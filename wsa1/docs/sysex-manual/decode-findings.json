@@ -1,0 +1,813 @@
+[
+ {
+  "area": "Technics SX-WSA1R \u2014 Universal / General MIDI System Exclusive (receive and transmit), from the annotated TLCS-900 disassembly at /home/fsanches/compartilhado/kn5000-roms-disasm/wsa1",
+  "findings": [
+   {
+    "topic": "HEADLINE: only TWO universal SysEx messages are recognised \u2014 GM System On and GM System Off",
+    "detail": "Walking the firmware's own SysEx match table end to end, the complete set of Universal System Exclusive messages the WSA1R acts on is: GM System On and GM System Off, both addressed to device 0x7F (all-call). Nothing else universal is decoded \u2014 see the separate 'not recognised' finding for the enumeration that proves it. Everything else the SysEx engine understands is Matsushita-ID (0x50) traffic.",
+    "symbols": "LinkTable_F4FF61 root sub-array at 0xF5115B (records 767-781), PtrTable_F4F888 entries 32/33, PtrTable_F4F800 entries 32/33, handlers 0xFB51E7 and 0xFB520C",
+    "evidence": "prom_b/wsa1_prom_b.s:101161-101175 (the 15 root records at 0xF5115B..0xF511AF, terminated by the 0xFF record) and prom_a/wsa1_prom_a.s sub_FB63D1 0xFB63F2 `ld L,0x0f` \u2014 the scan is bounded at exactly 15 records, which is exactly the length of that list.",
+    "certainty": "established",
+    "bytes": "F0 7E 7F 09 01 F7  (GM System On)   /   F0 7E 7F 09 02 F7  (GM System Off)"
+   },
+   {
+    "topic": "GM System On \u2014 exact bytes and exactly what it changes",
+    "detail": "On receipt the handler at 0xFB51E7 does three things, unconditionally: (1) `set 7,(0x60F020)` \u2014 a flag byte in the 0x60F000 scratch page, purpose not established; (2) `or (0x7F4D),0x04` \u2014 SETS BIT 2 of the byte at RAM 0x7F4D, which is the machine's global GENERAL MIDI MODE flag; (3) posts a four-field record {E=0x91, D=0x03, A=the new value of (0x7F4D), W=0x04} onto the pending UI/parameter event list at 0x2E00. It does not itself reload any sound settings; the 'replace your current settings with GENERAL MIDI settings' work is done by whatever consumes event 0x91/0x03.",
+    "symbols": "handler 0xFB51E7 (PtrTable_F4F800[32] = PtrTable_F4F888[32] = 0x00FB51E7); poster 0xF41B18 -> prom_a sub_F8BC08 0xF8BC08 -> sub_F8BF07 0xF8BF07 -> T_Queue2E00_AppendRegs (0xF40F3C) -> Queue2E00_AppendRegs 0xF86AA3",
+    "evidence": "prom_a/wsa1_prom_a.s:86381-86394 \u2014 `m_set 7,MD24,0x60f020` (0xFB51E8), `m_or_mi8 MB16,0x7f4d,0x04` (0xFB51ED), `ld H,(0x7f4d)` (0xFB51F2), then `pushw 0x04 / push BC / pushw 0x03 / pushw 0x91 / call 0xf41b18` (0xFB51F6-0xFB5204).",
+    "certainty": "established",
+    "bytes": "F0 7E 7F 09 01 F7"
+   },
+   {
+    "topic": "GM System Off \u2014 exact bytes, and it is a no-op when GM mode is already off",
+    "detail": "The handler at 0xFB520C first reads (0x7F4A + 3) = (0x7F4D) and tests bit 2 with `and C,0x04`. If the bit is already clear it returns immediately \u2014 no flag write, no event posted. Otherwise it sets bit 7 of (0x60F020), clears bit 2 of (0x7F4D) with `and (XIX+3),0xFB`, and posts the same {E=0x91, D=0x03, A=new (0x7F4D), W=0x04} record. So a second GM System Off in a row is silently ignored, while a second GM System On is not (the On handler has no such guard).",
+    "symbols": "handler 0xFB520C (PtrTable_F4F800[33] = PtrTable_F4F888[33] = 0x00FB520C); .LFB523E is the early-out",
+    "evidence": "prom_a/wsa1_prom_a.s:86395-86414 \u2014 `lda XIX,(0x7f4a)` (0xFB520E), `ld C,(XIX+0x03)` / `and C,0x04` / `jr z,.LFB523E` (0xFB5214-0xFB521A), `and (XIX+0x03),0xfb` (0xFB5223), then the same 0xF41B18 post at 0xFB5238.",
+    "certainty": "established",
+    "bytes": "F0 7E 7F 09 02 F7"
+   },
+   {
+    "topic": "Bit 2 of RAM 0x7F4D IS the GENERAL MIDI MODE flag (corroborated four independent ways)",
+    "detail": "The one thing GM On/Off change is bit 2 of the byte at 0x7F4D. That this bit is the user-visible 'GENERAL MIDI MODE : ON/OFF' setting is corroborated by: (a) the panel screen object at PanelScreen_VtableTable entry 0x9A / screen id 0x7A, whose painter's own text reads 'GENERAL MIDI', ' GENERAL MIDI MODE  :  ', ' ON', ' OFF'; (b) prom_b routines that set and clear exactly this bit and then post the identical {0x91, 0x03, value, 0x04} record; (c) three Standard-MIDI-File writers that choose which GM System message to embed by testing `bit 2,(0x7f4d)`; (d) many read-only consumers across prom_b.",
+    "symbols": "Paint_GeneralMidiMode 0xF99D0C, Paint_GeneralMidiMode_Entry 0xF99844, ScreenButton_GeneralMidiMode_Entry 0xF9984C; prom_b sub_F45119 0xF4514F/0xF45156; 0xF64B88/0xF64B97; 0xF6679E/0xF667AD; 0xF66926/0xF66935; readers 0xF443BD, 0xF443CC, 0xF45D19, 0xF45D80, 0xF696F4, 0xF698E8, 0xF69927, 0xF6994F, 0xF6BD45",
+    "evidence": "prom_a/wsa1_prom_a.s:43491-43499 (screen text); prom_b/wsa1_prom_b.s:86520-86522 plus 86524-86530 where `ld E,0x91 / ld D,0x03 / ld W,0x04` is the same record the SysEx handler posts; prom_b/wsa1_prom_b.s:23455 ff. for the 5-language 'Turning on GENERAL MIDI MODE will replace your current settings' dialog.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Where the message is decoded: a byte-trie whose FIRST level matches the THIRD byte of the message",
+    "detail": "The SysEx body parser (sub_FB63D1) skips two bytes \u2014 the 0xF0 and the ID byte \u2014 then walks a trie of 6-byte records [match:1][action:1][next:u32]. Level 1 is the sub-array that starts at 0xF5115B; each matched byte is stored in the 16-byte parse record at (0x60FCD8) at offsets 5,6,7,...; a non-zero action byte ends the walk and becomes the command number in record slot 0. For the universal branch the three levels are: device-ID byte, then sub-ID#1, then sub-ID#2. Level 1: 0x7F, action 0, next 0x00F4FFCD. Level 2: 0x09, action 0, next 0x00F4FFBB. Level 3: 0x01 -> action 0x20 (command 32 = GM System On); 0x02 -> action 0x21 (command 33 = GM System Off). Command N is then dispatched through a 34-entry pointer table.",
+    "symbols": "sub_FB63D1 0xFB63D1, sub_FB6219 (record setter) 0xFB6219, sub_FB62D3 (record getter) 0xFB62D3, LinkTable_F4FF61 records 18/19 (0xF4FFCD) and 15/16/17 (0xF4FFBB), PtrTable_F4F800, PtrTable_F4F888",
+    "evidence": "prom_a/wsa1_prom_a.s:88348-88360 (`add (XBC+0x02),XWA` with XWA=2 at 0xFB63E1 = skip F0 and ID; `add XBC,0x00f5115b` at 0xFB63FC); prom_b/wsa1_prom_b.s:101167 (`7f 00 cd ff f4 00` at 0xF51191), prom_b/wsa1_prom_b.s:100571-100573 (`09 00 bb ff f4 00` at 0xF4FFCD; `01 20 ...` and `02 21 ...` at 0xF4FFBB/0xF4FFC1); dispatch at prom_a 0xFB22A7-0xFB22BA `mul A,0x04 / add XWA,0x00f4f888 / ld XBC,(XWA) / jp (XBC)` and the twin at 0xFB21AA with 0x00f4f800.",
+    "certainty": "established",
+    "bytes": "trie records: 7F 00 CD FF F4 00 | 09 00 BB FF F4 00 | 01 20 61 FF F4 00 | 02 21 61 FF F4 00"
+   },
+   {
+    "topic": "The device-ID byte must be 0x7F exactly \u2014 there is no per-unit device number and no wildcard at that level",
+    "detail": "Level 1 of the trie compares the byte only for equality and for the 0xFF end-of-list marker; the 0xFE 'match anything' wildcard that levels 2 and deeper support is NOT implemented at level 1. The level-1 list contains 0x7F and no other value that could serve as a device ID. So `F0 7E 00 09 01 F7`, `F0 7E 10 09 01 F7`, etc. are NOT recognised \u2014 only the 0x7F all-call form is.",
+    "symbols": "sub_FB63D1 level-1 compare at 0xFB6415; level-2 compare with wildcard at 0xFB64C5/0xFB64C9; root list 0xF5115B..0xF511AF",
+    "evidence": "prom_a/wsa1_prom_a.s:88379-88381 \u2014 level 1 is `ld c,(xiz-1) / cp C,H / jrl nz` with no `cp L,0xfe`; contrast prom_a/wsa1_prom_a.s:88457-88460 at .LFB64C5 where level 2 has `cp H,L / jr z / cp L,0xfe / jrl nz`.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "NOT recognised: Master Volume, Identity Request/Reply, GM2 On, and every other universal message",
+    "detail": "Two independent gates rule these out. (1) The MIDI front end accepts only two ID bytes after 0xF0 \u2014 0x50 and 0x7E \u2014 so every Universal REAL-TIME message (0xF0 0x7F ...), which is where GM Master Volume (F0 7F 7F 04 01 ll mm F7) and Master Balance live, is discarded before it ever reaches the body parser. (2) Inside the Universal Non-Real-Time branch the only sub-ID#1 in the table is 0x09; there is no 0x06 (Identity / General Information), no 0x01-0x05 (sample dump / file dump), no 0x08 (tuning), no 0x04, and under 0x09 only sub-ID#2 0x01 and 0x02 \u2014 so no GM2 System On (0x03). A whole-ROM byte scan finds no 7E 7F 06, no 7E 00 06 and no 7F 7F 04 anywhere in prom_a/prom_b/prom_c. The unit therefore never answers an Identity Request.",
+    "symbols": "MIDI_RX_SysExStart 0xFA584D (interrupt side), MIDI_Fg_SystemCommon 0xFA5B15 (foreground side), MIDI_SysEx_Ignore 0xFA586D, level-2 list at 0xF4FFCD, level-3 list at 0xF4FFBB",
+    "evidence": "prom_a/wsa1_prom_a.s:61939-61956 \u2014 `cp E,0x50 / jr z / cp E,0x7e / jr nz, MIDI_SysEx_Ignore` (0xFA5850-0xFA5858); prom_a/wsa1_prom_a.s:62597-62602 \u2014 the same pair at 0xFA5B15-0xFA5B1D; prom_b/wsa1_prom_b.s:100571-100576 \u2014 the level-2 list is exactly {0x09, 0xFF-terminator} and the level-3 list exactly {0x01, 0x02, 0xFF-terminator}.",
+    "certainty": "established",
+    "bytes": "REJECTED: F0 7F 7F 04 01 ll mm F7 (Master Volume); F0 7E dd 06 01 F7 (Identity Request); F0 7E 7F 09 03 F7 (GM2 System On)"
+   },
+   {
+    "topic": "GM On/Off are NOT subject to the per-command receive filter",
+    "detail": "Before dispatch, sub_FB6B87 looks the command number up in a 34-byte class table at 0xF4FE82 and, for classes 1, 2 and 3, requires the matching bits of (0x7FD6) to be set \u2014 otherwise it writes error 0x21 into parse-record slot 4 and the message is dropped. Commands 32 and 33 (GM On/Off) have class byte 0x00, which matches none of the three tests, so the routine falls straight through and the messages are always honoured regardless of (0x7FD6). Three further pre-dispatch gates (sub_FB6BF4, sub_FB6CFC, sub_FB6DBD) test only command numbers 0x11/0x14/0x18/0x1A and first-bytes 0x7E/0x2B/0x2C/0x2D, none of which is the GM path.",
+    "symbols": "sub_FB6B87 0xFB6B87, class table 0xF4FE82 (34 bytes, 0xF4FE82..0xF4FEA3; bytes[32]=0x00, bytes[33]=0x00), sub_FB6BF4 0xFB6BF4, sub_FB6CFC 0xFB6CFC, sub_FB6DBD 0xFB6DBD",
+    "evidence": "prom_a/wsa1_prom_a.s:89251-89272 \u2014 `add XWA,0x00f4fe82 / ld C,(XWA)` then `cp BC,1 / cp BC,2 / cp BC,3 / jr .LFB6BF2`, and the error write `pushw 0x21 / pushw 0x04 / ... sub_FB6219` at 0xFB6BE1; prom_b/wsa1_prom_b.s:100525-100528 gives the table bytes (0xF4FEA2 = 0x00, 0xF4FEA3 = 0x00).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The receive framing: which bytes must be present, and where the message is assembled",
+    "detail": "Two identical state machines drain two rings. Each waits for 0xF0 (state 0), then requires the next byte to be 0x50 or 0x7E (state 1, anything else aborts the message), then accumulates data bytes until a byte with bit 7 set arrives; that byte must be 0xF7 or the message is aborted. Every accumulated byte, including the leading 0xF0, the ID and the closing 0xF7, goes into the buffer through sub_FB6165. On 0xF7 the trie walk and dispatch run. So the recognised form really is the full six-byte F0 ... F7, not a fragment.",
+    "symbols": "sub_FB20CE 0xFB20CE (drains ring 0x601646, dispatch through sub_FB2160 + PtrTable_F4F800) and sub_FB21CB 0xFB21CB (drains ring 0x601C6E, dispatch through sub_FB225D + PtrTable_F4F888); byte appender sub_FB6165 0xFB6165; abort path sub_FB80F3 0xFB80F3",
+    "evidence": "prom_a/wsa1_prom_a.s:81216-81256 \u2014 `cp H,0xf0` (0xFB2201), `cp H,0x50 / cp H,0x7e` (0xFB220B/0xFB2210), `and C,0x80 / jr nz` then `cp H,0xf7 / jr nz -> .LFB2250` (0xFB221C, 0xFB223A); prom_a/wsa1_prom_a.s:88067-88090 for sub_FB6165.",
+    "certainty": "established",
+    "bytes": "F0 <50|7E> ... F7"
+   },
+   {
+    "topic": "Both MIDI receive paths reach the same handlers",
+    "detail": "Ring 0x601646 is filled by the INTERRUPT-time parser (MIDI_RX_SysExStart / MIDI_RX_SysExData / the 0xF7 arm of MIDI_RX_Byte, all via Ring601646_Put 0xF41E3C); ring 0x601C6E is filled by the FOREGROUND parser (MIDI_Fg_SystemCommon / MIDI_Fg_SysExData via Ring601C6E_PutBlock 0xF41EAC and Ring601C6E_Put 0xF41EA8). The main loop drains both on every pass. Their two dispatch tables differ for the Matsushita commands (PtrTable_F4F800 sends commands 1-8 and 10-22 to 0xFB2820, PtrTable_F4F888 sends them to the do-nothing 0xFB22C8) but are IDENTICAL at slots 32 and 33 \u2014 so GM System On/Off behave the same on either path.",
+    "symbols": "main loop 0xF82077 (`call 0xf408e8` -> T_F408E8 -> 0xFB20CE) and 0xF820D3 (`call 0xf40904` -> T_F40904 -> 0xFB21CB), gated by Ring601C6E_IsEmpty 0xF41EB0 at 0xF820CB; T_Ring601646_Put 0xF41E3C; T_Ring601C6E_Put 0xF41EA8",
+    "evidence": "prom_a/wsa1_prom_a.s:4043 and 4079-4082; prom_b/wsa1_prom_b.s:81703 and 81710 (the two directory slots); prom_b/wsa1_prom_b.s:100083-100084 and 100015-100016 (PtrTable slots 32/33 both = 0x00FB51E7 / 0x00FB520C).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The unit also TRANSMITS GM System On / GM System Off over MIDI",
+    "detail": "A six-byte template pair sits in prom_b at 0xF4FEE6 and 0xF4FEEC. sub_FB4CAE picks 0xF4FEE6 (GM System On) when byte +1 of its argument record is 0x11 and 0xF4FEEC (GM System Off) when it is 0x10, then hands the 6 bytes to the SysEx transmit path. The bytes are byte-for-byte the same as the two messages the unit receives.",
+    "symbols": "template pair at 0xF4FEE6 / 0xF4FEEC (part of the 0xF4FEA8-0xF4FF60 SysEx template block); sender sub_FB4CAE 0xFB4CAE; transmit chain sub_FB6F24 0xFB6F24 -> sub_FB71BB 0xFB71BB -> sub_FB8081 0xFB8081",
+    "evidence": "prom_a/wsa1_prom_a.s:85843-85852 \u2014 `cp H,0x11 / pushw 0x06 / lda XWA,(0xf4fee6)` (0xFB4CBD-0xFB4CC5) and `cp H,0x10 / pushw 0x06 / lda XBC,(0xf4feec)` (0xFB4CCD-0xFB4CD5); prom_b/wsa1_prom_b.s:100531-100532 gives the template bytes.",
+    "certainty": "established",
+    "bytes": "F0 7E 7F 09 01 F7 (at 0xF4FEE6)   /   F0 7E 7F 09 02 F7 (at 0xF4FEEC)"
+   },
+   {
+    "topic": "The same two messages are written into Standard MIDI Files, selected by the GM-mode flag",
+    "detail": "Three SMF writers each carry an 8-byte pair of SMF track events \u2014 delta-time 0x00, then a 5-byte SysEx event \u2014 and choose between them at write time. Two of the three choose with `bit 2,(0x7f4d)`, i.e. by the very flag the received GM messages set and clear: bit set -> GM System On is written as the track's first event, bit clear -> GM System Off. The third selects on (0x1239) instead. Only one of the three copies is annotated in the tree; the other two are still emitted as unnamed data blocks with their readers identified but their role not written up.",
+    "symbols": "GmSystemSysEx_F76E64 (0xF76E64 / 0xF76E6C), chosen at 0xF76F4A `ld XIY,0x00F76E64` + 0xF76F4F `bit 2,(0x7f4d)`; Data_F75675 (0xF75675 / 0xF7567D), chosen at 0xF7575B + 0xF75760 `bit 2,(0x7f4d)`; Data_F73844 (0xF73844 / 0xF7384C), chosen at 0xF73AC9 + 0xF73ACE `cp (0x1239),0x00`",
+    "evidence": "prom_b/wsa1_prom_b.s:167295-167320 (the annotated GmSystemSysEx_F76E64 block and its header); prom_b/wsa1_prom_b.s:164474-164485 and 164569-164572 (Data_F75675 and its `bit 2,(0x7f4d)` selector); prom_b/wsa1_prom_b.s:161706-161722 and 161950-161955 (Data_F73844 and its selector).",
+    "certainty": "established",
+    "bytes": "00 F0 05 7E 7F 09 01 F7   /   00 F0 05 7E 7F 09 02 F7   (SMF delta-time 0 + 5-byte SysEx event)"
+   },
+   {
+    "topic": "Trailing bytes before the F7 are probably tolerated",
+    "detail": "The trie walk stops the instant it matches a record whose action byte is non-zero \u2014 for GM that is the sub-ID#2 byte. Nothing afterwards checks the message length, and the dispatch gate is only 'parse-record slot 4 is zero and slot 0 is below 0x22'. So F0 7E 7F 09 01 <extra bytes> F7 would most likely still be taken as GM System On. Marked LIKELY: this follows from the absence of a length check, not from a positive test, and it has not been confirmed on hardware.",
+    "symbols": "sub_FB63D1 exit .LFB6B6C 0xFB6B6C; dispatch gate in sub_FB225D at 0xFB227A (`cp A,0x00` on slot 4) and 0xFB2291 (`cp A,0x22` on slot 0)",
+    "evidence": "prom_a/wsa1_prom_a.s:89232-89238 \u2014 the success exit writes slot 2 and returns without consuming the rest of the buffer; prom_a/wsa1_prom_a.s:81306-81318 \u2014 the only two conditions guarding dispatch.",
+    "certainty": "likely",
+    "bytes": "F0 7E 7F 09 01 <xx ...> F7"
+   },
+   {
+    "topic": "The manufacturer-ID byte is not re-checked after the front end",
+    "detail": "The front end accepts ID 0x50 or 0x7E, then sub_FB63D1 skips two bytes without looking at either, and the level-1 list is shared by both ID families (it holds the Technics command bytes 0x21-0x2D and 0x7E alongside 0x7F). Consequently F0 50 7F 09 01 F7 would most likely be decoded as GM System On exactly as F0 7E 7F 09 01 F7 is, and conversely F0 7E 21 04 00 11 F7 would enter the Technics command path. Marked LIKELY: it follows from the missing check rather than from an explicit test, and there is no evidence the firmware ever sends such a hybrid.",
+    "symbols": "sub_FB63D1 0xFB63D1 (the +2 skip at 0xFB63E1), root list 0xF5115B, front-end filters MIDI_RX_SysExStart 0xFA5850 and MIDI_Fg_SystemCommon 0xFA5B15",
+    "evidence": "prom_a/wsa1_prom_a.s:88352-88356 \u2014 `sub XWA,XWA / inc 2,XWA / add (XBC+0x02),XWA` advances the read cursor by two with no comparison; prom_b/wsa1_prom_b.s:101161-101175 shows Technics bytes and 0x7F in one list.",
+    "certainty": "likely",
+    "bytes": "F0 50 7F 09 01 F7  (would likely act as GM System On)"
+   },
+   {
+    "topic": "A global kill switch on SysEx reception: (0x89) == 0xFF",
+    "detail": "Both drainers open with `cp (0x89),0xff / jrl z, <exit>` and return without touching the rings when the byte at 0x89 is 0xFF. While that holds, no SysEx of any kind \u2014 Technics or universal \u2014 is processed. What sets (0x89) is not established in this tree; the existing notes list it under 'still not converted'.",
+    "symbols": "sub_FB20CE 0xFB20D1, sub_FB21CB 0xFB21CE; the byte (0x89)",
+    "evidence": "prom_a/wsa1_prom_a.s:81109-81110 and 81220-81221 \u2014 `m_cp_mi8 MB8, 0x89, 0xff` followed by `jrl z`; notes/FINDINGS-midi-port.md 'Still not converted' names (0x89) as unidentified.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Context for the manual: the rest of the SysEx engine is Matsushita ID 0x50",
+    "detail": "The same trie and the same 34-slot dispatch table serve a Technics/Matsushita command set carried under ID 0x50. The level-1 list admits command bytes 0x21, 0x22, 0x23, 0x24, 0x25, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D and 0x7E. Fixed transmit templates for the short handshake messages sit at 0xF4FEA8-0xF4FF60. WARNING: which company holds MIDI manufacturer ID 0x50 is deliberately NOT asserted anywhere in this tree \u2014 it needs the MMA assignment list, which is not present here. Do not print a company name on the strength of the byte.",
+    "symbols": "template block 0xF4FEA8-0xF4FF60 (readers at 0xFB28D9, 0xFB28F1, 0xFB279C, 0xFB27CD, 0xFB2812, 0xFB28E9, 0xFB2334, 0xFB23AD, 0xFB7034 and the 0x2D family 0xFB2429..0xFB2710); root list 0xF5115B; PtrTable_F4F800 / PtrTable_F4F888",
+    "evidence": "prom_b/wsa1_prom_b.s:100528-100533 for the template bytes; prom_b/wsa1_prom_b.s:101161-101175 for the command bytes; prom_a/wsa1_prom_a.s:61930-61938 (MIDI_RX_SysExStart header) for the explicit refusal to name the company.",
+    "certainty": "established",
+    "bytes": "F0 50 23 7E F7 | F0 50 24 7E F7 | F0 50 27 7E F7 | F0 50 28 7E F7 | F0 50 29 7E F7 | F0 50 2A 7E F7 | F0 50 21 04 00 11 F7 | F0 50 22 04 00 11 F7"
+   },
+   {
+    "topic": "Provenance note: the task's two named entry points are on the transmit/UI side, not the receive side",
+    "detail": "GmSystemSysEx_F76E64 is in prom_b (not prom_a as the brief states): it is the Standard-MIDI-File writer's pair of 8-byte track events, i.e. what the unit WRITES INTO A FILE, not what it parses from the wire. Paint_GeneralMidiMode_Entry (prom_a 0xF99844) is a three-byte wrapper around the panel painter Paint_GeneralMidiMode (0xF99D0C) for screen id 0x7A. The receive-side decode is elsewhere entirely \u2014 prom_a 0xFB20CE/0xFB21CB and 0xFB63D1, with tables in prom_b at 0xF4FF61/0xF5115B and 0xF4F800/0xF4F888.",
+    "symbols": "GmSystemSysEx_F76E64 (prom_b/wsa1_prom_b.s:167308), Paint_GeneralMidiMode_Entry (prom_a/wsa1_prom_a.s:42886), Paint_GeneralMidiMode 0xF99D0C",
+    "evidence": "grep of the two labels across the tree: GmSystemSysEx_F76E64 occurs only in prom_b/wsa1_prom_b.s:167308; Paint_GeneralMidiMode_Entry only in prom_a/wsa1_prom_a.s:42886 (`calr 0x04c5` -> 0xF99D0C).",
+    "certainty": "established",
+    "bytes": ""
+   }
+  ],
+  "openQuestions": [
+   "What bit 7 of (0x60F020) means. Both GM handlers set it before posting their event, and nothing converted in this tree reads it.",
+   "What consumes the {E=0x91, D=0x03, A=<(0x7F4D)>, W=0x04} record on the 0x2E00 pending list. Until that is traced, 'GM System On replaces the current settings with the GM settings' is the panel dialog's claim, not something the disassembly establishes for the SysEx path.",
+   "What sets byte +1 of sub_FB4CAE's argument record to 0x11 or 0x10 \u2014 i.e. what actually makes the unit TRANSMIT GM System On/Off over MIDI (as opposed to writing it into an SMF). The template selection is proven; the trigger is not.",
+   "What (0x89) is and who sets it to 0xFF. While it is 0xFF, both SysEx drainers exit immediately and no SysEx at all is processed.",
+   "Whether trailing bytes between the sub-ID#2 and the F7 are genuinely tolerated. Needs a hardware test: send F0 7E 7F 09 01 00 F7 and see whether GM mode turns on. Hardware is currently unreachable \u2014 park it in kn7000_mame/notes/HARDWARE-QUESTIONS-PENDING-FELIPE.md rather than asserting it.",
+   "Whether F0 50 7F 09 01 F7 really acts as GM System On (the ID byte is never re-checked after the front-end filter). Same hardware test applies.",
+   "Which company holds MIDI manufacturer ID 0x50. The tree refuses to name it without the MMA assignment list; the published manual should do the same.",
+   "What the Matsushita commands 1-33 do individually. Only the two GM slots were traced here; PtrTable_F4F800 slot 9 (0xFB33FE) and slots 23-31 have distinct handlers that were not read.",
+   "Data_F73844 and Data_F75675 (prom_b) are still classified as unidentified data blocks even though they are byte-identical SMF GM-event pairs with located readers. Their headers should be corrected in the disassembly; that is a source edit this pass did not make.",
+   "No reproducibility artefact was committed for this pass. The enumeration above was done by reading the .s files plus one throwaway Python byte-scan of original_ROMs/*. If any of these byte sequences are published, a small committed probe (walk LinkTable_F4FF61 from record 767 and print every accepted message) belongs beside the disassembly, per the project's permanent-storage rule."
+  ],
+  "_label": ""
+ },
+ {
+  "area": "SX-WSA1R MIDI transport on CPU 1 (prom_a/prom_b): how MIDI 1 and MIDI 2 are distinguished, what confines BULK DUMP to MIDI 1, buffer sizes and overrun, and the settings that touch SysEx. Sources: /home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_a/wsa1_prom_a.s, .../prom_b/wsa1_prom_b.s, .../original_ROMs/wsa1_prom_b.ic13, and the prior notes .../notes/FINDINGS-midi-port.md, .../notes/FINDINGS-prom_c-serial-midi.md, .../notes/FINDINGS-prom_a-ring-buffers.md.",
+  "findings": [
+   {
+    "topic": "There are two MIDI input pumps and they differ by ONE byte: the port tag",
+    "detail": "MIDI messages reach the application through two byte-for-byte twin routines. MidiIn_PumpPortA (0xFA6018) drains ring 0x600C1E; MidiIn_PumpPortB (0xFA60C2) drains ring 0x601028. Each pump calls its own fetch routine, which copies one message into the staging record at 0x1940..0x1943 and writes a constant PORT TAG into (0x1943): MidiIn_FetchMessage_PortA writes 0x00 at 0xFA60A4, MidiIn_FetchMessage_PortB writes 0x10 at 0xFA612D. The two pumps are 97 bytes each and differ in exactly four bytes (ring base and two ring-veneer addresses); the two fetch routines are 0x28 bytes and differ in four (ring base, scan veneer, and the tag byte). Everything downstream of the tag is shared code.",
+    "symbols": "MidiIn_PumpPortA 0xFA6018, MidiIn_PumpPortB 0xFA60C2, MidiIn_FetchMessage_PortA 0xFA609A, MidiIn_FetchMessage_PortB 0xFA6123, staging record 0x1940-0x1943, T_MidiIn_PumpPortA 0xF40744, T_MidiIn_PumpPortB 0xF43358",
+    "evidence": "prom_a/wsa1_prom_a.s: `ld (XIY+0x03),0x00` at FA60A4 vs `ld (XIY+0x03),0x10` at FA612D; `ld XIX,0x00600c1e` at FA6023 vs `ld XIX,0x00601028` at FA60CD. Both pumps are dispatched from the main loop at 0xF82081 (after Ring600C1E_IsEmpty 0xF41DB4 -> 0xF822B9 `call 0xf40744`) and 0xF8208C (after Ring601028_IsEmpty 0xF41DD8 -> 0xF82389 `call 0xf43358`).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The port tag is bit 4 of a 5-bit channel index: 32 logical channels, 16 per port",
+    "detail": "MidiIn_RouteChannelMessage builds the routing index as (status & 0x0F) | (0x1943), i.e. channel in bits 0-3 and the port tag in bit 4. That 0..0x1F index selects an entry of the 32-byte offset table at 0x1800, whose value is an offset into the list area at 0x1820 (64 bytes) holding `count, part, part, ...`. So MIDI 1 occupies indices 0x00-0x0F and MIDI 2 indices 0x10-0x1F, and every routing decision in the instrument is made on the combined 5-bit value, never on the port alone.",
+    "symbols": "MidiIn_RouteChannelMessage 0xFA61CE, tables 0x1800 (32 B) and 0x1820 (64 B), second pair 0x18A0/0x18C0, cursor/count cells 0x1974/0x1975/0x1977, current index 0x197E",
+    "evidence": "prom_a FA61CE-FA61D9: `ld A,(0x1940) / and A,0x0F / or A,(0x1943) / ld (0x197E),A`, then `ld XHL,0x00001800 / ld A,(XHL+A)`. MidiIn_BuildChannelRouteTable (0xFA6F21) fills exactly that shape: it clears 0x20 bytes at 0x1800 and 0x40 at 0x1820, loops W = 0..0x1F (`cp (0x197A),0x20` at FA7013) and matches each part's byte +0x0D masked with 0x1F (FA6FC8/FA6FD3).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "MIDI 1 is CPU 1's own UART; MIDI 2 arrives pre-parsed over the inter-CPU link",
+    "detail": "Nothing on CPU 1 receives MIDI 2 bytes from a UART. CPU 1's serial channel 0 (SC0) is MIDI 1: its receive ISR MIDI_RX_Byte parses bytes and appends finished messages to ring 0x600C1E, which is exactly the ring MidiIn_PumpPortA reads (tag 0x00). The port-B ring 0x601028 has only TWO writers in either image, both inside the FOREGROUND parser: MIDI_Fg_Deliver2 at 0xFA5AA4 and MIDI_Fg_Deliver3 at 0xFA5ADC, both through Ring601028_PutBlock (0xF41DD4). That foreground parser, MIDI_DrainQueue (0xFA5942), takes its raw bytes from ring 0x60195A (Ring60195A_Get, 0xF41D18), and ring 0x60195A is filled by the INTER-CPU LINK receive path: the link's selector-1 arm indexes an 8-entry table at prom_b 0xF57D4F by the command byte's top three bits, and index 6 is 0xF57C72 = Ring60195A_PutBlock_Ldir. Outbound, port B is not a UART either: MIDI_PostSendWork_PortB (0xFA5C12) empties ring 0x60153C into a stack buffer and hands it to Link_SendBlockIn32ByteChunks (0xF40ED4 -> prom_a 0xF8E02C) with selector 2.",
+    "symbols": "MIDI_RX_Byte 0xFA5496, MIDI_RX_DeliverTwo 0xFA57AF, MIDI_RX_DeliverThree 0xFA5803, MIDI_DrainQueue 0xFA5942, MIDI_Fg_Deliver2 0xFA5A8B, MIDI_Fg_Deliver3 0xFA5ABE, MIDI_PostSendWork_PortB 0xFA5C12, INTTC3_Sel1_GeneralCmd 0xF8E570, link sink table prom_b 0xF57D4F, Ring60195A_PutBlock_Ldir prom_b 0xF57C72",
+    "evidence": "prom_a FA57B3 `ld XIX,0x00600c1e` inside MIDI_RX_DeliverTwo, and FA5803 in DeliverThree, both appending with `call 0xf41dac` (Ring600C1E_Put). The only two `call 0xf41dd4` sites in either image are FA5AA4 and FA5ADC (grep over both .s files). prom_a FA5944 `call 0xf41d18` = T_Ring60195A_Get. The link sink list is quoted in prom_a's own header at 0xF8E56D-0xF8E570 (`idx 6 0x00F57C72`). Main loop at 0xF820BF tests Ring60195A_IsEmpty (0xF41D24) and only then calls MIDI_DrainQueue (0xF40728).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "That the far end of the link is the physical MIDI 2 jack is an inference, not a schematic fact",
+    "detail": "The tree's schematic-derived pin table names CPU 1's TXD0/RXD0 as MIDI1OUT/MIDI1IN and P82 as MIDI1SNS. prom_c (CPU 2) independently implements a complete second MIDI port on ITS serial channel 0 - MIDI range filter, 0xFE active-sensing flag, 31250 baud - and forwards bytes CPU 1 sends on link channel 2 straight to that UART (Link_Ch2_ForwardBytes -> MIDI_Tx_PutByte), while sending its own received bytes to CPU 1 on link channel 6. Channel 2 is the selector CPU 1's port-B transmitters push, and channel 6 is the index whose sink is ring 0x60195A. So port B end-to-end is CPU 2's SC0. What is NOT in this tree is a schematic label calling CPU 2's SC0 'MIDI 2'.",
+    "symbols": "prom_c INTRX0_HANDLER 0xF991FF, INTTX0_HANDLER 0xF99265, Link_Ch2_ForwardBytes (per-byte sink of link channel 2) 0xF992C6, MIDI_Tx_PutByte, prom_c 0xFCC5C2-0xFCC5C4 (FF/FA/FB single bytes sent on link channel 6)",
+    "evidence": "notes/FINDINGS-prom_c-serial-midi.md (whole file, especially 'a byte CPU 1 sends on link channel 2 goes straight out of the MIDI OUT port' and the channel-6 send of 0xFF on the active-sensing timeout); notes/DRIVER-INSIGHT-wsa1-2026-09-02.md:331 for TXD0/RXD0 = MIDI1OUT/MIDI1IN on IC1. \u26a0 That same pin table was corrected once for an off-by-one row (the P7 column); the correction text does not restate P82/TXD0/RXD0, so treat the MIDI1SNS label as carried over, not re-derived.",
+    "certainty": "likely",
+    "bytes": ""
+   },
+   {
+    "topic": "SYSTEM EXCLUSIVE never travels in the port-A/port-B message rings at all",
+    "detail": "Neither input pump can ever see a SysEx. On the interrupt side, MIDI_RX_SystemCommon sends 0xF0 to MIDI_RX_SysExStart, which forwards the accepted bytes to Ring601646_Put (0xF41E3C) - a different ring from 0x600C1E. On the foreground side, MIDI_Fg_SystemCommon posts the accepted header to Ring601C6E_PutBlock (0xF41EAC) and MIDI_Fg_SysExData posts body bytes to Ring601C6E_Put (0xF41EA8) - again not 0x601028. And even if a 0xF0 did reach a pump, MidiIn_SystemMessage indexes MidiIn_SystemSubTable by the status byte's LOW NIBBLE, so 0xF0 lands on slot 0, which is MidiIn_SystemIgnore (a `or (0x9F),0x01` and RET). Only 0xF2 (slot 2) and 0xF3 (slot 3) have handlers. SysEx is therefore a wholly separate transport on both ports.",
+    "symbols": "MIDI_RX_SysExStart 0xFA584D, MIDI_RX_SysExData 0xFA586E, MIDI_Fg_SystemCommon 0xFA5AEB, MIDI_Fg_SysExData 0xFA5B3D, MidiIn_SystemMessage 0xFA614B, MidiIn_SystemSubTable 0xFA6164 (16 x LE32), MidiIn_SystemIgnore 0xFA61C9, MidiIn_SongPosition 0xFA61A4, MidiIn_SongSelect 0xFA61B8",
+    "evidence": "prom_a FA614B-FA6155 `ld L,(0x1940) / and L,0x0F / sla 0x02,L`; the table at FA6164 has 0x00FA61C9 in slots 0,1,4..15 and 0x00FA61A4 / 0x00FA61B8 in slots 2 and 3. The SysEx forwards are `call 0xf41e3c` at FA5860/FA5867/FA587D and `call 0xf41ea8`/`0xf41eac` at FA5B57/FA5B2E.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Two SysEx identifiers are accepted and only two: 0x50 and 0x7E",
+    "detail": "Every stage of the SysEx path applies the same two-value test on the byte after 0xF0. A message with any other identifier stays 'armed' (so the parser still tracks where it ends) but is never forwarded. There is NO device-number / unit-number byte tested anywhere in the converted receive path, and none is inserted anywhere in the converted transmit path - the outgoing templates are copied byte-for-byte out of ROM with no masking or ORing.",
+    "symbols": "MIDI_RX_SysExStart 0xFA584D (`cp E,0x50` FA5850, `cp E,0x7E` FA5855), MIDI_Fg_SystemCommon 0xFA5B15/0xFA5B1A, SysEx assemblers 0xFB210E/0xFB2113 and 0xFB220B/0xFB2210, bulk-receive loop 0xFB60EE, MIDI_SysExHeader 0xFA5CB8",
+    "evidence": "prom_a, five independent sites with the same pair of compares. Template copier sub_FB6E7F (0xFB6E7F) moves bytes with `ld H,(XIX) / ld (XBC),H` and no arithmetic (FB6E92-FB6EA9). \u26a0 The tree contradicts itself on WHO owns 0x50: prom_a's header at FA5AEB says 'Matsushita's MIDI manufacturer ID', while notes/FINDINGS-midi-port.md explicitly refuses to name a company ('it needs the MMA's assignment list, which is not in this tree'). Do not print a company name on this evidence.",
+    "certainty": "established",
+    "bytes": "F0 50 ... F7   /   F0 7E ... F7"
+   },
+   {
+    "topic": "State bytes: (0xA9) interrupt-side, (0x0964) foreground-side, same bit layout",
+    "detail": "Both SysEx state machines use bit 0 = 'a SysEx is armed' (set the moment 0xF0 arrives), bit 1 = 'the identifier was accepted', bit 5 = a suppression bit. Body bytes are forwarded only when bit 1 is set AND bit 5 is clear. MIDI_Fg_SystemCommon writes the literal 3 (bits 0+1) on acceptance; MIDI_DrainQueue writes 4 after a clean 0xF7 close and 0 when any other status byte aborts the message.",
+    "symbols": "(0xA9) SysEx state (interrupt), (0x0964) SysEx state (foreground), (0x9A)/(0x0960) running status, (0x9E)/(0x0963) flags, (0x216F) bit 0 = MIDI activity",
+    "evidence": "prom_a FA584D `ld (0xa9),0x01`, FA585A `set 1,(0xa9)`, FA586E/FA5873 `bit 1,(0xa9)` / `bit 5,(0xa9)`; FA5B1F `ld (0x0964),0x03`, FA5989 `ld (0x0964),0x04`, FA5991 `ld (0x0964),0x00`, FA5B41/FA5B47 the mirror bit tests. \u26a0 notes/FINDINGS-midi-port.md records that bit 5 is TESTED and set NOWHERE in the converted code - so the suppression path has no known writer.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The two SysEx assemblers are twins, one per port - so ORDINARY SysEx reception is not MIDI-1-only",
+    "detail": "sub_FB20CE drains ring 0x601646 (the MIDI 1 / interrupt-side SysEx queue) and sub_FB21CB drains ring 0x601C6E (the MIDI 2 / foreground-side queue). They are the same routine: a 3-state machine at (0x60FD43) - state 0 waits for 0xF0, state 1 accepts 0x50 or 0x7E, state 2 takes body bytes - appending through sub_FB6165 and, on 0xF7, running the message processor sub_FB2160. Both are dispatched every pass of the main loop. So a Technics or Universal SysEx arriving on MIDI 2 IS parsed and IS acted on; the MIDI-1-only restriction the manual describes is NOT a property of the general SysEx receiver.",
+    "symbols": "sub_FB20CE (MIDI 1, ring 0x601646 via 0xF41E38), sub_FB21CB (MIDI 2, ring 0x601C6E via 0xF41EA4), sub_FB6165 (byte appender), sub_FB2160 (post-0xF7 processor), thunks T_F408E8 / T_F40904, state byte (0x60FD43), buffer descriptor pointer (0x60FC80)",
+    "evidence": "Main loop prom_a 0xF82077 `call 0xf408e8` (unconditional) and 0xF820CB `call 0xf41eb0` (Ring601C6E_IsEmpty) then 0xF820D3 `call 0xf40904`. The two bodies at 0xFB20CE and 0xFB21CB are instruction-for-instruction identical apart from the Get veneer and the branch displacements.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "\u2605 What confines BULK DUMP to MIDI 1: the dump's own send and receive loops name only the MIDI 1 rings",
+    "detail": "There are two block transmitters in prom_a and they differ ONLY in which ports they write. sub_FB7165 (0xFB7165) splits the frame into 0x20-byte chunks and pushes each through Ring601432_PutBlock (0xF41DF8) + MIDI_PostSendWork (0xF40724) - port A / MIDI 1 ONLY. sub_FB71BB (0xFB71BB) pushes each chunk through BOTH that pair AND Ring60153C_PutBlock (0xF41E1C) + MIDI_PostSendWork_PortB (0xF40730) - both ports. Both prepare the frame with the same helper (0xFB5F65). The BULK DUMP transmit engine sub_FB6F6B / sub_FB6FB2 uses sub_FB7165, i.e. MIDI 1 only; the 14 live-parameter/'MIDI out' senders at 0xFB33EE..0xFB555B use sub_FB71BB, i.e. both ports. Symmetrically, the blocking bulk-dump RECEIVE loop sub_FB6098 reads ring 0x601646 (0xF41E38) and nothing else, and its caller sub_FB6072 first spins until the MIDI 1 OUT ring 0x601432 is empty. Both directions of the bulk dump are therefore hard-wired to MIDI 1 at the call-site level - there is no setting involved.",
+    "symbols": "sub_FB7165 (MIDI 1 only) 0xFB7165, sub_FB71BB (both ports) 0xFB71BB, bulk send drivers sub_FB6F6B 0xFB6F6B / sub_FB6FB2 0xFB6FB2, bulk send dispatcher sub_FB23E2 0xFB23E2 (called from main loop 0xF820BC), bulk receive sub_FB6098 0xFB6098, its caller sub_FB6072 0xFB6072, Ring601432_SpinUntilEmpty 0xFB6084",
+    "evidence": "prom_a FB7189/FB71AA = `call 0xf41df8` with no second port; FB71DF/FB71EB and FB720E/FB7218 = the 0xF41DF8+0xF41E1C pair. Callers: `calr sub_FB7165` at FB6ED8, FB6F99, FB6FEA, FB7AD6; `call sub_FB71BB` at FB33EE, FB34BD, FB3ECB, FB4836, FB495A, FB4AAE, FB4CE5, FB4E0D, FB4EC0, FB4F7B, FB5053, FB51D9, FB5412, FB555B. Receive: FB60C0 `call 0xf41e38`; FB6076 `calr Ring601432_SpinUntilEmpty`.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Ring 0x601432 is MIDI 1 OUT, ring 0x60153C is MIDI 2 OUT, and (0x194B) is the runtime port select",
+    "detail": "Ring 0x601432 is drained one byte at a time by the INTTX0 handler MIDI_TX_Ready straight into SC0BUF, so it is the MIDI 1 transmit queue. Ring 0x60153C is drained by MIDI_PostSendWork_PortB into the link with selector 2, so it is the MIDI 2 transmit queue. For the staged-message output path the choice is data-driven: MidiOut_PostStagedMessage tests `cp (0x194B),0x00` and takes MIDI_PostSendWork (0xF40724) when zero, MIDI_PostSendWork_PortB (0xF40730) otherwise, with the matching PutBlock chosen ten instructions earlier. MIDI_SendBankAndProgram uses a different, per-call selector: bit 4 of its channel argument - clear sends through Ring601432_PutBlock, set sends through the link - which is the same bit 4 that is the input-side port tag.",
+    "symbols": "MIDI_TX_Ready 0xFA542F, Ring601432_Get 0xF41DF0, MidiOut_PutByteA 0xFA7D95, MidiOut_PostStagedMessage (the 0xFA7D26 site), (0x194B) port select, MIDI_SendBankAndProgram 0xFA5B5F (`and C,0x10` at FA5BC1), MIDI_PostSendWork 0xFA590F, running-status mailboxes (0x9B) port A / (0x091F) port B",
+    "evidence": "prom_a FA7D26-FA7D37 `ld XIX,0x00f40724 / cp (0x194b),0x00 / jr z / ld XIX,0x00f40730 / call (XIX)`; FA5BC1 `and C,0x10 / jr nz` choosing FA5BCD `call 0xf41df8` vs FA5BE6 `call 0xf40ed4`; MIDI_SendAllNotesOff_AllChannels (0xFA5C54) sends its 5-byte template to both, first via 0xF41DF8 then via 0xF40ED4 selector 2.",
+    "certainty": "established",
+    "bytes": "B0 00 <bank>>7> 20 <bank&0x7F> C0 <prog>  (MIDI_BankProgramTemplate 0xFA5CBA, channel ORed into bytes 0 and 5)\nB0 7B 00 79 00  (MIDI_AllNotesOffTemplate 0xFA5CC1, 0xB0|ch in byte 0)"
+   },
+   {
+    "topic": "Every buffer size, from the ring class itself",
+    "detail": "All fourteen rings are instances of one class whose control block sits ten bytes below the data pointer: -10 scan cursor, -8 read cursor, -6 scan limit, -4 write cursor, -2 FREE BYTES REMAINING, +0.. data. Init seeds the free count with capacity-1, so one slot of every ring is permanently unused. The MIDI ones are: 0x600C1E = 0x400 (MIDI 1 IN messages, 1023 usable), 0x601028 = 0x400 (MIDI 2 IN messages, 1023), 0x601646 = 0x200 (MIDI 1 SysEx bytes, 511), 0x601C6E = 0x200 (MIDI 2 SysEx bytes, 511), 0x60195A = 0x200 (MIDI 2 raw byte stream from the link, 511), 0x601432 = 0x100 (MIDI 1 OUT, 255), 0x60153C = 0x100 (MIDI 2 OUT, 255). On the CPU 2 side the queues are a 22-byte descriptor pair: RX 0x00F2FB over 0x7EDA-0x82D9 (1024 bytes, free 0x03FF) and TX 0x00F311 over 0x82DA-0x84D9 (512 bytes, free 0x01FF).",
+    "symbols": "ring class 0xF84000-0xF842DE, instance bank 0xF842DF-0xF84C6B (15 groups of 11 veneers, 163 bytes each), free-count field at ring-2 (0x601430 for port A, 0x60153A for port B)",
+    "evidence": "notes/FINDINGS-prom_a-ring-buffers.md sections 1-2, re-derivable with `python3 notes/prom_a_ringbuf_map.py`; the CPU 2 figures with `python3 notes/prom_c_ram_image.py 0x00F2FB:22 0x00F311:22` (notes/FINDINGS-prom_c-serial-midi.md, round 3). prom_a FA7D57/FA7D64 name 0x601430 and 0x60153A directly as the two free-count cells.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Input overrun: four distinct failure modes, three counters, one flush",
+    "detail": "(1) A byte that arrives with a UART error never reaches the parser: MIDI_RX_ErrorReset reads SC0BUF to clear the condition, drops running status, sets (0x9E) bit 3 and increments the 8-BIT counter at (0x0931). (2) A message that will not fit is dropped whole and sets (0x9E) bit 2 plus the 8-bit counter at (0x0932) - the free-space tests are `cp (XIX+0xFE),0x0003` before writing 2 bytes and `,0x0004` before writing 3, one more than is about to be written. (3) CONGESTION SHEDDING: before the ordinary test, if free space is 0x40 or less and the message is a Note On (`and D,0xF0 / cp D,0x90`) with NON-ZERO velocity, it is thrown away; a Note On with velocity 0 - a release under running status - falls through and is delivered. So an overloaded input loses note starts and never loses note ends. (4) Recovery: the main loop tests `(0x9E) & 0x2C` (bits 2, 3, 5) and, if any is set, calls Ring600C1E_Init (0xF41DB8) - the entire MIDI 1 input ring is discarded - then clears those bits with `and (0x9E),0xD3`.",
+    "symbols": "MIDI_RX_ErrorReset 0xFA5418, MIDI_RX_QueueFull2 0xFA57D0, MIDI_RX_QueueFull3 0xFA5828, MIDI_RX_SecondDataByte 0xFA57DE, error counter (0x0931) 8-bit, overflow counter (0x0932) 8-bit, flags (0x9E) bits 2/3/5, main-loop flush 0xF82059-0xF82071",
+    "evidence": "prom_a FA57EE `cp (XIX+0xfe),0x0040 / jr ugt`, FA57F6-FA5801 the Note-On/velocity test, FA5803 `cp (XIX+0xfe),0x0004`, FA57B8 `cp (XIX+0xfe),0x0003`; FA57D0/FA5828 `set 2,(0x9e)` + `inc 1,(0x0932)`; F8205B-F82067 `ld A,(0x9e) / and A,0x2c / jr z / call 0xf41db8 / and (0x9e),0xd3`. The 8-bit width of (0x0931) is settled in notes/FINDINGS-midi-port.md (opcode 0xC1/0x61 = INCBIM, and (0x0932) sits immediately after it).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Output overrun: 240 polls, then the whole transmit queue is thrown away",
+    "detail": "MidiOut_PostStagedMessage will not enqueue unless the selected port's ring has at least 3 free bytes. It polls, counting (0xA2) from 0 up to 0xF0 = 240, reading the free-count cell directly (0x601430 for port A, 0x60153A for port B). On timeout it writes 0xF6 to SC0BUF and calls the port's ring Init - Ring601432_Init (0xF41E00) for port A, Ring60153C_Init (0xF41E24) for port B - so everything queued for that port is discarded. It also sets (0x9E) bit 0.",
+    "symbols": "MidiOut_PostStagedMessage (0xFA7CEB-0xFA7D91), retry counter (0xA2), SC0BUF = SFR 0x50",
+    "evidence": "prom_a FA7D47 `set 0,(0x9e)`, FA7D4A `ld (0xa2),0x00`, FA7D4D-FA7D54 `inc 1,(0xa2) / cp (0xa2),0xf0 / jr nc`, FA7D57/FA7D64 the two free-count addresses, FA7D69 `cp (XIZ),0x0003`, FA7D76 `ld (0x50),0xf6`, FA7D7A/FA7D87 the two Init veneers. \u26a0 0xF6 is MIDI Tune Request; nothing decoded says the firmware intends it as such rather than as a flush marker.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "SysEx accumulation has its own 255-byte ceiling",
+    "detail": "Incoming SysEx bytes are appended by sub_FB6165 into the buffer named by the descriptor pointer at (0x60FC80): the byte is stored at *(desc+0x0A)++, a 0xFF sentinel is written after it, and the 16-bit counter at desc+0x00 is incremented - except on 0xF0, which RESETS the counter to 1. Before appending a data byte the assemblers read that counter and compare it with 0x00FF; at 255 or more the message is aborted. sub_FB20CE and sub_FB21CB abandon silently (state back to 0, then sub_FB80F3); the bulk-dump receive loop sub_FB6098 instead raises status code 6 through sub_FB6219 and stops.",
+    "symbols": "sub_FB6165 0xFB6165, descriptor pointer (0x60FC80), count at +0x00, write cursor at +0x0A, abort sites 0xFB212B/0xFB2228/0xFB610A",
+    "evidence": "prom_a FB6192-FB619E `cp (XIZ+0x08),0xf0 / jr nz / ld (XBC),0x0001`; FB61A0-FB61AA the increment; FB2124-FB212F, FB2221-FB222C and FB6103-FB610E all `ld XBC,(0x60fc80) / ld WA,(XBC) / cp WA,0x00ff / jr nc`.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "\u2605 The bulk-dump packet format, read out of the transmit engine",
+    "detail": "A bulk-dump item is set up by appending a 12-byte header template from ROM (sub_FB6E7F), then sub_FB6F6B loops: sub_FB7040 NIBBLISES the source data - each source byte becomes two bytes, HIGH nibble first, `(b>>4)` then `(b & 0x0F)` - and keeps going while the frame's byte count is below 0xFC = 252; sub_FB70AE appends a one-byte CONTINUATION FLAG, 1 if the remaining-length counter (0x60FD00) is non-zero and 0 if the transfer is finished; sub_FB7111 appends the CHECKSUM and the terminating 0xF7. The checksum is an 8-bit sum of the frame from offset +0x0F (the byte after 0xF0) up to but not including the checksum, negated, with bit 7 cleared: `(-sum) & 0x7F`. The 0xF7 is not computed - it is byte 1 of the 16-bit constant at 0xF4FE68, whose bytes are 00 F7, loaded before the low byte is overwritten with the checksum. Only then does sub_FB7165 push the frame to MIDI 1.",
+    "symbols": "sub_FB6E7F 0xFB6E7F (header), sub_FB6F24 0xFB6F24 (raw append), sub_FB7040 0xFB7040 (nibbliser), sub_FB70AE 0xFB70AE / sub_FB70E6 0xFB70E6 (continuation flag), sub_FB7111 0xFB7111 (checksum), sub_FB7165 0xFB7165 (send), remaining-length (0x60FD00), source cursor (0x60FCF8), frame descriptor (0x60FC88)",
+    "evidence": "prom_a FB7066-FB7077 `ld H,(XBC) / ld (XIX+0x01),H / ld (XIX),H / ld C,H / srl 0x04,C / ld (XIX),C / and (XIX+0x01),0x0f` then `push 0x0002`; FB70A3 `cp WA,0x00fc / jr c`; FB70B6-FB70C3 the flag; FB7119 `ld BC,(0xf4fe68)` with original_ROMs/wsa1_prom_b.ic13 offset 0x4FE68 = `00 F7`; FB7126 `add XIX,0x0000000f`; FB7137-FB714E the sum, `sub WA,BC`, `res 0x07,A`.",
+    "certainty": "established",
+    "bytes": "F0 50 2D 04 00 11 <a2 a1 a0> <l2 l1 l0> [<hi nib> <lo nib>]... <00|01> <cksum> F7"
+   },
+   {
+    "topic": "\u2605 The bulk-dump address and length fields are 3 bytes of base-128, MSB first - proved by a tiling check and by two measured region sizes",
+    "detail": "The 12-byte templates at prom_b 0xF4FEF8 onward are `F0 50 2D 04 00 11` followed by six bytes that are a 3-byte start address and a 3-byte length, each in 7-bits-per-byte, most significant first. Two independent checks: (a) consecutive templates tile - 40 00 00 + length 00 00 20 gives 40 00 20, which is literally the next template's address; 20 00 00 + 00 00 10 -> 20 00 10; 60 00 00 + 00 18 00 -> 60 18 00; 50 00 00 + 00 06 00 -> 50 06 00. (b) the lengths match the RAM ranges the source-cursor setters install: sub_FB75BA sets source 0x7600, end 0x7620, count 0x20 - template length 00 00 20 = 32; sub_FB75E4 sets source 0x7620 running to 0x7F7E with `inc 2` - 0x7F7E-0x7620+2 = 2400 - template length 00 12 60 = 0x12*128 + 0x60 = 2400. Exact.",
+    "symbols": "templates prom_b 0xF4FEF8, 0xF4FF04, 0xF4FF10, 0xF4FF1C, 0xF4FF28, 0xF4FF34, 0xF4FF40, 0xF4FF49, 0xF4FF55; setters sub_FB75BA 0xFB75BA and sub_FB75E4 0xFB75E4; senders sub_FB23F9 0xFB23F9 and sub_FB243E 0xFB243E; dispatcher sub_FB23E2 0xFB23E2",
+    "evidence": "`xxd -s 0x4FEF8 original_ROMs/wsa1_prom_b.ic13`; prom_a FB2429 `lda XBC,(0xf4fef8) / push 0x000c / call sub_FB6E7F` then FB2433 `call sub_FB6F6B`, and FB246E the same with 0xF4FF04. Region setters at FB75C2 (`ld BC,0x7600`, `+0x20`, count 0x20) and FB75EE-FB7612 (`ld HL,0x7600 / ld DE,0x7620 / ld BC,0x7f7e ... inc 2,XBC`).",
+    "certainty": "established",
+    "bytes": "F0 50 2D 04 00 11 40 00 00 00 00 20   (addr 40:00:00, len 32)\nF0 50 2D 04 00 11 40 00 20 00 12 60   (addr 40:00:20, len 2400)\nF0 50 2D 04 00 11 20 00 00 00 00 10\nF0 50 2D 04 00 11 20 00 10 00 00 00\nF0 50 2D 04 00 11 60 00 00 00 18 00\nF0 50 2D 04 00 11 60 18 00 01 70 00\nF0 50 2D 04 00 11 62 08 00           (9 bytes)\nF0 50 2D 04 00 11 50 00 00 00 06 00\nF0 50 2D 04 00 11 50 06 00 05 40 00"
+   },
+   {
+    "topic": "The other fixed SysEx templates in ROM",
+    "detail": "A contiguous template table sits at prom_b 0xF4FEB4-0xF4FF60. Six 5-byte messages `F0 50 <cmd> 7E F7` with cmd = 23, 24, 27, 28, 29, 2A; a 3-byte fragment `F0 50 7E` at 0xF4FED2 that sub_FB7025 prepends conditionally; two 7-byte `F0 50 <21|22> 04 00 11 F7`; a 3-byte fragment `F0 50 25` at 0xF4FEE3 used by the live-parameter sender at 0xFB33A4; the two GM Universal messages; a 6-byte `F0 50 2C 04 00 11` at 0xF4FEF2; then the nine bulk templates above. Every one of them is copied verbatim - no channel, unit or device byte is substituted into any of them.",
+    "symbols": "template table prom_b 0xF4FEB4..0xF4FF60, readers sub_FB7025 0xFB7025 (0xF4FED2), 0xFB33A4 (0xF4FEE3), 0xFB2429/0xFB246E (bulk), sub_FB6E7F 0xFB6E7F",
+    "evidence": "`xxd -s 0x4FEB0 -l 0xB0 original_ROMs/wsa1_prom_b.ic13`, plus the `lda XBC,(0xf4fexx)` operands in prom_a at FB7034, FB33A4, FB2429, FB246E. The GM pair is independently corroborated by prom_b's own GmSystemSysEx_F76E64 (line 167295), which embeds the same five-byte bodies as SMF events.",
+    "certainty": "established",
+    "bytes": "F0 50 23 7E F7 / F0 50 24 7E F7 / F0 50 27 7E F7 / F0 50 28 7E F7 / F0 50 29 7E F7 / F0 50 2A 7E F7\nF0 50 7E            (0xF4FED2, 3-byte fragment)\nF0 50 21 04 00 11 F7\nF0 50 22 04 00 11 F7\nF0 50 25            (0xF4FEE3, 3-byte fragment)\nF0 7E 7F 09 01 F7   (GM System On)\nF0 7E 7F 09 02 F7   (GM System Off)\nF0 50 2C 04 00 11"
+   },
+   {
+    "topic": "The received-SysEx command dispatch: a 34-entry table at prom_b 0xF4F800",
+    "detail": "When a SysEx closes with 0xF7, sub_FB2160 reads two fields out of a 16-byte record through the byte-accessor sub_FB62D3(record, index): field 4 must be 0, and field 0 must be below 0x22. Field 0 is then multiplied by 4, added to 0x00F4F800 and the resulting LE32 pointer is entered with a stack-argument tail jump. So the machine recognises 34 SysEx commands, numbered 0x00-0x21. sub_FB62D3 is a 16-way jump table that simply returns record[index]; its write twin sub_FB6219 is the same table storing a byte.",
+    "symbols": "sub_FB2160 0xFB2160, sub_FB62D3 0xFB62D3 (getter, JumpTable_FB62F6), sub_FB6219 0xFB6219 (setter, JumpTable_FB6240), command table prom_b 0xF4F800, record pointer (0x60FCD8)",
+    "evidence": "prom_a FB217D `cp A,0x00 / jr nz`, FB2194 `cp A,0x22 / jr nc`, FB21AA-FB21BD `mul A,0x04 / extz XWA / add XWA,0x00f4f800 / ld XBC,(XWA) / jp (XBC)`. The 16-entry bound on both accessors is the ROM's own (`cp BC,0x000F / jrl ugt` at FB622C and FB62E2) and each has the tree's last-entry test in its header. \u26a0 Which WIRE bytes land in record fields 0 and 4 is NOT established here - sub_FB63AF, which fills the record, was not traced.",
+    "certainty": "likely",
+    "bytes": ""
+   },
+   {
+    "topic": "The MIDI settings that touch SysEx: an EXCLUSIVE filter, and no device number",
+    "detail": "The MIDI INPUT&OUTPUT FILTER screen has eight ON/OFF fields, each a bit-field in the 0x7F30 block. In screen order they are PROGRAM CHANGE = (0x7F39) bit 4, BANK SELECT = (0x7F3A) bit 7, PITCH BEND = (0x7F39) bit 6, CONTROL CHANGE = (0x7F39) bit 3, RESET ALL CTRL = (0x7F3B) bit 0, CHANNEL PRESSURE = (0x7F39) bit 5, SONG SELECT = (0x7F33) bit 3, EXCLUSIVE = (0x7F38) bits 0-3 (displayed ON when the nibble is non-zero). A byte-level census over all four ROMs finds exactly six references to 0x7F38: three are this screen, and the other three - 0xFB3398, 0xFB341E, 0xFB4B7F - all test `and C,0x08`, i.e. bit 3, as a gate on sending a live-parameter SysEx. No reference to 0x7F38 exists in any receive path, and none exists in prom_b, prom_c or prom_d at all. There is no MIDI channel or device-number setting anywhere in the SysEx path: the channel settings - MIDI INPUT MODE (0x7F35) low nibble, SINGLE CHANNEL (0x7F36) & 0x1F - are consumed only by MidiIn_BuildChannelRouteTable for channel-voice routing.",
+    "symbols": "filter readers sub_F9ABEF 0xF9ABEF, sub_F9AC15, sub_F9AC3B, sub_F9AC61, sub_F9AC87, sub_F9ACAA, sub_F9ACD0, sub_F9ACF6 0xF9ACF6; editors sub_F9AD21..sub_F9AF19; DL_InputOutputFilterMidiPr0gramChange prom_b 0xF0CCEE; transmit gates 0xFB3398 / 0xFB341E / 0xFB4B7F; MidiIn_BuildChannelRouteTable 0xFA6F21",
+    "evidence": "prom_a F9ACFB `ld C,(0x7f38) / and C,0x0f`; F9AF2B-F9AF44 the editor with mask 0x0F; FB3398-FB339F `ld C,(0x7f38) / and C,0x08 / jr z`. The screen order comes from the display list's own `.ascii` records at prom_b 0xF0CCEE (PROGRAM CHANGE, BANK SELECT, PITCH BEND, CONTROL CHANGE, RESET ALL CTRL, CHANNEL PRESSURE, SONG SELECT, EXCLUSIVE) matched against the handlers' consecutive display-list pointer pairs 0xF0CDE7 -> 0xF0CE5F stepping 15 bytes. The census is the four-ROM prefix scan over the 12 TLCS-900 direct-memory spellings (command in openQuestions).",
+    "certainty": "likely",
+    "bytes": ""
+   },
+   {
+    "topic": "Two settings bits that do reach the MIDI code, and their consumers",
+    "detail": "(0x7F34) bit 2 is ORed into the Song Position Pointer value (MidiIn_SongPosition sets bit 7 of (0xA5) when it is set) and is tested by the timer/sequencer transport in five more places. (0x7F33) bit 3 - the SONG SELECT filter - is tested by MidiIn_SongSelect and sets bit 7 of (0xA3). (0x7F39) bits 3/4/5/6 are the Control Change, Program Change, Channel Pressure and Pitch Bend filters and are read by MidiIn_ProgramChange (0xFA6D58), MidiIn_PitchBend (0xFA6E07) and MidiIn_ChannelPressure (0xFA6E8E) among 41 sites. (0x7F32) bit 2 gates the live-parameter SysEx senders alongside the EXCLUSIVE bit, and swaps out the whole sequencer tick handler elsewhere.",
+    "symbols": "MidiIn_SongPosition 0xFA61A4, MidiIn_SongSelect 0xFA61B8, MidiIn_ProgramChange 0xFA6D58, MidiIn_PitchBend 0xFA6DE3, MidiIn_ChannelPressure 0xFA6E6A, MidiIn_ControllerEnableTable 0xFA8468 (16-bit entries: byte offset from 0x7F39 in the high half, bit mask in the low half, 0xFFFF = always enabled)",
+    "evidence": "prom_a FA61AB `bit 2,(0x7f34)`, FA61BC `bit 3,(0x7f33)`, FA6D58/FA6E07/FA6E8E the three filter tests, FA6293-FA629F `ld XIX,0x00007f39 / ld C,(XIX+W) / and C,A / jr z` in MidiIn_ControlChange. (0x7F32) bit 2 at FB3393 and FB3419, and at F82EB9 with prom_a's own comment 'swaps the whole handler out'.",
+    "certainty": "established",
+    "bytes": ""
+   }
+  ],
+  "openQuestions": [
+   "The manual's 'BULK DUMP only on MIDI 1' is explained by call sites, not by a setting: sub_FB7165 (send) names only ring 0x601432 and sub_FB6098 (receive) names only ring 0x601646. But ORDINARY SysEx reception exists on both ports (sub_FB21CB drains the MIDI 2 SysEx ring 0x601C6E every main-loop pass). If the manual also says non-bulk SysEx is MIDI-1-only, that is NOT what the firmware does and the manual text should be checked before publication.",
+   "Which company holds manufacturer ID 0x50 is not settled in this tree, and the tree contradicts itself: the header at prom_a 0xFA5AEB says 'Matsushita', notes/FINDINGS-midi-port.md explicitly refuses to name one. Needs the MMA assignment list.",
+   "That CPU 2's serial channel 0 is the physical MIDI 2 jack is an inference from the link-channel wiring (link selector 2 = CPU1->CPU2 MIDI bytes, link index 6 = CPU2->CPU1 MIDI bytes). The schematic pin table in notes/DRIVER-INSIGHT-wsa1-2026-09-02.md names only MIDI1OUT/MIDI1IN/MIDI1SNS, and that table has already needed one off-by-one correction. A MIDI2 pin label from the service manual would close it.",
+   "sub_FB63AF, which builds the 16-byte record that sub_FB2160 dispatches on, was not traced, so the mapping from wire bytes to record fields 0 and 4 is unknown. Until that is done, 'command number = record[0], 0x00-0x21' cannot be turned into 'the byte at wire offset N is the command'. The 34-entry table at prom_b 0xF4F800 is the next thing to enumerate for the manual.",
+   "Frame-length arithmetic is one byte from a contradiction and should be measured, not reasoned about: the transmitter stops adding nibble pairs once the frame reaches 0xFC = 252 bytes and then appends flag + checksum + F7, while the receiver aborts a message whose accumulated count reaches 0xFF = 255. Whether the largest frame the machine emits is 255 or 256 bytes - and therefore whether it can overrun its own receiver - needs the reset point of the count at (0x60FC88)+0 (sub_FB7BB9 / sub_FB8081) to be read.",
+   "The EXCLUSIVE field is edited with bit mask 0x0F but the transmit gates test only bit 3. The reading that ON writes all four bits (0x0F) and OFF writes 0x00 is consistent with both, but the bit-field setter at 0xFB... reached by `calr 0xf22b` from 0xF9AF37 was not read, so it is inference. Do not publish 'EXCLUSIVE = (0x7F38) bit 3' as the storage format without reading that setter.",
+   "sub_FB7025 conditionally prepends the 3-byte fragment F0 50 7E when (0x60FCE4)+0x0F == 1, inside the same per-packet loop that already has a 12-byte header in the buffer. Whether that is the continuation-packet header (and therefore whether packets 2..n look different from packet 1 on the wire) is not established.",
+   "Reproducibility: the four-ROM address census quoted in the settings finding was run ad hoc as `python3` over original_ROMs/*, scanning the 12 TLCS-900 direct-memory prefix spellings (0xC1/D1/E1/F1 with a 16-bit address field, 0xC2/D2/E2/F2 with a 24-bit one) for 0x7F32/33/35/36/38/39/3A/3B. notes/prom_a_xref.py and notes/prom_c_xrefs.py already do this properly for their own images; the cross-image sweep should be added to one of them and committed rather than left in scratch."
+  ],
+  "_label": ""
+ },
+ {
+  "area": "Technics SX-WSA1R firmware \u2014 MIDI System Exclusive RECEIVE path (prom_a interrupt parser, prom_a foreground parser, prom_a message collector, prom_b grammar tables)",
+  "findings": [
+   {
+    "topic": "How F0 reaches the SysEx handler at all",
+    "detail": "0xF0 arrives as an ordinary status byte in MIDI_RX_Byte and is only stored as running status in (0x9A); nothing SysEx-specific happens yet. The SysEx handler runs when the NEXT byte arrives: it has bit 7 clear, so MIDI_RX_DataByte takes it, finds (0xA9) bit 0 still clear, forms (running_status & 0x70) >> 2 and jumps through MIDI_StatusDispatch_Table slot 7 to MIDI_RX_SystemCommon, which compares D against 0xF0 and branches to MIDI_RX_SysExStart with D = 0xF0 and E = that byte. So the byte the acceptance test looks at is the FIRST DATA BYTE after F0, i.e. message byte index 1.",
+    "symbols": "MIDI_RX_Byte 0xFA5496; MIDI_RX_DataByte 0xFA5763; MIDI_StatusDispatch_Table 0xFA578E; MIDI_RX_SystemCommon 0xFA5830; MIDI_RX_SysExStart 0xFA584D",
+    "evidence": "0xFA54C0 `st_dd8b a,0x9a`; 0xFA576A `bit 0,(0xa9)` / 0xFA576D `jrl nz`; 0xFA5779 `and A,0x70` + 0xFA577C `srl 2`; 0xFA5833 `cp D,0xf0` / 0xFA5836 `jr z`",
+    "certainty": "established",
+    "bytes": "F0 <id> ..."
+   },
+   {
+    "topic": "The identifier test \u2014 exactly two bytes, both fixed immediates",
+    "detail": "MIDI_RX_SysExStart first writes (0xA9) = 0x01 (\"armed\") for EVERY F0, then tests the identifier byte against two literal immediates: 0x50 and 0x7E. Either one takes the Accept path. There is no third comparison, no table lookup and no read of any setting or NVRAM cell on this path \u2014 both values are immediate operands of `cp E,imm8`. 0x7E is MIDI's Universal Non-Real Time ID. There is NO device/unit number or model ID compared at this level; the very next byte is already treated as body data.",
+    "symbols": "MIDI_RX_SysExStart 0xFA584D; MIDI_SysEx_Accept 0xFA585A",
+    "evidence": "0xFA584D `ld (0xa9),0x01`; 0xFA5850 `cp E,0x50` (`cd cf 50`) / 0xFA5853 `jr z`; 0xFA5855 `cp E,0x7e` (`cd cf 7e`) / 0xFA5858 `jr nz`",
+    "certainty": "established",
+    "bytes": "F0 50 ... | F0 7E ..."
+   },
+   {
+    "topic": "What makes it take the Ignore path, and what Ignore actually does",
+    "detail": "MIDI_SysEx_Ignore (0xFA586D) is nothing but the shared `ret` \u2014 it is also the fall-through of Accept. Taking it means: (0xA9) keeps the value 0x01, i.e. ARMED but NOT accepted. The consequence is deliberate: every following data byte still reaches MIDI_RX_SysExData (because bit 0 is set) and is dropped there (because bit 1 is clear), so the unit tracks another maker's message to its F7 without acting on it. Ignore is taken for any identifier byte that is neither 0x50 nor 0x7E.",
+    "symbols": "MIDI_SysEx_Ignore 0xFA586D; MIDI_RX_SysExData 0xFA586E",
+    "evidence": "0xFA5858 `jr nz,0xFA586D`; 0xFA586D `0e` (RET); 0xFA586E `bit 1,(0xa9)` / 0xFA5871 `jr z` to the RET at 0xFA5883",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "On Accept, F0 and the identifier are re-emitted into a ring, not just flagged",
+    "detail": "Accept sets (0xA9) bit 1 (\"in-message\") and then pushes BOTH bytes \u2014 D (0xF0) and E (the identifier) \u2014 through prom_b slot 0xF41E3C. That slot is `jp 0xF849EE`, whose prom_a label is Ring601646_Put, so the interrupt side's SysEx bytes land in the ring object at 0x601646, capacity 0x200 per the ring-buffer map. Body bytes go to the same routine.",
+    "symbols": "MIDI_SysEx_Accept 0xFA585A; T_Ring601646_Put 0xF41E3C; Ring601646_Put 0xF849EE",
+    "evidence": "0xFA585A `set 1,(0xa9)`; 0xFA5860 and 0xFA5867 `call 0xf41e3c`; prom_b `T_Ring601646_Put: jp 0xF849EE  ; F41E3C`; notes/FINDINGS-prom_a-ring-buffers.md capacity table row `0x601646 | 0x200`",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Body-byte gate: forwarded only while bit 1 set AND bit 5 clear",
+    "detail": "MIDI_RX_SysExData forwards a body byte only if (0xA9) bit 1 is set and (0xA9) bit 5 is clear; it also sets bit 0 of (0x216F), the MIDI-activity flag. Bit 5 is a suppression flag \u2014 see the separate finding on where it is set.",
+    "symbols": "MIDI_RX_SysExData 0xFA586E; MIDI_SysEx_DataDone 0xFA5883",
+    "evidence": "0xFA586E `bit 1,(0xa9)` / `jr z`; 0xFA5873 `bit 5,(0xa9)` / `jr nz`; 0xFA5878 `set 0,(0x216f)`; 0xFA587D `call 0xf41e3c`",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Termination and the abort rule \u2014 how a message ends",
+    "detail": "Termination is handled back in MIDI_RX_Byte's status-byte arm, not in the SysEx routines. With (0xA9) bit 0 set: if bit 1 is CLEAR (an ignored maker), any status byte ends the message quietly \u2014 (0x9A)=0 and (0xA9) &= 0xCC, clearing bits 0,1,4,5. If bit 1 is SET: a 0xF7 with bit 5 clear forwards the 0xF7 itself through 0xF41E3C and then writes (0xA9)=0x04, which the following `and 0xCC` preserves \u2014 so 0x04 is the \"a complete SysEx was received\" residue. Any OTHER status byte 0x80..0xF6 aborts: (0xA9)=0x10, (0x9A)=0, and nothing is forwarded. System Real Time 0xF8..0xFF never reaches this arm (it is split off at 0xFA54B6), so a clock or active-sensing byte inside a SysEx does NOT break it \u2014 correct MIDI 1.0 behaviour.",
+    "symbols": "MIDI_RX_Byte .LFA54C0 0xFA54C0 / .LFA54E5 0xFA54E5 / .LFA54EE 0xFA54EE",
+    "evidence": "0xFA54C7 `bit 0,(0xa9)`; 0xFA54CC `bit 1,(0xa9)`; 0xFA54D1 `cp A,0xf7`; 0xFA54D6 `bit 5,(0xa9)`; 0xFA54DC `call 0xf41e3c`; 0xFA54E2 `ld (0xa9),0x04`; 0xFA54E8 `and (0xa9),0xcc`; 0xFA54EE `ld (0xa9),0x10`; 0xFA54B6 `cp A,0xf7 / jr ule`",
+    "certainty": "established",
+    "bytes": "... F7"
+   },
+   {
+    "topic": "(0xA9) \u2014 the complete SysEx state byte, and a CORRECTION to the existing annotation",
+    "detail": "Full map from every write and test in the image: bit 0 = armed (any F0), bit 1 = identifier accepted, bit 2 = a message completed cleanly (value 0x04), bit 4 = a message was aborted by a stray status byte (value 0x10), bit 5 = suppress further SysEx. A UART receive error wipes the whole byte (`ld (0xa9),0x00` at 0xFA5426). \u2605 CORRECTION: both the block header above MIDI_RX_SysExStart and notes/FINDINGS-midi-port.md state that bit 5 is \"set nowhere in the converted code\". It IS set \u2014 at 0xFB6151, inside the synchronous receiver sub_FB6098, on a SysEx framing error. It is cleared again by the next F0 (`ld (0xa9),0x01`) and by the `and 0xCC` at 0xFA54E8. Bits 2 and 4 are written but no test of them was found anywhere in prom_a.",
+    "symbols": "MIDI_RX_ErrorReset 0xFA5426; sub_FB6098 0xFB6098 (set at 0xFB6151); MIDI_RX_SysExStart 0xFA584D",
+    "evidence": "census of (0xA9) sites: 0xFA5426, 0xFA54C7, 0xFA54CC, 0xFA54D6, 0xFA54E2, 0xFA54E8, 0xFA54EE, 0xFA5520, 0xFA576A, 0xFA584D, 0xFA585A, 0xFA586E, 0xFA5873, 0xFB6151, 0xFB99CC \u2014 bit 5 is set only at 0xFB6151 (`f0 a9 bd`)",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "System Real Time is suppressed while a SysEx is in flight",
+    "detail": "MIDI_RT_Received reads (0xA9), masks with 0x03 and returns early if either bit is set, so 0xF8 TIMING CLOCK / 0xFA START / 0xFB CONTINUE / 0xFC STOP are ignored for transport and tempo purposes for as long as a SysEx is armed or in progress (0xFE and 0xFF are handled before that test and are unaffected). Separately, the block sender at 0xFB99AB spins on `(0xA9) & 0x01` until it is clear before pushing a block out \u2014 it will not transmit into an inbound SysEx.",
+    "symbols": "MIDI_RT_Received 0xFA5504; sub_FB99AB 0xFB99AB",
+    "evidence": "0xFA5520 `ld A,(0xa9)` / 0xFA5523 `and A,0x03` / 0xFA5526 `jr nz`; 0xFB99CC `ld H,(0xa9)` / 0xFB99CF `and H,0x01` / 0xFB99D2 spin",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "MIDI_SysExHeader (F0 50) is a TRANSMIT template \u2014 ZERO bytes are ever matched against it",
+    "detail": "This is the most likely thing for a manual to get backwards. MIDI_SysExHeader at 0xFA5CB8 is two bytes, 0xF0 0x50. Its ONLY reader is MIDI_Fg_SystemCommon, which loads it as one 16-bit word into a 2-byte outgoing frame, then OVERWRITES byte 1 at 0xFA5B24 with the identifier that was actually received, then posts 2 bytes to ring 0x601C6E via 0xF41EAC (Ring601C6E_PutBlock). No compare instruction anywhere in either image reads 0xFA5CB8. The acceptance decision is made entirely by the `cp` immediates listed above; the 0x50 in the template is only the expected value, never the sent one.",
+    "symbols": "MIDI_SysExHeader 0xFA5CB8; MIDI_Fg_SystemCommon 0xFA5AEB; T_Ring601C6E_PutBlock 0xF41EAC",
+    "evidence": "0xFA5CB8 `.byte 0xf0, 0x50`; 0xFA5AF3 `ld bc,(0xfa5cb8)`; 0xFA5B24 `ld (XIZ+0xff),H`; 0xFA5B2B `pushw 0x02` + 0xFA5B2E `call 0xf41eac`; the block header at 0xFA5CB8 states it is the only reader",
+    "certainty": "established",
+    "bytes": "F0 50"
+   },
+   {
+    "topic": "A second, independent copy of the same state machine runs in the foreground",
+    "detail": "MIDI_DrainQueue / MIDI_Fg_SystemCommon / MIDI_Fg_SysExData mirror the interrupt parser bit for bit, with (0x0960) as running status, (0x0963) as flags and (0x0964) as the SysEx state. The identifier test is the same pair of immediates, 0x50 then 0x7E. On accept it writes (0x0964)=0x03 (bits 0+1 together); 0xF7 closes with (0x0964)=0x04; any other status abandons with (0x0964)=0x00. Its bytes go to a DIFFERENT ring, 0x601C6E (capacity 0x200), through 0xF41EA8 / 0xF41EAC.",
+    "symbols": "MIDI_DrainQueue 0xFA5942; MIDI_Fg_SystemCommon 0xFA5AEB; MIDI_Fg_SysExData 0xFA5B3D; MIDI_Fg_DataByte 0xFA59FA",
+    "evidence": "0xFA5B15 `cp H,0x50` / 0xFA5B1A `cp H,0x7e`; 0xFA5B1F `ld (0x0964),0x03`; 0xFA5989 `ld (0x0964),0x04`; 0xFA5991 `ld (0x0964),0x00`; 0xFA5B41/0xFA5B47 the bit-1/bit-5 gate; 0xFA5B57 `call 0xf41ea8`",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Where received data is buffered, and exactly what bounds it",
+    "detail": "Neither ring is the message buffer. Two near-identical collectors drain them \u2014 sub_FB20CE from ring 0x601646 (interrupt side, via 0xF41E38) and sub_FB21CB from ring 0x601C6E (foreground side, via 0xF41EA4) \u2014 and both append into the SAME message buffer through sub_FB6165, sharing one state byte at (0x60FD43): 0 = waiting for F0, 1 = waiting for the identifier, 2 = body. sub_FB6165 stores the byte at the cursor desc[+0x0A], post-increments it, writes a 0xFF sentinel one past it, and maintains a 16-bit count at desc[+0x00]: an F0 RESETS the count to 1, every other byte increments it. THE BOUND: a body data byte is appended only while that count is below 0x00FF \u2014 `cp WA,0x00ff / jr nc` rejects at 255 and resets the collector. The identifier byte and the closing 0xF7 bypass that test, so the longest message that can be stored is F0 + identifier + 253 data bytes + F7 = 256 bytes, plus the sentinel.",
+    "symbols": "sub_FB20CE 0xFB20CE; sub_FB21CB 0xFB21CB; sub_FB6165 0xFB6165; state byte (0x60FD43); buffer pointer (0x60FC80)",
+    "evidence": "0xFB20E3 `call 0xf41e38` / 0xFB21E0 `call 0xf41ea4`; 0xFB2104 `cp H,0xf0`; 0xFB210E `cp H,0x50` + 0xFB2113 `cp H,0x7e` (and the identical 0xFB2201/0xFB220B/0xFB2210); 0xFB2124-0xFB212F and 0xFB2221-0xFB222C `ld WA,(XBC) / cp WA,0x00ff / jr nc`; 0xFB618F `ld (XWA),0xff`; 0xFB6192 `cp (XIZ+0x08),0xf0` then 0xFB619A `ld (XBC),0x0001` else 0xFB61A6 `inc 1,HL`",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The buffer objects themselves",
+    "detail": "sub_FB7F42 installs four buffer descriptors: (0x60FC80)=0x60F820 (the active one), (0x60FC84)=0x60F938, (0x60FC88)=0x60FA50, (0x60FC8C)=0x60FB68. sub_FB7FEB resets a descriptor: count desc[+0x00]=0, and the three cursors desc[+0x02] (read), desc[+0x06] and desc[+0x0A] (write) all set to desc+0x0E, with a 0xFF sentinel written there. So payload starts 14 bytes into each descriptor. The four are spaced 0x118 apart and the last one ends exactly at 0x60FC80 where the pointer table begins, which makes the payload area 0x118-0x0E = 0x10A = 266 bytes each \u2014 comfortably above the 257 bytes the count bound allows. sub_FB8028 swaps the active and alternate descriptors, so this is a double buffer.",
+    "symbols": "sub_FB7F42 0xFB7F42; sub_FB7FEB 0xFB7FEB; sub_FB8028 0xFB8028; sub_FB80F3 0xFB80F3 (reset the active buffer)",
+    "evidence": "0xFB7F48-0xFB7F8D the four `lda`/`ld` pairs; 0xFB7FF3 `ld (XIX),0x0000`; 0xFB7FF9 `add XBC,0x0000000e`; 0xFB8002/0xFB8008/0xFB800E the three cursor stores; 0xFB8014 `ld (XBC),0xff`. The 0x118 stride and the exact abutment at 0x60FC80 are arithmetic on those four addresses, not a statement in the ROM",
+    "certainty": "likely",
+    "bytes": ""
+   },
+   {
+    "topic": "\u2605 The grammar walker SKIPS F0 and the identifier without re-comparing them",
+    "detail": "sub_FB63D1 begins by adding 2 to the buffer's read cursor and then reading one byte \u2014 so the first byte it examines is message byte index 2. Bytes 0 (F0) and 1 (the manufacturer/Universal identifier) are never compared again, and the identifier is never stored into the parse record. Consequence for a manual: the command grammar below is reachable with EITHER identifier \u2014 e.g. `F0 7E 21 04 00 11 F7` parses exactly like `F0 50 21 04 00 11 F7`, and `F0 50 7F 09 01 F7` parses as GM System On. Whether an individual handler re-reads the raw buffer to check byte 1 was not found, but no such read was located.",
+    "symbols": "sub_FB63D1 0xFB63D1; sub_FB61B1 0xFB61B1 (read one byte, advance the cursor)",
+    "evidence": "0xFB63DD `sub XWA,XWA` / 0xFB63DF `inc 2,XWA` / 0xFB63E1 `add (XBC+0x02),XWA`; 0xFB63EA `calr` to 0xFB61B1; setter indices used by the walk start at 5, never 0..4 for a message byte",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "\u2605 The accepted third byte \u2014 the root table, 14 values",
+    "detail": "The walker matches message byte 2 against a 6-byte-record table at prom_b 0xF5115B, bounded to 15 records (the 15th is the 0xFF terminator). Record layout = [0] match byte, [1] command id (0 means descend), [2..5] LE32 pointer to the next node. The 14 accepted values, in table order, are: 0x25, 0x7E, 0x23, 0x24, 0x2D, 0x27, 0x28, 0x2C, 0x2B, 0x7F, 0x29, 0x2A, 0x21, 0x22. Note 0x26 is NOT accepted. Two of them terminate immediately: 0x25 yields command 0x09 and 0x7E yields command 0x0A with no further bytes matched.",
+    "symbols": "root table 0xF5115B (prom_b LinkTable_F4FF61 record 767); sub_FB63D1 0xFB63D1; probe wsa1/notes/sysex-probes/sysex_grammar_dump.py",
+    "evidence": "0xFB63FC `add XBC,0x00f5115b`; 0xFB63F2 `ld l,0x0f` with 0xFB649A `dec 1,L` bounds it at 15; 0xFB649A `inc 6,DE` fixes stride 6; 0xFB6407 `cp A,0xff` is the terminator test; 0xFB64C9 `cp L,0xfe` makes 0xFE a wildcard. Table bytes read from original_ROMs/wsa1_prom_b.ic13 at load base 0xF00000 (base asserted against the literal F0 50 23 7E F7 at 0xF4FEB4)",
+    "certainty": "established",
+    "bytes": "F0 <50|7E> {21,22,23,24,25,27,28,29,2A,2B,2C,2D,7E,7F} ... F7"
+   },
+   {
+    "topic": "\u2605 The complete short-form accepted sequences, with their command numbers",
+    "detail": "Walking the trie gives, for the sequences that terminate within a few bytes: `F0 .. 23 7E F7` = cmd 0x01; `24 7E` = 0x02; `27 7E` = 0x03; `28 7E` = 0x04; `29 7E` = 0x05; `2A 7E` = 0x04 (same command as 0x28); `25` = 0x09; `7E` = 0x0A; `21 04 <00|01> 11` = 0x07; `22 04 <00|01> 11` = 0x08; `7F 09 01` = 0x20 (this is MIDI's standard GM System On); `7F 09 02` = 0x21 (GM System Off). The families 0x2B, 0x2C and 0x2D all continue `04 <00|01> 11` and then open into large parameter-address subtrees (338 reachable nodes in total) reaching commands up to at least 0x1A; those bodies are not enumerated here. These byte strings are independently corroborated by a block of literal OUTGOING SysEx templates in prom_b at 0xF4FEB4-0xF4FF60, which contains exactly F0 50 23 7E F7, F0 50 24 7E F7, F0 50 27 7E F7, F0 50 28 7E F7, F0 50 29 7E F7, F0 50 2A 7E F7, F0 50 21 04 00 11 F7, F0 50 22 04 00 11 F7, F0 7E 7F 09 01 F7, F0 7E 7F 09 02 F7 and a run of F0 50 2D 04 00 11 ... messages.",
+    "symbols": "root 0xF5115B and nodes 0xF4FF67..0xF511B4; literal templates 0xF4FEB4-0xF4FF60; probe wsa1/notes/sysex-probes/sysex_grammar_dump.py --paths",
+    "evidence": "Table records read from the ROM by the committed probe; the outgoing templates are read by prom_a at 0xFB2334 (`lda XBC,0xf4fed5` = F0 50 21 04 00 11 F7, with `pushw 0x07` as its length) and 0xFB23AD (`lda XBC,0xf4fedc` = F0 50 22 04 00 11 F7)",
+    "certainty": "established",
+    "bytes": "F0 50 23 7E F7 | F0 50 21 04 00 11 F7 | F0 7E 7F 09 01 F7"
+   },
+   {
+    "topic": "\u2605 The byte after 0x04 is a two-valued unit/device field; 04 nn 11 is a model triple",
+    "detail": "In every 0x21 / 0x22 / 0x2B / 0x2C / 0x2D family the grammar demands 0x04, then EITHER 0x00 OR 0x01, then 0x11. Both values are literal match bytes in separate records (e.g. node 0xF4FF73 holds `00 00 <ptr>` and `01 00 <ptr>`, both pointing at node 0xF4FF67 which matches 0x11) \u2014 they are NOT read from a setting, a DIP strap or NVRAM at match time. The matched bytes are stored into the parse record at indices 6, 7 and 8. sub_FB2323 transmits F0 50 21 04 00 11 F7 up to three times, waits for command 0x08 (which is `F0 .. 22 04 <00|01> 11`), and then COPIES parse-record fields 6, 7 and 8 into (0x60FC90), (0x60FC91) and (0x60FC92) \u2014 i.e. it remembers the responding unit's triple. Those three cells are written there and initialised to 0xFF by sub_FB7F1F, but no reader of them was found anywhere in prom_a.",
+    "symbols": "nodes 0xF4FF85/0xF4FF73/0xF4FF67 (for 0x21) and 0xF4FFAF/0xF4FF9D/0xF4FF91 (for 0x22); sub_FB2323 0xFB2323; sub_FB7F1F 0xFB7F1F",
+    "evidence": "0xFB2375/0xFB2384/0xFB2393 push field indices 6, 7, 8 into sub_FB62D3 and 0xFB237F/0xFB238E/0xFB239D store the results; 0xFB2355 `cp A,0x08` is the reply test; a grep of prom_a for 0x60fc90/91/92 finds only those three stores and the 0xFB7F21 init",
+    "certainty": "established",
+    "bytes": "F0 50 21 04 00 11 F7  /  F0 50 21 04 01 11 F7"
+   },
+   {
+    "topic": "Validation: the parse record, its error codes, and the dispatch bound",
+    "detail": "The walk fills a 16-byte parse record whose pointer is (0x60FCD8)=0x60FC98, initialised from a ROM template at prom_b 0xF511E9 = `00 00 00 00 00 FF FF FF FF FF FF FF FF FF FF FF`. Field 0 = the command id, field 4 = an error code (0 = OK), fields 5..0x0E = the matched message bytes from index 2 onwards. A miss in the ROOT table writes error 0x07; a miss in any deeper node writes 0x08; the deepest loop writes 0x10. After the walk, sub_FB2160 (interrupt-side) and sub_FB225D (foreground) require field 4 == 0, then require field 0 < 0x22, then dispatch through a 34-entry LE32 handler table \u2014 0xF4F800 for the interrupt-side ring and 0xF4F888 for the foreground ring. The two tables TILE (0xF4F800 + 34*4 = 0xF4F888), which is the last-entry test on the count. The two differ only in their default slot: unhandled commands run 0xFB2820 (a bulk-transfer session loop) on the interrupt side and 0xFB22C8 (reset and return, a no-op) on the foreground side.",
+    "symbols": "sub_FB62D3 0xFB62D3 (field getter); sub_FB6219 0xFB6219 (field setter); sub_FB2160 0xFB2160; sub_FB225D 0xFB225D; template 0xF511E9",
+    "evidence": "0xFB640C `pushw 0x07` and 0xFB64BF `pushw 0x08` and 0xFB6AD7 `pushw 0x10`, all reaching 0xFB6ADA `pushw 0x04` + the setter; 0xFB217D `cp a,0x00` (field 4); 0xFB2194 and 0xFB2291 `cp A,0x22 / jr nc`; 0xFB21AF `add XWA,0x00f4f800` and 0xFB22AC `add XWA,0x00f4f888`; 0xFB801A `lda XIY,0xf511e9` + `ldw bc,0x08` + `ldirw`",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "A third, stricter collector accepts ONLY 0x50",
+    "detail": "sub_FB6098 is a blocking receiver that drains the interrupt-side ring 0x601646 itself, with its own local state. Unlike the two background collectors it accepts ONLY 0x50 as the identifier \u2014 there is no 0x7E test. It reports through parse-record field 4: 1 = first byte was not F0, 2 = identifier was not 0x50, 3 = a status byte other than F7 arrived mid-message, 6 = the 0xFF byte-count bound was hit. On any of errors 1/2/3 (but not 6) it also sets (0xA9) bit 5, which is what suppresses further SysEx forwarding in the interrupt parser until the next F0. On a clean F7 it sets bit 5 of (0x60FD40).",
+    "symbols": "sub_FB6098 0xFB6098",
+    "evidence": "0xFB60E0 `cp H,0xf0` else 0xFB60E9 `pushw 0x01`; 0xFB60EE `cp H,0x50` else 0xFB60F7 `pushw 0x02` (no 0x7E compare exists in this routine); 0xFB612C `cp H,0xf7` else 0xFB6142 `pushw 0x03`; 0xFB610A `cp WA,0x00ff` / 0xFB611B `pushw 0x06`; 0xFB6145 `pushw 0x04` + setter; 0xFB6151 `set 5,(0xa9)`",
+    "certainty": "established",
+    "bytes": "F0 50 ... F7"
+   },
+   {
+    "topic": "\u26a0 Two annotations in the same file disagree about what 0x50 is",
+    "detail": "The block header above MIDI_RX_SysExStart explicitly refuses to name a company: \"Which company holds 0x50 is NOT established here ... Do not write a company name into this file on the strength of the byte alone.\" The block header above MIDI_Fg_SystemCommon \u2014 generated by notes/gen_prom_a_fa5aeb_module.py \u2014 states flatly \"0x50 is Matsushita's MIDI manufacturer ID\". Nothing in this tree resolves the two; the claim needs the MMA assignment list, which is not present here. For a published manual, quote the byte 0x50 and leave the attribution to a cited external source.",
+    "symbols": "header at 0xFA5919-0xFA5938 (MIDI_RX_SysExStart); header at ~0xFA5AEB (MIDI_Fg_SystemCommon); notes/gen_prom_a_fa5aeb_module.py line ~515",
+    "evidence": "the two comment blocks, quoted verbatim above, in prom_a/wsa1_prom_a.s",
+    "certainty": "unverified",
+    "bytes": "50"
+   }
+  ],
+  "openQuestions": [
+   "Who reads (0xA9) bits 2 and 4? They are written (0x04 after a clean F7, 0x10 after an aborted SysEx) but a census of every (0xA9) site in prom_a finds no test of either. If nothing reads them they are diagnostics only \u2014 but a reader could live in prom_c/prom_d, which were not searched.",
+   "Do the command HANDLERS re-check the manufacturer byte? The grammar walker provably skips message bytes 0 and 1, so at the grammar level `F0 7E 21 04 00 11 F7` is accepted identically to `F0 50 21 ...`. Many handlers do re-read the raw buffer descriptor (0x60FC80), so a late check is possible; none was located. This must be settled before a manual states that either identifier works.",
+   "The tables contain command ids up to 0x27, but both dispatchers reject anything >= 0x22. Commands 0x22-0x27 therefore parse successfully and are then dropped by sub_FB2160/sub_FB225D. Is there a third dispatcher with a larger bound, or are those table entries dead? Only one site each references 0xF4F800 and 0xF4F888.",
+   "What do commands 0x01-0x1F actually do? On the interrupt-side ring, 0x01-0x08 and 0x0A-0x16 all land on the single shared handler 0xFB2820, which gates on the panel-mode cell (0x207A)==0x79 and on command >= 7; on the foreground ring the same commands land on a no-op. Distinct handlers exist only for 0x00, 0x09, 0x17, 0x18, 0x19, 0x1A, 0x1B-0x1F, 0x20, 0x21.",
+   "The 0x2B / 0x2C / 0x2D subtrees (338 reachable nodes) are the bulk of the protocol \u2014 parameter addresses after `04 <00|01> 11` \u2014 and were not enumerated. The committed probe dumps them with --paths; they need a pass of their own before any parameter table goes into a manual.",
+   "What is the unit byte after 0x04 for \u2014 a device number selectable in the UI, or a MAIN/SUB distinction between two linked units? The grammar accepts 0x00 and 0x01 unconditionally and the value is only remembered (0x60FC91), never compared. Felipe's hardware could settle this by watching what the instrument sends for its own unit.",
+   "The 266-byte payload capacity per buffer is arithmetic on the 0x118 descriptor stride and the abutment at 0x60FC80, not a constant in the ROM. Worth confirming against a MAME memory map before it is printed as a limit; the byte-count bound of 255/256 bytes per message IS a ROM constant and is the number a manual should quote.",
+   "(0x0964) = 4, set by the foreground parser after a clean F7, has no located reader \u2014 the same open question the existing block header at 0xFA5942 already flags."
+  ],
+  "_label": ""
+ },
+ {
+  "area": "WSA1R SysEx error reporting \u2014 where ERROR 40 / 41 / 42 are raised (prom_a + prom_b)",
+  "findings": [
+   {
+    "topic": "The whole chain: status byte \u2192 message id \u2192 screen",
+    "detail": "None of the three errors is raised as the number 40/41/42. The SysEx engine keeps a parse record whose pointer is RAM (0x60FCD8); field 4 of that record is a STATUS byte. At the end of a bulk-dump session sub_FB7DFE reads it: 0x00 \u2192 message 0x23 (\"COMPLETED!\"); 0x21 \u2192 screen 0xB3 with no popup at all; anything else \u2192 message := STATUS_MAP[status], where STATUS_MAP is the byte table at prom_b 0xF511C7. The message id is written to RAM (0x2880) and screen request 0xAB is posted. sub_F99098 then paints (0x2880): base = *(0xF993B9 + 4*(0x7FC1)), start = *(base + 8*code), end = *(base + 8*code + 4), handed to display-list interpreter A. Message 0x22 = ERROR 40, 0x21 = ERROR 41, 0x20 = ERROR 42, 0x23 = COMPLETED!. Field accessors: sub_FB6219 sets a field, sub_FB62D3 gets one, both 16-way jump tables over record offsets +0..+15.",
+    "symbols": "sub_FB7DFE 0xFB7DFE, sub_FB7E29 0xFB7E29, sub_FB7E38 0xFB7E38, sub_FB7E43 0xFB7E43, AsciiRun_F511C7 0xF511C7 (prom_b), PtrTable_F99121 0xF99121, sub_F99098 0xF99098, sub_F99021 0xF99021, sub_FB6219 0xFB6219, sub_FB62D3 0xFB62D3",
+    "evidence": "0xFB7E54 `add XWA,0x00f511c7` is the ONLY instruction in any of the four images naming 0xF511C7; 0xFB7E5C `ld (0x2880),C`. Painter: 0xF990A3 `cp C,0x40`, 0xF990AF `mul C,0x08`, 0xF990BF `add XWA,0x00f993b9`, 0xF990CC/0xFB... `ld XIY,(XWA)` + `inc 4,XBC`. Index origin pinned twice: sub_FB7DFE special-cases status 0 to message 0x23 AND STATUS_MAP[0] == 0x23. Reproduced by wsa1/notes/sysex-probes/sysex_error_codes.py (commit d4f11089).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "ERROR 40 \u2014 exact condition",
+    "detail": "ERROR 40 is message 0x22, and STATUS_MAP maps exactly three statuses to it: 0x08, 0x09 and 0x0A. Those three are raised by the SysEx header parser sub_FB63D1, which matches the incoming message against a 10-level trie in prom_b whose root is 0xF5115B. The parser first advances the buffer read cursor by TWO \u2014 the 0xF0 and the manufacturer byte are skipped and never re-compared \u2014 so trie depth 1 is message byte [2], depth 2 is byte [3], and so on. Code 0x08 = byte[3] not in the depth-2 node; 0x09 = byte[4] not in the depth-3 node; 0x0A = byte[5] not in the depth-4 node. For every Technics product id the machine knows (0x21, 0x22, 0x2B, 0x2C, 0x2D) the accepted depth-2/3/4 bytes are 0x04, then 0x00 or 0x01, then 0x11 \u2014 so for a message addressed to the WSA1 (id 0x2D) ERROR 40 means byte[3] != 0x04, or byte[4] not in {0x00,0x01}, or byte[5] != 0x11. For the six short forms (ids 0x23,0x24,0x27,0x28,0x29,0x2A) depth 2 must be 0x7E. For 0x7F (universal) depth 2 must be 0x09. NOTE that a wrong PRODUCT ID at byte[2] does NOT give ERROR 40 \u2014 it gives status 0x07, i.e. ERROR 41.",
+    "symbols": "sub_FB63D1 0xFB63D1; raise sites 0xFB64BF (0x08), 0xFB6582 (0x09), 0xFB6645 (0x0A); shared tail 0xFB6ADA; root table 0xF5115B (prom_b)",
+    "evidence": "Cursor skip: 0xFB63DD `sub XWA,XWA / inc 2,XWA / add (XBC+0x02),XWA` (bytes e8 a0 e8 62 a9 02 88). Root bound: 0xFB63F2 `ld L,0x0f`, stride from `inc 6,DE` at 0xFB649A. Raises: `pushw 0x08` at 0xFB64BF etc., then 0xFB6ADA `pushw 0x04` and the setter. Corroborated independently: every trie node ends in a 0xFF record whose SECOND byte repeats the depth's error code \u2014 0xF511AF=FF 07 (root), 0xF50225=FF 08, 0xF50219=FF 09, 0xF50207=FF 0A. Third confirmation of the byte offsets: the outgoing template block at prom_b 0xF4FEF8 is literally F0 50 2D 04 00 11 40 00 00 00 00 20, which is the trie path \"2D/04/00/11/40/00/00/00/00/20\" starting at offset 2.",
+    "certainty": "established",
+    "bytes": "accepted: F0 50 <21|22|2B|2C|2D> 04 <00|01> 11 \u2026  |  F0 50 <23|24|27|28|29|2A> 7E F7  |  F0 50 7E  |  F0 50 25  |  F0 7E 7F 09 <01|02> F7"
+   },
+   {
+    "topic": "ERROR 42 \u2014 exact condition, and it is a SEND-side error only",
+    "detail": "ERROR 42 is message 0x20. Three statuses map to it \u2014 0x18, 0x1F and 0x20 \u2014 but only 0x20 is ever raised anywhere in the four ROM images. Its single raise is in sub_FB6FB2, the loop that streams a bulk dump OUT: each pass calls Link_WaitBlockDone through prom_b thunk 0xF4123C and, if it returns WA = 0xFFFF, writes status 0x20 to BOTH parse records (*(0x60FCE0) at 0xFB6FFB and *(0x60FCD8) at 0xFB700A). Link_WaitBlockDone returns 0xFFFF when bit 7 of (0x8A) \u2014 \"a link block transfer is outstanding\" \u2014 is still set 500 ticks of the free-running counter (0x80) after entry, i.e. about 1.02 s at the 488.28 Hz derived for timer 1; it then also aborts the transfer (DMA3V=0, (0x6007DA)=0, P7 bit 1 set) and bumps the error counter at (0x6007E1). So ERROR 42 is NOT a MIDI handshake failure with the receiving device, despite the on-screen wording: it is the CPU1\u2194CPU2 block link failing to complete while the dump is being sent.",
+    "symbols": "sub_FB6FB2 0xFB6FB2, wait at 0xFB6FD1 `call 0xf4123c`, raise at 0xFB6FFB and 0xFB700A; Link_WaitBlockDone 0xF8E66D; thunk T_Link_WaitBlockDone 0xF4123C; sub_FB6F6B 0xFB6F6B is the same loop WITHOUT the wait",
+    "evidence": "0xFB6FD1 `call 0xf4123c` / 0xFB6FD5 `cp WA,0xffff` / 0xFB6FD9 `jr z,.LFB6FFB`; .LFB6FFB = `pushw 0x20 / pushw 0x04 / ld XBC,(0x60fce0) / push / calr 0xFB6219`, immediately followed by the same with `ld XBC,(XIX)` where XIX = 0x60FCD8. Timeout constant: 0xF8E67D `cp BC,0x01f4`. Direction: sub_FB6FB2 is called from Remote_E80000_Read32Blocks (0xFB2542) and 0xFB273D, and the loop's sub_FB7040 splits each source byte into a high and a low nibble (`srl c,0x04` at 0xFB706F, `and (XIX+0x01),0x0f` at 0xFB7074) before pushing it into the OUTPUT buffer object *(0x60FC88).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "ERROR 41 \u2014 the catch-all, and the full list of what lands on it",
+    "detail": "ERROR 41 is message 0x21 and is what STATUS_MAP gives for every raised status except 0x08/0x09/0x0A (\u219240), 0x20 (\u219242), 0x16 (\u2192ERROR 21) and 0x00 (\u2192COMPLETED). The statuses actually raised, with their conditions: 0x01 the first byte of an inbound message inside a session is not 0xF0; 0x02 the second byte is not 0x50; 0x03 a status byte other than 0xF7 arrived inside an open message; 0x04 (0x9E) & 0x2C is non-zero, i.e. the MIDI-IN UART reported a framing/parity/overrun error or active sensing was lost; 0x05 a timeout \u2014 (0x80) minus the start tick exceeded 0x09C4 (2500 ticks, ~5.1 s), or 0x03E8 (1000, ~2.0 s) when bit 2 of (0x60FD40) is set; 0x06 the message exceeded 254 bytes; 0x07 byte[2] (the product id) is not one of the 14 the root table lists; 0x0B..0x10 the trie failed at depths 5..10; 0x0E (second site) three per-section enable flags were all clear; 0x11 the nibble-encoded body has an ODD length, or the machine is not on the right screen; 0x12 the tail flag byte is neither 0x00 nor 0x01; 0x13 and 0x1E a section index >= 0x12; 0x14 CHECKSUM MISMATCH; 0x19..0x1D per-section guards; 0x21 nothing selected (special-cased away, no popup).",
+    "symbols": "0xFB60E9(01) 0xFB60F7(02) 0xFB6142(03) 0xFB776D(04) 0xFB77A1(05) 0xFB611B(06) 0xFB640C(07) 0xFB6708(0B) 0xFB67CB(0C) 0xFB688E(0D) 0xFB6951/0xFB6CE5(0E) 0xFB6A14(0F) 0xFB6AD7(10) 0xFB5184/0xFB6DA7(11) 0xFB6E69(12) 0xFB2C9A(13) 0xFB6E64(14) 0xFB29A8,0xFB29DE(19) 0xFB2A14,0xFB2A67(1A) 0xFB2AAB,0xFB2AE2,0xFB2B1D(1B) 0xFB2B5C,0xFB2B93,0xFB2BCE(1C) 0xFB2C21,0xFB2C59(1D) 0xFB306C(1E) 0xFB6BE1(21)",
+    "evidence": "Every site is a `pushw <status> / pushw 0x04 / <record> / call 0xFB6219` sequence found by a byte scan of prom_a (26 direct sites plus the 10 shared-tail depth raises plus 2 branch-tail raises); listed by `sysex_error_codes.py --sites`. Condition sources: 0x04 at 0xFB7761-0xFB7767 `ld C,(0x9e) / and C,0x2c / jr z`; 0x05 at 0xFB778A `ldw HL,0x09c4` and 0xFB7794 `ldw HL,0x03e8` with `sub BC,(XIZ+0x08) / cp BC,HL / jr le`; 0x06 at 0xFB610A `cp WA,0x00ff / jr nc`; 0x11 at 0xFB6D81-0xFB6DA5 (`inc 2,XIY` stepping to write_ptr-3, `cp XBC,XIX / jr z` else raise).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The checksum, and the three-byte tail every accepted message must have",
+    "detail": "sub_FB6CFC walks the nibble-encoded body two bytes at a time from the point the trie stopped and must land exactly on (write_ptr - 3); overshooting by one raises status 0x11. That leaves the last three bytes of the message as <flag> <checksum> <F7>. sub_FB6DBD then (a) requires the parse record's field 5 \u2014 the product id the trie matched \u2014 to be one of 0x7E, 0x2B, 0x2C, 0x2D, otherwise it performs NO checksum check at all; (b) reads <flag>, which must be 0x00 or 0x01 else status 0x12, and stores it in field 15; (c) sums the message bytes from offset 1 (the 0x50 manufacturer id) through <flag> inclusive, computes (-sum) & 0x7F, and compares it with <checksum>; a mismatch is status 0x14 \u2192 ERROR 41. The 0xF0 and the trailing 0xF7 are OUTSIDE the sum. Equivalently: (sum of bytes[1..n] + checksum) & 0x7F == 0.",
+    "symbols": "sub_FB6CFC 0xFB6CFC, sub_FB6DBD 0xFB6DBD; product-id gate 0xFB6DE8-0xFB6DFA; flag test 0xFB6E09-0xFB6E0F; sum loop 0xFB6E3A-0xFB6E47; checksum compare 0xFB6E4D-0xFB6E62",
+    "evidence": "Buffer object layout from sub_FB7FEB (0xFB7FEB): count at +0, read cursor at +2, body-start mark at +6, write cursor at +0x0A, payload begins at +0x0E and always ends in a 0xFF guard. The sum starts at object+0x0F \u2014 one byte past the 0xF0 \u2014 and runs while XIX != the saved read cursor (0xFB6E3C `cp XBC,(XIZ-4)`); the checksum byte is then fetched by the same one-byte reader sub_FB61B1 (`calr 0xf352` at 0xFB6E5C) and compared at 0xFB6E60 `cp H,A`. Negation: 0xFB6E4D `sub WA,WA / sub WA,BC` then 0xFB6E53 `res 0x07,H`.",
+    "certainty": "established",
+    "bytes": "F0 50 <trie-matched header> <body, even byte count> <00|01> <checksum> F7"
+   },
+   {
+    "topic": "Body encoding: two 7-bit bytes per data byte, high nibble first",
+    "detail": "The bulk-dump payload is nibble-encoded. On receive, 0xFB72C9-0xFB7301 reads two successive body bytes and forms byte = ((first & 0x0F) << 4) | (second & 0x0F). On transmit, sub_FB7040 does the inverse: `srl c,0x04` gives the first emitted byte and `and (XIX+0x01),0x0f` the second. This is why an odd body length is a hard error (status 0x11).",
+    "symbols": "receive join 0xFB72E2 `sll h,0x04` + 0xFB72FC `and A,0x0f` + 0xFB7301 `xor L,H`; transmit split sub_FB7040 0xFB7040, 0xFB706F / 0xFB7074",
+    "evidence": "Instruction sequence read directly at both sites; the two are exact inverses, which is the cross-check.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "\u26a0 Status 0x16 is NOT one of the 4x errors \u2014 it shows ERROR 21! \"Memory full\"",
+    "detail": "STATUS_MAP[0x16] is 0x0F, and message 0x0F is the display list at 0xF2DD4F-0xF2DD6B, which reads \"ERROR 21!\" / \"Memory full\". It is raised in the receive decoder when the body still has bytes left but the destination counter (0x60FD20) has reached zero \u2014 i.e. the incoming dump is larger than the target area. A manual that assumes every SysEx bulk-dump failure is 40/41/42 would get this one wrong.",
+    "symbols": "raise sites 0xFB734C and 0xFB7401; message 0x0F \u2192 0xF2DD4F",
+    "evidence": "0xFB7342 `ld XBC,(0x60fd20) / or XBC,XBC / jrl nz` then `pushw 0x16`, with the body-remaining test three instructions earlier (`ld XIY,(XBC+0x06) / cp XIY,XWA / jr c`). STATUS_MAP byte at 0xF511DD is 0x0F.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "\u26a0 TRAP: the .s under-declares STATUS_MAP as 22 bytes; it is 34",
+    "detail": "prom_b/wsa1_prom_b.s labels 0xF511C7 `AsciiRun_F511C7` and declares only 22 bytes, because the layout tool's ASCII heuristic stops at the first non-printable byte (0x0F at 0xF511DD). The reader at 0xFB7E54 applies NO bound, and statuses up to 0x21 are raised, so the real table is 34 bytes, 0xF511C7-0xF511E8. Reading only the declared 22 bytes loses every ERROR 42 entry and the ERROR 21 entry. Full table (index = status): 23 21 21 21 21 21 21 21 22 22 22 21 21 21 21 21 21 21 21 21 21 21 0F 21 20 21 21 21 21 21 21 20 20 21.",
+    "symbols": "AsciiRun_F511C7 0xF511C7, header at prom_b/wsa1_prom_b.s line ~101343",
+    "evidence": "The header itself says \"22 bytes that are printable but are not text \u2026 the layout's ascii rule fires on it at threshold 20\". The byte at 0xF511DD is 0x0F and at 0xF511DF is 0x20; both are live entries (status 0x16 and 0x18). No `cp` bounds the index at the reader \u2014 sub_FB7E43 is 0xFB7E43-0xFB7E6B and contains no compare.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The three errors are reported ONLY by the SYSEX BULK DUMP screen",
+    "detail": "Status bytes are written whenever a complete F0\u2026F7 message is parsed, from either MIDI ring, but the popup only appears where sub_FB7DFE runs, and that has exactly two call sites: 0xFB20BF, the tail of the bulk-dump mode dispatcher (gated on bit 7 of (0x60F802)), and 0xFB286F, the tail of the send loop. So a foreign SysEx arriving while the machine is on any other screen sets no visible error. A corollary worth stating carefully: while a bulk-dump session IS open, unrelated SysEx traffic on the MIDI input can set the status and therefore colour the popup that the session ends with.",
+    "symbols": "sub_FB7DFE callers 0xFB20BF and 0xFB286F; engine entry sub_FB2049 0xFB2049; JumpTable_FB2081 (6 modes, `cps bc,0x05 / jr ugt` at 0xFB2070); screen painter Paint_SysexBulkDump 0xF99A04",
+    "evidence": "A byte census of `call 0xFB7DFE` (1d fe 7d fb) over prom_a returns exactly those two sites plus none in prom_b/c/d. Paint_SysexBulkDump's menu writes the mode into (0x60F802) from the 8-byte table at 0xF99AE3 (00 03 05 04 02 \u2026) and ORs in 0x80 at 0xF99AAF.",
+    "certainty": "likely",
+    "bytes": ""
+   },
+   {
+    "topic": "The messages the machine accepts at all, and the WSA1's own product id",
+    "detail": "The root table lists 14 product/id bytes plus the 0xFF terminator: 0x21, 0x22, 0x23, 0x24, 0x25, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x7E, 0x7F. The WSA1's own is 0x2D \u2014 every outgoing bulk-dump header template in prom_b begins F0 50 2D 04 00 11. 0x2B and 0x2C carry huge parameter sub-trees (3756 accepted sequences each) while 0x2D carries 16 sequences ending in internal command ids 0x0B, 0x0C, 0x0E and 0x12-0x16. 0x7F 09 01 / 0x7F 09 02, reached as F0 7E 7F 09 01 F7 and F0 7E 7F 09 02 F7, are GM System On and GM System Off (commands 0x20 and 0x21) and prom_b holds both as literals. A matched sequence yields a command id that is bounded by `cp A,0x22` and used to index one of two 34-entry handler tables, 0xF4F800 for a message that came in on the interrupt-side ring and 0xF4F888 for the foreground ring.",
+    "symbols": "root 0xF5115B; templates 0xF4FEB4-0xF4FF60; handler tables 0xF4F800 / 0xF4F888; bounds 0xFB2194 / 0xFB2291",
+    "evidence": "Templates read literally out of prom_b: F0 50 23 7E F7 at 0xF4FEB4, F0 50 2D 04 00 11 40 00 00 00 00 20 at 0xF4FEF8, F0 7E 7F 09 01 F7 at 0xF4FEE6. Trie enumerated by wsa1/notes/sysex-probes/sysex_grammar_dump.py (commit 0ac8f694).",
+    "certainty": "established",
+    "bytes": "F0 50 2D 04 <00|01> 11 40 00 00 00 00 20 \u2026 (one of eight WSA1 header forms)"
+   },
+   {
+    "topic": "Before the trie: the session framer's own three checks",
+    "detail": "Inside a bulk-dump session the byte-level framer is sub_FB6098 (reached via sub_FB6072). It is a three-state machine on the incoming ring: state 0 accepts only 0xF0 (else status 0x01), state 1 accepts only 0x50 (else status 0x02), state 2 accepts data bytes until 0xF7 \u2014 any other status byte gives status 0x03 and also sets bit 5 of (0xA9), and a message longer than 254 bytes gives status 0x06. Outside a session the interrupt-side framers sub_FB20CE / sub_FB21CB accept 0x50 OR 0x7E as the identifier and silently DROP anything else without raising a status at all, which is how another maker's SysEx passes through unremarked.",
+    "symbols": "sub_FB6072 0xFB6072, sub_FB6098 0xFB6098; sub_FB20CE 0xFB20CE (ring 0xF41E38), sub_FB21CB 0xFB21CB (ring 0xF41EA4, Ring601C6E_Get); byte appender sub_FB6165 0xFB6165",
+    "evidence": "0xFB60E0 `cp H,0xf0`, 0xFB60EE `cp H,0x50`, 0xFB612C `cp H,0xf7`, 0xFB610A `cp WA,0x00ff`. In sub_FB21CB, 0xFB220B `cp H,0x50` / 0xFB2210 `cp H,0x7e` / `jr nz,.LFB2250` where .LFB2250 only resets the state and continues. Corroborates notes/FINDINGS-midi-port.md, which reaches the same 0x50/0x7E conclusion from the interrupt parser.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Four statuses exist in the map but are never raised",
+    "detail": "Statuses 0x15, 0x17, 0x18 and 0x1F have STATUS_MAP entries (0x21, 0x21, 0x20, 0x20) but no writer anywhere in prom_a/b/c/d. Two of them, 0x18 and 0x1F, would have produced ERROR 42; that means ERROR 42 has exactly one reachable cause in this firmware. Do not document 0x18/0x1F as behaviour.",
+    "symbols": "STATUS_MAP 0xF511C7 indices 0x15, 0x17, 0x18, 0x1F",
+    "evidence": "Exhaustive scan of every `call`/`calr` to the field setter sub_FB6219 in prom_a (112 call sites, of which 26 write field 4) plus the 10 shared-tail and 2 branch-tail raises; asserted in sysex_error_codes.py (`set(by_code) & e42 == {0x20}`).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "A complete GERMAN copy of all three error screens exists but is unreachable",
+    "detail": "prom_b holds two full sets of the ERROR nn display lists. The English set that sub_F99098 draws is at 0xF2E46A (40), 0xF2E4E4 (41), 0xF2E587 (42). A second, German set sits at 0xF2FCCE (40), 0xF2FD53 (41), 0xF2FE03 (42) and belongs to the parallel screen-set table PtrTable_F98DE5, which is the English table shifted down by exactly 0x400 and carries its own three-slot base table at 0xF98FB1-0xF98FBC holding 0x00F98D21. The painter, however, hard-codes the ENGLISH block's base table at 0xF993B9, whose three slots all hold 0x00F99121, and the selector byte (0x7FC1) is written exactly once in the whole image \u2014 `ld (0x7FC1),0x00` at 0xF82628. So in this dump the German text can never be shown. Quote the English strings.",
+    "symbols": "PtrTable_F99121 0xF99121 (+ base table 0xF993B9); PtrTable_F98DE5 0xF98DE5 (+ base table 0xF98FB1); selector (0x7FC1) written at 0xF82628",
+    "evidence": "PtrTable_F98DE5[124] = 0x00F2FCCE, the German ERROR 40 record start (its 4-byte header 08 0D 5B 00 precedes the ASCII). Byte census of `[c1|f1] c1 7f` over all four images: one write (0xF82628) and three reads (0xF990B9, 0xF990F1, 0xF99D88). Opcode-anchored census, so an upper bound on sites, but the write is a real instruction.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "What the screens actually say, verbatim",
+    "detail": "ERROR 40! / \"The Identification (ID) code of the\" / \"System Exclusive data received by\" / \"the WSA is different product.\"  \u2014  ERROR 41! / \"An error has occured during System\" / \"Exclusive data reception.The data\" / \"from the transmitting device may be\" / \"incomplete.\" / \"Please try again.\"  \u2014  ERROR 42! / \"An error has occured during System\" / \"Exclusive transmition.The data has\" / \"not been received correctly.\" / \"Please try again.\"  The firmware's own spellings (\"occured\", \"transmition\") are reproduced as-is. Note sub_F99021 also writes 0xFF to (0x209A) for every message id except 0x23 and 0x2C, which is what distinguishes an alert from a plain notice.",
+    "symbols": "DL_Error40TheIdentificationIdCodeOfThe 0xF2E46A, DL_Error41AnErrorHasOccuredDuringSystem 0xF2E4E4, DL_Error42AnErrorHasOccuredDuringSystem 0xF2E587, DL_Completed 0xF2E615",
+    "evidence": "Walked with the display-list record framing (opcode, length, two operand bytes, then ASCII) out of original_ROMs/wsa1_prom_b.ic13; the same labels and text are already in prom_b/wsa1_prom_b.s around lines 57363-57460.",
+    "certainty": "established",
+    "bytes": ""
+   }
+  ],
+  "openQuestions": [
+   "The wording of ERROR 42 (\"The data has not been received correctly\") implies a handshake with the receiving MIDI device, but the only raise is a CPU1\u2194CPU2 link-block timeout (Link_WaitBlockDone). The tree's own header for Link_WaitBlockDone says of this very call site: \"0xFB6FD1 \u2026 what it waits on is NOT established\". So whether the link block being waited on carries the outgoing MIDI stream to CPU 2 (which would make the manual's wording loosely right) or something else is UNVERIFIED. Do not assert a cause-and-effect with the receiving instrument in the manual.",
+   "Semantically odd but repeatedly confirmed: an unknown PRODUCT ID at message byte [2] gives status 0x07 \u2192 ERROR 41, while a wrong byte at [3], [4] or [5] gives ERROR 40. If a real-hardware check is ever possible, sending F0 50 99 04 00 11 \u2026 (bogus product) vs F0 50 2D 99 00 11 \u2026 (good product, bogus next byte) would distinguish 41 from 40 on the panel and settle it. Felipe's hardware is currently unreachable; park it.",
+   "Trie depth 3 accepts 0x00 or 0x01 for every product id and both lead to the identical subtree. Reading this as a device/unit number is an INFERENCE (likely); the ROM only says the two values are accepted and equivalent.",
+   "The tail flag byte before the checksum must be 0x00 or 0x01 (status 0x12 otherwise) and is stored in field 15 of the parse record. What it MEANS is not established \u2014 nothing converted reads field 15 back.",
+   "Statuses 0x19-0x1E each guard one bulk-dump section (their guard is `field 3 of *(0x60FCDC) == 0`, i.e. the previous section completed). Which section is which \u2014 SOUND, COMBINATION, SYSTEM/PART & MIDI, TOTAL KEYBOARD, per the menu text in Paint_SysexBulkDump \u2014 is NOT established and should not be guessed in the manual.",
+   "PtrTable_F98DE5 (the German screen set) has no located reader; the tree's own header says so. Whether some other firmware variant of the WSA1R selects it, or it is dead weight from a shared source tree, is unknown.",
+   "Reproducibility: the new probe wsa1/notes/sysex-probes/sysex_error_codes.py + its README section are committed as kn5000-roms-disasm d4f11089 (with the required LLVM version line). It re-derives every number quoted above from original_ROMs/, asserts both load bases and prints OK. The pre-existing wsa1/notes/sysex-probes/sysex_grammar_dump.py (0ac8f694) covers the trie. Nothing from this session lives only in scratch."
+  ],
+  "_label": ""
+ },
+ {
+  "area": "Technics SX-WSA1R firmware \u2014 the SysEx BULK DUMP transmit path (prom_a UI screen 0x79 \u2192 the SysEx engine at 0xFB2000-0xFB8CA5, templates in prom_b 0xF4FEB4-0xF4FF60)",
+  "findings": [
+   {
+    "topic": "Entry point: screen 0x79's button handler is what starts a dump",
+    "detail": "Pressing a row on the SYSEX BULK DUMP screen runs the handler at 0xF99A8F (slot 9 of DisplayListPtrs_F99870, the 32-entry block selected by (0x2740)=0). One arm of it selects a menu row; the other reads the current selection (0x2720)&7, maps it through the 5-byte table at 0xF99AE3 = 00 03 05 04 02, stores the result in (0x60F802) with bit 7 set, and calls prom_b thunk 0xF408E4, whose jp target is prom_a 0xFB2049. 0xFB2049 is the job runner: it sets bit 6 of (0x60FD40) (\"this is a SEND, not a RECEIVE\"), calls Ring600C1E_InitIfPanelMode79, sub_FB7B0B (arms the SENDING screen state), sub_FB2323 (the handshake), then jumps through JumpTable_FB2081 on (0x60F802)&7. The routine that actually puts bytes on the wire is sub_FB7165 (0xFB7165).",
+    "symbols": "Paint_SysexBulkDump 0xF99A04, ScreenButton_SysexBulkDump_Entry 0xF99835, DisplayListPtrs_F99870, 0xF99A8F, 0xF99AE3, 0xF408E4 (T_F408E4), sub_FB2049 0xFB2049, JumpTable_FB2081, sub_FB2323 0xFB2323, sub_FB7165 0xFB7165",
+    "evidence": "0xF99AA5 `mx8_ld_rm MXB, ra_IY, rb_A, r1` with XIY=0xF99AE3; 0xF99AAA `ld (0x60F802),A`; 0xF99AAF `or (0x60F802),0x80`; 0xF99AB5 `call 0xF408E4`. prom_b line 81702: `T_F408E4: jp 0xFB2049`. 0xFB2049 `ld C,(0x60F802) / and C,0x80 / jr z`. Byte table verified against the ROM image at 0xF99AE3 = 00 03 05 04 02 00 00 00.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Five menu rows, four data categories",
+    "detail": "The screen offers TOTAL KEYBOARD, SOUND, COMBINATION, SYSTEM,PART & MIDI and SEQUENCER (display list 0xF0D6AF-0xF0D79C). (0x2720) holds the row 0..4 in that top-to-bottom order. Row->job code via 0xF99AE3 is 0->0, 1->3, 2->5, 3->4, 4->2; the job codes dispatch to: job 0 = sub_FB22CD (TOTAL KEYBOARD = all four categories, in the order SYSTEM,PART & MIDI, SOUND, COMBINATION, SEQUENCER), job 3 = sub_FB22F6 (SOUND), job 5 = sub_FB2314 (COMBINATION), job 4 = sub_FB2305 (SYSTEM,PART & MIDI), job 2 = sub_FB22E7 (SEQUENCER). Job 1 exists in the table and is a bare RET at 0xFB22E6. The SEQUENCER row is not drawn at all when (0xC4)==2 (Paint_SysexBulkDump ends the list at 0xF0D77F instead of 0xF0D79C) and its dump is refused unless (0xC4)==1 (sub_FB5FF5 returns 0xFFFF from the table at 0xF4FE76, whose index-3 word is FFFF).",
+    "symbols": "0xF99AE3, sub_FB22CD 0xFB22CD, sub_FB22E6 0xFB22E6, sub_FB22E7 0xFB22E7, sub_FB22F6 0xFB22F6, sub_FB2305 0xFB2305, sub_FB2314 0xFB2314, sub_FB23E2 0xFB23E2, sub_FB5FF5 0xFB5FF5, DL 0xF0D6AF",
+    "evidence": "Two independent chains agree. (a) The display list's own text records and their y coordinates (0x06, 0x0C, 0x12, 0x18, 0x1E) put the rows in that order, and the handlers at table slots 8..12 (0xF99A66, 0xF99A8F, 0xF99AEB, 0xF99B14, 0xF99B3D) write (0x2720)=0..4 respectively, the last one gated by `cp (0xC4),0x02`. (b) Each job routine's source extent matches the category name: job 4 -> 0x7600..0x7F7F (sub_FB74D7), job 3 -> 0x60A000..0x649FFF, 256 KiB (sub_FB751A), job 5 -> 0x609D00, 0x16300 (sub_FB758A), job 2 -> 0x603400, 0x59000 (sub_FB753E). Re-derived by wsa1/notes/sysex-probes/sysex_bulkdump_tx.py.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Data message frame layout",
+    "detail": "A bulk-dump data frame is: F0 50 2D 04 <dev> 11 <A1 A2 A3> <S1 S2 S3> <nibble data ...> <cont> <sum> F7. 0x50 is the manufacturer id, 0x2D the bulk-data command, 0x04 and 0x11 are fixed bytes present in every 21/22/2B/2C/2D message, <dev> is a unit number that the firmware always TRANSMITS as 0x00 and ACCEPTS as 0x00 or 0x01. A1A2A3 is a 21-bit address as three MSB-first septets, S1S2S3 the transfer size in SOURCE bytes as three MSB-first septets. <cont> is 0x01 when more frames follow and 0x00 on the last frame of the transfer. <sum> is the checksum, then 0xF7.",
+    "symbols": "templates prom_b 0xF4FEF8, 0xF4FF04, 0xF4FF10, 0xF4FF1C, 0xF4FF28, 0xF4FF34, 0xF4FF40, 0xF4FF49, 0xF4FF55; sub_FB6E7F 0xFB6E7F (append+autoflush), sub_FB6F24 0xFB6F24 (append), sub_FB7040 0xFB7040 (nibble packer), sub_FB70AE 0xFB70AE / sub_FB70E6 0xFB70E6 (cont flag), sub_FB7111 0xFB7111 (checksum)",
+    "evidence": "The nine headers are literal byte runs in prom_b, each named by exactly one `lda xbc,(imm24)` in prom_a. The receive grammar (trie root prom_b 0xF5115B, walked by sysex_grammar_dump.py) accepts exactly the same byte strings, including both 0x00 and 0x01 in the <dev> position: level tables 0xF5021F (0x04), 0xF5020D (0x00|0x01), 0xF50201 (0x11), 0xF501DD (0x40|0x20|0x50|0x60|0x62).",
+    "certainty": "established",
+    "bytes": "F0 50 2D 04 <00|01> 11 A1 A2 A3 S1 S2 S3 <data...> <00|01> <sum> F7"
+   },
+   {
+    "topic": "The address and size fields \u2014 proved, not assumed",
+    "detail": "A1A2A3 and S1S2S3 are each a 21-bit value packed MSB-first into three 7-bit groups, value = (b0<<14)|(b1<<7)|b2. The size counts SOURCE bytes, not transmitted nibbles. Decoded: SYSTEM,PART & MIDI part 1 addr 0x100000 size 0x20; part 2 addr 0x100020 size 0x960; SOUND addr 0x080000 size 0x40000; SEQUENCER part 1 addr 0x180000 size 0xC00; part 2 addr 0x180C00 size 0x7800; part 3 addr 0x188400 size supplied at run time; COMBINATION part 1 addr 0x140000 size 0x300; part 2 addr 0x140300 size 0x16000.",
+    "symbols": "sub_FB75BA, sub_FB75E4, sub_FB751A, sub_FB7649, sub_FB766F, sub_FB7692, sub_FB76B5, sub_FB76F2, sub_FB7722, sub_FB6EE9 0xFB6EE9",
+    "evidence": "Four independent agreements, all asserted by wsa1/notes/sysex-probes/sysex_bulkdump_tx.py. (1) Each septet size equals the byte extent the matching prom_a descriptor-writer stores (end-start==size), times the block count where the source is streamed (SOUND 32 x 0x2000, COMBINATION part 2 16 x 0x1600; the loop counts are the literals `ldb h,0x1f` at 0xFB2524 and `ldb h,0x0f` at 0xFB271F, each one pass short because a further block follows the loop). (2) For every category sent in parts, addr(part N+1) - addr(part N) == size(part N): 0x100020-0x100000==0x20, 0x140300-0x140000==0x300, 0x180C00-0x180000==0xC00, 0x188400-0x180C00==0x7800. (3) The one variable-size case builds the triple at run time: sub_FB6EE9 does `srl xbc,0x0E / res 7,C`, `srl xbc,0x07 / res 7,C`, `res 7,C` on the remaining-byte counter (0x60FD00) and appends 3 bytes, and its template 0xF4FF40 stops right after the address. (4) The SOUND size 0x40000 equals the 32 x 0x2000 that Remote_E80000_Read32Blocks actually reads.",
+    "certainty": "established",
+    "bytes": "e.g. 40 00 20 = address 0x100020; 00 12 60 = size 0x960 = 2400 bytes"
+   },
+   {
+    "topic": "Data bytes are sent as nibble pairs, high nibble first",
+    "detail": "Every source byte becomes two message bytes: (byte >> 4) then (byte & 0x0F). So a frame carries exactly half as many source bytes as it has data bytes, and a dump on the wire is twice the size the S1S2S3 field states.",
+    "symbols": "sub_FB7040 0xFB7040",
+    "evidence": "0xFB7066-0xFB7077: `ld H,(XBC)` (the source byte), `ld (XIX+0x01),H`, `ld (XIX),H`, `ld C,H / srl c,0x04 / ld (XIX),C`, `and (XIX+0x01),0x0F`, then `pushw 0x02 / push XIX / calr sub_FB6F24` appends XIX[0] then XIX[1].",
+    "certainty": "established",
+    "bytes": "source 0xF1 -> 0F 01"
+   },
+   {
+    "topic": "Checksum: (0 - sum) & 0x7F over everything after the leading F0",
+    "detail": "The checksum byte is (0 - S) & 0x7F where S is the 8-bit sum of every message byte from the SECOND byte (the 0x50 manufacturer id) through the continuation-flag byte inclusive. The leading 0xF0 is NOT summed; the checksum byte itself and the trailing 0xF7 are not summed. Equivalently, (sum of all bytes after F0, including the checksum) mod 128 == 0. The checksum byte and the 0xF7 are appended together from the 2-byte literal at prom_b 0xF4FE68 = 00 F7, with the low byte overwritten by the computed value.",
+    "symbols": "sub_FB7111 0xFB7111, literal prom_b 0xF4FE68",
+    "evidence": "0xFB7119 `ld bc,(0xF4FE68)` then 0xFB7151 `ld (xiz-6),a` overwrites its low byte; 0xFB7121-0xFB7126 `ld xix,(0x60FC88) / add XIX,0x0000000F` starts the sum at buffer offset +0x0F while the message's first byte lives at +0x0E; 0xFB7131 `ld XIY,(XWA+0x0A)` is the write cursor, which points one past the last appended byte; 0xFB7137-0xFB7144 is the byte loop `ld C,(XIX) / add H,C`; 0xFB7146-0xFB714E `ld C,H / extz BC / sub WA,WA / sub WA,BC / res 0x07,A`; 0xFB7154-0xFB715B pushes length 2 and the pointer to the {checksum, 0xF7} pair. Buffer layout +0x0E = first message byte is fixed by sub_FB7FEB 0xFB7FEB, which sets the +0x02/+0x06/+0x0A pointers all to buf+0x0E, and by sub_FB7165, which transmits from buf+0x0E.",
+    "certainty": "established",
+    "bytes": "checksum = (0 - \u03a3(bytes from 0x50 .. cont flag)) & 0x7F"
+   },
+   {
+    "topic": "Block size: 0xFC message bytes, so 120 or 125 source bytes per frame",
+    "detail": "The packer stops as soon as the message byte count reaches 0xFC (252). A first frame carries the 12-byte header, so 120 source bytes (240 nibble bytes) and the whole frame is 255 bytes on the wire. A continuation frame carries the 3-byte header F0 50 7E, so 125 source bytes (250 nibble bytes) and the frame is exactly 256 bytes.",
+    "symbols": "sub_FB7040 0xFB70A3 `cp WA,0x00FC`, sub_FB7165 0xFB71A0 `cp HL,0x0020`, Ring601432_PutBlock 0xF8481C, Ring_Put_0100 0xF841D5",
+    "evidence": "0xFB70A3 is the loop's only exit test besides the remaining-byte counter, and the count at buf+0 is incremented once per appended byte by sub_FB6F24 (0xFB7057 `incw 0x01,(xbc)`). \u2605 Corroboration: MIDI-out ring 0x601432 holds exactly 0x100 bytes (Ring_Put_0100 wraps with `minc1_16 ix,0x00ff` at 0xF841E9) and Ring_Put_0100 does NOT block \u2014 it returns 0xFFFF and drops the byte, a result Ring601432_PutBlock ignores \u2014 so 0xFC is the largest cap under which a whole frame still fits the ring. sub_FB7165 pushes the frame in 0x20-byte chunks, calling T_MIDI_PostSendWork (0xF40724) after each.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Continuation frames re-open with F0 50 7E",
+    "detail": "Only the first frame of a transfer carries the full F0 50 2D 04 dd 11 <addr> <size> header. Every later frame of the same transfer begins F0 50 7E and then goes straight into nibble data. The firmware decides this from the PREVIOUS frame's continuation flag, which it also records in byte +0x0F of that frame's descriptor.",
+    "symbols": "sub_FB7025 0xFB7025, template prom_b 0xF4FED2 = F0 50 7E, sub_FB70AE 0xFB70AE, sub_FB70E6 0xFB70E6, sub_FB8081 0xFB8081",
+    "evidence": "sub_FB7025: `ld xbc,(0x60FCE4) / ld A,(XBC+0x0F) / cp A,1 / jr nz skip`, then appends 3 bytes from 0xF4FED2. sub_FB70AE and sub_FB70E6 both append the flag byte to the message AND call sub_FB6219 with index 0x0F on the CURRENT descriptor (0x60FCE0). sub_FB8081 swaps (0x60FCE0) with (0x60FCE4) after each send, so at the next frame (0x60FCE4) is the descriptor of the frame just sent.",
+    "certainty": "established",
+    "bytes": "F0 50 7E <data...> <cont> <sum> F7"
+   },
+   {
+    "topic": "Continuation flag semantics, and the two frame loops",
+    "detail": "sub_FB6F6B (0xFB6F6B) is the ordinary frame loop: it emits frames until the transfer's remaining-byte counter (0x60FD00) hits 0, and its flag byte is 1 while bytes remain, 0 on the very last frame. sub_FB6FB2 (0xFB6FB2) is the streamed variant used for the categories whose source is fetched from the other CPU in blocks; it always emits flag = 1, because another block always follows. Categories whose source is streamed therefore end through sub_FB6F6B, so the last frame of the whole transfer still carries flag = 0.",
+    "symbols": "sub_FB6F6B 0xFB6F6B, sub_FB6FB2 0xFB6FB2, sub_FB70AE 0xFB70AE, sub_FB70E6 0xFB70E6, Remote_E80000_Read32Blocks 0xFB24EC, sub_FB26E7 0xFB26E7",
+    "evidence": "sub_FB70AE loads 1 into the stack temp and replaces it with 0 when `(0x60FD00)` is zero; sub_FB70E6 always loads 1 and never tests. Remote_E80000_Read32Blocks runs 31 loop passes of {link read, sub_FB7649, sub_FB6FB2} then one more block terminated by `call 0xF4123C` and `call sub_FB6F6B`; sub_FB26E7 does the same with 15 passes plus one.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Handshake: a two-message enquiry before any data, retried three times each",
+    "detail": "sub_FB2323 runs at the start of every dump job, before any data. Step 1: send F0 50 21 04 00 11 F7 and wait for a reply whose parsed class is 8 \u2014 i.e. an incoming F0 50 22 04 <00|01> 11 F7. It retries up to 3 times; if all three fail it clears the error field and carries on WITHOUT the ACK protocol. On success it copies the reply's bytes at offsets 4, 5, 6 (parse-record fields 6, 7, 8) into RAM 0x60FC90/91/92 \u2014 the remote device's id triple. Step 2: send F0 50 22 04 00 11 F7 and wait for class 1 \u2014 an incoming F0 50 23 7E F7 (ACK). Up to 3 attempts. On success it sets bit 7 of (0x60FD40), which is the flag that turns on per-frame acknowledgement for the rest of the dump.",
+    "symbols": "sub_FB2323 0xFB2323, templates 0xF4FED5 and 0xF4FEDC, sub_FB6072 0xFB6072, sub_FB62D3 0xFB62D3, (0x60FD40) bit 7",
+    "evidence": "0xFB2334/0xFB233A append 7 bytes from 0xF4FED5 via sub_FB6E7F (which auto-transmits because the last byte is 0xF7); 0xFB2355 `cp A,0x08`; 0xFB235C `cp h,0x03 / jr c` bounds the retries. 0xFB23AD/0xFB23B3 append 0xF4FEDC; 0xFB23CE `cp a,0x01`; 0xFB23D2 `set 7,(0x60FD40)`. The class values come from the receive trie at prom_b 0xF5115B: F0 50 22 04 {00|01} 11 -> class 8 (terminal at 0xF4FF91), F0 50 23 7E -> class 1 (root entry 0xF51167).",
+    "certainty": "established",
+    "bytes": "out F0 50 21 04 00 11 F7  \u2192 in F0 50 22 04 <00|01> 11 F7 ; out F0 50 22 04 00 11 F7 \u2192 in F0 50 23 7E F7"
+   },
+   {
+    "topic": "Per-frame acknowledgement, retransmission and the two timeouts",
+    "detail": "After every data frame is handed to the MIDI output, sub_FB6026 runs. If bit 7 of (0x60FD40) is set (the handshake succeeded) it waits for a reply and requires class 1, i.e. F0 50 23 7E F7. Class 6 sets the status byte to 0x1F and gives up. Anything else causes the SAME frame to be retransmitted from the other buffer (0x60FC8C) through sub_FB7165, up to 3 attempts; after 3 the status byte becomes 0x18 and the session aborts. If bit 7 is clear (no handshake partner), no ACK is expected at all: it just spins until the MIDI-out ring is empty and then waits 0x19 = 25 timer-1 ticks (~51 ms at the 488.28 Hz of notes/FINDINGS-system-clock.md) before the next frame. The reply wait itself times out after 0x09C4 = 2500 ticks (~5.1 s), or 0x03E8 = 1000 ticks (~2.05 s) when bit 2 of (0x60FD40) is set, which sub_FB2323 sets around each handshake send; on expiry the status byte becomes 5.",
+    "symbols": "sub_FB6026 0xFB6026, sub_FB6072 0xFB6072, sub_FB7785 0xFB7785, sub_FB77C7 0xFB77C7, Ring601432_SpinUntilEmpty 0xFB6084, sub_FB7165 0xFB7165",
+    "evidence": "0xFB602D `bit 7,(0x60FD40)`; 0xFB603D `cp h,0x01 / jr z` done; 0xFB6041 `cp h,0x06` -> `ld (XBC+0x04),0x1f`; 0xFB6053 `calr` to 0xFB7165 with (0x60FC8C) pushed; 0xFB6059 `cp l,0x03 / jr c`; 0xFB6063 `ld (XBC+0x04),0x18`. 0xFB6069 is the no-handshake arm: Ring601432_SpinUntilEmpty then sub_FB77C7, whose loop is `cp BC,0x0019 / jr lt` on the free-running tick (0x0080). sub_FB7785 `ldw hl,0x09C4` / `ldw hl,0x03E8` under `bit 2,(0x60FD40)`, then status field 4 = 5 on expiry.",
+    "certainty": "established",
+    "bytes": "ACK expected: F0 50 23 7E F7"
+   },
+   {
+    "topic": "End-of-category, end-of-dump and abort messages",
+    "detail": "After each category finishes, sub_FB277E bumps the step id and sends F0 50 27 7E F7, then waits for the ACK. After the whole job, sub_FB27AD sends F0 50 28 7E F7 and waits. If the status byte comes back 0x18 (three failed retries), it then sends F0 50 29 7E F7 \u2014 the abort/gave-up notification.",
+    "symbols": "sub_FB277E 0xFB277E, sub_FB27AD 0xFB27AD, templates 0xF4FEBE, 0xF4FEC3, 0xF4FEC8",
+    "evidence": "0xFB279C `lda xbc,(0xF4FEBE)` with length 5 then sub_FB6E7F and sub_FB6026; 0xFB27CD `lda xbc,(0xF4FEC3)`; 0xFB27F0 and 0xFB280A `cp A,0x18` both funnelling to 0xFB2812 `lda xbc,(0xF4FEC8)`. Template bytes read straight out of prom_b.",
+    "certainty": "established",
+    "bytes": "F0 50 27 7E F7 (end of category) ; F0 50 28 7E F7 (end of dump) ; F0 50 29 7E F7 (abort)"
+   },
+   {
+    "topic": "The same protocol in reverse \u2014 what the WSA1R answers when it is the receiver",
+    "detail": "When the machine is on the receiving end, sub_FB28BE generates the acknowledgement, but only while bit 7 of (0x60FD40) is set. Status byte 0 -> F0 50 23 7E F7 (ACK). Status byte 0x16 -> F0 50 2A 7E F7. Any other status -> F0 50 24 7E F7 (NAK). An incoming F0 50 21 04 dd 11 F7 (class 7) is answered at 0xFB28FF by sending F0 50 22 04 00 11 F7, which confirms that the 0x22 message is the reply to the 0x21 enquiry.",
+    "symbols": "sub_FB28BE 0xFB28BE, 0xFB28FF, 0xFB291D, dispatch table prom_b 0xF4F916 (34 entries, bound `cp H,0x22` at 0xFB2896)",
+    "evidence": "0xFB28CF `ld H,(XBC+0x04)`; 0xFB28D9 `lda xwa,(0xF4FEB4)`; 0xFB28E4 `cp H,0x16` -> 0xFB28E9 `lda xbc,(0xF4FECD)`; else 0xFB28F1 `lda xbc,(0xF4FEB9)`. Table 0xF4F916 entry 7 = 0x00FB28FF and entry 8 = 0x00FB291D; 0xFB290D-0xFB2916 appends 7 bytes of 0xF4FEDC.",
+    "certainty": "established",
+    "bytes": "F0 50 23 7E F7 = ACK ; F0 50 24 7E F7 = NAK ; F0 50 2A 7E F7 = status 0x16"
+   },
+   {
+    "topic": "The complete command byte vocabulary the firmware will parse",
+    "detail": "The receive trie at prom_b 0xF5115B accepts exactly 14 command bytes in the third position after F0 50: 0x21, 0x22, 0x23, 0x24, 0x25, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x7E, 0x7F. Terminal classes are: 23 7E -> 1; 24 7E -> 2; 27 7E -> 3; 28 7E and 2A 7E -> 4; 29 7E -> 5; 21 04 dd 11 -> 7; 22 04 dd 11 -> 8; 25 -> 9; 7E -> 0x0A; the eight 2D data headers -> 0x0B, 0x0C, 0x0E, 0x12, 0x13, 0x14, 0x15, 0x16; 2C 04 dd 11 <3-byte parameter id> -> 0x18 (3618 accepted parameter ids); 2B 04 dd 11 <3-byte parameter id> -> 0x1A (3612 ids); 7F 09 01 -> 0x20 and 7F 09 02 -> 0x21. Note that the anomalous template F0 50 2D 04 00 11 20 00 00 00 00 10 at prom_b 0xF4FF10 is NOT in the grammar and belongs to the unreferenced routine at 0xFB248A.",
+    "symbols": "trie root prom_b 0xF5115B, sub_FB63D1 0xFB63D1, sub_FB61B1 0xFB61B1, wsa1/notes/sysex-probes/sysex_grammar_dump.py",
+    "evidence": "0xFB63FC `add XBC,0x00F5115B`, bounded to 15 records by `ld l,0x0f` at 0xFB63F2 and `dec 1,L` at 0xFB649A, stride 6 from `inc 6,DE`. Record = [0] match byte, [1] class (0 = descend), [2..5] LE32 next node; 0xFF ends a node, 0xFE is a wildcard. Walked exhaustively from the ROM image.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The receiver only accepts messages that begin F0 50",
+    "detail": "The byte-level SysEx collector rejects anything whose first byte is not 0xF0 (status code 1) or whose second byte is not 0x50 (status code 2). A status byte other than 0xF7 arriving mid-message gives code 3, and a message of 0xFF bytes or more gives code 6. So this machine ignores every other maker's SysEx in the bulk-dump path. Which company holds manufacturer id 0x50 is NOT established anywhere in this tree \u2014 do not write a company name into the manual on the strength of the byte alone.",
+    "symbols": "sub_FB6098 0xFB6098, sub_FB6165 0xFB6165, MIDI_RX_SysExStart 0xFA584D",
+    "evidence": "0xFB60E0 `cp H,0xF0`, 0xFB60EE `cp H,0x50`, 0xFB612C `cp H,0xF7`, 0xFB610A `cp WA,0x00FF`. The interrupt-side parser MIDI_RX_SysExStart independently accepts only identifier bytes 0x50 and 0x7E (notes/FINDINGS-midi-port.md, which also records the searched negative about the company name).",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "How a frame reaches the wire, and which port",
+    "detail": "sub_FB7165 (0xFB7165) writes the finished frame into MIDI-out ring 0x601432 in 0x20-byte chunks through prom_b thunk 0xF41DF8 (T_Ring601432_PutBlock), calling 0xF40724 (T_MIDI_PostSendWork) after each chunk, with `ei 6` / `ei 0` bracketing each chunk. It also writes 0x00 to the one-byte mailbox (0x9B) first. Ring 0x601432 is the queue MIDI_TX_Ready drains into SC0BUF, i.e. MIDI OUT. A sibling, sub_FB71BB (0xFB71BB), sends the same frame to BOTH 0x601432 and the second ring 0x60153C (T_Ring60153C_PutBlock 0xF41E1C, woken through T_MIDI_PostSendWork_PortB 0xF40730); the bulk-dump frame loops use sub_FB7165 only.",
+    "symbols": "sub_FB7165 0xFB7165, sub_FB71BB 0xFB71BB, T_Ring601432_PutBlock 0xF41DF8, T_MIDI_PostSendWork 0xF40724, Ring601432_Get 0xF847F7, MIDI_TX_Ready 0xFA542F",
+    "evidence": "0xFB7189 and 0xFB71AA `call 0xF41DF8` with the pushed length 0x20 and then HL; prom_b line 82805 `T_Ring601432_PutBlock: jp 0xF8481C`. notes/FINDINGS-midi-port.md establishes that MIDI_TX_Ready pulls from the output queue through 0xF41DF0 = T_Ring601432_Get.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "Per-category transfer breakdown as it appears on the wire",
+    "detail": "SYSTEM,PART & MIDI = two transfers: address 0x100000 size 32 bytes (RAM 0x7600-0x761F) and address 0x100020 size 2400 bytes (RAM 0x7620-0x7F7F); 2432 bytes total. SOUND = one transfer: address 0x080000 size 262144 bytes, streamed from the other CPU's 0xE80000-0xEBFFFF in 32 blocks of 8 KiB through the staging buffer at 0x60A000. COMBINATION = two transfers: address 0x140000 size 768 bytes (remote 0xEC0000) and address 0x140300 size 90112 bytes (remote 0xEC0300 upward in 16 blocks of 0x1600); 0x16300 total. SEQUENCER = three transfers: address 0x180000 size 3072 (RAM 0x603400), address 0x180C00 size 30720 (RAM 0x610000), address 0x188400 with a run-time size (RAM from 0x617800; the static form is 0x50C00, but with bit 6 of (0x60FD40) set \u2014 which the UI path always sets \u2014 the size becomes the word at 0x603452 times 16).",
+    "symbols": "sub_FB23EF/sub_FB23F9/sub_FB243E, Remote_E80000_Read32Blocks 0xFB24EC, sub_FB2675/sub_FB267F/sub_FB26E7, sub_FB2587/sub_FB25A2/sub_FB25E7/sub_FB262C, descriptor writers sub_FB75BA/FB75E4/FB7649/FB766F/FB7692/FB76B5/FB76F2/FB7722, sub_FB7748 0xFB7748",
+    "evidence": "Each transfer's template immediate and its descriptor-writer's three literals are read back and cross-checked by wsa1/notes/sysex-probes/sysex_bulkdump_tx.py; the remote reads are the `ld XWA,0x00E80000` / `ld XIX,0x00EC0300` / `pushw 0x2000` / `pushw 0x1600` literals at 0xFB24CD, 0xFB271A, 0xFB2530, 0xFB272B feeding prom_b thunk 0xF40EF0 with 0xF4123C (Link_WaitBlockDone) after each. sub_FB76B5 0xFB76D4 `bit 6,(0x60FD40)` selects the run-time size from sub_FB7748, which computes `(0x603452) * 0x10`.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The buffers and the parse record, for anyone re-deriving this",
+    "detail": "Two 280-byte transmit buffers at 0x60FA50 and 0x60FB68 (current pointer in 0x60FC88, spare in 0x60FC8C) and two receive buffers at 0x60F820/0x60F938 (0x60FC80/0x60FC84). Buffer layout: +0 word = message byte count, +2 long = parse cursor, +6 long, +0x0A long = write cursor, +0x0E onward = the message bytes, with a 0xFF sentinel written at the cursor after every append. Four 16-byte descriptors at 0x60FCB8/0x60FCC8 (transmit, pointers in 0x60FCE0/0x60FCE4) and 0x60FC98/0x60FCA8 (receive, 0x60FCD8/0x60FCDC); field 0 = parsed message class, field 3 = step id, field 4 = status/error, fields 5..0x0E = the matched header bytes, field 0x0F = the last continuation flag. The transfer descriptor is the triple at 0x60FCF8 (current source pointer), 0x60FCFC (end pointer), 0x60FD00 (remaining bytes).",
+    "symbols": "sub_FB7F42 0xFB7F42 (the allocator), sub_FB7FEB 0xFB7FEB (buffer init, descriptor template prom_b 0xF511E9), sub_FB6219 0xFB6219 (field setter), sub_FB62D3 0xFB62D3 (field getter), sub_FB8081 0xFB8081 / sub_FB8028 0xFB8028 (the buffer swaps)",
+    "evidence": "sub_FB7F42 is a run of `lda` / `ld (0x60FCxx),xbc` pairs naming every address above; sub_FB7FEB sets +0x02, +0x06 and +0x0A all to XIX+0x0E and writes 0xFF there, then `ldirw` 8 words from 0xF511E9 into the descriptor. sub_FB6219/sub_FB62D3 are 16-way jump tables over offsets +0..+0x0F (JumpTable_FB6240, JumpTable_FB62F6), each with the last-entry test already recorded in the .s headers.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The progress display and its status codes",
+    "detail": "(0x60F810) is 1 while sending and 2 while receiving; Paint_Sending (0xF99B82) and Paint_SystemExclusivePleaseWait (0xF99CA1) key off it. (0x60F804..0x60F809) hold the SENDING status bytes and (0x60F80A..0x60F80F) the RECEIVING ones; the low 7 bits index the pointer array at prom_b 0xF0D942 (send) whose entries are: 1 \"SYS,PART&MIDI : SENDING\", 2 \"COMPLETED\", 3 \"SOUND : SENDING\", 4 \"COMPLETED\", 5 \"COMBINATION : SENDING\", 6 \"COMPLETED\", 7 \"SEQUENCER : SENDING\", 8 \"COMPLETED\". Codes 7 and 8 are suppressed when (0xC4)==2, the same condition that hides the SEQUENCER row.",
+    "symbols": "Paint_Sending 0xF99B82, Paint_SysPartMidiSoundCombination 0xF99C5C, sub_FB7B0B 0xFB7B0B, sub_FB7B79 0xFB7B79, pointer array prom_b 0xF0D942",
+    "evidence": "0xFB7B7F/0xFB7B89 `ld (XIX),0x02` / `ld (XIX),0x01` under `bit 6,(0x60FD40)` with XIX = 0x60F810; Paint_Sending 0xF99B82 `bit 0,(0x60F810)`. 0xF99C94 `sla hl,0x02 / mx_ld_rm ... (XIY+HL)` with XIY=0xF0D942; the four LE32s and their .ascii targets read out of the prom_b image. 0xF99C7C `cp (0xC4),0x02` then `cp l,0x07` / `cp L,0x08`.",
+    "certainty": "established",
+    "bytes": ""
+   },
+   {
+    "topic": "The 2B / 2C messages are single-parameter traffic, not bulk dump",
+    "detail": "F0 50 2C 04 dd 11 <3-byte parameter id> <value...> F7 and F0 50 2B 04 dd 11 <3-byte parameter id> ... F7 share the same F0 50 <cmd> 04 dd 11 envelope but are parameter messages, dispatched to 0xFB34CA and 0xFB42AB rather than to the bulk-dump handlers. The bare 6-byte template at prom_b 0xF4FEF2 = F0 50 2C 04 00 11 is the header those transmit sites prepend. Which of the two is the SET and which the REQUEST is not established here.",
+    "symbols": "template prom_b 0xF4FEF2, transmit sites 0xFB47E9, 0xFB48E7, 0xFB4A59, 0xFB4DAF, 0xFB4E65, 0xFB4F26, 0xFB4FDC, 0xFB53BF, 0xFB5473; dispatch table prom_b 0xF4F800 entries 0x18 and 0x1A",
+    "evidence": "The trie assigns class 0x18 to 3618 distinct 2C forms and 0x1A to 3612 distinct 2B forms, all of shape 04 <00|01> 11 followed by a three-byte id. Table 0xF4F800[0x18] = 0x00FB34CA, [0x1A] = 0x00FB42AB.",
+    "certainty": "likely",
+    "bytes": "F0 50 2C 04 <00|01> 11 <p1 p2 p3> ... F7"
+   },
+   {
+    "topic": "Remote-triggered dumps use the same engine",
+    "detail": "Five code arms at 0xFB5122, 0xFB512C, 0xFB5136, 0xFB5140 and 0xFB514A set (0x60F802) to 4, 3, 1, 2 and 5 and then call sub_FB516A, which runs the job immediately only when the current screen (0x207A) is 0x79 \u2014 the SYSEX BULK DUMP screen \u2014 or when (0x2076)==1 and (0x207A)==1; otherwise it sets the status byte to 0x11. These five arms are entries 0x1B..0x1F of both 34-entry message dispatch tables at prom_b 0xF4F800 and 0xF4F888.",
+    "symbols": "0xFB5122-0xFB514A, sub_FB516A 0xFB516A, sub_FB5154 0xFB5154, dispatch tables prom_b 0xF4F800 / 0xF4F888",
+    "evidence": "0xFB516A `cp (0x207A),0x79 / jr z` then `cp (0x2076),0x01` and `cp (0x207A),0x01`; 0xFB5184 pushes 0x11 into field 4. Table entries read from the ROM image at 0xF4F86C..0xF4F87C and 0xF4F8F4..0xF4F904. \u26a0 No form in the trie at 0xF5115B produces classes 0x1B..0x1F, so which incoming message reaches these arms is NOT established.",
+    "certainty": "likely",
+    "bytes": ""
+   }
+  ],
+  "openQuestions": [
+   "Which incoming SysEx message actually selects a category for a remote-triggered dump. The five arms at 0xFB5122-0xFB514A are dispatch-table entries 0x1B..0x1F, but the receive trie at prom_b 0xF5115B produces no form with those classes. Either a second grammar root exists or those classes are raised internally; neither was found. UNVERIFIED \u2014 do not publish a \"dump request\" message format.",
+   "The class-6 arm of sub_FB6026 (0xFB6041 `cp h,0x06` -> status 0x1F). No byte sequence in the trie yields class 6, so the wire form that triggers it is UNVERIFIED.",
+   "Press/release semantics. PanelButton_Route (0xF861AC) passes the button index in W bits 0-4 and a flag in bit 7; the existing header reads bit 7 clear as \"released\", but that word is not cited to anything. On screen 0x79 the four row-select handlers act with bit 7 SET while the dump-start arm of 0xF99A8F acts with bit 7 CLEAR, and on the GENERAL MIDI screen (0xF99DDD, 0xF99DF4, 0xF99E2C) every handler acts with bit 7 CLEAR. Which physical panel key is index 9 \u2014 and whether the on-screen \" SEND\" label belongs to it or to index 15 (0xF99B6E, which only requests screen 0x12) \u2014 is UNVERIFIED.",
+   "What the constant bytes 0x04 and 0x11 mean. They are in every 21/22/2B/2C/2D message and the trie matches them literally. A product-family byte and a model id is the obvious reading but nothing in the ROM says so. Likewise nothing says whether a user can ever make the machine transmit device number 0x01 rather than 0x00; every transmit template holds 0x00 and only the receiver accepts either.",
+   "The address space. 0x080000 (SOUND), 0x100000 (SYSTEM,PART & MIDI), 0x140000 (COMBINATION), 0x180000/0x188400 (SEQUENCER) are logical addresses that do not equal the internal source addresses (RAM 0x7600, remote flash 0xE80000/0xEC0000). Whether they map onto anything a user or a service manual would recognise is UNVERIFIED.",
+   "(0xC4). Its value 1 enables the SEQUENCER dump and 2 hides the SEQUENCER row entirely; a model or option variant is the obvious reading, but it is not established. This matters for the manual: on a machine where (0xC4) != 1 the SEQUENCER category is silently refused.",
+   "The second output ring 0x60153C, woken through T_MIDI_PostSendWork_PortB (0xF40730 -> 0xFA5C12). It looks like a second MIDI OUT, and sub_FB71BB sends to both rings, but no bulk-dump frame goes through it and the port's identity is UNVERIFIED.",
+   "The one-byte mailbox (0x9B), set to 0x00 by both sub_FB7165 and sub_FB71BB and to 0xF3 at 0xFE1507. notes/FINDINGS-midi-port.md records it as selecting an arm of MIDI_PostSendWork but does not decode it.",
+   "The orphan at 0xFB248A and its template prom_b 0xF4FF10 (F0 50 2D 04 00 11 20 00 00 00 00 10). Nothing names 0xFB248A, and its template says 16 bytes while the routine passes count 0x0000 to the link read. It should NOT go into the manual as a real message; the probe asserts the anomaly so it will fire if either half changes.",
+   "Frame timing on the wire. A 256-byte frame exactly fills the 0x100-byte MIDI-out ring and Ring_Put_0100 drops rather than blocks, so whether a real transfer ever loses a byte depends on interrupt latency, which cannot be settled from the disassembly. Felipe's hardware is unreachable (notes: kn5000-hardware-inaccessible), so this is a hardware question to park."
+  ],
+  "_label": ""
+ }
+]

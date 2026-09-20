@@ -1,0 +1,77 @@
+\chapter{Message framing}
+
+\section{The identifier test}\label{sec:identifier}
+\estab\ The instrument accepts exactly two System Exclusive identifiers, and they are
+literal immediate operands, not settings:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+identifier & meaning & instruction \\
+\midrule
+\bytes{0x50} & Matsushita (Technics) & \texttt{cp E,0x50} at \bytes{0xFA5850} \\
+\bytes{0x7E} & Universal Non-Real Time & \texttt{cp E,0x7E} at \bytes{0xFA5855} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+There is no third comparison, no table lookup, and no read of any stored setting on this
+path. \textbf{There is no device or unit number at this level} --- the byte after the
+identifier is already treated as message body.
+
+\section{How a message is tracked}
+\estab\ \bytes{0xF0} is first handled as an ordinary status byte and stored as running
+status. The SysEx logic runs when the \emph{next} byte arrives, so the byte the identifier
+test inspects is message byte index~1.
+
+A single RAM byte, \bytes{(0xA9)}, holds the whole receive state:
+
+\begin{center}
+\begin{tabular}{cll}
+\toprule
+bit & meaning & set at \\
+\midrule
+0 & armed --- an \bytes{F0} was seen & \bytes{0xFA584D} \\
+1 & identifier accepted & \bytes{0xFA585A} \\
+2 & a message completed cleanly (byte value \bytes{0x04}) & \bytes{0xFA54E2} \\
+4 & aborted by a stray status byte (byte value \bytes{0x10}) & \bytes{0xFA54EE} \\
+5 & suppress further SysEx & \bytes{0xFB6151} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\estab\ A UART receive error clears the byte outright at \bytes{0xFA5426}.
+
+\begin{tcolorbox}[colback=blue!4!white,colframe=blue!40!black,title=A correction to the
+firmware's own annotations]
+Both the block header above \sym{MIDI\_RX\_SysExStart} and the project's
+\texttt{FINDINGS-midi-port.md} state that bit~5 is ``set nowhere in the converted code''.
+It \emph{is} set, at \bytes{0xFB6151}, in the synchronous receiver on a SysEx framing
+error. Bits~2 and~4 are written but no reader of them was found anywhere in
+\texttt{prom\_a}.
+\end{tcolorbox}
+
+\section{What happens to another maker's message}
+\estab\ An identifier that is neither \bytes{0x50} nor \bytes{0x7E} leaves bit~0 set and
+bit~1 clear. Every following byte still reaches the data handler and is discarded there,
+so the instrument tracks the foreign message to its \bytes{F7} without acting on it and
+without raising any error. Outside a bulk-dump session this is silent.
+
+\section{Termination, abort, and real time}
+\estab\ Termination is decided in the status-byte path, not in the SysEx routines:
+
+\begin{itemize}
+\item \bytes{F7} with bit~5 clear forwards the \bytes{F7} and leaves \bytes{(0xA9)} =
+  \bytes{0x04}, the ``complete message received'' residue.
+\item Any other status byte in \bytes{0x80}--\bytes{0xF6} aborts: \bytes{(0xA9)} =
+  \bytes{0x10} and nothing is forwarded.
+\item System Real Time (\bytes{0xF8}--\bytes{0xFF}) is split off earlier, at
+  \bytes{0xFA54B6}, so a clock or active-sensing byte \emph{inside} a System Exclusive
+  message does not break it. This is correct MIDI 1.0 behaviour.
+\end{itemize}
+
+\estab\ Conversely, while a SysEx is armed or in progress the instrument ignores
+\bytes{0xF8} \textsc{timing clock}, \bytes{0xFA} \textsc{start}, \bytes{0xFB}
+\textsc{continue} and \bytes{0xFC} \textsc{stop} for transport purposes
+(\bytes{0xFA5520}). The block sender likewise spins until an inbound message finishes
+before transmitting (\bytes{0xFB99CC}).

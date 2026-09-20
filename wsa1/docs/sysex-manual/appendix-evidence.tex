@@ -1,0 +1,205 @@
+\chapter{Evidence index}
+Every finding behind this manual, with the firmware symbols that establish it.
+\small
+\section{Technics SX-WSA1R ? Universal / General MIDI System Exclusive (receive and transmit), from the annotated TLCS-}
+\begin{longtable}{p{0.30\textwidth}p{0.12\textwidth}p{0.48\textwidth}}
+\toprule topic & certainty & symbols \\ \midrule \endhead
+HEADLINE: only TWO universal SysEx messages are recognised ? GM System On and GM System Of & \estab & LinkTable\_F4FF61 root sub-array at 0xF5115B (records 767-781), PtrTable\_F4F888 entries 32/33, PtrTable\_F4F800 entries 32/33, handlers 0xFB51E7 and 0xFB520C \\
+\addlinespace
+GM System On ? exact bytes and exactly what it changes & \estab & handler 0xFB51E7 (PtrTable\_F4F800[32] = PtrTable\_F4F888[32] = 0x00FB51E7); poster 0xF41B18 -> prom\_a sub\_F8BC08 0xF8BC08 -> sub\_F8BF07 0xF8BF07 -> T\_Queue2E00\_AppendRegs  \\
+\addlinespace
+GM System Off ? exact bytes, and it is a no-op when GM mode is already off & \estab & handler 0xFB520C (PtrTable\_F4F800[33] = PtrTable\_F4F888[33] = 0x00FB520C); .LFB523E is the early-out \\
+\addlinespace
+Bit 2 of RAM 0x7F4D IS the GENERAL MIDI MODE flag (corroborated four independent ways) & \estab & Paint\_GeneralMidiMode 0xF99D0C, Paint\_GeneralMidiMode\_Entry 0xF99844, ScreenButton\_GeneralMidiMode\_Entry 0xF9984C; prom\_b sub\_F45119 0xF4514F/0xF45156; 0xF64B88/0xF64B97; \\
+\addlinespace
+Where the message is decoded: a byte-trie whose FIRST level matches the THIRD byte of the  & \estab & sub\_FB63D1 0xFB63D1, sub\_FB6219 (record setter) 0xFB6219, sub\_FB62D3 (record getter) 0xFB62D3, LinkTable\_F4FF61 records 18/19 (0xF4FFCD) and 15/16/17 (0xF4FFBB), PtrTable \\
+\addlinespace
+The device-ID byte must be 0x7F exactly ? there is no per-unit device number and no wildca & \estab & sub\_FB63D1 level-1 compare at 0xFB6415; level-2 compare with wildcard at 0xFB64C5/0xFB64C9; root list 0xF5115B..0xF511AF \\
+\addlinespace
+NOT recognised: Master Volume, Identity Request/Reply, GM2 On, and every other universal m & \estab & MIDI\_RX\_SysExStart 0xFA584D (interrupt side), MIDI\_Fg\_SystemCommon 0xFA5B15 (foreground side), MIDI\_SysEx\_Ignore 0xFA586D, level-2 list at 0xF4FFCD, level-3 list at 0xF4F \\
+\addlinespace
+GM On/Off are NOT subject to the per-command receive filter & \estab & sub\_FB6B87 0xFB6B87, class table 0xF4FE82 (34 bytes, 0xF4FE82..0xF4FEA3; bytes[32]=0x00, bytes[33]=0x00), sub\_FB6BF4 0xFB6BF4, sub\_FB6CFC 0xFB6CFC, sub\_FB6DBD 0xFB6DBD \\
+\addlinespace
+The receive framing: which bytes must be present, and where the message is assembled & \estab & sub\_FB20CE 0xFB20CE (drains ring 0x601646, dispatch through sub\_FB2160 + PtrTable\_F4F800) and sub\_FB21CB 0xFB21CB (drains ring 0x601C6E, dispatch through sub\_FB225D + Ptr \\
+\addlinespace
+Both MIDI receive paths reach the same handlers & \estab & main loop 0xF82077 (`call 0xf408e8` -> T\_F408E8 -> 0xFB20CE) and 0xF820D3 (`call 0xf40904` -> T\_F40904 -> 0xFB21CB), gated by Ring601C6E\_IsEmpty 0xF41EB0 at 0xF820CB; T\_R \\
+\addlinespace
+The unit also TRANSMITS GM System On / GM System Off over MIDI & \estab & template pair at 0xF4FEE6 / 0xF4FEEC (part of the 0xF4FEA8-0xF4FF60 SysEx template block); sender sub\_FB4CAE 0xFB4CAE; transmit chain sub\_FB6F24 0xFB6F24 -> sub\_FB71BB 0x \\
+\addlinespace
+The same two messages are written into Standard MIDI Files, selected by the GM-mode flag & \estab & GmSystemSysEx\_F76E64 (0xF76E64 / 0xF76E6C), chosen at 0xF76F4A `ld XIY,0x00F76E64` + 0xF76F4F `bit 2,(0x7f4d)`; Data\_F75675 (0xF75675 / 0xF7567D), chosen at 0xF7575B + 0x \\
+\addlinespace
+Trailing bytes before the F7 are probably tolerated & \likely & sub\_FB63D1 exit .LFB6B6C 0xFB6B6C; dispatch gate in sub\_FB225D at 0xFB227A (`cp A,0x00` on slot 4) and 0xFB2291 (`cp A,0x22` on slot 0) \\
+\addlinespace
+The manufacturer-ID byte is not re-checked after the front end & \likely & sub\_FB63D1 0xFB63D1 (the +2 skip at 0xFB63E1), root list 0xF5115B, front-end filters MIDI\_RX\_SysExStart 0xFA5850 and MIDI\_Fg\_SystemCommon 0xFA5B15 \\
+\addlinespace
+A global kill switch on SysEx reception: (0x89) == 0xFF & \estab & sub\_FB20CE 0xFB20D1, sub\_FB21CB 0xFB21CE; the byte (0x89) \\
+\addlinespace
+Context for the manual: the rest of the SysEx engine is Matsushita ID 0x50 & \estab & template block 0xF4FEA8-0xF4FF60 (readers at 0xFB28D9, 0xFB28F1, 0xFB279C, 0xFB27CD, 0xFB2812, 0xFB28E9, 0xFB2334, 0xFB23AD, 0xFB7034 and the 0x2D family 0xFB2429..0xFB27 \\
+\addlinespace
+Provenance note: the task's two named entry points are on the transmit/UI side, not the re & \estab & GmSystemSysEx\_F76E64 (prom\_b/wsa1\_prom\_b.s:167308), Paint\_GeneralMidiMode\_Entry (prom\_a/wsa1\_prom\_a.s:42886), Paint\_GeneralMidiMode 0xF99D0C \\
+\addlinespace
+\bottomrule\end{longtable}
+\section{SX-WSA1R MIDI transport on CPU 1 (prom\_a/prom\_b): how MIDI 1 and MIDI 2 are distinguished, what confines BULK }
+\begin{longtable}{p{0.30\textwidth}p{0.12\textwidth}p{0.48\textwidth}}
+\toprule topic & certainty & symbols \\ \midrule \endhead
+There are two MIDI input pumps and they differ by ONE byte: the port tag & \estab & MidiIn\_PumpPortA 0xFA6018, MidiIn\_PumpPortB 0xFA60C2, MidiIn\_FetchMessage\_PortA 0xFA609A, MidiIn\_FetchMessage\_PortB 0xFA6123, staging record 0x1940-0x1943, T\_MidiIn\_PumpP \\
+\addlinespace
+The port tag is bit 4 of a 5-bit channel index: 32 logical channels, 16 per port & \estab & MidiIn\_RouteChannelMessage 0xFA61CE, tables 0x1800 (32 B) and 0x1820 (64 B), second pair 0x18A0/0x18C0, cursor/count cells 0x1974/0x1975/0x1977, current index 0x197E \\
+\addlinespace
+MIDI 1 is CPU 1's own UART; MIDI 2 arrives pre-parsed over the inter-CPU link & \estab & MIDI\_RX\_Byte 0xFA5496, MIDI\_RX\_DeliverTwo 0xFA57AF, MIDI\_RX\_DeliverThree 0xFA5803, MIDI\_DrainQueue 0xFA5942, MIDI\_Fg\_Deliver2 0xFA5A8B, MIDI\_Fg\_Deliver3 0xFA5ABE, MIDI\_Po \\
+\addlinespace
+That the far end of the link is the physical MIDI 2 jack is an inference, not a schematic  & \likely & prom\_c INTRX0\_HANDLER 0xF991FF, INTTX0\_HANDLER 0xF99265, Link\_Ch2\_ForwardBytes (per-byte sink of link channel 2) 0xF992C6, MIDI\_Tx\_PutByte, prom\_c 0xFCC5C2-0xFCC5C4 (FF/F \\
+\addlinespace
+SYSTEM EXCLUSIVE never travels in the port-A/port-B message rings at all & \estab & MIDI\_RX\_SysExStart 0xFA584D, MIDI\_RX\_SysExData 0xFA586E, MIDI\_Fg\_SystemCommon 0xFA5AEB, MIDI\_Fg\_SysExData 0xFA5B3D, MidiIn\_SystemMessage 0xFA614B, MidiIn\_SystemSubTable 0 \\
+\addlinespace
+Two SysEx identifiers are accepted and only two: 0x50 and 0x7E & \estab & MIDI\_RX\_SysExStart 0xFA584D (`cp E,0x50` FA5850, `cp E,0x7E` FA5855), MIDI\_Fg\_SystemCommon 0xFA5B15/0xFA5B1A, SysEx assemblers 0xFB210E/0xFB2113 and 0xFB220B/0xFB2210, bu \\
+\addlinespace
+State bytes: (0xA9) interrupt-side, (0x0964) foreground-side, same bit layout & \estab & (0xA9) SysEx state (interrupt), (0x0964) SysEx state (foreground), (0x9A)/(0x0960) running status, (0x9E)/(0x0963) flags, (0x216F) bit 0 = MIDI activity \\
+\addlinespace
+The two SysEx assemblers are twins, one per port - so ORDINARY SysEx reception is not MIDI & \estab & sub\_FB20CE (MIDI 1, ring 0x601646 via 0xF41E38), sub\_FB21CB (MIDI 2, ring 0x601C6E via 0xF41EA4), sub\_FB6165 (byte appender), sub\_FB2160 (post-0xF7 processor), thunks T\_F \\
+\addlinespace
+ What confines BULK DUMP to MIDI 1: the dump's own send and receive loops name only the M & \estab & sub\_FB7165 (MIDI 1 only) 0xFB7165, sub\_FB71BB (both ports) 0xFB71BB, bulk send drivers sub\_FB6F6B 0xFB6F6B / sub\_FB6FB2 0xFB6FB2, bulk send dispatcher sub\_FB23E2 0xFB23E2 \\
+\addlinespace
+Ring 0x601432 is MIDI 1 OUT, ring 0x60153C is MIDI 2 OUT, and (0x194B) is the runtime port & \estab & MIDI\_TX\_Ready 0xFA542F, Ring601432\_Get 0xF41DF0, MidiOut\_PutByteA 0xFA7D95, MidiOut\_PostStagedMessage (the 0xFA7D26 site), (0x194B) port select, MIDI\_SendBankAndProgram 0 \\
+\addlinespace
+Every buffer size, from the ring class itself & \estab & ring class 0xF84000-0xF842DE, instance bank 0xF842DF-0xF84C6B (15 groups of 11 veneers, 163 bytes each), free-count field at ring-2 (0x601430 for port A, 0x60153A for por \\
+\addlinespace
+Input overrun: four distinct failure modes, three counters, one flush & \estab & MIDI\_RX\_ErrorReset 0xFA5418, MIDI\_RX\_QueueFull2 0xFA57D0, MIDI\_RX\_QueueFull3 0xFA5828, MIDI\_RX\_SecondDataByte 0xFA57DE, error counter (0x0931) 8-bit, overflow counter (0x \\
+\addlinespace
+Output overrun: 240 polls, then the whole transmit queue is thrown away & \estab & MidiOut\_PostStagedMessage (0xFA7CEB-0xFA7D91), retry counter (0xA2), SC0BUF = SFR 0x50 \\
+\addlinespace
+SysEx accumulation has its own 255-byte ceiling & \estab & sub\_FB6165 0xFB6165, descriptor pointer (0x60FC80), count at +0x00, write cursor at +0x0A, abort sites 0xFB212B/0xFB2228/0xFB610A \\
+\addlinespace
+ The bulk-dump packet format, read out of the transmit engine & \estab & sub\_FB6E7F 0xFB6E7F (header), sub\_FB6F24 0xFB6F24 (raw append), sub\_FB7040 0xFB7040 (nibbliser), sub\_FB70AE 0xFB70AE / sub\_FB70E6 0xFB70E6 (continuation flag), sub\_FB7111 \\
+\addlinespace
+ The bulk-dump address and length fields are 3 bytes of base-128, MSB first - proved by a & \estab & templates prom\_b 0xF4FEF8, 0xF4FF04, 0xF4FF10, 0xF4FF1C, 0xF4FF28, 0xF4FF34, 0xF4FF40, 0xF4FF49, 0xF4FF55; setters sub\_FB75BA 0xFB75BA and sub\_FB75E4 0xFB75E4; senders su \\
+\addlinespace
+The other fixed SysEx templates in ROM & \estab & template table prom\_b 0xF4FEB4..0xF4FF60, readers sub\_FB7025 0xFB7025 (0xF4FED2), 0xFB33A4 (0xF4FEE3), 0xFB2429/0xFB246E (bulk), sub\_FB6E7F 0xFB6E7F \\
+\addlinespace
+The received-SysEx command dispatch: a 34-entry table at prom\_b 0xF4F800 & \likely & sub\_FB2160 0xFB2160, sub\_FB62D3 0xFB62D3 (getter, JumpTable\_FB62F6), sub\_FB6219 0xFB6219 (setter, JumpTable\_FB6240), command table prom\_b 0xF4F800, record pointer (0x60FC \\
+\addlinespace
+The MIDI settings that touch SysEx: an EXCLUSIVE filter, and no device number & \likely & filter readers sub\_F9ABEF 0xF9ABEF, sub\_F9AC15, sub\_F9AC3B, sub\_F9AC61, sub\_F9AC87, sub\_F9ACAA, sub\_F9ACD0, sub\_F9ACF6 0xF9ACF6; editors sub\_F9AD21..sub\_F9AF19; DL\_InputO \\
+\addlinespace
+Two settings bits that do reach the MIDI code, and their consumers & \estab & MidiIn\_SongPosition 0xFA61A4, MidiIn\_SongSelect 0xFA61B8, MidiIn\_ProgramChange 0xFA6D58, MidiIn\_PitchBend 0xFA6DE3, MidiIn\_ChannelPressure 0xFA6E6A, MidiIn\_ControllerEnab \\
+\addlinespace
+\bottomrule\end{longtable}
+\section{Technics SX-WSA1R firmware ? MIDI System Exclusive RECEIVE path (prom\_a interrupt parser, prom\_a foreground pa}
+\begin{longtable}{p{0.30\textwidth}p{0.12\textwidth}p{0.48\textwidth}}
+\toprule topic & certainty & symbols \\ \midrule \endhead
+How F0 reaches the SysEx handler at all & \estab & MIDI\_RX\_Byte 0xFA5496; MIDI\_RX\_DataByte 0xFA5763; MIDI\_StatusDispatch\_Table 0xFA578E; MIDI\_RX\_SystemCommon 0xFA5830; MIDI\_RX\_SysExStart 0xFA584D \\
+\addlinespace
+The identifier test ? exactly two bytes, both fixed immediates & \estab & MIDI\_RX\_SysExStart 0xFA584D; MIDI\_SysEx\_Accept 0xFA585A \\
+\addlinespace
+What makes it take the Ignore path, and what Ignore actually does & \estab & MIDI\_SysEx\_Ignore 0xFA586D; MIDI\_RX\_SysExData 0xFA586E \\
+\addlinespace
+On Accept, F0 and the identifier are re-emitted into a ring, not just flagged & \estab & MIDI\_SysEx\_Accept 0xFA585A; T\_Ring601646\_Put 0xF41E3C; Ring601646\_Put 0xF849EE \\
+\addlinespace
+Body-byte gate: forwarded only while bit 1 set AND bit 5 clear & \estab & MIDI\_RX\_SysExData 0xFA586E; MIDI\_SysEx\_DataDone 0xFA5883 \\
+\addlinespace
+Termination and the abort rule ? how a message ends & \estab & MIDI\_RX\_Byte .LFA54C0 0xFA54C0 / .LFA54E5 0xFA54E5 / .LFA54EE 0xFA54EE \\
+\addlinespace
+(0xA9) ? the complete SysEx state byte, and a CORRECTION to the existing annotation & \estab & MIDI\_RX\_ErrorReset 0xFA5426; sub\_FB6098 0xFB6098 (set at 0xFB6151); MIDI\_RX\_SysExStart 0xFA584D \\
+\addlinespace
+System Real Time is suppressed while a SysEx is in flight & \estab & MIDI\_RT\_Received 0xFA5504; sub\_FB99AB 0xFB99AB \\
+\addlinespace
+MIDI\_SysExHeader (F0 50) is a TRANSMIT template ? ZERO bytes are ever matched against it & \estab & MIDI\_SysExHeader 0xFA5CB8; MIDI\_Fg\_SystemCommon 0xFA5AEB; T\_Ring601C6E\_PutBlock 0xF41EAC \\
+\addlinespace
+A second, independent copy of the same state machine runs in the foreground & \estab & MIDI\_DrainQueue 0xFA5942; MIDI\_Fg\_SystemCommon 0xFA5AEB; MIDI\_Fg\_SysExData 0xFA5B3D; MIDI\_Fg\_DataByte 0xFA59FA \\
+\addlinespace
+Where received data is buffered, and exactly what bounds it & \estab & sub\_FB20CE 0xFB20CE; sub\_FB21CB 0xFB21CB; sub\_FB6165 0xFB6165; state byte (0x60FD43); buffer pointer (0x60FC80) \\
+\addlinespace
+The buffer objects themselves & \likely & sub\_FB7F42 0xFB7F42; sub\_FB7FEB 0xFB7FEB; sub\_FB8028 0xFB8028; sub\_FB80F3 0xFB80F3 (reset the active buffer) \\
+\addlinespace
+ The grammar walker SKIPS F0 and the identifier without re-comparing them & \estab & sub\_FB63D1 0xFB63D1; sub\_FB61B1 0xFB61B1 (read one byte, advance the cursor) \\
+\addlinespace
+ The accepted third byte ? the root table, 14 values & \estab & root table 0xF5115B (prom\_b LinkTable\_F4FF61 record 767); sub\_FB63D1 0xFB63D1; probe wsa1/notes/sysex-probes/sysex\_grammar\_dump.py \\
+\addlinespace
+ The complete short-form accepted sequences, with their command numbers & \estab & root 0xF5115B and nodes 0xF4FF67..0xF511B4; literal templates 0xF4FEB4-0xF4FF60; probe wsa1/notes/sysex-probes/sysex\_grammar\_dump.py --paths \\
+\addlinespace
+ The byte after 0x04 is a two-valued unit/device field; 04 nn 11 is a model triple & \estab & nodes 0xF4FF85/0xF4FF73/0xF4FF67 (for 0x21) and 0xF4FFAF/0xF4FF9D/0xF4FF91 (for 0x22); sub\_FB2323 0xFB2323; sub\_FB7F1F 0xFB7F1F \\
+\addlinespace
+Validation: the parse record, its error codes, and the dispatch bound & \estab & sub\_FB62D3 0xFB62D3 (field getter); sub\_FB6219 0xFB6219 (field setter); sub\_FB2160 0xFB2160; sub\_FB225D 0xFB225D; template 0xF511E9 \\
+\addlinespace
+A third, stricter collector accepts ONLY 0x50 & \estab & sub\_FB6098 0xFB6098 \\
+\addlinespace
+ Two annotations in the same file disagree about what 0x50 is & \unver & header at 0xFA5919-0xFA5938 (MIDI\_RX\_SysExStart); header at \textasciitilde{}0xFA5AEB (MIDI\_Fg\_SystemCommon); notes/gen\_prom\_a\_fa5aeb\_module.py line \textasciitilde{}515 \\
+\addlinespace
+\bottomrule\end{longtable}
+\section{WSA1R SysEx error reporting ? where ERROR 40 / 41 / 42 are raised (prom\_a + prom\_b)}
+\begin{longtable}{p{0.30\textwidth}p{0.12\textwidth}p{0.48\textwidth}}
+\toprule topic & certainty & symbols \\ \midrule \endhead
+The whole chain: status byte $\rightarrow$ message id $\rightarrow$ screen & \estab & sub\_FB7DFE 0xFB7DFE, sub\_FB7E29 0xFB7E29, sub\_FB7E38 0xFB7E38, sub\_FB7E43 0xFB7E43, AsciiRun\_F511C7 0xF511C7 (prom\_b), PtrTable\_F99121 0xF99121, sub\_F99098 0xF99098, sub\_ \\
+\addlinespace
+ERROR 40 ? exact condition & \estab & sub\_FB63D1 0xFB63D1; raise sites 0xFB64BF (0x08), 0xFB6582 (0x09), 0xFB6645 (0x0A); shared tail 0xFB6ADA; root table 0xF5115B (prom\_b) \\
+\addlinespace
+ERROR 42 ? exact condition, and it is a SEND-side error only & \estab & sub\_FB6FB2 0xFB6FB2, wait at 0xFB6FD1 `call 0xf4123c`, raise at 0xFB6FFB and 0xFB700A; Link\_WaitBlockDone 0xF8E66D; thunk T\_Link\_WaitBlockDone 0xF4123C; sub\_FB6F6B 0xFB6F \\
+\addlinespace
+ERROR 41 ? the catch-all, and the full list of what lands on it & \estab & 0xFB60E9(01) 0xFB60F7(02) 0xFB6142(03) 0xFB776D(04) 0xFB77A1(05) 0xFB611B(06) 0xFB640C(07) 0xFB6708(0B) 0xFB67CB(0C) 0xFB688E(0D) 0xFB6951/0xFB6CE5(0E) 0xFB6A14(0F) 0xFB6 \\
+\addlinespace
+The checksum, and the three-byte tail every accepted message must have & \estab & sub\_FB6CFC 0xFB6CFC, sub\_FB6DBD 0xFB6DBD; product-id gate 0xFB6DE8-0xFB6DFA; flag test 0xFB6E09-0xFB6E0F; sum loop 0xFB6E3A-0xFB6E47; checksum compare 0xFB6E4D-0xFB6E62 \\
+\addlinespace
+Body encoding: two 7-bit bytes per data byte, high nibble first & \estab & receive join 0xFB72E2 `sll h,0x04` + 0xFB72FC `and A,0x0f` + 0xFB7301 `xor L,H`; transmit split sub\_FB7040 0xFB7040, 0xFB706F / 0xFB7074 \\
+\addlinespace
+ Status 0x16 is NOT one of the 4x errors ? it shows ERROR 21! "Memory full" & \estab & raise sites 0xFB734C and 0xFB7401; message 0x0F $\rightarrow$ 0xF2DD4F \\
+\addlinespace
+ TRAP: the .s under-declares STATUS\_MAP as 22 bytes; it is 34 & \estab & AsciiRun\_F511C7 0xF511C7, header at prom\_b/wsa1\_prom\_b.s line \textasciitilde{}101343 \\
+\addlinespace
+The three errors are reported ONLY by the SYSEX BULK DUMP screen & \likely & sub\_FB7DFE callers 0xFB20BF and 0xFB286F; engine entry sub\_FB2049 0xFB2049; JumpTable\_FB2081 (6 modes, `cps bc,0x05 / jr ugt` at 0xFB2070); screen painter Paint\_SysexBulk \\
+\addlinespace
+The messages the machine accepts at all, and the WSA1's own product id & \estab & root 0xF5115B; templates 0xF4FEB4-0xF4FF60; handler tables 0xF4F800 / 0xF4F888; bounds 0xFB2194 / 0xFB2291 \\
+\addlinespace
+Before the trie: the session framer's own three checks & \estab & sub\_FB6072 0xFB6072, sub\_FB6098 0xFB6098; sub\_FB20CE 0xFB20CE (ring 0xF41E38), sub\_FB21CB 0xFB21CB (ring 0xF41EA4, Ring601C6E\_Get); byte appender sub\_FB6165 0xFB6165 \\
+\addlinespace
+Four statuses exist in the map but are never raised & \estab & STATUS\_MAP 0xF511C7 indices 0x15, 0x17, 0x18, 0x1F \\
+\addlinespace
+A complete GERMAN copy of all three error screens exists but is unreachable & \estab & PtrTable\_F99121 0xF99121 (+ base table 0xF993B9); PtrTable\_F98DE5 0xF98DE5 (+ base table 0xF98FB1); selector (0x7FC1) written at 0xF82628 \\
+\addlinespace
+What the screens actually say, verbatim & \estab & DL\_Error40TheIdentificationIdCodeOfThe 0xF2E46A, DL\_Error41AnErrorHasOccuredDuringSystem 0xF2E4E4, DL\_Error42AnErrorHasOccuredDuringSystem 0xF2E587, DL\_Completed 0xF2E615 \\
+\addlinespace
+\bottomrule\end{longtable}
+\section{Technics SX-WSA1R firmware ? the SysEx BULK DUMP transmit path (prom\_a UI screen 0x79 $\rightarrow$ the SysEx engine at 0x}
+\begin{longtable}{p{0.30\textwidth}p{0.12\textwidth}p{0.48\textwidth}}
+\toprule topic & certainty & symbols \\ \midrule \endhead
+Entry point: screen 0x79's button handler is what starts a dump & \estab & Paint\_SysexBulkDump 0xF99A04, ScreenButton\_SysexBulkDump\_Entry 0xF99835, DisplayListPtrs\_F99870, 0xF99A8F, 0xF99AE3, 0xF408E4 (T\_F408E4), sub\_FB2049 0xFB2049, JumpTable\_F \\
+\addlinespace
+Five menu rows, four data categories & \estab & 0xF99AE3, sub\_FB22CD 0xFB22CD, sub\_FB22E6 0xFB22E6, sub\_FB22E7 0xFB22E7, sub\_FB22F6 0xFB22F6, sub\_FB2305 0xFB2305, sub\_FB2314 0xFB2314, sub\_FB23E2 0xFB23E2, sub\_FB5FF5 0x \\
+\addlinespace
+Data message frame layout & \estab & templates prom\_b 0xF4FEF8, 0xF4FF04, 0xF4FF10, 0xF4FF1C, 0xF4FF28, 0xF4FF34, 0xF4FF40, 0xF4FF49, 0xF4FF55; sub\_FB6E7F 0xFB6E7F (append+autoflush), sub\_FB6F24 0xFB6F24 (ap \\
+\addlinespace
+The address and size fields ? proved, not assumed & \estab & sub\_FB75BA, sub\_FB75E4, sub\_FB751A, sub\_FB7649, sub\_FB766F, sub\_FB7692, sub\_FB76B5, sub\_FB76F2, sub\_FB7722, sub\_FB6EE9 0xFB6EE9 \\
+\addlinespace
+Data bytes are sent as nibble pairs, high nibble first & \estab & sub\_FB7040 0xFB7040 \\
+\addlinespace
+Checksum: (0 - sum) \& 0x7F over everything after the leading F0 & \estab & sub\_FB7111 0xFB7111, literal prom\_b 0xF4FE68 \\
+\addlinespace
+Block size: 0xFC message bytes, so 120 or 125 source bytes per frame & \estab & sub\_FB7040 0xFB70A3 `cp WA,0x00FC`, sub\_FB7165 0xFB71A0 `cp HL,0x0020`, Ring601432\_PutBlock 0xF8481C, Ring\_Put\_0100 0xF841D5 \\
+\addlinespace
+Continuation frames re-open with F0 50 7E & \estab & sub\_FB7025 0xFB7025, template prom\_b 0xF4FED2 = F0 50 7E, sub\_FB70AE 0xFB70AE, sub\_FB70E6 0xFB70E6, sub\_FB8081 0xFB8081 \\
+\addlinespace
+Continuation flag semantics, and the two frame loops & \estab & sub\_FB6F6B 0xFB6F6B, sub\_FB6FB2 0xFB6FB2, sub\_FB70AE 0xFB70AE, sub\_FB70E6 0xFB70E6, Remote\_E80000\_Read32Blocks 0xFB24EC, sub\_FB26E7 0xFB26E7 \\
+\addlinespace
+Handshake: a two-message enquiry before any data, retried three times each & \estab & sub\_FB2323 0xFB2323, templates 0xF4FED5 and 0xF4FEDC, sub\_FB6072 0xFB6072, sub\_FB62D3 0xFB62D3, (0x60FD40) bit 7 \\
+\addlinespace
+Per-frame acknowledgement, retransmission and the two timeouts & \estab & sub\_FB6026 0xFB6026, sub\_FB6072 0xFB6072, sub\_FB7785 0xFB7785, sub\_FB77C7 0xFB77C7, Ring601432\_SpinUntilEmpty 0xFB6084, sub\_FB7165 0xFB7165 \\
+\addlinespace
+End-of-category, end-of-dump and abort messages & \estab & sub\_FB277E 0xFB277E, sub\_FB27AD 0xFB27AD, templates 0xF4FEBE, 0xF4FEC3, 0xF4FEC8 \\
+\addlinespace
+The same protocol in reverse ? what the WSA1R answers when it is the receiver & \estab & sub\_FB28BE 0xFB28BE, 0xFB28FF, 0xFB291D, dispatch table prom\_b 0xF4F916 (34 entries, bound `cp H,0x22` at 0xFB2896) \\
+\addlinespace
+The complete command byte vocabulary the firmware will parse & \estab & trie root prom\_b 0xF5115B, sub\_FB63D1 0xFB63D1, sub\_FB61B1 0xFB61B1, wsa1/notes/sysex-probes/sysex\_grammar\_dump.py \\
+\addlinespace
+The receiver only accepts messages that begin F0 50 & \estab & sub\_FB6098 0xFB6098, sub\_FB6165 0xFB6165, MIDI\_RX\_SysExStart 0xFA584D \\
+\addlinespace
+How a frame reaches the wire, and which port & \estab & sub\_FB7165 0xFB7165, sub\_FB71BB 0xFB71BB, T\_Ring601432\_PutBlock 0xF41DF8, T\_MIDI\_PostSendWork 0xF40724, Ring601432\_Get 0xF847F7, MIDI\_TX\_Ready 0xFA542F \\
+\addlinespace
+Per-category transfer breakdown as it appears on the wire & \estab & sub\_FB23EF/sub\_FB23F9/sub\_FB243E, Remote\_E80000\_Read32Blocks 0xFB24EC, sub\_FB2675/sub\_FB267F/sub\_FB26E7, sub\_FB2587/sub\_FB25A2/sub\_FB25E7/sub\_FB262C, descriptor writers s \\
+\addlinespace
+The buffers and the parse record, for anyone re-deriving this & \estab & sub\_FB7F42 0xFB7F42 (the allocator), sub\_FB7FEB 0xFB7FEB (buffer init, descriptor template prom\_b 0xF511E9), sub\_FB6219 0xFB6219 (field setter), sub\_FB62D3 0xFB62D3 (fiel \\
+\addlinespace
+The progress display and its status codes & \estab & Paint\_Sending 0xF99B82, Paint\_SysPartMidiSoundCombination 0xF99C5C, sub\_FB7B0B 0xFB7B0B, sub\_FB7B79 0xFB7B79, pointer array prom\_b 0xF0D942 \\
+\addlinespace
+The 2B / 2C messages are single-parameter traffic, not bulk dump & \likely & template prom\_b 0xF4FEF2, transmit sites 0xFB47E9, 0xFB48E7, 0xFB4A59, 0xFB4DAF, 0xFB4E65, 0xFB4F26, 0xFB4FDC, 0xFB53BF, 0xFB5473; dispatch table prom\_b 0xF4F800 entries  \\
+\addlinespace
+Remote-triggered dumps use the same engine & \likely & 0xFB5122-0xFB514A, sub\_FB516A 0xFB516A, sub\_FB5154 0xFB5154, dispatch tables prom\_b 0xF4F800 / 0xF4F888 \\
+\addlinespace
+\bottomrule\end{longtable}
