@@ -8,6 +8,8 @@
 | `sysex_command_map.py` | Walking the grammar to the BOTTOM (not depth 8): what does each accepted sequence make the instrument DO? Covers `25`, `7E`-as-third-byte, the `2D` subtree and the dump request. | `python3 wsa1/notes/sysex-probes/sysex_command_map.py` (tables) or `--paths` (all 7542 sequences) |
 | `sysex_param_space.py` | The `2B` and `2C` families: what the bytes after the model id `11` mean, which command id each sequence terminates in, and how `2B` differs from `2C`. | `python3 wsa1/notes/sysex-probes/sysex_param_space.py` (tables) or `--paths` (all 7512 sequences) |
 | `sysex_dump_categories.py` | WHICH of the five bulk-dump categories emits WHICH data header, in what order, and what the header's 21-bit address field means. | `python3 wsa1/notes/sysex-probes/sysex_dump_categories.py` (tables) or `--wire` (each header as transmitted) |
+| `sysex_cross_product.py` | Is this the SAME protocol in the sibling Technics products? Reads the WSA1R, KN5000 and KN1500 grammars out of raw ROM side by side, prints each one's model triple, fixed messages and bulk-dump regions, and asserts what is shared and what is not. | `python3 wsa1/notes/sysex-probes/sysex_cross_product.py` (summary), `--paths` (every accepted sequence), `--kn7000` (the later, incompatible dialect) |
+| `sysex_wire_capture_check.py` | Does a dump a REAL machine put on the wire obey the frame format decoded from the ROMs? Checks the handshake, header, nibble payload, 0xFC cap, continuation flag, checksum and declared length of all 2883 messages of a captured SOUND+COMBINATION dump. | `python3 wsa1/notes/sysex-probes/sysex_wire_capture_check.py` (summary) or `--frames` |
 
 ## Signal being read
 
@@ -330,3 +332,68 @@ own row→job values at prom_a `0xF99AE3`.
 3. Index **0** of every group is the same placeholder descriptor `0xF511F9`,
    which `0xFB4D92` refuses *by address*. The wire indices are therefore
    1-based and index 0 is unreachable.
+
+## `sysex_cross_product.py` — signal being read
+
+Three images, three copies of the same three structures. Each load base is
+asserted by content (`F0 50 23 7E F7` must sit at the stated address), never
+assumed.
+
+| product | image | base | templates | grammar root |
+|---|---|---|---|---|
+| WSA1R | `wsa1_prom_b.ic13` | `0xF00000` | `0xF4FEB4` | `0xF5115B` |
+| KN5000 | `kn5000_v10_program.rom` | `0xE00000` | `0xEE3594` | `0xEE493E` |
+| KN1500 | IC15 `…9649eai.ic15.rest` | `0xD80000` | `0xF5278E` | `0xF53838` |
+
+* The KN5000 root is named by `lda XBC,0xee493e` at `0xFD5F6F` and `0xFD5FB0`,
+  bounded to **16** records by `cp QIZH,0x10` (`0xFD6015`), stride 6 from
+  `muls WA,0x0006` — one record more than the WSA1R's 15, and the extra one is
+  a `0xFE` **wildcard**.
+* Status maps: WSA1R `0xF511C7` (34 bytes), KN5000 `0xEE49B4` (35 bytes then
+  `0xFF`). 32 of the 34 shared entries are identical.
+* KN5000 transmit side, for the checksum claim: `0xFD6B7A` sums from buffer
+  `+0x0F` to the write cursor, `neg E` / `res 7,E`, then appends that byte plus
+  the `0xF7` beside it in the word at `0xEE2D6A` (`00 F7`) — the same routine,
+  the same constants and the same 2-byte literal as the WSA1R's `0xFB7111` /
+  `0xF4FE68`. Receive side `0xFD6959` gates the checksum on the same four
+  families `{0x7E,0x2B,0x2C,0x2D}` and raises the same statuses `0x12`/`0x14`.
+
+### Pass criterion
+
+Every assert silent, `OK` printed. Headline numbers: three roots with the same
+14 family bytes; KN5000 and KN1500 carry a 15th, wildcard record and the WSA1R
+does not; triples `04 00|01 11` / `01 28 12` / `01 24|25|26 11`; 32/34 status
+entries identical; 11 of 13 KN5000 dump regions unchanged in the KN1500.
+
+### Trap
+
+A product that answers to more than one model triple repeats its whole
+address table once per triple. Counting rows without de-duplicating makes the
+WSA1R look like it has 16 transfers and the KN1500 39; the real counts are 8
+and 13.
+
+## `sysex_wire_capture_check.py` — signal being read
+
+`SND_CMBI.syx`, a real SOUND+COMBINATION bulk dump, 728254 bytes / 2883
+messages, from the community archive `KN7000/WSA1R_files/SND_CMBI_syx.zip`
+(zip sha256 `72e8d9b3…b055`, syx sha256 `a7a83a08…968e`). **Not committed** —
+it is a capture, not a ROM; the hash above is the baseline and the script
+refuses to assert against any other file unless `--any` is given.
+
+Every rule is checked against the bytes, not restated: three unanswered
+enquiries then the dump proceeds without acknowledgements; five data headers
+whose `(address, length)` pairs are all five present in prom_b's own grammar;
+2871 continuation frames re-opening `F0 50 7E`; every payload byte `< 0x10`;
+`len(frame) - 4 == 0xFC` on every full frame (125 source bytes, 120 in a
+header frame); flag `0x01` except once per transfer; **0 checksum failures in
+2876 frames**; and every transfer delivering exactly the byte count its own
+header declared.
+
+### The one contradiction it found
+
+Every message in the capture carries the model triple `04 01 11`, while the
+dumped v2 `prom_b` transmits `04 00 11` and **no `04 01 11` literal exists
+anywhere in the four WSA1 images**. Both are accepted on reception, and the
+KN1500 accepts three consecutive values in the same position, so that byte is
+a model/variant code rather than a constant of the product. A librarian must
+accept both.
