@@ -185,16 +185,14 @@ EMIT = 0xFB6E7F                      # push a literal template into the frame
 APPEND_SIZE = 0xFB6EE9               # append the run-time size septets
 
 
-def scan_emitter(start, limit=0xC0):
+def scan_emitter(start, end):
     """Read one part emitter's bytes and pull out the three things that
-    identify what it sends.  Every hit is counted and asserted, so a window
-    that runs past the routine's RET cannot go unnoticed."""
+    identify what it sends.  The window is bounded by the NEXT routine in the
+    module, and every hit is counted and asserted, so a window that runs into
+    a neighbour cannot go unnoticed."""
     steps, templates, descs, hdrlens, appends = [], [], [], [], []
     p = start
-    end = start + limit
     while p < end:
-        if a(p, 1) == b"\x0e" and p > start + 4 and not steps:
-            break
         # pushw <step> ; pushw 0x03 ; ld xbc,(0x60FCE0) ; push ; call setfield
         if (a(p, 1) == b"\x0b" and a(p + 3, 3) == bytes([0x0B, 0x03, 0x00])
                 and a(p + 6, 5) == bytes([0xE2, 0xE0, 0xFC, 0x60, 0x21])
@@ -273,10 +271,23 @@ for site in (0xFB2534, 0xFB2560, 0xFB26CE, 0xFB272F, 0xFB275B):
     assert call24(site) == 0xF40EF0, hex(site)
 
 # ---------------------------------------------- 6. build the transmit table
+# Every routine this module lays out in order, so each part emitter's window
+# stops where the next routine begins.  No fixed window length is guessed.
+BOUNDS = sorted({TOTAL_ROUTINE, END_OF_CATEGORY} | set(TOTAL_ORDER)
+                | {e for parts in CAT_PARTS.values() for e in parts})
+
+
+def window_end(addr):
+    later = [x for x in BOUNDS if x > addr]
+    assert later, hex(addr)
+    return later[0]
+
+
 PARTS = []          # (category, index, step, template, desc, hdrlen, runtime)
 for cat in TOTAL_ORDER:
     for i, emitter in enumerate(CAT_PARTS[cat]):
-        PARTS.append((CATEGORY_NAME[cat], i + 1) + scan_emitter(emitter))
+        PARTS.append((CATEGORY_NAME[cat], i + 1)
+                     + scan_emitter(emitter, window_end(emitter)))
 
 # every part's header is a `F0 50 2D 04 00 11` data header
 for _, _, _, tmpl, _, hlen, rt in PARTS:

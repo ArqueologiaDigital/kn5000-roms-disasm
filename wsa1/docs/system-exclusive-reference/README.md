@@ -13,7 +13,7 @@ pdflatex wsa1r-system-exclusive-reference.tex
 pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
 ```
 
-12 pages. Needs only a standard TeX Live.
+15 pages. Needs only a standard TeX Live.
 
 ## Files
 
@@ -27,6 +27,7 @@ pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of cont
 | `sec-bulk-dump.tex` | categories, data message, encoding, checksum, handshake |
 | `sec-universal.tex` | what is and is not honoured |
 | `sec-errors.tex` | the five screens and their causes |
+| `sec-family.tex` | what the SX-KN5000 and SX-KN1500 share and do not |
 | `sec-limitations.tex` | what this edition does not cover |
 
 ## Scope

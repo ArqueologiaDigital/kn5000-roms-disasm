@@ -1,0 +1,54 @@
+\chapter{Relationship to other Technics instruments}
+
+The message engine described in this reference is not unique to the SX-WSA1R. At least two
+other Technics instruments implement the same protocol: the SX-KN5000 and the SX-KN1500.
+
+\section{What is shared}
+All three use the \bytes{50} identifier, the same message families, the same short control
+messages, the same payload encoding and the same checksum rule. The fixed messages are
+byte-for-byte identical:
+
+\begin{center}
+\bytes{F0 50 23 7E F7}\quad
+\bytes{F0 50 24 7E F7}\quad
+\bytes{F0 50 27 7E F7}\quad
+\bytes{F0 50 28 7E F7}\quad
+\bytes{F0 50 29 7E F7}\quad
+\bytes{F0 50 2A 7E F7}
+\end{center}
+
+The error mapping is also nearly common: of the thirty-four status values, thirty-two
+produce the same report on the SX-WSA1R and the SX-KN5000.
+
+\section{What distinguishes the products}
+The model triple is the discriminator. A message whose triple does not match the receiving
+instrument is refused with \textsc{error 40}.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+instrument & model triple \\
+\midrule
+SX-WSA1R & \bytes{04 00 11}, \bytes{04 01 11} \\
+SX-KN5000 & \bytes{01 28 12} \\
+SX-KN1500 & \bytes{01 24 11}, \bytes{01 25 11}, \bytes{01 26 11} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A librarian that supports more than one of these instruments needs only to vary the triple
+and the dump region addresses; the framing, handshake, encoding and checksum are common
+code.
+
+\section{Dump regions differ}
+The dump region addresses are per-product. The SX-KN5000 and SX-KN1500 share eleven of
+their thirteen region and length pairs with each other, but the SX-WSA1R shares none of
+its eight with either --- its categories are its own.
+
+\begin{caution}{The SX-WSA1R does not accept the GS-style messages its siblings do}
+The SX-KN5000 and SX-KN1500 additionally accept a small set of messages in the
+\bytes{42 12} parameter form, including the sequence \bytes{42 12 40 00 7F 00 41} used
+elsewhere in the industry as a reset. \textbf{The SX-WSA1R accepts none of them.} Software
+that resets a KN-series instrument that way and assumes the SX-WSA1R will follow will find
+it does not respond.
+\end{caution}
