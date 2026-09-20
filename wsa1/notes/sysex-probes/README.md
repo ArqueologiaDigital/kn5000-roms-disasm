@@ -5,6 +5,7 @@
 | `sysex_grammar_dump.py` | After `F0 <50\|7E>`, which byte sequences does the firmware accept, and which internal command number does each one produce? | `python3 wsa1/notes/sysex-probes/sysex_grammar_dump.py` (tables) or `--paths` (accepted sequences) |
 | `sysex_error_codes.py` | Which internal status code raises `ERROR 40!`, `ERROR 41!` or `ERROR 42!`, and where in prom_a is each one raised? | `python3 wsa1/notes/sysex-probes/sysex_error_codes.py` (table) or `--sites` (every raise site) |
 | `sysex_bulkdump_tx.py` | What does the machine put on the wire when SYSEX BULK DUMP -> SEND is pressed: which menu row dumps what, what the frame header says, and how the checksum and the block size are computed? | `python3 wsa1/notes/sysex-probes/sysex_bulkdump_tx.py` (tables) or `--frames` (block arithmetic + a worked checksum) |
+| `sysex_command_map.py` | Walking the grammar to the BOTTOM (not depth 8): what does each accepted sequence make the instrument DO? Covers `25`, `7E`-as-third-byte, the `2D` subtree and the dump request. | `python3 wsa1/notes/sysex-probes/sysex_command_map.py` (tables) or `--paths` (all 7542 sequences) |
 
 ## Signal being read
 
@@ -124,3 +125,60 @@ unreferenced routine at `0xFB248A`, which passes count `0x0000` to the link
 read. The tree already flags `0xFB248A` as named by nothing. The script
 asserts the anomaly explicitly instead of skipping it, so it will fire if
 either half ever changes.
+
+
+## `sysex_command_map.py` — signal being read
+
+Both load bases are asserted before anything is read: prom_b must hold
+`F0 50 23 7E F7` at `0xF4FEB4`, prom_a must hold `00 03 05 04 02` at
+`0xF99AE3`.
+
+* **A THIRD handler table.** `0xF4F916`, 34 entries, named by the one
+  instruction `add XWA,0x00f4f916` at prom_a `0xFB28A1`.  `0xF4F800` /
+  `0xF4F888` send almost everything to the *same* default, `0xFB2820`,
+  which is the bulk-transfer **session loop**; inside that loop
+  `sub_FB2877` re-dispatches the very same command number through
+  `0xF4F916`.  So a command's real behaviour is in the THIRD table, not
+  the first two.  Nine slots of `0xF4F916` are the `2D` category
+  handlers; one is the `7E` continuation; two are the handshake.
+* **`25` = tempo, proven from three independent directions.** The
+  receiver (`0xFB33FE`) and the transmitter (`0xFB3355`) each bound the
+  value to `0x0028..0x012C`, and so does the **sequencer clock
+  programmer** at `0xFAA350`, whose out-of-range default `ldw WA,0x78`
+  is 120.  The sender's 3-byte prefill at prom_b `0xF4FA76` is
+  `08 07 F7`, which under the receiver's own `lo | hi<<4` decodes to
+  exactly 120.
+* **The `2D` subtree is the receive side of the SEND button.** The
+  script checks every accepted sequence's address and size septets
+  against the nine literal transmit templates at `0xF4FEF8..0xF4FF55`;
+  all eight categories match, including the one template whose size is
+  appended at run time (SEQUENCER part 3) being the one sequence the
+  trie pins only three septets deep.
+* **The dump request.** Five arms at `0xFB5122..0xFB514A` each write a
+  job code to `(0x60F802)`; the script reads the codes out of the
+  instruction bytes and checks them against the SEND menu's own row→job
+  table at `0xF99AE3`, and checks each request's area byte against that
+  category's dump address top septet.  Four of the five arms are
+  reachable from the wire; `0x1D` is not.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`.  The headline numbers
+are **16** sequences under `2D` over **8** command numbers, **7542**
+accepted sequences over **27** command numbers, tempo bounds **40..300**
+with default **120**, and **six** command numbers (`0x06 0x0D 0x0F 0x10
+0x11 0x1D`) that have a handler and no accepted sequence.
+
+### Trap
+
+A node's `0xFF` record carries the parser's **depth-specific error
+code** in the same byte position a match record carries the command
+number — `0x07` at the root, then `0x08`, `0x09` … up to `0x10`.  Those
+overlap the real command numbers `0x07`-`0x10`.  A walk that does not
+break on `0xFF` invents commands.  The script breaks on it and asserts
+the root terminator is `0x07`.
+
+The other trap is `sysex_grammar_dump.py --paths`, which truncates at
+depth 8 and therefore **cannot see** commands `0x0B`, `0x0C`, `0x0E`,
+`0x12`-`0x17`, `0x19` or `0x1B`-`0x1F` at all.  Reading its output as a
+complete list is how the `2D` subtree and the dump request were missed.
