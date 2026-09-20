@@ -435,6 +435,58 @@ assert V2 == [0, 0, 0, 0xFFFF, 0, 0xFFFF], V2
 SEQ_FEATURE = 3
 
 
+# ------------------- 10. ★★★ THE DUMP REQUEST names the category BY ADDRESS
+# A remote device can ask for a dump with `F0 50 2B 04 <unit> 11 <addr> <3
+# don't-care bytes> F7`.  The trie stores the three address septets
+# LITERALLY and the three size septets as WILDCARDS (0xFE), and each of the
+# four accepted addresses is exactly the FIRST part's dump address of one
+# category -- whose job code the handler then writes to (0x60F802).
+# That is an independent second witness that the address identifies a
+# category, from a message that has no payload for it to be an offset into.
+FIRST_HANDLER = 0xF4F800              # prom_a 0xFB21AF, the IRQ-side table
+WILDCARD = 0xFE
+
+req = []
+for m, c, nx in records(ROOT, 15):
+    if m == 0xFF:
+        break
+    if m == 0x2B:
+        walk(nx, bytes([m]), req)
+
+REQUESTS = {}
+for seq, cmd in req:
+    if seq[2] != 0x00 or len(seq) != 10:
+        continue
+    if seq[7:] != bytes([WILDCARD] * 3):      # size septets are don't-care
+        continue
+    REQUESTS[bytes(seq[4:7])] = cmd
+assert len(REQUESTS) == 4, sorted(REQUESTS)
+
+REQ_JOB = {}
+for addr3, cmd in REQUESTS.items():
+    arm = int.from_bytes(b(FIRST_HANDLER + 4 * cmd, 4), "little")
+    op = a(arm, 6)                            # ld (0x60F802),<job>
+    assert op[:5] == bytes([0xF2, 0x02, 0xF8, 0x60, 0x00]), (hex(arm), op.hex())
+    REQ_JOB[addr3] = op[5]
+
+# each requested address is the first part's address of exactly one category,
+# and the job code it starts is that category's own menu job
+FIRST_PART_ADDR = {}
+for name, idx, step, tmpl, desc, hlen, rt in PARTS:
+    if idx == 1:
+        FIRST_PART_ADDR[b(tmpl + 6, 3)] = name
+assert set(REQUESTS) == set(FIRST_PART_ADDR), (sorted(REQUESTS),
+                                               sorted(FIRST_PART_ADDR))
+for addr3, job in REQ_JOB.items():
+    name = FIRST_PART_ADDR[addr3]
+    assert CATEGORY_NAME[CATEGORY_OF_JOB[job]] == name, (name, job)
+
+# ⚠ there is NO dump request for TOTAL KEYBOARD, and one handler slot
+# (job 1, the bare RET) has no accepted sequence at all.
+assert 0 not in REQ_JOB.values(), "TOTAL KEYBOARD is not requestable"
+assert 1 not in REQ_JOB.values()
+
+
 # ------------------------------------------------------------------ report
 def main():
     ap = argparse.ArgumentParser()
@@ -480,6 +532,13 @@ def main():
               % (name, idx, key.hex(" ").upper(), RX[key], RX_HANDLER[RX[key]]))
     print("  (the orphan header %s is neither sent nor accepted)"
           % b(ORPHAN + 6, 6).hex(" ").upper())
+    print()
+    print("Dump REQUEST -- F0 50 2B 04 <unit> 11 <addr> <3 ignored bytes> F7")
+    for addr3 in sorted(REQUESTS, key=lambda k: FIRST_PART_ADDR[k]):
+        print("  %-18s -> command 0x%02X -> job %d = %s"
+              % (addr3.hex(" ").upper(), REQUESTS[addr3], REQ_JOB[addr3],
+                 FIRST_PART_ADDR[addr3]))
+    print("  (no request exists for TOTAL KEYBOARD)")
     print()
     print("SEQUENCER availability, by the model-variant strap (0x00C4):")
     print("  strap == 1 -> feature %d = 0x%04X  (category is sent)"

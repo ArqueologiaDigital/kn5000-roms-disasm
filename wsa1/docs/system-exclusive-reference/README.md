@@ -13,7 +13,7 @@ pdflatex wsa1r-system-exclusive-reference.tex
 pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
 ```
 
-15 pages. Needs only a standard TeX Live.
+16 pages. Needs only a standard TeX Live.
 
 ## Files
 

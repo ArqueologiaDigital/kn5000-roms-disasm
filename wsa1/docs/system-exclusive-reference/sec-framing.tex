@@ -30,5 +30,7 @@ A message ends at \bytes{F7}. If any other status byte in the range
 contents discarded.
 
 \section{Length limit}
-A message may not exceed 254 bytes. A longer message is rejected and, inside a bulk-dump
-session, reported as a reception error.
+A complete message may not exceed 256 bytes counting \bytes{F0} and \bytes{F7}, that is
+254 bytes between them. A longer message is abandoned and, inside a bulk-dump session,
+reported as a reception error. Dumps sent by the instrument use the full 256 bytes for all
+but the last message of each transfer.

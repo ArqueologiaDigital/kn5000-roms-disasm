@@ -91,6 +91,29 @@ On reception the checksum is checked only for families \bytes{7E}, \bytes{2B},
 unremarked.
 \end{caution}
 
+\section{Requesting a dump}
+A dump can be asked for over MIDI; the front-panel \textsc{send} button is not the only
+way to start one. The request names a category by its region byte:
+
+\begin{center}
+\bytes{F0 50 2B 04 \textit{nn} 11 \textit{area} 00 00 \textit{x x x} F7}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\bytes{\textit{area}} & category requested \\
+\midrule
+\bytes{40} & \textsc{system, part \& midi} \\
+\bytes{20} & \textsc{sound} \\
+\bytes{50} & \textsc{combination} \\
+\bytes{60} & \textsc{sequencer} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The instrument then runs exactly the transfer the corresponding menu row would have run.
+
 \section{Opening a transfer}
 A dump begins with a two-step exchange. Each step is attempted up to three times.
 
@@ -129,3 +152,10 @@ When the SX-WSA1R is the receiver it answers each data message with
 
 While a bulk-dump session is open the instrument accepts only the \bytes{50} identifier;
 universal messages are not honoured until the session ends.
+
+\begin{caution}{Memory-full is treated as end-of-dump}
+When the SX-WSA1R is \emph{sending} and the receiver answers \bytes{F0 50 2A 7E F7} to
+report that its memory is full, the instrument treats that exactly as it treats
+\bytes{F0 50 28 7E F7}, end of dump. It stops, and it reports success. A sender that needs
+to know whether the data arrived cannot rely on the instrument to notice.
+\end{caution}

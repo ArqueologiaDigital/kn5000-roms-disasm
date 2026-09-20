@@ -7,8 +7,8 @@ messages, and error reporting. The following are not covered.
 \item[Parameter addresses.] The message families \bytes{2B} and \bytes{2C} carry
   individual parameter traffic and each addresses a large parameter space. The addresses
   themselves are not tabulated here.
-\item[Bulk-dump data layout.] The protocol that carries a dump is described in full, but
-  the meaning of the bytes inside a dumped block --- the structure of a sound, a
-  combination or a sequence --- is not.
+\item[Block contents.] Chapter~4 gives the address, length and repeat count of every
+  message a dump contains, but not the meaning of the bytes \emph{inside} a block --- the
+  structure of a sound, a combination or a sequence.
 \item[Operating system version 1.] Everything here describes version 2.0.
 \end{description}

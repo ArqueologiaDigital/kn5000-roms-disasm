@@ -19,8 +19,15 @@ three fixed bytes:
 \bytes{04} \quad \bytes{\textit{nn}} \quad \bytes{11}
 \end{center}
 
-where \bytes{\textit{nn}} is \bytes{00} or \bytes{01}. This triple identifies the product;
-a message whose triple does not match is rejected with \textsc{error 40}.
+where \bytes{\textit{nn}} is \bytes{00} or \bytes{01}. A message whose triple the
+instrument does not recognise is rejected with \textsc{error 40}.
+
+\begin{caution}{The middle byte is not a constant of the product}
+The instrument transmits \bytes{04 00 11} and accepts both \bytes{04 00 11} and
+\bytes{04 01 11}. A bulk dump captured from a real instrument carries \bytes{04 01 11}
+throughout. A receiver must therefore accept either value, and must not use the middle
+byte to identify the product.
+\end{caution}
 
 \section{Short messages}
 These messages are complete as shown. They form the control vocabulary of a bulk-dump
@@ -42,6 +49,17 @@ message & meaning \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+\section{Tempo}
+The family \bytes{25} carries a tempo setting, in the range 40 to 300 beats per minute.
+A value outside that range is treated as 120.
+
+\begin{note}{Two functions depend on the instrument variant}
+The tempo message and the transfer of the \textsc{sequencer} category are both gated on
+the instrument's model strap. On a unit whose strap is not set to the keyboard value,
+neither is available in either direction, and a \textsc{sequencer} dump sends nothing at
+all --- not even the end-of-category message.
+\end{note}
 
 \section{Parameter families}
 The families \bytes{2B} and \bytes{2C} carry individual parameter traffic rather than bulk
