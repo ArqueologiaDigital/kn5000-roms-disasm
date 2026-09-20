@@ -6,6 +6,7 @@
 | `sysex_error_codes.py` | Which internal status code raises `ERROR 40!`, `ERROR 41!` or `ERROR 42!`, and where in prom_a is each one raised? | `python3 wsa1/notes/sysex-probes/sysex_error_codes.py` (table) or `--sites` (every raise site) |
 | `sysex_bulkdump_tx.py` | What does the machine put on the wire when SYSEX BULK DUMP -> SEND is pressed: which menu row dumps what, what the frame header says, and how the checksum and the block size are computed? | `python3 wsa1/notes/sysex-probes/sysex_bulkdump_tx.py` (tables) or `--frames` (block arithmetic + a worked checksum) |
 | `sysex_command_map.py` | Walking the grammar to the BOTTOM (not depth 8): what does each accepted sequence make the instrument DO? Covers `25`, `7E`-as-third-byte, the `2D` subtree and the dump request. | `python3 wsa1/notes/sysex-probes/sysex_command_map.py` (tables) or `--paths` (all 7542 sequences) |
+| `sysex_param_space.py` | The `2B` and `2C` families: what the bytes after the model id `11` mean, which command id each sequence terminates in, and how `2B` differs from `2C`. | `python3 wsa1/notes/sysex-probes/sysex_param_space.py` (tables) or `--paths` (all 7512 sequences) |
 | `sysex_dump_categories.py` | WHICH of the five bulk-dump categories emits WHICH data header, in what order, and what the header's 21-bit address field means. | `python3 wsa1/notes/sysex-probes/sysex_dump_categories.py` (tables) or `--wire` (each header as transmitted) |
 
 ## Signal being read
@@ -266,3 +267,66 @@ The other trap is printing a dump address as three hex bytes of its VALUE
 (`18 84 00` for `0x188400`). Those are not the bytes on the wire, and
 `0x84` cannot appear in a SysEx data byte at all. The wire bytes are the
 septets: `62 08 00`.
+
+
+## `sysex_param_space.py` — signal being read
+
+prom_b at `0xF00000` (the `F0 50 23 7E F7` literal at `0xF4FEB4` **and** the
+`F0 50 2C 04 00 11` reply header at `0xF4FEF2` are both asserted) plus prom_a
+at `0xF80000` for the menu table and the four job-code stores.
+
+* **The address.** prom_b `Pack3x7BitFields_Bytes6To8` (`0xF36849`) computes
+  `(b6&7F)<<14 | (b7&7F)<<7 | (b8&7F)`; bytes 9-11 are the byte count the same
+  way. A descriptor's **first six bytes are exactly that address triple and
+  that count triple**, and `0xFB4DBC` puts those same six bytes on the wire
+  behind the `2C` header — the reply's header *is* the descriptor.
+* **The trie's terminal record is a KEY, not a node.** `0xFB645F`/`0xFB647B`
+  read `*(next)` and `*(next+1)` into parse-record fields 1 and 2 = the
+  **group** and the **index**. The group is bounded to 1..7 by
+  `dec 1,WA / cp wa,0x06 / jr ugt` at `0xFB34F1`+ (cmd `0x18`) and `0xFB42AB`+
+  (cmd `0x1A`), and each arm bounds the index with its own `cp A,<n> / jr nc`.
+* **★ The twelve descriptor tables TILE** from `0xF51E8E` to `0xF5220E`,
+  alternating `2C`-arm / `2B`-arm per group. That single chain is the
+  last-entry test on all twelve bounds at once, and it is what proves the two
+  families address the *same* parameter set through two method slots
+  (`+0x14` and `+0x18` of the descriptor).
+* **Direction, three witnesses.** `+0x14` (cmd `0x18`, family `2C`) reaches
+  `sub_FB77F3`, which **reads two bytes off the message** and returns
+  `(b0<<4)|(b1&0x0F)`. `+0x18` (cmd `0x1A`, family `2B`) reaches e.g.
+  `0xFB4562`, which reads the *instrument* (`sub_FB7A02`) and calls
+  `sub_FB4D62`, the transmitter. And the length check at `0xFB6D5F` admits
+  only `0x7E`/`0x2D`/`0x2C` — `2B` is not length-checked because it carries
+  no data.
+* **The count triple is always on the wire.** The trie spells it out only when
+  it is not 1. For the rest, `0xFB6CA6` catches command ids `0x18` and `0x1A`,
+  tests parse field `0x0C` for the untouched `0xFF`, reads the three bytes
+  itself and requires their OR to be 1 (`0xFB6CE1`), else status `0x0E` →
+  `ERROR 41!`.
+* **The trailing flag.** `0xFB6DE8` admits `0x7E`/`0x2D`/`0x2C`/`0x2B`, reads
+  one byte that must be `0` or `1` (else status `0x12`), stores it in field
+  `0x0F` and only then checksums. The reply builder emits it as the third byte
+  of its data block, prefilled from prom_b `0xF4FA84` (`00 00 00`).
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. Headline numbers: **3756**
+accepted sequences under *each* of `2B` and `2C`; `0x1A` x3742 / `0x19` x6 /
+`0x1B`,`0x1C`,`0x1E`,`0x1F` x2 for `2B` and `0x18` x3750 / `0x17` x6 for `2C`;
+**32** part blocks of **57** parameters (18 + 39 across two groups); the four
+whole-area request arms carry job codes **4/3/5/2**, which are the SEND menu's
+own row→job values at prom_a `0xF99AE3`.
+
+### Traps
+
+1. `sysex_grammar_dump.py --paths` truncates at depth 8 and therefore cannot
+   show the count triple at all; this script walks to the bottom and asserts
+   the depth never reaches 24.
+2. **One record in the whole space is a wildcard**: byte 7 = `11`, byte 8 =
+   `0xFE`. `0xFB3AD1` reads byte 8 back out of the parse record and looks it
+   up in prom_b `0xF4FA9C`; `0xFF` there means *drop the message silently*.
+   Only 68 of the 128 byte-8 values are admitted (`20..36`, `40..56`,
+   `60..75`). Comparing that record's address against its descriptor without
+   special-casing it is a false failure.
+3. Index **0** of every group is the same placeholder descriptor `0xF511F9`,
+   which `0xFB4D92` refuses *by address*. The wire indices are therefore
+   1-based and index 0 is unreachable.
