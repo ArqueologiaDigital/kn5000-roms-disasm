@@ -6,6 +6,7 @@
 | `sysex_error_codes.py` | Which internal status code raises `ERROR 40!`, `ERROR 41!` or `ERROR 42!`, and where in prom_a is each one raised? | `python3 wsa1/notes/sysex-probes/sysex_error_codes.py` (table) or `--sites` (every raise site) |
 | `sysex_bulkdump_tx.py` | What does the machine put on the wire when SYSEX BULK DUMP -> SEND is pressed: which menu row dumps what, what the frame header says, and how the checksum and the block size are computed? | `python3 wsa1/notes/sysex-probes/sysex_bulkdump_tx.py` (tables) or `--frames` (block arithmetic + a worked checksum) |
 | `sysex_command_map.py` | Walking the grammar to the BOTTOM (not depth 8): what does each accepted sequence make the instrument DO? Covers `25`, `7E`-as-third-byte, the `2D` subtree and the dump request. | `python3 wsa1/notes/sysex-probes/sysex_command_map.py` (tables) or `--paths` (all 7542 sequences) |
+| `sysex_dump_categories.py` | WHICH of the five bulk-dump categories emits WHICH data header, in what order, and what the header's 21-bit address field means. | `python3 wsa1/notes/sysex-probes/sysex_dump_categories.py` (tables) or `--wire` (each header as transmitted) |
 
 ## Signal being read
 
@@ -203,3 +204,65 @@ receiver *and* the transmitter, identically:
    "ON" sets bit 3.  ⚠ The row→caption binding is by POSITION (two
    independent orderings agree: the eight setters and the eight
    painters) — no instruction quotes the caption.
+
+
+## `sysex_dump_categories.py` — signal being read
+
+Both load bases are asserted first, as above.
+
+* **The transmit call graph is DECODED, not assumed.** Menu row → job code
+  (`0xF99AE3`) → job routine (`JumpTable_FB2081`) → category routine → part
+  emitters. Every edge is a `calr` (`1E disp16`) or `call` (`1D imm24`) whose
+  target the script computes from the bytes, and every chain is closed by the
+  `RET` that follows it, so the number of parts is the ROM's statement, not a
+  guess.
+* **TOTAL KEYBOARD's order is the `calr` chain** in `sub_FB23E2`:
+  SYSTEM,PART & MIDI → SOUND → COMBINATION → SEQUENCER. The script asserts
+  that the four routines the four single-category jobs run are exactly the
+  four in that chain.
+* **Each part emitter names one template, one descriptor writer and one step
+  id.** The scan window for each emitter is bounded by the NEXT routine in
+  the module — no fixed window length is guessed — and the counts are
+  asserted, so a window that ran into a neighbour would fire.
+* **★ The address field is NOT an internal address.** The script prints the
+  source extent beside the dump address for every part, and asserts they
+  differ. The clincher is a negative that kills any affine map at once:
+  SOUND and COMBINATION **abut in CPU 2's flash**
+  (`0xE80000 + 0x40000 == 0xEC0000`, asserted) and are **0x0C0000 apart** in
+  the dump address space.
+* **★★ The receive side matches the address+size pair LITERALLY.** The
+  grammar trie's `2D` subtree accepts exactly the eight byte strings the
+  transmitter sends and nothing else; the script asserts set equality
+  between the two sides, and that each accepted string's command number
+  reaches a handler that calls the **same descriptor writer** the transmit
+  side used. Nothing anywhere decodes the address arithmetically.
+* **The one field that IS a number** is SEQUENCER part 3's size. The
+  transmit encoder (`sub_FB6EE9`) splits it `>>14, >>7, >>0` masked to seven
+  bits; the receive decoder (`sub_FB741A`) rebuilds it `<<14, <<7, <<0` from
+  parse-record fields `0x0C/0x0D/0x0E`. Both shift literals are asserted.
+  The value itself is `0x10 ×` the sequencer's own memory-use counter
+  (`mul XBC,(0x603452)` at `0xFB7757`), capped by the static extent 0x50C00.
+* **The SEQUENCER availability gate.** `sub_FB5FF5(3)` returns a word from
+  `0xF4FE6A` when the model-variant strap `(0x00C4)` is 1 and from
+  `0xF4FE76` otherwise; the second table holds `0xFFFF` at index 3, and on
+  that arm `sub_FB2587` returns before sending anything — **including the
+  end-of-category message**, which is inside the guarded block.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. The headline results are
+the four dump-address bases `0x080000` SOUND / `0x100000` SYSTEM,PART & MIDI
+/ `0x140000` COMBINATION / `0x180000` SEQUENCER, the eight accepted receive
+strings, and the TOTAL KEYBOARD order.
+
+### Trap
+
+`62 08 00` is `0x188400`, not `0x188000` — the middle septet carries
+`0x08 << 7 = 0x400`. Dropping it breaks the one arithmetic the addresses do
+satisfy, `addr(part N+1) − addr(part N) == size(part N)`, which the script
+asserts for all three multi-part categories.
+
+The other trap is printing a dump address as three hex bytes of its VALUE
+(`18 84 00` for `0x188400`). Those are not the bytes on the wire, and
+`0x84` cannot appear in a SysEx data byte at all. The wire bytes are the
+septets: `62 08 00`.
