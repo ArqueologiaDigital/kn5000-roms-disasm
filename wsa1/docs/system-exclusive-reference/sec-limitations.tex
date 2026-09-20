@@ -4,9 +4,9 @@ This reference covers message framing, the bulk-dump transfer protocol, the univ
 messages, and error reporting. The following are not covered.
 
 \begin{description}
-\item[Parameter addresses.] The message families \bytes{2B} and \bytes{2C} carry
-  individual parameter traffic and each addresses a large parameter space. The addresses
-  themselves are not tabulated here.
+\item[Parameter meanings.] Chapter~\ref{ch:params} gives the structure of the parameter
+  address space and the size of each block, but not what each individual parameter
+  controls.
 \item[Block contents.] Chapter~4 gives the address, length and repeat count of every
   message a dump contains, but not the meaning of the bytes \emph{inside} a block --- the
   structure of a sound, a combination or a sequence.

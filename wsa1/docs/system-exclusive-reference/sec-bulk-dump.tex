@@ -24,23 +24,35 @@ category & address bytes & length bytes & length & blocks \\
                               & \bytes{60 18 00} & \bytes{01 70 00} & 30\,720 & \\
                               & \bytes{62 08 00} & \multicolumn{2}{l}{set at send time} & \\
 \addlinespace
-\textsc{total keyboard}       & \multicolumn{4}{l}{sends the other categories in turn} \\
+\textsc{total keyboard}       & \multicolumn{4}{l}{the four categories in the order above} \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 Lengths are in source bytes; on the wire each occupies twice as many, because of the
-payload encoding described below. The block counts are the instrument's 32 sounds and 16
-combinations: those two categories repeat one block layout that many times.
+payload encoding described below.
+
+The \emph{blocks} column is internal structure, not extra messages: \textsc{sound} sends
+one header covering all 262\,144 bytes, which is 32 repeats of an 8\,192-byte layout, and
+\textsc{combination}'s second block one header covering 90\,112 bytes as 16 repeats of
+5\,632. Those are the instrument's 32 sounds and 16 combinations.
+
+\textsc{total keyboard} runs the four categories one after another in the order listed,
+each closed by its own end-of-category message, with a single end-of-dump message after
+the last.
 
 The \textsc{sequencer} category is the only one whose final message has no fixed length ---
 it carries as much recorded material as the instrument holds.
 
 \begin{note}{The dump address is not a memory address}
-The three address bytes identify a \emph{region of the dump format}, not a location in the
-instrument's memory. The values above are the only ones the instrument emits, and a
-receiver should treat them as fixed identifiers for the four categories rather than
-attempt to compute from them.
+Within one category the addresses are consecutive: a block's address is the previous
+block's address plus its length. Across categories they are not. \textsc{sound} and
+\textsc{combination} are held side by side inside the instrument, yet their dump addresses
+are 786\,432 apart; other pairs are the reverse.
+
+Treat the address and length bytes together as a fixed name for one of the eight blocks.
+The instrument does the same --- on reception it compares them against a fixed list and
+performs no arithmetic on them.
 \end{note}
 
 \section{Data message}
@@ -112,7 +124,11 @@ way to start one. The request names a category by its region byte:
 \end{tabular}
 \end{center}
 
-The instrument then runs exactly the transfer the corresponding menu row would have run.
+The three bytes in the length position are ignored; any values are accepted. The
+instrument then runs exactly the transfer the corresponding menu row would have run.
+
+There is no request for \textsc{total keyboard}: the four categories must be asked for one
+at a time.
 
 \section{Opening a transfer}
 A dump begins with a two-step exchange. Each step is attempted up to three times.
@@ -152,6 +168,24 @@ When the SX-WSA1R is the receiver it answers each data message with
 
 While a bulk-dump session is open the instrument accepts only the \bytes{50} identifier;
 universal messages are not honoured until the session ends.
+
+\begin{caution}{The instrument must be on the SYSEX BULK DUMP screen to receive}
+A dump cannot be pushed to an idle instrument. Reception happens only while that screen is
+displayed; a dump sent at any other time is parsed, discarded, and not reported.
+
+A dump offered on the MIDI~2 input is never received either, at any time. This is what lies
+behind the published instruction to use MIDI~1 for bulk transfers.
+\end{caution}
+
+Seven of the eight patterns are pinned on all six bytes, address and length together.
+Sending a correct address with a shortened length is not a short transfer --- it is an
+unrecognised message, refused with \textsc{error 41}. Only \textsc{sequencer} block~3
+has its length read as a number, because that block's size varies. An arbitrary
+destination cannot be written.
+
+The one length the message itself controls is \textsc{sequencer} part~3, which is capped at
+330\,752 bytes; beyond that, and whenever the destination fills mid-message, the
+instrument answers \bytes{F0 50 2A 7E F7} and reports \textsc{error 21}.
 
 \begin{caution}{Memory-full is treated as end-of-dump}
 When the SX-WSA1R is \emph{sending} and the receiver answers \bytes{F0 50 2A 7E F7} to

@@ -1,0 +1,46 @@
+\chapter{Parameter messages}\label{ch:params}
+
+Two message families address individual parameters rather than transferring blocks.
+Family \bytes{2C} writes; family \bytes{2B} requests. Both share one address space.
+
+\begin{center}
+\bytes{F0 50 2B 04 \textit{nn} 11 \textit{r} \textit{s} \textit{p} \ldots F7}
+\end{center}
+
+The three bytes after the model triple select what is addressed.
+
+\section{Parameter area}
+When \bytes{\textit{r}} is \bytes{00}, \bytes{\textit{s}} selects a block and
+\bytes{\textit{p}} selects a parameter within it.
+
+\begin{center}
+\begin{tabular}{llr}
+\toprule
+\bytes{\textit{s}} & block & parameters \\
+\midrule
+\bytes{00} & common block 0 & 16 \\
+\bytes{01} & common block 1 & 6 \\
+\bytes{08} & write only & 4 \\
+\bytes{10} & common block 10 & 20 \\
+\bytes{11} & common block 11 & 4, plus a further 68 values \\
+\bytes{20}--\bytes{3F} & part 0 to part 31 & 57 each \\
+\bytes{60} & single parameter & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The part blocks are regular: \bytes{\textit{s}} is \bytes{20} plus the part number, and all
+32 parts take the same 57 parameters. A few parameters carry more than one data byte.
+
+Under \bytes{\textit{s}} = \bytes{11}, values of \bytes{\textit{p}} from \bytes{03} upward
+are admitted in three runs --- \bytes{20}--\bytes{36}, \bytes{40}--\bytes{56} and
+\bytes{60}--\bytes{75}. Any other value in that block is accepted by the parser and then
+discarded, producing no error and no effect.
+
+\section{Whole-area request}
+Family \bytes{2B} also requests an entire category, as described in chapter~4. Here
+\bytes{\textit{r}} takes the region byte rather than \bytes{00}.
+
+\section{A third region}
+Both families accept \bytes{\textit{r}} values of \bytes{10}, \bytes{18} and \bytes{19},
+which carry an address and a count. What they address is not covered by this edition.
