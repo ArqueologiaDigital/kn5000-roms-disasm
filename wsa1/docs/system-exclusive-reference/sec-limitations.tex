@@ -21,11 +21,12 @@ and \textsc{combination} blocks a dump carries.
   section~\ref{sec:combmemory}, and chapter~\ref{ch:params} names most of what its
   records hold; the effect records are named by chapter~\ref{ch:effects} instead, as a
   type and its values. What was left over has now been read across the whole stored
-  corpus --- 257 combinations of eight parts, so 2\,056 part records, the 129 presets
-  carried in the program and 128 more from a user dump --- and most of it turns out
-  not to be unknown but fixed.
+  corpus --- 385 combinations of eight parts, so 3\,080 part records, from three sources
+  produced independently of one another: the 129 presets carried in the program, 128 from
+  a user's flash dump, and 128 more from the combination area of a native disk file ---
+  and most of it turns out not to be unknown but fixed.
 
-  \emph{Fixed.} Block~A holds the same value in all 2\,056 records at \bytes{+02},
+  \emph{Fixed.} Block~A holds the same value in all 3\,080 records at \bytes{+02},
   \bytes{+04}, \bytes{+10} and \bytes{+15}--\bytes{+1A}, and block~B does at
   \bytes{+00}--\bytes{+02}, \bytes{+0D}, \bytes{+11}, \bytes{+12} and \bytes{+15}.
   Every one of them reads zero. Write zero there; a dump that carries anything else is
@@ -34,9 +35,11 @@ and \textsc{combination} blocks a dump carries.
   \emph{Live.} What varies is the last three bytes of each block, and the two blocks
   carry the same shape there: an index \bytes{00}--\bytes{0F}, an index
   \bytes{00}--\bytes{07}, and a flag. They are two fields and not one written twice ---
-  they agree in 1\,280 of the 2\,056 records and differ in the other 776. Block~A's is
-  unused by all 1\,024 user parts and by all but 38 preset parts; block~B's is used by
-  both, in 434 preset parts and 418 user ones. Ahead of block~B's sit three more,
+  they agree in most records and differ in 776. Block~A's is unused by all 1\,024 user
+  flash parts and by all but 38 preset parts; block~B's is used in 434 preset parts and
+  418 user flash ones. The disk corpus uses neither: all 1\,024 of its parts read zero in
+  both, which is the strongest sign yet that the triple is not part of a combination's
+  edited state. Ahead of block~B's sit three more,
   \bytes{+18}--\bytes{+1A}, which take fifteen distinct combinations across the corpus
   and read \bytes{01 01 01} or \bytes{00 01 01} in four records out of five.
 
@@ -54,14 +57,23 @@ and \textsc{combination} blocks a dump carries.
   built at run time, so naming them needs the writer caught in the act rather than
   found by searching.
 \item[Two equaliser addresses.] Chapter~\ref{ch:params} lists \textsc{main out
-  equalizer low-freq} and \textsc{high-freq} without an address, because the
+  equalizer low-freq} and \textsc{high-freq} without a dump position, because the
   descriptors that would place them are the ones whose setter does not build its target
-  the way the others do, and the low-frequency descriptor contradicts the stored data in
-  every combination. The corpus cannot settle it either: all 257 combinations hold the
-  same four equaliser bytes, \bytes{D8 02 58 04}, so nothing stored ever moved the
-  control. Under the gain mask \bytes{3F} both gains read 24 of 0--48, which is centre,
-  as a flat equaliser should be. Deciding between the two candidate placements needs an
-  instrument whose equaliser has been moved off centre and then dumped.
+  the way the others do. The stored data now places them anyway, on an argument the
+  descriptors cannot make. Record \bytes{79} gives four bytes, \bytes{+01}--\bytes{+04},
+  to four parameters. The two \textsc{gain}s are pinned to \bytes{+01} and \bytes{+03} by
+  setters read instruction by instruction, so the two frequencies are the two bytes left,
+  \bytes{+02} and \bytes{+04}. Three independent corpora agree: 385 combinations hold one
+  of two settings, \bytes{D8 02 58 04} or \bytes{D2 01 58 04}, and \textbf{they differ at
+  \bytes{+01} and \bytes{+02} only} --- one instrument's low band was moved and its low
+  pair moved together, while the high pair did not move at all. The descriptor that would
+  put \textsc{low-freq} at \bytes{+01} is contradicted outright: it declares 0--17 and
+  \bytes{+01} never reads below 18 in any combination in any corpus.
+
+  What is not settled is the scale. \textsc{high-freq} is declared 17--26 and \bytes{+04}
+  reads 4, so either the stored byte is an index into a table rather than the displayed
+  value, or the published range is not the stored one. An instrument with both bands moved
+  off centre, dumped, would settle it; so would the setter, if it is ever read out.
 \item[The rest of a song record, and PERFORMANCE.] Section~\ref{sec:seqmemory} now
   decodes 2\,400 of a song record's 3\,072 bytes, from a native sequencer file off a disk:
   they are the same tagged records a combination is built from, so

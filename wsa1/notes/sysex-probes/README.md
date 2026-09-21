@@ -1637,8 +1637,11 @@ all four came back empty or powerless. This one asks from the **data** side: 257
 combinations of eight parts is 2056 part records, each with its named neighbours beside it.
 
 ★ **Most of the list is not unknown, it is fixed.** Block A holds the same value in all
-2056 records at `+02`, `+04`, `+10` and `+15..+1A`; block B at `+00..+02`, `+0D`, `+11`,
-`+12` and `+15`. All of them read zero. "Reserved, write zero" is a stronger statement than
+**3080 records across three independently produced corpora** — the presets in the program,
+a user's flash dump, and the combination area of a native disk file — at `+02`, `+04`,
+`+10` and `+15..+1A`; block B at `+00..+02`, `+0D`, `+11`, `+12` and `+15`. All read zero.
+Adding the third corpus changed none of them, which is the point: a constancy claim is
+worth exactly what its corpus is worth. "Reserved, write zero" is a stronger statement than
 "unknown", and it is what the corpus supports.
 
 What genuinely varies is the last three bytes of each block — an index `00..0F`, an index
@@ -1650,9 +1653,16 @@ block B's is used by both sources.
 like a cache of the sound the part plays; it is not, because the same program number
 carries two different triples in 36 cases. Reporting that is the point of the test.
 
-⚠ The equaliser question stays open and the corpus says why: all 257 combinations hold the
-same four bytes `D8 02 58 04`, so no stored datum ever moved the control and none can
-decide whether `LOW-FREQ` sits at `+01` or at the unnamed `+02`.
+★★ **The third corpus settled the equaliser placement.** The disk holds `D2 01 58 04`
+where the other two hold `D8 02 58 04` — differing at `+01` and `+02` **only**. One
+instrument's low band was moved and its low pair moved together while the high pair did
+not. Since the record gives four bytes to four parameters and both `GAIN`s are pinned to
+`+01`/`+03` by setters that were read instruction by instruction, the frequencies are
+`+02` and `+04`. The descriptor putting `LOW-FREQ` at `+01` is contradicted outright: it
+declares 0..17 and `+01` never reads below 18 anywhere.
+
+⚠ The *scale* is still open: `HIGH-FREQ` is declared 17..26 and `+04` reads 4, so either
+the stored byte is a table index or the published range is not the stored one.
 
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_unnamed_bytes.py

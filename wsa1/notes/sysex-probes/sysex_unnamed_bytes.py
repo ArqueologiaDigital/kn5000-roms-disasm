@@ -19,8 +19,12 @@ another byte is a copy of it and is thereby named; a byte with eight values is
 an enum and its width says so.
 
 WHAT IT SETTLES
-  * Most of the "unnamed" list is CONSTANT over all 2056 records.  Those are
-    reserved, and saying so is a stronger statement than leaving them open.
+  * Most of the "unnamed" list is CONSTANT over all 3080 records, across THREE
+    corpora that were produced independently of one another -- the presets in
+    the program, a user's flash dump, and the combination area of a native
+    disk file.  Those bytes are reserved, and saying so is a stronger
+    statement than leaving them open.  A fourth corpus would be worth adding
+    for the same reason: a constancy claim is worth what its corpus is worth.
   * The bytes that do vary are not scattered: the last three of each part block
     are a TRIPLE -- an index 0..15, an index 0..7, and a flag.  Block A's is
     unused by every one of the 1024 user parts; block B's is used by both
@@ -29,6 +33,10 @@ WHAT IT SETTLES
   * The triple is NOT a cache of the part's program number.  That is the
     natural hypothesis and it is refuted here by counterexample, which is the
     point of running the test.
+  * The MAIN OUT EQUALISER is no longer invariant.  The disk corpus holds a
+    different setting from the other two, and the two differ at +01 and +02
+    only.  That is what places the two frequency fields -- see the end of the
+    output.
 
 SIGNAL BEING READ
   Every (record tag, offset) of every part record of all 257 combinations,
@@ -44,7 +52,7 @@ PASS CRITERION
   The measured counts below are asserted, so this fails if the corpus or the
   layout decode changes under it.
 """
-import io, os, sys, contextlib
+import hashlib, io, os, sys, zipfile, contextlib
 from collections import Counter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -52,7 +60,22 @@ sys.path.insert(0, HERE)
 with contextlib.redirect_stdout(io.StringIO()):
     import sysex_combination_layout as L   # noqa: E402
 
-CORPUS, PARTS = L.CORPUS, L.PARTS
+CORPUS, PARTS = list(L.CORPUS), L.PARTS
+
+# A THIRD corpus, independent of both: the combination area of a native disk
+# file.  It matters because "this byte never varies" is only worth what its
+# corpus is worth, and this one was produced by a different user on different
+# hardware from the flash capture.
+DISK_ZIP = "/home/fsanches/compartilhado/KN7000/WSA1R_files/GJS1.zip"
+DISK_SHA = "c098228819824593d0f426eb053625fa70ac582c3fe29727564544d4d9979524"
+DISK_MEMBER, DISK_BASE, DISK_N = "GJS1/01220497.CMB", 0x300, 128
+if os.path.exists(DISK_ZIP):
+    assert hashlib.sha256(open(DISK_ZIP, "rb").read()).hexdigest() == DISK_SHA, \
+        "GJS1.zip is not the archive checked here"
+    with zipfile.ZipFile(DISK_ZIP) as z:
+        _d = z.read(DISK_MEMBER)
+    CORPUS.append(("disk .CMB",
+                   [L.combination(_d, DISK_BASE + i * L.COMB) for i in range(DISK_N)]))
 ROLE = {"A": 0x00, "B": 0x20}
 
 
@@ -69,7 +92,8 @@ def part_rows():
 ROWS = part_rows()
 N = len(ROWS)
 print("%d part records from %s" % (N, ", ".join(l for l, _ in CORPUS)))
-assert N == 257 * PARTS, "expected 257 combinations of %d parts, got %d" % (PARTS, N)
+EXPECT_N = (257 + DISK_N) * PARTS if len(CORPUS) == 3 else 257 * PARTS
+assert N == EXPECT_N, "expected %d part records, got %d" % (EXPECT_N, N)
 
 COLS = {}
 for role, _ in ROLE.items():
@@ -151,6 +175,8 @@ for label, combos in CORPUS:
             assert nz == 0, "a user combination's block A carries a triple"
         if label == "user flash" and role == "B":
             assert nz > 0, "block B's triple is no longer used by user data"
+        if label == "disk .CMB":
+            assert nz == 0, "the disk corpus now uses the triple"
 
 # ---- is the triple a cache of the part's program number?
 obs = {}
@@ -177,13 +203,23 @@ for t, n in cnt.most_common():
     print("   %s  x%d" % (" ".join("%02X" % x for x in t), n))
 
 print("\nRECORD 0x79 +01..+04, THE MAIN OUT EQUALISER")
-eq = {tuple(c[0x79][1:5]) for _, combos in CORPUS for c in combos}
-print("   distinct over 257 combinations: %s"
-      % ", ".join(" ".join("%02X" % x for x in t) for t in sorted(eq)))
-assert eq == {(0xD8, 0x02, 0x58, 0x04)}, "the stored equaliser is no longer invariant"
-print("   every stored combination holds the same equaliser, so no stored datum")
-print("   can decide between the descriptor that puts FREQUENCY at +01/+03 and")
-print("   the two unnamed bytes at +02/+04.  Gain reads 24 of 0..48 -- centre --")
-print("   under the +01/+03 mask 0x3F, which is what a flat equaliser should be.")
+for label, combos in CORPUS:
+    eq = sorted({tuple(c[0x79][1:5]) for c in combos})
+    print("   %-14s %s" % (label, ", ".join(" ".join("%02X" % x for x in t) for t in eq)))
+all_eq = sorted({tuple(c[0x79][1:5]) for _, combos in CORPUS for c in combos})
+assert all_eq == [(0xD2, 0x01, 0x58, 0x04), (0xD8, 0x02, 0x58, 0x04)], \
+    "the equaliser settings are not the two this analysis rests on"
+print("   TWO settings, and they differ at +01 and +02 ONLY -- +03 and +04 are")
+print("   identical in all %d combinations.  Under the gain mask 0x3F, +01 reads 24"
+      % sum(len(c) for _, c in CORPUS))
+print("   (centre of 0..48) in one and 18 in the other, so the low band was moved.")
+print("   +02 moves with it, 02 -> 01, and the high pair does not move at all.")
+print("   The record gives four bytes to four parameters; the two GAINS are pinned")
+print("   to +01 and +03 by setters that were read instruction by instruction; so")
+print("   the two FREQUENCIES are the two bytes left, +02 and +04, and the")
+print("   descriptor that puts LOW-FREQ at +01 is contradicted by every combination")
+print("   in every corpus -- it declares 0..17 and +01 never reads below 18.")
+print("   NOT settled: the declared HIGH-FREQ range is 17..26 and +04 reads 4, so")
+print("   either the stored byte is an index into a table or that range is wrong.")
 
 print("\nOK")
