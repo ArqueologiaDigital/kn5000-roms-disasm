@@ -41,9 +41,26 @@ are not: they were read from scans, nothing independent states them, and a misre
 would survive. Treat them as a guide to what the bytes are for rather than as a
 specification.
 
-Two further things the guide gives and this edition does not reproduce: the conversion
-from a byte value to a physical unit --- seconds, hertz, decibels --- which it prints as
-eighteen tables, and the block diagram of each effect.
+The block diagram the guide prints for each effect is not reproduced either.
 \end{caution}
 
 \input{tbl-effects}
+
+\section{From a byte to a quantity}\label{sec:conversions}
+A \textsc{value} byte is not a quantity. The tables below turn one into seconds, hertz,
+decibels or cents; an effect's parameter says which table applies, and a librarian needs
+them to display a control rather than merely name it.
+
+Each row gives a span of parameter values, the quantity at each end of it, and the step
+between one parameter and the next.
+
+\begin{note}{The tables check themselves}
+The four numbers in a row are not independent: the first value plus the step times the
+span must equal the last. All 41 rows satisfy that identity, which is what makes this
+transcription trustworthy --- a misread endpoint or step would break it.
+\end{note}
+
+Two further tables the guide prints, describing how two fields share a single byte for the
+parametric equaliser and the exciter, are not reproduced here.
+
+\input{tbl-conversions}

@@ -8,9 +8,9 @@ models. The following are not covered.
 \item[What the parameters do.] Chapter~\ref{ch:params} enumerates all 108 addresses of
   the \bytes{00} area with their name, length, bit mask, accepted values and position in a
   dump. It does not explain what each setting does to the sound; the user manuals do that.
-\item[Byte values in physical units.] Chapter~\ref{ch:effects} names each effect's
-  \textsc{value} bytes but not the curve that turns a byte into seconds, hertz or
-  decibels. The guide prints those as eighteen conversion tables.
+\item[Two byte-packing tables.] Section~\ref{sec:conversions} gives sixteen of the
+  guide's eighteen data tables. The two left out describe how two fields share a single
+  byte, for the parametric equaliser and the exciter.
 \item[Two block layouts.] The \textsc{sound} and \textsc{combination} blocks are laid
   out in chapter~\ref{ch:blocks}, down to the record level. What a combination part holds
   beyond its sound's name, and how a stored sequence is arranged, are not covered.

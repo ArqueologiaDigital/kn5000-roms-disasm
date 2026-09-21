@@ -23,7 +23,7 @@ pdflatex wsa1r-system-exclusive-reference.tex
 pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
 ```
 
-55 pages. Needs only a standard TeX Live.
+57 pages. Needs only a standard TeX Live.
 
 ## Files
 
@@ -45,6 +45,7 @@ pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of cont
 | `sec-sound.tex` | the NORMAL SOUND and DRUM SOUND areas |
 | `sec-effects.tex` | the 56 effects and their VALUE bytes |
 | `tbl-effects.tex` | **generated** — the effect catalogue |
+| `tbl-conversions.tex` | **generated** — byte-to-quantity tables |
 | `sec-enums.tex` | control functions and filter values |
 | `tbl-sound.tex` | **generated** — the sound parameter tables |
 | `tbl-parameters.tex` | **generated** — the 108-parameter tables |
@@ -68,6 +69,7 @@ python3 ../../notes/sysex-probes/sysex_param_table_tex.py tbl-parameters.tex
 python3 ../../notes/sysex-probes/sysex_block_signatures.py --tex tbl-signatures.tex
 python3 ../../notes/sysex-probes/sysex_sound_layout.py --tex tbl-sound.tex
 python3 ../../notes/sysex-probes/sysex_effects.py --tex tbl-effects.tex
+python3 ../../notes/sysex-probes/sysex_conversion_tables.py --tex tbl-conversions.tex
 ```
 
 

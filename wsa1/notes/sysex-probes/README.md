@@ -1433,3 +1433,36 @@ says so rather than assuming the layouts match.
 
 Pass: four banks of `0x10000`, 128 notes per drum run, at least 64 sounds per bank, all
 128 combination parts named, `OK`.
+
+### `sysex_conversion_tables.py` and `conversion_tables.json`
+
+**Question:** do the transcribed effect data tables check out arithmetically?
+
+A `VALUE` byte is not a quantity. The guide's page 33 carries eighteen tables turning a
+parameter into seconds, hertz, decibels or cents; without them a librarian can label a
+control but not display it. Sixteen are transcribed here.
+
+Like every transcription in this project they are checked rather than trusted — this time
+by the tables' own arithmetic. Each row gives a parameter span, a first value, a last value
+and a step, and those four numbers are **not independent**:
+
+```
+v_lo + step × (p_hi − p_lo) == v_hi
+```
+
+The guide prints all four, so the identity is redundant information a correct reading must
+satisfy and a wrong one almost certainly will not. **41 rows, 41 chances to fail**, and all
+41 hold. It is the same shape as the tiling check on the sound layout: the source
+over-determines itself and the redundancy is the test.
+
+⚠ Not checked: a table's title, its unit, or an enumerated table's words — those carry no
+arithmetic. Tables 17 and 18, which describe how two fields share one byte, are not
+transcribed.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_conversion_tables.py
+python3 wsa1/notes/sysex-probes/sysex_conversion_tables.py --tex \
+    wsa1/docs/system-exclusive-reference/tbl-conversions.tex
+```
+
+Pass: every arithmetic row satisfies the identity, `OK`.

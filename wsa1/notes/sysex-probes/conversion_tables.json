@@ -1,0 +1,453 @@
+{
+ "_comment": [
+  "The DSP effect data tables: how an effect's VALUE byte becomes a physical",
+  "quantity. Transcribed from Technics' Reference Guide page 33, which is",
+  "image-only and was rendered and read.",
+  "",
+  "Every arithmetic row carries first value, last value and step, and",
+  "sysex_conversion_tables.py asserts v_lo + step*(p_hi - p_lo) == v_hi for each",
+  "one. A misread endpoint or step breaks that identity, so the transcription",
+  "checks itself row by row.",
+  "",
+  "Tables 17 and 18 of the guide describe how two fields share one byte and are",
+  "not transcribed here; the reference says so."
+ ],
+ "tables": [
+  {
+   "n": 1,
+   "title": "Reverb time",
+   "unit": "seconds",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 15,
+     "v_lo": 0.1,
+     "v_hi": 0.4,
+     "step": 0.02
+    },
+    {
+     "p_lo": 16,
+     "p_hi": 23,
+     "v_lo": 0.45,
+     "v_hi": 0.8,
+     "step": 0.05
+    },
+    {
+     "p_lo": 24,
+     "p_hi": 55,
+     "v_lo": 0.9,
+     "v_hi": 4.0,
+     "step": 0.1
+    },
+    {
+     "p_lo": 56,
+     "p_hi": 75,
+     "v_lo": 4.2,
+     "v_hi": 8.0,
+     "step": 0.2
+    },
+    {
+     "p_lo": 76,
+     "p_hi": 97,
+     "v_lo": 9.0,
+     "v_hi": 30.0,
+     "step": 1.0
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "title": "High dump gain",
+   "unit": "dB",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 24,
+     "v_lo": -24.0,
+     "v_hi": 0.0,
+     "step": 1.0
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "title": "LFO speed",
+   "unit": "Hz",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 50,
+     "v_lo": 0.0,
+     "v_hi": 5.0,
+     "step": 0.1
+    },
+    {
+     "p_lo": 51,
+     "p_hi": 75,
+     "v_lo": 5.2,
+     "v_hi": 10.0,
+     "step": 0.2
+    },
+    {
+     "p_lo": 76,
+     "p_hi": 88,
+     "v_lo": 10.8,
+     "v_hi": 20.4,
+     "step": 0.8
+    },
+    {
+     "p_lo": 89,
+     "p_hi": 99,
+     "v_lo": 22.2,
+     "v_hi": 40.2,
+     "step": 1.8
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "title": "LFO wave form",
+   "unit": "",
+   "values": [
+    "sine",
+    "triangle",
+    "square"
+   ]
+  },
+  {
+   "n": 5,
+   "title": "Gate time and mask time, gated reverb",
+   "unit": "ms",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 20,
+     "v_lo": 10,
+     "v_hi": 50,
+     "step": 2
+    },
+    {
+     "p_lo": 21,
+     "p_hi": 30,
+     "v_lo": 55,
+     "v_hi": 100,
+     "step": 5
+    },
+    {
+     "p_lo": 31,
+     "p_hi": 70,
+     "v_lo": 110,
+     "v_hi": 500,
+     "step": 10
+    },
+    {
+     "p_lo": 71,
+     "p_hi": 80,
+     "v_lo": 550,
+     "v_hi": 1000,
+     "step": 50
+    },
+    {
+     "p_lo": 81,
+     "p_hi": 99,
+     "v_lo": 1100,
+     "v_hi": 2900,
+     "step": 100
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "title": "PEQ Fc",
+   "unit": "Hz",
+   "values": [
+    40,
+    50,
+    63,
+    80,
+    100,
+    125,
+    160,
+    200,
+    250,
+    315,
+    400,
+    500,
+    630,
+    800,
+    1000,
+    1250,
+    1600,
+    2000,
+    2500,
+    3150,
+    4000,
+    5000,
+    6300,
+    8000,
+    10000,
+    12500,
+    16000
+   ],
+   "note": "a third-octave series; the parameter is the index"
+  },
+  {
+   "n": 7,
+   "title": "PEQ Q",
+   "unit": "",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 9,
+     "v_lo": 0.1,
+     "v_hi": 1.0,
+     "step": 0.1
+    },
+    {
+     "p_lo": 10,
+     "p_hi": 15,
+     "v_lo": 1.5,
+     "v_hi": 4.0,
+     "step": 0.5
+    },
+    {
+     "p_lo": 16,
+     "p_hi": 31,
+     "v_lo": 5.0,
+     "v_hi": 20.0,
+     "step": 1.0
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "title": "PEQ gain",
+   "unit": "dB",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 48,
+     "v_lo": -12.0,
+     "v_hi": 12.0,
+     "step": 0.5
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "title": "Attack and release sensitivity",
+   "unit": "seconds, 90 per cent swing time",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 89,
+     "v_lo": 0.001,
+     "v_hi": 0.09,
+     "step": 0.001
+    },
+    {
+     "p_lo": 90,
+     "p_hi": 90,
+     "v_lo": 0.1,
+     "v_hi": 0.1,
+     "step": 0.01
+    },
+    {
+     "p_lo": 91,
+     "p_hi": 94,
+     "v_lo": 0.2,
+     "v_hi": 0.5,
+     "step": 0.1
+    }
+   ]
+  },
+  {
+   "n": 10,
+   "title": "Attack for slow attacker",
+   "unit": "seconds, 90 per cent swing time",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 99,
+     "v_lo": 0.2,
+     "v_hi": 20.0,
+     "step": 0.2
+    },
+    {
+     "p_lo": 0,
+     "p_hi": 99,
+     "v_lo": 0.01,
+     "v_hi": 1.0,
+     "step": 0.01
+    }
+   ],
+   "note": "the first row is attack, the second release"
+  },
+  {
+   "n": 11,
+   "title": "LFO speed, rotary speaker",
+   "unit": "Hz",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 20,
+     "v_lo": 0.0,
+     "v_hi": 2.0,
+     "step": 0.1
+    },
+    {
+     "p_lo": 21,
+     "p_hi": 50,
+     "v_lo": 2.2,
+     "v_hi": 8.0,
+     "step": 0.2
+    },
+    {
+     "p_lo": 51,
+     "p_hi": 99,
+     "v_lo": 8.55,
+     "v_hi": 34.95,
+     "step": 0.55
+    }
+   ]
+  },
+  {
+   "n": 12,
+   "title": "LFO acceleration, rotary speaker",
+   "unit": "seconds, 90 per cent swing time",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 75,
+     "v_lo": 1.0,
+     "v_hi": 31.0,
+     "step": 0.4
+    },
+    {
+     "p_lo": 76,
+     "p_hi": 99,
+     "v_lo": 32.25,
+     "v_hi": 61.0,
+     "step": 1.25
+    }
+   ]
+  },
+  {
+   "n": 13,
+   "title": "LFO speed, ring modulator",
+   "unit": "Hz",
+   "rows": [
+    {
+     "p_lo": 0,
+     "p_hi": 10,
+     "v_lo": 0,
+     "v_hi": 10,
+     "step": 1
+    },
+    {
+     "p_lo": 11,
+     "p_hi": 19,
+     "v_lo": 20,
+     "v_hi": 100,
+     "step": 10
+    },
+    {
+     "p_lo": 20,
+     "p_hi": 64,
+     "v_lo": 120,
+     "v_hi": 1000,
+     "step": 20
+    },
+    {
+     "p_lo": 65,
+     "p_hi": 87,
+     "v_lo": 1200,
+     "v_hi": 10000,
+     "step": 400
+    },
+    {
+     "p_lo": 88,
+     "p_hi": 99,
+     "v_lo": 10800,
+     "v_hi": 19600,
+     "step": 800
+    }
+   ]
+  },
+  {
+   "n": 14,
+   "title": "Pitch L and R, pitch shifter",
+   "unit": "cents",
+   "rows": [
+    {
+     "p_lo": -36,
+     "p_hi": -32,
+     "v_lo": -1200,
+     "v_hi": -800,
+     "step": 100
+    },
+    {
+     "p_lo": -31,
+     "p_hi": -20,
+     "v_lo": -700,
+     "v_hi": -150,
+     "step": 50
+    },
+    {
+     "p_lo": -19,
+     "p_hi": -11,
+     "v_lo": -100,
+     "v_hi": -20,
+     "step": 10
+    },
+    {
+     "p_lo": -10,
+     "p_hi": 10,
+     "v_lo": -10,
+     "v_hi": 10,
+     "step": 1
+    },
+    {
+     "p_lo": 11,
+     "p_hi": 19,
+     "v_lo": 20,
+     "v_hi": 100,
+     "step": 10
+    },
+    {
+     "p_lo": 20,
+     "p_hi": 31,
+     "v_lo": 150,
+     "v_hi": 700,
+     "step": 50
+    },
+    {
+     "p_lo": 32,
+     "p_hi": 36,
+     "v_lo": 800,
+     "v_hi": 1200,
+     "step": 100
+    }
+   ]
+  },
+  {
+   "n": 15,
+   "title": "Resonance for wah",
+   "unit": "",
+   "values": [
+    "wide",
+    "middle",
+    "narrow"
+   ]
+  },
+  {
+   "n": 16,
+   "title": "Slow/Fast, rotary speaker",
+   "unit": "",
+   "values": [
+    "slow",
+    "fast"
+   ]
+  }
+ ]
+}
