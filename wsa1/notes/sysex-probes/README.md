@@ -1626,3 +1626,38 @@ python3 wsa1/notes/sysex-probes/sysex_override_flags.py
 ```
 
 Pass: all six are `bit n,(XIY+0x15)` at the stated bit, the bits are distinct, `OK`.
+
+### `sysex_unnamed_bytes.py`
+
+**Question:** what are the bytes of a combination that no parameter names?
+
+`sysex_combination_layout.py` ends with a list of bytes some combination writes that no
+parameter descriptor reaches. Four searches of the *program* had been run against them and
+all four came back empty or powerless. This one asks from the **data** side: 257
+combinations of eight parts is 2056 part records, each with its named neighbours beside it.
+
+★ **Most of the list is not unknown, it is fixed.** Block A holds the same value in all
+2056 records at `+02`, `+04`, `+10` and `+15..+1A`; block B at `+00..+02`, `+0D`, `+11`,
+`+12` and `+15`. All of them read zero. "Reserved, write zero" is a stronger statement than
+"unknown", and it is what the corpus supports.
+
+What genuinely varies is the last three bytes of each block — an index `00..0F`, an index
+`00..07` and a flag. They are **two fields, not one written twice**: equal in 1280 records
+and different in the other 776. Block A's is unused by every one of the 1024 user parts;
+block B's is used by both sources.
+
+★ **The obvious hypothesis is refuted here rather than left standing.** The triple looks
+like a cache of the sound the part plays; it is not, because the same program number
+carries two different triples in 36 cases. Reporting that is the point of the test.
+
+⚠ The equaliser question stays open and the corpus says why: all 257 combinations hold the
+same four bytes `D8 02 58 04`, so no stored datum ever moved the control and none can
+decide whether `LOW-FREQ` sits at `+01` or at the unnamed `+02`.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_unnamed_bytes.py
+```
+
+Pass: a planted copy of `PANPOT` is found and a planted arithmetic column is not — without
+both, "no copy found" would be worthless. The reserved sets, the triple's widths, the user
+-data usage and the equaliser invariant are all asserted, `OK`.
