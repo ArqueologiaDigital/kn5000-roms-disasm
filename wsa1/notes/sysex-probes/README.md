@@ -1466,3 +1466,32 @@ python3 wsa1/notes/sysex-probes/sysex_conversion_tables.py --tex \
 ```
 
 Pass: every arithmetic row satisfies the identity, `OK`.
+
+### `sysex_published_sizes.py`
+
+**Question:** does the ROM accept exactly the dump sizes Technics published?
+
+The bulk-dump table was decoded from the program — the eight `(ADR, SIZ)` pairs the
+instrument matches literally on reception. Three of the four categories were then
+confirmed against a capture. The fourth, `SEQUENCER`, could not be: the capture came from
+a rack, and a rack refuses that category.
+
+**It does not need a capture.** Technics printed the sizes on page 45 of the Reference
+Guide, under "SIZ of data dump area". This asserts that the set the ROM accepts and the
+set the guide prints are the **same set**, `SEQUENCER` included — two sources, a
+disassembly and a printed book, sharing no path at all. They are identical, down to the
+guide using the word *Variable* for the same block the ROM sizes at run time.
+
+The guide also prints `SEQUENCER : WSA1 only` beside its request table, which is the same
+restriction the firmware's feature table gives the rack.
+
+⚠ What this does **not** settle: frame-level behaviour for `SEQUENCER` — checksums,
+continuation, the acknowledgement handshake. Those are verified by capture on the other
+three categories and the program runs all four through one path, but no `SEQUENCER`
+transfer has been observed here.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_published_sizes.py
+```
+
+Pass: the two sets are equal area by area, `OK`.

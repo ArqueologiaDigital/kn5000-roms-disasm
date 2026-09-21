@@ -16,8 +16,9 @@ models. The following are not covered.
   bytes of a combination part hold beyond the name is in no published table --- the
   guide's own stop at the drum sound --- and would have to be decoded. How a stored
   sequence is arranged is likewise not covered.
-\item[The SEQUENCER category, against hardware.] Its protocol is described, but the
-  capture used to check everything else came from a rack, which cannot send it. Closing
-  this needs one transfer from an SX-WSA1 keyboard. See chapter~\ref{ch:overview}.
-\item[Operating system version 1.] Everything here describes version 2.0.
+\item[Operating system version 1.] Everything here describes version 2.0, whose
+  \textsc{ver} byte is \bytes{11} --- exclusive specification 2.1. A machine speaking a
+  different version announces it in that byte, which is the sixth of any message that
+  carries one, so a receiver can tell at once that it is talking to something this
+  reference does not describe.
 \end{description}

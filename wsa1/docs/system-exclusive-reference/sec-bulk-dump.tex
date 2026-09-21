@@ -33,6 +33,12 @@ category & area & \textsc{adr} & \textsc{siz} & length & blocks \\
 Lengths are in source bytes; on the wire each occupies twice as many, because of the
 payload encoding described below.
 
+\begin{note}{These lengths are confirmed by the manufacturer}
+Every length in the table was decoded from the program, and Technics prints the same set
+in its \emph{Reference Guide}. The two agree area by area, including \textsc{sequencer},
+whose last block the guide also calls variable rather than giving it a size.
+\end{note}
+
 The \emph{blocks} column is internal structure, not extra messages: \textsc{sound} sends
 one header covering all 262\,144 bytes, which is 32 repeats of an 8\,192-byte layout, and
 \textsc{combination}'s second block one header covering 90\,112 bytes as 16 repeats of
