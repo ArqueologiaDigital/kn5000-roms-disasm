@@ -50,3 +50,9 @@ or \bytes{F0 50 22 04 00 11 F7}) is answered with the model's own value, whichev
 the enquiry itself carried. A second, behavioural test is to request a \textsc{sequencer}
 dump and see whether anything arrives.
 \end{note}
+
+\begin{note}{Which machine is which}
+The two behaviours are selected by a hardware input read once at power-on, not by anything
+the program names. Identifying the \bytes{01} machine as the rack rests on the service
+documentation for that input rather than on the program itself.
+\end{note}
