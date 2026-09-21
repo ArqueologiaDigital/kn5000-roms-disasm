@@ -22,13 +22,17 @@ three fixed bytes:
 where \bytes{\textit{nn}} is \bytes{00} or \bytes{01}. A message whose triple the
 instrument does not recognise is rejected with \textsc{error 40}.
 
-\begin{caution}{The middle byte is not a constant of the product}
-The instrument transmits \bytes{04 00 11} and accepts both \bytes{04 00 11} and
-\bytes{04 01 11}. A bulk dump captured from a real instrument carries \bytes{04 01 11}
-throughout. The transmitted value is fixed --- it is not derived from the keyboard/rack
-setting described in chapter~\ref{ch:models} --- so the middle byte does not distinguish
-the two models either. A receiver must accept both values and must not use the middle byte
-to identify anything.
+\begin{caution}{The middle byte names the model, and only on transmission}
+The keyboard transmits \bytes{04 00 11}; the rack transmits \bytes{04 01 11}. The rack
+substitutes the middle byte as the message leaves, in every \bytes{21}, \bytes{22},
+\bytes{2C} and \bytes{2D} message it sends, and recomputes the checksum of those that
+carry one, so the substitution is invisible in the checksum. A bulk dump captured from a
+real rack carries \bytes{04 01 11} throughout.
+
+Reception is model-blind. Both values are accepted by both models, on every family that
+carries the triple, and reach the same handler; a message is never refused, ignored or
+treated differently because of the middle byte. A receiver must therefore accept both,
+and a file dumped from one model loads into the other.
 \end{caution}
 
 \section{Short messages}

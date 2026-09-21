@@ -2,7 +2,10 @@
 
 The SX-WSA1 keyboard and the SX-WSA1R rack module run the same program and speak the same
 System Exclusive protocol. Two features are nonetheless available on the keyboard and not
-on the rack, in both directions.
+on the rack, in both directions, and the two models put different bytes in the model
+triple. Nothing else in the System Exclusive implementation depends on which model it is:
+the framing, the checksum, the handshake, the error reporting, the parameter address space
+and every other bulk-dump category are identical.
 
 \begin{center}
 \begin{tabular}{lcc}
@@ -17,6 +20,9 @@ message framing, checksum, handshake & yes & yes \\
 dump requests & yes & yes \\
 General MIDI On / Off & yes & yes \\
 \midrule
+model triple transmitted & \bytes{04 00 11} & \bytes{04 01 11} \\
+model triples accepted & both & both \\
+\midrule
 \textsc{sequencer} bulk dump & yes & \textbf{no} \\
 tempo message (family \bytes{25}) & yes & \textbf{no} \\
 \bottomrule
@@ -24,19 +30,23 @@ tempo message (family \bytes{25}) & yes & \textbf{no} \\
 \end{center}
 
 \begin{caution}{On the rack, a SEQUENCER dump sends nothing and says nothing}
-The \textsc{sequencer} row is present on the rack's \textsc{sysex bulk dump} menu, and
-selecting it and pressing \textsc{send} appears to work. Nothing is transmitted --- not
-even the end-of-category message that closes every other transfer. A librarian waiting for
-data will simply time out.
+The rack's \textsc{sysex bulk dump} menu has no \textsc{sequencer} row: it is not drawn,
+and the soft key that would select it does nothing. The category can still be reached over
+MIDI, by a dump request addressed to \bytes{60 00 00}, and as part of \textsc{total
+keyboard}. In both cases nothing is transmitted --- not even the end-of-category message
+that closes every other transfer. A librarian waiting for data will simply time out.
 
-The same applies to the \textsc{sequencer} portion of \textsc{total keyboard}.
+On the rack the transfer-progress screen likewise lists only \textsc{sys,part\&midi},
+\textsc{sound} and \textsc{combination}.
 \end{caution}
 
 The tempo message is refused in both directions on the rack: it will neither act on one
 received nor send one.
 
-\begin{note}{The model triple does not tell you which you are talking to}
-Both models transmit the same model triple, so it cannot be used to distinguish them. The
-only reliable test over MIDI is behavioural --- request a \textsc{sequencer} dump and see
-whether anything arrives.
+\begin{note}{Telling the two apart over MIDI}
+The middle byte of the model triple in anything the instrument transmits is \bytes{00} on
+the keyboard and \bytes{01} on the rack; an identity enquiry (\bytes{F0 50 21 04 00 11 F7}
+or \bytes{F0 50 22 04 00 11 F7}) is answered with the model's own value, whichever value
+the enquiry itself carried. A second, behavioural test is to request a \textsc{sequencer}
+dump and see whether anything arrives.
 \end{note}

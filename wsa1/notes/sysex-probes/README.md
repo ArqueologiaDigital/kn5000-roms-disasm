@@ -8,10 +8,12 @@
 | `sysex_command_map.py` | Walking the grammar to the BOTTOM (not depth 8): what does each accepted sequence make the instrument DO? Covers `25`, `7E`-as-third-byte, the `2D` subtree and the dump request. | `python3 wsa1/notes/sysex-probes/sysex_command_map.py` (tables) or `--paths` (all 7542 sequences) |
 | `sysex_param_wire_format.py` | The COMPLETE byte layout of a `2B` / `2C` message: where the data sits, what the count triple means, what a request carries instead of data, what the reply looks like, and what a receiver must compute for the checksum. Ends with worked examples it verifies. | `python3 wsa1/notes/sysex-probes/sysex_param_wire_format.py` (tables + examples), `--lengths` (every multi-byte parameter) or `--capture` (re-check the checksum rule against the real dump) |
 | `sysex_param_space.py` | The `2B` and `2C` families: what the bytes after the model id `11` mean, which command id each sequence terminates in, and how `2B` differs from `2C`. | `python3 wsa1/notes/sysex-probes/sysex_param_space.py` (tables), `--params` (every parameter with its accepted value range) or `--paths` (all 7512 sequences) |
+| `sysex_third_region.py` | The THIRD region of the `2B`/`2C` families (`byte 6 = 10/18/19`), which `sysex_param_space.py` can only name: what that address space CONTAINS, what a write does, what a request is answered with, and how it is bounded. | `python3 wsa1/notes/sysex-probes/sysex_third_region.py` (tables) or `--map` (every block of both regions) |
 | `sysex_dump_categories.py` | WHICH of the five bulk-dump categories emits WHICH data header, in what order, and what the header's 21-bit address field means. | `python3 wsa1/notes/sysex-probes/sysex_dump_categories.py` (tables) or `--wire` (each header as transmitted) |
 | `sysex_bulkdump_rx.py` | The RECEIVE side: what picks the destination of an incoming data message, whether an arbitrary address is honoured, what bounds the write, what order the messages must come in, and whether the panel has to be on the SYSEX BULK DUMP screen. | `python3 wsa1/notes/sysex-probes/sysex_bulkdump_rx.py` (tables) or `--order` (the whole in-session dispatch table) |
 | `sysex_cross_product.py` | Is this the SAME protocol in the sibling Technics products? Reads the WSA1R, KN5000 and KN1500 grammars out of raw ROM side by side, prints each one's model triple, fixed messages and bulk-dump regions, and asserts what is shared and what is not. | `python3 wsa1/notes/sysex-probes/sysex_cross_product.py` (summary), `--paths` (every accepted sequence), `--kn7000` (the later, incompatible dialect) |
 | `sysex_wire_capture_check.py` | Does a dump a REAL machine put on the wire obey the frame format decoded from the ROMs? Checks the handshake, header, nibble payload, 0xFC cap, continuation flag, checksum and declared length of all 2883 messages of a captured SOUND+COMBINATION dump. | `python3 wsa1/notes/sysex-probes/sysex_wire_capture_check.py` (summary) or `--frames` |
+| `sysex_model_variant.py` | What the keyboard/rack setting changes about the SysEx implementation: all six entries of the feature table and every reader of it, every other place the SysEx engine reads the setting, and the transmit-time rewrite of the model triple that makes a real rack's dump carry `04 01 11`. | `python3 wsa1/notes/sysex-probes/sysex_model_variant.py` (tables) or `--sites` (every compare site in prom_a) |
 
 ## Signal being read
 
@@ -418,10 +420,19 @@ header declared.
 
 Every message in the capture carries the model triple `04 01 11`, while the
 dumped v2 `prom_b` transmits `04 00 11` and **no `04 01 11` literal exists
-anywhere in the four WSA1 images**. Both are accepted on reception, and the
-KN1500 accepts three consecutive values in the same position, so that byte is
-a model/variant code rather than a constant of the product. A librarian must
-accept both.
+anywhere in the four WSA1 images**.
+
+⚠ **RESOLVED by `sysex_model_variant.py`, and the earlier reading of it was
+too weak.** The `01` is written at transmit time: `sub_FB5F65` (0xFB5F65)
+runs on every outgoing message, and when the model-variant strap `(0x00C4)`
+is 2 it overwrites message byte 4 with `0x01` for families `21`, `22`, `2C`
+and `2D`, then recomputes the checksum over `sub_FB7111`'s own window. So the
+middle byte **does** distinguish the two models on transmission — the
+capture is a strap-2 machine — even though reception is model-blind and both
+values reach the same handlers. The note that used to stand here, that the
+byte is "not derived from the keyboard/rack setting", was wrong; the
+published chapters `sec-message-set.tex` and `sec-models.tex` were corrected
+in the same commit. A librarian must still accept both.
 ## `sysex_bulkdump_rx.py` — signal being read
 
 Both load bases are asserted first, the same way `sysex_bulkdump_tx.py`
@@ -538,3 +549,137 @@ descriptor** — six bytes of `F0 50 2C 04 00 11` and six bytes of address and
 count.  Reading them as one twelve-byte header loses the fact that the second
 six come from the descriptor and are therefore the *requested* address, and
 hides the part patch that rewrites one of them.
+
+## `sysex_third_region.py` — signal being read
+
+All three load bases are asserted by content first (prom_a `00 03 05 04 02` at
+`0xF99AE3`, prom_b `F0 50 23 7E F7` at `0xF4FEB4`, prom_c `add XWA,0x4a1` at
+`0xFB459E`).
+
+* **Command slots.** Entries `0x17` (family `2C`) and `0x19` (family `2B`) of
+  **both** outer tables `0xF4F800` / `0xF4F888` hold prom_a `0xFB3483` /
+  `0xFB3495`. Both routines are `ld XBC,(0x60FC80) / add XBC,0x0E / push /
+  call <thunk>`: `0x60FC80` is the collector struct and `+0x0E` is the received
+  message's own `F0`, so everything below indexes **wire** byte numbers.
+  ⚠ Neither routine tests the panel-mode byte `(0x207A)`, while the bulk-dump
+  default handler `0xFB2820` tests it at its second instruction — the script
+  asserts the contrast, which is what establishes that these messages need no
+  session and no screen.
+* **The request** is prom_b `sub_F36F8C` (`0xF36F8C`, thunk `T_F41254`):
+  `Pack3x7BitFields_Bytes6To8` → address, `..._Bytes9To11` → count,
+  `cp XBC,0x00060000` splits the two regions, and
+  `sub XWA,0x00040000 / cp XWA,0x000002c9` and
+  `sub XWA,0x00060000 / cp XWA,0x00004c98` bound them. Accepted → state word
+  `(0x000A00) |= 5` and return 0; refused → return 1, and prom_a `0xFB34AD`
+  transmits the five bytes at prom_b `0xF4FEC8`, which are the **abort**
+  message the reference already names.
+* **The write** is prom_b `sub_F379AB` (`0xF379AB`, thunk `T_F41258`): the same
+  split, `cp (0x000A07),0x0001` (the count must be exactly 1), the value is
+  `(msg[12]<<4) | (msg[13]&0x0F)`, and a ladder of `cp XIX,<n>` turns the
+  offset into (block, index) for prom_a `0xFD616A` (melodic) or `0xFD6704`
+  (drum) — **the same two routines the panel's own tone editor commits
+  through** (`FINDINGS-l7a1429-field-editors.md` §1c). That is what identifies
+  what the region contains.
+* **The layouts are read, not restated.** Every threshold is an `EC CF imm32`
+  operand and every selector a `0B imm16` operand. The melodic ladder yields
+  four 43-byte blocks (selectors `0x11/0x21/0x31/0x41`) and four 81-byte blocks
+  (selectors 1–4); the script asserts `0xD9 + 4*81 == 0x21D` and
+  `0x21D + 4*43 == 713`, so the region **ends on its last block** — the
+  last-entry test. The drum ladder yields `408 + 150*n` with sub-blocks at
+  `+0 / +64 / +107`, and `(19608 - 408) / 150 == 128` exactly.
+* **★ The cross-check is a different image.** prom_c's
+  `Part_GetPercWaveSelectRecord` computes `0x0087D2 + 0x4A1 + 150*inst +
+  43*idx` and `ToneMsg_WriteWaveSelectParam` computes `0x0087D2 + 0x21D +
+  43*element`. The script asserts `0x4A1 == 713 + 408 + 64` — i.e. the two
+  protocol regions are **contiguous, in this order**, in CPU 2's staging image,
+  which no byte of prom_b knows.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. Headline numbers: **713**
+bytes at `0x040000` and **19608** at `0x060000`; `217 + 4x81 + 4x43`;
+`408 + 128x150` with `150 = 64 + 43 + 43`; count **1** on a write; **120**
+bytes per reply message (255 on the wire, inside the receiver's 256-byte
+ceiling); refusal answer `F0 50 29 7E F7`.
+
+### Traps
+
+1. **The write bound is `<=`, the request bound is `address + count <=`.** So
+   the write path accepts one offset past the end of each region (713 and
+   19608), which lands one index past the last block. The script computes the
+   region sizes from the request path, where the arithmetic is unambiguous.
+2. **A request's reply cannot be replayed as a write.** The reply is a `2C`
+   message with a count of up to 120, and the write path refuses any count but
+   1 — silently. Restoring a region takes one message per byte.
+3. **73 offsets of the melodic region and 70 of the drum region never reach the
+   sound engine**; they are answered by the panel processor through thunk
+   `T_F434A0`, and they are the same 69 parameters the `byte 7 = 11` wildcard
+   record of the parameter area reaches (`sysex_param_space.py` trap 2).
+
+## `sysex_model_variant.py` — signal being read
+
+One firmware serves two boxes. The discriminator is the direct-page byte
+`(0x0000C4)`, written **once** at RESET by `Variant_SetFromPB0`
+(`0xF82882`) from **PORT B bit 0** — HIGH → 1, LOW → 2 — and read 109 times
+in prom_a and twice in prom_b. The script asserts the store idiom `F0 C4 41`
+occurs exactly once in either CPU-1 image, and that every compare site tests
+1 or 2 and nothing else.
+
+* **The feature table.** `sub_FB5FF5` (`0xFB5FF5`) bounds its argument with
+  `cp (XIZ+0x08),0x06 / jr NC` → `0xFFFF`, picks prom_b `0xF4FE6A` when the
+  strap is 1 and `0xF4FE76` otherwise, and indexes with stride 2. Both table
+  addresses occur in **exactly one instruction each** in 1 MiB, so nothing
+  else reads them; the two tables are contiguous (`0xF4FE6A`+12 = `0xF4FE76`)
+  and sit immediately after the `00 F7` word the checksum routine appends.
+* **Every caller, and the index each passes.** `refs_to()` scans the raw
+  image for `call imm24`, `calr disp16` and every relative branch, then
+  filters the candidates through the instruction boundaries of this tree's
+  own byte-exact `prom_a/wsa1_prom_a.s`. Six callers; the `pushw imm16`
+  before each one is read from the bytes. ★ **All six pass 3 or 5** —
+  entries **0, 1, 2 and 4 have no reader at all**. They are `0x0000` in both
+  tables, i.e. permitted, and nothing ever asks.
+* **★★ The other strap reader in the engine.** Exactly two `C0 C4 3F` sites
+  exist in `0xFB2000-0xFB8200`: the selector above and `sub_FB5F65`
+  (`0xFB5F65`). On strap 2 only, and for families `21`, `22`, `2C` and `2D`
+  only, it overwrites **message byte 4** — the middle byte of the model
+  triple — with `0x01`, and for `2C`/`2D` recomputes the checksum over
+  `+0x0F .. len-3`, storing `(-sum) & 0x7F` at `len-2`. The script asserts
+  that window and that arithmetic against `sub_FB7111`'s own, so a patched
+  message checksums as if it had been built that way.
+* **It is on every transmit path.** `sub_FB5F65`'s two callers sit at the
+  head of `sub_FB7165` and `sub_FB71BB`, and those two are the only routines
+  in the engine that reach the MIDI-out block write (`0xF41DF8`). All 19
+  calls to them are inside the engine.
+* **Reception is model-blind.** The trie accepts model byte `00` and `01` for
+  all five families that carry the triple (`21 22 2B 2C 2D`), with identical
+  continuations and identical command numbers on both.
+* **What the user sees.** Three display lists and one soft key swap on the
+  strap; the script proves the dropped tails byte for byte — ` SEQUENCER`
+  from the SYSEX BULK DUMP menu (`0xF0D77F-0xF0D79C`), ` SEQUENCER     :`
+  from the transfer-progress screen (`0xF0D81B-0xF0D82E`), `REALTIME
+  MESSAGE` from the MIDI menu index — and reads the dead row-4 key gate at
+  `0xF99B3D`.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. Headline results: **6**
+feature entries, **1** reader, **6** call sites, indices **{3, 5}** only;
+**4** patched families; model byte `00` → `01`; checksum window `+0x0F .. -2`.
+
+### What it does NOT establish
+
+**Which physical box is variant 1 and which is 2.** No string in any of the
+four images names either model. The tree's assignment (2 = SX-WSA1R) rests on
+the SX-WSA1R service manual — see `notes/WSA1-EMULATION-DISASM-GAPS.md` — and
+the script deliberately prints "variant 1" / "variant 2" and never a model
+name. A third, weaker corroboration now exists: the community capture
+`SND_CMBI.syx`, filed under WSA1R, carries `04 01 11`, which only a strap-2
+machine transmits.
+
+### Trap
+
+A raw byte scan for a branch displacement matches inside other instructions —
+`0xFB71B3` is the second byte of `inc 6,XSP` and reads as a `jr Z` to
+`0xFB71BB`. Counting those makes `sub_FB71BB` look like it has 15 callers
+instead of 14. Every candidate must be checked against an instruction
+boundary before it is believed.
