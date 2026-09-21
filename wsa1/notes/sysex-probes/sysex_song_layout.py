@@ -211,23 +211,73 @@ counts = Counter(seq)
 print("  it is not an array of fixed-size records: no power-of-two chunking leaves")
 print("  any chunk empty, and the last byte is non-zero, so all of it is in use")
 for sz in (0x400, 0x800, 0x1000, 0x2000):
-    empty = sum(1 for i in range(0, len(seq), sz)
-                if not any(seq[i:i + sz]))
-    assert empty == 0, "a %d-byte chunk is empty after all" % sz
+    assert all(any(seq[i:i + sz]) for i in range(0, len(seq), sz)), \
+        "a %d-byte chunk is empty after all" % sz
 assert seq[-1] != 0, "the file ends in padding"
-
 top = counts.most_common(3)
 print("  commonest bytes: %s"
       % ", ".join("0x%02X %.1f%%" % (v, 100.0 * n / len(seq)) for v, n in top))
 assert [v for v, _ in top] == [0x00, 0x81, 0x90], "the byte profile has changed"
-print("  0x90 is MIDI note-on and the stream is full of it, but the event framing")
-print("  is NOT decoded here: the six-byte spacing the opening bytes suggest does")
-print("  not survive -- the longest run of 0x90 bytes six apart is one.")
-run = best = 0
-for i in range(len(seq) - 6):
-    run = run + 1 if seq[i] == 0x90 and seq[i + 6] == 0x90 else 0
-    best = max(best, run)
-assert best <= 2, "the stream is periodic after all -- re-open this"
-print("  longest such run: %d" % best)
+
+# LOCALLY it is events.  From the first one the stream parses as
+#   [delta < 0x80] [0x81 prefix, sometimes] [status >= 0x80] [4 bytes]
+# and keeps parsing for 39 records before a data byte goes over 0x80.
+def local_parse(start):
+    i, n, pre = start, 0, 0
+    while i < len(seq) - 8:
+        if seq[i] >= 0x80:
+            break
+        j = i + 1
+        st = []
+        while j < len(seq) and seq[j] >= 0x80 and len(st) < 2:
+            st.append(seq[j]); j += 1
+        if not st or any(x >= 0x80 for x in seq[j:j + 4]):
+            break
+        if len(st) > 1:
+            pre += 1
+        n += 1; i = j + 4
+    return i, n, pre
+
+
+stop, nrec, npre = local_parse(8)
+print("\n  from the first event it parses as [delta][0x81 sometimes][status][4 bytes]")
+print("  for %d records (%d of them carrying the 0x81), then stops at 0x%X"
+      % (nrec, npre, stop))
+assert (nrec, npre) == (39, 10), "the local parse has changed"
+
+# GLOBALLY there is no such framing: if the stream were fixed-width with one
+# status byte per record, one column would stand out.  None does.
+print("\n  but there is no global framing -- the share of bytes >= 0x80 in each")
+print("  column, for every width and phase, sits at about 30 per cent:")
+for w in (4, 6, 8):
+    sh = [100.0 * sum(1 for i in range(ph, len(seq) - w, w) if seq[i] >= 0x80)
+          / len(range(ph, len(seq) - w, w)) for ph in range(w)]
+    print("    width %d: %s" % (w, " ".join("%.1f" % x for x in sh)))
+    assert max(sh) - min(sh) < 4.0, "a column now stands out at width %d" % w
+print("  so the file is not one linear stream, and the event encoding is NOT")
+print("  decoded here.  Start from the playback routine, not from the opening bytes.")
+
+# A LEAD, reported with its null rather than promoted.  The song header's 17
+# three-byte entries carry 16-bit values.  Read as indices into 256-byte blocks
+# they land on block starts more often than chance -- but the null is high and
+# this is one width out of four tried, so it is a lead and nothing more.
+from math import comb
+starts = [int.from_bytes(R[0][0x100 + i * 3 + 1:0x100 + i * 3 + 3], "little")
+          for i in range(17)]
+print("\n  A LEAD, NOT A FINDING. The header's 17 values are %s" % starts)
+for B in (128, 256, 320, 350):
+    nb = len(seq) // B
+    if max(starts) >= nb:
+        continue
+    base = sum(1 for k in range(nb) if seq[k * B] == 0x80) / nb
+    hit = sum(1 for st in starts if seq[st * B] == 0x80)
+    tail = sum(comb(17, k) * base ** k * (1 - base) ** (17 - k)
+               for k in range(hit, 18))
+    print("    %d-byte blocks: %d of 17 start with 0x80; %.3f of all %d blocks do;"
+          % (B, hit, base, nb))
+    print("      probability of that many or more by chance: %.2e" % tail)
+print("  Only the 256-byte reading is better than chance, and a third of ALL")
+print("  blocks begin with 0x80 anyway, so this is worth following and is not")
+print("  evidence the values ARE block numbers.")
 
 print("\nOK")

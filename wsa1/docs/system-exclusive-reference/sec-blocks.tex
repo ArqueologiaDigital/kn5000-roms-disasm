@@ -265,12 +265,35 @@ on an inference rather than a decode.
 What can be said about it is deliberately little. It is not an array of fixed-size
 records: no power-of-two chunking of the file leaves a single chunk empty, and its last
 byte is not padding. Its commonest bytes are \bytes{00} at 16.1\,\%, \bytes{81} at
-14.6\,\% and \bytes{90} at 9.9\,\%, and \bytes{90} is MIDI note-on, so the stream is
-events rather than a table. The event framing is \emph{not} decoded here. The opening
-bytes look like six-byte records and that does not survive contact with the rest of the
-file --- across 179\,200 bytes the longest run of \bytes{90} bytes six apart is one.
-Anyone continuing this should start from the playback routine rather than from the
-pattern the first few events appear to make.
+14.6\,\% and \bytes{90} at 9.9\,\%.
+
+\emph{Locally} it is plainly events. From the first one the stream parses as a delta
+below \bytes{80}, then an \bytes{81} that is present on some records and absent on
+others, then a status byte, then four data bytes. \bytes{90} is MIDI note-on and
+\bytes{B4} appears where a controller would. It keeps parsing that way for 39 records
+before a data byte goes over \bytes{80}.
+
+\emph{Globally} there is no such framing, and the way to see that is to look for the
+status column. If the stream were fixed-width with one status byte per record, one column
+would be full of bytes at or above \bytes{80} and the others nearly empty. For every width
+from 4 to 8 and every phase within it, each column sits at about 30\,\%. So the file is
+not one linear stream --- which is what a block-allocated area would look like --- and the
+event encoding is \textbf{not} decoded here. Anyone continuing should start from the
+playback routine rather than from the pattern the opening events appear to make.
+
+\begin{note}{One lead, with the reason it is not more than that}
+The song header's seventeen three-byte entries carry 16-bit values, and in the recorded
+song they are 104, 222, 485, 149, 459, 287, 246, and then 486 to 495 consecutively. The
+consecutive run is what an allocator handing out fresh blocks would leave behind.
+
+Read as indices into 256-byte blocks of \textsc{performance}, twelve of the seventeen land
+on a block whose first byte is \bytes{80}, where 33\,\% of all 700 blocks begin that way
+--- a probability of about $1.8\times10^{-3}$ by chance. That is the only block size of
+four tried that beats chance at all.
+
+It is reported here as a lead and not as a finding. A third of all blocks begin with
+\bytes{80} anyway, the test was chosen after seeing the data, and one file is one file.
+\end{note}
 
 \begin{note}{Reassembly is self-checking}
 A block reassembled correctly comes out at exactly the length its own header declared. A

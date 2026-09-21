@@ -1736,10 +1736,22 @@ It also characterises the companion `.SEQ` (179 200 bytes), which is `PERFORMANC
 fixed-size record array, commonest bytes `00`/`81`/`90`, and `90` is MIDI note-on, so it is
 an event stream.
 
-⚠ **The event framing is NOT decoded.** The opening bytes look like six-byte records and
-that does not survive: across the whole file the longest run of `90` bytes six apart is
-**one**. The probe asserts that, so nobody re-derives the wrong shape from the first 64
-bytes — which is exactly what happened while writing it.
+**Locally it is plainly events**: from the first one it parses as a delta below `80`, an
+`81` present on some records and not others, a status, and four data bytes — 39 records
+before a data byte exceeds `80`.
+
+⚠ **Globally there is no such framing, and the test shows why.** If the stream were
+fixed-width with one status per record, one column would be full of bytes ≥ `80`. For every
+width 4–8 and every phase, each column sits at ~30%. So the file is not one linear stream.
+The probe asserts both the local parse and the absence of a standout column, so nobody
+re-derives a fixed record shape from the first 64 bytes — which is exactly what happened
+while writing it.
+
+⚠ **One lead, reported with its null.** The header's 17 values are 104, 222, 485, 149, 459,
+287, 246, then 486–495 consecutively — the trail an allocator leaves. Read as 256-byte
+block indices, 12 of 17 land on a block starting `80`, where 33% of all 700 blocks do
+(p ≈ 1.8e-3), and it is the only one of four block sizes that beats chance. Not promoted:
+the null is high, the test was chosen after seeing the data, and one file is one file.
 
 ★★ **The 544-byte header is laid out too**, read as the difference between the recorded
 song and the nine identical empty ones (113 differing bytes). Signature `5A 5A 5A 5A`;
