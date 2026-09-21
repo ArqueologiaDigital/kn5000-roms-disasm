@@ -72,6 +72,21 @@ def main():
                                          fmt(r["v_hi"])))
             checked += 1
 
+    # The packed formats: a field must be wide enough for its table's range.
+    by_n = {t["n"]: t for t in doc["tables"]}
+    print("\nPACKED FIELDS (the guide's tables 17 and 18, and its equaliser note)")
+    for pk in doc.get("packings", []):
+        for f in pk["fields"]:
+            t = by_n[f["table"]]
+            top = max(r["p_hi"] for r in t["rows"]) if "rows" in t \
+                else len(t["values"]) - 1
+            need = max(1, top.bit_length())
+            assert f["bits"] >= need, \
+                ("%s is given %d bits but table %d reaches parameter %d, "
+                 "which needs %d" % (f["name"], f["bits"], f["table"], top, need))
+            print("    %-14s %d bits, table %-2d reaches %3d and needs %d"
+                  % (f["name"], f["bits"], f["table"], top, need))
+
     print("\n  %d tables, %d arithmetic rows, every one satisfying"
           % (len(doc["tables"]), checked))
     print("  v_lo + step x (p_hi - p_lo) == v_hi")
@@ -103,6 +118,21 @@ def main():
                            % (fmt(r["p_lo"]), fmt(r["p_hi"]),
                               fmt(r["v_lo"]), fmt(r["v_hi"]), fmt(r["step"])))
             out += ["\\bottomrule", "\\end{tabular}", "\\end{center}", ""]
+        out.append("\\paragraph{Packed fields}")
+        out.append("Three of the guide's tables describe fields sharing two bytes "
+                   "rather than a conversion. Each is listed with its width.")
+        out += ["\\begin{center}",
+                "\\begin{tabular}{p{38mm}l>{\\raggedright\\arraybackslash}p{62mm}}",
+                "\\toprule", "format & field & width \\\\", "\\midrule"]
+        for pk in doc.get("packings", []):
+            first = True
+            for f in pk["fields"]:
+                note = (" --- " + f["note"]) if f.get("note") else ""
+                out.append("%s & %s & %d bits%s \\\\"
+                           % (pk["title"] if first else "", f["name"],
+                              f["bits"], note))
+                first = False
+        out += ["\\bottomrule", "\\end{tabular}", "\\end{center}", ""]
         out += ["}", ""]
         target = sys.argv[sys.argv.index("--tex") + 1]
         open(target, "w").write("\n".join(out) + "\n")

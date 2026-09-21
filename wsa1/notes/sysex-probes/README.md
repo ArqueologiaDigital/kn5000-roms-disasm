@@ -1438,9 +1438,9 @@ Pass: four banks of `0x10000`, 128 notes per drum run, at least 64 sounds per ba
 
 **Question:** do the transcribed effect data tables check out arithmetically?
 
-A `VALUE` byte is not a quantity. The guide's page 33 carries eighteen tables turning a
-parameter into seconds, hertz, decibels or cents; without them a librarian can label a
-control but not display it. Sixteen are transcribed here.
+A `VALUE` byte is not a quantity. The guide's page 33 carries eighteen tables; fifteen turn a parameter into seconds, hertz,
+decibels or cents, and three describe how several fields share two bytes. Without them a
+librarian can label a control but not display it. All of them are here.
 
 Like every transcription in this project they are checked rather than trusted — this time
 by the tables' own arithmetic. Each row gives a parameter span, a first value, a last value
@@ -1455,9 +1455,13 @@ satisfy and a wrong one almost certainly will not. **41 rows, 41 chances to fail
 41 hold. It is the same shape as the tiling check on the sound layout: the source
 over-determines itself and the redundancy is the test.
 
+The packings check themselves a second way: a field's width must be wide enough for the
+range of the table it carries, and every one is **exactly** wide enough — 5 bits for a
+parameter reaching 31, 5 for one reaching 26, 6 for one reaching 48. A misread width
+would not land on the boundary.
+
 ⚠ Not checked: a table's title, its unit, or an enumerated table's words — those carry no
-arithmetic. Tables 17 and 18, which describe how two fields share one byte, are not
-transcribed.
+arithmetic.
 
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_conversion_tables.py

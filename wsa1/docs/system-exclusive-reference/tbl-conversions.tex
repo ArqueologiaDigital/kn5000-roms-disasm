@@ -177,5 +177,22 @@ parameter & value & step \\
 \paragraph{Table 16: Slow/Fast, rotary speaker}
 \bytes{00} slow, \bytes{01} fast.
 
+\paragraph{Packed fields}
+Three of the guide's tables describe fields sharing two bytes rather than a conversion. Each is listed with its width.
+\begin{center}
+\begin{tabular}{p{38mm}l>{\raggedright\arraybackslash}p{62mm}}
+\toprule
+format & field & width \\
+\midrule
+PEQ Q, Fc and G & PEQ Q & 5 bits \\
+ & PEQ Fc & 5 bits --- split 3 bits in the first byte, 2 in the second \\
+ & PEQ G & 6 bits \\
+Exciter emphasis Fc & Emphasis Fc & 5 bits --- split 3 bits and 2, the same shape as table 17 \\
+Pre/post equaliser Fc and G & EQ Fc & 5 bits --- split 3 bits and 2 \\
+ & EQ G & 6 bits \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 }
 

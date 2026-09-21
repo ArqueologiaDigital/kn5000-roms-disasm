@@ -9,8 +9,9 @@
   "one. A misread endpoint or step breaks that identity, so the transcription",
   "checks itself row by row.",
   "",
-  "Tables 17 and 18 of the guide describe how two fields share one byte and are",
-  "not transcribed here; the reference says so."
+  "'packings' are the guide's tables 17 and 18 and its pre/post equaliser note:",
+  "three fields sharing two bytes. Each field's width must be wide enough for",
+  "the range of the table it carries, which the probe also asserts."
  ],
  "tables": [
   {
@@ -447,6 +448,62 @@
    "values": [
     "slow",
     "fast"
+   ]
+  }
+ ],
+ "packings": [
+  {
+   "n": 17,
+   "title": "PEQ Q, Fc and G",
+   "bytes": 2,
+   "fields": [
+    {
+     "name": "PEQ Q",
+     "bits": 5,
+     "table": 7
+    },
+    {
+     "name": "PEQ Fc",
+     "bits": 5,
+     "table": 6,
+     "note": "split 3 bits in the first byte, 2 in the second"
+    },
+    {
+     "name": "PEQ G",
+     "bits": 6,
+     "table": 8
+    }
+   ]
+  },
+  {
+   "n": 18,
+   "title": "Exciter emphasis Fc",
+   "bytes": 2,
+   "fields": [
+    {
+     "name": "Emphasis Fc",
+     "bits": 5,
+     "table": 6,
+     "note": "split 3 bits and 2, the same shape as table 17"
+    }
+   ]
+  },
+  {
+   "n": 0,
+   "title": "Pre/post equaliser Fc and G",
+   "bytes": 2,
+   "fields": [
+    {
+     "name": "EQ Fc",
+     "bits": 5,
+     "table": 6,
+     "note": "split 3 bits and 2"
+    },
+    {
+     "name": "EQ G",
+     "bits": 6,
+     "table": 8
+    }
    ]
   }
  ]
