@@ -15,6 +15,7 @@
 | `sysex_wire_capture_check.py` | Does a dump a REAL machine put on the wire obey the frame format decoded from the ROMs? Checks the handshake, header, nibble payload, 0xFC cap, continuation flag, checksum and declared length of all 2883 messages of a captured SOUND+COMBINATION dump. | `python3 wsa1/notes/sysex-probes/sysex_wire_capture_check.py` (summary) or `--frames` |
 | `sysex_model_variant.py` | What the keyboard/rack setting changes about the SysEx implementation: all six entries of the feature table and every reader of it, every other place the SysEx engine reads the setting, and the transmit-time rewrite of the model triple that makes a real rack's dump carry `04 01 11`. | `python3 wsa1/notes/sysex-probes/sysex_model_variant.py` (tables) or `--sites` (every compare site in prom_a) |
 | `sysex_unreachable_commands.py` | The command numbers that have a handler and NO accepted wire sequence (`0x06 0x0D 0x0F 0x10 0x11 0x1D`) — dead code, or reachable another way? — plus what `F0 50 7E` does when it is the WHOLE message, and what family `25` does besides carry a number. | `python3 wsa1/notes/sysex-probes/sysex_unreachable_commands.py` (tables) or `--steps` (every continuation slot) |
+| `sysex_param_addresses.py` | WHERE does each `00`-area parameter live: the WORK-RAM byte its descriptor names, the BULK-DUMP address of that byte, and -- for the eight on the mixer strip -- the screen caption that edits it. | `python3 wsa1/notes/sysex-probes/sysex_param_addresses.py` (the table), `--dump` (with dump addresses), `--strip` (the eight named parameters), `--lists` (the value white-lists) |
 | `sysex_signature_checks.py` | The leading bytes of a block — `WA0`, `WSA1`, `WSA SOUND RAM S0`: do they encode a format or OS version, who checks them, and what happens on a mismatch? Also collects every piece of evidence in the four images bearing on an OS other than the dumped v2.0. | `python3 wsa1/notes/sysex-probes/sysex_signature_checks.py` (tables) or `--artefacts` (confront the ROM literals with a real dump and real disk files) |
 | `sysex_general_midi.py` | Does GENERAL MIDI mode change System Exclusive behaviour: which messages stop being accepted, whether bulk dump or the parameter families are affected, whether the instrument TRANSMITS on entering or leaving GM, and where the GM state sits inside a bulk dump. | `python3 wsa1/notes/sysex-probes/sysex_general_midi.py` (tables) or `--records` (all 77 records of the SYSTEM,PART & MIDI part-2 block) |
 
@@ -925,3 +926,71 @@ references to `0x7F4D`.
    ignored — the in-session collector at `0xFB60EE` demands identifier
    `0x50`, raises status `0x02`, and `STATUS_MAP[2]` is the `ERROR 41!`
    screen. The transfer dies; GM mode does not change.
+
+## `sysex_param_addresses.py` — signal being read
+
+Both load bases asserted by content first (prom_b `F0 50 23 7E F7` at
+`0xF4FEB4`, prom_a `00 03 05 04 02` at `0xF99AE3`).
+
+* **The descriptor's `+6` and `+7` are a RECORD NUMBER and a BYTE OFFSET**, not
+  an address. `sub_FB7890` (`0xFB7890`) takes a four-byte record
+  `{record, offset, value, mask}`, resolves the record number through
+  `IndexedTable_GetPtr`, and does `base[offset] = (base[offset] & ~mask) |
+  (value & mask)`. The setters fill that record from the descriptor: common
+  `0xFB3778` reads `+6` at `0xFB37E5` and `+7` at `0xFB37EB`; part `0xFB38E4`
+  does the same at `0xFB3957`/`0xFB3971` and ORs `byte7 - 0x20` — the PART
+  NUMBER — into the record number (`sub A,0x20` at `0xFB3969`).
+* **The record table is `ParamNumber_RecordPtrs`, prom_a `0xFACDEA`**, 256 LE32
+  work-RAM addresses. Named by the three `lda XBC,0xfacdea` instructions at
+  `0xFAA873`, `0xFAA94E` and `0xFAB7F4`, each followed by
+  `ld (0x60f018),XBC`, and `(0x60F018)` is exactly what `IndexedTable_GetPtr`
+  loads (`0xFB77DD`) and indexes by 4 (`0xFB77E2`).
+* **★ THREE CONFIRMATIONS FROM CODE THAT NEVER READS A DESCRIPTOR.**
+  `0xFB9D88` does `and (0x7f35),0xf0` and then posts `{0x80, 3, 0, 0x0F}`;
+  `RecordPtrs[0x80] + 3 == 0x7F35`. `0xFB9C31` does `or (0x7f4a+3),0x04` and
+  then posts `{0x91, 3, 4, 0xFF}`; `RecordPtrs[0x91] == 0x7F4A`. `0xFB9C1A`
+  loops records 0..15 writing offset `0x0D` with mask `0x0F` — the MIDI channel
+  nibble of the first sixteen parts. Two of the three pin the arithmetic
+  exactly; the third pins the offset.
+* **★ THE PARAMETER AREA AND ONE BULK-DUMP CATEGORY ARE THE SAME BYTES.** The
+  two SYSTEM,PART & MIDI templates at prom_b `0xF4FEF8`/`0xF4FF04` carry
+  `0x100000`/`0x20` and `0x100020`/`0x960`, which abut; prom_a `0xF9603C`
+  copies `0x4B0` WORDS from `0x7620` with `ldirw`, and `0x4B0 * 2 == 0x960`,
+  so the block is one object. Every resolved parameter lands inside
+  `0x7600..0x7F80`, and its dump address is `0x100000 + (RAM - 0x7600)`.
+* **The names come from the instrument's own mixer strip.** Eight interpreter-A
+  text records at `0xF28A56..0xF28A97` (COMBINATION MODE) and
+  `0xF28160..0xF281A1` (SOUND MODE) draw eight captions at **y = 212** and
+  x = 10, 50, 90, 128, 168, 210, 250, 288. Eight interpreter-B value records
+  draw at **y = 226** within 3 px of those same eight columns, and the paint
+  code at `0xF91D55..0xF91E28` loads each one from a literal part-record offset
+  first. The caption directly above a cell names the parameter the cell shows.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. Headline numbers: **108**
+parameter descriptors, **99** resolved to a RAM byte, RAM block
+`0x7600..0x7F80` = dump `0x100000..0x100980`, part records **0x40** bytes with
+parts 0-7 at `0x76A2 + 0x40p` and parts 8-31 at `0x78E2 + 0x40(p-8)`, and
+**8** screen-named parameters.
+
+### Traps
+
+1. **The part records are not one uniform array.** Parts 0-7 sit at
+   `0x76A2 + 0x40*p`, then a `0x40`-byte hole holds two COMMON blocks (records
+   `0x92` and `0x79`), and parts 8-31 resume at `0x78E2`. Computing a part's
+   base as `0x76A2 + 0x40*part` is right for eight parts and wrong for
+   twenty-four.
+2. **Not every setter uses `+6`/`+7`.** `0xFB3882`, which serves only
+   `00 00 00` and `00 00 01`, takes the 32-bit word at
+   `0xF51E58 + 6*desc[0x0E] + 2` as the target ADDRESS. Those two are bits 0
+   and 1 of `0x7FD6` — **outside** the block the bulk dump carries. Nine
+   further parameters have setters this script has not read, and it prints `?`
+   for them rather than assume the rule.
+3. **`+0x0E` does not mean the same thing to every setter.** For `0xFB3778`,
+   `0xFB38E4` and `0xFB3882` it indexes six-byte records at `0xF51E58`; for
+   `0xFB3B04` it indexes four-byte records at `0xF51E70`, and for `0xFB3D13`
+   four-byte records at `0xF51E84`. Only the first family is a VALUE
+   WHITE-LIST, which `sub_FB374D` walks and which refuses a value that is not
+   in it.
+
