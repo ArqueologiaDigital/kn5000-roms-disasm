@@ -1264,3 +1264,38 @@ at it or drop it beside the script.
 The `SND_CMBI.syx` capture is **three** categories, not the two its name suggests: it
 opens with `SYSTEM,PART & MIDI`, then `SOUND`, then `COMBINATION`. That first one is the
 category the parameter chapter maps, which is why the check above is possible at all.
+
+### `sysex_names_crosscheck.py`
+
+**Question:** do the names read out of the *firmware* agree with the names Technics
+*published*?
+
+Two independent sources name the `00`-area parameters: `sysex_param_screen_names.py`
+derives 39 of them from the instrument's own menu screens — the caption printed on the
+same row as the field that edits a byte — and this was done **before** anyone here had
+seen the published tables. `param_names.json` holds all 108 as the *Reference Guide*
+prints them.
+
+The document publishes the guide's names. This script exists because a public claim was
+made about the other source — that reading names off the machine had worked — and that
+claim should be checkable by someone who was not here. It is also a live guard: a future
+mis-transcription of the published tables will make the screens disagree.
+
+It prints two numbers, and the reason there are two matters. The sources differ in *form*:
+the firmware gives a menu path, `PART > INTERNAL SOUND (PAGE2/3) > HOLD1`; the guide gives
+a grouped name, `CONTROLLER INTERNAL FILTER: HOLD1`. Comparing whole strings scores
+**21/39**, and most of what it rejects is a difference of heading, not of name. Comparing
+only the leaf — what each source calls the parameter itself — scores **35/39**, and that is
+the question actually being asked.
+
+The first criterion was not loosened until rows passed; a second, better-specified question
+was asked, and both answers are printed. The four whose leaves differ are printed in full,
+and all four are the instrument abbreviating on a small screen: `MASTER TUNE` /
+`MASTER TUNING`, `R.T.CREATOR` / `REAL-TIME CREATOR`, `CTL. PEDAL` / `CONTROL PEDAL`, and
+one where both words sit on the stop list so nothing was left to match.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_names_crosscheck.py
+```
+
+Pass: all 39 addresses are ones the guide also names, both counts are printed, `OK`.
