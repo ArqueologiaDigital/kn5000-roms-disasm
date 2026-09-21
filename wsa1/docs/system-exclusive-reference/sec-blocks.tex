@@ -47,70 +47,52 @@ A stored drum kit is likewise the layout of chapter~\ref{ch:sound}: its 128 note
 sit at a 150-byte stride, each beginning with its thirteen-character name.
 
 \section{Inside the COMBINATION block}\label{sec:combmemory}
-The larger \textsc{combination} block is 16 combinations of 5\,632 bytes, and each of
-those is \textbf{eight parts of 704 bytes} --- the eight parts a combination has. Every
-part carries a sixteen-character name two bytes in: the sound loaded into it.
+The larger \textsc{combination} block is \textbf{128 stored combinations of 704 bytes},
+arranged as sixteen banks of eight. The banks' names are the last 256 bytes of the smaller
+\textsc{combination} block, one name per bank; each combination carries its own
+sixteen-character name two bytes into its record.
+
+\subsection*{A combination is a stream of parameter records}
+The 704 bytes are not a fixed layout but a \textbf{tagged stream}. Each record is a tag
+byte, a length byte, then that many bytes of payload; the stream ends with
+\bytes{FF FF} and fills the 704 exactly. Every one of the 128 combinations has the same
+23 records in the same order.
 
 \begin{center}
-\begin{tabular}{lll}
+{\small
+\begin{tabular}{llll}
 \toprule
- & at & \\
+at & tag & length & \\
 \midrule
-combination \textit{c} & 5\,632 $\times$ \textit{c} & sixteen of them \\
-part \textit{p} & $+$ 704 $\times$ \textit{p} & eight per combination \\
-that part's sound name & $+$ 2 & sixteen characters \\
+\bytes{000} & \bytes{78} & 16 & the combination's name \\
+\bytes{012} & \bytes{60} & 12 & effect common \\
+\bytes{020} & \bytes{61} & 30 & \textsc{effect1} \\
+\bytes{040} & \bytes{62} & 30 & \textsc{effect2} \\
+\bytes{060} & \bytes{63} & 30 & \textsc{reverb} \\
+\bytes{080} & \bytes{00}, \bytes{20} & 30 each & part 1, two records \\
+\ldots & \ldots & & parts 2 to 8, the same pair \\
+\bytes{280} & \bytes{92} & 14 & key scaling and scale tuning \\
+\bytes{290} & \bytes{79} & 44 & part common \\
+\bytes{2BE} & \bytes{FF FF} & & end of stream \\
 \bottomrule
 \end{tabular}
+}
 \end{center}
 
-The combinations' own names are the last 256 bytes of the smaller
-\textsc{combination} block, sixteen of sixteen characters.
+\begin{note}{The tags are the instrument's own record numbers}
+This is what makes the format legible. A tag is not arbitrary: all 23 are record numbers
+in the parameter area of chapter~\ref{ch:params}, and a record's payload is that record's
+bytes. So \bytes{20} is part~1's own block --- the same \bytes{20} that addresses part~1
+in an \textsc{itr} message --- and the parameter tables name its fields directly.
 
-\subsection*{Inside a part}
-A part divides further, and the division is visible in the dump: a 128-byte header, then
-\textbf{eight records of 64 bytes}, then a 64-byte tail --- $128 + 8\times64 + 64 = 704$.
-Each record carries its own index \emph{twice} --- in its first byte, and in the low
-nibble of its sixteenth --- and in every one of the 128 parts examined its bytes 23 to 31
-are zero. Those are what fix the 64-byte stride.
+The record numbers also run in address order with exactly two bytes between consecutive
+records, which are the tag and length. The stream is a copy of a region of the
+instrument's memory with its record headers intact.
+\end{note}
 
-\begin{center}
-\begin{tabular}{lll}
-\toprule
- & at & \\
-\midrule
-header & \bytes{000} & 128 bytes; the sound's name is at \bytes{002} \\
-record \textit{r} & \bytes{080} $+$ 64 $\times$ \textit{r} & eight of them, each starting with \textit{r} \\
-tail & \bytes{280} & 64 bytes \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-What those eight records are is not established. They behave like uniform slots rather
-than two groups of four: adjacent records resemble each other most, and the resemblance
-rises steadily toward the higher indices, where consecutive records differ in only a byte
-or two. A part with little in it leaves the upper slots at a common default.
-
-The instrument gives a part eight things of which there are exactly eight --- four tones
-and four modeling blocks --- but that is a coincidence of counting until something
-confirms it, and the similarity gradient argues against it.
-
-\begin{caution}{A part names a preset, and is not itself a stored sound}
-704 is not 713, and at the offsets the name suggests --- 0, 2 or 3 --- the parameters of
-chapter~\ref{ch:sound} do not land in their declared ranges. Sweeping every offset instead
-does turn up several that would, but that test has only four discriminating fields and a
-baseline of three quarters, so it cannot locate anything: whether a part embeds a sound
-block somewhere is simply not established here.
-
-What is established is that a part's name does not resolve against the sound memory in the
-same dump. Of 128 part
-names in a real transfer, \textbf{none} matched any of the 259 sounds that transfer
-carried --- they name preset sounds. A librarian should not expect to follow a
-combination's parts into the \textsc{sound} block it arrived with.
-
-What the rest of a part holds is not covered here, and the published guide does not give
-it either: its parameter tables cover \textsc{system}, \textsc{part}, \textsc{normal
-sound} and \textsc{drum sound}, and stop.
-\end{caution}
+That also explains the second \textsc{system, part \& midi} block, whose first bytes
+chapter~\ref{ch:blocks} lists as \bytes{78 10}: those are not a signature but the first
+record's tag and length --- the same stream, beginning with the same name record.
 
 \begin{note}{How this was established, and why it is not a coincidence}
 A dump from a real instrument was walked at a 713-byte stride from the first stored
@@ -118,8 +100,9 @@ sound. Sixty-four consecutive records began with a printable sixteen-character n
 every bank, and the drum runs gave 128 consecutive thirteen-character names in every bank.
 A stride one byte either side of 713 breaks the run at the first record.
 
-The combination figures come from the same walk: all 128 parts of all 16 combinations
-carry a name where the 704-byte stride says one should be.
+The combination stream is checked differently: its records must tile the 704 bytes and
+land on \bytes{FF FF}. All 128 do, with the same 23 records in the same order, and all 23
+tags are live record numbers in the parameter area.
 \end{note}
 
 \begin{note}{Reassembly is self-checking}

@@ -1505,3 +1505,40 @@ python3 wsa1/notes/sysex-probes/sysex_published_sizes.py
 ```
 
 Pass: the two sets are equal area by area, `OK`.
+
+### `sysex_combination_layout.py`
+
+**Question:** what is inside a stored combination?
+
+⚠ **This probe corrected a structure two earlier commits had published.** A stored
+combination is **704 bytes**, not 5632: `0x1600` is a *bank of eight*. What
+`sysex_sound_memory.py` used to call a 704-byte "part" is a whole combination, and what it
+called "eight 64-byte records" are the eight parts, two records each. The smaller
+`COMBINATION` block's name tail is **bank** names, one per eight, not combination names.
+
+The 704 bytes are a **tagged stream**: `{tag, length, payload}`, ending on `FF FF` and
+filling 704 exactly. All 128 combinations in a real dump carry the same 23 records in the
+same order.
+
+The finding that makes it legible: **every tag is a record number in the parameter area**.
+Tag `20` is part 1's own block — the same `20` that addresses part 1 in an `ITR` message —
+so `param_names.json` names its fields directly. The records also run in RAM address order
+with exactly two bytes between consecutive ones, which are the tag and length: the stream
+is a copy of memory with its headers intact. That also explains the `78 10` this project
+had recorded as the second `SYSTEM,PART & MIDI` block's *signature* — it is the first
+record's tag and length.
+
+★ It also found a contradiction in `param_names.json`: `10/20 MAIN OUT EQUALIZER LOW-FREQ`
+is declared `00-11` but every combination holds 24 there. It is one of exactly two
+descriptors `sysex_param_addresses.py` already flags as not building its target from
+`+6`/`+7`, and it is the only row of 22 that fails — so that byte is the low **gain**, and
+the low-frequency byte is elsewhere.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_combination_layout.py
+python3 wsa1/notes/sysex-probes/sysex_combination_layout.py --presets   # the 129 in ROM
+python3 wsa1/notes/sysex-probes/sysex_combination_layout.py --fields
+```
+
+Pass: the stream tiles 704 in all corpora, every tag is a live record number, the range
+and ordering tests hold, `OK`.

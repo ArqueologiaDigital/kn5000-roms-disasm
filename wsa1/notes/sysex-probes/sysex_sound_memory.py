@@ -108,9 +108,12 @@ def all_blocks(buf):
     return out
 
 
-COMB_SIZE, COMB_PARTS, PART_SIZE = 5632, 8, 704
-# Inside a part: a header, eight records, a tail. 128 + 8*64 + 64 == 704.
-PART_HEAD, PART_REC, PART_RECS = 128, 64, 8
+# CORRECTED. A stored COMBINATION is 704 bytes; 0x1600 is a BANK of eight of
+# them. What an earlier version of this probe called a 704-byte "part" is a
+# whole combination, and what it called eight 64-byte "records" are the eight
+# parts, two records each. See sysex_combination_layout.py, which decodes the
+# unit properly as a TLV stream.
+COMB_SIZE, COMB_BANK = 704, 8
 SND = [None]          # the SOUND block, for the part-name cross-check
 
 
@@ -125,6 +128,9 @@ def strides():
 
 
 def check_combinations(blocks, printable_in):
+    """The combination blocks, at the level this probe covers: how many
+    combinations, where their names are, and the bank names. The INTERNAL
+    layout of a combination is sysex_combination_layout.py's subject."""
     c1 = blocks.get((0x50, 0x00, 0x00))
     c2 = blocks.get((0x50, 0x06, 0x00))
     if c1 is None or c2 is None:
@@ -132,17 +138,12 @@ def check_combinations(blocks, printable_in):
         return
     assert len(c2) % COMB_SIZE == 0, "the combination block is not a whole number"
     n = len(c2) // COMB_SIZE
-    assert COMB_PARTS * PART_SIZE == COMB_SIZE, "the part arithmetic does not close"
-    print("\nSTORED COMBINATIONS  (%d of %d bytes, %d parts of %d)"
-          % (n, COMB_SIZE, COMB_PARTS, PART_SIZE))
-    named = 0
-    for c in range(n):
-        for part in range(COMB_PARTS):
-            if printable_in(c2, c * COMB_SIZE + part * PART_SIZE + 2, NAME_NORMAL):
-                named += 1
-    print("  %d of %d parts carry a 16-character name two bytes in"
-          % (named, n * COMB_PARTS))
-    assert named == n * COMB_PARTS, "some parts have no name where one is expected"
+    print("\nSTORED COMBINATIONS  (%d of %d bytes, %d banks of %d)"
+          % (n, COMB_SIZE, n // COMB_BANK, COMB_BANK))
+    named = sum(1 for c in range(n)
+                if printable_in(c2, c * COMB_SIZE + 2, NAME_NORMAL))
+    print("  %d of %d carry a 16-character name two bytes in" % (named, n))
+    assert named == n, "some combinations have no name where one is expected"
 
     # The part names do NOT resolve against the sounds in the same dump.
     stored = set()
@@ -153,55 +154,28 @@ def check_combinations(blocks, printable_in):
             stored.add(SND[0][a + k * 713:a + k * 713 + NAME_NORMAL]
                        .decode("latin1").strip())
             k += 1
-    hit = 0
-    for c in range(n):
-        for part in range(COMB_PARTS):
-            o = c * COMB_SIZE + part * PART_SIZE + 2
-            if c2[o:o + NAME_NORMAL].decode("latin1").strip() in stored:
-                hit += 1
-    print("  %d of %d part names occur in this dump's %d stored sounds"
-          % (hit, n * COMB_PARTS, len(stored)))
-    assert hit == 0, "some part names now resolve against sound memory"
-    print("  -- so a part names a PRESET sound, not one carried by the same dump")
+    hit = sum(1 for c in range(n)
+              if c2[c * COMB_SIZE + 2:c * COMB_SIZE + 2 + NAME_NORMAL]
+              .decode("latin1").strip() in stored)
+    print("  %d of %d combination names occur in this dump's %d stored sounds"
+          % (hit, n, len(stored)))
+    assert hit == 0, "some combination names now match a stored sound"
 
-    at = len(c1) - n * NAME_NORMAL
-    names = [c1[at + i * NAME_NORMAL: at + (i + 1) * NAME_NORMAL] for i in range(n)]
-    assert all(all(32 <= c < 127 for c in s) for s in names), \
-        "the combination names are not the last %d bytes of the smaller block" % (
-            n * NAME_NORMAL)
-    # The inside of a part, as far as the dump itself shows it.
-    zero = [i for i in range(PART_SIZE)
-            if all(c2[c * COMB_SIZE + p * PART_SIZE + i] == 0
-                   for c in range(n) for p in range(COMB_PARTS))]
-    zset = set(zero)
-    assert PART_HEAD + PART_RECS * PART_REC + PART_REC == PART_SIZE, \
-        "the part arithmetic does not close"
-    for k in range(PART_RECS):
-        for j in range(23, 32):
-            o = PART_HEAD + k * PART_REC + j
-            assert o in zset, \
-                "record %d byte %d is not always zero, so the %d-byte stride is wrong" \
-                % (k, j, PART_REC)
-    idx_ok = all(c2[c * COMB_SIZE + p * PART_SIZE + PART_HEAD + k * PART_REC] == k
-                 for c in range(n) for p in range(COMB_PARTS)
-                 for k in range(PART_RECS))
-    # the index appears a second time, in the low nibble of byte 15
-    idx2 = all((c2[c * COMB_SIZE + p * PART_SIZE + PART_HEAD + k * PART_REC + 15]
-                & 0x0F) == k
-               for c in range(n) for p in range(COMB_PARTS)
-               for k in range(PART_RECS))
-    assert idx2, "byte 15's low nibble is no longer the slot index"
-    print("  a part is %d bytes of header, %d records of %d, then %d bytes"
-          % (PART_HEAD, PART_RECS, PART_REC, PART_REC))
-    print("  every record's bytes 23-31 are zero in all %d parts%s"
-          % (n * COMB_PARTS,
-             ", and each carries its index twice, in byte 0 and in the low"
-             " nibble of byte 15" if idx_ok else ""))
-    assert idx_ok, "the records no longer begin with their index"
-
-    print("  the %d combination names are the last %d bytes of the smaller block,"
-          % (n, n * NAME_NORMAL))
-    print("  beginning %r" % names[0].decode("latin1").strip())
+    # The smaller block's tail is the BANK names -- one per eight combinations,
+    # not one per combination. An earlier version of this probe called them the
+    # combinations' own names, which was wrong.
+    banks = n // COMB_BANK
+    at = len(c1) - banks * NAME_NORMAL
+    names = [c1[at + i * NAME_NORMAL: at + (i + 1) * NAME_NORMAL]
+             for i in range(banks)]
+    assert all(all(32 <= c < 127 for c in x) for x in names), \
+        "the bank names are not the last %d bytes of the smaller block" % (
+            banks * NAME_NORMAL)
+    print("  the %d BANK names are the last %d bytes of the smaller block,"
+          % (banks, banks * NAME_NORMAL))
+    print("  beginning %r -- one name per eight combinations"
+          % names[0].decode("latin1").strip())
+    print("  the inside of a combination is sysex_combination_layout.py's subject")
 
 
 def main():
