@@ -37,6 +37,68 @@ are admitted in three runs --- \bytes{20}--\bytes{36}, \bytes{40}--\bytes{56} an
 \bytes{60}--\bytes{75}. Any other value in that block is accepted by the parser and then
 discarded, producing no error and no effect.
 
+Counting the part block once, the area holds 108 distinct parameters.
+
+\section{Parameters and the bulk dump are the same bytes}\label{sec:paramdump}
+
+The individual parameters and the \textsc{system, part \& midi} bulk dump are two views of
+one object. That dump carries addresses \bytes{100000} to \bytes{100980}, and every
+parameter in the \bytes{00} area is one byte --- or a field of one byte --- inside it.
+
+This matters in both directions. An editor that writes parameters and a librarian that
+restores dumps are competing for the same storage, so a dump restored after a parameter
+write discards that write. It also gives a way to confirm any row of the tables below
+without opening the instrument: dump the category, change the one parameter, dump again,
+and the two dumps differ at the stated address and nowhere else.
+
+\subsection*{Where a part's record sits}
+Each part occupies a \bytes{40}-byte record, and the offsets in
+table~\ref{tbl:partparams} are relative to the start of that record. The records are in
+two runs:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+part & record begins at \\
+\midrule
+0 to 7 & \bytes{1000A2} + \bytes{40} $\times$ part \\
+8 to 31 & \bytes{1002E2} + \bytes{40} $\times$ (part $-$ 8) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{caution}{The part records are not one array}
+The obvious formula, \bytes{1000A2} + \bytes{40} $\times$ part, is correct for the first
+eight parts and wrong for the other twenty-four. A \bytes{40}-byte gap after part 7 holds
+common-block storage, and the parts resume above it. Code that assumes a single stride
+will read and write the wrong part for parts 8 upward, and will corrupt two common blocks
+on the way past.
+\end{caution}
+
+\section{What a parameter accepts}
+
+Each parameter has a fixed data length and a range of accepted values. A value outside the
+range is rejected without an error message. Where the tables give a range of
+\bytes{0}~or~\bytes{1} the parameter is a single bit, and several such parameters usually
+share one byte of the dump --- so a dump editor changing one of them must preserve the
+others in the same byte.
+
+Three parameters accept an enumerated set rather than a range; sending any other value has
+no effect.
+
+\input{tbl-parameters}
+
+\section{Names}
+The name column is filled only where the instrument itself or its published manual names
+the byte. A name marked \dag{} is a match on value range or bit count rather than a
+statement by the machine. Blank means this edition does not know what the parameter is;
+its address, length and accepted values are still correct, and are enough to read it out
+of the instrument and watch what changes.
+
+One parameter does not store what it is sent: \bytes{20 05} accepts \bytes{0}--\bytes{127}
+and passes the value through a substitution before storing it, so reading it back does not
+return what was written.
+
 \section{Whole-area request}
 Family \bytes{2B} also requests an entire category, as described in chapter~4. Here
 \bytes{\textit{r}} takes the region byte rather than \bytes{00}.

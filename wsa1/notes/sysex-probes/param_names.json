@@ -1,0 +1,41 @@
+{
+  "_comment": [
+    "Curated names for the 00-area parameters, consumed by sysex_param_table_tex.py.",
+    "confidence ESTABLISHED = the instrument or its published manual names this byte;",
+    "LIKELY = a hard match on value range or bit count, printed with a dagger;",
+    "anything weaker is left out of this file entirely rather than printed hedged.",
+    "basis must say what would have to be false for the name to be wrong."
+  ],
+
+  "20/03": {"name": "VOL (LVL)", "confidence": "ESTABLISHED",
+            "basis": "mixer strip, caption over the value cell that reads this byte"},
+  "20/04": {"name": "EFF1", "confidence": "ESTABLISHED",
+            "basis": "mixer strip, caption over the value cell that reads this byte"},
+  "20/05": {"name": "EFF2", "confidence": "ESTABLISHED",
+            "basis": "mixer strip, caption over the value cell that reads this byte"},
+  "20/06": {"name": "REV", "confidence": "ESTABLISHED",
+            "basis": "mixer strip, caption over the value cell that reads this byte"},
+  "20/07": {"name": "PAN", "confidence": "ESTABLISHED",
+            "basis": "mixer strip; shown L64 to R63, 128 positions"},
+  "20/40": {"name": "INT (internal sound)", "confidence": "ESTABLISHED",
+            "basis": "mixer strip INT cell reads this bit"},
+  "20/41": {"name": "MIDI channel", "confidence": "ESTABLISHED",
+            "basis": "mixer strip MIDI cell; shown 1-01 to 2-16, and the manual gives the same 32 values"},
+
+  "10/00": {"name": "OCT", "confidence": "ESTABLISHED",
+            "basis": "mixer strip OCT cell reads this byte; shown -3 to +3"},
+  "10/11": {"name": "scale tuning type", "confidence": "ESTABLISHED",
+            "basis": "the scale-tuning routine tests this byte; 15 enumerated values, 0x80 = USER"},
+  "10/13": {"name": "user scale, note 1", "confidence": "ESTABLISHED", "basis": "twelve consecutive bytes the user-scale routine reads"},
+  "10/14": {"name": "user scale, note 2", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/15": {"name": "user scale, note 3", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/16": {"name": "user scale, note 4", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/17": {"name": "user scale, note 5", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/18": {"name": "user scale, note 6", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/19": {"name": "user scale, note 7", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/1A": {"name": "user scale, note 8", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/1B": {"name": "user scale, note 9", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/1C": {"name": "user scale, note 10", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/1D": {"name": "user scale, note 11", "confidence": "ESTABLISHED", "basis": "same run"},
+  "10/1E": {"name": "user scale, note 12", "confidence": "ESTABLISHED", "basis": "same run"}
+}
