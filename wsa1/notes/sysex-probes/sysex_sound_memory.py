@@ -109,6 +109,8 @@ def all_blocks(buf):
 
 
 COMB_SIZE, COMB_PARTS, PART_SIZE = 5632, 8, 704
+# Inside a part: a header, eight records, a tail. 128 + 8*64 + 64 == 704.
+PART_HEAD, PART_REC, PART_RECS = 128, 64, 8
 SND = [None]          # the SOUND block, for the part-name cross-check
 
 
@@ -167,6 +169,29 @@ def check_combinations(blocks, printable_in):
     assert all(all(32 <= c < 127 for c in s) for s in names), \
         "the combination names are not the last %d bytes of the smaller block" % (
             n * NAME_NORMAL)
+    # The inside of a part, as far as the dump itself shows it.
+    zero = [i for i in range(PART_SIZE)
+            if all(c2[c * COMB_SIZE + p * PART_SIZE + i] == 0
+                   for c in range(n) for p in range(COMB_PARTS))]
+    zset = set(zero)
+    assert PART_HEAD + PART_RECS * PART_REC + PART_REC == PART_SIZE, \
+        "the part arithmetic does not close"
+    for k in range(PART_RECS):
+        for j in range(23, 32):
+            o = PART_HEAD + k * PART_REC + j
+            assert o in zset, \
+                "record %d byte %d is not always zero, so the %d-byte stride is wrong" \
+                % (k, j, PART_REC)
+    idx_ok = all(c2[c * COMB_SIZE + p * PART_SIZE + PART_HEAD + k * PART_REC] == k
+                 for c in range(n) for p in range(COMB_PARTS)
+                 for k in range(PART_RECS))
+    print("  a part is %d bytes of header, %d records of %d, then %d bytes"
+          % (PART_HEAD, PART_RECS, PART_REC, PART_REC))
+    print("  every record's bytes 23-31 are zero in all %d parts%s"
+          % (n * COMB_PARTS,
+             ", and each begins with its own index" if idx_ok else ""))
+    assert idx_ok, "the records no longer begin with their index"
+
     print("  the %d combination names are the last %d bytes of the smaller block,"
           % (n, n * NAME_NORMAL))
     print("  beginning %r" % names[0].decode("latin1").strip())

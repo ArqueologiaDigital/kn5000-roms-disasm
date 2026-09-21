@@ -17,10 +17,11 @@ and \textsc{combination} blocks a dump carries.
 
 \section{Open, and what would close it}
 \begin{description}
-\item[Inside a combination part.] Section~\ref{sec:combmemory} establishes that a part is
-  704 bytes and names a preset sound. What the rest holds is in no published table --- the
-  guide's own parameter tables stop at the drum sound --- so closing it means decoding the
-  program, as the \bytes{00} area was decoded.
+\item[What a combination part's records mean.] Section~\ref{sec:combmemory} divides a
+  part into a header, eight 64-byte records and a tail, and the program confirms the
+  704-byte figure. What the eight records \emph{are} is not established, and no published
+  table covers it --- the guide's own parameter tables stop at the drum sound --- so
+  closing it means decoding the program, as the \bytes{00} area was decoded.
 \item[The SEQUENCER block's contents.] Its addresses and lengths are confirmed twice over
   (chapter~\ref{ch:bulk}), but no capture here contains one, so how a stored sequence is
   arranged is unknown. One transfer from an SX-WSA1 keyboard would settle it, and would

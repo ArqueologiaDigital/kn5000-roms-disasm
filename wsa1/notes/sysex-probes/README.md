@@ -1428,8 +1428,14 @@ parts of 704, every one of the 128 parts carrying a 16-character name two bytes 
 sound loaded into it. Eight parts is what a combination has. The combinations' own names
 are the last 256 bytes of the smaller block.
 
-⚠ 704 is **not** 713, so a combination part is not simply a stored sound, and the probe
-says so rather than assuming the layouts match.
+It then divides a part: a 128-byte header, **eight records of 64 bytes**, and a 64-byte
+tail — 128 + 8×64 + 64 = 704. The stride is fixed by two things the probe asserts: every
+record's bytes 23–31 are zero in all 128 parts, and each record begins with its own index
+0–7. The firmware confirms the outer figures independently, computing a part address as
+`base + 0x1600 × combination + 0x2C0 × part`.
+
+⚠ 704 is **not** 713, so a combination part is not simply a stored sound, and what the
+eight records *are* is not established — the probe reports the structure and stops there.
 
 Pass: four banks of `0x10000`, 128 notes per drum run, at least 64 sounds per bank, all
 128 combination parts named, `OK`.
