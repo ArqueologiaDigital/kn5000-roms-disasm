@@ -13,6 +13,14 @@ The instrument has two sets of MIDI sockets, MIDI~1 and MIDI~2. Ordinary perform
 is handled on both. \textbf{Bulk dump transfers use MIDI~1 only} --- a dump offered on
 MIDI~2 is not received, and the instrument sends dumps only from MIDI~1.
 
+\section{Relationship to the published manual}
+Technics' own guide documents \textsc{sysex bulk dump} as a feature: which menu rows exist,
+that the \textsc{send} button starts a transfer, that the MIDI~1 sockets must be used, and
+three error numbers. It states no byte layouts, and the instrument shipped without a MIDI
+implementation chart. This reference supplies what the guide leaves out, and follows it
+wherever both describe the same thing --- with one exception, the meaning of
+\textsc{error 42}, set out in chapter~\ref{ch:errors}.
+
 \section{Verification}
 The message layouts, the payload encoding and the checksum rule in this reference have been
 checked against a bulk dump captured from a real instrument: 2\,883 messages carrying a
