@@ -1,7 +1,8 @@
 \chapter{SX-WSA1 and SX-WSA1R}\label{ch:models}
 
-The SX-WSA1 keyboard and the SX-WSA1R rack module run the same program and speak the same
-System Exclusive protocol. Two features are nonetheless available on the keyboard and not
+The SX-WSA1 keyboard and the SX-WSA1R rack module ship \textbf{the same ROMs} --- not
+merely the same program built twice, but the same images --- and speak the same System
+Exclusive protocol. Two features are nonetheless available on the keyboard and not
 on the rack, in both directions, and the two models put different bytes in the model
 triple. Nothing else in the System Exclusive implementation depends on which model it is:
 the framing, the checksum, the handshake, the error reporting, the parameter address space
@@ -57,8 +58,9 @@ dump and see whether anything arrives.
 \end{note}
 
 \begin{note}{Which machine is which}
-The two behaviours are selected by a hardware input read once at power-on; the program
-names neither model. The identification does not depend on that, because Technics
+Because the ROMs are identical, the difference between the two models is not a firmware
+difference at all. Both behaviours are present in every machine, and a hardware input read
+once at power-on selects between them; the program names neither model. The identification does not depend on that, because Technics
 published the answer: the field table gives \textsc{md}~=~\bytes{00} for the SX-WSA1 and
 \bytes{01} for the SX-WSA1R, and the machine that reads the second value is the one that
 transmits \bytes{01}.
