@@ -13,7 +13,7 @@ pdflatex wsa1r-system-exclusive-reference.tex
 pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
 ```
 
-29 pages. Needs only a standard TeX Live.
+30 pages. Needs only a standard TeX Live.
 
 ## Files
 
@@ -33,6 +33,8 @@ pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of cont
 | `tbl-parameters.tex` | **generated** — the 108-parameter tables |
 | `sec-models.tex` | the two features the rack does not support |
 | `sec-family.tex` | what the SX-KN5000 and SX-KN1500 share and do not |
+| `sec-examples.tex` | worked messages, byte by byte |
+| `tbl-examples.tex` | **generated** — the example bytes |
 | `sec-limitations.tex` | what this edition does not cover |
 
 ## Regenerating the parameter tables
@@ -41,6 +43,12 @@ pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of cont
 
 ```sh
 python3 ../../notes/sysex-probes/sysex_param_table_tex.py tbl-parameters.tex
+```
+
+`tbl-examples.tex` is generated the same way:
+
+```sh
+python3 ../../notes/sysex-probes/sysex_examples_tex.py tbl-examples.tex
 ```
 
 It reads the addresses from `sysex_param_addresses.py` and the names from

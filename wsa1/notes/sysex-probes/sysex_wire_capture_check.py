@@ -20,8 +20,13 @@ QUESTION THIS ANSWERS
       * that every payload byte is a nibble, i.e. < 0x10, high nibble first.
 
 THE CAPTURE
-    SND_CMBI.syx -- a SOUND + COMBINATION bulk dump, 728254 bytes, 2883
-    messages.  It is not committed here (it is a regenerable capture, not a
+    SND_CMBI.syx -- 728254 bytes, 2883 messages.  Its name says SOUND and
+    COMBINATION, but it is a THREE-category session: it opens with
+    SYSTEM,PART & MIDI (both blocks), then SOUND, then COMBINATION (both
+    blocks) -- five of the eight blocks, three enquiries, three
+    end-of-category messages and one end-of-dump.  The SYSTEM,PART & MIDI
+    block matters: it is the one the parameter chapter maps, so the capture
+    can be read against that table directly.  It is not committed here (it is a regenerable capture, not a
     ROM), and it is not ours: it ships inside the community archive
     KN7000/WSA1R_files/SND_CMBI_syx.zip.
 
