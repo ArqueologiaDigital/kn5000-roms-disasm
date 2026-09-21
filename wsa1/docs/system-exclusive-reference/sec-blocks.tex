@@ -212,7 +212,47 @@ one of their fields is named by chapter~\ref{ch:params}, because they are the sa
 records --- which puts 2\,400 of a song record's 3\,072 bytes under names this reference
 already carries.
 
-The 544 bytes ahead of the stream and the 128 after it are not covered.
+\paragraph{The 544 bytes ahead of the stream.} Nine of the ten records are identical, so
+every byte a song writes is a byte where the recorded one differs, and there are 113 of
+them in this region. Read that way it lays out as follows. Fields marked
+\emph{unused}~$=$ carry that value in an empty record.
+
+\begin{center}
+\begin{tabular}{llp{74mm}}
+\toprule
+at & size & \\
+\midrule
+\bytes{+000} & 4  & signature \bytes{5A 5A 5A 5A} \\
+\bytes{+004} & 1  & \bytes{01} in the recorded song, \bytes{00} in all nine empty ones \\
+\bytes{+023} & 16 & a ramp \bytes{01}--\bytes{0F} then \bytes{20} \\
+\bytes{+034} & 16 & the same ramp again \\
+\bytes{+07E} & 34 & 17 entries of 2 bytes, unused $=$ \bytes{FF FF} \\
+\bytes{+0A0} & 17 & 17 entries of 1 byte, unused $=$ \bytes{05} \\
+\bytes{+0CA} & 6  & the song \textsc{name} \\
+\bytes{+100} & 51 & 17 entries of 3 bytes, unused $=$ \bytes{00 FF FF}; in use the first
+                    byte reads \bytes{80} and the other two are a 16-bit value \\
+\bytes{+134} & 204 & 51 entries of 4 bytes, identical in all ten records \\
+\bytes{+200} & 7  & a second signature, \bytes{5A 5A 01 00} then \bytes{WA0} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The three tables are the part worth trusting, because they corroborate each other: they
+are at different offsets, they mark an unused entry three different ways, and all three
+are \textbf{seventeen} entries long. One such count would be an accident of where a reader
+chose to stop; three agreeing is a structure. In the recorded song every one of the
+seventeen \bytes{+100} entries is in use, and the last ten of their 16-bit values run
+consecutively --- which is what a block allocator handing out consecutive blocks looks
+like, though this reference does not decode what they index.
+
+The instrument's own help text names three special tracks besides the melody ones ---
+\textsc{rhythm}, \textsc{chord} and \textsc{control} --- so a per-track reading of these
+tables is the natural one. It is not established here, and the seventeen is a measurement
+while the reading is not.
+
+\paragraph{The 128 bytes after it.} \bytes{+B80} to the end is identical in all ten
+records, recorded and empty alike, and is almost entirely zero. Nothing a song does
+touches it.
 
 \subsection{PERFORMANCE}
 

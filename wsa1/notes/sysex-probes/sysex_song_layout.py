@@ -117,6 +117,54 @@ assert R[2:] == [R[1]] * (SONGS - 2), "the empty songs are not all identical"
 print("  songs 1..9 are byte-identical; song 0 is the recorded one, differing in %d bytes"
       % sum(1 for a in range(SONG) if R[0][a] != R[1][a]))
 
+# ---- the header, read as the difference between the recorded song and the
+# nine identical empty ones.  Every byte that differs is a byte a song writes.
+U, E = R[0], R[1]
+print("\nTHE HEADER, +0x000..+0x%03X" % (STREAM - 1))
+assert U[:4] == b"\x5A" * 4
+print("  +000  4  signature 5A 5A 5A 5A")
+assert U[4] == 1 and all(R[i][4] == 0 for i in range(1, SONGS)), \
+    "+004 is not 1 in the recorded song and 0 in every empty one"
+print("  +004  1  1 in the recorded song, 0 in all %d empty ones" % (SONGS - 1))
+
+RAMP = bytes(range(1, 16)) + b"\x20"
+for at in (0x23, 0x34):
+    assert U[at:at + 16] == RAMP, "the ramp at +%02X has changed" % at
+print("  +023 16  a ramp 01..0F then 20 -- and +034 carries the same ramp again")
+
+# three tables of the SAME length, each with its own unused marker.  That they
+# agree on seventeen is the evidence; no one of them would be worth much alone.
+TABLES = [(0x07E, 2, b"\xFF\xFF"), (0x0A0, 1, b"\x05"), (0x100, 3, b"\x00\xFF\xFF")]
+counts = []
+for at, w, unused in TABLES:
+    n = 0
+    while E[at + n * w: at + (n + 1) * w] == unused:
+        n += 1
+    counts.append(n)
+    print("  +%03X %2d  %d entries of %d, unused = %s"
+          % (at, n * w, n, w, " ".join("%02X" % c for c in unused)))
+assert counts == [17, 17, 17], \
+    "the three header tables no longer agree on seventeen: %r" % counts
+print("  -> three tables, three different unused markers, all SEVENTEEN entries")
+used = [U[0x100 + i * 3] for i in range(17)]
+assert set(used) == {0x80}, "the recorded song does not mark all 17 entries in use"
+print("     in the recorded song all seventeen of the +100 entries read 80 and")
+print("     carry a 16-bit value; the last ten of those run consecutively")
+assert U[0xCA:0xD0] == R[1][0xCA:0xD0], "the name field moved"
+print("  +0CA  6  NAME")
+assert U[0x200:0x207] == b"\x5A\x5A\x01\x00WA0", "the second signature changed"
+print("  +200  7  a second signature, 5A 5A 01 00 then 'WA0'")
+
+TAIL = 0xB80
+assert all(R[i][TAIL:] == R[1][TAIL:] for i in range(SONGS)), "the tail varies"
+print("\n  the last %d bytes, +%03X onwards, are identical in all %d records"
+      % (SONG - TAIL, TAIL, SONGS))
+d_hdr = sum(1 for i in range(STREAM) if U[i] != E[i])
+d_str = sum(1 for i in range(STREAM, TAIL) if U[i] != E[i])
+print("  a recorded song differs from an empty one in %d header bytes and %d"
+      % (d_hdr, d_str))
+print("  stream bytes, and in none of the tail")
+
 print("\nTHE RECORD STREAM, from +0x%03X" % STREAM)
 segs, o = [], STREAM
 while o < SONG:

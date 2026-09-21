@@ -1741,8 +1741,21 @@ that does not survive: across the whole file the longest run of `90` bytes six a
 **one**. The probe asserts that, so nobody re-derives the wrong shape from the first 64
 bytes — which is exactly what happened while writing it.
 
-⚠ Still uncovered: the 544 bytes ahead of the song stream, the 128 after it, and the event
-encoding.
+★★ **The 544-byte header is laid out too**, read as the difference between the recorded
+song and the nine identical empty ones (113 differing bytes). Signature `5A 5A 5A 5A`;
+`+004` is 1 recorded / 0 empty; a ramp `01..0F,20` at `+023` and again at `+034`; the name
+at `+0CA`; a second signature `5A 5A 01 00 'WA0'` at `+200`.
+
+★★★ **Three tables corroborate each other.** At `+07E` (17×2, unused `FF FF`), `+0A0`
+(17×1, unused `05`) and `+100` (17×3, unused `00 FF FF`) — different offsets, three
+different unused markers, and all three **seventeen** entries long. One such count is where
+a reader chose to stop; three agreeing is a structure. The probe asserts all three.
+
+The 128-byte tail from `+B80` is identical in all ten records.
+
+⚠ Still uncovered: what those tables *mean* (a per-track reading is natural — the firmware
+names Rhythm, Chord and Control as special tracks — and is **not** established here), and
+the event encoding.
 
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_song_layout.py
