@@ -11,9 +11,11 @@ models. The following are not covered.
 \item[Two byte-packing tables.] Section~\ref{sec:conversions} gives sixteen of the
   guide's eighteen data tables. The two left out describe how two fields share a single
   byte, for the parametric equaliser and the exciter.
-\item[Two block layouts.] The \textsc{sound} and \textsc{combination} blocks are laid
-  out in chapter~\ref{ch:blocks}, down to the record level. What a combination part holds
-  beyond its sound's name, and how a stored sequence is arranged, are not covered.
+\item[Inside a combination part, and the SEQUENCER block.] Chapter~\ref{ch:blocks} takes
+  the \textsc{sound} and \textsc{combination} blocks down to the record level. What the 704
+  bytes of a combination part hold beyond the name is in no published table --- the
+  guide's own stop at the drum sound --- and would have to be decoded. How a stored
+  sequence is arranged is likewise not covered.
 \item[The SEQUENCER category, against hardware.] Its protocol is described, but the
   capture used to check everything else came from a rack, which cannot send it. Closing
   this needs one transfer from an SX-WSA1 keyboard. See chapter~\ref{ch:overview}.

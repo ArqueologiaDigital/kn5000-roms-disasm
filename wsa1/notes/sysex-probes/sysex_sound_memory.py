@@ -109,6 +109,7 @@ def all_blocks(buf):
 
 
 COMB_SIZE, COMB_PARTS, PART_SIZE = 5632, 8, 704
+SND = [None]          # the SOUND block, for the part-name cross-check
 
 
 def strides():
@@ -140,6 +141,26 @@ def check_combinations(blocks, printable_in):
     print("  %d of %d parts carry a 16-character name two bytes in"
           % (named, n * COMB_PARTS))
     assert named == n * COMB_PARTS, "some parts have no name where one is expected"
+
+    # The part names do NOT resolve against the sounds in the same dump.
+    stored = set()
+    for b in range(4):
+        a = b * BANK + NORMAL_AT[b]
+        k = 0
+        while printable_in(SND[0], a + k * 713, NAME_NORMAL):
+            stored.add(SND[0][a + k * 713:a + k * 713 + NAME_NORMAL]
+                       .decode("latin1").strip())
+            k += 1
+    hit = 0
+    for c in range(n):
+        for part in range(COMB_PARTS):
+            o = c * COMB_SIZE + part * PART_SIZE + 2
+            if c2[o:o + NAME_NORMAL].decode("latin1").strip() in stored:
+                hit += 1
+    print("  %d of %d part names occur in this dump's %d stored sounds"
+          % (hit, n * COMB_PARTS, len(stored)))
+    assert hit == 0, "some part names now resolve against sound memory"
+    print("  -- so a part names a PRESET sound, not one carried by the same dump")
 
     at = len(c1) - n * NAME_NORMAL
     names = [c1[at + i * NAME_NORMAL: at + (i + 1) * NAME_NORMAL] for i in range(n)]
@@ -201,6 +222,7 @@ def main():
         at = 0 * BANK + NORMAL_AT[0]
         assert run(at, wrong, NAME_NORMAL) < 4, \
             "a stride of %d also produces a run; the test does not discriminate" % wrong
+    SND[0] = snd
     check_combinations(blocks, lambda b, o, n: len(b[o:o+n]) == n
                        and all(32 <= c < 127 for c in b[o:o+n]))
 

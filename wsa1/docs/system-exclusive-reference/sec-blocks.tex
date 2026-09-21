@@ -66,10 +66,19 @@ that part's sound name & $+$ 2 & sixteen characters \\
 The combinations' own names are the last 256 bytes of the smaller
 \textsc{combination} block, sixteen of sixteen characters.
 
-\begin{caution}{A combination part is not a stored sound}
-704 is not 713. A part is the same size for every part and carries a sound's name, but it
-is not the sound record of section~\ref{sec:soundmemory}, and what the rest of it holds is
-not covered here.
+\begin{caution}{A part names a preset, and is not itself a stored sound}
+704 is not 713, and a part is not the sound record of section~\ref{sec:soundmemory}: the
+parameters of chapter~\ref{ch:sound} do not land in range when read at any obvious offset
+into a part.
+
+Nor does a part's name resolve against the sound memory in the same dump. Of 128 part
+names in a real transfer, \textbf{none} matched any of the 259 sounds that transfer
+carried --- they name preset sounds. A librarian should not expect to follow a
+combination's parts into the \textsc{sound} block it arrived with.
+
+What the rest of a part holds is not covered here, and the published guide does not give
+it either: its parameter tables cover \textsc{system}, \textsc{part}, \textsc{normal
+sound} and \textsc{drum sound}, and stop.
 \end{caution}
 
 \begin{note}{How this was established, and why it is not a coincidence}
