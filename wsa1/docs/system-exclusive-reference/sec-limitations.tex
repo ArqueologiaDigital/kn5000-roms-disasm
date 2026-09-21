@@ -17,7 +17,7 @@ and \textsc{combination} blocks a dump carries.
 
 \section{Open, and what would close it}
 \begin{description}
-\item[Three bytes inside a combination.] The combination stream is decoded in
+\item[What three inert bytes are for.] The combination stream is decoded in
   section~\ref{sec:combmemory}, and chapter~\ref{ch:params} names most of what its
   records hold; the effect records are named by chapter~\ref{ch:effects} instead. What was
   left over has been read across the whole stored corpus --- 385 combinations of eight
@@ -78,8 +78,9 @@ and \textsc{combination} blocks a dump carries.
 
   So these three bytes are carried in stored data and copied wholesale, and no code treats
   them as fields. For a librarian that is actionable --- preserve them, do not compute
-  them --- which makes it a closed question rather than an open one, even though the bytes
-  still have no name.
+  them. What remains open is only what they are \emph{for}, and since no code on this
+  processor reads them the answer is not in this program; the obvious place to look next is
+  the second processor.
 
   Also open: which side of the indirection the triple holds --- what the part asked for,
   or what it resolved to. Eight of the nine re-maps in the corpus are identity maps, so
