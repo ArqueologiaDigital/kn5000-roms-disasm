@@ -1935,3 +1935,34 @@ python3 wsa1/notes/sysex-probes/sysex_performance_stream.py
 Pass: 17 disjoint chains totalling 560 blocks, zero stray bytes, the per-status lengths,
 the offset ordering beating its shuffled control, and 16 entries naming themselves with the
 control at 0, `OK`.
+
+### `sysex_conductor_events.py`
+
+**Question:** what do the seventeenth stream's two events say?
+
+An earlier edition said naming them needed more songs — "one song is two events". ★ **That
+was the wrong place to look.** The playback routine has to dispatch on those statuses, and
+it does, in a compare chain that also covers `90`, `B0`, `C0`, `D0`, `D1`, `D3`.
+
+★★★ **`80` is the TEMPO**, on five strands, none of them proximity:
+
+1. Its handler writes a 16-bit value into record `7A` `+00` — identified by the record tag
+   the handler itself passes to the publish routine, not by guessing.
+2. Another writer of the same address is a reset path storing the literal **`0x0078` = 120**.
+3. A display routine reads it as a **nine-bit** quantity and formats it as a number. A
+   tempo needs nine bits; a byte will not hold 300.
+4. The **transmitter** is in the image too, and the probe re-implements its 7+2 split.
+5. Round trip: stored `80 00 16 01` → handler's arithmetic → **150** → transmitter's split
+   → `80 00 16 01`. **Byte for byte, through two independent pieces of code.**
+
+⚠ **`87` is NOT named.** Its handler puts a 7-bit value in a mailbox whose top bit means
+"changed"; the consumer clears it, **adds one**, and distributes the result; the
+transmitter subtracts one again. Stored 3 → internal 4. A per-song time signature fits the
+arithmetic and the help text — and fitting is not being shown, so the reference says so.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_conductor_events.py
+```
+
+Pass: the dispatch compares present, `80`/`87` tested together, the 120 literal in place,
+and the round trip reproducing the stored bytes, `OK`.

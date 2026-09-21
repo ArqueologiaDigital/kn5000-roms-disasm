@@ -24,17 +24,17 @@ and \textsc{combination} blocks a dump carries.
   never reads has no purpose the program can reveal, so if those three ever meant
   something it was to a version of the firmware that is not in any archive here --- which
   makes this the same wall as the next item and not a separate one.
-\item[What the seventeenth stream's two events say.] Section~\ref{sec:seqmemory} decodes
-  \textsc{performance}: 256-byte blocks numbered from one, chained by a 16-bit link at
-  \bytes{+03}, carrying a flat event stream. It establishes that entry $i$ of a song
-  header is track $i$, and shows the seventeenth stream to be a timekeeper --- 999 events
-  of which 997 are the clock, sharing no status with the sixteen recording tracks in
-  either direction.
+\item[One event of one kind.] Section~\ref{sec:seqmemory} decodes
+  \textsc{performance}, establishes that entry $i$ of a song header is track $i$, shows the
+  seventeenth stream to be a timekeeper, and names the first of its two events: \bytes{80}
+  is the tempo, on a round trip through the instrument's own encoder and decoder that
+  reproduces the stored bytes exactly.
 
-  It carries two other events, of kinds that appear nowhere else. What they mean is not
-  established, and the limit here is the corpus rather than the method: one song is two
-  events. A handful of recordings, or one made deliberately with a known tempo and time
-  signature, would name them in an afternoon.
+  The second, \bytes{87}, carries one 7-bit value that the instrument stores with one added
+  to it. What that value \emph{is} is the last thing about the sequencer this reference
+  does not say. A per-song time signature fits the arithmetic and fits what the
+  instrument's help text says about time signatures, and this reference declines to promote
+  a fit. One recording made with a deliberately unusual time signature would settle it.
 \item[Operating system version 1.] Everything here describes version 2.0. Closing this
   needs a dump of the earlier firmware, and there is not one to be had. The archive this
   project works from carries a single firmware set, whose own accompanying note calls

@@ -337,8 +337,29 @@ clock}, plus exactly two others, whose statuses --- \bytes{80} and \bytes{87} --
 none of the sixteen.
 
 So the seventeen streams are the sixteen recording tracks Technics publishes plus one that
-only keeps time. What its two events mean is not established here: the values they carry
-appear nowhere in the song header to be checked against.
+only keeps time.
+
+\paragraph{Its two events.} \bytes{80} is the \textbf{tempo}. The playback routine
+dispatches on it, and its handler writes a 16-bit value into record \bytes{7A} --- passing
+that record's own tag to the routine that publishes a record, which is how the record is
+identified rather than guessed --- at \bytes{+00}, two bytes below the \bytes{+02} the
+parameter map already names. A reset path writes the literal \textbf{120} to the same
+place, which is every sequencer's default tempo. A display routine reads it as a
+\emph{nine}-bit quantity and hands it to number formatting, and nine bits is what a tempo
+needs and a byte is not.
+
+The transmitter for the event is in the program too, and it settles the encoding: it emits
+\bytes{80}, the offset, then the nine bits as seven plus two. Running the handler's
+arithmetic on the stored event and the transmitter's arithmetic back again reproduces the
+stored bytes exactly, and the value between them is \textbf{150}.
+
+\bytes{87} is a song-level setting and is not named here. Its handler puts a 7-bit value
+into a one-byte mailbox whose top bit means ``changed''; the consumer clears that bit, adds
+one, and distributes the result, and the transmitter subtracts one again. The stored value
+in this song is 3, so the instrument's own is 4. A per-song time signature --- which the
+instrument's help text says cannot be changed once tracks exist, so it would be written
+once at the head of a conductor track, where this one sits --- fits that arithmetic. Fitting
+is not the same as being shown, and this reference does not claim it.
 
 \paragraph{The 128 bytes after it.} \bytes{+B80} to the end is identical in all ten
 records, recorded and empty alike, and is almost entirely zero. Nothing a song does
