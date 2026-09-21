@@ -888,8 +888,11 @@ Both load bases are asserted by content first: prom_b must hold
   builder is called from `sub_FB590A`, which `UiListA_Class91` (`0xF87B02`)
   names as the ONLY handler of internal event class `0x91` — the class the
   receive handlers, the panel toggle, the boot restore and the SMF loader
-  all post. It is NOT gated by the EXCLUSIVE transmit filter
-  (`(0x7F38)` bit 3), which guards only `sub_FB4B7D`.
+  all post — 20 sites in all, every one of them carrying the same record id
+  `0x91` and byte index `0x03`. It is NOT gated by the EXCLUSIVE transmit
+  filter (`(0x7F38)` bit 3), which guards only `sub_FB4B7D`; it IS dropped
+  while `sub_FB590A` is already inside itself (bit 0 of `(0x60F01F)`,
+  set at `0xFB5929` and cleared at `0xFB5958`).
 * **★★★ Where GM sits in a dump.** `sub_FB75E4` sizes SYSTEM,PART & MIDI
   part 2 from the constants `0x7620` and `0x7F7E`; the same two bound the
   record walk at `0xFAAAD4`/`0xFAAADA`, whose stride is
