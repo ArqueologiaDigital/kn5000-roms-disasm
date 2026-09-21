@@ -1725,7 +1725,17 @@ different source**: the first stream's `(tag, length)` list must equal `SHAPE` i
 `sysex_combination_layout.py`, which was derived from the instrument's own uploads.
 Agreement is not something this script can arrange for itself.
 
-⚠ Still uncovered: the 544 bytes ahead of the stream, the 128 after it, and `PERFORMANCE`.
+It also characterises the companion `.SEQ` (179 200 bytes), which is `PERFORMANCE`: not a
+fixed-size record array, commonest bytes `00`/`81`/`90`, and `90` is MIDI note-on, so it is
+an event stream.
+
+⚠ **The event framing is NOT decoded.** The opening bytes look like six-byte records and
+that does not survive: across the whole file the longest run of `90` bytes six apart is
+**one**. The probe asserts that, so nobody re-derives the wrong shape from the first 64
+bytes — which is exactly what happened while writing it.
+
+⚠ Still uncovered: the 544 bytes ahead of the song stream, the 128 after it, and the event
+encoding.
 
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_song_layout.py

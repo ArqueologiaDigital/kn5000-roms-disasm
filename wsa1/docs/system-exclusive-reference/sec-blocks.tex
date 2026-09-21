@@ -212,8 +212,25 @@ one of their fields is named by chapter~\ref{ch:params}, because they are the sa
 records --- which puts 2\,400 of a song record's 3\,072 bytes under names this reference
 already carries.
 
-The 544 bytes ahead of the stream and the 128 after it are not covered. Neither is
-\textsc{performance}, the recorded material itself.
+The 544 bytes ahead of the stream and the 128 after it are not covered.
+
+\subsection{PERFORMANCE}
+
+The same disk set carries a companion file of 179\,200 bytes, which is everything the
+fixed-size song records are not --- so it is the recorded material, the
+\textsc{performance} block. That correspondence comes from how the disk splits the
+sequencer and not from anything in the program, and it is the one claim here that rests
+on an inference rather than a decode.
+
+What can be said about it is deliberately little. It is not an array of fixed-size
+records: no power-of-two chunking of the file leaves a single chunk empty, and its last
+byte is not padding. Its commonest bytes are \bytes{00} at 16.1\,\%, \bytes{81} at
+14.6\,\% and \bytes{90} at 9.9\,\%, and \bytes{90} is MIDI note-on, so the stream is
+events rather than a table. The event framing is \emph{not} decoded here. The opening
+bytes look like six-byte records and that does not survive contact with the rest of the
+file --- across 179\,200 bytes the longest run of \bytes{90} bytes six apart is one.
+Anyone continuing this should start from the playback routine rather than from the
+pattern the first few events appear to make.
 
 \begin{note}{Reassembly is self-checking}
 A block reassembled correctly comes out at exactly the length its own header declared. A

@@ -50,6 +50,7 @@ PASS CRITERION
   is not something this script can arrange for itself.
 """
 import hashlib, io, os, sys, zipfile, contextlib
+from collections import Counter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -60,6 +61,7 @@ ZIP = "/home/fsanches/compartilhado/KN7000/WSA1R_files/GJS1.zip"
 ZIP_SHA = "c098228819824593d0f426eb053625fa70ac582c3fe29727564544d4d9979524"
 MEMBER = "GJS1/01220497.SQF"
 SQF_SHA = "9c5ebf768110d7c11bf5f4241db2a984e217fbf5b2b4c7706b57ef46b0dda886"
+SEQ_MEMBER = "GJS1/01220497.SEQ"
 
 SONG = 3072
 SONGS = 10
@@ -148,5 +150,36 @@ print("\n  %d of a song record's %d bytes are records this reference already nam
       % (covered, SONG))
 print("  the %d bytes before +0x%03X, and the %d after the last terminator, are not"
       % (STREAM, STREAM, SONG - STREAM - covered))
+
+# ---- the companion file, which is the recorded material
+with zipfile.ZipFile(ZIP) as z:
+    seq = z.read(SEQ_MEMBER)
+print("\n%s -- %d bytes" % (SEQ_MEMBER, len(seq)))
+print("  the disk set splits the sequencer the way the transfer does: this file is")
+print("  everything the fixed-size song records are not, so it is PERFORMANCE.")
+print("  That correspondence is inferred from the split, not read out of a program.")
+
+counts = Counter(seq)
+print("  it is not an array of fixed-size records: no power-of-two chunking leaves")
+print("  any chunk empty, and the last byte is non-zero, so all of it is in use")
+for sz in (0x400, 0x800, 0x1000, 0x2000):
+    empty = sum(1 for i in range(0, len(seq), sz)
+                if not any(seq[i:i + sz]))
+    assert empty == 0, "a %d-byte chunk is empty after all" % sz
+assert seq[-1] != 0, "the file ends in padding"
+
+top = counts.most_common(3)
+print("  commonest bytes: %s"
+      % ", ".join("0x%02X %.1f%%" % (v, 100.0 * n / len(seq)) for v, n in top))
+assert [v for v, _ in top] == [0x00, 0x81, 0x90], "the byte profile has changed"
+print("  0x90 is MIDI note-on and the stream is full of it, but the event framing")
+print("  is NOT decoded here: the six-byte spacing the opening bytes suggest does")
+print("  not survive -- the longest run of 0x90 bytes six apart is one.")
+run = best = 0
+for i in range(len(seq) - 6):
+    run = run + 1 if seq[i] == 0x90 and seq[i + 6] == 0x90 else 0
+    best = max(best, run)
+assert best <= 2, "the stream is periodic after all -- re-open this"
+print("  longest such run: %d" % best)
 
 print("\nOK")

@@ -78,8 +78,10 @@ and \textsc{combination} blocks a dump carries.
   decodes 2\,400 of a song record's 3\,072 bytes, from a native sequencer file off a disk:
   they are the same tagged records a combination is built from, so
   chapter~\ref{ch:params} names their fields. What is left is the 544 bytes ahead of that
-  stream, the 128 after it, and \textsc{performance} --- the recorded material, whose
-  length varies and which nothing here describes. A \textsc{sequencer} transfer from an
+  stream, the 128 after it, and the event encoding of \textsc{performance}.
+  Section~\ref{sec:seqmemory} now characterises that block from a real file --- an event
+  stream, not a record array --- but does not decode its framing, and the six-byte shape
+  its opening events suggest is shown there to be an artefact of the first few. A \textsc{sequencer} transfer from an
   SX-WSA1 keyboard would still be the natural way to put that category's frame-level
   behaviour beyond doubt, since the rack refuses it.
 \item[Operating system version 1.] Everything here describes version 2.0. Closing this
