@@ -185,11 +185,18 @@ def check_combinations(blocks, printable_in):
     idx_ok = all(c2[c * COMB_SIZE + p * PART_SIZE + PART_HEAD + k * PART_REC] == k
                  for c in range(n) for p in range(COMB_PARTS)
                  for k in range(PART_RECS))
+    # the index appears a second time, in the low nibble of byte 15
+    idx2 = all((c2[c * COMB_SIZE + p * PART_SIZE + PART_HEAD + k * PART_REC + 15]
+                & 0x0F) == k
+               for c in range(n) for p in range(COMB_PARTS)
+               for k in range(PART_RECS))
+    assert idx2, "byte 15's low nibble is no longer the slot index"
     print("  a part is %d bytes of header, %d records of %d, then %d bytes"
           % (PART_HEAD, PART_RECS, PART_REC, PART_REC))
     print("  every record's bytes 23-31 are zero in all %d parts%s"
           % (n * COMB_PARTS,
-             ", and each begins with its own index" if idx_ok else ""))
+             ", and each carries its index twice, in byte 0 and in the low"
+             " nibble of byte 15" if idx_ok else ""))
     assert idx_ok, "the records no longer begin with their index"
 
     print("  the %d combination names are the last %d bytes of the smaller block,"

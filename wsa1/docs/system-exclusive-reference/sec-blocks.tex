@@ -69,8 +69,9 @@ The combinations' own names are the last 256 bytes of the smaller
 \subsection*{Inside a part}
 A part divides further, and the division is visible in the dump: a 128-byte header, then
 \textbf{eight records of 64 bytes}, then a 64-byte tail --- $128 + 8\times64 + 64 = 704$.
-Each record begins with its own index, \bytes{00} to \bytes{07}, and in every one of the
-128 parts examined its bytes 23 to 31 are zero, which is what fixes the 64-byte stride.
+Each record carries its own index \emph{twice} --- in its first byte, and in the low
+nibble of its sixteenth --- and in every one of the 128 parts examined its bytes 23 to 31
+are zero. Those are what fix the 64-byte stride.
 
 \begin{center}
 \begin{tabular}{lll}
@@ -84,9 +85,14 @@ tail & \bytes{280} & 64 bytes \\
 \end{tabular}
 \end{center}
 
-What those eight records are is not established. The instrument gives a part eight things
-of which there are exactly eight --- four tones and four modeling blocks --- but that is a
-coincidence of counting until something confirms it.
+What those eight records are is not established. They behave like uniform slots rather
+than two groups of four: adjacent records resemble each other most, and the resemblance
+rises steadily toward the higher indices, where consecutive records differ in only a byte
+or two. A part with little in it leaves the upper slots at a common default.
+
+The instrument gives a part eight things of which there are exactly eight --- four tones
+and four modeling blocks --- but that is a coincidence of counting until something
+confirms it, and the similarity gradient argues against it.
 
 \begin{caution}{A part names a preset, and is not itself a stored sound}
 704 is not 713, and at the offsets the name suggests --- 0, 2 or 3 --- the parameters of
