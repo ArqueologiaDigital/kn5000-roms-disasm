@@ -34,8 +34,10 @@ and \textsc{combination} blocks a dump carries.
   SX-WSA1 keyboard would be the natural way in, and would also put that category's
   frame-level behaviour beyond doubt.
 \item[Operating system version 1.] Everything here describes version 2.0. Closing this
-  needs a dump of the earlier firmware, which this project does not have --- but a reader
-  can establish what they are holding two ways without one.
+  needs a dump of the earlier firmware, which this project does not have. This version
+  carries no sign of the earlier one: a search of all three program images turns up no
+  conversion path and no compatibility text, and nothing compares the version byte a
+  block carries. A reader can nonetheless establish what they are holding, two ways.
 
   Over MIDI: \textsc{ver}, the sixth byte of any message that carries it, is \bytes{11}
   here --- exclusive specification 2.1. A machine speaking a different version announces
