@@ -1661,3 +1661,31 @@ python3 wsa1/notes/sysex-probes/sysex_unnamed_bytes.py
 Pass: a planted copy of `PANPOT` is found and a planted arithmetic column is not — without
 both, "no copy found" would be worthless. The reserved sets, the triple's widths, the user
 -data usage and the equaliser invariant are all asserted, `OK`.
+
+### `sysex_firmware_generation.py`
+
+**Question:** which generation of the firmware is the reference read from — measured
+against a Technics document rather than against the ROM's own account of itself?
+
+Technics issued a one-page multilingual erratum, `QQCG0279A`, whose single change renames
+the second soft key of the `SOUND MODE` home screen from `VOL` to `LVL` and makes it adjust
+the level relative to the current value, −30 to +30. **The dumped firmware already carries
+the new caption**, so it post-dates that erratum. That is an external date for the dump;
+the `ROM VERSION` screen only reports what the ROM says about itself.
+
+★ The rename reached **one screen out of two**. The image holds four soft-key rows of this
+shape: the two whose last key is `MIDI` — the screen the erratum photographs — read `LVL`,
+and the two whose last key is `PART` still read `VOL`.
+
+⚠ **An earlier draft of this probe asserted that no row says `VOL`, and the assertion
+caught it.** The rows are therefore parsed whole and counted, not grepped: a bare search
+for `VOL` hits `VOLUME` fourteen times in this image and would settle nothing. The probe
+also checks that every row of the shape is accounted for, which is what turns "the rename
+landed on one screen" from an impression into a count.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_firmware_generation.py
+```
+
+Pass: exactly two rows of each form, all four rows of the shape accounted for, the erratum
+scan matching its hash and confirmed image-only, `OK`.
