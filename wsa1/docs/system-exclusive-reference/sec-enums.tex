@@ -1,0 +1,81 @@
+\chapter{Enumerations}\label{ch:enums}
+
+Three lists in chapter~\ref{ch:sound} are referred to rather than spelled out where they
+are used, because each is shared by many parameters. They are given here.
+
+\section{Control functions}\label{sec:controlfn}
+Every controller in a sound --- the pitch bend lever, the two modulation wheels, the
+control pedal, after touch, and the six controller boxes in each axis --- is three bytes:
+an on/off and phase byte, a \textsc{function select} byte, and a depth. The
+\textsc{function select} byte chooses what the controller moves, from this list.
+
+\begin{center}
+{\small
+\begin{tabular}{llll}
+\toprule
+\bytes{00} & \textsc{off}                     & \bytes{1A} & filter LFO3 speed \\
+\bytes{01} & pitch bend                       & \bytes{1B} & filter LFO4 speed \\
+\bytes{02} & sustain level                    & \bytes{1C} & fitting$^\ast$ \\
+\bytes{03} & filter cutoff frequency          & \bytes{1D} & position \\
+\bytes{04} & pitch LFO1 depth                 & \bytes{1E} & position depth \\
+\bytes{05} & pitch LFO2 depth                 & \bytes{1F} & (reserve) \\
+\bytes{06} & pitch LFO3 depth                 & \bytes{20} & position movement width \\
+\bytes{07} & pitch LFO4 depth                 & \bytes{21} & position movement speed \\
+\bytes{08} & amp LFO1 depth                   & \bytes{22} & (reserve) \\
+\bytes{09} & amp LFO2 depth                   & \bytes{23} & muting$^\ast$ \\
+\bytes{0A} & amp LFO3 depth                   & \bytes{24} & resonator key shift$^\ast$ \\
+\bytes{0B} & amp LFO4 depth                   & \bytes{25} & sub gain \\
+\bytes{0C} & filter LFO1 depth                & \bytes{26} & delay$^\ast$ \\
+\bytes{0D} & filter LFO2 depth                & \bytes{27} & panning$^\ast$ \\
+\bytes{0E} & filter LFO3 depth                & \bytes{28} & effect1 send$^\ast$ \\
+\bytes{0F} & filter LFO4 depth                & \bytes{29} & reverb send$^\ast$ \\
+\bytes{10} & pitch LFO1 speed                 & \bytes{2A} & level$^\ast$ \\
+\bytes{11} & pitch LFO2 speed                 & \bytes{2B} & amp env.\ attack time$^\ast$ \\
+\bytes{12} & pitch LFO3 speed                 & \bytes{2C} & amp env.\ decay time$^\ast$ \\
+\bytes{13} & pitch LFO4 speed                 & \bytes{2D} & amp env.\ release time$^\ast$ \\
+\bytes{14} & amp LFO1 speed                   & \bytes{2E} & filter resonance$^\ast$ \\
+\bytes{15} & amp LFO2 speed                   & \bytes{2F} & effect1 dynamic control \\
+\bytes{16} & amp LFO3 speed                   & \bytes{30} & effect2 dynamic control \\
+\bytes{17} & amp LFO4 speed                   & \bytes{31} & reverb dynamic control \\
+\bytes{18} & filter LFO1 speed                & \bytes{32}--\bytes{7F} & (reserve) \\
+\bytes{19} & filter LFO2 speed                &            & \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+$^\ast$ marked functions cannot be driven by after touch.
+
+\section{Filter values}\label{sec:filtervals}
+A tone's filter has four \textsc{value} bytes whose meaning depends on the filter mode
+selected for that tone.
+
+\begin{center}
+{\small
+\begin{tabular}{lllll}
+\toprule
+mode & \textsc{value1} & \textsc{value2} & \textsc{value3} & \textsc{value4} \\
+\midrule
+\textsc{lpf12} & cutoff frequency & resonance & EQ frequency & EQ gain, EQ range \\
+\textsc{hpf12} & cutoff frequency & resonance & EQ frequency & EQ gain, EQ range \\
+\textsc{lpf24} & cutoff frequency & resonance & --- & --- \\
+\textsc{hpf24} & cutoff frequency & resonance & --- & --- \\
+\textsc{bpf}   & low cutoff frequency & low resonance & high cutoff frequency & high resonance \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+Cutoff frequencies are \bytes{00}--\bytes{7F}. Resonance is \bytes{00}--\bytes{05}: in the
+12\,dB modes and \textsc{bpf} a step is 3\,dB, covering $-6$ to $9$\,dB; in the 24\,dB
+modes a step is 6\,dB, covering $-12$ to $18$\,dB. \textsc{eq gain} is
+\bytes{00}--\bytes{0E}, where \bytes{00} is silence and \bytes{01}--\bytes{0E} span $-6$ to
+$+6$\,dB, and the top bit of that same byte is \textsc{eq range}: \bytes{0} low,
+\bytes{1} high.
+
+\section{Interaction connect}
+Modeling parameter \bytes{228} sets how a sound's four resonators are connected --- none of
+them, the first pair, the second pair, both pairs, or all four together. The guide gives
+the resulting connection state of each of the four blocks for every setting; it is not
+reproduced here, and the parameter's own range, \bytes{00}--\bytes{03}, is in
+chapter~\ref{ch:sound}.

@@ -8,11 +8,10 @@ models. The following are not covered.
 \item[What the parameters do.] Chapter~\ref{ch:params} enumerates all 108 addresses of
   the \bytes{00} area with their name, length, bit mask, accepted values and position in a
   dump. It does not explain what each setting does to the sound; the user manuals do that.
-\item[The drum sound area.] \textsc{normal sound} is laid out in
-  chapter~\ref{ch:sound}; \textsc{drum sound} is reachable but not enumerated.
-\item[Three enumerations inside a sound.] The control-function list a controller chooses
-  from, the filter \textsc{value} bytes per filter mode, and the effect \textsc{value}
-  bytes per effect type. All three are in the published guide.
+\item[The effect parameters.] The twenty \textsc{value} bytes under each of
+  \textsc{effect1}, \textsc{effect2} and \textsc{reverb} mean different things for each
+  effect type. The published guide gives them, effect by effect, and this edition does not
+  reproduce them.
 \item[Block contents.] Chapter~\ref{ch:blocks} gives each block's signature and where its
   names are, but not how a stored sound, combination or sequence is arranged inside one.
   Chapter~\ref{ch:sound} lays out the sound being \emph{edited}, which is a different

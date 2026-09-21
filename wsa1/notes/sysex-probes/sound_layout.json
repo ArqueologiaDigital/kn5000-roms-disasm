@@ -1,138 +1,1551 @@
 {
-  "_comment": [
-    "Layout of the WSA NORMAL SOUND parameter area, transcribed from Technics'",
-    "published Reference Guide, pages 48-51 (image-only; the pages were rendered",
-    "and read). Consumed by sysex_sound_layout.py, which checks that the groups",
-    "tile the area exactly and that the totals match the firmware's own figure.",
-    "",
-    "'at'/'to' are parameter numbers in hex. A group repeats 'count' times at",
-    "'stride' bytes. Fields sharing one parameter number are listed as several",
-    "entries with the same 'at' and different 'bits'."
-  ],
-  "area": {"adr": "10 00 00", "address": 262144, "size": 713},
-  "groups": [
-    {"name": "GENERAL DATA", "at": "000", "to": "0D8", "count": 1, "stride": 0,
+ "_comment": [
+  "Layout of the WSA sound parameter areas, transcribed from Technics' published",
+  "Reference Guide (image-only pages, rendered and read). Consumed by",
+  "sysex_sound_layout.py, which checks that every block tiles its parent exactly",
+  "and that each area's total matches the size the firmware decode established.",
+  "",
+  "'at'/'to' are parameter numbers in hex, in the AREA's own frame -- for a",
+  "repeating block they describe its FIRST instance, and 'count'/'stride' place",
+  "the rest. Where the guide prints a repeating block as several columns side by",
+  "side, only the first column is transcribed and the others are derived from the",
+  "stride: the columns are vertically offset on the page, and reading them in",
+  "parallel is precisely how this transcription first went wrong."
+ ],
+ "areas": [
+  {
+   "name": "NORMAL SOUND",
+   "adr": "10 00 00",
+   "address": 262144,
+   "size": 713,
+   "blocks": [
+    {
+     "name": "GENERAL DATA",
+     "at": "000",
+     "to": "0D8",
+     "count": 1,
+     "stride": 0,
      "entries": [
-      {"at": "000", "to": "00F", "name": "NAME (16 characters)", "bits": "BP6~0", "range": "20-7F", "note": "space to }"},
-      {"at": "010", "name": "ATTRIBUTE FLAG: PARAMETER MODE", "bits": "BP7~6", "range": "00-00", "note": "0: NORMAL MODE, fixed"},
-      {"at": "011", "name": "TONE ON/OFF", "bits": "BP7~0", "range": "-", "note": "two bits per tone, 4th 3rd 2nd 1st"},
-      {"at": "012", "name": "KEY ON MODE", "bits": "BP7~0", "range": "-", "note": "per tone: 0 KEY ON, 1 KEY OFF, 2 LEGATO, 3 NON LEGATO"},
-      {"at": "013", "name": "KEY SCALING", "bits": "BP7~0", "range": "00-42", "note": "0 OFF, 1-22 octave, 64-66 all key"},
-      {"at": "014", "to": "016", "name": "CONTROLLERS: PITCH BEND", "bits": "-", "range": "-", "note": "on/off and phase, function select, depth"},
-      {"at": "017", "to": "019", "name": "MODULATION WHEEL 1 SELECT1", "bits": "-", "range": "-", "note": "same three bytes"},
-      {"at": "01A", "to": "01C", "name": "MODULATION WHEEL 1 SELECT2", "bits": "-", "range": "-", "note": ""},
-      {"at": "01D", "to": "01F", "name": "MODULATION WHEEL 2 SELECT1", "bits": "-", "range": "-", "note": ""},
-      {"at": "020", "to": "022", "name": "MODULATION WHEEL 2 SELECT2", "bits": "-", "range": "-", "note": ""},
-      {"at": "023", "name": "REALTIME CREATOR BOX SELECT", "bits": "BP6~0", "range": "-", "note": "bit per box, BOX1-BOX6"},
-      {"at": "024", "name": "REALTIME CONTROLLER BOX SELECT", "bits": "BP6~0", "range": "-", "note": "bit per box, BOX1-BOX6"},
-      {"at": "025", "to": "027", "name": "CONTROL PEDAL SELECT1", "bits": "-", "range": "-", "note": ""},
-      {"at": "028", "to": "02A", "name": "CONTROL PEDAL SELECT2", "bits": "-", "range": "-", "note": ""},
-      {"at": "02B", "to": "02D", "name": "AFTER TOUCH SELECT1", "bits": "-", "range": "-", "note": ""},
-      {"at": "02E", "to": "030", "name": "AFTER TOUCH SELECT2", "bits": "-", "range": "-", "note": ""},
-      {"at": "031", "to": "054", "name": "BOX SELECT: CONTROLLER BOX1 X through BOX6 Y", "bits": "-", "range": "-", "note": "twelve controllers, three bytes each, X then Y"},
-      {"at": "055", "name": "PITCH OCTAVE SHIFT", "bits": "BP3~0", "range": "06-0A", "note": "6 is -2 oct, 8 is 0, A is +2 oct"},
-      {"at": "056", "name": "(RESERVE)", "bits": "-", "range": "-", "note": ""},
-      {"at": "057", "to": "066", "name": "PITCH LFO BOX1-BOX4", "bits": "-", "range": "-", "note": "four bytes per box: depth, speed, key sync and touch depth, wave and delay"},
-      {"at": "067", "to": "076", "name": "LEVEL LFO BOX1-BOX4", "bits": "-", "range": "-", "note": "same four bytes per box"},
-      {"at": "077", "to": "086", "name": "FILTER LFO BOX1-BOX4", "bits": "-", "range": "-", "note": "same four bytes per box"},
-      {"at": "087", "name": "MIXER OUTPUT SELECT: MAIN, SUB", "bits": "BP3~0, BP7~4", "range": "00-05", "note": "0 no output, 1 MAIN, 2-4 SUB1-3, 5 EFFECT2"},
-      {"at": "088", "name": "EFFECT SEND VOLUME: EFFECT1", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "089", "name": "EFFECT SEND VOLUME: REVERB", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "08A", "name": "EFFECT OUTPUT SELECT: EFFECT1, EFFECT2", "bits": "BP3~0, BP7~4", "range": "01-04", "note": "1 MAIN, 2-4 SUB1-3"},
-      {"at": "08B", "name": "DSP EFFECT COMMON ALGORITHM", "bits": "BP0", "range": "00-01", "note": "0 SERIAL, 1 PARALLEL"},
-      {"at": "08C", "name": "EFFECT1 TYPE", "bits": "-", "range": "-", "note": "see the guide's DSP EFFECT pages"},
-      {"at": "08D", "to": "0A0", "name": "EFFECT1 PARAMETER VALUE1-VALUE20", "bits": "-", "range": "-", "note": "meaning depends on the type"},
-      {"at": "0A1", "name": "EFFECT1 ANOTHER EFF SEND", "bits": "-", "range": "-", "note": ""},
-      {"at": "0A2", "name": "EFFECT1 DYNAMIC CONTROL", "bits": "-", "range": "-", "note": ""},
-      {"at": "0A3", "name": "EFFECT2 TYPE", "bits": "-", "range": "-", "note": ""},
-      {"at": "0A4", "to": "0B7", "name": "EFFECT2 PARAMETER VALUE1-VALUE20", "bits": "-", "range": "-", "note": ""},
-      {"at": "0B8", "name": "EFFECT2 ANOTHER EFF SEND", "bits": "-", "range": "-", "note": ""},
-      {"at": "0B9", "name": "EFFECT2 DYNAMIC CONTROL", "bits": "-", "range": "-", "note": ""},
-      {"at": "0BA", "name": "REVERB TYPE", "bits": "-", "range": "-", "note": ""},
-      {"at": "0BB", "to": "0CE", "name": "REVERB PARAMETER VALUE1-VALUE20", "bits": "-", "range": "-", "note": ""},
-      {"at": "0CF", "name": "REVERB DYNAMIC CONTROL", "bits": "-", "range": "-", "note": "reverb has no ANOTHER EFF SEND"},
-      {"at": "0D0", "name": "DIGITAL EFFECT MODE: ON/OFF, PAN, EFFECT TYPE", "bits": "BP7, BP6, BP3~0", "range": "00-0B", "note": "0-1 CELESTE, 2-3 CHORUS, 4-5 ENSEMBLE, 6-7 TREMOLO, 8-9 DELAY, 10-11 SOLO EFFECT"},
-      {"at": "0D1", "to": "0D8", "name": "DIGITAL EFFECT VALUE1-VALUE8", "bits": "-", "range": "-", "note": ""}
-     ]},
-    {"name": "TONE DATA", "at": "0D9", "to": "129", "count": 4, "stride": 81,
+      {
+       "at": "000",
+       "to": "00F",
+       "name": "NAME (16 characters)",
+       "bits": "BP6~0",
+       "range": "20-7F",
+       "note": "space to }"
+      },
+      {
+       "at": "010",
+       "name": "ATTRIBUTE FLAG: PARAMETER MODE",
+       "bits": "BP7~6",
+       "range": "00-00",
+       "note": "0: NORMAL MODE, fixed"
+      },
+      {
+       "at": "011",
+       "name": "TONE ON/OFF",
+       "bits": "BP7~0",
+       "range": "-",
+       "note": "two bits per tone, 4th 3rd 2nd 1st"
+      },
+      {
+       "at": "012",
+       "name": "KEY ON MODE",
+       "bits": "BP7~0",
+       "range": "-",
+       "note": "per tone: 0 KEY ON, 1 KEY OFF, 2 LEGATO, 3 NON LEGATO"
+      },
+      {
+       "at": "013",
+       "name": "KEY SCALING",
+       "bits": "BP7~0",
+       "range": "00-42",
+       "note": "0 OFF, 1-22 octave, 64-66 all key"
+      },
+      {
+       "at": "014",
+       "to": "016",
+       "name": "CONTROLLERS: PITCH BEND",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "017",
+       "to": "019",
+       "name": "MODULATION WHEEL 1 SELECT1",
+       "bits": "-",
+       "range": "-",
+       "note": "same three bytes"
+      },
+      {
+       "at": "01A",
+       "to": "01C",
+       "name": "MODULATION WHEEL 1 SELECT2",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "01D",
+       "to": "01F",
+       "name": "MODULATION WHEEL 2 SELECT1",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "020",
+       "to": "022",
+       "name": "MODULATION WHEEL 2 SELECT2",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "023",
+       "name": "REALTIME CREATOR BOX SELECT",
+       "bits": "BP6~0",
+       "range": "-",
+       "note": "bit per box, BOX1-BOX6"
+      },
+      {
+       "at": "024",
+       "name": "REALTIME CONTROLLER BOX SELECT",
+       "bits": "BP6~0",
+       "range": "-",
+       "note": "bit per box, BOX1-BOX6"
+      },
+      {
+       "at": "025",
+       "to": "027",
+       "name": "CONTROL PEDAL SELECT1",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "028",
+       "to": "02A",
+       "name": "CONTROL PEDAL SELECT2",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "02B",
+       "to": "02D",
+       "name": "AFTER TOUCH SELECT1",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "02E",
+       "to": "030",
+       "name": "AFTER TOUCH SELECT2",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "031",
+       "to": "054",
+       "name": "BOX SELECT: CONTROLLER BOX1 X through BOX6 Y",
+       "bits": "-",
+       "range": "-",
+       "note": "twelve controllers, three bytes each, X then Y"
+      },
+      {
+       "at": "055",
+       "name": "PITCH OCTAVE SHIFT",
+       "bits": "BP3~0",
+       "range": "06-0A",
+       "note": "6 is -2 oct, 8 is 0, A is +2 oct"
+      },
+      {
+       "at": "056",
+       "name": "(RESERVE)",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "057",
+       "to": "066",
+       "name": "PITCH LFO BOX1-BOX4",
+       "bits": "-",
+       "range": "-",
+       "note": "four bytes per box: depth, speed, key sync and touch depth, wave and delay"
+      },
+      {
+       "at": "067",
+       "to": "076",
+       "name": "LEVEL LFO BOX1-BOX4",
+       "bits": "-",
+       "range": "-",
+       "note": "same four bytes per box"
+      },
+      {
+       "at": "077",
+       "to": "086",
+       "name": "FILTER LFO BOX1-BOX4",
+       "bits": "-",
+       "range": "-",
+       "note": "same four bytes per box"
+      },
+      {
+       "at": "087",
+       "name": "MIXER OUTPUT SELECT: MAIN, SUB",
+       "bits": "BP3~0, BP7~4",
+       "range": "00-05",
+       "note": "0 no output, 1 MAIN, 2-4 SUB1-3, 5 EFFECT2"
+      },
+      {
+       "at": "088",
+       "name": "EFFECT SEND VOLUME: EFFECT1",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "089",
+       "name": "EFFECT SEND VOLUME: REVERB",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "08A",
+       "name": "EFFECT OUTPUT SELECT: EFFECT1, EFFECT2",
+       "bits": "BP3~0, BP7~4",
+       "range": "01-04",
+       "note": "1 MAIN, 2-4 SUB1-3"
+      },
+      {
+       "at": "08B",
+       "name": "DSP EFFECT COMMON ALGORITHM",
+       "bits": "BP0",
+       "range": "00-01",
+       "note": "0 SERIAL, 1 PARALLEL"
+      },
+      {
+       "at": "08C",
+       "name": "EFFECT1 TYPE",
+       "bits": "-",
+       "range": "-",
+       "note": "see the guide's DSP EFFECT pages"
+      },
+      {
+       "at": "08D",
+       "to": "0A0",
+       "name": "EFFECT1 PARAMETER VALUE1-VALUE20",
+       "bits": "-",
+       "range": "-",
+       "note": "meaning depends on the type"
+      },
+      {
+       "at": "0A1",
+       "name": "EFFECT1 ANOTHER EFF SEND",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "0A2",
+       "name": "EFFECT1 DYNAMIC CONTROL",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "0A3",
+       "name": "EFFECT2 TYPE",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "0A4",
+       "to": "0B7",
+       "name": "EFFECT2 PARAMETER VALUE1-VALUE20",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "0B8",
+       "name": "EFFECT2 ANOTHER EFF SEND",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "0B9",
+       "name": "EFFECT2 DYNAMIC CONTROL",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "0BA",
+       "name": "REVERB TYPE",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "0BB",
+       "to": "0CE",
+       "name": "REVERB PARAMETER VALUE1-VALUE20",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "0CF",
+       "name": "REVERB DYNAMIC CONTROL",
+       "bits": "-",
+       "range": "-",
+       "note": "reverb has no ANOTHER EFF SEND"
+      },
+      {
+       "at": "0D0",
+       "name": "DIGITAL EFFECT MODE: ON/OFF, PAN, EFFECT TYPE",
+       "bits": "BP7, BP6, BP3~0",
+       "range": "00-0B",
+       "note": "0-1 CELESTE, 2-3 CHORUS, 4-5 ENSEMBLE, 6-7 TREMOLO, 8-9 DELAY, 10-11 SOLO EFFECT"
+      },
+      {
+       "at": "0D1",
+       "to": "0D8",
+       "name": "DIGITAL EFFECT VALUE1-VALUE8",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      }
+     ]
+    },
+    {
+     "name": "TONE DATA",
+     "at": "0D9",
+     "to": "129",
+     "count": 4,
+     "stride": 81,
      "entries": [
-      {"at": "0D9", "name": "ATTRIBUTE DELAY", "bits": "BP5~0", "range": "00-32", "note": "0 delay off"},
-      {"at": "0DA", "name": "ATTRIBUTE PANNING", "bits": "BP7~0", "range": "00-80", "note": "0-127 fixed pan, 128 random pan"},
-      {"at": "0DB", "name": "TONE SELECT: TTN SELECT", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "0DC", "name": "TONE KIND, TONE LOCATION, BANK SELECT", "bits": "BP7~6, BP5~4, BP3~0", "range": "-", "note": "kind 0 NORMAL 1 DRUM 2 ATTACK; location 0 internal ROM 1 internal RAM 2 external ROM"},
-      {"at": "0DD", "name": "PITCH KEY SHIFT", "bits": "BP7~0", "range": "E8-18", "note": "-24 to +24"},
-      {"at": "0DE", "name": "PITCH DETUNE", "bits": "BP7~0", "range": "80-7F", "note": "-128 to +127"},
-      {"at": "0DF", "name": "BOX CONTROL LFO-FM1: BOX SELECT, ON/OFF, PHASE, SCALE SELECT", "bits": "BP7~6, BP5, BP4, BP2~0", "range": "-", "note": "scale 0 1/1 through 6 1/64, 7 FIX"},
-      {"at": "0E0", "to": "0E9", "name": "PITCH ENVELOPE SHAPE: total depth, start pitch, attack time, peak level, decay1 time, sustain1 level, decay2 time, sustain2 level, release time, stop pitch", "bits": "-", "range": "-", "note": "one byte each, in that order"},
-      {"at": "0EA", "name": "PITCH ENV TOUCH FOLLOW ADR TIME", "bits": "BP7~0", "range": "CE-32", "note": "-50 to +50"},
-      {"at": "0EB", "name": "PITCH ENV TOUCH FOLLOW DEPTH", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "0EC", "name": "PITCH ENV KEY FOLLOW CENTER KEY", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "0ED", "name": "PITCH ENV KEY FOLLOW ATTACK SLOPE", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "0EE", "name": "PITCH ENV KEY FOLLOW DECAY SLOPE", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "0EF", "name": "PITCH ENV KEY FOLLOW RELEASE SLOPE", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "0F0", "name": "LEVEL VOLUME", "bits": "BP6~0", "range": "00-7F", "note": "one step is 0.375 dB"},
-      {"at": "0F1", "name": "LEVEL TOUCH DEPTH", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "0F2", "name": "LEVEL TOUCH CURVE", "bits": "BP7~5", "range": "00-06", "note": "0 is -3 curve through 6 is +3 curve"},
-      {"at": "0F3", "name": "LEVEL KEY FOLLOW CENTER KEY", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "0F4", "name": "LEVEL KEY FOLLOW LOW KEY LIMIT", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "0F5", "name": "LEVEL KEY FOLLOW HIGH KEY LIMIT", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "0F6", "name": "LEVEL KEY FOLLOW SLOPE", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "0F7", "to": "0FA", "name": "LAYER KEY RANGE: low key select, low fade, high key select, high fade", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "0FB", "to": "0FE", "name": "LAYER VELOCITY RANGE: low vel select, low fade, high vel select, high fade", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "0FF", "name": "BOX CONTROL LFO-AM: BOX SELECT, ON/OFF, PHASE", "bits": "BP7~6, BP5, BP4", "range": "-", "note": ""},
-      {"at": "100", "to": "106", "name": "LEVEL ENVELOPE SHAPE: attack time, peak level, decay1 time, sustain1 level, decay2 time, sustain2 level, release time", "bits": "-", "range": "-", "note": ""},
-      {"at": "107", "name": "LEVEL ENV TOUCH FOLLOW ATTACK", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "108", "name": "LEVEL ENV TOUCH FOLLOW DECAY", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "109", "to": "10B", "name": "LEVEL ENV KEY FOLLOW: center key, low key limit, high key limit", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "10C", "to": "10E", "name": "LEVEL ENV KEY FOLLOW: attack slope, decay slope, release slope", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "10F", "name": "FILTER MODE, TOUCH CURVE", "bits": "BP2~0, BP7~5", "range": "00-06", "note": "0 THROUGH, 1 LPF12+EQ, 2 HPF12+EQ, 3 LPF24, 4 HPF24, 5 BPF"},
-      {"at": "110", "name": "FILTER TOUCH DEPTH", "bits": "BP5~0", "range": "00-32", "note": ""},
-      {"at": "111", "name": "FILTER LFO-FCM: BOX SELECT, ON/OFF, PHASE", "bits": "BP7~6, BP5, BP4", "range": "-", "note": ""},
-      {"at": "112", "to": "114", "name": "FILTER KEY FOLLOW: center key, low key limit, high key limit", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "115", "name": "FILTER KEY FOLLOW SLOPE", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "116", "to": "11F", "name": "FILTER ENVELOPE SHAPE: cutoff adjust, start point, attack time, peak level, decay1 time, sustain1 level, decay2 time, sustain2 level, release time, stop point", "bits": "-", "range": "-", "note": ""},
-      {"at": "120", "name": "FILTER ENV TOUCH FOLLOW ADR TIME", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "121", "name": "FILTER ENV TOUCH FOLLOW DEPTH", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "122", "name": "FILTER ENV KEY FOLLOW CENTER KEY", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "123", "to": "125", "name": "FILTER ENV KEY FOLLOW: attack slope, decay slope, release slope", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "126", "to": "129", "name": "FILTER PARAMETER VALUE1-VALUE4", "bits": "-", "range": "-", "note": "meaning depends on the filter mode"}
-     ]},
-    {"name": "MODELING DATA", "at": "21D", "to": "247", "count": 4, "stride": 43,
+      {
+       "at": "0D9",
+       "name": "ATTRIBUTE DELAY",
+       "bits": "BP5~0",
+       "range": "00-32",
+       "note": "0 delay off"
+      },
+      {
+       "at": "0DA",
+       "name": "ATTRIBUTE PANNING",
+       "bits": "BP7~0",
+       "range": "00-80",
+       "note": "0-127 fixed pan, 128 random pan"
+      },
+      {
+       "at": "0DB",
+       "name": "TONE SELECT: TTN SELECT",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "0DC",
+       "name": "TONE KIND, TONE LOCATION, BANK SELECT",
+       "bits": "BP7~6, BP5~4, BP3~0",
+       "range": "-",
+       "note": "kind 0 NORMAL 1 DRUM 2 ATTACK; location 0 internal ROM 1 internal RAM 2 external ROM"
+      },
+      {
+       "at": "0DD",
+       "name": "PITCH KEY SHIFT",
+       "bits": "BP7~0",
+       "range": "E8-18",
+       "note": "-24 to +24"
+      },
+      {
+       "at": "0DE",
+       "name": "PITCH DETUNE",
+       "bits": "BP7~0",
+       "range": "80-7F",
+       "note": "-128 to +127"
+      },
+      {
+       "at": "0DF",
+       "name": "BOX CONTROL LFO-FM1: BOX SELECT, ON/OFF, PHASE, SCALE SELECT",
+       "bits": "BP7~6, BP5, BP4, BP2~0",
+       "range": "-",
+       "note": "scale 0 1/1 through 6 1/64, 7 FIX"
+      },
+      {
+       "at": "0E0",
+       "to": "0E9",
+       "name": "PITCH ENVELOPE SHAPE: total depth, start pitch, attack time, peak level, decay1 time, sustain1 level, decay2 time, sustain2 level, release time, stop pitch",
+       "bits": "-",
+       "range": "-",
+       "note": "one byte each, in that order"
+      },
+      {
+       "at": "0EA",
+       "name": "PITCH ENV TOUCH FOLLOW ADR TIME",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": "-50 to +50"
+      },
+      {
+       "at": "0EB",
+       "name": "PITCH ENV TOUCH FOLLOW DEPTH",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "0EC",
+       "name": "PITCH ENV KEY FOLLOW CENTER KEY",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "0ED",
+       "name": "PITCH ENV KEY FOLLOW ATTACK SLOPE",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "0EE",
+       "name": "PITCH ENV KEY FOLLOW DECAY SLOPE",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "0EF",
+       "name": "PITCH ENV KEY FOLLOW RELEASE SLOPE",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "0F0",
+       "name": "LEVEL VOLUME",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": "one step is 0.375 dB"
+      },
+      {
+       "at": "0F1",
+       "name": "LEVEL TOUCH DEPTH",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "0F2",
+       "name": "LEVEL TOUCH CURVE",
+       "bits": "BP7~5",
+       "range": "00-06",
+       "note": "0 is -3 curve through 6 is +3 curve"
+      },
+      {
+       "at": "0F3",
+       "name": "LEVEL KEY FOLLOW CENTER KEY",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "0F4",
+       "name": "LEVEL KEY FOLLOW LOW KEY LIMIT",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "0F5",
+       "name": "LEVEL KEY FOLLOW HIGH KEY LIMIT",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "0F6",
+       "name": "LEVEL KEY FOLLOW SLOPE",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "0F7",
+       "to": "0FA",
+       "name": "LAYER KEY RANGE: low key select, low fade, high key select, high fade",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "0FB",
+       "to": "0FE",
+       "name": "LAYER VELOCITY RANGE: low vel select, low fade, high vel select, high fade",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "0FF",
+       "name": "BOX CONTROL LFO-AM: BOX SELECT, ON/OFF, PHASE",
+       "bits": "BP7~6, BP5, BP4",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "100",
+       "to": "106",
+       "name": "LEVEL ENVELOPE SHAPE: attack time, peak level, decay1 time, sustain1 level, decay2 time, sustain2 level, release time",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "107",
+       "name": "LEVEL ENV TOUCH FOLLOW ATTACK",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "108",
+       "name": "LEVEL ENV TOUCH FOLLOW DECAY",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "109",
+       "to": "10B",
+       "name": "LEVEL ENV KEY FOLLOW: center key, low key limit, high key limit",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "10C",
+       "to": "10E",
+       "name": "LEVEL ENV KEY FOLLOW: attack slope, decay slope, release slope",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "10F",
+       "name": "FILTER MODE, TOUCH CURVE",
+       "bits": "BP2~0, BP7~5",
+       "range": "00-06",
+       "note": "0 THROUGH, 1 LPF12+EQ, 2 HPF12+EQ, 3 LPF24, 4 HPF24, 5 BPF"
+      },
+      {
+       "at": "110",
+       "name": "FILTER TOUCH DEPTH",
+       "bits": "BP5~0",
+       "range": "00-32",
+       "note": ""
+      },
+      {
+       "at": "111",
+       "name": "FILTER LFO-FCM: BOX SELECT, ON/OFF, PHASE",
+       "bits": "BP7~6, BP5, BP4",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "112",
+       "to": "114",
+       "name": "FILTER KEY FOLLOW: center key, low key limit, high key limit",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "115",
+       "name": "FILTER KEY FOLLOW SLOPE",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "116",
+       "to": "11F",
+       "name": "FILTER ENVELOPE SHAPE: cutoff adjust, start point, attack time, peak level, decay1 time, sustain1 level, decay2 time, sustain2 level, release time, stop point",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "120",
+       "name": "FILTER ENV TOUCH FOLLOW ADR TIME",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "121",
+       "name": "FILTER ENV TOUCH FOLLOW DEPTH",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "122",
+       "name": "FILTER ENV KEY FOLLOW CENTER KEY",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "123",
+       "to": "125",
+       "name": "FILTER ENV KEY FOLLOW: attack slope, decay slope, release slope",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "126",
+       "to": "129",
+       "name": "FILTER PARAMETER VALUE1-VALUE4",
+       "bits": "-",
+       "range": "-",
+       "note": "meaning depends on the filter mode"
+      }
+     ]
+    },
+    {
+     "name": "MODELING DATA",
+     "at": "21D",
+     "to": "247",
+     "count": 4,
+     "stride": 43,
      "entries": [
-      {"at": "21D", "to": "21F", "name": "DRIVER THRESHOLD POINT: between A and B, B and C, C and D", "bits": "BP6~0", "range": "00-7F", "note": "provided that A < B < C < D"},
-      {"at": "220", "name": "DRIVER A TTN SELECT", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "221", "name": "DRIVER A KIND, LOCATION, BANK SELECT", "bits": "BP7~6, BP5~4, BP3~0", "range": "-", "note": "kind 0 NORMAL 1 DRUM 2 ATTACK"},
-      {"at": "222", "to": "223", "name": "DRIVER B: TTN select; kind, location, bank select", "bits": "-", "range": "-", "note": ""},
-      {"at": "224", "to": "225", "name": "DRIVER C: TTN select; kind, location, bank select", "bits": "-", "range": "-", "note": ""},
-      {"at": "226", "to": "227", "name": "DRIVER D: TTN select; kind, location, bank select", "bits": "-", "range": "-", "note": ""},
-      {"at": "228", "name": "RESONATOR GENERAL: INTERACTION CONNECT, RESONATOR TYPE", "bits": "BP7~6, BP5~0", "range": "00-3F", "note": "type 0 ORIGINAL, 1-63 preset"},
-      {"at": "229", "name": "(RESERVE)", "bits": "-", "range": "-", "note": ""},
-      {"at": "22A", "name": "POSITION PARAMETER POSITION", "bits": "BP7~0", "range": "00-FA", "note": "0.2 per cent per step, 0 to 50 per cent"},
-      {"at": "22B", "name": "FORMANT FLAG, DEPTH", "bits": "BP7, BP6~0", "range": "00-7F", "note": "0 FIXED, 1 MOVE"},
-      {"at": "22C", "name": "(RESERVE)", "bits": "-", "range": "-", "note": ""},
-      {"at": "22D", "name": "POSITION TOUCH", "bits": "BP7~0", "range": "CE-32", "note": "-50 to +50"},
-      {"at": "22E", "name": "POSITION MOVEMENT WIDTH", "bits": "BP5~0", "range": "00-32", "note": ""},
-      {"at": "22F", "name": "POSITION MOVEMENT SPEED, SAMPLE/HOLD", "bits": "BP5~0, BP7", "range": "00-32", "note": ""},
-      {"at": "230", "name": "INTERACTION GAIN", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "231", "name": "(RESERVE)", "bits": "-", "range": "-", "note": ""},
-      {"at": "232", "name": "MAIN RESONATOR MODE, FITTING", "bits": "BP7, BP6~0", "range": "00-7F", "note": "0 positive feedback, 1 negative feedback"},
-      {"at": "233", "name": "MAIN RESONATOR SCALE, MUTING", "bits": "BP7, BP6~0", "range": "00-7F", "note": ""},
-      {"at": "234", "name": "MAIN TOUCH FOLLOW TOUCH FITTING", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "235", "name": "MAIN TOUCH FOLLOW TOUCH MUTING", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "236", "to": "238", "name": "MAIN KEY FOLLOW: center key, low key limit, high key limit", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "239", "name": "MAIN KEY FOLLOW SLOPE", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "23A", "name": "MAIN PITCH KEY SHIFT", "bits": "BP7~0", "range": "C4-3C", "note": "-60 to +60"},
-      {"at": "23B", "name": "MAIN PITCH DETUNE", "bits": "BP7~0", "range": "80-7F", "note": "-128 to +127"},
-      {"at": "23C", "name": "SUB RESONATOR MODE, FITTING", "bits": "BP7, BP6~0", "range": "00-7F", "note": ""},
-      {"at": "23D", "name": "SUB RESONATOR SCALE, MUTING", "bits": "BP7, BP6~0", "range": "00-7F", "note": ""},
-      {"at": "23E", "name": "SUB GAIN", "bits": "BP7~0", "range": "9C-64", "note": ""},
-      {"at": "23F", "name": "SUB TOUCH FOLLOW TOUCH FITTING", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "240", "name": "SUB TOUCH FOLLOW TOUCH MUTING", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "241", "name": "SUB TOUCH FOLLOW TOUCH SUB GAIN", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "242", "to": "244", "name": "SUB KEY FOLLOW: center key, low key limit, high key limit", "bits": "BP6~0", "range": "00-7F", "note": ""},
-      {"at": "245", "name": "SUB KEY FOLLOW SLOPE", "bits": "BP7~0", "range": "CE-32", "note": ""},
-      {"at": "246", "name": "SUB PITCH KEY SHIFT", "bits": "BP7~0", "range": "C4-3C", "note": ""},
-      {"at": "247", "name": "SUB PITCH DETUNE", "bits": "BP7~0", "range": "80-7F", "note": ""}
-     ]}
-  ]
+      {
+       "at": "21D",
+       "to": "21F",
+       "name": "DRIVER THRESHOLD POINT: between A and B, B and C, C and D",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": "provided that A < B < C < D"
+      },
+      {
+       "at": "220",
+       "name": "DRIVER A TTN SELECT",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "221",
+       "name": "DRIVER A KIND, LOCATION, BANK SELECT",
+       "bits": "BP7~6, BP5~4, BP3~0",
+       "range": "-",
+       "note": "kind 0 NORMAL 1 DRUM 2 ATTACK"
+      },
+      {
+       "at": "222",
+       "to": "223",
+       "name": "DRIVER B: TTN select; kind, location, bank select",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "224",
+       "to": "225",
+       "name": "DRIVER C: TTN select; kind, location, bank select",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "226",
+       "to": "227",
+       "name": "DRIVER D: TTN select; kind, location, bank select",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "228",
+       "name": "RESONATOR GENERAL: INTERACTION CONNECT, RESONATOR TYPE",
+       "bits": "BP7~6, BP5~0",
+       "range": "00-3F",
+       "note": "type 0 ORIGINAL, 1-63 preset"
+      },
+      {
+       "at": "229",
+       "name": "(RESERVE)",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "22A",
+       "name": "POSITION PARAMETER POSITION",
+       "bits": "BP7~0",
+       "range": "00-FA",
+       "note": "0.2 per cent per step, 0 to 50 per cent"
+      },
+      {
+       "at": "22B",
+       "name": "FORMANT FLAG, DEPTH",
+       "bits": "BP7, BP6~0",
+       "range": "00-7F",
+       "note": "0 FIXED, 1 MOVE"
+      },
+      {
+       "at": "22C",
+       "name": "(RESERVE)",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "22D",
+       "name": "POSITION TOUCH",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": "-50 to +50"
+      },
+      {
+       "at": "22E",
+       "name": "POSITION MOVEMENT WIDTH",
+       "bits": "BP5~0",
+       "range": "00-32",
+       "note": ""
+      },
+      {
+       "at": "22F",
+       "name": "POSITION MOVEMENT SPEED, SAMPLE/HOLD",
+       "bits": "BP5~0, BP7",
+       "range": "00-32",
+       "note": ""
+      },
+      {
+       "at": "230",
+       "name": "INTERACTION GAIN",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "231",
+       "name": "(RESERVE)",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "232",
+       "name": "MAIN RESONATOR MODE, FITTING",
+       "bits": "BP7, BP6~0",
+       "range": "00-7F",
+       "note": "0 positive feedback, 1 negative feedback"
+      },
+      {
+       "at": "233",
+       "name": "MAIN RESONATOR SCALE, MUTING",
+       "bits": "BP7, BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "234",
+       "name": "MAIN TOUCH FOLLOW TOUCH FITTING",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "235",
+       "name": "MAIN TOUCH FOLLOW TOUCH MUTING",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "236",
+       "to": "238",
+       "name": "MAIN KEY FOLLOW: center key, low key limit, high key limit",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "239",
+       "name": "MAIN KEY FOLLOW SLOPE",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "23A",
+       "name": "MAIN PITCH KEY SHIFT",
+       "bits": "BP7~0",
+       "range": "C4-3C",
+       "note": "-60 to +60"
+      },
+      {
+       "at": "23B",
+       "name": "MAIN PITCH DETUNE",
+       "bits": "BP7~0",
+       "range": "80-7F",
+       "note": "-128 to +127"
+      },
+      {
+       "at": "23C",
+       "name": "SUB RESONATOR MODE, FITTING",
+       "bits": "BP7, BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "23D",
+       "name": "SUB RESONATOR SCALE, MUTING",
+       "bits": "BP7, BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "23E",
+       "name": "SUB GAIN",
+       "bits": "BP7~0",
+       "range": "9C-64",
+       "note": ""
+      },
+      {
+       "at": "23F",
+       "name": "SUB TOUCH FOLLOW TOUCH FITTING",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "240",
+       "name": "SUB TOUCH FOLLOW TOUCH MUTING",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "241",
+       "name": "SUB TOUCH FOLLOW TOUCH SUB GAIN",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "242",
+       "to": "244",
+       "name": "SUB KEY FOLLOW: center key, low key limit, high key limit",
+       "bits": "BP6~0",
+       "range": "00-7F",
+       "note": ""
+      },
+      {
+       "at": "245",
+       "name": "SUB KEY FOLLOW SLOPE",
+       "bits": "BP7~0",
+       "range": "CE-32",
+       "note": ""
+      },
+      {
+       "at": "246",
+       "name": "SUB PITCH KEY SHIFT",
+       "bits": "BP7~0",
+       "range": "C4-3C",
+       "note": ""
+      },
+      {
+       "at": "247",
+       "name": "SUB PITCH DETUNE",
+       "bits": "BP7~0",
+       "range": "80-7F",
+       "note": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "DRUM SOUND",
+   "adr": "18 00 00",
+   "address": 393216,
+   "size": 19608,
+   "blocks": [
+    {
+     "name": "KIT DATA",
+     "at": "000",
+     "to": "097",
+     "count": 1,
+     "stride": 0,
+     "entries": [
+      {
+       "at": "000",
+       "to": "00F",
+       "name": "NAME (16 characters)",
+       "bits": "BP6~0",
+       "range": "20-7F",
+       "note": "space to }"
+      },
+      {
+       "at": "010",
+       "name": "ATTRIBUTE FLAG: PARAMETER MODE",
+       "bits": "BP7~6",
+       "range": "00-00",
+       "note": "2: DRUM MODE, fixed"
+      },
+      {
+       "at": "011",
+       "to": "013",
+       "name": "CONTROLLERS: PITCH BEND",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "014",
+       "to": "016",
+       "name": "MODULATION WHEEL 1 SELECT1",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "017",
+       "to": "019",
+       "name": "MODULATION WHEEL 1 SELECT2",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "01A",
+       "to": "01C",
+       "name": "MODULATION WHEEL 2 SELECT1",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "01D",
+       "to": "01F",
+       "name": "MODULATION WHEEL 2 SELECT2",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "020",
+       "name": "REALTIME CREATOR BOX SELECT",
+       "bits": "BP6~0",
+       "range": "-",
+       "note": "bit per box, BOX1-BOX6"
+      },
+      {
+       "at": "021",
+       "name": "REALTIME CONTROLLER BOX SELECT",
+       "bits": "BP6~0",
+       "range": "-",
+       "note": "bit per box, BOX1-BOX6"
+      },
+      {
+       "at": "022",
+       "to": "024",
+       "name": "CONTROL PEDAL SELECT1",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "025",
+       "to": "027",
+       "name": "CONTROL PEDAL SELECT2",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "028",
+       "to": "02A",
+       "name": "AFTER TOUCH SELECT1",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "02B",
+       "to": "02D",
+       "name": "AFTER TOUCH SELECT2",
+       "bits": "-",
+       "range": "-",
+       "note": "on/off and phase, function select, depth"
+      },
+      {
+       "at": "02E",
+       "to": "051",
+       "name": "BOX SELECT: CONTROLLER BOX1 X through BOX6 Y",
+       "bits": "-",
+       "range": "-",
+       "note": "twelve controllers, three bytes each, X then Y"
+      },
+      {
+       "at": "052",
+       "name": "MIXER EFFECT OUTPUT SELECT: EFFECT1, EFFECT2",
+       "bits": "BP3~0, BP7~4",
+       "range": "01-04",
+       "note": "1 MAIN, 2-4 SUB1-3"
+      },
+      {
+       "at": "053",
+       "name": "DSP EFFECT COMMON ALGORITHM",
+       "bits": "BP0",
+       "range": "00-01",
+       "note": "0 SERIAL, 1 PARALLEL"
+      },
+      {
+       "at": "054",
+       "name": "EFFECT1 TYPE",
+       "bits": "-",
+       "range": "-",
+       "note": "see the effect tables"
+      },
+      {
+       "at": "055",
+       "to": "068",
+       "name": "EFFECT1 PARAMETER VALUE1-VALUE20",
+       "bits": "-",
+       "range": "-",
+       "note": "meaning depends on the type"
+      },
+      {
+       "at": "069",
+       "name": "EFFECT1 ANOTHER EFF SEND",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "06A",
+       "name": "EFFECT1 DYNAMIC CONTROL",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "06B",
+       "name": "EFFECT2 TYPE",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "06C",
+       "to": "07F",
+       "name": "EFFECT2 PARAMETER VALUE1-VALUE20",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "080",
+       "name": "EFFECT2 ANOTHER EFF SEND",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "081",
+       "name": "EFFECT2 DYNAMIC CONTROL",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "082",
+       "name": "REVERB TYPE",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "083",
+       "to": "096",
+       "name": "REVERB PARAMETER VALUE1-VALUE20",
+       "bits": "-",
+       "range": "-",
+       "note": ""
+      },
+      {
+       "at": "097",
+       "name": "REVERB DYNAMIC CONTROL",
+       "bits": "-",
+       "range": "-",
+       "note": "reverb has no ANOTHER EFF SEND"
+      }
+     ]
+    },
+    {
+     "name": "SOUND SELECT",
+     "at": "098",
+     "to": "197",
+     "count": 1,
+     "stride": 0,
+     "entries": [
+      {
+       "at": "098",
+       "to": "197",
+       "name": "SOUND SELECT, NOTE:00 to NOTE:7F",
+       "bits": "-",
+       "range": "-",
+       "note": "128 notes, two bytes each"
+      }
+     ]
+    },
+    {
+     "name": "NOTE DATA",
+     "at": "198",
+     "to": "22D",
+     "count": 128,
+     "stride": 150,
+     "blocks": [
+      {
+       "name": "NOTE GENERAL DATA",
+       "at": "198",
+       "to": "1A9",
+       "count": 1,
+       "stride": 0,
+       "entries": [
+        {
+         "at": "198",
+         "to": "1A4",
+         "name": "NAME (13 characters)",
+         "bits": "BP6~0",
+         "range": "20-7F",
+         "note": ""
+        },
+        {
+         "at": "1A5",
+         "name": "ATTRIBUTE FLAG: KEY OFF MODE, TONE ON/OFF",
+         "bits": "BP5, BP3~0",
+         "range": "00-01",
+         "note": "two bits per tone, 2nd then 1st"
+        },
+        {
+         "at": "1A6",
+         "name": "SAME GROUP DUMP: DUMP FLAG, GROUP NUMBER",
+         "bits": "BP7, BP6~0",
+         "range": "00-7F",
+         "note": "flag 1 dumps the same group's sound"
+        },
+        {
+         "at": "1A7",
+         "name": "MIXER OUTPUT SELECT: MAIN, SUB",
+         "bits": "BP3~0, BP7~4",
+         "range": "00-05",
+         "note": "0 no output, 1 MAIN, 2-4 SUB1-3, 5 EFFECT2"
+        },
+        {
+         "at": "1A8",
+         "name": "EFFECT SEND VOLUME: EFFECT1",
+         "bits": "BP6~0",
+         "range": "00-7F",
+         "note": ""
+        },
+        {
+         "at": "1A9",
+         "name": "EFFECT SEND VOLUME: REVERB",
+         "bits": "BP6~0",
+         "range": "00-7F",
+         "note": ""
+        }
+       ]
+      },
+      {
+       "name": "NOTE TONE DATA",
+       "at": "1AA",
+       "to": "1C0",
+       "count": 2,
+       "stride": 23,
+       "entries": [
+        {
+         "at": "1AA",
+         "name": "ATTRIBUTE DELAY",
+         "bits": "BP5~0",
+         "range": "00-32",
+         "note": "0 delay off"
+        },
+        {
+         "at": "1AB",
+         "name": "ATTRIBUTE PANNING",
+         "bits": "BP7~0",
+         "range": "00-80",
+         "note": "0-127 fixed pan, 128 random pan"
+        },
+        {
+         "at": "1AC",
+         "name": "TONE SELECT: TTN SELECT",
+         "bits": "BP6~0",
+         "range": "00-7F",
+         "note": ""
+        },
+        {
+         "at": "1AD",
+         "name": "TONE KIND, TONE LOCATION, BANK SELECT",
+         "bits": "BP7~6, BP5~4, BP3~0",
+         "range": "-",
+         "note": "kind 0 NORMAL 1 DRUM 2 ATTACK"
+        },
+        {
+         "at": "1AE",
+         "name": "PITCH KEY SHIFT",
+         "bits": "BP7~0",
+         "range": "E8-18",
+         "note": "-50 to +50"
+        },
+        {
+         "at": "1AF",
+         "name": "PITCH DETUNE",
+         "bits": "BP7~0",
+         "range": "80-7F",
+         "note": "-128 to +127"
+        },
+        {
+         "at": "1B0",
+         "name": "LEVEL VOLUME",
+         "bits": "BP6~0",
+         "range": "00-7F",
+         "note": "one step is 0.375 dB"
+        },
+        {
+         "at": "1B1",
+         "name": "LEVEL TOUCH DEPTH",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": "-50 to +50"
+        },
+        {
+         "at": "1B2",
+         "name": "LEVEL TOUCH CURVE",
+         "bits": "BP7~5",
+         "range": "00-06",
+         "note": "0 is -3 curve through 6 is +3 curve"
+        },
+        {
+         "at": "1B3",
+         "to": "1B8",
+         "name": "LEVEL ENVELOPE SHAPE: attack time, decay1 time, sustain1 level, decay2 time, sustain2 level, release time",
+         "bits": "BP6~0",
+         "range": "00-64",
+         "note": "one byte each, in that order"
+        },
+        {
+         "at": "1B9",
+         "name": "LEVEL ENV TOUCH FOLLOW ATTACK",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": ""
+        },
+        {
+         "at": "1BA",
+         "name": "LEVEL ENV TOUCH FOLLOW DECAY",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": ""
+        },
+        {
+         "at": "1BB",
+         "name": "FILTER MODE, TOUCH CURVE",
+         "bits": "BP2~0, BP7~5",
+         "range": "00-06",
+         "note": "0 THROUGH, 1 LPF12+EQ, 2 HPF12+EQ, 3 LPF24, 4 HPF24, 5 BPF"
+        },
+        {
+         "at": "1BC",
+         "name": "FILTER TOUCH DEPTH",
+         "bits": "BP5~0",
+         "range": "00-32",
+         "note": ""
+        },
+        {
+         "at": "1BD",
+         "to": "1C0",
+         "name": "FILTER PARAMETER VALUE1-VALUE4",
+         "bits": "-",
+         "range": "-",
+         "note": "meaning depends on the filter mode"
+        }
+       ]
+      },
+      {
+       "name": "NOTE MODELING DATA",
+       "at": "1D8",
+       "to": "202",
+       "count": 2,
+       "stride": 43,
+       "entries": [
+        {
+         "at": "1D8",
+         "to": "1DA",
+         "name": "DRIVER THRESHOLD POINT: between A and B, B and C, C and D",
+         "bits": "BP6~0",
+         "range": "00-7F",
+         "note": "provided that A < B < C < D"
+        },
+        {
+         "at": "1DB",
+         "name": "DRIVER A TTN SELECT",
+         "bits": "BP6~0",
+         "range": "00-7F",
+         "note": ""
+        },
+        {
+         "at": "1DC",
+         "name": "DRIVER A KIND, LOCATION, BANK SELECT",
+         "bits": "BP7~6, BP5~4, BP3~0",
+         "range": "-",
+         "note": "kind 0 NORMAL 1 DRUM 2 ATTACK"
+        },
+        {
+         "at": "1DD",
+         "to": "1DE",
+         "name": "DRIVER B: TTN select; kind, location, bank select",
+         "bits": "-",
+         "range": "-",
+         "note": ""
+        },
+        {
+         "at": "1DF",
+         "to": "1E0",
+         "name": "DRIVER C: TTN select; kind, location, bank select",
+         "bits": "-",
+         "range": "-",
+         "note": ""
+        },
+        {
+         "at": "1E1",
+         "to": "1E2",
+         "name": "DRIVER D: TTN select; kind, location, bank select",
+         "bits": "-",
+         "range": "-",
+         "note": ""
+        },
+        {
+         "at": "1E3",
+         "name": "RESONATOR GENERAL: INTERACTION CONNECT, RESONATOR TYPE",
+         "bits": "BP7~6, BP5~0",
+         "range": "00-3F",
+         "note": "type 0 ORIGINAL, 1-63 preset"
+        },
+        {
+         "at": "1E4",
+         "name": "(RESERVE)",
+         "bits": "-",
+         "range": "-",
+         "note": ""
+        },
+        {
+         "at": "1E5",
+         "name": "POSITION PARAMETER POSITION",
+         "bits": "BP7~0",
+         "range": "00-FA",
+         "note": "0.2 per cent per step, 0 to 50 per cent"
+        },
+        {
+         "at": "1E6",
+         "name": "FORMANT FLAG, DEPTH",
+         "bits": "BP7, BP6~0",
+         "range": "00-7F",
+         "note": "0 FIXED, 1 MOVE"
+        },
+        {
+         "at": "1E7",
+         "name": "(RESERVE)",
+         "bits": "-",
+         "range": "-",
+         "note": ""
+        },
+        {
+         "at": "1E8",
+         "name": "POSITION TOUCH",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": "-50 to +50"
+        },
+        {
+         "at": "1E9",
+         "name": "POSITION MOVEMENT WIDTH",
+         "bits": "BP5~0",
+         "range": "00-32",
+         "note": ""
+        },
+        {
+         "at": "1EA",
+         "name": "POSITION MOVEMENT SPEED, SAMPLE/HOLD",
+         "bits": "BP5~0, BP7",
+         "range": "00-32",
+         "note": ""
+        },
+        {
+         "at": "1EB",
+         "name": "INTERACTION GAIN",
+         "bits": "BP6~0",
+         "range": "00-7F",
+         "note": ""
+        },
+        {
+         "at": "1EC",
+         "name": "(RESERVE)",
+         "bits": "-",
+         "range": "-",
+         "note": ""
+        },
+        {
+         "at": "1ED",
+         "name": "MAIN RESONATOR MODE, FITTING",
+         "bits": "BP7, BP6~0",
+         "range": "00-7F",
+         "note": "0 positive feedback, 1 negative feedback"
+        },
+        {
+         "at": "1EE",
+         "name": "MAIN RESONATOR SCALE, MUTING",
+         "bits": "BP7, BP6~0",
+         "range": "00-7F",
+         "note": ""
+        },
+        {
+         "at": "1EF",
+         "name": "MAIN TOUCH FOLLOW TOUCH FITTING",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": ""
+        },
+        {
+         "at": "1F0",
+         "name": "MAIN TOUCH FOLLOW TOUCH MUTING",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": ""
+        },
+        {
+         "at": "1F1",
+         "to": "1F3",
+         "name": "MAIN KEY FOLLOW: center key, low key limit, high key limit",
+         "bits": "BP6~0",
+         "range": "00-7F",
+         "note": ""
+        },
+        {
+         "at": "1F4",
+         "name": "MAIN KEY FOLLOW SLOPE",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": ""
+        },
+        {
+         "at": "1F5",
+         "name": "MAIN PITCH KEY SHIFT",
+         "bits": "BP7~0",
+         "range": "C4-3C",
+         "note": "-60 to +60"
+        },
+        {
+         "at": "1F6",
+         "name": "MAIN PITCH DETUNE",
+         "bits": "BP7~0",
+         "range": "80-7F",
+         "note": "-128 to +127"
+        },
+        {
+         "at": "1F7",
+         "name": "SUB RESONATOR MODE, FITTING",
+         "bits": "BP7, BP6~0",
+         "range": "00-7F",
+         "note": ""
+        },
+        {
+         "at": "1F8",
+         "name": "SUB RESONATOR SCALE, MUTING",
+         "bits": "BP7, BP6~0",
+         "range": "00-7F",
+         "note": ""
+        },
+        {
+         "at": "1F9",
+         "name": "SUB GAIN",
+         "bits": "BP7~0",
+         "range": "9C-64",
+         "note": ""
+        },
+        {
+         "at": "1FA",
+         "name": "SUB TOUCH FOLLOW TOUCH FITTING",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": ""
+        },
+        {
+         "at": "1FB",
+         "name": "SUB TOUCH FOLLOW TOUCH MUTING",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": ""
+        },
+        {
+         "at": "1FC",
+         "name": "SUB TOUCH FOLLOW TOUCH SUB GAIN",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": ""
+        },
+        {
+         "at": "1FD",
+         "to": "1FF",
+         "name": "SUB KEY FOLLOW: center key, low key limit, high key limit",
+         "bits": "BP6~0",
+         "range": "00-7F",
+         "note": ""
+        },
+        {
+         "at": "200",
+         "name": "SUB KEY FOLLOW SLOPE",
+         "bits": "BP7~0",
+         "range": "CE-32",
+         "note": ""
+        },
+        {
+         "at": "201",
+         "name": "SUB PITCH KEY SHIFT",
+         "bits": "BP7~0",
+         "range": "C4-3C",
+         "note": ""
+        },
+        {
+         "at": "202",
+         "name": "SUB PITCH DETUNE",
+         "bits": "BP7~0",
+         "range": "80-7F",
+         "note": ""
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
 }

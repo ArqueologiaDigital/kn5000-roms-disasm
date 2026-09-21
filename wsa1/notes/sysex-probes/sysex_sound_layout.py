@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Is the transcribed NORMAL SOUND layout self-consistent, and does it match the decode?
+"""Are the transcribed sound layouts self-consistent, and do they match the decode?
 
 QUESTION IT ANSWERS
   `sound_layout.json` is a TRANSCRIPTION, read by eye off rendered scans of
-  Technics' Reference Guide (pages 48-51, which carry no text layer).  A
+  Technics' Reference Guide (pages 48-55, which carry no text layer).  A
   transcription from a scan is exactly the kind of artefact that looks right and
   is wrong: a `253` misread as `256` changes nothing on the page and everything
   in a librarian.
@@ -11,30 +11,34 @@ QUESTION IT ANSWERS
   So the transcription is not trusted, it is CHECKED, by two things it cannot
   satisfy by accident:
 
-  1. THE AREA MUST TILE.  Every parameter number from the first to the last of a
-     group must be covered exactly once -- no gap, no overlap.  A misread digit
-     almost always breaks this, because it leaves a hole somewhere and a
-     collision somewhere else.
-  2. THE TOTAL MUST MATCH THE FIRMWARE.  The three groups, with their repeat
-     counts, must come to the size of the NORMAL SOUND area as established
-     independently from the program: 713 bytes.  That number was not used to
-     build the transcription, and nothing in the guide states it.
+  1. EVERY BLOCK MUST TILE ITS PARENT.  Each parameter number from a block's
+     first to its last is covered exactly once -- no gap, no overlap -- and a
+     block's children must tile the block.  A misread digit almost always leaves
+     a hole somewhere and a collision somewhere else, and the assertion names
+     both.
+  2. EACH AREA'S TOTAL MUST MATCH THE FIRMWARE.  NORMAL SOUND must come to 713
+     bytes and DRUM SOUND to 19608.  Both figures come from the separate decode
+     of the parameter dispatch; the guide prints neither, and neither was used
+     to build the transcription.
 
-  Those two together pin every group boundary and both strides.  They do NOT
-  check a parameter's NAME, its bit field or its range; a misread there survives,
-  and the chapter says the transcription is what it is.
+  Those two pin every block boundary and every stride.  They do NOT check a
+  parameter's NAME, its bit field or its range; a misread there survives, and
+  the chapter says so rather than letting a validator imply otherwise.
+
+  A NOTE ON METHOD.  Where the guide gives a repeating block as several columns
+  side by side, only the FIRST column is transcribed and the others are derived
+  from the stride.  The columns are vertically offset on the page, and reading
+  them in parallel is precisely how this transcription first went wrong.
 
 SIGNAL BEING READ
-  `sound_layout.json` only.  The 713-byte figure is from the separate decode of
-  the parameter dispatch, recorded in the reference.
+  `sound_layout.json` only.
 
 RUN
   python3 wsa1/notes/sysex-probes/sysex_sound_layout.py
   python3 wsa1/notes/sysex-probes/sysex_sound_layout.py --tex <file>
 
 PASS CRITERION
-  Each group tiles its own extent, the four repeats of each repeating group land
-  where the stride says, the whole area totals 713 bytes, and OK.
+  Every block tiles, both areas hit their declared size, and OK.
 """
 import json
 import os
@@ -43,9 +47,6 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 LAYOUT = os.path.join(HERE, "sound_layout.json")
 
-AREA_SIZE = 713          # from the decode, not from the guide
-ADR_BASE = 0x040000      # ADR 10 00 00
-
 
 def h(s):
     return int(s, 16)
@@ -53,89 +54,118 @@ def h(s):
 
 def bitfield(s):
     """The guide writes a bit range as BP7~0. A bare ~ is a non-breaking space
-    in LaTeX, so it must be turned into a dash, not escaped away."""
+    in LaTeX, so it must become a dash, not be escaped away."""
     if not s or s == "-":
         return ""
     return s.replace("BP", "").replace("~", "--")
 
 
 def tex_escape(s):
-    # braces must go first: they are the ones that break the build, and the
-    # guide uses them in prose ("space to }")
     return (s.replace("\\", "").replace("{", "\\{").replace("}", "\\}")
              .replace("&", "\\&").replace("_", "\\_")
              .replace("%", "\\%").replace("#", "\\#"))
 
 
+def check_block(b, path):
+    """A block's children -- entries or sub-blocks -- must tile it exactly."""
+    lo, hi = h(b["at"]), h(b["to"])
+    span = hi - lo + 1
+    name = "%s/%s" % (path, b["name"]) if path else b["name"]
+
+    pieces = []
+    for sub in b.get("blocks", []):
+        s_lo, s_hi = h(sub["at"]), h(sub["to"])
+        s_span = s_hi - s_lo + 1
+        if sub["count"] > 1:
+            assert sub["stride"] == s_span, \
+                "%s: %s has stride %d but spans %d" % (name, sub["name"],
+                                                       sub["stride"], s_span)
+        for i in range(sub["count"]):
+            base = s_lo + i * (sub["stride"] or s_span)
+            pieces.append((base, base + s_span - 1, "%s[%d]" % (sub["name"], i)))
+        check_block(sub, name)
+    for e in b.get("entries", []):
+        a = h(e["at"])
+        z = h(e["to"]) if e.get("to") else a
+        pieces.append((a, z, e["name"]))
+
+    covered = {}
+    for a, z, who in pieces:
+        assert lo <= a <= z <= hi, \
+            "%s: %s (%03X-%03X) is outside %03X-%03X" % (name, who, a, z, lo, hi)
+        for n in range(a, z + 1):
+            assert n not in covered, \
+                "%s: %03X covered twice (%s and %s)" % (name, n, covered[n], who)
+            covered[n] = who
+    missing = [n for n in range(lo, hi + 1) if n not in covered]
+    assert not missing, \
+        "%s: %d numbers uncovered, first %03X" % (name, len(missing), missing[0])
+    return span
+
+
+# Note bases the guide PRINTS, spot-checked against the ones the stride implies.
+# Two of these were read off different pages, and the last is the final row of
+# the table -- so agreeing with all four pins the 0x198 base and the 150-byte
+# stride independently of the tiling arithmetic.
+GUIDE_NOTE_BASES = {0x13: 0x0CBA, 0x14: 0x0D50, 0x20: 0x1458, 0x7F: 0x4C02}
+
+
+def check_note_bases(area):
+    note = [b for b in area["blocks"] if b["name"] == "NOTE DATA"][0]
+    base, stride = h(note["at"]), note["stride"]
+    for n, printed in sorted(GUIDE_NOTE_BASES.items()):
+        got = base + n * stride
+        assert got == printed, \
+            "NOTE:%02X computes to %03X, the guide prints %03X" % (n, got, printed)
+    print("  note bases agree with the four the guide prints (%s)"
+          % ", ".join("NOTE:%02X" % n for n in sorted(GUIDE_NOTE_BASES)))
+
+
 def main():
     doc = json.load(open(LAYOUT))
-    groups = doc["groups"]
 
-    total = 0
-    print("\nNORMAL SOUND LAYOUT, as transcribed")
-    for g in groups:
-        lo, hi = h(g["at"]), h(g["to"])
-        span = hi - lo + 1
-
-        # (1) the entries must tile [lo, hi] exactly
-        covered = {}
-        for e in g["entries"]:
-            a = h(e["at"])
-            b = h(e["to"]) if e.get("to") else a
-            assert lo <= a <= b <= hi, \
-                "%s: entry %s-%s is outside %s-%s" % (g["name"], e["at"],
-                                                      e.get("to"), g["at"], g["to"])
-            for n in range(a, b + 1):
-                assert n not in covered, \
-                    "%s: parameter %03X covered twice (%s and %s)" % (
-                        g["name"], n, covered[n], e["name"])
-                covered[n] = e["name"]
-        missing = [n for n in range(lo, hi + 1) if n not in covered]
-        assert not missing, \
-            "%s: %d parameter numbers uncovered, first %03X" % (
-                g["name"], len(missing), missing[0])
-
-        # (2) the repeats must land where the stride says
-        if g["count"] > 1:
-            assert g["stride"] == span, \
-                "%s: stride %d but the group spans %d" % (g["name"], g["stride"], span)
-        total += span * g["count"]
-        print("  %-14s %s-%s  %3d bytes  x%d  stride %d"
-              % (g["name"], g["at"], g["to"], span, g["count"], g["stride"] or span))
-
-    print("  %-14s %s" % ("", "-" * 40))
-    print("  %-14s %d bytes" % ("TOTAL", total))
-
-    # (3) the total must match the figure the firmware decode produced
-    assert total == AREA_SIZE, \
-        "the transcription totals %d bytes; the decode says the area is %d" % (
-            total, AREA_SIZE)
-    print("\n  matches the %d-byte NORMAL SOUND area found in the program" % AREA_SIZE)
-
-    # the repeats' base addresses, which the chapter prints
-    print("\n  repeat bases:")
-    for g in groups:
-        if g["count"] > 1:
-            bases = [h(g["at"]) + i * g["stride"] for i in range(g["count"])]
-            print("    %-14s %s" % (g["name"],
-                                    "  ".join("%03X" % b for b in bases)))
-    last = max(h(g["to"]) + (g["count"] - 1) * g["stride"] for g in groups)
-    assert last == AREA_SIZE - 1, "the area ends at %03X, expected %03X" % (
-        last, AREA_SIZE - 1)
-    print("    area runs 000 to %03X" % last)
+    for area in doc["areas"]:
+        print("\n%s  --  ADR %s, %d bytes" % (area["name"], area["adr"], area["size"]))
+        total = 0
+        for b in area["blocks"]:
+            span = check_block(b, area["name"])
+            count = b["count"]
+            total += span * count
+            bases = [h(b["at"]) + i * (b["stride"] or span) for i in range(count)]
+            shown = "  ".join("%03X" % x for x in bases[:4])
+            if count > 4:
+                shown += "  ... %03X" % bases[-1]
+            print("  %-20s %4d bytes  x%-4d %s" % (b["name"], span, count, shown))
+        print("  %-20s %4d bytes" % ("TOTAL", total))
+        assert total == area["size"], \
+            "%s totals %d bytes; the decode says %d" % (area["name"], total, area["size"])
+        last = max(h(b["to"]) + (b["count"] - 1) * (b["stride"] or 0)
+                   for b in area["blocks"])
+        assert last == area["size"] - 1, \
+            "%s ends at %03X, expected %03X" % (area["name"], last, area["size"] - 1)
+        print("  matches the decode, and the area ends at %03X" % last)
+        if any(b["name"] == "NOTE DATA" for b in area["blocks"]):
+            check_note_bases(area)
 
     if "--tex" in sys.argv:
         out = ["%% GENERATED by notes/sysex-probes/sysex_sound_layout.py --tex",
                "%% Source: sound_layout.json. Do not edit.", ""]
-        for g in groups:
-            out += ["\\subsection*{%s}" % tex_escape(g["name"]),
-                    "{\\small", "\\begin{longtable}{l>{\\raggedright\\arraybackslash}p{24mm}>{\\raggedright\\arraybackslash}p{58mm}"
+
+        def emit(b, depth):
+            if b.get("blocks"):
+                for sub in b["blocks"]:
+                    emit(sub, depth)
+                return
+            out.append("\\subsection*{%s}" % tex_escape(b["name"]))
+            out.extend(["{\\small",
+                    "\\begin{longtable}{l>{\\raggedright\\arraybackslash}p{24mm}"
+                    ">{\\raggedright\\arraybackslash}p{58mm}"
                     ">{\\raggedright\\arraybackslash}p{36mm}}",
                     "\\toprule", "no. & bits & parameter & values \\\\",
                     "\\midrule\\endfirsthead",
                     "\\toprule no. & bits & parameter & values \\\\",
-                    "\\midrule\\endhead"]
-            for e in g["entries"]:
+                    "\\midrule\\endhead"])
+            for e in b["entries"]:
                 num = ("\\bytes{%s--%s}" % (e["at"], e["to"])) if e.get("to") \
                     else "\\bytes{%s}" % e["at"]
                 vals = e.get("range", "-")
@@ -143,10 +173,15 @@ def main():
                 note = tex_escape(e.get("note", ""))
                 if note:
                     vals = (vals + " --- " if vals else "") + note
-                bits = bitfield(e.get("bits", "-"))
                 out.append("%s & %s & %s & %s \\\\"
-                           % (num, bits, tex_escape(e["name"]), vals))
-            out += ["\\bottomrule", "\\end{longtable}", "}", ""]
+                           % (num, bitfield(e.get("bits", "-")),
+                              tex_escape(e["name"]), vals))
+            out.extend(["\\bottomrule", "\\end{longtable}", "}", ""])
+
+        for area in doc["areas"]:
+            out.append("\\section{%s parameters}" % tex_escape(area["name"].title()))
+            for b in area["blocks"]:
+                emit(b, 0)
         target = sys.argv[sys.argv.index("--tex") + 1]
         open(target, "w").write("\n".join(out) + "\n")
         print("\n  wrote %s" % target)

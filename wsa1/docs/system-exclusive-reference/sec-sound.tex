@@ -61,19 +61,62 @@ and no overlap and come to exactly that total, which is what makes the layout ab
 trustworthy rather than merely plausible.
 \end{note}
 
-\section{What is transcribed here, and what is not}
+\section{How a drum sound is laid out}
+The \textsc{drum sound} area is \textbf{19\,608 bytes} and is arranged quite differently:
+a kit, then a table choosing a sound for each of the 128 note numbers, then 128 note
+records --- one per key.
+
+\begin{center}
+\begin{tabular}{lrrl}
+\toprule
+block & size & repeats & parameter numbers \\
+\midrule
+\textsc{kit data}     & 152 &   1 & \bytes{000}--\bytes{097} \\
+\textsc{sound select} & 256 &   1 & \bytes{098}--\bytes{197}, two bytes per note \\
+\textsc{note data}    & 150 & 128 & \bytes{198} $+$ 150 $\times$ note \\
+\midrule
+total & 19\,608 & & \bytes{000}--\bytes{4C97} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Each note record is itself three kinds of block, and a drum note has \emph{two} tones and
+two modeling blocks where a normal sound has four:
+
+\begin{center}
+\begin{tabular}{lrrl}
+\toprule
+block & size & repeats & offset within the note \\
+\midrule
+\textsc{note general data}  &  18 & 1 & \bytes{000} \\
+\textsc{note tone data}     &  23 & 2 & \bytes{012}, \bytes{029} \\
+\textsc{note modeling data} &  43 & 2 & \bytes{040}, \bytes{06B} \\
+\midrule
+total & 150 & & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The modeling block is the same 43-byte layout a normal sound uses. The tone block is not:
+a drum tone has no pitch or filter envelope of its own and no layer ranges, which is what
+takes it from 81 bytes down to 23.
+
+\begin{note}{The note positions are checked against the guide's own table}
+The guide prints the starting number of every one of the 128 notes. The layout above
+implies them instead --- \bytes{198} plus 150 per note --- and the two agree wherever they
+were compared, including at the last row, \textsc{note:7f}, which both put at
+\bytes{4C02}. With the area also totalling the 19\,608 bytes the program gives, that is
+three independent routes to the same arithmetic.
+\end{note}
+
+\section{What is transcribed here, and how far it is checked}
 The tables give each parameter's number, its bit field within that byte, its name and its
 range. They were read from scans of the published tables, and the numbering is checked by
 the tiling described above. \textbf{The names, bit fields and ranges are not checked by
 anything}; a misreading of one would survive.
 
-Three enumerations the guide prints are not reproduced: the list of about fifty control
-functions that a controller's \textsc{function select} byte chooses from, the meaning of
-the filter \textsc{value} bytes for each filter mode, and the meaning of the twenty
-\textsc{value} bytes under each effect type. All three are in the guide.
+The enumerations these tables point at --- the control functions a controller can be
+assigned to, the filter \textsc{value} bytes for each filter mode, and the
+\textsc{interaction connect} table --- are in chapter~\ref{ch:enums}.
 
 \input{tbl-sound}
-
-\section{Drum sound}
-\textsc{drum sound} is reached at \bytes{18 00 00}, and messages addressed there are
-accepted. Its contents are not enumerated in this edition.
