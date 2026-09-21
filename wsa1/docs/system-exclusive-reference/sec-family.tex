@@ -50,6 +50,15 @@ The dump region addresses are per-product. The SX-KN5000 and SX-KN1500 share ele
 their thirteen region and length pairs with each other, but the SX-WSA1R shares none of
 its eight with either --- its categories are its own.
 
+\begin{note}{A fourth instrument's name sits in the signature table}
+The program holds its block signatures as literals, and immediately after
+\textsc{wsa sound ram s0} --- its own --- comes \textsc{kn3000 sound ram}. No pointer in
+either program image reaches that second string, so nothing here shows it being used, and
+whether this instrument would accept an SX-KN3000 sound block is not established. The
+coverage of that negative is three-byte little-endian pointers across both 512\,KB
+images; the string could still be reached by indexing from the first.
+\end{note}
+
 \begin{caution}{The SX-WSA1R does not accept the GS-style messages its siblings do}
 The SX-KN5000 and SX-KN1500 additionally accept a small set of messages in the
 \bytes{42 12} parameter form, including the sequence \bytes{42 12 40 00 7F 00 41} used

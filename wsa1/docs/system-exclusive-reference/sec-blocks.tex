@@ -15,6 +15,10 @@ twice, as hexadecimal and as text.
 A file whose first bytes do not match the block it claims to be is not a dump of that
 category.
 
+The first \textsc{system, part \& midi} block is a signature in the fullest sense: all 32
+of its bytes are a constant the instrument copies out of its own program when it
+initialises, with one byte filled in afterwards. It carries no settings.
+
 \section{Names}
 The \textsc{sound} block continues, immediately after its sixteen-byte signature, with
 sixteen-byte names in the instrument's own character set, padded with spaces. The second
