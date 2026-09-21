@@ -67,11 +67,14 @@ The combinations' own names are the last 256 bytes of the smaller
 \textsc{combination} block, sixteen of sixteen characters.
 
 \begin{caution}{A part names a preset, and is not itself a stored sound}
-704 is not 713, and a part is not the sound record of section~\ref{sec:soundmemory}: the
-parameters of chapter~\ref{ch:sound} do not land in range when read at any obvious offset
-into a part.
+704 is not 713, and at the offsets the name suggests --- 0, 2 or 3 --- the parameters of
+chapter~\ref{ch:sound} do not land in their declared ranges. Sweeping every offset instead
+does turn up several that would, but that test has only four discriminating fields and a
+baseline of three quarters, so it cannot locate anything: whether a part embeds a sound
+block somewhere is simply not established here.
 
-Nor does a part's name resolve against the sound memory in the same dump. Of 128 part
+What is established is that a part's name does not resolve against the sound memory in the
+same dump. Of 128 part
 names in a real transfer, \textbf{none} matched any of the 259 sounds that transfer
 carried --- they name preset sounds. A librarian should not expect to follow a
 combination's parts into the \textsc{sound} block it arrived with.
