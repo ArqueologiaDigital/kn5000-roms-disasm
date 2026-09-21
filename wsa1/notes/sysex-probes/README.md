@@ -1334,3 +1334,37 @@ beside each, and the document's table is generated from it rather than typed.
 python3 wsa1/notes/sysex-probes/sysex_block_signatures.py --tex \
     wsa1/docs/system-exclusive-reference/tbl-signatures.tex
 ```
+
+### `sysex_sound_layout.py` and `sound_layout.json`
+
+**Question:** is the transcribed `NORMAL SOUND` layout self-consistent, and does it agree
+with what the program says?
+
+`sound_layout.json` is a **transcription**, read by eye off rendered scans of the
+Reference Guide's pages 48–51, which carry no text layer. That is exactly the kind of
+artefact that looks right and is wrong — a `253` misread as `256` changes nothing on the
+page and everything in a librarian. So it is checked by two things it cannot satisfy by
+accident:
+
+1. **The area must tile.** Every parameter number in a group is covered exactly once, no
+   gap and no overlap. A misread digit leaves a hole somewhere and a collision somewhere
+   else, and the assertion names both.
+2. **The total must match the decode.** The three groups with their repeat counts must come
+   to **713 bytes**, the size of the `NORMAL SOUND` area established separately from the
+   program. The guide never prints that number and it was not used to build the
+   transcription.
+
+Together those pin every group boundary and both strides — and they did their job: the
+strides they force (0x51 and 0x2B) reproduce the guide's own four columns
+(`0D9/12A/17B/1CC`, `21D/248/273/29E`) exactly.
+
+⚠ **What they do not check:** a parameter's name, bit field or range. A misreading there
+survives, and the chapter says so rather than implying the whole table is verified.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_sound_layout.py
+python3 wsa1/notes/sysex-probes/sysex_sound_layout.py --tex \
+    wsa1/docs/system-exclusive-reference/tbl-sound.tex
+```
+
+Pass: each group tiles its extent, the repeats land on the stride, the total is 713, `OK`.

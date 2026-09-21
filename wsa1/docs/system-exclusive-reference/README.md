@@ -23,7 +23,7 @@ pdflatex wsa1r-system-exclusive-reference.tex
 pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
 ```
 
-37 pages. Needs only a standard TeX Live.
+43 pages. Needs only a standard TeX Live.
 
 ## Files
 
@@ -42,6 +42,8 @@ pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of cont
 | `tbl-signatures.tex` | **generated** — the block signatures, from a real dump |
 | `sec-settings.tex` | the EXCLUSIVE filter, which sockets carry what, memory protect |
 | `sec-parameters.tex` | the 2B/2C parameter address space |
+| `sec-sound.tex` | the NORMAL SOUND area and its layout |
+| `tbl-sound.tex` | **generated** — the sound parameter tables |
 | `tbl-parameters.tex` | **generated** — the 108-parameter tables |
 | `sec-models.tex` | the two features the rack does not support |
 | `sec-family.tex` | what the SX-KN5000 and SX-KN1500 share and do not |
@@ -61,6 +63,7 @@ python3 ../../notes/sysex-probes/sysex_param_table_tex.py tbl-parameters.tex
 
 ```sh
 python3 ../../notes/sysex-probes/sysex_block_signatures.py --tex tbl-signatures.tex
+python3 ../../notes/sysex-probes/sysex_sound_layout.py --tex tbl-sound.tex
 ```
 
 

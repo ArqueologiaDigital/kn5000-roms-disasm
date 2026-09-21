@@ -1,0 +1,79 @@
+\chapter{The sound areas}\label{ch:sound}
+
+\textsc{normal sound} and \textsc{drum sound} are the two areas of the address map that
+hold an instrument sound rather than a setting. They are reached the same way as any other
+parameter, with \textsc{itr} to write and \textsc{drq} to request.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textsc{adr} & address & area \\
+\midrule
+\bytes{10 00 00} & \bytes{040000} & \textsc{normal sound}, individual \\
+\bytes{18 00 00} & \bytes{060000} & \textsc{drum sound}, individual \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{caution}{This is the sound being edited, not a stored one}
+These addresses reach the instrument's working copy --- the sound currently loaded for
+editing. They are not a way to read or write one of the 32 stored sounds. For those, use
+the \textsc{sound} bulk-dump category, which carries the whole sound memory at
+\bytes{20 00 00}.
+\end{caution}
+
+\section{How a normal sound is laid out}
+The \textsc{normal sound} area is \textbf{713 bytes}. It is one \textsc{general data}
+block, then four identical \textsc{tone data} blocks, then four identical
+\textsc{modeling data} blocks --- the instrument's four tones and the four driver and
+resonator models that go with them.
+
+\begin{center}
+\begin{tabular}{lrrl}
+\toprule
+block & size & repeats & parameter numbers \\
+\midrule
+\textsc{general data}  & 217 & 1 & \bytes{000}--\bytes{0D8} \\
+\textsc{tone data}     &  81 & 4 & \bytes{0D9}, \bytes{12A}, \bytes{17B}, \bytes{1CC} \\
+\textsc{modeling data} &  43 & 4 & \bytes{21D}, \bytes{248}, \bytes{273}, \bytes{29E} \\
+\midrule
+total & 713 & & \bytes{000}--\bytes{2C8} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A parameter number is an offset from the start of the area, so the address of parameter
+\textit{p} of tone \textit{n} (counting tones from 1) is
+
+\begin{center}
+\bytes{040000} $+$ \bytes{0D9} $+$ 81 $\times$ (\textit{n} $-$ 1) $+$ \textit{p}
+\end{center}
+
+expressed as \textsc{adr} in the usual three seven-bit bytes, and the same with \bytes{21D}
+and 43 for a modeling block. The tables below give one instance of each repeating block;
+the other three are identical at the offsets above.
+
+\begin{note}{Two independent sources agree on the size}
+The block sizes and repeat counts here come from Technics' published parameter tables. The
+figure of 713 bytes for the whole area comes from the program, decoded separately, and the
+guide never states it. The transcribed blocks tile \bytes{000} to \bytes{2C8} with no gap
+and no overlap and come to exactly that total, which is what makes the layout above
+trustworthy rather than merely plausible.
+\end{note}
+
+\section{What is transcribed here, and what is not}
+The tables give each parameter's number, its bit field within that byte, its name and its
+range. They were read from scans of the published tables, and the numbering is checked by
+the tiling described above. \textbf{The names, bit fields and ranges are not checked by
+anything}; a misreading of one would survive.
+
+Three enumerations the guide prints are not reproduced: the list of about fifty control
+functions that a controller's \textsc{function select} byte chooses from, the meaning of
+the filter \textsc{value} bytes for each filter mode, and the meaning of the twenty
+\textsc{value} bytes under each effect type. All three are in the guide.
+
+\input{tbl-sound}
+
+\section{Drum sound}
+\textsc{drum sound} is reached at \bytes{18 00 00}, and messages addressed there are
+accepted. Its contents are not enumerated in this edition.
