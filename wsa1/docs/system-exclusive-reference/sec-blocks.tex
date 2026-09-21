@@ -147,9 +147,10 @@ tags are live record numbers in the parameter area.
 
 \section{Inside the SEQUENCER block}\label{sec:seqmemory}
 No capture available for this reference contains a \textsc{sequencer} transfer --- the one
-to hand came from a rack, which refuses that category --- so nothing below was measured
-from a dump. The top-level arrangement is nonetheless settled, because the program gives
-it away.
+to hand came from a rack, which refuses that category. The top-level arrangement is
+settled all the same, because the program gives it away, and the record's own contents
+are read below from a native sequencer file off a disk, which carries the
+\textsc{header} block byte for byte.
 
 \begin{center}
 \begin{tabular}{lll}
@@ -174,8 +175,45 @@ That \textsc{location} carries the name at the \emph{same} offset is what shows 
 song record as well, rather than a directory: it is the working copy, in the shape of a
 stored one.
 
-What the other 3\,066 bytes of a record hold, and how \textsc{performance} is arranged,
-are not covered.
+\subsection{Inside a song record}
+
+A native sequencer file from a disk, \bytes{01220497.SQF}, is 30\,720 bytes --- the
+\textsc{header} block exactly --- and it decodes on the arrangement above without
+adjustment: ten records of 3\,072, each opening \bytes{5A 5A 5A 5A}, each with six
+printable characters at \bytes{+CA}. Nine of the ten are byte-identical, which is what
+ten song slots with one song recorded into them should look like, and the recorded one
+differs from the empty template in 727 bytes.
+
+Most of a song record is material this reference already names. From \bytes{+220} it is a
+tagged stream in the same form as a combination, \bytes{\{tag, length, payload\}} runs
+closed by \bytes{FF FF}, and it falls into three:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+at & records & \\
+\midrule
+\bytes{+220}--\bytes{+4DF} & 23 & \textbf{a complete combination}, 704 bytes \\
+\bytes{+4E0}--\bytes{+AFF} & 49 & parts 8--31, then record \bytes{7A} \\
+\bytes{+B00}--\bytes{+B7F} & 5  & records \bytes{98}, \bytes{99}, \bytes{80}, \bytes{91}, \bytes{93} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The first stream is a combination in the strict sense: the same 23 records in the same
+order and the same 704 bytes as section~\ref{sec:combmemory} gives, compared field for
+field rather than by eye. So a song carries its own combination inside it.
+
+The part records then run \bytes{00}--\bytes{1F} for block~A and \bytes{20}--\bytes{3F}
+for block~B, complete and without gaps: \textbf{a song has thirty-two parts}, the same
+thirty-two the parameter grammar addresses at block \bytes{20} plus the part number.
+Eight arrive inside the embedded combination and the other twenty-four follow it. Every
+one of their fields is named by chapter~\ref{ch:params}, because they are the same
+records --- which puts 2\,400 of a song record's 3\,072 bytes under names this reference
+already carries.
+
+The 544 bytes ahead of the stream and the 128 after it are not covered. Neither is
+\textsc{performance}, the recorded material itself.
 
 \begin{note}{Reassembly is self-checking}
 A block reassembled correctly comes out at exactly the length its own header declared. A

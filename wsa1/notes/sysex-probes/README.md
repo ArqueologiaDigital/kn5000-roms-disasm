@@ -1689,3 +1689,37 @@ python3 wsa1/notes/sysex-probes/sysex_firmware_generation.py
 
 Pass: exactly two rows of each form, all four rows of the shape accounted for, the erratum
 scan matching its hash and confirmed image-only, `OK`.
+
+### `sysex_song_layout.py`
+
+**Question:** what is inside a song?
+
+The largest thing the reference did not cover. No `SEQUENCER` dump exists for this project
+— the rack refuses that category — but **a disk does just as well**: a community disk image
+carries `01220497.SQF`, a native sequencer file of exactly 30 720 bytes, which is the
+`HEADER` block. It decodes on the structure the firmware predicted with no adjustment:
+ten records of 3072, each opening `5A 5A 5A 5A`, six printable characters at `+0xCA`.
+
+★ **Most of a song record is material the reference already names.** From `+0x220` it is a
+tagged stream in the combination's own form, in three parts: `+0220..+04DF` is a
+**complete 704-byte combination**, `+04E0..+0AFF` carries parts 8–31 and record `7A`, and
+`+0B00..+0B7F` holds records `98 99 80 91 93`.
+
+★★ **A song has thirty-two parts** — tags `00..1F` block A and `20..3F` block B, complete
+and without gaps, the same 32 the parameter grammar addresses. Eight arrive inside the
+embedded combination and 24 follow it. That puts **2400 of 3072 bytes** under existing
+names.
+
+The check that carries the claim is an **equality against a structure derived from a
+different source**: the first stream's `(tag, length)` list must equal `SHAPE` in
+`sysex_combination_layout.py`, which was derived from the instrument's own uploads.
+Agreement is not something this script can arrange for itself.
+
+⚠ Still uncovered: the 544 bytes ahead of the stream, the 128 after it, and `PERFORMANCE`.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_song_layout.py
+```
+
+Pass: ten records of 3072, three streams closing on their own terminators, 64 complete
+part tags, the first stream equal to the combination shape and to 704 bytes, `OK`.

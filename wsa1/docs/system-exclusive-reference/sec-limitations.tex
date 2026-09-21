@@ -62,12 +62,14 @@ and \textsc{combination} blocks a dump carries.
   control. Under the gain mask \bytes{3F} both gains read 24 of 0--48, which is centre,
   as a flat equaliser should be. Deciding between the two candidate placements needs an
   instrument whose equaliser has been moved off centre and then dumped.
-\item[A song's contents.] Section~\ref{sec:seqmemory} shows the \textsc{sequencer}
-  block to be ten song records of 3\,072 bytes and names the one field the program
-  reveals. The rest of a record, and the variable-length \textsc{performance} block that
-  carries the recorded material, are not covered; a \textsc{sequencer} transfer from an
-  SX-WSA1 keyboard would be the natural way in, and would also put that category's
-  frame-level behaviour beyond doubt.
+\item[The rest of a song record, and PERFORMANCE.] Section~\ref{sec:seqmemory} now
+  decodes 2\,400 of a song record's 3\,072 bytes, from a native sequencer file off a disk:
+  they are the same tagged records a combination is built from, so
+  chapter~\ref{ch:params} names their fields. What is left is the 544 bytes ahead of that
+  stream, the 128 after it, and \textsc{performance} --- the recorded material, whose
+  length varies and which nothing here describes. A \textsc{sequencer} transfer from an
+  SX-WSA1 keyboard would still be the natural way to put that category's frame-level
+  behaviour beyond doubt, since the rack refuses it.
 \item[Operating system version 1.] Everything here describes version 2.0. Closing this
   needs a dump of the earlier firmware, which this project does not have. This version
   carries no sign of the earlier one: a search of all three program images turns up no
