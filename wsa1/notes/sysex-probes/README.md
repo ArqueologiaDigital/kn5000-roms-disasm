@@ -14,7 +14,9 @@
 | `sysex_cross_product.py` | Is this the SAME protocol in the sibling Technics products? Reads the WSA1R, KN5000 and KN1500 grammars out of raw ROM side by side, prints each one's model triple, fixed messages and bulk-dump regions, and asserts what is shared and what is not. | `python3 wsa1/notes/sysex-probes/sysex_cross_product.py` (summary), `--paths` (every accepted sequence), `--kn7000` (the later, incompatible dialect) |
 | `sysex_wire_capture_check.py` | Does a dump a REAL machine put on the wire obey the frame format decoded from the ROMs? Checks the handshake, header, nibble payload, 0xFC cap, continuation flag, checksum and declared length of all 2883 messages of a captured SOUND+COMBINATION dump. | `python3 wsa1/notes/sysex-probes/sysex_wire_capture_check.py` (summary) or `--frames` |
 | `sysex_model_variant.py` | What the keyboard/rack setting changes about the SysEx implementation: all six entries of the feature table and every reader of it, every other place the SysEx engine reads the setting, and the transmit-time rewrite of the model triple that makes a real rack's dump carry `04 01 11`. | `python3 wsa1/notes/sysex-probes/sysex_model_variant.py` (tables) or `--sites` (every compare site in prom_a) |
+| `sysex_unreachable_commands.py` | The command numbers that have a handler and NO accepted wire sequence (`0x06 0x0D 0x0F 0x10 0x11 0x1D`) — dead code, or reachable another way? — plus what `F0 50 7E` does when it is the WHOLE message, and what family `25` does besides carry a number. | `python3 wsa1/notes/sysex-probes/sysex_unreachable_commands.py` (tables) or `--steps` (every continuation slot) |
 | `sysex_signature_checks.py` | The leading bytes of a block — `WA0`, `WSA1`, `WSA SOUND RAM S0`: do they encode a format or OS version, who checks them, and what happens on a mismatch? Also collects every piece of evidence in the four images bearing on an OS other than the dumped v2.0. | `python3 wsa1/notes/sysex-probes/sysex_signature_checks.py` (tables) or `--artefacts` (confront the ROM literals with a real dump and real disk files) |
+| `sysex_general_midi.py` | Does GENERAL MIDI mode change System Exclusive behaviour: which messages stop being accepted, whether bulk dump or the parameter families are affected, whether the instrument TRANSMITS on entering or leaving GM, and where the GM state sits inside a bulk dump. | `python3 wsa1/notes/sysex-probes/sysex_general_midi.py` (tables) or `--records` (all 77 records of the SYSTEM,PART & MIDI part-2 block) |
 
 ## Signal being read
 
@@ -685,6 +687,93 @@ A raw byte scan for a branch displacement matches inside other instructions —
 instead of 14. Every candidate must be checked against an instruction
 boundary before it is believed.
 
+## `sysex_unreachable_commands.py` — signal being read
+
+Both load bases asserted by content, and then a third, stronger base check:
+every instruction line this script reads out of `prom_a/wsa1_prom_a.s` is
+compared against the raw image before it is used (119 331 lines, 0
+mismatches), so the instruction boundaries are the tree's, not a guess.
+
+* **The orphans are unreachable, and the argument is a negative.** A command
+  number reaches a handler only out of parse-record field 0, and field 0 is
+  written at exactly **19** sites, **all** of them inside the grammar walker
+  `0xFB63D1-0xFB6B87`. The script finds those sites by locating every
+  call/`calr` to the setter `sub_FB6219` and reading the `pushw` immediates
+  behind it, so "no accepted sequence" really does mean "no way in".
+* **0x0D is the receive half of the transmitter at `0xFB248A`**, which has no
+  caller in prom_a. Its header prom_b `0xF4FF10` is `20 00 00 / 00 00 10` —
+  the SOUND address with a length of 16 — and the trie accepts the SOUND
+  address only with `10 00 00`. The descriptor writer both halves call,
+  `sub_FB7629`, sets `start == end` and size 0.
+* **0x0F / 0x10 / 0x11 are a whole three-part category that was stubbed out.**
+  They demand steps 0 / 8 / 9 where SEQUENCER demands 0 / 12 / 13, they arm
+  continuation slots 7 / 8 / 9, 0x11 calls the same run-time length decoder
+  `sub_FB741A` that SEQUENCER part 3 does — and every routine that would move
+  data is a single `ret`: `0xFB753D`, `0xFB766C`, `0xFB766D`, `0xFB766E`,
+  the entry hook `0xFB7EE3` and the error recovery `0xFB7EE4`. Each stub sits
+  one byte before a real routine of the same shape, which is why the script
+  asserts the entry byte rather than trusting a name.
+* **0x1D is a dump request for job 1**, and `JumpTable_FB2081[1]` runs
+  `sub_FB22E6`, a single `ret` — the one job slot with no body. The other
+  four request arms carry jobs 4/3/2/5, which are in the SEND menu's own
+  row→job table.
+* **0x06 is below the session loop's floor**: `cp a,0x07 / jr c` at
+  `0xFB283C`, and its session slot `0xFB3233` is a `ret`.
+* **`F0 50 7E` needs a flag and a checksum.** `sub_FB6CFC` sets the parity
+  limit to *write pointer − 3* and starts from the payload cursor; the parse
+  record is initialised from prom_b `0xF511E9` = `00 00 00 00 00` then eleven
+  `FF`, so the count triple is never zero and the parity rule always runs for
+  a `7E`. A bare `F0 50 7E F7` therefore takes status `0x11`, and BOTH
+  dispatchers (`0xFB217D`, `0xFB2887`) refuse to run a handler once a status
+  is set — so command 0x0A never executes and nothing is transmitted.
+* **Command 0x0A dispatches a second time, on the session step**, through
+  the 18-entry table `0xF4F99E` (bound `cp A,0x12` at `0xFB2C7E`). Twelve
+  slots accept a frame; six — 0, 3, 6, 10, 14, 17, the states in which a
+  *header* is expected — raise status `0x13`, which `STATUS_MAP` sends to
+  the same screen as every other `ERROR 41!`.
+* **Family 25, both directions, five gates each**, read as instruction bytes:
+  the model-variant feature slot 5, `(0x207A) != 0x79`, `(0x7F32)` bit 2
+  clear, `(0x7F38)` bit 3 set, and on the send side `(0x0922)` bit 0 clear.
+  The value is `lo | hi<<4`, bounded 40..300 in both. The **sender clamps**
+  (`0xFB33B8` / `0xFB33C6` store 40 and 300); the **receiver clamps nothing** —
+  the script asserts there is no `ldw WA,0x78` anywhere in the receiver, and
+  that the one that exists is in the sequencer clock programmer at
+  `0xFAA368`, which rewrites the *stored* tempo.
+* **The write-protect class table** prom_b `0xF4FE82`, indexed by command and
+  read against `(0x7FD6)`: bit 0 refuses `0x0D 0x0E 0x17`, bit 1 refuses
+  `0x15 0x16`, either bit refuses `0x0A 0x0B 0x0C`. SEQUENCER and the
+  ordinary parameter write `0x18` are class 0 and are never refused.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. Headline numbers: **7542**
+accepted sequences over **27** command numbers with **6** orphans; **19**
+writers of the command field, **0** outside the walker; **0** callers of
+`0xFB248A`; **6** `ret` stubs behind 0x0F/0x10/0x11; **12 of 18**
+continuation slots live; tempo `40 → F0 50 25 08 02 F7`, `120 → 08 07`,
+`300 → 0C 12`.
+
+### ⚠ A correction to the published reference
+
+`sec-message-set.tex` says of family `25` that "a value outside that range is
+treated as 120". **The receiver does no such thing** — it drops the message,
+changing nothing and reporting nothing. The 120 belongs to the sequencer
+clock programmer, which rewrites the *stored* tempo if it ever finds it out
+of range, and to the sender's own prefill `08 07 F7`.
+
+### Traps
+
+1. `sub_FB741A` appears in the call list of 0x11 and of 0x14 and is **not** a
+   descriptor writer — it is the run-time length decoder. Asserting that
+   every routine 0x11 calls is a stub fails on it.
+2. A routine that is "a single `ret`" must be tested by its **entry byte**,
+   not by its name: `sub_FB753D` and `sub_FB753E` differ by one byte and one
+   of them is the SEQUENCER's real descriptor writer.
+3. The parse record is **double buffered** (`0x60FCD8` and `0x60FCDC` swap in
+   `sub_FB8028`), which is why a data handler reads the session step out of
+   one record and writes its status into the other. Reading both out of the
+   same pointer makes every step test look wrong.
+
 ## `sysex_signature_checks.py` — signal being read
 
 Both load bases are asserted by content: prom_b must hold `F0 50 23 7E F7` at
@@ -765,3 +854,71 @@ python3 wsa1/notes/sysex-probes/manual_model_markers.py
 ⚠ Only `WSA1-Practical Applications.pdf` has a usable text layer. The service manual and
 the technical guide are page images and `pdftotext` returns nothing from them — see
 `technics_roms/tools/render_service_manual_sheet.py` for those.
+
+## `sysex_general_midi.py` — signal being read
+
+Both load bases are asserted by content first: prom_b must hold
+`F0 50 23 7E F7` at `0xF4FEB4`, prom_a `00 03 05 04 02` at `0xF99AE3`.
+
+* **The two messages.** The trie ROOT `0xF5115B` is applied to message byte
+  **2** — `sub XWA,XWA / inc 2,XWA / add (XBC+0x02),XWA` at `0xFB63DD`
+  skips the `0xF0` and the identifier — so `7F` → `09` → `01`/`02` yields
+  commands `0x20`/`0x21`. ⚠ The identifier is tested only while the message
+  is COLLECTED (`cp H,0x50 / cp H,0x7E` at `0xFB210E`) and never again, so
+  the grammar itself does not distinguish `F0 7E …` from `F0 50 …`.
+* **Three dispatch tables, two answers.** `0xF4F800` (interrupt-side) and
+  `0xF4F888` (foreground) both hold `0xFB51E7`/`0xFB520C`; the in-session
+  table `0xF4F916` holds `0xFB3230`, whose byte is `0x0E`, a bare `ret`.
+  The script asserts the opcode, not the address.
+* **GM mode is ONE BIT**, bit 2 of `(0x7F4D)`. The receive handlers are
+  asserted byte for byte: `set 7,(0x60F020)`, `or/and (0x7F4D)`, then the
+  posted event `{0x91, 0x03, value, 0x04}`. The OFF handler reaches the
+  same bit as `(0x7F4A)+3` and returns at once when it is already clear;
+  the ON handler has no guard at all.
+* **★ The echo lock.** Bit 7 of `(0x60F020)` is SET at exactly two sites
+  (both receive handlers), read with mask `0x80` at exactly one
+  (`0xFB5F36`), has no `bit 7,(…)` form anywhere, is cleared by no
+  instruction, and no `and` of that cell clears it. prom_b and prom_c never
+  touch the cell. RESET zeroes it — the single `ld XBC,0x3000 /
+  ld XIX,0x00604000` clear at `0xF827AF` covers `0x604000..0x610000`.
+* **★★ The instrument transmits.** `sub_FB5F2E` builds
+  `{0xB0, 0x11|0x10, 0x00, 0x7F}` and calls `sub_FB4CAE`, which selects the
+  6-byte literal at `0xF4FEE6` or `0xF4FEEC` by the record's byte +1. Index
+  `0xB0` of the 192-entry class table `0xF4FB38` is the same emitter. The
+  builder is called from `sub_FB590A`, which `UiListA_Class91` (`0xF87B02`)
+  names as the ONLY handler of internal event class `0x91` — the class the
+  receive handlers, the panel toggle, the boot restore and the SMF loader
+  all post. It is NOT gated by the EXCLUSIVE transmit filter
+  (`(0x7F38)` bit 3), which guards only `sub_FB4B7D`.
+* **★★★ Where GM sits in a dump.** `sub_FB75E4` sizes SYSTEM,PART & MIDI
+  part 2 from the constants `0x7620` and `0x7F7E`; the same two bound the
+  record walk at `0xFAAAD4`/`0xFAAADA`, whose stride is
+  `ld C,(XIX+1) / inc 2,XBC / add XIX,XBC`. The block is a list of
+  `{id, length, payload}` records: walking the factory default image at
+  prom_b `0xF3F400` gives **77 records ending exactly on `0x7F7E`** — the
+  last-entry test. `0x7F4D` falls in the record whose id is `0x91`, at
+  payload byte **3**: the SAME `0x91`/`0x03` pair the internal event
+  carries. Block offset **2349** of 2400, factory default `0x00` = off.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. Headline numbers:
+commands `0x20`/`0x21`; flag bit `0x04` of `0x7F4D`; echo lock set 2× /
+read 1× / cleared 0×; literals `0xF4FEE6` and `0xF4FEEC`; **77** records
+ending on `0x7F7E`; GM at block offset **2349**, record id `0x91`, payload
+byte 3; **3** GM-bit sites in the whole engine span and **0** data-table
+references to `0x7F4D`.
+
+### Traps
+
+1. **`0x60F020` has other tenants.** `0xFABA46` reads the same cell and
+   tests bit 1. Counting reads of the cell instead of reads that mask with
+   `0x80` makes the lock look like it has two readers.
+2. **The two 6-byte literals sit just past the nine fixed messages** at
+   `0xF4FEB4-0xF4FEE2`, inside the same run of template bytes. They are not
+   part of that table and no template index reaches them; only
+   `sub_FB4CAE`'s two `lda` operands do.
+3. A GM message arriving **while a bulk dump session is open** is not
+   ignored — the in-session collector at `0xFB60EE` demands identifier
+   `0x50`, raises status `0x02`, and `STATUS_MAP[2]` is the `ERROR 41!`
+   screen. The transfer dies; GM mode does not change.
