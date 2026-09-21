@@ -1739,9 +1739,11 @@ It also characterises the companion `.SEQ` (179 200 bytes), which is `PERFORMANC
 fixed-size record array, commonest bytes `00`/`81`/`90`, and `90` is MIDI note-on, so it is
 an event stream.
 
-**Locally it is plainly events**: from the first one it parses as a delta below `80`, an
-`81` present on some records and not others, a status, and four data bytes — 39 records
-before a data byte exceeds `80`.
+**Locally it is plainly events**: a delta below `80`, any number of `81` bytes, then a
+status *or none at all* (MIDI running status) — **85 records**, 5 on running status, 20
+with a leading `81`, statuses only `90` (note-on) and `B4` (control change). Requiring the
+four payload bytes to be valid MIDI data below `80` stops the parse at record 39, so at
+least one of them is not a 0–127 quantity.
 
 ⚠ **Globally there is no such framing, and the test shows why.** If the stream were
 fixed-width with one status per record, one column would be full of bytes ≥ `80`. For every
@@ -1808,3 +1810,26 @@ python3 wsa1/notes/sysex-probes/sysex_remap_files.py
 
 Pass: offsets equally spaced, every name printable, `16*(groups+1) + 128*width == map size`
 closes, eight identity maps, `OK`.
+
+### `manual_sequencer_specs.py`
+
+**Question:** what does the published manual say about the things this project measured?
+
+The English owner's manual exists twice in the archive and **one copy carries an OCR text
+layer** — the only Technics volume here that can be searched rather than rendered. It had
+gone unread for the same reason the Reference Guide did: nobody looked inside the archive.
+
+★★ It confirms, from a source that knew nothing of this decode:
+
+| the manual says | what it confirms |
+|---|---|
+| "32 MIDI parts available (32-part multi-timbral)" | a song's part tags `00..1F` / `20..3F` — **32 parts** |
+| "play back up to 10 performances" | `SEQUENCER` is **ten** song records of 3072 |
+| "16 recording tracks" | the header's three 17-entry tables hold **one more than the tracks** |
+| "16-track, 47,000 note Sequencer" | ~4 bytes a note — the only external constraint on the event encoding |
+
+```sh
+python3 wsa1/notes/sysex-probes/manual_sequencer_specs.py
+```
+
+Pass: all five phrases present in the extracted text, both hashes matching, `OK`.

@@ -206,7 +206,10 @@ field rather than by eye. So a song carries its own combination inside it.
 
 The part records then run \bytes{00}--\bytes{1F} for block~A and \bytes{20}--\bytes{3F}
 for block~B, complete and without gaps: \textbf{a song has thirty-two parts}, the same
-thirty-two the parameter grammar addresses at block \bytes{20} plus the part number.
+thirty-two the parameter grammar addresses at block \bytes{20} plus the part number. That
+is not only an inference from the tags --- the owner's manual advertises ``32 MIDI parts
+available (32-part multi-timbral)'', and in the same breath that the sequencer records
+``up to 10 performances'', which is the ten song records this block is made of.
 Eight arrive inside the embedded combination and the other twenty-four follow it. Every
 one of their fields is named by chapter~\ref{ch:params}, because they are the same
 records --- which puts 2\,400 of a song record's 3\,072 bytes under names this reference
@@ -245,10 +248,12 @@ seventeen \bytes{+100} entries is in use, and the last ten of their 16-bit value
 consecutively --- which is what a block allocator handing out consecutive blocks looks
 like, though this reference does not decode what they index.
 
-The instrument's own help text names three special tracks besides the melody ones ---
-\textsc{rhythm}, \textsc{chord} and \textsc{control} --- so a per-track reading of these
-tables is the natural one. It is not established here, and the seventeen is a measurement
-while the reading is not.
+Technics publishes the track count, and it is \textbf{sixteen}: ``this instrument's
+\textsc{sequencer} has 16 recording tracks''. So the tables carry one entry more than
+there are tracks. The instrument's own help text names three special tracks besides the
+melody ones --- \textsc{rhythm}, \textsc{chord} and \textsc{control} --- and a per-track
+reading of the tables is the natural one. The seventeen is a measurement; which track each
+entry belongs to, and what the seventeenth is for, are not established here.
 
 \paragraph{The 128 bytes after it.} \bytes{+B80} to the end is identical in all ten
 records, recorded and empty alike, and is almost entirely zero. Nothing a song does
@@ -268,10 +273,13 @@ byte is not padding. Its commonest bytes are \bytes{00} at 16.1\,\%, \bytes{81} 
 14.6\,\% and \bytes{90} at 9.9\,\%.
 
 \emph{Locally} it is plainly events. From the first one the stream parses as a delta
-below \bytes{80}, then an \bytes{81} that is present on some records and absent on
-others, then a status byte, then four data bytes. \bytes{90} is MIDI note-on and
-\bytes{B4} appears where a controller would. It keeps parsing that way for 39 records
-before a data byte goes over \bytes{80}.
+below \bytes{80}, then any number of \bytes{81} bytes, then a status --- or no status at
+all, which is MIDI running status, the previous one standing --- then four payload bytes.
+It runs that way for \textbf{85 records}, five of them on running status and twenty
+carrying a leading \bytes{81}, and the only statuses that appear are \bytes{90}, note-on,
+and \bytes{B4}, a control change. What the four payload bytes are is not determined here:
+requiring them to be valid MIDI data below \bytes{80} stops the parse at the 39th record,
+so at least one of them is not a 0--127 quantity.
 
 \emph{Globally} there is no such framing, and the way to see that is to look for the
 status column. If the stream were fixed-width with one status byte per record, one column
@@ -293,6 +301,11 @@ four tried that beats chance at all.
 
 It is reported here as a lead and not as a finding. A third of all blocks begin with
 \bytes{80} anyway, the test was chosen after seeing the data, and one file is one file.
+
+What the manual does supply is a capacity: a ``16-track, 47\,000 note Sequencer''. Over a
+\textsc{performance} of the size seen here that is a shade under four bytes a note, which
+is the right order for an event of a delta, a note, a velocity and a length, and is the
+one external constraint on the encoding this reference has.
 \end{note}
 
 \begin{note}{Reassembly is self-checking}

@@ -220,30 +220,42 @@ print("  commonest bytes: %s"
 assert [v for v, _ in top] == [0x00, 0x81, 0x90], "the byte profile has changed"
 
 # LOCALLY it is events.  From the first one the stream parses as
-#   [delta < 0x80] [0x81 prefix, sometimes] [status >= 0x80] [4 bytes]
-# and keeps parsing for 39 records before a data byte goes over 0x80.
+#   [delta < 0x80] [zero or more 0x81] [status >= 0x80, or none] [4 bytes]
+# where "no status" is MIDI running status -- the previous status stands.  The
+# four payload bytes are taken verbatim; requiring them to be under 0x80 stops
+# the parse dead at the 39th record, and they are plainly not all data in the
+# 0..127 sense.
 def local_parse(start):
-    i, n, pre = start, 0, 0
+    i, n, run, pre = start, 0, 0, 0
+    stats = Counter()
     while i < len(seq) - 8:
         if seq[i] >= 0x80:
             break
-        j = i + 1
-        st = []
-        while j < len(seq) and seq[j] >= 0x80 and len(st) < 2:
+        j, st = i + 1, []
+        while j < len(seq) and seq[j] >= 0x80 and len(st) < 8:
             st.append(seq[j]); j += 1
-        if not st or any(x >= 0x80 for x in seq[j:j + 4]):
+        if st:
+            stats[st[-1]] += 1
+            pre += len(st) - 1
+        else:
+            run += 1
+        if j + 4 > len(seq):
             break
-        if len(st) > 1:
-            pre += 1
         n += 1; i = j + 4
-    return i, n, pre
+    return i, n, run, pre, stats
 
 
-stop, nrec, npre = local_parse(8)
-print("\n  from the first event it parses as [delta][0x81 sometimes][status][4 bytes]")
-print("  for %d records (%d of them carrying the 0x81), then stops at 0x%X"
-      % (nrec, npre, stop))
-assert (nrec, npre) == (39, 10), "the local parse has changed"
+stop, nrec, nrun, npre, stats = local_parse(8)
+print("\n  from the first event it parses as [delta][0x81...][status or none][4 bytes],")
+print("  'or none' being MIDI running status, for %d records before it loses sync" % nrec)
+print("    %d of them use running status, %d carry a leading 0x81" % (nrun, npre))
+print("    statuses seen: %s"
+      % ", ".join("0x%02X x%d" % (k, v) for k, v in stats.most_common()))
+assert (nrec, nrun, npre) == (85, 5, 20), "the local parse has changed"
+assert set(stats) == {0x90, 0xB4}, "the status set has changed"
+print("  0x90 is note-on and 0xB4 a control change, so these are MIDI events; but")
+print("  the roles of the four payload bytes are NOT determined here, and the")
+print("  parse desynchronises at 0x%X, a fifth of one per cent into the file." % stop)
 
 # GLOBALLY there is no such framing: if the stream were fixed-width with one
 # status byte per record, one column would stand out.  None does.
