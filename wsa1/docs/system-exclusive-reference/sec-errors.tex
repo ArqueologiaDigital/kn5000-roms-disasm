@@ -36,7 +36,8 @@ The general reception failure. It covers:
 \item a message inside a session that does not begin \bytes{F0 50};
 \item a status byte other than \bytes{F7} arriving inside an open message;
 \item a framing, parity or overrun error on the MIDI input, or loss of active sensing;
-\item no reply within the timeout;
+\item no reply within the reply window, including the acknowledgement that each
+  data message must receive;
 \item a message longer than 254 bytes;
 \item an odd number of payload bytes;
 \item a continuation flag that is neither \bytes{00} nor \bytes{01};
@@ -44,9 +45,22 @@ The general reception failure. It covers:
 \end{itemize}
 
 \section{ERROR 42 --- transmission}
-Raised when the instrument cannot complete an outgoing transfer internally, roughly a
-second after the attempt stalls. In this version it has a single cause and does not
-indicate a fault on the MIDI cable or at the receiving device.
+Raised when an outgoing transfer stalls inside the instrument: the send path waits for one
+block to be handed over internally, and reports \textsc{error 42} when that wait times out
+after about a second. In version~2.0 this is its only cause.
+
+\begin{caution}{ERROR 42 is not a report about the receiving device}
+The published manual describes \textsc{error 42} as an error during transmission, with the
+data not having been received correctly. That is not what the instrument tests. The
+condition it reports is internal to the sending machine and can arise with nothing
+connected to the MIDI output at all.
+
+A genuine failure at the far end looks different. No acknowledgement within the reply
+window, a framing, parity or overrun error on the input, and a transfer abandoned after its
+three retries all raise \textsc{error 41}. Software diagnosing a failed transfer should
+read \textsc{error 41}, not \textsc{error 42}, as the sign of a problem on the cable or at
+the receiver.
+\end{caution}
 
 \section{Interference from other traffic}
 While a bulk-dump session is open, unrelated System Exclusive traffic arriving on the MIDI

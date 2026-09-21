@@ -174,6 +174,29 @@ for sentinel, code in ((0xF511AF, 0x07),   # root, depth 1
                        (0xF50207, 0x0A)):  # node "2D 04 00", depth 4
     assert b(sentinel, 2) == bytes([0xFF, code]), f"sentinel 0x{sentinel:06X}"
 
+# --- WHAT the single reachable ERROR 42 actually tests -------------------
+# The raise at 0xFB6FFB is the target of one conditional branch, and the
+# instruction pair in front of that branch says what the condition IS:
+#     FB6FD1  call 0xF4123C        -> Link_WaitBlockDone
+#     FB6FD5  cp WA,0xFFFF         -> 0xFFFF is that routine's timeout return
+#     FB6FD9  jr z,.LFB6FFB        -> taken ONLY on the timeout
+# So ERROR 42 reports an INTERNAL block-transfer deadline, not a MIDI-side
+# condition.  The published manual calls it "the data has not been received
+# correctly", which this branch cannot be testing: nothing here reads the
+# MIDI input.
+assert a(0xFB6FD1, 12) == bytes([0x1D, 0x3C, 0x12, 0xF4,      # call 0xF4123C
+                                 0xD8, 0xCF, 0xFF, 0xFF,      # cp WA,0xFFFF
+                                 0x66, 0x20,                  # jr z,+0x20
+                                 0x1E, 0x62]), "the ERROR 42 branch moved"
+assert 0xFB6FD9 + 2 + 0x20 == 0xFB6FFB, "the branch no longer lands on the raise"
+
+# The MIDI-side failures raise ERROR 41, not 42, which is the other half of
+# the correction.  Status 0x05 at 0xFB77A1 is guarded by a 1000-tick deadline
+# on a reply, and status 0x04 at 0xFB776D by the UART error bits 0x2C of (0x9E).
+assert a(0xFB7794, 3) == bytes([0x33, 0xE8, 0x03]), "the reply deadline moved"
+assert a(0xFB7761, 6) == bytes([0xC0, 0x9E, 0x23, 0xCB, 0xCC, 0x2C]), \
+    "the UART error-bit test moved"
+
 # --- headline assertions -----------------------------------------------
 def screen(st): return message(STATUS_MAP[st])[2].split(" | ")[0]
 assert screen(0x00) == "COMPLETED!",  screen(0x00)
@@ -183,6 +206,8 @@ for st in (0x08, 0x09, 0x0A):
 assert screen(0x14) == "ERROR 41!",   screen(0x14)   # checksum mismatch
 assert screen(0x16) == "ERROR 21!",   screen(0x16)   # "Memory full", NOT a 4x
 assert screen(0x20) == "ERROR 42!",   screen(0x20)
+assert screen(0x04) == "ERROR 41!",   screen(0x04)   # UART line error
+assert screen(0x05) == "ERROR 41!",   screen(0x05)   # reply deadline
 # 0x20 is the only status mapping to ERROR 42 that the ROM ever raises
 e42 = [st for st in range(len(STATUS_MAP)) if screen(st) == "ERROR 42!"]
 assert e42 == [0x18, 0x1F, 0x20], e42
