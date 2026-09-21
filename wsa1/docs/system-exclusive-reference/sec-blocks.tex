@@ -255,11 +255,20 @@ produces seventeen \emph{disjoint} chains, which nothing but a real per-track in
 do. The other two tables are the same length and are read the same way here, which is an
 inference from their length rather than a measurement.
 
-Technics publishes the track count, and it is \textbf{sixteen}: ``this instrument's
-\textsc{sequencer} has 16 recording tracks''. So there is one entry, and one chain, more
-than there are recording tracks. The instrument's own help text names three special tracks
-besides the melody ones --- \textsc{rhythm}, \textsc{chord} and \textsc{control}. Which
-entry is which track, and what the seventeenth carries, are not established here.
+\textbf{Entry $i$ is track $i$}, and its events address part $i$. A controller event
+names the part it addresses in its second data byte, and for sixteen of the seventeen
+entries \emph{every} such event in the chain names the entry's own index --- against a
+control, each entry paired with the next entry's chain, that matches none of the
+seventeen. A chain's last block is only partly used and its tail holds stale bytes, so it
+is excluded; with it left in, those stale events show up as the same handful of part
+numbers in every chain, which is how the tail was noticed.
+
+The seventeenth is the exception, and informatively so. Technics publishes \textbf{sixteen}
+recording tracks --- ``this instrument's \textsc{sequencer} has 16 recording tracks'' ---
+and entry~16 carries no part-addressed controller events at all. The instrument's help
+text names three special tracks besides the melody ones, \textsc{rhythm}, \textsc{chord}
+and \textsc{control}, so a seventeenth stream that addresses no part is consistent with a
+conductor track; what it does carry is not established here.
 
 \paragraph{The 128 bytes after it.} \bytes{+B80} to the end is identical in all ten
 records, recorded and empty alike, and is almost entirely zero. Nothing a song does

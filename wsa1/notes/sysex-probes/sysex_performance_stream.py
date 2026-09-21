@@ -163,6 +163,49 @@ assert cback / (cfwd + cback) > 0.25, "the control no longer disagrees"
 print("  -> the first data byte of every event is its offset inside the step")
 print("     that 0x81 advances.")
 
+# ---- WHICH TRACK IS WHICH.  A B0 event's second data byte is the part it
+# addresses.  If entry i of the song header is track i, then every B0 event in
+# entry i's chain should name part i.  A chain's LAST block is only partly
+# used and its tail holds stale bytes, so it is excluded -- and that exclusion
+# is not a convenience: with it included the stale events are visible as a
+# recurring {1, 2, 5, 12} in every chain, which is how it was noticed.
+def b0_parts(blocks):
+    p = b"".join(block(n)[DATA_AT:] for n in blocks)
+    c, i = Counter(), 0
+    while i < len(p):
+        if p[i] < 0x80:
+            i += 1; continue
+        st, j = p[i], i + 1
+        while j < len(p) and p[j] < 0x80:
+            j += 1
+        if st == 0xB0 and j - i - 1 == 5:
+            c[p[i + 2]] += 1
+        i = j
+    return c
+
+
+print("\n  which entry is which track -- a B0 event's second data byte is the")
+print("  part it addresses, and a chain's partly-used last block is excluded:")
+named = 0
+for i, c in enumerate(chains):
+    parts = b0_parts(c[:-1])
+    ok = list(parts) == [i]
+    named += ok
+    print("    entry %2d  B0 parts %-14s %s"
+          % (i, dict(sorted(parts.items())), "== the entry index" if ok
+             else ("no B0 events" if not parts else "")))
+assert named == 16, "expected 16 entries to name themselves, got %d" % named
+
+# the control: pair each entry with the NEXT chain instead of its own
+shifted = sum(1 for i in range(TRACKS)
+              if list(b0_parts(chains[(i + 1) % TRACKS][:-1])) == [i])
+print("    CONTROL, each entry paired with the next entry's chain: %d of %d"
+      % (shifted, TRACKS))
+assert shifted == 0, "the control matches too, so the test proves nothing"
+print("  -> entry i is track i, and its events address part i.  Entry 16, the")
+print("     one beyond the sixteen recording tracks Technics publishes, carries")
+print("     no part-addressed controller events at all.")
+
 notes = [e[2] for e in events if e[1] == 0x90 and len(e[2]) == 5]
 print("\n  %d note events; their five bytes, as ranges:" % len(notes))
 for k, name in enumerate(("offset in step", "note number", "velocity",

@@ -1910,9 +1910,20 @@ chains**. A track is then a flat event stream, `[status ≥ 0x80][N data bytes <
 is its offset within the step: within a step those offsets go backwards 11 times in 15 306
 pairs (0.07%), where the same events **shuffled** go backwards 38.8%.
 
+★★ **It also settles which entry is which track.** A `B0` event names the part it
+addresses in its second data byte, and for **16 of the 17** entries *every* such event in
+the chain names the entry's own index — control (each entry paired with the next entry's
+chain): **0 of 17**. The 17th names no part at all, which matches Technics publishing
+sixteen *recording* tracks.
+
+⚠ A chain's last block is partly used and its tail holds stale bytes; excluding it is not a
+convenience — with it left in, the stale events appear as the same `{1,2,5,12}` in every
+chain, which is how the tail was noticed.
+
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_performance_stream.py
 ```
 
 Pass: 17 disjoint chains totalling 560 blocks, zero stray bytes, the per-status lengths,
-and the offset ordering beating its shuffled control, `OK`.
+the offset ordering beating its shuffled control, and 16 entries naming themselves with the
+control at 0, `OK`.

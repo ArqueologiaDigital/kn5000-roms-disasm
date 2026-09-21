@@ -85,17 +85,17 @@ and \textsc{combination} blocks a dump carries.
   or what it resolved to. Eight of the nine re-maps in the corpus are identity maps, so
   the two sides coincide wherever it could be checked. Deciding it needs a machine with a
   non-identity re-map loaded, dumped.
-\item[Which track is which.] Section~\ref{sec:seqmemory} covers a song record's shape
-  entirely --- 2\,400 of its 3\,072 bytes are the same tagged records a combination is
-  built from, the 544-byte header is laid out field by field, and the 128-byte tail is
-  untouched by any song --- and \textsc{performance} is decoded: 256-byte blocks numbered
-  from one, chained by a 16-bit link at \bytes{+03}, carrying a flat event stream whose
-  statuses and lengths are tabulated there.
+\item[What the seventeenth stream carries.] Section~\ref{sec:seqmemory} covers a song
+  record's shape entirely, decodes \textsc{performance} --- 256-byte blocks numbered from
+  one, chained by a 16-bit link at \bytes{+03}, carrying a flat event stream whose
+  statuses and lengths are tabulated --- and establishes that entry $i$ of the song
+  header is track $i$.
 
-  What is left is a labelling question rather than a structural one. The song header holds
-  three seventeen-entry tables and Technics publishes sixteen recording tracks, so there is
-  one entry more than there are tracks. Which entry belongs to which track, and what the
-  seventeenth carries, would be settled by one recording made on a known single track.
+  Sixteen of the seventeen entries are the sixteen recording tracks Technics publishes,
+  each naming its own part in every controller event it carries. The seventeenth names no
+  part. What it holds is the one thing about the sequencer this reference does not say,
+  and a recording made on a known single track would settle it along with the roles of the
+  header's other two seventeen-entry tables.
 \item[Operating system version 1.] Everything here describes version 2.0. Closing this
   needs a dump of the earlier firmware, and there is not one to be had here: the archive
   this project works from carries a single firmware set, whose own accompanying note calls
