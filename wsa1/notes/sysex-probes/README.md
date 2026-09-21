@@ -1644,14 +1644,17 @@ Adding the third corpus changed none of them, which is the point: a constancy cl
 worth exactly what its corpus is worth. "Reserved, write zero" is a stronger statement than
 "unknown", and it is what the corpus supports.
 
-What genuinely varies is the last three bytes of each block — an index `00..0F`, an index
-`00..07` and a flag. They are **two fields, not one written twice**: equal in 1280 records
-and different in the other 776. Block A's is unused by every one of the 1024 user parts;
-block B's is used by both sources.
+★★★ **The trailing triple is a second `PROGRAM CHANGE & BANK`.** `+1B` and `+1C` are one
+7-bit number split four bits and three; `+1D` is a bank from the same value set the part's
+own bank uses. Of 890 parts carrying a non-zero one, number **and** bank both match the
+part's own in 296, and **the number never matches without the bank matching too** (0
+cases) — against a control, the same test against a neighbouring part, that lands 39 times.
+The 4+3 split is confirmed from outside the dump by `sysex_remap_files.py`: a re-map is 16
+groups of 8 holding `(number, source)` pairs.
 
-★ **The obvious hypothesis is refuted here rather than left standing.** The triple looks
-like a cache of the sound the part plays; it is not, because the same program number
-carries two different triples in 36 cases. Reporting that is the point of the test.
+★ An earlier hypothesis is refuted here rather than left standing: the triple is not a
+*cache* of the sound, because the same program number carries two different triples in 36
+cases. That is exactly what an indirection between the two copies produces.
 
 ★★★ **The equaliser is fully resolved — placement, bit layout and scale.** The guide's own
 packing note says `EQ Fc` is **5 bits** and `EQ G` is **6 bits**: eleven bits do not fit in
@@ -1775,3 +1778,33 @@ python3 wsa1/notes/sysex-probes/sysex_song_layout.py
 
 Pass: ten records of 3072, three streams closing on their own terminators, 64 complete
 part tags, the first stream equal to the combination shape and to 704 bytes, `OK`.
+
+### `sysex_remap_files.py`
+
+**Question:** what is a re-map, and why does it explain a combination's trailing triple?
+
+A second copy of an address that usually differs from the first is an **indirection**, and
+the instrument has one. The disk set carries RE-MAP files, and their shape is the evidence.
+
+A re-map file is a 32-byte header — ASCII `WSA1 `, then three little-endian offsets and a
+zero terminator — followed by three maps:
+
+| file | kind | map size | layout |
+|---|---|---|---|
+| `.CRM` | COMBI RE-MAP | 528 | 1 name + **16 group names** of 16, then 128 entries of 2 |
+| `.SRM` | SOUND RE-MAP | 528 | same |
+| `.DRM` | USER DRUM MAP | 144 | 1 name of 16, then 128 entries of 1 |
+
+★★ **Sixteen groups of eight is the same 4+3 split a part's trailing triple uses**, and the
+entries are `(number, source)` pairs — which is what the triple holds. The source byte
+takes 0,1,2,8,9 across these files; a part's `+1D` takes 0,1,8,9,0x20.
+
+★ Eight of the nine maps are identities; the ninth is `GM RE-MAP`, and the probe asserts
+that count so the non-identity one is *demonstrably* different rather than assumed to be.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_remap_files.py
+```
+
+Pass: offsets equally spaced, every name printable, `16*(groups+1) + 128*width == map size`
+closes, eight identity maps, `OK`.

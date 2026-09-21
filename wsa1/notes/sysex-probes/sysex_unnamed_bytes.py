@@ -178,24 +178,56 @@ for label, combos in CORPUS:
         if label == "disk .CMB":
             assert nz == 0, "the disk corpus now uses the triple"
 
-# ---- is the triple a cache of the part's program number?
-obs = {}
-for _, _, _, a, b in ROWS:
-    key = (a[0], a[1], a[2])
-    for role, t in (("A", tuple(a[0x1B:0x1E])), ("B", tuple(b[0x1B:0x1E]))):
-        obs.setdefault((role, key), set()).add(t)
-ambiguous = {k: v for k, v in obs.items() if len(v) > 1}
-print("\nIS THE TRIPLE A FUNCTION OF PROGRAM CHANGE & BANK?")
-print("  %d distinct programs; %d of them carry more than one triple"
-      % (len({k[1] for k in obs}), len(ambiguous)))
-for k, v in sorted(ambiguous.items())[:4]:
-    print("    %s prog %02X %02X %02X -> %s"
-          % (k[0], k[1][0], k[1][1], k[1][2],
-             " ".join("(%02X %02X %02X)" % t for t in sorted(v))))
-assert ambiguous, "the triple now IS a function of the program -- re-open this"
-print("  NO -- the same program carries different triples, so it is not a cache")
-print("  of the sound.  What it is, is open; the shape (a 0..15 index, a 0..7")
-print("  index and a flag) is the same shape the combination memory itself uses.")
+# ---- what the triple IS.  Its shape is a 7-bit number split four bits and
+# three -- 0..15 and 0..7 -- and the disk's re-map files use exactly that split:
+# a re-map is 16 GROUPS of 8, 128 entries of (number, source).  So test the
+# triple as a second PROGRAM CHANGE & BANK for the same part.
+TRIPLES = []
+for _, _, _, a_, b_ in ROWS:
+    for r in (a_, b_):
+        t = (r[0x1B], r[0x1C], r[0x1D])
+        if t != (0, 0, 0):
+            TRIPLES.append((t, a_[0], a_[1]))
+
+both = num_only = bank_only = neither = 0
+for t, prog, bank in TRIPLES:
+    n, bk = (t[0] * 8 + t[1]) == prog, t[2] == bank
+    if n and bk:
+        both += 1
+    elif n:
+        num_only += 1
+    elif bk:
+        bank_only += 1
+    else:
+        neither += 1
+print("\nWHAT THE TRAILING TRIPLE IS")
+print("  %d parts carry a non-zero triple.  Reading +1B and +1C as one 7-bit"
+      % len(TRIPLES))
+print("  number, +1B * 8 + +1C, and +1D as a bank:")
+print("    number AND bank both equal the part's own PROGRAM CHANGE & BANK : %d (%.0f%%)"
+      % (both, 100.0 * both / len(TRIPLES)))
+print("    the number matches but the bank does not                        : %d" % num_only)
+print("    the bank matches but the number does not                        : %d" % bank_only)
+print("    neither                                                         : %d" % neither)
+
+# the null: the same test against a different part's program and bank
+shifted = [TRIPLES[(i + 1) % len(TRIPLES)] for i in range(len(TRIPLES))]
+ctrl = sum(1 for (t, _, _), (_, p2, b2) in zip(TRIPLES, shifted)
+           if (t[0] * 8 + t[1]) == p2 and t[2] == b2)
+print("  control -- the same test against the NEXT part's program and bank: %d (%.1f%%)"
+      % (ctrl, 100.0 * ctrl / len(TRIPLES)))
+
+assert num_only == 0, \
+    "the number now matches without the bank matching, which breaks the reading"
+assert both > 6 * ctrl, "the agreement is no longer well above its control"
+print("  The number NEVER matches without the bank matching too, and the pair")
+print("  agrees %.1f times as often as the control.  So the triple is a second"
+      % (float(both) / ctrl))
+print("  PROGRAM CHANGE & BANK for the part: a 7-bit number split four bits and")
+print("  three, plus a bank drawn from the same values the part's own bank uses.")
+print("  It equals the part's own in a third of cases and differs in the rest --")
+print("  which is what the far side of a re-map looks like, and it is why the")
+print("  triple is not a function of the program: an indirection sits between.")
 
 print("\nBLOCK B +18..+1A, the three bytes ahead of its triple")
 cnt = Counter(tuple(r[4][0x18:0x1B]) for r in ROWS)

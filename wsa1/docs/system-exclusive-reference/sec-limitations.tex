@@ -17,45 +17,35 @@ and \textsc{combination} blocks a dump carries.
 
 \section{Open, and what would close it}
 \begin{description}
-\item[Some bytes inside a combination.] The combination stream is decoded in
+\item[Three bytes inside a combination.] The combination stream is decoded in
   section~\ref{sec:combmemory}, and chapter~\ref{ch:params} names most of what its
-  records hold; the effect records are named by chapter~\ref{ch:effects} instead, as a
-  type and its values. What was left over has now been read across the whole stored
-  corpus --- 385 combinations of eight parts, so 3\,080 part records, from three sources
-  produced independently of one another: the 129 presets carried in the program, 128 from
-  a user's flash dump, and 128 more from the combination area of a native disk file ---
-  and most of it turns out not to be unknown but fixed.
+  records hold; the effect records are named by chapter~\ref{ch:effects} instead. What was
+  left over has been read across the whole stored corpus --- 385 combinations of eight
+  parts, so 3\,080 part records, from three sources produced independently of one another:
+  the 129 presets carried in the program, 128 from a user's flash dump, and 128 more from
+  the combination area of a native disk file.
 
-  \emph{Fixed.} Block~A holds the same value in all 3\,080 records at \bytes{+02},
+  \emph{Reserved.} Block~A holds the same value in all 3\,080 records at \bytes{+02},
   \bytes{+04}, \bytes{+10} and \bytes{+15}--\bytes{+1A}, and block~B does at
-  \bytes{+00}--\bytes{+02}, \bytes{+0D}, \bytes{+11}, \bytes{+12} and \bytes{+15}.
-  Every one of them reads zero. Write zero there; a dump that carries anything else is
-  something this reference does not describe.
+  \bytes{+00}--\bytes{+02}, \bytes{+0D}, \bytes{+11}, \bytes{+12} and \bytes{+15}. Every
+  one reads zero. Write zero there.
 
-  \emph{Live.} What varies is the last three bytes of each block, and the two blocks
-  carry the same shape there: an index \bytes{00}--\bytes{0F}, an index
-  \bytes{00}--\bytes{07}, and a flag. They are two fields and not one written twice ---
-  they agree in most records and differ in 776. Block~A's is unused by all 1\,024 user
-  flash parts and by all but 38 preset parts; block~B's is used in 434 preset parts and
-  418 user flash ones. The disk corpus uses neither: all 1\,024 of its parts read zero in
-  both, which is the strongest sign yet that the triple is not part of a combination's
-  edited state. Ahead of block~B's sit three more,
-  \bytes{+18}--\bytes{+1A}, which take fifteen distinct combinations across the corpus
-  and read \bytes{01 01 01} or \bytes{00 01 01} in four records out of five.
+  \emph{Named.} The last three bytes of each block are a second \textsc{program change \&
+  bank} for that part: \bytes{+1B} and \bytes{+1C} are one 7-bit number split four bits
+  and three, and \bytes{+1D} is a bank drawn from the same values the part's own bank
+  uses. Of the 890 parts carrying a non-zero one, the number and the bank \emph{both}
+  match the part's own in 296, and the number never matches without the bank matching too
+  --- against a control, the same test run against a neighbouring part, that lands 39
+  times. The shape is confirmed from outside the dump as well: the instrument's re-map
+  files are sixteen groups of eight, the same 4+3 split, holding entries that are exactly
+  (number, source) pairs. A second copy of an address that usually differs from the first
+  is an indirection, which is also why the triple is not a function of the program number.
 
-  The natural reading of that triple is that it caches the sound the part is playing.
-  It does not: the same program number carries two different triples in 36 cases, so
-  the triple is not determined by the program. The shape it does have --- a sixteen-way
-  index, an eight-way index and a flag --- is the shape by which the combination memory
-  is itself addressed. Four searches of the program have been run against these bytes
-  and all four came back empty or powerless: no menu screen captions them, the setter
-  that takes a literal record and offset writes none of them, the six routines that
-  reach a part through the instrument's own part pointer are the six that read the
-  override byte, and looking for their addresses as literals has no discriminating
-  power --- a byte pair occurs by chance often enough in half a megabyte to swamp it,
-  as a named byte used as a control demonstrates. They are written through pointers
-  built at run time, so naming them needs the writer caught in the act rather than
-  found by searching.
+  \emph{Open.} Block~B's \bytes{+18}--\bytes{+1A}, three bytes taking fifteen distinct
+  combinations across the corpus and reading \bytes{01 01 01} or \bytes{00 01 01} in four
+  records out of five. And which side of the indirection the triple is --- what the part
+  asked for, or what it resolved to --- is not established; deciding that needs a machine
+  with a non-identity re-map loaded, dumped.
 \item[What a song's header fields mean, and PERFORMANCE.] Section~\ref{sec:seqmemory}
   now covers the whole of a song record's shape: 2\,400 of its 3\,072 bytes are the same
   tagged records a combination is built from, so chapter~\ref{ch:params} names their
