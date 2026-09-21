@@ -56,8 +56,10 @@ WHERE THE SIGNAL IS  (prom_a 0xF80000, prom_b 0xF00000; both bases asserted)
     word at prom_b 0xF4FE68.  NOTHING reads field 0x0F for 2B/2C afterwards --
     every reader of it is a 2D bulk-data handler.
 
-  * REPLY.  A 2B reaches the descriptor's +0x18 method, which reaches one of
-    four builders, one per data length.  Each emits, in order: the six-byte
+  * REPLY.  A 2B reaches the descriptor's +0x18 method, which reaches a
+    builder.  Five of them are checked here -- one per data length, plus the
+    part variant and the wildcard variant; there are others and they are not
+    claimed to be all.  Each emits, in order: the six-byte
     literal `F0 50 2C 04 00 11` at prom_b 0xF4FEF2; six bytes of address and
     count taken from the DESCRIPTOR; 2*N nibble bytes; and one flag byte, 0,
     from an all-zero prefill.  Then 0xFB7111 appends the checksum and F7.
@@ -67,8 +69,11 @@ WHERE THE SIGNAL IS  (prom_a 0xF80000, prom_b 0xF00000; both bases asserted)
         2 bytes 0xFB536D  emits 5  (prefill 0xF4FA90)
         3 bytes 0xFB5425  emits 7  (prefill 0xF4FA95; `add C,0x20` 0xFB5496
                                     patches the same byte)
-    So the reply's address is the address that was asked for, and its count
-    triple is the parameter's own.
+        1 byte  0xFB49FF  emits 3  (the one wildcard record; parse field 0x0B
+                                    -- the byte 8 that was asked for -- is
+                                    written back over the copy at 0xFB4A7F)
+    Every one of them therefore answers at the address that was ASKED FOR,
+    not at the descriptor's literal one, and with the parameter's own count.
 
   * SAME ENCODING AS THE BULK DUMP, literally.  The bulk receive unpacker
     0xFB72B5 runs the same three instructions on the same cursor field
@@ -312,11 +317,13 @@ assert b(0xF4FA84, 3) == bytes(3) and b(0xF4FA90, 5) == bytes(5) and b(0xF4FA95,
 BUILDERS = {                       # emitter -> (data bytes emitted, prefill)
     0xFB4D62: (3, 0xF4FA84), 0xFB4F8F: (3, 0xF4FA8D),
     0xFB536D: (5, 0xF4FA90), 0xFB5425: (7, 0xF4FA95),
+    0xFB49FF: (3, 0xF4FA81),
 }
 SITES = {0xFB4D62: (0xFB4DAC, 0xFB4DB9, 0xFB4DF8),
          0xFB4F8F: (0xFB4FD9, 0xFB4FE6, 0xFB503E),
          0xFB536D: (0xFB53BC, 0xFB53C9, 0xFB5400),
-         0xFB5425: (0xFB5470, 0xFB547D, 0xFB5546)}
+         0xFB5425: (0xFB5470, 0xFB547D, 0xFB5546),
+         0xFB49FF: (0xFB4A56, 0xFB4A63, 0xFB4A9C)}
 for fn, (n, pre) in BUILDERS.items():
     hdr, desc, data = SITES[fn]
     assert a_(hdr, 3) == hx("0B 06 00"), "%06X: header is not 6 bytes" % fn
@@ -325,10 +332,13 @@ for fn, (n, pre) in BUILDERS.items():
     assert (n - 1) % 2 == 0, "data block has no room for the flag"
     assert b(pre, n) == bytes(n), "%06X: prefill is not all zero" % fn
 # the header literal is named at each builder, and the part patch at two of them
-for site in (0xFB4DAF, 0xFB4FDC, 0xFB53BF, 0xFB5473):
+for site in (0xFB4DAF, 0xFB4FDC, 0xFB53BF, 0xFB5473, 0xFB4A59):
     assert a_(site, 5) == hx("F2 F2 FE F4 31"), "reply header not named at %06X" % site
 assert a_(0xFB4FF9, 3) == hx("C9 31 05"), "part patch (set 5,A) moved"
 assert a_(0xFB5496, 3) == hx("CB C8 20"), "part patch (add C,0x20) moved"
+# the wildcard builder writes the REQUESTED byte 8 back over the copy
+assert a_(0xFB4A72, 3) == hx("0B 0B 00"), "wildcard patch no longer reads field 0x0B"
+assert a_(0xFB4A7F, 3) == hx("BE F8 41"), "wildcard patch target moved"
 
 # the bulk-dump unpacker is the same three instructions on the same cursor
 assert a_(0xFB72E2, 3) == hx("CE EE 04"), "bulk sll h,4 moved"

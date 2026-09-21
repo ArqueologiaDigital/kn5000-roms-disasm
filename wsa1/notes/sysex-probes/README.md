@@ -507,11 +507,14 @@ of the instruction bytes and asserted, never quoted.
   and `0xFB72B5` (bulk) run the same three instructions on the same cursor
   field: `sll h,4`, `and A,0x0F`, then `or`/`xor` — which agree because the
   nibbles do not overlap.  High nibble first, two wire bytes per data byte.
-* **The reply.** Four builders, one per data length, each emitting
+* **The reply.** Five builders checked (one per data length, plus the part
+  and wildcard variants; there are others), each emitting
   6 header + 6 address-and-count + 2N nibble + 1 flag bytes.  The script reads
   the three `pushw` counts out of each builder and asserts them, asserts each
   one names the `F0 50 2C 04 00 11` literal at `0xF4FEF2`, and asserts the two
-  part builders patch address byte 7 to `0x20 + part` (`set 5,A` / `add C,0x20`).
+  part builders patch address byte 7 to `0x20 + part` (`set 5,A` / `add C,0x20`)
+  and the wildcard builder writes the requested byte 8 back over its copy —
+  so a reply always answers at the address that was **asked for**.
 * **A refused `2B`/`2C` is answered `F0 50 29 7E F7`** — `0xFB5197`, gated on
   the family being `2B` or `2C`, reading the literal at `0xF4FEC8`.  No other
   family is answered when it is refused, and an accepted `2C` is not answered
