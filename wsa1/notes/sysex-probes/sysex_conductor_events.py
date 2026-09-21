@@ -155,10 +155,40 @@ assert 20 <= value <= 511, "the value is not in any plausible tempo range"
 print("     the two agree byte for byte, and %d is a tempo." % value)
 
 ev87 = [e for e in found if e[0] == 0x87][0]
-print("\n   the other event, %s: a 7-bit value of %d, which the consumer stores"
-      % (" ".join("%02X" % c for c in ev87), ev87[2]))
-print("   as %d -- it adds one -- and the transmitter subtracts one again."
-      % (ev87[2] + 1))
-print("   Not named here.  A per-song time signature fits the arithmetic and")
-print("   the help text, and fitting is not the same as being shown.")
+num = ev87[2] + 1
+print("\n   THE OTHER EVENT, %s" % " ".join("%02X" % c for c in ev87))
+
+# its emitter's template, which carries the status as a literal
+TEMPLATE = bytes.fromhex("870000")
+tpl = [BASE + m.start() for m in re.finditer(re.escape(TEMPLATE), PROM_B)]
+print("     a 3-byte emitter template beginning 87 00 00 at: %s"
+      % " ".join("0x%06X" % t for t in tpl[:4]))
+assert tpl, "the 0x87 emitter template is gone"
+
+# the setting it carries cycles 1..8 in the user interface
+CYCLE = bytes.fromhex("c2d73460") + bytes.fromhex("3f08")   # cp (0x6034d7),0x08
+INC = bytes.fromhex("c2d73460") + bytes.fromhex("61")       # inc 1,(0x6034d7)
+assert re.search(re.escape(CYCLE), PROM_B), "the 1..8 wrap is gone"
+assert re.search(re.escape(INC), PROM_B), "the increment is gone"
+print("     the setting it carries is cycled 1..8 with wraparound by a control")
+
+# and a display routine writes it as a NUMERATOR over a literal 4
+DENOM = bytes.fromhex("2104") + bytes.fromhex("c2d7346020")  # ld A,0x04 ; ld W,(0x6034d7)
+den = [BASE + m.start() for m in re.finditer(re.escape(DENOM), PROM_B)]
+print("     a display routine loads the literal 4 and then the setting, and")
+print("     writes the PAIR -- a numerator over a denominator of four -- at: %s"
+      % " ".join("0x%06X" % x for x in den))
+assert den, "the numerator-over-four store is gone"
+
+# the screen's own words
+assert b"TIME SIG" in PROM_B and b"/4" in PROM_B, "the TIME SIG caption is gone"
+i = PROM_B.index(b"TIME SIG")
+near = PROM_B[i:i + 24]
+print("     and the screen text reads: %r"
+      % "".join(chr(c) if 32 <= c < 127 else "." for c in near))
+assert b"/4" in near, "the caption no longer has /4 beside it"
+
+print("     -> 0x87 carries the TIME SIGNATURE numerator, stored one less than")
+print("        it reads.  This song's %d means %d/4." % (ev87[2], num))
+assert 1 <= num <= 8, "the numerator is outside the range the control allows"
 print("\nOK")

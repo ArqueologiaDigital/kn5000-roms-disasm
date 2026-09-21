@@ -353,13 +353,18 @@ The transmitter for the event is in the program too, and it settles the encoding
 arithmetic on the stored event and the transmitter's arithmetic back again reproduces the
 stored bytes exactly, and the value between them is \textbf{150}.
 
-\bytes{87} is a song-level setting and is not named here. Its handler puts a 7-bit value
-into a one-byte mailbox whose top bit means ``changed''; the consumer clears that bit, adds
-one, and distributes the result, and the transmitter subtracts one again. The stored value
-in this song is 3, so the instrument's own is 4. A per-song time signature --- which the
-instrument's help text says cannot be changed once tracks exist, so it would be written
-once at the head of a conductor track, where this one sits --- fits that arithmetic. Fitting
-is not the same as being shown, and this reference does not claim it.
+\bytes{87} is the \textbf{time signature}. Its handler puts a 7-bit value into a one-byte
+mailbox whose top bit means ``changed''; the consumer clears that bit, \emph{adds one}, and
+distributes the result, and the event's own emitter --- whose template carries the status
+\bytes{87} as a literal --- subtracts one again. The setting it carries is cycled
+\textbf{1 to 8} with wraparound by a front-panel control. And a display routine loads the
+literal \textbf{4}, then that setting, and writes the pair: a numerator over a denominator
+of four, drawn immediately before the tempo. The screen's own text reads
+\textsc{time sig}~$=$~\textit{n}/4.
+
+So the stored value is one less than the numerator. This song carries 3, which is
+\textbf{4/4}, and the two events at the head of its conductor track are its time signature
+and its tempo.
 
 \paragraph{The 128 bytes after it.} \bytes{+B80} to the end is identical in all ten
 records, recorded and empty alike, and is almost entirely zero. Nothing a song does

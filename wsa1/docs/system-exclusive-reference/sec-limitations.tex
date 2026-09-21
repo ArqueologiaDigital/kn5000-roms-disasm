@@ -17,36 +17,24 @@ and \textsc{combination} blocks a dump carries.
 
 \section{Open, and what would close it}
 \begin{description}
-\item[What three inert bytes are for.] Section~\ref{sec:combtail} settles how the tail of
-  a part block behaves: the reserved runs, the second \textsc{program change \& bank}, and
-  block~B's \bytes{+18}--\bytes{+1A}, which no code on either processor reads. That last
-  one leaves a question this project cannot answer from what it has. A byte the program
-  never reads has no purpose the program can reveal, so if those three ever meant
-  something it was to a version of the firmware that is not in any archive here --- which
-  makes this the same wall as the next item and not a separate one.
-\item[One event of one kind.] Section~\ref{sec:seqmemory} decodes
-  \textsc{performance}, establishes that entry $i$ of a song header is track $i$, shows the
-  seventeenth stream to be a timekeeper, and names the first of its two events: \bytes{80}
-  is the tempo, on a round trip through the instrument's own encoder and decoder that
-  reproduces the stored bytes exactly.
-
-  The second, \bytes{87}, carries one 7-bit value that the instrument stores with one added
-  to it. What that value \emph{is} is the last thing about the sequencer this reference
-  does not say. A per-song time signature fits the arithmetic and fits what the
-  instrument's help text says about time signatures, and this reference declines to promote
-  a fit. One recording made with a deliberately unusual time signature would settle it.
-\item[Operating system version 1.] Everything here describes version 2.0. Closing this
-  needs a dump of the earlier firmware, and there is not one to be had. The archive this
-  project works from carries a single firmware set, whose own accompanying note calls
-  version 2 ``probably the last released version''; every copy of a WSA1 program image
-  anywhere on this project's machine hashes to those same four files. This is an absence
-  of an artefact rather than a piece of analysis left undone, and no amount of reading
-  version 2 will produce version 1 --- a search of all three program images for a
+\item[Operating system version 1 --- and one thing that depends on it.]
+  Everything here describes version 2.0. Closing this needs a dump of the earlier
+  firmware, and there is not one to be had. The archive this project works from carries a
+  single firmware set, whose own accompanying note calls version 2 ``probably the last
+  released version''; every copy of a WSA1 program image anywhere on this project's
+  machine hashes to those same four files. A search of all three program images for a
   conversion path, for compatibility text, and for anything that compares the version byte
-  a block carries, turns up nothing. This version
-  carries no sign of the earlier one: a search of all three program images turns up no
-  conversion path and no compatibility text, and nothing compares the version byte a
-  block carries. A reader can nonetheless establish what they are holding, two ways.
+  a block carries, turns up nothing --- so no amount of reading version 2 will produce
+  version 1.
+
+  One other question reduces to this one. Section~\ref{sec:combtail} shows that block~B's
+  \bytes{+18}--\bytes{+1A} are read by no code on either processor, measured over every
+  access in all four images against a control that fires on the bytes next door. A byte
+  the program never reads has no purpose that program can reveal. If those three ever
+  meant anything it was to a firmware this project cannot see, which makes it the same
+  wall and not a second one.
+
+  A reader can nonetheless establish what they are holding, three ways.
 
   Over MIDI: \textsc{ver}, the sixth byte of any message that carries it, is \bytes{11}
   here --- exclusive specification 2.1. A machine speaking a different version announces
