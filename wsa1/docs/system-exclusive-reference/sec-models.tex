@@ -52,7 +52,14 @@ dump and see whether anything arrives.
 \end{note}
 
 \begin{note}{Which machine is which}
-The two behaviours are selected by a hardware input read once at power-on, not by anything
-the program names. Identifying the \bytes{01} machine as the rack rests on the service
-documentation for that input rather than on the program itself.
+The two behaviours are selected by a hardware input read once at power-on; the program
+names neither model. The identification rests on two outside sources that agree.
+
+The service documentation for that input identifies the machine that reads the second
+value as the rack. Independently, Technics' own user guide marks the features the rack
+lacks: its sequencer chapter is headed \textsc{sequencer (wsa1)}, and fifty-nine passages
+across the guide carry the same \textsc{(wsa1)} marker for keyboard-only functions. A
+model with no sequencer has nothing to put in a \textsc{sequencer} dump and no use for a
+tempo message, which is exactly the pair of System Exclusive functions that machine
+refuses.
 \end{note}
