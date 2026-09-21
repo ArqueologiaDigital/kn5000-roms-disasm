@@ -106,7 +106,8 @@ RUN
 PASS
     Every assert is silent and the script prints OK.  Headline numbers:
     3756 sequences under each family, of which 3750 (2C) / 3742 (2B) reach a
-    parameter; 6 wire bytes of header, 3 of address, 3 of count; 1809 of the
+    parameter; 6 wire bytes of header, 3 of address, 3 of count, so 15 + 2N
+    bytes in all; 1809 of the
     1875 addressable parameters are one byte long, 64 are two and 2 are three;
     the checksum is (0 - sum(bytes after F0 up to and including the flag)) & 7F
     and the three worked examples check out under it.
@@ -404,6 +405,12 @@ W3 = message(0x2C, (0x00, 0x20, 0x00), (0x00, 0x00, 0x03), [0x12, 0x00, 0x40])
 assert W3 == hx("F0 50 2C 04 00 11 00 20 00 00 00 03 01 02 00 00 04 00 00 45 F7")
 assert len(W3) == 21
 
+# LENGTH FORMULA, asserted rather than asserted-by-eye: 6 header + 3 address
+# + 3 count + 2N data + flag + checksum + F7.
+for m, n in ((WRITE, 1), (W7, 1), (W3, 3), (REPLY, 1)):
+    assert len(m) == 15 + 2 * n, "a write of %d data bytes is %d long" % (n, len(m))
+assert len(REQ) == 15, "a request is not 15 bytes"
+
 # every example verifies under the instrument's own rule
 for m in (WRITE, REQ, W7, W3):
     assert checksum(m[1:-2]) == m[-2], "worked example fails its own checksum"
@@ -481,8 +488,8 @@ for r in rows:
     print("  %-7s %-25s %-25s %s" % r)
 
 print()
-print("  message length = 13 + 2*N for a write, 15 for any request,")
-print("  13 + 2*N for a reply, where N is the count.")
+print("  message length = 15 + 2*N for a write and for a reply, and 15 for")
+print("  any request whatever N is, because a request carries no data.")
 print("  N is the parameter's own data length: %d parameters take 1 byte, "
       "%d take 2, %d take 3." % (N1, N2, N3))
 print("  For N = 1 the triple is not pinned by the grammar; the parser reads it")
