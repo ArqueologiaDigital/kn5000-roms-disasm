@@ -1,21 +1,33 @@
 \chapter{Scope of this edition}\label{ch:limits}
 
 This reference covers message framing, the bulk-dump transfer protocol, the parameter
-address space, the universal messages, error reporting and the differences between the two
-models. The following are not covered.
+address space, the sound and drum areas, the effects, the universal messages, error
+reporting, the differences between the two models, and the layout of the \textsc{sound}
+and \textsc{combination} blocks a dump carries.
 
+\section{Deliberately outside it}
 \begin{description}
-\item[What the parameters do.] Chapter~\ref{ch:params} enumerates all 108 addresses of
-  the \bytes{00} area with their name, length, bit mask, accepted values and position in a
-  dump. It does not explain what each setting does to the sound; the user manuals do that.
-\item[Inside a combination part, and the SEQUENCER block.] Chapter~\ref{ch:blocks} takes both
-  of those blocks down to the record level. What the 704
-  bytes of a combination part hold beyond the name is in no published table --- the
-  guide's own stop at the drum sound --- and would have to be decoded. How a stored
-  sequence is arranged is likewise not covered.
+\item[What a parameter does to the sound.] Chapter~\ref{ch:params} enumerates all 108
+  addresses of the \bytes{00} area with their name, length, bit mask, accepted values and
+  position in a dump, and chapter~\ref{ch:sound} does the same for the sound areas. What a
+  setting \emph{does} is the user manuals' subject, not a protocol reference's.
+\item[The effect block diagrams.] The guide draws the signal path of each of the 56
+  effects. Chapter~\ref{ch:effects} gives their parameters instead.
+\end{description}
+
+\section{Open, and what would close it}
+\begin{description}
+\item[Inside a combination part.] Section~\ref{sec:combmemory} establishes that a part is
+  704 bytes and names a preset sound. What the rest holds is in no published table --- the
+  guide's own parameter tables stop at the drum sound --- so closing it means decoding the
+  program, as the \bytes{00} area was decoded.
+\item[The SEQUENCER block's contents.] Its addresses and lengths are confirmed twice over
+  (chapter~\ref{ch:bulk}), but no capture here contains one, so how a stored sequence is
+  arranged is unknown. One transfer from an SX-WSA1 keyboard would settle it, and would
+  also put that category's frame-level behaviour beyond doubt.
 \item[Operating system version 1.] Everything here describes version 2.0, whose
   \textsc{ver} byte is \bytes{11} --- exclusive specification 2.1. A machine speaking a
-  different version announces it in that byte, which is the sixth of any message that
-  carries one, so a receiver can tell at once that it is talking to something this
-  reference does not describe.
+  different version announces it in that byte, the sixth of any message carrying one, so a
+  receiver can tell at once that it is talking to something this reference does not
+  describe. Closing it needs a dump of that firmware, which this project does not have.
 \end{description}
