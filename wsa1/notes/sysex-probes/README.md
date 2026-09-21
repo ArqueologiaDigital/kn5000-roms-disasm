@@ -1089,3 +1089,79 @@ boundaries before it is believed.  That is the same trap
   read off a prom_b directory slot (`T_F408F0`) with no located caller.
 * **`(0x7F32)` bit 4**, a fifth condition the received tempo value must pass
   (`0xFB57FC`) before it reaches the tempo itself.  It is on no MIDI page.
+
+## `sysex_screen_fields.py` — signal being read
+
+A menu screen is a stream of compact records. A caption is
+`[style?] [len] [col] [row] <ASCII…>` and an editable field is
+`[kind] [len] [addr lo] [addr hi] [mask] [shift] … [col] [row]`, where `addr`
+is a 16-bit work-RAM address and `shift` is the bit position of `mask`'s
+lowest set bit. Caption and field carry the **same row**, so the caption on a
+field's row is the label the instrument itself prints for that RAM byte — and
+`(addr, mask, shift)` identifies the SysEx parameter exactly.
+
+This script scans both images for that shape and prints every hit beside the
+captions on its row.
+
+### Pass criterion
+
+None: it is a search. The rows worth keeping are the ones whose `y=` column is
+not `None`.
+
+### Trap
+
+It finds only the fields that name their RAM byte as a **16-bit literal**. A
+per-part screen reaches the part record through an index register, so none of
+the 57 part parameters appears here; those are named by the MIDI they gate or
+emit instead (see below). A hit is a lead, not a fact — pin it as a literal
+byte string in `sysex_param_screen_names.py` before calling it established.
+
+### The position is ONE 16-bit number
+
+MEMORY PROTECT's `SOUND         :` caption sits at column 240 and is 15
+characters long, so its value cell lands at 240+15+2 = **257** — which the
+record stores as column 1 of the *next* row. Read the trailing pair as two
+independent bytes and that field looks like it belongs to a different line.
+
+## `sysex_param_screen_names.py` — signal being read
+
+Names the `00`-area parameters from the instrument itself, by two mechanisms,
+with every claim pinned as a literal byte string at a literal address:
+
+* **The menu screens** — the caption/field row pairing above, for 19
+  parameters across TUNE & SCALE, TOUCH SENSITIVITY, DATA LOAD FILTER,
+  MEMORY PROTECT, DRUMS MAP and MIDI TOTAL MODE.
+* **The MIDI they gate or emit** — a part-record bit that gates a routine
+  which builds a control-change message names itself, because the routine
+  writes the controller number as a literal and the manual's CONTROLLER ASSIGN
+  page prints the same numbers: MODULATION1 #1, MODULATION2 #2, CTRL.PEDAL #4,
+  HOLD #64, R.T.CREAT.X #16, .Y #17, R.T.CTRL.X #18, .Y #19, plus status 0xE0
+  for PITCH BEND and 0xD0 for AFTER TOUCH. Likewise the three MIDI-input
+  filters, reached from the status-nibble table at `0xFA6242` (program change)
+  and the controller map at `0xFA83E8` (bank select, volume).
+
+### Pass criterion
+
+Every assert silent, `OK`, then the 39 established rows.
+
+### ★ MASTER TUNE, proved to the last digit
+
+`0xFA0525` fills the two MASTER TUNE display cells `0x264C`/`0x264D` from a
+reverse lookup of `(0x7F4A)` — parameter `00/08` — in the table at `0xFA1C5C`:
+index *H* gives `H/3 + 27` whole hertz and `H % 3` the tenth. The loop starts
+at H=1, giving **427.3 Hz**, and the table's last entry is H=78, giving
+**453.0 Hz** — the published range exactly.
+
+### ★ The controller routines feed CPU 2, not the MIDI port
+
+`0xFC1A1A` hands its 4-byte message to `0xF40ED4`, the CPU1↔CPU2 link. So the
+ten bits at record `0x20` offsets 0x0B/0x0C/0x0E (`20/70`…`20/79`) are the
+**INTERNAL SOUND** controller page, and their bit-for-bit mirror at offsets
+0x13/0x14/0x16 (`20/55`…`20/5E`) is the MIDI OUTPUT FILTER page — not the
+other way round.
+
+### Trap
+
+`SOUND MUTE` reads `0x7F0B` and `FOOT SW1/2 POLARITY` read `0x7F12`; neither
+is one of the 108 parameters. A published setting having no parameter address
+is a real result, not a gap in the search.
