@@ -6,6 +6,7 @@
 | `sysex_error_codes.py` | Which internal status code raises `ERROR 40!`, `ERROR 41!` or `ERROR 42!`, and where in prom_a is each one raised? | `python3 wsa1/notes/sysex-probes/sysex_error_codes.py` (table) or `--sites` (every raise site) |
 | `sysex_bulkdump_tx.py` | What does the machine put on the wire when SYSEX BULK DUMP -> SEND is pressed: which menu row dumps what, what the frame header says, and how the checksum and the block size are computed? | `python3 wsa1/notes/sysex-probes/sysex_bulkdump_tx.py` (tables) or `--frames` (block arithmetic + a worked checksum) |
 | `sysex_command_map.py` | Walking the grammar to the BOTTOM (not depth 8): what does each accepted sequence make the instrument DO? Covers `25`, `7E`-as-third-byte, the `2D` subtree and the dump request. | `python3 wsa1/notes/sysex-probes/sysex_command_map.py` (tables) or `--paths` (all 7542 sequences) |
+| `sysex_param_wire_format.py` | The COMPLETE byte layout of a `2B` / `2C` message: where the data sits, what the count triple means, what a request carries instead of data, what the reply looks like, and what a receiver must compute for the checksum. Ends with worked examples it verifies. | `python3 wsa1/notes/sysex-probes/sysex_param_wire_format.py` (tables + examples), `--lengths` (every multi-byte parameter) or `--capture` (re-check the checksum rule against the real dump) |
 | `sysex_param_space.py` | The `2B` and `2C` families: what the bytes after the model id `11` mean, which command id each sequence terminates in, and how `2B` differs from `2C`. | `python3 wsa1/notes/sysex-probes/sysex_param_space.py` (tables), `--params` (every parameter with its accepted value range) or `--paths` (all 7512 sequences) |
 | `sysex_dump_categories.py` | WHICH of the five bulk-dump categories emits WHICH data header, in what order, and what the header's 21-bit address field means. | `python3 wsa1/notes/sysex-probes/sysex_dump_categories.py` (tables) or `--wire` (each header as transmitted) |
 | `sysex_bulkdump_rx.py` | The RECEIVE side: what picks the destination of an incoming data message, whether an arbitrary address is honoured, what bounds the write, what order the messages must come in, and whether the panel has to be on the SYSEX BULK DUMP screen. | `python3 wsa1/notes/sysex-probes/sysex_bulkdump_rx.py` (tables) or `--order` (the whole in-session dispatch table) |
@@ -482,3 +483,55 @@ the two ROM sites and asserts they match rather than quoting a number.
    preceding `F0 50 21 …` enquiry — and again at `0xFB6063` on the send
    side. Likewise status `0x17` (`ERROR 41!`) is stored directly at
    `0xFB3249` when an abort is received.
+
+## `sysex_param_wire_format.py` — signal being read
+
+Both load bases asserted by content, as above.  Everything below is read out
+of the instruction bytes and asserted, never quoted.
+
+* **The frame.** The collector record's byte buffer starts at `record+0x0E`
+  (`add XBC,0x0E` at `0xFB7FF9`) and the `F0` goes into it, so a checksum that
+  sums from `record+0x0F` — which both `0xFB6E27` (receive) and `0xFB7126`
+  (transmit) do — starts one byte after the `F0`.  That is the whole reason
+  the rule reads "every byte after `F0`".  The rule is re-checked against the
+  2876 checksummed frames of the real `SND_CMBI.syx` dump with `--capture`.
+* **The count triple is the parameter's DATA LENGTH, and it is not always 1.**
+  1809 parameters take one byte, 33 take two and 33 take three.  The grammar
+  spells the triple out **iff** the parameter is multi-byte — the script
+  asserts that biconditional over the whole space — and for the one-byte case
+  `0xFB6BF4` reads the three bytes itself and requires their **bitwise OR** to
+  equal 1 (`or L,H` / `or A,L` / `cp A,1` at `0xFB6CD3`/`0xFB6CDB`/`0xFB6CE1`).
+  ⚠ That is an OR, not a value test: `00 00 01` is the right answer and six
+  other combinations would also pass.
+* **The data encoding is the bulk dump's, literally.** `0xFB77F3` (parameter)
+  and `0xFB72B5` (bulk) run the same three instructions on the same cursor
+  field: `sll h,4`, `and A,0x0F`, then `or`/`xor` — which agree because the
+  nibbles do not overlap.  High nibble first, two wire bytes per data byte.
+* **The reply.** Four builders, one per data length, each emitting
+  6 header + 6 address-and-count + 2N nibble + 1 flag bytes.  The script reads
+  the three `pushw` counts out of each builder and asserts them, asserts each
+  one names the `F0 50 2C 04 00 11` literal at `0xF4FEF2`, and asserts the two
+  part builders patch address byte 7 to `0x20 + part` (`set 5,A` / `add C,0x20`).
+* **A refused `2B`/`2C` is answered `F0 50 29 7E F7`** — `0xFB5197`, gated on
+  the family being `2B` or `2C`, reading the literal at `0xF4FEC8`.  No other
+  family is answered when it is refused, and an accepted `2C` is not answered
+  at all.
+* **Both output rings.** The reply builders and the refusal call `0xFB71BB`,
+  which puts the block into `Ring601432` *and* `Ring60153C`; the bulk-dump
+  path calls `0xFB7165`, which uses the first only.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`.  Headline numbers: message
+length `13 + 2N` for a write or a reply and `15` for any request; the length
+census 1809 / 33 / 33; and the three worked examples, which the script builds
+with the instrument's own arithmetic and then compares against hard-coded
+literals.
+
+### Trap
+
+The two `pushw 0x06` blocks a reply builder emits are **header then
+descriptor** — six bytes of `F0 50 2C 04 00 11` and six bytes of address and
+count.  Reading them as one twelve-byte header loses the fact that the second
+six come from the descriptor and are therefore the *requested* address, and
+hides the part patch that rewrites one of them.
