@@ -1545,3 +1545,35 @@ python3 wsa1/notes/sysex-probes/sysex_combination_layout.py --fields
 
 Pass: the stream tiles 704 in all corpora, every tag is a live record number, the range
 and ordering tests hold, `OK`.
+
+### `sysex_sequencer_layout.py`
+
+**Question:** how is the `SEQUENCER` bulk-dump block arranged?
+
+No capture here contains a `SEQUENCER` transfer — the one to hand came from a rack, which
+refuses that category — so this project had recorded the arrangement as unknown and
+waiting on a keyboard. **A capture is needed to see the data; the arrangement is in the
+program**, and one routine gives it away.
+
+`SongName_ResetToUnderscores` (prom_a `0xF818EA`) blanks a song's six-character name in
+three places, and its destinations are literal: `0x6034CA` — the `LOCATION` block at
+`+0xCA` — and `0x610000 + song*3072 + 0xCA`, the multiply written as `sla xwa,0x0b` plus
+`sla xiy,0x0a`, added. So:
+
+* the `HEADER` block is **ten song records of 3072 bytes** (10 × 3072 = 30720, the whole
+  block, and the manual says ten songs);
+* a song's **name is six characters at `+0xCA`** of its record;
+* `LOCATION` carries the name at the **same** offset, so it is a song record too — the
+  working copy of the one being edited, not a directory.
+
+Every assertion is on literal instruction bytes, and the shift arithmetic is checked
+against the block size rather than assumed.
+
+⚠ Not settled: the other 3066 bytes of a record, and the variable-length `PERFORMANCE`
+block that carries the recorded material.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_sequencer_layout.py
+```
+
+Pass: the routine's bytes are as expected, `2^11 + 2^10 == 3072`, `30720/3072 == 10`, `OK`.

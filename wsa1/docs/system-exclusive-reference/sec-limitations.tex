@@ -23,10 +23,12 @@ and \textsc{combination} blocks a dump carries.
   handful of bytes in each record are written by the instrument and reached by no
   parameter, so they carry no published name: the tail of each part's second record, a
   few bytes of its first, and two in each effect block.
-\item[The SEQUENCER block's contents.] Its addresses and lengths are confirmed twice over
-  (chapter~\ref{ch:bulk}), but no capture here contains one, so how a stored sequence is
-  arranged is unknown. One transfer from an SX-WSA1 keyboard would settle it, and would
-  also put that category's frame-level behaviour beyond doubt.
+\item[A song's contents.] Section~\ref{sec:seqmemory} shows the \textsc{sequencer}
+  block to be ten song records of 3\,072 bytes and names the one field the program
+  reveals. The rest of a record, and the variable-length \textsc{performance} block that
+  carries the recorded material, are not covered; a \textsc{sequencer} transfer from an
+  SX-WSA1 keyboard would be the natural way in, and would also put that category's
+  frame-level behaviour beyond doubt.
 \item[Operating system version 1.] Everything here describes version 2.0. Closing this
   needs a dump of the earlier firmware, which this project does not have --- but a reader
   can establish what they are holding two ways without one.

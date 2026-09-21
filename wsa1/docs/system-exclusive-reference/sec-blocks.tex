@@ -1,8 +1,8 @@
 \chapter{What a block contains}\label{ch:blocks}
 
 Every block opens with a fixed signature, and two of them carry readable names, which let
-a program check a stored dump and list what is in it. Beyond that, the \textsc{sound} and
-\textsc{combination} blocks are laid out below; \textsc{sequencer} is not covered.
+a program check a stored dump and list what is in it. Beyond that, all three of the \textsc{sound}, \textsc{combination} and
+\textsc{sequencer} blocks are laid out below, each to a different depth.
 
 \section{Signatures}\label{sec:signatures}
 The bytes below are the first bytes of the reassembled block --- after the payload has been
@@ -104,6 +104,38 @@ The combination stream is checked differently: its records must tile the 704 byt
 land on \bytes{FF FF}. All 128 do, with the same 23 records in the same order, and all 23
 tags are live record numbers in the parameter area.
 \end{note}
+
+\section{Inside the SEQUENCER block}\label{sec:seqmemory}
+No capture available for this reference contains a \textsc{sequencer} transfer --- the one
+to hand came from a rack, which refuses that category --- so nothing below was measured
+from a dump. The top-level arrangement is nonetheless settled, because the program gives
+it away.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+block & size & \\
+\midrule
+\textsc{location}    & 3\,072 & one song record: the song being edited \\
+\textsc{header}      & 30\,720 & \textbf{ten song records of 3\,072} \\
+\textsc{performance} & variable & the recorded material \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A song's name is \textbf{six characters at offset \bytes{CA}} of its record. One routine
+establishes all of it at once: it blanks that name in three places, and its destinations
+are literal --- the \textsc{location} block at \bytes{CA}, and the \textsc{header} block
+at $\text{song} \times 3072 + \bytes{CA}$, the multiply written as a shift by eleven plus
+a shift by ten. Ten records of 3\,072 fill the block exactly, and the published manual
+says the sequencer holds ten songs.
+
+That \textsc{location} carries the name at the \emph{same} offset is what shows it to be a
+song record as well, rather than a directory: it is the working copy, in the shape of a
+stored one.
+
+What the other 3\,066 bytes of a record hold, and how \textsc{performance} is arranged,
+are not covered.
 
 \begin{note}{Reassembly is self-checking}
 A block reassembled correctly comes out at exactly the length its own header declared. A
