@@ -14,6 +14,7 @@
 | `sysex_cross_product.py` | Is this the SAME protocol in the sibling Technics products? Reads the WSA1R, KN5000 and KN1500 grammars out of raw ROM side by side, prints each one's model triple, fixed messages and bulk-dump regions, and asserts what is shared and what is not. | `python3 wsa1/notes/sysex-probes/sysex_cross_product.py` (summary), `--paths` (every accepted sequence), `--kn7000` (the later, incompatible dialect) |
 | `sysex_wire_capture_check.py` | Does a dump a REAL machine put on the wire obey the frame format decoded from the ROMs? Checks the handshake, header, nibble payload, 0xFC cap, continuation flag, checksum and declared length of all 2883 messages of a captured SOUND+COMBINATION dump. | `python3 wsa1/notes/sysex-probes/sysex_wire_capture_check.py` (summary) or `--frames` |
 | `sysex_model_variant.py` | What the keyboard/rack setting changes about the SysEx implementation: all six entries of the feature table and every reader of it, every other place the SysEx engine reads the setting, and the transmit-time rewrite of the model triple that makes a real rack's dump carry `04 01 11`. | `python3 wsa1/notes/sysex-probes/sysex_model_variant.py` (tables) or `--sites` (every compare site in prom_a) |
+| `sysex_signature_checks.py` | The leading bytes of a block — `WA0`, `WSA1`, `WSA SOUND RAM S0`: do they encode a format or OS version, who checks them, and what happens on a mismatch? Also collects every piece of evidence in the four images bearing on an OS other than the dumped v2.0. | `python3 wsa1/notes/sysex-probes/sysex_signature_checks.py` (tables) or `--artefacts` (confront the ROM literals with a real dump and real disk files) |
 
 ## Signal being read
 
@@ -683,3 +684,65 @@ A raw byte scan for a branch displacement matches inside other instructions —
 `0xFB71BB`. Counting those makes `sub_FB71BB` look like it has 15 callers
 instead of 14. Every candidate must be checked against an instruction
 boundary before it is believed.
+
+## `sysex_signature_checks.py` — signal being read
+
+Both load bases are asserted by content: prom_b must hold `F0 50 23 7E F7` at
+`0xF4FEB4`, prom_a must hold `WSA SOUND RAM S0` at `0xFE7027`.
+
+* **The preambles are ROM literals.** `0xFE7027` `"WSA SOUND RAM S0"`,
+  `0xFE7049` `"WSA1"`, and the 32-byte SYSTEM,PART & MIDI default at
+  `0xFE704E`, whose head is `5A 5A 01 00 "WA0" 00`. The COMBINATION
+  preamble `5A 5A 5A 5A 00 00 "WSA1  " 01 00 00 02` is not a prom_a/prom_b
+  literal at all — it is the first sixteen bytes of **prom_c**, which the
+  combination flash bank repeats.
+* **★ Five comparators, three called, and every call site is a DISK LOAD.**
+  The script finds every encoded reference to each of the five in all four
+  images — `calr`, `call`, `jp` and any 24-bit data pointer — and asserts
+  the result. `0xFE2DF8` (`"WSA"`) and `0xFE2E24` (`0x01,0x06`) have **zero**
+  references in 2 MiB of ROM. The three live ones are reached from routines
+  that first write a three-character file extension (`"TM "`, `"CMB"`,
+  `"LSW"`) into the file descriptor at `0x21C8+8`, and each answers a
+  mismatch with `ld a,0x10` before the transfer.
+* **★★ No comparator reads a version.** The COMBINATION check covers bytes
+  6..9 only and never reaches the `01 00 00 02` at byte 12; the SYSTEM check
+  covers bytes 4..5 only and never reaches the `0` of `"WA0"`. The SOUND
+  check is the only one that covers its tag in full, all sixteen bytes.
+  `0xFE2E3D` also passes a block whose four bytes are all `0xFF`.
+* **The MIDI path never looks.** The script asserts the part-1 receive
+  descriptor (`0x7600 .. 0x7620`, size `0x20`, written by `sub_FB75BA`)
+  and that nothing in prom_a or prom_b reads `0x7600`-`0x7607` as a value.
+* **The model triple's middle byte**, read out of the trie at all five
+  nodes that carry it: two records, `00` and `01`, both descending to the
+  same node. The literal counts are `04 00 11` ×86 and `04 01 11` ×0 —
+  ⚠ which is **not** a transmit count: `sub_FB5F65` writes the `01` in at
+  transmit time when `(0xC4) == 2`. The script asserts that patcher is
+  present so the literal count can never be misread as one.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. Headline numbers: **5**
+comparators, **3** referenced, **2** with zero references; **3** disk-load
+call sites all answering `0x10`; **0** readers of the signature bytes on
+the MIDI path; **4** unreachable bulk-dump command numbers (`0x0D`, `0x0F`,
+`0x10`, `0x11`) and the 16-byte orphan template at `0xF4FF10`.
+
+### ⚠ What it establishes about OS version 1
+
+**Nothing exists.** No instruction compares a firmware or format version;
+no message carries one; the instrument has no Identity Reply; and the only
+run-time switch that changes SysEx behaviour is `(0xC4)`, which
+`Variant_SetFromPB0` (`0xF82882`) derives from PORT B bit 0 at reset — a
+hardware strap. The one observation that looked like v1 evidence — a real
+dump carrying `04 01 11` when no such literal exists in the ROM — is the
+rack's transmit-time substitution, decoded in `sysex_model_variant.py`.
+
+### Trap
+
+`b"\x5A\x5A\x5A\x5A\x00\x00WSA1  "` is **12** bytes, not 16 — comparing it
+against a 16-byte slice is a false failure, and the first version of this
+script did exactly that.
+
+The other trap is treating the two unreferenced comparators as behaviour.
+They are shaped for block headers this firmware never tests; a manual that
+described them would describe something the instrument does not do.
