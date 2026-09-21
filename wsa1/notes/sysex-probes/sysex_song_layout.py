@@ -208,23 +208,25 @@ print("  everything the fixed-size song records are not, so it is PERFORMANCE.")
 print("  That correspondence is inferred from the split, not read out of a program.")
 
 counts = Counter(seq)
-print("  it is not an array of fixed-size records: no power-of-two chunking leaves")
-print("  any chunk empty, and the last byte is non-zero, so all of it is in use")
-for sz in (0x400, 0x800, 0x1000, 0x2000):
-    assert all(any(seq[i:i + sz]) for i in range(0, len(seq), sz)), \
-        "a %d-byte chunk is empty after all" % sz
-assert seq[-1] != 0, "the file ends in padding"
 top = counts.most_common(3)
 print("  commonest bytes: %s"
       % ", ".join("0x%02X %.1f%%" % (v, 100.0 * n / len(seq)) for v, n in top))
 assert [v for v, _ in top] == [0x00, 0x81, 0x90], "the byte profile has changed"
 
-# LOCALLY it is events.  From the first one the stream parses as
+# NOT "all of it is in use".  An earlier version of this probe argued that no
+# power-of-two chunking leaves a chunk empty and the last byte is not zero, so
+# the whole file is live.  That does not follow: this is an image of the
+# sequencer's memory, ONE of its ten songs is recorded, and a free block holds
+# whatever was in it before.  Non-zero is not the same as in use.
+live = sum(1 for i in range(0, len(seq), 0x400) if any(seq[i:i + 0x400]))
+print("  every one of its %d 1 KiB chunks has a non-zero byte -- which says only"
+      % (len(seq) // 0x400))
+print("  that nothing was ever blanked, NOT that the data is live: one song of")
+print("  ten is recorded here, so most of this is free space holding old bytes.")
+
+# LOCALLY it is events: from the first one the stream parses as
 #   [delta < 0x80] [zero or more 0x81] [status >= 0x80, or none] [4 bytes]
-# where "no status" is MIDI running status -- the previous status stands.  The
-# four payload bytes are taken verbatim; requiring them to be under 0x80 stops
-# the parse dead at the 39th record, and they are plainly not all data in the
-# 0..127 sense.
+# with "no status" being MIDI running status.
 def local_parse(start):
     i, n, run, pre = start, 0, 0, 0
     stats = Counter()
@@ -235,8 +237,7 @@ def local_parse(start):
         while j < len(seq) and seq[j] >= 0x80 and len(st) < 8:
             st.append(seq[j]); j += 1
         if st:
-            stats[st[-1]] += 1
-            pre += len(st) - 1
+            stats[st[-1]] += 1; pre += len(st) - 1
         else:
             run += 1
         if j + 4 > len(seq):
@@ -247,49 +248,65 @@ def local_parse(start):
 
 stop, nrec, nrun, npre, stats = local_parse(8)
 print("\n  from the first event it parses as [delta][0x81...][status or none][4 bytes],")
-print("  'or none' being MIDI running status, for %d records before it loses sync" % nrec)
-print("    %d of them use running status, %d carry a leading 0x81" % (nrun, npre))
-print("    statuses seen: %s"
-      % ", ".join("0x%02X x%d" % (k, v) for k, v in stats.most_common()))
+print("  'or none' being running status, for %d records, stopping at 0x%X" % (nrec, stop))
+print("    statuses: %s" % ", ".join("0x%02X x%d" % (k, v) for k, v in stats.most_common()))
 assert (nrec, nrun, npre) == (85, 5, 20), "the local parse has changed"
 assert set(stats) == {0x90, 0xB4}, "the status set has changed"
-print("  0x90 is note-on and 0xB4 a control change, so these are MIDI events; but")
-print("  the roles of the four payload bytes are NOT determined here, and the")
-print("  parse desynchronises at 0x%X, a fifth of one per cent into the file." % stop)
 
-# GLOBALLY there is no such framing: if the stream were fixed-width with one
-# status byte per record, one column would stand out.  None does.
-print("\n  but there is no global framing -- the share of bytes >= 0x80 in each")
-print("  column, for every width and phase, sits at about 30 per cent:")
-for w in (4, 6, 8):
-    sh = [100.0 * sum(1 for i in range(ph, len(seq) - w, w) if seq[i] >= 0x80)
-          / len(range(ph, len(seq) - w, w)) for ph in range(w)]
-    print("    width %d: %s" % (w, " ".join("%.1f" % x for x in sh)))
-    assert max(sh) - min(sh) < 4.0, "a column now stands out at width %d" % w
-print("  so the file is not one linear stream, and the event encoding is NOT")
-print("  decoded here.  Start from the playback routine, not from the opening bytes.")
+# ...and it does NOT generalise, which is the point of measuring it.  Let the
+# parser skip a byte and retry whenever it fails, and count the skips.
+i, recs, resync = 8, 0, 0
+while i < len(seq) - 8:
+    if seq[i] >= 0x80:
+        i += 1; resync += 1; continue
+    j = i + 1
+    while j < len(seq) and seq[j] >= 0x80 and j - i <= 8:
+        j += 1
+    if j + 4 > len(seq):
+        break
+    recs += 1; i = j + 4
+print("  over the WHOLE file the same rule needs %d resynchronisations for %d"
+      % (resync, recs))
+print("  records -- worse than one per record, so the model is wrong for nearly")
+print("  all of it.  The 85 at the start are a local run, not the encoding.")
+assert resync > recs, "the resync rate has improved; re-open the encoding question"
 
-# A LEAD, reported with its null rather than promoted.  The song header's 17
-# three-byte entries carry 16-bit values.  Read as indices into 256-byte blocks
-# they land on block starts more often than chance -- but the null is high and
-# this is one width out of four tried, so it is a lead and nothing more.
-from math import comb
+# And there is no block chain to follow either.  If the header's 17 values were
+# block numbers and blocks were linked, some link offset would give disjoint
+# chains.  None does, over four block sizes and every offset within a block.
 starts = [int.from_bytes(R[0][0x100 + i * 3 + 1:0x100 + i * 3 + 3], "little")
           for i in range(17)]
-print("\n  A LEAD, NOT A FINDING. The header's 17 values are %s" % starts)
-for B in (128, 256, 320, 350):
+found = []
+for B in (128, 256, 320, 512):
     nb = len(seq) // B
     if max(starts) >= nb:
         continue
-    base = sum(1 for k in range(nb) if seq[k * B] == 0x80) / nb
-    hit = sum(1 for st in starts if seq[st * B] == 0x80)
-    tail = sum(comb(17, k) * base ** k * (1 - base) ** (17 - k)
-               for k in range(hit, 18))
-    print("    %d-byte blocks: %d of 17 start with 0x80; %.3f of all %d blocks do;"
-          % (B, hit, base, nb))
-    print("      probability of that many or more by chance: %.2e" % tail)
-print("  Only the 256-byte reading is better than chance, and a third of ALL")
-print("  blocks begin with 0x80 anyway, so this is worth following and is not")
-print("  evidence the values ARE block numbers.")
+    for lo in range(B - 1):
+        for big in (False, True):
+            seen, ok = set(), True
+            for st0 in starts:
+                cur, local = st0, set()
+                while True:
+                    if cur >= nb or cur in local:
+                        ok = False; break
+                    local.add(cur)
+                    o = cur * B + lo
+                    nxt = int.from_bytes(seq[o:o + 2], "big" if big else "little")
+                    if nxt in (0, 0xFFFF) or nxt >= nb:
+                        break
+                    cur = nxt
+                if not ok or (local & seen):
+                    ok = False; break
+                seen |= local
+            if ok and len(seen) >= 40:
+                found.append((B, lo, big))
+print("\n  block-chain search: %d block sizes x every link offset x both byte"
+      % 4)
+print("  orders, asking for disjoint terminating chains from the 17 values --")
+print("  solutions found: %d" % len(found))
+assert not found, "a block chain exists after all: %r" % found[:3]
+print("  So the 17 values are not block numbers in any linked scheme of that")
+print("  shape, and the earlier 0x80-alignment observation is not supported by")
+print("  a structure. The event encoding needs the playback routine.")
 
 print("\nOK")

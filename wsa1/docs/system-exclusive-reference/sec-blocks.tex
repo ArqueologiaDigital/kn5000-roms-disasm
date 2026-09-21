@@ -267,45 +267,51 @@ fixed-size song records are not --- so it is the recorded material, the
 sequencer and not from anything in the program, and it is the one claim here that rests
 on an inference rather than a decode.
 
-What can be said about it is deliberately little. It is not an array of fixed-size
-records: no power-of-two chunking of the file leaves a single chunk empty, and its last
-byte is not padding. Its commonest bytes are \bytes{00} at 16.1\,\%, \bytes{81} at
-14.6\,\% and \bytes{90} at 9.9\,\%.
+What can be said about it is deliberately little, and one thing said in an earlier
+edition has to be taken back. Its commonest bytes are \bytes{00} at 16.1\,\%, \bytes{81}
+at 14.6\,\% and \bytes{90} at 9.9\,\%.
 
-\emph{Locally} it is plainly events. From the first one the stream parses as a delta
-below \bytes{80}, then any number of \bytes{81} bytes, then a status --- or no status at
-all, which is MIDI running status, the previous one standing --- then four payload bytes.
-It runs that way for \textbf{85 records}, five of them on running status and twenty
-carrying a leading \bytes{81}, and the only statuses that appear are \bytes{90}, note-on,
-and \bytes{B4}, a control change. What the four payload bytes are is not determined here:
-requiring them to be valid MIDI data below \bytes{80} stops the parse at the 39th record,
-so at least one of them is not a 0--127 quantity.
+\begin{caution}{A retraction: ``fully used'' did not follow}
+An earlier edition argued that no power-of-two chunking of this file leaves a chunk empty
+and its last byte is not padding, \emph{therefore} all of it is live data. That does not
+follow. The file is an image of the sequencer's memory, one of its ten songs is recorded,
+and a free block holds whatever happened to be in it. Non-zero is not the same as in use,
+and most of this file is very likely free space holding stale bytes --- which is also the
+simplest explanation for everything below.
+\end{caution}
 
-\emph{Globally} there is no such framing, and the way to see that is to look for the
-status column. If the stream were fixed-width with one status byte per record, one column
-would be full of bytes at or above \bytes{80} and the others nearly empty. For every width
-from 4 to 8 and every phase within it, each column sits at about 30\,\%. So the file is
-not one linear stream --- which is what a block-allocated area would look like --- and the
-event encoding is \textbf{not} decoded here. Anyone continuing should start from the
-playback routine rather than from the pattern the opening events appear to make.
+\emph{Locally} it is events. From the first one the stream parses as a delta below
+\bytes{80}, then any number of \bytes{81} bytes, then a status --- or no status at all,
+which is MIDI running status --- then four payload bytes. It runs that way for
+\textbf{85 records}, and the only statuses are \bytes{90}, note-on, and \bytes{B4}, a
+control change.
 
-\begin{note}{One lead, with the reason it is not more than that}
-The song header's seventeen three-byte entries carry 16-bit values, and in the recorded
-song they are 104, 222, 485, 149, 459, 287, 246, and then 486 to 495 consecutively. The
-consecutive run is what an allocator handing out fresh blocks would leave behind.
+\emph{And it does not generalise.} Letting the same parser skip a byte and retry whenever
+it fails, across the whole file it needs 41\,858 resynchronisations for 26\,189 records
+--- worse than one per record. So those 85 are a local run and not the encoding. Two
+other measurements say the same thing. If the stream were fixed-width with one status per
+record, one column would be thick with bytes at or above \bytes{80}: for every width from
+4 to 8 and every phase within it, each column sits at about 30\,\%. And asking whether
+the file is block-allocated --- four block sizes, every possible link offset within a
+block, both byte orders, requiring disjoint terminating chains from the seventeen values
+in the song header --- returns no solution at all.
 
-Read as indices into 256-byte blocks of \textsc{performance}, twelve of the seventeen land
-on a block whose first byte is \bytes{80}, where 33\,\% of all 700 blocks begin that way
---- a probability of about $1.8\times10^{-3}$ by chance. That is the only block size of
-four tried that beats chance at all.
+The event encoding is \textbf{not} decoded here, and after those three tests the honest
+next step is the playback routine rather than any further pattern-matching on the bytes.
 
-It is reported here as a lead and not as a finding. A third of all blocks begin with
-\bytes{80} anyway, the test was chosen after seeing the data, and one file is one file.
-
-What the manual does supply is a capacity: a ``16-track, 47\,000 note Sequencer''. Over a
+\begin{note}{What the manual contributes, and one observation that did not survive}
+The published capacity is a ``16-track, 47\,000 note Sequencer''. Over a
 \textsc{performance} of the size seen here that is a shade under four bytes a note, which
 is the right order for an event of a delta, a note, a velocity and a length, and is the
 one external constraint on the encoding this reference has.
+
+An earlier observation is withdrawn. The song header's seventeen values end in a
+consecutive run --- 486 to 495 --- which is the trail an allocator leaves, and read as
+indices into 256-byte blocks twelve of the seventeen land on a block beginning \bytes{80}
+against a base rate of 33\,\%. That was recorded as a lead. The chain search above was the
+test that would have turned it into a finding, and it failed, so the lead is left standing
+only as the consecutive run: suggestive of an allocator, attached to no structure this
+reference can demonstrate.
 \end{note}
 
 \begin{note}{Reassembly is self-checking}

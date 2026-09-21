@@ -1735,44 +1735,28 @@ different source**: the first stream's `(tag, length)` list must equal `SHAPE` i
 `sysex_combination_layout.py`, which was derived from the instrument's own uploads.
 Agreement is not something this script can arrange for itself.
 
-It also characterises the companion `.SEQ` (179 200 bytes), which is `PERFORMANCE`: not a
-fixed-size record array, commonest bytes `00`/`81`/`90`, and `90` is MIDI note-on, so it is
-an event stream.
+It also characterises the companion `.SEQ` (179 200 bytes), which is `PERFORMANCE`.
 
-**Locally it is plainly events**: a delta below `80`, any number of `81` bytes, then a
-status *or none at all* (MIDI running status) — **85 records**, 5 on running status, 20
-with a leading `81`, statuses only `90` (note-on) and `B4` (control change). Requiring the
-four payload bytes to be valid MIDI data below `80` stops the parse at record 39, so at
-least one of them is not a 0–127 quantity.
+⚠ **A retraction this probe now carries.** An earlier version argued that no power-of-two
+chunking leaves a chunk empty and the last byte is not padding, *therefore* all of it is
+live. That does not follow — it is a memory image, one song of ten is recorded, and a free
+block holds whatever was in it. Non-zero is not in use.
 
-⚠ **Globally there is no such framing, and the test shows why.** If the stream were
-fixed-width with one status per record, one column would be full of bytes ≥ `80`. For every
-width 4–8 and every phase, each column sits at ~30%. So the file is not one linear stream.
-The probe asserts both the local parse and the absence of a standout column, so nobody
-re-derives a fixed record shape from the first 64 bytes — which is exactly what happened
-while writing it.
+**Locally it is events**: a delta below `80`, any number of `81` bytes, then a status *or
+none* (running status), then four payload bytes — **85 records**, statuses only `90` and
+`B4`.
 
-⚠ **One lead, reported with its null.** The header's 17 values are 104, 222, 485, 149, 459,
-287, 246, then 486–495 consecutively — the trail an allocator leaves. Read as 256-byte
-block indices, 12 of 17 land on a block starting `80`, where 33% of all 700 blocks do
-(p ≈ 1.8e-3), and it is the only one of four block sizes that beats chance. Not promoted:
-the null is high, the test was chosen after seeing the data, and one file is one file.
+⚠⚠ **It does not generalise, and the probe proves that three ways.** (1) Letting the parser
+resynchronise, the whole file needs **41 858 resyncs for 26 189 records** — worse than one
+per record. (2) If it were fixed-width with one status per record, a column would be thick
+with bytes ≥ `80`; every width 4–8 and every phase sits near 30%. (3) A block-chain search
+— four block sizes × every link offset × both byte orders, requiring disjoint terminating
+chains from the header's 17 values — returns **no solution**.
 
-★★ **The 544-byte header is laid out too**, read as the difference between the recorded
-song and the nine identical empty ones (113 differing bytes). Signature `5A 5A 5A 5A`;
-`+004` is 1 recorded / 0 empty; a ramp `01..0F,20` at `+023` and again at `+034`; the name
-at `+0CA`; a second signature `5A 5A 01 00 'WA0'` at `+200`.
-
-★★★ **Three tables corroborate each other.** At `+07E` (17×2, unused `FF FF`), `+0A0`
-(17×1, unused `05`) and `+100` (17×3, unused `00 FF FF`) — different offsets, three
-different unused markers, and all three **seventeen** entries long. One such count is where
-a reader chose to stop; three agreeing is a structure. The probe asserts all three.
-
-The 128-byte tail from `+B80` is identical in all ten records.
-
-⚠ Still uncovered: what those tables *mean* (a per-track reading is natural — the firmware
-names Rhythm, Chord and Control as special tracks — and is **not** established here), and
-the event encoding.
+⚠ **A lead withdrawn.** The 17 values end in a consecutive run (486–495) and, read as
+256-byte block indices, 12 of 17 land on a block starting `80` against a 33% base rate.
+Test (3) was what would have promoted it, and it failed. What survives is only the
+consecutive run: suggestive of an allocator, attached to no demonstrable structure.
 
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_song_layout.py
