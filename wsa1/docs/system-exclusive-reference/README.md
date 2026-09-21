@@ -13,7 +13,7 @@ pdflatex wsa1r-system-exclusive-reference.tex
 pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
 ```
 
-24 pages. Needs only a standard TeX Live.
+29 pages. Needs only a standard TeX Live.
 
 ## Files
 
@@ -30,9 +30,23 @@ pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of cont
 | `sec-blocks.tex` | block signatures and where the names are |
 | `sec-settings.tex` | the EXCLUSIVE filter, which sockets carry what, memory protect |
 | `sec-parameters.tex` | the 2B/2C parameter address space |
+| `tbl-parameters.tex` | **generated** — the 108-parameter tables |
 | `sec-models.tex` | the two features the rack does not support |
 | `sec-family.tex` | what the SX-KN5000 and SX-KN1500 share and do not |
 | `sec-limitations.tex` | what this edition does not cover |
+
+## Regenerating the parameter tables
+
+`tbl-parameters.tex` is written by a probe and must not be edited by hand:
+
+```sh
+python3 ../../notes/sysex-probes/sysex_param_table_tex.py tbl-parameters.tex
+```
+
+It reads the addresses from `sysex_param_addresses.py` and the names from
+`param_names.json`, so a name added to that file, or a change in the decode, reaches the
+document by rerunning the command. The script fails if a name no longer matches a
+parameter.
 
 ## Scope
 
