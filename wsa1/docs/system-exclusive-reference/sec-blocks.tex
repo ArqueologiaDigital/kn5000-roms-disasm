@@ -1,0 +1,44 @@
+\chapter{What a block contains}\label{ch:blocks}
+
+This reference describes the protocol that carries a dump. The meaning of the data inside a
+block is outside its scope, with one exception worth stating: every block opens with a
+fixed signature, and two of them carry readable names. Together these let a program check
+a stored dump before sending it back, and list what is in it, without understanding the
+rest.
+
+\section{Signatures}
+The bytes below are the first bytes of the reassembled block --- after the payload has been
+rejoined from its nibbles, not as they appear on the wire.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+block & first bytes & as text \\
+\midrule
+\textsc{system, part \& midi} 1 & \bytes{5A 5A 01 00 57 41 30 00} & \texttt{ZZ..WA0.} \\
+\textsc{system, part \& midi} 2 & \bytes{78 10} \ldots               & \texttt{x.} \\
+\textsc{sound}                  & \bytes{57 53 41 20 53 4F 55 4E} & \texttt{WSA SOUND RAM S0} \\
+\textsc{combination} 1          & \bytes{5A 5A 5A 5A 00 00 57 53} & \texttt{ZZZZ..WSA1\ \ } \\
+\textsc{combination} 2          & \bytes{78 10} \ldots               & \texttt{x.} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A file whose first bytes do not match the block it claims to be is not a dump of that
+category.
+
+\section{Names}
+The \textsc{sound} block continues, immediately after its sixteen-byte signature, with
+sixteen-byte names in the instrument's own character set, padded with spaces. The second
+\textsc{combination} block and the second \textsc{system, part \& midi} block use a
+different framing: a two-byte prefix, then a sixteen-byte name, then two further bytes.
+
+A librarian can therefore show the user what a stored file holds --- ``\texttt{SWEEP PAD}'',
+``\texttt{Space Infinity}'' --- without decoding anything else.
+
+\begin{note}{Reassembly is self-checking}
+A block reassembled correctly comes out at exactly the length its own header declared. A
+wrong nibble order, or a payload taken with its trailing flag and checksum still attached,
+does not. Checking the length is a cheap way to confirm a receiver is unpacking correctly
+before trusting anything it produces.
+\end{note}
