@@ -217,10 +217,11 @@ def main():
     print("  %d fields checked, %d outside their declared range" % (cchecked, len(cbad)))
 
     # ONE field in this dump holds a value the parameter message would refuse:
-    # common 00 08, declared 48..192, stored 00.  That is not a fault in the
-    # map -- the declared range is what the SETTER accepts, and a stored byte
-    # need not be a value anyone ever set.  It is pinned here so that a SECOND
-    # such field would show up as a change rather than pass unnoticed.
+    # 00 00 08, declared 48..192, stored 00.  The published parameter table
+    # names it MASTER TUNING and gives its data range as C0-00-3F, a SIGNED
+    # value with 00 = 440.0 Hz -- so 00 is the default, and the descriptor's
+    # 48..192 is not describing the same quantity.  The reference says so.
+    # Pinned here so that a SECOND such field shows up as a change.
     KNOWN = {(0x00, 0x08, 0)}
     assert {(b[0], b[1], b[2]) for b in bad} == KNOWN, \
         "out-of-range fields changed: %s" % sorted((b[0], b[1], b[2]) for b in bad)

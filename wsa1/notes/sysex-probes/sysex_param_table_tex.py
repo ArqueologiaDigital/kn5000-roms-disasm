@@ -165,7 +165,8 @@ def main():
     w("%% Regenerate after any change to sysex_param_addresses.py or param_names.json")
     w("")
 
-    w("\\begin{longtable}{lllllp{40mm}}")
+    w("{\\small")
+    w("\\begin{longtable}{lllll>{\\raggedright\\arraybackslash}p{38mm}}")
     w("\\caption{The 57 parameters of a part block. \\bytes{\\textit{p}} is the third")
     w("address byte; the offset is the byte's position inside that part's record in")
     w("a \\textsc{system, part \\& midi} bulk dump.}\\label{tbl:partparams}\\\\")
@@ -180,20 +181,22 @@ def main():
           (r["param"], r["size"], off, maskcol(r), values(r, wl), named(names, r)))
     w("\\bottomrule")
     w("\\end{longtable}")
+    w("}")
     w("")
 
-    w("\\begin{longtable}{llllllp{32mm}}")
+    w("{\\small")
+    w("\\begin{longtable}{llllll>{\\raggedright\\arraybackslash}p{29mm}}")
     w("\\caption{The parameters of the common blocks. The address is the one a")
     w("\\textsc{system, part \\& midi} bulk dump carries for the same")
     w("byte.}\\label{tbl:commonparams}\\\\")
     w("\\toprule")
-    w("\\bytes{\\textit{s}} & \\bytes{\\textit{p}} & data & dump address & bits & values & name \\\\")
+    w("\\bytes{\\textit{s}} & \\bytes{\\textit{p}} & data & address & bits & values & name \\\\")
     w("\\midrule\\endfirsthead")
-    w("\\toprule \\bytes{\\textit{s}} & \\bytes{\\textit{p}} & data & dump address & bits & values & name \\\\")
+    w("\\toprule \\bytes{\\textit{s}} & \\bytes{\\textit{p}} & data & address & bits & values & name \\\\")
     w("\\midrule\\endhead")
     for r in sorted(common, key=lambda r: (r["block"], r["param"])):
         if "OUTSIDE" in r["note"]:
-            addr = "not dumped"          # the byte itself lies outside the block
+            addr = "outside"            # the byte itself lies outside the block
         elif r["dump"] is None:
             addr = "---"                 # position not established
         else:
@@ -203,6 +206,7 @@ def main():
            values(r, wl), named(names, r)))
     w("\\bottomrule")
     w("\\end{longtable}")
+    w("}")
     w("")
 
     w("\\begin{center}")

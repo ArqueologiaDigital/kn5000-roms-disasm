@@ -132,15 +132,23 @@ the byte, and a dump editor changing one must preserve the rest.
 Three parameters accept an enumerated set rather than a range; sending any other value has
 no effect.
 
-\begin{caution}{A dump may hold values a parameter message would refuse}
-The accepted values in the tables are what the instrument takes from a \bytes{2C} write.
-They are not a guarantee about what a stored byte contains. In a dump taken from a real
-machine, one field --- common block \bytes{00}, parameter \bytes{08} --- holds
-\bytes{00} although a write of \bytes{00} to it would be rejected.
+\begin{caution}{Master tuning: the published range and the range check disagree}
+For \bytes{00 00 08}, \textsc{master tuning}, the published data range is \bytes{C0} to
+\bytes{00} to \bytes{3F} --- a signed value, \bytes{00} being concert pitch, spanning
+427.3 to 453.0\,Hz. The instrument's own range check on that parameter admits 48 to 192,
+which is what the table below reports. The two do not describe the same values, and a dump
+taken from a real machine holds \bytes{00} there, the published centre and not a member of
+the checked range.
 
-So a librarian should not validate a dump by checking it against these ranges, and should
-not assume a value read out of a dump can be written back one parameter at a time.
+Send what the published specification gives. This is the only parameter where the two
+sources differ; every other range in the tables agrees with the published one.
 \end{caution}
+
+\begin{note}{The accepted values are what a write is checked against}
+They are what the instrument takes from an \textsc{itr}, not a guarantee about what a
+stored byte contains. A librarian should not validate a dump by checking it against these
+ranges.
+\end{note}
 
 \input{tbl-parameters}
 

@@ -160,5 +160,90 @@
     "name": "EFFECT1 TYPE",
     "confidence": "ESTABLISHED",
     "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
+  },
+  "00/00": {
+    "name": "SOUND MEMORY PROTECT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/01": {
+    "name": "COMBINATION MEMORY PROTECT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/08": {
+    "name": "MASTER TUNING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME table. NOTE: the published data range is C0-00-3F (427.3-440.0-453.0 Hz) and the decoded range check is 48..192; the two disagree and the document says so. A real dump holds 00, the published centre."
+  },
+  "00/10": {
+    "name": "VELOCITY CURVE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/11": {
+    "name": "VELOCITY OFFSET",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/12": {
+    "name": "AFTER TOUCH CURVE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/13": {
+    "name": "AFTER TOUCH THRESHOLD",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/20": {
+    "name": "DRUMS MAP SELECT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/30": {
+    "name": "DATA LOAD FILTER: EFFECT \\& OUTPUT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/31": {
+    "name": "DATA LOAD FILTER: REAL-TIME CREATOR 1-6",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/32": {
+    "name": "DATA LOAD FILTER: COMBINATION OCTAVE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/33": {
+    "name": "DATA LOAD FILTER: MIDI SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/34": {
+    "name": "DATA LOAD FILTER: KEY \\& VELOCITY LAYER",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/35": {
+    "name": "DATA LOAD FILTER: MAIN OUT EQUALIZER",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/36": {
+    "name": "DATA LOAD FILTER: KEY SCALING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "00/40": {
+    "name": "COMBINATION NUMBER and BANK",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+  },
+  "01/00": {
+    "name": "MIDI INPUT MODE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
   }
 }
