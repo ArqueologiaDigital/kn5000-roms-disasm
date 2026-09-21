@@ -26,9 +26,15 @@ and \textsc{combination} blocks a dump carries.
   (chapter~\ref{ch:bulk}), but no capture here contains one, so how a stored sequence is
   arranged is unknown. One transfer from an SX-WSA1 keyboard would settle it, and would
   also put that category's frame-level behaviour beyond doubt.
-\item[Operating system version 1.] Everything here describes version 2.0, whose
-  \textsc{ver} byte is \bytes{11} --- exclusive specification 2.1. A machine speaking a
-  different version announces it in that byte, the sixth of any message carrying one, so a
-  receiver can tell at once that it is talking to something this reference does not
-  describe. Closing it needs a dump of that firmware, which this project does not have.
+\item[Operating system version 1.] Everything here describes version 2.0. Closing this
+  needs a dump of the earlier firmware, which this project does not have --- but a reader
+  can establish what they are holding two ways without one.
+
+  Over MIDI: \textsc{ver}, the sixth byte of any message that carries it, is \bytes{11}
+  here --- exclusive specification 2.1. A machine speaking a different version announces
+  it there, so a receiver can tell at once that it is talking to something this reference
+  does not describe.
+
+  At the instrument: it has a \textsc{rom version} screen of its own, which reports its
+  ROMs separately as \textsc{wsa-a}, \textsc{wsa-c} and \textsc{wsa-d}.
 \end{description}
