@@ -1854,3 +1854,30 @@ python3 wsa1/notes/sysex-probes/sysex_triple_writer.py
 ```
 
 Pass: 3 writing groups, 3 reading groups, zero loose sites, `OK`.
+
+### `sysex_blockb_tail.py`
+
+**Question:** does any code handle block B's `+0x18`, `+0x19` and `+0x1A`?
+
+The data side was exhausted (no copy, no run copy, no determinant). This asks the program,
+by displacement rather than by address — block B sits `0x20` past block A, so the bytes are
+either `(reg+0x38..0x3A)` or `(reg+0x18..0x1A)`.
+
+* From block A's base: **zero** groups touch all three, in either image.
+* From block B's base: five groups, **none of them a part record**. Two are inside a
+  64-entry uniform 3-byte table that unidasm refuses to decode as instructions at all.
+
+★★ **The discriminator is controlled.** "Is this a part record" is tested by the step that
+turns a table index into a part slot (`add IY,0x0080`). It **fires on the sites that write
+the triple next door** and on none of these five. The probe asserts the control fires — a
+negative from a test that cannot fire is worth nothing.
+
+★ **Conclusion, and it is actionable:** these three bytes are carried in stored data and
+copied wholesale; no code treats them as fields. Preserve them, do not compute them.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_blockb_tail.py
+```
+
+Pass: 0 groups block-A-relative, 5 block-B-relative with none near the part-record step,
+control firing, `OK`.

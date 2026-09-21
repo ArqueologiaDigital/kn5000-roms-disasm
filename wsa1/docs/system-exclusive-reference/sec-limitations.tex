@@ -55,15 +55,31 @@ and \textsc{combination} blocks a dump carries.
   three and returns two. A three-byte form of a two-byte quantity is exactly what a program
   number and a bank become.
 
-  \emph{Open.} Block~B's \bytes{+18}--\bytes{+1A}, three bytes taking fifteen distinct
-  combinations across the corpus and reading \bytes{01 01 01} or \bytes{00 01 01} in four
-  records out of five. Three searches have been run against them over all 3\,080 part
-  records and 220 byte columns, and the coverage is worth stating because the answer is
-  negative: none of the three is an exact copy of any other column; the three together are
-  not a copy of any other three-byte run; and no column determines any of them --- the
-  best dependency is 0.62 of the target's entropy where a shuffled control scores 0.03 and
-  a determination would score 1. The closest match, \bytes{+1A} agreeing with \bytes{+03}
-  in 97.6\,\% of records, is two nearly-constant columns agreeing and nothing more.
+  \emph{Inert.} Block~B's \bytes{+18}--\bytes{+1A} take fifteen distinct combinations
+  across the corpus and read \bytes{01 01 01} or \bytes{00 01 01} in four records out of
+  five. Nothing names them, and both halves of that have now been measured rather than
+  assumed.
+
+  From the data: over all 3\,080 part records and 220 byte columns, none of the three is a
+  copy of any other column, the three together are not a copy of any other three-byte run,
+  and no column determines any of them --- the best dependency is 0.62 of the target's
+  entropy where a shuffled control scores 0.03 and a determination would score 1. The
+  closest match, \bytes{+1A} agreeing with \bytes{+03} in 97.6\,\% of records, is two
+  nearly-constant columns agreeing and nothing more.
+
+  From the program: a part record is reached through a pointer, so these bytes are named
+  by displacement, and there are two displacements they could carry --- block~B sits
+  \bytes{20} past block~A. At the first, no group of instructions touches all three, in
+  either image. At the second there are five, and not one of them reaches a part record;
+  two are inside a 64-entry uniform table that the reference disassembler refuses to
+  decode as instructions at all. The test for ``does this reach a part record'' is the
+  step that turns a table index into a part slot, and it is controlled: it fires on the
+  sites that write the triple next door, and on none of these five.
+
+  So these three bytes are carried in stored data and copied wholesale, and no code treats
+  them as fields. For a librarian that is actionable --- preserve them, do not compute
+  them --- which makes it a closed question rather than an open one, even though the bytes
+  still have no name.
 
   Also open: which side of the indirection the triple holds --- what the part asked for,
   or what it resolved to. Eight of the nine re-maps in the corpus are identity maps, so
