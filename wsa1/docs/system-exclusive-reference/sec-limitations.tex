@@ -17,42 +17,24 @@ and \textsc{combination} blocks a dump carries.
 
 \section{Open, and what would close it}
 \begin{description}
-\item[Operating system version 1 --- and one thing that depends on it.]
-  Everything here describes version 2.0. Closing this needs a dump of the earlier
-  firmware, and there is not one to be had. The archive this project works from carries a
-  single firmware set, whose own accompanying note calls version 2 ``probably the last
-  released version''; every copy of a WSA1 program image anywhere on this project's
-  machine hashes to those same four files. A search of all three program images for a
-  conversion path, for compatibility text, and for anything that compares the version byte
-  a block carries, turns up nothing --- so no amount of reading version 2 will produce
-  version 1.
+\item[Other firmware.] This reference describes one ROM set, and it can now name which.
+  The instrument does not report an ``operating system version'' at all: it has a
+  \textsc{rom version} screen that reports \emph{three} ROMs separately, as
+  \textsc{wsa-a}, \textsc{wsa-c} and \textsc{wsa-d}. Each program image ends with the
+  linker's own build stamp in its last sixteen bytes, and the screen's code reads them ---
+  one routine twenty bytes from the caption checks the stamp's tail, another loads from
+  the same place. The set read here is
 
-  One other question reduces to this one. Section~\ref{sec:combtail} shows that block~B's
-  \bytes{+18}--\bytes{+1A} are read by no code on either processor, measured over every
-  access in all four images against a control that fires on the bytes next door. A byte
-  the program never reads has no purpose that program can reveal. If those three ever
-  meant anything it was to a firmware this project cannot see, which makes it the same
-  wall and not a second one.
+  \begin{center}
+  \textsc{wsa-a}~822 \qquad \textsc{wsa-c}~230 \qquad \textsc{wsa-d}~54
+  \end{center}
 
-  A reader can nonetheless establish what they are holding, three ways.
+  and a reader can compare all three against their own instrument in one screen. Three
+  stamps for four images is not an omission: \textsc{wsa-a} spans two of them, which is why
+  the screen lists three.
 
-  Over MIDI: \textsc{ver}, the sixth byte of any message that carries it, is \bytes{11}
-  here --- exclusive specification 2.1. A machine speaking a different version announces
-  it there, so a receiver can tell at once that it is talking to something this reference
-  does not describe.
-
-  At the instrument: it has a \textsc{rom version} screen of its own, which reports its
-  ROMs separately as \textsc{wsa-a}, \textsc{wsa-c} and \textsc{wsa-d}.
-
-  And from the front panel, against a document rather than against the machine's own
-  account of itself. Technics issued a one-page erratum to the owner's manuals,
-  \textsc{qqcg0279a}, whose single change renames the second soft key of the
-  \textsc{sound mode} home screen from \textsc{vol} to \textsc{lvl} and makes it
-  adjust the level relative to the current value, $-30$ to $+30$. The firmware read
-  here already carries the new caption, so it is later than that erratum. The rename
-  reached one screen only: the image holds four soft-key rows of that shape, and the
-  two whose last key is \textsc{midi} --- the screen the erratum photographs --- read
-  \textsc{lvl}, while the two whose last key is \textsc{part} still read
-  \textsc{vol}. An instrument whose \textsc{sound mode} home screen says \textsc{vol}
-  is older than the machine this reference describes.
+  So ``version 2'' is a label the community archive puts on a file set, not a number the
+  machine reports, and there is no single version for a reader to match. Describing a
+  different ROM set is a different document and would need those ROMs; the three numbers
+  above are what makes it possible to tell that you are holding one.
 \end{description}

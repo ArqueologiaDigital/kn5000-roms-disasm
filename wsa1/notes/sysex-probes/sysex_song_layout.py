@@ -165,6 +165,43 @@ print("  a recorded song differs from an empty one in %d header bytes and %d"
       % (d_hdr, d_str))
 print("  stream bytes, and in none of the tail")
 
+# ---- the three tables are PER-TRACK, and that is measured rather than
+# inferred from their length.  The working copy of a song record lives at a
+# fixed address, so a header field has a fixed address too, and the routine
+# that saves a track's state names all three bases as 32-bit constants.
+LOCATION = 0x603400                      # the SEQUENCER LOCATION block in CPU 1 RAM
+ROMS_ = os.path.join(HERE, "..", "..", "original_ROMs")
+PB = open(os.path.join(ROMS_, "wsa1_prom_b.ic13"), "rb").read()
+
+
+def base_const(off):
+    """the operand bytes of `ld r,0x0060XXXX` for LOCATION+off."""
+    a = LOCATION + off
+    return bytes([a & 0xFF, (a >> 8) & 0xFF, (a >> 16) & 0xFF, 0x00])
+
+
+print("\n  THE HEADER'S THREE TABLES ARE INDEXED BY THE TRACK NUMBER")
+print("  (the working copy of a song record sits at 0x%06X, so a header field"
+      % LOCATION)
+print("   has a fixed address and the program names these as constants)")
+for off, stride in ((0x07E, 2), (0x0A0, 1), (0x100, 3)):
+    hits = [m.start() for m in __import__("re").finditer(
+        __import__("re").escape(base_const(off)), PB)]
+    print("    +%03X  stride %d  referenced as a base constant %d time(s) in prom_b"
+          % (off, stride, len(hits)))
+    assert hits, "the base of the +%03X table is no longer a constant" % off
+
+# one routine writes the first two, from the same index, with strides 2 and 1
+SAVE = bytes.fromhex("dbec01") + bytes([0x44]) + base_const(0x07E)   # sla 1,HL ; ld XIX,..
+assert __import__("re").search(__import__("re").escape(SAVE), PB), \
+    "the doubled index into the +7E table is gone"
+PAIR = bytes([0x46]) + base_const(0x0A0)                              # ld XIZ,..
+i = PB.index(SAVE)
+assert PAIR in PB[i:i + 0x30], "the +A0 base is no longer written beside the +7E one"
+print("    the +7E and +A0 tables are written by ONE routine, from ONE index --")
+print("    doubled for the two-byte table and not for the one-byte one -- so")
+print("    they are per-track, measured and not inferred from their length.")
+
 print("\nTHE RECORD STREAM, from +0x%03X" % STREAM)
 segs, o = [], STREAM
 while o < SONG:

@@ -1966,3 +1966,38 @@ python3 wsa1/notes/sysex-probes/sysex_conductor_events.py
 
 Pass: the dispatch compares present, `80`/`87` tested together, the 120 literal in place,
 and the round trip reproducing the stored bytes, `OK`.
+
+### `rom_version_stamps.py`
+
+**Question:** which firmware is this, in the instrument's own terms?
+
+The reference called itself "operating system version 2.0" throughout and listed version 1
+as its one unreachable gap. ★ **Both rested on a label the community archive puts on the
+file set, not on anything the instrument says.** The instrument reports no OS version at
+all: it has a `ROM VERSION` screen reporting **three** ROMs separately.
+
+★★ **Each program image ends with the linker's build stamp** in its last sixteen bytes:
+
+| image | stamp | the screen shows |
+|---|---|---|
+| `wsa1_prom_a.ic12` | `wsaa_822` | `WSA-A: 822` |
+| `wsa1_prom_b.ic13` | *(none)* | — |
+| `wsa1_prom_c.ic28` | `wsac_230` | `WSA-C: 230` |
+| `wsa1_prom_d.bin` | `wsad_54` | `WSA-D: 54` |
+
+Four images, three stamps — `prom_a` and `prom_b` are two halves of **one** program, which
+is why the screen lists three. That is an independent confirmation of a structure this
+project established elsewhere.
+
+The screen's own code reads them: twenty bytes from the caption one routine checks the
+stamp's tail and another loads from the same region.
+
+⚠ The byte between the name and `ssf` is `0x02` in two images and `.` in the third, so the
+stamp is matched on shape, not on a literal.
+
+```sh
+python3 wsa1/notes/sysex-probes/rom_version_stamps.py
+```
+
+Pass: three stamps of the right shape at the same offset, the fourth image bare, and the
+suffix check present near the caption, `OK`.

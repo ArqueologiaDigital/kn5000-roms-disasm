@@ -297,6 +297,8 @@ at & size & \\
 \bytes{+07E} & 34 & 17 entries of 2 bytes, unused $=$ \bytes{FF FF} \\
 \bytes{+0A0} & 17 & 17 entries of 1 byte, unused $=$ \bytes{05} \\
 \bytes{+0CA} & 6  & the song \textsc{name} \\
+\bytes{+0D7} & 1  & the \textsc{time signature} numerator, as displayed --- so
+                    \emph{one more} than the conductor track's \bytes{87} event carries \\
 \bytes{+100} & 51 & 17 entries of 3 bytes, unused $=$ \bytes{00 FF FF}; in use the first
                     byte reads \bytes{80} and \textbf{the other two are that track's
                     first block in \textsc{performance}} \\
@@ -314,11 +316,13 @@ seventeen \bytes{+100} entries is in use, and the last ten of their 16-bit value
 consecutively --- which is what a block allocator handing out consecutive blocks looks
 like, though this reference does not decode what they index.
 
-The per-track reading is no longer a guess about the \bytes{+100} table: its seventeen
+All three tables are per-track, and that is measured. The \bytes{+100} table's seventeen
 values are the seventeen chains of \textsc{performance} blocks, and following them
 produces seventeen \emph{disjoint} chains, which nothing but a real per-track index would
-do. The other two tables are the same length and are read the same way here, which is an
-inference from their length rather than a measurement.
+do. For the other two the program says so directly: the working copy of a song record sits
+at a fixed address, so each table has a fixed base, and one routine writes both of them
+from \emph{one} track index --- doubled for the two-byte table and left alone for the
+one-byte one.
 
 \textbf{Entry $i$ is track $i$}, and its events address part $i$. A controller event
 names the part it addresses in its second data byte, and for sixteen of the seventeen
