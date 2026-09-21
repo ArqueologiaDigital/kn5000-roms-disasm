@@ -25,9 +25,10 @@ System Exclusive errors will mis-read a truncated restore as something else.
 \end{caution}
 
 \section{ERROR 40 --- wrong identification}
-Raised when the message family byte is accepted but the bytes that follow it do not match
-the product. For a message addressed to the SX-WSA1R this means the model triple was not
-\bytes{04}, then \bytes{00} or \bytes{01}, then \bytes{11}.
+Raised when \textsc{cmd} is accepted but the bytes that follow it do not match the
+product. For a message addressed to the SX-WSA1R that means \textsc{pc} was not
+\bytes{04}, or \textsc{md} was neither \bytes{00} nor \bytes{01}, or \textsc{ver} was
+not \bytes{11}.
 
 \section{ERROR 41 --- reception}
 The general reception failure. It covers:

@@ -13,12 +13,30 @@ The instrument has two sets of MIDI sockets, MIDI~1 and MIDI~2. Ordinary perform
 is handled on both. \textbf{Bulk dump transfers use MIDI~1 only} --- a dump offered on
 MIDI~2 is not received, and the instrument sends dumps only from MIDI~1.
 
-\section{Relationship to the published manual}
-Technics' own guide documents \textsc{sysex bulk dump} as a feature: which menu rows exist,
-that the \textsc{send} button starts a transfer, that the MIDI~1 sockets must be used, and
-three error numbers. It states no byte layouts, and the instrument shipped without a MIDI
-implementation chart. This reference supplies what the guide leaves out, and follows it
-wherever both describe the same thing --- with one exception, the meaning of
+\section{Relationship to the published documentation}
+Technics documented this instrument's System Exclusive implementation, in the
+\emph{Reference Guide} that shipped alongside the two user manuals. Its pages~34--35 carry
+a MIDI implementation chart headed \emph{Synthesizer} \textsc{[sx-wsa1]}
+\emph{Synthesizer module} \textsc{[sx-wsa1r]}, and pages~41--56 give the message format,
+the address map and the parameter tables. Where that guide and this reference describe the
+same thing, the guide's terms are used here and its statements are followed.
+
+This reference exists because the published specification describes the \emph{format} and
+not the \emph{behaviour}. It does not say what raises each error number, that a dump can be
+requested only while one screen is displayed, that the \textsc{exclusive} filter governs a
+single message, that the rack refuses two functions silently, or that the instrument stops
+announcing its own General MIDI changes once a controller has sent one. Those are the
+subject of the chapters that follow, and they were established by decoding the program and
+by checking a dump from a real machine.
+
+\begin{note}{An earlier edition of this reference said no chart was published}
+It said the instrument shipped without a MIDI implementation chart. That was wrong: the
+chart and the full message format are in the \emph{Reference Guide}, which is a separate
+volume from the user manual the claim had been checked against. The document now takes the
+published specification as its starting point.
+\end{note}
+
+One statement of the published documentation is contradicted here: the meaning of
 \textsc{error 42}, set out in chapter~\ref{ch:errors}.
 
 \section{Verification}

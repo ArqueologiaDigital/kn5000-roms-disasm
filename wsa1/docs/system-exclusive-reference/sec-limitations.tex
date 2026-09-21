@@ -1,12 +1,20 @@
 \chapter{Scope of this edition}\label{ch:limits}
 
-This reference covers message framing, the bulk-dump transfer protocol, the universal
-messages, and error reporting. The following are not covered.
+This reference covers message framing, the bulk-dump transfer protocol, the parameter
+address space, the universal messages, error reporting and the differences between the two
+models. The following are not covered.
 
 \begin{description}
-\item[Parameter meanings.] Chapter~\ref{ch:params} gives the structure of the parameter
-  address space and the size of each block, but not what each individual parameter
-  controls.
+\item[Most parameter meanings.] Chapter~\ref{ch:params} enumerates all 108 addresses of
+  the \bytes{00} area with their length, bit mask, accepted values and position in a dump,
+  and names 31 of them. The remaining names are in the published \emph{Reference Guide},
+  whose parameter tables this edition does not reproduce; a reader who needs them should
+  go there. Every range this reference and that guide both state agrees.
+\item[The effect parameters.] The twenty values under each of \textsc{effect1},
+  \textsc{effect2} and \textsc{reverb} mean different things for each effect type, and
+  those meanings are not given here.
+\item[The sound areas.] \textsc{normal sound} and \textsc{drum sound} are reachable but
+  not enumerated.
 \item[Block contents.] Chapter~\ref{ch:blocks} gives each block's signature and where its
   names are, but not the meaning of the rest of the bytes --- the structure of a sound, a
   combination or a sequence.

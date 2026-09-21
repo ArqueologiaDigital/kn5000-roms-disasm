@@ -1,49 +1,97 @@
 \chapter{Parameter messages}\label{ch:params}
 
-Two message families address individual parameters rather than transferring blocks.
-Family \bytes{2C} writes; family \bytes{2B} requests. Both share one address space.
+Two commands address individual parameters rather than transferring blocks.
+\textsc{itr} (\bytes{2C}) writes one; \textsc{drq} (\bytes{2B}) requests one.
 
 \begin{center}
-\bytes{F0 50 2B 04 \textit{nn} 11 \textit{r} \textit{s} \textit{p} \ldots F7}
+\bytes{F0 50 2B 04 \textit{md} 11 \textit{a2 a1 a0} \textit{s2 s1 s0} \textit{cn} \textit{sm} F7}
 \end{center}
 
-The three bytes after the model triple select what is addressed.
-
-\section{Parameter area}
-When \bytes{\textit{r}} is \bytes{00}, \bytes{\textit{s}} selects a block and
-\bytes{\textit{p}} selects a parameter within it.
+\section{The address}
+\textsc{adr} is a single 21-bit address, sent as three seven-bit bytes, most significant
+first. It is the same address space the bulk dump uses --- a dump and a parameter write are
+two ways of reaching one map. The published map divides it as follows.
 
 \begin{center}
-\begin{tabular}{llr}
+\begin{tabular}{lllll}
 \toprule
-\bytes{\textit{s}} & block & parameters \\
+\textsc{adr} & address & area & subarea & \\
 \midrule
-\bytes{00} & common block 0 & 16 \\
-\bytes{01} & common block 1 & 6 \\
-\bytes{08} & write only & 4 \\
-\bytes{10} & common block 10 & 20 \\
-\bytes{11} & common block 11 & 4, plus a further 68 values \\
-\bytes{20}--\bytes{3F} & part 0 to part 31 & 57 each \\
-\bytes{60} & single parameter & 1 \\
+\bytes{00 00 00} & \bytes{000000} & \textsc{system} & & real time \\
+\bytes{00 08 00} & \bytes{000400} & \textsc{system} & & non-real time \\
+\bytes{00 10 00} & \bytes{000800} & \textsc{part} & \textsc{common} & real time \\
+\bytes{00 18 00} & \bytes{000C00} & \textsc{part} & \textsc{common} & non-real time \\
+\bytes{00 20 00} & \bytes{001000} & \textsc{part} & \textsc{individual} & part 1, real time \\
+\bytes{00 20 40} & \bytes{001040} & \textsc{part} & \textsc{individual} & part 1, non-real time \\
+\bytes{00 3F 40} & \bytes{001FC0} & \textsc{part} & \textsc{individual} & part 32, non-real time \\
+\bytes{00 60 00} & \bytes{003000} & \textsc{part} & \textsc{special} & real time \\
+\bytes{00 68 00} & \bytes{003400} & \textsc{part} & \textsc{special} & non-real time \\
+\bytes{10 00 00} & \bytes{040000} & \textsc{normal sound} & \textsc{individual} & real time \\
+\bytes{18 00 00} & \bytes{060000} & \textsc{drum sound} & \textsc{individual} & real time \\
+\bytes{20 00 00} & \bytes{080000} & \textsc{sound memory} & \textsc{total} & \\
+\bytes{40 00 00} & \bytes{100000} & \textsc{panel} & \textsc{header} & \\
+\bytes{40 00 20} & \bytes{100020} & \textsc{panel} & \textsc{panel data} & \\
+\bytes{50 00 00} & \bytes{140000} & \textsc{combination} & \textsc{header} & \\
+\bytes{60 00 00} & \bytes{180000} & \textsc{sequencer} & \textsc{location} & \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-The part blocks are regular: \bytes{\textit{s}} is \bytes{20} plus the part number, and all
-32 parts take the same 57 parameters. A few parameters carry more than one data byte.
+The last five are the bulk-dump categories of chapter~\ref{ch:bulk}. The ones above them
+are what an individual parameter message reaches.
 
-Under \bytes{\textit{s}} = \bytes{11}, values of \bytes{\textit{p}} from \bytes{03} upward
-are admitted in three runs --- \bytes{20}--\bytes{36}, \bytes{40}--\bytes{56} and
-\bytes{60}--\bytes{75}. Any other value in that block is accepted by the parser and then
-discarded, producing no error and no effect.
+\section{Parts}
+A part occupies \bytes{80} bytes of the map, split in half: the first \bytes{40} are its
+real-time parameters and the second \bytes{40} its non-real-time ones. So for part $n$,
+counting from~1, the middle byte of \textsc{adr} is $\mathtt{20} + n - 1$, and the last
+byte is the parameter, below \bytes{40} for a real-time parameter and \bytes{40} or above
+for a non-real-time one.
 
-Counting the part block once, the area holds 108 distinct parameters.
+All 32 parts take the same 57 parameters.
+
+\section{What the instrument actually accepts}
+Not every address in the map is a parameter. In the \bytes{00} area the instrument accepts
+108 distinct addresses, which the tables below enumerate in full.
+
+\begin{center}
+\begin{tabular}{lllr}
+\toprule
+\textsc{adr} middle & area & subarea & parameters \\
+\midrule
+\bytes{00}, \bytes{01} & \textsc{system} & & 22 \\
+\bytes{08} & \textsc{system} & non-real time & 4 \\
+\bytes{10}, \bytes{11} & \textsc{part} & \textsc{common} & 24 \\
+\bytes{20}--\bytes{3F} & \textsc{part} & \textsc{individual} & 57 each \\
+\bytes{60} & \textsc{part} & \textsc{special} & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Under \bytes{11}, values of the last byte from \bytes{03} upward are admitted in three
+runs, one per effect processor:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+run & processor & \\
+\midrule
+\bytes{20}--\bytes{36} & \textsc{effect1} & type, twenty values, send, dynamic control \\
+\bytes{40}--\bytes{56} & \textsc{effect2} & type, twenty values, send, dynamic control \\
+\bytes{60}--\bytes{75} & \textsc{reverb}  & type, twenty values, dynamic control \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Within a run the first address is the effect type and the next twenty are its parameters,
+whose meaning depends on the type selected. Any value of the last byte outside the three
+runs is accepted by the parser and then discarded, producing no error and no effect.
 
 \section{Parameters and the bulk dump are the same bytes}\label{sec:paramdump}
 
-The individual parameters and the \textsc{system, part \& midi} bulk dump are two views of
-one object. That dump carries addresses \bytes{100000} to \bytes{100980}, and every
-parameter in the \bytes{00} area is one byte --- or a field of one byte --- inside it.
+The \textsc{part} and \textsc{system} parameters and the \textsc{panel} bulk dump --- the
+category the menu calls \textsc{system, part \& midi} --- are two views of one object. That
+dump carries \bytes{100000} to \bytes{100980}, and every parameter of the \bytes{00} area
+is one byte, or a field of one byte, inside it.
 
 This matters in both directions. An editor that writes parameters and a librarian that
 restores dumps are competing for the same storage, so a dump restored after a parameter
@@ -52,36 +100,34 @@ without opening the instrument: dump the category, change the one parameter, dum
 and the two dumps differ at the stated address and nowhere else.
 
 \subsection*{Where a part's record sits}
-Each part occupies a \bytes{40}-byte record, and the offsets in
-table~\ref{tbl:partparams} are relative to the start of that record. The records are in
-two runs:
+Each part occupies a \bytes{40}-byte record in that dump, and the offsets in
+table~\ref{tbl:partparams} are relative to the start of it. The records are in two runs:
 
 \begin{center}
 \begin{tabular}{ll}
 \toprule
 part & record begins at \\
 \midrule
-0 to 7 & \bytes{1000A2} + \bytes{40} $\times$ part \\
-8 to 31 & \bytes{1002E2} + \bytes{40} $\times$ (part $-$ 8) \\
+1 to 8 & \bytes{1000A2} + \bytes{40} $\times$ (part $-$ 1) \\
+9 to 32 & \bytes{1002E2} + \bytes{40} $\times$ (part $-$ 9) \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \begin{caution}{The part records are not one array}
-The obvious formula, \bytes{1000A2} + \bytes{40} $\times$ part, is correct for the first
-eight parts and wrong for the other twenty-four. A \bytes{40}-byte gap after part 7 holds
-common-block storage, and the parts resume above it. Code that assumes a single stride
-will read and write the wrong part for parts 8 upward, and will corrupt two common blocks
-on the way past.
+The obvious formula, \bytes{1000A2} + \bytes{40} $\times$ (part $-$ 1), is correct for the
+first eight parts and wrong for the other twenty-four. A \bytes{40}-byte gap after part~8
+holds common-block storage, and the parts resume above it. Code that assumes a single
+stride will read and write the wrong part for parts~9 upward, and will corrupt two common
+blocks on the way past.
 \end{caution}
 
 \section{What a parameter accepts}
 
 Each parameter has a fixed data length and a range of accepted values. A value outside the
-range is rejected without an error message. Where the tables give a range of
-\bytes{0}~or~\bytes{1} the parameter is a single bit, and several such parameters usually
-share one byte of the dump --- so a dump editor changing one of them must preserve the
-others in the same byte.
+range is rejected without an error message. The \emph{bits} column gives which bits of the
+dump byte belong to the parameter; where that is not all of them, other parameters share
+the byte, and a dump editor changing one must preserve the rest.
 
 Three parameters accept an enumerated set rather than a range; sending any other value has
 no effect.
@@ -109,10 +155,12 @@ One parameter does not store what it is sent: \bytes{20 05} accepts \bytes{0}--\
 and passes the value through a substitution before storing it, so reading it back does not
 return what was written.
 
-\section{Whole-area request}
-Family \bytes{2B} also requests an entire category, as described in chapter~4. Here
-\bytes{\textit{r}} takes the region byte rather than \bytes{00}.
+\section{Whole-category request}
+\textsc{drq} also requests an entire bulk-dump category, as described in
+chapter~\ref{ch:bulk}. There \textsc{adr} names one of the lower five rows of the map
+above.
 
-\section{A third region}
-Both families accept \bytes{\textit{r}} values of \bytes{10}, \bytes{18} and \bytes{19},
-which carry an address and a count. What they address is not covered by this edition.
+\section{The sound areas}
+\textsc{adr} values beginning \bytes{10} and \bytes{18} reach \textsc{normal sound} and
+\textsc{drum sound}, the individual sound being edited rather than any stored one. This
+edition does not enumerate their parameters.

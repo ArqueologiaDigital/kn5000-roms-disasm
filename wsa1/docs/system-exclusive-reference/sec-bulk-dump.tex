@@ -1,30 +1,31 @@
-\chapter{Bulk dump}
+\chapter{Bulk dump}\label{ch:bulk}
 
 Bulk dump transfers the instrument's internal data as System Exclusive. The instrument is
 silent for the duration, and the transfer uses the MIDI~1 sockets only.
 
 \section{Categories and what each transmits}
-The \textsc{sysex bulk dump} screen offers five categories. Each sends one or more data
-messages at fixed dump addresses.
+The \textsc{sysex bulk dump} screen offers five categories. Each sends one or more
+\textsc{btr} messages at fixed addresses. The menu's names and the published address map's
+names for the same data differ; both are given.
 
 \begin{center}
-\begin{tabular}{llllr}
+\begin{tabular}{lllllr}
 \toprule
-category & address bytes & length bytes & length & blocks \\
+category & area & \textsc{adr} & \textsc{siz} & length & blocks \\
 \midrule
-\textsc{system, part \& midi} & \bytes{40 00 00} & \bytes{00 00 20} & 32 & \\
-                              & \bytes{40 00 20} & \bytes{00 12 60} & 2\,400 & \\
+\textsc{system, part \& midi} & \textsc{panel} & \bytes{40 00 00} & \bytes{00 00 20} & 32 & \\
+                              & & \bytes{40 00 20} & \bytes{00 12 60} & 2\,400 & \\
 \addlinespace
-\textsc{sound}                & \bytes{20 00 00} & \bytes{10 00 00} & 262\,144 & 32 \\
+\textsc{sound}                & \textsc{sound memory} & \bytes{20 00 00} & \bytes{10 00 00} & 262\,144 & 32 \\
 \addlinespace
-\textsc{combination}          & \bytes{50 00 00} & \bytes{00 06 00} & 768 & \\
-                              & \bytes{50 06 00} & \bytes{05 40 00} & 90\,112 & 16 \\
+\textsc{combination}          & \textsc{combination} & \bytes{50 00 00} & \bytes{00 06 00} & 768 & \\
+                              & & \bytes{50 06 00} & \bytes{05 40 00} & 90\,112 & 16 \\
 \addlinespace
-\textsc{sequencer}            & \bytes{60 00 00} & \bytes{00 18 00} & 3\,072 & \\
-                              & \bytes{60 18 00} & \bytes{01 70 00} & 30\,720 & \\
-                              & \bytes{62 08 00} & \multicolumn{2}{l}{set at send time} & \\
+\textsc{sequencer}            & \textsc{sequencer} & \bytes{60 00 00} & \bytes{00 18 00} & 3\,072 & \\
+                              & & \bytes{60 18 00} & \bytes{01 70 00} & 30\,720 & \\
+                              & & \bytes{62 08 00} & \multicolumn{2}{l}{set at send time} & \\
 \addlinespace
-\textsc{total keyboard}       & \multicolumn{4}{l}{the four categories in the order above} \\
+\textsc{total keyboard}       & \multicolumn{5}{l}{the four categories in the order above} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -44,18 +45,18 @@ the last.
 The \textsc{sequencer} category is the only one whose final message has no fixed length ---
 it carries as much recorded material as the instrument holds.
 
-\begin{note}{The dump address is not a memory address}
-Within one category the addresses are consecutive: a block's address is the previous
-block's address plus its length. Across categories they are not. \textsc{sound} and
-\textsc{combination} are held side by side inside the instrument, yet their dump addresses
-are 786\,432 apart; other pairs are the reverse.
+\begin{note}{The address is an exclusive address, not a memory address}
+\textsc{adr} is a position in the published MIDI exclusive address map, which
+chapter~\ref{ch:params} gives in full. It is not an address inside the instrument:
+\textsc{sound} and \textsc{combination} are held side by side in the machine, yet their
+exclusive addresses are 786\,432 apart.
 
-Treat the address and length bytes together as a fixed name for one of the eight blocks.
-The instrument does the same --- on reception it compares them against a fixed list and
-performs no arithmetic on them.
+For a bulk dump it is best treated as a fixed name. On reception the instrument compares
+\textsc{adr} and \textsc{siz} against a fixed list and performs no arithmetic on them, so
+seven of the eight blocks are pinned on all six bytes; see below.
 \end{note}
 
-\section{Data message}
+\section{Data message --- BTR}
 \begin{center}
 \bytes{F0 50 2D 04 \textit{nn} 11}\quad
 \bytes{\textit{a2 a1 a0}}\quad
@@ -67,14 +68,15 @@ performs no arithmetic on them.
 \end{center}
 
 \begin{description}
-\item[\bytes{\textit{nn}}] unit field, \bytes{00} or \bytes{01}.
-\item[\bytes{\textit{a2 a1 a0}}] destination address, three bytes, most significant first,
-  seven bits each: the value is $a_2 \times 128^2 + a_1 \times 128 + a_0$.
-\item[\bytes{\textit{l2 l1 l0}}] length in \emph{source} bytes, encoded the same way.
-\item[\bytes{\textit{data}}] the payload, encoded as described below.
-\item[\bytes{\textit{c}}] continuation flag: \bytes{01} if further messages follow,
-  \bytes{00} on the last.
-\item[\bytes{\textit{sum}}] checksum.
+\item[\bytes{\textit{nn}}] \textsc{md}, the model: \bytes{00} or \bytes{01}.
+\item[\bytes{\textit{a2 a1 a0}}] \textsc{adr}, the destination, three bytes, most
+  significant first, seven bits each: the value is $a_2 \times 128^2 + a_1 \times 128 + a_0$.
+\item[\bytes{\textit{l2 l1 l0}}] \textsc{siz}, the length in \emph{source} bytes, encoded
+  the same way.
+\item[\bytes{\textit{data}}] \textsc{dt}, the payload, encoded as described below.
+\item[\bytes{\textit{c}}] \textsc{cn}, the continue identifier: \bytes{01} if further
+  messages follow, \bytes{00} on the last.
+\item[\bytes{\textit{sum}}] \textsc{sm}, the checksum.
 \end{description}
 
 A message is filled to at most 252 bytes before being sent; longer transfers are split.
@@ -103,9 +105,9 @@ On reception the checksum is checked only for families \bytes{7E}, \bytes{2B},
 unremarked.
 \end{caution}
 
-\section{Requesting a dump}
+\section{Requesting a dump --- DRQ}
 A dump can be asked for over MIDI; the front-panel \textsc{send} button is not the only
-way to start one. The request names a category by its region byte:
+way to start one. The request names a category by the top byte of \textsc{adr}:
 
 \begin{center}
 \bytes{F0 50 2B 04 \textit{nn} 11 \textit{area} 00 00 \textit{x x x} F7}
@@ -114,7 +116,7 @@ way to start one. The request names a category by its region byte:
 \begin{center}
 \begin{tabular}{ll}
 \toprule
-\bytes{\textit{area}} & category requested \\
+\textsc{adr} & category requested \\
 \midrule
 \bytes{40} & \textsc{system, part \& midi} \\
 \bytes{20} & \textsc{sound} \\
@@ -124,7 +126,7 @@ way to start one. The request names a category by its region byte:
 \end{tabular}
 \end{center}
 
-The three bytes in the length position are ignored; any values are accepted. The
+The three bytes of \textsc{siz} are ignored; any values are accepted. The
 instrument then runs exactly the transfer the corresponding menu row would have run.
 
 There is no request for \textsc{total keyboard}: the four categories must be asked for one
@@ -152,9 +154,9 @@ three attempts, after which the transfer is abandoned.
 A reply is awaited for about 5.1 seconds; during the opening exchange the wait is about
 2.05 seconds.
 
-\section{Continuation}
-Data messages after the first open with \bytes{F0 50 7E}, followed by payload,
-continuation flag, checksum and \bytes{F7}.
+\section{Continuation --- CDD}
+Data messages after the first open with \bytes{F0 50 7E}, \textsc{cdd}, followed by
+\textsc{dt}, \textsc{cn}, \textsc{sm} and \bytes{F7}. A continuation carries no address.
 
 \section{Closing}
 At the end of each category the sender transmits \bytes{F0 50 27 7E F7} and waits for an

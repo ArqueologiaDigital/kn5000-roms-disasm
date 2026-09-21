@@ -17,9 +17,9 @@ three-byte & \bytes{F0 50 2C 04 00 11 00 20 00 00 00 03 01 02 00 00 04 00 00 45 
 \end{tabular}
 \end{center}
 
-The value 100 is \bytes{64}, which the payload carries as the two bytes
-\bytes{06 04}. The three bytes before it are the count, and the \bytes{00} after
-it is the continuation flag. The checksum closes the message.
+The value 100 is \bytes{64}, which \textsc{dt} carries as the two bytes
+\bytes{06 04}. The three bytes before it are \textsc{siz}, and the \bytes{00}
+after it is \textsc{cn}. \textsc{sm} closes the message.
 
 \section{A frame from a real instrument}
 The bytes below open the first data message of a dump recorded from an
@@ -29,8 +29,10 @@ SX-WSA1R, a transfer of three categories in one session:
 \bytes{F0 50 2D 04 01 11 40 00 00 00 00 20 \ldots}
 \end{center}
 
-Reading it by the rules of chapter~4: family \bytes{2D}, model triple
-\bytes{04 01 11} --- the rack's --- destination \bytes{40 00 00} and length \bytes{00 00 20},
+Reading it by the rules of chapter~\ref{ch:bulk}: \textsc{cmd} is \bytes{2D}
+\textsc{btr}; \bytes{04 01 11} are \textsc{pc}, \textsc{md} and \textsc{ver}, the
+middle one being the rack's; then \textsc{adr} \bytes{40 00 00} and \textsc{siz}
+\bytes{00 00 20},
 which together name block~1 of \textsc{system, part \& midi}. The length decodes to 32 source
 bytes and the frame carries 32 of them.
 

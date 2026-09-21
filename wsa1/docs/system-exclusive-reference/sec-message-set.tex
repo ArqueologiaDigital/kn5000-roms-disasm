@@ -1,80 +1,130 @@
 \chapter{The Technics message set}\label{ch:messageset}
 
-\section{Message families}
-After \bytes{F0 50}, the third byte selects a message family. The instrument accepts
-fourteen values:
+\section{Fields}
+Technics' published specification names the fields of a Technics System Exclusive message.
+This reference uses those names.
 
 \begin{center}
-\bytes{21 22 23 24 25 27 28 29 2A 2B 2C 2D 7E 7F}
-\end{center}
-
-\bytes{26} is not accepted. The SX-WSA1R's own product identifier is \bytes{2D}; its
-outgoing bulk-dump data messages all begin \bytes{F0 50 2D}.
-
-\section{The model triple}
-The families \bytes{21}, \bytes{22}, \bytes{2B}, \bytes{2C} and \bytes{2D} continue with
-three fixed bytes:
-
-\begin{center}
-\bytes{04} \quad \bytes{\textit{nn}} \quad \bytes{11}
-\end{center}
-
-where \bytes{\textit{nn}} is \bytes{00} or \bytes{01}. A message whose triple the
-instrument does not recognise is rejected with \textsc{error 40}.
-
-\begin{caution}{The middle byte names the model, and only on transmission}
-The keyboard transmits \bytes{04 00 11}; the rack transmits \bytes{04 01 11}. The rack
-substitutes the middle byte as the message leaves, in every \bytes{21}, \bytes{22},
-\bytes{2C} and \bytes{2D} message it sends, and recomputes the checksum of those that
-carry one, so the substitution is invisible in the checksum. A bulk dump captured from a
-real rack carries \bytes{04 01 11} throughout.
-
-Reception is model-blind. Both values are accepted by both models, on every family that
-carries the triple, and reach the same handler; a message is never refused, ignored or
-treated differently because of the middle byte. A receiver must therefore accept both,
-and a file dumped from one model loads into the other.
-\end{caution}
-
-\section{Short messages}
-These messages are complete as shown. They form the control vocabulary of a bulk-dump
-session.
-
-\begin{center}
-\begin{tabular}{ll}
+\begin{tabular}{lll}
 \toprule
-message & meaning \\
+field & value & meaning \\
 \midrule
-\bytes{F0 50 23 7E F7} & acknowledge \\
-\bytes{F0 50 24 7E F7} & not acknowledged \\
-\bytes{F0 50 27 7E F7} & end of category \\
-\bytes{F0 50 28 7E F7} & end of dump \\
-\bytes{F0 50 29 7E F7} & abort \\
-\bytes{F0 50 2A 7E F7} & destination full \\
-\bytes{F0 50 21 04 \textit{nn} 11 F7} & enquiry \\
-\bytes{F0 50 22 04 \textit{nn} 11 F7} & enquiry reply \\
+\textsc{sox}  & \bytes{F0} & exclusive status \\
+\textsc{idc}  & \bytes{50} & Technics identifier \\
+\textsc{cmd}  & & command, see below \\
+\textsc{pc}   & \bytes{04} & product category, \textsc{wsa} \\
+              & \bytes{7E} & \textsc{dmy}, the dummy used where no product is named \\
+\textsc{md}   & \bytes{00} & model, SX-WSA1 \\
+              & \bytes{01} & model, SX-WSA1R \\
+\textsc{ver}  & \bytes{11} & exclusive version 2.1 \\
+\multicolumn{3}{l}{\emph{then, for the messages that carry data:}} \\
+\textsc{adr}  & 3 bytes & a 21-bit address, seven bits each, most significant first \\
+\textsc{siz}  & 3 bytes & length in source bytes, encoded the same way \\
+\textsc{dt}   & & the data \\
+\textsc{cn}   & \bytes{00}/\bytes{01} & continue identifier \\
+\textsc{sm}   & & checksum \\
+\textsc{eox}  & \bytes{F7} & end of exclusive \\
 \bottomrule
 \end{tabular}
 \end{center}
 
+\begin{note}{VER is a version, not part of a model identifier}
+\bytes{11} is the version of the \emph{exclusive specification}, 2.1. It is not an
+operating system version --- this instrument's operating system 2.0 sends
+\textsc{ver}~=~\bytes{11} --- and it is not part of a model code. The model is
+\textsc{md}, the byte before it.
+\end{note}
+
+\section{Commands}
+After \bytes{F0 50}, \textsc{cmd} selects the message.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textsc{cmd} & & \\
+\midrule
+\bytes{21} & \textsc{hrq} & hand shake request \\
+\bytes{22} & \textsc{hrt} & hand shake routine \\
+\bytes{23} & \textsc{ack} & acknowledge \\
+\bytes{24} & \textsc{nak} & negative acknowledge \\
+\bytes{25} & \textsc{tmp} & tempo data \\
+\bytes{27} & \textsc{eok} & end of block \\
+\bytes{28} & \textsc{end} & end \\
+\bytes{29} & \textsc{err} & error \\
+\bytes{2A} & \textsc{ful} & memory full \\
+\bytes{2B} & \textsc{drq} & data request \\
+\bytes{2C} & \textsc{itr} & individual data \\
+\bytes{2D} & \textsc{btr} & data block \\
+\bytes{7E} & \textsc{cdd} & continuing data \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The instrument accepts one further value that the published table does not list,
+\bytes{7F}, and does not accept \bytes{26}.
+
+\section{Which fields each message carries}
+\textsc{ack}, \textsc{nak}, \textsc{eok}, \textsc{end}, \textsc{err} and \textsc{ful} name
+no product: they carry \textsc{pc}~=~\bytes{7E} \textsc{dmy} and stop there, with no
+\textsc{md} and no \textsc{ver}. That is why they are five bytes long.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+message & \\
+\midrule
+\bytes{F0 50 23 7E F7} & \textsc{ack} \\
+\bytes{F0 50 24 7E F7} & \textsc{nak} \\
+\bytes{F0 50 27 7E F7} & \textsc{eok}, end of block \\
+\bytes{F0 50 28 7E F7} & \textsc{end}, end of dump \\
+\bytes{F0 50 29 7E F7} & \textsc{err} \\
+\bytes{F0 50 2A 7E F7} & \textsc{ful}, memory full \\
+\bytes{F0 50 21 04 \textit{md} 11 F7} & \textsc{hrq}, hand shake request \\
+\bytes{F0 50 22 04 \textit{md} 11 F7} & \textsc{hrt}, hand shake routine \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textsc{drq}, \textsc{itr} and \textsc{btr} carry \textsc{pc}, \textsc{md} and
+\textsc{ver}, then \textsc{adr} and \textsc{siz}, then \textsc{cn} and \textsc{sm}.
+\textsc{itr} and \textsc{btr} carry \textsc{dt} between them; \textsc{drq}, which asks
+rather than tells, carries none. \textsc{cdd} carries \textsc{dt}, \textsc{cn} and
+\textsc{sm} with no address at all.
+
+\begin{caution}{MD is rewritten on transmission}
+The keyboard transmits \textsc{md}~=~\bytes{00}, the rack \bytes{01}. The rack substitutes
+the byte as the message leaves, on every \bytes{21}, \bytes{22}, \bytes{2C} and \bytes{2D}
+message it sends, and recomputes the checksum afterwards, so the substitution is invisible
+to a receiver that validates it. A bulk dump captured from a real rack carries
+\bytes{04 01 11} throughout.
+
+Reception is model-blind. Both values are accepted by both models, on every command that
+carries \textsc{md}, and reach the same handler; a message is never refused, ignored or
+treated differently because of it. A receiver must therefore accept both, and a file
+dumped from one model loads into the other.
+\end{caution}
+
+A message whose \textsc{pc}, \textsc{md} or \textsc{ver} the instrument does not recognise
+is rejected with \textsc{error 40}.
+
 \section{Tempo}
-The family \bytes{25} carries a tempo and nothing else:
+\textsc{tmp} carries a tempo and nothing else:
 
 \begin{center}
 \bytes{F0 50 25 \textit{lo} \textit{hi} F7}
 \end{center}
 
-Six bytes. Unlike every other Technics family it carries \textbf{no model triple, no unit
-field and no checksum}, and any bytes sent beyond the fifth are ignored. The tempo is nine
-bits sent low nibble first: $\mathit{value} = \mathit{lo} + 16\,\mathit{hi}$. The accepted
-range is 40 to 300 beats per minute and a value outside it is treated as 120.
+Six bytes. Unlike every other Technics command it carries \textbf{no \textsc{pc}, no
+\textsc{md}, no \textsc{ver} and no checksum}, and any bytes sent beyond the fifth are
+ignored. The tempo is nine bits sent low nibble first:
+$\mathit{value} = \mathit{lo} + 16\,\mathit{hi}$. The accepted range is 40 to 300 beats per
+minute and a value outside it is treated as 120.
 
 This message is the one thing the \textsc{exclusive} filter governs; see
-chapter~\ref{ch:settings}.
+chapter~\ref{ch:settings}. It is also one of the two things the rack does not support; see
+chapter~\ref{ch:models}.
 
-See chapter~\ref{ch:models} --- the tempo message is one of two things the rack does not
-support.
-
-\section{Parameter families}
-The families \bytes{2B} and \bytes{2C} carry individual parameter traffic rather than bulk
-transfer. Both address one parameter space, which chapter~\ref{ch:params} sets out and
-enumerates; chapter~\ref{ch:examples} works a write and a read through byte by byte.
+\section{Parameter commands}
+\textsc{drq} requests and \textsc{itr} writes an individual parameter. Both address the
+space chapter~\ref{ch:params} sets out; chapter~\ref{ch:examples} works one through byte by
+byte.

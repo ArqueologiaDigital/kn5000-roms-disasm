@@ -105,30 +105,30 @@ byte.}\label{tbl:commonparams}\\
 \bytes{08} & \bytes{08} & 1 & --- & \bytes{F0} & 0--1 &  \\
 \bytes{08} & \bytes{10} & 1 & --- & --- & 0--127 &  \\
 \bytes{08} & \bytes{11} & 3 & --- & --- & 0--1 &  \\
-\bytes{10} & \bytes{00} & 1 & \bytes{1002B2} & \bytes{7F} & 28--100 & OCT \\
-\bytes{10} & \bytes{10} & 1 & \bytes{1002A3} & \bytes{80} & 0--1 &  \\
-\bytes{10} & \bytes{11} & 1 & \bytes{1002A2} & all & enumerated, 15 values & scale tuning type \\
-\bytes{10} & \bytes{12} & 1 & \bytes{1002A3} & \bytes{0F} & 0--11 &  \\
-\bytes{10} & \bytes{13} & 1 & \bytes{1002A4} & all & 0--255 & user scale, note 1 \\
-\bytes{10} & \bytes{14} & 1 & \bytes{1002A5} & all & 0--255 & user scale, note 2 \\
-\bytes{10} & \bytes{15} & 1 & \bytes{1002A6} & all & 0--255 & user scale, note 3 \\
-\bytes{10} & \bytes{16} & 1 & \bytes{1002A7} & all & 0--255 & user scale, note 4 \\
-\bytes{10} & \bytes{17} & 1 & \bytes{1002A8} & all & 0--255 & user scale, note 5 \\
-\bytes{10} & \bytes{18} & 1 & \bytes{1002A9} & all & 0--255 & user scale, note 6 \\
-\bytes{10} & \bytes{19} & 1 & \bytes{1002AA} & all & 0--255 & user scale, note 7 \\
-\bytes{10} & \bytes{1A} & 1 & \bytes{1002AB} & all & 0--255 & user scale, note 8 \\
-\bytes{10} & \bytes{1B} & 1 & \bytes{1002AC} & all & 0--255 & user scale, note 9 \\
-\bytes{10} & \bytes{1C} & 1 & \bytes{1002AD} & all & 0--255 & user scale, note 10 \\
-\bytes{10} & \bytes{1D} & 1 & \bytes{1002AE} & all & 0--255 & user scale, note 11 \\
-\bytes{10} & \bytes{1E} & 1 & \bytes{1002AF} & all & 0--255 & user scale, note 12 \\
-\bytes{10} & \bytes{20} & 1 & --- & \bytes{1F} & 0--17 &  \\
-\bytes{10} & \bytes{21} & 1 & \bytes{1002B3} & \bytes{3F} & 0--48 &  \\
-\bytes{10} & \bytes{22} & 1 & --- & \bytes{1F} & 17--26 &  \\
-\bytes{10} & \bytes{23} & 1 & \bytes{1002B5} & \bytes{3F} & 0--48 &  \\
-\bytes{11} & \bytes{00} & 1 & \bytes{100034} & \bytes{01} & 0--1 &  \\
-\bytes{11} & \bytes{01} & 1 & \bytes{1002B7} & \bytes{0F} & 1--4 &  \\
-\bytes{11} & \bytes{02} & 1 & \bytes{1002B7} & \bytes{F0} & 1--4 &  \\
-\bytes{11} & \bytes{20} & 1 & --- & --- & 0--0 &  \\
+\bytes{10} & \bytes{00} & 1 & \bytes{1002B2} & \bytes{7F} & 28--100 & KEY TRANSPOSE \\
+\bytes{10} & \bytes{10} & 1 & \bytes{1002A3} & \bytes{80} & 0--1 & KEY SCALING MODE \\
+\bytes{10} & \bytes{11} & 1 & \bytes{1002A2} & all & enumerated, 15 values & TOTAL KEY SCALING \\
+\bytes{10} & \bytes{12} & 1 & \bytes{1002A3} & \bytes{0F} & 0--11 & KEY SCALING SHIFT \\
+\bytes{10} & \bytes{13} & 1 & \bytes{1002A4} & all & 0--255 & Ckey DETUNE SETTING \\
+\bytes{10} & \bytes{14} & 1 & \bytes{1002A5} & all & 0--255 & Dbkey DETUNE SETTING \\
+\bytes{10} & \bytes{15} & 1 & \bytes{1002A6} & all & 0--255 & Dkey DETUNE SETTING \\
+\bytes{10} & \bytes{16} & 1 & \bytes{1002A7} & all & 0--255 & Ebkey DETUNE SETTING \\
+\bytes{10} & \bytes{17} & 1 & \bytes{1002A8} & all & 0--255 & Ekey DETUNE SETTING \\
+\bytes{10} & \bytes{18} & 1 & \bytes{1002A9} & all & 0--255 & Fkey DETUNE SETTING \\
+\bytes{10} & \bytes{19} & 1 & \bytes{1002AA} & all & 0--255 & Gbkey DETUNE SETTING \\
+\bytes{10} & \bytes{1A} & 1 & \bytes{1002AB} & all & 0--255 & Gkey DETUNE SETTING \\
+\bytes{10} & \bytes{1B} & 1 & \bytes{1002AC} & all & 0--255 & Abkey DETUNE SETTING \\
+\bytes{10} & \bytes{1C} & 1 & \bytes{1002AD} & all & 0--255 & Akey DETUNE SETTING \\
+\bytes{10} & \bytes{1D} & 1 & \bytes{1002AE} & all & 0--255 & Bbkey DETUNE SETTING \\
+\bytes{10} & \bytes{1E} & 1 & \bytes{1002AF} & all & 0--255 & Bkey DETUNE SETTING \\
+\bytes{10} & \bytes{20} & 1 & --- & \bytes{1F} & 0--17 & MAIN OUT EQUALIZER LOW-FREQ \\
+\bytes{10} & \bytes{21} & 1 & \bytes{1002B3} & \bytes{3F} & 0--48 & MAIN OUT EQUALIZER LOW-GAIN \\
+\bytes{10} & \bytes{22} & 1 & --- & \bytes{1F} & 17--26 & MAIN OUT EQUALIZER HIGH-FREQ \\
+\bytes{10} & \bytes{23} & 1 & \bytes{1002B5} & \bytes{3F} & 0--48 & MAIN OUT EQUALIZER HIGH-GAIN \\
+\bytes{11} & \bytes{00} & 1 & \bytes{100034} & \bytes{01} & 0--1 & EFFECT COMMON ALGORITHM \\
+\bytes{11} & \bytes{01} & 1 & \bytes{1002B7} & \bytes{0F} & 1--4 & EFFECT1 OUTPUT SELECT \\
+\bytes{11} & \bytes{02} & 1 & \bytes{1002B7} & \bytes{F0} & 1--4 & EFFECT2 OUTPUT SELECT \\
+\bytes{11} & \bytes{20} & 1 & --- & --- & 0--0 & EFFECT1 TYPE \\
 \bytes{60} & \bytes{00} & 1 & \bytes{100905} & \bytes{7F} & 0--127 &  \\
 \bottomrule
 \end{longtable}

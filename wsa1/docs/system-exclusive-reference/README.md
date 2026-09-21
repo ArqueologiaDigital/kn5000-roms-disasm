@@ -4,7 +4,13 @@ A byte-level reference for how the SX-WSA1R communicates over MIDI System Exclus
 message framing, the Technics message set, the bulk-dump transfer protocol, the universal
 messages it honours, and what it reports when a transfer fails.
 
-Technics published no MIDI implementation chart for this instrument.
+Technics *did* publish a MIDI implementation chart and a System Exclusive specification for
+this instrument, in the separate **Reference Guide** (pages 34–35 and 41–56). This document
+uses that guide's field names and follows its statements; it exists to cover the
+instrument's *behaviour*, which the guide does not describe — what raises each error, when a
+dump can be received, what the EXCLUSIVE filter actually governs, and what the rack
+refuses. `../../notes/sysex-probes/manual_reference_guide.py` pins the guide by hash and
+lists which page carries what.
 
 ## Build
 
@@ -13,7 +19,7 @@ pdflatex wsa1r-system-exclusive-reference.tex
 pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
 ```
 
-30 pages. Needs only a standard TeX Live.
+33 pages. Needs only a standard TeX Live.
 
 ## Files
 

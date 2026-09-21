@@ -21,22 +21,27 @@ The error mapping is also nearly common: of the thirty-four status values, thirt
 produce the same report on the SX-WSA1R and the SX-KN5000.
 
 \section{What distinguishes the products}
-The model triple is the discriminator. A message whose triple does not match the receiving
-instrument is refused with \textsc{error 40}.
+\textsc{pc}, \textsc{md} and \textsc{ver} together are the discriminator. A message whose
+three bytes do not match the receiving instrument is refused with \textsc{error 40}.
 
 \begin{center}
 \begin{tabular}{ll}
 \toprule
-instrument & model triple \\
+instrument & \textsc{pc} \textsc{md} \textsc{ver} \\
 \midrule
-SX-WSA1R & \bytes{04 00 11}, \bytes{04 01 11} \\
+SX-WSA1 / SX-WSA1R & \bytes{04 00 11}, \bytes{04 01 11} \\
 SX-KN5000 & \bytes{01 28 12} \\
 SX-KN1500 & \bytes{01 24 11}, \bytes{01 25 11}, \bytes{01 26 11} \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-A librarian that supports more than one of these instruments needs only to vary the triple
+The split is legible once the fields are named: \textsc{pc}~=~\bytes{04} is the
+\textsc{wsa} product category and \bytes{01} the keyboards, \textsc{md} separates models
+within a category, and \textsc{ver} is the exclusive specification's own version --- 2.1
+for the WSA1 and the KN1500, 2.2 for the KN5000.
+
+A librarian that supports more than one of these instruments needs only to vary those bytes
 and the dump region addresses; the framing, handshake, encoding and checksum are common
 code.
 

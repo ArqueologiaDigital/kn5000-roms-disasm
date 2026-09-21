@@ -19,9 +19,10 @@ error is reported for it.
 
 \begin{caution}{There is no device or unit number after the identifier}
 Many instruments place a device id immediately after the manufacturer identifier. The
-SX-WSA1R does not. The byte following \bytes{50} is already the message-family byte
-described in chapter~\ref{ch:messageset}. A unit field does appear later in some families,
-but it is not where the convention would put it.
+SX-WSA1R does not. The byte following \bytes{50} is already \textsc{cmd}, the command, described in
+chapter~\ref{ch:messageset}. A model byte does appear two positions later in most
+commands, but it names the model, not the device, and it is not where the convention would
+put a device id.
 \end{caution}
 
 \section{Termination}

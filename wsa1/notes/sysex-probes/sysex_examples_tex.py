@@ -181,9 +181,9 @@ def main():
     w("\\end{tabular}")
     w("\\end{center}")
     w("")
-    w("The value 100 is \\bytes{64}, which the payload carries as the two bytes")
-    w("\\bytes{06 04}. The three bytes before it are the count, and the \\bytes{00} after")
-    w("it is the continuation flag. The checksum closes the message.")
+    w("The value 100 is \\bytes{64}, which \\textsc{dt} carries as the two bytes")
+    w("\\bytes{06 04}. The three bytes before it are \\textsc{siz}, and the \\bytes{00}")
+    w("after it is \\textsc{cn}. \\textsc{sm} closes the message.")
     w("")
     ahex = " ".join("%02X" % b for b in head[6:9])
     lhex = " ".join("%02X" % b for b in head[9:12])
@@ -197,9 +197,12 @@ def main():
     w("\\bytes{%s \\ldots}" % " ".join("%02X" % b for b in head))
     w("\\end{center}")
     w("")
-    w("Reading it by the rules of chapter~4: family \\bytes{2D}, model triple")
-    w("\\bytes{%s} --- the rack's --- destination \\bytes{%s} and length \\bytes{%s},"
-      % (" ".join("%02X" % b for b in head[3:6]), ahex, lhex))
+    w("Reading it by the rules of chapter~\\ref{ch:bulk}: \\textsc{cmd} is \\bytes{2D}")
+    w("\\textsc{btr}; \\bytes{%s} are \\textsc{pc}, \\textsc{md} and \\textsc{ver}, the"
+      % " ".join("%02X" % b for b in head[3:6]))
+    w("middle one being the rack's; then \\textsc{adr} \\bytes{%s} and \\textsc{siz}"
+      % ahex)
+    w("\\bytes{%s}," % lhex)
     w("which together name block~%d of \\textsc{%s}. The length decodes to %s source"
       % (part, block, format(count, ",d")))
     w("bytes and the frame carries %d of them." % len(src))
