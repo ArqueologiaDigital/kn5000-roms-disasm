@@ -69,12 +69,13 @@ and \textsc{combination} blocks a dump carries.
 
   From the program: a part record is reached through a pointer, so these bytes are named
   by displacement, and there are two displacements they could carry --- block~B sits
-  \bytes{20} past block~A. At the first, no group of instructions touches all three, in
-  either image. At the second there are five, and not one of them reaches a part record;
-  two are inside a 64-entry uniform table that the reference disassembler refuses to
-  decode as instructions at all. The test for ``does this reach a part record'' is the
-  step that turns a table index into a part slot, and it is controlled: it fires on the
-  sites that write the triple next door, and on none of these five.
+  \bytes{20} past block~A. Counting every individual access at either, across all four
+  images and not only the two the instrument's panel runs on, there are 127. Three of them
+  come near the pointer table that holds part records, and all three are in one routine
+  which indexes that table \emph{without} the step that selects a part, so it reaches a
+  sibling structure. None reaches a part record. The test for that is controlled: it fires
+  on the bytes next door, where 6 of 91 accesses do reach a part record, including the
+  sites that write the triple.
 
   So these three bytes are carried in stored data and copied wholesale, and no code treats
   them as fields. For a librarian that is actionable --- preserve them, do not compute
@@ -98,10 +99,14 @@ and \textsc{combination} blocks a dump carries.
   and a recording made on a known single track would settle it along with the roles of the
   header's other two seventeen-entry tables.
 \item[Operating system version 1.] Everything here describes version 2.0. Closing this
-  needs a dump of the earlier firmware, and there is not one to be had here: the archive
-  this project works from carries a single firmware set, whose own accompanying note calls
-  version 2 ``probably the last released version''. This is an absence of an artefact
-  rather than a piece of analysis left undone. This version
+  needs a dump of the earlier firmware, and there is not one to be had. The archive this
+  project works from carries a single firmware set, whose own accompanying note calls
+  version 2 ``probably the last released version''; every copy of a WSA1 program image
+  anywhere on this project's machine hashes to those same four files. This is an absence
+  of an artefact rather than a piece of analysis left undone, and no amount of reading
+  version 2 will produce version 1 --- a search of all three program images for a
+  conversion path, for compatibility text, and for anything that compares the version byte
+  a block carries, turns up nothing. This version
   carries no sign of the earlier one: a search of all three program images turns up no
   conversion path and no compatibility text, and nothing compares the version byte a
   block carries. A reader can nonetheless establish what they are holding, two ways.

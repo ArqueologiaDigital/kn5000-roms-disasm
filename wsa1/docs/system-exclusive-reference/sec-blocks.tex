@@ -263,12 +263,17 @@ seventeen. A chain's last block is only partly used and its tail holds stale byt
 is excluded; with it left in, those stale events show up as the same handful of part
 numbers in every chain, which is how the tail was noticed.
 
-The seventeenth is the exception, and informatively so. Technics publishes \textbf{sixteen}
-recording tracks --- ``this instrument's \textsc{sequencer} has 16 recording tracks'' ---
-and entry~16 carries no part-addressed controller events at all. The instrument's help
-text names three special tracks besides the melody ones, \textsc{rhythm}, \textsc{chord}
-and \textsc{control}, so a seventeenth stream that addresses no part is consistent with a
-conductor track; what it does carry is not established here.
+The seventeenth is not a recording track, and the evidence is stronger than its not
+naming a part. Set its statuses against the other sixteen's and the two sets are
+\textbf{disjoint in both directions}. Every one of the sixteen carries notes, controllers
+and program changes --- \bytes{90}, \bytes{B0}, \bytes{B4}, \bytes{C0}, \bytes{D1},
+\bytes{D2}. Entry~16 carries none of those. It is 999 events of which \textbf{997 are the
+clock}, plus exactly two others, whose statuses --- \bytes{80} and \bytes{87} --- appear in
+none of the sixteen.
+
+So the seventeen streams are the sixteen recording tracks Technics publishes plus one that
+only keeps time. What its two events mean is not established here: the values they carry
+appear nowhere in the song header to be checked against.
 
 \paragraph{The 128 bytes after it.} \bytes{+B80} to the end is identical in all ten
 records, recorded and empty alike, and is almost entirely zero. Nothing a song does

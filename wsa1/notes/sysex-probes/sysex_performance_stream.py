@@ -206,6 +206,49 @@ print("  -> entry i is track i, and its events address part i.  Entry 16, the")
 print("     one beyond the sixteen recording tracks Technics publishes, carries")
 print("     no part-addressed controller events at all.")
 
+# ---- WHAT THE SEVENTEENTH STREAM IS.  Not "the one that does not name a
+# part", which is only an absence.  Its status set and the other sixteen's are
+# DISJOINT, in both directions, which is a much stronger statement: it shares
+# nothing with them and they share nothing with it.
+def statuses(blocks):
+    p = b"".join(block(n)[DATA_AT:] for n in blocks)
+    out, i = Counter(), 0
+    while i < len(p):
+        if p[i] < 0x80:
+            i += 1; continue
+        st, j = p[i], i + 1
+        while j < len(p) and p[j] < 0x80:
+            j += 1
+        out[st] += 1; i = j
+    return out
+
+
+CLOCK = 0x81
+tracks = [statuses(c[:-1]) for c in chains]
+musical = set()
+for t in tracks[:16]:
+    musical |= set(t) - {CLOCK}
+last = set(tracks[16]) - {CLOCK}
+print("\n  the seventeenth stream, against the other sixteen:")
+print("    statuses used by tracks 0-15 : %s"
+      % " ".join("%02X" % x for x in sorted(musical)))
+print("    statuses used by entry 16    : %s"
+      % " ".join("%02X" % x for x in sorted(last)))
+print("    entry 16 is %d events, %d of them the clock"
+      % (sum(tracks[16].values()), tracks[16][CLOCK]))
+assert not (musical & last), "the status sets are no longer disjoint"
+assert tracks[16][CLOCK] / sum(tracks[16].values()) > 0.99, \
+    "entry 16 is no longer almost entirely clock"
+for i, t in enumerate(tracks[:16]):
+    assert 0x90 in t, "track %d carries no notes" % i
+assert 0x90 not in tracks[16], "entry 16 carries notes after all"
+print("    -> the two sets are DISJOINT in both directions.  Every one of the")
+print("    sixteen carries notes and entry 16 carries none; entry 16's two")
+print("    statuses appear in none of the sixteen.  So it is not a recording")
+print("    track at all, which is what Technics publishing SIXTEEN recording")
+print("    tracks predicts.  What its two events mean is not established: the")
+print("    values they carry appear nowhere in the song header to check against.")
+
 notes = [e[2] for e in events if e[1] == 0x90 and len(e[2]) == 5]
 print("\n  %d note events; their five bytes, as ranges:" % len(notes))
 for k, name in enumerate(("offset in step", "note number", "velocity",

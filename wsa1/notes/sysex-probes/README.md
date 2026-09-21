@@ -1860,8 +1860,16 @@ turns a table index into a part slot (`add IY,0x0080`). It **fires on the sites 
 the triple next door** and on none of these five. The probe asserts the control fires — a
 negative from a test that cannot fire is worth nothing.
 
+★★ **Every individual access is examined, across all four images** — including both of the
+second processor's — not only groups of three, because a routine touching one byte alone
+would slip past a grouping test. **127 accesses**; 3 come near the part pointer table and
+all 3 are in *one* routine that indexes it **without** the `0x80` step that selects a part,
+so they reach a sibling structure; **0 reach a part record**. Control: 6 of 91 accesses at
+`+1B..+1D` do reach one, including the triple's writers.
+
 ★ **Conclusion, and it is actionable:** these three bytes are carried in stored data and
-copied wholesale; no code treats them as fields. Preserve them, do not compute them.
+copied wholesale; no code on either processor treats them as fields. Preserve them, do not
+compute them.
 
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_blockb_tail.py
