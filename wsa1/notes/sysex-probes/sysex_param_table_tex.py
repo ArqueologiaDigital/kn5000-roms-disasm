@@ -166,7 +166,7 @@ def main():
     w("")
 
     w("{\\small")
-    w("\\begin{longtable}{lllll>{\\raggedright\\arraybackslash}p{38mm}}")
+    w("\\begin{longtable}{lllll>{\\raggedright\\arraybackslash}p{72mm}}")
     w("\\caption{The 57 parameters of a part block. \\bytes{\\textit{p}} is the third")
     w("address byte; the offset is the byte's position inside that part's record in")
     w("a \\textsc{system, part \\& midi} bulk dump.}\\label{tbl:partparams}\\\\")
@@ -185,7 +185,7 @@ def main():
     w("")
 
     w("{\\small")
-    w("\\begin{longtable}{llllll>{\\raggedright\\arraybackslash}p{29mm}}")
+    w("\\begin{longtable}{llllll>{\\raggedright\\arraybackslash}p{52mm}}")
     w("\\caption{The parameters of the common blocks. The address is the one a")
     w("\\textsc{system, part \\& midi} bulk dump carries for the same")
     w("byte.}\\label{tbl:commonparams}\\\\")

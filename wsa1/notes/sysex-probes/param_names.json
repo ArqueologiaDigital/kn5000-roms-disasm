@@ -1,249 +1,550 @@
 {
   "_comment": [
-    "Curated names for the 00-area parameters, consumed by sysex_param_table_tex.py.",
-    "confidence ESTABLISHED = the instrument or its published manual names this byte;",
-    "LIKELY = a hard match on value range or bit count, printed with a dagger;",
-    "anything weaker is left out of this file entirely rather than printed hedged.",
-    "basis must say what would have to be false for the name to be wrong."
+    "Names for the 00-area parameters, consumed by sysex_param_table_tex.py.",
+    "Every name here is the one Technics' own Reference Guide prints for that",
+    "address (pages 46-47); none is inferred. Store names in PLAIN text --",
+    "the generator escapes & and _ for LaTeX itself.",
+    "confidence ESTABLISHED = published or stated by the instrument's own screen;",
+    "LIKELY = a hard match on value range or bit count, printed with a dagger."
   ],
-  "20/03": {
-    "name": "VOL (LVL)",
-    "confidence": "ESTABLISHED",
-    "basis": "mixer strip, caption over the value cell that reads this byte"
-  },
-  "20/04": {
-    "name": "EFF1",
-    "confidence": "ESTABLISHED",
-    "basis": "mixer strip, caption over the value cell that reads this byte"
-  },
-  "20/05": {
-    "name": "EFF2",
-    "confidence": "ESTABLISHED",
-    "basis": "mixer strip, caption over the value cell that reads this byte"
-  },
-  "20/06": {
-    "name": "REV",
-    "confidence": "ESTABLISHED",
-    "basis": "mixer strip, caption over the value cell that reads this byte"
-  },
-  "20/07": {
-    "name": "PAN",
-    "confidence": "ESTABLISHED",
-    "basis": "mixer strip; shown L64 to R63, 128 positions. In a real dump every part reads 64, the entry that scale labels CTR"
-  },
-  "20/40": {
-    "name": "INT (internal sound)",
-    "confidence": "ESTABLISHED",
-    "basis": "mixer strip INT cell reads this bit"
-  },
-  "20/41": {
-    "name": "MIDI channel",
-    "confidence": "ESTABLISHED",
-    "basis": "mixer strip MIDI cell; shown 1-01 to 2-16, and the manual gives the same 32 values. In a real dump the 32 parts read an unbroken 0..31 ramp"
-  },
-  "10/00": {
-    "name": "KEY TRANSPOSE",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly; the mixer strip shows the same byte as OCT"
-  },
-  "10/11": {
-    "name": "TOTAL KEY SCALING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/13": {
-    "name": "Ckey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/14": {
-    "name": "Dbkey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/15": {
-    "name": "Dkey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/16": {
-    "name": "Ebkey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/17": {
-    "name": "Ekey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/18": {
-    "name": "Fkey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/19": {
-    "name": "Gbkey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/1A": {
-    "name": "Gkey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/1B": {
-    "name": "Abkey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/1C": {
-    "name": "Akey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/1D": {
-    "name": "Bbkey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/1E": {
-    "name": "Bkey DETUNE SETTING",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/10": {
-    "name": "KEY SCALING MODE",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/12": {
-    "name": "KEY SCALING SHIFT",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/20": {
-    "name": "MAIN OUT EQUALIZER LOW-FREQ",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/21": {
-    "name": "MAIN OUT EQUALIZER LOW-GAIN",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/22": {
-    "name": "MAIN OUT EQUALIZER HIGH-FREQ",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "10/23": {
-    "name": "MAIN OUT EQUALIZER HIGH-GAIN",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "11/00": {
-    "name": "EFFECT COMMON ALGORITHM",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "11/01": {
-    "name": "EFFECT1 OUTPUT SELECT",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "11/02": {
-    "name": "EFFECT2 OUTPUT SELECT",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
-  "11/20": {
-    "name": "EFFECT1 TYPE",
-    "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table; the published range matches the decoded one exactly"
-  },
   "00/00": {
     "name": "SOUND MEMORY PROTECT",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/01": {
     "name": "COMBINATION MEMORY PROTECT",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/08": {
     "name": "MASTER TUNING",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME table. NOTE: the published data range is C0-00-3F (427.3-440.0-453.0 Hz) and the decoded range check is 48..192; the two disagree and the document says so. A real dump holds 00, the published centre."
+    "basis": "Technics Reference Guide, SYSTEM parameter table; published data range C0-00-3F (427.3-440.0-453.0 Hz) disagrees with the decoded range check of 48..192"
   },
   "00/10": {
     "name": "VELOCITY CURVE",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/11": {
     "name": "VELOCITY OFFSET",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/12": {
     "name": "AFTER TOUCH CURVE",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/13": {
     "name": "AFTER TOUCH THRESHOLD",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/20": {
     "name": "DRUMS MAP SELECT",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/30": {
-    "name": "DATA LOAD FILTER: EFFECT \\& OUTPUT",
+    "name": "DATA LOAD FILTER: EFFECT & OUTPUT",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/31": {
     "name": "DATA LOAD FILTER: REAL-TIME CREATOR 1-6",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/32": {
     "name": "DATA LOAD FILTER: COMBINATION OCTAVE",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/33": {
     "name": "DATA LOAD FILTER: MIDI SETTING",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/34": {
-    "name": "DATA LOAD FILTER: KEY \\& VELOCITY LAYER",
+    "name": "DATA LOAD FILTER: KEY & VELOCITY LAYER",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/35": {
     "name": "DATA LOAD FILTER: MAIN OUT EQUALIZER",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/36": {
     "name": "DATA LOAD FILTER: KEY SCALING",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "00/40": {
     "name": "COMBINATION NUMBER and BANK",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
   },
   "01/00": {
     "name": "MIDI INPUT MODE",
     "confidence": "ESTABLISHED",
-    "basis": "Technics Reference Guide, SYSTEM REAL TIME parameter table; the published range matches the decoded one"
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
+  },
+  "01/01": {
+    "name": "MIDI OUTPUT MODE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
+  },
+  "01/02": {
+    "name": "SINGLE CHANNEL",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
+  },
+  "01/03": {
+    "name": "LOCAL TOTAL",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
+  },
+  "01/04": {
+    "name": "PROGRAM CHANGE MODE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
+  },
+  "01/05": {
+    "name": "SINGLE CHANNEL PROGRAM CHANGE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM parameter table"
+  },
+  "08/00": {
+    "name": "INITIAL",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM parameter table; the guide marks this subarea receive-only"
+  },
+  "08/08": {
+    "name": "PLAY MODE REQUEST",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM parameter table; the guide marks this subarea receive-only"
+  },
+  "08/10": {
+    "name": "COMBINATION WRITE REQUEST",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM parameter table; the guide marks this subarea receive-only"
+  },
+  "08/11": {
+    "name": "SOUND WRITE REQUEST",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, SYSTEM parameter table; the guide marks this subarea receive-only"
+  },
+  "10/00": {
+    "name": "KEY TRANSPOSE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/10": {
+    "name": "KEY SCALING MODE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/11": {
+    "name": "TOTAL KEY SCALING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/12": {
+    "name": "KEY SCALING SHIFT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/13": {
+    "name": "Ckey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/14": {
+    "name": "Dbkey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/15": {
+    "name": "Dkey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/16": {
+    "name": "Ebkey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/17": {
+    "name": "Ekey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/18": {
+    "name": "Fkey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/19": {
+    "name": "Gbkey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/1A": {
+    "name": "Gkey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/1B": {
+    "name": "Abkey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/1C": {
+    "name": "Akey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/1D": {
+    "name": "Bbkey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/1E": {
+    "name": "Bkey DETUNE SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/20": {
+    "name": "MAIN OUT EQUALIZER LOW-FREQ",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/21": {
+    "name": "MAIN OUT EQUALIZER LOW-GAIN",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/22": {
+    "name": "MAIN OUT EQUALIZER HIGH-FREQ",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "10/23": {
+    "name": "MAIN OUT EQUALIZER HIGH-GAIN",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "11/00": {
+    "name": "EFFECT COMMON ALGORITHM",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "11/01": {
+    "name": "EFFECT1 OUTPUT SELECT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "11/02": {
+    "name": "EFFECT2 OUTPUT SELECT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "11/20": {
+    "name": "EFFECT1 TYPE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART COMMON REAL TIME parameter table"
+  },
+  "20/00": {
+    "name": "PROGRAM CHANGE & BANK",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/03": {
+    "name": "VOLUME",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/04": {
+    "name": "EFFECT1 SEND",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/05": {
+    "name": "EFFECT2 ON/OFF",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table; published range 00-01 (OFF/ON) disagrees with the decoded range check of 0..127, and the instrument remaps the value"
+  },
+  "20/06": {
+    "name": "REVERB SEND",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/07": {
+    "name": "PANPOT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table; confirmed independently -- every part reads 64 in a real dump, the value the pan scale labels CTR"
+  },
+  "20/08": {
+    "name": "KEY SHIFT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/09": {
+    "name": "FINE TUNE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/0A": {
+    "name": "PITCH BEND RANGE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/10": {
+    "name": "ASSIGN MODE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/14": {
+    "name": "KEY SCALING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/20": {
+    "name": "VELOCITY OFFSET",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/28": {
+    "name": "KEY LAYER LOW",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/29": {
+    "name": "KEY LAYER HIGH",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/2A": {
+    "name": "VELOCITY LAYER LOW",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/2B": {
+    "name": "VELOCITY LAYER HIGH",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/30": {
+    "name": "MAIN OUT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/31": {
+    "name": "SUB OUT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/40": {
+    "name": "LOCAL CONTROL",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/41": {
+    "name": "BASIC CHANNEL",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table; confirmed independently -- the 32 parts read an unbroken 0..31 ramp in a real dump"
+  },
+  "20/42": {
+    "name": "MIDI OUT SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/43": {
+    "name": "MIDI IN SETTING",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/48": {
+    "name": "MIDI INPUT FILTER: PROGRAM CHANGE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/49": {
+    "name": "MIDI INPUT FILTER: BANK SELECT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/4A": {
+    "name": "MIDI INPUT FILTER: VOLUME",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/50": {
+    "name": "MIDI OUTPUT FILTER: PROGRAM CHANGE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/51": {
+    "name": "MIDI OUTPUT FILTER: BANK SELECT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/52": {
+    "name": "MIDI OUTPUT FILTER: VOLUME",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/53": {
+    "name": "MIDI OUTPUT FILTER: PANPOT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/54": {
+    "name": "MIDI OUTPUT FILTER: EFFECT DEPTH",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/55": {
+    "name": "MIDI OUTPUT FILTER: PITCH BEND",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/56": {
+    "name": "MIDI OUTPUT FILTER: MODULATION1",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/57": {
+    "name": "MIDI OUTPUT FILTER: MODULATION2",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/58": {
+    "name": "MIDI OUTPUT FILTER: REAL-TIME CREATOR-X",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/59": {
+    "name": "MIDI OUTPUT FILTER: REAL-TIME CREATOR-Y",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/5A": {
+    "name": "MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-X",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/5B": {
+    "name": "MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-Y",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/5C": {
+    "name": "MIDI OUTPUT FILTER: HOLD1",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/5D": {
+    "name": "MIDI OUTPUT FILTER: CONTROL PEDAL",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/5E": {
+    "name": "MIDI OUTPUT FILTER: AFTER TOUCH",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/60": {
+    "name": "MIDI MULTIPLE MESSAGES OUTPUT: PROGRAM CHANGE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/61": {
+    "name": "MIDI MULTIPLE MESSAGES OUTPUT: BANK SELECT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/63": {
+    "name": "MIDI MULTIPLE MESSAGES OUTPUT: VOLUME",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/64": {
+    "name": "MIDI MULTIPLE MESSAGES OUTPUT: PANPOT",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/65": {
+    "name": "MIDI MULTIPLE MESSAGES OUTPUT: REVERB DEPTH",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/66": {
+    "name": "MIDI MULTIPLE MESSAGES OUTPUT: CHORUS DEPTH",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/68": {
+    "name": "MIDI OUT KEY TRANSPOSE",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/70": {
+    "name": "CONTROLLER INTERNAL FILTER: PITCH BEND",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/71": {
+    "name": "CONTROLLER INTERNAL FILTER: MODULATION1",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/72": {
+    "name": "CONTROLLER INTERNAL FILTER: MODULATION2",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/73": {
+    "name": "CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-X",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/74": {
+    "name": "CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-Y",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/75": {
+    "name": "CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-X",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/76": {
+    "name": "CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-Y",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/77": {
+    "name": "CONTROLLER INTERNAL FILTER: HOLD1",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/78": {
+    "name": "CONTROLLER INTERNAL FILTER: CONTROL PEDAL",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "20/79": {
+    "name": "CONTROLLER INTERNAL FILTER: AFTER TOUCH",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART INDIVIDUAL parameter table"
+  },
+  "60/00": {
+    "name": "METRONOME VOLUME",
+    "confidence": "ESTABLISHED",
+    "basis": "Technics Reference Guide, PART SPECIAL REAL TIME parameter table"
   }
 }

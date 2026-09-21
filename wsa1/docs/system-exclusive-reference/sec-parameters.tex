@@ -132,16 +132,21 @@ the byte, and a dump editor changing one must preserve the rest.
 Three parameters accept an enumerated set rather than a range; sending any other value has
 no effect.
 
-\begin{caution}{Master tuning: the published range and the range check disagree}
-For \bytes{00 00 08}, \textsc{master tuning}, the published data range is \bytes{C0} to
-\bytes{00} to \bytes{3F} --- a signed value, \bytes{00} being concert pitch, spanning
-427.3 to 453.0\,Hz. The instrument's own range check on that parameter admits 48 to 192,
-which is what the table below reports. The two do not describe the same values, and a dump
-taken from a real machine holds \bytes{00} there, the published centre and not a member of
-the checked range.
+\begin{caution}{Two parameters where the published range and the range check disagree}
+The \emph{values} column below is the range the instrument's own check enforces. For all
+but two parameters that is also the published range. The exceptions:
 
-Send what the published specification gives. This is the only parameter where the two
-sources differ; every other range in the tables agrees with the published one.
+\begin{description}
+\item[\bytes{00 00 08} \textsc{master tuning}.] Published as \bytes{C0}--\bytes{00}--\bytes{3F},
+  a signed value with \bytes{00} at concert pitch, spanning 427.3 to 453.0\,Hz. The range
+  check admits 48 to 192. A dump from a real machine holds \bytes{00} there --- the
+  published centre, and not a member of the checked range.
+\item[\bytes{00 \textit{nn} 05} \textsc{effect2 on/off}.] Published as \bytes{00}--\bytes{01}.
+  The range check admits 0 to 127, and the instrument passes the value through a
+  substitution before storing it, so reading it back does not return what was written.
+\end{description}
+
+Send what the published specification gives.
 \end{caution}
 
 \begin{note}{The accepted values are what a write is checked against}
@@ -153,15 +158,15 @@ ranges.
 \input{tbl-parameters}
 
 \section{Names}
-The name column is filled only where the instrument itself or its published manual names
-the byte. A name marked \dag{} is a match on value range or bit count rather than a
-statement by the machine. Blank means this edition does not know what the parameter is;
-its address, length and accepted values are still correct, and are enough to read it out
-of the instrument and watch what changes.
+Every name in the tables is the one Technics' own parameter tables print for that address.
+None is inferred. Two of them are corroborated a second way, from a dump taken off a real
+machine: every part's \textsc{panpot} reads 64, the value the instrument displays as
+\textsc{ctr}, and the 32 parts' \textsc{basic channel} bytes read an unbroken ramp from 0
+to 31.
 
-One parameter does not store what it is sent: \bytes{20 05} accepts \bytes{0}--\bytes{127}
-and passes the value through a substitution before storing it, so reading it back does not
-return what was written.
+The \bytes{08} block is marked receivable but not requestable: the instrument accepts a
+write to it and will not report its contents. Its four addresses are commands rather than
+settings --- they initialise a section, switch play mode, or ask for a store.
 
 \section{Whole-category request}
 \textsc{drq} also requests an entire bulk-dump category, as described in
