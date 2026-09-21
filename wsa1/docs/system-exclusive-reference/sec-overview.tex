@@ -28,6 +28,14 @@ checked against a bulk dump captured from a real instrument: 2\,883 messages car
 all 2\,876 verify under the rule given in chapter~3. Every transfer in the capture
 delivered exactly the byte count its header declared.
 
+The parameter placement in chapter~\ref{ch:params} has been checked against the same
+capture. The \textsc{system, part \& midi} category was reassembled from it and each
+parameter's own field read out of the result, for all 32 parts: 1\,833 fields, of which
+1\,832 hold a value inside the range the instrument accepts for that parameter. Run
+against a plausible but wrong placement --- one uniform stride for all 32 parts, instead of
+the two runs chapter~\ref{ch:params} describes --- the same check puts 69 fields out of
+range, so it is capable of rejecting a wrong map.
+
 \section{Conventions}
 Byte values are hexadecimal. A field written \bytes{\textit{nn}} takes one of the values
 listed for it. Ellipses inside a message stand for a body whose length depends on the

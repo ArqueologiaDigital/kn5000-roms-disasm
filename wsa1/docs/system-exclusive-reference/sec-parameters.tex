@@ -86,6 +86,16 @@ others in the same byte.
 Three parameters accept an enumerated set rather than a range; sending any other value has
 no effect.
 
+\begin{caution}{A dump may hold values a parameter message would refuse}
+The accepted values in the tables are what the instrument takes from a \bytes{2C} write.
+They are not a guarantee about what a stored byte contains. In a dump taken from a real
+machine, one field --- common block \bytes{00}, parameter \bytes{08} --- holds
+\bytes{00} although a write of \bytes{00} to it would be rejected.
+
+So a librarian should not validate a dump by checking it against these ranges, and should
+not assume a value read out of a dump can be written back one parameter at a time.
+\end{caution}
+
 \input{tbl-parameters}
 
 \section{Names}
