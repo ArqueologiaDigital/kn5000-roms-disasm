@@ -1,5 +1,9 @@
 # Technics SX-WSA1R — System Exclusive Reference
 
+**Unofficial.** Not published, endorsed or checked by Technics or Panasonic. Written by
+inspecting a disassembly of the SX-WSA1R's program ROMs, operating system version 2, and
+checking the result against a bulk dump captured from a real instrument.
+
 A byte-level reference for how the SX-WSA1R communicates over MIDI System Exclusive:
 message framing, the Technics message set, the bulk-dump transfer protocol, the universal
 messages it honours, and what it reports when a transfer fails.

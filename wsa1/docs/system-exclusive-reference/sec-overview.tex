@@ -1,5 +1,18 @@
 \chapter{Overview}
 
+\begin{caution}{This is unofficial documentation}
+Nothing here comes from Technics or Panasonic, and nothing here has been checked by them.
+This document was written by inspecting a disassembly of the SX-WSA1R's program ROMs,
+operating system version~2, and by confronting what that showed with a bulk dump captured
+from a real instrument.
+
+Technics did publish a specification of its own, and where that specification covers the
+same ground this document follows it and uses its terms --- section~1.2 says what it is and
+where it differs. Everything beyond it is inference from a disassembly, and inference can
+be wrong. Treat a statement here as a report of what one machine was observed to do, not
+as a guarantee about yours.
+\end{caution}
+
 The Technics SX-WSA1R exchanges data over MIDI System Exclusive. This reference describes
 the messages it sends and accepts: their byte layout, the bulk-dump transfer protocol, the
 universal messages it honours, and what it reports when a transfer fails.
