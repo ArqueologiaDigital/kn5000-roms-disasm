@@ -1,0 +1,67 @@
+\chapter{Settings that affect System Exclusive}\label{ch:settings}
+
+\section{The EXCLUSIVE filter}
+The MIDI menu's \textsc{input \& output filter} page has eight rows, each a plain
+\textsc{on}/\textsc{off} switch for one kind of MIDI message. The last row is
+\textsc{exclusive}. There is one such switch and it governs both directions: the same
+setting is consulted when the instrument sends and when it receives. There is no separate
+input filter, no per-socket filter and no third state, and the page is the same on both
+models.
+
+\begin{caution}{EXCLUSIVE governs the tempo message and nothing else}
+Despite its name, this switch does not turn System Exclusive on and off. Its entire effect
+on the messages in this reference is the family \bytes{25} tempo message: with
+\textsc{exclusive} set to \textsc{off} the instrument neither sends one nor acts on one
+received, silently in both directions.
+
+\textbf{A bulk dump transfers normally with \textsc{exclusive} set to \textsc{off}.}
+Software that cannot complete a transfer should not look here for the cause.
+\end{caution}
+
+Everything below is unaffected by the setting:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+function & affected by \textsc{exclusive}? \\
+\midrule
+bulk dump, sent or received & no \\
+dump requests & no \\
+the opening enquiry and its reply & no \\
+acknowledgements and the session control messages & no \\
+parameter messages, and the replies and refusals to them & no \\
+General MIDI System On / Off, sent or received & no \\
+error reporting & no \\
+\midrule
+tempo message (family \bytes{25}) & \textbf{yes} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Which sockets carry what}
+The instrument has two sets of MIDI sockets. Only bulk-dump traffic is restricted to the
+first.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+message & accepted on \\
+\midrule
+bulk-dump data, continuation frames, handshake, acknowledgements & MIDI 1 only \\
+dump requests & MIDI 1 only \\
+parameter messages (families \bytes{2B}, \bytes{2C}) & MIDI 1 and MIDI 2 \\
+tempo message (family \bytes{25}) & MIDI 1 and MIDI 2 \\
+General MIDI System On / Off & MIDI 1 and MIDI 2 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+MIDI channels are written with the socket set first: \texttt{1-01} to \texttt{1-16} and
+\texttt{2-01} to \texttt{2-16}. No channel or device-number setting affects System
+Exclusive addressing --- these messages carry no channel.
+
+\section{Memory protect}
+Two write-protect switches are consulted before an incoming message is acted on. A message
+they block never reaches the transfer machinery, and the instrument shows its own
+write-protection prompt rather than a System Exclusive error. A transfer that stops with
+that prompt on screen has not failed as a transfer.

@@ -57,8 +57,19 @@ message & meaning \\
 \end{center}
 
 \section{Tempo}
-The family \bytes{25} carries a tempo setting, in the range 40 to 300 beats per minute.
-A value outside that range is treated as 120.
+The family \bytes{25} carries a tempo and nothing else:
+
+\begin{center}
+\bytes{F0 50 25 \textit{lo} \textit{hi} F7}
+\end{center}
+
+Six bytes. Unlike every other Technics family it carries \textbf{no model triple, no unit
+field and no checksum}, and any bytes sent beyond the fifth are ignored. The tempo is nine
+bits sent low nibble first: $\mathit{value} = \mathit{lo} + 16\,\mathit{hi}$. The accepted
+range is 40 to 300 beats per minute and a value outside it is treated as 120.
+
+This message is the one thing the \textsc{exclusive} filter governs; see
+chapter~\ref{ch:settings}.
 
 See chapter~\ref{ch:models} --- the tempo message is one of two things the rack does not
 support.

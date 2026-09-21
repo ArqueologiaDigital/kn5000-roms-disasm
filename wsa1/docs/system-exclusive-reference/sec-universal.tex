@@ -38,3 +38,38 @@ message & \\
 The instrument does not implement Identity Reply, so it cannot be auto-detected by a
 controller that relies on it. The entire Universal Real Time identifier \bytes{7F} is
 unrecognised.
+
+\section{Practical consequences}
+\textbf{A General MIDI message sent during a bulk dump breaks the dump.} While a transfer
+is open the instrument accepts only messages beginning \bytes{F0 50}. One beginning
+\bytes{F0 7E} is treated as a reception failure: the transfer is abandoned and
+\textsc{error 41} is reported. General MIDI mode is left unchanged.
+
+\textbf{The instrument announces its own changes.} Entering or leaving General MIDI mode
+makes it transmit the matching message, for a change made at the front panel as well as
+one made by loading a song. Neither direction is affected by the \textsc{exclusive}
+filter.
+
+\begin{caution}{The announcement stops for good once you send one}
+The interlock that stops the instrument echoing a General MIDI message back is armed by
+the first such message it receives after power-on, and is never disarmed. Once a
+controller has sent either message, the instrument stops announcing its own General MIDI
+changes for the rest of the session. A controller that tracks the instrument's mode by
+listening for these messages will silently stop being told.
+\end{caution}
+
+\textbf{General MIDI state travels in a dump.} It is carried in the second
+\textsc{system, part \& midi} block, so restoring that category restores the General MIDI
+setting with it. A dump taken in General MIDI mode is not the same file as one taken out
+of it.
+
+\section{The identifier is checked once}
+Once \bytes{50} or \bytes{7E} has been accepted the instrument does not look at it again;
+the third byte alone selects the message. \bytes{F0 50 7F 09 01 F7} is therefore acted on
+as General MIDI System On despite carrying the Matsushita identifier, and a Technics
+message sent with \bytes{7E} in the identifier position works equally well. Send the
+conventional identifier, but expect a receiver to be lenient.
+
+Nothing else about General MIDI mode changes the System Exclusive implementation: every
+family is accepted exactly as before, with the same encoding, checksum, handshake and
+error reporting.
