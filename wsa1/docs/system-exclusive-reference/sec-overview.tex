@@ -1,4 +1,4 @@
-\chapter{Overview}
+\chapter{Overview}\label{ch:overview}
 
 \begin{caution}{This is unofficial documentation}
 Nothing here comes from Technics or Panasonic, and nothing here has been checked by them.
@@ -69,6 +69,17 @@ parameter's own field read out of the result, for all 32 parts: 1\,833 fields, o
 against a plausible but wrong placement --- one uniform stride for all 32 parts, instead of
 the two runs chapter~\ref{ch:params} describes --- the same check puts 69 fields out of
 range, so it is capable of rejecting a wrong map.
+
+\begin{caution}{What the capture does not cover}
+Three of the four bulk-dump categories appear in it. \textsc{sequencer} does not, and
+cannot: the capture came from a rack, which refuses that category
+(chapter~\ref{ch:models}). Everything this reference says about \textsc{sequencer} ---
+its three blocks, their addresses and lengths, and the variable length of the last one ---
+rests on the program alone and has not been confronted with hardware.
+
+The same applies to anything only a keyboard can do. A reader with an SX-WSA1 can close
+that gap with one transfer.
+\end{caution}
 
 Two fields in that capture label themselves. Every part's MIDI channel holds its own part
 number, so the 32 parts spell out an unbroken ramp from 0 to 31 --- which the wrong
