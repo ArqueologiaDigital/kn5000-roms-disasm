@@ -1,10 +1,9 @@
 \chapter{What a block contains}\label{ch:blocks}
 
-This reference describes the protocol that carries a dump. The meaning of the data inside a
-block is outside its scope, with one exception worth stating: every block opens with a
-fixed signature, and two of them carry readable names. Together these let a program check
-a stored dump before sending it back, and list what is in it, without understanding the
-rest.
+Every block opens with a fixed signature, and two of them carry readable names, which let
+a program check a stored dump and list what is in it. Beyond that, the \textsc{sound}
+block's contents are laid out below; the \textsc{combination} and \textsc{sequencer}
+blocks are not covered.
 
 \section{Signatures}\label{sec:signatures}
 The bytes below are the first bytes of the reassembled block --- after the payload has been
@@ -25,6 +24,35 @@ different framing: a two-byte prefix, then a sixteen-byte name, then two further
 
 A librarian can therefore show the user what a stored file holds --- ``\texttt{SWEEP PAD}'',
 ``\texttt{Space Infinity}'' --- without decoding anything else.
+
+\section{Inside the SOUND block}\label{sec:soundmemory}
+The \textsc{sound} block is sound \emph{memory}, and it is laid out in four banks of
+\bytes{10000} bytes. Within a bank the stored sounds are packed back to back, and a
+stored sound \textbf{is the same 713-byte layout chapter~\ref{ch:sound} gives for the
+sound being edited} --- so its name is its first sixteen bytes, and every parameter in
+that chapter is at its stated offset from the start of the record.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & at & \\
+\midrule
+bank \textit{b} & \bytes{10000} $\times$ \textit{b} & four banks \\
+stored sounds & \bytes{359} in bank 0, \bytes{090} in the others & 713 bytes each \\
+a drum kit's 128 notes & \bytes{B468} & 150 bytes each \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A stored drum kit is likewise the layout of chapter~\ref{ch:sound}: its 128 note records
+sit at a 150-byte stride, each beginning with its thirteen-character name.
+
+\begin{note}{How this was established, and why it is not a coincidence}
+A dump from a real instrument was walked at a 713-byte stride from the first stored
+sound. Sixty-four consecutive records began with a printable sixteen-character name, in
+every bank, and the drum runs gave 128 consecutive thirteen-character names in every bank.
+A stride one byte either side of 713 breaks the run at the first record.
+\end{note}
 
 \begin{note}{Reassembly is self-checking}
 A block reassembled correctly comes out at exactly the length its own header declared. A

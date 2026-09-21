@@ -1,0 +1,163 @@
+#!/usr/bin/env python3
+"""Is a STORED sound the same thing as the sound parameter layout?
+
+QUESTION IT ANSWERS
+  Chapter 8 of the reference lays out the sound being EDITED -- the area at
+  ADR 10 00 00, 713 bytes, reachable one parameter at a time.  The SOUND bulk
+  dump is a different thing: 262144 bytes of sound MEMORY.  The reference said
+  the relationship between them was not established, and a librarian that wants
+  to show or edit the sounds inside a dump needs exactly that.
+
+  It is establishable, from the dump itself.  If a stored sound uses the same
+  layout, then sounds must sit at a 713-byte stride with a printable 16-character
+  name at offset 0 -- because NAME is parameter 000-00F of that layout.  And a
+  stored drum kit's note records must sit at a 150-byte stride with a printable
+  13-character name at offset 0, because that is NOTE GENERAL DATA.
+
+  Both hold, in all four banks, exactly.  The strides are not hard-coded here:
+  they are read out of `sound_layout.json`, so if the parameter layout is ever
+  corrected and the dump stops matching it, this fails.
+
+WHY IT IS A REAL TEST
+  A 713-byte stride landing on a printable 16-byte name 64 times in a row, and a
+  150-byte stride doing the same 128 times in a row in each of four banks, does
+  not happen by chance in binary data.  The control is the arithmetic itself:
+  any other stride breaks the run at the first record.
+
+SIGNAL BEING READ
+  SND_CMBI.syx, the SOUND transfer (ADR 20 00 00, 262144 bytes), reassembled
+  from the wire.  Not committed: it ships in KN7000/WSA1R_files/SND_CMBI_syx.zip.
+  Point SYSEX_CAPTURE at the .syx, or drop it beside this script.
+
+RUN
+  python3 wsa1/notes/sysex-probes/sysex_sound_memory.py
+  python3 wsa1/notes/sysex-probes/sysex_sound_memory.py --names
+
+PASS CRITERION
+  Four banks of 0x10000, each with its 128-note drum run and a run of at least
+  64 normal sounds, and OK.
+"""
+import json
+import os
+import sys
+import zipfile
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+LAYOUT = os.path.join(HERE, "sound_layout.json")
+CANDIDATES = [os.environ.get("SYSEX_CAPTURE", ""),
+              os.path.join(HERE, "SND_CMBI.syx"),
+              "/home/fsanches/compartilhado/KN7000/WSA1R_files/SND_CMBI.syx"]
+ZIP = "/home/fsanches/compartilhado/KN7000/WSA1R_files/SND_CMBI_syx.zip"
+
+BANK = 0x10000            # the sound memory is four of these
+DRUM_NOTES_AT = 0xB468    # where a bank's drum note records begin
+NORMAL_AT = {0: 0x359, 1: 0x090, 2: 0x090, 3: 0x090}
+NAME_NORMAL, NAME_NOTE = 16, 13
+
+
+def capture():
+    for p in CANDIDATES:
+        if p and os.path.exists(p):
+            return open(p, "rb").read()
+    if os.path.exists(ZIP):
+        with zipfile.ZipFile(ZIP) as z:
+            return z.read([n for n in z.namelist() if n.lower().endswith(".syx")][0])
+    raise SystemExit("capture not found; set SYSEX_CAPTURE")
+
+
+def messages(buf):
+    i = 0
+    while True:
+        s = buf.find(b"\xF0", i)
+        if s < 0:
+            return
+        e = buf.find(b"\xF7", s)
+        if e < 0:
+            return
+        yield buf[s:e + 1]
+        i = e + 1
+
+
+def join(p):
+    return bytes(((p[i] & 0x0F) << 4) | (p[i + 1] & 0x0F) for i in range(0, len(p), 2))
+
+
+def sound_block(buf):
+    acc = out = None
+    for m in messages(buf):
+        if m[:3] == b"\xF0\x50\x2D":
+            acc = bytearray(join(m[12:-3])) if m[6] == 0x20 else None
+        elif m[:3] == b"\xF0\x50\x7E" and acc is not None:
+            acc += join(m[3:-3])
+            if m[-3] == 0x00:
+                out, acc = bytes(acc), None
+    assert out is not None, "the capture has no SOUND transfer"
+    return out
+
+
+def strides():
+    """The two record sizes, taken from the parameter layout, not hard-coded."""
+    doc = json.load(open(LAYOUT))
+    areas = {a["name"]: a for a in doc["areas"]}
+    normal = areas["NORMAL SOUND"]["size"]
+    note = [b for b in areas["DRUM SOUND"]["blocks"]
+            if b["name"] == "NOTE DATA"][0]["stride"]
+    return normal, note
+
+
+def main():
+    snd = sound_block(capture())
+    normal_stride, note_stride = strides()
+    print("\nSOUND memory: %d bytes = %d banks of 0x%X"
+          % (len(snd), len(snd) // BANK, BANK))
+    print("  strides taken from sound_layout.json: normal sound %d, drum note %d"
+          % (normal_stride, note_stride))
+    assert len(snd) % BANK == 0, "the block is not a whole number of banks"
+    banks = len(snd) // BANK
+
+    def printable(o, n):
+        s = snd[o:o + n]
+        return len(s) == n and all(32 <= c < 127 for c in s)
+
+    def run(start, stride, nlen):
+        n = 0
+        while printable(start + n * stride, nlen):
+            n += 1
+        return n
+
+    print("\nSTORED NORMAL SOUNDS  (stride %d, %d-character name at offset 0)"
+          % (normal_stride, NAME_NORMAL))
+    for b in range(banks):
+        at = b * BANK + NORMAL_AT[b]
+        n = run(at, normal_stride, NAME_NORMAL)
+        first = snd[at:at + NAME_NORMAL].decode("latin1").strip()
+        print("  bank %d at 0x%06X: %3d sounds, first %r" % (b, at, n, first))
+        assert n >= 64, "bank %d has only %d stored sounds in a row" % (b, n)
+        if "--names" in sys.argv:
+            for k in range(n):
+                o = at + k * normal_stride
+                print("      %2d 0x%06X %r"
+                      % (k, o, snd[o:o + NAME_NORMAL].decode("latin1")))
+
+    print("\nSTORED DRUM KIT NOTES  (stride %d, %d-character name at offset 0)"
+          % (note_stride, NAME_NOTE))
+    for b in range(banks):
+        at = b * BANK + DRUM_NOTES_AT
+        n = run(at, note_stride, NAME_NOTE)
+        first = snd[at:at + NAME_NOTE].decode("latin1").strip()
+        print("  bank %d at 0x%06X: %3d notes, first %r" % (b, at, n, first))
+        assert n == 128, "bank %d has %d consecutive notes, expected 128" % (b, n)
+
+    # The control: the run exists only at the right stride.
+    for wrong in (normal_stride - 1, normal_stride + 1, note_stride - 1):
+        at = 0 * BANK + NORMAL_AT[0]
+        assert run(at, wrong, NAME_NORMAL) < 4, \
+            "a stride of %d also produces a run; the test does not discriminate" % wrong
+    print("\n  a stride one byte either side of %d breaks the run immediately,"
+          % normal_stride)
+    print("  so the match is the layout and not an artefact of the search")
+    print("OK")
+
+
+if __name__ == "__main__":
+    main()

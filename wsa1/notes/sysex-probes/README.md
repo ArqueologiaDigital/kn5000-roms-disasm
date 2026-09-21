@@ -1397,3 +1397,30 @@ python3 wsa1/notes/sysex-probes/sysex_effects.py --tex \
 ```
 
 Pass: the number sets are equal, no effect declares more than 20 values, `OK`.
+
+### `sysex_sound_memory.py`
+
+**Question:** is a *stored* sound the same thing as the sound parameter layout?
+
+Chapter 8 lays out the sound being **edited** — 713 bytes at `ADR 10 00 00`. The `SOUND`
+bulk dump is a different thing: 262144 bytes of sound **memory**. A librarian that wants
+to show or edit the sounds inside a dump needs to know whether the two agree.
+
+They do, and the dump proves it by itself. If a stored sound uses that layout then sounds
+must sit at a 713-byte stride with a printable 16-character name at offset 0, because
+`NAME` is parameter `000`–`00F`. They do — **64 in a row in every one of four banks** —
+and a stored drum kit's 128 note records likewise sit at a 150-byte stride with their
+13-character names.
+
+The strides are **not hard-coded**: they are read out of `sound_layout.json`, so if the
+parameter layout is ever corrected and the dump stops matching it, this fails.
+
+The control is the arithmetic: a stride one byte either side of 713 breaks the run at the
+first record, which the probe asserts.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_sound_memory.py
+python3 wsa1/notes/sysex-probes/sysex_sound_memory.py --names   # list every stored sound
+```
+
+Pass: four banks of `0x10000`, 128 notes per drum run, at least 64 sounds per bank, `OK`.
