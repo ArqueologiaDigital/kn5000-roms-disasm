@@ -206,20 +206,66 @@ print("\nRECORD 0x79 +01..+04, THE MAIN OUT EQUALISER")
 for label, combos in CORPUS:
     eq = sorted({tuple(c[0x79][1:5]) for c in combos})
     print("   %-14s %s" % (label, ", ".join(" ".join("%02X" % x for x in t) for t in eq)))
-all_eq = sorted({tuple(c[0x79][1:5]) for _, combos in CORPUS for c in combos})
-assert all_eq == [(0xD2, 0x01, 0x58, 0x04), (0xD8, 0x02, 0x58, 0x04)], \
-    "the equaliser settings are not the two this analysis rests on"
-print("   TWO settings, and they differ at +01 and +02 ONLY -- +03 and +04 are")
-print("   identical in all %d combinations.  Under the gain mask 0x3F, +01 reads 24"
-      % sum(len(c) for _, c in CORPUS))
-print("   (centre of 0..48) in one and 18 in the other, so the low band was moved.")
-print("   +02 moves with it, 02 -> 01, and the high pair does not move at all.")
-print("   The record gives four bytes to four parameters; the two GAINS are pinned")
-print("   to +01 and +03 by setters that were read instruction by instruction; so")
-print("   the two FREQUENCIES are the two bytes left, +02 and +04, and the")
-print("   descriptor that puts LOW-FREQ at +01 is contradicted by every combination")
-print("   in every corpus -- it declares 0..17 and +01 never reads below 18.")
-print("   NOT settled: the declared HIGH-FREQ range is 17..26 and +04 reads 4, so")
-print("   either the stored byte is an index into a table or that range is wrong.")
+
+# The guide's own packing note says EQ Fc is 5 bits and EQ G is 6 bits.  Eleven
+# bits do not fit in a byte, which is why no single-byte descriptor could ever
+# place the frequency -- a band is a 16-bit field spanning two bytes.  The
+# declared ranges give the test: GAIN 0..48, LOW Fc 0..17, HIGH Fc 17..26,
+# those two being sub-ranges of one 27-entry frequency table (they overlap at
+# 17).  Only one bit assignment puts every stored value inside them.
+DECLARED = {"GAIN": (0, 48), "LOW": (0, 17), "HIGH": (17, 26)}
+BANDS = [(c[0x79][1], c[0x79][2], "LOW") for _, cs in CORPUS for c in cs] + \
+        [(c[0x79][3], c[0x79][4], "HIGH") for _, cs in CORPUS for c in cs]
+
+
+def fits(order, gpos, fpos):
+    for b0, b1, nm in BANDS:
+        v = (b0 | (b1 << 8)) if order == "LE" else ((b0 << 8) | b1)
+        g, fc = (v >> gpos) & 0x3F, (v >> fpos) & 0x1F
+        lo, hi = DECLARED[nm]
+        if not (DECLARED["GAIN"][0] <= g <= DECLARED["GAIN"][1] and lo <= fc <= hi):
+            return False
+    return True
+
+
+# Search the WHOLE space rather than a few hand-picked candidates: every
+# placement of a contiguous 6-bit gain and a contiguous 5-bit index inside the
+# two bytes, both byte orders.  A single survivor is a much stronger result
+# than beating three chosen alternatives.
+OK_LAYOUTS = [(o, g, f)
+              for o in ("LE", "BE")
+              for g in range(11)
+              for f in range(12)
+              if (f + 5 <= g or g + 6 <= f) and fits(o, g, f)]
+print("\n   %d band observations; assignments of a 6-bit gain and 5-bit index"
+      % len(BANDS))
+print("   that put EVERY one inside its declared range: %d" % len(OK_LAYOUTS))
+for o, g, f in OK_LAYOUTS:
+    print("     %s, gain at bit %d, index at bit %d" % (o, g, f))
+assert OK_LAYOUTS == [("LE", 0, 6)], \
+    "the equaliser bit assignment is no longer uniquely determined"
+print("   -> a band is a 16-bit LITTLE-ENDIAN word: GAIN in bits 0-5, frequency")
+print("      INDEX in bits 6-10, indexing the guide's 27-entry PEQ Fc table.")
+print("      LOW band at +01/+02 (dump 1002B3), HIGH at +03/+04 (dump 1002B5).")
+print("      The index takes TWO bits from the low byte and THREE from the high.")
+print("   !! The guide's packed-field note for its pre/post equaliser format says")
+print("      the split is three bits in the first byte and two in the second.")
+print("      For MAIN OUT EQUALIZER that is the other way round, and no such")
+print("      layout fits: it is in the search space above and it fails.")
+assert not fits("LE", 0, 3) and not fits("BE", 0, 6), "a rejected layout now fits"
+
+settings = Counter()
+for _, combos in CORPUS:
+    for c in combos:
+        r = c[0x79]
+        lo, hi = r[1] | (r[2] << 8), r[3] | (r[4] << 8)
+        settings[(lo & 0x3F, (lo >> 6) & 0x1F, hi & 0x3F, (hi >> 6) & 0x1F)] += 1
+print("\n   the settings actually stored:")
+for (lg, lf, hg, hf), n in settings.most_common():
+    print("     LOW gain %2d Fc %2d | HIGH gain %2d Fc %2d   x%d" % (lg, lf, hg, hf, n))
+assert set(settings) == {(24, 11, 24, 17), (18, 7, 24, 17)}, \
+    "the stored equaliser settings have changed"
+print("   both gains read 24 of 0..48 -- centre -- in the factory setting, and the")
+print("   one instrument that moved its low band moved gain and frequency together.")
 
 print("\nOK")

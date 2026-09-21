@@ -75,8 +75,11 @@ a \textsc{system, part \& midi} bulk dump.}\label{tbl:partparams}\\
 {\small
 \begin{longtable}{llllll>{\raggedright\arraybackslash}p{52mm}}
 \caption{The parameters of the common blocks. The address is the one a
-\textsc{system, part \& midi} bulk dump carries for the same
-byte.}\label{tbl:commonparams}\\
+\textsc{system, part \& midi} bulk dump carries for the same byte.
+\emph{command} marks an address that is an action rather than stored state, so
+no dump carries it; \emph{outside} marks a byte that falls outside the block;
+\bytes{---} marks a position this reference has not
+established.}\label{tbl:commonparams}\\
 \toprule
 \bytes{\textit{s}} & \bytes{\textit{p}} & data & address & bits & values & name \\
 \midrule\endfirsthead
@@ -104,10 +107,10 @@ byte.}\label{tbl:commonparams}\\
 \bytes{01} & \bytes{03} & 1 & \bytes{100936} & \bytes{20} & 0--1 & LOCAL TOTAL \\
 \bytes{01} & \bytes{04} & 1 & \bytes{100932} & \bytes{03} & 0--1 & PROGRAM CHANGE MODE \\
 \bytes{01} & \bytes{05} & 1 & \bytes{100932} & \bytes{08} & 0--1 & SINGLE CHANNEL PROGRAM CHANGE \\
-\bytes{08} & \bytes{00} & 1 & --- & --- & 0--6 & INITIAL \\
-\bytes{08} & \bytes{08} & 1 & --- & \bytes{F0} & 0--1 & PLAY MODE REQUEST \\
-\bytes{08} & \bytes{10} & 1 & --- & --- & 0--127 & COMBINATION WRITE REQUEST \\
-\bytes{08} & \bytes{11} & 3 & --- & --- & 0--1 & SOUND WRITE REQUEST \\
+\bytes{08} & \bytes{00} & 1 & command & --- & 0--6 & INITIAL \\
+\bytes{08} & \bytes{08} & 1 & command & \bytes{F0} & 0--1 & PLAY MODE REQUEST \\
+\bytes{08} & \bytes{10} & 1 & command & --- & 0--127 & COMBINATION WRITE REQUEST \\
+\bytes{08} & \bytes{11} & 3 & command & --- & 0--1 & SOUND WRITE REQUEST \\
 \bytes{10} & \bytes{00} & 1 & \bytes{1002B2} & \bytes{7F} & 28--100 & KEY TRANSPOSE \\
 \bytes{10} & \bytes{10} & 1 & \bytes{1002A3} & \bytes{80} & 0--1 & KEY SCALING MODE \\
 \bytes{10} & \bytes{11} & 1 & \bytes{1002A2} & all & enumerated, 15 values & TOTAL KEY SCALING \\
@@ -124,9 +127,9 @@ byte.}\label{tbl:commonparams}\\
 \bytes{10} & \bytes{1C} & 1 & \bytes{1002AD} & all & 0--255 & Akey DETUNE SETTING \\
 \bytes{10} & \bytes{1D} & 1 & \bytes{1002AE} & all & 0--255 & Bbkey DETUNE SETTING \\
 \bytes{10} & \bytes{1E} & 1 & \bytes{1002AF} & all & 0--255 & Bkey DETUNE SETTING \\
-\bytes{10} & \bytes{20} & 1 & --- & \bytes{1F} & 0--17 & MAIN OUT EQUALIZER LOW-FREQ \\
+\bytes{10} & \bytes{20} & 1 & \bytes{1002B3} & 6--10 & 0--17 & MAIN OUT EQUALIZER LOW-FREQ \\
 \bytes{10} & \bytes{21} & 1 & \bytes{1002B3} & \bytes{3F} & 0--48 & MAIN OUT EQUALIZER LOW-GAIN \\
-\bytes{10} & \bytes{22} & 1 & --- & \bytes{1F} & 17--26 & MAIN OUT EQUALIZER HIGH-FREQ \\
+\bytes{10} & \bytes{22} & 1 & \bytes{1002B5} & 6--10 & 17--26 & MAIN OUT EQUALIZER HIGH-FREQ \\
 \bytes{10} & \bytes{23} & 1 & \bytes{1002B5} & \bytes{3F} & 0--48 & MAIN OUT EQUALIZER HIGH-GAIN \\
 \bytes{11} & \bytes{00} & 1 & \bytes{100034} & \bytes{01} & 0--1 & EFFECT COMMON ALGORITHM \\
 \bytes{11} & \bytes{01} & 1 & \bytes{1002B7} & \bytes{0F} & 1--4 & EFFECT1 OUTPUT SELECT \\

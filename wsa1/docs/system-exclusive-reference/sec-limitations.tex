@@ -56,24 +56,6 @@ and \textsc{combination} blocks a dump carries.
   as a named byte used as a control demonstrates. They are written through pointers
   built at run time, so naming them needs the writer caught in the act rather than
   found by searching.
-\item[Two equaliser addresses.] Chapter~\ref{ch:params} lists \textsc{main out
-  equalizer low-freq} and \textsc{high-freq} without a dump position, because the
-  descriptors that would place them are the ones whose setter does not build its target
-  the way the others do. The stored data now places them anyway, on an argument the
-  descriptors cannot make. Record \bytes{79} gives four bytes, \bytes{+01}--\bytes{+04},
-  to four parameters. The two \textsc{gain}s are pinned to \bytes{+01} and \bytes{+03} by
-  setters read instruction by instruction, so the two frequencies are the two bytes left,
-  \bytes{+02} and \bytes{+04}. Three independent corpora agree: 385 combinations hold one
-  of two settings, \bytes{D8 02 58 04} or \bytes{D2 01 58 04}, and \textbf{they differ at
-  \bytes{+01} and \bytes{+02} only} --- one instrument's low band was moved and its low
-  pair moved together, while the high pair did not move at all. The descriptor that would
-  put \textsc{low-freq} at \bytes{+01} is contradicted outright: it declares 0--17 and
-  \bytes{+01} never reads below 18 in any combination in any corpus.
-
-  What is not settled is the scale. \textsc{high-freq} is declared 17--26 and \bytes{+04}
-  reads 4, so either the stored byte is an index into a table rather than the displayed
-  value, or the published range is not the stored one. An instrument with both bands moved
-  off centre, dumped, would settle it; so would the setter, if it is ever read out.
 \item[The rest of a song record, and PERFORMANCE.] Section~\ref{sec:seqmemory} now
   decodes 2\,400 of a song record's 3\,072 bytes, from a native sequencer file off a disk:
   they are the same tagged records a combination is built from, so

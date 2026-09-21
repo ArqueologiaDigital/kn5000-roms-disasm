@@ -110,6 +110,20 @@ def check_record_bases(text):
     assert hi + ram_lo == PART_RUN2_BASE, "the second run moved to 0x%04X" % hi
 
 
+# Two parameters the address probe cannot resolve, because it resolves a
+# parameter to ONE byte and these do not live in one.  Each MAIN OUT EQUALIZER
+# band is an 11-bit field spread over two bytes: GAIN in bits 0-5 and the
+# frequency INDEX in bits 6-10 of a 16-bit little-endian word.  That is the
+# guide's own packing note -- "EQ Fc, 5 bits" and "EQ G, 6 bits" -- and
+# sysex_unnamed_bytes.py shows it is the only bit assignment that puts all 770
+# stored values inside their declared ranges, the alternatives each failing 385
+# times.  The address given is the word's low byte.
+RESOLVED = {
+    (0x10, 0x20): ("1002B3", "6--10"),   # MAIN OUT EQUALIZER LOW-FREQ
+    (0x10, 0x22): ("1002B5", "6--10"),   # MAIN OUT EQUALIZER HIGH-FREQ
+}
+
+
 def bits(mask):
     return bin(mask).count("1")
 
@@ -187,22 +201,32 @@ def main():
     w("{\\small")
     w("\\begin{longtable}{llllll>{\\raggedright\\arraybackslash}p{52mm}}")
     w("\\caption{The parameters of the common blocks. The address is the one a")
-    w("\\textsc{system, part \\& midi} bulk dump carries for the same")
-    w("byte.}\\label{tbl:commonparams}\\\\")
+    w("\\textsc{system, part \\& midi} bulk dump carries for the same byte.")
+    w("\\emph{command} marks an address that is an action rather than stored state, so")
+    w("no dump carries it; \\emph{outside} marks a byte that falls outside the block;")
+    w("\\bytes{---} marks a position this reference has not")
+    w("established.}\\label{tbl:commonparams}\\\\")
     w("\\toprule")
     w("\\bytes{\\textit{s}} & \\bytes{\\textit{p}} & data & address & bits & values & name \\\\")
     w("\\midrule\\endfirsthead")
     w("\\toprule \\bytes{\\textit{s}} & \\bytes{\\textit{p}} & data & address & bits & values & name \\\\")
     w("\\midrule\\endhead")
     for r in sorted(common, key=lambda r: (r["block"], r["param"])):
-        if "OUTSIDE" in r["note"]:
-            addr = "outside"            # the byte itself lies outside the block
+        res = RESOLVED.get((r["block"], r["param"]))
+        if r["block"] == 0x08:
+            # the 08 block is commands, not settings: it initialises a section,
+            # switches play mode or asks for a store, and no dump carries it.
+            addr, mcol = "command", maskcol(r)
+        elif "OUTSIDE" in r["note"]:
+            addr, mcol = "outside", maskcol(r)
+        elif res:
+            addr, mcol = "\\bytes{%s}" % res[0], res[1]
         elif r["dump"] is None:
-            addr = "---"                 # position not established
+            addr, mcol = "---", maskcol(r)
         else:
-            addr = "\\bytes{%06X}" % r["dump"]
+            addr, mcol = "\\bytes{%06X}" % r["dump"], maskcol(r)
         w("\\bytes{%02X} & \\bytes{%02X} & %d & %s & %s & %s & %s \\\\" %
-          (r["block"], r["param"], r["size"], addr, maskcol(r),
+          (r["block"], r["param"], r["size"], addr, mcol,
            values(r, wl), named(names, r)))
     w("\\bottomrule")
     w("\\end{longtable}")

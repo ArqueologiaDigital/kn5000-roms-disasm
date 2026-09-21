@@ -155,6 +155,30 @@ stored byte contains. A librarian should not validate a dump by checking it agai
 ranges.
 \end{note}
 
+\begin{note}{Each MAIN OUT EQUALIZER band is one two-byte field}
+Its four parameters do not occupy four bytes one each. A band is a 16-bit
+\textbf{little-endian} word: \textsc{gain} in bits 0--5, and in bits 6--10 a five-bit
+\emph{index} into the 27-entry frequency table of section~\ref{sec:conversions}, so the
+index takes two bits from the low byte and three from the high one. The low band's word
+begins at \bytes{1002B3} and the high band's at \bytes{1002B5}. That is why the two
+frequencies have no byte of their own to be listed against, and it is what the published
+ranges are already telling you: \bytes{0}--\bytes{17} and \bytes{17}--\bytes{26} are two
+sub-ranges of one 27-entry table, overlapping at 17.
+
+The placement is not a reading of the bytes that happens to work. Taking 385 stored
+combinations from three sources gives 770 band observations, and of every way to put a
+contiguous six-bit gain and a contiguous five-bit index inside two bytes, in either byte
+order, \textbf{exactly one} places all 770 inside their declared ranges. The factory
+setting decodes to gain 24 of 0--48 --- centre --- in both bands, with index 11 low and 17
+high; the one instrument in the corpus that had moved its low band reads gain 18, index 7.
+
+\medskip
+\textbf{One disagreement.} The guide's packed-field note for its pre/post equaliser format
+gives the five-bit index as three bits in the first byte and two in the second. For
+\textsc{main out equalizer} it is the other way round --- that layout is inside the search
+above, and it fails.
+\end{note}
+
 \input{tbl-parameters}
 
 \section{Names}

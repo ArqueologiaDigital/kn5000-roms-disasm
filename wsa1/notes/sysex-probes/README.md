@@ -1653,16 +1653,23 @@ block B's is used by both sources.
 like a cache of the sound the part plays; it is not, because the same program number
 carries two different triples in 36 cases. Reporting that is the point of the test.
 
-★★ **The third corpus settled the equaliser placement.** The disk holds `D2 01 58 04`
-where the other two hold `D8 02 58 04` — differing at `+01` and `+02` **only**. One
-instrument's low band was moved and its low pair moved together while the high pair did
-not. Since the record gives four bytes to four parameters and both `GAIN`s are pinned to
-`+01`/`+03` by setters that were read instruction by instruction, the frequencies are
-`+02` and `+04`. The descriptor putting `LOW-FREQ` at `+01` is contradicted outright: it
-declares 0..17 and `+01` never reads below 18 anywhere.
+★★★ **The equaliser is fully resolved — placement, bit layout and scale.** The guide's own
+packing note says `EQ Fc` is **5 bits** and `EQ G` is **6 bits**: eleven bits do not fit in
+a byte, so a band is a *two-byte* field and no single-byte descriptor could ever place it.
+The declared ranges are the test — `GAIN` 0..48, `LOW` Fc 0..17, `HIGH` Fc 17..26, the last
+two being sub-ranges of one 27-entry table (they overlap at 17).
 
-⚠ The *scale* is still open: `HIGH-FREQ` is declared 17..26 and `+04` reads 4, so either
-the stored byte is a table index or the published range is not the stored one.
+The probe searches the **whole space**: every placement of a contiguous 6-bit gain and
+5-bit index inside two bytes, both byte orders. **Exactly one of them** puts all 770 band
+observations inside their declared ranges — little-endian, gain at bit 0, index at bit 6.
+The low band's word is at dump `1002B3`, the high band's at `1002B5`. Factory setting
+decodes to gain 24 (centre) in both bands, index 11 low and 17 high; the one instrument
+that had moved its low band reads gain 18, index 7.
+
+⚠ **One disagreement with the guide.** Its packed-field note for the pre/post equaliser
+format gives the split as three bits in the first byte and two in the second. For
+`MAIN OUT EQUALIZER` it is the other way round — that layout is inside the search and it
+fails.
 
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_unnamed_bytes.py
