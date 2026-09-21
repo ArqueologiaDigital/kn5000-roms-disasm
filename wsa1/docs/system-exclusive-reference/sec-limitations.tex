@@ -43,9 +43,18 @@ and \textsc{combination} blocks a dump carries.
 
   \emph{Open.} Block~B's \bytes{+18}--\bytes{+1A}, three bytes taking fifteen distinct
   combinations across the corpus and reading \bytes{01 01 01} or \bytes{00 01 01} in four
-  records out of five. And which side of the indirection the triple is --- what the part
-  asked for, or what it resolved to --- is not established; deciding that needs a machine
-  with a non-identity re-map loaded, dumped.
+  records out of five. Three searches have been run against them over all 3\,080 part
+  records and 220 byte columns, and the coverage is worth stating because the answer is
+  negative: none of the three is an exact copy of any other column; the three together are
+  not a copy of any other three-byte run; and no column determines any of them --- the
+  best dependency is 0.62 of the target's entropy where a shuffled control scores 0.03 and
+  a determination would score 1. The closest match, \bytes{+1A} agreeing with \bytes{+03}
+  in 97.6\,\% of records, is two nearly-constant columns agreeing and nothing more.
+
+  Also open: which side of the indirection the triple holds --- what the part asked for,
+  or what it resolved to. Eight of the nine re-maps in the corpus are identity maps, so
+  the two sides coincide wherever it could be checked. Deciding it needs a machine with a
+  non-identity re-map loaded, dumped.
 \item[What a song's header fields mean, and PERFORMANCE.] Section~\ref{sec:seqmemory}
   now covers the whole of a song record's shape: 2\,400 of its 3\,072 bytes are the same
   tagged records a combination is built from, so chapter~\ref{ch:params} names their

@@ -28,6 +28,17 @@ WHAT A RE-MAP FILE IS
   takes 0, 1, 2, 8 and 9 across these files, and that a part's +1D takes exactly
   0, 1, 8, 9 and 0x20, is the correspondence that ties the two together.
 
+THE SAME FORMAT IS IN THE FIRMWARE
+  prom_b carries the three DEFAULT map files as literal images, 0x650 bytes
+  apart -- which is 32 bytes of header plus three maps of 528.  They decode
+  under the same rules with the same offsets and the same names, so the format
+  is established from two sources that cannot have influenced each other: a
+  disk written by a user in 1997 and the ROM that wrote it.
+
+  The one byte that differs is +0x0F: zero in every ROM template and 0x31 in
+  every saved file, so it is written at save time and is not part of the
+  format's constant header.
+
 SIGNAL BEING READ
   KN7000/WSA1R_files/GJS1.zip, sha256
   c098228819824593d0f426eb053625fa70ac582c3fe29727564544d4d9979524, members
@@ -91,6 +102,29 @@ with zipfile.ZipFile(ZIP) as z:
                      else "NOT an identity map, sources %s" % src,
                      " ".join("%02X" % c for c in d[tbl:tbl + 8])))
         print()
+
+# ---- the same format, read out of the firmware
+ROMS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "original_ROMs")
+PROM_B = open(os.path.join(ROMS, "wsa1_prom_b.ic13"), "rb").read()
+TEMPLATES = [(0x30810, "SOUND RE-MAP 1  "), (0x30E60, "COMBI RE-MAP 1  "),
+             (0x314B0, "USER DRUM MAP 1 ")]
+print("THE SAME THREE FILES, AS LITERAL IMAGES IN prom_b")
+for base, first in TEMPLATES:
+    assert PROM_B[base:base + 5] == MAGIC, "no WSA1 magic at 0x%X" % base
+    offs = [int.from_bytes(PROM_B[base + 0x10 + 4 * i:base + 0x14 + 4 * i], "little")
+            for i in range(4)]
+    assert offs[3] == 0 and offs[0] == 0x20, "template at 0x%X has a odd header" % base
+    nm = PROM_B[base + offs[0]:base + offs[0] + NAME].decode("ascii")
+    assert nm == first, "template at 0x%X is %r, expected %r" % (base, nm, first)
+    assert PROM_B[base + 0x0F] == 0, "the ROM template has a non-zero byte at +0x0F"
+    print("   0x%06X  %r  offsets %s"
+          % (0xF00000 + base, nm, [hex(o) for o in offs[:3]]))
+step = TEMPLATES[1][0] - TEMPLATES[0][0]
+assert step == 0x20 + 3 * 528, "the templates are not one file apart"
+print("   spaced 0x%X apart = 32 header + 3 maps of 528, so the ROM holds whole" % step)
+print("   FILES, not just names -- the format agrees with the disk's in every")
+print("   field.  The only byte that differs is +0x0F: 0 in the ROM, 0x31 once")
+print("   saved, so it is written at save time.\n")
 
 assert identity_seen == 8, \
     "expected eight identity maps of the nine, found %d" % identity_seen

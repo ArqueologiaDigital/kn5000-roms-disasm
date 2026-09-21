@@ -1804,12 +1804,19 @@ takes 0,1,2,8,9 across these files; a part's `+1D` takes 0,1,8,9,0x20.
 ★ Eight of the nine maps are identities; the ninth is `GM RE-MAP`, and the probe asserts
 that count so the non-identity one is *demonstrably* different rather than assumed to be.
 
+★★ **The same format is in the firmware.** `prom_b` carries the three default map files
+as literal images, `0x650` apart — which is 32 bytes of header plus three maps of 528. They
+decode under the same rules with the same offsets and names, so the format is established
+from **two sources that cannot have influenced each other**: a disk written by a user in
+1997, and the ROM that wrote it. The one byte that differs is `+0x0F` — zero in every ROM
+template, `0x31` in every saved file — so it is written at save time.
+
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_remap_files.py
 ```
 
 Pass: offsets equally spaced, every name printable, `16*(groups+1) + 128*width == map size`
-closes, eight identity maps, `OK`.
+closes, eight identity maps, all three ROM templates matching, `OK`.
 
 ### `manual_sequencer_specs.py`
 
