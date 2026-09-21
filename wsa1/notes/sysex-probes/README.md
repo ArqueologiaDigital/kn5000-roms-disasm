@@ -1824,3 +1824,33 @@ python3 wsa1/notes/sysex-probes/manual_sequencer_specs.py
 ```
 
 Pass: all five phrases present in the extracted text, both hashes matching, `OK`.
+
+### `sysex_triple_writer.py`
+
+**Question:** what code writes and reads a part's trailing triple?
+
+An earlier edition said naming those bytes needed "the writer caught in the act rather than
+found by searching", and then searched four more times. ★ **The search that works is
+neither of the ones tried.** Those bytes are never named by an absolute address — a part
+record is reached through a pointer — so searching for their RAM addresses finds nothing,
+which is exactly what happened. They *are* named by displacement off that pointer, and
+`(XIY+0x1b)`, `(XIY+0x1c)`, `(XIY+0x1d)` are short distinctive byte strings.
+
+★★ **Three sites write all three bytes, three read all three, and no site anywhere touches
+one of them on its own** — the probe asserts that last part, so "they are one field" is a
+measurement rather than an impression.
+
+★★ At the writing site the values come back from a conversion whose input is written to a
+fixed address as **two** bytes and whose result is read from another as **three**, with an
+inverse beside it taking three and returning two. A three-byte form of a two-byte quantity
+is what a program number plus a bank becomes.
+
+⚠ H and L here are two byte registers, not a 16-bit pair — the consumer stores them to two
+separate addresses. That matters because "one 16-bit HL" is the obvious rival to the 4+3
+split, and the data rejects it 4 matches to 296.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_triple_writer.py
+```
+
+Pass: 3 writing groups, 3 reading groups, zero loose sites, `OK`.

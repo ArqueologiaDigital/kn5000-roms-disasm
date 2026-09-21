@@ -36,10 +36,24 @@ and \textsc{combination} blocks a dump carries.
   uses. Of the 890 parts carrying a non-zero one, the number and the bank \emph{both}
   match the part's own in 296, and the number never matches without the bank matching too
   --- against a control, the same test run against a neighbouring part, that lands 39
-  times. The shape is confirmed from outside the dump as well: the instrument's re-map
-  files are sixteen groups of eight, the same 4+3 split, holding entries that are exactly
-  (number, source) pairs. A second copy of an address that usually differs from the first
-  is an indirection, which is also why the triple is not a function of the program number.
+  times. The pair \bytes{+1B},~\bytes{+1C} takes \textbf{exactly 128 distinct values}
+  across the corpus, which is what a 7-bit number split four and three must and which no
+  rival reading of those two bytes predicts. The shape is confirmed from outside the dump
+  as well: the instrument's re-map files are sixteen groups of eight, the same 4+3 split,
+  holding entries that are exactly (number, source) pairs. A second copy of an address
+  that usually differs from the first is an indirection, which is also why the triple is
+  not a function of the program number.
+
+  The program agrees. These bytes are never named by an address --- a part record is
+  reached through a pointer, which is why earlier searches for their addresses found
+  nothing --- but they are named by displacement off that pointer, and those are short
+  distinctive byte strings. There are three sites that write all three bytes and three
+  that read all three, in both images, and \textbf{not one site anywhere touches any of
+  the three on its own}: they are a single field. At the writing site the values come back
+  from a conversion whose input is written to a fixed address as \emph{two} bytes and
+  whose result is read from another as \emph{three}, with an inverse beside it that takes
+  three and returns two. A three-byte form of a two-byte quantity is exactly what a program
+  number and a bank become.
 
   \emph{Open.} Block~B's \bytes{+18}--\bytes{+1A}, three bytes taking fifteen distinct
   combinations across the corpus and reading \bytes{01 01 01} or \bytes{00 01 01} in four

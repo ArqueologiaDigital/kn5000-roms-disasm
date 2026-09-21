@@ -210,6 +210,34 @@ print("    the number matches but the bank does not                        : %d"
 print("    the bank matches but the number does not                        : %d" % bank_only)
 print("    neither                                                         : %d" % neither)
 
+# Two more checks the reading has to survive.  First: if +1B and +1C jointly
+# hold a 7-bit number split four bits and three, the PAIR can take at most 128
+# distinct values, and it should take close to all of them.
+pairs = {(t[0], t[1]) for t, _, _ in TRIPLES}
+print("  the (+1B, +1C) pair takes %d distinct values across the corpus"
+      % len(pairs))
+assert len(pairs) == 128, "the pair no longer takes exactly 128 values"
+print("  -- exactly 128, which is what a 7-bit number split 4+3 must, and which")
+print("  no other reading of the two bytes predicts.")
+
+# Second: the alternative readings, scored the same way.  The firmware loads
+# these two into H and L, so reading them as one 16-bit HL is the obvious rival.
+def hits(f):
+    return sum(1 for t, prog, _ in TRIPLES if f(t) == prog)
+
+
+RIVALS = [("+1B*8 + +1C", lambda t: t[0] * 8 + t[1]),
+          ("+1C*8 + +1B", lambda t: t[1] * 8 + t[0]),
+          ("HL = +1C*256 + +1B", lambda t: (t[1] << 8) | t[0]),
+          ("+1B*16 + +1C", lambda t: t[0] * 16 + t[1]),
+          ("+1C alone", lambda t: t[1])]
+print("  readings of the pair, scored against the part's own program:")
+for name, f in RIVALS:
+    print("    %-22s %4d of %d" % (name, hits(f), len(TRIPLES)))
+best = max(RIVALS, key=lambda r: hits(r[1]))
+assert best[0] == "+1B*8 + +1C", "a different reading now wins"
+assert hits(RIVALS[2][1]) < 10, "the 16-bit reading is no longer ruled out"
+
 # the null: the same test against a different part's program and bank
 shifted = [TRIPLES[(i + 1) % len(TRIPLES)] for i in range(len(TRIPLES))]
 ctrl = sum(1 for (t, _, _), (_, p2, b2) in zip(TRIPLES, shifted)
