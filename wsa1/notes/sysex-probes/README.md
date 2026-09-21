@@ -1165,3 +1165,102 @@ other way round.
 `SOUND MUTE` reads `0x7F0B` and `FOOT SW1/2 POLARITY` read `0x7F12`; neither
 is one of the 108 parameters. A published setting having no parameter address
 is a real result, not a gap in the search.
+
+---
+
+## The published specification, and the document generators
+
+### `manual_reference_guide.py`
+
+**Question:** where is Technics' own System Exclusive specification, and what is on
+each page?
+
+It is **not** in either user manual. It is the third volume, the *Reference Guide*,
+inside `KN7000/WSA1R_files/OM.zip` at `OM/EN/TECHNICS_WSA1_REFERENCE_GUIDE_2.pdf`.
+The script checks the archive and the PDF by sha256, asserts the guide is still
+image-only (so nobody concludes "not documented" from a text search of it), and prints
+the page index plus the field and address-map tables this project relies on.
+
+```sh
+python3 wsa1/notes/sysex-probes/manual_reference_guide.py
+pdftoppm -r 150 -png -f 41 -l 41 <the pdf> /tmp/rg     # then LOOK at it
+```
+
+Pass: both hashes match, 56 pages, empty text layer, `OK`.
+
+### `sysex_param_table_tex.py` and `param_names.json`
+
+**Question:** what goes in the reference's parameter chapter?
+
+Runs `sysex_param_addresses.py`, keeps only what is visible on the wire — accepted
+values, data length, bit mask, position in the bulk dump — discards every internal
+address, merges the names from `param_names.json`, and writes the chapter's tables. No
+number in that chapter is typed by hand. A name in the JSON whose address is not a
+parameter is a hard error, which is how a stale name gets caught.
+
+All 108 names come from the guide's tables (pages 46–47); none is inferred.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_param_table_tex.py \
+    wsa1/docs/system-exclusive-reference/tbl-parameters.tex
+```
+
+Pass: `57 part parameters, 51 common, 108 named, 3 white-listed`, then `OK`.
+
+### `sysex_examples_tex.py`
+
+**Question:** are the worked examples in the appendix actually correct?
+
+Builds them rather than transcribing them. The parameter messages come from
+`sysex_param_wire_format.py` and every printed checksum is re-verified against the rule
+the document states. The bulk-dump example is a frame from a real machine, and the
+script **re-encodes that frame from its own decoded payload and asserts the result is
+byte-identical to the capture** — so the encoder printed in the appendix is demonstrably
+the one the instrument used.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_examples_tex.py \
+    wsa1/docs/system-exclusive-reference/tbl-examples.tex
+```
+
+Pass: 5 examples re-verified, the frame re-encodes identically, `OK`.
+
+### `sysex_param_vs_capture.py`
+
+**Question:** does the published parameter map survive a dump from real hardware?
+
+Reassembles the `SYSTEM,PART & MIDI` category out of `SND_CMBI.syx` and reads each
+parameter's own field — `(byte & mask) >> shift` — for all 32 parts, checking it against
+the declared range.
+
+**It is a test that can fail.** The same scan is run a second time against a deliberately
+wrong map — one uniform `0x40` stride for all 32 parts, instead of the two runs the real
+layout has — and that run must produce far more violations, or the test is not measuring
+anything. It does: **1833 fields checked, 1 out of range on the real map and 69 on the
+wrong one.**
+
+The one exception is `00 00 08` `MASTER TUNING` holding `00`. That is not a fault in the
+map: the guide gives its range as `C0-00-3F`, signed around concert pitch, so `00` is the
+default. It is pinned so a *second* such field would show up as a change.
+
+It also prints two **self-labelling** fields, which are the strongest evidence in the set:
+
+* every part's `BASIC CHANNEL` holds its own part number, so the 32 parts read an
+  unbroken `0..31` ramp — and the wrong map interrupts it at part 9, the first past the
+  gap. One ramp confirms both the parameter and the record layout.
+* every part's `PANPOT` reads 64, the entry the instrument's own pan scale labels `CTR`.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_param_vs_capture.py
+python3 wsa1/notes/sysex-probes/sysex_param_vs_capture.py --values   # every field
+```
+
+The capture is not committed — it is a regenerable capture, not a ROM, and it ships in
+`KN7000/WSA1R_files/SND_CMBI_syx.zip` (`.syx` sha256 `a7a83a08…`). Point `SYSEX_CAPTURE`
+at it or drop it beside the script.
+
+### Trap, recorded because it cost several sessions
+
+The `SND_CMBI.syx` capture is **three** categories, not the two its name suggests: it
+opens with `SYSTEM,PART & MIDI`, then `SOUND`, then `COMBINATION`. That first one is the
+category the parameter chapter maps, which is why the check above is possible at all.
