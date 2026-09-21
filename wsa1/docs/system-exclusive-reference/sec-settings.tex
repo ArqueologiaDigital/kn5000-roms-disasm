@@ -2,8 +2,9 @@
 
 \section{The EXCLUSIVE filter}
 The MIDI menu's \textsc{input \& output filter} page has eight rows, each a plain
-\textsc{on}/\textsc{off} switch for one kind of MIDI message. The last row is
-\textsc{exclusive}. There is one such switch and it governs both directions: the same
+\textsc{on}/\textsc{off} switch for one kind of MIDI message: \textsc{program change},
+\textsc{bank select}, \textsc{pitch bend}, \textsc{control change}, \textsc{reset all
+cnt.}, \textsc{channel pressure}, \textsc{song select} and, last, \textsc{exclusive}. There is one such switch and it governs both directions: the same
 setting is consulted when the instrument sends and when it receives. There is no separate
 input filter, no per-socket filter and no third state, and the page is the same on both
 models.
@@ -16,6 +17,11 @@ received, silently in both directions.
 
 \textbf{A bulk dump transfers normally with \textsc{exclusive} set to \textsc{off}.}
 Software that cannot complete a transfer should not look here for the cause.
+
+This is worth knowing before telling a user to change the setting: the illustration of that
+page in Technics' own guide shows \textsc{exclusive} switched \textsc{off}, so an
+instrument presenting that page as pictured is already able to send and receive every
+message in this reference.
 \end{caution}
 
 Everything below is unaffected by the setting:
