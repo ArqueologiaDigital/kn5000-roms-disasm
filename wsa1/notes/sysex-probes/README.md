@@ -16,6 +16,7 @@
 | `sysex_model_variant.py` | What the keyboard/rack setting changes about the SysEx implementation: all six entries of the feature table and every reader of it, every other place the SysEx engine reads the setting, and the transmit-time rewrite of the model triple that makes a real rack's dump carry `04 01 11`. | `python3 wsa1/notes/sysex-probes/sysex_model_variant.py` (tables) or `--sites` (every compare site in prom_a) |
 | `sysex_unreachable_commands.py` | The command numbers that have a handler and NO accepted wire sequence (`0x06 0x0D 0x0F 0x10 0x11 0x1D`) — dead code, or reachable another way? — plus what `F0 50 7E` does when it is the WHOLE message, and what family `25` does besides carry a number. | `python3 wsa1/notes/sysex-probes/sysex_unreachable_commands.py` (tables) or `--steps` (every continuation slot) |
 | `sysex_param_addresses.py` | WHERE does each `00`-area parameter live: the WORK-RAM byte its descriptor names, the BULK-DUMP address of that byte, and -- for the eight on the mixer strip -- the screen caption that edits it. | `python3 wsa1/notes/sysex-probes/sysex_param_addresses.py` (the table), `--dump` (with dump addresses), `--strip` (the eight named parameters), `--named` (every name the ROM itself supplies), `--lists` (the value white-lists) |
+| `sysex_user_settings.py` | WHICH USER SETTINGS change whether System Exclusive works: does an EXCLUSIVE filter exist for input, for output or both; exactly what it suppresses; whether it touches bulk dump, parameter messages or the General MIDI messages; and whether any MIDI channel / mode / device-number setting takes part in System Exclusive at all. | `python3 wsa1/notes/sysex-probes/sysex_user_settings.py` (tables), `--sites` (every instruction that names a settings byte) or `--census` (the reference count per byte) |
 | `sysex_signature_checks.py` | The leading bytes of a block — `WA0`, `WSA1`, `WSA SOUND RAM S0`: do they encode a format or OS version, who checks them, and what happens on a mismatch? Also collects every piece of evidence in the four images bearing on an OS other than the dumped v2.0. | `python3 wsa1/notes/sysex-probes/sysex_signature_checks.py` (tables) or `--artefacts` (confront the ROM literals with a real dump and real disk files) |
 | `sysex_general_midi.py` | Does GENERAL MIDI mode change System Exclusive behaviour: which messages stop being accepted, whether bulk dump or the parameter families are affected, whether the instrument TRANSMITS on entering or leaving GM, and where the GM state sits inside a bulk dump. | `python3 wsa1/notes/sysex-probes/sysex_general_midi.py` (tables) or `--records` (all 77 records of the SYSTEM,PART & MIDI part-2 block) |
 
@@ -1003,3 +1004,88 @@ parts 0-7 at `0x76A2 + 0x40p` and parts 8-31 at `0x78E2 + 0x40(p-8)`, and
    WHITE-LIST, which `sub_FB374D` walks and which refuses a value that is not
    in it.
 
+
+## `sysex_user_settings.py` — signal being read
+
+Both load bases are asserted by content, as above.  The object under test is
+the **MIDI settings block at `0x007F32`**, which is *one parameter record* —
+number `0x80` — and not a set of loose bytes.
+
+* **Row → RAM byte, three ways at once.**  Each row of the INPUT & OUTPUT
+  FILTER page has an editor and a painter; the editor hands the generic field
+  editor `sub_F9A165` a (mask, address) pair and then commits through prom_b
+  `0xF41B18` with the quadruple *(parameter number, byte offset, value, mask)*.
+  The script reads all three out of the instruction bytes and asserts that the
+  editor's address, the painter's address and `0x7F32 + offset` are the same
+  byte, for all eight rows.  Every commit carries number `0x80`.
+* **Row → caption is GEOMETRIC.**  One display list draws the eight captions;
+  each row's value comes from a 15-byte interpreter-B record of its own whose
+  `+0x0D` word is the screen position.  The script asserts each value position
+  lies after the end of its own caption and before the start of the next.  The
+  split caption `RESET ALL CTRL` + `  :` is re-joined by the same rule.
+* **★ Two witnesses that never touch the screen.**  `MidiIn_ControlChange`
+  indexes an enable table (`0xFA8468`) whose entries are *(byte offset from
+  `0x7F39`, bit mask)*.  The bit the BANK SELECT row writes gates exactly
+  controllers **0 and 32** — Bank Select MSB and LSB — and the bit the RESET
+  ALL CTRL row writes gates exactly controller **121**, Reset All Controllers.
+  Two rows named by the wire, not by the panel.
+* **★ The filter is ONE switch acting in BOTH directions.**  `MidiIn_ProgramChange`
+  (`0xFA6D58`) and `MidiOut_ProgramChange` (`0xFA71C4`) open with the *same*
+  `bit 4,(0x7F39)`.  There is exactly one `EXCLUSIVE` caption in prom_b, one
+  editor and one painter — there is no separate input and output setting.
+* **★ The census is CLOSED, which is what makes the negatives worth anything.**
+  Three ways an address of this size can be formed are all swept, at
+  instruction boundaries taken from this tree's byte-exact `.s` files: the
+  16-bit absolute operand forms (`C0/C1/D1/E1/F1 lo hi`), the address as a 16-
+  or 32-bit immediate, and register-indexed loads off such a base.  The only
+  indexed bases inside the block are `0x7F36` (used at offset 0) and `0x7F39`
+  (two tables, offsets 0/1/2 only), so **nothing can reach `0x7F38`
+  indirectly**.  `(0x7F38)` therefore has exactly **six** references in 1 MiB
+  × 2 and prom_b has none.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`.  Headline results: eight
+filter rows on parameter record `0x80` (base `0x7F32`); `EXCLUSIVE` =
+`(0x7F38)` mask `0x0F` with **only bit 3 read**; six references, three of them
+consumers — `25` tempo transmit `0xFB3355`, `25` tempo receive `0xFB33FE`, and
+the staged-parameter emitter `0xFB4B7D`; 187 of that emitter's 192 dispatch
+slots a bare `RET` and four of the remaining five landing on the placeholder
+descriptor; default `0x0F` = **ON**.
+
+### ⚠ The trap this probe exists to close
+
+`0xFB4B7D` dispatches to `0xFB4CAE`, which is the **only** code in either
+CPU-1 image that can put `F0 7E 7F 09 01 F7` or `F0 7E 7F 09 02 F7` on the
+wire — the literals occur once each in prom_b and are named by one instruction
+each, both inside it.  From that alone one concludes "EXCLUSIVE off stops
+General MIDI being transmitted".  **That is wrong.**  `0xFB4CAE` has a second
+caller, `0xFB5F2E`, which builds the same four-byte record itself (number
+`0xB0`, byte `0x11` for ON and `0x10` for OFF) and calls it *directly* at
+`0xFB5F5C`, never passing the gate.  What holds that path back is bit 7 of
+`(0x60F020)`, set by the two General MIDI *receive* handlers and by nothing
+else — an echo interlock, not a user setting.  The script asserts **both**
+callers, so the wrong claim cannot come back.
+
+⚠ A raw scan for `1D AE 4C FB` also matches inside `3C 1D` at `0xFB5F5B`-ish
+offsets in other code; every candidate is filtered through the instruction
+boundaries before it is believed.  That is the same trap
+`sysex_model_variant.py` records.
+
+### What it does NOT establish
+
+* **What fills the `0x2C00` staged-parameter queue.**  Four of the emitter's
+  five live slots are provably dead (placeholder descriptor lists) and the
+  fifth only fires for byte offsets `0x10`/`0x11`; whether any queued record
+  ever carries those is not decided here.  So "the tempo message is the only
+  thing the EXCLUSIVE filter actually withholds" is stated as a *likely*
+  reading, not a proven one.
+* **Where bit 7 of `(0x60F020)` is cleared.**  Two `set 7` sites exist and no
+  `res 7` anywhere; no block initialiser covering it was found either.
+* **The exact trigger of the transmitted General MIDI message.**  The panel's
+  GENERAL MIDI confirm handler (`0xF99E85`) and both receive handlers post the
+  same record — number `0x91`, offset 3 — and `sub_FB590A` consumes it and
+  calls the emitter; that `sub_FB590A` is the handler *for* number `0x91` is
+  read off a prom_b directory slot (`T_F408F0`) with no located caller.
+* **`(0x7F32)` bit 4**, a fifth condition the received tempo value must pass
+  (`0xFB57FC`) before it reaches the tempo itself.  It is on no MIDI page.

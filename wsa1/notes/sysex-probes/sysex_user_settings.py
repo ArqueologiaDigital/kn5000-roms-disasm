@@ -15,7 +15,8 @@ QUESTION THIS ANSWERS
       * EVERY consumer of the EXCLUSIVE bit, exhaustively, so that
         "bulk dump is NOT affected" is a measurement and not an absence;
       * whether it affects the General MIDI messages -- separately for the
-        ones the instrument SENDS and the ones it RECEIVES;
+        ones the instrument SENDS and the ones it RECEIVES (it affects
+        NEITHER, and the reason is a second, ungated emitter);
       * whether any MIDI channel, mode or device-number setting takes part
         in System Exclusive at all;
       * the built-in initial value of every row;
@@ -70,11 +71,18 @@ WHAT IT ESTABLISHES, AND HOW
      table in prom_b; 187 entries are a bare `ret`.  Of the five that are
      not, four reach descriptor lists whose first entry is the placeholder
      descriptor 0xF511F9, whose transmit method is itself a bare `ret`.
-     The fifth sends one of the two six-byte literals
-     `F0 7E 7F 09 01 F7` / `F0 7E 7F 09 02 F7`.  Those two literals occur
-     ONCE EACH in 1 MiB of prom_b and are named by ONE instruction each,
-     both inside that one routine.  ⇒ every General MIDI System On/Off
-     message the instrument transmits passes the EXCLUSIVE gate.
+     The fifth, 0xFB4CAE, sends one of the two six-byte literals
+     `F0 7E 7F 09 01 F7` / `F0 7E 7F 09 02 F7`, which occur ONCE EACH in
+     1 MiB of prom_b and are named by ONE instruction each, both inside it.
+
+     ⚠ AND THAT IS WHERE A TEMPTING WRONG ANSWER LIVES.  0xFB4CAE has a
+     SECOND caller, 0xFB5F2E, which builds the same four-byte record on its
+     own frame and calls it directly -- bypassing the EXCLUSIVE test
+     entirely.  What holds THAT path back is bit 7 of (0x60F020), set by
+     the two General MIDI receive handlers and by nothing else, i.e. an
+     echo interlock.  So "EXCLUSIVE off stops General MIDI being
+     transmitted" is FALSE, and the script asserts both callers so the
+     claim cannot drift back.
 
   8. RECEPTION OF GENERAL MIDI IS NOT FILTERED.  The grammar reaches
      command 0x20 / 0x21, whose handlers are 0xFB51E7 / 0xFB520C, and
@@ -101,11 +109,11 @@ RUN
 
 PASS
     Every assert is silent and the script prints OK.  Headline results:
-    8 filter rows + 2 realtime rows + 2 more on one page, all on parameter
-    record 0x80; EXCLUSIVE = (0x7F38) mask 0x0F, bit 3 the only bit read,
-    6 references in 1 MiB x2, 3 consumers; 187/192 emitter slots dead and
-    4 of the remaining 5 landing on a placeholder; GM literals referenced
-    once each, both behind the gate; default 0x0F = ON.
+    8 filter rows, all on parameter record 0x80 whose base is 0x7F32;
+    EXCLUSIVE = (0x7F38) mask 0x0F with bit 3 the only bit anything reads,
+    6 references in 1 MiB x 2, 3 consumers; 187/192 emitter slots dead and
+    4 of the remaining 5 landing on a placeholder; the General MIDI
+    emitter has TWO callers and only one is gated; default 0x0F = ON.
 """
 import argparse
 import os
@@ -412,10 +420,10 @@ assert ROWS[5]["addr"] == 0x7F39
 
 # CAPTIONS.  One display list draws all eight; bind each value field to the
 # caption whose text ends just before it and whose successor starts after.
-CAPTION_DL = 0xF0CD41        # inside DL_InputOutputFilterMidiPr0gramChange
+CAPTION_DL, CAPTION_DL_END = 0xF0CCEE, 0xF0CDE7
 CAPTIONS = []
-p = 0xF0CCBF
-while p < 0xF0CDE7:
+p = CAPTION_DL
+while p < CAPTION_DL_END:
     op, ln = b(p, 1)[0], b(p + 1, 1)[0]
     if op in (0x06, 0x07) and ln > 5:
         txt = bytes(b(p + 4, ln - 4))
@@ -566,7 +574,7 @@ assert a(0xFB4D41, 2) == bytes([0x66, 0x17]), "jr Z out of the walk"
 DESC_LISTS = {}
 for idx, entry in sorted(LIVE.items()):
     p, found = entry, None
-    while p < entry + 0x30:
+    while p < entry + 0x50:
         if a(p, 1) == b"\xf2" and a(p + 4, 1) == b"\x31":
             v = int.from_bytes(a(p + 1, 3), "little")
             if 0xF51E00 <= v < 0xF51E80:
@@ -592,14 +600,37 @@ for lit in (GM_ON, GM_OFF):
              if s in BOUNDARY["a"]]
     assert len(named) == 1, "literal 0x%06X named %d times" % (lit, len(named))
     assert 0xFB4CAE <= named[0] < 0xFB4D1F, \
-        "literal 0x%06X is named outside the gated routine" % lit
+        "literal 0x%06X is named outside sub_FB4CAE" % lit
 assert a(0xFB4CBD, 3) == bytes([0xCE, 0xCF, 0x11]), "cp H,0x11 selects GM ON"
 assert a(0xFB4CCD, 3) == bytes([0xCE, 0xCF, 0x10]), "cp H,0x10 selects GM OFF"
-# slot 0xB0 is reached from 0xFB4B7D and from nowhere else
 assert LIVE[0xB0] == 0x00FB4CAE
-assert scan(A, PROM_A_BASE, bytes([0x1D, 0xAE, 0x4C, 0xFB])) == [], \
-    "something calls the GM emitter directly"
-# and 0xFB4B7D itself is reached only through prom_b thunk T_F40900
+
+# ★★ AND THE GENERAL MIDI EMITTER HAS A SECOND, UNGATED CALLER.
+# 0xFB5F2E builds the same four-byte record on its own stack frame --
+# number 0xB0, byte 0x11 for ON or 0x10 for OFF -- and calls 0xFB4CAE
+# DIRECTLY, so it never passes the EXCLUSIVE test at 0xFB4B7F.  Instead it
+# is suppressed by bit 7 of (0x60F020), which the two General MIDI RECEIVE
+# handlers set: that is an echo interlock, not a user setting.
+GM_DIRECT = 0xFB5F2E
+assert a(0xFB5F36, 6) == bytes([0xC2, 0x20, 0xF0, 0x60, 0x23,
+                                0xCB]), "the echo interlock moved"
+assert a(0xFB5F3B, 3) == bytes([0xCB, 0xCC, 0x80]), "and C,0x80"
+assert a(0xFB5F40, 3) == bytes([0xB4, 0x00, 0xB0]), "record[0] = 0xB0"
+assert a(0xFB5F4B, 4) == bytes([0xBC, 0x01, 0x00, 0x11]), "record[1] = 0x11 (ON)"
+assert a(0xFB5F57, 4) == bytes([0xBC, 0x01, 0x00, 0x10]), "record[1] = 0x10 (OFF)"
+assert a(0xFB5F5C, 4) == bytes([0x1D, 0xAE, 0x4C, 0xFB]), "direct call to 0xFB4CAE"
+# bit 7 of (0x60F020) is written by exactly the two GM receive handlers
+SET7_60F020 = [s for s in scan(A, PROM_A_BASE,
+                               bytes([0xF2, 0x20, 0xF0, 0x60, 0xBF]))
+               if s in BOUNDARY["a"]]
+assert SET7_60F020 == [0xFB51E8, 0xFB521C], SET7_60F020
+# ⇒ the two callers of the General MIDI emitter, and only one is filtered
+GM_CALLERS = [s for s in scan(A, PROM_A_BASE, bytes([0x1D, 0xAE, 0x4C, 0xFB]))
+              if s in BOUNDARY["a"]]
+assert GM_CALLERS == [0xFB5F5C], GM_CALLERS
+assert bl(EMIT_TABLE + 4 * 0xB0) == 0x00FB4CAE
+
+# 0xFB4B7D itself is reached only through prom_b thunk T_F40900
 assert b(0xF40900, 4) == bytes([0x1B, 0x7D, 0x4B, 0xFB]), "T_F40900 moved"
 assert scan(A, PROM_A_BASE, bytes([0x1D, 0x7D, 0x4B, 0xFB])) == [], \
     "something calls 0xFB4B7D directly"
@@ -617,13 +648,18 @@ for cmd in GM_CMD:
     assert h1 == h2, "the two ring tables disagree on command 0x%02X" % cmd
     GM_HANDLER[cmd] = h1
 assert GM_HANDLER == {0x20: 0x00FB51E7, 0x21: 0x00FB520C}, GM_HANDLER
-# neither handler names any byte of the settings block
+# Neither handler reads a FILTER byte.  The only settings bytes either one
+# names are 0x7F4A (the record base it walks) and 0x7F4D (the GENERAL MIDI
+# MODE flag it is there to change) -- so the census, restricted to the two
+# handler bodies, must come out exactly {0x7F4A, 0x7F4D}.
+GM_TOUCHES = set()
 for cmd, h in GM_HANDLER.items():
     for addr, sites in list(ABS_A.items()) + list(IMM_A.items()):
         for s in sites:
             s = s[0] if isinstance(s, tuple) else s
-            assert not (h <= s < h + 0x40 and addr != 0x7F4A), \
-                "GM handler 0x%06X reads 0x%04X" % (h, addr)
+            if h <= s < h + 0x40:
+                GM_TOUCHES.add(addr)
+assert GM_TOUCHES == {0x7F4A, 0x7F4D}, GM_TOUCHES
 # 0x7F4A is the GENERAL MIDI MODE byte's own record base, not a filter:
 assert a(0xFB520E, 4) == bytes([0xF1, 0x4A, 0x7F, 0x34]), "lda XIX,(0x7F4A)"
 assert a(0xFB5214, 6) == bytes([0x8C, 0x03, 0x23, 0xCB, 0xCC, 0x04]), \
@@ -662,11 +698,11 @@ assert DEFAULTS[0x7F34] & 0x04 != 0, "REALTIME COMMANDS default is not ON"
 DUMP2_SRC_LO, DUMP2_SRC_HI = 0x007620, 0x007F80
 DUMP2_ADDR, DUMP2_LEN = 0x100020, 2400
 assert DUMP2_SRC_HI - DUMP2_SRC_LO == DUMP2_LEN
-assert b(0xF4FF0A, 12) == bytes([0xF0, 0x50, 0x2D, 0x04, 0x00, 0x11,
+assert b(0xF4FF04, 12) == bytes([0xF0, 0x50, 0x2D, 0x04, 0x00, 0x11,
                                  0x40, 0x00, 0x20, 0x00, 0x12, 0x60]), \
     "the SYSTEM,PART & MIDI part-2 template moved"
-assert (0x12 << 14) | (0x60 << 0) == DUMP2_LEN or \
-       ((0x00 << 14) | (0x12 << 7) | 0x60) == DUMP2_LEN
+assert (0x00 << 14) | (0x12 << 7) | 0x60 == DUMP2_LEN, "length septets"
+assert (0x40 << 14) | (0x00 << 7) | 0x20 == DUMP2_ADDR, "address septets"
 for addr in (0x7F32, 0x7F38, 0x7F4D):
     assert DUMP2_SRC_LO <= addr < DUMP2_SRC_HI
 
@@ -738,12 +774,13 @@ def main():
     print("  (the only bases in the block are 0x7F36, used at offset 0, and")
     print("   0x7F39, whose two index tables use offsets 0, 1 and 2 only)\n")
 
-    print("so EXCLUSIVE = OFF withholds exactly:")
+    print("so EXCLUSIVE = OFF withholds:")
     print("  * the `25` tempo message, sent AND received")
-    print("  * every General MIDI System On/Off message the instrument SENDS")
-    print("and withholds nothing else.  Not affected: bulk dump in either")
+    print("  * anything the staged-parameter emitter 0xFB4B7D would put out")
+    print("and withholds nothing else.  NOT affected: bulk dump in either")
     print("  direction, dump requests, the handshake, `2B`/`2C` parameter")
-    print("  traffic, and General MIDI messages the instrument RECEIVES.\n")
+    print("  traffic, General MIDI messages the instrument RECEIVES, and --")
+    print("  see below -- the General MIDI messages it SENDS.\n")
 
     print("what the outgoing-SysEx routine 0xFB4B7D can actually emit")
     print("  192 dispatch slots, %d of them a bare RET" % SLOTS.count(DEAD))
@@ -755,7 +792,16 @@ def main():
             print("    slot 0x%02X -> 0x%06X  descriptor list 0x%06X -- "
                   "placeholder, emits nothing" % (idx, LIVE[idx], DESC_LISTS[idx]))
     print("  the GM literals occur ONCE EACH in prom_b and are named by ONE")
-    print("  instruction each, both inside 0xFB4CAE, behind the gate\n")
+    print("  instruction each, both inside 0xFB4CAE.")
+    print("  ⚠ BUT 0xFB4CAE HAS A SECOND CALLER THAT IS NOT GATED.  0xFB5F2E")
+    print("  builds the same record itself -- number 0xB0, byte 0x11 for ON or")
+    print("  0x10 for OFF -- and calls 0xFB4CAE directly at 0xFB5F5C, so it")
+    print("  never reaches the EXCLUSIVE test.  It is held back instead by bit")
+    print("  7 of (0x60F020), which is set by the two General MIDI RECEIVE")
+    print("  handlers and nothing else: an echo interlock, not a user setting.")
+    print("  ⇒ switching EXCLUSIVE off does NOT stop the instrument sending")
+    print("    General MIDI System On/Off when General MIDI is switched on the")
+    print("    panel.  The filter's one live effect is the tempo message.\n")
 
     print("REALTIME MESSAGES -- two rows; only CLOCK touches System Exclusive")
     for k, cap in ((0, "REALTIME COMMANDS"), (1, "CLOCK")):
