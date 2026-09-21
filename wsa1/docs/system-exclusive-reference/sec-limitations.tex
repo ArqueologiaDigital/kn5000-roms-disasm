@@ -17,87 +17,24 @@ and \textsc{combination} blocks a dump carries.
 
 \section{Open, and what would close it}
 \begin{description}
-\item[What three inert bytes are for.] The combination stream is decoded in
-  section~\ref{sec:combmemory}, and chapter~\ref{ch:params} names most of what its
-  records hold; the effect records are named by chapter~\ref{ch:effects} instead. What was
-  left over has been read across the whole stored corpus --- 385 combinations of eight
-  parts, so 3\,080 part records, from three sources produced independently of one another:
-  the 129 presets carried in the program, 128 from a user's flash dump, and 128 more from
-  the combination area of a native disk file.
+\item[What three inert bytes are for.] Section~\ref{sec:combtail} settles how the tail of
+  a part block behaves: the reserved runs, the second \textsc{program change \& bank}, and
+  block~B's \bytes{+18}--\bytes{+1A}, which no code on either processor reads. That last
+  one leaves a question this project cannot answer from what it has. A byte the program
+  never reads has no purpose the program can reveal, so if those three ever meant
+  something it was to a version of the firmware that is not in any archive here --- which
+  makes this the same wall as the next item and not a separate one.
+\item[What the seventeenth stream's two events say.] Section~\ref{sec:seqmemory} decodes
+  \textsc{performance} --- 256-byte blocks numbered from one, chained by a 16-bit link at
+  \bytes{+03}, carrying a flat event stream --- establishes that entry $i$ of a song header
+  is track $i$, and shows the seventeenth stream to be a timekeeper: 999 events of which
+  997 are the clock, sharing no status with the sixteen recording tracks in either
+  direction.
 
-  \emph{Reserved.} Block~A holds the same value in all 3\,080 records at \bytes{+02},
-  \bytes{+04}, \bytes{+10} and \bytes{+15}--\bytes{+1A}, and block~B does at
-  \bytes{+00}--\bytes{+02}, \bytes{+0D}, \bytes{+11}, \bytes{+12} and \bytes{+15}. Every
-  one reads zero. Write zero there.
-
-  \emph{Named.} The last three bytes of each block are a second \textsc{program change \&
-  bank} for that part: \bytes{+1B} and \bytes{+1C} are one 7-bit number split four bits
-  and three, and \bytes{+1D} is a bank drawn from the same values the part's own bank
-  uses. Of the 890 parts carrying a non-zero one, the number and the bank \emph{both}
-  match the part's own in 296, and the number never matches without the bank matching too
-  --- against a control, the same test run against a neighbouring part, that lands 39
-  times. The pair \bytes{+1B},~\bytes{+1C} takes \textbf{exactly 128 distinct values}
-  across the corpus, which is what a 7-bit number split four and three must and which no
-  rival reading of those two bytes predicts. The shape is confirmed from outside the dump
-  as well: the instrument's re-map files are sixteen groups of eight, the same 4+3 split,
-  holding entries that are exactly (number, source) pairs. A second copy of an address
-  that usually differs from the first is an indirection, which is also why the triple is
-  not a function of the program number.
-
-  The program agrees. These bytes are never named by an address --- a part record is
-  reached through a pointer, which is why earlier searches for their addresses found
-  nothing --- but they are named by displacement off that pointer, and those are short
-  distinctive byte strings. There are three sites that write all three bytes and three
-  that read all three, in both images, and \textbf{not one site anywhere touches any of
-  the three on its own}: they are a single field. At the writing site the values come back
-  from a conversion whose input is written to a fixed address as \emph{two} bytes and
-  whose result is read from another as \emph{three}, with an inverse beside it that takes
-  three and returns two. A three-byte form of a two-byte quantity is exactly what a program
-  number and a bank become.
-
-  \emph{Inert.} Block~B's \bytes{+18}--\bytes{+1A} take fifteen distinct combinations
-  across the corpus and read \bytes{01 01 01} or \bytes{00 01 01} in four records out of
-  five. Nothing names them, and both halves of that have now been measured rather than
-  assumed.
-
-  From the data: over all 3\,080 part records and 220 byte columns, none of the three is a
-  copy of any other column, the three together are not a copy of any other three-byte run,
-  and no column determines any of them --- the best dependency is 0.62 of the target's
-  entropy where a shuffled control scores 0.03 and a determination would score 1. The
-  closest match, \bytes{+1A} agreeing with \bytes{+03} in 97.6\,\% of records, is two
-  nearly-constant columns agreeing and nothing more.
-
-  From the program: a part record is reached through a pointer, so these bytes are named
-  by displacement, and there are two displacements they could carry --- block~B sits
-  \bytes{20} past block~A. Counting every individual access at either, across all four
-  images and not only the two the instrument's panel runs on, there are 127. Three of them
-  come near the pointer table that holds part records, and all three are in one routine
-  which indexes that table \emph{without} the step that selects a part, so it reaches a
-  sibling structure. None reaches a part record. The test for that is controlled: it fires
-  on the bytes next door, where 6 of 91 accesses do reach a part record, including the
-  sites that write the triple.
-
-  So these three bytes are carried in stored data and copied wholesale, and no code treats
-  them as fields. For a librarian that is actionable --- preserve them, do not compute
-  them. What remains open is only what they are \emph{for}, and since no code on this
-  processor reads them the answer is not in this program; the obvious place to look next is
-  the second processor.
-
-  Also open: which side of the indirection the triple holds --- what the part asked for,
-  or what it resolved to. Eight of the nine re-maps in the corpus are identity maps, so
-  the two sides coincide wherever it could be checked. Deciding it needs a machine with a
-  non-identity re-map loaded, dumped.
-\item[What the seventeenth stream carries.] Section~\ref{sec:seqmemory} covers a song
-  record's shape entirely, decodes \textsc{performance} --- 256-byte blocks numbered from
-  one, chained by a 16-bit link at \bytes{+03}, carrying a flat event stream whose
-  statuses and lengths are tabulated --- and establishes that entry $i$ of the song
-  header is track $i$.
-
-  Sixteen of the seventeen entries are the sixteen recording tracks Technics publishes,
-  each naming its own part in every controller event it carries. The seventeenth names no
-  part. What it holds is the one thing about the sequencer this reference does not say,
-  and a recording made on a known single track would settle it along with the roles of the
-  header's other two seventeen-entry tables.
+  It carries two other events, of kinds that appear nowhere else. What they mean is not
+  established, and the limit here is the corpus rather than the method: one song is two
+  events. A handful of recordings, or one made deliberately with a known tempo and time
+  signature, would name them in an afternoon.
 \item[Operating system version 1.] Everything here describes version 2.0. Closing this
   needs a dump of the earlier firmware, and there is not one to be had. The archive this
   project works from carries a single firmware set, whose own accompanying note calls
