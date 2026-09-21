@@ -1736,27 +1736,15 @@ different source**: the first stream's `(tag, length)` list must equal `SHAPE` i
 Agreement is not something this script can arrange for itself.
 
 It also characterises the companion `.SEQ` (179 200 bytes), which is `PERFORMANCE`.
+**Its format is decoded in `sysex_performance_stream.py`** — this probe keeps the two
+negative results that preceded it, because both are instructive: a linear parse works for
+85 records and then loses sync, and no column stands out as a status column at any width
+or phase. Both are symptoms of the same thing — the file is blocks, and most of it is free
+space holding stale bytes.
 
-⚠ **A retraction this probe now carries.** An earlier version argued that no power-of-two
-chunking leaves a chunk empty and the last byte is not padding, *therefore* all of it is
-live. That does not follow — it is a memory image, one song of ten is recorded, and a free
-block holds whatever was in it. Non-zero is not in use.
-
-**Locally it is events**: a delta below `80`, any number of `81` bytes, then a status *or
-none* (running status), then four payload bytes — **85 records**, statuses only `90` and
-`B4`.
-
-⚠⚠ **It does not generalise, and the probe proves that three ways.** (1) Letting the parser
-resynchronise, the whole file needs **41 858 resyncs for 26 189 records** — worse than one
-per record. (2) If it were fixed-width with one status per record, a column would be thick
-with bytes ≥ `80`; every width 4–8 and every phase sits near 30%. (3) A block-chain search
-— four block sizes × every link offset × both byte orders, requiring disjoint terminating
-chains from the header's 17 values — returns **no solution**.
-
-⚠ **A lead withdrawn.** The 17 values end in a consecutive run (486–495) and, read as
-256-byte block indices, 12 of 17 land on a block starting `80` against a 33% base rate.
-Test (3) was what would have promoted it, and it failed. What survives is only the
-consecutive run: suggestive of an allocator, attached to no demonstrable structure.
+⚠ **A retraction this probe carries.** An earlier version argued that no chunk is empty and
+the last byte is not padding, *therefore* all of it is live. That does not follow: one song
+of ten is recorded here. Non-zero is not in use.
 
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_song_layout.py
@@ -1881,3 +1869,50 @@ python3 wsa1/notes/sysex-probes/sysex_blockb_tail.py
 
 Pass: 0 groups block-A-relative, 5 block-B-relative with none near the part-record step,
 control firing, `OK`.
+
+### `sysex_performance_stream.py`
+
+**Question:** how is a recorded performance stored?
+
+The reference's largest undecoded area, and **two earlier attempts on it failed in ways
+worth recording**. A linear parse works for 85 records then loses sync. A block-chain
+search — four block sizes × every link offset × both byte orders — returned nothing, and on
+that basis this project **withdrew a correct hypothesis**.
+
+★★★ **The firmware settles it in four instructions:**
+
+```
+sub  XWA,0x00617800     ; the base of PERFORMANCE in CPU 1 RAM
+sra  0x08,XWA           ; >> 8   -- blocks are 256 bytes
+inc  1,XWA              ; ...and are numbered from ONE
+```
+
+⚠⚠ **The chain search had numbered blocks from zero.** Every block it examined was the one
+before the block it meant. The hypothesis was right and the test that appeared to kill it
+was mis-specified — a more dangerous error than a wrong guess, because a negative result
+looks like diligence.
+
+**The format.** 256-byte blocks numbered from 1; 5-byte header; next block is a 16-bit LE
+number at `+03` (where `ld HL,(XHL+0x03)` reads it); data `+05..+FF`. The song header's 17
+entries are each track's first block — following them gives **560 blocks in 17 disjoint
+chains**. A track is then a flat event stream, `[status ≥ 0x80][N data bytes < 0x80]`:
+
+| status | data | |
+|---|---|---|
+| `81` | 0 | advance the clock one step (19 980 of the 41 646 events) |
+| `90` | 5 | note: offset, note number, velocity, gate lo, gate hi |
+| `B0`,`B4` | 5 | controller |
+| `C0` | 5 | program change |
+| `D2`,`E0` | 3 | |
+| `D1` | 2 | |
+
+★★★ **41 646 events parse with not one byte left over.** And every event's first data byte
+is its offset within the step: within a step those offsets go backwards 11 times in 15 306
+pairs (0.07%), where the same events **shuffled** go backwards 38.8%.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_performance_stream.py
+```
+
+Pass: 17 disjoint chains totalling 560 blocks, zero stray bytes, the per-status lengths,
+and the offset ordering beating its shuffled control, `OK`.

@@ -233,7 +233,8 @@ at & size & \\
 \bytes{+0A0} & 17 & 17 entries of 1 byte, unused $=$ \bytes{05} \\
 \bytes{+0CA} & 6  & the song \textsc{name} \\
 \bytes{+100} & 51 & 17 entries of 3 bytes, unused $=$ \bytes{00 FF FF}; in use the first
-                    byte reads \bytes{80} and the other two are a 16-bit value \\
+                    byte reads \bytes{80} and \textbf{the other two are that track's
+                    first block in \textsc{performance}} \\
 \bytes{+134} & 204 & 51 entries of 4 bytes, identical in all ten records \\
 \bytes{+200} & 7  & a second signature, \bytes{5A 5A 01 00} then \bytes{WA0} \\
 \bottomrule
@@ -248,12 +249,17 @@ seventeen \bytes{+100} entries is in use, and the last ten of their 16-bit value
 consecutively --- which is what a block allocator handing out consecutive blocks looks
 like, though this reference does not decode what they index.
 
+The per-track reading is no longer a guess about the \bytes{+100} table: its seventeen
+values are the seventeen chains of \textsc{performance} blocks, and following them
+produces seventeen \emph{disjoint} chains, which nothing but a real per-track index would
+do. The other two tables are the same length and are read the same way here, which is an
+inference from their length rather than a measurement.
+
 Technics publishes the track count, and it is \textbf{sixteen}: ``this instrument's
-\textsc{sequencer} has 16 recording tracks''. So the tables carry one entry more than
-there are tracks. The instrument's own help text names three special tracks besides the
-melody ones --- \textsc{rhythm}, \textsc{chord} and \textsc{control} --- and a per-track
-reading of the tables is the natural one. The seventeen is a measurement; which track each
-entry belongs to, and what the seventeenth is for, are not established here.
+\textsc{sequencer} has 16 recording tracks''. So there is one entry, and one chain, more
+than there are recording tracks. The instrument's own help text names three special tracks
+besides the melody ones --- \textsc{rhythm}, \textsc{chord} and \textsc{control}. Which
+entry is which track, and what the seventeenth carries, are not established here.
 
 \paragraph{The 128 bytes after it.} \bytes{+B80} to the end is identical in all ten
 records, recorded and empty alike, and is almost entirely zero. Nothing a song does
@@ -267,52 +273,73 @@ fixed-size song records are not --- so it is the recorded material, the
 sequencer and not from anything in the program, and it is the one claim here that rests
 on an inference rather than a decode.
 
-What can be said about it is deliberately little, and one thing said in an earlier
-edition has to be taken back. Its commonest bytes are \bytes{00} at 16.1\,\%, \bytes{81}
-at 14.6\,\% and \bytes{90} at 9.9\,\%.
+\subsubsection*{The area is blocks}
 
-\begin{caution}{A retraction: ``fully used'' did not follow}
-An earlier edition argued that no power-of-two chunking of this file leaves a chunk empty
-and its last byte is not padding, \emph{therefore} all of it is live data. That does not
-follow. The file is an image of the sequencer's memory, one of its ten songs is recorded,
-and a free block holds whatever happened to be in it. Non-zero is not the same as in use,
-and most of this file is very likely free space holding stale bytes --- which is also the
-simplest explanation for everything below.
+\textsc{performance} is divided into \textbf{256-byte blocks numbered from one}. That is
+not inferred: the sequencer turns an address into a block number with three instructions
+--- subtract the area's base, shift right by eight, add one --- and turns it back with a
+decrement and a shift left by eight.
+
+A block's first five bytes are a header. The \textbf{next block's number is a 16-bit
+little-endian value at \bytes{+03}}, which is the offset the same routine reads it from,
+and a chain ends on \bytes{0000} or \bytes{FFFF}. The data is \bytes{+05} to \bytes{+FF}.
+
+The seventeen entries in a song's header (section~\ref{sec:seqmemory}) hold each track's
+\emph{first} block. Following all seventeen gives 560 blocks and the chains are
+\textbf{disjoint} --- no block belongs to two tracks --- which is the first check that the
+reading is right. They account for four fifths of the area; the rest is free, and holds
+whatever was last written there.
+
+\begin{caution}{A withdrawn hypothesis that was correct, and why the test missed it}
+An earlier edition of this chapter recorded, as a lead, that the seventeen values looked
+like 256-byte block numbers. It then reported a search for a link field --- four block
+sizes, every offset within a block, both byte orders, requiring disjoint chains --- that
+found nothing, and withdrew the lead on that basis.
+
+The search was wrong, in one respect: it numbered blocks from zero. Every block it
+examined was the one before the block it meant. The hypothesis was right and the test that
+appeared to kill it was mis-specified, which is a more dangerous kind of error than a
+wrong guess, because a negative result looks like diligence.
+
+What settled it was not a better search. It was reading the four instructions in the
+firmware that form a block number, which say \bytes{+1} in as many words.
 \end{caution}
 
-\emph{Locally} it is events. From the first one the stream parses as a delta below
-\bytes{80}, then any number of \bytes{81} bytes, then a status --- or no status at all,
-which is MIDI running status --- then four payload bytes. It runs that way for
-\textbf{85 records}, and the only statuses are \bytes{90}, note-on, and \bytes{B4}, a
-control change.
+\subsubsection*{The events}
 
-\emph{And it does not generalise.} Letting the same parser skip a byte and retry whenever
-it fails, across the whole file it needs 41\,858 resynchronisations for 26\,189 records
---- worse than one per record. So those 85 are a local run and not the encoding. Two
-other measurements say the same thing. If the stream were fixed-width with one status per
-record, one column would be thick with bytes at or above \bytes{80}: for every width from
-4 to 8 and every phase within it, each column sits at about 30\,\%. And asking whether
-the file is block-allocated --- four block sizes, every possible link offset within a
-block, both byte orders, requiring disjoint terminating chains from the seventeen values
-in the song header --- returns no solution at all.
+Reassembled, a track is a flat stream with no delta before each event: a status byte at or
+above \bytes{80}, then a fixed number of data bytes, every one below \bytes{80}. Across
+all seventeen tracks that parses \textbf{41\,646 events with not one byte left over}.
 
-The event encoding is \textbf{not} decoded here, and after those three tests the honest
-next step is the playback routine rather than any further pattern-matching on the bytes.
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+status & data & \\
+\midrule
+\bytes{81} & 0 & advance the clock one step \\
+\bytes{90} & 5 & a note \\
+\bytes{B0}, \bytes{B4} & 5 & a controller \\
+\bytes{C0} & 5 & a program change \\
+\bytes{D2} & 3 & \\
+\bytes{E0} & 3 & \\
+\bytes{D1} & 2 & \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\begin{note}{What the manual contributes, and one observation that did not survive}
-The published capacity is a ``16-track, 47\,000 note Sequencer''. Over a
-\textsc{performance} of the size seen here that is a shade under four bytes a note, which
-is the right order for an event of a delta, a note, a velocity and a length, and is the
-one external constraint on the encoding this reference has.
+Time is carried by the events themselves. \bytes{81} takes no data and does nothing but
+advance the clock, and it is much the commonest status --- 19\,980 of the 41\,646. Every
+other event's \textbf{first data byte is its offset inside the current step}: within a
+step those offsets never go backwards, 11 times in 15\,306 consecutive pairs, where the
+same events shuffled go backwards 38.8\,\% of the time.
 
-An earlier observation is withdrawn. The song header's seventeen values end in a
-consecutive run --- 486 to 495 --- which is the trail an allocator leaves, and read as
-indices into 256-byte blocks twelve of the seventeen land on a block beginning \bytes{80}
-against a base rate of 33\,\%. That was recorded as a lead. The chain search above was the
-test that would have turned it into a finding, and it failed, so the lead is left standing
-only as the consecutive run: suggestive of an allocator, attached to no structure this
-reference can demonstrate.
-\end{note}
+A note's five bytes are then the offset, the note number, the velocity, and a gate length
+in two 7-bit halves. Over 14\,380 notes the note-number column stays inside 25--126 and
+the velocity column inside 1--127, which is what those two columns have to look like and
+what no other assignment of the five produces.
+
+A handful of statuses outside the table appear a few times each, at the ends of chains
+where a block's last event is cut short; they are not part of the format.
 
 \begin{note}{Reassembly is self-checking}
 A block reassembled correctly comes out at exactly the length its own header declared. A
