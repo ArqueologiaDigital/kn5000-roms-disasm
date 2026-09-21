@@ -413,6 +413,25 @@ for off, c1, c2, rec in NAMED:
     cands = [p for p in PARTS if p.rec == 0x00 and p.off == off]
     assert cands, "no part parameter at offset +0x%02X" % off
 
+# ----------------------------------------- one more block the ROM names itself
+# prom_a's ScaleTuning_* routines name RAM 0x78A2 as the temperament selector
+# and 0x78A4..0x78AF as the twelve USER offsets.  0x78A2 is common parameter
+# 00 10 11 and the twelve bytes are 00 10 13 .. 00 10 1E, in semitone order.
+assert a_(0xFC0D41, 5) == bytes([0xC1, 0xA2, 0x78, 0x3F, 0x80]), \
+    "ScaleTuning_PostAllTwelveSemitones no longer tests (0x78A2) against 0x80"
+assert a_(0xFC0DB4, 5) == bytes([0x43, 0xA4, 0x78, 0x00, 0x00]), \
+    "the USER row is no longer at 0x78A4"
+assert a_(0xFC0D84, 5) == bytes([0x43, 0x00, 0x68, 0xF0, 0x00]), \
+    "the ROM scale table is no longer 0xF06800"
+assert a_(0xFC0D7E, 4) == bytes([0x20, 0x0C, 0xC8, 0x41]), "the row stride is not 12"
+assert a_(0xFC0D61, 3) == bytes([0xC9, 0xCF, 0x0C]), "the USER loop is not 12 long"
+assert a_(0xFC0D8D, 3) == bytes([0xC9, 0xCF, 0x0C]), "the ROM loop is not 12 long"
+assert RECPTR[0x92] == 0x78A2, "record 0x92 is no longer 0x78A2"
+SCALE12 = [p for p in PARAMS if p.b7 == 0x10 and 0x13 <= p.b8 <= 0x1E]
+assert len(SCALE12) == 12, "the twelve scale parameters are %d" % len(SCALE12)
+assert [ram_of(p) for p in sorted(SCALE12, key=lambda q: q.b8)] == \
+    list(range(0x78A4, 0x78B0)), "00 10 13..1E are not 0x78A4..0x78AF in order"
+
 # ------------------------------------------------------- the value white-lists
 # desc+0x0E, for the three generic setters only, indexes a 6-byte record at
 # 0xF51E58: a 16-bit COUNT and a 32-bit pointer to that many legal byte values.
@@ -430,6 +449,9 @@ assert LISTS[0][2] == [0x00, 0x40, 0x41, 0x42], "list 0 changed"
 assert LISTS[2][0] == 15 and LISTS[2][2][0] == 0x00 and LISTS[2][2][-1] == 0x80, \
     "list 2 changed"
 assert LISTS[3][2] == [0x00, 0x02, 0x03, 0x04], "list 3 changed"
+# list 2 is the temperament white-list; its last value is the one
+# ScaleTuning_PostAllTwelveSemitones sends to the USER RAM row.
+assert LISTS[2][2][-1] == 0x80, "USER is no longer the last legal temperament"
 for p in PARAMS:
     if p.setter in GENERIC and p.xlat != 0xFF:
         cnt, ptr, vals = LISTS[p.xlat]
@@ -452,6 +474,19 @@ def rows():
 
 def main():
     argv = sys.argv[1:]
+    if "--named" in argv:
+        print("\nWHAT THE INSTRUMENT ITSELF CALLS THESE PARAMETERS")
+        print("  (a) the mixer strip -- caption at y=212 directly over the value at y=226")
+        for i, x in enumerate(COLS):
+            print("      x=%-4d COMBINATION MODE %-5s SOUND MODE %s" %
+                  (x, CAPS[i][2], CAPS_SM[i][2]))
+        print("  (b) prom_a's own routine names")
+        print("      00 10 11     ScaleTuning_PostAllTwelveSemitones tests it; 0x80 = USER")
+        print("      00 10 13..1E ScaleTuning_PostSemitoneFromUserRam reads 0x78A4, 12 long")
+        print("      00 20 41     the nibble 0xFB9C1A writes for records 0..15 is the")
+        print("                   MIDI channel; the strip prints it 1-01..2-16")
+        return 0
+
     if "--lists" in argv:
         print("\nVALUE WHITE-LISTS (desc+0x0E -> 0xF51E58 + 6*n), generic setters only")
         for i, (cnt, ptr, vals) in sorted(LISTS.items()):

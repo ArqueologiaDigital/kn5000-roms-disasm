@@ -15,7 +15,7 @@
 | `sysex_wire_capture_check.py` | Does a dump a REAL machine put on the wire obey the frame format decoded from the ROMs? Checks the handshake, header, nibble payload, 0xFC cap, continuation flag, checksum and declared length of all 2883 messages of a captured SOUND+COMBINATION dump. | `python3 wsa1/notes/sysex-probes/sysex_wire_capture_check.py` (summary) or `--frames` |
 | `sysex_model_variant.py` | What the keyboard/rack setting changes about the SysEx implementation: all six entries of the feature table and every reader of it, every other place the SysEx engine reads the setting, and the transmit-time rewrite of the model triple that makes a real rack's dump carry `04 01 11`. | `python3 wsa1/notes/sysex-probes/sysex_model_variant.py` (tables) or `--sites` (every compare site in prom_a) |
 | `sysex_unreachable_commands.py` | The command numbers that have a handler and NO accepted wire sequence (`0x06 0x0D 0x0F 0x10 0x11 0x1D`) — dead code, or reachable another way? — plus what `F0 50 7E` does when it is the WHOLE message, and what family `25` does besides carry a number. | `python3 wsa1/notes/sysex-probes/sysex_unreachable_commands.py` (tables) or `--steps` (every continuation slot) |
-| `sysex_param_addresses.py` | WHERE does each `00`-area parameter live: the WORK-RAM byte its descriptor names, the BULK-DUMP address of that byte, and -- for the eight on the mixer strip -- the screen caption that edits it. | `python3 wsa1/notes/sysex-probes/sysex_param_addresses.py` (the table), `--dump` (with dump addresses), `--strip` (the eight named parameters), `--lists` (the value white-lists) |
+| `sysex_param_addresses.py` | WHERE does each `00`-area parameter live: the WORK-RAM byte its descriptor names, the BULK-DUMP address of that byte, and -- for the eight on the mixer strip -- the screen caption that edits it. | `python3 wsa1/notes/sysex-probes/sysex_param_addresses.py` (the table), `--dump` (with dump addresses), `--strip` (the eight named parameters), `--named` (every name the ROM itself supplies), `--lists` (the value white-lists) |
 | `sysex_signature_checks.py` | The leading bytes of a block — `WA0`, `WSA1`, `WSA SOUND RAM S0`: do they encode a format or OS version, who checks them, and what happens on a mismatch? Also collects every piece of evidence in the four images bearing on an OS other than the dumped v2.0. | `python3 wsa1/notes/sysex-probes/sysex_signature_checks.py` (tables) or `--artefacts` (confront the ROM literals with a real dump and real disk files) |
 | `sysex_general_midi.py` | Does GENERAL MIDI mode change System Exclusive behaviour: which messages stop being accepted, whether bulk dump or the parameter families are affected, whether the instrument TRANSMITS on entering or leaving GM, and where the GM state sits inside a bulk dump. | `python3 wsa1/notes/sysex-probes/sysex_general_midi.py` (tables) or `--records` (all 77 records of the SYSTEM,PART & MIDI part-2 block) |
 
@@ -958,6 +958,15 @@ Both load bases asserted by content first (prom_b `F0 50 23 7E F7` at
   copies `0x4B0` WORDS from `0x7620` with `ldirw`, and `0x4B0 * 2 == 0x960`,
   so the block is one object. Every resolved parameter lands inside
   `0x7600..0x7F80`, and its dump address is `0x100000 + (RAM - 0x7600)`.
+* **★ A SECOND BLOCK THE ROM NAMES ITSELF.** prom_a's
+  `ScaleTuning_PostAllTwelveSemitones` (`0xFC0D41`) tests `(0x78A2)` against
+  `0x80` and, on a match, reads twelve bytes from `0x78A4`
+  (`ScaleTuning_PostSemitoneFromUserRam`, `ld XHL,0x000078a4` at `0xFC0DB4`);
+  otherwise it indexes twelve-byte rows of `ScaleTuningOffsets` at prom_b
+  `0xF06800`. `RecordPtrs[0x92] == 0x78A2`, so `00 10 11` is the temperament
+  selector and `00 10 13`..`00 10 1E` are the twelve USER offsets in semitone
+  order — and `0x80`, the last value of the white-list `00 10 11` uses, is the
+  one the routine sends to the USER row.
 * **The names come from the instrument's own mixer strip.** Eight interpreter-A
   text records at `0xF28A56..0xF28A97` (COMBINATION MODE) and
   `0xF28160..0xF281A1` (SOUND MODE) draw eight captions at **y = 212** and
