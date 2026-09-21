@@ -17,6 +17,12 @@ message & meaning \\
 Turning General MIDI on restricts the sounds and operations available and may rearrange
 the percussion map. General MIDI System Off has no effect if General MIDI is already off.
 
+A received message takes effect at once. The same change made at the front panel does not:
+the panel asks for a confirmation first, and the user can decline it. A controller sending
+General MIDI System On is therefore doing something the user cannot be offered the chance
+to refuse, and the mode change it causes is one the instrument warns will make material
+recorded in the other mode play back wrongly.
+
 Both messages are also written into Standard MIDI Files produced by the instrument, as a
 five-byte System Exclusive event at delta time zero.
 
