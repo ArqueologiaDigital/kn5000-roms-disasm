@@ -1528,11 +1528,14 @@ is a copy of memory with its headers intact. That also explains the `78 10` this
 had recorded as the second `SYSTEM,PART & MIDI` block's *signature* — it is the first
 record's tag and length.
 
-★ It also found a contradiction in `param_names.json`: `10/20 MAIN OUT EQUALIZER LOW-FREQ`
-is declared `00-11` but every combination holds 24 there. It is one of exactly two
-descriptors `sysex_param_addresses.py` already flags as not building its target from
-`+6`/`+7`, and it is the only row of 22 that fails — so that byte is the low **gain**, and
-the low-frequency byte is elsewhere.
+★ It also surfaced something about one descriptor. `10/20` and `10/21` — `MAIN OUT
+EQUALIZER LOW-FREQ` and `LOW-GAIN` — both name record `79` offset 1, with masks `1F` and
+`3F`. Every stored combination holds 24 there, which is inside `LOW-GAIN`'s declared
+`0..48` and outside `LOW-FREQ`'s `0..17`, in all 257 corpora. That is consistent with the
+flag `sysex_param_addresses.py` already raises on `10/20` — its setter does not build its
+target from `+6`/`+7`, so it writes somewhere the descriptor does not say. **The
+reference is unaffected**: it reports no dump position for that parameter, and the name
+and range it does print match the published table.
 
 ```sh
 python3 wsa1/notes/sysex-probes/sysex_combination_layout.py
