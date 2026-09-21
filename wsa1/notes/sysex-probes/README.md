@@ -1546,6 +1546,22 @@ python3 wsa1/notes/sysex-probes/sysex_combination_layout.py --fields
 Pass: the stream tiles 704 in all corpora, every tag is a live record number, the range
 and ordering tests hold, `OK`.
 
+### `sysex_block_signatures.py --tex <file>` — and where the signature comes from
+
+(The `--tex` mode is described above.) The probe also answers a second question:
+**does anything check the signature?**
+
+Block 1 of `SYSTEM,PART & MIDI` is 32 bytes held as a literal in prom_a at `0xFE704E`, and
+two routines copy it into RAM — one of them into `0x7600`, which *is* that block. Both are
+plain copy loops; **no comparison against the constant exists**, and none against its
+leading `5A 5A` either. So the instrument writes its signature and never reads it back:
+checking it is a librarian's job, not the instrument's.
+
+Coverage of that negative, which the probe states and asserts: every three-byte pointer to
+the constant (two sites, both copies, each verified to contain the load-store pair and a
+bound at `0x20`), and every immediate compare against `5A 5A` across both 512 KiB images.
+Code reaching the constant from another base would not be seen.
+
 ### `sysex_sequencer_layout.py`
 
 **Question:** how is the `SEQUENCER` bulk-dump block arranged?

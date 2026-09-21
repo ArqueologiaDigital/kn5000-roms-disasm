@@ -19,6 +19,18 @@ The first \textsc{system, part \& midi} block is a signature in the fullest sens
 of its bytes are a constant the instrument copies out of its own program when it
 initialises, with one byte filled in afterwards. It carries no settings.
 
+\begin{caution}{The instrument writes its signature but does not check it}
+Two routines copy that constant into memory and both are plain copy loops. No comparison
+against it was found anywhere in either program image, and none against its leading
+\bytes{5A 5A} either. \textbf{Do not expect a block with a wrong signature to be
+refused.} Checking it is something a librarian should do; the instrument does not.
+
+The coverage of that negative: every three-byte pointer to the constant, which is two
+sites, and every immediate comparison against \bytes{5A 5A} across both images. Code
+reaching the constant from a different base, or comparing through a pointer built
+elsewhere, would not have been seen.
+\end{caution}
+
 \section{Names}
 The \textsc{sound} block continues, immediately after its sixteen-byte signature, with
 sixteen-byte names in the instrument's own character set, padded with spaces. The second
