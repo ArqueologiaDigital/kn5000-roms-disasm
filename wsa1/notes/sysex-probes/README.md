@@ -746,3 +746,22 @@ script did exactly that.
 The other trap is treating the two unreferenced comparators as behaviour.
 They are shaped for block headers this firmware never tests; a manual that
 described them would describe something the instrument does not do.
+
+## `manual_model_markers.py` — the outside source for the model naming
+
+The firmware names neither model: it reads a hardware input and compares it against 1 or 2.
+The reference's "Which machine is which" note therefore rests on sources outside the
+program, and this makes one of them recheckable — Technics' own user guide marks
+keyboard-only features `(WSA1)`, **59** times, including the heading `Part VII Sequencer
+(WSA1)`.
+
+A model with no sequencer has nothing to put in a SEQUENCER bulk dump and no use for a
+tempo message, which is exactly the pair the other model refuses.
+
+```sh
+python3 wsa1/notes/sysex-probes/manual_model_markers.py
+```
+
+⚠ Only `WSA1-Practical Applications.pdf` has a usable text layer. The service manual and
+the technical guide are page images and `pdftotext` returns nothing from them — see
+`technics_roms/tools/render_service_manual_sheet.py` for those.
