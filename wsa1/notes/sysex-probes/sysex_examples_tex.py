@@ -207,9 +207,9 @@ def main():
       % (part, block, format(count, ",d")))
     w("bytes and the frame carries %d of them." % len(src))
     w("")
-    w("The payload decodes to \\bytes{%s}\\ldots, the signature chapter~5 gives for"
+    w("The payload decodes to \\bytes{%s}\\ldots, the"
       % " ".join("%02X" % b for b in src[:8]))
-    w("that block.")
+    w("signature section~\\ref{sec:signatures} gives for that block.")
     w("")
     w("That block is the one chapter~\\ref{ch:params} maps: a dump of this category can be")
     w("read against table~\\ref{tbl:partparams} directly, which is the cheapest way to")

@@ -23,7 +23,7 @@ pdflatex wsa1r-system-exclusive-reference.tex
 pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
 ```
 
-33 pages. Needs only a standard TeX Live.
+36 pages. Needs only a standard TeX Live.
 
 ## Files
 
@@ -32,12 +32,14 @@ pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of cont
 | `wsa1r-system-exclusive-reference.tex` | the document |
 | `style.tex` | page style and macros |
 | `sec-overview.tex` | ports, conventions, applicability |
+| `sec-glance.tex` | the one-page summary card |
 | `sec-framing.tex` | identifiers, termination, length limit |
 | `sec-message-set.tex` | message families, model triple, short messages |
 | `sec-bulk-dump.tex` | categories, data message, encoding, checksum, handshake |
 | `sec-universal.tex` | what is and is not honoured |
 | `sec-errors.tex` | the five screens and their causes |
 | `sec-blocks.tex` | block signatures and where the names are |
+| `tbl-signatures.tex` | **generated** — the block signatures, from a real dump |
 | `sec-settings.tex` | the EXCLUSIVE filter, which sockets carry what, memory protect |
 | `sec-parameters.tex` | the 2B/2C parameter address space |
 | `tbl-parameters.tex` | **generated** — the 108-parameter tables |
@@ -55,7 +57,12 @@ pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of cont
 python3 ../../notes/sysex-probes/sysex_param_table_tex.py tbl-parameters.tex
 ```
 
-`tbl-examples.tex` is generated the same way:
+`tbl-signatures.tex` and `tbl-examples.tex` are generated the same way:
+
+```sh
+python3 ../../notes/sysex-probes/sysex_block_signatures.py --tex tbl-signatures.tex
+```
+
 
 ```sh
 python3 ../../notes/sysex-probes/sysex_examples_tex.py tbl-examples.tex

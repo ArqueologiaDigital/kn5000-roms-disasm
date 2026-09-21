@@ -7,7 +7,7 @@ operating system version~2, and by confronting what that showed with a bulk dump
 from a real instrument.
 
 Technics did publish a specification of its own, and where that specification covers the
-same ground this document follows it and uses its terms --- section~1.2 says what it is and
+same ground this document follows it and uses its terms --- section~\ref{sec:published} says what it is and
 where it differs. Everything beyond it is inference from a disassembly, and inference can
 be wrong. Treat a statement here as a report of what one machine was observed to do, not
 as a guarantee about yours.
@@ -26,7 +26,7 @@ The instrument has two sets of MIDI sockets, MIDI~1 and MIDI~2. Ordinary perform
 is handled on both. \textbf{Bulk dump transfers use MIDI~1 only} --- a dump offered on
 MIDI~2 is not received, and the instrument sends dumps only from MIDI~1.
 
-\section{Relationship to the published documentation}
+\section{Relationship to the published documentation}\label{sec:published}
 Technics documented this instrument's System Exclusive implementation, in the
 \emph{Reference Guide} that shipped alongside the two user manuals. Its pages~34--35 carry
 a MIDI implementation chart headed \emph{Synthesizer} \textsc{[sx-wsa1]}
@@ -54,9 +54,12 @@ One statement of the published documentation is contradicted here: the meaning o
 
 \section{Verification}
 The message layouts, the payload encoding and the checksum rule in this reference have been
-checked against a bulk dump captured from a real instrument: 2\,883 messages carrying a
-\textsc{sound} and \textsc{combination} transfer. Of these, 2\,876 carry a checksum, and
-all 2\,876 verify under the rule given in chapter~3. Every transfer in the capture
+checked against a bulk dump captured from a real instrument: 2\,883 messages. Despite its
+name the capture is a three-category session --- \textsc{system, part \& midi},
+\textsc{sound} and \textsc{combination} --- which matters, because the first of those is
+the category chapter~\ref{ch:params} maps, so the parameter tables can be read against it
+directly. Of these, 2\,876 carry a checksum, and
+all 2\,876 verify under the rule given in chapter~\ref{ch:bulk}. Every transfer in the capture
 delivered exactly the byte count its header declared.
 
 The parameter placement in chapter~\ref{ch:params} has been checked against the same

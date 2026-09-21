@@ -1,0 +1,76 @@
+\chapter{At a glance}\label{ch:glance}
+
+Everything in this chapter is stated again, with its conditions, in the chapters that
+follow. This page is for someone who already knows the protocol and wants the bytes.
+
+\section{Frame}
+\begin{center}
+\bytes{F0} \quad \bytes{50} \quad \textsc{cmd} \quad \bytes{04} \quad \textit{md} \quad
+\bytes{11} \quad [\,\textsc{adr}$\times$3 \quad \textsc{siz}$\times$3 \quad \textsc{dt}\ldots \quad
+\textit{cn} \quad \textit{sm}\,] \quad \bytes{F7}
+\end{center}
+
+\bytes{04} is \textsc{pc}, the product; \textit{md} is \bytes{00} for the SX-WSA1 and
+\bytes{01} for the SX-WSA1R, and both are accepted by both; \bytes{11} is \textsc{ver}, the
+exclusive specification's version. \textsc{adr} and \textsc{siz} are 21-bit values in three
+seven-bit bytes, most significant first. There is no device or unit number anywhere.
+
+\section{Messages}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\bytes{F0 50 21 04 \textit{md} 11 F7} & \textsc{hrq} & hand shake request \\
+\bytes{F0 50 22 04 \textit{md} 11 F7} & \textsc{hrt} & hand shake routine \\
+\bytes{F0 50 23 7E F7} & \textsc{ack} & acknowledge \\
+\bytes{F0 50 24 7E F7} & \textsc{nak} & not acknowledged \\
+\bytes{F0 50 25 \textit{lo} \textit{hi} F7} & \textsc{tmp} & tempo, $\mathit{lo}+16\,\mathit{hi}$; no checksum \\
+\bytes{F0 50 27 7E F7} & \textsc{eok} & end of category \\
+\bytes{F0 50 28 7E F7} & \textsc{end} & end of dump \\
+\bytes{F0 50 29 7E F7} & \textsc{err} & abort \\
+\bytes{F0 50 2A 7E F7} & \textsc{ful} & destination full \\
+\bytes{F0 50 2B \ldots} & \textsc{drq} & request: \textsc{adr}, \textsc{siz}, no \textsc{dt} \\
+\bytes{F0 50 2C \ldots} & \textsc{itr} & write one parameter \\
+\bytes{F0 50 2D \ldots} & \textsc{btr} & bulk data, first frame \\
+\bytes{F0 50 7E \ldots} & \textsc{cdd} & bulk data, every frame after \\
+\midrule
+\bytes{F0 7E 7F 09 01 F7} & & General MIDI System On \\
+\bytes{F0 7E 7F 09 02 F7} & & General MIDI System Off \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Rules}
+\begin{description}
+\item[Payload.] Each source byte goes out as two bytes, \textbf{high nibble first}:
+  \bytes{F1} becomes \bytes{0F 01}. A payload is always an even number of bytes.
+\item[Checksum.] $\mathit{sm} = (0 - S) \mathbin{\&} \mathtt{7F}$, where $S$ sums every
+  byte from \bytes{50} through \textit{cn}. Equivalently everything after \bytes{F0},
+  checksum included, sums to zero modulo 128. Verified on reception for
+  \bytes{7E}, \bytes{2B}, \bytes{2C} and \bytes{2D} only.
+\item[Continue.] \textit{cn} is \bytes{01} while more frames follow, \bytes{00} on the last.
+\item[Size.] At most 256 bytes per message including \bytes{F0} and \bytes{F7}: 120 source
+  bytes in a \textsc{btr} frame, 125 in a \textsc{cdd} frame.
+\end{description}
+
+\section{Bulk dump}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textsc{adr} & area & menu name \\
+\midrule
+\bytes{40 00 00} & \textsc{panel} & \textsc{system, part \& midi} \\
+\bytes{20 00 00} & \textsc{sound memory} & \textsc{sound} \\
+\bytes{50 00 00} & \textsc{combination} & \textsc{combination} \\
+\bytes{60 00 00} & \textsc{sequencer} & \textsc{sequencer} (keyboard only) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Send \textsc{drq} with one of those to ask for a category. The instrument must be showing
+the \textsc{sysex bulk dump} screen to receive a dump, and bulk traffic works on the
+MIDI~1 sockets only.
+
+\section{Errors}
+\textsc{error 40} wrong product, model or version. \textsc{error 41} anything wrong with
+reception, including a missing acknowledgement. \textsc{error 42} an internal deadline, not
+a fault at the far end. \textsc{error 21} the destination is full.

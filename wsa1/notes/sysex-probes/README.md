@@ -1299,3 +1299,38 @@ python3 wsa1/notes/sysex-probes/sysex_names_crosscheck.py
 ```
 
 Pass: all 39 addresses are ones the guide also names, both counts are printed, `OK`.
+
+### `doc_glance_consistency.py`
+
+**Question:** does the reference's one-page summary card still agree with the chapters it
+summarises?
+
+A summary that drifts from its source is worse than none, because it is the page a reader
+copies from, and the drift is silent — both pages still compile and both still look right.
+This reduces every `\bytes{...}` on `sec-glance.tex` to its leading run of literal hex
+bytes and requires that run to appear in some other chapter.
+
+One-directional by construction: it catches the card claiming something no chapter says,
+and it cannot catch a chapter changing a value the card never mentioned. It prints its
+coverage so that limit is visible — currently **20 checkable sequences of 40 groups**, the
+other 20 beginning with a variable field.
+
+```sh
+python3 wsa1/notes/sysex-probes/doc_glance_consistency.py
+```
+
+Pass: every checkable sequence found, counts printed, `OK`.
+
+### `sysex_block_signatures.py --tex <file>`
+
+The probe now also writes the reference's signature table.
+
+⚠ **A defect it used to have, and the document inherited:** it printed 8 hex bytes beside
+16 characters of text, inviting the reader to match two columns that do not correspond. It
+now prints all sixteen bytes, in two rows of eight with the matching eight characters
+beside each, and the document's table is generated from it rather than typed.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_block_signatures.py --tex \
+    wsa1/docs/system-exclusive-reference/tbl-signatures.tex
+```

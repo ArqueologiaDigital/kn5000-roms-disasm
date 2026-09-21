@@ -221,6 +221,13 @@ def main():
     w("\\end{tabular}")
     w("\\end{center}")
 
+    if any("\\dag" in r for r in out):
+        out += ["", "\\noindent A name marked \\dag{} is a match on value range or bit",
+                "count rather than a statement by the instrument or its manufacturer.", ""]
+    else:
+        out += ["", "%% no \\dag emitted: every name is ESTABLISHED, so no legend is needed",
+                ""]
+
     text = "\n".join(out) + "\n"
     if len(sys.argv) > 1:
         open(sys.argv[1], "w").write(text)

@@ -42,6 +42,14 @@ one header covering all 262\,144 bytes, which is 32 repeats of an 8\,192-byte la
 each closed by its own end-of-category message, with a single end-of-dump message after
 the last.
 
+\begin{note}{The transmit order is not the menu order}
+The table above is in transmit order, which a capture from a real instrument confirms:
+\textsc{system, part \& midi} goes first. The \textsc{sysex bulk dump} menu lists the
+same categories in a different order, with \textsc{sound} at the top. A receiver should
+take each transfer's \textsc{adr} as the statement of what is arriving, and not infer the
+category from its position in the session.
+\end{note}
+
 The \textsc{sequencer} category is the only one whose final message has no fixed length ---
 it carries as much recorded material as the instrument holds.
 
@@ -79,7 +87,25 @@ seven of the eight blocks are pinned on all six bytes; see below.
 \item[\bytes{\textit{sum}}] \textsc{sm}, the checksum.
 \end{description}
 
-A message is filled to at most 252 bytes before being sent; longer transfers are split.
+\subsection*{How much each frame carries}
+A complete message may not exceed 256 bytes including \bytes{F0} and \bytes{F7}
+(chapter~\ref{ch:framing}), and the two frame shapes reach that limit differently, because
+a \textsc{btr} header is eleven bytes where a \textsc{cdd} continuation header is two:
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+frame & total & payload bytes & source bytes \\
+\midrule
+\textsc{btr}, the first of a transfer & 255 & 240 & 120 \\
+\textsc{cdd}, every one after it      & 256 & 250 & 125 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Longer transfers are split across as many \textsc{cdd} frames as needed. Those figures are
+the observed maxima in a dump from a real instrument, not a stated limit; a sender may use
+less.
 
 \section{Payload encoding}
 Each source byte is sent as two message bytes, \textbf{high nibble first}:

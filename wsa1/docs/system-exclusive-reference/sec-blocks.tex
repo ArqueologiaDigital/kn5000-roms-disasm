@@ -6,23 +6,13 @@ fixed signature, and two of them carry readable names. Together these let a prog
 a stored dump before sending it back, and list what is in it, without understanding the
 rest.
 
-\section{Signatures}
+\section{Signatures}\label{sec:signatures}
 The bytes below are the first bytes of the reassembled block --- after the payload has been
-rejoined from its nibbles, not as they appear on the wire.
+rejoined from its nibbles, not as they appear on the wire. They were read out of a dump
+from a real instrument, and the two rows of each entry are the same sixteen bytes shown
+twice, as hexadecimal and as text.
 
-\begin{center}
-\begin{tabular}{lll}
-\toprule
-block & first bytes & as text \\
-\midrule
-\textsc{system, part \& midi} 1 & \bytes{5A 5A 01 00 57 41 30 00} & \texttt{ZZ..WA0.} \\
-\textsc{system, part \& midi} 2 & \bytes{78 10} \ldots               & \texttt{x.} \\
-\textsc{sound}                  & \bytes{57 53 41 20 53 4F 55 4E} & \texttt{WSA SOUND RAM S0} \\
-\textsc{combination} 1          & \bytes{5A 5A 5A 5A 00 00 57 53} & \texttt{ZZZZ..WSA1\ \ } \\
-\textsc{combination} 2          & \bytes{78 10} \ldots               & \texttt{x.} \\
-\bottomrule
-\end{tabular}
-\end{center}
+\input{tbl-signatures}
 
 A file whose first bytes do not match the block it claims to be is not a dump of that
 category.
