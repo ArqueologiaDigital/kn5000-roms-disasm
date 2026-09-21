@@ -20,8 +20,9 @@ and \textsc{combination} blocks a dump carries.
 \item[Some bytes inside a combination.] The combination stream is decoded in
   section~\ref{sec:combmemory}, and chapter~\ref{ch:params} names most of what its
   records hold; the effect records are named by chapter~\ref{ch:effects} instead, as a
-  type and its values. What is left is specific and small: in each part's first record
-  \bytes{+04} and \bytes{+15}--\bytes{+1D}, in its second \bytes{+00}--\bytes{+02},
+  type and its values. What is left is specific and small. Section~\ref{sec:combmemory} names
+  \bytes{+15} of a part's first record; the rest is \bytes{+04} and
+  \bytes{+16}--\bytes{+1D} there, in its second \bytes{+00}--\bytes{+02},
   \bytes{+0D}, \bytes{+11}, \bytes{+12}, \bytes{+15} and \bytes{+18}--\bytes{+1D},
   and in the part-common record \bytes{+02}, \bytes{+04} and \bytes{+06} onwards. A
   search of every menu screen that names a work-RAM byte finds a caption for none of

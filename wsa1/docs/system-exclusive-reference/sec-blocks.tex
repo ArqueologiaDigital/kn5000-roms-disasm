@@ -106,6 +106,30 @@ records, which are the tag and length. The stream is a copy of a region of the
 instrument's memory with its record headers intact.
 \end{note}
 
+\subsection*{One byte the parameter tables do not reach}
+A part's first record carries, at \bytes{+15}, six flags that no parameter addresses. Each
+says whether the part uses its own value for one of the \textsc{midi multiple messages
+output} settings or the instrument's internal one:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+bit & parameter \\
+\midrule
+0 & \textsc{program change} \\
+1 & \textsc{volume} \\
+2 & \textsc{panpot} \\
+3 & \textsc{chorus depth} \\
+4 & \textsc{reverb depth} \\
+5 & \textsc{bank select} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Six sibling routines each test one of those bits and then choose between the part's
+internal field and its override field; the six parameters are exactly the six the
+published tables give an override at all. Bits 6 and 7 are not accounted for.
+
 That also explains the second \textsc{system, part \& midi} block, whose first bytes
 chapter~\ref{ch:blocks} lists as \bytes{78 10}: those are not a signature but the first
 record's tag and length --- the same stream, beginning with the same name record.

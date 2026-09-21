@@ -1593,3 +1593,36 @@ python3 wsa1/notes/sysex-probes/sysex_sequencer_layout.py
 ```
 
 Pass: the routine's bytes are as expected, `2^11 + 2^10 == 3072`, `30720/3072 == 10`, `OK`.
+
+### `sysex_override_flags.py`
+
+**Question:** what is byte `+0x15` of a part's first record?
+
+One of the bytes no parameter reaches and no screen captions. It is a bit-field of **six
+override flags**, one per `MIDI MULTIPLE MESSAGES OUTPUT` setting — each says whether the
+part sends its own value or the internal one.
+
+Six sibling gates in prom_a, each a `bit n,(XIY+0x15)` whose taken branch chooses between
+a part's internal field and its override field:
+
+| bit | gate | parameter |
+|---|---|---|
+| 0 | `0xF97459` | `20/60` PROGRAM CHANGE |
+| 1 | `0xF974DB` | `20/63` VOLUME |
+| 2 | `0xF9750B` | `20/64` PANPOT |
+| 3 | `0xF9753B` | `20/66` CHORUS DEPTH |
+| 4 | `0xF9756B` | `20/65` REVERB DEPTH |
+| 5 | `0xF97489` | `20/61` BANK SELECT |
+
+Not assigned by order: each gate is a distinct address whose displacement byte *is* `0x15`
+and whose selector byte *is* the bit number, and the six parameters are independently
+known to be exactly the six carrying a second write — `sysex_param_addresses.py` flags
+those and only those.
+
+⚠ Bits 6 and 7 are not named.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_override_flags.py
+```
+
+Pass: all six are `bit n,(XIY+0x15)` at the stated bit, the bits are distinct, `OK`.
