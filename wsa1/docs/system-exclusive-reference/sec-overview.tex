@@ -36,6 +36,13 @@ against a plausible but wrong placement --- one uniform stride for all 32 parts,
 the two runs chapter~\ref{ch:params} describes --- the same check puts 69 fields out of
 range, so it is capable of rejecting a wrong map.
 
+Two fields in that capture label themselves. Every part's MIDI channel holds its own part
+number, so the 32 parts spell out an unbroken ramp from 0 to 31 --- which the wrong
+placement interrupts at part~8, the first part past the gap. Every part's pan holds 64,
+the value the instrument's own scale displays as \textsc{ctr}. Those two names in
+chapter~\ref{ch:params} therefore rest on a real dump as well as on the instrument's
+screen.
+
 \section{Conventions}
 Byte values are hexadecimal. A field written \bytes{\textit{nn}} takes one of the values
 listed for it. Ellipses inside a message stand for a body whose length depends on the

@@ -155,6 +155,50 @@ def scan(img, ram_of, verbose=False):
     return checked, bad
 
 
+def field(img, blk, par, part, ram_of):
+    for p in P.PARAMS:
+        if p.b7 == blk and p.b8 == par:
+            r = ram_of(p, part)
+            if r is None:
+                return None
+            off = r - RAM_LO
+            if not (0 <= off < len(img)):
+                return None
+            return (img[off] & p.mask) >> p.shift
+    raise KeyError("%02X %02X" % (blk, par))
+
+
+def witness(img):
+    """Two fields whose real values LABEL THEMSELVES, and what breaks them.
+
+    The MIDI channel of part n reads n, so the 32 parts spell out an unbroken
+    0..31 ramp.  A ramp is self-labelling twice over: it confirms which
+    parameter this is, and it confirms the record layout, because a wrong
+    layout has to interrupt it somewhere.  The single-stride control does
+    exactly that, at part 8 -- the first part past the hole.
+
+    PAN is the second: every part reads 64, and 64 is the entry the pan scale
+    itself labels CTR."""
+    real = [field(img, 0x20, 0x41, q, P.ram_of) for q in range(32)]
+    ctrl = [field(img, 0x20, 0x41, q, ram_of_control) for q in range(32)]
+    pan = [field(img, 0x20, 0x07, q, P.ram_of) for q in range(32)]
+
+    print("\nSELF-LABELLING FIELDS")
+    print("  MIDI channel, published map: %s" % real)
+    print("  MIDI channel, control map:   %s" % ctrl)
+    print("  PAN, published map:          %s" % sorted(set(pan)))
+
+    assert real == list(range(32)), "the MIDI channel is no longer an unbroken ramp"
+    assert ctrl != real, "the control map reproduces the ramp, so it proves nothing"
+    assert ctrl[8] != 8, "the control map no longer breaks at part 8"
+    assert set(pan) == {64}, "PAN is not centred in this dump: %s" % sorted(set(pan))
+    # 64 is what the instrument's own pan scale calls CTR
+    assert P.RECS[0xF28468]["ents"][64] == "CTR", "the pan scale moved"
+    print("  the ramp is unbroken on the published map and breaks at part %d on the"
+          % ctrl.index(0, 1))
+    print("  control; PAN reads 64 throughout, which that scale labels CTR")
+
+
 def main():
     img = build_image(reassemble(capture()))
     print("\nSYSTEM,PART & MIDI reassembled: %d bytes" % len(img))
@@ -165,6 +209,8 @@ def main():
     print("  %d fields checked, %d outside their declared range" % (checked, len(bad)))
     for b in bad:
         print("    %02X %02X part %-2d byte 0x%03X = %02X -> %d, declared %d..%d" % b)
+
+    witness(img)
 
     cchecked, cbad = scan(img, ram_of_control)
     print("\nCONTROL -- the same test on a single-stride part map, which is wrong")

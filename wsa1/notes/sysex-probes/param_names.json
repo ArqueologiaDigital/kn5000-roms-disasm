@@ -16,11 +16,11 @@
   "20/06": {"name": "REV", "confidence": "ESTABLISHED",
             "basis": "mixer strip, caption over the value cell that reads this byte"},
   "20/07": {"name": "PAN", "confidence": "ESTABLISHED",
-            "basis": "mixer strip; shown L64 to R63, 128 positions"},
+            "basis": "mixer strip; shown L64 to R63, 128 positions. In a real dump every part reads 64, the entry that scale labels CTR"},
   "20/40": {"name": "INT (internal sound)", "confidence": "ESTABLISHED",
             "basis": "mixer strip INT cell reads this bit"},
   "20/41": {"name": "MIDI channel", "confidence": "ESTABLISHED",
-            "basis": "mixer strip MIDI cell; shown 1-01 to 2-16, and the manual gives the same 32 values"},
+            "basis": "mixer strip MIDI cell; shown 1-01 to 2-16, and the manual gives the same 32 values. In a real dump the 32 parts read an unbroken 0..31 ramp"},
 
   "10/00": {"name": "OCT", "confidence": "ESTABLISHED",
             "basis": "mixer strip OCT cell reads this byte; shown -3 to +3"},
