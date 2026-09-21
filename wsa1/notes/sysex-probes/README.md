@@ -1400,7 +1400,7 @@ Pass: the number sets are equal, no effect declares more than 20 values, `OK`.
 
 ### `sysex_sound_memory.py`
 
-**Question:** is a *stored* sound the same thing as the sound parameter layout?
+**Question:** what is inside the `SOUND` and `COMBINATION` blocks of a bulk dump?
 
 Chapter 8 lays out the sound being **edited** — 713 bytes at `ADR 10 00 00`. The `SOUND`
 bulk dump is a different thing: 262144 bytes of sound **memory**. A librarian that wants
@@ -1423,4 +1423,13 @@ python3 wsa1/notes/sysex-probes/sysex_sound_memory.py
 python3 wsa1/notes/sysex-probes/sysex_sound_memory.py --names   # list every stored sound
 ```
 
-Pass: four banks of `0x10000`, 128 notes per drum run, at least 64 sounds per bank, `OK`.
+It resolves `COMBINATION` the same way: 16 combinations of 5632 bytes, each of **eight**
+parts of 704, every one of the 128 parts carrying a 16-character name two bytes in — the
+sound loaded into it. Eight parts is what a combination has. The combinations' own names
+are the last 256 bytes of the smaller block.
+
+⚠ 704 is **not** 713, so a combination part is not simply a stored sound, and the probe
+says so rather than assuming the layouts match.
+
+Pass: four banks of `0x10000`, 128 notes per drum run, at least 64 sounds per bank, all
+128 combination parts named, `OK`.

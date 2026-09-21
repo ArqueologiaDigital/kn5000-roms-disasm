@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Is a STORED sound the same thing as the sound parameter layout?
+"""What is inside the SOUND and COMBINATION blocks of a bulk dump?
 
 QUESTION IT ANSWERS
   Chapter 8 of the reference lays out the sound being EDITED -- the area at
@@ -24,8 +24,19 @@ WHY IT IS A REAL TEST
   not happen by chance in binary data.  The control is the arithmetic itself:
   any other stride breaks the run at the first record.
 
+THE COMBINATION BLOCK
+  The same walk resolves it: 16 combinations of 5632 bytes, each of EIGHT parts
+  of 704, and every one of the 128 parts carries a printable 16-character name
+  two bytes in -- the sound loaded into that part.  Eight parts is what the
+  instrument's COMBINATION mode has.  The combinations' own names are the last
+  256 bytes of the smaller COMBINATION block.
+
+  704 is NOT 713, so a combination part is not simply a stored sound; what the
+  rest of a part holds is not established here.
+
 SIGNAL BEING READ
-  SND_CMBI.syx, the SOUND transfer (ADR 20 00 00, 262144 bytes), reassembled
+  SND_CMBI.syx, the SOUND transfer (ADR 20 00 00, 262144 bytes) and both
+  COMBINATION transfers, reassembled
   from the wire.  Not committed: it ships in KN7000/WSA1R_files/SND_CMBI_syx.zip.
   Point SYSEX_CAPTURE at the .syx, or drop it beside this script.
 
@@ -82,17 +93,22 @@ def join(p):
     return bytes(((p[i] & 0x0F) << 4) | (p[i + 1] & 0x0F) for i in range(0, len(p), 2))
 
 
-def sound_block(buf):
-    acc = out = None
+def all_blocks(buf):
+    """Every completed transfer in the capture, keyed by its ADR."""
+    out, acc, adr = {}, None, None
     for m in messages(buf):
         if m[:3] == b"\xF0\x50\x2D":
-            acc = bytearray(join(m[12:-3])) if m[6] == 0x20 else None
+            adr, acc = tuple(m[6:9]), bytearray(join(m[12:-3]))
+            if m[-3] == 0x00:
+                out[adr], acc = bytes(acc), None
         elif m[:3] == b"\xF0\x50\x7E" and acc is not None:
             acc += join(m[3:-3])
             if m[-3] == 0x00:
-                out, acc = bytes(acc), None
-    assert out is not None, "the capture has no SOUND transfer"
+                out[adr], acc = bytes(acc), None
     return out
+
+
+COMB_SIZE, COMB_PARTS, PART_SIZE = 5632, 8, 704
 
 
 def strides():
@@ -105,8 +121,40 @@ def strides():
     return normal, note
 
 
+def check_combinations(blocks, printable_in):
+    c1 = blocks.get((0x50, 0x00, 0x00))
+    c2 = blocks.get((0x50, 0x06, 0x00))
+    if c1 is None or c2 is None:
+        print("\n  (the capture carries no COMBINATION transfer)")
+        return
+    assert len(c2) % COMB_SIZE == 0, "the combination block is not a whole number"
+    n = len(c2) // COMB_SIZE
+    assert COMB_PARTS * PART_SIZE == COMB_SIZE, "the part arithmetic does not close"
+    print("\nSTORED COMBINATIONS  (%d of %d bytes, %d parts of %d)"
+          % (n, COMB_SIZE, COMB_PARTS, PART_SIZE))
+    named = 0
+    for c in range(n):
+        for part in range(COMB_PARTS):
+            if printable_in(c2, c * COMB_SIZE + part * PART_SIZE + 2, NAME_NORMAL):
+                named += 1
+    print("  %d of %d parts carry a 16-character name two bytes in"
+          % (named, n * COMB_PARTS))
+    assert named == n * COMB_PARTS, "some parts have no name where one is expected"
+
+    at = len(c1) - n * NAME_NORMAL
+    names = [c1[at + i * NAME_NORMAL: at + (i + 1) * NAME_NORMAL] for i in range(n)]
+    assert all(all(32 <= c < 127 for c in s) for s in names), \
+        "the combination names are not the last %d bytes of the smaller block" % (
+            n * NAME_NORMAL)
+    print("  the %d combination names are the last %d bytes of the smaller block,"
+          % (n, n * NAME_NORMAL))
+    print("  beginning %r" % names[0].decode("latin1").strip())
+
+
 def main():
-    snd = sound_block(capture())
+    blocks = all_blocks(capture())
+    snd = blocks.get((0x20, 0x00, 0x00))
+    assert snd is not None, "the capture has no SOUND transfer"
     normal_stride, note_stride = strides()
     print("\nSOUND memory: %d bytes = %d banks of 0x%X"
           % (len(snd), len(snd) // BANK, BANK))
@@ -153,6 +201,9 @@ def main():
         at = 0 * BANK + NORMAL_AT[0]
         assert run(at, wrong, NAME_NORMAL) < 4, \
             "a stride of %d also produces a run; the test does not discriminate" % wrong
+    check_combinations(blocks, lambda b, o, n: len(b[o:o+n]) == n
+                       and all(32 <= c < 127 for c in b[o:o+n]))
+
     print("\n  a stride one byte either side of %d breaks the run immediately,"
           % normal_stride)
     print("  so the match is the layout and not an artefact of the search")

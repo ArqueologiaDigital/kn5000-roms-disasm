@@ -1,9 +1,8 @@
 \chapter{What a block contains}\label{ch:blocks}
 
 Every block opens with a fixed signature, and two of them carry readable names, which let
-a program check a stored dump and list what is in it. Beyond that, the \textsc{sound}
-block's contents are laid out below; the \textsc{combination} and \textsc{sequencer}
-blocks are not covered.
+a program check a stored dump and list what is in it. Beyond that, the \textsc{sound} and
+\textsc{combination} blocks are laid out below; \textsc{sequencer} is not covered.
 
 \section{Signatures}\label{sec:signatures}
 The bytes below are the first bytes of the reassembled block --- after the payload has been
@@ -47,11 +46,40 @@ a drum kit's 128 notes & \bytes{B468} & 150 bytes each \\
 A stored drum kit is likewise the layout of chapter~\ref{ch:sound}: its 128 note records
 sit at a 150-byte stride, each beginning with its thirteen-character name.
 
+\section{Inside the COMBINATION block}\label{sec:combmemory}
+The larger \textsc{combination} block is 16 combinations of 5\,632 bytes, and each of
+those is \textbf{eight parts of 704 bytes} --- the eight parts a combination has. Every
+part carries a sixteen-character name two bytes in: the sound loaded into it.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & at & \\
+\midrule
+combination \textit{c} & 5\,632 $\times$ \textit{c} & sixteen of them \\
+part \textit{p} & $+$ 704 $\times$ \textit{p} & eight per combination \\
+that part's sound name & $+$ 2 & sixteen characters \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The combinations' own names are the last 256 bytes of the smaller
+\textsc{combination} block, sixteen of sixteen characters.
+
+\begin{caution}{A combination part is not a stored sound}
+704 is not 713. A part is the same size for every part and carries a sound's name, but it
+is not the sound record of section~\ref{sec:soundmemory}, and what the rest of it holds is
+not covered here.
+\end{caution}
+
 \begin{note}{How this was established, and why it is not a coincidence}
 A dump from a real instrument was walked at a 713-byte stride from the first stored
 sound. Sixty-four consecutive records began with a printable sixteen-character name, in
 every bank, and the drum runs gave 128 consecutive thirteen-character names in every bank.
 A stride one byte either side of 713 breaks the run at the first record.
+
+The combination figures come from the same walk: all 128 parts of all 16 combinations
+carry a name where the 704-byte stride says one should be.
 \end{note}
 
 \begin{note}{Reassembly is self-checking}
