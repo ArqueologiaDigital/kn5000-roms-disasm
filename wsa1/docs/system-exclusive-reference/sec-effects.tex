@@ -1,0 +1,49 @@
+\chapter{Effects}\label{ch:effects}
+
+A sound carries three effect blocks --- \textsc{effect1}, \textsc{effect2} and
+\textsc{reverb} --- and each is a \textsc{type} byte followed by twenty \textsc{value}
+bytes, an \textsc{another eff send} and a \textsc{dynamic control}. The \textsc{type} byte
+selects one of 56 effects, and what the twenty \textsc{value} bytes mean depends entirely
+on which.
+
+\section{What the type byte selects}
+The numbers are not contiguous: they are grouped, with modulation effects below
+\bytes{10}, reverbs at \bytes{10}--\bytes{1B}, distortion and dynamics at
+\bytes{20}--\bytes{27}, a second modulation group at \bytes{30}--\bytes{38}, two-effect
+combinations at \bytes{40}--\bytes{4B} and three-effect combinations at
+\bytes{60}--\bytes{63}.
+
+Twelve of the reverbs are marked \textsc{(rev only)} in the published guide: they are
+intended for the \textsc{reverb} block rather than \textsc{effect1} or \textsc{effect2}.
+
+\begin{note}{Two sources agree on which effects exist}
+The table below was transcribed from the guide. Independently, this project
+disassembled the effects DSP and produced a manifest of every distinct effect program
+with the number that selects it. The two sets of numbers are equal --- 56 effects,
+no more on either side --- which is what makes the numbering here trustworthy.
+
+They disagree only in spelling, because the ROM carries the short names the instrument
+displays and the guide prints long ones. The table gives the guide's.
+\end{note}
+
+\section{What the value bytes mean}
+The \textsc{value} list below is the order the bytes appear in, so the first name is
+\textsc{value1}, the second \textsc{value2}, and so on. An effect that names fewer than
+twenty leaves the rest unused.
+
+The combination effects concatenate their components: the first block's parameters, then
+a dry/wet for the second block, then the second block's. A three-effect combination
+continues the same way.
+
+\begin{caution}{The value lists are transcribed, and not checked by anything}
+The effect \emph{numbers} are confirmed twice over. The \emph{names} in the value lists
+are not: they were read from scans, nothing independent states them, and a misreading
+would survive. Treat them as a guide to what the bytes are for rather than as a
+specification.
+
+Two further things the guide gives and this edition does not reproduce: the conversion
+from a byte value to a physical unit --- seconds, hertz, decibels --- which it prints as
+eighteen tables, and the block diagram of each effect.
+\end{caution}
+
+\input{tbl-effects}

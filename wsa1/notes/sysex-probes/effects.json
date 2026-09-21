@@ -1,0 +1,782 @@
+{
+ "_comment": [
+  "DSP effect catalogue. The VALUE parameter lists are transcribed from Technics'",
+  "Reference Guide, DSP EFFECT pages 3-32, which are image-only and were rendered",
+  "and read. The effect NUMBERS are cross-checked by sysex_effects.py against",
+  "wsa1/dsp/programs.tsv, which was derived independently from the ROMs.",
+  "",
+  "'values' is the order of the VALUE1..VALUEn bytes of an effect block.",
+  "An empty list means the effect takes no parameters."
+ ],
+ "effects": [
+  {
+   "prog": 0,
+   "guide_name": "NO OPERATION",
+   "values": []
+  },
+  {
+   "prog": 1,
+   "guide_name": "CHORUS",
+   "values": [
+    "WET",
+    "DEPTH",
+    "LFO SPEED",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 2,
+   "guide_name": "MODULATED CHORUS",
+   "values": [
+    "WET",
+    "DEPTH",
+    "SLOW LFO SPEED",
+    "FAST LFO SPEED",
+    "FAST LFO BALANCE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 3,
+   "guide_name": "ENHANCER",
+   "values": [
+    "WET",
+    "MANUAL",
+    "LOW MIX",
+    "HIGH MIX",
+    "DELAY TIME L",
+    "DELAY TIME R",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 4,
+   "guide_name": "FLANGER",
+   "values": [
+    "WET",
+    "DEPTH",
+    "LFO SPEED",
+    "RESONANCE",
+    "MANUAL",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 5,
+   "guide_name": "PHASER",
+   "values": [
+    "WET",
+    "DEPTH",
+    "LFO SPEED",
+    "RESONANCE",
+    "MANUAL",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 6,
+   "guide_name": "ENSEMBLE",
+   "values": [
+    "WET",
+    "DEPTH",
+    "LFO SPEED",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 8,
+   "guide_name": "GATED REVERB",
+   "values": [
+    "WET",
+    "GATE TIME",
+    "HIGH DUMP GAIN",
+    "THRESHOLD",
+    "MASK TIME",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 9,
+   "guide_name": "SINGLE DELAY",
+   "values": [
+    "WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "HIGH DUMP GAIN",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 10,
+   "guide_name": "MULTI TAP DELAY",
+   "values": [
+    "WET",
+    "DELAY 1",
+    "DELAY 2",
+    "DELAY 3",
+    "DELAY 4",
+    "PAN 1",
+    "PAN 2",
+    "PAN 3",
+    "PAN 4",
+    "FEED BACK",
+    "HIGH DUMP GAIN",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 11,
+   "guide_name": "MANUAL DELAY",
+   "values": [
+    "WET",
+    "MODULATION DEPTH",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "HIGH DUMP GAIN",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 16,
+   "guide_name": "ROOM REVERB 1 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 17,
+   "guide_name": "ROOM REVERB 2 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 18,
+   "guide_name": "PLATE REVERB 1 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 19,
+   "guide_name": "PLATE REVERB 2 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 20,
+   "guide_name": "CONCERT REVERB 1 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 21,
+   "guide_name": "CONCERT REVERB 2 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 22,
+   "guide_name": "DARK REVERB 1 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 23,
+   "guide_name": "DARK REVERB 2 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 24,
+   "guide_name": "BRIGHT REVERB 1 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 25,
+   "guide_name": "BRIGHT REVERB 2 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 26,
+   "guide_name": "WAVE REVERB 1 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 27,
+   "guide_name": "WAVE REVERB 2 (REV only)",
+   "values": [
+    "REVERB TIME",
+    "PRE DELAY",
+    "HIGH DUMP GAIN",
+    "EARLY REFL LEVEL",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 32,
+   "guide_name": "DISTORTION",
+   "values": [
+    "WET",
+    "DRIVE",
+    "ADJUST",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 33,
+   "guide_name": "OVERDRIVE",
+   "values": [
+    "WET",
+    "DRIVE",
+    "ADJUST",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 34,
+   "guide_name": "FUZZ",
+   "values": [
+    "WET",
+    "DRIVE",
+    "ADJUST",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 35,
+   "guide_name": "EXCITER",
+   "values": [
+    "WET",
+    "DRIVE",
+    "ADJUST",
+    "EMPHASIS Fc",
+    "EMPHASIS GAIN",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 36,
+   "guide_name": "COMPRESSOR",
+   "values": [
+    "WET",
+    "THRESHOLD",
+    "RATIO",
+    "ATTACK SENSITIVITY",
+    "RELEASE SENSITIVITY",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 37,
+   "guide_name": "SLOW ATTACKER",
+   "values": [
+    "WET",
+    "THRESHOLD",
+    "ATTACK RATE",
+    "RELEASE RATE",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 38,
+   "guide_name": "NOISE GENERATOR",
+   "values": [
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 39,
+   "guide_name": "PARAMETRIC EQ",
+   "values": [
+    "BAND EMPHASIS 1 Fc",
+    "BAND EMPHASIS 1 Q",
+    "BAND EMPHASIS 1 G",
+    "BAND EMPHASIS 2 Fc",
+    "BAND EMPHASIS 2 Q",
+    "BAND EMPHASIS 2 G",
+    "BAND EMPHASIS 3 Fc",
+    "BAND EMPHASIS 3 Q",
+    "BAND EMPHASIS 3 G",
+    "BAND EMPHASIS 4 Fc",
+    "BAND EMPHASIS 4 Q",
+    "BAND EMPHASIS 4 G",
+    "BAND EMPHASIS 5 Fc",
+    "BAND EMPHASIS 5 Q",
+    "BAND EMPHASIS 5 G",
+    "BAND EMPHASIS 6 Fc",
+    "BAND EMPHASIS 6 Q",
+    "BAND EMPHASIS 6 G",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 48,
+   "guide_name": "AUTO PAN",
+   "values": [
+    "WET",
+    "DEPTH",
+    "LFO SPEED",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 49,
+   "guide_name": "PITCH SHIFTER",
+   "values": [
+    "WET",
+    "PITCH L",
+    "PITCH R",
+    "PRE DELAY",
+    "FEEDBACK",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 50,
+   "guide_name": "VIBRATO",
+   "values": [
+    "WET",
+    "DEPTH",
+    "LFO SPEED",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 51,
+   "guide_name": "PEDAL WAH",
+   "values": [
+    "WET",
+    "RESONANCE",
+    "MANUAL",
+    "SWEEP RANGE",
+    "WAH CENTER Fc",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 52,
+   "guide_name": "AUTO WAH",
+   "values": [
+    "WET",
+    "RESONANCE",
+    "MANUAL",
+    "SWEEP RANGE",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 53,
+   "guide_name": "ROTARY SPEAKER",
+   "values": [
+    "WET",
+    "DRIVE",
+    "VOLUME ADJUST",
+    "TREBLE DEPTH",
+    "TREBLE FAST",
+    "TREBLE SLOW",
+    "TREBLE WIND UP",
+    "TREBLE WIND DOWN",
+    "BASS DEPTH",
+    "BASS FAST",
+    "BASS SLOW",
+    "BASS WIND UP",
+    "BASS WIND DOWN",
+    "VOLUME",
+    "SLOW/FAST"
+   ]
+  },
+  {
+   "prog": 54,
+   "guide_name": "RING MODULATOR",
+   "values": [
+    "WET",
+    "OSC SPEED",
+    "PHASE",
+    "OSC WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 55,
+   "guide_name": "HAAS EFFECT",
+   "values": [
+    "WET",
+    "DELAY TIME L",
+    "DELAY TIME R",
+    "BALANCE",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 56,
+   "guide_name": "MIX UP",
+   "values": [
+    "WET",
+    "DEPTH",
+    "SLOW LFO SPEED",
+    "FAST LFO SPEED L",
+    "FAST LFO SPEED R",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 64,
+   "guide_name": "SINGLE DELAY + CHORUS",
+   "values": [
+    "DELAY WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "CHORUS DRY/WET",
+    "DEPTH",
+    "LFO SPEED",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 65,
+   "guide_name": "SINGLE DELAY + SINGLE DELAY",
+   "values": [
+    "DELAY 1 WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "DELAY 2 DRY/WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 66,
+   "guide_name": "SINGLE DELAY + FLANGER",
+   "values": [
+    "DELAY WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "FLANGER DRY/WET",
+    "DEPTH",
+    "LFO SPEED",
+    "RESONANCE",
+    "MANUAL",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 67,
+   "guide_name": "SINGLE DELAY + VIBRATO",
+   "values": [
+    "DELAY WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "VIBRATO DRY/WET",
+    "DEPTH",
+    "LFO SPEED",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 68,
+   "guide_name": "SINGLE DELAY + PHASER",
+   "values": [
+    "DELAY WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "PHASER DRY/WET",
+    "DEPTH",
+    "LFO SPEED",
+    "RESONANCE",
+    "MANUAL",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 69,
+   "guide_name": "PEDAL WAH + DELAY",
+   "values": [
+    "WAH WET",
+    "RESONANCE",
+    "MANUAL",
+    "SWEEP RANGE",
+    "WAH CENTER Fc",
+    "DELAY DRY/WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 70,
+   "guide_name": "AUTO WAH + SINGLE DELAY",
+   "values": [
+    "WAH WET",
+    "RESONANCE",
+    "MANUAL",
+    "SWEEP RANGE",
+    "DELAY DRY/WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 71,
+   "guide_name": "PEQ + CHORUS",
+   "values": [
+    "BAND EMPHASIS 1 Fc",
+    "BAND EMPHASIS 1 Q",
+    "BAND EMPHASIS 1 G",
+    "BAND EMPHASIS 2 Fc",
+    "BAND EMPHASIS 2 Q",
+    "BAND EMPHASIS 2 G",
+    "CHORUS DRY/WET",
+    "DEPTH",
+    "LFO SPEED",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 72,
+   "guide_name": "PEQ + SINGLE DELAY",
+   "values": [
+    "BAND EMPHASIS 1 Fc",
+    "BAND EMPHASIS 1 Q",
+    "BAND EMPHASIS 1 G",
+    "BAND EMPHASIS 2 Fc",
+    "BAND EMPHASIS 2 Q",
+    "BAND EMPHASIS 2 G",
+    "DELAY DRY/WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 73,
+   "guide_name": "PEQ + FLANGER",
+   "values": [
+    "BAND EMPHASIS 1 Fc",
+    "BAND EMPHASIS 1 Q",
+    "BAND EMPHASIS 1 G",
+    "BAND EMPHASIS 2 Fc",
+    "BAND EMPHASIS 2 Q",
+    "BAND EMPHASIS 2 G",
+    "FLANGER DRY/WET",
+    "DEPTH",
+    "LFO SPEED",
+    "RESONANCE",
+    "MANUAL",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 74,
+   "guide_name": "PEQ + VIBRATO",
+   "values": [
+    "BAND EMPHASIS 1 Fc",
+    "BAND EMPHASIS 1 Q",
+    "BAND EMPHASIS 1 G",
+    "BAND EMPHASIS 2 Fc",
+    "BAND EMPHASIS 2 Q",
+    "BAND EMPHASIS 2 G",
+    "VIBRATO DRY/WET",
+    "DEPTH",
+    "LFO SPEED",
+    "PHASE",
+    "LFO WAVEFORM",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 75,
+   "guide_name": "PEQ + COMPRESSOR",
+   "values": [
+    "BAND EMPHASIS 1 Fc",
+    "BAND EMPHASIS 1 Q",
+    "BAND EMPHASIS 1 G",
+    "BAND EMPHASIS 2 Fc",
+    "BAND EMPHASIS 2 Q",
+    "BAND EMPHASIS 2 G",
+    "THRESHOLD",
+    "RATIO",
+    "ATTACK SENSITIVITY",
+    "RELEASE SENSITIVITY",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 96,
+   "guide_name": "PEQ + COMPRESSOR + DISTORTION",
+   "values": [
+    "BAND EMPHASIS 1 Fc",
+    "BAND EMPHASIS 1 Q",
+    "BAND EMPHASIS 1 G",
+    "BAND EMPHASIS 2 Fc",
+    "BAND EMPHASIS 2 Q",
+    "BAND EMPHASIS 2 G",
+    "THRESHOLD",
+    "RATIO",
+    "ATTACK SENSITIVITY",
+    "RELEASE SENSITIVITY",
+    "DRIVE",
+    "ADJUST",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 97,
+   "guide_name": "PEQ + COMPRESSOR + OVERDRIVE",
+   "values": [
+    "BAND EMPHASIS Fc",
+    "BAND EMPHASIS Q",
+    "BAND EMPHASIS G",
+    "THRESHOLD",
+    "RATIO",
+    "ATTACK SENSITIVITY",
+    "RELEASE SENSITIVITY",
+    "DRIVE",
+    "ADJUST",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 98,
+   "guide_name": "PEQ + DISTORTION + DELAY",
+   "values": [
+    "BAND EMPHASIS 1 Fc",
+    "BAND EMPHASIS 1 Q",
+    "BAND EMPHASIS 1 G",
+    "BAND EMPHASIS 2 Fc",
+    "BAND EMPHASIS 2 Q",
+    "BAND EMPHASIS 2 G",
+    "DRIVE",
+    "ADJUST",
+    "DELAY DRY/WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "VOLUME"
+   ]
+  },
+  {
+   "prog": 99,
+   "guide_name": "PEQ + OVERDRIVE + DELAY",
+   "values": [
+    "BAND EMPHASIS 1 Fc",
+    "BAND EMPHASIS 1 Q",
+    "BAND EMPHASIS 1 G",
+    "BAND EMPHASIS 2 Fc",
+    "BAND EMPHASIS 2 Q",
+    "BAND EMPHASIS 2 G",
+    "DRIVE",
+    "ADJUST",
+    "DELAY DRY/WET",
+    "DELAY L",
+    "DELAY R",
+    "FEEDBACK L",
+    "FEEDBACK R",
+    "VOLUME"
+   ]
+  }
+ ]
+}

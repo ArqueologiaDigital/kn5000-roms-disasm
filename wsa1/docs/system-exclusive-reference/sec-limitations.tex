@@ -8,16 +8,15 @@ models. The following are not covered.
 \item[What the parameters do.] Chapter~\ref{ch:params} enumerates all 108 addresses of
   the \bytes{00} area with their name, length, bit mask, accepted values and position in a
   dump. It does not explain what each setting does to the sound; the user manuals do that.
-\item[The effect parameters.] The twenty \textsc{value} bytes under each of
-  \textsc{effect1}, \textsc{effect2} and \textsc{reverb} mean different things for each
-  effect type. The published guide gives them, effect by effect, and this edition does not
-  reproduce them.
+\item[Byte values in physical units.] Chapter~\ref{ch:effects} names each effect's
+  \textsc{value} bytes but not the curve that turns a byte into seconds, hertz or
+  decibels. The guide prints those as eighteen conversion tables.
 \item[Block contents.] Chapter~\ref{ch:blocks} gives each block's signature and where its
   names are, but not how a stored sound, combination or sequence is arranged inside one.
   Chapter~\ref{ch:sound} lays out the sound being \emph{edited}, which is a different
   thing from the sound memory a bulk dump carries.
 \item[The SEQUENCER category, against hardware.] Its protocol is described, but the
-  capture used to check everything else came from a rack, which cannot send it. See
-  chapter~\ref{ch:overview}.
+  capture used to check everything else came from a rack, which cannot send it. Closing
+  this needs one transfer from an SX-WSA1 keyboard. See chapter~\ref{ch:overview}.
 \item[Operating system version 1.] Everything here describes version 2.0.
 \end{description}

@@ -1368,3 +1368,32 @@ python3 wsa1/notes/sysex-probes/sysex_sound_layout.py --tex \
 ```
 
 Pass: each group tiles its extent, the repeats land on the stride, the total is 713, `OK`.
+
+### `sysex_effects.py` and `effects.json`
+
+**Question:** does the transcribed effect catalogue agree with the one read out of the
+ROMs?
+
+An effect block's `TYPE` byte selects an effect and its twenty `VALUE` bytes mean whatever
+that effect says they mean. `effects.json` transcribes both from the guide's DSP EFFECT
+pages, which are image-only and had to be rendered and read.
+
+The **numbers** are checkable against something entirely independent: this project had
+already disassembled the effects DSP into `wsa1/dsp/programs.tsv`, a manifest of every
+distinct effect program with the number that selects it. That came from the ROMs; the
+guide is a printed book. The probe asserts **set equality** on the effect numbers — and
+they are equal, 56 either side.
+
+⚠ **Not checked:** the `VALUE` lists. Nothing independent states them, so a misreading
+survives, and the chapter says so rather than implying the whole table is verified. The
+two sources also differ in spelling by design — the ROM carries the short names the
+instrument displays (`S.DELAY+CHORUS`), the guide the long ones — so the probe prints them
+side by side and asserts only the numbers.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_effects.py
+python3 wsa1/notes/sysex-probes/sysex_effects.py --tex \
+    wsa1/docs/system-exclusive-reference/tbl-effects.tex
+```
+
+Pass: the number sets are equal, no effect declares more than 20 values, `OK`.
