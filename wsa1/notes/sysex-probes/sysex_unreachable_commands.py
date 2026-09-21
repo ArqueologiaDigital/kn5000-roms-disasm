@@ -314,6 +314,19 @@ print("\n0x0D is the receive half of the transmitter at 0x%06X, which has no"
       "\n  and the descriptor writer both halves share sets the size to 0."
       % TX_ORPHAN)
 
+# and the stubbed triple has no header bytes anywhere: nine 2D templates
+# exist, eight live plus the orphan, and none is spare.
+import re as _re
+_lits = [m.start() + B_BASE for m in
+         _re.finditer(_re.escape(bytes([0xF0, 0x50, 0x2D, 0x04, 0x00, 0x11])), b)]
+assert len(_lits) == 9 and 0xF4FF10 in _lits, "the 2D template count changed"
+assert not _re.search(_re.escape(bytes([0xF0, 0x50, 0x2D, 0x04, 0x00, 0x11])), a), \
+    "a 2D template now exists in prom_a too"
+print("  nine `F0 50 2D 04 00 11` literals exist in prom_b -- the eight the"
+      "\n  grammar accepts plus the orphan -- so 0x0F/0x10/0x11 have no header"
+      "\n  bytes anywhere: what that category would have carried is not"
+      "\n  recorded in the firmware.")
+
 # ---------------------------------------------------------------------------
 # 5. 0x1D -- a dump request for a job that is a `ret`
 # ---------------------------------------------------------------------------
