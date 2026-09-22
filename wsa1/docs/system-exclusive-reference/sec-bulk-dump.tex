@@ -164,6 +164,18 @@ instrument then runs exactly the transfer the corresponding menu row would have 
 There is no request for \textsc{total keyboard}: the four categories must be asked for one
 at a time.
 
+\begin{caution}{A dump request is screen-gated; a parameter request is not}
+Both are \textsc{drq}, family \bytes{2B}, and they behave differently. A request naming
+one of the four categories above is accepted only while the panel shows \textsc{sysex bulk
+dump} --- or, as a second route, while two further panel bytes read \bytes{01}. Anywhere
+else it is refused with status \bytes{11}.
+
+A request naming a \emph{parameter} (chapter~\ref{ch:params}) has no such gate: nothing in
+the parameter engine reads the panel at all, so it is answered wherever the instrument
+happens to be. That difference is what makes the parameter request, and not the dump
+request, the thing to send when all you want is a reply.
+\end{caution}
+
 \section{Opening a transfer}
 A dump begins with a two-step exchange. Each step is attempted up to three times.
 

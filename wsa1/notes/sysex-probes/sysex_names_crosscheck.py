@@ -93,10 +93,15 @@ def agrees(a, b):
 
 
 def main():
-    out = subprocess.run([sys.executable, SCREENS], capture_output=True,
-                         text=True, check=True).stdout
-    # that probe prints its OK early, before the rows, so test membership
-    assert any(l.strip() == "OK" for l in out.splitlines()), \
+    run = subprocess.run([sys.executable, SCREENS], capture_output=True,
+                         text=True, check=True)
+    out = run.stdout
+    # That probe keeps its narrative on stderr so that --json can emit a clean
+    # document on stdout, so its pass line is on stderr and the rows are on
+    # stdout.  Look for the pass line in BOTH: reading only stdout made this
+    # assertion fire on a probe that had in fact passed.
+    assert any(l.strip() == "OK"
+               for l in (out + "\n" + run.stderr).splitlines()), \
         "the screen-name probe did not pass"
 
     derived = {}

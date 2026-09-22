@@ -105,9 +105,23 @@ def find_block(layout, area_name, block_name):
     raise SystemExit("no area %s" % area_name)
 
 
+# The misprint, exactly: DRUM page 55, NOTE TONE DATA, the 2nd column, whose
+# first seven entries are five too low before it jumps 02A -> 030.
+KNOWN = [
+    ("ATTRIBUTE DELAY", 2, "024", "029"),
+    ("PANNING", 2, "025", "02A"),
+    ("TTN SELECT", 2, "026", "02B"),
+    ("TONE KIND", 2, "027", "02C"),
+    ("PITCH KEY SHIFT", 2, "028", "02D"),
+    ("PITCH DETUNE", 2, "029", "02E"),
+    ("LEVEL VOLUME", 2, "02A", "02F"),
+]
+
+
 def main():
     layout = json.load(open(LAYOUT))
     rc = 0
+    found = []
     for area_name, block_name, page, rows in TABLES:
         block = find_block(layout, area_name, block_name)
         stride = block["stride"]
@@ -127,16 +141,23 @@ def main():
                     good += 1
                 else:
                     bad += 1
+                    found.append((name, n + 1, printed.upper(), "%03X" % want))
                     print("    %-20s column %d prints %s, stride gives %03X"
                           % (name, n + 1, printed, want))
         print("  %d column entries agree, %d do not" % (good, bad))
         assert good, "nothing agreed; the matcher is broken, not the guide"
-        rc |= 1 if bad else 0
 
-    if rc:
-        print("\nThe guide misprints a column. sound_layout.json takes the "
-              "first column only, so it is unaffected.")
-        return 1
+    # The misprint is a permanent property of the printed guide, so it is
+    # asserted rather than reported as a failure: what must not change is the
+    # SET of rows it touches.  A stride edit, or a transcription that slipped,
+    # moves a row in or out of this list and fails here.
+    assert found == KNOWN, (
+        "the set of misprinted entries changed.\n  now:   %s\n  known: %s"
+        % (found, KNOWN))
+    print("\nThe guide misprints one column, on the %d entries above, and has "
+          "done since it was printed." % len(KNOWN))
+    print("sound_layout.json takes the first column only and derives the rest "
+          "from the stride, so it is unaffected.")
     print("\nOK")
     return 0
 
