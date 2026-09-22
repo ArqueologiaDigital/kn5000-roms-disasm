@@ -51,6 +51,20 @@ COVERAGE, STATED
   This compares the two files' name lists to each other and reports where they
   differ; it cannot say which is right.
 
+HOW TO REGENERATE THE PAGES THIS WAS READ FROM
+  The guide is image-only, so it has to be rendered before it can be read.  The
+  PNGs are a large regenerable corpus and are deliberately NOT committed; this
+  is the recipe, and it is the only thing that needs to survive.
+
+      python3 wsa1/notes/sysex-probes/manual_reference_guide.py   # checks the
+          # OM.zip sha256 and extracts OM/EN/TECHNICS_WSA1_REFERENCE_GUIDE_2.pdf
+      pdftoppm -r 200 -png -f 3 -l 33 <the pdf> pg    # pg-03.png .. pg-33.png
+
+  Page N of the PDF is page N of the guide: the printed folio at the foot of
+  each page matches, checked on p16 (PARAMETRIC EQ, "EFFECT No.; 39") and p33
+  (the conversion tables).  150 dpi is enough to read the DATA and VALUE
+  columns; 200 dpi is enough to read the ranges beside them.
+
 SIGNAL BEING READ
   `effects.json` (names and order) against the table below (names and printed
   VALUE numbers).  The pages each row came from are named in PAGES.
