@@ -18,7 +18,32 @@
 
 \pagestyle{fancy}
 \fancyhf{}
+
+% The running head puts a fixed string on the left and the current chapter on the right, on one
+% line. report's default \chaptermark makes that right-hand entry "CHAPTER 15. RELATIONSHIP TO
+% OTHER TECHNICS INSTRUMENTS" -- uppercased and prefixed -- and the four longest chapters then ran
+% into the left-hand string. Measured: the head is 438.17pt wide, the left string takes 225.56pt,
+% so the right has 212.62pt, and chapters 4, 11, 12 and 15 wanted 218.63, 237.44, 306.24 and
+% 339.92pt. Those are exactly the pages Felipe reported overlapping (11, 12, 53, 55, 61).
+%
+% Dropping the "CHAPTER n." prefix and the uppercasing leaves the bare title, whose worst case is
+% chapter 15 at 188.43pt -- 24.19pt of clearance. Keeping the number ("15. Relationship to...")
+% would fit at 205.64pt, but with only 6.97pt to spare, which one new chapter would swallow.
+% The number is still in the table of contents and in the PDF bookmarks.
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 \fancyhead[L]{\small Technics SX-WSA1R \textendash{} System Exclusive Reference}
-\fancyhead[R]{\small\leftmark}
+\fancyhead[R]{\small\leftmark\hdrfitcheck}
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
+
+% ...and a guard, so a future chapter title that would collide fails the build loudly instead of
+% shipping an overlap. Grep the log for HEADER OVERFLOW.
+\newlength{\hdrfitL}\newlength{\hdrfitR}
+\newcommand{\hdrfitgap}{12pt}
+\newcommand{\hdrfitcheck}{%
+  \settowidth{\hdrfitL}{\small Technics SX-WSA1R \textendash{} System Exclusive Reference}%
+  \settowidth{\hdrfitR}{\small\leftmark}%
+  \ifdim\dimexpr\hdrfitL+\hdrfitR+\hdrfitgap\relax>\headwidth
+    \GenericWarning{}{HEADER OVERFLOW on page \thepage: \the\hdrfitL\space + \the\hdrfitR
+      \space + \hdrfitgap\space gap exceeds \the\headwidth}%
+  \fi}

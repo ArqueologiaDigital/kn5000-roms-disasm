@@ -23,14 +23,21 @@ pdflatex wsa1r-system-exclusive-reference.tex
 pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
 ```
 
-60 pages. Needs only a standard TeX Live.
+63 numbered pages (65 in the PDF, counting the title page and the contents).
+Needs only a standard TeX Live.
+
+`header-fit.py` answers "will any chapter's running head collide with the fixed string on
+the left?" -- it measures every chapter title in LaTeX at the document's own size and
+geometry. style.tex carries the same test as a build-time guard; grep the log for
+`HEADER OVERFLOW`.
 
 ## Files
 
 | file | |
 |---|---|
 | `wsa1r-system-exclusive-reference.tex` | the document |
-| `style.tex` | page style and macros |
+| `style.tex` | page style and macros, incl. the running-head overflow guard |
+| `header-fit.py` | measures every chapter's running head against the space it has |
 | `sec-overview.tex` | ports, conventions, applicability |
 | `sec-glance.tex` | the one-page summary card |
 | `sec-framing.tex` | identifiers, termination, length limit |
