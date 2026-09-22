@@ -5,7 +5,11 @@
   "and read. The effect NUMBERS are cross-checked by sysex_effects.py against",
   "wsa1/dsp/programs.tsv, which was derived independently from the ROMs.",
   "",
-  "'values' is the order of the VALUE1..VALUEn bytes of an effect block.",
+  "'values' is the effect's parameter list in the order the guide prints it.",
+  "It is NOT the order of the VALUE bytes: 22 of the 56 effects have a",
+  "parameter that spans two bytes, or several parameters that share a pair.",
+  "effect_value_numbers.json gives the byte each parameter occupies, read",
+  "from the same pages' MIDI VALUE column. See sysex_effect_value_numbers.py.",
   "An empty list means the effect takes no parameters."
  ],
  "effects": [
@@ -474,7 +478,8 @@
     "WET",
     "DELAY TIME L",
     "DELAY TIME R",
-    "BALANCE",
+    "BALANCE L",
+    "BALANCE R",
     "VOLUME"
    ]
   },

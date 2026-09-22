@@ -27,19 +27,38 @@ displays and the guide prints long ones. The table gives the guide's.
 \end{note}
 
 \section{What the value bytes mean}
-The \textsc{value} list below is the order the bytes appear in, so the first name is
-\textsc{value1}, the second \textsc{value2}, and so on. An effect that names fewer than
-twenty leaves the rest unused.
+Each parameter below is printed with the \textsc{value} byte it occupies, in bold. Those
+numbers are the guide's own: every \textsc{dsp effect} page carries a \textsc{midi value}
+column giving each row's byte outright. An effect that uses fewer than twenty leaves the
+rest unused.
+
+\begin{caution}{A parameter is not always one byte, and a byte is not always one parameter}
+It is tempting to read the parameter list as the byte order --- first name
+\textsc{value1}, second \textsc{value2}. That is true of 34 of the 56 effects and wrong
+for the other 22, so a librarian built on it addresses those 22 incorrectly.
+
+Two things break it. A parameter with a wide range spans \emph{two} bytes: \textsc{single
+delay} reaches 350\,ms and its \textsc{delay l} is bytes 1--2, which pushes everything
+after it up by one. And several parameters can \emph{share} a pair: each band of
+\textsc{parametric eq} names an \textsc{fc}, a \textsc{q} and a \textsc{g}, and all
+three are packed into the same two bytes by the guide's table~17. \textsc{parametric eq}
+has 19 parameters and 13 \textsc{value} bytes.
+
+Where a span like \textbf{2--3} appears against more than one parameter, those parameters
+share those bytes; the packing tables at the end of this chapter give each field's width
+and position.
+\end{caution}
 
 The combination effects concatenate their components: the first block's parameters, then
 a dry/wet for the second block, then the second block's. A three-effect combination
 continues the same way.
 
-\begin{caution}{The value lists are transcribed, and not checked by anything}
-The effect \emph{numbers} are confirmed twice over. The \emph{names} in the value lists
-are not: they were read from scans, nothing independent states them, and a misreading
-would survive. Treat them as a guide to what the bytes are for rather than as a
-specification.
+\begin{caution}{The names are transcribed, and not checked by anything}
+The effect \emph{numbers} are confirmed twice over, and the byte numbers check themselves:
+each effect's must be exactly $1\ldots N$, used once each in ascending order, which a
+misread digit almost always breaks. The \emph{names} have no such check --- they were read
+from scans, nothing independent states them, and a misreading would survive. Treat them as
+a guide to what the bytes are for rather than as a specification.
 
 The block diagram the guide prints for each effect is not reproduced either.
 \end{caution}
