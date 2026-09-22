@@ -54,6 +54,20 @@ manuals, and the remedy is the same: render the page before concluding it is sil
 
 \section{Open, and what would close it}
 \begin{description}
+\item[Why a parameter reply arrives twice.] Against the emulated instrument every answer
+  to a \bytes{2B} arrived \emph{two} times, about 20\,ms apart, in three runs out of four
+  and once in the fourth. A receiver that stops at the first is fine; one that pairs
+  requests with replies by counting them is not, which is why it is written down here
+  rather than dismissed as noise. The likely place is that both outer dispatch tables send
+  commands \bytes{1A}--\bytes{1F} to the same handler, where \bytes{21} and \bytes{22}
+  reach the session entry on the interrupt side only --- but nothing measured so far
+  isolates it, and only one \textsc{midi in} is wired in the emulation, so it is not a
+  doubled input. Whether a real instrument does it too is unknown.
+
+\item[What refuses a category dump request.] Its own panel gate admits the
+  \textsc{sysex bulk dump} screen, and a request sent there was still refused. The refusal
+  is downstream of that test and has not been traced.
+
 \item[Other firmware.] This reference describes one ROM set, and it can now name which.
   The instrument does not report an ``operating system version'' at all: it has a
   \textsc{rom version} screen that reports \emph{three} ROMs separately, as
