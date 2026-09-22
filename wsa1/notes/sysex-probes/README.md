@@ -19,6 +19,7 @@
 | `sysex_user_settings.py` | WHICH USER SETTINGS change whether System Exclusive works: does an EXCLUSIVE filter exist for input, for output or both; exactly what it suppresses; whether it touches bulk dump, parameter messages or the General MIDI messages; and whether any MIDI channel / mode / device-number setting takes part in System Exclusive at all. | `python3 wsa1/notes/sysex-probes/sysex_user_settings.py` (tables), `--sites` (every instruction that names a settings byte) or `--census` (the reference count per byte) |
 | `sysex_signature_checks.py` | The leading bytes of a block — `WA0`, `WSA1`, `WSA SOUND RAM S0`: do they encode a format or OS version, who checks them, and what happens on a mismatch? Also collects every piece of evidence in the four images bearing on an OS other than the dumped v2.0. | `python3 wsa1/notes/sysex-probes/sysex_signature_checks.py` (tables) or `--artefacts` (confront the ROM literals with a real dump and real disk files) |
 | `sysex_general_midi.py` | Does GENERAL MIDI mode change System Exclusive behaviour: which messages stop being accepted, whether bulk dump or the parameter families are affected, whether the instrument TRANSMITS on entering or leaving GM, and where the GM state sits inside a bulk dump. | `python3 wsa1/notes/sysex-probes/sysex_general_midi.py` (tables) or `--records` (all 77 records of the SYSTEM,PART & MIDI part-2 block) |
+| `sysex_handshake_gate.py` | What answers `F0 50 21 ...` and `F0 50 22 ...`: which handler each reaches, that BOTH sit behind the SYSEX BULK DUMP screen test, which of the two ever transmits anything, what the handshake state must be, and what model byte the reply carries. | `python3 wsa1/notes/sysex-probes/sysex_handshake_gate.py` (the gates) or `--tables` (all three dispatch tables side by side) |
 | `sysex_handshake_21_22.py` | What the instrument does when `F0 50 21 ...` or `F0 50 22 ...` arrives, and when that causes a TRANSMIT: the dispatch, the screen and state gates, whether any code builds a reply carrying the model value the message CARRIED, and a positive control on the same parser that does answer at rest. | `python3 wsa1/notes/sysex-probes/sysex_handshake_21_22.py` (the two handlers, byte by byte) or `--census` (every site in the four images that can see a `21`/`22` family byte) |
 
 ## Signal being read
@@ -689,6 +690,80 @@ A raw byte scan for a branch displacement matches inside other instructions —
 `0xFB71BB`. Counting those makes `sub_FB71BB` look like it has 15 callers
 instead of 14. Every candidate must be checked against an instruction
 boundary before it is believed.
+
+## `sysex_handshake_gate.py` — signal being read
+
+Both load bases asserted by content. The question is what a librarian gets
+back when it sends `F0 50 21 04 nn 11 F7` or `F0 50 22 04 nn 11 F7`, and the
+answer is a gate, a state and a template.
+
+* **Both are bulk-dump session commands.** `21` terminates in command `0x07`
+  and `22` in `0x08`, and the interrupt-side dispatch table `0xF4F800` sends
+  both to `0xFB2820` — the same session entry every data message reaches.
+  The foreground table `0xF4F888` sends both to the no-op `0xFB22C8`.
+* **★ The screen gate, and the silence.** `0xFB2820`'s first test is
+  `cp (0x207A),0x79`; the `jr nz` lands on `0xFB2873`, which is
+  `res 4,(XIX) / pop XIX / ret`. No transmit, no status, no error screen.
+  Off the SYSEX BULK DUMP screen these two messages are **dropped without a
+  word**, which on the wire is indistinguishable from a dead cable.
+* **The handshake state `(0x60FD44)`.** Inside a session the third table
+  (`0xF4F916`) gives `0x07` → `0xFB28FF` and `0x08` → `0xFB291D`.
+  `0xFB28FF` answers `21` **only while the state is 0**, then writes 1 and
+  transmits the seven bytes at prom_b `0xF4FEDC`, `F0 50 22 04 00 11 F7`;
+  out of state it falls to the bare `ret` at `0xFB291C`. `0xFB291D` accepts
+  `22` **only while the state is 1**, then stores the peer's own PC/MD/VER
+  at `(0x60FC94..96)`, sets bit 7 of `(0x60FD40)` — the flag that switches
+  acknowledgements on — and writes 2. ⚠ **It transmits nothing of its own**;
+  the script asserts neither message sender is called in its body. Out of
+  state it stores status `0x18`, `ERROR 42!`. `0xFB8177` returns the state
+  to 0 when the session ends.
+* **What an open session answers with.** With that bit set, `sub_FB28BE`
+  answers *every* message from the parse record's status field: 0 →
+  `F0 50 23 7E F7`, `0x16` → `F0 50 2A 7E F7`, anything else →
+  `F0 50 24 7E F7`. None of the three carries a model byte.
+* **The model byte.** `sub_FB6E7F` reaches `sub_FB7165`, whose first call is
+  `sub_FB5F65`, the strap-2 patcher (see `sysex_model_variant.py`); the
+  script follows both `calr` displacements rather than trusting the label.
+  The reply is therefore `F0 50 22 04 01 11 F7` from a rack. The enquiry's
+  own model byte cannot reach it: the trie's `00` and `01` records at
+  `0xF4FF73` and `0xF4FF9D` descend to the same node.
+* **The parameter path has no screen test at all.** Command `0x1A` goes to
+  `0xFB42AB` in *both* outer tables and the script scans
+  `0xFB39A0-0xFB4B00` for the operand bytes of any `(0x207A)` access —
+  **zero** hits. The dump request is different again: `sub_FB516A` admits it
+  on screen `0x79` **or** when `(0x2076)` and `(0x207A)` both read 1.
+
+### Pass criterion
+
+Every assert is silent and the script prints `OK`. Headline facts: **2**
+commands behind **1** screen gate, **1** of the two ever transmits a reply,
+`F0 50 22 04 00 11 F7` → `04 01 11` on the rack, **3** acknowledgement
+templates, **0** screen tests on the parameter path.
+
+### Measured against the emulated instrument
+
+The probes live in the librarian, `wsa1r-librarian/tools/emulator-probes/`,
+and each records Active Sensing and an answered parameter request in the
+same file as its negative:
+
+* `ask-sysex-screen-gate.sh` — idle: both forms silent.
+* `ask-sysex-on-bulkdump-screen.sh` — drives the panel to screen `0x79` and
+  logs `(0x207A)` and `(0x60FD44)` from Lua while the messages go in.
+  `21` is answered `F0 50 22 04 01 11 F7` at state 0, `F0 50 23 7E F7` at
+  state 1 or 2; `22` is answered `F0 50 23 7E F7` at state 1 and
+  `F0 50 24 7E F7` at state 2.
+* `panel-send-dump.sh` — a dump started from the panel, in which the
+  instrument **transmits** `F0 50 21 04 01 11 F7` as its opening message.
+
+### Trap
+
+⚠ The `-str` flag, not `-skip_gameinfo`, is what makes MAME's
+`-autoboot_script` run on a stock build: `-skip_gameinfo` leaves the
+missing-ROM warning up and the script never loads at all. ⚠ And MAME's
+`-mdin`/`-mdout` slot options are not optional — without them the ALSA ports
+still appear and still subscribe, and the instrument's MIDI OUT is silent,
+which is exactly the "it does not answer" symptom this probe exists to
+separate.
 
 ## `sysex_unreachable_commands.py` — signal being read
 
