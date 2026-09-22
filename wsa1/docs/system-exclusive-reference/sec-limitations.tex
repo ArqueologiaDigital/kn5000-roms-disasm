@@ -15,6 +15,37 @@ and \textsc{combination} blocks a dump carries.
   effects. Chapter~\ref{ch:effects} gives their parameters instead.
 \end{description}
 
+\section{What the guide names but does not pin down}
+An implementation of this reference --- a librarian that reads and writes every address in
+it --- was built alongside this edition, and the count of what it could \emph{not} turn into
+a control is the most honest measure of where the published tables stop. Three gaps, all of
+them the guide's rather than this document's, and each one a place where a reader must
+either measure the instrument or leave the parameter alone.
+
+\begin{description}
+\item[Bytes the guide addresses but does not break down.] In \textsc{normal sound}, 36 of
+  137 fields carry no bit layout and 20 carry no range; in \textsc{drum sound}, 29 of 99 and
+  8 respectively. The guide names each one and gives its address, and stops there. Several
+  could be split by reading the prose beside them --- \textsc{tone on/off} notes ``two bits
+  per tone, 4th 3rd 2nd 1st'' --- but a layout inferred from a sentence is a guess wearing a
+  table's clothes, and chapter~\ref{ch:sound} prints the note instead.
+
+\item[Which conversion table applies to which effect parameter.] Chapter~\ref{ch:effects}
+  gives the 17 tables that turn an effect's \textsc{value} byte into a frequency, a time or
+  a gain, and the guide assigns them to parameters with an arrow drawn on the page. Neither
+  the tables nor the parameter lists carry that assignment as data. Of 434 effect parameters,
+  159 can be matched to a table by name; 49 distinct parameter names cannot, among them
+  \textsc{osc waveform}, \textsc{emphasis gain} and \textsc{wah center Fc}.
+
+\item[\textsc{value} numbering where fields share a byte.] The guide's effect parameter
+  lists are the order of the \textsc{value} bytes, and its tables~17 and~18 say the
+  parametric equaliser's \textsc{q}, \textsc{fc} and \textsc{g} share two bytes between
+  three names. Both cannot be true as printed: three names in two bytes shifts every
+  \textsc{value} number after them. 133 parameters across eleven effects --- programs 35,
+  39, 71--75 and 96--99 --- sit after such a packing and have no \textsc{value} number here
+  for that reason.
+\end{description}
+
 \section{Open, and what would close it}
 \begin{description}
 \item[Other firmware.] This reference describes one ROM set, and it can now name which.
