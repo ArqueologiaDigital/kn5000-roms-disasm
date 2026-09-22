@@ -51,14 +51,19 @@ received nor send one.
 \begin{note}{Telling the two apart over MIDI}
 \textsc{md} in anything the instrument transmits is \bytes{00} on the keyboard and
 \bytes{01} on the rack --- the values Technics' published field table gives for the two
-models. Reading it back takes more than asking, because the two messages that would carry
-it in a reply, \textsc{hrq} and \textsc{hrt}, are not an identity enquiry: they are the
-opening exchange of a bulk dump (chapter~\ref{ch:bulk}) and are answered only inside it.
-The instrument must be showing the \textsc{sysex bulk dump} screen, and \bytes{21} is
-answered only while the handshake state is zero, \bytes{22} only while it is one. Sent to
-an instrument sitting on any other screen, both produce silence --- and not an
-\textsc{err} either, so nothing on the wire separates the wrong moment from the wrong
-machine or a dead cable.
+models. Reading it back takes more than asking. \textsc{hrq} and \textsc{hrt} are not an
+identity enquiry: they are the opening exchange of a bulk dump (chapter~\ref{ch:bulk}),
+they are acted on only inside it, and only one of the two produces a reply carrying
+\textsc{md} at all. An \textsc{hrq} is answered with an \textsc{hrt}, which does carry
+it. An \textsc{hrt} is answered with \bytes{F0 50 23 7E F7} --- an acknowledgement, with
+no model triple in it --- so sending an \textsc{hrt} to ask what machine this is returns
+nothing to read.
+
+Even the \textsc{hrq} route needs the instrument to be showing the \textsc{sysex bulk
+dump} screen with the handshake state at zero, and answering it \emph{opens a receive
+session}, which is a side effect a librarian probably did not want. Sent to an instrument
+on any other screen it produces silence --- and not an \textsc{err} either, so nothing on
+the wire separates the wrong moment from the wrong machine or a dead cable.
 
 What does work at rest is a \emph{parameter} request (chapter~\ref{ch:params}) --- not a
 dump request, which is \textsc{drq} too and is screen-gated like the handshake. Nothing in

@@ -165,26 +165,37 @@ There is no request for \textsc{total keyboard}: the four categories must be ask
 at a time.
 
 \begin{caution}{A dump request is screen-gated; a parameter request is not}
-Both are \textsc{drq}, family \bytes{2B}, and they behave differently. A request naming
-one of the four categories above is accepted only while the panel shows \textsc{sysex bulk
-dump} --- or, as a second route, while two further panel bytes read \bytes{01}. Anywhere
-else it is refused with status \bytes{11}.
+Both are \textsc{drq}, family \bytes{2B}, and they do not behave alike. The routine that
+takes a request naming one of the four categories above tests the panel before anything
+else: it proceeds on the \textsc{sysex bulk dump} screen, or when two further panel bytes
+both read \bytes{01}, and otherwise sets status \bytes{11}.
 
-A request naming a \emph{parameter} (chapter~\ref{ch:params}) has no such gate: nothing in
-the parameter engine reads the panel at all, so it is answered wherever the instrument
-happens to be. That difference is what makes the parameter request, and not the dump
-request, the thing to send when all you want is a reply.
+\textbf{That gate is not the whole story, and this edition cannot finish it.} Against the
+emulated instrument a category request was refused with \bytes{F0 50 29 7E F7} on the
+\textsc{sysex bulk dump} screen as well as at rest, and no request ever started a
+transfer. Something downstream of the panel test refuses as well, and what it is has not
+been isolated. Read the section above as the message the instrument parses, not as a
+transfer anyone has seen start this way.
+
+A request naming a \emph{parameter} (chapter~\ref{ch:params}) has no panel gate at all
+--- nothing in the parameter engine reads the panel --- and it does answer, at rest, both
+when the address is good and when it is not. That is the one \bytes{2B} whose reply can be
+relied on.
 \end{caution}
 
 \section{Opening a transfer}
 A dump begins with a two-step exchange. Each step is attempted up to three times.
 
 \begin{enumerate}
-\item The sender transmits \bytes{F0 50 21 04 00 11 F7} and expects
+\item The sender transmits \bytes{F0 50 21 04 \textit{md} 11 F7} and expects
   \bytes{F0 50 22 04 \textit{nn} 11 F7}.
-\item The sender transmits \bytes{F0 50 22 04 00 11 F7} and expects
+\item The sender transmits \bytes{F0 50 22 04 \textit{md} 11 F7} and expects
   \bytes{F0 50 23 7E F7}.
 \end{enumerate}
+
+\textsc{md} is the sender's own: \bytes{00} from a keyboard and \bytes{01} from a rack,
+substituted on the way out as chapter~\ref{ch:messageset} describes. A capture from a real
+rack carries \bytes{04 01 11} in both steps.
 
 Read from the instrument's side, each step is gated twice: the panel must be on the
 \textsc{sysex bulk dump} screen, and the handshake state must be the one that step
@@ -194,8 +205,15 @@ The state advances only on a step that passed both gates, so a sender that opens
 transfer twice without closing the first will find its second \bytes{21} ignored.
 
 If the exchange succeeds, every subsequent data message must be acknowledged. If all three
-attempts of the first step fail, \textbf{the dump proceeds anyway, without
-acknowledgements}, at a fixed pace of roughly 51\,ms between messages.
+attempts of \emph{either} step fail, \textbf{the dump proceeds anyway, without
+acknowledgements}: both exits fall through to the same place with the acknowledgement bit
+still clear, and the transfer runs regardless.
+
+The unacknowledged dump is paced by a fixed wait of the order of 50\,ms between messages.
+The figure is given loosely on purpose: measured off the wire the gaps have a median of
+45\,ms, but the host timestamps jitter by as much as the quantity being measured, so only
+the order of magnitude survives. The 2.05\,s the opening exchange waits per attempt is
+large enough to measure cleanly, and was: three attempts, 2.04 and 2.00\,s apart.
 
 \section{Acknowledgement and retry}
 With acknowledgements in force, each data message must be answered with
