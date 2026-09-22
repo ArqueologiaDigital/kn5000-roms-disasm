@@ -30,21 +30,27 @@ either measure the instrument or leave the parameter alone.
   per tone, 4th 3rd 2nd 1st'' --- but a layout inferred from a sentence is a guess wearing a
   table's clothes, and chapter~\ref{ch:sound} prints the note instead.
 
-\item[Which conversion table applies to which effect parameter.] Chapter~\ref{ch:effects}
-  gives the 17 tables that turn an effect's \textsc{value} byte into a frequency, a time or
-  a gain, and the guide assigns them to parameters with an arrow drawn on the page. Neither
-  the tables nor the parameter lists carry that assignment as data. Of 434 effect parameters,
-  159 can be matched to a table by name; 49 distinct parameter names cannot, among them
-  \textsc{osc waveform}, \textsc{emphasis gain} and \textsc{wah center Fc}.
-
-\item[\textsc{value} numbering where fields share a byte.] The guide's effect parameter
-  lists are the order of the \textsc{value} bytes, and its tables~17 and~18 say the
-  parametric equaliser's \textsc{q}, \textsc{fc} and \textsc{g} share two bytes between
-  three names. Both cannot be true as printed: three names in two bytes shifts every
-  \textsc{value} number after them. 133 parameters across eleven effects --- programs 35,
-  39, 71--75 and 96--99 --- sit after such a packing and have no \textsc{value} number here
-  for that reason.
+\item[Ranges given only as prose.] A handful of parameters have a range the guide states
+  in words rather than endpoints --- ``0.2 per cent per step'' and the like. Those are
+  printed as the note, not converted into a span, because the conversion would be a reading
+  of the sentence rather than a transcription of a number.
 \end{description}
+
+\begin{note}{Two gaps this edition closed by reading a column}
+Earlier drafts listed two more, and both turned out to be the guide stating something
+nobody had transcribed rather than the guide failing to state it.
+
+The first was which conversion table each effect parameter uses. It is the \textsc{data}
+column of every \textsc{dsp effect} page, and it is now given for all 435 parameters.
+
+The second was the \textsc{value} numbering where several fields share a byte. That is the
+\textsc{value} column of the same pages, printed outright on every row, and it is now given
+for all 56 effects.
+
+Both had been described as unstated on the strength of not having looked at the right part
+of the page. That is the same error this project has made repeatedly with these image-only
+manuals, and the remedy is the same: render the page before concluding it is silent.
+\end{note}
 
 \section{Open, and what would close it}
 \begin{description}

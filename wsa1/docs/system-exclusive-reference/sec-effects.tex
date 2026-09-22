@@ -67,8 +67,23 @@ The block diagram the guide prints for each effect is not reproduced either.
 
 \section{From a byte to a quantity}\label{sec:conversions}
 A \textsc{value} byte is not a quantity. The tables below turn one into seconds, hertz,
-decibels or cents; an effect's parameter says which table applies, and a librarian needs
-them to display a control rather than merely name it.
+decibels or cents. Which table applies is printed in the table above as a superscript
+against each parameter: \textsc{high dump gain}~\textbf{8}$^{*2}$ is byte~8, read through
+table~2. A parameter with no superscript needs no table --- the range beside it in the
+guide is already the quantity, and the byte carries it directly.
+
+Of the 435 parameters, 159 take a table and 276 are direct. The assignment is the guide's
+own: each \textsc{dsp effect} page carries a \textsc{midi} column pair, and while the
+\textsc{value} column gives the byte number, the \textsc{data} column beside it names the
+table.
+
+\begin{note}{One parameter where the guide contradicts itself}
+Effect \bytes{47}, \textsc{peq + chorus}, prints no table against its \textsc{lfo speed}
+and no \textsc{hz} against its range. The same parameter with the same 0--40.2 range
+carries table~3 and the unit on all eleven other pages that have it. The table above prints
+what page 27 prints; a librarian would do better to treat it as table~3 like its
+siblings.
+\end{note}
 
 Each row gives a span of parameter values, the quantity at each end of it, and the step
 between one parameter and the next.
