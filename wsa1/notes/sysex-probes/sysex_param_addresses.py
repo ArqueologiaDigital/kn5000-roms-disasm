@@ -492,6 +492,10 @@ def as_json():
         "dump": {"adr": A1, "bytes": RAM_HI - RAM_LO,
                  "blocks": [[A1, S1], [A2, S2]]},
         "parts": 32,
+        # desc+0x0E selects a white-list of the only VALUES the setter will accept. Three
+        # parameters use one, and a chooser that offered the whole min..max range for them
+        # would offer values the instrument refuses.
+        "value_lists": {str(i): vals for i, (cnt, ptr, vals) in sorted(LISTS.items()) if vals},
         "params": [],
     }
     for p_ in sorted(PARAMS, key=lambda x: (x.b7, x.b8)):
@@ -503,7 +507,8 @@ def as_json():
              # instruction is "base[offset] under mask" and does not use it, so it is
              # reported raw rather than applied.
              "desc_0f": p_.inv,
-             "part": p_.b7 == 0x20}
+             "part": p_.b7 == 0x20,
+             "value_list": p_.xlat if (p_.setter in GENERIC and p_.xlat != 0xFF) else None}
         # A resolved RAM address is not automatically IN the dump: the pair at 00/00-00/01
         # lives at 0x7FD6, past RAM_HI, which the assertions above state outright. Offering
         # ram - RAM_LO for those gives an offset beyond the 2432 bytes, so they are reported
