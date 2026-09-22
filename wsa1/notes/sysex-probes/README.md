@@ -2118,3 +2118,6 @@ python3 wsa1/notes/sysex-probes/rom_version_stamps.py
 
 Pass: three stamps of the right shape at the same offset, the fourth image bare, and the
 suffix check present near the caption, `OK`.
+| `sysex_signed_range_check.py` | Does each sound parameter's HEX span agree with the decimal span printed beside it? 12 rows carry both; 11 are the control and the 12th found a misprint in the guide. | `python3 wsa1/notes/sysex-probes/sysex_signed_range_check.py` |
+| `sysex_repeat_numbering_check.py` | Where a block repeats, does the guide's nth per-instance column equal the first plus (n-1) strides? NORMAL SOUND TONE DATA is the control; DRUM NOTE TONE DATA's 2nd column is misprinted. | `python3 wsa1/notes/sysex-probes/sysex_repeat_numbering_check.py` |
+| `sysex_effect_value_numbers.py` | Is an effect's VALUE list the same thing as its list of parameter NAMES? The guide's VALUE column, transcribed off all thirty DSP EFFECT pages, says no. | `python3 wsa1/notes/sysex-probes/sysex_effect_value_numbers.py` (summary) or `--all` |

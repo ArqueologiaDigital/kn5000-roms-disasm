@@ -112,8 +112,30 @@ three independent routes to the same arithmetic.
 \section{What is transcribed here, and how far it is checked}
 The tables give each parameter's number, its bit field within that byte, its name and its
 range. They were read from scans of the published tables, and the numbering is checked by
-the tiling described above. \textbf{The names, bit fields and ranges are not checked by
+the tiling described above. \textbf{The names and bit fields are not checked by
 anything}; a misreading of one would survive.
+
+A \emph{range} is checked wherever the guide gives it twice, once in hex and once in
+decimal, which it does on 12 rows. Eleven agree. The twelfth is a misprint in the guide,
+and is the one place in these tables where the printed page and what is set here differ:
+
+\begin{caution}{Two misprints in the guide's drum tables}
+\textsc{drum sound / note tone data / pitch key shift}, \bytes{1AE}, is printed with the
+span \bytes{E8\textasciitilde 18} beside the note \textsc{-\,50\textasciitilde+\,50}.
+\bytes{E8}--\bytes{18} read as a signed byte is $-24$ to $+24$, and the identical row in
+\textsc{normal sound tone data}, \bytes{0DD}, carries the same span beside
+\textsc{-\,24\textasciitilde+\,24}. The hex is right; the table above prints $-24$ to
+$+24$. The \textsc{50} appears to have come from the neighbouring signed rows on the same
+page, every one of which is \bytes{CE\textasciitilde 32}.
+
+On the same page the \textsc{2nd} column of \textsc{note tone data} is misnumbered. A
+23-byte block starting at \bytes{012} puts its second instance at \bytes{029}, and the
+column's tail (\bytes{030} onward) agrees --- but its first seven entries read
+\bytes{024} to \bytes{02A}, five too low, and the column jumps from \bytes{02A} to
+\bytes{030}. The numbering above is derived from the stride, so it is unaffected; a
+reader taking the second tone's addresses off the printed column would write seven
+parameters to the wrong bytes.
+\end{caution}
 
 The enumerations these tables point at --- the control functions a controller can be
 assigned to, the filter \textsc{value} bytes for each filter mode, and the

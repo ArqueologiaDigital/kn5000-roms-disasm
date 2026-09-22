@@ -1214,7 +1214,8 @@
          "name": "PITCH KEY SHIFT",
          "bits": "BP7~0",
          "range": "E8-18",
-         "note": "-50 to +50"
+         "note": "-24 to +24",
+         "note_source": "CORRECTED: the guide prints \"- 50~+ 50\" beside E8~18 on p55, which is arithmetically -24..+24, and the identical NORMAL SOUND row 0DD prints \"- 24~+ 24\" beside the same span. See sysex_signed_range_check.py."
         },
         {
          "at": "1AF",
