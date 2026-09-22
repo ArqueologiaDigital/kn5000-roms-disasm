@@ -5,12 +5,17 @@ QUESTION IT ANSWERS
 
 This reference has called itself a description of "operating system version
 2.0" throughout, and listed version 1 as the one thing it could not reach for
-want of a dump.  Both of those rest on a label the community archive puts on
-the file set, not on anything the instrument says.
+want of a dump.
 
-The instrument does not report an operating system version at all.  It has a
-ROM VERSION screen, and that screen reports THREE ROMs separately, as WSA-A,
-WSA-C and WSA-D.
+"Version 2" is a real designation: Felipe, who owns the hardware, reports that
+the number is printed on the labels glued to the EPROMs themselves, and that is
+where the name for this ROM set comes from.  What it is NOT is anything the
+RUNNING instrument says -- it appears on no screen and in no message -- so it
+cannot be read without opening the unit.
+
+What the instrument reports instead is per-ROM build stamps.  It has a ROM
+VERSION screen, and that screen reports THREE ROMs separately, as WSA-A, WSA-C
+and WSA-D.  Those are the identifiers a reader can check with the lid on.
 
 WHERE THE NUMBERS COME FROM
   Each program image ends with a build stamp -- the linker's source file name,

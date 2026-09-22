@@ -2164,9 +2164,12 @@ and the round trip reproducing the stored bytes, `OK`.
 **Question:** which firmware is this, in the instrument's own terms?
 
 The reference called itself "operating system version 2.0" throughout and listed version 1
-as its one unreachable gap. ★ **Both rested on a label the community archive puts on the
-file set, not on anything the instrument says.** The instrument reports no OS version at
-all: it has a `ROM VERSION` screen reporting **three** ROMs separately.
+as its one unreachable gap. ★ **"Version 2" is printed on the labels glued to the EPROMs**
+(Felipe, who owns the hardware) --- a real designation, and the origin of the name for this
+ROM set --- **but it is not anything the running instrument says**, so it cannot be read
+without opening the unit. The instrument reports no OS version at all: it has a
+`ROM VERSION` screen reporting **three** ROMs separately, and those are what a reader can
+check with the lid on.
 
 ★★ **Each program image ends with the linker's build stamp** in its last sixteen bytes:
 
