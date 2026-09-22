@@ -1478,6 +1478,122 @@ python3 wsa1/notes/sysex-probes/sysex_conversion_tables.py --tex \
 
 Pass: every arithmetic row satisfies the identity, `OK`.
 
+## Where the guide disagrees with itself, and where we disagree with the guide
+
+Three probes ask the same kind of question: the Reference Guide prints some things twice,
+so the two printings check each other — and where they do not agree, either the guide is
+wrong or our transcription of it is. All three **exit non-zero on purpose**: the failure
+is the finding, and each names the guide page it was read from so the claim can be
+re-rendered and re-read.
+
+### `sysex_signed_range_check.py`
+
+**Question:** does each sound parameter's hex span agree with the decimal span printed
+beside it?
+
+Every row of the sound-parameter tables gives its range twice, `DATA (HEX)` and
+`DATA (DEC)`. Reading the hex as a signed byte must reproduce the decimal.
+
+**It found one row that does not.** `DRUM SOUND / NOTE TONE DATA / PITCH KEY SHIFT`
+(parameter `1AE` in the area frame; the guide prints it as `016`/`028` in the note frame)
+gives `E8~18` beside `- 50~+ 50`. `E8`..`18` signed is −24..+24. The **same** parameter in
+`NORMAL SOUND / TONE DATA` (`0DD`/`12E`/`17F`/`1D0`, guide p50) gives `E8~18` beside
+`- 24~+ 24`.
+
+Both rows were rendered at 200 dpi and read, and both say what `sound_layout.json` says
+they say — so this is **the guide contradicting itself**, not a transcription slip. The
+hex is what holds arithmetically, and the `50` is where it came from: every other signed
+row on that page is `CE~32`, −50..+50, including `LEVEL TOUCH DEPTH` two rows below.
+
+Control: 11 rows agree in the same run, including three `PITCH KEY SHIFT` rows with a
+different span (`C4~3C`, −60..+60).
+
+⚠ Coverage: 12 of 197 entries carry both spans. A row whose note is prose (`0.2 per cent
+per step`) cannot be judged, and the count of those is printed rather than implied.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_signed_range_check.py
+```
+
+Pass: at least one row judged, at least one row passes, none fails.
+
+### `sysex_repeat_numbering_check.py`
+
+**Question:** where a block repeats, do the guide's per-instance parameter columns advance
+by the block's stride?
+
+`NORMAL SOUND / TONE DATA` prints four columns, `DRUM SOUND / NOTE TONE DATA` two. The nth
+column must be the first plus (n−1) strides, on every row.
+
+**It found a misprint.** On p55 the drum table's 2nd column runs `024 025 026 027 028 029
+02A` and then jumps to `030 031 … 03F`. A 23-byte block starting at `012` puts its second
+instance at `029`, so the tail is right and the **first seven entries are five too low**;
+the discontinuity is inside the column, `02A` followed by `030`.
+
+The 23 is not in doubt: the table's own 1st column spans `012`..`028` inclusive, and
+`NOTE DATA`'s 150-byte stride only adds up as 18 + 2×23 + 2×43 — a figure that came from
+the firmware decode, not from this page.
+
+`sound_layout.json` is **unaffected**, and for a stated reason: its method is to transcribe
+the first column only and derive the rest from the stride. That rule was written after a
+different column-reading mistake; here it is what kept the guide's own misprint out of the
+data.
+
+Control: the same check on `NORMAL SOUND / TONE DATA` — 36 column entries, all correct.
+
+⚠ Coverage: two tables (guide pp. 50, 51 and 55). `MODELING DATA` and `NOTE MODELING DATA`
+also print per-instance columns and were not transcribed, so this says nothing about them.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_repeat_numbering_check.py
+```
+
+### `sysex_effect_value_numbers.py`
+
+**Question:** is an effect's `VALUE` list the same thing as its list of parameter **names**?
+
+`effects.json` says its `values` list *is* "the order of the VALUE1..VALUEn bytes".
+`conversion_tables.json` says three PEQ fields share two bytes. Both cannot be true.
+
+The guide settles it outright, because **every DSP EFFECT page prints the byte number**:
+each parameter table has a `MIDI` column pair, `DATA` and `VALUE`, and the `VALUE` column
+is the answer. It is not 1:1 in either direction:
+
+| guide | row | `VALUE` prints |
+|---|---|---|
+| p16 `PARAMETRIC EQ` | `BAND EMPHASIS 1 Fc` | *(blank)* |
+| | `BAND EMPHASIS 1 Q` | `1,2` |
+| | `BAND EMPHASIS 1 G` | `*17` |
+| | `VOLUME` | `13` |
+| p10 `SINGLE DELAY` | `DELAY L` | `2,3` |
+| | `DELAY R` | `4,5` |
+
+So `conversion_tables.json` is right and `effects.json`'s sentence is wrong — and the error
+is **wider than the PEQ**. Any parameter the guide numbers `a,b` spans two bytes, and every
+`VALUE` number after it shifts. `PARAMETRIC EQ` is **13** value bytes, not 19;
+`SINGLE DELAY` is **9**, not 7.
+
+This script holds the `VALUE` column as transcribed off all thirty DSP EFFECT pages, so the
+two files can be compared mechanically. Of 56 effects, **19** have a byte count different
+from their name count and **3 more** (`72`, `98`, `99`) have the same count with a
+different mapping — 22 affected, 34 genuinely 1:1.
+
+Self-check: within each effect the numbers mentioned must be exactly 1..N, each once, in
+order. A misread digit breaks that and the assertion names the effect. Every effect also
+still fits the twenty `VALUE` bytes a block carries — the largest is `MULTI TAP DELAY` at
+16.
+
+It also reports where the two files' **name** lists differ: `HAAS EFFECT` (p21) prints
+`BALANCE L` and `BALANCE R` where `effects.json` has a single `BALANCE`.
+
+⚠ Coverage: all 56 effects, every DSP EFFECT page — not a sample. What is **not** checked
+is the names; nothing independent states them, exactly as `sysex_effects.py` says.
+
+```sh
+python3 wsa1/notes/sysex-probes/sysex_effect_value_numbers.py
+python3 wsa1/notes/sysex-probes/sysex_effect_value_numbers.py --all
+```
+
 ### `sysex_published_sizes.py`
 
 **Question:** does the ROM accept exactly the dump sizes Technics published?
