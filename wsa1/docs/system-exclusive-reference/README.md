@@ -20,8 +20,14 @@ lists which page carries what.
 
 ```sh
 pdflatex wsa1r-system-exclusive-reference.tex
-pdflatex wsa1r-system-exclusive-reference.tex     # twice, for the table of contents
+pdflatex wsa1r-system-exclusive-reference.tex
+pdflatex wsa1r-system-exclusive-reference.tex     # THREE passes from a clean tree
 ```
+
+Two passes is not enough when there is no `.toc` to start from: the first pass writes contents
+entries against page numbers taken before the contents itself occupied any pages, the second
+typesets them one page short, and only the third settles. Checked by running a fourth, which
+changes nothing.
 
 63 numbered pages (65 in the PDF, counting the title page and the contents).
 Needs only a standard TeX Live.
