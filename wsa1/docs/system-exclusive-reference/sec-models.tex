@@ -51,10 +51,25 @@ received nor send one.
 \begin{note}{Telling the two apart over MIDI}
 \textsc{md} in anything the instrument transmits is \bytes{00} on the keyboard and
 \bytes{01} on the rack --- the values Technics' published field table gives for the two
-models. An identity enquiry (\bytes{F0 50 21 04 00 11 F7}
-or \bytes{F0 50 22 04 00 11 F7}) is answered with the model's own value, whichever value
-the enquiry itself carried. A second, behavioural test is to request a \textsc{sequencer}
-dump and see whether anything arrives.
+models. Reading it back takes more than asking, because the two messages that would carry
+it in a reply, \textsc{hrq} and \textsc{hrt}, are not an identity enquiry: they are the
+opening exchange of a bulk dump (chapter~\ref{ch:bulk}) and are answered only inside it.
+The instrument must be showing the \textsc{sysex bulk dump} screen, and \bytes{21} is
+answered only while the handshake state is zero, \bytes{22} only while it is one. Sent to
+an instrument sitting on any other screen, both produce silence --- and not an
+\textsc{err} either, so nothing on the wire separates the wrong moment from the wrong
+machine or a dead cable.
+
+What does work at rest is a parameter request (chapter~\ref{ch:params}). Nothing in the
+parameter engine consults the panel, so a \textsc{drq} is answered wherever the
+instrument happens to be, and the \textsc{itr} that answers it carries \textsc{md}
+substituted the same way. A request the instrument refuses is answered too, with
+\bytes{F0 50 29 7E F7} --- unlike \bytes{21} and \bytes{22}, which are outside the set
+that error reply covers. So the parameter route reports a machine that is listening even
+when the address asked for is wrong, which makes it the better probe in both directions.
+
+A third test is behavioural: request a \textsc{sequencer} dump and see whether anything
+arrives.
 \end{note}
 
 \begin{note}{Which machine is which}

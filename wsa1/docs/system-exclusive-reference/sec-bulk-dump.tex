@@ -174,6 +174,13 @@ A dump begins with a two-step exchange. Each step is attempted up to three times
   \bytes{F0 50 23 7E F7}.
 \end{enumerate}
 
+Read from the instrument's side, each step is gated twice: the panel must be on the
+\textsc{sysex bulk dump} screen, and the handshake state must be the one that step
+expects --- zero for \bytes{21}, one for \bytes{22}. A \bytes{21} that arrives on any
+other screen, or a \bytes{22} before its \bytes{21}, is answered with nothing at all.
+The state advances only on a step that passed both gates, so a sender that opens a
+transfer twice without closing the first will find its second \bytes{21} ignored.
+
 If the exchange succeeds, every subsequent data message must be acknowledged. If all three
 attempts of the first step fail, \textbf{the dump proceeds anyway, without
 acknowledgements}, at a fixed pace of roughly 51\,ms between messages.
