@@ -498,14 +498,23 @@ def as_json():
         if 0x20 < p_.b7 < 0x60:
             continue                      # the other 31 part blocks are identical
         e = {"b7": p_.b7, "b8": p_.b8, "size": p_.size, "mask": p_.mask,
-             "shift": p_.shift, "min": p_.lo, "max": p_.hi, "inv": bool(p_.inv),
+             "shift": p_.shift, "min": p_.lo, "max": p_.hi,
+             # descriptor +0x0F. The write path this script verifies instruction by
+             # instruction is "base[offset] under mask" and does not use it, so it is
+             # reported raw rather than applied.
+             "desc_0f": p_.inv,
              "part": p_.b7 == 0x20}
+        # A resolved RAM address is not automatically IN the dump: the pair at 00/00-00/01
+        # lives at 0x7FD6, past RAM_HI, which the assertions above state outright. Offering
+        # ram - RAM_LO for those gives an offset beyond the 2432 bytes, so they are reported
+        # as having none, like any other parameter the dump does not carry.
+        def offset(r):
+            return None if r is None or not (RAM_LO <= r < RAM_HI) else r - RAM_LO
         if p_.b7 == 0x20:
-            offs = [ram_of(p_, q) for q in range(32)]
-            e["dump_offset"] = None if any(r is None for r in offs) else [r - RAM_LO for r in offs]
+            offs = [offset(ram_of(p_, q)) for q in range(32)]
+            e["dump_offset"] = None if any(o is None for o in offs) else offs
         else:
-            r = ram_of(p_)
-            e["dump_offset"] = None if r is None else r - RAM_LO
+            e["dump_offset"] = offset(ram_of(p_))
         out["params"].append(e)
     return out
 
