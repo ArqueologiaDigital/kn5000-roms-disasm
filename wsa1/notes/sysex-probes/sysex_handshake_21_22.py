@@ -322,7 +322,9 @@ assert le32(T_IRQ + 4 * PARAM_REQ) == le32(T_FG + 4 * PARAM_REQ) == 0x00FB42AB
 # in it, and it dispatches straight on parse-record field 1.
 assert a(0xFB42AB, 3) == bytes([0x0B, 0x01, 0x00]), "pushw field 1"
 assert a(0xFB42C7, 6) == bytes([0xE8, 0xC8, 0xD1, 0x42, 0xFB, 0x00]), "JumpTable_FB42D1"
-assert not any(0xFB42AB <= s < 0xFB4510 for s in SCREEN79), "a screen gate in the 2B arm"
+# EXHAUSTIVE over the WHOLE 2B/2C parameter engine, 0xFB3483..0xFB5122 -- the
+# span from the first non-session handler to the dump-request arms:
+assert not any(0xFB3483 <= s < 0xFB5122 for s in SCREEN79), "a screen gate in the 2B/2C engine"
 # and its reply is built from the `2C` template, which sysex_model_variant.py
 # shows the strap patch also rewrites.
 assert b(0xF4FEF2, 6) == bytes([0xF0, 0x50, 0x2C, 0x04, 0x00, 0x11])
@@ -433,8 +435,11 @@ print()
 print("POSITIVE CONTROL -- the same parser, a path that DOES answer at rest")
 print("  F0 50 2B 04 <00|01> 11 <gg> <pp> ... -> cmd 0x%02X -> 0x%06X in BOTH"
       % (PARAM_REQ, le32(T_IRQ + 4 * PARAM_REQ)))
-print("  outer tables, with no compare against the panel-mode byte anywhere in")
-print("  it, and a reply built from the `2C` template 0xF4FEF2.")
+print("  outer tables, and NO instruction anywhere in 0xFB3483-0xFB5122, the whole")
+print("  parameter engine, compares the panel-mode byte.  Its reply is built from")
+print("  the `2C` template 0xF4FEF2, named by 9 instructions in that span, and the")
+print("  strap patch rewrites its MD too -- so a `2B` request IS an at-rest test")
+print("  of which model answered.")
 print("  Even a REFUSED 0x2B or 0x2C is answered: sub_FB5197, at the tail of")
 print("  both dispatchers, sends F0 50 29 7E F7 when the status is non-zero")
 print("  AND the family byte is 0x2B or 0x2C.  0x21 and 0x22 are never in that")
