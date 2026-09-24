@@ -79,6 +79,7 @@ FDC_WaitReady:
 .Lc_f9676d:
 	pop XIZ
 	ret
+FDC_ResultPhase_Read_Code_Helper:
 	push XIZ
 	ld iz, (0x0409:16)
 	ldw QIZ, 0x0080
@@ -107,12 +108,14 @@ FDC_WaitReady:
 .Lc_f967b0:
 	pop XIZ
 	ret
+FDC_InitSequence_Full_Helper:
 	ldw WA, 0x0036
 	calr FDC_Send_Command
 	ld wa, 2:i3
 	calr SOME_DELAY
 	ld (0x8a68:16), 0xff
 	ret
+FDC_Write_Data_Entry:
 	.byte 0x3e, 0x1e, 0x02, 0x0a, 0x1e, 0x6d, 0x09, 0xdb
 	.byte 0xcf, 0xff, 0xff, 0x66, 0x0e, 0x1e, 0xb2, 0x09
 	.byte 0xdb, 0xcf, 0xff, 0xff, 0x66, 0x05, 0xf1, 0x68
@@ -186,14 +189,14 @@ FDC_COMMAND_DISPATCHER:
 	ld	(35214:16), 0
 	ld	wa, (35236:16)
 	cp	wa, 11
-	jr	ugt, 36	; -> 0xF969D7
+	jr	ugt, FDC_CheckDriveCount	; -> 0xF969D7
 	add	wa, wa
 	lda	xix, (15374514:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (16345545:24)
 	jp_rr	8, xix, wa
 FDC_CMD_HANDLER_BASE:
-	calr	255
+	calr	FDC_SetupFormatParams
 	ld	l, (35208:16)
 	ret
 FDC_ReturnZero:
@@ -207,29 +210,29 @@ FDC_CheckDriveCount:
 	ld	wa, (35238:16)
 	ld	(35214:16), a
 	cp	(35214:16), 1
-	jr	ule, 6
+	jr	ule, FDC_ValidateCommand
 	ldw	wa, 254
-	jrl	1972
+	jrl	FDC_Set_Status
 FDC_ValidateCommand:
 	ld	wa, (35236:16)
 	cp	wa, 4:i3
-	jr	z, 33
+	jr	z, FDC_ValidateTrack
 	cp	wa, 3:i3
-	jr	z, 29
+	jr	z, FDC_ValidateTrack
 	cp	wa, 2:i3
-	jr	z, 25
+	jr	z, FDC_ValidateTrack
 	cp	wa, 5:i3
-	jr	z, 13
+	jr	z, FDC_Command5Handler
 	cp	wa, 11
-	jr	z, 4
+	jr	z, FDC_NoOpReturn
 	cp	wa, 1:i3
-	jr	nz, 11
+	jr	nz, FDC_ValidateTrack
 FDC_NoOpReturn:
 	ld l, 0x0:opc
 	ret
 
 FDC_Command5Handler:
-	calr	492
+	calr	FDC_Command5_Epilogue
 	ld	l, (35208:16)
 	ret
 FDC_ValidateTrack:
@@ -238,9 +241,9 @@ FDC_ValidateTrack:
 	ld	(35226:16), a
 	extz	wa
 	cp	wa, (35436:16)
-	jr	c, 6	; -> 0xF96A2F
+	jr	c, FDC_HandleCmd2	; -> 0xF96A2F
 	ldw	wa, 254
-	jrl	1905	; -> 0xF971A0
+	jrl	FDC_Set_Status	; -> 0xF971A0
 FDC_HandleCmd2:
 	.byte 0xd1, 0xa4, 0x89, 0x3f, 0x02, 0x00, 0x6e, 0x08
 	.byte 0x1e, 0xa1, 0x01, 0xc1, 0x88, 0x89, 0x27, 0x0e
@@ -274,7 +277,7 @@ FDC_ErrorInvalid:
 	jrl FDC_Set_Status
 
 FDC_ValidExecute:
-	calr	277
+	calr	FDC_CheckHead
 	ld	l, (35208:16)
 	ret
 FDC_SetupFormatParams:
@@ -282,15 +285,15 @@ FDC_SetupFormatParams:
 	ld	(35282:16), a
 	and	a, 15
 	cp	a, 3:i3
-	jrl	z, 129
+	jrl	z, FDC_Format1440K
 	cp	a, 2:i3
-	jr	z, 69
+	jr	z, FDC_FormatDD
 	cp	a, 5:i3
-	jr	z, 9
+	jr	z, FDC_FormatHD
 	cp	a, 4:i3
-	jr	z, 5
+	jr	z, FDC_FormatHD
 	cp	a, 0:i3
-	jrl	nz, 168
+	jrl	nz, FDC_FormatUnknown
 FDC_FormatHD:
 	ld	(35218:16), 2
 	ld	(35225:16), 1
@@ -302,7 +305,7 @@ FDC_FormatHD:
 	ldw	(35436:16), 80
 	ldw	(35438:16), 9
 	ldw	(35440:16), 10
-	jr	118
+	jr	FDC_InitStateVars
 FDC_FormatDD:
 	ld	(35218:16), 3
 	ld	(35225:16), 1
@@ -314,7 +317,7 @@ FDC_FormatDD:
 	ldw	(35436:16), 77
 	ldw	(35438:16), 8
 	ldw	(35440:16), 9
-	jr	62
+	jr	FDC_InitStateVars
 FDC_Format1440K:
 	ld	(35218:16), 2
 	ld	(35225:16), 1
@@ -326,7 +329,7 @@ FDC_Format1440K:
 	ldw	(35436:16), 80
 	ldw	(35438:16), 18
 	ldw	(35440:16), 19
-	jr	6
+	jr	FDC_InitStateVars
 FDC_FormatUnknown:
 	ldw wa, 0xfe
 	calr FDC_Set_Status
@@ -560,10 +563,10 @@ FDC_ResultPhase_Read:
 	ret
 	dec	2, xsp
 	ld	(xsp), a
-	calr	-1644
+	calr	FDC_ResultPhase_Read_Code_Helper
 	ld	a, (xsp)
 	extz	wa
-	calr	-1727
+	calr	FDC_Write_Data
 	inc	2, xsp
 	ret
 	dec 2,XSP
@@ -588,13 +591,13 @@ FDC_Exception_Status_Decoder:
 	ld	a, c
 	and	a, 192
 	cp	a, 64
-	jr	z, 28
+	jr	z, FDC_StatusDecode_AbnormalTerm
 	cp	a, 128
-	jr	z, 20
+	jr	z, FDC_StatusDecode_InvalidCommand
 	cp	a, 192
-	jr	z, 7
+	jr	z, FDC_StatusDecode_DriveNotReady
 	cp	a, 0:i3
-	jr	nz, 105
+	jr	nz, FDC_StatusDecode_UnknownIC
 	ld	l, 0:opc
 	ret
 FDC_StatusDecode_DriveNotReady:
@@ -851,16 +854,16 @@ SOME_DELAY_Loop:
 
 FDC_InitSequence_Short:
 	ldw	wa, 40
-	jr	-39
+	jr	SOME_DELAY
 
 FDC_InitSequence_Full:
-	calr	64019
-	calr	64003
+	calr	FDC_Init_Sequence_1
+	calr	FDC_Pulse_PH0
 	ld	(35278:16), 0
 	ld	(35428:16), 0
-	calr	64636
-	calr	62832
-	jrl	-2690
+	calr	FDC_HardwareSetup
+	calr	FDC_InitSequence_Full_Helper
+	jrl	FDC_Write_Data_Entry
 FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin of boot FDC_CmdRecalibrate
 	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate_head.bin"
 	ld a, (0x899a:16)
@@ -984,15 +987,18 @@ FDC_STATUS_COPY_Code:
 	ret	
 	ld	wa, (35240:16)
 	cp	wa, 1:i3
-	jr	z, 13
+	jr	z, FDC_STATUS_COPY_Code_Skip2
 	cp	wa, 0:i3
-	jr	nz, 2
-	jr	13
+	jr	nz, FDC_STATUS_COPY_Code_Skip
+	jr	FDC_STATUS_COPY_Code_Join
+FDC_STATUS_COPY_Code_Skip:
 	ldw	wa, 254
-	calr	63806
+	calr	FDC_Set_Status
 	ret	
+FDC_STATUS_COPY_Code_Skip2:
 	ld	(35278:16), 255
 	ret	
+FDC_STATUS_COPY_Code_Join:
 	ld	(35278:16), 0
 	ret	
 FDC_INTERRUPT_HANDLER:
@@ -1003,21 +1009,24 @@ FDC_INTERRUPT_HANDLER:
 FDC_INTERRUPT_HANDLER_Code:
 	push	xsp
 	nop	
-	jr	nz, 42
-	calr	61050
+	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
+	calr	FDC_Read_Data
 	ldb_erp	l, 251
 	bit_erpb	251, 7
-	jr	z, 6
+	jr	z, FDC_INTERRUPT_HANDLER_Code_Skip
 	ldw	wa, 50
-	calr	63743
+	calr	FDC_Set_Status
+FDC_INTERRUPT_HANDLER_Code_Skip:
 	bit_erpb	251, 5
-	jr	nz, 6
+	jr	nz, FDC_INTERRUPT_HANDLER_Code_Skip2
 	ldw	wa, 49
-	calr	63731
+	calr	FDC_Set_Status
+FDC_INTERRUPT_HANDLER_Code_Skip2:
 	bit_erpb	251, 6
-	jr	z, 6
+	jr	z, FDC_INTERRUPT_HANDLER_Code_Epilogue
 	ldw	wa, 47
-	calr	63719
+	calr	FDC_Set_Status
+FDC_INTERRUPT_HANDLER_Code_Epilogue:
 	pop	qiz
 	ret	
 FDC_CommandEntry:
@@ -1217,15 +1226,15 @@ INT4_ReadResultLoop:
 	lda_dpi XSP, 0xf8
 
 INT4_WaitResultReady:
-	calr	-5010
+	calr	FDC_Read_Status
 	bit	7, l
-	jr	z, -8
-	calr	-5018
+	jr	z, INT4_WaitResultReady
+	calr	FDC_Read_Status
 	bit	6, l
-	jr	nz, -25
-	calr	-3192
+	jr	nz, INT4_ReadResultLoop
+	calr	FDC_Exception_Status_Decoder
 	cp	(35269:16), 128
-	jr	nz, -81
+	jr	nz, INT4_WaitDataReady
 INT4_ExitRestore:
 	ld	(35268:16), 0
 	pop	xwa
@@ -1239,10 +1248,10 @@ INT4_ExitRestore:
 Reset_Floppy_Disk_Controller:
 	set_dd8	0, 52
 	ldw	wa, 10
-	calr	63296
+	calr	SOME_DELAY
 	res_dd8	0, 52
 	ldw	wa, 10
-	jrl	-2249
+	jrl	SOME_DELAY
 	ld	(71:8), 30:io
 	bit_dd8	6, 52
 	ret	nz
@@ -1251,9 +1260,9 @@ Reset_Floppy_Disk_Controller:
 	ldw	(35466:16), 0
 	ldw	(35468:16), 0
 	cp	a, 0:i3
-	jr	nz, 8
+	jr	nz, FDC_Reset_SetDD_SectorCount
 	ldw	(35470:16), 224
-	jr	6
+	jr	FDC_Reset_BuildParams
 FDC_Reset_SetDD_SectorCount:
 	ldw	(35470:16), 211
 FDC_Reset_BuildParams:
@@ -1263,7 +1272,7 @@ FDC_Reset_BuildParams:
 	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
-	calr	64935
+	calr	FDC_CommandEntry
 	ldw	(35464:16), 3
 	ldw	(35466:16), 0
 	ldw	(35468:16), 0
@@ -1274,7 +1283,7 @@ FDC_Reset_BuildParams:
 	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
-	calr	64883
+	calr	FDC_CommandEntry
 	ldw	(35464:16), 3
 	ldw	(35466:16), 0
 	ldw	(35468:16), 0
@@ -1285,7 +1294,7 @@ FDC_Reset_BuildParams:
 	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
-	calr	64831
+	calr	FDC_CommandEntry
 	ldw	(35464:16), 3
 	ldw	(35466:16), 0
 	ldw	(35468:16), 0
@@ -1296,7 +1305,7 @@ FDC_Reset_BuildParams:
 	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
-	calr	64779
+	calr	FDC_CommandEntry
 	ldw	(35464:16), 3
 	ldw	(35466:16), 0
 	ldw	(35468:16), 0
@@ -1307,10 +1316,10 @@ FDC_Reset_BuildParams:
 	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
-	calr	64727
+	calr	FDC_CommandEntry
 	lda	xsp, (xsp+20)
 	ldw	wa, 200
-	calr	62998
+	calr	SOME_DELAY
 	incw	1, (58132:16)
 	ret
 Check_for_Floppy_Disk_Change:

@@ -111,7 +111,7 @@ RVari_SelectE_FirstItem_Draw:
 	inc	1, wa
 	.byte 0x91	; llvm-mc cannot spell this byte
 	.byte 0xf0	; llvm-mc cannot spell this byte
-	jr	nz, 58	; -> 0xFBF59B
+	jr	nz, RVari_SelectE_SecondItem_Setup	; -> 0xFBF59B
 	ld	xwa, (xiz+44)
 	ld	bc, (xwa)
 	muls	bc, 10
@@ -130,7 +130,7 @@ RVari_SelectE_FirstItem_Draw:
 	exts	xwa
 	divs	wa, 4
 	cp	wa, de
-	jr	nz, 8	; -> 0xFBF59B
+	jr	nz, RVari_SelectE_SecondItem_Setup	; -> 0xFBF59B
 	ld	(xsp+10), 0
 	ld	(xsp+12), 7
 RVari_SelectE_SecondItem_Setup:
@@ -175,7 +175,7 @@ RVari_SelectE_SecondItem_Draw:
 	pushw 5718
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -189,7 +189,7 @@ RVari_SelectE_SecondItem_Draw:
 	extz	wa
 	pushw	wa
 	ld	xwa, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xhl, (xsp+532)
 	lda	xbc, (xhl+2)
 	ld	wa, (xbc)
@@ -202,11 +202,11 @@ RVari_SelectE_SecondItem_Draw:
 	add	wa, 16
 	ld	(xde+6), wa
 	.byte 0x93, 0x3f, 0x00, 0x00
-	jr	nz, 16
+	jr	nz, RVari_SelectE_SecondItem_BtnNotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
 	ldw	(xwa+4), 176
-	jr	14
+	jr	RVari_SelectE_SecondItem_BtnDraw
 RVari_SelectE_SecondItem_BtnNotFirst:
 	lda_dri XWA, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -338,7 +338,7 @@ RVari_SelectO_SecondItem_Draw:
 	pushw 5722
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -352,7 +352,7 @@ RVari_SelectO_SecondItem_Draw:
 	extz	wa
 	pushw	wa
 	ld	xwa, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xhl, (xsp+532)
 	lda	xbc, (xhl+2)
 	ld	wa, (xbc)
@@ -365,11 +365,11 @@ RVari_SelectO_SecondItem_Draw:
 	add	wa, 16
 	ld	(xde+6), wa
 	.byte 0x93, 0x3f, 0x00, 0x00
-	jr	nz, 16
+	jr	nz, RVari_SelectO_SecondBtn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
 	ldw	(xwa+4), 176
-	jr	14
+	jr	RVari_SelectO_SecondBtn_Draw
 RVari_SelectO_SecondBtn_NotFirst:
 	lda_dri XWA, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -752,7 +752,7 @@ RVari_ConfirmF_Item_Draw:
 	pushw 5726
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -766,7 +766,7 @@ RVari_ConfirmF_Item_Draw:
 	extz	wa
 	pushw	wa
 	ld	xwa, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xhl, (xsp+532)
 	lda	xbc, (xhl+2)
 	ld	wa, (xbc)
@@ -779,11 +779,11 @@ RVari_ConfirmF_Item_Draw:
 	add	wa, 16
 	ld	(xde+6), wa
 	.byte 0x93, 0x3f, 0x00, 0x00
-	jr	nz, 16
+	jr	nz, RVari_ConfirmF_Btn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
 	ldw	(xwa+4), 176
-	jr	14
+	jr	RVari_ConfirmF_Btn_Draw
 RVari_ConfirmF_Btn_NotFirst:
 	lda_dri XWA, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -1019,7 +1019,7 @@ RVari_ConfirmE_Item_Draw:
 	pushw 5742
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -1033,7 +1033,7 @@ RVari_ConfirmE_Item_Draw:
 	extz	wa
 	pushw	wa
 	ld	xwa, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xhl, (xsp+532)
 	lda	xbc, (xhl+2)
 	ld	wa, (xbc)
@@ -1046,11 +1046,11 @@ RVari_ConfirmE_Item_Draw:
 	add	wa, 16
 	ld	(xde+6), wa
 	.byte 0x93, 0x3f, 0x00, 0x00
-	jr	nz, 16
+	jr	nz, RVari_ConfirmE_Btn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
 	ldw	(xwa+4), 176
-	jr	14
+	jr	RVari_ConfirmE_Btn_Draw
 RVari_ConfirmE_Btn_NotFirst:
 	lda_dri XWA, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -1263,7 +1263,7 @@ RVari_EnumNotifyF_Item_Draw:
 	pushw 5746
 	lda	xwa, (xsp+284)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -1277,7 +1277,7 @@ RVari_EnumNotifyF_Item_Draw:
 	extz	wa
 	pushw	wa
 	ld	xwa, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xhl, (xsp+532)
 	lda	xbc, (xhl+2)
 	ld	wa, (xbc)
@@ -1290,11 +1290,11 @@ RVari_EnumNotifyF_Item_Draw:
 	add	wa, 16
 	ld	(xde+6), wa
 	.byte 0x93, 0x3f, 0x00, 0x00
-	jr	nz, 16
+	jr	nz, RVari_EnumNotifyF_Btn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
 	ldw	(xwa+4), 176
-	jr	14
+	jr	RVari_EnumNotifyF_Btn_Draw
 RVari_EnumNotifyF_Btn_NotFirst:
 	lda_dri XWA, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -1432,7 +1432,7 @@ RVari_EnumNotifyE_Item_Draw:
 	pushw 5750
 	lda	xwa, (xsp+282)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -1446,7 +1446,7 @@ RVari_EnumNotifyE_Item_Draw:
 	extz	wa
 	pushw	wa
 	ld	xwa, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xhl, (xsp+532)
 	lda	xbc, (xhl+2)
 	ld	wa, (xbc)
@@ -1459,11 +1459,11 @@ RVari_EnumNotifyE_Item_Draw:
 	add	wa, 16
 	ld	(xde+6), wa
 	.byte 0x93, 0x3f, 0x00, 0x00
-	jr	nz, 16
+	jr	nz, RVari_EnumNotifyE_Btn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
 	ldw	(xwa+4), 176
-	jr	14
+	jr	RVari_EnumNotifyE_Btn_Draw
 RVari_EnumNotifyE_Btn_NotFirst:
 	lda_dri XWA, 0xfd, 0x18, 0x02
 	ldw (xwa), 0xb7
@@ -2589,10 +2589,10 @@ RVari_Epilogue:
 RVari_UpdateDisplayNotify:
 	dec	4, xsp
 	push	xiz
-	call	16408153
+	call	GetViewInstance
 	ld	(xsp+4), xhl
 	pushw	4
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xbc, (xsp+4)
@@ -2609,11 +2609,11 @@ RVari_UpdateDisplayNotify:
 	ld	xwa, 21102592
 	ld	xbc, 31588352
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 	ld	xwa, 20971523
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 	pop	xiz
 	inc	4, xsp
 	ret

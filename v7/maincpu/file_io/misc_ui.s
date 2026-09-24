@@ -35,14 +35,14 @@ JumpInsert_DispatchBody:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	JumpInsert_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	JumpInsert_Return
 	ld	xhl, 4:i3
-	jr	9
+	jr	JumpInsert_Return
 JumpInsert_Error:
 	ld xhl, 0:i3
 	jr JumpInsert_Return
@@ -56,13 +56,13 @@ FilePriorityFunc:
 	push	xiz
 	ld	xiz, xwa
 	cp	xbc, 31457381
-	jr	z, 70	; -> 0xF94D25
+	jr	z, FilePriority_DefaultReturn	; -> 0xF94D25
 	cp	xbc, 31457380
-	jr	z, 58	; -> 0xF94D21
+	jr	z, FilePriority_ReturnOne	; -> 0xF94D21
 	cp	xbc, 31457379
-	jr	z, 43	; -> 0xF94D1A
+	jr	z, FilePriority_ReturnPointer	; -> 0xF94D1A
 	cp	xbc, 31457378
-	jr	nz, 46	; -> 0xF94D25
+	jr	nz, FilePriority_DefaultReturn	; -> 0xF94D25
 	ld	wa, (xde+8)
 	and	wa, 1
 	sla	wa, 2
@@ -74,7 +74,7 @@ FilePriorityFunc:
 	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	13	; -> 0xF94D27
+	jr	FilePriority_Return	; -> 0xF94D27
 FilePriority_ReturnPointer:
 	lda xhl, (0x0340f4:24)
 	jr FilePriority_Return
@@ -105,32 +105,32 @@ SetupExitFunc:
 	push	xiz
 	ld	xiz, xde
 	cp	xbc, 29360130
-	jr	nz, 92
+	jr	nz, SetupExit_Return
 	ld	xde, xiz
-	call	16400380
+	call	InheritedProc
 	or	xiz, xiz
-	jr	nz, 82
+	jr	nz, SetupExit_Return
 	ld	wa, 6:i3
-	call	16535254
+	call	PanelDisplay_DispatchByMode
 	cp	hl, 0:i3
-	jr	z, 72
+	jr	z, SetupExit_Return
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16421459
+	call	SendEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16421701
+	call	PostEvent
 	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16421701
+	call	PostEvent
 	ld	xwa, 21299248
 	ld	xbc, 31784972
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 SetupExit_Return:
 	ld xhl, 0:i3
 	pop xiz
@@ -780,7 +780,7 @@ PsFileNameBox_Confirm_MultiItem:
 	push	xwa
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, (xsp+10)
 	ld	xix, (xwa+42)
@@ -793,13 +793,13 @@ PsFileNameBox_Confirm_MultiItem:
 	lda	xbc, (xsp+158)
 	lda	xde, (xsp+18)
 	.byte 0x94, 0xf5
-	jr	nz, 16
+	jr	nz, PsFileNameBox_Confirm_NewItem
 	lda	xwa, (xsp+146)
 	ld	xhl, (xhl)
 	push	xhl
 	pushw 0
 	pushw 255
-	jr	17
+	jr	PsFileNameBox_Confirm_Finish
 PsFileNameBox_Confirm_NewItem:
 	lda_dri XWA, 0xfd, 0x92, 0x00
 	ld xhl, (xhl)

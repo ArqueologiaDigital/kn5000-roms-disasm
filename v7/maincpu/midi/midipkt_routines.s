@@ -278,15 +278,15 @@ MidiPkt_EnqueueControl_335C:
 	.byte 0xbc, 0x00, 0x04, 0x68, 0x39
 MidiPkt_EnqueueControl_335C_ZeroData:
 	ld	(48224:16), 3
-	jr	50
+	jr	MidiPkt_EnqueueControl_3358_Code_Entry
 	ld	(48224:16), 1
-	jr	43
+	jr	MidiPkt_EnqueueControl_3358_Code_Entry
 	ld	(48224:16), 2
-	jr	36
+	jr	MidiPkt_EnqueueControl_3358_Code_Entry
 	ld	(48224:16), 5
-	jr	29
+	jr	MidiPkt_EnqueueControl_3358_Code_Entry
 	ld	(48224:16), 6
-	jr	22
+	jr	MidiPkt_EnqueueControl_3358_Code_Entry
 	push	xde
 	push	xhl
 MidiPkt_EnqueueControl_335C_Return:
@@ -294,6 +294,7 @@ MidiPkt_EnqueueControl_335C_Return:
 MidiPkt_EnqueueControl_3358:
 	.byte 0x96, 0xf5, 0x5e, 0x5c, 0x5b, 0x5a, 0xc1, 0x60
 	.byte 0xbc, 0x21, 0xd8, 0x12, 0x1b, 0xdd, 0x84, 0xfd
+MidiPkt_EnqueueControl_3358_Code_Entry:
 	.byte 0xc1, 0x9a, 0x8c, 0x21, 0xc9, 0xcf, 0x57, 0x66
 	.byte 0x0b, 0xc1, 0x98, 0x8c, 0x3f, 0x01, 0x6e, 0x06
 	.byte 0xc9, 0xd9, 0x6e, 0x02, 0x68, 0xd4, 0xe1, 0x10
@@ -493,6 +494,7 @@ MidiPkt_SendBankSelect:
 	cp	qiz, 0
 MidiPkt_SendBankSelect_Send:
 	jr	le, 50
+MidiPkt_DispatchData_Chan6_Code_Loop:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 18704
@@ -507,13 +509,14 @@ MidiPkt_SysExValidator_Data:
 	add	xwa, 18704
 	ld	c, (xsp+4)
 	extz	bc
-	call	16630064
-	jr	7
+	call	AppEvent_HandleChannelEvent_Helper
+	jr	MidiPkt_DispatchData_Chan6_Code_Join
 	inc	1, iz
 	cp	iz, qiz
-	jr	lt, -50
+	jr	lt, MidiPkt_DispatchData_Chan6_Code_Loop
+MidiPkt_DispatchData_Chan6_Code_Join:
 	push	xiz
-	call	15668425
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xiz
 	inc	2, xsp

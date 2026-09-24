@@ -83,10 +83,10 @@ Encoder_ProcessVolume:
 	extz	wa
 	lda	xbc, (15573436:24)
 	ld_rrb	a, xbc, wa
-	calr	21
+	calr	Encoder_ClampScaleAndNormalize
 	ld	a, l
 	cp	a, (36440:16)
-	jr	z, 9	; -> 0xFC650B
+	jr	z, Encoder_ProcessVolume_NoChange	; -> 0xFC650B
 	ld	(36440:16), a
 	ldb_erp	a, 248
 	extz	iz
@@ -102,7 +102,7 @@ Encoder_ClampScaleAndNormalize:
 	ld	l, a
 	ld	c, (36418:16)
 	cp	l, c
-	jr	nc, 2
+	jr	nc, Encoder_PerformScaling
 	ld	l, c
 Encoder_PerformScaling:
 	sub	l, c
@@ -159,7 +159,7 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	add	hl, hl
 	ld	a, l
 	ld	(36428:16), a
-	jr	14	; -> 0xFC65D3
+	jr	Encoder_ProcessBreath_Return	; -> 0xFC65D3
 Encoder_ProcessBreath_SimplePassthrough:
 	cp	(36428:16), a
 	ret	z
@@ -228,9 +228,9 @@ Encoder_ReturnDefaultConstant_End:
 Encoder_ApplySystemModeSettings:
 	ld	a, (49121:16)
 	cp	a, 6:i3
-	jr	z, 50
+	jr	z, Encoder_ConfigureRangeLimit
 	cp	a, 5:i3
-	jr	z, 25
+	jr	z, Encoder_ConfigureVolumeMode
 	cp	a, 4:i3
 	ret	nz
 	ld	a, (49123:16)

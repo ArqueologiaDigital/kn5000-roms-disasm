@@ -41,7 +41,7 @@ SeqName_SendCurrentIndex:
 	extz	xde
 	ld	xwa, (33336:16)
 	ld	xbc, 31784962
-	jrl	517
+	jrl	SeqName_PostEventExit
 SeqName_InitAllSlots:
 	ld iz, 0:i3
 
@@ -49,14 +49,14 @@ SeqName_SendSlotLoop:
 	ld	bc, iz
 	ld	wa, bc
 	ld	de, 1:i3
-	calr	65315
+	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33336:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
-	jr	lt, -32
+	jr	lt, SeqName_SendSlotLoop
 SeqName_ReturnZero:
 	ld xhl, 0:i3
 	jrl SeqName_Exit
@@ -65,15 +65,15 @@ SeqName_HandleNavigation:
 	ld	wa, hl
 	ld	iz, hl
 	or	xde, xde
-	jr	nz, 51
+	jr	nz, SeqName_HandlePlayAction
 	cp	(33890:16), 0
-	jr	nz, 44
+	jr	nz, SeqName_HandlePlayAction
 	cp	xbc, 29360152
-	jr	nz, 11
+	jr	nz, SeqName_CheckPrevKey
 	cp	wa, 9
-	jrl	nc, 301
+	jrl	nc, SeqName_GetCurrentIndex
 	inc	1, wa
-	jr	16
+	jr	SeqName_UpdateIndex
 SeqName_CheckPrevKey:
 	cp xbc, 0x1c00017
 	jrl nz, SeqName_GetCurrentIndex
@@ -84,7 +84,7 @@ SeqName_CheckPrevKey:
 SeqName_UpdateIndex:
 	ld	(33340:16), wa
 	ld	de, wa
-	jrl	276
+	jrl	SeqName_UpdateDisplay
 SeqName_HandlePlayAction:
 	.byte 0xea, 0xcf, 0x04, 0x00, 0x00, 0x00, 0x7e, 0xad
 	.byte 0x00, 0xc1, 0x62, 0x84, 0x3f, 0x00, 0x7e, 0xa5
@@ -115,50 +115,50 @@ SeqName_LoadAndPlay:
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	38514
+	calr	InitializeOperationState
 	ld	wa, (33340:16)
-	call	16284832
+	call	LoadFileMultiPass
 	ld	wa, hl
 	ld	bc, 5:i3
-	calr	39149
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	call	16290139
-	call	16290094
-	call	16290928
+	call	FileIO_ResetCurrentRecord
+	call	GetEncodedFreeSpaceData
+	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
-	calr	38568
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
-	jr	86
+	jr	SeqName_ShowAndExit
 SeqName_HandleAction32:
 	cp	xde, 50
-	jr	nz, 82
+	jr	nz, SeqName_GetCurrentIndex
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	38426
+	calr	InitializeOperationState
 	ld	wa, (33340:16)
-	call	16284832
+	call	LoadFileMultiPass
 	ld	wa, hl
 	ld	bc, 5:i3
-	calr	39061
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	call	16290139
-	call	16290094
-	call	16290928
+	call	FileIO_ResetCurrentRecord
+	call	GetEncodedFreeSpaceData
+	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
-	calr	38480
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
 SeqName_ShowAndExit:
 	call SoundCtrl_SendCommand
@@ -167,27 +167,27 @@ SeqName_GetCurrentIndex:
 	ld	de, (33340:16)
 SeqName_UpdateDisplay:
 	cp	iz, de
-	jrl	z, -345
+	jrl	z, SeqName_ReturnZero
 	extz	xde
 	ld	xwa, (33336:16)
 	ld	xbc, 31784962
-	call	16423243
+	call	ApPostEvent
 	ld	wa, iz
 	ld	bc, iz
 	ld	de, 1:i3
-	calr	64923
+	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33336:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	ld	bc, (33340:16)
 	ld	wa, bc
 	ld	de, 1:i3
-	calr	64897
+	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33336:16)
 	ld	xbc, 29360143
-	jr	75
+	jr	SeqName_PostEventExit
 SeqName_SetIndexPlaying:
 	cp (0x8462:16), 0x00
 	jrl z, SeqName_ReturnZero
@@ -332,18 +332,18 @@ IntMed_MarkSlotEmpty:
 IntMed_NextSlot:
 	inc	1, iz
 	cp	iz, 10
-	jr	c, -54
+	jr	c, IntMed_CheckSlotLoop
 	ld	xwa, 0:i3
 	ld	(33346:16), xwa
-	jrl	990
+	jrl	IntMed_Exit
 IntMed_CheckPlaying:
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	cp	l, 1:i3
-	jrl	nz, 193
+	jrl	nz, IntMed_HandleError
 	ld	(33890:16), 1
 	ld	a, (34816:16)
 	cp	a, (34814:16)
-	jr	nc, 76
+	jr	nc, IntMed_CheckRepeat
 	ld	iz, 0:i3
 	lda	xbc, (34804:16)
 IntMed_FindCurrentSong:
@@ -351,22 +351,22 @@ IntMed_FindCurrentSong:
 	extz	xde
 	add	xde, xbc
 	cp	(xde), a
-	jr	nz, 49
+	jr	nz, IntMed_NextSongSearch
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31784962
-	calr	-965
+	calr	FmmSeqSongNameFunc
 	stb_erp	a, 248
 	extz	wa
-	call	15862692
+	call	SongBank_SwitchAndUpdateTempo
 	inc	1, (34816:16)
 	ld	xwa, (33346:16)
 	or	xwa, xwa
-	jrl	z, 913
+	jrl	z, IntMed_Exit
 	ld	xbc, 31784969
 	ld	xde, 30
-	jr	87
+	jr	IntMed_PostDelayEvent
 IntMed_NextSongSearch:
 	inc 1, iz
 	cp iz, 0xa
@@ -374,7 +374,7 @@ IntMed_NextSongSearch:
 	jrl IntMed_Exit
 IntMed_CheckRepeat:
 	cp	(34818:16), 0
-	jr	z, 87
+	jr	z, IntMed_ClearPlayFlag
 	ld	(34816:16), 0
 	ld	iz, 0:i3
 	lda	xwa, (34804:16)
@@ -383,19 +383,19 @@ IntMed_PlayFromStart:
 	extz	xbc
 	add	xbc, xwa
 	.byte 0x81, 0x3f, 0x00
-	jr	nz, 54
+	jr	nz, IntMed_NextSongLoop
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31784962
-	calr	-1054
+	calr	FmmSeqSongNameFunc
 	stb_erp	a, 248
 	extz	wa
-	call	15862692
+	call	SongBank_SwitchAndUpdateTempo
 	inc	1, (34816:16)
 	ld	xwa, (33346:16)
 	or	xwa, xwa
-	jrl	z, 824
+	jrl	z, IntMed_Exit
 	ld	xbc, 31784969
 	ld	xde, 30
 IntMed_PostDelayEvent:
@@ -410,16 +410,16 @@ IntMed_NextSongLoop:
 
 IntMed_ClearPlayFlag:
 	ld	(33890:16), 0
-	jrl	788
+	jrl	IntMed_Exit
 IntMed_HandleError:
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	ld	(33890:16), 0
 	cp	l, 0:i3
-	jrl	z, 774
+	jrl	z, IntMed_Exit
 	ld	(32422:16), 14
 	ldw	wa, 238
-	call	16355504
-	jrl	759
+	call	SoundCtrl_SendCommand
+	jrl	IntMed_Exit
 IntMed_HandleStop:
 	cp (0x8c9a:16), 0x7a
 	jrl z, IntMed_Exit
@@ -431,7 +431,7 @@ IntMed_HandleStop:
 
 IntMed_StoreWindowPtr:
 	ld	(33342:16), xwa
-	jrl	732
+	jrl	IntMed_Exit
 IntMed_InitSlotDisplay:
 	ld iz, 0:i3
 
@@ -448,7 +448,7 @@ IntMed_FormatSlotLoop:
 	ld	c, (xde)
 	extz	bc
 	ld	de, iz
-	calr	64956
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33350:16)
@@ -456,11 +456,11 @@ IntMed_FormatSlotLoop:
 	add	xde, xwa
 	ld	xwa, (33342:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
-	jr	c, -66
-	jrl	661
+	jr	c, IntMed_FormatSlotLoop
+	jrl	IntMed_Exit
 IntMed_HandleNavToggle:
 	lda xwa, (0x87f4:16)
 	cp XDE,0x0000000a
@@ -490,7 +490,7 @@ IntMed_AssignOrderLoop:
 	add	xbc, xwa
 	ld	a, (xbc)
 	cp	a, 254
-	jr	nz, 58
+	jr	nz, IntMed_NextAssignSlot
 	ld	a, (34814:16)
 	ld	(xbc), a
 	inc	1, (34814:16)
@@ -502,7 +502,7 @@ IntMed_AssignOrderLoop:
 	ld	c, (xbc)
 	extz	bc
 	ld	de, iz
-	calr	64820
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33350:16)
@@ -510,7 +510,7 @@ IntMed_AssignOrderLoop:
 	add	xde, xwa
 	ld	xwa, (33342:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 IntMed_NextAssignSlot:
 	inc 1, iz
 	cp iz, 0xa
@@ -527,7 +527,7 @@ IntMed_UnmarkSlotLoop:
 	add	xbc, xwa
 	ld	a, (xbc)
 	cp	a, 253
-	jr	ugt, 55
+	jr	ugt, IntMed_NextUnmark
 	ld	(xbc), 254
 	dec	1, (34814:16)
 	ld	wa, iz
@@ -538,7 +538,7 @@ IntMed_UnmarkSlotLoop:
 	ld	c, (xbc)
 	extz	bc
 	ld	de, iz
-	calr	64735
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33350:16)
@@ -546,7 +546,7 @@ IntMed_UnmarkSlotLoop:
 	add	xde, xwa
 	ld	xwa, (33342:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 IntMed_NextUnmark:
 	inc 1, iz
 	cp iz, 0xa
@@ -637,23 +637,23 @@ IntMed_NextReorder:
 	ld	a, (34814:16)
 	extz	wa
 	cp	(xsp+2), wa
-	jr	c, -88
-	jrl	170
+	jr	c, IntMed_ReorderLoop
+	jrl	IntMed_Exit
 IntMed_HandleRepeatToggle:
 	cp	xde, 12
-	jr	nz, 24
+	jr	nz, IntMed_HandlePlay
 	cp	xbc, 29360151
-	jr	nz, 8
+	jr	nz, IntMed_SetRepeatOff
 	ld	(34818:16), 1
-	jrl	146
+	jrl	IntMed_Exit
 IntMed_SetRepeatOff:
 	ld	(34818:16), 0
-	jrl	138
+	jrl	IntMed_Exit
 IntMed_HandlePlay:
 	cp	xde, 13
-	jrl	nz, 129
+	jrl	nz, IntMed_Exit
 	cp	(33890:16), 0
-	jr	nz, 122
+	jr	nz, IntMed_Exit
 	ld	(34816:16), 0
 	ld	iz, 0:i3
 IntMed_StartPlayLoop:
@@ -661,24 +661,24 @@ IntMed_StartPlayLoop:
 	extz	xbc
 	add	xbc, xwa
 	.byte 0x81, 0x3f, 0x00
-	jr	nz, 58
+	jr	nz, IntMed_NextPlaySlot
 	ld	(33890:16), 1
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31784962
-	calr	-1816
+	calr	FmmSeqSongNameFunc
 	stb_erp	a, 248
 	extz	wa
-	call	15862692
+	call	SongBank_SwitchAndUpdateTempo
 	inc	1, (34816:16)
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 122
-	call	16355459
-	jr	46
+	call	UI_PostModeChangeEvent
+	jr	IntMed_Exit
 IntMed_NextPlaySlot:
 	inc 1, iz
 	cp iz, 0xa
@@ -687,7 +687,7 @@ IntMed_NextPlaySlot:
 
 IntMed_StoreDelayFlag:
 	ld	(33346:16), xwa
-	jr	30
+	jr	IntMed_Exit
 IntMed_CheckContinue:
 	cp (0x8462:16), 0x00
 	jr z, IntMed_Exit
@@ -706,11 +706,11 @@ IntMed_Exit:
 FmmDiskMedley1Func:
 	pushw	iz
 	cp	xbc, 29360139
-	jr	z, 14
+	jr	z, DiskMed1_InitLoop
 	cp	xbc, 31784964
-	jr	nz, 74
+	jr	nz, DiskMed1_Exit
 	ld	(33430:16), xde
-	jr	68
+	jr	DiskMed1_Exit
 DiskMed1_InitLoop:
 	ld iz, 0:i3
 
@@ -727,7 +727,7 @@ DiskMed1_FormatLoop:
 	ld	c, (xde)
 	extz	bc
 	ld	de, iz
-	calr	64195
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33434:16)
@@ -735,10 +735,10 @@ DiskMed1_FormatLoop:
 	add	xde, xwa
 	ld	xwa, (33430:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
-	jr	c, -66
+	jr	c, DiskMed1_FormatLoop
 DiskMed1_Exit:
 	ld xhl, 0:i3
 	popw iz
@@ -747,11 +747,11 @@ DiskMed1_Exit:
 FmmDiskMedley2Func:
 	pushw	iz
 	cp	xbc, 29360139
-	jr	z, 14
+	jr	z, DiskMed2_InitLoop
 	cp	xbc, 31784964
-	jr	nz, 83
+	jr	nz, DiskMed2_Exit
 	ld	(33514:16), xde
-	jr	77
+	jr	DiskMed2_Exit
 DiskMed2_InitLoop:
 	ldw iz, 0xa
 
@@ -769,7 +769,7 @@ DiskMed2_FormatLoop:
 	extz	bc
 	ld	de, iz
 	sub	de, 10
-	calr	64094
+	calr	FormatMedleyNumber
 	ld	wa, iz
 	sll	wa, 3
 	lda	xbc, (33438:24)
@@ -778,10 +778,10 @@ DiskMed2_FormatLoop:
 	add	xde, xbc
 	ld	xwa, (33514:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 20
-	jr	c, -74
+	jr	c, DiskMed2_FormatLoop
 DiskMed2_Exit:
 	ld xhl, 0:i3
 	popw iz
@@ -828,7 +828,7 @@ DiskMed_ReturnFinished:
 
 DiskMed_InitPlayOrder:
 	cp	xde, 13
-	jrl	nz, 184
+	jrl	nz, DiskMed_ReturnZero
 	ld	(34816:16), 0
 	ld	(34814:16), 0
 	ld	(34818:16), 0
@@ -836,15 +836,15 @@ DiskMed_InitPlayOrder:
 DiskMed_CheckSlotLoop:
 	stb_erp	a, 248
 	extz	wa
-	call	15861296
+	call	SongBank_ScanActiveVoices
 	lda	xbc, (34804:16)
 	ld	wa, iz
 	extz	xwa
 	add	xwa, xbc
 	cp	l, 0:i3
-	jr	z, 5
+	jr	z, DiskMed_MarkUnused
 	ld	(xwa), 254
-	jr	3
+	jr	DiskMed_NextSlotCheck
 DiskMed_MarkUnused:
 	ld (xwa), 0xff
 
@@ -867,10 +867,10 @@ DiskMed_FindFirstSong:
 	add	xwa, xhl
 	ld	a, (xwa)
 	cp	a, (34816:16)
-	jr	nz, 7
+	jr	nz, DiskMed_NextFirst
 	stb_erp	a, 248
 	extz	wa
-	jr	48
+	jr	DiskMed_PlaySong
 DiskMed_NextFirst:
 	inc 1, iz
 	cp iz, 0xa
@@ -890,14 +890,14 @@ DiskMed_FindFirstLoop:
 	add	xwa, xbc
 	ld	a, (xwa)
 	cp	a, (34816:16)
-	jr	nz, 17	; -> 0xF91FA6
+	jr	nz, DiskMed_NextFindFirst	; -> 0xF91FA6
 	stb_erp	a, 248
 	extz	wa
 DiskMed_PlaySong:
-	call	15862692
+	call	SongBank_SwitchAndUpdateTempo
 	inc	1, (34816:16)
 	ld	xhl, 1:i3
-	jr	10
+	jr	DiskMed_HelperExit
 DiskMed_NextFindFirst:
 	inc 1, iz
 	cp iz, 0xa
@@ -995,29 +995,29 @@ DiskSel_NextFile:
 	jrl DiskSel_Exit
 
 DiskSel_CheckPlaying:
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	cp	l, 1:i3
-	jrl	nz, 763
+	jrl	nz, DiskSel_HandleError
 	ld	(33890:16), 1
 	ld	xwa, (xsp+14)
 	ld	xbc, (xsp+10)
 	ld	xde, (xsp+6)
-	calr	64925
+	calr	DiskMed_PlayNextHelper
 	cp	l, 1:i3
-	jr	nz, 38
+	jr	nz, DiskSel_CheckFinished
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 120
-	jrl	685
+	jrl	DiskSel_CallPauseMode
 DiskSel_CheckFinished:
 	cp	l, 2:i3
-	jrl	nz, 1761	; -> 0xF927FA
+	jrl	nz, DiskSel_Exit	; -> 0xF927FA
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
@@ -1028,7 +1028,7 @@ DiskSel_CheckFinished:
 	call	ApPostEvent
 	ld	a, (34976:16)
 	cp	a, (34974:16)
-	jrl	nc, 324	; -> 0xF92288
+	jrl	nc, DiskSel_CheckRepeat	; -> 0xF92288
 	ld	iz, 0:i3
 DiskSel_ClearSelections:
 	stb_erp A, 0xf8
@@ -1061,69 +1061,69 @@ DiskSel_SendFileInfo:
 	add	xde, xbc
 	ld	xwa, (33598:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, qiz
 	cpw	qiz, 20
-	jr	lt, -37
+	jr	lt, DiskSel_SendFileInfo
 	ld	xwa, 0:i3
 	ld	xbc, 29360139
 	ld	xde, 0:i3
-	calr	64518
+	calr	FmmDiskMedley1Func
 	ld	xwa, 0:i3
 	ld	xbc, 29360139
 	ld	xde, 0:i3
-	calr	64601
+	calr	FmmDiskMedley2Func
 	ld	xwa, 0:i3
 	ld	xbc, 29360139
 	ld	xde, 7798792
-	calr	40774
+	calr	DiskNameFunc
 	ld	xwa, 0:i3
 	ld	xbc, 29360139
 	ld	xde, 7798793
-	calr	40990
+	calr	DiskInfoFunc
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	35838
-	call	16283131
+	calr	InitializeOperationState
+	call	FileIO_ParseDirectoryEntry
 	ld	qiz, hl
-	calr	35920
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360138
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	cp	qiz, 0
-	jr	ge, 30
+	jr	ge, DiskSel_PlayNext
 	ld	(33890:16), 0
 	ldw	wa, 96
-	call	16355459
+	call	UI_PostModeChangeEvent
 	ld	wa, qiz
 	ld	bc, 1:i3
-	calr	36421
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
 	ldw	wa, 238
-	jrl	1272
+	jrl	DiskSel_ShowErrorAndExit
 DiskSel_PlayNext:
 	inc	1, (34976:16)
 	ld	xwa, (xsp+14)
 	ld	xbc, 29360151
 	ld	xde, 13
-	calr	64557
+	calr	DiskMed_PlayNextHelper
 	cp	l, 1:i3
-	jr	nz, 25
+	jr	nz, DiskSel_NextSongLoop
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 120
-	call	16355459
-	jr	9
+	call	UI_PostModeChangeEvent
+	jr	DiskSel_ClearPlaying
 DiskSel_NextSongLoop:
 	inc 1, iz
 	cp iz, 0x14
@@ -1131,10 +1131,10 @@ DiskSel_NextSongLoop:
 
 DiskSel_ClearPlaying:
 	ld	(33890:16), 0
-	jrl	1394
+	jrl	DiskSel_Exit
 DiskSel_CheckRepeat:
 	cp	(34978:16), 0
-	jr	z, -15
+	jr	z, DiskSel_ClearPlaying
 	ld	(34976:16), 0
 	ld	iz, 0:i3
 DiskSel_RepeatClear:
@@ -1168,66 +1168,66 @@ DiskSel_RepeatSendInfo:
 	add	xde, xbc
 	ld	xwa, (33598:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, qiz
 	cpw	qiz, 20
-	jr	lt, -37
+	jr	lt, DiskSel_RepeatSendInfo
 	ld	xwa, 0:i3
 	ld	xbc, 29360139
 	ld	xde, 0:i3
-	calr	64182
+	calr	FmmDiskMedley1Func
 	ld	xwa, 0:i3
 	ld	xbc, 29360139
 	ld	xde, 0:i3
-	calr	64265
+	calr	FmmDiskMedley2Func
 	ld	xwa, 0:i3
 	ld	xbc, 29360139
 	ld	xde, 7798792
-	calr	40438
+	calr	DiskNameFunc
 	ld	xwa, 0:i3
 	ld	xbc, 29360139
 	ld	xde, 7798793
-	calr	40654
+	calr	DiskInfoFunc
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	35502
-	call	16283131
+	calr	InitializeOperationState
+	call	FileIO_ParseDirectoryEntry
 	ld	qiz, hl
-	calr	35584
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360138
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	cp	qiz, 0
-	jr	ge, 30
+	jr	ge, DiskSel_RepeatPlayNext
 	ld	(33890:16), 0
 	ldw	wa, 96
-	call	16355459
+	call	UI_PostModeChangeEvent
 	ld	wa, qiz
 	ld	bc, 1:i3
-	calr	36085
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
 	ldw	wa, 238
-	jrl	936
+	jrl	DiskSel_ShowErrorAndExit
 DiskSel_RepeatPlayNext:
 	inc	1, (34976:16)
 	ld	xwa, (xsp+14)
 	ld	xbc, 29360151
 	ld	xde, 13
-	calr	64221
+	calr	DiskMed_PlayNextHelper
 	cp	l, 1:i3
-	jr	nz, 26
+	jr	nz, DiskSel_RepeatNext
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 120
 DiskSel_CallPauseMode:
 	call UI_PostModeChangeEvent
@@ -1240,27 +1240,27 @@ DiskSel_RepeatNext:
 	jrl DiskSel_Exit
 
 DiskSel_HandleError:
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	ld	(33890:16), 0
 	cp	l, 0:i3
-	jr	nz, 35
+	jr	nz, DiskSel_ShowError
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360138
 	ld	xde, 0:i3
-	call	16423243
-	jrl	1014
+	call	ApPostEvent
+	jrl	DiskSel_Exit
 DiskSel_ShowError:
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(32422:16), 14
 	ldw	wa, 238
-	jrl	799
+	jrl	DiskSel_ShowErrorAndExit
 DiskSel_HandleStopEvent:
 	cp (0x8c9a:16), 0x78
 	jr z, DiskSel_PostStopEvent
@@ -1276,21 +1276,21 @@ DiskSel_PostStopEvent:
 DiskSel_StoreWindowPtr:
 	ld	xwa, (xsp+6)
 	ld	(33598:16), xwa
-	call	16290274
+	call	GetCurrentFileIndex
 	ld	(33602:16), hl
 	cp	hl, 0:i3
-	jr	lt, 16
+	jr	lt, DiskSel_DefaultIndex
 	exts	xhl
 	ld	xwa, (33598:16)
 	ld	xbc, 31784962
 	ld	xde, xhl
-	jrl	914
+	jrl	DiskSel_PostEvent
 DiskSel_DefaultIndex:
 	ldw	(33602:16), 0
 	ld	xwa, (33598:16)
 	ld	xbc, 31784962
 	ld	xde, 0:i3
-	jrl	894
+	jrl	DiskSel_PostEvent
 DiskSel_InitDisplay:
 	ld iz, 0:i3
 
@@ -1304,14 +1304,14 @@ DiskSel_DisplayLoop:
 	stb_erp	c, 248
 	ld	(xhl), c
 	ld	bc, 2:i3
-	call	16289787
+	call	FileIO_CheckRecordByFile
 	ld	wa, iz
 	cp	l, 0:i3
-	jr	nz, 13
+	jr	nz, DiskSel_GetFileName
 	ldw	bc, 8
-	call	16289787
+	call	FileIO_CheckRecordByFile
 	cp	l, 0:i3
-	jr	z, 10
+	jr	z, DiskSel_EmptyFileName
 	ld	wa, iz
 DiskSel_GetFileName:
 	call GetFileEntryPtr
@@ -1334,7 +1334,7 @@ DiskSel_FormatEntry:
 	pushw	6
 	pushw	0
 	ld	xwa, xhl
-	call	16289232
+	call	FileIO_ReadHeader_ParseLoop
 	ld	de, iz
 	sll	de, 5
 	lda	xbc, (33904:16)
@@ -1342,11 +1342,11 @@ DiskSel_FormatEntry:
 	add	xde, xbc
 	ld	xwa, (33598:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 20
-	jr	lt, -125
-	jrl	768
+	jr	lt, DiskSel_DisplayLoop
+	jrl	DiskSel_Exit
 DiskSel_HandleNavigation:
 	ld de, (0x8342:16)
 	ld (XSP+0x04),DE
@@ -1389,9 +1389,9 @@ DiskSel_HandleToggle:
 	lda	xhl, (34954:16)
 	ld	xwa, (xsp+6)
 	cp	xwa, 10
-	jr	nz, 100
+	jr	nz, DiskSel_HandleSelect
 	cp	(33890:16), 0
-	jr	nz, 93
+	jr	nz, DiskSel_HandleSelect
 	ld	iz, 0:i3
 DiskSel_FindMarkedLoop:
 	cpib_sri 0x07, 0xec, 0xf8, 0xfe
@@ -1417,7 +1417,7 @@ DiskSel_NextAssign:
 DiskSel_UnmarkLoop:
 	ld	a, (xhl)
 	cp	a, 253
-	jr	ugt, 7
+	jr	ugt, DiskSel_NextUnmark
 	ld	(xhl), 254
 	dec	1, (34974:16)
 DiskSel_NextUnmark:
@@ -1444,9 +1444,9 @@ DiskSel_HandleSelect:
 	.byte 0x68, 0x2c
 DiskSel_RemoveSelect:
 	cp	a, 253
-	jr	ugt, 39
+	jr	ugt, DiskSel_RefreshAfterSelect
 	cp	de, 20
-	jr	ge, 7
+	jr	ge, DiskSel_ReorderSlots
 	ld	(xbc), 254
 	dec	1, (34974:16)
 DiskSel_ReorderSlots:
@@ -1483,14 +1483,14 @@ DiskSel_RefreshBoth:
 DiskSel_HandleRepeat:
 	ld	xwa, (xsp+6)
 	cp	xwa, 12
-	jr	nz, 24
+	jr	nz, DiskSel_HandlePlayStart
 	cp	xbc, 29360151
-	jr	nz, 8
+	jr	nz, DiskSel_SetRepeatOff
 	ld	(34978:16), 1
-	jrl	288
+	jrl	DiskSel_GetCurrentIndex
 DiskSel_SetRepeatOff:
 	ld	(34978:16), 0
-	jrl	280
+	jrl	DiskSel_GetCurrentIndex
 DiskSel_HandlePlayStart:
 	ld xwa, (xsp + 6)
 
@@ -1576,25 +1576,25 @@ DiskSel_PlayNextLoop:
 DiskSel_HandleAllCheck:
 	ld	xwa, (xsp+6)
 	cp	xwa, 14
-	jr	nz, 20
+	jr	nz, DiskSel_GetCurrentIndex
 	cp	xbc, 29360151
-	jr	nz, 7
+	jr	nz, DiskSel_SetAllOff
 	ld	(34980:16), 1
-	jr	5
+	jr	DiskSel_GetCurrentIndex
 DiskSel_SetAllOff:
 	ld	(34980:16), 0
 DiskSel_GetCurrentIndex:
 	ld	de, (33602:16)
 DiskSel_UpdateDisplay:
 	cp	(xsp+4), de
-	jr	z, 80
+	jr	z, DiskSel_Exit
 	ld	wa, de
-	call	16290296
+	call	NotifyUIOfSelectionChange
 	ld	de, (33602:16)
 	exts	xde
 	ld	xwa, (33598:16)
 	ld	xbc, 31784962
-	call	16423243
+	call	ApPostEvent
 	ld	de, (xsp+4)
 	sll	de, 5
 	lda	xbc, (33904:16)
@@ -1602,7 +1602,7 @@ DiskSel_UpdateDisplay:
 	add	xde, xbc
 	ld	xwa, (33598:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	ld	de, (33602:16)
 	sll	de, 5
 	lda	xbc, (33904:16)
@@ -1753,7 +1753,7 @@ SmfFmt_FormatLoop:
 	ld	c, (xbc)
 	extz	bc
 	ld	de, iz
-	calr	-4238
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33604:16)
@@ -1761,10 +1761,10 @@ SmfFmt_FormatLoop:
 	add	xde, xwa
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	.byte 0x9f, 0x04, 0xf6
-	jr	c, -67
+	jr	c, SmfFmt_FormatLoop
 SmfFmt_FillEmpty:
 	cp iz, 0xa
 	jr nc, SmfFmt_Exit
@@ -1777,7 +1777,7 @@ SmfFmt_EmptyLoop:
 	add	xwa, xbc
 	ldw	bc, 255
 	ld	de, iz
-	calr	61239
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33604:16)
@@ -1785,10 +1785,10 @@ SmfFmt_EmptyLoop:
 	add	xde, xwa
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
-	jr	c, -54
+	jr	c, SmfFmt_EmptyLoop
 SmfFmt_Exit:
 	pop xiz
 	inc 6, xsp
@@ -1800,49 +1800,49 @@ FmmSmfMedleyFunc:
 	ld	xhl, xbc
 	ld	(xsp+2), xwa
 	cp	xhl, 31784970
-	jrl	z, 1172
+	jrl	z, SmfMed_CheckContinue
 	ld	xwa, xde
 	cp	xhl, 31784968
-	jrl	z, 1155
+	jrl	z, SmfMed_StoreDelayFlag
 	ld	bc, (33692:16)
 	cp	xhl, 29360152
-	jrl	z, 685
+	jrl	z, SmfMed_HandleNavToggle
 	cp	xhl, 29360151
-	jrl	z, 676
+	jrl	z, SmfMed_HandleNavToggle
 	cp	xhl, 29360139
-	jrl	z, 657
+	jrl	z, SmfMed_RefreshDisplay
 	cp	xhl, 31784964
-	jrl	z, 641
+	jrl	z, SmfMed_StoreWindowPtr
 	cp	xhl, 29360147
-	jrl	nz, 1145
+	jrl	nz, SmfMed_Exit
 	cp	xde, 3
-	jrl	z, 580
+	jrl	z, SmfMed_HandleStop
 	cp	xde, 2
-	jrl	nz, 1127
+	jrl	nz, SmfMed_Exit
 	ld	wa, 0:i3
-	calr	33769
+	calr	InitializeOperationState
 	ld	a, (35995:16)
 	ld	(33694:16), a
 	cp	a, 111
-	jr	z, 5
+	jr	z, SmfMed_CheckNotPlaying
 	cp	a, 114
-	jr	nz, 57
+	jr	nz, SmfMed_CheckPlayMode
 SmfMed_CheckNotPlaying:
 	ld	(33890:16), 0
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	cp	l, 4:i3
-	jr	z, 29
+	jr	z, SmfMed_Error3F
 	cp	l, 3:i3
-	jr	z, 15
+	jr	z, SmfMed_Error31
 	cp	l, 2:i3
-	jrl	nz, 1082
+	jrl	nz, SmfMed_Exit
 	ld	(32422:16), 1
 	ldw	wa, 238
-	jr	18
+	jr	SmfMed_ShowError
 SmfMed_Error31:
 	ld	(32422:16), 49
 	ldw	wa, 238
-	jr	8
+	jr	SmfMed_ShowError
 SmfMed_Error3F:
 	ld	(32422:16), 63
 	ldw	wa, 238
@@ -1857,62 +1857,62 @@ SmfMed_CheckPlayMode:
 	jrl nz, SmfMed_InitFromDisk
 
 SmfMed_CheckPlaying:
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	cp	l, 1:i3
-	jrl	c, 285
-	call	15861571
+	jrl	c, SmfMed_CheckNotPlayError
+	call	Medley_GetPlaybackStatus
 	cp	l, 4:i3
-	jr	z, 28
+	jr	z, SmfMed_PlayError3F
 	cp	l, 3:i3
-	jr	z, 14
+	jr	z, SmfMed_PlayError31
 	cp	l, 2:i3
-	jr	nz, 36
+	jr	nz, SmfMed_SetPlaying
 	ld	(32422:16), 1
 	ldw	wa, 238
-	jr	18
+	jr	SmfMed_ShowPlayError
 SmfMed_PlayError31:
 	ld	(32422:16), 49
 	ldw	wa, 238
-	jr	8
+	jr	SmfMed_ShowPlayError
 SmfMed_PlayError3F:
 	ld	(32422:16), 63
 	ldw	wa, 238
 SmfMed_ShowPlayError:
-	call	16355504
+	call	SoundCtrl_SendCommand
 	inc	1, (33696:16)
 SmfMed_SetPlaying:
 	ld	(33890:16), 1
 	ld	a, (34950:16)
 	cp	a, (34948:16)
-	jr	nc, 91	; -> 0xF92B0B
+	jr	nc, SmfMed_CheckRepeat	; -> 0xF92B0B
 	ld	iz, 0:i3
 	ld	bc, (33692:16)
 	cp	bc, 0:i3
-	jrl	ule, 949	; -> 0xF92E70
+	jrl	ule, SmfMed_Exit	; -> 0xF92E70
 	lda	xde, (34820:16)
 SmfMed_FindSongLoop:
 	ld	hl, iz
 	extz	xhl
 	add	xhl, xde
 	cp	(xhl), a
-	jr	nz, 57
+	jr	nz, SmfMed_NextSong
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+2)
 	ld	xbc, 31784962
-	calr	45445
+	calr	FmmSmfFileNameFunc
 	ld	xwa, (33684:16)
 	ld	bc, (33692:16)
-	calr	65016
+	calr	SmfMed_FormatSlotList
 	inc	1, (34950:16)
 	ld	wa, iz
-	call	16292978
+	call	GetFileEntryByIndex
 	ld	xwa, (33688:16)
 	or	xwa, xwa
-	jrl	z, 890
+	jrl	z, SmfMed_Exit
 	ld	xbc, 31784969
 	ld	xde, 30
-	jr	113
+	jr	SmfMed_PostDelayEvent
 SmfMed_NextSong:
 	inc 1, iz
 	cp iz, bc
@@ -1920,36 +1920,36 @@ SmfMed_NextSong:
 	jrl SmfMed_Exit
 SmfMed_CheckRepeat:
 	cp	(34952:16), 0
-	jr	z, 113
+	jr	z, SmfMed_ClearRepeatCount
 	cp	(33696:16), a
-	jr	nc, 107
+	jr	nc, SmfMed_ClearRepeatCount
 	ld	(34950:16), 0
 	ld	(33696:16), 0
 	ld	iz, 0:i3
 	ld	wa, (33692:16)
 	cp	wa, 0:i3
-	jrl	ule, 835
+	jrl	ule, SmfMed_Exit
 	lda	xbc, (34820:16)
 SmfMed_RepeatFindLoop:
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
 	.byte 0x82, 0x3f, 0x00
-	jr	nz, 62
+	jr	nz, SmfMed_RepeatNext
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+2)
 	ld	xbc, 31784962
-	calr	-20206
+	calr	FmmSmfFileNameFunc
 	ld	xwa, (33684:16)
 	ld	bc, (33692:16)
-	calr	-635
+	calr	SmfMed_FormatSlotList
 	inc	1, (34950:16)
 	ld	wa, iz
-	call	16292978
+	call	GetFileEntryByIndex
 	ld	xwa, (33688:16)
 	or	xwa, xwa
-	jrl	z, 775
+	jrl	z, SmfMed_Exit
 	ld	xbc, 31784969
 	ld	xde, 30
 SmfMed_PostDelayEvent:
@@ -1964,7 +1964,7 @@ SmfMed_RepeatNext:
 
 SmfMed_ClearRepeatCount:
 	ld	(33696:16), 0
-	jr	9
+	jr	SmfMed_ClearPlaying
 SmfMed_CheckNotPlayError:
 	call Medley_GetPlaybackStatus
 	cp l, 0:i3
@@ -1972,7 +1972,7 @@ SmfMed_CheckNotPlayError:
 
 SmfMed_ClearPlaying:
 	ld	(33890:16), 0
-	jrl	725
+	jrl	SmfMed_Exit
 SmfMed_InitFromDisk:
 	ld xde, 0:i3
 	ld e, (0x88a8:16)
@@ -2005,13 +2005,13 @@ SmfMed_InitState:
 	ldw	bc, 128
 	ld	wa, (33896:16)
 	cp	wa, 128
-	jr	ugt, 2
+	jr	ugt, SmfMed_ClampFileCount
 	ld	bc, wa
 SmfMed_ClampFileCount:
 	ld	(33692:16), bc
 	ld	iz, 0:i3
 	cp	bc, 0:i3
-	jr	ule, 21
+	jr	ule, SmfMed_FinishInit
 	lda	xwa, (34820:16)
 SmfMed_ClearSlotsLoop:
 	ld	bc, iz
@@ -2020,34 +2020,34 @@ SmfMed_ClearSlotsLoop:
 	ld	(xbc), 255
 	inc	1, iz
 	cp	iz, (33692:16)
-	jr	c, -17	; -> 0xF92C26
+	jr	c, SmfMed_ClearSlotsLoop	; -> 0xF92C26
 SmfMed_FinishInit:
-	call	15862435
+	call	CDlike_InitModeAndLoadBank
 	ld	xwa, 0:i3
 	ld	(33688:16), xwa
-	jrl	556
+	jrl	SmfMed_Exit
 SmfMed_HandleStop_Entry:
 SmfMed_HandleStop:
 	ld	a, (35994:16)
 	cp	a, 111
-	jrl	z, 546
+	jrl	z, SmfMed_Exit
 	cp	a, 114
-	jrl	z, 540
+	jrl	z, SmfMed_Exit
 	cp	a, 115
-	jrl	z, 534
+	jrl	z, SmfMed_Exit
 	cp	a, 118
-	jrl	z, 528
-	call	15862598
-	calr	33232
+	jrl	z, SmfMed_Exit
+	call	CDlike_ExitModeAndRestore
+	calr	CancelOperationCleanup
 	ld	(33890:16), 0
-	jrl	513
+	jrl	SmfMed_Exit
 SmfMed_StoreWindowPtr:
 	ld	(33684:16), xwa
-	jrl	506
+	jrl	SmfMed_Exit
 SmfMed_RefreshDisplay:
 	ld	xwa, (33684:16)
-	calr	64606
-	jrl	496
+	calr	SmfMed_FormatSlotList
+	jrl	SmfMed_Exit
 SmfMed_HandleNavToggle:
 	lda xwa, (0x8804:16)
 	cp XDE,0x0000000a
@@ -2070,10 +2070,10 @@ SmfMed_FindUnmarkedLoop:
 
 SmfMed_CheckAllUnmarked:
 	cp	iz, de
-	jr	nc, 41
+	jr	nc, SmfMed_RemoveOrderLoop
 	ld	iz, 0:i3
 	cp	de, 0:i3
-	jr	ule, 73
+	jr	ule, SmfMed_RefreshAfterToggle
 	lda	xde, (34820:16)
 SmfMed_AssignOrderLoop:
 	.byte 0xde, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21
@@ -2085,7 +2085,7 @@ SmfMed_NextAssign:
 SmfMed_RemoveOrderLoop:
 	ld	iz, 0:i3
 	cp	de, 0:i3
-	jr	ule, 32
+	jr	ule, SmfMed_RefreshAfterToggle
 	lda	xde, (34820:16)
 SmfMed_UnmarkLoop:
 	ld	bc, iz
@@ -2093,7 +2093,7 @@ SmfMed_UnmarkLoop:
 	add	xbc, xde
 	ld	a, (xbc)
 	cp	a, 253
-	jr	ugt, 7
+	jr	ugt, SmfMed_NextUnmark
 	ld	(xbc), 255
 	dec	1, (34948:16)
 SmfMed_NextUnmark:
@@ -2101,7 +2101,7 @@ SmfMed_NextUnmark:
 SmfMed_RefreshAfterToggle:
 	ld	xwa, (33684:16)
 	ld	bc, (33692:16)
-	jr	124
+	jr	SmfMed_CallFormatSlots
 SmfMed_HandleSelectToggle:
 	.byte 0xea, 0xcf, 0x0b, 0x00, 0x00, 0x00, 0x6e, 0x7a
 	.byte 0xc1, 0x62, 0x84, 0x3f, 0x00, 0x6e, 0x73, 0xaf
@@ -2113,7 +2113,7 @@ SmfMed_HandleSelectToggle:
 	.byte 0x3b
 SmfMed_RemoveFromOrder:
 	cp	c, 253
-	jr	ugt, 54
+	jr	ugt, SmfMed_RefreshAfterSelect
 	ld	(xwa), 255
 	ld	a, (34948:16)
 	dec	1, a
@@ -2122,7 +2122,7 @@ SmfMed_RemoveFromOrder:
 	ld	iz, 0:i3
 	extz	wa
 	cp	wa, 0:i3
-	jr	ule, 31
+	jr	ule, SmfMed_RefreshAfterSelect
 	ld	ix, wa
 SmfMed_ReorderLoop:
 	ld de, iz
@@ -2151,47 +2151,47 @@ SmfMed_CallFormatSlots:
 
 SmfMed_HandleRepeat:
 	cp	xde, 12
-	jr	nz, 24
+	jr	nz, SmfMed_HandlePlay
 	cp	xhl, 29360151
-	jr	nz, 8
+	jr	nz, SmfMed_SetRepeatOff
 	ld	(34952:16), 1
-	jrl	205
+	jrl	SmfMed_Exit
 SmfMed_SetRepeatOff:
 	ld	(34952:16), 0
-	jrl	197
+	jrl	SmfMed_Exit
 SmfMed_HandlePlay:
 	cp	xde, 13
-	jrl	nz, 188
+	jrl	nz, SmfMed_Exit
 	cp	(33890:16), 0
-	jrl	nz, 180
+	jrl	nz, SmfMed_Exit
 	ld	(34950:16), 0
 	ld	(33696:16), 0
 	ld	iz, 0:i3
 	ld	bc, (33692:16)
 	cp	bc, 0:i3
-	jr	ule, 72
+	jr	ule, SmfMed_CheckAutoPlay
 SmfMed_PlayFindLoop:
 	ld	de, iz
 	extz	xde
 	add	xde, xwa
 	.byte 0x82, 0x3f, 0x00
-	jr	nz, 55
+	jr	nz, SmfMed_PlayNextLoop
 	ld	(33890:16), 1
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+2)
 	ld	xbc, 31784962
-	calr	-20882
+	calr	FmmSmfFileNameFunc
 	inc	1, (34950:16)
 	ld	wa, iz
-	call	16292978
+	call	GetFileEntryByIndex
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 115
-	call	16355459
-	jr	6
+	call	UI_PostModeChangeEvent
+	jr	SmfMed_CheckAutoPlay
 SmfMed_PlayNextLoop:
 	inc 1, iz
 	cp iz, bc
@@ -2199,23 +2199,23 @@ SmfMed_PlayNextLoop:
 
 SmfMed_CheckAutoPlay:
 	cp	(33890:16), 0
-	jr	nz, 81
+	jr	nz, SmfMed_Exit
 	ld	xwa, (xsp+2)
 	ld	xbc, 31784963
 	ld	xde, 0:i3
-	calr	-20943
+	calr	FmmSmfFileNameFunc
 	ld	iz, hl
 	ld	wa, iz
-	call	16292978
+	call	GetFileEntryByIndex
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 111
-	jr	35
+	jr	SmfMed_CallPauseMode
 SmfMed_StoreDelayFlag:
 	ld	(33688:16), xwa
-	jr	33
+	jr	SmfMed_Exit
 SmfMed_CheckContinue:
 	cp (0x8462:16), 0x00
 	jr z, SmfMed_Exit
@@ -2251,7 +2251,7 @@ PdFmt_FormatLoop:
 	ld	(xde), a
 	ld	wa, (xsp+2)
 	add	wa, iz
-	call	16294372
+	call	GetFileRecordPtr
 	ld	xbc, xhl
 	ld	wa, iz
 	sll	wa, 5
@@ -2265,7 +2265,7 @@ PdFmt_FormatLoop:
 	add	de, iz
 	inc	1, de
 	.byte 0x0b, 0x14, 0x00, 0x0b, 0x01, 0x00
-	call	16289232
+	call	FileIO_ReadHeader_ParseLoop
 	ld	de, iz
 	sll	de, 5
 	lda	xbc, (33904:16)
@@ -2273,10 +2273,10 @@ PdFmt_FormatLoop:
 	add	xde, xbc
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
-	jr	lt, -98
+	jr	lt, PdFmt_FormatLoop
 	popw	iz
 	inc	6, xsp
 	ret
@@ -2285,27 +2285,27 @@ FmmPdFileNameFunc:
 	pushw	iz
 	ld	(xsp+2), xwa
 	cp	xbc, 31784963
-	jrl	z, 484
+	jrl	z, PdName_GetIndexReturn
 	ld	wa, (33702:16)
 	ld	iz, wa
 	cp	xbc, 31784962
-	jrl	z, 420
+	jrl	z, PdName_SetIndexPlaying
 	ld	hl, wa
 	exts	xhl
 	divs	hl, 10
 	cp	xbc, 29360152
-	jr	z, 91
+	jr	z, PdName_HandleNavigation
 	cp	xbc, 29360151
-	jr	z, 83
+	jr	z, PdName_HandleNavigation
 	cp	xbc, 29360139
-	jr	z, 57
+	jr	z, PdName_RefreshList
 	cp	xbc, 31784964
-	jr	nz, 62
+	jr	nz, PdName_ReturnZero
 	ld	(33698:16), xde
-	call	16294075
+	call	GetCurrentFileIndexAlt
 	ld	(33702:16), hl
 	cp	hl, 0:i3
-	jr	ge, 6
+	jr	ge, PdName_UpdateIndex
 	ldw	(33702:16), 0
 PdName_UpdateIndex:
 	ld	wa, (33702:16)
@@ -2315,12 +2315,12 @@ PdName_UpdateIndex:
 	exts	xde
 	ld	xwa, (33698:16)
 	ld	xbc, 31784962
-	jrl	373
+	jrl	PdName_PostEvent
 PdName_RefreshList:
 	muls	hl, 10
 	ld	xwa, (33698:16)
 	ld	bc, hl
-	calr	65291
+	calr	PdMed_FormatFileList
 PdName_ReturnZero:
 	ld xhl, 0:i3
 	jrl PdName_Exit
@@ -2360,19 +2360,19 @@ PdName_CheckEndBound:
 	exts	xwa
 	divs	wa, 10
 	cp	hl, wa
-	jr	ge, 17
+	jr	ge, PdName_GetCurrentIndex
 	exts	xde
 	divs	de, 10
 	ld	wa, qde
 	cp	wa, 0:i3
-	jr	z, 4
+	jr	z, PdName_GetCurrentIndex
 	ld	(33702:16), bc
 PdName_GetCurrentIndex:
 	ld	wa, (33702:16)
 PdName_UpdateDisplay:
 	cp	iz, wa
-	jrl	z, -162
-	call	16294296
+	jrl	z, PdName_ReturnZero
+	call	SetCurrentFileIndex
 	ld	wa, (33702:16)
 	exts	xwa
 	divs	wa, 10
@@ -2380,7 +2380,7 @@ PdName_UpdateDisplay:
 	exts	xde
 	ld	xwa, (33698:16)
 	ld	xbc, 31784962
-	call	16423243
+	call	ApPostEvent
 	ld	bc, (33702:16)
 	exts	xbc
 	divs	bc, 10
@@ -2389,7 +2389,7 @@ PdName_UpdateDisplay:
 	divs	de, 10
 	ld	xwa, (33698:16)
 	cp	de, bc
-	jr	nz, 75
+	jr	nz, PdName_RefreshPage
 	ld	bc, iz
 	exts	xbc
 	divs	bc, 10
@@ -2400,7 +2400,7 @@ PdName_UpdateDisplay:
 	extz	xde
 	add	xde, xhl
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	ld	wa, (33702:16)
 	exts	xwa
 	divs	wa, 10
@@ -2412,8 +2412,8 @@ PdName_UpdateDisplay:
 	add	xde, xbc
 	ld	xwa, (33698:16)
 	ld	xbc, 29360143
-	call	16423243
-	jrl	-295
+	call	ApPostEvent
+	jrl	PdName_ReturnZero
 PdName_RefreshPage:
 	muls bc, 0xa
 	calr PdMed_FormatFileList
@@ -2503,7 +2503,7 @@ PdFmtSlot_FormatLoop:
 	ld	c, (xbc)
 	extz	bc
 	ld	de, iz
-	calr	-6295
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33704:16)
@@ -2511,10 +2511,10 @@ PdFmtSlot_FormatLoop:
 	add	xde, xwa
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	.byte 0x9f, 0x04, 0xf6
-	jr	c, -67
+	jr	c, PdFmtSlot_FormatLoop
 PdFmtSlot_FillEmpty:
 	cp iz, 0xa
 	jr nc, PdFmtSlot_Exit
@@ -2527,7 +2527,7 @@ PdFmtSlot_EmptyLoop:
 	add	xwa, xbc
 	ldw	bc, 255
 	ld	de, iz
-	calr	59182
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33704:16)
@@ -2535,10 +2535,10 @@ PdFmtSlot_EmptyLoop:
 	add	xde, xwa
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
-	jr	c, -54
+	jr	c, PdFmtSlot_EmptyLoop
 PdFmtSlot_Exit:
 	pop xiz
 	inc 6, xsp
@@ -2551,73 +2551,73 @@ FmmPdMedleyFunc:
 	ld	xde, xbc
 	ld	xiz, xwa
 	cp	xde, 31784970
-	jrl	z, 988
+	jrl	z, PdMed_CheckContinue
 	ld	xwa, xhl
 	cp	xde, 31784968
-	jrl	z, 971
+	jrl	z, PdMed_StoreDelayFlag
 	ld	bc, (33792:16)
 	cp	xde, 29360152
-	jrl	z, 534
+	jrl	z, PdMed_HandleNavToggle
 	cp	xde, 29360151
-	jrl	z, 525
+	jrl	z, PdMed_HandleNavToggle
 	cp	xde, 29360139
-	jrl	z, 506
+	jrl	z, PdMed_RefreshDisplay
 	cp	xde, 31784964
-	jrl	z, 490
+	jrl	z, PdMed_StoreWindowPtr
 	cp	xde, 29360147
-	jrl	nz, 958
+	jrl	nz, PdMed_Exit
 	cp	xhl, 3
-	jrl	z, 440
+	jrl	z, PdMed_HandleStop
 	cp	xhl, 2
-	jrl	nz, 940
+	jrl	nz, PdMed_Exit
 	ld	wa, 0:i3
-	call	16297463
+	call	InitializeOperationState
 	ld	a, (35995:16)
 	cp	a, 113
-	jr	nz, 25
+	jr	nz, PdMed_CheckPlayMode
 	ld	(33890:16), 0
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	cp	l, 2:i3
-	jrl	c, 911
+	jrl	c, PdMed_Exit
 	ld	(32422:16), 1
 	ldw	wa, 238
-	jrl	242
+	jrl	PdMed_ShowError
 PdMed_CheckPlayMode:
 	cp	a, 117
-	jrl	nz, 243	; -> 0xF93332
+	jrl	nz, PdMed_InitFromDisk	; -> 0xF93332
 	call	Medley_GetPlaybackStatus
 	cp	l, 1:i3
-	jrl	nz, 205	; -> 0xF93315
+	jrl	nz, PdMed_HandleError	; -> 0xF93315
 	ld	(33890:16), 1
 	ld	c, (34950:16)
 	lda	xwa, (34820:16)
 	cp	c, (34948:16)
-	jr	nc, 80	; -> 0xF932AB
+	jr	nc, PdMed_CheckRepeat	; -> 0xF932AB
 	ld	hl, 0:i3
 	ld	de, (33792:16)
 	cp	de, 0:i3
-	jrl	ule, 855	; -> 0xF935BD
+	jrl	ule, PdMed_Exit	; -> 0xF935BD
 PdMed_FindSongLoop:
 	ld	ix, hl
 	extz	xix
 	add	xix, xwa
 	cp	(xix), c
-	jr	nz, 50
+	jr	nz, PdMed_NextSong
 	extz	xhl
 	ld	xwa, xiz
 	ld	xbc, 31784962
 	ld	xde, xhl
-	calr	64617
+	calr	FmmPdFileNameFunc
 	ld	xwa, (33784:16)
 	ld	bc, (33792:16)
-	calr	65115
+	calr	PdMed_FormatSlotList
 	inc	1, (34950:16)
 	ld	xwa, (33788:16)
 	or	xwa, xwa
-	jrl	z, 807
+	jrl	z, PdMed_Exit
 	ld	xbc, 31784969
 	ld	xde, 30
-	jr	91
+	jr	PdMed_PostDelayEvent
 PdMed_NextSong:
 	inc 1, hl
 	cp hl, de
@@ -2649,12 +2649,12 @@ PdMed_RepeatNext:
 
 PdMed_ClearPlaying:
 	ld	(33890:16), 0
-	jrl	680
+	jrl	PdMed_Exit
 PdMed_HandleError:
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	ld	(33890:16), 0
 	cp	l, 0:i3
-	jrl	z, 666
+	jrl	z, PdMed_Exit
 	ld	(32422:16), 1
 	ldw	wa, 238
 PdMed_ShowError:
@@ -2679,13 +2679,13 @@ PdMed_InitState:
 	ldw	bc, 128
 	ld	wa, (33898:16)
 	cp	wa, 128
-	jr	ugt, 2
+	jr	ugt, PdMed_ClampCount
 	ld	bc, wa
 PdMed_ClampCount:
 	ld	(33792:16), bc
 	ld	hl, 0:i3
 	cp	bc, 0:i3
-	jr	ule, 21
+	jr	ule, PdMed_FinishInit
 	lda	xwa, (34820:16)
 PdMed_ClearSlotsLoop:
 	ld	bc, hl
@@ -2694,29 +2694,29 @@ PdMed_ClearSlotsLoop:
 	ld	(xbc), 255
 	inc	1, hl
 	cp	hl, (33792:16)
-	jr	c, -17	; -> 0xF933A2
+	jr	c, PdMed_ClearSlotsLoop	; -> 0xF933A2
 PdMed_FinishInit:
-	call	15862435
+	call	CDlike_InitModeAndLoadBank
 	ld	xwa, 0:i3
 	ld	(33788:16), xwa
-	jrl	509
+	jrl	PdMed_Exit
 PdMed_HandleStop:
 	ld	a, (35994:16)
 	cp	a, 113
-	jrl	z, 499
+	jrl	z, PdMed_Exit
 	cp	a, 117
-	jrl	z, 493
-	call	15862598
-	call	16297527
+	jrl	z, PdMed_Exit
+	call	CDlike_ExitModeAndRestore
+	call	CancelOperationCleanup
 	ld	(33890:16), 0
-	jrl	477
+	jrl	PdMed_Exit
 PdMed_StoreWindowPtr:
 	ld	(33784:16), xwa
-	jrl	470
+	jrl	PdMed_Exit
 PdMed_RefreshDisplay:
 	ld	xwa, (33784:16)
-	calr	64758
-	jrl	460
+	calr	PdMed_FormatSlotList
+	jrl	PdMed_Exit
 PdMed_HandleNavToggle:
 	cp XHL,0x0000000a
 	jrl nz, PdMed_HandleSelectToggle
@@ -2739,10 +2739,10 @@ PdMed_FindUnmarkedLoop:
 
 PdMed_CheckAllUnmarked:
 	cp	hl, wa
-	jr	nc, 41
+	jr	nc, PdMed_RemoveOrderLoop
 	ld	hl, 0:i3
 	cp	wa, 0:i3
-	jr	ule, 73
+	jr	ule, PdMed_RefreshAfterToggle
 	lda	xde, (34820:16)
 PdMed_AssignOrderLoop:
 	.byte 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21
@@ -2754,7 +2754,7 @@ PdMed_NextAssign:
 PdMed_RemoveOrderLoop:
 	ld	hl, 0:i3
 	cp	wa, 0:i3
-	jr	ule, 32
+	jr	ule, PdMed_RefreshAfterToggle
 	lda	xde, (34820:16)
 PdMed_UnmarkLoop:
 	ld	bc, hl
@@ -2762,7 +2762,7 @@ PdMed_UnmarkLoop:
 	add	xbc, xde
 	ld	a, (xbc)
 	cp	a, 253
-	jr	ugt, 7
+	jr	ugt, PdMed_NextUnmark
 	ld	(xbc), 255
 	dec	1, (34948:16)
 PdMed_NextUnmark:
@@ -2770,7 +2770,7 @@ PdMed_NextUnmark:
 PdMed_RefreshAfterToggle:
 	ld	xwa, (33784:16)
 	ld	bc, (33792:16)
-	jr	119
+	jr	PdMed_CallFormatSlots
 PdMed_HandleSelectToggle:
 	cp XHL,0x0000000b
 	jr nz, PdMed_HandleRepeat
@@ -2790,7 +2790,7 @@ PdMed_HandleSelectToggle:
 	.byte 0x68, 0x3b
 PdMed_RemoveFromOrder:
 	cp	c, 253
-	jr	ugt, 54
+	jr	ugt, PdMed_RefreshAfterSelect
 	ld	(xhl), 255
 	ld	a, (34948:16)
 	dec	1, a
@@ -2799,7 +2799,7 @@ PdMed_RemoveFromOrder:
 	ld	hl, 0:i3
 	extz	wa
 	cp	wa, 0:i3
-	jr	ule, 31
+	jr	ule, PdMed_RefreshAfterSelect
 	ld	iy, wa
 PdMed_ReorderLoop:
 	ld de, hl
@@ -2828,45 +2828,45 @@ PdMed_CallFormatSlots:
 
 PdMed_HandleRepeat:
 	cp	xhl, 12
-	jr	nz, 24
+	jr	nz, PdMed_HandlePlay
 	cp	xde, 29360151
-	jr	nz, 8
+	jr	nz, PdMed_SetRepeatOff
 	ld	(34952:16), 1
-	jrl	173
+	jrl	PdMed_Exit
 PdMed_SetRepeatOff:
 	ld	(34952:16), 0
-	jrl	165
+	jrl	PdMed_Exit
 PdMed_HandlePlay:
 	cp	xhl, 13
-	jrl	nz, 156
+	jrl	nz, PdMed_Exit
 	cp	(33890:16), 0
-	jrl	nz, 148
+	jrl	nz, PdMed_Exit
 	ld	(34950:16), 0
 	ld	hl, 0:i3
 	ld	wa, (33792:16)
 	cp	wa, 0:i3
-	jr	ule, 69
+	jr	ule, PdMed_CheckAutoPlay
 	lda	xbc, (34820:16)
 PdMed_PlayFindLoop:
 	ld	de, hl
 	extz	xde
 	add	xde, xbc
 	.byte 0x82, 0x3f, 0x00
-	jr	nz, 48
+	jr	nz, PdMed_PlayNextLoop
 	ld	(33890:16), 1
 	extz	xhl
 	ld	xwa, xiz
 	ld	xbc, 31784962
 	ld	xde, xhl
-	calr	-1651
+	calr	FmmPdFileNameFunc
 	inc	1, (34950:16)
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 117
-	call	16355459
-	jr	6
+	call	UI_PostModeChangeEvent
+	jr	PdMed_CheckAutoPlay
 PdMed_PlayNextLoop:
 	inc 1, hl
 	cp hl, wa
@@ -2874,16 +2874,16 @@ PdMed_PlayNextLoop:
 
 PdMed_CheckAutoPlay:
 	cp	(33890:16), 0
-	jr	nz, 57
+	jr	nz, PdMed_Exit
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 113
-	jr	32
+	jr	PdMed_CallPauseMode
 PdMed_StoreDelayFlag:
 	ld	(33788:16), xwa
-	jr	30
+	jr	PdMed_Exit
 PdMed_CheckContinue:
 	cp (0x8462:16), 0x00
 	jr z, PdMed_Exit
@@ -2966,7 +2966,7 @@ DocFmt_FormatLoop:
 	ld	(xde), a
 	ld	wa, (xsp+2)
 	add	wa, iz
-	call	16295854
+	call	FileIO_GetFileEntryWithRefresh
 	ld	xbc, xhl
 	ld	wa, iz
 	sll	wa, 5
@@ -2981,7 +2981,7 @@ DocFmt_FormatLoop:
 	inc	1, de
 	pushw 12
 	pushw 0
-	call	16289232
+	call	FileIO_ReadHeader_ParseLoop
 	ld	de, iz
 	sll	de, 5
 	lda	xbc, (33904:16)
@@ -2989,10 +2989,10 @@ DocFmt_FormatLoop:
 	add	xde, xbc
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
-	jr	lt, -98
+	jr	lt, DocFmt_FormatLoop
 	popw	iz
 	inc	6, xsp
 	ret
@@ -3001,27 +3001,27 @@ FmmDocFileNameFunc:
 	pushw	iz
 	ld	(xsp+2), xwa
 	cp	xbc, 31784963
-	jrl	z, 484
+	jrl	z, DocName_GetIndexReturn
 	ld	wa, (33798:16)
 	ld	iz, wa
 	cp	xbc, 31784962
-	jrl	z, 420
+	jrl	z, DocName_SetIndexPlaying
 	ld	hl, wa
 	exts	xhl
 	divs	hl, 10
 	cp	xbc, 29360152
-	jr	z, 91
+	jr	z, DocName_HandleNavigation
 	cp	xbc, 29360151
-	jr	z, 83
+	jr	z, DocName_HandleNavigation
 	cp	xbc, 29360139
-	jr	z, 57
+	jr	z, DocName_RefreshList
 	cp	xbc, 31784964
-	jr	nz, 62
+	jr	nz, DocName_ReturnZero
 	ld	(33794:16), xde
-	call	16294849
+	call	FileIO_GetCurrentFileIndex_Alt
 	ld	(33798:16), hl
 	cp	hl, 0:i3
-	jr	ge, 6
+	jr	ge, DocName_UpdateIndex
 	ldw	(33798:16), 0
 DocName_UpdateIndex:
 	ld	wa, (33798:16)
@@ -3031,12 +3031,12 @@ DocName_UpdateIndex:
 	exts	xde
 	ld	xwa, (33794:16)
 	ld	xbc, 31784962
-	jrl	373
+	jrl	DocName_PostEvent
 DocName_RefreshList:
 	muls	hl, 10
 	ld	xwa, (33794:16)
 	ld	bc, hl
-	calr	65291
+	calr	DocMed_FormatFileList
 DocName_ReturnZero:
 	ld xhl, 0:i3
 	jrl DocName_Exit
@@ -3076,19 +3076,19 @@ DocName_CheckEndBound:
 	exts	xwa
 	divs	wa, 10
 	cp	hl, wa
-	jr	ge, 17
+	jr	ge, DocName_GetCurrentIndex
 	exts	xde
 	divs	de, 10
 	ld	wa, qde
 	cp	wa, 0:i3
-	jr	z, 4
+	jr	z, DocName_GetCurrentIndex
 	ld	(33798:16), bc
 DocName_GetCurrentIndex:
 	ld	wa, (33798:16)
 DocName_UpdateDisplay:
 	cp	iz, wa
-	jrl	z, -162
-	call	16295241
+	jrl	z, DocName_ReturnZero
+	call	FileIO_SelectFileByIndex
 	ld	wa, (33798:16)
 	exts	xwa
 	divs	wa, 10
@@ -3096,7 +3096,7 @@ DocName_UpdateDisplay:
 	exts	xde
 	ld	xwa, (33794:16)
 	ld	xbc, 31784962
-	call	16423243
+	call	ApPostEvent
 	ld	bc, (33798:16)
 	exts	xbc
 	divs	bc, 10
@@ -3105,7 +3105,7 @@ DocName_UpdateDisplay:
 	divs	de, 10
 	ld	xwa, (33794:16)
 	cp	de, bc
-	jr	nz, 75
+	jr	nz, DocName_RefreshPage
 	ld	bc, iz
 	exts	xbc
 	divs	bc, 10
@@ -3116,7 +3116,7 @@ DocName_UpdateDisplay:
 	extz	xde
 	add	xde, xhl
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	ld	wa, (33798:16)
 	exts	xwa
 	divs	wa, 10
@@ -3128,8 +3128,8 @@ DocName_UpdateDisplay:
 	add	xde, xbc
 	ld	xwa, (33794:16)
 	ld	xbc, 29360143
-	call	16423243
-	jrl	-295
+	call	ApPostEvent
+	jrl	DocName_ReturnZero
 DocName_RefreshPage:
 	muls bc, 0xa
 	calr DocMed_FormatFileList
@@ -3220,7 +3220,7 @@ DocFmtSlot_FormatLoop:
 	ld	c, (xbc)
 	extz	bc
 	ld	de, iz
-	calr	-8258
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33800:16)
@@ -3228,10 +3228,10 @@ DocFmtSlot_FormatLoop:
 	add	xde, xwa
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	.byte 0x9f, 0x04, 0xf6
-	jr	c, -67
+	jr	c, DocFmtSlot_FormatLoop
 DocFmtSlot_FillEmpty:
 	cp iz, 0xa
 	jr nc, DocFmtSlot_Exit
@@ -3244,7 +3244,7 @@ DocFmtSlot_EmptyLoop:
 	add	xwa, xbc
 	ldw	bc, 255
 	ld	de, iz
-	calr	57219
+	calr	FormatMedleyNumber
 	ld	de, iz
 	sll	de, 3
 	lda	xwa, (33800:16)
@@ -3252,10 +3252,10 @@ DocFmtSlot_EmptyLoop:
 	add	xde, xwa
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
-	jr	c, -54
+	jr	c, DocFmtSlot_EmptyLoop
 DocFmtSlot_Exit:
 	pop xiz
 	inc 6, xsp
@@ -3267,73 +3267,73 @@ FmmDocMedleyFunc:
 	ld	xde, xbc
 	ld	xiz, xwa
 	cp	xde, 31784970
-	jrl	z, 1014
+	jrl	z, DocMed_CheckContinue
 	ld	xwa, xhl
 	cp	xde, 31784968
-	jrl	z, 997
+	jrl	z, DocMed_StoreDelayFlag
 	ld	bc, (33888:16)
 	cp	xde, 29360152
-	jrl	z, 548
+	jrl	z, DocMed_HandleNavToggle
 	cp	xde, 29360151
-	jrl	z, 539
+	jrl	z, DocMed_HandleNavToggle
 	cp	xde, 29360139
-	jrl	z, 520
+	jrl	z, DocMed_RefreshDisplay
 	cp	xde, 31784964
-	jrl	z, 504
+	jrl	z, DocMed_StoreWindowPtr
 	cp	xde, 29360147
-	jrl	nz, 984
+	jrl	nz, DocMed_Exit
 	cp	xhl, 3
-	jrl	z, 454
+	jrl	z, DocMed_HandleStop
 	cp	xhl, 2
-	jrl	nz, 966
+	jrl	nz, DocMed_Exit
 	ld	wa, 0:i3
-	call	16297463
+	call	InitializeOperationState
 	ld	a, (35995:16)
 	cp	a, 112
-	jr	nz, 25
+	jr	nz, DocMed_CheckPlayMode
 	ld	(33890:16), 0
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	cp	l, 2:i3
-	jrl	c, 937
+	jrl	c, DocMed_Exit
 	ld	(32422:16), 1
 	ldw	wa, 238
-	jrl	242
+	jrl	DocMed_ShowError
 DocMed_CheckPlayMode:
 	cp	a, 116
-	jrl	nz, 243	; -> 0xF93ADD
+	jrl	nz, DocMed_CheckInit	; -> 0xF93ADD
 	call	Medley_GetPlaybackStatus
 	cp	l, 1:i3
-	jrl	nz, 205	; -> 0xF93AC0
+	jrl	nz, DocMed_HandleError	; -> 0xF93AC0
 	ld	(33890:16), 1
 	ld	c, (34950:16)
 	lda	xwa, (34820:16)
 	cp	c, (34948:16)
-	jr	nc, 80	; -> 0xF93A56
+	jr	nc, DocMed_CheckRepeat	; -> 0xF93A56
 	ld	hl, 0:i3
 	ld	de, (33888:16)
 	cp	de, 0:i3
-	jrl	ule, 881	; -> 0xF93D82
+	jrl	ule, DocMed_Exit	; -> 0xF93D82
 DocMed_FindSongLoop:
 	ld	ix, hl
 	extz	xix
 	add	xix, xwa
 	cp	(xix), c
-	jr	nz, 50
+	jr	nz, DocMed_NextSong
 	extz	xhl
 	ld	xwa, xiz
 	ld	xbc, 31784962
 	ld	xde, xhl
-	calr	64617
+	calr	FmmDocFileNameFunc
 	ld	xwa, (33880:16)
 	ld	bc, (33888:16)
-	calr	65115
+	calr	DocMed_FormatSlotList
 	inc	1, (34950:16)
 	ld	xwa, (33884:16)
 	or	xwa, xwa
-	jrl	z, 833
+	jrl	z, DocMed_Exit
 	ld	xbc, 31784969
 	ld	xde, 30
-	jr	91
+	jr	DocMed_PostDelayEvent
 DocMed_NextSong:
 	inc 1, hl
 	cp hl, de
@@ -3365,12 +3365,12 @@ DocMed_RepeatNext:
 
 DocMed_ClearPlaying:
 	ld	(33890:16), 0
-	jrl	706
+	jrl	DocMed_Exit
 DocMed_HandleError:
-	call	15861571
+	call	Medley_GetPlaybackStatus
 	ld	(33890:16), 0
 	cp	l, 0:i3
-	jrl	z, 692
+	jrl	z, DocMed_Exit
 	ld	(32422:16), 1
 	ldw	wa, 238
 DocMed_ShowError:
@@ -3380,26 +3380,26 @@ DocMed_ShowError:
 DocMed_CheckInit_Entry:
 DocMed_CheckInit:
 	cpw	(33900:16), 0
-	jr	lt, 8
+	jr	lt, DocMed_InitFromDisk
 	cpw	(33896:16), 0
-	jr	nz, 66
+	jr	nz, DocMed_InitState
 DocMed_InitFromDisk:
 	ldw	(33896:16), 65535
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
-	call	16295369
+	call	ApPostEvent
+	call	FileIO_InitFileNavigation
 	ld	(33900:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360138
 	ld	xde, 0:i3
-	call	16423243
-	call	16297555
+	call	ApPostEvent
+	call	SignalProgressUpdate
 DocMed_InitState:
 	ld	(33890:16), 0
 	ld	(34950:16), 0
@@ -3407,13 +3407,13 @@ DocMed_InitState:
 	ldw	bc, 128
 	ld	wa, (33900:16)
 	cp	wa, 128
-	jr	ugt, 2
+	jr	ugt, DocMed_ClampCount
 	ld	bc, wa
 DocMed_ClampCount:
 	ld	(33888:16), bc
 	ld	hl, 0:i3
 	cp	bc, 0:i3
-	jr	ule, 21
+	jr	ule, DocMed_FinishInit
 	lda	xwa, (34820:16)
 DocMed_ClearSlotsLoop:
 	ld	bc, hl
@@ -3422,29 +3422,29 @@ DocMed_ClearSlotsLoop:
 	ld	(xbc), 255
 	inc	1, hl
 	cp	hl, (33888:16)
-	jr	c, -17	; -> 0xF93B5B
+	jr	c, DocMed_ClearSlotsLoop	; -> 0xF93B5B
 DocMed_FinishInit:
-	call	15862435
+	call	CDlike_InitModeAndLoadBank
 	ld	xwa, 0:i3
 	ld	(33884:16), xwa
-	jrl	521
+	jrl	DocMed_Exit
 DocMed_HandleStop:
 	ld	a, (35994:16)
 	cp	a, 112
-	jrl	z, 511
+	jrl	z, DocMed_Exit
 	cp	a, 116
-	jrl	z, 505
-	call	15862598
-	call	16297527
+	jrl	z, DocMed_Exit
+	call	CDlike_ExitModeAndRestore
+	call	CancelOperationCleanup
 	ld	(33890:16), 0
-	jrl	489
+	jrl	DocMed_Exit
 DocMed_StoreWindowPtr:
 	ld	(33880:16), xwa
-	jrl	482
+	jrl	DocMed_Exit
 DocMed_RefreshDisplay:
 	ld	xwa, (33880:16)
-	calr	64744
-	jrl	472
+	calr	DocMed_FormatSlotList
+	jrl	DocMed_Exit
 DocMed_HandleNavToggle:
 	cp XHL,0x0000000a
 	jrl nz, DocMed_HandleSelectToggle
@@ -3467,10 +3467,10 @@ DocMed_FindUnmarkedLoop:
 
 DocMed_CheckAllUnmarked:
 	cp	hl, wa
-	jr	nc, 41
+	jr	nc, DocMed_RemoveOrderLoop
 	ld	hl, 0:i3
 	cp	wa, 0:i3
-	jr	ule, 73
+	jr	ule, DocMed_RefreshAfterToggle
 	lda	xde, (34820:16)
 DocMed_AssignOrderLoop:
 	.byte 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21
@@ -3482,7 +3482,7 @@ DocMed_NextAssign:
 DocMed_RemoveOrderLoop:
 	ld	hl, 0:i3
 	cp	wa, 0:i3
-	jr	ule, 32
+	jr	ule, DocMed_RefreshAfterToggle
 	lda	xde, (34820:16)
 DocMed_UnmarkLoop:
 	ld	bc, hl
@@ -3490,7 +3490,7 @@ DocMed_UnmarkLoop:
 	add	xbc, xde
 	ld	a, (xbc)
 	cp	a, 253
-	jr	ugt, 7
+	jr	ugt, DocMed_NextUnmark
 	ld	(xbc), 255
 	dec	1, (34948:16)
 DocMed_NextUnmark:
@@ -3498,7 +3498,7 @@ DocMed_NextUnmark:
 DocMed_RefreshAfterToggle:
 	ld	xwa, (33880:16)
 	ld	bc, (33888:16)
-	jr	119
+	jr	DocMed_CallFormatSlots
 DocMed_HandleSelectToggle:
 	cp XHL,0x0000000b
 	jr nz, DocMed_HandleRepeat
@@ -3518,7 +3518,7 @@ DocMed_HandleSelectToggle:
 	.byte 0x68, 0x3b
 DocMed_RemoveFromOrder:
 	cp	c, 253
-	jr	ugt, 54
+	jr	ugt, DocMed_RefreshAfterSelect
 	ld	(xhl), 255
 	ld	a, (34948:16)
 	dec	1, a
@@ -3527,7 +3527,7 @@ DocMed_RemoveFromOrder:
 	ld	hl, 0:i3
 	extz	wa
 	cp	wa, 0:i3
-	jr	ule, 31
+	jr	ule, DocMed_RefreshAfterSelect
 	ld	iy, wa
 DocMed_ReorderLoop:
 	ld de, hl
@@ -3556,45 +3556,45 @@ DocMed_CallFormatSlots:
 
 DocMed_HandleRepeat:
 	cp	xhl, 12
-	jr	nz, 24
+	jr	nz, DocMed_HandlePlay
 	cp	xde, 29360151
-	jr	nz, 8
+	jr	nz, DocMed_SetRepeatOff
 	ld	(34952:16), 1
-	jrl	185
+	jrl	DocMed_Exit
 DocMed_SetRepeatOff:
 	ld	(34952:16), 0
-	jrl	177
+	jrl	DocMed_Exit
 DocMed_HandlePlay:
 	cp	xhl, 13
-	jrl	nz, 168
+	jrl	nz, DocMed_Exit
 	cp	(33890:16), 0
-	jrl	nz, 160
+	jrl	nz, DocMed_Exit
 	ld	(34950:16), 0
 	ld	hl, 0:i3
 	ld	wa, (33888:16)
 	cp	wa, 0:i3
-	jr	ule, 69
+	jr	ule, DocMed_CheckAutoPlay
 	lda	xbc, (34820:16)
 DocMed_PlayFindLoop:
 	ld	de, hl
 	extz	xde
 	add	xde, xbc
 	.byte 0x82, 0x3f, 0x00
-	jr	nz, 48
+	jr	nz, DocMed_PlayNextLoop
 	ld	(33890:16), 1
 	extz	xhl
 	ld	xwa, xiz
 	ld	xbc, 31784962
 	ld	xde, xhl
-	calr	-1665
+	calr	FmmDocFileNameFunc
 	inc	1, (34950:16)
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 116
-	call	16355459
-	jr	6
+	call	UI_PostModeChangeEvent
+	jr	DocMed_CheckAutoPlay
 DocMed_PlayNextLoop:
 	inc 1, hl
 	cp hl, wa
@@ -3602,20 +3602,20 @@ DocMed_PlayNextLoop:
 
 DocMed_CheckAutoPlay:
 	cp	(33890:16), 0
-	jr	nz, 69
+	jr	nz, DocMed_Exit
 	ld	xwa, xiz
 	ld	xbc, 31784963
 	ld	xde, 0:i3
-	calr	-1719
+	calr	FmmDocFileNameFunc
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 112
-	jr	32
+	jr	DocMed_CallPauseMode
 DocMed_StoreDelayFlag:
 	ld	(33884:16), xwa
-	jr	30
+	jr	DocMed_Exit
 DocMed_CheckContinue:
 	cp (0x8462:16), 0x00
 	jr z, DocMed_Exit
@@ -3678,7 +3678,7 @@ SongSlot_RawData_Start:
 SongSlot_RawData:
 	pushw	iz
 	ld	iz, bc
-	calr	-43
+	calr	GetSongSlotValue
 	cp	hl, iz
 	scc	z, hl
 	popw	iz
@@ -4474,20 +4474,20 @@ PasswordOk:
 	push	xiz
 	ld	xiz, xwa
 	cp	xbc, 29360135
-	jr	z, 45
+	jr	z, PwdOk_HandleConfirm
 	cp	xbc, 31457404
-	jr	z, 33
+	jr	z, PwdOk_Return2
 	cp	xbc, 31457412
-	jr	z, 118
+	jr	z, PwdOk_ReturnZero
 	cp	xbc, 31457338
-	jr	nz, 110
+	jr	nz, PwdOk_ReturnZero
 	pushw	234
 	pushw	35830
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	95
+	jr	PwdOk_Exit
 PwdOk_Return2:
 	ld xhl, 2:i3
 	jr PwdOk_Exit
@@ -4527,20 +4527,20 @@ CheckPasswordOk:
 	push	xiz
 	ld	xiz, xwa
 	cp	xbc, 29360135
-	jr	z, 49
+	jr	z, CheckOk_HandleConfirm
 	cp	xbc, 31457404
-	jr	z, 36
+	jr	z, CheckOk_Return2
 	cp	xbc, 31457412
-	jrl	z, 183
+	jrl	z, CheckOk_ReturnZero
 	cp	xbc, 31457338
-	jrl	nz, 174
+	jrl	nz, CheckOk_ReturnZero
 	pushw	234
 	pushw	35834
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jrl	158
+	jrl	CheckOk_Exit
 CheckOk_Return2:
 	ld xhl, 2:i3
 	jrl CheckOk_Exit

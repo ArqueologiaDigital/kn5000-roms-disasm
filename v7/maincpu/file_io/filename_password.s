@@ -15,25 +15,25 @@ FmmPasswordFunc:
 	ld	(xsp+4), xwa
 	ld	wa, iz
 	cp	xbc, 31784976
-	jrl	z, 339
+	jrl	z, Password_HandleLoadEvent
 	lda	xde, (35184:16)
 	cp	xbc, 31784975
-	jrl	z, 195
+	jrl	z, Password_HandleSaveEvent
 	cp	xbc, 31784974
-	jr	z, 63
+	jr	z, Password_HandleDeleteEvent
 	cp	xbc, 31784973
-	jrl	nz, 348
-	call	16334389
+	jrl	nz, Password_Return
+	call	CheckAnySlotHasData
 	cp	l, 0:i3
-	jr	nz, 8
-	call	16334421
+	jr	nz, Password_ShowError
+	call	CheckSlotIndexValid
 	cp	l, 0:i3
-	jr	z, 15
+	jr	z, Password_ClearAndSetSlot
 Password_ShowError:
 	ld	(32422:16), 10
 	ldw	wa, 238
-	call	16355504
-	jrl	317
+	call	SoundCtrl_SendCommand
+	jrl	Password_Return
 Password_ClearAndSetSlot:
 	.byte 0xde, 0x88, 0x1d, 0x02, 0x3e, 0xf9, 0xde, 0x88
 	.byte 0x1d, 0x3d, 0x3e, 0xf9, 0xf1, 0x71, 0x89, 0x30
@@ -63,7 +63,7 @@ Password_ForwardToFileName:
 Password_ShowErrorStatus:
 	ld	(32422:16), 11
 	ldw	wa, 238
-	jrl	166
+	jrl	Password_CallStatusDisplay
 Password_HandleSaveEvent:
 	cp (XDE),0x03
 	jr nz, .Lc_f8c61d
@@ -113,7 +113,7 @@ Password_ForwardToSaveFilter:
 Password_SaveErrorStatus:
 	ld	(32422:16), 11
 	ldw	wa, 238
-	jr	35
+	jr	Password_CallStatusDisplay
 Password_HandleLoadEvent:
 	call CheckSlotIsSelected
 	cp l, 0:i3
@@ -177,13 +177,13 @@ SelectMode_DetermineMode:
 
 SelectMode_SetBothMode:
 	ld	(35184:16), a
-	jr	25
+	jr	SelectMode_Return
 SelectMode_SingleMode:
 	lda	xbc, (35184:16)
 	cpib_erp	250, 0
-	jr	z, 5
+	jr	z, SelectMode_CheckSaveOnlyMode
 	ld	(xbc), 1
-	jr	11
+	jr	SelectMode_Return
 SelectMode_CheckSaveOnlyMode:
 	ld a, 0x0:opc
 	cpib_erp 0xfb, 0
@@ -206,35 +206,35 @@ FmmFileNameFunc:
 	ld	xbc, xiz
 	ld	xwa, (xsp+8)
 	cp	xwa, 31784960
-	jrl	z, 1476
+	jrl	z, FileName_HandleRegister
 	cp	xwa, 29360152
-	jrl	z, 193
+	jrl	z, FileName_HandleScroll
 	cp	xwa, 29360151
-	jrl	z, 184
+	jrl	z, FileName_HandleScroll
 	cp	xwa, 29360139
-	jr	z, 70
+	jr	z, FileName_HandleShow
 	cp	xwa, 31784964
-	jrl	nz, 1544
+	jrl	nz, FileName_Return
 	ld	(32470:16), xbc
-	call	16290274
+	call	GetCurrentFileIndex
 	ld	(32478:16), hl
 	cp	hl, 0:i3
-	jr	lt, 15
+	jr	lt, FileName_ListSelect_Negative
 	exts	xhl
 	ld	xwa, (32470:16)
 	ld	xbc, 31784962
 	ld	xde, xhl
-	jr	17
+	jr	FileName_ListSelect_Forward
 FileName_ListSelect_Negative:
 	ldw	(32478:16), 0
 	ld	xwa, (32470:16)
 	ld	xbc, 31784962
 	ld	xde, 0:i3
 FileName_ListSelect_Forward:
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 0:i3
 	ld	(32474:16), xwa
-	jrl	1483
+	jrl	FileName_Return
 FileName_HandleShow:
 	ldw (xsp + 6), 0x0
 FileName_DrawItemLoop:
@@ -246,7 +246,7 @@ FileName_DrawItemLoop:
 	add	xhl, xde
 	ld	bc, (xsp+6)
 	ld	(xhl), c
-	call	16290326
+	call	GetFileEntryPtr
 	ld	xbc, xhl
 	ld	de, (xsp+6)
 	ld	wa, de
@@ -260,7 +260,7 @@ FileName_DrawItemLoop:
 	pushw 6
 	pushw 0
 	ld	xwa, xhl
-	call	16289232
+	call	FileIO_ReadHeader_ParseLoop
 	ld	de, (xsp+6)
 	sll	de, 5
 	lda	xbc, (33904:16)
@@ -268,24 +268,24 @@ FileName_DrawItemLoop:
 	add	xde, xbc
 	ld	xwa, (32470:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	incw	1, (xsp+6)
 	.byte 0x9f, 0x06, 0x3f, 0x14, 0x00
-	jr	lt, -98
-	jrl	1377
+	jr	lt, FileName_DrawItemLoop
+	jrl	FileName_Return
 FileName_HandleScroll:
 	.byte 0xbf, 0x06, 0x16, 0xde, 0x7e
 	ld	wa, (xsp+6)
 	ld	(xsp+4), wa
 	or	xiz, xiz
-	jr	nz, 46
+	jr	nz, FileName_PageUp
 	ld	xwa, (xsp+8)
 	cp	xwa, 29360152
-	jr	nz, 13
+	jr	nz, FileName_ScrollUp
 	.byte 0x9f, 0x06, 0x3f, 0x13, 0x00
-	jrl	ge, 970
+	jrl	ge, FileName_GetSelection
 	incw	1, (xsp+6)
-	jr	72
+	jr	FileName_ScrollApply
 FileName_ScrollUp:
 	cp xwa, 0x1c00017
 	jrl nz, FileName_GetSelection
@@ -318,50 +318,50 @@ FileName_ScrollApply:
 	jrl	886
 FileName_OpSave:
 	cp	xiz, 3
-	jrl	nz, 170
-	call	16289841
+	jrl	nz, FileName_OpLoad
+	call	CheckFileSystemStatus
 	cp	hl, 0:i3
-	jrl	z, 161
-	call	16289506
+	jrl	z, FileName_OpLoad
+	call	FileIO_WriteRecordName_Loop
 	cp	hl, 0:i3
-	jrl	z, 152
+	jrl	z, FileName_OpLoad
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, (32478:16)
 	extz	wa
-	calr	-6531
+	calr	FileIO_MidiOutSendByte
 	ld	wa, 0:i3
-	calr	-6843
-	call	16283131
+	calr	InitializeOperationState
+	call	FileIO_ParseDirectoryEntry
 	ld	wa, hl
 	ld	bc, 1:i3
-	calr	-6204
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	calr	-6769
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	cpw	(61854:16), 0
-	jr	z, 36
+	jr	z, FileName_OpSave_ShowCode1
 	ld	wa, 2:i3
-	call	16289512
+	call	FileIO_WriteRecordName_Done
 	cp	l, 0:i3
-	jr	z, 26
+	jr	z, FileName_OpSave_ShowCode1
 	ld	wa, 2:i3
-	call	16289732
+	call	FileIO_CheckRecordValid
 	cp	l, 0:i3
-	jr	nz, 11
+	jr	nz, FileName_OpSave_ShowCodeA
 	ldw	wa, 8
-	call	16289732
+	call	FileIO_CheckRecordValid
 	cp	l, 0:i3
-	jr	z, 5
+	jr	z, FileName_OpSave_ShowCode1
 FileName_OpSave_ShowCodeA:
 	ldw wa, 0xa
 	jr FileName_OpSave_CallHandler
@@ -380,18 +380,18 @@ FileName_OpSave_CallHandler:
 
 FileName_OpLoad:
 	cp	xiz, 4
-	jrl	nz, 197
-	call	16289600
+	jrl	nz, FileName_OpFormat
+	call	FileIO_FormatName_Done
 	cp	hl, 0:i3
-	jrl	z, 188
-	calr	64862
+	jrl	z, FileName_OpFormat
+	calr	SelectPasswordMode
 	cp	hl, 0:i3
-	jr	z, 19
+	jr	z, FileName_OpLoad_NoPwd
 	ld	xde, 0:i3
 	ld	e, (35184:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29687812
-	jrl	338
+	jrl	FileName_OpDispatch
 FileName_OpLoad_NoPwd:
 	call CheckFileSystemStatus
 	cp hl, 0:i3
@@ -411,70 +411,70 @@ FileName_OpLoad_Execute:
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	58459
-	call	16284320
+	calr	InitializeOperationState
+	call	FileIO_SaveAllRegions
 	ld	wa, hl
 	ld	bc, 5:i3
-	calr	59098
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	call	16290139
-	call	16290094
-	call	16290928
+	call	FileIO_ResetCurrentRecord
+	call	GetEncodedFreeSpaceData
+	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
-	calr	58517
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	call	16355414
+	call	UI_PostPartChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
-	jrl	493
+	jrl	FileName_CallStatusDisplay
 FileName_OpFormat:
 	cp	xiz, 50
-	jr	nz, 115
+	jr	nz, FileName_OpDelete
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	58336
-	call	16284320
+	calr	InitializeOperationState
+	call	FileIO_SaveAllRegions
 	ld	wa, hl
 	ld	bc, 5:i3
-	calr	58975
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	call	16290139
-	call	16290094
-	call	16290928
+	call	FileIO_ResetCurrentRecord
+	call	GetEncodedFreeSpaceData
+	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
-	calr	58394
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	call	16355414
+	call	UI_PostPartChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
-	jrl	370
+	jrl	FileName_CallStatusDisplay
 FileName_OpDelete:
 	cp xiz, 0x5
 	jrl nz, FileName_OpFormatVariant
@@ -499,97 +499,97 @@ FileName_OpDelete_Execute:
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	58161
-	call	16286496
+	calr	InitializeOperationState
+	call	ReadSingleFile
 	ld	wa, hl
 	ld	bc, 5:i3
-	calr	58800
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	calr	58235
-	call	16290139
-	call	16290094
-	call	16290928
+	calr	SignalProgressUpdate
+	call	FileIO_ResetCurrentRecord
+	call	GetEncodedFreeSpaceData
+	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
-	jrl	233
+	jrl	FileName_CallStatusDisplay
 FileName_OpFormatVariant:
 	cp	xiz, 51
-	jr	nz, 77
+	jr	nz, FileName_OpNavigate
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	58076
-	call	16286496
+	calr	InitializeOperationState
+	call	ReadSingleFile
 	ld	wa, hl
 	ld	bc, 5:i3
-	calr	58715
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	calr	58150
-	call	16290139
-	call	16290094
-	call	16290928
+	calr	SignalProgressUpdate
+	call	FileIO_ResetCurrentRecord
+	call	GetEncodedFreeSpaceData
+	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
-	jrl	148
+	jrl	FileName_CallStatusDisplay
 FileName_OpNavigate:
 	cp	xiz, 6
-	jrl	nz, 143
-	call	16289841
+	jrl	nz, FileName_GetSelection
+	call	CheckFileSystemStatus
 	cp	hl, 0:i3
-	jrl	z, 134
+	jrl	z, FileName_GetSelection
 	ld	xbc, (xsp+8)
 	ld	wa, (32478:16)
 	cp	xbc, 29360152
-	jr	nz, 16
+	jr	nz, FileName_Navigate_ScrollUp
 	ld	bc, wa
 	cp	wa, 19
-	jr	ge, 28
+	jr	ge, FileName_Navigate_CheckChanged
 	inc	1, bc
 	ld	(32478:16), bc
-	jr	20
+	jr	FileName_Navigate_CheckChanged
 FileName_Navigate_ScrollUp:
 	cp	xbc, 29360151
-	jr	nz, 12
+	jr	nz, FileName_Navigate_CheckChanged
 	ld	bc, wa
 	cp	wa, 0:i3
-	jr	le, 6
+	jr	le, FileName_Navigate_CheckChanged
 	dec	1, bc
 	ld	(32478:16), bc
 FileName_Navigate_CheckChanged:
 	ld	wa, (xsp+6)
 	cp wa, (32478:16)
-	jr	z, 74
+	jr	z, FileName_GetSelection
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	-7615
+	calr	InitializeOperationState
 	ld	wa, (32478:16)
-	call	16286763
+	call	ReadDualFileEx
 	ld	wa, hl
 	ld	bc, 5:i3
-	calr	-6980
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	calr	-7545
-	call	16290928
+	calr	SignalProgressUpdate
+	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
 FileName_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -598,7 +598,7 @@ FileName_GetSelection:
 	ld	wa, (32478:16)
 FileName_UpdateDisplay:
 	cp	(xsp+4), wa
-	jrl	z, 363	; -> 0xF8CD60
+	jrl	z, FileName_Return	; -> 0xF8CD60
 	call	NotifyUIOfSelectionChange
 	ld	(35164:16), 4
 	ld	de, (32478:16)
@@ -655,19 +655,19 @@ FileName_UpdateButtons_Check:
 FileName_CheckCallback:
 	ld	xwa, (32474:16)
 	or	xwa, xwa
-	jrl	z, 200
+	jrl	z, FileName_Return
 	cp	(35994:16), 103
-	jr	z, 71
-	call	16289841
+	jr	z, FileName_Callback_Simple
+	call	CheckFileSystemStatus
 	ld	iz, hl
 	ldw	wa, 8
-	call	16289732
+	call	FileIO_CheckRecordValid
 	cp	l, 0:i3
-	jr	z, 14
+	jr	z, FileName_Callback_SetFilter
 	ldw	wa, 9
-	call	16289732
+	call	FileIO_CheckRecordValid
 	cp	l, 0:i3
-	jr	z, 3
+	jr	z, FileName_Callback_SetFilter
 	set	2, iz
 FileName_Callback_SetFilter:
 	call FileIO_WriteRecordName_Loop
@@ -685,14 +685,14 @@ FileName_Callback_Send:
 	extz	xde
 	ld	xwa, (32474:16)
 	ld	xbc, 31784961
-	jr	118
+	jr	FileName_DispatchWidget
 FileName_Callback_Simple:
-	call	16289600
+	call	FileIO_FormatName_Done
 	extz	xhl
 	ld	xwa, (32474:16)
 	ld	xbc, 31784961
 	ld	xde, xhl
-	jr	99
+	jr	FileName_DispatchWidget
 FileName_HandleRegister:
 	ld (0x7eda:16), xbc
 	cp (0x8c9a:16), 0x67
@@ -724,9 +724,9 @@ FileName_Register_Send:
 	extz	xde
 	ld	xwa, (32474:16)
 	ld	xbc, 31784961
-	jr	17
+	jr	FileName_DispatchWidget
 FileName_Register_Simple:
-	call	16289600
+	call	FileIO_FormatName_Done
 	extz	xhl
 	ld	xwa, (32474:16)
 	ld	xbc, 31784961

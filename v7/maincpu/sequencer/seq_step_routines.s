@@ -55,22 +55,23 @@ SeqStep_NoteByteBlock:
 	call	SeqData_ReadNextByte
 	ld	(9686:16), l
 	ldw	wa, 129
+SeqStep_NoteByteBlock_Join:
 	call	PartCtrl_WriteByte_Indexed
 	cp	(9686:16), 129
-	jr	z, 73
+	jr	z, SeqStep_NoteByteBlock_Skip
 	call	SeqData_AdvancePosition
 	cp	(0x287a:16), 0
-	jr	nz, 62
+	jr	nz, SeqStep_NoteByteBlock_Skip
 	.byte 0xc1, 0xd6, 0x25, 0x19, 0xd8, 0x25
 	call	SeqData_ReadNextByte
 	ld	(9686:16), l
 	ld	a, (9688:16)
 	extz	wa
-	jr	-44
+	jr	SeqStep_NoteByteBlock_Join
 	ldib_erp	249, 0
-	jr	18
+	jr	SeqStep_NoteConsumeInit
 	ldib_erp	249, 1
-	jr	13
+	jr	SeqStep_NoteConsumeInit
 
 SeqStep_NoteSetD1:
 	ldib_erp 0xf9, 2
@@ -91,6 +92,7 @@ SeqStep_NoteConsumeLoop:
 	call SeqData_AdvancePosition
 	cp (0x287a:16), 0
 	jr z, SeqStep_NoteConsumeAdvance
+SeqStep_NoteByteBlock_Skip:
 	mrdw5 0x9f, 0x04, 0x19, 0xaf, 0x28
 	mrdw5 0x9f, 0x06, 0x19, 0x66, 0x26
 	jrl SeqStep_NoteExit
@@ -202,6 +204,7 @@ SeqStep_EventPosManage:
 	bit 0, (0x287b:16)
 	jrl nz, SeqStep_EventPosConsumeAdvance
 	jrl SeqStep_EventExit
+SeqStep_EventPosManage_Loop:
 	bit 0, (9824:16)
 	jr z, SeqStep_EventPosCheck
 	bit 0, (9826:16)
@@ -308,8 +311,8 @@ SeqStep_EventPosConsumeAdvance:
 
 SeqStep_EventPosFinish:
 	bit	0, (0x271e:16)
-	jrl	z, -285
-	jr	56
+	jrl	z, SeqStep_EventPosManage_Loop
+	jr	SeqStep_EventExit
 
 SeqStep_EventPosReturn:
 	ldib_erp 0xfb, 0
@@ -676,7 +679,7 @@ SeqStep_TrackChangeNonDrum:
 
 SeqStep_TrackChangeLoop:
 	ld	(32422:16), 15
-	jrl	240
+	jrl	SeqStep_TrackChangeValidate
 SeqStep_TrackChangeLoopCheck:
 	cp l, 0xd
 	jr nz, SeqStep_TrackChangeNext
@@ -778,9 +781,9 @@ SeqStep_TrackChangeValidate:
 	ld	a, (9998:16)
 	dec	1, a
 	ld	(10010:16), a
-	calr	2668
+	calr	SeqStep_BoundaryReturn
 	ld	(32422:16), 15
-	jrl	448
+	jrl	SeqStep_TrackChangeExit
 SeqStep_TrackChangeFinal:
 	call Part_ProcessAndDecrementVoice
 	ldw_erp HL, 0xfa
@@ -1041,7 +1044,7 @@ SeqStep_MultiTrackCleanup:
 
 	ld (0x2878:16), a
 
-	call	15988897
+	call	SeqVoice_InitAllChannelParams
 
 	stb_erp A, 0xfb
 

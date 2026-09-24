@@ -74,6 +74,7 @@ IntTx0_CheckQueueEmpty:
 	swi	6
 	ld	(1054:16), 6
 	ret
+IntTx0_DequeueAndSend_Code_Skip:
 	ld	(1066:16), 0
 	pushw	wa
 	ld	a, (1056:16)
@@ -177,63 +178,72 @@ ClkTick_Src1CoarseUpdate:
 	ld	c, e
 	ret
 	.byte 0xf1, 0x27, 0x04, 0xc9
-	jr	z, 2
+	jr	z, ClkTick_Src1FineUpdate_Code_Skip
 	ld	d, 242:opc
+ClkTick_Src1FineUpdate_Code_Skip:
 	ld	xix, 127867
 	.byte 0x9c, 0xfe, 0x3f, 0x40, 0x00
-	jr	ugt, 14
+	jr	ugt, ClkTick_Src1FineUpdate_Code_Entry
 	pushw	de
 	and	d, 240
 	cp	d, 144
 	popw	de
-	jr	nz, 4
+	jr	nz, ClkTick_Src1FineUpdate_Code_Entry
 	cp	e, 0:i3
-	jr	nz, 37
+	jr	nz, ClkTick_Src1FineUpdate_Code_Return
+ClkTick_Src1FineUpdate_Code_Entry:
 	.byte 0x9c, 0xfe, 0x3f, 0x04, 0x00
-	jr	c, 31
+	jr	c, ClkTick_Src1FineUpdate_Code_Entry2
 	ld	a, d
 	pushw	wa
-	call	15673155
+	call	SeqMain_WriteByte
 	inc	2, xsp
 	ld	a, c
 	pushw	wa
-	call	15673155
+	call	SeqMain_WriteByte
 	inc	2, xsp
 	pushw	de
-	call	15673155
+	call	SeqMain_WriteByte
 	inc	2, xsp
 	.byte 0xc1, 0x27, 0x04, 0x3c, 0xbd
+ClkTick_Src1FineUpdate_Code_Return:
 	ret
+ClkTick_Src1FineUpdate_Code_Entry2:
 	.byte 0xf1, 0x27, 0x04, 0xba
 	inc	1, (46913:16)
 	ret
 	ld	(1059:16), 0
 	cp	d, 240
-	jr	z, 22
+	jr	z, ClkTick_Src1FineUpdate_Code_Skip3
 	cp	d, 242
-	jr	z, 6
+	jr	z, ClkTick_Src1FineUpdate_Code_Entry3
 	cp	d, 243
-	jr	z, 9
+	jr	z, ClkTick_Src1FineUpdate_Code_Skip2
 	ret
+ClkTick_Src1FineUpdate_Code_Entry3:
 	.byte 0xc1, 0x27, 0x04, 0x3e, 0x42
 	ld	c, e
 	ret
+ClkTick_Src1FineUpdate_Code_Skip2:
 	jrl	-158
+ClkTick_Src1FineUpdate_Code_Skip3:
 	ld	(1074:16), 1
 	cp	e, 80
-	jr	z, 10
+	jr	z, ClkTick_Src1FineUpdate_Code_Entry4
 	cp	e, 65
-	jr	z, 5
+	jr	z, ClkTick_Src1FineUpdate_Code_Entry4
 	cp	e, 126
-	jr	nz, 20
+	jr	nz, ClkTick_Src1FineUpdate_Code_Return2
+ClkTick_Src1FineUpdate_Code_Entry4:
 	.byte 0xf1, 0x32, 0x04, 0xb9
 	ld	a, d
 	pushw	wa
-	call	15673503
+	call	SeqBuf2_WriteByte
 	inc	2, xsp
 	pushw	de
-	call	15673503
+	call	SeqBuf2_WriteByte
 	inc	2, xsp
+ClkTick_Src1FineUpdate_Code_Return2:
 	ret
 	.byte 0xf1, 0x32, 0x04, 0xc9
 	jr	z, 13
@@ -243,6 +253,7 @@ ClkTick_Src1CoarseUpdate:
 	call	15673503
 	inc	2, xsp
 	ret
+SndParam_Widget1_AppendType2_Helper2:
 	ld xwa, (0x0438:16)
 	ld xbc, (0x043c:16)
 	ld xde, (0x0440:16)
@@ -530,14 +541,14 @@ SysEx_InProgressReturn:
 	extz	hl
 	ld	l, (38350:16)
 	cp	l, 31
-	jr	ugt, 50
+	jr	ugt, SysEx_InProgressByte_Code_Return
 	.byte 0xf1, 0x57, 0xfd, 0xcc
-	jr	z, 44
+	jr	z, SysEx_InProgressByte_Code_Return
 	sll	hl, 1
 	ld	xix, 16584406
 	ld_rrw	bc, xix, hl
 	cp	c, 255
-	jr	z, 26
+	jr	z, SysEx_InProgressByte_Code_Return
 	ld	d, (38298:16)
 	ld	e, 255:opc
 	ld	a, (38299:16)
@@ -545,12 +556,13 @@ SysEx_InProgressReturn:
 	ld	(38312:16), bc
 	ld	(38314:16), de
 	call	16565737
+SysEx_InProgressByte_Code_Return:
 	ret
 	ld	a, (38350:16)
 	cp	a, 16
-	jr	nz, 52
+	jr	nz, SysEx_InProgressByte_Code_Return2
 	cp	(38331:16), 16
-	jr	nz, 45
+	jr	nz, SysEx_InProgressByte_Code_Return2
 	xor	e, e
 	ld	a, (38298:16)
 	cp	a, 3:i3
@@ -564,6 +576,7 @@ SysEx_InProgressReturn:
 	ld	(38312:16), bc
 	ld	(38314:16), de
 	call	16563640
+SysEx_InProgressByte_Code_Return2:
 	ret
 	swi	7
 	nop

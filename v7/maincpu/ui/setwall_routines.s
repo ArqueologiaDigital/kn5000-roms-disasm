@@ -33,6 +33,7 @@ SetWall_UpdateSlotIndex:
 SetWall_InlineCodeBlock:
 	call	SetWall_InlineCodeBlock2
 	ret
+MiddleFuncCall_DispatchData_Code_Helper:
 	call	SetWall_InlineCodeBlock2
 	.byte 0xc1, 0xdf
 	incf
@@ -48,6 +49,7 @@ SetWall_InlineCodeBlock:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
+MiddleFuncCall_DispatchData_Code_Helper2:
 	call	SetWall_InlineCodeBlock2
 	.byte 0xc1, 0xdf
 	incf
@@ -87,6 +89,7 @@ SetWall_InlineCodeBlock:
 	ccf
 	zcf
 	incf
+SetWall_UpdateSlotIndex_Sub:
 	call	SetWall_InlineCodeBlock_0x7F
 	ret
 	ld	a, (0x2873:16)
@@ -115,6 +118,7 @@ SetWall_InlineCodeBlock:
 	jr	4
 	call	CDlikeSwTtl_DispatchData_0x4A
 	ret
+MiddleFuncCall_DispatchData_Code_Helper3:
 	call	SetWall_InlineCodeBlock_0x7F
 	ret
 	swi	7
@@ -211,13 +215,13 @@ SetWall_NewSlotSelected:
 	ld	(3298:16), 0
 	ld	a, (10355:16)
 	cp	a, 16
-	jr	z, 25
+	jr	z, SetWall_DispatchSlotEvent
 	ld	(3298:16), 2
 	cp	a, 15
-	jr	z, 15
+	jr	z, SetWall_DispatchSlotEvent
 	ld	(3298:16), 3
 	cp	a, 14
-	jr	z, 5
+	jr	z, SetWall_DispatchSlotEvent
 	ld	(3298:16), 1
 SetWall_DispatchSlotEvent:
 	xor wa, wa
@@ -278,6 +282,7 @@ SetWall_InitCallSequences:
 	ld	(3295:16), 8
 	call	SetWall_UpdateSlotIndex
 	ret
+MiddleFuncCall_DispatchData_Code_Helper4:
 	call	SetWall_InlineCodeBlock2
 	call	CDlikeSwTtl_SendStartEvt
 	ld	(3295:16), 0
@@ -633,8 +638,9 @@ SetWall_InlineCodeBlock2:
 	ld_rrb a, xde, iy
 	pop xde
 	cp a, (10355:16)
-	jr	nz, 4
+	jr	nz, SetWall_InlineCodeBlock2_Skip
 	jp	SetWall_InlineCodeBlock2_0x5E
+SetWall_InlineCodeBlock2_Skip:
 	ld	a, (0x2873:16)
 	xor	w, w
 	ld	iy, wa
@@ -651,9 +657,11 @@ SetWall_InlineCodeBlock2:
 	pop xde
 	and	a, c
 	cp	a, 0:i3
-	jr	z, 2
-	jr	4
+	jr	z, SetWall_InlineCodeBlock2_Skip2
+	jr	SetWall_InlineCodeBlock2_Join
+SetWall_InlineCodeBlock2_Skip2:
 	jp	SetWall_InlineCodeBlock2_0x5E
+SetWall_InlineCodeBlock2_Join:
 	call	SetWall_CrossTypeChange
 	ret
 
@@ -1847,7 +1855,7 @@ SetWall_SendPanelCtrl:
 
 	ld d, 0x3:opc
 
-	call	16624672
+	call	SysEx_ApplyVoiceParam_49
 
 	ret
 
@@ -2013,6 +2021,7 @@ SetWall_RetStub2:
 SetWall_MiscDataAndCode:
 	ret
 	ret
+MiddleFuncCall_DispatchData_Code_Helper5:
 	ld	xix, 62080
 	ld	xiy, 4441
 	ldw	bc, 16
@@ -2028,84 +2037,95 @@ SetWall_MiscDataAndCode:
 	ldw	bc, 16
 	.byte 0x85, 0x11
 	cp	(35994:16), 143
-	jr	z, 7
+	jr	z, SetWall_MiscDataAndCode_Skip
 	cp	(35994:16), 167
-	jr	z, 10
+	jr	z, SetWall_MiscDataAndCode_Skip2
+SetWall_MiscDataAndCode_Skip:
 	ld	a, 142:opc
-	call	16355459
-	jp	15859990
+	call	UI_PostModeChangeEvent
+	jp	SetWall_MiscDataAndCode_Return
+SetWall_MiscDataAndCode_Skip2:
 	ld	a, 131:opc
-	call	16355459
+	call	UI_PostModeChangeEvent
+SetWall_MiscDataAndCode_Return:
 	ret
 	ld	xwa, (4349:16)
 	push	xwa
 	xor	xwa, xwa
 	ld	a, (10347:16)
 	cp a, (65507:24)
-	jr	nz, 7
+	jr	nz, SetWall_MiscDataAndCode_Skip3
 	ld	xix, 62032
-	jr	16
+	jr	SetWall_MiscDataAndCode_Join
+SetWall_MiscDataAndCode_Skip3:
 	ld	xix, 700416
 	sla	xwa, 11
 	add	xix, xwa
 	add	xix, 208
+SetWall_MiscDataAndCode_Join:
 	xor	xbc, xbc
 	xor	de, de
+SetWall_MiscDataAndCode_Loop:
 	ld_rrb	a, xix, de
 	bit	7, a
-	jr	z, 13
+	jr	z, SetWall_MiscDataAndCode_Skip4
 	push	xbc
 	push	xde
 	push	xix
-	call	15860112
+	call	SetWall_MiscDataAndCode_Helper
 	pop	xix
 	pop	xde
 	pop	xbc
 	.byte 0xe7, 0x34, 0x81
+SetWall_MiscDataAndCode_Skip4:
 	add	de, 3
 	cp	de, 48
-	jr	c, -33
+	jr	c, SetWall_MiscDataAndCode_Loop
 	ld	xde, xbc
 	cp	xbc, 0
-	jr	z, 23
+	jr	z, SetWall_MiscDataAndCode_Skip5
 	ld	xde, xbc
 	mul	bc, 100
 	ld	hl, (10349:16)
 	div	xbc, xhl
 	inc	1, bc
 	cp	bc, 100
-	jr	c, 3
+	jr	c, SetWall_MiscDataAndCode_Skip5
 	ldw	bc, 99
+SetWall_MiscDataAndCode_Skip5:
 	ld	(10348:16), c
 	pop	xwa
 	ld	(4349:16), xwa
 	ret
+SetWall_MiscDataAndCode_Helper:
 	.byte 0xe7, 0x34, 0xa8
 	ld	wa, de
 	inc	1, wa
 	ld_rrw	hl, xix, wa
 	cp	hl, 65535
-	jr	z, 55
+	jr	z, SetWall_MiscDataAndCode_Return2
 	push	xhl
 	.byte 0xe7, 0x34, 0x04
-	call	15860186
+	call	SetWall_MiscDataAndCode_Helper2
 	pop_lerp 52
 	ld	xhl, (4349:16)
 	.byte 0xb3, 0xcf
 	pop	xhl
-	jr	z, 35
+	jr	z, SetWall_MiscDataAndCode_Return2
 	.byte 0xe7, 0x34, 0x61, 0xe7, 0x34, 0x04
-	call	15860186
+	call	SetWall_MiscDataAndCode_Helper2
 	pop_lerp 52
 	ld	xhl, (4349:16)
 	.byte 0xb3, 0xcf
-	jr	z, 14
+	jr	z, SetWall_MiscDataAndCode_Return2
 	ld	hl, (xhl+3)
 	cp	hl, 65535
-	jr	z, 5
+	jr	z, SetWall_MiscDataAndCode_Return2
 	.byte 0xe7, 0x34, 0x61
 	jr	-32
+SetWall_MiscDataAndCode_Return2:
 	ret
+SetWall_MiscDataAndCode_Helper2:
 	push	xiy
 	ld	xiy, (7514:16)
 	extz	xhl

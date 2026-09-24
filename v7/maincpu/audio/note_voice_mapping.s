@@ -411,6 +411,7 @@ AccNoteOn_ChannelLoop_Remap98:
 	.byte 0x0c, 0x30, 0xe8, 0x89, 0xea, 0x88, 0x1d, 0x6b
 	.byte 0x1f, 0xfe, 0xcf, 0xd8, 0x7e, 0x13, 0xff, 0xd7
 	.byte 0xfa, 0x05, 0xf3, 0xfd, 0xae, 0x00, 0x37, 0x0e
+DemoMode_Main_Operation_Helper:
 	.byte 0xf3, 0xfd, 0x10, 0xfe, 0x37, 0x3e, 0xf1, 0x62
 	.byte 0xc1, 0x36, 0xf3, 0xfd, 0x50, 0x01, 0x00, 0x90
 	.byte 0xf3, 0xfd, 0x52, 0x01, 0x00, 0x01, 0xbf, 0x04
@@ -563,6 +564,7 @@ RhythmMidi_SeqEvt:
 	pop XIZ
 	lda xsp, (xsp + 0x0148)
 	ret
+Interrupt_FlagSetBytecode_Helper2:
 	.byte 0xf3, 0xfd, 0x58, 0xff, 0x37, 0xd7, 0xfa, 0x04
 	.byte 0xf1, 0x62, 0xc1, 0x30
 RhythmMidi_SeqEvt_Dispatch:
@@ -1081,7 +1083,7 @@ VoiceClaim_Extended_Init:
 VoiceClaimExt_Slot1_MarkLoop:
 	extz bc
 	ld xwa, xde
-	call 16664362
+	call VoiceClaim_Extended_Init_Code_Helper
 	lda xsp, (xsp + 0x0150)
 	ret
 	.byte 0xf3, 0xfd, 0xb0, 0xfe, 0x37, 0xf3, 0xfd, 0x4e
@@ -1135,6 +1137,7 @@ VoiceClaimExt_Slot3_SetParam:
 	.byte 0xc3, 0xfd, 0x4e, 0x01, 0x21, 0xc9, 0x8b, 0xd9
 	.byte 0x12, 0xea, 0x88, 0x1d, 0x2a, 0x47, 0xfe, 0xf3
 	.byte 0xfd, 0x50, 0x01, 0x37, 0x0e
+VoiceAlloc_ScoopDisplayProcess_Helper:
 	cpw (0xcd86:16), 0x0000
 	ret Z
 	call 0xfe832d
@@ -1145,12 +1148,13 @@ VoiceClaimExt_Slot6_MarkLoop:
 	ld	bc, 2:i3
 	call	16660458
 	ret
+VoiceAlloc_ScoopDisplayProcess_Helper2:
 	ld	a, (52809:16)
 	extz	wa
 VoiceClaimExt_Slot6_MarkCheck:
 	ld	(52835:16), wa
 	ld	de, 0:i3
-	jr	48
+	jr	VoiceClaim_Extended_Return_Code_Entry
 	ld	wa, de
 	add	wa, wa
 	inc	4, wa
@@ -1165,6 +1169,7 @@ VoiceClaim_Extended_Return:
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xb3, 0x41, 0xda
 	.byte 0x88, 0xd8, 0x80, 0xf1, 0x67, 0xce, 0x31, 0xe8
 	.byte 0x12, 0xe9, 0x80, 0xb0, 0x00, 0x40, 0xda, 0x61
+VoiceClaim_Extended_Return_Code_Entry:
 	.byte 0xc1, 0x49, 0xce, 0x21, 0xd8, 0x12, 0xd8, 0xf2
 	.byte 0x61, 0xc6, 0x1d, 0x97, 0x98, 0xfe, 0xf1, 0x62
 	.byte 0xc1, 0x30, 0xd9, 0xa8, 0x1d, 0xea, 0x37, 0xfe
@@ -2171,10 +2176,10 @@ NoteMap_CollectAndAllocVoice_NoTimerCheck:
 	.byte 0x71, 0x52, 0xfe
 NoteMap_FallbackVoiceCheck:
 	cp	l, 0:i3
-	jr	nz, 25
-	call	16679602
+	jr	nz, NoteMap_CollectAndAllocVoice_NoTimerCheck_Code_Skip
+	call	NoteMap_CollectAndAllocVoice_NoTimerCheck_Code_Helper
 	cp	l, 255
-	jr	z, 16
+	jr	z, NoteMap_CollectAndAllocVoice_NoTimerCheck_Code_Skip
 	ld	xwa, (xsp+4)
 	ld	bc, 2:i3
 FallbackVoiceCheck_LoopBody:
@@ -2182,6 +2187,7 @@ FallbackVoiceCheck_LoopBody:
 	ld	xwa, (xsp+4)
 	ld	bc, 2:i3
 	calr	2182
+NoteMap_CollectAndAllocVoice_NoTimerCheck_Code_Skip:
 	ld	a, (xsp+2)
 	ld	c, a
 	extz	bc
@@ -2371,12 +2377,13 @@ UpdateEntry_EmitNext:
 	ld A,(XWA)
 	cp A,(XSP+0x04)
 UpdateEntry_CheckLayerCount:
-	jr	nz, 14
+	jr	nz, NoteMap_UpdateEntry_Code_Skip
 	ld	a, (xsp+4)
 	ld	c, a
 	extz	bc
 	ld	xwa, (xsp+6)
-	call	16664362
+	call	VoiceClaim_Extended_Init_Code_Helper
+NoteMap_UpdateEntry_Code_Skip:
 	ld	xwa, (xsp+6)
 	ld	a, (xwa+3)
 UpdateEntry_NonSpecialPath:
@@ -3374,6 +3381,7 @@ EmitNoteData_Process_LoadReg2:
 	pop QIZ
 	lda xsp, (xsp + 0x0e)
 	ret
+VoiceClaim_Extended_Init_Code_Helper:
 	.byte 0xbf, 0xe4, 0x37, 0x2e, 0xbf, 0x18, 0x43, 0xbf
 	.byte 0x1a, 0x60, 0x8f, 0x18, 0x21, 0xd8, 0x12, 0xf2
 	.byte 0xb8, 0x8e, 0xee, 0x31, 0xc3, 0x07, 0xe4, 0xe0
@@ -3458,7 +3466,8 @@ AllocNewVoiceEntry_LoadParam:
 	ld	(xsp+6), xwa
 	ld	iz, 0:i3
 	ld	qiz, 0
-	jrl	277
+	jrl	AllocNewVoiceEntry_LoadParam_Code_Join
+AllocNewVoiceEntry_LoadParam_Code_Loop:
 	ld WA,QIZ
 	extz XWA
 	ld XBC,XWA
@@ -3573,6 +3582,7 @@ AllocNewVoiceEntry_LoadParam:
 	ld iz, 0:i3
 .Lc_fe4a23:
 	inc 1,QIZ
+AllocNewVoiceEntry_LoadParam_Code_Join:
 	ld XWA,(XSP+0x06)
 	ld A,(XWA+0x01)
 	ld C,A
@@ -3580,7 +3590,7 @@ AllocNewVoiceEntry_LoadParam:
 AllocNewVoiceEntry_LoadParam2:
 	ld	wa, qiz
 	cp	wa, bc
-	jrl	c, -295
+	jrl	c, AllocNewVoiceEntry_LoadParam_Code_Loop
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -3625,31 +3635,33 @@ AllocNewVoiceEntry_LoadParam4:
 	ld	(xhl), a
 	inc	1, bc
 	cp	bc, 0:i3
-	jr	z, 39
+	jr	z, AllocNewVoiceEntry_LoadParam3_Code_Skip2
 	cp	bc, 6:i3
-	jr	z, 14
+	jr	z, AllocNewVoiceEntry_LoadParam3_Code_Skip
 	ld	xwa, (xsp+6)
 	ld	a, (xwa+1)
 	dec	1, a
 	extz	wa
 	cp	wa, iz
-	jr	nz, 21
+	jr	nz, AllocNewVoiceEntry_LoadParam3_Code_Skip2
+AllocNewVoiceEntry_LoadParam3_Code_Skip:
 	ld	xwa, 52280
 	push	xwa
 	ld	wa, bc
 	mul	wa, 5
 	pushw	wa
-	call	15672481
+	call	TempoRingBuf_WriteBytes
 	inc	6, xsp
 	ld	bc, 0:i3
+AllocNewVoiceEntry_LoadParam3_Code_Skip2:
 	inc	1, iz
 	ld	xwa, (xsp+6)
 	ld	a, (xwa+1)
 	extz	wa
 	cp	iz, wa
 	jrl	c, -263
-	call	15668815
-	call	16004715
+	call	TempoRingBuf_Consume
+	call	SeqPlay_CheckAndStartPlayback
 	popw	iz
 	inc	8, xsp
 	ret
@@ -3662,7 +3674,8 @@ AllocNewVoiceEntry_LoadParam4:
 	ei	0x00
 	ld	bc, 0:i3
 	ld	iz, 0:i3
-	jrl	228
+	jrl	SetChannelParam_LoadParam4_Code_Join
+AllocNewVoiceEntry_LoadParam3_Code_Loop:
 	ld	wa, iz
 	extz	xwa
 	ld	xde, xwa
@@ -3670,7 +3683,7 @@ AllocNewVoiceEntry_LoadParam4:
 	add	xde, xwa
 	inc	4, xde
 	.byte 0xaf, 0x06, 0x82, 0xba, 0x04, 0xc9
-	jrl	nz, 161
+	jrl	nz, SetChannelParam_LoadParam4_Code_Skip
 	ld	wa, iz
 	extz	xwa
 	ld	xde, xwa
@@ -3678,7 +3691,7 @@ AllocNewVoiceEntry_LoadParam4:
 	add	xde, xwa
 	inc	4, xde
 	.byte 0xaf, 0x06, 0x82, 0x8a, 0x02, 0x3f, 0xff
-	jrl	z, 138
+	jrl	z, SetChannelParam_LoadParam4_Code_Skip
 	ld	wa, bc
 	mul	wa, 5
 	lda	xde, (52310:16)
@@ -3724,31 +3737,35 @@ SetChannelParam_LoadParam5:
 	ld	a, (xsp+4)
 	ld	(xhl), a
 	inc	1, bc
+SetChannelParam_LoadParam4_Code_Skip:
 	cp	bc, 0:i3
-	jr	z, 39
+	jr	z, SetChannelParam_LoadParam4_Code_Skip3
 	cp	bc, 6:i3
-	jr	z, 14
+	jr	z, SetChannelParam_LoadParam4_Code_Skip2
 	ld	xwa, (xsp+6)
 	ld	a, (xwa+1)
 	dec	1, a
 	extz	wa
 	cp	wa, iz
-	jr	nz, 21
+	jr	nz, SetChannelParam_LoadParam4_Code_Skip3
+SetChannelParam_LoadParam4_Code_Skip2:
 	ld	xwa, 52310
 	push	xwa
 	ld	wa, bc
 	mul	wa, 5
 	pushw	wa
-	call	15672481
+	call	TempoRingBuf_WriteBytes
 	inc	6, xsp
 	ld	bc, 0:i3
+SetChannelParam_LoadParam4_Code_Skip3:
 	inc	1, iz
+SetChannelParam_LoadParam4_Code_Join:
 	ld	xwa, (xsp+6)
 	ld	a, (xwa+1)
 	extz	wa
 	cp	iz, wa
-	jrl	c, -241
-	call	15668815
+	jrl	c, AllocNewVoiceEntry_LoadParam3_Code_Loop
+	call	TempoRingBuf_Consume
 	popw	iz
 	inc	8, xsp
 	ret
@@ -3761,7 +3778,7 @@ SetChannelParam_LoadParam5:
 	ei	0x00
 	ld	bc, 0:i3
 	ld	iz, 0:i3
-	jrl	228
+	jrl	ScanEmitMidi_VoiceLoop_Code_Entry
 	ld	wa, iz
 	extz	xwa
 	ld	xde, xwa
@@ -3825,6 +3842,7 @@ ScanEmitMidi_VoiceLoop:
 	.byte 0x15, 0x40, 0x74, 0xcc, 0x00, 0x00, 0x38, 0xd9
 	.byte 0x88, 0xd8, 0x08, 0x05, 0x00, 0x28, 0x1d, 0xa1
 	.byte 0x24, 0xef, 0xef, 0x66, 0xd9, 0xa8, 0xde, 0x61
+ScanEmitMidi_VoiceLoop_Code_Entry:
 	.byte 0xaf, 0x06, 0x20, 0x88, 0x01, 0x21, 0xd8, 0x12
 	.byte 0xd8, 0xf6, 0x77, 0x0f, 0xff, 0x1d, 0x4f, 0x16
 	.byte 0xef, 0x4e, 0xef, 0x60, 0x0e, 0xbf, 0xf2, 0x37
@@ -4340,6 +4358,7 @@ ResetTimers_CheckCount:
 	.byte 0x21, 0xd8, 0x12, 0x9f, 0x02, 0xf8, 0x77, 0xfb
 ResetTimers_Return:
 	.byte 0xfe, 0xd7, 0xfa, 0x05, 0xbf, 0x12, 0x37, 0x0e
+VoiceRealloc_CheckSingleLayer_Code_Helper:
 	.byte 0xbf, 0xf0, 0x37, 0xd7, 0xfa, 0x04, 0xbf, 0x0c
 	.byte 0x45, 0xbf, 0x0e, 0x60, 0x8f, 0x0c, 0x21, 0xd8
 	.byte 0x12, 0xd8, 0x80, 0xd8, 0xc8, 0x24, 0x01, 0xe8
@@ -5443,12 +5462,13 @@ ReallocVoices_Exit_WriteReg4:
 	call	16662359
 NoteMap_StoreAndRet:
 	cp	l, 0:i3
-	jr	z, 19
+	jr	z, StoreAndRet_WriteReg_Code_Epilogue
 	lda	xwa, (xsp)
 StoreAndRet_WriteReg:
 	.byte 0xe8, 0x8a, 0xc3, 0xfd, 0x48, 0x01, 0x21, 0xc9
 	.byte 0x8b, 0xd9, 0x12, 0xea, 0x88, 0x1d, 0x00, 0x49
 	.byte 0xfe
+StoreAndRet_WriteReg_Code_Epilogue:
 	lda xsp, (xsp + 0x014c)
 	ret
 	.byte 0xf3, 0xfd, 0xb4, 0xfe, 0x37, 0x2e, 0xf3, 0xfd
@@ -5508,7 +5528,7 @@ VoiceRealloc_LookupVoice:
 	ld	e, a
 	extz	de
 	ld	xwa, xhl
-	call	16669056
+	call	VoiceRealloc_CheckSingleLayer_Code_Helper
 	lda	xwa, (xsp+2)
 	ld	bc, 2:i3
 	call	16666008
@@ -5669,14 +5689,15 @@ ProcessLayeredNoteOn_LoadIter:
 	ld	de, 0:i3
 	call	16662359
 	cp	l, 0:i3
-	jr	z, 19
+	jr	z, ProcessLayeredNoteOn_WriteReg4_Code_Skip
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+328)
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	call	16664362
+	call	VoiceClaim_Extended_Init_Code_Helper
+ProcessLayeredNoteOn_WriteReg4_Code_Skip:
 	ld	(xsp+166), 4
 	ld	(xsp+167), 255
 	lda	xwa, (xsp)
@@ -6037,7 +6058,7 @@ SeqPart_MelodicNote_Layer1Done:
 	ld	wa, iz
 	ldw	bc, 432
 	ldw	de, 8192
-	call	16689430
+	call	SeqPart_EmitMelodicNote_Code_Helper
 	ld	wa, iz
 	pushw	5
 SeqPart_MelodicNote_SingleLayer:
@@ -6047,7 +6068,7 @@ SeqPart_MelodicNote_SingleLayer:
 	ld	wa, iz
 	ldw	bc, 64
 	ld	de, 0:i3
-	call	16689430
+	call	SeqPart_EmitMelodicNote_Code_Helper
 	ld	wa, iz
 	pushw	5
 	ldw	bc, 64
@@ -6061,7 +6082,7 @@ SeqPart_MelodicNote_SingleLayer:
 	ld	wa, iz
 	ldw	bc, 11
 	ldw	de, 127
-	call	16689430
+	call	SeqPart_EmitMelodicNote_Code_Helper
 	ld	wa, iz
 	pushw	5
 	ldw	bc, 11
@@ -6232,6 +6253,7 @@ ProcessEventDispatch_LoadIter:
 	.byte 0xde, 0x8a, 0x31, 0x5e, 0x00, 0x1d, 0x4a, 0xcb
 	.byte 0xfc, 0x78, 0x56, 0xfd, 0x78, 0x53, 0xfd, 0x1d
 	.byte 0x63, 0xb1, 0xfe, 0x5e, 0xef, 0x66, 0x0e, 0x0e
+NoteMap_CollectAndAllocVoice_NoTimerCheck_Code_Helper:
 	.byte 0x27, 0xff, 0xd1, 0xca, 0xcd, 0x3f, 0x00, 0x00
 	.byte 0x6e, 0x27, 0xf1, 0x86, 0xcd, 0x30, 0x1e, 0xdd
 	.byte 0x00, 0xcf, 0xcf, 0xff, 0x66, 0x17, 0x1e, 0x60
@@ -7808,6 +7830,7 @@ VoiceSlot_IterateAlloc_Block4:
 	pop	xix
 	pop	xiz
 	ret
+VoiceAlloc_ScoopDisplayProcess_Helper3:
 	lda	xsp, (xsp-20)
 VoiceSlot_IterateAlloc_SetByte:
 	.byte 0x3e, 0xe9, 0x8b, 0xe8, 0x8e, 0xbf, 0x0a, 0x14
@@ -7923,7 +7946,7 @@ VoiceSlot_CheckAndApply_Data2:
 VoiceSlot_CheckAndApply_Prologue:
 	ld	a, (xsp+3)
 	and	a, 255
-	jr	z, 23
+	jr	z, VoiceSlot_CheckAndApply_Data2_Code_Epilogue
 	ld	(xsp+1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -7933,7 +7956,8 @@ VoiceSlot_CheckAndApply_Prologue:
 	extz	bc
 VoiceSlot_CheckAndApply_Compare:
 	ld	xwa, xde
-	calr	1474
+	calr	VoiceSlot_CheckAndApply_Data2_Code_Helper
+VoiceSlot_CheckAndApply_Data2_Code_Epilogue:
 	inc	4, xsp
 	ret
 	ret
@@ -8157,6 +8181,7 @@ HdaeRom_TableEntry2:
 	.byte 0x66, 0x13, 0xb7, 0x30, 0xe8, 0x8a, 0x8f, 0x03
 	.byte 0x21, 0xc9, 0xcc, 0x80, 0xc9, 0x8b, 0xd9, 0x12
 	.byte 0xea, 0x88, 0x1e, 0x03, 0x00, 0xef, 0x64, 0x0e
+VoiceSlot_CheckAndApply_Data2_Code_Helper:
 	.byte 0xbf, 0xf4, 0x37, 0x3e, 0xe8, 0x8e, 0x8e, 0x03
 	.byte 0x21, 0xbf, 0x04, 0x41, 0xbe, 0x03, 0x43, 0xbf
 	.byte 0x0c, 0x30, 0xe8, 0x89, 0xbf, 0x0a, 0x30, 0xe8
@@ -8173,6 +8198,7 @@ UIStateEvt_ProcessHandler:
 	.byte 0x16, 0x00, 0x68, 0x09, 0xaf, 0x0c, 0x20, 0x9f
 	.byte 0x0a, 0x21, 0x1e, 0xe9, 0x01, 0x8f, 0x04, 0x21
 	.byte 0xbe, 0x03, 0x41, 0x5e, 0xbf, 0x0c, 0x37, 0x0e
+SeqPart_EmitMelodicNote_Code_Helper:
 	.byte 0xef, 0x6a, 0x2e, 0xda, 0x8e, 0xbf, 0x02, 0x50
 	.byte 0xd9, 0xcf, 0x78, 0x00, 0x76, 0xbc, 0x01, 0xd9
 	.byte 0xcf, 0xb2, 0x01, 0x76, 0xab, 0x01, 0xd9, 0xcf
@@ -8185,13 +8211,13 @@ HdaeRom_AltProcessBlock:
 	cp	bc, 128
 	jrl	z, 278
 	cp	bc, 94
-	jrl	z, 253
+	jrl	z, HdaeRom_AltCheckResult_Code_Entry4
 	cp	bc, 93
-	jrl	z, 230
+	jrl	z, HdaeRom_AltCheckResult_Code_Entry3
 	cp	bc, 91
-	jrl	z, 207
+	jrl	z, HdaeRom_AltCheckResult_Code_Entry2
 	cp	bc, 1536
-	jrl	z, 184
+	jrl	z, HdaeRom_AltCheckResult_Code_Entry
 	cp	bc, 64
 	jrl	z, 145
 	cp	bc, 11
@@ -8203,16 +8229,17 @@ HdaeRom_AltProcessBlock:
 	cp	bc, 1:i3
 	jr	z, 47
 	cp	bc, 32
-	jr	z, 23
+	jr	z, UIStateEvt_ProcessHandler_Code_Skip
 	cp	bc, 0:i3
-	jrl	nz, 340
+	jrl	nz, HdaeRom_AltCheckResult_Code_Join
 	ld	wa, (xsp+2)
 	add	wa, wa
 	lda	xbc, (53044:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), iz
-	jrl	322
+	jrl	HdaeRom_AltCheckResult_Code_Join
+UIStateEvt_ProcessHandler_Code_Skip:
 	ld	wa, (xsp+2)
 HdaeRom_AltReadParam:
 	.byte 0xd8, 0x80, 0xf1, 0x74, 0xcf, 0x31, 0xe8, 0x12
@@ -8232,12 +8259,16 @@ HdaeRom_AltCheckResult:
 	.byte 0xa8, 0xd8, 0x8e, 0xc7, 0xf8, 0x89, 0xc9, 0x8b
 	.byte 0xd9, 0x12, 0x9f, 0x02, 0x20, 0xd9, 0x8a, 0x31
 	.byte 0x40, 0x00, 0x1e, 0x21, 0x09, 0x78, 0xc2, 0x00
+HdaeRom_AltCheckResult_Code_Entry:
 	.byte 0xde, 0x89, 0x9f, 0x02, 0x20, 0xd9, 0x8a, 0x31
 	.byte 0x97, 0x00, 0x1e, 0x11, 0x09, 0x78, 0xb2, 0x00
+HdaeRom_AltCheckResult_Code_Entry2:
 	.byte 0xde, 0x89, 0x9f, 0x02, 0x20, 0xd9, 0x8a, 0x31
 	.byte 0x5b, 0x00, 0x1e, 0x01, 0x09, 0x78, 0xa2, 0x00
+HdaeRom_AltCheckResult_Code_Entry3:
 	.byte 0xde, 0x89, 0x9f, 0x02, 0x20, 0xd9, 0x8a, 0x31
 	.byte 0x5d, 0x00, 0x1e, 0xf1, 0x08, 0x78, 0x92, 0x00
+HdaeRom_AltCheckResult_Code_Entry4:
 	.byte 0x9f, 0x02, 0x20, 0xd8, 0x80, 0xf1, 0xb4, 0xcf
 	.byte 0x31, 0xe8, 0x12, 0xe9, 0x80, 0xb0, 0x56, 0x78
 	.byte 0x80, 0x00, 0xde, 0x89, 0x9f, 0x02, 0x20, 0xd9
@@ -8259,6 +8290,7 @@ HdaeRom_AltCheckResult:
 	.byte 0x02, 0x20, 0x31, 0x78, 0x00, 0xda, 0xa8
 HdaeRom_AltTableEntry0:
 	calr 2140
+HdaeRom_AltCheckResult_Code_Join:
 	call 0xfeb7aa
 	popw iz
 	inc 2,XSP
@@ -8384,7 +8416,7 @@ SndPart_SetVolume_LoadReg:
 	add	bc, iz
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, 4
+	jr	lt, SndPart_SetPan
 	sub	bc, 12
 SndPart_SetPan:
 	ld	wa, bc
@@ -8404,9 +8436,9 @@ SndPart_SetDamperPedal:
 	.byte 0x00
 SndPart_SetDamperPed_LoadReg:
 	nop
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	hl, 128
-	jrl	nz, 802
+	jrl	nz, SendEpilogue_Data_Code_Skip
 	ld	a, (64797:16)
 	and	a, 15
 	ld	c, a
@@ -8538,7 +8570,8 @@ SendEpilogue_Data:
 	.byte 0x1c, 0xcf, 0x60, 0x68, 0x10, 0xf1, 0x20, 0xcf
 	.byte 0x60, 0x68, 0x0a, 0xf1, 0x24, 0xcf, 0x60, 0x68
 	.byte 0x04, 0xf1, 0x28, 0xcf, 0x60
-	call 0xfeb7aa
+SendEpilogue_Data_Code_Skip:
+	call SendEpilogue_Data_Code_Helper
 	pop XIZ
 	inc 4,XSP
 	ret
@@ -8743,6 +8776,7 @@ SendPartDataBlocks_LoadReg:
 	.byte 0x8a, 0x30, 0x18, 0x00, 0xd9, 0xaf, 0x1e, 0xa7
 SendPartDataBlocks_LoadIter3:
 	.byte 0xfc, 0x1d, 0xaa, 0xb7, 0xfe, 0xef, 0x64, 0x0e
+DemoMode_Main_Operation_Helper2:
 	.byte 0x3e, 0x36, 0x40, 0x00, 0xd8, 0xa8, 0xde, 0xcf
 	.byte 0x40, 0x00, 0x67, 0x08, 0xde, 0x88, 0xd8, 0x80
 	.byte 0xd8, 0xca, 0x80, 0x00, 0xde, 0xee, 0x07, 0xd8
@@ -8765,6 +8799,7 @@ COMM_SendDataReturn:
 	ldw	qiz, 16
 	cpw	qiz, 19
 	jr	ge, 28
+SendPartDataBlocks_Send_Code_Loop:
 	ld	wa, qiz
 	ld	bc, iz
 	calr	64612
@@ -8774,8 +8809,8 @@ COMM_SendDataReturn:
 	calr	64570
 	inc	1, qiz
 	cpw	qiz, 19
-	jr	lt, -28
-	call	16693162
+	jr	lt, SendPartDataBlocks_Send_Code_Loop
+	call	SendEpilogue_Data_Code_Helper
 	pop	xiz
 	ret
 	ldw	wa, 80
@@ -8817,97 +8852,111 @@ MIDI_SendPitchBend:
 	.byte 0x23, 0xd9, 0x12, 0xd9, 0xf3, 0x61, 0xe4, 0x80
 	.byte 0x21, 0xd8, 0x12, 0x42, 0xf4, 0xcf, 0x00, 0x00
 	.byte 0xd8, 0x89, 0xd8, 0xa8, 0x1b, 0xca, 0x32, 0xef
+SendEpilogue_Data_Code_Helper:
 	.byte 0x0e
+CDlikeSwTtl_ShowSongTitle_Helper:
 	ld hl, (0xe91f:16)
 	ret
 MIDI_SendChannelPressure:
 	pushw	iz
-	calr	46
+	calr	MIDI_SendChannelPressure_Helper
 	ld	iz, hl
 	ld	wa, iz
 	cp	wa, 65534
-	jr	z, 25
+	jr	z, MIDI_SendChannelPressure_Skip
 	cp	wa, 65535
-	jr	z, 19
+	jr	z, MIDI_SendChannelPressure_Skip
 	cp	wa, 65533
-	jr	nz, 22
+	jr	nz, MIDI_SendChannelPressure_Epilogue
 	ld	iz, 0:i3
 	calr	382
 	ld	wa, iz
-	call	15861706
-	jr	9
+	call	SongMode_VoiceStateDisp
+	jr	MIDI_SendChannelPressure_Epilogue
+MIDI_SendChannelPressure_Skip:
 	calr	371
 	ld	wa, iz
-	call	15861706
+	call	SongMode_VoiceStateDisp
+MIDI_SendChannelPressure_Epilogue:
 	popw	iz
 	ret
+MIDI_SendChannelPressure_Helper:
 	push	xiz
 	cp	(59646:16), 0
-	jr	nz, 5
+	jr	nz, MIDI_SendChannelPressure_Skip2
 	ld	hl, 0:i3
-	jrl	142
+	jrl	MIDI_SendChannelPressure_Epilogue2
+MIDI_SendChannelPressure_Skip2:
 	ld	wa, (59679:16)
 	and	wa, 2
 	cp	wa, 2:i3
-	jr	nz, 13
+	jr	nz, MIDI_SendChannelPressure_Skip3
 	ld	wa, (59679:16)
 	bit	2, wa
-	jr	nz, 4
+	jr	nz, MIDI_SendChannelPressure_Skip3
 	ld	hl, 0:i3
-	jr	117
+	jr	MIDI_SendChannelPressure_Epilogue2
+MIDI_SendChannelPressure_Skip3:
 	ld	wa, 1:i3
-	calr	828
+	calr	MIDI_PitchBendData_Block_Code_Sub
 	ld	wa, (59679:16)
 	ld	bc, (59689:16)
-	calr	1054
+	calr	MIDI_SendChannelPressure_Helper2
 	ld	xiz, xhl
 	cp	(59678:16), 4
-	jr	nz, 5
+	jr	nz, MIDI_SendChannelPressure_Loop
 	ld	xwa, xiz
 	calr	7010
+MIDI_SendChannelPressure_Loop:
 	cp	(59681:16), xiz
-	jr	ugt, 79
+	jr	ugt, MIDI_SendChannelPressure_Skip7
 	calr	8126
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	ge, 5
+	jr	ge, MIDI_SendChannelPressure_Skip4
 	ldw	hl, 65535
-	jr	67
+	jr	MIDI_SendChannelPressure_Epilogue2
+MIDI_SendChannelPressure_Skip4:
 	ld	a, (59678:16)
 	cp	a, 4:i3
-	jr	z, 42
+	jr	z, MIDI_SendChannelPressure_Skip6
 	cp	a, 3:i3
-	jr	z, 23
+	jr	z, MIDI_SendChannelPressure_Skip5
 	cp	a, 2:i3
-	jr	z, 19
+	jr	z, MIDI_SendChannelPressure_Skip5
 	cp	a, 1:i3
-	jr	nz, -40
+	jr	nz, MIDI_SendChannelPressure_Loop
 	ld	a, l
 	extz	wa
-	calr	2166
+	calr	MIDI_SendChannelPressure_Helper3
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	ge, -53
-	jr	32
+	jr	ge, MIDI_SendChannelPressure_Loop
+	jr	MIDI_SendChannelPressure_Epilogue2
+MIDI_SendChannelPressure_Skip5:
 	ld	a, l
 	extz	wa
 	calr	5640
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	ge, -68
-	jr	17
+	jr	ge, MIDI_SendChannelPressure_Loop
+	jr	MIDI_SendChannelPressure_Epilogue2
+MIDI_SendChannelPressure_Skip6:
 	ld	a, l
 	extz	wa
 	calr	6642
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	ge, -83
+	jr	ge, MIDI_SendChannelPressure_Loop
 	.byte 0x68
 SeqVoice_CheckAndRet_RestoreReg:
 	push	sr
+MIDI_SendChannelPressure_Skip7:
 	ld	hl, 0:i3
+MIDI_SendChannelPressure_Epilogue2:
 	pop	xiz
 	ret
+CDlikeSwTtl_ShowSongTitle_Helper2:
 	dec	6, xsp
 SeqVoice_CheckAndRet_Prologue:
 	pushw	iz
@@ -8946,6 +8995,7 @@ SeqVoice_CheckAndRet_Data:
 	.byte 0xde, 0x8b, 0x4e, 0x0e, 0x1e, 0x7c, 0x03, 0xd8
 	.byte 0xaa, 0x1e, 0xf4, 0x01, 0x1e, 0xe1, 0x1e, 0x78
 	.byte 0x0f, 0x1f
+SeqVoice_CheckAndRet_Data_Code_Join:
 	lda xsp, (xsp - 0x0e)
 	pushw iz
 	ld (XSP+0x0e),WA
@@ -9002,6 +9052,7 @@ MIDI_SendSysExCmd:
 	.byte 0x00, 0x61, 0x87
 .Lc_feb9ef:
 	.byte 0x4e, 0xbf, 0x0e, 0x37, 0x0e
+DpDocTtlFunc_Helper:
 	.byte 0xd1, 0x1f, 0xe9, 0x20, 0xd8, 0x33, 0x00, 0x66
 	.byte 0x0e, 0xd8, 0xac, 0x1e, 0x47, 0x01, 0x1e, 0xc7
 	.byte 0x02, 0xd1, 0x1f, 0xe9, 0x3e, 0x02, 0x00, 0xd1
@@ -9021,40 +9072,46 @@ MIDI_SendPartVolumes_Loop:
 	exts	xiz
 	ld	xwa, xiz
 	cp	xwa, 0
-	jr	ge, 7
+	jr	ge, MIDI_SendPartVol_LookupFallback
 	ld	xhl, 4294967295
-	jr	47
+	jr	WriteAndCheck_LoadParam_Code_Epilogue
 MIDI_SendPartVol_LookupFallback:
 	bit	7, iz
-	jr	z, 40
+	jr	z, WriteAndCheck_LoadParam_Code_Skip2
 	and	xiz, 127
+WriteAndCheck_LoadParam_Code_Loop:
 	calr	7558
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	ge, 7
+	jr	ge, WriteAndCheck_LoadParam_Code_Skip
 	ld	xhl, 4294967295
-	jr	20
+	jr	WriteAndCheck_LoadParam_Code_Epilogue
+WriteAndCheck_LoadParam_Code_Skip:
 	ld	wa, hl
 	and	wa, 127
 	exts	xwa
 	sla	xiz, 7
 	add	xiz, xwa
 	bit	7, hl
-	jr	nz, -34
+	jr	nz, WriteAndCheck_LoadParam_Code_Loop
+WriteAndCheck_LoadParam_Code_Skip2:
 	ld	xhl, xiz
+WriteAndCheck_LoadParam_Code_Epilogue:
 	pop	xiz
 	ret
+SeekRecord_Done_Compare_Code_Helper:
 	lda	xsp, (xsp-12)
 	ld	(xsp+4), xbc
 	ld	(xsp+8), xwa
-	call	16067211
+	call	TaskBuf_ReadNextByte
 	ld	wa, hl
 	exts	xwa
 	ld	(xsp), xwa
 	cp	xwa, 0
-	jr	ge, 7
+	jr	ge, WriteAndCheck_LoadParam_Code_Skip3
 	ld	xhl, 4294967295
-	jr	97
+	jr	PitchReset_ChannelLoop_Code_Epilogue
+WriteAndCheck_LoadParam_Code_Skip3:
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa)
 	incw	1, (xwa)
@@ -9088,6 +9145,7 @@ PitchReset_CheckExtChannels:
 	bit 7, hl
 	jr nz, -61
 	ld xhl, (xsp)
+PitchReset_ChannelLoop_Code_Epilogue:
 	lda xsp, (xsp + 0x0c)
 	ret
 	.byte 0xef, 0x6e, 0x2e, 0xbf, 0x02
@@ -9103,6 +9161,7 @@ MIDI_PitchBendData_Block:
 	.byte 0xf0, 0x67, 0xe0, 0xdb, 0xa8, 0x4e, 0xef
 MIDI_SendAllSoundOff:
 	jr	z, 14
+MIDI_PitchBendData_Block_Code_Sub:
 	cp	wa, 4:i3
 	jrl	z, 172
 	cp	wa, 3:i3
@@ -9163,6 +9222,7 @@ OutputFlush_InitVal:
 	ret
 	res 2, (0x28a7:16)
 	ret
+MIDI_SendChannelPressure_Helper2:
 	dec 4,XSP
 	push XIZ
 	ld (XSP+0x04),BC
@@ -9311,7 +9371,7 @@ ReadVariableLengthDa_LoadParam:
 	.byte 0xf5, 0xdb, 0x88, 0xd8, 0xd8, 0x69, 0x06, 0x33
 	.byte 0xff, 0xff
 ReadVariableLengthDa_DoReadNext:
-	jrl	377
+	jrl	PlayModeStateMachine_Block5_Code_Epilogue
 	ld	wa, (xsp+142)
 	extz	xwa
 	lda	xbc, (xsp+136)
@@ -9400,6 +9460,7 @@ PlayModeStateMachine_Prologue:
 	jr 6
 	add (59681:16), xhl
 	ld hl, 0:i3
+PlayModeStateMachine_Block5_Code_Epilogue:
 	popw iz
 	lda XSP,(XSP+0x008e)
 	ret
@@ -9419,6 +9480,7 @@ PlayModeStateMachine_LoadParam:
 	call	15903192
 	ld	hl, 0:i3
 	ret
+MIDI_SendChannelPressure_Helper3:
 	ld	c, a
 	cp	c, 247
 	jr	z, 42
@@ -9608,6 +9670,7 @@ SeqFile_CheckTrackMagic:
 	ld	qiz, 3
 	cp	iz, qiz
 	jr	nc, 32
+SeqFile_ReadTrackMagic_Loop_Code_Loop:
 	calr	5090
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -9622,7 +9685,7 @@ SeqFile_ValidateTrackMagic:
 	ld	(xbc), l
 	inc	1, iz
 	cp	iz, qiz
-	jr	c, -32
+	jr	c, SeqFile_ReadTrackMagic_Loop_Code_Loop
 	lda	xwa, (xsp+4)
 	ld	xbc, xwa
 SeqFile_SkipTrackPad_Init:
@@ -9634,67 +9697,78 @@ SeqFile_SkipTrackPad_Init:
 	ret
 	ld	hl, 0:i3
 	ret
+MiddleFuncCall_DispatchData_Code_Helper6:
 	pushw	iz
 	ld	iz, 0:i3
 	cp	(59646:16), 0
-	jr	nz, 31
+	jr	nz, SeqFile_ReadTrackMagic_Loop_Code_Skip
 	ld	hl, 0:i3
-	jr	79
+	jr	SeqFile_ReadTrackMagic_Loop_Code_Epilogue2
+SeqFile_ReadTrackMagic_Loop_Code_Loop2:
 	calr	5372
 	cp	hl, 1920
-	jr	le, 18
-	calr	5664
+	jr	le, SeqFile_ReadTrackMagic_Loop_Code_Skip
+	calr	SeqFile_ReadTrackMagic_Loop_Code_Helper2
 	cp	hl, 64
-	jr	gt, 20
+	jr	gt, SeqFile_ReadTrackMagic_Loop_Code_Skip2
 	calr	5354
 	cp	hl, 2028
-	jr	gt, 11
-	calr	167
+	jr	gt, SeqFile_ReadTrackMagic_Loop_Code_Skip2
+SeqFile_ReadTrackMagic_Loop_Code_Skip:
+	calr	ConfigureBanks_Block
 	ld	iz, hl
 	ld	wa, iz
 	cp	wa, 0:i3
-	jr	z, -38
-	calr	5635
+	jr	z, SeqFile_ReadTrackMagic_Loop_Code_Loop2
+SeqFile_ReadTrackMagic_Loop_Code_Skip2:
+	calr	SeqFile_ReadTrackMagic_Loop_Code_Helper2
 	cp	hl, 0:i3
 	.byte 0xf2, 0xd8, 0xa9, 0xf2, 0xea
 	ld	wa, iz
 	cp	wa, 65533
-	jr	z, 21
+	jr	z, SeqFile_ReadTrackMagic_Loop_Code_Epilogue
 	cp	wa, 65534
-	jr	z, 6
+	jr	z, SeqFile_ReadTrackMagic_Loop_Code_Skip3
 	cp	wa, 65535
-	jr	nz, 9
+	jr	nz, SeqFile_ReadTrackMagic_Loop_Code_Epilogue
+SeqFile_ReadTrackMagic_Loop_Code_Skip3:
 	calr	-2885
 	ld	wa, iz
-	call	15861706
+	call	SongMode_VoiceStateDisp
+SeqFile_ReadTrackMagic_Loop_Code_Epilogue:
 	ld	hl, iz
+SeqFile_ReadTrackMagic_Loop_Code_Epilogue2:
 	popw	iz
 	ret
+LyricsTrack_ReadAndParse_Helper:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xwa
-	calr	5530
+	calr	SeqFile_ReadTrackMagic_Loop_Code_Helper
 	ld	iz, hl
 	ld	wa, iz
 	cp	wa, 0:i3
-	jr	ge, 8
+	jr	ge, SeqFile_ReadTrackMagic_Loop_Code_Skip4
 	ld	xwa, (xsp+2)
 	ld	(xwa), 0
-	jr	29
+	jr	ConfigureBanks_Send
+SeqFile_ReadTrackMagic_Loop_Code_Skip4:
 	ld	wa, iz
 	ld	xbc, (xsp+2)
-	calr	5570
+	calr	SeqFile_ReadTrackMagic_Loop_Code_Helper3
 	cp	hl, 0:i3
-	jr	ge, 8
+	jr	ge, SeqFile_ReadTrackMagic_Loop_Code_Skip5
 	ld	xwa, (xsp+2)
 	ld	(xwa), 0
-	jr	9
+	jr	ConfigureBanks_Send
+SeqFile_ReadTrackMagic_Loop_Code_Skip5:
 	ld	xwa, (xsp+2)
 	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x00, 0x00
 ConfigureBanks_Send:
 	popw	iz
 	inc	4, xsp
 	ret
+LyricsFile_ValidateAndInsert_Helper:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xwa
@@ -9855,19 +9929,22 @@ SeekRecord_Done_DoLookupRe:
 	jr	nz, 7
 	ld	xwa, 2:i3
 	ld	(xsp+2), xwa
-	jr	5
+	jr	SeekRecord_Done_Compare_Code_Join
 	ld	xwa, 3:i3
 	ld	(xsp+2), xwa
+SeekRecord_Done_Compare_Code_Join:
 	ld	wa, (xsp+10)
 	exts	xwa
 	.byte 0xaf, 0x02, 0xf0
-	jr	ge, 41
-	call	16067211
+	jr	ge, SeekRecord_Done_Compare_Code_Skip2
+SeekRecord_Done_Compare_Code_Loop:
+	call	TaskBuf_ReadNextByte
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	ge, 6
+	jr	ge, SeekRecord_Done_Compare_Code_Skip
 	ldw	hl, 65535
-	jrl	303
+	jrl	SeqFile_ReadTrackData_Code_Epilogue
+SeekRecord_Done_Compare_Code_Skip:
 	lda	xwa, (xsp+12)
 	ld	bc, (xsp+10)
 	extz	xbc
@@ -9877,7 +9954,8 @@ SeekRecord_Done_DoLookupRe:
 	ld	wa, (xsp+10)
 	exts	xwa
 	.byte 0xaf, 0x02, 0xf0
-	jr	lt, -41
+	jr	lt, SeekRecord_Done_Compare_Code_Loop
+SeekRecord_Done_Compare_Code_Skip2:
 	ldw	(xsp+270), 0
 	ld	xwa, (59695:16)
 	ld	(xsp+6), xwa
@@ -9892,13 +9970,13 @@ SeekRecord_PopReturn_Prologue:
 	lda	xwa, (xsp+272)
 	ld	xbc, xwa
 	ld	xwa, xde
-	calr	62116
+	calr	SeekRecord_Done_Compare_Code_Helper
 	ld	(xsp+2), xhl
 	ld	xwa, (xsp+2)
 	cp	xwa, 0
-	jr	ge, 6
+	jr	ge, SeekRecord_PopReturn_Block
 	ldw	hl, 65535
-	jrl	216
+	jrl	SeqFile_ReadTrackData_Code_Epilogue
 SeekRecord_PopReturn_Block:
 	.byte 0xaf, 0x02, 0x20, 0xe1, 0x2f, 0xe9, 0x88, 0x8f
 	.byte 0x0c, 0x3f
@@ -9958,6 +10036,7 @@ SeqFile_ReadTrackData:
 SeqFile_ReadTrackDat_LoadIter:
 	nop
 	ld hl, 0:i3
+SeqFile_ReadTrackData_Code_Epilogue:
 	popw iz
 	lda XSP,(XSP+0x0210)
 	ret
@@ -10952,6 +11031,7 @@ SoundParam_InitDefaultBanks:
 	ld hl, 0:i3
 .Lc_feda3e:
 	ret
+SeqFile_ReadTrackMagic_Loop_Code_Helper:
 	ld wa, (0xd812:16)
 	cp wa, (0xd814:16)
 	jr nz, .Lc_feda4e
@@ -10973,9 +11053,11 @@ SoundParam_InitDefaultBanks:
 	incw 1, (0xd814:16)
 .Lc_feda76:
 	ret
+SeqFile_ReadTrackMagic_Loop_Code_Helper2:
 	ldw HL, 0x07ff
 	sub hl, (0xd816:16)
 	ret
+SeqFile_ReadTrackMagic_Loop_Code_Helper3:
 	.byte 0xef, 0x6e, 0x2e, 0xbf, 0x02, 0x61
 SoundParam_InitDefau_LoadReg:
 	.byte 0xbf, 0x06, 0x50, 0xde, 0xa8, 0xde, 0x88, 0x9f
@@ -11096,25 +11178,30 @@ SndParam_StoreAndReturn:
 	jr	47
 	extz	xbc
 	.byte 0x8f, 0x02, 0x3f, 0x0f
-	jr	nz, 7
+	jr	nz, DirectReturn_DoLookupC_Code_Entry
 	ld	xwa, 64
-	jr	11
+	jr	DirectReturn_DoLookupC_Code_Join
+DirectReturn_DoLookupC_Code_Entry:
 	.byte 0x8f, 0x02, 0x3f, 0x14
-	jr	nz, 17
+	jr	nz, DirectReturn_DoLookupC_Code_Skip
 	ld	xwa, 68
+DirectReturn_DoLookupC_Code_Join:
 	ld	xde, (57522:16)
 	add	xde, xwa
 	.byte 0xa2, 0x81
 	ld	l, (xbc)
-	jr	9
+	jr	DirectReturn_DoLookupC_Code_Epilogue
+DirectReturn_DoLookupC_Code_Skip:
 	ld	xwa, (57522:16)
 	.byte 0xa8, 0x3c, 0x81
 	ld	l, (xbc)
+DirectReturn_DoLookupC_Code_Epilogue:
 	inc	4, xsp
 	ret
+VariScreenProc_Helper:
 	dec	2, xsp
 	ld	(xsp), a
-	call	16355409
+	call	GetCurrentPartSelect
 	extz	hl
 	ld	c, (xsp)
 	extz	bc
@@ -11223,11 +11310,13 @@ SysexRingBuf_ReadByte:
 SysexRingBuf_ReadAndAdvance:
 	add	(15216878:24), de
 	lda	xhl, (xwa+16)
+SysexRingBuf_ReadByte_Code_Loop:
 	ldb_spi	a, 232
 	lda_dpi	xbc, 228
 	cp	xde, xhl
-	jr	c, -10
+	jr	c, SysexRingBuf_ReadByte_Code_Loop
 	ret
+Display_BytecodeBlock_F_Helper2:
 	dec	8, xsp
 	push	qiz
 	ld	(xsp+2), xde
@@ -11245,7 +11334,7 @@ SysexRingBuf_ReadBytes:
 	ccf
 	ld	c, (xsp+6)
 	extz	bc
-	call	16706179
+	call	SysexRingBuf_GetFreeSpace_Code_Helper
 	extz	hl
 	ld	xbc, (xsp+2)
 SysexRingBuf_ReadBytesLoop:
@@ -11318,6 +11407,7 @@ StoreAndAdvance_LoadDRAM2:
 	pop	qiz
 	inc	8, xsp
 	ret
+MIDI_DistributeParamToChannels_Helper:
 	ld	xwa, 192
 	call	16567398
 	cp	hl, 1:i3
@@ -11407,6 +11497,7 @@ CharMap_ActivePreamb_LoadDRAM:
 	.byte 0x0e, 0x41, 0x14, 0x00, 0x00, 0x00, 0x68
 CharMap_ActivePreamb_Prologue:
 	.byte 0xae, 0x41, 0x24, 0x00, 0x00, 0x00, 0x68, 0xa7
+SeMenu_SetDisplayValue_Helper:
 	.byte 0x3e, 0xe8, 0x8e, 0x40, 0xc0, 0x00, 0x00, 0x00
 	.byte 0x1d, 0x66, 0xcc, 0xfc, 0xdb, 0xd9, 0x6e, 0x07
 	.byte 0xee, 0x88, 0x1e, 0xe4, 0xff, 0x68, 0x05, 0xee
@@ -11435,6 +11526,7 @@ CharMap_ActivePreamb_Increment:
 	.byte 0x0e, 0x41, 0x18
 CharMap_ActivePreamb_Prologue2:
 	.byte 0x00, 0x00, 0x00, 0x32, 0x00, 0x04, 0x68, 0xb6
+SMF_InitPlaybackState_Helper:
 	.byte 0x41, 0x28, 0x00, 0x00, 0x00, 0x32, 0x00, 0x02
 	.byte 0x68, 0xac, 0x3e, 0xe8, 0x8e, 0x40
 SndParam_ApplyMaskClamp:
@@ -11442,6 +11534,7 @@ SndParam_ApplyMaskClamp:
 	.byte 0xdb, 0xd9, 0x6e, 0x07, 0xee, 0x88, 0x1e, 0xe1
 	.byte 0xff, 0x68, 0x05, 0xee, 0x88, 0x1e, 0xd0, 0xff
 	.byte 0x5e, 0x0e
+MidiPgmChg_Mode0_SetupA_Code_Helper:
 	push XIZ
 	ld XIZ,XWA
 	ld A,(XIZ+0x05)
@@ -11492,10 +11585,11 @@ StoreDRAMInit_ReadBuf:
 	ld	xbc, 2013267134
 	pop	xiz
 	ret
+SndBuf_WriteParamEntries_Helper:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 192
-	call	16567398
+	call	AcApcToggleProc_Helper
 StoreDRAMInit_ReadBuf2:
 	.byte 0xdb, 0xd9, 0x6e, 0x07, 0xee, 0x88, 0x1e, 0xb0
 	.byte 0xff, 0x68, 0x05, 0xee, 0x88, 0x1e, 0x36, 0xff
@@ -11511,6 +11605,7 @@ StoreDRAMInit_ReadBuf3:
 	ld	a, (xiy+1)
 	ld	(xde), a
 	ret
+MidiNoteOn_SetupVoiceA_Code_Helper:
 	dec	6, xsp
 	push	xiz
 	ld	e, c
@@ -11563,6 +11658,7 @@ ApplyProgramChangeAs_Block:
 	.byte 0x05, 0xef
 ApplyProgramChangeAs_RestoreReg:
 	jr	z, 14
+ApplyProgramChangeAs_Block_Code_Sub:
 	dec	2, xsp
 	ld	(xsp), a
 ApplyProgramChangeAs_Prologue:
@@ -11668,6 +11764,7 @@ FetchOscTableEntry_ClearByte:
 	.byte 0x0e, 0xd8
 FetchOscTableEntry_ClearByte2:
 	.byte 0x8b, 0xd9, 0x06, 0xd9, 0xc3, 0x0f, 0x04, 0x00
+Param_SignExtendReturn_Code_Helper:
 	.byte 0xef, 0x6a, 0xb7
 FetchOscTableEntry_Compute:
 	.byte 0x43, 0xe8, 0x89, 0xe9, 0xcf, 0xaa, 0x01, 0x00
@@ -11943,15 +12040,16 @@ Param_SignExtendRetu_Return:
 	ld	a, (xbc+16)
 	and	a, 192
 	cp	a, 192
-	jrl	z, 154
+	jrl	z, Param_SignExtendReturn_Code_Join
 	cp	a, 64
-	jrl	z, 148
+	jrl	z, Param_SignExtendReturn_Code_Join
 	cp	a, 128
-	jr	z, 5
+	jr	z, Param_SignExtendReturn_Code_Skip
 	cp	a, 0:i3
-	jrl	nz, 138
+	jrl	nz, Param_SignExtendReturn_Code_Join
+Param_SignExtendReturn_Code_Skip:
 	cp	xbc, 470
-	jr	ugt, 125
+	jr	ugt, Param_SignExtendReturn_Code_Skip4
 	lda	xde, (57596:16)
 	ld	(xde), 45
 	ld	xwa, (xsp+20)
@@ -11959,20 +12057,23 @@ Param_SignExtendRetu_Return:
 	lda	xwa, (xde+1)
 	ld	(xsp+12), xwa
 	cp	iz, 6:i3
-	jr	nc, 13
+	jr	nc, Param_SignExtendReturn_Code_Skip2
+Param_SignExtendReturn_Code_Loop:
 	ld	xwa, (xsp+12)
 	ld	c, (xhl)
 	ld	(xwa), c
 	inc	1, iz
 	cp	iz, 6:i3
-	jr	c, -13
+	jr	c, Param_SignExtendReturn_Code_Loop
+Param_SignExtendReturn_Code_Skip2:
 	ld	(xde+7), 0
 	lda	xwa, (xde+8)
 	ld	(xsp+16), xwa
 	ld	(xsp+12), xwa
 	ld	wa, (xsp+6)
 	cp	iz, wa
-	jr	nc, 46
+	jr	nc, Param_SignExtendReturn_Code_Skip3
+Param_SignExtendReturn_Code_Loop2:
 	ld	xwa, (xsp+16)
 	ld	c, (xwa+1)
 	and	c, 15
@@ -11982,7 +12083,7 @@ Param_SignExtendRetu_Return:
 	or	a, c
 	ld	c, a
 	ld	xwa, (xsp+2)
-	calr	-1119
+	calr	Param_SignExtendReturn_Code_Helper
 	ld	xwa, (xsp+16)
 	ld	(xwa), l
 	inc	1, iz
@@ -11990,15 +12091,18 @@ Param_SignExtendRetu_Return:
 	add	(xsp+8), xwa
 	ld	wa, (xsp+6)
 	cp	iz, wa
-	jr	c, -46
+	jr	c, Param_SignExtendReturn_Code_Loop2
+Param_SignExtendReturn_Code_Skip3:
 	ld	bc, (xsp+6)
 	inc	8, bc
 	ld	wa, 3:i3
 	ld	xde, 57596
-	call	15676106
+	call	sendCOMM
 	ldw	(xsp+18), 0
-	jr	5
+	jr	Param_SignExtendReturn_Code_Join
+Param_SignExtendReturn_Code_Skip4:
 	ldw	(xsp+18), 1
+Param_SignExtendReturn_Code_Join:
 	ld	hl, (xsp+18)
 	popw	iz
 	lda	xsp, (xsp+22)
@@ -12079,6 +12183,7 @@ Param_SignExtendRetu_Return:
 	.byte 0x32, 0xef, 0xbf, 0x04, 0x02, 0x00, 0x00, 0x68
 	.byte 0x05, 0xbf, 0x04, 0x02, 0x01, 0x00, 0x9f, 0x04
 	.byte 0x23, 0x5e, 0xef, 0x64, 0x0e
+SysexRingBuf_GetFreeSpace_Code_Helper:
 	lda xde, (0xe21c:16)
 	ld (XDE),0x2b
 	ld (XDE+0x01),0x30
@@ -12095,7 +12200,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+9), c
 	ld	wa, 3:i3
 	ldw	bc, 10
-	call	15676106
+	call	sendCOMM
 	ld	l, (57891:16)
 	ret
 	lda	xde, (57894:16)
@@ -12114,7 +12219,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+9), c
 	ld	wa, 3:i3
 	ldw	bc, 10
-	call	15676106
+	call	sendCOMM
 	ld	l, (57901:16)
 	ret
 	lda	xde, (57904:16)
@@ -12133,7 +12238,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+9), c
 	ld	wa, 3:i3
 	ldw	bc, 10
-	call	15676106
+	call	sendCOMM
 	ld	l, (57911:16)
 	ret
 	lda	xde, (57914:16)
@@ -12152,11 +12257,11 @@ Param_SignExtendRetu_Return:
 	ld	(xde+9), c
 	ld	wa, 3:i3
 	ldw	bc, 10
-	call	15676106
+	call	sendCOMM
 	ld	l, (57921:16)
 	ret
 	cp	wa, 4:i3
-	jrl	ugt, 130
+	jrl	ugt, Param_SignExtendReturn_Code_Skip10
 	lda	xde, (57924:16)
 	ld	(xde), 45
 	ld	(xde+1), 0
@@ -12168,29 +12273,35 @@ Param_SignExtendRetu_Return:
 	ld	(xde+7), c
 	lda	xbc, (xde+2)
 	cp	wa, 4:i3
-	jr	z, 36
+	jr	z, Param_SignExtendReturn_Code_Skip8
 	cp	wa, 3:i3
-	jr	z, 27
+	jr	z, Param_SignExtendReturn_Code_Skip7
 	cp	wa, 2:i3
-	jr	z, 18
+	jr	z, Param_SignExtendReturn_Code_Skip6
 	cp	wa, 1:i3
-	jr	z, 9
+	jr	z, Param_SignExtendReturn_Code_Skip5
 	cp	wa, 0:i3
-	jr	nz, 25
+	jr	nz, Param_SignExtendReturn_Code_Skip9
 	ld	(xbc), 10
-	jr	23
+	jr	Param_SignExtendReturn_Code_Join2
+Param_SignExtendReturn_Code_Skip5:
 	ld	(xbc), 11
-	jr	18
+	jr	Param_SignExtendReturn_Code_Join2
+Param_SignExtendReturn_Code_Skip6:
 	ld	(xbc), 12
-	jr	13
+	jr	Param_SignExtendReturn_Code_Join2
+Param_SignExtendReturn_Code_Skip7:
 	ld	(xbc), 13
-	jr	8
+	jr	Param_SignExtendReturn_Code_Join2
+Param_SignExtendReturn_Code_Skip8:
 	ld	(xbc), 14
-	jr	3
+	jr	Param_SignExtendReturn_Code_Join2
+Param_SignExtendReturn_Code_Skip9:
 	ld	(xhl), 0
+Param_SignExtendReturn_Code_Join2:
 	ld	c, (xhl)
 	cp	c, 0:i3
-	jr	z, 41
+	jr	z, Param_SignExtendReturn_Code_Skip10
 	extz	xwa
 	ld	xbc, xwa
 	sll	xbc, 3
@@ -12206,7 +12317,8 @@ Param_SignExtendRetu_Return:
 	inc	8, c
 	extz	bc
 	ld	wa, 3:i3
-	call	15676106
+	call	sendCOMM
+Param_SignExtendReturn_Code_Skip10:
 	inc	1, (57595:16)
 	ld	l, (57595:16)
 	res	7, l
@@ -12906,24 +13018,29 @@ SendPartDataBlock_Data4:
 	or	(xiz), d
 	swi	6
 	jp	16272858
+FileIO_ParseDirectoryEntry_Helper5:
 	ret
+FileIO_ParseDirectoryEntry_Helper6:
 	cp	wa, 0:i3
 	ret	ge
 	ldw	wa, 255
 	ldw	bc, 255
 	call	16706694
 	ret
+FileIO_LoadSongRegion8_Helper:
 	calr	64570
 	cp	l, 6:i3
 	jr	ugt, 7
 	cp	l, 1:i3
-	jr	c, 3
+	jr	c, SendPartDataBlock_Data3_Code_Skip
 	ld	hl, 0:i3
 	ret
+SendPartDataBlock_Data3_Code_Skip:
 	ldw	hl, 65434
 	ret
+AccBankData_FinalizeCheck_Code_Helper:
 	cp	wa, 0:i3
-	jr	lt, 50
+	jr	lt, SendPartDataBlock_Data3_Code_Skip2
 	ldw	wa, 255
 	ldw	bc, 255
 	calr	64830
@@ -12940,10 +13057,12 @@ SendPartDataBlock_Data5:
 	ldw	bc, 255
 	call	16706754
 	jr	10
+SendPartDataBlock_Data3_Code_Skip2:
 	ldw	wa, 255
 	ldw	bc, 255
 	call	16706694
 	jp	16272858
+FileIO_ByteBlock_DemoProc1_Helper5:
 	ret
 SendPartDataBlock_InitVal4:
 	dec	4, xsp
@@ -12996,7 +13115,9 @@ SendPartDataBlock_LoadReg5:
 	call	16272858
 	inc	4, xsp
 	ret
+FileIO_ByteBlock_DemoProc1_Helper6:
 	ret
+FileIO_ByteBlock_DemoProc1_Helper7:
 	dec	2, xsp
 	push	xiz
 	ld	(xsp+4), a
@@ -13161,6 +13282,7 @@ PostTmSave_ByteBlock:
 	popw	iz
 	inc	8, xsp
 	retd	4
+MssNameFunc_Helper:
 	dec	6, xsp
 	push	xiz
 PostTmSave_Success:
@@ -13184,6 +13306,7 @@ TmFlashWrite_Block1_Entry:
 	.byte 0x04, 0xee, 0x8b, 0x68, 0x0f, 0xee, 0x61, 0x9f
 	.byte 0x04, 0x69, 0x9f, 0x06, 0x20, 0x9f, 0x04, 0xf0
 	.byte 0x63, 0xd2, 0xeb, 0xa8, 0x5e, 0xef, 0x66, 0x0e
+DrawEditSw_CopyVariant_Code_Helper:
 	.byte 0xaf, 0x04, 0x21, 0xdb, 0xa8, 0x68, 0x16, 0xaf
 	.byte 0x08, 0x22, 0x68, 0x08
 	ld A,(XDE)
@@ -13192,6 +13315,7 @@ TmFlashWrite_Block1_Entry:
 	.byte 0xea, 0x61, 0x82, 0x3f, 0x00, 0x6e, 0xf3, 0xe9
 	.byte 0x61, 0xdb, 0x61, 0x81, 0x3f, 0x00, 0x6e, 0xe5
 	.byte 0x0e
+Boot_CheckConfigFlag7_Helper:
 	ld XHL,(XSP+0x04)
 	ld iy, 0:i3
 	ld ix, 0:i3
@@ -13227,6 +13351,7 @@ TmFlashWrite_ValidateParams:
 	.byte 0xdc, 0xd8, 0x66, 0x0d, 0xed, 0x88, 0xd8, 0x06
 	.byte 0xd7, 0xe2, 0x06, 0xe8, 0x61, 0xe8, 0x8b, 0x68
 	.byte 0x02, 0xed, 0x8b, 0x0e
+InitializeKubo_Helper:
 	ld HL,QWA
 	mul xhl, xbc
 	ld DE,QBC
@@ -13237,6 +13362,7 @@ TmFlashWrite_ValidateParams:
 	mul xwa, xbc
 	add XHL,XWA
 	ret
+Scoop_EventLoop_12Entry_Helper:
 	.byte 0xef, 0x6c, 0x2e, 0xd8, 0xaf, 0x1d, 0xc4, 0x1f
 	.byte 0xef, 0xaf
 TmFlashWrite_Block2:
@@ -13260,44 +13386,49 @@ TmFlash_WriteRoutine:
 	.byte 0xc2, 0x03, 0x88, 0x9f, 0x04, 0x20, 0xb1, 0x41
 	.byte 0xe2, 0x1c, 0xc2, 0x03, 0x20, 0xb0, 0x00, 0x00
 	.byte 0x0e
+SLIDE_Decompress_4K_Init_Helper:
 	ld XWA,(XSP+0x04)
 	or XWA,XWA
 	ret Z
 	ld	wa, 1:i3
-	call	15670909
+	call	TaskSched_WaitForEvent
 	ld	xbc, (xsp+4)
 	dec	6, xbc
 	ld	xwa, (251180:24)
 	or	xwa, xwa
-	jr	nz, 15
+	jr	nz, TmFlash_WriteRoutine_Code_Skip
 	ld	xwa, 0:i3
 	ld	(xbc), xwa
 	ld	(251180:24), xbc
 	ld	wa, 1:i3
-	jp	15670698
+	jp	TaskSched_SignalEvent
+TmFlash_WriteRoutine_Code_Skip:
 	ld	xix, (251180:24)
 	ld	xde, xix
 	or	xix, xix
-	jr	z, 12
+	jr	z, TmFlash_WriteRoutine_Code_Skip2
+TmFlash_WriteRoutine_Code_Loop:
 	cp	xbc, xix
-	jr	ule, 8
+	jr	ule, TmFlash_WriteRoutine_Code_Skip2
 	ld	xde, xix
 	ld	xix, (xix)
 	or	xix, xix
-	jr	nz, -12
+	jr	nz, TmFlash_WriteRoutine_Code_Loop
+TmFlash_WriteRoutine_Code_Skip2:
 	cp	xbc, xix
-	jr	nz, 6
+	jr	nz, TmFlash_WriteRoutine_Code_Skip3
 	ld	wa, 1:i3
-	jp	15670698
+	jp	TaskSched_SignalEvent
+TmFlash_WriteRoutine_Code_Skip3:
 	ld	hl, (xbc+4)
 	extz	xhl
 	ld	xwa, xbc
 	inc	6, xwa
 	add	xwa, xhl
 	cp	xix, (251180:24)
-	jr	nz, 49
+	jr	nz, TmFlash_WriteRoutine_Code_Skip5
 	cp	xwa, (251180:24)
-	jr	nz, 24
+	jr	nz, TmFlash_WriteRoutine_Code_Skip4
 	ld	xwa, (251180:24)
 	ld	xwa, (xwa)
 	ld	(xbc), xwa
@@ -13305,66 +13436,77 @@ TmFlash_WriteRoutine:
 	ld	wa, (xwa+4)
 	inc	6, wa
 	add	(xbc+4), wa
-	jr	7
+	jr	TmFlash_WriteRoutine_Code_Join
+TmFlash_WriteRoutine_Code_Skip4:
 	ld	xwa, (251180:24)
 	ld	(xbc), xwa
+TmFlash_WriteRoutine_Code_Join:
 	ld	(251180:24), xbc
 	ld	wa, 1:i3
-	jp	15670698
+	jp	TaskSched_SignalEvent
+TmFlash_WriteRoutine_Code_Skip5:
 	or	xix, xix
-	jr	z, 21
+	jr	z, TmFlash_WriteRoutine_Code_Skip6
 	cp	xwa, xix
 TmFlash_BulkTransferToSubCPU:
-	jr	nz, 17
+	jr	nz, TmFlash_WriteRoutine_Code_Skip6
 	ld	xwa, (xix)
 	ld	(xbc), xwa
 	ld	wa, (xix+4)
 	.byte 0x99, 0x04, 0x80
 	inc	6, wa
 	ld	(xbc+4), wa
-	jr	2
+	jr	TmFlash_WriteRoutine_Code_Join2
+TmFlash_WriteRoutine_Code_Skip6:
 	ld	(xbc), xix
+TmFlash_WriteRoutine_Code_Join2:
 	ld	hl, (xde+4)
 	extz	xhl
 	ld	xwa, xde
 	inc	6, xwa
 	add	xwa, xhl
 	cp	xwa, xbc
-	jr	nz, 17
+	jr	nz, TmFlash_WriteRoutine_Code_Skip7
 	ld	xwa, (xbc)
 	ld	(xde), xwa
 	ld	wa, (xbc+4)
 	.byte 0x9a, 0x04, 0x80
 	inc	6, wa
 	ld	(xde+4), wa
-	jr	2
+	jr	TmFlash_WriteRoutine_Code_Join3
+TmFlash_WriteRoutine_Code_Skip7:
 	ld	(xde), xbc
+TmFlash_WriteRoutine_Code_Join3:
 	ld	wa, 1:i3
-	jp	15670698
+	jp	TaskSched_SignalEvent
 	ld	e, 0:opc
 	bit	15, qwa
-	jr	z, 9
+	jr	z, TmFlash_WriteRoutine_Code_Skip8
 	ld	e, 1:opc
 	cpl	qwa
 	cpl	wa
 	inc	1, xwa
+TmFlash_WriteRoutine_Code_Skip8:
 	bit	15, qbc
-	jr	z, 10
+	jr	z, TmFlash_WriteRoutine_Code_Skip9
 	or	e, 2
 	cpl	qbc
 	cpl	bc
 	inc	1, xbc
+TmFlash_WriteRoutine_Code_Skip9:
 	pushw	de
 	calr	48
 	popw	wa
 	cp	w, 1:i3
-	jr	z, 9
+	jr	z, TmFlash_WriteRoutine_Code_Skip10
 	ld	xhl, xde
 	bit	0, a
 	scc	nz, a
-	jr	4
+	jr	TmFlash_WriteRoutine_Code_Join4
+TmFlash_WriteRoutine_Code_Skip10:
 	cp	a, 3:i3
 	ret	z
+TmFlash_WriteRoutine_Code_Join4:
 	or XHL,XHL
 	ret Z
 	cp a, 0:i3
@@ -13374,6 +13516,7 @@ TmFlash_BulkTransferToSubCPU:
 	inc 1,XHL
 	ret
 	.byte 0x24, 0x00, 0x68, 0xb5, 0x24, 0x01, 0x68, 0xb1
+FDC_SetupSectorParams_Helper:
 	.byte 0x1e, 0x03, 0x00
 VoiceParam_DispatchTable1:
 	.byte 0xea, 0x8b, 0x0e, 0xe9, 0xcf, 0x01, 0x00, 0x00
@@ -13409,6 +13552,7 @@ VoiceParam_DispatchTable1:
 	ret Z
 	.byte 0xec, 0x61, 0xea, 0x61, 0xd9, 0x88, 0xd9, 0x69
 	.byte 0xd8, 0xd8, 0x6e, 0xeb, 0xb4, 0x00, 0x00, 0x0e
+SLIDE_Parse_Header_Helper:
 	.byte 0x9f, 0x0c, 0x21, 0xaf, 0x08, 0x22, 0xaf, 0x04
 	.byte 0x24, 0x68, 0x0e, 0x84, 0x3f, 0x00, 0x6e, 0x03
 	.byte 0xdb, 0xa8, 0x0e, 0xec, 0x61, 0xea, 0x61, 0xd9
@@ -13421,6 +13565,7 @@ VoiceParam_DispatchTable1:
 	.byte 0xd8, 0x66, 0x05, 0x82, 0x3f, 0x00, 0x6e, 0xef
 	.byte 0x68, 0x06, 0xf5, 0xf0, 0x00, 0x00, 0xd9, 0x69
 	.byte 0xd9, 0xd8, 0x6e, 0xf6, 0x0e
+SoundPreset_FindMatch_Helper:
 	ld BC,(XSP+0x0c)
 	ld hl, 0:i3
 	cp bc, 0:i3
@@ -13455,6 +13600,7 @@ StrSearch_CheckHaystackEnd:
 	jr	z, 2
 ParseInt16:
 	.byte 0x95, 0x11, 0xb0, 0xff, 0x85, 0x10, 0x0e
+FileIO_CheckPathAndVolumeLabel_Helper:
 	ld XDE,(XSP+0x04)
 	ld XHL,XDE
 	jr t, ParseInt16_CheckWhitespace
@@ -13516,6 +13662,7 @@ ParseInt32_Return:
 Math_MultiplyAccumulate:
 	.byte 0xf6, 0xc5, 0xec, 0x3f, 0x00, 0x6e, 0xf6, 0xeb
 	.byte 0xa8, 0x0e
+SLIDE_Decompress_4K_Init_Helper2:
 	dec 6,XSP
 	push XIZ
 	ld WA,(XSP+0x0e)
@@ -13556,7 +13703,7 @@ Free_Block:
 Free_Compare:
 	ld	w, 56:opc
 	push	xiz
-	call	16713025
+	call	SoundPreset_FindMatch_Helper
 	lda	xsp, (xsp+14)
 	pop	xiz
 	ret
@@ -13569,31 +13716,35 @@ Free_LoadReg:
 	push	xwa
 	ld	xiz, (xsp+16)
 	push	xiz
-	call	16720053
+	call	Free_Compare2_Helper
 	add	xsp, 12
 	or	xhl, xhl
-	jr	nz, 11
+	jr	nz, Free_Compare2_Skip
 	ld	xwa, xiz
 	add	xwa, 65535
 	ld	(xwa), 0
+Free_Compare2_Skip:
 	ld	xhl, xiz
 	pop	xiz
 	ret
 	or	xwa, xwa
-	jr	nz, 6
+	jr	nz, Free_Compare2_Skip2
 	ld	xhl, (251176:24)
 	ret
+Free_Compare2_Skip2:
 	cp	(251176:24), xwa
 Free_Block2:
-	jr	nc, 6
+	jr	nc, Free_Compare2_Skip3
 	ld	xhl, 4294967295
 Free_Block3:
 	ret
+Free_Compare2_Skip3:
 	ld	xhl, (251172:24)
 	add	(251172:24), xwa
 Free_OrBits:
 	sub	(251176:24), xwa
 	ret
+LyricsTrack_ReadAndParse_Helper2:
 	push	xiz
 	pushw	65535
 	pushw	0
@@ -13603,13 +13754,15 @@ Free_OrBits:
 	inc	8, xsp
 	or	xhl, xhl
 Free_LoadReg2:
-	jr	nz, 5
+	jr	nz, Free_Compare2_Skip4
 Free_LoadReg3:
 	ldw	hl, 65535
 	jr	2
+Free_Compare2_Skip4:
 	sub	xhl, xiz
 	pop	xiz
 	ret
+CommonIDProc_Helper:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	wa, (xsp+12)
@@ -13629,7 +13782,7 @@ Free_ClearByte:
 	cpl	qde
 	inc	1, xde
 	push	xde
-	call	16719899
+	call	Free_LoadReg4_Code_Helper
 	lda	xsp, (xsp+10)
 	dec	1, xhl
 Free_Block4:
@@ -13657,6 +13810,7 @@ Math_DivideU32:
 	lda_dpi xbc, 240
 	djnz16 de, -6
 	ret
+ClipBlit_Replace_Impl_Helper:
 	ld HL,(XSP+0x04)
 	cp hl, 0:i3
 	ret GE

@@ -688,7 +688,7 @@ SndParam_LookupChannelVoice:
 	xor HL,HL
 	ld l, (0x0fac:16)
 	pushw hl
-	call 0xfee2f8
+	call ApplyProgramChangeAs_Block_Code_Sub
 	ld A,L
 	pop XDE
 	pop XBC
@@ -1156,8 +1156,8 @@ SMF_WriteChannelNoteData:
 	ld_rrb	l, xix, hl
 	pop	xix
 	cp	(4324:16), 255
-	jrl	nz, 172
-	call	15896124
+	jrl	nz, SMF_WriteNote_AltPath
+	call	SMF_ResolveGlobalChannel
 	ld	a, (6881:16)
 	or	a, 192
 	ld	l, c
@@ -1168,7 +1168,7 @@ SMF_WriteChannelNoteData:
 	pushw	bc
 	pushw	de
 	ld	xwa, 6743
-	call	16703738
+	call	SMF_InitPlaybackState_Helper
 	popw	de
 	popw	bc
 	ld	a, (6881:16)
@@ -1178,7 +1178,7 @@ SMF_WriteChannelNoteData:
 	pushw	wa
 	pushw	bc
 	pushw	de
-	call	15893900
+	call	SMF_WriteByteLoop
 	popw	de
 	popw	bc
 	popw	wa
@@ -1187,10 +1187,10 @@ SMF_WriteChannelNoteData:
 	ld	xbc, 0:i3
 	ld	xwa, (6701:16)
 	cp	xwa, xbc
-	jr	lt, 6
+	jr	lt, SMF_WriteNote_FileUnderflow1
 	pop	xbc
 	pop	xwa
-	jp	15889252
+	jp	SMF_WriteNote_BankSelect
 SMF_WriteNote_FileUnderflow1:
 	pop xbc
 	pop xwa
@@ -2261,24 +2261,24 @@ SMF_ProgramChange_ProcessPatch:
 	ld	(6748:16), l
 	pop	xix
 	ld	xwa, 6743
-	call	16703738
+	call	SMF_InitPlaybackState_Helper
 	ld	a, 176:opc
 	ld	w, (4213:16)
 	or	a, w
 	xor	w, w
 	ld	l, (6744:16)
 	pushw	wa
-	call	15893900
+	call	SMF_WriteByteLoop
 	popw	wa
 	push	xwa
 	push	xbc
 	ld	xbc, 0:i3
 	ld	xwa, (6701:16)
 	cp	xwa, xbc
-	jr	lt, 6
+	jr	lt, SMF_ProgramChange_WriteBankMSB_Underflow
 	pop	xbc
 	pop	xwa
-	jp	15891442
+	jp	SMF_ProgramChange_WriteBankMSB_Data
 SMF_ProgramChange_WriteBankMSB_Underflow:
 	pop xbc
 	pop xwa
@@ -3001,22 +3001,22 @@ FileOpen_ParseModeNext:
 FileOpen_AllocBuffer:
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	1, hl
 	pushw	hl
-	calr	65347
+	calr	SeqStep_MemAllocWrapper
 	inc	6, xsp
 	ld	(xsp+12), xhl
 	or	xhl, xhl
-	jr	nz, 5
+	jr	nz, FileOpen_CopyFilename
 	ld	xhl, 0:i3
-	jrl	570
+	jrl	FileOpen_Return
 FileOpen_CopyFilename:
 	ld	xwa, (xsp+24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, (xsp+12)
 	ld	(xsp+16), xwa
@@ -3061,12 +3061,12 @@ FileOpen_StoreNormChar:
 FileOpen_MatchDevice:
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	ld	iz, hl
 	extz	xiz
 	ld	xwa, (xsp+28)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	8, xsp
 	ld	wa, hl
 	extz	xwa
@@ -3080,7 +3080,7 @@ FileOpen_MatchDevice:
 	ld	a, (xsp+6)
 	extz	wa
 	cp	wa, (254942:24)
-	jr	ge, 44	; -> 0xF4E8FC
+	jr	ge, FileOpen_DeviceFound	; -> 0xF4E8FC
 FileOpen_DeviceSearchLoop:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+22)
@@ -3587,11 +3587,11 @@ SeqStep_FileCloseExit:
 	ld	xbc, (xsp+12)
 	ld	iz, 0:i3
 	or	xbc, xbc
-	jr	z, 42
+	jr	z, SeqStep_FileCloseInner_Skip2
 	.byte 0x89, 0x04
 	push	xsp
 	nop
-	jr	z, 24
+	jr	z, SeqStep_FileCloseInner_Skip
 	ld	xwa, (xsp+4)
 	push	xwa
 	pushw	1
@@ -3601,25 +3601,28 @@ SeqStep_FileCloseExit:
 	ld	xwa, (xwa+36)
 	call	(xwa)
 	lda	xsp, (xsp+10)
-	jrl	131
+	jrl	SeqStep_FileCloseInner_Epilogue2
+SeqStep_FileCloseInner_Skip:
 	ldw	(0x1e53c:24), 25
 	ldw	hl, 0xffff
-	jr	119
+	jr	SeqStep_FileCloseInner_Epilogue2
+SeqStep_FileCloseInner_Skip2:
 	ld qiz, 0
 	cpw qiz, 16
-	jr	ge, 107
+	jr	ge, SeqStep_FileCloseInner_Epilogue
+SeqStep_FileCloseInner_Loop:
 	ld wa, qiz
 	sla wa, 2
 	lda	xbc, (0x210b4:24)
 	ld_rrl xwa, xbc, wa
 	or xwa, xwa
-	jr	z, 77
+	jr	z, SeqStep_FileCloseInner_Skip3
 	ld wa, qiz
 	sla wa, 2
 	lda	xbc, (0x210b4:24)
 	ld_rrl xwa, xbc, wa
 	cp xwa, 4294967295
-	jr	z, 53
+	jr	z, SeqStep_FileCloseInner_Skip3
 	ld	xwa, (xsp+4)
 	push	xwa
 	pushw	1
@@ -3637,10 +3640,13 @@ SeqStep_FileCloseExit:
 	call	(xwa)
 	lda	xsp, (xsp+10)
 	or	iz, hl
+SeqStep_FileCloseInner_Skip3:
 	inc 1, qiz
 	cpw qiz, 16
-	jr	lt, -107
+	jr	lt, SeqStep_FileCloseInner_Loop
+SeqStep_FileCloseInner_Epilogue:
 	ld	hl, iz
+SeqStep_FileCloseInner_Epilogue2:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -3676,14 +3682,14 @@ SeqStep_FileNopB:
 SeqStep_FreeMemory:
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
 	ret
 SeqStep_MallocWrapper:
 	ld	xwa, (xsp+6)
 	pushw	wa
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ret
 FileOpenDefault:
@@ -3748,9 +3754,10 @@ SeqStep_ByteBlockF245:
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	nz, 5
+	jr	nz, FileOpenDefault_Skip
 	ldw	hl, 0xffff
-	jr	24
+	jr	FileOpenDefault_Epilogue
+FileOpenDefault_Skip:
 	ld	xwa, xiz
 	push	xwa
 	ld	xwa, (xiz+14)
@@ -3761,6 +3768,7 @@ SeqStep_ByteBlockF245:
 	call	FileClose
 	inc	8, xsp
 	ld	hl, (xsp+4)
+FileOpenDefault_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -3793,10 +3801,11 @@ SeqStep_ByteBlockF245:
 	.byte 0x89, 0x04
 	push	xsp
 	nop
-	jr	nz, 11
+	jr	nz, FileOpenDefault_Skip2
 	ldw	(0x1e53c:24), 17
 	ldw	hl, 17
 	ret
+FileOpenDefault_Skip2:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa)
 	push	xwa
@@ -4054,22 +4063,24 @@ SeqStep_FileTellFinal:
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	nz, 6
+	jr	nz, SeqStep_FileSeekCleanup_Skip
 	ldw	hl, 0xffff
-	jrl	149
+	jrl	SeqStep_FileSeekCleanup_Epilogue
+SeqStep_FileSeekCleanup_Skip:
 	ld	xwa, (xiz+26)
 	or	xwa, xwa
-	jr	nz, 9
+	jr	nz, SeqStep_FileSeekCleanup_Skip2
 	ldw	(0x1e53c:24), 13
-	jr	64
+	jr	SeqStep_FileSeekCleanup_Loop
+SeqStep_FileSeekCleanup_Skip2:
 	pushw	0
 	ld	xwa, 64
 	push	xwa
 	push	xiz
-	calr	64983
+	calr	SeqStep_FileSeekSetup
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 41
+	jr	nz, SeqStep_FileSeekCleanup_Loop
 	push	xiz
 	pushw	1
 	pushw	32
@@ -4078,18 +4089,21 @@ SeqStep_FileTellFinal:
 	call	FileRead
 	lda	xsp, (xsp+12)
 	cp	hl, 1:i3
-	jr	nz, 53
+	jr	nz, SeqStep_FileSeekCleanup_Skip4
+SeqStep_FileSeekCleanup_Entry:
 	.byte 0x8f
 	ld	(63:8), 0:io
-	jr	z, 47
+	jr	z, SeqStep_FileSeekCleanup_Skip4
 	cp	(xsp+8), 229
-	jr	z, 19
+	jr	z, SeqStep_FileSeekCleanup_Skip3
 	ldw	(0x1e53c:24), 27
+SeqStep_FileSeekCleanup_Loop:
 	push	xiz
 	call	FileClose
 	inc	4, xsp
 	ldw	hl, 0xffff
-	jr	57
+	jr	SeqStep_FileSeekCleanup_Epilogue
+SeqStep_FileSeekCleanup_Skip3:
 	push	xiz
 	pushw	1
 	pushw	32
@@ -4098,7 +4112,8 @@ SeqStep_FileTellFinal:
 	call	FileRead
 	lda	xsp, (xsp+12)
 	cp	hl, 1:i3
-	jr	z, -53
+	jr	z, SeqStep_FileSeekCleanup_Entry
+SeqStep_FileSeekCleanup_Skip4:
 	ld	xwa, (xsp+4)
 	push	xwa
 	pushw	21
@@ -4109,10 +4124,11 @@ SeqStep_FileTellFinal:
 	call	(xwa)
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, -62
+	jr	nz, SeqStep_FileSeekCleanup_Loop
 	push	xiz
 	call	FileClose
 	inc	4, xsp
+SeqStep_FileSeekCleanup_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+36)
 	ret
@@ -4495,12 +4511,13 @@ SeqStep_FileBufferFinal:
 	calr	65271
 	inc	4, xsp
 	cp	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqStep_FileBufferFinal_Skip
 	ld	(xsp+4), hl
+SeqStep_FileBufferFinal_Skip:
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+5)
 	.byte 0x8e, 0x17, 0xf1
-	jr	nz, 9
+	jr	nz, SeqStep_FileBufferFinal_Skip2
 	.byte 0xbe
 	ex_ff
 	dec	6, b
@@ -4508,6 +4525,7 @@ SeqStep_FileBufferFinal:
 	ex_ff
 	push	xix
 	.byte 0x80
+SeqStep_FileBufferFinal_Skip2:
 	incw	1, (xsp+6)
 	lda	xiz, (xiz+538)
 	.byte 0x9f, 0x06
@@ -4640,22 +4658,22 @@ SeqStep_FileSectorComplete:
 	ld	(xwa+12), c
 	lda	xwa, (xsp+14)
 	push	xwa
-	calr	65260
+	calr	SeqStep_FileSectorRead
 	ld	xwa, (xsp+26)
 	ld	(xwa+13), hl
 	lda	xwa, (xsp+18)
 	push	xwa
-	calr	65247
+	calr	SeqStep_FileSectorRead
 	ld	xwa, (xsp+30)
 	ld	(xwa+15), hl
 	lda	xwa, (xsp+22)
 	push	xwa
-	calr	65234
+	calr	SeqStep_FileSectorRead
 	ld	xwa, (xsp+34)
 	ld	(xwa+17), hl
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	65253
+	calr	SeqStep_FileSectorProcess
 	lda	xsp, (xsp+26)
 	ld	xwa, (xsp+12)
 	ld	(xwa+19), xhl
@@ -5046,6 +5064,7 @@ SeqStep_FileSectorPopReturn:
 	pop XIZ
 	inc 2,XSP
 	ret
+SeqByteBlock_StyleBitmapRef_Code_Helper:
 	.byte 0xef, 0x6c, 0x3e, 0xaf, 0x0c, 0x26, 0xae, 0x1e
 	.byte 0x20, 0x98, 0x24, 0x20, 0xd8, 0x68, 0xbf, 0x06
 	.byte 0x50, 0x9e, 0x2a, 0x20, 0xbf, 0x04, 0x50, 0x9f
@@ -5114,7 +5133,7 @@ SeqByteBlock_MedleyPlayback:
 	ld	w, 128:opc
 	push	xsp
 	pushw	sp
-	jr	z, 7
+	jr	z, SeqStep_FileSectorError_Entry
 SeqByteBlock_EffectsSeqData:
 	ld	xwa, (xiz)
 	.byte 0x80
@@ -5122,6 +5141,7 @@ SeqByteBlock_EffectsSeqData:
 SeqByteBlock_EffectsSeqEntry:
 	pop	xix
 	jr	nz, 4
+SeqStep_FileSectorError_Entry:
 	.byte 0xe8
 SeqByteBlock_MedleyPlaybackB:
 	add	(xbc-90), xwa
@@ -5375,6 +5395,7 @@ SeqByteBlock_StyleBitmapRef:
 	.byte 0x00, 0x0b, 0x01, 0x00, 0x3e, 0x1e, 0x85, 0xf7
 	.byte 0xef, 0x60, 0xdb, 0x88, 0xd8, 0xd8, 0x76, 0x19
 	.byte 0xff, 0x5e, 0xbf, 0x1e, 0x37, 0x0e
+SeqByteBlock_StyleBitmapRef_Code_Helper2:
 	dec 4,XSP
 	push XIZ
 	ld XIZ,(XSP+0x0c)
@@ -5406,6 +5427,7 @@ SeqByteBlock_StyleBitmapRef:
 	.byte 0x00, 0xd9, 0xa8, 0xaf, 0x08, 0x20, 0xb8, 0x2a
 	.byte 0x51, 0xaf, 0x08, 0x20, 0xe9, 0xa8, 0xb8, 0x47
 	.byte 0x61, 0x5e, 0x0e
+SeqByteBlock_StyleBitmapRef_Code_Helper3:
 	lda xsp, (xsp - 0x22)
 	push XIZ
 	ldw (XSP+0x12), 0x0000
@@ -5571,9 +5593,10 @@ SeqByteBlock_ChannelContainer:
 	call	(xwa)
 	inc	4, xsp
 	cp	hl, 0:i3
-	jr	z, 6
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip
 	ldw	hl, 42
-	jrl	190
+	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue
+SeqByteBlock_StyleBitmapRef_Code_Skip:
 	ld	xwa, (xsp+2)
 	.byte 0xb8	; v10 does not spell this byte either
 	push	sr
@@ -5583,13 +5606,14 @@ SeqByteBlock_ChannelContainer:
 	push_a
 	ld	xwa, (xsp+2)
 	push	xwa
-	calr	64342
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper3
 	inc	4, xsp
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	z, 5
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip2
 	ld	hl, iz
-	jrl	156
+	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue
+SeqByteBlock_StyleBitmapRef_Code_Skip2:
 	ld	xwa, (xsp+6)
 	.byte 0x98	; v10 does not spell this byte either
 	ld	h, 63:opc
@@ -5621,7 +5645,7 @@ SeqByteBlock_ChannelContainer:
 	inc	6, l
 	ld	xhl, 359061726
 	cp	iz, 5:i3
-	jr	nz, 59
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Join
 	ld	xwa, (xsp+18)
 	push	xwa
 	ld	xwa, (xsp+18)
@@ -5629,7 +5653,7 @@ SeqByteBlock_ChannelContainer:
 	calr	63464
 	inc	8, xsp
 	ld	iz, hl
-	jr	42
+	jr	SeqByteBlock_StyleBitmapRef_Code_Join
 	ld	xwa, (xsp+14)
 	.byte 0xb8	; v10 does not spell this byte either
 	pop	sr
@@ -5651,10 +5675,12 @@ SeqByteBlock_ChannelContainer:
 	.byte 0xb8	; v10 does not spell this byte either
 	pop	sr
 	.byte 0xbf	; v10 does not spell this byte either
+SeqByteBlock_StyleBitmapRef_Code_Join:
 	cp	iz, 0:i3
-	jr	z, 4
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip3
 	ld	hl, iz
-	jr	19
+	jr	SeqByteBlock_StyleBitmapRef_Code_Epilogue
+SeqByteBlock_StyleBitmapRef_Code_Skip3:
 	ld	xwa, (xsp+14)
 	ld	xbc, xwa
 	ld	a, (xwa+3)
@@ -5662,9 +5688,11 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+2)
 	incm8	1, (xwa+3)
 	ld	hl, 0:i3
+SeqByteBlock_StyleBitmapRef_Code_Epilogue:
 	popw	iz
 	inc	8, xsp
 	ret
+SeqByteBlock_StyleBitmapRef_Code_Helper4:
 	dec	8, xsp
 	push	xiz
 	ld	xwa, (xsp+16)
@@ -5673,7 +5701,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+16)
 	ld	xwa, (xwa+26)
 	or	xwa, xwa
-	jr	nz, 62
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip4
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+38)
 	extz	xbc
@@ -5699,7 +5727,8 @@ SeqByteBlock_ChannelContainer:
 	ld	xbc, (xsp+26)
 	ld	(xbc), wa
 	ld	hl, 0:i3
-	jrl	363
+	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue2
+SeqByteBlock_StyleBitmapRef_Code_Skip4:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xwa+22)
 	ld	xwa, (xsp+8)
@@ -5712,7 +5741,7 @@ SeqByteBlock_ChannelContainer:
 	extz	xbc
 	ld	xwa, (xsp+16)
 	ld	xwa, (xwa+22)
-	call	16712757
+	call	FDC_SetupSectorParams_Helper
 	ld	xiz, xhl
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+38)
@@ -5782,11 +5811,12 @@ SeqByteBlock_ChannelContainer:
 	.byte 0x9f	; v10 does not spell this byte either
 	.byte 0x04	; v10 does not spell this byte either
 	.byte 0xf0	; v10 does not spell this byte either
-	jr	nc, 99
+	jr	nc, SeqByteBlock_StyleBitmapRef_Code_Skip5
+SeqByteBlock_StyleBitmapRef_Code_Loop:
 	pushw	hl
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	60702
+	calr	SeqStep_FileSectorError
 	inc	6, xsp
 	ld	xwa, (xsp+8)
 	ld	wa, (xwa+36)
@@ -5827,10 +5857,11 @@ SeqByteBlock_ChannelContainer:
 	.byte 0x9f	; v10 does not spell this byte either
 	.byte 0x04	; v10 does not spell this byte either
 	.byte 0xf0	; v10 does not spell this byte either
-	jr	c, -99
+	jr	c, SeqByteBlock_StyleBitmapRef_Code_Loop
+SeqByteBlock_StyleBitmapRef_Code_Skip5:
 	ld	xwa, (xsp+16)
 	push	xwa
-	calr	61342
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper
 	inc	4, xsp
 	ld	xwa, 0:i3
 	ld	a, (xsp+6)
@@ -5849,7 +5880,7 @@ SeqByteBlock_ChannelContainer:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	xwa, (xsp+22)
 	add	(xwa), xhl
 	ld	xwa, (xsp+16)
@@ -5857,16 +5888,18 @@ SeqByteBlock_ChannelContainer:
 	extz	xwa
 	ld	xbc, (xsp+8)
 	ld	xbc, (xbc+32)
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	xwa, 0:i3
 	ld	a, (xsp+6)
 	sub	xhl, xwa
 	ld	xwa, (xsp+26)
 	ld	(xwa), hl
 	ld	hl, 0:i3
+SeqByteBlock_StyleBitmapRef_Code_Epilogue2:
 	pop	xiz
 	inc	8, xsp
 	ret
+SeqByteBlock_StyleBitmapRef_Code_Helper5:
 	dec	6, xsp
 	push	xiz
 	ld	xiz, (xsp+14)
@@ -5876,11 +5909,11 @@ SeqByteBlock_ChannelContainer:
 	push	xwa
 	pushw	1
 	push	xiz
-	calr	65064
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper4
 	lda	xsp, (xsp+14)
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	nz, 42
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Epilogue3
 	ld	wa, (xsp+18)
 	set	3, wa
 	pushw	wa
@@ -5889,16 +5922,18 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+12)
 	push	xwa
 	push	xiz
-	calr	59024
+	calr	SeqStep_FileIoCheck
 	lda	xsp, (xsp+14)
 	ld	(xiz+34), xhl
 	ld	xwa, xhl
 	or	xwa, xwa
-	jr	nz, 5
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip6
 	ldw	hl, 10
 	jr	6
+SeqByteBlock_StyleBitmapRef_Code_Skip6:
 	ld	xwa, (xiz+34)
 	ld	hl, (xwa+20)
+SeqByteBlock_StyleBitmapRef_Code_Epilogue3:
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -5949,39 +5984,41 @@ SeqByteBlock_ChannelContainer:
 	push	xwa
 	pushw	hl
 	push	xiz
-	calr	64914
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper4
 	add	xsp, 14
 	cp	hl, 0:i3
-	jr	z, 17
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip7
 	ld	a, l
 	exts	wa
 	ld	(124220:24), wa
 	ld	(xiz+6), wa
 	ld	hl, 0:i3
-	jrl	269
+	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue4
+SeqByteBlock_StyleBitmapRef_Code_Skip7:
 	ld	xwa, (xiz+34)
 	or	xwa, xwa
-	jr	z, 19
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip8
 	ld	xwa, (xiz+34)
 	ld	a, (xwa+22)
 	and	a, 3
 	cp	a, 3:i3
-	jr	nz, 47
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip9
 	ld	xwa, (xiz+34)
 	.byte 0xb8	; v10 does not spell this byte either
 	ex_ff
 	.byte 0xb3	; v10 does not spell this byte either
+SeqByteBlock_StyleBitmapRef_Code_Skip8:
 	pushw	40
 	ld	xwa, 0:i3
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
 	push	xiz
-	calr	58835
+	calr	SeqStep_FileIoCheck
 	lda	xsp, (xsp+14)
 	ld	(xiz+34), xhl
 	or	xhl, xhl
-	jr	nz, 17
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip9
 	.byte 0xbe	; v10 does not spell this byte either
 	ei	2
 	ldw	(0:8), 15602:io
@@ -5989,7 +6026,8 @@ SeqByteBlock_ChannelContainer:
 	.byte 0x01	; v10 does not spell this byte either
 	push	sr
 	ldw	(0:8), 43227:io
-	jrl	202
+	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue4
+SeqByteBlock_StyleBitmapRef_Code_Skip9:
 	ld	xbc, (xiz+34)
 	ld	xwa, (xsp+24)
 	ld	(xbc+12), xwa
@@ -6007,8 +6045,9 @@ SeqByteBlock_ChannelContainer:
 	.byte 0x9f	; v10 does not spell this byte either
 	ldw	(240:8), 1391:io
 	ld	wa, (xsp+4)
-	jr	3
+	jr	SeqByteBlock_StyleBitmapRef_Code_Join2
 	ld	wa, (xsp+10)
+SeqByteBlock_StyleBitmapRef_Code_Join2:
 	ld	(xbc), wa
 	ld	xwa, (xiz+34)
 	ld	wa, (xwa+16)
@@ -6016,7 +6055,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0x9f	; v10 does not spell this byte either
 	calr	63
 	nop
-	jr	z, 29
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip10
 	ld	xwa, (xiz+34)
 	push	xwa
 	ld	xwa, (xsp+16)
@@ -6028,7 +6067,8 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xiz+34)
 	ld	(xwa+20), hl
 	ld	(xiz+6), hl
-	jr	27
+	jr	SeqByteBlock_StyleBitmapRef_Code_Join3
+SeqByteBlock_StyleBitmapRef_Code_Skip10:
 	ld	xwa, (xiz+34)
 	push	xwa
 	ld	xwa, (xsp+16)
@@ -6040,6 +6080,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xiz+34)
 	ld	(xwa+20), hl
 	ld	(xiz+6), hl
+SeqByteBlock_StyleBitmapRef_Code_Join3:
 	ld	xwa, (xiz+34)
 	.byte 0xb8	; v10 does not spell this byte either
 	ex_ff
@@ -6075,12 +6116,14 @@ SeqByteBlock_ChannelContainer:
 	push_a
 	push	xsp
 	ld	c, 0:opc
-	jr	nz, 8
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Epilogue4
 	ld	xwa, (xiz+34)
 	ldw	(xwa+20), 0
+SeqByteBlock_StyleBitmapRef_Code_Epilogue4:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
+SeqByteBlock_StyleBitmapRef_Code_Helper6:
 	dec	4, xsp
 	pushw	iz
 	ldw	(xsp+2), 0
@@ -6163,22 +6206,23 @@ SeqByteBlock_ChannelContainer:
 	pushw	64
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	64893
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper5
 	inc	6, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	z, 26
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip11
 	ld	a, l
 	exts	wa
 	ld	(124220:24), wa
 	ld	hl, (xsp+2)
-	jrl	354
+	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue5
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+34)
 	.byte 0xb8	; v10 does not spell this byte either
 	ex_ff
 	inc	6, w
 	.byte 0xd4	; v10 does not spell this byte either
+SeqByteBlock_StyleBitmapRef_Code_Skip11:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
@@ -6269,7 +6313,7 @@ SeqByteBlock_ChannelContainer:
 	extz	xbc
 	ld	xwa, (xsp+10)
 	add	(xwa+22), xbc
-	jr	86
+	jr	SeqByteBlock_StyleBitmapRef_Code_Join4
 	cp	(xsp+18), de
 	jr	nc, 5
 	ld	wa, (xsp+18)
@@ -6309,6 +6353,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xde, 1:i3
 	add	(xwa+22), xde
 	djnz16	iz, -68
+SeqByteBlock_StyleBitmapRef_Code_Join4:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
@@ -6341,6 +6386,7 @@ SeqByteBlock_ChannelContainer:
 	nop
 	.byte 0x80	; v10 does not spell this byte either
 	ld	hl, (xsp+2)
+SeqByteBlock_StyleBitmapRef_Code_Epilogue5:
 	popw	iz
 	inc	4, xsp
 	ret
@@ -6352,7 +6398,7 @@ SeqChan_SetupAndCallHelper:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	64966
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper6
 	lda	xsp, (xsp+12)
 	ret
 SeqChan_InitChannelState:
@@ -6364,9 +6410,10 @@ SeqChan_InitChannelState:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	64944
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper6
 	lda	xsp, (xsp+12)
 	ret
+SeqByteBlock_StyleBitmapRef_Code_Helper7:
 	dec	6, xsp
 	pushw	iz
 	ldw	(xsp+2), 0
@@ -6434,16 +6481,17 @@ SeqChan_InitChannelState:
 	pushw	wa
 	ld	xwa, (xsp+14)
 	push	xwa
-	calr	64306
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper5
 	inc	6, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	z, 15
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip12
 	ld	a, l
 	exts	wa
 	ld	(124220:24), wa
 	ld	hl, (xsp+2)
-	jrl	442
+	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue6
+SeqByteBlock_StyleBitmapRef_Code_Skip12:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
 	.byte 0xb8	; v10 does not spell this byte either
@@ -6537,11 +6585,12 @@ SeqChan_InitChannelState:
 	exts	xbc
 	ld	xwa, (xsp+12)
 	add	(xwa+22), xbc
-	jrl	163
+	jrl	SeqByteBlock_StyleBitmapRef_Code_Join5
 	cp	(xsp+20), hl
-	jr	ge, 5
+	jr	ge, SeqByteBlock_StyleBitmapRef_Code_Skip13
 	ld	wa, (xsp+20)
 	jr	2
+SeqByteBlock_StyleBitmapRef_Code_Skip13:
 	ld	wa, hl
 	ld	iz, wa
 	cp	iz, 0:i3
@@ -6613,6 +6662,7 @@ SeqChan_InitChannelState:
 	add	(xwa+22), xbc
 	sub	iz, 1
 	jrl	nz, -144
+SeqByteBlock_StyleBitmapRef_Code_Join5:
 	ld	xwa, (xsp+12)
 	ld	xbc, (xwa+22)
 	ld	xwa, (xsp+12)
@@ -6646,6 +6696,7 @@ SeqChan_InitChannelState:
 	nop
 	jrl	nz, -584
 	ld	hl, (xsp+2)
+SeqByteBlock_StyleBitmapRef_Code_Epilogue6:
 	popw	iz
 	inc	6, xsp
 	ret
@@ -6670,7 +6721,7 @@ SeqChan_ProcessEventArg1:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	64867
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper7
 	lda	xsp, (xsp+12)
 	ret
 SeqChan_ValidateAndDispatch:
@@ -6686,9 +6737,10 @@ SeqChan_ValidateAndDispatch:
 	pop	sr
 	push	xsp
 	nop
-	jr	nz, 4
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Entry
 	ld	hl, 0:i3
-	jr	31
+	jr	SeqByteBlock_StyleBitmapRef_Code_Epilogue7
+SeqByteBlock_StyleBitmapRef_Code_Entry:
 	.byte 0xbe
 	pop	sr
 	inc	6, l
@@ -6696,13 +6748,14 @@ SeqChan_ValidateAndDispatch:
 	.byte 0xf1
 	inc	4, xsp
 	cp	hl, 0:i3
-	jr	nz, 16
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Epilogue7
 	ld	xwa, (xiz+18)
 	decm8	1, (xwa+3)
 	ld	(xiz+4), 0
 	push	xiz
-	calr	58071
+	calr	SeqStep_FileBufferFinal
 	inc	4, xsp
+SeqByteBlock_StyleBitmapRef_Code_Epilogue7:
 	pop	xiz
 	ret
 SeqChan_TraverseAndProcess:
@@ -6712,12 +6765,13 @@ SeqChan_TraverseAndProcess:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+71)
 	.byte 0xaf, 0x10, 0xf0
-	jr	nc, 116
+	jr	nc, SeqByteBlock_StyleBitmapRef_Code_Skip15
 	ld	xwa, (xsp+12)
 	.byte 0xb8, 0x03, 0xc9
-	jr	nz, 8
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip14
 	ldw	(xsp+6), 20
-	jrl	205
+	jrl	SeqByteBlock_StyleBitmapRef_Code_Join6
+SeqByteBlock_StyleBitmapRef_Code_Skip14:
 	ld	xwa, (xsp+12)
 	ld	xbc, xwa
 	ld	xwa, (xwa+71)
@@ -6725,12 +6779,12 @@ SeqChan_TraverseAndProcess:
 	pushw 32
 	ld	xwa, (xsp+14)
 	push	xwa
-	calr	-1859
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper5
 	inc	6, xsp
 	ld	(xsp+6), hl
 	ld	wa, (xsp+6)
 	cp	wa, 0:i3
-	jrl	nz, 171
+	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Join6
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
 	ld	bc, (xwa+40)
@@ -6750,22 +6804,24 @@ SeqChan_TraverseAndProcess:
 	ld	(xsp+6), hl
 	ld	wa, (xsp+6)
 	cp	wa, 0:i3
-	jr	nz, 120
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Join6
 	ld	xwa, (xsp+12)
 	ld	xbc, (xsp+16)
 	ld	(xwa+71), xbc
 	ld	xwa, (xsp+12)
 	.byte 0xb8, 0x03, 0xbf
+SeqByteBlock_StyleBitmapRef_Code_Skip15:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
 	or	xwa, xwa
-	jr	z, 18
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip16
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
 	.byte 0x88, 0x16, 0x3c, 0xe7
 	ld	xwa, (xsp+12)
 	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
+SeqByteBlock_StyleBitmapRef_Code_Skip16:
 	ld	xwa, (xsp+12)
 	ld	xbc, (xsp+16)
 	ld	(xwa+22), xbc
@@ -6773,24 +6829,27 @@ SeqChan_TraverseAndProcess:
 	ld	xiz, xwa
 	ldw	(xsp+4), 0
 	.byte 0x9f, 0x04, 0x3f, 0x0a, 0x00
-	jr	ge, 49
+	jr	ge, SeqByteBlock_StyleBitmapRef_Code_Join6
+SeqByteBlock_StyleBitmapRef_Code_Loop2:
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+5)
 	.byte 0x8e, 0x17, 0xf1
-	jr	nz, 23
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip17
 	ld	a, (xiz+22)
 	and	a, 3
 	cp	a, 3:i3
-	jr	nz, 13
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip17
 	push	xiz
-	calr	-7909
+	calr	SeqStep_FileBufferSetup
 	inc	4, xsp
 	or	(xsp+6), hl
 	.byte 0x8e, 0x16, 0x3c, 0xe5
+SeqByteBlock_StyleBitmapRef_Code_Skip17:
 	incw	1, (xsp+4)
 	lda	xiz, (xiz+538)
 	.byte 0x9f, 0x04, 0x3f, 0x0a, 0x00
-	jr	lt, -49
+	jr	lt, SeqByteBlock_StyleBitmapRef_Code_Loop2
+SeqByteBlock_StyleBitmapRef_Code_Join6:
 	ld	hl, (xsp+6)
 	pop	xiz
 	inc	4, xsp
@@ -6805,14 +6864,14 @@ SeqChan_ReadNextFromLoop:
 	inc	8, xsp
 	ld	(xsp+4), hl
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
-	jrl	nz, 136
+	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Skip18
 	pushw 0
 	push	xiz
-	calr	-2087
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper5
 	inc	6, xsp
 	ld	(xsp+4), hl
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
-	jr	nz, 117
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip18
 	ld	xwa, (xiz+34)
 	lda	xwa, (xwa+26)
 	ld	(xsp+6), xwa
@@ -6820,7 +6879,7 @@ SeqChan_ReadNextFromLoop:
 	pushw 20522
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	(xsp+30), 16
 	lda	xwa, (xsp+31)
 	push	xwa
@@ -6837,7 +6896,7 @@ SeqChan_ReadNextFromLoop:
 	push	xbc
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	-7414
+	calr	SeqStep_FileSectorReturn
 	ld	(xsp+31), 46
 	ld	wa, (xiz+48)
 	ld	(xsp+47), wa
@@ -6845,7 +6904,7 @@ SeqChan_ReadNextFromLoop:
 	push	xwa
 	lda	xwa, (xsp+34)
 	push	xwa
-	calr	-7435
+	calr	SeqStep_FileSectorReturn
 	lda	xsp, (xsp+28)
 	ld	xwa, (xiz+34)
 	.byte 0xb8, 0x16, 0xb9
@@ -6855,6 +6914,7 @@ SeqChan_ReadNextFromLoop:
 	ld	(xiz+71), xwa
 	ld	(xiz+64), 16
 	.byte 0xbe, 0x03, 0xbf
+SeqByteBlock_StyleBitmapRef_Code_Skip18:
 	ld	hl, (xsp+4)
 	pop	xiz
 	lda	xsp, (xsp+30)
@@ -6865,10 +6925,10 @@ SeqChan_WritePatchData:
 	ld	xiz, (xsp+10)
 	ld	(xiz+52), 229
 	push	xiz
-	calr	61288
+	calr	SeqByteBlock_StyleBitmapRef_Code_Helper2
 	ld	(xsp+8), hl
 	push	xiz
-	calr	57625
+	calr	SeqStep_FileBufferFinal
 	or	(xsp+12), hl
 	ld	a, (xiz+5)
 	extz	wa
@@ -6890,18 +6950,19 @@ SeqChan_WriteExtendedPatch:
 	ld	xiz, (xsp+8)
 	ld	wa, (xsp+12)
 	cp	wa, 21
-	jr	z, 80
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip20
 	cp	wa, 20
-	jr	z, 19
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Skip19
 	cp	wa, 1:i3
-	jr	nz, 85
+	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip21
 	push	xiz
-	calr	57556
+	calr	SeqStep_FileBufferFinal
 	inc	4, xsp
 	cp	hl, 0:i3
-	jr	z, 56
+	jr	z, SeqByteBlock_StyleBitmapRef_Code_Join7
 	ldw	hl, 0xffff
-	jr	80
+	jr	SeqByteBlock_StyleBitmapRef_Code_Epilogue8
+SeqByteBlock_StyleBitmapRef_Code_Skip19:
 	ld	xwa, 4:i3
 	add	(xsp+14), xwa
 	ld	xwa, (xsp+14)
@@ -6922,8 +6983,10 @@ SeqChan_WriteExtendedPatch:
 	.byte 0xbf, 0xb9
 	pop	sr
 	.byte 0xbf
+SeqByteBlock_StyleBitmapRef_Code_Join7:
 	ld	hl, 0:i3
-	jr	25
+	jr	SeqByteBlock_StyleBitmapRef_Code_Epilogue8
+SeqByteBlock_StyleBitmapRef_Code_Skip20:
 	push	xiz
 	calr	61237
 	inc	4, xsp
@@ -6931,9 +6994,11 @@ SeqChan_WriteExtendedPatch:
 	.byte 0xbe
 	pop	sr
 	.byte 0xbf
-	jr	-19
+	jr	SeqByteBlock_StyleBitmapRef_Code_Join7
+SeqByteBlock_StyleBitmapRef_Code_Skip21:
 	ldw	(0x1e53c:24), 18
 	ldw	hl, 0xffff
+SeqByteBlock_StyleBitmapRef_Code_Epilogue8:
 	pop	xiz
 	ret
 
@@ -6982,7 +7047,7 @@ SeqStep_CountLoop_Done:
 SeqStep_CalcTotalSectors:
 	ld	xwa, (xsp+4)
 	push	xwa
-	calr	65455
+	calr	SeqStep_CountValidSectors
 	inc	4, xsp
 	ld	bc, hl
 	extz	xbc
@@ -6990,7 +7055,7 @@ SeqStep_CalcTotalSectors:
 	ld	xwa, (xwa+30)
 	ld	wa, (xwa+40)
 	extz	xwa
-	call	16712319
+	call	InitializeKubo_Helper
 	ret
 SeqStep_SectorCompareBlock:
 	ld	xde, (xsp+4)
@@ -7004,10 +7069,11 @@ SeqStep_SectorCompareBlock:
 	extz	wa
 	and	wa, 24
 	cp	wa, bc
-	jr	z, 11
+	jr	z, SeqStep_SectorCompareBlock_Skip
 	ldw	(0x1e53c:24), 13
 	ldw	hl, 0xffff
 	ret
+SeqStep_SectorCompareBlock_Skip:
 	ld	wa, (xsp+10)
 	ld	(xde+64), a
 	.byte 0xba
@@ -7026,20 +7092,22 @@ SeqStep_SectorCompareBlock:
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	nz, 5
+	jr	nz, SeqStep_SectorCompareBlock_Entry
 	ldw	hl, 0xffff
-	jr	24
+	jr	SeqStep_SectorCompareBlock_Epilogue
+SeqStep_SectorCompareBlock_Entry:
 	.byte 0x9f
 	ret
 	.byte 0x04
 	pushw	1
 	push	xiz
-	calr	65440
+	calr	SeqStep_SectorCompareBlock
 	ld	(xsp+12), hl
 	push	xiz
 	call	FileClose
 	lda	xsp, (xsp+12)
 	ld	hl, (xsp+4)
+SeqStep_SectorCompareBlock_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -7049,16 +7117,18 @@ SeqStep_SectorCompareBlock:
 	ld	wa, (xwa+36)
 	dec	8, wa
 	cp	hl, wa
-	jr	ule, 3
+	jr	ule, SeqStep_SectorCompareBlock_Skip2
 	ld	hl, 0:i3
 	ret
+SeqStep_SectorCompareBlock_Skip2:
 	cp	hl, 0:i3
-	jr	z, 8
+	jr	z, SeqStep_SectorCompareBlock_Skip3
 	pushw	hl
 	push	xbc
-	calr	57867
+	calr	SeqStep_FileSectorError
 	inc	6, xsp
 	ret
+SeqStep_SectorCompareBlock_Skip3:
 	ld	hl, (xbc+69)
 	ret
 
@@ -7107,21 +7177,22 @@ SeqChan_ByteBlockB:
 SeqChan_ByteBlockC:
 	push	xiz
 	ld	xiz, (xsp+20)
-	call	16063039
+	call	SeqChan_ByteBlockC_Helper
 	cp	hl, 0:i3
-	jr	z, 9
-	call	16063021
+	jr	z, SeqChan_ByteBlockC_Skip
+	call	FDC_ClearDiskChangeStatus
 	ld	hl, 6:i3
-	jrl	136
-	call	16063045
+	jrl	SeqChan_ByteBlockC_Epilogue
+SeqChan_ByteBlockC_Skip:
+	call	FDC_ReadDiskType
 	cp	l, 2:i3
-	jr	nz, 97
+	jr	nz, SeqChan_ByteBlockC_Skip3
 	.byte 0x9f, 0x0c, 0x3f, 0x00, 0x00
-	jr	nz, 90
+	jr	nz, SeqChan_ByteBlockC_Skip3
 	.byte 0x9f, 0x0e, 0x3f, 0x00, 0x00
-	jr	nz, 83
+	jr	nz, SeqChan_ByteBlockC_Skip3
 	.byte 0x9f, 0x10, 0x3f, 0x01, 0x00
-	jr	nz, 76
+	jr	nz, SeqChan_ByteBlockC_Skip3
 	ldw	(35188:16), 65535
 	push	xiz
 	.byte 0x0b, 0x01, 0x00, 0x0b, 0x01, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
@@ -7130,14 +7201,15 @@ SeqChan_ByteBlockC:
 	extz	wa
 	pushw	wa
 	pushw 3
-	calr	-176
+	calr	SeqStep_ParseVariableHeader
 	lda	xsp, (xsp+16)
 	ldw	(35188:16), 0
 	cp	hl, 0:i3
-	jr	nz, 8
+	jr	nz, SeqChan_ByteBlockC_Skip2
 	ld	(xiz+16), 2
 	ld	hl, 0:i3
-	jr	52
+	jr	SeqChan_ByteBlockC_Epilogue
+SeqChan_ByteBlockC_Skip2:
 	pushw 512
 	pushw 228
 	pushw 20536
@@ -7145,7 +7217,8 @@ SeqChan_ByteBlockC:
 	call	16713148
 	lda	xsp, (xsp+10)
 	ld	hl, 0:i3
-	jr	31
+	jr	SeqChan_ByteBlockC_Epilogue
+SeqChan_ByteBlockC_Skip3:
 	push	xiz
 	.byte 0x9f, 0x16, 0x04, 0x9f, 0x16, 0x04, 0x9f, 0x14, 0x04, 0x9f, 0x18, 0x04
 	ld	xwa, (xsp+20)
@@ -7153,8 +7226,9 @@ SeqChan_ByteBlockC:
 	extz	wa
 	pushw	wa
 	pushw 3
-	calr	-246
+	calr	SeqStep_ParseVariableHeader
 	lda	xsp, (xsp+16)
+SeqChan_ByteBlockC_Epilogue:
 	pop	xiz
 	ret
 SeqChan_ByteBlockD:
@@ -7177,6 +7251,7 @@ SeqChan_ByteBlockD:
 	calr	65254
 	lda	xsp, (xsp+16)
 	ret
+SeqChan_ByteBlockD_Helper:
 	dec	2, xsp
 	push	xiz
 	ld	xiz, (xsp+14)
@@ -7198,14 +7273,15 @@ SeqChan_ByteBlockD:
 	cp	wa, 6:i3
 	jr	z, 67
 	cp	wa, 51
-	jr	z, 21
+	jr	z, SeqChan_ByteBlockD_Skip
 	cp	wa, 53
-	jr	z, 15
+	jr	z, SeqChan_ByteBlockD_Skip
 	cp	wa, 47
-	jr	nz, 125
+	jr	nz, SeqChan_ByteBlockD_Skip3
 	ldw (xbc), 31
 	ld	hl, 0:i3
-	jrl	170
+	jrl	SeqChan_ByteBlockD_Epilogue
+SeqChan_ByteBlockD_Skip:
 	ld	xwa, (xiz)
 	.byte 0xb8
 	push	sr
@@ -7214,20 +7290,21 @@ SeqChan_ByteBlockD:
 	ld	a, 0:opc
 	ld	xwa, (xiz)
 	push	xwa
-	calr	65246
+	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
 	call	SeqByteBlock_StyleBitmapRef_0x736
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	z, 5
+	jr	z, SeqChan_ByteBlockD_Entry
 	ld	(xiz+20), hl
-	jr	121
+	jr	SeqChan_ByteBlockD_Entry3
+SeqChan_ByteBlockD_Entry:
 	.byte 0xbf, 0x04
 	push	sr
 	.byte 0x01
 	nop
-	jr	114
+	jr	SeqChan_ByteBlockD_Entry3
 	ld	xwa, (xiz)
 	.byte 0xb8
 	push	sr
@@ -7241,14 +7318,15 @@ SeqChan_ByteBlockD:
 	call	SeqByteBlock_StyleBitmapRef_0x736
 	inc	4, xsp
 	cp	hl, 0:i3
-	jr	z, 5
+	jr	z, SeqChan_ByteBlockD_Entry2
 	ld	(xiz+20), hl
-	jr	82
+	jr	SeqChan_ByteBlockD_Entry3
+SeqChan_ByteBlockD_Entry2:
 	.byte 0xbf, 0x04
 	push	sr
 	.byte 0x01
 	nop
-	jr	75
+	jr	SeqChan_ByteBlockD_Entry3
 	ld	xwa, (xiz)
 	.byte 0xb8
 	push	sr
@@ -7257,17 +7335,19 @@ SeqChan_ByteBlockD:
 	ld	w, 0:opc
 	ld	xwa, (xiz)
 	push	xwa
-	calr	65167
+	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
 	call	SeqByteBlock_StyleBitmapRef_0x736
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	z, 5
+	jr	z, SeqChan_ByteBlockD_Skip2
 	ld	(xiz+20), hl
-	jr	42
+	jr	SeqChan_ByteBlockD_Entry3
+SeqChan_ByteBlockD_Skip2:
 	ld	hl, 0:i3
-	jr	54
+	jr	SeqChan_ByteBlockD_Epilogue
+SeqChan_ByteBlockD_Skip3:
 	ld	xwa, (xiz)
 	.byte 0xb8
 	push	sr
@@ -7276,7 +7356,7 @@ SeqChan_ByteBlockD:
 	ld	d, 0:opc
 	ld	xwa, (xiz)
 	push	xwa
-	calr	65130
+	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
 	call	SeqByteBlock_StyleBitmapRef_0x736
@@ -7289,6 +7369,7 @@ SeqChan_ByteBlockD:
 	push	sr
 	.byte 0x01
 	nop
+SeqChan_ByteBlockD_Entry3:
 	.byte 0xd2
 	calr	551
 	push	xsp
@@ -7298,6 +7379,7 @@ SeqChan_ByteBlockD:
 	ld	hl, 0:i3
 	jr	3
 	ld	hl, (xsp+4)
+SeqChan_ByteBlockD_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -7422,14 +7504,14 @@ SeqChan_ByteBlockE:
 	ld	xwa, (xsp+34)
 	ld	xwa, (xwa)
 	push	xwa
-	calr	64825
+	calr	SeqChan_ByteBlockC
 	lda	xsp, (xsp+16)
 	ld	(xsp+12), hl
 	ld	xwa, (xsp+22)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	calr	65002
+	calr	SeqChan_ByteBlockD_Helper
 	inc	8, xsp
 	cp	hl, 0:i3
 	jrl	nz, -216
@@ -7558,14 +7640,14 @@ SeqChan_ByteBlockF:
 	ld	xwa, (xsp+34)
 	ld	xwa, (xwa)
 	push	xwa
-	calr	64684
+	calr	SeqChan_ByteBlockD
 	lda	xsp, (xsp+16)
 	ld	(xsp+12), hl
 	ld	xwa, (xsp+22)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	calr	64702
+	calr	SeqChan_ByteBlockD_Helper
 	inc	8, xsp
 	cp	hl, 0:i3
 	jrl	nz, -216
@@ -7593,6 +7675,7 @@ FDC_ClearDiskChangeStatus:
 	ld	a, (0x3e3e4:24)
 	ld	(0x3e3e2:24), a
 	ret
+SeqChan_ByteBlockC_Helper:
 	ld	hl, (0x3e3e6:24)
 	ret
 
@@ -7687,14 +7770,14 @@ FDC_Format2DD_Step2:
 
 FDC_Format2DD_AllocBuf:
 	pushw	512
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	xwa, xhl
 	or	xwa, xwa
-	jr	nz, 5
+	jr	nz, FDC_Format2DD_WriteBoot
 	ld	hl, 0:i3
-	jrl	891
+	jrl	FDC_CmdFrame_Epilogue
 FDC_Format2DD_WriteBoot:
 	pushw	512
 	pushw	0
@@ -7721,16 +7804,16 @@ FDC_Format2DD_WriteBoot:
 	lda	xsp, (xsp+22)
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51B78
+	jr	z, FDC_Format2DD_WriteFAT1	; -> 0xF51B78
 	stb_erp	a, 251
 	extz	wa
-	calr	65266
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	782	; -> 0xF51E86
+	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_WriteFAT1:
 	pushw	512
 	pushw	0
@@ -7757,16 +7840,16 @@ FDC_Format2DD_WriteFAT1:
 	lda	xsp, (xsp+22)
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51BE5
+	jr	z, FDC_Format2DD_WriteFAT2	; -> 0xF51BE5
 	stb_erp	a, 251
 	extz	wa
-	calr	65157
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	673	; -> 0xF51E86
+	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_WriteFAT2:
 	pushw	512
 	pushw	0
@@ -7839,16 +7922,16 @@ FDC_Format2DD_WriteDataSec1:
 	lda	xsp, (xsp+22)
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51CCC
+	jr	z, FDC_Format2DD_WriteDataSec2	; -> 0xF51CCC
 	stb_erp	a, 251
 	extz	wa
-	calr	64926
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	442	; -> 0xF51E86
+	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_WriteDataSec2:
 	pushw	512
 	pushw	0
@@ -7918,16 +8001,16 @@ FDC_Format2DD_TrackBody:
 	inc	4, xsp
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51DA5
+	jr	z, FDC_Format2DD_TrackInc	; -> 0xF51DA5
 	stb_erp	a, 251
 	extz	wa
-	calr	64709
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	225	; -> 0xF51E86
+	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_TrackInc:
 	incw 1, (xsp + 14)
 
@@ -7945,16 +8028,16 @@ FDC_Format2DD_Side1Body:
 	inc	4, xsp
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51DE4
+	jr	z, FDC_Format2DD_Side1Inc	; -> 0xF51DE4
 	stb_erp	a, 251
 	extz	wa
-	calr	64646
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	162	; -> 0xF51E86
+	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_Side1Inc:
 	incw 1, (xsp + 14)
 
@@ -7985,12 +8068,12 @@ FDC_Format2DD_FinalTrack:
 	ldb_erp	l, 251
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	8, xsp
 	cpib_erp	251, 0
-	jr	nz, 4	; -> 0xF51E7C
+	jr	nz, FDC_Format2DD_SetSectorAndRet	; -> 0xF51E7C
 	ld	hl, 1:i3
-	jr	10	; -> 0xF51E86
+	jr	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_SetSectorAndRet:
 	stb_erp A, 0xfb
 	extz wa
@@ -8036,14 +8119,14 @@ FDC_Format2HD_Step2:
 
 FDC_Format2HD_AllocBuf:
 	pushw	512
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	xwa, xhl
 	or	xwa, xwa
-	jr	nz, 5
+	jr	nz, FDC_Format2HD_WriteBoot
 	ld	hl, 0:i3
-	jrl	752
+	jrl	FdcOp_Epilogue20
 FDC_Format2HD_WriteBoot:
 	pushw	512
 	pushw	0
@@ -8070,16 +8153,16 @@ FDC_Format2HD_WriteBoot:
 	lda	xsp, (xsp+22)
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51F5E
+	jr	z, FDC_Format2HD_WriteFAT1	; -> 0xF51F5E
 	stb_erp	a, 251
 	extz	wa
-	calr	64268
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	643	; -> 0xF521E1
+	jrl	FdcOp_Epilogue20	; -> 0xF521E1
 FDC_Format2HD_WriteFAT1:
 	pushw	512
 	pushw	0
@@ -8106,16 +8189,16 @@ FDC_Format2HD_WriteFAT1:
 	lda	xsp, (xsp+22)
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51FCB
+	jr	z, FDC_Format2HD_InitTrackLoop	; -> 0xF51FCB
 	stb_erp	a, 251
 	extz	wa
-	calr	64159
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	534	; -> 0xF521E1
+	jrl	FdcOp_Epilogue20	; -> 0xF521E1
 FDC_Format2HD_InitTrackLoop:
 	pushw	512
 	pushw	0
@@ -8132,16 +8215,16 @@ FDC_Format2HD_TrackBody:
 	inc	4, xsp
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF5200B
+	jr	z, FDC_Format2HD_TrackInc	; -> 0xF5200B
 	stb_erp	a, 251
 	extz	wa
-	calr	64095
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	470	; -> 0xF521E1
+	jrl	FdcOp_Epilogue20	; -> 0xF521E1
 FDC_Format2HD_TrackInc:
 	incw 1, (xsp + 14)
 
@@ -8177,16 +8260,16 @@ FDC_Format2HD_Side2Body:
 	inc	4, xsp
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF520C2
+	jr	z, FDC_Format2HD_Side2Inc	; -> 0xF520C2
 	stb_erp	a, 251
 	extz	wa
-	calr	63912
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	287	; -> 0xF521E1
+	jrl	FdcOp_Epilogue20	; -> 0xF521E1
 FDC_Format2HD_Side2Inc:
 	incw 1, (xsp + 14)
 
@@ -8215,16 +8298,16 @@ FDC_Format2HD_Side1Body:
 	inc	4, xsp
 	ldb_erp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF5213F
+	jr	z, FDC_Format2HD_Side1Inc	; -> 0xF5213F
 	stb_erp	a, 251
 	extz	wa
-	calr	63787
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	162	; -> 0xF521E1
+	jrl	FdcOp_Epilogue20	; -> 0xF521E1
 FDC_Format2HD_Side1Inc:
 	incw 1, (xsp + 14)
 
@@ -8255,12 +8338,12 @@ FDC_Format2HD_FinalTrack:
 	ldb_erp	l, 251
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	8, xsp
 	cpib_erp	251, 0
-	jr	nz, 4	; -> 0xF521D7
+	jr	nz, FDC_Format2HD_SetSectorAndRet	; -> 0xF521D7
 	ld	hl, 1:i3
-	jr	10	; -> 0xF521E1
+	jr	FdcOp_Epilogue20	; -> 0xF521E1
 FDC_Format2HD_SetSectorAndRet:
 	stb_erp A, 0xfb
 	extz wa
@@ -8277,7 +8360,7 @@ GetMediaType:
 	push QIZ
 	call Reset_Floppy_Disk_Controller
 	pushw 0x0400
-	call 0xff06a3
+	call SLIDE_Decompress_4K_Init_Helper2
 	inc 2,XSP
 	ld (XSP+0x02),XHL
 	ld XWA,XHL
@@ -8413,7 +8496,7 @@ GetMediaType_Epilogue:
 
 	push xwa
 
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 
 	stb_erp A, 0xfb
 
@@ -8421,7 +8504,7 @@ GetMediaType_Epilogue:
 
 	pushw wa
 
-	calr 63190
+	calr FDC_StoreDiskType
 
 	inc 6, xsp
 
@@ -8454,13 +8537,13 @@ GetDiskFreeSpace:
 
 GetDiskFreeSpace_JumpTable:
 	ld	hl, 0:i3
-	jr	72
+	jr	GetDiskFreeSpace_Epilogue
 	ld	xwa, 0xb2400
 	ld	(xiz), xwa
-	jr	16
+	jr	FileIO_ReadFreeSpaceViaFAT
 	ld	xwa, 0x163e00
 	ld	(xiz), xwa
-	jr	7
+	jr	FileIO_ReadFreeSpaceViaFAT
 	.byte 0x40, 0x00
 	ld	xwa, 0x60b6000b
 
@@ -8510,7 +8593,7 @@ GetVolumeLabel:
 
 GetVolumeLabel_JumpTable:
 	ld	xhl, 0:i3
-	jrl	155
+	jrl	GetVolumeLabel_Return
 
 FileIO_ReadVolumeLabelEntry:
 	pushw 0xe4
@@ -8600,22 +8683,22 @@ PathInfo_BuildAndOpen:
 	pushw	20774
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	ld	xwa, xiz
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	pushw	228
 	pushw	20778
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16050067
+	call	FileOpen
 	add	xsp, 24
 	or	xhl, xhl
-	jr	nz, 4
+	jr	nz, PathInfo_CheckAttrib
 	ld	hl, 0:i3
-	jr	31
+	jr	PathInfo_RetVal
 PathInfo_CheckAttrib:
 	ld (xhl + 64), 0x28
 	setm 7, (xhl + 3)
@@ -8659,7 +8742,7 @@ FileIO_ParseLoop_AppendSlash:
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
 	ld	de, 0:i3
 	ld	xwa, (xiz)
@@ -8706,89 +8789,89 @@ _findfirst:
 
 FindFirst_AllocHandle:
 	pushw	8
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+8), xhl
 	ld	xwa, xhl
 	or	xwa, xwa
-	jr	nz, 8
+	jr	nz, FindFirst_AllocPathBuf
 	ld	xhl, 4294967295
-	jrl	227
+	jrl	FdcFile_Epilogue20
 FindFirst_AllocPathBuf:
 	pushw	260
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	nz, 18
+	jr	nz, FindFirst_ParseAndOpen
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	xhl, 4294967295
-	jrl	194
+	jrl	FdcFile_Epilogue20
 FindFirst_ParseAndOpen:
 	ld	xwa, (xsp+20)
 	ld	(xsp+12), xwa
 	ld	xwa, xiz
 	lda	xbc, (xsp+12)
-	calr	65305
+	calr	FileIO_ParsePathComponents
 	cp	hl, 0:i3
-	jr	z, 25
+	jr	z, FindFirst_OpenDir
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	ld	xwa, xiz
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	8, xsp
 	ld	xhl, 4294967295
-	jrl	151
+	jrl	FdcFile_Epilogue20
 FindFirst_OpenDir:
 	pushw	228
 	pushw	20784
 	ld	xwa, xiz
 	push	xwa
-	call	16050067
+	call	FileOpen
 	inc	8, xsp
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, 24
+	jr	nz, FindFirst_AllocPattern
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	ld	xwa, xiz
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	8, xsp
 	ld	xhl, 4294967295
-	jr	102
+	jr	FdcFile_Epilogue20
 FindFirst_AllocPattern:
 	ld	xwa, xiz
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	1, hl
 	pushw	hl
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	lda	xsp, (xsp+10)
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	nz, 17
+	jr	nz, FindFirst_CopyAndSearch
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	xhl, 4294967295
-	jr	54
+	jr	FdcFile_Epilogue20
 FindFirst_CopyAndSearch:
 	ld	xwa, (xsp+12)
 	push	xwa
 	push	xiz
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, (xsp+8)
 	ld	(xwa+4), xiz
@@ -8797,11 +8880,11 @@ FindFirst_CopyAndSearch:
 	ld	(xwa), xbc
 	ld	xwa, (xsp+8)
 	ld	xbc, (xsp+16)
-	calr	87
+	calr	_findnext
 	cp	hl, 0:i3
-	jr	nz, 5
+	jr	nz, FindFirst_FailAndClose
 	ld	xhl, (xsp+8)
-	jr	11
+	jr	FdcFile_Epilogue20
 FindFirst_FailAndClose:
 	ld xwa, (xsp + 8)
 	calr _findclose
@@ -8832,14 +8915,14 @@ FindClose_FreeResources:
 	ld	xwa, xiz
 	ld	xwa, (xwa)
 	push	xwa
-	call	16051286
+	call	FileClose
 	ld	xwa, xiz
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	ld	xwa, xiz
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	lda	xsp, (xsp+12)
 	ld	hl, 0:i3
 FindClose_Return:
@@ -9093,7 +9176,7 @@ SndTable_ByteBlock_ReadOps:
 	pop	sr
 	push	xsp
 	nop
-	jr	nz, 48
+	jr	nz, SndTable_ByteBlock_ReadOps_Code_Entry
 	ld	xbc, (0x2357a:24)
 	push	xbc
 	pushw	1024
@@ -9102,9 +9185,10 @@ SndTable_ByteBlock_ReadOps:
 	call	FileRead
 	lda	xsp, (xsp+12)
 	cp	hl, 0:i3
-	jr	lt, 3
+	jr	lt, SndTable_ByteBlock_ReadOps_Code_Skip
 	ld	hl, 0:i3
 	ret
+SndTable_ByteBlock_ReadOps_Code_Skip:
 	ld	xwa, (0x2357a:24)
 	ld	wa, (xwa+6)
 	and	wa, 0x7fff
@@ -9113,6 +9197,7 @@ SndTable_ByteBlock_ReadOps:
 	ret
 	ldw	hl, 0xffff
 	ret
+SndTable_ByteBlock_ReadOps_Code_Entry:
 	.byte 0xc2
 	or	xhl, xix
 	pop	sr
@@ -9178,7 +9263,7 @@ SndTable_ByteBlock_ReadOps:
 	ld	xbc, xwa
 	ld	wa, 3:i3
 	call	TaskMsg_Send
-	jr	71
+	jr	SndTable_ByteBlock_ReadOps_Code_Join
 	.byte 0xb6
 	push	sr
 	nop
@@ -9188,12 +9273,13 @@ SndTable_ByteBlock_ReadOps:
 	ld	xbc, (0x2272e:24)
 	sub	xbc, xwa
 	cp	xbc, 1024
-	jr	ugt, 14
+	jr	ugt, SndTable_ByteBlock_ReadOps_Code_Skip2
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, (0x2272e:24)
 	sub	xbc, xwa
 	ld	(xiz), bc
+SndTable_ByteBlock_ReadOps_Code_Skip2:
 	ldw (xiz+2), 0
 	ld	xwa, xiz
 	ld	xbc, xwa
@@ -9207,6 +9293,7 @@ SndTable_ByteBlock_ReadOps:
 	extz	xwa
 	cp xwa, (141102:24)
 	jrl	ule, -134
+SndTable_ByteBlock_ReadOps_Code_Join:
 	ld	(0x2357e:24), 0
 	call	Show_ScreenGroup_Entry_0x7A
 	pop	xiz
@@ -9216,10 +9303,11 @@ SndTable_ByteBlock_ReadOps:
 	dec	1, xwa
 	or	xbc, xbc
 	ret	z
+SndTable_ByteBlock_ReadOps_Code_Loop:
 	ld	xbc, xwa
 	dec	1, xwa
 	or	xbc, xbc
-	jr	nz, -8
+	jr	nz, SndTable_ByteBlock_ReadOps_Code_Loop
 	ret
 
 TaskBuf_ReadNextByte:
@@ -9426,16 +9514,17 @@ FDC_SectorCmd_ByteBlock:
 	ld	xiz, xwa
 	ld	wa, (0x2358c:24)
 	ld	xbc, xiz
-	calr	65445
+	calr	FDC_ExecuteSectorCommand
 	incw	1, (0x2358c:24)
 	cp	hl, 0:i3
-	jr	nz, 22
+	jr	nz, FDC_ExecuteSectorCommand_Epilogue
 	ld	de, (0x2358c:24)
 	lda	xwa, (xiz+512)
 	ld	xbc, xwa
 	ld	wa, de
-	calr	65419
+	calr	FDC_ExecuteSectorCommand
 	incw	1, (0x2358c:24)
+FDC_ExecuteSectorCommand_Epilogue:
 	pop	xiz
 	ret
 
@@ -9543,10 +9632,10 @@ FDC_DetectSector_CheckPianoDisc:
 	pushw	20790
 	lda	xwa, (148302:24)
 	push	xwa
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 3
+	jr	nz, FDC_DetectSector_ReturnPD3
 	ld	hl, 0:i3
 	ret
 FDC_DetectSector_ReturnPD3:
@@ -9680,7 +9769,7 @@ SeqDispatch_TrampolineBlock:
 	ret
 	ret
 	ret
-	calr	4418
+	calr	AccBuf_ResetAndReload
 	ret
 
 Seq_DispatcherEntry:
@@ -9781,7 +9870,7 @@ SeqCtl_CheckBit7:
 	ld	(12895:16), a
 	xor	a, a
 	bit	4, w
-	jr	z, 3
+	jr	z, SeqCtl_CheckBit4
 	or	a, 1
 SeqCtl_CheckBit4:
 	bit 5, w
@@ -9792,7 +9881,7 @@ SeqCtl_CheckBit5:
 	ld	(12897:16), a
 	xor	a, a
 	bit	2, w
-	jr	z, 3
+	jr	z, SeqCtl_CheckBit2
 	or	a, 1
 SeqCtl_CheckBit2:
 	bit 3, w
@@ -9819,7 +9908,7 @@ SeqCtl_StoreKeyMask:
 VoiceParam_ClampAndStore:
 	ld	l, (12889:16)
 	ld	h, (12891:16)
-	calr	15
+	calr	VoiceParam_ClampAndValidate
 	ld	(12889:16), l
 	and	h, 127
 	and	h, 7
@@ -10024,13 +10113,13 @@ AccChord_CheckModeAndUpdate:
 	ld	a, (12920:16)
 	or	a, (12921:16)
 	and	a, 63
-	jrl	z, 132	; -> 0xF5331C
+	jrl	z, AccChord_ReadKeysRet	; -> 0xF5331C
 	ld	a, (12860:16)
 	cp	a, 0:i3
-	jr	nz, 124	; -> 0xF5331C
+	jr	nz, AccChord_ReadKeysRet	; -> 0xF5331C
 	ld	a, (12864:16)
 	cp	a, (12860:16)
-	jr	z, 114	; -> 0xF5331C
+	jr	z, AccChord_ReadKeysRet	; -> 0xF5331C
 	ld	(12860:16), a
 	ld	(52803:16), a
 	ld	(36006:16), a
@@ -10046,7 +10135,7 @@ AccChord_CheckModeAndUpdate:
 	ld	(36008:16), a
 	ld	(8964:16), a
 	cp	a, (12865:16)
-	jr	nz, 5	; -> 0xF532ED
+	jr	nz, AccChord_CompareNoteC	; -> 0xF532ED
 	ld	(36008:16), 0
 AccChord_CompareNoteC:
 	.byte 0xc1, 0x3f, 0x32, 0x21, 0xf1, 0x3b, 0x32, 0x41

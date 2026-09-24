@@ -15,13 +15,13 @@ ParaLoadOpt_AudioFlagCheck:
 	ld	(xsp+4), a
 	ld	a, (48282:16)
 	bit	0, a
-	jr	z, 23
+	jr	z, ParaLoadOpt_CaseA
 	res	0, a
 	ld	(48282:16), a
 	ld	xwa, 5701638
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 ParaLoadOpt_CaseA:
 	ld a, (0x02475c:24)
 	cp a, (xsp + 2)
@@ -73,56 +73,57 @@ ParaLoadOpt_DispatchTable_A:
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	201
+	jrl	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024760:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	180
+	jrl	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024760:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	159
+	jrl	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024762:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	138
+	jrl	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024762:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	118
+	jr	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024764:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	98
+	jr	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024764:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	78
+	jr	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024766:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	58
+	jr	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024766:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	38
+	jr	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024768:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	18
+	jr	ParaLoadOpt_DispatchTable_A_Join
 	ld	(0x024768:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
+ParaLoadOpt_DispatchTable_A_Join:
 	call	ApPostEvent
 
 MidiFunc_SendEvtReturnAlt:
@@ -136,17 +137,17 @@ ParaLoadOpt_AudioFlagCheck_B:
 	ld	(xsp+4), a
 	ld	a, (48282:16)
 	bit	1, a
-	jr	z, 23
+	jr	z, ParaLoadOpt_CaseD
 	res	1, a
 	ld	(48282:16), a
 	ld	xwa, 5701649
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 ParaLoadOpt_CaseD:
 	ld	a, (48244:16)
 	bit	7, a
-	jr	z, 31
+	jr	z, ParaLoadOpt_CaseE
 	res	7, a
 	ld	(48244:16), a
 	ld	a, (xsp+2)
@@ -154,11 +155,11 @@ ParaLoadOpt_CaseD:
 	ld	xwa, 5701659
 	ld	xbc, 31457447
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 ParaLoadOpt_CaseE:
 	ld	a, (48248:16)
 	bit	7, a
-	jr	z, 30
+	jr	z, ParaLoadOpt_CaseF
 	res	7, a
 	ld	(48248:16), a
 	ld	a, (xsp)
@@ -166,19 +167,19 @@ ParaLoadOpt_CaseE:
 	ld	xwa, 5701659
 	ld	xbc, 31457447
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 ParaLoadOpt_CaseF:
 	ld	a, (48240:16)
 	bit	7, a
-	jrl	z, 296	; -> 0xF767F9
+	jrl	z, MidiFunc_SendEventReturn	; -> 0xF767F9
 	res	7, a
 	ld	(48240:16), a
 	ld	a, (xsp+4)
 	extz	wa
 	cp	wa, 0:i3
-	jrl	mi, 279	; -> 0xF767F9
+	jrl	mi, MidiFunc_SendEventReturn	; -> 0xF767F9
 	cp	wa, 12
-	jrl	gt, 272	; -> 0xF767F9
+	jrl	gt, MidiFunc_SendEventReturn	; -> 0xF767F9
 	add	wa, wa
 	lda	xix, (15203924:24)
 	ld_rrw	wa, xix, wa
@@ -193,56 +194,57 @@ ParaLoadOpt_DispatchTable_B:
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	201
+	jrl	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024760:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	180
+	jrl	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024760:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	159
+	jrl	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024762:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	138
+	jrl	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024762:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	118
+	jr	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024764:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	98
+	jr	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024764:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	78
+	jr	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024766:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	58
+	jr	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024766:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	38
+	jr	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024768:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	18
+	jr	ParaLoadOpt_DispatchTable_B_Join
 	ld	(0x024768:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
+ParaLoadOpt_DispatchTable_B_Join:
 	call	ApPostEvent
 
 MidiFunc_SendEventReturn:
@@ -511,21 +513,21 @@ ParaLoadOpt_GridCheck1:
 	ld xiz, 0x42
 
 ParaLoadOpt_GetViewAndCopy:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	36
+	jr	AccFunc_ReturnZeroJmp
 	ld	xwa, xiz
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+70)
 	ld	xbc, (xsp+16)
 	ld	xde, (xsp+12)
-	jr	15
+	jr	ParaLoadOpt_CallApFunc
 ParaLoadOpt_GridCheck2:
 	ld xwa, xiz
 	call GetViewInstance
@@ -591,11 +593,11 @@ ParaLoadOptGridCheck:
 	lda xix, (ParaLoadOpt_GridDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ParaLoadOpt_GridDispatch:
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
 	srl	xbc, 0
@@ -603,15 +605,15 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), hl
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 801
+	jrl	nz, ParaLoadOpt_ReturnZero
 	cp	hl, 8
-	jr	z, 106
+	jr	z, ParaLoadOpt_GridDispatch_Skip3
 	cp	hl, 7:i3
-	jr	z, 71
+	jr	z, ParaLoadOpt_GridDispatch_Skip2
 	cp	hl, 3:i3
-	jr	z, 36
+	jr	z, ParaLoadOpt_GridDispatch_Skip
 	cp	hl, 2:i3
-	jrl	nz, 782
+	jrl	nz, ParaLoadOpt_ReturnZero
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -621,7 +623,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
-	jrl	303
+	jrl	ParaLoadOpt_GridDispatch_Join
+ParaLoadOpt_GridDispatch_Skip:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -631,7 +634,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
-	jrl	272
+	jrl	ParaLoadOpt_GridDispatch_Join
+ParaLoadOpt_GridDispatch_Skip2:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -641,7 +645,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), xbc
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
-	jrl	241
+	jrl	ParaLoadOpt_GridDispatch_Join
+ParaLoadOpt_GridDispatch_Skip3:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -651,12 +656,12 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), xbc
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
-	jrl	210
-	call	16400579
+	jrl	ParaLoadOpt_GridDispatch_Join
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
 	srl	xbc, 0
@@ -664,15 +669,15 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), hl
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 618
+	jrl	nz, ParaLoadOpt_ReturnZero
 	cp	hl, 8
-	jrl	z, 127
+	jrl	z, ParaLoadOpt_GridDispatch_Skip6
 	cp	hl, 7:i3
-	jr	z, 85
+	jr	z, ParaLoadOpt_GridDispatch_Skip5
 	cp	hl, 3:i3
-	jr	z, 43
+	jr	z, ParaLoadOpt_GridDispatch_Skip4
 	cp	hl, 2:i3
-	jrl	nz, 598
+	jrl	nz, ParaLoadOpt_ReturnZero
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -684,7 +689,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
-	jr	112
+	jr	ParaLoadOpt_GridDispatch_Join
+ParaLoadOpt_GridDispatch_Skip4:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -696,7 +702,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
-	jr	74
+	jr	ParaLoadOpt_GridDispatch_Join
+ParaLoadOpt_GridDispatch_Skip5:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -708,7 +715,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
-	jr	36
+	jr	ParaLoadOpt_GridDispatch_Join
+ParaLoadOpt_GridDispatch_Skip6:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -720,8 +728,9 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
-	call	16382589
-	jrl	441
+ParaLoadOpt_GridDispatch_Join:
+	call	MainRamAdd
+	jrl	ParaLoadOpt_ReturnZero
 	ld	xix, xhl
 	ldw	(xiy), 1
 	ld	(xsp+16), xbc
@@ -730,7 +739,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xbc, xiz
 	lda	xde, (xhl+14)
 	.byte 0xa3, 0xf6
-	jr	nz, 44
+	jr	nz, ParaLoadOpt_GridDispatch_Skip7
 	ldw	(xwa), 2
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -740,16 +749,17 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	jrl	370
+	jrl	ParaLoadOptSendEvtReturn
+ParaLoadOpt_GridDispatch_Skip7:
 	lda	xhl, (xbc+1)
 	.byte 0xa4, 0xf3
-	jr	nz, 44
+	jr	nz, ParaLoadOpt_GridDispatch_Skip8
 	ldw	(xwa), 3
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -759,16 +769,17 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	jrl	319
+	jrl	ParaLoadOptSendEvtReturn
+ParaLoadOpt_GridDispatch_Skip8:
 	lda	xhl, (xbc+2)
 	.byte 0xa4, 0xf3
-	jr	nz, 44
+	jr	nz, ParaLoadOpt_GridDispatch_Skip9
 	ldw	(xwa), 7
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -778,16 +789,17 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	jrl	268
+	jrl	ParaLoadOptSendEvtReturn
+ParaLoadOpt_GridDispatch_Skip9:
 	inc	3, xbc
 	.byte 0xa4, 0xf1
-	jrl	nz, 265
+	jrl	nz, ParaLoadOpt_ReturnZero
 	ldw	(xwa), 8
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -797,13 +809,13 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	jrl	217
+	jrl	ParaLoadOptSendEvtReturn
 VoiceUI_MiscHandler:
 	ld xde, xhl
 	srl xde, 0

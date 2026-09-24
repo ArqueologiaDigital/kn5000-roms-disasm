@@ -221,21 +221,21 @@ PcgOutGrid_CopyStrBank1:
 	ld xiz, 0x42
 
 PcgOutGrid_CopyStrCommon:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	36
+	jr	PcgOutGrid_ReturnZero
 	ld	xwa, xiz
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+70)
 	ld	xbc, (xsp+16)
 	ld	xde, (xsp+12)
-	jr	15
+	jr	PcgOutGrid_CallDelegate
 PcgOutGrid_DispatchDelegate:
 	ld xwa, xiz
 	call GetViewInstance
@@ -324,7 +324,7 @@ PcgOutCheckGridDataStructure:
 	pushw 0x00e7
 	pushw 0xff9e
 	push XBC
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0a)
 	call GetFocusObject
 	ld XWA,XHL
@@ -339,13 +339,13 @@ PcgOutCheck_SendPreset1:
 	pushw	231
 	pushw	65444
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
-	jrl	440
+	jrl	PcgOutCheck_SetFinalProp
 PcgOutCheck_SendPreset2:
 	.byte 0xc2, 0x70, 0x47, 0x02, 0x3f, 0xff, 0x6e, 0x45
 	.byte 0x0b, 0xe7, 0x00, 0x0b, 0xaa, 0xff, 0x39, 0x1d
@@ -364,7 +364,7 @@ PcgOutCheck_SendPreset2Named:
 	pushw	231
 	pushw	65464
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -383,13 +383,13 @@ PcgOutCheck_SendPreset2Named:
 	pushw	65470
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
-	jrl	264	; -> 0xF7797B
+	jrl	PcgOutCheck_SetFinalProp	; -> 0xF7797B
 PcgOutCheck_SendPreset3:
 	.byte 0xb0, 0x02, 0x02, 0x00, 0xc2, 0x70, 0x47, 0x02
 	.byte 0x3f, 0xff, 0x6e, 0x6c, 0x0b, 0xe7, 0x00, 0x0b
@@ -413,7 +413,7 @@ PcgOutCheck_SendPreset3Named:
 	pushw	231
 	pushw	65498
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -428,7 +428,7 @@ PcgOutCheck_SendPreset3Named:
 	pushw	65504
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -447,7 +447,7 @@ PcgOutCheck_SendPreset3Named:
 	pushw	65510
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl

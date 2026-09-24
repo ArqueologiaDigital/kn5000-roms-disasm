@@ -121,7 +121,7 @@ SoundBank_InitTrack_ByteFields:
 	st_rrb	a, xhl, iy
 	inc	1, iy
 	cp	iy, 7:i3
-	jr	ule, -21
+	jr	ule, SoundBank_InitTrack_ByteFields
 	ld	a, (36302:16)
 	st_rrb	a, xhl, iy
 	ld	xhl, 20

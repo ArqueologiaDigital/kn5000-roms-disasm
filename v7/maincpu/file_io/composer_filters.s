@@ -46,20 +46,20 @@ CompLoad_HandleCancel:
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	call	16355414
+	call	UI_PostPartChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(32422:16), 0
 	ldw	wa, 238
-	jr	91
+	jr	CompLoad_CallStatusDisplay
 CompLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -70,21 +70,21 @@ CompLoad_HandleError:
 	jrl CompLoad_Return
 
 CompLoad_HandleSuccess:
-	calr	57104
+	calr	ResetProgressIndication
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	call	16355414
+	call	UI_PostPartChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(32422:16), 2
 	ldw	wa, 238
 CompLoad_CallStatusDisplay:
@@ -97,21 +97,21 @@ CompLoad_HandleAbort:
 
 CompLoad_HandleSelection:
 	ld	(32480:16), xde
-	call	16290274
+	call	GetCurrentFileIndex
 	ld	(32484:16), hl
 	cp	hl, 0:i3
-	jr	lt, 16
+	jr	lt, CompLoad_Selection_Negative
 	exts	xhl
 	ld	xwa, (32480:16)
 	ld	xbc, 31784962
 	ld	xde, xhl
-	jrl	463
+	jrl	CompLoad_DispatchWidget
 CompLoad_Selection_Negative:
 	ldw	(32484:16), 0
 	ld	xwa, (32480:16)
 	ld	xbc, 31784962
 	ld	xde, 0:i3
-	jrl	443
+	jrl	CompLoad_DispatchWidget
 CompLoad_HandleShow:
 	ld iz, 0:i3
 
@@ -125,13 +125,13 @@ CompLoad_DrawItemLoop:
 	stb_erp	c, 248
 	ld	(xhl), c
 	ld	bc, 3:i3
-	call	16289787
+	call	FileIO_CheckRecordByFile
 	cp	l, 0:i3
-	jr	z, 10
+	jr	z, CompLoad_DrawItem_Empty
 	ld	wa, iz
-	call	16290326
+	call	GetFileEntryPtr
 	ld	xbc, xhl
-	jr	5
+	jr	CompLoad_DrawItem_Continue
 CompLoad_DrawItem_Empty:
 	lda xbc, (DiskOp_ChannelCfgTable_0x80:24)
 
@@ -148,7 +148,7 @@ CompLoad_DrawItem_Continue:
 	pushw	6
 	pushw	0
 	ld	xwa, xhl
-	call	16289232
+	call	FileIO_ReadHeader_ParseLoop
 	ld	de, iz
 	sll	de, 5
 	lda	xbc, (33904:16)
@@ -156,22 +156,22 @@ CompLoad_DrawItem_Continue:
 	add	xde, xbc
 	ld	xwa, (32480:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 20
-	jr	lt, -112
-	jrl	330
+	jr	lt, CompLoad_DrawItemLoop
+	jrl	CompLoad_Return
 CompLoad_HandleScroll:
 	ld	wa, (32484:16)
 	ld	(xsp+2), wa
 	or	xde, xde
-	jr	nz, 37
+	jr	nz, CompLoad_PageScroll
 	cp	xbc, 29360152
-	jr	nz, 11
+	jr	nz, CompLoad_ScrollUp
 	cp	wa, 19
-	jrl	ge, 217
+	jrl	ge, CompLoad_GetSelection
 	inc	1, wa
-	jr	64
+	jr	CompLoad_StorePosition
 CompLoad_ScrollUp:
 	cp xbc, 0x1c00017
 	jrl nz, CompLoad_GetSelection
@@ -199,7 +199,7 @@ CompLoad_PageDown:
 
 CompLoad_StorePosition:
 	ld	(32484:16), wa
-	jrl	146
+	jrl	CompLoad_UpdateDisplay
 CompLoad_OpLoad:
 	cp xde, 0x3
 	jrl nz, CompLoad_GetSelection
@@ -214,47 +214,47 @@ CompLoad_OpLoad:
 CompLoad_HideButtons_Loop:
 	stb_erp	a, 248
 	extz	wa
-	call	16289576
+	call	FileIO_FormatName_Copy
 	inc	1, iz
 	cp	iz, 8
-	jr	lt, -17
+	jr	lt, CompLoad_HideButtons_Loop
 	ld	wa, 3:i3
-	call	16289556
+	call	FileIO_FormatName_Loop
 	ld	wa, 0:i3
-	calr	-8736
-	call	16283131
+	calr	InitializeOperationState
+	call	FileIO_ParseDirectoryEntry
 	ld	wa, hl
 	ld	bc, 1:i3
-	calr	-8097
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	calr	-8662
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	call	16355414
+	call	UI_PostPartChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
-	call	16355504
+	call	SoundCtrl_SendCommand
 CompLoad_GetSelection:
 	ld	wa, (32484:16)
 CompLoad_UpdateDisplay:
 	cp	(xsp+2), wa
-	jr	z, 78
-	call	16290296
+	jr	z, CompLoad_Return
+	call	NotifyUIOfSelectionChange
 	ld	de, (32484:16)
 	exts	xde
 	ld	xwa, (32480:16)
 	ld	xbc, 31784962
-	call	16423243
+	call	ApPostEvent
 	ld	de, (xsp+2)
 	sll	de, 5
 	lda	xbc, (33904:16)
@@ -262,7 +262,7 @@ CompLoad_UpdateDisplay:
 	add	xde, xbc
 	ld	xwa, (32480:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	ld	de, (32484:16)
 	sll	de, 5
 	lda	xbc, (33904:16)
@@ -382,16 +382,16 @@ FmmLoadFilterFunc:
 	dec	6, xsp
 	ld	(xsp+2), xde
 	cp	xbc, 29360152
-	jr	z, 96
+	jr	z, LoadFilter_HandleScroll
 	cp	xbc, 29360151
-	jr	z, 88
+	jr	z, LoadFilter_HandleScroll
 	cp	xbc, 29360139
-	jr	z, 19
+	jr	z, LoadFilter_HandleShow
 	cp	xbc, 31784964
-	jrl	nz, 425
+	jrl	nz, LoadFilter_Return
 	ld	xwa, (xsp+2)
 	ld	(32486:16), xwa
-	jrl	415
+	jrl	LoadFilter_Return
 LoadFilter_HandleShow:
 	ldw (xsp), 0x0
 
@@ -468,7 +468,7 @@ LoadFilter_UpdateDisplay:
 	lda	xde, (32490:16)
 	exts	xwa
 	add	xwa, xde
-	calr	-469
+	calr	RenderFilterDisplay
 	ld	xwa, (xsp+2)
 	extz	wa
 	sla	wa, 4
@@ -476,8 +476,8 @@ LoadFilter_UpdateDisplay:
 	lda_rr	xde, xbc, wa
 	ld	xwa, (32486:16)
 	ld	xbc, 29360143
-	call	16423243
-	jrl	185
+	call	ApPostEvent
+	jrl	LoadFilter_Return
 LoadFilter_OpLoad:
 	ld XWA,(XSP+0x02)
 	cp XWA,0x0000000a
@@ -587,16 +587,16 @@ FmmSaveFilterFunc:
 	dec	6, xsp
 	ld	(xsp+2), xde
 	cp	xbc, 29360152
-	jr	z, 96
+	jr	z, SaveFilter_HandleScroll
 	cp	xbc, 29360151
-	jr	z, 88
+	jr	z, SaveFilter_HandleScroll
 	cp	xbc, 29360139
-	jr	z, 19
+	jr	z, SaveFilter_HandleShow
 	cp	xbc, 31784964
-	jrl	nz, 848
+	jrl	nz, SaveFilter_Return
 	ld	xwa, (xsp+2)
 	ld	(32618:16), xwa
-	jrl	838
+	jrl	SaveFilter_Return
 SaveFilter_HandleShow:
 	ldw (xsp), 0x0
 
@@ -674,7 +674,7 @@ SaveFilter_UpdateDisplay:
 	lda	xde, (32622:16)
 	exts	xwa
 	add	xwa, xde
-	calr	-334
+	calr	RenderSaveFilterDisplay
 	ld	xwa, (xsp+2)
 	extz	wa
 	sla	wa, 4
@@ -682,7 +682,7 @@ SaveFilter_UpdateDisplay:
 	lda_rr	xde, xbc, wa
 	ld	xwa, (32618:16)
 	ld	xbc, 29360143
-	jrl	270
+	jrl	SaveFilter_DispatchWidget
 SaveFilter_SelectAll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x8
@@ -719,7 +719,7 @@ SaveFilter_DeselectAll:
 SaveFilter_DeselectAll_Loop:
 	ld	wa, (xsp)
 	extz	wa
-	call	16289650
+	call	FileIO_BuildRecordPath_Done
 	ld	wa, (xsp)
 	sll	wa, 4
 	lda	xbc, (32622:16)
@@ -727,7 +727,7 @@ SaveFilter_DeselectAll_Loop:
 	add	xwa, xbc
 	ld	bc, (xsp)
 	extz	bc
-	calr	-506
+	calr	RenderSaveFilterDisplay
 	ld	de, (xsp)
 	sll	de, 4
 	lda	xbc, (32622:16)
@@ -735,26 +735,26 @@ SaveFilter_DeselectAll_Loop:
 	add	xde, xbc
 	ld	xwa, (32618:16)
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	incw	1, (xsp)
 	.byte 0x97, 0x3f, 0x08, 0x00
-	jr	lt, -62
-	jrl	421
+	jr	lt, SaveFilter_DeselectAll_Loop
+	jrl	SaveFilter_Return
 SaveFilter_OpSave:
 	ld	xwa, (xsp+2)
 	cp	xwa, 10
-	jrl	nz, 199
-	call	16289600
+	jrl	nz, SaveFilter_OpFormat
+	call	FileIO_FormatName_Done
 	cp	hl, 0:i3
-	jrl	z, 190
-	calr	61681
+	jrl	z, SaveFilter_OpFormat
+	calr	SelectPasswordMode
 	cp	hl, 0:i3
-	jr	z, 18
+	jr	z, SaveFilter_Save_NoPwd
 	ld	xde, 0:i3
 	ld	e, (35184:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29687812
-	jr	44
+	jr	SaveFilter_DispatchWidget
 SaveFilter_Save_NoPwd:
 	call CheckFileSystemStatus
 	cp hl, 0:i3
@@ -777,69 +777,69 @@ SaveFilter_Save_Execute:
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	55275
-	call	16284320
+	calr	InitializeOperationState
+	call	FileIO_SaveAllRegions
 	ld	wa, hl
 	ld	bc, 5:i3
-	calr	55914
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	call	16290139
-	call	16290094
-	call	16290928
+	call	FileIO_ResetCurrentRecord
+	call	GetEncodedFreeSpaceData
+	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
-	calr	55333
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	call	16355414
+	call	UI_PostPartChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
-	jr	123
+	jr	SaveFilter_CallStatusDisplay
 SaveFilter_OpFormat:
 	ld	xwa, (xsp+2)
 	cp	xwa, 50
-	jr	nz, 118
+	jr	nz, SaveFilter_ResetAll
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	55150
-	call	16284320
+	calr	InitializeOperationState
+	call	FileIO_SaveAllRegions
 	ld	wa, hl
 	ld	bc, 5:i3
-	calr	55789
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	call	16290139
-	call	16290094
-	call	16290928
+	call	FileIO_ResetCurrentRecord
+	call	GetEncodedFreeSpaceData
+	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
-	calr	55208
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	call	16355414
+	call	UI_PostPartChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
 SaveFilter_CallStatusDisplay:
 	call SoundCtrl_SendCommand

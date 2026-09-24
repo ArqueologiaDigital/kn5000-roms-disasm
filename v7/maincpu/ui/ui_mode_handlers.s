@@ -98,18 +98,18 @@ EffectMode_ApplyTranspose_StoreTimer:
 	jr	0
 EffectMode_CheckTransposeAndLookup:
 	ld	xwa, 163840
-	call	16567398
+	call	AcApcToggleProc_Helper
 	bit	7, hl
 	ret	nz
-	calr	5
+	calr	SndParam_LoadTransposeValues
 	ld	(36028:16), hl
 	ret
 SndParam_LoadTransposeValues:
 	ld	xwa, 163840
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	(36942:16), l
 	ld	xwa, 163841
-	call	16567398
+	call	AcApcToggleProc_Helper
 	lda	xwa, (36942:16)
 	ld	(xwa+1), l
 	ld	(xwa+2), 72
@@ -117,7 +117,7 @@ SndParam_LoadTransposeValues:
 	push	xhl
 	push	xix
 	push	xiz
-	call	16068357
+	call	Rhythm_DispatchNote_Finalize
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -140,12 +140,12 @@ EffectMode_TimerCountdown:
 	cp	a, 0:i3
 	ret	nz
 	cpw	(36026:16), 0
-	jr	z, 11
+	jr	z, EffectMode_TimerCountdown_CheckMode
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	calr	-160
+	calr	EffectMode_ApplyTranspose
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -153,11 +153,11 @@ EffectMode_TimerCountdown:
 EffectMode_TimerCountdown_CheckMode:
 	ld	a, (35994:16)
 	cp	a, 197
-	jr	z, 10
+	jr	z, EffectMode_TimerCountdown_ResBit7
 	cp	a, 194
-	jr	z, 5
+	jr	z, EffectMode_TimerCountdown_ResBit7
 	cp	a, 193
-	jr	nz, 5
+	jr	nz, EffectMode_TimerCountdown_SetBit7
 EffectMode_TimerCountdown_ResBit7:
 	.byte 0xf1, 0x46, 0xb7, 0xb7	; resda 7, 0xb7e2 (v7 patched)
 
@@ -174,7 +174,7 @@ EffectMode_TimerCountdown_SetBit7:
 
 EffectMode_CheckTransposeChanged:
 	ld XWA,0x00028000
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	bit 0x07,HL
 	jr nz, EffectMode_TransposeInvalid
 	calr SndParam_LoadTransposeValues
@@ -190,9 +190,9 @@ EffectMode_ProcessPresetChange:
 	ld	bc, (36026:16)
 	ld	wa, bc
 	cp	bc, 0:i3
-	jr	z, 4
+	jr	z, EffectMode_ProcessPresetChange_CheckBit7
 	dec	1, wa
-	jr	6
+	jr	EffectMode_ProcessPresetChange_Apply
 EffectMode_ProcessPresetChange_CheckBit7:
 	.byte 0xf1, 0x46, 0xb7, 0xcf, 0x6e, 0x56
 EffectMode_ProcessPresetChange_Apply:
@@ -240,9 +240,9 @@ EffectMode_ClampAndLookupPreset:
 EffectMode_ClampAndLookup_Clamped:
 	ld	c, (35996:16)
 	cp	c, 194
-	jr	z, 5
+	jr	z, EffectMode_LookupPreset_BankC2C5
 	cp	c, 197
-	jr	nz, 7
+	jr	nz, EffectMode_LookupPreset_Bank7000
 EffectMode_LookupPreset_BankC2C5:
 	ld xbc, 0x986000	; = table_data STYLEREC_PTRTABLE_C2C5 (UI states 0xc2/0xc5); cross-ROM -- table_data assembles separately, constant stays literal
 	jr EffectMode_LookupPreset_Compute
@@ -263,16 +263,16 @@ EffectMode_DisplayPresetName:
 	pushw	iz
 	ld	c, (35996:16)
 	cp	c, 192
-	jr	z, 10
+	jr	z, EffectMode_DisplayName_ValidMode
 	cp	c, 194
-	jr	z, 5
+	jr	z, EffectMode_DisplayName_ValidMode
 	cp	c, 197
-	jr	nz, 119
+	jr	nz, EffectMode_DisplayName_Done
 EffectMode_DisplayName_ValidMode:
 	ld	wa, (36026:16)
 	ld	iz, wa
 	cp	wa, 0:i3
-	jr	z, 2
+	jr	z, EffectMode_DisplayName_CheckC2C5
 	dec	1, iz
 EffectMode_DisplayName_CheckC2C5:
 	cp c, 0xc2
@@ -383,15 +383,15 @@ EffectMode_SearchPresetTableC0_Next:
 EffectMode_UpdateDisplay:
 	push	xiz
 	ld	xiz, xwa
-	calr	389
+	calr	EffectMode_BackupParamBlock
 	ld	a, (36022:16)
 	bit	5, a
-	jr	z, 14
+	jr	z, EffectMode_UpdateDisplay_NoPatch
 	res	5, a
 	ld	(36022:16), a
 	ld	xwa, xiz
-	calr	62718
-	jr	3
+	calr	BitMapOut_ByteData_PatchTable
+	jr	EffectMode_UpdateDisplay_CopyVoice
 EffectMode_UpdateDisplay_NoPatch:
 	calr EffectMode_UpdateBitFlags
 
@@ -467,7 +467,7 @@ EffectMode_UpdateBitFlags:
 	ld	xwa, (36036:16)
 	ld	(xsp+8), xwa
 	ld	iy, 0:i3
-	jr	40
+	jr	EffectMode_UpdateBitFlags_Loop
 EffectMode_UpdateBitFlags_ProcessEntry:
 	ld a, (xix + 4)
 	extz wa
@@ -634,41 +634,41 @@ EffectMode_SetRegion_Apply:
 	ld	(xbc), a
 	ld	a, (35996:16)
 	cp	a, 194
-	jr	z, 5
+	jr	z, EffectMode_CheckPedalType
 	cp	a, 197
-	jr	nz, 71
+	jr	nz, EffectMode_PopIzRet
 EffectMode_CheckPedalType:
 	.byte 0xf1, 0x1e, 0x04, 0xca
-	jr	nz, 65
+	jr	nz, EffectMode_PopIzRet
 	ld	wa, (36026:16)
 	bit	0, wa
-	jr	z, 29
+	jr	z, EffectMode_SendPedalType_Bank1
 	ld	xwa, 164097
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	hl, 2:i3
-	jr	z, 43
+	jr	z, EffectMode_PopIzRet
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
 	ld	wa, 0:i3
-	call	16100806
+	call	AccReplay_SendPedalType5
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	27
+	jr	EffectMode_PopIzRet
 EffectMode_SendPedalType_Bank1:
 	ld	xwa, 164097
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	hl, 3:i3
-	jr	z, 14
+	jr	z, EffectMode_PopIzRet
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
 	ld	wa, 1:i3
-	call	16100806
+	call	AccReplay_SendPedalType5
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -769,32 +769,32 @@ EffectMode_ReinitWithFlag:
 EffectMode_CheckModeAndReinit:
 	ld	c, (35994:16)
 	cp	c, 120
-	jr	z, 41
+	jr	z, SndOutput_ReinitByMode
 	cp	c, 122
-	jr	z, 36
+	jr	z, SndOutput_ReinitByMode
 	ld	a, (35992:16)
 	cp	a, 2:i3
-	jr	z, 28
+	jr	z, SndOutput_ReinitByMode
 	cp	a, 1:i3
-	jr	z, 24
+	jr	z, SndOutput_ReinitByMode
 	cp	c, 133
-	jr	z, 19
+	jr	z, SndOutput_ReinitByMode
 	cp	c, 129
-	jr	z, 14
+	jr	z, SndOutput_ReinitByMode
 	cp	c, 127
-	jr	z, 9
+	jr	z, SndOutput_ReinitByMode
 	cp	c, 96
-	jr	z, 4
+	jr	z, SndOutput_ReinitByMode
 	cp	a, 7:i3
 	ret	nz
 SndOutput_ReinitByMode:
 	ld	xwa, 1025
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	hl, 3:i3
-	jr	z, 6
+	jr	z, SndOutput_ReinitByMode_TypeA
 	cp	hl, 2:i3
 	ret	nz
-	jr	4
+	jr	SndOutput_ReinitByMode_TypeB
 SndOutput_ReinitByMode_TypeA:
 	calr SndOutput_ReinitByMode_NotifyParam
 	ret
@@ -805,17 +805,17 @@ SndOutput_ReinitByMode_TypeB:
 	ld	wa, (36026:16)
 	ld	qiz, wa
 	ldw	(36028:16), 65535
-	calr	64171
+	calr	EffectMode_CheckTransposeChanged
 	ld	bc, (36026:16)
 	cp	bc, 0:i3
-	jr	z, 21
+	jr	z, SndOutput_ReinitByMode_Restore
 	dec	1, bc
 	ld	a, (36024:16)
 	extz	wa
 	add	bc, wa
 	ld	(36026:16), bc
-	calr	64189
-	call	15668425
+	calr	EffectMode_ProcessPresetChange
+	call	SwbtWr_ReinitOutputBank
 SndOutput_ReinitByMode_Restore:
 	ld	wa, qiz
 	ld	(36026:16), wa
@@ -1377,21 +1377,21 @@ VramTest_Done:
 
 SelfTest_FirmwareVersionCheck:
 	push	qiz
-	call	16776933
+	call	Get_Firmware_Version
 	cp	l, 119
-	jr	nz, 19
+	jr	nz, SelfTest_InterCPU_Send
 	ldw	wa, 251
-	call	16355459
-	call	15665495
+	call	UI_PostModeChangeEvent
+	call	SubCPU_PayloadErrorStore
 	ld	(36070:16), 2
-	jrl	404
+	jrl	EffectMode_PopRetFA
 SelfTest_InterCPU_Send:
 	ld	xwa, 61442
 	ldw	bc, 8
 	ld	xde, 36040
-	call	15676288
+	call	InterCPU_E2_Send
 	ld	xwa, 4194303
-	jr	20
+	jr	SelfTest_WaitBitLoop_Check
 SelfTest_WaitBitLoop_Copy:
 	ld xiy, 0x620
 	ld xix, 0x620
@@ -1476,9 +1476,9 @@ SelfTest_Diagnostic_Skip:
 SelfTest_SramAndRom:
 	ldib_erp	250, 0
 	ld	wa, 0:i3
-	calr	64548
+	calr	Test_SRAM_IC21
 	cp	hl, 0:i3
-	jr	z, 68	; -> 0xFB7063
+	jr	z, SelfTest_SramAndRom_CheckROM	; -> 0xFB7063
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	call	DeleteEvent
@@ -1511,9 +1511,9 @@ SelfTest_SramAndRom_CheckROM:
 	and	a, 9
 	ld	(36064:16), a
 	cp	a, 0:i3
-	jr	z, 70	; -> 0xFB70CA
+	jr	z, EffectMode_PopRetFA	; -> 0xFB70CA
 	cpib_erp	250, 0
-	jr	nz, 33	; -> 0xFB70AA
+	jr	nz, SelfTest_PostRomError	; -> 0xFB70AA
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	call	DeleteEvent
@@ -1525,11 +1525,11 @@ SelfTest_PostRomError:
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 15990791
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 EffectMode_PopRetFA:
 	popw_erp 0xfa
 	ret
@@ -1572,21 +1572,21 @@ EffectMode_CheckAndDispatch:
 	jr t, EffectMode_DispatchUpdate
 EffectMode_CheckAndDispatch_Bit4Clear:
 	bit	4, a
-	jr	z, 44
+	jr	z, EffectMode_DispatchUpdate
 	res	4, a
 	ld	(36068:16), a
 	ld	a, (36070:16)
 	cp	a, 0:i3
-	jr	z, 29
+	jr	z, EffectMode_DispatchUpdate
 	ld	(36070:16), 0
-	calr	116
-	calr	867
+	calr	EffectMode_RestoreSwbWr_NormalMode
+	calr	LED_SetAll_WithBlank
 	ld	(58136:16), 16
-	jr	11
+	jr	EffectMode_DispatchUpdate
 EffectMode_ResetDiagMode:
 	ld	(36070:16), 0
-	calr	852
-	calr	95
+	calr	LED_SetAll_WithBlank
+	calr	EffectMode_RestoreSwbWr_NormalMode
 EffectMode_DispatchUpdate:
 	.byte 0xc1, 0x9a, 0x8c, 0x3f, 0xf8, 0xf2, 0xe9, 0x71
 	.byte 0xfb, 0xe6, 0xc1, 0x9a, 0x8c, 0x3f, 0xf7, 0xf2
@@ -1687,26 +1687,26 @@ EffectMode_RestoreSwbWr_NormalMode:
 
 
 EffectMode_HandleTimerEvents:
-	call	16355372
+	call	CtrlPanel_GetSelectionState
 	cp	hl, 0:i3
 	ret	nz
 	ld	a, (36062:16)
 	cp	a, 150
-	jrl	z, 171
+	jrl	z, EffectMode_TimerEvent_Step96
 	cp	a, 120
-	jrl	z, 136
+	jrl	z, EffectMode_TimerEvent_Step78
 	cp	a, 90
-	jr	z, 102
+	jr	z, EffectMode_TimerEvent_Step5A
 	cp	a, 60
-	jr	z, 68
+	jr	z, EffectMode_TimerEvent_Step3C
 	cp	a, 30
-	jr	z, 34
+	jr	z, EffectMode_TimerEvent_Step1E
 	cp	a, 0:i3
-	jrl	nz, 167
+	jrl	nz, EffectMode_TimerEvent_Default
 	ld	xwa, 16252940
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
@@ -1716,7 +1716,7 @@ EffectMode_TimerEvent_Step1E:
 	ld	xwa, 16252942
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
@@ -1726,7 +1726,7 @@ EffectMode_TimerEvent_Step3C:
 	ld	xwa, 16252944
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
@@ -1736,7 +1736,7 @@ EffectMode_TimerEvent_Step5A:
 	ld	xwa, 16252934
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
@@ -1746,7 +1746,7 @@ EffectMode_TimerEvent_Step78:
 	ld	xwa, 16252936
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
@@ -1756,7 +1756,7 @@ EffectMode_TimerEvent_Step96:
 	ld	xwa, 16252938
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(36062:16), 220
 	ret
 EffectMode_TimerEvent_Default:
@@ -1767,43 +1767,43 @@ EffectMode_TimerEvent_Default:
 EffectMode_RunDiagSequence:
 	ld	a, (36062:16)
 	cp	a, 0:i3
-	jr	nz, 115
+	jr	nz, EffectMode_DiagSeq_AnimFrame
 	ld	xwa, 16252934
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
-	calr	63623
-	calr	63620
+	call	ApPostEvent
+	calr	A_Short_Pause
+	calr	A_Short_Pause
 	ld	xwa, 16252936
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
-	calr	63601
-	calr	63598
+	call	ApPostEvent
+	calr	A_Short_Pause
+	calr	A_Short_Pause
 	ld	xwa, 16252938
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
-	calr	63579
-	calr	63576
+	call	ApPostEvent
+	calr	A_Short_Pause
+	calr	A_Short_Pause
 	ld	xwa, 16252940
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
-	calr	63557
-	calr	63554
+	call	ApPostEvent
+	calr	A_Short_Pause
+	calr	A_Short_Pause
 	ld	xwa, 16252942
 	ld	xbc, 29360129
 	ld	xde, 0:i3
-	call	16423243
-	calr	63535
-	calr	63532
+	call	ApPostEvent
+	calr	A_Short_Pause
+	calr	A_Short_Pause
 	inc	1, (36062:16)
 	ret
 EffectMode_DiagSeq_AnimFrame:
 	ld	c, (36060:16)
 	cp	c, 0:i3
-	jr	nz, 61	; -> 0xFB7385
+	jr	nz, EffectMode_DiagSeq_DecrementDelay	; -> 0xFB7385
 	extz	wa
 	lda	xbc, (15433350:24)
 	ld	xde, 0:i3
@@ -1814,9 +1814,9 @@ EffectMode_DiagSeq_AnimFrame:
 	call	ApPostEvent
 	ld	a, (36062:16)
 	cp	a, 5:i3
-	jr	nz, 7	; -> 0xFB7379
+	jr	nz, EffectMode_DiagSeq_IncFrame	; -> 0xFB7379
 	ld	(36062:16), 1
-	jr	6	; -> 0xFB737F
+	jr	EffectMode_DiagSeq_SetDelay	; -> 0xFB737F
 EffectMode_DiagSeq_IncFrame:
 	inc	1, a
 	ld	(36062:16), a
@@ -1957,9 +1957,9 @@ EffectMode_MidiParseLoop:
 	push	xiz
 	lda	xiz, (36048:16)
 	ld	xwa, xiz
-	call	16540231
+	call	MIDI_ParseThreeByteParams
 	cp	hl, 65535
-	jr	z, 17
+	jr	z, EffectMode_MidiParse_Done
 EffectMode_MidiParse_Continue:
 	ld xwa, xiz
 	calr EffectMode_MidiSetLEDs
@@ -2031,7 +2031,7 @@ TEST2FUNC:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST2FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST2FUNC_DispatchReturn:
-	calr	0xfdd8
+	calr	EffectMode_ByteData_DiagEvents
 
 TableDispatch_Return3:
 	ld xhl, 0:i3
@@ -2073,7 +2073,7 @@ TEST4FUNC:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST4FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST4FUNC_DispatchReturn:
-	calr	0xfe22
+	calr	EffectMode_ModeChangeTransition
 
 TableDispatch_Return5:
 	ld xhl, 0:i3
@@ -2094,14 +2094,14 @@ TEST6FUNC:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST6FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST6FUNC_DispatchReturn:
-	calr	0xfe7e
+	calr	FDC_CommandAndPostEvent
 
 TableDispatch_Return:
 	ld xhl, 0:i3
 	ret
 
 BitmapFinpic_ByteData:
-	call	15665005
+	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
 	ld	a, (49124:16)
@@ -2109,13 +2109,13 @@ BitmapFinpic_ByteData:
 	ret	nz
 	cp	(49121:16), 0
 	ret	nz
-	call	16405594
+	call	GetTitleNow
 	cp	xhl, 27263222
 	ret	nz
 	ld	xwa, 4294967295
 	ld	xbc, 29360139
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ret
 BitmapFinpic:
 	cp xbc, 0x1e000a3
@@ -2394,7 +2394,7 @@ MasterSetup_DialTurn_ScrollUp:
 	ld	hl, bc
 	lda	xbc, (xsp+12)
 	cp	hl, 1000
-	jr	nc, 38
+	jr	nc, MasterSetup_ScrollUp_Overflow
 	ld	hl, (xde)
 	ld	wa, (xwa)
 	add	wa, hl
@@ -2407,14 +2407,14 @@ MasterSetup_DialTurn_ScrollUp:
 	ld_rrl	xwa, xde, wa
 	push	xwa
 	push	xbc
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	23
+	jr	MasterSetup_ScrollUp_UpdateView
 MasterSetup_ScrollUp_Overflow:
 	ld	xwa, (15443092:24)
 	push	xwa
 	push	xbc
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+78)
@@ -2442,10 +2442,10 @@ MasterSetup_ScrollUp_Search_Loop:
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 19
+	jr	nz, MasterSetup_ScrollUp_Search_Done
 	inc	1, iz
 MasterSetup_ScrollUp_Search_Check:
 	ld xwa, (xsp + 8)
@@ -2475,46 +2475,46 @@ MasterSetup_ScrollUp_Search_Done:
 	ld	xwa, (xsp+74)
 	ld	xbc, 29360143
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xwa, (xsp+74)
 	ld	xbc, 31457422
 	ld	xde, 4294901760
-	call	16421459
+	call	SendEvent
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+70)
 	ld	xbc, 29360152
 	ld	xde, (xsp+66)
-	jrl	1328
+	jrl	SeqFile_CallApFunc
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xsp+74)
-	call	16408153
+	call	GetViewInstance
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	xwa, (xsp+74)
 	ld	xbc, 31457360
 	ld	xde, (xsp+66)
-	call	16421459
+	call	SendEvent
 	or	xhl, xhl
-	jrl	z, 421
+	jrl	z, MasterSetup_FallbackEvent
 	ld	xwa, (xsp+74)
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	cp	hl, 0:i3
-	jrl	nz, 346
+	jrl	nz, MasterSetup_DialDown_SendPageEvent
 	ld	xbc, (xsp+8)
 	ld	xwa, (xbc+90)
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 272
+	jrl	nz, MasterSetup_DialDown_DecPage
 	ld	xbc, (xbc+78)
 	lda	xde, (xsp+12)
 	lda	xhl, (15443092:24)
 	.byte 0x91, 0x3f, 0x00, 0x00
-	jr	z, 25
+	jr	z, MasterSetup_DialDown_Underflow
 	ld	wa, (xbc)
 	dec	1, wa
 	ld	(xbc), wa
@@ -2522,9 +2522,9 @@ MasterSetup_ScrollUp_Search_Done:
 	ld_rrl	xwa, xhl, wa
 	push	xwa
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	23
+	jr	MasterSetup_DialDown_UpdateView
 MasterSetup_DialDown_Underflow:
 	ld XWA, (xhl + 0x176a)
 
@@ -2532,7 +2532,7 @@ MasterSetup_DialDown_Underflow:
 
 	push xde
 
-	call	16713584
+	call	Free_Compare2
 
 	inc 8, xsp
 
@@ -2569,10 +2569,10 @@ MasterSetup_DialDown_Search_Loop:
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 3
+	jr	nz, MasterSetup_DialDown_Search_Done
 	djnz16	iz, -46
 MasterSetup_DialDown_Search_Done:
 	cp iz, 0:i3
@@ -2670,48 +2670,48 @@ MasterSetup_FallbackEvent:
 	ld	xwa, (xsp+74)
 	ld	xbc, 31457425
 	ld	xde, (xsp+66)
-	call	16421459
+	call	SendEvent
 	or	xhl, xhl
-	jrl	z, 842
+	jrl	z, SeqFile_ReturnZeroJmp2
 	ld	xwa, (xsp+74)
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+70)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)
-	call	16401834
+	call	ApFuncCall
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)
-	call	16359856
+	call	SetAutoInc
 	ld	xwa, (xsp+74)
 	ld	xbc, 29360152
 	ld	xde, (xsp+66)
-	call	16359788
+	call	SetDialUp
 	ld	xwa, (xsp+74)
 	ld	xbc, 29360151
 	ld	xde, (xsp+66)
-	call	16359805
+	call	SetDialDown
 	ld	wa, 1:i3
-	jrl	584
+	jrl	MasterSetup_SetDialEnable
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xsp+74)
-	call	16408153
+	call	GetViewInstance
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	xwa, (xsp+74)
 	ld	xbc, 31457360
 	ld	xde, (xsp+66)
-	call	16421459
+	call	SendEvent
 	or	xhl, xhl
-	jrl	z, 450
+	jrl	z, MstStyleAlp_FallbackDispatch
 	ld	xwa, (xsp+74)
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xix, (xsp+8)
 	ld	xde, (xix+82)
 	ld	xbc, (xix+90)
@@ -2719,13 +2719,13 @@ MasterSetup_FallbackEvent:
 	muls	wa, 9
 	dec	1, wa
 	.byte 0x92, 0xf0
-	jrl	lt, 278
+	jrl	lt, MstStyleAlp_PageForward
 	ld	wa, (xde)
 	exts	xwa
 	divs	wa, 9
 	ld	wa, qwa
 	cp	wa, hl
-	jrl	nz, 342
+	jrl	nz, MstStyleAlp_SelectAndAutoInc
 	lda	xix, (xix+78)
 	ld	xwa, (xix)
 	ld	bc, (xde)
@@ -2734,7 +2734,7 @@ MasterSetup_FallbackEvent:
 	ld	hl, bc
 	lda	xbc, (15443092:24)
 	cp	hl, 1000
-	jr	nc, 36
+	jr	nc, MstStyleAlp_OverflowCopy
 	ld	hl, (xwa)
 	ld	de, (xde)
 	add	de, hl
@@ -2747,9 +2747,9 @@ MasterSetup_FallbackEvent:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	23
+	jr	MstStyleAlp_UpdateFocusIndex
 MstStyleAlp_OverflowCopy:
 	ld xwa, (xbc)
 
@@ -2759,7 +2759,7 @@ MstStyleAlp_OverflowCopy:
 
 	push xwa
 
-	call	16713584
+	call	Free_Compare2
 
 	inc 8, xsp
 
@@ -2794,10 +2794,10 @@ MstStyleAlp_CompareEntry:
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 19
+	jr	nz, MstStyleAlp_CompareComplete
 	inc	1, iz
 MstStyleAlp_CompareLoopCond:
 	ld xwa, (xsp + 8)
@@ -2922,23 +2922,23 @@ MasterSetup_SetDialEnable:
 
 MasterSetup_GetNameA:
 	ld	xwa, (xsp+74)
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+62)
 	push	xwa
 	ld	xwa, (xsp+70)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	159
+	jrl	SeqFile_ReturnZeroJmp2
 MasterSetup_GetNameB_DrawString:
 	ld	xwa, (xsp+74)
-	call	16408153
+	call	GetViewInstance
 	ld	xiz, xhl
 	ld	xwa, (xiz+66)
 	push	xwa
 	ld	xwa, (xsp+70)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	lda	xhl, (xsp+54)
 	ldw	(xhl), 14
 	lda	xbc, (xhl+2)
@@ -2962,7 +2962,7 @@ MasterSetup_GetNameB_DrawString:
 	.byte 0x90, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0x18, 0x0d
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+22)
 	lda	xwa, (xsp+50)
 	lda	xbc, (xsp+46)
@@ -2971,14 +2971,14 @@ MasterSetup_GetNameB_DrawString:
 	push	xhl
 	pushw 251
 	pushw 245
-	call	16434877
-	jr	38
+	call	DrawString
+	jr	SeqFile_ReturnZeroJmp2
 	ld	xwa, (xsp+74)
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+70)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)
-	jr	16
+	jr	SeqFile_CallApFunc
 MasterSetup_ForwardToChild:
 	ld xwa, (xsp + 74)
 	call GetViewInstance
@@ -3049,7 +3049,7 @@ MstStyleAlp_EventDispatch:
 	ld	xwa, 0x142000d
 	ld	xbc, 0x1e20018
 	call	MainFuncCall
-	jrl	408
+	jrl	EffectMode_SendEvent_Return
 
 MstStyleAlp_CellSelect:
 	call GetFocusObject
@@ -3132,9 +3132,9 @@ MstStyleAlp_OverflowStr:
 	pushw	3380
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	121
+	jr	MstStyleAlp_FinalSendEvent
 MstStyleAlp_CopyEntryAndPad:
 	ld WA,(XBC)
 	add WA,IX
@@ -3460,15 +3460,15 @@ MstStyle_GetNameB:
 	ld xiz, 0x42
 
 MstStyle_GetName_Load:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	20
+	jr	SeqFileAlt_ReturnZeroJmp
 MstStyle_ForwardToChild:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
@@ -3513,11 +3513,11 @@ MstStyle1GridCheck:
 
 ; MstStyle1GridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d8a)
 MstStyle1Grid_EventDispatch:
-	jrl	t, 0x0167
+	jrl	t, MstStyle1Grid_Epilogue
 MstStyle1Grid_CellSelect:
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
-	call	16408153
+	call	GetViewInstance
 	ld	(xsp+4), xhl
 	lda	xhl, (xsp+30)
 	ld	xwa, (xsp+38)
@@ -3542,7 +3542,7 @@ MstStyle1Grid_CellSelect:
 	sub	ix, 10
 	ld	wa, (xiz)
 	.byte 0x95, 0xf0
-	jrl	nz, 148
+	jrl	nz, MstStyle1Grid_BottomSection
 	ld	xwa, (xsp+4)
 	ld	xiy, (xwa+74)
 	ld	xwa, (xhl)
@@ -3553,17 +3553,17 @@ MstStyle1Grid_CellSelect:
 	sub	hl, wa
 	ld	wa, (xde)
 	cp	wa, hl
-	jr	ge, 105
+	jr	ge, MstStyle1Grid_OutOfRange
 	add	ix, wa
 	sla	ix, 3
 	ld	xwa, (xsp+8)
 	ld_rrl	xwa, xwa, ix
 	push	xwa
 	push	xbc
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	(xsp+10), 0
-	jr	23
+	jr	MstStyle1Grid_PadLeft_Check
 MstStyle1Grid_PadLeft_Loop:
 	pushw	1
 	pushw	237
@@ -3585,9 +3585,9 @@ MstStyle1Grid_OutOfRange:
 	pushw	237
 	pushw	3446
 	push	xbc
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	103
+	jr	MstStyle1Grid_CheckPlayAudio
 MstStyle1Grid_BottomSection:
 	.byte 0x92, 0x84, 0xdc, 0xec, 0x03, 0xaf, 0x08, 0x20
 	.byte 0xe3, 0x07, 0xe0, 0xf0, 0x20, 0x38, 0x39, 0x1d
@@ -4064,14 +4064,14 @@ MstStyle1Sub_SetDialEnable:
 
 MstStyle1Sub_GetNameA:
 	ld	xwa, (xsp+66)
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+62)
 	push	xwa
 	ld	xwa, (xsp+62)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	143
+	jrl	SeqFile_ReturnZeroJmp
 MstStyle1Sub_GetNameB_DrawString:
 	ld XWA,(XSP+0x42)
 	call GetViewInstance
@@ -4149,11 +4149,11 @@ MstStyle1SubGridCheck:
 
 ; MstStyle1SubGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0dc2)
 MstStyle1Sub_EventDispatch:
-	jrl	t, 0x015b
+	jrl	t, MstStyle1SubGrid_Epilogue
 MstStyle1SubGrid_CellSelect:
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
-	call	16408153
+	call	GetViewInstance
 	ld	(xsp+4), xhl
 	lda	xwa, (xsp+26)
 	ld	xbc, xiz
@@ -4176,7 +4176,7 @@ MstStyle1SubGrid_CellSelect:
 	sub	hl, 10
 	ld	wa, (xiz)
 	.byte 0x95, 0xf0
-	jrl	nz, 147
+	jrl	nz, MstStyle1SubGrid_BottomSection
 	ld	xwa, (xsp+4)
 	ld	xiy, (xwa+74)
 	ld	xwa, (xix)
@@ -4187,7 +4187,7 @@ MstStyle1SubGrid_CellSelect:
 	sub	ix, wa
 	ld	wa, (xbc)
 	cp	wa, ix
-	jr	gt, 104
+	jr	gt, MstStyle1SubGrid_OutOfRange
 	add	hl, wa
 	exts	xhl
 	sll	xhl, 3
@@ -4195,10 +4195,10 @@ MstStyle1SubGrid_CellSelect:
 	ld	xwa, (xhl)
 	push	xwa
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ldib_erp	251, 0
-	jr	23
+	jr	MstStyle1SubGrid_PadLeft_Check
 MstStyle1SubGrid_PadLeft_Loop:
 	pushw 0x1
 
@@ -4230,9 +4230,9 @@ MstStyle1SubGrid_OutOfRange:
 	pushw	237
 	pushw	3502
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	102
+	jr	MstStyle1SubGrid_CheckPlayAudio
 MstStyle1SubGrid_BottomSection:
 	.byte 0x91, 0x83, 0xeb, 0x13, 0xeb, 0xee, 0x03, 0xe2
 	.byte 0xd2, 0x40, 0x03, 0x83, 0xa3, 0x20, 0x38, 0x3a
@@ -5286,14 +5286,14 @@ MstStyle2_SetDialEnable:
 
 MstStyle2_GetNameA:
 	ld	xwa, (xsp+56)
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+62)
 	push	xwa
 	ld	xwa, (xsp+52)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	505
+	jrl	SeqData_ReturnZero
 MstStyle2_GetNameB_DrawString:
 	ld XWA,(XSP+0x38)
 	call GetViewInstance
@@ -5331,7 +5331,7 @@ MstStyle2_GetNameB_DrawString:
 	pushw 3536
 	lda	xwa, (xsp+34)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+20)
 	lda	xwa, (xsp+40)
 	lda	xbc, (xsp+36)
@@ -5340,26 +5340,26 @@ MstStyle2_GetNameB_DrawString:
 	push	xhl
 	pushw 251
 	pushw 245
-	call	16434877
+	call	DrawString
 	ld	xbc, (xiz+82)
 	ld	xwa, (xiz+78)
 	lda	xde, (xsp+18)
 	ld	wa, (xwa)
 	.byte 0x91, 0xf0
-	jr	nz, 68
+	jr	nz, MstStyle2_NameB_DrawLower
 	ld	xhl, (xiz+74)
 	ld	wa, (xbc)
 	sla	wa, 1
 	dec	1, wa
 	.byte 0x93, 0xf0
-	jr	le, 20
+	jr	le, MstStyle2_NameB_DrawCurrent
 	pushw 237
 	pushw 3540
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, 15535590
-	jr	73
+	jr	MstStyle2_NameB_Render
 MstStyle2_NameB_DrawCurrent:
 	exts	xwa
 	sll	xwa, 3
@@ -5369,10 +5369,10 @@ MstStyle2_NameB_DrawCurrent:
 	pushw	237
 	pushw	3564
 	push	xde
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	ld	xwa, 15535600
-	jr	39
+	jr	MstStyle2_NameB_Render
 MstStyle2_NameB_DrawLower:
 	ld	wa, (xbc)
 	sla	wa, 1
@@ -5385,14 +5385,14 @@ MstStyle2_NameB_DrawLower:
 	pushw	237
 	pushw	3574
 	push	xde
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	ld	xwa, 15535610
 MstStyle2_NameB_Render:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	lda	xbc, (xsp+36)
 	ldw	(xbc), 10
@@ -5414,7 +5414,7 @@ MstStyle2_NameB_Render:
 	push	xhl
 	pushw 251
 	pushw 245
-	call	16434877
+	call	DrawString
 	lda	xbc, (xsp+36)
 	ldw	(xbc), 267
 	lda	xhl, (xbc+2)
@@ -5435,7 +5435,7 @@ MstStyle2_NameB_Render:
 	push	xhl
 	pushw 251
 	pushw 245
-	call	16434877
+	call	DrawString
 	lda	xhl, (xsp+36)
 	ldw	(xhl), 145
 	lda	xbc, (xhl+2)
@@ -5462,7 +5462,7 @@ MstStyle2_NameB_Render:
 	pushw 3584
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+40)
 	lda	xbc, (xsp+36)
@@ -5471,8 +5471,8 @@ MstStyle2_NameB_Render:
 	push	xhl
 	pushw 255
 	pushw 247
-	call	16434877
-	jr	20
+	call	DrawString
+	jr	SeqData_ReturnZero
 MstStyle2_ForwardToChild:
 	ld xwa, (xsp + 56)
 	call GetViewInstance
@@ -5529,10 +5529,10 @@ MstGrid2_ScrollJumpTable:
 	ld	xbc, (xsp+62)
 	ld	(xsp+56), bc
 	cp	bc, 4:i3
-	jr	ge, 42
+	jr	ge, MstStyle2GridCheck_Skip
 	ld	xwa, (xhl+94)
 	cp	bc, (xwa)
-	jrl	gt, 683
+	jrl	gt, MstGrid2_Return
 	ld	wa, bc
 	exts	xwa
 	ld	xbc, xwa
@@ -5544,12 +5544,13 @@ MstGrid2_ScrollJumpTable:
 	extz	xde
 	ld	xwa, 0x142000d
 	ld	xbc, 0x1e20018
-	jr	46
+	jr	MstStyle2GridCheck_Join
+MstStyle2GridCheck_Skip:
 	ld	xwa, (xhl+98)
 	ld	wa, (xwa)
 	inc	5, wa
 	cp	bc, wa
-	jrl	gt, 637
+	jrl	gt, MstGrid2_Return
 	dec	5, bc
 	ld	wa, bc
 	exts	xwa
@@ -5562,8 +5563,9 @@ MstGrid2_ScrollJumpTable:
 	extz	xde
 	ld	xwa, 0x142000d
 	ld	xbc, 0x1e20018
+MstStyle2GridCheck_Join:
 	call	MainFuncCall
-	jrl	596
+	jrl	MstGrid2_Return
 
 MstGrid2_CellSelect:
 	call GetFocusObject
@@ -5612,19 +5614,19 @@ MstGrid2_CellSelect:
 	inc	5, bc
 	ld	wa, (xhl)
 	.byte 0x94, 0xf0
-	jrl	ge, 205
+	jrl	ge, MstGrid2_LowerSection
 	cp	de, 4:i3
-	jr	ge, 98
+	jr	ge, MstGrid2_UpperHalf
 	.byte 0x96, 0xf2
-	jr	gt, 86
+	jr	gt, MstGrid2_OutOfRange_LowCol
 	ld	xwa, (xiy)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	(xsp+18), 0
-	jr	23
+	jr	MstGrid2_PadLeft_CheckA
 MstGrid2_PadLeft_LoopA:
 	pushw	1
 	pushw	237
@@ -5644,31 +5646,31 @@ MstGrid2_PadLeft_CheckA:
 	add	xbc, (213206:24)
 	ld	xwa, (xbc)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
 	ld	a, (xsp+18)
 	extz	wa
 	cp	wa, bc
-	jr	c, -64
-	jrl	353
+	jr	c, MstGrid2_PadLeft_LoopA
+	jrl	MstGrid2_CheckPlayAudio
 MstGrid2_OutOfRange_LowCol:
 	ld xwa, Str_StoreTotalSetting_DE_0x188
 	jrl MstGrid2_CopyFallback
 
 MstGrid2_UpperHalf:
 	cp	de, bc
-	jr	gt, 91
+	jr	gt, MstGrid2_OutOfRange_HighCol
 	ld	xwa, (xsp+16)
 	ld	xwa, (xwa)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	(xsp+18), 0
-	jr	23
+	jr	MstGrid2_PadLeft_CheckB
 MstGrid2_PadLeft_LoopB:
 	pushw	1
 	pushw	237
@@ -5689,15 +5691,15 @@ MstGrid2_PadLeft_CheckB:
 	add	xbc, (213210:24)
 	ld	xwa, (xbc)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
 	ld	a, (xsp+18)
 	extz	wa
 	cp	wa, bc
-	jr	c, -66
-	jrl	250
+	jr	c, MstGrid2_PadLeft_LoopB
+	jrl	MstGrid2_CheckPlayAudio
 MstGrid2_OutOfRange_HighCol:
 	ld xwa, Str_StoreTotalSetting_DE_0x1AC
 	jrl MstGrid2_CopyFallback
@@ -5726,15 +5728,15 @@ MstGrid2_PadLeft_CheckC:
 	add	xbc, (213206:24)
 	ld	xwa, (xbc)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
 	ld	a, (xsp+18)
 	extz	wa
 	cp	wa, bc
-	jr	c, -64
-	jrl	148
+	jr	c, MstGrid2_PadLeft_LoopC
+	jrl	MstGrid2_CheckPlayAudio
 MstGrid2_OutOfRange_LowCol2:
 	ld xwa, Str_StoreTotalSetting_DE_0x1D0
 	jrl MstGrid2_CopyFallback
@@ -5767,15 +5769,15 @@ MstGrid2_PadLeft_CheckD:
 	add	xbc, (213210:24)
 	ld	xwa, (xbc)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
 	ld	a, (xsp+18)
 	extz	wa
 	cp	wa, bc
-	jr	c, -66
-	jr	23
+	jr	c, MstGrid2_PadLeft_LoopD
+	jr	MstGrid2_CheckPlayAudio
 MstGrid2_OutOfRange_HighCol2:
 	ld xwa, Str_StoreTotalSetting_DE_0x1F4
 	jr MstGrid2_CopyFallback
@@ -5787,7 +5789,7 @@ MstGrid2_CopyFallback:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 MstGrid2_CheckPlayAudio:
 	ld wa, (xsp + 54)
@@ -6119,21 +6121,21 @@ TchSens_GetNameB:
 	ld xiz, 0x42
 
 TchSens_GetName_Load:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	36
+	jr	TchSens_ReturnZeroJmp
 	ld	xwa, xiz
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+70)
 	ld	xbc, (xsp+16)
 	ld	xde, (xsp+12)
-	jr	15
+	jr	TchSens_CallApFunc
 TchSens_ForwardToChild:
 	ld xwa, xiz
 	call GetViewInstance
@@ -6176,11 +6178,11 @@ TchSensGridCheck:
 	lda xix, (TchSensGrid_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 TchSensGrid_EventDispatch:
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
@@ -6189,42 +6191,45 @@ TchSensGrid_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 16
+	jr	nz, TchSensGridCheck_Entry
 	cp	de, 1:i3
-	jr	nz, 12
+	jr	nz, TchSensGridCheck_Entry
 	ld	xwa, 256
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jrl	190
+	jrl	TchSensGridCheck_Join
+TchSensGridCheck_Entry:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 16
+	jr	nz, TchSensGridCheck_Entry2
 	cp	de, 4:i3
-	jr	nz, 12
+	jr	nz, TchSensGridCheck_Entry2
 	ld	xwa, 260
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jrl	168
+	jrl	TchSensGridCheck_Join
+TchSensGridCheck_Entry2:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 16
+	jr	nz, TchSensGridCheck_Entry3
 	cp	de, 5:i3
-	jr	nz, 12
+	jr	nz, TchSensGridCheck_Entry3
 	ld	xwa, 258
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jrl	146
+	jrl	TchSensGridCheck_Join
+TchSensGridCheck_Entry3:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 652
+	jrl	nz, TchSensGrid_ReturnZero
 	cp	de, 6:i3
-	jrl	nz, 647
+	jrl	nz, TchSensGrid_ReturnZero
 	ld	xwa, 259
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	123
-	call	16400579
+	jr	TchSensGridCheck_Join
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
@@ -6233,42 +6238,46 @@ TchSensGrid_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 16
+	jr	nz, TchSensGridCheck_Entry4
 	cp	de, 1:i3
-	jr	nz, 12
+	jr	nz, TchSensGridCheck_Entry4
 	ld	xwa, 256
 	ldw	bc, 65535
 	ld	de, 2:i3
-	jr	66
+	jr	TchSensGridCheck_Join
+TchSensGridCheck_Entry4:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 16
+	jr	nz, TchSensGridCheck_Entry5
 	cp	de, 4:i3
-	jr	nz, 12
+	jr	nz, TchSensGridCheck_Entry5
 	ld	xwa, 260
 	ldw	bc, 65535
 	ld	de, 2:i3
-	jr	44
+	jr	TchSensGridCheck_Join
+TchSensGridCheck_Entry5:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 16
+	jr	nz, TchSensGridCheck_Entry6
 	cp	de, 5:i3
-	jr	nz, 12
+	jr	nz, TchSensGridCheck_Entry6
 	ld	xwa, 258
 	ldw	bc, 65535
 	ld	de, 2:i3
-	jr	22
+	jr	TchSensGridCheck_Join
+TchSensGridCheck_Entry6:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 528
+	jrl	nz, TchSensGrid_ReturnZero
 	cp	de, 6:i3
-	jrl	nz, 523
+	jrl	nz, TchSensGrid_ReturnZero
 	ld	xwa, 259
 	ldw	bc, 65535
 	ld	de, 2:i3
-	call	16381237
-	jrl	506
+TchSensGridCheck_Join:
+	call	MainLswAdd
+	jrl	TchSensGrid_ReturnZero
 	lda	xix, (xde+4)
 	ld	xwa, (xde)
 	cp	xwa, 256
-	jr	nz, 51
+	jr	nz, TchSensGridCheck_Skip
 	lda	xwa, (xsp+14)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 1
@@ -6276,16 +6285,17 @@ TchSensGrid_EventDispatch:
 	ld	(xwa+4), xbc
 	.byte 0x94, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0xe0, 0x0e
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 31457420
-	jrl	438
+	jrl	TchSensGrid_SendEvent
+TchSensGridCheck_Skip:
 	ld	xwa, (xde)
 	cp	xwa, 260
-	jr	nz, 59
+	jr	nz, TchSensGridCheck_Skip3
 	lda	xwa, (xsp+14)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 4
@@ -6293,51 +6303,54 @@ TchSensGrid_EventDispatch:
 	ld	(xwa+4), xbc
 	ld	xwa, 15535848
 	.byte 0x94, 0x3f, 0x00, 0x00
-	jr	z, 5
+	jr	z, TchSensGridCheck_Skip2
 	ld	xwa, 15535844
+TchSensGridCheck_Skip2:
 	push	xwa
 	push	xbc
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 31457420
-	jrl	369
+	jrl	TchSensGrid_SendEvent
+TchSensGridCheck_Skip3:
 	lda	xiy, (xsp+14)
 	lda	xiz, (xsp+4)
 	lda	xbc, (xiy+2)
 	lda	xhl, (xiy+4)
 	ld	xwa, (xde)
 	cp	xwa, 258
-	jr	nz, 43
+	jr	nz, TchSensGridCheck_Skip4
 	ldw	(xiy), 1
 	ldw	(xbc), 5
 	ld	(xhl), xiz
 	.byte 0x94, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0xec, 0x0e
 	push	xiz
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 31457420
-	jrl	304
+	jrl	TchSensGrid_SendEvent
+TchSensGridCheck_Skip4:
 	ld	xwa, (xde)
 	cp	xwa, 259
-	jrl	nz, 297
+	jrl	nz, TchSensGrid_ReturnZero
 	ldw	(xiy), 1
 	ldw	(xbc), 6
 	ld	(xhl), xiz
 	.byte 0x94, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0xf0, 0x0e
 	push	xiz
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 31457420
-	jrl	250
+	jrl	TchSensGrid_SendEvent
 TchSensGrid_CellSelect:
 	lda xbc, (xsp + 0x0e)
 	ld XWA,XDE
@@ -6353,13 +6366,13 @@ TchSensGrid_CellSelect:
 	cpw (XWA), 0x0001
 	jr nz, .Lc_fba51b
 	ld XWA,0x00000100
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	pushw hl
 	pushw 0x00ed
 	pushw 0x0ef4
 	lda xwa, (xsp + 0x0a)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0a)
 	call GetFocusObject
 	ld XWA,XHL
@@ -6373,7 +6386,7 @@ TchSensGrid_CheckCell_1_4:
 	cpw (XWA), 0x0004
 	jr nz, TchSensGrid_CheckCell_1_5
 	ld XWA,0x00000104
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	ld XWA,Str_StoreTotalSetting_DE_0x270
 	cp hl, 0:i3
 	jr nz, TchSensGrid_Cell_1_4_Render
@@ -6382,13 +6395,13 @@ TchSensGrid_Cell_1_4_Render:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 31457420
-	jr	108
+	jr	TchSensGrid_SendEvent
 TchSensGrid_CheckCell_1_5:
 	.byte 0x91, 0x3f, 0x01, 0x00, 0x6e, 0x31, 0x90, 0x3f
 	.byte 0x05, 0x00, 0x6e, 0x2b, 0x40, 0x02, 0x01, 0x00
@@ -6602,21 +6615,21 @@ FSWAss_GetNameB:
 	ld xiz, 0x42
 
 FSWAss_GetName_Load:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	36
+	jr	FSWAss_ReturnZeroJmp
 	ld	xwa, xiz
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+70)
 	ld	xbc, (xsp+16)
 	ld	xde, (xsp+12)
-	jr	15
+	jr	FSWAss_CallApFunc
 FSWAss_ForwardToChild:
 	ld xwa, xiz
 	call GetViewInstance
@@ -6659,11 +6672,11 @@ FSWAssGridCheck:
 	lda xix, (FSWAssGrid_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 FSWAssGrid_EventDispatch:
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+260)
 	ld	xbc, xde
@@ -6672,21 +6685,21 @@ FSWAssGrid_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 68
+	jr	nz, FSWAssGridCheck_Entry
 	cp	de, 2:i3
-	jr	nz, 64
+	jr	nz, FSWAssGridCheck_Entry
 	ld	xwa, 10374
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	2228
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 2213
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10374
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	2206
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6694,23 +6707,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10374
 	ld	de, 2:i3
-	jrl	997
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 68
+	jr	nz, FSWAssGridCheck_Entry2
 	cp	de, 3:i3
-	jr	nz, 64
+	jr	nz, FSWAssGridCheck_Entry2
 	ld	xwa, 10376
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	2154
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 2139
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10376
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	2132
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6718,23 +6732,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10376
 	ld	de, 2:i3
-	jrl	923
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry2:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 68
+	jr	nz, FSWAssGridCheck_Entry3
 	cp	de, 4:i3
-	jr	nz, 64
+	jr	nz, FSWAssGridCheck_Entry3
 	ld	xwa, 10378
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	2080
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 2065
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10378
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	2058
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6742,23 +6757,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10378
 	ld	de, 2:i3
-	jrl	849
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry3:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 68
+	jr	nz, FSWAssGridCheck_Entry4
 	cp	de, 5:i3
-	jr	nz, 64
+	jr	nz, FSWAssGridCheck_Entry4
 	ld	xwa, 10380
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	2006
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 1991
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10380
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1984
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6766,23 +6782,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10380
 	ld	de, 2:i3
-	jrl	775
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry4:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 68
+	jr	nz, FSWAssGridCheck_Entry5
 	cp	de, 6:i3
-	jr	nz, 64
+	jr	nz, FSWAssGridCheck_Entry5
 	ld	xwa, 10382
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1932
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 1917
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10382
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1910
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6790,23 +6807,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10382
 	ld	de, 2:i3
-	jrl	701
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry5:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 68
+	jr	nz, FSWAssGridCheck_Entry6
 	cp	de, 7:i3
-	jr	nz, 64
+	jr	nz, FSWAssGridCheck_Entry6
 	ld	xwa, 10384
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1858
+	calr	AudioTable_FindMatchIndex
 	cp	l, 28
-	jrl	nc, 1843
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10384
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1836
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6814,23 +6832,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10384
 	ld	de, 2:i3
-	jrl	627
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry6:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 1794
+	jrl	nz, AudioTable_ReturnZero
 	cp	de, 8
-	jrl	nz, 1787
+	jrl	nz, AudioTable_ReturnZero
 	ld	xwa, 10368
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1780
+	calr	AudioTable_FindMatchIndex
 	cp	l, 30
-	jrl	nc, 1765
+	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10368
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1758
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6838,12 +6857,12 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10368
 	ld	de, 2:i3
-	jrl	549
-	call	16400579
+	jrl	FSWAssGridCheck_Join
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+260)
 	ld	xbc, xde
@@ -6852,21 +6871,21 @@ FSWAssGrid_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 67
+	jr	nz, FSWAssGridCheck_Entry7
 	cp	de, 2:i3
-	jr	nz, 63
+	jr	nz, FSWAssGridCheck_Entry7
 	ld	xwa, 10374
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1669
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1655
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10374
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1648
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6874,23 +6893,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10374
 	ld	de, 2:i3
-	jrl	439
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry7:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 67
+	jr	nz, FSWAssGridCheck_Entry8
 	cp	de, 3:i3
-	jr	nz, 63
+	jr	nz, FSWAssGridCheck_Entry8
 	ld	xwa, 10376
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1596
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1582
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10376
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1575
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6898,23 +6918,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10376
 	ld	de, 2:i3
-	jrl	366
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry8:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 67
+	jr	nz, FSWAssGridCheck_Entry9
 	cp	de, 4:i3
-	jr	nz, 63
+	jr	nz, FSWAssGridCheck_Entry9
 	ld	xwa, 10378
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1523
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1509
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10378
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1502
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6922,23 +6943,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10378
 	ld	de, 2:i3
-	jrl	293
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry9:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 67
+	jr	nz, FSWAssGridCheck_Entry10
 	cp	de, 5:i3
-	jr	nz, 63
+	jr	nz, FSWAssGridCheck_Entry10
 	ld	xwa, 10380
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1450
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1436
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10380
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1429
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6946,23 +6968,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10380
 	ld	de, 2:i3
-	jrl	220
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry10:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 67
+	jr	nz, FSWAssGridCheck_Entry11
 	cp	de, 6:i3
-	jr	nz, 63
+	jr	nz, FSWAssGridCheck_Entry11
 	ld	xwa, 10382
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1377
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1363
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10382
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1356
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6970,23 +6993,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10382
 	ld	de, 2:i3
-	jrl	147
+	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry11:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 66
+	jr	nz, FSWAssGridCheck_Entry12
 	cp	de, 7:i3
-	jr	nz, 62
+	jr	nz, FSWAssGridCheck_Entry12
 	ld	xwa, 10384
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1304
+	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
-	jrl	z, 1290
+	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10384
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1283
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -6994,23 +7018,24 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10384
 	ld	de, 2:i3
-	jr	75
+	jr	FSWAssGridCheck_Join
+FSWAssGridCheck_Entry12:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 1242
+	jrl	nz, AudioTable_ReturnZero
 	cp	de, 8
-	jrl	nz, 1235
+	jrl	nz, AudioTable_ReturnZero
 	ld	xwa, 10368
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1228
+	calr	AudioTable_FindMatchIndex
 	cp	l, 29
-	jrl	ule, 1213
+	jrl	ule, AudioTable_ReturnZero
 	ld	xwa, 10368
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
-	calr	1206
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (15535908:24)
@@ -7018,20 +7043,21 @@ FSWAssGrid_EventDispatch:
 	extz	bc
 	ld	xwa, 10368
 	ld	de, 2:i3
-	call	16381053
-	jrl	1167
+FSWAssGridCheck_Join:
+	call	MainLswPut
+	jrl	AudioTable_ReturnZero
 	lda	xix, (xde+4)
 	lda	xiy, (xsp+4)
 	ld	xwa, (xde)
 	cp	xwa, 10374
-	jr	nz, 76
+	jr	nz, FSWAssGridCheck_Skip
 	lda	xwa, (xsp+260)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 2
 	ld	(xwa+4), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	1136
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (15535940:24)
@@ -7041,24 +7067,25 @@ FSWAssGrid_EventDispatch:
 	pushw 4590
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
-	jrl	1071
+	jrl	AudioTable_SendEventAndContinue
+FSWAssGridCheck_Skip:
 	lda	xhl, (xsp+260)
 	lda	xbc, (xhl+4)
 	ld	xwa, (xde)
 	cp	xwa, 10376
-	jr	nz, 70
+	jr	nz, FSWAssGridCheck_Skip2
 	ldw	(xhl), 1
 	ldw	(xhl+2), 3
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	1048
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (15535940:24)
@@ -7068,22 +7095,23 @@ FSWAssGrid_EventDispatch:
 	pushw 4594
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
-	jrl	983
+	jrl	AudioTable_SendEventAndContinue
+FSWAssGridCheck_Skip2:
 	ld	xwa, (xde)
 	cp	xwa, 10378
-	jr	nz, 70
+	jr	nz, FSWAssGridCheck_Skip3
 	ldw	(xhl), 1
 	ldw	(xhl+2), 4
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	968
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (15535940:24)
@@ -7093,22 +7121,23 @@ FSWAssGrid_EventDispatch:
 	pushw 4598
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
-	jrl	903
+	jrl	AudioTable_SendEventAndContinue
+FSWAssGridCheck_Skip3:
 	ld	xwa, (xde)
 	cp	xwa, 10380
-	jr	nz, 70
+	jr	nz, FSWAssGridCheck_Skip4
 	ldw	(xhl), 1
 	ldw	(xhl+2), 5
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	888
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (15535940:24)
@@ -7118,23 +7147,24 @@ FSWAssGrid_EventDispatch:
 	pushw 4602
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
-	jrl	823
+	jrl	AudioTable_SendEventAndContinue
+FSWAssGridCheck_Skip4:
 	lda	xiz, (xhl+2)
 	ld	xwa, (xde)
 	cp	xwa, 10382
-	jr	nz, 69
+	jr	nz, FSWAssGridCheck_Skip5
 	ldw	(xhl), 1
 	ldw	(xiz), 6
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	806
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (15535940:24)
@@ -7144,22 +7174,23 @@ FSWAssGrid_EventDispatch:
 	pushw 4606
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
-	jrl	741
+	jrl	AudioTable_SendEventAndContinue
+FSWAssGridCheck_Skip5:
 	ld	xwa, (xde)
 	cp	xwa, 10384
-	jr	nz, 69
+	jr	nz, FSWAssGridCheck_Skip6
 	ldw	(xhl), 1
 	ldw	(xiz), 7
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	727
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (15535940:24)
@@ -7169,22 +7200,23 @@ FSWAssGrid_EventDispatch:
 	pushw 4610
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
-	jrl	662
+	jrl	AudioTable_SendEventAndContinue
+FSWAssGridCheck_Skip6:
 	ld	xwa, (xde)
 	cp	xwa, 10368
-	jrl	nz, 655
+	jrl	nz, AudioTable_ReturnZero
 	ldw	(xhl), 1
 	ldw	(xiz), 8
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	647
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (15535940:24)
@@ -7194,13 +7226,13 @@ FSWAssGrid_EventDispatch:
 	pushw 4614
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
-	jrl	582
+	jrl	AudioTable_SendEventAndContinue
 FSWAssGrid_CellSelect:
 	lda XBC,(XSP+0x0104)
 	ld XWA,XDE
@@ -7216,7 +7248,7 @@ FSWAssGrid_CellSelect:
 	cpw (XWA), 0x0002
 	jr nz, .Lc_fbaf8b
 	ld XWA,0x00002886
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -7229,7 +7261,7 @@ FSWAssGrid_CellSelect:
 	pushw 0x120a
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7243,7 +7275,7 @@ FSWAssGrid_CheckCell_1_3:
 	cpw (XWA), 0x0003
 	jr nz, .Lc_fbafdb
 	ld XWA,0x00002888
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -7256,7 +7288,7 @@ FSWAssGrid_CheckCell_1_3:
 	pushw 0x120e
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7270,7 +7302,7 @@ FSWAssGrid_CheckCell_1_4:
 	cpw (XWA), 0x0004
 	jr nz, .Lc_fbb02b
 	ld XWA,0x0000288a
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -7283,7 +7315,7 @@ FSWAssGrid_CheckCell_1_4:
 	pushw 0x1212
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7297,7 +7329,7 @@ FSWAssGrid_CheckCell_1_5:
 	cpw (XWA), 0x0005
 	jr nz, .Lc_fbb07b
 	ld XWA,0x0000288c
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -7310,7 +7342,7 @@ FSWAssGrid_CheckCell_1_5:
 	pushw 0x1216
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7324,7 +7356,7 @@ FSWAssGrid_CheckCell_1_6:
 	cpw (XWA), 0x0006
 	jr nz, .Lc_fbb0cb
 	ld XWA,0x0000288e
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -7337,7 +7369,7 @@ FSWAssGrid_CheckCell_1_6:
 	pushw 0x121a
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7351,7 +7383,7 @@ FSWAssGrid_CheckCell_1_7:
 	cpw (XWA), 0x0007
 	jr nz, .Lc_fbb11a
 	ld XWA,0x00002890
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -7364,7 +7396,7 @@ FSWAssGrid_CheckCell_1_7:
 	pushw 0x121e
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7378,7 +7410,7 @@ FSWAssGrid_CheckCell_1_8:
 	cpw (XWA), 0x0008
 	jr nz, AudioTable_ReturnZero
 	ld XWA,0x00002880
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -7391,7 +7423,7 @@ FSWAssGrid_CheckCell_1_8:
 	pushw 0x1222
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7435,8 +7467,8 @@ FswAsIniFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; FswAsIniFunc event dispatch (6-entry, event 0x1c00013, table 0xed1234)
 FswAsIni_EventDispatch:
-	calr	6
-	calr	30
+	calr	FSWAss_CheckAndNotify
+	calr	FSWAss_RefreshAllVoices
 
 SeqLoadFunc_ReturnZero:
 	ld xhl, 0:i3
@@ -7758,16 +7790,16 @@ PmExpFilter_DrawCellBank1:
 	push	xwa
 	.byte 0x0b, 0xed, 0x00, 0x0b, 0x04, 0x14
 	push	xde
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+280)
 	ld	xbc, 31457420
-	call	16421459
+	call	SendEvent
 	incm8	1, (xsp+10)
 	.byte 0x8f, 0x0a, 0x3f, 0x09
-	jr	c, -87
+	jr	c, PmExpFilter_DrawCellBank1
 	lda	xwa, (xsp+16)
 	ldw	(xwa+2), 6
 	ldw	(xwa+6), 23
@@ -7775,7 +7807,7 @@ PmExpFilter_DrawCellBank1:
 	ldw	(xwa+4), 315
 	ldw	bc, 193
 	ldw	de, 243
-	call	16437580
+	call	DrawDesignBox
 	lda	xde, (xsp+16)
 	ld	wa, (xde+4)
 	.byte 0x92, 0xa0
@@ -7797,7 +7829,7 @@ PmExpFilter_DrawCellBank1:
 	pushw 5128
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	lda	xwa, (xsp+16)
 	lda	xbc, (xsp+12)
@@ -7806,7 +7838,7 @@ PmExpFilter_DrawCellBank1:
 	push	xhl
 	pushw 0
 	pushw 247
-	jrl	197
+	jrl	PmExpFilter_DrawCentered
 PmExpFilter_DrawCellBank2:
 .Lc_fbb5f9:
 	lda XBC,(XSP+0x0118)
@@ -7826,7 +7858,7 @@ PmExpFilter_DrawCellBank2:
 	pushw 0x00ed
 	pushw 0x1412
 	push XDE
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7835,7 +7867,7 @@ PmExpFilter_DrawCellBank2:
 	call SendEvent
 	incm8	1, (xsp+10)
 	.byte 0x8f, 0x0a, 0x3f, 0x09
-	jr	c, -87
+	jr	c, PmExpFilter_DrawCellBank2
 	lda	xwa, (xsp+16)
 	ldw	(xwa+2), 6
 	ldw	(xwa+6), 23
@@ -7843,7 +7875,7 @@ PmExpFilter_DrawCellBank2:
 	ldw	(xwa+4), 315
 	ldw	bc, 193
 	ldw	de, 243
-	call	16437580
+	call	DrawDesignBox
 	lda	xde, (xsp+16)
 	ld	wa, (xde+4)
 	.byte 0x92, 0xa0
@@ -7865,7 +7897,7 @@ PmExpFilter_DrawCellBank2:
 	pushw 5142
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	lda	xwa, (xsp+16)
 	lda	xbc, (xsp+12)
@@ -8039,21 +8071,21 @@ PmExpFilter_GetNameB:
 	ld xiz, 0x42
 
 PmExpFilter_GetNameCommon:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+292)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	44
+	jr	SeqLoad_ReturnZeroJmp
 	ld	xwa, xiz
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+70)
 	ld	xbc, (xsp+292)
 	ld	xde, (xsp+288)
-	jr	19
+	jr	PmExpFilter_ForwardApFunc
 PmExpFilter_ForwardToView:
 	ld xwa, xiz
 	call GetViewInstance
@@ -8153,20 +8185,21 @@ PmExpFilter_EventDispatch:
 	sla	wa, 2
 	dec	8, wa
 	cp	c, 2:i3
-	jr	z, 35
+	jr	z, PmExpFilterGridCheck_Skip
 	cp	c, 1:i3
-	jrl	nz, 598
+	jrl	nz, SeqLoad_StoreReturnZero
 	cp	de, 2:i3
-	jrl	lt, 593
+	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
-	jrl	gt, 586
+	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (ParamStr02_Vocalist_0x52:24)
 	ld_rrl	xwa, xbc, wa
 	ldw	bc, 65535
 	ld	de, 2:i3
-	jrl	148
+	jrl	PmExpFilterGridCheck_Join
+PmExpFilterGridCheck_Skip:
 	cp	de, 2:i3
-	jrl	lt, 563
+	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, 556
 	lda	xbc, (ParamStr02_Vocalist_0x76:24)
@@ -8197,26 +8230,28 @@ PmExpFilter_EventDispatch:
 	jrl	nz, 488
 	ld	c, (213218:24)
 	cp	c, 2:i3
-	jr	z, 33
+	jr	z, PmExpFilterGridCheck_Skip2
 	cp	c, 1:i3
-	jrl	nz, 474
+	jrl	nz, SeqLoad_StoreReturnZero
 	cp	de, 2:i3
-	jrl	lt, 469
+	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
-	jrl	gt, 462
+	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (ParamStr02_Vocalist_0x52:24)
 	ld_rrl	xwa, xbc, wa
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	26
+	jr	PmExpFilterGridCheck_Join
+PmExpFilterGridCheck_Skip2:
 	cp	de, 2:i3
-	jrl	lt, 441
+	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
-	jrl	gt, 434
+	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (ParamStr02_Vocalist_0x76:24)
 	ld_rrl	xwa, xbc, wa
 	ld	bc, 1:i3
 	ld	de, 2:i3
+PmExpFilterGridCheck_Join:
 	call	MainLswAdd
 	jrl	413
 	ld	a, (213218:24)
@@ -8338,11 +8373,11 @@ PmExpFilterCheck_AltDecode:
 	jr	gt, 34	; -> 0xFBBC1E
 	lda	xwa, (15537234:24)
 	ld_rrl	xwa, xwa, bc
-	call	16567398
+	call	AcApcToggleProc_Helper
 	lda	xbc, (xsp)
 	ld	xwa, 15537298
 	cp	hl, 0:i3
-	jr	nz, 5	; -> 0xFBBC1A
+	jr	nz, PmExpFilterCheck_PushNameB	; -> 0xFBBC1A
 	ld	xwa, 15537294
 PmExpFilterCheck_PushNameB:
 	push xwa
@@ -8355,11 +8390,11 @@ PmExpFilterCheck_PushDefault:
 	push xde
 
 PmExpFilterCheck_StrcpySend:
-	call	16713584
+	call	Free_Compare2
 
 	inc 8, xsp
 
-	call	16400579
+	call	GetFocusObject
 
 	ld xwa, xhl
 
@@ -8450,58 +8485,58 @@ DispTimeSet_SelectInit:
 	ld	xwa, xiz
 	ld	xbc, (xsp+16)
 	ld	xde, (xsp+12)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xsp+12)
 	or	xwa, xwa
-	jrl	nz, 491
+	jrl	nz, SeqSave_ReturnZeroJmp
 	ld	wa, 5:i3
-	call	16535254
+	call	PanelDisplay_DispatchByMode
 	cp	hl, 0:i3
-	jrl	z, 480
+	jrl	z, SeqSave_ReturnZeroJmp
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16421459
+	call	SendEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16421701
+	call	PostEvent
 	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16421701
+	call	PostEvent
 	ld	xwa, 21102606
 	ld	xbc, 31588373
 	ld	xde, (xsp+12)
-	call	16402006
-	jrl	404
+	call	MainFuncCall
+	jrl	SeqSave_ReturnZeroJmp
 	ld	xwa, xiz
 	ld	xbc, (xsp+16)
 	ld	xde, (xsp+12)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, xiz
 	ld	xbc, 31457360
 	ld	xde, (xsp+12)
-	call	16421459
+	call	SendEvent
 	or	xhl, xhl
-	jr	z, 51
+	jr	z, DispTimeSet_DialFallback
 	ld	xwa, xiz
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	dec	1, hl
 	extz	xhl
 	add	xhl, 4294901760
 	ld	xwa, xiz
 	ld	xbc, 29360142
 	ld	xde, xhl
-	call	16421459
+	call	SendEvent
 	ld	xwa, xiz
 	ld	xbc, (xsp+16)
 	ld	xde, (xsp+12)
-	call	16359856
-	jrl	323
+	call	SetAutoInc
+	jrl	SeqSave_ReturnZeroJmp
 DispTimeSet_DialFallback:
 	ld xwa, xiz
 	ld xbc, 0x1e00091
@@ -8597,21 +8632,21 @@ DispTimeSet_GetNameB:
 	ld xiz, 0x42
 
 DispTimeSet_GetNameCommon:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	36
+	jr	SeqSave_ReturnZeroJmp
 	ld	xwa, xiz
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+70)
 	ld	xbc, (xsp+16)
 	ld	xde, (xsp+12)
-	jr	15
+	jr	DispTimeSet_CallApFunc
 DispTimeSet_CellSelectFwd:
 	ld xwa, xiz
 	call GetViewInstance
@@ -8654,11 +8689,11 @@ DispTimeSetGridCheck:
 	lda xix, (DispTimeSet_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 DispTimeSet_EventDispatch:
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+40)
 	ld	xbc, xde
@@ -8667,9 +8702,9 @@ DispTimeSet_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 40
+	jr	nz, DispTimeSetGridCheck_Entry
 	cp	de, 2:i3
-	jr	nz, 36
+	jr	nz, DispTimeSetGridCheck_Entry
 	lda	xwa, (xsp+8)
 	lda	xbc, (213222:24)
 	ld	(xwa), xbc
@@ -8680,11 +8715,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	555
+	jrl	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Entry:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 40
+	jr	nz, DispTimeSetGridCheck_Entry2
 	cp	de, 3:i3
-	jr	nz, 36
+	jr	nz, DispTimeSetGridCheck_Entry2
 	lda	xwa, (xsp+8)
 	lda	xbc, (213224:24)
 	ld	(xwa), xbc
@@ -8695,11 +8731,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	509
+	jrl	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Entry2:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 37
+	jr	nz, DispTimeSetGridCheck_Entry3
 	cp	de, 4:i3
-	jr	nz, 33
+	jr	nz, DispTimeSetGridCheck_Entry3
 	lda	xwa, (xsp+8)
 	lda	xbc, (213226:24)
 	ld	(xwa), xbc
@@ -8710,11 +8747,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	466
+	jrl	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Entry3:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 40
+	jr	nz, DispTimeSetGridCheck_Entry4
 	cp	de, 5:i3
-	jr	nz, 36
+	jr	nz, DispTimeSetGridCheck_Entry4
 	lda	xwa, (xsp+8)
 	lda	xbc, (213228:24)
 	ld	(xwa), xbc
@@ -8725,11 +8763,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
-	jrl	420
+	jrl	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Entry4:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jr	nz, 40
+	jr	nz, DispTimeSetGridCheck_Entry5
 	cp	de, 6:i3
-	jr	nz, 36
+	jr	nz, DispTimeSetGridCheck_Entry5
 	lda	xwa, (xsp+8)
 	lda	xbc, (213230:24)
 	ld	(xwa), xbc
@@ -8740,11 +8779,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
-	jrl	374
+	jrl	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Entry5:
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 1199
+	jrl	nz, DispTimeSet_ReturnZero
 	cp	de, 7:i3
-	jrl	nz, 1194
+	jrl	nz, DispTimeSet_ReturnZero
 	lda	xwa, (xsp+8)
 	lda	xbc, (213232:24)
 	ld	(xwa), xbc
@@ -8755,12 +8795,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
-	jrl	326
-	call	16400579
+	jrl	DispTimeSetGridCheck_Join
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xde, xhl
 	lda	xiy, (xsp+40)
 	ld	xwa, xde
@@ -8770,9 +8810,9 @@ DispTimeSet_EventDispatch:
 	ld	iz, de
 	ld	(xiy+2), iz
 	.byte 0x95, 0x3f, 0x01, 0x00
-	jr	nz, 43
+	jr	nz, DispTimeSetGridCheck_Entry6
 	cp	iz, 2:i3
-	jr	nz, 39
+	jr	nz, DispTimeSetGridCheck_Entry6
 	lda	xwa, (xsp+8)
 	lda	xbc, (213222:24)
 	ld	(xwa), xbc
@@ -8783,11 +8823,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	240
+	jrl	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Entry6:
 	.byte 0x95, 0x3f, 0x01, 0x00
-	jr	nz, 43
+	jr	nz, DispTimeSetGridCheck_Entry7
 	cp	iz, 3:i3
-	jr	nz, 39
+	jr	nz, DispTimeSetGridCheck_Entry7
 	lda	xwa, (xsp+8)
 	lda	xbc, (213224:24)
 	ld	(xwa), xbc
@@ -8798,11 +8839,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	191
+	jrl	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Entry7:
 	.byte 0x95, 0x3f, 0x01, 0x00
-	jr	nz, 40
+	jr	nz, DispTimeSetGridCheck_Entry8
 	cp	iz, 4:i3
-	jr	nz, 36
+	jr	nz, DispTimeSetGridCheck_Entry8
 	lda	xwa, (xsp+8)
 	lda	xbc, (213226:24)
 	ld	(xwa), xbc
@@ -8813,11 +8855,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	145
+	jrl	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Entry8:
 	.byte 0x95, 0x3f, 0x01, 0x00
-	jr	nz, 42
+	jr	nz, DispTimeSetGridCheck_Skip
 	cp	iz, 5:i3
-	jr	nz, 38
+	jr	nz, DispTimeSetGridCheck_Skip
 	lda	xwa, (xsp+8)
 	lda	xbc, (213228:24)
 	ld	(xwa), xbc
@@ -8828,16 +8871,17 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
-	jr	97
+	jr	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Skip:
 	lda	xwa, (xsp+8)
 	lda	xbc, (xwa+4)
 	lda	xhl, (xwa+6)
 	lda	xde, (xwa+10)
 	lda	xix, (xwa+14)
 	.byte 0x95, 0x3f, 0x01, 0x00
-	jr	nz, 35
+	jr	nz, DispTimeSetGridCheck_Entry9
 	cp	iz, 6:i3
-	jr	nz, 31
+	jr	nz, DispTimeSetGridCheck_Entry9
 	lda	xiy, (213230:24)
 	ld	(xwa), xiy
 	ldw	(xbc), 1
@@ -8847,11 +8891,12 @@ DispTimeSet_EventDispatch:
 	ld	(xhl), xbc
 	ld	xbc, 1:i3
 	ld	(xde), xbc
-	jr	41
+	jr	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Entry9:
 	.byte 0x95, 0x3f, 0x01, 0x00
-	jrl	nz, 866
+	jrl	nz, DispTimeSet_ReturnZero
 	cp	iz, 7:i3
-	jrl	nz, 861
+	jrl	nz, DispTimeSet_ReturnZero
 	lda	xiy, (213232:24)
 	ld	(xwa), xiy
 	ldw	(xbc), 1
@@ -8861,12 +8906,13 @@ DispTimeSet_EventDispatch:
 	ld	(xhl), xbc
 	ld	xbc, 1:i3
 	ld	(xde), xbc
-	call	16382589
-	jrl	825
+DispTimeSetGridCheck_Join:
+	call	MainRamAdd
+	jrl	DispTimeSet_ReturnZero
 	lda	xwa, (213222:24)
 	lda	xiy, (xde+14)
 	.byte 0xa2, 0xf0
-	jr	nz, 64
+	jr	nz, DispTimeSetGridCheck_Skip2
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 2
@@ -8881,16 +8927,17 @@ DispTimeSet_EventDispatch:
 	pushw 237
 	pushw 5458
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
-	jrl	745
+	jrl	DispTimeSet_SendEventReturn
+DispTimeSetGridCheck_Skip2:
 	lda	xwa, (213224:24)
 	.byte 0xa2, 0xf0
-	jr	nz, 64
+	jr	nz, DispTimeSetGridCheck_Skip3
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 3
@@ -8905,18 +8952,19 @@ DispTimeSet_EventDispatch:
 	pushw 237
 	pushw 5462
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
-	jrl	672
+	jrl	DispTimeSet_SendEventReturn
+DispTimeSetGridCheck_Skip3:
 	lda	xbc, (213226:24)
 	lda	xwa, (15537334:24)
 	ld	(xsp+4), xwa
 	.byte 0xa2, 0xf1
-	jr	nz, 62
+	jr	nz, DispTimeSetGridCheck_Skip4
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 4
@@ -8931,16 +8979,17 @@ DispTimeSet_EventDispatch:
 	pushw 237
 	pushw 5466
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
-	jrl	593
+	jrl	DispTimeSet_SendEventReturn
+DispTimeSetGridCheck_Skip4:
 	lda	xwa, (213228:24)
 	.byte 0xa2, 0xf0
-	jr	nz, 62
+	jr	nz, DispTimeSetGridCheck_Skip5
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 5
@@ -8955,20 +9004,21 @@ DispTimeSet_EventDispatch:
 	pushw 237
 	pushw 5470
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
-	jrl	522
+	jrl	DispTimeSet_SendEventReturn
+DispTimeSetGridCheck_Skip5:
 	lda	xiz, (213230:24)
 	lda	xhl, (xsp+40)
 	lda	xix, (xsp+30)
 	lda	xwa, (xhl+2)
 	lda	xbc, (xhl+4)
 	.byte 0xa2, 0xf6
-	jr	nz, 54
+	jr	nz, DispTimeSetGridCheck_Skip6
 	ldw	(xhl), 1
 	ldw	(xwa), 6
 	ld	(xbc), xix
@@ -8981,16 +9031,17 @@ DispTimeSet_EventDispatch:
 	pushw 237
 	pushw 5474
 	push	xix
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
-	jrl	447
+	jrl	DispTimeSet_SendEventReturn
+DispTimeSetGridCheck_Skip6:
 	lda	xiz, (213232:24)
 	.byte 0xa2, 0xf6
-	jrl	nz, 441
+	jrl	nz, DispTimeSet_ReturnZero
 	ldw	(xhl), 1
 	ldw	(xwa), 7
 	ld	(xbc), xix
@@ -9003,13 +9054,13 @@ DispTimeSet_EventDispatch:
 	pushw 237
 	pushw 5478
 	push	xix
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
-	jrl	383
+	jrl	DispTimeSet_SendEventReturn
 DispTimeSetCheck_CellDecode:
 	lda xhl, (xsp + 0x28)
 	ld XWA,XDE
@@ -9033,7 +9084,7 @@ DispTimeSetCheck_CellDecode:
 	pushw 0x00ed
 	pushw 0x156a
 	push XBC
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9055,7 +9106,7 @@ DispTimeSetCheck_TryRow3:
 	pushw 0x00ed
 	pushw 0x156e
 	push XBC
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9076,7 +9127,7 @@ DispTimeSetCheck_TryRow4:
 	pushw 0x00ed
 	pushw 0x1572
 	push XBC
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9097,7 +9148,7 @@ DispTimeSetCheck_TryRow5:
 	pushw 0x00ed
 	pushw 0x1576
 	push XBC
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9118,7 +9169,7 @@ DispTimeSetCheck_TryRow6:
 	pushw 0x00ed
 	pushw 0x157a
 	push XBC
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9139,7 +9190,7 @@ DispTimeSetCheck_TryRow7:
 	pushw 0x00ed
 	pushw 0x157e
 	push XBC
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9167,22 +9218,22 @@ DispTimeSetOK_ReturnZero:
 
 MainTimeFlashFunc:
 	cp	xbc, 31588373
-	jr	z, 64
+	jr	z, MainTimeFlash_DispatchCmd
 	cp	xbc, 31588372
-	jr	nz, 62
+	jr	nz, MainTimeFlash_ReturnZero
 	ld	(32422:16), 40
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 5:i3
-	call	16535006
+	call	CtrlPanel_IndicatorJumpTable
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16423243
-	jr	6
+	call	ApPostEvent
+	jr	MainTimeFlash_ReturnZero
 MainTimeFlash_DispatchCmd:
 	ld wa, 5:i3
 	call Audio_DispatchCommand
@@ -9208,26 +9259,26 @@ NormScreenProc:
 	jr NormScreen_Epilogue
 NormScreen_InitHandler:
 	ld	xwa, xiz
-	call	16408153
+	call	GetViewInstance
 	.byte 0xc2, 0xe6, 0x40, 0x03, 0x3f, 0x00
-	jr	z, 71
+	jr	z, NormScreen_ClearBit
 	ld	a, (36076:16)
 	extz	wa
 	bit	0, wa
-	jr	z, 60
+	jr	z, NormScreen_ClearBit
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16421459
+	call	SendEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16421701
+	call	PostEvent
 	ld	(32422:16), 36
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16421701
+	call	PostEvent
 	.byte 0xf1, 0xec, 0x8c, 0xb0
 NormScreen_ClearBit:
 	.byte 0xf1, 0xec, 0x8c, 0xb0	; resda 0, 0x8d88 (v7 patched)
@@ -9238,7 +9289,7 @@ NormScreen_ClearBit:
 
 	ld xde, (xsp + 4)
 
-	call	16400380
+	call	InheritedProc
 
 	ld xhl, 0:i3
 
@@ -9271,16 +9322,16 @@ IvWindowPageControlProc:
 IvWindowPgCtl_Init:
 	ld	xwa, xiz
 	ld	xde, (xsp+8)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, xiz
-	call	16408153
+	call	GetViewInstance
 	ld	xiz, xhl
 	ld	xwa, 192
-	call	16567398
+	call	AcApcToggleProc_Helper
 	lda	xbc, (xiz+22)
 	ld	wa, 1:i3
 	cp	hl, 1:i3
-	jr	nz, 2
+	jr	nz, IvWindowPgCtl_SetPageIndex
 	ld	wa, 3:i3
 IvWindowPgCtl_SetPageIndex:
 	ld xde, (xbc)
@@ -9401,7 +9452,7 @@ UI_MainFuncCall_Execute:
 
 IvWindowPgCtl_JumpToEnd:
 	ld XWA,0x000000c0
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	cp hl, 1:i3
 	jr nz, IvWindowPgCtl_JumpToStart
 	ld XWA,(XSP+0x04)
@@ -9485,9 +9536,9 @@ IvPageOverWr_GetName:
 	pushw	5520
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	154
+	jrl	PmNamingCheck_CleanupRet
 IvPageOverWr_PageSelect:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
@@ -9562,21 +9613,21 @@ PmNamingCheck:
 	ld	(xsp+22), xde
 	ld	xiz, xwa
 	cp	xbc, 29360135
-	jr	z, 59
+	jr	z, PmNaming_HandleKeyPress
 	cp	xbc, 31457404
-	jr	z, 43
+	jr	z, PmNaming_GetKeyLayout
 	cp	xbc, 31457412
-	jrl	z, 219
+	jrl	z, PmBankNamingCheck_Ret
 	cp	xbc, 31457338
-	jrl	nz, 210
+	jrl	nz, PmBankNamingCheck_Ret
 	ld	xwa, 768
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	ld	wa, hl
 	ld	xbc, (xsp+22)
-	call	16472497
+	call	BitMapOut_UpdateDisplayWidget
 	ld	xhl, xiz
-	jrl	187
+	jrl	PmNaming_Epilogue
 PmNaming_GetKeyLayout:
 	ld xhl, 0x10
 	jrl PmNaming_Epilogue
@@ -9584,41 +9635,41 @@ PmNaming_GetKeyLayout:
 PmNaming_HandleKeyPress:
 	ld	xwa, (xsp+22)
 	cp	xwa, 11
-	jr	nz, 120
+	jr	nz, PmNaming_HandleF_Confirm
 	ld	xwa, 768
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	l, 0:i3
-	jr	z, 107
-	call	16391098
+	jr	z, PmNaming_HandleF_Confirm
+	call	GetNamingWindowID
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457338
-	call	16421459
+	call	SendEvent
 	ld	xwa, 768
-	call	16567398
+	call	AcApcToggleProc_Helper
 	extz	hl
 	lda	xbc, (xsp+4)
 	ld	wa, hl
-	call	16472568
-	call	16391098
+	call	BitMapOut_UpdateWidget_TypeB
+	call	GetNamingWindowID
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457338
-	call	16421459
+	call	SendEvent
 	lda	xwa, (xsp+4)
 	push	xwa
 	pushw	0
 	pushw	63906
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263185
-	call	16421701
+	call	PostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 1:i3
-	call	16421701
+	call	PostEvent
 PmNaming_HandleF_Confirm:
 	ld xwa, (xsp + 22)
 	cp xwa, 0xf
@@ -9727,28 +9778,30 @@ MssName_EventDispatch:
 	lda	xbc, (xiz+14)
 	ld	xwa, (xbc)
 	or	xwa, xwa
-	jr	nz, 19
+	jr	nz, MssNameFunc_Skip
 	pushw	237
 	pushw	5526
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	129
+	jrl	MssNameFunc_Join2
+MssNameFunc_Skip:
 	dec	1, xwa
 	cp	xwa, 800
-	jr	le, 4
+	jr	le, MssNameFunc_Skip2
 	ld	xwa, 2:i3
 	ld	(xbc), xwa
+MssNameFunc_Skip2:
 	ld	xwa, (xbc)
 	dec	1, xwa
-	call	16475862
+	call	EffectMode_SearchPresetTableC0
 	ld	xwa, (xiz+14)
 	dec	1, xwa
 	cp	xhl, 4294967295
-	jr	z, 43
+	jr	z, MssNameFunc_Skip3
 	pushw	16
-	call	16475862
+	call	EffectMode_SearchPresetTableC0
 	push	xhl
 	ld	xwa, (xiz+18)
 	push	xwa
@@ -9758,10 +9811,11 @@ MssName_EventDispatch:
 	ld	xwa, (xiz+18)
 	lda	xwa, (xwa+16)
 	push	xwa
-	call	16720141
+	call	MssNameFunc_Helper2
 	lda	xsp, (xsp+18)
 	ld	xwa, 15537572
-	jr	37
+	jr	MssNameFunc_Join
+MssNameFunc_Skip3:
 	sll	xwa, 2
 	add	xwa, 9990144
 	ld	xbc, (xwa)
@@ -9775,24 +9829,27 @@ MssName_EventDispatch:
 	call	16712982
 	lda	xsp, (xsp+10)
 	ld	xwa, 15537576
+MssNameFunc_Join:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16712000
+	call	MssNameFunc_Helper
 	inc	8, xsp
 	ld	(xhl), 0
+MssNameFunc_Join2:
 	ld	xhl, (xsp+4)
-	jr	23
+	jr	MssNameFunc_Epilogue
 	ld	xhl, 1:i3
-	jr	19
+	jr	MssNameFunc_Epilogue
 	ld	xhl, 512
-	jr	12
+	jr	MssNameFunc_Epilogue
 	lda	xhl, (36026:16)
-	jr	6
+	jr	MssNameFunc_Epilogue
 	ld	xhl, 2:i3
-	jr	2
+	jr	MssNameFunc_Epilogue
 MssName_ReturnZero:
 	ld xhl, 0:i3
+MssNameFunc_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -9847,20 +9904,20 @@ AcPmBkNoBox_ShowHide:
 AcPmBkNoBox_Match:
 	ld	xwa, (xsp+260)
 	ld	xde, xiz
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xiz)
 	cp	xwa, 768
-	jr	nz, 81
+	jr	nz, UI_AcPmBkNoBoxProc_Return
 	lda	xde, (xsp+4)
 	ld	bc, (xiz+4)
 	cp	bc, 0:i3
-	jr	nz, 15
+	jr	nz, AcPmBkNoBox_FormatBankNo
 	pushw	237
 	pushw	5568
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	39
+	jr	AcPmBkNoBox_SendConfirm
 AcPmBkNoBox_FormatBankNo:
 	dec	1, bc
 	ld	wa, bc
@@ -9876,7 +9933,7 @@ AcPmBkNoBox_FormatBankNo:
 	pushw	237
 	pushw	5578
 	push	xde
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 AcPmBkNoBox_SendConfirm:
 	lda xde, (xsp + 4)
@@ -9942,11 +9999,11 @@ AcBkNoBox_ShowHide:
 AcBkNoBox_Match:
 	ld	xwa, (xsp+260)
 	ld	xde, xiz
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xiz)
 	cp	xwa, 768
-	jr	nz, 43
-	call	16472152
+	jr	nz, UI_AcBkNoBoxProc_Return
+	call	BitMapOut_PrepareRender_CheckBit1
 	inc	1, l
 	extz	hl
 	pushw	hl
@@ -9954,12 +10011,12 @@ AcBkNoBox_Match:
 	pushw	5586
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, (xsp+260)
 	ld	xbc, 29360143
-	call	16421459
+	call	SendEvent
 UI_AcBkNoBoxProc_Return:
 	ld xhl, 0:i3
 
@@ -9976,30 +10033,30 @@ MsaModeScreenProc:
 	ld	xiz, xbc
 	ld	(xsp+24), xwa
 	cp	xiz, 29360135
-	jrl	z, 436
+	jrl	z, MsaMode_OK
 	cp	xiz, 29360142
-	jrl	z, 218
+	jrl	z, MsaMode_Select
 	cp	xiz, 29360141
-	jrl	z, 180
+	jrl	z, MsaMode_Paint
 	cp	xiz, 29360156
-	jr	z, 108
+	jr	z, MsaMode_Match
 	cp	xiz, 29360139
-	jr	z, 69
+	jr	z, MsaMode_Show
 	cp	xiz, 29360129
-	jrl	nz, 557
+	jrl	nz, MsaMode_Default
 	ld	xwa, (xsp+20)
 	cp	xwa, 4
-	jr	z, 34
+	jr	z, MsaMode_Init_Forward
 	cp	xwa, 3
-	jr	nz, 26
+	jr	nz, MsaMode_Init_Forward
 	ld	xwa, 1024
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	hl, 0:i3
-	jr	nz, 13
+	jr	nz, MsaMode_Init_Forward
 	ld	xwa, 1024
 	ld	bc, 1:i3
 	ld	de, 3:i3
-	call	16381053
+	call	MainLswPut
 MsaMode_Init_Forward:
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
@@ -10294,7 +10351,7 @@ PmemMode_Paint:
 
 	ldw de, 0xf3
 
-	call	16437580
+	call	DrawDesignBox
 
 	lda_dri XDE, 0xfd, 0x0c, 0x01
 
@@ -10338,7 +10395,7 @@ PmemMode_Paint:
 
 	push xwa
 
-	call	16713584
+	call	Free_Compare2
 
 	inc 8, xsp
 
@@ -10356,7 +10413,7 @@ PmemMode_Paint:
 
 	pushw 0xf7
 
-	call	16435871
+	call	DrawStringCentered
 
 	ld XWA, (xsp + 0x0118)
 
@@ -10587,7 +10644,7 @@ AcPmBkEdit_BankChanged:
 
 	push xwa
 
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 
 	ld XWA, (xsp + 0x0138)
 
@@ -10599,7 +10656,7 @@ AcPmBkEdit_BankChanged:
 
 	push xwa
 
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 
 	lda xsp, (xsp + 18)
 
@@ -10609,7 +10666,7 @@ AcPmBkEdit_BankChanged:
 
 	ld xbc, 0x1c0000f
 
-	call	16421459
+	call	SendEvent
 
 	ldib_erp 0xfb, 1
 
@@ -10658,13 +10715,13 @@ AcPmBkEdit_BankEdit:
 	pushw 0x15ea
 	ld XWA,(XSP+0x0e)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	ld XWA,(XSP+0x0138)
 	inc 2,XWA
 	push XWA
 	lda xwa, (xsp + 0x3c)
 	push XWA
-	call 0xff05e4
+	call FileIO_CheckPathAndVolumeLabel_Helper
 	lda xsp, (xsp + 0x12)
 	lda xhl, (xsp + 0x2e)
 	lda xwa, (xsp + 0x10)
@@ -10929,25 +10986,25 @@ AcPmBkEdit_OK:
 
 AcPmBkEdit_OK_Load:
 	ld	xwa, 768
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	l, 0:i3
-	jr	z, 37
+	jr	z, AcPmBkEdit_OK_LoadEmpty
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263186
-	call	16421701
+	call	PostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 1:i3
-	call	16421701
-	jr	82
+	call	PostEvent
+	jr	AcPmBkEdit_ReturnZero
 AcPmBkEdit_OK_LoadEmpty:
 	ld	(32422:16), 73
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16423243
-	jr	56
+	call	ApPostEvent
+	jr	AcPmBkEdit_ReturnZero
 AcPmBkEdit_OK_SaveDelete:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
@@ -11063,9 +11120,9 @@ GmOnOff_CheckDesign:
 	ld	c, (36004:16)
 	or	c, (36006:16)
 	or	c, (36008:16)
-	jr	nz, 7
+	jr	nz, GmOnOff_SendHideEvent
 	ldw	bc, 245
-	call	16428646
+	call	DrawBox
 GmOnOff_SendHideEvent:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c20006
@@ -11133,12 +11190,12 @@ VariScreen_HandleShow:
 	ld	a, (35998:16)
 	extz	wa
 	ld	bc, 0:i3
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+31), l
 	ld	a, (35998:16)
 	extz	wa
 	ldw	bc, 32
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp+28)
 	ld	(xwa+4), l
 	.byte 0xb8, 0x02, 0x14, 0x9e, 0x8c	; differs from v10 here and llvm-objdump cannot read it
@@ -11155,7 +11212,7 @@ VariScreen_HandleShow:
 	ld	(xde), wa
 	ld	a, (xbc)
 	extz	wa
-	call	16702680
+	call	VariScreenProc_Helper
 	ld	xde, (xsp+24)
 	ld	xbc, (xde+52)
 	extz	hl
@@ -11459,7 +11516,7 @@ VariScreen_DrawNameString:
 	pushw 5642
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+550)
 	lda	xbc, (xsp+546)
@@ -11473,7 +11530,7 @@ VariScreen_DrawNameString:
 	extz	wa
 	pushw	wa
 	ld	xwa, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xbc, (xsp+546)
 	lda	xde, (xbc+2)
 	ld	wa, (xde)
@@ -11487,10 +11544,10 @@ VariScreen_DrawNameString:
 	ld	(xhl+6), wa
 	lda	xwa, (xhl+4)
 	.byte 0x91, 0x3f, 0x00, 0x00
-	jr	nz, 10
+	jr	nz, VariScreen_SetRightVoiceBounds
 	ldw	(xhl), 16
 	ldw	(xwa), 156
-	jr	8
+	jr	VariScreen_DrawVoiceString
 VariScreen_SetRightVoiceBounds:
 	ldw (xhl), 0xab
 	ldw (xwa), 0x137
@@ -11709,7 +11766,7 @@ VariScreen_DrawRightNameString:
 	pushw 5646
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+550)
 	lda	xbc, (xsp+546)
@@ -11723,7 +11780,7 @@ VariScreen_DrawRightNameString:
 	extz	wa
 	pushw	wa
 	ld	xwa, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xbc, (xsp+546)
 	lda	xde, (xbc+2)
 	ld	wa, (xde)
@@ -11737,10 +11794,10 @@ VariScreen_DrawRightNameString:
 	ld	(xhl+6), wa
 	lda	xwa, (xhl+4)
 	.byte 0x91, 0x3f, 0x00, 0x00
-	jr	nz, 10
+	jr	nz, VariScreen_SetRightVoiceRightBounds
 	ldw	(xhl), 16
 	ldw	(xwa), 156
-	jr	8
+	jr	VariScreen_DrawRightVoiceString
 VariScreen_SetRightVoiceRightBounds:
 	ldw (xhl), 0xab
 	ldw (xwa), 0x137
@@ -11867,14 +11924,14 @@ VariScreen_ConfirmLoopBody:
 	ld XBC,(XDE+0x30)
 	ld BC,(XBC)
 	ld (XWA+0x02),C
-	call 0xfee092
+	call SeMenu_SetDisplayValue_Helper
 	lda xbc, (xsp + 0x1c)
 	ld A,(XBC+0x03)
 	extz WA
 	ld C,(XBC+0x04)
 	extz BC
 	lda XDE,(XSP+0x0122)
-	call 0xfede7b
+	call Display_BytecodeBlock_F_Helper2
 	ld (XSP+0x0132),0x00
 	ld (XSP+0x08),0x09
 	ld XWA,(XSP+0x10)
@@ -11984,7 +12041,7 @@ VariScreen_ConfirmDrawNameAudio:
 	pushw 5662
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+550)
 	lda	xde, (xsp+546)
@@ -11999,7 +12056,7 @@ VariScreen_ConfirmDrawNameAudio:
 	pushw	bc
 	ld	xbc, xde
 	ld	xde, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xde, (xsp+546)
 	lda	xbc, (xde+2)
 	ld	hl, (xbc)
@@ -12013,10 +12070,10 @@ VariScreen_ConfirmDrawNameAudio:
 	ld	(xwa+6), bc
 	lda	xbc, (xwa+4)
 	.byte 0x92, 0x3f, 0x00, 0x00
-	jr	nz, 10
+	jr	nz, VariScreen_ConfirmSetVoiceRightBounds
 	ldw	(xwa), 16
 	ldw	(xbc), 156
-	jr	8
+	jr	VariScreen_ConfirmDrawVoiceString
 VariScreen_ConfirmSetVoiceRightBounds:
 	ldw (xwa), 0xab
 	ldw (xbc), 0x137
@@ -12197,7 +12254,7 @@ VariScreen_EnumDrawNameAudio:
 	pushw 5666
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+550)
 	lda	xde, (xsp+546)
@@ -12212,7 +12269,7 @@ VariScreen_EnumDrawNameAudio:
 	pushw	bc
 	ld	xbc, xde
 	ld	xde, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xhl, (xsp+546)
 	lda	xbc, (xhl+2)
 	ld	de, (xbc)
@@ -12226,10 +12283,10 @@ VariScreen_EnumDrawNameAudio:
 	ld	(xwa+6), bc
 	lda	xbc, (xwa+4)
 	.byte 0x93, 0x3f, 0x00, 0x00
-	jr	nz, 10
+	jr	nz, VariScreen_EnumSetVoiceRightBounds
 	ldw	(xwa), 16
 	ldw	(xbc), 156
-	jr	8
+	jr	VariScreen_EnumDrawVoiceString
 VariScreen_EnumSetVoiceRightBounds:
 	ldw (xwa), 0xab
 	ldw (xbc), 0x137
@@ -12747,27 +12804,27 @@ RVariScreenProc:
 	ld	(xsp+552), xwa
 	ld	xbc, (xsp+548)
 	cp	xbc, 29360135
-	jrl	z, 6577	; -> 0xFC0721
+	jrl	z, RVari_OK	; -> 0xFC0721
 	cp	xbc, 31588363
-	jrl	z, 5527	; -> 0xFC0310
+	jrl	z, RVari_EnumNotify	; -> 0xFC0310
 	cp	xbc, 29360143
-	jrl	z, 3893	; -> 0xFBFCB7
+	jrl	z, RVari_Confirm	; -> 0xFBFCB7
 	cp	xbc, 29360142
-	jrl	z, 563	; -> 0xFBEFBE
+	jrl	z, RVari_Select	; -> 0xFBEFBE
 	cp	xbc, 29360141
-	jrl	z, 214	; -> 0xFBEE6A
+	jrl	z, RVari_Paint	; -> 0xFBEE6A
 	cp	xbc, 29360139
-	jrl	z, 181	; -> 0xFBEE52
+	jrl	z, RVari_Show	; -> 0xFBEE52
 	cp	xbc, 29360129
-	jrl	nz, 9280	; -> 0xFC11E6
+	jrl	nz, RVari_Default	; -> 0xFC11E6
 	ld	xwa, (xsp+552)
 	call	GetViewInstance
 	ld	xiz, xhl
 	ld	xwa, 163840
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	(xsp+17), l
 	ld	xwa, 163841
-	call	16567398
+	call	AcApcToggleProc_Helper
 	lda	xwa, (xsp+14)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
@@ -12799,7 +12856,7 @@ RVariScreenProc:
 	push	xsp
 	ret
 	nop
-	jr	nz, 20	; -> 0xFBEE28
+	jr	nz, RVari_Init_TypeNotE	; -> 0xFBEE28
 	ld	xbc, (xiz+44)
 	ld	xwa, (xiz+60)
 	ld	wa, (xwa)
@@ -12807,7 +12864,7 @@ RVariScreenProc:
 	divs	wa, 40
 	inc	1, wa
 	ld	(xbc), wa
-	jr	18	; -> 0xFBEE3A
+	jr	RVari_Init_ForwardEvent	; -> 0xFBEE3A
 RVari_Init_TypeNotE:
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 60)
@@ -12885,10 +12942,10 @@ RVari_Paint:
 	ld	xde, 15537734
 	call	DrawString
 	ld	xwa, 163840
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	(xsp+17), l
 	ld	xwa, 163841
-	call	16567398
+	call	AcApcToggleProc_Helper
 	lda	xwa, (xsp+14)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
@@ -12934,7 +12991,7 @@ RVari_Paint:
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xhl, 0:i3
-	jrl	8763	; -> 0xFC11F9
+	jrl	RVari_Epilogue	; -> 0xFC11F9
 RVari_Select:
 	.byte 0xe3, 0xfd, 0x28, 0x02, 0x20, 0xe3, 0xfd, 0x24
 	.byte 0x02, 0x21, 0xe3, 0xfd, 0x20, 0x02, 0x22, 0x1d
@@ -12972,7 +13029,7 @@ RVari_Select_CheckSameBank:
 	lda	xbc, (15531432:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
-	call	16369274
+	call	DrawEditSw
 	ld	xwa, (xiz+64)
 	ld	wa, (xwa)
 	exts	xwa
@@ -12982,7 +13039,7 @@ RVari_Select_CheckSameBank:
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
-	call	16360742
+	call	GetEditSwPoint
 	lda	xde, (xsp+536)
 	lda	xbc, (xsp+534)
 	ld	wa, (xbc)
@@ -13007,7 +13064,7 @@ RVari_Select_CheckSameBank:
 	pushw	5710
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -13021,7 +13078,7 @@ RVari_Select_CheckSameBank:
 	extz	wa
 	pushw	wa
 	ld	xwa, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xhl, (xsp+532)
 	lda	xde, (xhl+2)
 	ld	wa, (xde)
@@ -13046,7 +13103,7 @@ RVari_Select_CheckSameBank:
 	pushw	wa
 	ld	xwa, xbc
 	ld	xbc, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	ld	xwa, (xiz+60)
 	ld	wa, (xwa)
 	exts	xwa
@@ -13056,7 +13113,7 @@ RVari_Select_CheckSameBank:
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
-	call	16360742
+	call	GetEditSwPoint
 	lda	xwa, (xsp+536)
 	lda	xde, (xsp+534)
 	ld	bc, (xde)
@@ -13069,14 +13126,14 @@ RVari_Select_CheckSameBank:
 	ldw	(xwa+4), 311
 	ldw	bc, 193
 	ld	de, 7:i3
-	call	16437580
+	call	DrawDesignBox
 	ld	xwa, (xiz+56)
 	ld	wa, (xwa)
 	extz	wa
 	ld	xbc, (xiz+60)
 	ld	bc, (xbc)
 	extz	bc
-	call	16104563
+	call	AccVoice_DispatchWithChannel
 	extz	xhl
 	pushw	13
 	push	xhl
@@ -13093,7 +13150,7 @@ RVari_Select_CheckSameBank:
 	lda	xbc, (15531432:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
-	call	16369274
+	call	DrawEditSw
 	ld	xwa, (xiz+60)
 	ld	wa, (xwa)
 	exts	xwa
@@ -13103,7 +13160,7 @@ RVari_Select_CheckSameBank:
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
-	call	16360742
+	call	GetEditSwPoint
 	lda	xde, (xsp+536)
 	lda	xbc, (xsp+534)
 	ld	wa, (xbc)
@@ -13128,7 +13185,7 @@ RVari_Select_CheckSameBank:
 	pushw	5714
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -13137,7 +13194,7 @@ RVari_Select_CheckSameBank:
 	push	xhl
 	pushw	0
 	pushw	7
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xbc, (xsp+532)
 	lda	xhl, (xbc+2)
 	ld	de, (xhl)
@@ -13156,7 +13213,7 @@ RVari_Select_CheckSameBank:
 	push	xhl
 	pushw	0
 	pushw	7
-	call	16436029
+	call	DrawStringLeftJustify
 	ld	xwa, (xiz+64)
 	ld	wa, (xwa)
 	exts	xwa
@@ -13165,7 +13222,7 @@ RVari_Select_CheckSameBank:
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
-	call	16360742
+	call	GetEditSwPoint
 	lda	xwa, (xsp+536)
 	lda	xde, (xsp+534)
 	ld	bc, (xde)
@@ -13178,7 +13235,7 @@ RVari_Select_CheckSameBank:
 	ldw	(xwa+4), 156
 	ld	bc, 0:i3
 	ldw	de, 245
-	call	16437580
+	call	DrawDesignBox
 	lda	xwa, (xsp+536)
 	lda	xbc, (xsp+532)
 	lda	xhl, (xbc+2)
@@ -13201,7 +13258,7 @@ RVari_Select_CheckSameBank:
 	push	xhl
 	pushw	255
 	pushw	247
-	call	16436029
+	call	DrawStringLeftJustify
 	ld	xwa, (xiz+60)
 	ld	wa, (xwa)
 	exts	xwa
@@ -13210,7 +13267,7 @@ RVari_Select_CheckSameBank:
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
-	call	16360742
+	call	GetEditSwPoint
 	lda	xwa, (xsp+536)
 	lda	xde, (xsp+534)
 	ld	bc, (xde)
@@ -13223,7 +13280,7 @@ RVari_Select_CheckSameBank:
 	ldw	(xwa+4), 156
 	ldw	bc, 193
 	ld	de, 7:i3
-	call	16437580
+	call	DrawDesignBox
 	lda	xwa, (xsp+536)
 	lda	xbc, (xsp+532)
 	lda	xhl, (xbc+2)
@@ -13246,6 +13303,6 @@ RVari_Select_CheckSameBank:
 	push	xhl
 	pushw	0
 	pushw	247
-	call	16436029
-	jrl	2173
+	call	DrawStringLeftJustify
+	jrl	RVari_Select_ReturnZero
 	.include "ui/rvari_routines.s"

@@ -68,48 +68,48 @@ CmptCnctDrawConnectionDiagram:
 	ld	bc, (xhl+4)
 	ld	xwa, (xhl+8)
 	cp	bc, 2:i3
-	jr	z, 66
+	jr	z, CmptCnct_DrawDiagram2
 	cp	bc, 1:i3
-	jr	z, 33
+	jr	z, CmptCnct_DrawDiagram1
 	cp	bc, 0:i3
-	jr	nz, 87
+	jr	nz, CmptCnct_DrawDiagramDefault
 	pushw	231
 	pushw	63560
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
 	ld	xbc, 15091570
 	ldw	de, 296
-	jr	85
+	jr	CmptCnctBitmapDrawComplete
 CmptCnct_DrawDiagram1:
 	pushw	231
 	pushw	63586
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
 	ld	xbc, 15123538
 	ldw	de, 296
-	jr	56
+	jr	CmptCnctBitmapDrawComplete
 CmptCnct_DrawDiagram2:
 	pushw	231
 	pushw	63612
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
 	ld	xbc, 15155506
 	ldw	de, 296
-	jr	27
+	jr	CmptCnctBitmapDrawComplete
 CmptCnct_DrawDiagramDefault:
 	pushw	231
 	pushw	63638
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
@@ -181,10 +181,10 @@ PcgMode_CopyStrEntry:
 	push xbc
 
 PcgMode_CallStrcpy:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	9
+	jr	MdPcgMode_Epilogue
 PcgMode_InvalidReturn:
 	ld xhl, 0x2201
 	jr MdPcgMode_Epilogue
@@ -245,10 +245,10 @@ DrumType_CopyStrEntry:
 	push xbc
 
 DrumType_CallStrcpy:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	9
+	jr	MdDrumType_Epilogue
 DrumType_InvalidReturn:
 	ld xhl, 0x2205
 	jr MdDrumType_Epilogue
@@ -289,14 +289,14 @@ SetupLoadOptionJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	21
+	jr	MdSetupLoad_Epilogue
 	ld	xhl, 2:i3
-	jr	17
+	jr	MdSetupLoad_Epilogue
 	ld	xhl, 3:i3
-	jr	13
+	jr	MdSetupLoad_Epilogue
 SetupLoadInvalidIndex:
 	ld xhl, 0:i3
 	jr MdSetupLoad_Epilogue

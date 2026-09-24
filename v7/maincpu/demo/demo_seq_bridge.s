@@ -28,42 +28,42 @@ MiddleFuncCall_DispatchData:
 MiddleFuncCall_DispatchData_Code:
 	pushw	wa
 	ld	xiy, 1044134714
-	call	16279416
+	call	Demo_SelectEntry_ProcessSongList
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jrl	132
+	jrl	SqTrSel_CaseC
 	push	xde
 	pushw	0
 	pushw	4441
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	15859911
+	call	MiddleFuncCall_DispatchData_Code_Helper5
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	105
+	jr	SqTrSel_CaseC
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	15855126
+	call	MiddleFuncCall_DispatchData_Code_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	91
+	jr	SqTrSel_CaseC
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	15855165
+	call	MiddleFuncCall_DispatchData_Code_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -73,7 +73,7 @@ MiddleFuncCall_DispatchData_Code:
 	push	xhl
 	push	xix
 	push	xiz
-	call	15855680
+	call	SetWall_InitCallSequences
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -83,40 +83,40 @@ MiddleFuncCall_DispatchData_Code:
 	push	xhl
 	push	xix
 	push	xiz
-	call	15855698
+	call	MiddleFuncCall_DispatchData_Code_Helper4
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	49
+	jr	SqTrSel_CaseC
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	15855243
+	call	SetWall_UpdateSlotIndex_Sub
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	35
+	jr	SqTrSel_CaseC
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	15855321
+	call	MiddleFuncCall_DispatchData_Code_Helper3
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	21
+	jr	SqTrSel_CaseC
 	call	16635550
-	jr	15
-	calr	60449
-	jr	10
-	call	16553566
-	jr	4
+	jr	SqTrSel_CaseC
+	calr	DisplayMode_RefreshState
+	jr	SqTrSel_CaseC
+	call	VoiceChannels_InitPanFromPreset
+	jr	SqTrSel_CaseC
 SqTrSel_CaseB:
-	call	16696381
+	call	MiddleFuncCall_DispatchData_Code_Helper6
 SqTrSel_CaseC:
 	ld xhl, 0:i3
 	ret
@@ -315,7 +315,7 @@ SongBankLookup_BuildAudioCmd:
 	pushw	226
 	pushw	514
 	push	xiz
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	ld	(xiz+4), 0
 	ld	wa, (xsp+4)
@@ -684,18 +684,18 @@ PlayMode_SwitchToModeAndNotify:
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 139
-	call	16355459
+	call	UI_PostModeChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(32422:16), 35
 	ldw	wa, 238
-	jp	16355504
+	jp	SoundCtrl_SendCommand
 DispatchHandler_ConditionalJump:
-	jr	t, 0x08
+	jr	t, DispatchHandler_SubJumpTable_Join
 
 DispatchHandler_JumpToSubHandler:
 	jr DispatchHandler_CallResolve
@@ -706,6 +706,7 @@ DispatchHandler_JumpSub:
 DispatchHandler_SubJumpTable:
 	jr DispatchHandler_CallSlotResolve
 	jr DispatchHandler_StoreNodePtr
+DispatchHandler_SubJumpTable_Join:
 	call DispatchHandler_InitAllSlots
 	ret
 

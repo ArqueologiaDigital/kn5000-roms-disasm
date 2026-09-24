@@ -80,11 +80,11 @@ MidiCC_Handler_BitManipulation:
 	.incbin "includes/romslices/v7_transplant_MidiCC_Handler_BitManipulation.bin"
 	.byte 0x51
 	ld	(38314:16), de
-	call	16563896
+	call	MidiCC_Handler_BitManipulation_Code_Helper4
 	ret
 	ld	a, (38350:16)
 	cp	a, 31
-	jr	ugt, 55
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -92,7 +92,7 @@ MidiCC_Handler_BitManipulation:
 	ld	xix, 16583766
 	ld_rrw	bc, xix, hl
 	cp	c, 255
-	jr	z, 31
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return
 	inc	2, xix
 	ld_rrb	d, xix, hl
 	ld	e, (38298:16)
@@ -100,11 +100,12 @@ MidiCC_Handler_BitManipulation:
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16563896
+	call	MidiCC_Handler_BitManipulation_Code_Helper4
+MidiCC_Handler_BitManipulation_Code_Return:
 	ret
 	ld	a, (38350:16)
 	cp	a, 31
-	jr	ugt, 55
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return2
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -112,7 +113,7 @@ MidiCC_Handler_BitManipulation:
 	ld	xix, 16583862
 	ld_rrw	bc, xix, hl
 	cp	c, 255
-	jr	z, 31
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return2
 	inc	2, xix
 	ld_rrb	d, xix, hl
 	ld	e, (38298:16)
@@ -120,11 +121,12 @@ MidiCC_Handler_BitManipulation:
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16563896
+	call	MidiCC_Handler_BitManipulation_Code_Helper4
+MidiCC_Handler_BitManipulation_Code_Return2:
 	ret
 	ld	a, (38350:16)
 	cp	a, 31
-	jr	ugt, 55
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return3
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -132,7 +134,7 @@ MidiCC_Handler_BitManipulation:
 	ld	xix, 16583958
 	ld_rrw	bc, xix, hl
 	cp	c, 255
-	jr	z, 31
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return3
 	inc	2, xix
 	ld_rrb	d, xix, hl
 	ld	e, (38298:16)
@@ -140,70 +142,76 @@ MidiCC_Handler_BitManipulation:
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16563896
+	call	MidiCC_Handler_BitManipulation_Code_Helper4
+MidiCC_Handler_BitManipulation_Code_Return3:
 	ret
 	ld	l, (38350:16)
 	cp	l, 31
-	jrl	ugt, 134
+	jrl	ugt, MidiCC_Handler_BitManipulation_Code_Return4
 	extz	hl
 	ld	xix, 16584374
 	ld_rrb	c, xix, hl
 	cp	c, 255
-	jr	z, 117
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return4
 	sll	hl, 1
 	ld	xix, 38360
 	ld_rrw	wa, xix, hl
 	cp	wa, 32896
-	jr	z, 14
+	jr	z, MidiCC_Handler_BitManipulation_Code_Entry
 	cp	wa, 32897
-	jr	z, 29
+	jr	z, MidiCC_Handler_BitManipulation_Code_Entry2
 	cp	wa, 32898
-	jr	z, 42
-	jr	84
+	jr	z, MidiCC_Handler_BitManipulation_Code_Entry3
+	jr	MidiCC_Handler_BitManipulation_Code_Return4
+MidiCC_Handler_BitManipulation_Code_Entry:
 	.byte 0xf1, 0x57, 0xfd, 0xc8
-	jr	z, 78
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return4
 	ld	b, 11:opc
 	ld	e, (38298:16)
 	cp	e, 12
-	jr	ugt, 67
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return4
 	ld	d, 127:opc
-	jr	43
+	jr	MidiCC_Handler_BitManipulation_Code_Join
+MidiCC_Handler_BitManipulation_Code_Entry2:
 	.byte 0xf1, 0x57, 0xfd, 0xc9
-	jr	z, 57
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return4
 	ld	b, 10:opc
 	ld	e, (38298:16)
 	sll	e, 1
 	ld	d, 255:opc
-	jr	24
+	jr	MidiCC_Handler_BitManipulation_Code_Join
+MidiCC_Handler_BitManipulation_Code_Entry3:
 	.byte 0xf1, 0x57, 0xfd, 0xc9
-	jr	z, 38
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return4
 	ld	b, 9:opc
 	ld	e, (38298:16)
 	cp	e, 76
-	jr	ugt, 27
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return4
 	cp	e, 52
-	jr	c, 22
+	jr	c, MidiCC_Handler_BitManipulation_Code_Return4
 	ld	d, 127:opc
+MidiCC_Handler_BitManipulation_Code_Join:
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16563840
+	call	MidiCC_Handler_BitManipulation_Code_Helper3
+MidiCC_Handler_BitManipulation_Code_Return4:
 	ret
 	ld	l, (38350:16)
 	cp	l, 31
-	jr	ugt, 97
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return5
 	extz	hl
 	ld	xix, 16584374
 	ld_rrb	c, xix, hl
 	cp	c, 255
-	jr	z, 80
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return5
 	sll	hl, 1
 	ld	xix, 38360
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x3f, 0x81, 0x80
-	jr	nz, 63
+	jr	nz, MidiCC_Handler_BitManipulation_Code_Return5
 	.byte 0xf1, 0x57, 0xfd, 0xc9
-	jr	z, 57
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return5
 	ld	b, 10:opc
 	ld	xix, (36950:16)
 	extz	hl
@@ -220,7 +228,8 @@ MidiCC_Handler_BitManipulation:
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16563840
+	call	MidiCC_Handler_BitManipulation_Code_Helper3
+MidiCC_Handler_BitManipulation_Code_Return5:
 	ret
 	ld	a, (38298:16)
 	set	7, a
@@ -232,8 +241,9 @@ MidiCC_Handler_BitManipulation:
 	dec	1, xix
 	ld_rrb	w, xix, hl
 	cp	wa, 65535
-	jr	nz, 7
+	jr	nz, MidiCC_Handler_BitManipulation_Code_Return6
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f
+MidiCC_Handler_BitManipulation_Code_Return6:
 	ret
 	ld	a, (38298:16)
 	set	7, a
@@ -245,68 +255,72 @@ MidiCC_Handler_BitManipulation:
 	inc	1, xix
 	ld_rrb	w, xix, hl
 	cp	wa, 65535
-	jr	nz, 9
+	jr	nz, MidiCC_Handler_BitManipulation_Code_Return7
 	dec	1, xix
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f
+MidiCC_Handler_BitManipulation_Code_Return7:
 	ret
 	ld	a, (38350:16)
 	cp	a, 31
-	jr	ugt, 44
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return8
 	sll	a, 1
 	ld	xix, 16584054
 	ld_rr8w	bc, xix, a
 	cp	c, 255
-	jr	z, 26
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return8
 	ld	e, (38298:16)
 	ld	d, 127:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16563926
+	call	VoiceMode3_DispatchTable_Code_Helper
+MidiCC_Handler_BitManipulation_Code_Return8:
 	ret
 	ld	a, (38350:16)
 	cp	a, 31
-	jr	ugt, 44
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return9
 	sll	a, 1
 	ld	xix, 16584118
 	ld_rr8w	bc, xix, a
 	cp	c, 255
-	jr	z, 26
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return9
 	ld	e, (38298:16)
 	ld	d, 127:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16564059
+	call	MidiCC_Handler_BitManipulation_Code_Helper5
+MidiCC_Handler_BitManipulation_Code_Return9:
 	ret
 	ld	a, (38298:16)
 	ld	de, (38314:16)
 	xor	e, e
 	cp	a, 64
-	jr	c, 2
+	jr	c, MidiCC_Handler_BitManipulation_Code_Skip
 	ld	e, d
+MidiCC_Handler_BitManipulation_Code_Skip:
 	ld	(38314:16), de
-	call	16563692
+	call	MidiCC_Handler_BitManipulation_Code_Helper
 	ret
 	ld	e, a
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16564089
+	call	MidiCC_Handler_BitManipulation_Code_Helper6
 	ret
 	ld	a, (38350:16)
 	cp	a, 31
-	jr	ugt, 50
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return10
 	.byte 0xf1, 0x57, 0xfd, 0xcc
-	jr	z, 44
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return10
 	sll	a, 1
 	ld	xix, 16584182
 	ld_rr8w	bc, xix, a
 	cp	c, 255
-	jr	z, 26
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return10
 	ld	e, (38297:16)
 	ld	d, 255:opc
 	ld	a, (38299:16)
@@ -314,73 +328,81 @@ MidiCC_Handler_BitManipulation:
 	ld	(38312:16), bc
 	ld	(38314:16), de
 	call	16565074
+MidiCC_Handler_BitManipulation_Code_Return10:
 	ret
 	ld	a, (38350:16)
 	cp	a, 31
-	jr	ugt, 52
+	jr	ugt, MidiCC_Handler_BitManipulation_Code_Return11
 	.byte 0xf1, 0x57, 0xfd, 0xce
-	jr	z, 46
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return11
 	sll	a, 1
 	ld	xix, 16584246
 	ld_rr8w	bc, xix, a
 	cp	c, 255
-	jr	z, 28
+	jr	z, MidiCC_Handler_BitManipulation_Code_Return11
 	ld	e, (38297:16)
 	ld	d, (38298:16)
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16563791
+	call	MidiCC_Handler_BitManipulation_Code_Helper2
+MidiCC_Handler_BitManipulation_Code_Return11:
 	ret
 	ld	a, (38350:16)
 	cp	a, 31
-	jr	ugt, 50
+	jr	ugt, MidiCC_VoiceParam_8_Return
 	.byte 0xf1, 0x57, 0xfd, 0xcd
-	jr	z, 44
+	jr	z, MidiCC_VoiceParam_8_Return
 	sll	a, 1
 	.byte 0x44, 0x76, 0x0e, 0xfd
 MidiCC_VoiceParam_8:
 	nop
 	ld_rr8w	bc, xix, a
 	cp	c, 255
-	jr	z, 26
+	jr	z, MidiCC_VoiceParam_8_Return
 	ld	e, (38297:16)
 	ld	d, 127:opc
 	ld	a, (38299:16)
 	ld	(38316:16), a
 	ld	(38312:16), bc
 	ld	(38314:16), de
-	call	16563896
+	call	MidiCC_Handler_BitManipulation_Code_Helper4
+MidiCC_VoiceParam_8_Return:
 	ret
 	cp	(49121:16), 13
-	jr	nz, 13
+	jr	nz, MidiCC_VoiceParam_8_Return2
 	ld	a, (49123:16)
 	and	a, 255
-	jr	z, 4
+	jr	z, MidiCC_VoiceParam_8_Return2
 	.byte 0xf1, 0xd0, 0x95, 0xb8
+MidiCC_VoiceParam_8_Return2:
 	ret
 	.byte 0xf1, 0xd0, 0x95, 0xc8
-	jr	z, 24
+	jr	z, MidiCC_VoiceParam_8_Return3
 	.byte 0xf1, 0xd0, 0x95, 0xb0
 	ld	(38353:16), 128
-	calr	13
+	calr	MidiCC_VoiceParam_8_Helper
 	ld	(38353:16), 64
-	calr	5
-	call	16553566
+	calr	MidiCC_VoiceParam_8_Helper
+	call	VoiceChannels_InitPanFromPreset
+MidiCC_VoiceParam_8_Return3:
 	ret
+MidiCC_VoiceParam_8_Helper:
 	ld	xix, 37976
 	cp	(38353:16), 128
-	jr	z, 5
+	jr	z, MidiCC_VoiceParam_8_Skip
 	ld	xix, 38136
+MidiCC_VoiceParam_8_Skip:
 	ldw	wa, 65535
 	ldw	bc, 16
 	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ld	xix, 38008
 	cp	(38353:16), 128
-	jr	z, 5
+	jr	z, MidiCC_VoiceParam_8_Skip2
 	ld	xix, 38168
+MidiCC_VoiceParam_8_Skip2:
 	xor	wa, wa
 	.byte 0x31, 0x40
 MidiCC_StubHandler_B:
@@ -412,6 +434,7 @@ MidiCC_VoiceParam_12:
 	.byte 0x45, 0xeb, 0x85, 0xec, 0x61, 0xc8, 0x61, 0xc1
 	.byte 0xd2, 0x95, 0x61, 0xc1, 0xd2, 0x95, 0x3f, 0x20
 	.byte 0x6e, 0x88, 0x0e
+AccPedal_SendCtrl1_CheckPort_Code_Helper:
 	bit 0, (0xb74b:16)
 	jr nz, .Lc_fcfdb9
 	bit 4, (0xfd50:16)
@@ -1868,19 +1891,19 @@ DataBuf_CopyEffectBlock12:
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+6)
 	inc	2, xwa
-	call	16632296
+	call	DataBuf_CopyVoiceBlock24_Code_Helper2
 	cp	hl, 0:i3
-	jrl	ge, 280
+	jrl	ge, DataBuf_CopyFilterBlock12_Code_Epilogue
 	ld	xbc, (xsp+6)
 	ld	a, (xbc)
 	cp	a, 99
-	jrl	z, 137
+	jrl	z, DataBuf_CopyVoiceBlock24_Code_Skip2
 	cp	a, 97
-	jrl	nz, 263
+	jrl	nz, DataBuf_CopyFilterBlock12_Code_Epilogue
 	lda	xde, (xbc+2)
 	ld	xwa, 18688
 	ld	bc, 1:i3
-	call	16630342
+	call	DataBuf_CopyVoiceBlock24_Code_Helper
 	ld	xbc, (xsp+6)
 	ld	a, (xbc+1)
 	dec	1, a
@@ -1901,10 +1924,11 @@ DataBuf_CopyEffectBlock12:
 	call	16629800
 	ld	qiz, hl
 	cp	qiz, 0
-	jr	lt, 49
+	jr	lt, DataBuf_CopyVoiceBlock24_Code_Skip
 	ld	iz, 0:i3
 	cp	qiz, 0
-	jr	le, 42
+	jr	le, DataBuf_CopyVoiceBlock24_Code_Skip
+DataBuf_CopyVoiceBlock24_Code_Loop:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 18704
@@ -1915,18 +1939,20 @@ DataBuf_CopyEffectBlock12:
 	add	xwa, 18704
 	ld	xde, (xsp+6)
 	inc	2, xde
-	call	16630342
+	call	DataBuf_CopyVoiceBlock24_Code_Helper
 	inc	1, iz
 	cp	iz, qiz
-	jr	lt, -42
+	jr	lt, DataBuf_CopyVoiceBlock24_Code_Loop
+DataBuf_CopyVoiceBlock24_Code_Skip:
 	ld	a, (xsp+4)
 	ld	(64628:16), a
-	jrl	132
+	jrl	DataBuf_CopyFilterBlock12_Code_Epilogue
+DataBuf_CopyVoiceBlock24_Code_Skip2:
 	ld	xwa, (xsp+6)
 	lda	xde, (xwa+2)
 	ld	xwa, 19200
 	ldw	bc, 20
-	call	16630342
+	call	DataBuf_CopyVoiceBlock24_Code_Helper
 	ld	xbc, (xsp+6)
 	ld	a, (xbc+1)
 	dec	1, a
@@ -1945,6 +1971,7 @@ DataBuf_CopyFilterBlock12:
 	.byte 0x00, 0xaf, 0x06, 0x22, 0xea, 0x62, 0x1d, 0x46
 	.byte 0xc2, 0xfd, 0xde, 0x61, 0xd7, 0xfa, 0xf6, 0x61
 	.byte 0xd6, 0x8f, 0x04, 0x21, 0xf1, 0x8e, 0xfc, 0x41
+DataBuf_CopyFilterBlock12_Code_Epilogue:
 	pop XIZ
 	inc 6,XSP
 	ret
@@ -3536,6 +3563,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	popw iz
 	inc 6,XSP
 	ret
+Part_InitFromPreset_Helper:
 	pushw iz
 	ld IZ,WA
 	lda xwa, (Naka_ToshiParam_Table_0x6C:24)
@@ -3589,14 +3617,15 @@ DSPCfg_VoiceSlotB_ExtractData:
 	popw iz
 	ret
 	cp	a, 0:i3
-	jr	z, 15
+	jr	z, DSPCfg_VoiceSlotB_ExtractData_Code_Skip
 	cp	c, 0:i3
-	jr	z, 11
+	jr	z, DSPCfg_VoiceSlotB_ExtractData_Code_Skip
 	sub	c, 127
 	add	c, a
 	ld	l, c
 	cp	l, 0:i3
 	ret	ge
+DSPCfg_VoiceSlotB_ExtractData_Code_Skip:
 	ld	l, 0:opc
 	ret
 	cp	wa, 9
@@ -3611,23 +3640,27 @@ DSPCfg_VoiceSlotB_ExtractData:
 	call	16713757
 	inc	8, xsp
 	ret
+VocalistPage2OKFunc_Helper:
 	.byte 0xd7, 0xfa, 0x04
 	ld	a, (46928:16)
 	bit	7, a
-	jr	z, 7
+	jr	z, DSPCfg_VoiceSlotB_ExtractData_Code_Skip2
 	ld	(46932:16), 1
-	jr	17
+	jr	DSPCfg_VoiceSlotB_ExtractData_Code_Join
+DSPCfg_VoiceSlotB_ExtractData_Code_Skip2:
 	bit	6, a
-	jr	z, 7
+	jr	z, DSPCfg_VoiceSlotB_ExtractData_Code_Skip3
 	ld	(46932:16), 0
-	jr	5
+	jr	DSPCfg_VoiceSlotB_ExtractData_Code_Join
+DSPCfg_VoiceSlotB_ExtractData_Code_Skip3:
 	ld	(46932:16), 2
+DSPCfg_VoiceSlotB_ExtractData_Code_Join:
 	ld	a, (46928:16)
 	and	a, 63
 	ldb_erp	a, 251
 	ld	(46928:16), a
 	cp	(46932:16), 0
-	jr	nz, 36
+	jr	nz, DSPCfg_VoiceSlotB_ExtractData_Code_Skip4
 	ld	xwa, 192
 	ld	bc, 0:i3
 	ld	de, 1:i3
@@ -3636,7 +3669,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	push	xhl
 	push	xix
 	push	xiz
-	call	15668398
+	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -3644,62 +3677,68 @@ DSPCfg_VoiceSlotB_ExtractData:
 	stb_erp	a, 251
 	ld	(46928:16), a
 	ld	(46932:16), a
+DSPCfg_VoiceSlotB_ExtractData_Code_Skip4:
 	ld	a, (46928:16)
 	cp	a, 25
-	jr	c, 10
+	jr	c, DSPCfg_VoiceSlotB_ExtractData_Code_Skip5
 	cp	a, 27
-	jr	c, 84
+	jr	c, DSPCfg_VoiceSlotB_ExtractData_Code_Epilogue
 	cp	a, 29
-	jr	ugt, 79
+	jr	ugt, DSPCfg_VoiceSlotB_ExtractData_Code_Epilogue
+DSPCfg_VoiceSlotB_ExtractData_Code_Skip5:
 	cp	a, 0:i3
-	jr	z, 12
+	jr	z, DSPCfg_VoiceSlotB_ExtractData_Code_Skip6
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	16533946
+	call	SndParam_SyncDisplayBitmap
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
+DSPCfg_VoiceSlotB_ExtractData_Code_Skip6:
 	ld	a, (46928:16)
 	extz	wa
-	calr	108
+	calr	DSPCfg_VoiceSlotB_ExtractData_Code_Helper2
 	ld	a, (46928:16)
 	extz	wa
-	calr	49
+	calr	DSPCfg_VoiceSlotB_ExtractData_Code_Helper
 	ld	a, (46928:16)
 	extz	wa
-	calr	137
+	calr	DSPCfg_VoiceSlotB_ExtractData_Code_Helper3
 	.byte 0xf1, 0x52, 0xb7, 0xc8
-	jr	nz, 30
+	jr	nz, DSPCfg_VoiceSlotB_ExtractData_Code_Epilogue
 	ld	wa, 3:i3
-	call	16472167
+	call	BitMapOut_GetRenderMode_CheckBit3
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	16534084
-	call	15668398
-	call	16624306
-	call	15668398
+	call	SoundParam_NotifyMultipleChanges
+	call	SwbtWr_ReinitBothBanks
+	call	SysEx_ValidateRolandHeader_Cmd33
+	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
+DSPCfg_VoiceSlotB_ExtractData_Code_Epilogue:
 	pop qiz
 	ret
+DSPCfg_VoiceSlotB_ExtractData_Code_Helper:
 	extz	wa
-	calr	324
+	calr	DSPCfg_VoiceSlotB_ExtractData_Code_Helper4
 	or	xhl, xhl
 	ret	z
 	lda	xwa, (xhl+138)
 	ld	xbc, xwa
 	lda	xde, (xwa+96)
+DSPCfg_VoiceSlotB_ExtractData_Code_Loop:
 	ld	xhl, xbc
 	ld	xix, (xbc)
 	or	xix, xix
-	jr	z, 16
+	jr	z, DSPCfg_VoiceSlotB_ExtractData_Code_Skip7
 	ld	a, (xhl+4)
 	cpl	a
 	.byte 0x84, 0xc1
@@ -3707,30 +3746,35 @@ DSPCfg_VoiceSlotB_ExtractData:
 	ld	a, (xhl+5)
 	or	a, w
 	ld	(xix), a
+DSPCfg_VoiceSlotB_ExtractData_Code_Skip7:
 	inc	6, xbc
 	cp	xbc, xde
-	jr	c, -30
+	jr	c, DSPCfg_VoiceSlotB_ExtractData_Code_Loop
 	ret
+DSPCfg_VoiceSlotB_ExtractData_Code_Helper2:
 	extz	wa
-	calr	274
+	calr	DSPCfg_VoiceSlotB_ExtractData_Code_Helper4
 	or	xhl, xhl
 	ret	z
 	ld	xbc, xhl
 	lda	xde, (xhl+138)
+DSPCfg_VoiceSlotB_ExtractData_Code_Loop2:
 	ld	xhl, xbc
 	ld	xix, (xbc)
 	or	xix, xix
-	jr	z, 16
+	jr	z, DSPCfg_VoiceSlotB_ExtractData_Code_Skip8
 	ld	a, (xix)
 	and	a, 248
 	.byte 0x8b, 0x04, 0xe1
 	lda_dpi	xbc, 240
 	ld	a, (xhl+5)
 	ld	(xix), a
+DSPCfg_VoiceSlotB_ExtractData_Code_Skip8:
 	inc	6, xbc
 	cp	xbc, xde
-	jr	c, -30
+	jr	c, DSPCfg_VoiceSlotB_ExtractData_Code_Loop2
 	ret
+DSPCfg_VoiceSlotB_ExtractData_Code_Helper3:
 	ld c, (0xb754:16)
 	cp c, 2:i3
 	ret Z
@@ -3765,6 +3809,7 @@ DataBuf_TransferSlotBitfields_Loop:
 	.byte 0x00, 0x38, 0xd8, 0xa9, 0xee, 0x89, 0x32, 0xea
 	.byte 0x00, 0x1d, 0x12, 0x3c, 0xef, 0x3e, 0x1d, 0x15
 	.byte 0x03, 0xff, 0xef, 0x64, 0x5e, 0xef, 0x62, 0x0e
+DSPCfg_VoiceSlotB_ExtractData_Code_Helper4:
 	.byte 0xc9, 0xcf, 0x19, 0x6f, 0x11, 0xd8, 0x12, 0xd8
 	.byte 0x09, 0xea, 0x00, 0xf2, 0xfe, 0x15, 0xee, 0x31
 	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x33, 0x0e, 0xc9, 0xcf
@@ -4079,6 +4124,7 @@ MidiSysEx_SendAllParams:
 	.byte 0x66, 0x9f, 0x04, 0x61, 0x9f, 0x04, 0x3f, 0x10
 	.byte 0x00, 0x67, 0xc5, 0x3e, 0x1d, 0x15, 0x03, 0xff
 	.byte 0xef, 0x64, 0x5e, 0xef, 0x62, 0x0e
+VocalistPage2OKFunc_Helper2:
 	extz WA
 	sla WA, 0x03
 	lda xbc, (NakaInst_SoundConfig_LookupTable_0x1786:24)
@@ -4153,8 +4199,8 @@ MidiSysEx_SendProgramChange:
 	ld	bc, 4:i3
 	calr	380
 	cp	l, 0:i3
-	jrl	nz, 144
-	call	15673490
+	jrl	nz, MidiSysEx_SendControlChange2_Code_Epilogue
+	call	SeqBuf2_ReadByte
 	cp	hl, 65535
 	jr	z, 119
 	ld	iz, (1033:16)
@@ -4162,38 +4208,45 @@ MidiSysEx_SendProgramChange:
 	extz	bc
 	ld	xwa, (48144:16)
 	cpib_erp	251, 1
-	jr	z, 23
+	jr	z, MidiSysEx_SendReverbFixup_Code_Skip2
 	cpib_erp	251, 0
-	jr	nz, 36
+	jr	nz, MidiSysEx_SendReverbFixup_Code_Skip4
 	cp	l, 240
-	jr	nz, 7
+	jr	nz, MidiSysEx_SendReverbFixup_Code_Skip
 	ldib_erp	251, 1
 	ld	wa, bc
-	jr	41
+	jr	MidiSysEx_SendReverbFixup_Code_Join
+MidiSysEx_SendReverbFixup_Code_Skip:
 	ld	bc, 4:i3
 	ld	de, 1:i3
 	jr	72
+MidiSysEx_SendReverbFixup_Code_Skip2:
 	cp	l, 80
-	jr	nz, 7
+	jr	nz, MidiSysEx_SendReverbFixup_Code_Skip3
 	ldib_erp	251, 2
 	ld	wa, bc
-	jr	23
+	jr	MidiSysEx_SendReverbFixup_Code_Join
+MidiSysEx_SendReverbFixup_Code_Skip3:
 	ld	bc, 4:i3
 	ld	de, 2:i3
 	jr	54
+MidiSysEx_SendReverbFixup_Code_Skip4:
 	bit	7, l
-	jr	nz, 26
+	jr	nz, MidiSysEx_SendReverbFixup_Code_Skip6
 	ld	xde, (48056:16)
 	.byte 0x92, 0x3f, 0xff, 0x00
-	jr	nc, 7
+	jr	nc, MidiSysEx_SendReverbFixup_Code_Skip5
 	ld	wa, bc
-	calr	58
+MidiSysEx_SendReverbFixup_Code_Join:
+	calr	MidiSysEx_SendReverbFixup_Code_Helper
 	jr	39
+MidiSysEx_SendReverbFixup_Code_Skip5:
 	ld	bc, 4:i3
 	ld	de, 6:i3
 MidiSysEx_SendCC1ViaCOMM:
 	calr	154
 	jr	30
+MidiSysEx_SendReverbFixup_Code_Skip6:
 	cp	l, 247
 	jr	nz, 14
 MidiSysEx_SendControlChange2:
@@ -4202,8 +4255,10 @@ MidiSysEx_SendControlChange2:
 	.byte 0xda, 0xab, 0x1e, 0x7e, 0x00, 0xf1, 0x32, 0x04
 	.byte 0xbd, 0x1e, 0xdc, 0x12, 0xde, 0x88, 0x1e, 0xf9
 	.byte 0x12, 0xf1, 0x7c, 0xbc, 0xcd, 0x76, 0x62, 0xff
+MidiSysEx_SendControlChange2_Code_Epilogue:
 	pop XIZ
 	ret
+MidiSysEx_SendReverbFixup_Code_Helper:
 	.byte 0xe1, 0xb8, 0xbb, 0x21, 0xb9
 MidiSysEx_SendCC2RegValue:
 	.byte 0x0a, 0x32, 0xa2, 0x21, 0xf5, 0xe4, 0x33, 0xb2
@@ -4254,28 +4309,28 @@ MidiSysEx_SendBank1P2ViaCOMM:
 	ld	l, 104:opc
 	pop	xde
 	ld	xbc, 1:i3
-	jr	78
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 2:i3
-	jr	74
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 MidiSysEx_SendBankData2:
 	ld	xbc, 3:i3
-	jr	70
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 4:i3
-	jr	66
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 5:i3
-	jr	62
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 6:i3
-	jr	58
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 7:i3
-	jr	54
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 8
-	jr	47
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 9
-	jr	40
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 10
-	jr	33
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 11
-	jr	26
+	jr	MidiSysEx_SendBank1Param2_Code_Join
 	ld	xbc, 12
 	jr	19
 	ld	xbc, 13
@@ -4283,6 +4338,7 @@ MidiSysEx_SendBankData2:
 	ld	xbc, 14
 	jr	5
 	ld	xbc, 15
+MidiSysEx_SendBank1Param2_Code_Join:
 	add	xwa, xbc
 MidiSysEx_SendBank2ViaCOMM:
 	ld	l, (xwa)
@@ -4763,6 +4819,7 @@ MidiSeq_Slot7_WriteParams:
 	.byte 0x13, 0xe1, 0x10, 0xbc, 0x20, 0xd9, 0xac, 0x32
 	.byte 0x14, 0x00, 0x68, 0x05, 0xd9, 0xac, 0x32, 0x12
 	.byte 0x00, 0x1e, 0x50, 0xf4, 0xd7, 0xfa, 0x05, 0x0e
+DSP_Init_ErrorFlagSet_Code_Helper:
 	.byte 0xd9, 0x8a, 0xd9, 0x69, 0xda, 0xd8, 0x66, 0x1d
 	.byte 0xe1, 0xc0, 0xbb, 0x23, 0xbb, 0x0a, 0x34, 0xa4
 	.byte 0x22, 0xf5, 0xe8, 0x35, 0xb4, 0x62, 0xc5, 0xe0
@@ -4791,6 +4848,7 @@ MidiSeq_Slot8_WriteParams:
 	.byte 0xb5, 0x45, 0x93, 0x61, 0xd9, 0x8a, 0xd9, 0x69
 	.byte 0xda, 0xd8, 0x6e, 0xea, 0xe1, 0xc0, 0xbb, 0x20
 	.byte 0xa8, 0x0a, 0x20, 0xb0, 0x00, 0xff, 0x0e
+DSP_Init_ErrorFlagSet_Code_Helper2:
 	ld xwa, (0xbc10:16)
 	cp (XWA+0x04),0x00
 	ret NZ
@@ -4891,6 +4949,7 @@ MidiSeq_CompareRange:
 	lda_dpi	xbc, 228
 	ld	(xbc), 255
 	ret
+VoiceParam_AssSwb_MultiBlock_Data_Code_Helper:
 	dec	4, xsp
 	lda	xbc, (xsp)
 	ld	xde, (xsp+8)
@@ -5056,6 +5115,7 @@ SeqOut_FlushWithChunking:
 	.byte 0xbe, 0x08, 0x60, 0xf1, 0x7c, 0xbc, 0xce, 0x66
 	.byte 0x0d, 0x1e, 0xb3, 0x00, 0xa6, 0x20, 0xeb, 0x80
 	.byte 0xbe, 0x04, 0x60, 0xbe, 0x08, 0x63, 0x5e, 0x0e
+DSP_Init_ErrorFlagSet_Code_Helper3:
 	.byte 0xf2, 0x00, 0x88, 0x1e, 0x32, 0xb0
 SeqOut_ChunkLoop32:
 	.byte 0x62, 0xf2, 0x20, 0x88, 0x1e, 0x31, 0xea, 0xa1
@@ -5086,7 +5146,7 @@ SeqOut_TimedChunkRemainder:
 	push	xhl
 	push	xix
 	push	xiz
-	call	16115051
+	call	SeqOut_TimedChunkLoop32_Code_Helper
 SeqVoice_ReadEntryFields_Data:
 	.byte 0x5e, 0x5c, 0x5b, 0x5a, 0xd2, 0x2e, 0x48, 0x09
 	.byte 0x23, 0xeb, 0x12, 0xeb, 0xee, 0x04, 0x0e, 0x3a
@@ -5503,15 +5563,16 @@ DSP_Init_ErrorFlagSet:
 	.byte 0xfd, 0x1d, 0x65
 MidiSeq_PartLookup_Data:
 	jr	le, -3
-	call	16605890
+	call	DSP_Init_ErrorFlagSet_Code_Helper2
 	ret
 	ret
 	ret
 	ret
-	calr	9
-	calr	59
-	calr	109
-	jrl	163
+	calr	DSP_Init_ErrorFlagSet_Code_Helper4
+	calr	DSP_Init_ErrorFlagSet_Code_Helper5
+	calr	DSP_Init_ErrorFlagSet_Code_Helper6
+	jrl	MidiSeq_ClearSyncFlag_Code_Join
+DSP_Init_ErrorFlagSet_Code_Helper4:
 	ld	xwa, (48144:16)
 	ld	bc, 4:i3
 	call	16602853
@@ -5522,12 +5583,13 @@ MidiSeq_PartLookup_Data:
 	ldw	de, 18
 	call	16602729
 	ld	xwa, 48176
-	call	16607248
+	call	DSP_Init_ErrorFlagSet_Code_Helper3
 	ld	xwa, 15611478
 	ldw	bc, 12
-	call	16605725
-	call	16605890
+	call	DSP_Init_ErrorFlagSet_Code_Helper
+	call	DSP_Init_ErrorFlagSet_Code_Helper2
 	ret
+DSP_Init_ErrorFlagSet_Code_Helper5:
 	ld	xwa, (48144:16)
 	ld	bc, 4:i3
 	call	16602853
@@ -5545,6 +5607,7 @@ MidiSeq_ApplyPendingParams:
 	call	16605725
 	call	16605890
 	ret
+DSP_Init_ErrorFlagSet_Code_Helper6:
 	ld	xwa, (48144:16)
 	ld	bc, 4:i3
 	call	16602853
@@ -5563,8 +5626,9 @@ MidiSeq_ClearSyncFlag:
 MidiSeq_PartConfigure_Data:
 	jr	le, -3
 	call	16605797
-	call	16605890
+	call	DSP_Init_ErrorFlagSet_Code_Helper2
 	ret
+MidiSeq_ClearSyncFlag_Code_Join:
 	ld	xwa, (48144:16)
 	ld	bc, 4:i3
 	call	16602853
@@ -5574,7 +5638,7 @@ MidiSeq_PartConfigure_Data:
 	incm8	1, (xwa+3)
 	ld	xwa, 15611296
 	ld	bc, 5:i3
-	call	16605725
+	call	DSP_Init_ErrorFlagSet_Code_Helper
 	call	16602335
 	ret
 	ld	xwa, (48144:16)
@@ -6172,33 +6236,33 @@ SeqAlt_CheckInitBuffer:
 	push	xhl
 	push	xix
 	push	xiz
-	call	16532755
-	call	16532608
-	call	16532770
-	call	16554949
+	call	ToneGen_DSPCfg_Initialize
+	call	ToneGen_Config_InitAllEntries
+	call	Voice_InitAllChannelEntries
+	call	ToneGen_DispatchByMode
 	ld	wa, 3:i3
-	call	16472167
-	call	16534084
-	call	15668425
-	call	16624306
+	call	BitMapOut_GetRenderMode_CheckBit3
+	call	SoundParam_NotifyMultipleChanges
+	call	SwbtWr_ReinitOutputBank
+	call	SysEx_ValidateRolandHeader_Cmd33
 	ld	wa, 3:i3
-	call	16472176
+	call	BitMapOut_GetRenderMode_Return
 	.byte 0xf1, 0x5d, 0x90, 0xbc
-	call	16554829
+	call	SeqTimer_UpdateTempoReg
 	.byte 0xf1, 0x5d, 0x90, 0xb4
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	calr	818
-	calr	863
+	calr	SoundMode_AlternateRender_Code_Sub
+	calr	MidiSysEx_ProcessBlock_Code_Helper
 	calr	861
-	calr	906
-	calr	951
+	calr	MidiSysEx_ProcessBlock_Code_Helper2
+	calr	MidiSysEx_ProcessBlock_Code_Helper3
 	calr	949
 	calr	947
 	calr	945
-	calr	1019
+	calr	MidiSysEx_ProcessBlock_Code_Helper4
 	lda	xde, (64607:16)
 	ld	c, (xde)
 	res	0, c
@@ -6345,21 +6409,24 @@ SoundMode_RenderWithNotify:
 	lda	xbc, (15609654:24)
 	ld	xwa, xbc
 	lda	xbc, (xbc+64)
+SoundMode_FullRenderUpdate_Code_Loop:
 	ld	xhl, (xwa)
 	ld	d, (xhl-1)
 SoundMode_NotifyActiveVoices:
 	ld	e, d
 	dec	1, d
 	cp	e, 0:i3
-	jr	z, 12
+	jr	z, SoundMode_FullRenderUpdate_Code_Skip
+SoundMode_FullRenderUpdate_Code_Loop2:
 	stib_dsp	236, 0
 	ld	e, d
 	dec	1, d
 	cp	e, 0:i3
-	jr	nz, -12
+	jr	nz, SoundMode_FullRenderUpdate_Code_Loop2
+SoundMode_FullRenderUpdate_Code_Skip:
 	inc	4, xwa
 	cp	xwa, xbc
-	jr	c, -31
+	jr	c, SoundMode_FullRenderUpdate_Code_Loop
 SoundMode_RenderPopRegs:
 	ret
 	ld wa, (0x11f5:16)
@@ -6377,6 +6444,7 @@ SoundMode_AlternateRender:
 	.byte 0x30, 0x80, 0x3f, 0x0f, 0x63, 0xe6, 0xef
 MidiCtrl_ModeSwitchHandler:
 	jr ov, 14
+SoundMode_AlternateRender_Code_Sub:
 	ld (0x908b:16), 0xb1
 	ld (0x908d:16), 0x00
 	ld (0x908c:16), 0x00
@@ -6397,6 +6465,7 @@ MidiCtrl_ModeSwitchHandler:
 	cp A,0x0f
 	jr ule, .Lc_fd8306
 	ret
+MidiSysEx_ProcessBlock_Code_Helper:
 	.byte 0x0e, 0xf1, 0x8b, 0x90, 0x00, 0xb2, 0xf1
 MidiCtrl_ApplyModeSwitch:
 	.byte 0x8d, 0x90, 0x00, 0x00, 0xf1, 0x8c, 0x90, 0x00
@@ -6411,6 +6480,7 @@ MidiCtrl_CheckAltCommand:
 	jr	ule, -32
 MidiCtrl_FullReconfigure:
 	ret
+MidiSysEx_ProcessBlock_Code_Helper2:
 	ld (0x908b:16), 0xb3
 	ld (0x908d:16), 0x7f
 	ld (0x908c:16), 0x00
@@ -6431,6 +6501,7 @@ MidiCtrl_FullReconfigure:
 	cp A,0x0f
 	jr ule, .Lc_fd8367
 	ret
+MidiSysEx_ProcessBlock_Code_Helper3:
 	.byte 0x0e, 0x0e, 0x0e, 0xf1, 0x8b, 0x90, 0x00, 0xb0
 	.byte 0xf1
 MidiCtrl_DeltaAndProcess:
@@ -6447,6 +6518,7 @@ SoundMode_ProcessToneAndParams:
 	.byte 0x41, 0xf1, 0x8e, 0x90, 0x00, 0x7f, 0x3a, 0x3b
 	.byte 0x3c, 0x3e, 0x1d, 0xda, 0x8e, 0xfc, 0x5e, 0x5c
 	.byte 0x5b, 0x5a, 0x0e
+MidiSysEx_ProcessBlock_Code_Helper4:
 	lda xbc, (0x95d8:16)
 	ld XDE,XBC
 	lda xwa, (0x9617:16)
@@ -7273,6 +7345,7 @@ VoiceParam_MultiMode_StubRet:
 	.byte 0xe8
 VoiceParam_AssSwb_MultiBlock_Data:
 	.incbin "includes/romslices/v7_transplant_VoiceParam_AssSwb_MultiBlock_Data_head.bin"
+Audio_InitSingleChannelParams_Helper:
 	push XIZ
 	bit 4, (0xfd50:16)
 	jr nz, .Lc_fd989b
@@ -7287,7 +7360,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add XIZ,XBC
 .Lc_fd986a:
 	push XIZ
-	call 0xfd6495
+	call VoiceParam_AssSwb_MultiBlock_Data_Code_Helper
 	inc 4,XSP
 	ld (0xbc86:16), xhl
 	lda xwa, (0xbc86:16)

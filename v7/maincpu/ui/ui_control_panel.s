@@ -22,13 +22,13 @@ ParaLoadOpt_BuildFromIZ1:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	jr	84
+	jr	ParaLoadOptSendEvtReturn
 ParaLoadOpt_BuildFromIZ2:
 	ld	c, (xiz+2)
 	extz	bc
@@ -38,13 +38,13 @@ ParaLoadOpt_BuildFromIZ2:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	call	16400579
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	jr	41
+	jr	ParaLoadOptSendEvtReturn
 ParaLoadOpt_BuildFromIZ3:
 	ld c, (xiz + 3)
 
@@ -98,22 +98,22 @@ ParaLoadOptOK_ReturnZero:
 
 MainFlashFunc:
 	cp	xbc, 31653894
-	jr	z, 64
+	jr	z, MainFlash_AudioDispatch
 	cp	xbc, 31653893
-	jr	nz, 62
+	jr	nz, MainFlash_ReturnZero
 	ld	(32422:16), 37
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 7:i3
-	call	16535006
+	call	CtrlPanel_IndicatorJumpTable
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16423243
-	jr	6
+	call	ApPostEvent
+	jr	MainFlash_ReturnZero
 MainFlash_AudioDispatch:
 	ld wa, 7:i3
 	call Audio_DispatchCommand
@@ -767,9 +767,9 @@ IvTimer_HandleEvent3A:
 	pushw	39060
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	66
+	jr	IvTimer_ReturnZero
 IvTimer_HandleEvent09:
 	ld xwa, 0x1e5000a
 	push xwa
@@ -1380,9 +1380,9 @@ Slider_Case1E0006A:
 	pushw	39066
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	354
+	jrl	Slider_NoChange
 Slider_Case1E0006B:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -1750,9 +1750,9 @@ Bounds_Case1E0006A:
 	pushw	39070
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	105
+	jr	Bounds_Done
 Bounds_Default:
 	ld xwa, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1833,9 +1833,9 @@ Edit_Case1E00069:
 	pushw	234
 	pushw	39074
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	62
+	jr	Edit_NoChange
 Edit_Case1E00068:
 	ld xwa, xiz
 	call GetViewInstance
@@ -1993,7 +1993,7 @@ KeyScan_CheckEmptyMarker:
 
 KeyScan_ScanLoop:
 	cp	(xix), bc
-	jr	nz, 49
+	jr	nz, KeyScan_AdvanceEntry
 	ld	d, 0:opc
 	extz	xde
 	sll	xde, 8
@@ -2027,7 +2027,7 @@ KeyScan_AdvanceEntry:
 CtrlPanel_HandleKeyInput:
 	ld	a, (49121:16)
 	cp	a, 16
-	jr	z, 24
+	jr	z, CtrlPanel_HandleKey10
 	cp	a, 0:i3
 	ret	nz
 	ld	a, (49123:16)
@@ -2036,14 +2036,14 @@ CtrlPanel_HandleKeyInput:
 	ld	a, (9954:16)
 	and	a, 3
 	ret	nz
-	jr	25
+	jr	PartSelect_UpdateDisplayState
 CtrlPanel_HandleKey10:
-	call	16635862
+	call	DkMdlyPly_CheckState_Helper2
 	ld	xde, 0:i3
 	ld	e, (35998:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29360175
-	call	16423243
+	call	ApPostEvent
 	ret
 PartSelect_UpdateDisplayState:
 	ld	a, (64614:16)
@@ -2160,32 +2160,32 @@ RefreshApTask:
 	ld	(160930:24), xwa
 	ld	xwa, 4294967295
 	ld	xbc, 29360136
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360135
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360137
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360159
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360156
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360148
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360149
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457456
 	ld	xde, 0:i3
-	jp	16423243
+	jp	ApPostEvent
 RefreshSwEvent:
 	ld xwa, 0:i3
 	ld (0x02749a:24), xwa
@@ -2215,7 +2215,7 @@ KeyScan_Disable:
 
 MainAutoFree:
 	push	xde
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	xhl, 0:i3
 	ret
@@ -2426,7 +2426,7 @@ RamCtrl_Set_InvalidSize:
 RamCtrl_Set_Dispatch:
 	pushw 0x16
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -2450,7 +2450,7 @@ RamCtrl_Set_Dispatch:
 
 	ld xde, (xsp + 12)
 
-	call	16423243
+	call	ApPostEvent
 
 	ld xwa, 0xffffffff
 
@@ -2515,7 +2515,7 @@ BitCtrl_ReadBitZero:
 BitCtrl_ReadBitDone:
 	pushw 0xe
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -2537,7 +2537,7 @@ BitCtrl_ReadBitDone:
 
 	ld xde, (xsp + 8)
 
-	call	16423243
+	call	ApPostEvent
 
 	ld xwa, 0xffffffff
 
@@ -2589,15 +2589,15 @@ MainPmanCtrl_StorePartSelect:
 	jr	31
 MainPmanCtrl_CheckSoundParam:
 	ld	xwa, 16640
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	l, 1:i3
-	jr	z, 4
+	jr	z, MainPmanCtrl_SetPartSelectOne
 	cp	l, 5:i3
-	jr	nz, 9
+	jr	nz, MainPmanCtrl_SetPartSelectZero
 MainPmanCtrl_SetPartSelectOne:
 	ld	(35998:16), 1
 	ld	e, 1:opc
-	jr	9
+	jr	MainPmanCtrl_CompareAndUpdate
 MainPmanCtrl_SetPartSelectZero:
 	ld	(35998:16), 0
 MainPmanCtrl_LoadPartSelect:
@@ -2615,56 +2615,56 @@ MainTitleControl:
 	ld	xwa, xde
 	and	xwa, 65535
 	cp	xbc, 31457467
-	jrl	z, 228
+	jrl	z, MainTitleCtrl_HandleBB
 	ld	hl, wa
 	cp	xbc, 31457466
-	jrl	z, 203
+	jrl	z, MainTitleCtrl_HandleBA
 	cp	xbc, 31457451
-	jrl	z, 180
+	jrl	z, MainTitleCtrl_HandleAB
 	ld	a, (35994:16)
 	cp	xbc, 29360147
-	jrl	z, 134
+	jrl	z, SeqState_DemoModeHandler
 	cp	xbc, 29360168
-	jr	z, 85
+	jr	z, MainTitleCtrl_SaveAndTransition
 	cp	xbc, 29360150
-	jr	z, 77
+	jr	z, MainTitleCtrl_SaveAndTransition
 	cp	xbc, 29360149
-	jr	z, 46
+	jr	z, SeqState_TransitionMode
 	cp	xbc, 29360148
-	jrl	nz, 238
+	jrl	nz, UIWidget_ReturnZero
 	.byte 0xc1, 0x98, 0x8c, 0x19, 0x99, 0x8c
 	ld	(35992:16), l
 	ldw	wa, 72
-	call	16544114
+	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 0:i3
 	ld	(160930:24), xwa
 	ld	(160926:24), xwa
 	ld	(160922:24), xwa
-	jrl	201
+	jrl	UIWidget_ReturnZero
 SeqState_TransitionMode:
 	ld	(35995:16), a
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
 	ld	(35994:16), l
 	ld	(35996:16), l
 	ldw	wa, 97
-	jr	13
+	jr	MainTitleCtrl_SetIndicatorAndClear
 MainTitleCtrl_SaveAndTransition:
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
 	ld	(35996:16), l
 	ldw	wa, 97
 MainTitleCtrl_SetIndicatorAndClear:
-	call	16544114
+	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 0:i3
 	ld	(160930:24), xwa
 	ld	(160926:24), xwa
 	ld	(160922:24), xwa
-	call	16635862
-	jrl	137
+	call	DkMdlyPly_CheckState_Helper2
+	jrl	UIWidget_ReturnZero
 SeqState_DemoModeHandler:
 	cp	xde, 8
-	jrl	nz, 128
+	jrl	nz, UIWidget_ReturnZero
 	cp	(35996:16), a
-	jr	nz, 4
+	jr	nz, SeqDemo_SaveCurrentState
 	ld	(35995:16), a
 SeqDemo_SaveCurrentState:
 	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c, 0xc1, 0x98
@@ -2950,9 +2950,9 @@ CtrlPanel_DispatchByIndex:
 
 CtrlPanel_FrameDispatchTable:
 	ld	xde, 4:i3
-	jr	18
+	jr	CtrlPanel_ApplyMarginLoop
 	ld	xde, 3:i3
-	jr	14
+	jr	CtrlPanel_ApplyMarginLoop
 	ld	xde, 1:i3
 	decm	2, (xiz+4)
 	ld	wa, 2:i3

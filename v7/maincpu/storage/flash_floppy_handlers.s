@@ -563,136 +563,155 @@ InitializeNaka:
 NAKA_InitDataBlock:
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip
 	lda	xhl, (NAKA_UIObjectTable_0x13E0:24)
 	ret
+InitializeNaka_Skip:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip2
 	lda	xhl, (NAKA_UIObjectTable_0x1452:24)
 	ret
+InitializeNaka_Skip2:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip3
 	lda	xhl, (NAKA_UIObjectTable_0x1492:24)
 	ret
+InitializeNaka_Skip3:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip4
 	lda	xhl, (NAKA_UIObjectTable_0x1684:24)
 	ret
+InitializeNaka_Skip4:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip5
 	lda	xhl, (NAKA_UIObjectTable_0x16FC:24)
 	ret
+InitializeNaka_Skip5:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip6
 	lda	xhl, (NAKA_UIObjectTable_0x186C:24)
 	ret
+InitializeNaka_Skip6:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip7
 	lda	xhl, (NAKA_UIObjectTable_0x19FE:24)
 	ret
+InitializeNaka_Skip7:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip8
 	lda	xhl, (NAKA_UIObjectTable_0x1B8A:24)
 	ret
+InitializeNaka_Skip8:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip9
 	lda	xhl, (NAKA_UIObjectTable_0x1D6E:24)
 	ret
+InitializeNaka_Skip9:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip10
 	lda	xhl, (NAKA_UIObjectTable_0x1DF2:24)
 	ret
+InitializeNaka_Skip10:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip11
 	lda	xhl, (NAKA_UIObjectTable_0x1F94:24)
 	ret
+InitializeNaka_Skip11:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip12
 	lda	xhl, (NAKA_UIObjectTable_0x2004:24)
 	ret
+InitializeNaka_Skip12:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip13
 	lda	xhl, (NAKA_UIObjectTable_0x2166:24)
 	ret
+InitializeNaka_Skip13:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip14
 	lda	xhl, (NAKA_UIObjectTable_0x21E0:24)
 	ret
+InitializeNaka_Skip14:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip15
 	lda	xhl, (NAKA_UIObjectTable_0x2342:24)
 	ret
+InitializeNaka_Skip15:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip16
 	lda	xhl, (NAKA_UIObjectTable_0x24B2:24)
 	ret
+InitializeNaka_Skip16:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip17
 	lda	xhl, (NAKA_UIObjectTable_0x2512:24)
 	ret
+InitializeNaka_Skip17:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, 0x1e0009f
-	jr	nz, 6
+	jr	nz, InitializeNaka_Skip18
 	lda	xhl, (NAKA_UIObjectTable_0x2572:24)
 	ret
+InitializeNaka_Skip18:
 	ld	xhl, 0:i3
 	ret
-	calr	371
-	calr	56
+InitializeNaka_Join:
+	calr	Flash_InitExtMemAddrs
+	calr	NoteEvent_LoadSoundGenParams
 	ld	wa, 1:i3
-	calr	2205
-	calr	48
+	calr	NoteEventBuffer_Store
+	calr	NoteEvent_LoadSoundGenParams
 	ld	wa, 2:i3
-	calr	2197
-	calr	40
+	calr	NoteEventBuffer_Store
+	calr	NoteEvent_LoadSoundGenParams
 	ld	wa, 3:i3
-	calr	2189
-	calr	32
+	calr	NoteEventBuffer_Store
+	calr	NoteEvent_LoadSoundGenParams
 	ld	wa, 4:i3
-	calr	2181
-	calr	24
+	calr	NoteEventBuffer_Store
+	calr	NoteEvent_LoadSoundGenParams
 	ld	wa, 5:i3
-	calr	2173
-	calr	16
+	calr	NoteEventBuffer_Store
+	calr	NoteEvent_LoadSoundGenParams
 	ld	wa, 6:i3
-	calr	2165
-	calr	8
+	calr	NoteEventBuffer_Store
+	calr	NoteEvent_LoadSoundGenParams
 	ld	wa, 7:i3
-	calr	2157
-	jrl	5626
+	calr	NoteEventBuffer_Store
+	jrl	Flash_ExtendedOpsBlock_Code_Join
 
 NoteEvent_LoadSoundGenParams:
 	lda_dri XSP, 0xfd, 0x94, 0xfe
@@ -845,23 +864,23 @@ Flash_InitBytecodeBlock:
 	ld	(xsp+12), a
 	ld	(xsp+2), 0
 	ld	(xsp+8), 0
-	calr	-139
+	calr	Flash_InitExtMemAddrs
 	ld	a, (xsp+12)
 	extz	wa
 	.byte 0x8f, 0x0c, 0x3f, 0x0a
-	jrl	nc, 349
-	calr	5349
+	jrl	nc, Flash_InitBytecodeBlock_Skip5
+	calr	DualVoice_ScanAllColumns
 	ld	a, (xsp+10)
 	extz	wa
-	calr	5538
+	calr	DualVoice_ScanAllColumnsAlt
 	ld	a, (xsp+10)
 	extz	wa
-	calr	1567
+	calr	NoteEvent_Store
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	1569
-	call	16114969
+	calr	NoteEventBuffer_CopyToSlot
+	call	AccPatch_CountSlotsAlt
 	ld	a, (xsp+10)
 	extz	wa
 	lda	xbc, (14770428:24)
@@ -870,6 +889,7 @@ Flash_InitBytecodeBlock:
 	ld	xwa, (3186:16)
 	ld	(14610:16), xwa
 	ldib_erp	251, 0
+Flash_InitBytecodeBlock_Loop:
 	ld	c, (xsp+6)
 	extz	bc
 	stb_erp	a, 251
@@ -879,16 +899,17 @@ Flash_InitBytecodeBlock:
 	add	de, bc
 	lda	xwa, (14770368:24)
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x19, 0x10, 0x39
-	call	16116212
+	call	AccPatch_InitFromSlotIndex
 	inc1b_erp	251
 	cp_erpb	251, 10
-	jr	c, -43
+	jr	c, Flash_InitBytecodeBlock_Loop
 	ld	xwa, (3182:16)
 	ld	(14610:16), xwa
 	ld	xwa, (3186:16)
 	ld	(14614:16), xwa
 	.byte 0xf1, 0x14, 0x35, 0xb0
 	ldib_erp	251, 0
+Flash_InitBytecodeBlock_Loop2:
 	ld	e, (xsp+12)
 	extz	de
 	stb_erp	a, 251
@@ -902,69 +923,76 @@ Flash_InitBytecodeBlock:
 	extz	wa
 	add	bc, wa
 	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x19, 0x11, 0x39
-	call	16133691
+	call	DualVoice_ParamLoadDone
 	ld	a, (13588:16)
 	extz	wa
 	bit	0, wa
-	jr	z, 6
+	jr	z, Flash_InitBytecodeBlock_Skip
 	ld	(xsp+8), 1
-	jr	9
+	jr	Flash_InitBytecodeBlock_Join
+Flash_InitBytecodeBlock_Skip:
 	inc1b_erp	251
 	cp_erpb	251, 10
-	jr	c, -74
-	call	16114965
+	jr	c, Flash_InitBytecodeBlock_Loop2
+Flash_InitBytecodeBlock_Join:
+	call	AccPatch_CountSlots_Wrapper
 	.byte 0x8f, 0x08, 0x3f, 0x00
-	jrl	nz, 128
+	jrl	nz, Flash_InitBytecodeBlock_Loop3
 	lda	xwa, (1748:16)
 	.byte 0x90, 0x3f, 0xff, 0xff
-	jr	nz, 42
+	jr	nz, Flash_InitBytecodeBlock_Skip3
 	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
-	jr	nz, 35
-	calr	1748
+	jr	nz, Flash_InitBytecodeBlock_Skip3
+	calr	Flash_StoreBaseAndInitAccPatch
 	ld	a, (xsp+4)
 	extz	wa
-	calr	1449
+	calr	NoteEventBuffer_Store
 	lda	xwa, (1850:16)
 	.byte 0x90, 0x3f, 0xff, 0xff
-	jr	nz, 8
+	jr	nz, Flash_InitBytecodeBlock_Skip2
 	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
 	jrl	z, 341
-	calr	5909
+Flash_InitBytecodeBlock_Skip2:
+	calr	Flash_WriteBackSlotTable
 	jrl	335
+Flash_InitBytecodeBlock_Skip3:
 	ld	a, (xsp+10)
 	extz	wa
-	calr	6003
+	calr	Flash_SlotUpdateOpsBlock
 	ld	wa, hl
 	ld	c, (xsp+10)
 	extz	bc
 	cp	wa, 0:i3
-	jr	nz, 42
+	jr	nz, Flash_InitBytecodeBlock_Skip4
 	ld	wa, bc
-	calr	1912
+	calr	Flash_InitBytecodeBlock_Helper
 	ld	a, (xsp+6)
 	extz	wa
-	calr	2346
-	calr	1681
+	calr	Flash_InitBytecodeBlock_Helper3
+	calr	Flash_StoreBaseAndInitAccPatch
 	ld	a, (xsp+4)
 	extz	wa
-	calr	1382
+	calr	NoteEventBuffer_Store
 	ld	a, (xsp+10)
 	extz	wa
-	calr	2721
-	calr	2966
+	calr	Flash_InitBytecodeBlock_Helper4
+	calr	Flash_InitBytecodeBlock_Helper5
 	call	16711343
 	jrl	274
+Flash_InitBytecodeBlock_Skip4:
 	calr	3531
 	calr	3957
 	calr	4600
 	calr	4730
-	jrl	305
+	jrl	Flash_InitBytecodeBlock_Join3
+Flash_InitBytecodeBlock_Loop3:
 	ld	(xsp+2), 1
-	jrl	273
-	calr	5000
+	jrl	Flash_InitBytecodeBlock_Join2
+Flash_InitBytecodeBlock_Skip5:
+	calr	DualVoice_ScanAllColumns
 	ld	a, (xsp+10)
 	extz	wa
-	calr	5189
+	calr	DualVoice_ScanAllColumnsAlt
 	ld	xix, (3186:16)
 	ld	xiy, (3182:16)
 	ldw	bc, 46080
@@ -977,6 +1005,7 @@ Flash_InitBytecodeBlock:
 	ld	xwa, (3186:16)
 	ld	(14610:16), xwa
 	ldib_erp	251, 0
+Flash_InitBytecodeBlock_Loop4:
 	ld	c, (xsp+10)
 	extz	bc
 	stb_erp	a, 251
@@ -986,18 +1015,19 @@ Flash_InitBytecodeBlock:
 	add	de, bc
 	lda	xwa, (14770368:24)
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x19, 0x10, 0x39
-	call	16116212
+	call	AccPatch_InitFromSlotIndex
 	inc1b_erp	251
 	cp_erpb	251, 10
-	jr	c, -43
+	jr	c, Flash_InitBytecodeBlock_Loop4
 	ld	a, (xsp+12)
 	extz	wa
-	calr	320
+	calr	PartGrid_ColumnDispatch
 	ld	(14610:16), xhl
 	ld	xwa, (3186:16)
 	ld	(14614:16), xwa
 	.byte 0xf1, 0x14, 0x35, 0xb0
 	ldib_erp	251, 0
+Flash_InitBytecodeBlock_Loop5:
 	ld	e, (xsp+6)
 	extz	de
 	stb_erp	a, 251
@@ -1011,86 +1041,94 @@ Flash_InitBytecodeBlock:
 	extz	wa
 	add	bc, wa
 	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x19, 0x11, 0x39
-	call	16133691
+	call	DualVoice_ParamLoadDone
 	ld	a, (13588:16)
 	extz	wa
 	bit	0, wa
-	jr	z, 24
+	jr	z, Flash_InitBytecodeBlock_Skip6
 	ld	(xsp+8), 1
 	ld	xwa, (14614:16)
 	ld	(14610:16), xwa
 	.byte 0xc1, 0x11, 0x39, 0x19, 0x10, 0x39
-	call	16116212
-	jr	9
+	call	AccPatch_InitFromSlotIndex
+	jr	Flash_InitBytecodeBlock_Entry
+Flash_InitBytecodeBlock_Skip6:
 	inc1b_erp	251
 	cp_erpb	251, 10
-	jr	c, -92
+	jr	c, Flash_InitBytecodeBlock_Loop5
+Flash_InitBytecodeBlock_Entry:
 	.byte 0x8f, 0x08, 0x3f, 0x00
-	jrl	nz, -229
+	jrl	nz, Flash_InitBytecodeBlock_Loop3
 	lda	xwa, (1748:16)
 	.byte 0x90, 0x3f, 0xff, 0xff
-	jr	nz, 55
+	jr	nz, Flash_InitBytecodeBlock_Skip7
 	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
-	jr	nz, 48
+	jr	nz, Flash_InitBytecodeBlock_Skip7
 	ld	xix, (3182:16)
 	ld	xiy, (3186:16)
 	ldw	bc, 46080
 	.byte 0x95, 0x11, 0x8f, 0x02, 0x3f, 0x02
-	jr	nz, 15
+	jr	nz, Flash_InitBytecodeBlock_Join2
 	.byte 0x8f, 0x0c, 0x19, 0x68, 0x0c, 0x8f, 0x0a, 0x19, 0x6a, 0x0c, 0x8f, 0x06, 0x19, 0x6c, 0x0c
-	call	16114965
+Flash_InitBytecodeBlock_Join2:
+	call	AccPatch_CountSlots_Wrapper
 	ld	l, (xsp+2)
 	pop qiz
 	lda	xsp, (xsp+12)
 	ret
+Flash_InitBytecodeBlock_Skip7:
 	ld	a, (xsp+10)
 	extz	wa
-	calr	1754
+	calr	Flash_InitBytecodeBlock_Helper2
 	calr	4032
+Flash_InitBytecodeBlock_Join3:
 	ld	(xsp+2), 2
 	.byte 0x8f, 0x0c, 0x19, 0x68, 0x0c, 0x8f, 0x0a, 0x19, 0x6a, 0x0c, 0x8f, 0x06, 0x19, 0x6c, 0x0c
 	jr	-67
 	dec	2, xsp
 	ld	(xsp), a
-	calr	-826
+	calr	Flash_InitExtMemAddrs
 	ld	l, (3176:16)
 	ld	c, (3178:16)
 	ld	e, (3180:16)
 	.byte 0x87, 0x3f, 0x02
-	jr	z, 26
+	jr	z, Flash_InitBytecodeBlock_Join4
 	.byte 0x87, 0x3f, 0x00
-	jr	nz, 21
+	jr	nz, Flash_InitBytecodeBlock_Join4
 	ld	a, l
 	extz	wa
 	extz	bc
 	extz	de
 	cp	l, 10
-	jr	nc, 5
-	calr	5818
-	jr	3
+	jr	nc, Flash_InitBytecodeBlock_Skip8
+	calr	Flash_InitBytecodeBlock_Helper6
+	jr	Flash_InitBytecodeBlock_Join4
+Flash_InitBytecodeBlock_Skip8:
 	calr	6231
+Flash_InitBytecodeBlock_Join4:
 	ld	l, 0:opc
 	inc	2, xsp
 	ret
 	dec	2, xsp
 	ld	(xsp), a
-	calr	-881
+	calr	Flash_InitExtMemAddrs
 	ld	a, (3176:16)
 	ld	c, (3178:16)
 	ld	e, (3180:16)
 	.byte 0x87, 0x3f, 0x02
-	jr	z, 14
+	jr	z, Flash_InitBytecodeBlock_Skip9
 	.byte 0x87, 0x3f, 0x00
-	jr	nz, 9
+	jr	nz, Flash_InitBytecodeBlock_Skip9
 	extz	wa
 	extz	bc
 	extz	de
 	calr	6188
-	call	16114965
+Flash_InitBytecodeBlock_Skip9:
+	call	AccPatch_CountSlots_Wrapper
 	ld	l, 0:opc
 	inc	2, xsp
 	ret
-	jrl	-1298
+	jrl	InitializeNaka_Join
 PartGrid_ColumnDispatch:
 	ld xhl, (3182:16)
 	ld xbc, (3186:16)
@@ -1114,22 +1152,23 @@ PartGrid_ColumnDispatch:
 
 PartGrid_ColumnJumpTable:
 	ld	xhl, (3190:16)
-	jr	38
+	jr	PartGrid_ColumnDispatch_Return
 	ld	xhl, (3194:16)
-	jr	32
+	jr	PartGrid_ColumnDispatch_Return
 	ld	xhl, (3198:16)
-	jr	26
+	jr	PartGrid_ColumnDispatch_Return
 	ld	xhl, (3202:16)
-	jr	20
+	jr	PartGrid_ColumnDispatch_Return
 	ld	xhl, (3206:16)
-	jr	14
+	jr	PartGrid_ColumnDispatch_Return
 	ld	xhl, (3210:16)
-	jr	8
+	jr	PartGrid_ColumnDispatch_Return
 	ld	xhl, (3214:16)
-	jr	t, 0x02
+	jr	t, PartGrid_ColumnDispatch_Return
 
 PartGrid_CopyHLtoBC:
 	ld xhl, xbc
+PartGrid_ColumnDispatch_Return:
 	ret
 
 Util_FrameSetup10:
@@ -1272,7 +1311,7 @@ PartGrid_OperationsBlock:
 	exts	xbc
 	add	xbc, xwa
 	cp	(xsp+8), 4
-	jr	z, 64
+	jr	z, PartGrid_OperationsBlock_Skip
 	cp	(xsp+8), 3
 	jr	z, 48
 	cp	(xsp+8), 2
@@ -1297,6 +1336,7 @@ PartGrid_OperationsBlock:
 	ld	(xbc+48), e
 	ld	xwa, 49
 	jr	8
+PartGrid_OperationsBlock_Skip:
 	ld	(xbc+56), e
 	ld	xwa, 57
 	add	xbc, xwa
@@ -1591,7 +1631,7 @@ Flash_EraseAndWriteFinal:
 Flash_StoreBaseAndInitAccPatch:
 	ld	xwa, (3186:16)
 	ld	(14610:16), xwa
-	jp	16166403
+	jp	AccPatch_InitSlotChain_Wrap
 Flash_ExtendedOpsBlock:
 	.byte 0x3e, 0xda, 0x12, 0xf2, 0xc0, 0x60, 0xe1, 0x34
 	.byte 0xf3, 0x07, 0xf0, 0xe8, 0x33, 0x25, 0x00, 0xc9
@@ -1619,6 +1659,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xe1, 0x72, 0x0c, 0x21, 0xf3, 0x07, 0xe4, 0xe8
 	.byte 0x31, 0xc9, 0xcf, 0x0a, 0x6f, 0x05, 0x83, 0x21
 	.byte 0xb1, 0x41, 0x0e, 0x81, 0x21, 0xb3, 0x41, 0x0e
+Flash_InitBytecodeBlock_Helper:
 	dec 2,XSP
 	pushw iz
 	ld (XSP+0x02),A
@@ -1703,6 +1744,7 @@ Flash_ExtendedOpsBlock:
 	popw iz
 	inc 2,XSP
 	ret
+Flash_InitBytecodeBlock_Helper2:
 	.byte 0xef, 0x6e, 0xbf, 0x04, 0x41, 0x1e, 0x4e, 0x0d
 	.byte 0xf1, 0xd4, 0x06, 0x30, 0x90, 0x3f, 0xff, 0xff
 	.byte 0x66, 0x0d, 0xf1, 0xa0, 0x07, 0x31, 0x90, 0x20
@@ -1734,6 +1776,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0x02, 0x61, 0x68, 0x07, 0xcf, 0x61, 0xcf, 0xcf
 	.byte 0x28, 0x67, 0xb3, 0x87, 0x61, 0x87, 0x3f, 0x32
 	.byte 0x77, 0x3b, 0xff, 0xef, 0x66, 0x0e
+Flash_InitBytecodeBlock_Helper3:
 	dec 2,XSP
 	push XIZ
 	ld (XSP+0x04),A
@@ -1811,6 +1854,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xc7, 0xf9, 0x61, 0xc7, 0xf9, 0xcf, 0x0a, 0x77
 	.byte 0xf3, 0xfe, 0xc7, 0xf8, 0x61, 0xc7, 0xf8, 0xcf
 	.byte 0x32, 0x77, 0xd0, 0xfe, 0x5e, 0xef, 0x62, 0x0e
+Flash_InitBytecodeBlock_Helper4:
 	.byte 0xe1, 0x96, 0x0c, 0x24, 0xe1, 0x92, 0x0c, 0x25
 	.byte 0x31, 0x00, 0x80, 0x95, 0x11, 0xf1, 0xa0, 0x07
 	.byte 0x33, 0x9b, 0x02, 0x21, 0xd9, 0xcf, 0xff, 0xff
@@ -1842,6 +1886,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0x00, 0xc8, 0x61, 0xda, 0x61, 0xc8, 0xcf, 0x27
 	.byte 0x63, 0xe1, 0xe1, 0x96, 0x0c, 0x21, 0xe1, 0x92
 	.byte 0x0c, 0x22, 0xd8, 0xa9, 0x1b, 0xd2, 0x3b, 0xef
+Flash_InitBytecodeBlock_Helper5:
 	.byte 0xbf, 0xf4, 0x37, 0x3e, 0xe1, 0x96, 0x0c, 0x24
 	.byte 0xe1, 0x92, 0x0c, 0x25, 0x31, 0x00, 0x80, 0x95
 	.byte 0x11, 0xf1, 0xa0, 0x07, 0x30, 0x90, 0x3f, 0xff
@@ -2099,6 +2144,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xf3, 0x07, 0xe8, 0xe0, 0x02, 0x00, 0x00, 0xce
 	.byte 0x61, 0xcf, 0x61, 0xcf, 0xcf, 0x32, 0x67, 0xc2
 	.byte 0x0e
+Flash_ExtendedOpsBlock_Code_Join:
 	ld xix, (0x0c96:16)
 	ld xiy, (0x0c92:16)
 	ldw BC, 0x8000
@@ -2374,10 +2420,11 @@ SlotTable_ExtendedOpsBlock:
 	ld	xwa, xbc
 	inc	4, xde
 	lda xbc, (xbc+200)
+SlotTable_ExtendedOpsBlock_Loop:
 	stiw_dsp 234, 255, 255
 	stiw_dsp 226, 255, 255
 	cp	xwa, xbc
-	jr	c, -14
+	jr	c, SlotTable_ExtendedOpsBlock_Loop
 	ret
 	lda	xde, (2156:16)
 	ldw (xde), 65535
@@ -2625,6 +2672,7 @@ Flash_SlotUpdateOpsBlock:
 	pop QIZ
 	inc 2,XSP
 	ret
+Flash_InitBytecodeBlock_Helper6:
 	.byte 0xef, 0x68, 0xbf, 0x06, 0x43, 0xda, 0x12, 0xda
 	.byte 0x88, 0x1e, 0xc5, 0xf0, 0x1e, 0x2c, 0xee, 0x8f
 	.byte 0x06, 0x21, 0xd8, 0x12, 0x1e, 0x98, 0xec, 0xbf
@@ -2810,7 +2858,7 @@ Flash_SlotUpdateOpsBlock:
 	ret
 	lda	xsp, (xsp-1036)
 	push	xiz
-	calr	-7589
+	calr	Flash_InitExtMemAddrs
 	ld	xiy, 14769344
 	lda	xix, (xsp+16)
 	ldw	bc, 512
@@ -2919,19 +2967,20 @@ Flash_SlotUpdateOpsBlock:
 	add	xwa, xhl
 	ld	(xbc+28), xwa
 	ld	xiz, xwa
-	call	16290121
+	call	FileIO_GetDiskFreeSpace
 	cp	xhl, xiz
-	jr	ge, 6
+	jr	ge, Flash_SlotUpdateOpsBlock_Code_Skip
 	ldw	hl, 65435
-	jrl	321
+	jrl	Flash_SlotUpdateOpsBlock_Code_Epilogue
+Flash_SlotUpdateOpsBlock_Code_Skip:
 	lda	xwa, (xsp+16)
 	ld	xbc, 1024
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, 296
+	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
 	ld	wa, 1:i3
-	calr	-6169
+	calr	NoteEventBuffer_CopyToSlot
 	ld	xwa, (3186:16)
 	ld	xde, 0:i3
 	ld	e, (xwa+46)
@@ -2940,12 +2989,12 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 8
 	add	xbc, xde
 	sla	xbc, 4
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, 256
+	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
 	ld	wa, 2:i3
-	calr	-6209
+	calr	NoteEventBuffer_CopyToSlot
 	ld	xwa, (3186:16)
 	ld	xde, 0:i3
 	ld	e, (xwa+46)
@@ -2954,12 +3003,12 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 8
 	add	xbc, xde
 	sla	xbc, 4
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, 216
+	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
 	ld	wa, 3:i3
-	calr	-6249
+	calr	NoteEventBuffer_CopyToSlot
 	ld	xwa, (3186:16)
 	ld	xde, 0:i3
 	ld	e, (xwa+46)
@@ -2968,12 +3017,12 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 8
 	add	xbc, xde
 	sla	xbc, 4
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, 176
+	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
 	ld	wa, 4:i3
-	calr	-6289
+	calr	NoteEventBuffer_CopyToSlot
 	ld	xwa, (3186:16)
 	ld	xde, 0:i3
 	ld	e, (xwa+46)
@@ -2982,12 +3031,12 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 8
 	add	xbc, xde
 	sla	xbc, 4
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, 136
+	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
 	ld	wa, 5:i3
-	calr	-6329
+	calr	NoteEventBuffer_CopyToSlot
 	ld	xhl, (3186:16)
 	ld	xde, 0:i3
 	ld	e, (xhl+46)
@@ -2997,12 +3046,12 @@ Flash_SlotUpdateOpsBlock:
 	add	xbc, xde
 	sla	xbc, 4
 	ld	xwa, xhl
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jr	lt, 95
+	jr	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
 	ld	wa, 6:i3
-	calr	-6370
+	calr	NoteEventBuffer_CopyToSlot
 	ld	xhl, (3186:16)
 	ld	xde, 0:i3
 	ld	e, (xhl+46)
@@ -3012,12 +3061,12 @@ Flash_SlotUpdateOpsBlock:
 	add	xbc, xde
 	sla	xbc, 4
 	ld	xwa, xhl
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jr	lt, 54
+	jr	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
 	ld	wa, 7:i3
-	calr	-6411
+	calr	NoteEventBuffer_CopyToSlot
 	ld	xhl, (3186:16)
 	ld	xde, 0:i3
 	ld	e, (xhl+46)
@@ -3027,14 +3076,16 @@ Flash_SlotUpdateOpsBlock:
 	add	xbc, xde
 	sla	xbc, 4
 	ld	xwa, xhl
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jr	lt, 13
+	jr	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
 	ld	xwa, (3218:16)
 	ld	xbc, 62464
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+Flash_SlotUpdateOpsBlock_Code_Skip2:
+	call	FileIO_ReturnError
+Flash_SlotUpdateOpsBlock_Code_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+1036)
 	ret
@@ -3617,7 +3668,7 @@ ToneParam_ExtendedOpsBlock:
 	pushw iz
 	ld IZ,WA
 	set 0, (0x3435:16)
-	call 0xf62d45
+	call AccPat_IndexToAddress_Sub
 	ld a, (0x3514:16)
 	extz WA
 	bit 0x00,WA
@@ -3635,24 +3686,24 @@ DualVoice_LoadAndScan:
 	ld	(xsp+14), a
 	ld	(xsp+4), 0
 	ld	(xsp+10), 0
-	calr	-10598
+	calr	Flash_InitExtMemAddrs
 	ld	(3182:16), xiz
 	.byte 0x8f, 0x0e, 0x3f, 0x0a
-	jrl	nc, 201
+	jrl	nc, DualVoice_LoadDoneRetVal
 	ld	a, (xsp+14)
 	extz	wa
-	calr	-5114
+	calr	DualVoice_ScanAllColumns
 	ld	a, (xsp+12)
 	extz	wa
-	calr	-4925
+	calr	DualVoice_ScanAllColumnsAlt
 	ld	a, (xsp+12)
 	extz	wa
-	calr	-8896
+	calr	NoteEvent_Store
 	ld	(xsp+6), l
 	ld	a, (xsp+6)
 	extz	wa
-	calr	-8894
-	call	16114969
+	calr	NoteEventBuffer_CopyToSlot
+	call	AccPatch_CountSlotsAlt
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (14770428:24)
@@ -3671,10 +3722,10 @@ DualVoice_AccPatchLoop:
 	add	de, bc
 	lda	xwa, (14770368:24)
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x19, 0x10, 0x39
-	call	16116212
+	call	AccPatch_InitFromSlotIndex
 	inc1b_erp	251
 	cp_erpb	251, 10
-	jr	c, -43
+	jr	c, DualVoice_AccPatchLoop
 	ld	xwa, (3182:16)
 	ld	(14610:16), xwa
 	ld	xwa, (3186:16)
@@ -3695,11 +3746,11 @@ DualVoice_ParamCompareLoop:
 	extz	wa
 	add	bc, wa
 	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x19, 0x11, 0x39
-	call	16133691
+	call	DualVoice_ParamLoadDone
 	ld	a, (13588:16)
 	extz	wa
 	bit	0, wa
-	jr	z, 16
+	jr	z, DualVoice_LoopCheckNext
 	ld	(xsp+10), 1
 DualVoice_SetLoadFlag:
 	ld (xsp + 4), 0x1
@@ -4802,10 +4853,10 @@ CmpBndRng_DefaultString:
 
 CmpBndRng_CallStrcpy:
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	13
+	jr	CmpBndRng_PopIzRet
 CmpBndRng_ReturnSizeConst:
 	ld xhl, 0x28403
 	jr CmpBndRng_PopIzRet
@@ -5105,15 +5156,15 @@ CmpSetP1_GridCheck_Case1:
 
 ; CmpSetP1 grid check case 2
 CmpSetP1_GridCheck_Case2:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	19
+	jr	CmpSetP1_ReturnZeroJmp
 CmpSetP1_GridCheck_Case3:
 	ld xwa, xiz
 	call GetViewInstance
@@ -5171,11 +5222,11 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	(xwa+2), de
 	ld	wa, (xwa)
 	cp	wa, 1:i3
-	jrl	nz, 328
+	jrl	nz, Widget_PostEvtReturnZero
 	exts	xde
 	ld	xwa, 0x144000d
 	ld	xbc, 0x1e4000e
-	jr	54
+	jr	CmpSetP1GridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x1e0008f
@@ -5190,12 +5241,13 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	(xwa+2), de
 	ld	wa, (xwa)
 	cp	wa, 1:i3
-	jrl	nz, 272
+	jrl	nz, Widget_PostEvtReturnZero
 	exts	xde
 	ld	xwa, 0x144000d
 	ld	xbc, 0x1e4000f
+CmpSetP1GridCheck_Join:
 	call	MainFuncCall
-	jrl	253
+	jrl	Widget_PostEvtReturnZero
 
 ; CmpSetP1 grid check return
 CmpSetP1_GridCheck_Return:
@@ -5230,9 +5282,9 @@ UI_COMPONENT_DISPATCH:
 	pushw	225
 	pushw	52964
 	push	xde
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
-	jrl	138
+	jrl	WidgetHandler_PostEventAndReturnZero
 UI_COMPONENT_DISPATCH_CASE1:
 	ld	a, (13362:16)
 	srl	a, 7
@@ -5250,13 +5302,13 @@ UI_COMPONENT_DISPATCH_CASE1:
 	pushw	225
 	pushw	52968
 	push	xde
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
-	jr	79	; -> 0xF1A845
+	jr	WidgetHandler_PostEventAndReturnZero	; -> 0xF1A845
 UI_COMPONENT_DISPATCH_CASE2:
 	ld	c, (13389:16)
 	ld	xwa, 252358
-	jr	17
+	jr	UI_COMPONENT_DISPATCH_CASE2_COMMON
 UI_COMPONENT_DISPATCH_CASE3:
 	ld	a, (13390:16)
 	srl	a, 4
@@ -5285,7 +5337,7 @@ UI_COMPONENT_DISPATCH_CASE5_SKIP:
 	push xwa	; Push parameter
 UI_COMPONENT_DISPATCH_PUSH_CALL:
 	push	xde
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	inc	8, xsp
 WidgetHandler_PostEventAndReturnZero:
 	cpw (xsp + 22), 0x4
@@ -5417,7 +5469,7 @@ GridCheck_SetMode1:
 	ld xiz, 0x3d9c6
 
 GridCheck_LookupAndSend:
-	calr 46
+	calr GridCheck_LookupSndParam
 
 	extz hl
 
@@ -5431,7 +5483,7 @@ GridCheck_LookupAndSend:
 
 	push xwa
 
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 
 	inc 8, xsp
 
@@ -5561,13 +5613,13 @@ AcApcToggle_SetParam83:
 	ld xwa, 0x28083
 
 AcApcToggle_ReadSndParam:
-	call	16567398
+	call	AcApcToggleProc_Helper
 	lda	xbc, (xiz+34)
 	ld	xwa, (xbc)
 	cp	hl, 0:i3
-	jr	nz, 6
+	jr	nz, AcApcToggle_SetOne
 	ldw	(xwa), 0
-	jr	4
+	jr	AcApcToggle_SendUpdate
 AcApcToggle_SetOne:
 	ldw (xwa), 0x1
 
@@ -5597,7 +5649,7 @@ AcApcToggle_HandleLswMsg:
 	or XWA,XWA
 	jr nz, EventHandler_Return
 	ld XWA,0x00028081
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	ld XWA,(XSP+0x08)
 	cpw (XWA+0x04), 0x0001
 	jr nz, AcApcToggle_SendZero
@@ -5758,7 +5810,7 @@ AcApcMdBox_HandleTitleDisp:
 	st_erpb_rr a, 0xf8
 	extz IZ
 	ld XWA,0x00028080
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	cp HL,IZ
 	jr z, AcS2cMem_ReturnZeroJmp
 	ld XWA,0x00028080
@@ -5813,7 +5865,7 @@ S2cMemNoBox_CallInherited:
 
 S2cMemNoBox_HandleScroll:
 	ld	xwa, xiz
-	call	16400380
+	call	InheritedProc
 	ld	a, (14579:16)
 	extz	wa
 	sla	wa, 2
@@ -5822,12 +5874,12 @@ S2cMemNoBox_HandleScroll:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16421459
+	call	SendEvent
 S2cMemNoBox_ReturnZero:
 	ld xhl, 0:i3
 
@@ -5850,22 +5902,22 @@ PsS2cFmeasBoxProc:
 	jr PsS2cFmeas_PopReturn
 PsS2cFmeas_HandleScroll:
 	ld	xwa, (xsp+260)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xsp+260)
-	call	16408153
+	call	GetViewInstance
 	ld	xiz, xhl
 	.byte 0xd1, 0xee, 0x38, 0x04, 0x0b, 0xe1, 0x00, 0x0b, 0x84, 0xd5
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xbc, (xiz+22)
 	lda	xwa, (xiz+32)
 	cp	(14811:16), 0
-	jr	nz, 10
+	jr	nz, PsS2cFmeas_SetActive
 	ldw	(xwa), 0
 	ldw	(xbc), 255
-	jr	8
+	jr	PsS2cFmeas_SendUpdateEvents
 PsS2cFmeas_SetActive:
 	ldw (xwa), 0xff
 	ldw (xbc), 0xf5
@@ -5900,22 +5952,22 @@ PsS2cLmeasBoxProc:
 	jr PsS2cLmeas_PopReturn
 PsS2cLmeas_HandleScroll:
 	ld	xwa, (xsp+260)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xsp+260)
-	call	16408153
+	call	GetViewInstance
 	ld	xiz, xhl
 	.byte 0xd1, 0xf0, 0x38, 0x04, 0x0b, 0xe1, 0x00, 0x0b, 0x88, 0xd5
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xbc, (xiz+22)
 	lda	xwa, (xiz+32)
 	cp	(14811:16), 1
-	jr	nz, 10
+	jr	nz, PsS2cLmeas_SetActive
 	ldw	(xwa), 0
 	ldw	(xbc), 255
-	jr	8
+	jr	PsS2cLmeas_SendUpdateEvents
 PsS2cLmeas_SetActive:
 	ldw (xwa), 0xff
 	ldw (xbc), 0xf5
@@ -5951,7 +6003,7 @@ PsSeqSongNoBoxProc:
 
 PsSeqSongNo_HandleScroll:
 	ld	xwa, xiz
-	call	16400380
+	call	InheritedProc
 	ld	a, (65507:24)
 	inc	1, a
 	extz	wa
@@ -5960,12 +6012,12 @@ PsSeqSongNo_HandleScroll:
 	pushw	54668
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16421459
+	call	SendEvent
 	ld	xhl, 0:i3
 PsSeqSongNo_PopReturn:
 	pop xiz
@@ -5986,9 +6038,9 @@ PsS2cTransBoxProc:
 	jr SndArg_GridBnk_Case2
 PsS2cTrans_HandleScroll:
 	ld	xwa, (xsp+260)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xsp+260)
-	call	16408153
+	call	GetViewInstance
 	ld	xiz, xhl
 	ld	a, (14578:16)
 	extz	wa
@@ -5998,15 +6050,15 @@ PsS2cTrans_HandleScroll:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
 	cp	(14811:16), 2
-	jr	nz, 10
+	jr	nz, SndArg_GridBnk_Case0
 	ldw	(xbc), 0
 	ldw	(xwa), 255
-	jr	8
+	jr	SndArg_GridBnk_Case1
 SndArg_GridBnk_Case0:
 	ldw (xbc), 0xff
 	ldw (xwa), 0xf5
@@ -6061,16 +6113,16 @@ FdcFormat_DialGrid:
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
 	ld	xde, (xsp+12)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xsp+16)
-	call	16408153
+	call	GetViewInstance
 	ld	(xsp+8), xhl
 	cp	(14811:16), 3
-	jrl	nz, 538
+	jrl	nz, FdcFormat_ReturnZeroJmp
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+26)
@@ -6082,7 +6134,7 @@ FdcFormat_DialGrid:
 	extz	xde
 	ld	xwa, (xsp+16)
 	ld	xbc, 29360151
-	call	16359788
+	call	SetDialUp
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+26)
 	ld	xwa, (xsp+4)
@@ -6093,35 +6145,35 @@ FdcFormat_DialGrid:
 	extz	xde
 	ld	xwa, (xsp+16)
 	ld	xbc, 29360152
-	call	16359805
+	call	SetDialDown
 	ld	wa, 1:i3
-	jrl	349
+	jrl	S2cGrid_SetDialEnable
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
 	ld	xde, (xsp+12)
-	call	16400380
+	call	InheritedProc
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457360
 	ld	xde, (xsp+12)
-	call	16421459
+	call	SendEvent
 	or	xhl, xhl
-	jr	z, 56
+	jr	z, S2cGrid_DialDownSendApply
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	dec	1, hl
 	extz	xhl
 	add	xhl, 4294901760
 	ld	xwa, (xsp+16)
 	ld	xbc, 29360142
 	ld	xde, xhl
-	call	16421459
+	call	SendEvent
 	ld	xwa, (xsp+16)
 	ld	xbc, 29360153
 	ld	xde, (xsp+12)
-	call	16359856
-	jrl	363
+	call	SetAutoInc
+	jrl	FdcFormat_ReturnZeroJmp
 S2cGrid_DialDownSendApply:
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e00091
@@ -6219,15 +6271,15 @@ FdcFormat_GridCheck_Case1:
 	ld xiz, 0x42
 
 S2cGrid_GetViewAndCopy:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	56
+	jr	FdcFormat_ReturnZeroJmp
 FdcFormat_GridCheck_Case2:
 	ld xwa, (xsp + 16)
 	call GetViewInstance

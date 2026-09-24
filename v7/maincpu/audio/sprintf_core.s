@@ -293,7 +293,7 @@ Sprintf_Decimal_DigitLoop:
 	add	(xde), xbc
 	ld	xbc, (xde)
 	dec	8, xbc
-	call	16719888
+	call	Sprintf_Decimal_PrecZeroLoop_Code_Helper
 Sprintf_Decimal_PadRightSpace:
 	.byte 0x9f, 0x0a, 0x04, 0x9f, 0x0a, 0x04, 0x9f, 0x0a
 	.byte 0x04, 0xbf
@@ -627,7 +627,7 @@ Sprintf_FormatFloat_fF:
 	ld	wa, (xsp+20)
 	ld	qiz, wa
 Sprintf_FormatFloat_fF_Call:
-	jr	6
+	jr	Sprintf_FormatFloat_gG
 	dec	1, qiz
 	decm	1, (xsp+20)
 Sprintf_FormatFloat_gG:
@@ -790,18 +790,20 @@ Sprintf_FFixed_IntDigitOutput:
 	inc	2, xsp
 	incw	1, (246306:24)
 	ld	qiz, iz
-	jr	15
+	jr	Sprintf_FFixed_LeadDigitDone_Code_Join
+Sprintf_FFixed_LeadDigitDone_Code_Loop:
 	pushw	48
 	ld	xwa, (xsp+14)
 	call	(xwa)
 Sprintf_FFixed_IntDigitLoop:
 	inc	2, xsp
 	incw	1, (246306:24)
+Sprintf_FFixed_LeadDigitDone_Code_Join:
 	ld	wa, qiz
 	inc	1, qiz
 	cp	wa, 3:i3
-	jr	lt, -25
-	jr	25
+	jr	lt, Sprintf_FFixed_LeadDigitDone_Code_Loop
+	jr	Sprintf_FFixed_IntZeroFill_Code_Join
 	dec	1, iz
 Sprintf_FFixed_IntZeroFill:
 	.byte 0xaf, 0x16, 0x20, 0xc3, 0x07, 0xe0, 0xf8, 0x21
@@ -809,6 +811,7 @@ Sprintf_FFixed_IntZeroFill:
 Sprintf_FFixed_IntZeroLoop:
 	srl	xwa, 98
 	incw	1, (246306:24)
+Sprintf_FFixed_IntZeroFill_Code_Join:
 	cp	iz, 0:i3
 	jr	nz, -29
 	ld	wa, (xsp+16)
@@ -937,7 +940,7 @@ Sprintf_ESci_ComputePadding:
 	pushw	wa
 	pushw	3
 	pushw	49732
-	jr	50
+	jr	Sprintf_ESci_PadLeftLoop_Code_Join
 Sprintf_ESci_PadLeftCheck:
 	.byte 0x39, 0x1e, 0xf0, 0x02, 0x9f, 0x0c, 0x04, 0x0b
 	.byte 0x03, 0x00, 0x0b, 0x44, 0xc2, 0x1e, 0xfd, 0x03
@@ -956,7 +959,8 @@ Sprintf_ESci_EmitSign:
 	sub	wa, iz
 	pushw	wa
 	push	xbc
-	calr	230
+Sprintf_ESci_PadLeftLoop_Code_Join:
+	calr	Sprintf_ESci_OutputMantissa
 Sprintf_ESci_SignPlus:
 	inc	8, xsp
 	ld	qiz, 1
@@ -1023,13 +1027,14 @@ Sprintf_ESci_OutputMantissa:
 	ld	wa, 0:i3
 	ld	hl, (xsp+18)
 	cp	hl, 0:i3
-	jr	le, 11
+	jr	le, Sprintf_ESci_OutputMantissa_Skip
 Sprintf_ESci_MantDigitOutput:
 	add	wa, wa
 	set	0, wa
 	inc	1, iz
 	cp	iz, hl
 	jr	lt, -11
+Sprintf_ESci_OutputMantissa_Skip:
 	ld	iz, (xsp+20)
 	dec	1, iz
 	ld	xiy, (xsp+14)
@@ -1228,12 +1233,14 @@ Sprintf_GGen_CopyLoop:
 	.byte 0x69, 0x0d, 0xee, 0x88, 0xd8, 0x06, 0xd7, 0xe2
 	.byte 0x06, 0xe8, 0x61, 0xe8, 0x8b, 0x68, 0x02, 0xee
 	.byte 0x8b, 0x5e, 0xef, 0x60, 0x0e, 0xff
+Sprintf_Decimal_PrecZeroLoop_Code_Helper:
 	ld XIX,(XBC)
 	ld XIY,(XBC+0x04)
 Sprintf_GGen_HandleCarry:
 	ld (XWA),XIX
 	ld (XWA+0x04),XIY
 	ret
+Free_LoadReg4_Code_Helper:
 	.byte 0xbf, 0xd2, 0x37, 0x3e, 0x9f
 Sprintf_GGen_CarryLoop:
 	.byte 0x3e, 0x3f, 0x02, 0x00, 0x61, 0x07, 0x9f, 0x3e
@@ -1279,6 +1286,7 @@ Sprintf_Shift_Loop:
 	.byte 0xb0
 Sprintf_Shift_ApplyShift:
 	.byte 0x64, 0xb8, 0x04, 0x65, 0xb8, 0x08, 0x53, 0x0e
+Free_Compare2_Helper:
 	.byte 0xef, 0x6c, 0x2e, 0x9f, 0x14, 0x26, 0x2e, 0x9f
 	.byte 0x14, 0x04, 0xaf, 0x12, 0x20, 0x38, 0x1d, 0xf5
 	.byte 0x20, 0xff, 0xef
@@ -1302,6 +1310,7 @@ Sprintf_PropCarry_Loop:
 Sprintf_PropCarry_Store:
 	ld	xhl, 0:i3
 	ret
+MssNameFunc_Helper2:
 	ld	de, (xsp+10)
 	ld	xix, (xsp+4)
 	ld	xhl, xix

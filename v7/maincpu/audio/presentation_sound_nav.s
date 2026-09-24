@@ -814,20 +814,23 @@ SetWallPaper:
 
 SetWallPaper_DispatchData:
 	cpw	(0x0340fe:24), 0
-	jr	nz, 28
+	jr	nz, SetWallPaper_Skip
 
 SetWallPaper_Default:
 	ld wa, 0:i3
+SetWallPaper_Join:
 	jp ChangeWall
 SetWallPaper_CaseData:
 	cpw	(0x0340fa:24), 0
-	jr	nz, 13
+	jr	nz, SetWallPaper_Skip
+SetWallPaper_Loop:
 	ld	wa, 1:i3
-	jr	-17
+	jr	SetWallPaper_Join
 	cpw	(0x0340fc:24), 0
-	jr	z, -13
+	jr	z, SetWallPaper_Loop
+SetWallPaper_Skip:
 	ld	wa, 2:i3
-	jr	t, 0xe2
+	jr	t, SetWallPaper_Join
 
 SetWallColor:
 	cp wa, 1:i3
@@ -1245,20 +1248,21 @@ DirmdTitleFunc:
 DirmdEmu_CaseF:
 	ld	a, (35996:16)
 	cp	a, (35997:16)
-	jr	z, 25
+	jr	z, PostTitle_Function_Skip
 	ldw	wa, 255
-	call	16453699
+	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	16453693
-	call	16453802
+	call	PostTitle_Function_Helper2
+	call	PostTitle_Function_Helper4
 	ldw	wa, 255
-	call	16453705
+	call	PostTitle_Function_Helper3
+PostTitle_Function_Skip:
 	ld	xwa, 15375216
-	call	16394900
-	jp	16261308
+	call	FDemoText_ByteData_DisplayRefresh_Helper
+	jp	AudioCtrl_DataBlock_Return
 	ld	xwa, 15375234
-	call	16394900
-	jp	16261309
+	call	FDemoText_ByteData_DisplayRefresh_Helper
+	jp	AudioCtrl_DataBlock_Return2
 	lda	xsp, (xsp-256)
 	pushw	iz
 	.byte 0xd3, 0xfd, 0x08, 0x01, 0x04
@@ -1268,19 +1272,19 @@ DirmdEmu_CaseF:
 	pushw 39828
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
-	call	16394900
+	call	FDemoText_ByteData_DisplayRefresh_Helper
 	ld	wa, iz
 	ld	bc, (xsp+264)
-	call	16261310
+	call	PostTitle_Function_Helper
 	popw	iz
 	.byte 0xf3, 0xfd, 0x00, 0x01, 0x37
 	ret
 	ld	xwa, 15375276
-	call	16394900
-	jp	16261311
+	call	FDemoText_ByteData_DisplayRefresh_Helper
+	jp	AudioCtrl_DataBlock_Return3
 DirmdEmulator_Entry:
 
 DirmdEmulator:
@@ -1307,15 +1311,15 @@ DirmdEmulator_Dispatch:
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	113
+	jr	DirmdEmu_DefaultCase
 	ld	(58138:16), 0
 	ldw	wa, 255
-	call	16453699
+	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	16453693
-	call	16453802
+	call	PostTitle_Function_Helper2
+	call	PostTitle_Function_Helper4
 	ldw	wa, 255
-	call	16453705
+	call	PostTitle_Function_Helper3
 	push	xde
 	push	xhl
 	push	xix
@@ -1326,7 +1330,7 @@ DirmdEmulator_Dispatch:
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	69
+	jr	DirmdEmu_DefaultCase
 	ld	(58138:16), 16
 	push	xde
 	push	xhl
@@ -1339,9 +1343,9 @@ DirmdEmulator_Dispatch:
 	pop	xhl
 	pop	xde
 	ld	(58138:16), 0
-	jr	45
+	jr	DirmdEmu_DefaultCase
 	cp	xde, 255
-	jr	ugt, 37
+	jr	ugt, DirmdEmu_DefaultCase
 	push	xde
 	push	xhl
 	push	xix
@@ -1450,22 +1454,24 @@ WindowProc_EventDispatch:
 	ld	(xsp+12), xhl
 	ld	xwa, (xsp+16)
 	cp	xwa, 4
-	jr	z, 122
+	jr	z, WindowProc_Skip4
 	cp	xwa, 3
-	jr	z, 12
+	jr	z, WindowProc_Skip
 	cp	xwa, 5
-	jr	z, 4
+	jr	z, WindowProc_Skip
 	or	xwa, xwa
-	jr	nz, 102
+	jr	nz, WindowProc_Skip4
+WindowProc_Skip:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
 	ld	xwa, (xwa)
 	cp	xwa, 0xffffffff
-	jr	z, 14
+	jr	z, WindowProc_Skip2
 	ld	xwa, (xsp+24)
 	ld	xbc, 0x01c00002
 	ld	xde, 0:i3
 	call	SendEvent
+WindowProc_Skip2:
 	call	GetCurrentTarget
 	ld	xiz, xhl
 	ld	xwa, xiz
@@ -1473,14 +1479,16 @@ WindowProc_EventDispatch:
 	ld	xde, 0:i3
 	call	SendEvent
 	cp	xhl, 0xffffffff
-	jr	z, 23
+	jr	z, WindowProc_Skip3
+WindowProc_Loop:
 	ld	xiz, xhl
 	ld	xwa, xiz
 	ld	xbc, 0x01e0004b
 	ld	xde, 0:i3
 	call	SendEvent
 	cp	xhl, 0xffffffff
-	jr	nz, -23
+	jr	nz, WindowProc_Loop
+WindowProc_Skip3:
 	ld	xde, (xsp+24)
 	ld	xwa, xiz
 	ld	xbc, 0x01e00049
@@ -1488,85 +1496,92 @@ WindowProc_EventDispatch:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
 	ld	(xwa), xiz
+WindowProc_Skip4:
 	ld	xwa, (xsp+24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
-	calr	59203
+	calr	GroupBoxProc
 	ld	xwa, (xsp+16)
 	cp	xwa, 4
-	jrl	nz, 724
+	jrl	nz, AcNaming_ReturnZero
 	ld	xwa, (xsp+12)
 	ld	xbc, (xwa+32)
 	ld	xwa, (xbc)
 	cp	xwa, 0xffffffff
-	jrl	z, 707
+	jrl	z, AcNaming_ReturnZero
 	ld	xwa, (xbc)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
 	call	SendEvent
-	jrl	692
+	jrl	AcNaming_ReturnZero
 	ld	xwa, (xsp+24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
-	calr	59147
+	calr	GroupBoxProc
 	ld	xwa, (xsp+24)
 	call	GetViewInstance
 	ld	(xsp+12), xhl
 	ld	xwa, (xsp+16)
 	cp	xwa, 3
-	jrl	z, 144
+	jrl	z, WindowProc_Skip10
 	cp	xwa, 4
-	jr	z, 30
+	jr	z, WindowProc_Skip6
 	cp	xwa, 5
-	jr	z, 5
+	jr	z, WindowProc_Skip5
 	or	xwa, xwa
-	jrl	nz, 637
+	jrl	nz, AcNaming_ReturnZero
+WindowProc_Skip5:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
 	ld	xwa, (xwa)
 	cp	xwa, 0xffffffff
-	jrl	z, 620
+	jrl	z, AcNaming_ReturnZero
+WindowProc_Skip6:
 	ld	xde, (xsp+12)
 	ld	xbc, (xde+28)
 	ld	xwa, (xbc)
 	cp	xwa, 0xffffffff
-	jr	z, 16
+	jr	z, WindowProc_Skip7
 	ld	xwa, (xde+32)
 	ld	xde, (xwa)
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e00049
 	call	SendEvent
+WindowProc_Skip7:
 	ld	xde, (xsp+12)
 	ld	xbc, (xde+32)
 	ld	xwa, (xbc)
 	cp	xwa, 0xffffffff
-	jr	z, 16
+	jr	z, WindowProc_Skip8
 	ld	xwa, (xde+28)
 	ld	xde, (xwa)
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e00048
 	call	SendEvent
+WindowProc_Skip8:
 	call	GetCurrentTarget
 	cp	xhl, (xsp+24)
-	jr	nz, 12
+	jr	nz, WindowProc_Skip9
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
 	ld	xwa, (xwa)
 	call	SetCurrentTarget
+WindowProc_Skip9:
 	ld	xde, (xsp+12)
 	ld	xbc, (xde+28)
 	ld	xwa, 0xffffffff
 	ld	(xbc), xwa
 	ld	xbc, (xde+32)
 	ld	(xbc), xwa
-	jrl	514
+	jrl	AcNaming_ReturnZero
+WindowProc_Skip10:
 	call	GetCurrentTarget
 	cp	xhl, (xsp+24)
-	jrl	nz, 504
+	jrl	nz, AcNaming_ReturnZero
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
 	ld	xwa, (xwa)
-	jrl	489
+	jrl	WindowProc_RestoreTarget
 
 ; WindowProc field set value handler (event 0x1c00048)
 WindowField_SetValue:

@@ -85,6 +85,7 @@ SndParam_Lkp2_MatchFound:
 SndParam_Lkp2_ProbeAdvance:
 	.byte 0x41, 0x68, 0x05, 0xbf, 0x04, 0x02, 0xff, 0xff
 	.byte 0x9f, 0x04, 0x23, 0x5e, 0xbf, 0x0e, 0x37, 0x0e
+SndParam_ResolveOscEntry_Helper:
 	.byte 0xbf, 0xea, 0x37, 0x3e, 0xbf
 SndParam_Lkp2_ProbeEntry:
 	.byte 0x0e, 0x62, 0xbf, 0x12, 0x61, 0xbf, 0x16, 0x60
@@ -1073,6 +1074,7 @@ SndParam_WidgetAppendTail:
 	ret
 	ret
 	ret
+SndParam_WidgetAppendType2_Code_Loop:
 	pushw	wa
 SndParam_WidgetCallType3:
 	.byte 0xc1, 0xd0, 0x00, 0x21, 0xf1, 0x23, 0x04
@@ -1119,7 +1121,7 @@ SndParam_Widget1_AppendType2:
 	ld	a, (209:16)
 	and	a, 28
 	popw	wa
-	jrl	nz, -191
+	jrl	nz, SndParam_WidgetAppendType2_Code_Loop
 	push	xwa
 	push	xbc
 	push	xde
@@ -1155,34 +1157,39 @@ SndParam_Widget1_CallType3:
 	push	xix
 	push	xiy
 	push	xiz
-	calr	1579
+	calr	SndParam_Widget1_AppendType2_Helper2
 	ld	a, (46915:16)
 	bit	7, a
-	jr	z, 78
+	jr	z, SndParam_Widget1_AppendType2_Skip4
 	cp	a, 247
-	jr	ule, 5
-	calr	84
-	jr	71
+	jr	ule, SndParam_Widget1_AppendType2_Skip
+	calr	SndParam_Widget1_AppendType2_Helper
+	jr	SndParam_Widget1_AppendType2_Join
+SndParam_Widget1_AppendType2_Skip:
 	ld	(1059:16), a
 	.byte 0xc1, 0x27, 0x04, 0x3c, 0xbd, 0xf1, 0x32, 0x04, 0xc8
-	jr	z, 56
+	jr	z, SndParam_Widget1_AppendType2_Join
 	.byte 0xf1, 0x32, 0x04, 0xc9
-	jr	z, 23
+	jr	z, SndParam_Widget1_AppendType2_Skip2
 	cp	a, 247
-	jr	nz, 30
+	jr	nz, SndParam_Widget1_AppendType2_Skip3
 	.byte 0xf1, 0x32, 0x04, 0xcd
-	jr	nz, 12
+	jr	nz, SndParam_Widget1_AppendType2_Skip2
 	pushw	wa
-	call	15673503
+	call	SeqBuf2_WriteByte
 	inc	2, xsp
 	ld	(1074:16), 4
+SndParam_Widget1_AppendType2_Skip2:
 	ld	(1059:16), 0
 	.byte 0xc1, 0x32, 0x04, 0x3c, 0xcc
-	jr	15
+	jr	SndParam_Widget1_AppendType2_Join
+SndParam_Widget1_AppendType2_Skip3:
 	ld	(1074:16), 16
 	ld	(1059:16), 0
-	jr	3
-	calr	1191
+	jr	SndParam_Widget1_AppendType2_Join
+SndParam_Widget1_AppendType2_Skip4:
+	calr	ClkTick_BeatSubdivCheck
+SndParam_Widget1_AppendType2_Join:
 	calr	1515
 	pop	xiz
 	pop	xiy
@@ -1192,175 +1199,200 @@ SndParam_Widget1_CallType3:
 	pop	xbc
 	pop	xwa
 	ret
+SndParam_Widget1_AppendType2_Helper:
 	cp	a, 254
-	jr	nz, 5
+	jr	nz, SndParam_Widget1_AppendType2_Entry
 	.byte 0xf1, 0x27, 0x04, 0xbf
+SndParam_Widget1_AppendType2_Return:
 	ret
+SndParam_Widget1_AppendType2_Entry:
 	.byte 0xf1, 0x50, 0xfd, 0xcc
-	jr	nz, -7
+	jr	nz, SndParam_Widget1_AppendType2_Return
 	cp	a, 253
-	jr	nc, -12
+	jr	nc, SndParam_Widget1_AppendType2_Return
 	.byte 0xf1, 0x46, 0xb7, 0xce
-	jr	nz, -18
+	jr	nz, SndParam_Widget1_AppendType2_Return
 	cp	(32367:16), 0
-	jr	z, 19
+	jr	z, SndParam_Widget1_AppendType2_Skip6
 	cp	a, 250
-	jr	nz, 5
-	call	16194098
+	jr	nz, SndParam_Widget1_AppendType2_Skip5
+	call	AccPlay_StopEntry
 	ret
+SndParam_Widget1_AppendType2_Skip5:
 	cp	a, 252
-	jr	nz, 4
+	jr	nz, SndParam_Widget1_AppendType2_Skip6
 	.byte 0xf1, 0x99, 0x7e, 0xb8
+SndParam_Widget1_AppendType2_Skip6:
 	ld	d, a
 	.byte 0xf1, 0x50, 0xfd, 0xca
-	jrl	z, 804
+	jrl	z, IntTx0_DequeueAndSend_Code_Skip
 	cp	d, 248
-	jr	nz, 104
+	jr	nz, SndParam_Widget1_AppendType2_Skip10
 	.byte 0xf1, 0xac, 0x28, 0xcd
-	jr	z, 4
+	jr	z, SndParam_Widget1_AppendType2_Skip7
 	inc	1, (1108:16)
+SndParam_Widget1_AppendType2_Skip7:
 	ld	a, (1066:16)
 	cp	a, 112
-	jr	ugt, 20
+	jr	ugt, SndParam_Widget1_AppendType2_Skip9
 	cp	a, 4:i3
-	jr	ugt, 6
+	jr	ugt, SndParam_Widget1_AppendType2_Skip8
 	ld	wa, (46908:16)
-	jr	14
+	jr	SndParam_Widget1_AppendType2_Join2
+SndParam_Widget1_AppendType2_Skip8:
 	extz	xwa
 	xor	w, w
 	.byte 0xd1, 0x3e, 0xb7, 0x48
-	jr	4
+	jr	SndParam_Widget1_AppendType2_Join2
+SndParam_Widget1_AppendType2_Skip9:
 	ld	wa, (46906:16)
+SndParam_Widget1_AppendType2_Join2:
 	ld	(146:16), wa
 	ld	(1066:16), 0
 	.byte 0xf1, 0x1f, 0x04, 0xc8
-	jr	z, 5
+	jr	z, SndParam_Widget1_AppendType2_Entry2
 	ld	(1055:16), 6
+SndParam_Widget1_AppendType2_Entry2:
 	.byte 0xf1, 0x1f, 0x04, 0xca
-	jr	z, 35
+	jr	z, SndParam_Widget1_AppendType2_Skip10
 	.byte 0xc1, 0x6a, 0x04, 0x3c, 0xfc
 	inc	4, (1130:16)
 	cp	(1130:16), 96
-	jr	nz, 19
+	jr	nz, SndParam_Widget1_AppendType2_Skip10
 	ld	(1130:16), 0
 	incw	1, (1128:16)
 	cp	(32367:16), 0
-	jr	z, 3
+	jr	z, SndParam_Widget1_AppendType2_Skip10
 	calr	845
+SndParam_Widget1_AppendType2_Skip10:
 	ld	a, (1056:16)
 	pushw	wa
 	and	a, 5
 	popw	wa
-	jrl	z, 401
+	jrl	z, SndParam_Widget1_AppendType2_Entry9
 	cp	d, 248
-	jrl	nz, 315
+	jrl	nz, SndParam_Widget1_AppendType2_Entry7
 	bit	0, a
-	jr	z, 30
+	jr	z, SndParam_Widget1_AppendType2_Skip12
 	ld	(1056:16), 6
 	.byte 0xf1, 0x1e, 0x04, 0xc8
-	jr	z, 5
+	jr	z, SndParam_Widget1_AppendType2_Entry3
 	ld	(1054:16), 6
+SndParam_Widget1_AppendType2_Entry3:
 	.byte 0xf1, 0x21, 0x04, 0xc8
-	jr	z, 5
+	jr	z, SndParam_Widget1_AppendType2_Skip11
 	ld	(1057:16), 6
-	jrl	280
+SndParam_Widget1_AppendType2_Skip11:
+	jrl	SndParam_Widget1_AppendType2_Entry7
+SndParam_Widget1_AppendType2_Skip12:
 	bit	2, a
-	jr	z, 25
+	jr	z, SndParam_Widget1_AppendType2_Entry4
 	.byte 0xc1, 0x17, 0x04, 0x3c, 0xfc
 	inc	4, (1047:16)
 	cp	(1047:16), 96
-	jr	nz, 9
+	jr	nz, SndParam_Widget1_AppendType2_Entry4
 	ld	(1047:16), 0
 	incw	1, (1048:16)
+SndParam_Widget1_AppendType2_Entry4:
 	.byte 0xf1, 0x1e, 0x04, 0xca
-	jr	z, 81
+	jr	z, SndParam_Widget1_AppendType2_Skip14
 	.byte 0xc1, 0x15, 0x04, 0x3c, 0xfc
 	inc	4, (1045:16)
 	cp	(1045:16), 96
-	jr	nz, 65
+	jr	nz, SndParam_Widget1_AppendType2_Skip14
 	ld	(1045:16), 0
 	inc	1, (1046:16)
 	ld	a, (14079:16)
 	and	a, 31
-	jr	z, 3
+	jr	z, SndParam_Widget1_AppendType2_Skip13
 	calr	719
+SndParam_Widget1_AppendType2_Skip13:
 	ld	a, (1046:16)
 	ld	w, (1075:16)
 	.byte 0xc1, 0x58, 0x04, 0x30
 	cp	a, w
-	jr	c, 28
+	jr	c, SndParam_Widget1_AppendType2_Skip14
 	ld	(1046:16), 0
 	inc	1, (1076:16)
 	inc	1, (1077:16)
 	ld	a, (1077:16)
 	cp	a, (13371:16)
-	jr	ule, 5
+	jr	ule, SndParam_Widget1_AppendType2_Skip14
 	ld	(1077:16), 0
+SndParam_Widget1_AppendType2_Skip14:
 	ld	a, (1045:16)
 	ld	w, a
 	sub	a, (1111:16)
-	jr	z, 37
-	jr	ugt, 3
+	jr	z, SndParam_Widget1_AppendType2_Entry5
+	jr	ugt, SndParam_Widget1_AppendType2_Skip15
 	add	a, 96
+SndParam_Widget1_AppendType2_Skip15:
 	ld	(1111:16), w
 	add	(1124:16), a
 	add	(1122:16), a
 	xor	w, w
 	.byte 0xd1, 0x60, 0x04, 0x80
 	cp	a, 96
-	jr	c, 5
+	jr	c, SndParam_Widget1_AppendType2_Skip16
 	sub	a, 96
 	inc	1, w
+SndParam_Widget1_AppendType2_Skip16:
 	ld	(1120:16), wa
+SndParam_Widget1_AppendType2_Entry5:
 	.byte 0xf1, 0x21, 0x04, 0xca
-	jr	z, 108
+	jr	z, SndParam_Widget1_AppendType2_Entry7
 	.byte 0xc1, 0x1b, 0x04, 0x3c, 0xfc
 	inc	4, (1051:16)
 	ld	a, (1051:16)
 	.byte 0xf1, 0x31, 0x04, 0xc8
-	jr	z, 28
+	jr	z, SndParam_Widget1_AppendType2_Entry6
 	cp	a, (1071:16)
-	jr	nz, 22
+	jr	nz, SndParam_Widget1_AppendType2_Entry6
 	.byte 0xf1, 0x31, 0x04, 0xb0
 	ld	(1054:16), 1
 	cpw	(10410:16), 0
-	jr	z, 5
+	jr	z, SndParam_Widget1_AppendType2_Entry6
 	ld	a, 133:opc
 	calr	643
+SndParam_Widget1_AppendType2_Entry6:
 	.byte 0xf1, 0x31, 0x04, 0xcb
-	jr	z, 28
+	jr	z, SndParam_Widget1_AppendType2_Skip17
 	cp	a, (1072:16)
-	jr	nz, 22
+	jr	nz, SndParam_Widget1_AppendType2_Skip17
 	.byte 0xf1, 0x31, 0x04, 0xb3
 	ld	(1054:16), 8
 	cpw	(10410:16), 0
-	jr	z, 5
+	jr	z, SndParam_Widget1_AppendType2_Skip17
 	ld	a, 134:opc
 	calr	609
+SndParam_Widget1_AppendType2_Skip17:
 	cp	(1051:16), 96
-	jr	nz, 99
+	jr	nz, SndParam_Widget1_AppendType2_Return2
 	ld	(1051:16), 0
 	incw	1, (1052:16)
 	cpw	(10410:16), 0
-	jr	z, 3
+	jr	z, SndParam_Widget1_AppendType2_Entry7
 	calr	512
+SndParam_Widget1_AppendType2_Entry7:
 	.byte 0xf1, 0x52, 0xfd, 0xca
-	jr	z, 73
+	jr	z, SndParam_Widget1_AppendType2_Return2
 	cp	d, 252
-	jr	nz, 68
+	jr	nz, SndParam_Widget1_AppendType2_Return2
 	ld	(1056:16), 16
 	.byte 0xf1, 0x1e, 0x04, 0xca
-	jr	z, 28
+	jr	z, SndParam_Widget1_AppendType2_Entry8
 	.byte 0xf1, 0x21, 0x04, 0xca
-	jr	z, 4
+	jr	z, SndParam_Widget1_AppendType2_Skip18
 	.byte 0xf1, 0xde, 0x33, 0xba
+SndParam_Widget1_AppendType2_Skip18:
 	ld	(1054:16), 16
 	cpw	(10410:16), 0
-	jr	z, 5
+	jr	z, SndParam_Widget1_AppendType2_Entry8
 	ld	a, 134:opc
 	calr	532
+SndParam_Widget1_AppendType2_Entry8:
 	.byte 0xf1, 0x21, 0x04, 0xca
-	jr	z, 23
+	jr	z, SndParam_Widget1_AppendType2_Return2
 	ld	(1057:16), 16
 	pushw	wa
 	ld	a, (1045:16)
@@ -1368,28 +1400,34 @@ SndParam_Widget1_CallType3:
 	ld	a, (1046:16)
 	ld	(1079:16), a
 	popw	wa
+SndParam_Widget1_AppendType2_Return2:
 	ret
+SndParam_Widget1_AppendType2_Entry9:
 	.byte 0xf1, 0x52, 0xfd, 0xca
-	jr	z, -36
+	jr	z, SndParam_Widget1_AppendType2_Entry8
 	.byte 0xf1, 0xa7, 0x28, 0xca
-	jr	nz, 11
+	jr	nz, SndParam_Widget1_AppendType2_Return3
 	cp	d, 250
-	jr	z, 26
+	jr	z, SndParam_Widget1_AppendType2_Entry10
 	cp	d, 251
 	jrl	z, 200
+SndParam_Widget1_AppendType2_Return3:
 	ret
 	cpw	(61854:16), 0
-	jr	z, 10
+	jr	z, SndParam_Widget1_AppendType2_Return4
 	push	sr
 	ei	0x06
-	calr	22
+	calr	SndParam_Widget1_AppendType2_Sub
 	calr	100
 	pop	sr
+SndParam_Widget1_AppendType2_Return4:
 	ret
+SndParam_Widget1_AppendType2_Entry10:
 	.byte 0xf1, 0xac, 0x28, 0xbd
 	ld	(1108:16), 0
 	cpw	(61854:16), 0
 	jr	nz, 80
+SndParam_Widget1_AppendType2_Sub:
 	xor	wa, wa
 	ld	(1047:16), a
 	ld	(1048:16), wa

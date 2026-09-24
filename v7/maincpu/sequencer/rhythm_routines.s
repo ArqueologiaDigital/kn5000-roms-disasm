@@ -35,21 +35,21 @@ Rhythm_CompareNoteA_Only:
 	ld	a, (12860:16)
 	ld	w, (12867:16)
 	cp	a, w
-	jr	z, 5
-	calr	89
-	jr	30
+	jr	z, Rhythm_CompareNoteB
+	calr	Rhythm_NoteOnAfterSetup_A
+	jr	Rhythm_SaveCurrentNoteState
 Rhythm_CompareNoteB:
 	ld	a, (12861:16)
 	ld	w, (12868:16)
 	cp	a, w
-	jr	z, 3
-	calr	109
+	jr	z, Rhythm_CompareNoteC
+	calr	Rhythm_NoteOnAfterSetup_B
 Rhythm_CompareNoteC:
 	ld	a, (12862:16)
 	ld	w, (12869:16)
 	cp	a, w
-	jr	z, 3
-	calr	167
+	jr	z, Rhythm_SaveCurrentNoteState
+	calr	Rhythm_NoteOnAfterSetup_C
 Rhythm_SaveCurrentNoteState:
 	ld	a, (12860:16)
 	ld	(12867:16), a
@@ -247,8 +247,8 @@ RhythmEvt_PostProcess:
 RhythmEvt_SkipUnknown:
 	popw	iy
 	ld	iy, (13249:16)
-	call	16071765
-	jrl	-111
+	call	RingBuf_AdvanceIndex
+	jrl	RhythmEvt_NoteOnLoop
 RhythmEvt_IterDone:
 	ret
 
@@ -301,7 +301,7 @@ RhythmEvt_Full91_PostRange:
 	calr Rhythm_NoteRangeCheck
 
 RhythmEvt_Full91_PostTransp:
-	calr 570
+	calr Rhythm_VoiceMapLookup
 
 	popw iy
 
@@ -432,7 +432,7 @@ Rhythm_VelLookA_CheckEmpty:
 Rhythm_VelLookA_CheckRange:
 	ld	l, (12860:16)
 	cp	l, 48
-	jr	c, 2
+	jr	c, Rhythm_VelLookA_SelectTable
 	xor	l, l
 Rhythm_VelLookA_SelectTable:
 	.byte 0x45, 0xc6, 0x4c, 0xf5, 0x00, 0xf1, 0x58, 0x32
@@ -498,10 +498,10 @@ Rhythm_Transp_CheckZero:
 Rhythm_Transp_Apply:
 	dec	1, a
 	cp	a, (12847:16)
-	jr	ugt, 12	; -> 0xF54D83
+	jr	ugt, Rhythm_Transp_NegativeOctave	; -> 0xF54D83
 	add	w, a
 	bit	7, w
-	jr	z, 3	; -> 0xF54D81
+	jr	z, Rhythm_Transp_JumpToWrap	; -> 0xF54D81
 	sub	w, 12
 Rhythm_Transp_JumpToWrap:
 	jr Rhythm_Transp_WrapCheck
@@ -545,7 +545,7 @@ Rhythm_VoiceMap_CheckInstr:
 Rhythm_VoiceMap_CheckBit4:
 	ld	l, (12860:16)
 	cp	l, 48
-	jr	c, 2
+	jr	c, Rhythm_VoiceMap_ClampInstr
 	xor	l, l
 Rhythm_VoiceMap_ClampInstr:
 	.byte 0x45, 0x6b, 0x4e, 0xf5, 0x00, 0xf1, 0x58, 0x32
@@ -553,10 +553,10 @@ Rhythm_VoiceMap_ClampInstr:
 Rhythm_VoiceMap_SelectTable:
 	ld_rr8b	l, xiy, l
 	cp	l, 0:i3
-	jr	z, 38	; -> 0xF54E1F
+	jr	z, Rhythm_VoiceMap_ApplyBase	; -> 0xF54E1F
 	ld	h, (13207:16)
 	cp	l, 1:i3
-	jr	z, 4	; -> 0xF54E05
+	jr	z, Rhythm_VoiceMap_CheckMute	; -> 0xF54E05
 	ld	h, (13208:16)
 Rhythm_VoiceMap_CheckMute:
 	bit 5, h
@@ -577,10 +577,10 @@ Rhythm_VoiceMap_SubShift:
 
 Rhythm_VoiceMap_ApplyBase:
 	ld	w, a
-	calr	65171
+	calr	Rhythm_InstrBaseLookup
 	ld	l, (12860:16)
 	cp	l, 48
-	jr	c, 2
+	jr	c, Rhythm_VoiceMap_Inst2Clamp
 	xor	l, l
 Rhythm_VoiceMap_Inst2Clamp:
 	.byte 0x45, 0xc6, 0x4c, 0xf5, 0x00, 0xf1, 0x58, 0x32
@@ -700,7 +700,7 @@ Rhythm_VelComp_CheckBit4:
 Rhythm_VelComp_ClampInstr:
 	ld	l, (12860:16)
 	cp	l, 48
-	jr	c, 2
+	jr	c, Rhythm_VelComp_SelectTable
 	xor	l, l
 Rhythm_VelComp_SelectTable:
 	.byte 0x45, 0x2a, 0x4f, 0xf5, 0x00, 0xf1, 0x58, 0x32
@@ -753,10 +753,10 @@ Rhythm_DispatchCh_D7:
 	ld XIX,0x00003058
 Rhythm_DispatchCh_D7_Loop:
 	ld	(13112:16), 4
-	calr	173
+	calr	Rhythm_SingleNoteHandler
 	add	xix, 9
 	cp	xix, 12448
-	jr	c, -22
+	jr	c, Rhythm_DispatchCh_D7_Loop
 	ret
 Rhythm_DispatchCh_D4:
 	ld a, (0x3228:16)
@@ -769,10 +769,10 @@ Rhythm_DispatchCh_D4:
 	ld XIX,0x000030a0
 Rhythm_DispatchCh_D4_Loop:
 	ld	(13112:16), 8
-	calr	117
+	calr	Rhythm_SingleNoteHandler
 	add	xix, 9
 	cp	xix, 12520
-	jr	c, -22
+	jr	c, Rhythm_DispatchCh_D4_Loop
 	ret
 Rhythm_DispatchCh_D5:
 	ld a, (0x3229:16)
@@ -784,10 +784,10 @@ Rhythm_DispatchCh_D5:
 	ld XIX,0x000030e8
 Rhythm_DispatchCh_D5_Loop:
 	ld	(13112:16), 16
-	calr	66
+	calr	Rhythm_SingleNoteHandler
 	add	xix, 9
 	cp	xix, 12592
-	jr	c, -22
+	jr	c, Rhythm_DispatchCh_D5_Loop
 	ret
 Rhythm_DispatchCh_D6:
 	ld a, (0x322a:16)
@@ -799,10 +799,10 @@ Rhythm_DispatchCh_D6:
 	ld XIX,0x00003130
 Rhythm_DispatchCh_D6_Loop:
 	ld	(13112:16), 32
-	calr	15
+	calr	Rhythm_SingleNoteHandler
 	add	xix, 9
 	cp	xix, 12664
-	jr	c, -22
+	jr	c, Rhythm_DispatchCh_D6_Loop
 	ret
 Rhythm_SingleNoteHandler:
 	ld a, (xix)
@@ -867,9 +867,9 @@ Rhythm_ValidateAndSend:
 	call AccTuning_CallWithSaveRestore
 	ld a, (0x3386:16)
 	cp	(13192:16), a
-	jr	nz, 5
-	calr	6
-	jr	3
+	jr	nz, Rhythm_Validate_Mismatch
+	calr	Rhythm_MatchedPhrase
+	jr	Rhythm_Validate_Done
 Rhythm_Validate_Mismatch:
 	calr Rhythm_MismatchedPhrase
 
@@ -932,7 +932,7 @@ Rhythm_MismatchOther_PostRange:
 	calr Rhythm_NoteRangeCheck
 
 Rhythm_MismatchOther_Output:
-	calr	64553
+	calr	Rhythm_VoiceMapLookup
 	ld	(xix+2), a
 	ld	a, (13204:16)
 	ld	(xix+3), a
@@ -1165,7 +1165,7 @@ Rhythm_SaveState:
 	ld	a, (12775:16)
 	and	a, 253
 	bit	0, a
-	jr	z, 3
+	jr	z, Rhythm_SaveState_StoreBits
 	or	a, 2
 Rhythm_SaveState_StoreBits:
 	.byte 0xf1, 0xe7, 0x31, 0x41, 0xc1, 0x57, 0x32, 0x3e
@@ -1187,17 +1187,17 @@ Rhythm_SaveState_ClearFx:
 Rhythm_SaveState_CheckFx2:
 	ld	a, (12909:16)
 	and	a, 3
-	jr	nz, 9
+	jr	nz, Rhythm_SaveState_Fx2Active
 	ld	a, (12910:16)
 	and	a, 13
-	jr	z, 17
+	jr	z, Rhythm_SaveState_ClearFx2
 Rhythm_SaveState_Fx2Active:
 	ld	a, (12939:16)
 	and	a, 63
-	jr	nz, 13
+	jr	nz, Rhythm_VoiceAssignDetect
 	and	a, 252
 	and	a, 242
-	jr	5
+	jr	Rhythm_VoiceAssignDetect
 Rhythm_SaveState_ClearFx2:
 	.byte 0xc1, 0x8b, 0x32, 0x3c, 0xc0	; anddi8 (0x3327), 192 (v7 patched)
 
@@ -1301,8 +1301,8 @@ Rhythm_VoiceAssign_SaveShadow:
 	ld	(13012:16), a
 	ld	a, (12960:16)
 	ld	(12962:16), a
-	call	16094732
-	calr	1
+	call	AccTuning_SaveState
+	calr	Rhythm_SeqResetCheck
 	ret
 Rhythm_SeqResetCheck:
 	bit 2, (0x3433:16)
@@ -1324,7 +1324,7 @@ Rhythm_SeqReset_UpdateFlags:
 	ld	a, (13363:16)
 	and	a, 239
 	bit	2, a
-	jr	z, 3
+	jr	z, Rhythm_SeqReset_Store
 	or	a, 16
 Rhythm_SeqReset_Store:
 	ld	(13363:16), a
@@ -1403,10 +1403,10 @@ Rhythm_TranspMod_OctaveWrap:
 	ld	a, (12861:16)
 	dec	1, a
 	cp	a, 7:i3
-	jr	nc, 12
+	jr	nc, Rhythm_TranspMod_WrapNeg
 	add	w, a
 	bit	7, w
-	jr	z, 3
+	jr	z, Rhythm_TranspMod_WrapJump
 	sub	w, 12
 Rhythm_TranspMod_WrapJump:
 	jr Rhythm_TranspMod_WrapClamp

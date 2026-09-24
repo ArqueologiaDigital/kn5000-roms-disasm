@@ -222,26 +222,26 @@ CtrlPanel_HandleFirmwareCheck:
 	call z, (CaptureLcd:24)
 CtrlPanel_HandlePortCommands:
 	cp	(49121:16), 32
-	jr	nz, 47
+	jr	nz, CtrlPanel_HandleSerialPort
 	cp	(49122:16), 0
-	jr	z, 40
+	jr	z, CtrlPanel_HandleSerialPort
 	ld	xwa, 4294967295
 	ld	xbc, 29360187
-	call	16421979
+	call	DeleteEvent
 	ld	xde, 0:i3
 	ld	e, (49122:16)
 	add	xde, 25165824
 	ld	xwa, 4294967295
 	ld	xbc, 29360187
-	call	16423243
+	call	ApPostEvent
 CtrlPanel_HandleSerialPort:
 	cp	(49121:16), 33
-	jrl	nz, 835
+	jrl	nz, UIEvent_Epilogue
 	cp	(49122:16), 0
-	jrl	z, 827
+	jrl	z, UIEvent_Epilogue
 	ld	xwa, 4294967295
 	ld	xbc, 29360159
-	call	16421979
+	call	DeleteEvent
 	ld	a, (49122:16)
 	add	a, 16
 	exts	wa
@@ -250,56 +250,56 @@ CtrlPanel_HandleSerialPort:
 	ld_rrl	xde, xbc, wa
 	ld	xwa, 4294967295
 	ld	xbc, 29360159
-	jrl	774
+	jrl	UIEvent_DispatchAndReturn
 CtrlPanel_EventType_A8:
 	cp	e, 3:i3
-	jrl	nz, 155
+	jrl	nz, CtrlPanel_AA_Epilogue
 	ld	c, (49123:16)
 	ld	a, c
 	and	a, (49122:16)
 	bit	0, a
-	jr	z, 26
+	jr	z, CtrlPanel_A8_CheckRelease
 	ld	xwa, 4294967295
 	ld	xbc, 31457435
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 1:i3
 	.byte 0xe2, 0x90, 0x74, 0x02, 0xe8
-	jrl	732
+	jrl	UIEvent_Epilogue
 CtrlPanel_A8_CheckRelease:
 	bit 0, c
 	jr nz, CtrlPanel_ClearStateVar
 	jrl UIEvent_Epilogue
 CtrlPanel_EventType_AA:
 	cp	e, 17
-	jrl	z, 666
+	jrl	z, CtrlPanel_AA_PanelEvent_11
 	ld	c, (49123:16)
 	ld	a, c
 	and	a, (49122:16)
 	cp	e, 1:i3
-	jrl	z, 501
+	jrl	z, CtrlPanel_AA_PanelEvent_01_Bit1
 	cp	e, 21
-	jrl	z, 402
+	jrl	z, CtrlPanel_AA_PanelEvent_15
 	cp	e, 4:i3
-	jrl	z, 306
+	jrl	z, CtrlPanel_AA_PanelEvent_04_Bit4
 	cp	e, 14
-	jrl	z, 153
+	jrl	z, CtrlPanel_AA_PanelEvent_0E_Bit3
 	cp	e, 18
-	jr	z, 107
+	jr	z, CtrlPanel_AA_PanelEvent_12
 	cp	e, 15
-	jr	z, 61
+	jr	z, CtrlPanel_AA_PanelEvent_0F
 	cp	e, 5:i3
-	jrl	nz, 671
+	jrl	nz, UIEvent_Epilogue
 	ld	a, (49123:16)
 	and	a, (49122:16)
 	bit	0, a
-	jrl	z, 657
+	jrl	z, UIEvent_Epilogue
 	bit	1, a
-	jrl	z, 651
+	jrl	z, UIEvent_Epilogue
 	ld	xwa, (160912:24)
 	cp	xwa, 1
-	jrl	nz, 637
-	call	16776933
+	jrl	nz, UIEvent_Epilogue
+	call	Get_Firmware_Version
 	cp	l, 255
 	.byte 0xf2, 0x23, 0xec, 0xfa, 0xe6
 CtrlPanel_ClearStateVar:
@@ -364,11 +364,11 @@ CtrlPanel_AA_PanelEvent_0E_Bit2:
 	ld	a, c
 	and	a, (49122:16)
 	bit	2, a
-	jr	z, 14
+	jr	z, CtrlPanel_AA_0E_Bit2Release
 	ld	xwa, 4294967295
 	ld	xbc, 31457445
 	ld	xde, 3:i3
-	jr	17
+	jr	CtrlPanel_AA_0E_Bit2Post
 CtrlPanel_AA_0E_Bit2Release:
 	bit 2, c
 	jr z, CtrlPanel_AA_PanelEvent_0E_Bit4
@@ -384,11 +384,11 @@ CtrlPanel_AA_PanelEvent_0E_Bit4:
 	ld	a, c
 	and	a, (49122:16)
 	bit	4, a
-	jr	z, 18
+	jr	z, CtrlPanel_AA_0E_Bit4Release
 	ld	xwa, 4294967295
 	ld	xbc, 31457445
 	ld	xde, 9
-	jrl	406
+	jrl	UIEvent_DispatchAndReturn
 CtrlPanel_AA_0E_Bit4Release:
 	bit 4, c
 	jrl z, UIEvent_Epilogue
@@ -420,11 +420,11 @@ CtrlPanel_AA_PanelEvent_04_Bit5:
 	ld	a, c
 	and	a, (49122:16)
 	bit	5, a
-	jr	z, 15
+	jr	z, CtrlPanel_AA_04_Bit5Release
 	ld	xwa, 4294967295
 	ld	xbc, 31457445
 	ld	xde, 5:i3
-	jrl	312
+	jrl	UIEvent_DispatchAndReturn
 CtrlPanel_AA_04_Bit5Release:
 	bit 5, c
 	jrl z, UIEvent_Epilogue
@@ -490,11 +490,11 @@ CtrlPanel_AA_PanelEvent_01_Bit5:
 	ld	a, c
 	and	a, (49122:16)
 	bit	5, a
-	jr	z, 17
+	jr	z, CtrlPanel_AA_01_Bit5Release
 	ld	xwa, 4294967295
 	ld	xbc, 31457445
 	ld	xde, 8
-	jr	20
+	jr	CtrlPanel_AA_01_Bit5Post
 CtrlPanel_AA_01_Bit5Release:
 	bit 5, c
 	jr z, CtrlPanel_AA_PanelEvent_01_Bit6
@@ -510,11 +510,11 @@ CtrlPanel_AA_PanelEvent_01_Bit6:
 	ld	a, c
 	and	a, (49122:16)
 	bit	6, a
-	jr	z, 17
+	jr	z, CtrlPanel_AA_01_Bit6Release
 	ld	xwa, 4294967295
 	ld	xbc, 31457445
 	ld	xde, 8
-	jr	70
+	jr	UIEvent_DispatchAndReturn
 CtrlPanel_AA_01_Bit6Release:
 	bit 6, c
 	jr z, UIEvent_Epilogue
@@ -527,11 +527,11 @@ CtrlPanel_AA_PanelEvent_11:
 	ld	c, (49123:16)
 	ld	a, c
 	and	a, (49122:16)
-	jr	z, 17
+	jr	z, CtrlPanel_AA_11_Release
 	ld	xwa, 4294967295
 	ld	xbc, 31457445
 	ld	xde, 10
-	jr	19
+	jr	UIEvent_DispatchAndReturn
 CtrlPanel_AA_11_Release:
 	cp c, 0:i3
 	jr z, UIEvent_Epilogue

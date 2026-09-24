@@ -8,51 +8,51 @@
 
 PsGridBox_Init:
 	ld	xwa, (xsp+334)
-	call	16408153
+	call	GetViewInstance
 	ld	xiz, xhl
 	ld	wa, (xiz+38)
 	sll	wa, 1
 	inc	2, wa
 	pushw	wa
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	ld	xwa, (xiz+50)
 	ld	(xwa), xhl
 	ld	wa, (xiz+36)
 	sll	wa, 1
 	inc	2, wa
 	pushw	wa
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	ld	xwa, (xiz+54)
 	ld	(xwa), xhl
 	ld	wa, (xiz+36)
 	sll	wa, 1
 	inc	2, wa
 	pushw	wa
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	6, xsp
 	ld	xwa, (xiz+58)
 	ld	(xwa), xhl
 	ld	xwa, (xsp+334)
 	ld	xbc, (xsp+330)
 	ld	xde, (xsp+326)
-	jrl	758
+	jrl	PsGridBox_ShowHide_Tail
 PsGridBox_Close:
 	ld	xwa, (xsp+334)
 	ld	xbc, (xsp+330)
 	ld	xde, (xsp+326)
-	calr	61005
+	calr	VwBoxProc
 	ld	xwa, (xsp+334)
-	call	16408153
+	call	GetViewInstance
 	ld	xiz, xhl
 	lda	xbc, (xiz+50)
 	ld	xwa, (xbc)
 	ld	xwa, (xwa)
 	or	xwa, xwa
-	jr	z, 18
+	jr	z, PsGridBox_Close_FreeRows
 	ld	xwa, (xbc)
 	ld	xwa, (xwa)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	xbc, (xiz+50)
 	ld	xwa, 0:i3
@@ -61,10 +61,10 @@ PsGridBox_Close_FreeRows:
 	ld	xbc, (xiz+54)
 	ld	xwa, (xbc)
 	or	xwa, xwa
-	jr	z, 16
+	jr	z, PsGridBox_Close_FreeRowAlt
 	ld	xwa, (xbc)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	xbc, (xiz+54)
 	ld	xwa, 0:i3
@@ -73,10 +73,10 @@ PsGridBox_Close_FreeRowAlt:
 	ld	xbc, (xiz+58)
 	ld	xwa, (xbc)
 	or	xwa, xwa
-	jr	z, 16
+	jr	z, PsGridBox_ReturnZero
 	ld	xwa, (xbc)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	xbc, (xiz+58)
 	ld	xwa, 0:i3
@@ -945,18 +945,18 @@ PsGridBox_Scroll_CopyStr:
 	push	xwa
 	ld	xwa, (xsp+330)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	-2334
+	jrl	PsGridBox_ReturnZero
 	ld	xwa, (xsp+334)
-	call	16408153
+	call	GetViewInstance
 	ld	(xsp+20), xhl
 	ld	xwa, (xsp+326)
 	srl	xwa, 0
 	ld	qwa, 0
 	ld	iz, wa
 	cp	iz, 65535
-	jr	nz, 8
+	jr	nz, PsGridBox_Scroll_DefaultRow
 	ld	xwa, (xsp+20)
 	ld	xwa, (xwa+46)
 	ld	iz, (xwa)

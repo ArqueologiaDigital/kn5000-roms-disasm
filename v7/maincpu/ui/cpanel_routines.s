@@ -333,19 +333,19 @@ CPanel_PollStartup:
 
 
 CPanel_ButtonPollLoop:
-	calr	223
+	calr	CPanel_WaitTXReady
 	ld	a, 32:opc
 	ld	w, 11:opc
-	calr	298
-	calr	65177
-	calr	1650
+	calr	CPanel_SendCommand
+	calr	DELAY_6_TICKS
+	calr	CPanel_RX_Process
 	ld	a, (36281:16)
 	ld	w, 13:opc
 	bit	7, a
-	jr	nz, 9
+	jr	nz, CPanel_EncoderCheck
 	ld	w, 14:opc
 	bit	6, a
-	jr	nz, 2
+	jr	nz, CPanel_EncoderCheck
 	ld	w, 12:opc
 CPanel_EncoderCheck:
 	.byte 0xc1, 0xce, 0x8d, 0xf8, 0xf1, 0xce, 0x8d, 0x40
@@ -639,7 +639,7 @@ RXByte1_InspectByte:
 	ld	(36079:16), 2
 	and	a, 63
 	cp	a, 48
-	jr	c, 10
+	jr	c, RXByte1_AdvanceState
 	and	a, 15
 	add	a, 3
 	ld	(36079:16), a
@@ -734,9 +734,9 @@ PollLoop_TXCheckThreshold:
 	ld	iy, (36195:16)
 	ld	xde, 36197
 	st_rrb	w, xde, iy
-	calr	964
+	calr	CPanel_IncLEDPtr
 	st_rrb	a, xde, iy
-	calr	956
+	calr	CPanel_IncLEDPtr
 	ld	(36195:16), iy
 PollLoop_DispatchWork:
 	.byte 0x06, 0x00, 0xc1, 0xf0, 0x8c, 0x21, 0xc9, 0xcc
@@ -820,19 +820,19 @@ CPanel_RX_PacketHandlers:
 
 CPanel_RX_ButtonPacket:
 	ld_rrb	w, xde, iy
-	calr	635
+	calr	CPanel_IncRXPtr
 	st_rrb	w, xiz, ix
-	calr	649
+	calr	CPanel_IncEventPtr
 	ld	(36088:16), w
 	ld_rrb	a, xde, iy
-	calr	615
+	calr	CPanel_IncRXPtr
 	st_rrb	a, xiz, ix
-	calr	629
+	calr	CPanel_IncEventPtr
 	ld	(36089:16), a
 	and	w, 79
 	ld	xhl, 36270
 	bit	6, w
-	jr	z, 3	; -> 0xFC41F2
+	jr	z, BtnPkt_AddOffset	; -> 0xFC41F2
 	sub	w, 48
 BtnPkt_AddOffset:
 	add l, w
@@ -846,20 +846,20 @@ BtnPkt_XORLookup:
 	.byte 0x8d, 0x55, 0x78, 0x4b, 0xff
 CPanel_RX_EncoderPacket:
 	ld_rrb	w, xde, iy
-	calr	544
+	calr	CPanel_IncRXPtr
 	st_rrb	w, xiz, ix
-	calr	558
+	calr	CPanel_IncEventPtr
 	ld	(36088:16), w
 	ld_rrb	a, xde, iy
-	calr	524
+	calr	CPanel_IncRXPtr
 	ld	(36089:16), a
 	ld	c, w
-	calr	49
+	calr	EncPkt_DispatchThunk
 	cp	hl, 65535
-	jr	nz, 9	; -> 0xFC4249
-	calr	539
+	jr	nz, EncPkt_WriteEvent	; -> 0xFC4249
+	calr	CPanel_DecEventPtr
 	ld	(36097:16), iy
-	jr	31	; -> 0xFC4268
+	jr	EncPkt_ParseNext	; -> 0xFC4268
 EncPkt_WriteEvent:
 	.byte 0xf3, 0x07, 0xf8, 0xf0, 0x47, 0x1e, 0x02, 0x02
 	.byte 0xf1, 0xfa, 0x8c, 0x47, 0xf3, 0x07, 0xf8, 0xf0
@@ -929,9 +929,9 @@ MBytePkt_LoopBody:
 	jr nz, MBytePkt_EncWriteResult
 	jr t, MBytePkt_EncNoEvent
 MBytePkt_EncNoEvent:
-	calr	367
+	calr	CPanel_DecEventPtr
 	ld	(36097:16), iy
-	jrl	67
+	jrl	MBytePkt_LoopTail
 MBytePkt_EncWriteResult:
 	ld	a, (36090:16)
 MBytePkt_WriteEventByte:
@@ -966,7 +966,7 @@ MBytePkt_LoopTail:
 CPanel_RX_SyncPacket:
 	ldb_sri A, 0x07, 0xe8, 0xf4
 
-	calr	240
+	calr	CPanel_IncRXPtr
 
 	ldb_sri A, 0x07, 0xe8, 0xf4
 
@@ -999,10 +999,10 @@ CPanel_UpdateLEDs__check_next:
 LEDs_CheckTXSpace:
 	ld	wa, (36195:16)
 	sub	wa, (36193:16)
-	jr	nc, 6	; -> 0xFC4393
+	jr	nc, LEDs_TXForwardDist	; -> 0xFC4393
 	neg	wa
 	ld	hl, wa
-	jr	5	; -> 0xFC4398
+	jr	LEDs_TXCheckThreshold	; -> 0xFC4398
 LEDs_TXForwardDist:
 	ldw hl, 0x3c
 	sub hl, wa
@@ -1038,15 +1038,15 @@ CPanel_LED_HandlePacket2:
 
 	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 
-	calr 110
+	calr CPanel_IncLEDPtr
 
 	ldb_sri W, 0x07, 0xf8, 0xf0	; W = event queue byte 2 at (XIZ + IX)
 
-	calr 135
+	calr ToneGen_IncrementWrap128
 
 	stb_dri W, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 
-	calr 94
+	calr CPanel_IncLEDPtr
 
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 
@@ -1077,16 +1077,16 @@ CPanel_LED_HandlePacketN:	; FC4BC5 -- LED handler for packet type 3
 
 CPanel_LED_HandlePacketN__loop:
 	ld_rrb	a, xiz, ix
-	calr	72
+	calr	ToneGen_IncrementWrap128
 	st_rrb	a, xde, iy
-	calr	31
+	calr	CPanel_IncLEDPtr
 	ld	(xiz-8), ix
 	incw	1, (xiz-2)
 	ld	(36195:16), iy
 	dec	1, b
 	cp	b, 0:i3
-	jr	nz, -32
-	jrl	-201
+	jr	nz, CPanel_LED_HandlePacketN__loop
+	jrl	CPanel_UpdateLEDs__check_next
 LEDs_Return:
 	ret
 

@@ -15,22 +15,24 @@ Scoop_SoundEditorData:
 	; v9/v10's Scoop_SoundEditorData opens the same way (jp/jp/ld wa,(xsp+4)/
 	; ld bc,(xsp+6)/...) confirming the framing; only the call targets differ,
 	; unresolved to symbols because this v7 link never names them.
-	jp	15776404
-	jp	15776994
+	jp	SeMenu_CopyWriteUpdate_Join
+	jp	SeMenu_CopyWriteUpdate_Return
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	call	15783792
+	call	Scoop_SoundEditorData_Helper
+Scoop_SoundEditorData_Join:
 	ld	wa, 1:i3
-	call	15671353
+	call	AudioLock_GetCount
 	cp	hl, 0:i3
-	jr	z, 8
+	jr	z, Scoop_SoundEditorData_Skip
 	ld	wa, 3:i3
-	call	15670325
-	jr	-18
+	call	TaskSched_YieldToQueue
+	jr	Scoop_SoundEditorData_Join
+Scoop_SoundEditorData_Skip:
 	ld	xwa, 0:i3
 	ld	xbc, 29360135
-	jp	16421979
-	jp	15776995
+	jp	DeleteEvent
+	jp	SeMenu_CopyWriteUpdate_Return2
 	dec 4,XSP
 	lda xde, (xsp + 0x02)
 	lda XHL, (XSP)

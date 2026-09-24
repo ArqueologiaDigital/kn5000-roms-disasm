@@ -99,7 +99,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 361
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068684
 	ld	(xsp+256), xwa
 	lda	xwa, (16405742:24)
@@ -111,7 +111,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 457
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068685
 	ld	(xsp+256), xwa
 	lda	xwa, (16405819:24)
@@ -123,7 +123,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 489
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068674
 	ld	(xsp+256), xwa
 	lda	xwa, (16401759:24)
@@ -134,7 +134,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 297
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068674
 	ld	(xsp+256), xwa
 	lda	xwa, (16401759:24)
@@ -145,7 +145,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 1065
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068673
 	ld	(xsp+256), xwa
 	lda	xwa, (16401564:24)
@@ -156,7 +156,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 265
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068673
 	ld	(xsp+256), xwa
 	lda	xwa, (16401564:24)
@@ -167,7 +167,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 1033
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068675
 	ld	(xsp+256), xwa
 	lda	xwa, (16401931:24)
@@ -178,7 +178,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 329
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068675
 	ld	(xsp+256), xwa
 	lda	xwa, (16401931:24)
@@ -189,7 +189,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 1097
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068688
 	ld	(xsp+256), xwa
 	lda	xwa, (16405896:24)
@@ -200,7 +200,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 127
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068687
 	ld	(xsp+256), xwa
 	lda	xwa, (16408254:24)
@@ -211,7 +211,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 895
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068688
 	ld	(xsp+256), xwa
 	lda	xwa, (16405896:24)
@@ -222,7 +222,7 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 252
-	call	16400110
+	call	RegisterObjectTable
 	ld	xwa, 23068687
 	ld	(xsp+256), xwa
 	lda	xwa, (16408254:24)
@@ -233,21 +233,21 @@ InitializeHama:
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 1020
-	call	16400110
+	call	RegisterObjectTable
 	pushw 9
 	lda	xwa, (14810392:24)
 	push	xwa
 	ld	xwa, 127
 	ld	xbc, 21561344
 	ld	xde, 16515072
-	call	16402803
+	call	RegisterTitle
 	pushw 9
 	lda	xwa, (14810402:24)
 	push	xwa
 	ld	xwa, 252
 	ld	xbc, 21561344
 	ld	xde, 16515072
-	call	16402803
+	call	RegisterTitle
 	lda	xsp, (xsp+14)
 	ret
 FDTest_PrintDiag:
@@ -587,12 +587,12 @@ LoadExtROM_Entry:
 	pushw	65436
 	ld	xwa, 2097152
 	push	xwa
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	z, 8
+	jr	z, LoadExtROM_JumpEntry
 	lda	xwa, (14811042:24)
-	jrl	-217
+	jrl	SendEvent_Entry
 LoadExtROM_JumpEntry:
 	ld xhl, 0x200008
 	lda xwa, (0x027ed2:24)
@@ -608,7 +608,7 @@ LoadXaprInit_Entry:
 	pushw	65456
 	ld	xwa, 2621440
 	push	xwa
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
 	ret	nz
@@ -636,12 +636,12 @@ LoadAndRunXapr_Entry:
 	pushw	65478
 	ld	xwa, 2621440
 	push	xwa
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 8
+	jr	nz, LoadAndRunXapr_ClearFlag
 	ld	(253188:24), 1
-	jr	6
+	jr	LoadAndRunXapr_CallIfActive
 LoadAndRunXapr_ClearFlag:
 	ld (0x03dd04:24), 0x00
 

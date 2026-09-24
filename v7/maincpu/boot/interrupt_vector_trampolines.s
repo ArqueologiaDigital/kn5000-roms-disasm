@@ -6,6 +6,7 @@
 ; A few slots contain stub code (adc, ld xiy, decf) for specific interrupts.
 
 	.incbin "includes/romslices/v7_block_interrupt_vector_trampolines_head.bin"
+AcApcToggleProc_Helper:
 	dec 6,XSP
 	push XIZ
 	ldw (XSP+0x04), 0xffff
@@ -30,7 +31,7 @@
 	add XHL,XWA
 	ld XWA,XHL
 	ld XBC,0x000007ff
-	call 0xff0435
+	call FDC_SetupSectorParams_Helper
 	ld IX,HL
 	jr t, .Lc_fccce0
 .Lc_fcccb4:
@@ -82,4 +83,5 @@
 	pop XIZ
 	inc 6,XSP
 	ret
+DkMdlyPly_CheckState_Helper:
 	.incbin "includes/romslices/v7_block_interrupt_vector_trampolines_tail.bin"

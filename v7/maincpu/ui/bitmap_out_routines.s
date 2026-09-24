@@ -64,112 +64,118 @@ BitMapOut_BlitComplete:
 	lda xsp, (xsp + 16)
 	ret
 BitMapOut_ByteData_RenderA:
-	call	15665005
+	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	call	16405594
+	call	GetTitleNow
 	cp	xhl, 27263222
 	ret	z
 	cp	(49121:16), 0
 	ret	nz
-	calr	605
+	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
 	ret	nz
 	ld	a, (49122:16)
 	cp	a, 13
-	jr	z, 42
+	jr	z, BitMapOut_ByteData_RenderA_Skip
 	cp	a, 12
-	jr	nz, 74
+	jr	nz, BitMapOut_ByteData_RenderA_Skip2
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263210
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	jr	72
+	jr	BitMapOut_ByteData_RenderA_Join
+BitMapOut_ByteData_RenderA_Skip:
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263211
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	jr	35
+	jr	BitMapOut_ByteData_RenderA_Join
+BitMapOut_ByteData_RenderA_Skip2:
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263208
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	480
+BitMapOut_ByteData_RenderA_Join:
+	calr	BitMapOut_StorePresetValue
 	ret
 BitMapOut_ByteData_RenderB:
 	dec	6, xsp
-	call	15665005
+	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
-	jrl	z, 158
-	call	16405594
+	jrl	z, BitMapOut_ByteData_RenderB_Epilogue
+	call	GetTitleNow
 	cp	xhl, 27263222
-	jrl	z, 145
+	jrl	z, BitMapOut_ByteData_RenderB_Epilogue
 	ld	a, (49124:16)
 	cp	a, (35998:16)
-	jrl	nz, 134
+	jrl	nz, BitMapOut_ByteData_RenderB_Epilogue
 	cp	(49121:16), 0
-	jr	nz, 127
-	calr	429
+	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
+	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
-	jr	nz, 120
-	call	16405594
+	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
+	call	GetTitleNow
 	cp	xhl, 27263208
-	jr	nz, 108
+	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
 	ld	a, (35998:16)
 	extz	wa
 	ld	bc, 0:i3
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+3), l
 	ld	a, (35998:16)
 	extz	wa
 	ldw	bc, 32
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	.byte 0xb8, 0x02, 0x14, 0x9e, 0x8c
-	call	16552842
+	call	SndParam_ResolveVoiceEntry
 	ld	a, (xsp+256)
 	cp	a, 13
-	jr	z, 5
+	jr	z, BitMapOut_ByteData_RenderB_Skip
 	cp	a, 12
-	jr	nz, 18
+	jr	nz, BitMapOut_ByteData_RenderB_Skip2
+BitMapOut_ByteData_RenderB_Skip:
 	ld	xwa, 4294967295
 	ld	xbc, 31457401
 	ld	xde, 0:i3
-	call	16423243
-	jr	35
+	call	ApPostEvent
+	jr	BitMapOut_ByteData_RenderB_Epilogue
+BitMapOut_ByteData_RenderB_Skip2:
 	ld	xwa, 4294967295
 	ld	xbc, 29491207
-	call	16421979
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29491207
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	310
+	calr	BitMapOut_StorePresetValue
+BitMapOut_ByteData_RenderB_Epilogue:
 	inc	6, xsp
 	ret
 BitMapOut_ByteData_RenderC:
 	ld	wa, 0:i3
-	jrl	302
+	jrl	BitMapOut_StorePresetValue
 BitMapOut_ByteData_RenderD:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 49 of 76 slots byte-identical
 	dec	6, xsp
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
-	jr	z, 120
+	jr	z, BitMapOut_ByteData_RenderD_Epilogue
 	call	GetTitleNow
 	.byte 0xeb	; v10 does not spell this byte either
 	.byte 0xcf	; v10 does not spell this byte either
@@ -177,7 +183,7 @@ BitMapOut_ByteData_RenderD:
 	.byte 0x00	; v10 does not spell this byte either
 	.byte 0xa0	; v10 does not spell this byte either
 	.byte 0x01	; v10 does not spell this byte either
-	jr	nz, 108
+	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
 	.byte 0xc1	; v10 does not spell this byte either
 	.byte 0xe4	; v10 does not spell this byte either
 	.byte 0xbf	; v10 does not spell this byte either
@@ -186,16 +192,16 @@ BitMapOut_ByteData_RenderD:
 	jr	mi, -63
 	.byte 0xe1, 0xbf, 0x3f	; differs from v10 here and llvm-objdump cannot read it
 	rcf
-	jr	nz, 94
+	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
 	ld	a, (35998:16)
 	extz	wa
 	ld	bc, 0:i3
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+3), l
 	ld	a, (35998:16)
 	extz	wa
 	ldw	bc, 32
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	.byte 0xb8	; v10 does not spell this byte either
@@ -206,20 +212,23 @@ BitMapOut_ByteData_RenderD:
 	call	SndParam_ResolveVoiceEntry
 	ld	a, (xsp+256)
 	cp	a, 13
-	jr	z, 5
+	jr	z, BitMapOut_ByteData_RenderD_Skip
 	cp	a, 12
-	jr	nz, 18
+	jr	nz, BitMapOut_ByteData_RenderD_Skip2
+BitMapOut_ByteData_RenderD_Skip:
 	ld	xwa, 4294967295
 	ld	xbc, 31457401
 	ld	xde, 0:i3
 	call	ApPostEvent
-	jr	21
+	jr	BitMapOut_ByteData_RenderD_Epilogue
+BitMapOut_ByteData_RenderD_Skip2:
 	ld	xwa, 4294967295
 	ld	xbc, 29491207
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	172
+	calr	BitMapOut_StorePresetValue
+BitMapOut_ByteData_RenderD_Epilogue:
 	inc	6, xsp
 	ret
 	call	Boot_CheckConfigFlag7
@@ -229,7 +238,7 @@ BitMapOut_ByteData_RenderD:
 	.byte 0xe1, 0xbf, 0x3f	; differs from v10 here and llvm-objdump cannot read it
 	nop
 	ret	nz
-	calr	146
+	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
 	ret	nz
 	ld	xwa, 4294967295
@@ -240,7 +249,7 @@ BitMapOut_ByteData_RenderD:
 	ld	xde, 27263209
 	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	109
+	calr	BitMapOut_StorePresetValue
 	ret
 BitMapOut_ByteData_RenderE:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 20 of 29 slots byte-identical
@@ -257,7 +266,7 @@ BitMapOut_ByteData_RenderE:
 	push	xsp
 	popw	wa
 	ret	nz
-	calr	78
+	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
 	ret	nz
 	call	GetTitleNow
@@ -271,7 +280,7 @@ BitMapOut_ByteData_RenderE:
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	32
+	calr	BitMapOut_StorePresetValue
 	ret
 BitMapOut_CheckDiskAndApply:
 	cp (0x8c9c:16), 0x8a
@@ -360,10 +369,11 @@ BitMapOut_ByteData_TransitionSeq:
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
 	ld	xde, 3:i3
-	jr	12
+	jr	BitMapOut_ByteData_TransitionSeq_Join
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
 	ld	xde, 1:i3
+BitMapOut_ByteData_TransitionSeq_Join:
 	call	ApPostEvent
 	ret
 BitMapOut_ByteData_PresetCopy:
@@ -1792,7 +1802,7 @@ BitMapOut_DeltaEncode_BufferFull:
 	ld	a, (36010:16)
 	set	2, a
 	ld	(36010:16), a
-	jr	23
+	jr	BitMapOut_DeltaEncode_EncodeChange
 BitMapOut_DeltaEncode_SlowTimeout:
 	cp hl, 0x1f4
 	jr c, BitMapOut_DeltaEncode_EncodeChange
@@ -1940,7 +1950,7 @@ BitMapOut_ApplyIOChange_Port0:
 	ld	e, (36016:16)
 	ld	(36016:16), 255
 	ld	d, (36016:16)
-	call	16579981
+	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
 	ld	(36016:16), 0
 	ld	c, (36016:16)
 	ld	(36016:16), 0
@@ -1951,7 +1961,7 @@ BitMapOut_ApplyIOChange_Port0:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	16579981
+	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1972,7 +1982,7 @@ BitMapOut_ApplyIOChange_Port1:
 	ld	e, (36016:16)
 	ld	(36016:16), 255
 	ld	d, (36016:16)
-	call	16579981
+	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
 	ld	(36016:16), 1
 	ld	c, (36016:16)
 	ld	(36016:16), 0
@@ -1983,7 +1993,7 @@ BitMapOut_ApplyIOChange_Port1:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	16579981
+	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2004,7 +2014,7 @@ BitMapOut_ApplyIOChange_Port2:
 	ld	e, (36016:16)
 	ld	(36016:16), 255
 	ld	d, (36016:16)
-	call	16579981
+	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
 	ld	(36016:16), 2
 	ld	c, (36016:16)
 	ld	(36016:16), 0
@@ -2015,7 +2025,7 @@ BitMapOut_ApplyIOChange_Port2:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	16579981
+	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2036,7 +2046,7 @@ BitMapOut_ApplyIOChange_Port3:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	16579981
+	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2057,7 +2067,7 @@ BitMapOut_ApplyIOChange_Port4:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	16579981
+	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2078,7 +2088,7 @@ BitMapOut_ApplyIOChange_Port5:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	16579981
+	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2485,7 +2495,7 @@ BitMapOut_DeltaEncode_Type90Handler:
 BitMapOut_DeltaEncode_Type90PartB:
 	ld	b, w
 	bit	1, w
-	jrl	nz, 216	; -> 0xFB5620
+	jrl	nz, BitMapOut_DeltaEncode_Type90Epilog	; -> 0xFB5620
 	set	1, b
 	ld	(36010:16), b
 	ld	iz, hl
@@ -2648,7 +2658,7 @@ BitMapOut_DeltaEncode_Type90Final:
 BitMapOut_RefreshDisplay_CheckDirty:
 	extz	wa
 	ld	xbc, 63904
-	jrl	-5847
+	jrl	BitMapOut_CopyVoicePreset9
 	ret
 BitMapOut_RefreshDisplay_ClearDirty:
 	dec 0,XSP
@@ -2812,7 +2822,7 @@ BitMapOut_PrepareRenderState:
 	ldw	wa, 256
 	sub	wa, bc
 	cp	wa, 8
-	jr	ule, 116
+	jr	ule, BitMapOut_PrepareRender_CheckBit0
 	ld	iy, bc
 	lda	xix, (48797:16)
 	lda	xhl, (64606:16)
@@ -2826,7 +2836,7 @@ BitMapOut_PrepareRenderState:
 	ld	a, (xhl)
 	and	a, 64
 	cp	a, w
-	jr	z, 46
+	jr	z, BitMapOut_PrepareRender_SetParams
 	inc	1, iy
 	extz	xbc
 	add	xbc, xix
@@ -2889,106 +2899,117 @@ BitMapOut_GetRenderMode_Return:
 BitMapOut_ByteData_RenderState:
 	push	xiz
 	cp	(49121:16), 4
-	jrl	nz, 179
+	jrl	nz, BitMapOut_ByteData_RenderState_Epilogue
 	ld	a, (49122:16)
 	and	a, (49123:16)
 	and	a, 3
 	cp	a, 1:i3
-	jr	z, 29
+	jr	z, BitMapOut_ByteData_RenderState_Skip2
 	cp	a, 2:i3
-	jr	nz, 48
-	calr	-68
+	jr	nz, BitMapOut_ByteData_RenderState_Skip4
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ldb_erp	l, 251
 	inc1b_erp	251
 	cp_erpb	251, 9
-	jr	le, 3
+	jr	le, BitMapOut_ByteData_RenderState_Skip
 	ldib_erp	251, 0
+BitMapOut_ByteData_RenderState_Skip:
 	stb_erp	a, 251
 	extz	wa
-	jr	20
-	calr	-93
+	jr	BitMapOut_ByteData_RenderState_Join
+BitMapOut_ByteData_RenderState_Skip2:
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ldb_erp	l, 251
 	dec1b_erp	251
-	jr	ge, 4
+	jr	ge, BitMapOut_ByteData_RenderState_Skip3
 	ldi_erpb	251, 9
+BitMapOut_ByteData_RenderState_Skip3:
 	stb_erp	a, 251
 	extz	wa
-	calr	-108
-	call	16405594
+BitMapOut_ByteData_RenderState_Join:
+	calr	BitMapOut_PrepareRender_CheckBit2
+BitMapOut_ByteData_RenderState_Skip4:
+	call	GetTitleNow
 	cp	xhl, 27263184
-	jr	nz, 19
+	jr	nz, BitMapOut_ByteData_RenderState_Skip5
 	stb_erp	e, 251
 	exts	de
 	exts	xde
 	ld	xwa, 4294967295
 	ld	xbc, 29360142
-	jr	67
-	call	16405594
+	jr	BitMapOut_ByteData_RenderState_Join2
+BitMapOut_ByteData_RenderState_Skip5:
+	call	GetTitleNow
 	cp	xhl, 27263185
-	jr	nz, 59
+	jr	nz, BitMapOut_ByteData_RenderState_Skip6
 	pushw 18
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
-	calr	-170
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ld	(xiz), l
-	calr	-175
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ld	a, l
 	lda	xbc, (xiz+1)
-	calr	285
+	calr	BitMapOut_UpdateWidget_PostDraw
 	ld	xwa, 4294967295
 	ld	xbc, 29491202
 	ld	xde, xiz
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16423243
+BitMapOut_ByteData_RenderState_Join2:
+	call	ApPostEvent
+BitMapOut_ByteData_RenderState_Skip6:
 	ld	xwa, 0:i3
 	ld	xbc, 0:i3
 	ld	xde, 0:i3
-	call	16354423
+	call	MainGetPmemName
+BitMapOut_ByteData_RenderState_Epilogue:
 	pop	xiz
 	ret
 BitMapOut_ByteData_DisplayUpdate:
 	push	xiz
 	ld	a, (49121:16)
 	cp	a, 1:i3
-	jr	nz, 107
+	jr	nz, BitMapOut_ByteData_DisplayUpdate_Epilogue
 	ld	a, (49123:16)
 	res	7, a
 	cp	a, 0:i3
-	jr	z, 25
+	jr	z, BitMapOut_ByteData_DisplayUpdate_Skip
 	ld	xwa, 768
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	l, 0:i3
-	jr	z, 12
+	jr	z, BitMapOut_ByteData_DisplayUpdate_Skip
 	dec	1, l
 	srl	l, 3
 	extz	hl
 	ld	wa, hl
-	calr	65269
-	call	16405594
+	calr	BitMapOut_PrepareRender_CheckBit2
+BitMapOut_ByteData_DisplayUpdate_Skip:
+	call	GetTitleNow
 	cp	xhl, 27263185
-	jr	nz, 59
+	jr	nz, BitMapOut_ByteData_DisplayUpdate_Epilogue
 	pushw	18
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
-	calr	65238
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ld	(xiz), l
-	calr	65233
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ld	a, l
 	lda	xbc, (xiz+1)
-	calr	157
+	calr	BitMapOut_UpdateWidget_PostDraw
 	ld	xwa, 4294967295
 	ld	xbc, 29491202
 	ld	xde, xiz
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16423243
+	call	ApPostEvent
+BitMapOut_ByteData_DisplayUpdate_Epilogue:
 	pop	xiz
 	ret
 BitMapOut_UpdateDisplayWidget:
@@ -3087,7 +3108,9 @@ BitMapOut_UpdateWidget_Done:
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x4b, 0x99
 	.byte 0xfa, 0x0e, 0x0e, 0xd8, 0x12, 0xd9, 0xd8, 0xf2
 	.byte 0x0d, 0x76, 0xfc, 0xd1, 0x1b, 0xbd, 0x44, 0xfc
+FileIO_ByteBlock_DemoProc1_Helper3:
 	.byte 0x0e
+FileIO_ByteBlock_DemoProc1_Helper4:
 	dec 2,XSP
 	push QIZ
 	ld (XSP+0x02),A
@@ -3140,7 +3163,7 @@ BitMapOut_ByteData_WidgetTable:
 
 	ldw (36028:16), 65535
 
-	calr	2476
+	calr	EffectMode_CheckTransposeChanged
 
 	pop	xiz
 
@@ -3150,7 +3173,7 @@ BitMapOut_ByteData_WidgetTable:
 
 	pop	xde
 
-	calr	0x0051
+	calr	BitMapOut_ApplyPatch_Return
 
 
 
@@ -3160,12 +3183,12 @@ BitMapOut_ApplyWidgetPatch:
 
 BitMapOut_ApplyPatch_SkipHeader:
 	push	xiz
-	calr	74
+	calr	BitMapOut_ApplyPatch_Return
 	ld	a, (36032:16)
 	cp	a, 128
-	jr	c, 8
+	jr	c, BitMapOut_ApplyPatch_Execute
 	ldw	(36026:16), 0
-	jr	55
+	jr	BitMapOut_ApplyPatch_Done
 BitMapOut_ApplyPatch_Execute:
 	ld iz, 0:i3
 	ldib_erp 0xfb, 0
@@ -3175,14 +3198,14 @@ BitMapOut_ApplyPatch_Execute:
 BitMapOut_ApplyPatch_Loop:
 	stb_erp	a, 251
 	extz	wa
-	call	16104576
+	call	AccVoice_GetChannelCount_Wrap
 	extz	hl
 	add	iz, hl
 	inc	1, iz
 	inc1b_erp	251
 	stb_erp	a, 251
 	cp	a, (36032:16)
-	jr	c, -27
+	jr	c, BitMapOut_ApplyPatch_Loop
 BitMapOut_ApplyPatch_Store:
 	ld	a, (36034:16)
 	extz	wa
@@ -3198,7 +3221,7 @@ BitMapOut_ApplyPatch_Done:
 BitMapOut_ApplyPatch_Return:
 	push QIZ
 	ld XWA,0x00028000
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	.byte 0xc7, 0xfb, 0x9f, 0x40, 0x01, 0x80, 0x02, 0x00
 	.byte 0x1d, 0x66, 0xcc, 0xfc, 0xf1, 0x4e, 0x90, 0x31
 	.byte 0xc7, 0xfb, 0x89, 0xb1, 0x41, 0xb9, 0x01, 0x47

@@ -1076,18 +1076,18 @@ MainLoop_AfterBit1Check:
 	jr nz, MainLoop_AfterBit3Check
 
 MainLoop_AfterBit3Check:
-	call	15673907
+	call	SeqBuf_DspSysEx_CheckSongEnd
 	and	hl, hl
-	jr	z, 4
-	call	16625940
+	jr	z, MainLoop_AfterSeqBuf_DspSysEx
+	call	MainLoop_AfterSeqTick_Code_Helper
 MainLoop_AfterSeqBuf_DspSysEx:
 	ld	a, (13265:16)
 	and	a, 3
-	jr	z, 13
+	jr	z, MainLoop_AfterAccWrap
 	ld	a, (12775:16)
 	and	a, 3
-	jr	nz, 4
-	call	16094890
+	jr	nz, MainLoop_AfterAccWrap
+	call	AccWrap_DeferredAction
 MainLoop_AfterAccWrap:
 	.byte 0xf1, 0x73, 0x04, 0xa8, 0x6e, 0x04, 0x1d, 0xea
 	.byte 0xb4, 0xfd
@@ -1617,7 +1617,7 @@ SeqTiming_Snapshot_CheckFrac:
 SeqTiming_Snapshot_PostSnap:
 	ei	0
 	cp	wa, (13014:16)
-	jr	c, 12	; -> 0xEF1724
+	jr	c, SeqTiming_Snapshot_CheckFracOverflow	; -> 0xEF1724
 	push	xhl
 	call	AccTiming_InitAllParts
 	xor	wa, wa
@@ -1643,7 +1643,7 @@ SyncTiming_Snapshot_CheckFrac:
 SyncTiming_Snapshot_PostSnap:
 	ei	0
 	cp	wa, (32098:16)
-	jr	c, 12	; -> 0xEF176C
+	jr	c, SyncTiming_Snapshot_CheckFracOverflow	; -> 0xEF176C
 	push	xhl
 	call	SeqEvt_EntryPoint2
 	xor	wa, wa
@@ -1660,21 +1660,21 @@ Seq_FullInit:
 	ld	(1043:16), a
 	ld	(1058:16), a
 	ld	(1139:16), a
-	call	15669194
-	call	15672365
-	call	15672539
-	call	15673235
-	call	15672713
-	call	15673409
-	call	15673061
-	call	15673583
-	call	15672887
-	call	15674627
-	call	15674453
-	call	15674975
-	call	15674801
-	call	15673757
-	call	15673931
+	call	AudioMix_Init
+	call	SeqBuf_Init
+	call	TempoRingBuf_Init
+	call	SeqMain_InitBuffer
+	call	RhythmBuf_Init
+	call	SeqBuf_MidiOut_Init
+	call	SeqEvtBuf_Init
+	call	SeqBuf2_Init
+	call	AltEvtBuf_Init
+	call	SeqBuf_NoteEvent_Flush
+	call	SeqBuf_VoiceMap_Flush
+	call	SeqBuf_NoteEvent_InitBuffer
+	call	SeqBuf_SoundEdit_Flush
+	call	SeqBuf3_Init
+	call	SeqBuf_DspSysEx_InitBuffer
 	ld	(48797:16), 255
 	ret
 Seq_InitStub_Nop1:
@@ -3221,8 +3221,9 @@ SeqBuf_InlineBytecode:
 	.byte 0xd2
 	ld	xbc, 0xdbf301e5
 	.byte 0xa8
-	jr	z, 3
+	jr	z, SeqBuf_WriteBytes_Return
 	ldw	hl, 0xffff
+SeqBuf_WriteBytes_Return:
 	ret
 
 SeqBuf_GetWritePos:
@@ -3378,7 +3379,7 @@ TempoRingBuf_SaveWritePos:
 	pushw	ix
 	push	xde
 	lda	xde, (0x1ef5d:24)
-	calr	2738
+	calr	RingBuf_CheckFull_512
 	pop	xde
 	popw	ix
 	ret
@@ -3404,7 +3405,7 @@ RhythmBuf_InlineBytecode:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x1ef5d:24)
 	ld	a, (xiy)
-	calr	2774
+	calr	Seq_RingBuf_WriteByte_512
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -3473,7 +3474,7 @@ RhythmBuf_InlineBytecode2:
 	pushw	ix
 	push	xde
 	lda	xde, (0x1f167:24)
-	calr	2421
+	calr	Seq_RingBuf_ReadByte
 	pop	xde
 	popw	ix
 	ret
@@ -3482,7 +3483,7 @@ RhythmBuf_InlineBytecode2:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x1f167:24)
-	calr	2485
+	calr	Seq_RingBuf_WriteByte_Small
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -3514,8 +3515,9 @@ AltEvtBuf_InlineBytecode:
 	pop	xsp
 	.byte 0xf1, 0x01, 0xf3
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, RhythmBuf_Init_Return
 	ldw	hl, 0xffff
+RhythmBuf_Init_Return:
 	ret
 	ld	hl, (0x1f165:24)
 	ret
@@ -3562,7 +3564,7 @@ AltEvtBuf_Helpers:
 	pushw	ix
 	push	xde
 	lda	xde, (0x1f271:24)
-	calr	2247
+	calr	Seq_RingBuf_ReadByte
 	pop	xde
 	popw	ix
 	ret
@@ -3588,7 +3590,7 @@ SeqEvtBuf_InlineBytecode:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x1f271:24)
 	ld	a, (xiy)
-	calr	2283
+	calr	Seq_RingBuf_WriteByte_Small
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -3599,8 +3601,9 @@ SeqEvtBuf_InlineBytecode:
 	ld	hl, (0x1f26d:24)
 	cp	hl, (0x1f269:24)
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqEvtBuf_WriteByte_Return
 	ldw	hl, 0xffff
+SeqEvtBuf_WriteByte_Return:
 	ret
 	.byte 0xd2
 	jr	nc, -14
@@ -3908,8 +3911,9 @@ SeqBuf2_InlineBytecode:
 	cp	(xsp), w
 	.byte 0x01, 0xf3
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqBuf2_WriteByte_Return
 	ldw	hl, 0xffff
+SeqBuf2_WriteByte_Return:
 	ret
 	ld	hl, (0x1f88d:24)
 	ret
@@ -4011,8 +4015,9 @@ SeqBuf3_InlineBytecode:
 	cp	(xbc), de
 	.byte 0x01, 0xf3
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqBuf3_ReadByte_Return
 	ldw	hl, 0xffff
+SeqBuf3_ReadByte_Return:
 	ret
 
 SeqBuf3_GetTimingValue:
@@ -4173,7 +4178,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x200ad:24)
-	calr	1124
+	calr	RingBuf128_WriteByte_CheckFull
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -4186,7 +4191,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x200ad:24)
 	ld	a, (xiy)
-	calr	1096
+	calr	RingBuf128_WriteByte_CheckFull
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -4197,8 +4202,9 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	ld	hl, (0x200a9:24)
 	cp hl, (131237:24)
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, Seq_DataHandler_Return
 	ldw	hl, 0xffff
+Seq_DataHandler_Return:
 	ret
 	ld	hl, (0x200ab:24)
 	ret
@@ -4241,7 +4247,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	pushw	ix
 	push	xde
 	lda	xde, (0x20137:24)
-	calr	886
+	calr	RingBuf128_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
@@ -4269,7 +4275,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x20137:24)
 	ld	a, (xiy)
-	calr	922
+	calr	RingBuf128_WriteByte_CheckFull
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -4284,8 +4290,9 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	push	sr
 	.byte 0xf3
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, Seq_TimerEventLoop_Return
 	ldw	hl, 0xffff
+Seq_TimerEventLoop_Return:
 	ret
 	ld	hl, (0x20135:24)
 	ret
@@ -4451,7 +4458,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x202cb:24)
-	calr	745
+	calr	Seq_RingBuf_WriteByte_Small
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -4464,7 +4471,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x202cb:24)
 	ld	a, (xiy)
-	calr	717
+	calr	Seq_RingBuf_WriteByte_Small
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -4475,8 +4482,9 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	ld	hl, (0x202c7:24)
 	cp hl, (131779:24)
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqBuf_NoteEvent_WriteByte_Data_Return
 	ldw	hl, 0xffff
+SeqBuf_NoteEvent_WriteByte_Data_Return:
 	ret
 	ld	hl, (0x202c9:24)
 	ret
@@ -4524,7 +4532,7 @@ SeqBuf_NoteEvent_SaveWritePtr:
 	pushw	ix
 	push	xde
 	lda	xde, (0x203d5:24)
-	calr	507
+	calr	Seq_RingBuf_ReadByte
 	pop	xde
 	popw	ix
 	ret
@@ -4535,7 +4543,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x203d5:24)
-	calr	571
+	calr	Seq_RingBuf_WriteByte_Small
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -4548,7 +4556,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x203d5:24)
 	ld	a, (xiy)
-	calr	543
+	calr	Seq_RingBuf_WriteByte_Small
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -4559,8 +4567,9 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	ld	hl, (0x203d1:24)
 	cp hl, (132045:24)
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqBuf_NoteEvent_WriteByte_Block_Return
 	ldw	hl, 0xffff
+SeqBuf_NoteEvent_WriteByte_Block_Return:
 	ret
 	ld	hl, (0x203d3:24)
 	ret
@@ -4630,7 +4639,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x204df:24)
-	calr	397
+	calr	Seq_RingBuf_WriteByte_Small
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -4643,7 +4652,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x204df:24)
 	ld	a, (xiy)
-	calr	369
+	calr	Seq_RingBuf_WriteByte_Small
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -5901,20 +5910,24 @@ E1DMA_ISR_BytecodeBlock:
 	ld	xwa, (xde)
 	ld	bc, (xde+8)
 	ld	xde, (xde+4)
-	calr	64945
+	calr	InterCPU_E1_Bulk_Transfer
 	ei	0
 	bit_dd8	1, 104
-	jr	nz, 27
+	jr	nz, INTTC0_HANDLER_Skip2
 	.byte 0xd8	; v10 does not spell this byte either
 	pushw	sp
 	ld	xwa, 4175611601
-	jr	nz, 6
+	jr	nz, INTTC0_HANDLER_Skip
 	incw	1, (58052:16)
-	jr	6
+	jr	INTTC0_HANDLER_Join
+INTTC0_HANDLER_Skip:
 	ldw	(58052:16), 0
+INTTC0_HANDLER_Join:
 	ld	(58054:16), wa
-	jr	6
+	jr	INTTC0_HANDLER_Join2
+INTTC0_HANDLER_Skip2:
 	ldw	(58052:16), 0
+INTTC0_HANDLER_Join2:
 	ld	wa, (58052:16)
 	cp	wa, 10
 	ret	ule
@@ -5925,6 +5938,7 @@ E1DMA_ISR_BytecodeBlock:
 	inc	1, (58050:16)
 	ret
 	ld	de, (1033:16)
+INTTC0_HANDLER_Entry:
 	.byte 0xf1	; v10 does not spell this byte either
 	ld	w, 6:opc
 	dec	6, l
@@ -5935,7 +5949,7 @@ E1DMA_ISR_BytecodeBlock:
 	ld	bc, (1033:16)
 	sub	bc, wa
 	cp	bc, 250
-	jr	le, -23
+	jr	le, INTTC0_HANDLER_Entry
 	ld	(256:16), 0
 	ld	(1506:16), 0
 	.byte 0xf0	; v10 does not spell this byte either
@@ -6496,7 +6510,7 @@ TableDataROM_IdentifyChip:
 
 TableDataROM_IdentifyChip_WaitReady:
 	bit_dd8	5, 28
-	jr	z, -5
+	jr	z, TableDataROM_IdentifyChip_WaitReady
 	ld	xbc, xde
 	add	xbc, 87380
 	ld	xwa, 11141290
@@ -6752,24 +6766,26 @@ HDAE5000_Status_NotPresent:
 	ret
 
 HDAE5000_Status_DataBlock:
-	calr	65155
-	calr	65518
+	calr	HDAE5000_Flash_Verify
+	calr	HDAE5000_Status_Check
 	cp	hl, 0xffff
 	ret	nz
-	calr	65509
+HDAE5000_Status_Check_Loop:
+	calr	HDAE5000_Status_Check
 	cp	hl, 0xffff
-	jr	z, -9
+	jr	z, HDAE5000_Status_Check_Loop
 	ret
 	dec	4, xsp
 	push	xiz
 	ld	xwa, 0x80000
 	ld	(xsp+4), xwa
-	calr	64949
+	calr	HDAE5000_Detect
 	cp	xhl, 0xffffffff
-	jr	nz, 5
+	jr	nz, HDAE5000_Status_Check_Skip
 	ldw	hl, 0xffff
-	jr	65
-	calr	65106
+	jr	HDAE5000_Status_Check_Epilogue
+HDAE5000_Status_Check_Skip:
+	calr	HDAE5000_Flash_Verify
 	ld	xwa, 0x80000
 	ld	xbc, 0x10000
 	call	Flash_FillBuffer
@@ -6790,6 +6806,7 @@ HDAE5000_Status_DataBlock:
 	cp	xiz, 8000
 	jr	c, -26
 	ld	hl, 0:i3
+HDAE5000_Status_Check_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -6803,7 +6820,7 @@ SLIDE_Decompress_4K_Init:
 
 	pushw 0x1000
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -6922,7 +6939,7 @@ SLIDE_Decompress_4K_Continue:
 SLIDE_Decompress_4K_Done:
 	ld	xwa, (1570:16)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	popw	iz
 	ret
@@ -6935,7 +6952,7 @@ SLIDE_Decompress_8K_Init:
 
 	pushw 0x2000
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -7054,7 +7071,7 @@ SLIDE_Decompress_8K_Continue:
 SLIDE_Decompress_8K_Done:
 	ld	xwa, (1570:16)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	popw	iz
 	ret
@@ -7071,7 +7088,7 @@ SLIDE_Parse_Header:
 	lda xwa, (xsp + 0x06)
 	push XWA
 	push XIZ
-	call 0xff04e4
+	call SLIDE_Parse_Header_Helper
 	add XSP,0x0000000a
 	cp hl, 0:i3
 	jr nz, SLIDE_Parse_NotFound
@@ -7160,7 +7177,7 @@ FDC_SetupSectorParams:
 
 	ld xbc, 0x12
 
-	call	16712757
+	call	FDC_SetupSectorParams_Helper
 
 	inc 1, xhl
 
@@ -7216,102 +7233,102 @@ Detect_Disk_Type:
 	push	xiz
 	ld	(xsp+4), 255
 	pushw	512
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 33
 	ld	bc, 1:i3
 	ld	xde, xiz
-	calr	65456
+	calr	FDC_ReadSectors
 	pushw	38
 	pushw	224
 	pushw	56
 	push	xiz
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 7
+	jr	nz, DetectDisk_CheckProgram2of2
 	ld	(xsp+4), 1
-	jrl	210
+	jrl	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckProgram2of2:
 	pushw	38
 	pushw	224
 	pushw	96
 	push	xiz
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 7
+	jr	nz, DetectDisk_CheckTable1of2
 	ld	(xsp+4), 2
-	jrl	179
+	jrl	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckTable1of2:
 	pushw	38
 	pushw	224
 	pushw	176
 	push	xiz
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 7
+	jr	nz, DetectDisk_CheckTable2of2
 	ld	(xsp+4), 3
-	jrl	148
+	jrl	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckTable2of2:
 	pushw	38
 	pushw	224
 	pushw	216
 	push	xiz
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 6
+	jr	nz, DetectDisk_CheckCmpCustom
 	ld	(xsp+4), 4
-	jr	118
+	jr	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckCmpCustom:
 	pushw	38
 	pushw	224
 	pushw	296
 	push	xiz
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 6
+	jr	nz, DetectDisk_CheckHDAEPRG
 	ld	(xsp+4), 5
-	jr	88
+	jr	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckHDAEPRG:
 	pushw	38
 	pushw	224
 	pushw	336
 	push	xiz
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 6
+	jr	nz, DetectDisk_CheckProgramPCK
 	ld	(xsp+4), 6
-	jr	58
+	jr	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckProgramPCK:
 	pushw	38
 	pushw	224
 	pushw	136
 	push	xiz
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 6
+	jr	nz, DetectDisk_CheckTablePCK
 	ld	(xsp+4), 7
-	jr	28
+	jr	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckTablePCK:
 	pushw	38
 	pushw	224
 	pushw	256
 	push	xiz
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 4
+	jr	nz, DetectDisk_FreeBufAndReturn
 	ld	(xsp+4), 8
 DetectDisk_FreeBufAndReturn:
 	push	xiz
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	l, (xsp+4)
 	pop	xiz
@@ -7942,11 +7959,13 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	ld	xwa, 8388608
 	ld	(xsp+8), xwa
 	ld	(xsp+12), 0
+HDAE5000_ROM_Transfer_Loop:
 	ld	a, (xsp+12)
 	ld	(1441792:24), a
 	lda	xwa, (2621440:24)
 	ld	(xsp+4), xwa
 	ld	xiz, 0:i3
+HDAE5000_ROM_Transfer_Loop2:
 	ld	xwa, (xsp+8)
 	stb_dpi	a, 226
 	ld	(xsp+8), xwa
@@ -7954,13 +7973,13 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	ld	xde, (xsp+4)
 	ld_spil	xbc, 234
 	ld	(xsp+4), xde
-	call	15678801
+	call	Flash_ProgramByte
 	inc	1, xiz
 	cp	xiz, 131072
-	jr	c, -34
+	jr	c, HDAE5000_ROM_Transfer_Loop2
 	incm8	1, (xsp+12)
 	.byte 0x8f, 0x0c, 0x3f, 0x04
-	jr	c, -61
+	jr	c, HDAE5000_ROM_Transfer_Loop
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
@@ -8172,7 +8191,7 @@ LZSS_Decompress_ToFlash:
 	ld iz, 0:i3
 
 LZSS_Decompress_ReadHeader:
-	calr	65258
+	calr	Parport_ReadNextByte
 	ld	bc, iz
 	extz	xbc
 	lda	xwa, (xsp+2)
@@ -8181,17 +8200,17 @@ LZSS_Decompress_ReadHeader:
 	ld	(xde), l
 	inc	1, iz
 	cp	iz, 6:i3
-	jr	c, -22
+	jr	c, LZSS_Decompress_ReadHeader
 	pushw	5
 	pushw	224
 	pushw	392
 	push	xwa
-	call	16712932
+	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	z, 5
+	jr	z, LZSS_Decompress_HeaderOK
 	ldw	hl, 65535
-	jr	68
+	jr	LZSS_Decompress_Return
 LZSS_Decompress_HeaderOK:
 	ld iz, 0:i3
 
@@ -8233,7 +8252,7 @@ LZ_Decompress_Init:
 	lda	xsp, (xsp-16)
 	push	xiz
 	pushw	4096
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+16), xhl
 	ld	xwa, (xsp+16)
@@ -8391,7 +8410,7 @@ LZ_Decompress_LoopCheck:
 LZ_Decompress_Done:
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	pop	xiz
 	lda	xsp, (xsp+16)

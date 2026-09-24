@@ -85,60 +85,69 @@ TextRender_PopAndReturn:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x3a, 0x01
 	retd 0x8
+PostTitle_Function_Helper2:
 	ld (0x03efa2:24), wa
 	ret
 
 GraphicsRender_ByteData:
 	ld	(0x03efa4:24), wa
 	ret
+PostTitle_Function_Helper3:
 	pushw	iz
 	ld	iz, wa
-	calr	37078
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	z, 7
+	jr	z, GraphicsRender_ByteData_Skip
 	ld	wa, iz
-	calr	29
-	jr	20
+	calr	GraphicsRender_ByteData_Helper
+	jr	GraphicsRender_ByteData_Epilogue
+GraphicsRender_ByteData_Skip:
 	ld	wa, 6:i3
-	calr	36824
+	calr	DrawQueue_Alloc
 	ld	xwa, xhl
 	lda	xbc, (GraphicsRender_ByteData_0x2D:24)
 	ld	(xwa), xbc
 	ld	(xwa+4), iz
-	calr	36593
+	calr	DisplayCmd_DequeueAndExecute
+GraphicsRender_ByteData_Epilogue:
 	popw	iz
 	ret
 	ld	wa, (xwa+4)
-	jr	0
+	jr	GraphicsRender_ByteData_Helper
+GraphicsRender_ByteData_Helper:
 	dec	4, xsp
 	pushw	iz
 	ld	(0x03efa6:24), wa
 	call	Table_LookupDword
 	ld	(xsp+2), xhl
 	ldw	iz, 64
+GraphicsRender_ByteData_Loop:
 	ld	wa, iz
 	ld	xbc, (xsp+2)
 	call	SetPaletteRGB
 	inc	1, iz
 	cp	iz, 192
-	jr	c, -17
+	jr	c, GraphicsRender_ByteData_Loop
 	ldw	(0x03ef9e:24), 4
 	ldw	(0x030460:24), 1
 	popw	iz
 	inc	4, xsp
 	ret
-	calr	36984
+PostTitle_Function_Helper4:
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	nz, 19
+	jr	nz, GraphicsRender_ByteData_Join
 	ld	wa, 4:i3
-	calr	36737
+	calr	DrawQueue_Alloc
 	ld	xwa, xhl
 	lda	xbc, (GraphicsRender_ByteData_0x7F:24)
 	ld	(xwa), xbc
-	jrl	-29027
-	jr	0
+	jrl	DisplayCmd_DequeueAndExecute
+	jr	GraphicsRender_ByteData_Join
+GraphicsRender_ByteData_Join:
 	pushw	iz
 	ldw	iz, 32
+GraphicsRender_ByteData_Loop2:
 	ld	wa, iz
 	sub	wa, 32
 	extz	xwa
@@ -152,8 +161,9 @@ GraphicsRender_ByteData:
 	call	SetPaletteRGB
 	inc	1, iz
 	cp	iz, 64
-	jr	c, -39
+	jr	c, GraphicsRender_ByteData_Loop2
 	ldw	iz, 192
+GraphicsRender_ByteData_Loop3:
 	ld	wa, iz
 	sub	wa, 192
 	extz	xwa
@@ -168,7 +178,7 @@ GraphicsRender_ByteData:
 	call	SetPaletteRGB
 	inc	1, iz
 	.long GUI_DisplayStructData
-	jr	c, -39
+	jr	c, GraphicsRender_ByteData_Loop3
 	ldw	(0x03ef9e:24), 4
 	ldw	(0x030460:24), 1
 	popw	iz
@@ -209,6 +219,7 @@ Display_DeferOrUpdateScreen_Direct:
 	ld wa, 1:i3
 	calr SetNeedUpdate
 	jrl UpdateScreen
+SeMenu_PresetManager_Save_Helper:
 	ret
 
 GraphicsRender_RetStub:
@@ -216,9 +227,9 @@ GraphicsRender_RetStub:
 
 GraphicsRender_ShortByteBlock:
 	lda	xbc, (xwa+1)
-	jr	5
+	jr	GraphicsRender_ProcessEntries
 	lda	xbc, (xwa+1)
-	jr	t, 0x62
+	jr	t, GraphicsRender_Start
 
 GraphicsRender_ProcessEntries:
 	lda_dri XSP, 0xfd, 0x6a, 0xff
@@ -618,6 +629,7 @@ DrawText_LayoutAndRender_Variant1:
 	jr	ule, 35
 	lda	xhl, (xsp+10)
 	ld	xde, 6:i3
+DrawText_LayoutAndRender_Variant1_Loop:
 	ld	xix, xde
 	ld	xbc, 0xfffffffa
 	add	xix, xbc
@@ -630,7 +642,7 @@ DrawText_LayoutAndRender_Variant1:
 	inc	1, iy
 	inc	1, xde
 	.byte 0x9f, 0x04, 0xf5
-	jr	c, -30
+	jr	c, DrawText_LayoutAndRender_Variant1_Loop
 	ld	wa, iy
 	extz	xwa
 	lda	xde, (xsp+10)
@@ -835,7 +847,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
-	calr	61981
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-16)
@@ -851,7 +863,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	bc, (xiz+8)
 	ld	(xwa+6), bc
 	ld	bc, (0x03efa4:24)
-	calr	61938
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -994,7 +1006,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	bc, (xiz+8)
 	ld	(xwa+6), bc
 	ld	bc, (0x03efa4:24)
-	calr	61556
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -1058,7 +1070,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	xbc, (xwa+2)
 	ld	de, (0x03efa4:24)
 	ld	xwa, xhl
-	calr	56835
+	calr	ColorBlit2_LargeCodeBlock
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-12)
@@ -1103,6 +1115,7 @@ DrawText_LayoutAndRender_Variant1:
 	popw	iz
 	lda	xsp, (xsp+12)
 	ret
+AccDraw_Secondary_Helper19:
 	dec	8, xsp
 	.byte 0xd7
 	swi	2
@@ -1311,7 +1324,7 @@ DrawText_ExtLayout_Variant1:
 	ld	(xsp+4), wa
 	ld	hl, 0:i3
 	cpw	(xsp+4), 0
-	jr	ule, 51
+	jr	ule, DrawText_ExtendedLayout_Skip
 	ld	xbc, xde
 	lda	xwa, (xbc+7)
 	ld	(xsp+8), xwa
@@ -1321,6 +1334,7 @@ DrawText_ExtLayout_Variant1:
 	.byte 0x9f, 0x04, 0x40
 	ld	xbc, xwa
 	ld	xde, 0:i3
+DrawText_ExtendedLayout_Loop:
 	ld	xwa, (xsp+8)
 	ld	xiy, (xwa)
 	ld	xiz, xix
@@ -1333,7 +1347,8 @@ DrawText_ExtLayout_Variant1:
 	inc	1, xde
 	inc	1, xbc
 	cp	hl, (xsp+4)
-	jr	c, -28
+	jr	c, DrawText_ExtendedLayout_Loop
+DrawText_ExtendedLayout_Skip:
 	extz	xhl
 	lda	xwa, (xsp+16)
 	ld	(xsp+8), xwa
@@ -1353,7 +1368,7 @@ DrawText_ExtLayout_Variant1:
 	pushw	(0x03efa2:24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
-	calr	60994
+	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+284)
 	ret
@@ -1419,6 +1434,7 @@ DrawFunc_Init_PushFontAndDraw:
 	.byte 0xed, 0x5e, 0xf3, 0xfd, 0x0c, 0x01, 0x37, 0x0e
 DrawFunc_Init_Variant1:
 	.incbin "includes/romslices/v7_transplant_DrawFunc_Init_Variant1_head.bin"
+AccDraw_Secondary_Helper20:
 	lda xsp, (xsp - 0x010c)
 	push XIZ
 	ld XIZ,XWA
@@ -1458,7 +1474,7 @@ DrawFunc_Init_Variant1:
 .Lc_fb1e56:
 	push XWA
 	push XBC
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0a)
 	ld A,(XIZ+0x06)
 	and A,0x3f
@@ -1555,7 +1571,7 @@ ColorBlit_Variant_ByteData:
 	add	de, bc
 	ld	(xwa+4), de
 	ld	bc, (0x03efa2:24)
-	calr	54048
+	calr	ColorBlit2
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -1587,7 +1603,7 @@ ColorBlit_Variant_ByteData:
 	ld	bc, (xde+6)
 	ld	(xwa+6), bc
 	ld	bc, (0x03efa2:24)
-	calr	53968
+	calr	ColorBlit2
 	inc	8, xsp
 	ret
 
@@ -1778,10 +1794,10 @@ CalcTotalWidth:
 	ld (XSP+0x0c),XBC
 	ld XIZ,XWA
 	push XIZ
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	inc 1,HL
 	pushw hl
-	call 0xff06a3
+	call SLIDE_Decompress_4K_Init_Helper2
 	inc 6,XSP
 	ld (XSP+0x08),XHL
 	ld XWA,(XSP+0x08)
@@ -1794,7 +1810,7 @@ CalcTotalWidth:
 	add XIZ,0x00945c00
 	ld XWA,(XSP+0x08)
 	push XWA
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	inc 4,XSP
 	ld XBC,(XIZ+0x0c)
 	or XBC,XBC
@@ -1825,7 +1841,7 @@ CalcTotalWidth_KerningLoop:
 CalcTotalWidth_FreeAndReturn:
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, iz
 	pop	xiz
@@ -1877,7 +1893,7 @@ Wordwrap_CheckEndOfString:
 Wordwrap_FreeAndReturn:
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, (xsp+10)
 	pop	xiz
@@ -2617,376 +2633,376 @@ VGA_CRTCTiming_ByteData:
 	jr -21
 	ldw	wa, 964
 	ld	bc, 6:i3
-	calr	65051
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	65043
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	65034
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 4:i3
-	calr	65026
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	65017
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 16
-	calr	65008
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64999
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 23
-	calr	64990
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64981
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 5:i3
-	calr	64973
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64964
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 6:i3
-	calr	64956
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64947
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 37
-	calr	64938
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64929
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 19
-	calr	64920
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64911
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 8
-	calr	64902
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64893
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 0:i3
-	calr	64885
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64876
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 28
-	calr	64867
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64858
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64849
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64840
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 3:i3
-	calr	64832
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64823
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 2:i3
-	calr	64815
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64806
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 5:i3
-	calr	64798
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64789
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64780
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64771
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 3:i3
-	calr	64763
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64754
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 8
-	calr	64745
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64736
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 170
-	calr	64727
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64718
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 16
-	calr	64709
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64700
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 8
-	calr	64691
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64682
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 10
-	calr	64673
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64664
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	64656
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64647
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 19
-	calr	64638
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64629
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 6:i3
-	calr	64621
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64612
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 13
-	calr	64603
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64594
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	64586
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64577
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 12
-	calr	64568
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64559
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 0:i3
-	calr	64551
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64542
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 37
-	calr	64533
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64524
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 12
-	calr	64515
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64506
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 15
-	calr	64497
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64488
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64479
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64470
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 14
-	calr	64461
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64452
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 0:i3
-	calr	64444
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64435
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 51
-	calr	64426
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64417
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 8
-	calr	64408
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64399
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64390
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64381
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 247
-	calr	64372
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64363
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 16
-	calr	64354
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64345
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 251
-	calr	64336
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64327
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 34
-	calr	64318
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64309
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 14
-	calr	64300
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64291
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	64283
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64274
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 100
-	calr	64265
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64256
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 3:i3
-	calr	64248
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64239
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 9
-	calr	64230
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64221
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 5:i3
-	calr	64213
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64204
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 43
-	calr	64195
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64186
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 7:i3
-	calr	64178
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64169
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 88
-	calr	64160
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64151
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 9
-	calr	64142
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64133
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 7:i3
-	calr	64125
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64116
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 11
-	calr	64107
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64098
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	64090
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64081
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 13
-	calr	64072
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64063
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 13
-	calr	64054
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64045
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 15
-	calr	64036
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64027
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 58
-	calr	64018
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64009
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64000
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	63991
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 12
-	calr	63982
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ld	bc, 6:i3
-	calr	63974
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 0:i3
-	jrl	-1570
+	jrl	_Write_VGA_Register
 
 VGA_ConfigExtSequencer:
 	_VGA_SEQUENCER 0x6, 0x1
@@ -3449,7 +3465,7 @@ PmBank_BankChanged_DrawSlot:
 	pushw 5754
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+268)
 	lda	xhl, (xsp+264)
@@ -3463,7 +3479,7 @@ PmBank_BankChanged_DrawSlot:
 	extz	bc
 	pushw	bc
 	ld	xbc, xhl
-	call	16436029
+	call	DrawStringLeftJustify
 	lda	xde, (xsp+264)
 	lda	xbc, (xde+2)
 	ld	hl, (xbc)
@@ -3477,10 +3493,10 @@ PmBank_BankChanged_DrawSlot:
 	ld	(xwa+6), bc
 	lda	xbc, (xwa+4)
 	.byte 0x92, 0x3f, 0x00, 0x00
-	jr	nz, 10
+	jr	nz, PmBank_BankChanged_SecondRight
 	ldw	(xwa), 16
 	ldw	(xbc), 156
-	jr	8
+	jr	PmBank_BankChanged_DrawIndicator
 PmBank_BankChanged_SecondRight:
 	ldw (xwa), 0xab
 	ldw (xbc), 0x137
@@ -3717,7 +3733,7 @@ PmBank_DrawRegionInfo:
 	pushw 5912
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 	lda	xbc, (xsp+264)
 	ldw	(xbc), 230
@@ -3739,8 +3755,8 @@ PmBank_DrawRegionInfo:
 	push	xhl
 	pushw 255
 	pushw 245
-	call	16434877
-	jrl	522
+	call	DrawString
+	jrl	ToneGen_InitDone
 PmBank_OnPaint:
 	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
@@ -3991,7 +4007,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	iz
 	pushw	247
 	ld	xde, TransposeNoteStr_C_0xA0
-	jrl	271
+	jrl	ToneGen_WriteParamByIndex_Join
 	inc	8, xiy
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4026,7 +4042,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	iz
 	pushw	247
 	ld	xde, TransposeNoteStr_C_0xE4
-	jrl	183
+	jrl	ToneGen_WriteParamByIndex_Join
 	lda	xiy, (xiy+16)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4046,7 +4062,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xde
 	ld	xde, TransposeNoteStr_C_0x10C
-	jrl	136
+	jrl	ToneGen_WriteParamByIndex_Join
 	lda	xiy, (xiy+24)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4066,7 +4082,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xde
 	ld	xde, TransposeNoteStr_C_0x12A
-	jr	90
+	jr	ToneGen_WriteParamByIndex_Join
 	lda	xiy, (xiy+32)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4086,7 +4102,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xde
 	ld	xde, TransposeNoteStr_C_0x148
-	jr	44
+	jr	ToneGen_WriteParamByIndex_Join
 	lda	xiy, (xiy+40)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4106,6 +4122,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xde
 	ld	xde, TransposeNoteStr_C_0x16A
+ToneGen_WriteParamByIndex_Join:
 	call	DrawString
 
 ToneGen_WriteParam_Return:
@@ -4138,30 +4155,30 @@ WallHomeEditCheck:
 WallHomeEdit_EventDispatch:
 	ld	xwa, (xsp+4)
 	ld	xde, xiz
-	call	16400380
+	call	InheritedProc
 	or	xiz, xiz
-	jr	nz, 83
+	jr	nz, WallHomeEditCheck_ReturnFalse
 	ldw	wa, 8
-	call	16535254
+	call	PanelDisplay_DispatchByMode
 	cp	hl, 0:i3
-	jr	z, 72
+	jr	z, WallHomeEditCheck_ReturnFalse
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16421459
+	call	SendEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16421701
+	call	PostEvent
 	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16421701
+	call	PostEvent
 	ld	xwa, 21102607
 	ld	xbc, 31588373
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 WallHomeEditCheck_ReturnFalse:
 	ld xhl, 0:i3
 	jr WallHome_PopIzSkip4Ret
@@ -4190,14 +4207,14 @@ WallHomeEdit_PushAddr:
 	push xbc
 
 WallHomeEdit_CallAudio:
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	inc	8, xsp
 	ld	xhl, (xsp+4)
-	jr	13
+	jr	WallHome_PopIzSkip4Ret
 	ld	xhl, 1:i3
-	jr	9
+	jr	WallHome_PopIzSkip4Ret
 	lda	xhl, (213242:24)
-	jr	2
+	jr	WallHome_PopIzSkip4Ret
 	ld	xhl, 2:i3
 WallHome_PopIzSkip4Ret:
 	pop xiz
@@ -4226,28 +4243,32 @@ WallMenuEdit_EventDispatch:
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
-	jr	z, 11
+	jr	z, WallMenuEditCheck_Skip
 	or	xwa, xwa
-	jr	nz, 14
+	jr	nz, WallMenuEditCheck_Skip2
 	ld	xwa, 15538394
-	jr	12
+	jr	WallMenuEditCheck_Join
+WallMenuEditCheck_Skip:
 	ld	xwa, 15538402
-	jr	5
+	jr	WallMenuEditCheck_Join
+WallMenuEditCheck_Skip2:
 	ld	xwa, 15538410
+WallMenuEditCheck_Join:
 	push	xwa
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	WallMenuEditCheck_Epilogue
 	ld	xhl, 1:i3
-	jr	13
+	jr	WallMenuEditCheck_Epilogue
 	lda	xhl, (213244:24)
-	jr	6
+	jr	WallMenuEditCheck_Epilogue
 	ld	xhl, 2:i3
-	jr	2
+	jr	WallMenuEditCheck_Epilogue
 WallOthEditCheck_RetZero:
 	ld xhl, 0:i3
+WallMenuEditCheck_Epilogue:
 	pop xiz
 	ret
 
@@ -4273,28 +4294,32 @@ WallOthEdit_EventDispatch:
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
-	jr	z, 11
+	jr	z, WallOthEditCheck_Skip
 	or	xwa, xwa
-	jr	nz, 14
+	jr	nz, WallOthEditCheck_Skip2
 	ld	xwa, 15538438
-	jr	12
+	jr	WallOthEditCheck_Join
+WallOthEditCheck_Skip:
 	ld	xwa, 15538446
-	jr	5
+	jr	WallOthEditCheck_Join
+WallOthEditCheck_Skip2:
 	ld	xwa, 15538454
+WallOthEditCheck_Join:
 	push	xwa
 	push	xbc
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	WallOthEditCheck_Epilogue
 	ld	xhl, 1:i3
-	jr	13
+	jr	WallOthEditCheck_Epilogue
 	lda	xhl, (213246:24)
-	jr	6
+	jr	WallOthEditCheck_Epilogue
 	ld	xhl, 2:i3
-	jr	2
+	jr	WallOthEditCheck_Epilogue
 WallOthCheckLoop_RetZero:
 	ld xhl, 0:i3
+WallOthEditCheck_Epilogue:
 	pop xiz
 	ret
 
@@ -4311,23 +4336,23 @@ WallSetOK_ReturnZero:
 
 MainWallSetFlashFunc:
 	cp	xbc, 31588374
-	jr	z, 79
+	jr	z, MainWallFlash_ClearAndRestore
 	cp	xbc, 31588373
-	jr	z, 62
+	jr	z, MainWallFlash_DispatchAudio
 	cp	xbc, 31588372
-	jrl	nz, 165
+	jrl	nz, MainWallFlash_ReturnZero
 	ld	(32422:16), 40
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 8
-	call	16535006
+	call	CtrlPanel_IndicatorJumpTable
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	jr	108
+	jr	MainWallFlash_PostEvent
 MainWallFlash_DispatchAudio:
 	ldw wa, 0x8
 	call Audio_DispatchCommand
@@ -4338,20 +4363,20 @@ MainWallFlash_ClearAndRestore:
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16423243
-	call	16442410
+	call	ApPostEvent
+	call	Gfx_ClearFrameBuffers
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360149
 	ld	xde, 27263048
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
@@ -4414,32 +4439,32 @@ WallUsrShowHideFunc:
 	push	xiz
 	ld	xiz, xde
 	cp	xbc, 29360130
-	jr	nz, 93
+	jr	nz, MainVariSet_ReturnZero
 	ld	xde, xiz
-	call	16400380
+	call	InheritedProc
 	or	xiz, xiz
-	jr	nz, 83
+	jr	nz, MainVariSet_ReturnZero
 	ldw	wa, 8
-	call	16535254
+	call	PanelDisplay_DispatchByMode
 	cp	hl, 0:i3
-	jr	z, 72
+	jr	z, MainVariSet_ReturnZero
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16421459
+	call	SendEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16421701
+	call	PostEvent
 	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16421701
+	call	PostEvent
 	ld	xwa, 21102607
 	ld	xbc, 31588373
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 MainVariSet_ReturnZero:
 	ld xhl, 0:i3
 	pop xiz
@@ -4496,32 +4521,32 @@ MainSvariIni_ReturnZero:
 MainRvariIni:
 	push	xiz
 	cp	xbc, 31588359
-	jr	nz, 88
+	jr	nz, MainRvariIni_ReturnZero
 	pushw	6
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	(xiz+3), l
 	ld	xwa, 163841
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	(xiz+4), l
 	ld	(xiz+2), 72
 	ld	xwa, xiz
-	call	16552842
+	call	SndParam_ResolveVoiceEntry
 	ld	a, (xiz)
 	extz	wa
-	call	16104576
+	call	AccVoice_GetChannelCount_Wrap
 	ld	(xiz+3), l
 	ld	xwa, 4294967295
 	ld	xbc, 31588360
 	ld	xde, xiz
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16423243
+	call	ApPostEvent
 MainRvariIni_ReturnZero:
 	ld xhl, 0:i3
 	pop xiz
@@ -4553,22 +4578,22 @@ MainGetSndName:
 	push	xiz
 	ld	xiz, xde
 	cp	xbc, 31588355
-	jr	nz, 89
+	jr	nz, MainGetSndName_ReturnZero
 	pushw	18
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+6), xhl
 	ld	a, (xiz+3)
 	ld	(xsp+4), a
 	ld	xwa, xiz
-	call	16703634
+	call	SeMenu_SetDisplayValue_Helper
 	ld	a, (xiz+3)
 	extz	wa
 	ld	c, (xiz+4)
 	extz	bc
 	ld	xde, (xsp+6)
 	inc	1, xde
-	call	16703099
+	call	Display_BytecodeBlock_F_Helper2
 	ld	xwa, (xsp+6)
 	ld	(xwa+17), 0
 	ld	c, (xsp+4)
@@ -4576,11 +4601,11 @@ MainGetSndName:
 	ld	xwa, 4294967295
 	ld	xbc, 31588357
 	ld	xde, (xsp+6)
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, (xsp+6)
-	call	16423243
+	call	ApPostEvent
 MainGetSndName_ReturnZero:
 	ld xhl, 0:i3
 	pop xiz
@@ -4591,23 +4616,23 @@ MainGetRhyGrpName:
 	dec	6, xsp
 	push	xiz
 	cp	xbc, 31588362
-	jr	nz, 105
+	jr	nz, MainGetRhyGrpName_ReturnZero
 	pushw	17
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	(xsp+7), l
 	ld	xwa, 163841
-	call	16567398
+	call	AcApcToggleProc_Helper
 	lda	xwa, (xsp+4)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
-	call	16552842
+	call	SndParam_ResolveVoiceEntry
 	ld	a, (xsp+4)
 	extz	wa
-	call	16104590
+	call	AccVoice_CopyFromROM_Wrap
 	extz	xhl
 	pushw	16
 	push	xhl
@@ -4618,11 +4643,11 @@ MainGetRhyGrpName:
 	ld	xwa, 4294967295
 	ld	xbc, 31588364
 	ld	xde, xiz
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16423243
+	call	ApPostEvent
 MainGetRhyGrpName_ReturnZero:
 	ld xhl, 0:i3
 	pop xiz
@@ -4634,9 +4659,9 @@ MainGetRhyName:
 	push	xiz
 	ld	xiz, xde
 	cp	xbc, 31588361
-	jr	nz, 98
+	jr	nz, MainGetRhyName_ReturnZero
 	pushw	15
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+6), xhl
 	ld	xbc, xiz
@@ -4646,7 +4671,7 @@ MainGetRhyName:
 	extz	wa
 	ld	c, (xbc+1)
 	extz	bc
-	call	16104563
+	call	AccVoice_DispatchWithChannel
 	extz	xhl
 	pushw	13
 	push	xhl
@@ -4662,11 +4687,11 @@ MainGetRhyName:
 	ld	xwa, 4294967295
 	ld	xbc, 31588363
 	ld	xde, (xsp+6)
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, (xsp+6)
-	call	16423243
+	call	ApPostEvent
 MainGetRhyName_ReturnZero:
 	ld xhl, 0:i3
 	pop xiz
@@ -4696,7 +4721,7 @@ MainPmGet:
 
 MainPmGet_HandleBankData:
 	pushw	18
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	xwa, (xsp+6)
@@ -4715,7 +4740,7 @@ MainPmGet_HandleBankData:
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, (xsp+2)
-	jr	111	; -> 0xFC23E8
+	jr	MainPmGet_PostEvent	; -> 0xFC23E8
 MainPmGet_HandleCheckBit2:
 	ld xwa, (xsp + 6)
 	ldb_erp A, 0xfb
@@ -4730,7 +4755,7 @@ MainPmGet_HandleCheckBit2:
 MainPmGet_HandleBankDisplay:
 	pushw 0x13
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -4748,7 +4773,7 @@ MainPmGet_HandleBankDisplay:
 
 	ld xwa, 0x300
 
-	call	16567398
+	call	AcApcToggleProc_Helper
 
 	ld xbc, (xsp + 2)
 
@@ -4760,7 +4785,7 @@ MainPmGet_HandleBankDisplay:
 
 	inc 2, xbc
 
-	call	16472497
+	call	BitMapOut_UpdateDisplayWidget
 
 	ld xwa, 0xffffffff
 
@@ -4768,7 +4793,7 @@ MainPmGet_HandleBankDisplay:
 
 	ld xde, (xsp + 2)
 
-	call	16423243
+	call	ApPostEvent
 
 	ld xwa, 0xffffffff
 
@@ -4791,17 +4816,17 @@ MainSysControl:
 	.byte 0xd7, 0xfa, 0x04
 	ld	(xsp+2), xde
 	cp	xbc, 31588371
-	jr	nz, 121
+	jr	nz, MainSysControl_PostDispatchFinalize
 	ld	(32422:16), 40
 	ldw	wa, 238
-	call	16355504
+	call	SoundCtrl_SendCommand
 	ld	xwa, (xsp+2)
 	ldb_erp	a, 251
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	15665495
+	call	SubCPU_PayloadErrorStore
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -4809,9 +4834,9 @@ MainSysControl:
 	stb_erp	a, 251
 	extz	wa
 	cp	wa, 0:i3
-	jr	mi, 82
+	jr	mi, MainSysControl_PostDispatchFinalize
 	cp	wa, 8
-	jr	gt, 76
+	jr	gt, MainSysControl_PostDispatchFinalize
 	add	wa, wa
 	lda	xix, (15538978:24)
 	ld_rrw	wa, xix, wa
@@ -4828,8 +4853,8 @@ MainSysCtrl_Entry2_PartInit:
 	call Part_InitFromPreset
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry3_Misc:
-	call	16708047
-	jr	28
+	call	TmFlash_Return_LoadReg
+	jr	MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry4_CopyBitmaps:
 	call Display_CopyAndRenderBitmaps
 	jr t, MainSysControl_PostDispatchFinalize
@@ -4857,25 +4882,25 @@ MainSysCtrl_DelayOuter:
 MainSysCtrl_DelayInner:
 	inc	1, wa
 	cp	wa, 256
-	jr	c, -8
+	jr	c, MainSysCtrl_DelayInner
 	inc	1, bc
 	cp	bc, 4096
-	jr	c, -18
+	jr	c, MainSysCtrl_DelayOuter
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360148
 	ld	xde, 25165825
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(32422:16), 35
 	ldw	wa, 238
-	call	16355504
+	call	SoundCtrl_SendCommand
 	ld	xhl, 0:i3
 	pop	qiz
 	inc	4, xsp
@@ -4904,13 +4929,13 @@ CntIniFunc_ReturnZero:
 
 MainMssSetUp:
 	cp	xbc, 31588377
-	jr	z, 23
+	jr	z, MainMssSetUp_ClearMode
 	cp	xbc, 31588376
-	jr	nz, 20
+	jr	nz, MainMssSetUp_ReturnZero
 	ld	(36026:16), de
 	incw	1, (36026:16)
 	ld	(36018:16), 7
-	jr	5
+	jr	MainMssSetUp_ReturnZero
 MainMssSetUp_ClearMode:
 	ld	(36018:16), 0
 MainMssSetUp_ReturnZero:
@@ -4974,7 +4999,7 @@ AcFreeSplit_ValueChanged:
 	.byte 0x60, 0x68, 0x4e
 AcFreeSplit_LookupNoteLabel:
 	ld	xwa, 16769
-	call	16567398
+	call	AcApcToggleProc_Helper
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
@@ -4982,7 +5007,7 @@ AcFreeSplit_LookupNoteLabel:
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	ld	xwa, 16769
-	call	16567398
+	call	AcApcToggleProc_Helper
 	exts	xhl
 	divs	hl, 12
 	ld	wa, qhl
@@ -4994,7 +5019,7 @@ AcFreeSplit_LookupNoteLabel:
 	pushw	7160
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 AcFreeSplit_SendConfirmEvent:
 	lda xde, (xsp + 4)
@@ -5004,21 +5029,21 @@ AcFreeSplit_SendConfirmEvent:
 
 AcFreeSplit_CheckSecondKey:
 	cp	xwa, 16769
-	jr	nz, 126
+	jr	nz, UI_AccChordBoxProc_Return
 	ld	xwa, 16768
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	hl, 0:i3
-	jr	z, 18
+	jr	z, AcFreeSplit_LookupSecondNote
 	pushw	237
 	pushw	7172
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	78
+	jr	AcFreeSplit_SendSecondConfirm
 AcFreeSplit_LookupSecondNote:
 	ld	xwa, 16769
-	call	16567398
+	call	AcApcToggleProc_Helper
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
@@ -5026,7 +5051,7 @@ AcFreeSplit_LookupSecondNote:
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	ld	xwa, 16769
-	call	16567398
+	call	AcApcToggleProc_Helper
 	exts	xhl
 	divs	hl, 12
 	ld	wa, qhl
@@ -5038,7 +5063,7 @@ AcFreeSplit_LookupSecondNote:
 	pushw	7184
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 AcFreeSplit_SendSecondConfirm:
 	lda xde, (xsp + 4)

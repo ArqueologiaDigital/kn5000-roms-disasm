@@ -23,26 +23,26 @@ MainGetSoundName:
 	.byte 0x16, 0x00, 0x6b, 0x2c
 GetSoundName_BuildString:
 	ld	bc, 0:i3
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	ldb_erp	l, 251
 	ld	xwa, (xsp+20)
 	ldw	bc, 32
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	stb_erp	a, 251
 	extz	wa
 	extz	hl
 	ld	bc, hl
 	ld	xde, (xsp+10)
-	call	16703099
+	call	Display_BytecodeBlock_F_Helper2
 	ld	xwa, (xsp+10)
 	ld	(xwa+16), 0
-	jr	16	; -> 0xF98941
+	jr	GetSoundName_DispatchResult	; -> 0xF98941
 GetSoundName_DefaultString:
 	pushw	234
 	pushw	39398
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 GetSoundName_DispatchResult:
 	ld xwa, 0xffffffff
@@ -60,11 +60,11 @@ GetSoundName_DispatchResult:
 
 SoundLookup_ByCategory:
 	ld	bc, 0:i3
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+17), l
 	ld	xwa, (xsp+20)
 	ldw	bc, 32
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp+14)
 	ld	(xwa+4), l
 	ld	xbc, (xsp+20)
@@ -100,7 +100,7 @@ Sound_SetSelection:
 	ld	b, 0:opc
 	extz	bc
 	extz	de
-	call	16553262
+	call	MIDI_DistributeParamToChannels
 	ld	xwa, (xsp+20)
 	extz	wa
 	ld	xbc, (xsp+20)
@@ -115,7 +115,7 @@ Sound_SetSelection:
 	ld	bc, 0:i3
 	call	16624260
 	ld	wa, 1:i3
-	jrl	386
+	jrl	Sound_Navigate_Notify
 Sound_Navigate_Entry:
 	ld (xsp + 4), wa
 	cpw (xsp + 4), 0xf
@@ -140,7 +140,7 @@ Sound_Navigate_Init:
 
 	ld bc, 0:i3
 
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 
 	ld (xsp + 17), l
 
@@ -148,7 +148,7 @@ Sound_Navigate_Init:
 
 	ldw bc, 0x20
 
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 
 	lda xwa, (xsp + 14)
 
@@ -178,7 +178,7 @@ Sound_Navigate_Init:
 
 	ld bc, (xsp + 8)
 
-	calr	299
+	calr	GetSoundBankCount
 
 	ld (xsp + 6), hl
 
@@ -371,22 +371,22 @@ GetSoundBankCount_CheckSpecial:
 	jr z, GetSoundBankCount_Invalid
 
 GetSoundBankCount_DoLookup:
-	call	16702576
+	call	DirectReturn_DoDrainQue
 	exts	hl
-	jr	-15
+	jr	GetSoundBankCount_Return
 MainGetRhythmName:
 	dec	4, xsp
 	push	qiz
 	cp	xbc, 31457375
-	jrl	nz, 140	; -> 0xF98C6F
+	jrl	nz, MainGetRhythmName_Return	; -> 0xF98C6F
 	ld	xwa, 163840
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ldb_erp	l, 250
 	ld	xwa, 163841
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ldb_erp	l, 251
 	pushw	17
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	lda	xbc, (36942:16)
@@ -436,16 +436,16 @@ MainGetPmemName:
 	dec	8, xsp
 	push	qiz
 	pushw	8
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	ld	(xsp+4), xhl
 	pushw	18
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	4, xsp
 	ld	(xsp+6), xhl
 	call	BitMapOut_PrepareRender_CheckBit1
 	ldb_erp	l, 251
 	ld	xwa, 768
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	xwa, (xsp+2)
 	ld	(xwa+2), hl
 	pushw	17
@@ -463,12 +463,12 @@ MainGetPmemName:
 	stb_erp	a, 251
 	extz	wa
 	cp	wa, de
-	jr	nz, 17	; -> 0xF98CE3
+	jr	nz, MainGetPmemName_CalcOffset	; -> 0xF98CE3
 	call	BitMapOut_GetRenderMode
 	bit	7, l
-	jr	z, 4	; -> 0xF98CDF
+	jr	z, MainGetPmemName_PageNotFirst	; -> 0xF98CDF
 	ld	bc, 0:i3
-	jr	18	; -> 0xF98CF1
+	jr	MainGetPmemName_StoreResult	; -> 0xF98CF1
 MainGetPmemName_PageNotFirst:
 	ld bc, 1:i3
 	jr MainGetPmemName_StoreResult

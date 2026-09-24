@@ -45,20 +45,20 @@ WPLoad_HandleCancel:
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 72
-	call	16355459
+	call	UI_PostModeChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(32422:16), 0
 	ldw	wa, 238
-	jr	92
+	jr	WPLoad_CallStatusDisplay
 WPLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -69,21 +69,21 @@ WPLoad_HandleError:
 	jrl WPLoad_Return
 
 WPLoad_HandleSuccess:
-	calr	51015
+	calr	ResetProgressIndication
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 72
-	call	16355459
+	call	UI_PostModeChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(32422:16), 2
 	ldw	wa, 238
 WPLoad_CallStatusDisplay:
@@ -97,10 +97,10 @@ WPLoad_HandleAbort:
 WPLoad_HandleSelection:
 	ld	xwa, (xsp+6)
 	ld	(33044:16), xwa
-	call	16296968
+	call	FileIO_GetCurrentWallpaperIndex
 	ld	(33048:16), hl
 	cp	hl, 0:i3
-	jr	ge, 6
+	jr	ge, WPLoad_Selection_Positive
 	ldw	(33048:16), 0
 WPLoad_Selection_Positive:
 	ld	wa, (33048:16)
@@ -110,14 +110,14 @@ WPLoad_Selection_Positive:
 	exts	xde
 	ld	xwa, (33044:16)
 	ld	xbc, 31784962
-	jrl	468
+	jrl	WPLoad_DispatchWidget
 WPLoad_HandleShow:
 	ld	bc, (33048:16)
 	exts	xbc
 	divs	bc, 10
 	muls	bc, 10
-	calr	64979
-	jrl	452
+	calr	DisplaySmfSequenceList
+	jrl	WPLoad_Return
 WPLoad_HandleScroll:
 	ld	xbc, 29687809
 	ld	xde, 1:i3
@@ -126,16 +126,16 @@ WPLoad_HandleScroll:
 	ld	(xsp+4), hl
 	ld	xwa, (xsp+6)
 	or	xwa, xwa
-	jr	nz, 43	; -> 0xF8E720
+	jr	nz, WPLoad_PageScroll	; -> 0xF8E720
 	ld	xwa, xiz
 	cp	xwa, 29360152
-	jr	nz, 15	; -> 0xF8E70E
+	jr	nz, WPLoad_ScrollUp	; -> 0xF8E70E
 	ld	wa, hl
 	inc	1, wa
 	cp	wa, (33902:16)
-	jrl	ge, 238	; -> 0xF8E7F8
+	jrl	ge, WPLoad_GetSelection	; -> 0xF8E7F8
 	inc	1, hl
-	jr	71	; -> 0xF8E755
+	jr	WPLoad_StorePosition	; -> 0xF8E755
 WPLoad_ScrollUp:
 	cp xwa, 0x1c00017
 	jrl nz, WPLoad_GetSelection
@@ -156,17 +156,17 @@ WPLoad_PageScroll:
 WPLoad_PageDown:
 	ld	xwa, (xsp+6)
 	cp	xwa, 2
-	jr	nz, 69
+	jr	nz, WPLoad_OpLoad
 	ld	wa, hl
 	add	wa, 10
 	ld	de, (33902:16)
 	cp	wa, de
-	jr	ge, 13
+	jr	ge, WPLoad_PageDown_Boundary
 	add	hl, 10
 WPLoad_StorePosition:
 	ld	(33048:16), hl
 	ld	bc, hl
-	jrl	158
+	jrl	WPLoad_UpdateDisplay
 WPLoad_PageDown_Boundary:
 	ld	bc, de
 	dec	1, bc
@@ -176,53 +176,53 @@ WPLoad_PageDown_Boundary:
 	exts	xhl
 	divs	hl, 10
 	cp	hl, ix
-	jrl	ge, 131
+	jrl	ge, WPLoad_GetSelection
 	exts	xde
 	divs	de, 10
 	ld	wa, qde
 	cp	wa, 0:i3
-	jr	z, 118
+	jr	z, WPLoad_GetSelection
 	ld	(33048:16), bc
-	jr	116
+	jr	WPLoad_UpdateDisplay
 WPLoad_OpLoad:
 	ld	xwa, (xsp+6)
 	cp	xwa, 3
-	jr	nz, 101
+	jr	nz, WPLoad_GetSelection
 	ld	xwa, 6291494
 	ld	xbc, 29360129
 	ld	xde, 5:i3
-	call	16423243
+	call	ApPostEvent
 	ld	wa, 0:i3
-	calr	50767
-	call	16287614
+	calr	InitializeOperationState
+	call	LoadFromSecondaryPage
 	ld	wa, hl
 	ld	bc, 1:i3
-	calr	51406
+	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
-	calr	50841
+	calr	SignalProgressUpdate
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 1:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 72
-	call	16355459
+	call	UI_PostModeChangeEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ldw	wa, 238
-	call	16355504
+	call	SoundCtrl_SendCommand
 WPLoad_GetSelection:
 	ld	bc, (33048:16)
 WPLoad_UpdateDisplay:
 	cp	(xsp+4), bc
-	jrl	z, 143
+	jrl	z, WPLoad_SendState
 	ld	wa, bc
-	call	16297188
+	call	FileIO_SelectWallpaperByIndex
 	ld	wa, (33048:16)
 	exts	xwa
 	divs	wa, 10
@@ -230,7 +230,7 @@ WPLoad_UpdateDisplay:
 	exts	xde
 	ld	xwa, (33044:16)
 	ld	xbc, 31784962
-	call	16423243
+	call	ApPostEvent
 	ld	bc, (33048:16)
 	exts	xbc
 	divs	bc, 10
@@ -239,7 +239,7 @@ WPLoad_UpdateDisplay:
 	divs	de, 10
 	ld	xwa, (33044:16)
 	cp	de, bc
-	jr	nz, 75
+	jr	nz, WPLoad_RedrawPage
 	ld	bc, (xsp+4)
 	exts	xbc
 	divs	bc, 10
@@ -250,7 +250,7 @@ WPLoad_UpdateDisplay:
 	extz	xde
 	add	xde, xhl
 	ld	xbc, 29360143
-	call	16423243
+	call	ApPostEvent
 	ld	wa, (33048:16)
 	exts	xwa
 	divs	wa, 10
@@ -262,8 +262,8 @@ WPLoad_UpdateDisplay:
 	add	xde, xbc
 	ld	xwa, (33044:16)
 	ld	xbc, 29360143
-	call	16423243
-	jr	7
+	call	ApPostEvent
+	jr	WPLoad_SendState
 WPLoad_RedrawPage:
 	muls bc, 0xa
 	calr DisplaySmfSequenceList
@@ -283,7 +283,7 @@ WPLoad_Return:
 
 WP_ScanAvailability:
 	push	xiz
-	call	16289841
+	call	CheckFileSystemStatus
 	ld	qiz, hl
 	ldw	(35162:16), 0
 	ld	iz, 0:i3
@@ -373,10 +373,10 @@ WP_FindNextSlot:
 	pushw	iz
 	ld	a, (35164:16)
 	cp	a, 4:i3
-	jr	nc, 66
+	jr	nc, WPFind_NotFound
 	ld	bc, (35162:16)
 	cp	bc, 0:i3
-	jr	z, 58
+	jr	z, WPFind_NotFound
 	ld	iz, 1:i3
 	extz	wa
 	ld	qbc, wa
@@ -397,10 +397,10 @@ WPFind_SearchLoop:
 
 WPFind_CheckSlot:
 	and	iy, bc
-	jr	z, 8
+	jr	z, WPFind_NextSlot
 	ld	(35164:16), l
 	ld	l, 1:opc
-	jr	8
+	jr	WPFind_Return
 WPFind_NextSlot:
 	inc 1, iz
 	cp iz, 4:i3

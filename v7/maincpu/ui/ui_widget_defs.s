@@ -192,15 +192,15 @@ AcGridBox_GetRowText:
 	ld xiz, 0x42
 
 AcGridBox_CopyText:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	19
+	jr	AcGridBox_ReturnZero
 AcGridBox_CellSelect:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
@@ -242,7 +242,7 @@ GridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GridCheck_JumpEnd:
-	jr	t, 0x3d
+	jr	t, GridCheck_Return
 
 GridCheck_CellSelect:
 	lda xbc, (xsp + 10)
@@ -273,11 +273,11 @@ GridCheck_CellSelect:
 
 	push xde
 
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 
 	lda xsp, (xsp + 12)
 
-	call	16400579
+	call	GetFocusObject
 
 	ld xwa, xhl
 
@@ -285,7 +285,7 @@ GridCheck_CellSelect:
 
 	ld xbc, 0x1e0008c
 
-	call	16421459
+	call	SendEvent
 
 	ld xhl, 0:i3
 
@@ -416,13 +416,13 @@ PsEditBox_Paint:
 	call ConvertStrings
 	lda xwa, (xsp + 0x010c)
 	push XWA
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	ld XWA,(XSP+0x0c)
 	ld IZ,(XWA+0x28)
 	add IZ,HL
 	lda xwa, (xsp + 0x0110)
 	push XWA
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	inc 0,XSP
 	lda xwa, (xsp + 0x020c)
 	lda xde, (xwa + 0x04)
@@ -435,7 +435,7 @@ PsEditBox_Paint:
 	add	hl, bc
 	ld	(xde), hl
 	lda	xbc, (xsp+532)
-	calr	-22128
+	calr	GetBoxCenter
 	lda	xwa, (xsp+524)
 	lda	xde, (xsp+532)
 	ld	xhl, (xsp+8)
@@ -450,11 +450,11 @@ PsEditBox_Paint:
 	ld	xhl, (xhl+28)
 	ld	xbc, xde
 	ld	xde, xhl
-	call	16436284
+	call	DrawStringAlignment
 	ld	xwa, (xsp+540)
 	ld	xbc, 29360142
 	ld	xde, 0:i3
-	jrl	388
+	jrl	PsEditBox_Dispatch
 PsEditBox_Select:
 	ld XWA, (xsp + 0x021c)
 	call GetViewInstance
@@ -480,7 +480,7 @@ PsEditBox_Confirm:
 	call ConvertStrings
 	lda xwa, (xsp + 0x010c)
 	push XWA
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	inc 4,XSP
 	ld XWA,(XSP+0x08)
 	ld BC,(XWA+0x28)
@@ -502,7 +502,7 @@ PsEditBox_Confirm_CopyText:
 	ld	xwa, (xsp+536)
 	push	xwa
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 PsEditBox_Confirm_Render:
 	ld xiy, (xsp + 8)
@@ -714,7 +714,7 @@ PsTblEditBox_Return:
 
 PasTableCheck:
 	cp	xbc, 31457356
-	jr	nz, 22
+	jr	nz, PasTableCheck_Return
 	ld	xwa, (xde)
 	sll	xwa, 2
 	ld	xbc, 15377026
@@ -722,7 +722,7 @@ PasTableCheck:
 	ld	xwa, (xbc)
 	push	xwa
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 PasTableCheck_Return:
 	ld xhl, 0:i3
@@ -755,7 +755,7 @@ AcOnOffBoxProc:
 
 AcOnOff_GetText:
 	ld	xwa, xiz
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, (xhl+50)
 	ld	wa, (xwa)
 	extz	xwa
@@ -766,9 +766,9 @@ AcOnOff_GetText:
 	push	xwa
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	129
+	jrl	AcOnOff_ReturnZero
 AcOnOff_SetValue:
 	ld xwa, xiz
 	call GetViewInstance
@@ -872,29 +872,29 @@ AcNumEditBoxProc:
 	jrl AcNumEdit_Dispatch
 AcNumEdit_GetText:
 	ld	xwa, (xsp+32)
-	call	16408153
+	call	GetViewInstance
 	ld	(xsp+4), xhl
 	pushw 234
 	pushw 41642
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+12)
 	.byte 0x98, 0x36, 0x04, 0x0b, 0xea, 0x00, 0x0b, 0xac, 0xa2
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xwa, (xsp+26)
 	push	xwa
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+26)
 	pushw 234
 	pushw 41648
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+50)
 	.byte 0x90, 0x04
@@ -902,9 +902,9 @@ AcNumEdit_GetText:
 	push	xwa
 	ld	xwa, (xsp+42)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+18)
-	jrl	350
+	jrl	AcNumEdit_ReturnZero
 AcNumEdit_SetValue:
 	ld xwa, (xsp + 32)
 	call GetViewInstance
@@ -1387,7 +1387,7 @@ MainLswPut:
 	ld	(xsp+6), bc
 	ld	(xsp+8), xwa
 	pushw	12
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, (xsp+8)
@@ -1401,11 +1401,11 @@ MainLswPut:
 	ld	xwa, 20971522
 	ld	xbc, 31457367
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 	ld	xwa, 20971523
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 	ld	hl, 0:i3
 	pop	xiz
 	inc	8, xsp
@@ -1417,7 +1417,7 @@ MainLswPartPut:
 	ld	(xsp+8), bc
 	ld	iz, wa
 	pushw	12
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	bc, (xsp+8)
@@ -1437,11 +1437,11 @@ MainLswPartPut:
 	ld	xwa, 20971522
 	ld	xbc, 31457370
 	ld	xde, (xsp+2)
-	call	16402006
+	call	MainFuncCall
 	ld	xwa, 20971523
 	ld	xbc, 31457315
 	ld	xde, (xsp+2)
-	call	16402006
+	call	MainFuncCall
 	ld	hl, 0:i3
 	popw	iz
 	inc	8, xsp
@@ -1453,7 +1453,7 @@ MainLswAdd:
 	ld	(xsp+6), bc
 	ld	(xsp+8), xwa
 	pushw	12
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, (xsp+8)
@@ -1467,11 +1467,11 @@ MainLswAdd:
 	ld	xwa, 20971522
 	ld	xbc, 31457368
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 	ld	xwa, 20971523
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 	ld	hl, 0:i3
 	pop	xiz
 	inc	8, xsp
@@ -1483,7 +1483,7 @@ MainLswPartAdd:
 	ld	(xsp+8), bc
 	ld	iz, wa
 	pushw	12
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	bc, (xsp+8)
@@ -1503,11 +1503,11 @@ MainLswPartAdd:
 	ld	xwa, 20971522
 	ld	xbc, 31457371
 	ld	xde, (xsp+2)
-	call	16402006
+	call	MainFuncCall
 	ld	xwa, 20971523
 	ld	xbc, 31457315
 	ld	xde, (xsp+2)
-	call	16402006
+	call	MainFuncCall
 	ld	hl, 0:i3
 	popw	iz
 	inc	8, xsp
@@ -1521,7 +1521,7 @@ MainLswGet:
 
 	pushw 0xc
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -1545,7 +1545,7 @@ MainLswGet:
 
 	ld xde, xiz
 
-	call	16401701
+	call	FuncCall
 
 	ld xwa, 0x1400003
 
@@ -1553,7 +1553,7 @@ MainLswGet:
 
 	ld xde, xiz
 
-	call	16401701
+	call	FuncCall
 
 	ld hl, 0:i3
 
@@ -1576,7 +1576,7 @@ MainLswPartGet:
 
 	pushw 0xc
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -1612,7 +1612,7 @@ MainLswPartGet:
 
 	ld xde, (xsp + 2)
 
-	call	16401701
+	call	FuncCall
 
 	ld xwa, 0x1400003
 
@@ -1620,7 +1620,7 @@ MainLswPartGet:
 
 	ld xde, (xsp + 2)
 
-	call	16401701
+	call	FuncCall
 
 	ld hl, 0:i3
 
@@ -1940,22 +1940,23 @@ RamEditCheck_JumpStart:
 	pushw	41654
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
-	jr	31
+	jr	ResetLswFilter_Epilogue
 	ld	xhl, 4:i3
-	jr	27
+	jr	ResetLswFilter_Epilogue
 	ld	xhl, 1:i3
-	jr	23
+	jr	ResetLswFilter_Epilogue
 	ld	xhl, 16
-	jr	16
+	jr	ResetLswFilter_Epilogue
 	ld	xhl, 4294967267
-	jr	9
+	jr	ResetLswFilter_Epilogue
 	lda	xhl, (161482:24)
-	jr	2
+	jr	ResetLswFilter_Epilogue
 RamEditCheck_NotHandled:
 	ld xhl, 0:i3
+ResetLswFilter_Epilogue:
 	pop xiz
 	ret
 
@@ -1968,7 +1969,7 @@ MainRamPut:
 
 	pushw 0x16
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -1990,7 +1991,7 @@ MainRamPut:
 
 	ld xde, (xsp + 4)
 
-	call	16402006
+	call	MainFuncCall
 
 	ld xwa, 0x1400003
 
@@ -1998,7 +1999,7 @@ MainRamPut:
 
 	ld xde, (xsp + 4)
 
-	call	16402006
+	call	MainFuncCall
 
 	pop xiz
 
@@ -2017,7 +2018,7 @@ MainRamAdd:
 
 	pushw 0x16
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -2039,7 +2040,7 @@ MainRamAdd:
 
 	ld xde, (xsp + 4)
 
-	call	16402006
+	call	MainFuncCall
 
 	ld xwa, 0x1400003
 
@@ -2063,7 +2064,7 @@ MainRamGet:
 	ld	(xsp+4), bc
 	ld	(xsp+6), xwa
 	pushw	22
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, (xsp+6)
@@ -2078,11 +2079,11 @@ MainRamGet:
 	ld	xwa, 20971528
 	ld	xbc, 31457384
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 	ld	xwa, 20971523
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16402006
+	call	MainFuncCall
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -2280,13 +2281,13 @@ BitEditCheck:
 	push	xiz
 	ld	xiz, xwa
 	cp	xbc, 31457381
-	jr	z, 73	; -> 0xF9FD76
+	jr	z, BitEditCheck_NotHandled	; -> 0xF9FD76
 	cp	xbc, 31457380
-	jr	z, 58	; -> 0xF9FD6F
+	jr	z, BitEditCheck_GetMask	; -> 0xF9FD6F
 	cp	xbc, 31457379
-	jr	z, 43	; -> 0xF9FD68
+	jr	z, BitEditCheck_GetAddr	; -> 0xF9FD68
 	cp	xbc, 31457378
-	jr	nz, 49	; -> 0xF9FD76
+	jr	nz, BitEditCheck_NotHandled	; -> 0xF9FD76
 	ld	wa, (xde+8)
 	and	wa, 1
 	sla	wa, 2
@@ -2298,7 +2299,7 @@ BitEditCheck:
 	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	16	; -> 0xF9FD78
+	jr	BitEditCheck_Return	; -> 0xF9FD78
 BitEditCheck_GetAddr:
 	lda xhl, (0x0276ce:24)
 	jr BitEditCheck_Return
@@ -2349,7 +2350,7 @@ MainBitGet:
 
 	pushw 0xe
 
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 
 	inc 2, xsp
 
@@ -2375,7 +2376,7 @@ MainBitGet:
 
 	ld xde, xiz
 
-	call	16402006
+	call	MainFuncCall
 
 	ld xwa, 0x1400003
 
@@ -2454,7 +2455,7 @@ PsMenuBox_Confirm_CopyText:
 	ld	xwa, (xsp+276)
 	push	xwa
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 PsMenuBox_Confirm_Render:
 	lda_dri XHL, 0xfd, 0x0c, 0x01
@@ -3165,10 +3166,10 @@ PsEditSwBox_InlineData:
 	ld	(xsp+8), de
 	ld	xiz, xbc
 	lda	xbc, (xsp+4)
-	calr	40500
+	calr	GetEditSwPoint
 	lda	xwa, (xsp+4)
 	cpw	(xwa), 0
-	jr	nz, 41
+	jr	nz, PsEditSwBoxProc_Skip2
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
 	sub	wa, 9
@@ -3177,16 +3178,18 @@ PsEditSwBox_InlineData:
 	inc	8, wa
 	ld	(xiz+6), wa
 	ld	wa, (xsp+8)
-	calr	36090
+	calr	BoxLeftCheck
 	ldw	wa, 8
 	cp	hl, 0:i3
-	jr	z, 2
+	jr	z, PsEditSwBoxProc_Skip
 	ld	wa, 0:i3
+PsEditSwBoxProc_Skip:
 	ld	(xiz), wa
 	ldw	(xiz+4), 38
+PsEditSwBoxProc_Skip2:
 	lda	xwa, (xsp+4)
 	cpw	(xwa), 319
-	jr	nz, 46
+	jr	nz, PsEditSwBoxProc_Join
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
 	sub	wa, 9
@@ -3196,16 +3199,18 @@ PsEditSwBox_InlineData:
 	ld	(xiz+6), wa
 	ldw	(xiz), 281
 	ld	wa, (xsp+8)
-	calr	36054
+	calr	BoxRightCheck
 	lda	xwa, (xiz+4)
 	cp	hl, 0:i3
-	jr	z, 6
+	jr	z, PsEditSwBoxProc_Skip3
 	ldw	(xwa), 319
-	jr	4
+	jr	PsEditSwBoxProc_Join
+PsEditSwBoxProc_Skip3:
 	ldw	(xwa), 311
+PsEditSwBoxProc_Join:
 	lda	xbc, (xsp+4)
 	cpw	(xbc+2), 239
-	jr	nz, 27
+	jr	nz, PsEditSwBoxProc_Epilogue
 	ldw	(xiz+2), 216
 	ldw	(xiz+6), 238
 	ld	wa, (xbc)
@@ -3214,6 +3219,7 @@ PsEditSwBox_InlineData:
 	ld	wa, (xbc)
 	add	wa, 15
 	ld	(xiz+4), wa
+PsEditSwBoxProc_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -3222,16 +3228,17 @@ PsEditSwBox_InlineData:
 	ld	(xsp+10), xde
 	ld	iz, bc
 	cp	wa, iz
-	jr	c, 2
+	jr	c, PsEditSwBoxProc_Skip4
 	ex16 iz, wa
+PsEditSwBoxProc_Skip4:
 	lda	xbc, (xsp+6)
-	calr	40333
+	calr	GetEditSwPoint
 	lda	xbc, (xsp+2)
 	ld	wa, iz
-	calr	40325
+	calr	GetEditSwPoint
 	lda	xbc, (xsp+6)
 	cpw	(xbc+2), 239
-	jr	nz, 31
+	jr	nz, PsEditSwBoxProc_Epilogue2
 	ld	xwa, (xsp+10)
 	ldw	(xwa+2), 216
 	.byte 0xb8
@@ -3242,6 +3249,7 @@ PsEditSwBox_InlineData:
 	ld	bc, (xsp+2)
 	add	bc, 15
 	ld	(xwa+4), bc
+PsEditSwBoxProc_Epilogue2:
 	popw	iz
 	lda	xsp, (xsp+12)
 	ret
@@ -3434,37 +3442,38 @@ ButtonState_DispatchDSP_InlineData:
 	lda	xde, (xsp+12)
 	ld	xwa, (xsp+298)
 	ld	xbc, 31457338
-	call	16421459
-	jr	100
+	call	SendEvent
+	jr	ButtonState_Paint_DrawAligned
 	ld	xwa, 15377130
-	jr	82
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377134
-	jr	75
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377138
-	jr	68
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377142
-	jr	61
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377146
-	jr	54
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377150
-	jr	47
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377154
-	jr	40
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377158
-	jr	33
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377160
-	jr	26
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377162
-	jr	19
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377166
-	jr	12
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377170
-	jr	5
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, 15377174
+ButtonState_PaintProc_Join:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 ButtonState_Paint_DrawAligned:
 	lda_dri XWA, 0xfd, 0x20, 0x01
@@ -3678,23 +3687,24 @@ AcIndexEdit_DispatchDSP_InlineData:
 	exts	xde
 	ld	xwa, (xsp+6)
 	bit	7, wa
-	jr	z, 13
+	jr	z, ButtonState_PaintProc_Skip
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00018
-	jrl	161
+	jrl	AcIndexEdit_SendAndReturn
+ButtonState_PaintProc_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00017
-	jrl	148
+	jrl	AcIndexEdit_SendAndReturn
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00017
-	jrl	130
+	jrl	AcIndexEdit_SendAndReturn
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00018
-	jr	t, 0x71
+	jr	t, AcIndexEdit_SendAndReturn
 
 AcIndexEdit_Fallthrough:
 	ld xwa, xiz
@@ -3912,13 +3922,13 @@ VwEditSwBox_GetText_AltView:
 	ld xiz, 0x28
 
 VwEditSwBox_GetText_CopyStr:
-	call	16408153
+	call	GetViewInstance
 	add	xhl, xiz
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 VwEditSwBox_ReturnZero:
 	ld xhl, 0:i3
@@ -4738,9 +4748,9 @@ IvPageControl_GetText:
 	pushw	41824
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	86
+	jr	IvPageControl_ReturnZero
 IvPageControl_PageChange:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
@@ -4814,9 +4824,9 @@ IvMainEditSw_GetText:
 	pushw	41830
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	78
+	jr	IvMainEditSw_ReturnZero
 IvMainEditSw_BtnOK:
 	ld xwa, xiz
 	call GetViewInstance
@@ -4891,7 +4901,7 @@ IvExit_GetText:
 	pushw	234
 	pushw	41836
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 IvExit_ReturnZero:
 	ld xhl, 0:i3
@@ -4927,10 +4937,10 @@ IvExitMode_GetText:
 	pushw	41842
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jr	114
+	jr	IvExitMode_Return
 IvExitMode_OK:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
@@ -5000,10 +5010,10 @@ IvExitScreen_GetText:
 	pushw	41848
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jr	111
+	jr	IvExitScreen_Return
 IvExitScreen_OK:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
@@ -5072,10 +5082,10 @@ IvExitWindow_GetText:
 	pushw	41854
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jr	119
+	jr	IvExitWindow_Return
 IvExitWindow_OK:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1e00053
@@ -5257,24 +5267,24 @@ NamingCheck:
 	ld	xiz, xwa
 	lda	xwa, (257902:24)
 	cp	xbc, 31457404
-	jr	z, 32
+	jr	z, NamingCheck_GetStrLen
 	cp	xbc, 31457412
-	jr	z, 20
+	jr	z, NamingCheck_NotHandled
 	cp	xbc, 31457338
-	jr	nz, 12
+	jr	nz, NamingCheck_NotHandled
 	push	xwa
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	13
+	jr	NamingCheck_Return
 NamingCheck_NotHandled:
 	ld xhl, 0:i3
 	jr NamingCheck_Return
 
 NamingCheck_GetStrLen:
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	extz	xhl
 NamingCheck_Return:
@@ -5479,7 +5489,7 @@ IvInterrupt_GetText:
 	pushw	41884
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 IvInterrupt_ReturnZero:
 	ld xhl, 0:i3
@@ -5508,13 +5518,13 @@ ReminderProc_Return:
 
 IvIntReminderProc:
 	cp	xbc, 31457437
-	jr	z, 25
+	jr	z, IvIntReminder_GetInterval
 	cp	xbc, 31457338
-	jrl	nz, -216
+	jrl	nz, IvInterruptProc
 	pushw	234
 	pushw	41890
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
 	ret
@@ -5525,13 +5535,13 @@ IvIntReminder_GetInterval:
 
 IvIntCompleteProc:
 	cp	xbc, 31457437
-	jr	z, 25
+	jr	z, IvIntComplete_GetInterval
 	cp	xbc, 31457338
-	jrl	nz, -257
+	jrl	nz, IvInterruptProc
 	pushw	234
 	pushw	41896
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
 	ret
@@ -5542,13 +5552,13 @@ IvIntComplete_GetInterval:
 
 IvIntErrorProc:
 	cp	xbc, 31457437
-	jr	z, 25
+	jr	z, IvIntError_GetInterval
 	cp	xbc, 31457338
-	jrl	nz, -298
+	jrl	nz, IvInterruptProc
 	pushw	234
 	pushw	41902
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
 	ret
@@ -5601,7 +5611,7 @@ IvIntVari_GetText:
 	pushw	41908
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 IvIntVari_ReturnZero:
 	ld xhl, 0:i3
@@ -5618,13 +5628,13 @@ IvIntVari_Return:
 
 IvIntEasySetProc:
 	cp	xbc, 31457437
-	jr	z, 25
+	jr	z, IvIntEasySet_GetInterval
 	cp	xbc, 31457338
-	jrl	nz, -461
+	jrl	nz, IvInterruptProc
 	pushw	234
 	pushw	41914
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
 	ret
@@ -5677,7 +5687,7 @@ IvIntWelcome_GetText:
 	pushw	41920
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 IvIntWelcome_ReturnZero:
 	ld xhl, 0:i3
@@ -6067,15 +6077,15 @@ AcPmemName_Confirm_ZeroIndex:
 	pushw	234
 	pushw	41950
 	push	xix
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
-	jr	15
+	jr	AcPmemName_Confirm_SendEvent
 AcPmemName_Confirm_EmptySlot:
 	pushw	hl
 	pushw	234
 	pushw	41966
 	push	xix
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 AcPmemName_Confirm_SendEvent:
 	lda xde, (xsp + 4)
@@ -6224,7 +6234,7 @@ AcMixerVol_Confirm:
 	ld XWA,Str_No_0x1F6
 	add XWA,XBC
 	ld XWA,(XWA)
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	ld (XSP+0x04),HL
 	ld XWA,(XSP+0x08)
 	ld WA,(XWA+0x1c)
@@ -6236,7 +6246,7 @@ AcMixerVol_Confirm:
 	lda xwa, (Str_No_0x1FA:24)
 	add XWA,XBC
 	ld XWA,(XWA)
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	ld (XSP+0x06),HL
 	lda xbc, (xsp + 0x18)
 	ld XWA,(XSP+0x2c)
@@ -6256,7 +6266,7 @@ AcMixerVol_Confirm:
 	.byte 0x9f, 0x04, 0x04, 0x0b, 0xea, 0x00, 0x0b, 0xb0, 0xa6
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+24)
 	lda	xbc, (xsp+32)
@@ -6266,7 +6276,7 @@ AcMixerVol_Confirm:
 	pushw 0
 	ld	xhl, (xsp+14)
 	.byte 0x9b, 0x16, 0x04
-	call	16435871
+	call	DrawStringCentered
 	lda	xwa, (xsp+32)
 	lda	xde, (xsp+24)
 	ld	bc, (xde)
@@ -6276,7 +6286,7 @@ AcMixerVol_Confirm:
 	add	bc, 10
 	ld	(xwa+2), bc
 	ld	xbc, 2:i3
-	call	16431622
+	call	DrawBitmapFast
 	lda	xwa, (xsp+32)
 	ldw	bc, 128
 	.byte 0x9f, 0x04, 0xa1
@@ -6285,12 +6295,12 @@ AcMixerVol_Confirm:
 	divs	bc, 128
 	add	(xwa+2), bc
 	ld	xbc, 3:i3
-	call	16431622
+	call	DrawBitmapFast
 	.byte 0x9f, 0x06, 0x3f, 0x01, 0x00
-	jrl	nz, 830
+	jrl	nz, UIList_ReturnZeroJmp
 	lda	xbc, (xsp+24)
 	ld	xwa, (xsp+44)
-	call	16355792
+	call	GetClientBox
 	lda	xbc, (xsp+32)
 	lda	xwa, (xsp+24)
 	ld	de, (xwa)
@@ -6310,8 +6320,8 @@ AcMixerVol_Confirm:
 	push	xde
 	.byte 0x0b, 0xfb, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x01, 0x00
 	ld	xde, 15378100
-	call	16436343
-	jrl	747
+	call	DrawStringReverse
+	jrl	UIList_ReturnZeroJmp
 AcMixerVol_PartSelect:
 	ld xwa, (xsp + 44)
 	call GetViewInstance
@@ -6428,7 +6438,7 @@ AcMixerVol_OK:
 	lda xwa, (Str_No_0x1FA:24)
 	add XWA,XBC
 	ld XWA,(XWA)
-	call 0xfccc66
+	call AcApcToggleProc_Helper
 	ld (XSP+0x06),HL
 	ld XWA,(XSP+0x08)
 	lda xwa, (xwa + 0x1c)
@@ -6577,11 +6587,11 @@ AcMixerVol_Reset_Fallthrough:
 AcMixerVol_EncoderUpdate:
 	ld	xwa, (xsp+36)
 	ld	bc, 0:i3
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+15), l
 	ld	xwa, (xsp+36)
 	ldw	bc, 32
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp+12)
 	ld	(xwa+4), l
 	ld	xbc, (xsp+36)
@@ -6626,18 +6636,22 @@ AcMixerVol_Return:
 ScrollDelta_ComputeDirection:
 	ld	hl, de
 	cp	xwa, 0x01c00027
-	jr	z, 18
+	jr	z, AcPmemName_Confirm_Code_Skip
 	cp	xwa, 0x01c00007
-	jr	nz, 21
+	jr	nz, AcPmemName_Confirm_Code_Skip3
 	ld	hl, (xsp+4)
 	bit	7, bc
-	jr	nz, 7
-	jr	13
+	jr	nz, AcPmemName_Confirm_Code_Skip2
+	jr	AcPmemName_Confirm_Code_Return
+AcPmemName_Confirm_Code_Skip:
 	bit	7, bc
-	jr	z, 8
+	jr	z, AcPmemName_Confirm_Code_Return
+AcPmemName_Confirm_Code_Skip2:
 	mul	hl, 0xffff
-	jr	2
+	jr	AcPmemName_Confirm_Code_Return
+AcPmemName_Confirm_Code_Skip3:
 	ld	hl, 0:i3
+AcPmemName_Confirm_Code_Return:
 	retd	2
 
 DbMemoProc:
@@ -6742,10 +6756,10 @@ DbMemo_DrawContent:
 DbMemo_DrawContent_Loop:
 	lda	xwa, (xsp+86)
 	lda	xbc, (xsp+70)
-	call	16430662
+	call	MovePixels
 	lda	xwa, (xsp+78)
 	ld	bc, 7:i3
-	call	16428646
+	call	DrawBox
 	.byte 0x9f, 0x04, 0x04
 	ld	xwa, (xsp+8)
 	push	xwa
@@ -6765,39 +6779,40 @@ DbMemo_DrawContent_Loop:
 	push	xhl
 	pushw 0
 	pushw 7
-	call	16434877
+	call	DrawString
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	.byte 0x9f, 0x04, 0xf3
-	jrl	nz, -220
+	jrl	nz, DbMemo_ReturnZero
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	(xsp+6), xwa
-	jr	-97
+	jr	DbMemo_DrawContent_Loop
+FDemoText_ByteData_DisplayRefresh_Helper:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	1, hl
 	pushw	hl
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	ld	xiz, xhl
 	ld	xwa, (xsp+10)
 	push	xwa
 	push	xiz
-	call	16713584
+	call	Free_Compare2
 	lda	xsp, (xsp+14)
 	ld	xwa, 4294967295
 	ld	xbc, 29360165
 	ld	xde, xiz
-	call	16421701
+	call	PostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16421701
+	call	PostEvent
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -6926,7 +6941,7 @@ DbMemDump_Confirm_RowLoop:
 	pushw 0xa6c6
 	lda xwa, (xsp + 0x26)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x16)
 	lda xwa, (xsp + 0x68)
 	lda xbc, (xsp + 0x64)
@@ -7108,7 +7123,7 @@ PsCursorBox_Confirm_CopyText:
 	ld	xwa, (xsp+554)
 	push	xwa
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 PsCursorBox_Confirm_CheckCursor:
 	ld xwa, (xsp + 14)
@@ -7558,11 +7573,11 @@ PsTrkSw_Confirm_SetSub:
 PsTrkSw_Confirm_DrawGeometry:
 	lda	xbc, (xsp+166)
 	ld	xwa, (xsp+178)
-	call	16408201
+	call	GetBox
 	lda	xbc, (xsp+166)
 	lda	xde, (xsp+158)
 	ldw	wa, 203
-	call	16355826
+	call	GetClientBox2
 	lda	xiy, (xsp+158)
 	lda	xix, (xsp+150)
 	ld	bc, 4:i3
@@ -7592,10 +7607,10 @@ PsTrkSw_Confirm_DrawGeometry:
 	inc	1, bc
 	ld	(xsp+152), bc
 	lda	xbc, (xsp+146)
-	call	16356237
+	call	GetBoxCenter
 	lda	xwa, (xsp+150)
 	lda	xbc, (xsp+134)
-	call	16356237
+	call	GetBoxCenter
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa+22)
 	inc	1, wa
@@ -7604,22 +7619,22 @@ PsTrkSw_Confirm_DrawGeometry:
 	pushw 43044
 	lda	xwa, (xsp+124)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+4)
 	ld	xbc, (xwa+24)
 	.byte 0x98, 0x16, 0x3f, 0x08, 0x00
-	jrl	nc, 130
+	jrl	nc, PsTrkSw_Confirm_Track8Plus
 	.byte 0x91, 0x3f, 0x00, 0x00
-	jr	z, 70
+	jr	z, PsTrkSw_Confirm_DrawOff
 	lda	xwa, (xsp+166)
 	ldw	bc, 203
 	ld	de, 0:i3
-	call	16437580
+	call	DrawDesignBox
 	lda	xwa, (xsp+142)
 	lda	xbc, (xsp+138)
 	ld	de, 0:i3
-	call	16426365
+	call	DrawLine
 	lda	xwa, (xsp+158)
 	lda	xbc, (xsp+146)
 	lda	xde, (xsp+118)
@@ -7627,11 +7642,11 @@ PsTrkSw_Confirm_DrawGeometry:
 	push	xhl
 	pushw 7
 	pushw 247
-	call	16435871
+	call	DrawStringCentered
 	lda	xwa, (xsp+150)
 	ld	bc, 7:i3
-	call	16428646
-	jrl	181
+	call	DrawBox
+	jrl	PsTrkSw_Confirm_DrawSecondary
 PsTrkSw_Confirm_DrawOff:
 	lda_dri XWA, 0xfd, 0xa6, 0x00
 	ldw bc, 0xcb
@@ -7981,7 +7996,7 @@ AcTrkSw_Select:
 	pushw 0xa828
 	ld XWA,(XSP+0x0e)
 	push XWA
-	call 0xff01a0
+	call DrawEditSw_CopyVariant_Code_Helper
 	inc 0,XSP
 	ld XWA,(XSP+0x0a)
 	.byte 0xf3, 0x07, 0xe0, 0xec, 0x30, 0xbf, 0x0e, 0x60
@@ -8032,7 +8047,7 @@ AcTrkSw_Select_Paint:
 AcTrkSw_Select_CheckTrackNum:
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 AcTrkSw_Select_LowTrack:
 	ld xhl, 0:i3
@@ -8135,92 +8150,96 @@ ObjectProc:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 AcTrkSw_Return:
 	ld	xhl, xiz
-	jrl	682
+	jrl	ObjectProc_Join5
 	ld	xwa, xiz
 	ld	xbc, 31457281
 	ld	xde, (xsp+136)
-	jrl	597
+	jrl	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 31457282
 	ld	xde, (xsp+136)
-	jrl	582
+	jrl	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 31457283
 	ld	xde, (xsp+136)
-	jrl	567
+	jrl	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 31457301
 	ld	xde, (xsp+136)
-	jrl	552
+	jrl	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 31457284
 	ld	xde, (xsp+136)
-	jrl	537
+	jrl	ObjectProc_Join3
 	ld	xwa, (xsp+136)
 	ld	(xwa), 0
 	ld	xwa, xiz
 	ld	xbc, 31457285
 	ld	xde, (xsp+136)
-	calr	1662
+	calr	ClassProc
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457300
 	ld	xde, 23068688
-	call	16421459
+	call	SendEvent
 	or	xhl, xhl
-	jr	z, 18
+	jr	z, ObjectProc_Skip
 	pushw 234
 	pushw 43152
 	ld	xwa, (xsp+140)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
+ObjectProc_Skip:
 	ld	xhl, (xsp+4)
-	jrl	534
+	jrl	ObjectProc_Join5
 	ld	xwa, xiz
 	ld	xbc, 31457286
 	ld	xde, (xsp+136)
-	jrl	449
+	jrl	ObjectProc_Join3
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16421459
+	call	SendEvent
 	lda	xbc, (xsp+8)
 	ld	xhl, xbc
 	ld	xwa, (xsp+136)
 	.byte 0xa0, 0x83
 	lda	xde, (xwa+4)
 	.byte 0x83, 0x3f, 0x59
-	jr	nz, 11
+	jr	nz, ObjectProc_Skip2
 	pushw 234
 	pushw 43156
 	ld	xwa, (xde)
 	push	xwa
-	jr	21
+	jr	ObjectProc_Join
+ObjectProc_Skip2:
 	ld	xwa, (xsp+136)
 	.byte 0xa0, 0x81
 	ld	xwa, (xde)
 	.byte 0x81, 0x3f, 0x5a
-	jr	nz, 16
+	jr	nz, ObjectProc_Skip3
 	pushw 234
 	pushw 43162
 	push	xwa
-	call	16713584
+ObjectProc_Join:
+	call	Free_Compare2
 	inc	8, xsp
-	jrl	419
+	jrl	ObjectProc_Join4
+ObjectProc_Skip3:
 	pushw 234
 	pushw 43170
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, xiz
 	ld	xbc, 31457287
 	ld	xde, (xsp+136)
-	jrl	343
+	jrl	ObjectProc_Join3
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16421459
+	call	SendEvent
 	ld	xwa, (xsp+136)
 	ld	bc, (xwa+8)
 	extz	xbc
@@ -8233,11 +8252,11 @@ AcTrkSw_Return:
 	add	xwa, 39845888
 	ld	xbc, 31457288
 	ld	xde, (xsp+136)
-	jrl	184
+	jrl	ObjectProc_Join2
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16421459
+	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
@@ -8250,11 +8269,11 @@ AcTrkSw_Return:
 	add	xwa, 39845888
 	ld	xbc, 31457289
 	ld	xde, (xsp+136)
-	jr	122
+	jr	ObjectProc_Join2
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16421459
+	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
@@ -8267,11 +8286,11 @@ AcTrkSw_Return:
 	add	xwa, 39845888
 	ld	xbc, 31457290
 	ld	xde, (xsp+136)
-	jr	60
+	jr	ObjectProc_Join2
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16421459
+	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
@@ -8284,12 +8303,13 @@ AcTrkSw_Return:
 	add	xwa, 39845888
 	ld	xbc, 31457291
 	ld	xde, (xsp+136)
-	call	16421459
-	jrl	140
+ObjectProc_Join2:
+	call	SendEvent
+	jrl	ObjectProc_Join4
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16421459
+	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
@@ -8302,37 +8322,40 @@ AcTrkSw_Return:
 	add	xwa, 39845888
 	ld	xbc, 31457292
 	ld	xde, (xsp+136)
-	call	16421459
-	jr	96
+	call	SendEvent
+	jr	ObjectProc_Join5
 	ld	xwa, xiz
 	ld	xbc, 31457293
 	ld	xde, (xsp+136)
-	jr	12
+	jr	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 31457294
 	ld	xde, (xsp+136)
-	calr	1145
-	jr	65
+ObjectProc_Join3:
+	calr	ClassProc
+	jr	ObjectProc_Join5
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16421459
+	call	SendEvent
 	lda	xwa, (xsp+8)
 	.byte 0xe3, 0xfd, 0x88, 0x00, 0x80
 	ld	xhl, 0:i3
 	ld	l, (xwa)
-	jr	34
+	jr	ObjectProc_Join5
 	ld	xwa, (xsp+136)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
+ObjectProc_Join4:
 	ld	xhl, 0:i3
-	jr	18
+	jr	ObjectProc_Join5
 ExitWindow_Init:
 	ld_sril XWA, (xsp + 0x0090)
 	ld_sril XBC, (xsp + 0x008c)
 	ld_sril XDE, (xsp + 0x0088)
 	calr InheritedProc
+ObjectProc_Join5:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x90, 0x00
 	ret
@@ -8496,7 +8519,7 @@ CountObject:
 	ld WA,QIZ
 	extz XWA
 	ld XBC,0x0000000e
-	call 0xff027f
+	call InitializeKubo_Helper
 InputDialog_GetText:
 	ld xwa, (xsp + 4)
 	add xwa, xhl
@@ -8890,16 +8913,16 @@ TitleWidget_Paint_DrawText:
 	.byte 0xaf, 0x04, 0x82
 	ld	xde, (xde+4)
 	cp	xde, 4294967295
-	jr	nz, -71
-	jrl	426
+	jr	nz, TitleWidget_Paint_CheckState
+	jrl	ClassProc_ReturnZeroJmp
 	ld	xwa, (xiz+16)
 	push	xwa
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, 0:i3
 	ld	(xsp+10), xwa
-	jr	27
+	jr	TitleWidget_Confirm
 TitleWidget_Select:
 	sub a, 0x41
 	ld w, 0x0:opc
@@ -8915,16 +8938,16 @@ TitleWidget_Confirm:
 	.byte 0xaf, 0x0a, 0x80
 	ld	a, (xwa)
 	cp	a, 0:i3
-	jr	nz, -43
+	jr	nz, TitleWidget_Select
 	ld	xwa, (xsp+274)
 	push	xwa
 	push	xde
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xwa, (xsp+154)
 	push	xwa
 	ld	xwa, (xsp+286)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	lda	xsp, (xsp+16)
 	ld	wa, (xsp+8)
 	extz	xwa
@@ -8935,32 +8958,32 @@ TitleWidget_Confirm:
 	.byte 0xaf, 0x04, 0x81
 	ld	xbc, (xbc+4)
 	cp	xbc, 4294967295
-	jrl	z, 306
+	jrl	z, ClassProc_ReturnZeroJmp
 	ld	xwa, xbc
 	ld	xbc, 31457285
 	ld	xde, (xsp+274)
-	calr	-439
-	jrl	288
+	calr	ClassProc
+	jrl	ClassProc_ReturnZeroJmp
 	ld	xbc, 31457305
-	call	16421459
+	call	SendEvent
 	lda	xwa, (xsp+146)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	extz	xhl
-	jrl	377
+	jrl	ClassProc_ReturnWithStatus
 	ld	xbc, (xhl)
 	cp	xbc, 4294967295
-	jr	z, 15
+	jr	z, TitleWidget_Confirm_DrawLayout
 	ld	xwa, xbc
 	ld	xbc, 31457287
 	ld	xde, (xsp+274)
-	calr	-493
+	calr	ClassProc
 TitleWidget_Confirm_DrawLayout:
 	ld	xwa, (xsp+274)
 	ld	xwa, (xwa+4)
 	.byte 0x80, 0x3f, 0x00
-	jrl	nz, 223
+	jrl	nz, ClassProc_ReturnZeroJmp
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -8972,11 +8995,11 @@ TitleWidget_Confirm_DrawLayout:
 	push	xwa
 	lda	xwa, (xsp+150)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, 0:i3
 	ld	(xsp+10), xwa
-	jr	27
+	jr	TitleWidget_Confirm_DrawRowLoop
 TitleWidget_Confirm_DrawRow:
 	sub a, 0x41
 	ld w, 0x0:opc
@@ -9550,7 +9573,7 @@ ObjectEnum_OK_DispatchInline:
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, 22
-	call	16712319
+	call	InitializeKubo_Helper
 	add	xhl, xiz
 	ldw	(xhl+18), 65535
 	ldw	(xhl+20), 65535
@@ -9559,16 +9582,16 @@ ObjectEnum_OK_DispatchInline:
 	ld	xde, (257922:24)
 	ld	xwa, 20971521
 	ld	xbc, 29360148
-	calr	-607
+	calr	MainFuncCall
 	ld	xde, (257930:24)
 	ld	xwa, 20971521
 	ld	xbc, 29360149
-	calr	-625
+	calr	MainFuncCall
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	ld	xde, 0:i3
-	call	16421459
-	jr	40
+	call	SendEvent
+	jr	ObjectEnum_Return
 ObjectEnum_Default:
 	ld wa, (xsp + 8)
 	extz xwa
@@ -9653,7 +9676,7 @@ RegisterTitle:
 
 	ld xbc, 0x16
 
-	call	16712319
+	call	InitializeKubo_Helper
 
 	ld xbc, 0x32abc
 
@@ -9691,7 +9714,7 @@ RegisterTitle:
 
 UnregisteredTitle:
 	ld	xbc, 22
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	xbc, 207548
 	add	xbc, xhl
 	ld	xwa, 18874368
@@ -9835,7 +9858,7 @@ EventDispatch_Select:
 
 	ld xbc, 0x16
 
-	call 16712319
+	call InitializeKubo_Helper
 
 	add xhl, (xsp + 4)
 
@@ -9898,13 +9921,13 @@ EventDispatch_OK:
 	extz XIZ
 	ld XWA,XIZ
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	ld XWA,XIZ
 	cpw (XHL+0x12), 0xffff
 	jrl z, .Lc_fa4d7f
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	ld WA,(XHL+0x12)
 	exts XWA
@@ -9934,7 +9957,7 @@ EventDispatch_OK:
 	ld WA,(XSP+0x0c)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	ld XBC,(XSP+0x12)
 	ld WA,BC
@@ -9961,7 +9984,7 @@ EventDispatch_OK:
 	ld WA,(XSP+0x0c)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	ld XWA,(XSP+0x08)
 	ld (XHL+0x12),WA
@@ -10024,7 +10047,7 @@ EventDispatch_DefaultProc:
 
 	ld xbc, 0x16
 
-	call 16712319
+	call InitializeKubo_Helper
 
 	add xhl, (xsp + 4)
 
@@ -10038,19 +10061,19 @@ EventDispatch_DefaultProc:
 
 	ld xbc, 0x1c00016
 
-	calr	-1996
+	calr	MainFuncCall
 
 	ld wa, 1:i3
 
-	calr	1599
+	calr	SetInterruptTime
 
 	ld wa, 2:i3
 
-	calr	1678
+	calr	TitleProc_SetResourceDirtyFlag
 
 	ldw wa, 0x10
 
-	jrl	1388
+	jrl	TitleProc_ClearAndReturn
 
 
 
@@ -10073,16 +10096,16 @@ EventDispatch_Return:
 	ld XWA,(XSP+0x22)
 	ld XBC,0x01e0009a
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	16712319
+	call	InitializeKubo_Helper
 	.byte 0xaf, 0x04, 0x83
 	lda	xbc, (xhl+18)
 	ld	wa, (xbc)
 	cp	wa, 65535
-	jrl	z, 1472
+	jrl	z, TitleProc_ReturnZero
 	ld	xwa, (257930:24)
 	ld	(257934:24), xwa
 	ld	wa, (xbc)
@@ -10092,17 +10115,17 @@ EventDispatch_Return:
 	ld	xde, xwa
 	ld	xwa, 20971521
 	ld	xbc, 29360168
-	calr	-2136
+	calr	MainFuncCall
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	16712319
+	call	InitializeKubo_Helper
 	.byte 0xaf, 0x04, 0x83
 	ldw	(xhl+18), 65535
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	xwa, xhl
 	.byte 0xaf, 0x04, 0x80
 	ldw	(xwa+20), 65535
@@ -10128,7 +10151,7 @@ EventDispatch_Return:
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	16712319
+	call	InitializeKubo_Helper
 	.byte 0xaf, 0x04, 0x83
 	ldw	(xhl+20), 65535
 	ld	wa, (179250:24)
@@ -10139,20 +10162,20 @@ EventDispatch_Return:
 	push	xbc
 	ld	xbc, (xsp+42)
 	ld	xde, 4294967295
-	call	16424522
+	call	KillApTimer
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	16712319
+	call	InitializeKubo_Helper
 	.byte 0xaf, 0x04, 0x83, 0x9b, 0x12, 0x3f, 0xff, 0xff
-	jrl	nz, 1253
+	jrl	nz, TitleProc_ReturnZero
 	ldw	wa, 18
-	jrl	1079
+	jrl	TitleProc_ClearAndReturn
 EnumList_Init:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	lda xbc, (xhl + 0x0e)
 	ld XWA,(XBC)
@@ -10171,7 +10194,7 @@ EnumList_Init_TypeB:
 
 	ld xbc, 0x16
 
-	call	16712319
+	call	InitializeKubo_Helper
 
 	add xhl, (xsp + 4)
 
@@ -10179,7 +10202,7 @@ EnumList_Init_TypeB:
 
 	ld (xhl + 14), xwa
 
-	jrl	1181
+	jrl	TitleProc_ReturnZero
 
 
 
@@ -10190,7 +10213,7 @@ EnumList_Close:
 
 	ld xbc, 0x16
 
-	call 16712319
+	call InitializeKubo_Helper
 
 	add xhl, (xsp + 4)
 
@@ -10227,7 +10250,7 @@ EnumList_ShowHide_A:
 
 	ld xbc, 0x16
 
-	call 16712319
+	call InitializeKubo_Helper
 
 	add xhl, (xsp + 4)
 
@@ -10263,7 +10286,7 @@ EnumList_ShowHide_B:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jrl z, TitleProc_ReturnZero
@@ -10305,13 +10328,13 @@ EnumList_PartChange_B:
 
 	ld xbc, 0x16
 
-	call 16712319
+	call InitializeKubo_Helper
 
 	add xhl, (xsp + 4)
 
 	cpw (xhl + 18), 0xffff
 
-	jrl z, 932
+	jrl z, TitleProc_ReturnZero
 
 	ld xwa, 0x1c00028
 
@@ -10340,7 +10363,7 @@ EnumList_ValueChange_A:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, EnumList_ValueChange_B
@@ -10387,7 +10410,7 @@ EnumList_Paint:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, EnumList_Paint_DrawEntry
@@ -10426,7 +10449,7 @@ EnumList_Return:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, TitleProc_ToggleFlag
@@ -10454,7 +10477,7 @@ EnumList_OK:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, TitleProc_ToggleFlag
@@ -10485,7 +10508,7 @@ EnumList_OK_Next:
 
 	ld xbc, 0x16
 
-	call	16712319
+	call	InitializeKubo_Helper
 
 	add xhl, (xsp + 4)
 
@@ -10495,7 +10518,7 @@ EnumList_OK_Next:
 
 	extz xhl
 
-	jrl	425
+	jrl	TitleFunc_Epilogue34
 
 
 
@@ -10600,7 +10623,7 @@ EnumList_HitTest_Match:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	ld XWA,(XHL)
 	ld XBC,XIZ
@@ -10634,7 +10657,7 @@ EnumList_HitTest_NoMatch:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call 0xff027f
+	call InitializeKubo_Helper
 	add XHL,(XSP+0x04)
 	ld XWA,(XHL)
 	ld XBC,XIZ
@@ -11002,7 +11025,7 @@ Viewable_SetName:
 	ld (XSP+0x04),XIX
 	ld XWA,(XSP+0x10)
 	push XWA
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	ld (XSP+0x0c),HL
 	ld WA,(XSP+0x0e)
 	extz XWA
@@ -11010,16 +11033,16 @@ Viewable_SetName:
 	add XWA,(XSP+0x08)
 	ld XWA,(XWA)
 	push XWA
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	inc 0,XSP
 	cp HL,(XSP+0x08)
 	jr nc, Viewable_SetName_Copy
 	ld XWA,(XSP+0x10)
 	push XWA
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	inc 1,HL
 	pushw hl
-	call 0xff06a3
+	call SLIDE_Decompress_4K_Init_Helper2
 	inc 6,XSP
 	ld WA,(XSP+0x0a)
 	extz XWA
@@ -11043,11 +11066,11 @@ Viewable_SetName_Copy:
 
 	push xwa
 
-	call	16713584
+	call	Free_Compare2
 
 	inc 8, xsp
 
-	jrl	-192
+	jrl	Viewable_ReturnZero
 
 
 
@@ -12245,37 +12268,37 @@ pBoolProc:
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
 	cp	xiz, 31457292
-	jrl	z, 239
+	jrl	z, BoxStyle7_Execute
 	cp	xiz, 31457291
-	jrl	z, 192
+	jrl	z, BoxStyle7_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
 	cp	xiz, 31457289
-	jr	z, 110
+	jr	z, BoxStyle7_CalcWidth
 	cp	xiz, 31457290
-	jr	z, 56
+	jr	z, BoxStyle7_Setup
 	cp	xiz, 31457288
-	jrl	nz, 174
+	jrl	nz, BoxStyle7_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
-	calr	11952
+	calr	IDCountHelper
 	ld	(xsp+4), xhl
 	ld	xbc, (xsp+264)
 	ld	xwa, (xbc)
 	ld	bc, (xbc+8)
-	calr	11936
+	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	wa, (xwa)
 	ld	(xhl), wa
-	jr	102
+	jr	BoxStyle7_InnerFill
 BoxStyle7_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12313,7 +12336,7 @@ BoxStyle7_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 BoxStyle7_InnerFill:
 	ld xhl, 0:i3
@@ -12366,37 +12389,37 @@ pSwordProc:
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
 	cp	xiz, 31457292
-	jrl	z, 239
+	jrl	z, BoxStyle8_Execute
 	cp	xiz, 31457291
-	jrl	z, 192
+	jrl	z, BoxStyle8_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
 	cp	xiz, 31457289
-	jr	z, 110
+	jr	z, BoxStyle8_CalcWidth
 	cp	xiz, 31457290
-	jr	z, 56
+	jr	z, BoxStyle8_Setup
 	cp	xiz, 31457288
-	jrl	nz, 174
+	jrl	nz, BoxStyle8_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
-	calr	11636
+	calr	IDCountHelper
 	ld	(xsp+4), xhl
 	ld	xbc, (xsp+264)
 	ld	xwa, (xbc)
 	ld	bc, (xbc+8)
-	calr	11620
+	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	wa, (xwa)
 	ld	(xhl), wa
-	jr	102
+	jr	BoxStyle8_InnerFill
 BoxStyle8_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12434,7 +12457,7 @@ BoxStyle8_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 BoxStyle8_InnerFill:
 	ld xhl, 0:i3
@@ -12487,37 +12510,37 @@ pUwordProc:
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
 	cp	xiz, 31457292
-	jrl	z, 239
+	jrl	z, BoxStyle9_Execute
 	cp	xiz, 31457291
-	jrl	z, 192
+	jrl	z, BoxStyle9_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
 	cp	xiz, 31457289
-	jr	z, 110
+	jr	z, BoxStyle9_CalcWidth
 	cp	xiz, 31457290
-	jr	z, 56
+	jr	z, BoxStyle9_Setup
 	cp	xiz, 31457288
-	jrl	nz, 174
+	jrl	nz, BoxStyle9_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
-	calr	11320
+	calr	IDCountHelper
 	ld	(xsp+4), xhl
 	ld	xbc, (xsp+264)
 	ld	xwa, (xbc)
 	ld	bc, (xbc+8)
-	calr	11304
+	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	wa, (xwa)
 	ld	(xhl), wa
-	jr	102
+	jr	BoxStyle9_InnerFill
 BoxStyle9_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12555,7 +12578,7 @@ BoxStyle9_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 BoxStyle9_InnerFill:
 	ld xhl, 0:i3
@@ -12608,37 +12631,37 @@ pScharProc:
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
 	cp	xiz, 31457292
-	jrl	z, 241
+	jrl	z, BoxStyle10_Execute
 	cp	xiz, 31457291
-	jrl	z, 192
+	jrl	z, BoxStyle10_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
 	cp	xiz, 31457289
-	jr	z, 110
+	jr	z, BoxStyle10_CalcWidth
 	cp	xiz, 31457290
-	jr	z, 56
+	jr	z, BoxStyle10_Setup
 	cp	xiz, 31457288
-	jrl	nz, 176
+	jrl	nz, BoxStyle10_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
-	calr	11004
+	calr	IDCountHelper
 	ld	(xsp+4), xhl
 	ld	xbc, (xsp+264)
 	ld	xwa, (xbc)
 	ld	bc, (xbc+8)
-	calr	10988
+	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	a, (xwa)
 	ld	(xhl), a
-	jr	102
+	jr	BoxStyle10_InnerFill
 BoxStyle10_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12676,7 +12699,7 @@ BoxStyle10_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 BoxStyle10_InnerFill:
 	ld xhl, 0:i3
@@ -12730,37 +12753,37 @@ pUcharProc:
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
 	cp	xiz, 31457292
-	jrl	z, 239
+	jrl	z, BoxStyle11_Execute
 	cp	xiz, 31457291
-	jrl	z, 192
+	jrl	z, BoxStyle11_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
 	cp	xiz, 31457289
-	jr	z, 110
+	jr	z, BoxStyle11_CalcWidth
 	cp	xiz, 31457290
-	jr	z, 56
+	jr	z, BoxStyle11_Setup
 	cp	xiz, 31457288
-	jrl	nz, 174
+	jrl	nz, BoxStyle11_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
-	calr	10686
+	calr	IDCountHelper
 	ld	(xsp+4), xhl
 	ld	xbc, (xsp+264)
 	ld	xwa, (xbc)
 	ld	bc, (xbc+8)
-	calr	10670
+	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	a, (xwa)
 	ld	(xhl), a
-	jr	102
+	jr	BoxStyle11_InnerFill
 BoxStyle11_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12798,7 +12821,7 @@ BoxStyle11_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 BoxStyle11_InnerFill:
 	ld xhl, 0:i3
@@ -12851,37 +12874,37 @@ pSlongProc:
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
 	cp	xiz, 31457292
-	jrl	z, 237
+	jrl	z, BoxStyle12_Execute
 	cp	xiz, 31457291
-	jrl	z, 192
+	jrl	z, BoxStyle12_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
 	cp	xiz, 31457289
-	jr	z, 110
+	jr	z, BoxStyle12_CalcWidth
 	cp	xiz, 31457290
-	jr	z, 56
+	jr	z, BoxStyle12_Setup
 	cp	xiz, 31457288
-	jrl	nz, 172
+	jrl	nz, BoxStyle12_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
-	calr	10370
+	calr	IDCountHelper
 	ld	(xsp+4), xhl
 	ld	xbc, (xsp+264)
 	ld	xwa, (xbc)
 	ld	bc, (xbc+8)
-	calr	10354
+	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	xwa, (xwa)
 	ld	(xhl), xwa
-	jr	102
+	jr	BoxStyle12_InnerFill
 BoxStyle12_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -12919,7 +12942,7 @@ BoxStyle12_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 BoxStyle12_InnerFill:
 	ld xhl, 0:i3
@@ -12971,37 +12994,37 @@ pUlongProc:
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
 	cp	xiz, 31457292
-	jrl	z, 243
+	jrl	z, BoxStyle13_Execute
 	cp	xiz, 31457291
-	jrl	z, 198
+	jrl	z, BoxStyle13_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	cp	xiz, 31457289
-	jr	z, 113
+	jr	z, BoxStyle13_CalcWidth
 	lda	xde, (xwa+8)
 	cp	xiz, 31457290
-	jr	z, 56
+	jr	z, BoxStyle13_Setup
 	cp	xiz, 31457288
-	jrl	nz, 178
+	jrl	nz, BoxStyle13_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
-	calr	10056
+	calr	IDCountHelper
 	ld	(xsp+4), xhl
 	ld	xbc, (xsp+264)
 	ld	xwa, (xbc)
 	ld	bc, (xbc+8)
-	calr	10040
+	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	xwa, (xwa)
 	ld	(xhl), xwa
-	jr	108
+	jr	BoxStyle13_InnerFill
 BoxStyle13_Setup:
 	ld xiz, (xbc)
 	ld (xsp + 4), xiz
@@ -13040,7 +13063,7 @@ BoxStyle13_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
 BoxStyle13_InnerFill:
 	ld xhl, 0:i3
@@ -13098,13 +13121,13 @@ EdgeDraw_TopLeft:
 	push	xiz
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	ix, 0:i3
 	ld	iy, 0:i3
 	lda	xhl, (xsp+4)
 	ld	xde, 0:i3
-	jr	51
+	jr	EdgeDraw_TopLeft_Return
 EdgeDraw_TopLeft_Inner:
 	cp c, 0x50
 	jr nz, EdgeDraw_TopLeft_Done
@@ -13177,25 +13200,25 @@ EdgeDraw_TopRight_Inner:
 	pushw	43632
 	ld	xwa, (xsp+268)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
-	jr	45
+	jr	EdgeDraw_BottomLeft
 EdgeDraw_TopRight_Done:
 	pushw	234
 	pushw	43638
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+272)
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xwa, (xsp+24)
 	push	xwa
 	ld	xwa, (xsp+284)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	lda	xsp, (xsp+24)
 EdgeDraw_BottomLeft:
 	ld xhl, 0:i3
@@ -13270,7 +13293,7 @@ EdgeDraw_BottomRight:
 	pushw	43640
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
 EdgeDraw_BottomRight_Inner:
 	ld xhl, 0:i3
@@ -13344,9 +13367,9 @@ TabDraw_TopEdge:
 	pushw	43646
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
-	jr	60
+	jr	TabDraw_TopEdge_Execute
 TabDraw_TopEdge_Inner:
 	ld xwa, (xsp + 8)
 	calr IDCursorAdvance
@@ -13365,7 +13388,7 @@ TabDraw_TopEdge_CalcWidth:
 TabDraw_TopEdge_CalcHeight:
 	ld xwa, (xsp + 8)
 
-	calr	9306
+	calr	IDCursorAdvance
 
 	lda xbc, (xhl - 4)
 
@@ -13447,18 +13470,18 @@ EdgeVariant_A_Setup:
 	pushw	43654
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
 	ld	xhl, 1:i3
-	jr	127
+	jr	POINTWProc_Return
 EdgeVariant_A_CalcWidth:
 	pushw	234
 	pushw	43662
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
-	jr	60
+	jr	EdgeVariant_A_Done
 EdgeVariant_A_CalcHeight:
 	ld xwa, (xsp + 8)
 	calr IDCursorAdvance
@@ -13477,7 +13500,7 @@ EdgeVariant_A_CalcHeight2:
 EdgeVariant_A_Execute:
 	ld xwa, (xsp + 8)
 
-	calr	9091
+	calr	IDCursorAdvance
 
 	lda xbc, (xhl - 4)
 
@@ -13548,13 +13571,13 @@ EdgeVariant_B_CalcWidth:
 	push	xwa
 	lda	xwa, (xsp+6)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	iy, 0:i3
 	ld	iz, 0:i3
 	lda	xix, (xsp+2)
 	ld	xbc, 0:i3
-	jr	32
+	jr	EdgeVariant_B_Return
 EdgeVariant_B_CalcHeight:
 	cp a, 0x55
 	jr nz, EdgeVariant_B_Done
@@ -13618,25 +13641,25 @@ EdgeVariant_C_CalcWidth:
 	pushw	43664
 	ld	xwa, (xsp+264)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
-	jr	45
+	jr	EdgeVariant_C_CheckInner
 EdgeVariant_C_CalcHeight:
 	pushw	234
 	pushw	43668
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+268)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xwa, (xsp+20)
 	push	xwa
 	ld	xwa, (xsp+280)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	lda	xsp, (xsp+24)
 EdgeVariant_C_CheckInner:
 	ld xhl, 0:i3
@@ -13704,16 +13727,16 @@ ShadowBox_A_Setup:
 	pushw	43670
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
 	ld	xhl, 1:i3
-	jr	81
+	jr	IDCursorProc_Return
 ShadowBox_A_CalcWidth:
 	pushw	234
 	pushw	43674
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
 ShadowBox_A_CheckInner:
 	ld xhl, 0:i3
@@ -13838,18 +13861,18 @@ ShadowBox_B_Prologue:
 	pushw	43676
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+4376)
 	push	xwa
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+16)
 	push	xwa
 	ld	xwa, (xsp+4372)
 	push	xwa
-	jr	35
+	jr	ShadowBox_B_InnerFill
 ShadowBox_B_CalcWidth:
 	ld XIZ, (xsp + 0x1110)
 	ld XWA, (xsp + 0x1110)
@@ -13867,10 +13890,10 @@ ShadowBox_B_CheckInner:
 	push xwa
 
 ShadowBox_B_InnerFill:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jrl	148
+	jrl	ViewFlagProc_Return
 ShadowBox_B_CalcHeight:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
@@ -13890,12 +13913,12 @@ ShadowBox_B_Execute:
 	ld	xwa, (xbc)
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16400597
+	call	ClassProc
 	push	xhl
 	call	16713560
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 25
+	jr	nz, ShadowBox_C_Setup
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
 	lda	xbc, (xsp+272)
@@ -13904,7 +13927,7 @@ ShadowBox_B_Execute:
 	ld	(xiz+4), xwa
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	20
+	jr	ShadowBox_C_CalcHeight
 ShadowBox_C_Setup:
 	ld xwa, 1:i3
 	add (xsp + 8), xwa
@@ -14600,20 +14623,20 @@ ScrollBar_Setup:
 	ld	xwa, (xde)
 	ld	xbc, (xsp+314)
 	ld	bc, (xbc+8)
-	calr	6585
+	calr	IDCountHelper
 	ld	(xsp+6), xhl
 	ld	xbc, (xsp+314)
 	ld	xwa, (xbc)
 	ld	bc, (xbc+8)
-	calr	6569
+	calr	IDCountHelper
 	ld	(xsp+10), xhl
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	1, hl
 	pushw	hl
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	6, xsp
 	ld	xwa, (xsp+10)
 	ld	(xwa), xhl
@@ -14621,29 +14644,29 @@ ScrollBar_Setup:
 	ld	xwa, (xwa)
 	push	xwa
 	ld	xwa, (xsp+14)
-	jrl	151
+	jrl	ScrollBar_ReturnAlt
 ScrollBar_CalcRange:
 	pushw	234
 	pushw	43680
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+322)
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	pushw	234
 	pushw	43682
 	lda	xwa, (xsp+34)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+24)
 	lda	xwa, (xsp+14)
 	push	xwa
 	ld	xwa, (xsp+318)
 	push	xwa
-	jr	97
+	jr	ScrollBar_ReturnAlt2
 ScrollBar_CalcThumb:
 	ld XWA, (xsp + 0x013a)
 	calr IDCursorAdvance
@@ -14663,19 +14686,19 @@ ScrollBar_Draw:
 	ld XIZ,(XWA)
 	ld XWA,(XSP+0x04)
 	push XWA
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	ld (XSP+0x10),HL
 	push XIZ
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	inc 0,XSP
 	cp HL,(XSP+0x0c)
 	jr nc, ScrollBar_ReturnZero
 	ld XWA,(XSP+0x04)
 	push XWA
-	call 0xff07c3
+	call LyricsTrack_ReadAndParse_Helper2
 	inc 1,HL
 	pushw hl
-	call 0xff06a3
+	call SLIDE_Decompress_4K_Init_Helper2
 	inc 6,XSP
 	ld XWA,(XSP+0x08)
 	ld (XWA),XHL
@@ -14689,7 +14712,7 @@ ScrollBar_ReturnAlt:
 	push xwa
 
 ScrollBar_ReturnAlt2:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
 ScrollBar_Return:
@@ -14732,18 +14755,18 @@ SliderH_Prologue:
 	pushw	43684
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+272)
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+8)
 	push	xwa
 	ld	xwa, (xsp+268)
 	push	xwa
-	jr	41
+	jr	SliderH_CalcThumb_Clamp
 SliderH_CalcRange:
 	ld XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
@@ -14763,10 +14786,10 @@ SliderH_CalcThumb:
 	push xwa
 
 SliderH_CalcThumb_Clamp:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jr	93
+	jr	SliderH_ReturnAlt5
 SliderH_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
@@ -14854,18 +14877,18 @@ SliderV_Prologue:
 	pushw	43688
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+272)
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+8)
 	push	xwa
 	ld	xwa, (xsp+268)
 	push	xwa
-	jr	41
+	jr	SliderV_CalcThumb_Clamp
 SliderV_CalcRange:
 	ld XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
@@ -14885,10 +14908,10 @@ SliderV_CalcThumb:
 	push xwa
 
 SliderV_CalcThumb_Clamp:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jr	93
+	jr	BitmapIDProc_Return
 SliderV_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
@@ -14975,18 +14998,18 @@ DrawHelper_A_Prologue:
 	pushw	43696
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+272)
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+8)
 	push	xwa
 	ld	xwa, (xsp+268)
 	push	xwa
-	jr	41
+	jr	DrawHelper_A_ClampThumb
 DrawHelper_A_CalcRange:
 	ld XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
@@ -15006,10 +15029,10 @@ DrawHelper_A_CalcThumb:
 	push xwa
 
 DrawHelper_A_ClampThumb:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jr	93
+	jr	ApFuncIDProc_Return
 DrawHelper_A_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
@@ -15145,18 +15168,18 @@ DrawHelper_B_FinishAlt:
 	pushw	43700
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+4380)
 	push	xwa
 	lda	xwa, (xsp+32)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+20)
 	push	xwa
 	ld	xwa, (xsp+4376)
 	push	xwa
-	jr	44
+	jr	DrawHelper_C_CalcThumb
 DrawHelper_C_Setup:
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
@@ -15177,10 +15200,10 @@ DrawHelper_C_CalcRange:
 	push xwa
 
 DrawHelper_C_CalcThumb:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jrl	168
+	jrl	MainFuncIDProc_Return
 DrawHelper_C_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 8), xwa
@@ -15200,7 +15223,7 @@ DrawHelper_C_ReturnZero:
 	ld	xwa, (xbc)
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16401759
+	call	ApFunctionProc
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -15208,7 +15231,7 @@ DrawHelper_C_ReturnZero:
 	call	16713560
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 28
+	jr	nz, DrawHelper_C_ReturnAlt
 	ld	xwa, (xsp+12)
 	sll	xwa, 2
 	lda	xbc, (xsp+276)
@@ -15218,7 +15241,7 @@ DrawHelper_C_ReturnZero:
 	ld	(xwa+4), xbc
 	ld	xwa, 0:i3
 	ld	(xsp+8), xwa
-	jr	20
+	jr	DrawHelper_C_ReturnAlt3
 DrawHelper_C_ReturnAlt:
 	ld xwa, 1:i3
 	add (xsp + 12), xwa
@@ -15338,18 +15361,18 @@ DrawHelper_D_FinishAlt:
 	pushw	43704
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+4380)
 	push	xwa
 	lda	xwa, (xsp+32)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+20)
 	push	xwa
 	ld	xwa, (xsp+4376)
 	push	xwa
-	jr	44
+	jr	DrawHelper_E_CalcThumb
 DrawHelper_E_Setup:
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
@@ -15370,10 +15393,10 @@ DrawHelper_E_CalcRange:
 	push xwa
 
 DrawHelper_E_CalcThumb:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jrl	168
+	jrl	ViewIDProc_Return
 DrawHelper_E_DrawTrack:
 	ld xwa, 0xffffffff
 	ld (xsp + 8), xwa
@@ -15393,7 +15416,7 @@ DrawHelper_E_ReturnZero:
 	ld	xwa, (xbc)
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16401931
+	call	MainFunctionProc
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -15401,7 +15424,7 @@ DrawHelper_E_ReturnZero:
 	call	16713560
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 28
+	jr	nz, DrawHelper_E_ReturnAlt
 	ld	xwa, (xsp+12)
 	sll	xwa, 2
 	lda	xbc, (xsp+276)
@@ -15411,7 +15434,7 @@ DrawHelper_E_ReturnZero:
 	ld	(xwa+4), xbc
 	ld	xwa, 0:i3
 	ld	(xsp+8), xwa
-	jr	20
+	jr	DrawHelper_E_ReturnAlt3
 DrawHelper_E_ReturnAlt:
 	ld xwa, 1:i3
 	add (xsp + 12), xwa
@@ -15538,7 +15561,7 @@ ViewID_Select_NoName:
 	add	xwa, 27262976
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xde, (xsp+4)
 	ld	xwa, (xde+8)
 	sll	xwa, 2
@@ -15552,9 +15575,9 @@ ViewID_Select_NoName:
 	pushw	43722
 	ld	xwa, (xde+4)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
-	jrl	231
+	jrl	ViewID_ReturnZero
 ViewID_EnumCount:
 	ld xhl, (xsp + 16)
 	inc 1, xhl
@@ -15565,30 +15588,30 @@ ViewID_GetInfoStr:
 	pushw	43730
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	ld	xwa, (xsp+4380)
 	push	xwa
 	lda	xwa, (xsp+32)
 	push	xwa
-	call	16713188
+	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+20)
 	push	xwa
 	ld	xwa, (xsp+4376)
 	push	xwa
-	jrl	173
+	jrl	ViewID_StrCpy
 ViewID_GetCurrent:
 	ld	xwa, (xsp+4372)
 	ld	(xsp+4), xwa
 	ld	xwa, (xsp+4372)
-	calr	4202
+	calr	IDCursorAdvance
 	ld	bc, (xhl)
 	exts	xbc
 	ld	xde, (xsp+4)
 	ld	(xde), xbc
 	ld	xwa, (xde)
 	cp	xwa, 4294967295
-	jr	z, 125
+	jr	z, ViewID_GetCurrent_None
 	ld	xwa, (xde+8)
 	srl	xwa, 0
 	and	xwa, 4095
@@ -15599,18 +15622,18 @@ ViewID_GetCurrent:
 	ld	xwa, xbc
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16405896
+	call	ViewableProc
 	.byte 0x83, 0x3f, 0x00
-	jr	z, 23
+	jr	z, ViewID_GetCurrent_NoName
 	push	xhl
 	pushw 234
 	pushw 43738
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	jr	82
+	jr	ViewID_ReturnZero
 ViewID_GetCurrent_NoName:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+8)
@@ -15620,7 +15643,7 @@ ViewID_GetCurrent_NoName:
 	add	xwa, 27262976
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xbc, (xsp+4)
 	ld	xwa, (xbc)
 	ld	qwa, 0
@@ -15630,9 +15653,9 @@ ViewID_GetCurrent_NoName:
 	pushw	43744
 	ld	xwa, (xbc+4)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
-	jr	19
+	jr	ViewID_ReturnZero
 ViewID_GetCurrent_None:
 	pushw 0xea
 	pushw 0xaae8
@@ -15641,7 +15664,7 @@ ViewID_GetCurrent_None:
 	push xwa
 
 ViewID_StrCpy:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 ViewID_ReturnZero:
 	ld xhl, 0:i3
@@ -15666,7 +15689,7 @@ ViewID_EnumOpen_ScanLoop:
 	ld	xwa, (xbc)
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16405896
+	call	ViewableProc
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -15674,7 +15697,7 @@ ViewID_EnumOpen_ScanLoop:
 	call	16713560
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 28
+	jr	nz, ViewID_EnumOpen_ScanNext
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
 	lda	xbc, (xsp+276)
@@ -15684,7 +15707,7 @@ ViewID_EnumOpen_ScanLoop:
 	ld	(xwa+4), xbc
 	ld	xwa, 0:i3
 	ld	(xsp+12), xwa
-	jr	20
+	jr	ViewID_EnumOpen_Store
 ViewID_EnumOpen_ScanNext:
 	ld xwa, 1:i3
 	add (xsp + 8), xwa
@@ -15813,7 +15836,7 @@ ScreenID_EventSwitch:
 	ld XWA,(XSP+0x08)
 	ld XWA,(XWA+0x04)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	inc 0,XSP
 	jrl t, ScreenID_ReturnZero
 ScreenID_Select_Lookup:
@@ -15841,7 +15864,7 @@ ScreenID_Select_NoName:
 	add	xwa, 27262976
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xde, (xsp+4)
 	ld	xwa, (xde+8)
 	sll	xwa, 2
@@ -15855,9 +15878,9 @@ ScreenID_Select_NoName:
 	pushw	43774
 	ld	xwa, (xde+4)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
-	jrl	165
+	jrl	ScreenID_ReturnZero
 ScreenID_EnumCount:
 	ld xhl, (xsp + 16)
 	inc 1, xhl
@@ -15887,7 +15910,7 @@ ScreenID_GetCurrent:
 	ld XWA,(XSP+0x0c)
 	ld XWA,(XWA+0x04)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	jr t, ScreenID_ReturnZero
 ScreenID_GetCurrent_NoName:
@@ -15899,7 +15922,7 @@ ScreenID_GetCurrent_NoName:
 	add	xwa, 27262976
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xbc, (xsp+4)
 	ld	xwa, (xbc)
 	ld	qwa, 0
@@ -15909,16 +15932,16 @@ ScreenID_GetCurrent_NoName:
 	pushw	43788
 	ld	xwa, (xbc+4)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
-	jr	19
+	jr	ScreenID_ReturnZero
 ScreenID_GetCurrent_None:
 	pushw	234
 	pushw	43796
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 ScreenID_ReturnZero:
 	ld xhl, 0:i3
@@ -15958,7 +15981,7 @@ ScreenID_EnumOpen_ScanNoName:
 	add	xwa, 27262976
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
 	lda	xbc, (xsp+276)
@@ -15971,7 +15994,7 @@ ScreenID_EnumOpen_ScanNoName:
 	pushw	43810
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
 ScreenID_EnumOpen_Compare:
 	ld	xwa, (xsp+4)
@@ -16140,7 +16163,7 @@ WindowID_EventSwitch:
 	ld XWA,(XSP+0x08)
 	ld XWA,(XWA+0x04)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	inc 0,XSP
 	jrl t, WindowID_ReturnZero
 WindowID_Select_Lookup:
@@ -16168,7 +16191,7 @@ WindowID_Select_NoName:
 	add	xwa, 27262976
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xde, (xsp+4)
 	ld	xwa, (xde+8)
 	sll	xwa, 2
@@ -16182,9 +16205,9 @@ WindowID_Select_NoName:
 	pushw	43840
 	ld	xwa, (xde+4)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
-	jrl	165
+	jrl	WindowID_ReturnZero
 WindowID_EnumCount:
 	ld xhl, (xsp + 16)
 	inc 1, xhl
@@ -16214,7 +16237,7 @@ WindowID_GetCurrent:
 	ld XWA,(XSP+0x0c)
 	ld XWA,(XWA+0x04)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
 	jr t, WindowID_ReturnZero
 WindowID_GetCurrent_NoName:
@@ -16226,7 +16249,7 @@ WindowID_GetCurrent_NoName:
 	add	xwa, 27262976
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xbc, (xsp+4)
 	ld	xwa, (xbc)
 	ld	qwa, 0
@@ -16236,16 +16259,16 @@ WindowID_GetCurrent_NoName:
 	pushw	43854
 	ld	xwa, (xbc+4)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
-	jr	19
+	jr	WindowID_ReturnZero
 WindowID_GetCurrent_None:
 	pushw	234
 	pushw	43862
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 WindowID_ReturnZero:
 	ld xhl, 0:i3
@@ -16285,7 +16308,7 @@ WindowID_EnumOpen_ScanNoName:
 	add	xwa, 27262976
 	ld	xbc, 31457301
 	ld	xde, 0:i3
-	call	16421459
+	call	SendEvent
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
 	lda	xbc, (xsp+276)
@@ -16298,7 +16321,7 @@ WindowID_EnumOpen_ScanNoName:
 	pushw	43876
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
 WindowID_EnumOpen_Compare:
 	ld	xwa, (xsp+4)
@@ -16486,9 +16509,9 @@ ModeID_GetCurrent_SendAudio:
 	push	xwa
 	ld	xwa, (xiz+4)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	jr	72
+	jr	ModeID_ReturnZero
 ModeID_GetNext:
 	ld XIZ,(XSP+0x1110)
 	ld XWA,(XSP+0x1110)
@@ -16509,7 +16532,7 @@ ModeID_GetNext:
 	pushw 0xab90
 	ld XWA,(XWA)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0a)
 	jr t, ModeID_ReturnZero
 ModeID_GetNext_HasName:
@@ -16518,7 +16541,7 @@ ModeID_GetNext_HasName:
 	push xwa
 
 ModeID_Strcpy:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 ModeID_ReturnZero:
 	ld xhl, 0:i3
@@ -16698,9 +16721,9 @@ TitleID_GetCurrent_SendAudio:
 	push	xwa
 	ld	xwa, (xiz+4)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	jr	72
+	jr	TitleID_ReturnZero
 TitleID_GetNext:
 	ld XIZ,(XSP+0x1110)
 	ld XWA,(XSP+0x1110)
@@ -16721,7 +16744,7 @@ TitleID_GetNext:
 	pushw 0xabbc
 	ld XWA,(XWA)
 	push XWA
-	call 0xff0295
+	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0a)
 	jr t, TitleID_ReturnZero
 TitleID_GetNext_HasName:
@@ -16730,7 +16753,7 @@ TitleID_GetNext_HasName:
 	push xwa
 
 TitleID_Strcpy:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 TitleID_ReturnZero:
 	ld xhl, 0:i3
@@ -16854,7 +16877,7 @@ NameProc_ReturnZero:
 	push xwa
 
 NameProc_DefaultForward:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 NameProc_Return:
 	ld xhl, 0:i3
@@ -16913,9 +16936,9 @@ ConstFlagProc_SetValue_Check:
 	push xwa
 
 ConstFlagProc_SetValue_Store:
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	33
+	jr	ConstFlagProc_Default_Forward
 ConstFlagProc_Default:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 8)
@@ -17012,23 +17035,24 @@ CommonIDProc_JumpTable:
 	add	xbc, (xwa+8)
 	ld	xwa, (xbc)
 	push	xwa
-	jr	24
+	jr	CommonIDProc_Join
 	ld	hl, (xbc)
 	extz	xhl
-	jrl	278
+	jrl	CommonIDProc_Epilogue
 CommonIDProc_CheckAvail:
 	ld	xhl, 1:i3
-	jrl	273
+	jrl	CommonIDProc_Epilogue
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
 	pushw 234
 	pushw 44002
+CommonIDProc_Join:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	88
+	jr	CommonIDProc_ReturnZero
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
 	pushw 10
@@ -17037,28 +17061,28 @@ CommonIDProc_CheckAvail:
 	push	xwa
 	ld	xwa, (xbc)
 	push	xwa
-	call	16713697
+	call	CommonIDProc_Helper
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+12)
 	.byte 0x98, 0x04, 0x3f, 0x00, 0x00
-	jr	z, 52
+	jr	z, CommonIDProc_ReturnZero
 	ld	iz, 0:i3
 	ld	xbc, (xwa+8)
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	xde, 0:i3
-	jr	27
+	jr	CommonIDProc_SearchLoop_Check
 CommonIDProc_SearchLoop_Compare:
 	.byte 0xab, 0x04, 0xf0
-	jr	nz, 18
+	jr	nz, CommonIDProc_SearchLoop_Next
 	ld	xwa, (xhl)
 	push	xwa
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
-	jr	15
+	jr	CommonIDProc_ReturnZero
 CommonIDProc_SearchLoop_Next:
 	inc 1, iz
 	inc 8, xde
@@ -17769,7 +17793,7 @@ DeleteSpecEvent_Epilogue:
 	ld xbc, (xsp + 16)			; restore event code
 	ld xde, (xsp + 2)			; load modified event param
 MainSendEvent_Prologue:
-	calr	744
+	calr	ApPostEvent
 	pop qiz					; restore QIZ
 	lda xsp, (xsp + 22)			; deallocate stack frame
 	ret
@@ -18200,20 +18224,20 @@ ApDeliveryEvent_ScanLoop:
 	ld wa, 4:i3
 
 ApDeliveryEvent_Deliver:
-	call	15670909
+	call	TaskSched_WaitForEvent
 	ld	wa, (191542:24)
 	ld	de, wa
 	inc	1, de
 	ld	bc, (191540:24)
 	cp	de, bc
-	jr	z, -45
+	jr	z, ApDeliveryEvent_ScanLoop
 	sub	wa, 1023
 	cp	wa, bc
-	jr	z, -53
+	jr	z, ApDeliveryEvent_ScanLoop
 	cp	xiz, 4294967295
-	jr	z, 44
+	jr	z, ApDeliveryEvent_ReturnZero
 	pushw	12
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+4), xhl
 	ld	(xhl), xiz
@@ -18225,7 +18249,7 @@ ApDeliveryEvent_Deliver:
 	ld	xwa, 29360183
 	ld	(xsp+12), xwa
 	ld	(xsp+8), xhl
-	jr	5
+	jr	ApDeliveryEvent_Return
 ApDeliveryEvent_ReturnZero:
 	ld xwa, 0:i3
 	ld (xsp + 4), xwa
@@ -18926,11 +18950,12 @@ DrawFunc_StackHandler:
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)
 	or	xwa, xwa
-	jr	z, 7
+	jr	z, DrawFunc_Return_Epilogue
 	push	xiz
 	ld	xhl, (xiz+4)
 	call	(xhl)
 	pop	xiz
+DrawFunc_Return_Epilogue:
 	pop	xiz
 	ret
 	ret
@@ -18938,6 +18963,7 @@ DrawFunc_StackHandler:
 DrawFunc_StackEntry:
 	ld xwa, (xsp + 4)
 	jr DrawFunc
+DrawFunc_StackEntry_Join:
 	push xiz
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
@@ -18968,15 +18994,16 @@ DrawFunc_XspCheck:
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)
 	or	xwa, xwa
-	jr	z, 7
+	jr	z, DrawFunc_StackEntry_Epilogue
 	push	xiz
 	ld	xhl, (xiz+4)
 	call	(xhl)
 	pop	xiz
+DrawFunc_StackEntry_Epilogue:
 	pop	xiz
 	ret
 	ld	xwa, (xsp+4)
-	jr	-65
+	jr	DrawFunc_StackEntry_Join
 
 
 IS_XSP_INSIDE_4K_REGION_AT_1C032:
@@ -19126,7 +19153,7 @@ UpdateScreen_Prologue:
 	ret
 
 UpdateScreen_CheckDirty:
-	calr	15
+	calr	Gfx_BlitDirtyRegions
 	ld	wa, (197712:24)
 	cp	wa, 0:i3
 	ret	nz

@@ -66,20 +66,20 @@ FDTest_OpenFailed:
 
 FDTest_AllocBuffer:
 	pushw	2048
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+4), xhl
 	ld	xwa, xhl
 	or	xwa, xwa
-	jr	nz, 24
+	jr	nz, FDTest_FillBuffer
 	lda	xwa, (14810738:24)
-	calr	64885
+	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ldw	hl, 65535
-	jrl	357
+	jrl	FDTest_Return
 FDTest_FillBuffer:
 	ld xwa, (xsp + 4)
 	ld bc, 0:i3
@@ -97,44 +97,44 @@ FDTest_OpenForWrite:
 	push	xwa
 	lda	xwa, (14810694:24)
 	push	xwa
-	call	16050067
+	call	FileOpen
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	nz, 24
+	jr	nz, FDTest_WriteBuffer
 	lda	xwa, (14810762:24)
-	calr	64815
+	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ldw	hl, 65535
-	jrl	287
+	jrl	FDTest_Return
 FDTest_WriteBuffer:
 	lda	xwa, (14810786:24)
-	calr	64791
+	calr	FDTest_PrintDiag
 	push	xiz
 	pushw	2048
 	pushw	1
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16050869
+	call	FileWrite
 	lda	xsp, (xsp+12)
 	cp	hl, 2048
-	jr	z, 24
+	jr	z, FDTest_CloseAndReopen
 	lda	xwa, (14810802:24)
-	calr	64759
+	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ldw	hl, 65535
-	jrl	231
+	jrl	FDTest_Return
 FDTest_CloseAndReopen:
 	lda	xwa, (14810810:24)
-	calr	64735
+	calr	FDTest_PrintDiag
 	push	xiz
-	call	16051286
+	call	FileClose
 	pushw	2048
 	pushw	0
 	ld	xwa, (xsp+12)
@@ -142,42 +142,42 @@ FDTest_CloseAndReopen:
 	call	16713757
 	lda	xsp, (xsp+12)
 	lda	xwa, (14810814:24)
-	calr	64705
+	calr	FDTest_PrintDiag
 	lda	xwa, (14810828:24)
 	push	xwa
 	lda	xwa, (14810694:24)
 	push	xwa
-	call	16050067
+	call	FileOpen
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	nz, 24
+	jr	nz, FDTest_ReadBack
 	lda	xwa, (14810832:24)
-	calr	64673
+	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ldw	hl, 65535
-	jrl	145
+	jrl	FDTest_Return
 FDTest_ReadBack:
 	push	xiz
 	pushw	2048
 	pushw	1
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16050796
+	call	FileRead
 	lda	xsp, (xsp+12)
 	cp	hl, 2048
-	jr	z, 23
+	jr	z, FDTest_VerifyData
 	lda	xwa, (14810856:24)
-	calr	64625
+	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ldw	hl, 65535
-	jr	98
+	jr	FDTest_Return
 FDTest_VerifyData:
 	lda xwa, (FDTest_String_TestTitleFunc_0x1B2:24)
 	calr FDTest_PrintDiag
@@ -202,24 +202,24 @@ FDTest_CompareNext:
 
 FDTest_CompareResult:
 	lda	xwa, (14810868:24)
-	calr	64559
+	calr	FDTest_PrintDiag
 	cp	iz, 0:i3
-	jr	z, 23
+	jr	z, FDTest_Pass
 	lda	xwa, (14810886:24)
-	calr	64547
+	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ldw	hl, 65535
-	jr	20
+	jr	FDTest_Return
 FDTest_Pass:
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	lda	xwa, (14810902:24)
-	calr	64514
+	calr	FDTest_PrintDiag
 	ld	hl, 0:i3
 FDTest_Return:
 	pop xiz
@@ -351,12 +351,12 @@ HamaListProc:
 	jr HamaList_Return
 
 HamaList_HandleSelect:
-	call	16408153
+	call	GetViewInstance
 	ld	xwa, xiz
 	push	xwa
 	ld	xwa, (xhl+42)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, 0:i3
 HamaList_Return:

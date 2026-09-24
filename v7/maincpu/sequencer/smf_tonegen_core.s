@@ -974,7 +974,7 @@ FloppyIO_ReadMidiEvtBytes_ReadFailed:
 	pop xwa
 	jp FloppyIO_ReadMidiEvtBytes_Exit
 FloppyIO_ReadMidiEvtBytes_Trap:
-	jrl	t, 0xffc3
+	jrl	t, FloppyIO_ReadMidiEvtBytes_Loop
 
 FloppyIO_ReadMidiEvtBytes_DispatchCheck:
 	cpw (3932:16), 0
@@ -2683,15 +2683,15 @@ MidiNoteOn_SetupVoiceA:
 	extz	xiy
 	push	xiy
 	push	xix
-	call	15877661
+	call	SoundGen_CaptureVoiceParams
 	pop	xix
 	ld	a, 144:opc
 	push	xix
-	call	15879109
+	call	SoundGen_UpdateAndRefresh
 	pop	xix
 	pop	xiy
 	cp	(4323:16), 0
-	jrl	nz, 284
+	jrl	nz, VoiceSynth_NullRet2
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
@@ -2699,21 +2699,21 @@ MidiNoteOn_SetupVoiceA:
 	pop	xix
 	srl	xiy, 1
 	push	xiy
-	call	15879185
+	call	SoundGen_ScalePitchByTempo
 	pop	xiy
 	push	xiy
 	push	xix
-	call	15879109
+	call	SoundGen_UpdateAndRefresh
 	pop	xix
 	pop	xiy
 	cp	(4323:16), 0
-	jrl	nz, 244
+	jrl	nz, VoiceSynth_NullRet2
 	cp	(4600:16), 2
-	jr	nz, 108
+	jr	nz, MidiNoteOn_StandardNoteA
 	ld	a, (4011:16)
 	and	a, 15
 	cp	a, 9
-	jrl	nz, 50
+	jrl	nz, MidiNoteOn_NonDrumLookupA
 	push	xix
 	push	xbc
 	push	xde
@@ -2730,12 +2730,12 @@ MidiNoteOn_SetupVoiceA:
 	xor	hl, hl
 	ld	l, (4012:16)
 	pushw	hl
-	call	16704248
+	call	ApplyProgramChangeAs_Block_Code_Sub
 	ld	a, l
 	pop	xde
 	pop	xbc
 	pop	xix
-	jp	15879571
+	jp	Scoop_ApplySoundParams
 MidiNoteOn_NonDrumLookupA:
 	push	xix
 	push	xbc
@@ -2749,13 +2749,13 @@ MidiNoteOn_NonDrumLookupA:
 	ld	xix, 6711
 	ld_rrw	wa, xix, hl
 	ld	c, w
-	call	16704027
+	call	MidiNoteOn_SetupVoiceA_Code_Helper
 	ld	a, (4012:16)
 	add	a, l
 	pop	xde
 	pop	xbc
 	pop	xix
-	jp	15879571
+	jp	Scoop_ApplySoundParams
 MidiNoteOn_StandardNoteA:
 	ld a, (4012:16)
 
@@ -3100,7 +3100,7 @@ MidiPgmChg_Mode2_SetupA:
 	pop XIX
 	call VoiceChannel_StoreVoiceIdx
 	ld XWA,0x00001a57
-	call 0xfee122
+	call MidiPgmChg_Mode0_SetupA_Code_Helper
 	cpw (0x1a5f:16), 0x0009
 	jr z, MidiPgmChg_Mode2_ApplyEnvelopeA
 	ld XHL,0x00001a37
@@ -3322,22 +3322,22 @@ MidiNoteOn_SetupVoiceB:
 	.byte 0xc1, 0x8c, 0x10, 0x3e, 0x01
 	ld	iy, (4237:16)
 	extz	xiy
-	call	15878012
+	call	SoundGen_ClampVoiceIndexMin1
 	and	iy, 15
 	push	xiy
 	push	xix
-	call	15882890
+	call	SoundGen_ReadVoiceRegs
 	pop	xix
 	ld	w, (4011:16)
 	and	w, 15
 	ld	a, 144:opc
 	or	a, w
 	push	xix
-	call	15879109
+	call	SoundGen_UpdateAndRefresh
 	pop	xix
 	pop	xiy
 	cp	(4323:16), 0
-	jrl	nz, 294
+	jrl	nz, VoiceParam_NullRet2
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
@@ -3346,22 +3346,22 @@ MidiNoteOn_SetupVoiceB:
 	srl	xiy, 1
 	push	xiy
 	push	xix
-	call	15879185
+	call	SoundGen_ScalePitchByTempo
 	pop	xix
 	pop	xiy
 	push	xiy
 	push	xix
-	call	15879109
+	call	SoundGen_UpdateAndRefresh
 	pop	xix
 	pop	xiy
 	cp	(4323:16), 0
-	jrl	nz, 252
+	jrl	nz, VoiceParam_NullRet2
 	cp	(4600:16), 2
-	jr	nz, 108
+	jr	nz, MidiNoteOn_StandardNoteB
 	ld	a, (4011:16)
 	and	a, 15
 	cp	a, 9
-	jrl	nz, 50
+	jrl	nz, MidiNoteOn_NonDrumLookupB
 	push	xix
 	push	xbc
 	push	xde
@@ -3378,12 +3378,12 @@ MidiNoteOn_SetupVoiceB:
 	xor	hl, hl
 	ld	l, (4012:16)
 	pushw	hl
-	call	16704248
+	call	ApplyProgramChangeAs_Block_Code_Sub
 	ld	a, l
 	pop	xde
 	pop	xbc
 	pop	xix
-	jp	15881392
+	jp	Scoop_ApplySoundParamsAlt
 MidiNoteOn_NonDrumLookupB:
 	push	xix
 	push	xbc
@@ -3397,13 +3397,13 @@ MidiNoteOn_NonDrumLookupB:
 	ld	xix, 6711
 	ld_rrw	wa, xix, hl
 	ld	c, w
-	call	16704027
+	call	MidiNoteOn_SetupVoiceA_Code_Helper
 	ld	a, (4012:16)
 	add	a, l
 	pop	xde
 	pop	xbc
 	pop	xix
-	jp	15881392
+	jp	Scoop_ApplySoundParamsAlt
 MidiNoteOn_StandardNoteB:
 	ld a, (4012:16)
 
@@ -3760,7 +3760,7 @@ MidiPgmChg_Mode2_SetupB:
 	ld (0x1a5c:16), l
 	call VoiceChannel_StoreVoiceIdx
 	ld XWA,0x00001a57
-	call 0xfee122
+	call MidiPgmChg_Mode0_SetupA_Code_Helper
 	cpw (0x1a5f:16), 0x0009
 	jr z, MidiPgmChg_Mode2_ApplyEnvelopeB
 	ld XHL,0x00001a37
@@ -4660,7 +4660,7 @@ VoiceParam_ByMode_Mode0:
 	ld	h, (6747:16)
 	ld	(xiy+256), l
 	ld	(xiy+1), h
-	jrl	206	; -> 0xF2624C
+	jrl	VoiceParam_ByMode_StoreAndReturn	; -> 0xF2624C
 VoiceParam_ByMode_Mode2:
 	push XIX
 	push XDE
@@ -4683,7 +4683,7 @@ VoiceParam_ByMode_Mode2:
 	push XIY
 	call VoiceChannel_StoreVoiceIdx
 	ld XWA,0x00001a57
-	call 0xfee122
+	call MidiPgmChg_Mode0_SetupA_Code_Helper
 	cpw (0x1a5f:16), 0x0009
 	jr z, VoiceParam_ByMode_Mode2_Apply
 	ld XHL,0x00001a37
@@ -4907,7 +4907,7 @@ VoiceSynth_Algo_MultiPath:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 67
+	jr	nz, VoiceSynth_Algo_MultiPath_Return
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
@@ -4924,7 +4924,7 @@ VoiceSynth_Algo_MultiPath:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 30
+	jr	nz, VoiceSynth_Algo_MultiPath_Return
 	ld	a, (4013:16)
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
@@ -4933,10 +4933,11 @@ VoiceSynth_Algo_MultiPath:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 13
+	jr	nz, VoiceSynth_Algo_MultiPath_Return
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
 	ld	(4323:16), 0
+VoiceSynth_Algo_MultiPath_Return:
 	ret
 VoiceSynth_Algo_Null:
 	ret
@@ -4948,7 +4949,7 @@ VoiceSynth_Algo_ChannelConfig:
 	ld_rrb	l, xix, iy
 	pop	xix
 	cp	l, 255
-	jr	z, 66
+	jr	z, VoiceSynth_Algo_ChannelConfig_Return
 	ld	c, l
 	xor	h, h
 	sla	hl, 2
@@ -4964,17 +4965,20 @@ VoiceSynth_Algo_ChannelConfig:
 	ld_rrb	e, xiy, ix
 	pop	xiy
 	cp	a, e
-	jr	ule, 2
+	jr	ule, VoiceSynth_Algo_ChannelConfig_Skip
 	ld	a, e
+VoiceSynth_Algo_ChannelConfig_Skip:
 	cp	c, 1:i3
-	jr	nz, 8
+	jr	nz, VoiceSynth_Algo_ChannelConfig_Skip2
 	push	xhl
 	push	xiy
-	call	15886684
+	call	VoiceChannel_GetCombinedStatus
 	pop	xiy
 	pop	xhl
+VoiceSynth_Algo_ChannelConfig_Skip2:
 	st_rrb	a, xhl, iy
-	call	15886753
+	call	VoiceChannel_LookupParams
+VoiceSynth_Algo_ChannelConfig_Return:
 	ret
 VoiceSynth_Algo_ConditionalUpdate:
 	; --- Main routine: bit test, store, conditional call (49 bytes) ---
@@ -5010,7 +5014,7 @@ VoiceSynth_Algo_MultiStage:
 	rcf
 	push	xsp
 	nop
-	jrl	nz, 150
+	jrl	nz, VoiceSynth_Algo_MultiStage_Return
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
@@ -5062,7 +5066,7 @@ VoiceSynth_Algo_MultiStage:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 45
+	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	a, (4013:16)
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
@@ -5071,7 +5075,7 @@ VoiceSynth_Algo_MultiStage:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 28
+	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	a, 127:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
@@ -5080,10 +5084,11 @@ VoiceSynth_Algo_MultiStage:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 13
+	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
 	ld	(4323:16), 0
+VoiceSynth_Algo_MultiStage_Return:
 	ret
 VoiceSynth_Algo_PitchModulated:
 	ld	iy, (4011:16)
@@ -5098,7 +5103,7 @@ VoiceSynth_Algo_PitchModulated:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 78
+	jr	nz, VoiceSynth_Algo_PitchModulated_Return
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
@@ -5135,6 +5140,7 @@ VoiceSynth_Algo_PitchModulated:
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
 	ld	(4323:16), 0
+VoiceSynth_Algo_PitchModulated_Return:
 	ret
 VoiceSynth_Algo_DirectStore:
 	ld	iy, (4011:16)
@@ -5163,7 +5169,7 @@ VoiceSynth_Algo_PitchShift:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 67
+	jr	nz, VoiceSynth_Algo_PitchShift_Return
 	sla	iy, 1
 	push	xix
 	ld	xix, 4014
@@ -5180,7 +5186,7 @@ VoiceSynth_Algo_PitchShift:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 30
+	jr	nz, VoiceSynth_Algo_PitchShift_Return
 	push	xiy
 	ld	a, (4013:16)
 	call	SoundGen_UpdateAndRefresh
@@ -5189,10 +5195,11 @@ VoiceSynth_Algo_PitchShift:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 13
+	jr	nz, VoiceSynth_Algo_PitchShift_Return
 	call	ToneGen_SetSustainBit
 	call	SoundGen_WriteVoiceParams
 	ld	(4323:16), 0
+VoiceSynth_Algo_PitchShift_Return:
 	ret
 VoiceParam_ReadUpdate_6:
 	ld	iy, (4011:16)
@@ -5202,7 +5209,7 @@ VoiceParam_ReadUpdate_6:
 	ld_rrb	l, xix, iy
 	pop	xix
 	cp	l, 255
-	jr	z, 66
+	jr	z, VoiceParam_ReadUpdate_6_Return
 	ld	c, l
 	xor	h, h
 	sla	hl, 2
@@ -5218,17 +5225,20 @@ VoiceParam_ReadUpdate_6:
 	ld_rrb	e, xiy, ix
 	pop	xiy
 	cp	a, e
-	jr	ule, 2
+	jr	ule, VoiceParam_ReadUpdate_6_Skip
 	ld	a, e
+VoiceParam_ReadUpdate_6_Skip:
 	cp	c, 1:i3
-	jr	nz, 8
+	jr	nz, VoiceParam_ReadUpdate_6_Skip2
 	push	xhl
 	pushw	iy
 	call	15886684
 	popw	iy
 	pop	xhl
+VoiceParam_ReadUpdate_6_Skip2:
 	st_rrb	a, xhl, iy
 	call	15886753
+VoiceParam_ReadUpdate_6_Return:
 	ret
 VoiceParam_ReadUpdate_7:
 	.byte 0xf1
@@ -5262,7 +5272,7 @@ VoiceParam_ReadUpdate_10:
 	rcf
 	push	xsp
 	nop
-	jrl	nz, 122
+	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	sla	iy, 1
 	push	xix
 	ld	xix, 4014
@@ -5279,7 +5289,7 @@ VoiceParam_ReadUpdate_10:
 	rcf
 	push	xsp
 	nop
-	jrl	nz, 84
+	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, (4011:16)
 	and	a, 15
 	push	xiy
@@ -5289,7 +5299,7 @@ VoiceParam_ReadUpdate_10:
 	rcf
 	push	xsp
 	nop
-	jrl	nz, 63
+	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, 8:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
@@ -5298,7 +5308,7 @@ VoiceParam_ReadUpdate_10:
 	rcf
 	push	xsp
 	nop
-	jrl	nz, 47
+	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, (4013:16)
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
@@ -5307,7 +5317,7 @@ VoiceParam_ReadUpdate_10:
 	rcf
 	push	xsp
 	nop
-	jrl	nz, 29
+	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, 127:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
@@ -5316,10 +5326,11 @@ VoiceParam_ReadUpdate_10:
 	rcf
 	push	xsp
 	nop
-	jrl	nz, 13
+	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	call	ToneGen_SetSustainBit
 	call	SoundGen_WriteVoiceParams
 	ld	(4323:16), 0
+VoiceParam_ReadUpdate_10_Return:
 	ret
 VoiceParam_ReadUpdate_11:
 	ld	iy, (4237:16)
@@ -5337,7 +5348,7 @@ VoiceParam_ReadUpdate_11:
 	rcf
 	push	xsp
 	nop
-	jrl	nz, 80
+	jrl	nz, VoiceParam_ReadUpdate_11_Return
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
@@ -5374,6 +5385,7 @@ VoiceParam_ReadUpdate_11:
 	call	ToneGen_SetSustainBit
 	call	SoundGen_WriteVoiceParams
 	ld	(4323:16), 0
+VoiceParam_ReadUpdate_11_Return:
 	ret
 
 ToneGen_ValidateAndSelectVoice:

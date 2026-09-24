@@ -276,7 +276,7 @@ DrawLine_Impl_SteepLoop:
 DrawLine_Impl_ShallowSetup:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+28)
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	(xsp+16), xhl
 	lda	xwa, (xsp+56)
 	ld	(xsp+40), xwa
@@ -292,7 +292,7 @@ DrawLine_Impl_ShallowSetup:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, 622
+	jrl	lt, DrawLine_Impl_BuildDirtyRect
 DrawLine_Impl_ShallowLoop:
 	ld xix, (xsp + 44)
 	ld wa, (xix)
@@ -432,7 +432,7 @@ DrawLine_Impl_PatternDiagCheck:
 
 	ld xbc, (xsp + 24)
 
-	call	16712319
+	call	InitializeKubo_Helper
 
 	ld (xsp + 12), xhl
 
@@ -506,7 +506,7 @@ DrawLine_Impl_PatternSteepLoop:
 DrawLine_Impl_PatternShallowSetup:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+28)
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	(xsp+16), xhl
 	ld	xwa, (xsp+40)
 	ld	(xsp+32), xwa
@@ -522,7 +522,7 @@ DrawLine_Impl_PatternShallowSetup:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jr	lt, 92
+	jr	lt, DrawLine_Impl_BuildDirtyRect
 DrawLine_Impl_PatternShallowLoop:
 	ld xix, (xsp + 40)
 	ld wa, (xix)
@@ -818,7 +818,7 @@ DrawLineEx_DiagSetup:
 
 	ld xbc, xiz
 
-	call	16712319
+	call	InitializeKubo_Helper
 
 	ld (xsp + 12), xhl
 
@@ -904,7 +904,7 @@ DrawLineEx_ShallowSetup:
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	(xsp+16), xhl
 	ld	xbc, (xsp+28)
 	ld	xwa, xbc
@@ -920,7 +920,7 @@ DrawLineEx_ShallowSetup:
 	ld	(xsp+28), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jr	lt, 86
+	jr	lt, DrawLineEx_BuildDirtyRect
 DrawLineEx_ShallowLoop:
 	ld iz, (xsp + 58)
 	ld wa, (xsp + 44)
@@ -2015,7 +2015,7 @@ DrawWall_DoCopy:
 
 	ldw (xwa + 6), 0xef
 
-	calr	-5333
+	calr	SetChangeRect
 
 	pop xiz
 
@@ -3278,7 +3278,7 @@ DrawBitmapFile_Impl:
 	pushw 0xadf2
 	ld XWA,(XSP+0x043a)
 	push XWA
-	call 0xff04e4
+	call SLIDE_Parse_Header_Helper
 	add XSP,0x0000000a
 	cp hl, 0:i3
 	jrl nz, DrawBitmapFile_Impl_Return
@@ -3404,7 +3404,7 @@ DrawBitmapFile_Impl_ComputeStride:
 	ld	xbc, (xsp+8)
 	dec	1, xbc
 	ld	xwa, (xsp+32)
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	(xsp+32), xhl
 	add	xhl, 354304
 	ld	(xsp+28), xhl
@@ -3412,7 +3412,7 @@ DrawBitmapFile_Impl_ComputeStride:
 	ld	(xsp+12), xwa
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	le, 190
+	jrl	le, DrawBitmapFile_Impl_FillRemaining
 DrawBitmapFile_Impl_DecodeRowLoop:
 	ld	xwa, (xsp+20)
 	pushw	wa
@@ -3455,7 +3455,7 @@ DrawBitmapFile_Impl_TileRemainder:
 
 	ld xbc, (xsp + 16)
 
-	call	16712319
+	call	InitializeKubo_Helper
 
 	ld xwa, 0x140
 
@@ -3530,13 +3530,13 @@ DrawBitmapFile_Impl_FillLoop:
 DrawBitmapFile_Impl_CopyToVRAM:
 	ld	xwa, (xsp+40)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
-	calr	8986
+	calr	Gfx_DecodeImageToBuffer
 	ld	xwa, (xsp+1080)
-	calr	1987
+	calr	IsPointOnScreen
 	cp	hl, 0:i3
-	jrl	z, 169	; -> 0xFAC6B6
+	jrl	z, DrawBitmapFile_Impl_Return	; -> 0xFAC6B6
 	ld	xbc, (xsp+36)
 	ld	xwa, (xbc+4)
 	ld	(xsp+40), wa
@@ -3562,7 +3562,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	ldw	(xsp+32), 0
 	ld	wa, (xsp+42)
 	cp	wa, 0:i3
-	jr	ule, 50	; -> 0xFAC68A
+	jr	ule, DrawBitmapFile_Impl_BuildDirtyRect	; -> 0xFAC68A
 DrawBitmapFile_Impl_VRAMRowLoop:
 	.byte 0x9f, 0x22, 0x3f, 0xf0, 0x00, 0x6f, 0x2b, 0x9f
 	.byte 0x28, 0x20, 0x28, 0xaf, 0x26, 0x20, 0x38, 0x3e
@@ -3782,20 +3782,20 @@ DrawString_Impl_ClampDirtyTop:
 DrawString_Impl_ClampDirtyBottom:
 	lda	xbc, (xsp+40)
 	ld	xwa, (xsp+312)
-	call	16458291
+	call	ConvertStrings
 	lda	xwa, (xsp+40)
 	ld	(xsp+24), xwa
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+12)
 	or	xwa, xwa
-	jr	nz, 17
+	jr	nz, DrawString_Impl_VariableWidthLoop
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	16713667
+	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
 	ld	wa, (xsp+16)
 	mul	xwa, xhl
-	jr	50
+	jr	DrawString_Impl_ComputeDirtyRect
 DrawString_Impl_VariableWidthLoop:
 	ld xwa, (xsp + 24)
 	cp (xwa), 0x0

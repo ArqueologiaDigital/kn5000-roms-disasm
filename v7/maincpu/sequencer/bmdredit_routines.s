@@ -490,25 +490,25 @@ BmDrEdit_InitDisplayParams:
 BmDrEdit_TempoAnimTimer:
 	ld	a, (58070:16)
 	cp	a, 30
-	jr	ule, 7
+	jr	ule, BmDrEdit_TempoAnimTimer_Reset
 	inc	1, a
 	ld	(58070:16), a
 	ret
 BmDrEdit_TempoAnimTimer_Reset:
 	ld	(58070:16), 0
-	calr	15
-	calr	173
-	calr	191
-	calr	232
-	calr	250
-	jrl	262
+	calr	BmDrEdit_CheckTempoData
+	calr	BmDrEdit_DecrementDelayA
+	calr	BmDrEdit_DelayAExpired
+	calr	BmDrEdit_DecrementDelayB
+	calr	BmDrEdit_DelayBExpired
+	jrl	BmDrEdit_DelayReturn
 BmDrEdit_CheckTempoData:
-	call	15672515
+	call	TempoRingBuf_CheckEmpty
 	cp	hl, 0:i3
 	ret	z
 	ld	a, (35996:16)
 	cp	a, 149
-	jr	z, 5
+	jr	z, BmDrEdit_CheckTempoData_ReadyToProcess
 	cp	a, 152
 	ret	nz
 BmDrEdit_CheckTempoData_ReadyToProcess:
@@ -659,7 +659,7 @@ BmDrEdit_RefreshDisplayState:
 
 	ldw wa, 0xf
 
-	call	16017021
+	call	SoundCtrl_SaveAndSendCmd_EE
 
 	set 4, (0x28ad:16)
 
@@ -697,7 +697,7 @@ BmDrEdit_SaveSeqState_SetMode95:
 	ldw wa, 0x95
 
 BmDrEdit_SaveSeqState_Apply:
-	call	16355459
+	call	UI_PostModeChangeEvent
 
 	ldmm16 0x2963, 3407
 
@@ -1747,7 +1747,7 @@ BmDrEdit_ByteData_ScrollParams:
 
 BmDrEdit_InitDrumMode:
 	pushw 0x06a4
-	call 0xff06a3
+	call SLIDE_Decompress_4K_Init_Helper2
 	inc 2,XSP
 	.byte 0xf1, 0x50, 0x1d, 0x63, 0xf1, 0x54, 0x1d, 0x63
 	.byte 0x1e, 0x39, 0x19, 0xf1, 0x8e, 0x27, 0x02, 0x0a
@@ -1770,19 +1770,19 @@ BmDrEdit_InitCommon:
 BmDrEdit_InitCommon_CheckSongActive:
 	ld	a, (35994:16)
 	cp	a, (35995:16)
-	jr	nz, 33
+	jr	nz, BmDrEdit_InitCommon_SetupDisplay
 	ld	a, (35996:16)
 	cp	a, (35997:16)
-	jr	z, 23
+	jr	z, BmDrEdit_InitCommon_SetupDisplay
 	.byte 0xf1, 0xad, 0x28, 0xcc
-	jr	z, 17
+	jr	z, BmDrEdit_InitCommon_SetupDisplay
 	ld	wa, 1:i3
-	call	16355414
+	call	UI_PostPartChangeEvent
 	.byte 0xf1, 0xad, 0x28, 0xb4, 0xf1, 0x6a, 0x26, 0xb0
-	jrl	337
+	jrl	BmDrEdit_PopIzAndReturn
 BmDrEdit_InitCommon_SetupDisplay:
 	.byte 0xf1, 0x6a, 0x26, 0xb8, 0xf1, 0xe2, 0x26, 0xb8
-	call	16094901
+	call	AccWrap_PlayModeDispatch
 	.byte 0xf1, 0xa7, 0x28, 0xba
 	ld	(10588:16), 0
 	ld	wa, (10595:16)
@@ -1790,13 +1790,13 @@ BmDrEdit_InitCommon_SetupDisplay:
 	.byte 0xd1, 0x63, 0x29, 0x19, 0x51, 0x0d
 	ld	a, (35997:16)
 	cp	a, 150
-	jr	z, 63
+	jr	z, BmDrEdit_CopyStepCount
 	cp	a, 153
-	jr	z, 58
+	jr	z, BmDrEdit_CopyStepCount
 	cp	a, 148
-	jr	z, 5
+	jr	z, BmDrEdit_SetRecordingFlag
 	cp	a, 151
-	jr	nz, 6
+	jr	nz, BmDrEdit_CheckDrumModeEntry
 BmDrEdit_SetRecordingFlag:
 	.byte 0xf1, 0xec, 0x8c, 0xb8
 	jr	24
@@ -1911,7 +1911,7 @@ BmDrEdit_CleanupDrumMode:
 	ldmm16 0x2796, 0x2792
 	ld xwa, (0x1d50:16)
 	push XWA
-	call 0xff0315
+	call SLIDE_Decompress_4K_Init_Helper
 	inc 4,XSP
 	cp (0x8c9a:16), 0x98
 	jr z, BmDrEdit_SkipPartSelect

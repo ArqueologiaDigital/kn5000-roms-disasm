@@ -86,12 +86,12 @@ DemoStyleTtlFunc:
 DemoStyle_DispatchTable:
 	.ascii ":;<>"
 DemoStyle_DispatchTable_Code:
-	call	16278990
+	call	FDemo_IndicatorSetup
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jrl	128
+	jrl	DemoStyleTtlFunc_Exit
 DemoStyle_InputHandler:
 	cp xde, 0xf
 	jr z, DemoStyle_EnterHandler
@@ -164,12 +164,12 @@ DemoSoundTtlFunc:
 DemoSound_DispatchTable:
 	.ascii ":;<>"
 DemoSound_DispatchTable_Code:
-	call	16278990
+	call	FDemo_IndicatorSetup
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	124
+	jr	DemoSoundTtlFunc_Exit
 DemoSound_InputHandler:
 	cp xde, 0xf
 	jr z, DemoSound_EnterHandler
@@ -242,12 +242,12 @@ DemoRhyTtlFunc:
 DemoRhythm_DispatchTable:
 	.ascii ":;<>"
 DemoRhythm_DispatchTable_Code:
-	call	16278990
+	call	FDemo_IndicatorSetup
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	124
+	jr	DemoRhyTtlFunc_Exit
 DemoRhythm_InputHandler:
 	cp xde, 0xf
 	jr z, DemoRhythm_EnterHandler

@@ -81,16 +81,20 @@ ExcDotFunc_HandlerJumpTable:
 	ld	c, (149340:24)
 	extz	bc
 	cp	bc, 0:i3
-	jr	ule, 22	; -> 0xF762BD
+	jr	ule, ExcDotFunc_Skip2	; -> 0xF762BD
+ExcDotFunc_Loop:
 	cp	l, 0:i3
-	jr	z, 8	; -> 0xF762B3
+	jr	z, ExcDotFunc_Skip	; -> 0xF762B3
 	stib_dsp	240, 157
 	dec	1, l
-	jr	4	; -> 0xF762B7
+	jr	ExcDotFunc_Join	; -> 0xF762B7
+ExcDotFunc_Skip:
 	stib_dsp	240, 46
+ExcDotFunc_Join:
 	inc	1, de
 	cp	de, bc
-	jr	c, -22	; -> 0xF762A7
+	jr	c, ExcDotFunc_Loop	; -> 0xF762A7
+ExcDotFunc_Skip2:
 	ld	(xix), 0
 	ld	xhl, xwa
 	ret
@@ -129,14 +133,14 @@ ExcPmemFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcPmemFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcPmemFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcPmemFunc_Return
 ExcPmemFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcPmemFunc_Return
@@ -168,14 +172,14 @@ ExcSmemFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcSmemFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcSmemFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcSmemFunc_Return
 ExcSmemFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcSmemFunc_Return
@@ -207,14 +211,14 @@ ExcCompFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcCompFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcCompFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcCompFunc_Return
 ExcCompFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcCompFunc_Return
@@ -246,14 +250,14 @@ ExcSeqFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcSeqFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcSeqFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcSeqFunc_Return
 ExcSeqFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcSeqFunc_Return
@@ -285,14 +289,14 @@ ExcMspFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16713584
+	call	Free_Compare2
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcMspFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcMspFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcMspFunc_Return
 ExcMspFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcMspFunc_Return
