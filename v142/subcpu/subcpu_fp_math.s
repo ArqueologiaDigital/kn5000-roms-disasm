@@ -1063,7 +1063,7 @@ Int_SignedDiv_NegResult:
 ; llvm-mc round trip.
 Int_SignedDiv_ConstData:
 	ld	d, 0:opc
-	jr	-75
+	jr	Int_SignedDiv
 
 ; Entry point "signed remainder": D = 1, jump to Int_SignedDiv. The three bytes at
 ; 0x03DC63 are a fourth entry point ("unsigned remainder"): call FP_UnsignedDiv and
@@ -1255,10 +1255,10 @@ FP_DP_CallWithBuf12:
 	ld	xiz, xwa
 	ld	xwa, xsp
 	ld	xbc, (xbc)
-	call	253935
+	call	FP_SP_NormCore
 	ld	xwa, xiz
 	ld	xbc, xsp
-	call	254022
+	call	FP_DP_Encode
 	lda	xsp, (xsp+12)
 	pop	xiz
 	ret
@@ -1349,10 +1349,10 @@ FP_SP_CallWithBuf8b:
 	ld	xiz, xwa
 	ld	xwa, xsp
 	ld	xbc, (xbc)
-	call	253491
+	call	FP_DP_NormCore
 	ld	xwa, xiz
 	ld	xbc, xsp
-	call	254128
+	call	FP_SP_Encode
 	lda	xsp, (xsp+8)
 	pop	xiz
 	ret
