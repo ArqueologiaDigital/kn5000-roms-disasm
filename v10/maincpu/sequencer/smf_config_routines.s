@@ -177,7 +177,7 @@ SMF_HeaderConstants:
 	.asciz "MThd"
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
 	normal

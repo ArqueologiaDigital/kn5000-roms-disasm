@@ -5128,7 +5128,7 @@ SeqNotePos_DataBlock_A:
 	ld	(1071:16), a
 	.byte 0xf1
 	ldw	bc, 0xb804
-	di
+	ei	0
 	ret
 
 SeqNote_UpdatePlayPosition_B:
@@ -5181,7 +5181,7 @@ SeqNotePosB_DataBlock:
 	ld	(1072:16), a
 	.byte 0xf1
 	ldw	bc, 0xbb04
-	di
+	ei	0
 	ret
 
 SeqVoice_HandleEndMark:

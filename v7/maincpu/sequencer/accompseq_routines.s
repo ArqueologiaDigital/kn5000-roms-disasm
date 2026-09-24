@@ -40,7 +40,7 @@ AccompSeq_ReadTimerRegisters:
 	ld	(32130:16), a
 	ld	a, (1055:16)
 	ld	(32131:16), a
-	di
+	ei	0
 	ret
 AccompSeq_SaveTimerSnapshot:
 	ld	wa, (32128:16)
@@ -1270,7 +1270,7 @@ AccompSeq_InitPlayState:
 	jr nz, AccompSeq_InitPlay_SetCounters
 	or (0x041f:16), 0x01
 AccompSeq_InitPlay_SetCounters:
-	di
+	ei	0
 	ld	(32160:16), wa
 	ld	(32162:16), wa
 	ld	a, (32136:16)

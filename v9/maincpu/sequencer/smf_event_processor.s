@@ -8377,7 +8377,7 @@ SeqChan_ByteBlockD:
 	push	sr
 	.byte 0xb3, 0xb1
 	push	sr
-	di
+	ei	0
 	ld	xwa, (xiz)
 	ld	xwa, (xwa+26)
 	ld	xwa, (xiz)

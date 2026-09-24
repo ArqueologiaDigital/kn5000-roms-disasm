@@ -16857,7 +16857,7 @@ VoiceSlot_CheckAndApply_Data:
 	.byte 0x04
 	ld	(10:8), 0:io
 	.byte 0x04
-	di
+	ei	0
 	nop
 	.byte 0x04, 0x06
 	ldw	(4:8), 2567:io
@@ -16873,7 +16873,7 @@ VoiceSlot_CheckAndApply_Data:
 	reti
 	push	0
 	pop	sr
-	di
+	ei	0
 	pop	sr
 	reti
 	ldw	(2:8), 2307:io

@@ -15845,7 +15845,7 @@ HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 	nop
 .Lppe_read_exec:
 	; Read/execute with polling loop
-	ei 0x07				; enable interrupts
+	ei 0x07				; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	ld a, 0x89:opc
 	ld (0x160006:24), a; (0x160006) = 0x89
 	nop
@@ -16066,7 +16066,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	call HDAE5000_PPORT_Ready_Check
 	ld wa, 3:i3				; display command
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3				; check result
@@ -16102,7 +16102,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	jp HDAE5000_PPORT_Cmd_Done
 
 .Lc2b_cmd_format:			; 0x2956CC — Format HD command handler
-	di
+	ei	0
 	ldw wa, 0x001A
 	nop
 	lda xbc, (0x295436:24); lda XBC, 0x295436 — format string
@@ -16127,7 +16127,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	call HDAE5000_Display_String
 	call HDAE5000_PPORT_Ready_Check
 	ld wa, 7:i3				; display command
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3
@@ -16150,7 +16150,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	call HDAE5000_Display_String
 	call HDAE5000_PPORT_Ready_Check
 	ld wa, 4:i3				; display progress step 1
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	ldw bc, 0x002C
@@ -16159,7 +16159,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	call 2714308				; call 0x296AC4
 	ld wa, 5:i3				; step 2
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	ldw bc, 0x0034
@@ -16168,7 +16168,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	call 2714308
 	ld wa, 6:i3				; step 3
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	ldw bc, 0x003C
@@ -16231,7 +16231,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	call HDAE5000_Display_String
 	call HDAE5000_PPORT_Ready_Check
 	ld wa, 4:i3
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	ldw bc, 0x002C
@@ -16240,7 +16240,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	call 2714308
 	ld wa, 5:i3
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	ldw bc, 0x0034
@@ -16249,7 +16249,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	call 2714308
 	ld wa, 6:i3
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	ldw bc, 0x003C
@@ -16393,7 +16393,7 @@ HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
 	nop
 	ldw wa, 0x000E				; display command
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3				; check result
@@ -16478,7 +16478,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	ldw wa, 0x000E				; display command
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3
@@ -17034,7 +17034,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	ld (0x239150:24), xwa; st (0x239150), XWA
 	nop
 	ld wa, 1:i3				; display command
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	ld (0x239100:24), xix; st (0x239100), XIX — save data ptr
@@ -17049,7 +17049,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ldw wa, 0x0014				; display progress command
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	; Test flag byte 1 bit by bit, write corresponding region to HD
@@ -17194,7 +17194,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ldw wa, 0x0010				; display final command
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	jp HDAE5000_PPORT_Cmd_Done
@@ -17210,9 +17210,9 @@ HDAE5000_Cmd06_WriteFSB:	; 0x296294 (150 bytes)
 	call HDAE5000_Display_String
 	call HDAE5000_Render_Display_Region
 	ld wa, 1:i3			; WA = 1
-	ei 0x00				; disable interrupts
+	ei 0x00				; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
 	call HDAE5000_Display_String
-	ei 0x07				; enable interrupts
+	ei 0x07				; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	xor wa, wa			; WA = 0
 	ld a, (0x2390da:24); A = [0x2390DA] (FSB byte 0)
 	nop
@@ -17244,9 +17244,9 @@ HDAE5000_Cmd06_WriteFSB:	; 0x296294 (150 bytes)
 	nop
 	ldw wa, 0x000F			; WA = 0x0F (command code)
 	nop
-	ei 0x00				; disable interrupts
+	ei 0x00				; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
 	call HDAE5000_Display_String
-	ei 0x07				; enable interrupts
+	ei 0x07				; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	cp wa, 0:i3			; result == 0?
 	jp z, (2712342:24)		; jp Z, skip error handling (0x296316)
 	nop
@@ -17283,7 +17283,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	ld (0x239154:24), xwa; st (0x239154), XWA — save count
 	nop
 	ld wa, 1:i3				; WA = 1 (display command)
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	xor wa, wa				; clear WA
@@ -17318,7 +17318,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	nop
 	ldw wa, 0x0015				; display command
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3				; check display result
@@ -17352,7 +17352,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	nop
 	ldw wa, 0x0017				; display command (send data)
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3				; check result
@@ -17378,7 +17378,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 .Lsdb_send_final:			; 0x29647A — send final status byte
 	ldw wa, 0x0016				; display command (final)
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3
@@ -17554,9 +17554,9 @@ HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
 	nop
 	ldw wa, 0x001B			; WA = 0x1B (write command)
 	nop
-	ei 0x00				; disable interrupts
+	ei 0x00				; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
 	call HDAE5000_Display_String
-	ei 0x07				; enable interrupts
+	ei 0x07				; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	cp wa, 0:i3			; result == 0?
 	jp z, (2713196:24)		; jp Z → skip error (0x29666C)
 	nop
@@ -17636,7 +17636,7 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	ldw wa, 0x001D				; display command
 	nop
 	call HDAE5000_Display_String
-	ei 7					; enable interrupts
+	ei 7					; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	lda xix, (0x239168:24); lda XIX, 0x239168 — PPORT command area
 	nop
 	ld xwa, (xix + 2)			; read 32-bit parameter
@@ -17660,7 +17660,7 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	call HDAE5000_Display_String
 	ld (0x2390fa:24), wa; st (0x2390FA), WA — save result
 	nop
-	di					; disable interrupts
+	ei	0					; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
 	ld xbc, 0:i3
 	ld xde, 0:i3
 	ldw wa, 0x001E				; display command
@@ -17724,15 +17724,15 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	nop
 	ldw wa, 0x000D				; display command
 	nop
-	di					; disable interrupts
+	ei	0					; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
 	call HDAE5000_Display_String
-	ei 7					; enable interrupts
+	ei 7					; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	ret
 	nop
 .Lrdr2_register:			; 0x296802
 	; Set WA=1, call Display_String, store XIX to data source ptr
 	ld wa, 1:i3
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	ld (0x239100:24), xix; st (0x239100), XIX — data source ptr
@@ -18054,7 +18054,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	pushw hl
 	nop
 	ld wa, 1:i3				; display command
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	ld (0x239100:24), xix; st (0x239100), XIX
@@ -18583,7 +18583,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldw wa, 0x0018				; display command — HD read
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3				; check result
@@ -18598,7 +18598,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldw wa, 0x0019				; display command — sector read
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3
@@ -18656,7 +18656,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldw wa, 0x0018				; display command — HD read
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	cp wa, 0:i3
@@ -18695,7 +18695,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldw wa, 0x0019				; display command — sector read
 	nop
-	di
+	ei	0
 	call HDAE5000_Display_String
 	ei 7
 	pop xix

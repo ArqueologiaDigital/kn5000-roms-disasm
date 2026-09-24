@@ -482,7 +482,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	di
+	ei	0
 	ei	1
 	reti
 	.byte 0x01
@@ -1388,7 +1388,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
 	nop

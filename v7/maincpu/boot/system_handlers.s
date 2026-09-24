@@ -1615,7 +1615,7 @@ SeqTiming_Snapshot_CheckFrac:
 	.byte 0xc1, 0xda, 0x32, 0xf7, 0x67, 0x05, 0xf1, 0x62
 	.byte 0x04, 0x00, 0x00
 SeqTiming_Snapshot_PostSnap:
-	di
+	ei	0
 	cp	wa, (13014:16)
 	jr	c, 12	; -> 0xEF1724
 	push	xhl
@@ -1641,7 +1641,7 @@ SyncTiming_Snapshot_CheckFrac:
 	.byte 0xc1, 0x60, 0x7d, 0xf7, 0x67, 0x05, 0xf1, 0x6d
 	.byte 0x04, 0x00, 0x00
 SyncTiming_Snapshot_PostSnap:
-	di
+	ei	0
 	cp	wa, (32098:16)
 	jr	c, 12	; -> 0xEF176C
 	push	xhl
@@ -5896,13 +5896,13 @@ E1DMA_ISR_BytecodeBlock:
 	zcf
 	.byte 0xb0	; v10 does not spell this byte either
 	.byte 0xb7	; v10 does not spell this byte either
-	di
+	ei	0
 	lda	xde, (1556:16)
 	ld	xwa, (xde)
 	ld	bc, (xde+8)
 	ld	xde, (xde+4)
 	calr	64945
-	di
+	ei	0
 	bit_dd8	1, 104
 	jr	nz, 27
 	.byte 0xd8	; v10 does not spell this byte either
@@ -6729,7 +6729,7 @@ HDAE5000_Flash_Erase_AllSectors:
 	ld	xbc, xiz
 	add	xbc, 0x1f4000
 	ld	(xbc), xwa
-	di
+	ei	0
 	pop	xiz
 	ret
 

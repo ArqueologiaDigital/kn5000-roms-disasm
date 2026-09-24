@@ -964,7 +964,7 @@ AccStyle_ByteDataBlock:
 	nop
 	halt
 	nop
-	di
+	ei	0
 	reti
 	nop
 	ld	(0:8), 9:io
@@ -1022,7 +1022,7 @@ AccStyle_ByteDataBlock:
 	nop
 	max
 	nop
-	di
+	ei	0
 	ld	(0:8), 10:io
 	nop
 	incf
@@ -7815,7 +7815,7 @@ AccSync_MidiClock_Update:
 
 AccSync_MidiClock_Apply:
 	call	16576929
-	di
+	ei	0
 AccSync_MidiClock_Return:
 	ret
 
@@ -8998,7 +8998,7 @@ AccTiming_SlotOffsetTables:
 	nop
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
 	incf
@@ -9701,7 +9701,7 @@ AccVoice_CopyFromROM_DataBlock:
 	push	sr
 	nop
 	max
-	di
+	ei	0
 	halt
 	push	sr
 	nop
@@ -10618,28 +10618,28 @@ Demo_StyleRhythmData:
 	.zero 12
 	.asciz "chord map 5     "
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	cp	(xwa), l
 	swi	7
 	swi	7
@@ -13888,7 +13888,7 @@ AccPatch_UpdateSequenceState:
 	ld	(13661:16), a
 	ld	wa, (1045:16)
 	ld	(13930:16), wa
-	di
+	ei	0
 	ld	a, (13363:16)
 	ld	w, (13664:16)
 	bit	2, a
@@ -24356,7 +24356,7 @@ RegPreset_LoadVoiceData:
 	nop
 	ei	4
 	ei	4
-	di
+	ei	0
 	nop
 	max
 	ei	4

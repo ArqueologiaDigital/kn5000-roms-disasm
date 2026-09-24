@@ -438,17 +438,17 @@ UIRender_LoadTwoDescriptors:
 UIRender_DescriptorTable1:
 	ret
 	ld	(18:8), 6:io
-	di
+	ei	0
 	zcf
 	nop
 	ret
 	ld	(82:8), 12:io
-	di
+	ei	0
 	zcf
 	nop
 	ret
 	ld	(146:8), 18:io
-	di
+	ei	0
 	zcf
 	nop
 	jp	0x010b0a
@@ -8128,7 +8128,7 @@ MemConfig_Handler_1:
 	.byte 0xf1, 0x53
 	decf
 	scc8	nz, l
-	di
+	ei	0
 	ld	a, 4:opc
 	call	VoiceSlot_RestoreState
 	call	AccPedal_CheckBitAndUpdate
@@ -8196,7 +8196,7 @@ MemConfig_Handler_1:
 	.byte 0xf1, 0x53
 	decf
 	scc8	z, l
-	di
+	ei	0
 	ld	a, 6:opc
 	jp	MemConfig_Handler_1_0x256
 	ld	a, 4:opc
@@ -14374,7 +14374,7 @@ Display_BytecodeBlock_F:
 	scf
 	push	xsp
 	ldf 126
-	di
+	ei	0
 	ld	a, 17:opc
 	jp	Display_BytecodeBlock_F_0x59
 	.byte 0xc1, 0xbb
@@ -14653,7 +14653,7 @@ Display_BytecodeBlock_F:
 	ld	a, 245:opc
 	.byte 0xf0
 	ld	xbc, 0x76203f85
-	di
+	ei	0
 	.byte 0xc5, 0xf4
 	ld	a, 245:opc
 	.byte 0xf0
@@ -15575,7 +15575,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xf1, 0xf3
 	rcf
 	scc8	nz, l
-	di
+	ei	0
 	add	xiy, 8
 	ld	xix, 3806
 	ldw	bc, 8
@@ -16361,7 +16361,7 @@ Scoop_CallDisplayHelper:
 Scoop_DisplayData_ButtonLayout:
 	ret
 	ld	(146:8), 18:io
-	di
+	ei	0
 	zcf
 	nop
 	ld	xiy, Scoop_DisplayData_ButtonLayout_0x17

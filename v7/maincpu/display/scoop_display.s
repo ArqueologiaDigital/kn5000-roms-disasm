@@ -438,17 +438,17 @@ UIRender_LoadTwoDescriptors:
 UIRender_DescriptorTable1:
 	ret
 	ld	(18:8), 6:io
-	di
+	ei	0
 	zcf
 	nop
 	ret
 	ld	(82:8), 12:io
-	di
+	ei	0
 	zcf
 	nop
 	ret
 	ld	(146:8), 18:io
-	di
+	ei	0
 	zcf
 	nop
 	jp	0x010b0a
@@ -10834,7 +10834,7 @@ Scoop_CallDisplayHelper:
 Scoop_DisplayData_ButtonLayout:
 	ret
 	ld	(146:8), 18:io
-	di
+	ei	0
 	zcf
 	nop
 	ld	xiy, Scoop_DisplayData_ButtonLayout_0x17
@@ -10949,17 +10949,17 @@ Scoop_DrawFrameLines:
 Scoop_FrameData:
 	ret
 	ld	(18:8), 6:io
-	di
+	ei	0
 	zcf
 	nop
 	ret
 	ld	(82:8), 12:io
-	di
+	ei	0
 	zcf
 	nop
 	ret
 	ld	(146:8), 18:io
-	di
+	ei	0
 	zcf
 	nop
 	ret

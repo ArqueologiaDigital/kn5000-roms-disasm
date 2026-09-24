@@ -802,7 +802,7 @@ TaskSched_SoftTimer_Service:
 	inc	1, wa
 	ld	(4306:16), wa
 	ldc_cr16	wa, 0x7c
-	di
+	ei	0
 	ldw	ix, 4298
 	extz	xix
 	ld	b, 1:opc
@@ -1924,7 +1924,7 @@ RingBuf_Access_Opaque_A:
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 0
 	ld	(xix+10), 0
-	di
+	ei	0
 	pop	xhl
 	pop	xiy
 	pop	xix

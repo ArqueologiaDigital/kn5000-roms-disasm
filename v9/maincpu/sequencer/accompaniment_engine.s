@@ -1060,7 +1060,7 @@ AccStyle_ByteDataBlock:
 	nop
 	halt
 	nop
-	di
+	ei	0
 	reti
 	nop
 	ld	(0:8), 9:io
@@ -1118,7 +1118,7 @@ AccStyle_ByteDataBlock:
 	nop
 	max
 	nop
-	di
+	ei	0
 	ld	(0:8), 10:io
 	nop
 	incf
@@ -10312,7 +10312,7 @@ AccTiming_SlotOffsetTables:
 	nop
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
 	incf
@@ -11442,7 +11442,7 @@ AccVoice_CopyFromROM_DataBlock:
 	push	sr
 	nop
 	max
-	di
+	ei	0
 	halt
 	push	sr
 	nop
@@ -12506,28 +12506,28 @@ Demo_StyleRhythmData:
 	.zero 12
 	.asciz "chord map 5     "
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	nop
 	nop
-	di
+	ei	0
 	cp	(xwa), l
 	swi	7
 	swi	7
@@ -24192,7 +24192,7 @@ __pad_F63F8F:
 	ret
 	nop
 	nop
-	di
+	ei	0
 	ei	1
 	ei	2
 	ei	3
@@ -29519,7 +29519,7 @@ RegPreset_LoadVoiceData:
 	nop
 	ei	4
 	ei	4
-	di
+	ei	0
 	nop
 	max
 	ei	4
@@ -36729,7 +36729,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	w, 241:opc
 	.asciz "R9PC"
 	.byte 0x98
-	di
+	ei	0
 	add	xhl, 4
 	ld_rrw wa, xhl, iy
 	ld (14676:16), wa
@@ -36741,7 +36741,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	w, 241:opc
 	.asciz "V9PC"
 	.byte 0x98
-	di
+	ei	0
 	add	xhl, 8
 	ld_rrw wa, xhl, iy
 	ld (14680:16), wa
@@ -36969,7 +36969,7 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0xd1
 	.asciz "z9%C"
 	.byte 0x98
-	di
+	ei	0
 	add	xhl, 3
 	ld_rrw wa, xhl, iy
 	ld (14708:16), wa

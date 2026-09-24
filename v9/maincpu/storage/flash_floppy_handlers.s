@@ -362,7 +362,7 @@ FlashWrite_BlockRef_Type6:
 	.ascii "Y EDIT"
 	.byte 0x17
 	rcf
-	di
+	ei	0
 	reti
 	nop
 	.ascii "SOUND EDIT"
@@ -539,7 +539,7 @@ FlashWrite_BlockRef_Type6:
 	.ascii "R KIT"
 	.byte 0x17
 	rcf
-	di
+	ei	0
 	reti
 	nop
 	.ascii "SOUND EDIT"

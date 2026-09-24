@@ -630,12 +630,12 @@ User_didnt_request_flash_mem_update:
 	ldw	(65482:24), 0
 	set_dd8	0, 40
 	call	15676020
-	di
+	ei	0
 	calr	134
 	calr	804
 	ld	wa, 0:i3
 	call	16634741
-	di
+	ei	0
 	call	16477975
 	calr	867
 	cp	hl, 0:i3

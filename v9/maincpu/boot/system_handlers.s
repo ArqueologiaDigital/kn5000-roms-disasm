@@ -6044,13 +6044,13 @@ E1DMA_ISR_BytecodeBlock:
 	inc	6, l
 	zcf
 	.byte 0xb0, 0xb7
-	di
+	ei	0
 	lda	xde, (1556:16)
 	ld	xwa, (xde)
 	ld	bc, (xde+8)
 	ld	xde, (xde+4)
 	calr	64945
-	di
+	ei	0
 	bit_dd8 1, 104
 	jr	nz, 27
 	.byte 0xd8
@@ -6895,7 +6895,7 @@ HDAE5000_Flash_Erase_AllSectors:
 	ld	xbc, xiz
 	add	xbc, 0x1f4000
 	ld	(xbc), xwa
-	di
+	ei	0
 	pop	xiz
 	ret
 

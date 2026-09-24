@@ -928,13 +928,13 @@ CtrlAssignStr_Off:	aligned_string "      OFF       "
 	ld	(91:8), 4:io
 	pop	xhl
 	.byte 0x04
-	di
+	ei	0
 	nop
 	nop
-	di
-	di
-	di
-	di
+	ei	0
+	ei	0
+	ei	0
+	ei	0
 ParamStr_Table_01:
 	.long ParamStr01_RhythmSelection
 	.long ParamStr01_Tempo
@@ -2617,7 +2617,7 @@ NakaInstTable8_NullTerm:
 	cp	(0xff00:16), l
 	normal
 	nop
-	di
+	ei	0
 
 
 	push	xix
@@ -3104,8 +3104,8 @@ NakaInstTable8_NullTerm:
 	reti
 	nop
 	cp	(0xff00:16), l
-	di
-	di
+	ei	0
+	ei	0
 
 
 	push	xix
@@ -3293,7 +3293,7 @@ NakaInstTable8_NullTerm:
 	cp	(0xff00:16), l
 	ret
 	nop
-	di
+	ei	0
 
 
 	push	xix
@@ -3678,7 +3678,7 @@ ErrorDialog_RecoveryLine3:
 	swi	7
 	nop
 	nop
-	di
+	ei	0
 	ld	(0:8), 10:io
 	nop
 	decf
@@ -6769,7 +6769,7 @@ MidiChParam_Entry_010:
 	.byte 0x98
 	ld	(64:8), 0:io
 	normal
-	di
+	ei	0
 	swi	7
 	normal
 	normal
@@ -7055,7 +7055,7 @@ MidiChParam_Entry_028:
 	ld	(45:8), 0:io
 	nop
 	ld	xsp, 0x0300c004
-	di
+	ei	0
 	swi	7
 	normal
 	normal
@@ -7170,7 +7170,7 @@ MidiChParam_Entry_035:
 	retd	45
 	nop
 	ld	xsp, 0x01004000
-	di
+	ei	0
 	swi	7
 	normal
 	normal
@@ -10338,7 +10338,7 @@ PartParam_Entry_039:
 	.byte 0x98
 	nop
 	nop
-	di
+	ei	0
 	swi	7
 	nop
 	swi	7

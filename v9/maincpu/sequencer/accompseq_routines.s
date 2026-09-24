@@ -991,7 +991,7 @@ AccompSeq_LargeCodeBlock1:
 	.byte 0xf4, 0xec
 	ld	xbc, 0xbbfe7c1e
 	.byte 0x04, 0x55
-	di
+	ei	0
 	popw	iy
 	ret
 	ld	wa, 0:i3
@@ -1029,7 +1029,7 @@ AccompSeq_LargeCodeBlock1:
 	ld	wa, 0:i3
 	ld	a, (1046:16)
 	ld	(1128:16), wa
-	di
+	ei	0
 	ret
 
 AccompSeq_UpdatePosition:

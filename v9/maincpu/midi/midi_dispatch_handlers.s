@@ -2856,7 +2856,7 @@ MidiCC_ChannelMappingData:
 	nop
 	halt
 	nop
-	di
+	ei	0
 	reti
 	nop
 	ld	(0:8), 9:io
@@ -2967,7 +2967,7 @@ MidiCC_ChannelMappingData:
 	nop
 	halt
 	nop
-	di
+	ei	0
 	reti
 	nop
 	ld	(0:8), 9:io
@@ -14749,7 +14749,7 @@ SeqBuf2_InitWithInterrupts:
 SeqBuf_Timing_Data:
 	ei	6
 	call	SeqBuf_MidiOut_Init
-	di
+	ei	0
 	ret
 
 MidiChan_ClearStorageFields:

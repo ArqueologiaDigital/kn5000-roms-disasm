@@ -11501,7 +11501,7 @@ SeBitmap_EnvCurve5:
 	jp	1546
 	.byte 0x1f
 	nop
-	di
+	ei	0
 	pushw	iz
 	nop
 	halt
@@ -11560,7 +11560,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.ascii "T0NE LAYER"
 	ldf	16
-	di
+	ei	0
 	reti
 	nop
 	.ascii "SOUND EDIT"
@@ -11664,7 +11664,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x54
 	.ascii "0NE SELECT"
 	ldf	16
-	di
+	ei	0
 	reti
 	nop
 	.ascii "SOUND EDIT"
@@ -12677,7 +12677,7 @@ SeBitmap_EnvCurve5:
 	popw	iy
 	.ascii "PLITUDE"
 	ldf	16
-	di
+	ei	0
 	reti
 	nop
 	.byte 0x53
@@ -13510,7 +13510,7 @@ SeBitmap_EnvCurve5:
 	ld	xiz, 0x45544c49
 	.byte 0x52, 0x17
 	rcf
-	di
+	ei	0
 	reti
 	nop
 	.ascii "SOUND EDIT"
@@ -13667,7 +13667,7 @@ SeBitmap_EnvCurve5:
 	ei	74
 	calr	21061
 	ldf	12
-	di
+	ei	0
 	.byte 0xd1
 	nop
 	.ascii "CUTOFF"

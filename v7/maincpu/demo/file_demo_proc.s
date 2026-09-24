@@ -8220,7 +8220,7 @@ FileIO_MidiOutSendByte:
 	call	15673329
 	inc	4, xsp
 	call	16576929
-	di
+	ei	0
 MidiOutSend_Return:
 	inc 2, xsp
 	ret

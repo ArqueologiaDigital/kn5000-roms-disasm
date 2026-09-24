@@ -336,9 +336,9 @@ sub_F0003C:
 	st_dd8b	a, 149	; F00084  ld (0x95),A
 	st_dd8b	a, 148	; F00087  ld (0x94),A
 	st_dd8b	a, 150	; F0008A  ld (0x96),A
-	di	; F0008D  ei 0x00
+	ei	0	; F0008D  ei 0x00
 	jr	5	; F0008F  jr T,0xf00096
-	di	; F00091  ei 0x00
+	ei	0	; F00091  ei 0x00
 	calr	114	; F00093  calr 0xf00108
 	ret	; F00096  ret
 
@@ -386,7 +386,7 @@ sub_F00099:
 	add	xhl, xwa	; F000DA  add XHL,XWA
 	ld	xwa, (xhl)	; F000DC  ld XWA,(XHL)
 	call	(xwa)	; F000DE  call T,XWA
-	di	; F000E0  ei 0x00
+	ei	0	; F000E0  ei 0x00
 	ret	; F000E2  ret
 
 ; --- 0xF000E3-0xF000E4, 2 B, converted by lane promB6 (TRAILER).
@@ -553,7 +553,7 @@ sub_F001B5:
 	jr	nz, 9	; F001B8  jr NZ,0xf001c3
 	ei	6	; F001BA  ei 0x06
 	calr	212	; F001BC  calr 0xf00293
-	di	; F001BF  ei 0x00
+	ei	0	; F001BF  ei 0x00
 	jr	3	; F001C1  jr T,0xf001c6
 	calr	65267	; F001C3  calr 0xf000b9
 	ret	; F001C6  ret
@@ -745,20 +745,20 @@ sub_F002F4:
 	ei	6	; F002F6  ei 0x06
 	st_dd8b	a, 141	; F002F8  ld (0x8d),A
 	st_dd8w	wa, 142	; F002FB  ld (0x8e),WA
-	di	; F002FE  ei 0x00
+	ei	0	; F002FE  ei 0x00
 	ret	; F00300  ret
 	xor	wa, wa	; F00301  xor WA,WA
 	ei	6	; F00303  ei 0x06
 	st_dd8b	a, 139	; F00305  ld (0x8b),A
 	st_dd8b	a, 140	; F00308  ld (0x8c),A
 	ld	(6311938:24), a	; F0030B  ld (0x605002),A
-	di	; F00310  ei 0x00
+	ei	0	; F00310  ei 0x00
 	ret	; F00312  ret
 	xor	wa, wa	; F00313  xor WA,WA
 	ei	6	; F00315  ei 0x06
 	st_dd8w	wa, 145	; F00317  ld (0x91),WA
 	st_dd8b	a, 147	; F0031A  ld (0x93),A
-	di	; F0031D  ei 0x00
+	ei	0	; F0031D  ei 0x00
 	ret	; F0031F  ret
 	m_bit 2, MD16, 0x7f34	; F00320  bit 2,(0x7f34)
 	jr	z, 24	; F00324  jr Z,0xf0033e
@@ -769,7 +769,7 @@ sub_F002F4:
 	jr	4	; F00332  jr T,0xf00338
 	m_or_mi8 MB8, 0xa0, 0x02	; F00334  or (0xa0),0x02
 	call	15992612	; F00338  call 0xf40724
-	di	; F0033C  ei 0x00
+	ei	0	; F0033C  ei 0x00
 	ret	; F0033E  ret
 
 ; --- BEGIN gen_prom_b_f0033f_f0199e 0xF0033F-0xF00800 ---
@@ -1270,7 +1270,7 @@ Data_F007FE:
 sub_F00800:
 	ei	6	; F00800  ei 0x06
 	ld_sd8b	a, 150	; F00802  ld A,(0x96)
-	di	; F00805  ei 0x00
+	ei	0	; F00805  ei 0x00
 	ld	w, (6311962:24)	; F00807  ld W,(0x60501a)
 	ld	(6311962:24), a	; F0080C  ld (0x60501a),A
 	and	a, 4	; F00811  and A,0x04
@@ -1299,7 +1299,7 @@ sub_F00800:
 	ld	(6311955:24), a	; F00856  ld (0x605013),A
 	ld_sd8b	a, 148	; F0085B  ld A,(0x94)
 	ld	(6311959:24), a	; F0085E  ld (0x605017),A
-	di	; F00863  ei 0x00
+	ei	0	; F00863  ei 0x00
 	calr	326	; F00865  calr 0xf009ae
 	calr	454	; F00868  calr 0xf00a31
 	cp	a, 1:i3	; F0086B  cp A,1
@@ -1538,7 +1538,7 @@ sub_F00800:
 	ld	(6311938:24), 0	; F00B39  ld (0x605002),0x00
 	ld	(140:8), 0:io	; F00B3F  ld (0x8c),0x00
 	ld	(139:8), 0:io	; F00B42  ld (0x8b),0x00
-	di	; F00B45  ei 0x00
+	ei	0	; F00B45  ei 0x00
 	ret	; F00B47  ret
 
 ; --------------------------------------------------------------------------
@@ -85627,7 +85627,7 @@ sub_F44964:
 	ld_sd8b	a, 150	; F44969  ld A,(0x96)
 	ld	(13402:16), a	; F4496C  ld (0x345a),A
 	m_and_mi8 MB8, 0x96, 0xed	; F44970  and (0x96),0xed
-	di	; F44974  ei 0x00
+	ei	0	; F44974  ei 0x00
 	ld	xwa, (12288:16)	; F44976  ld XWA,(0x3000)
 	cp	xwa, 0	; F4497A  cp XWA,0x00000000
 	jr	nz, 8	; F44980  jr NZ,0xf4498a
@@ -87370,7 +87370,7 @@ sub_F456F0:
 	ei	6	; F45748  ei 0x06
 	ldw	(145:8), 0:io	; F4574A  ld (0x91),0x0000
 	ld	(147:8), 0:io	; F4574E  ld (0x93),0x00
-	di	; F45751  ei 0x00
+	ei	0	; F45751  ei 0x00
 	call	15993268	; F45753  call 0xf409b4
 	m_bit 2, MD16, 0x7f32	; F45757  bit 2,(0x7f32)
 	jr	z, 3	; F4575B  jr Z,0xf45760
@@ -87629,7 +87629,7 @@ sub_F45975:		; <- T_F40A10
 	ld	wa, (xhl+6)	; F4597C  ld WA,(XHL+0x06)
 	ld	(xhl+2), wa	; F4597F  ld (XHL+0x02),WA
 	m_ld_mi16 MDD+r3, 0x08, 0x01ff	; F45982  ld (XHL+0x08),0x01ff
-	di	; F45987  ei 0x00
+	ei	0	; F45987  ei 0x00
 	ret	; F45989  ret
 
 ; --------------------------------------------------------------------------
@@ -87819,7 +87819,7 @@ sub_F45B0A:		; <- T_F40A14
 	ld	wa, (xhl+2)	; F45B11  ld WA,(XHL+0x02)
 	ld	(xhl+6), wa	; F45B14  ld (XHL+0x06),WA
 	m_ld_mi16 MDD+r3, 0x08, 0x01ff	; F45B17  ld (XHL+0x08),0x01ff
-	di	; F45B1C  ei 0x00
+	ei	0	; F45B1C  ei 0x00
 	ret	; F45B1E  ret
 
 ; --------------------------------------------------------------------------
@@ -87837,7 +87837,7 @@ sub_F45B1F:
 	ei	6	; F45B1F  ei 0x06
 	ldw	(145:8), 0:io	; F45B21  ld (0x91),0x0000
 	ld	(147:8), 0:io	; F45B25  ld (0x93),0x00
-	di	; F45B28  ei 0x00
+	ei	0	; F45B28  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B2A  bit 5,(0x34d0)
 	jr	nz, 10	; F45B2E  jr NZ,0xf45b3a
 	xor	xwa, xwa	; F45B30  xor XWA,XWA
@@ -87864,7 +87864,7 @@ sub_F45B48:
 	ei	6	; F45B48  ei 0x06
 	ldw	(145:8), 0:io	; F45B4A  ld (0x91),0x0000
 	ld	(147:8), 0:io	; F45B4E  ld (0x93),0x00
-	di	; F45B51  ei 0x00
+	ei	0	; F45B51  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B53  bit 5,(0x34d0)
 	jr	nz, 10	; F45B57  jr NZ,0xf45b63
 	xor	xwa, xwa	; F45B59  xor XWA,XWA
@@ -89014,7 +89014,7 @@ sub_F4783A:
 	ld	(13394:16), wa	; F47844  ld (0x3452),WA
 	ld_sd8b	a, 147	; F47848  ld A,(0x93)
 	ld	(13396:16), a	; F4784B  ld (0x3454),A
-	di	; F4784F  ei 0x00
+	ei	0	; F4784F  ei 0x00
 	ld	a, (13396:16)	; F47851  ld A,(0x3454)
 	ld	e, (13403:16)	; F47855  ld E,(0x345b)
 	cp	a, e	; F47859  cp A,E
@@ -116413,7 +116413,7 @@ SC1_ConfigurePort:
 	ldw	(10896:16), 0	; F5A94A  ld (0x2a90),0x0000
 	ldw	(10898:16), 0	; F5A950  ld (0x2a92),0x0000
 	m_and_mi8 MB8, 0x56, 0xdf	; F5A956  and (0x56),0xdf
-	di	; F5A95A  ei 0x00
+	ei	0	; F5A95A  ei 0x00
 	ret	; F5A95C  ret
 ; ---------------------------------------------------------------------
 ; SC1_SendWord_Polled -- shift two bytes out with the interrupts still off
@@ -116631,7 +116631,7 @@ SC1_Cmd_E3_E2_E3:
 	ei	6	; F5AAED  ei 0x06
 	ld	wa, (10896:16)	; F5AAEF  ld WA,(0x2a90)
 	ld	(10898:16), wa	; F5AAF3  ld (0x2a92),WA
-	di	; F5AAF7  ei 0x00
+	ei	0	; F5AAF7  ei 0x00
 	calr	120	; F5AAF9  calr 0xf5ab74
 	ld	a, 227:opc	; F5AAFC  ld A,0xe3
 	ld	w, 0:opc	; F5AAFE  ld W,0x00
@@ -116659,7 +116659,7 @@ SC1_Cmd_EF:
 	ei	6	; F5AB3E  ei 0x06
 	ld	wa, (10896:16)	; F5AB40  ld WA,(0x2a90)
 	ld	(10898:16), wa	; F5AB44  ld (0x2a92),WA
-	di	; F5AB48  ei 0x00
+	ei	0	; F5AB48  ei 0x00
 	calr	39	; F5AB4A  calr 0xf5ab74
 	ld	a, 239:opc	; F5AB4D  ld A,0xef
 	ld	w, 0:opc	; F5AB4F  ld W,0x00
@@ -116708,13 +116708,13 @@ SC1_WaitTxDrain:
 	dec	1, (10891:16)	; F5AB95  dec 1,(0x2a8b)
 	m_cp_mi8 MB16, 0x2a8b, 0x00	; F5AB99  cp (0x2a8b),0x00
 	jr	z, 17	; F5AB9E  jr Z,0xf5abb1
-	di	; F5ABA0  ei 0x00
+	ei	0	; F5ABA0  ei 0x00
 	calr	65201	; F5ABA2  calr 0xf5aa56
 	jr	-46	; F5ABA5  jr T,0xf5ab79
 	ld	wa, (10978:16)	; F5ABA7  ld WA,(0x2ae2)
 	m_cp_rm MW16, 0x2ae0, 0	; F5ABAB  cp WA,(0x2ae0)
 	jr	nz, -28	; F5ABAF  jr NZ,0xf5ab95
-	di	; F5ABB1  ei 0x00
+	ei	0	; F5ABB1  ei 0x00
 	ret	; F5ABB3  ret
 ; ---------------------------------------------------------------------
 ; SC1_StartWordTx -- put two bytes in the tx ring and start the transmitter
@@ -116751,7 +116751,7 @@ SC1_StartWordTx:
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ABFC  and (0x55),0xfe
 	ld	(120:8), 80:io	; F5AC00  ld (0x78),0x50
 	st_dd8b	a, 84	; F5AC03  ld (0x54),A
-	di	; F5AC06  ei 0x00
+	ei	0	; F5AC06  ei 0x00
 	nop	; F5AC08  nop
 	ret	; F5AC09  ret
 ; ---------------------------------------------------------------------
@@ -117380,7 +117380,7 @@ SC1_TxFlush_Body:
 ;          merge.  Nothing here decides that.
 ; ---------------------------------------------------------------------
 SC1_TxFlush_Exit:
-	di	; F5B05D  ei 0x00
+	ei	0	; F5B05D  ei 0x00
 	ret	; F5B05F  ret
 ; ---------------------------------------------------------------------
 ; SC1_Service_SetBit2 / SC1_Service_ClearBit2 / SC1_RxDecode -- drain the rx
@@ -117984,7 +117984,7 @@ SC1_DeadTail:
 	m_ld_mi16 MDD+r3, 0x06, 0x000a	; F5B3FB  ld (XHL+0x06),0x000a
 	m_ld_mi16 MDD+r3, 0x08, 0x0056	; F5B400  ld (XHL+0x08),0x0056
 	m_and_mi8 MB8, 0x56, 0xdf	; F5B405  and (0x56),0xdf
-	di	; F5B409  ei 0x00
+	ei	0	; F5B409  ei 0x00
 	ldw	(10976:16), 0	; F5B40B  ld (0x2ae0),0x0000
 	ldw	(10978:16), 0	; F5B411  ld (0x2ae2),0x0000
 	calr	63239	; F5B417  calr 0xf5ab21
@@ -132630,7 +132630,7 @@ sub_F65792:
 	pop	sr	; F657AA  pop SR
 	max	; F657AB  max
 	halt	; F657AC  halt
-	di	; F657AD  ei 0x00
+	ei	0	; F657AD  ei 0x00
 	nop	; F657AF  nop
 	push	10	; F657B0  push 0x0a
 

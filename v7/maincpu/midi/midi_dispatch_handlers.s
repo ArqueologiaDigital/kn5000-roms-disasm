@@ -4421,7 +4421,7 @@ MidiChan_CheckSysExEnd:
 MidiChan_SendFieldParam3:
 	.byte 0xd8, 0x12, 0xd8, 0x09
 MidiChan_WriteAndSetFlag:
-	di
+	ei	0
 	ld	bc, wa
 	ld	xwa, (xsp+2)
 MIDI_ProcessChannelPair:
@@ -4875,7 +4875,7 @@ MidiSeq_SetRange3900:
 MidiSeq_SetRange4D800:
 	swi	5
 	inc	6, xsp
-	di
+	ei	0
 MidiSeq_CompareRange:
 	pop	xiz
 	inc	2, xsp
