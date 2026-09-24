@@ -666,14 +666,14 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	pushw 0x0002
 	ld	bc, hl
 	lda xde, (0x2e1c96:24)
-	calr	0x4ec2
+	calr	HDAE5000_HD_Data_Copy
 	jr t, .LRF_0436                        ; [68 12] jr T,0x280436
 .LRF_0424:
 	lda xwa, (0x22aa4c:24)
 	pushw 0x0002
 	lda xde, (0x2e1c96:24)
 	ld	bc, 0:i3
-	calr	0x4eae
+	calr	HDAE5000_HD_Data_Copy
 .LRF_0436:
 	ld	wa, 1:i3
 	jp HDAE5000_Set_Menu_Visibility                             ; jp 0x28b258
@@ -722,7 +722,7 @@ HDAE5000_TtlScreenRProc:
 	ld	xwa, 0:i3
 	ld	xbc, 0x01e000a1
 	ld	xde, 0:i3
-	calr	0xfe5a
+	calr	HDAE5000_Alloc_Memory_1
 	or xhl, xhl                             ; or XHL,XHL
 	jr z, .LRF_051a                        ; [66 62] jr Z,0x28051a
 	pushw 0x9600
@@ -798,7 +798,7 @@ HDAE5000_TtlScreenR2Proc:
 	ld	xwa, 0:i3
 	ld	xbc, 0x01e000a1
 	ld	xde, 0:i3
-	calr	0xfda9
+	calr	HDAE5000_Alloc_Memory_2
 	or xhl, xhl                             ; or XHL,XHL
 	jr z, .LRF_05f8                        ; [66 62] jr Z,0x2805f8
 	pushw 0x9600
@@ -874,7 +874,7 @@ HDAE5000_TtlScreenR3Proc:
 	ld	xwa, 0:i3
 	ld	xbc, 0x01e000a1
 	ld	xde, 0:i3
-	calr	0xfcf8
+	calr	HDAE5000_Alloc_Memory_3
 	or xhl, xhl                             ; or XHL,XHL
 	jr z, .LRF_06d6                        ; [66 62] jr Z,0x2806d6
 	pushw 0x9600
@@ -950,7 +950,7 @@ HDAE5000_IvScreenR2Proc:
 	ld	xwa, 0:i3
 	ld	xbc, 0x01e000a1
 	ld	xde, 0:i3
-	calr	0xfbef
+	calr	HDAE5000_Alloc_Memory_2
 	or xhl, xhl                             ; or XHL,XHL
 	jr z, .LRF_078c                        ; [66 3c] jr Z,0x28078c
 	pushw 0x0400
@@ -3928,11 +3928,11 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	; Large 124-byte stack frame for sector buffer and parameter blocks
 	lda xsp, (xsp - 124)		; allocate stack frame
 	ld wa, 0:i3
-	call 0x293E88
+	call HDAE5000_PPI_Write_Sector_Helper
 	cp hl, 0:i3
 	jrl nz, .Lpws_error
 	lda xwa, (xsp + 72)
-	call 0x297573
+	call HDAE5000_PPI_Write_Sector_Helper2
 	; MemFill: clear 32-byte buffer
 	pushw 0x0020			; count = 32
 	pushw 0x0000			; fill value = 0
@@ -3958,7 +3958,7 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	calr HDAE5000_Event_Handler
 	; Write sector data
 	lda xwa, (xsp + 56)
-	call 0x298B6C
+	call HDAE5000_PPI_Write_Sector_Helper3
 	; MemFill: clear buffer again
 	pushw 0x0020			; count = 32
 	pushw 0x0000			; fill value = 0
@@ -3968,14 +3968,14 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	; Compare and copy operations
 	lda xbc, (xsp + 76)
 	lda xwa, (xsp + 20)
-	call 0x29B815
+	call HDAE5000_PPI_Write_Sector_Helper4
 	lda xbc, (xsp + 20)
 	lda xde, (0x2e22aa:24); 0x2E22AA
 	lda xwa, (xsp + 20)
-	call 0x29B840
+	call HDAE5000_PPI_Write_Sector_Helper5
 	lda xbc, (xsp + 20)
 	lda xwa, (xsp + 24)
-	call 0x29BA20
+	call HDAE5000_Divide_Signed_Sub2
 	; Copy block via PPI
 	lda xiy, (xsp + 24)
 	ld xix, (xiy + 4)

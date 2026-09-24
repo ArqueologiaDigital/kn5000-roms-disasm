@@ -61,6 +61,7 @@ HDAE5000_Display_Buffer_Validate:	; 0x29AF71
 	; --- String copy with length limit (secondary entry) ---
 	; Stack: [+0x04] dest, [+0x08] source, [+0x0C] count
 	; Returns: XHL = end of copied string
+HDAE5000_HD_Read_Write_Helper:
 	ld xix, (xsp + 4)		; XIX = dest
 	ld xhl, xix			; XHL = dest (for return)
 	jr t, .Lscl_entry
@@ -149,6 +150,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr nz, .LMCR_b010                      ; [6e f6] jr NZ,0x29b010
 	ret
 
+HDAE5000_Directory_Handler_Helper:
 	push xiz
 	ld xiz, (xsp + 0x08)                    ; ld XIZ,(XSP+0x08)
 	push xiz
@@ -177,6 +179,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_Directory_Handler_Helper2:
 	ld xix, (xsp + 0x04)                    ; ld XIX,(XSP+0x04)
 	ld	xhl, xix
 	jr t, .LMCR_b074                       ; [68 1f] jr T,0x29b074
@@ -200,6 +203,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr nz, .LMCR_b055                      ; [6e dc] jr NZ,0x29b055
 	ret
 
+HDAE5000_String_Format_Helper:
 	lda	xsp, (xsp-16)
 	push xiz
 	ld	iz, 0:i3
@@ -294,7 +298,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	sub	iz, bc
 .LMCR_b164:
 	pushw iz                                ; push IZ
-	calr	0x0541
+	calr	HDAE5000_MemCopy_Reverse_Helper10
 	inc 2, xsp                              ; inc 2,XSP
 	ld (xsp + 0x04), hl
 	cp	iz, 0:i3
@@ -353,7 +357,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	pushm	(xsp+8)
 	pushw 0x0023
 	pushw 0x94aa
-	calr	0x03e0
+	calr	HDAE5000_MemCopy_Reverse_Helper8
 	inc	6, xsp
 	ld	qiz, 0
 	cp	iz, 0:i3
@@ -363,11 +367,11 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 .LMCR_b215:
 	pushw 0x0023
 	pushw 0x94aa
-	calr	0x02f7
+	calr	HDAE5000_MemCopy_Reverse_Helper5
 	pushm	(xsp+12)
 	pushw 0x0023
 	pushw 0x94aa
-	calr	0x03bb
+	calr	HDAE5000_MemCopy_Reverse_Helper8
 	lda	xsp, (xsp+10)
 	sub	iz, hl
 	inc	1, qiz
@@ -384,11 +388,11 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr t, .LMCR_b27c                       ; [68 32] jr T,0x29b27c
 .LMCR_b24a:
 	push xbc
-	calr	0x02f0
+	calr	HDAE5000_MemCopy_Reverse_Helper6
 	pushm	(xsp+12)
 	pushw 0x0023
 	pushw 0x94aa
-	calr	0x03fd
+	calr	HDAE5000_MemCopy_Reverse_Helper9
 	lda	xsp, (xsp+10)
 	add	iz, hl
 	inc	1, qiz
@@ -405,7 +409,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	pushw wa                                ; push WA
 	push xbc
 .LMCR_b27c:
-	calr	0x00e6
+	calr	HDAE5000_MemCopy_Reverse_Helper
 	inc 0, xsp                              ; inc 0,XSP
 	ld	qiz, 1
 .LMCR_b284:
@@ -414,7 +418,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	add	bc, bc
 	lda xwa, (0x2394aa:24)
 	push_sriw 0x07, 0xE0, 0xE4	; pushw (XWA+BC)
-	calr	0x0195
+	calr	HDAE5000_MemCopy_Reverse_Helper3
 	inc 4, xsp                              ; inc 4,XSP
 	inc	1, qiz
 	cpw	qiz, 0x0009
@@ -495,6 +499,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	lda	xsp, (xsp+16)
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper:
 	dec 0, xsp                              ; dec 0,XSP
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
@@ -562,6 +567,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper2:
 	ld xiy, (xsp + 0x04)                    ; ld XIY,(XSP+0x04)
 	and16_imm_ri xiy, 0xff, 0x00		; and (XIY),0x00ff
 	ld	ix, 1:i3
@@ -596,6 +602,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr lt, .LMCR_b3fa                      ; [61 cd] jr LT,0x29b3fa
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper3:
 	pushw iz                                ; push IZ
 	lda xde, (0x2394ea:24)
 	ld	xwa, xde
@@ -630,7 +637,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr t, .LMCR_b4cc                       ; [68 3d] jr T,0x29b4cc
 .LMCR_b48f:
 	inc	1, iz
-	calr	0x010c
+	calr	HDAE5000_MemCopy_Reverse_Helper7
 .LMCR_b494:
 	ldw	wa, 0x0008
 	sub	wa, (xsp+8)
@@ -641,7 +648,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr z, .LMCR_b48f                       ; [66 e5] jr Z,0x29b48f
 	pushw iz                                ; push IZ
 	pushw wa                                ; push WA
-	calr	0x001f
+	calr	HDAE5000_MemCopy_Reverse_Helper4
 	inc 4, xsp                              ; inc 4,XSP
 	ldw	bc, 0x0008
 	sub	bc, (xsp+8)
@@ -654,6 +661,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	popw iz                                 ; pop IZ
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper4:
 	ld	de, (xsp+6)
 	cp	de, 0x0020
 	jr ge, .LMCR_b4e4                      ; [69 0d] jr GE,0x29b4e4
@@ -684,6 +692,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr gt, .LMCR_b4f5                      ; [6a e1] jr GT,0x29b4f5
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper5:
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld	xbc, xwa
 	lda	xde, (xwa+18)
@@ -702,6 +711,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr c, .LMCR_b51d                       ; [67 e0] jr C,0x29b51d
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper6:
 	pushw iz                                ; push IZ
 	ld	ix, 0:i3
 	ld	xbc, 0:i3
@@ -751,6 +761,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	popw iz                                 ; pop IZ
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper7:
 	lda xhl, (0x2394ea:24)
 	ld	xbc, xhl
 	lda	xde, (xhl+20)
@@ -782,6 +793,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr gt, .LMCR_b5c4                      ; [6a e0] jr GT,0x29b5c4
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper8:
 	dec	2, xsp
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
@@ -826,7 +838,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	pushm	(xsp+14)
 	ld xwa, (xsp + 0x0c)                    ; ld XWA,(XSP+0x0c)
 	push xwa
-	calr	0xfda9
+	calr	HDAE5000_MemCopy_Reverse_Helper2
 	inc 0, xsp                              ; inc 0,XSP
 .LMCR_b643:
 	add	(xsp+2), iz
@@ -841,6 +853,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	inc 2, xsp                              ; inc 2,XSP
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper9:
 	pushw iz                                ; push IZ
 	ld xde, (xsp + 0x06)                    ; ld XDE,(XSP+0x06)
 	ld	iz, 0:i3
@@ -881,7 +894,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	pushw bc                                ; push BC
 	pushw iz                                ; push IZ
 	push xde
-	calr	0xfcc2
+	calr	HDAE5000_MemCopy_Reverse_Helper
 	inc 0, xsp                              ; inc 0,XSP
 .LMCR_b6a5:
 	ld	hl, iz
@@ -889,6 +902,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	popw iz                                 ; pop IZ
 	ret
 
+HDAE5000_MemCopy_Reverse_Helper10:
 	dec 0, xsp                              ; dec 0,XSP
 	push xiz
 	ld	wa, (xsp+16)
@@ -910,11 +924,11 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld xiz, (xsp + 0x04)                    ; ld XIZ,(XSP+0x04)
 	ld	xwa, xiz
 	lda	xbc, (1000:16)
-	call 0x29b8b7
+	call HDAE5000_Cell_Copy_Buffer_Helper
 	ld (xsp + 0x08), xhl                    ; ld (XSP+0x08),XHL
 	ld	xwa, xiz
 	lda	xbc, (1000:16)
-	call 0x29b8bb
+	call HDAE5000_Cell_Copy_Buffer_Helper2
 	ld	xiz, xhl
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	cp	xwa, 0x000003d4
@@ -962,6 +976,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	ret
 
 	nop                                     ; nop
+HDAE5000_Multiply_Sub:
 	ld	xhl, 0:i3
 	ld xix, (xbc)                           ; ld XIX,(XBC)
 	ld	de, qix
@@ -988,6 +1003,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	ldib_erp 0xee, 1		; ld QL,1
 	jr t, .LMUL_b76d                       ; [68 f0] jr T,0x29b76d
 	nop                                     ; nop
+HDAE5000_Multiply_Sub2:
 	ld xhl, (xbc)                           ; ld XHL,(XBC)
 	cpib_erp 0xee, 0		; cp QL,0
 	jr nz, .LMUL_b7ac                      ; [6e 27] jr NZ,0x29b7ac
@@ -1030,6 +1046,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	call_cc_ri xbc, 14		; call NZ,XBC
 	ret
 
+HDAE5000_Display_String_Render_Helper25:
 	ld xix, (xbc)                           ; ld XIX,(XBC)
 	ld xiy, (xbc + 0x04)                    ; ld XIY,(XBC+0x04)
 	ld (xwa), xix                           ; ld (XWA),XIX
@@ -1037,6 +1054,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	ret
 
 	nop                                     ; nop
+HDAE5000_Multiply_Sub3:
 	ld xix, (xbc)                           ; ld XIX,(XBC)
 	ld xiy, (xbc + 0x04)                    ; ld XIY,(XBC+0x04)
 	ld	hl, (xbc+8)
@@ -1051,23 +1069,24 @@ HDAE5000_Multiply:	; 0x29B72D
 	ld	xiz, xwa
 	ld	xwa, xsp
 	ld xbc, (xbc)                           ; ld XBC,(XBC)
-	call 0x29b9ac
+	call HDAE5000_Divide_Signed_Sub
 	ld	xwa, xiz
 	ld	xbc, xsp
-	call 0x29b77e
+	call HDAE5000_Multiply_Sub2
 	lda	xsp, (xsp+8)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_PPI_Write_Sector_Helper4:
 	push xiz
 	lda	xsp, (xsp-8)
 	ld	xiz, xwa
 	ld	xwa, xsp
 	ld xbc, (xbc)                           ; ld XBC,(XBC)
-	call 0x29b9c5
+	call HDAE5000_Multiply_Helper
 	ld	xwa, xiz
 	ld	xbc, xsp
-	call 0x29b77e
+	call HDAE5000_Multiply_Sub2
 	lda	xsp, (xsp+8)
 	pop xiz                                 ; pop XIZ
 	ret
@@ -1080,22 +1099,23 @@ HDAE5000_Multiply:	; 0x29B72D
 	ld	(xwa+2), 0x08
 	ret
 
+HDAE5000_PPI_Write_Sector_Helper5:
 	push xiz
 	lda	xsp, (xsp-20)
 	ld	xiz, xde
 	ld (xsp + 0x10), xwa                    ; ld (XSP+0x10),XWA
 	ld	xwa, xsp
-	call 0x29b744
+	call HDAE5000_Multiply_Sub
 	ld	xbc, xiz
 	lda	xiz, (xsp+8)
 	lda	xwa, (xiz)
-	call 0x29b744
+	call HDAE5000_Multiply_Sub
 	ld	xwa, xsp
 	lda	xbc, (xiz)
-	call 0x29ba64
+	call HDAE5000_Divide_Signed_Sub3
 	ld xwa, (xsp + 0x10)                    ; ld XWA,(XSP+0x10)
 	ld	xbc, xsp
-	call 0x29b77e
+	call HDAE5000_Multiply_Sub2
 	lda	xsp, (xsp+20)
 	pop xiz                                 ; pop XIZ
 	ret
@@ -1117,7 +1137,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	inc 1, xbc                              ; inc 1,XBC
 .LMUL_b891:
 	pushw de                                ; push DE
-	calr	0x0030
+	calr	HDAE5000_Divide_Signed
 	popw wa                                 ; pop WA
 	cp	w, 1:i3
 	jr z, .LMUL_b8a3                       ; [66 09] jr Z,0x29b8a3
@@ -1141,8 +1161,10 @@ HDAE5000_Multiply:	; 0x29B72D
 	inc 1, xhl                              ; inc 1,XHL
 	ret
 
+HDAE5000_Cell_Copy_Buffer_Helper:
 	ld	d, 0x00:opc
 	jr t, .LMUL_b870                       ; [68 b5] jr T,0x29b870
+HDAE5000_Cell_Copy_Buffer_Helper2:
 	ld	d, 0x01:opc
 	jr t, .LMUL_b870                       ; [68 b1] jr T,0x29b870
 
@@ -1166,7 +1188,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	jr nz, .LDIV_b915                      ; [6e 3d] jr NZ,0x29b915
 	ld	xde, xwa
 	div	xwa, xbc
-	jr	ov, 0x0a
+	jr	ov, .LDIV_b8e8
 	ld	xhl, 0:i3
 	ld	xde, xhl
 	ld	hl, wa
@@ -1231,6 +1253,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	ld	xde, xwa
 	ret
 
+HDAE5000_Divide_Signed_Helper:
 	ld xhl, (xbc)                           ; ld XHL,(XBC)
 	cpib_erp 0xee, 0		; cp QL,0
 	jr nz, .LDIV_b97b                      ; [6e 32] jr NZ,0x29b97b
@@ -1276,6 +1299,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	ret
 
 	nop                                     ; nop
+HDAE5000_Divide_Signed_Sub:
 	ld	e, 0x00:opc
 	ldcf	0x0f, qbc
 	stcf8ri 7, e		; stcf 0x07,E
@@ -1284,15 +1308,16 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	cpl	bc
 	inc 1, xbc                              ; inc 1,XBC
 .LDIV_b9be:
-	calr	0x0004
+	calr	HDAE5000_Multiply_Helper
 	ld	(xiy+3), e
 	ret
 
+HDAE5000_Multiply_Helper:
 	ld	xiy, xwa
 	or xbc, xbc                             ; or XBC,XBC
 	jr z, .LDIV_ba1a                       ; [66 4f] jr Z,0x29ba1a
 	bs1b	qbc
-	jr	ov, 0x05
+	jr	ov, .LDIV_b9d5
 	add	a, 0x10
 	jr t, .LDIV_b9d7                       ; [68 02] jr T,0x29b9d7
 .LDIV_b9d5:
@@ -1335,11 +1360,12 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	ret
 
 	nop                                     ; nop
+HDAE5000_Divide_Signed_Sub2:
 	push xiz
 	lda	xsp, (xsp-12)
 	ld	xiz, xwa
 	ld	xwa, xsp
-	call 0x29b744
+	call HDAE5000_Multiply_Sub
 	cp	l, 0:i3
 	jr nz, .LDIV_ba56                      ; [6e 26] jr NZ,0x29ba56
 	ld xhl, (xsp + 0x04)                    ; ld XHL,(XSP+0x04)
@@ -1358,12 +1384,13 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 .LDIV_ba56:
 	ld	xwa, xiz
 	ld	xbc, xsp
-	call 0x29b942
+	call HDAE5000_Divide_Signed_Helper
 	lda	xsp, (xsp+12)
 	pop xiz                                 ; pop XIZ
 	ret
 
 	nop                                     ; nop
+HDAE5000_Divide_Signed_Sub3:
 	ld	e, (xwa+2)
 	or	e, (xwa+2)
 	jp	nz, (0x29B830:24)

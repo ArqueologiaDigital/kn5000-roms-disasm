@@ -210,7 +210,7 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	ld	xwa, 0x007f0098
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xc698
+	calr	HDAE5000_HD_Seek
 .LFS_7334:
 	cpw	(xsp+42), 0x0001
 	jrl nz, .LFS_7447                      ; [7e 0b 01] jrl NZ,0x287447
@@ -482,20 +482,20 @@ HDAE5000_LBNLswBitCheck:
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_76ec                       ; [6e 22] jr NZ,0x2876ec
 	lda xwa, (0x22aa4c:24)
-	calr	0xdc6e
+	calr	HDAE5000_HD_Buffer_Init
 	ld	bc, (0x23A092:24)
 	ld	de, (0x23A094:24)
 	ld	wa, (0x22AA4C:24)
 	pushw wa                                ; push WA
 	ld	xwa, 0x007f0102
-	calr	0xc2e2
+	calr	HDAE5000_HD_Seek
 	jr t, .LFS_76fd                        ; [68 11] jr T,0x2876fd
 .LFS_76ec:
 	pushw 0xffff
 	ld	xwa, 0x007f0102
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xc2cf
+	calr	HDAE5000_HD_Seek
 .LFS_76fd:
 	ld	xhl, 0:i3
 	jr t, .LFS_7703                        ; [68 02] jr T,0x287703
@@ -581,20 +581,20 @@ HDAE5000_LBNPmtBitCheck:
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_77f6                       ; [6e 22] jr NZ,0x2877f6
 	lda xwa, (0x22aa4c:24)
-	calr	0xdb64
+	calr	HDAE5000_HD_Buffer_Init
 	ld	bc, (0x23A092:24)
 	ld	de, (0x23A094:24)
 	ld	wa, (0x22AA4C:24)
 	pushw wa                                ; push WA
 	ld	xwa, 0x007f0102
-	calr	0xc1d8
+	calr	HDAE5000_HD_Seek
 	jr t, .LFS_7807                        ; [68 11] jr T,0x287807
 .LFS_77f6:
 	pushw 0xffff
 	ld	xwa, 0x007f0102
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xc1c5
+	calr	HDAE5000_HD_Seek
 .LFS_7807:
 	ld	xhl, 0:i3
 	jr t, .LFS_780d                        ; [68 02] jr T,0x28780d
@@ -680,20 +680,20 @@ HDAE5000_LBNSqtBitCheck:
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7900                       ; [6e 22] jr NZ,0x287900
 	lda xwa, (0x22aa4c:24)
-	calr	0xda5a
+	calr	HDAE5000_HD_Buffer_Init
 	ld	bc, (0x23A092:24)
 	ld	de, (0x23A094:24)
 	ld	wa, (0x22AA4C:24)
 	pushw wa                                ; push WA
 	ld	xwa, 0x007f0102
-	calr	0xc0ce
+	calr	HDAE5000_HD_Seek
 	jr t, .LFS_7911                        ; [68 11] jr T,0x287911
 .LFS_7900:
 	pushw 0xffff
 	ld	xwa, 0x007f0102
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xc0bb
+	calr	HDAE5000_HD_Seek
 .LFS_7911:
 	ld	xhl, 0:i3
 	jr t, .LFS_7917                        ; [68 02] jr T,0x287917
@@ -779,20 +779,20 @@ HDAE5000_LBNCmpBitCheck:
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7a0a                       ; [6e 22] jr NZ,0x287a0a
 	lda xwa, (0x22aa4c:24)
-	calr	0xd950
+	calr	HDAE5000_HD_Buffer_Init
 	ld	bc, (0x23A092:24)
 	ld	de, (0x23A094:24)
 	ld	wa, (0x22AA4C:24)
 	pushw wa                                ; push WA
 	ld	xwa, 0x007f0102
-	calr	0xbfc4
+	calr	HDAE5000_HD_Seek
 	jr t, .LFS_7a1b                        ; [68 11] jr T,0x287a1b
 .LFS_7a0a:
 	pushw 0xffff
 	ld	xwa, 0x007f0102
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xbfb1
+	calr	HDAE5000_HD_Seek
 .LFS_7a1b:
 	ld	xhl, 0:i3
 	jr t, .LFS_7a21                        ; [68 02] jr T,0x287a21
@@ -878,20 +878,20 @@ HDAE5000_LBNTmBitCheck:
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7b14                       ; [6e 22] jr NZ,0x287b14
 	lda xwa, (0x22aa4c:24)
-	calr	0xd846
+	calr	HDAE5000_HD_Buffer_Init
 	ld	bc, (0x23A092:24)
 	ld	de, (0x23A094:24)
 	ld	wa, (0x22AA4C:24)
 	pushw wa                                ; push WA
 	ld	xwa, 0x007f0102
-	calr	0xbeba
+	calr	HDAE5000_HD_Seek
 	jr t, .LFS_7b25                        ; [68 11] jr T,0x287b25
 .LFS_7b14:
 	pushw 0xffff
 	ld	xwa, 0x007f0102
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xbea7
+	calr	HDAE5000_HD_Seek
 .LFS_7b25:
 	ld	xhl, 0:i3
 	jr t, .LFS_7b2b                        ; [68 02] jr T,0x287b2b
@@ -977,20 +977,20 @@ HDAE5000_LBNMspBitCheck:
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7c1e                       ; [6e 22] jr NZ,0x287c1e
 	lda xwa, (0x22aa4c:24)
-	calr	0xd73c
+	calr	HDAE5000_HD_Buffer_Init
 	ld	bc, (0x23A092:24)
 	ld	de, (0x23A094:24)
 	ld	wa, (0x22AA4C:24)
 	pushw wa                                ; push WA
 	ld	xwa, 0x007f0102
-	calr	0xbdb0
+	calr	HDAE5000_HD_Seek
 	jr t, .LFS_7c2f                        ; [68 11] jr T,0x287c2f
 .LFS_7c1e:
 	pushw 0xffff
 	ld	xwa, 0x007f0102
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xbd9d
+	calr	HDAE5000_HD_Seek
 .LFS_7c2f:
 	ld	xhl, 0:i3
 	jr t, .LFS_7c35                        ; [68 02] jr T,0x287c35
@@ -1076,20 +1076,20 @@ HDAE5000_LBNRcmBitCheck:
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7d28                       ; [6e 22] jr NZ,0x287d28
 	lda xwa, (0x22aa4c:24)
-	calr	0xd632
+	calr	HDAE5000_HD_Buffer_Init
 	ld	bc, (0x23A092:24)
 	ld	de, (0x23A094:24)
 	ld	wa, (0x22AA4C:24)
 	pushw wa                                ; push WA
 	ld	xwa, 0x007f0102
-	calr	0xbca6
+	calr	HDAE5000_HD_Seek
 	jr t, .LFS_7d39                        ; [68 11] jr T,0x287d39
 .LFS_7d28:
 	pushw 0xffff
 	ld	xwa, 0x007f0102
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xbc93
+	calr	HDAE5000_HD_Seek
 .LFS_7d39:
 	ld	xhl, 0:i3
 	jr t, .LFS_7d3f                        ; [68 02] jr T,0x287d3f
@@ -1175,20 +1175,20 @@ HDAE5000_LBNMdBitCheck:
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7e32                       ; [6e 22] jr NZ,0x287e32
 	lda xwa, (0x22aa4c:24)
-	calr	0xd528
+	calr	HDAE5000_HD_Buffer_Init
 	ld	bc, (0x23A092:24)
 	ld	de, (0x23A094:24)
 	ld	wa, (0x22AA4C:24)
 	pushw wa                                ; push WA
 	ld	xwa, 0x007f0102
-	calr	0xbb9c
+	calr	HDAE5000_HD_Seek
 	jr t, .LFS_7e43                        ; [68 11] jr T,0x287e43
 .LFS_7e32:
 	pushw 0xffff
 	ld	xwa, 0x007f0102
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xbb89
+	calr	HDAE5000_HD_Seek
 .LFS_7e43:
 	ld	xhl, 0:i3
 	jr t, .LFS_7e49                        ; [68 02] jr T,0x287e49
@@ -1272,20 +1272,20 @@ HDAE5000_LBNMdBitCheck:
 	cpw	(0x22AA5C:24), 5
 	jr nz, .LFS_7f3c                       ; [6e 22] jr NZ,0x287f3c
 	lda xwa, (0x22aa4c:24)
-	calr	0xd41e
+	calr	HDAE5000_HD_Buffer_Init
 	ld	bc, (0x23A092:24)
 	ld	de, (0x23A094:24)
 	ld	wa, (0x22AA4C:24)
 	pushw wa                                ; push WA
 	ld	xwa, 0x007f0102
-	calr	0xba92
+	calr	HDAE5000_HD_Seek
 	jr t, .LFS_7f4d                        ; [68 11] jr T,0x287f4d
 .LFS_7f3c:
 	pushw 0xffff
 	ld	xwa, 0x007f0102
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xba7f
+	calr	HDAE5000_HD_Seek
 .LFS_7f4d:
 	ld	xhl, 0:i3
 	jr t, .LFS_7f53                        ; [68 02] jr T,0x287f53
@@ -1667,7 +1667,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	push xhl
 	pushw 0x0022
 	pushw 0xa058
-	call 0x29af8f
+	call HDAE5000_HD_Read_Write_Helper
 	pushw 0x002e
 	pushw 0x2ebe
 	pushw 0x0022
@@ -1763,7 +1763,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	lda	xwa, (xsp+2)
 	ld	xde, xwa
 	ld	wa, (0x23A096:24)
-	call 0x28fbf3
+	call HDAE5000_FS_Write_FSB_Helper
 	cp	hl, 0xffff
 	jr z, .LFWF_847d                       ; [66 36] jr Z,0x28847d
 	cp	(xsp+6), 0x01
@@ -1826,7 +1826,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	ld	xde, xwa
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call 0x28fbf3
+	call HDAE5000_FS_Write_FSB_Helper
 	ld	iz, hl
 	ld	wa, iz
 	cp	wa, 0xffff
@@ -1901,7 +1901,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	ld	bc, (xsp+2)
 	ld	de, (xsp+4)
 	pushw iz                                ; push IZ
-	calr	0xb3e0
+	calr	HDAE5000_HD_Seek
 	jr t, .LFWF_860c                       ; [68 1e] jr T,0x28860c
 .LFWF_85ee:
 	ld	a, (xsp+32)
@@ -1912,7 +1912,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	pushw 0xffff
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
-	calr	0xb3c0
+	calr	HDAE5000_HD_Seek
 .LFWF_860c:
 	cp	(xsp+30), 0x02
 	jr z, .LFWF_8666                       ; [66 54] jr Z,0x288666
@@ -1977,23 +1977,23 @@ HDAE5000_SelectFlsScreen:
 	or xhl, xhl                             ; or XHL,XHL
 	jrl nz, .LFWF_881e                     ; [7e 38 01] jrl NZ,0x28881e
 	ldw	(0x23A090:24), 0
-	calr	0xf865
+	calr	HDAE5000_FS_Read_FSB
 	jrl t, .LFWF_881e                      ; [78 2b 01] jrl T,0x28881e
 .LFWF_86f3:
 	ldw	(0x23A090:24), 24
-	calr	0xf858
+	calr	HDAE5000_FS_Read_FSB
 	jrl t, .LFWF_881e                      ; [78 1e 01] jrl T,0x28881e
 .LFWF_8700:
 	ldw	(0x23A090:24), 48
-	calr	0xf84b
+	calr	HDAE5000_FS_Read_FSB
 	jrl t, .LFWF_881e                      ; [78 11 01] jrl T,0x28881e
 .LFWF_870d:
 	ldw	(0x23A090:24), 72
-	calr	0xf83e
+	calr	HDAE5000_FS_Read_FSB
 	jrl t, .LFWF_881e                      ; [78 04 01] jrl T,0x28881e
 .LFWF_871a:
 	ldw	(0x23A090:24), 96
-	calr	0xf831
+	calr	HDAE5000_FS_Read_FSB
 	jrl t, .LFWF_881e                      ; [78 f7 00] jrl T,0x28881e
 .LFWF_8727:
 	ld	bc, (0x23A090:24)
@@ -2002,7 +2002,7 @@ HDAE5000_SelectFlsScreen:
 	ld	(0x23a096), wa
 	ld	wa, 0:i3
 	ld	bc, 2:i3
-	calr	0xfb59
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0124)
@@ -2037,7 +2037,7 @@ HDAE5000_SelectFlsScreen:
 	cpw	(0x23A090:24), 24
 	jr lt, .LFWF_881e                      ; [61 69] jr LT,0x28881e
 	subw	(0x23A090:24), 24
-	calr	0xf796
+	calr	HDAE5000_FS_Read_FSB
 	ld	xwa, xiz
 	add	xwa, 0x00000018
 	ld	xde, xwa
@@ -2052,7 +2052,7 @@ HDAE5000_SelectFlsScreen:
 	cpw	(0x23A090:24), 96
 	jr ge, .LFWF_881e                      ; [69 2f] jr GE,0x28881e
 	addw	(0x23A090:24), 24
-	calr	0xf75c
+	calr	HDAE5000_FS_Read_FSB
 	ld	xwa, xiz
 	sub	xwa, 0x00000018
 	ld	xde, xwa
@@ -2132,7 +2132,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xde, xwa
 	ld	wa, iz
 	ld	bc, qiz
-	call 0x28fbf3
+	call HDAE5000_FS_Write_FSB_Helper
 	cp	hl, 0xffff
 	jrl z, .LFWF_899f                      ; [76 9e 00] jrl Z,0x28899f
 	cp	(xsp+9), 0x01
@@ -2155,7 +2155,7 @@ HDAE5000_FlsLoadScreen:
 	push xwa
 	ld	wa, (xsp+10)
 	ld	bc, (xsp+12)
-	calr	0x25f6
+	calr	HDAE5000_Display_Manager
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 d1 02] jrl Z,0x288c1a
 	cp	(0x229DAC:24), 2
@@ -2195,7 +2195,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xde, xwa
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call 0x28fbf3
+	call HDAE5000_FS_Write_FSB_Helper
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 4a 02] jrl Z,0x288c1a
 	cp	(xsp+9), 0x01
@@ -2219,7 +2219,7 @@ HDAE5000_FlsLoadScreen:
 	push xwa
 	ld	wa, (xsp+10)
 	ld	bc, (xsp+12)
-	calr	0x2520
+	calr	HDAE5000_Display_Manager
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 fb 01] jrl Z,0x288c1a
 	cp	(0x229DAC:24), 2
@@ -2254,7 +2254,7 @@ HDAE5000_FlsLoadScreen:
 	ld	(0x23a098), wa
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xf80b
+	calr	HDAE5000_FS_Write_FSB
 	ld	wa, (0x23A096:24)
 	call HDAE5000_Validate_Cell_Coords
 	cp	hl, 0xffff
@@ -2294,7 +2294,7 @@ HDAE5000_FlsLoadScreen:
 	ldw	(0x22B272:24), 16
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	calr	0xf770
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, xiz
 	add	xwa, 0x00000010
 	ld	xde, xwa
@@ -2309,7 +2309,7 @@ HDAE5000_FlsLoadScreen:
 	ldw	(0x22B272:24), 0
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	calr	0xf73a
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, xiz
 	add	xwa, 0x00000010
 	ld	xde, xwa
@@ -2329,7 +2329,7 @@ HDAE5000_FlsLoadScreen:
 	ldw	(0x22B272:24), 0
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	calr	0xf6ec
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, xiz
 	sub	xwa, 0x00000010
 	ld	xde, xwa
@@ -2344,7 +2344,7 @@ HDAE5000_FlsLoadScreen:
 	ldw	(0x22B272:24), 16
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	calr	0xf6b7
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, xiz
 	sub	xwa, 0x00000010
 	ld	xde, xwa
@@ -2362,7 +2362,7 @@ HDAE5000_FlsLoadScreen:
 	ld	(0x23a098), wa
 	ld	wa, 0:i3
 	ld	bc, 1:i3
-	calr	0xf67b
+	calr	HDAE5000_FS_Write_FSB
 .LFWF_8c1a:
 	ld	xhl, 0:i3
 	pop xiz                                 ; pop XIZ
@@ -2500,10 +2500,10 @@ HDAE5000_FlsEditScreen:
 .LFWF_8dd2:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call 0x28feae
+	call HDAE5000_FlsEditScreen_Helper
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xf4ae
+	calr	HDAE5000_FS_Write_FSB
 	jrl t, .LFWF_8fe9                      ; [78 ff 01] jrl T,0x288fe9
 .LFWF_8dea:
 	bit	0x07, iz
@@ -2511,17 +2511,17 @@ HDAE5000_FlsEditScreen:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, 0:i3
-	call 0x290106
+	call HDAE5000_FlsEditScreen_Helper2
 	jr t, .LFWF_8e11                       ; [68 10] jr T,0x288e11
 .LFWF_8e01:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, 1:i3
-	call 0x290106
+	call HDAE5000_FlsEditScreen_Helper2
 .LFWF_8e11:
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xf47d
+	calr	HDAE5000_FS_Write_FSB
 	jrl t, .LFWF_8fe9                      ; [78 ce 01] jrl T,0x288fe9
 .LFWF_8e1b:
 	bit	0x07, iz
@@ -2529,21 +2529,21 @@ HDAE5000_FlsEditScreen:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, 0:i3
-	call 0x290148
+	call HDAE5000_FlsEditScreen_Helper3
 	jr t, .LFWF_8e42                       ; [68 10] jr T,0x288e42
 .LFWF_8e32:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, 1:i3
-	call 0x290148
+	call HDAE5000_FlsEditScreen_Helper3
 .LFWF_8e42:
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xf44c
+	calr	HDAE5000_FS_Write_FSB
 	jrl t, .LFWF_8fe9                      ; [78 9d 01] jrl T,0x288fe9
 .LFWF_8e4c:
 	ld	xwa, 0x007f0151
-	calr	0xa8ba
+	calr	HDAE5000_HD_Format_Params
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0124)
@@ -2565,7 +2565,7 @@ HDAE5000_FlsEditScreen:
 	ld_sril	xhl, (xwa + 0x00e4)
 	ldw	wa, 0x0064
 	call	(xhl)
-	calr	0x2383
+	calr	HDAE5000_Wait_Callback_Loop
 	ld	wa, 0:i3
 	call HDAE5000_Display_Callback
 	cp	hl, 0xffff
@@ -2588,7 +2588,7 @@ HDAE5000_FlsEditScreen:
 	call	(xhl)
 	ld	xwa, 0x007f0298
 	ld	xbc, 0x007f0163
-	calr	0x24ec
+	calr	HDAE5000_UI_Main_Handler
 	ld	xwa, 0x01ca0002
 	push xwa
 	ld	xwa, 0x007f0163
@@ -2618,7 +2618,7 @@ HDAE5000_FlsEditScreen:
 	ldw	(0x22B272:24), 0
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xf324
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, xiz
 	add	xwa, 0x00000010
 	ld	xde, xwa
@@ -2635,7 +2635,7 @@ HDAE5000_FlsEditScreen:
 	ldw	(0x22B272:24), 16
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xf2e6
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, xiz
 	sub	xwa, 0x00000010
 	ld	xde, xwa
@@ -2652,7 +2652,7 @@ HDAE5000_FlsEditScreen:
 	ld	(0x23a098), wa
 	ld	wa, 1:i3
 	ld	bc, 1:i3
-	calr	0xf2ac
+	calr	HDAE5000_FS_Write_FSB
 .LFWF_8fe9:
 	ld	xhl, 0:i3
 	pop xiz                                 ; pop XIZ
@@ -2713,10 +2713,10 @@ HDAE5000_FlsDel1SwCatch:
 .LFWF_9095:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call 0x28fcb2
+	call HDAE5000_FlsDel1SwCatch_Helper
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xf1eb
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0104)
@@ -2794,10 +2794,10 @@ HDAE5000_FlsDel2SwCatch:
 .LFWF_9192:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call 0x28fd29
+	call HDAE5000_FlsDel2SwCatch_Helper
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xf0ee
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0104)
@@ -2851,27 +2851,27 @@ HDAE5000_FlsDirSelScreen:
 	jrl nz, .LFWF_935a                     ; [7e 0a 01] jrl NZ,0x28935a
 	ldw	(0x23A08E:24), 0
 	ld	xwa, 0x007f0151
-	calr	0xa4af
+	calr	HDAE5000_HD_Format_Params
 	jrl t, .LFWF_935a                      ; [78 f8 00] jrl T,0x28935a
 .LFWF_9262:
 	ldw	(0x23A08E:24), 24
 	ld	xwa, 0x007f0151
-	calr	0xa49d
+	calr	HDAE5000_HD_Format_Params
 	jrl t, .LFWF_935a                      ; [78 e6 00] jrl T,0x28935a
 .LFWF_9274:
 	ldw	(0x23A08E:24), 48
 	ld	xwa, 0x007f0151
-	calr	0xa48b
+	calr	HDAE5000_HD_Format_Params
 	jrl t, .LFWF_935a                      ; [78 d4 00] jrl T,0x28935a
 .LFWF_9286:
 	ldw	(0x23A08E:24), 72
 	ld	xwa, 0x007f0151
-	calr	0xa479
+	calr	HDAE5000_HD_Format_Params
 	jrl t, .LFWF_935a                      ; [78 c2 00] jrl T,0x28935a
 .LFWF_9298:
 	ldw	(0x23A08E:24), 96
 	ld	xwa, 0x007f0151
-	calr	0xa467
+	calr	HDAE5000_HD_Format_Params
 	jrl t, .LFWF_935a                      ; [78 b0 00] jrl T,0x28935a
 .LFWF_92aa:
 	ld	bc, (0x23A08E:24)
@@ -2880,7 +2880,7 @@ HDAE5000_FlsDirSelScreen:
 	ld	(0x23a092), wa
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xa8a9
+	calr	HDAE5000_HD_Read_Write
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0124)
@@ -2894,7 +2894,7 @@ HDAE5000_FlsDirSelScreen:
 	jr lt, .LFWF_935a                      ; [61 73] jr LT,0x28935a
 	subw	(0x23A08E:24), 24
 	ld	xwa, 0x007f0151
-	calr	0xa418
+	calr	HDAE5000_HD_Format_Params
 	ld	xwa, xiz
 	add	xwa, 0x00000018
 	ld	xde, xwa
@@ -2910,7 +2910,7 @@ HDAE5000_FlsDirSelScreen:
 	jr ge, .LFWF_935a                      ; [69 34] jr GE,0x28935a
 	addw	(0x23A08E:24), 24
 	ld	xwa, 0x007f0151
-	calr	0xa3d9
+	calr	HDAE5000_HD_Format_Params
 	ld	xwa, xiz
 	sub	xwa, 0x00000018
 	ld	xde, xwa
@@ -2966,18 +2966,18 @@ HDAE5000_FlsFileSelScreen:
 	ld_sril	xhl, (xwa + 0x00e4)
 	ldw	wa, 0x0064
 	call	(xhl)
-	calr	0x1e30
+	calr	HDAE5000_Wait_Callback_Loop
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (0x23A092:24)
-	call 0x2900c2
+	call HDAE5000_FlsFileSelScreen_Helper
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (0x23A094:24)
-	call 0x2900e4
+	call HDAE5000_FlsFileSelScreen_Helper2
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xee6d
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0124)
@@ -3001,7 +3001,7 @@ HDAE5000_FlsFileSelScreen:
 	decw	1, (0x23A092:24)
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xa6ea
+	calr	HDAE5000_HD_Read_Write
 	ld	xwa, xiz
 	add	xwa, 0x00000010
 	ld	xde, xwa
@@ -3018,7 +3018,7 @@ HDAE5000_FlsFileSelScreen:
 	incw	1, (0x23A092:24)
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xa6ad
+	calr	HDAE5000_HD_Read_Write
 	ld	xwa, xiz
 	sub	xwa, 0x00000010
 	ld	xde, xwa
@@ -3041,18 +3041,18 @@ HDAE5000_FlsFileSelScreen:
 	pushw 0x0002
 	ld	bc, hl
 	lda xde, (0x2e1c96:24)
-	calr	0xbdd5
+	calr	HDAE5000_HD_Data_Copy
 	jr t, .LFWF_9523                       ; [68 12] jr T,0x289523
 .LFWF_9511:
 	lda xwa, (0x22aa4c:24)
 	pushw 0x0002
 	lda xde, (0x2e1c96:24)
 	ld	bc, 0:i3
-	calr	0xbdc1
+	calr	HDAE5000_HD_Data_Copy
 .LFWF_9523:
 	ld	wa, 1:i3
 	ld	bc, 1:i3
-	calr	0xa63e
+	calr	HDAE5000_HD_Read_Write
 .LFWF_952a:
 	ld	xhl, 0:i3
 	pop xiz                                 ; pop XIZ
@@ -3118,18 +3118,18 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	xbc, 0x01c00001
 	ld	xde, 5:i3
 	call	(xhl)
-	calr	0x1c33
+	calr	HDAE5000_Wait_Callback_Loop
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (0x23A092:24)
-	call 0x2900c2
+	call HDAE5000_FlsFileSelScreen_Helper
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (0x23A094:24)
-	call 0x2900e4
+	call HDAE5000_FlsFileSelScreen_Helper2
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	calr	0xec70
+	calr	HDAE5000_FS_Write_FSB
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0104)
@@ -3653,7 +3653,7 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	; Check results and call directory handler
 	lda_dri xwa, 0xFD, 0x1E, 0x01	; lda XWA, XSP+0x011E
 	ld	bc, qiz
-	call 0x291c58
+	call HDAE5000_FS_Scan_Directory_Helper
 	cp hl, 0xffff
 	jrl z, .LFSD__no_match
 	; Match — attempt write
@@ -3664,7 +3664,7 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	pushw 0x0000
 	pushw 0x0000
 	ldw_sri0	wa, (xsp + 0x0132)
-	call 0x292151
+	call HDAE5000_FS_Scan_Directory_Helper2
 	cp hl, 0xffff
 	jrl nz, .LFSD__loop_next
 	; Write failed — error display
