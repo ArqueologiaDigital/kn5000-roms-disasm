@@ -1,0 +1,1442 @@
+IMAGE prom_c  -- 45 sampled sites out of 2479 accepted
+
+### SITE 0: wsa1/prom_c/p7/p7_module.s:13455  src_addr=0xFA1FA1  target=0xFCA252  proposed_label=Double_Multiply (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xbc                                   ; FA1F7A  push XBC
+   	lda	xiy, (xiz-0xB8)                        ; FA1F7B  lda XIY,XIZ+0xff48
+   	call	0xFCA1B6                              ; FA1F80  call 0xfca1b6
+   	ld	xbc, (xiz-0xB4)                         ; FA1F84  ld XBC,(XIZ+0xff4c)
+   	push	xbc                                   ; FA1F89  push XBC
+   	ld	xbc, (xiz-0xB8)                         ; FA1F8A  ld XBC,(XIZ+0xff48)
+   	push	xbc                                   ; FA1F8F  push XBC
+   	ld	xbc, (0xFCCA5E:24)                     ; FA1F90  ld XBC,(0xfcca5e)
+   	push	xbc                                   ; FA1F95  push XBC
+   	ld	xbc, (0xFCCA5A:24)                     ; FA1F96  ld XBC,(0xfcca5a)
+   	push	xbc                                   ; FA1F9B  push XBC
+   	lda	xiy, (xiz-0xC0)                        ; FA1F9C  lda XIY,XIZ+0xff40
+>> 	call	0xFCA252                              ; FA1FA1  call 0xfca252
+   	ld	xbc, (xiz-0xBC)                         ; FA1FA5  ld XBC,(XIZ+0xff44)
+   	push	xbc                                   ; FA1FAA  push XBC
+   	ld	xbc, (xiz-0xC0)                         ; FA1FAB  ld XBC,(XIZ+0xff40)
+   	push	xbc                                   ; FA1FB0  push XBC
+   	call	0xFCADD6                              ; FA1FB1  call 0xfcadd6
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3014; >> = target line):
+   ;          The overflow/underflow guards are literal: `cp IX,0 / jrl LE` and
+   ;          `cp IX,0x07FF / jrl GT`, 0x7FF being the reserved double exponent.
+   ; --------------------------------------------------------------------------
+   Double_Multiply:
+>> 	link32 0xEE, 0x0C, 0x68, 0xFF              ; FCA252  link XIZ,0xff68
+   	pushw	de                                   ; FCA256  push DE
+   	push	xhl                                   ; FCA257  push XHL
+   	push	xix                                   ; FCA258  push XIX
+   	push	xiy                                   ; FCA259  push XIY
+   	ld	wa, (xiz+22)                            ; FCA25A  ld WA,(XIZ+0x16)
+
+### SITE 1: wsa1/prom_c/p7/p7_module.s:6532  src_addr=0xF9DA54  target=0xFCA7A5  proposed_label=Double_Divide (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xbc                                   ; F9DA2D  push XBC
+   	lda	xiy, (xiz-0xAE)                        ; F9DA2E  lda XIY,XIZ+0xff52
+   	call	0xFCA252                              ; F9DA33  call 0xfca252
+   	ld	xbc, (xiz-0x9A)                         ; F9DA37  ld XBC,(XIZ+0xff66)
+   	push	xbc                                   ; F9DA3C  push XBC
+   	ld	xbc, (xiz-0x9E)                         ; F9DA3D  ld XBC,(XIZ+0xff62)
+   	push	xbc                                   ; F9DA42  push XBC
+   	ld	xbc, (xiz-0xAA)                         ; F9DA43  ld XBC,(XIZ+0xff56)
+   	push	xbc                                   ; F9DA48  push XBC
+   	ld	xbc, (xiz-0xAE)                         ; F9DA49  ld XBC,(XIZ+0xff52)
+   	push	xbc                                   ; F9DA4E  push XBC
+   	lda	xiy, (xiz-0xB6)                        ; F9DA4F  lda XIY,XIZ+0xff4a
+>> 	call	0xFCA7A5                              ; F9DA54  call 0xfca7a5
+   	ld	xbc, (xiz-0xB2)                         ; F9DA58  ld XBC,(XIZ+0xff4e)
+   	push	xbc                                   ; F9DA5D  push XBC
+   	ld	xbc, (xiz-0xB6)                         ; F9DA5E  ld XBC,(XIZ+0xff4a)
+   	push	xbc                                   ; F9DA63  push XBC
+   	ld	xbc, (0xFCCA66:24)                     ; F9DA64  ld XBC,(0xfcca66)
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3664; >> = target line):
+   ;          1076 = 1023 + 53 is the bias plus the mantissa width, the scaling a
+   ;          restoring divider needs to keep 53 bits of quotient.
+   ; --------------------------------------------------------------------------
+   Double_Divide:
+>> 	link32 0xEE, 0x0C, 0xDA, 0xFF              ; FCA7A5  link XIZ,0xffda
+   	push	xhl                                   ; FCA7A9  push XHL
+   	push	xde                                   ; FCA7AA  push XDE
+   	push	xix                                   ; FCA7AB  push XIX
+   	push	xiy                                   ; FCA7AC  push XIY
+   	ld	bc, (xiz+14)                            ; FCA7AD  ld BC,(XIZ+0x0e)
+
+### SITE 2: wsa1/prom_c/tone_db/tone_db_module.s:6889  src_addr=0xFBB870  target=0xFAF031  proposed_label=Voice_ApplyParamChange_Dispatch (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	0                                     ; FBB850  push 0x00
+   	extpfx3 0x8E, 0xF7, 0x04                   ; FBB852  push (XIZ+0xf7)
+   	call	0xFAF031                              ; FBB855  call 0xfaf031
+   	inc	8, xsp                                 ; FBB859  inc 0,XSP
+   	jrl sub_FBB793__FBBA89                     ; FBB85B  jrl T,0xfbba89
+   sub_FBB793__FBB85E:
+   	ld	xbc, (xiz-4)                            ; FBB85E  ld XBC,(XIZ+0xfc)
+   	add	xbc, 40                                ; FBB861  add XBC,0x00000028
+   	push	xbc                                   ; FBB867  push XBC
+   	pushw	0                                    ; FBB868  push 0x0000
+   	push	0                                     ; FBB86B  push 0x00
+   	extpfx3 0x8E, 0xF7, 0x04                   ; FBB86D  push (XIZ+0xf7)
+>> 	call	0xFAF031                              ; FBB870  call 0xfaf031
+   	inc	8, xsp                                 ; FBB874  inc 0,XSP
+   	jrl sub_FBB793__FBBA89                     ; FBB876  jrl T,0xfbba89
+   sub_FBB793__FBB879:
+   	ld	xbc, (xiz-4)                            ; FBB879  ld XBC,(XIZ+0xfc)
+   	add	xbc, 43                                ; FBB87C  add XBC,0x0000002b
+-- target context (wsa1/prom_c/midi/midi_controllers.s:5816; >> = target line):
+   ;          entries is.  The arms are named for the REGISTER each one refreshes, which is an
+   ;          instruction operand, and for nothing else.
+   ; --------------------------------------------------------------------------
+   Voice_ApplyParamChange_Dispatch:
+>> 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAF031  link XIZ,0x0000
+   	pushw	hl                                   ; FAF035  push HL
+   	pushw	de                                   ; FAF036  push DE
+   	push	xix                                   ; FAF037  push XIX
+   	ld	xix, (xiz+12)                           ; FAF038  ld XIX,(XIZ+0x0c)
+   	ld	de, (xiz+10)                            ; FAF03B  ld DE,(XIZ+0x0a)
+
+### SITE 3: wsa1/prom_c/tone_db/tone_db_module.s:3560  src_addr=0xFB9C13  target=0xF9A038  proposed_label=MemCopyWords (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jrl nz, sub_FB9B69__FB9E4A                 ; FB9BF5  jrl NZ,0xfb9e4a
+   	ld	c, (xiz+14)                             ; FB9BF8  ld C,(XIZ+0x0e)
+   	and	c, 28                                  ; FB9BFB  and C,0x1c
+   	extz	bc                                    ; FB9BFE  extz BC
+   	ld	(xiz-70), bc                            ; FB9C00  ld (XIZ+0xba),BC
+   	jrl sub_FB9B69__FB9E38                     ; FB9C03  jrl T,0xfb9e38
+   sub_FB9B69__FB9C06:
+   	pushw	0xD9                                 ; FB9C06  push 0x00d9
+   	lda	xbc, (0x87D2:24)                       ; FB9C09  lda XBC,0x0087d2
+   	push	xbc                                   ; FB9C0E  push XBC
+   	ld	xwa, (xiz-4)                            ; FB9C0F  ld XWA,(XIZ+0xfc)
+   	push	xwa                                   ; FB9C12  push XWA
+>> 	call	0xF9A038                              ; FB9C13  call 0xf9a038
+   	ld	(xiz-61), 0                             ; FB9C17  ld (XIZ+0xc3),0x00
+   	inc	8, xsp                                 ; FB9C1B  inc 0,XSP
+   	inc	2, xsp                                 ; FB9C1D  inc 2,XSP
+   sub_FB9B69__FB9C1F:
+   	cp (xiz-61), 0x04                          ; FB9C1F  cp (XIZ+0xc3),0x04
+-- target context (wsa1/prom_c/link/link_service.s:557; >> = target line):
+   ; Evidence: see this routine's own header above the `.equ` group -- 66 call sites
+   ;          by byte census, byte-identical to prom_a's, odd-length handling read
+   ;          off the `bit 0,bc / ldi / srl bc,1 / ldirw` sequence below.
+   MemCopyWords:
+>> 	push xix                                   ; F9A038  3c
+   	ld bc, (xsp+16)                            ; F9A039  9f 10 21   arg3: byte count
+   	ld xiy, (xsp+8)                            ; F9A03C  af 08 25   arg1: source   (LDI/LDIRW read (XIY+))
+   	ld xix, (xsp+12)                           ; F9A03F  af 0c 24   arg2: dest     (LDI/LDIRW write (XIX+))
+   	bit 0, bc                                  ; F9A042  d9 33 00
+   	jr z, MemCopyWords__words                  ; F9A045  66 02   odd count: move the leading byte first
+
+### SITE 4: wsa1/prom_c/storage/flash.s:540  src_addr=0xFC87F4  target=0xFC88F9  proposed_label=Flash_ProgramSectorFromBuffer (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	add	(xiz-4), xbc                       ; FC87DA  add (XIZ+0xfc),XBC
+   	inc	1, hl                              ; FC87DD  inc 1,HL
+   	jr Flash_WriteBlockIntoSector__FC87C9                           ; FC87DF  jr T,0xfc87c9
+   Flash_WriteBlockIntoSector__FC87E1:
+   	ld	xbc, (xiz+14)                       ; FC87E1  ld XBC,(XIZ+0x0e)
+   	push	xbc                               ; FC87E4  push XBC
+   	call	0xFC898F                          ; FC87E5  call 0xfc898f
+   	pop	xiy                                ; FC87E9  pop XIY
+   	cp	wa, 0xFFFF                          ; FC87EA  cp WA,0xffff
+   	jr z, Flash_WriteBlockIntoSector__FC87E1                        ; FC87EE  jr Z,0xfc87e1
+   	ld	xbc, (xiz+14)                       ; FC87F0  ld XBC,(XIZ+0x0e)
+   	push	xbc                               ; FC87F3  push XBC
+>> 	call	0xFC88F9                          ; FC87F4  call 0xfc88f9
+   	pop	xbc                                ; FC87F8  pop XBC
+   	pop	xix                                ; FC87F9  pop XIX
+   	popw	de                                ; FC87FA  pop DE
+   	popw	hl                                ; FC87FB  pop HL
+   	unlk32 xiz                             ; FC87FC  unlk XIZ   [llvm-mc cannot encode this]
+-- target context (wsa1/prom_c/storage/flash.s:753; >> = target line):
+   ;          what flash does -- so the caller must have erased the sector first.
+   ;          Every caller in this image does.
+   ; --------------------------------------------------------------------------
+   Flash_ProgramSectorFromBuffer:
+>> 	ld	xiy, (xsp+4)                        ; FC88F9  ld XIY,(XSP+0x04)
+   	push	xhl                               ; FC88FC  push XHL
+   	push	xix                               ; FC88FD  push XIX
+   	ld	xhl, 0xE8AAAA                       ; FC88FE  ld XHL,0x00e8aaaa
+   	ld	xix, 0x10000                        ; FC8903  ld XIX,0x00010000
+   	and	xiy, 0xFF0000                      ; FC8908  and XIY,0x00ff0000
+
+### SITE 5: wsa1/prom_c/p7/p7_module.s:9113  src_addr=0xF9F276  target=0xFCA252  proposed_label=Double_Multiply (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extpfx3 0x9E, 0xF0, 0x04                   ; F9F255  pushw (XIZ+0xf0)
+   	lda	xiy, (xiz-58)                          ; F9F258  lda XIY,XIZ+0xc6
+   	call	0xFCAA50                              ; F9F25B  call 0xfcaa50
+   	ld	xbc, (xiz-54)                           ; F9F25F  ld XBC,(XIZ+0xca)
+   	push	xbc                                   ; F9F262  push XBC
+   	ld	xbc, (xiz-58)                           ; F9F263  ld XBC,(XIZ+0xc6)
+   	push	xbc                                   ; F9F266  push XBC
+   	ld	xbc, (0xFCCA4E:24)                     ; F9F267  ld XBC,(0xfcca4e)
+   	push	xbc                                   ; F9F26C  push XBC
+   	ld	xbc, (0xFCCA4A:24)                     ; F9F26D  ld XBC,(0xfcca4a)
+   	push	xbc                                   ; F9F272  push XBC
+   	lda	xiy, (xiz-66)                          ; F9F273  lda XIY,XIZ+0xbe
+>> 	call	0xFCA252                              ; F9F276  call 0xfca252
+   	ld	xbc, (xiz-62)                           ; F9F27A  ld XBC,(XIZ+0xc2)
+   	push	xbc                                   ; F9F27D  push XBC
+   	ld	xbc, (xiz-66)                           ; F9F27E  ld XBC,(XIZ+0xbe)
+   	push	xbc                                   ; F9F281  push XBC
+   	ld	xbc, (0xFCCA66:24)                     ; F9F282  ld XBC,(0xfcca66)
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3014; >> = target line):
+   ;          The overflow/underflow guards are literal: `cp IX,0 / jrl LE` and
+   ;          `cp IX,0x07FF / jrl GT`, 0x7FF being the reserved double exponent.
+   ; --------------------------------------------------------------------------
+   Double_Multiply:
+>> 	link32 0xEE, 0x0C, 0x68, 0xFF              ; FCA252  link XIZ,0xff68
+   	pushw	de                                   ; FCA256  push DE
+   	push	xhl                                   ; FCA257  push XHL
+   	push	xix                                   ; FCA258  push XIX
+   	push	xiy                                   ; FCA259  push XIY
+   	ld	wa, (xiz+22)                            ; FCA25A  ld WA,(XIZ+0x16)
+
+### SITE 6: wsa1/prom_c/voice/note_engine.s:13276  src_addr=0xFB6B4E  target=0xFC81F8  proposed_label=sub_FC81F8 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	add	ix, 41                                 ; FB6B2F  add IX,0x0029
+   	inc	1, h                                   ; FB6B33  inc 1,H
+   	inc	8, xsp                                 ; FB6B35  inc 0,XSP
+   	inc	2, xsp                                 ; FB6B37  inc 2,XSP
+   	cp	h, 4:i3                                   ; FB6B39  cp H,4
+   	jr c, sub_FB68DD__FB6AEA                   ; FB6B3B  jr C,0xfb6aea
+   	pushw	1                                    ; FB6B3D  push 0x0001
+   	push	0                                     ; FB6B40  push 0x00
+   	extpfx3 0x8E, 0x08, 0x04                   ; FB6B42  push (XIZ+0x08)
+   	call	0xFC7481                              ; FB6B45  call 0xfc7481
+   	push	0                                     ; FB6B49  push 0x00
+   	extpfx3 0x8E, 0x08, 0x04                   ; FB6B4B  push (XIZ+0x08)
+>> 	call	0xFC81F8                              ; FB6B4E  call 0xfc81f8
+   	inc	6, xsp                                 ; FB6B52  inc 6,XSP
+   	pop	xix                                    ; FB6B54  pop XIX
+   	popw	de                                    ; FB6B55  pop DE
+   	pop	xhl                                    ; FB6B56  pop XHL
+   	unlk32 xiz                                 ; FB6B57  unlk XIZ
+-- target context (wsa1/prom_c/field_accessors.s:11057; >> = target line):
+   ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
+   ;          so the name is an address.
+   ; --------------------------------------------------------------------------
+   sub_FC81F8:
+>> 	link32 0xEE, 0x0C, 0xE6, 0xFF              ; FC81F8  link XIZ,0xffe6
+   	pushw	hl                                   ; FC81FC  push HL
+   	pushw	de                                   ; FC81FD  push DE
+   	push	xix                                   ; FC81FE  push XIX
+   	ld	(xiz-11), 0                             ; FC81FF  ld (XIZ+0xf5),0x00
+   	ld	(xiz-12), 0                             ; FC8203  ld (XIZ+0xf4),0x00
+
+### SITE 7: wsa1/prom_c/p7/p7_module.s:15618  src_addr=0xFA31C6  target=0xF9A646  proposed_label=P7Stream_Run (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pushw	3                                    ; FA31A3  push 0x0003
+   	lda	xwa, (0xFD26EB:24)                     ; FA31A6  lda XWA,0xfd26eb
+   	push	xwa                                   ; FA31AB  push XWA
+   	call	0xF9A646                              ; FA31AC  call 0xf9a646
+   	set_dd8	4, PB                              ; FA31B0  set 4,(0x1f)
+   	inc	8, xsp                                 ; FA31B3  inc 0,XSP
+   	inc	2, xsp                                 ; FA31B5  inc 2,XSP
+   	lda	xbc, (0xFD4B97:24)                     ; FA31B7  lda XBC,0xfd4b97
+   	push	xbc                                   ; FA31BC  push XBC
+   	pushw	4                                    ; FA31BD  push 0x0004
+   	lda	xwa, (0xFD270F:24)                     ; FA31C0  lda XWA,0xfd270f
+   	push	xwa                                   ; FA31C5  push XWA
+>> 	call	0xF9A646                              ; FA31C6  call 0xf9a646
+   	set_dd8	1, PB                              ; FA31CA  set 1,(0x1f)
+   	inc	8, xsp                                 ; FA31CD  inc 0,XSP
+   	inc	2, xsp                                 ; FA31CF  inc 2,XSP
+   	lda	xbc, (0xFD4B97:24)                     ; FA31D1  lda XBC,0xfd4b97
+   	push	xbc                                   ; FA31D6  push XBC
+-- target context (wsa1/prom_c/p7/p7_module.s:1282; >> = target line):
+   ;          record whose payload is not a whole number of THIS routine's groups, so they
+   ;          have another consumer that has not been found.
+   ; --------------------------------------------------------------------------
+   P7Stream_Run:
+>> 	link32 0xEE, 0x0C, 0xE2, 0xFF              ; F9A646  link XIZ,0xffe2
+   	pushw	hl                                   ; F9A64A  push HL
+   	push	xix                                   ; F9A64B  push XIX
+   	ld	xbc, (xiz+14)                           ; F9A64C  ld XBC,(XIZ+0x0e)
+   	ld	(xiz-4), xbc                            ; F9A64F  ld (XIZ+0xfc),XBC
+   	ld	a, 6:opc                                   ; F9A652  ld A,0x06
+
+### SITE 8: wsa1/prom_c/mathlib/mathlib.s:1469  src_addr=0xFC97AA  target=0xFCA252  proposed_label=Double_Multiply (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	0xFCA121                              ; FC978F  call 0xfca121
+   	cp	wa, 2:i3                                  ; FC9793  cp WA,2
+   	jr z, sub_FC9576__FC97C8                   ; FC9795  jr Z,0xfc97c8
+   	ld	xbc, (xiz+12)                           ; FC9797  ld XBC,(XIZ+0x0c)
+   	push	xbc                                   ; FC979A  push XBC
+   	ld	xbc, (xiz+8)                            ; FC979B  ld XBC,(XIZ+0x08)
+   	push	xbc                                   ; FC979E  push XBC
+   	ld	xbc, (xiz+20)                           ; FC979F  ld XBC,(XIZ+0x14)
+   	push	xbc                                   ; FC97A2  push XBC
+   	ld	xbc, (xiz+16)                           ; FC97A3  ld XBC,(XIZ+0x10)
+   	push	xbc                                   ; FC97A6  push XBC
+   	lda	xiy, (xiz-16)                          ; FC97A7  lda XIY,XIZ+0xf0
+>> 	call	0xFCA252                              ; FC97AA  call 0xfca252
+   	ld	xbc, (xiz-12)                           ; FC97AE  ld XBC,(XIZ+0xf4)
+   	push	xbc                                   ; FC97B1  push XBC
+   	ld	xbc, (xiz-16)                           ; FC97B2  ld XBC,(XIZ+0xf0)
+   	push	xbc                                   ; FC97B5  push XBC
+   	lda	xiy, (xiz+8)                           ; FC97B6  lda XIY,XIZ+0x08
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3014; >> = target line):
+   ;          The overflow/underflow guards are literal: `cp IX,0 / jrl LE` and
+   ;          `cp IX,0x07FF / jrl GT`, 0x7FF being the reserved double exponent.
+   ; --------------------------------------------------------------------------
+   Double_Multiply:
+>> 	link32 0xEE, 0x0C, 0x68, 0xFF              ; FCA252  link XIZ,0xff68
+   	pushw	de                                   ; FCA256  push DE
+   	push	xhl                                   ; FCA257  push XHL
+   	push	xix                                   ; FCA258  push XIX
+   	push	xiy                                   ; FCA259  push XIY
+   	ld	wa, (xiz+22)                            ; FCA25A  ld WA,(XIZ+0x16)
+
+### SITE 9: wsa1/prom_c/p7/p7_module.s:5016  src_addr=0xF9C814  target=0xFCAE60  proposed_label=Float32_Divide (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extpfx3 0x9E, 0xE8, 0x04                   ; F9C7ED  pushw (XIZ+0xe8)
+   	extpfx3 0x9E, 0xE6, 0x04                   ; F9C7F0  pushw (XIZ+0xe6)
+   	call	0xFCB02B                              ; F9C7F3  call 0xfcb02b
+   	push	xiy                                   ; F9C7F7  push XIY
+   	push	xix                                   ; F9C7F8  push XIX
+   	call	0xFCB005                              ; F9C7F9  call 0xfcb005
+   	ld	(xiz-0x8A), xiy                         ; F9C7FD  ld (XIZ+0xff76),XIY
+   	pushw	99                                   ; F9C802  push 0x0063
+   	call	0xFCAF8B                              ; F9C805  call 0xfcaf8b
+   	push	xiy                                   ; F9C809  push XIY
+   	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C80A  pushw (XIZ+0xff78)
+   	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C80F  pushw (XIZ+0xff76)
+>> 	call	0xFCAE60                              ; F9C814  call 0xfcae60
+   	push	xiy                                   ; F9C818  push XIY
+   	extpfx3 0x9E, 0xEC, 0x04                   ; F9C819  pushw (XIZ+0xec)
+   	extpfx3 0x9E, 0xEA, 0x04                   ; F9C81C  pushw (XIZ+0xea)
+   	call	0xFCAC52                              ; F9C81F  call 0xfcac52
+   	ld	(xiz-18), xiy                           ; F9C823  ld (XIZ+0xee),XIY
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4605; >> = target line):
+   ;          takes XHL's; `sub WA,BC` is therefore exp(first) - exp(second), so the
+   ;          FIRST slot is the numerator.
+   ; --------------------------------------------------------------------------
+   Float32_Divide:
+>> 	link32 0xEE, 0x0C, 0xCA, 0xFF              ; FCAE60  link XIZ,0xffca
+   	push	xhl                                   ; FCAE64  push XHL
+   	pushw	de                                   ; FCAE65  push DE
+   	push	xix                                   ; FCAE66  push XIX
+   	ld	xix, (xiz+8)                            ; FCAE67  ld XIX,(XIZ+0x08)
+   	ld	xhl, (xiz+12)                           ; FCAE6A  ld XHL,(XIZ+0x0c)
+
+### SITE 10: wsa1/prom_c/tone_db/tone_db_module.s:4129  src_addr=0xFBA22E  target=0xF9A038  proposed_label=MemCopyWords (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xwa, (xiz-8)                            ; FBA20B  ld XWA,(XIZ+0xf8)
+   	push	xwa                                   ; FBA20E  push XWA
+   	call	0xF9A038                              ; FBA20F  call 0xf9a038
+   	inc	8, xsp                                 ; FBA213  inc 0,XSP
+   	inc	2, xsp                                 ; FBA215  inc 2,XSP
+   	pushw	8                                    ; FBA217  push 0x0008
+   	ld	xbc, (xiz-12)                           ; FBA21A  ld XBC,(XIZ+0xf4)
+   	add	xbc, 30                                ; FBA21D  add XBC,0x0000001e
+   	push	xbc                                   ; FBA223  push XBC
+   	ld	xbc, (xiz-8)                            ; FBA224  ld XBC,(XIZ+0xf8)
+   	add	xbc, 30                                ; FBA227  add XBC,0x0000001e
+   	push	xbc                                   ; FBA22D  push XBC
+>> 	call	0xF9A038                              ; FBA22E  call 0xf9a038
+   	inc	8, xsp                                 ; FBA232  inc 0,XSP
+   	inc	2, xsp                                 ; FBA234  inc 2,XSP
+   	push	0                                     ; FBA236  push 0x00
+   	extpfx3 0x8E, 0xC1, 0x04                   ; FBA238  push (XIZ+0xc1)
+   	calr (0xFB9AC2 - 0xFBA23E)                 ; FBA23B  calr 0xfb9ac2
+-- target context (wsa1/prom_c/link/link_service.s:557; >> = target line):
+   ; Evidence: see this routine's own header above the `.equ` group -- 66 call sites
+   ;          by byte census, byte-identical to prom_a's, odd-length handling read
+   ;          off the `bit 0,bc / ldi / srl bc,1 / ldirw` sequence below.
+   MemCopyWords:
+>> 	push xix                                   ; F9A038  3c
+   	ld bc, (xsp+16)                            ; F9A039  9f 10 21   arg3: byte count
+   	ld xiy, (xsp+8)                            ; F9A03C  af 08 25   arg1: source   (LDI/LDIRW read (XIY+))
+   	ld xix, (xsp+12)                           ; F9A03F  af 0c 24   arg2: dest     (LDI/LDIRW write (XIX+))
+   	bit 0, bc                                  ; F9A042  d9 33 00
+   	jr z, MemCopyWords__words                  ; F9A045  66 02   odd count: move the leading byte first
+
+### SITE 11: wsa1/prom_c/voice/note_engine.s:1979  src_addr=0xFB1581  target=0xFCB23C  proposed_label=Shift8_LogicalRight (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   VoiceParams_Compute_A__FB1563:
+   	jrl VoiceParams_Compute_A__FB17FD          ; FB1563  jrl T,0xfb17fd
+   VoiceParams_Compute_A__FB1566:
+   	extz	xhl                                   ; FB1566  extz XHL
+   	ld	xbc, (xhl+0x1523)                       ; FB1568  ld XBC,(XHL+0x1523)
+   	ld	e, (xbc+18)                             ; FB156D  ld E,(XBC+0x12)
+   	ld	c, (0xFE12AE:24)                       ; FB1570  ld C,(0xfe12ae)
+   	and	c, e                                   ; FB1575  and C,E
+   	ld	(xiz-8), c                              ; FB1577  ld (XIZ+0xf8),C
+   	ld	a, (0xFE12B2:24)                       ; FB157A  ld A,(0xfe12b2)
+   	pushw	wa                                   ; FB157F  push WA
+   	pushw	bc                                   ; FB1580  push BC
+>> 	call	0xFCB23C                              ; FB1581  call 0xfcb23c
+   	ld	d, a                                    ; FB1585  ld D,A
+   	ld	hl, ix                                  ; FB1587  ld HL,IX
+   	ld	bc, (0xFDE697:24)                      ; FB1589  ld BC,(0xfde697)
+   	and	bc, hl                                 ; FB158E  and BC,HL
+   	jrl z, VoiceParams_Compute_A__FB17EF       ; FB1590  jrl Z,0xfb17ef
+-- target context (wsa1/prom_c/mathlib/mathlib.s:5239; >> = target line):
+   ; Evidence: the same two-step count split as the 16- and 32-bit shifts, applied to
+   ;          the byte register C with `srl A,C`.
+   ; --------------------------------------------------------------------------
+   Shift8_LogicalRight:
+>> 	ld	c, (xsp+4)                              ; FCB23C  ld C,(XSP+0x04)
+   	ld	b, (xsp+6)                              ; FCB23F  ld B,(XSP+0x06)
+   	ld	w, b                                    ; FCB242  ld W,B
+   	srl	w, 4                                   ; FCB244  srl 0x04,W
+   	sub	a, a                                   ; FCB247  sub A,A
+   	cp	w, 0:i3                                   ; FCB249  cp W,0
+
+### SITE 12: wsa1/prom_c/tone_db/tone_db_module.s:8712  src_addr=0xFBC8DA  target=0xFB454C  proposed_label=PercInst_GetWaveSelectRecord (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xbc, xix                                ; FBC8BB  ld XBC,XIX
+   	add	xbc, 0x98                              ; FBC8BD  add XBC,0x00000098
+   	extpfx3 0xAE, 0xFC, 0x81                   ; FBC8C3  add XBC,(XIZ+0xfc)
+   	ld	a, (xbc)                                ; FBC8C6  ld A,(XBC)
+   	extz	wa                                    ; FBC8C8  extz WA
+   	pushw	wa                                   ; FBC8CA  push WA
+   	call	0xFB48F7                              ; FBC8CB  call 0xfb48f7
+   	ld	(xiz-8), xiy                            ; FBC8CF  ld (XIZ+0xf8),XIY
+   	inc	8, xsp                                 ; FBC8D2  inc 0,XSP
+   	push	xiy                                   ; FBC8D4  push XIY
+   	push	0                                     ; FBC8D5  push 0x00
+   	extpfx3 0x8E, 0x0A, 0x04                   ; FBC8D7  push (XIZ+0x0a)
+>> 	call	0xFB454C                              ; FBC8DA  call 0xfb454c
+   	ld	(xiz-16), xiy                           ; FBC8DE  ld (XIZ+0xf0),XIY
+   	inc	6, xsp                                 ; FBC8E1  inc 6,XSP
+   	jr ToneStage_ApplyPercWaveSelTailPreset__FBC907                      ; FBC8E3  jr T,0xfbc907
+   ToneStage_ApplyPercWaveSelTailPreset__FBC8E5:
+   	ld	xbc, (0xD7ED:24)                       ; FBC8E5  ld XBC,(0x00d7ed)
+-- target context (wsa1/prom_c/voice/note_engine.s:8170; >> = target line):
+   ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
+   ;          so the name is an address.
+   ; --------------------------------------------------------------------------
+   PercInst_GetWaveSelectRecord:
+>> 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB454C  link XIZ,0x0000
+   	push	xix                                   ; FB4550  push XIX
+   	ld	xix, (xiz+10)                           ; FB4551  ld XIX,(XIZ+0x0a)
+   	add	xix, 18                                ; FB4554  add XIX,0x00000012
+   	ld	c, 43:opc                                  ; FB455A  ld C,0x2b
+   	extpfx3 0x8E, 0x08, 0x43                   ; FB455C  mul BC,(XIZ+0x08)
+
+### SITE 13: wsa1/prom_c/tone_db/tone_db_module.s:6829  src_addr=0xFBB7CE  target=0xFAF031  proposed_label=Voice_ApplyParamChange_Dispatch (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	(xiz-4), xiy                            ; FBB7AE  ld (XIZ+0xfc),XIY
+   	ld	a, (xbc+2)                              ; FBB7B1  ld A,(XBC+0x02)
+   	extz	wa                                    ; FBB7B4  extz WA
+   	ld	(xiz-14), wa                            ; FBB7B6  ld (XIZ+0xf2),WA
+   	jrl sub_FBB793__FBB9F3                     ; FBB7B9  jrl T,0xfbb9f3
+   sub_FBB793__FBB7BC:
+   	ld	xbc, (xiz-4)                            ; FBB7BC  ld XBC,(XIZ+0xfc)
+   	add	xbc, 20                                ; FBB7BF  add XBC,0x00000014
+   	push	xbc                                   ; FBB7C5  push XBC
+   	pushw	64                                   ; FBB7C6  push 0x0040
+   	push	0                                     ; FBB7C9  push 0x00
+   	extpfx3 0x8E, 0xF7, 0x04                   ; FBB7CB  push (XIZ+0xf7)
+>> 	call	0xFAF031                              ; FBB7CE  call 0xfaf031
+   	inc	8, xsp                                 ; FBB7D2  inc 0,XSP
+   	jrl sub_FBB793__FBBA89                     ; FBB7D4  jrl T,0xfbba89
+   sub_FBB793__FBB7D7:
+   	ld	xbc, (xiz-4)                            ; FBB7D7  ld XBC,(XIZ+0xfc)
+   	add	xbc, 23                                ; FBB7DA  add XBC,0x00000017
+-- target context (wsa1/prom_c/midi/midi_controllers.s:5816; >> = target line):
+   ;          entries is.  The arms are named for the REGISTER each one refreshes, which is an
+   ;          instruction operand, and for nothing else.
+   ; --------------------------------------------------------------------------
+   Voice_ApplyParamChange_Dispatch:
+>> 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAF031  link XIZ,0x0000
+   	pushw	hl                                   ; FAF035  push HL
+   	pushw	de                                   ; FAF036  push DE
+   	push	xix                                   ; FAF037  push XIX
+   	ld	xix, (xiz+12)                           ; FAF038  ld XIX,(XIZ+0x0c)
+   	ld	de, (xiz+10)                            ; FAF03B  ld DE,(XIZ+0x0a)
+
+### SITE 14: wsa1/prom_c/p7/p7_module.s:10678  src_addr=0xFA007C  target=0xFCADD6  proposed_label=Double_ToFloat32 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xbc, (xiz-0x70)                         ; FA005D  ld XBC,(XIZ+0x90)
+   	push	xbc                                   ; FA0060  push XBC
+   	ld	xbc, (0xFCC9B6:24)                     ; FA0061  ld XBC,(0xfcc9b6)
+   	push	xbc                                   ; FA0066  push XBC
+   	ld	xbc, (0xFCC9B2:24)                     ; FA0067  ld XBC,(0xfcc9b2)
+   	push	xbc                                   ; FA006C  push XBC
+   	lda	xiy, (xiz-0x78)                        ; FA006D  lda XIY,XIZ+0x88
+   	call	0xFCA626                              ; FA0070  call 0xfca626
+   	ld	xbc, (xiz-0x74)                         ; FA0074  ld XBC,(XIZ+0x8c)
+   	push	xbc                                   ; FA0077  push XBC
+   	ld	xbc, (xiz-0x78)                         ; FA0078  ld XBC,(XIZ+0x88)
+   	push	xbc                                   ; FA007B  push XBC
+>> 	call	0xFCADD6                              ; FA007C  call 0xfcadd6
+   	push	xiy                                   ; FA0080  push XIY
+   	lda	xiy, (xiz-0x80)                        ; FA0081  lda XIY,XIZ+0x80
+   	call	0xFCAA50                              ; FA0084  call 0xfcaa50
+   	ld	xbc, (xiz-0x7C)                         ; FA0088  ld XBC,(XIZ+0x84)
+   	push	xbc                                   ; FA008B  push XBC
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4522; >> = target line):
+   ;          reserved SINGLE exponent, and the infinity it builds is `or BC,0x7F80`.
+   ;          So it reads one format's fields and writes the other's.
+   ; --------------------------------------------------------------------------
+   Double_ToFloat32:
+>> 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FCADD6  link XIZ,0xfff2
+   	pushw	hl                                   ; FCADDA  push HL
+   	pushw	de                                   ; FCADDB  push DE
+   	push	xix                                   ; FCADDC  push XIX
+   	ld	de, (xiz+14)                            ; FCADDD  ld DE,(XIZ+0x0e)
+   	ld	bc, de                                  ; FCADE0  ld BC,DE
+
+### SITE 15: wsa1/prom_c/voice/note_engine.s:5825  src_addr=0xFB3C09  target=0xFACC5A  proposed_label=PartRec_Word0006_ClearBit13 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	0xFB7B05                              ; FB3BF2  call 0xfb7b05
+   	inc	6, xsp                                 ; FB3BF6  inc 6,XSP
+   MidiNote_OnByPartMode__FB3BF8:
+   	call	0xF98CB9                              ; FB3BF8  call 0xf98cb9
+   MidiNote_OnByPartMode__FB3BFC:
+   	inc	1, xix                                 ; FB3BFC  inc 1,XIX
+   	dec	1, l                                   ; FB3BFE  dec 1,L
+   	cp	l, 0:i3                                   ; FB3C00  cp L,0
+   	jr nz, MidiNote_OnByPartMode__FB3BAE       ; FB3C02  jr NZ,0xfb3bae
+   MidiNote_OnByPartMode__FB3C04:
+   	push	0                                     ; FB3C04  push 0x00
+   	extpfx3 0x8E, 0x08, 0x04                   ; FB3C06  push (XIZ+0x08)
+>> 	call	0xFACC5A                              ; FB3C09  call 0xfacc5a
+   	popw	bc                                    ; FB3C0D  pop BC
+   MidiNote_OnByPartMode__FB3C0E:
+   	ld	bc, (xiz+8)                             ; FB3C0E  ld BC,(XIZ+0x08)
+   	extz	bc                                    ; FB3C11  extz BC
+   	mul	bc, 0x12C                              ; FB3C13  mul BC,0x012c
+-- target context (wsa1/prom_c/wsa1_prom_c.s:2207; >> = target line):
+   ;          27 bytes against the setter's 27, differing at offsets 21, 22, 23 only.
+   ; Unknown:  what bit 13 of word +0x06 MEANS.
+   ; --------------------------------------------------------------------------
+   PartRec_Word0006_ClearBit13:
+>> 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACC5A  link XIZ,0x0000
+   	ld	bc, (xiz+8)                             ; FACC5E  ld BC,(XIZ+0x08)
+   	extz	bc                                    ; FACC61  extz BC
+   	mul	bc, 0x12C                              ; FACC63  mul BC,0x012c
+   	inc	6, bc                                  ; FACC67  inc 6,BC
+   	extz	xbc                                   ; FACC69  extz XBC
+
+### SITE 16: wsa1/prom_c/p7/p7_module.s:6122  src_addr=0xF9D55D  target=0xFCAE60  proposed_label=Float32_Divide (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	0xFCAF8B                              ; F9D540  call 0xfcaf8b
+   	push	xiy                                   ; F9D544  push XIY
+   	push	xix                                   ; F9D545  push XIX
+   	call	0xFCAE60                              ; F9D546  call 0xfcae60
+   	pop	xbc                                    ; F9D54A  pop XBC
+   	push	xiy                                   ; F9D54B  push XIY
+   	calr (0xF9B37E - 0xF9D54F)                 ; F9D54C  calr 0xf9b37e
+   	pushw	4                                    ; F9D54F  push 0x0004
+   	call	0xFCAF8B                              ; F9D552  call 0xfcaf8b
+   	push	xiy                                   ; F9D556  push XIY
+   	extpfx3 0x9E, 0xD0, 0x04                   ; F9D557  pushw (XIZ+0xd0)
+   	extpfx3 0x9E, 0xCE, 0x04                   ; F9D55A  pushw (XIZ+0xce)
+>> 	call	0xFCAE60                              ; F9D55D  call 0xfcae60
+   	pop	xbc                                    ; F9D561  pop XBC
+   	push	xiy                                   ; F9D562  push XIY
+   	calr (0xF9B37E - 0xF9D566)                 ; F9D563  calr 0xf9b37e
+   	pushw	4                                    ; F9D566  push 0x0004
+   	call	0xFCAF8B                              ; F9D569  call 0xfcaf8b
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4605; >> = target line):
+   ;          takes XHL's; `sub WA,BC` is therefore exp(first) - exp(second), so the
+   ;          FIRST slot is the numerator.
+   ; --------------------------------------------------------------------------
+   Float32_Divide:
+>> 	link32 0xEE, 0x0C, 0xCA, 0xFF              ; FCAE60  link XIZ,0xffca
+   	push	xhl                                   ; FCAE64  push XHL
+   	pushw	de                                   ; FCAE65  push DE
+   	push	xix                                   ; FCAE66  push XIX
+   	ld	xix, (xiz+8)                            ; FCAE67  ld XIX,(XIZ+0x08)
+   	ld	xhl, (xiz+12)                           ; FCAE6A  ld XHL,(XIZ+0x0c)
+
+### SITE 17: wsa1/prom_c/p7/p7_module.s:3490  src_addr=0xF9B679  target=0xFCAA50  proposed_label=Float32_ToDouble (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	inc	6, xsp                                 ; F9B656  inc 6,XSP
+   	jrl sub_F9BE3A__F9DFAC                     ; F9B658  jrl T,0xf9dfac
+   sub_F9B5A5__F9B65B:
+   	ld	xbc, (xiz+16)                           ; F9B65B  ld XBC,(XIZ+0x10)
+   	cp	xbc, 0                                  ; F9B65E  cp XBC,0x00000000
+   	jrl z, sub_F9B5A5__F9B71A                  ; F9B664  jrl Z,0xf9b71a
+   	ld	xwa, 99                                 ; F9B667  ld XWA,0x00000063
+   	sub	xwa, xbc                               ; F9B66C  sub XWA,XBC
+   	push	xwa                                   ; F9B66E  push XWA
+   	call	0xFCABC6                              ; F9B66F  call 0xfcabc6
+   	push	xiy                                   ; F9B673  push XIY
+   	lda	xiy, (xiz-0x8E)                        ; F9B674  lda XIY,XIZ+0xff72
+>> 	call	0xFCAA50                              ; F9B679  call 0xfcaa50
+   	ld	xbc, (xiz-0x8A)                         ; F9B67D  ld XBC,(XIZ+0xff76)
+   	push	xbc                                   ; F9B682  push XBC
+   	ld	xbc, (xiz-0x8E)                         ; F9B683  ld XBC,(XIZ+0xff72)
+   	push	xbc                                   ; F9B688  push XBC
+   	ld	xbc, (0xFCCA56:24)                     ; F9B689  ld XBC,(0xfcca56)
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4032; >> = target line):
+   ;          on 0x80000000.  Both format constants appear, and nothing else in the
+   ;          module mixes them except Double_ToFloat32, the other direction.
+   ; --------------------------------------------------------------------------
+   Float32_ToDouble:
+>> 	link32 0xEE, 0x0C, 0xEA, 0xFF              ; FCAA50  link XIZ,0xffea
+   	pushw	hl                                   ; FCAA54  push HL
+   	push	xde                                   ; FCAA55  push XDE
+   	push	xix                                   ; FCAA56  push XIX
+   	push	xiy                                   ; FCAA57  push XIY
+   	ld	xix, (xiz+8)                            ; FCAA58  ld XIX,(XIZ+0x08)
+
+### SITE 18: wsa1/prom_c/p7/p7_module.s:12519  src_addr=0xFA1519  target=0xFCA252  proposed_label=Double_Multiply (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xbc                                   ; FA14F2  push XBC
+   	lda	xiy, (xiz-0x88)                        ; FA14F3  lda XIY,XIZ+0xff78
+   	call	0xFCA41F                              ; FA14F8  call 0xfca41f
+   	ld	xbc, (xiz-0x84)                         ; FA14FC  ld XBC,(XIZ+0xff7c)
+   	push	xbc                                   ; FA1501  push XBC
+   	ld	xbc, (xiz-0x88)                         ; FA1502  ld XBC,(XIZ+0xff78)
+   	push	xbc                                   ; FA1507  push XBC
+   	ld	xbc, (0xFCC92E:24)                     ; FA1508  ld XBC,(0xfcc92e)
+   	push	xbc                                   ; FA150D  push XBC
+   	ld	xbc, (0xFCC92A:24)                     ; FA150E  ld XBC,(0xfcc92a)
+   	push	xbc                                   ; FA1513  push XBC
+   	lda	xiy, (xiz-0x90)                        ; FA1514  lda XIY,XIZ+0xff70
+>> 	call	0xFCA252                              ; FA1519  call 0xfca252
+   	ld	xbc, (xiz-0x8C)                         ; FA151D  ld XBC,(XIZ+0xff74)
+   	push	xbc                                   ; FA1522  push XBC
+   	ld	xbc, (xiz-0x90)                         ; FA1523  ld XBC,(XIZ+0xff70)
+   	push	xbc                                   ; FA1528  push XBC
+   	ld	xbc, (0xFCC9E6:24)                     ; FA1529  ld XBC,(0xfcc9e6)
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3014; >> = target line):
+   ;          The overflow/underflow guards are literal: `cp IX,0 / jrl LE` and
+   ;          `cp IX,0x07FF / jrl GT`, 0x7FF being the reserved double exponent.
+   ; --------------------------------------------------------------------------
+   Double_Multiply:
+>> 	link32 0xEE, 0x0C, 0x68, 0xFF              ; FCA252  link XIZ,0xff68
+   	pushw	de                                   ; FCA256  push DE
+   	push	xhl                                   ; FCA257  push XHL
+   	push	xix                                   ; FCA258  push XIX
+   	push	xiy                                   ; FCA259  push XIY
+   	ld	wa, (xiz+22)                            ; FCA25A  ld WA,(XIZ+0x16)
+
+### SITE 19: wsa1/prom_c/voice/note_engine.s:2860  src_addr=0xFB1F13  target=0xFA95D4  proposed_label=Voice_StageRegs_0500_08C0_AB (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	0xFA8323                              ; FB1EF5  call 0xfa8323
+   	pushw	de                                   ; FB1EF9  push DE
+   	call	0xFA8347                              ; FB1EFA  call 0xfa8347
+   	pushw	de                                   ; FB1EFE  push DE
+   	call	0xFA842D                              ; FB1EFF  call 0xfa842d
+   	pushw	de                                   ; FB1F03  push DE
+   	call	0xFA8BDD                              ; FB1F04  call 0xfa8bdd
+   	pushw	de                                   ; FB1F08  push DE
+   	call	0xFA919B                              ; FB1F09  call 0xfa919b
+   	pushw	de                                   ; FB1F0D  push DE
+   	call	0xFA93AF                              ; FB1F0E  call 0xfa93af
+   	pushw	de                                   ; FB1F12  push DE
+>> 	call	0xFA95D4                              ; FB1F13  call 0xfa95d4
+   	pushw	de                                   ; FB1F17  push DE
+   	call	0xFA9915                              ; FB1F18  call 0xfa9915
+   	pushw	de                                   ; FB1F1C  push DE
+   	call	0xFA9C60                              ; FB1F1D  call 0xfa9c60
+   	pushw	de                                   ; FB1F21  push DE
+-- target context (wsa1/prom_c/voice/voice_parameters.s:3830; >> = target line):
+   ;          was made for this routine, and "bend" is not asserted here.
+   ; Unknown:  what ScaleCoeff_TimesAbsDepth_Shr computes, and what tone fields +0x12 and +0x48 are.
+   ; --------------------------------------------------------------------------
+   Voice_StageRegs_0500_08C0_AB:
+>> 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FA95D4  link XIZ,0xfff6
+   	pushw	hl                                   ; FA95D8  push HL
+   	pushw	de                                   ; FA95D9  push DE
+   	pushw	ix                                   ; FA95DA  push IX
+   	ld	bc, (xiz+8)                             ; FA95DB  ld BC,(XIZ+0x08)
+   	extz	xbc                                   ; FA95DE  extz XBC
+
+### SITE 20: wsa1/prom_c/p7/p7_module.s:3623  src_addr=0xF9B819  target=0xFCADD6  proposed_label=Double_ToFloat32 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xbc, (xiz-0xAE)                         ; F9B7F2  ld XBC,(XIZ+0xff52)
+   	push	xbc                                   ; F9B7F7  push XBC
+   	ld	xbc, (0xFCCA5E:24)                     ; F9B7F8  ld XBC,(0xfcca5e)
+   	push	xbc                                   ; F9B7FD  push XBC
+   	ld	xbc, (0xFCCA5A:24)                     ; F9B7FE  ld XBC,(0xfcca5a)
+   	push	xbc                                   ; F9B803  push XBC
+   	lda	xiy, (xiz-0xB6)                        ; F9B804  lda XIY,XIZ+0xff4a
+   	call	0xFCA252                              ; F9B809  call 0xfca252
+   	ld	xbc, (xiz-0xB2)                         ; F9B80D  ld XBC,(XIZ+0xff4e)
+   	push	xbc                                   ; F9B812  push XBC
+   	ld	xbc, (xiz-0xB6)                         ; F9B813  ld XBC,(XIZ+0xff4a)
+   	push	xbc                                   ; F9B818  push XBC
+>> 	call	0xFCADD6                              ; F9B819  call 0xfcadd6
+   	ld	(xiz-18), xiy                           ; F9B81D  ld (XIZ+0xee),XIY
+   	inc	8, xsp                                 ; F9B820  inc 0,XSP
+   	inc	8, xsp                                 ; F9B822  inc 0,XSP
+   	jrl sub_F9B887__F9B9FB                     ; F9B824  jrl T,0xf9b9fb
+   sub_F9B5A5__F9B827:
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4522; >> = target line):
+   ;          reserved SINGLE exponent, and the infinity it builds is `or BC,0x7F80`.
+   ;          So it reads one format's fields and writes the other's.
+   ; --------------------------------------------------------------------------
+   Double_ToFloat32:
+>> 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FCADD6  link XIZ,0xfff2
+   	pushw	hl                                   ; FCADDA  push HL
+   	pushw	de                                   ; FCADDB  push DE
+   	push	xix                                   ; FCADDC  push XIX
+   	ld	de, (xiz+14)                            ; FCADDD  ld DE,(XIZ+0x0e)
+   	ld	bc, de                                  ; FCADE0  ld BC,DE
+
+### SITE 21: wsa1/prom_c/voice/note_engine.s:2912  src_addr=0xFB1F96  target=0xFAB79D  proposed_label=Voice_StageLevel_Reg0080_AB (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	0xFAB0BD                              ; FB1F7B  call 0xfab0bd
+   	pushw	0                                    ; FB1F7F  push 0x0000
+   	pushw	de                                   ; FB1F82  push DE
+   	call	0xFAA87E                              ; FB1F83  call 0xfaa87e
+   	pushw	de                                   ; FB1F87  push DE
+   	call	0xFAB5A5                              ; FB1F88  call 0xfab5a5
+   	pushw	de                                   ; FB1F8C  push DE
+   	call	0xFC35DB                              ; FB1F8D  call 0xfc35db
+   VoiceRegs_Stage_B__FB1F91:
+   	inc	8, xsp                                 ; FB1F91  inc 0,XSP
+   	inc	2, xsp                                 ; FB1F93  inc 2,XSP
+   	pushw	de                                   ; FB1F95  push DE
+>> 	call	0xFAB79D                              ; FB1F96  call 0xfab79d
+   	lda	xbc, (0xD75E:24)                       ; FB1F9A  lda XBC,0x00d75e
+   	push	xbc                                   ; FB1F9F  push XBC
+   	ld	a, h                                    ; FB1FA0  ld A,H
+   	extz	wa                                    ; FB1FA2  extz WA
+   	pushw	wa                                   ; FB1FA4  push WA
+-- target context (wsa1/prom_c/voice/voice_parameters.s:8232; >> = target line):
+   ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
+   ;          so the name is an address.
+   ; --------------------------------------------------------------------------
+   Voice_StageLevel_Reg0080_AB:
+>> 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAB79D  link XIZ,0x0000
+   	pushw	hl                                   ; FAB7A1  push HL
+   	pushw	de                                   ; FAB7A2  push DE
+   	push	xix                                   ; FAB7A3  push XIX
+   	ld	ix, (xiz+8)                             ; FAB7A4  ld IX,(XIZ+0x08)
+   	extz	xix                                   ; FAB7A7  extz XIX
+
+### SITE 22: wsa1/prom_c/wsa1_prom_c.s:2257  src_addr=0xFACCA7  target=0xFA6110  proposed_label=VoiceSlots_ListSlotsOfPart (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	0xFB582A                              ; FACC86  call 0xfb582a
+   	ld	hl, wa                                  ; FACC8A  ld HL,WA
+   	pop	xiy                                    ; FACC8C  pop XIY
+   	cp (xiz+10), 0x00                          ; FACC8D  cp (XIZ+0x0a),0x00
+   	jr nz, sub_FACC75__FACCD4                  ; FACC91  jr NZ,0xfaccd4
+   	ld	(0xD7A0:24), wa                        ; FACC93  ld (0x00d7a0),WA
+   	pushw	0                                    ; FACC98  push 0x0000
+   	ld	c, (xiz+10)                             ; FACC9B  ld C,(XIZ+0x0a)
+   	or	c, 12                                   ; FACC9E  or C,0x0c
+   	pushw	bc                                   ; FACCA1  push BC
+   	push	0                                     ; FACCA2  push 0x00
+   	extpfx3 0x8E, 0x08, 0x04                   ; FACCA4  push (XIZ+0x08)
+>> 	call	0xFA6110                              ; FACCA7  call 0xfa6110
+   	ld	ix, iy                                  ; FACCAB  ld IX,IY
+   	ldw	hl, 0                                  ; FACCAD  ld HL,0x0000
+   	jr sub_FACC75__FACCD0                      ; FACCB0  jr T,0xfaccd0
+   sub_FACC75__FACCB2:
+   	extz	xix                                   ; FACCB2  extz XIX
+-- target context (wsa1/prom_c/voice/voice_leaf_helpers.s:1459; >> = target line):
+   ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
+   ;          so the name is an address.
+   ; --------------------------------------------------------------------------
+   VoiceSlots_ListSlotsOfPart:
+>> 	link32 0xEE, 0x0C, 0xF9, 0xFF              ; FA6110  link XIZ,0xfff9
+   	pushw	hl                                   ; FA6114  push HL
+   	pushw	de                                   ; FA6115  push DE
+   	push	xix                                   ; FA6116  push XIX
+   	ld	c, (xiz+12)                             ; FA6117  ld C,(XIZ+0x0c)
+   	cpl	c                                      ; FA611A  cpl C
+
+### SITE 23: wsa1/prom_c/field_accessors.s:1184  src_addr=0xFC3ABD  target=0xF9A038  proposed_label=MemCopyWords (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	bc, (xiz-2)                             ; FC3A96  ld BC,(XIZ+0xfe)
+   	extz	xbc                                   ; FC3A99  extz XBC
+   	ld	(xiz-16), xbc                           ; FC3A9B  ld (XIZ+0xf0),XBC
+   	ld	xwa, (xiz-6)                            ; FC3A9E  ld XWA,(XIZ+0xfa)
+   	ld	(xiz-20), xwa                           ; FC3AA1  ld (XIZ+0xec),XWA
+   	add	xwa, xbc                               ; FC3AA4  add XWA,XBC
+   	add	xwa, 0x2AD                             ; FC3AA6  add XWA,0x000002ad
+   	extpfx3 0xAE, 0xF4, 0x80                   ; FC3AAC  add XWA,(XIZ+0xf4)
+   	push	xwa                                   ; FC3AAF  push XWA
+   	add	xbc, 0x21D                             ; FC3AB0  add XBC,0x0000021d
+   	add	xbc, 0x87D2                            ; FC3AB6  add XBC,0x000087d2
+   	push	xbc                                   ; FC3ABC  push XBC
+>> 	call	0xF9A038                              ; FC3ABD  call 0xf9a038
+   	ld	bc, de                                  ; FC3AC1  ld BC,DE
+   	extz	xbc                                   ; FC3AC3  extz XBC
+   	extpfx3 0xAE, 0xEC, 0x81                   ; FC3AC5  add XBC,(XIZ+0xec)
+   	add	xbc, 0x16C                             ; FC3AC8  add XBC,0x0000016c
+   	ld	(xiz-24), xbc                           ; FC3ACE  ld (XIZ+0xe8),XBC
+-- target context (wsa1/prom_c/link/link_service.s:557; >> = target line):
+   ; Evidence: see this routine's own header above the `.equ` group -- 66 call sites
+   ;          by byte census, byte-identical to prom_a's, odd-length handling read
+   ;          off the `bit 0,bc / ldi / srl bc,1 / ldirw` sequence below.
+   MemCopyWords:
+>> 	push xix                                   ; F9A038  3c
+   	ld bc, (xsp+16)                            ; F9A039  9f 10 21   arg3: byte count
+   	ld xiy, (xsp+8)                            ; F9A03C  af 08 25   arg1: source   (LDI/LDIRW read (XIY+))
+   	ld xix, (xsp+12)                           ; F9A03F  af 0c 24   arg2: dest     (LDI/LDIRW write (XIX+))
+   	bit 0, bc                                  ; F9A042  d9 33 00
+   	jr z, MemCopyWords__words                  ; F9A045  66 02   odd count: move the leading byte first
+
+### SITE 24: wsa1/prom_c/voice/note_engine.s:3764  src_addr=0xFB2850  target=0xFA96F7  proposed_label=Voice_StageRegs_CD (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pushw	de                                   ; FB2833  push DE
+   	call	0xFA92A5                              ; FB2834  call 0xfa92a5
+   	pushw	de                                   ; FB2838  push DE
+   	call	0xFAA1A5                              ; FB2839  call 0xfaa1a5
+   	pushw	de                                   ; FB283D  push DE
+   	call	0xFAA3EB                              ; FB283E  call 0xfaa3eb
+   	pushw	de                                   ; FB2842  push DE
+   	call	0xFAA96C                              ; FB2843  call 0xfaa96c
+   	pushw	0                                    ; FB2847  push 0x0000
+   	pushw	de                                   ; FB284A  push DE
+   	call	0xFAAC00                              ; FB284B  call 0xfaac00
+   	pushw	de                                   ; FB284F  push DE
+>> 	call	0xFA96F7                              ; FB2850  call 0xfa96f7
+   	ld	bc, (xde+10)                            ; FB2854  ld BC,(XDE+0x0a)
+   	pushw	bc                                   ; FB2857  push BC
+   	ld	bc, (xde+6)                             ; FB2858  ld BC,(XDE+0x06)
+   	pushw	bc                                   ; FB285B  push BC
+   	call	0xFC4DA1                              ; FB285C  call 0xfc4da1
+-- target context (wsa1/prom_c/voice/voice_parameters.s:3988; >> = target line):
+   ; Unknown:  what the routine is FOR beyond staging; the twelve words it writes are
+   ;          named by their register, not by their meaning.
+   ; --------------------------------------------------------------------------
+   Voice_StageRegs_CD:
+>> 	link32 0xEE, 0x0C, 0xFF, 0xFF              ; FA96F7  link XIZ,0xffff
+   	push	xhl                                   ; FA96FB  push XHL
+   	pushw	de                                   ; FA96FC  push DE
+   	push	xix                                   ; FA96FD  push XIX
+   	ld	bc, (xiz+8)                             ; FA96FE  ld BC,(XIZ+0x08)
+   	extz	xbc                                   ; FA9701  extz XBC
+
+### SITE 25: wsa1/prom_c/tone_db/tone_db_module.s:6484  src_addr=0xFBB5C5  target=0xFACD1B  proposed_label=sub_FACD1B (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	0xFACD1B                              ; FBB5A8  call 0xfacd1b
+   	pop	xiy                                    ; FBB5AC  pop XIY
+   	pushw	1                                    ; FBB5AD  push 0x0001
+   	push	0                                     ; FBB5B0  push 0x00
+   	extpfx3 0x8E, 0x08, 0x04                   ; FBB5B2  push (XIZ+0x08)
+   	call	0xFACD1B                              ; FBB5B5  call 0xfacd1b
+   	pop	xiy                                    ; FBB5B9  pop XIY
+   	jrl sub_FBB57C__FBB642                     ; FBB5BA  jrl T,0xfbb642
+   sub_FBB57C__FBB5BD:
+   	pushw	0                                    ; FBB5BD  push 0x0000
+   	push	0                                     ; FBB5C0  push 0x00
+   	extpfx3 0x8E, 0x08, 0x04                   ; FBB5C2  push (XIZ+0x08)
+>> 	call	0xFACD1B                              ; FBB5C5  call 0xfacd1b
+   	pop	xiy                                    ; FBB5C9  pop XIY
+   	jrl sub_FBB57C__FBB642                     ; FBB5CA  jrl T,0xfbb642
+   sub_FBB57C__FBB5CD:
+   	push	0                                     ; FBB5CD  push 0x00
+   	extpfx3 0x8E, 0x08, 0x04                   ; FBB5CF  push (XIZ+0x08)
+-- target context (wsa1/prom_c/wsa1_prom_c.s:2327; >> = target line):
+   ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
+   ;          so the name is an address.
+   ; --------------------------------------------------------------------------
+   sub_FACD1B:
+>> 	link32 0xEE, 0x0C, 0x00, 0x00              ; FACD1B  link XIZ,0x0000
+   	pushw	hl                                   ; FACD1F  push HL
+   	pushw	de                                   ; FACD20  push DE
+   	push	xix                                   ; FACD21  push XIX
+   	push	0                                     ; FACD22  push 0x00
+   	extpfx3 0x8E, 0x0A, 0x04                   ; FACD24  push (XIZ+0x0a)
+
+### SITE 26: wsa1/prom_c/tone_db/tone_db_module.s:19264  src_addr=0xFC2425  target=0xF98B20  proposed_label=Link_SendBuffer (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	add	(xiz-4), xbc                           ; FC240B  add (XIZ+0xfc),XBC
+   	jr LinkQuery_ReplyToneRecordBytes__FC23EE                      ; FC240E  jr T,0xfc23ee
+   LinkQuery_ReplyToneRecordBytes__FC2410:
+   	lda	xbc, (0xD945:24)                       ; FC2410  lda XBC,0x00d945
+   	push	xbc                                   ; FC2415  push XBC
+   	ld	xwa, (xiz+8)                            ; FC2416  ld XWA,(XIZ+0x08)
+   	ld	c, (xwa+3)                              ; FC2419  ld C,(XWA+0x03)
+   	extz	bc                                    ; FC241C  extz BC
+   	inc	6, bc                                  ; FC241E  inc 6,BC
+   	pushw	bc                                   ; FC2420  push BC
+   	ld	c, (xwa+4)                              ; FC2421  ld C,(XWA+0x04)
+   	pushw	bc                                   ; FC2424  push BC
+>> 	call	0xF98B20                              ; FC2425  call 0xf98b20
+   	inc	8, xsp                                 ; FC2429  inc 0,XSP
+   	pop	xix                                    ; FC242B  pop XIX
+   	popw	hl                                    ; FC242C  pop HL
+   	unlk32 xiz                                 ; FC242D  unlk XIZ
+   	ret                                        ; FC242F  ret
+-- target context (wsa1/prom_c/boot/boot_and_main.s:675; >> = target line):
+   ;          protocol's header byte as `(channel << 5) | (len - 1)`, which would
+   ;          make a small constant a CHANNEL -- offered as a lead, not a finding.
+   ; --------------------------------------------------------------------------
+   Link_SendBuffer:
+>> 	link32	0xEE, 0x0C, 0x00, 0x00
+   	ld	xbc, (xiz+12)
+   	push	xbc
+   	extpfx3	0x9E, 0x0A, 0x04
+   	push	0x00
+   	extpfx3	0x8E, 0x08, 0x04
+
+### SITE 27: wsa1/prom_c/voice/note_engine.s:4457  src_addr=0xFB2F25  target=0xFA96F7  proposed_label=Voice_StageRegs_CD (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pushw	de                                   ; FB2F08  push DE
+   	call	0xFA92A5                              ; FB2F09  call 0xfa92a5
+   	pushw	de                                   ; FB2F0D  push DE
+   	call	0xFAA1A5                              ; FB2F0E  call 0xfaa1a5
+   	pushw	de                                   ; FB2F12  push DE
+   	call	0xFAA3EB                              ; FB2F13  call 0xfaa3eb
+   	pushw	de                                   ; FB2F17  push DE
+   	call	0xFAA96C                              ; FB2F18  call 0xfaa96c
+   	pushw	0                                    ; FB2F1C  push 0x0000
+   	pushw	de                                   ; FB2F1F  push DE
+   	call	0xFAAC00                              ; FB2F20  call 0xfaac00
+   	pushw	de                                   ; FB2F24  push DE
+>> 	call	0xFA96F7                              ; FB2F25  call 0xfa96f7
+   	ld	bc, (xde+10)                            ; FB2F29  ld BC,(XDE+0x0a)
+   	pushw	bc                                   ; FB2F2C  push BC
+   	ld	bc, (xde+6)                             ; FB2F2D  ld BC,(XDE+0x06)
+   	pushw	bc                                   ; FB2F30  push BC
+   	call	0xFC4DA1                              ; FB2F31  call 0xfc4da1
+-- target context (wsa1/prom_c/voice/voice_parameters.s:3988; >> = target line):
+   ; Unknown:  what the routine is FOR beyond staging; the twelve words it writes are
+   ;          named by their register, not by their meaning.
+   ; --------------------------------------------------------------------------
+   Voice_StageRegs_CD:
+>> 	link32 0xEE, 0x0C, 0xFF, 0xFF              ; FA96F7  link XIZ,0xffff
+   	push	xhl                                   ; FA96FB  push XHL
+   	pushw	de                                   ; FA96FC  push DE
+   	push	xix                                   ; FA96FD  push XIX
+   	ld	bc, (xiz+8)                             ; FA96FE  ld BC,(XIZ+0x08)
+   	extz	xbc                                   ; FA9701  extz XBC
+
+### SITE 28: wsa1/prom_c/p7/p7_module.s:9017  src_addr=0xF9F16F  target=0xFCB005  proposed_label=Float32_Multiply (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xbc                                   ; F9F151  push XBC
+   	lda	xiy, (xiz-90)                          ; F9F152  lda XIY,XIZ+0xa6
+   	call	0xFCA7A5                              ; F9F155  call 0xfca7a5
+   	ld	xbc, (xiz-86)                           ; F9F159  ld XBC,(XIZ+0xaa)
+   	push	xbc                                   ; F9F15C  push XBC
+   	ld	xbc, (xiz-90)                           ; F9F15D  ld XBC,(XIZ+0xa6)
+   	push	xbc                                   ; F9F160  push XBC
+   	call	0xFCADD6                              ; F9F161  call 0xfcadd6
+   	ld	(xiz-32), xiy                           ; F9F165  ld (XIZ+0xe0),XIY
+   	extpfx3 0x9E, 0xEA, 0x04                   ; F9F168  pushw (XIZ+0xea)
+   	extpfx3 0x9E, 0xE8, 0x04                   ; F9F16B  pushw (XIZ+0xe8)
+   	push	xiy                                   ; F9F16E  push XIY
+>> 	call	0xFCB005                              ; F9F16F  call 0xfcb005
+   	ld	(xiz-36), xiy                           ; F9F173  ld (XIZ+0xdc),XIY
+   	extpfx3 0x9E, 0xE6, 0x04                   ; F9F176  pushw (XIZ+0xe6)
+   	extpfx3 0x9E, 0xE4, 0x04                   ; F9F179  pushw (XIZ+0xe4)
+   	call	0xFCB04A                              ; F9F17C  call 0xfcb04a
+   	ld	(xiz-40), xiy                           ; F9F180  ld (XIZ+0xd8),XIY
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4839; >> = target line):
+   ; Unknown:  why.  A missing multiply in the runtime is the obvious reading and
+   ;          nothing here proves it.
+   ; --------------------------------------------------------------------------
+   Float32_Multiply:
+>> 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FCB005  link XIZ,0xfffc
+   	ld	xbc, (0xFCB4E6:24)                     ; FCB009  ld XBC,(0xfcb4e6)
+   	ld	(xiz-4), xbc                            ; FCB00E  ld (XIZ+0xfc),XBC
+   	ld	xbc, (xiz+12)                           ; FCB011  ld XBC,(XIZ+0x0c)
+   	push	xbc                                   ; FCB014  push XBC
+   	ld	xwa, (xiz-4)                            ; FCB015  ld XWA,(XIZ+0xfc)
+
+### SITE 29: wsa1/prom_c/p7/p7_module.s:4591  src_addr=0xF9C2FE  target=0xFCAA50  proposed_label=Float32_ToDouble (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xbc                                   ; F9C2D7  push XBC
+   	ld	xbc, (xiz-0x8E)                         ; F9C2D8  ld XBC,(XIZ+0xff72)
+   	push	xbc                                   ; F9C2DD  push XBC
+   	ld	xbc, (0xFCC9EE:24)                     ; F9C2DE  ld XBC,(0xfcc9ee)
+   	push	xbc                                   ; F9C2E3  push XBC
+   	ld	xbc, (0xFCC9EA:24)                     ; F9C2E4  ld XBC,(0xfcc9ea)
+   	push	xbc                                   ; F9C2E9  push XBC
+   	lda	xiy, (xiz-0x96)                        ; F9C2EA  lda XIY,XIZ+0xff6a
+   	call	0xFCA252                              ; F9C2EF  call 0xfca252
+   	extpfx3 0x9E, 0xEC, 0x04                   ; F9C2F3  pushw (XIZ+0xec)
+   	extpfx3 0x9E, 0xEA, 0x04                   ; F9C2F6  pushw (XIZ+0xea)
+   	lda	xiy, (xiz-0x9E)                        ; F9C2F9  lda XIY,XIZ+0xff62
+>> 	call	0xFCAA50                              ; F9C2FE  call 0xfcaa50
+   	ld	xbc, (xiz-0x92)                         ; F9C302  ld XBC,(XIZ+0xff6e)
+   	push	xbc                                   ; F9C307  push XBC
+   	ld	xbc, (xiz-0x96)                         ; F9C308  ld XBC,(XIZ+0xff6a)
+   	push	xbc                                   ; F9C30D  push XBC
+   	ld	xbc, (xiz-0x9A)                         ; F9C30E  ld XBC,(XIZ+0xff66)
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4032; >> = target line):
+   ;          on 0x80000000.  Both format constants appear, and nothing else in the
+   ;          module mixes them except Double_ToFloat32, the other direction.
+   ; --------------------------------------------------------------------------
+   Float32_ToDouble:
+>> 	link32 0xEE, 0x0C, 0xEA, 0xFF              ; FCAA50  link XIZ,0xffea
+   	pushw	hl                                   ; FCAA54  push HL
+   	push	xde                                   ; FCAA55  push XDE
+   	push	xix                                   ; FCAA56  push XIX
+   	push	xiy                                   ; FCAA57  push XIY
+   	ld	xix, (xiz+8)                            ; FCAA58  ld XIX,(XIZ+0x08)
+
+### SITE 30: wsa1/prom_c/p7/p7_module.s:12931  src_addr=0xFA19A3  target=0xFCA41F  proposed_label=Double_Add (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xbc                                   ; FA1982  push XBC
+   	lda	xiy, (xiz-0x80)                        ; FA1983  lda XIY,XIZ+0x80
+   	call	0xFCA252                              ; FA1986  call 0xfca252
+   	ld	xbc, (0xFCC996:24)                     ; FA198A  ld XBC,(0xfcc996)
+   	push	xbc                                   ; FA198F  push XBC
+   	ld	xbc, (0xFCC992:24)                     ; FA1990  ld XBC,(0xfcc992)
+   	push	xbc                                   ; FA1995  push XBC
+   	ld	xbc, (xiz-0x7C)                         ; FA1996  ld XBC,(XIZ+0x84)
+   	push	xbc                                   ; FA1999  push XBC
+   	ld	xbc, (xiz-0x80)                         ; FA199A  ld XBC,(XIZ+0x80)
+   	push	xbc                                   ; FA199D  push XBC
+   	lda	xiy, (xiz-0x88)                        ; FA199E  lda XIY,XIZ+0xff78
+>> 	call	0xFCA41F                              ; FA19A3  call 0xfca41f
+   	ld	xbc, (xiz-0x84)                         ; FA19A7  ld XBC,(XIZ+0xff7c)
+   	push	xbc                                   ; FA19AC  push XBC
+   	ld	xbc, (xiz-0x88)                         ; FA19AD  ld XBC,(XIZ+0xff78)
+   	push	xbc                                   ; FA19B2  push XBC
+   	call	0xFCADD6                              ; FA19B3  call 0xfcadd6
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3201; >> = target line):
+   ;          exponents with 0x7FF0, restores hidden bits with 0x0010, and aligns the
+   ;          smaller operand before adding -- the classic add/subtract kernel.
+   ; --------------------------------------------------------------------------
+   Double_Add:
+>> 	link32 0xEE, 0x0C, 0xE4, 0xFF              ; FCA41F  link XIZ,0xffe4
+   	push	xhl                                   ; FCA423  push XHL
+   	push	xde                                   ; FCA424  push XDE
+   	push	xix                                   ; FCA425  push XIX
+   	push	xiy                                   ; FCA426  push XIY
+   	ld	xix, (xiz+12)                           ; FCA427  ld XIX,(XIZ+0x0c)
+
+### SITE 31: wsa1/prom_c/mathlib/mathlib.s:328  src_addr=0xFC8D92  target=0xFCA626  proposed_label=Double_Subtract (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   sub_FC8C45__FC8D77:
+   	ld	c, h                                    ; FC8D77  ld C,H
+   	xor	l, c                                   ; FC8D79  xor L,C
+   	ld	xbc, (0xFCB2AA:24)                     ; FC8D7B  ld XBC,(0xfcb2aa)
+   	push	xbc                                   ; FC8D80  push XBC
+   	ld	xbc, (0xFCB2A6:24)                     ; FC8D81  ld XBC,(0xfcb2a6)
+   	push	xbc                                   ; FC8D86  push XBC
+   	ld	xbc, (xiz+12)                           ; FC8D87  ld XBC,(XIZ+0x0c)
+   	push	xbc                                   ; FC8D8A  push XBC
+   	ld	xbc, (xiz+8)                            ; FC8D8B  ld XBC,(XIZ+0x08)
+   	push	xbc                                   ; FC8D8E  push XBC
+   	lda	xiy, (xiz-24)                          ; FC8D8F  lda XIY,XIZ+0xe8
+>> 	call	0xFCA626                              ; FC8D92  call 0xfca626
+   	ld	xbc, (xiz-20)                           ; FC8D96  ld XBC,(XIZ+0xec)
+   	push	xbc                                   ; FC8D99  push XBC
+   	ld	xbc, (xiz-24)                           ; FC8D9A  ld XBC,(XIZ+0xe8)
+   	push	xbc                                   ; FC8D9D  push XBC
+   	ld	xbc, (0xFCB2A2:24)                     ; FC8D9E  ld XBC,(0xfcb2a2)
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3424; >> = target line):
+   ;          their original order.  It then copies Double_Add's result out through
+   ;          its own XIY.
+   ; --------------------------------------------------------------------------
+   Double_Subtract:
+>> 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FCA626  link XIZ,0xfff0
+   	push	xix                                   ; FCA62A  push XIX
+   	push	xiy                                   ; FCA62B  push XIY
+   	ld	xix, (xiz+20)                           ; FCA62C  ld XIX,(XIZ+0x14)
+   	ld	xiy, (xiz+16)                           ; FCA62F  ld XIY,(XIZ+0x10)
+   	ld	wa, qix                                 ; FCA632  ld WA,QIX
+
+### SITE 32: wsa1/prom_c/mathlib/mathlib.s:2157  src_addr=0xFC9D2D  target=0xFCA121  proposed_label=Double_Compare (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	link32 0xEE, 0x0C, 0xAE, 0xFF              ; FC9D12  link XIZ,0xffae
+   	pushw	hl                                   ; FC9D16  push HL
+   	push	xix                                   ; FC9D17  push XIX
+   	push	xiy                                   ; FC9D18  push XIY
+   	ld	xbc, (0xFCB4A2:24)                     ; FC9D19  ld XBC,(0xfcb4a2)
+   	push	xbc                                   ; FC9D1E  push XBC
+   	ld	xbc, (0xFCB49E:24)                     ; FC9D1F  ld XBC,(0xfcb49e)
+   	push	xbc                                   ; FC9D24  push XBC
+   	ld	xbc, (xiz+12)                           ; FC9D25  ld XBC,(XIZ+0x0c)
+   	push	xbc                                   ; FC9D28  push XBC
+   	ld	xbc, (xiz+8)                            ; FC9D29  ld XBC,(XIZ+0x08)
+   	push	xbc                                   ; FC9D2C  push XBC
+>> 	call	0xFCA121                              ; FC9D2D  call 0xfca121
+   	cp	wa, 2:i3                                  ; FC9D31  cp WA,2
+   	jr z, sub_FC9D12__FC9D41                   ; FC9D33  jr Z,0xfc9d41
+   	ldw	(0xF362:24), 33                       ; FC9D35  ld (0x00f362),0x0021
+   	pushw	0                                    ; FC9D3C  push 0x0000
+   	jr sub_FC9D12__FC9D67                      ; FC9D3F  jr T,0xfc9d67
+-- target context (wsa1/prom_c/mathlib/mathlib.s:2807; >> = target line):
+   ; Unknown:  the exact code returned on each ordering; the arms set WA to 0, 1 and
+   ;          2 but which is which was not traced here.
+   ; --------------------------------------------------------------------------
+   Double_Compare:
+>> 	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FCA121  link XIZ,0xfff6
+   	push	xhl                                   ; FCA125  push XHL
+   	push	xde                                   ; FCA126  push XDE
+   	push	xix                                   ; FCA127  push XIX
+   	ld	xix, (xiz+12)                           ; FCA128  ld XIX,(XIZ+0x0c)
+   	ld	xhl, (xiz+8)                            ; FCA12B  ld XHL,(XIZ+0x08)
+
+### SITE 33: wsa1/prom_c/p7/p7_module.s:10681  src_addr=0xFA0084  target=0xFCAA50  proposed_label=Float32_ToDouble (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xbc                                   ; FA0066  push XBC
+   	ld	xbc, (0xFCC9B2:24)                     ; FA0067  ld XBC,(0xfcc9b2)
+   	push	xbc                                   ; FA006C  push XBC
+   	lda	xiy, (xiz-0x78)                        ; FA006D  lda XIY,XIZ+0x88
+   	call	0xFCA626                              ; FA0070  call 0xfca626
+   	ld	xbc, (xiz-0x74)                         ; FA0074  ld XBC,(XIZ+0x8c)
+   	push	xbc                                   ; FA0077  push XBC
+   	ld	xbc, (xiz-0x78)                         ; FA0078  ld XBC,(XIZ+0x88)
+   	push	xbc                                   ; FA007B  push XBC
+   	call	0xFCADD6                              ; FA007C  call 0xfcadd6
+   	push	xiy                                   ; FA0080  push XIY
+   	lda	xiy, (xiz-0x80)                        ; FA0081  lda XIY,XIZ+0x80
+>> 	call	0xFCAA50                              ; FA0084  call 0xfcaa50
+   	ld	xbc, (xiz-0x7C)                         ; FA0088  ld XBC,(XIZ+0x84)
+   	push	xbc                                   ; FA008B  push XBC
+   	ld	xbc, (xiz-0x80)                         ; FA008C  ld XBC,(XIZ+0x80)
+   	push	xbc                                   ; FA008F  push XBC
+   	ld	xbc, (0xFCCA76:24)                     ; FA0090  ld XBC,(0xfcca76)
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4032; >> = target line):
+   ;          on 0x80000000.  Both format constants appear, and nothing else in the
+   ;          module mixes them except Double_ToFloat32, the other direction.
+   ; --------------------------------------------------------------------------
+   Float32_ToDouble:
+>> 	link32 0xEE, 0x0C, 0xEA, 0xFF              ; FCAA50  link XIZ,0xffea
+   	pushw	hl                                   ; FCAA54  push HL
+   	push	xde                                   ; FCAA55  push XDE
+   	push	xix                                   ; FCAA56  push XIX
+   	push	xiy                                   ; FCAA57  push XIY
+   	ld	xix, (xiz+8)                            ; FCAA58  ld XIX,(XIZ+0x08)
+
+### SITE 34: wsa1/prom_c/p7/p7_module.s:5493  src_addr=0xF9CDE0  target=0xFCADD6  proposed_label=Double_ToFloat32 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xbc, (xiz-0xA2)                         ; F9CDB9  ld XBC,(XIZ+0xff5e)
+   	push	xbc                                   ; F9CDBE  push XBC
+   	ld	xbc, (xiz-0x96)                         ; F9CDBF  ld XBC,(XIZ+0xff6a)
+   	push	xbc                                   ; F9CDC4  push XBC
+   	ld	xbc, (xiz-0x9A)                         ; F9CDC5  ld XBC,(XIZ+0xff66)
+   	push	xbc                                   ; F9CDCA  push XBC
+   	lda	xiy, (xiz-0xAA)                        ; F9CDCB  lda XIY,XIZ+0xff56
+   	call	0xFCA7A5                              ; F9CDD0  call 0xfca7a5
+   	ld	xbc, (xiz-0xA6)                         ; F9CDD4  ld XBC,(XIZ+0xff5a)
+   	push	xbc                                   ; F9CDD9  push XBC
+   	ld	xbc, (xiz-0xAA)                         ; F9CDDA  ld XBC,(XIZ+0xff56)
+   	push	xbc                                   ; F9CDDF  push XBC
+>> 	call	0xFCADD6                              ; F9CDE0  call 0xfcadd6
+   	ld	(xiz-18), xiy                           ; F9CDE4  ld (XIZ+0xee),XIY
+   	jrl sub_F9BE3A__F9CF32                     ; F9CDE7  jrl T,0xf9cf32
+   sub_F9BE3A__F9CDEA:
+   	ld	xbc, (xiz+16)                           ; F9CDEA  ld XBC,(XIZ+0x10)
+   	cp	xbc, 80                                 ; F9CDED  cp XBC,0x00000050
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4522; >> = target line):
+   ;          reserved SINGLE exponent, and the infinity it builds is `or BC,0x7F80`.
+   ;          So it reads one format's fields and writes the other's.
+   ; --------------------------------------------------------------------------
+   Double_ToFloat32:
+>> 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FCADD6  link XIZ,0xfff2
+   	pushw	hl                                   ; FCADDA  push HL
+   	pushw	de                                   ; FCADDB  push DE
+   	push	xix                                   ; FCADDC  push XIX
+   	ld	de, (xiz+14)                            ; FCADDD  ld DE,(XIZ+0x0e)
+   	ld	bc, de                                  ; FCADE0  ld BC,DE
+
+### SITE 35: wsa1/prom_c/tone_db/tone_db_module.s:1151  src_addr=0xFB872D  target=0xFB6681  proposed_label=Part_RestageVoiceParams_Melodic (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	mul	bc, 0x12C                              ; FB870E  mul BC,0x012c
+   	extz	xbc                                   ; FB8712  extz XBC
+   	ld	xwa, (xbc+0x1523)                       ; FB8714  ld XWA,(XBC+0x1523)
+   	ld	c, (xwa+16)                             ; FB8719  ld C,(XWA+0x10)
+   	and	c, 0xC0                                ; FB871C  and C,0xc0
+   	extz	bc                                    ; FB871F  extz BC
+   	ld	(xiz-16), bc                            ; FB8721  ld (XIZ+0xf0),BC
+   	inc	6, xsp                                 ; FB8724  inc 6,XSP
+   	jr ToneStage_SwitchToPart__FB8742                      ; FB8726  jr T,0xfb8742
+   ToneStage_SwitchToPart__FB8728:
+   	push	0                                     ; FB8728  push 0x00
+   	extpfx3 0x8E, 0xF5, 0x04                   ; FB872A  push (XIZ+0xf5)
+>> 	call	0xFB6681                              ; FB872D  call 0xfb6681
+   	popw	bc                                    ; FB8731  pop BC
+   	jr ToneStage_SwitchToPart__FB875B                      ; FB8732  jr T,0xfb875b
+   ToneStage_SwitchToPart__FB8734:
+   	push	0                                     ; FB8734  push 0x00
+   	extpfx3 0x8E, 0xF5, 0x04                   ; FB8736  push (XIZ+0xf5)
+-- target context (wsa1/prom_c/voice/note_engine.s:12754; >> = target line):
+   ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
+   ;          so the name is an address.
+   ; --------------------------------------------------------------------------
+   Part_RestageVoiceParams_Melodic:
+>> 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FB6681  link XIZ,0xfff0
+   	push	xhl                                   ; FB6685  push XHL
+   	pushw	de                                   ; FB6686  push DE
+   	push	xix                                   ; FB6687  push XIX
+   	pushw	0                                    ; FB6688  push 0x0000
+   	push	0                                     ; FB668B  push 0x00
+
+### SITE 36: wsa1/prom_c/wsa1_prom_c.s:1929  src_addr=0xFACA9B  target=0xFB3D26  proposed_label=Voice_Retire_Mode20 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr sub_FACA40__FACAA5                      ; FACA82  jr T,0xfacaa5
+   sub_FACA40__FACA84:
+   	extz	xhl                                   ; FACA84  extz XHL
+   	ld	bc, (xhl+43)                            ; FACA86  ld BC,(XHL+0x2b)
+   	and	bc, 0x8080                             ; FACA89  and BC,0x8080
+   	jr z, sub_FACA40__FACAA5                   ; FACA8D  jr Z,0xfacaa5
+   	extz	xhl                                   ; FACA8F  extz XHL
+   	ld	c, (xhl)                                ; FACA91  ld C,(XHL)
+   	pushw	bc                                   ; FACA93  push BC
+   	call	0xFA6EA5                              ; FACA94  call 0xfa6ea5
+   	ld	c, (xhl)                                ; FACA98  ld C,(XHL)
+   	pushw	bc                                   ; FACA9A  push BC
+>> 	call	0xFB3D26                              ; FACA9B  call 0xfb3d26
+   	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FACA9F  ld (XHL+0x2b),0x0000
+   	pop	xiy                                    ; FACAA4  pop XIY
+   sub_FACA40__FACAA5:
+   	ld	c, (xix)                                ; FACAA5  ld C,(XIX)
+   	extz	bc                                    ; FACAA7  extz BC
+-- target context (wsa1/prom_c/voice/note_engine.s:6053; >> = target line):
+   ; Unknown:  ⚠ what 0xFB7345, 0xFAB8CC, 0xFABAE3, 0xFABBFB, 0xFA6EA5 and 0xFB74C6
+   ;          do.  ⚠ five of the six callers are outside this module, so the mode
+   ;          suffix describes the selector, not a precondition they all satisfy.
+   Voice_Retire_Mode20:
+>> 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3D26  link XIZ,0x0000
+   	pushw	hl                                   ; FB3D2A  push HL
+   	push	xde                                   ; FB3D2B  push XDE
+   	pushw	ix                                   ; FB3D2C  push IX
+   	ld	h, (xiz+8)                              ; FB3D2D  ld H,(XIZ+0x08)
+   	ld	c, 68:opc                                  ; FB3D30  ld C,0x44
+
+### SITE 37: wsa1/prom_c/p7/p7_module.s:15438  src_addr=0xFA30B0  target=0xF9A163  proposed_label=P7Byte_SendCmd (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pushw	bc                                   ; FA308B  push BC
+   	ld	xiy, (xiz-10)                           ; FA308C  ld XIY,(XIZ+0xf6)
+   	sra	xiy, 1                                 ; FA308F  sra 0x01,XIY
+   	and	xiy, 0x80                              ; FA3092  and XIY,0x00000080
+   	add	xiy, 21                                ; FA3098  add XIY,0x00000015
+   	extpfx3 0xC7, 0xF4, 0x8B                   ; FA309E  ld C,IYL
+   	pushw	bc                                   ; FA30A1  push BC
+   	call	0xF9A31A                              ; FA30A2  call 0xf9a31a
+   	ld	c, (0x861C:24)                         ; FA30A6  ld C,(0x00861c)
+   	pop	xiy                                    ; FA30AB  pop XIY
+   	pushw	bc                                   ; FA30AC  push BC
+   	pushw	3                                    ; FA30AD  push 0x0003
+>> 	call	0xF9A163                              ; FA30B0  call 0xf9a163
+   	pop	xbc                                    ; FA30B4  pop XBC
+   	unlk32 xiz                                 ; FA30B5  unlk XIZ
+   	ret                                        ; FA30B7  ret
+   ; --------------------------------------------------------------------------
+   ; MixerGain_ProductOfCurves -- 0xFA30B8..0xFA30F5 (62 bytes)
+-- target context (wsa1/prom_c/p7/p7_module.s:628; >> = target line):
+   ; Unknown:  ⚠ WHICH CHIP is on the other end.  Three destinations and three uPD6383GF DSPs
+   ;          in the machine is consistent and is NOT proof, and nothing here names a chip.
+   ; --------------------------------------------------------------------------
+   P7Byte_SendCmd:
+>> 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9A163  link XIZ,0xfff0
+   	pushw	hl                                   ; F9A167  push HL
+   	set_dd8	7, P2                              ; F9A168  set 7,(0x06)
+   	set_dd8	5, P5                              ; F9A16B  set 5,(0x0d)
+   	set_dd8	4, P5                              ; F9A16E  set 4,(0x0d)
+   	set_dd8	3, P5                              ; F9A171  set 3,(0x0d)
+
+### SITE 38: wsa1/prom_c/p7/p7_module.s:7253  src_addr=0xF9E082  target=0xFCABC6  proposed_label=Int32_ToFloat32 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; Unknown:  ⚠ whether the argument is treated as SIGNED.  It is passed straight to
+   ;          Int32_ToFloat32 (0xFCABC6), whose own name says signed, but that name is not
+   ;          re-derived here.
+   ;          ⚠ what the value IS.  All 23 call sites are inside the 0xF9BE3A module; none
+   ;          was traced to a physical quantity, so `Q31` describes the scaling and claims
+   ;          nothing else.
+   ; --------------------------------------------------------------------------
+   Int32_ToFloat32_Q31:
+   	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9E077  link XIZ,0xfffc
+   	push	xix                                   ; F9E07B  push XIX
+   	extpfx3 0x9E, 0x0A, 0x04                   ; F9E07C  pushw (XIZ+0x0a)
+   	extpfx3 0x9E, 0x08, 0x04                   ; F9E07F  pushw (XIZ+0x08)
+>> 	call	0xFCABC6                              ; F9E082  call 0xfcabc6
+   	ld	xix, xiy                                ; F9E086  ld XIX,XIY
+   	pushw	0                                    ; F9E088  push 0x0000
+   	pushw	0x8000                               ; F9E08B  push 0x8000
+   	call	0xFCABC6                              ; F9E08E  call 0xfcabc6
+   	push	xiy                                   ; F9E092  push XIY
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4246; >> = target line):
+   ; Evidence: the wrapper shape -- test 0x80000000, `cpl IY / cpl QIY / inc 1,XIY`,
+   ;          call UInt32_ToFloat32, then `or XIY,0x80000000` to set the sign.
+   ; --------------------------------------------------------------------------
+   Int32_ToFloat32:
+>> 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FCABC6  link XIZ,0xfffc
+   	push	xix                                   ; FCABCA  push XIX
+   	ld	xiy, (xiz+8)                            ; FCABCB  ld XIY,(XIZ+0x08)
+   	ld	xix, xiy                                ; FCABCE  ld XIX,XIY
+   	and	xix, 0x80000000                        ; FCABD0  and XIX,0x80000000
+   	cp	xix, 0                                  ; FCABD6  cp XIX,0x00000000
+
+### SITE 39: wsa1/prom_c/p7/p7_module.s:11599  src_addr=0xFA0B02  target=0xFCADD6  proposed_label=Double_ToFloat32 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xbc, (0xFCC8D6:24)                     ; FA0AE5  ld XBC,(0xfcc8d6)
+   	push	xbc                                   ; FA0AEA  push XBC
+   	ld	xbc, (xiz-0x6C)                         ; FA0AEB  ld XBC,(XIZ+0x94)
+   	push	xbc                                   ; FA0AEE  push XBC
+   	ld	xbc, (xiz-0x70)                         ; FA0AEF  ld XBC,(XIZ+0x90)
+   	push	xbc                                   ; FA0AF2  push XBC
+   	lda	xiy, (xiz-0x78)                        ; FA0AF3  lda XIY,XIZ+0x88
+   	call	0xFCA626                              ; FA0AF6  call 0xfca626
+   	ld	xbc, (xiz-0x74)                         ; FA0AFA  ld XBC,(XIZ+0x8c)
+   	push	xbc                                   ; FA0AFD  push XBC
+   	ld	xbc, (xiz-0x78)                         ; FA0AFE  ld XBC,(XIZ+0x88)
+   	push	xbc                                   ; FA0B01  push XBC
+>> 	call	0xFCADD6                              ; FA0B02  call 0xfcadd6
+   	push	xiy                                   ; FA0B06  push XIY
+   	lda	xiy, (xiz-0x80)                        ; FA0B07  lda XIY,XIZ+0x80
+   	call	0xFCAA50                              ; FA0B0A  call 0xfcaa50
+   	ld	xbc, (xiz-0x7C)                         ; FA0B0E  ld XBC,(XIZ+0x84)
+   	push	xbc                                   ; FA0B11  push XBC
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4522; >> = target line):
+   ;          reserved SINGLE exponent, and the infinity it builds is `or BC,0x7F80`.
+   ;          So it reads one format's fields and writes the other's.
+   ; --------------------------------------------------------------------------
+   Double_ToFloat32:
+>> 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FCADD6  link XIZ,0xfff2
+   	pushw	hl                                   ; FCADDA  push HL
+   	pushw	de                                   ; FCADDB  push DE
+   	push	xix                                   ; FCADDC  push XIX
+   	ld	de, (xiz+14)                            ; FCADDD  ld DE,(XIZ+0x0e)
+   	ld	bc, de                                  ; FCADE0  ld BC,DE
+
+### SITE 40: wsa1/prom_c/p7/p7_module.s:3568  src_addr=0xF9B764  target=0xFCAA50  proposed_label=Float32_ToDouble (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	a, (xbc)                                ; F9B73F  ld A,(XBC)
+   	cp	a, 0:i3                                   ; F9B741  cp A,0
+   	jrl nz, sub_F9B887__F9B9FE                 ; F9B743  jrl NZ,0xf9b9fe
+   	ld	xwa, (xiz+16)                           ; F9B746  ld XWA,(XIZ+0x10)
+   	cp	xwa, 84                                 ; F9B749  cp XWA,0x00000054
+   	jrl lt, sub_F9B5A5__F9B827                 ; F9B74F  jrl LT,0xf9b827
+   	ld	xiy, 99                                 ; F9B752  ld XIY,0x00000063
+   	sub	xiy, xwa                               ; F9B757  sub XIY,XWA
+   	push	xiy                                   ; F9B759  push XIY
+   	call	0xFCABC6                              ; F9B75A  call 0xfcabc6
+   	push	xiy                                   ; F9B75E  push XIY
+   	lda	xiy, (xiz-0x8E)                        ; F9B75F  lda XIY,XIZ+0xff72
+>> 	call	0xFCAA50                              ; F9B764  call 0xfcaa50
+   	ld	xbc, (xiz-0x8A)                         ; F9B768  ld XBC,(XIZ+0xff76)
+   	push	xbc                                   ; F9B76D  push XBC
+   	ld	xbc, (xiz-0x8E)                         ; F9B76E  ld XBC,(XIZ+0xff72)
+   	push	xbc                                   ; F9B773  push XBC
+   	ld	xbc, (0xFCCA3E:24)                     ; F9B774  ld XBC,(0xfcca3e)
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4032; >> = target line):
+   ;          on 0x80000000.  Both format constants appear, and nothing else in the
+   ;          module mixes them except Double_ToFloat32, the other direction.
+   ; --------------------------------------------------------------------------
+   Float32_ToDouble:
+>> 	link32 0xEE, 0x0C, 0xEA, 0xFF              ; FCAA50  link XIZ,0xffea
+   	pushw	hl                                   ; FCAA54  push HL
+   	push	xde                                   ; FCAA55  push XDE
+   	push	xix                                   ; FCAA56  push XIX
+   	push	xiy                                   ; FCAA57  push XIY
+   	ld	xix, (xiz+8)                            ; FCAA58  ld XIX,(XIZ+0x08)
+
+### SITE 41: wsa1/prom_c/p7/p7_module.s:11208  src_addr=0xFA069E  target=0xFCA252  proposed_label=Double_Multiply (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xiy                                   ; FA067D  push XIY
+   	lda	xiy, (xiz-0x80)                        ; FA067E  lda XIY,XIZ+0x80
+   	call	0xFCAA50                              ; FA0681  call 0xfcaa50
+   	ld	xbc, (xiz-0x7C)                         ; FA0685  ld XBC,(XIZ+0x84)
+   	push	xbc                                   ; FA0688  push XBC
+   	ld	xbc, (xiz-0x80)                         ; FA0689  ld XBC,(XIZ+0x80)
+   	push	xbc                                   ; FA068C  push XBC
+   	ld	xbc, (0xFCCA36:24)                     ; FA068D  ld XBC,(0xfcca36)
+   	push	xbc                                   ; FA0692  push XBC
+   	ld	xbc, (0xFCCA32:24)                     ; FA0693  ld XBC,(0xfcca32)
+   	push	xbc                                   ; FA0698  push XBC
+   	lda	xiy, (xiz-0x88)                        ; FA0699  lda XIY,XIZ+0xff78
+>> 	call	0xFCA252                              ; FA069E  call 0xfca252
+   	ld	xbc, (xiz-0x84)                         ; FA06A2  ld XBC,(XIZ+0xff7c)
+   	push	xbc                                   ; FA06A7  push XBC
+   	ld	xbc, (xiz-0x88)                         ; FA06A8  ld XBC,(XIZ+0xff78)
+   	push	xbc                                   ; FA06AD  push XBC
+   	ld	xbc, (0xFCCA46:24)                     ; FA06AE  ld XBC,(0xfcca46)
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3014; >> = target line):
+   ;          The overflow/underflow guards are literal: `cp IX,0 / jrl LE` and
+   ;          `cp IX,0x07FF / jrl GT`, 0x7FF being the reserved double exponent.
+   ; --------------------------------------------------------------------------
+   Double_Multiply:
+>> 	link32 0xEE, 0x0C, 0x68, 0xFF              ; FCA252  link XIZ,0xff68
+   	pushw	de                                   ; FCA256  push DE
+   	push	xhl                                   ; FCA257  push XHL
+   	push	xix                                   ; FCA258  push XIX
+   	push	xiy                                   ; FCA259  push XIY
+   	ld	wa, (xiz+22)                            ; FCA25A  ld WA,(XIZ+0x16)
+
+### SITE 42: wsa1/prom_c/p7/p7_module.s:13143  src_addr=0xFA1BEE  target=0xFCA41F  proposed_label=Double_Add (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extpfx3 0x9E, 0xEC, 0x04                   ; FA1BC5  pushw (XIZ+0xec)
+   	lda	xiy, (xiz-0x90)                        ; FA1BC8  lda XIY,XIZ+0xff70
+   	call	0xFCAA50                              ; FA1BCD  call 0xfcaa50
+   	ld	xbc, (xiz-0x84)                         ; FA1BD1  ld XBC,(XIZ+0xff7c)
+   	push	xbc                                   ; FA1BD6  push XBC
+   	ld	xbc, (xiz-0x88)                         ; FA1BD7  ld XBC,(XIZ+0xff78)
+   	push	xbc                                   ; FA1BDC  push XBC
+   	ld	xbc, (xiz-0x8C)                         ; FA1BDD  ld XBC,(XIZ+0xff74)
+   	push	xbc                                   ; FA1BE2  push XBC
+   	ld	xbc, (xiz-0x90)                         ; FA1BE3  ld XBC,(XIZ+0xff70)
+   	push	xbc                                   ; FA1BE8  push XBC
+   	lda	xiy, (xiz-0x98)                        ; FA1BE9  lda XIY,XIZ+0xff68
+>> 	call	0xFCA41F                              ; FA1BEE  call 0xfca41f
+   	ld	xbc, (xiz-0x94)                         ; FA1BF2  ld XBC,(XIZ+0xff6c)
+   	push	xbc                                   ; FA1BF7  push XBC
+   	ld	xbc, (xiz-0x98)                         ; FA1BF8  ld XBC,(XIZ+0xff68)
+   	push	xbc                                   ; FA1BFD  push XBC
+   	call	0xFCADD6                              ; FA1BFE  call 0xfcadd6
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3201; >> = target line):
+   ;          exponents with 0x7FF0, restores hidden bits with 0x0010, and aligns the
+   ;          smaller operand before adding -- the classic add/subtract kernel.
+   ; --------------------------------------------------------------------------
+   Double_Add:
+>> 	link32 0xEE, 0x0C, 0xE4, 0xFF              ; FCA41F  link XIZ,0xffe4
+   	push	xhl                                   ; FCA423  push XHL
+   	push	xde                                   ; FCA424  push XDE
+   	push	xix                                   ; FCA425  push XIX
+   	push	xiy                                   ; FCA426  push XIY
+   	ld	xix, (xiz+12)                           ; FCA427  ld XIX,(XIZ+0x0c)
+
+### SITE 43: wsa1/prom_c/p7/p7_module.s:13273  src_addr=0xFA1D64  target=0xFCA626  proposed_label=Double_Subtract (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xbc                                   ; FA1D45  push XBC
+   	lda	xiy, (xiz-0x70)                        ; FA1D46  lda XIY,XIZ+0x90
+   	call	0xFCA6FD                              ; FA1D49  call 0xfca6fd
+   	ld	xbc, (0xFCC82A:24)                     ; FA1D4D  ld XBC,(0xfcc82a)
+   	push	xbc                                   ; FA1D52  push XBC
+   	ld	xbc, (0xFCC826:24)                     ; FA1D53  ld XBC,(0xfcc826)
+   	push	xbc                                   ; FA1D58  push XBC
+   	ld	xbc, (xiz-0x6C)                         ; FA1D59  ld XBC,(XIZ+0x94)
+   	push	xbc                                   ; FA1D5C  push XBC
+   	ld	xbc, (xiz-0x70)                         ; FA1D5D  ld XBC,(XIZ+0x90)
+   	push	xbc                                   ; FA1D60  push XBC
+   	lda	xiy, (xiz-0x78)                        ; FA1D61  lda XIY,XIZ+0x88
+>> 	call	0xFCA626                              ; FA1D64  call 0xfca626
+   	ld	xbc, (xiz-0x74)                         ; FA1D68  ld XBC,(XIZ+0x8c)
+   	push	xbc                                   ; FA1D6B  push XBC
+   	ld	xbc, (xiz-0x78)                         ; FA1D6C  ld XBC,(XIZ+0x88)
+   	push	xbc                                   ; FA1D6F  push XBC
+   	call	0xFCADD6                              ; FA1D70  call 0xfcadd6
+-- target context (wsa1/prom_c/mathlib/mathlib.s:3424; >> = target line):
+   ;          their original order.  It then copies Double_Add's result out through
+   ;          its own XIY.
+   ; --------------------------------------------------------------------------
+   Double_Subtract:
+>> 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FCA626  link XIZ,0xfff0
+   	push	xix                                   ; FCA62A  push XIX
+   	push	xiy                                   ; FCA62B  push XIY
+   	ld	xix, (xiz+20)                           ; FCA62C  ld XIX,(XIZ+0x14)
+   	ld	xiy, (xiz+16)                           ; FCA62F  ld XIY,(XIZ+0x10)
+   	ld	wa, qix                                 ; FCA632  ld WA,QIX
+
+### SITE 44: wsa1/prom_c/p7/p7_module.s:4413  src_addr=0xF9C0E5  target=0xFCABC6  proposed_label=Int32_ToFloat32 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xbc                                   ; F9C0C2  push XBC
+   	ld	xbc, (xiz-0x9A)                         ; F9C0C3  ld XBC,(XIZ+0xff66)
+   	push	xbc                                   ; F9C0C8  push XBC
+   	call	0xFCADD6                              ; F9C0C9  call 0xfcadd6
+   	ld	(xiz-18), xiy                           ; F9C0CD  ld (XIZ+0xee),XIY
+   	jrl sub_F9BE3A__F9C24A                     ; F9C0D0  jrl T,0xf9c24a
+   sub_F9BE3A__F9C0D3:
+   	ld	xbc, (xiz+16)                           ; F9C0D3  ld XBC,(XIZ+0x10)
+   	cp	xbc, 64                                 ; F9C0D6  cp XBC,0x00000040
+   	jr gt, sub_F9BE3A__F9C154                  ; F9C0DC  jr GT,0xf9c154
+   	sub	xbc, 20                                ; F9C0DE  sub XBC,0x00000014
+   	push	xbc                                   ; F9C0E4  push XBC
+>> 	call	0xFCABC6                              ; F9C0E5  call 0xfcabc6
+   	ld	xix, xiy                                ; F9C0E9  ld XIX,XIY
+   	pushw	20                                   ; F9C0EB  push 0x0014
+   	call	0xFCAF8B                              ; F9C0EE  call 0xfcaf8b
+   	push	xix                                   ; F9C0F2  push XIX
+   	push	xiy                                   ; F9C0F3  push XIY
+-- target context (wsa1/prom_c/mathlib/mathlib.s:4246; >> = target line):
+   ; Evidence: the wrapper shape -- test 0x80000000, `cpl IY / cpl QIY / inc 1,XIY`,
+   ;          call UInt32_ToFloat32, then `or XIY,0x80000000` to set the sign.
+   ; --------------------------------------------------------------------------
+   Int32_ToFloat32:
+>> 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FCABC6  link XIZ,0xfffc
+   	push	xix                                   ; FCABCA  push XIX
+   	ld	xiy, (xiz+8)                            ; FCABCB  ld XIY,(XIZ+0x08)
+   	ld	xix, xiy                                ; FCABCE  ld XIX,XIY
+   	and	xix, 0x80000000                        ; FCABD0  and XIX,0x80000000
+   	cp	xix, 0                                  ; FCABD6  cp XIX,0x00000000
+

@@ -1,0 +1,1442 @@
+IMAGE prom_b  -- 45 sampled sites out of 15910 accepted
+
+### SITE 0: wsa1/prom_b/wsa1_prom_b.s:109345  src_addr=0xF56389  target=0xF563DC  proposed_label=sub_F56342_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	116	; F56366  jr T,0xf563dc
+   	call	16000772	; F56368  call 0xf42704
+   	ld	xwa, 16080189	; F5636C  ld XWA,0x00f55d3d
+   	push	xwa	; F56371  push XWA
+   	call	16002692	; F56372  call 0xf42e84
+   	inc	4, xsp	; F56376  inc 4,XSP
+   	ld	a, 1:opc	; F56378  ld A,0x01
+   	call	16002440	; F5637A  call 0xf42d88
+   	jr	92	; F5637E  jr T,0xf563dc
+   	bit_dd8	2, 150	; F56380  bit 2,(0x96)
+   	jr	nz, 87	; F56383  jr NZ,0xf563dc
+   	m_bit 2, MD16, 0x34d9	; F56385  bit 2,(0x34d9)
+>> 	jr	nz, 81	; F56389  jr NZ,0xf563dc
+   	m_bit 1, MD16, 0x360b	; F5638B  bit 1,(0x360b)
+   	jr	z, 69	; F5638F  jr Z,0xf563d6
+   	m_cp_mi16 MW16, 0x3000, 0x0000	; F56391  cp (0x3000),0x0000
+   	jr	z, 35	; F56397  jr Z,0xf563bc
+   	ld	a, (14038:16)	; F56399  ld A,(0x36d6)
+-- target context (wsa1/prom_b/wsa1_prom_b.s:109367; >> = target line):
+   	m_sub_rm MW16, 0x3622, 0	; F563CB  sub WA,(0x3622)
+   	ld	(6304890:24), wa	; F563CF  ld (0x60347a),WA
+   	jr	0	; F563D4  jr T,0xf563d6
+   	ldw	(8304:16), 32798	; F563D6  ld (0x2070),0x801e
+>> 	ret	; F563DC  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F563DD
+   ; Called from: table 0xF558AE[9]
+   ; Touches: (0x2070) (0x3008) (0x300C) (0x34D9) (0x360B) (0x36C6) (0x36CA)
+
+### SITE 1: wsa1/prom_b/wsa1_prom_b.s:19193  src_addr=0xF0B747  target=0xF0BE44  proposed_label=sub_F0BE44 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; --------------------------------------------------------------------------
+   ; sub_F0B747
+   ; Called from: table 0xFCF80C[241]
+   ; Touches: nothing with an absolute address
+   ; Calls:   sub_F0BE44
+   ; Evidence: word [241] of the pointer table at 0xFCF80C reads 0x00F0B747, that
+   ;           table's reader TRANSFERS to the word it loads, and 0xF0B747 is an
+   ;           instruction boundary of this transcription.
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F0B747:
+>> 	calr	1786	; F0B747  calr 0xf0be44
+   	ret	; F0B74A  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F0B74B
+   ; Called from: table 0xFCF80C[242]
+-- target context (wsa1/prom_b/wsa1_prom_b.s:20065; >> = target line):
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F0BE44:		; <- T_F42FA0
+>> 	link XIZ,0xfffa	; F0BE44  link XIZ,0xfffa
+   	lda	xbc, (xiz-2)	; F0BE48  lda XBC,XIZ+0xfe
+   	push	xbc	; F0BE4B  push XBC
+   	pushw	1	; F0BE4C  push 0x0001
+   	call	16608379	; F0BE4F  call 0xfd6c7b
+   	inc	6, xsp	; F0BE53  inc 6,XSP
+
+### SITE 2: wsa1/prom_b/wsa1_prom_b.s:127712  src_addr=0xF61BBB  target=0xF61BF4  proposed_label=sub_F61AF7_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	nz, 80	; F61BA2  jr NZ,0xf61bf4
+   	jr	-96	; F61BA4  jr T,0xf61b46
+   	m_rd_ld_rr2x RWX, 0x34, r1	; F61BA6  ld RBC3,BC
+   	m_rd_ld_rr2x RWX, 0x38, r2	; F61BA9  ld RDE3,DE
+   	push	xiy	; F61BAC  push XIY
+   	pushw	bc	; F61BAD  push BC
+   	pushw	de	; F61BAE  push DE
+   	call	16129036	; F61BAF  call 0xf61c0c
+   	popw	de	; F61BB3  pop DE
+   	popw	bc	; F61BB4  pop BC
+   	pop	xiy	; F61BB5  pop XIY
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F61BB6  cp (0x0d4a),0x00
+>> 	jr	nz, 55	; F61BBB  jr NZ,0xf61bf4
+   	inc	1, c	; F61BBD  inc 1,C
+   	call	16000924	; F61BBF  call 0xf4279c
+   	jrl	-164	; F61BC3  jrl T,0xf61b22
+   	inc	1, de	; F61BC6  inc 1,DE
+   	push	xiz	; F61BC8  push XIZ
+-- target context (wsa1/prom_b/wsa1_prom_b.s:127738; >> = target line):
+   	ld	(4718:16), xiz	; F61BE7  ld (0x126e),XIZ
+   	pop	xiz	; F61BEB  pop XIZ
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F61BEC  cp (0x0d4a),0x00
+   	jrl	z, -219	; F61BF1  jrl Z,0xf61b19
+>> 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F61BF4  cp (0x0d4a),0x00
+   	jr	nz, 16	; F61BF9  jr NZ,0xf61c0b
+   	m_bit 7, MD16, 0x0dec	; F61BFB  bit 7,(0x0dec)
+   	jr	nz, 6	; F61BFF  jr NZ,0xf61c07
+   	call	16130185	; F61C01  call 0xf62089
+   	jr	4	; F61C05  jr T,0xf61c0b
+
+### SITE 3: wsa1/prom_b/wsa1_prom_b.s:130690  src_addr=0xF63FBE  target=0xF6409B  proposed_label=sub_F63F90_Skip3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F63F94  cp (0x0d4a),0x00
+   	jrl	nz, 383	; F63F99  jrl NZ,0xf6411b
+   	call	16000780	; F63F9C  call 0xf4270c
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F63FA0  cp (0x0d4a),0x00
+   	jrl	nz, 371	; F63FA5  jrl NZ,0xf6411b
+   	ld	(3536:16), 255	; F63FA8  ld (0x0dd0),0xff
+   	push	xde	; F63FAD  push XDE
+   	ld	xde, (4718:16)	; F63FAE  ld XDE,(0x126e)
+   	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F63FB2  ld A,(XDE+IY)
+   	pop	xde	; F63FB7  pop XDE
+   	and	a, 127	; F63FB8  and A,0x7f
+   	cp	a, 72	; F63FBB  cp A,0x48
+>> 	jrl	z, 218	; F63FBE  jrl Z,0xf6409b
+   	m_and_mi8 MB16, 0x0d46, 0xfb	; F63FC1  and (0x0d46),0xfb
+   	ld	l, (3078:16)	; F63FC6  ld L,(0x0c06)
+   	ld	l, (3078:16)	; F63FCA  ld L,(0x0c06)
+   	push	xde	; F63FCE  push XDE
+   	ld	e, a	; F63FCF  ld E,A
+-- target context (wsa1/prom_b/wsa1_prom_b.s:130760; >> = target line):
+   	jrl	139	; F6408D  jrl T,0xf6411b
+   	m_and_mi8 MB16, 0x0d46, 0xfa	; F64090  and (0x0d46),0xfa
+   	jrl	131	; F64095  jrl T,0xf6411b
+   	jrl	128	; F64098  jrl T,0xf6411b
+>> 	call	16000780	; F6409B  call 0xf4270c
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F6409F  cp (0x0d4a),0x00
+   	jrl	nz, 116	; F640A4  jrl NZ,0xf6411b
+   	push	xde	; F640A7  push XDE
+   	ld	xde, (4718:16)	; F640A8  ld XDE,(0x126e)
+   	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F640AC  ld A,(XDE+IY)
+
+### SITE 4: wsa1/prom_b/wsa1_prom_b.s:186256  src_addr=0xF7FB0D  target=0xF7FBA3  proposed_label=sub_F7FAD2_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	16003828	; F7FAE3  call 0xf432f4
+   	jr	9	; F7FAE7  jr T,0xf7faf2
+   	ld	(10278:16), 3	; F7FAE9  ld (0x2826),0x03
+   	call	16003824	; F7FAEE  call 0xf432f0
+   	m_cp_mi8 MB16, 0x0db8, 0x02	; F7FAF2  cp (0x0db8),0x02
+   	jr	z, 18	; F7FAF7  jr Z,0xf7fb0b
+   	m_cp_mi8 MB16, 0x0db8, 0x03	; F7FAF9  cp (0x0db8),0x03
+   	jr	z, 56	; F7FAFE  jr Z,0xf7fb38
+   	m_cp_mi8 MB16, 0x0db8, 0x04	; F7FB00  cp (0x0db8),0x04
+   	jrl	z, 110	; F7FB05  jrl Z,0xf7fb76
+   	jrl	152	; F7FB08  jrl T,0xf7fba3
+   	cp	wa, 1:i3	; F7FB0B  cp WA,1
+>> 	jrl	lt, 147	; F7FB0D  jrl LT,0xf7fba3
+   	cp	wa, 999	; F7FB10  cp WA,0x03e7
+   	jrl	gt, 140	; F7FB14  jrl GT,0xf7fba3
+   	ld	(3096:16), wa	; F7FB17  ld (0x0c18),WA
+   	ld	(6304946:24), wa	; F7FB1B  ld (0x6034b2),WA
+   	ld	(4855:16), wa	; F7FB20  ld (0x12f7),WA
+-- target context (wsa1/prom_b/wsa1_prom_b.s:186299; >> = target line):
+   	ld	(3108:16), a	; F7FB94  ld (0x0c24),A
+   	ld	(4859:16), a	; F7FB98  ld (0x12fb),A
+   	call	16002596	; F7FB9C  call 0xf42e24
+   	calr	65112	; F7FBA0  calr 0xf7f9fb
+>> 	ret	; F7FBA3  ret
+   
+   ; Evidence: reached from calr from prom_b 0xF7FAC1, and from nothing else
+   ;           the scans see.
+   sub_F7FBA4:
+   	m_bit 1, MD16, 0x2075	; F7FBA4  bit 1,(0x2075)
+
+### SITE 5: wsa1/prom_b/wsa1_prom_b.s:140404  src_addr=0xF69BC8  target=0xF69BFD  proposed_label=sub_F69B76_Skip2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	e, w	; F69BAA  ld E,W
+   	and	w, 127	; F69BAC  and W,0x7f
+   	and	e, 128	; F69BAF  and E,0x80
+   	or	a, e	; F69BB2  or A,E
+   	ld	bc, wa	; F69BB4  ld BC,WA
+   	xor	de, de	; F69BB6  xor DE,DE
+   	ld	e, (3834:16)	; F69BB8  ld E,(0x0efa)
+   	exts	de	; F69BBC  exts DE
+   	add	wa, de	; F69BBE  add WA,DE
+   	cp	wa, 16383	; F69BC0  cp WA,0x3fff
+   	jr	gt, 55	; F69BC4  jr GT,0xf69bfd
+   	cp	wa, 0:i3	; F69BC6  cp WA,0
+>> 	jr	lt, 51	; F69BC8  jr LT,0xf69bfd
+   	bit	7, w	; F69BCA  bit 0x07,W
+   	jr	z, 2	; F69BCD  jr Z,0xf69bd1
+   	ld	wa, bc	; F69BCF  ld WA,BC
+   	ld	bc, wa	; F69BD1  ld BC,WA
+   	and	a, 127	; F69BD3  and A,0x7f
+-- target context (wsa1/prom_b/wsa1_prom_b.s:140424; >> = target line):
+   	call	16169311	; F69BF2  call 0xf6b95f
+   	popw	bc	; F69BF6  pop BC
+   	ld	w, c	; F69BF7  ld W,C
+   	call	16169439	; F69BF9  call 0xf6b9df
+>> 	xor	a, a	; F69BFD  xor A,A
+   	calr	9955	; F69BFF  calr 0xf6c2e5
+   	ret	; F69C02  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F69C03
+
+### SITE 6: wsa1/prom_b/wsa1_prom_b.s:126447  src_addr=0xF60E0C  target=0xF60E2B  proposed_label=sub_F60D3E_Skip7 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xhl	; F60DEE  push XHL
+   	push	xix	; F60DEF  push XIX
+   	ld	xix, 6304802	; F60DF0  ld XIX,0x00603422
+   	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60DF5  ld A,(XIX+HL)
+   	pop	xix	; F60DFA  pop XIX
+   	pop	xhl	; F60DFB  pop XHL
+   	cp	a, 32	; F60DFC  cp A,0x20
+   	jr	z, 6	; F60DFF  jr Z,0xf60e07
+   	push	xhl	; F60E01  push XHL
+   	call	16125504	; F60E02  call 0xf60e40
+   	pop	xhl	; F60E06  pop XHL
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F60E07  cp (0x0d4a),0x00
+>> 	jr	z, 29	; F60E0C  jr Z,0xf60e2b
+   	m_cp_mi8 MB16, 0x0d4a, 0x01	; F60E0E  cp (0x0d4a),0x01
+   	jr	z, 22	; F60E13  jr Z,0xf60e2b
+   	m_cp_mi8 MB16, 0x0d4a, 0x08	; F60E15  cp (0x0d4a),0x08
+   	jr	z, 15	; F60E1A  jr Z,0xf60e2b
+   	m_cp_mi8 MB16, 0x0d18, 0x00	; F60E1C  cp (0x0d18),0x00
+-- target context (wsa1/prom_b/wsa1_prom_b.s:126456; >> = target line):
+   	m_cp_mi8 MB16, 0x0d18, 0x00	; F60E1C  cp (0x0d18),0x00
+   	jr	nz, 8	; F60E21  jr NZ,0xf60e2b
+   	ld	a, (3402:16)	; F60E23  ld A,(0x0d4a)
+   	ld	(3352:16), a	; F60E27  ld (0x0d18),A
+>> 	inc	1, l	; F60E2B  inc 1,L
+   	jr	-81	; F60E2D  jr T,0xf60dde
+   	ld	a, (3352:16)	; F60E2F  ld A,(0x0d18)
+   	ld	(3402:16), a	; F60E33  ld (0x0d4a),A
+   	call	16000908	; F60E37  call 0xf4278c
+   	call	15993372	; F60E3B  call 0xf40a1c
+
+### SITE 7: wsa1/prom_b/wsa1_prom_b.s:129263  src_addr=0xF63132  target=0xF6327F  proposed_label=sub_F6306A_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	m_cp_rm MW16, 0x0c61, 2	; F63106  cp DE,(0x0c61)
+   	jrl	z, 40	; F6310A  jrl Z,0xf63135
+   	ld	bc, (3222:16)	; F6310D  ld BC,(0x0c96)
+   	calr	364	; F63111  calr 0xf63280
+   	call	16134880	; F63114  call 0xf632e0
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F63118  cp (0x0d4a),0x00
+   	jrl	nz, 351	; F6311D  jrl NZ,0xf6327f
+   	ld	bc, (3224:16)	; F63120  ld BC,(0x0c98)
+   	calr	345	; F63124  calr 0xf63280
+   	call	16134825	; F63127  call 0xf632a9
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F6312B  cp (0x0d4a),0x00
+   	jr	z, -44	; F63130  jr Z,0xf63106
+>> 	jrl	330	; F63132  jrl T,0xf6327f
+   	ld	wa, (3222:16)	; F63135  ld WA,(0x0c96)
+   	ld	(3228:16), wa	; F63139  ld (0x0c9c),WA
+   	ldw	bc, 256	; F6313D  ld BC,0x0100
+   	sub	bc, 5	; F63140  sub BC,0x0005
+   	ld	(3226:16), bc	; F63144  ld (0x0c9a),BC
+-- target context (wsa1/prom_b/wsa1_prom_b.s:129356; >> = target line):
+   	jr	nz, 11	; F63272  jr NZ,0xf6327f
+   	ld	bc, (3232:16)	; F63274  ld BC,(0x0ca0)
+   	m_sub_rm MW16, 0x0c9c, 1	; F63278  sub BC,(0x0c9c)
+   	calr	1	; F6327C  calr 0xf63280
+>> 	ret	; F6327F  ret
+   sub_F63280:
+   	pushw	wa	; F63280  push WA
+   	push	xde	; F63281  push XDE
+   	push	xhl	; F63282  push XHL
+   	cp	bc, 0:i3	; F63283  cp BC,0
+
+### SITE 8: wsa1/prom_b/wsa1_prom_b.s:152782  src_addr=0xF6F45E  target=0xF6F4F2  proposed_label=sub_F6F4F2 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   sub_F6F440:
+   	push	xiz	; F6F440  push XIZ
+   	push	xix	; F6F441  push XIX
+   	push	xhl	; F6F442  push XHL
+   	push	xde	; F6F443  push XDE
+   	ld	a, (10027:16)	; F6F444  ld A,(0x272b)
+   	m_cp_rm MB16, 0x360a, 1	; F6F448  cp A,(0x360a)
+   	jr	z, 23	; F6F44C  jr Z,0xf6f465
+   	call	16184438	; F6F44E  call 0xf6f476
+   	ld	a, (10027:16)	; F6F452  ld A,(0x272b)
+   	ld	(13834:16), a	; F6F456  ld (0x360a),A
+   	call	16184483	; F6F45A  call 0xf6f4a3
+>> 	calr	145	; F6F45E  calr 0xf6f4f2
+   	call	15993544	; F6F461  call 0xf40ac8
+   	call	16201792	; F6F465  call 0xf73840
+   	call	15998572	; F6F469  call 0xf41e6c
+   	call	15998356	; F6F46D  call 0xf41d94
+   	pop	xde	; F6F471  pop XDE
+-- target context (wsa1/prom_b/wsa1_prom_b.s:152874; >> = target line):
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F6F4F2:
+>> 	call	15993312	; F6F4F2  call 0xf409e0
+   	m_cp_mi8 MB24, 0x6034c6, 0xff	; F6F4F6  cp (0x6034c6),0xff
+   	jr	z, 9	; F6F4FC  jr Z,0xf6f507
+   	m_and_mi8 MB16, 0x7f4d, 0xfb	; F6F4FE  and (0x7f4d),0xfb
+   	xor	a, a	; F6F503  xor A,A
+   	jr	7	; F6F505  jr T,0xf6f50e
+
+### SITE 9: wsa1/prom_b/wsa1_prom_b.s:158771  src_addr=0xF7231D  target=0xF72322  proposed_label=sub_F7222D_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	33	; F722FF  jr T,0xf72322
+   	calr	890	; F72301  calr 0xf7267e
+   	jr	28	; F72304  jr T,0xf72322
+   	calr	921	; F72306  calr 0xf726a2
+   	jr	23	; F72309  jr T,0xf72322
+   	calr	59189	; F7230B  calr 0xf70a43
+   	jr	18	; F7230E  jr T,0xf72322
+   	calr	59268	; F72310  calr 0xf70a97
+   	jr	13	; F72313  jr T,0xf72322
+   	calr	59735	; F72315  calr 0xf70c6f
+   	jr	8	; F72318  jr T,0xf72322
+   	calr	59805	; F7231A  calr 0xf70cba
+>> 	jr	3	; F7231D  jr T,0xf72322
+   	calr	59936	; F7231F  calr 0xf70d42
+   	ret	; F72322  ret
+   
+   ; --------------------------------------------------------------------------
+   ; DispatchTable_F72323 -- 16 32-bit words, every one an address in
+-- target context (wsa1/prom_b/wsa1_prom_b.s:158773; >> = target line):
+   	jr	8	; F72318  jr T,0xf72322
+   	calr	59805	; F7231A  calr 0xf70cba
+   	jr	3	; F7231D  jr T,0xf72322
+   	calr	59936	; F7231F  calr 0xf70d42
+>> 	ret	; F72322  ret
+   
+   ; --------------------------------------------------------------------------
+   ; DispatchTable_F72323 -- 16 32-bit words, every one an address in
+   ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  9
+   ;                         distinct values.  notes/prom_b_f6d002_layout.py
+
+### SITE 10: wsa1/prom_b/wsa1_prom_b.s:86372  src_addr=0xF45024  target=0xF45036  proposed_label=sub_F44F67_Join2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	(6304798:24), xwa	; F45002  ld (0x60341e),XWA
+   	calr	2816	; F45007  calr 0xf45b0a
+   	xor	xwa, xwa	; F4500A  xor XWA,XWA
+   	ld	(14136:16), xwa	; F4500C  ld (0x3738),XWA
+   	jr	42	; F45010  jr T,0xf4503c
+   	cp	c, 16	; F45012  cp C,0x10
+   	jr	nc, 15	; F45015  jr NC,0xf45026
+   	ld	iz, (14136:16)	; F45017  ld IZ,(0x3738)
+   	ld	a, c	; F4501B  ld A,C
+   	rcf	; F4501D  rcf
+   	m_rd_stcf_a RW+r6	; F4501E  stcf A,IZ
+   	ld	(14136:16), iz	; F45020  ld (0x3738),IZ
+>> 	jr	16	; F45024  jr T,0xf45036
+   	ld	iz, (14138:16)	; F45026  ld IZ,(0x373a)
+   	ld	a, c	; F4502A  ld A,C
+   	sub	a, 16	; F4502C  sub A,0x10
+   	rcf	; F4502F  rcf
+   	m_rd_stcf_a RW+r6	; F45030  stcf A,IZ
+-- target context (wsa1/prom_b/wsa1_prom_b.s:86379; >> = target line):
+   	sub	a, 16	; F4502C  sub A,0x10
+   	rcf	; F4502F  rcf
+   	m_rd_stcf_a RW+r6	; F45030  stcf A,IZ
+   	ld	(14138:16), iz	; F45032  ld (0x373a),IZ
+>> 	calr	1146	; F45036  calr 0xf454b3
+   	calr	2866	; F45039  calr 0xf45b6e
+   	ret	; F4503C  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F4503D
+
+### SITE 11: wsa1/prom_b/wsa1_prom_b.s:309  src_addr=0xF00041  target=0xF00096  proposed_label=sub_F0003C_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; sub_F0003C
+   ; Reached from: a branch decoded inside this block -- the walk enters 0xF0003C
+   ;               from code it had already reached, not from any table.
+   ; Extent:  91 bytes, 36 instructions, ends `ret`.  The walk marks exactly
+   ;          0xF0003C-0xF00096.  9 bytes (10%) sit in spellings llvm-mc cannot
+   ;          encode and stay `.byte` with the MAME text in the comment.
+   ; Unknown: what the routine is for.  ★ COVERAGE ROUND: this pass converts
+   ;          reachable bytes and defers every semantic question, so the label
+   ;          stays sub_XXXXXX with the gap stated.
+   ; --------------------------------------------------------------------------
+   sub_F0003C:
+   	m_cp_mi8 MB16, 0x20b8, 0x11	; F0003C  cp (0x20b8),0x11
+>> 	jrl	nz, 82	; F00041  jrl NZ,0xf00096
+   	ld	a, (8377:16)	; F00044  ld A,(0x20b9)
+   	and	a, (8378:16)	; F00048  and A,(0x20ba)
+   	bit	0, a	; F0004C  bit 0x00,A
+   	jr	nz, 2	; F0004F  jr NZ,0xf00053
+   	jr	67	; F00051  jr T,0xf00096
+-- target context (wsa1/prom_b/wsa1_prom_b.s:343; >> = target line):
+   	di	; F0008D  ei 0x00
+   	jr	5	; F0008F  jr T,0xf00096
+   	di	; F00091  ei 0x00
+   	calr	114	; F00093  calr 0xf00108
+>> 	ret	; F00096  ret
+   
+   ; --- 0xF00097-0xF00098, 2 B, converted by lane promB6 (TRAILER).
+   ;     after sub_F0003C's `ret`, before sub_F00099
+   ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+   	.byte	0x00, 0x00	; F00097  routine trailer
+
+### SITE 12: wsa1/prom_b/wsa1_prom_b.s:89678  src_addr=0xF47E61  target=0xF47EAF  proposed_label=sub_F47C7C_Skip16 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	(14056:16), a	; F47E34  ld (0x36e8),A
+   	ldw	bc, 5	; F47E38  ld BC,0x0005
+   	ld	xde, 14057	; F47E3B  ld XDE,0x000036e9
+   	ld	xhl, 13476	; F47E40  ld XHL,0x000034a4
+   	m_ldir MBI+r3	; F47E45  ldir
+   	call	15993832	; F47E47  call 0xf40be8
+   	ld	de, (14140:16)	; F47E4B  ld DE,(0x373c)
+   	m_add_mi16 MW16, 0x33e2, 0x0007	; F47E4F  add (0x33e2),0x0007
+   	ld	a, (13470:16)	; F47E55  ld A,(0x349e)
+   	ld	c, a	; F47E59  ld C,A
+   	and	c, 240	; F47E5B  and C,0xf0
+   	cp	c, 144	; F47E5E  cp C,0x90
+>> 	jr	z, 76	; F47E61  jr Z,0xf47eaf
+   	cp	a, 210	; F47E63  cp A,0xd2
+   	jr	z, 95	; F47E66  jr Z,0xf47ec7
+   	cp	a, 211	; F47E68  cp A,0xd3
+   	jr	z, 102	; F47E6B  jr Z,0xf47ed3
+   	cp	a, 209	; F47E6D  cp A,0xd1
+-- target context (wsa1/prom_b/wsa1_prom_b.s:89705; >> = target line):
+   	m_cp_mi8 MB16, 0x34a4, 0x00	; F47EA1  cp (0x34a4),0x00
+   	jr	nz, 4	; F47EA6  jr NZ,0xf47eac
+   	call	15993536	; F47EA8  call 0xf40ac0
+   	jrl	-551	; F47EAC  jrl T,0xf47c88
+>> 	calr	771	; F47EAF  calr 0xf481b5
+   	jrl	-557	; F47EB2  jrl T,0xf47c88
+   	calr	1012	; F47EB5  calr 0xf482ac
+   	jrl	-563	; F47EB8  jrl T,0xf47c88
+   	calr	1010	; F47EBB  calr 0xf482b0
+   	jrl	-569	; F47EBE  jrl T,0xf47c88
+
+### SITE 13: wsa1/prom_b/wsa1_prom_b.s:94922  src_addr=0xF4B09D  target=0xF40C54  proposed_label=T_F40C54 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; Calls:   T_F40C54 sub_F4AEDD
+   ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
+   ;           sites are listed above), so 0xF4B08B is an instruction boundary.
+   ;           The name IS the address.
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F4B08B:
+   	ld	wa, (14076:16)	; F4B08B  ld WA,(0x36fc)
+   	ld	(13404:16), wa	; F4B08F  ld (0x345c),WA
+   	ldw	(13406:16), 5	; F4B093  ld (0x345e),0x0005
+   	incw	1, (14066:16)	; F4B099  incw 1,(0x36f2)
+>> 	call	15993940	; F4B09D  call 0xf40c54
+   	cp	a, 129	; F4B0A1  cp A,0x81
+   	jr	z, 11	; F4B0A4  jr Z,0xf4b0b1
+   	cp	a, 130	; F4B0A6  cp A,0x82
+   	jr	z, 18	; F4B0A9  jr Z,0xf4b0bd
+   	call	16035549	; F4B0AB  call 0xf4aedd
+-- target context (wsa1/prom_b/wsa1_prom_b.s:81839; >> = target line):
+   T_F40C00:	jp 0xF4A5B5  ; -> prom_b 0x4A5B5   x3
+   T_F40C04:	jp 0xF4B414  ; -> prom_b 0x4B414   x3
+   	.fill 0x48, 1, 0x0E  ; 0xF40C08: 72 x ret
+   T_F40C50:	jp 0xF4D02C  ; -> prom_b 0x4D02C   x15
+>> T_F40C54:	jp 0xF4D0DB  ; -> prom_b 0x4D0DB   x18
+   T_F40C58:	jp 0xF4D0FB  ; -> prom_b 0x4D0FB   x14
+   T_F40C5C:	jp 0xF4D690  ; -> prom_b 0x4D690   x7
+   T_F40C60:	jp 0xF4D6F6  ; -> prom_b 0x4D6F6   x2
+   T_F40C64:	jp 0xF4D000  ; -> prom_b 0x4D000   x9
+   T_F40C68:	jp 0xF4D002  ; -> prom_b 0x4D002   x1
+
+### SITE 14: wsa1/prom_b/wsa1_prom_b.s:130813  src_addr=0xF6413F  target=0xF4270C  proposed_label=T_F4270C (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   sub_F6411C:
+   	xor	hl, hl	; F6411C  xor HL,HL
+   	call	16000780	; F6411E  call 0xf4270c
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F64122  cp (0x0d4a),0x00
+   	jr	nz, 52	; F64127  jr NZ,0xf6415d
+   	call	16000780	; F64129  call 0xf4270c
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F6412D  cp (0x0d4a),0x00
+   	jr	nz, 41	; F64132  jr NZ,0xf6415d
+   	push	xde	; F64134  push XDE
+   	ld	xde, (4718:16)	; F64135  ld XDE,(0x126e)
+   	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F64139  ld A,(XDE+IY)
+   	pop	xde	; F6413E  pop XDE
+>> 	call	16000780	; F6413F  call 0xf4270c
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F64143  cp (0x0d4a),0x00
+   	jr	nz, 19	; F64148  jr NZ,0xf6415d
+   	push	xde	; F6414A  push XDE
+   	ld	xde, (4718:16)	; F6414B  ld XDE,(0x126e)
+   	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F6414F  ld A,(XDE+IY)
+-- target context (wsa1/prom_b/wsa1_prom_b.s:83374; >> = target line):
+   T_F426FC:	jp 0xF60598  ; -> prom_b 0x60598   x1
+   T_F42700:	jp 0xF5DAA2  ; -> prom_b 0x5DAA2   x1
+   T_F42704:	jp 0xF60B22  ; -> prom_b 0x60B22   x6
+   T_F42708:	jp 0xF60B0C  ; -> prom_b 0x60B0C   x6
+>> T_F4270C:	jp 0xF5EBD0  ; -> prom_b 0x5EBD0   x25
+   T_F42710:	jp 0xF5EC0E  ; -> prom_b 0x5EC0E   x7
+   T_F42714:	jp 0xF60B4E  ; -> prom_b 0x60B4E   x1
+   T_F42718:	jp 0xF60D3E  ; -> prom_b 0x60D3E   x1
+   T_F4271C:	jp 0xF6119A  ; -> prom_b 0x6119A   x1
+   T_F42720:	jp 0xF61A16  ; -> prom_b 0x61A16   x1
+
+### SITE 15: wsa1/prom_b/wsa1_prom_b.s:90175  src_addr=0xF4829C  target=0xF482AB  proposed_label=sub_F481B5_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	iy, wa	; F48272  ld IY,WA
+   	sla	iy, 1	; F48274  sla 0x01,IY
+   	ld	xhl, 12344	; F48277  ld XHL,0x00003038
+   	ld	a, (13279:16)	; F4827C  ld A,(0x33df)
+   	ld	xiz, xhl	; F48280  ld XIZ,XHL
+   	mx_lda32 MXD, ra_IZ, ra_IY, 6	; F48282  lda XIZ,XIZ+IY
+   	ld	(xiz+1), a	; F48287  ld (XIZ+0x01),A
+   	xor	xix, xix	; F4828A  xor XIX,XIX
+   	ld	xix, 12309	; F4828C  ld XIX,0x00003015
+   	ld	a, (13278:16)	; F48291  ld A,(0x33de)
+   	ld	(xix), a	; F48295  ld (XIX),A
+   	m_cp_mi8 MB16, 0x33de, 0xff	; F48297  cp (0x33de),0xff
+>> 	jr	z, 13	; F4829C  jr Z,0xf482ab
+   	xor	hl, hl	; F4829E  xor HL,HL
+   	ld	l, (13278:16)	; F482A0  ld L,(0x33de)
+   	calr	63414	; F482A4  calr 0xf47a5d
+   	ld	(xhl+4), 0	; F482A7  ld (XHL+0x04),0x00
+   	ret	; F482AB  ret
+-- target context (wsa1/prom_b/wsa1_prom_b.s:90180; >> = target line):
+   	xor	hl, hl	; F4829E  xor HL,HL
+   	ld	l, (13278:16)	; F482A0  ld L,(0x33de)
+   	calr	63414	; F482A4  calr 0xf47a5d
+   	ld	(xhl+4), 0	; F482A7  ld (XHL+0x04),0x00
+>> 	ret	; F482AB  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F482AC
+   ; Called from: in-module: 0xF47EB5
+   ; Touches: nothing with an absolute address
+
+### SITE 16: wsa1/prom_b/wsa1_prom_b.s:89407  src_addr=0xF47BBE  target=0xF47BE2  proposed_label=sub_F47AD0_Join2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	a, 0:opc	; F47B9D  ld A,0x00
+   	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F47B9F  ld (XHL+IY),A
+   	pop	xhl	; F47BA4  pop XHL
+   	m_cp_mi8 MB16, 0x33de, 0xff	; F47BA5  cp (0x33de),0xff
+   	jr	z, 20	; F47BAA  jr Z,0xf47bc0
+   	push	xhl	; F47BAC  push XHL
+   	xor	hl, hl	; F47BAD  xor HL,HL
+   	ld	l, (13278:16)	; F47BAF  ld L,(0x33de)
+   	calr	65191	; F47BB3  calr 0xf47a5d
+   	ld	a, (13277:16)	; F47BB6  ld A,(0x33dd)
+   	ld	(xhl+4), a	; F47BBA  ld (XHL+0x04),A
+   	pop	xhl	; F47BBD  pop XHL
+>> 	jr	34	; F47BBE  jr T,0xf47be2
+   	push	xhl	; F47BC0  push XHL
+   	xor	iy, iy	; F47BC1  xor IY,IY
+   	xor	wa, wa	; F47BC3  xor WA,WA
+   	ld	a, (13471:16)	; F47BC5  ld A,(0x349f)
+   	ld	iy, wa	; F47BC9  ld IY,WA
+-- target context (wsa1/prom_b/wsa1_prom_b.s:89420; >> = target line):
+   	ld	xiz, xhl	; F47BD7  ld XIZ,XHL
+   	mx_lda32 MXD, ra_IZ, ra_IY, 6	; F47BD9  lda XIZ,XIZ+IY
+   	ld	(xiz+1), a	; F47BDE  ld (XIZ+0x01),A
+   	pop	xhl	; F47BE1  pop XHL
+>> 	ld	(xhl+4), 0	; F47BE2  ld (XHL+0x04),0x00
+   	ld	xix, 12309	; F47BE6  ld XIX,0x00003015
+   	ld	c, (xix)	; F47BEB  ld C,(XIX)
+   	ld	(xhl+5), c	; F47BED  ld (XHL+0x05),C
+   	ld	a, (13279:16)	; F47BF0  ld A,(0x33df)
+   	ld	(xix), a	; F47BF4  ld (XIX),A
+
+### SITE 17: wsa1/prom_b/wsa1_prom_b.s:139012  src_addr=0xF691BC  target=0xF6B770  proposed_label=sub_F6B770 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp	w, 255	; F6919B  cp W,0xff
+   	jr	z, 91	; F6919E  jr Z,0xf691fb
+   	calr	10010	; F691A0  calr 0xf6b8bd
+   	cp	a, 129	; F691A3  cp A,0x81
+   	jr	z, 83	; F691A6  jr Z,0xf691fb
+   	calr	88	; F691A8  calr 0xf69203
+   	cp	w, 0:i3	; F691AB  cp W,0
+   	jr	nz, -23	; F691AD  jr NZ,0xf69198
+   	ld	a, 4:opc	; F691AF  ld A,0x04
+   	calr	12510	; F691B1  calr 0xf6c292
+   	ld	a, (3921:16)	; F691B4  ld A,(0x0f51)
+   	ld	(3924:16), a	; F691B8  ld (0x0f54),A
+>> 	calr	9649	; F691BC  calr 0xf6b770
+   	cp	w, 255	; F691BF  cp W,0xff
+   	jr	z, 36	; F691C2  jr Z,0xf691e8
+   	calr	9974	; F691C4  calr 0xf6b8bd
+   	cp	a, 129	; F691C7  cp A,0x81
+   	jr	z, 12	; F691CA  jr Z,0xf691d8
+-- target context (wsa1/prom_b/wsa1_prom_b.s:144059; >> = target line):
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F6B770:
+>> 	m_push MW16, 0x0e54	; F6B770  pushw (0x0e54)
+   	calr	65523	; F6B774  calr 0xf6b76a
+   	m_popw MD16, 0x0e54	; F6B777  popw (0x0e54)
+   	ret	; F6B77B  ret
+   
+   ; --------------------------------------------------------------------------
+
+### SITE 18: wsa1/prom_b/wsa1_prom_b.s:153722  src_addr=0xF6FBA4  target=0xF6FC0F  proposed_label=sub_F6FB51_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	w, (4682:16)	; F6FB82  ld W,(0x124a)
+   	cp	w, 1:i3	; F6FB86  cp W,1
+   	jr	z, 6	; F6FB88  jr Z,0xf6fb90
+   	cp	w, 253	; F6FB8A  cp W,0xfd
+   	jrl	nz, 127	; F6FB8D  jrl NZ,0xf6fc0f
+   	calr	510	; F6FB90  calr 0xf6fd91
+   	jrl	121	; F6FB93  jrl T,0xf6fc0f
+   	calr	481	; F6FB96  calr 0xf6fd7a
+   	ld	w, (4682:16)	; F6FB99  ld W,(0x124a)
+   	cp	w, 1:i3	; F6FB9D  cp W,1
+   	jr	z, 5	; F6FB9F  jr Z,0xf6fba6
+   	cp	w, 253	; F6FBA1  cp W,0xfd
+>> 	jr	nz, 105	; F6FBA4  jr NZ,0xf6fc0f
+   	calr	488	; F6FBA6  calr 0xf6fd91
+   	jr	100	; F6FBA9  jr T,0xf6fc0f
+   	calr	460	; F6FBAB  calr 0xf6fd7a
+   	ld	w, (4682:16)	; F6FBAE  ld W,(0x124a)
+   	cp	w, 1:i3	; F6FBB2  cp W,1
+-- target context (wsa1/prom_b/wsa1_prom_b.s:153762; >> = target line):
+   	jr	z, 5	; F6FC05  jr Z,0xf6fc0c
+   	cp	w, 253	; F6FC07  cp W,0xfd
+   	jr	nz, 3	; F6FC0A  jr NZ,0xf6fc0f
+   	calr	386	; F6FC0C  calr 0xf6fd91
+>> 	ret	; F6FC0F  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F6FC10
+   ; Called from: in-module: 0xF6FBF7
+   ; Touches: (0x1078) (0x107A) (0x108C) (0x108D) (0x108E) (0x108F) (0x11B2)
+
+### SITE 19: wsa1/prom_b/wsa1_prom_b.s:118323  src_addr=0xF5B8D1  target=0xF5B8DC  proposed_label=Dispatch_Code80_Bracketed_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xiz, xsp	; F5B8B7  ld XIZ,XSP
+   	push	xwa	; F5B8B9  push XWA
+   	push	xbc	; F5B8BA  push XBC
+   	push	xde	; F5B8BB  push XDE
+   	push	xhl	; F5B8BC  push XHL
+   	push	xix	; F5B8BD  push XIX
+   	push	xiy	; F5B8BE  push XIY
+   	ld	hl, (xiz+8)	; F5B8BF  ld HL,(XIZ+0x08)
+   	cp	hl, 192	; F5B8C2  cp HL,0x00c0
+   	jr	c, 11	; F5B8C6  jr C,0xf5b8d3
+   	sub	hl, 192	; F5B8C8  sub HL,0x00c0
+   	ld	xiy, 16103800	; F5B8CC  ld XIY,0x00f5b978
+>> 	jr	9	; F5B8D1  jr T,0xf5b8dc
+   	sub	hl, 128	; F5B8D3  sub HL,0x0080
+   	ld	xiy, 16103672	; F5B8D7  ld XIY,0x00f5b8f8
+   	sla	hl, 2	; F5B8DC  sla 0x02,HL
+   	mx_ld_rm MXL, ra_IY, ra_HL, 5	; F5B8DF  ld XIY,(XIY+HL)
+   	push	xiy	; F5B8E4  push XIY
+-- target context (wsa1/prom_b/wsa1_prom_b.s:118326; >> = target line):
+   	ld	xiy, 16103800	; F5B8CC  ld XIY,0x00f5b978
+   	jr	9	; F5B8D1  jr T,0xf5b8dc
+   	sub	hl, 128	; F5B8D3  sub HL,0x0080
+   	ld	xiy, 16103672	; F5B8D7  ld XIY,0x00f5b8f8
+>> 	sla	hl, 2	; F5B8DC  sla 0x02,HL
+   	mx_ld_rm MXL, ra_IY, ra_HL, 5	; F5B8DF  ld XIY,(XIY+HL)
+   	push	xiy	; F5B8E4  push XIY
+   	call	16105240	; F5B8E5  call 0xf5bf18
+   	pop	xiy	; F5B8E9  pop XIY
+   	call	(xiy)	; F5B8EA  call T,XIY
+
+### SITE 20: wsa1/prom_b/wsa1_prom_b.s:161151  src_addr=0xF73435  target=0xF7335A  proposed_label=sub_F7335A (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	ule, 7	; F73410  jr ULE,0xf73419
+   	ld	(3402:16), 10	; F73412  ld (0x0d4a),0x0a
+   	jr	34	; F73417  jr T,0xf7343b
+   	ld	(13404:16), wa	; F73419  ld (0x345c),WA
+   	ld	hl, wa	; F7341D  ld HL,WA
+   	calr	64232	; F7341F  calr 0xf72f0a
+   	ld	xhl, (4718:16)	; F73422  ld XHL,(0x126e)
+   	m_bit 7, MDI+r3, 0	; F73426  bit 7,(XHL)
+   	jr	nz, 7	; F73428  jr NZ,0xf73431
+   	ld	(3402:16), 11	; F7342A  ld (0x0d4a),0x0b
+   	jr	10	; F7342F  jr T,0xf7343b
+   	ld	hl, (13404:16)	; F73431  ld HL,(0x345c)
+>> 	calr	65314	; F73435  calr 0xf7335a
+   	ldw	iy, 5	; F73438  ld IY,0x0005
+   	ld	(3322:16), iy	; F7343B  ld (0x0cfa),IY
+   	ret	; F7343F  ret
+   
+   ; --------------------------------------------------------------------------
+-- target context (wsa1/prom_b/wsa1_prom_b.s:161040; >> = target line):
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F7335A:
+>> 	push	xiz	; F7335A  push XIZ
+   	ld	xiz, (4718:16)	; F7335B  ld XIZ,(0x126e)
+   	m_rd_ld_rr2x RLX, 0x38, r6	; F7335F  ld XDE3,XIZ
+   	pop	xiz	; F73362  pop XIZ
+   	m_rd_pushx RLX, 0x38	; F73363  push XDE3
+   	pushw	bc	; F73366  push BC
+
+### SITE 21: wsa1/prom_b/wsa1_prom_b.s:165901  src_addr=0xF763D3  target=0xF763D7  proposed_label=sub_F763D7 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	l, (xix)	; F763B3  ld L,(XIX)
+   	ld	(xiy), l	; F763B5  ld (XIY),L
+   	ld	(xix), a	; F763B7  ld (XIX),A
+   	ld	wa, (xiy+1)	; F763B9  ld WA,(XIY+0x01)
+   	ld	hl, (xix+1)	; F763BC  ld HL,(XIX+0x01)
+   	ld	(xiy+1), hl	; F763BF  ld (XIY+0x01),HL
+   	ld	(xix+1), wa	; F763C2  ld (XIX+0x01),WA
+   	xor	de, de	; F763C5  xor DE,DE
+   	jr	-80	; F763C7  jr T,0xf76379
+   	add	de, 3	; F763C9  add DE,0x0003
+   	cp	de, 96	; F763CD  cp DE,0x0060
+   	jr	ule, -90	; F763D1  jr ULE,0xf76379
+>> 	calr	1	; F763D3  calr 0xf763d7
+   	ret	; F763D6  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F763D7
+   ; Called from: in-module: 0xF763D3
+-- target context (wsa1/prom_b/wsa1_prom_b.s:165918; >> = target line):
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F763D7:
+>> 	ld	bc, (4226:16)	; F763D7  ld BC,(0x1082)
+   	ld	xiy, 4307	; F763DB  ld XIY,0x000010d3
+   	xor	hl, hl	; F763E0  xor HL,HL
+   	mx_ld_rm MXB, ra_IY, ra_HL, 1	; F763E2  ld A,(XIY+HL)
+   	cp	a, 255	; F763E7  cp A,0xff
+   	jr	z, 104	; F763EA  jr Z,0xf76454
+
+### SITE 22: wsa1/prom_b/wsa1_prom_b.s:24254  src_addr=0xF0EA4B  target=0xF0EA52  proposed_label=Blink_CmdArm_SetState_Then_F0EC4A_Skip (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ;          command pointer.
+   ; Evidence: the writes are literal (`ld (XIX),0x02` / `ld (XIX),0x01`) and XIX
+   ;          is 0x28D2 by construction.  2 is the value Blink_Tick runs on, so
+   ;          "(0x2823) is not 0x20" is what starts the blink.
+   ; Unknown:  what (0x2823) is.  0x20 is ASCII space and this module is about
+   ;          text, but that reading is NOT asserted.  ⚠ CORRECTED 2026-08-25
+   ;          (round 5): 0xF0EC4A IS converted now -- sub_F0EC4A, inside the
+   ;          0xF0EA9F-0xF13D33 block.
+   ; ---------------------------------------------------------------------
+   Blink_CmdArm_SetState_Then_F0EC4A:
+   	ld	c, (10275:16)	; F0EA44  ld C,(0x2823)
+   	cp	c, 32	; F0EA48  cp C,0x20
+>> 	jr	z, 5	; F0EA4B  jr Z,0xf0ea52
+   	ld	(xix), 2	; F0EA4D  ld (XIX),0x02
+   	jr	9	; F0EA50  jr T,0xf0ea5b
+   	ld	c, (xix)	; F0EA52  ld C,(XIX)
+   	cp	c, 0:i3	; F0EA54  cp C,0
+   	jr	nz, 3	; F0EA56  jr NZ,0xf0ea5b
+-- target context (wsa1/prom_b/wsa1_prom_b.s:24257; >> = target line):
+   	cp	c, 32	; F0EA48  cp C,0x20
+   	jr	z, 5	; F0EA4B  jr Z,0xf0ea52
+   	ld	(xix), 2	; F0EA4D  ld (XIX),0x02
+   	jr	9	; F0EA50  jr T,0xf0ea5b
+>> 	ld	c, (xix)	; F0EA52  ld C,(XIX)
+   	cp	c, 0:i3	; F0EA54  cp C,0
+   	jr	nz, 3	; F0EA56  jr NZ,0xf0ea5b
+   	ld	(xix), 1	; F0EA58  ld (XIX),0x01
+   	ld	xbc, (xiz+8)	; F0EA5B  ld XBC,(XIZ+0x08)
+   	push	xbc	; F0EA5E  push XBC
+
+### SITE 23: wsa1/prom_b/wsa1_prom_b.s:165194  src_addr=0xF75E33  target=0xF75E56  proposed_label=sub_F75685_Skip22 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jrl	z, 628	; F75E0F  jrl Z,0xf76086
+   	cp	a, 181	; F75E12  cp A,0xb5
+   	jrl	z, 62	; F75E15  jrl Z,0xf75e56
+   	cp	a, 188	; F75E18  cp A,0xbc
+   	jrl	z, 56	; F75E1B  jrl Z,0xf75e56
+   	cp	a, 189	; F75E1E  cp A,0xbd
+   	jrl	z, 50	; F75E21  jrl Z,0xf75e56
+   	cp	a, 184	; F75E24  cp A,0xb8
+   	jrl	z, 44	; F75E27  jrl Z,0xf75e56
+   	cp	a, 185	; F75E2A  cp A,0xb9
+   	jrl	z, 38	; F75E2D  jrl Z,0xf75e56
+   	cp	a, 186	; F75E30  cp A,0xba
+>> 	jrl	z, 32	; F75E33  jrl Z,0xf75e56
+   	cp	a, 187	; F75E36  cp A,0xbb
+   	jrl	z, 26	; F75E39  jrl Z,0xf75e56
+   	cp	l, 0:i3	; F75E3C  cp L,0
+   	jrl	c, 581	; F75E3E  jrl C,0xf76086
+   	cp	l, 16	; F75E41  cp L,0x10
+-- target context (wsa1/prom_b/wsa1_prom_b.s:165206; >> = target line):
+   	jrl	-891	; F75E4A  jrl T,0xf75ad2
+   	jrl	-894	; F75E4D  jrl T,0xf75ad2
+   	jrl	-897	; F75E50  jrl T,0xf75ad2
+   	jrl	-900	; F75E53  jrl T,0xf75ad2
+>> 	ld	c, (4505:16)	; F75E56  ld C,(0x1199)
+   	pushw	wa	; F75E5A  push WA
+   	pushw	hl	; F75E5B  push HL
+   	calr	954	; F75E5C  calr 0xf76219
+   	calr	1149	; F75E5F  calr 0xf762df
+   	popw	hl	; F75E62  pop HL
+
+### SITE 24: wsa1/prom_b/wsa1_prom_b.s:139553  src_addr=0xF69573  target=0xF6B8BD  proposed_label=sub_F6B8BD (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   
+   	ld	(3829:16), 0	; F6954C  ld (0x0ef5),0x00
+   	call	16176908	; F69551  call 0xf6d70c
+   	ret	; F69555  ret
+   	ld	(3829:16), 8	; F69556  ld (0x0ef5),0x08
+   	call	16176506	; F6955B  call 0xf6d57a
+   	ret	; F6955F  ret
+   	ld	(3829:16), 15	; F69560  ld (0x0ef5),0x0f
+   	call	16176565	; F69565  call 0xf6d5b5
+   	ld	(4800:16), 0	; F69569  ld (0x12c0),0x00
+   	call	16176648	; F6956E  call 0xf6d608
+   	ret	; F69572  ret
+>> 	calr	9031	; F69573  calr 0xf6b8bd
+   	cp	a, 129	; F69576  cp A,0x81
+   	jr	z, 20	; F69579  jr Z,0xf6958f
+   	cp	a, 130	; F6957B  cp A,0x82
+   	jr	z, 15	; F6957E  jr Z,0xf6958f
+   	calr	9070	; F69580  calr 0xf6b8f1
+-- target context (wsa1/prom_b/wsa1_prom_b.s:144225; >> = target line):
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F6B8BD:
+>> 	calr	788	; F6B8BD  calr 0xf6bbd4
+   	push	xde	; F6B8C0  push XDE
+   	ld	xde, 13408	; F6B8C1  ld XDE,0x00003460
+   	mx_ld_rm MXW, ra_DE, ra_IZ, 5	; F6B8C6  ld IY,(XDE+IZ)
+   	pop	xde	; F6B8CB  pop XDE
+   	calr	753	; F6B8CC  calr 0xf6bbc0
+
+### SITE 25: wsa1/prom_b/wsa1_prom_b.s:107186  src_addr=0xF556F7  target=0xF5533C  proposed_label=IndexedTable_GetByte (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ;           instruction boundary of this transcription (re-asserted on every
+   ;           emit).  That is ALL the name rests on.
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F556EA:		; <- T_F42CA0
+   	link XIZ,0xfffc	; F556EA  link XIZ,0xfffc
+   	pushw	hl	; F556EE  push HL
+   	push	xix	; F556EF  push XIX
+   	ld	l, (xiz+8)	; F556F0  ld L,(XIZ+0x08)
+   	pushw	1	; F556F3  push 0x0001
+   	pushw	hl	; F556F6  push HL
+>> 	calr	64578	; F556F7  calr 0xf5533c
+   	ld	(9792:16), a	; F556FA  ld (0x2640),A
+   	pushw	0	; F556FE  push 0x0000
+   	pushw	hl	; F55701  push HL
+   	calr	64567	; F55702  calr 0xf5533c
+   	ld	(9793:16), a	; F55705  ld (0x2641),A
+-- target context (wsa1/prom_b/wsa1_prom_b.s:106559; >> = target line):
+   ;           XIY,XBC / ld A,(XIY)`.
+   ; Unknown:  as above.
+   ; ---------------------------------------------------------------------
+   IndexedTable_GetByte:
+>> 	link XIZ,0x0000	; F5533C  link XIZ,0x0000
+   	push	xix	; F55340  push XIX
+   	push	0	; F55341  push 0x00
+   	m_push MBD+r6, 0x08	; F55343  push (XIZ+0x08)
+   	calr	65496	; F55346  calr 0xf55321
+   	ld	xix, xiy	; F55349  ld XIX,XIY
+
+### SITE 26: wsa1/prom_b/wsa1_prom_b.s:174310  src_addr=0xF7BE8C  target=0xF7BE9F  proposed_label=sub_F7BE79_Skip (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
+   ;           sites are listed above), so 0xF7BE79 is an instruction boundary.
+   ;           The name IS the address.
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F7BE79:
+   	ld	wa, (3106:16)	; F7BE79  ld WA,(0x0c22)
+   	calr	3807	; F7BE7D  calr 0xf7cd5f
+   	ld	(3106:16), wa	; F7BE80  ld (0x0c22),WA
+   	ld	(4857:16), wa	; F7BE84  ld (0x12f9),WA
+   	m_cp_rm MW16, 0x0c20, 0	; F7BE88  cp WA,(0x0c20)
+>> 	jr	nc, 17	; F7BE8C  jr NC,0xf7be9f
+   	ld	(3104:16), wa	; F7BE8E  ld (0x0c20),WA
+   	ld	(3096:16), wa	; F7BE92  ld (0x0c18),WA
+   	ld	(6304946:24), wa	; F7BE96  ld (0x6034b2),WA
+   	ld	(4855:16), wa	; F7BE9B  ld (0x12f7),WA
+   	ld	(3106:16), wa	; F7BE9F  ld (0x0c22),WA
+-- target context (wsa1/prom_b/wsa1_prom_b.s:174315; >> = target line):
+   	ld	(3104:16), wa	; F7BE8E  ld (0x0c20),WA
+   	ld	(3096:16), wa	; F7BE92  ld (0x0c18),WA
+   	ld	(6304946:24), wa	; F7BE96  ld (0x6034b2),WA
+   	ld	(4855:16), wa	; F7BE9B  ld (0x12f7),WA
+>> 	ld	(3106:16), wa	; F7BE9F  ld (0x0c22),WA
+   	ld	wa, (3106:16)	; F7BEA3  ld WA,(0x0c22)
+   	m_sub_rm MW16, 0x0c20, 0	; F7BEA7  sub WA,(0x0c20)
+   	inc	1, wa	; F7BEAB  inc 1,WA
+   	ld	(6304948:24), wa	; F7BEAD  ld (0x6034b4),WA
+   	ret	; F7BEB2  ret
+
+### SITE 27: wsa1/prom_b/wsa1_prom_b.s:122445  src_addr=0xF5E2E3  target=0xF5E2EC  proposed_label=sub_F5E2B9_Skip3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xhl, (4718:16)	; F5E2BF  ld XHL,(0x126e)
+   	ld	wa, (xhl+1)	; F5E2C3  ld WA,(XHL+0x01)
+   	cp	wa, 0:i3	; F5E2C6  cp WA,0
+   	jr	z, 6	; F5E2C8  jr Z,0xf5e2d0
+   	m_cp_rm MW16, 0x0ca4, 0	; F5E2CA  cp WA,(0x0ca4)
+   	jr	ule, 7	; F5E2CE  jr ULE,0xf5e2d7
+   	ld	(3402:16), 10	; F5E2D0  ld (0x0d4a),0x0a
+   	jr	24	; F5E2D5  jr T,0xf5e2ef
+   	ld	hl, wa	; F5E2D7  ld HL,WA
+   	call	16000956	; F5E2D9  call 0xf427bc
+   	ld	xhl, (4718:16)	; F5E2DD  ld XHL,(0x126e)
+   	m_bit 7, MDI+r3, 0	; F5E2E1  bit 7,(XHL)
+>> 	jr	nz, 7	; F5E2E3  jr NZ,0xf5e2ec
+   	ld	(3402:16), 11	; F5E2E5  ld (0x0d4a),0x0b
+   	jr	3	; F5E2EA  jr T,0xf5e2ef
+   	ldw	iy, 255	; F5E2EC  ld IY,0x00ff
+   	ret	; F5E2EF  ret
+   
+-- target context (wsa1/prom_b/wsa1_prom_b.s:122448; >> = target line):
+   	m_bit 7, MDI+r3, 0	; F5E2E1  bit 7,(XHL)
+   	jr	nz, 7	; F5E2E3  jr NZ,0xf5e2ec
+   	ld	(3402:16), 11	; F5E2E5  ld (0x0d4a),0x0b
+   	jr	3	; F5E2EA  jr T,0xf5e2ef
+>> 	ldw	iy, 255	; F5E2EC  ld IY,0x00ff
+   	ret	; F5E2EF  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F5E2F0
+   ; Called from: in-module: 0xF5E1E3 0xF5E212 0xF5E22B
+
+### SITE 28: wsa1/prom_b/wsa1_prom_b.s:109205  src_addr=0xF562B0  target=0xF562B9  proposed_label=Write3602_IfBit2088_F5629A_Skip (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; Unknown: what the routine is FOR.  The name states what it DOES, which is
+   ;          why it keeps an address and grades FRAMED, not content: the thing
+   ;          that would distinguish it from its siblings is a bare index into
+   ;          something nobody has named.
+   ; --------------------------------------------------------------------------
+   Write3602_IfBit2088_F5629A:
+   	push	xbc	; F5629A  push XBC
+   	ld	xbc, (8328:16)	; F5629B  ld XBC,(0x2088)
+   	and	xbc, 16	; F5629F  and XBC,0x00000010
+   	cp	xbc, 0	; F562A5  cp XBC,0x00000000
+   	jr	nz, 21	; F562AB  jr NZ,0xf562c2
+   	bit	7, w	; F562AD  bit 0x07,W
+>> 	jr	nz, 7	; F562B0  jr NZ,0xf562b9
+   	ld	(13826:16), 4	; F562B2  ld (0x3602),0x04
+   	jr	5	; F562B7  jr T,0xf562be
+   	ld	(13826:16), 12	; F562B9  ld (0x3602),0x0c
+   	call	15994052	; F562BE  call 0xf40cc4
+   	pop	xbc	; F562C2  pop XBC
+-- target context (wsa1/prom_b/wsa1_prom_b.s:109208; >> = target line):
+   	bit	7, w	; F562AD  bit 0x07,W
+   	jr	nz, 7	; F562B0  jr NZ,0xf562b9
+   	ld	(13826:16), 4	; F562B2  ld (0x3602),0x04
+   	jr	5	; F562B7  jr T,0xf562be
+>> 	ld	(13826:16), 12	; F562B9  ld (0x3602),0x0c
+   	call	15994052	; F562BE  call 0xf40cc4
+   	pop	xbc	; F562C2  pop XBC
+   	ret	; F562C3  ret
+   
+   ; --------------------------------------------------------------------------
+
+### SITE 29: wsa1/prom_b/wsa1_prom_b.s:91598  src_addr=0xF49209  target=0xF492B2  proposed_label=sub_F49033_Join4 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xbc, (xiz+8)	; F491E5  ld XBC,(XIZ+0x08)
+   	ld	(xbc), xiy	; F491E8  ld (XBC),XIY
+   	push	0	; F491EA  push 0x00
+   	m_push MB16, 0x2737	; F491EC  push (0x2737)
+   	push	0	; F491F0  push 0x00
+   	m_push MB16, 0x2736	; F491F2  push (0x2736)
+   	calr	513	; F491F6  calr 0xf493fa
+   	add	xiy, 65536	; F491F9  add XIY,0x00010000
+   	ld	xbc, (xiz+8)	; F491FF  ld XBC,(XIZ+0x08)
+   	ld	(xbc+6), xiy	; F49202  ld (XBC+0x06),XIY
+   	inc	8, xsp	; F49205  inc 0,XSP
+   	inc	8, xsp	; F49207  inc 0,XSP
+>> 	jrl	166	; F49209  jrl T,0xf492b2
+   	ld	bc, (10024:16)	; F4920C  ld BC,(0x2728)
+   	extz	bc	; F49210  extz BC
+   	cp	bc, 0:i3	; F49212  cp BC,0
+   	jr	z, 15	; F49214  jr Z,0xf49225
+   	cp	bc, 1:i3	; F49216  cp BC,1
+-- target context (wsa1/prom_b/wsa1_prom_b.s:91663; >> = target line):
+   	add	xiy, xbc	; F492A8  add XIY,XBC
+   	ld	xbc, (xiz+8)	; F492AA  ld XBC,(XIZ+0x08)
+   	ld	(xbc+6), xiy	; F492AD  ld (XBC+0x06),XIY
+   	inc	8, xsp	; F492B0  inc 0,XSP
+>> 	ld	xbc, (xiz+8)	; F492B2  ld XBC,(XIZ+0x08)
+   	m_ld_mi16 MDD+r1, 0x04, 0x4c98	; F492B5  ld (XBC+0x04),0x4c98
+   	jrl	311	; F492BA  jrl T,0xf493f4
+   	m_cp_mi8 MB16, 0x2229, 0x01	; F492BD  cp (0x2229),0x01
+   	jrl	nz, 229	; F492C2  jrl NZ,0xf493aa
+   	ld	xbc, 15466496	; F492C5  ld XBC,0x00ec0000
+
+### SITE 30: wsa1/prom_b/wsa1_prom_b.s:20423  src_addr=0xF0C171  target=0xF0C131  proposed_label=sub_F0C0BB_Loop (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	inc	6, xsp	; F0C153  inc 6,XSP
+   	m_cp_mi8 MBD+r6, 0xf8, 0x7f	; F0C155  cp (XIZ+0xf8),0x7f
+   	jrl	nc, 303	; F0C159  jrl NC,0xf0c28b
+   	incm8	1, (xiz-8)	; F0C15C  inc 1,(XIZ+0xf8)
+   	ld	bc, (xiz-8)	; F0C15F  ld BC,(XIZ+0xf8)
+   	extz	bc	; F0C162  extz BC
+   	pushw	bc	; F0C164  push BC
+   	pushw	4	; F0C165  push 0x0004
+   	lda	xiy, (15778160:24)	; F0C168  lda XIY,0xf0c170
+   	push	xiy	; F0C16D  push XIY
+   	jp	(xix)	; F0C16E  jp T,XIX
+   	pop	xiy	; F0C170  pop XIY
+>> 	jr	-66	; F0C171  jr T,0xf0c131
+   	lda	xbc, (xiz-10)	; F0C173  lda XBC,XIZ+0xf6
+   	push	xbc	; F0C176  push XBC
+   	pushw	4	; F0C177  push 0x0004
+   	call	16608379	; F0C17A  call 0xfd6c7b
+   	inc	6, xsp	; F0C17E  inc 6,XSP
+-- target context (wsa1/prom_b/wsa1_prom_b.s:20399; >> = target line):
+   	push	xiy	; F0C12A  push XIY
+   	jp	(xix)	; F0C12B  jp T,XIX
+   	inc	8, xsp	; F0C12D  inc 0,XSP
+   	inc	4, xsp	; F0C12F  inc 4,XSP
+>> 	calr	349	; F0C131  calr 0xf0c291
+   	lda	xbc, (xiz-6)	; F0C134  lda XBC,XIZ+0xfa
+   	push	xbc	; F0C137  push XBC
+   	pushw	15	; F0C138  push 0x000f
+   	call	16608379	; F0C13B  call 0xfd6c7b
+   	inc	6, xsp	; F0C13F  inc 6,XSP
+
+### SITE 31: wsa1/prom_b/wsa1_prom_b.s:602  src_addr=0xF00210  target=0xF00244  proposed_label=sub_F001C9_Sub4 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	25	; F001EF  jr T,0xf0020a
+   	ld	(149:8), 1:io	; F001F1  ld (0x95),0x01
+   	calr	253	; F001F4  calr 0xf002f4
+   	calr	294	; F001F7  calr 0xf00320
+   	call	15993220	; F001FA  call 0xf40984
+   	ld	(150:8), 1:io	; F001FE  ld (0x96),0x01
+   	calr	271	; F00201  calr 0xf00313
+   	ld	(148:8), 1:io	; F00204  ld (0x94),0x01
+   	calr	247	; F00207  calr 0xf00301
+   	ret	; F0020A  ret
+   	bit_dd8	2, 149	; F0020B  bit 2,(0x95)
+   	jr	nz, 5	; F0020E  jr NZ,0xf00215
+>> 	calr	49	; F00210  calr 0xf00244
+   	jr	38	; F00213  jr T,0xf0023b
+   	bit_dd8	2, 150	; F00215  bit 2,(0x96)
+   	jr	z, 30	; F00218  jr Z,0xf00238
+   	ld	xwa, (12288:16)	; F0021A  ld XWA,(0x3000)
+   	cp	xwa, 0	; F0021E  cp XWA,0x00000000
+-- target context (wsa1/prom_b/wsa1_prom_b.s:619; >> = target line):
+   	calr	65484	; F0023C  calr 0xf0020b
+   	ret	; F0023F  ret
+   	calr	65394	; F00240  calr 0xf001b5
+   	ret	; F00243  ret
+>> 	bit_dd8	0, 149	; F00244  bit 0,(0x95)
+   	jr	nz, 41	; F00247  jr NZ,0xf00272
+   	bit_dd8	2, 149	; F00249  bit 2,(0x95)
+   	jr	nz, 36	; F0024C  jr NZ,0xf00272
+   	m_bit 2, MD16, 0x34d9	; F0024E  bit 2,(0x34d9)
+   	jr	nz, 24	; F00252  jr NZ,0xf0026c
+
+### SITE 32: wsa1/prom_b/wsa1_prom_b.s:132168  src_addr=0xF652A0  target=0xF42770  proposed_label=T_BStore_ValidateSavedCursor (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	(3504:16), wa	; F6527B  ld (0x0db0),WA
+   	calr	519	; F6527F  calr 0xf65489
+   	calr	1293	; F65282  calr 0xf65792
+   	ret	; F65285  ret
+   	calr	64899	; F65286  calr 0xf6500c
+   	call	16000928	; F65289  call 0xf427a0
+   	cp	w, 0:i3	; F6528D  cp W,0
+   	jrl	z, 271	; F6528F  jrl Z,0xf653a1
+   	ld	(3486:16), w	; F65292  ld (0x0d9e),W
+   	xor	wa, wa	; F65296  xor WA,WA
+   	ld	a, (3486:16)	; F65298  ld A,(0x0d9e)
+   	ld	(3354:16), wa	; F6529C  ld (0x0d1a),WA
+>> 	call	16000880	; F652A0  call 0xf42770
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F652A4  cp (0x0d4a),0x00
+   	jrl	nz, 245	; F652A9  jrl NZ,0xf653a1
+   	ld	(3278:16), iy	; F652AC  ld (0x0cce),IY
+   	ld	wa, (13404:16)	; F652B0  ld WA,(0x345c)
+   	ld	(3276:16), wa	; F652B4  ld (0x0ccc),WA
+-- target context (wsa1/prom_b/wsa1_prom_b.s:83383; >> = target line):
+   T_F42720:	jp 0xF61A16  ; -> prom_b 0x61A16   x1
+   	.fill 0x4C, 1, 0x0E  ; 0xF42724: 76 x ret
+   ; Evidence: slot 0xF42770 is `jp 0xF62C7E`; prom_b 0xF62C7E carries the label
+   ;           BStore_ValidateSavedCursor, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+>> T_BStore_ValidateSavedCursor:	jp 0xF62C7E  ; F42770 (was T_F42770) -> prom_b 0x62C7E   x11
+   T_F42774:	jp 0xF62CFE  ; -> prom_b 0x62CFE   x29
+   T_F42778:	jp 0xF62DC9  ; -> prom_b 0x62DC9   x8
+   T_F4277C:	jp 0xF6306A  ; -> prom_b 0x6306A   x13
+   T_F42780:	jp 0xF63317  ; -> prom_b 0x63317   x4
+   T_F42784:	jp 0xF63383  ; -> prom_b 0x63383   x6
+
+### SITE 33: wsa1/prom_b/wsa1_prom_b.s:119942  src_addr=0xF5C722  target=0xF417F4  proposed_label=T_DisplayListB_Run (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	16106396	; F5C6EF  call 0xf5c39c
+   	call	16104891	; F5C6F3  call 0xf5bdbb
+   	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C6F7  cp (0x27f5),0x01
+   	jr	z, 21	; F5C6FC  jr Z,0xf5c713
+   	ld	(9536:16), 0	; F5C6FE  ld (0x2540),0x00
+   	ld	xiy, 15748978	; F5C703  ld XIY,0x00f04f72
+   	ld	xix, 15749117	; F5C708  ld XIX,0x00f04ffd
+   	call	15996916	; F5C70D  call 0xf417f4
+   	jr	19	; F5C711  jr T,0xf5c726
+   	ld	(9536:16), 0	; F5C713  ld (0x2540),0x00
+   	ld	xiy, 15939478	; F5C718  ld XIY,0x00f33796
+   	ld	xix, 15939598	; F5C71D  ld XIX,0x00f3380e
+>> 	call	15996916	; F5C722  call 0xf417f4
+   	ret	; F5C726  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F5C727
+   ; Called from: in-module: 0xF5C6BE 0xF5C749 0xF5C79E 0xF5C876 0xF5D622
+-- target context (wsa1/prom_b/wsa1_prom_b.s:82394; >> = target line):
+   ;           DisplayList_Run, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+   T_DisplayList_Run:	jp DisplayList_Run  ; F417F0 (was T_F417F0) -> prom_b 0x31A09   x392  THE UI ENGINE
+   ; Evidence: slot 0xF417F4 is `jp 0xF31AF0`; prom_b 0xF31AF0 carries the label
+   ;           DisplayListB_Run, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+>> T_DisplayListB_Run:	jp DisplayListB_Run  ; F417F4 (was T_F417F4) -> prom_b 0x31AF0   x269  the second interpreter
+   ; Evidence: slot 0xF417F8 is `jp 0xF31B21`; prom_b 0xF31B21 carries the label
+   ;           DLB_Handler_StringTable, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+   T_DLB_Handler_StringTable:	jp 0xF31B21  ; F417F8 (was T_F417F8) -> prom_b 0x31B21   x15
+   ; Evidence: slot 0xF417FC is `jp 0xF31B39`; prom_b 0xF31B39 carries the label
+   ;           DLB_Handler_StringTable2, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+
+### SITE 34: wsa1/prom_b/wsa1_prom_b.s:124691  src_addr=0xF5FB8A  target=0xF427A0  proposed_label=T_F427A0 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	m_and_mi8 MB16, 0x0c8a, 0xef	; F5FB59  and (0x0c8a),0xef
+   	m_and_mi8 MB16, 0x0c8a, 0x7f	; F5FB5E  and (0x0c8a),0x7f
+   	ld	(3402:16), 0	; F5FB63  ld (0x0d4a),0x00
+   	xor	wa, wa	; F5FB68  xor WA,WA
+   	ld	a, (3215:16)	; F5FB6A  ld A,(0x0c8f)
+   	ld	(3354:16), wa	; F5FB6E  ld (0x0d1a),WA
+   	call	16000880	; F5FB72  call 0xf42770
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F5FB76  cp (0x0d4a),0x00
+   	jrl	nz, 1171	; F5FB7B  jrl NZ,0xf60011
+   	ld	(3278:16), iy	; F5FB7E  ld (0x0cce),IY
+   	ld	wa, (13404:16)	; F5FB82  ld WA,(0x345c)
+   	ld	(3276:16), wa	; F5FB86  ld (0x0ccc),WA
+>> 	call	16000928	; F5FB8A  call 0xf427a0
+   	ld	a, (3214:16)	; F5FB8E  ld A,(0x0c8e)
+   	ld	de, (3187:16)	; F5FB92  ld DE,(0x0c73)
+   	ld	(3216:16), de	; F5FB96  ld (0x0c90),DE
+   	call	16000884	; F5FB9A  call 0xf42774
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F5FB9E  cp (0x0d4a),0x00
+-- target context (wsa1/prom_b/wsa1_prom_b.s:83399; >> = target line):
+   T_F42798:	jp 0xF6353E  ; -> prom_b 0x6353E   x7
+   ; Evidence: slot 0xF4279C is `jp 0xF635C9`; prom_b 0xF635C9 carries the label
+   ;           BStore_CursorAdvance, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+   T_BStore_CursorAdvance:	jp 0xF635C9  ; F4279C (was T_F4279C) -> prom_b 0x635C9   x43
+>> T_F427A0:	jp 0xF6360E  ; -> prom_b 0x6360E   x16
+   T_F427A4:	jp 0xF6364D  ; -> prom_b 0x6364D   x1
+   T_F427A8:	jp 0xF63749  ; -> prom_b 0x63749   x10
+   ; Evidence: slot 0xF427AC is `jp 0xF638BB`; prom_b 0xF638BB carries the label
+   ;           BStore_OpenChain, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+   T_BStore_OpenChain:	jp 0xF638BB  ; F427AC (was T_F427AC) -> prom_b 0x638BB   x3
+
+### SITE 35: wsa1/prom_b/wsa1_prom_b.s:125463  src_addr=0xF60452  target=0xF60338  proposed_label=sub_F60338 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xix, 6332416	; F6042A  ld XIX,0x0060a000
+   	mx_bit 7, MXD, ra_IX, ra_IY	; F6042F  bit 7,(XIX+IY)
+   	pop	xix	; F60434  pop XIX
+   	jr	nz, 23	; F60435  jr NZ,0xf6044e
+   	push	xix	; F60437  push XIX
+   	ld	xix, 6332416	; F60438  ld XIX,0x0060a000
+   	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F6043D  ld A,(XIX+IY)
+   	pop	xix	; F60442  pop XIX
+   	ld	xhl, (4718:16)	; F60443  ld XHL,(0x126e)
+   	mx_st_mr8 MXD, ra_HL, ra_IX, 1	; F60447  ld (XHL+IX),A
+   	jr	-65	; F6044C  jr T,0xf6040d
+   	ld	(3322:16), iy	; F6044E  ld (0x0cfa),IY
+>> 	call	16122680	; F60452  call 0xf60338
+   	ret	; F60456  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F60457
+   ; Called from: in-module: 0xF602B3 0xF6038F 0xF603B3 0xF603F8 0xF60421
+-- target context (wsa1/prom_b/wsa1_prom_b.s:125348; >> = target line):
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F60338:
+>> 	m_and_mi8 MB16, 0x0c8b, 0xfe	; F60338  and (0x0c8b),0xfe
+   	ld	iy, (3322:16)	; F6033D  ld IY,(0x0cfa)
+   	push	xix	; F60341  push XIX
+   	ld	xix, 6332416	; F60342  ld XIX,0x0060a000
+   	mx_ld_rm MXB, ra_IX, ra_IY, 3	; F60347  ld C,(XIX+IY)
+   	pop	xix	; F6034C  pop XIX
+
+### SITE 36: wsa1/prom_b/wsa1_prom_b.s:160082  src_addr=0xF72C8C  target=0xF72C93  proposed_label=sub_F72C74_Skip (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ;                    the address.
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F72C74:
+   	m_and_mi8 MB16, 0x0c8b, 0xfd	; F72C74  and (0x0c8b),0xfd
+   	ld	iy, (3328:16)	; F72C79  ld IY,(0x0d00)
+   	push	xix	; F72C7D  push XIX
+   	ld	xix, 6332672	; F72C7E  ld XIX,0x0060a100
+   	mx_ld_rm MXB, ra_IX, ra_IY, 2	; F72C83  ld B,(XIX+IY)
+   	pop	xix	; F72C88  pop XIX
+   	cp	b, 130	; F72C89  cp B,0x82
+>> 	jr	z, 5	; F72C8C  jr Z,0xf72c93
+   	cp	b, 129	; F72C8E  cp B,0x81
+   	jr	nz, 7	; F72C91  jr NZ,0xf72c9a
+   	m_or_mi8 MB16, 0x0c8b, 0x02	; F72C93  or (0x0c8b),0x02
+   	jr	33	; F72C98  jr T,0xf72cbb
+   	pushw	bc	; F72C9A  push BC
+-- target context (wsa1/prom_b/wsa1_prom_b.s:160085; >> = target line):
+   	cp	b, 130	; F72C89  cp B,0x82
+   	jr	z, 5	; F72C8C  jr Z,0xf72c93
+   	cp	b, 129	; F72C8E  cp B,0x81
+   	jr	nz, 7	; F72C91  jr NZ,0xf72c9a
+>> 	m_or_mi8 MB16, 0x0c8b, 0x02	; F72C93  or (0x0c8b),0x02
+   	jr	33	; F72C98  jr T,0xf72cbb
+   	pushw	bc	; F72C9A  push BC
+   	push	xix	; F72C9B  push XIX
+   	ld	xix, 6332672	; F72C9C  ld XIX,0x0060a100
+   	nop	; F72CA1  nop
+
+### SITE 37: wsa1/prom_b/wsa1_prom_b.s:109269  src_addr=0xF56304  target=0xF5630D  proposed_label=Write3602_IfBit2088_F562EE_Skip (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; Unknown: what the routine is FOR.  The name states what it DOES, which is
+   ;          why it keeps an address and grades FRAMED, not content: the thing
+   ;          that would distinguish it from its siblings is a bare index into
+   ;          something nobody has named.
+   ; --------------------------------------------------------------------------
+   Write3602_IfBit2088_F562EE:
+   	push	xbc	; F562EE  push XBC
+   	ld	xbc, (8328:16)	; F562EF  ld XBC,(0x2088)
+   	and	xbc, 64	; F562F3  and XBC,0x00000040
+   	cp	xbc, 0	; F562F9  cp XBC,0x00000000
+   	jr	nz, 21	; F562FF  jr NZ,0xf56316
+   	bit	7, w	; F56301  bit 0x07,W
+>> 	jr	nz, 7	; F56304  jr NZ,0xf5630d
+   	ld	(13826:16), 6	; F56306  ld (0x3602),0x06
+   	jr	5	; F5630B  jr T,0xf56312
+   	ld	(13826:16), 14	; F5630D  ld (0x3602),0x0e
+   	call	15994052	; F56312  call 0xf40cc4
+   	pop	xbc	; F56316  pop XBC
+-- target context (wsa1/prom_b/wsa1_prom_b.s:109272; >> = target line):
+   	bit	7, w	; F56301  bit 0x07,W
+   	jr	nz, 7	; F56304  jr NZ,0xf5630d
+   	ld	(13826:16), 6	; F56306  ld (0x3602),0x06
+   	jr	5	; F5630B  jr T,0xf56312
+>> 	ld	(13826:16), 14	; F5630D  ld (0x3602),0x0e
+   	call	15994052	; F56312  call 0xf40cc4
+   	pop	xbc	; F56316  pop XBC
+   	ret	; F56317  ret
+   
+   ; --------------------------------------------------------------------------
+
+### SITE 38: wsa1/prom_b/wsa1_prom_b.s:109209  src_addr=0xF562BE  target=0xF40CC4  proposed_label=T_F40CC4 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; --------------------------------------------------------------------------
+   Write3602_IfBit2088_F5629A:
+   	push	xbc	; F5629A  push XBC
+   	ld	xbc, (8328:16)	; F5629B  ld XBC,(0x2088)
+   	and	xbc, 16	; F5629F  and XBC,0x00000010
+   	cp	xbc, 0	; F562A5  cp XBC,0x00000000
+   	jr	nz, 21	; F562AB  jr NZ,0xf562c2
+   	bit	7, w	; F562AD  bit 0x07,W
+   	jr	nz, 7	; F562B0  jr NZ,0xf562b9
+   	ld	(13826:16), 4	; F562B2  ld (0x3602),0x04
+   	jr	5	; F562B7  jr T,0xf562be
+   	ld	(13826:16), 12	; F562B9  ld (0x3602),0x0c
+>> 	call	15994052	; F562BE  call 0xf40cc4
+   	pop	xbc	; F562C2  pop XBC
+   	ret	; F562C3  ret
+   
+   ; --------------------------------------------------------------------------
+   ; Write3602_IfBit2088_F562C4
+-- target context (wsa1/prom_b/wsa1_prom_b.s:81863; >> = target line):
+   T_F40CB4:	jp 0xF4E524  ; -> prom_b 0x4E524   x14
+   T_F40CB8:	jp 0xF4E591  ; -> prom_b 0x4E591
+   T_F40CBC:	jp 0xF4E525  ; -> prom_b 0x4E525
+   T_F40CC0:	jp 0xF4E1B2  ; -> prom_b 0x4E1B2   x1
+>> T_F40CC4:	jp 0xF4E56F  ; -> prom_b 0x4E56F   x24
+   T_F40CC8:	jp 0xF4E592  ; -> prom_b 0x4E592   x1
+   T_F40CCC:	jp 0xF4E30F  ; -> prom_b 0x4E30F   x2
+   	.fill 0x10, 1, 0x0E  ; 0xF40CD0: 16 x ret
+   T_F40CE0:	jp 0xF4EC00  ; -> prom_b 0x4EC00
+   T_F40CE4:	jp 0xF4EC25  ; -> prom_b 0x4EC25
+
+### SITE 39: wsa1/prom_b/wsa1_prom_b.s:28454  src_addr=0xF102AF  target=0xF102DF  proposed_label=sub_F10252_Join2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	bc	; F10294  extz BC
+   	extz	xbc	; F10296  extz XBC
+   	add	xiy, xbc	; F10298  add XIY,XBC
+   	ld	wa, (xiy)	; F1029A  ld WA,(XIY)
+   	and	wa, 1984	; F1029C  and WA,0x07c0
+   	srl	wa, 6	; F102A0  srl 0x06,WA
+   	ld	d, a	; F102A3  ld D,A
+   	ld	l, 26:opc	; F102A5  ld L,0x1a
+   	popw	bc	; F102A7  pop BC
+   	cp	a, 8	; F102A8  cp A,0x08
+   	jr	nc, 50	; F102AB  jr NC,0xf102df
+   	ld	d, 8:opc	; F102AD  ld D,0x08
+>> 	jr	46	; F102AF  jr T,0xf102df
+   	ld	bc, (10135:16)	; F102B1  ld BC,(0x2797)
+   	extz	bc	; F102B5  extz BC
+   	add	bc, 97	; F102B7  add BC,0x0061
+   	pushw	bc	; F102BB  push BC
+   	call	16002188	; F102BC  call 0xf42c8c
+-- target context (wsa1/prom_b/wsa1_prom_b.s:28474; >> = target line):
+   	cp	a, 22	; F102D6  cp A,0x16
+   	jr	ule, 2	; F102D9  jr ULE,0xf102dd
+   	ld	l, 22:opc	; F102DB  ld L,0x16
+   	ld	d, 0:opc	; F102DD  ld D,0x00
+>> 	ld	bc, (10135:16)	; F102DF  ld BC,(0x2797)
+   	extz	bc	; F102E3  extz BC
+   	add	bc, 97	; F102E5  add BC,0x0061
+   	pushw	bc	; F102E9  push BC
+   	call	16002188	; F102EA  call 0xf42c8c
+   	ld	(xiz-8), xiy	; F102EE  ld (XIZ+0xf8),XIY
+
+### SITE 40: wsa1/prom_b/wsa1_prom_b.s:157837  src_addr=0xF71B05  target=0xF71B80  proposed_label=sub_F71A95_Epilogue (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xde	; F71AE5  push XDE
+   	ld	xde, 4307	; F71AE6  ld XDE,0x000010d3
+   	mx_ld_rm MXW, ra_DE, ra_IY, 0	; F71AEB  ld WA,(XDE+IY)
+   	pop	xde	; F71AF0  pop XDE
+   	sra	iy, 1	; F71AF1  sra 0x01,IY
+   	pushw	bc	; F71AF4  push BC
+   	push	xiy	; F71AF5  push XIY
+   	call	16192047	; F71AF6  call 0xf7122f
+   	call	16191450	; F71AFA  call 0xf70fda
+   	pop	xiy	; F71AFE  pop XIY
+   	popw	bc	; F71AFF  pop BC
+   	m_cp_mi8 MB16, 0x1238, 0x00	; F71B00  cp (0x1238),0x00
+>> 	jrl	nz, 120	; F71B05  jrl NZ,0xf71b80
+   	ld	a, (4993:16)	; F71B08  ld A,(0x1381)
+   	and	a, 127	; F71B0C  and A,0x7f
+   	push	xiy	; F71B0F  push XIY
+   	call	16191450	; F71B10  call 0xf70fda
+   	pop	xiy	; F71B14  pop XIY
+-- target context (wsa1/prom_b/wsa1_prom_b.s:157877; >> = target line):
+   	ld	iy, (4530:16)	; F71B6F  ld IY,(0x11b2)
+   	call	16190527	; F71B73  call 0xf70c3f
+   	call	16192117	; F71B77  call 0xf71275
+   	ld	(4664:16), 0	; F71B7B  ld (0x1238),0x00
+>> 	pop	xiy	; F71B80  pop XIY
+   	ret	; F71B81  ret
+   
+   ; --------------------------------------------------------------------------
+   ; sub_F71B82
+   ; Called from: in-module: 0xF6F637
+
+### SITE 41: wsa1/prom_b/wsa1_prom_b.s:84163  src_addr=0xF431A0  target=0xF7D27A  proposed_label=ScreenEnter_S0ngSelectName (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   T_ScreenEnter_TrackAssignPresets:	jp 0xF7D0A6  ; F43190 (was T_F43190) -> prom_b 0x7D0A6
+   ; Evidence: slot 0xF43194 is `jp 0xF7D0AA`; prom_b 0xF7D0AA carries the label
+   ;           ScreenLeave_TrackAssignPresets (graded CONTENT).  DERIVATIVE name.
+   T_ScreenLeave_TrackAssignPresets:	jp 0xF7D0AA  ; F43194 (was T_F43194) -> prom_b 0x7D0AA
+   ; Evidence: slot 0xF43198 is `jp 0xF7D0AE`; prom_b 0xF7D0AE carries the label
+   ;           ScreenButton_TrackAssignPresets (graded CONTENT).  DERIVATIVE name.
+   T_ScreenButton_TrackAssignPresets:	jp 0xF7D0AE  ; F43198 (was T_F43198) -> prom_b 0x7D0AE
+   ; Evidence: slot 0xF4319C is `jp 0xF7D0B8`; prom_b 0xF7D0B8 carries the label
+   ;           ScreenNull_TrackAssignPresets (graded CONTENT).  DERIVATIVE name.
+   T_ScreenNull_TrackAssignPresets:	jp 0xF7D0B8  ; F4319C (was T_F4319C) -> prom_b 0x7D0B8
+   ; Evidence: slot 0xF431A0 is `jp 0xF7D27A`; prom_b 0xF7D27A carries the label
+   ;           ScreenEnter_S0ngSelectName (graded CONTENT).  DERIVATIVE name.
+>> T_ScreenEnter_S0ngSelectName:	jp 0xF7D27A  ; F431A0 (was T_F431A0) -> prom_b 0x7D27A
+   ; Evidence: slot 0xF431A4 is `jp 0xF7D27F`; prom_b 0xF7D27F carries the label
+   ;           ScreenLeave_S0ngSelectName (graded CONTENT).  DERIVATIVE name.
+   T_ScreenLeave_S0ngSelectName:	jp 0xF7D27F  ; F431A4 (was T_F431A4) -> prom_b 0x7D27F
+   ; Evidence: slot 0xF431A8 is `jp 0xF7D284`; prom_b 0xF7D284 carries the label
+   ;           ScreenButton_S0ngSelectName (graded CONTENT).  DERIVATIVE name.
+-- target context (wsa1/prom_b/wsa1_prom_b.s:178001; >> = target line):
+   ;           have one.
+   ;           [round7-entrypoints]
+   ; ---------------------------------------------------------------------
+   ScreenEnter_S0ngSelectName:
+>> 	call	16256558	; F7D27A  call 0xf80e2e
+   	ret	; F7D27E  ret
+   ; Evidence: the +4 word of screen object F431A0 (prom_a's PanelScreen_VtableTable);
+   ;           its body is `call 0xF80EAF` then `ret`.  [round7-entrypoints]
+   ScreenLeave_S0ngSelectName:
+   	call	16256687	; F7D27F  call 0xf80eaf
+
+### SITE 42: wsa1/prom_b/wsa1_prom_b.s:131260  src_addr=0xF64623  target=0xF6466D  proposed_label=sub_F64594_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	z, 2	; F645F9  jr Z,0xf645fd
+   	jr	112	; F645FB  jr T,0xf6466d
+   	ld	(3402:16), 0	; F645FD  ld (0x0d4a),0x00
+   	jr	96	; F64602  jr T,0xf64664
+   	ld	wa, (3187:16)	; F64604  ld WA,(0x0c73)
+   	ld	(3216:16), wa	; F64608  ld (0x0c90),WA
+   	ld	w, (3357:16)	; F6460C  ld W,(0x0d1d)
+   	ld	a, (3214:16)	; F64610  ld A,(0x0c8e)
+   	calr	59111	; F64614  calr 0xf62cfe
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F64617  cp (0x0d4a),0x00
+   	jr	z, 14	; F6461C  jr Z,0xf6462c
+   	m_cp_mi8 MB16, 0x0d4a, 0x08	; F6461E  cp (0x0d4a),0x08
+>> 	jr	nz, 72	; F64623  jr NZ,0xf6466d
+   	ld	(3402:16), 0	; F64625  ld (0x0d4a),0x00
+   	jr	56	; F6462A  jr T,0xf64664
+   	ld	hl, (13404:16)	; F6462C  ld HL,(0x345c)
+   	calr	61195	; F64630  calr 0xf6353e
+   	m_cp_mi8 MB16, 0x0d4a, 0x00	; F64633  cp (0x0d4a),0x00
+-- target context (wsa1/prom_b/wsa1_prom_b.s:131282; >> = target line):
+   	ld	(3392:16), wa	; F64660  ld (0x0d40),WA
+   	ld	a, (3214:16)	; F64664  ld A,(0x0c8e)
+   	inc	1, a	; F64668  inc 1,A
+   	jrl	-201	; F6466A  jrl T,0xf645a4
+>> 	ret	; F6466D  ret
+   sub_F6466E:		; <- T_F427D8
+   	m_and_mi8 MB16, 0x0c8a, 0xf7	; F6466E  and (0x0c8a),0xf7
+   	m_and_mi8 MB16, 0x0c8a, 0xef	; F64673  and (0x0c8a),0xef
+   	ld	wa, (6304954:24)	; F64678  ld WA,(0x6034ba)
+   	ld	(3392:16), wa	; F6467D  ld (0x0d40),WA
+
+### SITE 43: wsa1/prom_b/wsa1_prom_b.s:92267  src_addr=0xF49B19  target=0xF49B1E  proposed_label=sub_F49AFD_Skip2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
+   ;          per this tree's rule that a stated gap beats a plausible guess.
+   ; --------------------------------------------------------------------------
+   sub_F49AFD:
+   	m_cp_mi8 MB16, 0x34b8, 0x00	; F49AFD  cp (0x34b8),0x00
+   	jr	z, 62	; F49B02  jr Z,0xf49b42
+   	ld	a, (13483:16)	; F49B04  ld A,(0x34ab)
+   	m_cp_mi8 MB16, 0x34aa, 0x81	; F49B08  cp (0x34aa),0x81
+   	jr	nz, 2	; F49B0D  jr NZ,0xf49b11
+   	xor	a, a	; F49B0F  xor A,A
+   	ld	(13497:16), a	; F49B11  ld (0x34b9),A
+   	m_bit 0, MD16, 0x34b8	; F49B15  bit 0,(0x34b8)
+>> 	jr	z, 3	; F49B19  jr Z,0xf49b1e
+   	calr	37	; F49B1B  calr 0xf49b43
+   	m_bit 1, MD16, 0x34b8	; F49B1E  bit 1,(0x34b8)
+   	jr	z, 3	; F49B22  jr Z,0xf49b27
+   	calr	53	; F49B24  calr 0xf49b5c
+   	m_bit 2, MD16, 0x34b8	; F49B27  bit 2,(0x34b8)
+-- target context (wsa1/prom_b/wsa1_prom_b.s:92269; >> = target line):
+   	ld	(13497:16), a	; F49B11  ld (0x34b9),A
+   	m_bit 0, MD16, 0x34b8	; F49B15  bit 0,(0x34b8)
+   	jr	z, 3	; F49B19  jr Z,0xf49b1e
+   	calr	37	; F49B1B  calr 0xf49b43
+>> 	m_bit 1, MD16, 0x34b8	; F49B1E  bit 1,(0x34b8)
+   	jr	z, 3	; F49B22  jr Z,0xf49b27
+   	calr	53	; F49B24  calr 0xf49b5c
+   	m_bit 2, MD16, 0x34b8	; F49B27  bit 2,(0x34b8)
+   	jr	z, 3	; F49B2B  jr Z,0xf49b30
+   	calr	202	; F49B2D  calr 0xf49bfa
+
+### SITE 44: wsa1/prom_b/wsa1_prom_b.s:32372  src_addr=0xF122FD  target=0xF12315  proposed_label=sub_F122C5_Skip2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	z, 17	; F122D2  jr Z,0xf122e5
+   	call	16002688	; F122D4  call 0xf42e80
+   	ld	(xix), 0	; F122D8  ld (XIX),0x00
+   	ld	(8347:16), 129	; F122DB  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF866
+   	ld	(8348:16), 1	; F122E0  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615
+   	m_set 0, MD16, 0x2075	; F122E5  set 0,(0x2075)
+   	ld	(10135:16), 24	; F122E9  ld (0x2797),0x18
+   	ld	c, (8316:16)	; F122EE  ld C,(0x207c)
+   	m_cp_rm MB16, 0x207d, 3	; F122F2  cp C,(0x207d)
+   	jr	z, 29	; F122F6  jr Z,0xf12315
+   	ld	a, (xix)	; F122F8  ld A,(XIX)
+   	and	a, 8	; F122FA  and A,0x08
+>> 	jr	nz, 22	; F122FD  jr NZ,0xf12315
+   	m_or_mi8 MBI+r4, 0, 0x08	; F122FF  or (XIX),0x08
+   	lda	xbc, (15803330:24)	; F12302  lda XBC,0xf123c2
+   	push	xbc	; F12307  push XBC
+   	call	16002692	; F12308  call 0xf42e84
+   	pushw	1	; F1230C  push 0x0001
+-- target context (wsa1/prom_b/wsa1_prom_b.s:32380; >> = target line):
+   	call	16002692	; F12308  call 0xf42e84
+   	pushw	1	; F1230C  push 0x0001
+   	call	16002496	; F1230F  call 0xf42dc0
+   	inc	6, xsp	; F12313  inc 6,XSP
+>> 	ld	c, (xix)	; F12315  ld C,(XIX)
+   	and	c, 16	; F12317  and C,0x10
+   	jr	nz, 22	; F1231A  jr NZ,0xf12332
+   	m_or_mi8 MBI+r4, 0, 0x10	; F1231C  or (XIX),0x10
+   	lda	xbc, (15803380:24)	; F1231F  lda XBC,0xf123f4
+   	push	xbc	; F12324  push XBC
+

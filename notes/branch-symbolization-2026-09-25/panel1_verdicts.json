@@ -1,0 +1,2570 @@
+[
+ {
+  "image": "v142",
+  "verdicts": [
+   {
+    "site": 0,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Timer_Delay_Ticks spin loop. The ROM bytes at 0x020842 are d1 40 10 f0 (cp wa,(0x1040)) followed by 6a fa (jr gt,-6), so the target is the loop head. The _Loop name is correct."
+   },
+   {
+    "site": 1,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "DSP bytecode handler body: it fetches a stream byte from (xsp+26) and calls the send routine. Bytes 1d 4f 6a 03 are call 0x036A4F, which is DSP_DispatchData's entry (pushw iz). Existing name reused."
+   },
+   {
+    "site": 2,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Compiler switch on de&0xC0, confirmed by unidasm. The jr nz,8 at 0x0316D7 is the impossible default and skips the two loads, landing on sll bc,7 at 0x0316E1, where the case bodies join. The routine is documented as dead code but it is real code. Skip2 is structurally accurate."
+   },
+   {
+    "site": 3,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Algorithm-type dispatch arm: ld a,(xsp); extz; ld bc,N; call. The target 0x027CE4 is the Voice_DSP_OutputConfig prologue (lda xsp,(xsp-10))."
+   },
+   {
+    "site": 4,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Command 8..0x0B stubs: extz/extz/pushw N/calr/ret. The shared body ends in retd 2, which matches the pushed word. The target is the AudioChannel_Handler_Cmd08_0B prologue, and the displacement arithmetic checks out."
+   },
+   {
+    "site": 5,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "For-loop pre-check (ld iz,0; cp iz,4; jr nc). It jumps past the slot loop to the routing tail, the same place the loop's jr c,-60 falls through to."
+   },
+   {
+    "site": 6,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The bit-14 gate skips to 'inc 2,xsp; ret', which is correctly named Voice_DSPOut_B_Return."
+   },
+   {
+    "site": 7,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Handler 4 of the DSP bytecode interpreter: fetch one byte, DSP_DispatchCommand (0x036A2E), then jrl to CheckEnd. The region was converted from .byte, but the stream is coherent and matches the documented handler table. The target is a real loop-control block."
+   },
+   {
+    "site": 8,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Tail jump (jp 0x027CE4) after a bit-14 gate with ret z. The target is a routine entry."
+   },
+   {
+    "site": 9,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Opcode case arms each do calr then jrl to a common exit. The target is 'pop qiz; inc 4,xsp; ret', which is correctly named _Return."
+   },
+   {
+    "site": 10,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "VoiceParam_Action_Case arms, each ending in a jrl to the shared exit 'pop xiz; ret'. The routine's frame matches (push xiz)."
+   },
+   {
+    "site": 11,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The shape==5 test skips a 21-byte store block (4+4+3+3+3+3+1 bytes) to the plain-copy fallback (ld hl,0; cp hl,4; ret nc). The arithmetic matches exactly."
+   },
+   {
+    "site": 12,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Counted copy loop (inc 1,hl; cp hl,4; jr c,-32) back to the loop head. The existing _Match_Loop name is correct."
+   },
+   {
+    "site": 13,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Range folding before a table jump. The jrl lt,139 and jr lt,123 both reach 0x030508, the out-of-range default that sends the reply. The target is a real routine tail."
+   },
+   {
+    "site": 14,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Case arm: load args from the record, calr 0x02E581 (a routine prologue, dec 2,xsp), then jrl to the exit."
+   },
+   {
+    "site": 15,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Handler 0 of the DSP bytecode interpreter. 'ldw (xsp+4),1; jrl 473' jumps to the for-loop condition at 0x03C554, and the jrl ule,-490 at 0x03C562 loops back to 0x03C37B. Classic compiler loop. Join2 is structurally fine. The parent prefix DSP_Bytecode_Programs is a legacy name from when this was .byte data, but it already labels this handler."
+   },
+   {
+    "site": 16,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Opcode arm: two calls, then jrl t to the shared _Return (pop qiz; inc 4,xsp; ret)."
+   },
+   {
+    "site": 17,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "After a 4-iteration slot loop (jr c,-36), jrl t to 'popw iz; inc 6,xsp; ret'. The _Return name is correct."
+   },
+   {
+    "site": 18,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "call 0x027F19, which is the Voice_DSP_SimpleCopy2 prologue (dec 8,xsp)."
+   },
+   {
+    "site": 19,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The jrl gt range check (C > 6) goes to 0x02E918, 'inc 4,xsp; ret'. That is the common epilogue of the whole VoiceParam_Set_Tone_Option routine: all 7 cases and both range checks reach it. The name VoiceParam_Set_Tone_Option_Case0_Join inherits the nearest label, so it says the out-of-range default belongs to case 0. It should be _Return or _Epilogue. The tool's Epilogue rule misses frame-drop 'inc N,xsp; ret'."
+   },
+   {
+    "site": 20,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Loop exit of handler 0 after 'jrl ule,-490', then jrl to DSP_BytecodeInterpreter_CheckEnd, which is real and already named."
+   },
+   {
+    "site": 21,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Four 21-byte sub-case blocks, each computing xbc=table[part] and doing jr t,61/40/19 to the same join (ld a,(xiz+2)). All of it is inside VoiceParam_Query_Case4_PartialAny, so the name is accurate."
+   },
+   {
+    "site": 22,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Loop pre-check (ld iz,0; cp iz,4; jrl nc) going to the routine's _Return (popw iz; inc 6,xsp; ret)."
+   },
+   {
+    "site": 23,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Algorithm-type arm: extz wa; ldw bc,N; jrl t to the copier. The target is the DSP_EffParam_Copy_V7 entry, matching the comment 'Copy_V7 with descriptor 0x0B'."
+   },
+   {
+    "site": 24,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "FIFO1K_Get_Marked does push ix/xde; lda xde,0x040C2E; call; pop; ret. The target 0x020BBB is .byte-framed, but unidasm decodes it as clean code: ld ix,(xde-10); cp ix,(xde-6); jr nz; ld hl,0xffff; ret; ...; minc1 0x3ff,ix; ret. That is a real undisassembled FIFO engine entry, so the existing name is fine."
+   },
+   {
+    "site": 25,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "call 0x02B014, which is the Voice_Slot_CalcArticParams prologue (dec 8,xsp; push xiz). The source context is coherent: part-index argument loads and a status-bit gate."
+   },
+   {
+    "site": 26,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Compiler code with a stacked arg (pushw 2; pushw wa) calling 0x024A59, the Voice_OpSlot_WriteParams prologue (lda xsp,(xsp-12); push xiz)."
+   },
+   {
+    "site": 27,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Case 6 of Set_Tone_Option calls 0x028E26, the Voice_AllNotes_SustainRetrigger prologue. This matches the routine's header comment."
+   },
+   {
+    "site": 28,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "CheckStatusBits_80 computes index*287 through the 32-bit multiply helper (call 0x03D8CA). It is documented as unreferenced, but it is real code. The target is the helper's entry in subcpu_fp_math.s."
+   },
+   {
+    "site": 29,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Task forever-loop that receives a message buffer, processes it, then calls TaskMsgQ_Send (push sr; ei 6; pushes). The target is a clean routine entry."
+   },
+   {
+    "site": 30,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "jrl t to 0x031A51, 'ld hl,iz; popw iz; inc 6,xsp; ret', the epilogue of DSP_SetCoeff_MasterConfig. That label is the only one in the routine, so the prefix is correct. Join is not wrong, but Epilogue would be more precise."
+   },
+   {
+    "site": 31,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "Same target as site 19. Case 0's 'jr t,114' goes to the routine-wide exit 'inc 4,xsp; ret'. The Case0_Join name misattributes a routine-wide epilogue to case 0."
+   },
+   {
+    "site": 32,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Byte-copy loop (inc 1,iy; cp iy,hl; jr c,-40) back to the loop head. The existing _CopyLoop name is correct."
+   },
+   {
+    "site": 33,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Query case 5 ends with jrl t to the common tail VoiceParamFinalize_CopyToWorkArea, which is a real loop pre-header."
+   },
+   {
+    "site": 34,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "DispatchC arm test (cp c,1; jr nz) skipping to 'stb_erp L,0xFB; popw_erp 0xFA; ret'. The existing _Epilogue name is correct."
+   },
+   {
+    "site": 35,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Scheduler wake: it saves registers, indexes the 12-byte task record, and tests the state==3 (blocked) byte. The jr nz goes to the not-blocked path (incm8 1,(xix+10)). Real code."
+   },
+   {
+    "site": 36,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "Case 3's 'jr 37' reaches the same routine-wide exit 0x02E918 as sites 19 and 31. The Case0_Join name is misleading for the same reason."
+   },
+   {
+    "site": 37,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The opcode 0x0B arm calls VoiceParam_Set_Tone_Option (calr, displacement verified). The target is the routine prologue (dec 4,xsp)."
+   },
+   {
+    "site": 38,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Algorithm type 8 arm: jrl t to the DSP_EffParam_Copy_V4 entry. Consistent with the neighbouring arms."
+   },
+   {
+    "site": 39,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Opcode arm ending 'jr 100' to 'pop xiz; ret', which is correctly named Audio_Cmd_ToneEdit_Return."
+   },
+   {
+    "site": 40,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Counted loop: incw 1,(xsp+2); cp (xsp+2),iz; jr c,-40 goes back to 0x03191E, which follows the pre-check 'jrl nc,307'. It is a genuine loop head inside DSP_SetCoeff_MasterConfig."
+   },
+   {
+    "site": 41,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The sustain case calls 0x028E26 and then does jr t,46 to the shared reply sender (ld xde,0x1E0000; ldw bc,58; ...)."
+   },
+   {
+    "site": 42,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Handler 0 preamble: two data bytes sent through call 0x036A4F (DSP_DispatchData)."
+   },
+   {
+    "site": 43,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Opcode 0x02/0x03 calls WaveSel_Cache_VelSplitPtr (dec 4,xsp prologue) and then runs its 4-slot loop, as documented."
+   },
+   {
+    "site": 44,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Opcode 0x1D arm: call, then jrl t to the common tail Audio_Cmd_EffParam_Cache_And_Dispatch2, a real code join."
+   }
+  ],
+  "patterns": "No data-as-code in the v142 sample. I checked all 45 accepted sites against original_ROMs/kn5000_subprogram_v142.rom (file offset = address - 0x0EF00). Every src_addr holds the stated branch opcode (jr 6x, jrl 7x, calr 1e, call 1d, jp 1b), and every recomputed target equals the tool's target. Every source reads as compiler-generated C code: consistent (xsp+N) frame use, the muls wa,287 part-record indexing, arguments set up before calls, for-loop pre-checks and back-edges, and switch range checks. Sources come from the Audio_Cmd_*, VoiceParam_*, DSP_* and TaskSched sections of v142/subcpu/kn5000_subprogram_v142.s. The sites inside the DSP bytecode handlers (DSP_Bytecode_Programs, DSP_Bytecode_Op04/Op05, around lines 56065-56720) were converted from `.byte` runs, but they are coherent code and their call targets are DSP_DispatchCommand/DSP_DispatchData. The one data-framed target (site 24, FIFO_Engine1K_Get_Marked at 0x020BBB, around line 2320) decodes cleanly under unidasm as FIFO engine code: the neighbouring `.byte` runs at 0x020A9D..0x020C?? are undisassembled code, not data.\n\nOnly failure pattern found is in label NAMING, not source classification:\n1. The prefix is inherited from the nearest preceding label even when the target is a routine-wide exit. VoiceParam_Set_Tone_Option_Case0_Join (0x02E918, sites 19/31/36) is the common `inc 4,xsp; ret` epilogue of VoiceParam_Set_Tone_Option, reached from the pre-switch range checks and all 7 cases. Naming it Case0_* tells the reader the out-of-range default belongs to case 0.\n2. Frame-drop epilogues (`inc N,xsp; ret`, `lda xsp,(xsp+N); ret`, `ld hl,iz; popw iz; inc 6,xsp; ret`) do not match the Epilogue rule, which requires pops then ret, so they become Join. Examples: 0x02E918 and DSP_SetCoeff_MasterConfig_Join at 0x031A51. Suggested guard: treat `inc N,xsp`/`lda xsp,(xsp+N)` as a pop-equivalent. When every source of a new label lies between the enclosing routine entry and the target, derive the name from the routine entry label rather than the nearest intermediate case label.\n3. Minor: DSP_Bytecode_Programs_Join2 (0x03C554, site 15) inherits the legacy DSP_Bytecode_Programs name, which the source comment says covers CODE (handler 0). It is not wrong, but the \"Programs\" prefix suggests data. That target is really a for-loop condition check (LoopCond), not a plain join.\n\nDead-but-real code shows up as sources (DSP_SetCoeff_WithDispatch, CheckStatusBits_80, both documented as unreferenced). Their branches are internally consistent, so labelling them is harmless."
+ },
+ {
+  "image": "hdae5000",
+  "verdicts": [
+   {
+    "site": 0,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source is printf-style va_arg handling: `add (xde),8; ld xbc,(xde); dec 8,xbc; call`. The ROM has 1d dc b7 29 at 0x29A38E. The target 0x29B7DC comes right after a ret at 0x29B7DB and is an 8-byte (double) copy from (XBC) to (XWA), then ret, so it is a real entry. The Sub role is right. The 'Multiply' prefix is only inherited from the soft-float region."
+   },
+   {
+    "site": 1,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr 0x6e8a at 0x2844EE: 0x2844F1+0x6E8A = 0x28B37B. The source is a compare chain on XDE, with the argument XWA=0x22abf2 and the result XHL tested. The target is the existing HDAE5000_Validate_String entry."
+   },
+   {
+    "site": 2,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The caller loads arguments into WA/BC/DE, calls, then jumps over the alternative path. The target follows `inc 4,xsp; ret` and opens with a `dec 4,xsp; push iz` prologue."
+   },
+   {
+    "site": 3,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The arguments go in XWA/XDE and XBC=0x200, and the HL result is compared with 0xFFFF. The target follows a pop/ret epilogue and opens with a push xiz prologue."
+   },
+   {
+    "site": 4,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`pushw 2` puts a stack argument before the calr to the existing HD_Data_Copy (0x280422+0x4EC2). The target releases that argument with retd, so the stack protocol matches."
+   },
+   {
+    "site": 5,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The source is the signed-divide wrapper: it negates negative operands, keeps sign flags in E, and does pushw de / popw wa around the calr to 0x29B8C5. The target is really the UNSIGNED divide core (it uses `jr ule`). The existing label HDAE5000_Divide_Signed is wrong, and HDAE5000_Divide_Unsigned at 0x29B8BF already calls it. This mislabel was there before the tool, so fix the label; the substitution itself is fine."
+   },
+   {
+    "site": 6,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Same call protocol as site 4: pushw 2 plus XWA/XDE/BC arguments. calr 0x14cf lands on 0x2852E4, the HD_Data_Copy entry."
+   },
+   {
+    "site": 7,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source is a switch-style compare chain on XHL. calr 0xa4af is a signed displacement of -0x5B51, giving 0x28370E, where an `lda xsp,(xsp-26)` function prologue starts (existing HD_Format_Params)."
+   },
+   {
+    "site": 8,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The ROM holds three consecutive 0x0E (ret) bytes at 0x294413-0x294415. Before each call XWA is loaded with a debug banner at 0x2f9270 or 0x2f9284 ('---[ FormatHd ]---'), so 0x294414 is a compiled-out debug-trace stub and a valid call target. The existing label and comment 'HDAE5000_Display_Sub_294414 / Large display management routine (3061 bytes)' are wrong, and were there before the tool."
+   },
+   {
+    "site": 9,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr 0x70bd lands on 0x28B22B, right after `inc 4,xsp; ret`. The entry opens with `jr t` to the loop test (compiler loop rotation). The existing name describes a polling routine, which fits."
+   },
+   {
+    "site": 10,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Backward jp to the head (`cp xbc,0x10`) of a 16-byte copy loop that increments XBC, XIX and XIY. Loop is correct. The 'Display_String_Render' prefix is inherited from the region."
+   },
+   {
+    "site": 11,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The call sits in a test-step sequence: set status 0x200222, compare, jp to the error exit. The target follows a ret at 0x29769A, saves XHL/XIX to globals and polls I/O 0x13001E, so it is a subroutine entry."
+   },
+   {
+    "site": 12,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The ROM has 1b 28 66 29 at 0x296618: jp 0x296628, which skips the head check. The target is the existing hand-annotated .Lwmhd_do_write in the same routine."
+   },
+   {
+    "site": 13,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Backward jp closes a status-polling loop: `ld a,(0x13001E); and 0xC0; cp 0x40; jp z exit; jp head`. Loop is correct."
+   },
+   {
+    "site": 14,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr goes back -0x1EF to 0x291C0D. The source passes WA=1 and XBC=&0x230f1c and checks HL against 0xFFFF. The target is a small table-lookup leaf and is the first function of the old 2171-byte 'region' label."
+   },
+   {
+    "site": 15,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source increments counter 0x229d34 and moves the pointers by 0x200, then jumps back. The target is the loop head that compares 0x229d34 with 0x229c5c. Loop is correct."
+   },
+   {
+    "site": 16,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The call comes after MemCopy/MemFill with stack arguments and a frame cleanup. The target 0x29B815 follows a ret at 0x29B814 and opens with a push xiz / lda xsp prologue."
+   },
+   {
+    "site": 17,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The ROM shows 0x29B840 right after `ld (xwa+2),8; ret`, with a push xiz / lda xsp,(xsp-20) prologue. The call site uses coherent XWA/XBC/XDE arguments."
+   },
+   {
+    "site": 18,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Same HD_Data_Copy protocol as site 4: pushw 2, XDE=0x2e1c8a, BC=0x3f. The calr lands on 0x2852E4."
+   },
+   {
+    "site": 19,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "calr 0xfd58 lands on the ret stub at 0x294414, with XWA=0x2f90ae ('---[ SendInfosAboutFlsBlock ]---'), so this is a debug-trace no-op call. The target is valid. The pre-existing label 'Display_Sub_294414 (Large display management routine)' is wrong, as at site 8."
+   },
+   {
+    "site": 20,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The call sits in a test sequence (call; cp status; jp z; ld a,code; jp error). The target follows a ret and opens with a push-all prologue."
+   },
+   {
+    "site": 21,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The target follows a ret, opens with push xix and returns a value in XWA, which the caller uses (`add xwa,xix`)."
+   },
+   {
+    "site": 22,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The ROM shows 0x29B77E after `jr t,0x29b76d; nop`, where the nop is alignment padding. The target is a float conversion that reads (XBC) and checks the exponent against 0x7f/0xff82. The caller is a clean push xiz / frame / call / call / epilogue."
+   },
+   {
+    "site": 23,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr +0x1666 lands on 0x29391E, the entry of the existing Cell_Render_Type5, which opens with dec 4,xsp. The WA/BC arguments match."
+   },
+   {
+    "site": 24,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Decimal call 2714308 = 0x296AC4, the existing .Lppc_utility. The nops interleaved with instructions are the known timing pattern of this hand-annotated PPORT driver, not a sign of data. The target is used as a subroutine but carries a .L local-label name."
+   },
+   {
+    "site": 25,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Forward unconditional jp to the shared error exit at 0x29888A (`call 0x2974c7; pop x6; ret`). Several error codes jump there, and the ROM has another jp 0x29888a at 0x298886. Join is correct. The 'Display_String_Render' prefix is wrong for this HD self-test code, but it only comes from the region."
+   },
+   {
+    "site": 26,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The target follows a ret and opens with push xix. It indexes the table 0x229e57 by A=(0x229DA0), which matches the caller's use of 0x229DA0."
+   },
+   {
+    "site": 27,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The caller stores its arguments to globals, calls, then checks status 0x200222. The target follows a ret and opens with a push-all prologue."
+   },
+   {
+    "site": 28,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`ld a,5; jp 0x29742f` jumps to a shared tail, `ld (0x229D92),a; jp cleanup`. The ROM confirms 0x29742F right after a ret. Join is correct."
+   },
+   {
+    "site": 29,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Decimal call 2714160 = 0x296A30, the existing .Lpsb_finish finalizer in the hand-annotated PPORT transfer code."
+   },
+   {
+    "site": 30,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr +0x541 lands on 0x29B6A9, right after `popw iz; ret`. The caller pushes IZ as an argument and pops it after the call. The target reads it at (xsp+16), after dec 8,xsp + push xiz + the return address, so the offsets are consistent."
+   },
+   {
+    "site": 31,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Decimal call 2715732 = 0x297054, the existing .Lppc_send_region_to_pc. The source is the per-bit region dispatch: region 6, bit 0x40."
+   },
+   {
+    "site": 32,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Same routine as site 31, reached from the dispatch entry for region 2, bit 0x04."
+   },
+   {
+    "site": 33,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Same target as site 11, called from the next test step (status 5)."
+   },
+   {
+    "site": 34,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Three stack arguments (radix 10, buffer, value) are pushed, then cleaned up with lda xsp,(xsp+26). The target reads value, buffer and radix at xsp+4, +8 and +0xC, which matches. The existing .Lccb_sign_handler is a .L local label called from a different file (hd_driver.s)."
+   },
+   {
+    "site": 35,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The ROM has 64 05 at 0x29B9CE: jr ov to 0x29B9D5. This is the standard 32-bit highest-set-bit search: bs1b A,QBC, and if V is set (no bit found) fall back to bs1b A,BC. The existing .LDIV_b9d5 is a skip target."
+   },
+   {
+    "site": 36,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The pushw halves build src=0x2E5D50 and dest=0x230E7A. The target reads dest at +4 and src at +8, and the caller frees them with inc 8,xsp, so the arguments are consistent. The routine finds the end of dest first, so it is strcat, as the caller's own comment says. The pre-existing name HDAE5000_StrCopy is misleading."
+   },
+   {
+    "site": 37,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Backward jp to `cp xix,xiy`, the head of a loop that shifts 8-byte entries down one slot. Loop is correct."
+   },
+   {
+    "site": 38,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "After the 0xaa55aa55 / 0xf4f1f2f3 signature check, the source jumps forward to the common tail (`call 0x298993; pops; ret`), which the ROM confirms. Join is correct."
+   },
+   {
+    "site": 39,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The ROM shows 0x29899E right after a ret at 0x29899D. It initialises a nested loop (XBC<5, XHL<0x1a), so it is a leaf entry. The caller passes XIX and XIY and tests the result in A."
+   },
+   {
+    "site": 40,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Same target as site 9 (0x2893FB+0x1E30 = 0x28B22B). It is called after the workspace vtable calls."
+   },
+   {
+    "site": 41,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr +0xA43 lands on 0x292D16, the existing entry, which opens with an lda xsp,(xsp-32) prologue right after a ret."
+   },
+   {
+    "site": 42,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source is a regular 8-byte dispatch stub (`call X; ld wa,hl; ret; nop`), which the ROM confirms. Target 0x294C6A follows a jrl t tail-call to the 0x294414 stub and opens with push iz. The Sub role is right. The name 'Display_Sub_294414_Sub17' inherits a bogus parent (a 1-byte ret stub) and embeds an address."
+   },
+   {
+    "site": 43,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr goes back -0x28C4 to 0x285340, the existing HD_Buffer_Init, with XWA=0x22aa4c as the buffer argument."
+   },
+   {
+    "site": 44,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The same 8-byte dispatch-stub pattern as site 42. Target 0x29475A follows `popw iz; ret` and opens with push iz. The Sub role is right. The name inherits the bogus parent 'Display_Sub_294414'."
+   }
+  ],
+  "patterns": "No data decoded as code turned up in this sample. All 45 sources are real code and all 45 targets are plausible. I checked the ones that looked odd (sites 0, 8, 12, 19, 22, 30, 35, 42, 44 and several of the absolute-jp targets) against the ROM bytes in original_ROMs/hd-ae5000_v2_06i.ic4 with unidasm. Every displacement lands on an instruction boundary, and callers and targets agree on how stack arguments are passed and cleaned up. Every structural role is right: each Loop is backward, each Join is unconditional, each Sub is reached only by calls.\n\nThe label_misleading problems all come from existing names or inherited prefixes, not from the tool's role logic.\n\n(1) Four existing hand-written labels are wrong. The tool reuses them correctly, so fix the labels rather than blocking the sites:\n- HDAE5000_Divide_Signed at 0x29B8C5 (hdae5000/hdae5000_utilities.s) is the unsigned divide core; the signed wrapper is at 0x29B870.\n- HDAE5000_Display_Sub_294414 (hdae5000/hdae5000_ui_display.s:14373, commented 'Large display management routine (3061 bytes)') is one byte of 0x0E, a compiled-out debug-trace stub. Every caller passes XWA = a '---[ Name ]---' banner string from around 0x2f8f5e-0x2f92xx.\n- HDAE5000_StrCopy at 0x29AF0B is strcat.\n- Several local .L labels are used as cross-file subroutine targets: .Lccb_sign_handler (called from hdae5000_hd_driver.s), .Lppc_send_region_to_pc, .Lppc_utility and .Lpsb_finish. This assembles, because hd-ae5000_v2_06i.s .includes every part into one unit. But .L symbols never reach the ELF symbol table, so they are invisible to the symbols/ files and to llvm-objdump.\n\n(2) New names built from the enclosing region label are semantically wrong even when the role is right. Old coarse labels such as 'LDS 3061 bytes', 'LDIV 1819 bytes' and 'LTCI 2171 bytes' each span many functions. That produces names like:\n- HDAE5000_Display_Sub_294414_SubN (sites 42 and 44). These are children of a ret stub, and they carry an address, against the no-address-names policy.\n- HDAE5000_Display_String_Render_* and HDAE5000_RAM_Test_* on HD self-test and sector I/O code around 0x2974xx-0x2999xx (IDE status polling at 0x13001E, error codes stored to 0x200222).\n- HDAE5000_Multiply_SubN on double-copy and float-conversion helpers (0x29B7DC is a va_arg 8-byte copy).\n- Very large suffixes such as Loop44 and Sub23 are a sign that the parent region is not one function.\n\nSuggested guard: when the parent label's region is larger than a few hundred bytes, or the parent is a bare ret, or the parent name contains a hex address, fall back to a neutral name (e.g. HDAE5000_Sub_<role>) instead of inheriting the prefix.\n\n(3) The one recurring 'suspicious-looking' pattern is actual code: the nop-interleaved PPORT code in hdae5000/hdae5000_ui_display.s, roughly 0x2951xx-0x297xxx. That is the hand-annotated parallel-port driver with timing nops, and the 8-byte `call X; ld wa,hl; ret; nop` stubs at .Lpps_handler_N. A heuristic of 'nop runs mean data' would wrongly reject these.\n\nFiles and ranges to watch in other hdae5000 samples: hdae5000/hdae5000_data_tables.s (not represented here), and anything inside the region labels above."
+ },
+ {
+  "image": "prom_c",
+  "verdicts": [
+   {
+    "site": 0,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Compiled-C double-math sequence: 4x push xbc of two doubles (a local + a ROM constant pair at 0xFCCA5A/5E), lda xiy result slot, call, then the result is re-pushed for the next op. ROM bytes 1D 52 A2 FC confirmed. Target is the link32 prologue of Double_Multiply; 230 call sites to it in the ROM."
+   },
+   {
+    "site": 1,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Same double-arithmetic calling pattern (push 2 doubles, lda xiy result, call). Bytes 1D A5 A7 FC confirmed. Target: Double_Divide link32 prologue, 45 callers."
+   },
+   {
+    "site": 2,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Switch-arm code: computes a record address with add xbc, pushes the args, calls, cleans up with inc 8,xsp, then jrl to a common exit. Bytes confirmed. Target is a link32 XIZ,0 entry with 50 callers."
+   },
+   {
+    "site": 3,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Pushes count 0xD9, a source RAM address and a destination, calls a memcpy-style routine, then inc xsp cleanup and a loop counter compare. Bytes confirmed. Target MemCopyWords reads its args from (xsp+8/12/16) exactly as pushed; 66 callers."
+   },
+   {
+    "site": 4,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Flash write routine: a poll loop on a status call (cp wa,0xFFFF / jr z back), then push arg, call, pops and unlk epilogue. Bytes 1D F9 88 FC confirmed. Target is a routine entry that reads (xsp+4) and loads the flash command address 0xE8AAAA."
+   },
+   {
+    "site": 5,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Double-math chain (Float32_ToDouble, then Double_Multiply by a ROM constant). Bytes confirmed. Target is the Double_Multiply prologue."
+   },
+   {
+    "site": 6,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Loop tail (inc h / cp h,4 / jr c back), then two arg-pushing calls and a pop/unlk epilogue. Bytes confirmed. Target is a link32 routine entry with 6 callers; sub_FC81F8 is a positional name but not misleading."
+   },
+   {
+    "site": 7,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Repeated call pattern: push a ROM table pointer (0xFD27xx) and a count, call, set a port bit (set 4,(PB)), clean up the stack. Bytes confirmed. Target P7Stream_Run is a link32 entry with 79 callers."
+   },
+   {
+    "site": 8,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Inside the math library: Double_Compare result test, then push 2 double args and call. Bytes confirmed. Target is the Double_Multiply prologue."
+   },
+   {
+    "site": 9,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Float32 call chain; each result in XIY is re-pushed as the next op's argument. Bytes confirmed. Target is the Float32_Divide link32 prologue, 40 callers."
+   },
+   {
+    "site": 10,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Two back-to-back memcpy calls with count/src/dst pushes, standard stack cleanup and a calr to a sibling. Bytes confirmed. Target is MemCopyWords."
+   },
+   {
+    "site": 11,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Loads fields from a record pointer table (xhl+0x1523), pushes two words and calls a shift helper; the result in A is used right after. Bytes confirmed. Target Shift8_LogicalRight reads (xsp+4)/(xsp+6), matching the two pushed words."
+   },
+   {
+    "site": 12,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Indexed record access, call, the XIY result stored to a local, push args, call, stack cleanup, jr to join. Bytes confirmed. Target is a link32 entry with 8 callers."
+   },
+   {
+    "site": 13,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Same switch-arm pattern as site 2. Bytes confirmed. Target is the Voice_ApplyParamChange_Dispatch prologue."
+   },
+   {
+    "site": 14,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Double_Subtract followed by Double_ToFloat32 on the result, then Float32_ToDouble; a coherent compiled float chain. Bytes confirmed. Target is the Double_ToFloat32 prologue, 164 callers."
+   },
+   {
+    "site": 15,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Loop tail (dec l / cp l,0 / jr nz back), then push the part index and call, then mul bc,0x12C record indexing. Bytes confirmed. Target is a link32 entry that does the same mul bc,0x12C part-record indexing; 1 caller."
+   },
+   {
+    "site": 16,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Float32 divide/convert chain with a calr to a local helper. Bytes confirmed. Target is the Float32_Divide prologue."
+   },
+   {
+    "site": 17,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Guard (cp xbc,0 / jrl z), 99-x arithmetic, Int32_ToFloat32, then Float32_ToDouble into a local slot. Bytes confirmed. Target is the Float32_ToDouble prologue, 169 callers."
+   },
+   {
+    "site": 18,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Double_Add result multiplied by a ROM constant pair. Bytes confirmed. Target is the Double_Multiply prologue."
+   },
+   {
+    "site": 19,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A run of pushw de / call pairs into voice-register staging routines: repetitive but coherent compiled code, and every target is a link32 prologue. Bytes confirmed. Target has a link32 entry."
+   },
+   {
+    "site": 20,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Double_Multiply followed by Double_ToFloat32, the result stored to a local, stack cleanup and a jrl to join. Bytes confirmed. Target is the Double_ToFloat32 prologue."
+   },
+   {
+    "site": 21,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The same staging-call run as site 19, with stack cleanup at a join label. Bytes confirmed. Target is a link32 entry."
+   },
+   {
+    "site": 22,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Status compare / jr nz, store to RAM 0xD7A0, push args, call, use the result in IY. Bytes confirmed. Target is a link32 entry with 21 callers."
+   },
+   {
+    "site": 23,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Computes dst and src addresses (RAM base 0x87D2 plus offsets) and pushes them for a memcpy. Bytes confirmed. Target is MemCopyWords."
+   },
+   {
+    "site": 24,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Staging-call run (pushw de / call ...), then reads (xde+10)/(xde+6) for the next call. Bytes confirmed. Target is a link32 entry."
+   },
+   {
+    "site": 25,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Switch arms that each push (0|1, part) and call the same routine, then pop and jrl to a common exit. Bytes confirmed. Target is a link32 entry with 6 callers; positional name, not misleading."
+   },
+   {
+    "site": 26,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Builds reply args (buffer 0xD945, length+6, channel byte), calls the link send routine, then a full epilogue (pop/unlk/ret). Bytes confirmed. Target Link_SendBuffer is a link32 entry with 11 callers."
+   },
+   {
+    "site": 27,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Duplicate of the site-24 staging sequence in a sibling routine. Bytes confirmed. Target is a link32 entry."
+   },
+   {
+    "site": 28,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Double_Divide, then Double_ToFloat32, then a float32 multiply of the XIY result by a local. Bytes confirmed. Target is the Float32_Multiply prologue, 38 callers."
+   },
+   {
+    "site": 29,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Double_Multiply, then pushes a float32 local and calls Float32_ToDouble into a result slot. Bytes confirmed. Target is the Float32_ToDouble prologue."
+   },
+   {
+    "site": 30,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Double_Multiply result added to a ROM constant, then converted to float. Bytes confirmed. Target is the Double_Add prologue, 77 callers."
+   },
+   {
+    "site": 31,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Inside the math library: sign xor, then pushes a constant and an argument double and calls. Bytes confirmed. Target is the Double_Subtract prologue, 91 callers."
+   },
+   {
+    "site": 32,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Fresh function prologue (link32 + saves), pushes a constant double and the argument, calls the compare, and tests WA==2 with an errno-like store to 0xF362. Bytes confirmed. Target is the Double_Compare prologue."
+   },
+   {
+    "site": 33,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Same chain as site 14 (Double_ToFloat32, then back to double). Bytes confirmed. Target is the Float32_ToDouble prologue."
+   },
+   {
+    "site": 34,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Double_Divide result narrowed to float and stored, then jrl to join; the next arm has cp xbc,80. Bytes confirmed. Target is the Double_ToFloat32 prologue."
+   },
+   {
+    "site": 35,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Switch arms: push the part byte, call, pop, jr to join; preceded by mul bc,0x12C record indexing. Bytes confirmed. Target is a link32 entry."
+   },
+   {
+    "site": 36,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Tests flags (and bc,0x8080 / jr z), pushes a voice id from (xhl) and calls two routines, then clears the (xhl+0x2b) word. Bytes confirmed. Target is a link32 entry with 5 callers."
+   },
+   {
+    "site": 37,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Computes a byte, calls, loads RAM 0x861C, pushes (value, 3), calls, then the epilogue (pop/unlk/ret). Bytes confirmed. Target is a link32 entry that drives port bits (set 7,(P2) ...), consistent with a byte-send routine."
+   },
+   {
+    "site": 38,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A small wrapper routine: link32, push its argument, call int-to-float, then call again with 0x8000 as a scale. Bytes confirmed. Target is the Int32_ToFloat32 prologue, 83 callers."
+   },
+   {
+    "site": 39,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Double_Subtract, then Double_ToFloat32, then Float32_ToDouble; same idiom as sites 14 and 33. Bytes confirmed. Target is the Double_ToFloat32 prologue."
+   },
+   {
+    "site": 40,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Guards (cp a,0 / jrl nz; cp xwa,84 / jrl lt), 99-x arithmetic, Int32_ToFloat32, then Float32_ToDouble. Bytes confirmed. Target is the Float32_ToDouble prologue."
+   },
+   {
+    "site": 41,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Float32_ToDouble result multiplied by a ROM constant pair. Bytes confirmed. Target is the Double_Multiply prologue."
+   },
+   {
+    "site": 42,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Adds two double locals, result into a slot, then Double_ToFloat32. Bytes confirmed. Target is the Double_Add prologue."
+   },
+   {
+    "site": 43,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A double op (0xFCA6FD), then subtracts a constant, then converts to float. Bytes confirmed. Target is the Double_Subtract prologue."
+   },
+   {
+    "site": 44,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Range guard (cp xbc,64 / jr gt), sub 20, push, int-to-float, then a power/scale call with 20. Bytes confirmed. Target is the Int32_ToFloat32 prologue."
+   }
+  ],
+  "patterns": "No data-as-code in the prom_c sample: all 45 sites are REAL_CODE with a sound target. I checked every site against wsa1/original_ROMs/wsa1_prom_c.ic28 (base 0xF80000). Each source address holds 1D <lo> <mid> <hi> (call imm24) encoding exactly the claimed target. Each target is an existing routine entry: a link32 prologue (EE 0C ..) or, for MemCopyWords, Shift8_LogicalRight and Flash_ProgramSectorFromBuffer, a leaf that reads (xsp+N). Many targets have tens to hundreds of callers (Double_Multiply 230, Float32_ToDouble 169, Double_ToFloat32 164). No label is misleading, because all 45 are REUSED existing names; the tool minted no new structural name in this sample.\n\nThe sample has a blind spot. For prom_c the tool's own census counts 2,479 numeric branch operands, and my regex finds 2,467 call, 25 jrl and 12 jp. So random sampling almost never picks a relative branch, and this sample says nothing about the risky jr/jrl/calr path or the new-label naming path.\n\nI read the unsampled numeric jrl sites by hand, and they are also real code:\n- wsa1/prom_c/tone_db/tone_db_module.s, lines 14747-14785: a compiled switch chain (`cp bc,N / jrl z, -0xNNN`, 20 arms).\n- The same file, lines 11705, 13392, 13902 and 14739: backward `jrl -0xEE` / `-0xE2` just after `.long` computed-goto tables. Each is at a real label boundary, so these are loop/join back-edges, not bytes of the tables.\n- wsa1/prom_c/p7/p7_module.s:14140: a back-edge (`jrl -0x2E1`).\n\nThe 12 `jp 0xF9xxxx` lines in wsa1/prom_c/boot/reset_and_vectors.s target the shared kernel region, which should be excluded as shared-file.\n\nGuard suggestions:\n- Stratify review samples by mnemonic (call vs jr/jrl/calr/jp) and by new-vs-reused label. For prom_c, review all 25 jrl sites directly, since that is cheap.\n- The main thing to watch in the jrl sites is the placement right after `.long` jump tables. Check that a label planted there is never inside a `.long` run: the table-end boundary must be the target, not a byte inside the table.\n\nCoverage gap, not a failure: roughly 1,490 prom_c branches use the address-difference form `calr (0xTGT - 0xNEXT)` or `jr/jrl (0xTGT - 0xNEXT)`. The main concentrations are p7_module.s (492), tone_db_module.s (290), voice_parameters.s (210) and midi_controllers.s (179). They are still numeric cross-references under the symbolic-reference policy, but the tool's numeric-operand regex does not match them."
+ },
+ {
+  "image": "prom_b",
+  "verdicts": [
+   {
+    "site": 0,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "sub_F56342 is a table-dispatched routine that tests flag bits (0x96),(0x34D9),(0x360B). All exits converge on the ret at F563DC, and the whole span F56342-F563DC reads as coherent code. The target is a ret, so _Return is accurate."
+   },
+   {
+    "site": 1,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Wrapper `calr; ret` reached from pointer table 0xFCF80C. Target sub_F0BE44 is a C-style prologue (link XIZ, then push the args and call). The existing label is reused."
+   },
+   {
+    "site": 2,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The push/call/pop sequence and the repeated error-flag test cp (0x0d4a),0 are coherent. Six sources reach F61BF4, one of them the unconditional jrl at F61B57, so _Join is correct."
+   },
+   {
+    "site": 3,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code reads a byte through (XDE+IY), masks it with 0x7f and compares it to 0x48. It is a character-dispatch path. Target F6409B is `call T_F4270C` after two dead jrl's, and it is the only source (conditional, forward), so _Skip3 is fine."
+   },
+   {
+    "site": 4,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code range-checks WA against 1..999 and exits early to the ret at F7FBA3. It is a clean validation pattern, and _Return is correct."
+   },
+   {
+    "site": 5,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code clamps WA to 0..0x3FFF with exts/add arithmetic. Both out-of-range branches (gt at F69BC4, lt at F69BC8) jump forward to the shared tail `xor A,A; calr; ret`. _Skip2 is correct."
+   },
+   {
+    "site": 6,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A chain of cp (0x0d4a),N tests skips forward to `inc 1,L; jr -81` (a loop increment). All four sources are forward conditionals, so _Skip7 is structurally right."
+   },
+   {
+    "site": 7,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A loop over calr F63280 with error-flag checks ends in an unconditional jrl to the ret at F6327F. The target is ret, so _Return is right."
+   },
+   {
+    "site": 8,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Routine with pushes, compare-and-update of (0x360a) and a calr into a documented sub_F6F4F2 entry. The existing label is reused."
+   },
+   {
+    "site": 9,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "This is a compiled switch: a cp A,N / jr z chain dispatches to `calr X; jr ret` case bodies. The jr displacements fall by 5 each step (33, 28, 23 ... 3), which is a strong code signature. The target is ret, so _Return is correct. DispatchTable_F72323 after it is correctly framed as data."
+   },
+   {
+    "site": 10,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code sets a bit in one of two 16-bit bitmaps (0x3738/0x373a) with stcf A,IZ, selected by C<16. The if/else joins at `calr; calr; ret`. The source is unconditional, so _Join2 is right."
+   },
+   {
+    "site": 11,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The routine checks (0x20b8)==0x11 and exits early to the ret at F00096. Target is ret. Side note: the source spells 06 00 as `di`, but MAME decodes it as `ei 0x00`, which enables interrupts (see patterns)."
+   },
+   {
+    "site": 12,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "MIDI status dispatch: `and C,0xf0; cp C,0x90` (note-on), then cp A with 0xd2/0xd3/0xd1. The target is a `calr; jrl back-to-loop` case body. It has a single forward conditional source."
+   },
+   {
+    "site": 13,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code sets up words in RAM, increments a counter, calls and tests the result for 0x81/0x82. Target T_F40C54 is a `jp` slot in the routine-directory trampoline table, with 18 callers. The existing label is reused."
+   },
+   {
+    "site": 14,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The same `call T_F4270C; cp (0x0d4a),0` idiom repeats with byte fetches through (XDE+IY). The target is a jp trampoline slot with 25 callers."
+   },
+   {
+    "site": 15,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code does indexed stores into a struct array at 0x3038, then a sentinel test cp (0x33de),0xff skips to the ret. Target is ret, so _Return is correct."
+   },
+   {
+    "site": 16,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "An if/else with balanced push xhl/pop xhl on both arms joins at `ld (XHL+4),0`. The source is unconditional, so _Join2 is right."
+   },
+   {
+    "site": 17,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The loop uses calr helpers and tests their results (cp W,0xff; cp A,0x81). Target sub_F6B770 is a small `pushw (0x0e54); calr; popw; ret` routine."
+   },
+   {
+    "site": 18,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Repeated blocks of `calr; ld W,(0x124a); cp W,1 / cp W,0xfd`, each ending in a branch to the common ret at F6FC0F. _Return is correct."
+   },
+   {
+    "site": 19,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A register-saving dispatcher picks one of two pointer tables (0xF5B978 or 0xF5B8F8) by an HL>=0xC0 test. Both arms join at `sla 2,HL; ld XIY,(XIY+HL); call XIY`. The source is unconditional, so _Join is right."
+   },
+   {
+    "site": 20,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code does validation with an error code in (0x0d4a), then calr sub_F7335A, a routine that starts with register pushes. The existing label is reused."
+   },
+   {
+    "site": 21,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A 3-byte-record swap loop is followed by `calr 1; ret`, which calls the routine placed directly after it. Target sub_F763D7 is a scan loop over the table at 0x10d3 with a 0xff sentinel."
+   },
+   {
+    "site": 22,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A documented Blink routine: cp C,0x20 then an if/else on (XIX). The target is the else arm `ld C,(XIX)`, reached by a forward conditional, so _Skip is fine."
+   },
+   {
+    "site": 23,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A cp A,0xb5..0xbd / jrl z chain feeds a shared handler at F75E56. Before the target sit 4 unreachable jrl's (F75E4A-F75E53) that all land on F75AD2 at 3-byte steps. They are dead jumps in real code, not data. All seven sources are forward conditionals, so _Skip22 is fine."
+   },
+   {
+    "site": 24,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "F69573 follows a `ret` and the DispatchTable_F6953C case bodies, but `jr nz` at F6951F reaches it. It is real code. Target sub_F6B8BD is an existing entry."
+   },
+   {
+    "site": 25,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "C calling convention: link XIZ, arguments pushed with pushw, then calr to IndexedTable_GetByte, whose entry is `link XIZ,0`. The existing semantic label is reused."
+   },
+   {
+    "site": 26,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code keeps a running minimum: if WA < (0x0c20) it updates several mirrors, and both paths join at `ld (0x0c22),WA`. The single source is a forward conditional, so _Skip is fine."
+   },
+   {
+    "site": 27,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Error-code validation writes (0x0d4a)=10/11. The target is the success tail `ld IY,0xff; ret`, reached by a forward conditional."
+   },
+   {
+    "site": 28,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "An if/else on `bit 7,W` stores 4 or 12 to (0x3602). The target is the else arm. The pattern repeats in sibling routines (sites 37, 38)."
+   },
+   {
+    "site": 29,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Compiler-style code: pushes arguments, calls, stores results into a struct at (XBC+6) and cleans the stack with inc 8,XSP. The unconditional jrl joins at `ld XBC,(XIZ+8)`, so _Join4 is right."
+   },
+   {
+    "site": 30,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A C-compiled indirect call (`lda XIY,retaddr; push; jp XIX; pop XIY` for argument cleanup) followed by a backward `jr -66` to F0C131. That is a genuine loop, so _Loop is correct."
+   },
+   {
+    "site": 31,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code tests I/O flags (0x95)/(0x96). F00244 follows a `ret` and is the entry of a separate subroutine, reached only by calr, so _Sub is structurally right. Minor: the tool's 'extent' for sub_F001C9 (F001C9-F0027F) spans about 5 ret-separated sibling routines, so a standalone sub_F00244 would name it better."
+   },
+   {
+    "site": 32,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The BStore call sequence with error checks via (0x0d4a) is real code. The target is the trampoline slot T_BStore_ValidateSavedCursor, which already has a label."
+   },
+   {
+    "site": 33,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "XIY/XIX are loaded with display-list pointers, then `call T_DisplayListB_Run`, with a sibling call on the other branch. The target is a jp slot with an established name."
+   },
+   {
+    "site": 34,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The same BStore idiom as site 32. Target T_F427A0 is a jp trampoline slot."
+   },
+   {
+    "site": 35,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A byte-copy loop over 0x60A000+IY, then `call sub_F60338; ret`. The target starts with `and (0x0c8b),0xfe` and an indexed load, the same shape as its sibling routines."
+   },
+   {
+    "site": 36,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code tests B for 0x82/0x81 and sets a bit in (0x0c8b). The target is `or (0x0c8b),2`. The lone `nop` at F72CA1 after it is in the ROM (00) and matches MAME. It looks like original padding inside real code, not a desync."
+   },
+   {
+    "site": 37,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A sibling of site 28 that stores 6 or 14 to (0x3602). The target is the else arm, reached by a forward conditional."
+   },
+   {
+    "site": 38,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The shared tail `call T_F40CC4; pop XBC; ret` of the Write3602 routine family. The target is a jp trampoline slot with 24 callers."
+   },
+   {
+    "site": 39,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A bitfield extract (`and 0x07c0; srl 6`) clamps D to 8, then an unconditional jr jumps past the alternate path to `ld BC,(0x2797)`. The source is unconditional, so _Join2 is right."
+   },
+   {
+    "site": 40,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "sub_F71A95 begins with `push XIY`. The target `pop XIY; ret` is its matching epilogue, reached from F71A9B and F71B05, so _Epilogue is exact."
+   },
+   {
+    "site": 41,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source is a `jp` slot in the screen vtable/trampoline table (real jump instructions). The target ScreenEnter_S0ngSelectName is `call; ret`. The existing label is reused."
+   },
+   {
+    "site": 42,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A loop over the cursor with error-code handling on (0x0d4a)==0/8. Error exits go to the ret at F6466D, just after the loop-back jrl. _Return is correct."
+   },
+   {
+    "site": 43,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A textbook bit-dispatch: `bit n,(0x34b8); jr z,+3; calr handler_n` for n=0,1,2. The target is the next bit test, so _Skip2 is fine."
+   },
+   {
+    "site": 44,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Flag-guarded one-shot actions on (XIX) bits 0x08/0x10. Each guard skips a push/call/stack-cleanup block to the next `ld C,(XIX)` test. The source is a forward conditional, so _Skip2 is fine."
+   }
+  ],
+  "patterns": "No data-as-code found in the 45 prom_b sites. All 45 source and target addresses land on instruction boundaries in MAME's linear listing wsa1/original_ROMs/wsa1_prom_b.ic13.unidasm, and every context reads as coherent code: consistent register use, balanced push/pop, compiler-style link/pushw/inc-XSP sequences, switch chains with regular displacement steps. Targets in the jp-trampoline tables (T_F40Cxx, T_F427xx, T_F431xx in wsa1/prom_b/wsa1_prom_b.s around lines 81800-84200) are correct 4-byte slot boundaries. For prom_b the accepted set looks clean. I found no file or label family that is consistently data-as-code.\n\nThree things for tightening the guard or the naming:\n\n(1) Dead-but-real jump runs. Unreachable consecutive jrl/jr instructions all resolve to one target: F75E4A-F75E53 (4 x jrl to F75AD2, in the body of sub_F75685) and the duplicate `jrl 128` at F64098. A guard that required 'source reached by the walk' would reject these, but they are code artefacts rather than data. The telltale is several consecutive branches converging on one target at a regular stride, which is a good positive code signal. The reverse is the data-as-code signature to guard against: branches in a run that scatter to unrelated or odd targets.\n\n(2) Over-wide routine extents. The 'Extent' walk for sub_F001C9 (wsa1_prom_b.s about line 575; it claims F001C9-F0027F) spans about 5 separate ret-delimited subroutines (entries at F0020B, F0023C, F00240, F00244). As a result, calr targets there get names like sub_F001C9_Sub4 instead of standalone sub_F00244. The prefix is not a hazard, but it attributes a separate routine to the wrong parent. The same is likely in other lane-promB6 'converted CODE' spans near F00000-F00300. Suggested rule: when every source is a call and the target directly follows a `ret`, name it sub_<target>.\n\n(3) Side finding, not a branch issue. The LLVM backend encodes `di` as 06 00, which MAME decodes as `ei 0x00`: IFF=0, all interrupts enabled. The real DI is 06 07, and MAME prints that as `ei 0x07`. So all 27 `di` lines in wsa1/prom_b/wsa1_prom_b.s (e.g. F0008D and F00091, which close an `ei 6` critical section) read as the opposite of what the CPU does. This also applies to any other tree that uses `di` with this backend."
+ },
+ {
+  "image": "prom_a",
+  "verdicts": [
+   {
+    "site": 0,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "FE3F1C is the first arm of a real switch (ld BC,(0xFE6DD8+BC) then jp T,(0xFE3F1C+BC); offset table entries 0,1,4 decode to 0). The branch at FE3F1F goes to FE3F65 (cp (XWA),0xF9), a tail the arms share. Reuses .LFE3F65."
+   },
+   {
+    "site": 1,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "cp WA,0xFFFF / jr nz leads to FE4B46, ldw hl,0xFF, which sets an error return value and falls into popw iz / ret. That is the routine's error exit."
+   },
+   {
+    "site": 2,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The source, sub_FEA6D7, is real code. FF2232 sits inside the .byte block Data_FF17E2, but those bytes are an undisassembled subroutine: unidasm gives xor XHL,XHL / ld HL,(0x345C) / dec / sla 8 / call 0xFE8334 / add XHL,XIY / ld IY,(0x345E) / ld A,(XHL+IY) / ret, and it follows the ret at FF2231. It has about 32 callers. The name 'Data_FF17E2_Entry' tells the reader this is data and carries an address 0xA50 bytes away from where the label sits. The right fix is to split the block at FF21F6 and name the routine sub_FF2232."
+   },
+   {
+    "site": 3,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The caller pushes word args and calls a link-XIZ subroutine that reads (XIZ+8) and (XIZ+0x0A). Coherent. Reuses ToneEdit_StepFromEvent."
+   },
+   {
+    "site": 4,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr FAAEA0+0x1A0A = FAC8AA, the link XIZ prologue of sub_FAC8AA, which comes right after a pop/ret epilogue. The source pushes an arg first."
+   },
+   {
+    "site": 5,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "sub_FEB07A calls 12 display-list painters in a row, spaced 0x28 apart (7 code instructions plus a 12-byte DisplayList each). FEB118 is one of those painters. XIX=FEB140 is the list END bound, not a pointer into code."
+   },
+   {
+    "site": 6,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The branch is a flag-tested conditional call. F97563 follows ret, opens with a push XIZ/XIX/XHL/XDE prologue, and has 8 callers (F98689...F98922). The role 'Sub' is correct. The parent prefix sub_F97533 is only positional; the routine is a sibling, not part of sub_F97533."
+   },
+   {
+    "site": 7,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "cp (XSP+4),1 / jr nz skips an early return with hl=0 and reaches FE3EAC, which fills a buffer with 0x5A."
+   },
+   {
+    "site": 8,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A chain of bit tests on (XIX+n). The jr z goes to the next test block at F95373."
+   },
+   {
+    "site": 9,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A string-scan loop: after cp W,0x20 / jr z it lands on the loop condition cp IX,(XIZ+2), which is followed by jrl ule back to the loop head."
+   },
+   {
+    "site": 10,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr goes to FE1EC3, the link XIZ,-4 prologue of sub_FE1EC3, which follows an unlk/ret epilogue."
+   },
+   {
+    "site": 11,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Three pushed args, then calr to FBB800. That is a link-XIZ routine placed after 0x0E padding, and it reads (XIZ+8) and (XIZ+0x0A), which matches the pushes. pop XIY cleans up after the call."
+   },
+   {
+    "site": 12,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "An if/else arm calling sub_FE066C (pushw hl / push XIX prologue after ret)."
+   },
+   {
+    "site": 13,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The end of one switch arm that sets config words (ld WA,(XIY) / muls / ld (XBC),WA). The jrl goes to the shared epilogue pop XIZ / lda xsp,(xsp+0x16) / ret."
+   },
+   {
+    "site": 14,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "After ldw hl,0xFF the jr 3 skips a calr and reaches the pop XIZ / inc 4,XSP / ret epilogue."
+   },
+   {
+    "site": 15,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "pushw args then calr Dev7E_WriteByte, which reads (XSP+4) and (XSP+6). Consistent."
+   },
+   {
+    "site": 16,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A size-threshold ladder: each arm sets xwa and jumps to the common continuation at FE32E9, ld XHL,(XBC)."
+   },
+   {
+    "site": 17,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "cp de,0 / jr ule skips the loop entirely and lands on the first instruction after the loop, the one after jr c,-88."
+   },
+   {
+    "site": 18,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A bit-5 if/else calling sub_FC1CD4. Its register saves and restores balance (push XIX/W/XBC/DE/HL/A ... pops ... ret), so the ret bytes in front of it are padding."
+   },
+   {
+    "site": 19,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "pushw 1 / call / popw bc cleanup, calling a link XIZ,-2 routine."
+   },
+   {
+    "site": 20,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A djnz16 loop over 32 entries (IZ+=8) calls two builders. FC195D writes 0xB0 (MIDI control change), (XIZ+6), 1, 0 into the message buffer at 0x716. Coherent."
+   },
+   {
+    "site": 21,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A run of 'calr X / ret' thunks. They are the arms of a pointer table: .long 0x00FE9B78 at FE9A9A, entry 20. The calr goes to sub_FEABE9."
+   },
+   {
+    "site": 22,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A calr sequence ending in a fall-through into sub_FE9E00. The target sub_FF0205 follows a ret and is real code (bit tests, then calls)."
+   },
+   {
+    "site": 23,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A compare ladder on A (0x08, 0x28, bit 5). The target ld E,A / jp sub_F8A90B is the pass-through arm."
+   },
+   {
+    "site": 24,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "An if/else arm calling sub_FE0105 (push XDE/XHL/XIX/XIZ prologue after ret)."
+   },
+   {
+    "site": 25,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A family of setup stubs (XIZ/XIY/A) that each calr the shared Msg0716_DispatchIndex."
+   },
+   {
+    "site": 26,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "An unlabelled handler after jp. No absolute pointer to it exists in any WSA1 image, but it follows the sibling pattern: cp e,0 / jr z to the jp sub_F8A504 exit, then emit words through F8A500 (ld (XIX+),DE / ret). The target is a real 2-instruction helper that many handlers use."
+   },
+   {
+    "site": 27,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Byte args are pushed, then calr goes to the link XIZ routine sub_FE0970, which reads (XIZ+8). pop XIY cleans up later."
+   },
+   {
+    "site": 28,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "This is the count==0 early-out in sub_FC8D49. The target FC8E6E is the loop exit and epilogue (clear count, pops, unlk, ret) after jrl c,-266. The new name 'JumpTable_FC8DB2_Skip2' comes from the inline 9-entry jump table that ends at FC8DD5, 0x99 bytes earlier, so a reader would take the target for part of a jump table. It belongs to sub_FC8D49."
+   },
+   {
+    "site": 29,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A documented pure wrapper, calr / ret, into InstallPainter_CombinationGroupMenu."
+   },
+   {
+    "site": 30,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Sets 0x60F082/83 then calls sub_FAB20B, which tests exactly 0x60F083. Coherent data flow."
+   },
+   {
+    "site": 31,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "ld H,A / cp a,1 / jr nz skips the body and reaches ld A,H / pops / ret."
+   },
+   {
+    "site": 32,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code after 'lda xiy,FDF8EE / push XIY / jp (xix)' is the computed-call return point. Args are pushed, then the call goes to the link-XIZ routine sub_FD616A."
+   },
+   {
+    "site": 33,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The routine at FA098F (push XIX), referenced by pointers at FA1D28/FA1D2C, tests a flag and jrl's to its matching pop XIX / ret."
+   },
+   {
+    "site": 34,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Builds a 5-byte message at 0x716, sets BC=5, then calr Msg0716_Post_Trampoline."
+   },
+   {
+    "site": 35,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A handler at F8AFB4, referenced by the 6-byte group table at F8B9DA, turns 7-bit E into 14-bit DE and clamps it at 0x7F40. The jr c skips the clamp and goes to jp sub_F8A90B."
+   },
+   {
+    "site": 36,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A compare ladder on A. The target ld E,A / jp sub_F8A500 is the pass-through arm."
+   },
+   {
+    "site": 37,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "calr +1 calls sub_FE530B, the very next routine (link XIZ,-8), and returns to the ret in between. This is a legitimate idiom."
+   },
+   {
+    "site": 38,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The same pattern as site 6. F97451 is a standalone push-prologue routine after ret with 8 callers. The role 'Sub' is correct. 'sub_F97418_Sub3' is only a positional parent name."
+   },
+   {
+    "site": 39,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Pushes 4 words, calls Dev7E_WriteOneSector, then cleans up with lda xsp,(xsp+0x0A). Consistent."
+   },
+   {
+    "site": 40,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A flag-bit ladder on (0x21E7). The jr z skips 'ld h,0xFD / jr' and reaches the next step."
+   },
+   {
+    "site": 41,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "push XIX / pushw 5 / call Arr27A6_Get, which reads (XIZ+8) as a word index and (XIZ+0x0A) as a pointer. Matches."
+   },
+   {
+    "site": 42,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "cp A,0xFF / jr nz goes to FE0BE3 (calr / jr -64 back to the loop). This is a retry loop."
+   },
+   {
+    "site": 43,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A sequence of calr's. The target sub_FE2E96 (push XIX / lda xix,(0x21E8)) follows an unlk/ret."
+   },
+   {
+    "site": 44,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Pushes 2 bytes, then calr to the link XIZ routine sub_FE0970, which reads (XIZ+8). Same callee as site 27."
+   }
+  ],
+  "patterns": "SAMPLE RESULT (prom_a, 45 sites): every source is real code (45/45). 44/45 targets are clean instruction boundaries. Site 2 lands in undisassembled code framed as .byte. No data-as-code source was in the sample. The problems found are in NAMING, plus two accepted data-as-code sources that I found outside the sample.\n\n1. PARENT NAMING INHERITS DATA LABELS (symbolize_numeric_branches.py, lines 442-451). Parent = the nearest preceding label that does not start with .L. When that label names a table, the arm code after the table gets a table name. In prom_a.json labels_new, 11 of the 49 new labels are JumpTable_*: F9A414, F9ABEB, FAC38A, FB20C3, FB20CD, FB63A9, FC8E5E, FC8E6E (site 28), FD70F0, FD712A, FD7152. Others with the same problem: RecordTable_F8C727_Skip (F8C746), MidiIn_ControlRecordHandlers_Join/_Skip (FABFDC/FABFDD), Evt2030_ClassHandlers_Return (FAE800), Evt2030_Class20to3F_Return (FADCCA), Fdc_OperationJumpTable_Entry (FE6E80) and Data_FF17E2_Entry (FF2232). Fix: skip any candidate parent whose first emitting line is data (.byte/.short/.long/.fill). Otherwise fall back to sub_/L plus the target's own address. The positional '<prev>_Sub' / '_SubN' names for standalone routines after a ret (sub_F97533_Sub, sub_F97418_Sub3) also mislead mildly. A standalone routine should get sub_<own addr>.\n\n2. Data_FF17E2 IS MIS-BOUNDED (wsa1/prom_a/wsa1_prom_a.s:173586-173768). Its tail 0xFF21F6-0xFF2269 is four real subroutines (FF21F6, FF2204, FF2232, FF224D) with dozens of callers. The header line 'Nothing else in either image names any address inside it' is false. The tool labels FF2232 only because it happens to start a 16-byte .byte row. FF21F6 and FF2204 fall mid-row, so they are refused as mid-line-data. A boundary-data target with call sources should be reported as SPLIT+DISASSEMBLE rather than named Data_X_Entry.\n\n3. DATA-AS-CODE THAT THE GUARDS ACCEPTED (outside the sample):\n(a) wsa1_prom_a.s:172608: `jrl z, 0x40f1` at FF0BF0, the first 'instruction' after DisplayList_FF0BE1's last .byte row, with no label in between. The byte 0x76 at FF0BF0 is data: the op-02 display-list records point at it (pointer bytes at FF0BD9/FF0BE8). The real routine starts at FF0BF1 with f1 40 25 00 00 = ld (0x2540),0, the same opening as sub_FF0C12. The bogus jrl lands at FF4CE4, in the middle of a push sequence in LcdKeyRow4_DiskL0adFile, and the tool plans a new label there, LcdKeyRow4_DiskL0adFile_Skip. None of R1/R2/R3 fires: the block has 10 instructions, its other branches hit boundaries, and it holds only one nop. Guard: refuse numeric branches in the unlabelled code run that directly follows a data line inside the same label block. More generally, treat any block that switches from data to code with no label in between as suspect.\n(b) wsa1_prom_a.s:160090: `jr f, -6` at FE6E84 (sub_FE6E84; no absolute reference anywhere). Condition F never branches, yet the tool plans Fdc_OperationJumpTable_Entry at FE6E80, which is entry 10 of Fdc_OperationJumpTable. Guard: refuse cc=='f' sources and add `jrl? f,` to ABSURD. The current ABSURD regex only matches `jr cc, 0`.\n(c) For reference: the ASCII 'wsa' pseudo-branch `jrl c, 0x6173` at F95C7E (bytes 77 73 61) escaped R3 and was dropped only because its target fell mid-fill. R3 should also weigh branch operands that are printable ASCII, and the single `nop`/`normal` that follows a branch.\n\n4. Lower-risk shapes that are real code in this sample and should not be over-refused: unlabelled 'calr X / ret' thunk runs that are pointer-table arms (FE9B6C-FE9B8B, table at FE9A96), and unlabelled handlers after `jp sub_F8A500/504` in F8A4xx-F8AFxx (some reached through the 6-byte group table at F8B97A-F8B9F2, some with no absolute pointer at all, e.g. F8A64C)."
+ },
+ {
+  "image": "v9",
+  "verdicts": [
+   {
+    "site": 0,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The ROM at F6B880 decodes as a chain of calr/calr/calr/ret after a `bit 7,(0x3950)`/djnz loop, and the branch is aligned. The source text just before it misframes `bit 7,(0x3950); jr nz,+0x12` as `.byte 0xf1,0x50 / push xbc / dec 6,l / ccf`, so two real branches there are hidden, but this site is fine. The target F6B8E8 follows a ret and is a sibling subroutine (`ld WA,(0x3956)` ... calr ... ret). Sub is correct. The 'DataBlock' in the name comes from the parent label, not from the role."
+   },
+   {
+    "site": 1,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`jr T` at F0A96F comes after a loop and a call, both real code. The target F0A9D4 is `pop QIZ; lda XSP,XSP+0x0a; ret`, so Epilogue is correct."
+   },
+   {
+    "site": 2,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "This is a real counted loop: `inc 1,IZ; ld WA,IZ; cp WA,(XSP+6); jr C,back`. `.byte 0x9f,0x06,0xf0` is a complete `cp WA,(XSP+6)`. The target FEE133 (calr) is the loop head, so Loop is correct."
+   },
+   {
+    "site": 3,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The ROM shows `cp A,C; jr Z` inside a bit-blit loop, and the target FB0A35 is `inc 1,(XSP+0x18)`, the loop-increment join. Join is correct. The source around it is misframed, though: its `jr f,-124` and `jr f,104` lines are phantoms, not real branches."
+   },
+   {
+    "site": 4,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp XWA,8; jrl NZ` is part of a case chain. The target F90367 is the next compare, `ld XWA,(XSP+4); cp XWA,5`. Skip is correct."
+   },
+   {
+    "site": 5,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp WA,2; jr Z` jumps to the alternate `ld XWA,0x01440018 / ld XBC,0x01e40029` arm. This is coherent switch code, and Skip is correct."
+   },
+   {
+    "site": 6,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "`calr` in a long series of FDC result-byte dumps, all real code. The target F971E1 is a subroutine entry (`dec 2,XSP; ld (XSP),A; calr; ...; inc 2,XSP; ret`) with 12 or more calr callers. It gets 'Loop' only because some callers reach it by backward `jrl T` tail calls (F97439, F9746F, F97496, F9749F). The target is not a loop head, so FDC_ResultPhase_Read_Loop misleads. It should be Sub."
+   },
+   {
+    "site": 7,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp HL,0xffff; jrl Z` inside a real MIDI packet routine. The target FDA772 is `pop XIZ; lda XSP,+10; ret`, so Epilogue is correct."
+   },
+   {
+    "site": 8,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "This calr is real, surrounded by calls and a `cp L,0` test on the result. The source frames the target F06B72 as data (`.byte 0x88,0x06 / push xsp / nop / .byte 0x88 / reti`). The ROM there is real code: a predicate subroutine, `cp (XWA+6),0; jr Z; cp (XWA+7),7; ...; ld L,0; ret`. Entry fits, and this is genuine code-as-data evidence."
+   },
+   {
+    "site": 9,
+    "source_is": "DATA_AS_CODE",
+    "target_ok": "NO",
+    "label_misleading": true,
+    "reason": "This is a phantom branch caused by misframing. The ROM at F092B0 is `9f 1e 04` = `pushw (XSP+0x1e)`, followed by `1d 33 ee f0` = `call 0xf0ee33`. The source splits it as `.byte 0x9f` / `calr 7428` (bytes 1e 04 1d) / `ldw hl,0xf0ee`, so the calr is invented. It is also the only site in this sample that is not an instruction start in an independent unidasm decode. F0AFB8 is a mid-routine `call` that no real branch targets, so the label UpdSeSel_ExtendedOps_Data_Sub5 is spurious."
+   },
+   {
+    "site": 10,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "After a jump-table dispatch, a case arm does `and A,0xff; jrl Z` to the shared exit. The target FEAA15 is `inc 4,XSP; ret`, the function's exit. Join is acceptable."
+   },
+   {
+    "site": 11,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "There are four `ld XIY,tbl; ld C,(var); calr` calls to one helper. The target F6A748 comes after a ret and starts `xor WA,WA; ld XIX,XIY; ...; ret`. Sub is correct."
+   },
+   {
+    "site": 12,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp A,0; jrl Z` skips the table dispatch (`ld XHL,(XIX+HL); call T,XHL`). The target EFB270 is ret, so Return is correct."
+   },
+   {
+    "site": 13,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The call follows real argument setup. The target reuses the existing label GroupBoxProc, whose prologue is `lda XSP,XSP-40; push IZ`."
+   },
+   {
+    "site": 14,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The branch is aligned, and the ROM is `ld HL,(0x3976); ld (0x3978),HL; calr; ld WA,(XIZ+3)...`. Nearby source misdecodes `ld IY,(0x397a); ld XHL,0x69800` as `.byte 0xd1 / .asciz \"z9%C\"`, a false string. The target F6B57C (`xor XIZ,XIZ; ld XIZ,0x100; mul; add; ret`) is a small subroutine, so Sub is correct."
+   },
+   {
+    "site": 15,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`jrl T` ends a calr chain as a tail jump. The target FD824A (`bit 2,(0xbd1a); ret Z; push...`) is a subroutine-shaped block that follows two ret stubs. Join is acceptable."
+   },
+   {
+    "site": 16,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code is `calr; ret` stubs. The target FCCB1C is a bare `ret` stub that many calr sites call, and it already has the label MidiStream_ExtendedDispatch, which is reused. That name is odd for a ret, but it is pre-existing. The routine after the ret (`cp (0x9644),0x14`...) is misdecoded in the source as `.byte 0xc1 / ld xix,0x6e143f96 / reti`."
+   },
+   {
+    "site": 17,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`jr T` on the error path goes to F8A314, `pop IZ; lda XSP,+0x1c; ret`. It was named Join4 rather than Epilogue, apparently because the role logic does not count `popw` as a pop. The name is not misleading."
+   },
+   {
+    "site": 18,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`jrl T` after a `jr LE` back-edge leaves one loop variant. The target FAD52F is the common post-loop code (`lda XWA,XSP+0x22`...). Join is correct."
+   },
+   {
+    "site": 19,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code is coherent, with calls to VoiceSlot_* routines and `cp (0x0e4a),A; jrl UGT`, even though the parent label is named SysInit_BytecodeBlock. The target EFBCC6 (`ld A,1; call`) is the loop exit, so Skip is correct."
+   },
+   {
+    "site": 20,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The same helper is called repeatedly with parameters `ld (0x39ac),n; ld (0x39ad),m`. The target F1918B (`push IZ; ld IZ,0; res 0,(0x35b0); call`...) is a subroutine entry, so Sub is correct. The source misdecodes the `res 0,(0x35b0)` there."
+   },
+   {
+    "site": 21,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "This is in a real file-read sequence. The target reuses NoteEventBuffer_Store, whose prologue is `lda XSP,XSP-10`."
+   },
+   {
+    "site": 22,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A cp/jr NZ ladder maps A through 0x00, 0x40, 0x20, 0x60. The target F65445 is the next `cp A,0x60`, so Skip is correct."
+   },
+   {
+    "site": 23,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`calr; cp HL,0; jr Z` goes to the `ld WA,6; calr` arm, which is a coherent small routine. Skip is correct. The parent name GraphicsRender_ByteData labels code, but that name is inherited."
+   },
+   {
+    "site": 24,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The loop does `inc 1,E; jr T,back`. The target F59359 (`ld XIY,(0x32ce); cp E,(0x32a6); jr Z,exit`) is the loop head, so Loop is correct."
+   },
+   {
+    "site": 25,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp L,1; jr NZ` skips a block of SeMenu calls. The target F042FA is `ld WA,6; call; inc 0,XSP; ret`, the shared tail. Skip is correct."
+   },
+   {
+    "site": 26,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Range compares turn a value into an ASCII digit in L. `jr T` goes to F17D34, which is ret, so Return is correct."
+   },
+   {
+    "site": 27,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A calr sits in an event-code dispatch. The target F90935 comes after a ret and is a subroutine prologue (`dec 6,XSP; push XIZ; ld (XSP+4),C`), so Sub is correct."
+   },
+   {
+    "site": 28,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A calr chain ends with a `jrl T` tail jump. The target FD7A34 (`ld XWA,(0xbcac); ld BC,4; call; cp L,0; ret NZ`) follows a ret. Join is acceptable."
+   },
+   {
+    "site": 29,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The source is garbled (`.byte 0x86 / and (xbc),xhl / .byte 0xf1`), but the ROM is real, aligned code: `sub A,(XIZ); cp A,C; jr UGT,F06C08`. The name gets 'Loop' from the backward `jr C` at F06C3F, which is compiler tail-merging. There is no cycle: every path from F06C08 exits through `jr T,F06C33` and ret. The target is not a loop head."
+   },
+   {
+    "site": 30,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code compares a 3-byte signature ('H',0,'K' / 'G',0,'K' / 'L','K','E') with cp_erpb. On a match, the target F6D971 stores the canonical signature. Skip is correct."
+   },
+   {
+    "site": 31,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A range check `cp XWA,0; jr GE` precedes a jump-table dispatch. The target FEED91 is the table base, case 0 (`ld A,(XSP); exts; pushw 127`...). Skip is correct."
+   },
+   {
+    "site": 32,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "This is an absolute call in a real sequence (`ld XIZ,XHL; call; ld XWA,XIZ; ld BC,HL; call`). The target F5E7C9 (`push XIZ; call; and XHL,0xffff; pop XIZ; ret`) is a wrapper subroutine, so Sub is correct."
+   },
+   {
+    "site": 33,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The function prologue (`lda XSP,-10; push QIZ`) is followed by `cp QIZH,0; jrl Z` to F6620E, which is `pop QIZ; lda XSP,+10; ret`. Epilogue is correct."
+   },
+   {
+    "site": 34,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code checks an allocation: `or XIZ,XIZ; jr NZ` skips the `ld HL,3; jrl exit` error path. Skip is correct."
+   },
+   {
+    "site": 35,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A two-arm if/else sets BC/DE, then `jr T` joins at `call MainLswAdd`. Join is correct."
+   },
+   {
+    "site": 36,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The caller pushes two words, then calls. The target F8F913 comes after a ret and reads its stack argument (`ld XIX,(XSP+4)`), so it is a subroutine entry. Sub is correct."
+   },
+   {
+    "site": 37,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Switch-case arms push their arguments, then `jrl T` to a shared tail at F34FAB (`push XWA; ld XWA,(XSP+10)`...). Join is correct."
+   },
+   {
+    "site": 38,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A calr sits in an event dispatch. The target F908B0 is a subroutine prologue (`dec 6,XSP; ld (XSP),C; ld (XSP+2),XWA`), so Sub is correct."
+   },
+   {
+    "site": 39,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A counted loop saves registers, calls, restores, then does `add IX,28; dec 1,C; jr NZ,back`. The target is the loop head `push IX`, so Loop is correct."
+   },
+   {
+    "site": 40,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A range guard `cp A,31; jr UGT` jumps to FD0161, which is ret. Return is correct."
+   },
+   {
+    "site": 41,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The branch is aligned (the preceding `.byte 0xd1,0xd4 / ldw ix,63 / nop` is a misframed `cp (0x34d4),0`). `jr T` goes to F5EAB8, which is ret. Return is correct."
+   },
+   {
+    "site": 42,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A calr chain ends in ret (the earlier source lines misframe `ld (0x39bb),(0x3712)`, but this branch is aligned). The target F6A9E8 (`ld C,7; ld A,12; call; ret`) is a subroutine, so Sub is correct."
+   },
+   {
+    "site": 43,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code repeats `ld WA,(src); ld (0x3974),WA; ...; calr` to one helper. The target F6BB1B (`xor XWA,XWA; bit 7,(0x3950); jrl NZ`...) follows a ret, so Sub is correct. The source misdecodes the target's bit test."
+   },
+   {
+    "site": 44,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A chain of event-code compares (`cp XBC,0x1c000xx; jr Z`) all go to a shared handler at F82357 (`ld WA,DE; srl`...). Skip is correct."
+   }
+  ],
+  "patterns": "44 of the 45 sampled sites are real code whose branch is aligned. Site 9 is the one failure, and I cross-checked every site against an independent unidasm linear decode of original_ROMs/kn5000_v9_program.rom starting 60 bytes before each address. Only site 9's source address fails that check. All 45 targets land on instruction starts in that decode.\n\n1) Phantom branches from misframed multi-byte instructions (this is data-as-code in effect).\n- The converter emits the prefix byte of an instruction it could not express as `.byte`, then decodes the rest as instructions. The operand bytes (an address low byte of 0x1E or 0x60-0x7F) then read as calr/jr/jrl.\n  - Prefix 0xD1/0xC1 (abs16): `cp (abs16),imm`, `pushw (abs16)`, `ldw (abs),(abs)`.\n  - Prefix 0x9F/0x8F (XSP+d): `pushw (XSP+d)`.\n  - Opcode 0x27: `ld L,imm`.\n- Site 9 is an instance: semenu_routines.s:5580-5581 `.byte 0x9f` / `calr 7428` is really `pushw (XSP+0x1e)` + `call 0xf0ee33`, which yields the spurious UpdSeSel_ExtendedOps_Data_Sub5.\n- Other instances outside the sample:\n  - sequencer_ui.s:13877-8 `.byte 0xd1` / `calr 1062` (really `pushw (0x261e)`) creates Sqedt_ParamDispatch_Sub.\n  - sequencer_engine.s:14302, 30311 and 30336 are `.byte 0xd1` / `jr z, 38`.\n- Tree-wide estimate for v9: 75 of the 4,113 new labels (1.8%) have no source that is an instruction start in the independent decode. By file:\n  - sequencer/sequencer_engine.s 14, display/scoop_display.s 12\n  - sound_editor_ui.s 6, seq_step_routines.s 6, ui_window_procs.s 6\n  - ui_mode_handlers.s 5, dsp_config_sysex.s 5, accompaniment_engine.s 4\n  - scoop_editor_data.s, flash_floppy_handlers.s, drawbar_panel_ui.s and note_voice_mapping.s 2 each\n- The R3 absurd-marker guard misses these because the misdecodes use plausible opcodes (push_f, ex_ff, pushw iz, push xsp, ccf).\n- Recommended guard: decode the dump independently from 64 or more bytes back (or from the preceding label) and require the site to be an instruction start that decodes to the same branch. On this sample that rejects exactly site 9.\n- A cheaper proxy is to refuse a branch whose previous emitting line is a `.byte` run that is not a complete instruction on its own. Do not use 'previous line is a .byte ending in >=0x80': it would also reject real sites 2 (`.byte 0x9f,0x06,0xf0` is a complete cp) and 29.\n- Scale: 798 numeric branches in v9 directly follow a `.byte` line (594 of them where the last byte is >= 0x80). Top files: scoop_display.s 117, audio_control_engine.s 59, sequencer_engine.s 53, ui_window_procs.s 45, accompaniment_engine.s 39.\n\n2) Never-taken `jr f` / `jrl f` are phantom markers.\n- v9 has 200 numeric ones: extension_data.s 56, sound_editor_ui.s 33, ui_window_procs.s 28, accompaniment_engine.s 14, scoop_display.s 13.\n- At least 9 accepted new labels have one as their only source:\n  - ui_window_procs.s: ColorBlit2_LargeCodeBlock_Entry, _Loop3, _Loop4, _Loop12, _Loop13.\n  - scoop_display.s: VoiceState_DataBlock2_Loop9, Scoop_EventLoop_36Entry_Data_Return and _Entry.\n  - system_handlers.s: HDAE5000_Status_DataBlock_Loop2.\n- Add `jr f` / `jrl f` to ABSURD and never convert them. Site 3's context shows two of them.\n\n3) Role naming (Loop = 'any backward source') misleads in two shapes.\n- (a) A subroutine entry reached by backward `jrl T` tail calls. Site 6, FDC_ResultPhase_Read_Loop at F971E1, has 12 or more calr callers and a `dec 2,xsp` prologue.\n- (b) A compiler tail-merged block with no cycle. Site 29, SeMenu_BitShiftMask_End_Loop at F06C08: every path from it exits through ret.\n- Fixes: prefer Sub when any source is calr/call. Use Loop only when a backward conditional or djnz source lies in code reachable from the target.\n- Minor: `popw` is not treated as a pop for Epilogue (site 17's target `popw iz; lda xsp; ret` got Join4).\n\n4) Inherited parent names put Data/ByteData/DataBlock/Bytecode on verified real code.\n- Examples: AccPatch_VoiceAssignDataBlock_Sub9/_Sub/_Sub16, UpdSeSel_ExtendedOps_Data_Epilogue4, CalcAddrOffset_Data_Loop, GraphicsRender_ByteData_Skip, SysInit_BytecodeBlock_Skip12, FileIO_BytecodeData_Epilogue21, Scoop_SoundEditorData_Skip15, DrawDesignBox_ByteData_Join8.\n- This is not a tool bug, but the tool spreads the misnomer. The parent labels are what misclassify this code as data.\n\n5) Many accepted sites sit in misframed source even though the branch itself is aligned.\n- Site 0: `.byte 0xf1,0x50 / push xbc / dec 6,l / ccf` is really `bit 7,(0x3950); jr nz`, which hides two real branches.\n- Site 14: `.byte 0xd1 / .asciz \"z9%C\"` is really `ld IY,(0x397a); ld XHL,0x69800`.\n- Site 8's target: `.byte 0x88,0x06 / push xsp / nop` is really `cp (XWA+6),0`.\n- Site 16: the routine after the ret at FCCB1C.\n- Site 20: the target's `res 0,(0x35b0)`.\n- These spans are the source of pattern 1 and should be re-disassembled.\n\nArtefacts are in /tmp/claude-1000/-home-fsanches-compartilhado-kn5000-roms-disasm/53b889a2-7a91-44a2-993e-a73c39d83e0d/scratchpad/rev_v9_only/ (all in scratch):\n- dis_all.txt: per-site ROM decode.\n- v9_starts.txt: full-ROM linear-decode instruction starts.\n- phantom.json: the 75 labels with no aligned source.\n\nWarning: the shared file scratchpad/dis.sh was overwritten mid-run by another agent with a version that reads the v10 ROM. Do not trust outputs from it as v9."
+ },
+ {
+  "image": "v10",
+  "verdicts": [
+   {
+    "site": 0,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "ROM F4B16D is 66 4e (jr Z), following `cp (0x2632),WA` inside a SeqVoice_SeekAndScanTracks sequence. Target F4B1BD is `ldw (0x26de),(0x2632)` (d1 32 26 19 de 26). The converter wrote that one instruction as `.byte 0xd1 / ldw de,6438 / .byte 0xde / ...`, so the tool classed the target as boundary-data. Both sources (F4B16D, F4B18F) are forward `jr z`, so the target is a Skip. 'ByteBlock..._Entry' wrongly suggests an entry into a data block. The current tool revision still gives an Entry name (SeqPart_DualCopySetup_Entry3)."
+   },
+   {
+    "site": 1,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`pushw iz; ld iz,wa; ld wa,iz; calr` then a result test and an early exit. Target F89A7B is the existing ValidateFileRange, which starts right after a `ret`: a real routine entry."
+   },
+   {
+    "site": 2,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Case arms of the form `UI_PostDial*` then `ldw wa,N` end in `jrl T`. The target is the existing CstmCp_ReturnZero (`ld xhl,0; ret`) at F69224, which a jr T at F6921C also reaches."
+   },
+   {
+    "site": 3,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp a,13; jr z; cp a,12; jr nz` (checked against ROM) skips forward to FB413D `ld xwa,-1; ld xbc,0x01c20007; call DeleteEvent`. Skip is right. The parent name 'ByteData' is an older misnomer: this is code."
+   },
+   {
+    "site": 4,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "FD770D is a call chain (`calr` x4 then `jrl`). Target FD771C is itself a small helper (`calr FD7725; calr FD7759; jrl FD7A34`), also reached by a `jrl T` from FD7659, so Join is accurate. The parent name '_Data' is a misnomer; the current revision names it MidiPkt_ArpMultiPass_Join."
+   },
+   {
+    "site": 5,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Switch-case arms (`ld xwa,(xbc); ld xbc,0x01e8000N; jr`) all merge at F33AF5 `call ApFuncCall`. A genuine join."
+   },
+   {
+    "site": 6,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A `cp c,N; jr z` compare chain. Target F6D896 `cp a,2` begins the next test group, a sensible forward skip. The parent 'TableDataEntry' is a misnomer for code."
+   },
+   {
+    "site": 7,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`.byte 0xb0,0xbf` is `set 7,(xwa)` and decodes aligned. `jr T` at F0D981 goes to the shared tail F0D9F5 `call AddswbWr`, which a second arm also uses. Join is correct."
+   },
+   {
+    "site": 8,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A VGA register programming sequence (`ldw wa,0x3c4/0x3c5; ldw bc,N; calr`). The target is the existing _Write_VGA_Register, which starts after a `ret`."
+   },
+   {
+    "site": 9,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A repeated `ld (0x34ef),N; ld (0x34d6),N; ld wa,hl; calr` pattern. Target F19389 is `push iz` right after `pop xiz; ret`, so it is a subroutine and Sub is correct. The source is desynced just after the target: `.byte 0xf1,0xd1 / ldw ix,7608 / popw bc / ldw bc,0xc1f6` stands for `set 0,(0x34d1); call 0xf63149; ld a,(0x35b0)`."
+   },
+   {
+    "site": 10,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`ld_rrw bc,xix,hl; cp c,255; jr z` goes to FD009C `ret`, the end of MidiCC_VoiceParam_9; a jr T at FD0097 also lands there. Return is correct."
+   },
+   {
+    "site": 11,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A `cp a,N; jrl cc` dispatch on (0x8d38). Target F457CB is `pop iz; inc 4,xsp; ret`, an epilogue; the current revision names it _Epilogue. Join is not wrong."
+   },
+   {
+    "site": 12,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A window-proc body (InheritedProc, GetViewInstance, MainFuncCall, then `cpw (xiz+48),0; jr z`). Target F2BEF3 `ld xhl,0; jr` is also reached by a jr T at F2BEA8. A real join."
+   },
+   {
+    "site": 13,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp a,0; jr nz,7` goes to F09FF3 `ld wa,1; call ...; cp l,0; ret z`. Ordinary forward skip."
+   },
+   {
+    "site": 14,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`pop w; bit 7,w; jr nz` goes to F65C85 `cp a,0x1a` (ROM-aligned). Just above the target, the source hides `ld a,(0x342e); jr T` inside `.byte 0xc1 / pushw iz / .ascii \"4!h%\"`. The parent 'TimeSig_DisplayStrings' is a misnomer; this is code."
+   },
+   {
+    "site": 15,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A TempoRingBuf read loop (`call ...; cp wa,0xffff; jrl`). The target is `ret` at EFD344. The `sla xwa,207` a few lines up is the converter's rendering of `bit 7,(xde+hl)`, but the branch itself is aligned in ROM."
+   },
+   {
+    "site": 16,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`call VoiceSlot_ReadCurrentParams; cp a,0x84; jrl z` goes to EFBC8A `ld a,1; call; jp`. A real forward skip. 'BytecodeBlock' in the parent name is a misnomer for native code."
+   },
+   {
+    "site": 17,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`ld qiz,hl; cp qiz,0; jr lt` goes to FDABC4 `pop xiz; inc 2,xsp; ret`, an early-exit epilogue; the current revision names it _Epilogue."
+   },
+   {
+    "site": 18,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`call ...; cp w,0xff; jrl z` goes forward to EF83D1 `ld a,(0x0e42); ld (0x0e3f),a`, the exit after a loop (whose back-edge is at EF83CE). Skip is right. 'HandlerTable' in the parent name is a misnomer."
+   },
+   {
+    "site": 19,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Clamp logic on L (`dec 1,l; cp l,14; jr nz`) goes to F65A3F `cp l,255`. Correct forward skip."
+   },
+   {
+    "site": 20,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`call 16569399` = 0xFCD437, the existing SndParam_LookupReadOnly (`dec 6,xsp; push xiz`, following a `retd 2`). `.byte 0x8e,0x02,0x3f,0x00` nearby is `cp (xiz+2),0` and decodes aligned."
+   },
+   {
+    "site": 21,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "ROM EF940A `jrl NZ` after `cp (0x287a),0` goes to EF943C `ret`. Two lines up, the source spells that compare as `.byte 0xc1 / jrl gt,16168 / nop`. That is a phantom branch made from the bytes 7a 28 3f; R3 refused it."
+   },
+   {
+    "site": 22,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A handler list of the form `ldw wa,127/128; calr; jrl T`. Target FC96C2 `dec 2,xsp; ld (xsp),a` follows an unconditional `jrl`, so it is a subroutine entry and Sub is correct."
+   },
+   {
+    "site": 23,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Rectangle maths (div by 40, `sll 3`), then `calr`, then `inc 8,xsp; ret`. The target is the existing ColorBlit2 entry (`dec 2,xsp; push xiz`)."
+   },
+   {
+    "site": 24,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "ROM F460A7 is 73 d1 02 (jrl ULE), after `ld wa,iy; cp iy,1`, going to the existing AppEvent_ReturnZero. The branch is real but the context is badly desynced. `scc8 nz,b / .byte 0xdf / push sr` hides a real `jrl nz` (7e df 02). `decm8 6,(xiz) / zcf` hides a `jr nz` (6e 13). `.ascii \"h&Ph\"` hides a `jr T`."
+   },
+   {
+    "site": 25,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp a,c; jrl nc` goes to the existing CstmCp_ReturnZero2 (`ld xhl,0; ret`)."
+   },
+   {
+    "site": 26,
+    "source_is": "DATA_AS_CODE",
+    "target_ok": "NO",
+    "label_misleading": true,
+    "reason": "A phantom branch. ROM F183D6..F183E0 is `ld hl,(xsp); sll 8,hl; add hl,(xsp+2) [9f 02 83]; inc 6,xsp [ef 66]; ret [0e]`. The source renders those bytes as `.byte 0x9f / push sr / or (xhl),l / jr z,14`, so the 'jr z' is the bytes 66 0e: the tail of `inc 6,xsp` plus the `ret`. F183DF is not an instruction start. The target F183EF is the displacement byte inside `cp (xsp+2),0` (8f 02 3f 00 at F183EE); the source frames that byte as `push sr`. The byte gate cannot see this. The current revision still proposes it, as Flash_WriteBackSlotTable_Skip."
+   },
+   {
+    "site": 27,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A `cp xwa,const; jr z` chain whose arms all go to F78138 `ld xbc,NakaInst...`. Real forward skip."
+   },
+   {
+    "site": 28,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Struct setup (`ld (xbc+6..9),...; lda xbc,(xbc+10)`), then `calr`. Target F074BC `ld l,a; res 7,l` follows `inc 2,xsp; ret`, so it is a subroutine and Sub is correct."
+   },
+   {
+    "site": 29,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`.byte 0x8f,0x04 / push xsp / nop` is `cp (xsp+4),0` and decodes aligned. It is an if/else: `jr T` at F07146 goes past the else-arm to F0714E `ld c,(xsp+8)`. A real join."
+   },
+   {
+    "site": 30,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Case arms (`ld xwa,N; ldw bc,0xffff; ld de,1; jr`) merge at F75C74 `call MainLswAdd`. The parent name 'Data_InOutGridDispatch' wrongly suggests data."
+   },
+   {
+    "site": 31,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "A `cp a,0x80/0x84/0x88; jr` chain goes to F65591 `ret`. After the target, the byte table at F65592 (80 80 80 80 84..88) is data rendered as `.byte ... / add (xix),w / add (xwa-120),w`. That is genuine data-as-code, but it lies past the target."
+   },
+   {
+    "site": 32,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The FDC result-phase code (`ld a,(0x8a3x); extz wa; calr/jrl`) is real. Target F971E1 is a subroutine entry (`dec 2,xsp; ld (xsp),a; calr; ...; inc 2,xsp; ret`, directly after a `ret`). It is the target of 12 `calr` and 4 backward `jrl T` tail calls, and it is not a loop head. 'Loop' comes from the rule that any backward source means Loop. The current revision still gives a Loop name: FDC_Wait_Status_Timeout_Loop."
+   },
+   {
+    "site": 33,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`calr; cp l,0; jrl nz` goes to FEAA15 `inc 4,xsp; ret`, an epilogue; the current revision names it _Epilogue. Some source lines above render `bit 6,(xsp+3); jrl z` as `.byte 0xbf / pop sr / scc8 z,h / .byte 0x1f,...`, but the sampled branch is aligned."
+   },
+   {
+    "site": 34,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "FDC command switch arms (`ld (0x8a6c),N; ldw (0x8a22),0; ...; calr; jr`) merge at F96D61 `ld a,qizh; or a,0x0b; calr`. A real join. The parent 'WaitReady' is dubious; the current revision uses FDC_Write_Data_Join."
+   },
+   {
+    "site": 35,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "`calr` then `ret` is a real stub caller. Target FCCB1C is a single `ret` (a no-op callee used by 16 `calr`). The reused existing label MidiStream_ExtendedDispatch sits on that `ret`, while the real routine starts at FCCB1D (MidiStream_ExtendedDispatch_0x1, reached by absolute `call`). So `calr MidiStream_ExtendedDispatch` reads as a dispatch but does nothing. The region after it is desynced in source: `ld xix,0x6e143f96 / reti` hides `cp (0x9644),0x14; jr nz`."
+   },
+   {
+    "site": 36,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`.byte 0xc1 / ld d,138:opc / push xsp / nop` is `cp (0x8a24),0` and decodes aligned; `ld (0x8a28),a; calr` follows. Target F973E1 `ld a,(0x8a28); cp a,0x4f` comes after `inc 2,xsp; ret`, so Sub is correct."
+   },
+   {
+    "site": 37,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "Checked against ROM: FDE8CC `bit 2,(0xc07f)`, then FDE8D0 `jr z` to FDE916 `bit 6,(0xc07f)`. Both are real, but the source here is heavily desynced (`ld (0:8),104:io`, `.byte 0xf1 / jrl nc,-13632`). The `jrl nc,-13632` at FDE8CD, just before this branch, is a phantom made from the bytes of `bit 2,(0xc07f)`, and the tool ACCEPTED it (SwbtWr_DispatchLoop_Init_Loop at FDB390). For this site, 'Entry' misnames a forward-conditional skip target inside code; it is data-framed only because of the converter rendering."
+   },
+   {
+    "site": 38,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`ld l,13; jr 7` goes to F65A46 `ld a,l; ld xix,0xff92`, where the clamp arms merge (it also receives jr T from F65A29 and F65A32). Join is correct."
+   },
+   {
+    "site": 39,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`.byte 0x40 / .long NakaInst_OK` is the code `ld xwa,NakaInst_OK` written as data. The case arms `ld xwa,Str; jr` merge at FA0EAA `push xwa; lda xwa,(xsp+16); push; call Strcpy`. 'InlineData' in the parent name is a misnomer."
+   },
+   {
+    "site": 40,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The preceding `.byte` block plus `addr24 Sprintf_Locked` is code written as bytes (pushes, then `call Sprintf_Locked`), the reverse of data-as-code. `jrl` at F790A7 is real (78 2f 01) and goes to the existing PmemOutL_GridCheck_Return (`call SendEvent; ld xhl,0; pop xiz; ...; ret`), a return path."
+   },
+   {
+    "site": 41,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "An increment/decrement-with-clamp of (0x39a8). `cp a,0; jr z` goes to F65618 `ret`. Return is correct."
+   },
+   {
+    "site": 42,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`call 16115551` = 0xF5E75F `push xiz; ld xiy,xwa; call; pop xiz; ret`, which follows a `ret`: a subroutine, so Sub is correct. The source's `.byte 0xc3,0x07,0xf4,0xe0,0x3f,0x01` is `cp (xiy+wa),1` and decodes aligned."
+   },
+   {
+    "site": 43,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "Same VGA register sequence as site 8. The target is the existing _Write_VGA_Register."
+   },
+   {
+    "site": 44,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "`jp T,XIX+WA` at F349AB lands on case stubs F349B0 (`ld l,1`, falls through), F349BF (`ld l,2; jr -17`) and F349C3 (`ld l,3; jr -21`). The back-jumps go to the shared tail F349B2 `ld a,(0x02109c); cp a,l; scc z,hl; extz; jr T` to the exit. That is a switch join, not a cycle, so 'Loop' is wrong; it should be Join."
+   }
+  ],
+  "patterns": "About 1% of the sites the tool accepted in v10 are fake branches. The byte gate cannot catch them. I checked every accepted site against the ROM's own disassembly: 86 of 8,028 (1.07%) sit at an address where the ROM has no instruction start, or where the byte there is not that branch opcode. 13 of those 86 also point at a mid-instruction address; the other 73 hit a real instruction start by chance, so their labels look fine but come from a branch that does not exist. In this sample, site 26 is the one fake.\n\nMethod: I imported the current script's `analyse()` read-only and checked each accepted site against `original_ROMs/kn5000_v10_program.rom.unidasm`. A branch opcode means 0x60-6F for jr, 0x70-7F for jrl, 0x1E calr, 0x1D call, 0x1B jp.\n- Script: `scratchpad/audit_v10.py`; results: `scratchpad/v10_audit.json`.\n- The scratchpad is shared with sibling agents and is volatile. A sibling already overwrote my `sites.txt`, so commit the check if you adopt it.\n\n**1. Fake branches from converter desync (the main failure).** The ASL-to-LLVM conversion sometimes writes an instruction's first byte as a lone `.byte` and decodes the remaining operand bytes as separate instructions. Typical lone bytes are 0xf1/0xc1/0xd1/0xe1 (16-bit address forms) and 0x8f/0x9f/0xbf (stack-offset forms). When an operand byte falls in 0x60-7F or is 0x1E, a phantom `jr`/`jrl`/`calr` appears. Examples:\n- `bit 2,(0xc07f)` (f1 7f c0 ca) becomes `.byte 0xf1 / jrl nc,-13632`.\n- `cp (0x287a),0` becomes `.byte 0xc1 / jrl gt,16168 / nop`.\n- `add hl,(xsp+2); inc 6,xsp; ret` becomes `.byte 0x9f / push sr / or (xhl),l / jr z,14` (site 26).\n\nThe same desync also hides real branches, for example inside `.ascii \"h&Ph\"`, `scc8 nz,b` and `decm8 6,(xiz)/zcf`.\n\nThe existing R3 check misses these because the garbage looks plausible: a single `nop`, `push sr`, `or (xhl),l`, `ld (N:8),M:io`, `jr ov`, `xor (xsp),xhl`.\n\nFake sites per file (v10):\n\n| File | Fake sites |\n|---|---|\n| sequencer/sequencer_engine.s | 22 |\n| display/scoop_display.s | 18 |\n| ui/ui_window_procs.s | 7 |\n| ui/bitmap_out_routines.s | 5 |\n| audio/dsp_config_sysex.s | 5 |\n| audio/sound_editor_ui.s | 4 |\n| sequencer/accompaniment_engine.s | 4 |\n| audio/audio_control_engine.s | 4 |\n| audio/note_voice_mapping.s | 3 |\n| semenu_routines.s, drawbar_panel_ui.s, ui_mode_handlers.s | 2 each |\n| system_handlers.s, flash_floppy_handlers.s, sequencer_ui.s, smf_event_processor.s, accompseq_routines.s, seq_event_playback.s, file_demo_proc.s, midi_dispatch_handlers.s | 1 each |\n\nAccepted fakes include:\n- `dsp_config_sysex.s:6397` (FDE8CD, `SwbtWr_DispatchLoop_Init_Loop`) and `:6430`\n- `audio_control_engine.s:6447/6450/6461/6464` (`FileIO_BytecodeData_Loop5`-`8`)\n- `semenu_routines.s:3688` (`jr ov,-51`, becomes `SeMenu_ApplyPartEdit_Loop3`)\n- `seq_event_playback.s:3906`, where a fake `jrl` would be rewritten to the existing `VocalistPage_Handler`\n- `flash_floppy_handlers.s:3439` (site 26)\n\n**Recommended guard:** accept a site only if its address is an instruction start in an independent ROM disassembly and the byte there is the right branch opcode. For v10 that drops exactly the 86 fakes.\n- Also require the target to be an instruction start.\n- For images without a ready listing, run unidasm from the nearest label.\n- A source-only rule (\"a `.byte` line within the previous 3 code lines\") would catch 80 of the 86 but also reject 659 good sites.\n- Extra warning signs worth adding to R3: `jr/jrl` with ov/nov/pe/po/mi/pl conditions, and `:io` direct-page operands or `(xsp),xhl` forms right after a lone `.byte`.\n\n**2. The 'Entry' role is usually wrong.** Most of v10's 393 data-framed targets are real code that the converter split into `.byte` fragments. Example: `ldw (0x26de),(0x2632)` became `.byte 0xd1 / ldw de,6438 / .byte 0xde`. Mid-routine skip and join points therefore get names like `SeqPart_ByteBlockB0DE_Entry` (site 0) and `UIStateEvt_ChannelConfig_Data_Entry6` (site 37). Work the role out from the sources the same way as for code targets, and keep the data framing out of the name.\n\n**3. The 'Loop' role is wrong for tail-jumps and switch joins.** Any backward source currently makes a Loop. Two misfires in the sample:\n- Site 32: F971E1 is a subroutine entry reached by backward `jrl T` tail calls plus 12 `calr`.\n- Site 44: F349B2 is a switch-case shared tail reached by backward `jr T`.\n\nThe tool proposes 397 new Loop labels in v10. 7 of them are also call/calr targets, so they are certainly subroutine entries. 75 have only unconditional backward sources, which is an upper bound on how many are misnamed. Suggested fix: prefer Sub when any source is a call/calr and the target follows a `ret` or an unconditional jump. Use Loop only when a backward source is conditional, or when there is no unconditional exit between the target and that source.\n\n**4. Names inherited from wrong existing labels.** Names such as `_ByteBlock*`, `_Data`, `_DataBlock*`, `_Bytecode*`, `_InlineData`, `_JumpTable`, `_DisplayStrings`, `_TableDataEntry` and `Data_*` sit on genuine code. The tool copies them into new names (sites 0, 3, 4, 6, 7, 13, 14, 16, 18, 19, 27, 30, 37, 38, 39). This is not a role error, but it reinforces the old mistakes.\n\n**5. Reusing an existing label can mislead.** `MidiStream_ExtendedDispatch` (site 35) sits on a one-byte `ret` stub at FCCB1C. The real routine starts one byte later at FCCB1D, labelled `MidiStream_ExtendedDispatch_0x1`.\n\n**Two further notes:**\n- Sites 20, 21, 24, 29, 33 and 36 show that `.byte`-prefix renderings often line up again before the sampled branch. Only a check against the ROM separates those from site 26.\n- The proposed names in the sample come from an older revision of the tool. The current script names 20 of the 45 targets differently; for example site 0 is now `SeqPart_DualCopySetup_Entry3`, site 32 is `FDC_Wait_Status_Timeout_Loop` and site 26 is `Flash_WriteBackSlotTable_Skip`. The problems in items 1-3 are still present in the current names."
+ },
+ {
+  "image": "v7",
+  "verdicts": [
+   {
+    "site": 0,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "In the ROM, BmDrEdit_InitCommon at 0xF36F7D starts with push IZ. It compares (0x8c9a)/(0x8c9b), and the `jrl T,0xF37108` at 0xF36FB4 lands on `pop IZ; ret` at 0xF37108, which matches that push. The reused name is accurate."
+   },
+   {
+    "site": 1,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The function has a normal prologue (dec 4,xsp / push xiz) and then an event-code compare chain (0x1C00018, 0x1C00017, ...). jr z at 0xF8F32E lands on the case body `ld L,(0x8962)` at 0xF8F363, which follows a jrl. The Skip role is right. The parent SLSrcBankList_FuncBody is 536 lines earlier and belongs to a different function."
+   },
+   {
+    "site": 2,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The function allocates a frame with lda xsp,(xsp-10), and its `cp (xsp+6),0` is written as .byte 8f 06 3f 00. jr z at 0xF0C09D goes to `lda XSP,XSP+0x0a; ret` at 0xF0C107, which releases that same frame, so it is a true epilogue. The parent '..._Data' prefix is an inherited misnomer 707 lines away."
+   },
+   {
+    "site": 3,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "DisplayMode_Handler_3 sets (3567) and makes two calls. The call target 0xEFF015 is `call DisplayStr_ClearRegion; ld XIY,...`, a subroutine entry with an accurate existing label."
+   },
+   {
+    "site": 4,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source is a normal call sequence with pushw args and inc 8,xsp cleanup. 0xF08C6E follows a `ret` and opens a new frame with `lda XSP,XSP-28` plus arg spills, so it is a real subroutine entry and the Sub role is right. The parent SeMenu_ApplyPartEdit_Data2 (0xF07642) is about 5.6 KB and 2085 lines earlier, and 'Data2' is an inherited misnomer."
+   },
+   {
+    "site": 5,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The handler runs a compare chain on (0x8c9a). The .byte f2 8a 03 f2 de is `jp NZ,0xF2038A`, the same target, which confirms it. jrl T at 0xF202E3 lands on `ret` at 0xF2038A, so Return is right."
+   },
+   {
+    "site": 6,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "0xF6B57E is itself called by the calr at 0xF6B56E. Its `calr 0xF6B5C2` goes to `xor XWA,XWA; xor XHL,XHL; xor XDE,XDE; ld WA,(0x38d8)`, which follows a ret and is a subroutine entry. The 'VoiceAssignDataBlock' prefix is an inherited misnomer for code 507 lines away."
+   },
+   {
+    "site": 7,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source uses push-arg / calr / result-store triplets. calr -283 reaches SeqStep_FileSectorProcess at 0xF4F592, whose first instruction `ld XIX,(XSP+4)` reads the pushed argument. The ABI is consistent."
+   },
+   {
+    "site": 8,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source is an event-ID compare chain (0x1E0000C, ...). jr z lands on BoxStyle9_CalcWidth `ld XIZ,(XBC)`, a coherent case body."
+   },
+   {
+    "site": 9,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The source pushes a string pointer, calls 0xFF07C3, then computes 32-HL to pad left. 0xFF07C3 follows a ret and does push XIZ; push 0xffff; push 0; call 0xFF20F5, returning found-XIZ, i.e. it is strlen. The name 'Free_OrBits_Sub' ties it to 'Free_OrBits', a mislabeled mid-function point (the `sub (0x3d528),xwa` of a bump allocator at 0xFF07BD; Free_Block2 sits on a jr nc). The name actively misdescribes a string-length routine."
+   },
+   {
+    "site": 10,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code does a table lookup `ld BC,(XIX+HL)` and `cp C,0xff`, and jr z goes to `ret` at 0xFCF9D1. Return is right, and the ret is also the target of the earlier jr ugt."
+   },
+   {
+    "site": 11,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The ROM decodes cleanly: `cp XHL,-1; jr Z` and `cp A,(XSP); jr UGT` both reach `ld L,(XSP+2)` at 0xFC95AF, a join after two forward conditionals, so Skip is right. The nearby source text is a faux split (`.byte 0x8f/.byte 0x06/push xsp/.byte 0x1f` = cp (xsp+6),0x1f), but the instruction stream itself is real."
+   },
+   {
+    "site": 12,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The source sets up (0x2877)/(0x7ea6)/(0x287a) and then calls. 0xF4A570 follows `pop XIZ; inc 2,XSP; ret` and is a function entry (`push QIZ; ld A,(0x2879); res 0,A ...`), written in the source as `.byte 0xd7 / swi 2 / .byte 0x04`. The reused name SeqPart_ByteBlockA95A calls a subroutine a byte block. The name already exists and v9/v10 already `call SeqPart_ByteBlockA95A`, so reusing it is consistent; the name itself needs a rename across all three versions."
+   },
+   {
+    "site": 13,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The case body after a jp (xix+wa) dispatch loads args and calls. GetViewInstance (`ld XBC,XWA; srl; and 0xfff`) returns in XHL, and the caller stores XHL right after, which is consistent."
+   },
+   {
+    "site": 14,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source is a loop tail (`inc 1,C; cp C,(0x0ec1); jrl Z; inc 1,XIX; jp 0xEFD6B3`), and a second backward `jrl NZ,0xEFD6B3` exists at 0xEFD6C9. The target `push BC; push XIX; call` is a real loop head, so Loop is right. The lines just before the target (`ld (0:8),16:io; nop; ld xwa,...`) are a mis-disassembled 01/02/04..80 bitmask table, but the label goes after it. The 'DataBlock2' prefix is inherited from VoiceState_DataBlock2 (0xEFD150, code), 508 lines away."
+   },
+   {
+    "site": 15,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code sets up a rectangle and pushes a style byte, and the unconditional jr 7 goes to `call DrawDesignFrame`. The existing label is accurate."
+   },
+   {
+    "site": 16,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code keeps modulo-96 tick counters at (1045)/(1047). jr nz skips the counter reset and lands on `ld A,(0x0415)`, which is coherent. Skip is right."
+   },
+   {
+    "site": 17,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code makes paired font-metric calls (0xFB21FD, 0xFB220A) on the same table entry. GetCharDescent (`sll 4,XWA; add 0x945c00; ld HL,(XWA+4); ret`) matches its use as `sub iz,hl`."
+   },
+   {
+    "site": 18,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code is a register-save call sequence followed by a range-compare chain on A. jr C lands on `cp A,0` at 0xFD4D15, the next compare in the chain, which is coherent."
+   },
+   {
+    "site": 19,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The ROM at 0xF65849-0xF658AA is a coherent increment/decrement-with-clamp routine, and several jr's (ULE, T, Z, GE) converge on `ld (0x3453),A; ret` at 0xF658A6, so Join is right. However, the prefix TimeSig_DisplayStrings is a real ASCII table at 0xF65505 ('(1/2)+0  ', '(2/2)+0 ' ...), decoded as ldw/pushw/ei junk and about 0x3A0 bytes earlier. Naming this code as part of a string table misleads."
+   },
+   {
+    "site": 20,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The code compares A against a series of constants and maps each to a value (`cp A,0x0c; jr NZ,0xF65A55`). The target `cp A,0x1e` is the next case, so Skip is right. The name inherits the TimeSig_DisplayStrings string-table prefix (0xF65505), same as site 19."
+   },
+   {
+    "site": 21,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The caller passes XWA=0xEE35A0 and BC=5 and calls 0xFD621D. That address follows `pop QIZ; ret` and is a byte-append loop (ld DE,BC; dec BC; cp DE,0; ... ld E,(XWA+); ld (XIY),E; incw (XHL)), so it is valid code inside the .byte block. But 'MidiSeq_Slot7_WriteParams_Entry' reads as the entry of WriteParams. That parent is a v7 transplant label placed mid-instruction (0xFD61A5, inside `cp L,0x7e` at 0xFD61A4), and the target is a separate callee."
+   },
+   {
+    "site": 22,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The caller pushes two words and pops 4 bytes after the call. The callee `push XIZ; ld XIZ,XSP` reads (XIZ+8)/(XIZ+0x0a), which is consistent. The existing name is questionable (the routine is a table dispatcher) but carries no wrong role."
+   },
+   {
+    "site": 23,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "On an error return it loads a message pointer into XWA and tail-jumps with jrl to SendEvent_Entry (`ld XDE,XWA; ld XWA,-1; ld XBC,0x1C00025; jp SendEvent`), which is coherent."
+   },
+   {
+    "site": 24,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The ROM at 0xEFD35B-0xEFD388 is hand-style code, and several `jp 0xEFD388` / `jrl NZ` go to the shared `ret`. The sampled jp at 0xEFD384 targets the very next instruction. Return is right."
+   },
+   {
+    "site": 25,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code switches on E. For e==14 (0x0E), jrl Z lands on CtrlPanel_AA_PanelEvent_0E_Bit3 (`bit 3,A`), so the name and the case value agree."
+   },
+   {
+    "site": 26,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code pushes a mode pointer 0x00E4512A (as pushw 228/20778) and a path, calls, and then cleans up with add xsp,24. FileOpen reads (XSP+0x18)/(XSP+0x1c) after its frame setup, which matches."
+   },
+   {
+    "site": 27,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "MstStyle1Grid_CellSelect makes the call and then does `ld xwa,xhl`. GetFocusObject is `ld XHL,(0x02bc24); ret`, which is exactly that accessor."
+   },
+   {
+    "site": 28,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code copies (0x95a8)/(0x95aa) into (0x908b)/(0x908d) and calls. The target at 0xFC9988 is push XWA/XBC/XDE/..., a register-preserving wrapper entry."
+   },
+   {
+    "site": 29,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`or xhl,xhl; jr z` skips the send-event block and lands on IvPlayExit_PrepareInherited, which loads args for InheritedProc."
+   },
+   {
+    "site": 30,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code dispatches on event ID; 0x1C0000D goes to RVari_Paint, which reloads args from (xsp+552) and calls InheritedProc. That is coherent."
+   },
+   {
+    "site": 31,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code sets wa=1 and calls 0xF99118 (UI_PostDialEnable: `ld E,A; ld D,0; ... jp ApPostEvent`), so A is consumed as the event parameter."
+   },
+   {
+    "site": 32,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "This is a counted loop: `inc 1,IZ; cp IZ,461; jr C,-24` jumps back to SeqInit_ClearPartDataLoop at 0xF4312A. Loop is right."
+   },
+   {
+    "site": 33,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code loads the XWA/XBC=0x1C0000F/XDE args and calls SendEvent (lda XSP,-24; push XIZ; ...), which is coherent."
+   },
+   {
+    "site": 34,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The ROM at 0xF0FD88-0xF0FDB7 is a real sequence of calls followed by ret, and 0xF0FDEE (`ld (0x3efa8),0; ld XIY,0xF12317; ld XIX,0xF1231C; call 0xF0EBD6; ret`) is a subroutine that draws two strings. The reused name SeMenu_Utility_FormatNumber_Loop is wrong on role (it is only ever the target of calls, never a loop head) and on meaning (it formats no number)."
+   },
+   {
+    "site": 35,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The loop body at 0xF0F875-0xF0F8C9 is push C / table lookup / call / pop C. The unconditional jr T lands on `djnz C,0xF0F875`, the loop tail, so Join is right. The '..._Data' prefix is an inherited misnomer."
+   },
+   {
+    "site": 36,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "ApPlaySyori runs an event compare chain, and jrl z goes to NoteEditSy_ModeScroll (`bit 2,(0x0421)`). v10 already has `jrl z, NoteEditSy_ModeScroll` from ApPlaySyori, so reusing the name is consistent."
+   },
+   {
+    "site": 37,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The source pushes XDE/XHL/XIX/XIZ and calls. The following bytes 5e 5c 5b 5a are the matching pops, even though the label SeqVoice_ReadEntryFields_Data calls them data. The target 0xF5E56B follows a ret (`push XIZ; calr; call; pop XIZ; ret`), a sibling of the neighbouring wrappers."
+   },
+   {
+    "site": 38,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp (0x8c9b),102; jr z` skips the slot loop and lands on FmmSaveTtl_CommitSave (ld XWA,0x600026; ld XBC,0x1C00002; call ApPostEvent), which is coherent."
+   },
+   {
+    "site": 39,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "After the function prologue, a chain of `cp a,N; jr z` compares converges on a single `jr T,0xFC6127` trampoline at 0xFC60EA, with displacements shrinking by 5 each step, as expected. All sources are forward conditionals, so Skip is right."
+   },
+   {
+    "site": 40,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": true,
+    "reason": "The caller code is coherent. 0xFDD7D6 follows `or (0xc4fa),0x80; or (0xc4f8),4; calr; ret` and starts a real function (`bit 1,(0xfc67); jr Z; ld WA,(0xc4f8); bit 4,WA ...`). The parent ScreenGroup_WidgetLoop is a v7 transplant label placed at a fixed v10 offset: in v7 boot/screen_group_dispatch.s, ScreenGroup_ReInit (0xFDD777) and ScreenGroup_InitState sit mid-instruction. 'WidgetLoop_Sub' therefore names an unrelated routine after a misplaced label."
+   },
+   {
+    "site": 41,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "This is the standard post-event triple (XWA=0x600026, XBC=0x1C00002, XDE=0) followed by call ApPostEvent at 0xFA994B. The label is accurate."
+   },
+   {
+    "site": 42,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The code makes repeated (index in WA, dest in XBC) calls. SeMenu_LoadPartParam does extz WA; lda XDE,0x0660; add; ld A,(XWA); ld (XBC),A, which matches exactly."
+   },
+   {
+    "site": 43,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "The caller builds a struct at (xsp+4) with field +2 = 72. The callee `push XIZ; ld XIZ,XWA; lda XDE,XIZ+2; ld A,(XDE)` reads that field, which is consistent."
+   },
+   {
+    "site": 44,
+    "source_is": "REAL_CODE",
+    "target_ok": "YES",
+    "label_misleading": false,
+    "reason": "`cp (0x8c9a),108; jr nz` skips the SendEvent block and lands on SmfFN_UpdateFilenameField `cp (0x8c9a),107`, the next mode test. That is coherent."
+   }
+  ],
+  "patterns": "I checked each of the 45 sampled branches and targets against original_ROMs/kn5000_v7_program.rom, decoding at the ROM addresses myself.\n- All 45 sources are real code.\n- Every displacement lands on the claimed instruction boundary.\n- The 7 misleading-name verdicts (sites 9, 12, 19, 20, 21, 34, 40) come from naming, not from data-as-code.\n\nOutside the sample, I rebuilt the accepted set from scratchpad/symbr/v7.json: all numeric branches minus the R1/R2/R3/external/mid-line refusals. That found real data-as-code that the guard accepted.\n\n(1) CONFIRMED data-as-code accepted, in v7/maincpu/extensions/extension_data.s: 5 sites, all of them bad.\n- Lines 129 and 130: the \"min  \" chord string decoded as `jr pl,0x69` and `jr nz,32`.\n- Lines 163, 166 and 169: the pointer table `xx 02 ed 00` (0x00ED02xx entries) decoded as `jr nov,2`, `jr 2`, `jr le,2` between `.byte 0xed / nop`.\n- The tool would create ChordTypeStr_7sus4_Skip (0xED0212), Skip2 (0xED023A), Join (0xED023E), Skip3 (0xED0242) and Skip4 (0xED0259).\n- R3 missed these because the markers present are `push sr`, `.byte 0xed`, `aligned_string` and `ld w,N:opc`, none of which are on its marker list.\n- Suggested guards:\n  - refuse any site within a few lines of `aligned_string`/`.ascii`;\n  - refuse a jr cc whose opcode byte and displacement byte are both printable ASCII (0x60-0x6F plus 0x20-0x7E) when the surrounding ROM bytes are more than 80% printable and NUL-terminated;\n  - refuse when the \u00b116 bytes of ROM form at least 4 consecutive little-endian 32-bit values in 0xE00000-0xFFFFFF (a pointer table).\n- Refusing the whole of extension_data.s would cost nothing: 491 of its 496 sites are already refused.\n\n(2) Possible edge case to check: R3 appears not to see the first numeric branch of a file.\n- ui_widgets/naka_widget_desc_dispatch.s:6 and ui_widgets/naka_effects_eq_dispatch.s:7 are both `jr gt, 0x00`. They are the `6a 00` bytes of 4-byte record headers (\"XXj\\0\", \"^^j\\0\") in front of name strings.\n- They are absent from every refusal list, while the identical lines further down (lines 10, 14, ... and line 11) were refused.\n- display/scoop_editor_data.s:18 is also the first instruction of its file, but that one is real code.\n\n(3) Real code written in the source as faux instructions must not be refused just because marker words appear.\n- Site 11: `.byte 0x8f / .byte 0x06 / push xsp / .byte 0x1f` is `cp (xsp+6),0x1f`.\n- Site 12's target: `.byte 0xd7 / swi 2 / .byte 0x04` is `push qiz`.\n- sound_editor_ui.s:12809: `.byte 0x9f / ld (63:8),0:io / nop` is `cpw (xsp+8),0`.\n- Also check smf_event_processor.s around line 5580.\n- A marker-count heuristic scores these like data. Decoding the ROM bytes at the site is the reliable test.\n\n(4) Naming. This is the main source of the misleading names.\n- New labels take the name of the nearest preceding label in the same file, with no distance or boundary check.\n- Of the 3438 new v7 labels, 1181 inherit parent names that sound like data. The largest parents are:\n  - SeMenu_ApplyPartEdit_Data2 (147, up to about 5.6 KB away: 0xF07642 to 0xF08C6E);\n  - SeMenu_CopyWriteUpdate_Data (131);\n  - AudioCtrl_DataBlock (93);\n  - VoiceState_DataBlock2 (91);\n  - TimeSig_DisplayStrings (91);\n  - AccPatch_VoiceAssignDataBlock (90).\n- TimeSig_DisplayStrings (accompaniment_engine.s:21720, 0xF65505) is a genuine ASCII table ('(1/2)+0  ' ...), so its 91 children name code after a string table.\n- The parent search also crosses `.include` directives. Voice_FactoryPresetData (kn5000_v7_program.s:1520) is followed by 9 includes, and its 23 children at lines 1543-1826 are unrelated code.\n- The parent search also inherits v7 transplant labels that transplant_manifest.txt placed at fixed v10 offsets and that sit mid-instruction:\n  - MidiSeq_Slot7_WriteParams (0xFD61A5) and MidiSeq_Slot6_NextEntry (0xFD6195) in midi/midi_dispatch_handlers.s;\n  - ScreenGroup_ReInit, InitState and WidgetLoop in boot/screen_group_dispatch.s;\n  - Free_Block2 and Free_OrBits in audio/note_voice_mapping.s.\n- Suggested fixes:\n  - when a `ret`/`jp`/`jr T` lies between the parent and the target, and the target is only reached by calls, name it as a new function rather than Parent_SubN;\n  - do not derive names across a `.include`;\n  - do not derive from a parent whose address fails a ROM instruction-boundary check;\n  - do not derive from parents whose names say Str/Strings/Table/Data when the target is code.\n\n(5) Reused names can carry pre-existing role errors.\n- SeMenu_Utility_FormatNumber_Loop (sound_editor_ui.s:7346) is a call-only subroutine that draws two strings.\n- SeqPart_ByteBlockA95A (sequencer_engine.s:28635) is a function entry; v9 and v10 use the same name.\n- These need a rename across all versions rather than a tool change."
+ }
+]

@@ -1,0 +1,1442 @@
+IMAGE hdae5000  -- 45 sampled sites out of 875 accepted
+
+### SITE 0: hdae5000/hdae5000_ui_display.s:23036  src_addr=0x29A38E  target=0x29B7DC  proposed_label=HDAE5000_Multiply_Sub3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	add	(xde), xbc
+   	ld xbc, (xde)                           ; ld XBC,(XDE)
+   	lda	xbc, (xbc-10)
+   	call 0x29b7e8
+   	jr t, .LDSR_a392                       ; [68 12] jr T,0x29a392
+   .LDSR_a380:
+   	ld	xwa, xbc
+   	ld xde, (xsp + 0x56)                    ; ld XDE,(XSP+0x56)
+   	lda_dd8l	xbc, (8); lda XBC,0x08 (F0 8-bit direct)
+   	add	(xde), xbc
+   	ld xbc, (xde)                           ; ld XBC,(XDE)
+   	dec 0, xbc                              ; dec 0,XBC
+>> 	call 0x29b7dc
+   .LDSR_a392:
+   	pushm	(xsp+10)
+   	pushm	(xsp+10)
+   	pushm	(xsp+10)
+   	lda	xwa, (xsp+74)
+-- target context (hdae5000/hdae5000_utilities.s:1033; >> = target line):
+   	or xbc, xbc                             ; or XBC,XBC
+   	call_cc_ri xbc, 14		; call NZ,XBC
+   	ret
+   
+>> 	ld xix, (xbc)                           ; ld XIX,(XBC)
+   	ld xiy, (xbc + 0x04)                    ; ld XIY,(XBC+0x04)
+   	ld (xwa), xix                           ; ld (XWA),XIX
+   	ld (xwa + 0x04), xiy                    ; ld (XWA+0x04),XIY
+   	ret
+   
+
+### SITE 1: hdae5000/hdae5000_hd_driver.s:2000  src_addr=0x2844EE  target=0x28B37B  proposed_label=HDAE5000_Validate_String (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   .LHRW_44cb:
+   	ld	xhl, 0:i3
+   	jrl t, .LHRW_4594                      ; [78 c4 00] jrl T,0x284594
+   .LHRW_44d0:
+   	ld	xhl, 0x00000010
+   	jrl t, .LHRW_4594                      ; [78 bc 00] jrl T,0x284594
+   .LHRW_44d8:
+   	cp	xde, 0x0000000b
+   	jr z, .LHRW_4546                       ; [66 66] jr Z,0x284546
+   	cp	xde, 0x0000008a
+   	jrl nz, .LHRW_4592                     ; [7e a9 00] jrl NZ,0x284592
+   	lda xwa, (0x22abf2:24)
+>> 	calr	0x6e8a
+   	ld	xiz, xhl
+   	ld	xwa, xiz
+   	or xwa, xwa                             ; or XWA,XWA
+   	jrl z, .LHRW_4592                      ; [76 98 00] jrl Z,0x284592
+   	ld	xwa, xiz
+-- target context (hdae5000/hdae5000_ui_display.s:668; >> = target line):
+   HDAE5000_Validate_String:	; 0x28B37B (56 bytes)
+   	; Validate/navigate null-terminated record at (XWA)
+   	; Record format: [count][index][data...]
+   	; Returns XHL = pointer to data section, or 0 if record is empty
+>> 	cp (xwa), 0x00		; check if record is empty
+   	jr z, .LValidate_String__empty
+   	ld c, (xwa + 1)			; get current index
+   	extz bc				; zero-extend to 16-bit
+   	muls bc, 0x001B			; index * 27 (record stride)
+   	inc 4, bc			; skip 4-byte header
+
+### SITE 2: hdae5000/hdae5000_filesystem.s:2532  src_addr=0x288E2C  target=0x290148  proposed_label=HDAE5000_Cell_In_Bounds_Sub8 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call 0x290106
+   .LFWF_8e11:
+   	ld	wa, 1:i3
+   	ld	bc, 0:i3
+   	calr	0xf47d
+   	jrl t, .LFWF_8fe9                      ; [78 ce 01] jrl T,0x288fe9
+   .LFWF_8e1b:
+   	bit	0x07, iz
+   	jr z, .LFWF_8e32                       ; [66 12] jr Z,0x288e32
+   	ld	wa, (0x23A096:24)
+   	ld	bc, (0x23A098:24)
+   	ld	de, 0:i3
+>> 	call 0x290148
+   	jr t, .LFWF_8e42                       ; [68 10] jr T,0x288e42
+   .LFWF_8e32:
+   	ld	wa, (0x23A096:24)
+   	ld	bc, (0x23A098:24)
+   	ld	de, 1:i3
+-- target context (hdae5000/hdae5000_ui_display.s:8497; >> = target line):
+   	popw iz                                 ; pop IZ
+   	inc 4, xsp                              ; inc 4,XSP
+   	ret
+   
+>> 	dec	4, xsp
+   	pushw iz                                ; push IZ
+   	ld	(xsp+2), e
+   	ld	iz, bc
+   	ld (xsp + 0x04), wa                     ; ld (XSP+0x04),WA
+   	ld	wa, (xsp+4)
+
+### SITE 3: hdae5000/hdae5000_ui_display.s:9498  src_addr=0x290C26  target=0x29811C  proposed_label=HDAE5000_Display_Restore_Sub2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld wa, (xsp + 22)
+   	extz xwa
+   	ld xbc, 0x000004C0
+   	call HDAE5000_Multiply
+   	add xhl, 0x780
+   	add xhl, xiz
+   	lda xwa, (0x201662:24); 0x201662
+   	add xwa, xhl
+   	ld xbc, xwa
+   	ld xwa, (xsp + 8)
+   	ld xde, xbc
+   	ld xbc, 0x00000200
+>> 	call 0x29811C
+   	cp hl, 0xFFFF
+   	jr nz, .Lts90b_ok
+   	ldw hl, 0xFFFF
+   	jr .Lts90b_exit
+   .Lts90b_ok:
+-- target context (hdae5000/hdae5000_ui_display.s:20023; >> = target line):
+   	pop xbc                                 ; pop XBC
+   	pop xwa                                 ; pop XWA
+   	ret
+   
+>> 	push xiz
+   	ldw	hl, 0xffff
+   	cp	(0x200222:24), 0
+   	jp	nz, (0x29814E:24)
+   	ld	(0x229d40), xwa
+   	ld	(0x229d38), xbc
+
+### SITE 4: hdae5000/hd-ae5000_v2_06i.s:669  src_addr=0x28041F  target=0x2852E4  proposed_label=HDAE5000_HD_Data_Copy (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ldirw                                   ; ldirw
+   	ldw	(0x22AA4C:24), 511
+   	ld	wa, (0x23A092:24)
+   	ld	bc, (0x23A094:24)
+   	call HDAE5000_Table_Lookup
+   	ld	wa, hl
+   	cp	wa, 0xffff
+   	jr z, .LRF_0424                        ; [66 14] jr Z,0x280424
+   	lda xwa, (0x22aa4c:24)
+   	pushw 0x0002
+   	ld	bc, hl
+   	lda xde, (0x2e1c96:24)
+>> 	calr	0x4ec2
+   	jr t, .LRF_0436                        ; [68 12] jr T,0x280436
+   .LRF_0424:
+   	lda xwa, (0x22aa4c:24)
+   	pushw 0x0002
+   	lda xde, (0x2e1c96:24)
+-- target context (hdae5000/hdae5000_hd_driver.s:3325; >> = target line):
+   HDAE5000_HD_Data_Copy:	; 0x2852E4 (92 bytes)
+   	; Copy 12-byte record from (XDE) to (XWA) via ldirw, then set flag bytes
+   	; Input: XWA = dest, XDE = src, BC = flags (HL), E from stack = flag value
+   	; Returns with retd (deallocates 2 bytes from stack)
+>> 	ld xix, xde			; save source
+   	ld hl, bc			; HL = flags
+   	ld e, (xsp + 4)			; E = flag byte from stack
+   	ld xiy, xix			; XIY = source
+   	ld xix, xwa			; XIX = dest (for ldirw)
+   	ld bc, 6:i3			; count = 6 words (12 bytes)
+
+### SITE 5: hdae5000/hdae5000_utilities.s:1120  src_addr=0x29B892  target=0x29B8C5  proposed_label=HDAE5000_Divide_Signed (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cpl	qwa
+   	cpl	wa
+   	inc 1, xwa                              ; inc 1,XWA
+   .LMUL_b881:
+   	bit	0x0f, qbc
+   	jr z, .LMUL_b891                       ; [66 0a] jr Z,0x29b891
+   	or	e, 0x02
+   	cpl	qbc
+   	cpl	bc
+   	inc 1, xbc                              ; inc 1,XBC
+   .LMUL_b891:
+   	pushw de                                ; push DE
+>> 	calr	0x0030
+   	popw wa                                 ; pop WA
+   	cp	w, 1:i3
+   	jr z, .LMUL_b8a3                       ; [66 09] jr Z,0x29b8a3
+   	ld	xhl, xde
+   	bit	0x00, a
+-- target context (hdae5000/hdae5000_utilities.s:1160; >> = target line):
+   HDAE5000_Divide_Signed:	; 0x29B8C5
+   	; Signed 32÷32 divide (used by decimal string conversion)
+   ; LDIV: 0x29B8C5 (1819 bytes)
+   
+>> 	cp	xbc, 0x00000001
+   	jr z, .LDIV_b8fe                       ; [66 31] jr Z,0x29b8fe
+   	jr c, .LDIV_b903                       ; [67 34] jr C,0x29b903
+   	cp	xwa, xbc
+   	jr ule, .LDIV_b90a                     ; [63 37] jr ULE,0x29b90a
+   	cp	qbc, 0
+
+### SITE 6: hdae5000/hdae5000_hd_driver.s:1461  src_addr=0x283E12  target=0x2852E4  proposed_label=HDAE5000_HD_Data_Copy (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xwa, (0x23a1a2)
+   	ld	xwa, (xwa + 0x0e0a)
+   	ld	xhl, (xwa + 0x0124)
+   	ld	xwa, 0x007f0103
+   	ld	xbc, 0x01ea0002
+   	ld	xde, 0:i3
+   	call	(xhl)
+   	jrl t, .LHRW_3f7b                      ; [78 79 01] jrl T,0x283f7b
+   	lda xwa, (0x22aa4c:24)
+   	pushw 0x0002
+   	lda xde, (0x2e1c8a:24)
+   	ldw	bc, 0x003f
+>> 	calr	0x14cf
+   	ld	(0x23a094), iz
+   	ld	wa, (0x23A092:24)
+   	ld	bc, (0x23A094:24)
+   	call HDAE5000_Calculate_Row_Address
+   	ld	xde, xhl
+-- target context (hdae5000/hdae5000_hd_driver.s:3325; >> = target line):
+   HDAE5000_HD_Data_Copy:	; 0x2852E4 (92 bytes)
+   	; Copy 12-byte record from (XDE) to (XWA) via ldirw, then set flag bytes
+   	; Input: XWA = dest, XDE = src, BC = flags (HL), E from stack = flag value
+   	; Returns with retd (deallocates 2 bytes from stack)
+>> 	ld xix, xde			; save source
+   	ld hl, bc			; HL = flags
+   	ld e, (xsp + 4)			; E = flag byte from stack
+   	ld xiy, xix			; XIY = source
+   	ld xix, xwa			; XIX = dest (for ldirw)
+   	ld bc, 6:i3			; count = 6 words (12 bytes)
+
+### SITE 7: hdae5000/hdae5000_filesystem.s:2854  src_addr=0x28925C  target=0x28370E  proposed_label=HDAE5000_HD_Format_Params (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp	xhl, 0x00000007
+   	jr z, .LFWF_9298                       ; [66 65] jr Z,0x289298
+   	cp	xhl, 0x00000006
+   	jr z, .LFWF_9286                       ; [66 4b] jr Z,0x289286
+   	cp	xhl, 0x00000005
+   	jr z, .LFWF_9274                       ; [66 31] jr Z,0x289274
+   	cp	xhl, 0x00000001
+   	jr z, .LFWF_9262                       ; [66 17] jr Z,0x289262
+   	or xhl, xhl                             ; or XHL,XHL
+   	jrl nz, .LFWF_935a                     ; [7e 0a 01] jrl NZ,0x28935a
+   	ldw	(0x23A08E:24), 0
+   	ld	xwa, 0x007f0151
+>> 	calr	0xa4af
+   	jrl t, .LFWF_935a                      ; [78 f8 00] jrl T,0x28935a
+   .LFWF_9262:
+   	ldw	(0x23A08E:24), 24
+   	ld	xwa, 0x007f0151
+   	calr	0xa49d
+-- target context (hdae5000/hdae5000_hd_driver.s:787; >> = target line):
+   	; Args: XWA = context ptr (stored at XSP+0x18)
+   	; Uses table at 0x23a08e for base offset
+   
+   	; --- Prologue ---
+>> 	lda	xsp, (xsp-26)
+   	pushw iz                                ; push iz (compact 1-byte)
+   	ld (xsp + 0x18), xwa		; save context ptr
+   
+   	; --- Format 0x01F9 entries into buffer ---
+   	pushw 0x01f9
+
+### SITE 8: hdae5000/hdae5000_ui_display.s:15079  src_addr=0x294C86  target=0x294414  proposed_label=HDAE5000_Display_Sub_294414 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jrl	t, 0xf7aa
+   	pushw iz                                ; push IZ
+   	ld	iz, 0:i3
+   	ld	wa, 0:i3
+   	call HDAE5000_Display_Init
+   	cp	hl, 0:i3
+   	jr z, .LDS_4c79                        ; [66 02] jr Z,0x294c79
+   	ld	iz, 1:i3
+   .LDS_4c79:
+   	lda xwa, (0x2f9270:24)
+   	calr	0xf793
+   	lda xwa, (0x2f9284:24)
+>> 	calr	0xf78b
+   	ld	hl, iz
+   	popw iz                                 ; pop IZ
+   	ret
+   
+   	ld	xwa, (0x23a1a2)
+-- target context (hdae5000/hdae5000_ui_display.s:14377; >> = target line):
+   HDAE5000_Display_Sub_294414:	; 0x294414 (3061 bytes)
+   	; Large display management routine
+   ; LDS: 0x294414 (3061 bytes)
+   
+>> 	ret
+   
+   	ret
+   
+   	lda	xsp, (xsp-32)
+   	lda xwa, (0x2f8f5e:24)
+
+### SITE 9: hdae5000/hdae5000_hd_driver.s:1714  src_addr=0x28416B  target=0x28B22B  proposed_label=HDAE5000_Wait_Callback_Loop (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp	xhl, 0x00000001
+   	jr z, .LHRW_414e                       ; [66 05] jr Z,0x28414e
+   	or xhl, xhl                             ; or XHL,XHL
+   	jrl nz, .LHRW_41e1                     ; [7e 93 00] jrl NZ,0x2841e1
+   .LHRW_414e:
+   	ld	xwa, (0x23a1a2)
+   	ld	xwa, (xwa + 0x0e0a)
+   	ld_sril	xhl, (xwa + 0x0100)
+   	ld	xwa, 0x007f0217
+   	ld	xbc, 0x01c00001
+   	ld	xde, 3:i3
+   	call	(xhl)
+>> 	calr	0x70bd
+   	pushw 0x0001
+   	pushw 0x0000
+   	ld	wa, (0x23A092:24)
+   	ld	bc, (0x23A094:24)
+   	ld	de, (0x22ABE6:24)
+-- target context (hdae5000/hdae5000_ui_display.s:542; >> = target line):
+   HDAE5000_Wait_Callback_Loop:	; 0x28B22B (45 bytes)
+   	; Poll workspace callback until HL returns 0
+   	; Uses workspace ptr at (0x23A1A2) → callback table at +0x0E88
+   	; Calls callback at +0x00B8 (type 3), then polls at +0x00D0 (type 1)
+>> 	jr t, .LWait_Callback__poll
+   .LWait_Callback__invoke:
+   	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2) — workspace ptr
+   	ld xwa, (xwa + 0x0e88)             ; ld XWA, (XWA + 0x0E88) — callback table
+   	ld_sril xhl, (xwa + 0x00b8)             ; ld XHL, (XWA + 0x00B8) — callback fn
+   	ld wa, 3:i3			; callback type = 3
+
+### SITE 10: hdae5000/hdae5000_ui_display.s:21791  src_addr=0x2996AE  target=0x299699  proposed_label=HDAE5000_Display_String_Render_Loop44 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xbc, 0x00000090
+   	call HDAE5000_HD_Init_Variables
+   	add	xix, xwa
+   	ld	xbc, 0:i3
+   	lda xiy, (0x200870:24)
+   	cp	xbc, 0x00000010
+   	jp	z, (0x2996B2:24)
+   	ld	a, (xix)
+   	ld	(xiy), a
+   	inc 1, xbc                              ; inc 1,XBC
+   	inc 1, xix                              ; inc 1,XIX
+   	inc 1, xiy                              ; inc 1,XIY
+>> 	jp 0x299699                             ; jp 0x299699
+   	pop xwa                                 ; pop XWA
+   	pop xbc                                 ; pop XBC
+   	pop xiy                                 ; pop XIY
+   	pop xix                                 ; pop XIX
+   	ret
+-- target context (hdae5000/hdae5000_ui_display.s:21784; >> = target line):
+   	call HDAE5000_HD_Init_Variables
+   	add	xix, xwa
+   	ld	xbc, 0:i3
+   	lda xiy, (0x200870:24)
+>> 	cp	xbc, 0x00000010
+   	jp	z, (0x2996B2:24)
+   	ld	a, (xix)
+   	ld	(xiy), a
+   	inc 1, xbc                              ; inc 1,XBC
+   	inc 1, xix                              ; inc 1,XIX
+
+### SITE 11: hdae5000/hdae5000_ui_display.s:20416  src_addr=0x2986A9  target=0x29769B  proposed_label=HDAE5000_RAM_Test_Sub9 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jp 0x29888a                             ; jp 0x29888a
+   	lda xix, (0x200228:24)
+   	call 0x298896
+   	ld	xwa, (0x229c68)
+   	ld	(0x229c8c), xwa
+   	xor	xwa, xwa
+   	ld	(0x229c90), xwa
+   	ld	xwa, (0x229c90)
+   	cp	xwa, 0x00000f42
+   	jp	z, (0x2986E6:24)
+   	ld	xhl, (0x229c8c)
+   	lda xix, (0x200228:24)
+>> 	call 0x29769b
+   	cp	(0x200222:24), 0
+   	jp	z, (0x2986C2:24)
+   	ld	(0x200222:24), 2
+   	jp 0x29888a                             ; jp 0x29888a
+   	ld	xwa, (0x229c8c)
+-- target context (hdae5000/hdae5000_ui_display.s:19125; >> = target line):
+   	inc 2, xiy                              ; inc 2,XIY
+   	jp 0x297680                             ; jp 0x297680
+   	ret
+   
+>> 	ld	(0x200204), xhl
+   	ld	(0x200208), xix
+   	ld	(0x200222:24), 0
+   	ld	a, (0x13001E:24)
+   	and	a, 0xc0
+   	cp	a, 0x40
+
+### SITE 12: hdae5000/hdae5000_ui_display.s:17533  src_addr=0x296618  target=0x296628  proposed_label=.Lwmhd_do_write (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	and w, a			; W = cmd[1] AND head_mask
+   	ld (0x2390e4:24), w; [0x2390E4] = masked head
+   	nop
+   	ld (xix + 1), w			; update cmd[1] with masked value
+   	nop
+   	call HDAE5000_PPORT_Sum_Buffer
+   	cp (0x2390d4:24), 0x01; [0x2390D4] == 1? (status check)
+   	jp z, (2708340:24)		; jp Z → exit to PPORT finish (0x295374)
+   	nop
+   	cp (0x2390e2:24), 0x00; masked sector == 0?
+   	jp z, (2713116:24)		; jp Z → check head (0x29661C)
+   	nop
+>> 	jp 2713128			; jp → do write (0x296628)
+   .Lwmhd_check_head:			; 0x29661C
+   	cp (0x2390e4:24), 0x00; masked head == 0?
+   	jp z, (2713212:24)		; jp Z → done (0x29667C)
+   	nop
+   .Lwmhd_do_write:			; 0x296628
+-- target context (hdae5000/hdae5000_ui_display.s:17539; >> = target line):
+   	cp (0x2390e4:24), 0x00; masked head == 0?
+   	jp z, (2713212:24)		; jp Z → done (0x29667C)
+   	nop
+   .Lwmhd_do_write:			; 0x296628
+>> 	call HDAE5000_PPORT_Ready_Check
+   	ld xix, (0x239100:24); XIX = [0x239100] (data source ptr)
+   	nop
+   	ld a, (0x2390e2:24); A = masked sector
+   	nop
+   	ld (xix), a			; store to data[0]
+
+### SITE 13: hdae5000/hdae5000_ui_display.s:19183  src_addr=0x297776  target=0x297766  proposed_label=HDAE5000_RAM_Test_Loop13 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp	bc, 0x0200
+   	jp	nc, (0x297766:24)
+   	ld	wa, (xix)
+   	ld	(0x130010), wa
+   	inc 2, xix                              ; inc 2,XIX
+   	inc 2, xiy                              ; inc 2,XIY
+   	inc	2, bc
+   	jp 0x29774c                             ; jp 0x29774c
+   	ld	a, (0x13001E:24)
+   	and	a, 0xc0
+   	cp	a, 0x40
+   	jp	z, (0x29777A:24)
+>> 	jp 0x297766                             ; jp 0x297766
+   	ld	a, (0x13001E:24)
+   	and	a, 0x01
+   	ld	(0x200222:24), a
+   	ret
+   
+-- target context (hdae5000/hdae5000_ui_display.s:19179; >> = target line):
+   	inc 2, xix                              ; inc 2,XIX
+   	inc 2, xiy                              ; inc 2,XIY
+   	inc	2, bc
+   	jp 0x29774c                             ; jp 0x29774c
+>> 	ld	a, (0x13001E:24)
+   	and	a, 0xc0
+   	cp	a, 0x40
+   	jp	z, (0x29777A:24)
+   	jp 0x297766                             ; jp 0x297766
+   	ld	a, (0x13001E:24)
+
+### SITE 14: hdae5000/hdae5000_ui_display.s:11059  src_addr=0x291DF9  target=0x291C0D  proposed_label=HDAE5000_Table_Complex_Init (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xbc, (0x23a1a2)
+   	ld	xbc, (xbc + 0x0e88)
+   	ld_sril	xhl, (xbc + 0x00a8)
+   	ld	xbc, 0x00000200
+   	call	(xhl)
+   	ld	xwa, (0x23a1a2)
+   	ld	xwa, (xwa + 0x0e88)
+   	ld_sril	xhl, (xwa + 0x00ac)
+   	call	(xhl)
+   	lda xwa, (0x230f1c:24)
+   	ld	xbc, xwa
+   	ld	wa, 1:i3
+>> 	calr	0xfe11
+   	cp	hl, 0xffff
+   	jr nz, .LTCI_1e08                      ; [6e 06] jr NZ,0x291e08
+   	ldw	hl, 0xffff
+   	jrl t, .LTCI_214a                      ; [78 42 03] jrl T,0x29214a
+   .LTCI_1e08:
+-- target context (hdae5000/hdae5000_ui_display.s:10901; >> = target line):
+   HDAE5000_Table_Complex_Init:	; 0x291C0D (2171 bytes)
+   	; Complex table initialization (large stack frame)
+   ; LTCI: 0x291C0D (2171 bytes)
+   
+>> 	ld	de, wa
+   	extz xde                                ; extz XDE
+   	sll	xde, 0x03
+   	lda xhl, (0x2f8e26:24)
+   	add	xhl, xde
+   	ld	de, (xhl)
+
+### SITE 15: hdae5000/hdae5000_ui_display.s:20302  src_addr=0x29853C  target=0x298478  proposed_label=HDAE5000_Display_Restore_Loop7 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jp	z, (0x298540:24)
+   	ld	xwa, (0x229d38)
+   	ld	xbc, 0x00000200
+   	sub	xwa, xbc
+   	ld	(0x229d38), xwa
+   	ld	xwa, (0x229d34)
+   	inc 1, xwa                              ; inc 1,XWA
+   	ld	(0x229d34), xwa
+   	ld	xwa, (0x229d40)
+   	ld	xbc, 0x00000200
+   	add	xwa, xbc
+   	ld	(0x229d40), xwa
+>> 	jp 0x298478                             ; jp 0x298478
+   	ret
+   
+   	ld	xwa, (0x229d30)
+   	dec	1, xwa
+   	ld	xbc, 0x00000080
+-- target context (hdae5000/hdae5000_ui_display.s:20258; >> = target line):
+   	ld	xwa, 0:i3
+   	ld	(0x229d34), xwa
+   	ld	(0x229DBF:24), 0
+   	ld	(0x229DBE:24), 0
+>> 	ld	xwa, (0x229d34)
+   	cp	xwa, (0x229c5c)
+   	jp	nz, (0x298492:24)
+   	ld	xwa, 0:i3
+   	ld	(0x229d34), xwa
+   	jp 0x298540                             ; jp 0x298540
+
+### SITE 16: hdae5000/hdae5000_hd_driver.s:4938  src_addr=0x2863D9  target=0x29B815  proposed_label=HDAE5000_Multiply_Sub5 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push xwa
+   	lda xwa, (0x22b3a8:24)
+   	push xwa
+   	call HDAE5000_MemCopy
+   	pushw 0x0010
+   	pushw 0x0000
+   	lda xwa, (xsp + 0x26)
+   	push xwa
+   	call HDAE5000_MemFill
+   	lda xsp, (xsp + 0x12)
+   	lda xbc, (xsp + 0x2c)
+   	lda xwa, (xsp + 0x0c)
+>> 	call 0x29b815
+   	lda xbc, (xsp + 0x0c)
+   	lda xde, (0x2e2cd4:24)
+   	lda xwa, (xsp + 0x0c)
+   	call 0x29b840
+   	lda xbc, (xsp + 0x0c)
+-- target context (hdae5000/hdae5000_utilities.s:1062; >> = target line):
+   	lda	xsp, (xsp+8)
+   	pop xiz                                 ; pop XIZ
+   	ret
+   
+>> 	push xiz
+   	lda	xsp, (xsp-8)
+   	ld	xiz, xwa
+   	ld	xwa, xsp
+   	ld xbc, (xbc)                           ; ld XBC,(XBC)
+   	call 0x29b9c5
+
+### SITE 17: hdae5000/hdae5000_hd_driver.s:4942  src_addr=0x2863E8  target=0x29B840  proposed_label=HDAE5000_Multiply_Sub6 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pushw 0x0010
+   	pushw 0x0000
+   	lda xwa, (xsp + 0x26)
+   	push xwa
+   	call HDAE5000_MemFill
+   	lda xsp, (xsp + 0x12)
+   	lda xbc, (xsp + 0x2c)
+   	lda xwa, (xsp + 0x0c)
+   	call 0x29b815
+   	lda xbc, (xsp + 0x0c)
+   	lda xde, (0x2e2cd4:24)
+   	lda xwa, (xsp + 0x0c)
+>> 	call 0x29b840
+   	lda xbc, (xsp + 0x0c)
+   	lda xwa, (xsp + 0x10)
+   	call 0x29ba20
+   	lda xiy, (xsp + 0x10)
+   	ld xix, (xiy + 0x04)
+-- target context (hdae5000/hdae5000_utilities.s:1083; >> = target line):
+   
+   	ld	(xwa+2), 0x08
+   	ret
+   
+>> 	push xiz
+   	lda	xsp, (xsp-20)
+   	ld	xiz, xde
+   	ld (xsp + 0x10), xwa                    ; ld (XSP+0x10),XWA
+   	ld	xwa, xsp
+   	call 0x29b744
+
+### SITE 18: hdae5000/hdae5000_hd_driver.s:3676  src_addr=0x285713  target=0x2852E4  proposed_label=HDAE5000_HD_Data_Copy (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	de, (0x22AA4C:24)
+   	calr	0x59f7
+   .LHCM_56fa:
+   	ld	wa, 0:i3
+   	ld	bc, 0:i3
+   	calr	0xe467
+   	jr t, .LHCM_5778                       ; [68 75] jr T,0x285778
+   .LHCM_5703:
+   	lda xwa, (0x22aa4c:24)
+   	pushw 0x0002
+   	lda xde, (0x2e1c8a:24)
+   	ldw	bc, 0x003f
+>> 	calr	0xfbce
+   	calr	0xfd03
+   	jr t, .LHCM_5778                       ; [68 5d] jr T,0x285778
+   .LHCM_571b:
+   	lda xwa, (0x22aa4c:24)
+   	pushw 0x0002
+-- target context (hdae5000/hdae5000_hd_driver.s:3325; >> = target line):
+   HDAE5000_HD_Data_Copy:	; 0x2852E4 (92 bytes)
+   	; Copy 12-byte record from (XDE) to (XWA) via ldirw, then set flag bytes
+   	; Input: XWA = dest, XDE = src, BC = flags (HL), E from stack = flag value
+   	; Returns with retd (deallocates 2 bytes from stack)
+>> 	ld xix, xde			; save source
+   	ld hl, bc			; HL = flags
+   	ld e, (xsp + 4)			; E = flag byte from stack
+   	ld xiy, xix			; XIY = source
+   	ld xix, xwa			; XIX = dest (for ldirw)
+   	ld bc, 6:i3			; count = 6 words (12 bytes)
+
+### SITE 19: hdae5000/hdae5000_ui_display.s:14602  src_addr=0x2946B9  target=0x294414  proposed_label=HDAE5000_Display_Sub_294414 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xbc, xwa
+   	ld	wa, 2:i3
+   	call 0x294165
+   	ld xwa, (xsp + 0x40)                    ; ld XWA,(XSP+0x40)
+   	ld	(0x238f6a), xwa
+   	ld	wa, (xsp+68)
+   	ld	(0x238f6e), wa
+   	ld	wa, (xsp+70)
+   	ld	(0x238f70), wa
+   	ld	wa, (xsp+72)
+   	ld	(0x238f72), wa
+   	lda xwa, (0x2f90ae:24)
+>> 	calr	0xfd58
+   	ld	xwa, (0x238f6a)
+   	push xwa
+   	pushw 0x002f
+   	pushw 0x90d0
+   	lda	xwa, (xsp+8)
+-- target context (hdae5000/hdae5000_ui_display.s:14377; >> = target line):
+   HDAE5000_Display_Sub_294414:	; 0x294414 (3061 bytes)
+   	; Large display management routine
+   ; LDS: 0x294414 (3061 bytes)
+   
+>> 	ret
+   
+   	ret
+   
+   	lda	xsp, (xsp-32)
+   	lda xwa, (0x2f8f5e:24)
+
+### SITE 20: hdae5000/hdae5000_ui_display.s:18873  src_addr=0x29735C  target=0x297884  proposed_label=HDAE5000_RAM_Test_Sub11 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	lda xix, (0x229ddf:24)
+   	cp	bc, 0x0078
+   	jp	z, (0x297347:24)
+   	ld	(xix), 0x00
+   	inc 1, xix                              ; inc 1,XIX
+   	inc	1, bc
+   	jp 0x297333                             ; jp 0x297333
+   	call 0x29747a
+   	cp	(0x200222:24), 0
+   	jp	z, (0x29735C:24)
+   	ld	a, 0x03:opc
+   	jp 0x29742f                             ; jp 0x29742f
+>> 	call 0x297884
+   	cp	(0x200222:24), 0
+   	jp	z, (0x297371:24)
+   	ld	a, 0x05:opc
+   	jp 0x29742f                             ; jp 0x29742f
+   	call 0x2975ad
+-- target context (hdae5000/hdae5000_ui_display.s:19256; >> = target line):
+   	and	a, 0x01
+   	ld	(0x200222:24), a
+   	ret
+   
+>> 	push xwa
+   	push xbc
+   	push xde
+   	push xhl
+   	push xix
+   	push xiy
+
+### SITE 21: hdae5000/hdae5000_ui_display.s:21847  src_addr=0x299733  target=0x299487  proposed_label=HDAE5000_Display_String_Render_Sub19 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	add	xwa, xde
+   	pop xde                                 ; pop XDE
+   	pop xbc                                 ; pop XBC
+   	ret
+   
+   	xor	xwa, xwa
+   	xor	xbc, xbc
+   	ld	a, (0x229D9F:24)
+   	ld	xbc, 0x00000018
+   	call HDAE5000_HD_Init_Variables
+   	ld	xix, xwa
+   	xor	xwa, xwa
+>> 	call 0x299487
+   	add	xwa, xix
+   	ld	(0x229c54), wa
+   	ret
+   
+   	push xix
+-- target context (hdae5000/hdae5000_ui_display.s:21585; >> = target line):
+   	pop xde                                 ; pop XDE
+   	pop xbc                                 ; pop XBC
+   	ret
+   
+>> 	push xix
+   	lda xix, (0x229dda:24)
+   	xor	xwa, xwa
+   	ld	a, (0x229D9F:24)
+   	add	xix, xwa
+   	ld	a, (xix)
+
+### SITE 22: hdae5000/hdae5000_utilities.s:1057  src_addr=0x29B80C  target=0x29B77E  proposed_label=HDAE5000_Multiply_Sub2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld (xwa + 0x08), hl                     ; ld (XWA+0x08),HL
+   	ret
+   
+   	nop                                     ; nop
+   	push xiz
+   	lda	xsp, (xsp-8)
+   	ld	xiz, xwa
+   	ld	xwa, xsp
+   	ld xbc, (xbc)                           ; ld XBC,(XBC)
+   	call 0x29b9ac
+   	ld	xwa, xiz
+   	ld	xbc, xsp
+>> 	call 0x29b77e
+   	lda	xsp, (xsp+8)
+   	pop xiz                                 ; pop XIZ
+   	ret
+   
+   	push xiz
+-- target context (hdae5000/hdae5000_utilities.s:991; >> = target line):
+   	ld	xix, 0:i3
+   	ldib_erp 0xee, 1		; ld QL,1
+   	jr t, .LMUL_b76d                       ; [68 f0] jr T,0x29b76d
+   	nop                                     ; nop
+>> 	ld xhl, (xbc)                           ; ld XHL,(XBC)
+   	cpib_erp 0xee, 0		; cp QL,0
+   	jr nz, .LMUL_b7ac                      ; [6e 27] jr NZ,0x29b7ac
+   	ld xde, (xbc + 0x04)                    ; ld XDE,(XBC+0x04)
+   	cp	hl, 0x007f
+   	jr gt, .LMUL_b7bd                      ; [6a 2f] jr GT,0x29b7bd
+
+### SITE 23: hdae5000/hdae5000_ui_display.s:11430  src_addr=0x2922B5  target=0x29391E  proposed_label=HDAE5000_Cell_Render_Type5 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	bit	0x05, wa
+   	jr z, .LTCI_22b8                       ; [66 21] jr Z,0x2922b8
+   	ld	wa, (xsp+54)
+   	ld	bc, (xsp+52)
+   	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
+   	calr	0x095b
+   	ld (xsp + 0x04), hl
+   	ld	wa, (xsp+4)
+   	cp	wa, 0xffff
+   	jr nz, .LTCI_22b8                      ; [6e 09] jr NZ,0x2922b8
+   	ld	wa, (xsp+54)
+   	ld	bc, (xsp+52)
+>> 	calr	0x1666
+   .LTCI_22b8:
+   	cpw	(xsp+4), 0xffff
+   	jr z, .LTCI_22e8                       ; [66 29] jr Z,0x2922e8
+   	ld	wa, (xsp+64)
+   	bit	0x06, wa
+-- target context (hdae5000/hdae5000_ui_display.s:13398; >> = target line):
+   	inc 4, xsp
+   	ret
+   
+   HDAE5000_Cell_Render_Type5:	; 0x29391E (222 bytes)
+>> 	dec 4, xsp
+   	push xiz
+   	ld (xsp + 4), bc
+   	ld (xsp + 6), wa
+   	ld wa, (xsp + 4)
+   	extz xwa
+
+### SITE 24: hdae5000/hdae5000_ui_display.s:17422  src_addr=0x2964EA  target=0x296AC4  proposed_label=.Lppc_utility (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld (0x2390e2:24), a; [0x2390E2] = first byte
+   	nop
+   	ld a, (xix + 1)			; A = second byte
+   	nop
+   	ld (0x2390e4:24), a; [0x2390E4] = second byte
+   	nop
+   	call 2715144			; call 0x296E08 (process file list)
+   	call HDAE5000_Render_Display_Region2
+   	call HDAE5000_PPORT_Ready_Check
+   	ld bc, 0:i3			; BC = 0 (offset)
+   	ldw hl, 0x002C			; HL = 44 (block size)
+   	nop
+>> 	call 2714308			; call 0x296AC4 (transfer setup)
+   	cp (0x2390e6:24), 0x00; [0x2390E6] == 0? (error check)
+   	jp z, (2712830:24)		; jp Z, skip cleanup (0x2964FE)
+   	nop
+   	call HDAE5000_PPORT_Cleanup
+   .Lsfl_build_buffer:			; 0x2964FE
+-- target context (hdae5000/hdae5000_ui_display.s:18052; >> = target line):
+   	nop
+   
+   .Lppc_utility:				; 0x296AC4 — Display + save XIX + copy buffer
+   	; Push BC/HL, display command 1, save XIX to data ptr, copy BC..HL bytes
+>> 	pushw bc
+   	nop
+   	pushw hl
+   	nop
+   	ld wa, 1:i3				; display command
+   	di
+
+### SITE 25: hdae5000/hdae5000_ui_display.s:20442  src_addr=0x29872B  target=0x29888A  proposed_label=HDAE5000_Display_String_Render_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	xor	xwa, xwa
+   	ld	(0x229c90), xwa
+   	ld	xwa, (0x229c90)
+   	cp	xwa, 0x00000f42
+   	jp	z, (0x298784:24)
+   	ld	xhl, (0x229c8c)
+   	ld	xde, 0x00000200
+   	lda xix, (0x200428:24)
+   	call 0x297788
+   	cp	(0x200222:24), 0
+   	jp	z, (0x29872F:24)
+   	ld	(0x200222:24), 3
+>> 	jp 0x29888a                             ; jp 0x29888a
+   	lda xix, (0x200228:24)
+   	lda xiy, (0x200428:24)
+   	ld	bc, 0:i3
+   	cp	bc, 0x0200
+   	jp	z, (0x298760:24)
+-- target context (hdae5000/hdae5000_ui_display.s:20525; >> = target line):
+   	cp	(0x200222:24), 0
+   	jp	z, (0x29888A:24)
+   	ld	(0x200222:24), 10
+   	jp 0x29888a                             ; jp 0x29888a
+>> 	call 0x2974c7
+   	pop xiz                                 ; pop XIZ
+   	pop xiy                                 ; pop XIY
+   	pop xix                                 ; pop XIX
+   	pop xhl                                 ; pop XHL
+   	pop xde                                 ; pop XDE
+
+### SITE 26: hdae5000/hdae5000_ui_display.s:21869  src_addr=0x299768  target=0x29973F  proposed_label=HDAE5000_Display_String_Render_Sub23 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	a, (xix)
+   	pop xix                                 ; pop XIX
+   	ret
+   
+   	push xix
+   	push xbc
+   	xor	xwa, xwa
+   	ld	a, (0x229DA0:24)
+   	ld	xbc, 0x00000018
+   	call HDAE5000_HD_Init_Variables
+   	ld	xix, xwa
+   	xor	xwa, xwa
+>> 	call 0x29973f
+   	add	xwa, xix
+   	lda xix, (0x229e5c:24)
+   	add	xix, xwa
+   	ld	a, (xix)
+   	pop xbc                                 ; pop XBC
+-- target context (hdae5000/hdae5000_ui_display.s:21852; >> = target line):
+   	add	xwa, xix
+   	ld	(0x229c54), wa
+   	ret
+   
+>> 	push xix
+   	lda xix, (0x229e57:24)
+   	xor	xwa, xwa
+   	ld	a, (0x229DA0:24)
+   	add	xix, xwa
+   	ld	a, (xix)
+
+### SITE 27: hdae5000/hdae5000_ui_display.s:20030  src_addr=0x29813A  target=0x298150  proposed_label=HDAE5000_Display_Restore_Sub3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pop xde                                 ; pop XDE
+   	pop xbc                                 ; pop XBC
+   	pop xwa                                 ; pop XWA
+   	ret
+   
+   	push xiz
+   	ldw	hl, 0xffff
+   	cp	(0x200222:24), 0
+   	jp	nz, (0x29814E:24)
+   	ld	(0x229d40), xwa
+   	ld	(0x229d38), xbc
+   	ld	(0x229d2c), xde
+>> 	call 0x298150
+   	xor	hl, hl
+   	cp	(0x200222:24), 0
+   	jp	z, (0x29814E:24)
+   	ldw	hl, 0xffff
+   	pop xiz                                 ; pop XIZ
+-- target context (hdae5000/hdae5000_ui_display.s:20038; >> = target line):
+   	ldw	hl, 0xffff
+   	pop xiz                                 ; pop XIZ
+   	ret
+   
+>> 	push xwa
+   	push xbc
+   	push xde
+   	push xhl
+   	push xix
+   	push xiy
+
+### SITE 28: hdae5000/hdae5000_ui_display.s:18877  src_addr=0x29736D  target=0x29742F  proposed_label=HDAE5000_RAM_Test_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	inc 1, xix                              ; inc 1,XIX
+   	inc	1, bc
+   	jp 0x297333                             ; jp 0x297333
+   	call 0x29747a
+   	cp	(0x200222:24), 0
+   	jp	z, (0x29735C:24)
+   	ld	a, 0x03:opc
+   	jp 0x29742f                             ; jp 0x29742f
+   	call 0x297884
+   	cp	(0x200222:24), 0
+   	jp	z, (0x297371:24)
+   	ld	a, 0x05:opc
+>> 	jp 0x29742f                             ; jp 0x29742f
+   	call 0x2975ad
+   	ld	xhl, 1:i3
+   	lda xix, (0x200628:24)
+   	ld	xde, 0x00000200
+   	call 0x297788
+-- target context (hdae5000/hdae5000_ui_display.s:18929; >> = target line):
+   	ld	(0x229D92:24), 0
+   	call 0x2974c7
+   	ret
+   
+>> 	ld	(0x229D92:24), a
+   	jp 0x29742a                             ; jp 0x29742a
+   	push xix
+   	pushw wa                                ; push WA
+   	ld	xix, 0:i3
+   	cp	xix, 0x003fffff
+
+### SITE 29: hdae5000/hdae5000_ui_display.s:17785  src_addr=0x29687C  target=0x296A30  proposed_label=.Lpsb_finish (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp bc, 4:i3				; 4 bytes?
+   	jp z, (2713724:24)			; jp Z, 0x29687C — exit loop
+   	nop
+   	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC) — load checksum byte
+   	nop
+   	call 2714016				; call 0x2969A0 — send one byte
+   	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1 — error check
+   	jp z, (2713736:24)			; jp Z, 0x296888 — exit on error
+   	nop
+   	inc 1, bc				; BC++
+   	jr t, .Lrdr2_loop2			; loop
+   .Lrdr2_finalize:			; 0x29687C
+>> 	call 2714160				; call 0x296A30 — finalize transfer
+   	cp w, 0:i3				; check result
+   	jr z, .Lrdr2_exit			; exit if done
+   	jp .Lrdr2_main				; retry main loop
+   .Lrdr2_exit:				; 0x296888
+   	ret
+-- target context (hdae5000/hdae5000_ui_display.s:17978; >> = target line):
+   	ret
+   	nop
+   .Lpsb_finish:				; 0x296A30 — Finalize parallel port transfer
+   	; Deassert, wait for completion, read final status bit
+>> 	ld a, (0x160002:24); ld A, (0x160002)
+   	nop
+   	and a, 0xF7				; clear bit 3
+   	nop
+   	ld (0x160002:24), a; st (0x160002), A
+   	nop
+
+### SITE 30: hdae5000/hdae5000_utilities.s:297  src_addr=0x29B165  target=0x29B6A9  proposed_label=HDAE5000_MemCopy_Reverse_Sub13 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	e, (xde)
+   	res	0x07, e
+   	extz de                                 ; extz DE
+   	and	a, 0x0f
+   	jr z, .LMCR_b15e                       ; [66 02] jr Z,0x29b15e
+   	slaa	de
+   .LMCR_b15e:
+   	ld	iz, de
+   	add	iz, hl
+   	sub	iz, bc
+   .LMCR_b164:
+   	pushw iz                                ; push IZ
+>> 	calr	0x0541
+   	inc 2, xsp                              ; inc 2,XSP
+   	ld (xsp + 0x04), hl
+   	cp	iz, 0:i3
+   	jr ge, .LMCR_b174                      ; [69 03] jr GE,0x29b174
+   	decm	1, (xsp+4)
+-- target context (hdae5000/hdae5000_utilities.s:892; >> = target line):
+   .LMCR_b6a7:
+   	popw iz                                 ; pop IZ
+   	ret
+   
+>> 	dec 0, xsp                              ; dec 0,XSP
+   	push xiz
+   	ld	wa, (xsp+16)
+   	exts xwa                                ; exts XWA
+   	lda	xbc, (301:16)
+   	call HDAE5000_Multiply
+
+### SITE 31: hdae5000/hdae5000_ui_display.s:16940  src_addr=0x295FD0  target=0x297054  proposed_label=.Lppc_send_region_to_pc (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	and a, 0x40
+   	nop
+   	cp a, 0x40
+   	nop
+   	jp nz, (2711520:24)			; jp NZ, .Lsfsb_bit7
+   	nop
+   	ld xwa, (0x239140:24); ld XWA, (0x239140) — region 6
+   	nop
+   	ld (0x239164:24), xwa; st (0x239164), XWA
+   	nop
+   	ld (0x2390f0:24), 0x40; st (0x2390F0), 0x40
+   	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
+>> 	call 2715732
+   	cp (0x2390d4:24), 0x01
+   	jp z, (2708340:24)
+   	nop
+   .Lsfsb_bit7:				; 0x295FE0 — Bit 7 (0x80)
+   	ld a, (0x2390e2:24)
+-- target context (hdae5000/hdae5000_ui_display.s:18632; >> = target line):
+   
+   .Lppc_send_region_to_pc:		; 0x297054 — Send region data to PC
+   	; Main send routine: reads region descriptor, sets up PPORT buffer,
+   	; sends sectors in 512-byte blocks with checksum verification
+>> 	ld xwa, (0x239164:24); ld XWA, (0x239164) — region descriptor
+   	nop
+   	ld (0x239158:24), xwa; st (0x239158), XWA — save for retry
+   	nop
+   	xor xwa, xwa
+   	ld (0x2390fc:24), xwa; clear checksum
+
+### SITE 32: hdae5000/hdae5000_ui_display.s:16864  src_addr=0x295EE0  target=0x297054  proposed_label=.Lppc_send_region_to_pc (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	nop
+   	and a, 0x04
+   	nop
+   	cp a, 4:i3
+   	jp nz, (2711280:24)			; jp NZ, .Lsfsb_bit3
+   	nop
+   	ld xwa, (0x239124:24); ld XWA, (0x239124) — region 2
+   	nop
+   	ld (0x239164:24), xwa; st (0x239164), XWA
+   	nop
+   	ld (0x2390f0:24), 0x04; st (0x2390F0), 0x04
+   	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
+>> 	call 2715732
+   	cp (0x2390d4:24), 0x01
+   	jp z, (2708340:24)
+   	nop
+   .Lsfsb_bit3:				; 0x295EF0 — Bit 3 (0x08)
+   	ld a, (0x2390e2:24)
+-- target context (hdae5000/hdae5000_ui_display.s:18632; >> = target line):
+   
+   .Lppc_send_region_to_pc:		; 0x297054 — Send region data to PC
+   	; Main send routine: reads region descriptor, sets up PPORT buffer,
+   	; sends sectors in 512-byte blocks with checksum verification
+>> 	ld xwa, (0x239164:24); ld XWA, (0x239164) — region descriptor
+   	nop
+   	ld (0x239158:24), xwa; st (0x239158), XWA — save for retry
+   	nop
+   	xor xwa, xwa
+   	ld (0x2390fc:24), xwa; clear checksum
+
+### SITE 33: hdae5000/hdae5000_ui_display.s:20466  src_addr=0x29878F  target=0x29769B  proposed_label=HDAE5000_RAM_Test_Sub9 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	inc	4, bc
+   	jp 0x29873b                             ; jp 0x29873b
+   	ld	xwa, (0x229c8c)
+   	add	xwa, 0x00000001
+   	ld	(0x229c8c), xwa
+   	ld	xwa, (0x229c90)
+   	add	xwa, 0x00000001
+   	ld	(0x229c90), xwa
+   	jp 0x2986f7                             ; jp 0x2986f7
+   	call 0x2988af
+   	ld	xhl, 1:i3
+   	lda xix, (0x200628:24)
+>> 	call 0x29769b
+   	cp	(0x200222:24), 0
+   	jp	z, (0x2987A8:24)
+   	ld	(0x200222:24), 5
+   	jp 0x29888a                             ; jp 0x29888a
+   	call 0x29747a
+-- target context (hdae5000/hdae5000_ui_display.s:19125; >> = target line):
+   	inc 2, xiy                              ; inc 2,XIY
+   	jp 0x297680                             ; jp 0x297680
+   	ret
+   
+>> 	ld	(0x200204), xhl
+   	ld	(0x200208), xix
+   	ld	(0x200222:24), 0
+   	ld	a, (0x13001E:24)
+   	and	a, 0xc0
+   	cp	a, 0x40
+
+### SITE 34: hdae5000/hdae5000_hd_driver.s:2334  src_addr=0x2848A6  target=0x29AD08  proposed_label=.Lccb_sign_handler (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push xwa
+   	call HDAE5000_MemFill
+   	pushw 0x002e
+   	pushw 0x2600
+   	lda	xwa, (xsp+56)
+   	push xwa
+   	call HDAE5000_MemCopy_Block
+   	pushw 0x000a
+   	lda	xwa, (xsp+30)
+   	push xwa
+   	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
+   	push xwa
+>> 	call 0x29ad08
+   	lda	xsp, (xsp+26)
+   	push xhl
+   	lda	xwa, (xsp+48)
+   	push xwa
+   	call HDAE5000_StrCopy
+-- target context (hdae5000/hdae5000_ui_display.s:24125; >> = target line):
+   	;
+   	; --- Sub 2: Signed number format handler (0x29AD08-0x29AD43, 60 bytes) ---
+   	; Prepends '-' for negative values when radix==10, then calls Sub 3.
+   .Lccb_sign_handler:			; 0x29AD08
+>> 	ld xbc, (xsp + 8)		; XBC = output buffer ptr
+   	ld xde, (xsp + 4)		; XDE = value to convert
+   	ld wa, (xsp + 0x0C)		; WA = radix
+   	cp wa, 0x000A			; radix == 10? (decimal)
+   	jr nz, .Lccb_unsigned		; → unsigned conversion
+   	cp xde, 0x00000000		; value < 0? (signed check)
+
+### SITE 35: hdae5000/hdae5000_utilities.s:1295  src_addr=0x29B9CE  target=0x29B9D5  proposed_label=.LDIV_b9d5 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cpl	qbc
+   	cpl	bc
+   	inc 1, xbc                              ; inc 1,XBC
+   .LDIV_b9be:
+   	calr	0x0004
+   	ld	(xiy+3), e
+   	ret
+   
+   	ld	xiy, xwa
+   	or xbc, xbc                             ; or XBC,XBC
+   	jr z, .LDIV_ba1a                       ; [66 4f] jr Z,0x29ba1a
+   	bs1b	qbc
+>> 	jr	ov, 0x05
+   	add	a, 0x10
+   	jr t, .LDIV_b9d7                       ; [68 02] jr T,0x29b9d7
+   .LDIV_b9d5:
+   	bs1b16 bc		; bs1b A,BC
+   .LDIV_b9d7:
+-- target context (hdae5000/hdae5000_utilities.s:1299; >> = target line):
+   	jr	ov, 0x05
+   	add	a, 0x10
+   	jr t, .LDIV_b9d7                       ; [68 02] jr T,0x29b9d7
+   .LDIV_b9d5:
+>> 	bs1b16 bc		; bs1b A,BC
+   .LDIV_b9d7:
+   	ld	hl, 0:i3
+   	ld (xiy + 0x02), hl                     ; ld (XIY+0x02),HL
+   	ld l, a		; ld L,A
+   	ld_dst16_rid8 xiy, 0x00, hl		; ld (XIY+0x00),HL
+
+### SITE 36: hdae5000/hdae5000_ui_display.s:6337  src_addr=0x28EFFA  target=0x29AF0B  proposed_label=HDAE5000_StrCopy (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	lda xwa, (0x230e7a:24); XWA = &0x230E7A
+   	push xwa
+   	call 2731889			; strlen(path buffer)
+   	inc 4, xsp
+   	cp hl, 0:i3			; if strlen > 0
+   	jr z, .Lpb_no_separator		;   skip separator append
+   
+   	; Append separator
+   	pushw 46			; max = 0x2E
+   	pushw 23888			; src = 0x5D50 (separator string)
+   	pushw 35			; offset = 0x23
+   	pushw 3706			; dest = 0x0E7A
+>> 	call 2731787			; call 0x29AF0B (strcat)
+   	inc 0, xsp
+   
+   .Lpb_no_separator:			; 0x28F000
+   	; --- Call vtable method at +0x0094 to scan directory ---
+   	lda xwa, (0x2e5d54:24); XWA = 0x2E5D54 (param)
+-- target context (hdae5000/hdae5000_ui_display.s:24407; >> = target line):
+   HDAE5000_StrCopy:	; 29AF0Bh
+   	; Copy null-terminated string including terminator
+   	; Stack: [+0x04] = dest (XDE), [+0x08] = src (XBC)
+   	; Finds end of dest string, then copies src to that position
+>> 	ld xde, (xsp + 4)	; ld XDE, (XSP+0x04) - dest
+   	ld xhl, xde	; Save original dest
+   	jr HDAE5000_StrCopy__find_end
+   HDAE5000_StrCopy__find_loop:
+   	inc 1, xde	; inc 1, XDE
+   HDAE5000_StrCopy__find_end:
+
+### SITE 37: hdae5000/hdae5000_ui_display.s:21033  src_addr=0x298E84  target=0x298E6C  proposed_label=HDAE5000_Display_String_Render_Loop25 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jp 0x298e1f                             ; jp 0x298e1f
+   	ret
+   
+   	ld	xix, (0x229c94)
+   	lda xiy, (0x20158e:24)
+   	cp	xix, xiy
+   	jp	z, (0x298E88:24)
+   	ld xwa, (xix + 0x08)                    ; ld XWA,(XIX+0x08)
+   	ld (xix), xwa                           ; ld (XIX),XWA
+   	ld xwa, (xix + 0x0c)                    ; ld XWA,(XIX+0x0c)
+   	ld (xix + 0x04), xwa                    ; ld (XIX+0x04),XWA
+   	add	xix, 0x00000008
+>> 	jp 0x298e6c                             ; jp 0x298e6c
+   	xor	xwa, xwa
+   	lda xix, (0x20158e:24)
+   	ld (xix), xwa                           ; ld (XIX),XWA
+   	ld (xix + 0x04), xwa                    ; ld (XIX+0x04),XWA
+   	ret
+-- target context (hdae5000/hdae5000_ui_display.s:21026; >> = target line):
+   	ret
+   
+   	ld	xix, (0x229c94)
+   	lda xiy, (0x20158e:24)
+>> 	cp	xix, xiy
+   	jp	z, (0x298E88:24)
+   	ld xwa, (xix + 0x08)                    ; ld XWA,(XIX+0x08)
+   	ld (xix), xwa                           ; ld (XIX),XWA
+   	ld xwa, (xix + 0x0c)                    ; ld XWA,(XIX+0x0c)
+   	ld (xix + 0x04), xwa                    ; ld (XIX+0x04),XWA
+
+### SITE 38: hdae5000/hdae5000_ui_display.s:19013  src_addr=0x29752D  target=0x29754C  proposed_label=HDAE5000_RAM_Test_Join2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pop xwa                                 ; pop XWA
+   	ret
+   
+   	push xix
+   	push xbc
+   	push xwa
+   	lda xix, (0x200628:24)
+   	ld xwa, (xix)                           ; ld XWA,(XIX)
+   	ld xbc, (xix + 0x04)                    ; ld XBC,(XIX+0x04)
+   	cp	xwa, 0xaa55aa55
+   	jp	z, (0x297531:24)
+   	ld	(0x229D98:24), 0
+>> 	jp 0x29754c                             ; jp 0x29754c
+   	cp	xbc, 0xf4f1f2f3
+   	jp	z, (0x297546:24)
+   	ld	(0x229D98:24), 0
+   	jp 0x29754c                             ; jp 0x29754c
+   	ld	(0x229D98:24), 1
+-- target context (hdae5000/hdae5000_ui_display.s:19019; >> = target line):
+   	jp	z, (0x297546:24)
+   	ld	(0x229D98:24), 0
+   	jp 0x29754c                             ; jp 0x29754c
+   	ld	(0x229D98:24), 1
+>> 	call 0x298993
+   	pop xwa                                 ; pop XWA
+   	pop xbc                                 ; pop XBC
+   	pop xix                                 ; pop XIX
+   	ret
+   
+
+### SITE 39: hdae5000/hdae5000_ui_display.s:21455  src_addr=0x299317  target=0x29899E  proposed_label=HDAE5000_Display_String_Render_Sub5 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pop xiy                                 ; pop XIY
+   	pop xix                                 ; pop XIX
+   	ret
+   
+   	push xix
+   	push xiy
+   	push xbc
+   	call 0x298c52
+   	cp	a, 0:i3
+   	jp	z, (0x29936F:24)
+   	lda xix, (0x2013b2:24)
+   	lda xiy, (0x200c98:24)
+>> 	call 0x29899e
+   	cp	a, 1:i3
+   	jp	z, (0x29936F:24)
+   	cp	(0x229DC2:24), 5
+   	jp	c, (0x299333:24)
+   	ld	(0x229DC2:24), 0
+-- target context (hdae5000/hdae5000_ui_display.s:20626; >> = target line):
+   	ld	xwa, 0x0000ffee
+   	ld	(0x229c60), xwa
+   	ret
+   
+>> 	ld	xbc, 0:i3
+   	cp	xbc, 0x00000005
+   	jp	z, (0x2989DF:24)
+   	ld	xhl, 0:i3
+   	cp	xhl, 0x0000001a
+   	jp	z, (0x2989D9:24)
+
+### SITE 40: hdae5000/hdae5000_filesystem.s:2969  src_addr=0x2893F8  target=0x28B22B  proposed_label=HDAE5000_Wait_Callback_Loop (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xwa, (0x23a1a2)
+   	ld	xwa, (xwa + 0x0e0a)
+   	ld	xhl, (xwa + 0x0124)
+   	ld	xwa, 0x007f02c1
+   	ld	xbc, 0x01c00001
+   	ld	xde, 5:i3
+   	call	(xhl)
+   	ld	xwa, (0x23a1a2)
+   	ld	xwa, (xwa + 0x0e88)
+   	ld_sril	xhl, (xwa + 0x00e4)
+   	ldw	wa, 0x0064
+   	call	(xhl)
+>> 	calr	0x1e30
+   	ld	wa, (0x23A096:24)
+   	ld	bc, (0x23A098:24)
+   	ld	de, (0x23A092:24)
+   	call 0x2900c2
+   	ld	wa, (0x23A096:24)
+-- target context (hdae5000/hdae5000_ui_display.s:542; >> = target line):
+   HDAE5000_Wait_Callback_Loop:	; 0x28B22B (45 bytes)
+   	; Poll workspace callback until HL returns 0
+   	; Uses workspace ptr at (0x23A1A2) → callback table at +0x0E88
+   	; Calls callback at +0x00B8 (type 3), then polls at +0x00D0 (type 1)
+>> 	jr t, .LWait_Callback__poll
+   .LWait_Callback__invoke:
+   	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2) — workspace ptr
+   	ld xwa, (xwa + 0x0e88)             ; ld XWA, (XWA + 0x0E88) — callback table
+   	ld_sril xhl, (xwa + 0x00b8)             ; ld XHL, (XWA + 0x00B8) — callback fn
+   	ld wa, 3:i3			; callback type = 3
+
+### SITE 41: hdae5000/hdae5000_ui_display.s:11440  src_addr=0x2922D0  target=0x292D16  proposed_label=HDAE5000_Table_Sub_292D16 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	wa, (xsp+54)
+   	ld	bc, (xsp+52)
+   	calr	0x1666
+   .LTCI_22b8:
+   	cpw	(xsp+4), 0xffff
+   	jr z, .LTCI_22e8                       ; [66 29] jr Z,0x2922e8
+   	ld	wa, (xsp+64)
+   	bit	0x06, wa
+   	jr z, .LTCI_22e8                       ; [66 21] jr Z,0x2922e8
+   	ld	wa, (xsp+54)
+   	ld	bc, (xsp+52)
+   	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
+>> 	calr	0x0a43
+   	ld (xsp + 0x04), hl
+   	ld	wa, (xsp+4)
+   	cp	wa, 0xffff
+   	jr nz, .LTCI_22e8                      ; [6e 09] jr NZ,0x2922e8
+   	ld	wa, (xsp+54)
+-- target context (hdae5000/hdae5000_ui_display.s:12329; >> = target line):
+   	lda xsp, (xsp + 34)
+   	ret
+   
+   HDAE5000_Table_Sub_292D16:	; 0x292D16 (419 bytes)
+>> 	lda xsp, (xsp - 32)
+   	push xiz
+   	ld (xsp + 32), bc
+   	ld (xsp + 34), wa
+   	ldw (xsp + 4), 0x0000
+   	pushw 0x0008
+
+### SITE 42: hdae5000/hdae5000_ui_display.s:15659  src_addr=0x295248  target=0x294C6A  proposed_label=HDAE5000_Display_Sub_294414_Sub17 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   .Lpps_handler_15:			; 0x295236
+   	ld wa, bc
+   	ld bc, de
+   	call 0x294B4F
+   	ld wa, hl
+   	ret
+   	nop
+   .Lpps_handler_16:			; 0x295242
+   	call 0x294B82
+   	ret
+   	nop
+   .Lpps_handler_17:			; 0x295248
+>> 	call 0x294C6A
+   	ld wa, hl
+   	ret
+   	nop
+   .Lpps_handler_18:			; 0x295250
+   	call 0x294C8D
+-- target context (hdae5000/hdae5000_ui_display.s:15068; >> = target line):
+   	lda xwa, (0x2f924e:24)
+   	calr	0xf7b2
+   	lda xwa, (0x2f926e:24)
+   	jrl	t, 0xf7aa
+>> 	pushw iz                                ; push IZ
+   	ld	iz, 0:i3
+   	ld	wa, 0:i3
+   	call HDAE5000_Display_Init
+   	cp	hl, 0:i3
+   	jr z, .LDS_4c79                        ; [66 02] jr Z,0x294c79
+
+### SITE 43: hdae5000/hdae5000_filesystem.s:980  src_addr=0x287C01  target=0x285340  proposed_label=HDAE5000_HD_Buffer_Init (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   .LFS_7be4:
+   	ld	xhl, 0:i3
+   .LFS_7be6:
+   	jr t, .LFS_7c35                        ; [68 4d] jr T,0x287c35
+   	lda xhl, (0x22aa53:24)
+   	jr t, .LFS_7c35                        ; [68 46] jr T,0x287c35
+   	ld	xhl, 1:i3
+   	jr t, .LFS_7c35                        ; [68 42] jr T,0x287c35
+   .LFS_7bf3:
+   	cpw	(0x22AA5C:24), 5
+   	jr nz, .LFS_7c1e                       ; [6e 22] jr NZ,0x287c1e
+   	lda xwa, (0x22aa4c:24)
+>> 	calr	0xd73c
+   	ld	bc, (0x23A092:24)
+   	ld	de, (0x23A094:24)
+   	ld	wa, (0x22AA4C:24)
+   	pushw wa                                ; push WA
+   	ld	xwa, 0x007f0102
+-- target context (hdae5000/hdae5000_hd_driver.s:3375; >> = target line):
+   HDAE5000_HD_Buffer_Init:	; 0x285340 (220 bytes)
+   	; Sub-routine 1: Build bit flags from partition status array
+   	; Input: XWA = pointer to buffer (byte 0-1 = output flags, bytes 2-10 = status)
+   	; Sets bit N in (XWA) for each partition N whose status byte == 2
+>> 	ldw (xwa + 0), 0x0000		; clear output flags
+   	cp (xwa + 2), 0x02
+   	jr nz, .Lhbi_skip0
+   	ldw (xwa + 0), 0x0001		; set bit 0
+   .Lhbi_skip0:
+   	cp (xwa + 3), 0x02
+
+### SITE 44: hdae5000/hdae5000_ui_display.s:15609  src_addr=0x2951F6  target=0x29475A  proposed_label=HDAE5000_Display_Sub_294414_Sub8 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ret
+   	nop
+   .Lpps_handler_6:			; 0x2951E8
+   	call 0x294686
+   	ret
+   	nop
+   .Lpps_handler_7:			; 0x2951EE
+   	call 0x294735
+   	ld wa, hl
+   	ret
+   	nop
+   .Lpps_handler_8:			; 0x2951F6
+>> 	call 0x29475A
+   	ld wa, hl
+   	ret
+   	nop
+   .Lpps_handler_9:			; 0x2951FE
+   	call 0x29477F
+-- target context (hdae5000/hdae5000_ui_display.s:14661; >> = target line):
+   	ld	hl, iz
+   	popw iz                                 ; pop IZ
+   	ret
+   
+>> 	pushw iz                                ; push IZ
+   	ld	iz, 0:i3
+   	ld	wa, 1:i3
+   	call 0x293e88
+   	cp	hl, 0xffff
+   	jr nz, .LDS_476b                       ; [6e 02] jr NZ,0x29476b
+

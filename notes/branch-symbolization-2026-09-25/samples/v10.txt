@@ -1,0 +1,1442 @@
+IMAGE v10  -- 45 sampled sites out of 8028 accepted
+
+### SITE 0: v10/maincpu/sequencer/sequencer_engine.s:31752  src_addr=0xF4B16D  target=0xF4B1BD  proposed_label=SeqPart_ByteBlockB0DE_Entry (new; target kind boundary-data)
+-- source context (>> = the numeric branch):
+   	pop_f
+   	.byte 0xd4, 0x26
+   	ldw	(9946:16), 1
+   	ld	wa, (9778:16)
+   	dec	1, wa
+   	ld	(9948:16), wa
+   	ld	xwa, 0x272c
+   	call	SeqVoice_SeekAndScanTracks
+   	cp	(0x287a:16), 0
+   	jr	nz, 104
+   	ld	wa, (9862:16)
+   	cp (9778:16), wa
+>> 	jr	z, 78
+   	ld	l, (0x2740:16)
+   	ld	(0x287f:16), wa
+   	extz	hl
+   	ld	wa, hl
+   	ld	bc, hl
+-- target context (v10/maincpu/sequencer/sequencer_engine.s:31781; >> = target line):
+   	ld	xwa, 0x2732
+   	call	SeqVoice_SeekAndScanTracks
+   	cp	(0x287a:16), 0
+   	jr	nz, 16
+>> 	.byte 0xd1
+   	ldw	de, 6438
+   	.byte 0xde
+   	ld	h, 209:opc
+   	ld	h, (xiz)
+   	pop_f
+
+### SITE 1: v10/maincpu/demo/file_demo_proc.s:6619  src_addr=0xF8A0E6  target=0xF89A7B  proposed_label=ValidateFileRange (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	lda xwa, (0x025ec0:24)
+   	add xwa, xhl
+   	ld xhl, xwa
+   
+   GetEntry_Return:
+   	popw iz
+   	ret
+   
+   FileIO_ByteBlock_DemoProc2:
+   	pushw	iz
+   	ld	iz, wa
+   	ld	wa, iz
+>> 	calr	63890
+   	cp	hl, 0:i3
+   	jr	z, 5
+   	ldw	hl, 0xffff
+   	jr	26
+   	ld	wa, iz
+-- target context (v10/maincpu/demo/file_demo_proc.s:5878; >> = target line):
+   	ret
+   
+   
+   ValidateFileRange:
+>> 	ld c, (0x025db6:24)
+   	cp c, 2:i3
+   	jr z, ValidateFileRange_CheckLower
+   	cp c, 3:i3
+   	jr z, ValidateFileRange_CheckLower
+   	cp c, 4:i3
+
+### SITE 2: v10/maincpu/sequencer/accompaniment_engine.s:31813  src_addr=0xF68E83  target=0xF69224  proposed_label=CstmCp_ReturnZero (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	wa, 1:i3
+   	call	UI_PostDialEnable
+   	ld	wa, 1:i3
+   	call	UI_PostDialValueEvent
+   	ldw	wa, 129
+   	jr	15
+   	ld	wa, 1:i3
+   	call	UI_PostDialEnable
+   	ld	wa, 2:i3
+   	call	UI_PostDialValueEvent
+   	ldw	wa, 130
+   	call	UI_PostDialRangeEvent
+>> 	jrl	926
+   
+   ; CmpEsyTtl E variant 1
+   CmpEsyTtl_E_Var1:
+   	ld xwa, xde
+   	cp xde, 0x86
+-- target context (v10/maincpu/sequencer/accompaniment_engine.s:32093; >> = target line):
+   	ld wa, 0:i3
+   	call Tempo_EditBPM
+   
+   CstmCp_ReturnZero:
+>> 	ld xhl, 0:i3
+   	ret
+   ; CstmCpTtl record dispatch
+   CstmCpTtl_RecDispatch:
+   CstmCpTtlFunc:
+   	cp xbc, 0x1c00007
+
+### SITE 3: v10/maincpu/ui/bitmap_out_routines.s:157  src_addr=0xFB4129  target=0xFB413D  proposed_label=BitMapOut_ByteData_RenderB_Skip2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	lda	xwa, (xsp)
+   	ld	(xwa+4), l
+   	.byte 0xb8
+   	push	sr
+   	push_a
+   	push	xde
+   	.byte 0x8d
+   	call	SndParam_ResolveVoiceEntry
+   	ld a, (xsp+256)
+   	cp a, 13
+   	jr	z, 5
+   	cp	a, 12
+>> 	jr	nz, 18
+   	ld	xwa, 0xffffffff
+   	ld	xbc, 0x01e00079
+   	ld	xde, 0:i3
+   	call	ApPostEvent
+   	jr	35
+-- target context (v10/maincpu/ui/bitmap_out_routines.s:163; >> = target line):
+   	ld	xbc, 0x01e00079
+   	ld	xde, 0:i3
+   	call	ApPostEvent
+   	jr	35
+>> 	ld	xwa, 0xffffffff
+   	ld	xbc, 0x01c20007
+   	call	DeleteEvent
+   	ld	xwa, 0xffffffff
+   	ld	xbc, 0x01c20007
+   	ld	xde, 0:i3
+
+### SITE 4: v10/maincpu/midi/midi_dispatch_handlers.s:11591  src_addr=0xFD770D  target=0xFD771C  proposed_label=MidiPkt_ArpConfigChain_Data_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr MidiPkt_ArpPopReturn
+   
+   MidiPkt_ArpSecondLoopNext:
+   	inc1b_erp 0xfb
+   	cpib_erp 0xfb, 3
+   	jr c, MidiPkt_ArpSecondLoop
+   
+   MidiPkt_ArpPopReturn:
+   	popw_erp 0xfa
+   	ret
+   
+   MidiPkt_ArpConfigChain_Data:
+>> 	calr	12
+   	calr	122
+   	calr	623
+   	calr	242
+   	jrl	426
+   	calr	6
+-- target context (v10/maincpu/midi/midi_dispatch_handlers.s:11596; >> = target line):
+   	calr	122
+   	calr	623
+   	calr	242
+   	jrl	426
+>> 	calr	6
+   	calr	55
+   	jrl	783
+   	ld	xwa, (0xbcac:16)
+   	ld	bc, 4:i3
+   	call	SeqData_ReadFieldByIndex
+
+### SITE 5: v10/maincpu/sequencer/sequencer_ui.s:12410  src_addr=0xF33AE8  target=0xF33AF5  proposed_label=EffectBoxProc_CopyNameAndSetup_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	47
+   	ld	xwa, (xbc)
+   	ld	xbc, 0x01e80005
+   	jr	38
+   	ld	xwa, (xbc)
+   	ld	xbc, 0x01e80006
+   	jr	29
+   	ld	xwa, (xbc)
+   	ld	xbc, 0x01e80007
+   	jr	20
+   	ld	xwa, (xbc)
+   	ld	xbc, 0x01e80008
+>> 	jr	11
+   
+   EffectBoxProc_CopyNameAndSetup:
+   	ld xwa, (xsp + 4)
+   	ld xwa, (xwa + 28)
+   	ld xbc, 0x1e80001
+-- target context (v10/maincpu/sequencer/sequencer_ui.s:12416; >> = target line):
+   EffectBoxProc_CopyNameAndSetup:
+   	ld xwa, (xsp + 4)
+   	ld xwa, (xwa + 28)
+   	ld xbc, 0x1e80001
+>> 	call ApFuncCall
+   	pushw 0x7
+   	lda xwa, (xsp + 60)
+   	push xwa
+   	lda xwa, (xsp + 44)
+   	push xwa
+
+### SITE 6: v10/maincpu/sequencer/accompaniment_engine.s:38573  src_addr=0xF6D882  target=0xF6D896  proposed_label=AccStyle_TableDataEntry_Skip2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ret	z
+   	ld	c, (0x8d36:16)
+   	bit	0, (0xc07e:16)
+   	jr	z, 10
+   	cp	c, 17
+   	ret	nz
+   	ldw	wa, 16
+   	jr	98
+   	ld	a, (0x3d06:16)
+   	cp	c, 18
+   	jr	z, 61
+   	cp	c, 20
+>> 	jr	z, 18
+   	cp	c, 16
+   	ret	nz
+   	call	FileIO_CheckMediaIsWritable
+   	cp	hl, 0:i3
+   	ret	nz
+-- target context (v10/maincpu/sequencer/accompaniment_engine.s:38581; >> = target line):
+   	cp	hl, 0:i3
+   	ret	nz
+   	ldw	wa, 17
+   	jr	66
+>> 	cp	a, 2:i3
+   	jr	z, 21
+   	cp	a, 5:i3
+   	jr	z, 4
+   	cp	a, 1:i3
+   	ret	nz
+
+### SITE 7: v10/maincpu/audio/sound_editor_ui.s:5743  src_addr=0xF0D981  target=0xF0D9F5  proposed_label=SeMenu_CopyWriteUpdate_Data_Join18 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	.byte 0xb0, 0xbf
+   	ld	a, (xwa)
+   	ld	(xsp+16), a
+   	ld	wa, 4:i3
+   	ldw	bc, 64
+   	ld	de, 1:i3
+   	call	SeMenu_PatchBank_Data
+   	ld	a, (xsp+14)
+   	extz	wa
+   	pushw	64
+   	ld	bc, 4:i3
+   	ldw	de, 64
+>> 	jr	114
+   	ld	(xwa+10), 1
+   	call	SeMenu_BitShiftMask_End_0x14
+   	cp	l, 1:i3
+   	jr	nz, 120
+   	ld	a, (xsp+5)
+-- target context (v10/maincpu/audio/sound_editor_ui.s:5788; >> = target line):
+   	extz	wa
+   	pushw	64
+   	ld	bc, 4:i3
+   	ld	de, 0:i3
+>> 	call	AddswbWr
+   	jr	-102
+   	ld	(xwa+10), 255
+   	call	SeMenu_BitShiftMask_End_0x14
+   	cp	l, 1:i3
+   	jr	z, -120
+
+### SITE 8: v10/maincpu/display/graphics_text_vga.s:3260  src_addr=0xFB354F  target=0xFB3087  proposed_label=_Write_VGA_Register (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr	64345
+   	ldw	wa, 965
+   	ldw	bc, 251
+   	calr	64336
+   	ldw	wa, 964
+   	ldw	bc, 11
+   	calr	64327
+   	ldw	wa, 965
+   	ldw	bc, 34
+   	calr	64318
+   	ldw	wa, 964
+   	ldw	bc, 12
+>> 	calr	64309
+   	ldw	wa, 965
+   	ldw	bc, 14
+   	calr	64300
+   	ldw	wa, 964
+   	ldw	bc, 9
+-- target context (v10/maincpu/display/graphics_text_vga.s:2748; >> = target line):
+   	lda xsp, (xsp + 16)
+   	ret
+   
+   _Write_VGA_Register:
+>> 	ld de, 0:i3
+   
+   VGA_WriteReg_Delay:
+   	inc 1, de
+   	cp de, 0x80
+   	jr c, VGA_WriteReg_Delay
+
+### SITE 9: v10/maincpu/storage/flash_floppy_handlers.s:4839  src_addr=0xF192D2  target=0xF19389  proposed_label=ToneParam_ExtendedOpsBlock_Sub4 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ldw	ix, 0xeff1
+   	ldw	ix, 1024
+   	ld	(0x34d6:16), 18
+   	ld	wa, hl
+   	calr	210
+   	ld	(0x34ef:16), 5
+   	ld	(0x34d6:16), 19
+   	ld	wa, hl
+   	calr	195
+   	ld	(0x34ef:16), 6
+   	ld	(0x34d6:16), 22
+   	ld	wa, hl
+>> 	calr	180
+   	ld	(0x34ef:16), 7
+   	ld	(0x34d6:16), 23
+   	ld	wa, hl
+   	calr	165
+   	ld	(0x34ef:16), 10
+-- target context (v10/maincpu/storage/flash_floppy_handlers.s:4895; >> = target line):
+   	stb_erp c, 249
+   	ld (13551:16), c
+   	pop xiz
+   	ret
+>> 	pushw	iz
+   	ld	iz, wa
+   	.byte 0xf1, 0xd1
+   	ldw	ix, 7608
+   	popw	bc
+   	ldw	bc, 0xc1f6
+
+### SITE 10: v10/maincpu/midi/midi_dispatch_handlers.s:623  src_addr=0xFD0071  target=0xFD009C  proposed_label=MidiCC_VoiceParam_9_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ret
+   MidiCC_VoiceParam_9:
+   	ld	a, (0x966a:16)
+   	cp	a, 31
+   	jr	ugt, 65
+   	xor	w, w
+   	ld	hl, wa
+   	sll	wa, 1
+   	add	hl, wa
+   	ld	xix, MidiCC_ChannelMappingData_0x440
+   	ld_rrw bc, xix, hl
+   	cp c, 255
+>> 	jr	z, 41
+   	inc	2, xix
+   	ld_rrb d, xix, hl
+   	ld e, (38454:16)
+   	ld	a, (0x9637:16)
+   	ld	(0x9648:16), a
+-- target context (v10/maincpu/midi/midi_dispatch_handlers.s:636; >> = target line):
+   	jr	z, 6
+   	call	MidiStream_DispatchData_0x191
+   	jr	3
+   	calr	719
+>> 	ret
+   MidiCC_StubHandler_A:
+   	ret
+   MidiCC_StubHandler_B:
+   	ret
+   MidiCC_VoiceParam_10:
+
+### SITE 11: v10/maincpu/sequencer/sequencer_engine.s:22153  src_addr=0xF45532  target=0xF457CB  proposed_label=EffEdit_DSPConfigBlock_Join3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp	hl, 0:i3
+   	jrl	lt, 696
+   	ld	a, (0x8d38:16)
+   	cp	a, 214
+   	jrl	z, 529
+   	cp	a, 14
+   	jrl	z, 422
+   	cp	a, 12
+   	jrl	z, 344
+   	cp	a, 11
+   	jrl	z, 172
+   	cp	a, 10
+>> 	jrl	nz, 662
+   	ld	xwa, (xsp+2)
+   	cp	xwa, 0x4b00
+   	jrl	c, 650
+   	ld	xwa, (xsp+2)
+   	cp	xwa, 0x4b47
+-- target context (v10/maincpu/sequencer/sequencer_engine.s:22374; >> = target line):
+   	ld	de, iz
+   	extz	xde
+   	ld	xbc, 0x01e8000f
+   	call	ApDeliveryEvent
+>> 	popw	iz
+   	inc	4, xsp
+   	ret
+   
+   EffEdit_ValidateAndReadParams:
+   	pushw_erp 0xfa
+
+### SITE 12: v10/maincpu/sequencer/sequencer_ui.s:2241  src_addr=0xF2BEDE  target=0xF2BEF3  proposed_label=IvNamingExit_ScreenData_Join3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xwa, (xsp+178)
+   	ld	xbc, (xsp+174)
+   	ld	xde, (xsp+170)
+   	call	InheritedProc
+   	ld	xwa, (xsp+178)
+   	call	GetViewInstance
+   	ld	xiz, xhl
+   	ld	xwa, (xiz+34)
+   	ld	xbc, (xsp+174)
+   	ld	xde, (xsp+170)
+   	call	MainFuncCall
+   	cpw	(xiz+48), 0
+>> 	jr	z, 19
+   	ld	xwa, (xsp+178)
+   	ld	xbc, (xsp+174)
+   	ld	xde, (xsp+170)
+   	call	SetAutoInc
+   	ld	xhl, 0:i3
+-- target context (v10/maincpu/sequencer/sequencer_ui.s:2246; >> = target line):
+   	ld	xwa, (xsp+178)
+   	ld	xbc, (xsp+174)
+   	ld	xde, (xsp+170)
+   	call	SetAutoInc
+>> 	ld	xhl, 0:i3
+   	jr	19
+   	ld	xwa, (xsp+178)
+   	ld	xbc, (xsp+174)
+   	ld	xde, (xsp+170)
+   	call	InheritedProc
+
+### SITE 13: v10/maincpu/audio/semenu_routines.s:7077  src_addr=0xF09FEA  target=0xF09FF3  proposed_label=SeMenu_RefreshPartDisplay_Data_Skip13 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jp	SeMenu_ApplyPartEdit_Data2_0x852
+   	extz	wa
+   	ldw	bc, 17
+   	jp	SeMenu_ApplyPartEdit_Data2_0x8A1
+   	extz	wa
+   	ldw	bc, 18
+   	jp	SeMenu_ApplyPartEdit_Data2_0x8F4
+   	cp	a, 0:i3
+   	ret	z
+   	call	SeMenu_BitShiftMask_End_0x1A3
+   	ret
+   	cp	a, 0:i3
+>> 	jr	nz, 7
+   	ldw	wa, 39
+   	ld	bc, 0:i3
+   	jr	15
+   	ld	wa, 1:i3
+   	call	SeMenu_TransferPartValues_EndData_0x1E0
+-- target context (v10/maincpu/audio/semenu_routines.s:7081; >> = target line):
+   	jr	nz, 7
+   	ldw	wa, 39
+   	ld	bc, 0:i3
+   	jr	15
+>> 	ld	wa, 1:i3
+   	call	SeMenu_TransferPartValues_EndData_0x1E0
+   	cp	l, 0:i3
+   	ret	z
+   	ldw	wa, 41
+   	ld	bc, 1:i3
+
+### SITE 14: v10/maincpu/sequencer/accompaniment_engine.s:26324  src_addr=0xF65C56  target=0xF65C85  proposed_label=TimeSig_DisplayStrings_Skip14 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	popw	hl
+   	ld	a, l
+   	cp	a, 15
+   	jr	lt, 12
+   	ld	(0x342e:16), 25
+   	ld	(0x342f:16), 16
+   	jr	10
+   	ld	(0x342e:16), 15
+   	ld	(0x342f:16), 0
+   	ld	a, (0x34ef:16)
+   	pop	w
+   	bit	7, w
+>> 	jr	nz, 45
+   	cp	a, 26
+   	jr	nz, 26
+   	push	xix
+   	ld	a, (0x34d6:16)
+   	ld	xix, TimeSig_DisplayStrings_0x3C7
+-- target context (v10/maincpu/sequencer/accompaniment_engine.s:26346; >> = target line):
+   	pushw	hl
+   	.byte 0xc1
+   	pushw	iz
+   	.ascii "4!h%"
+>> 	cp	a, 26
+   	jr	z, 32
+   	dec	1, a
+   	cp a, (13359:16)
+   	jr ge, 24
+   	push	xix
+
+### SITE 15: v10/maincpu/display/scoop_display.s:11539  src_addr=0xEFD334  target=0xEFD344  proposed_label=VoiceState_DataBlock2_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	sla	xwa, 207
+   	pop	xde
+   	jrl	z, 2
+   	ld	w, 0:opc
+   	pop	xhl
+   	ret
+   	call	TempoRingBuf_ReadByte
+   	ld	wa, hl
+   	cp	wa, 0xffff
+   	jrl	z, 23
+   	call	VoiceState_DataBlock2_0x1CB
+   	bit	7, a
+>> 	jrl	nz, 13
+   	call	TempoRingBuf_ReadByte
+   	ld	wa, hl
+   	cp	wa, 0xffff
+   	jrl	nz, -36
+   	ret
+-- target context (v10/maincpu/display/scoop_display.s:11544; >> = target line):
+   	call	TempoRingBuf_ReadByte
+   	ld	wa, hl
+   	cp	wa, 0xffff
+   	jrl	nz, -36
+>> 	ret
+   	push	xix
+   	call	TempoRingBuf_SaveReadPos
+   	call	TempoRingBuf_ReadAlternate
+   	ld	wa, hl
+   	pop	xix
+
+### SITE 16: v10/maincpu/display/scoop_display.s:9306  src_addr=0xEFBC81  target=0xEFBC8A  proposed_label=SysInit_BytecodeBlock_Skip10 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	w, a
+   	call	VoiceSlot_FinalRetZ_0x84
+   	ld	a, 2:opc
+   	call	VoiceSlot_RestoreState
+   	call	VoiceSlot_FlagCheck
+   	ld	(3658:16), a
+   	xor	a, a
+   	ld	(3657:16), a
+   	call	VoiceSlot_DispatchRet
+   	inc	1, (3657:16)
+   	call	VoiceSlot_ReadCurrentParams
+   	cp	a, 132
+>> 	jrl	z, 6
+   	cp	a, 129
+   	jrl	nz, 10
+   	ld	a, 1:opc
+   	call	VoiceSlot_RestoreState
+   	jp	SysInit_BytecodeBlock_0x2A1
+-- target context (v10/maincpu/display/scoop_display.s:9309; >> = target line):
+   	cp	a, 132
+   	jrl	z, 6
+   	cp	a, 129
+   	jrl	nz, 10
+>> 	ld	a, 1:opc
+   	call	VoiceSlot_RestoreState
+   	jp	SysInit_BytecodeBlock_0x2A1
+   	call	VoiceSlot_FlagCheck
+   	cp	(3658:16), a
+   	jrl	ule, -45
+
+### SITE 17: v10/maincpu/audio/dsp_config_sysex.s:36  src_addr=0xFDAB83  target=0xFDABC4  proposed_label=SysEx_ApplyToSlot4B_Data_Skip3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xwa, (0xbcac:16)
+   	ldw	bc, 11
+   	call	SeqData_ReadFieldByIndex
+   	ld	(xsp+4), l
+   	ld	a, (xsp+4)
+   	extz	wa
+   	calr	87
+   	ld	(xsp+4), l
+   	ld	xwa, 0x4b04
+   	call	DSPCfg_ReadParam_Map0
+   	ld qiz, hl
+   	cp qiz, 0
+>> 	jr lt, 63
+   	ld	iz, 0:i3
+   	cp qiz, 0
+   	jr le, 50
+   	ld wa, iz
+   	exts	xwa
+-- target context (v10/maincpu/audio/dsp_config_sysex.s:61; >> = target line):
+   	jr	lt, -50
+   	push	xiz
+   	call	SwbtWr_ReinitOutputBank
+   	pop	xiz
+>> 	pop	xiz
+   	inc	2, xsp
+   	ret
+   
+   SysEx_ClampVoiceIndex128:
+   	cp a, 0x80
+
+### SITE 18: v10/maincpu/display/scoop_display.s:3969  src_addr=0xEF83BB  target=0xEF83D1  proposed_label=ToneParam_HandlerTable_BC_Skip12 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp	w, 255
+   	jrl	z, 47
+   	call	VoiceSlot_ReadCurrentParams
+   	cp	a, 129
+   	jrl	z, 17
+   	call	ToneParam_HandlerTable_BC_0x269
+   	cp	w, 0:i3
+   	jrl	nz, -29
+   	call	ToneParam_HandlerTable_BC_0x4DC
+   	jp	ToneParam_HandlerTable_BC_0x210
+   	call	VoiceSlot_DispatchRet
+   	cp	w, 255
+>> 	jrl	z, 19
+   	call	VoiceSlot_ReadCurrentParams
+   	cp	a, 129
+   	jrl	z, 9
+   	call	ToneParam_HandlerTable_BC_0x269
+   	cp	w, 0:i3
+-- target context (v10/maincpu/display/scoop_display.s:3976; >> = target line):
+   	jrl	z, 9
+   	call	ToneParam_HandlerTable_BC_0x269
+   	cp	w, 0:i3
+   	jrl	nz, -29
+>> 	ld	a, (3650:16)
+   	ld	(3647:16), a
+   	ld	w, 0:opc
+   	jp	ToneParam_HandlerTable_BC_0x268
+   	ld	a, 3:opc
+   	call	VoiceSlot_RestoreState
+
+### SITE 19: v10/maincpu/sequencer/accompaniment_engine.s:26121  src_addr=0xF65A39  target=0xF65A3F  proposed_label=TimeSig_DisplayStrings_Skip3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	nz, 20
+   	inc	1, l
+   	cp	l, 14
+   	jr	nz, 4
+   	ld	l, 15:opc
+   	jr	27
+   	cp	l, 16
+   	jr	c, 22
+   	ld	l, 15:opc
+   	jr	18
+   	dec	1, l
+   	cp	l, 14
+>> 	jr	nz, 4
+   	ld	l, 13:opc
+   	jr	7
+   	cp	l, 255
+   	jr	nz, 2
+   	ld	l, 0:opc
+-- target context (v10/maincpu/sequencer/accompaniment_engine.s:26124; >> = target line):
+   	cp	l, 14
+   	jr	nz, 4
+   	ld	l, 13:opc
+   	jr	7
+>> 	cp	l, 255
+   	jr	nz, 2
+   	ld	l, 0:opc
+   	ld	a, l
+   	ld	xix, 0xff92
+   	ld_rr8b h, xix, l
+
+### SITE 20: v10/maincpu/audio/audio_control_engine.s:848  src_addr=0xFC6094  target=0xFCD437  proposed_label=SndParam_LookupReadOnly (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xwa, xiz
+   	calr	-2056
+   	inc	4, xiz
+   	ld	xwa, xiz
+   	calr	-2063
+   	pop	xiz
+   	ret
+   	push	xiz
+   	ld	xiz, xwa
+   	cp	(36148:16), 19
+   	jr	z, 35
+   	ld	xwa, 192
+>> 	call	16569399
+   	cp	hl, 1:i3
+   	jr	z, 22
+   	.byte 0x8e, 0x02, 0x3f, 0x00
+   	jr	z, 4
+   	.byte 0xf1, 0x52, 0x8d, 0xbb
+-- target context (v10/maincpu/audio/sndparam_routines.s:228; >> = target line):
+   	popw	iz
+   	retd	2
+   
+   SndParam_LookupReadOnly:
+>> 	dec 6, xsp
+   	push xiz
+   	ldw (xsp + 4), 0xffff
+   	ld xiz, xwa
+   	ld xwa, 0:i3
+   	ld (xsp + 6), xwa
+
+### SITE 21: v10/maincpu/display/scoop_display.s:5497  src_addr=0xEF940A  target=0xEF943C  proposed_label=VoiceSlot_TableSetup_Return (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jrl	ugt, 10
+   	ldw	(3660:16), 0
+   	jp	VoiceSlot_TableSetup_0x40E
+   	ld	(3666:16), 4
+   	ld	wa, (0x371a:16)
+   	ld	(0x287f:16), wa
+   	call	SubCPU_ToneParamRet_0x315
+   	ld	a, (3424:16)
+   	call	SetWall_SlotResolve
+   	.byte 0xc1
+   	jrl	gt, 16168
+   	nop
+>> 	jrl	nz, 47
+   	ld	(0x28c1:16), iy
+   	ld	iy, (0x28af:16)
+   	ld	(0x28bf:16), iy
+   	ld	iy, (0x371a:16)
+   	cp	iy, 1000
+-- target context (v10/maincpu/display/scoop_display.s:5513; >> = target line):
+   	nop
+   	ld	a, (3666:16)
+   	ld	(3777:16), a
+   	call	VoiceState_DataBlock2_0x561
+>> 	ret
+   	ld	l, (3424:16)
+   	dec	1, l
+   	ld	h, l
+   	sla	l, 1
+   	add	l, h
+
+### SITE 22: v10/maincpu/audio/audio_control_engine.s:4905  src_addr=0xFC8701  target=0xFC96C2  proposed_label=SwbtWr_WriteParamBlock_Body_Sub (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	wa, 1:i3
+   	ld	bc, 7:i3
+   	calr	4482
+   	calr	3959
+   	inc	6, xsp
+   	ret
+   	ldw	wa, 127
+   	calr	4221
+   	jrl	3947
+   	ldw	wa, 127
+   	calr	4212
+   	ldw	wa, 128
+>> 	calr	4030
+   	jrl	3932
+   	ldw	wa, 127
+   	calr	4197
+   	jrl	3923
+   	ldw	wa, 127
+-- target context (v10/maincpu/audio/audio_control_engine.s:6582; >> = target line):
+   	ldw (0x90de:16), 0
+   
+   SwbtWr_WriteParamBlock_Body:
+   	jrl SwbtWr_AppendFixedParamBlock
+>> 	dec 2, xsp
+   	ld (xsp), a
+   	ld c, (0x9131:16)
+   	ld a, c
+   	and a, (xsp)
+   	jr z, Voice_Update_Return
+
+### SITE 23: v10/maincpu/display/graphics_text_vga.s:1934  src_addr=0xFB259D  target=0xFAF8C0  proposed_label=ColorBlit2 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld bc, qbc
+   	sll bc, 3
+   	ld	(xwa), bc
+   	ld	bc, (xde)
+   	.byte 0x9b, 0x04, 0x81
+   	ld	(xwa+6), bc
+   	ld	bc, (xhl+2)
+   	sll	bc, 3
+   	ld	de, (xwa)
+   	add	de, bc
+   	ld	(xwa+4), de
+   	ld	bc, (0x03efa2:24)
+>> 	calr	54048
+   	inc	8, xsp
+   	ret
+   	dec	8, xsp
+   	ld	xbc, xwa
+   	ld	wa, (xbc+2)
+-- target context (v10/maincpu/ui/ui_window_procs.s:7871; >> = target line):
+   	inc 8, xsp
+   	ret
+   
+   ColorBlit2:
+>> 	dec 2, xsp
+   	push xiz
+   	ld (xsp + 4), bc
+   	ld xiz, xwa
+   	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
+   	cp hl, 0:i3
+
+### SITE 24: v10/maincpu/sequencer/sequencer_engine.s:23188  src_addr=0xF460A7  target=0xF4637B  proposed_label=AppEvent_ReturnZero (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jrl	312
+   	.byte 0xf1
+   	ld	a, 4:opc
+   	scc8	nz, b
+   	.byte 0xdf
+   	push	sr
+   	.byte 0xc1
+   	ldw	iz, 0x3f8d
+   	decm8	6, (xiz)
+   	zcf
+   	ld	wa, iy
+   	cp	iy, 1:i3
+>> 	jrl	ule, 721
+   	dec	1, wa
+   	ld	(9504:16), wa
+   	.byte 0xf1
+   	.ascii "h&Ph"
+   	zcf
+-- target context (v10/maincpu/sequencer/sequencer_engine.s:23504; >> = target line):
+   NoteEdit_ReturnSendToggle:
+   	calr AppEvent_SendModeToggle
+   
+   AppEvent_ReturnZero:
+>> 	ld xhl, 0:i3
+   	popw iz
+   	inc 4, xsp
+   	ret
+   
+   SeqAccomp_ReassignVoiceState:
+
+### SITE 25: v10/maincpu/sequencer/accompaniment_engine.s:32252  src_addr=0xF6942E  target=0xF69594  proposed_label=CstmCp_ReturnZero2 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xde, 0:i3
+   	jrl	134
+   	cp	(0x3a7e:16), 0
+   	jrl	nz, 379
+   	ld	wa, 1:i3
+   	call	UI_PostEvent_0x6E
+   	ld	c, 29:opc
+   	ld	a, (0x39b7:16)
+   	cp	a, 10
+   	jr	nc, 2
+   	ld	c, 2:opc
+   	cp	a, c
+>> 	jrl	nc, 355
+   	inc	1, a
+   	ld	(0x39b7:16), a
+   	ld	xwa, 0xbe000b
+   	ld	xbc, 0x01c0000b
+   	ld	xde, 0:i3
+-- target context (v10/maincpu/sequencer/accompaniment_engine.s:32365; >> = target line):
+   	ldw	wa, 238
+   	call	SoundCtrl_SendCommand
+   
+   CstmCp_ReturnZero2:
+>> 	ld xhl, 0:i3
+   	ret
+   
+   CstmCp_StyleDataBlock:
+   	cp	xbc, 0x01e40016
+   	jr	nz, 40
+
+### SITE 26: v10/maincpu/storage/flash_floppy_handlers.s:3439  src_addr=0xF183DF  target=0xF183EF  proposed_label=Flash_SlotUpdateOpsBlock_Skip (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp	e, 50
+   	jr	c, -24
+   	cp	l, e
+   	jr	nc, 7
+   	sub	l, e
+   	extz	hl
+   	ld	(xsp+2), hl
+   	ld	hl, (xsp)
+   	sll	hl, 8
+   	.byte 0x9f
+   	push	sr
+   	or	(xhl), l
+>> 	jr	z, 14
+   	dec	4, xsp
+   	ld	(xsp+2), a
+   	calr	65155
+   	ld	a, 30:opc
+   	ld	(xsp), 31
+-- target context (v10/maincpu/storage/flash_floppy_handlers.s:3446; >> = target line):
+   	calr	65155
+   	ld	a, 30:opc
+   	ld	(xsp), 31
+   	.byte 0x8f
+>> 	push	sr
+   	push	xsp
+   	nop
+   	jr	nz, 2
+   	ld	a, 32:opc
+   	.byte 0x8f
+
+### SITE 27: v10/maincpu/ui/drawbar_panel_ui.s:285  src_addr=0xF7810D  target=0xF78138  proposed_label=ComSetGridCheck_JumpTable_Skip4 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	lt, -26
+   	lda	xde, (xsp+12)
+   	ld	(xhl+4), xde
+   	ld	xwa, (xsp+22)
+   	ld	xwa, (xwa)
+   	cp	xwa, 8709
+   	jr	z, 110
+   	cp	xwa, 8705
+   	jr	z, 102
+   	cp	xwa, 8832
+   	jr	z, 49
+   	cp	xwa, 8858
+>> 	jr	z, 41
+   	cp	xwa, 0x2a000
+   	jr	z, 33
+   	cp	xwa, 0x2a001
+   	jr	z, 25
+   	cp	xwa, 8834
+-- target context (v10/maincpu/ui/drawbar_panel_ui.s:296; >> = target line):
+   	cp	xwa, 8706
+   	jr	z, 9
+   	cp	xwa, 8707
+   	jrl	nz, 412
+>> 	ld	xbc, NakaInst_OFF_E80048_0x2
+   	ld	xwa, (xsp+22)
+   	cpw	(xwa+4), 0
+   	jr	z, 5
+   	ld	xbc, NakaToggle_OnOff_Data_0x4
+   	push	xbc
+
+### SITE 28: v10/maincpu/audio/semenu_routines.s:2703  src_addr=0xF07861  target=0xF074BC  proposed_label=SeMenu_SetupPartDisplay_End_Sub3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr	62769
+   	lda	xbc, (xsp)
+   	ld	wa, 1:i3
+   	calr	62196
+   	lda	xbc, (xsp)
+   	ld	(xbc+6), 127
+   	ld	(xbc+7), 0
+   	ld	(xbc+8), 127
+   	ld	(xbc+9), 0
+   	ld	a, (xsp+18)
+   	extz	wa
+   	lda	xbc, (xbc+10)
+>> 	calr	64600
+   	ld	a, (xsp+12)
+   	extz	wa
+   	pushw	wa
+   	.byte 0xbf
+   	push	sr
+-- target context (v10/maincpu/audio/semenu_routines.s:2297; >> = target line):
+   	ldw	de, 128
+   	calr	65482
+   	inc	2, xsp
+   	ret
+>> 	ld	l, a
+   	res	7, l
+   	ld	e, 255:opc
+   	cp	l, 0:i3
+   	jr	nz, 2
+   	ld	e, 1:opc
+
+### SITE 29: v10/maincpu/audio/semenu_routines.s:1894  src_addr=0xF07146  target=0xF0714E  proposed_label=SeMenu_TransferPartValues_EndData_Join10 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	c, (xsp+6)
+   	extz	bc
+   	stb_erp a, 251
+   	extz	wa
+   	lda	xde, (xsp+8)
+   	.byte 0x8f, 0x04
+   	push	xsp
+   	nop
+   	jr	nz, 8
+   	pushw	wa
+   	ld	wa, 0:i3
+   	calr	61588
+>> 	jr	6
+   	pushw	wa
+   	ld	wa, 3:i3
+   	calr	62670
+   	ld	c, (xsp+8)
+   	extz	bc
+-- target context (v10/maincpu/audio/semenu_routines.s:1898; >> = target line):
+   	jr	6
+   	pushw	wa
+   	ld	wa, 3:i3
+   	calr	62670
+>> 	ld	c, (xsp+8)
+   	extz	bc
+   	ldw	wa, 12
+   	calr	63957
+   	pushw	12
+   	pushw	59
+
+### SITE 30: v10/maincpu/midi/ac_listener_handlers.s:1434  src_addr=0xF75C68  target=0xF75C74  proposed_label=Data_InOutGridDispatch_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	46
+   	ld	xwa, 8577
+   	ldw	bc, 0xffff
+   	ld	de, 1:i3
+   	jr	34
+   	ld	xwa, 8580
+   	ldw	bc, 0xffff
+   	ld	de, 1:i3
+   	jr	22
+   	ld	xwa, 8578
+   	ldw	bc, 0xffff
+   	ld	de, 1:i3
+>> 	jr	10
+   	ld	xwa, 8579
+   	ldw	bc, 0xffff
+   	ld	de, 1:i3
+   	call	MainLswAdd
+   	jrl	1405
+-- target context (v10/maincpu/midi/ac_listener_handlers.s:1438; >> = target line):
+   	jr	10
+   	ld	xwa, 8579
+   	ldw	bc, 0xffff
+   	ld	de, 1:i3
+>> 	call	MainLswAdd
+   	jrl	1405
+   	lda	xwa, (xsp+4)
+   	ldw	(xwa), 1
+   	ld	xde, xbc
+   	ld	(xwa+4), xbc
+
+### SITE 31: v10/maincpu/sequencer/accompaniment_engine.s:25647  src_addr=0xF65562  target=0xF65591  proposed_label=DrumVoice_Handler7_Return2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr	63200
+   	.byte 0xc1, 0xcd
+   	ldw	ix, 0xbf3c
+   	calr	1520
+   	calr	4
+   	calr	1537
+   	ret
+   	ld	a, (0xfc5a:16)
+   	and	a, 255
+   	cp	a, 128
+   	jr	c, 50
+   	cp	a, 128
+>> 	jr	z, 45
+   	cp	a, 132
+   	jr	z, 40
+   	cp	a, 136
+   	jr	z, 35
+   	and	a, 127
+-- target context (v10/maincpu/sequencer/accompaniment_engine.s:25661; >> = target line):
+   	and	a, 127
+   	ld	(0xffa1:16), a
+   	ld	(0xffbf:16), a
+   	calr	63123
+>> 	ret
+   	.byte 0x80, 0x80, 0x80, 0x80, 0x84, 0x84, 0x84
+   	add	(xix), w
+   	add	(xwa-120), w
+   	push	xiz
+   	call	DrumVoice_Handler7_0xF5
+
+### SITE 32: v10/maincpu/storage/fdc_routines.s:1099  src_addr=0xF9749F  target=0xF971E1  proposed_label=FDC_ResultPhase_Read_Loop (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr	64867
+   	ld	a, (0x8a32:16)
+   	extz	wa
+   	calr	64858
+   	ld	a, (0x8a33:16)
+   	extz	wa
+   	calr	64849
+   	ld	a, (0x8a34:16)
+   	extz	wa
+   	jrl	-696
+   	ld	a, (0x8a36:16)
+   	extz	wa
+>> 	jrl	-705
+   	ld	a, (0x8a2b:16)
+   	extz	wa
+   	calr	64822
+   	ld	a, (0x8a2c:16)
+   	and	a, 1
+-- target context (v10/maincpu/storage/fdc_routines.s:763; >> = target line):
+   	extz	wa
+   	calr	63826
+   	inc	2, xsp
+   	ret
+>> 	dec	2, xsp
+   	ld	(xsp), a
+   	calr	63892
+   	ld	a, (xsp)
+   	extz	wa
+   	calr	63809
+
+### SITE 33: v10/maincpu/audio/note_voice_mapping.s:17225  src_addr=0xFEA900  target=0xFEAA15  proposed_label=SndParam_ProcessEntry_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	bc
+   	ld	xwa, xde
+   	calr	1939
+   	.byte 0xbf
+   	pop	sr
+   	scc8	z, h
+   	.byte 0x1f, 0x01, 0x8f
+   	nop
+   	ld	a, 216:opc
+   	ccf
+   	calr	5663
+   	cp	l, 0:i3
+>> 	jrl	nz, 274
+   	lda	xwa, (xsp)
+   	ld	xde, xwa
+   	ld	a, (xsp+3)
+   	and	a, 64
+   	ld	c, a
+-- target context (v10/maincpu/audio/note_voice_mapping.s:17341; >> = target line):
+   	ld	c, a
+   	extz	bc
+   	ld	xwa, xde
+   	calr	1646
+>> 	inc	4, xsp
+   	ret
+   HdaeRom_Entry:
+   	dec	4, xsp
+   	.byte 0xbf
+   	nop
+
+### SITE 34: v10/maincpu/storage/fdc_routines.s:234  src_addr=0xF96D37  target=0xF96D61  proposed_label=FDC_WaitReady_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	83
+   	ld	(0x8a6c:16), 3
+   	ldw	(0x8a22:16), 0
+   	ldi_erpb 251, 64
+   	ld wa, 0:i3
+   	calr 65027
+   	jr	61
+   	ld	(0x8a6c:16), 4
+   	ldw	(0x8a22:16), 0
+   	ldib_erp 251, 0
+   	ld wa, 2:i3
+   	calr	65006
+>> 	jr	40
+   	ld	(0x8a6c:16), 5
+   	ldw	(0x8a22:16), 0
+   	ldib_erp 251, 0
+   	ld wa, 2:i3
+   	calr	64985
+-- target context (v10/maincpu/storage/fdc_routines.s:246; >> = target line):
+   	ldw	(0x8a22:16), 0
+   	ldib_erp 251, 0
+   	ld wa, 2:i3
+   	calr	64964
+>> 	stb_erp a, 251
+   	or a, 11
+   	extz wa
+   	calr	1421
+   	.byte 0xc1
+   	ld	d, 138:opc
+
+### SITE 35: v10/maincpu/audio/audio_control_engine.s:10858  src_addr=0xFCC75A  target=0xFCCB1C  proposed_label=MidiStream_ExtendedDispatch (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	(0x9127:16), bc
+   	ld	(0x9129:16), de
+   	call	SwbtWr_WriteVoiceParam_PreserveRegs
+   	ret
+   	calr	985
+   	ret
+   	ld	(0x90f8:16), 255
+   	ld	bc, (0x9644:16)
+   	ld	de, (0x9646:16)
+   	call	MIDI_WriteVoiceParamCC
+   	call	SwbtWr_WriteVoiceParam_PreserveRegs
+   	ret
+>> 	calr	959
+   	ret
+   
+   MidiStream_LoadAllPresets:
+   	ld xiy, 0x9432
+   	ld w, 0xb3:opc
+-- target context (v10/maincpu/audio/audio_control_engine.s:11262; >> = target line):
+   MidiStream_PartSelectDone:
+   	ret
+   
+   MidiStream_ExtendedDispatch:
+>> 	ret
+   	.byte 0xc1
+   	ld	xix, 0x6e143f96
+   	reti
+   	ld	(0x9644:16), 72
+   	ld	c, 72:opc
+
+### SITE 36: v10/maincpu/storage/fdc_routines.s:936  src_addr=0xF9730E  target=0xF973E1  proposed_label=FDC_HardwareSetup_Sub (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	(xbc), a
+   	ret
+   	dec	2, xsp
+   	ld	(xsp), a
+   	calr	63542
+   	.byte 0xc1
+   	ld	d, 138:opc
+   	push	xsp
+   	nop
+   	jrl	nz, 214
+   	ld	a, (xsp)
+   	ld	(0x8a28:16), a
+>> 	calr	208
+   	cp	l, 0:i3
+   	jrl	nz, 200
+   	ld	a, (xsp)
+   	cp	a, 51
+   	jr	z, 30
+-- target context (v10/maincpu/storage/fdc_routines.s:1027; >> = target line):
+   	jr	3
+   	calr	196
+   	inc	2, xsp
+   	ret
+>> 	ld	a, (0x8a28:16)
+   	cp	a, 79
+   	jr	z, 20
+   	cp	a, 51
+   	jr	z, 15
+   	cp	a, 52
+
+### SITE 37: v10/maincpu/audio/dsp_config_sysex.s:6398  src_addr=0xFDE8D0  target=0xFDE916  proposed_label=UIStateEvt_ChannelConfig_Data_Entry6 (new; target kind boundary-data)
+-- source context (>> = the numeric branch):
+   	push	xiz
+   	ld	(0:8), 104:io
+   	ldw	(241:8), 0xc322:io
+   	.byte 0xbc, 0xd1, 0x9c, 0xc5
+   	push	xiz
+   	ld	(0:8), 209:io
+   	.byte 0x94, 0xc5
+   	push	xiz
+   	.byte 0x04
+   	nop
+   	.byte 0xf1
+   	jrl	nc, -13632
+>> 	jr	z, 68
+   	.byte 0xf1
+   	jrl	nz, -13632
+   	jr	z, 26
+   	.byte 0xf1
+   	ld	xde, 0x44f1bec3
+-- target context (v10/maincpu/audio/dsp_config_sysex.s:6429; >> = target line):
+   	.byte 0x94, 0xc5
+   	push	xiz
+   	.byte 0x04
+   	nop
+>> 	.byte 0xf1
+   	jrl	nc, -12608
+   	jr	z, 12
+   	.byte 0xd1, 0x9c, 0xc5
+   	push	xiz
+   	ld	(0:8), 209:io
+
+### SITE 38: v10/maincpu/sequencer/accompaniment_engine.s:26123  src_addr=0xF65A3D  target=0xF65A46  proposed_label=TimeSig_DisplayStrings_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp	l, 14
+   	jr	nz, 4
+   	ld	l, 15:opc
+   	jr	27
+   	cp	l, 16
+   	jr	c, 22
+   	ld	l, 15:opc
+   	jr	18
+   	dec	1, l
+   	cp	l, 14
+   	jr	nz, 4
+   	ld	l, 13:opc
+>> 	jr	7
+   	cp	l, 255
+   	jr	nz, 2
+   	ld	l, 0:opc
+   	ld	a, l
+   	ld	xix, 0xff92
+-- target context (v10/maincpu/sequencer/accompaniment_engine.s:26127; >> = target line):
+   	jr	7
+   	cp	l, 255
+   	jr	nz, 2
+   	ld	l, 0:opc
+>> 	ld	a, l
+   	ld	xix, 0xff92
+   	ld_rr8b h, xix, l
+   	ld l, a
+   	ld	a, 72:opc
+   	ld	(0x90f6:16), a
+
+### SITE 39: v10/maincpu/ui/ui_widget_defs.s:3447  src_addr=0xFA0E79  target=0xFA0EAA  proposed_label=ButtonState_DispatchDSP_InlineData_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xwa, Data_SoundEditorCharsLayout_0x418
+   	jr	82
+   	ld	xwa, Data_SoundEditorCharsLayout_0x41C
+   	jr	75
+   	ld	xwa, Data_SoundEditorCharsLayout_0x420
+   	jr	68
+   	ld	xwa, Data_SoundEditorCharsLayout_0x424
+   	jr	61
+   	.byte 0x40
+   	.long NakaInst_OK
+   	jr	54
+   	ld	xwa, NakaInst_OK_0x4
+>> 	jr	47
+   	ld	xwa, NakaInst_OK_0x8
+   	jr	40
+   	ld	xwa, NakaInst_OK_0xC
+   	jr	33
+   	ld	xwa, NakaInst_OK_0xE
+-- target context (v10/maincpu/ui/ui_widget_defs.s:3462; >> = target line):
+   	ld	xwa, NakaInst_OK_0x18
+   	jr	5
+   	.byte 0x40
+   	.long Str_No
+>> 	push	xwa
+   	lda	xwa, (xsp+16)
+   	push	xwa
+   	call	Strcpy
+   	inc	8, xsp
+   
+
+### SITE 40: v10/maincpu/ui/drawbar_panel_ui.s:1530  src_addr=0xF790A7  target=0xF791D9  proposed_label=PmemOutL_GridCheck_Return (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x71, 0x01, 0xaf
+   	.byte 0x20, 0x20, 0xb8, 0x0f, 0x30, 0xaf, 0x14, 0xa0
+   	.byte 0xe9, 0x8a, 0xe8, 0x82, 0xaf, 0x04, 0x20, 0xa0
+   	.byte 0xfa, 0x6e, 0x2e, 0xaf, 0x10, 0x20, 0xb0, 0x02
+   	.byte 0x01, 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20, 0x38
+   	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x9e, 0x01, 0xaf, 0x14
+   	.byte 0x20, 0x38, 0x1d
+   	addr24 Sprintf_Locked
+   	lda	xsp, (xsp+12)
+   	lda	xde, (xsp+36)
+   	ld	xwa, 5963785
+   	ld	xbc, 31457420
+>> 	jrl	303
+   	ld	xwa, (xsp+32)
+   	lda	xwa, (xwa+17)
+   	.byte 0xaf, 0x14, 0xa0
+   	add	xbc, xwa
+   	ld	xwa, (xsp+4)
+-- target context (v10/maincpu/ui/drawbar_panel_ui.s:1650; >> = target line):
+   	ld xbc, 0x1e0008c
+   
+   ; PmemOutLGridCheck return
+   PmemOutL_GridCheck_Return:
+>> 	call SendEvent
+   
+   PmemOutGrid_ReturnZero:
+   	ld xhl, 0:i3
+   	pop xiz
+   	lda xsp, (xsp + 78)
+
+### SITE 41: v10/maincpu/sequencer/accompaniment_engine.s:25720  src_addr=0xF65610  target=0xF65618  proposed_label=DrumVoice_Handler7_Return5 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xiz
+   	call	DrumVoice_Handler7_0x14D
+   	pop	xiz
+   	ret
+   	ld	a, (0x39a8:16)
+   	bit	7, w
+   	jr	z, 8
+   	cp	a, 1:i3
+   	jr	z, 14
+   	inc	1, a
+   	jr	6
+   	cp	a, 0:i3
+>> 	jr	z, 6
+   	dec	1, a
+   	ld	(0x39a8:16), a
+   	ret
+   	push	xiz
+   	call	DrumVoice_Handler7_0x170
+-- target context (v10/maincpu/sequencer/accompaniment_engine.s:25723; >> = target line):
+   	cp	a, 0:i3
+   	jr	z, 6
+   	dec	1, a
+   	ld	(0x39a8:16), a
+>> 	ret
+   	push	xiz
+   	call	DrumVoice_Handler7_0x170
+   	pop	xiz
+   	ret
+   	ld	a, (0x39a8:16)
+
+### SITE 42: v10/maincpu/sequencer/accompaniment_engine.s:13037  src_addr=0xF5E28C  target=0xF5E75F  proposed_label=AccTone_LookupByProgram_Dispatch_Sub6 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr	-1179
+   	ld	xwa, (13350:16)
+   	call	16115551
+   	ld	xwa, (13350:16)
+   	jrl	276
+   	ld	a, (1075:16)
+   	extz	wa
+   	lda	xiy, (14969776:24)
+   	.byte 0xc3, 0x07, 0xf4, 0xe0, 0x3f, 0x01
+   	jr	nz, 18
+   	calr	-1262
+   	ld	xwa, (13350:16)
+>> 	call	16115551
+   	ld	xwa, (13350:16)
+   	jrl	239
+   	ld	xwa, xhl
+   	ld	(xhl), e
+   	ld	e, (xix)
+-- target context (v10/maincpu/sequencer/accompaniment_engine.s:13431; >> = target line):
+   	ld	xiy, xwa
+   	call	AccPart_InitPositionsAndBase
+   	pop	xiz
+   	ret
+>> 	push	xiz
+   	ld	xiy, xwa
+   	call	AccInit_AllPartPositions
+   	pop	xiz
+   	ret
+   	push	xiz
+
+### SITE 43: v10/maincpu/display/graphics_text_vga.s:3284  src_addr=0xFB3595  target=0xFB3087  proposed_label=_Write_VGA_Register (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr	64274
+   	ldw	wa, 965
+   	ldw	bc, 100
+   	calr	64265
+   	ldw	wa, 964
+   	ldw	bc, 9
+   	calr	64256
+   	ldw	wa, 965
+   	ld	bc, 3:i3
+   	calr	64248
+   	ldw	wa, 964
+   	ldw	bc, 12
+>> 	calr	64239
+   	ldw	wa, 965
+   	ldw	bc, 9
+   	calr	64230
+   	ldw	wa, 964
+   	ldw	bc, 9
+-- target context (v10/maincpu/display/graphics_text_vga.s:2748; >> = target line):
+   	lda xsp, (xsp + 16)
+   	ret
+   
+   _Write_VGA_Register:
+>> 	ld de, 0:i3
+   
+   VGA_WriteReg_Delay:
+   	inc 1, de
+   	cp de, 0x80
+   	jr c, VGA_WriteReg_Delay
+
+### SITE 44: v10/maincpu/sequencer/sequencer_ui.s:13783  src_addr=0xF349C5  target=0xF349B2  proposed_label=SqplyFunc_PartQueryDispatch_Loop (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jp_ind 8, 0x07, 0xf0, 0xe0
+   
+   SqplyFunc_PartQueryDispatch:
+   	ld	l, 1:opc
+   	ld	a, (0x02109c:24)
+   	cp	a, l
+   	scc16	z, hl
+   	extz	xhl
+   	jr	16
+   	ld	l, 2:opc
+   	jr	-17
+   	ld	l, 3:opc
+>> 	jr	-21
+   
+   SqplyFunc_GetScreenId:
+   	call GetTitleNow
+   	ld h, 0x0:opc
+   	extz xhl
+-- target context (v10/maincpu/sequencer/sequencer_ui.s:13775; >> = target line):
+   	jp_ind 8, 0x07, 0xf0, 0xe0
+   
+   SqplyFunc_PartQueryDispatch:
+   	ld	l, 1:opc
+>> 	ld	a, (0x02109c:24)
+   	cp	a, l
+   	scc16	z, hl
+   	extz	xhl
+   	jr	16
+   	ld	l, 2:opc
+

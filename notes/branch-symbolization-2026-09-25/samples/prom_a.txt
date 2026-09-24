@@ -1,0 +1,1442 @@
+IMAGE prom_a  -- 45 sampled sites out of 3927 accepted
+
+### SITE 0: wsa1/prom_a/wsa1_prom_a.s:153493  src_addr=0xFE3F1F  target=0xFE3F65  proposed_label=.LFE3F65 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ldw hl, 0xff                                         ; FE3EF6  33 ff 00
+   	ld bc, (0x605d36:24)                                ; FE3EF9  d2 36 5d 60 21
+   	cp bc, 0x00:i3                                         ; FE3EFE  d9 d8
+   	jr mi, 0x7f                                          ; FE3F00  65 7f
+   	cp bc, 0x05:i3                                         ; FE3F02  d9 dd
+   	jr gt, 0x7b                                          ; FE3F04  6a 7b
+   	add BC,BC                                            ; FE3F06  d9 81
+   	lda xix, (0xfe6dd8:24)                               ; FE3F08  f2 d8 6d fe 34
+   	mx_ld_rm MXW, ra_IX, ra_BC, r1                       ; FE3F0D  d3 07 f0 e4 21
+   	lda xix, (0xfe3f1c:24)                               ; FE3F12  f2 1c 3f fe 34
+   	mx_jp_cc MXD, ra_IX, ra_BC, 8                        ; FE3F17  f3 07 f0 e4 d8
+   	cp (XWA),0x00                                        ; FE3F1C  80 3f 00
+>> 	jr nz, 0x44                                          ; FE3F1F  6e 44
+   	cp (XWA+0x01),0xff                                   ; FE3F21  88 01 3f ff
+   	jr nz, 0x39                                          ; FE3F25  6e 39
+   	cp (XWA+0x02),0xff                                   ; FE3F27  88 02 3f ff
+   	jr nz, 0x33                                          ; FE3F2B  6e 33
+   	push XWA                                             ; FE3F2D  38
+-- target context (wsa1/prom_a/wsa1_prom_a.s:153519; >> = target line):
+   .LFE3F60:
+   	ldw hl, 0xff                                         ; FE3F60  33 ff 00
+   	jr 0x1c                                              ; FE3F63  68 1c
+   .LFE3F65:
+>> 	cp (XWA),0xf9                                        ; FE3F65  80 3f f9
+   	jr z, 0x15                                           ; FE3F68  66 15
+   	jr 0x15                                              ; FE3F6A  68 15
+   sub_FE3F6C:
+   	cp (XWA),0xfe                                        ; FE3F6C  80 3f fe
+   	jr z, 0x0e                                           ; FE3F6F  66 0e
+
+### SITE 1: wsa1/prom_a/wsa1_prom_a.s:154796  src_addr=0xFE4AE3  target=0xFE4B46  proposed_label=.LFE4B46 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr nz, 0x0a                                          ; FE4AC9  6e 0a
+   	cp wa, 0x00:i3                                         ; FE4ACB  d8 d8
+   	jr nz, 0x0c                                          ; FE4ACD  6e 0c
+   	m_ld_mi16 MDI+r1, 0, 0x005a                          ; FE4ACF  b1 02 5a 00
+   	jr 0x6d                                              ; FE4AD3  68 6d
+   .LFE4AD5:
+   	m_ld_mi16 MDI+r1, 0, 0x0000                          ; FE4AD5  b1 02 00 00
+   	jr 0x0a                                              ; FE4AD9  68 0a
+   .LFE4ADB:
+   	cp wa, 0x00:i3                                         ; FE4ADB  d8 d8
+   	jr z, 0x06                                           ; FE4ADD  66 06
+   	cp WA,0xffff                                         ; FE4ADF  d8 cf ff ff
+>> 	jr nz, 0x61                                          ; FE4AE3  6e 61
+   .LFE4AE5:
+   	ld wa, (0x605d36:24)                                ; FE4AE5  d2 36 5d 60 20
+   	cp wa, 0x00:i3                                         ; FE4AEA  d8 d8
+   	jr mi, 0x58                                          ; FE4AEC  65 58
+   	cp wa, 0x05:i3                                         ; FE4AEE  d8 dd
+-- target context (wsa1/prom_a/wsa1_prom_a.s:154834; >> = target line):
+   .LFE4B42:
+   	ld hl, 0x00:i3                                         ; FE4B42  db a8
+   	jr 0x03                                              ; FE4B44  68 03
+   .LFE4B46:
+>> 	ldw hl, 0xff                                         ; FE4B46  33 ff 00
+   .LFE4B49:
+   	popw iz                                              ; FE4B49  4e
+   	ret                                                  ; FE4B4A  0e
+   sub_FE4B4B:
+   	dec 2,XSP                                            ; FE4B4B  ef 6a
+
+### SITE 2: wsa1/prom_a/wsa1_prom_a.s:166827  src_addr=0xFEA6E1  target=0xFF2232  proposed_label=Data_FF17E2_Entry (new; target kind boundary-data)
+-- source context (>> = the numeric branch):
+   .LFEA6C9:
+   	call 0xff21f6                                        ; FEA6C9  1d f6 21 ff
+   	jr .LFEA6BB                                          ; FEA6CD  68 ec
+   .LFEA6CF:
+   	incw 0x01, (0x601f6c:24)                          ; FEA6CF  d2 6c 1f 60 61
+   	jr .LFEA6C9                                          ; FEA6D4  68 f3
+   .LFEA6D6:
+   	ret                                                  ; FEA6D6  0e
+   sub_FEA6D7:
+   	calr 0xe51e                                          ; FEA6D7  1e 1e e5
+   	ldw (0x601f6c:24), 0x00                             ; FEA6DA  f2 6c 1f 60 02 00 00
+   .LFEA6E1:
+>> 	call 0xff2232                                        ; FEA6E1  1d 32 22 ff
+   	cp A,0x82                                            ; FEA6E5  c9 cf 82
+   	jr z, .LFEA708                                       ; FEA6E8  66 1e
+   	cp A,0x81                                            ; FEA6EA  c9 cf 81
+   	jr z, .LFEA6F5                                       ; FEA6ED  66 06
+   .LFEA6EF:
+-- target context (wsa1/prom_a/wsa1_prom_a.s:173764; >> = target line):
+   	.byte 0x01, 0x01, 0x01, 0xff, 0x1e, 0x0b, 0x00, 0x1e, 0x36, 0x00, 0xc9, 0x33, 0x07, 0x66, 0x01, 0x0e  ; FF21F2
+   	.byte 0x68, 0xf2, 0xd1, 0x5e, 0x34, 0x20, 0xd8, 0xcf, 0xff, 0x00, 0x6e, 0x1d, 0xeb, 0xd3, 0xd1, 0x5c  ; FF2202
+   	.byte 0x34, 0x23, 0xeb, 0x69, 0xeb, 0xec, 0x08, 0x1d, 0x34, 0x83, 0xfe, 0xed, 0x83, 0x9b, 0x03, 0x20  ; FF2212
+   	.byte 0xf1, 0x5c, 0x34, 0x50, 0x30, 0x05, 0x00, 0x68, 0x02, 0xd8, 0x61, 0xf1, 0x5e, 0x34, 0x50, 0x0e  ; FF2222
+>> 	.byte 0xeb, 0xd3, 0xd1, 0x5c, 0x34, 0x23, 0xeb, 0x69, 0xeb, 0xec, 0x08, 0x1d, 0x34, 0x83, 0xfe, 0xed  ; FF2232
+   	.byte 0x83, 0xd1, 0x5e, 0x34, 0x25, 0xc3, 0x07, 0xec, 0xf4, 0x21, 0x0e, 0xeb, 0xd3, 0xd1, 0x5c, 0x34  ; FF2242
+   	.byte 0x23, 0xeb, 0x69, 0xeb, 0xec, 0x08, 0x28, 0x1d, 0x34, 0x83, 0xfe, 0xed, 0x83, 0x48, 0xd1, 0x5e  ; FF2252
+   	.byte 0x34, 0x25, 0xf3, 0x07, 0xec, 0xf4, 0x41                            ; FF2262
+   	ret                                                  ; FF2269  0e
+   
+
+### SITE 3: wsa1/prom_a/wsa1_prom_a.s:145458  src_addr=0xFDF7B6  target=0xFD7C2D  proposed_label=ToneEdit_StepFromEvent (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pushw 0x03                                    ; FDF790  0b 03 00
+   	call 0xfd6c7b                                 ; FDF793  1d 7b 6c fd
+   	ld (XIX+0x06),0xff                            ; FDF797  bc 06 00 ff
+   	ld (XIX+0x07),0x00                            ; FDF79B  bc 07 00 00
+   	ld (XIX+0x08),0x32                            ; FDF79F  bc 08 00 32
+   	ld (XIX+0x09),0xce                            ; FDF7A3  bc 09 00 ce
+   	ld XBC,XIX                                    ; FDF7A7  ec 89
+   	add XBC,0x0000000a                            ; FDF7A9  e9 c8 0a 00 00 00
+   	push XBC                                      ; FDF7AF  39
+   	ld BC,(XIZ+0x08)                              ; FDF7B0  9e 08 21
+   	extz BC                                       ; FDF7B3  d9 12
+   	pushw bc                                      ; FDF7B5  29
+>> 	call 0xfd7c2d                                 ; FDF7B6  1d 2d 7c fd
+   	push XIX                                      ; FDF7BA  3c
+   	pushw 0x3c                                    ; FDF7BB  0b 3c 00
+   	ld bc, (xiz-2)                                ; FDF7BE  9e fe 21
+   	extz BC                                       ; FDF7C1  d9 12
+   	pushw bc                                      ; FDF7C3  29
+-- target context (wsa1/prom_a/wsa1_prom_a.s:131140; >> = target line):
+   	popw hl                                              ; FD7C29  4b
+   	unlk XIZ                                             ; FD7C2A  ee 0d
+   	ret                                                  ; FD7C2C  0e
+   ToneEdit_StepFromEvent:
+>> 	link XIZ,0x0000                                      ; FD7C2D  ee 0c 00 00
+   	push XIX                                             ; FD7C31  3c
+   	ld XIX,(XIZ+0x0a)                                    ; FD7C32  ae 0a 24
+   	ld C,(XIZ+0x08)                                      ; FD7C35  8e 08 23
+   	res 0x07,C                                           ; FD7C38  cb 30 07
+   	cp c, 0x00:i3                                          ; FD7C3B  cb d8
+
+### SITE 4: wsa1/prom_a/wsa1_prom_a.s:72069  src_addr=0xFAAE9D  target=0xFAC8AA  proposed_label=sub_FAC8AA (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld xbc, (xiz-18)                                     ; FAAE84  ae ee 21
+   	inc 1,XBC                                            ; FAAE87  e9 61
+   	ld (xiz-4), xbc                                      ; FAAE89  be fc 61
+   	inc 1,H                                              ; FAAE8C  ce 61
+   	jr .LFAAE60                                          ; FAAE8E  68 d0
+   .LFAAE90:
+   	ld xbc, (xiz-14)                                     ; FAAE90  ae f2 21
+   	dec 2,XBC                                            ; FAAE93  e9 6a
+   	push XBC                                             ; FAAE95  39
+   	calr sub_FAAC0F                                      ; FAAE96  1e 76 fd
+   	ld c, (xiz-10)                                       ; FAAE99  8e f6 23
+   	pushw bc                                             ; FAAE9C  29
+>> 	calr 0x1a0a                                          ; FAAE9D  1e 0a 1a
+   	ld (xiz-14), xiy                                     ; FAAEA0  be f2 65
+   	ld BC,DE                                             ; FAAEA3  da 89
+   	extz XBC                                             ; FAAEA5  e9 12
+   	add XBC,0x00fad30a                                   ; FAAEA7  e9 c8 0a d3 fa 00
+   	ld XBC,(XBC)                                         ; FAAEAD  a1 21
+-- target context (wsa1/prom_a/wsa1_prom_a.s:74757; >> = target line):
+   	pop XDE                                              ; FAC8A7  5a
+   	pop XHL                                              ; FAC8A8  5b
+   	ret                                                  ; FAC8A9  0e
+   sub_FAC8AA:
+>> 	link XIZ,0x0000                                      ; FAC8AA  ee 0c 00 00
+   	ld c, 0x04:opc                                          ; FAC8AE  23 04
+   	m_mul MBD+r6, 0x08, 3                                ; FAC8B0  8e 08 43
+   	extz XBC                                             ; FAC8B3  e9 12
+   	add XBC,0x00facdea                                   ; FAC8B5  e9 c8 ea cd fa 00
+   	ld XBC,(XBC)                                         ; FAC8BB  a1 21
+
+### SITE 5: wsa1/prom_a/wsa1_prom_a.s:167748  src_addr=0xFEB088  target=0xFEB118  proposed_label=sub_FEB118 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	m_bit 0, MD24, 0x601f70                              ; FEB069  f2 70 1f 60 c8
+   	jr z, .LFEB079                                       ; FEB06E  66 09
+   	calr 0x4818                                          ; FEB070  1e 18 48
+   	calr sub_FEB07A                                      ; FEB073  1e 04 00
+   	calr 0x0207                                          ; FEB076  1e 07 02
+   .LFEB079:
+   	ret                                                  ; FEB079  0e
+   sub_FEB07A:
+   	ld (0x2540:16), 0x00                                 ; FEB07A  f1 40 25 00 00
+   	calr sub_FEB0A4                                      ; FEB07F  1e 22 00
+   	calr 0x43                                            ; FEB082  1e 43 00
+   	calr 0x68                                            ; FEB085  1e 68 00
+>> 	calr 0x8d                                            ; FEB088  1e 8d 00
+   	calr 0xb2                                            ; FEB08B  1e b2 00
+   	calr 0xd7                                            ; FEB08E  1e d7 00
+   	calr 0xfc                                            ; FEB091  1e fc 00
+   	calr 0x0121                                          ; FEB094  1e 21 01
+   	calr 0x0146                                          ; FEB097  1e 46 01
+-- target context (wsa1/prom_a/wsa1_prom_a.s:167864; >> = target line):
+   ;          The label stays sub_XXXXXX on purpose; naming it would need the
+   ;          list's opcodes decoded or a caller that says what it is.
+   ; ---------------------------------------------------------------------
+   sub_FEB118:
+>> 	ld wa, (0x601f71:24)                                ; FEB118  d2 71 1f 60 20
+   	add WA,0x0003                                        ; FEB11D  d8 c8 03 00
+   	ld (0x26b0:16), wa                                  ; FEB121  f1 b0 26 50
+   	ld XIY,0x00feb134                                    ; FEB125  45 34 b1 fe 00
+   	ld XIX,0x00feb140                                    ; FEB12A  44 40 b1 fe 00
+   	call 0xf417f4                                        ; FEB12F  1d f4 17 f4
+
+### SITE 6: wsa1/prom_a/wsa1_prom_a.s:41752  src_addr=0xF988C2  target=0xF97563  proposed_label=sub_F97533_Sub (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	lda xiy, (0xf988ac:24)                               ; F988A4  f2 ac 88 f9 35
+   	push XIY                                             ; F988A9  3d
+   	jp (xix)                                             ; F988AA  b4 d8
+   .LF988AC:
+   	ld c, (0x7835:16)                                   ; F988AC  c1 35 78 23
+   	and C,0x80                                           ; F988B0  cb cc 80
+   	jr nz, .LF988B9                                      ; F988B3  6e 04
+   	call 0xf97533                                        ; F988B5  1d 33 75 f9
+   .LF988B9:
+   	ld c, (0x7836:16)                                   ; F988B9  c1 36 78 23
+   	and C,0x80                                           ; F988BD  cb cc 80
+   	jr nz, .LF988C6                                      ; F988C0  6e 04
+>> 	call 0xf97563                                        ; F988C2  1d 63 75 f9
+   .LF988C6:
+   	lda xbc, (0x7862:16)                                ; F988C6  f1 62 78 31
+   	ld (0x218b:16), xbc                                 ; F988CA  f1 8b 21 61
+   	ld (0x218f:16), 0x07                                 ; F988CE  f1 8f 21 00 07
+   	ld a, (0x7871:16)                                   ; F988D3  c1 71 78 21
+-- target context (wsa1/prom_a/wsa1_prom_a.s:39862; >> = target line):
+   	pop XHL                                              ; F9755F  5b
+   	pop XIX                                              ; F97560  5c
+   	pop XIZ                                              ; F97561  5e
+   	ret                                                  ; F97562  0e
+>> 	push XIZ                                             ; F97563  3e
+   	push XIX                                             ; F97564  3c
+   	push XHL                                             ; F97565  3b
+   	push XDE                                             ; F97566  3a
+   	ld xix, (0x218b:16)                                 ; F97567  e1 8b 21 24
+   	bit 4,(XIX+0x15)                                     ; F9756B  bc 15 cc
+
+### SITE 7: wsa1/prom_a/wsa1_prom_a.s:153448  src_addr=0xFE3EA7  target=0xFE3EAC  proposed_label=.LFE3EAC (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld hl, 0x00:i3                                         ; FE3E91  db a8
+   .LFE3E93:
+   	pop XIZ                                              ; FE3E93  5e
+   	inc 4,XSP                                            ; FE3E94  ef 64
+   	ret                                                  ; FE3E96  0e
+   sub_FE3E97:
+   	ld XWA,(XSP+0x04)                                    ; FE3E97  af 04 20
+   	ld (0x605d2c:24), xwa                               ; FE3E9A  f2 2c 5d 60 60
+   	ld hl, 0x00:i3                                         ; FE3E9F  db a8
+   	ret                                                  ; FE3EA1  0e
+   sub_FE3EA2:
+   	m_cp_mi16 MWD+r7, 0x04, 0x0001                       ; FE3EA2  9f 04 3f 01 00
+>> 	jr nz, 0x03                                          ; FE3EA7  6e 03
+   	ld hl, 0x00:i3                                         ; FE3EA9  db a8
+   	ret                                                  ; FE3EAB  0e
+   .LFE3EAC:
+   	lda xwa, (0x606f9b:24)                               ; FE3EAC  f2 9b 6f 60 30
+   	ld (XWA+0x04),0x5a                                   ; FE3EB1  b8 04 00 5a
+-- target context (wsa1/prom_a/wsa1_prom_a.s:153452; >> = target line):
+   	jr nz, 0x03                                          ; FE3EA7  6e 03
+   	ld hl, 0x00:i3                                         ; FE3EA9  db a8
+   	ret                                                  ; FE3EAB  0e
+   .LFE3EAC:
+>> 	lda xwa, (0x606f9b:24)                               ; FE3EAC  f2 9b 6f 60 30
+   	ld (XWA+0x04),0x5a                                   ; FE3EB1  b8 04 00 5a
+   	ld (XWA+0x03),0x5a                                   ; FE3EB5  b8 03 00 5a
+   	ld (XWA+0x02),0x5a                                   ; FE3EB9  b8 02 00 5a
+   	ld (XWA+0x01),0x5a                                   ; FE3EBD  b8 01 00 5a
+   	ld (XWA),0x5a                                        ; FE3EC1  b0 00 5a
+
+### SITE 8: wsa1/prom_a/wsa1_prom_a.s:37081  src_addr=0xF9536A  target=0xF95373  proposed_label=.LF95373 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld C,(XIX+0x03)                                      ; F9534B  8c 03 23
+   	and C,0x01                                           ; F9534E  cb cc 01
+   	jr z, 0x09                                           ; F95351  66 09
+   	ld C,(XIX+0x04)                                      ; F95353  8c 04 23
+   	and C,0x10                                           ; F95356  cb cc 10
+   	jrl nz, 0x6c                                         ; F95359  7e 6c 00
+   .LF9535C:
+   	ld C,(XIX+0x03)                                      ; F9535C  8c 03 23
+   	and C,0x04                                           ; F9535F  cb cc 04
+   	jr z, 0x0f                                           ; F95362  66 0f
+   	ld C,(XIX+0x04)                                      ; F95364  8c 04 23
+   	and C,0x40                                           ; F95367  cb cc 40
+>> 	jr z, 0x07                                           ; F9536A  66 07
+   	ld (0x2070:16), 0xd9                                 ; F9536C  f1 70 20 00 d9
+   	jr 0x50                                              ; F95371  68 50
+   .LF95373:
+   	ld C,(XIX+0x03)                                      ; F95373  8c 03 23
+   	and C,0x10                                           ; F95376  cb cc 10
+-- target context (wsa1/prom_a/wsa1_prom_a.s:37085; >> = target line):
+   	jr z, 0x07                                           ; F9536A  66 07
+   	ld (0x2070:16), 0xd9                                 ; F9536C  f1 70 20 00 d9
+   	jr 0x50                                              ; F95371  68 50
+   .LF95373:
+>> 	ld C,(XIX+0x03)                                      ; F95373  8c 03 23
+   	and C,0x10                                           ; F95376  cb cc 10
+   	jr z, 0x1c                                           ; F95379  66 1c
+   	ld C,(XIX+0x05)                                      ; F9537B  8c 05 23
+   	and C,0x01                                           ; F9537E  cb cc 01
+   	jr z, 0x14                                           ; F95381  66 14
+
+### SITE 9: wsa1/prom_a/wsa1_prom_a.s:36369  src_addr=0xF94E83  target=0xF94EC3  proposed_label=.LF94EC3 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   .LF94E64:
+   	mx_ld_rm MXB, ra_IZ, ra_IX, r3                       ; F94E64  c3 07 f8 f0 23
+   	inc 1,IX                                             ; F94E69  dc 61
+   	incm8 0x01, (xiz+0x08)                               ; F94E6B  8e 08 61
+   	cp IX,(XIZ+0x02)                                     ; F94E6E  9e 02 f4
+   	jr ule, 0x03                                         ; F94E71  63 03
+   	m_ld_rm MWD+r6, 0x00, r4                             ; F94E73  9e 00 24
+   .LF94E76:
+   	mx_ld_rm MXB, ra_IZ, ra_IX, r1                       ; F94E76  c3 07 f8 f0 21
+   	inc 1,IX                                             ; F94E7B  dc 61
+   	incm8 0x01, (xiz+0x08)                               ; F94E7D  8e 08 61
+   	cp W,0x20                                            ; F94E80  c8 cf 20
+>> 	jr z, 0x3e                                           ; F94E83  66 3e
+   	push XIZ                                             ; F94E85  3e
+   	pushw ix                                             ; F94E86  2c
+   	pushw wa                                             ; F94E87  28
+   	ld XIY,0x00f94f58                                    ; F94E88  45 58 4f f9 00
+   	m_cp_mi8 MB8, 0xc4, 0x01                             ; F94E8D  c0 c4 3f 01
+-- target context (wsa1/prom_a/wsa1_prom_a.s:36402; >> = target line):
+   	call 0xf40670                                        ; F94EBD  1d 70 06 f4
+   	popw ix                                              ; F94EC1  4c
+   	pop XIZ                                              ; F94EC2  5e
+   .LF94EC3:
+>> 	cp IX,(XIZ+0x02)                                     ; F94EC3  9e 02 f4
+   	jrl ule, -161                                        ; F94EC6  73 5f ff
+   	m_ld_rm MWD+r6, 0x00, r4                             ; F94EC9  9e 00 24
+   	jp sub_F94E28                                        ; F94ECC  1b 28 4e f9
+   .LF94ED0:
+   	ld (XIZ+0x06),IX                                     ; F94ED0  be 06 54
+
+### SITE 10: wsa1/prom_a/wsa1_prom_a.s:150079  src_addr=0xFE1E86  target=0xFE1EC3  proposed_label=sub_FE1EC3 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr nz, 0x04                                          ; FE1E6A  6e 04
+   	ld a, 0x10:opc                                          ; FE1E6C  21 10
+   	jr 0x20                                              ; FE1E6E  68 20
+   .LFE1E70:
+   	calr 0x0e82                                          ; FE1E70  1e 82 0e
+   	calr 0x0f46                                          ; FE1E73  1e 46 0f
+   	calr 0x0f03                                          ; FE1E76  1e 03 0f
+   	m_res 5, MD16, 0x21e7                                ; FE1E79  f1 e7 21 b5
+   	calr 0xecc3                                          ; FE1E7D  1e c3 ec
+   	ld H,A                                               ; FE1E80  c9 8e
+   	cp a, 0x01:i3                                          ; FE1E82  c9 d9
+   	jr nz, 0x08                                          ; FE1E84  6e 08
+>> 	calr 0x3a                                            ; FE1E86  1e 3a 00
+   	calr 0x0173                                          ; FE1E89  1e 73 01
+   	jr 0x02                                              ; FE1E8C  68 02
+   .LFE1E8E:
+   	ld A,H                                               ; FE1E8E  ce 89
+   .LFE1E90:
+-- target context (wsa1/prom_a/wsa1_prom_a.s:150113; >> = target line):
+   	popw hl                                              ; FE1EBF  4b
+   	unlk XIZ                                             ; FE1EC0  ee 0d
+   	ret                                                  ; FE1EC2  0e
+   sub_FE1EC3:
+>> 	link XIZ,0xfffc                                      ; FE1EC3  ee 0c fc ff
+   	pushw hl                                             ; FE1EC7  2b
+   	push XIX                                             ; FE1EC8  3c
+   	lda xbc, (0x1713:24)                                 ; FE1EC9  f2 13 17 00 31
+   	ld (xiz-4), xbc                                      ; FE1ECE  be fc 61
+   	ldw ix, 0x7fc0                                       ; FE1ED1  34 c0 7f
+
+### SITE 11: wsa1/prom_a/wsa1_prom_a.s:101344  src_addr=0xFBF535  target=0xFBB800  proposed_label=sub_FBB800 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	m_cp_mi8 MB16, 0x2767, 0x00                          ; FBF50F  c1 67 27 3f 00
+   	jr nz, .LFBF539                                      ; FBF514  6e 23
+   	m_cp_mi8 MB16, 0x2769, 0x01                          ; FBF516  c1 69 27 3f 01
+   	jr z, .LFBF52C                                       ; FBF51B  66 0f
+   	ld (0x2769:16), 0x01                                 ; FBF51D  f1 69 27 00 01
+   	m_set 4, MD16, 0x2071                                ; FBF522  f1 71 20 bc
+   	m_set 3, MD16, 0x2075                                ; FBF526  f1 75 20 bb
+   	jr .LFBF539                                          ; FBF52A  68 0d
+   .LFBF52C:
+   	push 0x00                                            ; FBF52C  09 00
+   	m_push MB16, 0x2765                                  ; FBF52E  c1 65 27 04
+   	pushw 0x09                                           ; FBF532  0b 09 00
+>> 	calr 0xc2c8                                          ; FBF535  1e c8 c2
+   	pop XIY                                              ; FBF538  5d
+   .LFBF539:
+   	ret                                                  ; FBF539  0e
+   	pushw hl                                             ; FBF53A  2b
+   	ld bc, (0x2767:16)                                 ; FBF53B  d1 67 27 21
+-- target context (wsa1/prom_a/wsa1_prom_a.s:94705; >> = target line):
+   ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
+   	.fill 977, 1, 0x0E
+   
+   sub_FBB800:
+>> 	link XIZ,0x0000                                      ; FBB800  ee 0c 00 00
+   	pushw hl                                             ; FBB804  2b
+   	ld L,(XIZ+0x0a)                                      ; FBB805  8e 0a 27
+   	ld H,(XIZ+0x08)                                      ; FBB808  8e 08 26
+   	ld C,H                                               ; FBB80B  ce 8b
+   	and C,0xf0                                           ; FBB80D  cb cc f0
+
+### SITE 12: wsa1/prom_a/wsa1_prom_a.s:149780  src_addr=0xFE1C91  target=0xFE066C  proposed_label=sub_FE066C (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ret                                                  ; FE1C78  0e
+   sub_FE1C79:
+   	calr 0xe91d                                          ; FE1C79  1e 1d e9
+   	calr 0xaa                                            ; FE1C7C  1e aa 00
+   	ret                                                  ; FE1C7F  0e
+   sub_FE1C80:
+   	ld (0x2880:16), 0x05                                 ; FE1C80  f1 80 28 00 05
+   	m_cp_mi8 MB16, 0x2229, 0x02                          ; FE1C85  c1 29 22 3f 02
+   	jr z, 0x05                                           ; FE1C8A  66 05
+   	calr 0xe95d                                          ; FE1C8C  1e 5d e9
+   	jr 0x03                                              ; FE1C8F  68 03
+   .LFE1C91:
+>> 	calr 0xe9d8                                          ; FE1C91  1e d8 e9
+   .LFE1C94:
+   	calr 0x92                                            ; FE1C94  1e 92 00
+   	ret                                                  ; FE1C97  0e
+   sub_FE1C98:
+   	calr 0xed23                                          ; FE1C98  1e 23 ed
+-- target context (wsa1/prom_a/wsa1_prom_a.s:147412; >> = target line):
+   	m_set 4, MD16, 0x2071                                ; FE0667  f1 71 20 bc
+   .LFE066B:
+   	ret                                                  ; FE066B  0e
+   sub_FE066C:
+>> 	pushw hl                                             ; FE066C  2b
+   	push XIX                                             ; FE066D  3c
+   	lda xix, (0x1736:24)                                 ; FE066E  f2 36 17 00 34
+   	calr 0xdf                                            ; FE0673  1e df 00
+   	ld H,A                                               ; FE0676  c9 8e
+   	ld (0x1735:24), a                                   ; FE0678  f2 35 17 00 41
+
+### SITE 13: wsa1/prom_a/wsa1_prom_a.s:152458  src_addr=0xFE3419  target=0xFE35F4  proposed_label=.LFE35F4 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ldw (0x605d54:24), 0x09                             ; FE33DE  f2 54 5d 60 02 09 00
+   	ldw (0x605d56:24), 0x02                             ; FE33E5  f2 56 5d 60 02 02 00
+   	ld XWA,0x000002c9                                    ; FE33EC  40 c9 02 00 00
+   	ld (0x605d58:24), xwa                               ; FE33F1  f2 58 5d 60 60
+   	ldw (0x605d62:24), 0x08                             ; FE33F6  f2 62 5d 60 02 08 00
+   	ldw (0x605d64:24), 0x01                             ; FE33FD  f2 64 5d 60 02 01 00
+   	m_ld_mi16 MDI+r3, 0, 0x0004                          ; FE3404  b3 02 04 00
+   	m_ld_mi16 MDI+r2, 0, 0x0002                          ; FE3408  b2 02 02 00
+   	ldw (0x605d6a:24), 0x00                             ; FE340C  f2 6a 5d 60 02 00 00
+   	ld WA,(XIY)                                          ; FE3413  95 20
+   	m_muls MWI+r4, 0, 0                                  ; FE3415  94 48
+   	ld (XBC),WA                                          ; FE3417  b1 50
+>> 	jrl 0x01d8                                           ; FE3419  78 d8 01
+   	ldw (0x605d3e:24), 0x07                             ; FE341C  f2 3e 5d 60 02 07 00
+   	ldw (0x605d40:24), 0x0e                             ; FE3423  f2 40 5d 60 02 0e 00
+   	lda xiy, (0x605d50:24)                               ; FE342A  f2 50 5d 60 35
+   	m_ld_mi16 MDI+r5, 0, 0x0010                          ; FE342F  b5 02 10 00
+   	lda xix, (0x605d52:24)                               ; FE3433  f2 52 5d 60 34
+-- target context (wsa1/prom_a/wsa1_prom_a.s:152554; >> = target line):
+   	ld WA,(XDE)                                          ; FE35EB  92 20
+   	m_muls MWI+r1, 0, 0                                  ; FE35ED  91 48
+   	ld (0x605d4e:24), wa                                ; FE35EF  f2 4e 5d 60 50
+   .LFE35F4:
+>> 	pop XIZ                                              ; FE35F4  5e
+   	lda xsp, (xsp+0x16)                                  ; FE35F5  bf 16 37
+   	ret                                                  ; FE35F8  0e
+   sub_FE35F9:
+   	pushw 0x00                                           ; FE35F9  0b 00 00
+   	calr 0x08a3                                          ; FE35FC  1e a3 08
+
+### SITE 14: wsa1/prom_a/wsa1_prom_a.s:153233  src_addr=0xFE3CA8  target=0xFE3CAD  proposed_label=.LFE3CAD (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld bc, (0x605d50:24)                                ; FE3C8C  d2 50 5d 60 21
+   	ld XWA,(XSP+0x0c)                                    ; FE3C91  af 0c 20
+   	ld IZ,(XWA+0x18)                                     ; FE3C94  98 18 26
+   	extz XIZ                                             ; FE3C97  ee 12
+   	div xiz, xbc                                         ; FE3C99  d9 56
+   	pushw iz                                             ; FE3C9B  2e
+   	calr 0x09aa                                          ; FE3C9C  1e aa 09
+   	inc 2,XSP                                            ; FE3C9F  ef 62
+   	cp hl, 0x00:i3                                         ; FE3CA1  db d8
+   	jr z, 0x05                                           ; FE3CA3  66 05
+   .LFE3CA5:
+   	ldw hl, 0xff                                         ; FE3CA5  33 ff 00
+>> 	jr 0x03                                              ; FE3CA8  68 03
+   .LFE3CAA:
+   	calr 0x0da8                                          ; FE3CAA  1e a8 0d
+   .LFE3CAD:
+   	pop XIZ                                              ; FE3CAD  5e
+   	inc 4,XSP                                            ; FE3CAE  ef 64
+-- target context (wsa1/prom_a/wsa1_prom_a.s:153237; >> = target line):
+   	jr 0x03                                              ; FE3CA8  68 03
+   .LFE3CAA:
+   	calr 0x0da8                                          ; FE3CAA  1e a8 0d
+   .LFE3CAD:
+>> 	pop XIZ                                              ; FE3CAD  5e
+   	inc 4,XSP                                            ; FE3CAE  ef 64
+   	ret                                                  ; FE3CB0  0e
+   sub_FE3CB1:
+   	push XIZ                                             ; FE3CB1  3e
+   	ld XIZ,(XSP+0x08)                                    ; FE3CB2  af 08 26
+
+### SITE 15: wsa1/prom_a/wsa1_prom_a.s:155988  src_addr=0xFE53ED  target=0xFE4C73  proposed_label=Dev7E_WriteByte (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ;           IMMEDIATE and 0x94 is STANDBY IMMEDIATE, but unlike the
+   ;           module's other five commands NOTHING in either body
+   ;           corroborates that -- no data phase, no operand, no result
+   ;           read beyond DRDY -- and operations 6 and 7 clear and SET PA
+   ;           bit 3 on unit 0, whose meaning is itself open. So this name
+   ;           says what the routine does and not what the command means
+   ; Was `sub_FE53E4`, named by notes/prom_a_census_round8.py (bucket round 10).
+   ; ---------------------------------------------------------------------
+   Unit1_Op6_IssueCommandAndWaitReady:
+   	pushw 0xff                                           ; FE53E4  0b ff 00
+   	pushw 0x01                                           ; FE53E7  0b 01 00
+   	pushw 0x00                                           ; FE53EA  0b 00 00
+>> 	calr 0xf883                                          ; FE53ED  1e 83 f8
+   	pushw 0x00                                           ; FE53F0  0b 00 00
+   	pushw 0x02                                           ; FE53F3  0b 02 00
+   	pushw 0x00                                           ; FE53F6  0b 00 00
+   	calr 0xf877                                          ; FE53F9  1e 77 f8
+   	pushw 0xff                                           ; FE53FC  0b ff 00
+-- target context (wsa1/prom_a/wsa1_prom_a.s:154985; >> = target line):
+   ;           in prom_a; see this module's header and `--ata`
+   ; Was `sub_FE4C73`, named by notes/prom_a_census_round8.py (bucket T1).
+   ; ---------------------------------------------------------------------
+   Dev7E_WriteByte:
+>> 	ld C,(XSP+0x06)                                      ; FE4C73  8f 06 23
+   	and C,0x07                                           ; FE4C76  cb cc 07
+   	cp (XSP+0x04),0x00                                   ; FE4C79  8f 04 3f 00
+   	jr nz, 0x05                                          ; FE4C7D  6e 05
+   	set 0x03,C                                           ; FE4C7F  cb 31 03
+   	jr 0x03                                              ; FE4C82  68 03
+
+### SITE 16: wsa1/prom_a/wsa1_prom_a.s:152356  src_addr=0xFE32C4  target=0xFE32E9  proposed_label=.LFE32E9 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld XHL,(XWA)                                         ; FE3299  a0 23
+   	lda xde, (0x605d58:24)                               ; FE329B  f2 58 5d 60 32
+   	cp XHL,0x00040000                                    ; FE32A0  eb cf 00 00 04 00
+   	jr nc, 0x0b                                          ; FE32A6  6f 0b
+   	ldw (0x605d4c:24), 0x0800                           ; FE32A8  f2 4c 5d 60 02 00 08
+   	ld xwa, 0x02:i3                                      ; FE32AF  e8 aa
+   	jr 0x36                                              ; FE32B1  68 36
+   .LFE32B3:
+   	cp XHL,0x00080000                                    ; FE32B3  eb cf 00 00 08 00
+   	jr nc, 0x0b                                          ; FE32B9  6f 0b
+   	ldw (0x605d4c:24), 0x1000                           ; FE32BB  f2 4c 5d 60 02 00 10
+   	ld xwa, 0x03:i3                                      ; FE32C2  e8 ab
+>> 	jr 0x23                                              ; FE32C4  68 23
+   .LFE32C6:
+   	lda xwa, (0x605d4c:24)                               ; FE32C6  f2 4c 5d 60 30
+   	cp XHL,0x00100000                                    ; FE32CB  eb cf 00 00 10 00
+   	jr nc, 0x08                                          ; FE32D1  6f 08
+   	m_ld_mi16 MDI+r0, 0, 0x2000                          ; FE32D3  b0 02 00 20
+-- target context (wsa1/prom_a/wsa1_prom_a.s:152370; >> = target line):
+   	jr nc, 0x19                                          ; FE32E1  6f 19
+   	m_ld_mi16 MDI+r0, 0, 0x4000                          ; FE32E3  b0 02 00 40
+   	ld xwa, 0x05:i3                                      ; FE32E7  e8 ad
+   .LFE32E9:
+>> 	ld XHL,(XBC)                                         ; FE32E9  a1 23
+   	bit 0x04,A                                           ; FE32EB  c9 33 04
+   	jr z, 0x03                                           ; FE32EE  66 03
+   	srl xhl, 0x00                                        ; FE32F0  eb ef 00
+   .LFE32F3:
+   	and A,0x0f                                           ; FE32F3  c9 cc 0f
+
+### SITE 17: wsa1/prom_a/wsa1_prom_a.s:151501  src_addr=0xFE2BED  target=0xFE2C4C  proposed_label=.LFE2C4C (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	inc 2,XSP                                            ; FE2BCC  ef 62
+   	cp wa, 0x00:i3                                         ; FE2BCE  d8 d8
+   	jrl nz, 0x85                                         ; FE2BD0  7e 85 00
+   	ldw de, 0x01                                         ; FE2BD3  32 01 00
+   	ld xbc, (xiz-12)                                     ; FE2BD6  ae f4 21
+   	cp XBC,0x00000400                                    ; FE2BD9  e9 cf 00 04 00 00
+   	jr c, 0x05                                           ; FE2BDF  67 05
+   	srl xbc, 0x0a                                        ; FE2BE1  e9 ef 0a
+   	ld DE,BC                                             ; FE2BE4  d9 8a
+   .LFE2BE6:
+   	m_ld_mi16 MDD+r6, 0xf8, 0x0000                       ; FE2BE6  be f8 02 00 00
+   	cp de, 0x00:i3                                         ; FE2BEB  da d8
+>> 	jr ule, 0x5d                                         ; FE2BED  63 5d
+   	ld XIX,0x00000000                                    ; FE2BEF  44 00 00 00 00
+   .LFE2BF4:
+   	ld xbc, (0x21d3:16)                                 ; FE2BF4  e1 d3 21 21
+   	add XBC,XIX                                          ; FE2BF8  ec 81
+   	ld (xiz-26), xbc                                     ; FE2BFA  be e6 61
+-- target context (wsa1/prom_a/wsa1_prom_a.s:151535; >> = target line):
+   	ld bc, (xiz-8)                                       ; FE2C45  9e f8 21
+   	cp BC,DE                                             ; FE2C48  da f1
+   	jr c, -88                                            ; FE2C4A  67 a8
+   .LFE2C4C:
+>> 	calr 0xdff6                                          ; FE2C4C  1e f6 df
+   	ld H,A                                               ; FE2C4F  c9 8e
+   	cp a, 0x03:i3                                          ; FE2C51  c9 db
+   	jr z, 0x07                                           ; FE2C53  66 07
+   	calr 0xef0d                                          ; FE2C55  1e 0d ef
+   .LFE2C58:
+
+### SITE 18: wsa1/prom_a/wsa1_prom_a.s:104618  src_addr=0xFC1217  target=0xFC1CD4  proposed_label=sub_FC1CD4 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push XHL                                             ; FC1200  3b
+   	call sub_FC120C                                      ; FC1201  1d 0c 12 fc
+   	calr 0x0b8a                                          ; FC1205  1e 8a 0b
+   	pop XHL                                              ; FC1208  5b
+   	pop XDE                                              ; FC1209  5a
+   	pop XIX                                              ; FC120A  5c
+   	ret                                                  ; FC120B  0e
+   sub_FC120C:
+   	ld W,B                                               ; FC120C  ca 88
+   	call sub_FC1119                                      ; FC120E  1d 19 11 fc
+   	bit 0x05,A                                           ; FC1212  c9 33 05
+   	jr nz, .LFC121C                                      ; FC1215  6e 05
+>> 	calr 0x0aba                                          ; FC1217  1e ba 0a
+   	jr .LFC121F                                          ; FC121A  68 03
+   .LFC121C:
+   	calr 0x0b03                                          ; FC121C  1e 03 0b
+   .LFC121F:
+   	ret                                                  ; FC121F  0e
+-- target context (wsa1/prom_a/wsa1_prom_a.s:105897; >> = target line):
+   	ret                                                  ; FC1CD1  0e
+   	ret                                                  ; FC1CD2  0e
+   	ret                                                  ; FC1CD3  0e
+   sub_FC1CD4:
+>> 	push XIX                                             ; FC1CD4  3c
+   	push W                                               ; FC1CD5  c8 04
+   	push XBC                                             ; FC1CD7  39
+   	pushw de                                             ; FC1CD8  2a
+   	pushw hl                                             ; FC1CD9  2b
+   	push_a                                               ; FC1CDA  14
+
+### SITE 19: wsa1/prom_a/wsa1_prom_a.s:144233  src_addr=0xFDEC42  target=0xFD74AE  proposed_label=sub_FD74AE (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pop XIY                                       ; FDEC2B  5d
+   	jr .LFDEC32                                   ; FDEC2C  68 04
+   .LFDEC2E:
+   	call 0xfd6e90                                 ; FDEC2E  1d 90 6e fd
+   .LFDEC32:
+   	unlk XIZ                                      ; FDEC32  ee 0d
+   	ret                                           ; FDEC34  0e
+   .LFDEC35:
+   	link XIZ,0x0000                               ; FDEC35  ee 0c 00 00
+   	cp (XIZ+0x08),0x00                            ; FDEC39  8e 08 3f 00
+   	jr z, .LFDEC56                                ; FDEC3D  66 17
+   	pushw 0x01                                    ; FDEC3F  0b 01 00
+>> 	call 0xfd74ae                                 ; FDEC42  1d ae 74 fd
+   	popw bc                                       ; FDEC46  49
+   	cp a, 0x00:i3                                   ; FDEC47  c9 d8
+   	jr z, .LFDEC56                                ; FDEC49  66 0b
+   	pushw 0x00                                    ; FDEC4B  0b 00 00
+   	pushw 0x90                                    ; FDEC4E  0b 90 00
+-- target context (wsa1/prom_a/wsa1_prom_a.s:130114; >> = target line):
+   	popw hl                                              ; FD74AA  4b
+   	unlk XIZ                                             ; FD74AB  ee 0d
+   	ret                                                  ; FD74AD  0e
+   sub_FD74AE:
+>> 	link XIZ,0xfffe                                      ; FD74AE  ee 0c fe ff
+   	pushw hl                                             ; FD74B2  2b
+   	lda xbc, (xiz-2)                                     ; FD74B3  be fe 31
+   	push XBC                                             ; FD74B6  39
+   	calr 0xf693                                          ; FD74B7  1e 93 f6
+   	pop XIY                                              ; FD74BA  5d
+
+### SITE 20: wsa1/prom_a/wsa1_prom_a.s:104463  src_addr=0xFC10EE  target=0xFC195D  proposed_label=sub_FC195D (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   sub_FC10DA:
+   	ret                                                  ; FC10DA  0e
+   sub_FC10DB:
+   	ret                                                  ; FC10DB  0e
+   	ret                                                  ; FC10DC  0e
+   sub_FC10DD:
+   	ld XIX,0x00000716                                    ; FC10DD  44 16 07 00 00
+   	ld XIZ,0x00fc0890                                    ; FC10E2  46 90 08 fc 00
+   	ldw bc, 0x20                                         ; FC10E7  31 20 00
+   .LFC10EA:
+   	pushw bc                                             ; FC10EA  29
+   	calr 0x0857                                          ; FC10EB  1e 57 08
+>> 	calr 0x086c                                          ; FC10EE  1e 6c 08
+   	popw bc                                              ; FC10F1  49
+   	add IZ,0x0008                                        ; FC10F2  de c8 08 00
+   	djnz16 bc, .LFC10EA                                  ; FC10F6  d9 1c f1
+   	ret                                                  ; FC10F9  0e
+   sub_FC10FA:
+-- target context (wsa1/prom_a/wsa1_prom_a.s:105418; >> = target line):
+   	ldw bc, 0x04                                         ; FC1956  31 04 00
+   	calr Msg0716_Post_Trampoline                         ; FC1959  1e be 00
+   	ret                                                  ; FC195C  0e
+   sub_FC195D:
+>> 	ld (XIX),0xb0                                        ; FC195D  b4 00 b0
+   	ld A,(XIZ+0x06)                                      ; FC1960  8e 06 21
+   	ld (XIX+0x01),A                                      ; FC1963  bc 01 41
+   	ld (XIX+0x02),0x01                                   ; FC1966  bc 02 00 01
+   	ld (XIX+0x03),0x00                                   ; FC196A  bc 03 00 00
+   	ldw bc, 0x04                                         ; FC196E  31 04 00
+
+### SITE 21: wsa1/prom_a/wsa1_prom_a.s:165712  src_addr=0xFE9B78  target=0xFEABE9  proposed_label=sub_FEABE9 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr nz, .LFE9B68                                      ; FE9B62  6e 04
+   	calr 0x0f1f                                          ; FE9B64  1e 1f 0f
+   	ret                                                  ; FE9B67  0e
+   .LFE9B68:
+   	calr 0xe67b                                          ; FE9B68  1e 7b e6
+   	ret                                                  ; FE9B6B  0e
+   	calr 0x0f25                                          ; FE9B6C  1e 25 0f
+   	ret                                                  ; FE9B6F  0e
+   	calr 0x0f9b                                          ; FE9B70  1e 9b 0f
+   	ret                                                  ; FE9B73  0e
+   	calr 0x0fb9                                          ; FE9B74  1e b9 0f
+   	ret                                                  ; FE9B77  0e
+>> 	calr 0x106e                                          ; FE9B78  1e 6e 10
+   	ret                                                  ; FE9B7B  0e
+   	calr 0x1137                                          ; FE9B7C  1e 37 11
+   	ret                                                  ; FE9B7F  0e
+   	calr 0x125e                                          ; FE9B80  1e 5e 12
+   	ret                                                  ; FE9B83  0e
+-- target context (wsa1/prom_a/wsa1_prom_a.s:167324; >> = target line):
+   .LFEABE1:
+   	ld (0x601f44:24), 0x01                             ; FEABE1  f2 44 1f 60 00 01
+   	jr .LFEABC1                                          ; FEABE7  68 d8
+   sub_FEABE9:
+>> 	m_or_mi8 MB16, 0x2075, 0x08                          ; FEABE9  c1 75 20 3e 08
+   	m_bit 7, MD24, 0x601f58                              ; FEABEE  f2 58 1f 60 cf
+   	jr z, .LFEABF6                                       ; FEABF3  66 01
+   .LFEABF5:
+   	ret                                                  ; FEABF5  0e
+   .LFEABF6:
+
+### SITE 22: wsa1/prom_a/wsa1_prom_a.s:165948  src_addr=0xFE9DFD  target=0xFF0205  proposed_label=sub_FF0205 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr .LFE9DE3                                          ; FE9DDD  68 04
+   .LFE9DDF:
+   	calr sub_FE9E04                                      ; FE9DDF  1e 22 00
+   	ret                                                  ; FE9DE2  0e
+   .LFE9DE3:
+   	m_add_mi8 MB24, 0x601f43, 0x05                       ; FE9DE3  c2 43 1f 60 38 05
+   	m_cp_mi8 MB24, 0x601f43, 0x5f                        ; FE9DE9  c2 43 1f 60 3f 5f
+   	jr ule, .LFE9DF7                                     ; FE9DEF  63 06
+   	ld (0x601f43:24), 0x5f                             ; FE9DF1  f2 43 1f 60 00 5f
+   .LFE9DF7:
+   	calr 0x6c58                                          ; FE9DF7  1e 58 6c
+   	calr sub_FE9EBB                                      ; FE9DFA  1e be 00
+>> 	calr 0x6405                                          ; FE9DFD  1e 05 64
+   sub_FE9E00:
+   	calr sub_FEA082                                      ; FE9E00  1e 7f 02
+   	ret                                                  ; FE9E03  0e
+   sub_FE9E04:
+   	ld c, (0x601f75:24)                                 ; FE9E04  c2 75 1f 60 23
+-- target context (wsa1/prom_a/wsa1_prom_a.s:171587; >> = target line):
+   	ld a, 0x05:opc                                          ; FF0201  21 05
+   	swi 7                                                ; FF0203  ff
+   	ret                                                  ; FF0204  0e
+   sub_FF0205:
+>> 	m_bit 0, MD24, 0x601f5b                              ; FF0205  f2 5b 1f 60 c8
+   	jr z, .LFF0233                                       ; FF020A  66 27
+   	m_bit 7, MD24, 0x601f58                              ; FF020C  f2 58 1f 60 cf
+   	jr z, .LFF0223                                       ; FF0211  66 10
+   	calr 0xf5bc                                          ; FF0213  1e bc f5
+   	calr 0xfd14                                          ; FF0216  1e 14 fd
+
+### SITE 23: wsa1/prom_a/wsa1_prom_a.s:18313  src_addr=0xF8AC8C  target=0xF8ACDE  proposed_label=.LF8ACDE (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr 0x71                                              ; F8AC6D  68 71
+   .LF8AC6F:
+   	ld a, 0x04:opc                                          ; F8AC6F  21 04
+   	m_mul MB16, 0x2250, 1                                ; F8AC71  c1 50 22 41
+   	add WA,0x0080                                        ; F8AC75  d8 c8 80 00
+   	extz XWA                                             ; F8AC79  e8 12
+   	add xwa, (0x60f018:24)                           ; F8AC7B  e2 18 f0 60 80
+   	ld XWA,(XWA)                                         ; F8AC80  a0 20
+   	ld A,(XWA+0x1d)                                      ; F8AC82  88 1d 21
+   	cp e, 0x01:i3                                          ; F8AC85  cd d9
+   	jr nz, 0x15                                          ; F8AC87  6e 15
+   	cp A,0x08                                            ; F8AC89  c9 cf 08
+>> 	jr z, 0x50                                           ; F8AC8C  66 50
+   	cp A,0x28                                            ; F8AC8E  c9 cf 28
+   	jr z, 0x4b                                           ; F8AC91  66 4b
+   	ld e, 0x08:opc                                          ; F8AC93  25 08
+   	bit 0x05,A                                           ; F8AC95  c9 33 05
+   	jr z, 0x46                                           ; F8AC98  66 46
+-- target context (wsa1/prom_a/wsa1_prom_a.s:18352; >> = target line):
+   	jr z, 0x06                                           ; F8ACD8  66 06
+   	ld e, 0x20:opc                                          ; F8ACDA  25 20
+   	jr 0x02                                              ; F8ACDC  68 02
+   .LF8ACDE:
+>> 	ld E,A                                               ; F8ACDE  c9 8d
+   .LF8ACE0:
+   	jp sub_F8A90B                                        ; F8ACE0  1b 0b a9 f8
+   .LF8ACE4:
+   	jp sub_F8A90F                                        ; F8ACE4  1b 0f a9 f8
+   	m_bit 1, MD16, 0x2075                                ; F8ACE8  f1 75 20 c9
+
+### SITE 24: wsa1/prom_a/wsa1_prom_a.s:150303  src_addr=0xFE208A  target=0xFE0105  proposed_label=sub_FE0105 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp a, 0x01:i3                                          ; FE2072  c9 d9
+   	jr nz, 0x05                                          ; FE2074  6e 05
+   	calr 0xeb7c                                          ; FE2076  1e 7c eb
+   	jr 0x03                                              ; FE2079  68 03
+   .LFE207B:
+   	calr 0xe06d                                          ; FE207B  1e 6d e0
+   .LFE207E:
+   	m_cp_mi8 MB16, 0x2725, 0x03                          ; FE207E  c1 25 27 3f 03
+   	jr nz, 0x05                                          ; FE2083  6e 05
+   	calr 0xe070                                          ; FE2085  1e 70 e0
+   	jr 0x03                                              ; FE2088  68 03
+   .LFE208A:
+>> 	calr 0xe078                                          ; FE208A  1e 78 e0
+   .LFE208D:
+   	ld A,H                                               ; FE208D  ce 89
+   .LFE208F:
+   	pop XIX                                              ; FE208F  5c
+   	popw hl                                              ; FE2090  4b
+-- target context (wsa1/prom_a/wsa1_prom_a.s:146686; >> = target line):
+   	pop XHL                                              ; FE0102  5b
+   	pop XDE                                              ; FE0103  5a
+   	ret                                                  ; FE0104  0e
+   sub_FE0105:
+>> 	push XDE                                             ; FE0105  3a
+   	push XHL                                             ; FE0106  3b
+   	push XIX                                             ; FE0107  3c
+   	push XIZ                                             ; FE0108  3e
+   	call 0xf41060                                        ; FE0109  1d 60 10 f4
+   	pop XIZ                                              ; FE010D  5e
+
+### SITE 25: wsa1/prom_a/wsa1_prom_a.s:102925  src_addr=0xFC027C  target=0xFC0990  proposed_label=Msg0716_DispatchIndex (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr 0x0731                                          ; FC025C  1e 31 07
+   	ret                                                  ; FC025F  0e
+   sub_FC0260:
+   	ld XIZ,0x00fc0898                                    ; FC0260  46 98 08 fc 00
+   	ld XIY,0x00fc09ce                                    ; FC0265  45 ce 09 fc 00
+   	ld a, 0x0d:opc                                          ; FC026A  21 0d
+   	calr 0x0721                                          ; FC026C  1e 21 07
+   	ret                                                  ; FC026F  0e
+   sub_FC0270:
+   	ld XIZ,0x00fc08a0                                    ; FC0270  46 a0 08 fc 00
+   	ld XIY,0x00fc09ce                                    ; FC0275  45 ce 09 fc 00
+   	ld a, 0x0d:opc                                          ; FC027A  21 0d
+>> 	calr 0x0711                                          ; FC027C  1e 11 07
+   	ret                                                  ; FC027F  0e
+   sub_FC0280:
+   	ld XIZ,0x00fc08a8                                    ; FC0280  46 a8 08 fc 00
+   	ld XIY,0x00fc09ce                                    ; FC0285  45 ce 09 fc 00
+   	ld a, 0x0d:opc                                          ; FC028A  21 0d
+-- target context (wsa1/prom_a/wsa1_prom_a.s:103655; >> = target line):
+   ; Unknown: nothing about the mechanism.  What each handler does is not
+   ;          established.
+   ; ---------------------------------------------------------------------
+   Msg0716_DispatchIndex:
+>> 	ld l, (0x20b8:16)                                   ; FC0990  c1 b8 20 27
+   	cp L,A                                               ; FC0994  c9 f7
+   	jr ugt, .LFC09AE                                     ; FC0996  6b 16
+   	m_and_mi8 MB16, 0x070f, 0xfd                         ; FC0998  c1 0f 07 3c fd
+   	ld XIX,0x00000716                                    ; FC099D  44 16 07 00 00
+   sub_FC09A2:
+
+### SITE 26: wsa1/prom_a/wsa1_prom_a.s:17517  src_addr=0xF8A653  target=0xF8A500  proposed_label=sub_F8A500 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld A,(XIX+0x18)                                      ; F8A637  8c 18 21
+   	pop XIX                                              ; F8A63A  5c
+   	bit 0x00,A                                           ; F8A63B  c9 33 00
+   	jr z, 0x04                                           ; F8A63E  66 04
+   	ld (xix-1), 0x1a                                     ; F8A640  bc ff 00 1a
+   .LF8A644:
+   	jp sub_F8A500                                        ; F8A644  1b 00 a5 f8
+   .LF8A648:
+   	jp sub_F8A504                                        ; F8A648  1b 04 a5 f8
+   	cp e, 0x00:i3                                          ; F8A64C  cd d8
+   	jr z, 0x12                                           ; F8A64E  66 12
+   	ldw de, 0x7f40                                       ; F8A650  32 40 7f
+>> 	calr 0xfeaa                                          ; F8A653  1e aa fe
+   	stiw_dsp 0xf1, 0xb9, 0x00                            ; F8A656  f5 f1 02 b9 00
+   	ldw de, 0x7f40                                       ; F8A65B  32 40 7f
+   	jp sub_F8A500                                        ; F8A65E  1b 00 a5 f8
+   .LF8A662:
+   	jp sub_F8A504                                        ; F8A662  1b 04 a5 f8
+-- target context (wsa1/prom_a/wsa1_prom_a.s:17296; >> = target line):
+   	popw hl                                              ; F8A4FC  4b
+   	pop XIY                                              ; F8A4FD  5d
+   	jp (xbc)                                             ; F8A4FE  b1 d8
+   sub_F8A500:
+>> 	stw_dpi de, 0xf1                                     ; F8A500  f5 f1 52
+   .LF8A503:
+   	ret                                                  ; F8A503  0e
+   sub_F8A504:
+   	dec 2,XIX                                            ; F8A504  ec 6a
+   	jr -5                                                ; F8A506  68 fb
+
+### SITE 27: wsa1/prom_a/wsa1_prom_a.s:148608  src_addr=0xFE1202  target=0xFE0970  proposed_label=sub_FE0970 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr 0xf73c                                          ; FE11E6  1e 3c f7
+   	calr 0x2c                                            ; FE11E9  1e 2c 00
+   	calr 0xf752                                          ; FE11EC  1e 52 f7
+   	jr 0x25                                              ; FE11EF  68 25
+   .LFE11F1:
+   	calr 0x0703                                          ; FE11F1  1e 03 07
+   	m_cp_mi8 MB16, 0x207a, 0x4e                          ; FE11F4  c1 7a 20 3f 4e
+   	jr nz, 0x03                                          ; FE11F9  6e 03
+   	calr 0x0709                                          ; FE11FB  1e 09 07
+   .LFE11FE:
+   	push 0x00                                            ; FE11FE  09 00
+   	push H                                               ; FE1200  ce 04
+>> 	calr 0xf76b                                          ; FE1202  1e 6b f7
+   	pushw 0x05dc                                         ; FE1205  0b dc 05
+   	calr 0x0216                                          ; FE1208  1e 16 02
+   	ld (0x2229:16), 0x00                                 ; FE120B  f1 29 22 00 00
+   	ld (0x2880:16), 0x02                                 ; FE1210  f1 80 28 00 02
+   	pop XIY                                              ; FE1215  5d
+-- target context (wsa1/prom_a/wsa1_prom_a.s:147773; >> = target line):
+   	ld (0x178e:24), 0x00                               ; FE0962  f2 8e 17 00 00 00
+   	ldw (0x1780:24), 0x00                               ; FE0968  f2 80 17 00 02 00 00
+   	ret                                                  ; FE096F  0e
+   sub_FE0970:
+>> 	link XIZ,0x0000                                      ; FE0970  ee 0c 00 00
+   	pushw hl                                             ; FE0974  2b
+   	push XIX                                             ; FE0975  3c
+   	lda xix, (0xfe1838:24)                               ; FE0976  f2 38 18 fe 34
+   	ld H,(XIZ+0x08)                                      ; FE097B  8e 08 26
+   	cp h, 0x01:i3                                          ; FE097E  ce d9
+
+### SITE 28: wsa1/prom_a/wsa1_prom_a.s:110910  src_addr=0xFC8D5C  target=0xFC8E6E  proposed_label=JumpTable_FC8DB2_Skip2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	unlk XIZ                                             ; FC8D42  ee 0d
+   	ret                                                  ; FC8D44  0e
+   sub_FC8D45:
+   	calr 0x01b6                                          ; FC8D45  1e b6 01
+   	ret                                                  ; FC8D48  0e
+   sub_FC8D49:
+   	link XIZ,0xfffa                                      ; FC8D49  ee 0c fa ff
+   	pushw hl                                             ; FC8D4D  2b
+   	pushw de                                             ; FC8D4E  2a
+   	push XIX                                             ; FC8D4F  3c
+   	m_ld_mi16 MDD+r6, 0xfe, 0x0000                       ; FC8D50  be fe 02 00 00
+   	m_cp_mi16 MW24, 0x602a00, 0x0000                     ; FC8D55  d2 00 2a 60 3f 00 00
+>> 	jrl ule, 0x010f                                      ; FC8D5C  73 0f 01
+   	ld XIX,0x00000000                                    ; FC8D5F  44 00 00 00 00
+   	ld (xiz-6), xix                                      ; FC8D64  be fa 64
+   	lda xbc, (0x602a02:24)                               ; FC8D67  f2 02 2a 60 31
+   	m_add_rm MLD+r6, 0xfa, r1                            ; FC8D6C  ae fa 81
+   	ld E,(XBC)                                           ; FC8D6F  81 25
+-- target context (wsa1/prom_a/wsa1_prom_a.s:111034; >> = target line):
+   	incw 0x01, (xiz-2)                                   ; FC8E60  9e fe 61
+   	ld bc, (xiz-2)                                       ; FC8E63  9e fe 21
+   	m_cp_rm MW24, 0x602a00, r1                           ; FC8E66  d2 00 2a 60 f1
+   	jrl c, -266                                          ; FC8E6B  77 f6 fe
+>> 	ldw (0x602a00:24), 0x00                             ; FC8E6E  f2 00 2a 60 02 00 00
+   	pop XIX                                              ; FC8E75  5c
+   	popw de                                              ; FC8E76  4a
+   	popw hl                                              ; FC8E77  4b
+   	unlk XIZ                                             ; FC8E78  ee 0d
+   	ret                                                  ; FC8E7A  0e
+
+### SITE 29: wsa1/prom_a/wsa1_prom_a.s:34013  src_addr=0xF93541  target=0xF935D7  proposed_label=InstallPainter_CombinationGroupMenu (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; InstallPainter_CombinationGroupMenu_Entry -- a PURE WRAPPER for InstallPainter_CombinationGroupMenu: it IS that
+   ; routine, so it is named for it.  Its whole extent is
+   ; one `calr` and the `ret` that follows it, and the routine
+   ; ends at 0xF93545, where the next top-level label begins.
+   ; Evidence: the `calr` at 0xF93541 targets 0xF935D7, which carries the
+   ;          label InstallPainter_CombinationGroupMenu.  The extent is measured to the next top-level
+   ;          label, never to a source line -- notes/wave7-verify-probes/
+   ;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+   ;          source line cost the round-5 pass.
+   ; ---------------------------------------------------------------------
+   
+   InstallPainter_CombinationGroupMenu_Entry:
+>> 	calr 0x93                                            ; F93541  1e 93 00
+   	ret                                                  ; F93544  0e
+   ; ---------------------------------------------------------------------
+   ; ScreenLeave_CombinationGroupMenu -- the LEAVE method of the screen object
+   ;          at PanelScreen_VtableTable entry 0xC5, i.e. SCREEN ID 0xA5 through
+   ;          PanelScreen_VtableTable_ViewB
+-- target context (wsa1/prom_a/wsa1_prom_a.s:34123; >> = target line):
+   ; Unknown: whether this routine also handles input for the screen, and
+   ;          whether any other routine paints it.  Neither was searched.
+   ; ---------------------------------------------------------------------
+   InstallPainter_CombinationGroupMenu:
+>> 	m_or_mi8 MB8, 0xc6, 0x01                             ; F935D7  c0 c6 3e 01
+   	ld a, (0x207c:16)                                   ; F935DB  c1 7c 20 21
+   	cp (0x207d:16), a                                    ; F935DF  c1 7d 20 f9
+   	jr z, .LF93602                                       ; F935E3  66 1d
+   	m_and_mi8 MB16, 0x2095, 0xef                         ; F935E5  c1 95 20 3c ef
+   	ld XWA,0xffffffff                                    ; F935EA  40 ff ff ff ff
+
+### SITE 30: wsa1/prom_a/wsa1_prom_a.s:73458  src_addr=0xFABBAF  target=0xFAB20B  proposed_label=sub_FAB20B (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	m_cp_rm MB24, 0x60f08a, r3                           ; FABB88  c2 8a f0 60 f3
+   	jr z, .LFABBCD                                       ; FABB8D  66 3e
+   .LFABB8F:
+   	ld c, (0x60f089:24)                                 ; FABB8F  c2 89 f0 60 23
+   	ld (XIX),C                                           ; FABB94  b4 43
+   	ld c, (0x60f08a:24)                                 ; FABB96  c2 8a f0 60 23
+   	ld (XIX+0x01),C                                      ; FABB9B  bc 01 43
+   	ld BC,IX                                             ; FABB9E  dc 89
+   	extz XBC                                             ; FABBA0  e9 12
+   	ld A,(XBC)                                           ; FABBA2  81 21
+   	ld (0x60f082:24), a                                 ; FABBA4  f2 82 f0 60 41
+   	ld (0x60f083:24), 0xff                             ; FABBA9  f2 83 f0 60 00 ff
+>> 	calr 0xf659                                          ; FABBAF  1e 59 f6
+   	ld (0x60f081:24), 0x01                             ; FABBB2  f2 81 f0 60 00 01
+   	ld C,(XIX+0x01)                                      ; FABBB8  8c 01 23
+   	ld (0x60f082:24), c                                 ; FABBBB  f2 82 f0 60 43
+   	ld (0x60f083:24), 0x01                             ; FABBC0  f2 83 f0 60 00 01
+   	calr 0xf642                                          ; FABBC6  1e 42 f6
+-- target context (wsa1/prom_a/wsa1_prom_a.s:72453; >> = target line):
+   	pop XIX                                              ; FAB207  5c
+   	unlk XIZ                                             ; FAB208  ee 0d
+   	ret                                                  ; FAB20A  0e
+   sub_FAB20B:
+>> 	m_cp_mi8 MB24, 0x60f083, 0x00                        ; FAB20B  c2 83 f0 60 3f 00
+   	jr z, .LFAB232                                       ; FAB211  66 1f
+   	m_cp_mi16 MW24, 0x60f000, 0x01fc                     ; FAB213  d2 00 f0 60 3f fc 01
+   	jr c, .LFAB22F                                       ; FAB21A  67 13
+   	push XDE                                             ; FAB21C  3a
+   	push XHL                                             ; FAB21D  3b
+
+### SITE 31: wsa1/prom_a/wsa1_prom_a.s:150649  src_addr=0xFE23CB  target=0xFE23E5  proposed_label=.LFE23E5 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld a, 0x01:opc                                          ; FE23B8  21 01
+   .LFE23BA:
+   	pop XIX                                              ; FE23BA  5c
+   	popw hl                                              ; FE23BB  4b
+   	ret                                                  ; FE23BC  0e
+   sub_FE23BD:
+   	pushw hl                                             ; FE23BD  2b
+   	pushw de                                             ; FE23BE  2a
+   	ld (0x21d0:16), 0x53                                 ; FE23BF  f1 d0 21 00 53
+   	calr 0xbd                                            ; FE23C4  1e bd 00
+   	ld H,A                                               ; FE23C7  c9 8e
+   	cp a, 0x01:i3                                          ; FE23C9  c9 d9
+>> 	jr nz, 0x18                                          ; FE23CB  6e 18
+   	ldw de, 0x0230                                       ; FE23CD  32 30 02
+   	ld c, (0x60a70f:24)                                 ; FE23D0  c2 0f a7 60 23
+   	cp C,0x31                                            ; FE23D5  cb cf 31
+   	jr nz, 0x03                                          ; FE23D8  6e 03
+   	ldw de, 0x0650                                       ; FE23DA  32 50 06
+-- target context (wsa1/prom_a/wsa1_prom_a.s:150661; >> = target line):
+   	pushw 0x5210                                         ; FE23DE  0b 10 52
+   	calr 0xda                                            ; FE23E1  1e da 00
+   	pop XIY                                              ; FE23E4  5d
+   .LFE23E5:
+>> 	ld A,H                                               ; FE23E5  ce 89
+   	popw de                                              ; FE23E7  4a
+   	popw hl                                              ; FE23E8  4b
+   	ret                                                  ; FE23E9  0e
+   sub_FE23EA:
+   	pushw hl                                             ; FE23EA  2b
+
+### SITE 32: wsa1/prom_a/wsa1_prom_a.s:145585  src_addr=0xFDF8FE  target=0xFD616A  proposed_label=sub_FD616A (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push XBC                                      ; FDF8E2  39
+   	pushw 0x00                                    ; FDF8E3  0b 00 00
+   	lda xiy, (0xfdf8ee:24)                        ; FDF8E6  f2 ee f8 fd 35
+   	push XIY                                      ; FDF8EB  3d
+   	jp (xix)                                      ; FDF8EC  b4 d8
+   	pushw 0x7f                                    ; FDF8EE  0b 7f 00
+   	lda xbc, (xiz-8)                              ; FDF8F1  be f8 31
+   	push XBC                                      ; FDF8F4  39
+   	pushw 0x39                                    ; FDF8F5  0b 39 00
+   	ld wa, (xiz-6)                                ; FDF8F8  9e fa 20
+   	extz WA                                       ; FDF8FB  d8 12
+   	pushw wa                                      ; FDF8FD  28
+>> 	call 0xfd616a                                 ; FDF8FE  1d 6a 61 fd
+   	pushw 0x00                                    ; FDF902  0b 00 00
+   	pushw 0x96                                    ; FDF905  0b 96 00
+   	call 0xf41ed4                                 ; FDF908  1d d4 1e f4
+   	pushw 0x00                                    ; FDF90C  0b 00 00
+   	pushw 0x00                                    ; FDF90F  0b 00 00
+-- target context (wsa1/prom_a/wsa1_prom_a.s:127702; >> = target line):
+   	popw hl                                              ; FD6166  4b
+   	unlk XIZ                                             ; FD6167  ee 0d
+   	ret                                                  ; FD6169  0e
+   sub_FD616A:
+>> 	link XIZ,0xfff4                                      ; FD616A  ee 0c f4 ff
+   	pushw hl                                             ; FD616E  2b
+   	push XIX                                             ; FD616F  3c
+   	lda xix, (xiz-12)                                    ; FD6170  be f4 34
+   	ld h, 0x00:opc                                          ; FD6173  26 00
+   .LFD6175:
+
+### SITE 33: wsa1/prom_a/wsa1_prom_a.s:54976  src_addr=0xFA099D  target=0xFA0A87  proposed_label=.LFA0A87 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call 0xf42e84                                        ; FA097D  1d 84 2e f4
+   	pushw 0x01                                           ; FA0981  0b 01 00
+   	call 0xf42dc0                                        ; FA0984  1d c0 2d f4
+   	calr 0x02d9                                          ; FA0988  1e d9 02
+   	inc 6,XSP                                            ; FA098B  ef 66
+   .LFA098D:
+   	pop XIX                                              ; FA098D  5c
+   	ret                                                  ; FA098E  0e
+   	push XIX                                             ; FA098F  3c
+   	lda xix, (0xf42c78:24)                               ; FA0990  f2 78 2c f4 34
+   	ld c, (0x2902:24)                                   ; FA0995  c2 02 29 00 23
+   	and C,0x04                                           ; FA099A  cb cc 04
+>> 	jrl nz, 0xe7                                         ; FA099D  7e e7 00
+   	ld c, (0x26a7:16)                                   ; FA09A0  c1 a7 26 23
+   	and C,0x07                                           ; FA09A4  cb cc 07
+   	extz BC                                              ; FA09A7  d9 12
+   	extz XBC                                             ; FA09A9  e9 12
+   	cp bc, 0x05:i3                                         ; FA09AB  d9 dd
+-- target context (wsa1/prom_a/wsa1_prom_a.s:55071; >> = target line):
+   	call 0xf42dc0                                        ; FA0A7E  1d c0 2d f4
+   	calr 0x01df                                          ; FA0A82  1e df 01
+   	inc 6,XSP                                            ; FA0A85  ef 66
+   .LFA0A87:
+>> 	pop XIX                                              ; FA0A87  5c
+   	ret                                                  ; FA0A88  0e
+   	ld c, (0x28b0:16)                                   ; FA0A89  c1 b0 28 23
+   	and C,0x01                                           ; FA0A8D  cb cc 01
+   	jr nz, .LFA0AAB                                      ; FA0A90  6e 19
+   	ld c, (0x2092:16)                                   ; FA0A92  c1 92 20 23
+
+### SITE 34: wsa1/prom_a/wsa1_prom_a.s:102677  src_addr=0xFC0050  target=0xFC1A1A  proposed_label=Msg0716_Post_Trampoline (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr 0x15b5                                          ; FC0029  1e b5 15
+   	popw hl                                              ; FC002C  4b
+   	inc 1,HL                                             ; FC002D  db 61
+   	cp HL,0x001f                                         ; FC002F  db cf 1f 00
+   	jr ule, .LFC001B                                     ; FC0033  63 e6
+   	ld XIX,0x00000716                                    ; FC0035  44 16 07 00 00
+   	ld (XIX),0xc0                                        ; FC003A  b4 00 c0
+   	ld (XIX+0x01),0x20                                   ; FC003D  bc 01 00 20
+   	ld (XIX+0x02),0x78                                   ; FC0041  bc 02 00 78
+   	ld (XIX+0x03),0x20                                   ; FC0045  bc 03 00 20
+   	ld (XIX+0x04),0x00                                   ; FC0049  bc 04 00 00
+   	ldw bc, 0x05                                         ; FC004D  31 05 00
+>> 	calr 0x19c7                                          ; FC0050  1e c7 19
+   	ld XIX,0x00000716                                    ; FC0053  44 16 07 00 00
+   	ld (0x20b9:16), 0x64                                 ; FC0058  f1 b9 20 00 64
+   	ld (XIX+0x01),0x20                                   ; FC005D  bc 01 00 20
+   	calr 0x14b7                                          ; FC0061  1e b7 14
+   	ld XIX,0x00000716                                    ; FC0064  44 16 07 00 00
+-- target context (wsa1/prom_a/wsa1_prom_a.s:105497; >> = target line):
+   ; Evidence: the whole routine is `1e 01 00 0e`.
+   ; Unknown: why the extra frame exists; the callee is 4 bytes away.
+   ; ---------------------------------------------------------------------
+   Msg0716_Post_Trampoline:
+>> 	calr Msg0716_Post                                    ; FC1A1A  1e 01 00
+   	ret                                                  ; FC1A1D  0e
+   ; ---------------------------------------------------------------------
+   ; Msg0716_Post -- post BC bytes from RAM 0x0716 on link stream 0
+   ;
+   ; Called from: Msg0716_Post_Trampoline, by `calr`, and nothing else.
+
+### SITE 35: wsa1/prom_a/wsa1_prom_a.s:18660  src_addr=0xF8AFC7  target=0xF8AFCC  proposed_label=.LF8AFCC (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   .LF8AFA3:
+   	xor XDE,0xffffffff                                   ; F8AFA3  ea cd ff ff ff ff
+   	.byte 0xe1, 0x56, 0x22, 0xca                         ; F8AFA9  e1 56 22 ca   and (0x2256),XDE
+   	ldw de, 0x0200                                       ; F8AFAD  32 00 02
+   .LF8AFB0:
+   	jp sub_F8A90B                                        ; F8AFB0  1b 0b a9 f8
+   	m_cp_mi8 MB8, 0xc4, 0x02                             ; F8AFB4  c0 c4 3f 02
+   	jrl z, -1708                                         ; F8AFB8  76 54 f9
+   	xor D,D                                              ; F8AFBB  cc d4
+   	sla de, 0x07                                         ; F8AFBD  da ec 07
+   	srl e, 0x01                                          ; F8AFC0  cd ef 01
+   	cp DE,0x7f40                                         ; F8AFC3  da cf 40 7f
+>> 	jr c, 0x03                                           ; F8AFC7  67 03
+   	ldw de, 0x7f7f                                       ; F8AFC9  32 7f 7f
+   .LF8AFCC:
+   	jp sub_F8A90B                                        ; F8AFCC  1b 0b a9 f8
+   	sub A,0x0b                                           ; F8AFD0  c9 ca 0b
+   	extz WA                                              ; F8AFD3  d8 12
+-- target context (wsa1/prom_a/wsa1_prom_a.s:18663; >> = target line):
+   	cp DE,0x7f40                                         ; F8AFC3  da cf 40 7f
+   	jr c, 0x03                                           ; F8AFC7  67 03
+   	ldw de, 0x7f7f                                       ; F8AFC9  32 7f 7f
+   .LF8AFCC:
+>> 	jp sub_F8A90B                                        ; F8AFCC  1b 0b a9 f8
+   	sub A,0x0b                                           ; F8AFD0  c9 ca 0b
+   	extz WA                                              ; F8AFD3  d8 12
+   	extz XWA                                             ; F8AFD5  e8 12
+   	add XWA,0x00f8b07e                                   ; F8AFD7  e8 c8 7e b0 f8 00
+   	ld A,(XWA)                                           ; F8AFDD  80 21
+
+### SITE 36: wsa1/prom_a/wsa1_prom_a.s:17679  src_addr=0xF8A7C6  target=0xF8A7D1  proposed_label=.LF8A7D1 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld e, 0x09:opc                                          ; F8A7AD  25 09
+   	jr 0x22                                              ; F8A7AF  68 22
+   .LF8A7B1:
+   	cp e, 0x03:i3                                          ; F8A7B1  cd db
+   	jr nz, 0x22                                          ; F8A7B3  6e 22
+   	cp a, 0x01:i3                                          ; F8A7B5  c9 d9
+   	jr ule, 0x18                                         ; F8A7B7  63 18
+   	cp A,0x10                                            ; F8A7B9  c9 cf 10
+   	jr z, 0x13                                           ; F8A7BC  66 13
+   	cp A,0x20                                            ; F8A7BE  c9 cf 20
+   	jr z, 0x0e                                           ; F8A7C1  66 0e
+   	cp A,0x21                                            ; F8A7C3  c9 cf 21
+>> 	jr z, 0x09                                           ; F8A7C6  66 09
+   	cp A,0x30                                            ; F8A7C8  c9 cf 30
+   	jr z, 0x04                                           ; F8A7CB  66 04
+   	ld e, 0x00:opc                                          ; F8A7CD  25 00
+   	jr 0x02                                              ; F8A7CF  68 02
+   .LF8A7D1:
+-- target context (wsa1/prom_a/wsa1_prom_a.s:17685; >> = target line):
+   	jr z, 0x04                                           ; F8A7CB  66 04
+   	ld e, 0x00:opc                                          ; F8A7CD  25 00
+   	jr 0x02                                              ; F8A7CF  68 02
+   .LF8A7D1:
+>> 	ld E,A                                               ; F8A7D1  c9 8d
+   .LF8A7D3:
+   	jp sub_F8A500                                        ; F8A7D3  1b 00 a5 f8
+   .LF8A7D7:
+   	jp sub_F8A504                                        ; F8A7D7  1b 04 a5 f8
+   	m_bit 1, MD16, 0x2075                                ; F8A7DB  f1 75 20 c9
+
+### SITE 37: wsa1/prom_a/wsa1_prom_a.s:37036  src_addr=0xF95307  target=0xF9530B  proposed_label=sub_F9530B (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz WA                                              ; F952F4  d8 12
+   	pop XIX                                              ; F952F6  5c
+   	popw de                                              ; F952F7  4a
+   	popw hl                                              ; F952F8  4b
+   	unlk XIZ                                             ; F952F9  ee 0d
+   	ret                                                  ; F952FB  0e
+   sub_F952FC:
+   	m_cp_mi8 MB8, 0xc4, 0x02                             ; F952FC  c0 c4 3f 02
+   	jr nz, 0x05                                          ; F95300  6e 05
+   	calr 0xc8                                            ; F95302  1e c8 00
+   	jr 0x03                                              ; F95305  68 03
+   .LF95307:
+>> 	calr 0x01                                            ; F95307  1e 01 00
+   .LF9530A:
+   	ret                                                  ; F9530A  0e
+   sub_F9530B:
+   	link XIZ,0xfff8                                      ; F9530B  ee 0c f8 ff
+   	pushw hl                                             ; F9530F  2b
+-- target context (wsa1/prom_a/wsa1_prom_a.s:37040; >> = target line):
+   	calr 0x01                                            ; F95307  1e 01 00
+   .LF9530A:
+   	ret                                                  ; F9530A  0e
+   sub_F9530B:
+>> 	link XIZ,0xfff8                                      ; F9530B  ee 0c f8 ff
+   	pushw hl                                             ; F9530F  2b
+   	push XIX                                             ; F95310  3c
+   	lda xix, (xiz-8)                                     ; F95311  be f8 34
+   	push XIX                                             ; F95314  3c
+   	pushw 0x08                                           ; F95315  0b 08 00
+
+### SITE 38: wsa1/prom_a/wsa1_prom_a.s:41695  src_addr=0xF9882B  target=0xF97451  proposed_label=sub_F97418_Sub3 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   .LF98808:
+   	lda xbc, (0x77e2:16)                                ; F98808  f1 e2 77 31
+   	ld (0x218b:16), xbc                                 ; F9880C  f1 8b 21 61
+   	ld (0x218f:16), 0x05                                 ; F98810  f1 8f 21 00 05
+   	ld a, (0x77f1:16)                                   ; F98815  c1 f1 77 21
+   	and A,0x80                                           ; F98819  c9 cc 80
+   	jr nz, .LF98822                                      ; F9881C  6e 04
+   	call 0xf97481                                        ; F9881E  1d 81 74 f9
+   .LF98822:
+   	ld c, (0x77f0:16)                                   ; F98822  c1 f0 77 23
+   	and C,0x80                                           ; F98826  cb cc 80
+   	jr nz, .LF9882F                                      ; F98829  6e 04
+>> 	call 0xf97451                                        ; F9882B  1d 51 74 f9
+   .LF9882F:
+   	ld c, (0x77f3:16)                                   ; F9882F  c1 f3 77 23
+   	and C,0x80                                           ; F98833  cb cc 80
+   	jr nz, .LF9883C                                      ; F98836  6e 04
+   	call 0xf974d3                                        ; F98838  1d d3 74 f9
+-- target context (wsa1/prom_a/wsa1_prom_a.s:39723; >> = target line):
+   	ldirw                                                ; F9744C  95 11
+   	pop XIX                                              ; F9744E  5c
+   	pop XWA                                              ; F9744F  58
+   	ret                                                  ; F97450  0e
+>> 	push XIZ                                             ; F97451  3e
+   	push XIX                                             ; F97452  3c
+   	push XHL                                             ; F97453  3b
+   	push XDE                                             ; F97454  3a
+   	ld xix, (0x218b:16)                                 ; F97455  e1 8b 21 24
+   	bit 0,(XIX+0x15)                                     ; F97459  bc 15 c8
+
+### SITE 39: wsa1/prom_a/wsa1_prom_a.s:155327  src_addr=0xFE4E5D  target=0xFE4D57  proposed_label=Dev7E_WriteOneSector (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; Was `sub_FE4E4C`, named by notes/prom_a_census_round8.py (bucket round 10).
+   ; ---------------------------------------------------------------------
+   Unit1_Op4_WriteSectorRun:
+   	dec 2,XSP                                            ; FE4E4C  ef 6a
+   	pushw iz                                             ; FE4E4E  2e
+   	ld IZ,(XSP+0x0a)                                     ; FE4E4F  9f 0a 26
+   .LFE4E52:
+   	ld XWA,(XSP+0x10)                                    ; FE4E52  af 10 20
+   	push XWA                                             ; FE4E55  38
+   	m_push MWD+r7, 0x10                                  ; FE4E56  9f 10 04
+   	pushw iz                                             ; FE4E59  2e
+   	m_push MWD+r7, 0x10                                  ; FE4E5A  9f 10 04
+>> 	calr 0xfef7                                          ; FE4E5D  1e f7 fe
+   	lda xsp, (xsp+0x0a)                                  ; FE4E60  bf 0a 37
+   	ld (XSP+0x02),HL                                     ; FE4E63  bf 02 53
+   	ld wa, (0x605d3c:24)                                ; FE4E66  d2 3c 5d 60 20
+   	incw 0x01, (xsp+0x0c)                                ; FE4E6B  9f 0c 61
+   	ld BC,(XSP+0x0c)                                     ; FE4E6E  9f 0c 21
+-- target context (wsa1/prom_a/wsa1_prom_a.s:155195; >> = target line):
+   ;           field
+   ; Was `sub_FE4D57`, named by notes/prom_a_census_round8.py (bucket round 10).
+   ; ---------------------------------------------------------------------
+   Dev7E_WriteOneSector:
+>> 	pushw iz                                             ; FE4D57  2e
+   	calr 0xffc4                                          ; FE4D58  1e c4 ff
+   	cp hl, 0x00:i3                                         ; FE4D5B  db d8
+   	jrl nz, 0xd2                                         ; FE4D5D  7e d2 00
+   	pushw 0xff                                           ; FE4D60  0b ff 00
+   	pushw 0x01                                           ; FE4D63  0b 01 00
+
+### SITE 40: wsa1/prom_a/wsa1_prom_a.s:148038  src_addr=0xFE0BD1  target=0xFE0BD7  proposed_label=.LFE0BD7 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   .LFE0BB3:
+   	ld c, (0x21e7:16)                                   ; FE0BB3  c1 e7 21 23
+   	and C,0x20                                           ; FE0BB7  cb cc 20
+   	jr nz, 0x23                                          ; FE0BBA  6e 23
+   	ld c, (0x21e7:16)                                   ; FE0BBC  c1 e7 21 23
+   	and C,0x04                                           ; FE0BC0  cb cc 04
+   	jr z, 0x05                                           ; FE0BC3  66 05
+   	calr 0xff30                                          ; FE0BC5  1e 30 ff
+   	jr 0x15                                              ; FE0BC8  68 15
+   .LFE0BCA:
+   	ld c, (0x21e7:16)                                   ; FE0BCA  c1 e7 21 23
+   	and C,0x02                                           ; FE0BCE  cb cc 02
+>> 	jr z, 0x04                                           ; FE0BD1  66 04
+   	ld h, 0xfd:opc                                          ; FE0BD3  26 fd
+   	jr 0x11                                              ; FE0BD5  68 11
+   .LFE0BD7:
+   	calr 0x99                                            ; FE0BD7  1e 99 00
+   	cp A,0xff                                            ; FE0BDA  c9 cf ff
+-- target context (wsa1/prom_a/wsa1_prom_a.s:148042; >> = target line):
+   	jr z, 0x04                                           ; FE0BD1  66 04
+   	ld h, 0xfd:opc                                          ; FE0BD3  26 fd
+   	jr 0x11                                              ; FE0BD5  68 11
+   .LFE0BD7:
+>> 	calr 0x99                                            ; FE0BD7  1e 99 00
+   	cp A,0xff                                            ; FE0BDA  c9 cf ff
+   	jr nz, 0x04                                          ; FE0BDD  6e 04
+   .LFE0BDF:
+   	ld h, 0x01:opc                                          ; FE0BDF  26 01
+   	jr 0x05                                              ; FE0BE1  68 05
+
+### SITE 41: wsa1/prom_a/wsa1_prom_a.s:144159  src_addr=0xFDEB8A  target=0xFD6C7B  proposed_label=Arr27A6_Get (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	link XIZ,0xffec                               ; FDEB6D  ee 0c ec ff
+   	pushw hl                                      ; FDEB71  2b
+   	push XIX                                      ; FDEB72  3c
+   	lda xix, (xiz-16)                             ; FDEB73  be f0 34
+   	lda xbc, (xiz-2)                              ; FDEB76  be fe 31
+   	push XBC                                      ; FDEB79  39
+   	call 0xfd6b4d                                 ; FDEB7A  1d 4d 6b fd
+   	lda xbc, (xiz-4)                              ; FDEB7E  be fc 31
+   	push XBC                                      ; FDEB81  39
+   	call 0xfda0ca                                 ; FDEB82  1d ca a0 fd
+   	push XIX                                      ; FDEB86  3c
+   	pushw 0x05                                    ; FDEB87  0b 05 00
+>> 	call 0xfd6c7b                                 ; FDEB8A  1d 7b 6c fd
+   	ld (XIX+0x06),0x7f                            ; FDEB8E  bc 06 00 7f
+   	ld (XIX+0x07),0x00                            ; FDEB92  bc 07 00 00
+   	ld (XIX+0x08),0x0d                            ; FDEB96  bc 08 00 0d
+   	ld (XIX+0x09),0x00                            ; FDEB9A  bc 09 00 00
+   	ld XBC,XIX                                    ; FDEB9E  ec 89
+-- target context (wsa1/prom_a/wsa1_prom_a.s:129071; >> = target line):
+   ;          direction and claims nothing about meaning.
+   ; Unknown:  what (0x27A6) holds.
+   ; ---------------------------------------------------------------------
+   Arr27A6_Get:
+>> 	link XIZ,0x0000                                      ; FD6C7B  ee 0c 00 00
+   	ld BC,(XIZ+0x08)                                     ; FD6C7F  9e 08 21
+   	extz BC                                              ; FD6C82  d9 12
+   	extz XBC                                             ; FD6C84  e9 12
+   	ld A,(XBC+0x27a6)                                    ; FD6C86  c3 e5 a6 27 21
+   	ld XBC,(XIZ+0x0a)                                    ; FD6C8B  ae 0a 21
+
+### SITE 42: wsa1/prom_a/wsa1_prom_a.s:148044  src_addr=0xFE0BDD  target=0xFE0BE3  proposed_label=.LFE0BE3 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr z, 0x05                                           ; FE0BC3  66 05
+   	calr 0xff30                                          ; FE0BC5  1e 30 ff
+   	jr 0x15                                              ; FE0BC8  68 15
+   .LFE0BCA:
+   	ld c, (0x21e7:16)                                   ; FE0BCA  c1 e7 21 23
+   	and C,0x02                                           ; FE0BCE  cb cc 02
+   	jr z, 0x04                                           ; FE0BD1  66 04
+   	ld h, 0xfd:opc                                          ; FE0BD3  26 fd
+   	jr 0x11                                              ; FE0BD5  68 11
+   .LFE0BD7:
+   	calr 0x99                                            ; FE0BD7  1e 99 00
+   	cp A,0xff                                            ; FE0BDA  c9 cf ff
+>> 	jr nz, 0x04                                          ; FE0BDD  6e 04
+   .LFE0BDF:
+   	ld h, 0x01:opc                                          ; FE0BDF  26 01
+   	jr 0x05                                              ; FE0BE1  68 05
+   .LFE0BE3:
+   	calr 0x22                                            ; FE0BE3  1e 22 00
+-- target context (wsa1/prom_a/wsa1_prom_a.s:148049; >> = target line):
+   .LFE0BDF:
+   	ld h, 0x01:opc                                          ; FE0BDF  26 01
+   	jr 0x05                                              ; FE0BE1  68 05
+   .LFE0BE3:
+>> 	calr 0x22                                            ; FE0BE3  1e 22 00
+   	jr -64                                               ; FE0BE6  68 c0
+   .LFE0BE8:
+   	ld (0x605a02:24), 0x00                             ; FE0BE8  f2 02 5a 60 00 00
+   	ld A,H                                               ; FE0BEE  ce 89
+   .LFE0BF0:
+
+### SITE 43: wsa1/prom_a/wsa1_prom_a.s:147815  src_addr=0xFE09C4  target=0xFE2E96  proposed_label=sub_FE2E96 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push XIY                                             ; FE09B5  3d
+   	jp (xix)                                             ; FE09B6  b4 d8
+   	popw bc                                              ; FE09B8  49
+   .LFE09B9:
+   	pop XIX                                              ; FE09B9  5c
+   	popw hl                                              ; FE09BA  4b
+   	unlk XIZ                                             ; FE09BB  ee 0d
+   	ret                                                  ; FE09BD  0e
+   sub_FE09BE:
+   	pushw hl                                             ; FE09BE  2b
+   	push XIX                                             ; FE09BF  3c
+   	lda xix, (0x21e7:16)                                ; FE09C0  f1 e7 21 34
+>> 	calr 0x24cf                                          ; FE09C4  1e cf 24
+   	calr 0xff95                                          ; FE09C7  1e 95 ff
+   	pushw 0x09                                           ; FE09CA  0b 09 00
+   	calr 0x0e68                                          ; FE09CD  1e 68 0e
+   	calr 0xfeea                                          ; FE09D0  1e ea fe
+   	ld H,A                                               ; FE09D3  c9 8e
+-- target context (wsa1/prom_a/wsa1_prom_a.s:151793; >> = target line):
+   	popw hl                                              ; FE2E92  4b
+   	unlk XIZ                                             ; FE2E93  ee 0d
+   	ret                                                  ; FE2E95  0e
+   sub_FE2E96:
+>> 	push XIX                                             ; FE2E96  3c
+   	lda xix, (0x21e8:16)                                ; FE2E97  f1 e8 21 34
+   	m_or_mi8 MBI+r4, 0, 0x40                             ; FE2E9B  84 3e 40
+   	calr 0xd2e3                                          ; FE2E9E  1e e3 d2
+   	calr 0xd2ed                                          ; FE2EA1  1e ed d2
+   	calr 0xd2f7                                          ; FE2EA4  1e f7 d2
+
+### SITE 44: wsa1/prom_a/wsa1_prom_a.s:147302  src_addr=0xFE0586  target=0xFE0970  proposed_label=sub_FE0970 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld (0x1735:24), a                                   ; FE0567  f2 35 17 00 41
+   	popw bc                                              ; FE056C  49
+   	cp h, 0x00:i3                                          ; FE056D  ce d8
+   	jr nz, 0x0b                                          ; FE056F  6e 0b
+   	calr 0x03b1                                          ; FE0571  1e b1 03
+   	calr 0x0742                                          ; FE0574  1e 42 07
+   	calr 0x03c7                                          ; FE0577  1e c7 03
+   	jr 0x1b                                              ; FE057A  68 1b
+   .LFE057C:
+   	calr 0x1388                                          ; FE057C  1e 88 13
+   	push 0x00                                            ; FE057F  09 00
+   	m_push MB24, 0x001735                                ; FE0581  c2 35 17 00 04
+>> 	calr 0x03e7                                          ; FE0586  1e e7 03
+   	calr 0x136b                                          ; FE0589  1e 6b 13
+   	ld (0x2229:16), 0x00                                 ; FE058C  f1 29 22 00 00
+   	ld (0x2071:16), 0x10                                 ; FE0591  f1 71 20 00 10
+   	popw bc                                              ; FE0596  49
+   .LFE0597:
+-- target context (wsa1/prom_a/wsa1_prom_a.s:147773; >> = target line):
+   	ld (0x178e:24), 0x00                               ; FE0962  f2 8e 17 00 00 00
+   	ldw (0x1780:24), 0x00                               ; FE0968  f2 80 17 00 02 00 00
+   	ret                                                  ; FE096F  0e
+   sub_FE0970:
+>> 	link XIZ,0x0000                                      ; FE0970  ee 0c 00 00
+   	pushw hl                                             ; FE0974  2b
+   	push XIX                                             ; FE0975  3c
+   	lda xix, (0xfe1838:24)                               ; FE0976  f2 38 18 fe 34
+   	ld H,(XIZ+0x08)                                      ; FE097B  8e 08 26
+   	cp h, 0x01:i3                                          ; FE097E  ce d9
+

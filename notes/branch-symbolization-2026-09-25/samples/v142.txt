@@ -1,0 +1,1442 @@
+IMAGE v142  -- 45 sampled sites out of 702 accepted
+
+### SITE 0: v142/subcpu/kn5000_subprogram_v142.s:1941  src_addr=0x020846  target=0x020842  proposed_label=Timer_Delay_Ticks_Loop (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	pop	xiy
+   	pop	xix
+   	popw	wa
+   	ret
+   ; Busy-wait delay measured in audio ticks. WA is halved, added to the free-running 32-bit
+   ; tick counter at 0x1040, and the routine spins until 0x1040 reaches that value.
+   ; Input: WA = 2 * number of ticks to wait. No timeout, no interrupt masking -- it depends
+   ; entirely on Timer_AudioTick_Handler (0x01FB41) still running.
+   Timer_Delay_Ticks:
+   	srl	wa, 1
+   	add	wa, (4160:16)
+   	cp	wa, (4160:16)
+>> 	jr	gt, -6
+   	ret
+   
+   IntMask_SetBit3:
+   	set_dd8 3, 0x80
+   	ret
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:1940; >> = target line):
+   ; entirely on Timer_AudioTick_Handler (0x01FB41) still running.
+   Timer_Delay_Ticks:
+   	srl	wa, 1
+   	add	wa, (4160:16)
+>> 	cp	wa, (4160:16)
+   	jr	gt, -6
+   	ret
+   
+   IntMask_SetBit3:
+   	set_dd8 3, 0x80
+
+### SITE 1: v142/subcpu/kn5000_subprogram_v142.s:56528  src_addr=0x03C7E2  target=0x036A4F  proposed_label=DSP_DispatchData (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	(xsp+26), xwa
+   	ld	a, c
+   	extz	wa
+   	ld	bc, (xsp+20)
+   	call	223790
+   	ld	qiz, hl
+   	ld	xwa, (xsp+26)
+   	ldb_spi	c, 224
+   	ld	(xsp+26), xwa
+   	ld	a, c
+   	extz	wa
+   	ld	bc, (xsp+20)
+>> 	call	223823
+   	ld	qiz, hl
+   	ld	xwa, (xsp+26)
+   	ldb_spi	c, 224
+   	ld	(xsp+26), xwa
+   	ld	a, c
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:46509; >> = target line):
+   ; ALREADY NAMED -- doc header only. Same shape for data bytes: BC == 0 -> DSP_Send_Data,
+   ; BC == 1 -> DSP2_Send_Data, else HL = 1. The transports' results are discarded in the same
+   ; way.
+   DSP_DispatchData:
+>> 	pushw iz
+   	ld iz, 0:i3
+   	ld de, bc
+   	cp de, 1:i3
+   	jr z, DSP_DispatchData_DSP2Path
+   	cp de, 0:i3
+
+### SITE 2: v142/subcpu/kn5000_subprogram_v142.s:35115  src_addr=0x0316D7  target=0x0316E1  proposed_label=DSP_SetCoeff_WithDispatch_Skip2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push xiz
+   	and	wa, 127
+   	ld	de, bc
+   	and	bc, 15
+   	and	de, 192
+   	cp	de, 192
+   	jr	z, 16
+   	cp	de, 128
+   	jr	z, 10
+   	cp	de, 64
+   	jr	z, 4
+   	cp	de, 0:i3
+>> 	jr	nz, 8
+   	ld	xde, (283412:24)
+   	ld	xhl, (xde+76)
+   	sll	bc, 7
+   	add	bc, wa
+   	add	bc, bc
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:35118; >> = target line):
+   	cp	de, 0:i3
+   	jr	nz, 8
+   	ld	xde, (283412:24)
+   	ld	xhl, (xde+76)
+>> 	sll	bc, 7
+   	add	bc, wa
+   	add	bc, bc
+   	ld	wa, bc
+   	extz	xwa
+   	add	xwa, xhl
+
+### SITE 3: v142/subcpu/kn5000_subprogram_v142.s:30965  src_addr=0x02F38A  target=0x027CE4  proposed_label=Voice_DSP_OutputConfig (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	bc, 0:i3
+   	call	163044
+   	ld	a, (xsp)
+   	extz	wa
+   	ld	bc, 1:i3
+   	call	163044
+   	jr	t, 55
+   ; Algorithm types 4..5: Voice_DSP_OutputConfig(part, 0) only.
+   Voice_DSPOut_A_Type4To5:
+   	ld	a, (xsp)
+   	extz	wa
+   	ld	bc, 0:i3
+>> 	call	163044
+   	jr	t, 43
+   ; Algorithm type 6: Voice_DSP_SimpleCopy(part).
+   Voice_DSPOut_A_Type6:
+   	ld	a, (xsp)
+   	extz	wa
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:16708; >> = target line):
+   ; Walks the voice output list (Voice_BuildOutputList 0x021A8E), consults
+   ; DSP_AlgoType_Dispatch1 (0x0337D2) and writes the effect-routing shadow words at 0x04520E
+   ; and then 0x04520C.  Twin of Voice_DSP_OutputConfig2 with different shadow offsets.
+   Voice_DSP_OutputConfig:
+>> 	lda	xsp, (xsp-10)
+   	ld	(xsp+6), c
+   	ld	(xsp+8), a
+   	cp8_imm_rid8	xsp, 0x06, 0x00	; cp (XSP+0x06),0x00
+   	jr	nz, LABEL_027D61
+   	ld	a, (xsp+8)
+
+### SITE 4: v142/subcpu/kn5000_subprogram_v142.s:20654  src_addr=0x029EB3  target=0x0295FF  proposed_label=AudioChannel_Handler_Cmd08_0B (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	bc
+   	pushw	0
+   	calr	63327
+   	ret
+   	extz	wa
+   	extz	bc
+   	pushw	1
+   	calr	63316
+   	ret
+   	extz	wa
+   	extz	bc
+   	pushw	2
+>> 	calr	63305
+   	ret
+   	extz	wa
+   	extz	bc
+   	pushw	3
+   	calr	63294
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:19773; >> = target line):
+   	lda	xsp, (xsp+10)
+   	retd	2
+   ; Shared body for commands 8..0x0B; stubs at 0x029E96/0x029EA1/0x029EAC/0x029EB7.
+   AudioChannel_Handler_Cmd08_0B:
+>> 	lda	xsp, (xsp-10)
+   	push	xiz
+   	ld	(xsp+10), c
+   	ld	(xsp+12), a
+   	ld	a, (xsp+18)
+   	extz	wa
+
+### SITE 5: v142/subcpu/kn5000_subprogram_v142.s:32483  src_addr=0x0300D9  target=0x030117  proposed_label=Audio_Cmd_DSPUnit_Op26_Routing (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	extz	wa
+   	call	183606
+   	ld	xwa, xhl
+   	call	167359
+   	jrl	t, 266
+   ; Opcode 0x26: the opcode-0x06 sequence with group 1 -- AlgoFlag_Write_Bit3(...,1),
+   ; AlgoFlag_Write(...,1) for four slots, then EFF_RoutingInit(part, unit, 1).
+   Audio_Cmd_DSPUnit_Op26:
+   	ld	iz, 0:i3
+   	cp	iz, 4:i3
+>> 	jr	nc, 60
+   ; Four-iteration slot loop of opcode 0x26.
+   Audio_Cmd_DSPUnit_Op26_SlotLoop:
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	ld	e, a
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:32513; >> = target line):
+   	cp	iz, 4:i3
+   	jr	c, -60
+   ; Tail of opcode 0x26: EFF_RoutingInit with DE = 1.
+   Audio_Cmd_DSPUnit_Op26_Routing:
+>> 	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	ld	e, a
+   	extz	de
+   	ld	a, (xsp+2)
+   	ld	c, a
+
+### SITE 6: v142/subcpu/kn5000_subprogram_v142.s:31048  src_addr=0x02F43B  target=0x02F44F  proposed_label=Voice_DSPOut_B_Return (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	wa
+   	call	163609
+   	jr	t, 41
+   ; Algorithm type 7: only if PART+0x0A bit 14 is set, Voice_DSP_OutputConfig2(part, 0)
+   ; followed by Voice_DSP_SimpleCopy2(part).
+   Voice_DSPOut_B_Type7:
+   	ld	a, (xsp)
+   	extz	wa
+   	muls	wa, 287
+   	lda	xbc, (267122:24)
+   	ld_rrw	wa, xbc, wa
+   	bit	14, wa
+>> 	jr	z, 18
+   	ld	a, (xsp)
+   	extz	wa
+   	ld	bc, 0:i3
+   	call	163281
+   	ld	a, (xsp)
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:31058; >> = target line):
+   	extz	wa
+   	call	163609
+   ; Pop the one-word frame and return.
+   Voice_DSPOut_B_Return:
+>> 	inc	2, xsp
+   	ret
+   ; Input A = part.  Applies the SECOND output slot only, and only for algorithm types 4..0x0B
+   ; ((patch+0x5D & 0x0F) - 4 must be in 0..7).  Table VOICE_DSPOUT_SECOND_A_JUMPTABLE
+   ; (0x00F9D3, base 0x02F48C).  Called from 0x02FC80 and 0x02FD09.
+   Voice_DSPOut_Second_A:
+
+### SITE 7: v142/subcpu/kn5000_subprogram_v142.s:56505  src_addr=0x03C7B8  target=0x03C9CE  proposed_label=DSP_BytecodeInterpreter_CheckEnd (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ;   jrl DSP_BytecodeInterpreter_CheckEnd (0x03C9CE)
+   ; i.e. "emit one command byte, no data".  This is the block that proves the frame layout used
+   ; by all six handlers.
+   DSP_Bytecode_Op04_CommandOnly:
+   	ld	xwa, (xsp+26)
+   	ldb_spi	c, 224
+   	ld	(xsp+26), xwa
+   	ld	a, c
+   	extz	wa
+   	ld	bc, (xsp+20)
+   	call	223790
+   	ld	qiz, hl
+>> 	jrl	531
+   ; Bytecode handler 5 (offset 0x48D, 448 bytes).  A variant of handler 0: command byte, two
+   ; preamble bytes, groups of five, but a TWO-way branch (0x08 = address, masked with IZH; else
+   ; parameter-modified) and its accumulator at frame+0x0C.  Exits to CheckEnd.
+   DSP_Bytecode_Op05_Groups5_Masked:
+   	; Converted from a 448-byte `.byte` run. Framing: unidasm; every
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:56720; >> = target line):
+   ; loops back to DSP_BytecodeInterpreter_Loop, else returns HL = IZ (accumulated status),
+   ; pop XIZ, `retd 0x4`.  ★ 0xFx is the only terminator -- a stream that lacks one runs off the
+   ; end of the program image (see [UNCERTAIN]).
+   DSP_BytecodeInterpreter_CheckEnd:
+>> 	ld xwa, (xsp + 26)
+   	ld a, (xwa)
+   	and a, 0xF0
+   	cp a, 0xF0
+   	jrl nz, DSP_BytecodeInterpreter_Loop
+   	stw_erp HL, 0xFA
+
+### SITE 8: v142/subcpu/kn5000_subprogram_v142.s:31104  src_addr=0x02F4B5  target=0x027CE4  proposed_label=Voice_DSP_OutputConfig (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jp	163518
+   ; Type 7: return unless PART+0x0A bit 14 is set, then Voice_DSP_OutputConfig(part, 1).
+   Voice_DSPOut_Second_A_Gated:
+   	ld	c, a
+   	extz	bc
+   	muls	bc, 287
+   	lda	xde, (267122:24)
+   	ld_rrw	bc, xde, bc
+   	bit	14, bc
+   	ret	z
+   	extz	wa
+   	ld	bc, 1:i3
+>> 	jp	163044
+   ; Types 0x0A..0x0B: tail-jump Voice_DSP_OutputConfig(part, 0).
+   Voice_DSPOut_Second_A_Slot0:
+   	extz	wa
+   	ld	bc, 0:i3
+   	jp	163044
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:16708; >> = target line):
+   ; Walks the voice output list (Voice_BuildOutputList 0x021A8E), consults
+   ; DSP_AlgoType_Dispatch1 (0x0337D2) and writes the effect-routing shadow words at 0x04520E
+   ; and then 0x04520C.  Twin of Voice_DSP_OutputConfig2 with different shadow offsets.
+   Voice_DSP_OutputConfig:
+>> 	lda	xsp, (xsp-10)
+   	ld	(xsp+6), c
+   	ld	(xsp+8), a
+   	cp8_imm_rid8	xsp, 0x06, 0x00	; cp (XSP+0x06),0x00
+   	jr	nz, LABEL_027D61
+   	ld	a, (xsp+8)
+
+### SITE 9: v142/subcpu/kn5000_subprogram_v142.s:31859  src_addr=0x02FB88  target=0x02FD7F  proposed_label=Audio_Cmd_EffParam_Return (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	a, (xwa+1)
+   	extz	wa
+   	ld	bc, 1:i3
+   	calr	63922
+   	jrl	516
+   ; Opcodes 0x33..0x36: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 2).
+   Audio_Cmd_EffParam_Grp0_Slot2:
+   	ld	xwa, (xsp+2)
+   	ld	a, (xwa+1)
+   	extz	wa
+   	ld	bc, 2:i3
+   	calr	63906
+>> 	jrl	500
+   ; Opcodes 0x37..0x3A: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 3).
+   Audio_Cmd_EffParam_Grp0_Slot3:
+   	ld	xwa, (xsp+2)
+   	ld	a, (xwa+1)
+   	extz	wa
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:32080; >> = target line):
+   	lda	xbc, (267214:24)
+   	st_rrb	l, xbc, wa
+   ; Restore QIZ, drop the 4-byte frame, return.  Every stage-1 and stage-2 case joins here.
+   Audio_Cmd_EffParam_Return:
+>> 	pop qiz
+   	inc	4, xsp
+   	ret
+   ; Input WA = part, C = slot 0..3.  XDE = the slot descriptor pointed to by
+   ; PART + 0x6E + slot*0x25; XBC = the 5-byte cache at UserTone_VelSplit_Base + 0x1E0 + slot*5.
+   ; If (descriptor+0x36 & 7) equals cache[0] the four cached bytes are copied straight into
+
+### SITE 10: v142/subcpu/kn5000_subprogram_v142.s:35612  src_addr=0x031B04  target=0x031E68  proposed_label=VoiceParamFinalize_Return (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	a, (xiz+1)
+   	extz	wa
+   	calr	53533
+   	ld	a, (xiz+2)
+   	and	a, 128
+   	cp	a, 128
+   	jr	z, 15
+   	cp	a, 0:i3
+   	jrl	nz, 875
+   	ld	xwa, xiz
+   	ld	bc, 2:i3
+   	calr	58422
+>> 	jrl	865
+   	ld	xwa, xiz
+   	ld	bc, 3:i3
+   	calr	58412
+   	jrl	855
+   ; Action case 4: VoiceAlloc_CheckAndInit then 0x0301E3.
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:35953; >> = target line):
+   	call InterCPU_DMA_Send
+   
+   ; Shared exit; also the direct (reply-less) exit of every action case.
+   VoiceParamFinalize_Return:
+>> 	pop xiz
+   	ret
+   
+   ; DSP_WriteVoiceParam -- Write DSP voice parameter by mode
+   ; Dispatches on voice+16 bits 7:6 for 4 modes (0x00/0x40/0x80/0xC0).
+   ; Copy a run of bytes out of a part's patch record, gated on the record format.
+
+### SITE 11: v142/subcpu/kn5000_subprogram_v142.s:32731  src_addr=0x0302F0  target=0x030307  proposed_label=DSP_SlotParam_Write_B_Shape1Or3_Plain (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	z, 82
+   	cp	a, 2:i3
+   	jr	z, 78
+   	cp	a, 3:i3
+   	jr	z, 4
+   	cp	a, 1:i3
+   	ret	nz
+   ; cache[0] in {1,3}: record shape 5 -> {0x00, 0x01, cache[1], cache[2]}, else plain copy.
+   DSP_SlotParam_Write_B_Shape1Or3:
+   	ld	a, (xbc+15)
+   	and	a, 7
+   	cp	a, 5:i3
+>> 	jr	nz, 21
+   	ld	(xbc+17), 0
+   	ld	(xbc+18), 1
+   	ld	a, (xde+1)
+   	ld	(xbc+19), a
+   	ld	a, (xde+2)
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:32741; >> = target line):
+   	ld	(xbc+20), a
+   	ret
+   ; Plain copy fallback.
+   DSP_SlotParam_Write_B_Shape1Or3_Plain:
+>> 	ld	hl, 0:i3
+   	cp	hl, 4:i3
+   	ret	nc
+   ; Loop body of that fallback.
+   DSP_SlotParam_Write_B_Shape1Or3_Loop:
+   	ld	wa, hl
+
+### SITE 12: v142/subcpu/kn5000_subprogram_v142.s:32711  src_addr=0x0302CE  target=0x0302B0  proposed_label=DSP_SlotParam_Write_B_Match_Loop (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	xwa
+   	add	xwa, 17
+   	ld	xix, xwa
+   	add	xix, xbc
+   	ld	wa, hl
+   	extz	xwa
+   	inc	1, xwa
+   	add	xwa, xde
+   	ld	a, (xwa)
+   	ld	(xix), a
+   	inc	1, hl
+   	cp	hl, 4:i3
+>> 	jr	c, -32
+   	ret
+   ; Shapes differ: switch on cache[0] exactly as at 0x02FDEE.
+   DSP_SlotParam_Write_B_Remap:
+   	ld	a, (xde)
+   	cp	a, 5:i3
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:32698; >> = target line):
+   	cp	hl, 4:i3
+   	ret	nc
+   ; Shapes agree: copy cache[1..4] into record+0x11..+0x14.
+   DSP_SlotParam_Write_B_Match_Loop:
+>> 	ld	wa, hl
+   	extz	xwa
+   	add	xwa, 17
+   	ld	xix, xwa
+   	add	xix, xbc
+   	ld	wa, hl
+
+### SITE 13: v142/subcpu/kn5000_subprogram_v142.s:32916  src_addr=0x03048B  target=0x030508  proposed_label=Audio_Cmd_ToneEdit_Reply_Send (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	add	xbc, (xsp+4)
+   	ld	a, (xiz+4)
+   	ld	(xbc), a
+   	ld	a, (xiz+2)
+   	extz	wa
+   	sub	wa, 25
+   	cp	wa, 0:i3
+   	jrl	lt, 139
+   	cp	wa, 11
+   	jr	le, 16
+   	sub	wa, 9
+   	cp	wa, 12
+>> 	jr	lt, 123
+   	cp	wa, 23
+   	jr	gt, 117
+   ; Fold opcodes 0x19..0x24 and 0x2B..0x36 into one 0..0x17 index and jump.
+   Audio_Cmd_ToneEdit_Reply_TableJump:
+   	lda	xix, (64200:24)
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:32979; >> = target line):
+   ;   len = 0x3A (58 bytes)
+   ; and calls InterCPU_E1_DMA_Transfer (0x020DB3).  If that call times out the command is
+   ; still acknowledged locally and the main CPU simply never sees the update.
+   Audio_Cmd_ToneEdit_Reply_Send:
+>> 	ld	xde, 1966080
+   	ldw	bc, 58
+   	ld	xwa, (283420:24)
+   	ld	a, (xwa+29351)
+   	extz	wa
+   	muls	wa, 80
+
+### SITE 14: v142/subcpu/kn5000_subprogram_v142.s:30328  src_addr=0x02EDC9  target=0x02E581  proposed_label=VoiceParam_FullSetup_ExtData (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld_rrw	wa, xix, wa
+   	lda	xix, (191929:24)
+   	jp_rr	8, xix, wa
+   ; Opcode 0x00: VoiceParam_FullSetup_ExtData(WA = part from rec+1, BC = value from rec+4).
+   Audio_Cmd_ToneEdit_Op00:
+   	ld	a, (xiz+1)
+   	ld	e, a
+   	extz	de
+   	ld	a, (xiz+4)
+   	ld	c, a
+   	extz	bc
+   	ld	wa, de
+>> 	calr	63413
+   	jrl	575
+   ; Opcode 0x04: VoiceAlloc_CheckAndInit(part) then 0x02AE22 (VoiceSlot_DataTable_02AE22)
+   ; with WA = part, BC = rec+4.
+   Audio_Cmd_ToneEdit_Op04:
+   	ld	a, (xiz+1)
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:29480; >> = target line):
+   ; Finally dispatches on the part mode (tone-header +0x10 & 0xC0):
+   ;   0x80 -> nothing;  0x40 -> VoiceSlot_AltInit (0x034968);  0x00 and 0xC0 ->
+   ;   VoiceSlot_FullInit (0x034890).
+   VoiceParam_FullSetup_ExtData:
+>> 	dec	2, xsp
+   	ld	(xsp), a
+   	ld	a, (xsp)
+   	extz	wa
+   	muls	wa, 287
+   	lda	xde, (267112:24)
+
+### SITE 15: v142/subcpu/kn5000_subprogram_v142.s:56095  src_addr=0x03C378  target=0x03C554  proposed_label=DSP_Bytecode_Programs_Join2 (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	bc, (xsp+20)
+   	call	223823
+   	ld	qiz, hl
+   	ld	xwa, (xsp+26)
+   	ldb_spi	c, 224
+   	ld	(xsp+26), xwa
+   	ld	a, c
+   	extz	wa
+   	ld	bc, (xsp+20)
+   	call	223823
+   	ld	qiz, hl
+   	ldw	(xsp+4), 1
+>> 	jrl	473
+   	ld	xwa, (xsp+26)
+   	cp	(xwa), 0
+   	jrl	nz, 150
+   	ld	xwa, (xsp+26)
+   	ldb_spi	c, 224
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:56263; >> = target line):
+   	ld	xwa, (xsp+26)
+   	inc	4, xwa
+   	ld	(xsp+26), xwa
+   	incw	1, (xsp+4)
+>> 	ld	wa, (xsp+6)
+   	dec	3, wa
+   	extz	xwa
+   	div	wa, 5
+   	cp	(xsp+4), wa
+   	jrl	ule, -490
+
+### SITE 16: v142/subcpu/kn5000_subprogram_v142.s:32004  src_addr=0x02FCD7  target=0x02FD7F  proposed_label=Audio_Cmd_EffParam_Return (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	st_rrb	l, xbc, wa
+   	jrl	t, 192
+   ; Opcode 0x5D with (rec+5) != 0x0F: only Partial_Build_Present_Word + EnvTranspose_UpdateLoop.
+   Audio_Cmd_EffParam_Op5D_Light:
+   	ld	xwa, (xsp+2)
+   	ld	a, (xwa+1)
+   	extz	wa
+   	call	207646
+   	ld	xwa, (xsp+2)
+   	ld	a, (xwa+1)
+   	extz	wa
+   	call	208414
+>> 	jrl	t, 165
+   ; Opcode 0x5E: Voice_DSPOut_Apply_A(part).
+   Audio_Cmd_EffParam_Op5E:
+   	ld	xwa, (xsp+2)
+   	ld	a, (xwa+1)
+   	extz	wa
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:32080; >> = target line):
+   	lda	xbc, (267214:24)
+   	st_rrb	l, xbc, wa
+   ; Restore QIZ, drop the 4-byte frame, return.  Every stage-1 and stage-2 case joins here.
+   Audio_Cmd_EffParam_Return:
+>> 	pop qiz
+   	inc	4, xsp
+   	ret
+   ; Input WA = part, C = slot 0..3.  XDE = the slot descriptor pointed to by
+   ; PART + 0x6E + slot*0x25; XBC = the 5-byte cache at UserTone_VelSplit_Base + 0x1E0 + slot*5.
+   ; If (descriptor+0x36 & 7) equals cache[0] the four cached bytes are copied straight into
+
+### SITE 17: v142/subcpu/kn5000_subprogram_v142.s:32412  src_addr=0x03004A  target=0x0301DF  proposed_label=Audio_Cmd_DSPUnit_Return (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	hl
+   	ld	a, (xsp+2)
+   	ld	c, a
+   	extz	bc
+   	stb_erp	a, 248
+   	ld	e, a
+   	extz	de
+   	ld	wa, hl
+   	call	207074
+   	inc	1, iz
+   	cp	iz, 4:i3
+   	jr	c, -36
+>> 	jrl	t, 402
+   ; Opcode 0x05: Voice_Query_PartVoices(part) then Pitch_Refresh_Sounding_Voices (0x028D4C).
+   Audio_Cmd_DSPUnit_Op05:
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	extz	wa
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:32608; >> = target line):
+   	ld	wa, de
+   	calr	64754
+   ; Restore IZ, drop the 6-byte frame, return.
+   Audio_Cmd_DSPUnit_Return:
+>> 	popw iz
+   	inc	6, xsp
+   	ret
+   ; Input XWA = command record.  Pure shadow-RAM write, no side effects: stores (rec+4) into
+   ; UserTone_VelSplit_Base + 0x1AA + (opcode >> 6)*0x0B + (opcode & 0x3F).  The trailing
+   ; `cp A,0x0A / ret UGT` before the final `ret` computes a flag nothing consumes.
+
+### SITE 18: v142/subcpu/kn5000_subprogram_v142.s:31055  src_addr=0x02F44B  target=0x027F19  proposed_label=Voice_DSP_SimpleCopy2 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	wa
+   	muls	wa, 287
+   	lda	xbc, (267122:24)
+   	ld_rrw	wa, xbc, wa
+   	bit	14, wa
+   	jr	z, 18
+   	ld	a, (xsp)
+   	extz	wa
+   	ld	bc, 0:i3
+   	call	163281
+   	ld	a, (xsp)
+   	extz	wa
+>> 	call	163609
+   ; Pop the one-word frame and return.
+   Voice_DSPOut_B_Return:
+   	inc	2, xsp
+   	ret
+   ; Input A = part.  Applies the SECOND output slot only, and only for algorithm types 4..0x0B
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:16956; >> = target line):
+   ; ----------------------------------------------------------------------------
+   ; NOT PRESENT in symbols/subcpu_symbols_reference.txt -- add it.
+   ; As above with target 0x045206 and callee 0x033C6B.
+   Voice_DSP_SimpleCopy2:
+>> 	dec	8, xsp
+   	ld	(xsp+6), a
+   	ld	a, (xsp+6)
+   	extz	wa
+   	call	DSP_ChanFreq_WritePacket2
+   	ld	(283142:24), hl
+
+### SITE 19: v142/subcpu/kn5000_subprogram_v142.s:29771  src_addr=0x02E882  target=0x02E918  proposed_label=VoiceParam_Set_Tone_Option_Case0_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	a, c
+   	extz	wa
+   	ld	de, wa
+   	add	de, 472
+   	lda	xhl, (282574:24)
+   	ld	a, (xsp)
+   	st_rrb	a, xhl, de
+   	ld	a, c
+   	extz	wa
+   	cp	wa, 0:i3
+   	jrl	mi, 152
+   	cp	wa, 6:i3
+>> 	jrl	gt, 147
+   	add	wa, wa
+   	lda	xix, (63845:24)
+   	ld_rrw	wa, xix, wa
+   	lda	xix, (190619:24)
+   	jp_rr	8, xix, wa
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:29825; >> = target line):
+   	call	183541
+   	ld	xwa, xhl
+   	ld	bc, 1:i3
+   	call	167462
+>> 	inc	4, xsp
+   	ret
+   ; ** Same blob; unnamed in both sources. ** Called from 0x02EF7B.
+   ; A = custom-tone slot. Latches it into the byte at (0x04531C) + 0x72A7 -- the "currently
+   ; selected custom tone" global that the next three routines all read back. Then for k = 0..1 it
+   ; copies from (0x04531C) + slot*0x50 + k*0x15 + 0x4AB7 into 0x044FCE + 0x1F4 + k*5:
+
+### SITE 20: v142/subcpu/kn5000_subprogram_v142.s:56269  src_addr=0x03C565  target=0x03C9CE  proposed_label=DSP_BytecodeInterpreter_CheckEnd (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	223823
+   	ld	qiz, hl
+   	ld	xwa, (xsp+26)
+   	inc	4, xwa
+   	ld	(xsp+26), xwa
+   	incw	1, (xsp+4)
+   	ld	wa, (xsp+6)
+   	dec	3, wa
+   	extz	xwa
+   	div	wa, 5
+   	cp	(xsp+4), wa
+   	jrl	ule, -490
+>> 	jrl	1126
+   ; Bytecode handler 1 (offset 0x23A, 249 bytes).  Entered ONLY by the computed jump in
+   ; DSP_BytecodeInterpreter_Loop when the opcode nibble is 1; no symbol existed for it.
+   ; Verified head: fetch one byte from the stream at (XSP+0x1A) with post-increment, extend it
+   ; and send it as a COMMAND -- DSP_DispatchCommand(WA = byte, BC = (XSP+0x14) = chip id) -- and
+   ; accumulate the returned status into IZ.  Then two preamble bytes and groups of five, with a
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:56720; >> = target line):
+   ; loops back to DSP_BytecodeInterpreter_Loop, else returns HL = IZ (accumulated status),
+   ; pop XIZ, `retd 0x4`.  ★ 0xFx is the only terminator -- a stream that lacks one runs off the
+   ; end of the program image (see [UNCERTAIN]).
+   DSP_BytecodeInterpreter_CheckEnd:
+>> 	ld xwa, (xsp + 26)
+   	ld a, (xwa)
+   	and a, 0xF0
+   	cp a, 0xF0
+   	jrl nz, DSP_BytecodeInterpreter_Loop
+   	stw_erp HL, 0xFA
+
+### SITE 21: v142/subcpu/kn5000_subprogram_v142.s:35786  src_addr=0x031CDA  target=0x031CEF  proposed_label=VoiceParam_Query_Case4_PartialAny_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jr	t, 61
+   	ld	a, (xiz+1)
+   	extz	wa
+   	muls	wa, 287
+   	lda	xbc, (267263:24)
+   	ld_rrl	xbc, xbc, wa
+   	jr	t, 40
+   	ld	a, (xiz+1)
+   	extz	wa
+   	muls	wa, 287
+   	lda	xbc, (267300:24)
+   	ld_rrl	xbc, xbc, wa
+>> 	jr	t, 19
+   	ld	a, (xiz+1)
+   	extz	wa
+   	muls	wa, 287
+   	lda	xbc, (267337:24)
+   	ld_rrl	xbc, xbc, wa
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:35792; >> = target line):
+   	extz	wa
+   	muls	wa, 287
+   	lda	xbc, (267337:24)
+   	ld_rrl	xbc, xbc, wa
+>> 	ld	a, (xiz+2)
+   	and	a, 63
+   	extz	wa
+   	extz	xwa
+   	add	xbc, xwa
+   	ld	a, (xiz+3)
+
+### SITE 22: v142/subcpu/kn5000_subprogram_v142.s:32394  src_addr=0x030023  target=0x0301DF  proposed_label=Audio_Cmd_DSPUnit_Return (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   Audio_Cmd_DSPUnit_Op02:
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	ld	e, a
+   	extz	de
+   	ld	a, (xsp+2)
+   	ld	c, a
+   	extz	bc
+   	ld	wa, de
+   	call	206518
+   	ld	iz, 0:i3
+   	cp	iz, 4:i3
+>> 	jrl	nc, 441
+   ; Four-iteration slot loop of opcode 0x02/0x03.
+   Audio_Cmd_DSPUnit_Op02_SlotLoop:
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	ld	l, a
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:32608; >> = target line):
+   	ld	wa, de
+   	calr	64754
+   ; Restore IZ, drop the 6-byte frame, return.
+   Audio_Cmd_DSPUnit_Return:
+>> 	popw iz
+   	inc	6, xsp
+   	ret
+   ; Input XWA = command record.  Pure shadow-RAM write, no side effects: stores (rec+4) into
+   ; UserTone_VelSplit_Base + 0x1AA + (opcode >> 6)*0x0B + (opcode & 0x3F).  The trailing
+   ; `cp A,0x0A / ret UGT` before the final `ret` computes a flag nothing consumes.
+
+### SITE 23: v142/subcpu/kn5000_subprogram_v142.s:30923  src_addr=0x02F32E  target=0x02F246  proposed_label=DSP_EffParam_Copy_V7 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	wa
+   	ldw	bc, 9
+   	jrl	t, 0xfe7e
+   ; Algorithm type 0x0A: DSP_EffParam_Copy_V6 with descriptor 0x0A.
+   DSP_EffParam_Apply_TA:
+   	extz	wa
+   	ldw	bc, 10
+   	jrl	t, 0xfec6
+   ; Algorithm type 0x0B: DSP_EffParam_Copy_V7 with descriptor 0x0B.
+   DSP_EffParam_Apply_TB:
+   	extz	wa
+   	ldw	bc, 11
+>> 	jrl	t, 0xff15
+   	ret
+   ; Input A = part.  Re-runs the part's DSP output routing after a parameter change.
+   ; Reads the algorithm type; types outside 0..7 do nothing.  Dispatches through
+   ; VOICE_DSPOUT_A_JUMPTABLE (0x00F9B3, base 0x02F36E) onto Voice_DSP_OutputConfig (0x027CE4)
+   ; and Voice_DSP_SimpleCopy (0x027EBE).  Called from 0x02FC6A and 0x02FCE2.
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:30806; >> = target line):
+   	ld	(xde+101), a
+   	ret
+   ; As V6 but patch+0x64 takes descriptor+0x0E instead of zero.
+   DSP_EffParam_Copy_V7:
+>> 	extz	wa
+   	muls	wa, 287
+   	lda	xde, (267118:24)
+   	ld_rrl	xde, xde, wa
+   	ld	a, c
+   	extz	wa
+
+### SITE 24: v142/subcpu/kn5000_subprogram_v142.s:2027  src_addr=0x0208DA  target=0x020BBB  proposed_label=FIFO_Engine1K_Get_Marked (reused existing; target kind boundary-data)
+-- source context (>> = the numeric branch):
+   RingBuf_ReadWrite_Opaque_A:
+   	pushw	hl
+   	ld	hl, (265254:24)
+   	ld	(265252:24), hl
+   	popw	hl
+   	ret
+   ; Pop one byte using the mark cursor, bounded by the commit index (0x040C28).
+   ; Engine entry 0x020BBB. Output: HL = byte, or 0xFFFF when the mark has reached the commit.
+   FIFO1K_Get_Marked:
+   	pushw	ix
+   	push	xde
+   	lda	xde, (265262:24)
+>> 	call	134075
+   	pop	xde
+   	popw	ix
+   	ret
+   ; Pop one byte using the mark cursor, bounded by the write index (0x040C2A).
+   ; Engine entry 0x020BD6. Output: HL = byte or 0xFFFF.
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:2321; >> = target line):
+   	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x03, 0xba
+   	.byte 0xf8, 0x54, 0x9a, 0xfe, 0x61, 0x0e
+   ; 1 KB twin of 0x020A9D (wrap mask 0x3FF).
+   FIFO_Engine1K_Get_Marked:
+>> 	.byte 0x9a, 0xf6
+   	.byte 0x24, 0x9a, 0xfa, 0xf4, 0x6e, 0x04, 0x33, 0xff
+   	.byte 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07, 0xe8, 0xf0
+   	.byte 0x27, 0xdc, 0x38, 0xff, 0x03, 0xba, 0xf6, 0x54
+   	.byte 0x0e
+   ; 1 KB twin of 0x020AB8 (wrap mask 0x3FF).
+
+### SITE 25: v142/subcpu/kn5000_subprogram_v142.s:35262  src_addr=0x031801  target=0x02B014  proposed_label=Voice_Slot_CalcArticParams (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	calr	DSP_EffectStateQuery
+   	ld	iz, hl
+   	jrl	t, 615
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	extz	wa
+   	calr	CheckStatusBits_40
+   	cp	l, 0:i3
+   	jr	z, 12
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	extz	wa
+>> 	call	176148
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	ld	l, a
+   	extz	hl
+   	ld	xwa, (xsp+4)
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:22813; >> = target line):
+   ; weight, so the array being walked is one plane of a 9x9x9 table.
+   ; Only caller: DSP_Cmd2B_AlgoSelect -- i.e. this runs when the DSP algorithm is (re)selected,
+   ; not per note. Touches no hardware.
+   Voice_Slot_CalcArticParams:
+>> 	dec 8, xsp
+   	push xiz
+   	ld (xsp + 10), a
+   	ld a, (xsp + 10)
+   	extz wa
+   	muls wa, 0x11F
+
+### SITE 26: v142/subcpu/kn5000_subprogram_v142.s:31493  src_addr=0x02F7F2  target=0x024A59  proposed_label=Voice_OpSlot_WriteParams (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	wa
+   	muls	wa, 287
+   	lda	xbc, (267112:24)
+   	lda_rr	xbc, xbc, wa
+   	ld	a, (xsp+8)
+   	ld	e, a
+   	extz	de
+   	pushw 2
+   	stb_erp	a, 248
+   	extz	wa
+   	pushw wa
+   	ld	wa, hl
+>> 	call	150105
+   	stb_erp	a, 248
+   	extz	wa
+   	call	143427
+   	stb_erp	a, 248
+   	extz	wa
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:10548; >> = target line):
+   ; slotrec+1, +3 and +7.
+   ; The direct/bypass path is chosen when the group index == 2, or the operator index == 0,
+   ; or the byte at 0x0451A7 == 0xF5 (a global "raw parameters" mode flag).
+   Voice_OpSlot_WriteParams:
+>> 	lda xsp, (xsp - 12)
+   	push xiz
+   	ld (xsp + 12), xbc
+   	ld l, (xsp + 22)
+   	ld c, e
+   	extz bc
+
+### SITE 27: v142/subcpu/kn5000_subprogram_v142.s:29824  src_addr=0x02E914  target=0x028E26  proposed_label=Voice_AllNotes_SustainRetrigger (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	a, (xsp+2)
+   	extz	wa
+   	call	214759
+   	jr	t, 26
+   	ld	a, (xsp+2)
+   	extz	wa
+   	call	214834
+   	ld	a, (xsp+2)
+   	extz	wa
+   	call	183541
+   	ld	xwa, xhl
+   	ld	bc, 1:i3
+>> 	call	167462
+   	inc	4, xsp
+   	ret
+   ; ** Same blob; unnamed in both sources. ** Called from 0x02EF7B.
+   ; A = custom-tone slot. Latches it into the byte at (0x04531C) + 0x72A7 -- the "currently
+   ; selected custom tone" global that the next three routines all read back. Then for k = 0..1 it
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:18922; >> = target line):
+   ; ★ BranchB and BranchD call Voice_Clear_HoldBit WITHOUT calling Voice_Reload_Levels, i.e. they give
+   ; back the tone-generator slot but keep the software voice -- the asymmetry matters for any
+   ; voice-leak analysis.
+   Voice_AllNotes_SustainRetrigger:
+>> 	lda xsp, (xsp - 10)
+   	push xiz
+   	ld (xsp + 12), c
+   	lda xbc, (0x04308e:24)
+   	ld (xsp + 4), xbc
+   	inc 5, xwa
+
+### SITE 28: v142/subcpu/kn5000_subprogram_v142.s:29091  src_addr=0x02E23A  target=0x03D8CA  proposed_label=FP_MulAccum64 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	and a, 0xC0
+   	cp a, 0x40
+   	scc16 z, hl
+   	ret
+   
+   ; --- CheckStatusBits_80: Check if status bits [7:6] are 0b10 ---
+   ; Entry: WA = index
+   ; Exit: HL = 1 if status bits are 0x80, else HL = 0
+   ; Identical predicate for part mode 0x80. Unreferenced in v142.
+   CheckStatusBits_80:
+   	extz	xwa
+   	ld	xbc, 287
+>> 	call	252106
+   	lda	xwa, (267118:24)
+   	add	xwa, xhl
+   	ld	xwa, (xwa)
+   	ld	a, (xwa+16)
+   	and	a, 192
+-- target context (v142/subcpu/subcpu_fp_math.s:640; >> = target line):
+   ; Inputs XWA:QWA and XBC:QBC (each a 32-bit value plus its high extension register),
+   ; result in XHL. Three `mul` instructions plus the cross-term adds; no rounding, no
+   ; exponent handling - this is an integer helper, not floating point.
+   FP_MulAccum64:
+>> 	stw_erp HL, 0xE2
+   	mul xhl, xbc
+   	stw_erp DE, 0xE6
+   	mul xde, xwa
+   	add xhl, xde
+   	ldw_erp HL, 0xEE
+
+### SITE 29: v142/subcpu/kn5000_subprogram_v142.s:51032  src_addr=0x038E2B  target=0x0204D1  proposed_label=TaskMsgQ_Send (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   ; Top of the task's forever-loop; target of the `jr T,0x038E10` at 0x038E2F.  This is the only
+   ; branch target in the whole region with no symbol in the LLVM build -- genuinely new.
+   DSP_State_ApplyTask_Loop:
+   	ld	wa, 2:i3
+   	call	132674
+   	ld	xiz, xhl
+   	ld	xwa, xiz
+   	call	224829
+   	ldw	(xiz+288), 0
+   	ld	xwa, xiz
+   	ld	xbc, xwa
+   	ld	wa, 1:i3
+>> 	call	132305
+   	jr	t, 0xdf
+   
+   ; Hands the caller's 0x91-word (290-byte) DSP configuration image to the apply task.
+   ; In: XWA = address of the caller's image (callers pass 0x00448E, the live config block).
+   ; Grabs a buffer:  XHL = TaskMsgQ_TryReceive(queue 2)   -- non-blocking; if a request is still
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:1521; >> = target line):
+   	extz	hl
+   	ret
+   
+   TaskMsgQ_Send:
+>> 	push	sr
+   	ei 6
+   	push xhl
+   	push xwa
+   	push xbc
+   	push xde
+
+### SITE 30: v142/subcpu/kn5000_subprogram_v142.s:35401  src_addr=0x03196B  target=0x031A51  proposed_label=DSP_SetCoeff_MasterConfig_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	a, (xwa+3)
+   	ld	l, a
+   	extz	hl
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	ld	c, a
+   	extz	bc
+   	lda	xwa, (283158:24)
+   	ld	xde, xwa
+   	ld	wa, hl
+   	calr	DSP_ReadVoiceParam5D
+   	ld	iz, hl
+>> 	jrl	t, 227
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+3)
+   	ld	l, a
+   	extz	hl
+   	ld	xwa, (xsp+4)
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:35489; >> = target line):
+   	ld	a, (xwa+1)
+   	extz	wa
+   	calr	DSP_SetCoeff_WriteParams
+   	ld	iz, hl
+>> 	ld	hl, iz
+   	popw iz
+   	inc	6, xsp
+   	ret
+   
+   ; Unbounded byte block copy used by the whole query family.
+
+### SITE 31: v142/subcpu/kn5000_subprogram_v142.s:29782  src_addr=0x02E8A4  target=0x02E918  proposed_label=VoiceParam_Set_Tone_Option_Case0_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	cp	wa, 6:i3
+   	jrl	gt, 147
+   	add	wa, wa
+   	lda	xix, (63845:24)
+   	ld_rrw	wa, xix, wa
+   	lda	xix, (190619:24)
+   	jp_rr	8, xix, wa
+   ; Base of the 7-way jump table at ROM 0x00F965; also the handler for option index 0.
+   VoiceParam_Set_Tone_Option_Case0:
+   	ld	a, (xsp+2)
+   	extz	wa
+   	call	214161
+>> 	jr	t, 114
+   	ld	a, (xsp+2)
+   	extz	wa
+   	call	214275
+   	cp	(xsp), 245
+   	jr	z, 9
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:29825; >> = target line):
+   	call	183541
+   	ld	xwa, xhl
+   	ld	bc, 1:i3
+   	call	167462
+>> 	inc	4, xsp
+   	ret
+   ; ** Same blob; unnamed in both sources. ** Called from 0x02EF7B.
+   ; A = custom-tone slot. Latches it into the byte at (0x04531C) + 0x72A7 -- the "currently
+   ; selected custom tone" global that the next three routines all read back. Then for k = 0..1 it
+   ; copies from (0x04531C) + slot*0x50 + k*0x15 + 0x4AB7 into 0x044FCE + 0x1F4 + k*5:
+
+### SITE 32: v142/subcpu/kn5000_subprogram_v142.s:33898  src_addr=0x030CF7  target=0x030CD1  proposed_label=DSP_VoiceCoeffRoute_CopyLoop (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	add	xwa, xbc
+   	ld	xbc, xwa
+   	add	xbc, xix
+   	ld	wa, iy
+   	inc	6, wa
+   	extz	xwa
+   	ld	xiz, 283152
+   	add	xiz, xwa
+   	ld	a, (xbc)
+   	ld	(xiz), a
+   	inc	1, iy
+   	cp	iy, hl
+>> 	jr	c, -40
+   ; The three trailing bytes described above.
+   DSP_VoiceCoeffRoute_Epilogue:
+   	ld	wa, hl
+   	inc	6, wa
+   	extz	xwa
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:33881; >> = target line):
+   	jr	nc, DSP_VoiceCoeffRoute_Epilogue
+   ; 0x0D-byte copy into 0x045210+6, followed by three extra bytes: row+0x0D, then the row
+   ; number's low and high halves -- i.e. the reply carries the row index back to the caller.
+   DSP_VoiceCoeffRoute_CopyLoop:
+>> 	ld	bc, iy
+   	extz	xbc
+   	ld	wa, de
+   	extz	xwa
+   	sll	xwa, 4
+   	add	xwa, xbc
+
+### SITE 33: v142/subcpu/kn5000_subprogram_v142.s:35827  src_addr=0x031D4A  target=0x031E2D  proposed_label=VoiceParamFinalize_CopyToWorkArea (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	wa
+   	extz	xwa
+   	add	xbc, xwa
+   	ld	a, (xiz+3)
+   	ld	l, a
+   	extz	hl
+   	lda	xwa, (283158:24)
+   	ld	xde, xwa
+   	ld	wa, hl
+   	calr	DSP_ParamWrite_BlockCopy
+   	ld	l, (xiz+3)
+   	extz	hl
+>> 	jrl	t, 224
+   ; Query case 6: ToneDB_Find_SubToneRecord (0x032AE0) resolves the record, then
+   ; packet[+3] bytes from record+packet[+2] are shipped.
+   VoiceParam_Query_Case6_SubTone:
+   	ld	a, (xiz+1)
+   	extz	wa
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:35915; >> = target line):
+   	extz	hl
+   
+   ; Common tail of the query family: copy the 6 request bytes to 0x045210.
+   VoiceParamFinalize_CopyToWorkArea:
+>> 	ld ix, 0:i3
+   	cp ix, 6:i3
+   	jr nc, VoiceParamFinalize_CallDispatch
+   
+   ; The 6-iteration header copy packet[i] -> 0x045210+i.
+   VoiceParamFinalize_CopyLoop:
+
+### SITE 34: v142/subcpu/kn5000_subprogram_v142.s:39889  src_addr=0x0341FC  target=0x034217  proposed_label=Algo_SubTable_Epilogue (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ldb_erp	a, 251
+   	jr	41
+   ; DispatchC arm for algorithm types 4 and 5: the value is the pan trim alone.
+   Algo_SubTable_DispatchC_Arm_Type45:
+   	extz	wa
+   	extz	bc
+   	calr	65325
+   	ldb_erp	l, 251
+   	jr	29
+   ; DispatchC arm for algorithm types 6 and 8: C == 1 -> descriptor[0x61] - 0x64.
+   Algo_SubTable_DispatchC_Arm_Type68:
+   	cp	c, 1:i3
+>> 	jr	nz, 25
+   	extz	wa
+   	muls	wa, 287
+   	lda	xbc, (267118:24)
+   	ld_rrl	xwa, xbc, wa
+   	ld	a, (xwa+97)
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:39900; >> = target line):
+   	ldb_erp	a, 251
+   
+   ; L = accumulator, pop QIZ, ret.  Also the no-op arm for algorithm type 7.
+   Algo_SubTable_Epilogue:
+>> 	stb_erp L, 0xFB
+   	popw_erp 0xFA
+   	ret
+   
+   ; Input A = part index, C = sub-slot.  Returns L = 0 immediately unless part+0x0A bit 15 is set.
+   ; Otherwise: base = sub-record byte +0x04, then a computed jump
+
+### SITE 35: v142/subcpu/kn5000_subprogram_v142.s:1078  src_addr=0x02019E  target=0x0201C9  proposed_label=TaskSched_Wake_Task_Count (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	push	xhl
+   	push	xwa
+   	push	xbc
+   	push	xde
+   	push	xix
+   	push	xiy
+   	push	xiz
+   	mul	a, 12
+   	add	wa, 4156
+   	ld	ix, wa
+   	extz	xix
+   	cp8_imm_rid8	xix, 0x09, 0x03	; cp (XIX+0x09),0x03
+>> 	jr	nz, 41
+   	ld	(xix+9), 4
+   	ld8_src_rid8	xix, 0x08, a	; ld a,(XIX+0x08)
+   	sll	a, 2
+   	extz	wa
+   	add	wa, 4200
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:1096; >> = target line):
+   	ld_dst16_rid8	xiy, 0x02, ix	; ld (XIY+0x02),ix
+   	jrl	-680
+   ; Task was not blocked: bump pending count (+0x0A) and go to Dispatch.
+   TaskSched_Wake_Task_Count:
+>> 	incm8	1, (xix+10)
+   	jrl	-686
+   ; Same wake as 0x020185 but safe from interrupt context: it saves only XWA/XIX/XIY/SR,
+   ; never touches the scheduler stack and returns with a plain RET instead of dispatching.
+   ; Input: A = task id. Output: none. Use this one from ISRs; the caller is expected to reach
+   ; a scheduling point later (TaskSwitch_Countdown at 0x01FFD0 does that on interrupt exit).
+
+### SITE 36: v142/subcpu/kn5000_subprogram_v142.s:29811  src_addr=0x02E8F1  target=0x02E918  proposed_label=VoiceParam_Set_Tone_Option_Case0_Join (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	a, (xsp+2)
+   	extz	wa
+   	ld	bc, 0:i3
+   	calr	VoiceAlloc_WithRoutingFlag_ExtData
+   	jr	58
+   	ld	a, (xsp+2)
+   	extz	wa
+   	call	214684
+   	ld	a, (xsp+2)
+   	extz	wa
+   	ld	bc, 0:i3
+   	calr	VoiceAlloc_WithRoutingFlag_ExtData
+>> 	jr	37
+   	ld	a, (xsp+2)
+   	extz	wa
+   	call	214759
+   	jr	t, 26
+   	ld	a, (xsp+2)
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:29825; >> = target line):
+   	call	183541
+   	ld	xwa, xhl
+   	ld	bc, 1:i3
+   	call	167462
+>> 	inc	4, xsp
+   	ret
+   ; ** Same blob; unnamed in both sources. ** Called from 0x02EF7B.
+   ; A = custom-tone slot. Latches it into the byte at (0x04531C) + 0x72A7 -- the "currently
+   ; selected custom tone" global that the next three routines all read back. Then for k = 0..1 it
+   ; copies from (0x04531C) + slot*0x50 + k*0x15 + 0x4AB7 into 0x044FCE + 0x1F4 + k*5:
+
+### SITE 37: v142/subcpu/kn5000_subprogram_v142.s:30484  src_addr=0x02EF20  target=0x02E85A  proposed_label=VoiceParam_Set_Tone_Option (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   Audio_Cmd_ToneEdit_Op0B_Alt:
+   	ld	a, (xiz+1)
+   	extz	wa
+   	calr	VoiceAlloc_CheckAndInit
+   	ld	a, (xiz+1)
+   	ld	l, a
+   	extz	hl
+   	ld	a, (xiz+3)
+   	ld	c, a
+   	extz	bc
+   	ld	e, (xiz+4)
+   	ld	wa, hl
+>> 	calr	63799
+   	jrl	232
+   ; Opcode 0x0D -- SELECT THE PART TO EDIT.  Copies 0x0451A4 to 0x0451A5 and then stores
+   ; (rec+1) into 0x0451A4.  This is the ONLY writer of 0x0451A4 apart from the 0xFF
+   ; initialisation at 0x034C3B, and 0x0451A5 is never read anywhere in the ROM.  Everything
+   ; gated on VoiceAlloc_CheckAndInit is inert until this opcode arrives.
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:29756; >> = target line):
+   ; Note that the 8-byte option array these indices address is initialised from ROM 0x00F95D by
+   ; VOICEPARAM_BUILD_TONE_STAGING, and that option[1] is the byte
+   ; VOICEPARAM_BUILD_TONE_STAGING zeroes when fewer than 4 slots are usable.
+   VoiceParam_Set_Tone_Option:
+>> 	dec	4, xsp
+   	ld	(xsp), e
+   	ld	(xsp+2), a
+   	ld	a, c
+   	extz	wa
+   	ld	de, wa
+
+### SITE 38: v142/subcpu/kn5000_subprogram_v142.s:30908  src_addr=0x02F316  target=0x02F14F  proposed_label=DSP_EffParam_Copy_V4 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	wa
+   	ld	bc, 6:i3
+   	jrl	t, 0xfda6
+   ; Algorithm type 7: DSP_EffParam_Copy_V3 with descriptor 7.
+   DSP_EffParam_Apply_T7:
+   	extz	wa
+   	ld	bc, 7:i3
+   	jrl	t, 0xfdef
+   ; Algorithm type 8: DSP_EffParam_Copy_V4 with descriptor 8.
+   DSP_EffParam_Apply_T8:
+   	extz	wa
+   	ldw	bc, 8
+>> 	jrl	t, 0xfe36
+   ; Algorithm type 9: DSP_EffParam_Copy_V5 with descriptor 9.
+   DSP_EffParam_Apply_T9:
+   	extz	wa
+   	ldw	bc, 9
+   	jrl	t, 0xfe7e
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:30714; >> = target line):
+   	ld	(xde+101), a
+   	ret
+   ; Fields +0x1C,+0x1A,+0x19,+0x1B then two zero bytes then +0x0E,+0x12.
+   DSP_EffParam_Copy_V4:
+>> 	extz	wa
+   	muls	wa, 287
+   	lda	xde, (267118:24)
+   	ld_rrl	xde, xde, wa
+   	ld	a, c
+   	extz	wa
+
+### SITE 39: v142/subcpu/kn5000_subprogram_v142.s:30544  src_addr=0x02EFA8  target=0x02F00E  proposed_label=Audio_Cmd_ToneEdit_Return (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	bc
+   	ld	a, (xiz+3)
+   	extz	wa
+   	ld	hl, wa
+   	sll	hl, 8
+   	or	hl, bc
+   	ld	wa, hl
+   	calr	VoiceParam_CustomTone_Apply_Catalog80
+   	ld	xwa, (283420:24)
+   	ld	a, (xwa+29351)
+   	extz	wa
+   	calr	64924
+>> 	jr	100
+   ; Opcode 0x15: 0x02EACE with the 16-bit value and BC = rec+5, then the same
+   ; InterCPU_Reply_EditBuffer_Block reply.
+   Audio_Cmd_ToneEdit_Op15:
+   	ld	a, (xiz+4)
+   	ld	c, a
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:30593; >> = target line):
+   Audio_Cmd_ToneEdit_Op17:
+   	call	218485
+   ; Restore XIZ and return.  Every case joins here.
+   Audio_Cmd_ToneEdit_Return:
+>> 	pop xiz
+   	ret
+   ; First of eight near-identical copiers.  Input WA = part, C = descriptor index.
+   ; XDE = the part's patch record (from PART+0x06); XBC = DSP_EFFECT_DESCRIPTOR_TABLE +
+   ; index*0x27.  Copies descriptor fields into patch+0x5E..+0x65; this variant takes
+   ; +0x00,+0x01,+0x1A,+0x1C,+0x1B,(skip +0x63),+0x0E,+0x12.  No hardware access.
+
+### SITE 40: v142/subcpu/kn5000_subprogram_v142.s:35386  src_addr=0x031944  target=0x03191E  proposed_label=DSP_SetCoeff_MasterConfig_Loop (new; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	c, a
+   	extz	bc
+   	ld	wa, (xsp+2)
+   	inc	6, wa
+   	extz	xwa
+   	ld	xde, 283152
+   	add	xde, xwa
+   	ld	wa, bc
+   	ld	bc, (xsp+2)
+   	calr	DSP_VoiceParamReadWrite
+   	incw	1, (xsp+2)
+   	cp	(xsp+2), iz
+>> 	jr	c, -40
+   	jrl	t, 264
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+3)
+   	ld	l, a
+   	extz	hl
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:35372; >> = target line):
+   	jrl	t, 316
+   	ldw	iz, 8
+   	cp	(xsp+2), iz
+   	jrl	nc, 307
+>> 	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	ld	c, a
+   	extz	bc
+   	ld	wa, (xsp+2)
+   	inc	6, wa
+
+### SITE 41: v142/subcpu/kn5000_subprogram_v142.s:32945  src_addr=0x0304D8  target=0x030508  proposed_label=Audio_Cmd_ToneEdit_Reply_Send (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	call	183606
+   	ld	xwa, xhl
+   	call	168049
+   	jr	t, 65
+   ; Voice_AllocateForSustain(part) then Voice_AllNotes_SustainRetrigger(list, 1).
+   Audio_Cmd_ToneEdit_Reply_Case_Sustain:
+   	ld	a, (xiz+1)
+   	extz	wa
+   	call	183541
+   	ld	xwa, xhl
+   	ld	bc, 1:i3
+   	call	167462
+>> 	jr	t, 46
+   ; Only when (rec+5) == 7: DSP_SlotParam_Write_From_Cache_B(index 0).
+   Audio_Cmd_ToneEdit_Reply_Case_Slot0:
+   	cp	(xiz+5), 7
+   	jr	nz, 40
+   	ld	wa, 0:i3
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:32979; >> = target line):
+   ;   len = 0x3A (58 bytes)
+   ; and calls InterCPU_E1_DMA_Transfer (0x020DB3).  If that call times out the command is
+   ; still acknowledged locally and the main CPU simply never sees the update.
+   Audio_Cmd_ToneEdit_Reply_Send:
+>> 	ld	xde, 1966080
+   	ldw	bc, 58
+   	ld	xwa, (283420:24)
+   	ld	a, (xwa+29351)
+   	extz	wa
+   	muls	wa, 80
+
+### SITE 42: v142/subcpu/kn5000_subprogram_v142.s:56393  src_addr=0x03C69F  target=0x036A4F  proposed_label=DSP_DispatchData (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	ld	(xsp+26), xwa
+   	ld	a, c
+   	extz	wa
+   	ld	bc, (xsp+20)
+   	call	223823
+   	ld	qiz, hl
+   	ld	xwa, (xsp+26)
+   	ldb_spi	c, 224
+   	ld	(xsp+26), xwa
+   	ld	a, c
+   	extz	wa
+   	ld	bc, (xsp+20)
+>> 	call	223823
+   	ld	qiz, hl
+   	ldw	(xsp+4), 1
+   	jr	72
+   	ld	xwa, (xsp+26)
+   	ldb_spi	c, 224
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:46509; >> = target line):
+   ; ALREADY NAMED -- doc header only. Same shape for data bytes: BC == 0 -> DSP_Send_Data,
+   ; BC == 1 -> DSP2_Send_Data, else HL = 1. The transports' results are discarded in the same
+   ; way.
+   DSP_DispatchData:
+>> 	pushw iz
+   	ld iz, 0:i3
+   	ld de, bc
+   	cp de, 1:i3
+   	jr z, DSP_DispatchData_DSP2Path
+   	cp de, 0:i3
+
+### SITE 43: v142/subcpu/kn5000_subprogram_v142.s:32391  src_addr=0x03001B  target=0x0326B6  proposed_label=WaveSel_Cache_VelSplitPtr (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	jrl	t, 471
+   ; Opcodes 0x02 and 0x03: WaveSel_Cache_VelSplitPtr(part, unit) then
+   ; WaveSel_Cache_SetDescPtr(part, unit, slot) for slots 0..3.
+   Audio_Cmd_DSPUnit_Op02:
+   	ld	xwa, (xsp+4)
+   	ld	a, (xwa+1)
+   	ld	e, a
+   	extz	de
+   	ld	a, (xsp+2)
+   	ld	c, a
+   	extz	bc
+   	ld	wa, de
+>> 	call	206518
+   	ld	iz, 0:i3
+   	cp	iz, 4:i3
+   	jrl	nc, 441
+   ; Four-iteration slot loop of opcode 0x02/0x03.
+   Audio_Cmd_DSPUnit_Op02_SlotLoop:
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:36879; >> = target line):
+   	calr WaveSel_StageA1_FindVelSplit
+   	retd 0x2
+   
+   WaveSel_Cache_VelSplitPtr:
+>> 	dec 4, xsp
+   	ld (xsp), c
+   	ld (xsp + 2), a
+   	ld a, (xsp + 2)
+   	extz wa
+   	muls wa, 0x11F
+
+### SITE 44: v142/subcpu/kn5000_subprogram_v142.s:31592  src_addr=0x02F8EC  target=0x02F999  proposed_label=Audio_Cmd_EffParam_Cache_And_Dispatch2 (reused existing; target kind boundary-code)
+-- source context (>> = the numeric branch):
+   	extz	de
+   	stb_erp	a, 251
+   	extz	wa
+   	muls	wa, 287
+   	lda	xbc, (267118:24)
+   	ld_rrl	xwa, xbc, wa
+   	lda	xwa, (xwa+26)
+   	ld	xbc, xwa
+   	ld	wa, de
+   	ld	xde, xbc
+   	ld	bc, 0:i3
+   	call	171569
+>> 	jrl	t, 170
+   ; Opcode 0x1E: AudioChannel_Dispatch(WA=part, XDE=&patch[0x1D], BC=0).
+   Audio_Cmd_EffParam_Grp3:
+   	stb_erp	a, 251
+   	ld	e, a
+   	extz	de
+-- target context (v142/subcpu/kn5000_subprogram_v142.s:31664; >> = target line):
+   ; Common tail of stage 1 and the entry to stage 2.  Stores (rec+4) into the parameter shadow
+   ; at UserTone_VelSplit_Base + opcode (0x044FCE + opcode), then range-checks the opcode:
+   ; 0x00..0x10 exit, 0x11..0x65 continue.
+   Audio_Cmd_EffParam_Cache_And_Dispatch2:
+>> 	lda	xwa, (282574:24)
+   	ld	xbc, xwa
+   	ld	xwa, (xsp+2)
+   	ld	a, (xwa+2)
+   	extz	wa
+   	lda_rr	xbc, xbc, wa
+
