@@ -82,16 +82,20 @@ ExcDotFunc_HandlerJumpTable:
 	ld	c, (149340:24)
 	extz	bc
 	cp	bc, 0:i3
-	jr	ule, 22
+	jr	ule, ExcDotFunc_Skip2
+ExcDotFunc_Loop:
 	cp	l, 0:i3
-	jr	z, 8
+	jr	z, ExcDotFunc_Skip
 	stib_dsp	240, 157
 	dec	1, l
-	jr	4
+	jr	ExcDotFunc_Join
+ExcDotFunc_Skip:
 	stib_dsp	240, 46
+ExcDotFunc_Join:
 	inc	1, de
 	cp	de, bc
-	jr	c, -22
+	jr	c, ExcDotFunc_Loop
+ExcDotFunc_Skip2:
 	ld	(xix), 0
 	ld	xhl, xwa
 	ret
@@ -133,11 +137,11 @@ ExcPmemFunc_HandlerJumpTable:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcPmemFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcPmemFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcPmemFunc_Return
 
 ExcPmemFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
@@ -173,11 +177,11 @@ ExcSmemFunc_HandlerJumpTable:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcSmemFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcSmemFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcSmemFunc_Return
 
 ExcSmemFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
@@ -213,11 +217,11 @@ ExcCompFunc_HandlerJumpTable:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcCompFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcCompFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcCompFunc_Return
 
 ExcCompFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
@@ -253,11 +257,11 @@ ExcSeqFunc_HandlerJumpTable:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcSeqFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcSeqFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcSeqFunc_Return
 
 ExcSeqFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
@@ -293,11 +297,11 @@ ExcMspFunc_HandlerJumpTable:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ExcMspFunc_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	ExcMspFunc_Return
 	ld	xhl, 3:i3
-	jr	9
+	jr	ExcMspFunc_Return
 
 ExcMspFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3

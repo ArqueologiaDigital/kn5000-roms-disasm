@@ -243,7 +243,7 @@ GridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GridCheck_JumpEnd:
-	jr	t, 0x3d
+	jr	t, GridCheck_Return
 
 GridCheck_CellSelect:
 	lda xbc, (xsp + 10)
@@ -1926,20 +1926,21 @@ RamEditCheck_JumpStart:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
-	jr	31
+	jr	ResetLswFilter_Epilogue
 	ld	xhl, 4:i3
-	jr	27
+	jr	ResetLswFilter_Epilogue
 	ld	xhl, 1:i3
-	jr	23
+	jr	ResetLswFilter_Epilogue
 	ld	xhl, 16
-	jr	16
+	jr	ResetLswFilter_Epilogue
 	ld	xhl, 0xffffffe3
-	jr	9
+	jr	ResetLswFilter_Epilogue
 	lda	xhl, (0x0276ca:24)
-	jr	2
+	jr	ResetLswFilter_Epilogue
 
 RamEditCheck_NotHandled:
 	ld xhl, 0:i3
+ResetLswFilter_Epilogue:
 	pop xiz
 	ret
 
@@ -3161,10 +3162,10 @@ PsEditSwBox_InlineData:
 	ld	(xsp+8), de
 	ld	xiz, xbc
 	lda	xbc, (xsp+4)
-	calr	40500
+	calr	GetEditSwPoint
 	lda	xwa, (xsp+4)
 	cpw	(xwa), 0
-	jr	nz, 41
+	jr	nz, PsEditSwBoxProc_Skip2
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
 	sub	wa, 9
@@ -3173,16 +3174,18 @@ PsEditSwBox_InlineData:
 	inc	8, wa
 	ld	(xiz+6), wa
 	ld	wa, (xsp+8)
-	calr	36090
+	calr	BoxLeftCheck
 	ldw	wa, 8
 	cp	hl, 0:i3
-	jr	z, 2
+	jr	z, PsEditSwBoxProc_Skip
 	ld	wa, 0:i3
+PsEditSwBoxProc_Skip:
 	ld	(xiz), wa
 	ldw	(xiz+4), 38
+PsEditSwBoxProc_Skip2:
 	lda	xwa, (xsp+4)
 	cpw	(xwa), 319
-	jr	nz, 46
+	jr	nz, PsEditSwBoxProc_Join
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
 	sub	wa, 9
@@ -3192,16 +3195,18 @@ PsEditSwBox_InlineData:
 	ld	(xiz+6), wa
 	ldw	(xiz), 281
 	ld	wa, (xsp+8)
-	calr	36054
+	calr	BoxRightCheck
 	lda	xwa, (xiz+4)
 	cp	hl, 0:i3
-	jr	z, 6
+	jr	z, PsEditSwBoxProc_Skip3
 	ldw	(xwa), 319
-	jr	4
+	jr	PsEditSwBoxProc_Join
+PsEditSwBoxProc_Skip3:
 	ldw	(xwa), 311
+PsEditSwBoxProc_Join:
 	lda	xbc, (xsp+4)
 	cpw	(xbc+2), 239
-	jr	nz, 27
+	jr	nz, PsEditSwBoxProc_Epilogue
 	ldw	(xiz+2), 216
 	ldw	(xiz+6), 238
 	ld	wa, (xbc)
@@ -3210,6 +3215,7 @@ PsEditSwBox_InlineData:
 	ld	wa, (xbc)
 	add	wa, 15
 	ld	(xiz+4), wa
+PsEditSwBoxProc_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -3218,16 +3224,17 @@ PsEditSwBox_InlineData:
 	ld	(xsp+10), xde
 	ld	iz, bc
 	cp	wa, iz
-	jr	c, 2
+	jr	c, PsEditSwBoxProc_Skip4
 	ex16	iz, wa
+PsEditSwBoxProc_Skip4:
 	lda	xbc, (xsp+6)
-	calr	40333
+	calr	GetEditSwPoint
 	lda	xbc, (xsp+2)
 	ld	wa, iz
-	calr	40325
+	calr	GetEditSwPoint
 	lda	xbc, (xsp+6)
 	cpw	(xbc+2), 239
-	jr	nz, 31
+	jr	nz, PsEditSwBoxProc_Epilogue2
 	ld	xwa, (xsp+10)
 	ldw	(xwa+2), 216
 	.byte 0xb8
@@ -3238,6 +3245,7 @@ PsEditSwBox_InlineData:
 	ld	bc, (xsp+2)
 	add	bc, 15
 	ld	(xwa+4), bc
+PsEditSwBoxProc_Epilogue2:
 	popw	iz
 	lda	xsp, (xsp+12)
 	ret
@@ -3431,34 +3439,35 @@ ButtonState_DispatchDSP_InlineData:
 	ld	xwa, (xsp+298)
 	ld	xbc, 0x01e0003a
 	call	SendEvent
-	jr	100
+	jr	ButtonState_Paint_DrawAligned
 	ld	xwa, Data_SoundEditorCharsLayout_0x418
-	jr	82
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, Data_SoundEditorCharsLayout_0x41C
-	jr	75
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, Data_SoundEditorCharsLayout_0x420
-	jr	68
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, Data_SoundEditorCharsLayout_0x424
-	jr	61
+	jr	ButtonState_PaintProc_Join
 	.byte 0x40
 	.long NakaInst_OK
-	jr	54
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK_0x4
-	jr	47
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK_0x8
-	jr	40
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK_0xC
-	jr	33
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK_0xE
-	jr	26
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK_0x10
-	jr	19
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK_0x14
-	jr	12
+	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK_0x18
-	jr	5
+	jr	ButtonState_PaintProc_Join
 	.byte 0x40
 	.long Str_No
+ButtonState_PaintProc_Join:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -3677,23 +3686,24 @@ AcIndexEdit_DispatchDSP_InlineData:
 	exts	xde
 	ld	xwa, (xsp+6)
 	bit	7, wa
-	jr	z, 13
+	jr	z, ButtonState_PaintProc_Skip
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00018
-	jrl	161
+	jrl	AcIndexEdit_SendAndReturn
+ButtonState_PaintProc_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00017
-	jrl	148
+	jrl	AcIndexEdit_SendAndReturn
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00017
-	jrl	130
+	jrl	AcIndexEdit_SendAndReturn
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00018
-	jr	t, 0x71
+	jr	t, AcIndexEdit_SendAndReturn
 
 AcIndexEdit_Fallthrough:
 	ld xwa, xiz
@@ -6695,18 +6705,22 @@ AcMixerVol_Return:
 ScrollDelta_ComputeDirection:
 	ld	hl, de
 	cp	xwa, 0x01c00027
-	jr	z, 18
+	jr	z, IvInterruptProc_Skip
 	cp	xwa, 0x01c00007
-	jr	nz, 21
+	jr	nz, IvInterruptProc_Skip3
 	ld	hl, (xsp+4)
 	bit	7, bc
-	jr	nz, 7
-	jr	13
+	jr	nz, IvInterruptProc_Skip2
+	jr	IvInterruptProc_Return
+IvInterruptProc_Skip:
 	bit	7, bc
-	jr	z, 8
+	jr	z, IvInterruptProc_Return
+IvInterruptProc_Skip2:
 	mul	hl, 0xffff
-	jr	2
+	jr	IvInterruptProc_Return
+IvInterruptProc_Skip3:
 	ld	hl, 0:i3
+IvInterruptProc_Return:
 	retd	2
 
 DbMemoProc:
@@ -7910,15 +7924,17 @@ PsTrkSw_TrailingData:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, xiz
-	call	16409190
+	call	GetViewInstance
 	lda	xde, (xhl+22)
 	lda	xbc, (xsp+4)
 	lda	xwa, (xbc+2)
 	.byte 0x92, 0x3f, 0x08, 0x00
-	jr	nc, 6
+	jr	nc, PsTrackSwitchProc_Skip
 	ldw	(xwa), 164
-	jr	4
+	jr	PsTrackSwitchProc_Join
+PsTrackSwitchProc_Skip:
 	ldw	(xwa), 196
+PsTrackSwitchProc_Join:
 	ld	wa, (xde)
 	and	wa, 7
 	mul	wa, 40
@@ -7930,7 +7946,7 @@ PsTrkSw_TrailingData:
 	add	wa, 28
 	ld	(xbc+6), wa
 	ld	xwa, xiz
-	call	16409255
+	call	SetBox
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -8321,33 +8337,33 @@ ObjectProc:
 
 AcTrkSw_Return:
 	ld	xhl, xiz
-	jrl	682
+	jrl	ObjectProc_Join5
 	ld	xwa, xiz
 	ld	xbc, 0x01e00001
 	ld	xde, (xsp+136)
-	jrl	597
+	jrl	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 0x01e00002
 	ld	xde, (xsp+136)
-	jrl	582
+	jrl	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 0x01e00003
 	ld	xde, (xsp+136)
-	jrl	567
+	jrl	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 0x01e00015
 	ld	xde, (xsp+136)
-	jrl	552
+	jrl	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 0x01e00004
 	ld	xde, (xsp+136)
-	jrl	537
+	jrl	ObjectProc_Join3
 	ld	xwa, (xsp+136)
 	ld	(xwa), 0
 	ld	xwa, xiz
 	ld	xbc, 0x01e00005
 	ld	xde, (xsp+136)
-	calr	1662
+	calr	ClassProc
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+144)
 	ld	xbc, 0x01e00014
@@ -8362,11 +8378,11 @@ AcTrkSw_Return:
 	call	Strcat
 	inc	8, xsp
 	ld	xhl, (xsp+4)
-	jrl	534
+	jrl	ObjectProc_Join5
 	ld	xwa, xiz
 	ld	xbc, 0x01e00006
 	ld	xde, (xsp+136)
-	jrl	449
+	jrl	ObjectProc_Join3
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 0x01e00019
@@ -8377,23 +8393,26 @@ AcTrkSw_Return:
 	add	xhl, (xwa)
 	lda	xde, (xwa+4)
 	cp	(xhl), 89
-	jr	nz, 11
+	jr	nz, ObjectProc_Skip
 	pushw 234
 	pushw 0xa894
 	ld	xwa, (xde)
 	push	xwa
-	jr	21
+	jr	ObjectProc_Join
+ObjectProc_Skip:
 	ld	xwa, (xsp+136)
 	add	xbc, (xwa)
 	ld	xwa, (xde)
 	cp	(xbc), 90
-	jr	nz, 16
+	jr	nz, ObjectProc_Skip2
 	pushw 234
 	pushw 0xa89a
 	push	xwa
+ObjectProc_Join:
 	call	Strcpy
 	inc	8, xsp
-	jrl	419
+	jrl	ObjectProc_Join4
+ObjectProc_Skip2:
 	pushw 234
 	pushw 0xa8a2
 	push	xwa
@@ -8402,7 +8421,7 @@ AcTrkSw_Return:
 	ld	xwa, xiz
 	ld	xbc, 0x01e00007
 	ld	xde, (xsp+136)
-	jrl	343
+	jrl	ObjectProc_Join3
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 0x01e00019
@@ -8419,7 +8438,7 @@ AcTrkSw_Return:
 	add	xwa, 0x02600000
 	ld	xbc, 0x01e00008
 	ld	xde, (xsp+136)
-	jrl	184
+	jrl	ObjectProc_Join2
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 0x01e00019
@@ -8436,7 +8455,7 @@ AcTrkSw_Return:
 	add	xwa, 0x02600000
 	ld	xbc, 0x01e00009
 	ld	xde, (xsp+136)
-	jr	122
+	jr	ObjectProc_Join2
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 0x01e00019
@@ -8453,7 +8472,7 @@ AcTrkSw_Return:
 	add	xwa, 0x02600000
 	ld	xbc, 0x01e0000a
 	ld	xde, (xsp+136)
-	jr	60
+	jr	ObjectProc_Join2
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 0x01e00019
@@ -8470,8 +8489,9 @@ AcTrkSw_Return:
 	add	xwa, 0x02600000
 	ld	xbc, 0x01e0000b
 	ld	xde, (xsp+136)
+ObjectProc_Join2:
 	call	SendEvent
-	jrl	140
+	jrl	ObjectProc_Join4
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 0x01e00019
@@ -8489,16 +8509,17 @@ AcTrkSw_Return:
 	ld	xbc, 0x01e0000c
 	ld	xde, (xsp+136)
 	call	SendEvent
-	jr	96
+	jr	ObjectProc_Join5
 	ld	xwa, xiz
 	ld	xbc, 0x01e0000d
 	ld	xde, (xsp+136)
-	jr	12
+	jr	ObjectProc_Join3
 	ld	xwa, xiz
 	ld	xbc, 0x01e0000e
 	ld	xde, (xsp+136)
-	calr	1145
-	jr	65
+ObjectProc_Join3:
+	calr	ClassProc
+	jr	ObjectProc_Join5
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 0x01e00019
@@ -8507,19 +8528,21 @@ AcTrkSw_Return:
 	add	xwa, (xsp+136)
 	ld	xhl, 0:i3
 	ld	l, (xwa)
-	jr	34
+	jr	ObjectProc_Join5
 	ld	xwa, (xsp+136)
 	push	xwa
 	call	Free
 	inc	4, xsp
+ObjectProc_Join4:
 	ld	xhl, 0:i3
-	jr	18
+	jr	ObjectProc_Join5
 
 ExitWindow_Init:
 	ld_sril XWA, (xsp + 0x0090)
 	ld_sril XBC, (xsp + 0x008c)
 	ld_sril XDE, (xsp + 0x0088)
 	calr InheritedProc
+ObjectProc_Join5:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x90, 0x00
 	ret
@@ -17302,10 +17325,10 @@ CommonIDProc_JumpTable:
 	add	xbc, (xwa+8)
 	ld	xwa, (xbc)
 	push	xwa
-	jr	24
+	jr	CommonIDProc_Join
 	ld	hl, (xbc)
 	extz	xhl
-	jrl	278
+	jrl	CommonIDProc_Epilogue
 
 CommonIDProc_CheckAvail:
 	ld xhl, 1:i3
@@ -17314,6 +17337,7 @@ CommonIDProc_CheckAvail:
 	ld (xsp + 4), xwa
 	pushw 0xea
 	pushw 0xabe2
+CommonIDProc_Join:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
@@ -18076,7 +18100,7 @@ DeleteSpecEvent_Epilogue:
 	ld xbc, (xsp + 16)			; restore event code
 	ld xde, (xsp + 2)			; load modified event param
 MainSendEvent_Prologue:
-	calr	744
+	calr	ApPostEvent
 	pop qiz					; restore QIZ
 	lda xsp, (xsp + 22)			; deallocate stack frame
 	ret
@@ -19234,11 +19258,12 @@ DrawFunc_StackHandler:
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)
 	or	xwa, xwa
-	jr	z, 7
+	jr	z, DrawFunc_Return_Epilogue
 	push	xiz
 	ld	xhl, (xiz+4)
 	call	(xhl)
 	pop	xiz
+DrawFunc_Return_Epilogue:
 	pop	xiz
 	ret
 	ret
@@ -19246,6 +19271,7 @@ DrawFunc_StackHandler:
 DrawFunc_StackEntry:
 	ld xwa, (xsp + 4)
 	jr DrawFunc
+DrawFunc_StackEntry_Join:
 	push xiz
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
@@ -19276,15 +19302,16 @@ DrawFunc_XspCheck:
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)
 	or	xwa, xwa
-	jr	z, 7
+	jr	z, DrawFunc_StackEntry_Epilogue
 	push	xiz
 	ld	xhl, (xiz+4)
 	call	(xhl)
 	pop	xiz
+DrawFunc_StackEntry_Epilogue:
 	pop	xiz
 	ret
 	ld	xwa, (xsp+4)
-	jr	-65
+	jr	DrawFunc_StackEntry_Join
 
 
 IS_XSP_INSIDE_4K_REGION_AT_1C032:

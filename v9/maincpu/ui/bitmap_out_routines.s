@@ -75,14 +75,14 @@ BitMapOut_ByteData_RenderA:
 	jrl	pl, 16320
 	nop
 	ret	nz
-	calr	605
+	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
 	ret	nz
 	ld	a, (0xc07e:16)
 	cp	a, 13
-	jr	z, 42
+	jr	z, BitMapOut_ByteData_RenderA_Skip
 	cp	a, 12
-	jr	nz, 74
+	jr	nz, BitMapOut_ByteData_RenderA_Skip2
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	call	DeleteEvent
@@ -91,7 +91,8 @@ BitMapOut_ByteData_RenderA:
 	ld	xde, 0x01a000ea
 	call	ApPostEvent
 	ld	wa, 1:i3
-	jr	72
+	jr	BitMapOut_ByteData_RenderA_Join
+BitMapOut_ByteData_RenderA_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	call	DeleteEvent
@@ -100,7 +101,8 @@ BitMapOut_ByteData_RenderA:
 	ld	xde, 0x01a000eb
 	call	ApPostEvent
 	ld	wa, 1:i3
-	jr	35
+	jr	BitMapOut_ByteData_RenderA_Join
+BitMapOut_ByteData_RenderA_Skip2:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	call	DeleteEvent
@@ -109,16 +111,17 @@ BitMapOut_ByteData_RenderA:
 	ld	xde, 0x01a000e8
 	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	480
+BitMapOut_ByteData_RenderA_Join:
+	calr	BitMapOut_StorePresetValue
 	ret
 BitMapOut_ByteData_RenderB:
 	dec	6, xsp
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
-	jrl	z, 158
+	jrl	z, BitMapOut_ByteData_RenderB_Epilogue
 	call	GetTitleNow
 	cp	xhl, 0x01a000f6
-	jrl	z, 145
+	jrl	z, BitMapOut_ByteData_RenderB_Epilogue
 	ld	a, (0xc080:16)
 	.byte 0xc1
 	push	xde
@@ -126,13 +129,13 @@ BitMapOut_ByteData_RenderB:
 	ld	(0x867e:16), 193
 	jrl	pl, 16320
 	nop
-	jr	nz, 127
-	calr	429
+	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
+	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
-	jr	nz, 120
+	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
 	call	GetTitleNow
 	cp	xhl, 0x01a000e8
-	jr	nz, 108
+	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
 	ld	a, (0x8d3a:16)
 	extz	wa
 	ld	bc, 0:i3
@@ -152,14 +155,16 @@ BitMapOut_ByteData_RenderB:
 	call	SndParam_ResolveVoiceEntry
 	ld a, (xsp+256)
 	cp a, 13
-	jr	z, 5
+	jr	z, BitMapOut_ByteData_RenderB_Skip
 	cp	a, 12
-	jr	nz, 18
+	jr	nz, BitMapOut_ByteData_RenderB_Skip2
+BitMapOut_ByteData_RenderB_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01e00079
 	ld	xde, 0:i3
 	call	ApPostEvent
-	jr	35
+	jr	BitMapOut_ByteData_RenderB_Epilogue
+BitMapOut_ByteData_RenderB_Skip2:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20007
 	call	DeleteEvent
@@ -168,28 +173,29 @@ BitMapOut_ByteData_RenderB:
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	310
+	calr	BitMapOut_StorePresetValue
+BitMapOut_ByteData_RenderB_Epilogue:
 	inc	6, xsp
 	ret
 BitMapOut_ByteData_RenderC:
 	ld	wa, 0:i3
-	jrl	302
+	jrl	BitMapOut_StorePresetValue
 BitMapOut_ByteData_RenderD:
 	dec	6, xsp
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
-	jr	z, 120
+	jr	z, BitMapOut_ByteData_RenderD_Epilogue
 	call	GetTitleNow
 	.long DrawbarSlider_ConfigData
 	.byte 0xa0, 0x01
-	jr	nz, 108
+	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
 	.byte 0xc1, 0x80, 0xc0
 	push	xsp
 	decm	6, (xwa)
 	jr	mi, -63
 	jrl	pl, 16320
 	rcf
-	jr	nz, 94
+	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
 	ld	a, (0x8d3a:16)
 	extz	wa
 	ld	bc, 0:i3
@@ -209,20 +215,23 @@ BitMapOut_ByteData_RenderD:
 	call	SndParam_ResolveVoiceEntry
 	ld a, (xsp+256)
 	cp a, 13
-	jr	z, 5
+	jr	z, BitMapOut_ByteData_RenderD_Skip
 	cp	a, 12
-	jr	nz, 18
+	jr	nz, BitMapOut_ByteData_RenderD_Skip2
+BitMapOut_ByteData_RenderD_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01e00079
 	ld	xde, 0:i3
 	call	ApPostEvent
-	jr	21
+	jr	BitMapOut_ByteData_RenderD_Epilogue
+BitMapOut_ByteData_RenderD_Skip2:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20007
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	172
+	calr	BitMapOut_StorePresetValue
+BitMapOut_ByteData_RenderD_Epilogue:
 	inc	6, xsp
 	ret
 	call	Boot_CheckConfigFlag7
@@ -232,7 +241,7 @@ BitMapOut_ByteData_RenderD:
 	jrl	pl, 16320
 	nop
 	ret	nz
-	calr	146
+	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
 	ret	nz
 	ld	xwa, 0xffffffff
@@ -243,7 +252,7 @@ BitMapOut_ByteData_RenderD:
 	ld	xde, 0x01a000e9
 	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	109
+	calr	BitMapOut_StorePresetValue
 	ret
 BitMapOut_ByteData_RenderE:
 	call	Boot_CheckConfigFlag7
@@ -257,7 +266,7 @@ BitMapOut_ByteData_RenderE:
 	push	xsp
 	popw	wa
 	ret	nz
-	calr	78
+	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
 	ret	nz
 	call	GetTitleNow
@@ -271,7 +280,7 @@ BitMapOut_ByteData_RenderE:
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
-	calr	32
+	calr	BitMapOut_StorePresetValue
 	ret
 
 BitMapOut_CheckDiskAndApply:
@@ -394,7 +403,7 @@ BitMapOut_ByteData_PresetCopy:
 	ld a, (49279:16)
 	res	7, a
 	cp	a, 0:i3
-	jr	z, 31
+	jr	z, BitMapOut_ByteData_PresetCopy_Code_Skip
 	ld	xwa, 769
 	call	SndParam_LookupReadOnly
 	stb_erp a, 251
@@ -405,6 +414,7 @@ BitMapOut_ByteData_PresetCopy:
 	jr	8
 	ld	xbc, 0xf9a0
 	calr	14
+BitMapOut_ByteData_PresetCopy_Code_Skip:
 	ldw	wa, 130
 	calr	7268
 	.byte 0xf1
@@ -3666,17 +3676,17 @@ BitMapOut_ByteData_RenderState:
 	jr	67
 	call	GetTitleNow
 	cp	xhl, 0x01a000d1
-	jr	nz, 59
+	jr	nz, BitMapOut_ByteData_RenderState_Skip
 	pushw	18
 	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
-	calr	65366
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ld	(xiz), l
-	calr	65361
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ld	a, l
 	lda	xbc, (xiz+1)
-	calr	285
+	calr	BitMapOut_UpdateWidget_PostDraw
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20002
 	ld	xde, xiz
@@ -3685,6 +3695,7 @@ BitMapOut_ByteData_RenderState:
 	ld	xbc, 0x01e00023
 	ld	xde, xiz
 	call	ApPostEvent
+BitMapOut_ByteData_RenderState_Skip:
 	ld	xwa, 0:i3
 	ld	xbc, 0:i3
 	ld	xde, 0:i3
@@ -3695,33 +3706,34 @@ BitMapOut_ByteData_DisplayUpdate:
 	push xiz
 	ld a, (49277:16)
 	cp	a, 1:i3
-	jr	nz, 107
+	jr	nz, BitMapOut_ByteData_DisplayUpdate_Epilogue
 	ld	a, (0xc07f:16)
 	res	7, a
 	cp	a, 0:i3
-	jr	z, 25
+	jr	z, BitMapOut_ByteData_DisplayUpdate_Skip
 	ld	xwa, 768
 	call	SndParam_LookupReadOnly
 	cp	l, 0:i3
-	jr	z, 12
+	jr	z, BitMapOut_ByteData_DisplayUpdate_Skip
 	dec	1, l
 	srl	l, 3
 	extz	hl
 	ld	wa, hl
-	calr	65269
+	calr	BitMapOut_PrepareRender_CheckBit2
+BitMapOut_ByteData_DisplayUpdate_Skip:
 	call	GetTitleNow
 	cp	xhl, 0x01a000d1
-	jr	nz, 59
+	jr	nz, BitMapOut_ByteData_DisplayUpdate_Epilogue
 	pushw	18
 	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
-	calr	65238
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ld	(xiz), l
-	calr	65233
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ld	a, l
 	lda	xbc, (xiz+1)
-	calr	157
+	calr	BitMapOut_UpdateWidget_PostDraw
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20002
 	ld	xde, xiz
@@ -3730,6 +3742,7 @@ BitMapOut_ByteData_DisplayUpdate:
 	ld	xbc, 0x01e00023
 	ld	xde, xiz
 	call	ApPostEvent
+BitMapOut_ByteData_DisplayUpdate_Epilogue:
 	pop	xiz
 	ret
 
@@ -3876,6 +3889,7 @@ BitMapOut_UpdateWidget_Done:
 	call	VoiceData_ExtendedParamSetup
 	jr	31
 	ldib_erp 251, 0
+BitMapOut_UpdateWidget_Finalize_Loop:
 	stb_erp c, 251
 	extz	bc
 	ld	a, (xsp+2)
@@ -3885,7 +3899,7 @@ BitMapOut_UpdateWidget_Done:
 	call	ToneGen_LookupByVoiceIndex
 	inc1b_erp 251
 	cp_erpb 251, 8
-	jr c, -28
+	jr c, BitMapOut_UpdateWidget_Finalize_Loop
 	pop qiz
 	inc	2, xsp
 	ret
@@ -3910,12 +3924,12 @@ BitMapOut_ByteData_WidgetTable:
 	push	xix
 	push	xiz
 	ldw	(0x8d58:16), 0xffff
-	calr	2476
+	calr	EffectMode_CheckTransposeChanged
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
-	calr	0x0051
+	calr	BitMapOut_ApplyPatch_Return
 
 BitMapOut_ApplyWidgetPatch:
 	ld xhl, 0:i3

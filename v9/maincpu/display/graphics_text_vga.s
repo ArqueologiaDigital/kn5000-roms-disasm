@@ -85,60 +85,69 @@ TextRender_PopAndReturn:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x3a, 0x01
 	retd 0x8
+DirmdEmulator_Dispatch_Code_Helper:
 	ld (0x03efa2:24), wa
 	ret
 
 GraphicsRender_ByteData:
 	ld	(0x03efa4:24), wa
 	ret
+DirmdEmulator_Dispatch_Code_Helper2:
 	pushw	iz
 	ld	iz, wa
-	calr	37078
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	z, 7
+	jr	z, GraphicsRender_ByteData_Skip
 	ld	wa, iz
-	calr	29
-	jr	20
+	calr	GraphicsRender_ByteData_Helper
+	jr	GraphicsRender_ByteData_Epilogue
+GraphicsRender_ByteData_Skip:
 	ld	wa, 6:i3
-	calr	36824
+	calr	DrawQueue_Alloc
 	ld	xwa, xhl
 	lda	xbc, (GraphicsRender_ByteData_0x2D:24)
 	ld	(xwa), xbc
 	ld	(xwa+4), iz
-	calr	36593
+	calr	DisplayCmd_DequeueAndExecute
+GraphicsRender_ByteData_Epilogue:
 	popw	iz
 	ret
 	ld	wa, (xwa+4)
-	jr	0
+	jr	GraphicsRender_ByteData_Helper
+GraphicsRender_ByteData_Helper:
 	dec	4, xsp
 	pushw	iz
 	ld	(0x03efa6:24), wa
 	call	Table_LookupDword
 	ld	(xsp+2), xhl
 	ldw	iz, 64
+GraphicsRender_ByteData_Loop:
 	ld	wa, iz
 	ld	xbc, (xsp+2)
 	call	SetPaletteRGB
 	inc	1, iz
 	cp	iz, 192
-	jr	c, -17
+	jr	c, GraphicsRender_ByteData_Loop
 	ldw	(0x03ef9e:24), 4
 	ldw	(0x030460:24), 1
 	popw	iz
 	inc	4, xsp
 	ret
-	calr	36984
+DirmdEmulator_Dispatch_Code_Helper3:
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	nz, 19
+	jr	nz, GraphicsRender_ByteData_Join
 	ld	wa, 4:i3
-	calr	36737
+	calr	DrawQueue_Alloc
 	ld	xwa, xhl
 	lda	xbc, (GraphicsRender_ByteData_0x7F:24)
 	ld	(xwa), xbc
-	jrl	-29027
-	jr	0
+	jrl	DisplayCmd_DequeueAndExecute
+	jr	GraphicsRender_ByteData_Join
+GraphicsRender_ByteData_Join:
 	pushw	iz
 	ldw	iz, 32
+GraphicsRender_ByteData_Loop2:
 	ld	wa, iz
 	sub	wa, 32
 	extz	xwa
@@ -152,8 +161,9 @@ GraphicsRender_ByteData:
 	call	SetPaletteRGB
 	inc	1, iz
 	cp	iz, 64
-	jr	c, -39
+	jr	c, GraphicsRender_ByteData_Loop2
 	ldw	iz, 192
+GraphicsRender_ByteData_Loop3:
 	ld	wa, iz
 	sub	wa, 192
 	extz	xwa
@@ -168,7 +178,7 @@ GraphicsRender_ByteData:
 	call	SetPaletteRGB
 	inc	1, iz
 	.long GUI_DisplayStructData
-	jr	c, -39
+	jr	c, GraphicsRender_ByteData_Loop3
 	ldw	(0x03ef9e:24), 4
 	ldw	(0x030460:24), 1
 	popw	iz
@@ -216,9 +226,9 @@ GraphicsRender_RetStub:
 
 GraphicsRender_ShortByteBlock:
 	lda	xbc, (xwa+1)
-	jr	5
+	jr	GraphicsRender_ProcessEntries
 	lda	xbc, (xwa+1)
-	jr	t, 0x62
+	jr	t, GraphicsRender_Start
 
 GraphicsRender_ProcessEntries:
 	lda_dri XSP, 0xfd, 0x6a, 0xff
@@ -618,6 +628,7 @@ DrawText_LayoutAndRender_Variant1:
 	jr	ule, 35
 	lda	xhl, (xsp+10)
 	ld	xde, 6:i3
+DrawText_LayoutAndRender_Variant1_Loop:
 	ld	xix, xde
 	ld	xbc, 0xfffffffa
 	add	xix, xbc
@@ -630,7 +641,7 @@ DrawText_LayoutAndRender_Variant1:
 	inc	1, iy
 	inc	1, xde
 	.byte 0x9f, 0x04, 0xf5
-	jr	c, -30
+	jr	c, DrawText_LayoutAndRender_Variant1_Loop
 	ld	wa, iy
 	extz	xwa
 	lda	xde, (xsp+10)
@@ -739,7 +750,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58578
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -755,7 +766,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58536
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -771,7 +782,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58494
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -787,7 +798,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60477
+	calr	DrawText_LayoutAndRender_Variant1_Helper2
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -803,7 +814,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60435
+	calr	DrawText_LayoutAndRender_Variant1_Helper2
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -819,7 +830,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60393
+	calr	DrawText_LayoutAndRender_Variant1_Helper2
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -835,7 +846,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
-	calr	61981
+	calr	DrawText_LayoutAndRender_Variant1_Helper3
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-16)
@@ -851,7 +862,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	bc, (xiz+8)
 	ld	(xwa+6), bc
 	ld	bc, (0x03efa4:24)
-	calr	61938
+	calr	DrawText_LayoutAndRender_Variant1_Helper3
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -868,7 +879,7 @@ DrawText_LayoutAndRender_Variant1:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58238
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -885,7 +896,7 @@ DrawText_LayoutAndRender_Variant1:
 	inc	2, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58193
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	inc	1, bc
@@ -902,7 +913,7 @@ DrawText_LayoutAndRender_Variant1:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58148
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	inc	2, bc
@@ -919,7 +930,7 @@ DrawText_LayoutAndRender_Variant1:
 	inc	2, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58103
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
@@ -938,7 +949,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xhl)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60081
+	calr	DrawText_LayoutAndRender_Variant1_Helper2
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	ld	(xwa), bc
@@ -951,7 +962,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xhl)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60044
+	calr	DrawText_LayoutAndRender_Variant1_Helper2
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+2)
 	ld	bc, (xde)
@@ -964,7 +975,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xiz+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60007
+	calr	DrawText_LayoutAndRender_Variant1_Helper2
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -977,7 +988,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xiz+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	59970
+	calr	DrawText_LayoutAndRender_Variant1_Helper2
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -994,7 +1005,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	bc, (xiz+8)
 	ld	(xwa+6), bc
 	ld	bc, (0x03efa4:24)
-	calr	61556
+	calr	DrawText_LayoutAndRender_Variant1_Helper3
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -1011,7 +1022,7 @@ DrawText_LayoutAndRender_Variant1:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	57856
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	inc	1, bc
@@ -1028,7 +1039,7 @@ DrawText_LayoutAndRender_Variant1:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	57811
+	calr	DrawText_LayoutAndRender_Variant1_Helper
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
@@ -1058,7 +1069,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	xbc, (xwa+2)
 	ld	de, (0x03efa4:24)
 	ld	xwa, xhl
-	calr	56835
+	calr	ColorBlit2_LargeCodeBlock
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-12)
@@ -1311,7 +1322,7 @@ DrawText_ExtLayout_Variant1:
 	ld	(xsp+4), wa
 	ld	hl, 0:i3
 	cpw	(xsp+4), 0
-	jr	ule, 51
+	jr	ule, DrawText_ExtendedLayout_Skip
 	ld	xbc, xde
 	lda	xwa, (xbc+7)
 	ld	(xsp+8), xwa
@@ -1321,6 +1332,7 @@ DrawText_ExtLayout_Variant1:
 	.byte 0x9f, 0x04, 0x40
 	ld	xbc, xwa
 	ld	xde, 0:i3
+DrawText_ExtendedLayout_Loop:
 	ld	xwa, (xsp+8)
 	ld	xiy, (xwa)
 	ld	xiz, xix
@@ -1333,7 +1345,8 @@ DrawText_ExtLayout_Variant1:
 	inc	1, xde
 	inc	1, xbc
 	cp	hl, (xsp+4)
-	jr	c, -28
+	jr	c, DrawText_ExtendedLayout_Loop
+DrawText_ExtendedLayout_Skip:
 	extz	xhl
 	lda	xwa, (xsp+16)
 	ld	(xsp+8), xwa
@@ -1353,7 +1366,7 @@ DrawText_ExtLayout_Variant1:
 	pushw	(0x03efa2:24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
-	calr	60994
+	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+284)
 	ret
@@ -1467,48 +1480,57 @@ DrawFunc_Init_Variant1:
 	ld	(xbc), ix
 	ld	a, (xiz+10)
 	cp	a, e
-	jr	z, 77
+	jr	z, DrawFunc_Init_Skip4
 	cp	a, 128
-	jr	nc, 10
+	jr	nc, DrawFunc_Init_Skip
 	cp	e, 128
-	jr	c, 5
+	jr	c, DrawFunc_Init_Skip
 	ld	a, 128:opc
 	sub	e, 128
+DrawFunc_Init_Skip:
 	cp	e, a
-	jr	ule, 8
+	jr	ule, DrawFunc_Init_Skip2
 	ld	(xsp+4), 43
 	sub	e, a
-	jr	8
+	jr	DrawFunc_Init_Join
+DrawFunc_Init_Skip2:
 	ld	(xsp+4), 45
 	sub	a, e
 	ld	e, a
+DrawFunc_Init_Join:
 	ld	c, e
 	extz	bc
 	lda	xde, (xsp+5)
 	cp	hl, 2:i3
-	jr	z, 12
+	jr	z, DrawFunc_Init_Skip3
 	pushw	bc
 	cp	hl, 1:i3
 	jr	nz, 17
 	ld	xwa, Str_No_0xE2A
-	jr	15
+	jr	DrawFunc_Init_Entry
+DrawFunc_Init_Skip3:
 	pushw	bc
 	pushw	234
 	pushw 0xb144
 	.ascii ":h,@H"
 	.byte 0xb1, 0xea
 	nop
+DrawFunc_Init_Entry:
 	.ascii "8:h#"
+DrawFunc_Init_Skip4:
 	pushw	0
 	cp	hl, 2:i3
-	jr	z, 11
+	jr	z, DrawFunc_Init_Skip5
 	cp	hl, 1:i3
-	jr	nz, 14
+	jr	nz, DrawFunc_Init_Skip6
 	ld	xwa, Str_No_0xE36
-	jr	12
+	jr	DrawFunc_Init_Join2
+DrawFunc_Init_Skip5:
 	ld	xwa, Str_No_0xE3A
 	jr	5
+DrawFunc_Init_Skip6:
 	ld	xwa, Str_No_0xE3E
+DrawFunc_Init_Join2:
 	push	xwa
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -1568,17 +1590,20 @@ DrawFunc_Init_Variant1:
 	ld	(xbc), de
 	lda	xbc, (xsp+4)
 	cp	hl, 2:i3
-	jr	z, 13
+	jr	z, DrawFunc_Init_Entry2
 	cp	hl, 1:i3
-	jr	nz, 18
+	jr	nz, DrawFunc_Init_Entry3
 	.byte 0x94, 0x04
 	ld	xwa, Str_No_0xE4A
-	jr	16
+	jr	DrawFunc_Init_Join3
+DrawFunc_Init_Entry2:
 	.byte 0x94, 0x04
 	ld	xwa, Str_No_0xE4E
-	jr	7
+	jr	DrawFunc_Init_Join3
+DrawFunc_Init_Entry3:
 	.byte 0x94, 0x04
 	ld	xwa, Str_No_0xE52
+DrawFunc_Init_Join3:
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -1647,10 +1672,11 @@ DrawFunc_Init_Variant1:
 	cp	l, 1:i3
 	jr	nz, 14
 	ld	xwa, Str_No_0xE5E
-	jr	12
+	jr	DrawFunc_Init_Join4
 	ld	xwa, Str_No_0xE62
-	jr	5
+	jr	DrawFunc_Init_Join4
 	ld	xwa, Str_No_0xE66
+DrawFunc_Init_Join4:
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -1711,43 +1737,52 @@ DrawFunc_Init_Variant1:
 	cp	a, 128
 	jr	nc, 10
 	cp	e, 128
-	jr	c, 5
+	jr	c, DrawFunc_Init_Skip7
 	ld	a, 128:opc
 	sub	e, 128
+DrawFunc_Init_Skip7:
 	cp	e, a
-	jr	ule, 8
+	jr	ule, DrawFunc_Init_Skip8
 	ld	(xsp+4), 43
 	sub	e, a
-	jr	8
+	jr	DrawFunc_Init_Join5
+DrawFunc_Init_Skip8:
 	ld	(xsp+4), 45
 	sub	a, e
 	ld	e, a
+DrawFunc_Init_Join5:
 	extz	de
 	lda	xbc, (xsp+5)
 	pushw	de
 	cp	l, 2:i3
-	jr	z, 11
+	jr	z, DrawFunc_Init_Entry4
 	cp	l, 1:i3
-	jr	nz, 14
+	jr	nz, DrawFunc_Init_Skip9
 	ld	xwa, Str_No_0xE72
-	jr	12
+	jr	DrawFunc_Init_Entry5
+DrawFunc_Init_Entry4:
 	.byte 0x40
 	.long FmtStr_pct2d
-	jr	5
+	jr	DrawFunc_Init_Entry5
+DrawFunc_Init_Skip9:
 	ld	xwa, Str_No_0xE7A
+DrawFunc_Init_Entry5:
 	.ascii "89h#¿"
 	.byte 0x04
 	ldw	bc, 11
 	nop
 	cp	l, 2:i3
-	jr	z, 11
+	jr	z, DrawFunc_Init_Skip10
 	cp	l, 1:i3
-	jr	nz, 14
+	jr	nz, DrawFunc_Init_Skip11
 	ld	xwa, Str_No_0xE7E
-	jr	12
+	jr	DrawFunc_Init_Join6
+DrawFunc_Init_Skip10:
 	ld	xwa, Str_No_0xE82
 	jr	5
+DrawFunc_Init_Skip11:
 	ld	xwa, Str_No_0xE86
+DrawFunc_Init_Join6:
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -1814,11 +1849,12 @@ DrawFunc_Init_Variant1:
 	pushw	234
 	pushw	0xb1ac
 	push	xbc
-	jr	9
+	jr	DrawFunc_Init_Join7
 	.byte 0x92, 0x04
 	ld	xwa, Data_CharMapFormatBlock_0x10
 	push	xwa
 	push	xbc
+DrawFunc_Init_Join7:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
@@ -1931,7 +1967,7 @@ ColorBlit_Variant_ByteData:
 	add	de, bc
 	ld	(xwa+4), de
 	ld	bc, (0x03efa2:24)
-	calr	54048
+	calr	ColorBlit2
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -1963,7 +1999,7 @@ ColorBlit_Variant_ByteData:
 	ld	bc, (xde+6)
 	ld	(xwa+6), bc
 	ld	bc, (0x03efa2:24)
-	calr	53968
+	calr	ColorBlit2
 	inc	8, xsp
 	ret
 
@@ -3005,376 +3041,376 @@ VGA_CRTCTiming_ByteData:
 	jr -21
 	ldw	wa, 964
 	ld	bc, 6:i3
-	calr	65051
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	65043
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	65034
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 4:i3
-	calr	65026
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	65017
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 16
-	calr	65008
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64999
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 23
-	calr	64990
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64981
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 5:i3
-	calr	64973
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64964
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 6:i3
-	calr	64956
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64947
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 37
-	calr	64938
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64929
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 19
-	calr	64920
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64911
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 8
-	calr	64902
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64893
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 0:i3
-	calr	64885
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64876
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 28
-	calr	64867
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64858
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64849
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64840
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 3:i3
-	calr	64832
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64823
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 2:i3
-	calr	64815
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64806
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 5:i3
-	calr	64798
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64789
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64780
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64771
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 3:i3
-	calr	64763
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64754
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 8
-	calr	64745
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64736
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 170
-	calr	64727
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64718
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 16
-	calr	64709
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64700
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 8
-	calr	64691
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64682
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 10
-	calr	64673
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64664
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	64656
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64647
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 19
-	calr	64638
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64629
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 6:i3
-	calr	64621
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64612
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 13
-	calr	64603
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64594
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	64586
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64577
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 12
-	calr	64568
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64559
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 0:i3
-	calr	64551
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64542
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 37
-	calr	64533
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64524
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 12
-	calr	64515
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64506
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 15
-	calr	64497
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64488
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64479
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64470
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 14
-	calr	64461
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64452
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 0:i3
-	calr	64444
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64435
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 51
-	calr	64426
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64417
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 8
-	calr	64408
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64399
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64390
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64381
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 247
-	calr	64372
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64363
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 16
-	calr	64354
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 10
-	calr	64345
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 251
-	calr	64336
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 11
-	calr	64327
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 34
-	calr	64318
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64309
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 14
-	calr	64300
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64291
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	64283
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64274
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 100
-	calr	64265
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64256
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 3:i3
-	calr	64248
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64239
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 9
-	calr	64230
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64221
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 5:i3
-	calr	64213
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64204
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 43
-	calr	64195
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64186
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 7:i3
-	calr	64178
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64169
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 88
-	calr	64160
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64151
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 9
-	calr	64142
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64133
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 7:i3
-	calr	64125
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64116
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 11
-	calr	64107
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64098
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 1:i3
-	calr	64090
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64081
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 13
-	calr	64072
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64063
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 13
-	calr	64054
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64045
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 15
-	calr	64036
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	64027
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 58
-	calr	64018
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 9
-	calr	64009
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 17
-	calr	64000
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ldw	bc, 12
-	calr	63991
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ldw	bc, 12
-	calr	63982
+	calr	_Write_VGA_Register
 	ldw	wa, 964
 	ld	bc, 6:i3
-	calr	63974
+	calr	_Write_VGA_Register
 	ldw	wa, 965
 	ld	bc, 0:i3
-	jrl	-1570
+	jrl	_Write_VGA_Register
 
 VGA_ConfigExtSequencer:
 	_VGA_SEQUENCER 0x6, 0x1
@@ -4383,7 +4419,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	iz
 	pushw	247
 	ld	xde, TransposeNoteStr_C_0xA0
-	jrl	271
+	jrl	ToneGen_WriteParamByIndex_Join
 	inc	8, xiy
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4418,7 +4454,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	iz
 	pushw	247
 	ld	xde, TransposeNoteStr_C_0xE4
-	jrl	183
+	jrl	ToneGen_WriteParamByIndex_Join
 	lda	xiy, (xiy+16)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4438,7 +4474,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xde
 	ld	xde, TransposeNoteStr_C_0x10C
-	jrl	136
+	jrl	ToneGen_WriteParamByIndex_Join
 	lda	xiy, (xiy+24)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4458,7 +4494,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xde
 	ld	xde, TransposeNoteStr_C_0x12A
-	jr	90
+	jr	ToneGen_WriteParamByIndex_Join
 	lda	xiy, (xiy+32)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4478,7 +4514,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xde
 	ld	xde, TransposeNoteStr_C_0x148
-	jr	44
+	jr	ToneGen_WriteParamByIndex_Join
 	lda	xiy, (xiy+40)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4498,6 +4534,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xde
 	ld	xde, TransposeNoteStr_C_0x16A
+ToneGen_WriteParamByIndex_Join:
 	call	DrawString
 
 ToneGen_WriteParam_Return:
@@ -4620,29 +4657,33 @@ WallMenuEdit_EventDispatch:
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
-	jr	z, 11
+	jr	z, ToneGen_WriteParamByIndex_Skip
 	or	xwa, xwa
-	jr	nz, 14
+	jr	nz, ToneGen_WriteParamByIndex_Skip2
 	ld	xwa, TransposeNoteStr_C_0x1C6
-	jr	12
+	jr	ToneGen_WriteParamByIndex_Join2
+ToneGen_WriteParamByIndex_Skip:
 	ld	xwa, TransposeNoteStr_C_0x1CE
-	jr	5
+	jr	ToneGen_WriteParamByIndex_Join2
+ToneGen_WriteParamByIndex_Skip2:
 	ld	xwa, TransposeNoteStr_C_0x1D6
+ToneGen_WriteParamByIndex_Join2:
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ToneGen_WriteParamByIndex_Epilogue
 	ld	xhl, 1:i3
-	jr	13
+	jr	ToneGen_WriteParamByIndex_Epilogue
 	lda	xhl, (0x0340fc:24)
-	jr	6
+	jr	ToneGen_WriteParamByIndex_Epilogue
 	ld	xhl, 2:i3
-	jr	2
+	jr	ToneGen_WriteParamByIndex_Epilogue
 
 WallOthEditCheck_RetZero:
 	ld xhl, 0:i3
+ToneGen_WriteParamByIndex_Epilogue:
 	pop xiz
 	ret
 
@@ -4668,29 +4709,33 @@ WallOthEdit_EventDispatch:
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
-	jr	z, 11
+	jr	z, ToneGen_WriteParamByIndex_Skip3
 	or	xwa, xwa
-	jr	nz, 14
+	jr	nz, ToneGen_WriteParamByIndex_Skip4
 	ld	xwa, TransposeNoteStr_C_0x1F2
-	jr	12
+	jr	ToneGen_WriteParamByIndex_Join3
+ToneGen_WriteParamByIndex_Skip3:
 	ld	xwa, TransposeNoteStr_C_0x1FA
-	jr	5
+	jr	ToneGen_WriteParamByIndex_Join3
+ToneGen_WriteParamByIndex_Skip4:
 	ld	xwa, TransposeNoteStr_C_0x202
+ToneGen_WriteParamByIndex_Join3:
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	ToneGen_WriteParamByIndex_Epilogue2
 	ld	xhl, 1:i3
-	jr	13
+	jr	ToneGen_WriteParamByIndex_Epilogue2
 	lda	xhl, (0x0340fe:24)
-	jr	6
+	jr	ToneGen_WriteParamByIndex_Epilogue2
 	ld	xhl, 2:i3
-	jr	2
+	jr	ToneGen_WriteParamByIndex_Epilogue2
 
 WallOthCheckLoop_RetZero:
 	ld xhl, 0:i3
+ToneGen_WriteParamByIndex_Epilogue2:
 	pop xiz
 	ret
 

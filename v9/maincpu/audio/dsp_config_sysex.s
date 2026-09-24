@@ -27,37 +27,42 @@ SysEx_ApplyToSlot4B_Data:
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	87
+	calr	SysEx_ClampVoiceIndex128
 	ld	(xsp+4), l
 	ld	xwa, 0x4b04
 	call	DSPCfg_ReadParam_Map0
 	ld qiz, hl
 	cp qiz, 0
-	jr lt, 63
+	jr lt, SysEx_ClampVoiceIndex8_Epilogue
 	ld	iz, 0:i3
 	cp qiz, 0
-	jr le, 50
+	jr le, SysEx_ClampVoiceIndex8_Join
+SysEx_ClampVoiceIndex8_Loop:
 	ld wa, iz
 	exts	xwa
 	add	xwa, 0x4b10
 	call	DSPCfg_ResolveAndExtract
 	cp	hl, 1:i3
-	jr	z, 4
+	jr	z, SysEx_ClampVoiceIndex8_Skip
 	cp	hl, 2:i3
-	jr	nz, 21
+	jr	nz, SysEx_ClampVoiceIndex8_Skip2
+SysEx_ClampVoiceIndex8_Skip:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 0x4b10
 	ld	c, (xsp+4)
 	extz	bc
 	call	DSPCfg_WriteParamFull
-	jr	7
+	jr	SysEx_ClampVoiceIndex8_Join
+SysEx_ClampVoiceIndex8_Skip2:
 	inc	1, iz
 	cp iz, qiz
-	jr	lt, -50
+	jr	lt, SysEx_ClampVoiceIndex8_Loop
+SysEx_ClampVoiceIndex8_Join:
 	push	xiz
 	call	SwbtWr_ReinitOutputBank
 	pop	xiz
+SysEx_ClampVoiceIndex8_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -82,39 +87,43 @@ SysEx_ApplyToSlot49_Data:
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	93
+	calr	SysEx_ClampVoiceIndex8_49
 	extz	hl
 	ld	xwa, 0x4900
 	ld	bc, hl
 	call	DSPCfg_WriteParamFull
 	cp	hl, 0:i3
-	jr	lt, 72
+	jr	lt, SysEx_ClampVoiceIndex128_Epilogue
 	ld	xwa, 0x4904
 	call	DSPCfg_ReadParam_Map0
 	ld qiz, hl
 	cp qiz, 0
-	jr lt, 55
+	jr lt, SysEx_ClampVoiceIndex128_Epilogue
 	ld	iz, 0:i3
 	cp qiz, 0
-	jr le, 42
+	jr le, SysEx_ClampVoiceIndex128_Skip2
+SysEx_ClampVoiceIndex128_Loop:
 	ld	a, (xsp+4)
 	extz	wa
 	stb_erp c, 248
 	extz	bc
-	calr	191
+	calr	SysEx_DispatchByChannel
 	ld	bc, hl
 	cp	bc, 0xd8f0
-	jr	z, 14
+	jr	z, SysEx_ClampVoiceIndex128_Skip
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 0x4910
 	call	DSPCfg_WriteParamFull
+SysEx_ClampVoiceIndex128_Skip:
 	inc	1, iz
 	cp iz, qiz
-	jr	lt, -42
+	jr	lt, SysEx_ClampVoiceIndex128_Loop
+SysEx_ClampVoiceIndex128_Skip2:
 	push	xiz
 	call	SwbtWr_ReinitOutputBank
 	pop	xiz
+SysEx_ClampVoiceIndex128_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -139,37 +148,42 @@ SysEx_ApplyToSlot49_Format_Data:
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	87
+	calr	SysEx_ClampVoiceIndex128_49
 	ld	(xsp+4), l
 	ld	xwa, 0x4904
 	call	DSPCfg_ReadParam_Map0
 	ld qiz, hl
 	cp qiz, 0
-	jr lt, 63
+	jr lt, SysEx_ApplyToSlot49_Format_Data_Epilogue
 	ld	iz, 0:i3
 	cp qiz, 0
-	jr le, 50
+	jr le, SysEx_ApplyToSlot49_Format_Data_Join
+SysEx_ApplyToSlot49_Format_Data_Loop:
 	ld wa, iz
 	exts	xwa
 	add	xwa, 0x4910
 	call	DSPCfg_ResolveAndExtract
 	cp	hl, 1:i3
-	jr	z, 4
+	jr	z, SysEx_ApplyToSlot49_Format_Data_Skip
 	cp	hl, 2:i3
-	jr	nz, 21
+	jr	nz, SysEx_ApplyToSlot49_Format_Data_Skip2
+SysEx_ApplyToSlot49_Format_Data_Skip:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 0x4910
 	ld	c, (xsp+4)
 	extz	bc
 	call	DSPCfg_WriteParamFull
-	jr	7
+	jr	SysEx_ApplyToSlot49_Format_Data_Join
+SysEx_ApplyToSlot49_Format_Data_Skip2:
 	inc	1, iz
 	cp iz, qiz
-	jr	lt, -50
+	jr	lt, SysEx_ApplyToSlot49_Format_Data_Loop
+SysEx_ApplyToSlot49_Format_Data_Join:
 	push	xiz
 	call	SwbtWr_ReinitOutputBank
 	pop	xiz
+SysEx_ApplyToSlot49_Format_Data_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -205,19 +219,19 @@ SysEx_ChannelHandler_4B_Data:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x468
-	jr	77
+	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x472
-	jr	66
+	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x480
-	jr	55
+	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x48A
-	jr	44
+	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 8
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x498
@@ -233,6 +247,7 @@ SysEx_ChannelHandler_4B_Data:
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4C6
+SysEx_DispatchByChannel_Entry:
 	.byte 0xd3
 	reti
 	.byte 0xe0, 0xe8
@@ -258,19 +273,19 @@ SysEx_ChannelHandler_49_Data:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4E4
-	jr	75
+	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4EE
-	jr	64
+	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x4F8
-	jr	53
+	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x502
-	jr	42
+	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x50C
@@ -286,6 +301,7 @@ SysEx_ChannelHandler_49_Data:
 	cp	c, 6:i3
 	ret	nc
 	ld	xwa, MidiPkt_EventType_Table_0x52C
+SysEx_DispatchByChannel_49_Entry:
 	.byte 0xd3
 	reti
 	.byte 0xe0, 0xe8
@@ -973,15 +989,18 @@ SwbtWr_QueuePostEvent_Done:
 
 SwbtWr_TrailingBytecode:
 	ld	xhl, 0xc039
+SwbtWr_TrailingBytecode_Join:
 	cp	(xhl), 255
-	jr	z, 6
+	jr	z, SwbtWr_TrailingBytecode_Skip
 	add	hl, 4
-	jr	-11
+	jr	SwbtWr_TrailingBytecode_Join
+SwbtWr_TrailingBytecode_Skip:
 	cp	xhl, 0xc074
-	jr	ugt, 9
+	jr	ugt, SwbtWr_TrailingBytecode_Return
 	ld	(xhl), de
 	ld	(xhl+2), wa
 	ld	(xhl+4), 255
+SwbtWr_TrailingBytecode_Return:
 	ret
 
 PreLswLoad:
@@ -3831,17 +3850,18 @@ DSPCfg_Data_ParamDispatch:
 	ld	(xsp+6), a
 	lda	xwa, (xsp+12)
 	cp	(xsp+6), 118
-	jrl	z, 159
+	jrl	z, DSPCfg_Data_ParamDispatch_Skip4
 	ld	hl, iz
 	cp	(xsp+6), 112
-	jr	z, 70
+	jr	z, DSPCfg_Data_ParamDispatch_Skip2
 	cp	(xsp+6), 103
-	jr	z, 59
+	jr	z, DSPCfg_Data_ParamDispatch_Skip
 	.byte 0x8f, 0x06
 	.ascii "?df5Å"
 	ld	l, 219:opc
 	zcf
 	ld qiz, 1
+DSPCfg_Data_ParamDispatch_Join:
 	ld e, 255:opc
 	ld	xwa, (xsp+14)
 	ld	bc, qiz
@@ -3860,15 +3880,17 @@ DSPCfg_Data_ParamDispatch:
 	pop	xiz
 	lda	xsp, (xsp+14)
 	retd	16
+DSPCfg_Data_ParamDispatch_Skip:
 	ld qiz, 2
-	jr -51
+	jr DSPCfg_Data_ParamDispatch_Join
+DSPCfg_Data_ParamDispatch_Skip2:
 	lda	xbc, (xsp+8)
-	calr	62102
+	calr	DSPCfg_ExtractFieldSingle
 	ld	wa, (xsp+12)
 	cp	wa, 32
-	jr	z, 49
+	jr	z, DSPCfg_Data_ParamDispatch_Loop
 	cp	wa, 16
-	jr	z, 28
+	jr	z, DSPCfg_Data_ParamDispatch_Skip3
 	ld	wa, iz
 	srl	wa, 6
 	and	wa, 31
@@ -3879,12 +3901,14 @@ DSPCfg_Data_ParamDispatch:
 	ld qiz, 1
 	incm8	1, (xsp+4)
 	jr	-98
+DSPCfg_Data_ParamDispatch_Skip3:
 	ld	wa, iz
 	srl	wa, 11
 	and	wa, 31
 	ld	hl, wa
 	ld	e, 248:opc
 	jr	-113
+DSPCfg_Data_ParamDispatch_Loop:
 	ld	hl, iz
 	and	hl, 63
 	.byte 0xd7
@@ -3892,6 +3916,7 @@ DSPCfg_Data_ParamDispatch:
 	.byte 0xa9, 0x8f, 0x04
 	.ascii "a%?x~"
 	swi	7
+DSPCfg_Data_ParamDispatch_Skip4:
 	lda	xbc, (xsp+10)
 	calr	61982
 	ld	wa, (xsp+12)
@@ -3904,7 +3929,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	e, 7:opc
 	jrl	-161
 	cpw	(xsp+10), 2
-	jr	nz, -55
+	jr	nz, DSPCfg_Data_ParamDispatch_Loop
 	ld	wa, iz
 	srl	wa, 8
 	and	wa, 63
@@ -3939,15 +3964,16 @@ DSPCfg_Data_ParamDispatch:
 	push	xwa
 	ld	xwa, (xsp+38)
 	ld	xbc, (xsp+34)
-	calr	65185
+	calr	DSPCfg_Data_ParamDispatch
 	ld	bc, 0:i3
 	cpw	(xsp+14), 0
-	jr	ule, 12
+	jr	ule, DSPCfg_Data_ParamDispatch_Skip5
 	ld	xwa, 1:i3
 	add	(xsp+22), xwa
 	inc	1, bc
 	cp	bc, (xsp+14)
 	jr	c, -12
+DSPCfg_Data_ParamDispatch_Skip5:
 	ld	xwa, (xsp+18)
 	calr	62201
 	ld	(xsp+18), xhl
@@ -4006,10 +4032,11 @@ DSPCfg_Data_ParamDispatch:
 	jp_rr 8, xix, wa
 	ld xiz, 18688
 	ld	wa, 0:i3
-	jr	48
+	jr	DSPCfg_Data_ParamDispatch_Join3
 	ld	xiz, 0x4a00
-	jr	5
+	jr	DSPCfg_Data_ParamDispatch_Join2
 	ld	xiz, 0x4b00
+DSPCfg_Data_ParamDispatch_Join2:
 	ld	wa, 1:i3
 	jr	32
 	ld	xiz, 0x4c00
@@ -4025,6 +4052,7 @@ DSPCfg_Data_ParamDispatch:
 	push	sr
 	swi	7
 	swi	7
+DSPCfg_Data_ParamDispatch_Join3:
 	cp	(xsp+12), 1
 	jr	c, 75
 	cp	(xsp+12), 17
@@ -5726,9 +5754,9 @@ UIStateEvt_ParamEdit_Data:
 	ld	a, (0xc07d:16)
 	extz	wa
 	cp	wa, 0:i3
-	jrl	mi, 606
+	jrl	mi, UIStateEvt_ParamEdit_Data_Epilogue
 	cp	wa, 6:i3
-	jrl	gt, 601
+	jrl	gt, UIStateEvt_ParamEdit_Data_Epilogue
 	add	wa, wa
 	lda	xix, (AudioInit_VoiceDispatch_Table_0x150:24)
 	ld_rrw wa, xix, wa
@@ -5736,7 +5764,7 @@ UIStateEvt_ParamEdit_Data:
 	jp_rr 8, xix, wa
 	ld a, (49279:16)
 	and	a, 7
-	jrl	z, 183
+	jrl	z, UIStateEvt_ParamEdit_Data_Entry
 	ld	wa, (0xc598:16)
 	bit	6, wa
 	jr	z, 44
@@ -5801,6 +5829,7 @@ UIStateEvt_ParamEdit_Data:
 	ld	(0xc5a0:16), 31
 	jr	5
 	ld	(0xc5a0:16), 16
+UIStateEvt_ParamEdit_Data_Entry:
 	.byte 0xf1
 	jrl	nc, -13376
 	jrl	z, 379
@@ -5977,6 +6006,7 @@ UIStateEvt_ParamEdit_Data:
 	push	xiz
 	.byte 0x04
 	nop
+UIStateEvt_ParamEdit_Data_Epilogue:
 	popw	iz
 	ret
 UIStateEvt_VolumeMixer_Data:
@@ -6054,15 +6084,16 @@ UIStateEvt_VolumeMixer_Data:
 	ret
 	.byte 0xf1
 	jrl	nc, -14144
-	jr	z, 26
+	jr	z, UIStateEvt_VolumeMixer_Data_Entry2
 	.byte 0xf1
 	jrl	nz, -14144
-	jr	z, 8
+	jr	z, UIStateEvt_VolumeMixer_Data_Entry
 	.byte 0xd1, 0x96, 0xc5
 	push	xiz
 	.byte 0x80
 	nop
 	jr	6
+UIStateEvt_VolumeMixer_Data_Entry:
 	.byte 0xd1, 0x96, 0xc5
 	push	xix
 	jrl	nc, -11777
@@ -6070,6 +6101,7 @@ UIStateEvt_VolumeMixer_Data:
 	push	xiz
 	.byte 0x04
 	nop
+UIStateEvt_VolumeMixer_Data_Entry2:
 	.byte 0xf1
 	jrl	nc, -13888
 	ret	z
@@ -6094,6 +6126,7 @@ UIStateEvt_VolumeMixer_Data:
 	ld	de, 0:i3
 	cp	de, 26
 	jr	ge, 79
+UIStateEvt_VolumeMixer_Data_Loop:
 	ld	wa, de
 	sla	wa, 2
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x7C:24)
@@ -6114,7 +6147,7 @@ UIStateEvt_VolumeMixer_Data:
 	and	a, 255
 	sub	a, 64
 	ld	(xhl), a
-	jr	19
+	jr	UIStateEvt_VolumeMixer_Data_Join
 	ld	wa, de
 	add	wa, wa
 	add	wa, 228
@@ -6122,9 +6155,10 @@ UIStateEvt_VolumeMixer_Data:
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 0
+UIStateEvt_VolumeMixer_Data_Join:
 	inc	1, de
 	cp	de, 26
-	jr	lt, -79
+	jr	lt, UIStateEvt_VolumeMixer_Data_Loop
 	.byte 0xd1, 0x94, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6142,13 +6176,13 @@ UIStateEvt_VolumeMixer_Data:
 UIStateEvt_EffectSelect_Data:
 	ld	a, (0xc07d:16)
 	cp	a, 4:i3
-	jrl	z, 270
+	jrl	z, UIStateEvt_EffectSelect_Data_Skip4
 	cp	a, 3:i3
-	jrl	z, 238
+	jrl	z, UIStateEvt_EffectSelect_Data_Skip3
 	cp	a, 2:i3
-	jrl	z, 147
+	jrl	z, UIStateEvt_EffectSelect_Data_Skip2
 	cp	a, 1:i3
-	jr	z, 99
+	jr	z, UIStateEvt_EffectSelect_Data_Skip
 	cp	a, 0:i3
 	ret	nz
 	ld	a, (0xc07f:16)
@@ -6193,6 +6227,7 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
+UIStateEvt_EffectSelect_Data_Skip:
 	ld	a, (0xc07f:16)
 	res	7, a
 	cp	a, 0:i3
@@ -6211,6 +6246,7 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
+UIStateEvt_EffectSelect_Data_Skip2:
 	ld	a, (0xc07f:16)
 	and	a, 255
 	ret	z
@@ -6226,6 +6262,7 @@ UIStateEvt_EffectSelect_Data:
 	ld hl, 0:i3
 	cp hl, 26
 	jr	nc, 37
+UIStateEvt_EffectSelect_Data_Loop:
 	ld	wa, hl
 	add	wa, wa
 	add	wa, 292
@@ -6240,12 +6277,13 @@ UIStateEvt_EffectSelect_Data:
 	retd	0xeb80
 	inc	1, hl
 	cp	hl, 26
-	jr	c, -37
+	jr	c, UIStateEvt_EffectSelect_Data_Loop
 	.byte 0xd1, 0x94, 0xc5
 	push	xiz
 	.byte 0x04
 	nop
 	ret
+UIStateEvt_EffectSelect_Data_Skip3:
 	ld	a, (0xc07f:16)
 	and	a, 255
 	ret	z
@@ -6257,6 +6295,7 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
+UIStateEvt_EffectSelect_Data_Skip4:
 	ld	a, (0xc07f:16)
 	and	a, 15
 	ret	z
@@ -6302,16 +6341,16 @@ UIStateEvt_ChannelConfig_Data:
 	cp	a, 10
 	jrl	z, 314
 	cp	a, 3:i3
-	jrl	z, 158
+	jrl	z, UIStateEvt_ChannelConfig_Data_Entry3
 	cp	a, 2:i3
-	jrl	z, 146
+	jrl	z, UIStateEvt_ChannelConfig_Data_Entry2
 	cp	a, 1:i3
 	ret	z
 	cp	a, 0:i3
 	ret	nz
 	.byte 0xf1
 	jrl	nc, -12608
-	jr	z, 12
+	jr	z, UIStateEvt_ChannelConfig_Data_Entry
 	.byte 0xd1, 0x9c, 0xc5
 	push	xiz
 	ld	(0:8), 209:io
@@ -6319,12 +6358,13 @@ UIStateEvt_ChannelConfig_Data:
 	push	xiz
 	.byte 0x04
 	nop
+UIStateEvt_ChannelConfig_Data_Entry:
 	.byte 0xf1
 	jrl	nc, -12864
 	ret	z
 	.byte 0xf1
 	jrl	nz, -12864
-	jr	z, 66
+	jr	z, UIStateEvt_ChannelConfig_Data_Skip
 	ld	de, 0:i3
 	cp	de, 26
 	jr	nc, 93
@@ -6352,9 +6392,11 @@ UIStateEvt_ChannelConfig_Data:
 	cp	de, 26
 	jr	c, -56
 	jr	35
+UIStateEvt_ChannelConfig_Data_Skip:
 	ld	de, 0:i3
 	cp	de, 26
 	jr	nc, 27
+UIStateEvt_ChannelConfig_Data_Loop:
 	ld	wa, de
 	add	wa, wa
 	add	wa, 292
@@ -6365,20 +6407,22 @@ UIStateEvt_ChannelConfig_Data:
 	push	xix
 	retd	0x61da
 	cp	de, 26
-	jr	c, -27
+	jr	c, UIStateEvt_ChannelConfig_Data_Loop
 	.byte 0xd1, 0x94, 0xc5
 	push	xiz
 	.byte 0x04
 	nop
 	ret
+UIStateEvt_ChannelConfig_Data_Entry2:
 	.byte 0xd1, 0x94, 0xc5
 	push	xiz
 	.byte 0x04
 	nop
 	ret
+UIStateEvt_ChannelConfig_Data_Entry3:
 	.byte 0xf1
 	jrl	nc, -14144
-	jr	z, 34
+	jr	z, UIStateEvt_ChannelConfig_Data_Entry4
 	.byte 0xf1
 	jrl	nz, -14144
 	jr	z, 12
@@ -6395,12 +6439,13 @@ UIStateEvt_ChannelConfig_Data:
 	push	xiz
 	.byte 0x04
 	nop
+UIStateEvt_ChannelConfig_Data_Entry4:
 	.byte 0xf1
 	jrl	nc, -13632
-	jr	z, 68
+	jr	z, UIStateEvt_ChannelConfig_Data_Entry6
 	.byte 0xf1
 	jrl	nz, -13632
-	jr	z, 26
+	jr	z, UIStateEvt_ChannelConfig_Data_Entry5
 	.byte 0xf1
 	ld	xde, 0x44f1bec3
 	.byte 0xc3
@@ -6413,6 +6458,7 @@ UIStateEvt_ChannelConfig_Data:
 	popw	ix
 	.byte 0xc3, 0xbe
 	jr	30
+UIStateEvt_ChannelConfig_Data_Entry5:
 	.byte 0xf1
 	ld	xde, 0x44f1b6c3
 	.byte 0xc3, 0xb6, 0xf1
@@ -6428,9 +6474,10 @@ UIStateEvt_ChannelConfig_Data:
 	push	xiz
 	.byte 0x04
 	nop
+UIStateEvt_ChannelConfig_Data_Entry6:
 	.byte 0xf1
 	jrl	nc, -12608
-	jr	z, 12
+	jr	z, UIStateEvt_ChannelConfig_Data_Entry7
 	.byte 0xd1, 0x9c, 0xc5
 	push	xiz
 	ld	(0:8), 209:io
@@ -6438,6 +6485,7 @@ UIStateEvt_ChannelConfig_Data:
 	push	xiz
 	.byte 0x04
 	nop
+UIStateEvt_ChannelConfig_Data_Entry7:
 	.byte 0xf1
 	jrl	nc, -12352
 	ret	z
@@ -6452,19 +6500,21 @@ UIStateEvt_ChannelConfig_Data:
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
-	jr	z, 38
+	jr	z, UIStateEvt_ChannelConfig_Data_Skip3
 	cp	hl, 1:i3
-	jr	z, 15
+	jr	z, UIStateEvt_ChannelConfig_Data_Skip2
 	cp	hl, 0:i3
 	ret	nz
 	ld	(0xc362:16), 0
 	ld	(0xc363:16), 255
 	ret
+UIStateEvt_ChannelConfig_Data_Skip2:
 	ld	xwa, 0x5001
 	call	SndParam_LookupReadOnly
 	ld	(0xc362:16), l
 	ld	(0xc363:16), 255
 	ret
+UIStateEvt_ChannelConfig_Data_Skip3:
 	ld	(0xc362:16), 0
 	ld	xwa, 0x5002
 	call	SndParam_LookupReadOnly
@@ -6480,10 +6530,12 @@ UIStateEvt_MuteToggle_Data:
 	bit	0, (0xc07f:16)
 	ret	z
 	bit	0, (0xc07e:16)
-	jr	z, 8
+	jr	z, UIStateEvt_MuteToggle_Data_Skip
 	orw	(0xc594:16), 1
-	jr	6
+	jr	UIStateEvt_MuteToggle_Data_Join
+UIStateEvt_MuteToggle_Data_Skip:
 	andw	(0xc594:16), 0xfffe
+UIStateEvt_MuteToggle_Data_Join:
 	orw	(0xc594:16), 4
 	ret
 	ret

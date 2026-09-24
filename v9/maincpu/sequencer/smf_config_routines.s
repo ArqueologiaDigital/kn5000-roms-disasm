@@ -2249,21 +2249,23 @@ SMF_ConfigSlot_CodeBlock:
 	ld	(4417:16), iy
 	incw	1, (4417:16)
 	cpw	(4417:16), 255
-	jr	ule, 47
+	jr	ule, SMF_ConfigSlot_Epilogue
 	ld	xhl, (10369:16)
 	ld	wa, (xhl+3)
 	ld	(4415:16), wa
 	ld	(10375:16), wa
 	ld	hl, wa
-	calr	192
+	calr	SMF_CalcPageAddress
 	ld	xhl, (4349:16)
 	.byte 0xb3, 0xcf
-	jr	nz, 7
+	jr	nz, SMF_ConfigSlot_Skip
 	ld	(10362:16), 2
-	jr	12
+	jr	SMF_ConfigSlot_Epilogue
+SMF_ConfigSlot_Skip:
 	ld	(10369:16), xhl
 	ldw	(4417:16), 5
 	ld	iy, 5:i3
+SMF_ConfigSlot_Epilogue:
 	pop	xwa
 	pop	xhl
 	ret

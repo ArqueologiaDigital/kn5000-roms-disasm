@@ -299,11 +299,11 @@ SetupLoadOptionJumpTable:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	21
+	jr	MdSetupLoad_Epilogue
 	ld	xhl, 2:i3
-	jr	17
+	jr	MdSetupLoad_Epilogue
 	ld	xhl, 3:i3
-	jr	13
+	jr	MdSetupLoad_Epilogue
 
 SetupLoadInvalidIndex:
 	ld xhl, 0:i3

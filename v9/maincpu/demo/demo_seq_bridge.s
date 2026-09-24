@@ -31,7 +31,7 @@ MiddleFuncCall_DispatchData:
 	pop	xix
 	pop	xhl
 	pop	xde
-	jrl	132
+	jrl	SqTrSel_CaseC
 	push	xde
 	pushw	0
 	pushw	4441
@@ -43,18 +43,18 @@ MiddleFuncCall_DispatchData:
 	push	xiz
 	call	SetWall_MiscDataAndCode_0x2
 	.ascii "^\\[Zhi:;<>"
-	call 15855168
+	call MiddleFuncCall_DispatchData_Code_Helper
 	pop xiz
 	pop xix
 	.ascii "[Zh[:;<>"
-	call 15855207
+	call MiddleFuncCall_DispatchData_Code_Helper2
 	.ascii "^\\[ZhM:;<>"
 	.byte 0x1d, 0x6a
 	.byte 0xf0, 0xf1
 	.ascii "^\\[Zh?:;<>"
-	call 15855740
+	call MiddleFuncCall_DispatchData_Code_Helper3
 	.ascii "^\\[Zh1:;<>"
-	call 15855285
+	call SetWall_InlineCodeBlock_Sub
 	pop xiz
 	pop xix
 	.ascii "[Zh#:;<>"
@@ -63,13 +63,13 @@ MiddleFuncCall_DispatchData:
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	21
+	jr	SqTrSel_CaseC
 	call	Audio_CheckSubsystemReady
-	jr	15
-	calr	60449
-	jr	10
+	jr	SqTrSel_CaseC
+	calr	DisplayMode_RefreshState
+	jr	SqTrSel_CaseC
 	call	VoiceChannels_InitPanFromPreset
-	jr	4
+	jr	SqTrSel_CaseC
 
 ; SqTrSelTtl case B
 SqTrSel_CaseB:
@@ -645,7 +645,7 @@ PlayMode_SwitchToModeAndNotify:
 	ldw wa, 0xee
 	jp SoundCtrl_SendCommand
 DispatchHandler_ConditionalJump:
-	jr	t, 0x08
+	jr	t, DispatchHandler_SubJumpTable_Join
 
 DispatchHandler_JumpToSubHandler:
 	jr DispatchHandler_CallResolve
@@ -656,6 +656,7 @@ DispatchHandler_JumpSub:
 DispatchHandler_SubJumpTable:
 	jr DispatchHandler_CallSlotResolve
 	jr DispatchHandler_StoreNodePtr
+DispatchHandler_SubJumpTable_Join:
 	call DispatchHandler_InitAllSlots
 	ret
 

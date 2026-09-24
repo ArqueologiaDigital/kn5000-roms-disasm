@@ -3825,13 +3825,14 @@ ErrorDialog_RecoveryLine3:
 	jp	0x1e1d1c
 	.byte 0x1f
 	.ascii " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
-	jrl	nc, 1
+	jrl	nc, Str_ErrorDialog_TryTurningOff_Code_Skip
 	.byte 0xe3
+Str_ErrorDialog_TryTurningOff_Code_Skip:
 	jrl	mi, 252
 	push	sr
 	nop
 	.byte 0x04
-	jrl	c, 252
+	jrl	c, Str_ErrorDialog_TryTurningOff_Code_Skip2
 	.byte 0x04
 	nop
 	.long SndParam_TableLookup_Via4100
@@ -3977,6 +3978,7 @@ ErrorDialog_RecoveryLine3:
 	.long CtrlPanel_SetResBit5_ViaLookup4C
 	nop
 	ld	xwa, CtrlPanel_SetResBit6_ViaLookup4C
+Str_ErrorDialog_TryTurningOff_Code_Skip2:
 	swi	7
 	swi	7
 	swi	7

@@ -10,16 +10,18 @@
 UIStateEvt_VoiceParamHandler:
 	ld	a, (0x8d36:16)
 	cp	a, 142
-	jr	z, 19
+	jr	z, UIStateEvt_VoiceParamHandler_Skip
 	cp	a, 100
-	jr	z, 14
+	jr	z, UIStateEvt_VoiceParamHandler_Skip
 	cp	a, 108
-	jr	lt, 17
+	jr	lt, UIStateEvt_VoiceParamHandler_Skip2
 	cp	a, 122
-	jr	le, 4
+	jr	le, UIStateEvt_VoiceParamHandler_Skip
 	jp	UIStateEvt_VoiceParamHandler_0x24
+UIStateEvt_VoiceParamHandler_Skip:
 	ld	(4330:16), 0
 	jrl	164
+UIStateEvt_VoiceParamHandler_Skip2:
 	ld	a, (0xc07d:16)
 	cp	a, 3:i3
 	.byte 0xf2, 0xb4
@@ -94,9 +96,10 @@ UIStateEvt_VoiceParamHandler:
 	ld	c, 16:opc
 	ld	a, 16:opc
 	cp_spib	a, 240
-	jr	z, 5
+	jr	z, UIStateEvt_VoiceParamHandler_Skip3
 	djnz16	bc, -8
 	jr	68
+UIStateEvt_VoiceParamHandler_Skip3:
 	xor	wa, wa
 	ld	a, 16:opc
 	sub	wa, bc
@@ -1379,7 +1382,7 @@ SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
 	pop	xix
 	pop	xhl
 	pop	xde
-	jr	20
+	jr	SqTrAsPsTtl_ReturnZero
 
 ; SqTrAsPsTtl case D
 SqTrAsPsTtl_CaseD:
@@ -1439,9 +1442,9 @@ SqTrAsPsTtl_CaseF:
 	extz	wa
 	sub	wa, 108
 	cp	wa, 0:i3
-	jr	lt, 41
+	jr	lt, SqTrAsPsTtl_CaseF_Skip
 	cp	wa, 13
-	jr	gt, 35
+	jr	gt, SqTrAsPsTtl_CaseF_Skip
 	lda	xix, (SepaOut_Config_0_0x44:24)
 	ld_rrw wa, xix, wa
 	extz wa
@@ -1450,6 +1453,7 @@ SqTrAsPsTtl_CaseF:
 	ld_rrw wa, xix, wa
 	lda xix, (15863692:24)
 	jp_rr 8, xix, wa
+SqTrAsPsTtl_CaseF_Skip:
 	push	xde
 	push	xhl
 	push	xix
@@ -1484,8 +1488,8 @@ SqMdlyPlyTtl_Dispatch:	.ascii ":;<>"
 	pop	xix
 	pop	xhl
 	pop	xde
-	calr	65384
-	jr	59
+	calr	SqTrAsPsTtl_CaseF
+	jr	SqMdlyPly_ReturnZero
 
 ; SqMdlyPly init playback
 SqMdlyPly_InitPlay:
@@ -1551,8 +1555,8 @@ DkMdlyPlyTtl_Dispatch:	.ascii ":;<>"
 	pop	xix
 	pop	xhl
 	pop	xde
-	calr	65236
-	jr	59
+	calr	SqTrAsPsTtl_CaseF
+	jr	DkMdlyPly_ReturnZero
 
 ; DkMdlyPly init playback
 DkMdlyPly_InitPlay:
@@ -1689,11 +1693,11 @@ DisplayMode_BatchEventSend:
 	ld	xwa, 0x6f000a
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
-	jrl	165
+	jrl	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x73000c
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
-	jrl	150
+	jrl	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x700007
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
@@ -1705,7 +1709,7 @@ DisplayMode_BatchEventSend:
 	ld	xwa, 0x700009
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
-	jr	104
+	jr	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x74000a
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
@@ -1717,7 +1721,7 @@ DisplayMode_BatchEventSend:
 	ld	xwa, 0x74000c
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
-	jr	58
+	jr	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x710007
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
@@ -1725,7 +1729,7 @@ DisplayMode_BatchEventSend:
 	ld	xwa, 0x710008
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
-	jr	28
+	jr	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x750009
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
@@ -1733,6 +1737,7 @@ DisplayMode_BatchEventSend:
 	ld	xwa, 0x75000a
 	ld	xbc, 0x01e0003b
 	ld	xde, 0:i3
+DisplayMode_DispatchEvents_Join:
 	call	ApPostEvent
 	ret
 
@@ -1760,8 +1765,8 @@ DpMdlyDocTtlFunc:
 ; DpMdlyDocTtlFunc title dispatch
 DpMdlyDocTtl_Dispatch:
 	ldw	(0x021086:24), 0
-	calr	65452
-	calr	65224
+	calr	DisplayMode_RefreshState
+	calr	DisplayMode_DispatchEvents
 	push	xde
 	push	xhl
 	push	xix
@@ -1776,8 +1781,8 @@ DpMdlyDocTtl_Dispatch:
 	pop	xix
 	pop	xhl
 	pop	xde
-	calr	64679
-	jr	72
+	calr	SqTrAsPsTtl_CaseF
+	jr	DpMdlyDoc_ReturnZero
 
 ; DpMdlyDoc case A
 DpMdlyDoc_CaseA:
@@ -1848,8 +1853,8 @@ DpMdlyPdTtlFunc:
 ; DpMdlyPdTtlFunc title dispatch
 DpMdlyPdTtl_Dispatch:
 	ldw	(0x021086:24), 0
-	calr	65276
-	calr	65048
+	calr	DisplayMode_RefreshState
+	calr	DisplayMode_DispatchEvents
 	push	xde
 	push	xhl
 	push	xix
@@ -1864,8 +1869,8 @@ DpMdlyPdTtl_Dispatch:
 	pop	xix
 	pop	xhl
 	pop	xde
-	calr	64503
-	jr	72
+	calr	SqTrAsPsTtl_CaseF
+	jr	DpMdlyPd_ReturnZero
 
 ; DpMdlyPd case A
 DpMdlyPd_CaseA:
@@ -1936,11 +1941,12 @@ DpMdlySmfTtlFunc:
 ; DpMdlySmfTtlFunc title dispatch
 DpMdlySmfTtl_Dispatch:
 	cp	(0x8d37:16), 118
-	jr	z, 19
+	jr	z, DpMdlySmfTtlFunc_Skip
 	ld	(0x021088:24), 0
 	ldw	(0x021086:24), 0
-	calr	65087
-	calr	64859
+	calr	DisplayMode_RefreshState
+	calr	DisplayMode_DispatchEvents
+DpMdlySmfTtlFunc_Skip:
 	push	xde
 	push	xhl
 	push	xix
@@ -1952,8 +1958,8 @@ DpMdlySmfTtl_Dispatch:
 	pop	xix
 	pop	xhl
 	pop	xde
-	calr	64314
-	jr	72
+	calr	SqTrAsPsTtl_CaseF
+	jr	DpMdlySmf_ReturnZero
 
 ; DpMdlySmf case A
 DpMdlySmf_CaseA:
@@ -2142,7 +2148,7 @@ NameGetFuncCall_Dispatch:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c70000
 	ld	xde, 0:i3
-	jrl	621
+	jrl	NameGetFuncCall_Join2
 	call	GetCurrentFileIndex
 	ld	wa, hl
 	call	GetFileEntryPtr
@@ -2160,7 +2166,7 @@ NameGetFuncCall_Dispatch:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c70001
 	ld	xde, 0:i3
-	jrl	564
+	jrl	NameGetFuncCall_Join2
 	call	GetFirstPageBase
 	ld	wa, hl
 	call	GetRecordPtrForFile
@@ -2180,7 +2186,7 @@ NameGetFuncCall_Dispatch:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c70002
 	ld	xde, 0:i3
-	jrl	500
+	jrl	NameGetFuncCall_Join2
 	pushw	20
 	call	GetFirstPageBase
 	ld	wa, hl
@@ -2221,7 +2227,7 @@ NameGetFuncCall_Dispatch:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c70006
 	ld	xde, 0:i3
-	jrl	378
+	jrl	NameGetFuncCall_Join2
 	pushw	12
 	call	FileIO_GetCurrentFileIndex_Alt
 	ld	wa, hl
@@ -2335,7 +2341,7 @@ NameGetFuncCall_Dispatch:
 	lda	xsp, (xsp+14)
 	lda	xwa, (0x021064:24)
 	or	xhl, xhl
-	jr	z, 22
+	jr	z, NameGetFuncCall_Skip
 	inc	1, xhl
 	pushw	28
 	push	xhl
@@ -2343,13 +2349,16 @@ NameGetFuncCall_Dispatch:
 	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	(0x021080:24), 0
-	jr	3
+	jr	NameGetFuncCall_Join
+NameGetFuncCall_Skip:
 	ld	(xwa), 0
+NameGetFuncCall_Join:
 	ld	xwa, 0x021064
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c7000e
 	ld	xde, 0:i3
+NameGetFuncCall_Join2:
 	call	ApPostEvent
 
 ; NameGetFuncCall entry handler
@@ -2828,17 +2837,18 @@ DpDocTtlFunc:
 ; DpDocTtlFunc title dispatch
 DpDocTtl_Dispatch:
 	ldw	(0x021086:24), 0
-	calr	62678
-	calr	62450
-	calr	64337
-	jrl	206
+	calr	DisplayMode_RefreshState
+	calr	DisplayMode_DispatchEvents
+	calr	CDlikeSwTtl_ShowDocTitle
+	jrl	DpDocTtl_ReturnZero
 	call	SeqState_GetFlags
 	bit	0, hl
-	jr	z, 7
-	calr	3398
+	jr	z, DpDocTtlFunc_Skip
+	calr	SeqRecPlay_DisableBoth
 	call	Song_AbortPlayback
-	calr	61909
-	jrl	184
+DpDocTtlFunc_Skip:
+	calr	SqTrAsPsTtl_CaseF
+	jrl	DpDocTtl_ReturnZero
 
 ; DpDocTtl case A
 DpDoc_CaseA:
@@ -2954,17 +2964,18 @@ DpPdTtlFunc:
 ; DpPdTtlFunc title dispatch
 DpPdTtl_Dispatch:
 	ldw	(0x021086:24), 0
-	calr	62375
-	calr	62147
-	calr	64102
-	jrl	206
+	calr	DisplayMode_RefreshState
+	calr	DisplayMode_DispatchEvents
+	calr	CDlikeSwTtl_ShowPdTitle
+	jrl	DpPdTtl_ReturnZero
 	call	SeqState_GetFlags
 	bit	0, hl
-	jr	z, 7
-	calr	3095
+	jr	z, DpPdTtlFunc_Skip
+	calr	SeqRecPlay_DisableBoth
 	call	Song_AbortPlayback
-	calr	61606
-	jrl	184
+DpPdTtlFunc_Skip:
+	calr	SqTrAsPsTtl_CaseF
+	jrl	DpPdTtl_ReturnZero
 
 ; DpPdTtl case A
 DpPd_CaseA:
@@ -3080,26 +3091,27 @@ DpSmfTtlFunc:
 ; DpSmfTtlFunc title dispatch
 DpSmfTtl_Dispatch:
 	cp	(0x8d37:16), 114
-	jrl	z, 255
+	jrl	z, DpSmfTtl_ReturnZero
 	ld	(0x021088:24), 0
 	ldw	(0x021086:24), 0
-	calr	62057
-	calr	61829
-	calr	63632
-	jrl	230
+	calr	DisplayMode_RefreshState
+	calr	DisplayMode_DispatchEvents
+	calr	CDlikeSwTtl_ShowSongTitle
+	jrl	DpSmfTtl_ReturnZero
 	cp	(0x8d36:16), 114
-	jrl	z, 222
+	jrl	z, DpSmfTtl_ReturnZero
 	call	SeqState_GetFlags
 	bit	0, hl
-	jr	z, 23
-	calr	2769
+	jr	z, DpSmfTtlFunc_Skip
+	calr	SeqRecPlay_DisableBoth
 	call	Song_AbortPlayback
 	ld	xwa, 0x6f0026
 	ld	xbc, 0x01c70009
 	ld	xde, 0:i3
 	call	ApPostEvent
-	calr	61264
-	jrl	184
+DpSmfTtlFunc_Skip:
+	calr	SqTrAsPsTtl_CaseF
+	jrl	DpSmfTtl_ReturnZero
 
 ; DpSmfTtl case A
 DpSmf_CaseA:
@@ -3217,14 +3229,15 @@ DpSmfLyrTtl_Dispatch:
 	ld	xwa, 0x6f0026
 	ld	xbc, 0x01c7000a
 	ld	xde, 0:i3
-	jr	18
-	calr	60982
-	jrl	193
+	jr	DpSmfLyrTtlFunc_Join
+	calr	SqTrAsPsTtl_CaseF
+	jrl	SeqStep_ReturnZero
 	ld	xwa, 0x6f0026
 	ld	xbc, 0x01c7000a
 	ld	xde, 0:i3
+DpSmfLyrTtlFunc_Join:
 	call	ApPostEvent
-	jrl	174
+	jrl	SeqStep_ReturnZero
 
 ; DpSmfLyrTtl case A
 DpSmfLyr_CaseA:

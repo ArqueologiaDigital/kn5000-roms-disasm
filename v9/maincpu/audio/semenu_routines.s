@@ -373,15 +373,16 @@ SeMenu_RegisterParamDisplay_Data:
 	ld	iz, bc
 	ld	(xsp+20), a
 	lda	xwa, (xsp+12)
-	calr	12557
+	calr	SeMenu_LoadObjEntries
 	lda	xbc, (xsp+2)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
+SeMenu_RegisterParamDisplay_Data_Loop:
 	stib_dsp 224, 0
 	cp	xwa, xbc
-	jr	c, -8
+	jr	c, SeMenu_RegisterParamDisplay_Data_Loop
 	lda	xwa, (xsp+14)
-	calr	64769
+	calr	SeMenu_LoadMasterPtr
 	lda	xhl, (xsp+16)
 	ld	wa, iz
 	srl	wa, 8
@@ -410,7 +411,7 @@ SeMenu_RegisterParamDisplay_Data:
 	ld	c, (xsp+20)
 	dec	1, c
 	ld	(xwa+5), c
-	calr	64706
+	calr	SeMenu_FlushDisplayObj
 	popw	iz
 	lda	xsp, (xsp+20)
 	ret
@@ -420,15 +421,16 @@ SeMenu_RegisterParamDisplay_Data:
 	ld	(xsp+20), c
 	ld	(xsp+22), a
 	lda	xwa, (xsp+12)
-	calr	12441
+	calr	SeMenu_LoadObjEntries
 	lda	xbc, (xsp+2)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
+SeMenu_RegisterParamDisplay_Data_Loop2:
 	stib_dsp 224, 0
 	cp	xwa, xbc
-	jr	c, -8
+	jr	c, SeMenu_RegisterParamDisplay_Data_Loop2
 	lda	xwa, (xsp+14)
-	calr	64653
+	calr	SeMenu_LoadMasterPtr
 	lda	xhl, (xsp+16)
 	ld	wa, iz
 	srl	wa, 8
@@ -464,7 +466,7 @@ SeMenu_RegisterParamDisplay_Data:
 	dec	1, c
 	add	e, c
 	ld	(xhl), e
-	calr	64574
+	calr	SeMenu_FlushDisplayObj
 	popw	iz
 	lda	xsp, (xsp+22)
 	ret
@@ -504,11 +506,12 @@ SeMenu_SetupDisplayObject_Data:
 	lda	xbc, (xsp+2)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
+SeMenu_SetupDisplayObject_Data_Loop:
 	stib_dsp 224, 0
 	cp	xwa, xbc
-	jr	c, -8
+	jr	c, SeMenu_SetupDisplayObject_Data_Loop
 	lda	xwa, (xsp+12)
-	calr	64468
+	calr	SeMenu_LoadMasterPtr
 	lda	xhl, (xsp+14)
 	ld	wa, iz
 	srl	wa, 8
@@ -527,7 +530,7 @@ SeMenu_SetupDisplayObject_Data:
 	ld	c, (xde)
 	ld	(xwa+4), c
 	ld	(xwa+5), 0
-	calr	64422
+	calr	SeMenu_FlushDisplayObj
 	popw	iz
 	lda	xsp, (xsp+16)
 	ret
@@ -663,11 +666,12 @@ SeMenu_InitDisplayColumn_Data:
 	lda	xbc, (xsp)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
+SeMenu_InitDisplayColumn_Data_Loop:
 	stib_dsp 224, 0
 	cp	xwa, xbc
-	jr	c, -8
+	jr	c, SeMenu_InitDisplayColumn_Data_Loop
 	lda	xwa, (xsp+10)
-	calr	64091
+	calr	SeMenu_LoadMasterPtr
 	lda	xwa, (xsp)
 	ld	(xwa), 136
 	ld	c, (xsp+10)
@@ -680,7 +684,7 @@ SeMenu_InitDisplayColumn_Data:
 	ld	c, (xbc)
 	ld	(xwa+4), c
 	ld	(xwa+5), 255
-	calr	64061
+	calr	SeMenu_FlushDisplayObj
 	lda	xsp, (xsp+18)
 	ret
 
@@ -714,7 +718,7 @@ SeMenu_SetDisplayValue_Data:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xwa, (xsp)
-	calr	63975
+	calr	SeMenu_LoadMasterPtr
 	ld	c, (xsp+8)
 	ld	a, c
 	extz	wa
@@ -725,9 +729,10 @@ SeMenu_SetDisplayValue_Data:
 	div	a, 20
 	ld	c, w
 	cp	e, 0:i3
-	jr	z, 4
+	jr	z, SeMenu_SetDisplayValue_Data_Skip
 	ld	e, 17:opc
 	jr	2
+SeMenu_SetDisplayValue_Data_Skip:
 	ld	e, 16:opc
 	lda	xwa, (xsp+2)
 	ld	(xwa), e
@@ -1023,11 +1028,12 @@ SeMenu_SetupMenuDisplay_Finalize:
 
 SeMenu_SetupMenuDisplay_Finalize_Data:
 	cp	a, 1:i3
-	jr	c, 9
+	jr	c, SeMenu_SetupMenuDisplay_Finalize_Data_Skip
 	cp	a, 4:i3
-	jr	ugt, 5
+	jr	ugt, SeMenu_SetupMenuDisplay_Finalize_Data_Skip
 	ld	(1629:16), a
 	ret
+SeMenu_SetupMenuDisplay_Finalize_Data_Skip:
 	ld	(1629:16), 1
 	ret
 
@@ -1117,12 +1123,14 @@ SeMenu_PartMask_Data:
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
-	jr	nz, 10
+	jr	nz, SeMenu_PartMask_Data_Code_Skip
 	ld	a, l
 	cpl	a
 	and	(1630:16), a
-	jr	4
+	jr	SeMenu_PartMask_Data_Code_Entry
+SeMenu_PartMask_Data_Code_Skip:
 	or	(1630:16), l
+SeMenu_PartMask_Data_Code_Entry:
 	.byte 0xbf
 	push	sr
 	push_a
@@ -1133,16 +1141,18 @@ SeMenu_PartMask_Data:
 	.byte 0x87
 	push	xsp
 	nop
-	jr	nz, 11
+	jr	nz, SeMenu_PartMask_Data_Code_Skip2
 	pushw	hl
 	ld	wa, 0:i3
 	ldw	bc, 17
-	calr	63197
-	jr	9
+	calr	SeMenu_RegisterElement_Extended
+	jr	SeMenu_PartMask_Data_Code_Epilogue
+SeMenu_PartMask_Data_Code_Skip2:
 	pushw	hl
 	ld	wa, 0:i3
 	ldw	bc, 13
-	calr	64276
+	calr	SeMenu_SetupDisplayObject_Alt1
+SeMenu_PartMask_Data_Code_Epilogue:
 	inc	8, xsp
 	ret
 
@@ -1214,6 +1224,7 @@ SeMenu_BitShiftMask_End:
 	cp	de, bc
 	jr	c, -9
 	ret
+SeMenu_TransferPartValues_EndData_Helper:
 	.byte 0x88, 0x06
 	push	xsp
 	nop
@@ -1257,14 +1268,14 @@ SeMenu_BitShiftMask_End:
 	extz	wa
 	ld	c, (xsp+12)
 	extz	bc
-	calr	65401
+	calr	SeMenu_BitShiftMask
 	cpl	l
 	and	(xsp+4), l
 	ld	a, (xiz)
 	extz	wa
 	ld	c, (xsp+12)
 	extz	bc
-	calr	65403
+	calr	SeMenu_BitShiftMask_End
 	ld	(xiz), l
 	ld	a, (xsp+10)
 	and	(xiz), a
@@ -1273,47 +1284,54 @@ SeMenu_BitShiftMask_End:
 	ccf
 	push	xsp
 	nop
-	jr	le, 55
+	jr	le, SeMenu_BitShiftMask_End_Skip
 	ld	a, (xiz)
 	.byte 0x8f
 	ret
 	.byte 0xf1
-	jr	z, 55
+	jr	z, SeMenu_BitShiftMask_End_Skip2
 	ld	a, (xsp+14)
 	.byte 0x86
 	and	(xbc), xhl
 	.byte 0xf1
-	jr	ugt, 5
+	jr	ugt, SeMenu_BitShiftMask_End_Loop
 	ld	a, (xsp+14)
-	jr	60
+	jr	SeMenu_BitShiftMask_End_Join2
+SeMenu_BitShiftMask_End_Loop:
 	ld	a, (xsp+18)
 	add	(xiz), a
+SeMenu_BitShiftMask_End_Join:
 	ld	a, (xiz)
 	.byte 0x8f
 	ldw	(193:8), 4824:io
 	ld	c, (xsp+12)
 	extz	bc
-	calr	65327
+	calr	SeMenu_BitShiftMask
 	ld	xwa, (xsp+6)
 	ld	(xwa), l
 	ld	c, (xsp+4)
 	or	(xwa), c
 	ld	hl, 1:i3
-	jr	9
+	jr	SeMenu_BitShiftMask_End_Epilogue
+SeMenu_BitShiftMask_End_Skip:
 	ld	a, (xiz)
 	cp	a, (xsp+16)
-	jr	nz, 7
+	jr	nz, SeMenu_BitShiftMask_End_Skip3
+SeMenu_BitShiftMask_End_Skip2:
 	ld	hl, 0:i3
+SeMenu_BitShiftMask_End_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
+SeMenu_BitShiftMask_End_Skip3:
 	ld	a, (xsp+16)
 	sub	a, c
 	.byte 0x86, 0xf1
-	jr	c, -57
+	jr	c, SeMenu_BitShiftMask_End_Loop
 	ld	a, (xsp+16)
+SeMenu_BitShiftMask_End_Join2:
 	ld	(xiz), a
-	jr	-59
+	jr	SeMenu_BitShiftMask_End_Join
 	lda	xsp, (xsp-16)
 	push	xiz
 	ld	xiz, xwa
@@ -1335,14 +1353,14 @@ SeMenu_BitShiftMask_End:
 	extz	wa
 	ld	c, (xsp+12)
 	extz	bc
-	calr	65223
+	calr	SeMenu_BitShiftMask
 	cpl	l
 	and	(xsp+4), l
 	ld	a, (xiz)
 	extz	wa
 	ld	c, (xsp+12)
 	extz	bc
-	calr	65225
+	calr	SeMenu_BitShiftMask_End
 	ld	(xiz), l
 	ld	a, (xsp+10)
 	and	(xiz), a
@@ -1350,85 +1368,95 @@ SeMenu_BitShiftMask_End:
 	ccf
 	push	xsp
 	nop
-	jr	le, 62
+	jr	le, SeMenu_BitShiftMask_End_Skip4
 	ld	a, (xiz)
 	.byte 0x8f
 	ret
 	.byte 0xf1
-	jr	z, 62
+	jr	z, SeMenu_BitShiftMask_End_Skip5
 	ld	c, (xiz)
 	ld	a, (xsp+14)
 	sub	a, c
 	ld	c, a
 	ld	a, (xsp+18)
 	cp	c, a
-	jr	ugt, 5
+	jr	ugt, SeMenu_BitShiftMask_End_Loop2
 	ld	a, (xsp+14)
-	jr	63
+	jr	SeMenu_BitShiftMask_End_Join4
+SeMenu_BitShiftMask_End_Loop2:
 	ld	a, (xsp+18)
 	add	(xiz), a
+SeMenu_BitShiftMask_End_Join3:
 	ld	a, (xiz)
 	.byte 0x8f
 	ldw	(193:8), 4824:io
 	ld	c, (xsp+12)
 	extz	bc
-	calr	65145
+	calr	SeMenu_BitShiftMask
 	ld	xwa, (xsp+6)
 	ld	(xwa), l
 	ld	c, (xsp+4)
 	or	(xwa), c
 	ld	hl, 1:i3
-	jr	9
+	jr	SeMenu_BitShiftMask_End_Epilogue2
+SeMenu_BitShiftMask_End_Skip4:
 	ld	a, (xiz)
 	cp	a, (xsp+16)
-	jr	nz, 7
+	jr	nz, SeMenu_BitShiftMask_End_Skip6
+SeMenu_BitShiftMask_End_Skip5:
 	ld	hl, 0:i3
+SeMenu_BitShiftMask_End_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
+SeMenu_BitShiftMask_End_Skip6:
 	ld	c, (xiz)
 	ld	a, (xsp+16)
 	.byte 0x8f
 	ccf
 	and	(xbc), xhl
 	.byte 0xf1
-	jr	lt, -60
+	jr	lt, SeMenu_BitShiftMask_End_Loop2
 	ld	a, (xsp+16)
+SeMenu_BitShiftMask_End_Join4:
 	ld	(xiz), a
-	jr	-62
+	jr	SeMenu_BitShiftMask_End_Join3
 	dec	2, xsp
 	lda	xwa, (xsp)
-	calr	64794
+	calr	SeMenu_SetupMenuDisplay_Finalize
 	.byte 0x87
 	push	xsp
 	nop
-	jr	z, 4
+	jr	z, SeMenu_BitShiftMask_End_Skip7
 	ld	wa, 0:i3
-	jr	2
+	jr	SeMenu_BitShiftMask_End_Join5
+SeMenu_BitShiftMask_End_Skip7:
 	ld	wa, 1:i3
-	calr	64771
+SeMenu_BitShiftMask_End_Join5:
+	calr	SeMenu_SetupMenuDisplay_Section3_End
 	ld	wa, 1:i3
-	calr	64532
+	calr	SeMenu_SetupMenuDisplay
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	inc	2, xsp
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp+2)
-	calr	64781
+	calr	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp)
-	calr	10361
+	calr	SeMenu_LoadObjEntries
 	lda	xde, (xsp+4)
 	.byte 0x87
 	push	xsp
 	nop
-	jr	nz, 16
+	jr	nz, SeMenu_BitShiftMask_End_Skip8
 	ld	a, (xsp+2)
 	extz	wa
 	pushw	7
 	ldw	bc, 54
-	calr	62610
-	jr	29
+	calr	SeMenu_RegisterElement_Extended
+	jr	SeMenu_BitShiftMask_End_Entry
+SeMenu_BitShiftMask_End_Skip8:
 	ld	a, (xsp+2)
 	dec	1, a
 	extz	wa
@@ -1439,7 +1467,8 @@ SeMenu_BitShiftMask_End:
 	ld	c, a
 	pushw	7
 	ld	wa, 0:i3
-	calr	63669
+	calr	SeMenu_SetupDisplayObject_Alt1
+SeMenu_BitShiftMask_End_Entry:
 	.byte 0x8f, 0x04
 	pop_f
 	xor	(xix+6), c
@@ -1486,6 +1515,7 @@ SeMenu_TransferPartValues_AltLoop:
 	lda_dri XWA, 0x07, 0xe0, 0xe4
 	ld (xde), a
 	jr SeMenu_TransferPartValues_Data
+SeMenu_TransferPartValues_EndData_Helper2:
 	cp a, 1:i3
 	jr nz, SeMenu_TransferPartValues_AltData
 	ld a, 0x6:opc
@@ -1513,54 +1543,68 @@ SeMenu_TransferPartValues_End2:
 
 SeMenu_TransferPartValues_EndData:
 	cp	a, 1:i3
-	jr	nz, 23
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip3
 	ld	a, (1678:16)
 	cp	a, 1:i3
-	jr	c, 4
+	jr	c, SeMenu_TransferPartValues_EndData_Skip
 	cp	a, 4:i3
-	jr	ule, 5
+	jr	ule, SeMenu_TransferPartValues_EndData_Skip2
+SeMenu_TransferPartValues_EndData_Skip:
 	ld	(1678:16), 1
+SeMenu_TransferPartValues_EndData_Skip2:
 	ld	a, (1678:16)
-	jr	56
+	jr	SeMenu_TransferPartValues_EndData_Join
+SeMenu_TransferPartValues_EndData_Skip3:
 	cp	a, 0:i3
-	jr	nz, 23
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip6
 	ld	a, (1677:16)
 	cp	a, 1:i3
-	jr	c, 4
+	jr	c, SeMenu_TransferPartValues_EndData_Skip4
 	cp	a, 4:i3
-	jr	ule, 5
+	jr	ule, SeMenu_TransferPartValues_EndData_Skip5
+SeMenu_TransferPartValues_EndData_Skip4:
 	ld	(1677:16), 1
+SeMenu_TransferPartValues_EndData_Skip5:
 	ld	a, (1677:16)
-	jr	29
+	jr	SeMenu_TransferPartValues_EndData_Join
+SeMenu_TransferPartValues_EndData_Skip6:
 	cp	a, 2:i3
-	jr	nz, 23
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip9
 	ld	a, (1679:16)
 	cp	a, 1:i3
-	jr	c, 4
+	jr	c, SeMenu_TransferPartValues_EndData_Skip7
 	cp	a, 4:i3
-	jr	ule, 5
+	jr	ule, SeMenu_TransferPartValues_EndData_Skip8
+SeMenu_TransferPartValues_EndData_Skip7:
 	ld	(1679:16), 1
+SeMenu_TransferPartValues_EndData_Skip8:
 	ld	a, (1679:16)
-	jr	2
+	jr	SeMenu_TransferPartValues_EndData_Join
+SeMenu_TransferPartValues_EndData_Skip9:
 	ld	a, 1:opc
+SeMenu_TransferPartValues_EndData_Join:
 	ld	(xbc), a
 	ret
 	cp	a, 0:i3
-	jr	nz, 12
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip10
 	lda	xwa, (1677:16)
 	cp	c, 0:i3
-	jr	z, 24
+	jr	z, SeMenu_TransferPartValues_EndData_Skip12
 	decm8	1, (xwa)
-	jr	22
+	jr	SeMenu_TransferPartValues_EndData_Entry
+SeMenu_TransferPartValues_EndData_Skip10:
 	cp	a, 1:i3
-	jr	nz, 6
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip11
 	lda	xwa, (1678:16)
 	jr	-18
+SeMenu_TransferPartValues_EndData_Skip11:
 	cp	a, 2:i3
 	ret	nz
 	lda	xwa, (1679:16)
 	jr	-28
+SeMenu_TransferPartValues_EndData_Skip12:
 	incm8	1, (xwa)
+SeMenu_TransferPartValues_EndData_Entry:
 	.byte 0x80
 	push	xsp
 	nop
@@ -1583,35 +1627,42 @@ SeMenu_TransferPartValues_EndData:
 	ld	(1685:16), a
 	ret
 	cp	a, 6:i3
-	jr	z, 16
+	jr	z, SeMenu_TransferPartValues_EndData_Skip14
 	cp	a, 5:i3
-	jr	z, 8
+	jr	z, SeMenu_TransferPartValues_EndData_Skip13
 	cp	a, 2:i3
-	jr	nz, 12
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip15
 	ld	a, 26:opc
-	jr	10
+	jr	SeMenu_TransferPartValues_EndData_Join2
+SeMenu_TransferPartValues_EndData_Skip13:
 	ld	a, 35:opc
-	jr	6
+	jr	SeMenu_TransferPartValues_EndData_Join2
+SeMenu_TransferPartValues_EndData_Skip14:
 	ld	a, 38:opc
-	jr	2
+	jr	SeMenu_TransferPartValues_EndData_Join2
+SeMenu_TransferPartValues_EndData_Skip15:
 	ld	a, 23:opc
+SeMenu_TransferPartValues_EndData_Join2:
 	ld	(xbc), a
 	ret
 	cp	a, 6:i3
-	jr	z, 16
+	jr	z, SeMenu_TransferPartValues_EndData_Skip17
 	cp	a, 5:i3
-	jr	z, 8
+	jr	z, SeMenu_TransferPartValues_EndData_Skip16
 	cp	a, 2:i3
 	jr	nz, 12
 	ld	a, 24:opc
 	jr	10
+SeMenu_TransferPartValues_EndData_Skip16:
 	ld	a, 33:opc
 	jr	6
+SeMenu_TransferPartValues_EndData_Skip17:
 	ld	a, 36:opc
 	jr	2
 	ld	a, 21:opc
 	ld	(xbc), a
 	ret
+SeMenu_ApplyPartEdit_Helper:
 	lda	xsp, (xsp-22)
 	.byte 0xd7
 	swi	2
@@ -1632,15 +1683,15 @@ SeMenu_TransferPartValues_EndData:
 	ld	(xwa+9), 0
 	ld	c, (xsp+20)
 	ld	(xwa+10), c
-	calr	64651
+	calr	SeMenu_TransferPartValues_EndData_Helper
 	cp	l, 0:i3
-	jr	z, 69
+	jr	z, SeMenu_TransferPartValues_EndData_Epilogue
 	ld	a, (xsp+22)
 	inc	2, a
 	ldb_erp a, 251
 	ldw	wa, 127
 	ld	bc, 0:i3
-	calr	64592
+	calr	SeMenu_BitShiftMask
 	stb_erp c, 251
 	extz	bc
 	extz	hl
@@ -1649,25 +1700,29 @@ SeMenu_TransferPartValues_EndData:
 	ret
 	push	xsp
 	nop
-	jr	nz, 8
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip18
 	pushw	hl
 	ld	wa, 0:i3
-	calr	62153
-	jr	6
+	calr	SeMenu_RegisterElement_Extended
+	jr	SeMenu_TransferPartValues_EndData_Join3
+SeMenu_TransferPartValues_EndData_Skip18:
 	pushw	hl
 	ld	wa, 3:i3
-	calr	63235
+	calr	SeMenu_SetupDisplayObject_Alt1
+SeMenu_TransferPartValues_EndData_Join3:
 	ld	c, (xsp+5)
 	extz	bc
 	ldw	wa, 11
-	calr	64522
+	calr	SeMenu_StorePartParam
 	pushw	11
 	pushw	59
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
+SeMenu_TransferPartValues_EndData_Epilogue:
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
+SeMenu_ApplyPartEdit_Helper2:
 	dec	8, xsp
 	push	xiz
 	ld	(xsp+6), e
@@ -1675,19 +1730,20 @@ SeMenu_TransferPartValues_EndData:
 	ld	(xsp+10), a
 	ld	xiz, (xsp+16)
 	ld	xwa, xiz
-	calr	64551
+	calr	SeMenu_TransferPartValues_EndData_Helper
 	extz	hl
 	cp	hl, 0:i3
-	jr	nz, 4
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip19
 	ld	l, 0:opc
-	jr	83
+	jr	SeMenu_TransferPartValues_EndData_Epilogue2
+SeMenu_TransferPartValues_EndData_Skip19:
 	lda	xwa, (xsp+4)
-	calr	9808
+	calr	SeMenu_LoadObjEntries
 	ld	a, (xiz+6)
 	extz	wa
 	ld	c, (xiz+7)
 	extz	bc
-	calr	64483
+	calr	SeMenu_BitShiftMask
 	extz	hl
 	ld	a, (xsp+6)
 	extz	wa
@@ -1697,17 +1753,19 @@ SeMenu_TransferPartValues_EndData:
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
-	jr	nz, 6
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip20
 	pushw	hl
-	calr	62041
-	jr	4
+	calr	SeMenu_RegisterElement_Extended
+	jr	SeMenu_TransferPartValues_EndData_Join4
+SeMenu_TransferPartValues_EndData_Skip20:
 	pushw	hl
-	calr	63125
+	calr	SeMenu_SetupDisplayObject_Alt1
+SeMenu_TransferPartValues_EndData_Join4:
 	ld	a, (xsp+8)
 	extz	wa
 	ld	c, (xiz+3)
 	extz	bc
-	calr	64410
+	calr	SeMenu_StorePartParam
 	ld	a, (xsp+8)
 	extz	wa
 	pushw	wa
@@ -1717,29 +1775,33 @@ SeMenu_TransferPartValues_EndData:
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	ld	l, 1:opc
+SeMenu_TransferPartValues_EndData_Epilogue2:
 	pop	xiz
 	inc	8, xsp
 	retd	6
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	calr	64130
+	calr	SeMenu_ValidatePartNumber
 	ld	a, (xsp)
 	.byte 0x8f
 	push	sr
 	.byte 0xf1
-	jr	z, 12
+	jr	z, SeMenu_TransferPartValues_EndData_Skip21
 	ld	a, (xsp+2)
 	extz	wa
-	calr	64324
+	calr	SeMenu_IsPartEnabled
 	cp	hl, 0:i3
-	jr	nz, 4
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip22
+SeMenu_TransferPartValues_EndData_Skip21:
 	ld	l, 0:opc
-	jr	10
+	jr	SeMenu_TransferPartValues_EndData_Epilogue3
+SeMenu_TransferPartValues_EndData_Skip22:
 	ld	a, (xsp+2)
 	extz	wa
-	calr	64080
+	calr	SeMenu_SetupMenuDisplay_Finalize_Data
 	ld	l, 1:opc
+SeMenu_TransferPartValues_EndData_Epilogue3:
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-14)
@@ -1747,25 +1809,25 @@ SeMenu_TransferPartValues_EndData:
 	ld	(xsp+12), a
 	ld	a, (xsp+10)
 	extz	wa
-	calr	64286
+	calr	SeMenu_IsPartEnabled
 	cp	hl, 0:i3
-	jrl	z, 136
+	jrl	z, SeMenu_TransferPartValues_EndData_Epilogue4
 	ld	a, (xsp+10)
 	inc	4, a
 	ld	(xsp), a
 	extz	wa
 	lda	xbc, (xsp+6)
-	calr	64314
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+6)
 	ld	a, (xbc)
 	bit	5, a
-	jr	nz, 40
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip23
 	set	5, a
 	ld	(xbc), a
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (xsp+4)
-	calr	64947
+	calr	SeMenu_TransferPartValues_EndData
 	lda	xde, (xsp+6)
 	ld	c, (xde)
 	and	c, 63
@@ -1775,24 +1837,28 @@ SeMenu_TransferPartValues_EndData:
 	sll	a, 6
 	or	c, a
 	ld	(xde), c
-	jr	15
+	jr	SeMenu_TransferPartValues_EndData_Join6
+SeMenu_TransferPartValues_EndData_Skip23:
 	bit	4, a
-	jr	z, 5
+	jr	z, SeMenu_TransferPartValues_EndData_Skip24
 	and	a, 15
-	jr	3
+	jr	SeMenu_TransferPartValues_EndData_Join5
+SeMenu_TransferPartValues_EndData_Skip24:
 	set	4, a
+SeMenu_TransferPartValues_EndData_Join5:
 	ld	(xbc), a
+SeMenu_TransferPartValues_EndData_Join6:
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (xsp+2)
-	calr	64866
+	calr	SeMenu_TransferPartValues_EndData_Helper2
 	ld	a, (xsp+10)
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
 	lda	xde, (xsp+6)
 	pushw	240
-	calr	61818
+	calr	SeMenu_RegisterElement_Extended
 	ld	a, (xsp)
 	extz	wa
 	ld	c, (xsp+6)
@@ -1804,8 +1870,10 @@ SeMenu_TransferPartValues_EndData:
 	pushw	42
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
+SeMenu_TransferPartValues_EndData_Epilogue4:
 	lda	xsp, (xsp+14)
 	ret
+SeMenu_ApplyPartEdit_Helper3:
 	lda	xsp, (xsp-12)
 	.byte 0xd7
 	swi	2
@@ -1857,18 +1925,20 @@ SeMenu_TransferPartValues_EndData:
 	jr nz, 25
 	jr	116
 	cpib_erp 250, 0
-	jr z, 111
+	jr z, SeMenu_TransferPartValues_EndData_Epilogue5
 	cpib_erp 250, 3
-	jr nz, 5
+	jr nz, SeMenu_TransferPartValues_EndData_Skip25
 	ldib_erp 250, 1
-	jr	8
+	jr	SeMenu_TransferPartValues_EndData_Join7
+SeMenu_TransferPartValues_EndData_Skip25:
 	cpib_erp 250, 1
-	jr nz, 3
+	jr nz, SeMenu_TransferPartValues_EndData_Join7
 	ldib_erp 250, 0
+SeMenu_TransferPartValues_EndData_Join7:
 	ld	c, (xsp+2)
 	extz	bc
 	ld	wa, 3:i3
-	calr	64057
+	calr	SeMenu_BitShiftMask
 	ldb_erp l, 251
 	stb_erp a, 251
 	cpl	a
@@ -1877,7 +1947,7 @@ SeMenu_TransferPartValues_EndData:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	calr	64033
+	calr	SeMenu_BitShiftMask
 	or	(xsp+8), l
 	ld	c, (xsp+6)
 	extz	bc
@@ -1887,22 +1957,25 @@ SeMenu_TransferPartValues_EndData:
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
-	jr	nz, 8
+	jr	nz, SeMenu_TransferPartValues_EndData_Skip26
 	pushw	wa
 	ld	wa, 0:i3
-	calr	61588
-	jr	6
+	calr	SeMenu_RegisterElement_Extended
+	jr	SeMenu_TransferPartValues_EndData_Join8
+SeMenu_TransferPartValues_EndData_Skip26:
 	pushw	wa
 	ld	wa, 3:i3
-	calr	62670
+	calr	SeMenu_SetupDisplayObject_Alt1
+SeMenu_TransferPartValues_EndData_Join8:
 	ld	c, (xsp+8)
 	extz	bc
 	ldw	wa, 12
-	calr	63957
+	calr	SeMenu_StorePartParam
 	pushw	12
 	pushw	59
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
+SeMenu_TransferPartValues_EndData_Epilogue5:
 	pop qiz
 	lda	xsp, (xsp+12)
 	ret
@@ -2072,47 +2145,53 @@ SeMenu_SetupPartDisplay_Mode3Loop:
 
 SeMenu_SetupPartDisplay_End:
 	cp	a, 1:i3
-	jr	nz, 32
+	jr	nz, SeMenu_SetupPartDisplay_End_Skip
 	ld	w, 0:opc
 	cp	e, 0:i3
 	ret	ule
 	lda	xix, (0x020bf3:24)
 	ld	hl, 0:i3
+SeMenu_SetupPartDisplay_End_Loop:
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
 	inc 1, w
 	inc 1, hl
 	cp	w, e
-	jr	c, -18
+	jr	c, SeMenu_SetupPartDisplay_End_Loop
 	ret
+SeMenu_SetupPartDisplay_End_Skip:
 	cp	a, 2:i3
-	jr	nz, 32
+	jr	nz, SeMenu_SetupPartDisplay_End_Skip2
 	ld	w, 0:opc
 	cp	e, 0:i3
 	ret	ule
 	lda	xix, (0x020c03:24)
 	ld	hl, 0:i3
+SeMenu_SetupPartDisplay_End_Loop2:
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
 	inc 1, w
 	inc 1, hl
 	cp	w, e
-	jr	c, -18
+	jr	c, SeMenu_SetupPartDisplay_End_Loop2
 	ret
+SeMenu_SetupPartDisplay_End_Skip2:
 	cp	a, 3:i3
-	jr	nz, 32
+	jr	nz, SeMenu_SetupPartDisplay_End_Skip3
 	ld	w, 0:opc
 	cp	e, 0:i3
 	ret	ule
 	lda	xix, (0x020c13:24)
 	ld	hl, 0:i3
+SeMenu_SetupPartDisplay_End_Loop3:
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
 	inc 1, w
 	inc 1, hl
 	cp	w, e
-	jr	c, -18
+	jr	c, SeMenu_SetupPartDisplay_End_Loop3
 	ret
+SeMenu_SetupPartDisplay_End_Skip3:
 	cp	a, 4:i3
 	ret	nz
 	ld	w, 0:opc
@@ -2120,39 +2199,48 @@ SeMenu_SetupPartDisplay_End:
 	ret	ule
 	lda	xix, (0x020c23:24)
 	ld	hl, 0:i3
+SeMenu_SetupPartDisplay_End_Loop4:
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
 	inc 1, w
 	inc 1, hl
 	cp	w, e
-	jr	c, -18
+	jr	c, SeMenu_SetupPartDisplay_End_Loop4
 	ret
 	ld	xhl, (xsp+4)
 	bit	15, bc
-	jr	z, 4
+	jr	z, SeMenu_SetupPartDisplay_End_Skip4
 	ld	c, 1:opc
-	jr	2
+	jr	SeMenu_SetupPartDisplay_End_Join
+SeMenu_SetupPartDisplay_End_Skip4:
 	ld	c, 0:opc
+SeMenu_SetupPartDisplay_End_Join:
 	ld	(xhl), c
 	ld	c, a
 	cp	wa, 16
-	jr	ugt, 6
+	jr	ugt, SeMenu_SetupPartDisplay_End_Skip5
+SeMenu_SetupPartDisplay_End_Join2:
 	ld	(xde), c
+SeMenu_SetupPartDisplay_End_Join3:
 	ld	hl, 0:i3
-	jr	34
+	jr	SeMenu_SetupPartDisplay_End_Return
+SeMenu_SetupPartDisplay_End_Skip5:
 	cp	wa, 17
-	jr	c, 15
+	jr	c, SeMenu_SetupPartDisplay_End_Skip6
 	cp	wa, 24
-	jr	ugt, 9
+	jr	ugt, SeMenu_SetupPartDisplay_End_Skip6
 	sub	c, 17
 	ld	(xde), c
 	.byte 0xb3, 0xbf
-	jr	-25
+	jr	SeMenu_SetupPartDisplay_End_Join3
+SeMenu_SetupPartDisplay_End_Skip6:
 	cp	wa, 25
-	jr	nz, 4
+	jr	nz, SeMenu_SetupPartDisplay_End_Skip7
 	ld	c, 16:opc
-	jr	-37
+	jr	SeMenu_SetupPartDisplay_End_Join2
+SeMenu_SetupPartDisplay_End_Skip7:
 	ldw	hl, 0xffff
+SeMenu_SetupPartDisplay_End_Return:
 	retd	4
 	ld	xhl, xbc
 	ld	b, 0:opc
@@ -2269,6 +2357,7 @@ SeMenu_SetupPartDisplay_End:
 	ld	xbc, 0x1b12d80e
 	ld	e, 149:opc
 	swi	1
+SeMenu_SetupPartDisplay_End_Sub:
 	dec	1, c
 	or	c, e
 	extz	bc
@@ -2278,6 +2367,7 @@ SeMenu_SetupPartDisplay_End:
 	jp	UI_PostDialValueEvent
 	ld	wa, bc
 	jp	UI_PostDialRangeEvent
+SeMenu_ApplyPartEdit_Helper4:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	wa, 1:i3
@@ -2286,20 +2376,22 @@ SeMenu_SetupPartDisplay_End:
 	extz	bc
 	ld	wa, 0:i3
 	ld	de, 0:i3
-	calr	65494
+	calr	SeMenu_SetupPartDisplay_End_Sub
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 1:i3
 	ldw	de, 128
-	calr	65482
+	calr	SeMenu_SetupPartDisplay_End_Sub
 	inc	2, xsp
 	ret
+SeMenu_ApplyPartEdit_Helper5:
 	ld	l, a
 	res	7, l
 	ld	e, 255:opc
 	cp	l, 0:i3
-	jr	nz, 2
+	jr	nz, SeMenu_SetupPartDisplay_End_Skip8
 	ld	e, 1:opc
+SeMenu_SetupPartDisplay_End_Skip8:
 	ld	(xbc), e
 	bit	7, a
 	ret	z
@@ -2308,9 +2400,10 @@ SeMenu_SetupPartDisplay_End:
 	ld	(xbc), a
 	ret
 	cp	a, 97
-	jr	c, 4
+	jr	c, SeMenu_SetupPartDisplay_End_Skip9
 	ld	(xbc), 32
 	ret
+SeMenu_SetupPartDisplay_End_Skip9:
 	extz	wa
 	lda	xde, (GUI_DisplayStructData_0x1129:24)
 	ld_rrb a, xde, wa
@@ -2355,32 +2448,36 @@ SeMenu_SetupPartDisplay_End:
 	ld	a, (xsp+6)
 	extz	wa
 	ld	bc, 0:i3
-	jr	60
+	jr	SeMenu_SetupPartDisplay_End_Join4
 	ldib_erp 251, 1
 	cpib_erp 250, 1
-	jr c, 40
+	jr c, SeMenu_SetupPartDisplay_End_Skip11
+SeMenu_SetupPartDisplay_End_Loop5:
 	stb_erp a, 251
 	extz	wa
-	calr	62901
+	calr	SeMenu_IsPartEnabled
 	cp	hl, 0:i3
-	jr	z, 17
+	jr	z, SeMenu_SetupPartDisplay_End_Skip10
 	stb_erp a, 251
 	extz	wa
-	calr	62661
+	calr	SeMenu_SetupMenuDisplay_Finalize_Data
 	ld	a, (xsp+6)
 	extz	wa
 	ld	bc, 0:i3
-	jr	23
+	jr	SeMenu_SetupPartDisplay_End_Join4
+SeMenu_SetupPartDisplay_End_Skip10:
 	inc1b_erp 251
 	stb_erp a, 251
 	cpb_erp a, 250
-	jr	ule, -40
+	jr	ule, SeMenu_SetupPartDisplay_End_Loop5
+SeMenu_SetupPartDisplay_End_Skip11:
 	ld	wa, 1:i3
-	calr	62636
+	calr	SeMenu_SetupMenuDisplay_Finalize_Data
 	ld	a, (xsp+6)
 	extz	wa
 	ld	bc, 0:i3
-	calr	60395
+SeMenu_SetupPartDisplay_End_Join4:
+	calr	SeMenu_SendEvent
 	pop qiz
 	inc	6, xsp
 	ret
@@ -2499,6 +2596,7 @@ SeMenu_ApplyPartEdit_Data2:
 	normal
 	jr	nz, 11
 	ld	a, 42:opc
+SeMenu_ApplyPartEdit_Join:
 	extz	wa
 	ld	bc, 1:i3
 	calr	60130
@@ -2512,9 +2610,10 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x87
 	push	xsp
 	push	sr
-	jr	nz, 4
+	jr	nz, SeMenu_ApplyPartEdit_Epilogue
 	ld	a, 57:opc
-	jr	-27
+	jr	SeMenu_ApplyPartEdit_Join
+SeMenu_ApplyPartEdit_Epilogue:
 	inc	2, xsp
 	ret
 	lda	xsp, (xsp-20)
@@ -2523,16 +2622,16 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	63253
+	calr	SeMenu_TransferPartValues_EndData
 	ld	a, (xsp+16)
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
 	lda	xde, (xsp+12)
-	calr	63144
+	calr	SeMenu_TransferPartValues
 	lda	xbc, (xsp)
 	ld	wa, 4:i3
-	calr	62571
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 3
 	ld	(xbc+7), 6
@@ -2541,7 +2640,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	64975
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+12)
 	inc	3, a
 	extz	wa
@@ -2576,16 +2675,16 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	63128
+	calr	SeMenu_TransferPartValues_EndData
 	ld	a, (xsp+16)
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
 	lda	xde, (xsp+12)
-	calr	63019
+	calr	SeMenu_TransferPartValues
 	lda	xbc, (xsp)
 	ld	wa, 4:i3
-	calr	62446
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 31
 	ld	(xbc+7), 0
@@ -2594,7 +2693,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	64850
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+12)
 	inc	3, a
 	extz	wa
@@ -2629,16 +2728,16 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	63003
+	calr	SeMenu_TransferPartValues_EndData
 	ld	a, (xsp+16)
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
 	lda	xde, (xsp+12)
-	calr	62894
+	calr	SeMenu_TransferPartValues
 	lda	xbc, (xsp)
 	ld	wa, 2:i3
-	calr	62321
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -2647,7 +2746,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	64725
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+12)
 	inc	1, a
 	extz	wa
@@ -2682,16 +2781,16 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	62878
+	calr	SeMenu_TransferPartValues_EndData
 	ld	a, (xsp+16)
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
 	lda	xde, (xsp+12)
-	calr	62769
+	calr	SeMenu_TransferPartValues
 	lda	xbc, (xsp)
 	ld	wa, 1:i3
-	calr	62196
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -2700,7 +2799,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	64600
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+12)
 	extz	wa
 	pushw	wa
@@ -2734,16 +2833,16 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	62755
+	calr	SeMenu_TransferPartValues_EndData
 	ld	a, (xsp+16)
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
 	lda	xde, (xsp+12)
-	calr	62646
+	calr	SeMenu_TransferPartValues
 	lda	xbc, (xsp)
 	ld	wa, 3:i3
-	calr	62073
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 63
 	ld	(xbc+7), 0
@@ -2752,7 +2851,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	64477
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+12)
 	inc	2, a
 	extz	wa
@@ -2762,9 +2861,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ldw	wa, 42
 	ld	bc, 3:i3
 	ld	de, 0:i3
-	calr	63042
+	calr	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 7:i3
-	calr	64415
+	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-20)
@@ -2773,16 +2872,16 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	62652
+	calr	SeMenu_TransferPartValues_EndData
 	ld	a, (xsp+16)
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
 	lda	xde, (xsp+12)
-	calr	62543
+	calr	SeMenu_TransferPartValues
 	lda	xbc, (xsp)
 	ld	wa, 3:i3
-	calr	61970
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 1
 	ld	(xbc+7), 7
@@ -2791,7 +2890,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	64374
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+12)
 	inc	2, a
 	extz	wa
@@ -2801,9 +2900,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ldw	wa, 42
 	ld	bc, 3:i3
 	ld	de, 0:i3
-	calr	62939
+	calr	SeMenu_ApplyPartEdit_Helper2
 	ldw	wa, 8
-	calr	64311
+	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
 	dec	4, xsp
@@ -2841,17 +2940,17 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
 	ld	wa, 0:i3
-	calr	61836
+	calr	SeMenu_LoadPartParam
 	.byte 0x8f
 	ret
 	push	xsp
 	nop
-	jr	z, 73
+	jr	z, SeMenu_ApplyPartEdit_Epilogue2
 	lda	xwa, (xsp+12)
-	calr	61567
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ld	wa, 3:i3
-	calr	61817
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -2860,7 +2959,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	64221
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+16)
@@ -2870,10 +2969,11 @@ SeMenu_ApplyPartEdit_Data2:
 	push	sr
 	.asciz "0807"
 	ld	bc, 3:i3
-	calr	62785
-	calr	2598
+	calr	SeMenu_ApplyPartEdit_Helper2
+	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 1:i3
-	calr	64155
+	calr	SeMenu_ApplyPartEdit_Helper4
+SeMenu_ApplyPartEdit_Epilogue2:
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-20)
@@ -2881,17 +2981,17 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
 	ld	wa, 0:i3
-	calr	61736
+	calr	SeMenu_LoadPartParam
 	.byte 0x8f
 	ret
 	push	xsp
 	nop
-	jr	z, 73
+	jr	z, SeMenu_ApplyPartEdit_Epilogue3
 	lda	xwa, (xsp+12)
-	calr	61467
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ld	wa, 4:i3
-	calr	61717
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -2900,7 +3000,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	64121
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+16)
@@ -2914,6 +3014,7 @@ SeMenu_ApplyPartEdit_Data2:
 	calr	2498
 	ld	wa, 2:i3
 	calr	64055
+SeMenu_ApplyPartEdit_Epilogue3:
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-22)
@@ -2933,10 +3034,10 @@ SeMenu_ApplyPartEdit_Data2:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 35
+	jr	nz, SeMenu_ApplyPartEdit_Skip
 	ldib_erp 250, 2
 	ld wa, 2:i3
-	calr	61607
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 255
 	ld	(xwa+7), 0
@@ -2944,10 +3045,11 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xwa+9), 206
 	ld	a, (xsp+20)
 	ldb_erp a, 251
-	jr 33
+	jr SeMenu_ApplyPartEdit_Join2
+SeMenu_ApplyPartEdit_Skip:
 	ldib_erp 250, 5
 	ld wa, 5:i3
-	calr	61572
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 127
 	ld	(xwa+7), 0
@@ -2955,10 +3057,11 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xwa+9), 0
 	ld	a, (xsp+18)
 	ldb_erp a, 251
+SeMenu_ApplyPartEdit_Join2:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	63969
+	calr	SeMenu_ApplyPartEdit_Helper5
 	stb_erp c, 250
 	extz	bc
 	ld	e, (xsp+14)
@@ -2968,10 +3071,10 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	wa
 	.byte 0xbf, 0x04
 	.asciz "0807"
-	calr	62530
-	calr	2343
+	calr	SeMenu_ApplyPartEdit_Helper2
+	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 3:i3
-	calr	63900
+	calr	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
@@ -2980,17 +3083,17 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
 	ld	wa, 0:i3
-	calr	61478
+	calr	SeMenu_LoadPartParam
 	.byte 0x8f
 	ret
 	push	xsp
 	nop
-	jr	z, 73
+	jr	z, SeMenu_ApplyPartEdit_Epilogue4
 	lda	xwa, (xsp+12)
-	calr	61209
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ld	wa, 6:i3
-	calr	61459
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -2999,7 +3102,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	63863
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+16)
@@ -3013,6 +3116,7 @@ SeMenu_ApplyPartEdit_Data2:
 	calr	2240
 	ld	wa, 4:i3
 	calr	63797
+SeMenu_ApplyPartEdit_Epilogue4:
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-22)
@@ -3032,10 +3136,10 @@ SeMenu_ApplyPartEdit_Data2:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 37
+	jr	nz, SeMenu_ApplyPartEdit_Skip2
 	ldi_erpb 250, 10
 	ldw wa, 10
-	calr	61347
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 255
 	ld	(xwa+7), 0
@@ -3043,10 +3147,11 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xwa+9), 206
 	ld	a, (xsp+20)
 	ldb_erp a, 251
-	jr 33
+	jr SeMenu_ApplyPartEdit_Join3
+SeMenu_ApplyPartEdit_Skip2:
 	ldib_erp 250, 7
 	ld wa, 7:i3
-	calr	61312
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 127
 	ld	(xwa+7), 0
@@ -3054,10 +3159,11 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xwa+9), 0
 	ld	a, (xsp+18)
 	ldb_erp a, 251
+SeMenu_ApplyPartEdit_Join3:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	63709
+	calr	SeMenu_ApplyPartEdit_Helper5
 	stb_erp c, 250
 	extz	bc
 	ld	e, (xsp+14)
@@ -3068,10 +3174,10 @@ SeMenu_ApplyPartEdit_Data2:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 55
-	calr	62270
-	calr	2083
+	calr	SeMenu_ApplyPartEdit_Helper2
+	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 5:i3
-	calr	63640
+	calr	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
@@ -3080,17 +3186,17 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
 	ld	wa, 0:i3
-	calr	61218
+	calr	SeMenu_LoadPartParam
 	.byte 0x8f
 	ret
 	push	xsp
 	nop
-	jr	z, 75
+	jr	z, SeMenu_ApplyPartEdit_Epilogue5
 	lda	xwa, (xsp+12)
-	calr	60949
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ldw	wa, 8
-	calr	61198
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3099,7 +3205,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	63602
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+16)
@@ -3113,6 +3219,7 @@ SeMenu_ApplyPartEdit_Data2:
 	calr	1978
 	ld	wa, 6:i3
 	calr	63535
+SeMenu_ApplyPartEdit_Epilogue5:
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-22)
@@ -3132,10 +3239,10 @@ SeMenu_ApplyPartEdit_Data2:
 	rcf
 	push	xsp
 	nop
-	jr	nz, 35
+	jr	nz, SeMenu_ApplyPartEdit_Skip3
 	ldib_erp 250, 1
 	ld wa, 1:i3
-	calr	61087
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 255
 	ld	(xwa+7), 0
@@ -3143,10 +3250,11 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xwa+9), 206
 	ld	a, (xsp+20)
 	ldb_erp a, 251
-	jr 35
+	jr SeMenu_ApplyPartEdit_Join4
+SeMenu_ApplyPartEdit_Skip3:
 	ldi_erpb 250, 9
 	ldw wa, 9
-	calr	61050
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 127
 	ld	(xwa+7), 0
@@ -3154,10 +3262,11 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xwa+9), 0
 	ld	a, (xsp+18)
 	ldb_erp a, 251
+SeMenu_ApplyPartEdit_Join4:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	63447
+	calr	SeMenu_ApplyPartEdit_Helper5
 	stb_erp c, 250
 	extz	bc
 	ld	e, (xsp+14)
@@ -3167,10 +3276,10 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	wa
 	.byte 0xbf, 0x04
 	.asciz "0807"
-	calr	62008
-	calr	1821
+	calr	SeMenu_ApplyPartEdit_Helper2
+	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 7:i3
-	calr	63378
+	calr	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
@@ -3178,10 +3287,10 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+16), c
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
-	calr	60701
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ld	wa, 3:i3
-	calr	60951
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3190,7 +3299,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	63355
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+14)
 	extz	de
 	ld	a, (xsp+16)
@@ -3200,7 +3309,7 @@ SeMenu_ApplyPartEdit_Data2:
 	push	sr
 	.asciz "080)"
 	ld	bc, 3:i3
-	calr	61919
+	calr	SeMenu_ApplyPartEdit_Helper2
 	lda	xbc, (xsp+12)
 	ld	wa, 3:i3
 	calr	60891
@@ -3234,10 +3343,10 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+16), c
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
-	calr	60557
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ld	wa, 4:i3
-	calr	60807
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3246,7 +3355,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	63211
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+14)
 	extz	de
 	ld	a, (xsp+16)
@@ -3256,41 +3365,42 @@ SeMenu_ApplyPartEdit_Data2:
 	push	sr
 	.asciz "080)"
 	ld	bc, 4:i3
-	calr	61775
+	calr	SeMenu_ApplyPartEdit_Helper2
 	lda	xbc, (xsp+12)
 	ld	wa, 4:i3
-	calr	60747
+	calr	SeMenu_LoadPartParam
 	ld	c, (xsp+12)
 	extz	bc
 	ldw	wa, 10
-	calr	60723
+	calr	SeMenu_StorePartParam
 	ld	wa, 2:i3
 	ld	bc, 1:i3
-	calr	3144
+	calr	SeMenu_ApplyPartEdit_Helper11
 	lda	xbc, (xsp+12)
 	ldw	wa, 9
-	calr	60720
+	calr	SeMenu_LoadPartParam
 	cp	(xsp+12), 1
-	jr	z, 20
+	jr	z, SeMenu_ApplyPartEdit_Skip4
 	ldw	wa, 9
 	ld	bc, 1:i3
-	calr	60693
+	calr	SeMenu_StorePartParam
 	pushw	9
 	pushw	41
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
+SeMenu_ApplyPartEdit_Skip4:
 	ld	wa, 3:i3
-	calr	63087
+	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
-	calr	60413
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ld	wa, 5:i3
-	calr	60663
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3299,7 +3409,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	63067
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+14)
 	extz	de
 	ld	a, (xsp+16)
@@ -3309,7 +3419,7 @@ SeMenu_ApplyPartEdit_Data2:
 	push	sr
 	.asciz "080)"
 	ld	bc, 5:i3
-	calr	61631
+	calr	SeMenu_ApplyPartEdit_Helper2
 	lda	xbc, (xsp+12)
 	ld	wa, 5:i3
 	calr	60603
@@ -3345,40 +3455,41 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	127
 	ld	bc, 2:i3
 	ld	de, 0:i3
-	calr	6424
+	calr	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
-	jr	nz, 50
+	jr	nz, SeMenu_ApplyPartEdit_Skip5
 	lda	xwa, (xsp+2)
-	calr	60257
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ld	wa, 2:i3
-	calr	60507
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp+4)
 	extz	bc
 	lda	xde, (xsp)
 	pushw	127
-	calr	58088
+	calr	SeMenu_RegisterElement_Extended
 	pushw	2
 	pushw	41
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	ld	wa, 2:i3
 	ld	bc, 1:i3
-	calr	2885
+	calr	SeMenu_ApplyPartEdit_Helper11
+SeMenu_ApplyPartEdit_Skip5:
 	ld	wa, 5:i3
-	calr	62863
+	calr	SeMenu_ApplyPartEdit_Helper4
 	inc	6, xsp
 	ret
 	lda	xsp, (xsp-18)
 	ld	(xsp+14), c
 	ld	(xsp+16), a
 	lda	xwa, (xsp+12)
-	calr	60190
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ld	wa, 0:i3
-	calr	60440
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3387,7 +3498,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	62844
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+14)
@@ -3397,19 +3508,19 @@ SeMenu_ApplyPartEdit_Data2:
 	push	sr
 	.asciz "080)"
 	ld	bc, 0:i3
-	calr	61408
+	calr	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 7:i3
-	calr	62781
+	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-18)
 	ld	(xsp+14), c
 	ld	(xsp+16), a
 	lda	xwa, (xsp+12)
-	calr	60107
+	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	ld	wa, 1:i3
-	calr	60357
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3418,7 +3529,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	62761
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+12)
 	extz	de
 	ld	a, (xsp+14)
@@ -3459,53 +3570,58 @@ SeMenu_ApplyPartEdit_Data2:
 	ret
 	push	xsp
 	nop
-	jr	nz, 5
+	jr	nz, SeMenu_ApplyPartEdit_Skip6
 	ld	(xwa), 27
-	jr	3
+	jr	SeMenu_ApplyPartEdit_Join5
+SeMenu_ApplyPartEdit_Skip6:
 	ld	(xwa), 3
+SeMenu_ApplyPartEdit_Join5:
 	ld	(xbc+9), 0
 	ld	a, (xsp+24)
 	extz	wa
 	lda	xbc, (xbc+10)
-	calr	62641
+	calr	SeMenu_ApplyPartEdit_Helper5
 	lda	xwa, (xsp+2)
-	calr	60257
+	calr	SeMenu_TransferPartValues_EndData_Helper
 	cp	l, 0:i3
-	jr	z, 109
+	jr	z, SeMenu_ApplyPartEdit_Epilogue6
 	stb_erp a, 251
 	extz	wa
 	ld	c, (xsp+5)
 	extz	bc
-	calr	60172
+	calr	SeMenu_StorePartParam
 	stb_erp a, 251
 	extz	wa
 	.byte 0x8f
 	ex_ff
 	push	xsp
 	push	sr
-	jr	nz, 6
+	jr	nz, SeMenu_ApplyPartEdit_Entry
 	pushw	wa
 	pushw	59
-	jr	10
+	jr	SeMenu_ApplyPartEdit_Join6
+SeMenu_ApplyPartEdit_Entry:
 	.byte 0x8f
 	ex_ff
 	push	xsp
 	pop	sr
-	jr	nz, 10
+	jr	nz, SeMenu_ApplyPartEdit_Skip7
 	pushw	wa
 	pushw	60
+SeMenu_ApplyPartEdit_Join6:
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
+SeMenu_ApplyPartEdit_Skip7:
 	lda	xbc, (xsp+16)
 	ldw	wa, 13
-	calr	60143
+	calr	SeMenu_LoadPartParam
 	incm8	1, (xsp+16)
 	lda	xbc, (xsp+2)
 	ld	a, (xbc+6)
 	extz	wa
 	ld	c, (xbc+7)
 	extz	bc
-	calr	60140
+	calr	SeMenu_BitShiftMask
 	ld	c, (xsp+16)
 	extz	bc
 	extz	hl
@@ -3514,16 +3630,19 @@ SeMenu_ApplyPartEdit_Data2:
 	ret
 	push	xsp
 	nop
-	jr	nz, 8
+	jr	nz, SeMenu_ApplyPartEdit_Skip8
 	pushw	hl
 	ld	wa, 0:i3
-	calr	57701
-	jr	6
+	calr	SeMenu_RegisterElement_Extended
+	jr	SeMenu_ApplyPartEdit_Join7
+SeMenu_ApplyPartEdit_Skip8:
 	pushw	hl
 	ld	wa, 3:i3
-	calr	58783
+	calr	SeMenu_SetupDisplayObject_Alt1
+SeMenu_ApplyPartEdit_Join7:
 	ld	wa, 2:i3
-	calr	62487
+	calr	SeMenu_ApplyPartEdit_Helper4
+SeMenu_ApplyPartEdit_Epilogue6:
 	pop qiz
 	lda	xsp, (xsp+24)
 	ret
@@ -3531,18 +3650,18 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+4), a
 	lda	xbc, (xsp+2)
 	ldw	wa, 13
-	calr	60068
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp)
-	calr	62491
+	calr	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp)
 	exts	bc
-	calr	60926
+	calr	SeMenu_ApplyPartEdit_Helper
 	ld	wa, 4:i3
-	calr	62439
+	calr	SeMenu_ApplyPartEdit_Helper4
 	inc	6, xsp
 	ret
 	dec	2, xsp
@@ -3553,11 +3672,11 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp)
 	extz	wa
 	extz	bc
-	calr	61365
+	calr	SeMenu_ApplyPartEdit_Helper3
 	ld	a, (xsp)
 	inc	4, a
 	extz	wa
-	calr	62407
+	calr	SeMenu_ApplyPartEdit_Helper4
 	inc	2, xsp
 	ret
 	lda	xsp, (xsp-22)
@@ -3570,33 +3689,34 @@ SeMenu_ApplyPartEdit_Data2:
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	ld	wa, 2:i3
-	calr	59976
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+19)
 	ld	wa, 3:i3
-	calr	59968
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+20)
 	ld	wa, 4:i3
-	calr	59960
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+21)
 	ld	wa, 5:i3
-	calr	59952
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+22)
 	ld	wa, 6:i3
-	calr	59944
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+24)
-	calr	5266
+	calr	SeMenu_LoadObjEntries
 	lda	xbc, (xsp+16)
 	.byte 0x8f
 	push_f
 	push	xsp
 	nop
-	jr	nz, 15
+	jr	nz, SeMenu_ApplyPartEdit_Skip9
 	ld	wa, 0:i3
-	calr	59924
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+17)
 	ld	wa, 1:i3
-	calr	59916
+	calr	SeMenu_LoadPartParam
 	jr	33
+SeMenu_ApplyPartEdit_Skip9:
 	ld	wa, 1:i3
 	calr	59909
 	ld	(xsp+17), 100
@@ -3614,6 +3734,7 @@ SeMenu_ApplyPartEdit_Data2:
 	lda	xbc, (xsp+16)
 	ld	xwa, xbc
 	lda	xde, (xbc+6)
+SeMenu_ApplyPartEdit_Loop:
 	ld	l, (xwa)
 	res	7, l
 	ld	(xwa), l
@@ -3622,7 +3743,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xwa), 100
 	inc	1, xwa
 	cp	xwa, xde
-	jr	ule, -21
+	jr	ule, SeMenu_ApplyPartEdit_Loop
 	ld	a, (xbc+1)
 	extz	wa
 	ld	(xsp+6), wa
@@ -3673,13 +3794,14 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+8), wa
 	ld	wa, (xsp+10)
 	.byte 0x9f, 0x06, 0xf0
-	jr	c, 16
+	jr	c, SeMenu_ApplyPartEdit_Skip10
 	ld	hl, (xsp+10)
 	.byte 0x9f, 0x06, 0xa3
 	ld	wa, (xsp+8)
 	mul	xwa, xhl
 	ld	(xsp+8), wa
 	jr	14
+SeMenu_ApplyPartEdit_Skip10:
 	ld	hl, (xsp+6)
 	.byte 0x9f
 	ldw	(163:8), 2207:io
@@ -3689,13 +3811,14 @@ SeMenu_ApplyPartEdit_Data2:
 	xor	(xsp), xhl
 	ccf
 	cp	hl, 0:i3
-	jr	nz, 13
+	jr	nz, SeMenu_ApplyPartEdit_Skip11
 	.byte 0x9f
 	ld	(56:8), 16:io
 	ld	l, 159:opc
 	.byte 0x06
 	ld	w, 191:opc
 	ldw	(80:8), 2664:io
+SeMenu_ApplyPartEdit_Skip11:
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	xwa, xhl
@@ -3731,15 +3854,17 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	l, e
 	extz	hl
 	cp	hl, 0:i3
-	jr	nz, 12
+	jr	nz, SeMenu_ApplyPartEdit_Skip12
 	add	iz, 0x2710
 	ld	wa, (xsp+10)
 	ld qiz, wa
-	jr	8
+	jr	SeMenu_ApplyPartEdit_Join8
+SeMenu_ApplyPartEdit_Skip12:
 	ld	wa, iz
 	extz	xwa
 	div	xwa, xhl
 	ld	iz, wa
+SeMenu_ApplyPartEdit_Join8:
 	ld	c, (xbc+6)
 	ld	e, c
 	extz	de
@@ -3748,11 +3873,13 @@ SeMenu_ApplyPartEdit_Data2:
 	sub l, c
 	extz	hl
 	cp	hl, 0:i3
-	jr	nz, 6
+	jr	nz, SeMenu_ApplyPartEdit_Skip13
 	add	de, 0x2710
-	jr	4
+	jr	SeMenu_ApplyPartEdit_Join9
+SeMenu_ApplyPartEdit_Skip13:
 	extz	xde
 	div	xde, xhl
+SeMenu_ApplyPartEdit_Join9:
 	ld	bc, (xsp+4)
 	.byte 0x9f
 	ld	(129:8), 222:io
@@ -3856,11 +3983,13 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	l, a
 	extz	hl
 	cp	hl, 0:i3
-	jr	nz, 6
+	jr	nz, SeMenu_ApplyPartEdit_Skip14
 	add	de, 0x2710
-	jr	4
+	jr	SeMenu_ApplyPartEdit_Join10
+SeMenu_ApplyPartEdit_Skip14:
 	extz	xde
 	div	xde, xhl
+SeMenu_ApplyPartEdit_Join10:
 	ld	l, (xsp+12)
 	extz	hl
 	extz	xde
@@ -3868,10 +3997,11 @@ SeMenu_ApplyPartEdit_Data2:
 	add	de, 213
 	pushw	146
 	ldw	wa, 214
-	calr	5
+	calr	SeMenu_ApplyPartEdit_Helper6
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
+SeMenu_ApplyPartEdit_Helper6:
 	pushw	iz
 	ld	iz, 0:i3
 	ld	ix, bc
@@ -3879,9 +4009,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	hl, iy
 	sub	hl, ix
 	cp	wa, 213
-	jr	nc, 38
+	jr	nc, SeMenu_ApplyPartEdit_Skip15
 	cp	de, 213
-	jr	ule, 72
+	jr	ule, SeMenu_ApplyPartEdit_Skip16
 	sub	de, wa
 	ld	ix, de
 	ldw	de, 213
@@ -3896,10 +4026,11 @@ SeMenu_ApplyPartEdit_Data2:
 	add	hl, bc
 	ld	iy, hl
 	ldw	de, 213
-	jr	38
+	jr	SeMenu_ApplyPartEdit_Join11
+SeMenu_ApplyPartEdit_Skip15:
 	dec	1, wa
 	cp	de, 258
-	jr	ule, 32
+	jr	ule, SeMenu_ApplyPartEdit_Skip16
 	sub	de, wa
 	ld	ix, de
 	ldw	de, 258
@@ -3914,12 +4045,15 @@ SeMenu_ApplyPartEdit_Data2:
 	add	hl, bc
 	ld	iy, hl
 	ldw	de, 258
+SeMenu_ApplyPartEdit_Join11:
 	ld	iz, iy
+SeMenu_ApplyPartEdit_Skip16:
 	pushw	iy
-	calr	1177
+	calr	SeMenu_ApplyPartEdit_Helper9
 	ld	hl, iz
 	popw	iz
 	retd	2
+SeMenu_ApplyPartEdit_Helper7:
 	lda	xsp, (xsp-32)
 	push	xiz
 	pushw	144
@@ -3930,33 +4064,35 @@ SeMenu_ApplyPartEdit_Data2:
 	inc	8, xsp
 	lda	xbc, (xsp+30)
 	ld	wa, 3:i3
-	calr	59134
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+31)
 	ld	wa, 5:i3
-	calr	59126
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+32)
 	ld	wa, 7:i3
-	calr	59118
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+33)
 	ldw	wa, 9
-	calr	59109
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+30)
 	ld	xwa, xbc
 	inc	4, xbc
+SeMenu_ApplyPartEdit_Loop2:
 	ld	e, (xwa)
 	res	7, e
 	ld	(xwa), e
 	cp	e, 100
-	jr	ule, 3
+	jr	ule, SeMenu_ApplyPartEdit_Skip17
 	ld	(xwa), 100
+SeMenu_ApplyPartEdit_Skip17:
 	inc	1, xwa
 	cp	xwa, xbc
-	jr	c, -21
+	jr	c, SeMenu_ApplyPartEdit_Loop2
 	lda	xbc, (xsp+22)
 	ld	wa, 2:i3
-	calr	59073
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+22)
-	calr	988
+	calr	SeMenu_ApplyPartEdit_Helper8
 	lda	xbc, (xsp+22)
 	ld	a, (xbc)
 	add	a, 50
@@ -3971,9 +4107,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+6), wa
 	inc	1, xbc
 	ld	wa, 4:i3
-	calr	59025
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+23)
-	calr	940
+	calr	SeMenu_ApplyPartEdit_Helper8
 	lda	xbc, (xsp+22)
 	ld	a, (xbc+1)
 	add	a, 50
@@ -3987,17 +4123,17 @@ SeMenu_ApplyPartEdit_Data2:
 	divs	wa, 100
 	ld	(xsp+10), wa
 	ld	wa, 2:i3
-	calr	58978
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+23)
 	ld	wa, 4:i3
-	calr	58970
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+22)
 	ld	a, (xbc+1)
 	.byte 0x81
 	xor	(xbc), xwa
 	zcf
 	lda	xbc, (xsp+28)
-	calr	1950
+	calr	SeMenu_ApplyPartEdit_Helper12
 	ld	a, (xsp+28)
 	extz	wa
 	ld	(xsp+8), wa
@@ -4011,13 +4147,14 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	a, c
 	ld	c, a
 	cp	c, 0:i3
-	jr	nz, 13
+	jr	nz, SeMenu_ApplyPartEdit_Skip18
 	.byte 0x9f
 	ld	(56:8), 16:io
 	ld	l, 159:opc
 	.byte 0x06
 	ld	w, 191:opc
 	ldw	(80:8), 3176:io
+SeMenu_ApplyPartEdit_Skip18:
 	extz	bc
 	ld	wa, (xsp+8)
 	exts	xwa
@@ -4025,9 +4162,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+8), wa
 	lda	xbc, (xsp+24)
 	ld	wa, 6:i3
-	calr	58888
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+24)
-	calr	803
+	calr	SeMenu_ApplyPartEdit_Helper8
 	lda	xbc, (xsp+22)
 	ld	a, (xbc+2)
 	add	a, 50
@@ -4042,17 +4179,17 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+14), wa
 	inc	1, xbc
 	ld	wa, 4:i3
-	calr	58839
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+24)
 	ld	wa, 6:i3
-	calr	58831
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+22)
 	ld	a, (xbc+2)
 	.byte 0x89, 0x01
 	xor	(xbc), xwa
 	zcf
 	lda	xbc, (xsp+28)
-	calr	1810
+	calr	SeMenu_ApplyPartEdit_Helper12
 	ld	a, (xsp+28)
 	extz	wa
 	ld	(xsp+12), wa
@@ -4082,9 +4219,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+12), wa
 	lda	xbc, (xsp+25)
 	ldw	wa, 8
-	calr	58747
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+25)
-	calr	662
+	calr	SeMenu_ApplyPartEdit_Helper8
 	lda	xbc, (xsp+22)
 	ld	a, (xbc+3)
 	add	a, 50
@@ -4099,10 +4236,10 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+18), wa
 	inc	2, xbc
 	ld	wa, 6:i3
-	calr	58698
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+25)
 	ldw	wa, 8
-	calr	58689
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+22)
 	ld	a, (xbc+3)
 	.byte 0x89
@@ -4110,7 +4247,7 @@ SeMenu_ApplyPartEdit_Data2:
 	xor	(xbc), xwa
 	zcf
 	lda	xbc, (xsp+28)
-	calr	1668
+	calr	SeMenu_ApplyPartEdit_Helper12
 	ld	a, (xsp+28)
 	extz	wa
 	ld	(xsp+16), wa
@@ -4124,7 +4261,7 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	a, c
 	ld	c, a
 	cp	c, 0:i3
-	jr	nz, 13
+	jr	nz, SeMenu_ApplyPartEdit_Skip19
 	.byte 0x9f
 	rcf
 	push	xwa
@@ -4134,17 +4271,19 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	w, 191:opc
 	ccf
 	.byte 0x50
-	jr	12
+	jr	SeMenu_ApplyPartEdit_Join12
+SeMenu_ApplyPartEdit_Skip19:
 	extz	bc
 	ld	wa, (xsp+16)
 	exts	xwa
 	divs	xwa, xbc
 	ld	(xsp+16), wa
+SeMenu_ApplyPartEdit_Join12:
 	lda	xbc, (xsp+26)
 	ldw	wa, 10
-	calr	58605
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+26)
-	calr	520
+	calr	SeMenu_ApplyPartEdit_Helper8
 	lda	xbc, (xsp+22)
 	ld	a, (xbc+4)
 	add	a, 50
@@ -4159,10 +4298,10 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+20), wa
 	inc	3, xbc
 	ldw	wa, 8
-	calr	58555
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+26)
 	ldw	wa, 10
-	calr	58546
+	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+22)
 	ld	a, (xbc+4)
 	.byte 0x89
@@ -4170,7 +4309,7 @@ SeMenu_ApplyPartEdit_Data2:
 	xor	(xbc), xwa
 	zcf
 	lda	xbc, (xsp+28)
-	calr	1525
+	calr	SeMenu_ApplyPartEdit_Helper12
 	ld	a, (xsp+28)
 	extz	wa
 	ld qiz, wa
@@ -4219,10 +4358,12 @@ SeMenu_ApplyPartEdit_Data2:
 	jr	ule, 2
 	ld	wa, 5:i3
 	cp	bc, wa
-	jr	c, 5
+	jr	c, SeMenu_ApplyPartEdit_Skip20
 	ld	(xsp+4), c
-	jr	3
+	jr	SeMenu_ApplyPartEdit_Join13
+SeMenu_ApplyPartEdit_Skip20:
 	ld	(xsp+4), a
+SeMenu_ApplyPartEdit_Join13:
 	incm8	1, (xsp+4)
 	ld	c, (xsp+4)
 	extz	bc
@@ -4272,43 +4413,44 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	wa, (xsp+10)
 	pushw	wa
 	ldw	wa, 51
-	calr	64571
+	calr	SeMenu_ApplyPartEdit_Helper6
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	nz, 60
+	jr	nz, SeMenu_ApplyPartEdit_Skip21
 	ld	wa, (xsp+8)
 	ld	bc, (xsp+10)
 	ld	de, (xsp+12)
 	ld	hl, (xsp+14)
 	pushw	hl
-	calr	64549
+	calr	SeMenu_ApplyPartEdit_Helper6
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	nz, 38
+	jr	nz, SeMenu_ApplyPartEdit_Skip21
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+14)
 	ld	de, (xsp+16)
 	ld	hl, (xsp+18)
 	pushw	hl
-	calr	64527
+	calr	SeMenu_ApplyPartEdit_Helper6
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	nz, 16
+	jr	nz, SeMenu_ApplyPartEdit_Skip21
 	ld	wa, (xsp+16)
 	ld	bc, (xsp+18)
 	pushw	bc
 	ldw	de, 213
-	calr	64508
+	calr	SeMenu_ApplyPartEdit_Helper6
 	ld	iz, (xsp+18)
+SeMenu_ApplyPartEdit_Skip21:
 	lda	xbc, (xsp+22)
 	ldw	wa, 96
 	sub	wa, iz
 	ld	(xbc+3), a
 	inc	4, xbc
 	ldw	wa, 10
-	calr	58220
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+26)
-	calr	135
+	calr	SeMenu_ApplyPartEdit_Helper8
 	lda	xbc, (xsp+22)
 	ld	a, (xbc+4)
 	.byte 0x89
@@ -4316,7 +4458,7 @@ SeMenu_ApplyPartEdit_Data2:
 	xor	(xbc), xwa
 	zcf
 	lda	xbc, (xsp+28)
-	calr	1193
+	calr	SeMenu_ApplyPartEdit_Helper12
 	ld	a, (xsp+28)
 	extz	wa
 	ld qiz, wa
@@ -4369,15 +4511,16 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	bc, (xsp+20)
 	pushw	bc
 	ldw	de, 258
-	calr	64350
+	calr	SeMenu_ApplyPartEdit_Helper6
 	pop	xiz
 	lda	xsp, (xsp+32)
 	ret
+SeMenu_ApplyPartEdit_Helper8:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (xsp+4)
-	calr	55592
+	calr	SeMenu_LoadRawAddr
 	.byte 0x86
 	push	xsp
 	ldw	de, 866
@@ -4389,7 +4532,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xiz), 206
 	lda	xbc, (xsp+6)
 	ld	wa, 1:i3
-	calr	58044
+	calr	SeMenu_LoadPartParam
 	ld	e, (xiz)
 	exts	de
 	.byte 0x8f, 0x04
@@ -4397,23 +4540,26 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x8f, 0x06
 	push	xsp
 	nop
-	jr	lt, 9
+	jr	lt, SeMenu_ApplyPartEdit_Skip22
 	ld	c, (xsp+6)
 	exts	bc
 	muls	xde, xbc
-	jr	14
+	jr	SeMenu_ApplyPartEdit_Join14
+SeMenu_ApplyPartEdit_Skip22:
 	ld	c, (xsp+6)
 	neg	c
 	ld	(xsp+6), c
 	exts	bc
 	muls	xde, xbc
 	neg	de
+SeMenu_ApplyPartEdit_Join14:
 	exts	xde
 	divs	de, 50
 	ld	(xiz), e
 	pop	xiz
 	inc	4, xsp
 	ret
+SeMenu_ApplyPartEdit_Helper9:
 	lda	xsp, (xsp-10)
 	pushw	iz
 	ld	(xsp+6), de
@@ -4444,32 +4590,35 @@ SeMenu_ApplyPartEdit_Data2:
 	nop
 	jr	nc, 7
 	ldw (xsp+8), 59
-	jr	12
+	jr	SeMenu_ApplyPartEdit_Join15
 	.byte 0x9f
 	ld	(63:8), 146:io
 	nop
-	jr	ule, 5
+	jr	ule, SeMenu_ApplyPartEdit_Join15
 	ldw (xsp+8), 146
+SeMenu_ApplyPartEdit_Join15:
 	cp	iz, 59
-	jr	nc, 6
+	jr	nc, SeMenu_ApplyPartEdit_Skip23
 	ldw	iz, 59
-	jrl	215
+	jrl	SeMenu_ApplyPartEdit_Join16
+SeMenu_ApplyPartEdit_Skip23:
 	cp	iz, 146
-	jrl	ule, 208
+	jrl	ule, SeMenu_ApplyPartEdit_Join16
 	ldw	iz, 146
-	jrl	202
+	jrl	SeMenu_ApplyPartEdit_Join16
 	.byte 0x9f
 	ld	(63:8), 59:io
 	nop
-	jr	c, 20
+	jr	c, SeMenu_ApplyPartEdit_Entry2
 	.byte 0x9f
 	ld	(63:8), 146:io
 	nop
-	jr	ugt, 13
+	jr	ugt, SeMenu_ApplyPartEdit_Entry2
 	cp	iz, 59
-	jr	c, 7
+	jr	c, SeMenu_ApplyPartEdit_Entry2
 	cp	iz, 146
-	jrl	ule, 175
+	jrl	ule, SeMenu_ApplyPartEdit_Join16
+SeMenu_ApplyPartEdit_Entry2:
 	.byte 0x9f
 	ld	(63:8), 59:io
 	nop
@@ -4530,7 +4679,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x9f
 	ld	(63:8), 146:io
 	nop
-	jr	ule, 29
+	jr	ule, SeMenu_ApplyPartEdit_Join16
 	ld	wa, (xsp+6)
 	.byte 0x9f
 	ldw	(160:8), 2207:io
@@ -4542,6 +4691,7 @@ SeMenu_ApplyPartEdit_Data2:
 	calr	31
 	add	(xsp+10), hl
 	ldw (xsp+8), 146
+SeMenu_ApplyPartEdit_Join16:
 	pushw	iz
 	.byte 0x9f
 	ld	(4:8), 159:io
@@ -4559,13 +4709,16 @@ SeMenu_ApplyPartEdit_Data2:
 	div	xwa, xde
 	ld	hl, wa
 	ret
+SeMenu_ApplyPartEdit_Helper10:
 	cp	a, 20
-	jr	nc, 4
+	jr	nc, SeMenu_ApplyPartEdit_Skip24
 	ld	a, 20:opc
-	jr	7
+	jr	SeMenu_ApplyPartEdit_Join17
+SeMenu_ApplyPartEdit_Skip24:
 	cp	a, 108
-	jr	ule, 2
+	jr	ule, SeMenu_ApplyPartEdit_Join17
 	ld	a, 108:opc
+SeMenu_ApplyPartEdit_Join17:
 	sub	a, 12
 	ld	l, a
 	extz	hl
@@ -4582,6 +4735,7 @@ SeMenu_ApplyPartEdit_Data2:
 	extz	hl
 	ld	(xbc), hl
 	ret
+SeMenu_ApplyPartEdit_Helper11:
 	lda	xsp, (xsp-28)
 	push	xiz
 	ld	(xsp+28), c
@@ -4594,7 +4748,7 @@ SeMenu_ApplyPartEdit_Data2:
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	ldw	wa, 10
-	calr	57548
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+30)
 	extz	wa
 	lda	xbc, (xsp+24)
@@ -4634,16 +4788,16 @@ SeMenu_ApplyPartEdit_Data2:
 	inc	1, a
 	extz	wa
 	lda	xbc, (xsp+26)
-	calr	57455
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+30)
 	inc	2, a
 	extz	wa
 	lda	xbc, (xsp+22)
-	calr	57442
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+24)
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	65324
+	calr	SeMenu_ApplyPartEdit_Helper10
 	ld	a, (xsp+26)
 	extz	wa
 	lda	xbc, (xsp+16)
@@ -4692,7 +4846,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ccf
 	push	xsp
 	nop
-	jr	nz, 63
+	jr	nz, SeMenu_ApplyPartEdit_Skip25
 	pushw	97
 	pushw	254
 	pushw	97
@@ -4718,6 +4872,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(4:8), 11:io
 	jr	lt, 0
 	jrl	239
+SeMenu_ApplyPartEdit_Skip25:
 	ld	a, (xsp+18)
 	exts	wa
 	lda	xbc, (xsp+20)
@@ -4740,18 +4895,20 @@ SeMenu_ApplyPartEdit_Data2:
 	ldw qiz, 97
 	ld	bc, hl
 	cp	(xsp+8), bc
-	jr	ule, 22
+	jr	ule, SeMenu_ApplyPartEdit_Entry3
 	ldw	iz, 72
 	.byte 0x8f
 	ccf
 	push	xsp
 	nop
-	jr	lt, 3
+	jr	lt, SeMenu_ApplyPartEdit_Skip26
 	ldw	iz, 122
+SeMenu_ApplyPartEdit_Skip26:
 	ld	wa, (xsp+14)
 	sub	wa, hl
 	ld	(xsp+16), wa
 	jr	12
+SeMenu_ApplyPartEdit_Entry3:
 	.byte 0x8f
 	ccf
 	push	xsp
@@ -4779,11 +4936,12 @@ SeMenu_ApplyPartEdit_Data2:
 	ccf
 	push	xsp
 	nop
-	jr	lt, 10
+	jr	lt, SeMenu_ApplyPartEdit_Skip27
 	ld wa, qiz
 	sub	wa, de
 	ld qiz, wa
 	jr	8
+SeMenu_ApplyPartEdit_Skip27:
 	ld wa, qiz
 	add	wa, de
 	ld qiz, wa
@@ -4843,6 +5001,7 @@ SeMenu_ApplyPartEdit_Data2:
 	pop	xiz
 	lda	xsp, (xsp+28)
 	ret
+SeMenu_ApplyPartEdit_Helper12:
 	cp	a, 0:i3
 	jr	ge, 2
 	neg	a
@@ -4854,9 +5013,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+26), a
 	ld	a, (xsp+24)
 	extz	wa
-	calr	56927
+	calr	SeMenu_IsPartEnabled
 	cp	hl, 0:i3
-	jrl	z, 376
+	jrl	z, SeMenu_ApplyPartEdit_Epilogue7
 	ld	a, (xsp+24)
 	extz	wa
 	add	wa, wa
@@ -4867,17 +5026,19 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x8f, 0x1a
 	push	xsp
 	nop
-	jr	nz, 10
+	jr	nz, SeMenu_ApplyPartEdit_Entry4
 	.byte 0xbf, 0x04
 	push	sr
 	ld	l, 0:opc
 	ldw	wa, 247
-	jr	8
+	jr	SeMenu_ApplyPartEdit_Entry5
+SeMenu_ApplyPartEdit_Entry4:
 	.byte 0xbf, 0x04
 	push	sr
 	ldw	wa, 0x3000
 	.byte 0xf1
 	nop
+SeMenu_ApplyPartEdit_Entry5:
 	.byte 0x97, 0x04
 	pushw	wa
 	ld	wa, (xsp+4)
@@ -4889,22 +5050,22 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+18)
-	calr	56892
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+22)
 	inc	1, a
 	extz	wa
 	lda	xbc, (xsp+20)
-	calr	56879
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+22)
 	inc	2, a
 	extz	wa
 	lda	xbc, (xsp+16)
-	calr	56866
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+22)
 	inc	3, a
 	extz	wa
 	lda	xbc, (xsp+14)
-	calr	56853
+	calr	SeMenu_LoadPartParam
 	.byte 0xbf
 	ccf
 	.byte 0xb7, 0xbf
@@ -4916,24 +5077,25 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0xb7, 0x8f, 0x1a
 	push	xsp
 	nop
-	jr	nz, 46
+	jr	nz, SeMenu_ApplyPartEdit_Skip28
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xsp+12)
-	calr	64717
+	calr	SeMenu_ApplyPartEdit_Helper10
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+10)
-	calr	64706
+	calr	SeMenu_ApplyPartEdit_Helper10
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xsp+8)
-	calr	64695
+	calr	SeMenu_ApplyPartEdit_Helper10
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xsp+6)
-	calr	64684
-	jr	120
+	calr	SeMenu_ApplyPartEdit_Helper10
+	jr	SeMenu_ApplyPartEdit_Join18
+SeMenu_ApplyPartEdit_Skip28:
 	ld	a, (xsp+20)
 	extz	wa
 	ld	(xsp+12), wa
@@ -4974,6 +5136,7 @@ SeMenu_ApplyPartEdit_Data2:
 	extz	xwa
 	div	wa, 127
 	ld	(xsp+6), wa
+SeMenu_ApplyPartEdit_Join18:
 	ld	wa, (xsp+4)
 	add	(xsp+12), wa
 	add	(xsp+10), wa
@@ -5015,6 +5178,7 @@ SeMenu_ApplyPartEdit_Data2:
 	swi	4
 	cp	xwa, xiy
 	lda	xsp, (xsp+24)
+SeMenu_ApplyPartEdit_Epilogue7:
 	lda	xsp, (xsp+28)
 	ret
 	dec	8, xsp
@@ -5043,7 +5207,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 0:i3
-	calr	56516
+	calr	SeMenu_StorePartParam
 	pushw	0
 	ld	a, (xsp+8)
 	extz	wa
@@ -5051,7 +5215,7 @@ SeMenu_ApplyPartEdit_Data2:
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	ld	wa, 1:i3
-	calr	55985
+	calr	SeMenu_SetupMenuDisplay
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-16)
@@ -5897,19 +6061,21 @@ SeMenu_ApplySynthParam_Data:
 	extz	bc
 	ld	wa, bc
 	ld	xbc, xde
-	jr	23
+	jr	SeMenu_ApplySynthParam_Data_Join
 	cp	a, 1:i3
-	jr	nz, 10
+	jr	nz, SeMenu_ApplySynthParam_Data_Skip
 	inc	7, c
 	extz	bc
 	ld	wa, bc
 	ld	xbc, xde
-	jr	9
+	jr	SeMenu_ApplySynthParam_Data_Join
+SeMenu_ApplySynthParam_Data_Skip:
 	add	c, 13
 	extz	bc
 	ld	wa, bc
 	ld	xbc, xde
-	calr	54691
+SeMenu_ApplySynthParam_Data_Join:
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	.byte 0xb6
 	ld	xbc, 0x0e62ef5e
@@ -6084,10 +6250,11 @@ SeMenu_ComputeParamTableAddr_Data:
 	add	xwa, 0x0205f3
 	ld	xde, xwa
 	lda	xhl, (xwa+10)
+SeMenu_ComputeParamTableAddr_Loop:
 	ldb_spi a, 232
 	lda_dpi xbc, 228
 	cp xde, xhl
-	jr c, -10
+	jr c, SeMenu_ComputeParamTableAddr_Loop
 	ret
 
 SeMenu_HandleMenuChange:
@@ -6168,7 +6335,7 @@ SeMenu_PatchBank_Data:
 	ld	(xsp+4), c
 	ld	(xsp+6), a
 	lda	xwa, (xsp)
-	calr	51762
+	calr	SeMenu_LoadMasterPtr
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xix, (0xf9b6:16)
@@ -6222,6 +6389,7 @@ SeMenu_PatchBank_Data:
 	and	(xhl), a
 	inc	8, xsp
 	ret
+SeMenu_ApplyPartEdit_Helper13:
 	lda	xsp, (xsp-12)
 	ld	(xsp+6), e
 	ld	(xsp+8), c
@@ -6263,6 +6431,7 @@ SeMenu_PatchBank_Data:
 	ld	a, (xsp+4)
 	cp	a, (xsp+16)
 	jr	nc, 116
+SeMenu_PatchBank_Data_Entry:
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
@@ -6294,26 +6463,29 @@ SeMenu_PatchBank_Data:
 	ld	(xsp+4), a
 	ld	a, (xsp+4)
 	cp	a, (xsp+16)
-	jr	ule, 6
+	jr	ule, SeMenu_PatchBank_Data_Skip
 	ld	a, (xsp+16)
 	ld	(xsp+4), a
+SeMenu_PatchBank_Data_Skip:
 	ld	a, (xsp)
 	or	(xsp+4), a
 	ld	a, (xsp+8)
 	extz	wa
 	ld	c, (xsp+4)
 	extz	bc
-	calr	53899
+	calr	SeMenu_StorePartParam
 	ld	l, 1:opc
-	jr	16
+	jr	SeMenu_PatchBank_Data_Epilogue
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
-	jr	z, 8
+	jr	z, SeMenu_PatchBank_Data_Skip2
 	ld	a, (xsp+4)
 	.byte 0x8f, 0x06, 0xf1
-	jr	ugt, -116
+	jr	ugt, SeMenu_PatchBank_Data_Entry
+SeMenu_PatchBank_Data_Skip2:
 	ld	l, 0:opc
+SeMenu_PatchBank_Data_Epilogue:
 	lda	xsp, (xsp+12)
 	retd	2
 
@@ -6429,21 +6601,22 @@ SeMenu_StoreEffectCoeff_Data:
 	rcf
 	ldiw
 	ld	(xsp), 0
+SeMenu_StoreEffectCoeff_Data_Loop:
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+34)
 	lda_rr xbc, xbc, wa
-	calr 65448
+	calr SeMenu_StoreEffectParam_Data
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+26)
 	lda_rr xbc, xbc, wa
-	calr 65461
+	calr SeMenu_StoreEffectCoeff_Data
 	incm8	1, (xsp)
 	.byte 0x87
 	push	xsp
 	push	sr
-	jr	ule, -37
+	jr	ule, SeMenu_StoreEffectCoeff_Data_Loop
 	lda	xde, (xsp+30)
 	lda	xbc, (xsp+34)
 	ld	a, (xbc)
@@ -6466,6 +6639,7 @@ SeMenu_StoreEffectCoeff_Data:
 	ld	xwa, (xsp+6)
 	ld	(xwa), l
 	ld	(xsp), 0
+SeMenu_StoreEffectCoeff_Data_Loop2:
 	ld	l, (xsp)
 	extz	hl
 	lda_rr xiy, xde, hl
@@ -6484,19 +6658,21 @@ SeMenu_StoreEffectCoeff_Data:
 	ld_rrb l, xwa, hl
 	stb_erp a, 238
 	cp	a, l
-	jr	ule, 12
+	jr	ule, SeMenu_StoreEffectCoeff_Data_Join
 	.byte 0x84
 	push	xsp
 	nop
-	jr	ge, 5
+	jr	ge, SeMenu_StoreEffectCoeff_Data_Skip
 	ld	(xiy), 0
-	jr	2
+	jr	SeMenu_StoreEffectCoeff_Data_Join
+SeMenu_StoreEffectCoeff_Data_Skip:
 	ld	(xiy), l
+SeMenu_StoreEffectCoeff_Data_Join:
 	incm8	1, (xsp)
 	.byte 0x87
 	push	xsp
 	push	sr
-	jr	ule, -74
+	jr	ule, SeMenu_StoreEffectCoeff_Data_Loop2
 	ld	a, (xbc)
 	and	a, 128
 	or	(xde), a
@@ -6515,6 +6691,7 @@ SeMenu_StoreEffectCoeff_Data:
 	ld	bc, 1:i3
 	calr	54052
 	ld	(xsp), 0
+SeMenu_StoreEffectCoeff_Data_Loop3:
 	ld	e, (xsp)
 	extz	de
 	lda	xbc, (xsp+18)
@@ -6535,7 +6712,7 @@ SeMenu_StoreEffectCoeff_Data:
 	.byte 0x87
 	push	xsp
 	pop	sr
-	jr	c, -41
+	jr	c, SeMenu_StoreEffectCoeff_Data_Loop3
 	lda	xsp, (xsp+40)
 	ret
 
@@ -6582,7 +6759,7 @@ SeMenu_RefreshPartDisplay_Data:
 	push	xhl
 	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
-	jr	z, 25
+	jr	z, SeMenu_RefreshPartDisplay_Epilogue
 	ld	a, (xsp)
 	extz	wa
 	ld	c, (xsp+2)
@@ -6593,6 +6770,7 @@ SeMenu_RefreshPartDisplay_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
+SeMenu_RefreshPartDisplay_Epilogue:
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -6601,7 +6779,7 @@ SeMenu_RefreshPartDisplay_Data:
 	push	xhl
 	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
-	jr	z, 25
+	jr	z, SeMenu_RefreshPartDisplay_Epilogue2
 	ld	a, (xsp)
 	extz	wa
 	ld	c, (xsp+2)
@@ -6612,6 +6790,7 @@ SeMenu_RefreshPartDisplay_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
+SeMenu_RefreshPartDisplay_Epilogue2:
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -6620,7 +6799,7 @@ SeMenu_RefreshPartDisplay_Data:
 	push	xhl
 	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
-	jr	z, 25
+	jr	z, SeMenu_RefreshPartDisplay_Epilogue3
 	ld	a, (xsp)
 	extz	wa
 	ld	c, (xsp+2)
@@ -6631,6 +6810,7 @@ SeMenu_RefreshPartDisplay_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
+SeMenu_RefreshPartDisplay_Epilogue3:
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -6639,7 +6819,7 @@ SeMenu_RefreshPartDisplay_Data:
 	push	xhl
 	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
-	jr	z, 25
+	jr	z, SeMenu_RefreshPartDisplay_Epilogue4
 	ld	a, (xsp)
 	extz	wa
 	ld	c, (xsp+2)
@@ -6650,6 +6830,7 @@ SeMenu_RefreshPartDisplay_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
+SeMenu_RefreshPartDisplay_Epilogue4:
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-16)
@@ -6800,7 +6981,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda	xwa, (xsp+2)
 	call	SeMenu_BitShiftMask_End_0x14
 	cp	l, 1:i3
-	jr	nz, 54
+	jr	nz, SeMenu_RefreshPartDisplay_Skip
 	ld	a, (xsp+5)
 	extz	wa
 	lda	xbc, (GUI_DisplayStructData_0x1362:24)
@@ -6818,14 +6999,15 @@ SeMenu_RefreshPartDisplay_Data:
 	pushw	39
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
+SeMenu_RefreshPartDisplay_Skip:
 	ld	wa, 6:i3
-	jrl	128
+	jrl	SeMenu_RefreshPartDisplay_Join3
 	lda	xbc, (xsp+2)
 	.byte 0x8f
 	rcf
 	push	xsp
 	push	sr
-	jr	nz, 34
+	jr	nz, SeMenu_RefreshPartDisplay_Skip2
 	ldi_erpb 251, 15
 	ldi_erpb 250, 41
 	ldw	wa, 15
@@ -6835,7 +7017,8 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	(xwa+7), 0
 	ld	(xwa+8), 10
 	ld	xbc, xwa
-	jr	43
+	jr	SeMenu_RefreshPartDisplay_Join2
+SeMenu_RefreshPartDisplay_Skip2:
 	ldi_erpb 251, 16
 	ldi_erpb 250, 42
 	ldw	wa, 16
@@ -6847,11 +7030,14 @@ SeMenu_RefreshPartDisplay_Data:
 	rcf
 	push	xsp
 	pop	sr
-	jr	nz, 5
+	jr	nz, SeMenu_RefreshPartDisplay_Skip3
 	ld	(xwa), 4
-	jr	3
+	jr	SeMenu_RefreshPartDisplay_Join
+SeMenu_RefreshPartDisplay_Skip3:
 	ld	(xwa), 0
+SeMenu_RefreshPartDisplay_Join:
 	ld	(xbc+8), 10
+SeMenu_RefreshPartDisplay_Join2:
 	ld	(xbc+9), 6
 	ld	a, (xsp+18)
 	extz	wa
@@ -6868,6 +7054,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	de, 0:i3
 	call	SeMenu_TransferPartValues_EndData_0x169
 	ld	wa, 6:i3
+SeMenu_RefreshPartDisplay_Join3:
 	call	SeMenu_SetupPartDisplay_End_0x1F6
 	pop qiz
 	lda	xsp, (xsp+18)
@@ -6887,10 +7074,11 @@ SeMenu_RefreshPartDisplay_Data:
 	call	SeMenu_ApplyPartEdit_Data2_0x17C1
 	ret
 	cp	a, 0:i3
-	jr	nz, 9
+	jr	nz, SeMenu_RefreshPartDisplay_Skip4
 	ldw	wa, 42
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
+SeMenu_RefreshPartDisplay_Skip4:
 	ldw	wa, 39
 	ld	bc, 2:i3
 	ld	de, 1:i3
@@ -6988,35 +7176,40 @@ SeMenu_RefreshPartDisplay_Data:
 	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
 	cp	a, 0:i3
-	jr	nz, 7
+	jr	nz, SeMenu_RefreshPartDisplay_Skip5
 	ldw	wa, 39
 	ld	bc, 0:i3
-	jr	15
+	jr	SeMenu_RefreshPartDisplay_Join4
+SeMenu_RefreshPartDisplay_Skip5:
 	ld	wa, 1:i3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
 	ld	bc, 1:i3
+SeMenu_RefreshPartDisplay_Join4:
 	call	SeMenu_SendEvent
 	ret
 	cp	a, 0:i3
-	jr	nz, 7
+	jr	nz, SeMenu_RefreshPartDisplay_Skip6
 	ldw	wa, 42
 	ld	bc, 0:i3
-	jr	15
+	jr	SeMenu_RefreshPartDisplay_Join5
+SeMenu_RefreshPartDisplay_Skip6:
 	ld	wa, 2:i3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
 	ld	bc, 1:i3
+SeMenu_RefreshPartDisplay_Join5:
 	call	SeMenu_SendEvent
 	ret
 	cp	a, 0:i3
-	jr	nz, 6
+	jr	nz, SeMenu_RefreshPartDisplay_Skip7
 	ld	wa, 0:i3
 	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+SeMenu_RefreshPartDisplay_Skip7:
 	ld	wa, 3:i3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cp	l, 0:i3
@@ -7026,9 +7219,10 @@ SeMenu_RefreshPartDisplay_Data:
 	call	SeMenu_SendEvent
 	ret
 	cp	a, 0:i3
-	jr	nz, 6
+	jr	nz, SeMenu_RefreshPartDisplay_Skip8
 	ld	wa, 1:i3
 	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+SeMenu_RefreshPartDisplay_Skip8:
 	ld	wa, 4:i3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cp	l, 0:i3
@@ -7074,29 +7268,33 @@ SeMenu_RefreshPartDisplay_Data:
 	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
 	cp	a, 0:i3
-	jr	nz, 7
+	jr	nz, SeMenu_RefreshPartDisplay_Skip9
 	ldw	wa, 39
 	ld	bc, 0:i3
-	jr	15
+	jr	SeMenu_RefreshPartDisplay_Join6
+SeMenu_RefreshPartDisplay_Skip9:
 	ld	wa, 1:i3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
 	ld	bc, 1:i3
+SeMenu_RefreshPartDisplay_Join6:
 	call	SeMenu_SendEvent
 	ret
 	cp	a, 0:i3
-	jr	nz, 7
+	jr	nz, SeMenu_RefreshPartDisplay_Skip10
 	ldw	wa, 42
 	ld	bc, 0:i3
-	jr	15
+	jr	SeMenu_RefreshPartDisplay_Join7
+SeMenu_RefreshPartDisplay_Skip10:
 	ld	wa, 2:i3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
 	ld	bc, 1:i3
+SeMenu_RefreshPartDisplay_Join7:
 	call	SeMenu_SendEvent
 	ret
 	cp	a, 0:i3
@@ -7162,10 +7360,11 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
 	cp	a, 0:i3
-	jr	nz, 9
+	jr	nz, SeMenu_RefreshPartDisplay_Skip11
 	ldw	wa, 39
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
+SeMenu_RefreshPartDisplay_Skip11:
 	ld	wa, 1:i3
 	ld	bc, 1:i3
 	jp	SeMenu_TransferPartValues_EndData_0x20E

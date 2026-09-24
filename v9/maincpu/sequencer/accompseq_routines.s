@@ -122,9 +122,10 @@ AccompSeq_IncrementTickCounter:
 	ld	a, (1130:16)
 	inc	1, a
 	cp	a, 96
-	jr	nz, 4
+	jr	nz, AccompSeq_CheckChannelActive_Skip
 	xor	a, a
 	inc	1, hl
+AccompSeq_CheckChannelActive_Skip:
 	ld	(1128:16), hl
 	ld	(1130:16), a
 	inc	1, (1132:16)
@@ -586,14 +587,15 @@ AccompSeq_InlineCodeBlock:
 	inc	1, xiy
 	ld	a, (xiy)
 	cp	a, 135
-	jr	nz, 16
+	jr	nz, AccompSeq_ResetCounters_Return
 	xor	xhl, xhl
 	ld	hl, (xhl+3)
 	ld	(0x7e42:16), hl
 	push	xhl
-	calr	64814
+	calr	AccompSeq_VRAMHelperData
 	pop	xhl
 	ld	iy, 6:i3
+AccompSeq_ResetCounters_Return:
 	ret
 
 AccompSeq_ProcessNoteOn6:
@@ -958,12 +960,14 @@ AccompSeq_LargeCodeBlock1:
 	ld	(xhl+3), a
 	ld	a, (0x7e58:16)
 	ld	(xhl+4), a
-	calr	1
+	calr	AccompSeq_PortaFadeOut_Helper
 	ret
+AccompSeq_PortaFadeOut_Helper:
 	bit	7, e
-	jr	z, 6
+	jr	z, AccompSeq_PortaFadeOut_Return
 	or	d, 16
 	and	e, 127
+AccompSeq_PortaFadeOut_Return:
 	ret
 	ld	a, 159:opc
 	ld	w, 127:opc
@@ -1004,7 +1008,7 @@ AccompSeq_LargeCodeBlock1:
 	ld	w, (1076:16)
 	ld	(0x7e62:16), w
 	cp	a, w
-	jr	z, 66
+	jr	z, AccompSeq_PortaFadeOut_Return2
 	.byte 0xf1
 	pop	xsp
 	jrl	nz, 26312
@@ -1020,8 +1024,9 @@ AccompSeq_LargeCodeBlock1:
 	dec	6, (0xd8c9:16)
 	.byte 0x06
 	call	AccompSeq_InitPartFull
-	jr	4
+	jr	AccompSeq_PortaFadeOut_Join
 	call	AccompSeq_ReinitPart
+AccompSeq_PortaFadeOut_Join:
 	ei	6
 	ld	c, (1045:16)
 	ld	(1130:16), c
@@ -1030,6 +1035,7 @@ AccompSeq_LargeCodeBlock1:
 	ld	a, (1046:16)
 	ld	(1128:16), wa
 	ei	0
+AccompSeq_PortaFadeOut_Return2:
 	ret
 
 AccompSeq_UpdatePosition:
@@ -1072,63 +1078,70 @@ AccompSeq_LargeCodeBlock2:
 	jp	AccompSeq_ClearPendingFlag
 	ld	a, (0xc07d:16)
 	cp	a, 9
-	jrl	nz, 160
+	jrl	nz, AccompSeq_ProcessAfterNote_Return
 	ld	a, (0xc07f:16)
 	bit	7, a
-	jr	z, 22
-	calr	1018
+	jr	z, AccompSeq_ProcessAfterNote_Skip2
+	calr	AccompSeq_ProcessAfterNote_Helper
 	ld	l, 127:opc
 	ld	h, 3:opc
 	ld	a, (0xc07e:16)
 	bit	7, a
-	jr	z, 3
-	calr	899
-	jrl	129
+	jr	z, AccompSeq_ProcessAfterNote_Skip
+	calr	AccompSeq_OutputEvent
+AccompSeq_ProcessAfterNote_Skip:
+	jrl	AccompSeq_ProcessAfterNote_Return
+AccompSeq_ProcessAfterNote_Skip2:
 	and	a, 63
 	cp	a, 0:i3
-	jr	z, 122
+	jr	z, AccompSeq_ProcessAfterNote_Return
 	ld	a, (0xc07e:16)
 	and	a, (0xc07f:16)
 	and	a, 63
 	cp	a, 0:i3
-	jr	z, 107
+	jr	z, AccompSeq_ProcessAfterNote_Return
 	xor	w, w
 	ld	hl, wa
 	ld	xix, AccompSeq_MidiFilterCodeBlock_0x7A
 	ld_rrb h, xix, hl
 	ld l, (64786:16)
 	cp l, 17
-	jr	z, 84
+	jr	z, AccompSeq_ProcessAfterNote_Return
 	cp	l, 18
-	jr	z, 79
+	jr	z, AccompSeq_ProcessAfterNote_Return
 	cp	l, 15
-	jr	z, 5
+	jr	z, AccompSeq_ProcessAfterNote_Skip3
 	cp	l, 16
-	jr	nz, 36
+	jr	nz, AccompSeq_ProcessAfterNote_Skip5
+AccompSeq_ProcessAfterNote_Skip3:
 	ld	xix, 0x1e8a00
 	cp	l, 16
-	jr	nz, 6
+	jr	nz, AccompSeq_ProcessAfterNote_Skip4
 	add	xix, 16
+AccompSeq_ProcessAfterNote_Skip4:
 	sll	h, 1
 	ld_rr8b l, xix, h
 	inc 1, h
 	ld_rr8b h, xix, h
 	cp l, 14
-	jr	ugt, 33
+	jr	ugt, AccompSeq_ProcessAfterNote_Return
+AccompSeq_ProcessAfterNote_Skip5:
 	call	Voice_NoteChannelTable1_0x422
 	cp	h, 0:i3
-	jr	z, 25
+	jr	z, AccompSeq_ProcessAfterNote_Return
 	.byte 0xc1
 	pushw	0x3f7f
 	nop
-	jr	nz, 18
+	jr	nz, AccompSeq_ProcessAfterNote_Return
 	.byte 0xf1
 	jrl	gt, -14210
-	jr	z, 5
-	calr	684
-	jr	7
-	calr	771
+	jr	z, AccompSeq_ProcessAfterNote_Skip6
+	calr	AccompSeq_HandleSpecialMode
+	jr	AccompSeq_ProcessAfterNote_Return
+AccompSeq_ProcessAfterNote_Skip6:
+	calr	AccompSeq_OutputEvent
 	call	AccompSeq_ProcessChordChange
+AccompSeq_ProcessAfterNote_Return:
 	ret
 
 AccompSeq_PostNoteProcess:
@@ -1411,35 +1424,40 @@ AccompSeq_ReinitPart:
 AccompSeq_HandleSpecialMode:
 	ld	a, (0x7e24:16)
 	and	a, 3
-	jr	z, 16
+	jr	z, AccompSeq_HandleSpecialMode_Skip
 	pushw	hl
 	ld	a, (0x7e24:16)
 	and	a, 252
 	ld	(0x7e24:16), a
-	calr	417
+	calr	AccompSeq_SendAllOff
 	popw	hl
+AccompSeq_HandleSpecialMode_Skip:
 	ld	a, (0xfd12:16)
 	cp	a, 13
-	jr	z, 5
+	jr	z, AccompSeq_HandleSpecialMode_Skip2
 	cp	a, 14
-	jr	nz, 37
+	jr	nz, AccompSeq_HandleSpecialMode_Skip4
+AccompSeq_HandleSpecialMode_Skip2:
 	ld	(0x7f0b:16), 1
-	calr	64858
+	calr	AccompSeq_ResetMidiState
 	and	l, 15
 	ld	(0x7f14:16), l
 	ld	w, (0xc07e:16)
 	ld	a, 1:opc
 	bit	0, w
-	jr	nz, 9
+	jr	nz, AccompSeq_HandleSpecialMode_Skip3
 	ld	a, 2:opc
 	bit	1, w
-	jr	nz, 2
+	jr	nz, AccompSeq_HandleSpecialMode_Skip3
 	ld	a, 4:opc
-	jr	15
+AccompSeq_HandleSpecialMode_Skip3:
+	jr	AccompSeq_HandleSpecialMode_Return
+AccompSeq_HandleSpecialMode_Skip4:
 	ld	(0x7f42:16), 57
 	call	DrumVoice_NotifyEE
 	ld	a, 8:opc
 	call	MIDI_SendSysExCmd
+AccompSeq_HandleSpecialMode_Return:
 	ret
 
 AccompSeq_OutputEvent:
@@ -1501,6 +1519,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	jr	ule, 3
 	ld iy, (xhl+256)
 	ret
+AccompSeq_ProcessAfterNote_Helper:
 	ld	a, (0xc07e:16)
 	bit	7, a
 	jr	nz, 7
@@ -1671,38 +1690,43 @@ AccompSeq_MidiFilterCodeBlock:
 	.byte 0xc1
 	pushw	0x3f7f
 	nop
-	jr	z, 4
+	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip
 	jp	AccompSeq_MidiFilterCodeBlock_0x79
+AccompSeq_MidiFilterCodeBlock_Code_Skip:
 	ld	e, 12:opc
 	ld	a, (0xfd12:16)
 	bit	7, w
-	jr	z, 10
+	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip3
 	inc	1, a
 	cp	a, e
-	jr	ule, 2
+	jr	ule, AccompSeq_MidiFilterCodeBlock_Code_Skip2
 	ld	a, e
-	jr	9
+AccompSeq_MidiFilterCodeBlock_Code_Skip2:
+	jr	AccompSeq_MidiFilterCodeBlock_Code_Join
+AccompSeq_MidiFilterCodeBlock_Code_Skip3:
 	dec	1, a
 	cp	a, 255
-	jr	nz, 2
+	jr	nz, AccompSeq_MidiFilterCodeBlock_Code_Join
 	ld	a, 0:opc
+AccompSeq_MidiFilterCodeBlock_Code_Join:
 	ld	(0xfd12:16), a
 	ld	(0x7e78:16), 0
 	.byte 0xc1, 0xe0, 0xe3
 	push	xiz
 	rcf
-	jr	57
+	jr	AccompSeq_MidiFilterCodeBlock_Code_Return
 	.byte 0xc1
 	jrl	16254
 	nop
-	jr	nz, 16
+	jr	nz, AccompSeq_MidiFilterCodeBlock_Code_Entry
 	ld	(0x7e79:16), a
 	ld	(0x7e78:16), 1
 	.byte 0xc1
 	or	hl, iz
 	push	xiz
 	rcf
-	jr	34
+	jr	AccompSeq_MidiFilterCodeBlock_Code_Return
+AccompSeq_MidiFilterCodeBlock_Code_Entry:
 	.byte 0xc1
 	.ascii "y~! "
 	ldw	(200:8), 0xc981:io
@@ -1718,6 +1742,7 @@ AccompSeq_MidiFilterCodeBlock:
 	or	hl, iz
 	push	xiz
 	rcf
+AccompSeq_MidiFilterCodeBlock_Code_Return:
 	ret
 	nop
 	nop

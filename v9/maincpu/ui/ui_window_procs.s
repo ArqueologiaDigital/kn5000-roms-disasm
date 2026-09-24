@@ -267,7 +267,7 @@ WndEvt_DispatchByEventCode:
 WndEvt_EventCodeDispatch:
 	ld	wa, (0x0274d8:24)
 	cp	wa, 0:i3
-	jrl	z, 2252
+	jrl	z, UIDialog_ReturnZeroJmp
 	dec	1, wa
 	ld	(0x0274d8:24), wa
 	ld	de, wa
@@ -284,7 +284,7 @@ WndEvt_EventCodeDispatch:
 	ld	bc, wa
 	inc	1, bc
 	cp bc, (160982:24)
-	jrl	nc, 2200
+	jrl	nc, UIDialog_ReturnZeroJmp
 	inc	1, wa
 	ld	(0x0274d8:24), wa
 	ld	de, wa
@@ -295,10 +295,10 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
-	jrl	770
+	jrl	WndEvt_EventCodeDispatch_Join3
 	ld	bc, (0x0274de:24)
 	cp	bc, 0:i3
-	jrl	z, 2155
+	jrl	z, UIDialog_ReturnZeroJmp
 	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
@@ -333,22 +333,23 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
-	jrl	646
+	jrl	WndEvt_EventCodeDispatch_Join3
 	lda	xde, (Data_SoundEditorCharsLayout:24)
 	lda	xwa, (xsp+12)
 	ld	(xsp+8), xwa
 	ld	xwa, (xsp+46)
 	cp	xwa, 0x01c00018
-	jrl	z, 147
+	jrl	z, WndEvt_EventCodeDispatch_Skip2
 	cp	xwa, 0x01c0001a
-	jrl	z, 138
+	jrl	z, WndEvt_EventCodeDispatch_Skip2
 	cp	xwa, 0x01c00017
-	jr	z, 9
+	jr	z, WndEvt_EventCodeDispatch_Skip
 	cp	xwa, 0x01c00019
-	jrl	nz, 1992
+	jrl	nz, UIDialog_ReturnZeroJmp
+WndEvt_EventCodeDispatch_Skip:
 	ld	bc, (0x0274de:24)
 	cp	bc, 13
-	jrl	c, 1980
+	jrl	c, UIDialog_ReturnZeroJmp
 	sub	bc, 13
 	ld	(0x0274de:24), bc
 	ld	wa, (0x0274da:24)
@@ -381,7 +382,8 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
-	jrl	476
+	jrl	WndEvt_EventCodeDispatch_Join3
+WndEvt_EventCodeDispatch_Skip2:
 	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
@@ -407,14 +409,16 @@ WndEvt_EventCodeDispatch:
 	ld	hl, wa
 	add	hl, 12
 	.byte 0x91, 0xf3
-	jr	ugt, 20
+	jr	ugt, WndEvt_EventCodeDispatch_Skip4
 	ld	c, (xsp+12)
 	cp	c, 90
-	jr	z, 5
+	jr	z, WndEvt_EventCodeDispatch_Skip3
 	cp	c, 122
-	jr	nz, 7
+	jr	nz, WndEvt_EventCodeDispatch_Skip4
+WndEvt_EventCodeDispatch_Skip3:
 	dec	1, wa
 	ld	(0x0274de:24), wa
+WndEvt_EventCodeDispatch_Skip4:
 	ld	bc, (0x0274e2:24)
 	mul	bc, 3
 	ld	wa, (0x0274da:24)
@@ -426,7 +430,7 @@ WndEvt_EventCodeDispatch:
 	ld	bc, wa
 	add	bc, 13
 	.byte 0x92, 0xf1
-	jrl	ugt, 1732
+	jrl	ugt, UIDialog_ReturnZeroJmp
 	ld	bc, wa
 	add	bc, 13
 	ld	(0x0274de:24), bc
@@ -449,11 +453,11 @@ WndEvt_EventCodeDispatch:
 	ld	c, (xde)
 	lda	xwa, (0x0274b0:24)
 	cp	c, 83
-	jr	nz, 28
+	jr	nz, WndEvt_EventCodeDispatch_Skip5
 	.byte 0x8a, 0x01
 	push	xsp
 	.byte 0x50
-	jr	nz, 22
+	jr	nz, WndEvt_EventCodeDispatch_Skip5
 	ld	bc, (0x0274d8:24)
 	extz	xbc
 	ld	xde, xwa
@@ -461,11 +465,13 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
 	ld	(xde), a
-	jr	11
+	jr	WndEvt_EventCodeDispatch_Join
+WndEvt_EventCodeDispatch_Skip5:
 	ld	de, (0x0274d8:24)
 	extz	xde
 	add	xwa, xde
 	ld	(xwa), c
+WndEvt_EventCodeDispatch_Join:
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x0274b0
@@ -478,7 +484,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
-	jrl	181
+	jrl	WndEvt_EventCodeDispatch_Join3
 	ld	bc, (0x0274da:24)
 	ld	wa, bc
 	extz	xwa
@@ -498,7 +504,7 @@ WndEvt_EventCodeDispatch:
 	ld	de, wa
 	inc	1, de
 	.byte 0x91, 0xf2
-	jrl	ugt, 1516
+	jrl	ugt, UIDialog_ReturnZeroJmp
 	inc	1, wa
 	ld	(0x0274de:24), wa
 	extz	xwa
@@ -512,20 +518,22 @@ WndEvt_EventCodeDispatch:
 	ld	wa, (0x0274d8:24)
 	extz	xwa
 	cp	c, 83
-	jr	nz, 24
+	jr	nz, WndEvt_EventCodeDispatch_Skip6
 	.byte 0x8a, 0x01
 	push	xsp
 	.byte 0x50
-	jr	nz, 18
+	jr	nz, WndEvt_EventCodeDispatch_Skip6
 	ld	xbc, 0x0274b0
 	add	xbc, xwa
 	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
 	ld	(xbc), a
-	jr	9
+	jr	WndEvt_EventCodeDispatch_Join2
+WndEvt_EventCodeDispatch_Skip6:
 	ld	xde, 0x0274b0
 	add	xde, xwa
 	ld	(xde), c
+WndEvt_EventCodeDispatch_Join2:
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x0274b0
@@ -538,17 +546,19 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
-	calr	59928
-	jrl	1389
+WndEvt_EventCodeDispatch_Join3:
+	calr	SetAutoInc
+	jrl	UIDialog_ReturnZeroJmp
 	ld	iz, (0x0274d6:24)
 	dec	1, iz
 	cp iz, (160984:24)
-	jr	ule, 47
+	jr	ule, WndEvt_EventCodeDispatch_Skip7
 	lda	xde, (0x0274b0:24)
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, 0xffffffff
 	add	xbc, xwa
+WndEvt_EventCodeDispatch_Loop:
 	ld	xhl, xbc
 	ld	xwa, 1:i3
 	add	xhl, xwa
@@ -562,7 +572,8 @@ WndEvt_EventCodeDispatch:
 	dec	1, iz
 	dec	1, xbc
 	cp iz, (160984:24)
-	jr	ugt, -31
+	jr	ugt, WndEvt_EventCodeDispatch_Loop
+WndEvt_EventCodeDispatch_Skip7:
 	ld	wa, (0x0274d8:24)
 	extz	xwa
 	lda	xde, (0x0274b0:24)
@@ -578,15 +589,16 @@ WndEvt_EventCodeDispatch:
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
-	jrl	1267
+	jrl	WndScroll_SendAndReturn
 	ld	iz, (0x0274d8:24)
 	cp iz, (160982:24)
-	jr	nc, 47
+	jr	nc, WndEvt_EventCodeDispatch_Skip8
 	lda	xde, (0x0274b0:24)
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, 1:i3
 	add	xbc, xwa
+WndEvt_EventCodeDispatch_Loop2:
 	ld	xhl, xbc
 	ld	xwa, 0xffffffff
 	add	xhl, xwa
@@ -600,7 +612,8 @@ WndEvt_EventCodeDispatch:
 	inc	1, iz
 	inc	1, xbc
 	cp iz, (160982:24)
-	jr	c, -34
+	jr	c, WndEvt_EventCodeDispatch_Loop2
+WndEvt_EventCodeDispatch_Skip8:
 	ld	wa, (0x0274d6:24)
 	dec	1, wa
 	extz	xwa
@@ -617,12 +630,12 @@ WndEvt_EventCodeDispatch:
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
-	jrl	1149
+	jrl	WndScroll_SendAndReturn
 	ld qiz, 0
 	ld iz, 0:i3
 	ld	de, (0x0274d6:24)
 	cp	de, 0:i3
-	jr	ule, 28
+	jr	ule, WndEvt_EventCodeDispatch_Skip9
 	lda	xhl, (0x0274b0:24)
 	ld	a, (xbc)
 	ld	bc, iz
@@ -635,6 +648,7 @@ WndEvt_EventCodeDispatch:
 	inc 1, iz
 	cp iz, de
 	jr	c, -21
+WndEvt_EventCodeDispatch_Skip9:
 	ld wa, qiz
 	cp	wa, de
 	jrl	z, 1103
@@ -648,6 +662,7 @@ WndEvt_EventCodeDispatch:
 	lda	xbc, (0x0274b0:24)
 	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
+WndEvt_EventCodeDispatch_Loop3:
 	ld	hl, de
 	sub	hl, iz
 	dec	1, hl
@@ -655,11 +670,12 @@ WndEvt_EventCodeDispatch:
 	ld	xix, xbc
 	add	xix, xhl
 	.byte 0x84, 0xf1
-	jr	nz, 9
+	jr	nz, WndEvt_EventCodeDispatch_Skip10
 	incw	1, (xsp+4)
 	inc	1, iz
 	cp	iz, de
-	jr	c, -25
+	jr	c, WndEvt_EventCodeDispatch_Loop3
+WndEvt_EventCodeDispatch_Skip10:
 	ld wa, qiz
 	ld	(xsp+6), wa
 	ld	wa, (xsp+4)
@@ -730,6 +746,7 @@ WndEvt_EventCodeDispatch:
 	ld	xhl, (0x0274e4:24)
 	ld	bc, iz
 	extz	xbc
+WndEvt_EventCodeDispatch_Loop4:
 	ld	xwa, xbc
 	ld	xix, xde
 	add	xix, xwa
@@ -738,7 +755,7 @@ WndEvt_EventCodeDispatch:
 	inc	1, iz
 	inc	1, xbc
 	cp iz, (160982:24)
-	jr	c, -21
+	jr	c, WndEvt_EventCodeDispatch_Loop4
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x0274b0
@@ -757,6 +774,7 @@ WndEvt_EventCodeDispatch:
 	lda	xde, (0x0274b0:24)
 	ld	xhl, xbc
 	ld	xbc, 0:i3
+WndEvt_EventCodeDispatch_Loop5:
 	ld	xwa, xbc
 	ld	xix, xde
 	add	xix, xwa
@@ -765,7 +783,7 @@ WndEvt_EventCodeDispatch:
 	inc	1, iz
 	inc	1, xbc
 	cp iz, (160982:24)
-	jr	c, -21
+	jr	c, WndEvt_EventCodeDispatch_Loop5
 	ld	xwa, 22
 	ld	xbc, 0x01e00080
 	ld	xde, 0:i3
@@ -777,7 +795,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
 	ld	xde, 0:i3
-	jrl	731
+	jrl	WndScroll_SendAndReturn
 
 WndScroll_CopyStringAndSend:
 	ld xwa, (xsp + 42)
@@ -1923,18 +1941,21 @@ EditSw_ByteData:
 	ld	(xsp+2), xwa
 	lda	xbc, (xsp+18)
 	ld	wa, (xwa+32)
-	calr	57283
+	calr	GetEditSwPoint
 	lda	xwa, (xsp+18)
 	lda	xbc, (xsp+12)
 	cpw	(xwa+2), 239
-	jr	z, 20
+	jr	z, DrawDesignFrame_Skip2
 	cpw	(xwa), 0
-	jr	nz, 7
+	jr	nz, DrawDesignFrame_Skip
 	ld	xwa, Data_SoundEditorCharsLayout_0x294
-	jr	12
+	jr	DrawDesignFrame_Join
+DrawDesignFrame_Skip:
 	ld	xwa, Data_SoundEditorCharsLayout_0x298
-	jr	5
+	jr	DrawDesignFrame_Join
+DrawDesignFrame_Skip2:
 	ld	xwa, Data_SoundEditorCharsLayout_0x29C
+DrawDesignFrame_Join:
 	push	xwa
 	push	xbc
 	call	Strcpy
@@ -1948,7 +1969,7 @@ EditSw_ByteData:
 	call	Strlen
 	lda	xsp, (xsp+16)
 	cp	hl, iz
-	jr	ule, 23
+	jr	ule, DrawDesignFrame_Skip3
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Strlen
@@ -1958,6 +1979,7 @@ EditSw_ByteData:
 	inc	6, xsp
 	ld	xwa, (xsp+8)
 	ld	(xwa+22), xhl
+DrawDesignFrame_Skip3:
 	lda	xwa, (xsp+12)
 	push	xwa
 	ld	xwa, (xsp+12)
@@ -3959,18 +3981,19 @@ DrawDesignBox_ByteData:
 	ld	(xsp+4), de
 	ld	(xsp+6), xbc
 	ld	xiz, xwa
-	calr	54020
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	z, 22
+	jr	z, ClampColorToRange_Skip
 	cpw	(0x03044e:24), 0
-	jr	z, 58
+	jr	z, ClampColorToRange_Epilogue
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
 	ld	de, (xsp+4)
-	calr	75
-	jr	45
+	calr	ClampColorToRange_Helper
+	jr	ClampColorToRange_Epilogue
+ClampColorToRange_Skip:
 	ldw	wa, 14
-	calr	53750
+	calr	DrawQueue_Alloc
 	ld	xwa, xhl
 	lda	xbc, (DrawDesignBox_ByteData_0x59:24)
 	ld	(xwa), xbc
@@ -3985,7 +4008,8 @@ DrawDesignBox_ByteData:
 	ldiw
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	calr	53495
+	calr	DisplayCmd_DequeueAndExecute
+ClampColorToRange_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -3995,8 +4019,9 @@ DrawDesignBox_ByteData:
 	cpw	(0x03044e:24), 0
 	ret	z
 	ld	xwa, xhl
-	calr	1
+	calr	ClampColorToRange_Helper
 	ret
+ClampColorToRange_Helper:
 	lda	xsp, (xsp-52)
 	push	xiz
 	ld	(xsp+46), de
@@ -4008,8 +4033,9 @@ DrawDesignBox_ByteData:
 	ld	bc, (xwa)
 	ld	xwa, (xsp+52)
 	cp	bc, (xwa)
-	jr	le, 2
+	jr	le, ClampColorToRange_Skip2
 	ld	xde, 1:i3
+ClampColorToRange_Skip2:
 	ld	(xsp+12), xde
 	ld	xde, 0xffffffff
 	ld	xwa, (xsp+48)
@@ -4023,38 +4049,44 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+26)
 	ld	hl, (xwa)
 	cp	bc, hl
-	jr	le, 2
+	jr	le, ClampColorToRange_Skip3
 	ld	xde, 1:i3
+ClampColorToRange_Skip3:
 	ld	(xsp+16), xde
 	ld	xwa, (xsp+12)
 	cp	xwa, 1
-	jr	nz, 12
+	jr	nz, ClampColorToRange_Skip4
 	ld	xwa, (xsp+48)
 	ld	de, (xwa)
 	ld	xwa, (xsp+52)
 	sub	de, (xwa)
-	jr	10
+	jr	ClampColorToRange_Join
+ClampColorToRange_Skip4:
 	ld	xwa, (xsp+52)
 	ld	de, (xwa)
 	ld	xwa, (xsp+48)
 	sub	de, (xwa)
+ClampColorToRange_Join:
 	exts	xde
 	ld	(xsp+4), xde
 	ld	xwa, (xsp+16)
 	cp	xwa, 1
-	jr	nz, 6
+	jr	nz, ClampColorToRange_Skip5
 	sub	bc, hl
 	ld	hl, bc
-	jr	2
+	jr	ClampColorToRange_Join2
+ClampColorToRange_Skip5:
 	sub	hl, bc
+ClampColorToRange_Join2:
 	exts	xhl
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, 8
+	jr	nz, ClampColorToRange_Skip6
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jrl	z, 551
+	jrl	z, ClampColorToRange_Epilogue2
+ClampColorToRange_Skip6:
 	ld	xwa, (xsp+52)
 	ld	xiy, xwa
 	lda	xix, (xsp+42)
@@ -4062,17 +4094,19 @@ DrawDesignBox_ByteData:
 	ldiw
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, 87
+	jr	nz, ClampColorToRange_Skip9
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, 481
+	jrl	lt, ClampColorToRange_Join7
+ClampColorToRange_Loop:
 	cp	(xsp+20), 3
-	jr	ule, 6
+	jr	ule, ClampColorToRange_Skip7
 	ld	(xsp+20), 0
-	jr	45
+	jr	ClampColorToRange_Join3
+ClampColorToRange_Skip7:
 	cp	(xsp+20), 1
-	jr	ugt, 36
+	jr	ugt, ClampColorToRange_Skip8
 	lda	xwa, (xsp+42)
 	ld	de, (xwa+2)
 	exts	xde
@@ -4087,26 +4121,31 @@ DrawDesignBox_ByteData:
 	add	xde, xwa
 	ld	wa, (xsp+46)
 	ld	(xde), a
+ClampColorToRange_Skip8:
 	incm8	1, (xsp+20)
+ClampColorToRange_Join3:
 	ld	xwa, (xsp+16)
 	add	(xsp+44), wa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, -70
-	jrl	408
+	jr	le, ClampColorToRange_Loop
+	jrl	ClampColorToRange_Join7
+ClampColorToRange_Skip9:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jr	nz, 87
+	jr	nz, ClampColorToRange_Skip12
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, 387
+	jrl	lt, ClampColorToRange_Join7
+ClampColorToRange_Loop2:
 	cp	(xsp+20), 3
-	jr	ule, 6
+	jr	ule, ClampColorToRange_Skip10
 	ld	(xsp+20), 0
-	jr	45
+	jr	ClampColorToRange_Join4
+ClampColorToRange_Skip10:
 	cp	(xsp+20), 1
-	jr	ugt, 36
+	jr	ugt, ClampColorToRange_Skip11
 	lda	xwa, (xsp+42)
 	ld	de, (xwa+2)
 	exts	xde
@@ -4121,18 +4160,21 @@ DrawDesignBox_ByteData:
 	add	xde, xwa
 	ld	wa, (xsp+46)
 	ld	(xde), a
+ClampColorToRange_Skip11:
 	incm8	1, (xsp+20)
+ClampColorToRange_Join4:
 	ld	xwa, (xsp+12)
 	add	(xsp+42), wa
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, -70
-	jrl	314
+	jr	le, ClampColorToRange_Loop2
+	jrl	ClampColorToRange_Join7
+ClampColorToRange_Skip12:
 	lda	xwa, (xsp+42)
 	ld	(xsp+30), xwa
 	ld	xwa, (xsp+8)
 	cp	xwa, (xsp+4)
-	jrl	le, 151
+	jrl	le, ClampColorToRange_Skip15
 	ld	xwa, (xsp+4)
 	sla	xwa, 0
 	ld	xbc, (xsp+8)
@@ -4154,13 +4196,15 @@ DrawDesignBox_ByteData:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, 232
+	jrl	lt, ClampColorToRange_Join7
+ClampColorToRange_Loop3:
 	cp	(xsp+20), 3
-	jr	ule, 6
+	jr	ule, ClampColorToRange_Skip13
 	ld	(xsp+20), 0
-	jr	42
+	jr	ClampColorToRange_Join5
+ClampColorToRange_Skip13:
 	cp	(xsp+20), 1
-	jr	ugt, 33
+	jr	ugt, ClampColorToRange_Skip14
 	ld	wa, (xde+2)
 	exts	xwa
 	ld	xhl, xwa
@@ -4174,7 +4218,9 @@ DrawDesignBox_ByteData:
 	add	xhl, xwa
 	ld	wa, (xsp+46)
 	ld	(xhl), a
+ClampColorToRange_Skip14:
 	incm8	1, (xsp+20)
+ClampColorToRange_Join5:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
@@ -4184,8 +4230,9 @@ DrawDesignBox_ByteData:
 	add	(xde+2), wa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, -81
-	jrl	148
+	jr	le, ClampColorToRange_Loop3
+	jrl	ClampColorToRange_Join7
+ClampColorToRange_Skip15:
 	ld	xwa, (xsp+8)
 	sla	xwa, 0
 	ld	xbc, (xsp+4)
@@ -4208,13 +4255,15 @@ DrawDesignBox_ByteData:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jr	lt, 79
+	jr	lt, ClampColorToRange_Join7
+ClampColorToRange_Loop4:
 	cp	(xsp+20), 3
-	jr	ule, 6
+	jr	ule, ClampColorToRange_Skip16
 	ld	(xsp+20), 0
-	jr	41
+	jr	ClampColorToRange_Join6
+ClampColorToRange_Skip16:
 	cp	(xsp+20), 1
-	jr	ugt, 32
+	jr	ugt, ClampColorToRange_Skip17
 	ld	wa, (xhl)
 	exts	xwa
 	ld	xix, xwa
@@ -4228,7 +4277,9 @@ DrawDesignBox_ByteData:
 	add	xix, xwa
 	ld	wa, (xsp+46)
 	ld	(xix), a
+ClampColorToRange_Skip17:
 	incm8	1, (xsp+20)
+ClampColorToRange_Join6:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
@@ -4238,7 +4289,8 @@ DrawDesignBox_ByteData:
 	add	(xde), wa
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, -79
+	jr	le, ClampColorToRange_Loop4
+ClampColorToRange_Join7:
 	lda	xwa, (xsp+34)
 	ld	xbc, (xsp+26)
 	ld	bc, (xbc)
@@ -4252,7 +4304,8 @@ DrawDesignBox_ByteData:
 	ld	xbc, (xsp+22)
 	ld	bc, (xbc)
 	ld	(xwa+6), bc
-	calr	53774
+	calr	SetChangeRect
+ClampColorToRange_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+52)
 	ret
@@ -6028,7 +6081,8 @@ Gfx_ImageDecodeByteData:
 	ld	xbc, (0x030452:24)
 	ld	(xsp+4), xbc
 	ld	ix, (xwa+2)
-	jr	59
+	jr	DrawDesignBox_Impl_Join2
+DrawDesignBox_Impl_Loop:
 	ld	bc, ix
 	extz	xbc
 	ld	xde, xbc
@@ -6042,7 +6096,8 @@ Gfx_ImageDecodeByteData:
 	ld	xiz, xde
 	add	xiz, xbc
 	ld	iy, (xwa)
-	jr	17
+	jr	DrawDesignBox_Impl_Join
+DrawDesignBox_Impl_Loop2:
 	ld	xhl, xiz
 	ld	xbc, xiz
 	sub	xbc, xde
@@ -6051,14 +6106,16 @@ Gfx_ImageDecodeByteData:
 	ld	c, (xbc)
 	ld	(xhl), c
 	inc	1, iy
+DrawDesignBox_Impl_Join:
 	ld	bc, (xwa+4)
 	cp	iy, bc
-	jr	ule, -24
+	jr	ule, DrawDesignBox_Impl_Loop2
 	inc	1, ix
+DrawDesignBox_Impl_Join2:
 	ld	bc, (xwa+6)
 	cp	ix, bc
-	jr	ule, -66
-	calr	48943
+	jr	ule, DrawDesignBox_Impl_Loop
+	calr	SetChangeRect
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -7044,7 +7101,7 @@ ChangeWall_Epilogue:
 
 ChangeWall_QueueCallback:
 	ld	wa, (xwa+4)
-	jr	0
+	jr	ChangeWall_Impl
 
 ChangeWall_Impl:
 	ld (0x03ef9c:24), wa
@@ -7085,7 +7142,7 @@ ChangeWallPalette_Epilogue:
 
 ChangeWallPalette_QueueCallback:
 	ld	wa, (xwa+4)
-	jr	0
+	jr	ChangeWallPalette_Impl
 
 ChangeWallPalette_Impl:
 	push xiz
@@ -7162,7 +7219,7 @@ ChangePalette_Epilogue:
 
 ChangePalette_QueueCallback:
 	ld	wa, (xwa+4)
-	jr	0
+	jr	ChangePalette_Impl
 
 ChangePalette_Impl:
 	push xiz
@@ -7431,7 +7488,7 @@ ClipBlit_Replace_ScanlineCond:
 	add bc, (xsp + 4)
 	ld (xwa + 4), bc
 	ld (xwa + 6), de
-	calr	45605
+	calr	SetChangeRect
 	pop xiz
 	lda	xsp, (xsp+28)
 	ret
@@ -7559,7 +7616,7 @@ ClipBlit_Direct_ScanlineCond:
 	add bc, (xsp + 4)
 	ld (xwa + 4), bc
 	ld (xwa + 6), de
-	calr	45299
+	calr	SetChangeRect
 	popw iz
 	lda	xsp, (xsp+26)
 	ret
@@ -8269,13 +8326,14 @@ ColorBlit2_LargeCodeBlock:
 	cp	a, 2:i3
 	jrl	z, 560
 	cp	a, 1:i3
-	jrl	z, 381
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip
 	cp	a, 0:i3
-	jrl	nz, 722
+	jrl	nz, ColorBlit2_LargeCodeBlock_Join9
 	ldw (xsp+6), 0
-	jrl	351
+	jrl	ColorBlit2_LargeCodeBlock_Join2
+ColorBlit2_LargeCodeBlock_Loop:
 	ldw (xsp+8), 0
-	jrl	321
+	jrl	ColorBlit2_LargeCodeBlock_Join
 	lda	xwa, (xsp+18)
 	ld	(xsp+10), xwa
 	ld	xwa, (xsp+28)
@@ -8423,6 +8481,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, 1:i3
 	add	(xsp+24), xwa
 	incw	1, (xsp+8)
+ColorBlit2_LargeCodeBlock_Join:
 	ld	xwa, (xsp+28)
 	lda	xde, (xwa+2)
 	ld	bc, (xde)
@@ -8431,16 +8490,20 @@ ColorBlit2_LargeCodeBlock:
 	cp	(xsp+8), wa
 	jrl	c, -340
 	incw	8, (xsp+6)
+ColorBlit2_LargeCodeBlock_Join2:
 	ld	xwa, (xsp+28)
 	ld	bc, (xwa+4)
 	.byte 0x90, 0xa1
 	cp	(xsp+6), bc
-	jrl	c, -365
-	jrl	346
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop
+	jrl	ColorBlit2_LargeCodeBlock_Join9
+ColorBlit2_LargeCodeBlock_Skip:
 	ldw (xsp+6), 0
-	jrl	149
+	jrl	ColorBlit2_LargeCodeBlock_Join5
+ColorBlit2_LargeCodeBlock_Loop2:
 	ldw (xsp+8), 0
-	jr	120
+	jr	ColorBlit2_LargeCodeBlock_Join4
+ColorBlit2_LargeCodeBlock_Loop3:
 	lda	xde, (xsp+18)
 	ld	xwa, (xsp+28)
 	ld	wa, (xwa)
@@ -8483,8 +8546,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb1
 	inc	6, l
 	.byte 0x04, 0xb1, 0xbd
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join3
 	.byte 0xb1, 0xb5
+ColorBlit2_LargeCodeBlock_Join3:
 	ld	a, (xsp+2)
 	add	(xsp+2), a
 	incw	1, (xde)
@@ -8495,24 +8559,28 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, 1:i3
 	add	(xsp+24), xwa
 	incw	1, (xsp+8)
+ColorBlit2_LargeCodeBlock_Join4:
 	ld	xwa, (xsp+28)
 	lda	xix, (xwa+2)
 	ld	bc, (xix)
 	ld	wa, (xwa+6)
 	sub	wa, bc
 	cp	(xsp+8), wa
-	jrl	c, -139
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop3
 	incw	8, (xsp+6)
+ColorBlit2_LargeCodeBlock_Join5:
 	ld	xwa, (xsp+28)
 	ld	bc, (xwa+4)
 	.byte 0x90, 0xa1
 	cp	(xsp+6), bc
-	jrl	c, -163
-	jrl	172
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop2
+	jrl	ColorBlit2_LargeCodeBlock_Join9
 	ldw (xsp+6), 0
-	jrl	150
+	jrl	ColorBlit2_LargeCodeBlock_Join8
+ColorBlit2_LargeCodeBlock_Loop4:
 	ldw (xsp+8), 0
-	jr	121
+	jr	ColorBlit2_LargeCodeBlock_Join7
+ColorBlit2_LargeCodeBlock_Loop5:
 	lda	xde, (xsp+18)
 	ld	xwa, (xsp+28)
 	ld	wa, (xwa)
@@ -8554,8 +8622,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb1
 	inc	6, l
 	.byte 0x04, 0xb1, 0xbe
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join6
 	.byte 0xb1, 0xb6
+ColorBlit2_LargeCodeBlock_Join6:
 	ld	a, (xsp+2)
 	add	(xsp+2), a
 	incw	1, (xde)
@@ -8566,24 +8635,28 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, 1:i3
 	add	(xsp+24), xwa
 	incw	1, (xsp+8)
+ColorBlit2_LargeCodeBlock_Join7:
 	ld	xwa, (xsp+28)
 	lda	xix, (xwa+2)
 	ld	bc, (xix)
 	ld	wa, (xwa+6)
 	sub	wa, bc
 	cp	(xsp+8), wa
-	jrl	c, -140
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop5
 	incw	8, (xsp+6)
+ColorBlit2_LargeCodeBlock_Join8:
 	ld	xwa, (xsp+28)
 	ld	bc, (xwa+4)
 	.byte 0x90, 0xa1
 	cp	(xsp+6), bc
-	jrl	c, -164
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop4
+ColorBlit2_LargeCodeBlock_Join9:
 	ld	xwa, (xsp+28)
-	calr	43162
+	calr	SetChangeRect
 	popw	iz
 	lda	xsp, (xsp+30)
 	ret
+DrawText_LayoutAndRender_Variant1_Helper:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), de
@@ -8650,6 +8723,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, xhl
 	calr	1
 	ret
+Voice_FactoryPresetData_Code_Helper:
 	lda	xsp, (xsp-72)
 	push	xiz
 	ld	(xsp+66), de
@@ -8658,18 +8732,19 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, (xsp+72)
 	calr	53867
 	cp	hl, 0:i3
-	jrl	z, 1855
+	jrl	z, ColorBlit2_LargeCodeBlock_Epilogue
 	ld	xwa, (xsp+68)
-	calr	53856
+	calr	IsPointOnScreen
 	cp	hl, 0:i3
-	jrl	z, 1844
+	jrl	z, ColorBlit2_LargeCodeBlock_Epilogue
 	ld	xde, 0xffffffff
 	ld	xwa, (xsp+68)
 	ld	bc, (xwa)
 	ld	xwa, (xsp+72)
 	.byte 0x90, 0xf1
-	jr	le, 2
+	jr	le, ColorBlit2_LargeCodeBlock_Skip2
 	ld	xde, 1:i3
+ColorBlit2_LargeCodeBlock_Skip2:
 	ld	(xsp+12), xde
 	ld	xde, 0xffffffff
 	ld	xwa, (xsp+68)
@@ -8683,17 +8758,19 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, (xsp+26)
 	ld	hl, (xwa)
 	cp	bc, hl
-	jr	le, 2
+	jr	le, ColorBlit2_LargeCodeBlock_Skip3
 	ld	xde, 1:i3
+ColorBlit2_LargeCodeBlock_Skip3:
 	ld	(xsp+16), xde
 	ld	xwa, (xsp+12)
 	cp	xwa, 1
-	jr	nz, 12
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip4
 	ld	xwa, (xsp+68)
 	ld	de, (xwa)
 	ld	xwa, (xsp+72)
 	.byte 0x90, 0xa2
 	jr	10
+ColorBlit2_LargeCodeBlock_Skip4:
 	ld	xwa, (xsp+72)
 	ld	de, (xwa)
 	ld	xwa, (xsp+68)
@@ -8703,19 +8780,22 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+4), xde
 	ld	xwa, (xsp+16)
 	cp	xwa, 1
-	jr	nz, 6
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip5
 	sub	bc, hl
 	ld	hl, bc
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join10
+ColorBlit2_LargeCodeBlock_Skip5:
 	sub	hl, bc
+ColorBlit2_LargeCodeBlock_Join10:
 	exts	xhl
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, 8
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip6
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jrl	z, 1705
+	jrl	z, ColorBlit2_LargeCodeBlock_Epilogue
+ColorBlit2_LargeCodeBlock_Skip6:
 	ld	xwa, (xsp+72)
 	ld	xiy, xwa
 	lda	xix, (xsp+62)
@@ -8957,7 +9037,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, 1117
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
 	ld	xiy, xde
 	ld	hl, (xsp+66)
 	lda	xwa, (xde+2)
@@ -9041,7 +9121,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, 916
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
 	ld	xix, xde
 	ld	hl, (xsp+66)
 	ld	xwa, (xsp+46)
@@ -9112,7 +9192,7 @@ ColorBlit2_LargeCodeBlock:
 	jrl	760
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, 79
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip7
 	ld	xwa, (xsp+46)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9129,12 +9209,13 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, 708
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
 	.byte 0xb2
 	inc	6, l
 	.byte 0x04, 0xb2, 0xbd
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join11
 	.byte 0xb2, 0xb5
+ColorBlit2_LargeCodeBlock_Join11:
 	ld	xwa, (xsp+16)
 	sla	xwa, 2
 	.byte 0xaf
@@ -9146,10 +9227,11 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xaf
 	ld	(241:8), 98:io
 	.byte 0xe1
-	jrl	674
+	jrl	ColorBlit2_LargeCodeBlock_Join17
+ColorBlit2_LargeCodeBlock_Skip7:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jr	nz, 68
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip8
 	ld	xwa, (xsp+46)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9178,6 +9260,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x04, 0xf1
 	jr	le, -20
 	jrl	599
+ColorBlit2_LargeCodeBlock_Skip8:
 	ld	xwa, (xsp+8)
 	.byte 0xaf, 0x04, 0xf0
 	jr	le, 119
@@ -9197,7 +9280,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, 539
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
 	lda	xhl, (xde+2)
 	ld	wa, (xhl)
 	exts	xwa
@@ -9213,8 +9296,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb4
 	inc	6, l
 	.byte 0x04, 0xb4, 0xb5
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join12
 	.byte 0xb4, 0xbd
+ColorBlit2_LargeCodeBlock_Join12:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
@@ -9226,7 +9310,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xaf
 	ld	(241:8), 98:io
 	.byte 0xc0
-	jrl	472
+	jrl	ColorBlit2_LargeCodeBlock_Join17
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
 	call	Math_MultiplyAccumulate
@@ -9238,7 +9322,8 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, 433
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
+ColorBlit2_LargeCodeBlock_Loop6:
 	ld	wa, (xde)
 	exts	xwa
 	ld	xix, xwa
@@ -9253,8 +9338,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb4
 	inc	6, l
 	.byte 0x04, 0xb4, 0xb5
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join13
 	.byte 0xb4, 0xbd
+ColorBlit2_LargeCodeBlock_Join13:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
@@ -9264,8 +9350,8 @@ ColorBlit2_LargeCodeBlock:
 	add	(xhl), wa
 	inc	1, xbc
 	.byte 0xaf, 0x04, 0xf1
-	jr	le, -61
-	jrl	369
+	jr	le, ColorBlit2_LargeCodeBlock_Loop6
+	jrl	ColorBlit2_LargeCodeBlock_Join17
 	ld	xwa, (xsp+46)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9275,7 +9361,7 @@ ColorBlit2_LargeCodeBlock:
 	sll	xbc, 6
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, 62
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip9
 	ld	xwa, (xsp+42)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9285,12 +9371,13 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, 317
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
 	.byte 0xb2
 	inc	6, l
 	.byte 0x04, 0xb2, 0xb6
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join14
 	.byte 0xb2, 0xbe
+ColorBlit2_LargeCodeBlock_Join14:
 	ld	xwa, (xsp+16)
 	sla	xwa, 2
 	.byte 0xaf
@@ -9302,10 +9389,11 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xaf
 	ld	(241:8), 98:io
 	.byte 0xe1
-	jrl	283
+	jrl	ColorBlit2_LargeCodeBlock_Join17
+ColorBlit2_LargeCodeBlock_Skip9:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jr	nz, 51
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip10
 	ld	xwa, (xsp+42)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9327,6 +9415,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x04, 0xf1
 	jr	le, -20
 	jrl	225
+ColorBlit2_LargeCodeBlock_Skip10:
 	ld	xwa, (xsp+8)
 	.byte 0xaf, 0x04, 0xf0
 	jr	le, 118
@@ -9346,7 +9435,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, 165
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join17
 	lda	xhl, (xde+2)
 	ld	wa, (xhl)
 	exts	xwa
@@ -9362,8 +9451,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb4
 	inc	6, l
 	.byte 0x04, 0xb4, 0xb6
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join15
 	.byte 0xb4, 0xbe
+ColorBlit2_LargeCodeBlock_Join15:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
@@ -9375,7 +9465,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xaf
 	ld	(241:8), 98:io
 	.byte 0xc0
-	jr	99
+	jr	ColorBlit2_LargeCodeBlock_Join17
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
 	call	Math_MultiplyAccumulate
@@ -9387,7 +9477,8 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jr	lt, 61
+	jr	lt, ColorBlit2_LargeCodeBlock_Join17
+ColorBlit2_LargeCodeBlock_Loop7:
 	ld	wa, (xde)
 	exts	xwa
 	ld	xix, xwa
@@ -9402,8 +9493,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb4
 	inc	6, l
 	.byte 0x04, 0xb4, 0xb6
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join16
 	.byte 0xb4, 0xbe
+ColorBlit2_LargeCodeBlock_Join16:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
@@ -9413,7 +9505,8 @@ ColorBlit2_LargeCodeBlock:
 	add	(xhl), wa
 	inc	1, xbc
 	.byte 0xaf, 0x04, 0xf1
-	jr	le, -61
+	jr	le, ColorBlit2_LargeCodeBlock_Loop7
+ColorBlit2_LargeCodeBlock_Join17:
 	lda	xwa, (xsp+54)
 	ld	xbc, (xsp+26)
 	ld	bc, (xbc)
@@ -9427,10 +9520,12 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, (xsp+22)
 	ld	bc, (xbc)
 	ld	(xwa+6), bc
-	calr	41137
+	calr	SetChangeRect
+ColorBlit2_LargeCodeBlock_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+72)
 	ret
+DrawText_LayoutAndRender_Variant1_Helper2:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), de
@@ -9508,8 +9603,9 @@ ColorBlit2_LargeCodeBlock:
 	ld	bc, (xwa)
 	ld	xwa, (xsp+56)
 	.byte 0x90, 0xf1
-	jr	le, 2
+	jr	le, ColorBlit2_LargeCodeBlock_Skip11
 	ld	xde, 1:i3
+ColorBlit2_LargeCodeBlock_Skip11:
 	ld	(xsp+12), xde
 	ld	xde, 0xffffffff
 	ld	xwa, (xsp+52)
@@ -9523,17 +9619,19 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, (xsp+30)
 	ld	hl, (xwa)
 	cp	bc, hl
-	jr	le, 2
+	jr	le, ColorBlit2_LargeCodeBlock_Skip12
 	ld	xde, 1:i3
+ColorBlit2_LargeCodeBlock_Skip12:
 	ld	(xsp+16), xde
 	ld	xwa, (xsp+12)
 	cp	xwa, 1
-	jr	nz, 12
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip13
 	ld	xwa, (xsp+52)
 	ld	de, (xwa)
 	ld	xwa, (xsp+56)
 	.byte 0x90, 0xa2
 	jr	10
+ColorBlit2_LargeCodeBlock_Skip13:
 	ld	xwa, (xsp+56)
 	ld	de, (xwa)
 	ld	xwa, (xsp+52)
@@ -9543,19 +9641,22 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+4), xde
 	ld	xwa, (xsp+16)
 	cp	xwa, 1
-	jr	nz, 6
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip14
 	sub	bc, hl
 	ld	hl, bc
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join18
+ColorBlit2_LargeCodeBlock_Skip14:
 	sub	hl, bc
+ColorBlit2_LargeCodeBlock_Join18:
 	exts	xhl
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, 8
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip15
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jrl	z, 1328
+	jrl	z, Voice_FactoryPresetData_Code_Epilogue
+ColorBlit2_LargeCodeBlock_Skip15:
 	ld	xwa, (xsp+56)
 	ld	xiy, xwa
 	lda	xix, (xsp+46)
@@ -9565,7 +9666,7 @@ ColorBlit2_LargeCodeBlock:
 	rcf
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jrl	nz, 298
+	jrl	nz, ColorBlit2_LargeCodeBlock_Skip16
 	ld	xwa, 0:i3
 	ld	(xsp+20), xwa
 	ld	xwa, (xsp+8)
@@ -9664,9 +9765,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb1
 	inc	6, l
 	.byte 0x04, 0xb1, 0xb5
-	jr	45
+	jr	ColorBlit2_LargeCodeBlock_Join19
 	.byte 0xb1, 0xbd
-	jr	41
+	jr	ColorBlit2_LargeCodeBlock_Join19
 	lda	xwa, (xsp+46)
 	ld	bc, (xwa+2)
 	exts	xbc
@@ -9684,6 +9785,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x04, 0xb1, 0xb6
 	jr	2
 	.byte 0xb1, 0xbe
+ColorBlit2_LargeCodeBlock_Join19:
 	incm8	1, (xsp+24)
 	ld	xwa, (xsp+16)
 	add	(xsp+48), wa
@@ -9695,6 +9797,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xea
 	swi	6
 	jrl	973
+ColorBlit2_LargeCodeBlock_Skip16:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
 	jrl	nz, 298
@@ -9703,6 +9806,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
 	jrl	lt, 948
+ColorBlit2_LargeCodeBlock_Entry:
 	.byte 0x8f
 	push_f
 	push	xsp
@@ -9797,9 +9901,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb1
 	inc	6, l
 	.byte 0x04, 0xb1, 0xb5
-	jr	45
+	jr	ColorBlit2_LargeCodeBlock_Join20
 	.byte 0xb1, 0xbd
-	jr	41
+	jr	ColorBlit2_LargeCodeBlock_Join20
 	lda	xwa, (xsp+46)
 	ld	bc, (xwa+2)
 	exts	xbc
@@ -9815,8 +9919,9 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb1
 	inc	6, l
 	.byte 0x04, 0xb1, 0xb6
-	jr	2
+	jr	ColorBlit2_LargeCodeBlock_Join20
 	.byte 0xb1, 0xbe
+ColorBlit2_LargeCodeBlock_Join20:
 	incm8	1, (xsp+24)
 	ld	xwa, (xsp+12)
 	add	(xsp+46), wa
@@ -9824,13 +9929,13 @@ ColorBlit2_LargeCodeBlock:
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	.byte 0xaf, 0x04, 0xf0
-	jrl	le, -278
-	jrl	667
+	jrl	le, ColorBlit2_LargeCodeBlock_Entry
+	jrl	Voice_FactoryPresetData_Code_Join4
 	lda	xwa, (xsp+46)
 	ld	(xsp+34), xwa
 	ld	xwa, (xsp+8)
 	.byte 0xaf, 0x04, 0xf0
-	jrl	le, 322
+	jrl	le, Voice_FactoryPresetData_Code_Skip2
 	.byte 0xaf, 0x04
 	.long NakaInst_Ballads
 	ld	xbc, (xsp+8)
@@ -9854,6 +9959,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
 	jrl	lt, 582
+ColorBlit2_LargeCodeBlock_Entry2:
 	.byte 0x8f
 	push_f
 	push	xsp

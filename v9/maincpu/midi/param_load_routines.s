@@ -75,56 +75,57 @@ ParaLoadOpt_DispatchTable_A:
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	201
+	jrl	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024760:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	180
+	jrl	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024760:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	159
+	jrl	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024762:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	138
+	jrl	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024762:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	118
+	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024764:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	98
+	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024764:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	78
+	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024766:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	58
+	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024766:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	38
+	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024768:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	18
+	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024768:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
+ParaLoadOpt_AudioFlagCheck_Join:
 	call	ApPostEvent
 
 MidiFunc_SendEvtReturnAlt:
@@ -202,56 +203,57 @@ ParaLoadOpt_DispatchTable_B:
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	201
+	jrl	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024760:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	180
+	jrl	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024760:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	159
+	jrl	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024762:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jrl	138
+	jrl	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024762:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	118
+	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024764:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	98
+	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024764:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	78
+	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024766:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	58
+	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024766:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	38
+	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024768:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
-	jr	18
+	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024768:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	ld	xde, 0:i3
+ParaLoadOpt_AudioFlagCheck_B_Join:
 	call	ApPostEvent
 
 MidiFunc_SendEventReturn:
@@ -616,15 +618,15 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), hl
 	cpw	(xwa), 1
-	jrl	nz, 801
+	jrl	nz, ParaLoadOpt_ReturnZero
 	cp	hl, 8
-	jr	z, 106
+	jr	z, ParaLoadOpt_PostDualEvent_Skip3
 	cp	hl, 7:i3
-	jr	z, 71
+	jr	z, ParaLoadOpt_PostDualEvent_Skip2
 	cp	hl, 3:i3
-	jr	z, 36
+	jr	z, ParaLoadOpt_PostDualEvent_Skip
 	cp	hl, 2:i3
-	jrl	nz, 782
+	jrl	nz, ParaLoadOpt_ReturnZero
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -634,7 +636,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
-	jrl	303
+	jrl	ParaLoadOpt_PostDualEvent_Join
+ParaLoadOpt_PostDualEvent_Skip:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -644,7 +647,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
-	jrl	272
+	jrl	ParaLoadOpt_PostDualEvent_Join
+ParaLoadOpt_PostDualEvent_Skip2:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -654,7 +658,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), xbc
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
-	jrl	241
+	jrl	ParaLoadOpt_PostDualEvent_Join
+ParaLoadOpt_PostDualEvent_Skip3:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -664,7 +669,7 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), xbc
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
-	jrl	210
+	jrl	ParaLoadOpt_PostDualEvent_Join
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
@@ -677,15 +682,15 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), hl
 	cpw	(xwa), 1
-	jrl	nz, 618
+	jrl	nz, ParaLoadOpt_ReturnZero
 	cp	hl, 8
 	jrl	z, 127
 	cp	hl, 7:i3
 	jr	z, 85
 	cp	hl, 3:i3
-	jr	z, 43
+	jr	z, ParaLoadOpt_PostDualEvent_Skip4
 	cp	hl, 2:i3
-	jrl	nz, 598
+	jrl	nz, ParaLoadOpt_ReturnZero
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -697,7 +702,8 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
-	jr	112
+	jr	ParaLoadOpt_PostDualEvent_Join
+ParaLoadOpt_PostDualEvent_Skip4:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -737,8 +743,9 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
+ParaLoadOpt_PostDualEvent_Join:
 	call	MainRamAdd
-	jrl	441
+	jrl	ParaLoadOpt_ReturnZero
 	ld	xix, xhl
 	ldw	(xiy), 1
 	ld	(xsp+16), xbc
@@ -747,7 +754,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xbc, xiz
 	lda	xde, (xhl+14)
 	.byte 0xa3, 0xf6
-	jr	nz, 44
+	jr	nz, ParaLoadOpt_PostDualEvent_Skip5
 	ldw	(xwa), 2
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -763,10 +770,11 @@ ParaLoadOpt_GridDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 0x01e0008c
-	jrl	370
+	jrl	ParaLoadOptSendEvtReturn
+ParaLoadOpt_PostDualEvent_Skip5:
 	lda	xhl, (xbc+1)
 	.byte 0xa4, 0xf3
-	jr	nz, 44
+	jr	nz, ParaLoadOpt_PostDualEvent_Skip6
 	ldw	(xwa), 3
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -782,10 +790,11 @@ ParaLoadOpt_GridDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 0x01e0008c
-	jrl	319
+	jrl	ParaLoadOptSendEvtReturn
+ParaLoadOpt_PostDualEvent_Skip6:
 	lda	xhl, (xbc+2)
 	.byte 0xa4, 0xf3
-	jr	nz, 44
+	jr	nz, ParaLoadOpt_PostDualEvent_Skip7
 	ldw	(xwa), 7
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -801,10 +810,11 @@ ParaLoadOpt_GridDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 0x01e0008c
-	jrl	268
+	jrl	ParaLoadOptSendEvtReturn
+ParaLoadOpt_PostDualEvent_Skip7:
 	inc	3, xbc
 	.byte 0xa4, 0xf1
-	jrl	nz, 265
+	jrl	nz, ParaLoadOpt_ReturnZero
 	ldw (xwa), 8
 	ld xwa, (xde)
 	sll xwa, 2
@@ -820,7 +830,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 0x01e0008c
-	jrl	217
+	jrl	ParaLoadOptSendEvtReturn
 
 ; Voice UI misc handler
 VoiceUI_MiscHandler:

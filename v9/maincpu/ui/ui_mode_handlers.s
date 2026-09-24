@@ -90,7 +90,7 @@ EffectMode_ByteData_Block2:
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
-	jr	54
+	jr	EffectMode_ByteData_Block2_Code_Join
 	.byte 0xc1
 	popw	iz
 	.byte 0x8d
@@ -108,14 +108,16 @@ EffectMode_ByteData_Block2:
 	.byte 0x8d
 	push	xsp
 	nop
-	jr	z, 24
+	jr	z, EffectMode_ByteData_Block2_Code_Skip
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x1e0009a
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
+EffectMode_ByteData_Block2_Code_Join:
 	call	UI_PostPartChangeEvent
-	jr	59
+	jr	EffectMode_ByteData_Block2_Code_Join2
+EffectMode_ByteData_Block2_Code_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x1e0009a
 	ld	xde, 0:i3
@@ -136,12 +138,13 @@ EffectMode_ByteData_Block2:
 	call	ApPostEvent
 	ldw	wa, 193
 	call	UI_PostModeChangeEvent
+EffectMode_ByteData_Block2_Code_Join2:
 	ld	(0x8d4e:16), 0
 	ret
 EffectMode_ByteData_Block3:
 	ld	a, (0xc07d:16)
 	cp	a, 0:i3
-	jr	nz, 95
+	jr	nz, EffectMode_ByteData_Block3_Skip3
 	.byte 0xc1
 	jrl	nc, 0x3fc0
 	nop
@@ -153,15 +156,17 @@ EffectMode_ByteData_Block3:
 	decm8	6, (xiy-52)
 	ld	xsp, 0x3f8d36c1
 	.byte 0xc0
-	jr	nz, 6
+	jr	nz, EffectMode_ByteData_Block3_Skip
 	call	UI_PostTimerResetEvent
 	jr	58
+EffectMode_ByteData_Block3_Skip:
 	ld	xwa, 1025
 	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
-	jr	z, 4
+	jr	z, EffectMode_ByteData_Block3_Skip2
 	cp	hl, 2:i3
 	jr	nz, 41
+EffectMode_ByteData_Block3_Skip2:
 	ld	xwa, 1024
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
@@ -175,6 +180,7 @@ EffectMode_ByteData_Block3:
 	calr	1623
 	.byte 0xf1, 0x52, 0x8d, 0xb3, 0xf1, 0x52, 0x8d, 0xb4
 	ret
+EffectMode_ByteData_Block3_Skip3:
 	cp	a, 7:i3
 	jr	nz, 59
 	ld	a, (0x8d52:16)
@@ -196,7 +202,7 @@ EffectMode_ByteData_Block3:
 	call	SndParam_LookupReadOnly
 	ld	(0x8d54:16), l
 	.byte 0xf1, 0xe2, 0xb7, 0xbf
-	calr	1551
+	calr	EffectMode_CheckModeAndReinit
 	.byte 0xc1, 0x52, 0x8d
 	push	xix
 	.byte 0xd7
@@ -205,28 +211,30 @@ EffectMode_ByteData_Block4:
 	.byte 0xc1
 	jrl	pl, 0x3fc0
 	pop	sr
-	jr	nz, 68
+	jr	nz, EffectMode_ByteData_Block4_Code_Entry
 	ld	a, (0xc07e:16)
 	and	a, 7
-	jr	z, 59
+	jr	z, EffectMode_ByteData_Block4_Code_Entry
 	ld	a, (0x8d52:16)
 	and	a, 40
-	jr	z, 50
+	jr	z, EffectMode_ByteData_Block4_Code_Entry
 	ld	xwa, 1025
 	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
-	jr	z, 4
+	jr	z, EffectMode_ByteData_Block4_Code_Skip
 	cp	hl, 2:i3
-	jr	nz, 33
+	jr	nz, EffectMode_ByteData_Block4_Code_Entry
+EffectMode_ByteData_Block4_Code_Skip:
 	ld	xwa, 1024
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	z, 20
+	jr	z, EffectMode_ByteData_Block4_Code_Entry
 	ld	xwa, 0x28002
 	call	SndParam_LookupReadOnly
 	ld	(0x8d54:16), l
 	.byte 0xf1, 0xe2, 0xb7, 0xbf
-	calr	1470
+	calr	EffectMode_CheckModeAndReinit
+EffectMode_ByteData_Block4_Code_Entry:
 	.byte 0xc1, 0x52, 0x8d
 	push	xix
 	.byte 0xd7
@@ -1982,32 +1990,37 @@ EffectMode_ByteData_DiagEvents:
 	ldb_erp a, 251
 	and a, 9
 	extz wa
-	calr	63353
+	calr	Report_test_result_by_blinking_LED
 	stb_erp a, 251
 	and a, 9
-	jr nz, 14
+	jr nz, EffectMode_ByteData_DiagEvents_Skip
 	ld	xwa, SeqStep_FileSectorPopReturn_0x35E
 	ld	xbc, 0x1c00001
 	ld	xde, 0:i3
-	jr	51
+	jr	EffectMode_ByteData_DiagEvents_Join
+EffectMode_ByteData_DiagEvents_Skip:
 	cp	a, 9
-	jr	nz, 14
+	jr	nz, EffectMode_ByteData_DiagEvents_Skip2
 	ld	xwa, SeqStep_FileSectorPopReturn_0x361
 	ld	xbc, 0x1c00001
 	ld	xde, 0:i3
-	jr	32
+	jr	EffectMode_ByteData_DiagEvents_Join
+EffectMode_ByteData_DiagEvents_Skip2:
 	bit_erpb 251, 0
-	jr z, 14
+	jr z, EffectMode_ByteData_DiagEvents_Skip3
 	ld	xwa, SeqStep_FileSectorPopReturn_0x364
 	ld	xbc, 0x1c00001
 	ld	xde, 0:i3
-	jr	12
+	jr	EffectMode_ByteData_DiagEvents_Join
+EffectMode_ByteData_DiagEvents_Skip3:
 	ld	xwa, SeqStep_FileSectorPopReturn_0x367
 	ld	xbc, 0x1c00001
 	ld	xde, 0:i3
+EffectMode_ByteData_DiagEvents_Join:
 	call	ApPostEvent
 	pop qiz
 	ret
+EffectMode_MidiSetLEDs_Helper:
 	ld	a, (0x8d37:16)
 	cp a, (36150:16)
 	ret	z
@@ -2201,7 +2214,7 @@ TEST2FUNC:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST2FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST2FUNC_DispatchReturn:
-	calr	0xfdd8
+	calr	EffectMode_ByteData_DiagEvents
 
 TableDispatch_Return3:
 	ld xhl, 0:i3
@@ -2222,7 +2235,7 @@ TEST3FUNC:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST3FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST3FUNC_DispatchReturn:
-	calr	0xfe19
+	calr	EffectMode_MidiSetLEDs_Helper
 
 TableDispatch_Return4:
 	ld xhl, 0:i3
@@ -2243,7 +2256,7 @@ TEST4FUNC:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST4FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST4FUNC_DispatchReturn:
-	calr	0xfe22
+	calr	EffectMode_ModeChangeTransition
 
 TableDispatch_Return5:
 	ld xhl, 0:i3
@@ -2264,7 +2277,7 @@ TEST6FUNC:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST6FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST6FUNC_DispatchReturn:
-	calr	0xfe7e
+	calr	FDC_CommandAndPostEvent
 
 TableDispatch_Return:
 	ld xhl, 0:i3
@@ -3393,7 +3406,7 @@ MstStyleAlp_EventDispatch:
 	ld	xwa, 0x142000d
 	ld	xbc, 0x1e20018
 	call	MainFuncCall
-	jrl	408
+	jrl	EffectMode_SendEvent_Return
 
 MstStyleAlp_CellSelect:
 	call GetFocusObject
@@ -3893,7 +3906,7 @@ MstStyle1GridCheck:
 
 ; MstStyle1GridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d8a)
 MstStyle1Grid_EventDispatch:
-	jrl	t, 0x0167
+	jrl	t, MstStyle1Grid_Epilogue
 
 MstStyle1Grid_CellSelect:
 	call GetFocusObject
@@ -4580,7 +4593,7 @@ MstStyle1SubGridCheck:
 
 ; MstStyle1SubGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0dc2)
 MstStyle1Sub_EventDispatch:
-	jrl	t, 0x015b
+	jrl	t, MstStyle1SubGrid_Epilogue
 
 MstStyle1SubGrid_CellSelect:
 	call GetFocusObject
@@ -5985,10 +5998,10 @@ MstGrid2_ScrollJumpTable:
 	ld	xbc, (xsp+62)
 	ld	(xsp+56), bc
 	cp	bc, 4:i3
-	jr	ge, 42
+	jr	ge, BitmapFinpic_ByteData_Skip
 	ld	xwa, (xhl+94)
 	cp	bc, (xwa)
-	jrl	gt, 683
+	jrl	gt, MstGrid2_Return
 	ld	wa, bc
 	exts	xwa
 	ld	xbc, xwa
@@ -6000,12 +6013,13 @@ MstGrid2_ScrollJumpTable:
 	extz	xde
 	ld	xwa, 0x142000d
 	ld	xbc, 0x1e20018
-	jr	46
+	jr	BitmapFinpic_ByteData_Join
+BitmapFinpic_ByteData_Skip:
 	ld	xwa, (xhl+98)
 	ld	wa, (xwa)
 	inc	5, wa
 	cp	bc, wa
-	jrl	gt, 637
+	jrl	gt, MstGrid2_Return
 	dec	5, bc
 	ld	wa, bc
 	exts	xwa
@@ -6018,8 +6032,9 @@ MstGrid2_ScrollJumpTable:
 	extz	xde
 	ld	xwa, 0x142000d
 	ld	xbc, 0x1e20018
+BitmapFinpic_ByteData_Join:
 	call	MainFuncCall
-	jrl	596
+	jrl	MstGrid2_Return
 
 MstGrid2_CellSelect:
 	call GetFocusObject
@@ -6682,13 +6697,14 @@ TchSensGrid_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
-	jr	nz, 16
+	jr	nz, TchSensGrid_EventDispatch_Skip
 	cp	de, 1:i3
-	jr	nz, 12
+	jr	nz, TchSensGrid_EventDispatch_Skip
 	ld	xwa, 256
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jrl	190
+TchSensGrid_EventDispatch_Skip:
 	cpw	(xwa), 1
 	jr	nz, 16
 	cp	de, 4:i3
@@ -6779,7 +6795,7 @@ TchSensGrid_EventDispatch:
 	lda	xix, (xde+4)
 	ld	xwa, (xde)
 	cp	xwa, 256
-	jr	nz, 51
+	jr	nz, TchSensGrid_EventDispatch_Skip2
 	lda	xwa, (xsp+14)
 	.byte 0xb0
 	push	sr
@@ -6802,7 +6818,8 @@ TchSensGrid_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 0x1e0008c
-	jrl	438
+	jrl	TchSensGrid_SendEvent
+TchSensGrid_EventDispatch_Skip2:
 	ld	xwa, (xde)
 	cp	xwa, 260
 	jr	nz, 59
@@ -6840,7 +6857,7 @@ TchSensGrid_EventDispatch:
 	lda	xhl, (xiy+4)
 	ld	xwa, (xde)
 	cp	xwa, 258
-	jr	nz, 43
+	jr	nz, TchSensGrid_EventDispatch_Skip3
 	.byte 0xb5
 	push	sr
 	.byte 0x01
@@ -6857,10 +6874,11 @@ TchSensGrid_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 0x1e0008c
-	jrl	304
+	jrl	TchSensGrid_SendEvent
+TchSensGrid_EventDispatch_Skip3:
 	ld	xwa, (xde)
 	cp	xwa, 259
-	jrl	nz, 297
+	jrl	nz, TchSensGrid_ReturnZero
 	.byte 0xb5
 	push	sr
 	.byte 0x01
@@ -6877,7 +6895,7 @@ TchSensGrid_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 0x1e0008c
-	jrl	250
+	jrl	TchSensGrid_SendEvent
 
 TchSensGrid_CellSelect:
 	lda xbc, (xsp + 14)
@@ -7420,7 +7438,7 @@ FSWAssGrid_EventDispatch:
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1758
+	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7621,7 +7639,7 @@ FSWAssGrid_EventDispatch:
 	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
-	calr	1206
+	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
 	lda	xbc, (Str_StoreTotalSetting_DE_0x298:24)
@@ -7630,12 +7648,12 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 0x2880
 	ld	de, 2:i3
 	call	MainLswPut
-	jrl	1167
+	jrl	AudioTable_ReturnZero
 	lda	xix, (xde+4)
 	lda	xiy, (xsp+4)
 	ld	xwa, (xde)
 	cp	xwa, 0x2886
-	jr	nz, 76
+	jr	nz, FSWAssGrid_EventDispatch_Entry
 	lda	xwa, (xsp+260)
 	.byte 0xb0
 	push	sr
@@ -7645,7 +7663,7 @@ FSWAssGrid_EventDispatch:
 	ld	(xwa+4), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	1136
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
@@ -7662,6 +7680,7 @@ FSWAssGrid_EventDispatch:
 	lda	xde, (xsp+260)
 	ld	xbc, 0x1e0008c
 	jrl	1071
+FSWAssGrid_EventDispatch_Entry:
 	.byte 0xf3
 	swi	5
 	.byte 0x04, 0x01
@@ -7693,10 +7712,10 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 0x1e0008c
-	jrl	983
+	jrl	AudioTable_SendEventAndContinue
 	ld	xwa, (xde)
 	cp	xwa, 0x288a
-	jr	nz, 70
+	jr	nz, FSWAssGrid_EventDispatch_Skip
 	.byte 0xb3
 	push	sr
 	.byte 0x01
@@ -7709,7 +7728,7 @@ FSWAssGrid_EventDispatch:
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	968
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
@@ -7725,10 +7744,11 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 0x1e0008c
-	jrl	903
+	jrl	AudioTable_SendEventAndContinue
+FSWAssGrid_EventDispatch_Skip:
 	ld	xwa, (xde)
 	cp	xwa, 0x288c
-	jr	nz, 70
+	jr	nz, FSWAssGrid_EventDispatch_Skip2
 	.byte 0xb3
 	push	sr
 	.byte 0x01
@@ -7737,7 +7757,7 @@ FSWAssGrid_EventDispatch:
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	888
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
@@ -7753,11 +7773,12 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 0x1e0008c
-	jrl	823
+	jrl	AudioTable_SendEventAndContinue
+FSWAssGrid_EventDispatch_Skip2:
 	lda	xiz, (xhl+2)
 	ld	xwa, (xde)
 	cp	xwa, 0x288e
-	jr	nz, 69
+	jr	nz, FSWAssGrid_EventDispatch_Skip3
 	.byte 0xb3
 	push	sr
 	.byte 0x01
@@ -7766,7 +7787,7 @@ FSWAssGrid_EventDispatch:
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	806
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
@@ -7787,6 +7808,7 @@ FSWAssGrid_EventDispatch:
 	nop
 	.byte 0xe0, 0x01
 	jrl	741
+FSWAssGrid_EventDispatch_Skip3:
 	ld	xwa, (xde)
 	cp	xwa, 0x2890
 	jr	nz, 69
@@ -7798,7 +7820,7 @@ FSWAssGrid_EventDispatch:
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
-	calr	727
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
@@ -7814,10 +7836,10 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 0x1e0008c
-	jrl	662
+	jrl	AudioTable_SendEventAndContinue
 	ld	xwa, (xde)
 	cp	xwa, 0x2880
-	jrl	nz, 655
+	jrl	nz, AudioTable_ReturnZero
 	.byte 0xb3
 	push	sr
 	.byte 0x01
@@ -7826,7 +7848,7 @@ FSWAssGrid_EventDispatch:
 	ld (xbc), xiy
 	ld wa, (xix)
 	extz wa
-	calr	647
+	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
@@ -7842,7 +7864,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 0x1e0008c
-	jrl	582
+	jrl	AudioTable_SendEventAndContinue
 
 FSWAssGrid_CellSelect:
 	lda_dri XBC, 0xfd, 0x04, 0x01
@@ -8079,8 +8101,8 @@ FswAsIniFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; FswAsIniFunc event dispatch (6-entry, event 0x1c00013, table 0xed1234)
 FswAsIni_EventDispatch:
-	calr	6
-	calr	30
+	calr	FSWAss_CheckAndNotify
+	calr	FSWAss_RefreshAllVoices
 
 SeqLoadFunc_ReturnZero:
 	ld xhl, 0:i3
@@ -8804,20 +8826,21 @@ PmExpFilter_EventDispatch:
 	sla	wa, 2
 	dec	8, wa
 	cp	c, 2:i3
-	jr	z, 35
+	jr	z, FSWAss_RefreshAllVoices_Skip
 	cp	c, 1:i3
-	jrl	nz, 598
+	jrl	nz, SeqLoad_StoreReturnZero
 	cp	de, 2:i3
-	jrl	lt, 593
+	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
-	jrl	gt, 586
+	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (ParamStr02_Vocalist_0x52:24)
 	ld_rrl	xwa, xbc, wa
 	ldw	bc, 0xffff
 	ld	de, 2:i3
-	jrl	148
+	jrl	FSWAss_RefreshAllVoices_Join
+FSWAss_RefreshAllVoices_Skip:
 	cp	de, 2:i3
-	jrl	lt, 563
+	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, 556
 	lda	xbc, (ParamStr02_Vocalist_0x76:24)
@@ -8847,26 +8870,28 @@ PmExpFilter_EventDispatch:
 	jrl	nz, 488
 	ld	c, (0x340e2:24)
 	cp	c, 2:i3
-	jr	z, 33
+	jr	z, FSWAss_RefreshAllVoices_Skip2
 	cp	c, 1:i3
-	jrl	nz, 474
+	jrl	nz, SeqLoad_StoreReturnZero
 	cp	de, 2:i3
-	jrl	lt, 469
+	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
-	jrl	gt, 462
+	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (ParamStr02_Vocalist_0x52:24)
 	ld_rrl	xwa, xbc, wa
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	26
+	jr	FSWAss_RefreshAllVoices_Join
+FSWAss_RefreshAllVoices_Skip2:
 	cp	de, 2:i3
-	jrl	lt, 441
+	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
-	jrl	gt, 434
+	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (ParamStr02_Vocalist_0x76:24)
 	ld_rrl	xwa, xbc, wa
 	ld	bc, 1:i3
 	ld	de, 2:i3
+FSWAss_RefreshAllVoices_Join:
 	call	MainLswAdd
 	jrl	413
 	ld	a, (0x340e2:24)
@@ -9335,9 +9360,9 @@ DispTimeSet_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
-	jr	nz, 40
+	jr	nz, FSWAss_RefreshAllVoices_Skip3
 	cp	de, 2:i3
-	jr	nz, 36
+	jr	nz, FSWAss_RefreshAllVoices_Skip3
 	lda	xwa, (xsp+8)
 	lda	xbc, (0x340e6:24)
 	ld	(xwa), xbc
@@ -9351,11 +9376,12 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
-	jrl	555
+	jrl	FSWAss_RefreshAllVoices_Join2
+FSWAss_RefreshAllVoices_Skip3:
 	cpw	(xwa), 1
-	jr	nz, 40
+	jr	nz, FSWAss_RefreshAllVoices_Entry
 	cp	de, 3:i3
-	jr	nz, 36
+	jr	nz, FSWAss_RefreshAllVoices_Entry
 	lda	xwa, (xsp+8)
 	lda	xbc, (0x340e8:24)
 	ld	(xwa), xbc
@@ -9370,6 +9396,7 @@ DispTimeSet_EventDispatch:
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
 	jrl	509
+FSWAss_RefreshAllVoices_Entry:
 	.byte 0x90
 	push	xsp
 	normal
@@ -9453,7 +9480,7 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
-	jrl	326
+	jrl	FSWAss_RefreshAllVoices_Join2
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x1e0008f
@@ -9595,12 +9622,13 @@ DispTimeSet_EventDispatch:
 	ld	(xhl), xbc
 	ld	xbc, 1:i3
 	ld	(xde), xbc
+FSWAss_RefreshAllVoices_Join2:
 	call	MainRamAdd
-	jrl	825
+	jrl	DispTimeSet_ReturnZero
 	lda	xwa, (0x340e6:24)
 	lda	xiy, (xde+14)
 	.byte 0xa2, 0xf0
-	jr	nz, 64
+	jr	nz, FSWAss_RefreshAllVoices_Skip4
 	lda	xwa, (xsp+40)
 	.byte 0xb0
 	push	sr
@@ -9624,10 +9652,11 @@ DispTimeSet_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 0x1e0008c
-	jrl	745
+	jrl	DispTimeSet_SendEventReturn
+FSWAss_RefreshAllVoices_Skip4:
 	lda	xwa, (0x340e8:24)
 	.byte 0xa2, 0xf0
-	jr	nz, 64
+	jr	nz, FSWAss_RefreshAllVoices_Skip5
 	lda	xwa, (xsp+40)
 	.byte 0xb0
 	push	sr
@@ -9651,12 +9680,13 @@ DispTimeSet_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 0x1e0008c
-	jrl	672
+	jrl	DispTimeSet_SendEventReturn
+FSWAss_RefreshAllVoices_Skip5:
 	lda	xbc, (0x340ea:24)
 	lda	xwa, (ParamStr_Table_03:24)
 	ld	(xsp+4), xwa
 	.byte 0xa2, 0xf1
-	jr	nz, 62
+	jr	nz, FSWAss_RefreshAllVoices_Skip6
 	lda	xwa, (xsp+40)
 	.byte 0xb0
 	push	sr
@@ -9684,10 +9714,11 @@ DispTimeSet_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 0x1e0008c
-	jrl	593
+	jrl	DispTimeSet_SendEventReturn
+FSWAss_RefreshAllVoices_Skip6:
 	lda	xwa, (0x340ec:24)
 	.byte 0xa2, 0xf0
-	jr	nz, 62
+	jr	nz, FSWAss_RefreshAllVoices_Skip7
 	lda	xwa, (xsp+40)
 	.byte 0xb0
 	push	sr
@@ -9711,14 +9742,15 @@ DispTimeSet_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 0x1e0008c
-	jrl	522
+	jrl	DispTimeSet_SendEventReturn
+FSWAss_RefreshAllVoices_Skip7:
 	lda	xiz, (0x340ee:24)
 	lda	xhl, (xsp+40)
 	lda	xix, (xsp+30)
 	lda	xwa, (xhl+2)
 	lda	xbc, (xhl+4)
 	.byte 0xa2, 0xf6
-	jr	nz, 54
+	jr	nz, FSWAss_RefreshAllVoices_Skip8
 	.byte 0xb3
 	push	sr
 	.byte 0x01
@@ -9740,10 +9772,11 @@ DispTimeSet_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 0x1e0008c
-	jrl	447
+	jrl	DispTimeSet_SendEventReturn
+FSWAss_RefreshAllVoices_Skip8:
 	lda	xiz, (0x340f0:24)
 	.byte 0xa2, 0xf6
-	jrl	nz, 441
+	jrl	nz, DispTimeSet_ReturnZero
 	.byte 0xb3
 	push	sr
 	.byte 0x01
@@ -9765,7 +9798,7 @@ DispTimeSet_EventDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 0x1e0008c
-	jrl	383
+	jrl	DispTimeSet_SendEventReturn
 
 DispTimeSetCheck_CellDecode:
 	lda xhl, (xsp + 40)
@@ -10493,26 +10526,28 @@ MssName_EventDispatch:
 	lda	xbc, (xiz+14)
 	ld	xwa, (xbc)
 	or	xwa, xwa
-	jr	nz, 19
+	jr	nz, NormScreenProc_Skip
 	pushw	237
 	pushw	5526
 	ld	xwa, (xiz+18)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
-	jrl	129
+	jrl	NormScreenProc_Join2
+NormScreenProc_Skip:
 	dec	1, xwa
 	cp	xwa, 800
-	jr	le, 4
+	jr	le, NormScreenProc_Skip2
 	ld	xwa, 2:i3
 	ld	(xbc), xwa
+NormScreenProc_Skip2:
 	ld	xwa, (xbc)
 	dec	1, xwa
 	call	EffectMode_SearchPresetTableC0
 	ld	xwa, (xiz+14)
 	dec	1, xwa
 	cp	xhl, 0xffffffff
-	jr	z, 43
+	jr	z, NormScreenProc_Skip3
 	pushw	16
 	call	EffectMode_SearchPresetTableC0
 	push	xhl
@@ -10527,7 +10562,8 @@ MssName_EventDispatch:
 	call	Sprintf_DataBlock_28E9
 	lda	xsp, (xsp+18)
 	ld	xwa, FadeTimeStr_Off_0x5A
-	jr	37
+	jr	NormScreenProc_Join
+NormScreenProc_Skip3:
 	sll	xwa, 2
 	add	xwa, 0x987000	; = table_data STYLEREC_PTRTABLE_DEFAULT (other UI states); cross-ROM -- table_data assembles separately, constant stays literal
 	ld	xbc, (xwa)
@@ -10541,25 +10577,28 @@ MssName_EventDispatch:
 	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	xwa, FadeTimeStr_Off_0x5E
+NormScreenProc_Join:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
 	call	TmFlash_CompareStrings
 	inc	8, xsp
 	ld	(xhl), 0
+NormScreenProc_Join2:
 	ld	xhl, (xsp+4)
-	jr	23
+	jr	NormScreenProc_Epilogue
 	ld	xhl, 1:i3
-	jr	19
+	jr	NormScreenProc_Epilogue
 	ld	xhl, 512
-	jr	12
+	jr	NormScreenProc_Epilogue
 	lda	xhl, (0x8d56:16)
-	jr	6
+	jr	NormScreenProc_Epilogue
 	ld	xhl, 2:i3
-	jr	2
+	jr	NormScreenProc_Epilogue
 
 MssName_ReturnZero:
 	ld xhl, 0:i3
+NormScreenProc_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
