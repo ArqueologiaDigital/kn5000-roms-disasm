@@ -3372,8 +3372,9 @@ SeqBuf_InlineBytecode:
 	.byte 0xd2
 	ld	xbc, 0xdbf301e5
 	.byte 0xa8
-	jr	z, 3
+	jr	z, SeqBuf_WriteBytes_Return
 	ldw	hl, 0xffff
+SeqBuf_WriteBytes_Return:
 	ret
 
 SeqBuf_GetWritePos:
@@ -3529,7 +3530,7 @@ TempoRingBuf_SaveWritePos:
 	pushw	ix
 	push	xde
 	lda	xde, (0x1ef5d:24)
-	calr	2738
+	calr	RingBuf_CheckFull_512
 	pop	xde
 	popw	ix
 	ret
@@ -3555,7 +3556,7 @@ RhythmBuf_InlineBytecode:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x1ef5d:24)
 	ld	a, (xiy)
-	calr	2774
+	calr	Seq_RingBuf_WriteByte_512
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -3624,7 +3625,7 @@ RhythmBuf_InlineBytecode2:
 	pushw	ix
 	push	xde
 	lda	xde, (0x1f167:24)
-	calr	2421
+	calr	Seq_RingBuf_ReadByte
 	pop	xde
 	popw	ix
 	ret
@@ -3633,7 +3634,7 @@ RhythmBuf_InlineBytecode2:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x1f167:24)
-	calr	2485
+	calr	Seq_RingBuf_WriteByte_Small
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -3665,8 +3666,9 @@ AltEvtBuf_InlineBytecode:
 	pop	xsp
 	.byte 0xf1, 0x01, 0xf3
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, AltEvtBuf_WriteBytes_Return
 	ldw	hl, 0xffff
+AltEvtBuf_WriteBytes_Return:
 	ret
 	ld	hl, (0x1f165:24)
 	ret
@@ -3713,7 +3715,7 @@ AltEvtBuf_Helpers:
 	pushw	ix
 	push	xde
 	lda	xde, (0x1f271:24)
-	calr	2247
+	calr	Seq_RingBuf_ReadByte
 	pop	xde
 	popw	ix
 	ret
@@ -3739,7 +3741,7 @@ SeqEvtBuf_InlineBytecode:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x1f271:24)
 	ld	a, (xiy)
-	calr	2283
+	calr	Seq_RingBuf_WriteByte_Small
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -3750,8 +3752,9 @@ SeqEvtBuf_InlineBytecode:
 	ld	hl, (0x1f26d:24)
 	cp	hl, (0x1f269:24)
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqEvtBuf_WriteByte_Return
 	ldw	hl, 0xffff
+SeqEvtBuf_WriteByte_Return:
 	ret
 	.byte 0xd2
 	jr	nc, -14
@@ -4059,8 +4062,9 @@ SeqBuf2_InlineBytecode:
 	cp	(xsp), w
 	.byte 0x01, 0xf3
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqBuf2_WriteBytes_Return
 	ldw	hl, 0xffff
+SeqBuf2_WriteBytes_Return:
 	ret
 	ld	hl, (0x1f88d:24)
 	ret
@@ -4162,8 +4166,9 @@ SeqBuf3_InlineBytecode:
 	cp	(xbc), de
 	.byte 0x01, 0xf3
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqBuf3_WriteBytes_Return
 	ldw	hl, 0xffff
+SeqBuf3_WriteBytes_Return:
 	ret
 
 SeqBuf3_GetTimingValue:
@@ -4324,7 +4329,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x200ad:24)
-	calr	1124
+	calr	RingBuf128_WriteByte_CheckFull
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -4337,7 +4342,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x200ad:24)
 	ld	a, (xiy)
-	calr	1096
+	calr	RingBuf128_WriteByte_CheckFull
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -4348,8 +4353,9 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	ld	hl, (0x200a9:24)
 	cp hl, (131237:24)
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, Seq_DataHandler_Return
 	ldw	hl, 0xffff
+Seq_DataHandler_Return:
 	ret
 	ld	hl, (0x200ab:24)
 	ret
@@ -4392,7 +4398,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	pushw	ix
 	push	xde
 	lda	xde, (0x20137:24)
-	calr	886
+	calr	RingBuf128_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
@@ -4420,7 +4426,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x20137:24)
 	ld	a, (xiy)
-	calr	922
+	calr	RingBuf128_WriteByte_CheckFull
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -4435,8 +4441,9 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	push	sr
 	.byte 0xf3
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, Seq_TimerEventLoop_Return
 	ldw	hl, 0xffff
+Seq_TimerEventLoop_Return:
 	ret
 	ld	hl, (0x20135:24)
 	ret
@@ -4602,7 +4609,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x202cb:24)
-	calr	745
+	calr	Seq_RingBuf_WriteByte_Small
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -4615,7 +4622,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x202cb:24)
 	ld	a, (xiy)
-	calr	717
+	calr	Seq_RingBuf_WriteByte_Small
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -4626,8 +4633,9 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	ld	hl, (0x202c7:24)
 	cp hl, (131779:24)
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqBuf_NoteEvent_WriteByte_Data_Return
 	ldw	hl, 0xffff
+SeqBuf_NoteEvent_WriteByte_Data_Return:
 	ret
 	ld	hl, (0x202c9:24)
 	ret
@@ -4675,7 +4683,7 @@ SeqBuf_NoteEvent_SaveWritePtr:
 	pushw	ix
 	push	xde
 	lda	xde, (0x203d5:24)
-	calr	507
+	calr	Seq_RingBuf_ReadByte
 	pop	xde
 	popw	ix
 	ret
@@ -4686,7 +4694,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x203d5:24)
-	calr	571
+	calr	Seq_RingBuf_WriteByte_Small
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -4699,7 +4707,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x203d5:24)
 	ld	a, (xiy)
-	calr	543
+	calr	Seq_RingBuf_WriteByte_Small
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -4710,8 +4718,9 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	ld	hl, (0x203d1:24)
 	cp hl, (132045:24)
 	ld	hl, 0:i3
-	jr	z, 3
+	jr	z, SeqBuf_NoteEvent_WriteByte_Block_Return
 	ldw	hl, 0xffff
+SeqBuf_NoteEvent_WriteByte_Block_Return:
 	ret
 	ld	hl, (0x203d3:24)
 	ret
@@ -4781,7 +4790,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	push	xde
 	ld	a, (xiz+8)
 	lda	xde, (0x204df:24)
-	calr	397
+	calr	Seq_RingBuf_WriteByte_Small
 	pop	xde
 	popw	ix
 	unlk	xiz
@@ -4794,7 +4803,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	ld	xiy, (xiz+10)
 	lda	xde, (0x204df:24)
 	ld	a, (xiy)
-	calr	369
+	calr	Seq_RingBuf_WriteByte_Small
 	inc	1, xiy
 	djnz16	bc, -10
 	pop	xde
@@ -6049,20 +6058,24 @@ E1DMA_ISR_BytecodeBlock:
 	ld	xwa, (xde)
 	ld	bc, (xde+8)
 	ld	xde, (xde+4)
-	calr	64945
+	calr	InterCPU_E1_Bulk_Transfer
 	ei	0
 	bit_dd8 1, 104
-	jr	nz, 27
+	jr	nz, INTTC0_HANDLER_Skip2
 	.byte 0xd8
 	pushw	sp
 	ld	xwa, 0xf8e362d1
-	jr	nz, 6
+	jr	nz, INTTC0_HANDLER_Skip
 	incw	1, (0xe360:16)
-	jr	6
+	jr	INTTC0_HANDLER_Join
+INTTC0_HANDLER_Skip:
 	ldw	(0xe360:16), 0
+INTTC0_HANDLER_Join:
 	ld	(0xe362:16), wa
-	jr	6
+	jr	INTTC0_HANDLER_Join2
+INTTC0_HANDLER_Skip2:
 	ldw	(0xe360:16), 0
+INTTC0_HANDLER_Join2:
 	ld	wa, (0xe360:16)
 	cp	wa, 10
 	ret	ule
@@ -6073,6 +6086,7 @@ E1DMA_ISR_BytecodeBlock:
 	inc	1, (0xe35e:16)
 	ret
 	ld	de, (1033:16)
+INTTC0_HANDLER_Entry:
 	.byte 0xf1
 	ld	w, 6:opc
 	dec	6, l
@@ -6083,7 +6097,7 @@ E1DMA_ISR_BytecodeBlock:
 	ld	bc, (1033:16)
 	sub	bc, wa
 	cp	bc, 250
-	jr	le, -23
+	jr	le, INTTC0_HANDLER_Entry
 	ld	(256:16), 0
 	ld	(1506:16), 0
 	.byte 0xf0
@@ -6918,24 +6932,26 @@ HDAE5000_Status_NotPresent:
 	ret
 
 HDAE5000_Status_DataBlock:
-	calr	65155
-	calr	65518
+	calr	HDAE5000_Flash_Verify
+	calr	HDAE5000_Status_Check
 	cp	hl, 0xffff
 	ret	nz
-	calr	65509
+HDAE5000_Status_Check_Loop:
+	calr	HDAE5000_Status_Check
 	cp	hl, 0xffff
-	jr	z, -9
+	jr	z, HDAE5000_Status_Check_Loop
 	ret
 	dec	4, xsp
 	push	xiz
 	ld	xwa, 0x80000
 	ld	(xsp+4), xwa
-	calr	64949
+	calr	HDAE5000_Detect
 	cp	xhl, 0xffffffff
-	jr	nz, 5
+	jr	nz, HDAE5000_Status_Check_Skip
 	ldw	hl, 0xffff
-	jr	65
-	calr	65106
+	jr	HDAE5000_Status_Check_Epilogue
+HDAE5000_Status_Check_Skip:
+	calr	HDAE5000_Flash_Verify
 	ld	xwa, 0x80000
 	ld	xbc, 0x10000
 	call	Flash_FillBuffer
@@ -6956,6 +6972,7 @@ HDAE5000_Status_DataBlock:
 	cp	xiz, 8000
 	jr	c, -26
 	ld	hl, 0:i3
+HDAE5000_Status_Check_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -8200,10 +8217,11 @@ HDAE5000_Init_BytecodeBlock:
 	call	HDAE5000_Status_Check
 	cp	hl, 0xffff
 	jr	nz, 13
+HDAE5000_Init_BytecodeBlock_Code_Loop:
 	calr	64920
 	call	HDAE5000_Status_Check
 	cp	hl, 0xffff
-	jr	z, -13
+	jr	z, HDAE5000_Init_BytecodeBlock_Code_Loop
 	ld	(0x160004:24), 0
 	.byte 0xf2, 0x04
 	nop

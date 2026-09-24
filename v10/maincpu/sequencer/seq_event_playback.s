@@ -1496,11 +1496,12 @@ AccPlay_SyncVoiceParams:
 	ld	xiy, 0xf9b6
 	ld	xix, 0xfd62
 	ld	c, 30:opc
+AccPlay_SetupSoundParams_Loop:
 	ld	a, (xiy)
 	ld	w, (xix)
 	ld	(xix), a
 	cp	a, w
-	jr	z, 18
+	jr	z, AccPlay_SetupSoundParams_Skip
 	push	xiy
 	push	xix
 	push	xbc
@@ -1512,11 +1513,12 @@ AccPlay_SyncVoiceParams:
 	pop	xbc
 	pop	xix
 	pop	xiy
+AccPlay_SetupSoundParams_Skip:
 	inc	1, iy
 	inc	1, ix
 	dec	1, c
 	cp	c, 0:i3
-	jr	nz, 0xda
+	jr	nz, AccPlay_SetupSoundParams_Loop
 
 AccPlay_SyncParamsRet:
 	ret
@@ -1593,9 +1595,9 @@ AccPlay_UpdateChorusParam:
 	ret
 
 AccPlay_UnusedCodeFragment:
-	calr	2006
+	calr	TempoRingBuf_ReadLoop
 	bit	7, a
-	jr	z, -8
+	jr	z, AccPlay_UnusedCodeFragment
 	ret
 
 AccPlay_ExtractVoiceSlot:
@@ -2565,10 +2567,11 @@ AccPlay_ToggleCodeFragment:
 	.byte 0xc1
 	pushw	0x3f7f
 	nop
-	jr	z, 12
+	jr	z, AccPlay_ToggleCodeFragment_Code_Return
 	ld	(0x7f0b:16), 0
 	call	TempoRingBuf_ReInitAndRet
-	calr	62399
+	calr	AccPlay_MainUpdateLoop
+AccPlay_ToggleCodeFragment_Code_Return:
 	ret
 
 AccPlay_CheckAndToggle:
@@ -3058,9 +3061,10 @@ VocalistGrid_DispatchData:
 	ld	bc, de
 	ld	(xhl+2), bc
 	cpw	(xhl), 1
-	jr	z, 7
+	jr	z, VocalistGridCheck_Skip
 	cpw	(xhl), 2
-	jrl	nz, 1604
+	jrl	nz, AcVocalist_ReturnZero
+VocalistGridCheck_Skip:
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
@@ -3070,7 +3074,7 @@ VocalistGrid_DispatchData:
 	lda	xde, (MidiPart_OctaveStr_m2_0x4:24)
 	ld_rrl xwa, xde, ix
 	cp xwa, 4294967295
-	jrl	z, 1571
+	jrl	z, AcVocalist_ReturnZero
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
@@ -3078,7 +3082,7 @@ VocalistGrid_DispatchData:
 	ld_rrl xwa, xde, bc
 	ld bc, 1:i3
 	ld de, 2:i3
-	jr	102
+	jr	VocalistGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
@@ -3111,7 +3115,7 @@ VocalistGrid_DispatchData:
 	lda	xde, (MidiPart_OctaveStr_m2_0x4:24)
 	ld_rrl xwa, xde, ix
 	cp xwa, 4294967295
-	jrl	z, 1468
+	jrl	z, AcVocalist_ReturnZero
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
@@ -3119,6 +3123,7 @@ VocalistGrid_DispatchData:
 	ld_rrl xwa, xde, bc
 	ldw bc, 65535
 	ld	de, 2:i3
+VocalistGridCheck_Join:
 	call	MainLswAdd
 	jrl	1442
 	ld	(xsp+4), xbc
@@ -3163,9 +3168,9 @@ VocalistGrid_DispatchData:
 	lda	xbc, (xde+4)
 	sub	xwa, 0x2d00
 	cp	xwa, 0
-	jrl	c, 1331
+	jrl	c, AcVocalist_ReturnZero
 	cp	xwa, 19
-	jrl	ugt, 1322
+	jrl	ugt, AcVocalist_ReturnZero
 	add	xwa, xwa
 	.byte 0xe8, 0xc8
 	.long MidiPart_ColWidthData
@@ -3174,18 +3179,21 @@ VocalistGrid_DispatchData:
 	jp_rr 8, xix, wa
 	ld wa, (xbc)
 	cp wa, 16
-	jr	z, 13
+	jr	z, VocalistGridCheck_Skip2
 	cp	wa, 17
-	jr	nz, 25
+	jr	nz, VocalistGridCheck_Skip3
 	ld	xwa, MidiPart_OctaveStr_m2_0x84
-	jr	5
+	jr	VocalistGridCheck_Join2
+VocalistGridCheck_Skip2:
 	ld	xwa, MidiPart_OctaveStr_m2_0x90
+VocalistGridCheck_Join2:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
-	jr	20
+	jr	VocalistGridCheck_Join3
+VocalistGridCheck_Skip3:
 	inc	1, wa
 	pushw	wa
 	pushw	231
@@ -3194,11 +3202,12 @@ VocalistGrid_DispatchData:
 	push	xwa
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
+VocalistGridCheck_Join3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	1222
+	jrl	VocalistGridCheck_Join12
 	ld	wa, (xbc)
 	inc	1, wa
 	.long Bitmap_MIDIConnections_Header
@@ -3211,7 +3220,7 @@ VocalistGrid_DispatchData:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	1183
+	jrl	VocalistGridCheck_Join12
 	ld	wa, (xbc)
 	inc	1, wa
 	pushw	wa
@@ -3225,7 +3234,7 @@ VocalistGrid_DispatchData:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	1144
+	jrl	VocalistGridCheck_Join12
 	ld	wa, (xbc)
 	sla	wa, 2
 	lda	xbc, (MidiPart_NoteNameTable:24)
@@ -3241,24 +3250,28 @@ VocalistGrid_DispatchData:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	1094
+	jrl	VocalistGridCheck_Join12
 	ld	wa, (xbc)
 	cp	wa, 3:i3
-	jr	z, 33
+	jr	z, VocalistGridCheck_Skip6
 	cp	wa, 2:i3
-	jr	z, 22
+	jr	z, VocalistGridCheck_Skip5
 	cp	wa, 1:i3
-	jr	z, 11
+	jr	z, VocalistGridCheck_Skip4
 	cp	wa, 0:i3
 	.ascii "n%@("
 	or	xsp, xsp
 	nop
-	jr	19
+	jr	VocalistGridCheck_Join4
+VocalistGridCheck_Skip4:
 	ld	xwa, MidiPart_OctaveStr_m2_0xD8
-	jr	12
+	jr	VocalistGridCheck_Join4
+VocalistGridCheck_Skip5:
 	ld	xwa, MidiPart_OctaveStr_m2_0xE4
-	jr	5
+	jr	VocalistGridCheck_Join4
+VocalistGridCheck_Skip6:
 	ld	xwa, MidiPart_OctaveStr_m2_0xF0
+VocalistGridCheck_Join4:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
@@ -3268,21 +3281,24 @@ VocalistGrid_DispatchData:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	1022
+	jrl	VocalistGridCheck_Join12
 	ld	wa, (xbc)
 	cp	wa, 120
-	jr	z, 13
+	jr	z, VocalistGridCheck_Skip7
 	cp	wa, 121
-	jr	nz, 25
+	jr	nz, VocalistGridCheck_Skip8
 	ld	xwa, MidiPart_OctaveStr_m2_0xFC
-	jr	5
+	jr	VocalistGridCheck_Join5
+VocalistGridCheck_Skip7:
 	ld	xwa, MidiPart_OctaveStr_m2_0x108
+VocalistGridCheck_Join5:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
-	jr	18
+	jr	VocalistGridCheck_Join6
+VocalistGridCheck_Skip8:
 	pushw	wa
 	pushw	231
 	pushw	0xef70
@@ -3290,11 +3306,12 @@ VocalistGrid_DispatchData:
 	push	xwa
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
+VocalistGridCheck_Join6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	948
+	jrl	VocalistGridCheck_Join12
 	ld	bc, (xbc)
 	ld	de, bc
 	and	de, 127
@@ -3382,18 +3399,21 @@ VocalistGrid_CheckDispData:
 	ld	xwa, 0x2d00
 	call	SndParam_LookupReadOnly
 	cp	hl, 16
-	jr	z, 13
+	jr	z, VocalistGridCheck_Skip9
 	cp	hl, 17
-	jr	nz, 25
+	jr	nz, VocalistGridCheck_Skip10
 	ld	xwa, MidiPart_OctaveStr_m2_0x134
-	jr	5
+	jr	VocalistGridCheck_Join7
+VocalistGridCheck_Skip9:
 	ld	xwa, MidiPart_OctaveStr_m2_0x140
+VocalistGridCheck_Join7:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
-	jr	29
+	jr	VocalistGridCheck_Join8
+VocalistGridCheck_Skip10:
 	ld	xwa, 0x2d00
 	call	SndParam_LookupReadOnly
 	inc	1, hl
@@ -3404,11 +3424,12 @@ VocalistGrid_CheckDispData:
 	push	xwa
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
+VocalistGridCheck_Join8:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	613
+	jrl	VocalistGridCheck_Join12
 	ld	xwa, 0x2d02
 	call	SndParam_LookupReadOnly
 	inc	1, hl
@@ -3423,7 +3444,7 @@ VocalistGrid_CheckDispData:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	567
+	jrl	VocalistGridCheck_Join12
 	ld	xwa, 0x2d04
 	call	SndParam_LookupReadOnly
 	inc	1, hl
@@ -3438,7 +3459,7 @@ VocalistGrid_CheckDispData:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	521
+	jrl	VocalistGridCheck_Join12
 	ld	xwa, 0x2d06
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
@@ -3455,51 +3476,59 @@ VocalistGrid_CheckDispData:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	464
+	jrl	VocalistGridCheck_Join12
 	ld	xwa, 0x2d08
 	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
-	jr	z, 33
+	jr	z, VocalistGridCheck_Entry
 	cp	hl, 2:i3
-	jr	z, 22
+	jr	z, VocalistGridCheck_Skip12
 	cp	hl, 1:i3
-	jr	z, 11
+	jr	z, VocalistGridCheck_Skip11
 	cp	hl, 0:i3
-	jr	nz, 37
+	jr	nz, VocalistGridCheck_Skip13
 	ld	xwa, MidiPart_OctaveStr_m2_0x17C
-	jr	19
+	jr	VocalistGridCheck_Join9
+VocalistGridCheck_Skip11:
 	ld	xwa, MidiPart_OctaveStr_m2_0x188
-	jr	12
+	jr	VocalistGridCheck_Join9
+VocalistGridCheck_Skip12:
 	ld	xwa, MidiPart_OctaveStr_m2_0x194
-	jr	5
+	jr	VocalistGridCheck_Join9
+VocalistGridCheck_Entry:
 	.byte 0x40
 	.long MidiPart_RecvTransStr
+VocalistGridCheck_Join9:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
+VocalistGridCheck_Skip13:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	385
+	jrl	VocalistGridCheck_Join12
 	ld	xwa, 0x2d0a
 	call	SndParam_LookupReadOnly
 	lda	xbc, (xsp+20)
 	cp	hl, 120
-	jr	z, 13
+	jr	z, VocalistGridCheck_Entry2
 	cp	hl, 121
-	jr	nz, 22
+	jr	nz, VocalistGridCheck_Skip14
 	ld	xwa, MidiPart_RecvTransStr_0xC
-	jr	5
+	jr	VocalistGridCheck_Join10
+VocalistGridCheck_Entry2:
 	.byte 0x40
 	.long MidiPart_AfterStr
+VocalistGridCheck_Join10:
 	push	xwa
 	push	xbc
 	call	Strcpy
 	inc	8, xsp
-	jr	27
+	jr	VocalistGridCheck_Join11
+VocalistGridCheck_Skip14:
 	ld	xwa, 0x2d0a
 	call	SndParam_LookupReadOnly
 	pushw	hl
@@ -3509,11 +3538,12 @@ VocalistGrid_CheckDispData:
 	push	xwa
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
+VocalistGridCheck_Join11:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	295
+	jrl	VocalistGridCheck_Join12
 	ld	xwa, 0x2d0d
 	call	SndParam_LookupReadOnly
 	exts	xhl
@@ -3547,7 +3577,7 @@ VocalistGrid_CheckDispData:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
-	jrl	177
+	jrl	VocalistGridCheck_Join12
 	ld	xwa, 0x2d11
 	call	SndParam_LookupReadOnly
 	exts	xhl
@@ -3606,6 +3636,7 @@ VocalistGrid_CheckDispData:
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
+VocalistGridCheck_Join12:
 	call	SendEvent
 
 AcVocalist_ReturnZero:
@@ -3643,10 +3674,11 @@ AcVocalist_ListDispatch:
 	ld	xwa, 0xd7000c
 	ld	xbc, 0x01c0000f
 	ld	xde, 0:i3
-	jr	12
+	jr	VocalistGridCheck_Join13
 	ld	xwa, 0xd7000c
 	ld	xbc, 0x01c0000f
 	ld	xde, 1:i3
+VocalistGridCheck_Join13:
 	call	SendEvent
 
 ; AcVocalist list case 1
@@ -3886,11 +3918,12 @@ VocalistPage1OK_Dispatch:
 	srl	xwa, 0
 	ld	qwa, 0
 	cp	wa, 0:i3
-	jr	z, 11
+	jr	z, VocalistPage2OKFunc_Skip
 	ld	xwa, 0x01d400
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	9
+VocalistPage2OKFunc_Skip:
 	ld	xwa, 0x01d400
 	ld	bc, 0:i3
 	ld	de, 2:i3
@@ -3899,6 +3932,7 @@ VocalistPage1OK_Dispatch:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000ee
+VocalistPage2OKFunc_Join:
 	call	ApPostEvent
 	ld	(0x7f40:16), 1
 	call	MidiSysEx_SendAllParams
@@ -3924,16 +3958,17 @@ VocalistPage1_DispatchData:
 	ld	xwa, 0x018000
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	9
+	jr	VocalistPage2OKFunc_Join2
 	ld	xwa, 0x018000
 	ld	bc, 0:i3
 	ld	de, 2:i3
+VocalistPage2OKFunc_Join2:
 	call	SoundParam_NotifyChange
 	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000ee
-	jr	-98
+	jr	VocalistPage2OKFunc_Join
 	ld	wa, bc
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
@@ -3947,20 +3982,22 @@ VocalistPage1_DispatchData:
 	srl	xwa, 0
 	ld	qwa, 0
 	cp	wa, 0:i3
-	jr	z, 11
+	jr	z, VocalistPage2OKFunc_Skip2
 	ld	xwa, 0x018c00
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	9
+	jr	VocalistPage2OKFunc_Join3
+VocalistPage2OKFunc_Skip2:
 	ld	xwa, 0x018c00
 	ld	bc, 0:i3
 	ld	de, 2:i3
+VocalistPage2OKFunc_Join3:
 	call	SoundParam_NotifyChange
 	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000ee
-	jrl	-189
+	jrl	VocalistPage2OKFunc_Join
 	ld	wa, bc
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
@@ -3972,7 +4009,7 @@ VocalistPage1_DispatchData:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000ee
-	jrl	-237
+	jrl	VocalistPage2OKFunc_Join
 
 MainVocalistPage2OKFunc:
 	cp xbc, 0x1e30008

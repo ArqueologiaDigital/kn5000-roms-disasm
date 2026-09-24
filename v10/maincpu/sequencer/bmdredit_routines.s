@@ -1529,19 +1529,21 @@ BmDrEdit_ByteData_NoteCoordTable:
 	ret	nc
 	inc	1, wa
 	ld	(10130:16), wa
-	jp	16017633
+	jp	NoteEditSy_SendModeScrollCmd
 	.byte 0xf1, 0x5c, 0x29, 0xcf
 	ret	nz
 	ld	wa, (10130:16)
 	cp	wa, 0:i3
-	jr	nz, 8
+	jr	nz, BmDrEdit_ByteData_NoteCoordTable_Code_Skip
 	ldw	(10130:16), 48
-	jr	10
+	jr	BmDrEdit_ByteData_NoteCoordTable_Code_Join
+BmDrEdit_ByteData_NoteCoordTable_Code_Skip:
 	cp	wa, 1:i3
 	ret	ule
 	dec	1, wa
 	ld	(10130:16), wa
-	call	16017633
+BmDrEdit_ByteData_NoteCoordTable_Code_Join:
+	call	NoteEditSy_SendModeScrollCmd
 	ret
 
 BmDrEdit_ChordScrollUp_Check:
@@ -3899,6 +3901,7 @@ NoteEdit_UpdateScrollAndDisplay:
 	cp (0x279a:16), wa
 	ret nc
 	jrl NoteEditSy_UpdateAllWidgets
+NoteEdit_UpdateScrollAndDisplay_Helper:
 	sub a, c
 	bit 0, (0x2742:16)
 	jr z, BmDrEdit_UpdateDisplay_MelodicOffset
@@ -3921,28 +3924,28 @@ BmDrEdit_ByteData_CompoundWidgetUpdate:
 	push	qiz
 	lda	xwa, (xsp+8)
 	lda	xbc, (xsp+6)
-	calr	-6217
+	calr	BmDrEdit_SetupCoordinates
 	ld	wa, (xsp+6)
 	sub	(xsp+8), wa
 	.byte 0x9f, 0x08, 0x19, 0xce, 0x27
-	call	15999398
+	call	SeqData_ReadNextByte
 	ldb_erp	l, 250
 	lda	xwa, (xsp+4)
 	lda	xbc, (xsp+2)
-	calr	-5184
+	calr	BmDrEdit_SetupScrollRegion
 	stb_erp	a, 250
 	extz	wa
 	ld	c, (xsp+4)
 	extz	bc
-	calr	-91
-	call	15990866
-	call	15990866
-	call	15999398
+	calr	NoteEdit_UpdateScrollAndDisplay_Helper
+	call	SeqData_AdvancePosition
+	call	SeqData_AdvancePosition
+	call	SeqData_ReadNextByte
 	ldb_erp	l, 250
 	stb_erp	a, 250
 	ldb_erp	a, 251
-	call	15990866
-	call	15999398
+	call	SeqData_AdvancePosition
+	call	SeqData_ReadNextByte
 	ldb_erp	l, 250
 	res_erpb	251, 7
 	res_erpb	250, 7
@@ -3953,10 +3956,11 @@ BmDrEdit_ByteData_CompoundWidgetUpdate:
 	extz	wa
 	add	bc, wa
 	ld	(10192:16), bc
-	calr	6
+	calr	NoteEdit_UpdateScrollAndDisplay_Helper2
 	pop	qiz
 	inc	8, xsp
 	ret
+NoteEdit_UpdateScrollAndDisplay_Helper2:
 	ld	e, (10100:16)
 	mul	e, 96
 	dec	1, de

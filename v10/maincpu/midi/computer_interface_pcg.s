@@ -295,11 +295,11 @@ PcgOutGridCheck:
 	lda xix, (PcgOutGridCheckJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 PcgOutGridCheckJumpTable:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16422496
+	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
@@ -309,16 +309,16 @@ PcgOutGridCheckJumpTable:
 	ld	bc, iz
 	ld	(xwa+2), bc
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 1690
+	jrl	nz, PcgOutGridCheckComplete
 	ld	xde, (xsp+44)
 	cp	bc, 3:i3
-	jrl	z, 163
+	jrl	z, PcgOutGridCheckJumpTable_Skip5
 	cp	bc, 2:i3
-	jr	z, 103
+	jr	z, PcgOutGridCheckJumpTable_Entry
 	cp	bc, 1:i3
-	jr	z, 52
+	jr	z, PcgOutGridCheckJumpTable_Skip2
 	cp	bc, 0:i3
-	jrl	nz, 1669
+	jrl	nz, PcgOutGridCheckComplete
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
@@ -329,10 +329,12 @@ PcgOutGridCheckJumpTable:
 	ld	xbc, 15
 	ld	(xwa+6), xbc
 	cp	xde, 29360153
-	jr	nz, 5
+	jr	nz, PcgOutGridCheckJumpTable_Skip
 	ld	xbc, 4:i3
 	ld	(xwa+14), xbc
-	jrl	481
+PcgOutGridCheckJumpTable_Skip:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip2:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
@@ -343,12 +345,14 @@ PcgOutGridCheckJumpTable:
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	cp	xde, 29360153
-	jr	nz, 5
+	jr	nz, PcgOutGridCheckJumpTable_Skip3
 	ld	xbc, 4:i3
 	ld	(xwa+14), xbc
-	jrl	434
+PcgOutGridCheckJumpTable_Skip3:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Entry:
 	.byte 0xc2, 0x70, 0x47, 0x02, 0x3f, 0xff
-	jrl	z, 1566
+	jrl	z, PcgOutGridCheckComplete
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
@@ -359,10 +363,12 @@ PcgOutGridCheckJumpTable:
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	cp	xde, 29360153
-	jr	nz, 5
+	jr	nz, PcgOutGridCheckJumpTable_Skip4
 	ld	xbc, 4:i3
 	ld	(xwa+14), xbc
-	jrl	378
+PcgOutGridCheckJumpTable_Skip4:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip5:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
@@ -375,15 +381,16 @@ PcgOutGridCheckJumpTable:
 	ld	xbc, 4294967295
 	ld	(xwa+10), xbc
 	cp	xde, 29360153
-	jr	nz, 5
+	jr	nz, PcgOutGridCheckJumpTable_Skip6
 	ld	xbc, 4:i3
 	ld	(xwa+14), xbc
-	jrl	323
-	call	16401616
+PcgOutGridCheckJumpTable_Skip6:
+	jrl	PcgOutGridCheckJumpTable_Join4
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
-	call	16422496
+	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
@@ -393,16 +400,16 @@ PcgOutGridCheckJumpTable:
 	ld	bc, iz
 	ld	(xwa+2), bc
 	.byte 0x90, 0x3f, 0x01, 0x00
-	jrl	nz, 1420
+	jrl	nz, PcgOutGridCheckComplete
 	ld	xde, (xsp+44)
 	cp	bc, 3:i3
-	jrl	z, 205
+	jrl	z, PcgOutGridCheckJumpTable_Skip11
 	cp	bc, 2:i3
-	jrl	z, 131
+	jrl	z, PcgOutGridCheckJumpTable_Entry2
 	cp	bc, 1:i3
-	jr	z, 66
+	jr	z, PcgOutGridCheckJumpTable_Skip8
 	cp	bc, 0:i3
-	jrl	nz, 1398
+	jrl	nz, PcgOutGridCheckComplete
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
@@ -414,13 +421,16 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa+6), xbc
 	lda	xhl, (xwa+14)
 	cp	xde, 29360154
-	jr	nz, 9
+	jr	nz, PcgOutGridCheckJumpTable_Skip7
 	ld	xbc, 4294967292
 	ld	(xhl), xbc
-	jr	7
+	jr	PcgOutGridCheckJumpTable_Join
+PcgOutGridCheckJumpTable_Skip7:
 	ld	xbc, 4294967295
 	ld	(xhl), xbc
-	jrl	196
+PcgOutGridCheckJumpTable_Join:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip8:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
@@ -432,15 +442,18 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa+6), xbc
 	lda	xhl, (xwa+14)
 	cp	xde, 29360154
-	jr	nz, 9
+	jr	nz, PcgOutGridCheckJumpTable_Skip9
 	ld	xbc, 4294967292
 	ld	(xhl), xbc
-	jr	7
+	jr	PcgOutGridCheckJumpTable_Join2
+PcgOutGridCheckJumpTable_Skip9:
 	ld	xbc, 4294967295
 	ld	(xhl), xbc
-	jrl	135
+PcgOutGridCheckJumpTable_Join2:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Entry2:
 	.byte 0xc2, 0x70, 0x47, 0x02, 0x3f, 0xff
-	jrl	z, 1267
+	jrl	z, PcgOutGridCheckComplete
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
@@ -452,13 +465,16 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa+6), xbc
 	lda	xhl, (xwa+14)
 	cp	xde, 29360154
-	jr	nz, 9
+	jr	nz, PcgOutGridCheckJumpTable_Skip10
 	ld	xbc, 4294967292
 	ld	(xhl), xbc
-	jr	7
+	jr	PcgOutGridCheckJumpTable_Join3
+PcgOutGridCheckJumpTable_Skip10:
 	ld	xbc, 4294967295
 	ld	(xhl), xbc
-	jr	66
+PcgOutGridCheckJumpTable_Join3:
+	jr	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip11:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
@@ -472,14 +488,16 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa+10), xbc
 	lda	xhl, (xwa+14)
 	cp	xde, 29360154
-	jr	nz, 9
+	jr	nz, PcgOutGridCheckJumpTable_Skip12
 	ld	xbc, 4294967292
 	ld	(xhl), xbc
-	jr	7
+	jr	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip12:
 	ld	xbc, 4294967295
 	ld	(xhl), xbc
-	call	16383626
-	jrl	1134
+PcgOutGridCheckJumpTable_Join4:
+	call	MainRamAdd
+	jrl	PcgOutGridCheckComplete
 	ldw	(xhl), 1
 	ld	xhl, xiy
 	ld	(xde), xiy

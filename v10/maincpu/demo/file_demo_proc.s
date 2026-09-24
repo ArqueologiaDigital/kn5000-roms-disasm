@@ -72,7 +72,7 @@ FDemo_DisplayResourceData:
 	ld	xbc, 256
 	call	FileIO_ReadBlock
 	or	xhl, xhl
-	jr	z, 23
+	jr	z, FDemo_DisplayResourceData_Skip
 	ld	xwa, 256
 	calr	132
 	pushw	256
@@ -81,6 +81,7 @@ FDemo_DisplayResourceData:
 	push	xhl
 	call	Mem_Copy
 	lda	xsp, (xsp+10)
+FDemo_DisplayResourceData_Skip:
 	inc	1, iz
 	cp	iz, 8
 	jr	lt, -47
@@ -100,9 +101,9 @@ FDemo_DisplayResourceData:
 	ld	xbc, 256
 	call	FileIO_ReadBlock
 	or	xhl, xhl
-	jr	z, 39
+	jr	z, FDemo_DisplayResourceData_Skip2
 	ld	xwa, 256
-	calr	56
+	calr	Seq_LoadNamedResource_Helper
 	pushw	256
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -114,6 +115,7 @@ FDemo_DisplayResourceData:
 	call	FileIO_ReadBlock
 	or	xhl, xhl
 	jr	nz, -39
+FDemo_DisplayResourceData_Skip2:
 	call	FileIO_CloseHandle
 	ld	hl, (xsp+4)
 	pop	xiz
@@ -125,6 +127,7 @@ FDemo_DisplayResourceData:
 	lda	xwa, (0xab000:24)
 	ld	(0x25b7e:24), xwa
 	ret
+Seq_LoadNamedResource_Helper:
 	lda	xhl, (0xab000:24)
 	lda	xbc, (0xfd800:24)
 	sub	xbc, xhl
@@ -134,12 +137,14 @@ FDemo_DisplayResourceData:
 	sub	xbc, xhl
 	add	xbc, xwa
 	cp	xbc, xix
-	jr	nc, 11
+	jr	nc, FDemo_DisplayResourceData_Skip3
 	ld	xhl, xde
 	add	xde, xwa
 	ld	(0x25b7e:24), xde
-	jr	2
+	jr	FDemo_DisplayResourceData_Return
+FDemo_DisplayResourceData_Skip3:
 	ld	xhl, 0:i3
+FDemo_DisplayResourceData_Return:
 	ret
 
 MainPreControl:
@@ -405,6 +410,7 @@ FDemo_LinkedListSearchInsert:
 	lda	xwa, (0x249d8:24)
 	ld	(xsp+2), xwa
 	ld	iz, 0:i3
+FDemo_LinkedListSearchInsert_Loop:
 	ld	xwa, (xsp+2)
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -412,35 +418,41 @@ FDemo_LinkedListSearchInsert:
 	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	z, 16
+	jr	z, FDemo_LinkedListSearchInsert_Skip
 	ld	xwa, 24
 	add	(xsp+2), xwa
 	inc	1, iz
 	cp	iz, 63
-	jr	lt, -34
+	jr	lt, FDemo_LinkedListSearchInsert_Loop
+FDemo_LinkedListSearchInsert_Skip:
 	cp	iz, 63
-	jr	z, 5
+	jr	z, FDemo_LinkedListSearchInsert_Skip2
 	ld	xhl, (xsp+2)
-	jr	6
+	jr	FDemo_LinkedListSearchInsert_Epilogue
+FDemo_LinkedListSearchInsert_Skip2:
 	ld	xwa, (xsp+6)
-	calr	65409
+	calr	FDemo_LinkedListSearch
+FDemo_LinkedListSearchInsert_Epilogue:
 	popw	iz
 	inc	8, xsp
 	ret
+FDemo_LinkedListLookupField_Helper:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xbc
 	lda	xiz, (0x249d8:24)
 	ld	de, 0:i3
+FDemo_LinkedListSearchInsert_Loop2:
 	ld	xbc, (xiz+16)
 	or	xbc, xbc
-	jr	z, 11
+	jr	z, FDemo_LinkedListSearchInsert_Skip3
 	lda	xiz, (xiz+24)
 	inc	1, de
 	cp	de, 63
-	jr	lt, -18
+	jr	lt, FDemo_LinkedListSearchInsert_Loop2
+FDemo_LinkedListSearchInsert_Skip3:
 	cp	de, 63
-	jr	z, 18
+	jr	z, FDemo_LinkedListSearchInsert_Skip4
 	push	xwa
 	push	xiz
 	call	Strcpy
@@ -448,8 +460,10 @@ FDemo_LinkedListSearchInsert:
 	ld	xwa, (xsp+4)
 	ld	(xiz+16), xwa
 	ld	hl, 1:i3
-	jr	2
+	jr	FDemo_LinkedListSearchInsert_Epilogue2
+FDemo_LinkedListSearchInsert_Skip4:
 	ld	hl, 0:i3
+FDemo_LinkedListSearchInsert_Epilogue2:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -475,7 +489,7 @@ FDemo_FileOpenAndProcess:
 	call Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+10)
-	calr	65369
+	calr	FDemo_LinkedListSearchInsert
 	or xhl, xhl
 	jr z, FDemo_FileOpen_DoOpen
 	ld	hl, 0:i3
@@ -494,7 +508,7 @@ FDemo_FileOpen_DoOpen:
 	ld xiz, xhl
 	call FileIO_SeekRead_ExtReturn
 	ld xwa, xiz
-	calr	64649
+	calr	Seq_LoadNamedResource_Helper
 	ld (xsp+6), xhl
 	ld xwa, (xsp+6)
 	or xwa, xwa
@@ -506,7 +520,7 @@ FDemo_FileOpen_CloseHandle:
 	call FileIO_CloseHandle
 	lda	xwa, (xsp+10)
 	ld xbc, (xsp+6)
-	calr	65355
+	calr	FDemo_LinkedListLookupField_Helper
 FDemo_FileOpen_GetResult:
 	ld hl, (xsp+4)
 FDemo_FileOpen_Exit:
@@ -665,14 +679,15 @@ Demo_SelectEntry_ByteTable:
 	bit	0, (0xc07e:16)
 	ret	z
 	cpw	(0x28b4:16), 0
-	jr	nz, 6
+	jr	nz, Demo_SelectEntry_ByteTable_Skip
 	bit	0, (0x3283:16)
-	jr	z, 52
+	jr	z, Demo_SelectEntry_ByteTable_Skip2
+Demo_SelectEntry_ByteTable_Skip:
 	res	3, (0x28ad:16)
 	cp	(0x8d38:16), 228
 	.byte 0xf2, 0xf1, 0x29, 0xf2, 0xee
-	calr	827
-	calr	1008
+	calr	Demo_PreSetupAndScan
+	calr	Demo_WaitForDisplayBit
 	ldw	(0x25b84:24), 1
 	ld	(0x8f4e:16), 4
 	cp	(0x8d38:16), 228
@@ -680,14 +695,17 @@ Demo_SelectEntry_ByteTable:
 	ld	a, (0x28a4:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
+Demo_SelectEntry_ByteTable_Skip2:
 	set	3, (0x28ad:16)
 	cp	(0x8d38:16), 228
-	jr	z, 11
+	jr	z, Demo_SelectEntry_ByteTable_Skip3
 	call	CDlikeSwTtl_SetRecordAndNotify
 	ld	(4440:16), 0
-	jr	5
+	jr	Demo_SelectEntry_ByteTable_Join
+Demo_SelectEntry_ByteTable_Skip3:
 	ld	(4440:16), 18
-	jrl	t, 0x00e3
+Demo_SelectEntry_ByteTable_Join:
+	jrl	t, Demo_SelectEntry_AfterSongLoad
 
 Demo_SelectEntry_ProcessSongList:
 	cpw (0x28b4:16), 0
@@ -3084,9 +3102,10 @@ FileIO_ByteBlock_DemoProc1:
 	ld	(xsp+38), wa
 	call	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	ge, 6
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip
 	ldw	hl, 0xff98
-	jrl	187
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue
+FileIO_ByteBlock_DemoProc1_Skip:
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
@@ -3105,13 +3124,14 @@ FileIO_ByteBlock_DemoProc1:
 	.long Resource_RegionPad
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip2
 	call	FileIO_ReturnError
-	jrl	128
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue
+FileIO_ByteBlock_DemoProc1_Skip2:
 	ld	wa, 1:i3
-	calr	61392
+	calr	FileIO_CheckRegionSignature
 	cp	hl, 0:i3
-	jr	z, 110
+	jr	z, FileIO_ByteBlock_DemoProc1_Skip3
 	ld	wa, (0x1ed35d:24)
 	extz	xwa
 	ld	(xsp+8), xwa
@@ -3133,7 +3153,7 @@ FileIO_ByteBlock_DemoProc1:
 	call	FileIO_SeekAndReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	lt, 46
+	jr	lt, FileIO_ByteBlock_DemoProc1_Join
 	ld	wa, (xsp+36)
 	extz	wa
 	call	BitMapOut_UpdateWidget_Done_0x8A
@@ -3148,10 +3168,13 @@ FileIO_ByteBlock_DemoProc1:
 	extz	wa
 	ld	bc, iz
 	call	BitMapOut_UpdateWidget_Done_0x8B
-	jr	3
+	jr	FileIO_ByteBlock_DemoProc1_Join
+FileIO_ByteBlock_DemoProc1_Skip3:
 	ldw	iz, 0xff9a
+FileIO_ByteBlock_DemoProc1_Join:
 	call	FileIO_CloseHandle
 	ld	hl, iz
+FileIO_ByteBlock_DemoProc1_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+36)
 	ret
@@ -3161,9 +3184,10 @@ FileIO_ByteBlock_DemoProc1:
 	ld	(xsp+38), wa
 	call	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	ge, 6
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip4
 	ldw	hl, 0xff98
-	jrl	259
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue2
+FileIO_ByteBlock_DemoProc1_Skip4:
 	ld	a, l
 	extz	wa
 	ld	(xsp+10), wa
@@ -3181,13 +3205,14 @@ FileIO_ByteBlock_DemoProc1:
 	ld	xbc, Resource_RegionPad_0x4
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip5
 	call	FileIO_ReturnError
-	jrl	199
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue2
+FileIO_ByteBlock_DemoProc1_Skip5:
 	ld	wa, 1:i3
-	calr	61175
+	calr	FileIO_CheckRegionSignature
 	cp	hl, 0:i3
-	jrl	z, 180
+	jrl	z, FileIO_ByteBlock_DemoProc1_Skip6
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xiz, xwa
@@ -3205,7 +3230,7 @@ FileIO_ByteBlock_DemoProc1:
 	call	FileIO_SeekAndReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jrl	lt, 130
+	jrl	lt, FileIO_ByteBlock_DemoProc1_Join2
 	ld	wa, (xsp+36)
 	extz	wa
 	call	BitMapOut_UpdateWidget_Done_0x98
@@ -3245,10 +3270,13 @@ FileIO_ByteBlock_DemoProc1:
 	extz	wa
 	ld	bc, iz
 	call	BitMapOut_UpdateWidget_Done_0x99
-	jr	3
+	jr	FileIO_ByteBlock_DemoProc1_Join2
+FileIO_ByteBlock_DemoProc1_Skip6:
 	ldw	iz, 0xff9a
+FileIO_ByteBlock_DemoProc1_Join2:
 	call	FileIO_CloseHandle
 	ld	hl, iz
+FileIO_ByteBlock_DemoProc1_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+36)
 	ret
@@ -3257,9 +3285,10 @@ FileIO_ByteBlock_DemoProc1:
 	ld	(xsp+32), wa
 	call	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	ge, 6
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip7
 	ldw	hl, 0xff98
-	jrl	204
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue3
+FileIO_ByteBlock_DemoProc1_Skip7:
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
@@ -3277,18 +3306,20 @@ FileIO_ByteBlock_DemoProc1:
 	ld	xbc, Resource_RegionPad_0x8
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip8
 	call	FileIO_ReturnError
-	jrl	145
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue3
+FileIO_ByteBlock_DemoProc1_Skip8:
 	ld	wa, 2:i3
-	calr	60891
+	calr	FileIO_CheckRegionSignature
 	cp	hl, 0:i3
-	jr	z, 127
-	calr	61292
+	jr	z, FileIO_ByteBlock_DemoProc1_Skip11
+	calr	FileIO_ReadHeaderAt4
 	cp	hl, 0:i3
-	jr	z, 5
+	jr	z, FileIO_ByteBlock_DemoProc1_Skip9
 	ldw	iz, 0xff96
-	jr	118
+	jr	FileIO_ByteBlock_DemoProc1_Join3
+FileIO_ByteBlock_DemoProc1_Skip9:
 	ld	wa, (xsp+32)
 	extz	wa
 	call	SeqLoad_ProcessDataBlock
@@ -3298,7 +3329,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	bc, 2:i3
 	call	UpdateFileEntry
 	cp	(xsp+4), xhl
-	jr	c, 81
+	jr	c, FileIO_ByteBlock_DemoProc1_Skip10
 	ld	wa, (xsp+32)
 	extz	wa
 	call	SeqLoad_ProcessDataBlock_0x80
@@ -3321,16 +3352,20 @@ FileIO_ByteBlock_DemoProc1:
 	ld	bc, iz
 	call	SeqLoad_ProcessDataBlock_0xCC
 	cp	iz, 0:i3
-	jr	lt, 19
+	jr	lt, FileIO_ByteBlock_DemoProc1_Join3
 	ld	wa, (xsp+32)
 	ld	bc, 0:i3
 	call	SetSongSlotValue
-	jr	8
+	jr	FileIO_ByteBlock_DemoProc1_Join3
+FileIO_ByteBlock_DemoProc1_Skip10:
 	ldw	iz, 0xff97
-	jr	3
+	jr	FileIO_ByteBlock_DemoProc1_Join3
+FileIO_ByteBlock_DemoProc1_Skip11:
 	ldw	iz, 0xff9a
+FileIO_ByteBlock_DemoProc1_Join3:
 	call	FileIO_CloseHandle
 	ld	hl, iz
+FileIO_ByteBlock_DemoProc1_Epilogue3:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	ret
@@ -3340,9 +3375,10 @@ FileIO_ByteBlock_DemoProc1:
 	ld	(xsp+28), wa
 	call	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	ge, 5
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip12
 	ldw	hl, 0xff98
-	jr	92
+	jr	FileIO_ByteBlock_DemoProc1_Epilogue4
+FileIO_ByteBlock_DemoProc1_Skip12:
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
@@ -3360,22 +3396,26 @@ FileIO_ByteBlock_DemoProc1:
 	ld	xbc, Resource_RegionPad_0xC
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 6
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip13
 	call	FileIO_ReturnError
-	jr	34
-	calr	60876
+	jr	FileIO_ByteBlock_DemoProc1_Epilogue4
+FileIO_ByteBlock_DemoProc1_Skip13:
+	calr	FileIO_ReadAndValidateHeader
 	cp	hl, 0:i3
-	jr	z, 18
+	jr	z, FileIO_ByteBlock_DemoProc1_Skip14
 	ld	wa, (xsp+28)
 	extz	wa
 	ld	bc, (xsp+26)
 	extz	bc
 	call	AccStyle_TableDataEntry_0x90
 	ld	iz, hl
-	jr	3
+	jr	FileIO_ByteBlock_DemoProc1_Join4
+FileIO_ByteBlock_DemoProc1_Skip14:
 	ldw	iz, 0xff9a
+FileIO_ByteBlock_DemoProc1_Join4:
 	call	FileIO_CloseHandle
 	ld	hl, iz
+FileIO_ByteBlock_DemoProc1_Epilogue4:
 	popw	iz
 	lda	xsp, (xsp+28)
 	ret
@@ -3385,9 +3425,10 @@ FileIO_ByteBlock_DemoProc1:
 	ld	(xsp+42), wa
 	call	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	ge, 6
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip15
 	ldw	hl, 0xff98
-	jrl	313
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue5
+FileIO_ByteBlock_DemoProc1_Skip15:
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
@@ -3405,20 +3446,22 @@ FileIO_ByteBlock_DemoProc1:
 	ld	xbc, Resource_RegionPad_0x10
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip16
 	call	FileIO_ReturnError
-	jrl	254
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue5
+FileIO_ByteBlock_DemoProc1_Skip16:
 	ld	wa, 4:i3
-	calr	60538
+	calr	FileIO_CheckRegionSignature
 	cp	hl, 0:i3
-	jr	nz, 10
+	jr	nz, FileIO_ByteBlock_DemoProc1_Skip17
 	call	FileIO_CloseHandle
 	.byte 0x33, 0x9a
 	.long NakaInst_WindowID_Cont
+FileIO_ByteBlock_DemoProc1_Skip17:
 	ld	wa, (xsp+42)
 	ld	iz, (xsp+40)
 	cp	wa, 40
-	jr	nc, 78
+	jr	nc, FileIO_ByteBlock_DemoProc1_Skip18
 	ldw	(xsp+10), 470
 	extz	xwa
 	ld	xbc, 470
@@ -3442,7 +3485,8 @@ FileIO_ByteBlock_DemoProc1:
 	div	wa, 20
 	ld	wa, qwa
 	ld	(xsp+14), a
-	jr	71
+	jr	FileIO_ByteBlock_DemoProc1_Join5
+FileIO_ByteBlock_DemoProc1_Skip18:
 	sub	wa, 40
 	sub	iz, 40
 	ldw	(xsp+10), 80
@@ -3466,12 +3510,13 @@ FileIO_ByteBlock_DemoProc1:
 	ld	(xsp+12), 64
 	stb_erp a, 248
 	ld	(xsp+14), a
+FileIO_ByteBlock_DemoProc1_Join5:
 	ld	xwa, (xsp+2)
 	ld	bc, 0:i3
 	call	FileIO_SeekAndReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	lt, 53
+	jr	lt, FileIO_ByteBlock_DemoProc1_Skip19
 	ld	a, (xsp+12)
 	extz	wa
 	ld	c, (xsp+14)
@@ -3490,8 +3535,10 @@ FileIO_ByteBlock_DemoProc1:
 	extz	bc
 	ld	de, iz
 	call	TmFlashWrite_Block1_Entry
+FileIO_ByteBlock_DemoProc1_Skip19:
 	call	FileIO_CloseHandle
 	ld	hl, iz
+FileIO_ByteBlock_DemoProc1_Epilogue5:
 	popw	iz
 	lda	xsp, (xsp+42)
 	ret
@@ -3501,9 +3548,10 @@ FileIO_ByteBlock_DemoProc1:
 	ld	(xsp+38), wa
 	call	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	ge, 6
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip20
 	.byte 0x33, 0x98
 	.long Pad_AfterBitmap_MIDIConnections_1
+FileIO_ByteBlock_DemoProc1_Skip20:
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
@@ -3521,18 +3569,20 @@ FileIO_ByteBlock_DemoProc1:
 	ld	xbc, Resource_RegionPad_0x14
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, FileIO_ByteBlock_DemoProc1_Skip21
 	call	FileIO_ReturnError
-	jrl	171
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue6
+FileIO_ByteBlock_DemoProc1_Skip21:
 	ld	wa, 4:i3
-	calr	60196
+	calr	FileIO_CheckRegionSignature
 	cp	hl, 0:i3
-	jr	nz, 10
+	jr	nz, FileIO_ByteBlock_DemoProc1_Skip22
 	call	FileIO_CloseHandle
 	ldw	hl, 0xff9a
-	jrl	152
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue6
+FileIO_ByteBlock_DemoProc1_Skip22:
 	cpw	(xsp+38), 2
-	jr	nc, 60
+	jr	nc, FileIO_ByteBlock_DemoProc1_Skip23
 	ldw (xsp+8), 9400
 	ld wa, (xsp+38)
 	extz	xwa
@@ -3549,18 +3599,20 @@ FileIO_ByteBlock_DemoProc1:
 	add	(xsp+4), xwa
 	ld	wa, (xsp+36)
 	ld	(xsp+10), a
-	jr	22
+	jr	FileIO_ByteBlock_DemoProc1_Join6
+FileIO_ByteBlock_DemoProc1_Skip23:
 	ldw	(xsp+8), 0x2927
 	ld	xiz, 0x4980
 	ld	xwa, 0x4980
 	ld	(xsp+4), xwa
 	ld	(xsp+10), 64
+FileIO_ByteBlock_DemoProc1_Join6:
 	ld	xwa, xiz
 	ld	bc, 0:i3
 	call	FileIO_SeekAndReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	lt, 43
+	jr	lt, FileIO_ByteBlock_DemoProc1_Skip24
 	ld	a, (xsp+10)
 	extz	wa
 	call	TmFlashWrite_Block1_Return
@@ -3575,8 +3627,10 @@ FileIO_ByteBlock_DemoProc1:
 	extz	wa
 	ld	bc, iz
 	call	TmFlashWrite_ValidateParams
+FileIO_ByteBlock_DemoProc1_Skip24:
 	call	FileIO_CloseHandle
 	ld	hl, iz
+FileIO_ByteBlock_DemoProc1_Epilogue6:
 	pop	xiz
 	lda	xsp, (xsp+36)
 	ret
@@ -6616,11 +6670,12 @@ FileIO_ByteBlock_DemoProc2:
 	pushw	iz
 	ld	iz, wa
 	ld	wa, iz
-	calr	63890
+	calr	ValidateFileRange
 	cp	hl, 0:i3
-	jr	z, 5
+	jr	z, GetFileEntryByIndex_Skip
 	ldw	hl, 0xffff
-	jr	26
+	jr	GetFileEntryByIndex_Epilogue
+GetFileEntryByIndex_Skip:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 82
@@ -6630,35 +6685,38 @@ FileIO_ByteBlock_DemoProc2:
 	ldcf 7, (xwa)	; F8A106 (ldcf 7,(xwa))
 	scc8	c, l
 	extz	hl
+GetFileEntryByIndex_Epilogue:
 	popw	iz
 	ret
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa
-	calr	62679
+	calr	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	lt, 49
+	jr	lt, GetFileEntryByIndex_Skip2
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
-	calr	62715
+	calr	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+16)
 	ld	bc, iz
-	calr	61516
+	calr	FileIO_FormatFileIndex
 	lda	xbc, (xsp+16)
 	lda	xwa, (xsp+2)
 	ld	de, 1:i3
-	calr	61550
+	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
 	.byte 0x41
 	.long FileOp_StubAndDirNames
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, GetFileEntryByIndex_Skip3
+GetFileEntryByIndex_Skip2:
 	ld	xhl, Filename_TemplateArea
-	jr	47
+	jr	GetFileEntryByIndex_Epilogue2
+GetFileEntryByIndex_Skip3:
 	ld	wa, (xsp+26)
 	sll	wa, 4
 	add	wa, 16
@@ -6671,35 +6729,38 @@ FileIO_ByteBlock_DemoProc2:
 	ld	(0x25be2:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25bd2:24)
+GetFileEntryByIndex_Epilogue2:
 	popw	iz
 	lda	xsp, (xsp+26)
 	ret
 	lda	xsp, (xsp-26)
 	push	xiz
 	ld	(xsp+28), wa
-	calr	62557
+	calr	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	lt, 49
+	jr	lt, GetFileEntryByIndex_Skip4
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
-	calr	62593
+	calr	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+18)
 	ld	bc, iz
-	calr	61394
+	calr	FileIO_FormatFileIndex
 	lda	xbc, (xsp+18)
 	lda	xwa, (xsp+4)
 	ld	de, 1:i3
-	calr	61428
+	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+4)
 	ld	xbc, FileOp_StubAndDirNames_0x4
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, GetFileEntryByIndex_Skip5
+GetFileEntryByIndex_Skip4:
 	ld	xhl, Filename_TemplateArea
-	jr	72
+	jr	GetFileEntryByIndex_Epilogue3
+GetFileEntryByIndex_Skip5:
 	ld	xwa, 13
 	ld	bc, 0:i3
 	call	FileIO_SeekAndReadBlock
@@ -6720,35 +6781,38 @@ FileIO_ByteBlock_DemoProc2:
 	ld	(0x25bf8:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25be8:24)
+GetFileEntryByIndex_Epilogue3:
 	pop	xiz
 	lda	xsp, (xsp+26)
 	ret
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa
-	calr	62410
+	calr	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	lt, 49
+	jr	lt, GetFileEntryByIndex_Skip6
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
-	calr	62446
+	calr	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+16)
 	ld	bc, iz
-	calr	61247
+	calr	FileIO_FormatFileIndex
 	lda	xbc, (xsp+16)
 	lda	xwa, (xsp+2)
 	ld	de, 2:i3
-	calr	61281
+	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
 	ld	xbc, FileOp_StubAndDirNames_0x8
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, GetFileEntryByIndex_Skip7
+GetFileEntryByIndex_Skip6:
 	ld	xhl, Filename_TemplateArea
-	jr	47
+	jr	GetFileEntryByIndex_Epilogue4
+GetFileEntryByIndex_Skip7:
 	ld	wa, (xsp+26)
 	sll	wa, 11
 	add	wa, 256
@@ -6761,6 +6825,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	(0x25c0e:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25bfe:24)
+GetFileEntryByIndex_Epilogue4:
 	popw	iz
 	lda	xsp, (xsp+26)
 	ret
@@ -6768,29 +6833,31 @@ FileIO_ByteBlock_DemoProc2:
 	pushw	iz
 	ld	(xsp+26), bc
 	ld	(xsp+28), wa
-	calr	62285
+	calr	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	lt, 49
+	jr	lt, GetFileEntryByIndex_Skip8
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
-	calr	62321
+	calr	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+16)
 	ld	bc, iz
-	calr	61122
+	calr	FileIO_FormatFileIndex
 	lda	xbc, (xsp+16)
 	lda	xwa, (xsp+2)
 	ld	de, 3:i3
-	calr	61156
+	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
 	ld	xbc, FileOp_StubAndDirNames_0xC
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, GetFileEntryByIndex_Skip9
+GetFileEntryByIndex_Skip8:
 	ld	xhl, Filename_TemplateArea
-	jr	54
+	jr	GetFileEntryByIndex_Epilogue5
+GetFileEntryByIndex_Skip9:
 	ld	wa, (xsp+28)
 	sll	wa, 2
 	.byte 0x9f, 0x1a
@@ -6806,36 +6873,39 @@ FileIO_ByteBlock_DemoProc2:
 	ld	(0x25c21:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25c14:24)
+GetFileEntryByIndex_Epilogue5:
 	popw	iz
 	lda	xsp, (xsp+28)
 	ret
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa
-	calr	62156
+	calr	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	lt, 49
+	jr	lt, GetFileEntryByIndex_Entry
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
-	calr	62192
+	calr	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+16)
 	ld	bc, iz
-	calr	60993
+	calr	FileIO_FormatFileIndex
 	lda	xbc, (xsp+16)
 	lda	xwa, (xsp+2)
 	ld	de, 4:i3
-	calr	61027
+	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
 	ld	xbc, FileOp_StubAndDirNames_0x10
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, GetFileEntryByIndex_Skip10
+GetFileEntryByIndex_Entry:
 	.byte 0x43
 	.long Filename_TemplateArea
-	jr	48
+	jr	GetFileEntryByIndex_Epilogue6
+GetFileEntryByIndex_Skip10:
 	ld	wa, (xsp+26)
 	mul	wa, 470
 	add	wa, 16
@@ -6848,35 +6918,38 @@ FileIO_ByteBlock_DemoProc2:
 	ld	(0x25c3a:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25c2a:24)
+GetFileEntryByIndex_Epilogue6:
 	popw	iz
 	lda	xsp, (xsp+26)
 	ret
 	lda	xsp, (xsp-24)
 	pushw	iz
-	calr	62036
+	calr	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	lt, 49
+	jr	lt, GetFileEntryByIndex_Entry2
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
-	calr	62072
+	calr	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+16)
 	ld	bc, iz
-	calr	60873
+	calr	FileIO_FormatFileIndex
 	lda	xbc, (xsp+16)
 	lda	xwa, (xsp+2)
 	ld	de, 4:i3
-	calr	60907
+	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
 	ld	xbc, FileOp_StubAndDirNames_0x14
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, GetFileEntryByIndex_Skip11
+GetFileEntryByIndex_Entry2:
 	.byte 0x43
 	.long Filename_TemplateArea
-	jr	40
+	jr	GetFileEntryByIndex_Epilogue7
+GetFileEntryByIndex_Skip11:
 	ld	xwa, 0x4980
 	ld	bc, 0:i3
 	call	FileIO_SeekAndReadBlock
@@ -6886,35 +6959,38 @@ FileIO_ByteBlock_DemoProc2:
 	ld	(0x25c50:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25c40:24)
+GetFileEntryByIndex_Epilogue7:
 	popw	iz
 	lda	xsp, (xsp+24)
 	ret
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa
-	calr	61921
+	calr	GetCurrentFileIndex
 	cp	hl, 0:i3
-	jr	lt, 49
+	jr	lt, GetFileEntryByIndex_Skip12
 	ld	a, l
 	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
-	calr	61957
+	calr	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+16)
 	ld	bc, iz
-	calr	60758
+	calr	FileIO_FormatFileIndex
 	lda	xbc, (xsp+16)
 	lda	xwa, (xsp+2)
 	ld	de, 4:i3
-	calr	60792
+	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
 	ld	xbc, FileOp_StubAndDirNames_0x18
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
-	jr	ge, 7
+	jr	ge, GetFileEntryByIndex_Skip13
+GetFileEntryByIndex_Skip12:
 	ld	xhl, Filename_TemplateArea
-	jr	54
+	jr	GetFileEntryByIndex_Epilogue8
+GetFileEntryByIndex_Skip13:
 	ld	(0x25c56:24), 32
 	ld	wa, (xsp+26)
 	mul	wa, 80
@@ -6928,6 +7004,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	(0x25c64:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25c56:24)
+GetFileEntryByIndex_Epilogue8:
 	popw	iz
 	lda	xsp, (xsp+26)
 	ret
@@ -8721,29 +8798,33 @@ FileIO_ErrorCodeByteBlock:
 	.byte 0xf6
 	ld	c, (0x8d36:16)
 	cp	c, 16
-	jr	c, 5
+	jr	c, FileIO_ErrorCodeByteBlock_Entry
 	cp	c, 22
 	ret	ule
+FileIO_ErrorCodeByteBlock_Entry:
 	.byte 0xf1
 	jrl	nz, -14144
-	jr	z, 68
+	jr	z, FileIO_ErrorCodeByteBlock_Skip4
 	.byte 0xc1
 	ldw	ix, 0x3f8d
 	.byte 0x06
-	jr	nz, 15
+	jr	nz, FileIO_ErrorCodeByteBlock_Skip
 	cp	c, 96
-	jr	z, 52
+	jr	z, FileIO_ErrorCodeByteBlock_Loop
 	cp	c, 126
 	.asciz "f/0`"
-	jr	38
+	jr	FileIO_ErrorCodeByteBlock_Join
+FileIO_ErrorCodeByteBlock_Skip:
 	cp	c, 188
-	jr	z, 10
+	jr	z, FileIO_ErrorCodeByteBlock_Skip2
 	cp	c, 97
-	jr	z, 5
+	jr	z, FileIO_ErrorCodeByteBlock_Skip2
 	cp	c, 100
-	jr	nz, 5
+	jr	nz, FileIO_ErrorCodeByteBlock_Skip3
+FileIO_ErrorCodeByteBlock_Skip2:
 	ldw	wa, 96
-	jr	18
+	jr	FileIO_ErrorCodeByteBlock_Join
+FileIO_ErrorCodeByteBlock_Skip3:
 	cp	c, 98
 	jr	nz, 5
 	ldw	wa, 176
@@ -8751,9 +8832,12 @@ FileIO_ErrorCodeByteBlock:
 	cp	c, 99
 	jr	nz, 7
 	ldw	wa, 72
+FileIO_ErrorCodeByteBlock_Join:
 	call	UI_PostModeChangeEvent
+FileIO_ErrorCodeByteBlock_Loop:
 	calr	64612
 	ret
+FileIO_ErrorCodeByteBlock_Skip4:
 	ld	a, (0x340f2:24)
 	.byte 0xc1
 	ldw	ix, 0x3f8d
@@ -8778,7 +8862,7 @@ FileIO_ErrorCodeByteBlock:
 	lda	xbc, (FileOp_StubAndDirNames_0x90:24)
 	ld_rrb a, xbc, wa
 	cp a, 119
-	jr	z, 21
+	jr	z, FileIO_ErrorCodeByteBlock_Skip5
 	cp	a, 108
 	jr	z, 13
 	cp	a, 97
@@ -8786,12 +8870,14 @@ FileIO_ErrorCodeByteBlock:
 	ldw	wa, 97
 	ldw	bc, 0x0064
 	.ascii "h>xLþ"
+FileIO_ErrorCodeByteBlock_Skip5:
 	extz	wa
-	jr	60
+	jr	FileIO_ErrorCodeByteBlock_Join2
 	cp	c, 96
-	jr	z, 5
+	jr	z, FileIO_ErrorCodeByteBlock_Skip6
 	cp	c, 126
-	jr	nz, 54
+	jr	nz, FileIO_ErrorCodeByteBlock_Skip8
+FileIO_ErrorCodeByteBlock_Skip6:
 	ld	c, a
 	cp	a, 0:i3
 	ret	z
@@ -8802,16 +8888,19 @@ FileIO_ErrorCodeByteBlock:
 	lda	xbc, (FileOp_StubAndDirNames_0x90:24)
 	ld_rrb a, xbc, wa
 	cp a, 119
-	jr	z, 19
+	jr	z, FileIO_ErrorCodeByteBlock_Skip7
 	cp	a, 108
 	jr	z, -51
 	cp	a, 97
 	ret	nz
 	ldw	wa, 97
 	ldw	bc, 100
-	jrl	-604
+	jrl	FileIO_DiskEventDispatch
+FileIO_ErrorCodeByteBlock_Skip7:
 	extz	wa
+FileIO_ErrorCodeByteBlock_Join2:
 	jp	UI_PostModeChangeEvent
+FileIO_ErrorCodeByteBlock_Skip8:
 	call	FDemo_MultiGuardCheck
 	cp	hl, 0:i3
 	ret	z
@@ -8819,21 +8908,23 @@ FileIO_ErrorCodeByteBlock:
 	nop
 	cp	(xiy), 0
 	nop
-	jr	ge, 10
+	jr	ge, FileIO_ErrorCodeByteBlock_Skip9
 	call	GetDiskSizeInfo
 	extz	hl
 	ld	(0x8500:16), hl
+FileIO_ErrorCodeByteBlock_Skip9:
 	ld	wa, (0x8500:16)
 	cp	wa, 1:i3
-	jrl	z, -190
+	jrl	z, FileIO_ErrorCodeByteBlock_Loop
 	cp	wa, 0:i3
-	jrl	z, -195
+	jrl	z, FileIO_ErrorCodeByteBlock_Loop
 	cp	wa, 5:i3
 	ret	z
 	cp	wa, 3:i3
-	jr	z, 4
+	jr	z, FileIO_ErrorCodeByteBlock_Skip10
 	cp	wa, 2:i3
 	ret	nz
+FileIO_ErrorCodeByteBlock_Skip10:
 	ld	xwa, DiskOp_ChannelCfgTable_0x44
 	call	FileIO_CheckFileExists
 	cp	l, 0:i3

@@ -3039,9 +3039,9 @@ CtrlPanel_DispatchByIndex:
 
 CtrlPanel_FrameDispatchTable:
 	ld	xde, 4:i3
-	jr	18
+	jr	CtrlPanel_ApplyMarginLoop
 	ld	xde, 3:i3
-	jr	14
+	jr	CtrlPanel_ApplyMarginLoop
 	ld	xde, 1:i3
 	decm	2, (xiz+4)
 	ld	wa, 2:i3

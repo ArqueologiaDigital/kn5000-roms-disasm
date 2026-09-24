@@ -38,11 +38,11 @@ JumpInsert_DispatchBody:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
-	jr	17
+	jr	JumpInsert_Return
 	ld	xhl, 1:i3
-	jr	13
+	jr	JumpInsert_Return
 	ld	xhl, 4:i3
-	jr	9
+	jr	JumpInsert_Return
 
 JumpInsert_Error:
 	ld xhl, 0:i3

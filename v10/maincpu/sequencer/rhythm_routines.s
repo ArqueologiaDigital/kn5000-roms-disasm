@@ -1648,6 +1648,6 @@ Rhythm_TranspMod_WrapDone:
 	ret
 
 Rhythm_TailPadding:
-	call	16069687
+	call	VoiceParam_ClampAndValidate
 	ret
 

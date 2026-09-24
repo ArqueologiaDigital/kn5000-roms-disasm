@@ -568,19 +568,22 @@ SmfFN_JumpTable:
 	ld	(0x81a4:16), xwa
 	ld	(0x81a8:16), xwa
 	cp	(0x8d36:16), 107
-	jr	z, 20
+	jr	z, FmmSmfFileNameFunc_Skip
 	call	GetFirstPageBase
 	ld	(0x81ac:16), hl
 	cp	hl, 0:i3
-	jr	ge, 26
+	jr	ge, FmmSmfFileNameFunc_Join
 	ldw	(0x81ac:16), 0
-	jr	18
+	jr	FmmSmfFileNameFunc_Join
+FmmSmfFileNameFunc_Skip:
 	ld	wa, (0x8504:16)
 	ld	(0x81ac:16), wa
 	cp	wa, 0:i3
-	jr	le, 2
+	jr	le, FmmSmfFileNameFunc_Skip2
 	dec	1, wa
+FmmSmfFileNameFunc_Skip2:
 	call	NavigateToFileIndex
+FmmSmfFileNameFunc_Join:
 	ld	wa, (0x81ac:16)
 	exts	xwa
 	divs	wa, 10
@@ -588,7 +591,7 @@ SmfFN_JumpTable:
 	exts	xde
 	ld	xwa, (0x81a0:16)
 	ld	xbc, 0x01e50002
-	jrl	1929
+	jrl	SmfFN_DispatchFinalEvent
 
 SmfFN_HandleActivate:
 	ld bc, (0x81ac:16)

@@ -33,6 +33,7 @@ SetWall_UpdateSlotIndex:
 SetWall_InlineCodeBlock:
 	call	SetWall_InlineCodeBlock2
 	ret
+MiddleFuncCall_DispatchData_Code_Helper:
 	call	SetWall_InlineCodeBlock2
 	.byte 0xc1, 0xdf
 	incf
@@ -48,6 +49,7 @@ SetWall_InlineCodeBlock:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
+MiddleFuncCall_DispatchData_Code_Helper2:
 	call	SetWall_InlineCodeBlock2
 	.byte 0xc1, 0xdf
 	incf
@@ -87,6 +89,7 @@ SetWall_InlineCodeBlock:
 	ccf
 	zcf
 	incf
+SetWall_InlineCodeBlock_Sub:
 	call	SetWall_InlineCodeBlock_0x7F
 	ret
 	ld	a, (0x2873:16)
@@ -279,6 +282,7 @@ SetWall_InitCallSequences:
 	ld	(3295:16), 8
 	call	SetWall_UpdateSlotIndex
 	ret
+MiddleFuncCall_DispatchData_Code_Helper3:
 	call	SetWall_InlineCodeBlock2
 	call	CDlikeSwTtl_SendStartEvt
 	ld	(3295:16), 0
@@ -611,8 +615,9 @@ SetWall_InlineCodeBlock2:
 	ld_rrb a, xde, iy
 	pop xde
 	cp a, (10355:16)
-	jr	nz, 4
+	jr	nz, SetWall_InlineCodeBlock2_Skip
 	jp	SetWall_InlineCodeBlock2_0x5E
+SetWall_InlineCodeBlock2_Skip:
 	ld	a, (0x2873:16)
 	xor	w, w
 	ld	iy, wa
@@ -629,9 +634,11 @@ SetWall_InlineCodeBlock2:
 	pop xde
 	and	a, c
 	cp	a, 0:i3
-	jr	z, 2
-	jr	4
+	jr	z, SetWall_InlineCodeBlock2_Skip2
+	jr	SetWall_InlineCodeBlock2_Join
+SetWall_InlineCodeBlock2_Skip2:
 	jp	SetWall_InlineCodeBlock2_0x5E
+SetWall_InlineCodeBlock2_Join:
 	call	SetWall_CrossTypeChange
 	ret
 
@@ -1987,14 +1994,16 @@ SetWall_MiscDataAndCode:
 	.byte 0xc1
 	ldw	iz, 0x3f8d
 	.byte 0x8f
-	jr	z, 7
+	jr	z, SetWall_MiscDataAndCode_Skip
 	.byte 0xc1
 	ldw	iz, 0x3f8d
 	.byte 0xa7
-	jr	z, 10
+	jr	z, SetWall_MiscDataAndCode_Skip2
+SetWall_MiscDataAndCode_Skip:
 	ld	a, 142:opc
 	call	UI_PostModeChangeEvent
 	jp	SetWall_MiscDataAndCode_0x51
+SetWall_MiscDataAndCode_Skip2:
 	ld	a, 131:opc
 	call	UI_PostModeChangeEvent
 	ret
@@ -2003,15 +2012,18 @@ SetWall_MiscDataAndCode:
 	xor	xwa, xwa
 	ld	a, (0x286b:16)
 	cp a, (65507:24)
-	jr nz, 7
+	jr nz, SetWall_MiscDataAndCode_Skip3
 	ld xix, 62032
-	jr	16
+	jr	SetWall_MiscDataAndCode_Join
+SetWall_MiscDataAndCode_Skip3:
 	ld	xix, 0x0ab000
 	sla	xwa, 11
 	add	xix, xwa
 	add	xix, 208
+SetWall_MiscDataAndCode_Join:
 	xor	xbc, xbc
 	xor	de, de
+SetWall_MiscDataAndCode_Loop:
 	ld_rrb a, xix, de
 	bit 7, a
 	jr z, 13
@@ -2026,18 +2038,19 @@ SetWall_MiscDataAndCode:
 	ldw	ix, 0xda81
 	ld	w, 0
 	cp	de, 48
-	jr	c, -33
+	jr	c, SetWall_MiscDataAndCode_Loop
 	ld	xde, xbc
 	cp	xbc, 0
-	jr	z, 23
+	jr	z, SetWall_MiscDataAndCode_Entry
 	ld	xde, xbc
 	mul	bc, 100
 	ld	hl, (0x286d:16)
 	div	xbc, xhl
 	inc	1, bc
 	cp	bc, 100
-	jr	c, 3
+	jr	c, SetWall_MiscDataAndCode_Entry
 	ldw	bc, 99
+SetWall_MiscDataAndCode_Entry:
 	.byte 0xf1
 	.ascii "l(CX"
 	ld	(4349:16), xwa

@@ -33,6 +33,7 @@ FDC_Read_Data:
 FDC_Send_Command:
 	ld	(0x110008:24), a
 	ret
+FDC_WaitReady_Helper:
 	.byte 0xc1
 	ld	b, 139:opc
 	pop_f
@@ -57,56 +58,69 @@ FDC_WaitReady:
 	ld	iz, (1033:16)
 	ldw qiz, 128
 	cpw	qiz, 128
-	jr	nz, 41
-	calr	65481
+	jr	nz, FDC_WaitReady_Skip3
+FDC_WaitReady_Loop:
+	calr	FDC_Read_Status
 	and	l, 31
 	ld	a, l
 	extz	wa
 	cp	wa, 0:i3
-	jr	nz, 3
+	jr	nz, FDC_WaitReady_Skip
 	ld qiz, 0
+FDC_WaitReady_Skip:
 	ld	wa, (1033:16)
 	sub	wa, iz
 	cp	wa, 500
-	jr	ule, 5
+	jr	ule, FDC_WaitReady_Skip2
 	ldw qiz, 65535
+FDC_WaitReady_Skip2:
 	cpw	qiz, 128
-	jr	z, -41
+	jr	z, FDC_WaitReady_Loop
+FDC_WaitReady_Skip3:
 	cp qiz, 0
-	jr z, 5
+	jr z, FDC_WaitReady_Epilogue
 	ld	wa, 1:i3
-	calr	2611
+	calr	FDC_Set_Status
+FDC_WaitReady_Epilogue:
 	pop	xiz
 	ret
+FDC_ResultPhase_Read_Helper:
 	push	xiz
 	ld	iz, (1033:16)
 	ldw qiz, 128
 	cpw	qiz, 128
-	jr	nz, 38
-	calr	65411
+	jr	nz, FDC_WaitReady_Skip6
+FDC_WaitReady_Loop2:
+	calr	FDC_Read_Status
 	and	l, 144
 	cp	l, 144
-	jr	nz, 3
+	jr	nz, FDC_WaitReady_Skip4
 	ld qiz, 0
+FDC_WaitReady_Skip4:
 	ld	wa, (1033:16)
 	sub	wa, iz
 	cp	wa, 500
-	jr	ule, 5
+	jr	ule, FDC_WaitReady_Skip5
 	ldw qiz, 65535
+FDC_WaitReady_Skip5:
 	cpw	qiz, 128
-	jr	z, -38
+	jr	z, FDC_WaitReady_Loop2
+FDC_WaitReady_Skip6:
 	cp qiz, 0
-	jr z, 5
+	jr z, FDC_WaitReady_Epilogue2
 	ld	wa, 1:i3
-	calr	2544
+	calr	FDC_Set_Status
+FDC_WaitReady_Epilogue2:
 	pop	xiz
 	ret
+FDC_CMD_EXEC_Helper:
 	ldw	wa, 54
-	calr	65370
+	calr	FDC_Send_Command
 	ld	wa, 2:i3
-	calr	2632
+	calr	SOME_DELAY
 	ld	(0x8b04:16), 255
 	ret
+FDC_CMD_EXEC_Helper2:
 	push	xiz
 	calr	2562
 	calr	2413
@@ -132,71 +146,79 @@ FDC_WaitReady:
 	calr	2435
 	cp	hl, 0xffff
 	jr	z, 102
-	calr	2494
-	calr	378
+	calr	FDC_ClearStatus_InitTimer
+	calr	FDC_WaitReady_Helper2
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	z, 8
+	jr	z, FDC_WaitReady_Loop3
 	ld	(0x8a20:16), 0
-	jrl	361
-	calr	65254
+	jrl	FDC_WaitReady_Epilogue3
+FDC_WaitReady_Loop3:
+	calr	FDC_Read_Status
 	bit	7, l
-	jr	z, -8
-	calr	65246
+	jr	z, FDC_WaitReady_Loop3
+	calr	FDC_Read_Status
 	bit	6, l
-	jr	nz, 24
+	jr	nz, FDC_WaitReady_Skip8
 	ld	l, 0:opc
 	cp	l, 128
-	jr	z, 11
-	calr	65231
+	jr	z, FDC_WaitReady_Skip7
+FDC_WaitReady_Loop4:
+	calr	FDC_Read_Status
 	and	l, 240
 	cp	l, 128
-	jr	nz, -11
+	jr	nz, FDC_WaitReady_Loop4
+FDC_WaitReady_Skip7:
 	ldw	wa, 8
-	calr	65246
+	calr	FDC_Write_Data
+FDC_WaitReady_Skip8:
 	lda	xiz, (0x8a60:16)
 	inc	1, xiz
-	calr	1134
-	calr	65211
+FDC_WaitReady_Loop5:
+	calr	FDC_Wait_Ready_Timeout
+	calr	FDC_Read_Data
 	lda_dpi xsp, 248
-	calr 65199
+FDC_WaitReady_Loop6:
+	calr FDC_Read_Status
 	bit 7, l
-	jr z, -8
-	calr	65191
+	jr z, FDC_WaitReady_Loop6
+	calr	FDC_Read_Status
 	bit	6, l
-	jr	nz, -25
-	calr	1481
+	jr	nz, FDC_WaitReady_Loop5
+	calr	FDC_Exception_Status_Decoder
 	.byte 0xc1
 	jr	lt, -118
 	push	xsp
 	decm8	6, (xwa)
 	sub	(xsp-40), xhl
-	calr	1657
+	calr	FDC_WaitReady_Helper3
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	z, 8
+	jr	z, FDC_WaitReady_Skip9
 	ld	(0x8a20:16), 0
-	jrl	260
+	jrl	FDC_WaitReady_Epilogue3
+FDC_WaitReady_Skip9:
 	ldw	wa, 79
-	calr	1636
+	calr	FDC_WaitReady_Helper3
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	z, 8
+	jr	z, FDC_WaitReady_Skip10
 	ld	(0x8a20:16), 0
-	jrl	239
+	jrl	FDC_WaitReady_Epilogue3
+FDC_WaitReady_Skip10:
 	ld	a, (0x8a6e:16)
 	and	a, 15
 	extz	wa
 	cp	wa, 0:i3
-	jrl	mi, 156
+	jrl	mi, FDC_WaitReady_Skip11
 	cp	wa, 5:i3
-	jrl	gt, 151
+	jrl	gt, FDC_WaitReady_Skip11
 	add	wa, wa
 	lda	xix, (DiskWarning_ConfirmStrings_0xBFA:24)
 	ld_rrw wa, xix, wa
@@ -206,75 +228,82 @@ FDC_WaitReady:
 	ldw	(0x8a22:16), 0
 	ldib_erp 251, 0
 	ld wa, 2:i3
-	calr	65093
-	jr	127
+	calr	FDC_WaitReady_Helper
+	jr	FDC_WaitReady_Join
 	ld	(0x8a6c:16), 0
 	ldw	(0x8a22:16), 0
 	ldi_erpb 251, 192
 	ld	wa, 2:i3
-	calr	65071
-	jr	105
+	calr	FDC_WaitReady_Helper
+	jr	FDC_WaitReady_Join
 	ld	(0x8a6c:16), 2
 	ldw	(0x8a22:16), 0
 	ldi_erpb 251, 64
 	ld wa, 0:i3
-	calr 65049
-	jr	83
+	calr FDC_WaitReady_Helper
+	jr	FDC_WaitReady_Join
 	ld	(0x8a6c:16), 3
 	ldw	(0x8a22:16), 0
 	ldi_erpb 251, 64
 	ld wa, 0:i3
-	calr 65027
-	jr	61
+	calr FDC_WaitReady_Helper
+	jr	FDC_WaitReady_Join
 	ld	(0x8a6c:16), 4
 	ldw	(0x8a22:16), 0
 	ldib_erp 251, 0
 	ld wa, 2:i3
-	calr	65006
-	jr	40
+	calr	FDC_WaitReady_Helper
+	jr	FDC_WaitReady_Join
 	ld	(0x8a6c:16), 5
 	ldw	(0x8a22:16), 0
 	ldib_erp 251, 0
 	ld wa, 2:i3
-	calr	64985
-	jr	19
+	calr	FDC_WaitReady_Helper
+	jr	FDC_WaitReady_Join
+FDC_WaitReady_Skip11:
 	ld	(0x8a6c:16), 0
 	ldw	(0x8a22:16), 0
 	ldib_erp 251, 0
 	ld wa, 2:i3
-	calr	64964
+	calr	FDC_WaitReady_Helper
+FDC_WaitReady_Join:
 	stb_erp a, 251
 	or a, 11
 	extz wa
-	calr	1421
+	calr	FDC_WaitReady_Helper3
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	z, 7
+	jr	z, FDC_WaitReady_Skip12
 	ld	(0x8a20:16), 0
-	jr	25
-	calr	3748
+	jr	FDC_WaitReady_Epilogue3
+FDC_WaitReady_Skip12:
+	calr	FDC_WaitReady_Helper4
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	z, 7
+	jr	z, FDC_WaitReady_Skip13
 	ld	(0x8a20:16), 0
-	jr	8
-	calr	2244
+	jr	FDC_WaitReady_Epilogue3
+FDC_WaitReady_Skip13:
+	calr	FDC_CmdRecalibrate
 	ld	(0x8a20:16), 0
+FDC_WaitReady_Epilogue3:
 	pop	xiz
 	ret
+FDC_WaitReady_Helper2:
 	ldw	wa, 54
-	calr	64900
+	calr	FDC_Send_Command
 	ld	wa, 2:i3
-	calr	2162
-	calr	64880
+	calr	SOME_DELAY
+	calr	FDC_Read_Status
 	cp	l, 255
-	jr	nz, 6
+	jr	nz, FDC_WaitReady_Skip14
 	ldw	wa, 252
-	calr	2047
+	calr	FDC_Set_Status
+FDC_WaitReady_Skip14:
 	ld	hl, 0:i3
 	ret
 
@@ -614,6 +643,7 @@ FDC_Setup_DMA_Src_Ack:
 	ld a, 0x8:opc
 	ldc_cr8 a, 0x4e
 	jr FDC_Port_Reset_Or_Noop
+FDC_MC_EXIT_Code_Helper:
 	ld bc, (0x8a1c:16)
 	ldc_cr16 bc, 0x4c
 	ret
@@ -712,21 +742,22 @@ FDC_ResultPhase_Read:
 	push	4
 	ldw qiz, 128
 	cpw qiz, 128
-	jr	nz, 83
-	calr	63905
+	jr	nz, FDC_ResultPhase_Read_Skip2
+	calr	FDC_Read_Status
 	res	4, l
 	ld	a, l
 	cp	a, 192
-	jr	z, 10
+	jr	z, FDC_ResultPhase_Read_Skip
 	cp	a, 128
-	jr	nz, 40
+	jr	nz, FDC_ResultPhase_Read_Join
 	ld qiz, 0
-	jr 35
+	jr FDC_ResultPhase_Read_Join
+FDC_ResultPhase_Read_Skip:
 	ld	iz, 1:i3
 	ld qiz, 0
 	cp qiz, 0
-	jr nz, 25
-	calr	63878
+	jr nz, FDC_ResultPhase_Read_Join
+	calr	FDC_Read_Data
 	lda	xwa, (0x8a60:16)
 	ld	bc, iz
 	extz	xbc
@@ -736,6 +767,7 @@ FDC_ResultPhase_Read:
 	inc	1, iz
 	cp qiz, 0
 	jr z, -25
+FDC_ResultPhase_Read_Join:
 	ld	wa, (1033:16)
 	.byte 0x9f, 0x04
 	xor	(xwa), xwa
@@ -745,6 +777,7 @@ FDC_ResultPhase_Read:
 	ldw qiz, 65535
 	cpw qiz, 128
 	jr	z, -83
+FDC_ResultPhase_Read_Skip2:
 	cp qiz, 0
 	jr z, 5
 	ld	wa, 3:i3
@@ -752,57 +785,64 @@ FDC_ResultPhase_Read:
 	pop	xiz
 	inc	2, xsp
 	ret
+FDC_HardwareSetup_Helper:
 	dec	2, xsp
 	ld	(xsp), a
-	calr	65412
+	calr	FDC_ResultPhase_Read
 	ld	a, (xsp)
 	extz	wa
-	calr	63826
+	calr	FDC_Write_Data
 	inc	2, xsp
 	ret
+FDC_HardwareSetup_Helper2:
 	dec	2, xsp
 	ld	(xsp), a
-	calr	63892
+	calr	FDC_ResultPhase_Read_Helper
 	ld	a, (xsp)
 	extz	wa
-	calr	63809
+	calr	FDC_Write_Data
 	inc	2, xsp
 	ret
+FDC_ResultPhase_Read_Helper2:
 	dec	2, xsp
 	ld	(xsp), a
-	calr	65378
+	calr	FDC_ResultPhase_Read
 	ld	a, (xsp)
 	extz	wa
-	calr	63775
+	calr	FDC_Send_Command
 	inc	2, xsp
 	ret
+FDC_HardwareSetup_Helper3:
 	dec	2, xsp
 	ld	(xsp), a
-	calr	65361
+	calr	FDC_ResultPhase_Read
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	nz, 7
+	jr	nz, FDC_ResultPhase_Read_Epilogue
 	ld	a, (xsp)
 	extz	wa
-	calr	65498
+	calr	FDC_ResultPhase_Read_Helper2
+FDC_ResultPhase_Read_Epilogue:
 	inc	2, xsp
 	ret
+FDC_HardwareSetup_Helper4:
 	dec	2, xsp
 	ld	(xsp), a
-	calr	65337
+	calr	FDC_ResultPhase_Read
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	nz, 17
+	jr	nz, FDC_ResultPhase_Read_Epilogue2
 	ld	a, (xsp)
 	extz	wa
-	calr	65474
-	calr	65174
-	calr	63715
+	calr	FDC_ResultPhase_Read_Helper2
+	calr	FDC_Wait_Ready_Timeout
+	calr	FDC_Read_Data
 	ld	(0x8a61:16), l
+FDC_ResultPhase_Read_Epilogue2:
 	inc	2, xsp
 	ret
 
@@ -923,75 +963,83 @@ FDC_HardwareSetup:
 	or	a, 96
 	ld	(xbc), a
 	ret
+FDC_WaitReady_Helper3:
 	dec	2, xsp
 	ld	(xsp), a
-	calr	63542
+	calr	FDC_WaitReady
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jrl	nz, 214
+	jrl	nz, FDC_HardwareSetup_Epilogue
 	ld	a, (xsp)
 	ld	(0x8a28:16), a
-	calr	208
+	calr	FDC_HardwareSetup_Helper5
 	cp	l, 0:i3
-	jrl	nz, 200
+	jrl	nz, FDC_HardwareSetup_Epilogue
 	ld	a, (xsp)
 	cp	a, 51
-	jr	z, 30
+	jr	z, FDC_HardwareSetup_Skip2
 	cp	a, 52
-	jr	z, 25
+	jr	z, FDC_HardwareSetup_Skip2
 	cp	a, 54
-	jr	z, 10
+	jr	z, FDC_HardwareSetup_Skip
 	cp	a, 53
-	jr	z, 5
+	jr	z, FDC_HardwareSetup_Skip
 	cp	a, 71
-	jr	nz, 20
+	jr	nz, FDC_HardwareSetup_Skip3
+FDC_HardwareSetup_Skip:
 	ld	a, (xsp)
 	extz	wa
-	calr	65227
-	jrl	163
+	calr	FDC_HardwareSetup_Helper3
+	jrl	FDC_HardwareSetup_Epilogue
+FDC_HardwareSetup_Skip2:
 	ld	a, (xsp)
 	extz	wa
-	calr	65241
-	jrl	153
+	calr	FDC_HardwareSetup_Helper4
+	jrl	FDC_HardwareSetup_Epilogue
+FDC_HardwareSetup_Skip3:
 	ld	a, (xsp)
 	res	4, a
 	cp	a, 79
-	jr	nz, 10
+	jr	nz, FDC_HardwareSetup_Skip4
 	ld	a, (xsp)
 	extz	wa
-	calr	65221
-	jrl	133
+	calr	FDC_HardwareSetup_Helper4
+	jrl	FDC_HardwareSetup_Epilogue
+FDC_HardwareSetup_Skip4:
 	ld	a, (xsp)
 	and	a, 15
 	cp	a, 14
-	jr	z, 10
+	jr	z, FDC_HardwareSetup_Skip5
 	ld	a, (xsp)
 	and	a, 15
 	cp	a, 11
-	jr	nz, 9
+	jr	nz, FDC_HardwareSetup_Skip6
+FDC_HardwareSetup_Skip5:
 	ld	a, (xsp)
 	extz	wa
-	calr	65191
-	jr	104
+	calr	FDC_HardwareSetup_Helper4
+	jr	FDC_HardwareSetup_Epilogue
+FDC_HardwareSetup_Skip6:
 	ld	a, (xsp)
 	extz	wa
-	calr	65107
+	calr	FDC_HardwareSetup_Helper
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	nz, 90
+	jr	nz, FDC_HardwareSetup_Epilogue
 	.byte 0x87
 	push	xsp
 	ld	(102:8), 85:io
 	.byte 0x87
 	push	xsp
 	pop	sr
-	jr	nz, 5
-	calr	171
-	jr	75
+	jr	nz, FDC_HardwareSetup_Skip7
+	calr	FDC_HardwareSetup_Helper6
+	jr	FDC_HardwareSetup_Epilogue
+FDC_HardwareSetup_Skip7:
 	ld	a, (0x8a29:16)
 	and	a, 1
 	sll	a, 2
@@ -1004,63 +1052,75 @@ FDC_HardwareSetup:
 	ld	a, e
 	set	0, a
 	extz	wa
-	calr	65067
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (xsp)
 	cp	a, 15
-	jr	z, 25
+	jr	z, FDC_HardwareSetup_Skip10
 	cp	a, 77
-	jr	z, 15
+	jr	z, FDC_HardwareSetup_Skip9
 	cp	a, 7:i3
-	jr	z, 9
+	jr	z, FDC_HardwareSetup_Skip8
 	cp	a, 4:i3
-	jr	z, 5
+	jr	z, FDC_HardwareSetup_Skip8
 	cp	a, 74
-	jr	nz, 12
-	jr	13
-	calr	158
-	jr	8
-	calr	192
-	jr	3
-	calr	196
+	jr	nz, FDC_HardwareSetup_Skip11
+FDC_HardwareSetup_Skip8:
+	jr	FDC_HardwareSetup_Epilogue
+FDC_HardwareSetup_Skip9:
+	calr	FDC_HardwareSetup_Helper7
+	jr	FDC_HardwareSetup_Epilogue
+FDC_HardwareSetup_Skip10:
+	calr	FDC_HardwareSetup_Helper8
+	jr	FDC_HardwareSetup_Epilogue
+FDC_HardwareSetup_Skip11:
+	calr	FDC_HardwareSetup_Helper9
+FDC_HardwareSetup_Epilogue:
 	inc	2, xsp
 	ret
+FDC_HardwareSetup_Helper5:
 	ld	a, (0x8a28:16)
 	cp	a, 79
-	jr	z, 20
+	jr	z, FDC_HardwareSetup_Skip12
 	cp	a, 51
-	jr	z, 15
+	jr	z, FDC_HardwareSetup_Skip12
 	cp	a, 52
-	jr	z, 10
+	jr	z, FDC_HardwareSetup_Skip12
 	cp	a, 71
-	jr	z, 5
+	jr	z, FDC_HardwareSetup_Skip12
 	cp	a, 53
-	jr	nz, 3
+	jr	nz, FDC_HardwareSetup_Skip13
+FDC_HardwareSetup_Skip12:
 	ld	l, 0:opc
 	ret
+FDC_HardwareSetup_Skip13:
 	ld	a, (0x8a28:16)
 	and	a, 31
 	cp	a, 30
-	jr	z, 29
+	jr	z, FDC_HardwareSetup_Skip14
 	cp	a, 29
-	jr	z, 24
+	jr	z, FDC_HardwareSetup_Skip14
 	cp	a, 25
-	jr	z, 19
+	jr	z, FDC_HardwareSetup_Skip14
 	cp	a, 16
-	jr	z, 17
+	jr	z, FDC_HardwareSetup_Skip15
 	cp	a, 17
-	jr	z, 9
+	jr	z, FDC_HardwareSetup_Skip14
 	cp	a, 15
-	jr	ugt, 7
+	jr	ugt, FDC_HardwareSetup_Skip15
 	cp	a, 2:i3
-	jr	c, 3
+	jr	c, FDC_HardwareSetup_Skip15
+FDC_HardwareSetup_Skip14:
 	ld	l, 0:opc
 	ret
+FDC_HardwareSetup_Skip15:
 	ld	l, 1:opc
 	ret
+FDC_HardwareSetup_Join:
 	ld	a, (0x8a35:16)
 	and	a, 3
 	extz	wa
-	jrl	-603
+	jrl	FDC_HardwareSetup_Helper2
+FDC_HardwareSetup_Helper6:
 	ld	a, (0x8a37:16)
 	sll	a, 4
 	ld	e, a
@@ -1070,7 +1130,7 @@ FDC_HardwareSetup:
 	ld	a, e
 	or	a, c
 	extz	wa
-	calr	64906
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a39:16)
 	sll	a, 1
 	ld	e, a
@@ -1080,60 +1140,67 @@ FDC_HardwareSetup:
 	ld	a, e
 	or	a, c
 	extz	wa
-	jrl	-657
+	jrl	FDC_HardwareSetup_Helper2
+FDC_HardwareSetup_Helper7:
 	ld	a, (0x8a2e:16)
 	and	a, 7
 	extz	wa
-	calr	64867
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a32:16)
 	extz	wa
-	calr	64858
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a33:16)
 	extz	wa
-	calr	64849
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a34:16)
 	extz	wa
-	jrl	-696
+	jrl	FDC_HardwareSetup_Helper2
+FDC_HardwareSetup_Helper8:
 	ld	a, (0x8a36:16)
 	extz	wa
-	jrl	-705
+	jrl	FDC_HardwareSetup_Helper2
+FDC_HardwareSetup_Helper9:
 	ld	a, (0x8a2b:16)
 	extz	wa
-	calr	64822
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a2c:16)
 	and	a, 1
 	extz	wa
-	calr	64810
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a2d:16)
 	extz	wa
-	calr	64801
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a2e:16)
 	and	a, 7
 	extz	wa
-	calr	64789
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a2f:16)
 	extz	wa
-	calr	64780
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a30:16)
 	extz	wa
-	calr	64771
+	calr	FDC_HardwareSetup_Helper2
 	ld	a, (0x8a28:16)
 	cp	a, 221
-	jr	z, 10
+	jr	z, FDC_HardwareSetup_Skip16
 	cp	a, 217
-	jr	z, 5
+	jr	z, FDC_HardwareSetup_Skip16
 	cp	a, 209
-	jr	nz, 3
-	jrl	-196
+	jr	nz, FDC_HardwareSetup_Skip17
+FDC_HardwareSetup_Skip16:
+	jrl	FDC_HardwareSetup_Join
+FDC_HardwareSetup_Skip17:
 	ld	a, (0x8a31:16)
 	extz	wa
-	calr	64740
+	calr	FDC_HardwareSetup_Helper2
 	ret
+FDC_CMD_EXEC_Helper3:
 	.byte 0xd1
 	ld	xiz, 0x3f8a
-	jr	z, 3
+	jr	z, FDC_HardwareSetup_Entry
 	ld	hl, 0:i3
 	ret
+FDC_HardwareSetup_Entry:
 	.byte 0xd1
 	ld	xix, 0x3f8a
 	jr	z, 3
@@ -1171,6 +1238,7 @@ FDC_HardwareSetup:
 	ret
 	ldw	hl, 0xffff
 	ret
+FDC_CMD_EXEC_Helper4:
 	.byte 0xd1
 	ld	xiz, 0x3f8a
 	jr	z, 3
@@ -1232,6 +1300,7 @@ FDC_HardwareSetup:
 	ret
 	ldw	hl, 0xffff
 	ret
+FDC_MODE_CONFIG_Helper:
 	ret
 
 FDC_Set_Status:
@@ -1271,8 +1340,10 @@ FDC_SetStatus_Return:
 FDC_ClearStatus_InitTimer:
 	ld	(0x8a24:16), 0
 	ret
+FDC_CmdRecalibrate_Code_Helper:
 	ld	(0x8a60:16), 255
 	ret
+FDC_ClearStatus_InitTimer_Join:
 	push	xiz
 	.byte 0xd7
 	swi	2
@@ -1373,6 +1444,7 @@ FDC_CmdRecalibrate:
 	calr	65408
 	pop qiz
 	ret
+FDC_CMD_EXEC_Helper5:
 	ld	a, (0x8a36:16)
 	cp	a, (35588:16)
 	ret	z
@@ -1392,18 +1464,18 @@ FDC_CmdRecalibrate:
 	jr	z, 5
 	ld	(0x8b04:16), 255
 	ldw	wa, 16
-	jrl	-183
+	jrl	SOME_DELAY
 	ld	(0x8a28:16), 198
-	calr	63873
-	calr	65288
+	calr	FDC_Setup_DMA_Mode
+	calr	FDC_CmdRecalibrate_Code_Helper
 	ldw	wa, 198
-	calr	64543
+	calr	FDC_WaitReady_Helper3
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
 	ret	nz
-	jrl	-258
+	jrl	FDC_ClearStatus_InitTimer_Join
 ; --- FDC_CMD_EXEC: Main FDC command execution engine ---
 ; Two nearly identical halves: READ path (command type 1) and
 ; WRITE path (command type 8), set in state variable 35432.
@@ -1419,16 +1491,18 @@ FDC_CmdRecalibrate:
 ; Uses (R+d16) addressing for all FDC state variable access. 672 bytes.
 FDC_CMD_EXEC:
 	pushw	iz
-	calr	65046
+	calr	FDC_CMD_EXEC_Helper3
 	cp	hl, 0:i3
-	jr	z, 8
+	jr	z, FDC_CMD_EXEC_Skip
 	ld	(0x8a68:16), 1
-	jrl	310
-	calr	65101
+	jrl	FDC_CMD_EXEC_Entry2
+FDC_CMD_EXEC_Skip:
+	calr	FDC_CMD_EXEC_Helper4
 	cp	hl, 0:i3
-	jr	nz, 8
+	jr	nz, FDC_CMD_EXEC_Skip2
 	ld	(0x8a68:16), 8
-	jrl	295
+	jrl	FDC_CMD_EXEC_Entry2
+FDC_CMD_EXEC_Skip2:
 	ld	(0x8a68:16), 1
 	jrl	287
 	ld	(0x8a24:16), 0
@@ -1509,14 +1583,15 @@ FDC_CMD_EXEC:
 	push	xsp
 	push	110
 	.byte 0x06
-	calr	62482
-	jrl	131
-	calr	64913
+	calr	FDC_CMD_EXEC_Helper
+	jrl	FDC_CMD_EXEC_Epilogue
+	calr	FDC_CMD_EXEC_Helper4
 	cp	hl, 0xffff
-	jr	z, 11
-	calr	62484
+	jr	z, FDC_CMD_EXEC_Entry
+	calr	FDC_CMD_EXEC_Helper2
 	ld	(0x8b04:16), 255
-	calr	65234
+	calr	FDC_CMD_EXEC_Helper5
+FDC_CMD_EXEC_Entry:
 	.byte 0xd1
 	ccf
 	.byte 0x8b
@@ -1562,6 +1637,7 @@ FDC_CMD_EXEC:
 	incm8	1, (xwa)
 	ld	a, (xwa)
 	ld	(0x8a36:16), a
+FDC_CMD_EXEC_Entry2:
 	.byte 0xd1
 	popw	de
 	.byte 0x8a
@@ -1569,6 +1645,7 @@ FDC_CMD_EXEC:
 	nop
 	nop
 	jrl	nz, -296
+FDC_CMD_EXEC_Epilogue:
 	popw	iz
 	ret
 	pushw	iz
@@ -1653,16 +1730,16 @@ FDC_CMD_EXEC:
 	push	110
 	push	30
 	.byte 0xdf, 0xf2
-	calr	62189
-	jrl	129
+	calr	FDC_CMD_EXEC_Helper2
+	jrl	FDC_CMD_EXEC_Epilogue2
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	pushw	sp
-	jr	z, 122
-	calr	62176
+	jr	z, FDC_CMD_EXEC_Epilogue2
+	calr	FDC_CMD_EXEC_Helper2
 	ld	(0x8b04:16), 255
-	calr	64926
+	calr	FDC_CMD_EXEC_Helper5
 	.byte 0xd1
 	ccf
 	.byte 0x8b
@@ -1715,6 +1792,7 @@ FDC_CMD_EXEC:
 	nop
 	nop
 	jrl	nz, -297
+FDC_CMD_EXEC_Epilogue2:
 	popw	iz
 	ret
 	ld	(0x8a28:16), 197
@@ -1727,7 +1805,7 @@ FDC_CMD_EXEC:
 	push	xsp
 	nop
 	ret	nz
-	jrl	-930
+	jrl	FDC_ClearStatus_InitTimer_Join
 ; --- FDC_MODE_CONFIG: Configure FDC format parameters by disk type ---
 ; Reads format type from state variable 35436.
 ; Dispatch by type: 0=default, 2=MFM, 3/4/5 = other formats.
@@ -1739,62 +1817,68 @@ FDC_CMD_EXEC:
 ; Then enters sector counting/validation loop.
 ; Uses (R+d16) addressing for all state variables. 184 bytes.
 FDC_MODE_CONFIG:
-	calr	64549
+	calr	FDC_MODE_CONFIG_Helper
 	cp	(0x8a24:16), 0
-	jrl	nz, 173
-	calr	746
+	jrl	nz, FDC_MC_EXIT
+	calr	FDC_INTERRUPT_HANDLER
 	cp	(0x8a24:16), 0
-	jrl	nz, 162
-	calr	64693
+	jrl	nz, FDC_MC_EXIT
+	calr	FDC_CmdRecalibrate
 	cp	(0x8a24:16), 0
-	jrl	nz, 151
+	jrl	nz, FDC_MC_EXIT
 	ld	a, (0x8a6c:16)
 	cp	a, 2:i3
-	jr	z, 40
+	jr	z, FDC_MODE_CONFIG_Skip3
 	cp	a, 3:i3
-	jr	z, 24
+	jr	z, FDC_MODE_CONFIG_Skip2
 	cp	a, 5:i3
-	jr	z, 8
+	jr	z, FDC_MODE_CONFIG_Skip
 	cp	a, 4:i3
-	jr	z, 4
+	jr	z, FDC_MODE_CONFIG_Skip
 	cp	a, 0:i3
-	jr	nz, 34
+	jr	nz, FDC_MODE_CONFIG_Join
+FDC_MODE_CONFIG_Skip:
 	ld	(0x8a2e:16), 2
 	ld	(0x8a33:16), 80
-	jr	22
+	jr	FDC_MODE_CONFIG_Join
+FDC_MODE_CONFIG_Skip2:
 	ld	(0x8a2e:16), 2
 	ld	(0x8a33:16), 108
-	jr	10
+	jr	FDC_MODE_CONFIG_Join
+FDC_MODE_CONFIG_Skip3:
 	ld	(0x8a2e:16), 3
 	ld	(0x8a33:16), 116
+FDC_MODE_CONFIG_Join:
 	ld	(0x8a36:16), 0
 	ld	(0x8a2b:16), 0
 	ld	(0x8a34:16), 229
 	ld	(0x8a2c:16), 0
 	ld	(0x8a29:16), 0
-	jr	54
+	jr	FDC_MODE_CONFIG_Join2
+FDC_MODE_CONFIG_Entry:
 	.byte 0xc1
 	ldw	iz, 6538
 	ccf
 	.byte 0x8a
-	calr	76
+	calr	FDC_MODE_CONFIG_Helper2
 	cp	(0x8a24:16), 0
-	jr	nz, 50
+	jr	nz, FDC_MC_EXIT
 	ld	a, (0x8a29:16)
 	xor	a, 1
 	ld	(0x8a29:16), a
 	ld	(0x8a2c:16), a
 	cp	(0x8a2c:16), 0
-	jr	nz, 16
+	jr	nz, FDC_MODE_CONFIG_Join2
 	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
 	ld	(0x8a36:16), a
 	ld	(0x8a12:16), a
+FDC_MODE_CONFIG_Join2:
 	ld	a, (0x8a36:16)
 	extz	wa
 	cp wa, (35592:16)
-	jr	ule, -66
+	jr	ule, FDC_MODE_CONFIG_Entry
 ; --- FDC_MC_EXIT: FORMAT command execution and sector fill ---
 ; Calls cleanup, sets up FORMAT command (command byte 0x4d).
 ; Loads format buffer address from 35440, stores to DMA source (35404).
@@ -1812,22 +1896,24 @@ FDC_MC_EXIT:
 	.byte 0xf2, 0xd0
 	jr	ugt, -7
 	.byte 0xee
-	calr	64521
+	calr	FDC_CmdRecalibrate
 	ld	(0x8b04:16), 255
 	ret
-	calr	64580
+FDC_MODE_CONFIG_Helper2:
+	calr	FDC_CMD_EXEC_Helper5
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jrl	nz, -3722
-	calr	22
+	jrl	nz, FDC_CMD_EXEC_Helper2
+	calr	FDC_MC_EXIT_Code_Helper2
 	ld	(0x8a28:16), 77
 	lda	xwa, (0x8a70:16)
 	ld	(0x8a4c:16), xwa
-	calr	62949
-	calr	63057
-	jrl	403
+	calr	FDC_Setup_DMA_Mode
+	calr	FDC_MC_EXIT_Code_Helper
+	jrl	FDC_MC_EXIT_Code_Join2
+FDC_MC_EXIT_Code_Helper2:
 	ld	(0x8a2d:16), 1
 	ldw	(0x8a1c:16), 0
 	ld	ix, (0x8b0a:16)
@@ -1835,7 +1921,8 @@ FDC_MC_EXIT:
 	ld	e, 0:opc
 	ld	iy, 0:i3
 	cp	iy, ix
-	jrl	nc, 262
+	jrl	nc, FDC_MC_EXIT_Code_Skip2
+FDC_MC_EXIT_Code_Loop:
 	ld	a, e
 	inc	1, e
 	extz	wa
@@ -1898,7 +1985,7 @@ FDC_MC_EXIT:
 	incw	1, (0x8a1c:16)
 	.byte 0xd1
 	ld	xiz, 0x3f8a
-	jr	nz, 28
+	jr	nz, FDC_MC_EXIT_Code_Skip
 	inc	1, (0x8a2d:16)
 	ld	a, e
 	inc	1, e
@@ -1909,7 +1996,8 @@ FDC_MC_EXIT:
 	add	xhl, xbc
 	ld	a, (0x8a2d:16)
 	ld	(xhl), a
-	jr	29
+	jr	FDC_MC_EXIT_Code_Join
+FDC_MC_EXIT_Code_Skip:
 	ld	wa, (0x8b0a:16)
 	srl	wa, 1
 	add	a, (0x8a2d:16)
@@ -1921,6 +2009,7 @@ FDC_MC_EXIT:
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), l
+FDC_MC_EXIT_Code_Join:
 	incw	1, (0x8a1c:16)
 	ld	a, e
 	inc	1, e
@@ -1935,7 +2024,8 @@ FDC_MC_EXIT:
 	inc	1, (0x8a2d:16)
 	inc	1, iy
 	cp	iy, ix
-	jrl	c, -262
+	jrl	c, FDC_MC_EXIT_Code_Loop
+FDC_MC_EXIT_Code_Skip2:
 	ld	wa, (0x8b0a:16)
 	bit	0, wa
 	ret	z
@@ -1980,40 +2070,44 @@ FDC_MC_EXIT:
 	ld	(xde), a
 	incw	1, (0x8a1c:16)
 	ret
+FDC_MC_EXIT_Code_Join2:
 	ld	(0x8a28:16), 77
-	calr	62532
-	calr	63947
+	calr	FDC_Setup_DMA_Mode
+	calr	FDC_CmdRecalibrate_Code_Helper
 	ldw	wa, 77
-	calr	63202
+	calr	FDC_WaitReady_Helper3
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
 	ret	nz
-	jrl	-1599
+	jrl	FDC_ClearStatus_InitTimer_Join
+FDC_WaitReady_Helper4:
 	pushw	iz
 	set_dd8 3, 40
 	ldw	wa, 254
-	calr	63182
+	calr	FDC_WaitReady_Helper3
 	.byte 0xc1
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	z, 8
+	jr	z, FDC_MC_EXIT_Code_Skip3
 	ldw	wa, 49
-	calr	63861
-	jr	15
+	calr	FDC_Set_Status
+	jr	FDC_MC_EXIT_Code_Epilogue
+FDC_MC_EXIT_Code_Skip3:
 	ld	iz, 1:i3
 	cp	iz, 0:i3
-	jr	z, 9
+	jr	z, FDC_MC_EXIT_Code_Epilogue
 	ldw	wa, 10
-	calr	63948
+	calr	SOME_DELAY
 	djnz16	iz, -9
+FDC_MC_EXIT_Code_Epilogue:
 	popw	iz
 	ret
 	res_dd8 3, 40
 	ldw wa, 14
-	jrl	-2395
+	jrl	FDC_WaitReady_Helper3
 ; --- FDC_STATUS_COPY: Copy FDC status and validate drive count ---
 ; Copies status from source to destination via (R+d16) load/store.
 ; Validates drive count (35396): 0 or 1 are valid, else error 0xfe.
@@ -2065,21 +2159,24 @@ FDC_INTERRUPT_HANDLER:
 	ld	d, 138:opc
 	push	xsp
 	nop
-	jr	nz, 42
-	calr	61050
+	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
+	calr	FDC_Read_Data
 	ldb_erp l, 251
 	bit_erpb 251, 7
-	jr z, 6
+	jr z, FDC_INTERRUPT_HANDLER_Code_Skip
 	ldw	wa, 50
-	calr	63743
+	calr	FDC_Set_Status
+FDC_INTERRUPT_HANDLER_Code_Skip:
 	bit_erpb 251, 5
-	jr nz, 6
+	jr nz, FDC_INTERRUPT_HANDLER_Code_Skip2
 	ldw	wa, 49
-	calr	63731
+	calr	FDC_Set_Status
+FDC_INTERRUPT_HANDLER_Code_Skip2:
 	bit_erpb 251, 6
-	jr z, 6
+	jr z, FDC_INTERRUPT_HANDLER_Code_Epilogue
 	ldw	wa, 47
-	calr	63719
+	calr	FDC_Set_Status
+FDC_INTERRUPT_HANDLER_Code_Epilogue:
 	pop qiz
 	ret
 
@@ -2136,10 +2233,10 @@ FDC_CommandEntry_CopyParams:
 	ld (0x8a24:16), 0
 	calr FDC_COMMAND_DISPATCHER
 	cp l, 0:i3
-	jr	nz, 116
+	jr	nz, FDC_Handler_ExitStatus
 	ld wa, (0x8a40:16)
 	cp wa, 0xb
-	jr	ugt, 100
+	jr	ugt, FDC_Handler_InvalidCommand
 	add wa, wa
 	lda xix, (DiskWarning_ConfirmStrings_0xC1E:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0

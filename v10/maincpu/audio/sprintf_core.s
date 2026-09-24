@@ -1681,12 +1681,14 @@ Sprintf_FFixed_Return:
 
 Sprintf_FFixed_DataTable:
 	ld	xwa, (xsp+4)
+Sprintf_FormatFFixed_Entry:
 	.byte 0x80, 0x3f, 0x00
-	jr	nz, 3
+	jr	nz, Sprintf_FormatFFixed_Skip
 	ld	hl, 1:i3
 	ret
+Sprintf_FormatFFixed_Skip:
 	cp_spib_im	224, 48
-	jr	z, -14
+	jr	z, Sprintf_FormatFFixed_Entry
 	ld	hl, 0:i3
 	ret
 
@@ -3076,16 +3078,18 @@ Sprintf_DataBlock_28E9:
 	ld	de, (xsp+10)
 	ld	xix, (xsp+4)
 	ld	xhl, xix
-	jr	8
+	jr	Sprintf_DataBlock_28E9_Join
+Sprintf_DataBlock_28E9_Loop:
 	stb_dpi	a, 240
 	ld	wa, (xsp+8)
 	ld	(xbc), a
+Sprintf_DataBlock_28E9_Join:
 	ld	wa, de
 	dec	1, de
 	cp	wa, 0:i3
 	ret	z
 	.byte 0x84, 0x3f, 0x00
-	jr	nz, -21
+	jr	nz, Sprintf_DataBlock_28E9_Loop
 	ret
 
 Sprintf_StringLength:

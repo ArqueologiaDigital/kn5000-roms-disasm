@@ -10,13 +10,15 @@
 ToneGen_IncrementWrap128:
 	inc	1, ix
 	cp	ix, 128
-	jr	c, 2
+	jr	c, ToneGen_IncrementWrap128_Return
 	ld	ix, 0:i3
+ToneGen_IncrementWrap128_Return:
 	ret
 	cp	ix, 0:i3
-	jr	nz, 4
+	jr	nz, ToneGen_IncrementWrap128_Skip
 	ldw	ix, 127
 	ret
+ToneGen_IncrementWrap128_Skip:
 	dec	1, ix
 	ret
 ToneGen_Config_AlignByte:
@@ -57,7 +59,7 @@ ToneGen_LookupByVoiceIndex:
 	sll	xbc, 6
 	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
-	calr	317
+	calr	DSPCfg_InitAllEntries
 	ret
 
 ToneGen_Config_InitAndChannels:
@@ -430,23 +432,27 @@ DSPCfg_InitDispatchData:
 	.byte 0x80, 0xc6
 	ld	xiy, 5:i3
 	cp	ix, iz
-	jr	nc, 21
+	jr	nc, DSPCfg_Init_BoundsCheck_Skip2
+DSPCfg_Init_BoundsCheck_Loop:
 	ld	xbc, xiy
 	add	xbc, xde
 	cp	(xbc), h
-	jr	nz, 5
+	jr	nz, DSPCfg_Init_BoundsCheck_Skip
 	ld	a, (xsp+6)
-	jr	22
+	jr	DSPCfg_Init_BoundsCheck_Join
+DSPCfg_Init_BoundsCheck_Skip:
 	inc	1, ix
 	inc	1, xiy
 	cp	ix, iz
-	jr	c, -21
+	jr	c, DSPCfg_Init_BoundsCheck_Loop
+DSPCfg_Init_BoundsCheck_Skip2:
 	cpl	l
 	and	(xwa), l
 	ld	c, (xde+4)
 	or	(xwa), c
 	ld	xwa, (xsp+2)
 	ld	a, (xwa)
+DSPCfg_Init_BoundsCheck_Join:
 	inc	5, a
 	ld	l, a
 	extz	hl
@@ -470,20 +476,22 @@ DSPCfg_InitDispatchData:
 	.byte 0x80, 0xc6
 	ld	xix, 5:i3
 	cp	iy, iz
-	jr	nc, 27
+	jr	nc, DSPCfg_Init_BoundsCheck_Join2
 	ld	xbc, xix
 	add	xbc, xde
 	cp	(xbc), h
-	jr	nz, 11
+	jr	nz, DSPCfg_Init_BoundsCheck_Skip3
 	cpl	l
 	and	(xwa), l
 	ld	c, (xde+4)
 	or	(xwa), c
-	jr	8
+	jr	DSPCfg_Init_BoundsCheck_Join2
+DSPCfg_Init_BoundsCheck_Skip3:
 	inc	1, iy
 	inc	1, xix
 	cp	iy, iz
 	jr	c, -27
+DSPCfg_Init_BoundsCheck_Join2:
 	ld	xwa, (xsp+2)
 	ld	l, (xwa)
 	inc	5, l
@@ -555,7 +563,7 @@ DSPCfg_SyncBitmapData:
 	ld	(xsp+14), xwa
 	ld	(xsp+10), xwa
 	ld	bc, (0x90de:16)
-	jrl	136
+	jrl	DSPCfg_CopyEntryValues_Entry
 	ld	(xsp+6), 0
 	ldb_spi a, 248
 	ld (xsp+8), a
@@ -616,6 +624,7 @@ DSPCfg_SyncBitmapData:
 	.byte 0x8f
 	ld	(63:8), 0:io
 	jr	nz, -115
+DSPCfg_CopyEntryValues_Entry:
 	.byte 0xc5
 	swi	0
 	ld	a, 191:opc
@@ -1067,7 +1076,7 @@ DSPCfg_Param_CaseC:
 	ld	wa, 1:i3
 	ld	xbc, 0x0340e4
 	ld	de, 2:i3
-	jr	67
+	jr	CtrlPanel_IndicatorJumpTable_Join
 	ld	xwa, 0x3d3410
 	push	xwa
 	ld	wa, 1:i3
@@ -1083,12 +1092,13 @@ DSPCfg_Param_CaseC:
 	ld	wa, 1:i3
 	ld	xbc, 0x0340f6
 	ld	de, 4:i3
-	jr	15
+	jr	CtrlPanel_IndicatorJumpTable_Join
 	ld	xwa, 0x3d3440
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340fa
 	ld	de, 6:i3
+CtrlPanel_IndicatorJumpTable_Join:
 	call	FlashWrite
 	ret
 
@@ -1111,29 +1121,31 @@ DSPCfg_Param_CaseD:
 	ld	xwa, 0x3d3400
 	push	xwa
 	ld	xwa, 0x0340e4
-	jr	30
+	jr	Audio_DispatchCommand_Join
 	pushw	12
 	ld	xwa, 0x3d3410
 	push	xwa
 	ld	xwa, 0x0340e6
-	jr	14
+	jr	Audio_DispatchCommand_Join
 	pushw	4
 	.asciz "@ 4="
 	push	xwa
 	ld	xwa, 0x0340f2
+Audio_DispatchCommand_Join:
 	push	xwa
-	jr	32
+	jr	Audio_DispatchCommand_Join2
 	pushw	4
 	ld	xwa, 0x3d3430
 	push	xwa
 	pushw	3
 	pushw	0x40f6
-	jr	15
+	jr	Audio_DispatchCommand_Join2
 	pushw	6
 	ld	xwa, 0x3d3440
 	push	xwa
 	pushw	3
 	pushw	0x40fa
+Audio_DispatchCommand_Join2:
 	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
@@ -1154,52 +1166,59 @@ PanelDisplay_DispatchData:
 	ld	xde, 0x3d3400
 	lda	xhl, (0x0340e4:24)
 	ld	bc, 0:i3
+PanelDisplay_DispatchByMode_Loop:
 	ldb_spi	a, 236
 	cp_spib	a, 232
-	jr	nz, 114
+	jr	nz, PanelDisplay_DispatchByMode_Skip
 	inc	1, bc
 	cp	bc, 2:i3
-	jr	c, -14
-	jr	115
+	jr	c, PanelDisplay_DispatchByMode_Loop
+	jr	DSPCfg_Param_Default
 	ld	xde, 0x3d3410
 	lda	xhl, (0x0340e6:24)
 	ld	bc, 0:i3
+PanelDisplay_DispatchByMode_Loop2:
 	ldb_spi	a, 236
 	cp_spib	a, 232
-	jr	nz, 86
+	jr	nz, PanelDisplay_DispatchByMode_Skip
 	inc	1, bc
 	cp	bc, 12
-	jr	c, -16
+	jr	c, PanelDisplay_DispatchByMode_Loop2
 	.asciz "hUB 4="
 	lda	xhl, (0x0340f2:24)
 	ld	bc, 0:i3
+PanelDisplay_DispatchByMode_Loop3:
 	ldb_spi a, 236
 	cp_spib a, 232
-	jr	nz, 56
+	jr	nz, PanelDisplay_DispatchByMode_Skip
 	inc	1, bc
 	cp	bc, 4:i3
-	jr	c, -14
+	jr	c, PanelDisplay_DispatchByMode_Loop3
 	.asciz "h9B04="
 	lda	xhl, (0x0340f6:24)
 	ld	bc, 0:i3
+PanelDisplay_DispatchByMode_Loop4:
 	ldb_spi	a, 236
 	cp_spib a, 232
-	jr	nz, 28
+	jr	nz, PanelDisplay_DispatchByMode_Skip
 	inc	1, bc
 	cp	bc, 4:i3
-	jr	c, -14
-	jr	t, 0x1d
+	jr	c, PanelDisplay_DispatchByMode_Loop4
+	jr	t, DSPCfg_Param_Default
 	.asciz "B@4="
 	lda	xhl, (0x0340fa:24)
 	ld	bc, 0:i3
+PanelDisplay_DispatchByMode_Loop5:
 	ldb_spi a, 236
 	cp_spib a, 232
-	jr	z, 3
+	jr	z, PanelDisplay_DispatchByMode_Skip2
+PanelDisplay_DispatchByMode_Skip:
 	ld	hl, 1:i3
 	ret
+PanelDisplay_DispatchByMode_Skip2:
 	inc	1, bc
 	cp	bc, 6:i3
-	jr	c, -17
+	jr	c, PanelDisplay_DispatchByMode_Loop5
 
 ; DSP config parameter default handler
 DSPCfg_Param_Default:

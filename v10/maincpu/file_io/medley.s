@@ -4089,7 +4089,7 @@ SongSlot_RawData_Start:
 SongSlot_RawData:
 	pushw	iz
 	ld	iz, bc
-	calr	-43
+	calr	GetSongSlotValue
 	cp	hl, iz
 	scc	z, hl
 	popw	iz
