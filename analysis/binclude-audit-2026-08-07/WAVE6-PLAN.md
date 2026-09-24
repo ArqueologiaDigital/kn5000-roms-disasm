@@ -9,7 +9,7 @@ per-package artifacts live under
 re-verification of every load-bearing byte is in
 `w7-adjudicator/reverification.txt`.
 
-Published documentation from this wave (kn5000-docs, committed 2026-08-08):
+Published documentation from this wave (technics-docs, committed 2026-08-08):
 `tmp94c241-memory-controller.md`, `subcpu-payload-provenance.md`,
 `mame-emulation-gaps.md`, plus provenance sections in `rom-reconstruction.md`
 and `subcpu-firmware-images.md` and corrections to `boot-sequence.md`,
@@ -60,7 +60,7 @@ inside the wave itself:
 - **"Sub CS2 = 128 KB at 0xFE0000, therefore 116,736 undumped bytes"** — depends on
   the refuted 64 KB rule. Under the rule the main-CPU handover forces, sub CS2 is
   64 KB at `0xFF0000` and at most ~52 KB is both addressable and undumped.
-- **`kn5000-docs/system-update-discs.md`** said type 7 stages the *program* ROM at
+- **`technics-docs/system-update-discs.md`** said type 7 stages the *program* ROM at
   `0x3E0000` for a later boot to flash. Wrong on both counts. **Fixed.**
 - **`kn5000-roms-disasm/subcpu/boot/kn5000_subcpu_boot.s:231,237`** (and the ASL
   mirror at `archive/asl/subcpu/boot/kn5000_subcpu_boot.asm:232,238`) call the
@@ -129,10 +129,10 @@ Read-only where marked; each returns evidence, not conclusions.
 | package | scope |
 |---|---|
 | **B1 `ic30-erased-comment`** | `subcpu/boot/kn5000_subcpu_boot.s:231,237` and `archive/asl/subcpu/boot/kn5000_subcpu_boot.asm:232,238` say "96KB of 0xFF (erased flash)". IC30 is a mask ROM and the region is UNDUMPED. Also make any "sub-CPU boot ~99% disassembled" figure state that only 3.3% of the chip is real data. (Overlaps Wave-3b package `subcpu-fill` in the binclude plan — merge them.) |
-| **B2 `flash-id-comment`** | `custom_data/kn5000_custom_data.s:8-13` names IC19 an **AM29LV800B** with IDs `0x2223`/`0x22AB`. Both wrong: those two IDs are the 4 Mbit **AM29F400B**, the two 8 Mbit IDs (`0x22D6`, `0x2258`) are missing, and the family is 5 V AM29F400/800B. (Already corrected in kn5000-docs.) |
+| **B2 `flash-id-comment`** | `custom_data/kn5000_custom_data.s:8-13` names IC19 an **AM29LV800B** with IDs `0x2223`/`0x22AB`. Both wrong: those two IDs are the 4 Mbit **AM29F400B**, the two 8 Mbit IDs (`0x22D6`, `0x2258`) are missing, and the family is 5 V AM29F400/800B. (Already corrected in technics-docs.) |
 | **B3 `updater-renames`** | `LZ_Decompress_Init` (`0xEF4D95`) **is** the SLIDE4K decompressor and targets `0x800000`; `LZSS_Decompress_ToFlash` (`0xEF4CF8`) performs **no** decompression (verbatim `0x20000` copy to `0x3E0000`); `Parport_ReadNextByte` (`0xEF4C07`) is the floppy stream reader; `Flash_ProgramByte` (`0xEF3D7B`) programs a 32-bit long; `Flash_BurnWithProgress` (`0xEF4702`) chip-erases and burns nothing; `HDAE5000_Flash_Verify` is a chip-erase command sequence. |
 | **B4 `boot-comment-fixes`** | `table_data/kn5000_table_data.s:246-247` says the fallback is `0x830000` — it is `0x800000`. `:3822` says `0x3E0000` is "Table Data ROM" — it is IC19. Also, `boot_hw_init.s` labels Block 4 "Table Data" while the CS2/CS4 reading (and `kn5000.cpp`) puts the table pair on CS2 — mark it unconfirmed rather than asserting either. |
-| **B5 `docs-msar-tables`** | `kn5000-docs/boot-sequence.md` and `docs/table_data_boot_code.md` read MSAR literally as a base and ignore MAMR masking; `docs/mame-driver/cpu-peripherals.md` lists the SFR block as `0x140-0x14B` BxCS / `0x14C-0x151` MAMR / `0x152-0x157` MSAR, contradicting `sfr_tmp94c241.s` and the MAME core, which interleave per block. (boot-sequence.md is done; the disasm-repo docs are not.) |
+| **B5 `docs-msar-tables`** | `technics-docs/boot-sequence.md` and `docs/table_data_boot_code.md` read MSAR literally as a base and ignore MAMR masking; `docs/mame-driver/cpu-peripherals.md` lists the SFR block as `0x140-0x14B` BxCS / `0x14C-0x151` MAMR / `0x152-0x157` MSAR, contradicting `sfr_tmp94c241.s` and the MAME core, which interleave per block. (boot-sequence.md is done; the disasm-repo docs are not.) |
 | **B6 `kn1500-crosscheck`** | The only other TLCS-900 sibling in the tree is `kn1500.cpp` (TMP95C061), whose crt0 already has a chip-select setup. Diff it against `boot_hw_init.s:85-134`. If it uses the same "catch-all CS + external 138/139 decode" idiom, that is house style and independently supports A3's expected result. Cheap, and nobody has done it. (KN6000/KN6500/KN7000 are MN10300 and have **nothing** to compare — do not waste a package there.) |
 
 ### Group C — MAME work, in dependency order
@@ -151,7 +151,7 @@ Read-only where marked; each returns evidence, not conclusions.
 
 | package | scope |
 |---|---|
-| **D1 `rom-provenance-notes`** | Land the IC30/IC19 provenance record in the disassembly repo's own notes (kn5000-docs already carries it). Include the exact measured split and the fact that the window boundaries are documentary, not measurable. |
+| **D1 `rom-provenance-notes`** | Land the IC30/IC19 provenance record in the disassembly repo's own notes (technics-docs already carries it). Include the exact measured split and the fact that the window boundaries are documentary, not measurable. |
 | **D2 `overlay-honesty`** | Decide whether the `ROMX_LOAD` overlay of the compressed payload should carry a marker (the composite is a reconstruction and nothing flags it; the base `ROM_LOAD` has a clean CRC/SHA1). Discuss with Felipe before touching MAME ROM definitions — this is a policy call, not a technical one. Related: `/home/fsanches/compartilhado/kn5000_custom_data_with_preset.ic19` is **not** independent evidence (canonical dump + a grafted 27,967-byte SLIDE4K blob); it should be labelled or moved out of the way. |
 
 ---
@@ -194,7 +194,7 @@ both "fit" already exist; a third guess is not progress.
 - Read-only on `kn5000-roms-disasm` and `kn7000_mame` for any package not
   explicitly scoped to edit them; one workflow at a time per repo.
 - `make all` + `compare_roms.py` at 100% byte-match after every disasm merge.
-- kn5000-docs commits need a passing
+- technics-docs commits need a passing
   `JEKYLL_NO_BUNDLER_REQUIRE=true jekyll build -s … -d /tmp/kn-site`, must
   `git add` explicit paths only, and must leave the pre-existing uncommitted
   `flowcharts/` edits alone. Nothing is ever pushed.

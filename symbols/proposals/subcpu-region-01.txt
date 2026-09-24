@@ -374,7 +374,7 @@
 ; curves, the floating-point constant pool at 0x012CD3, the 128-entry mixer-gain curve at
 ; 0x0131CF and the per-effect parameter metadata complex at 0x0133CF (180 symbols). Commit
 ; 85ecca2 continued into zone B, 0x0147B3-0x01E17E (202 symbols). Documented at
-; ../kn5000-docs/dsp-effect-data-zone.md. NOTE the head of the range: 0x012171-0x012194 is the
+; ../technics-docs/dsp-effect-data-zone.md. NOTE the head of the range: 0x012171-0x012194 is the
 ; 6-byte pitch bias table plus ToneGen_VoiceType_Default_Level and
 ; ToneGen_Semitone_Pitch_Table, all named before that pass; the carve proper starts at 0x012195.
 ; * REFUTED by the same pass: there is no "exponential pitch table at 0x13318". 0x13318 falls in

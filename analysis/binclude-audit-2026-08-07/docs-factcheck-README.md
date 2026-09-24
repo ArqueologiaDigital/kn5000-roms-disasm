@@ -16,7 +16,7 @@ Files:
   evidence each author cited. Enough to re-run either pass standalone.
 
 **Re-running next week** (Felipe asked for this): read the pages as published in
-`../kn5000-docs/` rather than from a scratch directory, and split the work across
+`../technics-docs/` rather than from a scratch directory, and split the work across
 two or three agents by package group. Both passes carried all ~292 claims to a
 single large structured return at the end of a long investigation; one of them
 took two attempts to deliver it, and a completed result was briefly mistaken for

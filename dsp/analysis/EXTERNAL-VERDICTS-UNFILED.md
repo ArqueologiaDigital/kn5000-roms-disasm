@@ -40,7 +40,7 @@ presence test: >= 3 tokens that are rare corpus-wide (document frequency <= 4) A
 | 3 | `audit/kn5000-output-design.md` | 1. (a) STEREO — the pan path, decoded end to end | ("Pan Left / Pan Right, 0x00=silent, 0x3C=center, 0x78=full") is **FALSIFIED** — the measured |
 | 4 | `audit/kn5000-output-design.md` | 1.6 Why `+0x840`/`+0x880` are NOT the L/R gains — and what e | ("Pan Left / Pan Right, 0x00=silent, 0x3C=center, 0x78=full") is **FALSIFIED** — the measured |
 | 5 | `audit/kn5000-output-design.md` | 2. (b) EFFECT SENDS — VERDICT: **there are none; ignoring th | 2. (b) EFFECT SENDS — VERDICT: **there are none; ignoring them is correct |
-| 6 | `audit/kn5000-output-design.md` | 4. Corrections this pass makes to existing notes/docs | \| `kn5000-docs/tone-generator.md:107-108,135-136,481-482` \| `+0x840`/`+0x880` = "Pan Left/Right, 0=silent, 0x3C=center, 0x78=full" \| **FALSIFIED** (§1 |
+| 6 | `audit/kn5000-output-design.md` | 4. Corrections this pass makes to existing notes/docs | \| `technics-docs/tone-generator.md:107-108,135-136,481-482` \| `+0x840`/`+0x880` = "Pan Left/Right, 0=silent, 0x3C=center, 0x78=full" \| **FALSIFIED** (§1 |
 | 7 | `dsp-allpass-rerun-applied.md` | (preamble) | INFERRED** / **EDUCATED GUESS** / **FALSIFIED** / **OPEN**. |
 | 8 | `dsp-alu-crossval.md` | 7. The acceptance test — what is actually runnable | `H_in·H_out`. (K5 also FALSIFIED the old reading that disconnect *attenuates*: a |
 | 9 | `dsp-alu-structure.md` | Is `L` really two fields, `[4:3]` + `[2:0]`?  TESTED, NOT SU | Is `L` really two fields, `[4:3]` + `[2:0]`? TESTED, NOT SUPPORTED |

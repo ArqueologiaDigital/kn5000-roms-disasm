@@ -21,7 +21,7 @@ actual path, not on `/` — a misread of that cost a day of shared-toolchain pai
 * **WSA1R sound subsystem labelling** — 152 routines named, ~155 refused with reasons.
 * **The L7A1429 (IC3) is documented end to end** — `wsa1/notes/HLE-GUIDE-l7a1429.md` is the entry
   point; register map, units, timing, topology, editor names, limits, and the coupling solver.
-  Public page: `kn5000-docs/wsa1-modeling-lsi.md`.
+  Public page: `technics-docs/wsa1-modeling-lsi.md`.
 * **WSA1R MAME driver** — schematic facts applied; `l7a1429_device` logs a named register trace.
 * **KN5000 DSP** — queue item 0 consumed as §232: 16 unanchored codes closed, 8 open, 9 not resident.
 
@@ -140,7 +140,7 @@ Nothing was pushed anywhere. All four repos are clean on `main`.
 
 Both repos clean on their canonical branches. Committed this stretch:
 
-* **kn5000-docs 34c2f1f** — mame-emulation-gaps.md Gap 4 CLOSED. The driver now
+* **technics-docs 34c2f1f** — mame-emulation-gaps.md Gap 4 CLOSED. The driver now
   binds main-CPU Port G to PEDALS and returns Port E bit 0 = 0 with a card
   fitted (kn5000.cpp, 2026-09-02); removed Gap 4, its two table rows, and the
   stale Port-E-bit-0 boot-gate entry. The sub-CPU DRAM strap (Port G bit 0)

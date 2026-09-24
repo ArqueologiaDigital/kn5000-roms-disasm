@@ -3214,7 +3214,7 @@ LZSS_Decompress:
 ;   0x9FFB56: malloc - Allocate memory from heap
 ;   0x9FFCDD: free - Free allocated memory
 ;
-; See also: ../kn5000-docs/boot-sequence.md for boot flow documentation
+; See also: ../technics-docs/boot-sequence.md for boot flow documentation
 ; =============================================================================
 
 ; =============================================================================

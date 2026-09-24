@@ -37,7 +37,7 @@
 ;
 ; The algorithms these names label live in the sub-CPU payload; see
 ; v142/subcpu/subcpu_data_tables.s (DSP_EffNN_* / DSP2_EffNN_* blocks) and
-; kn5000-docs/dsp-effect-data-zone.md.
+; technics-docs/dsp-effect-data-zone.md.
 ; =============================================================================
 NakaData_WidgetDescriptors:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x0, 0x1E1A

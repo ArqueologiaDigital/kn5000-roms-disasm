@@ -71,7 +71,7 @@ def create_hero_banner(output_path: Path, photo_path: Path):
 
 def main():
     script_dir = Path(__file__).parent
-    docs_dir = script_dir.parent / "kn5000-docs"
+    docs_dir = script_dir.parent / "technics-docs"
 
     photo_path = docs_dir / "assets" / "images" / "kn5000-photo.jpg"
     output_path = docs_dir / "assets" / "images" / "hero-banner.png"

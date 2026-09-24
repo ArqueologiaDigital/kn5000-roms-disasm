@@ -9,7 +9,7 @@
 ; *** THIS IS THE FIRST-STAGE BOOTLOADER'S OWN CP-SERIAL DRIVER. ***
 ; *** IT IS INDEPENDENT OF THE RUNTIME CP-SERIAL IMPLEMENTATION. ***
 ; The runtime control-panel protocol stack (CPanel_* in the maincpu program
-; ROM, documented in kn5000-docs/control-panel-protocol.md) is a separate
+; ROM, documented in technics-docs/control-panel-protocol.md) is a separate
 ; implementation that takes over only after the bootloader hands control to
 ; the main program.  When investigating CP-serial behaviour, keep findings
 ; from the two drivers apart: nothing proven here transfers to the runtime

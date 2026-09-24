@@ -108,7 +108,7 @@
 ; Effect 0x27, band 0: if any of param[0..2] is dirty, mark param[0] dirty and clear
 ; param[1] and param[2]. Five such blocks follow, covering param[0..14] in groups of
 ; three -- five bands of three values each (frequency / Q / gain), which is the shape of
-; the PARAMETRIC EQ described in kn5000-docs/effects-dsp.md. Coalescing to the first flag
+; the PARAMETRIC EQ described in technics-docs/effects-dsp.md. Coalescing to the first flag
 ; is what makes the DSP-side biquad get designed once per band instead of three times.
 
 [LABEL] 0x037210 EFF_DspChanInit_AlgoType1_Dirty  replaces=LABEL_037210  confidence=high
@@ -734,7 +734,7 @@
 ; then DATA 0x00, DATA 0x0A, and finally the 24-bit value packed into four bytes:
 ;   (v >> 17) & 0x7F, (v >> 9) & 0xFF, (v >> 1) & 0xFF, ((v << 7) & 0x80) + 0x15.
 ; That 7+8+8+1 split with the 0x15 tag in the last byte is the 36-bit-word packing
-; described in kn5000-docs/effects-dsp.md; the tag distinguishes the destination bank.
+; described in technics-docs/effects-dsp.md; the tag distinguishes the destination bank.
 
 [LABEL] 0x038528 DSP_WriteFreqParam_AlgoType_UseCmd30  replaces=LABEL_038528  confidence=high
 ; chip == 1: delegate to DSP_WriteParamCmd30.
@@ -1003,7 +1003,7 @@ reconciling with those notes before either claim is repeated.
 
 [UNCERTAIN] Effect number 0x27 (39) is the one whose parameters are coalesced in five
 groups of three by 0x0371CE..0x037437, which is exactly the shape of the 5-band parametric
-EQ documented in kn5000-docs/effects-dsp.md. I believe 0x27 IS the PARAMETRIC EQ, but I
+EQ documented in technics-docs/effects-dsp.md. I believe 0x27 IS the PARAMETRIC EQ, but I
 have not confirmed it against the effect-name string table, so it is stated as an
 observation rather than a fact.
 

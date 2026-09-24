@@ -13,7 +13,7 @@
 | What has actually landed, wave by wave | [`analysis/binclude-audit-2026-08-07/WAVE-STATUS.md`](analysis/binclude-audit-2026-08-07/WAVE-STATUS.md) |
 | Machine-readable findings (55 findings, 24 verdicts) | [`analysis/binclude-audit-2026-08-07/findings.json`](analysis/binclude-audit-2026-08-07/findings.json) |
 | Live reconstruction status | `python scripts/build/compare_roms.py` |
-| Narrative status for readers | `../kn5000-docs/rom-reconstruction.md` |
+| Narrative status for readers | `../technics-docs/rom-reconstruction.md` |
 
 ---
 

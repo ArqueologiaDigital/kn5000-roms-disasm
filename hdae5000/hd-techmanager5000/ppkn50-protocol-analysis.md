@@ -269,7 +269,7 @@ The PPI handler in the HDAE5000 firmware (at 0x160000 area) receives these comma
 
 See also:
 - `hdae5000/hd-ae5000_v2_06i.asm` - HDAE5000 firmware disassembly
-- `../kn5000-docs/hdae5000-disk-interface.md` - Disk interface documentation
+- `../technics-docs/hdae5000-disk-interface.md` - Disk interface documentation
 
 ## References
 

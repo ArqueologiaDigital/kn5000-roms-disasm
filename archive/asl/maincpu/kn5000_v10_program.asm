@@ -15,7 +15,7 @@ BOOT_ENTRY_POINT	EQU	RESET_HANDLER	; Entry point for watchdog reset
 
 ; =============================================================================
 ; Event Code Constants
-; See https://arqueologiadigital.github.io/KN5000-docs/event-codes/ for details
+; See https://arqueologiadigital.github.io/technics-docs/event-codes/ for details
 ; =============================================================================
 
 ; ClassProc getter events (handled by jump table at 0xEAA8F8)

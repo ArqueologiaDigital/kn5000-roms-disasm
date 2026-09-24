@@ -21,7 +21,7 @@ emulator, no hardware. Index of what landed and how it feeds the parked decode e
 - `dsp_residue_sudoku.py` — the prioritised decode roadmap over both corpora.
 
 **Analysis notes:** `TOPOLOGY-vs-ALGORITHMS.md`, `CROSSVALIDATION-by-algorithm.md`,
-`RESIDUE-SUDOKU-ROADMAP.md`. Public: `kn5000-docs/effects-dsp.md` §8. Blog: part 225.
+`RESIDUE-SUDOKU-ROADMAP.md`. Public: `technics-docs/effects-dsp.md` §8. Blog: part 225.
 
 ## How it feeds the decode
 

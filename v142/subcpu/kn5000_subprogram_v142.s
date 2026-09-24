@@ -7313,10 +7313,10 @@ Voice_Clamp_Byte_WA_Return:
 ; ROM, nor in the sub-CPU boot ROM, nor in the main program, walks the waveform ROMs.
 ; IC304-IC307 hang off IC303 and are in no CPU's address space:
 ;
-;   * THE SCHEMATICS. kn5000-docs/tone-generator.md:300,321 reads the service manual's Tone
+;   * THE SCHEMATICS. technics-docs/tone-generator.md:300,321 reads the service manual's Tone
 ;     Generator Sections A and B as "Waveform ROMs (IC304-307) --> Tone Generator LSI
 ;     (IC303)". The only CPU-facing windows on IC303 are its register file and its keybed
-;     side, and kn5000-docs/kn7000-expansion-and-wave-dump.md states plainly that NONE of
+;     side, and technics-docs/kn7000-expansion-and-wave-dump.md states plainly that NONE of
 ;     them is a wave-memory read port.
 ;
 ;   * THIS PAYLOAD'S OWN TRAFFIC, counted over the whole file. Two windows on IC303,
@@ -7344,7 +7344,7 @@ Voice_Clamp_Byte_WA_Return:
 ;
 ;   * THE MACHINE'S OWN WAVE ROM CHECK (service test 6, chord E3+E4) is ACOUSTIC: the ROMs
 ;     are made to sound and a technician listens for distortion. See
-;     kn5000-docs/test-modes.md and kn5000-docs/kn7000-expansion-and-wave-dump.md. The
+;     technics-docs/test-modes.md and technics-docs/kn7000-expansion-and-wave-dump.md. The
 ;     KN7000 does have a CPU-visible wave read port; the KN5000 has no equivalent.
 ;
 ; [INFERENCE] So the directory walk happens inside IC303. That is a conclusion by
@@ -7557,7 +7557,7 @@ Voice_Clamp_Byte_WA_Return:
 ; [INFERENCE] proofs (2) and (3) reach banks +0x800/+0x840 only. Envelopes 2 and 3 share the
 ; word format and the same 0x0118FE curve, so the same polarity is carried over to
 ; +0x900..+0xA40 by construction; no firmware site writes a mute word to those banks.
-; ★ OPEN CONFLICT: kn5000-docs/tone-generator.md reads +0x0840/+0x0880 as "Pan Left/Right,
+; ★ OPEN CONFLICT: technics-docs/tone-generator.md reads +0x0840/+0x0880 as "Pan Left/Right,
 ; 0x00 = silent" -- the opposite polarity. That document and this block disagree, and the
 ; disagreement is not settled here.
 ;
@@ -10103,7 +10103,7 @@ Voice_PanReg_WriteDispatchB_Return:
 ;
 ; CONFIDENCE MEDIUM, UNCHANGED: everything above is the SOURCE side -- which bytes the
 ; firmware puts in these words and when. What IC303 does with registers 0x27..0x29 is still
-; not proved here; the register meanings in kn5000-docs/tone-generator.md (which reads
+; not proved here; the register meanings in technics-docs/tone-generator.md (which reads
 ; +0x09C0/+0x0A00/+0x0A40 as aux/effect send levels, not as an envelope) are that document's
 ; reading, and it disagrees with the envelope reading recorded in the staging-block header.
 Voice_StereoLevel_Compute:
@@ -10489,7 +10489,7 @@ Voice_PortaLevel_ScaleAndPack:
 ; this routine writes none of them -- it clears +0x8C0, +0x500, +0x900, +0x940, +0x980,
 ; +0x9C0, +0xA00, +0xA40, +0x440 and +0x480. What 0x0000 means in those banks is unproved:
 ; under the envelope reading it is a target below the loud end of the curve, while
-; kn5000-docs/tone-generator.md reads several of them as effect sends, where 0 = no send.
+; technics-docs/tone-generator.md reads several of them as effect sends, where 0 = no send.
 Voice_Level_ClearAllOutputRegs:
 	ld xhl, (xwa + 23)
 	ldw (0x0451ea:24), 0x0000
@@ -47513,7 +47513,7 @@ EFF_DspChannel_Init_OuterNext:
 ; Effect 0x27, band 0: if any of param[0..2] is dirty, mark param[0] dirty and clear
 ; param[1] and param[2]. Five such blocks follow, covering param[0..14] in groups of
 ; three -- five bands of three values each (frequency / Q / gain), which is the shape of
-; the PARAMETRIC EQ described in kn5000-docs/effects-dsp.md. Coalescing to the first flag
+; the PARAMETRIC EQ described in technics-docs/effects-dsp.md. Coalescing to the first flag
 ; is what makes the DSP-side biquad get designed once per band instead of three times.
 EFF_DspChanInit_AlgoType0_Dirty:
 	ld bc, de
@@ -49971,7 +49971,7 @@ DSP_WriteParamCmd30:
 ; then DATA 0x00, DATA 0x0A, and finally the 24-bit value packed into four bytes:
 ;   (v >> 17) & 0x7F, (v >> 9) & 0xFF, (v >> 1) & 0xFF, ((v << 7) & 0x80) + 0x15.
 ; That 7+8+8+1 split with the 0x15 tag in the last byte is the 36-bit-word packing
-; described in kn5000-docs/effects-dsp.md; the tag distinguishes the destination bank.
+; described in technics-docs/effects-dsp.md; the tag distinguishes the destination bank.
 DSP_WriteFreqParam_AlgoType:
 	dec 6, xsp
 	pushw iz

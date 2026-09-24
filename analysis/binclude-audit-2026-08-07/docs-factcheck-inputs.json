@@ -126,7 +126,7 @@
    },
    {
     "claim": "table-data-rom.md's existing 'Instrument Patch Data (0x832000-0x850000)' section is factually wrong (name field, pointer-table address, region bounds) and the preset-bank half actually ends at 0x82FFFF",
-    "evidence": "kn5000-docs/table-data-rom.md:156-167 vs. table_data/preset_banks.s:2 ('SECTION DIRECTORY + PRESET DATA BANKS (0x800000 - 0x82FFFF)'), table_data/kn5000_table_data.s:106-108 (tone DB at 0x830000-0x87FFEF), and the ROM facts above (offset table at 0x831B00 holding relative offsets; records 0x8324D4-0x855A47; 16-byte space-padded name at record +0x00)"
+    "evidence": "technics-docs/table-data-rom.md:156-167 vs. table_data/preset_banks.s:2 ('SECTION DIRECTORY + PRESET DATA BANKS (0x800000 - 0x82FFFF)'), table_data/kn5000_table_data.s:106-108 (tone DB at 0x830000-0x87FFEF), and the ROM facts above (offset table at 0x831B00 holding relative offsets; records 0x8324D4-0x855A47; 16-byte space-padded name at record +0x00)"
    }
   ]
  },
@@ -350,7 +350,7 @@
    },
    {
     "claim": "The old page's 'Demo Song System' text (demo sequence data from 0x9999CC, demo category names at 0x99EC00) was still present in the live page and is falsified",
-    "evidence": "kn5000-docs/table-data-rom.md lines 97-103 as read at the start of this task. Falsified by: ROM 0x9999CC = 7 residue bytes, 0x9999D3-0x99EBFF verified all-0xFF, 0x99EC00 = b'Tour Of The 5000   Accordion    ' = PanelMemory_BankNames (table_data/panel_memory_presets.s:69-79)"
+    "evidence": "technics-docs/table-data-rom.md lines 97-103 as read at the start of this task. Falsified by: ROM 0x9999CC = 7 residue bytes, 0x9999D3-0x99EBFF verified all-0xFF, 0x99EC00 = b'Tour Of The 5000   Accordion    ' = PanelMemory_BankNames (table_data/panel_memory_presets.s:69-79)"
    }
   ]
  },
@@ -751,15 +751,15 @@
    },
    {
     "claim": "Effect 15 is ROCK ROTARY and effect 53 is ROTARY SPEAKER, and they share algorithm stream 0x016ACF; effect 39 is PARAMETRIC EQ.",
-    "evidence": "Names from kn5000_v10_program.rom at 0x033568-18n; algorithm pointers from the 0x01ED7C array (both 0x016ACF). Matches the table in kn5000-docs/dsp-effect-data-zone.md:121 and :149."
+    "evidence": "Names from kn5000_v10_program.rom at 0x033568-18n; algorithm pointers from the 0x01ED7C array (both 0x016ACF). Matches the table in technics-docs/dsp-effect-data-zone.md:121 and :149."
    },
    {
-    "claim": "Neither retracted claim appears anywhere in the kn5000-docs repository.",
-    "evidence": "`grep -rn \"13318|exponential|pitch table\" --include=*.md` over /home/fsanches/compartilhado/kn5000-docs returns only waveform-rom-format.md:139 (a different table, 0x01217D); `grep -rn \"0x00FF00|0x00FF80|00FF80\"` returns only tone-generator.md:210 and :534, which are TG register VALUES (0xFF00/0xFF80 mute volume), not table addresses."
+    "claim": "Neither retracted claim appears anywhere in the technics-docs repository.",
+    "evidence": "`grep -rn \"13318|exponential|pitch table\" --include=*.md` over /home/fsanches/compartilhado/technics-docs returns only waveform-rom-format.md:139 (a different table, 0x01217D); `grep -rn \"0x00FF00|0x00FF80|00FF80\"` returns only tone-generator.md:210 and :534, which are TG register VALUES (0xFF00/0xFF80 mute volume), not table addresses."
    },
    {
     "claim": "All four patches apply cleanly and the site builds.",
-    "evidence": "`patch -p1 --dry-run` on each against current kn5000-docs HEAD: 'checking file <name>' with no rejects. `jekyll build` of a scratch copy of the repo with the four files substituted: exit 0, zero warnings, 5.2 s."
+    "evidence": "`patch -p1 --dry-run` on each against current technics-docs HEAD: 'checking file <name>' with no rejects. `jekyll build` of a scratch copy of the repo with the four files substituted: exit 0, zero warnings, 5.2 s."
    }
   ]
  },
@@ -805,7 +805,7 @@
    },
    {
     "claim": "The addresses previously published on fdc-subsystem.md for handlers 1-11 (F97D93, F97D99, F97D9F, F97DA5, F97DAB, F97DB1, F97DB5, F97DB9, F97DBD, F97DC1, F97DC5) are wrong.",
-    "evidence": "compare kn5000-docs/fdc-subsystem.md:529-539 (as committed) against the ROM-derived offsets above and symbols/maincpu_symbols_reference.txt:29800-29810"
+    "evidence": "compare technics-docs/fdc-subsystem.md:529-539 (as committed) against the ROM-derived offsets above and symbols/maincpu_symbols_reference.txt:29800-29810"
    },
    {
     "claim": "The maincpu name FDC_STATUS_HANDLER (0xF97696) is a misnomer: it is the SEEK command handler, twin of the bootloader's FDC_CmdSeek.",
@@ -901,11 +901,11 @@
    },
    {
     "claim": "The boot driver derives the per-frame byte countdown with the same rule the runtime driver uses for CPANEL_PACKET_BYTE_COUNT: 2 bytes when (first byte & 0x3F) < 0x30, else (first byte & 0x0F) + 3.",
-    "evidence": "table_data/boot_cpserial_states.s:144-151 (State08 TX) and :242-244 (State20 RX header); kn5000-docs/control-panel-protocol.md:426-433 states the identical formula for the runtime driver"
+    "evidence": "table_data/boot_cpserial_states.s:144-151 (State08 TX) and :242-244 (State20 RX header); technics-docs/control-panel-protocol.md:426-433 states the identical formula for the runtime driver"
    },
    {
     "claim": "BootSerial_WaitDeviceIdent polls frame (0x20, 0x0B) and encodes the answer as 0x0D if bit 7 is set, else 0x0E if bit 6 is set, else 0x0C \u2014 the same command and the same three codes the runtime driver uses for the data wheel on segment 0x0B.",
-    "evidence": "table_data/boot_cpserial.s:620-643; kn5000-docs/control-panel-protocol.md:808-818 (command 0x20 0x0B, bit 7 -> mode 0xD, bit 6 -> 0xE, neither -> 0xC)"
+    "evidence": "table_data/boot_cpserial.s:620-643; technics-docs/control-panel-protocol.md:808-818 (command 0x20 0x0B, bit 7 -> mode 0xD, bit 6 -> 0xE, neither -> 0xC)"
    },
    {
     "claim": "Boot_ClassifyDeviceID (ROM 0x9FEF89) returns 3 if (0x1036)==0x6C, 2 if (0x1023)==0x70, 1 if (0x1038)==0x38, 4 if (0x1028)==0x0F, else 0; only class 4 (the flash-update service device) diverts the boot into the firmware-update UI.",
@@ -917,7 +917,7 @@
    },
    {
     "claim": "The handshake and probe frames sent by the boot driver are 1F DA, then 1F 1A / 1D 00 / DD 03 / 1E 80, then 25 01 / E2 04 / 20 10 / E2 11 for the probe, 20 0B for the ident poll, and 2B 00 / EB 00 / 20 10 / E3 10 for the re-ident \u2014 all of which also appear in the runtime driver's command reference.",
-    "evidence": "table_data/boot_cpserial.s:206-213 (FullInit sends 0x1f,0xda), :268-289 (HandshakeSequence four frames), :572-600 (ProbeSequence four frames), :621-643 (WaitDeviceIdent), :672-696 (ResetAndIdent); kn5000-docs/control-panel-protocol.md:130-158 lists 1F DA, 1F 1A, 1D 00, DD 03, 1E 80, 25 01, E2 04, 20 10, E2 11, E3 10, 2B 00, EB 00"
+    "evidence": "table_data/boot_cpserial.s:206-213 (FullInit sends 0x1f,0xda), :268-289 (HandshakeSequence four frames), :572-600 (ProbeSequence four frames), :621-643 (WaitDeviceIdent), :672-696 (ResetAndIdent); technics-docs/control-panel-protocol.md:130-158 lists 1F DA, 1F 1A, 1D 00, DD 03, 1E 80, 25 01, E2 04, 20 10, E2 11, E3 10, 2B 00, EB 00"
    },
    {
     "claim": "RX packets are classified by (first byte & 0x38) >> 1 through an 8-entry table at ROM 0x9FF746: classes 0/1 XOR-scrambled 2-byte, class 2 external decode, classes 3/4/5 discard, classes 6/7 variable-length run. TX packets are classified by (tag & 0x30) >> 4 through a 4-entry table at 0x9FF966.",
@@ -1073,7 +1073,7 @@
    },
    {
     "claim": "The ROM-status diagram PNG on the site is stale (2026-02-07) and its generator points at ASL paths that no longer exist",
-    "evidence": "`ls -l kn5000-docs/assets/images/rom-status-diagram.png` -> Feb 7 14:21. scripts/build/generate_rom_status_diagram.py:302-326 lists 'maincpu/kn5000_v10_program.asm', 'table_data/kn5000_table_data.asm', 'subcpu/kn5000_subprogram_v142.asm' \u2014 all confirmed MISSING from the repo root."
+    "evidence": "`ls -l technics-docs/assets/images/rom-status-diagram.png` -> Feb 7 14:21. scripts/build/generate_rom_status_diagram.py:302-326 lists 'maincpu/kn5000_v10_program.asm', 'table_data/kn5000_table_data.asm', 'subcpu/kn5000_subprogram_v142.asm' \u2014 all confirmed MISSING from the repo root."
    },
    {
     "claim": "The audit inventoried 598 .incbin/binclude directives of which 505 are honest build products, and produced 55 findings and 24 adversarial verdicts (14 CONFIRMED, 10 REFUTED)",
@@ -1173,7 +1173,7 @@
    },
    {
     "claim": "The four 100-entry u32 pointer arrays indexing the effect zone are at 0x01ED7C, 0x01EF0C, 0x01F09C and 0x01F22C",
-    "evidence": "Already published on the site at kn5000-docs/dsp-effect-data-zone.md (landed as docs commit 1bd4690); spacing 0x190 = 400 bytes = 100 x u32 is self-consistent"
+    "evidence": "Already published on the site at technics-docs/dsp-effect-data-zone.md (landed as docs commit 1bd4690); spacing 0x190 = 400 bytes = 100 x u32 is self-consistent"
    },
    {
     "claim": "Table Data ROM top-level layout (0x800000-0x9FFFFF) as given in my memory-map addition",

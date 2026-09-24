@@ -40,7 +40,7 @@ The control panel uses High Level Emulation because the Mitsubishi M37471M2196S 
 
 The main CPU communicates with the control panel via serial at address `0x120000` (latch registers). The protocol uses:
 
-- **Commands**: E1, E2, E3, 00-1F (see control-panel-protocol.md in kn5000-docs)
+- **Commands**: E1, E2, E3, 00-1F (see control-panel-protocol.md in technics-docs)
 - **Responses**: Button states, encoder values, acknowledgments
 - **Packet types**: Single-byte, multi-byte, and special encoder packets
 
@@ -54,8 +54,8 @@ The main CPU communicates with the control panel via serial at address `0x120000
 
 ## Related Documentation
 
-- `../kn5000-docs/control-panel-protocol.md` - Complete protocol analysis
-- `../kn5000-docs/memory-map.md` - Hardware register addresses
+- `../technics-docs/control-panel-protocol.md` - Complete protocol analysis
+- `../technics-docs/memory-map.md` - Hardware register addresses
 - `../maincpu/kn5000_v10_program.asm` - Main CPU disassembly (control panel routines at FC4xxx)
 
 ## License

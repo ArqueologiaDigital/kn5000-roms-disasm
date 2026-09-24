@@ -179,7 +179,7 @@
 ; -0x32..+0x32)) -- i.e. an 8-bit level in the high byte and a signed spread coefficient in
 ; the low byte, the same layout the mute path uses when it writes 0xFF80.
 ; Confidence medium only because the *meaning* of the three destination registers is taken
-; from kn5000-docs/tone-generator.md, not proved here.
+; from technics-docs/tone-generator.md, not proved here.
 
 [LABEL] 0x0246BC Voice_StereoLevel_Ch1_Unmodulated  replaces=LABEL_0246BC  confidence=high
 ; Channel-1 level with no key-scaling term: table[0x0118FE + tonerec+63] straight to (xsp+6).
@@ -703,7 +703,7 @@
 ; Voice_Pan_WriteWithDetune, Voice_Pan_WriteBothWithDetune, Voice_PanReg_WriteDispatch and
 ; Voice_PanReg_WriteDispatchB all write ONLY 0x0451D4 and 0x0451D6. Per the staging-block
 ; walk in ToneGen_WriteVoiceParams those are TG registers 0x100 and 0x140, which
-; kn5000-docs/tone-generator.md documents as "Interpolated pitch (portamento/legato)" and
+; technics-docs/tone-generator.md documents as "Interpolated pitch (portamento/legato)" and
 ; "Secondary pitch offset (detune)". The actual pan/level registers 0x800/0x840/0x880 are
 ; written 0x1200 bytes later by Voice_ComputeAndWritePan / Voice_WriteChPanShift.
 ; Corroborating arithmetic: the 7-bit field is clamped by ClampS8_0_to_78 (0..120 = a

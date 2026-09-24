@@ -4,7 +4,7 @@
 QUESTION.  MAME names MSAR/MAMR and never decodes them (tmp95c061.cpp:1313 and
 :1329 are bare stores into m_mem_start_reg / m_mem_start_mask, which nothing
 else reads).  No TMP95C061 databook exists in these trees.  The sibling project
-(../kn5000-roms-disasm -> kn5000-docs/tmp94c241-memory-controller.md) carries a
+(../kn5000-roms-disasm -> technics-docs/tmp94c241-memory-controller.md) carries a
 reconstruction that grades ITSELF unproven, and explicitly records that a rival
 64 KB-granularity reading was once "confirmed" just as convincingly.  Importing
 either one and calling it derived is how that project got burned.

@@ -44,7 +44,7 @@ Feature Presentation at 0x8E0000) round-trip from `.mid + .yaml` via
 `compress_lzss.py --strict`. Two errata from verification: preset 17's LZSS
 stream ends at 0x9F5676 and the remaining ~15.9 KB is non-stream tail carried
 verbatim; and the SLIDE4K size field is 24-bit **BE**, not LE as the Makefile
-comment and `kn5000-docs/lzss-compression.md` state. The docs' "14-byte
+comment and `technics-docs/lzss-compression.md` state. The docs' "14-byte
 header" is also wrong (it is 11 bytes) — which is exactly the misframing that
 produced the orphaned `original_ROMs/demo_preset_compressed_refs/` slices.
 
@@ -188,7 +188,7 @@ on the files it `.include`s.)
 Non-negotiables for every wave: blob files that `archive/asl/` bincludes stay
 byte-identical on disk (slice with `.incbin "file", offset, length` instead);
 symbols reference files are UPPERCASE and address-sorted; disasm commits carry
-the `LLVM: tlcs900_backend @ ...` line the hook enforces; kn5000-docs commits
+the `LLVM: tlcs900_backend @ ...` line the hook enforces; technics-docs commits
 need a passing jekyll build and must leave the pre-existing uncommitted
 `flowcharts/` edits alone; nothing is ever pushed.
 

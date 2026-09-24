@@ -41,7 +41,7 @@ test_ROMs/*.rom
 maincpu/llvm/*.o
 maincpu/llvm/*.elf
 
-# Extracted font intermediates (PNGs are in kn5000-docs, PGMs are raw)
+# Extracted font intermediates (PNGs are in technics-docs, PGMs are raw)
 extracted_fonts/*.pgm
 extracted_fonts/*.png
 

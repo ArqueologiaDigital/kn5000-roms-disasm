@@ -146,7 +146,7 @@
   "verdict": "REFUTED",
   "package": "d-tabledata",
   "correction": "Line 350: `{{ site.baseurl }}/music-stylist-database/` ; line 426: `{{ site.baseurl }}/panel-memory-factory-data/`",
-  "evidence": "The two new pages declare `permalink: /music-stylist-database/` and `permalink: /panel-memory-factory-data/`. Neither `/music-stylist/` nor `/panel-memory/` exists among the 108 permalinks in kn5000-docs, and nothing in this batch creates them. I extracted every `{{ site.baseurl }}\u2026` link from all seven draft packages and diffed against the existing permalinks plus the six being added: these two are the only broken links introduced (the third residual, `/effects-dsp/flowcharts/`, is pre-existing in effects-dsp.md and resolves under flowcharts/).",
+  "evidence": "The two new pages declare `permalink: /music-stylist-database/` and `permalink: /panel-memory-factory-data/`. Neither `/music-stylist/` nor `/panel-memory/` exists among the 108 permalinks in technics-docs, and nothing in this batch creates them. I extracted every `{{ site.baseurl }}\u2026` link from all seven draft packages and diffed against the existing permalinks plus the six being added: these two are the only broken links introduced (the third residual, `/effects-dsp/flowcharts/`, is pre-existing in effects-dsp.md and resolves under flowcharts/).",
   "checker": "addresses"
  },
  {
@@ -408,14 +408,14 @@
   "package": "d-subcpu-dsp",
   "claim": "All four d-subcpu-dsp patches apply cleanly",
   "verdict": "CONFIRMED",
-  "evidence": "`patch -p1 --dry-run --forward` in /home/fsanches/compartilhado/kn5000-docs against current HEAD: effects-dsp.md.patch, dsp-bytecode-interpreter.md.patch, subcpu-command-format.md.patch and subcpu-payload-loading.md.patch each print only 'checking file <name>' with no rejects. I did not re-run jekyll build.",
+  "evidence": "`patch -p1 --dry-run --forward` in /home/fsanches/compartilhado/technics-docs against current HEAD: effects-dsp.md.patch, dsp-bytecode-interpreter.md.patch, subcpu-command-format.md.patch and subcpu-payload-loading.md.patch each print only 'checking file <name>' with no rejects. I did not re-run jekyll build.",
   "checker": "behaviour"
  },
  {
   "package": "d-tonedb",
   "claim": "The d-tonedb patches are applicable as delivered",
   "verdict": "REFUTED",
-  "evidence": "OPERATIONAL BLOCKER. `patch -p1 --dry-run` against current kn5000-docs HEAD fails on three of the package's four deliverables: d-tonedb/tone-generator.md.patch ('malformed patch at line 15'), d-tonedb/audio-subsystem.md.patch ('malformed patch at line 16'), d-tonedb/table-data-rom.md.OPTIONAL.patch ('malformed patch at line 20'). Cause is wrong hunk line counts, e.g. tone-generator.md.patch's first header reads `@@ -424,6 +424,13 @@` but the hunk body has 6 context + 5 added lines = 11 new lines, so the parser overruns into the next `@@`. All other patches in the batch (d-boot x2, d-lzss, d-stylist-panelmem, d-status x2, d-subcpu-dsp x4) dry-run clean.",
+  "evidence": "OPERATIONAL BLOCKER. `patch -p1 --dry-run` against current technics-docs HEAD fails on three of the package's four deliverables: d-tonedb/tone-generator.md.patch ('malformed patch at line 15'), d-tonedb/audio-subsystem.md.patch ('malformed patch at line 16'), d-tonedb/table-data-rom.md.OPTIONAL.patch ('malformed patch at line 20'). Cause is wrong hunk line counts, e.g. tone-generator.md.patch's first header reads `@@ -424,6 +424,13 @@` but the hunk body has 6 context + 5 added lines = 11 new lines, so the parser overruns into the next `@@`. All other patches in the batch (d-boot x2, d-lzss, d-stylist-panelmem, d-status x2, d-subcpu-dsp x4) dry-run clean.",
   "correction": "Manager must recount the hunk headers in the three d-tonedb patches (or re-derive them with `diff -u`) before applying. d-tonedb/tone-database.md is a full new file and is unaffected.",
   "checker": "behaviour"
  },
@@ -458,7 +458,7 @@
   "package": "d-boot",
   "claim": "The maincpu FDC_HANDLER_OFFSETS at 0xEA98CA are 0,5,13,21,29,37,45,50,55,60,65,70 giving handlers 0xF97D8D\u20260xF97DD3, and the addresses currently published on fdc-subsystem.md for handlers 1-11 are wrong",
   "verdict": "CONFIRMED",
-  "evidence": "Read the twelve LE16 from original_ROMs/kn5000_v10_program.rom at file offset 0xA98CA myself: [0,5,13,21,29,37,45,50,55,60,65,70]; base 0xF97D8D gives F97D8D, F97D92, F97D9A, F97DA2, F97DAA, F97DB2, F97DBA, F97DBF, F97DC4, F97DC9, F97DCE, F97DD3. The live kn5000-docs/fdc-subsystem.md:529-539 list F97D93, F97D99, \u2026 which match none of these.",
+  "evidence": "Read the twelve LE16 from original_ROMs/kn5000_v10_program.rom at file offset 0xA98CA myself: [0,5,13,21,29,37,45,50,55,60,65,70]; base 0xF97D8D gives F97D8D, F97D92, F97D9A, F97DA2, F97DAA, F97DB2, F97DBA, F97DBF, F97DC4, F97DC9, F97DCE, F97DD3. The live technics-docs/fdc-subsystem.md:529-539 list F97D93, F97D99, \u2026 which match none of these.",
   "checker": "behaviour"
  },
  {
@@ -528,7 +528,7 @@
   "package": "d-status",
   "claim": "The ROM-status diagram PNG is stale (2026-02-07) and its generator points at ASL paths that no longer exist",
   "verdict": "CONFIRMED",
-  "evidence": "`ls -l kn5000-docs/assets/images/rom-status-diagram.png` -> Feb 7 14:21. scripts/build/generate_rom_status_diagram.py:302-326 names maincpu/kn5000_v10_program.asm, table_data/kn5000_table_data.asm, subcpu/kn5000_subprogram_v142.asm; `ls` on all three from the repo root: 'No such file or directory'. The draft's blockquote flagging the image as historical is the right handling.",
+  "evidence": "`ls -l technics-docs/assets/images/rom-status-diagram.png` -> Feb 7 14:21. scripts/build/generate_rom_status_diagram.py:302-326 names maincpu/kn5000_v10_program.asm, table_data/kn5000_table_data.asm, subcpu/kn5000_subprogram_v142.asm; `ls` on all three from the repo root: 'No such file or directory'. The draft's blockquote flagging the image as historical is the right handling.",
   "checker": "behaviour"
  },
  {

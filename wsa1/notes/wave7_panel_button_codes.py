@@ -115,7 +115,7 @@ nobody spends another round on them
     whose legend the manual states, then read what the firmware does with it),
     which is the method this script uses.
   * THE KN5000 SHARES THE PANEL MCU PART NUMBER AND THE FRAME, NOT THE MAP.
-    kn5000-docs/control-panel-protocol.md names the same Mitsubishi
+    technics-docs/control-panel-protocol.md names the same Mitsubishi
     M37471M2196S (the WSA1R fits ONE, on CP1; the KN5000 fits TWO), and gap E
     of notes/WSA1-EMULATION-DISASM-GAPS.md already settled that the WSA1's SC1
     module is the same driver.  But a segment/bit pair addresses a MATRIX

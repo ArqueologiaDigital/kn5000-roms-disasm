@@ -373,7 +373,7 @@ def main(argv):
     ap.add_argument("--disasm-root", default=os.environ.get("KN5000_DISASM_ROOT"),
                     help="the kn5000-roms-disasm checkout (default: this file's repo)")
     ap.add_argument("--docs-root", default=os.environ.get("KN5000_DOCS_ROOT"),
-                    help="the kn5000-docs checkout (default: ../kn5000-docs)")
+                    help="the technics-docs checkout (default: ../technics-docs)")
     ap.add_argument("--mame-root", default=os.environ.get("KN7000_MAME_ROOT"),
                     help="the kn7000_mame overlay (default: ../kn7000_mame)")
     ap.add_argument("--selftest", action="store_true",
@@ -381,7 +381,7 @@ def main(argv):
     args = ap.parse_args(argv)
 
     disasm = pathlib.Path(args.disasm_root or DISASM_DEFAULT).resolve()
-    docs = pathlib.Path(args.docs_root or disasm.parent / "kn5000-docs").resolve()
+    docs = pathlib.Path(args.docs_root or disasm.parent / "technics-docs").resolve()
     mame = pathlib.Path(args.mame_root or disasm.parent / "kn7000_mame").resolve()
 
     notes = disasm / "wsa1" / "notes"

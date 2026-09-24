@@ -18,12 +18,12 @@ This is a ROM disassembly project for the Technics KN5000 music keyboard. The go
 
 ### Documentation Website
 
-Detailed documentation is at `../kn5000-docs/`. Key pages:
+Detailed documentation is at `../technics-docs/`. Key pages:
 - **Hardware**: `hardware-architecture.md`, `memory-map.md`, `cpu-subsystem.md`
 - **Protocols**: `control-panel-protocol.md`, `inter-cpu-protocol.md`, `boot-sequence.md`
 - **Progress**: `rom-reconstruction.md`, `issues.md`, `reverse-engineering.md`
 - **Subsystems**: `audio-subsystem.md`, `fdc-subsystem.md`, `hdae5000.md`
-- **Data Formats**: `lzss-compression.md` (0x3E0000 address resolved - see [Firmware Update System](../kn5000-docs/lzss-compression.md#firmware-update-system-and-0x3e0000))
+- **Data Formats**: `lzss-compression.md` (0x3E0000 address resolved - see [Firmware Update System](../technics-docs/lzss-compression.md#firmware-update-system-and-0x3e0000))
 
 ### Analysis Documents
 
@@ -257,7 +257,7 @@ When new images are discovered and extracted as `.bin` files in `maincpu/images/
    make gallery
    ```
 
-3. **Update the image gallery** page at `../kn5000-docs/image-gallery.md` with the new images
+3. **Update the image gallery** page at `../technics-docs/image-gallery.md` with the new images
 
 4. **Commit both repositories** (roms-disasm and docs) together
 
@@ -268,15 +268,15 @@ This ensures the documentation website always reflects the latest extracted imag
 **When new firmware event codes are discovered or existing codes are better understood, ALL of the following must be updated:**
 
 1. **Assembly source** -- Add/update `EVT_*` `.equ` constants in `hdae5000/hd-ae5000_v2_06i.s` and `maincpu/kn5000_v10_program.s`; replace raw hex values with symbolic names (e.g., `EVT_INIT_HOOK`)
-2. **Event codes reference page** -- Update `../kn5000-docs/event-codes.md` with new codes, dispatch paths, and descriptions
-3. **HDAE5000 homebrew page** -- Update `../kn5000-docs/hdae5000-homebrew.md` if the discovery affects handler registration or activation flow
+2. **Event codes reference page** -- Update `../technics-docs/event-codes.md` with new codes, dispatch paths, and descriptions
+3. **HDAE5000 homebrew page** -- Update `../technics-docs/hdae5000-homebrew.md` if the discovery affects handler registration or activation flow
 4. **Mines project** -- Update `../../Mines/CLAUDE.md` if applicable
 
-**This policy exists because** event codes are the primary interface between the firmware and extension ROMs. Inconsistent documentation across the disassembly, website, and homebrew project causes confusion. The canonical event code reference is `../kn5000-docs/event-codes.md`.
+**This policy exists because** event codes are the primary interface between the firmware and extension ROMs. Inconsistent documentation across the disassembly, website, and homebrew project causes confusion. The canonical event code reference is `../technics-docs/event-codes.md`.
 
 ### Website Synchronization
 
-The documentation website at `../kn5000-docs/` must be kept in sync with project progress. **Run these commands regularly:**
+The documentation website at `../technics-docs/` must be kept in sync with project progress. **Run these commands regularly:**
 
 ```bash
 make website   # Updates gallery, issues, and ROM status diagram
@@ -326,7 +326,7 @@ make rom-status  # Regenerate the diagram
 make website     # Regenerate all website content
 ```
 
-The diagram is displayed on the documentation website at `/rom-reconstruction/`. See `../kn5000-docs/rom-reconstruction.md` for detailed progress tracking.
+The diagram is displayed on the documentation website at `/rom-reconstruction/`. See `../technics-docs/rom-reconstruction.md` for detailed progress tracking.
 
 ### Symbol Name Synchronization (STRICT POLICY)
 
@@ -343,7 +343,7 @@ This is a strict policy to prevent documentation from becoming outdated as symbo
 2. **When renaming symbols in assembly**, search documentation for the old name:
    ```bash
    # Find all references in documentation
-   grep -rn "OLD_SYMBOL_NAME" ../kn5000-docs/ maincpu/ subcpu/ table_data/ hdae5000/
+   grep -rn "OLD_SYMBOL_NAME" ../technics-docs/ maincpu/ subcpu/ table_data/ hdae5000/
    ```
 
 3. **Common symbol categories to check:**
@@ -372,7 +372,7 @@ tool. Beads was decommissioned on 2026-07-27; edit the file directly.
 
 **Before closing ANY issue, you MUST complete ALL of the following steps:**
 
-1. **Website Documentation Update**: Update the relevant pages in `../kn5000-docs/` with detailed findings:
+1. **Website Documentation Update**: Update the relevant pages in `../technics-docs/` with detailed findings:
    - Add new sections with specific technical details discovered
    - Include code addresses, register values, and protocol specifics
    - Document data structures with byte-level precision
@@ -422,7 +422,7 @@ The task list is:
 - Exported to the website via `make issues` (reads JSONL directly)
 - Visible at `/issues/` on the documentation site
 
-**Quick access:** read `.beads/issues.jsonl`, or see `../kn5000-docs/issues.md` for the web version.
+**Quick access:** read `.beads/issues.jsonl`, or see `../technics-docs/issues.md` for the web version.
 
 ### Disassembly Quality Standards (MANDATORY)
 
@@ -723,7 +723,7 @@ This is a strict policy to ensure the disassembly is maintainable and understand
 
 This is a strict policy to maintain consistency across all ROM components and ensure complete understanding of inter-component communication:
 
-1. **Memory ranges for each ROM component:** See `../kn5000-docs/memory-map.md` for complete address ranges.
+1. **Memory ranges for each ROM component:** See `../technics-docs/memory-map.md` for complete address ranges.
 
 2. **When an address falls outside the current ROM's range:**
    - Identify which ROM component owns that address
@@ -995,7 +995,7 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 
 ### LZSS Compressed Regions
 
-The KN5000 firmware uses LZSS compression (SLIDE4K format) for embedded data. When working with compressed regions, reference `../kn5000-docs/lzss-compression.md` for full details.
+The KN5000 firmware uses LZSS compression (SLIDE4K format) for embedded data. When working with compressed regions, reference `../technics-docs/lzss-compression.md` for full details.
 
 **Compressed Data Inventory:**
 
@@ -1009,7 +1009,7 @@ The KN5000 firmware uses LZSS compression (SLIDE4K format) for embedded data. Wh
 - Firmware updates (File Type 007) write compressed payload to 0x3E0000
 - On boot, `SubCPU_Send_Payload` tries to decompress from 0x3E0000; factory units fall back to Table Data ROM
 
-See `../kn5000-docs/lzss-compression.md` for full details.
+See `../technics-docs/lzss-compression.md` for full details.
 
 **Note:** The compressed data at 0x8E0000 decompresses to 38,144 bytes of parameter data (the Feature Demo preset), NOT the ~192KB Sub CPU executable.
 
@@ -1038,9 +1038,9 @@ The `mame_driver/` directory contains reference copies of MAME source files (`kn
 **Driver architecture documentation:** [`docs/mame-driver/`](docs/mame-driver/README.md) — summarizes the MAME source code (memory maps, SFR registers, serial protocol, timer quirks, wiring). Start with the README for quick reference, then drill into per-component docs.
 
 **Related documentation:**
-- Control panel protocol: `../kn5000-docs/control-panel-protocol.md`
-- Memory-mapped I/O: `../kn5000-docs/memory-map.md`
-- Inter-CPU communication: `../kn5000-docs/inter-cpu-protocol.md`
+- Control panel protocol: `../technics-docs/control-panel-protocol.md`
+- Memory-mapped I/O: `../technics-docs/memory-map.md`
+- Inter-CPU communication: `../technics-docs/inter-cpu-protocol.md`
 
 ### Accurate Hardware Emulation (STRICT POLICY)
 
@@ -1062,8 +1062,8 @@ This is a strict policy to ensure the MAME driver accurately represents the actu
 
 3. **Sub CPU Boot ROM and Payload Transfer:**
    - The Sub CPU boot ROM IS dumped and MUST be accurately emulated
-   - See `../kn5000-docs/boot-sequence.md` for boot ROM details
-   - See `../kn5000-docs/inter-cpu-protocol.md` for payload transfer protocol
+   - See `../technics-docs/boot-sequence.md` for boot ROM details
+   - See `../technics-docs/inter-cpu-protocol.md` for payload transfer protocol
    - HLE shortcuts (preloading payload, skipping boot) are NOT acceptable
 
 4. **Rationale:**
@@ -1091,7 +1091,7 @@ When encountering disputed interpretations:
 
 | Topic | Status | Claude's View | Human's Concern | Details |
 |-------|--------|---------------|-----------------|---------|
-| **Preset Data Destination** | 🟡 PARTIALLY RESOLVED | LZSS preset data (~33KB) goes to Sub CPU 0xF000+ | Transfer sizes don't match, fallback produces invalid data | `table_data/preset_data.asm`, `../kn5000-docs/lzss-compression.md` |
+| **Preset Data Destination** | 🟡 PARTIALLY RESOLVED | LZSS preset data (~33KB) goes to Sub CPU 0xF000+ | Transfer sizes don't match, fallback produces invalid data | `table_data/preset_data.asm`, `../technics-docs/lzss-compression.md` |
 
 **Resolved: Address 0x3E0000 Mapping**
 - [x] ~~Trace what `0x3E0000` actually maps to during boot~~ → **Custom Data Flash** (not Table Data ROM)
@@ -1144,7 +1144,7 @@ non-0xFF.
 The ASL mirror (`.asm`) sources are archived under `archive/asl/` and are not
 authoritative.
 
-See `../kn5000-docs/rom-reconstruction.md` for the narrative breakdown.
+See `../technics-docs/rom-reconstruction.md` for the narrative breakdown.
 
 ### Key Files
 
@@ -1167,17 +1167,17 @@ See `../kn5000-docs/rom-reconstruction.md` for the narrative breakdown.
 
 ROM dumps are stored in `original_ROMs/`. Reference disassembly files (`.unidasm`) are pre-generated.
 
-See `../kn5000-docs/rom-reconstruction.md` for the complete ROM inventory and chip locations.
+See `../technics-docs/rom-reconstruction.md` for the complete ROM inventory and chip locations.
 
 ### Memory Map
 
-See `../kn5000-docs/memory-map.md` for the complete memory layout including all I/O ports, ROM regions, and RAM areas.
+See `../technics-docs/memory-map.md` for the complete memory layout including all I/O ports, ROM regions, and RAM areas.
 
 ## Technical Constraints
 
 The main blocking issue is that ASL only supports TMP96C141, not TMP94C241F. Unsupported instructions are emitted as raw bytes via macros in `tmp94c241.inc`.
 
-See `../kn5000-docs/reverse-engineering.md` for detailed toolchain notes and workarounds.
+See `../technics-docs/reverse-engineering.md` for detailed toolchain notes and workarounds.
 
 ## Cross-Version Diff Minimization Policies (STRICT)
 
@@ -1232,7 +1232,7 @@ After any codebase change affecting cross-version comparisons:
 Executable code must be represented as native TLCS-900 instructions, not raw `.byte` directives. When creating a new version's source from ROM bytes, disassemble all code regions to native instructions. `.byte` fallbacks are acceptable ONLY for: (a) genuinely unknown instruction encodings not supported by the LLVM backend, (b) data bytes that are not executable code.
 
 ### 12. All Content Reachable via Website Sidebar (STRICT)
-Every documentation page added to the website (`/home/fsanches/compartilhado/kn5000-docs/`) must have a corresponding entry in `_data/navigation.yml`. No orphan pages.
+Every documentation page added to the website (`/home/fsanches/compartilhado/technics-docs/`) must have a corresponding entry in `_data/navigation.yml`. No orphan pages.
 
 ## ⚠⚠ RECURSIVE `grep` SILENTLY SKIPS 47% OF THIS TREE ⚠⚠
 

@@ -627,7 +627,7 @@ def emit_readme(path, rows):
     lines.append("")
     lines.append("## How to read these charts")
     lines.append("")
-    lines.append("The charts are **Mermaid** (they render on GitHub and in the kn5000-docs Jekyll "
+    lines.append("The charts are **Mermaid** (they render on GitHub and in the technics-docs Jekyll "
                  "site) and are **regenerated from the ROM words plus the notes** &mdash; never hand-drawn. "
                  "A node is emitted **only when the landmark it names is actually detected in the "
                  "program's words**, using the same rules as the disassembler "

@@ -40,7 +40,7 @@ Inside prom_c, in one routine: `0xFFF038 ldio MSAR0,0x10`, and 0x2F bytes later
 
 This is the claim the previous pass got wrong, and it was flagged as the single
 most likely error in the whole map. The old argument imported
-`kn5000-docs/tmp94c241-memory-controller.md`, a reconstruction that grades
+`technics-docs/tmp94c241-memory-controller.md`, a reconstruction that grades
 *itself* "strong, not proven" and records that a rival 64 KB-granularity reading
 had also once been "confirmed" — and the external file it cited for the
 512 KB row (`kn7000_mame/notes/kn1500-lcd.md:46-47`) in fact says *"~1 MB CS

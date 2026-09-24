@@ -221,7 +221,7 @@ I-RAM dump of the running MAME device.
 - **Narrative** — the MAME development blog, KN5000 effects-DSP series
   (Parts 78–84): how each result was found.
 - **Reference** — the project docs site, `/effects-dsp/`
-  (`kn5000-docs/effects-dsp.md`): the distilled reference.
+  (`technics-docs/effects-dsp.md`): the distilled reference.
 - **Deep notes** — the reverse-engineering write-ups in the `kn7000_mame` tree,
   indexed by `notes/kn5000-dsp-INDEX.md` (encoding, hi12, addressing, spaces,
   semantics, biquad, reverb, named coefficients, effect-map, …). The algorithm

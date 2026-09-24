@@ -282,7 +282,7 @@ note("MAME never decodes MAMR (tmp95c061.cpp:1313-1335 are bare stores) and no "
      "TMP95C061 datasheet exists in any of these trees.")
 note("The report's table (size = 32 KB x (MAMR+1); MAMR bit k masks A(15+k)) is "
      "NOT a new derivation: it is verbatim the reconstruction already recorded "
-     "in kn5000-docs/tmp94c241-memory-controller.md, which grades itself "
+     "in technics-docs/tmp94c241-memory-controller.md, which grades itself "
      "'strong, not proven' and records that a competing 64 KB-granularity "
      "reading was ALSO 'confirmed' by two exact fits before the contradiction "
      "was noticed.")

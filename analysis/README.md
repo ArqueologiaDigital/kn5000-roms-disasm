@@ -28,6 +28,6 @@ All analyses are performed on the original ROM dumps in `original_ROMs/`. Addres
 
 ## Related Documentation
 
-- Project documentation: `../kn5000-docs/`
+- Project documentation: `../technics-docs/`
 - Symbol reference files: `../symbols/`
 - Disassembly source: `../maincpu/`, `../subcpu/`, `../table_data/`

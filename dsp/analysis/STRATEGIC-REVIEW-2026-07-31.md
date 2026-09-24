@@ -34,7 +34,7 @@ Same shape, cheaper: `hi12` bit 5 already has a co-resident pair *inside one ima
 There is no `.wav`, `.flac`, `.aif` or `.mp3` of the real KN5000 anywhere in the three repos. `TODO-FOR-FELIPE.md` §1 has asked for one since 2026‑07‑22T20:31 and has not been touched since. A measured T60 gives the **per-pass loop gain numerically** — the one number `§43`/`§49`/`§53` guessed wrong three times.
 
 Two things must be settled by the agents *before* asking, or the capture is void:
-- **Gate H0.** `kn5000-docs/effects-dsp.md` is 327 lines, last committed 2026‑07‑26, and carries no UI-name → algorithm-slot → **chip** → image-hash table. "ROOM" names both an IC311 effect and IC310's master reverb (slot 88); without the table a capture may measure the wrong chip. The raw material exists — 224 recipes in `effect-selection-recipes.json`.
+- **Gate H0.** `technics-docs/effects-dsp.md` is 327 lines, last committed 2026‑07‑26, and carries no UI-name → algorithm-slot → **chip** → image-hash table. "ROOM" names both an IC311 effect and IC310's master reverb (slot 88); without the table a capture may measure the wrong chip. The raw material exists — 224 recipes in `effect-selection-recipes.json`.
 - **Decide the capture point.** The standing rule says DO3 only, but roadmap risk 34 is right: `m_do[unit][…]` is written only at `upd6383.cpp:2475/2476` with `unit ∈ {0,1}`, so **`m_do[2]` is never written** and a DO3 capture has no emulated comparand. Either render DO3 through the HD‑AE5000 first, or accept DO1/DO2 vs the main mix with IC310 contamination documented.
 
 ### (c) Things needing external resources

@@ -15,7 +15,7 @@ from collections import defaultdict
 from pathlib import Path
 
 LLVM_NM = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm"
-DOCS_DIR = Path("/home/fsanches/compartilhado/kn5000-docs")
+DOCS_DIR = Path("/home/fsanches/compartilhado/technics-docs")
 LABEL_RE = re.compile(r'LABEL_([0-9A-Fa-f]{6})')
 
 # ELF files to build address->symbol maps from

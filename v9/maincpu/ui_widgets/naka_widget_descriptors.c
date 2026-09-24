@@ -2936,7 +2936,7 @@ typedef struct __attribute__((packed)) {
      * takes its address with lda_d16); the id of the first displayed row is
      * the byte at 0x021098, so a page of 8 is a window into that list.
      *
-     * These are the names quoted by kn5000-docs/dsp-effect-data-zone.md and
+     * These are the names quoted by technics-docs/dsp-effect-data-zone.md and
      * by the per-effect banners of v142/subcpu/subcpu_data_tables.s.
      * ------------------------------------------------------------------ */
     char DspParamName[86][17];

@@ -1117,7 +1117,7 @@ rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom: rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt
 # ============================================================================
 # Documentation website targets
 # ============================================================================
-DOCS_DIR=../kn5000-docs
+DOCS_DIR=../technics-docs
 DOCS_GALLERY=$(DOCS_DIR)/assets/images/gallery
 
 gallery:
@@ -1130,7 +1130,7 @@ rom-status:
 	python scripts/build/generate_rom_status_diagram.py
 
 website: gallery issues rom-status
-	@echo "Website content updated. Don't forget to commit kn5000-docs."
+	@echo "Website content updated. Don't forget to commit technics-docs."
 
 # ============================================================================
 # Clean targets
