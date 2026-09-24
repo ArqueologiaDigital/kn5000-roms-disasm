@@ -126,7 +126,7 @@ KeyEvents_ToLink__F98CC8:
 	lda	xbc, (xiz-34)                      ; F98CCE  lda XBC,XIZ+0xde
 	inc	1, xbc                             ; F98CD1  inc 1,XBC
 	push	xbc                               ; F98CD3  push XBC
-	call	0xF9973D                          ; F98CD4  call 0xf9973d
+	call	KeyScan_ReadEvent                          ; F98CD4  call 0xf9973d
 	inc	8, xsp                             ; F98CD8  inc 0,XSP
 	cp	wa, 0xFFFF                          ; F98CDA  cp WA,0xffff
 	jr z, KeyEvents_ToLink__F98CE2                        ; F98CDE  jr Z,0xf98ce2
@@ -150,7 +150,7 @@ KeyEvents_ToLink__F98CEE:
 	add	xbc, xiz                           ; F98D06  add XBC,XIZ
 	add	xbc, 0xFFFFFFDE                    ; F98D08  add XBC,0xffffffde
 	push	xbc                               ; F98D0E  push XBC
-	call	0xF9973D                          ; F98D0F  call 0xf9973d
+	call	KeyScan_ReadEvent                          ; F98D0F  call 0xf9973d
 	inc	8, xsp                             ; F98D13  inc 0,XSP
 	cp	wa, 0xFFFF                          ; F98D15  cp WA,0xffff
 	jr z, KeyEvents_ToLink__F98D35                        ; F98D19  jr Z,0xf98d35
@@ -174,12 +174,12 @@ KeyEvents_ToLink__F98D35:
 	extz	wa                                ; F98D42  extz WA
 	pushw	wa                               ; F98D44  push WA
 	pushw	5                                ; F98D45  push 0x0005
-	call	0xF9997E                          ; F98D48  call 0xf9997e
+	call	Link_SendBlock                          ; F98D48  call 0xf9997e
 	inc	8, xsp                             ; F98D4C  inc 0,XSP
 KeyEvents_ToLink__F98D4E:
 	ld	(xiz-35), 0                         ; F98D4E  ld (XIZ+0xdd),0x00
 KeyEvents_ToLink__F98D52:
-	call	0xF991F4                          ; F98D52  call 0xf991f4
+	call	MIDI_Rx_Dequeue                          ; F98D52  call 0xf991f4
 	ld	hl, wa                              ; F98D56  ld HL,WA
 	ld	(xiz-2), wa                         ; F98D58  ld (XIZ+0xfe),WA
 	cp	hl, 0xFFFF                          ; F98D5B  cp HL,0xffff
@@ -205,7 +205,7 @@ KeyEvents_ToLink__F98D7C:
 	extz	wa                                ; F98D89  extz WA
 	pushw	wa                               ; F98D8B  push WA
 	pushw	6                                ; F98D8C  push 0x0006
-	call	0xF9997E                          ; F98D8F  call 0xf9997e
+	call	Link_SendBlock                          ; F98D8F  call 0xf9997e
 	inc	8, xsp                             ; F98D93  inc 0,XSP
 KeyEvents_ToLink__F98D95:
 	pop	xix                                ; F98D95  pop XIX
@@ -594,7 +594,7 @@ Link_Ch2_ForwardBytes__F99003:
 	pushw	wa                               ; F9900A  push WA
 	inc	1, xbc                             ; F9900B  inc 1,XBC
 	ld	(xiz+10), xbc                       ; F9900D  ld (XIZ+0x0a),XBC
-	call	0xF992C6                          ; F99010  call 0xf992c6
+	call	MIDI_Tx_PutByte                          ; F99010  call 0xf992c6
 	popw	bc                                ; F99014  pop BC
 Link_Ch2_ForwardBytes__F99015:
 	jr Link_Ch2_ForwardBytes__F98FDB                           ; F99015  jr T,0xf98fdb
@@ -641,7 +641,7 @@ Link_Ch3_SetTouchControl__F99031:
 	ld	a, (xbc+1)                          ; F99034  ld A,(XBC+0x01)
 	extz	wa                                ; F99037  extz WA
 	pushw	wa                               ; F99039  push WA
-	call	0xF99598                          ; F9903A  call 0xf99598
+	call	ToneGen_SetVelCurveMode                          ; F9903A  call 0xf99598
 	popw	bc                                ; F9903E  pop BC
 	jr Link_Ch3_SetTouchControl__F99060                           ; F9903F  jr T,0xf99060
 Link_Ch3_SetTouchControl__F99041:
@@ -649,7 +649,7 @@ Link_Ch3_SetTouchControl__F99041:
 	ld	a, (xbc+1)                          ; F99044  ld A,(XBC+0x01)
 	extz	wa                                ; F99047  extz WA
 	pushw	wa                               ; F99049  push WA
-	call	0xF995AD                          ; F9904A  call 0xf995ad
+	call	ToneGen_SetVelOffset                          ; F9904A  call 0xf995ad
 	popw	bc                                ; F9904E  pop BC
 	jr Link_Ch3_SetTouchControl__F99060                           ; F9904F  jr T,0xf99060
 Link_Ch3_SetTouchControl__F99051:

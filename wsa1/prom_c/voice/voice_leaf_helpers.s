@@ -468,7 +468,7 @@ sub_FA5ACA__FA5B23:
 	push	0                                     ; FA5B3E  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FA5B40  push (XIZ+0x0a)
 	pushw	de                                   ; FA5B43  push DE
-	calr (0xFA59CE - 0xFA5B47)                 ; FA5B44  calr 0xfa59ce
+	calr Rec11FE_UnlinkFromRing                 ; FA5B44  calr 0xfa59ce
 	pop	xiy                                    ; FA5B47  pop XIY
 	jr sub_FA5ACA__FA5B59                      ; FA5B48  jr T,0xfa5b59
 sub_FA5ACA__FA5B4A:
@@ -477,7 +477,7 @@ sub_FA5ACA__FA5B4A:
 	push	0                                     ; FA5B4E  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FA5B50  push (XIZ+0x0a)
 	pushw	de                                   ; FA5B53  push DE
-	calr (0xFA5A36 - 0xFA5B57)                 ; FA5B54  calr 0xfa5a36
+	calr Rec11FE_InsertIntoRing                 ; FA5B54  calr 0xfa5a36
 	inc	6, xsp                                 ; FA5B57  inc 6,XSP
 sub_FA5ACA__FA5B59:
 	ld	bc, (xiz+10)                            ; FA5B59  ld BC,(XIZ+0x0a)
@@ -705,14 +705,14 @@ sub_FA5C43__FA5C97:
 	add	bc, hl                                 ; FA5CB9  add BC,HL
 	ld	(xbc), e                                ; FA5CBB  ld (XBC),E
 	pushw	de                                   ; FA5CBD  push DE
-	calr (0xFA5B70 - 0xFA5CC1)                 ; FA5CBE  calr 0xfa5b70
+	calr Rec0E3E_UnlinkFromRing                 ; FA5CBE  calr 0xfa5b70
 	popw	bc                                    ; FA5CC1  pop BC
 	jr sub_FA5C43__FA5CCD                      ; FA5CC2  jr T,0xfa5ccd
 sub_FA5C43__FA5CC4:
 	push	0                                     ; FA5CC4  push 0x00
 	push	d                                     ; FA5CC6  push D
 	pushw	de                                   ; FA5CC8  push DE
-	calr (0xFA5BC7 - 0xFA5CCC)                 ; FA5CC9  calr 0xfa5bc7
+	calr Rec0E3E_InsertBeforeInRing                 ; FA5CC9  calr 0xfa5bc7
 	pop	xiy                                    ; FA5CCC  pop XIY
 sub_FA5C43__FA5CCD:
 	ld	bc, (xiz-2)                             ; FA5CCD  ld BC,(XIZ+0xfe)
@@ -794,19 +794,19 @@ sub_FA5CE9__FA5D41:
 	ld	(xix+4), 0xFF                           ; FA5D43  ld (XIX+0x04),0xff
 	push	0                                     ; FA5D47  push 0x00
 	push	h                                     ; FA5D49  push H
-	calr (0xFA5967 - 0xFA5D4E)                 ; FA5D4B  calr 0xfa5967
+	calr Rec0E3E_GroupOfIndex                 ; FA5D4B  calr 0xfa5967
 	pushw	wa                                   ; FA5D4E  push WA
 	pushw	33                                   ; FA5D4F  push 0x0021
 	push	0                                     ; FA5D52  push 0x00
 	push	h                                     ; FA5D54  push H
-	calr (0xFA5C43 - 0xFA5D59)                 ; FA5D56  calr 0xfa5c43
+	calr Rec0E3E_MoveToList                 ; FA5D56  calr 0xfa5c43
 	inc	8, xsp                                 ; FA5D59  inc 0,XSP
 sub_FA5CE9__FA5D5B:
 	push	0                                     ; FA5D5B  push 0x00
 	extpfx3 0x8E, 0xFD, 0x04                   ; FA5D5D  push (XIZ+0xfd)
 	push	0                                     ; FA5D60  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA5D62  push (XIZ+0x08)
-	calr (0xFA59CE - 0xFA5D68)                 ; FA5D65  calr 0xfa59ce
+	calr Rec11FE_UnlinkFromRing                 ; FA5D65  calr 0xfa59ce
 	ld	bc, (xiz-2)                             ; FA5D68  ld BC,(XIZ+0xfe)
 	extz	xbc                                   ; FA5D6B  extz XBC
 	add	bc, de                                 ; FA5D6D  add BC,DE
@@ -932,12 +932,12 @@ sub_FA5D84__FA5E33:
 sub_FA5D84__FA5E5D:
 	push	0                                     ; FA5E5D  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA5E5F  push (XIZ+0xff)
-	calr (0xFA5967 - 0xFA5E65)                 ; FA5E62  calr 0xfa5967
+	calr Rec0E3E_GroupOfIndex                 ; FA5E62  calr 0xfa5967
 	pushw	wa                                   ; FA5E65  push WA
 	pushw	33                                   ; FA5E66  push 0x0021
 	push	0                                     ; FA5E69  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FA5E6B  push (XIZ+0xff)
-	calr (0xFA5C43 - 0xFA5E71)                 ; FA5E6E  calr 0xfa5c43
+	calr Rec0E3E_MoveToList                 ; FA5E6E  calr 0xfa5c43
 	incm8	1, (xiz-1)                           ; FA5E71  inc 1,(XIZ+0xff)
 	inc	8, xsp                                 ; FA5E74  inc 0,XSP
 	cp (xiz-1), 0xC0                           ; FA5E76  cp (XIZ+0xff),0xc0
@@ -1150,7 +1150,7 @@ Voice_LookupDev10CChanIndex__FA5EFC:
 	pushw	hl                                   ; FA5F5B  push HL
 	push	0                                     ; FA5F5C  push 0x00
 	push	h                                     ; FA5F5E  push H
-	calr (0xFA598C - 0xFA5F63)                 ; FA5F60  calr 0xfa598c
+	calr Rec0E3E_IndexWithinGroup                 ; FA5F60  calr 0xfa598c
 	ld	h, a                                    ; FA5F63  ld H,A
 	ld	c, e                                    ; FA5F65  ld C,E
 	set	7, c                                   ; FA5F67  set 0x07,C
@@ -1170,7 +1170,7 @@ Voice_LookupDev10CChanIndex__FA5F7D:
 	ld	c, l                                    ; FA5F84  ld C,L
 	extz	bc                                    ; FA5F86  extz BC
 	pushw	bc                                   ; FA5F88  push BC
-	calr (0xFA5E82 - 0xFA5F8C)                 ; FA5F89  calr 0xfa5e82
+	calr Rec0E3E_FreeListHead                 ; FA5F89  calr 0xfa5e82
 	ld	h, a                                    ; FA5F8C  ld H,A
 	popw	bc                                    ; FA5F8E  pop BC
 	cp	a, 0xC0                                 ; FA5F8F  cp A,0xc0
@@ -1192,11 +1192,11 @@ Voice_LookupDev10CChanIndex__FA5F97:
 	pushw	hl                                   ; FA5FB4  push HL
 	push	0                                     ; FA5FB5  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FA5FB7  push (XIZ+0x0a)
-	calr (0xFA5ACA - 0xFA5FBD)                 ; FA5FBA  calr 0xfa5aca
+	calr Rec11FE_BindRingToSlot                 ; FA5FBA  calr 0xfa5aca
 	pushw	hl                                   ; FA5FBD  push HL
 	push	0                                     ; FA5FBE  push 0x00
 	push	h                                     ; FA5FC0  push H
-	calr (0xFA598C - 0xFA5FC5)                 ; FA5FC2  calr 0xfa598c
+	calr Rec0E3E_IndexWithinGroup                 ; FA5FC2  calr 0xfa598c
 	ld	h, a                                    ; FA5FC5  ld H,A
 	set	7, e                                   ; FA5FC7  set 0x07,E
 	inc	8, xsp                                 ; FA5FCA  inc 0,XSP
@@ -1206,7 +1206,7 @@ Voice_LookupDev10CChanIndex__FA5FD0:
 	ld	c, l                                    ; FA5FD0  ld C,L
 	extz	bc                                    ; FA5FD2  extz BC
 	pushw	bc                                   ; FA5FD4  push BC
-	calr (0xFA5E82 - 0xFA5FD8)                 ; FA5FD5  calr 0xfa5e82
+	calr Rec0E3E_FreeListHead                 ; FA5FD5  calr 0xfa5e82
 	ld	h, a                                    ; FA5FD8  ld H,A
 	popw	bc                                    ; FA5FDA  pop BC
 	cp	a, 0xC0                                 ; FA5FDB  cp A,0xc0
@@ -1218,17 +1218,17 @@ Voice_LookupDev10CChanIndex__FA5FE0:
 	extpfx3 0x8E, 0x08, 0x04                   ; FA5FE6  push (XIZ+0x08)
 	push	0                                     ; FA5FE9  push 0x00
 	push	h                                     ; FA5FEB  push H
-	calr (0xFA5C43 - 0xFA5FF0)                 ; FA5FED  calr 0xfa5c43
+	calr Rec0E3E_MoveToList                 ; FA5FED  calr 0xfa5c43
 	push	0                                     ; FA5FF0  push 0x00
 	push	h                                     ; FA5FF2  push H
 	pushw	hl                                   ; FA5FF4  push HL
 	push	0                                     ; FA5FF5  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FA5FF7  push (XIZ+0x0a)
-	calr (0xFA5ACA - 0xFA5FFD)                 ; FA5FFA  calr 0xfa5aca
+	calr Rec11FE_BindRingToSlot                 ; FA5FFA  calr 0xfa5aca
 	pushw	hl                                   ; FA5FFD  push HL
 	push	0                                     ; FA5FFE  push 0x00
 	push	h                                     ; FA6000  push H
-	calr (0xFA598C - 0xFA6005)                 ; FA6002  calr 0xfa598c
+	calr Rec0E3E_IndexWithinGroup                 ; FA6002  calr 0xfa598c
 	ld	h, a                                    ; FA6005  ld H,A
 	inc	8, xsp                                 ; FA6007  inc 0,XSP
 	inc	8, xsp                                 ; FA6009  inc 0,XSP
@@ -1281,7 +1281,7 @@ VoiceSlots_ReleaseChanAndReturnNone:
 	jr nc, sub_FA6026__FA6040                  ; FA6035  jr NC,0xfa6040
 	push	0                                     ; FA6037  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA6039  push (XIZ+0x08)
-	calr (0xFA5CE9 - 0xFA603F)                 ; FA603C  calr 0xfa5ce9
+	calr Rec11FE_ReleaseAllRings                 ; FA603C  calr 0xfa5ce9
 	popw	bc                                    ; FA603F  pop BC
 sub_FA6026__FA6040:
 	ld	c, h                                    ; FA6040  ld C,H
@@ -1324,14 +1324,14 @@ VoiceSlots_ReleaseThenLookup:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FA6057  push (XIZ+0x0c)
 	push	0                                     ; FA605A  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FA605C  push (XIZ+0x0a)
-	calr (0xFA6026 - 0xFA6062)                 ; FA605F  calr 0xfa6026
+	calr VoiceSlots_ReleaseChanAndReturnNone                 ; FA605F  calr 0xfa6026
 	push	0                                     ; FA6062  push 0x00
 	extpfx3 0x8E, 0x0E, 0x04                   ; FA6064  push (XIZ+0x0e)
 	push	0                                     ; FA6067  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FA6069  push (XIZ+0x0a)
 	push	0                                     ; FA606C  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA606E  push (XIZ+0x08)
-	calr (0xFA5ED3 - 0xFA6074)                 ; FA6071  calr 0xfa5ed3
+	calr Voice_LookupDev10CChanIndex                 ; FA6071  calr 0xfa5ed3
 	inc	8, xsp                                 ; FA6074  inc 0,XSP
 	inc	2, xsp                                 ; FA6076  inc 2,XSP
 	unlk32 xiz                                 ; FA6078  unlk XIZ
@@ -1401,7 +1401,7 @@ sub_FA607B__FA60A9:
 	push	0                                     ; FA60DC  push 0x00
 	push	h                                     ; FA60DE  push H
 	pushw	hl                                   ; FA60E0  push HL
-	calr (0xFA598C - 0xFA60E4)                 ; FA60E1  calr 0xfa598c
+	calr Rec0E3E_IndexWithinGroup                 ; FA60E1  calr 0xfa598c
 	extz	wa                                    ; FA60E4  extz WA
 	ld	(xiz-8), wa                             ; FA60E6  ld (XIZ+0xf8),WA
 	ld	bc, (xiz-1)                             ; FA60E9  ld BC,(XIZ+0xff)
@@ -1504,7 +1504,7 @@ sub_FA6110__FA613D:
 sub_FA6110__FA6187:
 	pushw	de                                   ; FA6187  push DE
 	pushw	hl                                   ; FA6188  push HL
-	calr (0xFA598C - 0xFA618C)                 ; FA6189  calr 0xfa598c
+	calr Rec0E3E_IndexWithinGroup                 ; FA6189  calr 0xfa598c
 	extz	wa                                    ; FA618C  extz WA
 	extpfx3 0x9E, 0xFE, 0xE0                   ; FA618E  or WA,(XIZ+0xfe)
 	ld	(xix), wa                               ; FA6191  ld (XIX),WA
@@ -1678,12 +1678,12 @@ sub_FA6269__FA6296:
 	ld	c, (xiz-2)                              ; FA62AE  ld C,(XIZ+0xfe)
 	ld	(xiz-4), c                              ; FA62B1  ld (XIZ+0xfc),C
 	pushw	bc                                   ; FA62B4  push BC
-	calr (0xFA5967 - 0xFA62B8)                 ; FA62B5  calr 0xfa5967
+	calr Rec0E3E_GroupOfIndex                 ; FA62B5  calr 0xfa5967
 	pushw	wa                                   ; FA62B8  push WA
 	pushw	33                                   ; FA62B9  push 0x0021
 	push	0                                     ; FA62BC  push 0x00
 	extpfx3 0x8E, 0xFC, 0x04                   ; FA62BE  push (XIZ+0xfc)
-	calr (0xFA5C43 - 0xFA62C4)                 ; FA62C1  calr 0xfa5c43
+	calr Rec0E3E_MoveToList                 ; FA62C1  calr 0xfa5c43
 	inc	8, xsp                                 ; FA62C4  inc 0,XSP
 sub_FA6269__FA62C6:
 	inc	5, de                                  ; FA62C6  inc 5,DE
@@ -2064,13 +2064,13 @@ sub_FA6528__FA6554:
 	add	bc, 0x1FE                              ; FA655A  add BC,0x01fe
 	pushw	bc                                   ; FA655E  push BC
 	pushw	ix                                   ; FA655F  push IX
-	calr (0xFA62DA - 0xFA6563)                 ; FA6560  calr 0xfa62da
+	calr ChanRec_RelinkToPoolQueue                 ; FA6560  calr 0xfa62da
 	pushw	1                                    ; FA6563  push 0x0001
 	ldw	bc, 0x41C                              ; FA6566  ld BC,0x041c
 	add	bc, 0xC6                               ; FA6569  add BC,0x00c6
 	pushw	bc                                   ; FA656D  push BC
 	pushw	ix                                   ; FA656E  push IX
-	calr (0xFA643F - 0xFA6572)                 ; FA656F  calr 0xfa643f
+	calr ChanRec_RelinkToPartQueue                 ; FA656F  calr 0xfa643f
 	ld	bc, (xix+8)                             ; FA6572  ld BC,(XIX+0x08)
 	ld	(xiz-2), bc                             ; FA6575  ld (XIZ+0xfe),BC
 	ld	wa, (xix+10)                            ; FA6578  ld WA,(XIX+0x0a)
@@ -2146,7 +2146,7 @@ ChanRec_ToPoolQueue6_SetFlag1:
 	ld	bc, (xde+15)                            ; FA65E7  ld BC,(XDE+0x0f)
 	pushw	bc                                   ; FA65EA  push BC
 	pushw	de                                   ; FA65EB  push DE
-	calr (0xFA62DA - 0xFA65EF)                 ; FA65EC  calr 0xfa62da
+	calr ChanRec_RelinkToPoolQueue                 ; FA65EC  calr 0xfa62da
 	inc	6, xsp                                 ; FA65EF  inc 6,XSP
 sub_FA65BD__FA65F1:
 	pop	xde                                    ; FA65F1  pop XDE
@@ -2190,7 +2190,7 @@ ChanRec_BeginRelease:
 	cp	c, 0x80                                 ; FA660E  cp C,0x80
 	jr nc, sub_FA65F6__FA661A                  ; FA6611  jr NC,0xfa661a
 	pushw	de                                   ; FA6613  push DE
-	calr (0xFA65BD - 0xFA6617)                 ; FA6614  calr 0xfa65bd
+	calr ChanRec_ToPoolQueue6_SetFlag1                 ; FA6614  calr 0xfa65bd
 	popw	bc                                    ; FA6617  pop BC
 	jr sub_FA65F6__FA6646                      ; FA6618  jr T,0xfa6646
 sub_FA65F6__FA661A:
@@ -2211,7 +2211,7 @@ sub_FA65F6__FA661A:
 	ld	bc, (xde+15)                            ; FA663C  ld BC,(XDE+0x0f)
 	pushw	bc                                   ; FA663F  push BC
 	pushw	de                                   ; FA6640  push DE
-	calr (0xFA62DA - 0xFA6644)                 ; FA6641  calr 0xfa62da
+	calr ChanRec_RelinkToPoolQueue                 ; FA6641  calr 0xfa62da
 	inc	6, xsp                                 ; FA6644  inc 6,XSP
 sub_FA65F6__FA6646:
 	pop	xde                                    ; FA6646  pop XDE
@@ -2732,7 +2732,7 @@ VoiceSubsystem_Init__FA67FA:
 	ld	(xiz-7), 64                             ; FA688D  ld (XIZ+0xf9),0x40
 VoiceSubsystem_Init__FA6891:
 	pushw	hl                                   ; FA6891  push HL
-	calr (0xFA6528 - 0xFA6895)                 ; FA6892  calr 0xfa6528
+	calr ChanRec_Release                 ; FA6892  calr 0xfa6528
 	add	hl, 23                                 ; FA6895  add HL,0x0017
 	decm8	1, (xiz-7)                           ; FA6899  dec 1,(XIZ+0xf9)
 	popw	bc                                    ; FA689C  pop BC
@@ -2755,7 +2755,7 @@ VoiceSubsystem_Init__FA68AA:
 	decm8	1, (xiz-7)                           ; FA68CA  dec 1,(XIZ+0xf9)
 	cp (xiz-7), 0x00                           ; FA68CD  cp (XIZ+0xf9),0x00
 	jr nz, VoiceSubsystem_Init__FA68AA                  ; FA68D1  jr NZ,0xfa68aa
-	calr (0xFA5D84 - 0xFA68D6)                 ; FA68D3  calr 0xfa5d84
+	calr VoiceSlots_InitAllTables                 ; FA68D3  calr 0xfa5d84
 	pop	xix                                    ; FA68D6  pop XIX
 	popw	de                                    ; FA68D7  pop DE
 	pop	xhl                                    ; FA68D8  pop XHL
@@ -2895,13 +2895,13 @@ Dev10C_PollBankAndRetire__FA6973:
 	and	a, 1                                   ; FA6983  and A,0x01
 	jr nz, Dev10C_PollBankAndRetire__FA699F                  ; FA6986  jr NZ,0xfa699f
 	pushw	bc                                   ; FA6988  push BC
-	calr (0xFA6528 - 0xFA698C)                 ; FA6989  calr 0xfa6528
+	calr ChanRec_Release                 ; FA6989  calr 0xfa6528
 	push	0                                     ; FA698C  push 0x00
 	push	d                                     ; FA698E  push D
-	call	0xFB0A8B                              ; FA6990  call 0xfb0a8b
+	call	Dev10C_ChanReset                              ; FA6990  call 0xfb0a8b
 	push	0                                     ; FA6994  push 0x00
 	push	d                                     ; FA6996  push D
-	calr (0xFA5CE9 - 0xFA699B)                 ; FA6998  calr 0xfa5ce9
+	calr Rec11FE_ReleaseAllRings                 ; FA6998  calr 0xfa5ce9
 	inc	6, xsp                                 ; FA699B  inc 6,XSP
 	jr Dev10C_PollBankAndRetire__FA69DE                      ; FA699D  jr T,0xfa69de
 Dev10C_PollBankAndRetire__FA699F:
@@ -2928,7 +2928,7 @@ Dev10C_PollBankAndRetire__FA699F:
 	and	a, 4                                   ; FA69D4  and A,0x04
 	jr z, Dev10C_PollBankAndRetire__FA69DE                   ; FA69D7  jr Z,0xfa69de
 	pushw	bc                                   ; FA69D9  push BC
-	calr (0xFA65BD - 0xFA69DD)                 ; FA69DA  calr 0xfa65bd
+	calr ChanRec_ToPoolQueue6_SetFlag1                 ; FA69DA  calr 0xfa65bd
 	popw	bc                                    ; FA69DD  pop BC
 Dev10C_PollBankAndRetire__FA69DE:
 	inc	1, hl                                  ; FA69DE  inc 1,HL
@@ -2938,7 +2938,7 @@ Dev10C_PollBankAndRetire__FA69DE:
 	jr nz, Dev10C_PollBankAndRetire__FA6973                  ; FA69EA  jr NZ,0xfa6973
 	push	0                                     ; FA69EC  push 0x00
 	extpfx5 0xC2, 0xCF, 0x87, 0x00, 0x04       ; FA69EE  push (0x0087cf)
-	calr (0xFA6269 - 0xFA69F6)                 ; FA69F3  calr 0xfa6269
+	calr VoiceSlots_ReapOrphansInBank                 ; FA69F3  calr 0xfa6269
 	popw	bc                                    ; FA69F6  pop BC
 	pop	xix                                    ; FA69F7  pop XIX
 	popw	de                                    ; FA69F8  pop DE
@@ -3291,7 +3291,7 @@ sub_FA6BB5__FA6C59:
 	ld	xbc, (xix)                              ; FA6C84  ld XBC,(XIX)
 	push	xbc                                   ; FA6C86  push XBC
 	extpfx3 0x9E, 0xEA, 0x04                   ; FA6C87  pushw (XIZ+0xea)
-	calr (0xFA69FD - 0xFA6C8D)                 ; FA6C8A  calr 0xfa69fd
+	calr ChanAlloc_FindVictim                 ; FA6C8A  calr 0xfa69fd
 	ld	de, wa                                  ; FA6C8D  ld DE,WA
 	sub	bc, bc                                 ; FA6C8F  sub BC,BC
 	inc	8, xsp                                 ; FA6C91  inc 0,XSP
@@ -3329,7 +3329,7 @@ sub_FA6BB5__FA6CB6:
 	and	c, 15                                  ; FA6CE3  and C,0x0f
 	pushw	bc                                   ; FA6CE6  push BC
 	pushw	1                                    ; FA6CE7  push 0x0001
-	call	0xFCA0BA                              ; FA6CEA  call 0xfca0ba
+	call	Shift16_Left                              ; FA6CEA  call 0xfca0ba
 	ld	hl, wa                                  ; FA6CEE  ld HL,WA
 	ld	c, (xiz-5)                              ; FA6CF0  ld C,(XIZ+0xfb)
 	srl	c, 4                                   ; FA6CF3  srl 0x04,C
@@ -3345,7 +3345,7 @@ sub_FA6BB5__FA6D05:
 	and	c, 15                                  ; FA6D0E  and C,0x0f
 	pushw	bc                                   ; FA6D11  push BC
 	pushw	1                                    ; FA6D12  push 0x0001
-	call	0xFCA0BA                              ; FA6D15  call 0xfca0ba
+	call	Shift16_Left                              ; FA6D15  call 0xfca0ba
 	ld	hl, wa                                  ; FA6D19  ld HL,WA
 	cpl	wa                                     ; FA6D1B  cpl WA
 	ld	(xiz-25), wa                            ; FA6D1D  ld (XIZ+0xe7),WA
@@ -3368,11 +3368,11 @@ sub_FA6BB5__FA6D43:
 	ld	wa, (xbc)                               ; FA6D4C  ld WA,(XBC)
 	pushw	wa                                   ; FA6D4E  push WA
 	pushw	de                                   ; FA6D4F  push DE
-	calr (0xFA62DA - 0xFA6D53)                 ; FA6D50  calr 0xfa62da
+	calr ChanRec_RelinkToPoolQueue                 ; FA6D50  calr 0xfa62da
 	pushw	0                                    ; FA6D53  push 0x0000
 	extpfx3 0x9E, 0xEA, 0x04                   ; FA6D56  pushw (XIZ+0xea)
 	pushw	de                                   ; FA6D59  push DE
-	calr (0xFA643F - 0xFA6D5D)                 ; FA6D5A  calr 0xfa643f
+	calr ChanRec_RelinkToPartQueue                 ; FA6D5A  calr 0xfa643f
 	sub	bc, bc                                 ; FA6D5D  sub BC,BC
 	inc	8, xsp                                 ; FA6D5F  inc 0,XSP
 	inc	4, xsp                                 ; FA6D61  inc 4,XSP
@@ -3466,7 +3466,7 @@ sub_FA6BB5__FA6E25:
 	pushw	bc                                   ; FA6E32  push BC
 	extpfx3 0x9E, 0xF8, 0x04                   ; FA6E33  pushw (XIZ+0xf8)
 	pushw	de                                   ; FA6E36  push DE
-	calr (0xFA62DA - 0xFA6E3A)                 ; FA6E37  calr 0xfa62da
+	calr ChanRec_RelinkToPoolQueue                 ; FA6E37  calr 0xfa62da
 	ld	bc, (xde+15)                            ; FA6E3A  ld BC,(XDE+0x0f)
 	extz	xbc                                   ; FA6E3D  extz XBC
 	incm8	1, (xbc+1)                           ; FA6E3F  inc 1,(XBC+0x01)
@@ -3475,7 +3475,7 @@ sub_FA6BB5__FA6E25:
 sub_FA6BB5__FA6E48:
 	push	0                                     ; FA6E48  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FA6E4A  push (XIZ+0xfb)
-	calr (0xFA5CE9 - 0xFA6E50)                 ; FA6E4D  calr 0xfa5ce9
+	calr Rec11FE_ReleaseAllRings                 ; FA6E4D  calr 0xfa5ce9
 	ld	xbc, (xiz+8)                            ; FA6E50  ld XBC,(XIZ+0x08)
 	extpfx3 0xAE, 0xF0, 0x81                   ; FA6E53  add XBC,(XIZ+0xf0)
 	ld	a, (xiz-5)                              ; FA6E56  ld A,(XIZ+0xfb)
@@ -3555,7 +3555,7 @@ ChanRec_ClearHoldAndRelease:
 	and	c, 15                                  ; FA6EC6  and C,0x0f
 	pushw	bc                                   ; FA6EC9  push BC
 	pushw	1                                    ; FA6ECA  push 0x0001
-	call	0xFCA0BA                              ; FA6ECD  call 0xfca0ba
+	call	Shift16_Left                              ; FA6ECD  call 0xfca0ba
 	cpl	wa                                     ; FA6ED1  cpl WA
 	ld	(xiz-2), wa                             ; FA6ED3  ld (XIZ+0xfe),WA
 	ld	c, h                                    ; FA6ED6  ld C,H
@@ -3568,7 +3568,7 @@ ChanRec_ClearHoldAndRelease:
 	ld	bc, ix                                  ; FA6EEB  ld BC,IX
 	add	bc, de                                 ; FA6EED  add BC,DE
 	pushw	bc                                   ; FA6EEF  push BC
-	calr (0xFA65F6 - 0xFA6EF3)                 ; FA6EF0  calr 0xfa65f6
+	calr ChanRec_BeginRelease                 ; FA6EF0  calr 0xfa65f6
 	popw	bc                                    ; FA6EF3  pop BC
 	pop	xix                                    ; FA6EF4  pop XIX
 	popw	de                                    ; FA6EF5  pop DE
@@ -3613,9 +3613,9 @@ ChanRec_ReleaseByChannel:
 	ld	bc, (xhl+12)                            ; FA6F18  ld BC,(XHL+0x0c)
 	pushw	bc                                   ; FA6F1B  push BC
 	pushw	hl                                   ; FA6F1C  push HL
-	calr (0xFA643F - 0xFA6F20)                 ; FA6F1D  calr 0xfa643f
+	calr ChanRec_RelinkToPartQueue                 ; FA6F1D  calr 0xfa643f
 	pushw	hl                                   ; FA6F20  push HL
-	calr (0xFA65F6 - 0xFA6F24)                 ; FA6F21  calr 0xfa65f6
+	calr ChanRec_BeginRelease                 ; FA6F21  calr 0xfa65f6
 	ld	de, (xhl+8)                             ; FA6F24  ld DE,(XHL+0x08)
 	inc	8, xsp                                 ; FA6F27  inc 0,XSP
 	cp	hl, de                                  ; FA6F29  cp HL,DE
@@ -3681,9 +3681,9 @@ sub_FA6F48__FA6F6C:
 	ld	bc, (xde+12)                            ; FA6F71  ld BC,(XDE+0x0c)
 	pushw	bc                                   ; FA6F74  push BC
 	pushw	de                                   ; FA6F75  push DE
-	calr (0xFA643F - 0xFA6F79)                 ; FA6F76  calr 0xfa643f
+	calr ChanRec_RelinkToPartQueue                 ; FA6F76  calr 0xfa643f
 	pushw	de                                   ; FA6F79  push DE
-	calr (0xFA65F6 - 0xFA6F7D)                 ; FA6F7A  calr 0xfa65f6
+	calr ChanRec_BeginRelease                 ; FA6F7A  calr 0xfa65f6
 	ld	c, (xde+20)                             ; FA6F7D  ld C,(XDE+0x14)
 	ld	(xiz-2), c                              ; FA6F80  ld (XIZ+0xfe),C
 	ld	xbc, (xiz+8)                            ; FA6F83  ld XBC,(XIZ+0x08)
@@ -3836,7 +3836,7 @@ sub_FA6FE0__FA7093:
 	pushw	bc                                   ; FA709F  push BC
 	lda	xbc, (xiz-6)                           ; FA70A0  lda XBC,XIZ+0xfa
 	push	xbc                                   ; FA70A3  push XBC
-	calr (0xFA6F48 - 0xFA70A7)                 ; FA70A4  calr 0xfa6f48
+	calr ChanRec_ReleaseQueueAndCollect                 ; FA70A4  calr 0xfa6f48
 	ld	hl, (xix)                               ; FA70A7  ld HL,(XIX)
 	sub	bc, bc                                 ; FA70A9  sub BC,BC
 	inc	8, xsp                                 ; FA70AB  inc 0,XSP
@@ -3855,7 +3855,7 @@ sub_FA6FE0__FA70BB:
 	pushw	bc                                   ; FA70C7  push BC
 	lda	xbc, (xiz-6)                           ; FA70C8  lda XBC,XIZ+0xfa
 	push	xbc                                   ; FA70CB  push XBC
-	calr (0xFA6F48 - 0xFA70CF)                 ; FA70CC  calr 0xfa6f48
+	calr ChanRec_ReleaseQueueAndCollect                 ; FA70CC  calr 0xfa6f48
 	inc	8, xsp                                 ; FA70CF  inc 0,XSP
 	inc	2, xsp                                 ; FA70D1  inc 2,XSP
 	jrl sub_FA6FE0__FA7277                     ; FA70D3  jrl T,0xfa7277
@@ -4482,7 +4482,7 @@ KeyZone_Stage_Reg0040_Stride8:
 	pushw	bc                                   ; FA749B  push BC
 	ld	c, (xix+4)                              ; FA749C  ld C,(XIX+0x04)
 	pushw	bc                                   ; FA749F  push BC
-	call	0xFC4D85                              ; FA74A0  call 0xfc4d85
+	call	Pack104_SetInputs_Rec0C_E08C                              ; FA74A0  call 0xfc4d85
 	inc	6, xsp                                 ; FA74A4  inc 6,XSP
 	pop	xix                                    ; FA74A6  pop XIX
 	pop	xhl                                    ; FA74A7  pop XHL
@@ -4534,7 +4534,7 @@ KeyZone_Stage_Reg0040_Stride6A:
 	pushw	bc                                   ; FA74DD  push BC
 	ld	c, (xix+4)                              ; FA74DE  ld C,(XIX+0x04)
 	pushw	bc                                   ; FA74E1  push BC
-	call	0xFC4D85                              ; FA74E2  call 0xfc4d85
+	call	Pack104_SetInputs_Rec0C_E08C                              ; FA74E2  call 0xfc4d85
 	inc	6, xsp                                 ; FA74E6  inc 6,XSP
 	pop	xix                                    ; FA74E8  pop XIX
 	pop	xhl                                    ; FA74E9  pop XHL
@@ -4586,7 +4586,7 @@ KeyZone_Stage_Reg0040_Stride6B:
 	pushw	bc                                   ; FA751D  push BC
 	pushw	0                                    ; FA751E  push 0x0000
 	pushw	0                                    ; FA7521  push 0x0000
-	call	0xFC4D85                              ; FA7524  call 0xfc4d85
+	call	Pack104_SetInputs_Rec0C_E08C                              ; FA7524  call 0xfc4d85
 	inc	6, xsp                                 ; FA7528  inc 6,XSP
 	pop	xix                                    ; FA752A  pop XIX
 	pop	xhl                                    ; FA752B  pop XHL
@@ -4637,7 +4637,7 @@ KeyZone_Stage_Reg0040_Stride4:
 	pushw	0                                    ; FA755C  push 0x0000
 	pushw	0                                    ; FA755F  push 0x0000
 	pushw	0                                    ; FA7562  push 0x0000
-	call	0xFC4D85                              ; FA7565  call 0xfc4d85
+	call	Pack104_SetInputs_Rec0C_E08C                              ; FA7565  call 0xfc4d85
 	inc	6, xsp                                 ; FA7569  inc 6,XSP
 	pop	xix                                    ; FA756B  pop XIX
 	pop	xhl                                    ; FA756C  pop XHL
@@ -4848,7 +4848,7 @@ ScaleCoeff_TimesAbsDepth_Shr__FA75E4:
 	push	0                                     ; FA75F4  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FA75F6  push (XIZ+0x0c)
 	pushw	wa                                   ; FA75F9  push WA
-	call	0xFCAA2F                              ; FA75FA  call 0xfcaa2f
+	call	Shift16_ArithRight                              ; FA75FA  call 0xfcaa2f
 	popw	hl                                    ; FA75FE  pop HL
 	unlk32 xiz                                 ; FA75FF  unlk XIZ
 	ret                                        ; FA7601  ret
@@ -5175,7 +5175,7 @@ sub_FA76D6__FA777D:
 	ld	bc, ix                                  ; FA777D  ld BC,IX
 	add	bc, 24                                 ; FA777F  add BC,0x0018
 	pushw	bc                                   ; FA7783  push BC
-	calr (0xFA76B2 - 0xFA7787)                 ; FA7784  calr 0xfa76b2
+	calr Clamp_36_to_120                 ; FA7784  calr 0xfa76b2
 	popw	bc                                    ; FA7787  pop BC
 	popw	ix                                    ; FA7788  pop IX
 	popw	de                                    ; FA7789  pop DE
@@ -5244,7 +5244,7 @@ sub_FA778E__FA77E2:
 	ld	bc, de                                  ; FA77E2  ld BC,DE
 	add	bc, 24                                 ; FA77E4  add BC,0x0018
 	pushw	bc                                   ; FA77E8  push BC
-	calr (0xFA76B2 - 0xFA77EC)                 ; FA77E9  calr 0xfa76b2
+	calr Clamp_36_to_120                 ; FA77E9  calr 0xfa76b2
 	popw	bc                                    ; FA77EC  pop BC
 	pop	xix                                    ; FA77ED  pop XIX
 	popw	de                                    ; FA77EE  pop DE
@@ -5539,12 +5539,12 @@ EGEnv_ScaleDepth_Shr12:
 	extz	xbc                                   ; FA7942  extz XBC
 	push	xbc                                   ; FA7944  push XBC
 	push	xwa                                   ; FA7945  push XWA
-	call	0xFCB11B                              ; FA7946  call 0xfcb11b
+	call	Multiply32                              ; FA7946  call 0xfcb11b
 	ld	(xiz-8), xiy                            ; FA794A  ld (XIZ+0xf8),XIY
 	ld	xix, (xiz+8)                            ; FA794D  ld XIX,(XIZ+0x08)
 	push	xiy                                   ; FA7950  push XIY
 	push	xix                                   ; FA7951  push XIX
-	call	0xFCB11B                              ; FA7952  call 0xfcb11b
+	call	Multiply32                              ; FA7952  call 0xfcb11b
 	ld	xix, xiy                                ; FA7956  ld XIX,XIY
 	srl	xiy, 12                                ; FA7958  srl 0x0c,XIY
 	ld	xix, xiy                                ; FA795B  ld XIX,XIY
@@ -5616,7 +5616,7 @@ EGEnv_Eval_BaseCurveA:
 	extz	xwa                                   ; FA799D  extz XWA
 	push	xwa                                   ; FA799F  push XWA
 	push	xbc                                   ; FA79A0  push XBC
-	call	0xFCB11B                              ; FA79A1  call 0xfcb11b
+	call	Multiply32                              ; FA79A1  call 0xfcb11b
 	ld	xix, xiy                                ; FA79A5  ld XIX,XIY
 	ld	d, (xhl+5)                              ; FA79A7  ld D,(XHL+0x05)
 	cp	d, 0:i3                                   ; FA79AA  cp D,0
@@ -5627,7 +5627,7 @@ EGEnv_Eval_BaseCurveA:
 	ld	c, (xhl+6)                              ; FA79B4  ld C,(XHL+0x06)
 	pushw	bc                                   ; FA79B7  push BC
 	push	xiy                                   ; FA79B8  push XIY
-	calr (0xFA7927 - 0xFA79BC)                 ; FA79B9  calr 0xfa7927
+	calr EGEnv_ScaleDepth_Shr12                 ; FA79B9  calr 0xfa7927
 	sub	xix, xiy                               ; FA79BC  sub XIX,XIY
 	inc	8, xsp                                 ; FA79BE  inc 0,XSP
 EGEnv_Eval_BaseCurveA__FA79C0:
@@ -5708,7 +5708,7 @@ EGEnv_Eval_ValueCurve_WithBaseCurveA:
 	extz	xwa                                   ; FA7A25  extz XWA
 	push	xwa                                   ; FA7A27  push XWA
 	push	xbc                                   ; FA7A28  push XBC
-	call	0xFCB11B                              ; FA7A29  call 0xfcb11b
+	call	Multiply32                              ; FA7A29  call 0xfcb11b
 	ld	xix, xiy                                ; FA7A2D  ld XIX,XIY
 	srl	xiy, 7                                 ; FA7A2F  srl 0x07,XIY
 	ld	xix, xiy                                ; FA7A32  ld XIX,XIY
@@ -5768,7 +5768,7 @@ EGEnv_Eval_BaseCurveB:
 	extz	xwa                                   ; FA7A7F  extz XWA
 	push	xwa                                   ; FA7A81  push XWA
 	push	xbc                                   ; FA7A82  push XBC
-	call	0xFCB11B                              ; FA7A83  call 0xfcb11b
+	call	Multiply32                              ; FA7A83  call 0xfcb11b
 	ld	xix, xiy                                ; FA7A87  ld XIX,XIY
 	ld	d, (xhl+5)                              ; FA7A89  ld D,(XHL+0x05)
 	cp	d, 0:i3                                   ; FA7A8C  cp D,0
@@ -5779,7 +5779,7 @@ EGEnv_Eval_BaseCurveB:
 	ld	c, (xhl+6)                              ; FA7A96  ld C,(XHL+0x06)
 	pushw	bc                                   ; FA7A99  push BC
 	push	xiy                                   ; FA7A9A  push XIY
-	calr (0xFA7927 - 0xFA7A9E)                 ; FA7A9B  calr 0xfa7927
+	calr EGEnv_ScaleDepth_Shr12                 ; FA7A9B  calr 0xfa7927
 	sub	xix, xiy                               ; FA7A9E  sub XIX,XIY
 	inc	8, xsp                                 ; FA7AA0  inc 0,XSP
 EGEnv_Eval_BaseCurveB__FA7AA2:
@@ -5850,7 +5850,7 @@ EGEnv_Eval_ValueCurve_WithBaseCurveB:
 	extz	xwa                                   ; FA7B0B  extz XWA
 	push	xwa                                   ; FA7B0D  push XWA
 	push	xbc                                   ; FA7B0E  push XBC
-	call	0xFCB11B                              ; FA7B0F  call 0xfcb11b
+	call	Multiply32                              ; FA7B0F  call 0xfcb11b
 	ld	xix, xiy                                ; FA7B13  ld XIX,XIY
 	srl	xiy, 7                                 ; FA7B15  srl 0x07,XIY
 	ld	xix, xiy                                ; FA7B18  ld XIX,XIY
@@ -5921,7 +5921,7 @@ EGEnv_Eval_FreqWriteBaseCurve:
 	extz	xwa                                   ; FA7B6D  extz XWA
 	push	xwa                                   ; FA7B6F  push XWA
 	push	xbc                                   ; FA7B70  push XBC
-	call	0xFCB11B                              ; FA7B71  call 0xfcb11b
+	call	Multiply32                              ; FA7B71  call 0xfcb11b
 	ld	xix, xiy                                ; FA7B75  ld XIX,XIY
 	ld	h, (xde+5)                              ; FA7B77  ld H,(XDE+0x05)
 	cp	h, 0:i3                                   ; FA7B7A  cp H,0
@@ -5932,7 +5932,7 @@ EGEnv_Eval_FreqWriteBaseCurve:
 	ld	c, (xde+6)                              ; FA7B84  ld C,(XDE+0x06)
 	pushw	bc                                   ; FA7B87  push BC
 	push	xiy                                   ; FA7B88  push XIY
-	calr (0xFA7927 - 0xFA7B8C)                 ; FA7B89  calr 0xfa7927
+	calr EGEnv_ScaleDepth_Shr12                 ; FA7B89  calr 0xfa7927
 	sub	xix, xiy                               ; FA7B8C  sub XIX,XIY
 	inc	8, xsp                                 ; FA7B8E  inc 0,XSP
 EGEnv_Eval_FreqWriteBaseCurve__FA7B90:
@@ -5968,7 +5968,7 @@ EGEnv_Eval_FreqWriteBaseCurve__FA7BC4:
 	extz	xwa                                   ; FA7BE0  extz XWA
 	push	xwa                                   ; FA7BE2  push XWA
 	push	xbc                                   ; FA7BE3  push XBC
-	call	0xFCB11B                              ; FA7BE4  call 0xfcb11b
+	call	Multiply32                              ; FA7BE4  call 0xfcb11b
 	ld	xix, xiy                                ; FA7BE8  ld XIX,XIY
 	ld	h, (xde+5)                              ; FA7BEA  ld H,(XDE+0x05)
 	cp	h, 0:i3                                   ; FA7BED  cp H,0
@@ -5979,7 +5979,7 @@ EGEnv_Eval_FreqWriteBaseCurve__FA7BC4:
 	ld	c, (xde+6)                              ; FA7BF7  ld C,(XDE+0x06)
 	pushw	bc                                   ; FA7BFA  push BC
 	push	xiy                                   ; FA7BFB  push XIY
-	calr (0xFA7927 - 0xFA7BFF)                 ; FA7BFC  calr 0xfa7927
+	calr EGEnv_ScaleDepth_Shr12                 ; FA7BFC  calr 0xfa7927
 	sub	xix, xiy                               ; FA7BFF  sub XIX,XIY
 	inc	8, xsp                                 ; FA7C01  inc 0,XSP
 EGEnv_Eval_FreqWriteBaseCurve__FA7C03:
@@ -6052,7 +6052,7 @@ EGEnv_Eval_ValueCurve_WithFreqWriteCurve:
 	extz	xwa                                   ; FA7C6F  extz XWA
 	push	xwa                                   ; FA7C71  push XWA
 	push	xbc                                   ; FA7C72  push XBC
-	call	0xFCB11B                              ; FA7C73  call 0xfcb11b
+	call	Multiply32                              ; FA7C73  call 0xfcb11b
 	ld	xix, xiy                                ; FA7C77  ld XIX,XIY
 	srl	xiy, 7                                 ; FA7C79  srl 0x07,XIY
 	ld	xix, xiy                                ; FA7C7C  ld XIX,XIY
@@ -6316,7 +6316,7 @@ Voice_StageLevel_Reg0080__FA7DC5:
 	add	ix, bc                                 ; FA7DC7  add IX,BC
 Voice_StageLevel_Reg0080__FA7DC9:
 	pushw	ix                                   ; FA7DC9  push IX
-	calr (0xFA7D49 - 0xFA7DCD)                 ; FA7DCA  calr 0xfa7d49
+	calr Clamp_0_to_00FF                 ; FA7DCA  calr 0xfa7d49
 	muls	wa, 2                                 ; FA7DCD  muls WA,0x0002
 	add	xwa, 0xFDDE2B                          ; FA7DD1  add XWA,0x00fdde2b
 	ld	bc, (xwa)                               ; FA7DD7  ld BC,(XWA)

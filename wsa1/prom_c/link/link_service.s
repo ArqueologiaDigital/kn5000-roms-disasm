@@ -171,7 +171,7 @@ Link_ServiceTask:
 	pushw	bc                               ; F99E80  push BC
 	ld	xbc, (0x8520:24)                   ; F99E81  ld XBC,(0x008520)
 	push	xbc                               ; F99E86  push XBC
-	calr (0xF99B0D - 0xF99E8A)             ; F99E87  calr 0xf99b0d
+	calr Link_SendCmdE1             ; F99E87  calr 0xf99b0d
 	inc	8, xsp                             ; F99E8A  inc 0,XSP
 	inc	2, xsp                             ; F99E8C  inc 2,XSP
 Link_ServiceTask__F99E8E:
@@ -186,11 +186,11 @@ Link_ServiceTask__F99E8E:
 	ld	(xix), 0                            ; F99EAC  ld (XIX),0x00
 	ld	xbc, (0x852D:24)                   ; F99EAF  ld XBC,(0x00852d)
 	push	xbc                               ; F99EB4  push XBC
-	call	0xFC89AF                          ; F99EB5  call 0xfc89af
-	call	0xFC856C                          ; F99EB9  call 0xfc856c
+	call	Flash_ReadSectorToBuffer                          ; F99EB5  call 0xfc89af
+	call	Flash_ReadResetMode                          ; F99EB9  call 0xfc856c
 	ld	xbc, (0x852D:24)                   ; F99EBD  ld XBC,(0x00852d)
 	push	xbc                               ; F99EC2  push XBC
-	call	0xFC8646                          ; F99EC3  call 0xfc8646
+	call	Flash_SectorErase                          ; F99EC3  call 0xfc8646
 	inc	8, xsp                             ; F99EC7  inc 0,XSP
 Link_ServiceTask__F99EC9:
 	ei	0                                     ; F99EC9  ei 0x00
@@ -199,19 +199,19 @@ Link_ServiceTask__F99EC9:
 	jr z, Link_ServiceTask__F99F02                        ; F99ED2  jr Z,0xf99f02
 	extpfx5 0xF2, 0x2C, 0x85, 0x00, 0xB6   ; F99ED4  res 6,(0x00852c)   [llvm-mc cannot encode this]
 	ei	0                                     ; F99ED9  ei 0x00
-	call	0xFC856C                          ; F99EDB  call 0xfc856c
+	call	Flash_ReadResetMode                          ; F99EDB  call 0xfc856c
 Link_ServiceTask__F99EDF:
 	ld	xbc, (0x8531:24)                   ; F99EDF  ld XBC,(0x008531)
 	push	xbc                               ; F99EE4  push XBC
-	call	0xFC898F                          ; F99EE5  call 0xfc898f
+	call	Flash_SectorBlankCheck                          ; F99EE5  call 0xfc898f
 	pop	xiy                                ; F99EE9  pop XIY
 	cp	wa, 0xFFFF                          ; F99EEA  cp WA,0xffff
 	jr z, Link_ServiceTask__F99EDF                        ; F99EEE  jr Z,0xf99edf
 	ld	xbc, (0x8531:24)                   ; F99EF0  ld XBC,(0x008531)
 	push	xbc                               ; F99EF5  push XBC
-	call	0xFC88F9                          ; F99EF6  call 0xfc88f9
+	call	Flash_ProgramSectorFromBuffer                          ; F99EF6  call 0xfc88f9
 	pushw	6                                ; F99EFA  push 0x0006
-	calr (0xF99AC3 - 0xF99F00)             ; F99EFD  calr 0xf99ac3
+	calr Link_SendCmdByte             ; F99EFD  calr 0xf99ac3
 	inc	6, xsp                             ; F99F00  inc 6,XSP
 Link_ServiceTask__F99F02:
 	ei	0                                     ; F99F02  ei 0x00
@@ -225,7 +225,7 @@ Link_ServiceTask__F99F02:
 	jr nz, Link_ServiceTask__F99F4F                       ; F99F18  jr NZ,0xf99f4f
 	ld	xbc, (0x8568:24)                   ; F99F1A  ld XBC,(0x008568)
 	push	xbc                               ; F99F1F  push XBC
-	call	0xFC898F                          ; F99F20  call 0xfc898f
+	call	Flash_SectorBlankCheck                          ; F99F20  call 0xfc898f
 	pop	xiy                                ; F99F24  pop XIY
 	cp	wa, 0xFFFF                          ; F99F25  cp WA,0xffff
 	jr z, Link_ServiceTask__F99F48                        ; F99F29  jr Z,0xf99f48
@@ -234,7 +234,7 @@ Link_ServiceTask__F99F2D:
 	ld	c, (xix)                            ; F99F2D  ld C,(XIX)
 	pushw	bc                               ; F99F2F  push BC
 	incm8	1, (xix)                         ; F99F30  inc 1,(XIX)
-	call	0xFC893B                          ; F99F32  call 0xfc893b
+	call	Flash_ProgramSlice1K                          ; F99F32  call 0xfc893b
 	ld	(0x8537:24), 1                    ; F99F36  ld (0x008537),0x01
 	popw	bc                                ; F99F3C  pop BC
 Link_ServiceTask__F99F3D:
@@ -253,7 +253,7 @@ Link_ServiceTask__F99F59:
 	ld	c, (xix)                            ; F99F59  ld C,(XIX)
 	pushw	bc                               ; F99F5B  push BC
 	incm8	1, (xix)                         ; F99F5C  inc 1,(XIX)
-	call	0xFC893B                          ; F99F5E  call 0xfc893b
+	call	Flash_ProgramSlice1K                          ; F99F5E  call 0xfc893b
 	popw	bc                                ; F99F62  pop BC
 Link_ServiceTask__F99F63:
 	ld	c, (xix)                            ; F99F63  ld C,(XIX)
@@ -263,7 +263,7 @@ Link_ServiceTask__F99F6C:
 	ei	0                                     ; F99F6C  ei 0x00
 	bit_dd8	1, PA                          ; F99F6E  bit 1,(0x1e)
 	jr nz, Link_ServiceTask__F99F97                       ; F99F71  jr NZ,0xf99f97
-	call	0xF9A030                          ; F99F73  call 0xf9a030
+	call	uDMA3_GetCount                          ; F99F73  call 0xf9a030
 	cp	(0xF331:24), wa                 ; F99F77  cp (0x00f331),WA
 	jr nz, Link_ServiceTask__F99F85                       ; F99F7C  jr NZ,0xf99f85
 	incw	1, (0xF32F:24)                 ; F99F7E  incw 1,(0x00f32f)
@@ -271,7 +271,7 @@ Link_ServiceTask__F99F6C:
 Link_ServiceTask__F99F85:
 	ldw	(0xF32F:24), 0                    ; F99F85  ld (0x00f32f),0x0000
 Link_ServiceTask__F99F8C:
-	call	0xF9A030                          ; F99F8C  call 0xf9a030
+	call	uDMA3_GetCount                          ; F99F8C  call 0xf9a030
 	ld	(0xF331:24), wa                    ; F99F90  ld (0x00f331),WA
 	jr Link_ServiceTask__F99F9E                           ; F99F95  jr T,0xf99f9e
 Link_ServiceTask__F99F97:

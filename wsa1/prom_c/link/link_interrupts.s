@@ -57,7 +57,7 @@ INT0_HANDLER:
 	push xix
 	lda xix, (0x00F9A01F:24)
 	bit_dd8 2, PA
-	jrl nz, (0x00F99CF8 - 0x00F99BCE)
+	jrl nz, INT0_HANDLER__return
 	ld xbc, 0x00100000
 	ld h, (xbc)
 	ld (0x008518:24), h
@@ -66,7 +66,7 @@ INT0_HANDLER:
 	extz xbc
 	sub bc, 0x00e1
 	cp bc, 6:i3
-	jrl ugt, (0x00F99CCF - 0x00F99BE9)
+	jrl ugt, INT0_HANDLER__cmd_E6_or_other
 	sll bc, 2
 	add xbc, 0x00F99BF6
 	ld xbc, (xbc)
@@ -179,7 +179,7 @@ INT0_HANDLER__cmd_E1:
 INT0_HANDLER__cmd_E1_armed:
 	ld (DMA3V:8), 0x0A:io                           ; F99C29  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
 	res_dd8 1, PA                              ; F99C2C  f0 1e b1   drop the handshake line
-	jrl t, (0x00F99CF6 - 0x00F99C32)           ; F99C2F  78 c4 00   -> INT0_HANDLER__drop_args
+	jrl t, INT0_HANDLER__drop_args           ; F99C2F  78 c4 00   -> INT0_HANDLER__drop_args
 ; ------------------------- command 0xE2 -------------------------------
 INT0_HANDLER__cmd_E2:
 	ld (0x00F32D:24), 0x03                     ; F99C32  f2 2d f3 00 00 03   transfer state := 3
@@ -192,7 +192,7 @@ INT0_HANDLER__cmd_E2:
 INT0_HANDLER__cmd_E2_armed:
 	ld (DMA3V:8), 0x0A:io                           ; F99C49  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
 	res_dd8 1, PA                              ; F99C4C  f0 1e b1   drop the handshake line
-	jrl t, (0x00F99CF6 - 0x00F99C52)           ; F99C4F  78 a4 00   -> INT0_HANDLER__drop_args
+	jrl t, INT0_HANDLER__drop_args           ; F99C4F  78 a4 00   -> INT0_HANDLER__drop_args
 ; ------------------------- command 0xE3 -------------------------------
 INT0_HANDLER__cmd_E3:
 	ld (0x00F32D:24), 0x05                     ; F99C52  f2 2d f3 00 00 05   transfer state := 5
@@ -205,7 +205,7 @@ INT0_HANDLER__cmd_E3:
 INT0_HANDLER__cmd_E3_armed:
 	ld (DMA3V:8), 0x0A:io                           ; F99C69  08 7f 0a   0x0A << 2 = 0x28 = INT0: the DMA now takes it
 	res_dd8 1, PA                              ; F99C6C  f0 1e b1   drop the handshake line
-	jrl t, (0x00F99CF6 - 0x00F99C72)           ; F99C6F  78 84 00   -> INT0_HANDLER__drop_args
+	jrl t, INT0_HANDLER__drop_args           ; F99C6F  78 84 00   -> INT0_HANDLER__drop_args
 ; ------------------------- command 0xE4 -------------------------------
 INT0_HANDLER__cmd_E4:
 	ld (0x00F32D:24), 0x06                     ; F99C72  f2 2d f3 00 00 06   transfer state := 6
@@ -476,14 +476,14 @@ INTTC3_HANDLER__state3_packet:
 	ld (0x00F32D:24), 0x00                     ; F99DBB  f2 2d f3 00 00 00   transfer state := idle
 	set_dd8 1, PA                              ; F99DC1  f0 1e b9
 	set 7, (0x00852A:24)                       ; F99DC4  f2 2a 85 00 bf   post 'packet ready' to the service task at 0xF99E5F
-	jrl t, (0x00F99E56 - 0x00F99DCC)           ; F99DC9  78 8a 00   -> INTTC3_HANDLER__return
+	jrl t, INTTC3_HANDLER__return           ; F99DC9  78 8a 00   -> INTTC3_HANDLER__return
 
 ; ---- state 4: a payload transfer finished ----
 INTTC3_HANDLER__state4_blockdone:
 	ld (0x00F32D:24), 0x00                     ; F99DCC  f2 2d f3 00 00 00   transfer state := idle
 	res 7, (0x00852B:24)                       ; F99DD2  f2 2b 85 00 b7   release Link_WaitBlockDone (0xF99FC1)
 	set_dd8 1, PA                              ; F99DD7  f0 1e b9
-	jrl t, (0x00F99E56 - 0x00F99DDD)           ; F99DDA  78 79 00   -> INTTC3_HANDLER__return
+	jrl t, INTTC3_HANDLER__return           ; F99DDA  78 79 00   -> INTTC3_HANDLER__return
 
 ; ---- state 5: the 0xE3 payload has landed ----
 INTTC3_HANDLER__state5:
@@ -501,7 +501,7 @@ INTTC3_HANDLER__state6_block_banked:
 	add xbc, 0x00010000                        ; F99DF9  e9 c8 00 00 01 00   forced into 0x010000-0x01FFFF
 	push xbc                                   ; F99DFF  39
 INTTC3_HANDLER__arm_payload:
-	call 0x00F9A01F                            ; F99E00  1d 1f a0 f9   uDMA3_SetDest: DMAD3 := dest, DMAC3 := count
+	call uDMA3_SetDest                            ; F99E00  1d 1f a0 f9   uDMA3_SetDest: DMAD3 := dest, DMAC3 := count
 	ld (DMA3V:8), 0x0A:io                           ; F99E04  08 7f 0a   re-point INT0 at the DMA engine
 	ld (0x00F32D:24), 0x04                     ; F99E07  f2 2d f3 00 00 04   transfer state := 4 (payload in flight)
 INTTC3_HANDLER__drop_args:
@@ -523,7 +523,7 @@ INTTC3_HANDLER__state8_block_banked:
 	and xbc, 0x0000FFFF                        ; F99E27  e9 cc ff ff 00 00
 	add xbc, 0x00010000                        ; F99E2D  e9 c8 00 00 01 00
 	push xbc                                   ; F99E33  39
-	call 0x00F9A01F                            ; F99E34  1d 1f a0 f9   uDMA3_SetDest
+	call uDMA3_SetDest                            ; F99E34  1d 1f a0 f9   uDMA3_SetDest
 	ld (DMA3V:8), 0x0A:io                           ; F99E38  08 7f 0a
 	ld (0x00F32D:24), 0x09                     ; F99E3B  f2 2d f3 00 00 09   transfer state := 9, NOT 4
 	jr INTTC3_HANDLER__drop_args               ; F99E41  68 ca

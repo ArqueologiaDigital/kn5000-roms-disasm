@@ -226,7 +226,7 @@ KeyScan_ReadEvent__F997B6:
 	extpfx3 0x8E, 0xFF, 0x04               ; F997C0  push (XIZ+0xff)   [llvm-mc cannot encode this]
 	push	0                                 ; F997C3  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04               ; F997C5  push (XIZ+0xfe)   [llvm-mc cannot encode this]
-	calr (0xF995DF - 0xF997CB)             ; F997C8  calr 0xf995df
+	calr ToneGen_VelocityFromTouch             ; F997C8  calr 0xf995df
 	ld	xbc, (xiz+12)                       ; F997CB  ld XBC,(XIZ+0x0c)
 	ld	(xbc), 0                            ; F997CE  ld (XBC),0x00
 	inc	8, xsp                             ; F997D1  inc 0,XSP
@@ -242,7 +242,7 @@ KeyScan_ReadEvent__F997D7:
 	extpfx3 0x8E, 0xFF, 0x04               ; F997E1  push (XIZ+0xff)   [llvm-mc cannot encode this]
 	push	0                                 ; F997E4  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04               ; F997E6  push (XIZ+0xfe)   [llvm-mc cannot encode this]
-	calr (0xF995DF - 0xF997EC)             ; F997E9  calr 0xf995df
+	calr ToneGen_VelocityFromTouch             ; F997E9  calr 0xf995df
 	inc	8, xsp                             ; F997EC  inc 0,XSP
 	inc	4, xsp                             ; F997EE  inc 4,XSP
 KeyScan_ReadEvent__F997F0:
@@ -294,8 +294,8 @@ KeyScan_ReadEvent__F997F7:
 NoteTrim_BuildFromCalibration:
 	link32 0xEE, 0x0C, 0xF9, 0xFF          ; F997FA  link XIZ,0xfff9   [llvm-mc cannot encode this]
 	pushw	hl                               ; F997FE  push HL
-	calr (0xF9988D - 0xF99802)             ; F997FF  calr 0xf9988d
-	call	0xFC8B0B                          ; F99802  call 0xfc8b0b
+	calr KeyScan_InitKeyStateBitmap             ; F997FF  calr 0xf9988d
+	call	EEPROM_LoadCalibration                          ; F99802  call 0xfc8b0b
 	ld	(xiz-6), xiy                        ; F99806  ld (XIZ+0xfa),XIY
 	cp	xiy, 0                              ; F99809  cp XIY,0x00000000
 	jr nz, NoteTrim_BuildFromCalibration__F99836                       ; F9980F  jr NZ,0xf99836
@@ -446,7 +446,7 @@ KeyScan_InitKeyStateBitmap__F998C6:
 	jr z, KeyScan_InitKeyStateBitmap__F99919                        ; F998FD  jr Z,0xf99919
 	pushw	wa                               ; F998FF  push WA
 	pushw	1                                ; F99900  push 0x0001
-	call	0xFCA0BA                          ; F99903  call 0xfca0ba
+	call	Shift16_Left                          ; F99903  call 0xfca0ba
 	ld	h, a                                ; F99907  ld H,A
 	ld	bc, (xiz-3)                         ; F99909  ld BC,(XIZ+0xfd)
 	extz	bc                                ; F9990C  extz BC
@@ -458,7 +458,7 @@ KeyScan_InitKeyStateBitmap__F99919:
 	push	0                                 ; F99919  push 0x00
 	extpfx3 0x8E, 0xFC, 0x04               ; F9991B  push (XIZ+0xfc)   [llvm-mc cannot encode this]
 	pushw	1                                ; F9991E  push 0x0001
-	call	0xFCA0BA                          ; F99921  call 0xfca0ba
+	call	Shift16_Left                          ; F99921  call 0xfca0ba
 	cpl	a                                  ; F99925  cpl A
 	ld	h, a                                ; F99927  ld H,A
 	ld	bc, (xiz-3)                         ; F99929  ld BC,(XIZ+0xfd)
@@ -545,10 +545,10 @@ Link_Init:
 	pushw	8                                ; F99963  push 0x0008
 	ld	xix, 0x100000                       ; F99966  ld XIX,0x00100000
 	push	xix                               ; F9996B  push XIX
-	call	0xF99FF8                          ; F9996C  call 0xf99ff8
+	call	uDMA2_SetDest                          ; F9996C  call 0xf99ff8
 	pushw	0                                ; F99970  push 0x0000
 	push	xix                               ; F99973  push XIX
-	call	0xF9A012                          ; F99974  call 0xf9a012
+	call	uDMA3_SetSource                          ; F99974  call 0xf9a012
 	inc	8, xsp                             ; F99978  inc 0,XSP
 	inc	4, xsp                             ; F9997A  inc 4,XSP
 	pop	xix                                ; F9997C  pop XIX
@@ -585,7 +585,7 @@ Link_SendBlock__F9998C:
 	pushw	32                               ; F9998D  push 0x0020
 	push	0                                 ; F99990  push 0x00
 	extpfx3 0x8E, 0x08, 0x04               ; F99992  push (XIZ+0x08)   [llvm-mc cannot encode this]
-	calr (0xF999BE - 0xF99998)             ; F99995  calr 0xf999be
+	calr Link_SendChunk             ; F99995  calr 0xf999be
 	add	xix, 32                            ; F99998  add XIX,0x00000020
 	ldw	bc, 32                             ; F9999E  ld BC,0x0020
 	sub	hl, bc                             ; F999A1  sub HL,BC
@@ -598,7 +598,7 @@ Link_SendBlock__F999A5:
 	pushw	bc                               ; F999AE  push BC
 	push	0                                 ; F999AF  push 0x00
 	extpfx3 0x8E, 0x08, 0x04               ; F999B1  push (XIZ+0x08)   [llvm-mc cannot encode this]
-	calr (0xF999BE - 0xF999B7)             ; F999B4  calr 0xf999be
+	calr Link_SendChunk             ; F999B4  calr 0xf999be
 	inc	8, xsp                             ; F999B7  inc 0,XSP
 	pop	xix                                ; F999B9  pop XIX
 	popw	hl                                ; F999BA  pop HL
@@ -679,7 +679,7 @@ Link_SendChunk__F99A1A:
 	pushw	bc                               ; F99A21  push BC
 	ld	xbc, (xiz+12)                       ; F99A22  ld XBC,(XIZ+0x0c)
 	push	xbc                               ; F99A25  push XBC
-	call	0xF9A005                          ; F99A26  call 0xf9a005
+	call	uDMA2_SetSource                          ; F99A26  call 0xf9a005
 	ld	(DMA2V:8), 18:io                         ; F99A2A  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99A2D  set 2,(0x20)
 	inc	6, xsp                             ; F99A30  inc 6,XSP
@@ -782,7 +782,7 @@ Link_SendCmdE2_MemRead__F99A8C:
 	ld	(xix+8), bc                         ; F99A9D  ld (XIX+0x08),BC
 	pushw	10                               ; F99AA0  push 0x000a
 	push	xix                               ; F99AA3  push XIX
-	call	0xF9A005                          ; F99AA4  call 0xf9a005
+	call	uDMA2_SetSource                          ; F99AA4  call 0xf9a005
 	ld	(DMA2V:8), 18:io                         ; F99AA8  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99AAB  set 2,(0x20)
 	set 7, (0x00852B:24)                   ; F99AAE  set 7,(0x00852b)   [llvm-mc cannot encode this]
@@ -964,7 +964,7 @@ Link_SendCmdE1__F99B5A:
 	pushw	6                                ; F99B78  push 0x0006
 	lda	xbc, (0x8542:24)                   ; F99B7B  lda XBC,0x008542
 	push	xbc                               ; F99B80  push XBC
-	call	0xF9A005                          ; F99B81  call 0xf9a005
+	call	uDMA2_SetSource                          ; F99B81  call 0xf9a005
 	ld	(DMA2V:8), 18:io                         ; F99B85  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99B88  set 2,(0x20)
 	inc	6, xsp                             ; F99B8B  inc 6,XSP
@@ -980,7 +980,7 @@ Link_SendCmdE1__F99B97:
 	pushw	bc                               ; F99BA0  push BC
 	ld	xbc, (xix)                          ; F99BA1  ld XBC,(XIX)
 	push	xbc                               ; F99BA3  push XBC
-	call	0xF9A005                          ; F99BA4  call 0xf9a005
+	call	uDMA2_SetSource                          ; F99BA4  call 0xf9a005
 	ld	(DMA2V:8), 18:io                         ; F99BA8  ld (0x7e),0x12
 	set_dd8	2, TRUN                        ; F99BAB  set 2,(0x20)
 	inc	6, xsp                             ; F99BAE  inc 6,XSP

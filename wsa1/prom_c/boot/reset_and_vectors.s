@@ -124,7 +124,7 @@ RESET:
 	ld (SC0CR:8),0x00:io
 	ld (SC0MOD:8),0x09:io	; 8-bit UART, baud-rate generator; unlike CPU 1
 				; the receiver is not enabled here
-	call 0xF99125		; ⚠ NOT a delay.  Earlier text here called it "a counted
+	call Dev108000_Preload_80toBF		; ⚠ NOT a delay.  Earlier text here called it "a counted
 				; delay (loops to 0x40)".  It is
 				; Dev108000_Preload_80toBF, converted above: 64
 				; write pairs into the device port at 0x108000.
@@ -141,7 +141,7 @@ RESET__clear_dram:
 	sub XBC,0x00000001
 	jr NZ,RESET__clear_dram
 
-	call 0xF989EF		; ⚠ 0x10D8 bytes, not 0xD8 -- earlier text here said
+	call RamImage_Copy		; ⚠ 0x10D8 bytes, not 0xD8 -- earlier text here said
 				; 0xD8.  `ld XBC,0x000010D8` sets BC = 4312 and
 				; `ldir` copies that many bytes from 0xFCB4EA to
 				; 0x00E2DF.  This is the RAM IMAGE: it initialises
@@ -181,31 +181,31 @@ IRQ_UNUSED:				; vectors 0x08-0x1C, 0x30-0x40,
 ;          MAME fetches NMI from that offset (tmp95c061.cpp:505).
 IRQ_NMI:				; vector 0x20
 	ei 0x07
-	call 0xF99125
+	call Dev108000_Preload_80toBF
 IRQ_NMI__hang:
 	jr IRQ_NMI__hang	; spin forever
 ; Evidence: VECTORS slot 0x28 (below) holds 0x00FFF0B4, this label's address; the
 ;          slot's name is cited to tmp95c061_irq_vector_map[] (tmp95c061.cpp:322-346).
 IRQ_INT0:				; vector 0x28
-	jp 0xF99BBE		; -> INT0_HANDLER, converted above
+	jp INT0_HANDLER		; -> INT0_HANDLER, converted above
 ; Evidence: VECTORS slot 0x48 (below) holds 0x00FFF0B8, this label's address.  It
 ;          is also the vector micro-DMA channel 2 is armed on (DMA2V = 0x12 at
 ;          0xF99A2A, and 0x12 << 2 = 0x48).
 IRQ_INTT2:				; vector 0x48
-	jp 0xF99E5E		; -> INTT2_HANDLER, converted above
+	jp INTT2_HANDLER		; -> INTT2_HANDLER, converted above
 ; Evidence: VECTORS slot 0x44 (below) holds 0x00FFF0BC, this label's address.
 IRQ_INTT1:				; vector 0x44
-	jp 0xF99063		; -> INTT1_HANDLER, converted above: the tick
+	jp INTT1_HANDLER		; -> INTT1_HANDLER, converted above: the tick
 				; counter at 0x00F2F3 and the six-phase work
 				; schedule in 0x007ED1
 ; Evidence: VECTORS slot 0x7C (below) holds 0x00FFF0C0, this label's address -- the
 ;          one vector stub in this table that carried no evidence line until wave 7
 ;          round 12.  The slot's name is cited to tmp95c061_irq_vector_map[].
 IRQ_INTTC2:				; vector 0x7C
-	jp 0xF99CFE		; -> INTTC2_HANDLER, converted above
+	jp INTTC2_HANDLER		; -> INTTC2_HANDLER, converted above
 ; Evidence: VECTORS slot 0x80 (below) holds 0x00FFF0C4, this label's address.
 IRQ_INTTC3:				; vector 0x80
-	jp 0xF99D20		; -> INTTC3_HANDLER, converted above
+	jp INTTC3_HANDLER		; -> INTTC3_HANDLER, converted above
 
 ; ------------------------------------------------------------------------------
 ; 0xFFF0C8-0xFFF0E4 -- six more entries in the same style that NOTHING reaches.

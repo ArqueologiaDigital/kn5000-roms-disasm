@@ -374,8 +374,8 @@ EEPROM_LoadCalibration:
 EEPROM_LoadCalibration__word:
 	ei	6                                       ; FC8B1D  ei 0x06
 	pushw	hl                                   ; FC8B1F  push HL
-	calr (0xFC8A29 - 0xFC8B23)                 ; FC8B20  calr 0xfc8a29
-	calr (0xFC8ADA - 0xFC8B26)                 ; FC8B23  calr 0xfc8ada
+	calr EEPROM_SendReadCommand                 ; FC8B20  calr 0xfc8a29
+	calr EEPROM_ShiftIn16                 ; FC8B23  calr 0xfc8ada
 	ld	(xiz-6), wa                             ; FC8B26  ld (XIZ+0xfa),WA
 	ld	(xiz-4), xix                            ; FC8B29  ld (XIZ+0xfc),XIX
 	lda	xbc, (0xE2A1:24)                       ; FC8B2C  lda XBC,0x00e2a1
@@ -395,14 +395,14 @@ EEPROM_LoadCalibration__word:
 	jr c, EEPROM_LoadCalibration__word         ; FC8B53  jr C,0xfc8b1d
 	pushw	hl                                   ; FC8B55  push HL
 	inc	1, hl                                  ; FC8B56  inc 1,HL
-	calr (0xFC8A29 - 0xFC8B5B)                 ; FC8B58  calr 0xfc8a29
-	calr (0xFC8ADA - 0xFC8B5E)                 ; FC8B5B  calr 0xfc8ada
+	calr EEPROM_SendReadCommand                 ; FC8B58  calr 0xfc8a29
+	calr EEPROM_ShiftIn16                 ; FC8B5B  calr 0xfc8ada
 	popw	bc                                    ; FC8B5E  pop BC
 	cp	de, wa                                  ; FC8B5F  cp DE,WA
 	jr nz, EEPROM_LoadCalibration__invalid     ; FC8B61  jr NZ,0xfc8b71
 	pushw	hl                                   ; FC8B63  push HL
-	calr (0xFC8A29 - 0xFC8B67)                 ; FC8B64  calr 0xfc8a29
-	calr (0xFC8ADA - 0xFC8B6A)                 ; FC8B67  calr 0xfc8ada
+	calr EEPROM_SendReadCommand                 ; FC8B64  calr 0xfc8a29
+	calr EEPROM_ShiftIn16                 ; FC8B67  calr 0xfc8ada
 	popw	bc                                    ; FC8B6A  pop BC
 	cp	wa, 0x5AA5                              ; FC8B6B  cp WA,0x5aa5
 	jr z, EEPROM_LoadCalibration__valid        ; FC8B6F  jr Z,0xfc8b77
@@ -440,17 +440,17 @@ EEPROM_LoadCalibration__ret:
 ; --------------------------------------------------------------------------
 EEPROM_WriteIndexPattern:
 	pushw	hl                                   ; FC8B82  push HL
-	calr (0xFC89C5 - 0xFC8B86)                 ; FC8B83  calr 0xfc89c5
+	calr EEPROM_WriteEnable                 ; FC8B83  calr 0xfc89c5
 	ldw	hl, 0                                  ; FC8B86  ld HL,0x0000
 EEPROM_WriteIndexPattern__word:
 	pushw	hl                                   ; FC8B89  push HL
 	pushw	hl                                   ; FC8B8A  push HL
-	calr (0xFC8A62 - 0xFC8B8E)                 ; FC8B8B  calr 0xfc8a62
+	calr EEPROM_WriteWord                 ; FC8B8B  calr 0xfc8a62
 	inc	1, hl                                  ; FC8B8E  inc 1,HL
 	pop	xiy                                    ; FC8B90  pop XIY
 	cp	hl, 31                                  ; FC8B91  cp HL,0x001f
 	jr c, EEPROM_WriteIndexPattern__word       ; FC8B95  jr C,0xfc8b89
-	calr (0xFC89F7 - 0xFC8B9A)                 ; FC8B97  calr 0xfc89f7
+	calr EEPROM_WriteDisable                 ; FC8B97  calr 0xfc89f7
 	popw	hl                                    ; FC8B9A  pop HL
 	ret                                        ; FC8B9B  ret
 ; --------------------------------------------------------------------------

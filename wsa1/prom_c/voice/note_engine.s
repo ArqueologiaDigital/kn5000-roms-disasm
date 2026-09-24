@@ -253,11 +253,11 @@ ExtBoard_ProbeAndInstallBases__FB05C0:
 	add	xbc, 0xC00000                          ; FB05C2  add XBC,0x00c00000
 	ld	(0xD811:24), xbc                       ; FB05C8  ld (0x00d811),XBC
 ExtBoard_ProbeAndInstallBases__FB05CD:
-	call	0xFB80E1                              ; FB05CD  call 0xfb80e1
+	call	Dev10C_ResetAllChannels                              ; FB05CD  call 0xfb80e1
 	pushw	0                                    ; FB05D1  push 0x0000
-	call	0xFA664B                              ; FB05D4  call 0xfa664b
-	call	0xFC7CF9                              ; FB05D8  call 0xfc7cf9
-	call	0xFB6CEE                              ; FB05DC  call 0xfb6cee
+	call	VoiceSubsystem_Init                              ; FB05D4  call 0xfa664b
+	call	sub_FC7CF9                              ; FB05D8  call 0xfc7cf9
+	call	PartRec_InitAllParts                              ; FB05DC  call 0xfb6cee
 	ld	(0x14FE:16), 0                          ; FB05E0  ld (0x14fe),0x00
 	popw	bc                                    ; FB05E5  pop BC
 	pop	xix                                    ; FB05E6  pop XIX
@@ -290,11 +290,11 @@ Toggle14FE_AndDispatch:
 	ld	c, (xix)                                ; FB05F1  ld C,(XIX)
 	cp	c, 0:i3                                   ; FB05F3  cp C,0
 	jr nz, Toggle14FE_AndDispatch__FB05FD      ; FB05F5  jr NZ,0xfb05fd
-	call	0xFACA40                              ; FB05F7  call 0xfaca40
+	call	sub_FACA40                              ; FB05F7  call 0xfaca40
 	jr Toggle14FE_AndDispatch__FB0605          ; FB05FB  jr T,0xfb0605
 Toggle14FE_AndDispatch__FB05FD:
-	call	0xFA68DC                              ; FB05FD  call 0xfa68dc
-	call	0xFACAB7                              ; FB0601  call 0xfacab7
+	call	Dev10C_PollBankAndRetire                              ; FB05FD  call 0xfa68dc
+	call	sub_FACAB7                              ; FB0601  call 0xfacab7
 Toggle14FE_AndDispatch__FB0605:
 	extpfx3 0x84, 0x3D, 0xFF                   ; FB0605  xor (XIX),0xff
 	pop	xix                                    ; FB0608  pop XIX
@@ -396,7 +396,7 @@ MidiIn_ParseRingAndDispatch__FB0619:
 	cp	de, 4:i3                                  ; FB0619  cp DE,4
 	jrl c, MidiIn_ParseRingAndDispatch__FB0A07 ; FB061B  jrl C,0xfb0a07
 	pushw	de                                   ; FB061E  push DE
-	call	0xFA5949                              ; FB061F  call 0xfa5949
+	call	MidiIn_StoreRingBacklog                              ; FB061F  call 0xfa5949
 	ld	xbc, (xiz+8)                            ; FB0623  ld XBC,(XIZ+0x08)
 	inc	4, xbc                                 ; FB0626  inc 4,XBC
 	ld	(xiz-12), xbc                           ; FB0628  ld (XIZ+0xf4),XBC
@@ -535,7 +535,7 @@ MidiIn_ParseRingAndDispatch__FB070F:
 	lda	xbc, (0xD7CE:24)                       ; FB0795  lda XBC,0x00d7ce
 	push	xbc                                   ; FB079A  push XBC
 MidiIn_ParseRingAndDispatch__FB079B:
-	call	0xFC2600                              ; FB079B  call 0xfc2600
+	call	ToneMsg_Dispatch                              ; FB079B  call 0xfc2600
 MidiIn_ParseRingAndDispatch__FB079F:
 	pop	xiy                                    ; FB079F  pop XIY
 	jrl MidiIn_ParseRingAndDispatch__FB09FE    ; FB07A0  jrl T,0xfb09fe
@@ -573,10 +573,10 @@ MidiIn_ParseRingAndDispatch__FB07A3:
 	push	xbc                                   ; FB07FC  push XBC
 	cp	h, 0xF0                                 ; FB07FD  cp H,0xf0
 	jr nc, MidiIn_ParseRingAndDispatch__FB0808 ; FB0800  jr NC,0xfb0808
-	call	0xFB3F36                              ; FB0802  call 0xfb3f36
+	call	MidiNote_Dispatch                              ; FB0802  call 0xfb3f36
 	jr MidiIn_ParseRingAndDispatch__FB079F     ; FB0806  jr T,0xfb079f
 MidiIn_ParseRingAndDispatch__FB0808:
-	call	0xFC3E02                              ; FB0808  call 0xfc3e02
+	call	NotePool8_NoteOnOff                              ; FB0808  call 0xfc3e02
 	jr MidiIn_ParseRingAndDispatch__FB079F     ; FB080C  jr T,0xfb079f
 MidiIn_ParseRingAndDispatch__FB080E:
 	cp	de, 4:i3                                  ; FB080E  cp DE,4
@@ -609,7 +609,7 @@ MidiIn_ParseRingAndDispatch__FB080E:
 	dec	4, de                                  ; FB085B  dec 4,DE
 	lda	xbc, (0xD7D8:24)                       ; FB085D  lda XBC,0x00d7d8
 	push	xbc                                   ; FB0862  push XBC
-	call	0xFAFDA5                              ; FB0863  call 0xfafda5
+	call	MidiCtrl_Dispatch                              ; FB0863  call 0xfafda5
 	jrl MidiIn_ParseRingAndDispatch__FB079F    ; FB0867  jrl T,0xfb079f
 MidiIn_ParseRingAndDispatch__FB086A:
 	cp	de, 5:i3                                  ; FB086A  cp DE,5
@@ -649,7 +649,7 @@ MidiIn_ParseRingAndDispatch__FB086A:
 	dec	5, de                                  ; FB08CB  dec 5,DE
 	lda	xbc, (0xD7DC:24)                       ; FB08CD  lda XBC,0x00d7dc
 	push	xbc                                   ; FB08D2  push XBC
-	call	0xFB6BA8                              ; FB08D3  call 0xfb6ba8
+	call	MidiProgram_SelectToneForPart                              ; FB08D3  call 0xfb6ba8
 	jrl MidiIn_ParseRingAndDispatch__FB079F    ; FB08D7  jrl T,0xfb079f
 MidiIn_ParseRingAndDispatch__FB08DA:
 	cp	de, 4:i3                                  ; FB08DA  cp DE,4
@@ -682,7 +682,7 @@ MidiIn_ParseRingAndDispatch__FB08DA:
 	dec	4, de                                  ; FB0927  dec 4,DE
 	lda	xbc, (0xD7E1:24)                       ; FB0929  lda XBC,0x00d7e1
 	push	xbc                                   ; FB092E  push XBC
-	call	0xFB0013                              ; FB092F  call 0xfb0013
+	call	sub_FB0013                              ; FB092F  call 0xfb0013
 	jrl MidiIn_ParseRingAndDispatch__FB079F    ; FB0933  jrl T,0xfb079f
 MidiIn_ParseRingAndDispatch__FB0936:
 	cp	de, 4:i3                                  ; FB0936  cp DE,4
@@ -715,7 +715,7 @@ MidiIn_ParseRingAndDispatch__FB0936:
 	dec	4, de                                  ; FB0983  dec 4,DE
 	lda	xbc, (0xD7E5:24)                       ; FB0985  lda XBC,0x00d7e5
 	push	xbc                                   ; FB098A  push XBC
-	call	0xFB0132                              ; FB098B  call 0xfb0132
+	call	sub_FB0132                              ; FB098B  call 0xfb0132
 	jrl MidiIn_ParseRingAndDispatch__FB079F    ; FB098F  jrl T,0xfb079f
 MidiIn_ParseRingAndDispatch__FB0992:
 	cp	de, 4:i3                                  ; FB0992  cp DE,4
@@ -748,7 +748,7 @@ MidiIn_ParseRingAndDispatch__FB0992:
 	dec	4, de                                  ; FB09DE  dec 4,DE
 	lda	xbc, (0xD7E9:24)                       ; FB09E0  lda XBC,0x00d7e9
 	push	xbc                                   ; FB09E5  push XBC
-	call	0xFB0338                              ; FB09E6  call 0xfb0338
+	call	GlobalSetup_Dispatch                              ; FB09E6  call 0xfb0338
 	jrl MidiIn_ParseRingAndDispatch__FB079F    ; FB09EA  jrl T,0xfb079f
 MidiIn_ParseRingAndDispatch__FB09ED:
 	ld	l, 0:opc                                   ; FB09ED  ld L,0x00
@@ -762,7 +762,7 @@ MidiIn_ParseRingAndDispatch__FB09FA:
 	cp	de, 0:i3                                  ; FB09FA  cp DE,0
 	jr nz, MidiIn_ParseRingAndDispatch__FB09F1 ; FB09FC  jr NZ,0xfb09f1
 MidiIn_ParseRingAndDispatch__FB09FE:
-	call	0xF98CB9                              ; FB09FE  call 0xf98cb9
+	call	KeyEvents_ToLink                              ; FB09FE  call 0xf98cb9
 	cp	l, 0:i3                                   ; FB0A02  cp L,0
 	jrl nz, MidiIn_ParseRingAndDispatch__FB0619 ; FB0A04  jrl NZ,0xfb0619
 MidiIn_ParseRingAndDispatch__FB0A07:
@@ -811,26 +811,26 @@ MidiMsg_SendBootSequence:
 	ld	(0xD7E0:24), 0                        ; FB0A2B  ld (0x00d7e0),0x00
 	lda	xbc, (0xD7DC:24)                       ; FB0A31  lda XBC,0x00d7dc
 	push	xbc                                   ; FB0A36  push XBC
-	call	0xFB6BA8                              ; FB0A37  call 0xfb6ba8
+	call	MidiProgram_SelectToneForPart                              ; FB0A37  call 0xfb6ba8
 	ld	(xix), 0xB0                             ; FB0A3B  ld (XIX),0xb0
 	ld	(xix+1), 0                              ; FB0A3E  ld (XIX+0x01),0x00
 	ld	(xix+2), 7                              ; FB0A42  ld (XIX+0x02),0x07
 	ld	(xix+3), 0                              ; FB0A46  ld (XIX+0x03),0x00
 	push	xix                                   ; FB0A4A  push XIX
-	call	0xFAFDA5                              ; FB0A4B  call 0xfafda5
+	call	MidiCtrl_Dispatch                              ; FB0A4B  call 0xfafda5
 	ld	(0xD7D4:24), 0x90                     ; FB0A4F  ld (0x00d7d4),0x90
 	ld	(0xD7D5:24), 0                        ; FB0A55  ld (0x00d7d5),0x00
 	ld	(0xD7D6:24), 48                       ; FB0A5B  ld (0x00d7d6),0x30
 	ld	(0xD7D7:24), 1                        ; FB0A61  ld (0x00d7d7),0x01
 	lda	xbc, (0xD7D4:24)                       ; FB0A67  lda XBC,0x00d7d4
 	push	xbc                                   ; FB0A6C  push XBC
-	call	0xFB3F36                              ; FB0A6D  call 0xfb3f36
+	call	MidiNote_Dispatch                              ; FB0A6D  call 0xfb3f36
 	ld	(xix), 0xB0                             ; FB0A71  ld (XIX),0xb0
 	ld	(xix+1), 0                              ; FB0A74  ld (XIX+0x01),0x00
 	ld	(xix+2), 0x78                           ; FB0A78  ld (XIX+0x02),0x78
 	ld	(xix+3), 0x7F                           ; FB0A7C  ld (XIX+0x03),0x7f
 	push	xix                                   ; FB0A80  push XIX
-	call	0xFAFDA5                              ; FB0A81  call 0xfafda5
+	call	MidiCtrl_Dispatch                              ; FB0A81  call 0xfafda5
 	inc	8, xsp                                 ; FB0A85  inc 0,XSP
 	inc	8, xsp                                 ; FB0A87  inc 0,XSP
 	pop	xix                                    ; FB0A89  pop XIX
@@ -946,62 +946,62 @@ VoiceRegs_Stage_A:
 	pushw	bc                                   ; FB0AF3  push BC
 	ld	c, (xde+3)                              ; FB0AF4  ld C,(XDE+0x03)
 	pushw	bc                                   ; FB0AF7  push BC
-	call	0xFC4D63                              ; FB0AF8  call 0xfc4d63
+	call	Pack104_SetInputs_E088_E089_E08A                              ; FB0AF8  call 0xfc4d63
 	pushw	de                                   ; FB0AFC  push DE
-	call	0xFC7F03                              ; FB0AFD  call 0xfc7f03
+	call	sub_FC7F03                              ; FB0AFD  call 0xfc7f03
 	pushw	de                                   ; FB0B01  push DE
-	call	0xFA819A                              ; FB0B02  call 0xfa819a
+	call	Voice_SelectKeyZone_Reg0040                              ; FB0B02  call 0xfa819a
 	pushw	de                                   ; FB0B06  push DE
-	call	0xFA8323                              ; FB0B07  call 0xfa8323
+	call	Voice_PitchAddZoneOffset_AB                              ; FB0B07  call 0xfa8323
 	pushw	de                                   ; FB0B0B  push DE
-	call	0xFA8347                              ; FB0B0C  call 0xfa8347
+	call	Voice_StagePitch_Reg0400_AB                              ; FB0B0C  call 0xfa8347
 	pushw	de                                   ; FB0B10  push DE
-	call	0xFA842D                              ; FB0B11  call 0xfa842d
+	call	Voice_StageRegs_0900_0940_0980_AB                              ; FB0B11  call 0xfa842d
 	pushw	de                                   ; FB0B15  push DE
-	call	0xFA8BDD                              ; FB0B16  call 0xfa8bdd
+	call	VoiceParam_DispatchOn_17_36                              ; FB0B16  call 0xfa8bdd
 	pushw	de                                   ; FB0B1A  push DE
-	call	0xFA919B                              ; FB0B1B  call 0xfa919b
+	call	Voice_StagePair_Reg0100_0140_AB                              ; FB0B1B  call 0xfa919b
 	pushw	de                                   ; FB0B1F  push DE
-	call	0xFA93AF                              ; FB0B20  call 0xfa93af
+	call	Voice_StageRegs_09C0_0A00_0A40_AB                              ; FB0B20  call 0xfa93af
 	pushw	de                                   ; FB0B24  push DE
-	call	0xFA95D4                              ; FB0B25  call 0xfa95d4
+	call	Voice_StageRegs_0500_08C0_AB                              ; FB0B25  call 0xfa95d4
 	pushw	de                                   ; FB0B29  push DE
-	call	0xFA9915                              ; FB0B2A  call 0xfa9915
+	call	Voice_StageChanSel_Reg0440_Reg0480                              ; FB0B2A  call 0xfa9915
 	pushw	de                                   ; FB0B2E  push DE
-	call	0xFA9C60                              ; FB0B2F  call 0xfa9c60
+	call	Voice_StageRegs_0180_AB                              ; FB0B2F  call 0xfa9c60
 	pushw	de                                   ; FB0B33  push DE
-	call	0xFA9F19                              ; FB0B34  call 0xfa9f19
+	call	Voice_StageChanSel_Reg04C0                              ; FB0B34  call 0xfa9f19
 	pushw	de                                   ; FB0B38  push DE
-	call	0xFAA0BC                              ; FB0B39  call 0xfaa0bc
+	call	Voice_StageRegs_00C0_AB                              ; FB0B39  call 0xfaa0bc
 	pushw	de                                   ; FB0B3D  push DE
-	call	0xFAA2B6                              ; FB0B3E  call 0xfaa2b6
+	call	Voice_ComputeField0029_AB                              ; FB0B3E  call 0xfaa2b6
 	pushw	de                                   ; FB0B42  push DE
-	call	0xFAA4C3                              ; FB0B43  call 0xfaa4c3
+	call	Voice_StageRegs_0800_A                              ; FB0B43  call 0xfaa4c3
 	pushw	0                                    ; FB0B47  push 0x0000
 	pushw	de                                   ; FB0B4A  push DE
-	call	0xFAA87E                              ; FB0B4B  call 0xfaa87e
+	call	Voice_StageRegs_0840_0880_AB                              ; FB0B4B  call 0xfaa87e
 	ld	bc, (xde+10)                            ; FB0B4F  ld BC,(XDE+0x0a)
 	pushw	bc                                   ; FB0B52  push BC
 	ld	bc, (xde+6)                             ; FB0B53  ld BC,(XDE+0x06)
 	pushw	bc                                   ; FB0B56  push BC
-	call	0xFC4DA1                              ; FB0B57  call 0xfc4da1
+	call	Pack104_SetInputs_Rec0E_E08D                              ; FB0B57  call 0xfc4da1
 	lda	xbc, (0xD7A2:24)                       ; FB0B5B  lda XBC,0x00d7a2
 	push	xbc                                   ; FB0B60  push XBC
-	call	0xFC4DBD                              ; FB0B61  call 0xfc4dbd
+	call	Dev104_PackStagingStruct                              ; FB0B61  call 0xfc4dbd
 	lda	xbc, (0xD7A2:24)                       ; FB0B65  lda XBC,0x00d7a2
 	push	xbc                                   ; FB0B6A  push XBC
 	ld	hl, (xiz+8)                             ; FB0B6B  ld HL,(XIZ+0x08)
 	extz	hl                                    ; FB0B6E  extz HL
 	pushw	hl                                   ; FB0B70  push HL
-	call	0xFB77EF                              ; FB0B71  call 0xfb77ef
+	call	Dev104_WriteAllChanRegs                              ; FB0B71  call 0xfb77ef
 	pushw	de                                   ; FB0B75  push DE
-	call	0xFAB5A5                              ; FB0B76  call 0xfab5a5
+	call	Voice_ComputeLevelBase_AB                              ; FB0B76  call 0xfab5a5
 	pushw	de                                   ; FB0B7A  push DE
-	call	0xFAB79D                              ; FB0B7B  call 0xfab79d
+	call	Voice_StageLevel_Reg0080_AB                              ; FB0B7B  call 0xfab79d
 	lda	xbc, (0xD75E:24)                       ; FB0B7F  lda XBC,0x00d75e
 	push	xbc                                   ; FB0B84  push XBC
 	pushw	hl                                   ; FB0B85  push HL
-	call	0xFB713A                              ; FB0B86  call 0xfb713a
+	call	Dev10C_WriteAllChanRegs                              ; FB0B86  call 0xfb713a
 	add	xsp, 66                                ; FB0B8A  add XSP,0x00000042
 	pop	xde                                    ; FB0B90  pop XDE
 	popw	hl                                    ; FB0B91  pop HL
@@ -1067,7 +1067,7 @@ sub_FB0B95:
 	pushw	wa                                   ; FB0BD2  push WA
 	push	0                                     ; FB0BD3  push 0x00
 	push	w                                     ; FB0BD5  push W
-	call	0xFCB23C                              ; FB0BD7  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB0BD7  call 0xfcb23c
 	ld	h, a                                    ; FB0BDB  ld H,A
 	ld	bc, ix                                  ; FB0BDD  ld BC,IX
 	inc	6, bc                                  ; FB0BDF  inc 6,BC
@@ -1112,7 +1112,7 @@ sub_FB0B95__FB0C19:
 	push	xbc                                   ; FB0C43  push XBC
 	push	0                                     ; FB0C44  push 0x00
 	extpfx3 0x8E, 0x14, 0x04                   ; FB0C46  push (XIZ+0x14)
-	call	0xFA727D                              ; FB0C49  call 0xfa727d
+	call	VelSplit_LayerFromVelocity                              ; FB0C49  call 0xfa727d
 	ld	(xiz-14), a                             ; FB0C4D  ld (XIZ+0xf2),A
 	ld	bc, (xiz-8)                             ; FB0C50  ld BC,(XIZ+0xf8)
 	add	bc, 0x88                               ; FB0C53  add BC,0x0088
@@ -1177,17 +1177,17 @@ sub_FB0B95__FB0C19:
 	ld	xbc, (xiz-22)                           ; FB0D03  ld XBC,(XIZ+0xea)
 	ld	(xhl+31), xbc                           ; FB0D06  ld (XHL+0x1f),XBC
 	pushw	hl                                   ; FB0D09  push HL
-	call	0xFA7F28                              ; FB0D0A  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB0D0A  call 0xfa7f28
 	push	0                                     ; FB0D0E  push 0x00
 	extpfx3 0x8E, 0xE8, 0x04                   ; FB0D10  push (XIZ+0xe8)
 	push	0                                     ; FB0D13  push 0x00
 	extpfx3 0x8E, 0xFC, 0x04                   ; FB0D15  push (XIZ+0xfc)
-	call	0xFB6272                              ; FB0D18  call 0xfb6272
+	call	Part_GetAlgoDescByte17                              ; FB0D18  call 0xfb6272
 	extz	wa                                    ; FB0D1C  extz WA
 	ld	(xhl+43), wa                            ; FB0D1E  ld (XHL+0x2b),WA
 	push	0                                     ; FB0D21  push 0x00
 	extpfx3 0x8E, 0xFC, 0x04                   ; FB0D23  push (XIZ+0xfc)
-	call	0xFB5D05                              ; FB0D26  call 0xfb5d05
+	call	Part_GetSecondaryParam_AlgoType9                              ; FB0D26  call 0xfb5d05
 	extz	wa                                    ; FB0D2A  extz WA
 	ld	(xhl+45), wa                            ; FB0D2C  ld (XHL+0x2d),WA
 	ld	bc, (xiz-36)                            ; FB0D2F  ld BC,(XIZ+0xdc)
@@ -1242,7 +1242,7 @@ sub_FB0B95__FB0C19:
 	extpfx3 0x8E, 0xE8, 0x04                   ; FB0DCE  push (XIZ+0xe8)
 	push	0                                     ; FB0DD1  push 0x00
 	extpfx3 0x8E, 0xFC, 0x04                   ; FB0DD3  push (XIZ+0xfc)
-	call	0xFC4B2E                              ; FB0DD6  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB0DD6  call 0xfc4b2e
 	ld	(xiz-44), a                             ; FB0DDA  ld (XIZ+0xd4),A
 	ld	xix, (xiz-40)                           ; FB0DDD  ld XIX,(XIZ+0xd8)
 	inc	6, xix                                 ; FB0DE0  inc 6,XIX
@@ -1358,7 +1358,7 @@ VoiceParams_Compute_A:
 	ld	a, (0xFE12B1:24)                       ; FB0E9F  ld A,(0xfe12b1)
 	pushw	wa                                   ; FB0EA4  push WA
 	pushw	bc                                   ; FB0EA5  push BC
-	call	0xFCB23C                              ; FB0EA6  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB0EA6  call 0xfcb23c
 	ld	d, a                                    ; FB0EAA  ld D,A
 	ld	hl, ix                                  ; FB0EAC  ld HL,IX
 	ld	bc, (0xFDE695:24)                      ; FB0EAE  ld BC,(0xfde695)
@@ -1394,7 +1394,7 @@ VoiceParams_Compute_A__FB0ED5:
 	push	xiy                                   ; FB0EFA  push XIY
 	push	0                                     ; FB0EFB  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FB0EFD  push (XIZ+0x10)
-	call	0xFA727D                              ; FB0F00  call 0xfa727d
+	call	VelSplit_LayerFromVelocity                              ; FB0F00  call 0xfa727d
 	ld	(xiz-16), a                             ; FB0F04  ld (XIZ+0xf0),A
 	ld	bc, ix                                  ; FB0F07  ld BC,IX
 	add	bc, 0xB1                               ; FB0F09  add BC,0x00b1
@@ -1451,16 +1451,16 @@ VoiceParams_Compute_A__FB0ED5:
 	ld	xbc, (xiz-24)                           ; FB0F9E  ld XBC,(XIZ+0xe8)
 	ld	(xhl+31), xbc                           ; FB0FA1  ld (XHL+0x1f),XBC
 	pushw	hl                                   ; FB0FA4  push HL
-	call	0xFA7F28                              ; FB0FA5  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB0FA5  call 0xfa7f28
 	pushw	0                                    ; FB0FA9  push 0x0000
 	push	0                                     ; FB0FAC  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB0FAE  push (XIZ+0xf8)
-	call	0xFB6272                              ; FB0FB1  call 0xfb6272
+	call	Part_GetAlgoDescByte17                              ; FB0FB1  call 0xfb6272
 	extz	wa                                    ; FB0FB5  extz WA
 	ld	(xhl+43), wa                            ; FB0FB7  ld (XHL+0x2b),WA
 	push	0                                     ; FB0FBA  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB0FBC  push (XIZ+0xf8)
-	call	0xFB5D05                              ; FB0FBF  call 0xfb5d05
+	call	Part_GetSecondaryParam_AlgoType9                              ; FB0FBF  call 0xfb5d05
 	extz	wa                                    ; FB0FC3  extz WA
 	ld	(xhl+45), wa                            ; FB0FC5  ld (XHL+0x2d),WA
 	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB0FC8  ld XBC,(XHL+IX)
@@ -1504,7 +1504,7 @@ VoiceParams_Compute_A__FB0ED5:
 	pushw	0                                    ; FB104B  push 0x0000
 	push	0                                     ; FB104E  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB1050  push (XIZ+0xf8)
-	call	0xFC4B2E                              ; FB1053  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB1053  call 0xfc4b2e
 	add	xsp, 22                                ; FB1057  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB105D  cp A,0
 	jr z, VoiceParams_Compute_A__FB106A        ; FB105F  jr Z,0xfb106a
@@ -1548,7 +1548,7 @@ VoiceParams_Compute_A__FB10AA:
 	ld	a, (0xFE12B1:24)                       ; FB10BE  ld A,(0xfe12b1)
 	pushw	wa                                   ; FB10C3  push WA
 	pushw	bc                                   ; FB10C4  push BC
-	call	0xFCB23C                              ; FB10C5  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB10C5  call 0xfcb23c
 	ld	d, a                                    ; FB10C9  ld D,A
 	ld	hl, ix                                  ; FB10CB  ld HL,IX
 	ld	bc, (0xFDE695:24)                      ; FB10CD  ld BC,(0xfde695)
@@ -1581,7 +1581,7 @@ VoiceParams_Compute_A__FB10F4:
 	push	xwa                                   ; FB1110  push XWA
 	push	0                                     ; FB1111  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FB1113  push (XIZ+0x10)
-	call	0xFA727D                              ; FB1116  call 0xfa727d
+	call	VelSplit_LayerFromVelocity                              ; FB1116  call 0xfa727d
 	ld	(xiz-14), a                             ; FB111A  ld (XIZ+0xf2),A
 	ld	bc, ix                                  ; FB111D  ld BC,IX
 	add	bc, 0x88                               ; FB111F  add BC,0x0088
@@ -1636,16 +1636,16 @@ VoiceParams_Compute_A__FB10F4:
 	ld	xbc, (xiz-24)                           ; FB11AD  ld XBC,(XIZ+0xe8)
 	ld	(xhl+31), xbc                           ; FB11B0  ld (XHL+0x1f),XBC
 	pushw	hl                                   ; FB11B3  push HL
-	call	0xFA7F28                              ; FB11B4  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB11B4  call 0xfa7f28
 	pushw	0                                    ; FB11B8  push 0x0000
 	push	0                                     ; FB11BB  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB11BD  push (XIZ+0xf8)
-	call	0xFB6272                              ; FB11C0  call 0xfb6272
+	call	Part_GetAlgoDescByte17                              ; FB11C0  call 0xfb6272
 	extz	wa                                    ; FB11C4  extz WA
 	ld	(xhl+43), wa                            ; FB11C6  ld (XHL+0x2b),WA
 	push	0                                     ; FB11C9  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB11CB  push (XIZ+0xf8)
-	call	0xFB5D05                              ; FB11CE  call 0xfb5d05
+	call	Part_GetSecondaryParam_AlgoType9                              ; FB11CE  call 0xfb5d05
 	extz	wa                                    ; FB11D2  extz WA
 	ld	(xhl+45), wa                            ; FB11D4  ld (XHL+0x2d),WA
 	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB11D7  ld XBC,(XHL+IX)
@@ -1689,7 +1689,7 @@ VoiceParams_Compute_A__FB10F4:
 	pushw	0                                    ; FB125A  push 0x0000
 	push	0                                     ; FB125D  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB125F  push (XIZ+0xf8)
-	call	0xFC4B2E                              ; FB1262  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB1262  call 0xfc4b2e
 	add	xsp, 22                                ; FB1266  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB126C  cp A,0
 	jr z, VoiceParams_Compute_A__FB1279        ; FB126E  jr Z,0xfb1279
@@ -1741,7 +1741,7 @@ VoiceParams_Compute_A__FB12B6:
 	ld	a, (0xFE12B2:24)                       ; FB12E7  ld A,(0xfe12b2)
 	pushw	wa                                   ; FB12EC  push WA
 	pushw	bc                                   ; FB12ED  push BC
-	call	0xFCB23C                              ; FB12EE  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB12EE  call 0xfcb23c
 	ld	d, a                                    ; FB12F2  ld D,A
 	ld	hl, ix                                  ; FB12F4  ld HL,IX
 	ld	bc, (0xFDE697:24)                      ; FB12F6  ld BC,(0xfde697)
@@ -1774,7 +1774,7 @@ VoiceParams_Compute_A__FB131D:
 	push	xwa                                   ; FB1339  push XWA
 	push	0                                     ; FB133A  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FB133C  push (XIZ+0x10)
-	call	0xFA727D                              ; FB133F  call 0xfa727d
+	call	VelSplit_LayerFromVelocity                              ; FB133F  call 0xfa727d
 	ld	(xiz-14), a                             ; FB1343  ld (XIZ+0xf2),A
 	ld	bc, ix                                  ; FB1346  ld BC,IX
 	add	bc, 0x88                               ; FB1348  add BC,0x0088
@@ -1857,18 +1857,18 @@ VoiceParams_Compute_A__FB131D:
 	ld	xwa, (xiz-22)                           ; FB1423  ld XWA,(XIZ+0xea)
 	ld	(xbc+99), xwa                           ; FB1426  ld (XBC+0x63),XWA
 	pushw	hl                                   ; FB1429  push HL
-	call	0xFA7F28                              ; FB142A  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB142A  call 0xfa7f28
 	pushw	1                                    ; FB142E  push 0x0001
 	push	0                                     ; FB1431  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB1433  push (XIZ+0xf8)
-	call	0xFB6272                              ; FB1436  call 0xfb6272
+	call	Part_GetAlgoDescByte17                              ; FB1436  call 0xfb6272
 	extz	wa                                    ; FB143A  extz WA
 	ld	bc, (xiz-28)                            ; FB143C  ld BC,(XIZ+0xe4)
 	extz	xbc                                   ; FB143F  extz XBC
 	ld	(xbc+0x6F), wa                          ; FB1441  ld (XBC+0x6f),WA
 	push	0                                     ; FB1444  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB1446  push (XIZ+0xf8)
-	call	0xFB5D05                              ; FB1449  call 0xfb5d05
+	call	Part_GetSecondaryParam_AlgoType9                              ; FB1449  call 0xfb5d05
 	extz	wa                                    ; FB144D  extz WA
 	ld	bc, (xiz-28)                            ; FB144F  ld BC,(XIZ+0xe4)
 	extz	xbc                                   ; FB1452  extz XBC
@@ -1932,7 +1932,7 @@ VoiceParams_Compute_A__FB131D:
 	pushw	1                                    ; FB1507  push 0x0001
 	push	0                                     ; FB150A  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB150C  push (XIZ+0xf8)
-	call	0xFC4B2E                              ; FB150F  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB150F  call 0xfc4b2e
 	add	xsp, 22                                ; FB1513  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB1519  cp A,0
 	jr z, VoiceParams_Compute_A__FB1526        ; FB151B  jr Z,0xfb1526
@@ -1976,7 +1976,7 @@ VoiceParams_Compute_A__FB1566:
 	ld	a, (0xFE12B2:24)                       ; FB157A  ld A,(0xfe12b2)
 	pushw	wa                                   ; FB157F  push WA
 	pushw	bc                                   ; FB1580  push BC
-	call	0xFCB23C                              ; FB1581  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB1581  call 0xfcb23c
 	ld	d, a                                    ; FB1585  ld D,A
 	ld	hl, ix                                  ; FB1587  ld HL,IX
 	ld	bc, (0xFDE697:24)                      ; FB1589  ld BC,(0xfde697)
@@ -2012,7 +2012,7 @@ VoiceParams_Compute_A__FB15B0:
 	push	xiy                                   ; FB15D5  push XIY
 	push	0                                     ; FB15D6  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FB15D8  push (XIZ+0x10)
-	call	0xFA727D                              ; FB15DB  call 0xfa727d
+	call	VelSplit_LayerFromVelocity                              ; FB15DB  call 0xfa727d
 	ld	(xiz-16), a                             ; FB15DF  ld (XIZ+0xf0),A
 	ld	bc, ix                                  ; FB15E2  ld BC,IX
 	add	bc, 0xB1                               ; FB15E4  add BC,0x00b1
@@ -2094,18 +2094,18 @@ VoiceParams_Compute_A__FB15B0:
 	ld	xwa, (xiz-24)                           ; FB16BD  ld XWA,(XIZ+0xe8)
 	ld	(xbc+99), xwa                           ; FB16C0  ld (XBC+0x63),XWA
 	pushw	hl                                   ; FB16C3  push HL
-	call	0xFA7F28                              ; FB16C4  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB16C4  call 0xfa7f28
 	pushw	1                                    ; FB16C8  push 0x0001
 	push	0                                     ; FB16CB  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB16CD  push (XIZ+0xf8)
-	call	0xFB6272                              ; FB16D0  call 0xfb6272
+	call	Part_GetAlgoDescByte17                              ; FB16D0  call 0xfb6272
 	extz	wa                                    ; FB16D4  extz WA
 	ld	bc, (xiz-30)                            ; FB16D6  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB16D9  extz XBC
 	ld	(xbc+0x6F), wa                          ; FB16DB  ld (XBC+0x6f),WA
 	push	0                                     ; FB16DE  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB16E0  push (XIZ+0xf8)
-	call	0xFB5D05                              ; FB16E3  call 0xfb5d05
+	call	Part_GetSecondaryParam_AlgoType9                              ; FB16E3  call 0xfb5d05
 	extz	wa                                    ; FB16E7  extz WA
 	ld	bc, (xiz-30)                            ; FB16E9  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB16EC  extz XBC
@@ -2169,7 +2169,7 @@ VoiceParams_Compute_A__FB15B0:
 	pushw	1                                    ; FB17A1  push 0x0001
 	push	0                                     ; FB17A4  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB17A6  push (XIZ+0xf8)
-	call	0xFC4B2E                              ; FB17A9  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB17A9  call 0xfc4b2e
 	add	xsp, 22                                ; FB17AD  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB17B3  cp A,0
 	jr z, VoiceParams_Compute_A__FB17C0        ; FB17B5  jr Z,0xfb17c0
@@ -2216,7 +2216,7 @@ VoiceParams_Compute_A__FB17FD:
 	push	0                                     ; FB1821  push 0x00
 	push	w                                     ; FB1823  push W
 	pushw	wa                                   ; FB1825  push WA
-	call	0xFCB23C                              ; FB1826  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB1826  call 0xfcb23c
 	ld	d, a                                    ; FB182A  ld D,A
 	ld	bc, ix                                  ; FB182C  ld BC,IX
 	inc	6, bc                                  ; FB182E  inc 6,BC
@@ -2255,7 +2255,7 @@ VoiceParams_Compute_A__FB185E:
 	push	xiy                                   ; FB1883  push XIY
 	push	0                                     ; FB1884  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FB1886  push (XIZ+0x10)
-	call	0xFA727D                              ; FB1889  call 0xfa727d
+	call	VelSplit_LayerFromVelocity                              ; FB1889  call 0xfa727d
 	ld	(xiz-16), a                             ; FB188D  ld (XIZ+0xf0),A
 	ld	bc, ix                                  ; FB1890  ld BC,IX
 	add	bc, 0xDA                               ; FB1892  add BC,0x00da
@@ -2337,18 +2337,18 @@ VoiceParams_Compute_A__FB185E:
 	ld	xwa, (xiz-24)                           ; FB197D  ld XWA,(XIZ+0xe8)
 	ld	(xbc+0xA7), xwa                         ; FB1980  ld (XBC+0x00a7),XWA
 	pushw	hl                                   ; FB1985  push HL
-	call	0xFA7F28                              ; FB1986  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB1986  call 0xfa7f28
 	pushw	2                                    ; FB198A  push 0x0002
 	push	0                                     ; FB198D  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB198F  push (XIZ+0xf8)
-	call	0xFB6272                              ; FB1992  call 0xfb6272
+	call	Part_GetAlgoDescByte17                              ; FB1992  call 0xfb6272
 	extz	wa                                    ; FB1996  extz WA
 	ld	bc, (xiz-30)                            ; FB1998  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB199B  extz XBC
 	ld	(xbc+0xB3), wa                          ; FB199D  ld (XBC+0x00b3),WA
 	push	0                                     ; FB19A2  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB19A4  push (XIZ+0xf8)
-	call	0xFB5D05                              ; FB19A7  call 0xfb5d05
+	call	Part_GetSecondaryParam_AlgoType9                              ; FB19A7  call 0xfb5d05
 	extz	wa                                    ; FB19AB  extz WA
 	ld	bc, (xiz-30)                            ; FB19AD  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB19B0  extz XBC
@@ -2412,7 +2412,7 @@ VoiceParams_Compute_A__FB185E:
 	pushw	2                                    ; FB1A73  push 0x0002
 	push	0                                     ; FB1A76  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB1A78  push (XIZ+0xf8)
-	call	0xFC4B2E                              ; FB1A7B  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB1A7B  call 0xfc4b2e
 	add	xsp, 22                                ; FB1A7F  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB1A85  cp A,0
 	jr z, VoiceParams_Compute_A__FB1A92        ; FB1A87  jr Z,0xfb1a92
@@ -2459,7 +2459,7 @@ VoiceParams_Compute_A__FB1ACF:
 	push	0                                     ; FB1AF3  push 0x00
 	push	w                                     ; FB1AF5  push W
 	pushw	wa                                   ; FB1AF7  push WA
-	call	0xFCB23C                              ; FB1AF8  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB1AF8  call 0xfcb23c
 	ld	d, a                                    ; FB1AFC  ld D,A
 	ld	bc, ix                                  ; FB1AFE  ld BC,IX
 	inc	6, bc                                  ; FB1B00  inc 6,BC
@@ -2498,7 +2498,7 @@ VoiceParams_Compute_A__FB1B30:
 	push	xiy                                   ; FB1B55  push XIY
 	push	0                                     ; FB1B56  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FB1B58  push (XIZ+0x10)
-	call	0xFA727D                              ; FB1B5B  call 0xfa727d
+	call	VelSplit_LayerFromVelocity                              ; FB1B5B  call 0xfa727d
 	ld	(xiz-16), a                             ; FB1B5F  ld (XIZ+0xf0),A
 	ld	bc, ix                                  ; FB1B62  ld BC,IX
 	add	bc, 0x103                              ; FB1B64  add BC,0x0103
@@ -2580,18 +2580,18 @@ VoiceParams_Compute_A__FB1B30:
 	ld	xwa, (xiz-24)                           ; FB1C4F  ld XWA,(XIZ+0xe8)
 	ld	(xbc+0xEB), xwa                         ; FB1C52  ld (XBC+0x00eb),XWA
 	pushw	hl                                   ; FB1C57  push HL
-	call	0xFA7F28                              ; FB1C58  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB1C58  call 0xfa7f28
 	pushw	3                                    ; FB1C5C  push 0x0003
 	push	0                                     ; FB1C5F  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB1C61  push (XIZ+0xf8)
-	call	0xFB6272                              ; FB1C64  call 0xfb6272
+	call	Part_GetAlgoDescByte17                              ; FB1C64  call 0xfb6272
 	extz	wa                                    ; FB1C68  extz WA
 	ld	bc, (xiz-30)                            ; FB1C6A  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1C6D  extz XBC
 	ld	(xbc+0xF7), wa                          ; FB1C6F  ld (XBC+0x00f7),WA
 	push	0                                     ; FB1C74  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB1C76  push (XIZ+0xf8)
-	call	0xFB5D05                              ; FB1C79  call 0xfb5d05
+	call	Part_GetSecondaryParam_AlgoType9                              ; FB1C79  call 0xfb5d05
 	extz	wa                                    ; FB1C7D  extz WA
 	ld	bc, (xiz-30)                            ; FB1C7F  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1C82  extz XBC
@@ -2655,7 +2655,7 @@ VoiceParams_Compute_A__FB1B30:
 	pushw	3                                    ; FB1D45  push 0x0003
 	push	0                                     ; FB1D48  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FB1D4A  push (XIZ+0xf8)
-	call	0xFC4B2E                              ; FB1D4D  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB1D4D  call 0xfc4b2e
 	add	xsp, 22                                ; FB1D51  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB1D57  cp A,0
 	jr z, VoiceParams_Compute_A__FB1D64        ; FB1D59  jr Z,0xfb1d64
@@ -2690,7 +2690,7 @@ VoiceParams_Compute_A__FB1D93:
 VoiceParams_Compute_A__FB1DA1:
 	ld	xbc, (xiz+8)                            ; FB1DA1  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FB1DA4  push XBC
-	call	0xFA6BB5                              ; FB1DA5  call 0xfa6bb5
+	call	ChanAlloc_ForNoteRequest                              ; FB1DA5  call 0xfa6bb5
 	ld	xbc, 10                                 ; FB1DA9  ld XBC,0x0000000a
 	ld	(xiz-6), xbc                            ; FB1DAE  ld (XIZ+0xfa),XBC
 	ldw	ix, 0                                  ; FB1DB1  ld IX,0x0000
@@ -2716,7 +2716,7 @@ VoiceParams_Compute_A__FB1DB9:
 	extpfx3 0x9E, 0xF6, 0x80                   ; FB1DE1  add WA,(XIZ+0xf6)
 	extz	xwa                                   ; FB1DE4  extz XWA
 	push	xwa                                   ; FB1DE6  push XWA
-	call	0xF9A038                              ; FB1DE7  call 0xf9a038
+	call	MemCopyWords                              ; FB1DE7  call 0xf9a038
 	ld	bc, (xiz-8)                             ; FB1DEB  ld BC,(XIZ+0xf8)
 	extz	xbc                                   ; FB1DEE  extz XBC
 	ld	(xbc+0x3BCF), d                         ; FB1DF0  ld (XBC+0x3bcf),D
@@ -2724,7 +2724,7 @@ VoiceParams_Compute_A__FB1DB9:
 	push	d                                     ; FB1DF7  push D
 	push	0                                     ; FB1DF9  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB1DFB  push (XIZ+0x0c)
-	call	0xFC376C                              ; FB1DFE  call 0xfc376c
+	call	PartSlot_SetRecordPtr_DF05                              ; FB1DFE  call 0xfc376c
 	ld	bc, (xiz-10)                            ; FB1E02  ld BC,(XIZ+0xf6)
 	add	bc, 43                                 ; FB1E05  add BC,0x002b
 	extz	xbc                                   ; FB1E09  extz XBC
@@ -2839,83 +2839,83 @@ VoiceRegs_Stage_B:
 	pushw	bc                                   ; FB1EE1  push BC
 	ld	c, (xde+3)                              ; FB1EE2  ld C,(XDE+0x03)
 	pushw	bc                                   ; FB1EE5  push BC
-	call	0xFC4D63                              ; FB1EE6  call 0xfc4d63
+	call	Pack104_SetInputs_E088_E089_E08A                              ; FB1EE6  call 0xfc4d63
 	pushw	de                                   ; FB1EEA  push DE
-	call	0xFC7F03                              ; FB1EEB  call 0xfc7f03
+	call	sub_FC7F03                              ; FB1EEB  call 0xfc7f03
 	pushw	de                                   ; FB1EEF  push DE
-	call	0xFA826C                              ; FB1EF0  call 0xfa826c
+	call	Voice_StageRegs_0040_B                              ; FB1EF0  call 0xfa826c
 	pushw	de                                   ; FB1EF4  push DE
-	call	0xFA8323                              ; FB1EF5  call 0xfa8323
+	call	Voice_PitchAddZoneOffset_AB                              ; FB1EF5  call 0xfa8323
 	pushw	de                                   ; FB1EF9  push DE
-	call	0xFA8347                              ; FB1EFA  call 0xfa8347
+	call	Voice_StagePitch_Reg0400_AB                              ; FB1EFA  call 0xfa8347
 	pushw	de                                   ; FB1EFE  push DE
-	call	0xFA842D                              ; FB1EFF  call 0xfa842d
+	call	Voice_StageRegs_0900_0940_0980_AB                              ; FB1EFF  call 0xfa842d
 	pushw	de                                   ; FB1F03  push DE
-	call	0xFA8BDD                              ; FB1F04  call 0xfa8bdd
+	call	VoiceParam_DispatchOn_17_36                              ; FB1F04  call 0xfa8bdd
 	pushw	de                                   ; FB1F08  push DE
-	call	0xFA919B                              ; FB1F09  call 0xfa919b
+	call	Voice_StagePair_Reg0100_0140_AB                              ; FB1F09  call 0xfa919b
 	pushw	de                                   ; FB1F0D  push DE
-	call	0xFA93AF                              ; FB1F0E  call 0xfa93af
+	call	Voice_StageRegs_09C0_0A00_0A40_AB                              ; FB1F0E  call 0xfa93af
 	pushw	de                                   ; FB1F12  push DE
-	call	0xFA95D4                              ; FB1F13  call 0xfa95d4
+	call	Voice_StageRegs_0500_08C0_AB                              ; FB1F13  call 0xfa95d4
 	pushw	de                                   ; FB1F17  push DE
-	call	0xFA9915                              ; FB1F18  call 0xfa9915
+	call	Voice_StageChanSel_Reg0440_Reg0480                              ; FB1F18  call 0xfa9915
 	pushw	de                                   ; FB1F1C  push DE
-	call	0xFA9C60                              ; FB1F1D  call 0xfa9c60
+	call	Voice_StageRegs_0180_AB                              ; FB1F1D  call 0xfa9c60
 	pushw	de                                   ; FB1F21  push DE
-	call	0xFA9F19                              ; FB1F22  call 0xfa9f19
+	call	Voice_StageChanSel_Reg04C0                              ; FB1F22  call 0xfa9f19
 	pushw	de                                   ; FB1F26  push DE
-	call	0xFAA0BC                              ; FB1F27  call 0xfaa0bc
+	call	Voice_StageRegs_00C0_AB                              ; FB1F27  call 0xfaa0bc
 	pushw	de                                   ; FB1F2B  push DE
-	call	0xFAA2B6                              ; FB1F2C  call 0xfaa2b6
+	call	Voice_ComputeField0029_AB                              ; FB1F2C  call 0xfaa2b6
 	ld	bc, (xde+10)                            ; FB1F30  ld BC,(XDE+0x0a)
 	pushw	bc                                   ; FB1F33  push BC
 	ld	bc, (xde+6)                             ; FB1F34  ld BC,(XDE+0x06)
 	pushw	bc                                   ; FB1F37  push BC
-	call	0xFC4DA1                              ; FB1F38  call 0xfc4da1
+	call	Pack104_SetInputs_Rec0E_E08D                              ; FB1F38  call 0xfc4da1
 	lda	xbc, (0xD7A2:24)                       ; FB1F3C  lda XBC,0x00d7a2
 	push	xbc                                   ; FB1F41  push XBC
-	call	0xFC571A                              ; FB1F42  call 0xfc571a
+	call	Dev104_LoadStageBImage                              ; FB1F42  call 0xfc571a
 	lda	xbc, (0xD7A2:24)                       ; FB1F46  lda XBC,0x00d7a2
 	push	xbc                                   ; FB1F4B  push XBC
 	ld	a, h                                    ; FB1F4C  ld A,H
 	extz	wa                                    ; FB1F4E  extz WA
 	pushw	wa                                   ; FB1F50  push WA
-	call	0xFB77EF                              ; FB1F51  call 0xfb77ef
+	call	Dev104_WriteAllChanRegs                              ; FB1F51  call 0xfb77ef
 	ld	l, (xde+3)                              ; FB1F55  ld L,(XDE+0x03)
 	add	xsp, 50                                ; FB1F58  add XSP,0x00000032
 	pushw	de                                   ; FB1F5E  push DE
 	cp	l, 3:i3                                   ; FB1F5F  cp L,3
 	jr nc, VoiceRegs_Stage_B__FB1F7B           ; FB1F61  jr NC,0xfb1f7b
-	call	0xFAACEE                              ; FB1F63  call 0xfaacee
+	call	Voice_StageRegs_0800_B_ModeLt3                              ; FB1F63  call 0xfaacee
 	pushw	0                                    ; FB1F67  push 0x0000
 	pushw	de                                   ; FB1F6A  push DE
-	call	0xFAA87E                              ; FB1F6B  call 0xfaa87e
+	call	Voice_StageRegs_0840_0880_AB                              ; FB1F6B  call 0xfaa87e
 	pushw	de                                   ; FB1F6F  push DE
-	call	0xFAB5A5                              ; FB1F70  call 0xfab5a5
+	call	Voice_ComputeLevelBase_AB                              ; FB1F70  call 0xfab5a5
 	pushw	de                                   ; FB1F74  push DE
-	call	0xFC3595                              ; FB1F75  call 0xfc3595
+	call	SlotRec_AddToArgField_000C                              ; FB1F75  call 0xfc3595
 	jr VoiceRegs_Stage_B__FB1F91               ; FB1F79  jr T,0xfb1f91
 VoiceRegs_Stage_B__FB1F7B:
-	call	0xFAB0BD                              ; FB1F7B  call 0xfab0bd
+	call	Voice_StageRegs_0800_B_ModeGe3                              ; FB1F7B  call 0xfab0bd
 	pushw	0                                    ; FB1F7F  push 0x0000
 	pushw	de                                   ; FB1F82  push DE
-	call	0xFAA87E                              ; FB1F83  call 0xfaa87e
+	call	Voice_StageRegs_0840_0880_AB                              ; FB1F83  call 0xfaa87e
 	pushw	de                                   ; FB1F87  push DE
-	call	0xFAB5A5                              ; FB1F88  call 0xfab5a5
+	call	Voice_ComputeLevelBase_AB                              ; FB1F88  call 0xfab5a5
 	pushw	de                                   ; FB1F8C  push DE
-	call	0xFC35DB                              ; FB1F8D  call 0xfc35db
+	call	sub_FC35DB                              ; FB1F8D  call 0xfc35db
 VoiceRegs_Stage_B__FB1F91:
 	inc	8, xsp                                 ; FB1F91  inc 0,XSP
 	inc	2, xsp                                 ; FB1F93  inc 2,XSP
 	pushw	de                                   ; FB1F95  push DE
-	call	0xFAB79D                              ; FB1F96  call 0xfab79d
+	call	Voice_StageLevel_Reg0080_AB                              ; FB1F96  call 0xfab79d
 	lda	xbc, (0xD75E:24)                       ; FB1F9A  lda XBC,0x00d75e
 	push	xbc                                   ; FB1F9F  push XBC
 	ld	a, h                                    ; FB1FA0  ld A,H
 	extz	wa                                    ; FB1FA2  extz WA
 	pushw	wa                                   ; FB1FA4  push WA
-	call	0xFB713A                              ; FB1FA5  call 0xfb713a
+	call	Dev10C_WriteAllChanRegs                              ; FB1FA5  call 0xfb713a
 	inc	8, xsp                                 ; FB1FA9  inc 0,XSP
 	popw	ix                                    ; FB1FAB  pop IX
 	pop	xde                                    ; FB1FAC  pop XDE
@@ -2958,7 +2958,7 @@ sub_FB1FB1:
 	pushw	wa                                   ; FB1FEE  push WA
 	push	0                                     ; FB1FEF  push 0x00
 	push	w                                     ; FB1FF1  push W
-	call	0xFCB23C                              ; FB1FF3  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB1FF3  call 0xfcb23c
 	ld	d, a                                    ; FB1FF7  ld D,A
 	ld	bc, ix                                  ; FB1FF9  ld BC,IX
 	inc	6, bc                                  ; FB1FFB  inc 6,BC
@@ -3054,7 +3054,7 @@ sub_FB1FB1__FB20A7:
 	ld	(xhl+31), xix                           ; FB20F4  ld (XHL+0x1f),XIX
 	ld	(xhl+37), de                            ; FB20F7  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB20FA  push HL
-	call	0xFA7F28                              ; FB20FB  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB20FB  call 0xfa7f28
 	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB20FF  ld (XHL+0x2b),0x0000
 	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB2104  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB2109  ld (XHL+0x31),0x00
@@ -3120,7 +3120,7 @@ VoiceParams_Compute_B:
 	push	xix                                   ; FB2178  push XIX
 	push	0                                     ; FB2179  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB217B  push (XIZ+0x0c)
-	call	0xFC382A                              ; FB217E  call 0xfc382a
+	call	sub_FC382A                              ; FB217E  call 0xfc382a
 	ld	ix, (xiz+12)                            ; FB2182  ld IX,(XIZ+0x0c)
 	extz	ix                                    ; FB2185  extz IX
 	ld	bc, ix                                  ; FB2187  ld BC,IX
@@ -3145,7 +3145,7 @@ VoiceParams_Compute_B:
 	push	0                                     ; FB21BE  push 0x00
 	push	w                                     ; FB21C0  push W
 	pushw	wa                                   ; FB21C2  push WA
-	call	0xFCB23C                              ; FB21C3  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB21C3  call 0xfcb23c
 	ld	d, a                                    ; FB21C7  ld D,A
 	ld	bc, ix                                  ; FB21C9  ld BC,IX
 	inc	6, bc                                  ; FB21CB  inc 6,BC
@@ -3232,7 +3232,7 @@ VoiceParams_Compute_B__FB2263:
 	ld	(xhl+31), xix                           ; FB22AE  ld (XHL+0x1f),XIX
 	ld	(xhl+37), de                            ; FB22B1  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB22B4  push HL
-	call	0xFA7F28                              ; FB22B5  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB22B5  call 0xfa7f28
 	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB22B9  ld (XHL+0x2b),0x0000
 	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB22BE  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB22C3  ld (XHL+0x31),0x00
@@ -3269,7 +3269,7 @@ VoiceParams_Compute_B__FB22FE:
 	push	0                                     ; FB2322  push 0x00
 	push	w                                     ; FB2324  push W
 	pushw	wa                                   ; FB2326  push WA
-	call	0xFCB23C                              ; FB2327  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB2327  call 0xfcb23c
 	ld	d, a                                    ; FB232B  ld D,A
 	ld	bc, ix                                  ; FB232D  ld BC,IX
 	inc	6, bc                                  ; FB232F  inc 6,BC
@@ -3361,7 +3361,7 @@ VoiceParams_Compute_B__FB23DA:
 	ld	(xhl+31), xix                           ; FB2425  ld (XHL+0x1f),XIX
 	ld	(xhl+37), de                            ; FB2428  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB242B  push HL
-	call	0xFA7F28                              ; FB242C  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB242C  call 0xfa7f28
 	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB2430  ld (XHL+0x2b),0x0000
 	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB2435  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB243A  ld (XHL+0x31),0x00
@@ -3398,7 +3398,7 @@ VoiceParams_Compute_B__FB2475:
 	push	0                                     ; FB2499  push 0x00
 	push	w                                     ; FB249B  push W
 	pushw	wa                                   ; FB249D  push WA
-	call	0xFCB23C                              ; FB249E  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB249E  call 0xfcb23c
 	ld	d, a                                    ; FB24A2  ld D,A
 	ld	bc, ix                                  ; FB24A4  ld BC,IX
 	inc	6, bc                                  ; FB24A6  inc 6,BC
@@ -3490,7 +3490,7 @@ VoiceParams_Compute_B__FB2553:
 	ld	(xhl+31), xix                           ; FB259E  ld (XHL+0x1f),XIX
 	ld	(xhl+37), de                            ; FB25A1  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB25A4  push HL
-	call	0xFA7F28                              ; FB25A5  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB25A5  call 0xfa7f28
 	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB25A9  ld (XHL+0x2b),0x0000
 	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB25AE  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB25B3  ld (XHL+0x31),0x00
@@ -3536,7 +3536,7 @@ VoiceParams_Compute_B__FB2607:
 	push	0                                     ; FB262B  push 0x00
 	push	w                                     ; FB262D  push W
 	pushw	wa                                   ; FB262F  push WA
-	call	0xFCB23C                              ; FB2630  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB2630  call 0xfcb23c
 	ld	d, a                                    ; FB2634  ld D,A
 	ld	bc, ix                                  ; FB2636  ld BC,IX
 	inc	6, bc                                  ; FB2638  inc 6,BC
@@ -3628,7 +3628,7 @@ VoiceParams_Compute_B__FB26E5:
 	ld	(xhl+31), xix                           ; FB2730  ld (XHL+0x1f),XIX
 	ld	(xhl+37), de                            ; FB2733  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB2736  push HL
-	call	0xFA7F28                              ; FB2737  call 0xfa7f28
+	call	Voice_ComputePitch                              ; FB2737  call 0xfa7f28
 	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB273B  ld (XHL+0x2b),0x0000
 	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB2740  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB2745  ld (XHL+0x31),0x00
@@ -3653,7 +3653,7 @@ VoiceParams_Compute_B__FB2779:
 VoiceParams_Compute_B__FB2780:
 	ld	xbc, (xiz+8)                            ; FB2780  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FB2783  push XBC
-	call	0xFA6BB5                              ; FB2784  call 0xfa6bb5
+	call	ChanAlloc_ForNoteRequest                              ; FB2784  call 0xfa6bb5
 	ld	xix, 10                                 ; FB2788  ld XIX,0x0000000a
 	ldw	de, 0                                  ; FB278D  ld DE,0x0000
 	ld	l, 4:opc                                   ; FB2790  ld L,0x04
@@ -3677,7 +3677,7 @@ VoiceParams_Compute_B__FB2793:
 	extpfx3 0x9E, 0xF4, 0x80                   ; FB27B7  add WA,(XIZ+0xf4)
 	extz	xwa                                   ; FB27BA  extz XWA
 	push	xwa                                   ; FB27BC  push XWA
-	call	0xF9A038                              ; FB27BD  call 0xf9a038
+	call	MemCopyWords                              ; FB27BD  call 0xf9a038
 	ld	bc, (xiz-10)                            ; FB27C1  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FB27C4  extz XBC
 	ld	(xbc+0x3BCF), h                         ; FB27C6  ld (XBC+0x3bcf),H
@@ -3685,7 +3685,7 @@ VoiceParams_Compute_B__FB2793:
 	push	h                                     ; FB27CD  push H
 	push	0                                     ; FB27CF  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB27D1  push (XIZ+0x0c)
-	call	0xFC376C                              ; FB27D4  call 0xfc376c
+	call	PartSlot_SetRecordPtr_DF05                              ; FB27D4  call 0xfc376c
 	inc	8, xsp                                 ; FB27D8  inc 0,XSP
 	inc	6, xsp                                 ; FB27DA  inc 6,XSP
 VoiceParams_Compute_B__FB27DC:
@@ -3738,52 +3738,52 @@ VoiceRegs_Stage_C:
 	pushw	bc                                   ; FB2811  push BC
 	ld	c, (xde+3)                              ; FB2812  ld C,(XDE+0x03)
 	pushw	bc                                   ; FB2815  push BC
-	call	0xFC4D63                              ; FB2816  call 0xfc4d63
+	call	Pack104_SetInputs_E088_E089_E08A                              ; FB2816  call 0xfc4d63
 	pushw	de                                   ; FB281A  push DE
-	call	0xFC7F7A                              ; FB281B  call 0xfc7f7a
+	call	sub_FC7F7A                              ; FB281B  call 0xfc7f7a
 	pushw	de                                   ; FB281F  push DE
-	call	0xFA819A                              ; FB2820  call 0xfa819a
+	call	Voice_SelectKeyZone_Reg0040                              ; FB2820  call 0xfa819a
 	pushw	de                                   ; FB2824  push DE
-	call	0xFA83A8                              ; FB2825  call 0xfa83a8
+	call	Voice_PitchAddZoneOffset_CD                              ; FB2825  call 0xfa83a8
 	pushw	de                                   ; FB2829  push DE
-	call	0xFA83CC                              ; FB282A  call 0xfa83cc
+	call	Voice_StagePitch_Reg0400_CD                              ; FB282A  call 0xfa83cc
 	pushw	de                                   ; FB282E  push DE
-	call	0xFA900A                              ; FB282F  call 0xfa900a
+	call	VoiceParam_DispatchOn_17_11                              ; FB282F  call 0xfa900a
 	pushw	de                                   ; FB2833  push DE
-	call	0xFA92A5                              ; FB2834  call 0xfa92a5
+	call	Voice_StagePair_Reg0100_0140_CD                              ; FB2834  call 0xfa92a5
 	pushw	de                                   ; FB2838  push DE
-	call	0xFAA1A5                              ; FB2839  call 0xfaa1a5
+	call	Voice_StageRegs_00C0_CD                              ; FB2839  call 0xfaa1a5
 	pushw	de                                   ; FB283D  push DE
-	call	0xFAA3EB                              ; FB283E  call 0xfaa3eb
+	call	Voice_ComputeField0029_CD                              ; FB283E  call 0xfaa3eb
 	pushw	de                                   ; FB2842  push DE
-	call	0xFAA96C                              ; FB2843  call 0xfaa96c
+	call	Voice_StageRegs_0800_CD                              ; FB2843  call 0xfaa96c
 	pushw	0                                    ; FB2847  push 0x0000
 	pushw	de                                   ; FB284A  push DE
-	call	0xFAAC00                              ; FB284B  call 0xfaac00
+	call	Voice_StageRegs_0840_0880_CD                              ; FB284B  call 0xfaac00
 	pushw	de                                   ; FB284F  push DE
-	call	0xFA96F7                              ; FB2850  call 0xfa96f7
+	call	Voice_StageRegs_CD                              ; FB2850  call 0xfa96f7
 	ld	bc, (xde+10)                            ; FB2854  ld BC,(XDE+0x0a)
 	pushw	bc                                   ; FB2857  push BC
 	ld	bc, (xde+6)                             ; FB2858  ld BC,(XDE+0x06)
 	pushw	bc                                   ; FB285B  push BC
-	call	0xFC4DA1                              ; FB285C  call 0xfc4da1
+	call	Pack104_SetInputs_Rec0E_E08D                              ; FB285C  call 0xfc4da1
 	lda	xbc, (0xD7A2:24)                       ; FB2860  lda XBC,0x00d7a2
 	push	xbc                                   ; FB2865  push XBC
-	call	0xFC4DBD                              ; FB2866  call 0xfc4dbd
+	call	Dev104_PackStagingStruct                              ; FB2866  call 0xfc4dbd
 	lda	xbc, (0xD7A2:24)                       ; FB286A  lda XBC,0x00d7a2
 	push	xbc                                   ; FB286F  push XBC
 	ld	hl, (xiz+8)                             ; FB2870  ld HL,(XIZ+0x08)
 	extz	hl                                    ; FB2873  extz HL
 	pushw	hl                                   ; FB2875  push HL
-	call	0xFB77EF                              ; FB2876  call 0xfb77ef
+	call	Dev104_WriteAllChanRegs                              ; FB2876  call 0xfb77ef
 	pushw	de                                   ; FB287A  push DE
-	call	0xFAB6D5                              ; FB287B  call 0xfab6d5
+	call	Voice_ComputeLevelBase_CD                              ; FB287B  call 0xfab6d5
 	pushw	de                                   ; FB287F  push DE
-	call	0xFAB7E0                              ; FB2880  call 0xfab7e0
+	call	Voice_StageLevel_Reg0080_CD                              ; FB2880  call 0xfab7e0
 	lda	xbc, (0xD75E:24)                       ; FB2884  lda XBC,0x00d75e
 	push	xbc                                   ; FB2889  push XBC
 	pushw	hl                                   ; FB288A  push HL
-	call	0xFB713A                              ; FB288B  call 0xfb713a
+	call	Dev10C_WriteAllChanRegs                              ; FB288B  call 0xfb713a
 	add	xsp, 56                                ; FB288F  add XSP,0x00000038
 	pop	xde                                    ; FB2895  pop XDE
 	popw	hl                                    ; FB2896  pop HL
@@ -3815,7 +3815,7 @@ sub_FB289A:
 	push	xwa                                   ; FB28C0  push XWA
 	push	0                                     ; FB28C1  push 0x00
 	push	d                                     ; FB28C3  push D
-	call	0xFB49EB                              ; FB28C5  call 0xfb49eb
+	call	Part_ResolveDrumInstrumentRecord                              ; FB28C5  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FB28C9  ld (XIZ+0xf8),XIY
 	ld	c, 23:opc                                  ; FB28CC  ld C,0x17
 	mul8rr	c, e                                ; FB28CE  mul BC,E
@@ -3830,7 +3830,7 @@ sub_FB289A:
 	pushw	de                                   ; FB28E6  push DE
 	push	0                                     ; FB28E7  push 0x00
 	push	d                                     ; FB28E9  push D
-	call	0xFB456F                              ; FB28EB  call 0xfb456f
+	call	Part_GetPercWaveSelectRecord                              ; FB28EB  call 0xfb456f
 	ld	xix, xiy                                ; FB28EF  ld XIX,XIY
 	ld	xbc, (xiz-8)                            ; FB28F1  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+13)                             ; FB28F4  ld A,(XBC+0x0d)
@@ -3842,11 +3842,11 @@ sub_FB289A:
 	push	xiy                                   ; FB2907  push XIY
 	push	0                                     ; FB2908  push 0x00
 	extpfx3 0x8E, 0x14, 0x04                   ; FB290A  push (XIZ+0x14)
-	call	0xFA72B3                              ; FB290D  call 0xfa72b3
+	call	VelSplit_LayerFromVelocity_b                              ; FB290D  call 0xfa72b3
 	ld	(xiz-10), a                             ; FB2911  ld (XIZ+0xf6),A
 	push	xix                                   ; FB2914  push XIX
 	pushw	wa                                   ; FB2915  push WA
-	call	0xFB474E                              ; FB2916  call 0xfb474e
+	call	WaveSelRec_ResolveEnvDescriptor                              ; FB2916  call 0xfb474e
 	ld	(xiz-14), xiy                           ; FB291A  ld (XIZ+0xf2),XIY
 	ld	c, 68:opc                                  ; FB291D  ld C,0x44
 	mul8rr	c, e                                ; FB291F  mul BC,E
@@ -3911,7 +3911,7 @@ sub_FB289A:
 	ld	xwa, (xiz-14)                           ; FB29BF  ld XWA,(XIZ+0xf2)
 	ld	(xbc+31), xwa                           ; FB29C2  ld (XBC+0x1f),XWA
 	extpfx3 0x9E, 0xEE, 0x04                   ; FB29C5  pushw (XIZ+0xee)
-	call	0xFA814C                              ; FB29C8  call 0xfa814c
+	call	Voice_ComputePitch_FromToneRecord                              ; FB29C8  call 0xfa814c
 	ld	bc, (xiz-18)                            ; FB29CC  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB29CF  extz XBC
 	extpfx5 0xB9, 0x2B, 0x02, 0x00, 0x00       ; FB29D1  ld (XBC+0x2b),0x0000
@@ -3935,7 +3935,7 @@ sub_FB289A:
 	pushw	de                                   ; FB2A0B  push DE
 	push	0                                     ; FB2A0C  push 0x00
 	push	d                                     ; FB2A0E  push D
-	call	0xFC6803                              ; FB2A10  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB2A10  call 0xfc6803
 	ld	h, (xiz+22)                             ; FB2A14  ld H,(XIZ+0x16)
 	set	7, h                                   ; FB2A17  set 0x07,H
 	ld	c, e                                    ; FB2A1A  ld C,E
@@ -3954,7 +3954,7 @@ sub_FB289A:
 	pushw	de                                   ; FB2A37  push DE
 	push	0                                     ; FB2A38  push 0x00
 	push	d                                     ; FB2A3A  push D
-	call	0xFC4B2E                              ; FB2A3C  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB2A3C  call 0xfc4b2e
 	ld	h, a                                    ; FB2A40  ld H,A
 	ld	xix, (xiz-28)                           ; FB2A42  ld XIX,(XIZ+0xe4)
 	inc	6, xix                                 ; FB2A45  inc 6,XIX
@@ -3987,7 +3987,7 @@ sub_FB289A__FB2A65:
 	pushw	de                                   ; FB2A85  push DE
 	push	0                                     ; FB2A86  push 0x00
 	push	d                                     ; FB2A88  push D
-	call	0xFC6803                              ; FB2A8A  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB2A8A  call 0xfc6803
 	inc	8, xsp                                 ; FB2A8E  inc 0,XSP
 	inc	2, xsp                                 ; FB2A90  inc 2,XSP
 sub_FB289A__FB2A92:
@@ -4032,7 +4032,7 @@ VoiceParams_Compute_C:
 	push	xwa                                   ; FB2AD1  push XWA
 	push	0                                     ; FB2AD2  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2AD4  push (XIZ+0x0c)
-	call	0xFB49EB                              ; FB2AD7  call 0xfb49eb
+	call	Part_ResolveDrumInstrumentRecord                              ; FB2AD7  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FB2ADB  ld (XIZ+0xf8),XIY
 	add	xiy, 18                                ; FB2ADE  add XIY,0x00000012
 	ld	(xiz-4), xiy                            ; FB2AE4  ld (XIZ+0xfc),XIY
@@ -4043,7 +4043,7 @@ VoiceParams_Compute_C:
 	pushw	0                                    ; FB2AF0  push 0x0000
 	push	0                                     ; FB2AF3  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2AF5  push (XIZ+0x0c)
-	call	0xFB456F                              ; FB2AF8  call 0xfb456f
+	call	Part_GetPercWaveSelectRecord                              ; FB2AF8  call 0xfb456f
 	ld	xix, xiy                                ; FB2AFC  ld XIX,XIY
 	ld	xbc, (xiz-8)                            ; FB2AFE  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+13)                             ; FB2B01  ld A,(XBC+0x0d)
@@ -4055,11 +4055,11 @@ VoiceParams_Compute_C:
 	push	xiy                                   ; FB2B15  push XIY
 	push	0                                     ; FB2B16  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FB2B18  push (XIZ+0x10)
-	call	0xFA72B3                              ; FB2B1B  call 0xfa72b3
+	call	VelSplit_LayerFromVelocity_b                              ; FB2B1B  call 0xfa72b3
 	ld	d, a                                    ; FB2B1F  ld D,A
 	push	xix                                   ; FB2B21  push XIX
 	pushw	wa                                   ; FB2B22  push WA
-	call	0xFB474E                              ; FB2B23  call 0xfb474e
+	call	WaveSelRec_ResolveEnvDescriptor                              ; FB2B23  call 0xfb474e
 	ld	(xiz-12), xiy                           ; FB2B27  ld (XIZ+0xf4),XIY
 	ldw	bc, 0x5A53                             ; FB2B2A  ld BC,0x5a53
 	ld	(xiz-14), bc                            ; FB2B2D  ld (XIZ+0xf2),BC
@@ -4117,7 +4117,7 @@ VoiceParams_Compute_C:
 	ld	xwa, (xiz-12)                           ; FB2BB7  ld XWA,(XIZ+0xf4)
 	ld	(xbc+31), xwa                           ; FB2BBA  ld (XBC+0x1f),XWA
 	extpfx3 0x9E, 0xF2, 0x04                   ; FB2BBD  pushw (XIZ+0xf2)
-	call	0xFA814C                              ; FB2BC0  call 0xfa814c
+	call	Voice_ComputePitch_FromToneRecord                              ; FB2BC0  call 0xfa814c
 	ld	bc, (xiz-14)                            ; FB2BC4  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2BC7  extz XBC
 	extpfx5 0xB9, 0x2B, 0x02, 0x00, 0x00       ; FB2BC9  ld (XBC+0x2b),0x0000
@@ -4141,7 +4141,7 @@ VoiceParams_Compute_C:
 	pushw	0                                    ; FB2C03  push 0x0000
 	push	0                                     ; FB2C06  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2C08  push (XIZ+0x0c)
-	call	0xFC6803                              ; FB2C0B  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB2C0B  call 0xfc6803
 	ld	xbc, (xiz+8)                            ; FB2C0F  ld XBC,(XIZ+0x08)
 	ld	(xbc+2), 0x80                           ; FB2C12  ld (XBC+0x02),0x80
 	ld	bc, (xiz-14)                            ; FB2C16  ld BC,(XIZ+0xf2)
@@ -4153,7 +4153,7 @@ VoiceParams_Compute_C:
 	pushw	0                                    ; FB2C23  push 0x0000
 	push	0                                     ; FB2C26  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2C28  push (XIZ+0x0c)
-	call	0xFC4B2E                              ; FB2C2B  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB2C2B  call 0xfc4b2e
 	add	xsp, 32                                ; FB2C2F  add XSP,0x00000020
 	cp	a, 0:i3                                   ; FB2C35  cp A,0
 	jr z, VoiceParams_Compute_C__FB2C42        ; FB2C37  jr Z,0xfb2c42
@@ -4174,7 +4174,7 @@ VoiceParams_Compute_C__FB2C4B:
 	pushw	0                                    ; FB2C5D  push 0x0000
 	push	0                                     ; FB2C60  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2C62  push (XIZ+0x0c)
-	call	0xFC6803                              ; FB2C65  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB2C65  call 0xfc6803
 	inc	8, xsp                                 ; FB2C69  inc 0,XSP
 	inc	2, xsp                                 ; FB2C6B  inc 2,XSP
 VoiceParams_Compute_C__FB2C6D:
@@ -4190,7 +4190,7 @@ VoiceParams_Compute_C__FB2C6D:
 	push	xwa                                   ; FB2C87  push XWA
 	push	0                                     ; FB2C88  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2C8A  push (XIZ+0x0c)
-	call	0xFB49EB                              ; FB2C8D  call 0xfb49eb
+	call	Part_ResolveDrumInstrumentRecord                              ; FB2C8D  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FB2C91  ld (XIZ+0xf8),XIY
 	add	xiy, 41                                ; FB2C94  add XIY,0x00000029
 	ld	(xiz-4), xiy                            ; FB2C9A  ld (XIZ+0xfc),XIY
@@ -4201,7 +4201,7 @@ VoiceParams_Compute_C__FB2C6D:
 	pushw	1                                    ; FB2CA6  push 0x0001
 	push	0                                     ; FB2CA9  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2CAB  push (XIZ+0x0c)
-	call	0xFB456F                              ; FB2CAE  call 0xfb456f
+	call	Part_GetPercWaveSelectRecord                              ; FB2CAE  call 0xfb456f
 	ld	xix, xiy                                ; FB2CB2  ld XIX,XIY
 	ld	xbc, (xiz-8)                            ; FB2CB4  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+13)                             ; FB2CB7  ld A,(XBC+0x0d)
@@ -4213,11 +4213,11 @@ VoiceParams_Compute_C__FB2C6D:
 	push	xiy                                   ; FB2CCB  push XIY
 	push	0                                     ; FB2CCC  push 0x00
 	extpfx3 0x8E, 0x10, 0x04                   ; FB2CCE  push (XIZ+0x10)
-	call	0xFA72B3                              ; FB2CD1  call 0xfa72b3
+	call	VelSplit_LayerFromVelocity_b                              ; FB2CD1  call 0xfa72b3
 	ld	d, a                                    ; FB2CD5  ld D,A
 	push	xix                                   ; FB2CD7  push XIX
 	pushw	wa                                   ; FB2CD8  push WA
-	call	0xFB474E                              ; FB2CD9  call 0xfb474e
+	call	WaveSelRec_ResolveEnvDescriptor                              ; FB2CD9  call 0xfb474e
 	ld	(xiz-12), xiy                           ; FB2CDD  ld (XIZ+0xf4),XIY
 	ldw	bc, 0x5A53                             ; FB2CE0  ld BC,0x5a53
 	ld	(xiz-14), bc                            ; FB2CE3  ld (XIZ+0xf2),BC
@@ -4278,7 +4278,7 @@ VoiceParams_Compute_C__FB2C6D:
 	ld	xwa, (xiz-12)                           ; FB2D77  ld XWA,(XIZ+0xf4)
 	ld	(xbc+99), xwa                           ; FB2D7A  ld (XBC+0x63),XWA
 	extpfx3 0x9E, 0xF0, 0x04                   ; FB2D7D  pushw (XIZ+0xf0)
-	call	0xFA814C                              ; FB2D80  call 0xfa814c
+	call	Voice_ComputePitch_FromToneRecord                              ; FB2D80  call 0xfa814c
 	ld	bc, (xiz-14)                            ; FB2D84  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2D87  extz XBC
 	extpfx5 0xB9, 0x6F, 0x02, 0x00, 0x00       ; FB2D89  ld (XBC+0x6f),0x0000
@@ -4302,7 +4302,7 @@ VoiceParams_Compute_C__FB2C6D:
 	pushw	1                                    ; FB2DC3  push 0x0001
 	push	0                                     ; FB2DC6  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2DC8  push (XIZ+0x0c)
-	call	0xFC6803                              ; FB2DCB  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB2DCB  call 0xfc6803
 	ld	xbc, (xiz+8)                            ; FB2DCF  ld XBC,(XIZ+0x08)
 	ld	(xbc+3), 0x81                           ; FB2DD2  ld (XBC+0x03),0x81
 	ld	bc, (xiz-14)                            ; FB2DD6  ld BC,(XIZ+0xf2)
@@ -4314,7 +4314,7 @@ VoiceParams_Compute_C__FB2C6D:
 	pushw	1                                    ; FB2DE3  push 0x0001
 	push	0                                     ; FB2DE6  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2DE8  push (XIZ+0x0c)
-	call	0xFC4B2E                              ; FB2DEB  call 0xfc4b2e
+	call	sub_FC4B2E                              ; FB2DEB  call 0xfc4b2e
 	add	xsp, 32                                ; FB2DEF  add XSP,0x00000020
 	cp	a, 0:i3                                   ; FB2DF5  cp A,0
 	jr z, VoiceParams_Compute_C__FB2E02        ; FB2DF7  jr Z,0xfb2e02
@@ -4335,7 +4335,7 @@ VoiceParams_Compute_C__FB2E0B:
 	pushw	1                                    ; FB2E1D  push 0x0001
 	push	0                                     ; FB2E20  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2E22  push (XIZ+0x0c)
-	call	0xFC6803                              ; FB2E25  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB2E25  call 0xfc6803
 	inc	8, xsp                                 ; FB2E29  inc 0,XSP
 	inc	2, xsp                                 ; FB2E2B  inc 2,XSP
 VoiceParams_Compute_C__FB2E2D:
@@ -4349,7 +4349,7 @@ VoiceParams_Compute_C__FB2E2D:
 	ld	(xbc+9), 0                              ; FB2E45  ld (XBC+0x09),0x00
 	ld	xbc, (xiz+8)                            ; FB2E49  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FB2E4C  push XBC
-	call	0xFA6BB5                              ; FB2E4D  call 0xfa6bb5
+	call	ChanAlloc_ForNoteRequest                              ; FB2E4D  call 0xfa6bb5
 	ld	xix, 10                                 ; FB2E51  ld XIX,0x0000000a
 	ldw	de, 0                                  ; FB2E56  ld DE,0x0000
 	ld	l, 2:opc                                   ; FB2E59  ld L,0x02
@@ -4373,7 +4373,7 @@ VoiceParams_Compute_C__FB2E5C:
 	extpfx3 0x9E, 0xF4, 0x80                   ; FB2E80  add WA,(XIZ+0xf4)
 	extz	xwa                                   ; FB2E83  extz XWA
 	push	xwa                                   ; FB2E85  push XWA
-	call	0xF9A038                              ; FB2E86  call 0xf9a038
+	call	MemCopyWords                              ; FB2E86  call 0xf9a038
 	ld	bc, (xiz-10)                            ; FB2E8A  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FB2E8D  extz XBC
 	ld	(xbc+0x3BCF), h                         ; FB2E8F  ld (XBC+0x3bcf),H
@@ -4381,7 +4381,7 @@ VoiceParams_Compute_C__FB2E5C:
 	push	h                                     ; FB2E96  push H
 	push	0                                     ; FB2E98  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB2E9A  push (XIZ+0x0c)
-	call	0xFC376C                              ; FB2E9D  call 0xfc376c
+	call	PartSlot_SetRecordPtr_DF05                              ; FB2E9D  call 0xfc376c
 	inc	8, xsp                                 ; FB2EA1  inc 0,XSP
 	inc	6, xsp                                 ; FB2EA3  inc 6,XSP
 VoiceParams_Compute_C__FB2EA5:
@@ -4427,58 +4427,58 @@ VoiceRegs_Stage_D:
 	pushw	bc                                   ; FB2EDA  push BC
 	ld	c, (xde+3)                              ; FB2EDB  ld C,(XDE+0x03)
 	pushw	bc                                   ; FB2EDE  push BC
-	call	0xFC4D63                              ; FB2EDF  call 0xfc4d63
+	call	Pack104_SetInputs_E088_E089_E08A                              ; FB2EDF  call 0xfc4d63
 	pushw	de                                   ; FB2EE3  push DE
-	call	0xFC7F7A                              ; FB2EE4  call 0xfc7f7a
+	call	sub_FC7F7A                              ; FB2EE4  call 0xfc7f7a
 	pushw	de                                   ; FB2EE8  push DE
-	call	0xFA819A                              ; FB2EE9  call 0xfa819a
+	call	Voice_SelectKeyZone_Reg0040                              ; FB2EE9  call 0xfa819a
 	lda	xbc, (0xD75E:24)                       ; FB2EED  lda XBC,0x00d75e
 	inc	2, xbc                                 ; FB2EF2  inc 2,XBC
 	push	xbc                                   ; FB2EF4  push XBC
-	call	0xFC369F                              ; FB2EF5  call 0xfc369f
+	call	Word_AddTickLow3                              ; FB2EF5  call 0xfc369f
 	pushw	de                                   ; FB2EF9  push DE
-	call	0xFA83A8                              ; FB2EFA  call 0xfa83a8
+	call	Voice_PitchAddZoneOffset_CD                              ; FB2EFA  call 0xfa83a8
 	pushw	de                                   ; FB2EFE  push DE
-	call	0xFA83CC                              ; FB2EFF  call 0xfa83cc
+	call	Voice_StagePitch_Reg0400_CD                              ; FB2EFF  call 0xfa83cc
 	pushw	de                                   ; FB2F03  push DE
-	call	0xFA900A                              ; FB2F04  call 0xfa900a
+	call	VoiceParam_DispatchOn_17_11                              ; FB2F04  call 0xfa900a
 	pushw	de                                   ; FB2F08  push DE
-	call	0xFA92A5                              ; FB2F09  call 0xfa92a5
+	call	Voice_StagePair_Reg0100_0140_CD                              ; FB2F09  call 0xfa92a5
 	pushw	de                                   ; FB2F0D  push DE
-	call	0xFAA1A5                              ; FB2F0E  call 0xfaa1a5
+	call	Voice_StageRegs_00C0_CD                              ; FB2F0E  call 0xfaa1a5
 	pushw	de                                   ; FB2F12  push DE
-	call	0xFAA3EB                              ; FB2F13  call 0xfaa3eb
+	call	Voice_ComputeField0029_CD                              ; FB2F13  call 0xfaa3eb
 	pushw	de                                   ; FB2F17  push DE
-	call	0xFAA96C                              ; FB2F18  call 0xfaa96c
+	call	Voice_StageRegs_0800_CD                              ; FB2F18  call 0xfaa96c
 	pushw	0                                    ; FB2F1C  push 0x0000
 	pushw	de                                   ; FB2F1F  push DE
-	call	0xFAAC00                              ; FB2F20  call 0xfaac00
+	call	Voice_StageRegs_0840_0880_CD                              ; FB2F20  call 0xfaac00
 	pushw	de                                   ; FB2F24  push DE
-	call	0xFA96F7                              ; FB2F25  call 0xfa96f7
+	call	Voice_StageRegs_CD                              ; FB2F25  call 0xfa96f7
 	ld	bc, (xde+10)                            ; FB2F29  ld BC,(XDE+0x0a)
 	pushw	bc                                   ; FB2F2C  push BC
 	ld	bc, (xde+6)                             ; FB2F2D  ld BC,(XDE+0x06)
 	pushw	bc                                   ; FB2F30  push BC
-	call	0xFC4DA1                              ; FB2F31  call 0xfc4da1
+	call	Pack104_SetInputs_Rec0E_E08D                              ; FB2F31  call 0xfc4da1
 	lda	xbc, (0xD7A2:24)                       ; FB2F35  lda XBC,0x00d7a2
 	push	xbc                                   ; FB2F3A  push XBC
-	call	0xFC4DBD                              ; FB2F3B  call 0xfc4dbd
+	call	Dev104_PackStagingStruct                              ; FB2F3B  call 0xfc4dbd
 	lda	xbc, (0xD7A2:24)                       ; FB2F3F  lda XBC,0x00d7a2
 	push	xbc                                   ; FB2F44  push XBC
 	ld	hl, (xiz+8)                             ; FB2F45  ld HL,(XIZ+0x08)
 	extz	hl                                    ; FB2F48  extz HL
 	pushw	hl                                   ; FB2F4A  push HL
-	call	0xFB77EF                              ; FB2F4B  call 0xfb77ef
+	call	Dev104_WriteAllChanRegs                              ; FB2F4B  call 0xfb77ef
 	pushw	de                                   ; FB2F4F  push DE
-	call	0xFAB6D5                              ; FB2F50  call 0xfab6d5
+	call	Voice_ComputeLevelBase_CD                              ; FB2F50  call 0xfab6d5
 	pushw	de                                   ; FB2F54  push DE
-	call	0xFC35B8                              ; FB2F55  call 0xfc35b8
+	call	SlotRec_AddToArgField_000E                              ; FB2F55  call 0xfc35b8
 	pushw	de                                   ; FB2F59  push DE
-	call	0xFAB7E0                              ; FB2F5A  call 0xfab7e0
+	call	Voice_StageLevel_Reg0080_CD                              ; FB2F5A  call 0xfab7e0
 	lda	xbc, (0xD75E:24)                       ; FB2F5E  lda XBC,0x00d75e
 	push	xbc                                   ; FB2F63  push XBC
 	pushw	hl                                   ; FB2F64  push HL
-	call	0xFB713A                              ; FB2F65  call 0xfb713a
+	call	Dev10C_WriteAllChanRegs                              ; FB2F65  call 0xfb713a
 	add	xsp, 62                                ; FB2F69  add XSP,0x0000003e
 	pop	xde                                    ; FB2F6F  pop XDE
 	popw	hl                                    ; FB2F70  pop HL
@@ -4518,7 +4518,7 @@ sub_FB2F74:
 	and	wa, 0xFF                               ; FB2FAF  and WA,0x00ff
 	ld	(xiz-18), wa                            ; FB2FB3  ld (XIZ+0xee),WA
 	pushw	wa                                   ; FB2FB6  push WA
-	call	0xFB4124                              ; FB2FB7  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FB2FB7  call 0xfb4124
 	ld	(xiz-22), xiy                           ; FB2FBB  ld (XIZ+0xea),XIY
 	ld	xbc, (xiz-14)                           ; FB2FBE  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc+11)                             ; FB2FC1  ld A,(XBC+0x0b)
@@ -4544,7 +4544,7 @@ sub_FB2F74:
 	push	w                                     ; FB2FFB  push W
 	pushw	bc                                   ; FB2FFD  push BC
 	extpfx3 0x9E, 0xE2, 0x04                   ; FB2FFE  pushw (XIZ+0xe2)
-	call	0xFB48F7                              ; FB3001  call 0xfb48f7
+	call	DrumKit_ResolveInstrumentRecord                              ; FB3001  call 0xfb48f7
 	ld	xix, xiy                                ; FB3005  ld XIX,XIY
 	ld	c, 23:opc                                  ; FB3007  ld C,0x17
 	mul8rr	c, d                                ; FB3009  mul BC,D
@@ -4555,7 +4555,7 @@ sub_FB2F74:
 	push	xix                                   ; FB3018  push XIX
 	push	0                                     ; FB3019  push 0x00
 	push	d                                     ; FB301B  push D
-	call	0xFB454C                              ; FB301D  call 0xfb454c
+	call	PercInst_GetWaveSelectRecord                              ; FB301D  call 0xfb454c
 	ld	(xiz-4), xiy                            ; FB3021  ld (XIZ+0xfc),XIY
 	ld	xbc, (xiz-14)                           ; FB3024  ld XBC,(XIZ+0xf2)
 	ld	a, (xbc)                                ; FB3027  ld A,(XBC)
@@ -4570,12 +4570,12 @@ sub_FB2F74:
 	push	xiy                                   ; FB3042  push XIY
 	push	0                                     ; FB3043  push 0x00
 	extpfx3 0x8E, 0x14, 0x04                   ; FB3045  push (XIZ+0x14)
-	call	0xFA72B3                              ; FB3048  call 0xfa72b3
+	call	VelSplit_LayerFromVelocity_b                              ; FB3048  call 0xfa72b3
 	ld	(xiz-10), a                             ; FB304C  ld (XIZ+0xf6),A
 	ld	xbc, (xiz-4)                            ; FB304F  ld XBC,(XIZ+0xfc)
 	push	xbc                                   ; FB3052  push XBC
 	pushw	wa                                   ; FB3053  push WA
-	call	0xFB474E                              ; FB3054  call 0xfb474e
+	call	WaveSelRec_ResolveEnvDescriptor                              ; FB3054  call 0xfb474e
 	ld	(xiz-14), xiy                           ; FB3058  ld (XIZ+0xf2),XIY
 	ld	c, 68:opc                                  ; FB305B  ld C,0x44
 	mul8rr	c, d                                ; FB305D  mul BC,D
@@ -4631,7 +4631,7 @@ sub_FB2F74:
 	ld	xwa, (xiz-14)                           ; FB30E5  ld XWA,(XIZ+0xf2)
 	ld	(xbc+31), xwa                           ; FB30E8  ld (XBC+0x1f),XWA
 	extpfx3 0x9E, 0xEE, 0x04                   ; FB30EB  pushw (XIZ+0xee)
-	call	0xFC36BE                              ; FB30EE  call 0xfc36be
+	call	sub_FC36BE                              ; FB30EE  call 0xfc36be
 	ld	bc, (xiz-18)                            ; FB30F2  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB30F5  extz XBC
 	extpfx5 0xB9, 0x2B, 0x02, 0x00, 0x00       ; FB30F7  ld (XBC+0x2b),0x0000
@@ -4700,7 +4700,7 @@ sub_FB2F74__FB3194:
 	push	0                                     ; FB3198  push 0x00
 	push	d                                     ; FB319A  push D
 	pushw	de                                   ; FB319C  push DE
-	call	0xFC6803                              ; FB319D  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB319D  call 0xfc6803
 	inc	8, xsp                                 ; FB31A1  inc 0,XSP
 	inc	2, xsp                                 ; FB31A3  inc 2,XSP
 	pop	xix                                    ; FB31A5  pop XIX
@@ -4751,7 +4751,7 @@ VoiceParams_Compute_D:
 	and	bc, 0xFF                               ; FB31F9  and BC,0x00ff
 	ld	(xiz-16), bc                            ; FB31FD  ld (XIZ+0xf0),BC
 	pushw	bc                                   ; FB3200  push BC
-	call	0xFB4124                              ; FB3201  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FB3201  call 0xfb4124
 	ld	(xiz-20), xiy                           ; FB3205  ld (XIZ+0xec),XIY
 	ld	xbc, (xiz-12)                           ; FB3208  ld XBC,(XIZ+0xf4)
 	ld	a, (xbc+11)                             ; FB320B  ld A,(XBC+0x0b)
@@ -4777,14 +4777,14 @@ VoiceParams_Compute_D:
 	push	w                                     ; FB3245  push W
 	pushw	bc                                   ; FB3247  push BC
 	extpfx3 0x9E, 0xE4, 0x04                   ; FB3248  pushw (XIZ+0xe4)
-	call	0xFB48F7                              ; FB324B  call 0xfb48f7
+	call	DrumKit_ResolveInstrumentRecord                              ; FB324B  call 0xfb48f7
 	ld	(xiz-8), xiy                            ; FB324F  ld (XIZ+0xf8),XIY
 	add	xiy, 18                                ; FB3252  add XIY,0x00000012
 	ld	(xiz-4), xiy                            ; FB3258  ld (XIZ+0xfc),XIY
 	ld	xbc, (xiz-8)                            ; FB325B  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB325E  push XBC
 	pushw	0                                    ; FB325F  push 0x0000
-	call	0xFB454C                              ; FB3262  call 0xfb454c
+	call	PercInst_GetWaveSelectRecord                              ; FB3262  call 0xfb454c
 	ld	xix, xiy                                ; FB3266  ld XIX,XIY
 	ld	xbc, (xiz-12)                           ; FB3268  ld XBC,(XIZ+0xf4)
 	ld	a, (xbc)                                ; FB326B  ld A,(XBC)
@@ -4800,11 +4800,11 @@ VoiceParams_Compute_D:
 	push	xiy                                   ; FB328A  push XIY
 	push	0                                     ; FB328B  push 0x00
 	push	d                                     ; FB328D  push D
-	call	0xFA72B3                              ; FB328F  call 0xfa72b3
+	call	VelSplit_LayerFromVelocity_b                              ; FB328F  call 0xfa72b3
 	ld	(xiz-10), a                             ; FB3293  ld (XIZ+0xf6),A
 	push	xix                                   ; FB3296  push XIX
 	pushw	wa                                   ; FB3297  push WA
-	call	0xFB474E                              ; FB3298  call 0xfb474e
+	call	WaveSelRec_ResolveEnvDescriptor                              ; FB3298  call 0xfb474e
 	ld	(xiz-14), xiy                           ; FB329C  ld (XIZ+0xf2),XIY
 	ldw	bc, 0x5A53                             ; FB329F  ld BC,0x5a53
 	ld	(xiz-16), bc                            ; FB32A2  ld (XIZ+0xf0),BC
@@ -4856,7 +4856,7 @@ VoiceParams_Compute_D:
 	ld	xwa, (xiz-14)                           ; FB331E  ld XWA,(XIZ+0xf2)
 	ld	(xbc+31), xwa                           ; FB3321  ld (XBC+0x1f),XWA
 	extpfx3 0x9E, 0xF0, 0x04                   ; FB3324  pushw (XIZ+0xf0)
-	call	0xFC36BE                              ; FB3327  call 0xfc36be
+	call	sub_FC36BE                              ; FB3327  call 0xfc36be
 	ld	bc, (xiz-16)                            ; FB332B  ld BC,(XIZ+0xf0)
 	extz	xbc                                   ; FB332E  extz XBC
 	extpfx5 0xB9, 0x2B, 0x02, 0x00, 0x00       ; FB3330  ld (XBC+0x2b),0x0000
@@ -4904,7 +4904,7 @@ VoiceParams_Compute_D__FB33A5:
 	pushw	0                                    ; FB33A6  push 0x0000
 	push	0                                     ; FB33A9  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB33AB  push (XIZ+0x0c)
-	call	0xFC6803                              ; FB33AE  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB33AE  call 0xfc6803
 	ld	xbc, (xiz+8)                            ; FB33B2  ld XBC,(XIZ+0x08)
 	extpfx4 0x89, 0x06, 0x3E, 0x40             ; FB33B5  or (XBC+0x06),0x40
 	ld	xbc, (xiz+8)                            ; FB33B9  ld XBC,(XIZ+0x08)
@@ -4935,7 +4935,7 @@ VoiceParams_Compute_D__FB33CE:
 	and	bc, 0xFF                               ; FB3400  and BC,0x00ff
 	ld	(xiz-16), bc                            ; FB3404  ld (XIZ+0xf0),BC
 	pushw	bc                                   ; FB3407  push BC
-	call	0xFB4124                              ; FB3408  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FB3408  call 0xfb4124
 	ld	(xiz-20), xiy                           ; FB340C  ld (XIZ+0xec),XIY
 	ld	xbc, (xiz-12)                           ; FB340F  ld XBC,(XIZ+0xf4)
 	ld	d, (xbc+11)                             ; FB3412  ld D,(XBC+0x0b)
@@ -4961,14 +4961,14 @@ VoiceParams_Compute_D__FB33CE:
 	push	w                                     ; FB3449  push W
 	pushw	bc                                   ; FB344B  push BC
 	extpfx3 0x9E, 0xE6, 0x04                   ; FB344C  pushw (XIZ+0xe6)
-	call	0xFB48F7                              ; FB344F  call 0xfb48f7
+	call	DrumKit_ResolveInstrumentRecord                              ; FB344F  call 0xfb48f7
 	ld	(xiz-8), xiy                            ; FB3453  ld (XIZ+0xf8),XIY
 	add	xiy, 41                                ; FB3456  add XIY,0x00000029
 	ld	(xiz-4), xiy                            ; FB345C  ld (XIZ+0xfc),XIY
 	ld	xbc, (xiz-8)                            ; FB345F  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB3462  push XBC
 	pushw	1                                    ; FB3463  push 0x0001
-	call	0xFB454C                              ; FB3466  call 0xfb454c
+	call	PercInst_GetWaveSelectRecord                              ; FB3466  call 0xfb454c
 	ld	xix, xiy                                ; FB346A  ld XIX,XIY
 	ld	xbc, (xiz-12)                           ; FB346C  ld XBC,(XIZ+0xf4)
 	ld	a, (xbc)                                ; FB346F  ld A,(XBC)
@@ -4983,11 +4983,11 @@ VoiceParams_Compute_D__FB33CE:
 	jrl z, VoiceParams_Compute_D__FB3595       ; FB348B  jrl Z,0xfb3595
 	push	xiy                                   ; FB348E  push XIY
 	pushw	80                                   ; FB348F  push 0x0050
-	call	0xFA72B3                              ; FB3492  call 0xfa72b3
+	call	VelSplit_LayerFromVelocity_b                              ; FB3492  call 0xfa72b3
 	ld	d, a                                    ; FB3496  ld D,A
 	push	xix                                   ; FB3498  push XIX
 	pushw	wa                                   ; FB3499  push WA
-	call	0xFB474E                              ; FB349A  call 0xfb474e
+	call	WaveSelRec_ResolveEnvDescriptor                              ; FB349A  call 0xfb474e
 	ld	(xiz-12), xiy                           ; FB349E  ld (XIZ+0xf4),XIY
 	ldw	bc, 0x5A53                             ; FB34A1  ld BC,0x5a53
 	ld	(xiz-14), bc                            ; FB34A4  ld (XIZ+0xf2),BC
@@ -5038,7 +5038,7 @@ VoiceParams_Compute_D__FB33CE:
 	ld	xwa, (xiz-12)                           ; FB351F  ld XWA,(XIZ+0xf4)
 	ld	(xbc+99), xwa                           ; FB3522  ld (XBC+0x63),XWA
 	extpfx3 0x9E, 0xF0, 0x04                   ; FB3525  pushw (XIZ+0xf0)
-	call	0xFC36BE                              ; FB3528  call 0xfc36be
+	call	sub_FC36BE                              ; FB3528  call 0xfc36be
 	ld	bc, (xiz-14)                            ; FB352C  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB352F  extz XBC
 	extpfx5 0xB9, 0x6F, 0x02, 0x00, 0x00       ; FB3531  ld (XBC+0x6f),0x0000
@@ -5086,7 +5086,7 @@ VoiceParams_Compute_D__FB35A6:
 	pushw	1                                    ; FB35A7  push 0x0001
 	push	0                                     ; FB35AA  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB35AC  push (XIZ+0x0c)
-	call	0xFC6803                              ; FB35AF  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB35AF  call 0xfc6803
 	inc	8, xsp                                 ; FB35B3  inc 0,XSP
 	inc	2, xsp                                 ; FB35B5  inc 2,XSP
 VoiceParams_Compute_D__FB35B7:
@@ -5100,7 +5100,7 @@ VoiceParams_Compute_D__FB35B7:
 	ld	(xbc+9), 0                              ; FB35CF  ld (XBC+0x09),0x00
 	ld	xbc, (xiz+8)                            ; FB35D3  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FB35D6  push XBC
-	call	0xFA6BB5                              ; FB35D7  call 0xfa6bb5
+	call	ChanAlloc_ForNoteRequest                              ; FB35D7  call 0xfa6bb5
 	ld	c, e                                    ; FB35DB  ld C,E
 	extz	bc                                    ; FB35DD  extz BC
 	extz	xbc                                   ; FB35DF  extz XBC
@@ -5125,14 +5125,14 @@ VoiceParams_Compute_D__FB35B7:
 	add	bc, wa                                 ; FB360D  add BC,WA
 	extz	xbc                                   ; FB360F  extz XBC
 	push	xbc                                   ; FB3611  push XBC
-	call	0xF9A038                              ; FB3612  call 0xf9a038
+	call	MemCopyWords                              ; FB3612  call 0xf9a038
 	extz	xix                                   ; FB3616  extz XIX
 	ld	(xix+0x3BCF), h                         ; FB3618  ld (XIX+0x3bcf),H
 	push	0                                     ; FB361D  push 0x00
 	push	h                                     ; FB361F  push H
 	push	0                                     ; FB3621  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB3623  push (XIZ+0x0c)
-	call	0xFC376C                              ; FB3626  call 0xfc376c
+	call	PartSlot_SetRecordPtr_DF05                              ; FB3626  call 0xfc376c
 	inc	8, xsp                                 ; FB362A  inc 0,XSP
 	inc	6, xsp                                 ; FB362C  inc 6,XSP
 VoiceParams_Compute_D__FB362E:
@@ -5188,7 +5188,7 @@ MidiNote_OnTail:
 	jrl nz, MidiNote_OnTail__FB3744            ; FB3676  jrl NZ,0xfb3744
 	push	0                                     ; FB3679  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB367B  push (XIZ+0x08)
-	call	0xFA7E2C                              ; FB367E  call 0xfa7e2c
+	call	PartRec_UpdateRepeatCounter                              ; FB367E  call 0xfa7e2c
 	push	0                                     ; FB3682  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB3684  push (XIZ+0x0c)
 	push	0                                     ; FB3687  push 0x00
@@ -5197,10 +5197,10 @@ MidiNote_OnTail:
 	extpfx3 0x8E, 0x08, 0x04                   ; FB368E  push (XIZ+0x08)
 	lda	xbc, (xiz-14)                          ; FB3691  lda XBC,XIZ+0xf2
 	push	xbc                                   ; FB3694  push XBC
-	calr (0xFB31AB - 0xFB3698)                 ; FB3695  calr 0xfb31ab
+	calr VoiceParams_Compute_D                 ; FB3695  calr 0xfb31ab
 	push	0                                     ; FB3698  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB369A  push (XIZ+0x08)
-	call	0xFC4BB6                              ; FB369D  call 0xfc4bb6
+	call	Pack104_SetInputs_PartRecord                              ; FB369D  call 0xfc4bb6
 	ld	h, (xiz-4)                              ; FB36A1  ld H,(XIZ+0xfc)
 	inc	8, xsp                                 ; FB36A4  inc 0,XSP
 	inc	6, xsp                                 ; FB36A6  inc 6,XSP
@@ -5233,16 +5233,16 @@ MidiNote_OnTail:
 	push	0                                     ; FB36EE  push 0x00
 	push	h                                     ; FB36F0  push H
 	pushw	0                                    ; FB36F2  push 0x0000
-	call	0xFC4C85                              ; FB36F5  call 0xfc4c85
+	call	Pack104_SetInputs_SubRecordPair                              ; FB36F5  call 0xfc4c85
 	push	xix                                   ; FB36F9  push XIX
 	pushw	de                                   ; FB36FA  push DE
-	call	0xFB7A58                              ; FB36FB  call 0xfb7a58
+	call	Dev104_WriteChanReg0                              ; FB36FB  call 0xfb7a58
 	push	0                                     ; FB36FF  push 0x00
 	push	h                                     ; FB3701  push H
-	calr (0xFB2EB7 - 0xFB3706)                 ; FB3703  calr 0xfb2eb7
+	calr VoiceRegs_Stage_D                 ; FB3703  calr 0xfb2eb7
 	push	xix                                   ; FB3706  push XIX
 	pushw	de                                   ; FB3707  push DE
-	call	0xFB77EF                              ; FB3708  call 0xfb77ef
+	call	Dev104_WriteAllChanRegs                              ; FB3708  call 0xfb77ef
 	ld	c, 68:opc                                  ; FB370C  ld C,0x44
 	mul8rr	c, h                                ; FB370E  mul BC,H
 	add	bc, 41                                 ; FB3710  add BC,0x0029
@@ -5250,11 +5250,11 @@ MidiNote_OnTail:
 	ld	wa, (xbc+0x3BCF)                        ; FB3716  ld WA,(XBC+0x3bcf)
 	pushw	wa                                   ; FB371B  push WA
 	pushw	de                                   ; FB371C  push DE
-	call	0xFB732C                              ; FB371D  call 0xfb732c
+	call	Dev10C_WriteReg_c                              ; FB371D  call 0xfb732c
 	push	xix                                   ; FB3721  push XIX
 	push	0                                     ; FB3722  push 0x00
 	push	h                                     ; FB3724  push H
-	call	0xFC56C4                              ; FB3726  call 0xfc56c4
+	call	sub_FC56C4                              ; FB3726  call 0xfc56c4
 	add	xsp, 32                                ; FB372A  add XSP,0x00000020
 	cp	a, 0:i3                                   ; FB3730  cp A,0
 	jr z, MidiNote_OnTail__FB3740              ; FB3732  jr Z,0xfb3740
@@ -5262,10 +5262,10 @@ MidiNote_OnTail:
 	ld	c, h                                    ; FB3735  ld C,H
 	extz	bc                                    ; FB3737  extz BC
 	pushw	bc                                   ; FB3739  push BC
-	call	0xFB7B05                              ; FB373A  call 0xfb7b05
+	call	Dev104_SetChanRegs_0140_0180                              ; FB373A  call 0xfb7b05
 	inc	6, xsp                                 ; FB373E  inc 6,XSP
 MidiNote_OnTail__FB3740:
-	call	0xF98CB9                              ; FB3740  call 0xf98cb9
+	call	KeyEvents_ToLink                              ; FB3740  call 0xf98cb9
 MidiNote_OnTail__FB3744:
 	pop	xix                                    ; FB3744  pop XIX
 	popw	de                                    ; FB3745  pop DE
@@ -5307,7 +5307,7 @@ MidiNote_OffTail:
 	jrl z, MidiNote_OffTail__FB385A            ; FB3783  jrl Z,0xfb385a
 	push	0                                     ; FB3786  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB3788  push (XIZ+0x08)
-	call	0xFA7E2C                              ; FB378B  call 0xfa7e2c
+	call	PartRec_UpdateRepeatCounter                              ; FB378B  call 0xfa7e2c
 	push	0                                     ; FB378F  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB3791  push (XIZ+0x0c)
 	push	0                                     ; FB3794  push 0x00
@@ -5316,10 +5316,10 @@ MidiNote_OffTail:
 	extpfx3 0x8E, 0x08, 0x04                   ; FB379B  push (XIZ+0x08)
 	lda	xbc, (xiz-14)                          ; FB379E  lda XBC,XIZ+0xf2
 	push	xbc                                   ; FB37A1  push XBC
-	calr (0xFB31AB - 0xFB37A5)                 ; FB37A2  calr 0xfb31ab
+	calr VoiceParams_Compute_D                 ; FB37A2  calr 0xfb31ab
 	push	0                                     ; FB37A5  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB37A7  push (XIZ+0x08)
-	call	0xFC4BB6                              ; FB37AA  call 0xfc4bb6
+	call	Pack104_SetInputs_PartRecord                              ; FB37AA  call 0xfc4bb6
 	ld	h, (xiz-3)                              ; FB37AE  ld H,(XIZ+0xfd)
 	inc	8, xsp                                 ; FB37B1  inc 0,XSP
 	inc	6, xsp                                 ; FB37B3  inc 6,XSP
@@ -5352,16 +5352,16 @@ MidiNote_OffTail:
 	push	0                                     ; FB37FB  push 0x00
 	push	h                                     ; FB37FD  push H
 	pushw	0                                    ; FB37FF  push 0x0000
-	call	0xFC4C85                              ; FB3802  call 0xfc4c85
+	call	Pack104_SetInputs_SubRecordPair                              ; FB3802  call 0xfc4c85
 	push	xix                                   ; FB3806  push XIX
 	pushw	de                                   ; FB3807  push DE
-	call	0xFB7A58                              ; FB3808  call 0xfb7a58
+	call	Dev104_WriteChanReg0                              ; FB3808  call 0xfb7a58
 	push	0                                     ; FB380C  push 0x00
 	push	h                                     ; FB380E  push H
-	calr (0xFB2EB7 - 0xFB3813)                 ; FB3810  calr 0xfb2eb7
+	calr VoiceRegs_Stage_D                 ; FB3810  calr 0xfb2eb7
 	push	xix                                   ; FB3813  push XIX
 	pushw	de                                   ; FB3814  push DE
-	call	0xFB77EF                              ; FB3815  call 0xfb77ef
+	call	Dev104_WriteAllChanRegs                              ; FB3815  call 0xfb77ef
 	ld	c, 68:opc                                  ; FB3819  ld C,0x44
 	mul8rr	c, h                                ; FB381B  mul BC,H
 	add	bc, 41                                 ; FB381D  add BC,0x0029
@@ -5369,11 +5369,11 @@ MidiNote_OffTail:
 	ld	wa, (xbc+0x3BCF)                        ; FB3823  ld WA,(XBC+0x3bcf)
 	pushw	wa                                   ; FB3828  push WA
 	pushw	de                                   ; FB3829  push DE
-	call	0xFB732C                              ; FB382A  call 0xfb732c
+	call	Dev10C_WriteReg_c                              ; FB382A  call 0xfb732c
 	push	xix                                   ; FB382E  push XIX
 	push	0                                     ; FB382F  push 0x00
 	push	h                                     ; FB3831  push H
-	call	0xFC56C4                              ; FB3833  call 0xfc56c4
+	call	sub_FC56C4                              ; FB3833  call 0xfc56c4
 	add	xsp, 32                                ; FB3837  add XSP,0x00000020
 	cp	a, 0:i3                                   ; FB383D  cp A,0
 	jr z, MidiNote_OffTail__FB384D             ; FB383F  jr Z,0xfb384d
@@ -5381,13 +5381,13 @@ MidiNote_OffTail:
 	ld	c, h                                    ; FB3842  ld C,H
 	extz	bc                                    ; FB3844  extz BC
 	pushw	bc                                   ; FB3846  push BC
-	call	0xFB7B05                              ; FB3847  call 0xfb7b05
+	call	Dev104_SetChanRegs_0140_0180                              ; FB3847  call 0xfb7b05
 	inc	6, xsp                                 ; FB384B  inc 6,XSP
 MidiNote_OffTail__FB384D:
-	call	0xF98CB9                              ; FB384D  call 0xf98cb9
+	call	KeyEvents_ToLink                              ; FB384D  call 0xf98cb9
 	push	0                                     ; FB3851  push 0x00
 	push	h                                     ; FB3853  push H
-	call	0xFA6EFA                              ; FB3855  call 0xfa6efa
+	call	ChanRec_ReleaseByChannel                              ; FB3855  call 0xfa6efa
 	popw	bc                                    ; FB3859  pop BC
 MidiNote_OffTail__FB385A:
 	pop	xix                                    ; FB385A  pop XIX
@@ -5454,7 +5454,7 @@ MidiNote_OnByPartMode:
 MidiNote_OnByPartMode__FB389B:
 	push	0                                     ; FB389B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB389D  push (XIZ+0x08)
-	call	0xFA7E2C                              ; FB38A0  call 0xfa7e2c
+	call	PartRec_UpdateRepeatCounter                              ; FB38A0  call 0xfa7e2c
 	push	0                                     ; FB38A4  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB38A6  push (XIZ+0x0c)
 	push	0                                     ; FB38A9  push 0x00
@@ -5463,10 +5463,10 @@ MidiNote_OnByPartMode__FB389B:
 	extpfx3 0x8E, 0x08, 0x04                   ; FB38B0  push (XIZ+0x08)
 	lda	xbc, (xiz-24)                          ; FB38B3  lda XBC,XIZ+0xe8
 	push	xbc                                   ; FB38B6  push XBC
-	calr (0xFB0E4F - 0xFB38BA)                 ; FB38B7  calr 0xfb0e4f
+	calr VoiceParams_Compute_A                 ; FB38B7  calr 0xfb0e4f
 	push	0                                     ; FB38BA  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB38BC  push (XIZ+0x08)
-	call	0xFC4BB6                              ; FB38BF  call 0xfc4bb6
+	call	Pack104_SetInputs_PartRecord                              ; FB38BF  call 0xfc4bb6
 	ld	l, 0:opc                                   ; FB38C3  ld L,0x00
 	ld	xix, 0x10C000                           ; FB38C5  ld XIX,0x0010c000
 	ld	xbc, xix                                ; FB38CA  ld XBC,XIX
@@ -5508,7 +5508,7 @@ MidiNote_OnByPartMode__FB38DD:
 	lda	xbc, (0xD7A2:24)                       ; FB3920  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3925  push XBC
 	pushw	de                                   ; FB3926  push DE
-	call	0xFB7A58                              ; FB3927  call 0xfb7a58
+	call	Dev104_WriteChanReg0                              ; FB3927  call 0xfb7a58
 	ld	c, 68:opc                                  ; FB392B  ld C,0x44
 	mul8rr	c, h                                ; FB392D  mul BC,H
 	inc	1, bc                                  ; FB392F  inc 1,BC
@@ -5521,10 +5521,10 @@ MidiNote_OnByPartMode__FB38DD:
 	push	0                                     ; FB3942  push 0x00
 	push	h                                     ; FB3944  push H
 	jr z, MidiNote_OnByPartMode__FB394D        ; FB3946  jr Z,0xfb394d
-	calr (0xFB27EE - 0xFB394B)                 ; FB3948  calr 0xfb27ee
+	calr VoiceRegs_Stage_C                 ; FB3948  calr 0xfb27ee
 	jr MidiNote_OnByPartMode__FB3950           ; FB394B  jr T,0xfb3950
 MidiNote_OnByPartMode__FB394D:
-	calr (0xFB0AD0 - 0xFB3950)                 ; FB394D  calr 0xfb0ad0
+	calr VoiceRegs_Stage_A                 ; FB394D  calr 0xfb0ad0
 MidiNote_OnByPartMode__FB3950:
 	popw	bc                                    ; FB3950  pop BC
 MidiNote_OnByPartMode__FB3951:
@@ -5565,14 +5565,14 @@ MidiNote_OnByPartMode__FB3966:
 	ld	c, h                                    ; FB39A8  ld C,H
 	extz	bc                                    ; FB39AA  extz BC
 	pushw	bc                                   ; FB39AC  push BC
-	call	0xFB732C                              ; FB39AD  call 0xfb732c
+	call	Dev10C_WriteReg_c                              ; FB39AD  call 0xfb732c
 	pop	xiy                                    ; FB39B1  pop XIY
 MidiNote_OnByPartMode__FB39B2:
 	lda	xbc, (0xD7A2:24)                       ; FB39B2  lda XBC,0x00d7a2
 	push	xbc                                   ; FB39B7  push XBC
 	push	0                                     ; FB39B8  push 0x00
 	push	h                                     ; FB39BA  push H
-	call	0xFC56C4                              ; FB39BC  call 0xfc56c4
+	call	sub_FC56C4                              ; FB39BC  call 0xfc56c4
 	inc	6, xsp                                 ; FB39C0  inc 6,XSP
 	cp	a, 0:i3                                   ; FB39C2  cp A,0
 	jr z, MidiNote_OnByPartMode__FB39D7        ; FB39C4  jr Z,0xfb39d7
@@ -5581,10 +5581,10 @@ MidiNote_OnByPartMode__FB39B2:
 	ld	a, h                                    ; FB39CC  ld A,H
 	extz	wa                                    ; FB39CE  extz WA
 	pushw	wa                                   ; FB39D0  push WA
-	call	0xFB7B05                              ; FB39D1  call 0xfb7b05
+	call	Dev104_SetChanRegs_0140_0180                              ; FB39D1  call 0xfb7b05
 	inc	6, xsp                                 ; FB39D5  inc 6,XSP
 MidiNote_OnByPartMode__FB39D7:
-	call	0xF98CB9                              ; FB39D7  call 0xf98cb9
+	call	KeyEvents_ToLink                              ; FB39D7  call 0xf98cb9
 MidiNote_OnByPartMode__FB39DB:
 	inc	1, xix                                 ; FB39DB  inc 1,XIX
 	dec	1, l                                   ; FB39DD  dec 1,L
@@ -5594,7 +5594,7 @@ MidiNote_OnByPartMode__FB39DB:
 MidiNote_OnByPartMode__FB39E6:
 	push	0                                     ; FB39E6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB39E8  push (XIZ+0x08)
-	call	0xFA7E2C                              ; FB39EB  call 0xfa7e2c
+	call	PartRec_UpdateRepeatCounter                              ; FB39EB  call 0xfa7e2c
 	push	0                                     ; FB39EF  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB39F1  push (XIZ+0x0c)
 	push	0                                     ; FB39F4  push 0x00
@@ -5603,10 +5603,10 @@ MidiNote_OnByPartMode__FB39E6:
 	extpfx3 0x8E, 0x08, 0x04                   ; FB39FB  push (XIZ+0x08)
 	lda	xbc, (xiz-24)                          ; FB39FE  lda XBC,XIZ+0xe8
 	push	xbc                                   ; FB3A01  push XBC
-	calr (0xFB2172 - 0xFB3A05)                 ; FB3A02  calr 0xfb2172
+	calr VoiceParams_Compute_B                 ; FB3A02  calr 0xfb2172
 	push	0                                     ; FB3A05  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB3A07  push (XIZ+0x08)
-	call	0xFC4BB6                              ; FB3A0A  call 0xfc4bb6
+	call	Pack104_SetInputs_PartRecord                              ; FB3A0A  call 0xfc4bb6
 	ld	l, 0:opc                                   ; FB3A0E  ld L,0x00
 	ld	xix, 0x10C000                           ; FB3A10  ld XIX,0x0010c000
 	ld	xbc, xix                                ; FB3A15  ld XBC,XIX
@@ -5648,10 +5648,10 @@ MidiNote_OnByPartMode__FB3A28:
 	lda	xbc, (0xD7A2:24)                       ; FB3A6B  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3A70  push XBC
 	pushw	de                                   ; FB3A71  push DE
-	call	0xFB7A58                              ; FB3A72  call 0xfb7a58
+	call	Dev104_WriteChanReg0                              ; FB3A72  call 0xfb7a58
 	push	0                                     ; FB3A76  push 0x00
 	push	h                                     ; FB3A78  push H
-	calr (0xFB1EBD - 0xFB3A7D)                 ; FB3A7A  calr 0xfb1ebd
+	calr VoiceRegs_Stage_B                 ; FB3A7A  calr 0xfb1ebd
 	inc	8, xsp                                 ; FB3A7D  inc 0,XSP
 	inc	8, xsp                                 ; FB3A7F  inc 0,XSP
 MidiNote_OnByPartMode__FB3A81:
@@ -5679,12 +5679,12 @@ MidiNote_OnByPartMode__FB3A95:
 	extz	bc                                    ; FB3AB3  extz BC
 	ld	de, bc                                  ; FB3AB5  ld DE,BC
 	pushw	bc                                   ; FB3AB7  push BC
-	call	0xFB732C                              ; FB3AB8  call 0xfb732c
+	call	Dev10C_WriteReg_c                              ; FB3AB8  call 0xfb732c
 	lda	xbc, (0xD7A2:24)                       ; FB3ABC  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3AC1  push XBC
 	push	0                                     ; FB3AC2  push 0x00
 	push	h                                     ; FB3AC4  push H
-	call	0xFC56C4                              ; FB3AC6  call 0xfc56c4
+	call	sub_FC56C4                              ; FB3AC6  call 0xfc56c4
 	inc	8, xsp                                 ; FB3ACA  inc 0,XSP
 	inc	2, xsp                                 ; FB3ACC  inc 2,XSP
 	cp	a, 0:i3                                   ; FB3ACE  cp A,0
@@ -5692,10 +5692,10 @@ MidiNote_OnByPartMode__FB3A95:
 	lda	xbc, (0xD7A2:24)                       ; FB3AD2  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3AD7  push XBC
 	pushw	de                                   ; FB3AD8  push DE
-	call	0xFB7B05                              ; FB3AD9  call 0xfb7b05
+	call	Dev104_SetChanRegs_0140_0180                              ; FB3AD9  call 0xfb7b05
 	inc	6, xsp                                 ; FB3ADD  inc 6,XSP
 MidiNote_OnByPartMode__FB3ADF:
-	call	0xF98CB9                              ; FB3ADF  call 0xf98cb9
+	call	KeyEvents_ToLink                              ; FB3ADF  call 0xf98cb9
 MidiNote_OnByPartMode__FB3AE3:
 	inc	1, xix                                 ; FB3AE3  inc 1,XIX
 	dec	1, l                                   ; FB3AE5  dec 1,L
@@ -5711,10 +5711,10 @@ MidiNote_OnByPartMode__FB3AEE:
 	extpfx3 0x8E, 0x08, 0x04                   ; FB3AFA  push (XIZ+0x08)
 	lda	xbc, (xiz-24)                          ; FB3AFD  lda XBC,XIZ+0xe8
 	push	xbc                                   ; FB3B00  push XBC
-	calr (0xFB2A98 - 0xFB3B04)                 ; FB3B01  calr 0xfb2a98
+	calr VoiceParams_Compute_C                 ; FB3B01  calr 0xfb2a98
 	push	0                                     ; FB3B04  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB3B06  push (XIZ+0x08)
-	call	0xFC4BB6                              ; FB3B09  call 0xfc4bb6
+	call	Pack104_SetInputs_PartRecord                              ; FB3B09  call 0xfc4bb6
 	ld	(xiz-9), 0                              ; FB3B0D  ld (XIZ+0xf7),0x00
 	ld	l, 0:opc                                   ; FB3B11  ld L,0x00
 	ld	xbc, 0x10C000                           ; FB3B13  ld XBC,0x0010c000
@@ -5768,10 +5768,10 @@ MidiNote_OnByPartMode__FB3B4D:
 	lda	xbc, (0xD7A2:24)                       ; FB3B89  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3B8E  push XBC
 	pushw	de                                   ; FB3B8F  push DE
-	call	0xFB7A58                              ; FB3B90  call 0xfb7a58
+	call	Dev104_WriteChanReg0                              ; FB3B90  call 0xfb7a58
 	push	0                                     ; FB3B94  push 0x00
 	push	h                                     ; FB3B96  push H
-	calr (0xFB27EE - 0xFB3B9B)                 ; FB3B98  calr 0xfb27ee
+	calr VoiceRegs_Stage_C                 ; FB3B98  calr 0xfb27ee
 	inc	8, xsp                                 ; FB3B9B  inc 0,XSP
 	inc	8, xsp                                 ; FB3B9D  inc 0,XSP
 MidiNote_OnByPartMode__FB3B9F:
@@ -5797,12 +5797,12 @@ MidiNote_OnByPartMode__FB3BAE:
 	extz	bc                                    ; FB3BCC  extz BC
 	ld	de, bc                                  ; FB3BCE  ld DE,BC
 	pushw	bc                                   ; FB3BD0  push BC
-	call	0xFB732C                              ; FB3BD1  call 0xfb732c
+	call	Dev10C_WriteReg_c                              ; FB3BD1  call 0xfb732c
 	lda	xbc, (0xD7A2:24)                       ; FB3BD5  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3BDA  push XBC
 	push	0                                     ; FB3BDB  push 0x00
 	push	h                                     ; FB3BDD  push H
-	call	0xFC56C4                              ; FB3BDF  call 0xfc56c4
+	call	sub_FC56C4                              ; FB3BDF  call 0xfc56c4
 	inc	8, xsp                                 ; FB3BE3  inc 0,XSP
 	inc	2, xsp                                 ; FB3BE5  inc 2,XSP
 	cp	a, 0:i3                                   ; FB3BE7  cp A,0
@@ -5810,10 +5810,10 @@ MidiNote_OnByPartMode__FB3BAE:
 	lda	xbc, (0xD7A2:24)                       ; FB3BEB  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3BF0  push XBC
 	pushw	de                                   ; FB3BF1  push DE
-	call	0xFB7B05                              ; FB3BF2  call 0xfb7b05
+	call	Dev104_SetChanRegs_0140_0180                              ; FB3BF2  call 0xfb7b05
 	inc	6, xsp                                 ; FB3BF6  inc 6,XSP
 MidiNote_OnByPartMode__FB3BF8:
-	call	0xF98CB9                              ; FB3BF8  call 0xf98cb9
+	call	KeyEvents_ToLink                              ; FB3BF8  call 0xf98cb9
 MidiNote_OnByPartMode__FB3BFC:
 	inc	1, xix                                 ; FB3BFC  inc 1,XIX
 	dec	1, l                                   ; FB3BFE  dec 1,L
@@ -5822,7 +5822,7 @@ MidiNote_OnByPartMode__FB3BFC:
 MidiNote_OnByPartMode__FB3C04:
 	push	0                                     ; FB3C04  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB3C06  push (XIZ+0x08)
-	call	0xFACC5A                              ; FB3C09  call 0xfacc5a
+	call	PartRec_Word0006_ClearBit13                              ; FB3C09  call 0xfacc5a
 	popw	bc                                    ; FB3C0D  pop BC
 MidiNote_OnByPartMode__FB3C0E:
 	ld	bc, (xiz+8)                             ; FB3C0E  ld BC,(XIZ+0x08)
@@ -5891,7 +5891,7 @@ VoiceQuery_Tag80_PartNote:
 	ld	(xix+1), bc                             ; FB3C4A  ld (XIX+0x01),BC
 	extpfx5 0xBC, 0x03, 0x02, 0x00, 0x00       ; FB3C4D  ld (XIX+0x03),0x0000
 	push	xix                                   ; FB3C52  push XIX
-	call	0xFA6FE0                              ; FB3C53  call 0xfa6fe0
+	call	VoiceQuery_Run                              ; FB3C53  call 0xfa6fe0
 	pop	xiy                                    ; FB3C57  pop XIY
 	ld	xiy, xix                                ; FB3C58  ld XIY,XIX
 	pop	xix                                    ; FB3C5A  pop XIX
@@ -5915,7 +5915,7 @@ VoiceQuery_Tag80_Part:
 	ld	(xix+1), bc                             ; FB3C77  ld (XIX+0x01),BC
 	extpfx5 0xBC, 0x03, 0x02, 0x7F, 0x00       ; FB3C7A  ld (XIX+0x03),0x007f
 	push	xix                                   ; FB3C7F  push XIX
-	call	0xFA6FE0                              ; FB3C80  call 0xfa6fe0
+	call	VoiceQuery_Run                              ; FB3C80  call 0xfa6fe0
 	pop	xiy                                    ; FB3C84  pop XIY
 	ld	xiy, xix                                ; FB3C85  ld XIY,XIX
 	pop	xix                                    ; FB3C87  pop XIX
@@ -5939,7 +5939,7 @@ VoiceQuery_Tag40_Part:
 	ld	(xix+1), bc                             ; FB3CA0  ld (XIX+0x01),BC
 	extpfx5 0xBC, 0x03, 0x02, 0x7F, 0x00       ; FB3CA3  ld (XIX+0x03),0x007f
 	push	xix                                   ; FB3CA8  push XIX
-	call	0xFA6FE0                              ; FB3CA9  call 0xfa6fe0
+	call	VoiceQuery_Run                              ; FB3CA9  call 0xfa6fe0
 	pop	xiy                                    ; FB3CAD  pop XIY
 	ld	xiy, xix                                ; FB3CAE  ld XIY,XIX
 	pop	xix                                    ; FB3CB0  pop XIX
@@ -5963,7 +5963,7 @@ VoiceQuery_Tag00_PartBit7:
 	ld	(xix+1), bc                             ; FB3CCC  ld (XIX+0x01),BC
 	extpfx5 0xBC, 0x03, 0x02, 0x7F, 0x00       ; FB3CCF  ld (XIX+0x03),0x007f
 	push	xix                                   ; FB3CD4  push XIX
-	call	0xFA6FE0                              ; FB3CD5  call 0xfa6fe0
+	call	VoiceQuery_Run                              ; FB3CD5  call 0xfa6fe0
 	pop	xiy                                    ; FB3CD9  pop XIY
 	ld	xiy, xix                                ; FB3CDA  ld XIY,XIX
 	pop	xix                                    ; FB3CDC  pop XIX
@@ -5989,7 +5989,7 @@ VoiceQuery_Tag00_Part:
 	ld	(xix+1), bc                             ; FB3CF5  ld (XIX+0x01),BC
 	extpfx5 0xBC, 0x03, 0x02, 0xFF, 0x00       ; FB3CF8  ld (XIX+0x03),0x00ff
 	push	xix                                   ; FB3CFD  push XIX
-	call	0xFA6FE0                              ; FB3CFE  call 0xfa6fe0
+	call	VoiceQuery_Run                              ; FB3CFE  call 0xfa6fe0
 	pop	xiy                                    ; FB3D02  pop XIY
 	ld	xiy, xix                                ; FB3D03  ld XIY,XIX
 	pop	xix                                    ; FB3D05  pop XIX
@@ -6011,7 +6011,7 @@ VoiceQuery_Tag00_All:
 	extpfx5 0xBC, 0x01, 0x02, 0x00, 0x00       ; FB3D12  ld (XIX+0x01),0x0000
 	extpfx5 0xBC, 0x03, 0x02, 0xFF, 0x1F       ; FB3D17  ld (XIX+0x03),0x1fff
 	push	xix                                   ; FB3D1C  push XIX
-	call	0xFA6FE0                              ; FB3D1D  call 0xfa6fe0
+	call	VoiceQuery_Run                              ; FB3D1D  call 0xfa6fe0
 	pop	xiy                                    ; FB3D21  pop XIY
 	ld	xiy, xix                                ; FB3D22  ld XIY,XIX
 	pop	xix                                    ; FB3D24  pop XIX
@@ -6077,7 +6077,7 @@ Voice_Retire_Mode20__FB3D5A:
 	ld	ix, bc                                  ; FB3D5F  ld IX,BC
 	and	ix, 0x100                              ; FB3D61  and IX,0x0100
 	pushw	de                                   ; FB3D65  push DE
-	call	0xFAB8CC                              ; FB3D66  call 0xfab8cc
+	call	Dev10C_StageRegs_0800_0840_FAB8CC                              ; FB3D66  call 0xfab8cc
 	popw	bc                                    ; FB3D6A  pop BC
 	cp	ix, 0:i3                                  ; FB3D6B  cp IX,0
 	jr z, Voice_Retire_Mode20__FB3D9E          ; FB3D6D  jr Z,0xfb3d9e
@@ -6087,30 +6087,30 @@ Voice_Retire_Mode20__FB3D5A:
 	extz	wa                                    ; FB3D77  extz WA
 	ld	ix, wa                                  ; FB3D79  ld IX,WA
 	pushw	wa                                   ; FB3D7B  push WA
-	call	0xFB74C6                              ; FB3D7C  call 0xfb74c6
+	call	Dev10C_SetChanReg_0840_0880_From2E                              ; FB3D7C  call 0xfb74c6
 	extz	xde                                   ; FB3D80  extz XDE
 	ld	bc, (xde+41)                            ; FB3D82  ld BC,(XDE+0x29)
 	pushw	bc                                   ; FB3D85  push BC
 	pushw	ix                                   ; FB3D86  push IX
-	call	0xFB732C                              ; FB3D87  call 0xfb732c
+	call	Dev10C_WriteReg_c                              ; FB3D87  call 0xfb732c
 	push	0                                     ; FB3D8B  push 0x00
 	push	h                                     ; FB3D8D  push H
-	call	0xFA6EA5                              ; FB3D8F  call 0xfa6ea5
+	call	ChanRec_ClearHoldAndRelease                              ; FB3D8F  call 0xfa6ea5
 	extpfx5 0x9A, 0x01, 0x3C, 0xFF, 0xFE       ; FB3D93  and (XDE+0x01),0xfeff
 	inc	8, xsp                                 ; FB3D98  inc 0,XSP
 	inc	4, xsp                                 ; FB3D9A  inc 4,XSP
 	jr Voice_Retire_Mode20__FB3DBB             ; FB3D9C  jr T,0xfb3dbb
 Voice_Retire_Mode20__FB3D9E:
 	pushw	de                                   ; FB3D9E  push DE
-	call	0xFABAE3                              ; FB3D9F  call 0xfabae3
+	call	Dev10C_StageRegs_0900_0940                              ; FB3D9F  call 0xfabae3
 	pushw	de                                   ; FB3DA3  push DE
-	call	0xFABBFB                              ; FB3DA4  call 0xfabbfb
+	call	Dev10C_StageRegs_09C0_0A00                              ; FB3DA4  call 0xfabbfb
 	lda	xbc, (0xD75E:24)                       ; FB3DA8  lda XBC,0x00d75e
 	push	xbc                                   ; FB3DAD  push XBC
 	ld	a, h                                    ; FB3DAE  ld A,H
 	extz	wa                                    ; FB3DB0  extz WA
 	pushw	wa                                   ; FB3DB2  push WA
-	call	0xFB7345                              ; FB3DB3  call 0xfb7345
+	call	Dev10C_WriteSixChanRegs_FromD78A                              ; FB3DB3  call 0xfb7345
 	inc	8, xsp                                 ; FB3DB7  inc 0,XSP
 	inc	2, xsp                                 ; FB3DB9  inc 2,XSP
 Voice_Retire_Mode20__FB3DBB:
@@ -6170,22 +6170,22 @@ Voice_Retire_Mode08__FB3E0F:
 	pushw	hl                                   ; FB3E17  push HL
 	cp	c, 3:i3                                   ; FB3E18  cp C,3
 	jr nc, Voice_Retire_Mode08__FB3E22         ; FB3E1A  jr NC,0xfb3e22
-	call	0xFAB9D8                              ; FB3E1C  call 0xfab9d8
+	call	Dev10C_StageRegs_0800_0840_FAB9D8                              ; FB3E1C  call 0xfab9d8
 	jr Voice_Retire_Mode08__FB3E26             ; FB3E20  jr T,0xfb3e26
 Voice_Retire_Mode08__FB3E22:
-	call	0xFAB8CC                              ; FB3E22  call 0xfab8cc
+	call	Dev10C_StageRegs_0800_0840_FAB8CC                              ; FB3E22  call 0xfab8cc
 Voice_Retire_Mode08__FB3E26:
 	popw	bc                                    ; FB3E26  pop BC
 	pushw	hl                                   ; FB3E27  push HL
-	call	0xFABAE3                              ; FB3E28  call 0xfabae3
+	call	Dev10C_StageRegs_0900_0940                              ; FB3E28  call 0xfabae3
 	pushw	hl                                   ; FB3E2C  push HL
-	call	0xFABBFB                              ; FB3E2D  call 0xfabbfb
+	call	Dev10C_StageRegs_09C0_0A00                              ; FB3E2D  call 0xfabbfb
 	lda	xbc, (0xD75E:24)                       ; FB3E31  lda XBC,0x00d75e
 	push	xbc                                   ; FB3E36  push XBC
 	ld	wa, (xiz+8)                             ; FB3E37  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FB3E3A  extz WA
 	pushw	wa                                   ; FB3E3C  push WA
-	call	0xFB7345                              ; FB3E3D  call 0xfb7345
+	call	Dev10C_WriteSixChanRegs_FromD78A                              ; FB3E3D  call 0xfb7345
 	inc	8, xsp                                 ; FB3E41  inc 0,XSP
 	inc	2, xsp                                 ; FB3E43  inc 2,XSP
 Voice_Retire_Mode08__FB3E45:
@@ -6221,13 +6221,13 @@ Voice_Retire_Mode10:
 	cp	c, 0:i3                                   ; FB3E6B  cp C,0
 	jr z, Voice_Retire_Mode10__FB3E86          ; FB3E6D  jr Z,0xfb3e86
 	pushw	hl                                   ; FB3E6F  push HL
-	call	0xFABCF9                              ; FB3E70  call 0xfabcf9
+	call	Dev10C_StageSixChanRegs_ForRetire                              ; FB3E70  call 0xfabcf9
 	lda	xbc, (0xD75E:24)                       ; FB3E74  lda XBC,0x00d75e
 	push	xbc                                   ; FB3E79  push XBC
 	ld	wa, (xiz+8)                             ; FB3E7A  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FB3E7D  extz WA
 	pushw	wa                                   ; FB3E7F  push WA
-	call	0xFB7345                              ; FB3E80  call 0xfb7345
+	call	Dev10C_WriteSixChanRegs_FromD78A                              ; FB3E80  call 0xfb7345
 	inc	8, xsp                                 ; FB3E84  inc 0,XSP
 Voice_Retire_Mode10__FB3E86:
 	popw	de                                    ; FB3E86  pop DE
@@ -6316,18 +6316,18 @@ VoiceList_RetireByMode__FB3EE6:
 VoiceList_RetireByMode__FB3F0A:
 	push	0                                     ; FB3F0A  push 0x00
 	push	h                                     ; FB3F0C  push H
-	calr (0xFB3DC1 - 0xFB3F11)                 ; FB3F0E  calr 0xfb3dc1
+	calr Voice_Retire_Mode08                 ; FB3F0E  calr 0xfb3dc1
 	jr VoiceList_RetireByMode__FB3F25          ; FB3F11  jr T,0xfb3f25
 VoiceList_RetireByMode__FB3F13:
 	push	0                                     ; FB3F13  push 0x00
 	push	h                                     ; FB3F15  push H
-	calr (0xFB3E50 - 0xFB3F1A)                 ; FB3F17  calr 0xfb3e50
+	calr Voice_Retire_Mode10                 ; FB3F17  calr 0xfb3e50
 	jr VoiceList_RetireByMode__FB3F25          ; FB3F1A  jr T,0xfb3f25
 VoiceList_RetireByMode__FB3F1C:
 	ld	xbc, (xiz-4)                            ; FB3F1C  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; FB3F1F  ld A,(XBC)
 	pushw	wa                                   ; FB3F21  push WA
-	calr (0xFB3D26 - 0xFB3F25)                 ; FB3F22  calr 0xfb3d26
+	calr Voice_Retire_Mode20                 ; FB3F22  calr 0xfb3d26
 VoiceList_RetireByMode__FB3F25:
 	popw	bc                                    ; FB3F25  pop BC
 VoiceList_RetireByMode__FB3F26:
@@ -6391,37 +6391,37 @@ MidiNote_Dispatch:
 	ld	c, (xix)                                ; FB3F50  ld C,(XIX)
 	and	c, 8                                   ; FB3F52  and C,0x08
 	pushw	bc                                   ; FB3F55  push BC
-	call	0xFA5958                              ; FB3F56  call 0xfa5958
+	call	MidiNote_StoreStatusBit3                              ; FB3F56  call 0xfa5958
 	ld	c, (xix+3)                              ; FB3F5A  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB3F5D  push BC
 	ld	c, (xix+2)                              ; FB3F5E  ld C,(XIX+0x02)
 	pushw	bc                                   ; FB3F61  push BC
 	ld	c, (xix+1)                              ; FB3F62  ld C,(XIX+0x01)
 	pushw	bc                                   ; FB3F65  push BC
-	calr (0xFB3860 - 0xFB3F69)                 ; FB3F66  calr 0xfb3860
+	calr MidiNote_OnByPartMode                 ; FB3F66  calr 0xfb3860
 	ld	c, (xix+3)                              ; FB3F69  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB3F6C  push BC
 	ld	c, (xix+2)                              ; FB3F6D  ld C,(XIX+0x02)
 	pushw	bc                                   ; FB3F70  push BC
 	ld	c, (xix+1)                              ; FB3F71  ld C,(XIX+0x01)
 	pushw	bc                                   ; FB3F74  push BC
-	calr (0xFB3634 - 0xFB3F78)                 ; FB3F75  calr 0xfb3634
+	calr MidiNote_OnTail                 ; FB3F75  calr 0xfb3634
 	jr MidiNote_Dispatch__FB3F98               ; FB3F78  jr T,0xfb3f98
 MidiNote_Dispatch__FB3F7A:
 	ld	c, (xix+2)                              ; FB3F7A  ld C,(XIX+0x02)
 	pushw	bc                                   ; FB3F7D  push BC
 	ld	c, (xix+1)                              ; FB3F7E  ld C,(XIX+0x01)
 	pushw	bc                                   ; FB3F81  push BC
-	calr (0xFB3C28 - 0xFB3F85)                 ; FB3F82  calr 0xfb3c28
+	calr VoiceQuery_Tag80_PartNote                 ; FB3F82  calr 0xfb3c28
 	push	xiy                                   ; FB3F85  push XIY
-	calr (0xFB3E8B - 0xFB3F89)                 ; FB3F86  calr 0xfb3e8b
+	calr VoiceList_RetireByMode                 ; FB3F86  calr 0xfb3e8b
 	ld	c, (xix+3)                              ; FB3F89  ld C,(XIX+0x03)
 	pushw	bc                                   ; FB3F8C  push BC
 	ld	c, (xix+2)                              ; FB3F8D  ld C,(XIX+0x02)
 	pushw	bc                                   ; FB3F90  push BC
 	ld	c, (xix+1)                              ; FB3F91  ld C,(XIX+0x01)
 	pushw	bc                                   ; FB3F94  push BC
-	calr (0xFB374A - 0xFB3F98)                 ; FB3F95  calr 0xfb374a
+	calr MidiNote_OffTail                 ; FB3F95  calr 0xfb374a
 MidiNote_Dispatch__FB3F98:
 	inc	8, xsp                                 ; FB3F98  inc 0,XSP
 	inc	6, xsp                                 ; FB3F9A  inc 6,XSP
@@ -6950,7 +6950,7 @@ VoiceRecords_InitFromAlloc:
 	ld	(xix+4), 0                              ; FB3FC3  ld (XIX+0x04),0x00
 	ld	(xix+5), 0                              ; FB3FC7  ld (XIX+0x05),0x00
 	push	xix                                   ; FB3FCB  push XIX
-	call	0xFA6BB5                              ; FB3FCC  call 0xfa6bb5
+	call	ChanAlloc_ForNoteRequest                              ; FB3FCC  call 0xfa6bb5
 	ld	xbc, xix                                ; FB3FD0  ld XBC,XIX
 	add	xbc, 10                                ; FB3FD2  add XBC,0x0000000a
 	ld	(xiz-4), xbc                            ; FB3FD8  ld (XIZ+0xfc),XBC
@@ -7696,13 +7696,13 @@ Part_ResolveToneRecord:
 	jr z, sub_FB42B0__FB42D6                   ; FB42CA  jr Z,0xfb42d6
 	ld	c, (xiz+12)                             ; FB42CC  ld C,(XIZ+0x0c)
 	pushw	bc                                   ; FB42CF  push BC
-	calr (0xFB4103 - 0xFB42D3)                 ; FB42D0  calr 0xfb4103
+	calr ToneStage_RecordForBankSelector                 ; FB42D0  calr 0xfb4103
 	popw	bc                                    ; FB42D3  pop BC
 	jr sub_FB42B0__FB42E0                      ; FB42D4  jr T,0xfb42e0
 sub_FB42B0__FB42D6:
 	extpfx3 0x9E, 0x0C, 0x04                   ; FB42D6  pushw (XIZ+0x0c)
 	extpfx3 0x9E, 0x0A, 0x04                   ; FB42D9  pushw (XIZ+0x0a)
-	calr (0xFB4124 - 0xFB42DF)                 ; FB42DC  calr 0xfb4124
+	calr ToneDB_ResolveToneRecord                 ; FB42DC  calr 0xfb4124
 	pop	xbc                                    ; FB42DF  pop XBC
 sub_FB42B0__FB42E0:
 	unlk32 xiz                                 ; FB42E0  unlk XIZ
@@ -7807,7 +7807,7 @@ ToneRec_GetElementBlock__FB433A:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB4343  push (XIZ+0x0c)
 	ld	a, (xiz+14)                             ; FB4346  ld A,(XIZ+0x0e)
 	pushw	wa                                   ; FB4349  push WA
-	calr (0xFB405F - 0xFB434D)                 ; FB434A  calr 0xfb405f
+	calr ToneRec_MapElementIndex_ByMask                 ; FB434A  calr 0xfb405f
 	ld	h, a                                    ; FB434D  ld H,A
 	inc	6, xsp                                 ; FB434F  inc 6,XSP
 	cp	a, 0xFF                                 ; FB4351  cp A,0xff
@@ -7874,14 +7874,14 @@ Part_GetElementBlock:
 	jr z, sub_FB4383__FB43B9                   ; FB43AB  jr Z,0xfb43b9
 	push	0                                     ; FB43AD  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB43AF  push (XIZ+0x08)
-	calr (0xFB42E3 - 0xFB43B5)                 ; FB43B2  calr 0xfb42e3
+	calr Part_GetElementBlock_Unpacked                 ; FB43B2  calr 0xfb42e3
 	inc	6, xsp                                 ; FB43B5  inc 6,XSP
 	jr sub_FB4383__FB43C6                      ; FB43B7  jr T,0xfb43c6
 sub_FB4383__FB43B9:
 	extz	xhl                                   ; FB43B9  extz XHL
 	ld	xbc, (xhl+0x1523)                       ; FB43BB  ld XBC,(XHL+0x1523)
 	push	xbc                                   ; FB43C0  push XBC
-	calr (0xFB4324 - 0xFB43C4)                 ; FB43C1  calr 0xfb4324
+	calr ToneRec_GetElementBlock                 ; FB43C1  calr 0xfb4324
 	inc	8, xsp                                 ; FB43C4  inc 0,XSP
 sub_FB4383__FB43C6:
 	popw	de                                    ; FB43C6  pop DE
@@ -7935,7 +7935,7 @@ ToneRec_GetWaveSelectRecord:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB43DA  push (XIZ+0x0a)
 	push	0                                     ; FB43DD  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB43DF  push (XIZ+0x08)
-	calr (0xFB405F - 0xFB43E5)                 ; FB43E2  calr 0xfb405f
+	calr ToneRec_MapElementIndex_ByMask                 ; FB43E2  calr 0xfb405f
 	ld	h, a                                    ; FB43E5  ld H,A
 	inc	6, xsp                                 ; FB43E7  inc 6,XSP
 	cp	a, 0xFF                                 ; FB43E9  cp A,0xff
@@ -7953,7 +7953,7 @@ sub_FB43CB__FB440C:
 	pushw	bc                                   ; FB440F  push BC
 	push	0                                     ; FB4410  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB4412  push (XIZ+0x08)
-	calr (0xFB40C7 - 0xFB4418)                 ; FB4415  calr 0xfb40c7
+	calr ToneRec_CountElements_ByMask                 ; FB4415  calr 0xfb40c7
 	extz	wa                                    ; FB4418  extz WA
 	pop	xiy                                    ; FB441A  pop XIY
 	cp	wa, 1:i3                                  ; FB441B  cp WA,1
@@ -8066,7 +8066,7 @@ sub_FB44A5__FB44D6:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB44DC  push (XIZ+0x0a)
 	ld	c, l                                    ; FB44DF  ld C,L
 	pushw	bc                                   ; FB44E1  push BC
-	calr (0xFB43CB - 0xFB44E5)                 ; FB44E2  calr 0xfb43cb
+	calr ToneRec_GetWaveSelectRecord                 ; FB44E2  calr 0xfb43cb
 	inc	8, xsp                                 ; FB44E5  inc 0,XSP
 sub_FB44A5__FB44E7:
 	pop	xix                                    ; FB44E7  pop XIX
@@ -8131,7 +8131,7 @@ sub_FB44EC__FB4527:
 	extpfx5 0xC3, 0x07, 0xF0, 0xE4, 0x21       ; FB453A  ld A,(XIX+BC)
 	extz	wa                                    ; FB453F  extz WA
 	pushw	wa                                   ; FB4541  push WA
-	calr (0xFB44A5 - 0xFB4545)                 ; FB4542  calr 0xfb44a5
+	calr ToneRec_GetWaveSelectRecord_ByBankSelector                 ; FB4542  calr 0xfb44a5
 	inc	8, xsp                                 ; FB4545  inc 0,XSP
 sub_FB44EC__FB4547:
 	pop	xix                                    ; FB4547  pop XIX
@@ -8235,7 +8235,7 @@ sub_FB456F__FB45AE:
 	push	xbc                                   ; FB45B1  push XBC
 	push	0                                     ; FB45B2  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB45B4  push (XIZ+0x0a)
-	calr (0xFB454C - 0xFB45BA)                 ; FB45B7  calr 0xfb454c
+	calr PercInst_GetWaveSelectRecord                 ; FB45B7  calr 0xfb454c
 	inc	6, xsp                                 ; FB45BA  inc 6,XSP
 sub_FB456F__FB45BC:
 	pop	xix                                    ; FB45BC  pop XIX
@@ -8469,7 +8469,7 @@ PartElement_ResolveEnvDescriptor:
 	push	w                                     ; FB473F  push W
 	push	0                                     ; FB4741  push 0x00
 	push	h                                     ; FB4743  push H
-	calr (0xFB45C0 - 0xFB4748)                 ; FB4745  calr 0xfb45c0
+	calr ToneDB_ResolveEnvDescriptor                 ; FB4745  calr 0xfb45c0
 	pop	xbc                                    ; FB4748  pop XBC
 	pop	xix                                    ; FB4749  pop XIX
 	popw	hl                                    ; FB474A  pop HL
@@ -8518,7 +8518,7 @@ WaveSelRec_ResolveEnvDescriptor:
 	pushw	wa                                   ; FB476D  push WA
 	push	0                                     ; FB476E  push 0x00
 	push	h                                     ; FB4770  push H
-	calr (0xFB45C0 - 0xFB4775)                 ; FB4772  calr 0xfb45c0
+	calr ToneDB_ResolveEnvDescriptor                 ; FB4772  calr 0xfb45c0
 	pop	xbc                                    ; FB4775  pop XBC
 	pop	xix                                    ; FB4776  pop XIX
 	popw	hl                                    ; FB4777  pop HL
@@ -8567,7 +8567,7 @@ PartElement_SetEnvDescriptorPointer:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB4789  push (XIZ+0x0a)
 	push	0                                     ; FB478C  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB478E  push (XIZ+0x08)
-	calr (0xFB46FC - 0xFB4794)                 ; FB4791  calr 0xfb46fc
+	calr PartElement_ResolveEnvDescriptor                 ; FB4791  calr 0xfb46fc
 	ld	xix, xiy                                ; FB4794  ld XIX,XIY
 	ld	c, 41:opc                                  ; FB4796  ld C,0x29
 	extpfx3 0x8E, 0x0A, 0x43                   ; FB4798  mul BC,(XIZ+0x0a)
@@ -8642,7 +8642,7 @@ Part_LoadToneRecordAndPointers:
 	pushw	bc                                   ; FB47D6  push BC
 	push	0                                     ; FB47D7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB47D9  push (XIZ+0x08)
-	calr (0xFB42B0 - 0xFB47DF)                 ; FB47DC  calr 0xfb42b0
+	calr Part_ResolveToneRecord                 ; FB47DC  calr 0xfb42b0
 	ld	xix, xiy                                ; FB47DF  ld XIX,XIY
 	ld	bc, (xiz+8)                             ; FB47E1  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB47E4  extz BC
@@ -8678,7 +8678,7 @@ sub_FB47C4__FB4828:
 	push	h                                     ; FB4830  push H
 	push	0                                     ; FB4832  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB4834  push (XIZ+0x08)
-	calr (0xFB4383 - 0xFB483A)                 ; FB4837  calr 0xfb4383
+	calr Part_GetElementBlock                 ; FB4837  calr 0xfb4383
 	ld	(xiz-4), xiy                            ; FB483A  ld (XIZ+0xfc),XIY
 	ld	(xiz-6), de                             ; FB483D  ld (XIZ+0xfa),DE
 	ld	bc, ix                                  ; FB4840  ld BC,IX
@@ -8691,7 +8691,7 @@ sub_FB47C4__FB4828:
 	push	h                                     ; FB4855  push H
 	push	0                                     ; FB4857  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB4859  push (XIZ+0x08)
-	calr (0xFB44EC - 0xFB485F)                 ; FB485C  calr 0xfb44ec
+	calr Part_GetWaveSelectRecord                 ; FB485C  calr 0xfb44ec
 	ld	(xiz-12), xiy                           ; FB485F  ld (XIZ+0xf4),XIY
 	ld	bc, (xiz-8)                             ; FB4862  ld BC,(XIZ+0xf8)
 	add	bc, 0x8C                               ; FB4865  add BC,0x008c
@@ -8706,7 +8706,7 @@ sub_FB47C4__FB4876:
 	push	h                                     ; FB4879  push H
 	push	0                                     ; FB487B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB487D  push (XIZ+0x08)
-	calr (0xFB477B - 0xFB4883)                 ; FB4880  calr 0xfb477b
+	calr PartElement_SetEnvDescriptorPointer                 ; FB4880  calr 0xfb477b
 	inc	1, l                                   ; FB4883  inc 1,L
 	inc	6, xsp                                 ; FB4885  inc 6,XSP
 	cp	l, 4:i3                                   ; FB4887  cp L,4
@@ -8728,7 +8728,7 @@ sub_FB47C4__FB489E:
 	push	h                                     ; FB48A6  push H
 	push	0                                     ; FB48A8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB48AA  push (XIZ+0x08)
-	calr (0xFB4383 - 0xFB48B0)                 ; FB48AD  calr 0xfb4383
+	calr Part_GetElementBlock                 ; FB48AD  calr 0xfb4383
 	ld	(xiz-4), xiy                            ; FB48B0  ld (XIZ+0xfc),XIY
 	ld	(xiz-6), de                             ; FB48B3  ld (XIZ+0xfa),DE
 	ld	bc, ix                                  ; FB48B6  ld BC,IX
@@ -8740,12 +8740,12 @@ sub_FB47C4__FB489E:
 	push	h                                     ; FB48C8  push H
 	push	0                                     ; FB48CA  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB48CC  push (XIZ+0x08)
-	call	0xFC2930                              ; FB48CF  call 0xfc2930
+	call	PartElement_SetWaveSelectPointer_ToRomDefault                              ; FB48CF  call 0xfc2930
 	push	0                                     ; FB48D3  push 0x00
 	push	h                                     ; FB48D5  push H
 	push	0                                     ; FB48D7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB48D9  push (XIZ+0x08)
-	call	0xFC295B                              ; FB48DC  call 0xfc295b
+	call	DrawbarPreset_GetDescriptor                              ; FB48DC  call 0xfc295b
 	ld	de, (xiz-6)                             ; FB48E0  ld DE,(XIZ+0xfa)
 	add	de, 41                                 ; FB48E3  add DE,0x0029
 	inc	1, h                                   ; FB48E7  inc 1,H
@@ -8969,7 +8969,7 @@ sub_FB49EB__FB4A2A:
 	pushw	bc                                   ; FB4A8D  push BC
 	extpfx3 0x9E, 0xF8, 0x04                   ; FB4A8E  pushw (XIZ+0xf8)
 	extpfx3 0x9E, 0xFA, 0x04                   ; FB4A91  pushw (XIZ+0xfa)
-	calr (0xFB48F7 - 0xFB4A97)                 ; FB4A94  calr 0xfb48f7
+	calr DrumKit_ResolveInstrumentRecord                 ; FB4A94  calr 0xfb48f7
 	inc	8, xsp                                 ; FB4A97  inc 0,XSP
 sub_FB49EB__FB4A99:
 	pop	xix                                    ; FB4A99  pop XIX
@@ -9436,7 +9436,7 @@ sub_FB4D45__FB4E4F:
 	add	bc, de                                 ; FB4E52  add BC,DE
 	pushw	bc                                   ; FB4E54  push BC
 sub_FB4D45__FB4E55:
-	calr (0xFB4D21 - 0xFB4E58)                 ; FB4E55  calr 0xfb4d21
+	calr Clamp_0_to_007F                 ; FB4E55  calr 0xfb4d21
 	ld	xbc, xix                                ; FB4E58  ld XBC,XIX
 	add	xbc, xiz                               ; FB4E5A  add XBC,XIZ
 	ld	(xbc-20), wa                            ; FB4E5C  ld (XBC+0xec),WA
@@ -10580,25 +10580,25 @@ sub_FB5636__FB56D6:
 	ld	h, (xiz+8)                              ; FB56D9  ld H,(XIZ+0x08)
 	push	0                                     ; FB56DC  push 0x00
 	push	h                                     ; FB56DE  push H
-	calr (0xFB582A - 0xFB56E3)                 ; FB56E0  calr 0xfb582a
+	calr PartRec_StageChanFreqWord_0065                 ; FB56E0  calr 0xfb582a
 	pushw	0                                    ; FB56E3  push 0x0000
 	push	0                                     ; FB56E6  push 0x00
 	push	h                                     ; FB56E8  push H
-	calr (0xFB59D2 - 0xFB56ED)                 ; FB56EA  calr 0xfb59d2
+	calr PartRec_StageChanFreqWord_0067                 ; FB56EA  calr 0xfb59d2
 	pushw	1                                    ; FB56ED  push 0x0001
 	push	0                                     ; FB56F0  push 0x00
 	push	h                                     ; FB56F2  push H
-	calr (0xFB582A - 0xFB56F7)                 ; FB56F4  calr 0xfb582a
+	calr PartRec_StageChanFreqWord_0065                 ; FB56F4  calr 0xfb582a
 	pushw	1                                    ; FB56F7  push 0x0001
 	push	0                                     ; FB56FA  push 0x00
 	push	h                                     ; FB56FC  push H
-	calr (0xFB59D2 - 0xFB5701)                 ; FB56FE  calr 0xfb59d2
+	calr PartRec_StageChanFreqWord_0067                 ; FB56FE  calr 0xfb59d2
 	push	0                                     ; FB5701  push 0x00
 	push	h                                     ; FB5703  push H
-	calr (0xFB5BAA - 0xFB5708)                 ; FB5705  calr 0xfb5baa
+	calr PartRec_StageChanFreqWord_006D                 ; FB5705  calr 0xfb5baa
 	push	0                                     ; FB5708  push 0x00
 	push	h                                     ; FB570A  push H
-	calr (0xFB5C77 - 0xFB570F)                 ; FB570C  calr 0xfb5c77
+	calr PartRec_StageChanFreqWord_006F                 ; FB570C  calr 0xfb5c77
 	add	xsp, 20                                ; FB570F  add XSP,0x00000014
 	jr sub_FB5636__FB573E                      ; FB5715  jr T,0xfb573e
 sub_FB5636__FB5717:
@@ -10638,25 +10638,25 @@ sub_FB5636__FB5755:
 	pushw	0                                    ; FB5779  push 0x0000
 	push	0                                     ; FB577C  push 0x00
 	push	d                                     ; FB577E  push D
-	calr (0xFB582A - 0xFB5783)                 ; FB5780  calr 0xfb582a
+	calr PartRec_StageChanFreqWord_0065                 ; FB5780  calr 0xfb582a
 	pushw	0                                    ; FB5783  push 0x0000
 	push	0                                     ; FB5786  push 0x00
 	push	d                                     ; FB5788  push D
-	calr (0xFB59D2 - 0xFB578D)                 ; FB578A  calr 0xfb59d2
+	calr PartRec_StageChanFreqWord_0067                 ; FB578A  calr 0xfb59d2
 	pushw	1                                    ; FB578D  push 0x0001
 	push	0                                     ; FB5790  push 0x00
 	push	d                                     ; FB5792  push D
-	calr (0xFB582A - 0xFB5797)                 ; FB5794  calr 0xfb582a
+	calr PartRec_StageChanFreqWord_0065                 ; FB5794  calr 0xfb582a
 	pushw	1                                    ; FB5797  push 0x0001
 	push	0                                     ; FB579A  push 0x00
 	push	d                                     ; FB579C  push D
-	calr (0xFB59D2 - 0xFB57A1)                 ; FB579E  calr 0xfb59d2
+	calr PartRec_StageChanFreqWord_0067                 ; FB579E  calr 0xfb59d2
 	push	0                                     ; FB57A1  push 0x00
 	push	d                                     ; FB57A3  push D
-	calr (0xFB5BAA - 0xFB57A8)                 ; FB57A5  calr 0xfb5baa
+	calr PartRec_StageChanFreqWord_006D                 ; FB57A5  calr 0xfb5baa
 	push	0                                     ; FB57A8  push 0x00
 	push	d                                     ; FB57AA  push D
-	calr (0xFB5C77 - 0xFB57AF)                 ; FB57AC  calr 0xfb5c77
+	calr PartRec_StageChanFreqWord_006F                 ; FB57AC  calr 0xfb5c77
 	add	xsp, 20                                ; FB57AF  add XSP,0x00000014
 	cp (xiz-1), 0x0A                           ; FB57B5  cp (XIZ+0xff),0x0a
 	jr nz, sub_FB5636__FB57DD                  ; FB57B9  jr NZ,0xfb57dd
@@ -12141,7 +12141,7 @@ sub_FB6190__FB6233:
 	pushw	hl                                   ; FB6233  push HL
 	push	0                                     ; FB6234  push 0x00
 	push	d                                     ; FB6236  push D
-	calr (0xFB6158 - 0xFB623B)                 ; FB6238  calr 0xfb6158
+	calr Part_GetAlgoDescByte16_Bias                 ; FB6238  calr 0xfb6158
 	add	a, h                                   ; FB623B  add A,H
 	pop	xiy                                    ; FB623D  pop XIY
 	jr sub_FB6190__FB626C                      ; FB623E  jr T,0xfb626c
@@ -12149,7 +12149,7 @@ sub_FB6190__FB6240:
 	pushw	hl                                   ; FB6240  push HL
 	push	0                                     ; FB6241  push 0x00
 	push	d                                     ; FB6243  push D
-	calr (0xFB6158 - 0xFB6248)                 ; FB6245  calr 0xfb6158
+	calr Part_GetAlgoDescByte16_Bias                 ; FB6245  calr 0xfb6158
 	pop	xiy                                    ; FB6248  pop XIY
 	jr sub_FB6190__FB626C                      ; FB6249  jr T,0xfb626c
 sub_FB6190__FB624B:
@@ -12370,7 +12370,7 @@ sub_FB639A__FB63C7:
 	push	0                                     ; FB63C7  push 0x00
 	push	d                                     ; FB63C9  push D
 	pushw	de                                   ; FB63CB  push DE
-	calr (0xFB601A - 0xFB63CF)                 ; FB63CC  calr 0xfb601a
+	calr Part_GetAlgoDescByte14                 ; FB63CC  calr 0xfb601a
 	ld	(xiz-2), a                              ; FB63CF  ld (XIZ+0xfe),A
 	ld	(xiz-4), hl                             ; FB63D2  ld (XIZ+0xfc),HL
 	ld	bc, (xiz-4)                             ; FB63D5  ld BC,(XIZ+0xfc)
@@ -12385,7 +12385,7 @@ sub_FB639A__FB63C7:
 	push	0                                     ; FB63F0  push 0x00
 	push	d                                     ; FB63F2  push D
 	pushw	de                                   ; FB63F4  push DE
-	calr (0xFB607F - 0xFB63F8)                 ; FB63F5  calr 0xfb607f
+	calr Part_GetAlgoDescByte15                 ; FB63F5  calr 0xfb607f
 	ld	(xiz-10), a                             ; FB63F8  ld (XIZ+0xf6),A
 	ld	bc, (xiz-8)                             ; FB63FB  ld BC,(XIZ+0xf8)
 	add	bc, 0xAD                               ; FB63FE  add BC,0x00ad
@@ -12394,7 +12394,7 @@ sub_FB639A__FB63C7:
 	push	0                                     ; FB6409  push 0x00
 	push	d                                     ; FB640B  push D
 	pushw	de                                   ; FB640D  push DE
-	calr (0xFB6190 - 0xFB6411)                 ; FB640E  calr 0xfb6190
+	calr Part_GetAlgoDescByte16                 ; FB640E  calr 0xfb6190
 	ld	(xiz-12), a                             ; FB6411  ld (XIZ+0xf4),A
 	ld	bc, (xiz-8)                             ; FB6414  ld BC,(XIZ+0xf8)
 	add	bc, 0xAE                               ; FB6417  add BC,0x00ae
@@ -12479,7 +12479,7 @@ PartRec_StageByte0075_FromDspParam00D7:
 	and	wa, 0x8000                             ; FB64A4  and WA,0x8000
 	jr z, sub_FB6487__FB64B1                   ; FB64A8  jr Z,0xfb64b1
 	pushw	hl                                   ; FB64AA  push HL
-	calr (0xFB5D6C - 0xFB64AE)                 ; FB64AB  calr 0xfb5d6c
+	calr Part_GetDspParam_00D7                 ; FB64AB  calr 0xfb5d6c
 	ld	h, a                                    ; FB64AE  ld H,A
 	popw	bc                                    ; FB64B0  pop BC
 sub_FB6487__FB64B1:
@@ -12597,7 +12597,7 @@ PartRec_ResetToDefaults:
 	pushw	0                                    ; FB6523  push 0x0000
 	push	0                                     ; FB6526  push 0x00
 	push	d                                     ; FB6528  push D
-	call	0xFC7E10                              ; FB652A  call 0xfc7e10
+	call	sub_FC7E10                              ; FB652A  call 0xfc7e10
 	extpfx5 0xBB, 0x1F, 0x02, 0x00, 0x00       ; FB652E  ld (XHL+0x1f),0x0000
 	extpfx5 0xBB, 0x21, 0x02, 0x00, 0x00       ; FB6533  ld (XHL+0x21),0x0000
 	extpfx5 0xBB, 0x23, 0x02, 0x00, 0x00       ; FB6538  ld (XHL+0x23),0x0000
@@ -12613,52 +12613,52 @@ PartRec_ResetToDefaults:
 	pushw	0                                    ; FB6568  push 0x0000
 	pushw	0                                    ; FB656B  push 0x0000
 	pushw	0                                    ; FB656E  push 0x0000
-	call	0xFA267A                              ; FB6571  call 0xfa267a
+	call	Rec8644_Store3Bytes_AndFlagChanged                              ; FB6571  call 0xfa267a
 	pushw	0                                    ; FB6575  push 0x0000
 	pushw	0                                    ; FB6578  push 0x0000
 	pushw	0                                    ; FB657B  push 0x0000
 	pushw	1                                    ; FB657E  push 0x0001
-	call	0xFA267A                              ; FB6581  call 0xfa267a
+	call	Rec8644_Store3Bytes_AndFlagChanged                              ; FB6581  call 0xfa267a
 	pushw	0                                    ; FB6585  push 0x0000
 	pushw	0                                    ; FB6588  push 0x0000
 	pushw	0                                    ; FB658B  push 0x0000
 	pushw	2                                    ; FB658E  push 0x0002
-	call	0xFA267A                              ; FB6591  call 0xfa267a
+	call	Rec8644_Store3Bytes_AndFlagChanged                              ; FB6591  call 0xfa267a
 	pushw	0                                    ; FB6595  push 0x0000
 	pushw	0                                    ; FB6598  push 0x0000
 	push	0                                     ; FB659B  push 0x00
 	push	d                                     ; FB659D  push D
-	call	0xFC589E                              ; FB659F  call 0xfc589e
+	call	PartRec_SetFittingOffset_0001                              ; FB659F  call 0xfc589e
 	pushw	0                                    ; FB65A3  push 0x0000
 	pushw	0                                    ; FB65A6  push 0x0000
 	push	0                                     ; FB65A9  push 0x00
 	push	d                                     ; FB65AB  push D
-	call	0xFC59EF                              ; FB65AD  call 0xfc59ef
+	call	PartRec_SetPositionOffset_0003                              ; FB65AD  call 0xfc59ef
 	pushw	0                                    ; FB65B1  push 0x0000
 	pushw	0                                    ; FB65B4  push 0x0000
 	push	0                                     ; FB65B7  push 0x00
 	push	d                                     ; FB65B9  push D
-	call	0xFC5EFB                              ; FB65BB  call 0xfc5efb
+	call	PartRec_SetMovementDepth_0007                              ; FB65BB  call 0xfc5efb
 	pushw	0                                    ; FB65BF  push 0x0000
 	pushw	0                                    ; FB65C2  push 0x0000
 	push	0                                     ; FB65C5  push 0x00
 	push	d                                     ; FB65C7  push D
-	call	0xFC6175                              ; FB65C9  call 0xfc6175
+	call	PartRec_SetMovementRate_0009                              ; FB65C9  call 0xfc6175
 	pushw	0                                    ; FB65CD  push 0x0000
 	pushw	0                                    ; FB65D0  push 0x0000
 	push	0                                     ; FB65D3  push 0x00
 	push	d                                     ; FB65D5  push D
-	call	0xFC63EC                              ; FB65D7  call 0xfc63ec
+	call	PartRec_SetMutingOffset_000B                              ; FB65D7  call 0xfc63ec
 	pushw	0                                    ; FB65DB  push 0x0000
 	pushw	0                                    ; FB65DE  push 0x0000
 	push	0                                     ; FB65E1  push 0x00
 	push	d                                     ; FB65E3  push D
-	call	0xFC654F                              ; FB65E5  call 0xfc654f
+	call	PartRec_SetTuningOffset_000D                              ; FB65E5  call 0xfc654f
 	pushw	0                                    ; FB65E9  push 0x0000
 	pushw	0                                    ; FB65EC  push 0x0000
 	push	0                                     ; FB65EF  push 0x00
 	push	d                                     ; FB65F1  push D
-	call	0xFC65EC                              ; FB65F3  call 0xfc65ec
+	call	PartRec_SetSubGainOffset_000F                              ; FB65F3  call 0xfc65ec
 	ld	xix, 0                                  ; FB65F7  ld XIX,0x00000000
 	ld	(xiz-1), 4                              ; FB65FC  ld (XIZ+0xff),0x04
 	add	xsp, 72                                ; FB6600  add XSP,0x00000048
@@ -12758,16 +12758,16 @@ Part_RestageVoiceParams_Melodic:
 	pushw	0                                    ; FB6688  push 0x0000
 	push	0                                     ; FB668B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB668D  push (XIZ+0x08)
-	calr (0xFB5636 - 0xFB6693)                 ; FB6690  calr 0xfb5636
+	calr Part_StageDspAlgoParams                 ; FB6690  calr 0xfb5636
 	push	0                                     ; FB6693  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB6695  push (XIZ+0x08)
-	calr (0xFB6487 - 0xFB669B)                 ; FB6698  calr 0xfb6487
+	calr PartRec_StageByte0075_FromDspParam00D7                 ; FB6698  calr 0xfb6487
 	push	0                                     ; FB669B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB669D  push (XIZ+0x08)
-	calr (0xFB4A9F - 0xFB66A3)                 ; FB66A0  calr 0xfb4a9f
+	calr PartRec_RecomputeWord0006_FromToneRec                 ; FB66A0  calr 0xfb4a9f
 	push	0                                     ; FB66A3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB66A5  push (XIZ+0x08)
-	calr (0xFB4D45 - 0xFB66AB)                 ; FB66A8  calr 0xfb4d45
+	calr sub_FB4D45                 ; FB66A8  calr 0xfb4d45
 	ld	bc, (xiz+8)                             ; FB66AB  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB66AE  extz BC
 	mul	bc, 0x12C                              ; FB66B0  mul BC,0x012c
@@ -12924,7 +12924,7 @@ sub_FB6681__FB6826:
 	pushw	hl                                   ; FB682D  push HL
 	push	0                                     ; FB682E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB6830  push (XIZ+0x08)
-	calr (0xFB53C5 - 0xFB6836)                 ; FB6833  calr 0xfb53c5
+	calr sub_FB53C5                 ; FB6833  calr 0xfb53c5
 	ld	h, l                                    ; FB6836  ld H,L
 	inc	1, h                                   ; FB6838  inc 1,H
 	inc	6, xsp                                 ; FB683A  inc 6,XSP
@@ -12935,7 +12935,7 @@ sub_FB6681__FB6826:
 	jrl c, sub_FB6681__FB66C4                  ; FB6847  jrl C,0xfb66c4
 	push	0                                     ; FB684A  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB684C  push (XIZ+0x08)
-	calr (0xFB639A - 0xFB6852)                 ; FB684F  calr 0xfb639a
+	calr PartElement_StageAlgoDescBytes_0024                 ; FB684F  calr 0xfb639a
 	ldw	de, 0                                  ; FB6852  ld DE,0x0000
 	ld	bc, (xiz+8)                             ; FB6855  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB6858  extz BC
@@ -12971,7 +12971,7 @@ sub_FB6681__FB6891:
 	pushw	bc                                   ; FB68A4  push BC
 	push	0                                     ; FB68A5  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB68A7  push (XIZ+0x08)
-	call	0xFC6803                              ; FB68AA  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB68AA  call 0xfc6803
 	inc	2, xix                                 ; FB68AE  inc 2,XIX
 	add	hl, 41                                 ; FB68B0  add HL,0x0029
 	inc	1, de                                  ; FB68B4  inc 1,DE
@@ -12982,10 +12982,10 @@ sub_FB6681__FB6891:
 	pushw	1                                    ; FB68C0  push 0x0001
 	push	0                                     ; FB68C3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB68C5  push (XIZ+0x08)
-	call	0xFC7481                              ; FB68C8  call 0xfc7481
+	call	Pack104_DispatchByResoMode_ForPart                              ; FB68C8  call 0xfc7481
 	push	0                                     ; FB68CC  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB68CE  push (XIZ+0x08)
-	call	0xFC81F8                              ; FB68D1  call 0xfc81f8
+	call	sub_FC81F8                              ; FB68D1  call 0xfc81f8
 	inc	6, xsp                                 ; FB68D5  inc 6,XSP
 	pop	xix                                    ; FB68D7  pop XIX
 	popw	de                                    ; FB68D8  pop DE
@@ -13036,16 +13036,16 @@ Part_RestageVoiceParams_Drawbar:
 	pushw	0                                    ; FB68E4  push 0x0000
 	push	0                                     ; FB68E7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB68E9  push (XIZ+0x08)
-	calr (0xFB5636 - 0xFB68EF)                 ; FB68EC  calr 0xfb5636
+	calr Part_StageDspAlgoParams                 ; FB68EC  calr 0xfb5636
 	push	0                                     ; FB68EF  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB68F1  push (XIZ+0x08)
-	calr (0xFB6487 - 0xFB68F7)                 ; FB68F4  calr 0xfb6487
+	calr PartRec_StageByte0075_FromDspParam00D7                 ; FB68F4  calr 0xfb6487
 	push	0                                     ; FB68F7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB68F9  push (XIZ+0x08)
-	call	0xFC2CD5                              ; FB68FC  call 0xfc2cd5
+	call	sub_FC2CD5                              ; FB68FC  call 0xfc2cd5
 	push	0                                     ; FB6900  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB6902  push (XIZ+0x08)
-	calr (0xFB4D45 - 0xFB6908)                 ; FB6905  calr 0xfb4d45
+	calr sub_FB4D45                 ; FB6905  calr 0xfb4d45
 	ld	(xiz-21), 0                             ; FB6908  ld (XIZ+0xeb),0x00
 	ld	bc, (xiz+8)                             ; FB690C  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB690F  extz BC
@@ -13211,7 +13211,7 @@ sub_FB68DD__FB6AA0:
 	push	h                                     ; FB6AA7  push H
 	push	0                                     ; FB6AA9  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB6AAB  push (XIZ+0x08)
-	calr (0xFB53C5 - 0xFB6AB1)                 ; FB6AAE  calr 0xfb53c5
+	calr sub_FB53C5                 ; FB6AAE  calr 0xfb53c5
 	inc	1, h                                   ; FB6AB1  inc 1,H
 	inc	6, xsp                                 ; FB6AB3  inc 6,XSP
 	cp	h, 4:i3                                   ; FB6AB5  cp H,4
@@ -13222,7 +13222,7 @@ sub_FB68DD__FB6AA0:
 	jrl c, sub_FB68DD__FB6926                  ; FB6AC5  jrl C,0xfb6926
 	push	0                                     ; FB6AC8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB6ACA  push (XIZ+0x08)
-	calr (0xFB639A - 0xFB6AD0)                 ; FB6ACD  calr 0xfb639a
+	calr PartElement_StageAlgoDescBytes_0024                 ; FB6ACD  calr 0xfb639a
 	ld	h, 0:opc                                   ; FB6AD0  ld H,0x00
 	ld	bc, (xiz+8)                             ; FB6AD2  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB6AD5  extz BC
@@ -13259,7 +13259,7 @@ sub_FB68DD__FB6B0F:
 	push	h                                     ; FB6B22  push H
 	push	0                                     ; FB6B24  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB6B26  push (XIZ+0x08)
-	call	0xFC6803                              ; FB6B29  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB6B29  call 0xfc6803
 	inc	2, de                                  ; FB6B2D  inc 2,DE
 	add	ix, 41                                 ; FB6B2F  add IX,0x0029
 	inc	1, h                                   ; FB6B33  inc 1,H
@@ -13270,10 +13270,10 @@ sub_FB68DD__FB6B0F:
 	pushw	1                                    ; FB6B3D  push 0x0001
 	push	0                                     ; FB6B40  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB6B42  push (XIZ+0x08)
-	call	0xFC7481                              ; FB6B45  call 0xfc7481
+	call	Pack104_DispatchByResoMode_ForPart                              ; FB6B45  call 0xfc7481
 	push	0                                     ; FB6B49  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB6B4B  push (XIZ+0x08)
-	call	0xFC81F8                              ; FB6B4E  call 0xfc81f8
+	call	sub_FC81F8                              ; FB6B4E  call 0xfc81f8
 	inc	6, xsp                                 ; FB6B52  inc 6,XSP
 	pop	xix                                    ; FB6B54  pop XIX
 	popw	de                                    ; FB6B55  pop DE
@@ -13404,7 +13404,7 @@ MidiProgram_SelectToneForPart:
 	pushw	wa                                   ; FB6BE7  push WA
 	ld	a, (xbc+2)                              ; FB6BE8  ld A,(XBC+0x02)
 	pushw	wa                                   ; FB6BEB  push WA
-	calr (0xFB6B5A - 0xFB6BEF)                 ; FB6BEC  calr 0xfb6b5a
+	calr ExtBoard_RemapBankSelector                 ; FB6BEC  calr 0xfb6b5a
 	ld	(xiz-7), a                              ; FB6BEF  ld (XIZ+0xf9),A
 	ld	bc, (xiz-5)                             ; FB6BF2  ld BC,(XIZ+0xfb)
 	add	bc, 28                                 ; FB6BF5  add BC,0x001c
@@ -13413,13 +13413,13 @@ MidiProgram_SelectToneForPart:
 	ld	(xbc), a                                ; FB6BFD  ld (XBC),A
 	push	0                                     ; FB6BFF  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FB6C01  push (XIZ+0xff)
-	calr (0xFB64C8 - 0xFB6C07)                 ; FB6C04  calr 0xfb64c8
+	calr PartRec_Word0004_ClearStagedSetBit2                 ; FB6C04  calr 0xfb64c8
 	push	0                                     ; FB6C07  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FB6C09  push (XIZ+0xff)
-	calr (0xFB6500 - 0xFB6C0F)                 ; FB6C0C  calr 0xfb6500
+	calr PartRec_ResetToDefaults                 ; FB6C0C  calr 0xfb6500
 	push	0                                     ; FB6C0F  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FB6C11  push (XIZ+0xff)
-	call	0xFACC3F                              ; FB6C14  call 0xfacc3f
+	call	PartRec_Word0006_SetBit13                              ; FB6C14  call 0xfacc3f
 	ld	xbc, (xiz+8)                            ; FB6C18  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FB6C1B  ld A,(XBC+0x03)
 	pushw	wa                                   ; FB6C1E  push WA
@@ -13427,7 +13427,7 @@ MidiProgram_SelectToneForPart:
 	pushw	wa                                   ; FB6C22  push WA
 	push	0                                     ; FB6C23  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FB6C25  push (XIZ+0xff)
-	calr (0xFB47C4 - 0xFB6C2B)                 ; FB6C28  calr 0xfb47c4
+	calr Part_LoadToneRecordAndPointers                 ; FB6C28  calr 0xfb47c4
 	ld	bc, (xiz-5)                             ; FB6C2B  ld BC,(XIZ+0xfb)
 	extz	xix                                   ; FB6C2E  extz XIX
 	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB6C30  ld XWA,(XIX+BC)
@@ -13483,26 +13483,26 @@ sub_FB6BA8__FB6C82:
 sub_FB6BA8__FB6CB2:
 	push	0                                     ; FB6CB2  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CB4  push (XIZ+0xff)
-	calr (0xFB6681 - 0xFB6CBA)                 ; FB6CB7  calr 0xfb6681
+	calr Part_RestageVoiceParams_Melodic                 ; FB6CB7  calr 0xfb6681
 	popw	bc                                    ; FB6CBA  pop BC
 	jr sub_FB6BA8__FB6CE8                      ; FB6CBB  jr T,0xfb6ce8
 sub_FB6BA8__FB6CBD:
 	push	0                                     ; FB6CBD  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CBF  push (XIZ+0xff)
-	call	0xFC28B5                              ; FB6CC2  call 0xfc28b5
+	call	sub_FC28B5                              ; FB6CC2  call 0xfc28b5
 	push	0                                     ; FB6CC6  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CC8  push (XIZ+0xff)
-	calr (0xFB68DD - 0xFB6CCE)                 ; FB6CCB  calr 0xfb68dd
+	calr Part_RestageVoiceParams_Drawbar                 ; FB6CCB  calr 0xfb68dd
 	pop	xiy                                    ; FB6CCE  pop XIY
 	jr sub_FB6BA8__FB6CE8                      ; FB6CCF  jr T,0xfb6ce8
 sub_FB6BA8__FB6CD1:
 	pushw	1                                    ; FB6CD1  push 0x0001
 	push	0                                     ; FB6CD4  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CD6  push (XIZ+0xff)
-	call	0xFC7A1F                              ; FB6CD9  call 0xfc7a1f
+	call	sub_FC7A1F                              ; FB6CD9  call 0xfc7a1f
 	push	0                                     ; FB6CDD  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CDF  push (XIZ+0xff)
-	call	0xFC81F8                              ; FB6CE2  call 0xfc81f8
+	call	sub_FC81F8                              ; FB6CE2  call 0xfc81f8
 	inc	6, xsp                                 ; FB6CE6  inc 6,XSP
 sub_FB6BA8__FB6CE8:
 	pop	xix                                    ; FB6CE8  pop XIX
@@ -13585,7 +13585,7 @@ sub_FB6CEE__FB6D28:
 	jr nz, sub_FB6CEE__FB6D13                  ; FB6D6A  jr NZ,0xfb6d13
 	push	0                                     ; FB6D6C  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FB6D6E  push (XIZ+0xf5)
-	calr (0xFB6500 - 0xFB6D74)                 ; FB6D71  calr 0xfb6500
+	calr PartRec_ResetToDefaults                 ; FB6D71  calr 0xfb6500
 	incm8	1, (xiz-11)                          ; FB6D74  inc 1,(XIZ+0xf5)
 	popw	bc                                    ; FB6D77  pop BC
 	cp (xiz-11), 0x21                          ; FB6D78  cp (XIZ+0xf5),0x21
@@ -13599,7 +13599,7 @@ sub_FB6CEE__FB6D83:
 	push	d                                     ; FB6D87  push D
 	push	0                                     ; FB6D89  push 0x00
 	push	h                                     ; FB6D8B  push H
-	call	0xFA78E8                              ; FB6D8D  call 0xfa78e8
+	call	EnvRec_ClearSlot                              ; FB6D8D  call 0xfa78e8
 	ld	l, d                                    ; FB6D91  ld L,D
 	inc	1, l                                   ; FB6D93  inc 1,L
 	pop	xiy                                    ; FB6D95  pop XIY

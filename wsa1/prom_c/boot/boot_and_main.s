@@ -562,7 +562,7 @@ Analog_ScanAndReport:
 	push	xwa                                   ; F98A8E  push XWA
 	push	0                                     ; F98A8F  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; F98A91  push (XIZ+0xfb)
-	calr (0xF98A0B - 0xF98A97)                 ; F98A94  calr 0xf98a0b
+	calr Analog_ChangeDetect                 ; F98A94  calr 0xf98a0b
 	ld	(xiz-6), a                              ; F98A97  ld (XIZ+0xfa),A
 	inc	8, xsp                                 ; F98A9A  inc 0,XSP
 	inc	2, xsp                                 ; F98A9C  inc 2,XSP
@@ -577,7 +577,7 @@ Analog_ScanAndReport:
 	push	xbc                                   ; F98ABF  push XBC
 	pushw	2                                    ; F98AC0  push 0x0002
 	pushw	5                                    ; F98AC3  push 0x0005
-	calr (0xF98B20 - 0xF98AC9)                 ; F98AC6  calr 0xf98b20
+	calr Link_SendBuffer                 ; F98AC6  calr 0xf98b20
 	inc	8, xsp                                 ; F98AC9  inc 0,XSP
 Analog_ScanAndReport__chan2:
 	ldw	bc, 0x65                               ; F98ACB  ld BC,0x0065
@@ -590,7 +590,7 @@ Analog_ScanAndReport__chan2:
 	push	xwa                                   ; F98AE0  push XWA
 	push	0                                     ; F98AE1  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; F98AE3  push (XIZ+0xfb)
-	calr (0xF98A0B - 0xF98AE9)                 ; F98AE6  calr 0xf98a0b
+	calr Analog_ChangeDetect                 ; F98AE6  calr 0xf98a0b
 	ld	(xiz-6), a                              ; F98AE9  ld (XIZ+0xfa),A
 	inc	8, xsp                                 ; F98AEC  inc 0,XSP
 	inc	2, xsp                                 ; F98AEE  inc 2,XSP
@@ -605,7 +605,7 @@ Analog_ScanAndReport__chan2:
 	push	xbc                                   ; F98B11  push XBC
 	pushw	2                                    ; F98B12  push 0x0002
 	pushw	5                                    ; F98B15  push 0x0005
-	calr (0xF98B20 - 0xF98B1B)                 ; F98B18  calr 0xf98b20
+	calr Link_SendBuffer                 ; F98B18  calr 0xf98b20
 	inc	8, xsp                                 ; F98B1B  inc 0,XSP
 Analog_ScanAndReport__done:
 	unlk32 xiz                                 ; F98B1D  unlk XIZ
@@ -678,7 +678,7 @@ Link_SendBuffer:
 	extpfx3	0x9E, 0x0A, 0x04
 	push	0x00
 	extpfx3	0x8E, 0x08, 0x04
-	call	0xF9997E
+	call	Link_SendBlock
 	inc	8, xsp
 	unlk32	xiz
 	ret
@@ -740,7 +740,7 @@ Serial0_SendByte_Blocking:
 	ld	a, (xiz+8)
 	ld	(xbc), a
 	pushw	0x00C8
-	calr	(0xF98B39 - 0xF98B69)
+	calr	Delay_CountdownArg_Z
 	popw	bc
 	unlk32	xiz
 	ret
@@ -818,21 +818,21 @@ Timer3_Init:
 ; --------------------------------------------------------------------------
 MAIN:
 	link32	0xEE, 0x0C, 0xC8, 0xFF
-	call	0xFB0504
-	call	0xFC88A0
-	call	0xFC8B9C
-	call	0xF9993E
-	call	0xF9919F
+	call	ExtBoard_ProbeAndInstallBases
+	call	Flash_ProbeAndStoreDeviceId
+	call	EEPROM_PortInit
+	call	Link_Init
+	call	Serial0_Init
 	call	0xF98000
-	call	0xF997FA
-	calr	(0xF98A02 - 0xF98BA0)
+	call	NoteTrim_BuildFromCalibration
+	calr	ADC_Init
 	ld	bc, (0x00FFFFEF:24)
 	extz	bc
 	pushw	bc
-	calr	(0xF990FA - 0xF98BAB)
-	calr	(0xF98B6D - 0xF98BAE)
-	call	0xFA3127
-	call	0xFB0A0D
+	calr	Timer1_SetPeriodAndStart
+	calr	Timer3_Init
+	call	P7Units_BootLoadAndStartTask
+	call	MidiMsg_SendBootSequence
 	popw	bc
 	ei	0
 	ld	(xiz-45), 0
@@ -840,7 +840,7 @@ MAIN:
 MAIN__loop:
 	ldw	(xiz-2), 0x0000
 MAIN__midi_drain:
-	call	0xF991F4
+	call	MIDI_Rx_Dequeue
 	ld	hl, wa
 	ld	(xiz-54), wa
 	cp	hl, 0xffff
@@ -863,7 +863,7 @@ MAIN__midi_done:
 	push	xbc
 	extpfx3	0x9E, 0xFE, 0x04
 	pushw	0x0006
-	call	0xF9997E
+	call	Link_SendBlock
 	inc	8, xsp
 MAIN__bit4:
 	ld	c, (0x007ED1:24)
@@ -872,8 +872,8 @@ MAIN__bit4:
 	cp	c, 0:i3
 	jr	z, MAIN__bit5
 	res 4, (0x007ED1:24)
-	call	0xF99E5F
-	call	0xFB05EC
+	call	Link_ServiceTask
+	call	Toggle14FE_AndDispatch
 	ld	hl, (0x00E2DF:24)
 	ld	bc, hl
 	inc	1, bc
@@ -906,7 +906,7 @@ MAIN__bit5:
 	cp	c, 0:i3
 	jr	z, MAIN__bit3
 	res 5, (0x007ED1:24)
-	calr	(0xF98A75 - 0xF98C8A)
+	calr	Analog_ScanAndReport
 MAIN__bit3:
 	ld	c, (0x007ED1:24)
 	and	c, 0x08
@@ -914,13 +914,13 @@ MAIN__bit3:
 	cp	c, 0:i3
 	jr	z, MAIN__tail
 	res 3, (0x007ED1:24)
-	calr	(0xF9915C - 0xF98CA1)
+	calr	sub_F9915C
 MAIN__tail:
-	calr	(0xF98CB9 - 0xF98CA4)
+	calr	KeyEvents_ToLink
 	lda	xbc, (0x00E2EB:24)
 	push	xbc
-	call	0xFB060A
-	call	0xF994E4
+	call	MidiIn_ParseRingAndDispatch
+	call	MIDI_Watchdogs_And_TransportSwitch
 	pop	xiy
 	jrl	MAIN__loop
 	unlk32	xiz

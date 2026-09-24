@@ -1080,7 +1080,7 @@ sub_FB6F2C__FB6F81:
 	add	xbc, 0xE21D                        ; FB6FC3  add XBC,0x0000e21d
 	ld	hl, (xbc)                           ; FB6FC9  ld HL,(XBC)
 	pushw	de                               ; FB6FCB  push DE
-	calr (0xFB6EDC - 0xFB6FCF)             ; FB6FCC  calr 0xfb6edc
+	calr Dev10C_ChanMinus2_ClrReg_0080_Bit15             ; FB6FCC  calr 0xfb6edc
 	ld	bc, de                              ; FB6FCF  ld BC,DE
 	add	bc, 0x900                          ; FB6FD1  add BC,0x0900
 	ld	(xiz-6), bc                         ; FB6FD5  ld (XIZ+0xfa),BC
@@ -1164,7 +1164,7 @@ Dev10C_SetChanReg_0080_ClrBit15:
 	push	xix                               ; FB703E  push XIX
 	ld	hl, (xiz+8)                         ; FB703F  ld HL,(XIZ+0x08)
 	pushw	hl                               ; FB7042  push HL
-	calr (0xFB6E0A - 0xFB7046)             ; FB7043  calr 0xfb6e0a
+	calr Dev10C_ChanPlus2_SetRegs_09xx             ; FB7043  calr 0xfb6e0a
 	ld	de, hl                              ; FB7046  ld DE,HL
 	add	de, 0x80                           ; FB7048  add DE,0x0080
 	ld	xix, 0x10C000                       ; FB704C  ld XIX,0x0010c000
@@ -1257,7 +1257,7 @@ sub_FB707E:
 	extz	xbc                               ; FB70C1  extz XBC
 	extpfx7 0xD3, 0xE5, 0xCF, 0x3B, 0x3C, 0xFF, 0xFB ; FB70C3  and (XBC+0x3bcf),0xfbff   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB70CA  push HL
-	calr (0xFB6EDC - 0xFB70CE)             ; FB70CB  calr 0xfb6edc
+	calr Dev10C_ChanMinus2_ClrReg_0080_Bit15             ; FB70CB  calr 0xfb6edc
 	ld	de, hl                              ; FB70CE  ld DE,HL
 	add	de, 0x500                          ; FB70D0  add DE,0x0500
 	ld	xbc, 0x10C000                       ; FB70D4  ld XBC,0x0010c000
@@ -1549,11 +1549,11 @@ Dev10C_WriteAllChanRegs:
 	ld	xix, (xiz+10)                       ; FB7141  ld XIX,(XIZ+0x0a)
 	ld	hl, (xiz+8)                         ; FB7144  ld HL,(XIZ+0x08)
 	pushw	hl                               ; FB7147  push HL
-	calr (0xFB6E8C - 0xFB714B)             ; FB7148  calr 0xfb6e8c
+	calr Dev10C_ChanMinus2_SetReg_0080_Bit15             ; FB7148  calr 0xfb6e8c
 	pushw	hl                               ; FB714B  push HL
-	calr (0xFB6E8C - 0xFB714F)             ; FB714C  calr 0xfb6e8c
+	calr Dev10C_ChanMinus2_SetReg_0080_Bit15             ; FB714C  calr 0xfb6e8c
 	pushw	hl                               ; FB714F  push HL
-	calr (0xFB6E0A - 0xFB7153)             ; FB7150  calr 0xfb6e0a
+	calr Dev10C_ChanPlus2_SetRegs_09xx             ; FB7150  calr 0xfb6e0a
 	ld	de, hl                              ; FB7153  ld DE,HL
 	add	de, 64                             ; FB7155  add DE,0x0040
 	ld	xbc, 0x10C000                       ; FB7159  ld XBC,0x0010c000
@@ -1675,7 +1675,7 @@ Dev10C_WriteAllChanRegs:
 	ld	xwa, (xiz-8)                        ; FB7297  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                           ; FB729A  ld (XWA),BC
 	pushw	hl                               ; FB729C  push HL
-	calr (0xFB6EDC - 0xFB72A0)             ; FB729D  calr 0xfb6edc
+	calr Dev10C_ChanMinus2_ClrReg_0080_Bit15             ; FB729D  calr 0xfb6edc
 	ld	bc, hl                              ; FB72A0  ld BC,HL
 	add	bc, 0x8C0                          ; FB72A2  add BC,0x08c0
 	ld	xwa, (xiz-4)                        ; FB72A6  ld XWA,(XIZ+0xfc)
@@ -1871,15 +1871,15 @@ Dev10C_WriteSixChanRegs_FromD78A:
 	ld	xix, (xiz+10)                           ; FB734C  ld XIX,(XIZ+0x0a)
 	ld	hl, (xiz+8)                             ; FB734F  ld HL,(XIZ+0x08)
 	pushw	hl                                   ; FB7352  push HL
-	calr (0xFB6E8C - 0xFB7356)                 ; FB7353  calr 0xfb6e8c
+	calr Dev10C_ChanMinus2_SetReg_0080_Bit15                 ; FB7353  calr 0xfb6e8c
 	pushw	hl                                   ; FB7356  push HL
-	calr (0xFB6E8C - 0xFB735A)                 ; FB7357  calr 0xfb6e8c
+	calr Dev10C_ChanMinus2_SetReg_0080_Bit15                 ; FB7357  calr 0xfb6e8c
 	pushw	hl                                   ; FB735A  push HL
-	calr (0xFB6E8C - 0xFB735E)                 ; FB735B  calr 0xfb6e8c
+	calr Dev10C_ChanMinus2_SetReg_0080_Bit15                 ; FB735B  calr 0xfb6e8c
 	pushw	hl                                   ; FB735E  push HL
-	calr (0xFB6E8C - 0xFB7362)                 ; FB735F  calr 0xfb6e8c
+	calr Dev10C_ChanMinus2_SetReg_0080_Bit15                 ; FB735F  calr 0xfb6e8c
 	pushw	hl                                   ; FB7362  push HL
-	calr (0xFB6E8C - 0xFB7366)                 ; FB7363  calr 0xfb6e8c
+	calr Dev10C_ChanMinus2_SetReg_0080_Bit15                 ; FB7363  calr 0xfb6e8c
 	ld	de, hl                                  ; FB7366  ld DE,HL
 	add	de, 0x840                              ; FB7368  add DE,0x0840
 	ld	xbc, 0x10C000                           ; FB736C  ld XBC,0x0010c000
@@ -1912,7 +1912,7 @@ Dev10C_WriteSixChanRegs_FromD78A:
 	ld	xwa, (xiz-8)                            ; FB73B7  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB73BA  ld (XWA),BC
 	pushw	hl                                   ; FB73BC  push HL
-	calr (0xFB6EDC - 0xFB73C0)                 ; FB73BD  calr 0xfb6edc
+	calr Dev10C_ChanMinus2_ClrReg_0080_Bit15                 ; FB73BD  calr 0xfb6edc
 	ld	bc, hl                                  ; FB73C0  ld BC,HL
 	add	bc, 0x940                              ; FB73C2  add BC,0x0940
 	ld	xwa, (xiz-4)                            ; FB73C6  ld XWA,(XIZ+0xfc)
@@ -2302,7 +2302,7 @@ sub_FB7521:
 	ld	xwa, (xiz-12)                           ; FB75A3  ld XWA,(XIZ+0xf4)
 	ld	(xwa), bc                               ; FB75A6  ld (XWA),BC
 	pushw	de                                   ; FB75A8  push DE
-	calr (0xFB6E0A - 0xFB75AC)                 ; FB75A9  calr 0xfb6e0a
+	calr Dev10C_ChanPlus2_SetRegs_09xx                 ; FB75A9  calr 0xfb6e0a
 	ld	bc, de                                  ; FB75AC  ld BC,DE
 	add	bc, 0x80                               ; FB75AE  add BC,0x0080
 	ld	(xiz-16), bc                            ; FB75B2  ld (XIZ+0xf0),BC
@@ -4137,7 +4137,7 @@ Dev10C_ResetAllChannels:
 	push	xix                                   ; FB80E7  3c                push XIX
 	lda	xbc, (0xFE12B5:24)                       ; FB80E8  f2 b5 12 fe 31    lda XBC,0xfe12b5
 	push	xbc                                   ; FB80ED  39                push XBC
-	calr (0xFB7715 - 0xFB80F1)                 ; FB80EE  1e 24 f6          calr 0xfb7715
+	calr Dev10C_WriteGlobalRegs                 ; FB80EE  1e 24 f6          calr 0xfb7715
 	ld	xix, DEV104_BASE                        ; FB80F1  44 00 40 10 00    ld XIX,0x00104000
 	ldw (xix), DEV104_BLK_0800                 ; FB80F6  b4 02 00 08       ld (XIX),0x0800
 	ld	bc, (0xFE1313:24)                        ; FB80FA  d2 13 13 fe 21    ld BC,(0xfe1313)
@@ -4176,13 +4176,13 @@ Dev10C_ResetAllChannels__FB8119:
 	push	xix                                   ; FB814E  3c                push XIX
 	lda	xwa, (0xFE12CF:24)                       ; FB814F  f2 cf 12 fe 30    lda XWA,0xfe12cf
 	push	xwa                                   ; FB8154  38                push XWA
-	call 0x00F9A038                            ; FB8155  1d 38 a0 f9       call 0xf9a038
+	call MemCopyWords                            ; FB8155  1d 38 a0 f9       call 0xf9a038
 	lda	xix, (0x00D91F:24)                       ; FB8159  f2 1f d9 00 34    lda XIX,0x00d91f
 	pushw	38                                   ; FB815E  0b 26 00          push 0x0026
 	push	xix                                   ; FB8161  3c                push XIX
 	lda	xbc, (0xFE133B:24)                       ; FB8162  f2 3b 13 fe 31    lda XBC,0xfe133b
 	push	xbc                                   ; FB8167  39                push XBC
-	call 0x00F9A038                            ; FB8168  1d 38 a0 f9       call 0xf9a038
+	call MemCopyWords                            ; FB8168  1d 38 a0 f9       call 0xf9a038
 	ldw	hl, 0                                  ; FB816C  33 00 00          ld HL,0x0000
 	add	xsp, 20                                ; FB816F  ef c8 14 00 00 00 add XSP,0x00000014
 Dev10C_ResetAllChannels__FB8175:
@@ -4190,7 +4190,7 @@ Dev10C_ResetAllChannels__FB8175:
 	push	xbc                                   ; FB817A  39                push XBC
 	ld	de, hl                                  ; FB817B  db 8a             ld DE,HL
 	pushw	de                                   ; FB817D  2a                push DE
-	calr (0xFB713A - 0xFB8181)                 ; FB817E  1e b9 ef          calr 0xfb713a
+	calr Dev10C_WriteAllChanRegs                 ; FB817E  1e b9 ef          calr 0xfb713a
 	extpfx7 0xD2, 0x1F, 0xD9, 0x00, 0x3C, 0xFF, 0xC0 ; FB8181  d2 1f d9 00 3c ff c0 and (0x00d91f),0xc0ff
 	ld	ix, (0x00D91F:24)                        ; FB8188  d2 1f d9 00 24    ld IX,(0x00d91f)
 	ld	bc, de                                  ; FB818D  da 89             ld BC,DE
@@ -4201,11 +4201,11 @@ Dev10C_ResetAllChannels__FB8175:
 	lda	xbc, (0x00D91F:24)                       ; FB819D  f2 1f d9 00 31    lda XBC,0x00d91f
 	push	xbc                                   ; FB81A2  39                push XBC
 	pushw	de                                   ; FB81A3  2a                push DE
-	calr (0xFB77EF - 0xFB81A7)                 ; FB81A4  1e 48 f6          calr 0xfb77ef
+	calr Dev104_WriteAllChanRegs                 ; FB81A4  1e 48 f6          calr 0xfb77ef
 	ld	bc, (0x00D8DB:24)                        ; FB81A7  d2 db d8 00 21    ld BC,(0x00d8db)
 	pushw	bc                                   ; FB81AC  29                push BC
 	pushw	de                                   ; FB81AD  2a                push DE
-	calr (0xFB732C - 0xFB81B1)                 ; FB81AE  1e 7b f1          calr 0xfb732c
+	calr Dev10C_WriteReg_c                 ; FB81AE  1e 7b f1          calr 0xfb732c
 	ld	hl, de                                  ; FB81B1  da 8b             ld HL,DE
 	inc	1, hl                                  ; FB81B3  db 61             inc 1,HL
 	inc	8, xsp                                 ; FB81B5  ef 60             inc 0,XSP
@@ -4254,11 +4254,11 @@ Dev10C_ResetAllChannels__FB81DB:
 	lda	xbc, (0x00D8DB:24)                       ; FB8221  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB8226  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB8227  9e f6 04          pushw (XIZ+0xf6)
-	calr (0xFB7C27 - 0xFB822D)                 ; FB822A  1e fa f9          calr 0xfb7c27
+	calr Dev10C_Slot2_WriteGateAndValue                 ; FB822A  1e fa f9          calr 0xfb7c27
 	lda	xbc, (0x00D8DB:24)                       ; FB822D  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB8232  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB8233  9e f6 04          pushw (XIZ+0xf6)
-	calr (0xFB7D1D - 0xFB8239)                 ; FB8236  1e e4 fa          calr 0xfb7d1d
+	calr Dev10C_Slot3_WriteGateAndValue                 ; FB8236  1e e4 fa          calr 0xfb7d1d
 	extpfx7 0xD2, 0x1F, 0xD9, 0x00, 0x3C, 0xFF, 0xC0 ; FB8239  d2 1f d9 00 3c ff c0 and (0x00d91f),0xc0ff
 	ld	bc, (0x00D91F:24)                        ; FB8240  d2 1f d9 00 21    ld BC,(0x00d91f)
 	res	2, bc                                  ; FB8245  d9 30 02          res 0x02,BC
@@ -4272,7 +4272,7 @@ Dev10C_ResetAllChannels__FB81DB:
 	lda	xbc, (0x00D91F:24)                       ; FB8262  f2 1f d9 00 31    lda XBC,0x00d91f
 	push	xbc                                   ; FB8267  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB8268  9e f6 04          pushw (XIZ+0xf6)
-	calr (0xFB7A58 - 0xFB826E)                 ; FB826B  1e ea f7          calr 0xfb7a58
+	calr Dev104_WriteChanReg0                 ; FB826B  1e ea f7          calr 0xfb7a58
 	incw	1, (xiz-2)                            ; FB826E  9e fe 61          incw 1,(XIZ+0xfe)
 	inc	1, de                                  ; FB8271  da 61             inc 1,DE
 	incw	1, (xiz-4)                            ; FB8273  9e fc 61          incw 1,(XIZ+0xfc)

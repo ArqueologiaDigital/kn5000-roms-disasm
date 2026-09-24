@@ -560,7 +560,7 @@ ToneStage_LoadElementWaveSelect_FromCatalogueRow:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB8438  push (XIZ+0x0c)
 	push	0                                     ; FB843B  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB843D  push (XIZ+0x0a)
-	calr (0xFB82C3 - 0xFB8443)                 ; FB8440  calr 0xfb82c3
+	calr ToneDB_ResolveWaveSelectRecord                 ; FB8440  calr 0xfb82c3
 	ld	(xiz-4), xiy                            ; FB8443  ld (XIZ+0xfc),XIY
 	ld	c, 43:opc                                  ; FB8446  ld C,0x2b
 	extpfx3 0x8E, 0x08, 0x43                   ; FB8448  mul BC,(XIZ+0x08)
@@ -575,7 +575,7 @@ ToneStage_LoadElementWaveSelect_FromCatalogueRow:
 	ld	xbc, (xiz-8)                            ; FB8469  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB846C  push XBC
 	push	xiy                                   ; FB846D  push XIY
-	calr (0xFB828E - 0xFB8471)                 ; FB846E  calr 0xfb828e
+	calr MemCopyBytes                 ; FB846E  calr 0xfb828e
 	inc	8, xsp                                 ; FB8471  inc 0,XSP
 	inc	2, xsp                                 ; FB8473  inc 2,XSP
 	unlk32 xiz                                 ; FB8475  unlk XIZ
@@ -625,7 +625,7 @@ ToneStage_LoadPercWaveSelect_FromCatalogueRow:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB847F  push (XIZ+0x0c)
 	push	0                                     ; FB8482  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB8484  push (XIZ+0x0a)
-	calr (0xFB82C3 - 0xFB848A)                 ; FB8487  calr 0xfb82c3
+	calr ToneDB_ResolveWaveSelectRecord                 ; FB8487  calr 0xfb82c3
 	ld	(xiz-4), xiy                            ; FB848A  ld (XIZ+0xfc),XIY
 	ld	c, 43:opc                                  ; FB848D  ld C,0x2b
 	extpfx3 0x8E, 0x08, 0x43                   ; FB848F  mul BC,(XIZ+0x08)
@@ -645,7 +645,7 @@ ToneStage_LoadPercWaveSelect_FromCatalogueRow:
 	ld	xwa, (xiz-8)                            ; FB84BB  ld XWA,(XIZ+0xf8)
 	push	xwa                                   ; FB84BE  push XWA
 	push	xiy                                   ; FB84BF  push XIY
-	calr (0xFB828E - 0xFB84C3)                 ; FB84C0  calr 0xfb828e
+	calr MemCopyBytes                 ; FB84C0  calr 0xfb828e
 	inc	8, xsp                                 ; FB84C3  inc 0,XSP
 	inc	2, xsp                                 ; FB84C5  inc 2,XSP
 	pop	xix                                    ; FB84C7  pop XIX
@@ -706,7 +706,7 @@ ToneStage_LoadToneRecord_FromPart:
 	pushw	0xD9                                 ; FB84EB  push 0x00d9
 	push	xbc                                   ; FB84EE  push XBC
 	push	xwa                                   ; FB84EF  push XWA
-	calr (0xFB828E - 0xFB84F3)                 ; FB84F0  calr 0xfb828e
+	calr MemCopyBytes                 ; FB84F0  calr 0xfb828e
 	ld	(xiz-9), 0                              ; FB84F3  ld (XIZ+0xf7),0x00
 	inc	8, xsp                                 ; FB84F7  inc 0,XSP
 	inc	2, xsp                                 ; FB84F9  inc 2,XSP
@@ -738,7 +738,7 @@ ToneStage_LoadToneRecord_FromPart__FB8508:
 	pushw	81                                   ; FB853E  push 0x0051
 	push	xwa                                   ; FB8541  push XWA
 	push	xbc                                   ; FB8542  push XBC
-	calr (0xFB828E - 0xFB8546)                 ; FB8543  calr 0xfb828e
+	calr MemCopyBytes                 ; FB8543  calr 0xfb828e
 	inc	8, xsp                                 ; FB8546  inc 0,XSP
 	inc	2, xsp                                 ; FB8548  inc 2,XSP
 	jr ToneStage_LoadToneRecord_FromPart__FB8503                      ; FB854A  jr T,0xfb8503
@@ -795,7 +795,7 @@ ToneStage_LoadKitRecord_FromPart:
 	pushw	0x198                                ; FB856F  push 0x0198
 	push	xbc                                   ; FB8572  push XBC
 	push	xwa                                   ; FB8573  push XWA
-	calr (0xFB828E - 0xFB8577)                 ; FB8574  calr 0xfb828e
+	calr MemCopyBytes                 ; FB8574  calr 0xfb828e
 	inc	8, xsp                                 ; FB8577  inc 0,XSP
 	inc	2, xsp                                 ; FB8579  inc 2,XSP
 	unlk32 xiz                                 ; FB857B  unlk XIZ
@@ -872,7 +872,7 @@ ToneStage_LoadPercInstHead:
 	ld	bc, (xiz+10)                            ; FB85CF  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FB85D2  extz BC
 	pushw	bc                                   ; FB85D4  push BC
-	call	0xFB48F7                              ; FB85D5  call 0xfb48f7
+	call	DrumKit_ResolveInstrumentRecord                              ; FB85D5  call 0xfb48f7
 	ld	(xiz-6), xiy                            ; FB85D9  ld (XIZ+0xfa),XIY
 	ld	c, 0x96:opc                                ; FB85DC  ld C,0x96
 	extpfx3 0x8E, 0x0E, 0x43                   ; FB85DE  mul BC,(XIZ+0x0e)
@@ -884,7 +884,7 @@ ToneStage_LoadPercInstHead:
 	pushw	64                                   ; FB85F4  push 0x0040
 	push	xbc                                   ; FB85F7  push XBC
 	push	xiy                                   ; FB85F8  push XIY
-	calr (0xFB828E - 0xFB85FC)                 ; FB85F9  calr 0xfb828e
+	calr MemCopyBytes                 ; FB85F9  calr 0xfb828e
 	inc	8, xsp                                 ; FB85FC  inc 0,XSP
 	inc	2, xsp                                 ; FB85FE  inc 2,XSP
 	unlk32 xiz                                 ; FB8600  unlk XIZ
@@ -947,7 +947,7 @@ ToneStage_LoadElementWaveSelect_FromToneRecord:
 	ld	a, (xbc+0x1523)                         ; FB8626  ld A,(XBC+0x1523)
 	extz	wa                                    ; FB862B  extz WA
 	pushw	wa                                   ; FB862D  push WA
-	call	0xFB44A5                              ; FB862E  call 0xfb44a5
+	call	ToneRec_GetWaveSelectRecord_ByBankSelector                              ; FB862E  call 0xfb44a5
 	ld	(xiz-4), xiy                            ; FB8632  ld (XIZ+0xfc),XIY
 	ld	c, 43:opc                                  ; FB8635  ld C,0x2b
 	extpfx3 0x8E, 0x0A, 0x43                   ; FB8637  mul BC,(XIZ+0x0a)
@@ -962,7 +962,7 @@ ToneStage_LoadElementWaveSelect_FromToneRecord:
 	ld	xbc, (xiz-8)                            ; FB8658  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB865B  push XBC
 	push	xiy                                   ; FB865C  push XIY
-	calr (0xFB828E - 0xFB8660)                 ; FB865D  calr 0xfb828e
+	calr MemCopyBytes                 ; FB865D  calr 0xfb828e
 	inc	8, xsp                                 ; FB8660  inc 0,XSP
 	inc	2, xsp                                 ; FB8662  inc 2,XSP
 	popw	hl                                    ; FB8664  pop HL
@@ -1014,7 +1014,7 @@ ToneStage_LoadPercWaveSelect_FromInstRecord:
 	push	xbc                                   ; FB8670  push XBC
 	push	0                                     ; FB8671  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8673  push (XIZ+0x08)
-	call	0xFB454C                              ; FB8676  call 0xfb454c
+	call	PercInst_GetWaveSelectRecord                              ; FB8676  call 0xfb454c
 	ld	(xiz-4), xiy                            ; FB867A  ld (XIZ+0xfc),XIY
 	ld	c, 43:opc                                  ; FB867D  ld C,0x2b
 	extpfx3 0x8E, 0x08, 0x43                   ; FB867F  mul BC,(XIZ+0x08)
@@ -1034,7 +1034,7 @@ ToneStage_LoadPercWaveSelect_FromInstRecord:
 	ld	xwa, (xiz-8)                            ; FB86AB  ld XWA,(XIZ+0xf8)
 	push	xwa                                   ; FB86AE  push XWA
 	push	xiy                                   ; FB86AF  push XIY
-	calr (0xFB828E - 0xFB86B3)                 ; FB86B0  calr 0xfb828e
+	calr MemCopyBytes                 ; FB86B0  calr 0xfb828e
 	inc	8, xsp                                 ; FB86B3  inc 0,XSP
 	inc	2, xsp                                 ; FB86B5  inc 2,XSP
 	pop	xix                                    ; FB86B7  pop XIX
@@ -1116,7 +1116,7 @@ ToneStage_SwitchToPart:
 	cp	c, 33                                   ; FB86CF  cp C,0x21
 	jrl nc, ToneStage_SwitchToPart__FB875B                 ; FB86D2  jrl NC,0xfb875b
 	pushw	bc                                   ; FB86D5  push BC
-	call	0xFB64C8                              ; FB86D6  call 0xfb64c8
+	call	PartRec_Word0004_ClearStagedSetBit2                              ; FB86D6  call 0xfb64c8
 	ld	bc, (xiz-11)                            ; FB86DA  ld BC,(XIZ+0xf5)
 	extz	bc                                    ; FB86DD  extz BC
 	mul	bc, 0x12C                              ; FB86DF  mul BC,0x012c
@@ -1133,7 +1133,7 @@ ToneStage_SwitchToPart:
 	pushw	wa                                   ; FB86FF  push WA
 	push	0                                     ; FB8700  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FB8702  push (XIZ+0xf5)
-	call	0xFB47C4                              ; FB8705  call 0xfb47c4
+	call	Part_LoadToneRecordAndPointers                              ; FB8705  call 0xfb47c4
 	ld	bc, (xiz-11)                            ; FB8709  ld BC,(XIZ+0xf5)
 	extz	bc                                    ; FB870C  extz BC
 	mul	bc, 0x12C                              ; FB870E  mul BC,0x012c
@@ -1148,13 +1148,13 @@ ToneStage_SwitchToPart:
 ToneStage_SwitchToPart__FB8728:
 	push	0                                     ; FB8728  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FB872A  push (XIZ+0xf5)
-	call	0xFB6681                              ; FB872D  call 0xfb6681
+	call	Part_RestageVoiceParams_Melodic                              ; FB872D  call 0xfb6681
 	popw	bc                                    ; FB8731  pop BC
 	jr ToneStage_SwitchToPart__FB875B                      ; FB8732  jr T,0xfb875b
 ToneStage_SwitchToPart__FB8734:
 	push	0                                     ; FB8734  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FB8736  push (XIZ+0xf5)
-	call	0xFB68DD                              ; FB8739  call 0xfb68dd
+	call	Part_RestageVoiceParams_Drawbar                              ; FB8739  call 0xfb68dd
 	popw	bc                                    ; FB873D  pop BC
 	jr ToneStage_SwitchToPart__FB875B                      ; FB873E  jr T,0xfb875b
 ToneStage_SwitchToPart__FB8740:
@@ -1183,7 +1183,7 @@ ToneStage_SwitchToPart__FB875B:
 ToneStage_SwitchToPart__FB8779:
 	push	0                                     ; FB8779  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB877B  push (XIZ+0x08)
-	calr (0xFB84CB - 0xFB8781)                 ; FB877E  calr 0xfb84cb
+	calr ToneStage_LoadToneRecord_FromPart                 ; FB877E  calr 0xfb84cb
 	ld	(xiz-12), 0                             ; FB8781  ld (XIZ+0xf4),0x00
 	popw	bc                                    ; FB8785  pop BC
 ToneStage_SwitchToPart__FB8786:
@@ -1198,7 +1198,7 @@ ToneStage_SwitchToPart__FB8793:
 	extpfx3 0x8E, 0xF4, 0x04                   ; FB8795  push (XIZ+0xf4)
 	push	0                                     ; FB8798  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB879A  push (XIZ+0x08)
-	calr (0xFB8603 - 0xFB87A0)                 ; FB879D  calr 0xfb8603
+	calr ToneStage_LoadElementWaveSelect_FromToneRecord                 ; FB879D  calr 0xfb8603
 	pop	xiy                                    ; FB87A0  pop XIY
 	jr ToneStage_SwitchToPart__FB878E                      ; FB87A1  jr T,0xfb878e
 ToneStage_SwitchToPart__FB87A3:
@@ -1299,7 +1299,7 @@ ToneStage_SwitchToPart__FB8877:
 ToneStage_SwitchToPart__FB88AC:
 	push	0                                     ; FB88AC  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB88AE  push (XIZ+0x08)
-	calr (0xFB8550 - 0xFB88B4)                 ; FB88B1  calr 0xfb8550
+	calr ToneStage_LoadKitRecord_FromPart                 ; FB88B1  calr 0xfb8550
 	lda	xbc, (0x8A9B:24)                       ; FB88B4  lda XBC,0x008a9b
 	ld	(xiz-4), xbc                            ; FB88B9  ld (XIZ+0xfc),XBC
 	ld	wa, (xiz+8)                             ; FB88BC  ld WA,(XIZ+0x08)
@@ -1349,7 +1349,7 @@ ToneStage_SwitchToPart__FB890E:
 	pushw	wa                                   ; FB8935  push WA
 	push	0                                     ; FB8936  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8938  push (XIZ+0x08)
-	calr (0xFB857E - 0xFB893E)                 ; FB893B  calr 0xfb857e
+	calr ToneStage_LoadPercInstHead                 ; FB893B  calr 0xfb857e
 	inc	8, xsp                                 ; FB893E  inc 0,XSP
 	push	0                                     ; FB8940  push 0x00
 	extpfx3 0x8E, 0xF4, 0x04                   ; FB8942  push (XIZ+0xf4)
@@ -1370,7 +1370,7 @@ ToneStage_SwitchToPart__FB890E:
 	ld	a, (xbc)                                ; FB896B  ld A,(XBC)
 	extz	wa                                    ; FB896D  extz WA
 	pushw	wa                                   ; FB896F  push WA
-	call	0xFB48F7                              ; FB8970  call 0xfb48f7
+	call	DrumKit_ResolveInstrumentRecord                              ; FB8970  call 0xfb48f7
 	ld	(xiz-8), xiy                            ; FB8974  ld (XIZ+0xf8),XIY
 	ld	(xiz-13), 0                             ; FB8977  ld (XIZ+0xf3),0x00
 	inc	8, xsp                                 ; FB897B  inc 0,XSP
@@ -1388,7 +1388,7 @@ ToneStage_SwitchToPart__FB898A:
 	push	xbc                                   ; FB8992  push XBC
 	push	0                                     ; FB8993  push 0x00
 	extpfx3 0x8E, 0xF3, 0x04                   ; FB8995  push (XIZ+0xf3)
-	calr (0xFB8668 - 0xFB899B)                 ; FB8998  calr 0xfb8668
+	calr ToneStage_LoadPercWaveSelect_FromInstRecord                 ; FB8998  calr 0xfb8668
 	inc	8, xsp                                 ; FB899B  inc 0,XSP
 	jr ToneStage_SwitchToPart__FB8985                      ; FB899D  jr T,0xfb8985
 ToneStage_SwitchToPart__FB899F:
@@ -1458,14 +1458,14 @@ Voice_RecomputeEnv_AndWriteSlot2:
 	pushw	0                                    ; FB8A02  push 0x0000
 	push	0                                     ; FB8A05  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8A07  push (XIZ+0x08)
-	call	0xFB501F                              ; FB8A0A  call 0xfb501f
+	call	sub_FB501F                              ; FB8A0A  call 0xfb501f
 	inc	6, xsp                                 ; FB8A0E  inc 6,XSP
 	push	0                                     ; FB8A10  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB8A12  push (XIZ+0x0a)
 	pushw	0                                    ; FB8A15  push 0x0000
 	push	0                                     ; FB8A18  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8A1A  push (XIZ+0x08)
-	call	0xFB5103                              ; FB8A1D  call 0xfb5103
+	call	sub_FB5103                              ; FB8A1D  call 0xfb5103
 	ld	(xiz-7), 0                              ; FB8A21  ld (XIZ+0xf9),0x00
 	inc	6, xsp                                 ; FB8A25  inc 6,XSP
 Voice_RecomputeEnv_AndWriteSlot2__FB8A27:
@@ -1481,7 +1481,7 @@ Voice_RecomputeEnv_AndWriteSlot2__FB8A34:
 	extpfx3 0x8E, 0xF9, 0x04                   ; FB8A39  push (XIZ+0xf9)
 	push	0                                     ; FB8A3C  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8A3E  push (XIZ+0x08)
-	call	0xFB53C5                              ; FB8A41  call 0xfb53c5
+	call	sub_FB53C5                              ; FB8A41  call 0xfb53c5
 	inc	6, xsp                                 ; FB8A45  inc 6,XSP
 	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A2F                      ; FB8A47  jr T,0xfb8a2f
 Voice_RecomputeEnv_AndWriteSlot2__FB8A49:
@@ -1490,7 +1490,7 @@ Voice_RecomputeEnv_AndWriteSlot2__FB8A49:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB8A4E  push (XIZ+0x0a)
 	push	0                                     ; FB8A51  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8A53  push (XIZ+0x08)
-	call	0xFA6110                              ; FB8A56  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FB8A56  call 0xfa6110
 	ld	(xiz-2), iy                             ; FB8A5A  ld (XIZ+0xfe),IY
 	ldw (xiz-4), 0x0000                        ; FB8A5D  ld (XIZ+0xfc),0x0000
 	inc	6, xsp                                 ; FB8A62  inc 6,XSP
@@ -1529,23 +1529,23 @@ Voice_RecomputeEnv_AndWriteSlot2__FB8A85:
 	pushw	bc                                   ; FB8AB7  push BC
 	push	0                                     ; FB8AB8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8ABA  push (XIZ+0x08)
-	call	0xFA981B                              ; FB8ABD  call 0xfa981b
+	call	EnvRec_LoadSlot                              ; FB8ABD  call 0xfa981b
 	ld	c, (xiz-6)                              ; FB8AC1  ld C,(XIZ+0xfa)
 	inc	8, xsp                                 ; FB8AC4  inc 0,XSP
 	inc	2, xsp                                 ; FB8AC6  inc 2,XSP
 	pushw	bc                                   ; FB8AC8  push BC
-	call	0xFA796D                              ; FB8AC9  call 0xfa796d
+	call	EGEnv_Eval_BaseCurveA                              ; FB8AC9  call 0xfa796d
 	ld	(0xD79E:24), wa                        ; FB8ACD  ld (0x00d79e),WA
 	ld	c, (xiz-6)                              ; FB8AD2  ld C,(XIZ+0xfa)
 	popw	wa                                    ; FB8AD5  pop WA
 	pushw	bc                                   ; FB8AD6  push BC
-	call	0xFA79F4                              ; FB8AD7  call 0xfa79f4
+	call	EGEnv_Eval_ValueCurve_WithBaseCurveA                              ; FB8AD7  call 0xfa79f4
 	ld	(0xD79A:24), wa                        ; FB8ADB  ld (0x00d79a),WA
 	popw	bc                                    ; FB8AE0  pop BC
 	lda	xbc, (0xD75E:24)                       ; FB8AE1  lda XBC,0x00d75e
 	push	xbc                                   ; FB8AE6  push XBC
 	extpfx3 0x9E, 0xFA, 0x04                   ; FB8AE7  pushw (XIZ+0xfa)
-	call	0xFB7C27                              ; FB8AEA  call 0xfb7c27
+	call	Dev10C_Slot2_WriteGateAndValue                              ; FB8AEA  call 0xfb7c27
 	inc	6, xsp                                 ; FB8AEE  inc 6,XSP
 	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A80                      ; FB8AF0  jr T,0xfb8a80
 Voice_RecomputeEnv_AndWriteSlot2__FB8AF2:
@@ -1583,14 +1583,14 @@ Voice_RecomputeEnv_AndWriteSlot1:
 	pushw	1                                    ; FB8B00  push 0x0001
 	push	0                                     ; FB8B03  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8B05  push (XIZ+0x08)
-	call	0xFB501F                              ; FB8B08  call 0xfb501f
+	call	sub_FB501F                              ; FB8B08  call 0xfb501f
 	inc	6, xsp                                 ; FB8B0C  inc 6,XSP
 	push	0                                     ; FB8B0E  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB8B10  push (XIZ+0x0a)
 	pushw	1                                    ; FB8B13  push 0x0001
 	push	0                                     ; FB8B16  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8B18  push (XIZ+0x08)
-	call	0xFB5103                              ; FB8B1B  call 0xfb5103
+	call	sub_FB5103                              ; FB8B1B  call 0xfb5103
 	ld	(xiz-7), 0                              ; FB8B1F  ld (XIZ+0xf9),0x00
 	inc	6, xsp                                 ; FB8B23  inc 6,XSP
 Voice_RecomputeEnv_AndWriteSlot1__FB8B25:
@@ -1606,7 +1606,7 @@ Voice_RecomputeEnv_AndWriteSlot1__FB8B32:
 	extpfx3 0x8E, 0xF9, 0x04                   ; FB8B37  push (XIZ+0xf9)
 	push	0                                     ; FB8B3A  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8B3C  push (XIZ+0x08)
-	call	0xFB53C5                              ; FB8B3F  call 0xfb53c5
+	call	sub_FB53C5                              ; FB8B3F  call 0xfb53c5
 	inc	6, xsp                                 ; FB8B43  inc 6,XSP
 	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B2D                      ; FB8B45  jr T,0xfb8b2d
 Voice_RecomputeEnv_AndWriteSlot1__FB8B47:
@@ -1616,7 +1616,7 @@ Voice_RecomputeEnv_AndWriteSlot1__FB8B47:
 	pushw	bc                                   ; FB8B50  push BC
 	push	0                                     ; FB8B51  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8B53  push (XIZ+0x08)
-	call	0xFA6110                              ; FB8B56  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FB8B56  call 0xfa6110
 	ld	(xiz-2), iy                             ; FB8B5A  ld (XIZ+0xfe),IY
 	ldw (xiz-4), 0x0000                        ; FB8B5D  ld (XIZ+0xfc),0x0000
 	inc	6, xsp                                 ; FB8B62  inc 6,XSP
@@ -1655,23 +1655,23 @@ Voice_RecomputeEnv_AndWriteSlot1__FB8B85:
 	pushw	bc                                   ; FB8BB7  push BC
 	push	0                                     ; FB8BB8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8BBA  push (XIZ+0x08)
-	call	0xFA981B                              ; FB8BBD  call 0xfa981b
+	call	EnvRec_LoadSlot                              ; FB8BBD  call 0xfa981b
 	ld	c, (xiz-6)                              ; FB8BC1  ld C,(XIZ+0xfa)
 	inc	8, xsp                                 ; FB8BC4  inc 0,XSP
 	inc	2, xsp                                 ; FB8BC6  inc 2,XSP
 	pushw	bc                                   ; FB8BC8  push BC
-	call	0xFA7A4B                              ; FB8BC9  call 0xfa7a4b
+	call	EGEnv_Eval_BaseCurveB                              ; FB8BC9  call 0xfa7a4b
 	ld	(0xD796:24), wa                        ; FB8BCD  ld (0x00d796),WA
 	ld	c, (xiz-6)                              ; FB8BD2  ld C,(XIZ+0xfa)
 	popw	wa                                    ; FB8BD5  pop WA
 	pushw	bc                                   ; FB8BD6  push BC
-	call	0xFA7AD6                              ; FB8BD7  call 0xfa7ad6
+	call	EGEnv_Eval_ValueCurve_WithBaseCurveB                              ; FB8BD7  call 0xfa7ad6
 	ld	(0xD798:24), wa                        ; FB8BDB  ld (0x00d798),WA
 	popw	bc                                    ; FB8BE0  pop BC
 	lda	xbc, (0xD75E:24)                       ; FB8BE1  lda XBC,0x00d75e
 	push	xbc                                   ; FB8BE6  push XBC
 	extpfx3 0x9E, 0xFA, 0x04                   ; FB8BE7  pushw (XIZ+0xfa)
-	call	0xFB7E13                              ; FB8BEA  call 0xfb7e13
+	call	Dev10C_Slot1_WriteGateAndValue                              ; FB8BEA  call 0xfb7e13
 	inc	6, xsp                                 ; FB8BEE  inc 6,XSP
 	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B80                      ; FB8BF0  jr T,0xfb8b80
 Voice_RecomputeEnv_AndWriteSlot1__FB8BF2:
@@ -1709,14 +1709,14 @@ Voice_RecomputeEnv_AndWriteSlot1or3:
 	pushw	2                                    ; FB8C00  push 0x0002
 	push	0                                     ; FB8C03  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8C05  push (XIZ+0x08)
-	call	0xFB501F                              ; FB8C08  call 0xfb501f
+	call	sub_FB501F                              ; FB8C08  call 0xfb501f
 	inc	6, xsp                                 ; FB8C0C  inc 6,XSP
 	push	0                                     ; FB8C0E  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FB8C10  push (XIZ+0x0a)
 	pushw	2                                    ; FB8C13  push 0x0002
 	push	0                                     ; FB8C16  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8C18  push (XIZ+0x08)
-	call	0xFB5103                              ; FB8C1B  call 0xfb5103
+	call	sub_FB5103                              ; FB8C1B  call 0xfb5103
 	ld	(xiz-7), 0                              ; FB8C1F  ld (XIZ+0xf9),0x00
 	inc	6, xsp                                 ; FB8C23  inc 6,XSP
 Voice_RecomputeEnv_AndWriteSlot1or3__FB8C25:
@@ -1732,7 +1732,7 @@ Voice_RecomputeEnv_AndWriteSlot1or3__FB8C32:
 	extpfx3 0x8E, 0xF9, 0x04                   ; FB8C37  push (XIZ+0xf9)
 	push	0                                     ; FB8C3A  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8C3C  push (XIZ+0x08)
-	call	0xFB53C5                              ; FB8C3F  call 0xfb53c5
+	call	sub_FB53C5                              ; FB8C3F  call 0xfb53c5
 	inc	6, xsp                                 ; FB8C43  inc 6,XSP
 	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C2D                      ; FB8C45  jr T,0xfb8c2d
 Voice_RecomputeEnv_AndWriteSlot1or3__FB8C47:
@@ -1742,7 +1742,7 @@ Voice_RecomputeEnv_AndWriteSlot1or3__FB8C47:
 	pushw	bc                                   ; FB8C50  push BC
 	push	0                                     ; FB8C51  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8C53  push (XIZ+0x08)
-	call	0xFA6110                              ; FB8C56  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FB8C56  call 0xfa6110
 	ld	(xiz-2), iy                             ; FB8C5A  ld (XIZ+0xfe),IY
 	ldw (xiz-4), 0x0000                        ; FB8C5D  ld (XIZ+0xfc),0x0000
 	inc	6, xsp                                 ; FB8C62  inc 6,XSP
@@ -1781,21 +1781,21 @@ Voice_RecomputeEnv_AndWriteSlot1or3__FB8C85:
 	pushw	bc                                   ; FB8CB7  push BC
 	push	0                                     ; FB8CB8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8CBA  push (XIZ+0x08)
-	call	0xFA981B                              ; FB8CBD  call 0xfa981b
+	call	EnvRec_LoadSlot                              ; FB8CBD  call 0xfa981b
 	ld	c, (xiz-6)                              ; FB8CC1  ld C,(XIZ+0xfa)
 	inc	8, xsp                                 ; FB8CC4  inc 0,XSP
 	inc	2, xsp                                 ; FB8CC6  inc 2,XSP
 	pushw	bc                                   ; FB8CC8  push BC
-	call	0xFA7B31                              ; FB8CC9  call 0xfa7b31
+	call	EGEnv_Eval_FreqWriteBaseCurve                              ; FB8CC9  call 0xfa7b31
 	ld	c, (xiz-6)                              ; FB8CCD  ld C,(XIZ+0xfa)
 	popw	wa                                    ; FB8CD0  pop WA
 	pushw	bc                                   ; FB8CD1  push BC
-	call	0xFA7C3A                              ; FB8CD2  call 0xfa7c3a
+	call	EGEnv_Eval_ValueCurve_WithFreqWriteCurve                              ; FB8CD2  call 0xfa7c3a
 	popw	bc                                    ; FB8CD6  pop BC
 	lda	xbc, (0xD75E:24)                       ; FB8CD7  lda XBC,0x00d75e
 	push	xbc                                   ; FB8CDC  push XBC
 	extpfx3 0x9E, 0xFA, 0x04                   ; FB8CDD  pushw (XIZ+0xfa)
-	call	0xFB7F09                              ; FB8CE0  call 0xfb7f09
+	call	Dev10C_Slot1or3_WriteGateAndValue                              ; FB8CE0  call 0xfb7f09
 	inc	6, xsp                                 ; FB8CE4  inc 6,XSP
 	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C80                      ; FB8CE6  jr T,0xfb8c80
 Voice_RecomputeEnv_AndWriteSlot1or3__FB8CE8:
@@ -1917,7 +1917,7 @@ sub_FB8CEC__FB8DCC:
 	pushw	64                                   ; FB8DDC  push 0x0040
 	push	0                                     ; FB8DDF  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8DE1  push (XIZ+0x08)
-	call	0xFAF031                              ; FB8DE4  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FB8DE4  call 0xfaf031
 	ldw	bc, 6                                  ; FB8DE8  ld BC,0x0006
 	extpfx3 0x9E, 0xF6, 0x41                   ; FB8DEB  mul XBC,(XIZ+0xf6)
 	add	xbc, 52                                ; FB8DEE  add XBC,0x00000034
@@ -1927,7 +1927,7 @@ sub_FB8CEC__FB8DCC:
 	pushw	64                                   ; FB8DFA  push 0x0040
 	push	0                                     ; FB8DFD  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8DFF  push (XIZ+0x08)
-	call	0xFAF031                              ; FB8E02  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FB8E02  call 0xfaf031
 	inc	8, xsp                                 ; FB8E06  inc 0,XSP
 	jr sub_FB8CEC__FB8DC7                      ; FB8E08  jr T,0xfb8dc7
 sub_FB8CEC__FB8E0A:
@@ -1956,7 +1956,7 @@ sub_FB8CEC__FB8E33:
 	pushw	64                                   ; FB8E43  push 0x0040
 	push	0                                     ; FB8E46  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8E48  push (XIZ+0x08)
-	call	0xFAF031                              ; FB8E4B  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FB8E4B  call 0xfaf031
 	ldw	bc, 6                                  ; FB8E4F  ld BC,0x0006
 	extpfx3 0x9E, 0xF6, 0x41                   ; FB8E52  mul XBC,(XIZ+0xf6)
 	add	xbc, 49                                ; FB8E55  add XBC,0x00000031
@@ -1966,7 +1966,7 @@ sub_FB8CEC__FB8E33:
 	pushw	64                                   ; FB8E61  push 0x0040
 	push	0                                     ; FB8E64  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8E66  push (XIZ+0x08)
-	call	0xFAF031                              ; FB8E69  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FB8E69  call 0xfaf031
 	inc	8, xsp                                 ; FB8E6D  inc 0,XSP
 	jr sub_FB8CEC__FB8E2E                      ; FB8E6F  jr T,0xfb8e2e
 sub_FB8CEC__FB8E71:
@@ -1995,7 +1995,7 @@ sub_FB8CEC__FB8E88:
 	pushw	wa                                   ; FB8EAC  push WA
 	push	0                                     ; FB8EAD  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8EAF  push (XIZ+0x08)
-	call	0xFB47C4                              ; FB8EB2  call 0xfb47c4
+	call	Part_LoadToneRecordAndPointers                              ; FB8EB2  call 0xfb47c4
 	ld	bc, (xiz+8)                             ; FB8EB6  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB8EB9  extz BC
 	mul	bc, 0x12C                              ; FB8EBB  mul BC,0x012c
@@ -2033,7 +2033,7 @@ sub_FB8CEC__FB8F00:
 sub_FB8CEC__FB8F1E:
 	push	0                                     ; FB8F1E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8F20  push (XIZ+0x08)
-	call	0xFB6681                              ; FB8F23  call 0xfb6681
+	call	Part_RestageVoiceParams_Melodic                              ; FB8F23  call 0xfb6681
 	popw	bc                                    ; FB8F27  pop BC
 	cp (xiz+10), 0x00                          ; FB8F28  cp (XIZ+0x0a),0x00
 	jrl z, sub_FB8CEC__FB8FD4                  ; FB8F2C  jrl Z,0xfb8fd4
@@ -2073,7 +2073,7 @@ sub_FB8CEC__FB8F56:
 	pushw	wa                                   ; FB8F8A  push WA
 	push	0                                     ; FB8F8B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8F8D  push (XIZ+0x08)
-	call	0xFAF031                              ; FB8F90  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FB8F90  call 0xfaf031
 	ldw	bc, 6                                  ; FB8F94  ld BC,0x0006
 	extpfx3 0x9E, 0xF6, 0x41                   ; FB8F97  mul XBC,(XIZ+0xf6)
 	add	xbc, 52                                ; FB8F9A  add XBC,0x00000034
@@ -2094,7 +2094,7 @@ sub_FB8CEC__FB8F56:
 	pushw	bc                                   ; FB8FC5  push BC
 	push	0                                     ; FB8FC6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8FC8  push (XIZ+0x08)
-	call	0xFAF031                              ; FB8FCB  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FB8FCB  call 0xfaf031
 	inc	8, xsp                                 ; FB8FCF  inc 0,XSP
 	jrl sub_FB8CEC__FB8F51                     ; FB8FD1  jrl T,0xfb8f51
 sub_FB8CEC__FB8FD4:
@@ -2102,7 +2102,7 @@ sub_FB8CEC__FB8FD4:
 sub_FB8CEC__FB8FD7:
 	push	0                                     ; FB8FD7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB8FD9  push (XIZ+0x08)
-	call	0xFB68DD                              ; FB8FDC  call 0xfb68dd
+	call	Part_RestageVoiceParams_Drawbar                              ; FB8FDC  call 0xfb68dd
 	popw	bc                                    ; FB8FE0  pop BC
 	jrl sub_FB8CEC__FB90AF                     ; FB8FE1  jrl T,0xfb90af
 sub_FB8CEC__FB8FE4:
@@ -2144,7 +2144,7 @@ sub_FB8CEC__FB9012:
 	pushw	wa                                   ; FB9046  push WA
 	push	0                                     ; FB9047  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9049  push (XIZ+0x08)
-	call	0xFAF031                              ; FB904C  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FB904C  call 0xfaf031
 	ldw	bc, 6                                  ; FB9050  ld BC,0x0006
 	extpfx3 0x9E, 0xF6, 0x41                   ; FB9053  mul XBC,(XIZ+0xf6)
 	add	xbc, 49                                ; FB9056  add XBC,0x00000031
@@ -2165,7 +2165,7 @@ sub_FB8CEC__FB9012:
 	pushw	bc                                   ; FB9081  push BC
 	push	0                                     ; FB9082  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9084  push (XIZ+0x08)
-	call	0xFAF031                              ; FB9087  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FB9087  call 0xfaf031
 	inc	8, xsp                                 ; FB908B  inc 0,XSP
 	jrl sub_FB8CEC__FB900D                     ; FB908D  jrl T,0xfb900d
 sub_FB8CEC__FB9090:
@@ -2326,7 +2326,7 @@ ToneDB_SourceNameList1_SelectEntry__FB9102:
 	extpfx3 0x8E, 0xF0, 0x04                   ; FB9195  push (XIZ+0xf0)
 	push	0                                     ; FB9198  push 0x00
 	extpfx3 0x8E, 0xF1, 0x04                   ; FB919A  push (XIZ+0xf1)
-	calr (0xFB8432 - 0xFB91A0)                 ; FB919D  calr 0xfb8432
+	calr ToneStage_LoadElementWaveSelect_FromCatalogueRow                 ; FB919D  calr 0xfb8432
 	ld	c, 43:opc                                  ; FB91A0  ld C,0x2b
 	extpfx3 0x8E, 0xF1, 0x43                   ; FB91A2  mul BC,(XIZ+0xf1)
 	extz	xbc                                   ; FB91A5  extz XBC
@@ -2350,7 +2350,7 @@ ToneDB_SourceNameList1_SelectEntry__FB91CD:
 	extpfx3 0x8E, 0xF1, 0x04                   ; FB91D3  push (XIZ+0xf1)
 	push	0                                     ; FB91D6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB91D8  push (XIZ+0x08)
-	call	0xFB477B                              ; FB91DB  call 0xfb477b
+	call	PartElement_SetEnvDescriptorPointer                              ; FB91DB  call 0xfb477b
 	inc	6, xsp                                 ; FB91DF  inc 6,XSP
 	jr ToneDB_SourceNameList1_SelectEntry__FB91C8                      ; FB91E1  jr T,0xfb91c8
 ToneDB_SourceNameList1_SelectEntry__FB91E3:
@@ -2383,7 +2383,7 @@ ToneDB_SourceNameList1_SelectEntry__FB91E3:
 	extpfx3 0x8E, 0xF1, 0x04                   ; FB922B  push (XIZ+0xf1)
 	push	0                                     ; FB922E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9230  push (XIZ+0x08)
-	call	0xFC6803                              ; FB9233  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB9233  call 0xfc6803
 	inc	8, xsp                                 ; FB9237  inc 0,XSP
 	inc	2, xsp                                 ; FB9239  inc 2,XSP
 	jr ToneDB_SourceNameList1_SelectEntry__FB9270                      ; FB923B  jr T,0xfb9270
@@ -2404,14 +2404,14 @@ ToneDB_SourceNameList1_SelectEntry__FB923D:
 	extpfx3 0x8E, 0xF1, 0x04                   ; FB9260  push (XIZ+0xf1)
 	push	0                                     ; FB9263  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9265  push (XIZ+0x08)
-	call	0xFC6803                              ; FB9268  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB9268  call 0xfc6803
 	inc	8, xsp                                 ; FB926C  inc 0,XSP
 	inc	2, xsp                                 ; FB926E  inc 2,XSP
 ToneDB_SourceNameList1_SelectEntry__FB9270:
 	pushw	0                                    ; FB9270  push 0x0000
 	push	0                                     ; FB9273  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9275  push (XIZ+0x08)
-	call	0xFC7481                              ; FB9278  call 0xfc7481
+	call	Pack104_DispatchByResoMode_ForPart                              ; FB9278  call 0xfc7481
 	pop	xbc                                    ; FB927C  pop XBC
 	popw	hl                                    ; FB927D  pop HL
 	unlk32 xiz                                 ; FB927E  unlk XIZ
@@ -2532,7 +2532,7 @@ ToneDB_SourceNameList2_SelectEntry__FB92D2:
 	extpfx3 0x8E, 0xF3, 0x04                   ; FB9366  push (XIZ+0xf3)
 	push	0                                     ; FB9369  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB936B  push (XIZ+0x08)
-	call	0xFB477B                              ; FB936E  call 0xfb477b
+	call	PartElement_SetEnvDescriptorPointer                              ; FB936E  call 0xfb477b
 	ld	bc, (xiz+8)                             ; FB9372  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB9375  extz BC
 	mul	bc, 0x12C                              ; FB9377  mul BC,0x012c
@@ -2563,7 +2563,7 @@ ToneDB_SourceNameList2_SelectEntry__FB92D2:
 	extpfx3 0x8E, 0xF3, 0x04                   ; FB93BC  push (XIZ+0xf3)
 	push	0                                     ; FB93BF  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB93C1  push (XIZ+0x08)
-	call	0xFC6803                              ; FB93C4  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB93C4  call 0xfc6803
 	inc	8, xsp                                 ; FB93C8  inc 0,XSP
 	inc	2, xsp                                 ; FB93CA  inc 2,XSP
 	jr ToneDB_SourceNameList2_SelectEntry__FB9401                      ; FB93CC  jr T,0xfb9401
@@ -2584,14 +2584,14 @@ ToneDB_SourceNameList2_SelectEntry__FB93CE:
 	extpfx3 0x8E, 0xF3, 0x04                   ; FB93F1  push (XIZ+0xf3)
 	push	0                                     ; FB93F4  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB93F6  push (XIZ+0x08)
-	call	0xFC6803                              ; FB93F9  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB93F9  call 0xfc6803
 	inc	8, xsp                                 ; FB93FD  inc 0,XSP
 	inc	2, xsp                                 ; FB93FF  inc 2,XSP
 ToneDB_SourceNameList2_SelectEntry__FB9401:
 	pushw	0                                    ; FB9401  push 0x0000
 	push	0                                     ; FB9404  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9406  push (XIZ+0x08)
-	call	0xFC7481                              ; FB9409  call 0xfc7481
+	call	Pack104_DispatchByResoMode_ForPart                              ; FB9409  call 0xfc7481
 	pop	xbc                                    ; FB940D  pop XBC
 	pop	xix                                    ; FB940E  pop XIX
 	popw	de                                    ; FB940F  pop DE
@@ -2704,7 +2704,7 @@ sub_FB9414__FB94AF:
 	pushw	wa                                   ; FB94EA  push WA
 	push	0                                     ; FB94EB  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB94ED  push (XIZ+0x08)
-	call	0xFC6803                              ; FB94F0  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB94F0  call 0xfc6803
 	inc	8, xsp                                 ; FB94F4  inc 0,XSP
 	inc	2, xsp                                 ; FB94F6  inc 2,XSP
 	jr sub_FB9414__FB952C                      ; FB94F8  jr T,0xfb952c
@@ -2724,7 +2724,7 @@ sub_FB9414__FB94FA:
 	pushw	bc                                   ; FB951E  push BC
 	push	0                                     ; FB951F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9521  push (XIZ+0x08)
-	call	0xFC6803                              ; FB9524  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB9524  call 0xfc6803
 	inc	8, xsp                                 ; FB9528  inc 0,XSP
 	inc	2, xsp                                 ; FB952A  inc 2,XSP
 sub_FB9414__FB952C:
@@ -2733,7 +2733,7 @@ sub_FB9414__FB952F:
 	pushw	0                                    ; FB952F  push 0x0000
 	push	0                                     ; FB9532  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9534  push (XIZ+0x08)
-	call	0xFC7A1F                              ; FB9537  call 0xfc7a1f
+	call	sub_FC7A1F                              ; FB9537  call 0xfc7a1f
 	pop	xbc                                    ; FB953B  pop XBC
 	pop	xix                                    ; FB953C  pop XIX
 	popw	hl                                    ; FB953D  pop HL
@@ -2821,7 +2821,7 @@ ToneDB_DrumSourceNameList_SelectEntry__FB95B3:
 	pushw	wa                                   ; FB95D9  push WA
 	push	0                                     ; FB95DA  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB95DC  push (XIZ+0x08)
-	calr (0xFB857E - 0xFB95E2)                 ; FB95DF  calr 0xfb857e
+	calr ToneStage_LoadPercInstHead                 ; FB95DF  calr 0xfb857e
 	ld	bc, (xiz+8)                             ; FB95E2  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB95E5  extz BC
 	mul	bc, 0x12C                              ; FB95E7  mul BC,0x012c
@@ -2861,7 +2861,7 @@ ToneDB_DrumSourceNameList_SelectEntry__FB95B3:
 	ld	a, (xbc)                                ; FB964C  ld A,(XBC)
 	extz	wa                                    ; FB964E  extz WA
 	pushw	wa                                   ; FB9650  push WA
-	call	0xFB48F7                              ; FB9651  call 0xfb48f7
+	call	DrumKit_ResolveInstrumentRecord                              ; FB9651  call 0xfb48f7
 	ld	(xiz-12), xiy                           ; FB9655  ld (XIZ+0xf4),XIY
 	ld	(xiz-36), 0                             ; FB9658  ld (XIZ+0xdc),0x00
 	inc	8, xsp                                 ; FB965C  inc 0,XSP
@@ -2879,7 +2879,7 @@ ToneDB_DrumSourceNameList_SelectEntry__FB966B:
 	push	xbc                                   ; FB9673  push XBC
 	push	0                                     ; FB9674  push 0x00
 	extpfx3 0x8E, 0xDC, 0x04                   ; FB9676  push (XIZ+0xdc)
-	calr (0xFB8668 - 0xFB967C)                 ; FB9679  calr 0xfb8668
+	calr ToneStage_LoadPercWaveSelect_FromInstRecord                 ; FB9679  calr 0xfb8668
 	ld	c, 23:opc                                  ; FB967C  ld C,0x17
 	extpfx3 0x8E, 0xDC, 0x43                   ; FB967E  mul BC,(XIZ+0xdc)
 	extz	xbc                                   ; FB9681  extz XBC
@@ -2956,7 +2956,7 @@ ToneDB_DrumSourceNameList_SelectEntry__FB9709:
 	extpfx3 0x8E, 0xDC, 0x04                   ; FB974C  push (XIZ+0xdc)
 	push	0                                     ; FB974F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9751  push (XIZ+0x08)
-	call	0xFC6803                              ; FB9754  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB9754  call 0xfc6803
 	inc	8, xsp                                 ; FB9758  inc 0,XSP
 	inc	2, xsp                                 ; FB975A  inc 2,XSP
 	jr ToneDB_DrumSourceNameList_SelectEntry__FB9777                      ; FB975C  jr T,0xfb9777
@@ -2968,7 +2968,7 @@ ToneDB_DrumSourceNameList_SelectEntry__FB975E:
 	extpfx3 0x8E, 0xDC, 0x04                   ; FB9767  push (XIZ+0xdc)
 	push	0                                     ; FB976A  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB976C  push (XIZ+0x08)
-	call	0xFC6803                              ; FB976F  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB976F  call 0xfc6803
 	inc	8, xsp                                 ; FB9773  inc 0,XSP
 	inc	2, xsp                                 ; FB9775  inc 2,XSP
 ToneDB_DrumSourceNameList_SelectEntry__FB9777:
@@ -2977,7 +2977,7 @@ ToneDB_DrumSourceNameList_SelectEntry__FB9779:
 	pushw	0                                    ; FB9779  push 0x0000
 	push	0                                     ; FB977C  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB977E  push (XIZ+0x08)
-	call	0xFC7A1F                              ; FB9781  call 0xfc7a1f
+	call	sub_FC7A1F                              ; FB9781  call 0xfc7a1f
 	pop	xbc                                    ; FB9785  pop XBC
 	pop	xix                                    ; FB9786  pop XIX
 	popw	hl                                    ; FB9787  pop HL
@@ -3073,7 +3073,7 @@ ToneDB_PercSourceNameList1_SelectEntry__FB97E8:
 	pushw	wa                                   ; FB9845  push WA
 	push	0                                     ; FB9846  push 0x00
 	extpfx3 0x8E, 0xEA, 0x04                   ; FB9848  push (XIZ+0xea)
-	calr (0xFB8478 - 0xFB984E)                 ; FB984B  calr 0xfb8478
+	calr ToneStage_LoadPercWaveSelect_FromCatalogueRow                 ; FB984B  calr 0xfb8478
 	ld	c, 43:opc                                  ; FB984E  ld C,0x2b
 	extpfx3 0x8E, 0xEA, 0x43                   ; FB9850  mul BC,(XIZ+0xea)
 	extz	xbc                                   ; FB9853  extz XBC
@@ -3145,7 +3145,7 @@ ToneDB_PercSourceNameList1_SelectEntry__FB98D5:
 	extpfx3 0x8E, 0xEA, 0x04                   ; FB9910  push (XIZ+0xea)
 	push	0                                     ; FB9913  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9915  push (XIZ+0x08)
-	call	0xFC6803                              ; FB9918  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB9918  call 0xfc6803
 	inc	8, xsp                                 ; FB991C  inc 0,XSP
 	inc	2, xsp                                 ; FB991E  inc 2,XSP
 	jr ToneDB_PercSourceNameList1_SelectEntry__FB993B                      ; FB9920  jr T,0xfb993b
@@ -3157,7 +3157,7 @@ ToneDB_PercSourceNameList1_SelectEntry__FB9922:
 	extpfx3 0x8E, 0xEA, 0x04                   ; FB992B  push (XIZ+0xea)
 	push	0                                     ; FB992E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9930  push (XIZ+0x08)
-	call	0xFC6803                              ; FB9933  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB9933  call 0xfc6803
 	inc	8, xsp                                 ; FB9937  inc 0,XSP
 	inc	2, xsp                                 ; FB9939  inc 2,XSP
 ToneDB_PercSourceNameList1_SelectEntry__FB993B:
@@ -3166,7 +3166,7 @@ ToneDB_PercSourceNameList1_SelectEntry__FB993D:
 	pushw	0                                    ; FB993D  push 0x0000
 	push	0                                     ; FB9940  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9942  push (XIZ+0x08)
-	call	0xFC7A1F                              ; FB9945  call 0xfc7a1f
+	call	sub_FC7A1F                              ; FB9945  call 0xfc7a1f
 	pop	xbc                                    ; FB9949  pop XBC
 	pop	xix                                    ; FB994A  pop XIX
 	unlk32 xiz                                 ; FB994B  unlk XIZ
@@ -3305,7 +3305,7 @@ ToneDB_PercSourceNameList2_SelectEntry__FB9A48:
 	extpfx3 0x8E, 0xEE, 0x04                   ; FB9A83  push (XIZ+0xee)
 	push	0                                     ; FB9A86  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9A88  push (XIZ+0x08)
-	call	0xFC6803                              ; FB9A8B  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB9A8B  call 0xfc6803
 	inc	8, xsp                                 ; FB9A8F  inc 0,XSP
 	inc	2, xsp                                 ; FB9A91  inc 2,XSP
 	jr ToneDB_PercSourceNameList2_SelectEntry__FB9AAE                      ; FB9A93  jr T,0xfb9aae
@@ -3317,7 +3317,7 @@ ToneDB_PercSourceNameList2_SelectEntry__FB9A95:
 	extpfx3 0x8E, 0xEE, 0x04                   ; FB9A9E  push (XIZ+0xee)
 	push	0                                     ; FB9AA1  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9AA3  push (XIZ+0x08)
-	call	0xFC6803                              ; FB9AA6  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FB9AA6  call 0xfc6803
 	inc	8, xsp                                 ; FB9AAA  inc 0,XSP
 	inc	2, xsp                                 ; FB9AAC  inc 2,XSP
 ToneDB_PercSourceNameList2_SelectEntry__FB9AAE:
@@ -3326,7 +3326,7 @@ ToneDB_PercSourceNameList2_SelectEntry__FB9AB0:
 	pushw	0                                    ; FB9AB0  push 0x0000
 	push	0                                     ; FB9AB3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9AB5  push (XIZ+0x08)
-	call	0xFC7A1F                              ; FB9AB8  call 0xfc7a1f
+	call	sub_FC7A1F                              ; FB9AB8  call 0xfc7a1f
 	pop	xbc                                    ; FB9ABC  pop XBC
 	pop	xix                                    ; FB9ABD  pop XIX
 	popw	hl                                    ; FB9ABE  pop HL
@@ -3380,11 +3380,11 @@ sub_FB9AC2:
 	pushw	0                                    ; FB9AF6  push 0x0000
 	push	0                                     ; FB9AF9  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9AFB  push (XIZ+0x08)
-	call	0xFB47C4                              ; FB9AFE  call 0xfb47c4
+	call	Part_LoadToneRecordAndPointers                              ; FB9AFE  call 0xfb47c4
 	inc	6, xsp                                 ; FB9B02  inc 6,XSP
 	push	0                                     ; FB9B04  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9B06  push (XIZ+0x08)
-	call	0xFB6681                              ; FB9B09  call 0xfb6681
+	call	Part_RestageVoiceParams_Melodic                              ; FB9B09  call 0xfb6681
 	popw	bc                                    ; FB9B0D  pop BC
 sub_FB9AC2__FB9B0E:
 	unlk32 xiz                                 ; FB9B0E  unlk XIZ
@@ -3450,14 +3450,14 @@ Field2Bit_CopyField:
 	push	b                                     ; FB9B44  push B
 	push	0                                     ; FB9B46  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB9B48  push (XIZ+0x0c)
-	call	0xFCB23C                              ; FB9B4B  call 0xfcb23c
+	call	Shift8_LogicalRight                              ; FB9B4B  call 0xfcb23c
 	ld	(xiz+12), a                             ; FB9B4F  ld (XIZ+0x0c),A
 	ld	c, (xiz+10)                             ; FB9B52  ld C,(XIZ+0x0a)
 	add	c, c                                   ; FB9B55  add C,C
 	pushw	bc                                   ; FB9B57  push BC
 	push	0                                     ; FB9B58  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FB9B5A  push (XIZ+0x0c)
-	call	0xFCB25D                              ; FB9B5D  call 0xfcb25d
+	call	Shift8_Left                              ; FB9B5D  call 0xfcb25d
 	ld	xbc, (xiz+14)                           ; FB9B61  ld XBC,(XIZ+0x0e)
 	or	(xbc), a                                ; FB9B64  or (XBC),A
 	unlk32 xiz                                 ; FB9B66  unlk XIZ
@@ -3531,7 +3531,7 @@ sub_FB9B69:
 	jr nz, sub_FB9B69__FB9BDF                  ; FB9BCB  jr NZ,0xfb9bdf
 	ld	c, (xiz+10)                             ; FB9BCD  ld C,(XIZ+0x0a)
 	pushw	bc                                   ; FB9BD0  push BC
-	call	0xFB4103                              ; FB9BD1  call 0xfb4103
+	call	ToneStage_RecordForBankSelector                              ; FB9BD1  call 0xfb4103
 	ld	(xiz-4), xiy                            ; FB9BD5  ld (XIZ+0xfc),XIY
 	ld	(xiz-64), 0                             ; FB9BD8  ld (XIZ+0xc0),0x00
 	popw	bc                                    ; FB9BDC  pop BC
@@ -3539,7 +3539,7 @@ sub_FB9B69:
 sub_FB9B69__FB9BDF:
 	extpfx3 0x9E, 0x0A, 0x04                   ; FB9BDF  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; FB9BE2  pushw (XIZ+0x08)
-	call	0xFB4124                              ; FB9BE5  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FB9BE5  call 0xfb4124
 	ld	(xiz-4), xiy                            ; FB9BE9  ld (XIZ+0xfc),XIY
 	ld	(xiz-64), 1                             ; FB9BEC  ld (XIZ+0xc0),0x01
 	pop	xiy                                    ; FB9BF0  pop XIY
@@ -3557,7 +3557,7 @@ sub_FB9B69__FB9C06:
 	push	xbc                                   ; FB9C0E  push XBC
 	ld	xwa, (xiz-4)                            ; FB9C0F  ld XWA,(XIZ+0xfc)
 	push	xwa                                   ; FB9C12  push XWA
-	call	0xF9A038                              ; FB9C13  call 0xf9a038
+	call	MemCopyWords                              ; FB9C13  call 0xf9a038
 	ld	(xiz-61), 0                             ; FB9C17  ld (XIZ+0xc3),0x00
 	inc	8, xsp                                 ; FB9C1B  inc 0,XSP
 	inc	2, xsp                                 ; FB9C1D  inc 2,XSP
@@ -3592,7 +3592,7 @@ sub_FB9B69__FB9C2D:
 	extpfx3 0x8E, 0xC3, 0x04                   ; FB9C68  push (XIZ+0xc3)
 	push	0                                     ; FB9C6B  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FB9C6D  push (XIZ+0xc1)
-	call	0xFB42E3                              ; FB9C70  call 0xfb42e3
+	call	Part_GetElementBlock_Unpacked                              ; FB9C70  call 0xfb42e3
 	ld	(xiz-8), xiy                            ; FB9C74  ld (XIZ+0xf8),XIY
 	ld	c, 43:opc                                  ; FB9C77  ld C,0x2b
 	extpfx3 0x8E, 0xC3, 0x43                   ; FB9C79  mul BC,(XIZ+0xc3)
@@ -3608,7 +3608,7 @@ sub_FB9B69__FB9C91:
 	extpfx3 0x8E, 0xC3, 0x04                   ; FB9C96  push (XIZ+0xc3)
 	ld	xbc, (xiz-4)                            ; FB9C99  ld XBC,(XIZ+0xfc)
 	push	xbc                                   ; FB9C9C  push XBC
-	call	0xFB4324                              ; FB9C9D  call 0xfb4324
+	call	ToneRec_GetElementBlock                              ; FB9C9D  call 0xfb4324
 	ld	(xiz-8), xiy                            ; FB9CA1  ld (XIZ+0xf8),XIY
 	inc	8, xsp                                 ; FB9CA4  inc 0,XSP
 	ld	xbc, (xiz-4)                            ; FB9CA6  ld XBC,(XIZ+0xfc)
@@ -3616,7 +3616,7 @@ sub_FB9B69__FB9C91:
 	push	0                                     ; FB9CAA  push 0x00
 	extpfx3 0x8E, 0xC3, 0x04                   ; FB9CAC  push (XIZ+0xc3)
 	extpfx3 0x9E, 0x0A, 0x04                   ; FB9CAF  pushw (XIZ+0x0a)
-	call	0xFB44A5                              ; FB9CB2  call 0xfb44a5
+	call	ToneRec_GetWaveSelectRecord_ByBankSelector                              ; FB9CB2  call 0xfb44a5
 	ld	(xiz-16), xiy                           ; FB9CB6  ld (XIZ+0xf0),XIY
 	inc	8, xsp                                 ; FB9CB9  inc 0,XSP
 sub_FB9B69__FB9CBB:
@@ -3629,7 +3629,7 @@ sub_FB9B69__FB9CBB:
 	push	xbc                                   ; FB9CD1  push XBC
 	ld	xbc, (xiz-8)                            ; FB9CD2  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB9CD5  push XBC
-	call	0xF9A038                              ; FB9CD6  call 0xf9a038
+	call	MemCopyWords                              ; FB9CD6  call 0xf9a038
 	ld	c, 43:opc                                  ; FB9CDA  ld C,0x2b
 	extpfx3 0x8E, 0xC3, 0x43                   ; FB9CDC  mul BC,(XIZ+0xc3)
 	extz	xbc                                   ; FB9CDF  extz XBC
@@ -3646,7 +3646,7 @@ sub_FB9B69__FB9CBB:
 	push	xbc                                   ; FB9D05  push XBC
 	ld	xiy, (xiz-16)                           ; FB9D06  ld XIY,(XIZ+0xf0)
 	push	xiy                                   ; FB9D09  push XIY
-	call	0xF9A038                              ; FB9D0A  call 0xf9a038
+	call	MemCopyWords                              ; FB9D0A  call 0xf9a038
 	inc	8, xsp                                 ; FB9D0E  inc 0,XSP
 	inc	2, xsp                                 ; FB9D10  inc 2,XSP
 	jr sub_FB9B69__FB9D62                      ; FB9D12  jr T,0xfb9d62
@@ -3656,7 +3656,7 @@ sub_FB9B69__FB9D14:
 	push	xbc                                   ; FB9D1A  push XBC
 	ld	xwa, (xiz-16)                           ; FB9D1B  ld XWA,(XIZ+0xf0)
 	push	xwa                                   ; FB9D1E  push XWA
-	call	0xF9A038                              ; FB9D1F  call 0xf9a038
+	call	MemCopyWords                              ; FB9D1F  call 0xf9a038
 	ld	xbc, (xiz-20)                           ; FB9D23  ld XBC,(XIZ+0xec)
 	add	xbc, 11                                ; FB9D26  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FB9D2C  ld (XIZ+0xbc),XBC
@@ -3675,7 +3675,7 @@ sub_FB9B69__FB9D14:
 	ld	xbc, (xiz-16)                           ; FB9D50  ld XBC,(XIZ+0xf0)
 	add	xbc, 13                                ; FB9D53  add XBC,0x0000000d
 	push	xbc                                   ; FB9D59  push XBC
-	call	0xF9A038                              ; FB9D5A  call 0xf9a038
+	call	MemCopyWords                              ; FB9D5A  call 0xf9a038
 	inc	8, xsp                                 ; FB9D5E  inc 0,XSP
 	inc	2, xsp                                 ; FB9D60  inc 2,XSP
 sub_FB9B69__FB9D62:
@@ -3683,7 +3683,7 @@ sub_FB9B69__FB9D62:
 sub_FB9B69__FB9D65:
 	push	0                                     ; FB9D65  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FB9D67  push (XIZ+0xc1)
-	calr (0xFB9AC2 - 0xFB9D6D)                 ; FB9D6A  calr 0xfb9ac2
+	calr sub_FB9AC2                 ; FB9D6A  calr 0xfb9ac2
 	popw	bc                                    ; FB9D6D  pop BC
 	jrl sub_FB9B69__FB9E47                     ; FB9D6E  jrl T,0xfb9e47
 sub_FB9B69__FB9D71:
@@ -3697,7 +3697,7 @@ sub_FB9B69__FB9D71:
 	lda	xiy, (0x87D2:24)                       ; FB9D8A  lda XIY,0x0087d2
 	push	xiy                                   ; FB9D8F  push XIY
 	push	xwa                                   ; FB9D90  push XWA
-	call	0xF9A038                              ; FB9D91  call 0xf9a038
+	call	MemCopyWords                              ; FB9D91  call 0xf9a038
 	ld	xbc, (0xD7F1:24)                       ; FB9D95  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0xAC)                         ; FB9D9A  ld XWA,(XBC+0x00ac)
 	ld	xix, xwa                                ; FB9D9F  ld XIX,XWA
@@ -3727,7 +3727,7 @@ sub_FB9B69__FB9DCA:
 	push	xbc                                   ; FB9DE3  push XBC
 	ld	xwa, (xiz-16)                           ; FB9DE4  ld XWA,(XIZ+0xf0)
 	push	xwa                                   ; FB9DE7  push XWA
-	call	0xF9A038                              ; FB9DE8  call 0xf9a038
+	call	MemCopyWords                              ; FB9DE8  call 0xf9a038
 	ld	xbc, (xiz-20)                           ; FB9DEC  ld XBC,(XIZ+0xec)
 	add	xbc, 11                                ; FB9DEF  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FB9DF5  ld (XIZ+0xbc),XBC
@@ -3746,14 +3746,14 @@ sub_FB9B69__FB9DCA:
 	ld	xbc, (xiz-16)                           ; FB9E19  ld XBC,(XIZ+0xf0)
 	add	xbc, 13                                ; FB9E1C  add XBC,0x0000000d
 	push	xbc                                   ; FB9E22  push XBC
-	call	0xF9A038                              ; FB9E23  call 0xf9a038
+	call	MemCopyWords                              ; FB9E23  call 0xf9a038
 	inc	8, xsp                                 ; FB9E27  inc 0,XSP
 	inc	2, xsp                                 ; FB9E29  inc 2,XSP
 	jr sub_FB9B69__FB9DC5                      ; FB9E2B  jr T,0xfb9dc5
 sub_FB9B69__FB9E2D:
 	push	0                                     ; FB9E2D  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FB9E2F  push (XIZ+0xc1)
-	calr (0xFB9AC2 - 0xFB9E35)                 ; FB9E32  calr 0xfb9ac2
+	calr sub_FB9AC2                 ; FB9E32  calr 0xfb9ac2
 	popw	bc                                    ; FB9E35  pop BC
 	jr sub_FB9B69__FB9E47                      ; FB9E36  jr T,0xfb9e47
 sub_FB9B69__FB9E38:
@@ -3788,7 +3788,7 @@ sub_FB9B69__FB9E4A:
 	extpfx3 0x8E, 0xC5, 0x04                   ; FB9E85  push (XIZ+0xc5)
 	push	0                                     ; FB9E88  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FB9E8A  push (XIZ+0xc1)
-	call	0xFB42E3                              ; FB9E8D  call 0xfb42e3
+	call	Part_GetElementBlock_Unpacked                              ; FB9E8D  call 0xfb42e3
 	ld	(xiz-8), xiy                            ; FB9E91  ld (XIZ+0xf8),XIY
 	ld	c, 43:opc                                  ; FB9E94  ld C,0x2b
 	extpfx3 0x8E, 0xC5, 0x43                   ; FB9E96  mul BC,(XIZ+0xc5)
@@ -3805,7 +3805,7 @@ sub_FB9B69__FB9EB2:
 	extpfx3 0x8E, 0xC5, 0x04                   ; FB9EB7  push (XIZ+0xc5)
 	ld	xbc, (xiz-4)                            ; FB9EBA  ld XBC,(XIZ+0xfc)
 	push	xbc                                   ; FB9EBD  push XBC
-	call	0xFB4324                              ; FB9EBE  call 0xfb4324
+	call	ToneRec_GetElementBlock                              ; FB9EBE  call 0xfb4324
 	ld	(xiz-8), xiy                            ; FB9EC2  ld (XIZ+0xf8),XIY
 	inc	8, xsp                                 ; FB9EC5  inc 0,XSP
 	ld	xbc, (xiz-4)                            ; FB9EC7  ld XBC,(XIZ+0xfc)
@@ -3813,7 +3813,7 @@ sub_FB9B69__FB9EB2:
 	push	0                                     ; FB9ECB  push 0x00
 	extpfx3 0x8E, 0xC5, 0x04                   ; FB9ECD  push (XIZ+0xc5)
 	extpfx3 0x9E, 0x0A, 0x04                   ; FB9ED0  pushw (XIZ+0x0a)
-	call	0xFB44A5                              ; FB9ED3  call 0xfb44a5
+	call	ToneRec_GetWaveSelectRecord_ByBankSelector                              ; FB9ED3  call 0xfb44a5
 	ld	(xiz-16), xiy                           ; FB9ED7  ld (XIZ+0xf0),XIY
 	ld	(xiz-64), 1                             ; FB9EDA  ld (XIZ+0xc0),0x01
 	inc	8, xsp                                 ; FB9EDE  inc 0,XSP
@@ -3833,7 +3833,7 @@ sub_FB9B69__FB9EEE:
 	extpfx3 0x8E, 0xC4, 0x04                   ; FB9EFD  push (XIZ+0xc4)
 	push	0                                     ; FB9F00  push 0x00
 	extpfx3 0x8E, 0xC5, 0x04                   ; FB9F02  push (XIZ+0xc5)
-	calr (0xFB9B11 - 0xFB9F08)                 ; FB9F05  calr 0xfb9b11
+	calr Field2Bit_CopyField                 ; FB9F05  calr 0xfb9b11
 	lda	xbc, (0x87E4:24)                       ; FB9F08  lda XBC,0x0087e4
 	inc	8, xsp                                 ; FB9F0D  inc 0,XSP
 	inc	2, xsp                                 ; FB9F0F  inc 2,XSP
@@ -3845,7 +3845,7 @@ sub_FB9B69__FB9EEE:
 	extpfx3 0x8E, 0xC4, 0x04                   ; FB9F1B  push (XIZ+0xc4)
 	push	0                                     ; FB9F1E  push 0x00
 	extpfx3 0x8E, 0xC5, 0x04                   ; FB9F20  push (XIZ+0xc5)
-	calr (0xFB9B11 - 0xFB9F26)                 ; FB9F23  calr 0xfb9b11
+	calr Field2Bit_CopyField                 ; FB9F23  calr 0xfb9b11
 	inc	8, xsp                                 ; FB9F26  inc 0,XSP
 	inc	2, xsp                                 ; FB9F28  inc 2,XSP
 	pushw	81                                   ; FB9F2A  push 0x0051
@@ -3857,7 +3857,7 @@ sub_FB9B69__FB9EEE:
 	push	xbc                                   ; FB9F40  push XBC
 	ld	xbc, (xiz-8)                            ; FB9F41  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB9F44  push XBC
-	call	0xF9A038                              ; FB9F45  call 0xf9a038
+	call	MemCopyWords                              ; FB9F45  call 0xf9a038
 	ld	c, 43:opc                                  ; FB9F49  ld C,0x2b
 	extpfx3 0x8E, 0xC4, 0x43                   ; FB9F4B  mul BC,(XIZ+0xc4)
 	extz	xbc                                   ; FB9F4E  extz XBC
@@ -3874,7 +3874,7 @@ sub_FB9B69__FB9EEE:
 	push	xbc                                   ; FB9F74  push XBC
 	ld	xiy, (xiz-16)                           ; FB9F75  ld XIY,(XIZ+0xf0)
 	push	xiy                                   ; FB9F78  push XIY
-	call	0xF9A038                              ; FB9F79  call 0xf9a038
+	call	MemCopyWords                              ; FB9F79  call 0xf9a038
 	inc	8, xsp                                 ; FB9F7D  inc 0,XSP
 	inc	2, xsp                                 ; FB9F7F  inc 2,XSP
 	jr sub_FB9B69__FB9FD1                      ; FB9F81  jr T,0xfb9fd1
@@ -3884,7 +3884,7 @@ sub_FB9B69__FB9F83:
 	push	xbc                                   ; FB9F89  push XBC
 	ld	xwa, (xiz-16)                           ; FB9F8A  ld XWA,(XIZ+0xf0)
 	push	xwa                                   ; FB9F8D  push XWA
-	call	0xF9A038                              ; FB9F8E  call 0xf9a038
+	call	MemCopyWords                              ; FB9F8E  call 0xf9a038
 	ld	xbc, (xiz-20)                           ; FB9F92  ld XBC,(XIZ+0xec)
 	add	xbc, 11                                ; FB9F95  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FB9F9B  ld (XIZ+0xbc),XBC
@@ -3903,13 +3903,13 @@ sub_FB9B69__FB9F83:
 	ld	xbc, (xiz-16)                           ; FB9FBF  ld XBC,(XIZ+0xf0)
 	add	xbc, 13                                ; FB9FC2  add XBC,0x0000000d
 	push	xbc                                   ; FB9FC8  push XBC
-	call	0xF9A038                              ; FB9FC9  call 0xf9a038
+	call	MemCopyWords                              ; FB9FC9  call 0xf9a038
 	inc	8, xsp                                 ; FB9FCD  inc 0,XSP
 	inc	2, xsp                                 ; FB9FCF  inc 2,XSP
 sub_FB9B69__FB9FD1:
 	push	0                                     ; FB9FD1  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FB9FD3  push (XIZ+0xc1)
-	calr (0xFB9AC2 - 0xFB9FD9)                 ; FB9FD6  calr 0xfb9ac2
+	calr sub_FB9AC2                 ; FB9FD6  calr 0xfb9ac2
 	popw	bc                                    ; FB9FD9  pop BC
 	jrl sub_FB9B69__FBA361                     ; FB9FDA  jrl T,0xfba361
 sub_FB9B69__FB9FDD:
@@ -3928,7 +3928,7 @@ sub_FB9B69__FB9FDD:
 	extpfx3 0x8E, 0xC4, 0x04                   ; FBA002  push (XIZ+0xc4)
 	push	0                                     ; FBA005  push 0x00
 	extpfx3 0x8E, 0xC5, 0x04                   ; FBA007  push (XIZ+0xc5)
-	calr (0xFB9B11 - 0xFBA00D)                 ; FBA00A  calr 0xfb9b11
+	calr Field2Bit_CopyField                 ; FBA00A  calr 0xfb9b11
 	inc	8, xsp                                 ; FBA00D  inc 0,XSP
 	inc	2, xsp                                 ; FBA00F  inc 2,XSP
 	pushw	2                                    ; FBA011  push 0x0002
@@ -3938,7 +3938,7 @@ sub_FB9B69__FB9FDD:
 	ld	xbc, (xiz-8)                            ; FBA01A  ld XBC,(XIZ+0xf8)
 	inc	2, xbc                                 ; FBA01D  inc 2,XBC
 	push	xbc                                   ; FBA01F  push XBC
-	call	0xF9A038                              ; FBA020  call 0xf9a038
+	call	MemCopyWords                              ; FBA020  call 0xf9a038
 	ld	c, 43:opc                                  ; FBA024  ld C,0x2b
 	extpfx3 0x8E, 0xC4, 0x43                   ; FBA026  mul BC,(XIZ+0xc4)
 	extz	xbc                                   ; FBA029  extz XBC
@@ -3955,7 +3955,7 @@ sub_FB9B69__FB9FDD:
 	push	xbc                                   ; FBA04F  push XBC
 	ld	xiy, (xiz-16)                           ; FBA050  ld XIY,(XIZ+0xf0)
 	push	xiy                                   ; FBA053  push XIY
-	call	0xF9A038                              ; FBA054  call 0xf9a038
+	call	MemCopyWords                              ; FBA054  call 0xf9a038
 	inc	8, xsp                                 ; FBA058  inc 0,XSP
 	inc	2, xsp                                 ; FBA05A  inc 2,XSP
 	jr sub_FB9B69__FBA0AC                      ; FBA05C  jr T,0xfba0ac
@@ -3965,7 +3965,7 @@ sub_FB9B69__FBA05E:
 	push	xbc                                   ; FBA064  push XBC
 	ld	xwa, (xiz-16)                           ; FBA065  ld XWA,(XIZ+0xf0)
 	push	xwa                                   ; FBA068  push XWA
-	call	0xF9A038                              ; FBA069  call 0xf9a038
+	call	MemCopyWords                              ; FBA069  call 0xf9a038
 	ld	xbc, (xiz-20)                           ; FBA06D  ld XBC,(XIZ+0xec)
 	add	xbc, 11                                ; FBA070  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FBA076  ld (XIZ+0xbc),XBC
@@ -3984,13 +3984,13 @@ sub_FB9B69__FBA05E:
 	ld	xbc, (xiz-16)                           ; FBA09A  ld XBC,(XIZ+0xf0)
 	add	xbc, 13                                ; FBA09D  add XBC,0x0000000d
 	push	xbc                                   ; FBA0A3  push XBC
-	call	0xF9A038                              ; FBA0A4  call 0xf9a038
+	call	MemCopyWords                              ; FBA0A4  call 0xf9a038
 	inc	8, xsp                                 ; FBA0A8  inc 0,XSP
 	inc	2, xsp                                 ; FBA0AA  inc 2,XSP
 sub_FB9B69__FBA0AC:
 	push	0                                     ; FBA0AC  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FBA0AE  push (XIZ+0xc1)
-	calr (0xFB9AC2 - 0xFBA0B4)                 ; FBA0B1  calr 0xfb9ac2
+	calr sub_FB9AC2                 ; FBA0B1  calr 0xfb9ac2
 	popw	bc                                    ; FBA0B4  pop BC
 	jrl sub_FB9B69__FBA361                     ; FBA0B5  jrl T,0xfba361
 sub_FB9B69__FBA0B8:
@@ -4006,7 +4006,7 @@ sub_FB9B69__FBA0B8:
 	ld	xbc, (xiz-8)                            ; FBA0D8  ld XBC,(XIZ+0xf8)
 	add	xbc, 23                                ; FBA0DB  add XBC,0x00000017
 	push	xbc                                   ; FBA0E1  push XBC
-	call	0xF9A038                              ; FBA0E2  call 0xf9a038
+	call	MemCopyWords                              ; FBA0E2  call 0xf9a038
 	inc	8, xsp                                 ; FBA0E6  inc 0,XSP
 	inc	2, xsp                                 ; FBA0E8  inc 2,XSP
 	pushw	15                                   ; FBA0EA  push 0x000f
@@ -4016,12 +4016,12 @@ sub_FB9B69__FBA0B8:
 	ld	xbc, (xiz-8)                            ; FBA0F7  ld XBC,(XIZ+0xf8)
 	add	xbc, 39                                ; FBA0FA  add XBC,0x00000027
 	push	xbc                                   ; FBA100  push XBC
-	call	0xF9A038                              ; FBA101  call 0xf9a038
+	call	MemCopyWords                              ; FBA101  call 0xf9a038
 	inc	8, xsp                                 ; FBA105  inc 0,XSP
 	inc	2, xsp                                 ; FBA107  inc 2,XSP
 	push	0                                     ; FBA109  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FBA10B  push (XIZ+0xc1)
-	calr (0xFB9AC2 - 0xFBA111)                 ; FBA10E  calr 0xfb9ac2
+	calr sub_FB9AC2                 ; FBA10E  calr 0xfb9ac2
 	popw	bc                                    ; FBA111  pop BC
 	jrl sub_FB9B69__FBA361                     ; FBA112  jrl T,0xfba361
 sub_FB9B69__FBA115:
@@ -4037,7 +4037,7 @@ sub_FB9B69__FBA115:
 	ld	xbc, (xiz-8)                            ; FBA131  ld XBC,(XIZ+0xf8)
 	inc	4, xbc                                 ; FBA134  inc 4,XBC
 	push	xbc                                   ; FBA136  push XBC
-	call	0xF9A038                              ; FBA137  call 0xf9a038
+	call	MemCopyWords                              ; FBA137  call 0xf9a038
 	ld	xbc, (xiz-8)                            ; FBA13B  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+6)                              ; FBA13E  ld A,(XBC+0x06)
 	and	a, 7                                   ; FBA141  and A,0x07
@@ -4053,12 +4053,12 @@ sub_FB9B69__FBA115:
 	ld	xbc, (xiz-8)                            ; FBA159  ld XBC,(XIZ+0xf8)
 	inc	7, xbc                                 ; FBA15C  inc 7,XBC
 	push	xbc                                   ; FBA15E  push XBC
-	call	0xF9A038                              ; FBA15F  call 0xf9a038
+	call	MemCopyWords                              ; FBA15F  call 0xf9a038
 	inc	8, xsp                                 ; FBA163  inc 0,XSP
 	inc	2, xsp                                 ; FBA165  inc 2,XSP
 	push	0                                     ; FBA167  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FBA169  push (XIZ+0xc1)
-	calr (0xFB9AC2 - 0xFBA16F)                 ; FBA16C  calr 0xfb9ac2
+	calr sub_FB9AC2                 ; FBA16C  calr 0xfb9ac2
 	popw	bc                                    ; FBA16F  pop BC
 	jrl sub_FB9B69__FBA361                     ; FBA170  jrl T,0xfba361
 sub_FB9B69__FBA173:
@@ -4074,7 +4074,7 @@ sub_FB9B69__FBA173:
 	ld	xbc, (xiz-8)                            ; FBA193  ld XBC,(XIZ+0xf8)
 	add	xbc, 54                                ; FBA196  add XBC,0x00000036
 	push	xbc                                   ; FBA19C  push XBC
-	call	0xF9A038                              ; FBA19D  call 0xf9a038
+	call	MemCopyWords                              ; FBA19D  call 0xf9a038
 	inc	8, xsp                                 ; FBA1A1  inc 0,XSP
 	inc	2, xsp                                 ; FBA1A3  inc 2,XSP
 	pushw	24                                   ; FBA1A5  push 0x0018
@@ -4084,12 +4084,12 @@ sub_FB9B69__FBA173:
 	ld	xbc, (xiz-8)                            ; FBA1B2  ld XBC,(XIZ+0xf8)
 	add	xbc, 57                                ; FBA1B5  add XBC,0x00000039
 	push	xbc                                   ; FBA1BB  push XBC
-	call	0xF9A038                              ; FBA1BC  call 0xf9a038
+	call	MemCopyWords                              ; FBA1BC  call 0xf9a038
 	inc	8, xsp                                 ; FBA1C0  inc 0,XSP
 	inc	2, xsp                                 ; FBA1C2  inc 2,XSP
 	push	0                                     ; FBA1C4  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FBA1C6  push (XIZ+0xc1)
-	calr (0xFB9AC2 - 0xFBA1CC)                 ; FBA1C9  calr 0xfb9ac2
+	calr sub_FB9AC2                 ; FBA1C9  calr 0xfb9ac2
 	popw	bc                                    ; FBA1CC  pop BC
 	jrl sub_FB9B69__FBA361                     ; FBA1CD  jrl T,0xfba361
 sub_FB9B69__FBA1D0:
@@ -4108,7 +4108,7 @@ sub_FB9B69__FBA1D0:
 	extpfx3 0x8E, 0xC4, 0x04                   ; FBA1F5  push (XIZ+0xc4)
 	push	0                                     ; FBA1F8  push 0x00
 	extpfx3 0x8E, 0xC5, 0x04                   ; FBA1FA  push (XIZ+0xc5)
-	calr (0xFB9B11 - 0xFBA200)                 ; FBA1FD  calr 0xfb9b11
+	calr Field2Bit_CopyField                 ; FBA1FD  calr 0xfb9b11
 	inc	8, xsp                                 ; FBA200  inc 0,XSP
 	inc	2, xsp                                 ; FBA202  inc 2,XSP
 	pushw	2                                    ; FBA204  push 0x0002
@@ -4116,7 +4116,7 @@ sub_FB9B69__FBA1D0:
 	push	xbc                                   ; FBA20A  push XBC
 	ld	xwa, (xiz-8)                            ; FBA20B  ld XWA,(XIZ+0xf8)
 	push	xwa                                   ; FBA20E  push XWA
-	call	0xF9A038                              ; FBA20F  call 0xf9a038
+	call	MemCopyWords                              ; FBA20F  call 0xf9a038
 	inc	8, xsp                                 ; FBA213  inc 0,XSP
 	inc	2, xsp                                 ; FBA215  inc 2,XSP
 	pushw	8                                    ; FBA217  push 0x0008
@@ -4126,12 +4126,12 @@ sub_FB9B69__FBA1D0:
 	ld	xbc, (xiz-8)                            ; FBA224  ld XBC,(XIZ+0xf8)
 	add	xbc, 30                                ; FBA227  add XBC,0x0000001e
 	push	xbc                                   ; FBA22D  push XBC
-	call	0xF9A038                              ; FBA22E  call 0xf9a038
+	call	MemCopyWords                              ; FBA22E  call 0xf9a038
 	inc	8, xsp                                 ; FBA232  inc 0,XSP
 	inc	2, xsp                                 ; FBA234  inc 2,XSP
 	push	0                                     ; FBA236  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FBA238  push (XIZ+0xc1)
-	calr (0xFB9AC2 - 0xFBA23E)                 ; FBA23B  calr 0xfb9ac2
+	calr sub_FB9AC2                 ; FBA23B  calr 0xfb9ac2
 	popw	bc                                    ; FBA23E  pop BC
 	jrl sub_FB9B69__FBA361                     ; FBA23F  jrl T,0xfba361
 sub_FB9B69__FBA242:
@@ -4149,7 +4149,7 @@ sub_FB9B69__FBA242:
 	extpfx3 0x8E, 0xC4, 0x04                   ; FBA264  push (XIZ+0xc4)
 	push	0                                     ; FBA267  push 0x00
 	extpfx3 0x8E, 0xC5, 0x04                   ; FBA269  push (XIZ+0xc5)
-	calr (0xFB9B11 - 0xFBA26F)                 ; FBA26C  calr 0xfb9b11
+	calr Field2Bit_CopyField                 ; FBA26C  calr 0xfb9b11
 	ld	xbc, (0xD7F1:24)                       ; FBA26F  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0xAC)                         ; FBA274  ld XWA,(XBC+0x00ac)
 	ld	xix, xwa                                ; FBA279  ld XIX,XWA
@@ -4166,7 +4166,7 @@ sub_FB9B69__FBA242:
 	add	xbc, 0x87D2                            ; FBA299  add XBC,0x000087d2
 	push	xbc                                   ; FBA29F  push XBC
 	push	xwa                                   ; FBA2A0  push XWA
-	call	0xF9A038                              ; FBA2A1  call 0xf9a038
+	call	MemCopyWords                              ; FBA2A1  call 0xf9a038
 	ld	xbc, (0xD7F1:24)                       ; FBA2A5  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0xAC)                         ; FBA2AA  ld XWA,(XBC+0x00ac)
 	ld	xix, xwa                                ; FBA2AF  ld XIX,XWA
@@ -4186,7 +4186,7 @@ sub_FB9B69__FBA242:
 	pushw	11                                   ; FBA2DE  push 0x000b
 	push	xbc                                   ; FBA2E1  push XBC
 	push	xwa                                   ; FBA2E2  push XWA
-	call	0xF9A038                              ; FBA2E3  call 0xf9a038
+	call	MemCopyWords                              ; FBA2E3  call 0xf9a038
 	ld	xbc, (xiz-20)                           ; FBA2E7  ld XBC,(XIZ+0xec)
 	add	xbc, 11                                ; FBA2EA  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FBA2F0  ld (XIZ+0xbc),XBC
@@ -4205,12 +4205,12 @@ sub_FB9B69__FBA242:
 	ld	xbc, (xiz-16)                           ; FBA314  ld XBC,(XIZ+0xf0)
 	add	xbc, 13                                ; FBA317  add XBC,0x0000000d
 	push	xbc                                   ; FBA31D  push XBC
-	call	0xF9A038                              ; FBA31E  call 0xf9a038
+	call	MemCopyWords                              ; FBA31E  call 0xf9a038
 	inc	8, xsp                                 ; FBA322  inc 0,XSP
 	inc	2, xsp                                 ; FBA324  inc 2,XSP
 	push	0                                     ; FBA326  push 0x00
 	extpfx3 0x8E, 0xC1, 0x04                   ; FBA328  push (XIZ+0xc1)
-	calr (0xFB9AC2 - 0xFBA32E)                 ; FBA32B  calr 0xfb9ac2
+	calr sub_FB9AC2                 ; FBA32B  calr 0xfb9ac2
 	popw	bc                                    ; FBA32E  pop BC
 	jr sub_FB9B69__FBA361                      ; FBA32F  jr T,0xfba361
 sub_FB9B69__FBA331:
@@ -4265,7 +4265,7 @@ sub_FB9B69__FBA364:
 sub_FB9B69__FBA3C6:
 	extpfx3 0x9E, 0x0A, 0x04                   ; FBA3C6  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; FBA3C9  pushw (XIZ+0x08)
-	call	0xFB4124                              ; FBA3CC  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FBA3CC  call 0xfb4124
 	ld	(xiz-24), xiy                           ; FBA3D0  ld (XIZ+0xe8),XIY
 	ld	bc, (xiz+10)                            ; FBA3D3  ld BC,(XIZ+0x0a)
 	sub	bc, 40                                 ; FBA3D6  sub BC,0x0028
@@ -4295,7 +4295,7 @@ sub_FB9B69__FBA3C6:
 	ld	a, (xbc)                                ; FBA417  ld A,(XBC)
 	extz	wa                                    ; FBA419  extz WA
 	pushw	wa                                   ; FBA41B  push WA
-	call	0xFB48F7                              ; FBA41C  call 0xfb48f7
+	call	DrumKit_ResolveInstrumentRecord                              ; FBA41C  call 0xfb48f7
 	ld	(xiz-28), xiy                           ; FBA420  ld (XIZ+0xe4),XIY
 	ld	(xiz-64), 1                             ; FBA423  ld (XIZ+0xc0),0x01
 	inc	8, xsp                                 ; FBA427  inc 0,XSP
@@ -4342,7 +4342,7 @@ sub_FB9B69__FBA48C:
 	push	xbc                                   ; FBA4A5  push XBC
 	ld	xwa, (xiz-28)                           ; FBA4A6  ld XWA,(XIZ+0xe4)
 	push	xwa                                   ; FBA4A9  push XWA
-	call	0xF9A038                              ; FBA4AA  call 0xf9a038
+	call	MemCopyWords                              ; FBA4AA  call 0xf9a038
 	ld	(xiz-61), 0                             ; FBA4AE  ld (XIZ+0xc3),0x00
 	inc	8, xsp                                 ; FBA4B2  inc 0,XSP
 	inc	2, xsp                                 ; FBA4B4  inc 2,XSP
@@ -4389,7 +4389,7 @@ sub_FB9B69__FBA51D:
 	push	xbc                                   ; FBA520  push XBC
 	push	0                                     ; FBA521  push 0x00
 	extpfx3 0x8E, 0xC3, 0x04                   ; FBA523  push (XIZ+0xc3)
-	call	0xFB454C                              ; FBA526  call 0xfb454c
+	call	PercInst_GetWaveSelectRecord                              ; FBA526  call 0xfb454c
 	ld	(xiz-44), xiy                           ; FBA52A  ld (XIZ+0xd4),XIY
 	inc	6, xsp                                 ; FBA52D  inc 6,XSP
 sub_FB9B69__FBA52F:
@@ -4412,7 +4412,7 @@ sub_FB9B69__FBA52F:
 	push	xwa                                   ; FBA561  push XWA
 	ld	xiy, (xiz-44)                           ; FBA562  ld XIY,(XIZ+0xd4)
 	push	xiy                                   ; FBA565  push XIY
-	call	0xF9A038                              ; FBA566  call 0xf9a038
+	call	MemCopyWords                              ; FBA566  call 0xf9a038
 	inc	8, xsp                                 ; FBA56A  inc 0,XSP
 	inc	2, xsp                                 ; FBA56C  inc 2,XSP
 	jr sub_FB9B69__FBA5BE                      ; FBA56E  jr T,0xfba5be
@@ -4422,7 +4422,7 @@ sub_FB9B69__FBA570:
 	push	xbc                                   ; FBA576  push XBC
 	ld	xwa, (xiz-44)                           ; FBA577  ld XWA,(XIZ+0xd4)
 	push	xwa                                   ; FBA57A  push XWA
-	call	0xF9A038                              ; FBA57B  call 0xf9a038
+	call	MemCopyWords                              ; FBA57B  call 0xf9a038
 	ld	xbc, (xiz-48)                           ; FBA57F  ld XBC,(XIZ+0xd0)
 	add	xbc, 11                                ; FBA582  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FBA588  ld (XIZ+0xbc),XBC
@@ -4441,7 +4441,7 @@ sub_FB9B69__FBA570:
 	ld	xbc, (xiz-44)                           ; FBA5AC  ld XBC,(XIZ+0xd4)
 	add	xbc, 13                                ; FBA5AF  add XBC,0x0000000d
 	push	xbc                                   ; FBA5B5  push XBC
-	call	0xF9A038                              ; FBA5B6  call 0xf9a038
+	call	MemCopyWords                              ; FBA5B6  call 0xf9a038
 	inc	8, xsp                                 ; FBA5BA  inc 0,XSP
 	inc	2, xsp                                 ; FBA5BC  inc 2,XSP
 sub_FB9B69__FBA5BE:
@@ -4463,7 +4463,7 @@ sub_FB9B69__FBA5C4:
 	add	xbc, 0x87D2                            ; FBA5EA  add XBC,0x000087d2
 	push	xbc                                   ; FBA5F0  push XBC
 	push	xwa                                   ; FBA5F1  push XWA
-	call	0xF9A038                              ; FBA5F2  call 0xf9a038
+	call	MemCopyWords                              ; FBA5F2  call 0xf9a038
 	ld	xbc, (xiz-28)                           ; FBA5F6  ld XBC,(XIZ+0xe4)
 	add	xbc, 18                                ; FBA5F9  add XBC,0x00000012
 	ld	(xiz-56), xbc                           ; FBA5FF  ld (XIZ+0xc8),XBC
@@ -4495,7 +4495,7 @@ sub_FB9B69__FBA621:
 	push	xwa                                   ; FBA645  push XWA
 	ld	xbc, (xiz-44)                           ; FBA646  ld XBC,(XIZ+0xd4)
 	push	xbc                                   ; FBA649  push XBC
-	call	0xF9A038                              ; FBA64A  call 0xf9a038
+	call	MemCopyWords                              ; FBA64A  call 0xf9a038
 	ld	xbc, (xiz-48)                           ; FBA64E  ld XBC,(XIZ+0xd0)
 	add	xbc, 11                                ; FBA651  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FBA657  ld (XIZ+0xbc),XBC
@@ -4514,7 +4514,7 @@ sub_FB9B69__FBA621:
 	ld	xbc, (xiz-44)                           ; FBA67B  ld XBC,(XIZ+0xd4)
 	add	xbc, 13                                ; FBA67E  add XBC,0x0000000d
 	push	xbc                                   ; FBA684  push XBC
-	call	0xF9A038                              ; FBA685  call 0xf9a038
+	call	MemCopyWords                              ; FBA685  call 0xf9a038
 	inc	8, xsp                                 ; FBA689  inc 0,XSP
 	inc	2, xsp                                 ; FBA68B  inc 2,XSP
 	jr sub_FB9B69__FBA61C                      ; FBA68D  jr T,0xfba61c
@@ -4571,7 +4571,7 @@ sub_FB9B69__FBA713:
 	push	xbc                                   ; FBA716  push XBC
 	push	0                                     ; FBA717  push 0x00
 	extpfx3 0x8E, 0xC5, 0x04                   ; FBA719  push (XIZ+0xc5)
-	call	0xFB454C                              ; FBA71C  call 0xfb454c
+	call	PercInst_GetWaveSelectRecord                              ; FBA71C  call 0xfb454c
 	ld	(xiz-44), xiy                           ; FBA720  ld (XIZ+0xd4),XIY
 	ld	(xiz-64), 1                             ; FBA723  ld (XIZ+0xc0),0x01
 	inc	6, xsp                                 ; FBA727  inc 6,XSP
@@ -4597,7 +4597,7 @@ sub_FB9B69__FBA737:
 	extpfx3 0x8E, 0xC4, 0x04                   ; FBA75D  push (XIZ+0xc4)
 	push	0                                     ; FBA760  push 0x00
 	extpfx3 0x8E, 0xC5, 0x04                   ; FBA762  push (XIZ+0xc5)
-	calr (0xFB9B11 - 0xFBA768)                 ; FBA765  calr 0xfb9b11
+	calr Field2Bit_CopyField                 ; FBA765  calr 0xfb9b11
 	inc	8, xsp                                 ; FBA768  inc 0,XSP
 	inc	2, xsp                                 ; FBA76A  inc 2,XSP
 	pushw	23                                   ; FBA76C  push 0x0017
@@ -4613,7 +4613,7 @@ sub_FB9B69__FBA737:
 	add	xbc, 18                                ; FBA787  add XBC,0x00000012
 	extpfx3 0xAE, 0xE4, 0x81                   ; FBA78D  add XBC,(XIZ+0xe4)
 	push	xbc                                   ; FBA790  push XBC
-	call	0xF9A038                              ; FBA791  call 0xf9a038
+	call	MemCopyWords                              ; FBA791  call 0xf9a038
 	ld	c, 43:opc                                  ; FBA795  ld C,0x2b
 	extpfx3 0x8E, 0xC4, 0x43                   ; FBA797  mul BC,(XIZ+0xc4)
 	extz	xbc                                   ; FBA79A  extz XBC
@@ -4635,7 +4635,7 @@ sub_FB9B69__FBA737:
 	push	xwa                                   ; FBA7CB  push XWA
 	ld	xiy, (xiz-44)                           ; FBA7CC  ld XIY,(XIZ+0xd4)
 	push	xiy                                   ; FBA7CF  push XIY
-	call	0xF9A038                              ; FBA7D0  call 0xf9a038
+	call	MemCopyWords                              ; FBA7D0  call 0xf9a038
 	inc	8, xsp                                 ; FBA7D4  inc 0,XSP
 	inc	2, xsp                                 ; FBA7D6  inc 2,XSP
 	jr sub_FB9B69__FBA828                      ; FBA7D8  jr T,0xfba828
@@ -4645,7 +4645,7 @@ sub_FB9B69__FBA7DA:
 	push	xbc                                   ; FBA7E0  push XBC
 	ld	xwa, (xiz-44)                           ; FBA7E1  ld XWA,(XIZ+0xd4)
 	push	xwa                                   ; FBA7E4  push XWA
-	call	0xF9A038                              ; FBA7E5  call 0xf9a038
+	call	MemCopyWords                              ; FBA7E5  call 0xf9a038
 	ld	xbc, (xiz-48)                           ; FBA7E9  ld XBC,(XIZ+0xd0)
 	add	xbc, 11                                ; FBA7EC  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FBA7F2  ld (XIZ+0xbc),XBC
@@ -4664,7 +4664,7 @@ sub_FB9B69__FBA7DA:
 	ld	xbc, (xiz-44)                           ; FBA816  ld XBC,(XIZ+0xd4)
 	add	xbc, 13                                ; FBA819  add XBC,0x0000000d
 	push	xbc                                   ; FBA81F  push XBC
-	call	0xF9A038                              ; FBA820  call 0xf9a038
+	call	MemCopyWords                              ; FBA820  call 0xf9a038
 	inc	8, xsp                                 ; FBA824  inc 0,XSP
 	inc	2, xsp                                 ; FBA826  inc 2,XSP
 sub_FB9B69__FBA828:
@@ -4692,7 +4692,7 @@ sub_FB9B69__FBA82B:
 	extpfx3 0x8E, 0xC4, 0x04                   ; FBA866  push (XIZ+0xc4)
 	push	0                                     ; FBA869  push 0x00
 	extpfx3 0x8E, 0xC5, 0x04                   ; FBA86B  push (XIZ+0xc5)
-	calr (0xFB9B11 - 0xFBA871)                 ; FBA86E  calr 0xfb9b11
+	calr Field2Bit_CopyField                 ; FBA86E  calr 0xfb9b11
 	inc	8, xsp                                 ; FBA871  inc 0,XSP
 	inc	2, xsp                                 ; FBA873  inc 2,XSP
 	pushw	4                                    ; FBA875  push 0x0004
@@ -4702,7 +4702,7 @@ sub_FB9B69__FBA82B:
 	ld	xbc, (xiz-36)                           ; FBA87E  ld XBC,(XIZ+0xdc)
 	inc	2, xbc                                 ; FBA881  inc 2,XBC
 	push	xbc                                   ; FBA883  push XBC
-	call	0xF9A038                              ; FBA884  call 0xf9a038
+	call	MemCopyWords                              ; FBA884  call 0xf9a038
 	ld	c, 43:opc                                  ; FBA888  ld C,0x2b
 	extpfx3 0x8E, 0xC4, 0x43                   ; FBA88A  mul BC,(XIZ+0xc4)
 	extz	xbc                                   ; FBA88D  extz XBC
@@ -4724,7 +4724,7 @@ sub_FB9B69__FBA82B:
 	push	xwa                                   ; FBA8BE  push XWA
 	ld	xiy, (xiz-44)                           ; FBA8BF  ld XIY,(XIZ+0xd4)
 	push	xiy                                   ; FBA8C2  push XIY
-	call	0xF9A038                              ; FBA8C3  call 0xf9a038
+	call	MemCopyWords                              ; FBA8C3  call 0xf9a038
 	inc	8, xsp                                 ; FBA8C7  inc 0,XSP
 	inc	2, xsp                                 ; FBA8C9  inc 2,XSP
 	jr sub_FB9B69__FBA91B                      ; FBA8CB  jr T,0xfba91b
@@ -4734,7 +4734,7 @@ sub_FB9B69__FBA8CD:
 	push	xbc                                   ; FBA8D3  push XBC
 	ld	xwa, (xiz-44)                           ; FBA8D4  ld XWA,(XIZ+0xd4)
 	push	xwa                                   ; FBA8D7  push XWA
-	call	0xF9A038                              ; FBA8D8  call 0xf9a038
+	call	MemCopyWords                              ; FBA8D8  call 0xf9a038
 	ld	xbc, (xiz-48)                           ; FBA8DC  ld XBC,(XIZ+0xd0)
 	add	xbc, 11                                ; FBA8DF  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FBA8E5  ld (XIZ+0xbc),XBC
@@ -4753,7 +4753,7 @@ sub_FB9B69__FBA8CD:
 	ld	xbc, (xiz-44)                           ; FBA909  ld XBC,(XIZ+0xd4)
 	add	xbc, 13                                ; FBA90C  add XBC,0x0000000d
 	push	xbc                                   ; FBA912  push XBC
-	call	0xF9A038                              ; FBA913  call 0xf9a038
+	call	MemCopyWords                              ; FBA913  call 0xf9a038
 	inc	8, xsp                                 ; FBA917  inc 0,XSP
 	inc	2, xsp                                 ; FBA919  inc 2,XSP
 sub_FB9B69__FBA91B:
@@ -4776,7 +4776,7 @@ sub_FB9B69__FBA91E:
 	ld	xbc, (xiz-36)                           ; FBA945  ld XBC,(XIZ+0xdc)
 	inc	6, xbc                                 ; FBA948  inc 6,XBC
 	push	xbc                                   ; FBA94A  push XBC
-	call	0xF9A038                              ; FBA94B  call 0xf9a038
+	call	MemCopyWords                              ; FBA94B  call 0xf9a038
 	ld	xbc, (xiz-36)                           ; FBA94F  ld XBC,(XIZ+0xdc)
 	ld	a, (xbc)                                ; FBA952  ld A,(XBC)
 	ld	h, a                                    ; FBA954  ld H,A
@@ -4803,7 +4803,7 @@ sub_FB9B69__FBA962:
 	ld	xbc, (xiz-36)                           ; FBA98D  ld XBC,(XIZ+0xdc)
 	add	xbc, 17                                ; FBA990  add XBC,0x00000011
 	push	xbc                                   ; FBA996  push XBC
-	call	0xF9A038                              ; FBA997  call 0xf9a038
+	call	MemCopyWords                              ; FBA997  call 0xf9a038
 	inc	8, xsp                                 ; FBA99B  inc 0,XSP
 	inc	2, xsp                                 ; FBA99D  inc 2,XSP
 	jrl sub_FB9B69__FBAA9D                     ; FBA99F  jrl T,0xfbaa9d
@@ -4834,7 +4834,7 @@ sub_FB9B69__FBA9A2:
 	pushw	23                                   ; FBA9EB  push 0x0017
 	push	xbc                                   ; FBA9EE  push XBC
 	push	xwa                                   ; FBA9EF  push XWA
-	call	0xF9A038                              ; FBA9F0  call 0xf9a038
+	call	MemCopyWords                              ; FBA9F0  call 0xf9a038
 	ld	xbc, (xiz-28)                           ; FBA9F4  ld XBC,(XIZ+0xe4)
 	add	xbc, 18                                ; FBA9F7  add XBC,0x00000012
 	ld	(xiz-56), xbc                           ; FBA9FD  ld (XIZ+0xc8),XBC
@@ -4857,7 +4857,7 @@ sub_FB9B69__FBA9A2:
 	push	xbc                                   ; FBAA31  push XBC
 	ld	xwa, (xiz-44)                           ; FBAA32  ld XWA,(XIZ+0xd4)
 	push	xwa                                   ; FBAA35  push XWA
-	call	0xF9A038                              ; FBAA36  call 0xf9a038
+	call	MemCopyWords                              ; FBAA36  call 0xf9a038
 	ld	xbc, (xiz-48)                           ; FBAA3A  ld XBC,(XIZ+0xd0)
 	add	xbc, 11                                ; FBAA3D  add XBC,0x0000000b
 	ld	(xiz-68), xbc                           ; FBAA43  ld (XIZ+0xbc),XBC
@@ -4876,7 +4876,7 @@ sub_FB9B69__FBA9A2:
 	ld	xbc, (xiz-44)                           ; FBAA67  ld XBC,(XIZ+0xd4)
 	add	xbc, 13                                ; FBAA6A  add XBC,0x0000000d
 	push	xbc                                   ; FBAA70  push XBC
-	call	0xF9A038                              ; FBAA71  call 0xf9a038
+	call	MemCopyWords                              ; FBAA71  call 0xf9a038
 	inc	8, xsp                                 ; FBAA75  inc 0,XSP
 	inc	2, xsp                                 ; FBAA77  inc 2,XSP
 	jr sub_FB9B69__FBAA9D                      ; FBAA79  jr T,0xfbaa9d
@@ -4993,7 +4993,7 @@ ToneStage_EnsurePartLoaded__FBAB0E:
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x01, 0x00 ; FBAB1B  or (XBC+0x1523),0x0001
 	push	0                                     ; FBAB22  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBAB24  push (XIZ+0x08)
-	calr (0xFB86BB - 0xFBAB2A)                 ; FBAB27  calr 0xfb86bb
+	calr ToneStage_SwitchToPart                 ; FBAB27  calr 0xfb86bb
 	ld	bc, (xiz+8)                             ; FBAB2A  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FBAB2D  extz BC
 	mul	bc, 0x12C                              ; FBAB2F  mul BC,0x012c
@@ -5010,7 +5010,7 @@ ToneStage_EnsurePartLoaded__FBAB0E:
 	pushw	wa                                   ; FBAB4F  push WA
 	push	0                                     ; FBAB50  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBAB52  push (XIZ+0x08)
-	call	0xFB47C4                              ; FBAB55  call 0xfb47c4
+	call	Part_LoadToneRecordAndPointers                              ; FBAB55  call 0xfb47c4
 	ld	bc, (xiz+8)                             ; FBAB59  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FBAB5C  extz BC
 	mul	bc, 0x12C                              ; FBAB5E  mul BC,0x012c
@@ -5160,84 +5160,84 @@ ToneEdit_Dispatch__FBAC37:
 	pushw	wa                                   ; FBAC3D  push WA
 	ld	a, (xbc+1)                              ; FBAC3E  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAC41  push WA
-	calr (0xFB8CEC - 0xFBAC45)                 ; FBAC42  calr 0xfb8cec
+	calr sub_FB8CEC                 ; FBAC42  calr 0xfb8cec
 	pop	xiy                                    ; FBAC45  pop XIY
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAC46  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAC49:
 	ld	xbc, (xiz+8)                            ; FBAC49  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBAC4C  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAC4F  push WA
-	calr (0xFBAAA2 - 0xFBAC53)                 ; FBAC50  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBAC50  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBAC53  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+4)                              ; FBAC56  ld A,(XBC+0x04)
 	popw	iy                                    ; FBAC59  pop IY
 	pushw	wa                                   ; FBAC5A  push WA
 	ld	a, (xbc+1)                              ; FBAC5B  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAC5E  push WA
-	call	0xFC2DA3                              ; FBAC5F  call 0xfc2da3
+	call	sub_FC2DA3                              ; FBAC5F  call 0xfc2da3
 	pop	xiy                                    ; FBAC63  pop XIY
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAC64  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAC67:
 	ld	xbc, (xiz+8)                            ; FBAC67  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBAC6A  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAC6D  push WA
-	calr (0xFBAAA2 - 0xFBAC71)                 ; FBAC6E  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBAC6E  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBAC71  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+4)                              ; FBAC74  ld A,(XBC+0x04)
 	popw	iy                                    ; FBAC77  pop IY
 	pushw	wa                                   ; FBAC78  push WA
 	ld	a, (xbc+1)                              ; FBAC79  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAC7C  push WA
-	call	0xFC2E4B                              ; FBAC7D  call 0xfc2e4b
+	call	sub_FC2E4B                              ; FBAC7D  call 0xfc2e4b
 	pop	xiy                                    ; FBAC81  pop XIY
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAC82  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAC85:
 	ld	xbc, (xiz+8)                            ; FBAC85  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBAC88  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAC8B  push WA
-	calr (0xFBAAA2 - 0xFBAC8F)                 ; FBAC8C  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBAC8C  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBAC8F  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+4)                              ; FBAC92  ld A,(XBC+0x04)
 	popw	iy                                    ; FBAC95  pop IY
 	pushw	wa                                   ; FBAC96  push WA
 	ld	a, (xbc+1)                              ; FBAC97  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAC9A  push WA
-	call	0xFC2F1A                              ; FBAC9B  call 0xfc2f1a
+	call	sub_FC2F1A                              ; FBAC9B  call 0xfc2f1a
 	pop	xiy                                    ; FBAC9F  pop XIY
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBACA0  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBACA3:
 	ld	xbc, (xiz+8)                            ; FBACA3  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBACA6  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBACA9  push WA
-	calr (0xFBAAA2 - 0xFBACAD)                 ; FBACAA  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBACAA  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBACAD  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+4)                              ; FBACB0  ld A,(XBC+0x04)
 	popw	iy                                    ; FBACB3  pop IY
 	pushw	wa                                   ; FBACB4  push WA
 	ld	a, (xbc+1)                              ; FBACB5  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBACB8  push WA
-	call	0xFC2FE9                              ; FBACB9  call 0xfc2fe9
+	call	sub_FC2FE9                              ; FBACB9  call 0xfc2fe9
 	pop	xiy                                    ; FBACBD  pop XIY
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBACBE  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBACC1:
 	ld	xbc, (xiz+8)                            ; FBACC1  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBACC4  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBACC7  push WA
-	calr (0xFBAAA2 - 0xFBACCB)                 ; FBACC8  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBACC8  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBACCB  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+4)                              ; FBACCE  ld A,(XBC+0x04)
 	popw	iy                                    ; FBACD1  pop IY
 	pushw	wa                                   ; FBACD2  push WA
 	ld	a, (xbc+1)                              ; FBACD3  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBACD6  push WA
-	call	0xFC30B7                              ; FBACD7  call 0xfc30b7
+	call	sub_FC30B7                              ; FBACD7  call 0xfc30b7
 	pop	xiy                                    ; FBACDB  pop XIY
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBACDC  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBACDF:
 	ld	xbc, (xiz+8)                            ; FBACDF  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBACE2  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBACE5  push WA
-	calr (0xFBAAA2 - 0xFBACE9)                 ; FBACE6  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBACE6  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBACE9  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FBACEC  ld A,(XBC+0x03)
 	extz	wa                                    ; FBACEF  extz WA
@@ -5253,14 +5253,14 @@ ToneEdit_Dispatch__FBACDF:
 	extpfx3 0x9E, 0xFE, 0x04                   ; FBAD05  pushw (XIZ+0xfe)
 	ld	a, (xbc+1)                              ; FBAD08  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAD0B  push WA
-	calr (0xFB90B3 - 0xFBAD0F)                 ; FBAD0C  calr 0xfb90b3
+	calr ToneDB_SourceNameList1_SelectEntry                 ; FBAD0C  calr 0xfb90b3
 	inc	6, xsp                                 ; FBAD0F  inc 6,XSP
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAD11  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAD14:
 	ld	xbc, (xiz+8)                            ; FBAD14  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBAD17  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAD1A  push WA
-	calr (0xFBAAA2 - 0xFBAD1E)                 ; FBAD1B  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBAD1B  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBAD1E  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FBAD21  ld A,(XBC+0x03)
 	extz	wa                                    ; FBAD24  extz WA
@@ -5276,7 +5276,7 @@ ToneEdit_Dispatch__FBAD14:
 	extpfx3 0x9E, 0xFE, 0x04                   ; FBAD3A  pushw (XIZ+0xfe)
 	ld	a, (xbc+1)                              ; FBAD3D  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAD40  push WA
-	calr (0xFB9281 - 0xFBAD44)                 ; FBAD41  calr 0xfb9281
+	calr ToneDB_SourceNameList2_SelectEntry                 ; FBAD41  calr 0xfb9281
 	inc	6, xsp                                 ; FBAD44  inc 6,XSP
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAD46  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAD49:
@@ -5294,7 +5294,7 @@ ToneEdit_Dispatch__FBAD49:
 	pushw	wa                                   ; FBAD6A  push WA
 	ld	a, (xbc+1)                              ; FBAD6B  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAD6E  push WA
-	call	0xFC3178                              ; FBAD6F  call 0xfc3178
+	call	sub_FC3178                              ; FBAD6F  call 0xfc3178
 	pop	xiy                                    ; FBAD73  pop XIY
 ToneEdit_Dispatch__FBAD74:
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAD74  jrl T,0xfbaf34
@@ -5307,7 +5307,7 @@ ToneEdit_Dispatch__FBAD77:
 	ld	xbc, (xiz+8)                            ; FBAD8C  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBAD8F  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAD92  push WA
-	calr (0xFBAAA2 - 0xFBAD96)                 ; FBAD93  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBAD93  calr 0xfbaaa2
 	popw	bc                                    ; FBAD96  pop BC
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAD97  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAD9A:
@@ -5325,7 +5325,7 @@ ToneEdit_Dispatch__FBAD9A:
 	pushw	wa                                   ; FBADBB  push WA
 	ld	a, (xbc+1)                              ; FBADBC  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBADBF  push WA
-	call	0xFC31BF                              ; FBADC0  call 0xfc31bf
+	call	sub_FC31BF                              ; FBADC0  call 0xfc31bf
 	pop	xiy                                    ; FBADC4  pop XIY
 ToneEdit_Dispatch__FBADC5:
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBADC5  jrl T,0xfbaf34
@@ -5335,14 +5335,14 @@ ToneEdit_Dispatch__FBADC8:
 	pushw	wa                                   ; FBADCE  push WA
 	ld	a, (xbc+1)                              ; FBADCF  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBADD2  push WA
-	calr (0xFB9414 - 0xFBADD6)                 ; FBADD3  calr 0xfb9414
+	calr sub_FB9414                 ; FBADD3  calr 0xfb9414
 	pop	xiy                                    ; FBADD6  pop XIY
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBADD7  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBADDA:
 	ld	xbc, (xiz+8)                            ; FBADDA  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBADDD  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBADE0  push WA
-	calr (0xFBAAA2 - 0xFBADE4)                 ; FBADE1  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBADE1  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBADE4  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FBADE7  ld A,(XBC+0x03)
 	extz	wa                                    ; FBADEA  extz WA
@@ -5356,14 +5356,14 @@ ToneEdit_Dispatch__FBADDA:
 	pushw	wa                                   ; FBADFC  push WA
 	ld	a, (xbc+1)                              ; FBADFD  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAE00  push WA
-	calr (0xFB9541 - 0xFBAE04)                 ; FBAE01  calr 0xfb9541
+	calr ToneDB_DrumSourceNameList_SelectEntry                 ; FBAE01  calr 0xfb9541
 	pop	xiy                                    ; FBAE04  pop XIY
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAE05  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAE08:
 	ld	xbc, (xiz+8)                            ; FBAE08  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBAE0B  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAE0E  push WA
-	calr (0xFBAAA2 - 0xFBAE12)                 ; FBAE0F  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBAE0F  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBAE12  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FBAE15  ld A,(XBC+0x03)
 	extz	wa                                    ; FBAE18  extz WA
@@ -5379,14 +5379,14 @@ ToneEdit_Dispatch__FBAE08:
 	extpfx3 0x9E, 0xFE, 0x04                   ; FBAE2E  pushw (XIZ+0xfe)
 	ld	a, (xbc+1)                              ; FBAE31  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAE34  push WA
-	calr (0xFB978B - 0xFBAE38)                 ; FBAE35  calr 0xfb978b
+	calr ToneDB_PercSourceNameList1_SelectEntry                 ; FBAE35  calr 0xfb978b
 	inc	6, xsp                                 ; FBAE38  inc 6,XSP
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAE3A  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAE3D:
 	ld	xbc, (xiz+8)                            ; FBAE3D  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBAE40  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAE43  push WA
-	calr (0xFBAAA2 - 0xFBAE47)                 ; FBAE44  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBAE44  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBAE47  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FBAE4A  ld A,(XBC+0x03)
 	extz	wa                                    ; FBAE4D  extz WA
@@ -5402,21 +5402,21 @@ ToneEdit_Dispatch__FBAE3D:
 	extpfx3 0x9E, 0xFE, 0x04                   ; FBAE63  pushw (XIZ+0xfe)
 	ld	a, (xbc+1)                              ; FBAE66  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBAE69  push WA
-	calr (0xFB994E - 0xFBAE6D)                 ; FBAE6A  calr 0xfb994e
+	calr ToneDB_PercSourceNameList2_SelectEntry                 ; FBAE6A  calr 0xfb994e
 	inc	6, xsp                                 ; FBAE6D  inc 6,XSP
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAE6F  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAE72:
 	pushw	1                                    ; FBAE72  push 0x0001
-	call	0xFC386C                              ; FBAE75  call 0xfc386c
+	call	SoundRam_ClearFourBanks                              ; FBAE75  call 0xfc386c
 	popw	bc                                    ; FBAE79  pop BC
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAE7A  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAE7D:
-	call	0xFC3CB8                              ; FBAE7D  call 0xfc3cb8
+	call	sub_FC3CB8                              ; FBAE7D  call 0xfc3cb8
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAE81  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAE84:
 	ld	c, (0xD733:24)                         ; FBAE84  ld C,(0x00d733)
 	pushw	bc                                   ; FBAE89  push BC
-	calr (0xFBAAA2 - 0xFBAE8D)                 ; FBAE8A  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBAE8A  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FBAE8D  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+5)                              ; FBAE90  ld A,(XBC+0x05)
 	popw	iy                                    ; FBAE93  pop IY
@@ -5429,7 +5429,7 @@ ToneEdit_Dispatch__FBAE84:
 	ld	a, (xbc+3)                              ; FBAE9F  ld A,(XBC+0x03)
 	extz	wa                                    ; FBAEA2  extz WA
 	pushw	wa                                   ; FBAEA4  push WA
-	calr (0xFB9B69 - 0xFBAEA8)                 ; FBAEA5  calr 0xfb9b69
+	calr sub_FB9B69                 ; FBAEA5  calr 0xfb9b69
 	inc	8, xsp                                 ; FBAEA8  inc 0,XSP
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAEAA  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAEAD:
@@ -6196,84 +6196,84 @@ ToneRec_LoadDspParams_ByAlgoType__FBB3C3:
 	pushw	0                                    ; FBB3C3  push 0x0000
 	push	0                                     ; FBB3C6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB3C8  push (XIZ+0x08)
-	calr (0xFBAF38 - 0xFBB3CE)                 ; FBB3CB  calr 0xfbaf38
+	calr ToneRec_LoadDspParams_AlgoTypes0to3                 ; FBB3CB  calr 0xfbaf38
 	pop	xiy                                    ; FBB3CE  pop XIY
 	jrl ToneRec_LoadDspParams_ByAlgoType__FBB4BC                     ; FBB3CF  jrl T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB3D2:
 	pushw	1                                    ; FBB3D2  push 0x0001
 	push	0                                     ; FBB3D5  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB3D7  push (XIZ+0x08)
-	calr (0xFBAF38 - 0xFBB3DD)                 ; FBB3DA  calr 0xfbaf38
+	calr ToneRec_LoadDspParams_AlgoTypes0to3                 ; FBB3DA  calr 0xfbaf38
 	pop	xiy                                    ; FBB3DD  pop XIY
 	jrl ToneRec_LoadDspParams_ByAlgoType__FBB4BC                     ; FBB3DE  jrl T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB3E1:
 	pushw	2                                    ; FBB3E1  push 0x0002
 	push	0                                     ; FBB3E4  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB3E6  push (XIZ+0x08)
-	calr (0xFBAF38 - 0xFBB3EC)                 ; FBB3E9  calr 0xfbaf38
+	calr ToneRec_LoadDspParams_AlgoTypes0to3                 ; FBB3E9  calr 0xfbaf38
 	pop	xiy                                    ; FBB3EC  pop XIY
 	jrl ToneRec_LoadDspParams_ByAlgoType__FBB4BC                     ; FBB3ED  jrl T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB3F0:
 	pushw	3                                    ; FBB3F0  push 0x0003
 	push	0                                     ; FBB3F3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB3F5  push (XIZ+0x08)
-	calr (0xFBAF38 - 0xFBB3FB)                 ; FBB3F8  calr 0xfbaf38
+	calr ToneRec_LoadDspParams_AlgoTypes0to3                 ; FBB3F8  calr 0xfbaf38
 	pop	xiy                                    ; FBB3FB  pop XIY
 	jrl ToneRec_LoadDspParams_ByAlgoType__FBB4BC                     ; FBB3FC  jrl T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB3FF:
 	pushw	4                                    ; FBB3FF  push 0x0004
 	push	0                                     ; FBB402  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB404  push (XIZ+0x08)
-	calr (0xFBAFD0 - 0xFBB40A)                 ; FBB407  calr 0xfbafd0
+	calr ToneRec_LoadDspParams_AlgoTypes4and5                 ; FBB407  calr 0xfbafd0
 	pop	xiy                                    ; FBB40A  pop XIY
 	jrl ToneRec_LoadDspParams_ByAlgoType__FBB4BC                     ; FBB40B  jrl T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB40E:
 	pushw	5                                    ; FBB40E  push 0x0005
 	push	0                                     ; FBB411  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB413  push (XIZ+0x08)
-	calr (0xFBAFD0 - 0xFBB419)                 ; FBB416  calr 0xfbafd0
+	calr ToneRec_LoadDspParams_AlgoTypes4and5                 ; FBB416  calr 0xfbafd0
 	pop	xiy                                    ; FBB419  pop XIY
 	jrl ToneRec_LoadDspParams_ByAlgoType__FBB4BC                     ; FBB41A  jrl T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB41D:
 	pushw	6                                    ; FBB41D  push 0x0006
 	push	0                                     ; FBB420  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB422  push (XIZ+0x08)
-	calr (0xFBB078 - 0xFBB428)                 ; FBB425  calr 0xfbb078
+	calr ToneRec_LoadDspParams_AlgoType6                 ; FBB425  calr 0xfbb078
 	pop	xiy                                    ; FBB428  pop XIY
 	jrl ToneRec_LoadDspParams_ByAlgoType__FBB4BC                     ; FBB429  jrl T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB42C:
 	pushw	7                                    ; FBB42C  push 0x0007
 	push	0                                     ; FBB42F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB431  push (XIZ+0x08)
-	calr (0xFBB101 - 0xFBB437)                 ; FBB434  calr 0xfbb101
+	calr ToneRec_LoadDspParams_AlgoType7                 ; FBB434  calr 0xfbb101
 	pop	xiy                                    ; FBB437  pop XIY
 	jrl ToneRec_LoadDspParams_ByAlgoType__FBB4BC                     ; FBB438  jrl T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB43B:
 	pushw	8                                    ; FBB43B  push 0x0008
 	push	0                                     ; FBB43E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB440  push (XIZ+0x08)
-	calr (0xFBB189 - 0xFBB446)                 ; FBB443  calr 0xfbb189
+	calr ToneRec_LoadDspParams_AlgoType8                 ; FBB443  calr 0xfbb189
 	pop	xiy                                    ; FBB446  pop XIY
 	jrl ToneRec_LoadDspParams_ByAlgoType__FBB4BC                     ; FBB447  jrl T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB44A:
 	pushw	9                                    ; FBB44A  push 0x0009
 	push	0                                     ; FBB44D  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB44F  push (XIZ+0x08)
-	calr (0xFBB212 - 0xFBB455)                 ; FBB452  calr 0xfbb212
+	calr ToneRec_LoadDspParams_AlgoType9                 ; FBB452  calr 0xfbb212
 	pop	xiy                                    ; FBB455  pop XIY
 	jr ToneRec_LoadDspParams_ByAlgoType__FBB4BC                      ; FBB456  jr T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB458:
 	pushw	10                                   ; FBB458  push 0x000a
 	push	0                                     ; FBB45B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB45D  push (XIZ+0x08)
-	calr (0xFBB29B - 0xFBB463)                 ; FBB460  calr 0xfbb29b
+	calr ToneRec_LoadDspParams_AlgoType10                 ; FBB460  calr 0xfbb29b
 	pop	xiy                                    ; FBB463  pop XIY
 	jr ToneRec_LoadDspParams_ByAlgoType__FBB4BC                      ; FBB464  jr T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB466:
 	pushw	11                                   ; FBB466  push 0x000b
 	push	0                                     ; FBB469  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB46B  push (XIZ+0x08)
-	calr (0xFBB315 - 0xFBB471)                 ; FBB46E  calr 0xfbb315
+	calr ToneRec_LoadDspParams_AlgoType11                 ; FBB46E  calr 0xfbb315
 	pop	xiy                                    ; FBB471  pop XIY
 	jr ToneRec_LoadDspParams_ByAlgoType__FBB4BC                      ; FBB472  jr T,0xfbb4bc
 ToneRec_LoadDspParams_ByAlgoType__FBB474:
@@ -6356,25 +6356,25 @@ sub_FBB4BF__FBB4E2:
 	pushw	0                                    ; FBB4E2  push 0x0000
 	push	0                                     ; FBB4E5  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB4E7  push (XIZ+0x08)
-	call	0xFACC75                              ; FBB4EA  call 0xfacc75
+	call	sub_FACC75                              ; FBB4EA  call 0xfacc75
 	pop	xiy                                    ; FBB4EE  pop XIY
 	pushw	1                                    ; FBB4EF  push 0x0001
 	push	0                                     ; FBB4F2  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB4F4  push (XIZ+0x08)
-	call	0xFACC75                              ; FBB4F7  call 0xfacc75
+	call	sub_FACC75                              ; FBB4F7  call 0xfacc75
 	pop	xiy                                    ; FBB4FB  pop XIY
 	jrl sub_FBB4BF__FBB579                     ; FBB4FC  jrl T,0xfbb579
 sub_FBB4BF__FBB4FF:
 	pushw	0                                    ; FBB4FF  push 0x0000
 	push	0                                     ; FBB502  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB504  push (XIZ+0x08)
-	call	0xFACC75                              ; FBB507  call 0xfacc75
+	call	sub_FACC75                              ; FBB507  call 0xfacc75
 	pop	xiy                                    ; FBB50B  pop XIY
 	jr sub_FBB4BF__FBB579                      ; FBB50C  jr T,0xfbb579
 sub_FBB4BF__FBB50E:
 	push	0                                     ; FBB50E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB510  push (XIZ+0x08)
-	call	0xFACDC1                              ; FBB513  call 0xfacdc1
+	call	sub_FACDC1                              ; FBB513  call 0xfacdc1
 	popw	bc                                    ; FBB517  pop BC
 	jr sub_FBB4BF__FBB579                      ; FBB518  jr T,0xfbb579
 sub_FBB4BF__FBB51A:
@@ -6389,7 +6389,7 @@ sub_FBB4BF__FBB51A:
 	pushw	0                                    ; FBB534  push 0x0000
 	push	0                                     ; FBB537  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB539  push (XIZ+0x08)
-	call	0xFACC75                              ; FBB53C  call 0xfacc75
+	call	sub_FACC75                              ; FBB53C  call 0xfacc75
 	pop	xiy                                    ; FBB540  pop XIY
 sub_FBB4BF__FBB541:
 	jr sub_FBB4BF__FBB579                      ; FBB541  jr T,0xfbb579
@@ -6469,25 +6469,25 @@ sub_FBB57C__FBB5A0:
 	pushw	0                                    ; FBB5A0  push 0x0000
 	push	0                                     ; FBB5A3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB5A5  push (XIZ+0x08)
-	call	0xFACD1B                              ; FBB5A8  call 0xfacd1b
+	call	sub_FACD1B                              ; FBB5A8  call 0xfacd1b
 	pop	xiy                                    ; FBB5AC  pop XIY
 	pushw	1                                    ; FBB5AD  push 0x0001
 	push	0                                     ; FBB5B0  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB5B2  push (XIZ+0x08)
-	call	0xFACD1B                              ; FBB5B5  call 0xfacd1b
+	call	sub_FACD1B                              ; FBB5B5  call 0xfacd1b
 	pop	xiy                                    ; FBB5B9  pop XIY
 	jrl sub_FBB57C__FBB642                     ; FBB5BA  jrl T,0xfbb642
 sub_FBB57C__FBB5BD:
 	pushw	0                                    ; FBB5BD  push 0x0000
 	push	0                                     ; FBB5C0  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB5C2  push (XIZ+0x08)
-	call	0xFACD1B                              ; FBB5C5  call 0xfacd1b
+	call	sub_FACD1B                              ; FBB5C5  call 0xfacd1b
 	pop	xiy                                    ; FBB5C9  pop XIY
 	jrl sub_FBB57C__FBB642                     ; FBB5CA  jrl T,0xfbb642
 sub_FBB57C__FBB5CD:
 	push	0                                     ; FBB5CD  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB5CF  push (XIZ+0x08)
-	call	0xFACE14                              ; FBB5D2  call 0xface14
+	call	sub_FACE14                              ; FBB5D2  call 0xface14
 	popw	bc                                    ; FBB5D6  pop BC
 	jr sub_FBB57C__FBB642                      ; FBB5D7  jr T,0xfbb642
 sub_FBB57C__FBB5D9:
@@ -6502,11 +6502,11 @@ sub_FBB57C__FBB5D9:
 	pushw	0                                    ; FBB5F3  push 0x0000
 	push	0                                     ; FBB5F6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB5F8  push (XIZ+0x08)
-	call	0xFACD1B                              ; FBB5FB  call 0xfacd1b
+	call	sub_FACD1B                              ; FBB5FB  call 0xfacd1b
 	pop	xiy                                    ; FBB5FF  pop XIY
 	push	0                                     ; FBB600  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB602  push (XIZ+0x08)
-	call	0xFACE14                              ; FBB605  call 0xface14
+	call	sub_FACE14                              ; FBB605  call 0xface14
 	popw	bc                                    ; FBB609  pop BC
 sub_FBB57C__FBB60A:
 	jr sub_FBB57C__FBB642                      ; FBB60A  jr T,0xfbb642
@@ -6586,13 +6586,13 @@ sub_FBB645__FBB668:
 	pushw	1                                    ; FBB668  push 0x0001
 	push	0                                     ; FBB66B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB66D  push (XIZ+0x08)
-	call	0xFACC75                              ; FBB670  call 0xfacc75
+	call	sub_FACC75                              ; FBB670  call 0xfacc75
 	pop	xiy                                    ; FBB674  pop XIY
 	jrl sub_FBB645__FBB6F5                     ; FBB675  jrl T,0xfbb6f5
 sub_FBB645__FBB678:
 	push	0                                     ; FBB678  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB67A  push (XIZ+0x08)
-	call	0xFACDC1                              ; FBB67D  call 0xfacdc1
+	call	sub_FACDC1                              ; FBB67D  call 0xfacdc1
 	popw	bc                                    ; FBB681  pop BC
 	jrl sub_FBB645__FBB6F5                     ; FBB682  jrl T,0xfbb6f5
 sub_FBB645__FBB685:
@@ -6607,7 +6607,7 @@ sub_FBB645__FBB685:
 	pushw	1                                    ; FBB69F  push 0x0001
 	push	0                                     ; FBB6A2  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB6A4  push (XIZ+0x08)
-	call	0xFACC75                              ; FBB6A7  call 0xfacc75
+	call	sub_FACC75                              ; FBB6A7  call 0xfacc75
 	pop	xiy                                    ; FBB6AB  pop XIY
 sub_FBB645__FBB6AC:
 	jr sub_FBB645__FBB6F5                      ; FBB6AC  jr T,0xfbb6f5
@@ -6615,7 +6615,7 @@ sub_FBB645__FBB6AE:
 	pushw	0                                    ; FBB6AE  push 0x0000
 	push	0                                     ; FBB6B1  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB6B3  push (XIZ+0x08)
-	call	0xFACC75                              ; FBB6B6  call 0xfacc75
+	call	sub_FACC75                              ; FBB6B6  call 0xfacc75
 	pop	xiy                                    ; FBB6BA  pop XIY
 	jr sub_FBB645__FBB6F5                      ; FBB6BB  jr T,0xfbb6f5
 sub_FBB645__FBB6BD:
@@ -6694,7 +6694,7 @@ sub_FBB6F8__FBB71B:
 	pushw	1                                    ; FBB71B  push 0x0001
 	push	0                                     ; FBB71E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB720  push (XIZ+0x08)
-	call	0xFACD1B                              ; FBB723  call 0xfacd1b
+	call	sub_FACD1B                              ; FBB723  call 0xfacd1b
 	pop	xiy                                    ; FBB727  pop XIY
 	jr sub_FBB6F8__FBB762                      ; FBB728  jr T,0xfbb762
 sub_FBB6F8__FBB72A:
@@ -6709,7 +6709,7 @@ sub_FBB6F8__FBB72A:
 	pushw	1                                    ; FBB744  push 0x0001
 	push	0                                     ; FBB747  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB749  push (XIZ+0x08)
-	call	0xFACD1B                              ; FBB74C  call 0xfacd1b
+	call	sub_FACD1B                              ; FBB74C  call 0xfacd1b
 	pop	xiy                                    ; FBB750  pop XIY
 sub_FBB6F8__FBB751:
 	jr sub_FBB6F8__FBB762                      ; FBB751  jr T,0xfbb762
@@ -6759,7 +6759,7 @@ sub_FBB765:
 	jr nz, sub_FBB765__FBB790                  ; FBB771  jr NZ,0xfbb790
 	push	0                                     ; FBB773  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBB775  push (XIZ+0x08)
-	calr (0xFBAAA2 - 0xFBB77B)                 ; FBB778  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FBB778  calr 0xfbaaa2
 	popw	bc                                    ; FBB77B  pop BC
 	cp (xiz+10), 0x00                          ; FBB77C  cp (XIZ+0x0a),0x00
 	jr z, sub_FBB765__FBB78A                   ; FBB780  jr Z,0xfbb78a
@@ -6826,7 +6826,7 @@ sub_FBB793__FBB7BC:
 	pushw	64                                   ; FBB7C6  push 0x0040
 	push	0                                     ; FBB7C9  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB7CB  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB7CE  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB7CE  call 0xfaf031
 	inc	8, xsp                                 ; FBB7D2  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB7D4  jrl T,0xfbba89
 sub_FBB793__FBB7D7:
@@ -6836,7 +6836,7 @@ sub_FBB793__FBB7D7:
 	pushw	0                                    ; FBB7E1  push 0x0000
 	push	0                                     ; FBB7E4  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB7E6  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB7E9  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB7E9  call 0xfaf031
 	inc	8, xsp                                 ; FBB7ED  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB7EF  jrl T,0xfbba89
 sub_FBB793__FBB7F2:
@@ -6846,7 +6846,7 @@ sub_FBB793__FBB7F2:
 	pushw	0                                    ; FBB7FC  push 0x0000
 	push	0                                     ; FBB7FF  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB801  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB804  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB804  call 0xfaf031
 	inc	8, xsp                                 ; FBB808  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB80A  jrl T,0xfbba89
 sub_FBB793__FBB80D:
@@ -6856,7 +6856,7 @@ sub_FBB793__FBB80D:
 	pushw	64                                   ; FBB817  push 0x0040
 	push	0                                     ; FBB81A  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB81C  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB81F  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB81F  call 0xfaf031
 	inc	8, xsp                                 ; FBB823  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB825  jrl T,0xfbba89
 sub_FBB793__FBB828:
@@ -6866,7 +6866,7 @@ sub_FBB793__FBB828:
 	pushw	64                                   ; FBB832  push 0x0040
 	push	0                                     ; FBB835  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB837  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB83A  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB83A  call 0xfaf031
 	inc	8, xsp                                 ; FBB83E  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB840  jrl T,0xfbba89
 sub_FBB793__FBB843:
@@ -6876,7 +6876,7 @@ sub_FBB793__FBB843:
 	pushw	0                                    ; FBB84D  push 0x0000
 	push	0                                     ; FBB850  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB852  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB855  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB855  call 0xfaf031
 	inc	8, xsp                                 ; FBB859  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB85B  jrl T,0xfbba89
 sub_FBB793__FBB85E:
@@ -6886,7 +6886,7 @@ sub_FBB793__FBB85E:
 	pushw	0                                    ; FBB868  push 0x0000
 	push	0                                     ; FBB86B  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB86D  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB870  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB870  call 0xfaf031
 	inc	8, xsp                                 ; FBB874  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB876  jrl T,0xfbba89
 sub_FBB793__FBB879:
@@ -6896,7 +6896,7 @@ sub_FBB793__FBB879:
 	pushw	0                                    ; FBB883  push 0x0000
 	push	0                                     ; FBB886  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB888  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB88B  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB88B  call 0xfaf031
 	inc	8, xsp                                 ; FBB88F  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB891  jrl T,0xfbba89
 sub_FBB793__FBB894:
@@ -6906,7 +6906,7 @@ sub_FBB793__FBB894:
 	pushw	0                                    ; FBB89E  push 0x0000
 	push	0                                     ; FBB8A1  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB8A3  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB8A6  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB8A6  call 0xfaf031
 	inc	8, xsp                                 ; FBB8AA  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB8AC  jrl T,0xfbba89
 sub_FBB793__FBB8AF:
@@ -6916,7 +6916,7 @@ sub_FBB793__FBB8AF:
 	pushw	64                                   ; FBB8B9  push 0x0040
 	push	0                                     ; FBB8BC  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB8BE  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB8C1  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB8C1  call 0xfaf031
 	inc	8, xsp                                 ; FBB8C5  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB8C7  jrl T,0xfbba89
 sub_FBB793__FBB8CA:
@@ -6926,7 +6926,7 @@ sub_FBB793__FBB8CA:
 	pushw	64                                   ; FBB8D4  push 0x0040
 	push	0                                     ; FBB8D7  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB8D9  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB8DC  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB8DC  call 0xfaf031
 	inc	8, xsp                                 ; FBB8E0  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB8E2  jrl T,0xfbba89
 sub_FBB793__FBB8E5:
@@ -6936,7 +6936,7 @@ sub_FBB793__FBB8E5:
 	pushw	64                                   ; FBB8EF  push 0x0040
 	push	0                                     ; FBB8F2  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB8F4  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB8F7  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB8F7  call 0xfaf031
 	inc	8, xsp                                 ; FBB8FB  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB8FD  jrl T,0xfbba89
 sub_FBB793__FBB900:
@@ -6946,7 +6946,7 @@ sub_FBB793__FBB900:
 	pushw	64                                   ; FBB90A  push 0x0040
 	push	0                                     ; FBB90D  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB90F  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB912  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB912  call 0xfaf031
 	inc	8, xsp                                 ; FBB916  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB918  jrl T,0xfbba89
 sub_FBB793__FBB91B:
@@ -6956,7 +6956,7 @@ sub_FBB793__FBB91B:
 	pushw	64                                   ; FBB925  push 0x0040
 	push	0                                     ; FBB928  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB92A  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB92D  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB92D  call 0xfaf031
 	inc	8, xsp                                 ; FBB931  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB933  jrl T,0xfbba89
 sub_FBB793__FBB936:
@@ -6966,7 +6966,7 @@ sub_FBB793__FBB936:
 	pushw	64                                   ; FBB940  push 0x0040
 	push	0                                     ; FBB943  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB945  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB948  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB948  call 0xfaf031
 	inc	8, xsp                                 ; FBB94C  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB94E  jrl T,0xfbba89
 sub_FBB793__FBB951:
@@ -6976,7 +6976,7 @@ sub_FBB793__FBB951:
 	pushw	64                                   ; FBB95B  push 0x0040
 	push	0                                     ; FBB95E  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB960  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB963  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB963  call 0xfaf031
 	inc	8, xsp                                 ; FBB967  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB969  jrl T,0xfbba89
 sub_FBB793__FBB96C:
@@ -6986,7 +6986,7 @@ sub_FBB793__FBB96C:
 	pushw	64                                   ; FBB976  push 0x0040
 	push	0                                     ; FBB979  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB97B  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB97E  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB97E  call 0xfaf031
 	inc	8, xsp                                 ; FBB982  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB984  jrl T,0xfbba89
 sub_FBB793__FBB987:
@@ -6996,7 +6996,7 @@ sub_FBB793__FBB987:
 	pushw	64                                   ; FBB991  push 0x0040
 	push	0                                     ; FBB994  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB996  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB999  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB999  call 0xfaf031
 	inc	8, xsp                                 ; FBB99D  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB99F  jrl T,0xfbba89
 sub_FBB793__FBB9A2:
@@ -7006,7 +7006,7 @@ sub_FBB793__FBB9A2:
 	pushw	64                                   ; FBB9AC  push 0x0040
 	push	0                                     ; FBB9AF  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB9B1  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB9B4  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB9B4  call 0xfaf031
 	inc	8, xsp                                 ; FBB9B8  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB9BA  jrl T,0xfbba89
 sub_FBB793__FBB9BD:
@@ -7016,7 +7016,7 @@ sub_FBB793__FBB9BD:
 	pushw	64                                   ; FBB9C7  push 0x0040
 	push	0                                     ; FBB9CA  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB9CC  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB9CF  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB9CF  call 0xfaf031
 	inc	8, xsp                                 ; FBB9D3  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB9D5  jrl T,0xfbba89
 sub_FBB793__FBB9D8:
@@ -7026,7 +7026,7 @@ sub_FBB793__FBB9D8:
 	pushw	64                                   ; FBB9E2  push 0x0040
 	push	0                                     ; FBB9E5  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBB9E7  push (XIZ+0xf7)
-	call	0xFAF031                              ; FBB9EA  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBB9EA  call 0xfaf031
 	inc	8, xsp                                 ; FBB9EE  inc 0,XSP
 	jrl sub_FBB793__FBBA89                     ; FBB9F0  jrl T,0xfbba89
 sub_FBB793__FBB9F3:
@@ -7096,11 +7096,11 @@ sub_FBB793__FBBA89:
 sub_FBB793__FBBABE:
 	push	0                                     ; FBBABE  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBAC0  push (XIZ+0xf7)
-	call	0xFB4A9F                              ; FBBAC3  call 0xfb4a9f
+	call	PartRec_RecomputeWord0006_FromToneRec                              ; FBBAC3  call 0xfb4a9f
 	popw	bc                                    ; FBBAC7  pop BC
 	push	0                                     ; FBBAC8  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBACA  push (XIZ+0xf7)
-	call	0xFB4D45                              ; FBBACD  call 0xfb4d45
+	call	sub_FB4D45                              ; FBBACD  call 0xfb4d45
 	ld	(xiz-10), 0                             ; FBBAD1  ld (XIZ+0xf6),0x00
 	popw	bc                                    ; FBBAD5  pop BC
 sub_FBB793__FBBAD6:
@@ -7140,7 +7140,7 @@ sub_FBB793__FBBAE4:
 	extpfx3 0x8E, 0xF6, 0x04                   ; FBBB2C  push (XIZ+0xf6)
 	push	0                                     ; FBBB2F  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBB31  push (XIZ+0xf7)
-	call	0xFC6803                              ; FBBB34  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBBB34  call 0xfc6803
 	inc	8, xsp                                 ; FBBB38  inc 0,XSP
 	inc	2, xsp                                 ; FBBB3A  inc 2,XSP
 	jr sub_FBB793__FBBB71                      ; FBBB3C  jr T,0xfbbb71
@@ -7161,7 +7161,7 @@ sub_FBB793__FBBB3E:
 	extpfx3 0x8E, 0xF6, 0x04                   ; FBBB61  push (XIZ+0xf6)
 	push	0                                     ; FBBB64  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBB66  push (XIZ+0xf7)
-	call	0xFC6803                              ; FBBB69  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBBB69  call 0xfc6803
 	inc	8, xsp                                 ; FBBB6D  inc 0,XSP
 	inc	2, xsp                                 ; FBBB6F  inc 2,XSP
 sub_FBB793__FBBB71:
@@ -7170,97 +7170,97 @@ sub_FBB793__FBBB74:
 	pushw	0                                    ; FBBB74  push 0x0000
 	push	0                                     ; FBBB77  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBB79  push (XIZ+0xf7)
-	call	0xFC7481                              ; FBBB7C  call 0xfc7481
+	call	Pack104_DispatchByResoMode_ForPart                              ; FBBB7C  call 0xfc7481
 	pop	xiy                                    ; FBBB80  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBB81  jrl T,0xfbbff7
 sub_FBB793__FBBB84:
 	push	0                                     ; FBBB84  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBB86  push (XIZ+0xf7)
-	call	0xFB4A9F                              ; FBBB89  call 0xfb4a9f
+	call	PartRec_RecomputeWord0006_FromToneRec                              ; FBBB89  call 0xfb4a9f
 	popw	bc                                    ; FBBB8D  pop BC
 	jrl sub_FBB793__FBBFF7                     ; FBBB8E  jrl T,0xfbbff7
 sub_FBB793__FBBB91:
 	pushw	0                                    ; FBBB91  push 0x0000
 	push	0                                     ; FBBB94  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBB96  push (XIZ+0xf7)
-	calr (0xFB89F8 - 0xFBBB9C)                 ; FBBB99  calr 0xfb89f8
+	calr Voice_RecomputeEnv_AndWriteSlot2                 ; FBBB99  calr 0xfb89f8
 	pop	xiy                                    ; FBBB9C  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBB9D  jrl T,0xfbbff7
 sub_FBB793__FBBBA0:
 	pushw	1                                    ; FBBBA0  push 0x0001
 	push	0                                     ; FBBBA3  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBBA5  push (XIZ+0xf7)
-	calr (0xFB89F8 - 0xFBBBAB)                 ; FBBBA8  calr 0xfb89f8
+	calr Voice_RecomputeEnv_AndWriteSlot2                 ; FBBBA8  calr 0xfb89f8
 	pop	xiy                                    ; FBBBAB  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBBAC  jrl T,0xfbbff7
 sub_FBB793__FBBBAF:
 	pushw	2                                    ; FBBBAF  push 0x0002
 	push	0                                     ; FBBBB2  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBBB4  push (XIZ+0xf7)
-	calr (0xFB89F8 - 0xFBBBBA)                 ; FBBBB7  calr 0xfb89f8
+	calr Voice_RecomputeEnv_AndWriteSlot2                 ; FBBBB7  calr 0xfb89f8
 	pop	xiy                                    ; FBBBBA  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBBBB  jrl T,0xfbbff7
 sub_FBB793__FBBBBE:
 	pushw	3                                    ; FBBBBE  push 0x0003
 	push	0                                     ; FBBBC1  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBBC3  push (XIZ+0xf7)
-	calr (0xFB89F8 - 0xFBBBC9)                 ; FBBBC6  calr 0xfb89f8
+	calr Voice_RecomputeEnv_AndWriteSlot2                 ; FBBBC6  calr 0xfb89f8
 	pop	xiy                                    ; FBBBC9  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBBCA  jrl T,0xfbbff7
 sub_FBB793__FBBBCD:
 	pushw	0                                    ; FBBBCD  push 0x0000
 	push	0                                     ; FBBBD0  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBBD2  push (XIZ+0xf7)
-	calr (0xFB8AF6 - 0xFBBBD8)                 ; FBBBD5  calr 0xfb8af6
+	calr Voice_RecomputeEnv_AndWriteSlot1                 ; FBBBD5  calr 0xfb8af6
 	pop	xiy                                    ; FBBBD8  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBBD9  jrl T,0xfbbff7
 sub_FBB793__FBBBDC:
 	pushw	1                                    ; FBBBDC  push 0x0001
 	push	0                                     ; FBBBDF  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBBE1  push (XIZ+0xf7)
-	calr (0xFB8AF6 - 0xFBBBE7)                 ; FBBBE4  calr 0xfb8af6
+	calr Voice_RecomputeEnv_AndWriteSlot1                 ; FBBBE4  calr 0xfb8af6
 	pop	xiy                                    ; FBBBE7  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBBE8  jrl T,0xfbbff7
 sub_FBB793__FBBBEB:
 	pushw	2                                    ; FBBBEB  push 0x0002
 	push	0                                     ; FBBBEE  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBBF0  push (XIZ+0xf7)
-	calr (0xFB8AF6 - 0xFBBBF6)                 ; FBBBF3  calr 0xfb8af6
+	calr Voice_RecomputeEnv_AndWriteSlot1                 ; FBBBF3  calr 0xfb8af6
 	pop	xiy                                    ; FBBBF6  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBBF7  jrl T,0xfbbff7
 sub_FBB793__FBBBFA:
 	pushw	3                                    ; FBBBFA  push 0x0003
 	push	0                                     ; FBBBFD  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBBFF  push (XIZ+0xf7)
-	calr (0xFB8AF6 - 0xFBBC05)                 ; FBBC02  calr 0xfb8af6
+	calr Voice_RecomputeEnv_AndWriteSlot1                 ; FBBC02  calr 0xfb8af6
 	pop	xiy                                    ; FBBC05  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBC06  jrl T,0xfbbff7
 sub_FBB793__FBBC09:
 	pushw	0                                    ; FBBC09  push 0x0000
 	push	0                                     ; FBBC0C  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBC0E  push (XIZ+0xf7)
-	calr (0xFB8BF6 - 0xFBBC14)                 ; FBBC11  calr 0xfb8bf6
+	calr Voice_RecomputeEnv_AndWriteSlot1or3                 ; FBBC11  calr 0xfb8bf6
 	pop	xiy                                    ; FBBC14  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBC15  jrl T,0xfbbff7
 sub_FBB793__FBBC18:
 	pushw	1                                    ; FBBC18  push 0x0001
 	push	0                                     ; FBBC1B  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBC1D  push (XIZ+0xf7)
-	calr (0xFB8BF6 - 0xFBBC23)                 ; FBBC20  calr 0xfb8bf6
+	calr Voice_RecomputeEnv_AndWriteSlot1or3                 ; FBBC20  calr 0xfb8bf6
 	pop	xiy                                    ; FBBC23  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBC24  jrl T,0xfbbff7
 sub_FBB793__FBBC27:
 	pushw	2                                    ; FBBC27  push 0x0002
 	push	0                                     ; FBBC2A  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBC2C  push (XIZ+0xf7)
-	calr (0xFB8BF6 - 0xFBBC32)                 ; FBBC2F  calr 0xfb8bf6
+	calr Voice_RecomputeEnv_AndWriteSlot1or3                 ; FBBC2F  calr 0xfb8bf6
 	pop	xiy                                    ; FBBC32  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBC33  jrl T,0xfbbff7
 sub_FBB793__FBBC36:
 	pushw	3                                    ; FBBC36  push 0x0003
 	push	0                                     ; FBBC39  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBC3B  push (XIZ+0xf7)
-	calr (0xFB8BF6 - 0xFBBC41)                 ; FBBC3E  calr 0xfb8bf6
+	calr Voice_RecomputeEnv_AndWriteSlot1or3                 ; FBBC3E  calr 0xfb8bf6
 	pop	xiy                                    ; FBBC41  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBC42  jrl T,0xfbbff7
 sub_FBB793__FBBC45:
@@ -7275,7 +7275,7 @@ sub_FBB793__FBBC51:
 	pushw	wa                                   ; FBBC5A  push WA
 	push	0                                     ; FBBC5B  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBC5D  push (XIZ+0xf7)
-	call	0xFAFBEC                              ; FBBC60  call 0xfafbec
+	call	sub_FAFBEC                              ; FBBC60  call 0xfafbec
 	pop	xiy                                    ; FBBC64  pop XIY
 	jrl sub_FBB793__FBBD0D                     ; FBBC65  jrl T,0xfbbd0d
 sub_FBB793__FBBC68:
@@ -7286,58 +7286,58 @@ sub_FBB793__FBBC68:
 sub_FBB793__FBBC74:
 	push	0                                     ; FBBC74  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBC76  push (XIZ+0xf7)
-	call	0xFB4A9F                              ; FBBC79  call 0xfb4a9f
+	call	PartRec_RecomputeWord0006_FromToneRec                              ; FBBC79  call 0xfb4a9f
 	popw	bc                                    ; FBBC7D  pop BC
 	push	0                                     ; FBBC7E  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBC80  push (XIZ+0xf7)
-	call	0xFB4D45                              ; FBBC83  call 0xfb4d45
+	call	sub_FB4D45                              ; FBBC83  call 0xfb4d45
 	popw	bc                                    ; FBBC87  pop BC
 	jrl sub_FBB793__FBBD0D                     ; FBBC88  jrl T,0xfbbd0d
 sub_FBB793__FBBC8B:
 	push	0                                     ; FBBC8B  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBC8D  push (XIZ+0xf7)
-	calr (0xFBB39F - 0xFBBC93)                 ; FBBC90  calr 0xfbb39f
+	calr ToneRec_LoadDspParams_ByAlgoType                 ; FBBC90  calr 0xfbb39f
 	popw	bc                                    ; FBBC93  pop BC
 	pushw	0                                    ; FBBC94  push 0x0000
 	push	0                                     ; FBBC97  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBC99  push (XIZ+0xf7)
-	call	0xFB5636                              ; FBBC9C  call 0xfb5636
+	call	Part_StageDspAlgoParams                              ; FBBC9C  call 0xfb5636
 	pop	xiy                                    ; FBBCA0  pop XIY
 	push	0                                     ; FBBCA1  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBCA3  push (XIZ+0xf7)
-	call	0xFB4A9F                              ; FBBCA6  call 0xfb4a9f
+	call	PartRec_RecomputeWord0006_FromToneRec                              ; FBBCA6  call 0xfb4a9f
 	popw	bc                                    ; FBBCAA  pop BC
 	push	0                                     ; FBBCAB  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBCAD  push (XIZ+0xf7)
-	call	0xFB4D45                              ; FBBCB0  call 0xfb4d45
+	call	sub_FB4D45                              ; FBBCB0  call 0xfb4d45
 	popw	bc                                    ; FBBCB4  pop BC
 	push	0                                     ; FBBCB5  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBCB7  push (XIZ+0xf7)
-	call	0xFB639A                              ; FBBCBA  call 0xfb639a
+	call	PartElement_StageAlgoDescBytes_0024                              ; FBBCBA  call 0xfb639a
 	popw	bc                                    ; FBBCBE  pop BC
 	push	0                                     ; FBBCBF  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBCC1  push (XIZ+0xf7)
-	calr (0xFBB4BF - 0xFBBCC7)                 ; FBBCC4  calr 0xfbb4bf
+	calr sub_FBB4BF                 ; FBBCC4  calr 0xfbb4bf
 	popw	bc                                    ; FBBCC7  pop BC
 	push	0                                     ; FBBCC8  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBCCA  push (XIZ+0xf7)
-	calr (0xFBB57C - 0xFBBCD0)                 ; FBBCCD  calr 0xfbb57c
+	calr sub_FBB57C                 ; FBBCCD  calr 0xfbb57c
 	popw	bc                                    ; FBBCD0  pop BC
 	push	0                                     ; FBBCD1  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBCD3  push (XIZ+0xf7)
-	calr (0xFBB645 - 0xFBBCD9)                 ; FBBCD6  calr 0xfbb645
+	calr sub_FBB645                 ; FBBCD6  calr 0xfbb645
 	popw	bc                                    ; FBBCD9  pop BC
 	push	0                                     ; FBBCDA  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBCDC  push (XIZ+0xf7)
-	calr (0xFBB6F8 - 0xFBBCE2)                 ; FBBCDF  calr 0xfbb6f8
+	calr sub_FBB6F8                 ; FBBCDF  calr 0xfbb6f8
 	popw	bc                                    ; FBBCE2  pop BC
 	push	0                                     ; FBBCE3  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBCE5  push (XIZ+0xf7)
-	call	0xFB6487                              ; FBBCE8  call 0xfb6487
+	call	PartRec_StageByte0075_FromDspParam00D7                              ; FBBCE8  call 0xfb6487
 	popw	bc                                    ; FBBCEC  pop BC
 	push	0                                     ; FBBCED  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBCEF  push (XIZ+0xf7)
-	call	0xFB5E00                              ; FBBCF2  call 0xfb5e00
+	call	Part_GetDspParam_00D8                              ; FBBCF2  call 0xfb5e00
 	ld	h, a                                    ; FBBCF6  ld H,A
 	ld	bc, (xiz-9)                             ; FBBCF8  ld BC,(XIZ+0xf7)
 	extz	bc                                    ; FBBCFB  extz BC
@@ -7385,7 +7385,7 @@ sub_FBB793__FBBD1F:
 	extpfx3 0x8E, 0xF6, 0x04                   ; FBBD67  push (XIZ+0xf6)
 	push	0                                     ; FBBD6A  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBD6C  push (XIZ+0xf7)
-	call	0xFC6803                              ; FBBD6F  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBBD6F  call 0xfc6803
 	inc	8, xsp                                 ; FBBD73  inc 0,XSP
 	inc	2, xsp                                 ; FBBD75  inc 2,XSP
 	jr sub_FBB793__FBBDAC                      ; FBBD77  jr T,0xfbbdac
@@ -7406,7 +7406,7 @@ sub_FBB793__FBBD79:
 	extpfx3 0x8E, 0xF6, 0x04                   ; FBBD9C  push (XIZ+0xf6)
 	push	0                                     ; FBBD9F  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBDA1  push (XIZ+0xf7)
-	call	0xFC6803                              ; FBBDA4  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBBDA4  call 0xfc6803
 	inc	8, xsp                                 ; FBBDA8  inc 0,XSP
 	inc	2, xsp                                 ; FBBDAA  inc 2,XSP
 sub_FBB793__FBBDAC:
@@ -7415,67 +7415,67 @@ sub_FBB793__FBBDAF:
 	pushw	0                                    ; FBBDAF  push 0x0000
 	push	0                                     ; FBBDB2  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBDB4  push (XIZ+0xf7)
-	call	0xFC7481                              ; FBBDB7  call 0xfc7481
+	call	Pack104_DispatchByResoMode_ForPart                              ; FBBDB7  call 0xfc7481
 	pop	xiy                                    ; FBBDBB  pop XIY
 	jrl sub_FBB793__FBBFF7                     ; FBBDBC  jrl T,0xfbbff7
 sub_FBB793__FBBDBF:
 	push	0                                     ; FBBDBF  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBDC1  push (XIZ+0xf7)
-	calr (0xFBB4BF - 0xFBBDC7)                 ; FBBDC4  calr 0xfbb4bf
+	calr sub_FBB4BF                 ; FBBDC4  calr 0xfbb4bf
 	popw	bc                                    ; FBBDC7  pop BC
 	jrl sub_FBB793__FBBFF7                     ; FBBDC8  jrl T,0xfbbff7
 sub_FBB793__FBBDCB:
 	push	0                                     ; FBBDCB  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBDCD  push (XIZ+0xf7)
-	calr (0xFBB57C - 0xFBBDD3)                 ; FBBDD0  calr 0xfbb57c
+	calr sub_FBB57C                 ; FBBDD0  calr 0xfbb57c
 	popw	bc                                    ; FBBDD3  pop BC
 	push	0                                     ; FBBDD4  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBDD6  push (XIZ+0xf7)
-	call	0xFB639A                              ; FBBDD9  call 0xfb639a
+	call	PartElement_StageAlgoDescBytes_0024                              ; FBBDD9  call 0xfb639a
 	popw	bc                                    ; FBBDDD  pop BC
 	jrl sub_FBB793__FBBFF7                     ; FBBDDE  jrl T,0xfbbff7
 sub_FBB793__FBBDE1:
 	push	0                                     ; FBBDE1  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBDE3  push (XIZ+0xf7)
-	calr (0xFBB645 - 0xFBBDE9)                 ; FBBDE6  calr 0xfbb645
+	calr sub_FBB645                 ; FBBDE6  calr 0xfbb645
 	popw	bc                                    ; FBBDE9  pop BC
 	push	0                                     ; FBBDEA  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBDEC  push (XIZ+0xf7)
-	call	0xFB639A                              ; FBBDEF  call 0xfb639a
+	call	PartElement_StageAlgoDescBytes_0024                              ; FBBDEF  call 0xfb639a
 	popw	bc                                    ; FBBDF3  pop BC
 	jrl sub_FBB793__FBBFF7                     ; FBBDF4  jrl T,0xfbbff7
 sub_FBB793__FBBDF7:
 	push	0                                     ; FBBDF7  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBDF9  push (XIZ+0xf7)
-	calr (0xFBB6F8 - 0xFBBDFF)                 ; FBBDFC  calr 0xfbb6f8
+	calr sub_FBB6F8                 ; FBBDFC  calr 0xfbb6f8
 	popw	bc                                    ; FBBDFF  pop BC
 	push	0                                     ; FBBE00  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBE02  push (XIZ+0xf7)
-	call	0xFB639A                              ; FBBE05  call 0xfb639a
+	call	PartElement_StageAlgoDescBytes_0024                              ; FBBE05  call 0xfb639a
 	popw	bc                                    ; FBBE09  pop BC
 	jrl sub_FBB793__FBBFF7                     ; FBBE0A  jrl T,0xfbbff7
 sub_FBB793__FBBE0D:
 	push	0                                     ; FBBE0D  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBE0F  push (XIZ+0xf7)
-	call	0xFB639A                              ; FBBE12  call 0xfb639a
+	call	PartElement_StageAlgoDescBytes_0024                              ; FBBE12  call 0xfb639a
 	popw	bc                                    ; FBBE16  pop BC
 	jrl sub_FBB793__FBBFF7                     ; FBBE17  jrl T,0xfbbff7
 sub_FBB793__FBBE1A:
 	push	0                                     ; FBBE1A  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBE1C  push (XIZ+0xf7)
-	call	0xFB639A                              ; FBBE1F  call 0xfb639a
+	call	PartElement_StageAlgoDescBytes_0024                              ; FBBE1F  call 0xfb639a
 	popw	bc                                    ; FBBE23  pop BC
 	jrl sub_FBB793__FBBFF7                     ; FBBE24  jrl T,0xfbbff7
 sub_FBB793__FBBE27:
 	push	0                                     ; FBBE27  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBE29  push (XIZ+0xf7)
-	call	0xFB6487                              ; FBBE2C  call 0xfb6487
+	call	PartRec_StageByte0075_FromDspParam00D7                              ; FBBE2C  call 0xfb6487
 	popw	bc                                    ; FBBE30  pop BC
 	jrl sub_FBB793__FBBFF7                     ; FBBE31  jrl T,0xfbbff7
 sub_FBB793__FBBE34:
 	push	0                                     ; FBBE34  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FBBE36  push (XIZ+0xf7)
-	call	0xFB5E00                              ; FBBE39  call 0xfb5e00
+	call	Part_GetDspParam_00D8                              ; FBBE39  call 0xfb5e00
 	ld	h, a                                    ; FBBE3D  ld H,A
 	ld	bc, (xiz-9)                             ; FBBE3F  ld BC,(XIZ+0xf7)
 	extz	bc                                    ; FBBE42  extz BC
@@ -7652,7 +7652,7 @@ sub_FBBFFB:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBC01F  push (XIZ+0x0c)
 	push	0                                     ; FBC022  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBC024  push (XIZ+0x0a)
-	calr (0xFB8432 - 0xFBC02A)                 ; FBC027  calr 0xfb8432
+	calr ToneStage_LoadElementWaveSelect_FromCatalogueRow                 ; FBC027  calr 0xfb8432
 	ld	c, 43:opc                                  ; FBC02A  ld C,0x2b
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBC02C  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBC02F  extz XBC
@@ -7676,7 +7676,7 @@ sub_FBBFFB__FBC055:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBC05C  push (XIZ+0x0a)
 	push	0                                     ; FBC05F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBC061  push (XIZ+0x08)
-	call	0xFB477B                              ; FBC064  call 0xfb477b
+	call	PartElement_SetEnvDescriptorPointer                              ; FBC064  call 0xfb477b
 	inc	6, xsp                                 ; FBC068  inc 6,XSP
 	jr sub_FBBFFB__FBC050                      ; FBC06A  jr T,0xfbc050
 sub_FBBFFB__FBC06C:
@@ -7709,7 +7709,7 @@ sub_FBBFFB__FBC06C:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBC0B4  push (XIZ+0x0a)
 	push	0                                     ; FBC0B7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBC0B9  push (XIZ+0x08)
-	call	0xFC6803                              ; FBC0BC  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBC0BC  call 0xfc6803
 	inc	8, xsp                                 ; FBC0C0  inc 0,XSP
 	inc	2, xsp                                 ; FBC0C2  inc 2,XSP
 	jr sub_FBBFFB__FBC0F9                      ; FBC0C4  jr T,0xfbc0f9
@@ -7730,14 +7730,14 @@ sub_FBBFFB__FBC0C6:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBC0E9  push (XIZ+0x0a)
 	push	0                                     ; FBC0EC  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBC0EE  push (XIZ+0x08)
-	call	0xFC6803                              ; FBC0F1  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBC0F1  call 0xfc6803
 	inc	8, xsp                                 ; FBC0F5  inc 0,XSP
 	inc	2, xsp                                 ; FBC0F7  inc 2,XSP
 sub_FBBFFB__FBC0F9:
 	pushw	0                                    ; FBC0F9  push 0x0000
 	push	0                                     ; FBC0FC  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBC0FE  push (XIZ+0x08)
-	call	0xFC7481                              ; FBC101  call 0xfc7481
+	call	Pack104_DispatchByResoMode_ForPart                              ; FBC101  call 0xfc7481
 	pop	xbc                                    ; FBC105  pop XBC
 	popw	hl                                    ; FBC106  pop HL
 	unlk32 xiz                                 ; FBC107  unlk XIZ
@@ -8144,7 +8144,7 @@ sub_FBC39D__FBC3EC:
 sub_FBC39D__FBC3EF:
 	push	0                                     ; FBC3EF  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC3F1  push (XIZ+0xf5)
-	call	0xFB4D45                              ; FBC3F4  call 0xfb4d45
+	call	sub_FB4D45                              ; FBC3F4  call 0xfb4d45
 	popw	bc                                    ; FBC3F8  pop BC
 	jrl sub_FBC39D__FBC720                     ; FBC3F9  jrl T,0xfbc720
 sub_FBC39D__FBC3FC:
@@ -8165,7 +8165,7 @@ sub_FBC39D__FBC3FC:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBC427  push (XIZ+0x0c)
 	push	0                                     ; FBC42A  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC42C  push (XIZ+0xf5)
-	calr (0xFBBFFB - 0xFBC432)                 ; FBC42F  calr 0xfbbffb
+	calr sub_FBBFFB                 ; FBC42F  calr 0xfbbffb
 	inc	8, xsp                                 ; FBC432  inc 0,XSP
 	jrl sub_FBC39D__FBC720                     ; FBC434  jrl T,0xfbc720
 sub_FBC39D__FBC437:
@@ -8173,11 +8173,11 @@ sub_FBC39D__FBC437:
 sub_FBC39D__FBC43A:
 	push	0                                     ; FBC43A  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC43C  push (XIZ+0xf5)
-	call	0xFB3CE0                              ; FBC43F  call 0xfb3ce0
+	call	VoiceQuery_Tag00_Part                              ; FBC43F  call 0xfb3ce0
 	ld	(xiz-4), xiy                            ; FBC443  ld (XIZ+0xfc),XIY
 	popw	bc                                    ; FBC446  pop BC
 	push	xiy                                   ; FBC447  push XIY
-	call	0xFADCC3                              ; FBC448  call 0xfadcc3
+	call	Voice_RestagePitchReg0400_ForList                              ; FBC448  call 0xfadcc3
 	pop	xiy                                    ; FBC44C  pop XIY
 	jrl sub_FBC39D__FBC720                     ; FBC44D  jrl T,0xfbc720
 sub_FBC39D__FBC450:
@@ -8195,14 +8195,14 @@ sub_FBC39D__FBC463:
 	pushw	0                                    ; FBC467  push 0x0000
 	push	0                                     ; FBC46A  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC46C  push (XIZ+0xf5)
-	call	0xFB5103                              ; FBC46F  call 0xfb5103
+	call	sub_FB5103                              ; FBC46F  call 0xfb5103
 	ld	c, (xiz-6)                              ; FBC473  ld C,(XIZ+0xfa)
 	inc	6, xsp                                 ; FBC476  inc 6,XSP
 	pushw	bc                                   ; FBC478  push BC
 	pushw	0                                    ; FBC479  push 0x0000
 	push	0                                     ; FBC47C  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC47E  push (XIZ+0xf5)
-	call	0xFB501F                              ; FBC481  call 0xfb501f
+	call	sub_FB501F                              ; FBC481  call 0xfb501f
 	inc	6, xsp                                 ; FBC485  inc 6,XSP
 	jr sub_FBC39D__FBC45E                      ; FBC487  jr T,0xfbc45e
 sub_FBC39D__FBC489:
@@ -8211,23 +8211,23 @@ sub_FBC39D__FBC489:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBC48E  push (XIZ+0x0c)
 	push	0                                     ; FBC491  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC493  push (XIZ+0xf5)
-	call	0xFB53C5                              ; FBC496  call 0xfb53c5
+	call	sub_FB53C5                              ; FBC496  call 0xfb53c5
 	inc	6, xsp                                 ; FBC49A  inc 6,XSP
 	jrl sub_FBC39D__FBC720                     ; FBC49C  jrl T,0xfbc720
 sub_FBC39D__FBC49F:
 	push	0                                     ; FBC49F  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC4A1  push (XIZ+0xf5)
-	call	0xFC81F8                              ; FBC4A4  call 0xfc81f8
+	call	sub_FC81F8                              ; FBC4A4  call 0xfc81f8
 	popw	bc                                    ; FBC4A8  pop BC
 	jrl sub_FBC39D__FBC720                     ; FBC4A9  jrl T,0xfbc720
 sub_FBC39D__FBC4AC:
 	push	0                                     ; FBC4AC  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC4AE  push (XIZ+0xf5)
-	call	0xFB3CE0                              ; FBC4B1  call 0xfb3ce0
+	call	VoiceQuery_Tag00_Part                              ; FBC4B1  call 0xfb3ce0
 	ld	(xiz-4), xiy                            ; FBC4B5  ld (XIZ+0xfc),XIY
 	popw	bc                                    ; FBC4B8  pop BC
 	push	xiy                                   ; FBC4B9  push XIY
-	call	0xFADDC8                              ; FBC4BA  call 0xfaddc8
+	call	Voice_RestageReg0080_ForList                              ; FBC4BA  call 0xfaddc8
 	pop	xiy                                    ; FBC4BE  pop XIY
 	jrl sub_FBC39D__FBC720                     ; FBC4BF  jrl T,0xfbc720
 sub_FBC39D__FBC4C2:
@@ -8247,14 +8247,14 @@ sub_FBC39D__FBC4D8:
 	pushw	1                                    ; FBC4DC  push 0x0001
 	push	0                                     ; FBC4DF  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC4E1  push (XIZ+0xf5)
-	call	0xFB5103                              ; FBC4E4  call 0xfb5103
+	call	sub_FB5103                              ; FBC4E4  call 0xfb5103
 	ld	c, (xiz-6)                              ; FBC4E8  ld C,(XIZ+0xfa)
 	inc	6, xsp                                 ; FBC4EB  inc 6,XSP
 	pushw	bc                                   ; FBC4ED  push BC
 	pushw	1                                    ; FBC4EE  push 0x0001
 	push	0                                     ; FBC4F1  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC4F3  push (XIZ+0xf5)
-	call	0xFB501F                              ; FBC4F6  call 0xfb501f
+	call	sub_FB501F                              ; FBC4F6  call 0xfb501f
 	inc	6, xsp                                 ; FBC4FA  inc 6,XSP
 	jr sub_FBC39D__FBC4D3                      ; FBC4FC  jr T,0xfbc4d3
 sub_FBC39D__FBC4FE:
@@ -8263,7 +8263,7 @@ sub_FBC39D__FBC4FE:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBC503  push (XIZ+0x0c)
 	push	0                                     ; FBC506  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC508  push (XIZ+0xf5)
-	call	0xFB53C5                              ; FBC50B  call 0xfb53c5
+	call	sub_FB53C5                              ; FBC50B  call 0xfb53c5
 	inc	6, xsp                                 ; FBC50F  inc 6,XSP
 	jrl sub_FBC39D__FBC720                     ; FBC511  jrl T,0xfbc720
 sub_FBC39D__FBC514:
@@ -8271,12 +8271,12 @@ sub_FBC39D__FBC514:
 sub_FBC39D__FBC517:
 	push	0                                     ; FBC517  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC519  push (XIZ+0xf5)
-	call	0xFB3C8B                              ; FBC51C  call 0xfb3c8b
+	call	VoiceQuery_Tag40_Part                              ; FBC51C  call 0xfb3c8b
 	ld	(xiz-4), xiy                            ; FBC520  ld (XIZ+0xfc),XIY
 	popw	bc                                    ; FBC523  pop BC
 	pushw	1                                    ; FBC524  push 0x0001
 	push	xiy                                   ; FBC527  push XIY
-	call	0xFADEAC                              ; FBC528  call 0xfadeac
+	call	sub_FADEAC                              ; FBC528  call 0xfadeac
 	inc	6, xsp                                 ; FBC52C  inc 6,XSP
 	jrl sub_FBC39D__FBC720                     ; FBC52E  jrl T,0xfbc720
 sub_FBC39D__FBC531:
@@ -8294,7 +8294,7 @@ sub_FBC39D__FBC546:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBC548  push (XIZ+0x0c)
 	push	0                                     ; FBC54B  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC54D  push (XIZ+0xf5)
-	calr (0xFBC10A - 0xFBC553)                 ; FBC550  calr 0xfbc10a
+	calr sub_FBC10A                 ; FBC550  calr 0xfbc10a
 	pop	xiy                                    ; FBC553  pop XIY
 sub_FBC39D__FBC554:
 	jrl sub_FBC39D__FBC720                     ; FBC554  jrl T,0xfbc720
@@ -8315,14 +8315,14 @@ sub_FBC39D__FBC56D:
 	pushw	2                                    ; FBC571  push 0x0002
 	push	0                                     ; FBC574  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC576  push (XIZ+0xf5)
-	call	0xFB5103                              ; FBC579  call 0xfb5103
+	call	sub_FB5103                              ; FBC579  call 0xfb5103
 	ld	c, (xiz-6)                              ; FBC57D  ld C,(XIZ+0xfa)
 	inc	6, xsp                                 ; FBC580  inc 6,XSP
 	pushw	bc                                   ; FBC582  push BC
 	pushw	2                                    ; FBC583  push 0x0002
 	push	0                                     ; FBC586  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC588  push (XIZ+0xf5)
-	call	0xFB501F                              ; FBC58B  call 0xfb501f
+	call	sub_FB501F                              ; FBC58B  call 0xfb501f
 	inc	6, xsp                                 ; FBC58F  inc 6,XSP
 	jr sub_FBC39D__FBC568                      ; FBC591  jr T,0xfbc568
 sub_FBC39D__FBC593:
@@ -8331,7 +8331,7 @@ sub_FBC39D__FBC593:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBC598  push (XIZ+0x0c)
 	push	0                                     ; FBC59B  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC59D  push (XIZ+0xf5)
-	call	0xFB53C5                              ; FBC5A0  call 0xfb53c5
+	call	sub_FB53C5                              ; FBC5A0  call 0xfb53c5
 	inc	6, xsp                                 ; FBC5A4  inc 6,XSP
 	jrl sub_FBC39D__FBC720                     ; FBC5A6  jrl T,0xfbc720
 sub_FBC39D__FBC5A9:
@@ -8345,7 +8345,7 @@ sub_FBC39D__FBC5B2:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBC5B4  push (XIZ+0x0c)
 	push	0                                     ; FBC5B7  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBC5B9  push (XIZ+0xf5)
-	calr (0xFBC31B - 0xFBC5BF)                 ; FBC5BC  calr 0xfbc31b
+	calr sub_FBC31B                 ; FBC5BC  calr 0xfbc31b
 	pop	xiy                                    ; FBC5BF  pop XIY
 	jrl sub_FBC39D__FBC720                     ; FBC5C0  jrl T,0xfbc720
 sub_FBC39D__FBC5C3:
@@ -8531,7 +8531,7 @@ ToneStage_ApplyWaveSelTailPreset:
 	ld	c, (xbc+0x1523)                         ; FBC771  ld C,(XBC+0x1523)
 	extz	bc                                    ; FBC776  extz BC
 	pushw	bc                                   ; FBC778  push BC
-	call	0xFB4124                              ; FBC779  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FBC779  call 0xfb4124
 	ld	(xiz-4), xiy                            ; FBC77D  ld (XIZ+0xfc),XIY
 	pop	xbc                                    ; FBC780  pop XBC
 	push	xiy                                   ; FBC781  push XIY
@@ -8545,7 +8545,7 @@ ToneStage_ApplyWaveSelTailPreset:
 	ld	a, (xbc+0x1523)                         ; FBC796  ld A,(XBC+0x1523)
 	extz	wa                                    ; FBC79B  extz WA
 	pushw	wa                                   ; FBC79D  push WA
-	call	0xFB44A5                              ; FBC79E  call 0xfb44a5
+	call	ToneRec_GetWaveSelectRecord_ByBankSelector                              ; FBC79E  call 0xfb44a5
 	ld	(xiz-12), xiy                           ; FBC7A2  ld (XIZ+0xf4),XIY
 	inc	8, xsp                                 ; FBC7A5  inc 0,XSP
 	jr ToneStage_ApplyWaveSelTailPreset__FBC7CB                      ; FBC7A7  jr T,0xfbc7cb
@@ -8673,7 +8673,7 @@ ToneStage_ApplyPercWaveSelTailPreset:
 	ld	(xiz-24), bc                            ; FBC874  ld (XIZ+0xe8),BC
 	pushw	bc                                   ; FBC877  push BC
 	extpfx3 0x9E, 0xEA, 0x04                   ; FBC878  pushw (XIZ+0xea)
-	call	0xFB4124                              ; FBC87B  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FBC87B  call 0xfb4124
 	ld	(xiz-4), xiy                            ; FBC87F  ld (XIZ+0xfc),XIY
 	ld	bc, (xiz-24)                            ; FBC882  ld BC,(XIZ+0xe8)
 	sub	bc, 40                                 ; FBC885  sub BC,0x0028
@@ -8703,13 +8703,13 @@ ToneStage_ApplyPercWaveSelTailPreset:
 	ld	a, (xbc)                                ; FBC8C6  ld A,(XBC)
 	extz	wa                                    ; FBC8C8  extz WA
 	pushw	wa                                   ; FBC8CA  push WA
-	call	0xFB48F7                              ; FBC8CB  call 0xfb48f7
+	call	DrumKit_ResolveInstrumentRecord                              ; FBC8CB  call 0xfb48f7
 	ld	(xiz-8), xiy                            ; FBC8CF  ld (XIZ+0xf8),XIY
 	inc	8, xsp                                 ; FBC8D2  inc 0,XSP
 	push	xiy                                   ; FBC8D4  push XIY
 	push	0                                     ; FBC8D5  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBC8D7  push (XIZ+0x0a)
-	call	0xFB454C                              ; FBC8DA  call 0xfb454c
+	call	PercInst_GetWaveSelectRecord                              ; FBC8DA  call 0xfb454c
 	ld	(xiz-16), xiy                           ; FBC8DE  ld (XIZ+0xf0),XIY
 	inc	6, xsp                                 ; FBC8E1  inc 6,XSP
 	jr ToneStage_ApplyPercWaveSelTailPreset__FBC907                      ; FBC8E3  jr T,0xfbc907
@@ -8863,7 +8863,7 @@ ToneMsg_WriteWaveSelectParam__FBC9BF:
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBC9C4  push (XIZ+0xfa)
 	push	0                                     ; FBC9C7  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBC9C9  push (XIZ+0xfb)
-	call	0xFB477B                              ; FBC9CC  call 0xfb477b
+	call	PartElement_SetEnvDescriptorPointer                              ; FBC9CC  call 0xfb477b
 	inc	6, xsp                                 ; FBC9D0  inc 6,XSP
 	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBC9D2  jrl T,0xfbcb09
 ToneMsg_WriteWaveSelectParam__FBC9D5:
@@ -8872,7 +8872,7 @@ ToneMsg_WriteWaveSelectParam__FBC9D5:
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBC9DA  push (XIZ+0xfa)
 	push	0                                     ; FBC9DD  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBC9DF  push (XIZ+0xfb)
-	call	0xFB477B                              ; FBC9E2  call 0xfb477b
+	call	PartElement_SetEnvDescriptorPointer                              ; FBC9E2  call 0xfb477b
 	inc	6, xsp                                 ; FBC9E6  inc 6,XSP
 	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBC9E8  jrl T,0xfbcb09
 ToneMsg_WriteWaveSelectParam__FBC9EB:
@@ -8881,7 +8881,7 @@ ToneMsg_WriteWaveSelectParam__FBC9EB:
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBC9F0  push (XIZ+0xfa)
 	push	0                                     ; FBC9F3  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBC9F5  push (XIZ+0xfb)
-	call	0xFB477B                              ; FBC9F8  call 0xfb477b
+	call	PartElement_SetEnvDescriptorPointer                              ; FBC9F8  call 0xfb477b
 	inc	6, xsp                                 ; FBC9FC  inc 6,XSP
 	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBC9FE  jrl T,0xfbcb09
 ToneMsg_WriteWaveSelectParam__FBCA01:
@@ -8890,7 +8890,7 @@ ToneMsg_WriteWaveSelectParam__FBCA01:
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBCA06  push (XIZ+0xfa)
 	push	0                                     ; FBCA09  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBCA0B  push (XIZ+0xfb)
-	call	0xFB477B                              ; FBCA0E  call 0xfb477b
+	call	PartElement_SetEnvDescriptorPointer                              ; FBCA0E  call 0xfb477b
 	inc	6, xsp                                 ; FBCA12  inc 6,XSP
 	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBCA14  jrl T,0xfbcb09
 ToneMsg_WriteWaveSelectParam__FBCA17:
@@ -8906,7 +8906,7 @@ ToneMsg_WriteWaveSelectParam__FBCA2A:
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBCA2C  push (XIZ+0xfa)
 	push	0                                     ; FBCA2F  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBCA31  push (XIZ+0xfb)
-	calr (0xFBC725 - 0xFBCA37)                 ; FBCA34  calr 0xfbc725
+	calr ToneStage_ApplyWaveSelTailPreset                 ; FBCA34  calr 0xfbc725
 	pop	xiy                                    ; FBCA37  pop XIY
 ToneMsg_WriteWaveSelectParam__FBCA38:
 	jrl ToneMsg_WriteWaveSelectParam__FBCB09                     ; FBCA38  jrl T,0xfbcb09
@@ -9006,7 +9006,7 @@ ToneMsg_WriteWaveSelectParam__FBCB09:
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBCB51  push (XIZ+0xfa)
 	push	0                                     ; FBCB54  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBCB56  push (XIZ+0xfb)
-	call	0xFC6803                              ; FBCB59  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBCB59  call 0xfc6803
 	inc	8, xsp                                 ; FBCB5D  inc 0,XSP
 	inc	2, xsp                                 ; FBCB5F  inc 2,XSP
 	jr ToneMsg_WriteWaveSelectParam__FBCB96                      ; FBCB61  jr T,0xfbcb96
@@ -9027,14 +9027,14 @@ ToneMsg_WriteWaveSelectParam__FBCB63:
 	extpfx3 0x8E, 0xFA, 0x04                   ; FBCB86  push (XIZ+0xfa)
 	push	0                                     ; FBCB89  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBCB8B  push (XIZ+0xfb)
-	call	0xFC6803                              ; FBCB8E  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBCB8E  call 0xfc6803
 	inc	8, xsp                                 ; FBCB92  inc 0,XSP
 	inc	2, xsp                                 ; FBCB94  inc 2,XSP
 ToneMsg_WriteWaveSelectParam__FBCB96:
 	pushw	0                                    ; FBCB96  push 0x0000
 	push	0                                     ; FBCB99  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; FBCB9B  push (XIZ+0xfb)
-	call	0xFC7481                              ; FBCB9E  call 0xfc7481
+	call	Pack104_DispatchByResoMode_ForPart                              ; FBCB9E  call 0xfc7481
 	pop	xbc                                    ; FBCBA2  pop XBC
 	popw	hl                                    ; FBCBA3  pop HL
 	unlk32 xiz                                 ; FBCBA4  unlk XIZ
@@ -9082,7 +9082,7 @@ sub_FBCBA7:
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBCBB9  push (XIZ+0x0c)
 	push	0                                     ; FBCBBC  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBCBBE  push (XIZ+0x08)
-	calr (0xFB857E - 0xFBCBC4)                 ; FBCBC1  calr 0xfb857e
+	calr ToneStage_LoadPercInstHead                 ; FBCBC1  calr 0xfb857e
 	ld	bc, (xiz+8)                             ; FBCBC4  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FBCBC7  extz BC
 	mul	bc, 0x12C                              ; FBCBC9  mul BC,0x012c
@@ -9114,7 +9114,7 @@ sub_FBCBA7:
 	ld	bc, (xiz+12)                            ; FBCC13  ld BC,(XIZ+0x0c)
 	extz	bc                                    ; FBCC16  extz BC
 	pushw	bc                                   ; FBCC18  push BC
-	call	0xFB48F7                              ; FBCC19  call 0xfb48f7
+	call	DrumKit_ResolveInstrumentRecord                              ; FBCC19  call 0xfb48f7
 	ld	(xiz-4), xiy                            ; FBCC1D  ld (XIZ+0xfc),XIY
 	ld	(xiz-11), 0                             ; FBCC20  ld (XIZ+0xf5),0x00
 	inc	8, xsp                                 ; FBCC24  inc 0,XSP
@@ -9132,7 +9132,7 @@ sub_FBCBA7__FBCC33:
 	push	xbc                                   ; FBCC3B  push XBC
 	push	0                                     ; FBCC3C  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBCC3E  push (XIZ+0xf5)
-	calr (0xFB8668 - 0xFBCC44)                 ; FBCC41  calr 0xfb8668
+	calr ToneStage_LoadPercWaveSelect_FromInstRecord                 ; FBCC41  calr 0xfb8668
 	ld	c, 23:opc                                  ; FBCC44  ld C,0x17
 	extpfx3 0x8E, 0xF5, 0x43                   ; FBCC46  mul BC,(XIZ+0xf5)
 	extz	xbc                                   ; FBCC49  extz XBC
@@ -9190,7 +9190,7 @@ sub_FBCBA7__FBCC95:
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBCCD8  push (XIZ+0xf5)
 	push	0                                     ; FBCCDB  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBCCDD  push (XIZ+0x08)
-	call	0xFC6803                              ; FBCCE0  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBCCE0  call 0xfc6803
 	inc	8, xsp                                 ; FBCCE4  inc 0,XSP
 	inc	2, xsp                                 ; FBCCE6  inc 2,XSP
 	jr sub_FBCBA7__FBCD03                      ; FBCCE8  jr T,0xfbcd03
@@ -9202,7 +9202,7 @@ sub_FBCBA7__FBCCEA:
 	extpfx3 0x8E, 0xF5, 0x04                   ; FBCCF3  push (XIZ+0xf5)
 	push	0                                     ; FBCCF6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBCCF8  push (XIZ+0x08)
-	call	0xFC6803                              ; FBCCFB  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBCCFB  call 0xfc6803
 	inc	8, xsp                                 ; FBCCFF  inc 0,XSP
 	inc	2, xsp                                 ; FBCD01  inc 2,XSP
 sub_FBCBA7__FBCD03:
@@ -9211,7 +9211,7 @@ sub_FBCBA7__FBCD05:
 	pushw	0                                    ; FBCD05  push 0x0000
 	push	0                                     ; FBCD08  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBCD0A  push (XIZ+0x08)
-	call	0xFC7A1F                              ; FBCD0D  call 0xfc7a1f
+	call	sub_FC7A1F                              ; FBCD0D  call 0xfc7a1f
 	pop	xbc                                    ; FBCD11  pop XBC
 	pop	xix                                    ; FBCD12  pop XIX
 	popw	hl                                    ; FBCD13  pop HL
@@ -9274,7 +9274,7 @@ sub_FBCD17__FBCD4D:
 	pushw	64                                   ; FBCD57  push 0x0040
 	push	0                                     ; FBCD5A  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCD5C  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCD5F  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCD5F  call 0xfaf031
 	inc	8, xsp                                 ; FBCD63  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCD65  jrl T,0xfbd01a
 sub_FBCD17__FBCD68:
@@ -9284,7 +9284,7 @@ sub_FBCD17__FBCD68:
 	pushw	0                                    ; FBCD72  push 0x0000
 	push	0                                     ; FBCD75  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCD77  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCD7A  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCD7A  call 0xfaf031
 	inc	8, xsp                                 ; FBCD7E  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCD80  jrl T,0xfbd01a
 sub_FBCD17__FBCD83:
@@ -9294,7 +9294,7 @@ sub_FBCD17__FBCD83:
 	pushw	0                                    ; FBCD8D  push 0x0000
 	push	0                                     ; FBCD90  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCD92  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCD95  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCD95  call 0xfaf031
 	inc	8, xsp                                 ; FBCD99  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCD9B  jrl T,0xfbd01a
 sub_FBCD17__FBCD9E:
@@ -9304,7 +9304,7 @@ sub_FBCD17__FBCD9E:
 	pushw	64                                   ; FBCDA8  push 0x0040
 	push	0                                     ; FBCDAB  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCDAD  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCDB0  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCDB0  call 0xfaf031
 	inc	8, xsp                                 ; FBCDB4  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCDB6  jrl T,0xfbd01a
 sub_FBCD17__FBCDB9:
@@ -9314,7 +9314,7 @@ sub_FBCD17__FBCDB9:
 	pushw	64                                   ; FBCDC3  push 0x0040
 	push	0                                     ; FBCDC6  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCDC8  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCDCB  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCDCB  call 0xfaf031
 	inc	8, xsp                                 ; FBCDCF  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCDD1  jrl T,0xfbd01a
 sub_FBCD17__FBCDD4:
@@ -9324,7 +9324,7 @@ sub_FBCD17__FBCDD4:
 	pushw	0                                    ; FBCDDE  push 0x0000
 	push	0                                     ; FBCDE1  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCDE3  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCDE6  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCDE6  call 0xfaf031
 	inc	8, xsp                                 ; FBCDEA  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCDEC  jrl T,0xfbd01a
 sub_FBCD17__FBCDEF:
@@ -9334,7 +9334,7 @@ sub_FBCD17__FBCDEF:
 	pushw	0                                    ; FBCDF9  push 0x0000
 	push	0                                     ; FBCDFC  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCDFE  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCE01  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCE01  call 0xfaf031
 	inc	8, xsp                                 ; FBCE05  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCE07  jrl T,0xfbd01a
 sub_FBCD17__FBCE0A:
@@ -9344,7 +9344,7 @@ sub_FBCD17__FBCE0A:
 	pushw	0                                    ; FBCE14  push 0x0000
 	push	0                                     ; FBCE17  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCE19  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCE1C  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCE1C  call 0xfaf031
 	inc	8, xsp                                 ; FBCE20  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCE22  jrl T,0xfbd01a
 sub_FBCD17__FBCE25:
@@ -9354,7 +9354,7 @@ sub_FBCD17__FBCE25:
 	pushw	0                                    ; FBCE2F  push 0x0000
 	push	0                                     ; FBCE32  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCE34  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCE37  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCE37  call 0xfaf031
 	inc	8, xsp                                 ; FBCE3B  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCE3D  jrl T,0xfbd01a
 sub_FBCD17__FBCE40:
@@ -9364,7 +9364,7 @@ sub_FBCD17__FBCE40:
 	pushw	64                                   ; FBCE4A  push 0x0040
 	push	0                                     ; FBCE4D  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCE4F  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCE52  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCE52  call 0xfaf031
 	inc	8, xsp                                 ; FBCE56  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCE58  jrl T,0xfbd01a
 sub_FBCD17__FBCE5B:
@@ -9374,7 +9374,7 @@ sub_FBCD17__FBCE5B:
 	pushw	64                                   ; FBCE65  push 0x0040
 	push	0                                     ; FBCE68  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCE6A  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCE6D  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCE6D  call 0xfaf031
 	inc	8, xsp                                 ; FBCE71  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCE73  jrl T,0xfbd01a
 sub_FBCD17__FBCE76:
@@ -9384,7 +9384,7 @@ sub_FBCD17__FBCE76:
 	pushw	64                                   ; FBCE80  push 0x0040
 	push	0                                     ; FBCE83  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCE85  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCE88  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCE88  call 0xfaf031
 	inc	8, xsp                                 ; FBCE8C  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCE8E  jrl T,0xfbd01a
 sub_FBCD17__FBCE91:
@@ -9394,7 +9394,7 @@ sub_FBCD17__FBCE91:
 	pushw	64                                   ; FBCE9B  push 0x0040
 	push	0                                     ; FBCE9E  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCEA0  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCEA3  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCEA3  call 0xfaf031
 	inc	8, xsp                                 ; FBCEA7  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCEA9  jrl T,0xfbd01a
 sub_FBCD17__FBCEAC:
@@ -9404,7 +9404,7 @@ sub_FBCD17__FBCEAC:
 	pushw	64                                   ; FBCEB6  push 0x0040
 	push	0                                     ; FBCEB9  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCEBB  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCEBE  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCEBE  call 0xfaf031
 	inc	8, xsp                                 ; FBCEC2  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCEC4  jrl T,0xfbd01a
 sub_FBCD17__FBCEC7:
@@ -9414,7 +9414,7 @@ sub_FBCD17__FBCEC7:
 	pushw	64                                   ; FBCED1  push 0x0040
 	push	0                                     ; FBCED4  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCED6  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCED9  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCED9  call 0xfaf031
 	inc	8, xsp                                 ; FBCEDD  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCEDF  jrl T,0xfbd01a
 sub_FBCD17__FBCEE2:
@@ -9424,7 +9424,7 @@ sub_FBCD17__FBCEE2:
 	pushw	64                                   ; FBCEEC  push 0x0040
 	push	0                                     ; FBCEEF  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCEF1  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCEF4  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCEF4  call 0xfaf031
 	inc	8, xsp                                 ; FBCEF8  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCEFA  jrl T,0xfbd01a
 sub_FBCD17__FBCEFD:
@@ -9434,7 +9434,7 @@ sub_FBCD17__FBCEFD:
 	pushw	64                                   ; FBCF07  push 0x0040
 	push	0                                     ; FBCF0A  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCF0C  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCF0F  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCF0F  call 0xfaf031
 	inc	8, xsp                                 ; FBCF13  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCF15  jrl T,0xfbd01a
 sub_FBCD17__FBCF18:
@@ -9444,7 +9444,7 @@ sub_FBCD17__FBCF18:
 	pushw	64                                   ; FBCF22  push 0x0040
 	push	0                                     ; FBCF25  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCF27  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCF2A  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCF2A  call 0xfaf031
 	inc	8, xsp                                 ; FBCF2E  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCF30  jrl T,0xfbd01a
 sub_FBCD17__FBCF33:
@@ -9454,7 +9454,7 @@ sub_FBCD17__FBCF33:
 	pushw	64                                   ; FBCF3D  push 0x0040
 	push	0                                     ; FBCF40  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCF42  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCF45  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCF45  call 0xfaf031
 	inc	8, xsp                                 ; FBCF49  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCF4B  jrl T,0xfbd01a
 sub_FBCD17__FBCF4E:
@@ -9464,7 +9464,7 @@ sub_FBCD17__FBCF4E:
 	pushw	64                                   ; FBCF58  push 0x0040
 	push	0                                     ; FBCF5B  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCF5D  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCF60  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCF60  call 0xfaf031
 	inc	8, xsp                                 ; FBCF64  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCF66  jrl T,0xfbd01a
 sub_FBCD17__FBCF69:
@@ -9474,7 +9474,7 @@ sub_FBCD17__FBCF69:
 	pushw	64                                   ; FBCF73  push 0x0040
 	push	0                                     ; FBCF76  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBCF78  push (XIZ+0xf9)
-	call	0xFAF031                              ; FBCF7B  call 0xfaf031
+	call	Voice_ApplyParamChange_Dispatch                              ; FBCF7B  call 0xfaf031
 	inc	8, xsp                                 ; FBCF7F  inc 0,XSP
 	jrl sub_FBCD17__FBD01A                     ; FBCF81  jrl T,0xfbd01a
 sub_FBCD17__FBCF84:
@@ -9565,7 +9565,7 @@ sub_FBCD17__FBD01A:
 	extpfx3 0x8E, 0xF3, 0x04                   ; FBD090  push (XIZ+0xf3)
 	push	0                                     ; FBD093  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FBD095  push (XIZ+0xf9)
-	calr (0xFBCBA7 - 0xFBD09B)                 ; FBD098  calr 0xfbcba7
+	calr sub_FBCBA7                 ; FBD098  calr 0xfbcba7
 	inc	8, xsp                                 ; FBD09B  inc 0,XSP
 sub_FBCD17__FBD09D:
 	pop	xix                                    ; FBD09D  pop XIX
@@ -9625,7 +9625,7 @@ sub_FBD0A2:
 	extpfx3 0x8E, 0x0E, 0x04                   ; FBD0D6  push (XIZ+0x0e)
 	push	0                                     ; FBD0D9  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBD0DB  push (XIZ+0x0a)
-	calr (0xFB8478 - 0xFBD0E1)                 ; FBD0DE  calr 0xfb8478
+	calr ToneStage_LoadPercWaveSelect_FromCatalogueRow                 ; FBD0DE  calr 0xfb8478
 	ld	c, 43:opc                                  ; FBD0E1  ld C,0x2b
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBD0E3  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBD0E6  extz XBC
@@ -9693,7 +9693,7 @@ sub_FBD0A2__FBD15A:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBD195  push (XIZ+0x0a)
 	push	0                                     ; FBD198  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBD19A  push (XIZ+0x08)
-	call	0xFC6803                              ; FBD19D  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBD19D  call 0xfc6803
 	inc	8, xsp                                 ; FBD1A1  inc 0,XSP
 	inc	2, xsp                                 ; FBD1A3  inc 2,XSP
 	jr sub_FBD0A2__FBD1C0                      ; FBD1A5  jr T,0xfbd1c0
@@ -9705,7 +9705,7 @@ sub_FBD0A2__FBD1A7:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBD1B0  push (XIZ+0x0a)
 	push	0                                     ; FBD1B3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBD1B5  push (XIZ+0x08)
-	call	0xFC6803                              ; FBD1B8  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBD1B8  call 0xfc6803
 	inc	8, xsp                                 ; FBD1BC  inc 0,XSP
 	inc	2, xsp                                 ; FBD1BE  inc 2,XSP
 sub_FBD0A2__FBD1C0:
@@ -9714,7 +9714,7 @@ sub_FBD0A2__FBD1C2:
 	pushw	0                                    ; FBD1C2  push 0x0000
 	push	0                                     ; FBD1C5  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBD1C7  push (XIZ+0x08)
-	call	0xFC7A1F                              ; FBD1CA  call 0xfc7a1f
+	call	sub_FC7A1F                              ; FBD1CA  call 0xfc7a1f
 	pop	xbc                                    ; FBD1CE  pop XBC
 	pop	xix                                    ; FBD1CF  pop XIX
 	unlk32 xiz                                 ; FBD1D0  unlk XIZ
@@ -10105,7 +10105,7 @@ sub_FBD46B:
 	push	xiy                                   ; FBD498  push XIY
 	push	0                                     ; FBD499  push 0x00
 	extpfx3 0x8E, 0xEF, 0x04                   ; FBD49B  push (XIZ+0xef)
-	call	0xFB49EB                              ; FBD49E  call 0xfb49eb
+	call	Part_ResolveDrumInstrumentRecord                              ; FBD49E  call 0xfb49eb
 	ld	(xiz-16), xiy                           ; FBD4A2  ld (XIZ+0xf0),XIY
 	ld	xbc, (xiz+8)                            ; FBD4A5  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FBD4A8  ld A,(XBC+0x03)
@@ -10156,7 +10156,7 @@ sub_FBD46B__FBD4DB:
 	extpfx3 0x8E, 0xEE, 0x04                   ; FBD518  push (XIZ+0xee)
 	push	0                                     ; FBD51B  push 0x00
 	extpfx3 0x8E, 0xEF, 0x04                   ; FBD51D  push (XIZ+0xef)
-	call	0xFC6803                              ; FBD520  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBD520  call 0xfc6803
 	inc	8, xsp                                 ; FBD524  inc 0,XSP
 	inc	2, xsp                                 ; FBD526  inc 2,XSP
 	jr sub_FBD46B__FBD55E                      ; FBD528  jr T,0xfbd55e
@@ -10177,7 +10177,7 @@ sub_FBD46B__FBD52A:
 	extpfx3 0x8E, 0xEE, 0x04                   ; FBD54E  push (XIZ+0xee)
 	push	0                                     ; FBD551  push 0x00
 	extpfx3 0x8E, 0xEF, 0x04                   ; FBD553  push (XIZ+0xef)
-	call	0xFC6803                              ; FBD556  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBD556  call 0xfc6803
 	inc	8, xsp                                 ; FBD55A  inc 0,XSP
 	inc	2, xsp                                 ; FBD55C  inc 2,XSP
 sub_FBD46B__FBD55E:
@@ -10186,7 +10186,7 @@ sub_FBD46B__FBD561:
 	pushw	0                                    ; FBD561  push 0x0000
 	push	0                                     ; FBD564  push 0x00
 	extpfx3 0x8E, 0xEF, 0x04                   ; FBD566  push (XIZ+0xef)
-	call	0xFC7A1F                              ; FBD569  call 0xfc7a1f
+	call	sub_FC7A1F                              ; FBD569  call 0xfc7a1f
 	pop	xiy                                    ; FBD56D  pop XIY
 	jrl sub_FBD46B__FBD6F7                     ; FBD56E  jrl T,0xfbd6f7
 sub_FBD46B__FBD571:
@@ -10205,7 +10205,7 @@ sub_FBD46B__FBD571:
 	pushw	0                                    ; FBD594  push 0x0000
 	push	0                                     ; FBD597  push 0x00
 	extpfx3 0x8E, 0xEF, 0x04                   ; FBD599  push (XIZ+0xef)
-	calr (0xFBD0A2 - 0xFBD59F)                 ; FBD59C  calr 0xfbd0a2
+	calr sub_FBD0A2                 ; FBD59C  calr 0xfbd0a2
 	inc	8, xsp                                 ; FBD59F  inc 0,XSP
 	inc	2, xsp                                 ; FBD5A1  inc 2,XSP
 	jrl sub_FBD46B__FBD6F7                     ; FBD5A3  jrl T,0xfbd6f7
@@ -10225,7 +10225,7 @@ sub_FBD46B__FBD5A6:
 	pushw	1                                    ; FBD5C9  push 0x0001
 	push	0                                     ; FBD5CC  push 0x00
 	extpfx3 0x8E, 0xEF, 0x04                   ; FBD5CE  push (XIZ+0xef)
-	calr (0xFBD0A2 - 0xFBD5D4)                 ; FBD5D1  calr 0xfbd0a2
+	calr sub_FBD0A2                 ; FBD5D1  calr 0xfbd0a2
 	inc	8, xsp                                 ; FBD5D4  inc 0,XSP
 	inc	2, xsp                                 ; FBD5D6  inc 2,XSP
 	jrl sub_FBD46B__FBD6F7                     ; FBD5D8  jrl T,0xfbd6f7
@@ -10233,23 +10233,23 @@ sub_FBD46B__FBD5DB:
 	ld	xbc, (xiz+8)                            ; FBD5DB  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBD5DE  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBD5E1  push WA
-	call	0xFB3CE0                              ; FBD5E2  call 0xfb3ce0
+	call	VoiceQuery_Tag00_Part                              ; FBD5E2  call 0xfb3ce0
 	ld	(xiz-12), xiy                           ; FBD5E6  ld (XIZ+0xf4),XIY
 	popw	bc                                    ; FBD5E9  pop BC
 	push	xiy                                   ; FBD5EA  push XIY
-	call	0xFAE0A1                              ; FBD5EB  call 0xfae0a1
+	call	sub_FAE0A1                              ; FBD5EB  call 0xfae0a1
 	pop	xiy                                    ; FBD5EF  pop XIY
 	jrl sub_FBD46B__FBD6F7                     ; FBD5F0  jrl T,0xfbd6f7
 sub_FBD46B__FBD5F3:
 	ld	xbc, (xiz+8)                            ; FBD5F3  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FBD5F6  ld A,(XBC+0x01)
 	pushw	wa                                   ; FBD5F9  push WA
-	call	0xFB3C8B                              ; FBD5FA  call 0xfb3c8b
+	call	VoiceQuery_Tag40_Part                              ; FBD5FA  call 0xfb3c8b
 	ld	(xiz-12), xiy                           ; FBD5FE  ld (XIZ+0xf4),XIY
 	popw	bc                                    ; FBD601  pop BC
 	pushw	1                                    ; FBD602  push 0x0001
 	push	xiy                                   ; FBD605  push XIY
-	call	0xFADEAC                              ; FBD606  call 0xfadeac
+	call	sub_FADEAC                              ; FBD606  call 0xfadeac
 	inc	6, xsp                                 ; FBD60A  inc 6,XSP
 	jrl sub_FBD46B__FBD6F7                     ; FBD60C  jrl T,0xfbd6f7
 sub_FBD46B__FBD60F:
@@ -10262,7 +10262,7 @@ sub_FBD46B__FBD60F:
 	jr nz, sub_FBD46B__FBD628                  ; FBD61F  jr NZ,0xfbd628
 sub_FBD46B__FBD621:
 	pushw	0                                    ; FBD621  push 0x0000
-	calr (0xFBD1D3 - 0xFBD627)                 ; FBD624  calr 0xfbd1d3
+	calr sub_FBD1D3                 ; FBD624  calr 0xfbd1d3
 	popw	bc                                    ; FBD627  pop BC
 sub_FBD46B__FBD628:
 	jrl sub_FBD46B__FBD6F7                     ; FBD628  jrl T,0xfbd6f7
@@ -10276,7 +10276,7 @@ sub_FBD46B__FBD62B:
 	jr nz, sub_FBD46B__FBD644                  ; FBD63B  jr NZ,0xfbd644
 sub_FBD46B__FBD63D:
 	pushw	1                                    ; FBD63D  push 0x0001
-	calr (0xFBD1D3 - 0xFBD643)                 ; FBD640  calr 0xfbd1d3
+	calr sub_FBD1D3                 ; FBD640  calr 0xfbd1d3
 	popw	bc                                    ; FBD643  pop BC
 sub_FBD46B__FBD644:
 	jrl sub_FBD46B__FBD6F7                     ; FBD644  jrl T,0xfbd6f7
@@ -10284,14 +10284,14 @@ sub_FBD46B__FBD647:
 	push	0                                     ; FBD647  push 0x00
 	extpfx3 0x8E, 0xED, 0x04                   ; FBD649  push (XIZ+0xed)
 	pushw	0                                    ; FBD64C  push 0x0000
-	calr (0xFBD3E8 - 0xFBD652)                 ; FBD64F  calr 0xfbd3e8
+	calr sub_FBD3E8                 ; FBD64F  calr 0xfbd3e8
 	pop	xiy                                    ; FBD652  pop XIY
 	jrl sub_FBD46B__FBD6F7                     ; FBD653  jrl T,0xfbd6f7
 sub_FBD46B__FBD656:
 	push	0                                     ; FBD656  push 0x00
 	extpfx3 0x8E, 0xED, 0x04                   ; FBD658  push (XIZ+0xed)
 	pushw	1                                    ; FBD65B  push 0x0001
-	calr (0xFBD3E8 - 0xFBD661)                 ; FBD65E  calr 0xfbd3e8
+	calr sub_FBD3E8                 ; FBD65E  calr 0xfbd3e8
 	pop	xiy                                    ; FBD661  pop XIY
 	jrl sub_FBD46B__FBD6F7                     ; FBD662  jrl T,0xfbd6f7
 sub_FBD46B__FBD665:
@@ -10392,7 +10392,7 @@ sub_FBD6FC:
 	push	xiy                                   ; FBD721  push XIY
 	push	0                                     ; FBD722  push 0x00
 	extpfx3 0x8E, 0xEB, 0x04                   ; FBD724  push (XIZ+0xeb)
-	call	0xFB49EB                              ; FBD727  call 0xfb49eb
+	call	Part_ResolveDrumInstrumentRecord                              ; FBD727  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FBD72B  ld (XIZ+0xf8),XIY
 	ld	xbc, (xiz+8)                            ; FBD72E  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FBD731  ld A,(XBC+0x03)
@@ -10411,7 +10411,7 @@ sub_FBD6FC:
 	push	xwa                                   ; FBD758  push XWA
 	push	0                                     ; FBD759  push 0x00
 	extpfx3 0x8E, 0xEA, 0x04                   ; FBD75B  push (XIZ+0xea)
-	call	0xFB454C                              ; FBD75E  call 0xfb454c
+	call	PercInst_GetWaveSelectRecord                              ; FBD75E  call 0xfb454c
 	ld	(xiz-16), xiy                           ; FBD762  ld (XIZ+0xf0),XIY
 	ld	xbc, (xiz+8)                            ; FBD765  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FBD768  ld A,(XBC+0x03)
@@ -10444,7 +10444,7 @@ sub_FBD6FC__FBD7A1:
 	extpfx3 0x8E, 0xEA, 0x04                   ; FBD7A9  push (XIZ+0xea)
 	push	0                                     ; FBD7AC  push 0x00
 	extpfx3 0x8E, 0xEB, 0x04                   ; FBD7AE  push (XIZ+0xeb)
-	calr (0xFBC80E - 0xFBD7B4)                 ; FBD7B1  calr 0xfbc80e
+	calr ToneStage_ApplyPercWaveSelTailPreset                 ; FBD7B1  calr 0xfbc80e
 	inc	6, xsp                                 ; FBD7B4  inc 6,XSP
 sub_FBD6FC__FBD7B6:
 	jr sub_FBD6FC__FBD7C1                      ; FBD7B6  jr T,0xfbd7c1
@@ -10489,7 +10489,7 @@ sub_FBD6FC__FBD7D3:
 	extpfx3 0x8E, 0xEA, 0x04                   ; FBD819  push (XIZ+0xea)
 	push	0                                     ; FBD81C  push 0x00
 	extpfx3 0x8E, 0xEB, 0x04                   ; FBD81E  push (XIZ+0xeb)
-	call	0xFC6803                              ; FBD821  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBD821  call 0xfc6803
 	inc	8, xsp                                 ; FBD825  inc 0,XSP
 	inc	2, xsp                                 ; FBD827  inc 2,XSP
 	jr sub_FBD6FC__FBD844                      ; FBD829  jr T,0xfbd844
@@ -10501,7 +10501,7 @@ sub_FBD6FC__FBD82B:
 	extpfx3 0x8E, 0xEA, 0x04                   ; FBD834  push (XIZ+0xea)
 	push	0                                     ; FBD837  push 0x00
 	extpfx3 0x8E, 0xEB, 0x04                   ; FBD839  push (XIZ+0xeb)
-	call	0xFC6803                              ; FBD83C  call 0xfc6803
+	call	Pack104_LoadElementWaveSelRec                              ; FBD83C  call 0xfc6803
 	inc	8, xsp                                 ; FBD840  inc 0,XSP
 	inc	2, xsp                                 ; FBD842  inc 2,XSP
 sub_FBD6FC__FBD844:
@@ -10510,7 +10510,7 @@ sub_FBD6FC__FBD846:
 	pushw	0                                    ; FBD846  push 0x0000
 	push	0                                     ; FBD849  push 0x00
 	extpfx3 0x8E, 0xEB, 0x04                   ; FBD84B  push (XIZ+0xeb)
-	call	0xFC7A1F                              ; FBD84E  call 0xfc7a1f
+	call	sub_FC7A1F                              ; FBD84E  call 0xfc7a1f
 	pop	xbc                                    ; FBD852  pop XBC
 	pop	xix                                    ; FBD853  pop XIX
 	popw	hl                                    ; FBD854  pop HL
@@ -10716,7 +10716,7 @@ ByteField_AddOrSub_Clamped:
 	extz	bc                                    ; FBD8F9  extz BC
 	extpfx3 0x9E, 0x0A, 0xA1                   ; FBD8FB  sub BC,(XIZ+0x0a)
 	pushw	bc                                   ; FBD8FE  push BC
-	calr (0xFBD88E - 0xFBD902)                 ; FBD8FF  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBD8FF  calr 0xfbd88e
 	exts	wa                                    ; FBD902  exts WA
 	ld	(xiz-2), wa                             ; FBD904  ld (XIZ+0xfe),WA
 	inc	6, xsp                                 ; FBD907  inc 6,XSP
@@ -10730,7 +10730,7 @@ ByteField_AddOrSub_Clamped__FBD90B:
 	extz	wa                                    ; FBD919  extz WA
 	extpfx3 0x9E, 0x0A, 0x80                   ; FBD91B  add WA,(XIZ+0x0a)
 	pushw	wa                                   ; FBD91E  push WA
-	calr (0xFBD88E - 0xFBD922)                 ; FBD91F  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBD91F  calr 0xfbd88e
 	exts	wa                                    ; FBD922  exts WA
 	ld	(xiz-2), wa                             ; FBD924  ld (XIZ+0xfe),WA
 	inc	6, xsp                                 ; FBD927  inc 6,XSP
@@ -10804,7 +10804,7 @@ sub_FBD943:
 	extz	bc                                    ; FBD984  extz BC
 	extpfx3 0x9E, 0x0A, 0xA1                   ; FBD986  sub BC,(XIZ+0x0a)
 	pushw	bc                                   ; FBD989  push BC
-	calr (0xFBD88E - 0xFBD98D)                 ; FBD98A  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBD98A  calr 0xfbd88e
 	exts	wa                                    ; FBD98D  exts WA
 	ld	(xiz-2), wa                             ; FBD98F  ld (XIZ+0xfe),WA
 	inc	6, xsp                                 ; FBD992  inc 6,XSP
@@ -10818,7 +10818,7 @@ sub_FBD943__FBD996:
 	extz	wa                                    ; FBD9A4  extz WA
 	extpfx3 0x9E, 0x0A, 0x80                   ; FBD9A6  add WA,(XIZ+0x0a)
 	pushw	wa                                   ; FBD9A9  push WA
-	calr (0xFBD88E - 0xFBD9AD)                 ; FBD9AA  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBD9AA  calr 0xfbd88e
 	exts	wa                                    ; FBD9AD  exts WA
 	ld	(xiz-2), wa                             ; FBD9AF  ld (XIZ+0xfe),WA
 	inc	6, xsp                                 ; FBD9B2  inc 6,XSP
@@ -10942,7 +10942,7 @@ sub_FBDA2C:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBDA41  push (XIZ+0x0a)
 	push	0                                     ; FBDA44  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBDA46  push (XIZ+0x08)
-	call	0xFAD37E                              ; FBDA49  call 0xfad37e
+	call	sub_FAD37E                              ; FBDA49  call 0xfad37e
 	extz	wa                                    ; FBDA4D  extz WA
 	extz	xwa                                   ; FBDA4F  extz XWA
 	ld	(xiz-4), xwa                            ; FBDA51  ld (XIZ+0xfc),XWA
@@ -10972,7 +10972,7 @@ sub_FBDA2C__FBDA63:
 	push	xbc                                   ; FBDA92  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FBDA93  pushw (XIZ+0xfe)
 	extpfx3 0x9E, 0xFC, 0x04                   ; FBDA96  pushw (XIZ+0xfc)
-	call	0xFCB11B                              ; FBDA99  call 0xfcb11b
+	call	Multiply32                              ; FBDA99  call 0xfcb11b
 	ld	(xiz-4), xiy                            ; FBDA9D  ld (XIZ+0xfc),XIY
 	srl	xiy, 7                                 ; FBDAA0  srl 0x07,XIY
 	ld	(xiz-4), xiy                            ; FBDAA3  ld (XIZ+0xfc),XIY
@@ -11018,7 +11018,7 @@ sub_FBDA2C__FBDAD4:
 	push	xbc                                   ; FBDB03  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FBDB04  pushw (XIZ+0xfe)
 	extpfx3 0x9E, 0xFC, 0x04                   ; FBDB07  pushw (XIZ+0xfc)
-	call	0xFCB11B                              ; FBDB0A  call 0xfcb11b
+	call	Multiply32                              ; FBDB0A  call 0xfcb11b
 	ld	(xiz-4), xiy                            ; FBDB0E  ld (XIZ+0xfc),XIY
 	srl	xiy, 7                                 ; FBDB11  srl 0x07,XIY
 	ld	(xiz-4), xiy                            ; FBDB14  ld (XIZ+0xfc),XIY
@@ -11064,7 +11064,7 @@ sub_FBDA2C__FBDB45:
 	push	xbc                                   ; FBDB74  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FBDB75  pushw (XIZ+0xfe)
 	extpfx3 0x9E, 0xFC, 0x04                   ; FBDB78  pushw (XIZ+0xfc)
-	call	0xFCB11B                              ; FBDB7B  call 0xfcb11b
+	call	Multiply32                              ; FBDB7B  call 0xfcb11b
 	ld	(xiz-4), xiy                            ; FBDB7F  ld (XIZ+0xfc),XIY
 	srl	xiy, 7                                 ; FBDB82  srl 0x07,XIY
 	ld	(xiz-4), xiy                            ; FBDB85  ld (XIZ+0xfc),XIY
@@ -11145,7 +11145,7 @@ sub_FBDBCE:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBDBE3  push (XIZ+0x0a)
 	push	0                                     ; FBDBE6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBDBE8  push (XIZ+0x08)
-	call	0xFAD43E                              ; FBDBEB  call 0xfad43e
+	call	sub_FAD43E                              ; FBDBEB  call 0xfad43e
 	extz	wa                                    ; FBDBEF  extz WA
 	extz	xwa                                   ; FBDBF1  extz XWA
 	ld	(xiz-4), xwa                            ; FBDBF3  ld (XIZ+0xfc),XWA
@@ -11168,7 +11168,7 @@ sub_FBDBCE:
 	extz	xbc                                   ; FBDC25  extz XBC
 	push	xbc                                   ; FBDC27  push XBC
 	push	xwa                                   ; FBDC28  push XWA
-	call	0xFCB11B                              ; FBDC29  call 0xfcb11b
+	call	Multiply32                              ; FBDC29  call 0xfcb11b
 	ld	(xiz-4), xiy                            ; FBDC2D  ld (XIZ+0xfc),XIY
 	srl	xiy, 7                                 ; FBDC30  srl 0x07,XIY
 	ld	(xiz-4), xiy                            ; FBDC33  ld (XIZ+0xfc),XIY
@@ -11331,7 +11331,7 @@ sub_FBDCD3__FBDCEA:
 	pushw	wa                                   ; FBDCF6  push WA
 	push	0                                     ; FBDCF7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBDCF9  push (XIZ+0x08)
-	call	0xFAD2D5                              ; FBDCFC  call 0xfad2d5
+	call	sub_FAD2D5                              ; FBDCFC  call 0xfad2d5
 	ld	(xiz-12), wa                            ; FBDD00  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBDD03  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBDD08  inc 0,XSP
@@ -11430,14 +11430,14 @@ sub_FBDCD3__FBDDBA:
 	ld	(xiz-18), bc                            ; FBDE02  ld (XIZ+0xee),BC
 sub_FBDCD3__FBDE05:
 	extpfx3 0x9E, 0xF2, 0x04                   ; FBDE05  pushw (XIZ+0xf2)
-	calr (0xFBD9D4 - 0xFBDE0B)                 ; FBDE08  calr 0xfbd9d4
+	calr sub_FBD9D4                 ; FBDE08  calr 0xfbd9d4
 	ld	(xiz-14), wa                            ; FBDE0B  ld (XIZ+0xf2),WA
 	popw	bc                                    ; FBDE0E  pop BC
 	pushw	0xFFE8                               ; FBDE0F  push 0xffe8
 	pushw	24                                   ; FBDE12  push 0x0018
 	sra	wa, 8                                  ; FBDE15  sra 0x08,WA
 	pushw	wa                                   ; FBDE18  push WA
-	calr (0xFBD88E - 0xFBDE1C)                 ; FBDE19  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBDE19  calr 0xfbd88e
 	ld	xbc, (xiz-4)                            ; FBDE1C  ld XBC,(XIZ+0xfc)
 	ld	(xbc+4), a                              ; FBDE1F  ld (XBC+0x04),A
 	ld	c, (xiz-14)                             ; FBDE22  ld C,(XIZ+0xf2)
@@ -11447,14 +11447,14 @@ sub_FBDCD3__FBDE05:
 	ld	(xbc+5), h                              ; FBDE2D  ld (XBC+0x05),H
 	inc	6, xsp                                 ; FBDE30  inc 6,XSP
 	extpfx3 0x9E, 0xF0, 0x04                   ; FBDE32  pushw (XIZ+0xf0)
-	calr (0xFBD9D4 - 0xFBDE38)                 ; FBDE35  calr 0xfbd9d4
+	calr sub_FBD9D4                 ; FBDE35  calr 0xfbd9d4
 	ld	(xiz-16), wa                            ; FBDE38  ld (XIZ+0xf0),WA
 	popw	bc                                    ; FBDE3B  pop BC
 	pushw	0xFFC4                               ; FBDE3C  push 0xffc4
 	pushw	60                                   ; FBDE3F  push 0x003c
 	sra	wa, 8                                  ; FBDE42  sra 0x08,WA
 	pushw	wa                                   ; FBDE45  push WA
-	calr (0xFBD88E - 0xFBDE49)                 ; FBDE46  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBDE46  calr 0xfbd88e
 	ld	xbc, (xiz-8)                            ; FBDE49  ld XBC,(XIZ+0xf8)
 	ld	(xbc+29), a                             ; FBDE4C  ld (XBC+0x1d),A
 	ld	c, (xiz-16)                             ; FBDE4F  ld C,(XIZ+0xf0)
@@ -11464,14 +11464,14 @@ sub_FBDCD3__FBDE05:
 	ld	(xbc+30), h                             ; FBDE5A  ld (XBC+0x1e),H
 	inc	6, xsp                                 ; FBDE5D  inc 6,XSP
 	extpfx3 0x9E, 0xEE, 0x04                   ; FBDE5F  pushw (XIZ+0xee)
-	calr (0xFBD9D4 - 0xFBDE65)                 ; FBDE62  calr 0xfbd9d4
+	calr sub_FBD9D4                 ; FBDE62  calr 0xfbd9d4
 	ld	(xiz-18), wa                            ; FBDE65  ld (XIZ+0xee),WA
 	popw	bc                                    ; FBDE68  pop BC
 	pushw	0xFFC4                               ; FBDE69  push 0xffc4
 	pushw	60                                   ; FBDE6C  push 0x003c
 	sra	wa, 8                                  ; FBDE6F  sra 0x08,WA
 	pushw	wa                                   ; FBDE72  push WA
-	calr (0xFBD88E - 0xFBDE76)                 ; FBDE73  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBDE73  calr 0xfbd88e
 	ld	xbc, (xiz-8)                            ; FBDE76  ld XBC,(XIZ+0xf8)
 	ld	(xbc+41), a                             ; FBDE79  ld (XBC+0x29),A
 	ld	c, (xiz-18)                             ; FBDE7C  ld C,(XIZ+0xee)
@@ -11489,7 +11489,7 @@ sub_FBDCD3__FBDE92:
 	push	xbc                                   ; FBDE95  push XBC
 	push	0                                     ; FBDE96  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBDE98  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBDE9B  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBDE9B  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBDE9F  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBDEA2  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBDEA7  inc 6,XSP
@@ -11577,7 +11577,7 @@ sub_FBDCD3__FBDF7B:
 	pushw	0                                    ; FBDF7B  push 0x0000
 	pushw	0xFF                                 ; FBDF7E  push 0x00ff
 	extpfx3 0x9E, 0xF2, 0x04                   ; FBDF81  pushw (XIZ+0xf2)
-	calr (0xFBD88E - 0xFBDF87)                 ; FBDF84  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBDF84  calr 0xfbd88e
 	exts	wa                                    ; FBDF87  exts WA
 	exts	xwa                                   ; FBDF89  exts XWA
 	add	xwa, 0xFDF0A3                          ; FBDF8B  add XWA,0x00fdf0a3
@@ -11589,7 +11589,7 @@ sub_FBDCD3__FBDF7B:
 	pushw	0                                    ; FBDF9D  push 0x0000
 	pushw	0xFF                                 ; FBDFA0  push 0x00ff
 	extpfx3 0x9E, 0xF0, 0x04                   ; FBDFA3  pushw (XIZ+0xf0)
-	calr (0xFBD88E - 0xFBDFA9)                 ; FBDFA6  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBDFA6  calr 0xfbd88e
 	exts	wa                                    ; FBDFA9  exts WA
 	exts	xwa                                   ; FBDFAB  exts XWA
 	add	xwa, 0xFDF0A3                          ; FBDFAD  add XWA,0x00fdf0a3
@@ -11607,7 +11607,7 @@ sub_FBDCD3__FBDFC5:
 	push	xbc                                   ; FBDFC8  push XBC
 	push	0                                     ; FBDFC9  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBDFCB  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBDFCE  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBDFCE  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBDFD2  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBDFD5  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBDFDA  inc 6,XSP
@@ -11643,7 +11643,7 @@ sub_FBDCD3__FBE00D:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBE02D  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBE030  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE033  push WA
-	calr (0xFBD8B8 - 0xFBE037)                 ; FBE034  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBE034  calr 0xfbd8b8
 	add	xsp, 18                                ; FBE037  add XSP,0x00000012
 	jrl sub_FBDCD3__FBE0D1                     ; FBE03D  jrl T,0xfbe0d1
 sub_FBDCD3__FBE040:
@@ -11660,7 +11660,7 @@ sub_FBDCD3__FBE040:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBE060  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBE063  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE066  push WA
-	calr (0xFBD8B8 - 0xFBE06A)                 ; FBE067  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBE067  calr 0xfbd8b8
 	add	xsp, 18                                ; FBE06A  add XSP,0x00000012
 	pushw	0                                    ; FBE070  push 0x0000
 	pushw	0x7F                                 ; FBE073  push 0x007f
@@ -11675,7 +11675,7 @@ sub_FBDCD3__FBE040:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBE090  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBE093  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE096  push WA
-	calr (0xFBD8B8 - 0xFBE09A)                 ; FBE097  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBE097  calr 0xfbd8b8
 	add	xsp, 18                                ; FBE09A  add XSP,0x00000012
 	jr sub_FBDCD3__FBE0D1                      ; FBE0A0  jr T,0xfbe0d1
 sub_FBDCD3__FBE0A2:
@@ -11714,7 +11714,7 @@ sub_FBDCD3__FBE0D7:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE0E3  push (XIZ+0x0a)
 	push	0                                     ; FBE0E6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE0E8  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE0EE)                 ; FBE0EB  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE0EB  calr 0xfbda2c
 	ld	(0x8829:24), a                         ; FBE0EE  ld (0x008829),A
 	ldw (xiz-10), 0x0000                       ; FBE0F3  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE0F8  inc 0,XSP
@@ -11737,7 +11737,7 @@ sub_FBDCD3__FBE10A:
 	push	xbc                                   ; FBE123  push XBC
 	ld	a, (xiz-10)                             ; FBE124  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE127  push WA
-	calr (0xFBDC6C - 0xFBE12B)                 ; FBE128  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE128  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE12B  inc 0,XSP
 	inc	4, xsp                                 ; FBE12D  inc 4,XSP
 	jr sub_FBDCD3__FBE105                      ; FBE12F  jr T,0xfbe105
@@ -11752,7 +11752,7 @@ sub_FBDCD3__FBE134:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE140  push (XIZ+0x0a)
 	push	0                                     ; FBE143  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE145  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE14B)                 ; FBE148  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE148  calr 0xfbda2c
 	ld	(0x882D:24), a                         ; FBE14B  ld (0x00882d),A
 	ldw (xiz-10), 0x0000                       ; FBE150  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE155  inc 0,XSP
@@ -11775,7 +11775,7 @@ sub_FBDCD3__FBE167:
 	push	xbc                                   ; FBE180  push XBC
 	ld	a, (xiz-10)                             ; FBE181  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE184  push WA
-	calr (0xFBDC6C - 0xFBE188)                 ; FBE185  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE185  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE188  inc 0,XSP
 	inc	4, xsp                                 ; FBE18A  inc 4,XSP
 	jr sub_FBDCD3__FBE162                      ; FBE18C  jr T,0xfbe162
@@ -11790,7 +11790,7 @@ sub_FBDCD3__FBE191:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE19D  push (XIZ+0x0a)
 	push	0                                     ; FBE1A0  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE1A2  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE1A8)                 ; FBE1A5  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE1A5  calr 0xfbda2c
 	ld	(0x8831:24), a                         ; FBE1A8  ld (0x008831),A
 	ldw (xiz-10), 0x0000                       ; FBE1AD  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE1B2  inc 0,XSP
@@ -11813,7 +11813,7 @@ sub_FBDCD3__FBE1C4:
 	push	xbc                                   ; FBE1DD  push XBC
 	ld	a, (xiz-10)                             ; FBE1DE  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE1E1  push WA
-	calr (0xFBDC6C - 0xFBE1E5)                 ; FBE1E2  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE1E2  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE1E5  inc 0,XSP
 	inc	4, xsp                                 ; FBE1E7  inc 4,XSP
 	jr sub_FBDCD3__FBE1BF                      ; FBE1E9  jr T,0xfbe1bf
@@ -11828,7 +11828,7 @@ sub_FBDCD3__FBE1EE:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE1FA  push (XIZ+0x0a)
 	push	0                                     ; FBE1FD  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE1FF  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE205)                 ; FBE202  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE202  calr 0xfbda2c
 	ld	(0x8835:24), a                         ; FBE205  ld (0x008835),A
 	ldw (xiz-10), 0x0000                       ; FBE20A  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE20F  inc 0,XSP
@@ -11851,7 +11851,7 @@ sub_FBDCD3__FBE221:
 	push	xbc                                   ; FBE23A  push XBC
 	ld	a, (xiz-10)                             ; FBE23B  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE23E  push WA
-	calr (0xFBDC6C - 0xFBE242)                 ; FBE23F  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE23F  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE242  inc 0,XSP
 	inc	4, xsp                                 ; FBE244  inc 4,XSP
 	jr sub_FBDCD3__FBE21C                      ; FBE246  jr T,0xfbe21c
@@ -11866,7 +11866,7 @@ sub_FBDCD3__FBE24B:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE257  push (XIZ+0x0a)
 	push	0                                     ; FBE25A  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE25C  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE262)                 ; FBE25F  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE25F  calr 0xfbda2c
 	ld	(0x8839:24), a                         ; FBE262  ld (0x008839),A
 	ldw (xiz-10), 0x0000                       ; FBE267  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE26C  inc 0,XSP
@@ -11889,7 +11889,7 @@ sub_FBDCD3__FBE27E:
 	push	xbc                                   ; FBE297  push XBC
 	ld	a, (xiz-10)                             ; FBE298  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE29B  push WA
-	calr (0xFBDC6C - 0xFBE29F)                 ; FBE29C  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE29C  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE29F  inc 0,XSP
 	inc	4, xsp                                 ; FBE2A1  inc 4,XSP
 	jr sub_FBDCD3__FBE279                      ; FBE2A3  jr T,0xfbe279
@@ -11904,7 +11904,7 @@ sub_FBDCD3__FBE2A8:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE2B4  push (XIZ+0x0a)
 	push	0                                     ; FBE2B7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE2B9  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE2BF)                 ; FBE2BC  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE2BC  calr 0xfbda2c
 	ld	(0x883D:24), a                         ; FBE2BF  ld (0x00883d),A
 	ldw (xiz-10), 0x0000                       ; FBE2C4  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE2C9  inc 0,XSP
@@ -11927,7 +11927,7 @@ sub_FBDCD3__FBE2DB:
 	push	xbc                                   ; FBE2F4  push XBC
 	ld	a, (xiz-10)                             ; FBE2F5  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE2F8  push WA
-	calr (0xFBDC6C - 0xFBE2FC)                 ; FBE2F9  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE2F9  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE2FC  inc 0,XSP
 	inc	4, xsp                                 ; FBE2FE  inc 4,XSP
 	jr sub_FBDCD3__FBE2D6                      ; FBE300  jr T,0xfbe2d6
@@ -11942,7 +11942,7 @@ sub_FBDCD3__FBE305:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE311  push (XIZ+0x0a)
 	push	0                                     ; FBE314  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE316  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE31C)                 ; FBE319  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE319  calr 0xfbda2c
 	ld	(0x8841:24), a                         ; FBE31C  ld (0x008841),A
 	ldw (xiz-10), 0x0000                       ; FBE321  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE326  inc 0,XSP
@@ -11965,7 +11965,7 @@ sub_FBDCD3__FBE338:
 	push	xbc                                   ; FBE351  push XBC
 	ld	a, (xiz-10)                             ; FBE352  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE355  push WA
-	calr (0xFBDC6C - 0xFBE359)                 ; FBE356  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE356  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE359  inc 0,XSP
 	inc	4, xsp                                 ; FBE35B  inc 4,XSP
 	jr sub_FBDCD3__FBE333                      ; FBE35D  jr T,0xfbe333
@@ -11980,7 +11980,7 @@ sub_FBDCD3__FBE362:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE36E  push (XIZ+0x0a)
 	push	0                                     ; FBE371  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE373  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE379)                 ; FBE376  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE376  calr 0xfbda2c
 	ld	(0x8845:24), a                         ; FBE379  ld (0x008845),A
 	ldw (xiz-10), 0x0000                       ; FBE37E  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE383  inc 0,XSP
@@ -12003,7 +12003,7 @@ sub_FBDCD3__FBE395:
 	push	xbc                                   ; FBE3AE  push XBC
 	ld	a, (xiz-10)                             ; FBE3AF  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE3B2  push WA
-	calr (0xFBDC6C - 0xFBE3B6)                 ; FBE3B3  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE3B3  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE3B6  inc 0,XSP
 	inc	4, xsp                                 ; FBE3B8  inc 4,XSP
 	jr sub_FBDCD3__FBE390                      ; FBE3BA  jr T,0xfbe390
@@ -12018,7 +12018,7 @@ sub_FBDCD3__FBE3BF:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE3CB  push (XIZ+0x0a)
 	push	0                                     ; FBE3CE  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE3D0  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE3D6)                 ; FBE3D3  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE3D3  calr 0xfbda2c
 	ld	(0x8849:24), a                         ; FBE3D6  ld (0x008849),A
 	ldw (xiz-10), 0x0000                       ; FBE3DB  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE3E0  inc 0,XSP
@@ -12041,7 +12041,7 @@ sub_FBDCD3__FBE3F2:
 	push	xbc                                   ; FBE40B  push XBC
 	ld	a, (xiz-10)                             ; FBE40C  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE40F  push WA
-	calr (0xFBDC6C - 0xFBE413)                 ; FBE410  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE410  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE413  inc 0,XSP
 	inc	4, xsp                                 ; FBE415  inc 4,XSP
 	jr sub_FBDCD3__FBE3ED                      ; FBE417  jr T,0xfbe3ed
@@ -12056,7 +12056,7 @@ sub_FBDCD3__FBE41C:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE428  push (XIZ+0x0a)
 	push	0                                     ; FBE42B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE42D  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE433)                 ; FBE430  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE430  calr 0xfbda2c
 	ld	(0x884D:24), a                         ; FBE433  ld (0x00884d),A
 	ldw (xiz-10), 0x0000                       ; FBE438  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE43D  inc 0,XSP
@@ -12079,7 +12079,7 @@ sub_FBDCD3__FBE44F:
 	push	xbc                                   ; FBE468  push XBC
 	ld	a, (xiz-10)                             ; FBE469  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE46C  push WA
-	calr (0xFBDC6C - 0xFBE470)                 ; FBE46D  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE46D  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE470  inc 0,XSP
 	inc	4, xsp                                 ; FBE472  inc 4,XSP
 	jr sub_FBDCD3__FBE44A                      ; FBE474  jr T,0xfbe44a
@@ -12094,7 +12094,7 @@ sub_FBDCD3__FBE479:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE485  push (XIZ+0x0a)
 	push	0                                     ; FBE488  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE48A  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE490)                 ; FBE48D  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE48D  calr 0xfbda2c
 	ld	(0x8851:24), a                         ; FBE490  ld (0x008851),A
 	ldw (xiz-10), 0x0000                       ; FBE495  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE49A  inc 0,XSP
@@ -12117,7 +12117,7 @@ sub_FBDCD3__FBE4AC:
 	push	xbc                                   ; FBE4C5  push XBC
 	ld	a, (xiz-10)                             ; FBE4C6  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE4C9  push WA
-	calr (0xFBDC6C - 0xFBE4CD)                 ; FBE4CA  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE4CA  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE4CD  inc 0,XSP
 	inc	4, xsp                                 ; FBE4CF  inc 4,XSP
 	jr sub_FBDCD3__FBE4A7                      ; FBE4D1  jr T,0xfbe4a7
@@ -12132,7 +12132,7 @@ sub_FBDCD3__FBE4D6:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE4E2  push (XIZ+0x0a)
 	push	0                                     ; FBE4E5  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE4E7  push (XIZ+0x08)
-	calr (0xFBDA2C - 0xFBE4ED)                 ; FBE4EA  calr 0xfbda2c
+	calr sub_FBDA2C                 ; FBE4EA  calr 0xfbda2c
 	ld	(0x8855:24), a                         ; FBE4ED  ld (0x008855),A
 	ldw (xiz-10), 0x0000                       ; FBE4F2  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE4F7  inc 0,XSP
@@ -12155,7 +12155,7 @@ sub_FBDCD3__FBE509:
 	push	xbc                                   ; FBE522  push XBC
 	ld	a, (xiz-10)                             ; FBE523  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE526  push WA
-	calr (0xFBDC6C - 0xFBE52A)                 ; FBE527  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE527  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE52A  inc 0,XSP
 	inc	4, xsp                                 ; FBE52C  inc 4,XSP
 	jr sub_FBDCD3__FBE504                      ; FBE52E  jr T,0xfbe504
@@ -12170,7 +12170,7 @@ sub_FBDCD3__FBE533:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE53F  push (XIZ+0x0a)
 	push	0                                     ; FBE542  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE544  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE54A)                 ; FBE547  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE547  calr 0xfbdbce
 	ld	(0x882A:24), a                         ; FBE54A  ld (0x00882a),A
 	ldw (xiz-10), 0x0000                       ; FBE54F  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE554  inc 0,XSP
@@ -12193,7 +12193,7 @@ sub_FBDCD3__FBE566:
 	push	xbc                                   ; FBE57F  push XBC
 	ld	a, (xiz-10)                             ; FBE580  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE583  push WA
-	calr (0xFBDC6C - 0xFBE587)                 ; FBE584  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE584  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE587  inc 0,XSP
 	inc	4, xsp                                 ; FBE589  inc 4,XSP
 	jr sub_FBDCD3__FBE561                      ; FBE58B  jr T,0xfbe561
@@ -12208,7 +12208,7 @@ sub_FBDCD3__FBE590:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE59C  push (XIZ+0x0a)
 	push	0                                     ; FBE59F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE5A1  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE5A7)                 ; FBE5A4  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE5A4  calr 0xfbdbce
 	ld	(0x882E:24), a                         ; FBE5A7  ld (0x00882e),A
 	ldw (xiz-10), 0x0000                       ; FBE5AC  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE5B1  inc 0,XSP
@@ -12231,7 +12231,7 @@ sub_FBDCD3__FBE5C3:
 	push	xbc                                   ; FBE5DC  push XBC
 	ld	a, (xiz-10)                             ; FBE5DD  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE5E0  push WA
-	calr (0xFBDC6C - 0xFBE5E4)                 ; FBE5E1  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE5E1  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE5E4  inc 0,XSP
 	inc	4, xsp                                 ; FBE5E6  inc 4,XSP
 	jr sub_FBDCD3__FBE5BE                      ; FBE5E8  jr T,0xfbe5be
@@ -12246,7 +12246,7 @@ sub_FBDCD3__FBE5ED:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE5F9  push (XIZ+0x0a)
 	push	0                                     ; FBE5FC  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE5FE  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE604)                 ; FBE601  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE601  calr 0xfbdbce
 	ld	(0x8832:24), a                         ; FBE604  ld (0x008832),A
 	ldw (xiz-10), 0x0000                       ; FBE609  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE60E  inc 0,XSP
@@ -12269,7 +12269,7 @@ sub_FBDCD3__FBE620:
 	push	xbc                                   ; FBE639  push XBC
 	ld	a, (xiz-10)                             ; FBE63A  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE63D  push WA
-	calr (0xFBDC6C - 0xFBE641)                 ; FBE63E  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE63E  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE641  inc 0,XSP
 	inc	4, xsp                                 ; FBE643  inc 4,XSP
 	jr sub_FBDCD3__FBE61B                      ; FBE645  jr T,0xfbe61b
@@ -12284,7 +12284,7 @@ sub_FBDCD3__FBE64A:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE656  push (XIZ+0x0a)
 	push	0                                     ; FBE659  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE65B  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE661)                 ; FBE65E  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE65E  calr 0xfbdbce
 	ld	(0x8836:24), a                         ; FBE661  ld (0x008836),A
 	ldw (xiz-10), 0x0000                       ; FBE666  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE66B  inc 0,XSP
@@ -12307,7 +12307,7 @@ sub_FBDCD3__FBE67D:
 	push	xbc                                   ; FBE696  push XBC
 	ld	a, (xiz-10)                             ; FBE697  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE69A  push WA
-	calr (0xFBDC6C - 0xFBE69E)                 ; FBE69B  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE69B  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE69E  inc 0,XSP
 	inc	4, xsp                                 ; FBE6A0  inc 4,XSP
 	jr sub_FBDCD3__FBE678                      ; FBE6A2  jr T,0xfbe678
@@ -12322,7 +12322,7 @@ sub_FBDCD3__FBE6A7:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE6B3  push (XIZ+0x0a)
 	push	0                                     ; FBE6B6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE6B8  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE6BE)                 ; FBE6BB  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE6BB  calr 0xfbdbce
 	ld	(0x883A:24), a                         ; FBE6BE  ld (0x00883a),A
 	ldw (xiz-10), 0x0000                       ; FBE6C3  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE6C8  inc 0,XSP
@@ -12345,7 +12345,7 @@ sub_FBDCD3__FBE6DA:
 	push	xbc                                   ; FBE6F3  push XBC
 	ld	a, (xiz-10)                             ; FBE6F4  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE6F7  push WA
-	calr (0xFBDC6C - 0xFBE6FB)                 ; FBE6F8  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE6F8  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE6FB  inc 0,XSP
 	inc	4, xsp                                 ; FBE6FD  inc 4,XSP
 	jr sub_FBDCD3__FBE6D5                      ; FBE6FF  jr T,0xfbe6d5
@@ -12360,7 +12360,7 @@ sub_FBDCD3__FBE704:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE710  push (XIZ+0x0a)
 	push	0                                     ; FBE713  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE715  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE71B)                 ; FBE718  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE718  calr 0xfbdbce
 	ld	(0x883E:24), a                         ; FBE71B  ld (0x00883e),A
 	ldw (xiz-10), 0x0000                       ; FBE720  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE725  inc 0,XSP
@@ -12383,7 +12383,7 @@ sub_FBDCD3__FBE737:
 	push	xbc                                   ; FBE750  push XBC
 	ld	a, (xiz-10)                             ; FBE751  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE754  push WA
-	calr (0xFBDC6C - 0xFBE758)                 ; FBE755  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE755  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE758  inc 0,XSP
 	inc	4, xsp                                 ; FBE75A  inc 4,XSP
 	jr sub_FBDCD3__FBE732                      ; FBE75C  jr T,0xfbe732
@@ -12398,7 +12398,7 @@ sub_FBDCD3__FBE761:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE76D  push (XIZ+0x0a)
 	push	0                                     ; FBE770  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE772  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE778)                 ; FBE775  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE775  calr 0xfbdbce
 	ld	(0x8842:24), a                         ; FBE778  ld (0x008842),A
 	ldw (xiz-10), 0x0000                       ; FBE77D  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE782  inc 0,XSP
@@ -12421,7 +12421,7 @@ sub_FBDCD3__FBE794:
 	push	xbc                                   ; FBE7AD  push XBC
 	ld	a, (xiz-10)                             ; FBE7AE  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE7B1  push WA
-	calr (0xFBDC6C - 0xFBE7B5)                 ; FBE7B2  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE7B2  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE7B5  inc 0,XSP
 	inc	4, xsp                                 ; FBE7B7  inc 4,XSP
 	jr sub_FBDCD3__FBE78F                      ; FBE7B9  jr T,0xfbe78f
@@ -12436,7 +12436,7 @@ sub_FBDCD3__FBE7BE:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE7CA  push (XIZ+0x0a)
 	push	0                                     ; FBE7CD  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE7CF  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE7D5)                 ; FBE7D2  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE7D2  calr 0xfbdbce
 	ld	(0x8846:24), a                         ; FBE7D5  ld (0x008846),A
 	ldw (xiz-10), 0x0000                       ; FBE7DA  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE7DF  inc 0,XSP
@@ -12459,7 +12459,7 @@ sub_FBDCD3__FBE7F1:
 	push	xbc                                   ; FBE80A  push XBC
 	ld	a, (xiz-10)                             ; FBE80B  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE80E  push WA
-	calr (0xFBDC6C - 0xFBE812)                 ; FBE80F  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE80F  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE812  inc 0,XSP
 	inc	4, xsp                                 ; FBE814  inc 4,XSP
 	jr sub_FBDCD3__FBE7EC                      ; FBE816  jr T,0xfbe7ec
@@ -12474,7 +12474,7 @@ sub_FBDCD3__FBE81B:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE827  push (XIZ+0x0a)
 	push	0                                     ; FBE82A  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE82C  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE832)                 ; FBE82F  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE82F  calr 0xfbdbce
 	ld	(0x884A:24), a                         ; FBE832  ld (0x00884a),A
 	ldw (xiz-10), 0x0000                       ; FBE837  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE83C  inc 0,XSP
@@ -12497,7 +12497,7 @@ sub_FBDCD3__FBE84E:
 	push	xbc                                   ; FBE867  push XBC
 	ld	a, (xiz-10)                             ; FBE868  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE86B  push WA
-	calr (0xFBDC6C - 0xFBE86F)                 ; FBE86C  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE86C  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE86F  inc 0,XSP
 	inc	4, xsp                                 ; FBE871  inc 4,XSP
 	jr sub_FBDCD3__FBE849                      ; FBE873  jr T,0xfbe849
@@ -12512,7 +12512,7 @@ sub_FBDCD3__FBE878:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE884  push (XIZ+0x0a)
 	push	0                                     ; FBE887  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE889  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE88F)                 ; FBE88C  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE88C  calr 0xfbdbce
 	ld	(0x884E:24), a                         ; FBE88F  ld (0x00884e),A
 	ldw (xiz-10), 0x0000                       ; FBE894  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE899  inc 0,XSP
@@ -12535,7 +12535,7 @@ sub_FBDCD3__FBE8AB:
 	push	xbc                                   ; FBE8C4  push XBC
 	ld	a, (xiz-10)                             ; FBE8C5  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE8C8  push WA
-	calr (0xFBDC6C - 0xFBE8CC)                 ; FBE8C9  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE8C9  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE8CC  inc 0,XSP
 	inc	4, xsp                                 ; FBE8CE  inc 4,XSP
 	jr sub_FBDCD3__FBE8A6                      ; FBE8D0  jr T,0xfbe8a6
@@ -12550,7 +12550,7 @@ sub_FBDCD3__FBE8D5:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE8E1  push (XIZ+0x0a)
 	push	0                                     ; FBE8E4  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE8E6  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE8EC)                 ; FBE8E9  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE8E9  calr 0xfbdbce
 	ld	(0x8852:24), a                         ; FBE8EC  ld (0x008852),A
 	ldw (xiz-10), 0x0000                       ; FBE8F1  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE8F6  inc 0,XSP
@@ -12573,7 +12573,7 @@ sub_FBDCD3__FBE908:
 	push	xbc                                   ; FBE921  push XBC
 	ld	a, (xiz-10)                             ; FBE922  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE925  push WA
-	calr (0xFBDC6C - 0xFBE929)                 ; FBE926  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE926  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE929  inc 0,XSP
 	inc	4, xsp                                 ; FBE92B  inc 4,XSP
 	jr sub_FBDCD3__FBE903                      ; FBE92D  jr T,0xfbe903
@@ -12588,7 +12588,7 @@ sub_FBDCD3__FBE932:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE93E  push (XIZ+0x0a)
 	push	0                                     ; FBE941  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBE943  push (XIZ+0x08)
-	calr (0xFBDBCE - 0xFBE949)                 ; FBE946  calr 0xfbdbce
+	calr sub_FBDBCE                 ; FBE946  calr 0xfbdbce
 	ld	(0x8856:24), a                         ; FBE949  ld (0x008856),A
 	ldw (xiz-10), 0x0000                       ; FBE94E  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBE953  inc 0,XSP
@@ -12611,7 +12611,7 @@ sub_FBDCD3__FBE965:
 	push	xbc                                   ; FBE97E  push XBC
 	ld	a, (xiz-10)                             ; FBE97F  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE982  push WA
-	calr (0xFBDC6C - 0xFBE986)                 ; FBE983  calr 0xfbdc6c
+	calr BitPair_TestAndEncode_Bits4to7                 ; FBE983  calr 0xfbdc6c
 	inc	8, xsp                                 ; FBE986  inc 0,XSP
 	inc	4, xsp                                 ; FBE988  inc 4,XSP
 	jr sub_FBDCD3__FBE960                      ; FBE98A  jr T,0xfbe960
@@ -12622,7 +12622,7 @@ sub_FBDCD3__FBE98F:
 	push	xbc                                   ; FBE992  push XBC
 	push	0                                     ; FBE993  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBE995  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBE998  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBE998  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBE99C  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBE99F  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBE9A4  inc 6,XSP
@@ -12647,7 +12647,7 @@ sub_FBDCD3__FBE9B5:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBE9D5  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBE9D8  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBE9DB  push WA
-	calr (0xFBD8B8 - 0xFBE9DF)                 ; FBE9DC  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBE9DC  calr 0xfbd8b8
 	add	xsp, 18                                ; FBE9DF  add XSP,0x00000012
 	pushw	0                                    ; FBE9E5  push 0x0000
 	pushw	0x7F                                 ; FBE9E8  push 0x007f
@@ -12662,7 +12662,7 @@ sub_FBDCD3__FBE9B5:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEA05  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEA08  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEA0B  push WA
-	calr (0xFBD8B8 - 0xFBEA0F)                 ; FBEA0C  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEA0C  calr 0xfbd8b8
 	ldw	bc, 43                                 ; FBEA0F  ld BC,0x002b
 	extpfx3 0x9E, 0xF6, 0x41                   ; FBEA12  mul XBC,(XIZ+0xf6)
 	add	xbc, 0x21D                             ; FBEA15  add XBC,0x0000021d
@@ -12673,7 +12673,7 @@ sub_FBDCD3__FBE9B5:
 	pushw	bc                                   ; FBEA2B  push BC
 	push	0                                     ; FBEA2C  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBEA2E  push (XIZ+0x08)
-	call	0xFC7B64                              ; FBEA31  call 0xfc7b64
+	call	sub_FC7B64                              ; FBEA31  call 0xfc7b64
 	ld	h, a                                    ; FBEA35  ld H,A
 	ldw	bc, 43                                 ; FBEA37  ld BC,0x002b
 	extpfx3 0x9E, 0xF6, 0x41                   ; FBEA3A  mul XBC,(XIZ+0xf6)
@@ -12689,7 +12689,7 @@ sub_FBDCD3__FBEA53:
 	push	xbc                                   ; FBEA56  push XBC
 	push	0                                     ; FBEA57  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEA59  push (XIZ+0x0a)
-	call	0xFAD688                              ; FBEA5C  call 0xfad688
+	call	Scale7Bit_ByDepth_UniOrBipolar_Shl7                              ; FBEA5C  call 0xfad688
 	ld	(xiz-12), wa                            ; FBEA60  ld (XIZ+0xf4),WA
 	inc	6, xsp                                 ; FBEA63  inc 6,XSP
 	cp	wa, 0:i3                                  ; FBEA65  cp WA,0
@@ -12727,7 +12727,7 @@ sub_FBDCD3__FBEA96:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEAB6  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEAB9  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEABC  push WA
-	calr (0xFBD8B8 - 0xFBEAC0)                 ; FBEABD  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEABD  calr 0xfbd8b8
 	ld	bc, (xiz-10)                            ; FBEAC0  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBEAC3  extz XBC
 	add	xbc, 0xFDE6A5                          ; FBEAC5  add XBC,0x00fde6a5
@@ -12760,7 +12760,7 @@ sub_FBDCD3__FBEAF1:
 	extpfx3 0x9E, 0xF0, 0x04                   ; FBEB11  pushw (XIZ+0xf0)
 	ld	a, (xiz-10)                             ; FBEB14  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEB17  push WA
-	calr (0xFBD8B8 - 0xFBEB1B)                 ; FBEB18  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEB18  calr 0xfbd8b8
 	ldw	bc, 43                                 ; FBEB1B  ld BC,0x002b
 	extpfx3 0x9E, 0xF6, 0x41                   ; FBEB1E  mul XBC,(XIZ+0xf6)
 	add	xbc, 0x21D                             ; FBEB21  add XBC,0x0000021d
@@ -12771,7 +12771,7 @@ sub_FBDCD3__FBEAF1:
 	pushw	bc                                   ; FBEB37  push BC
 	push	0                                     ; FBEB38  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBEB3A  push (XIZ+0x08)
-	call	0xFC7AB4                              ; FBEB3D  call 0xfc7ab4
+	call	sub_FC7AB4                              ; FBEB3D  call 0xfc7ab4
 	ld	h, a                                    ; FBEB41  ld H,A
 	ldw	bc, 43                                 ; FBEB43  ld BC,0x002b
 	extpfx3 0x9E, 0xF6, 0x41                   ; FBEB46  mul XBC,(XIZ+0xf6)
@@ -12787,7 +12787,7 @@ sub_FBDCD3__FBEB5F:
 	push	xbc                                   ; FBEB62  push XBC
 	push	0                                     ; FBEB63  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEB65  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBEB68  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBEB68  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBEB6C  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEB6F  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEB74  inc 6,XSP
@@ -12812,7 +12812,7 @@ sub_FBDCD3__FBEB84:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEBA4  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEBA7  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEBAA  push WA
-	calr (0xFBD8B8 - 0xFBEBAE)                 ; FBEBAB  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEBAB  calr 0xfbd8b8
 	add	xsp, 18                                ; FBEBAE  add XSP,0x00000012
 	jr sub_FBDCD3__FBEB7F                      ; FBEBB4  jr T,0xfbeb7f
 sub_FBDCD3__FBEBB6:
@@ -12822,7 +12822,7 @@ sub_FBDCD3__FBEBB9:
 	push	xbc                                   ; FBEBBC  push XBC
 	push	0                                     ; FBEBBD  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEBBF  push (XIZ+0x0a)
-	call	0xFAD561                              ; FBEBC2  call 0xfad561
+	call	sub_FAD561                              ; FBEBC2  call 0xfad561
 	ld	(xiz-12), wa                            ; FBEBC6  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEBC9  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEBCE  inc 6,XSP
@@ -12847,7 +12847,7 @@ sub_FBDCD3__FBEBDE:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEBFE  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEC01  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEC04  push WA
-	calr (0xFBD8B8 - 0xFBEC08)                 ; FBEC05  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEC05  calr 0xfbd8b8
 	add	xsp, 18                                ; FBEC08  add XSP,0x00000012
 	jr sub_FBDCD3__FBEBD9                      ; FBEC0E  jr T,0xfbebd9
 sub_FBDCD3__FBEC10:
@@ -12857,7 +12857,7 @@ sub_FBDCD3__FBEC13:
 	push	xbc                                   ; FBEC16  push XBC
 	push	0                                     ; FBEC17  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEC19  push (XIZ+0x0a)
-	call	0xFAD561                              ; FBEC1C  call 0xfad561
+	call	sub_FAD561                              ; FBEC1C  call 0xfad561
 	ld	(xiz-12), wa                            ; FBEC20  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEC23  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEC28  inc 6,XSP
@@ -12882,7 +12882,7 @@ sub_FBDCD3__FBEC38:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEC58  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEC5B  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEC5E  push WA
-	calr (0xFBD8B8 - 0xFBEC62)                 ; FBEC5F  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEC5F  calr 0xfbd8b8
 	add	xsp, 18                                ; FBEC62  add XSP,0x00000012
 	jr sub_FBDCD3__FBEC33                      ; FBEC68  jr T,0xfbec33
 sub_FBDCD3__FBEC6A:
@@ -12892,7 +12892,7 @@ sub_FBDCD3__FBEC6D:
 	push	xbc                                   ; FBEC70  push XBC
 	push	0                                     ; FBEC71  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEC73  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBEC76  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBEC76  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBEC7A  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEC7D  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEC82  inc 6,XSP
@@ -12917,7 +12917,7 @@ sub_FBDCD3__FBEC93:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBECB3  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBECB6  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBECB9  push WA
-	calr (0xFBD8B8 - 0xFBECBD)                 ; FBECBA  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBECBA  calr 0xfbd8b8
 	add	xsp, 18                                ; FBECBD  add XSP,0x00000012
 	pushw	0                                    ; FBECC3  push 0x0000
 	pushw	0x7F                                 ; FBECC6  push 0x007f
@@ -12932,7 +12932,7 @@ sub_FBDCD3__FBEC93:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBECE3  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBECE6  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBECE9  push WA
-	calr (0xFBD8B8 - 0xFBECED)                 ; FBECEA  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBECEA  calr 0xfbd8b8
 	add	xsp, 18                                ; FBECED  add XSP,0x00000012
 	jr sub_FBDCD3__FBEC8E                      ; FBECF3  jr T,0xfbec8e
 sub_FBDCD3__FBECF5:
@@ -12942,7 +12942,7 @@ sub_FBDCD3__FBECF8:
 	push	xbc                                   ; FBECFB  push XBC
 	push	0                                     ; FBECFC  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBECFE  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBED01  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBED01  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBED05  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBED08  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBED0D  inc 6,XSP
@@ -12967,7 +12967,7 @@ sub_FBDCD3__FBED1E:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBED3E  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBED41  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBED44  push WA
-	calr (0xFBD943 - 0xFBED48)                 ; FBED45  calr 0xfbd943
+	calr sub_FBD943                 ; FBED45  calr 0xfbd943
 	add	xsp, 18                                ; FBED48  add XSP,0x00000012
 	pushw	0xFFC4                               ; FBED4E  push 0xffc4
 	pushw	60                                   ; FBED51  push 0x003c
@@ -12982,7 +12982,7 @@ sub_FBDCD3__FBED1E:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBED6E  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBED71  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBED74  push WA
-	calr (0xFBD943 - 0xFBED78)                 ; FBED75  calr 0xfbd943
+	calr sub_FBD943                 ; FBED75  calr 0xfbd943
 	add	xsp, 18                                ; FBED78  add XSP,0x00000012
 	jr sub_FBDCD3__FBED19                      ; FBED7E  jr T,0xfbed19
 sub_FBDCD3__FBED80:
@@ -12992,7 +12992,7 @@ sub_FBDCD3__FBED83:
 	push	xbc                                   ; FBED86  push XBC
 	push	0                                     ; FBED87  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBED89  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBED8C  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBED8C  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBED90  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBED93  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBED98  inc 6,XSP
@@ -13017,7 +13017,7 @@ sub_FBDCD3__FBEDA8:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEDC8  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEDCB  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEDCE  push WA
-	calr (0xFBD943 - 0xFBEDD2)                 ; FBEDCF  calr 0xfbd943
+	calr sub_FBD943                 ; FBEDCF  calr 0xfbd943
 	add	xsp, 18                                ; FBEDD2  add XSP,0x00000012
 	jr sub_FBDCD3__FBEDA3                      ; FBEDD8  jr T,0xfbeda3
 sub_FBDCD3__FBEDDA:
@@ -13027,7 +13027,7 @@ sub_FBDCD3__FBEDDD:
 	push	xbc                                   ; FBEDE0  push XBC
 	push	0                                     ; FBEDE1  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEDE3  push (XIZ+0x0a)
-	call	0xFAD561                              ; FBEDE6  call 0xfad561
+	call	sub_FAD561                              ; FBEDE6  call 0xfad561
 	ld	(xiz-12), wa                            ; FBEDEA  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEDED  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEDF2  inc 6,XSP
@@ -13052,7 +13052,7 @@ sub_FBDCD3__FBEE02:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEE22  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEE25  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEE28  push WA
-	calr (0xFBD8B8 - 0xFBEE2C)                 ; FBEE29  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEE29  calr 0xfbd8b8
 	add	xsp, 18                                ; FBEE2C  add XSP,0x00000012
 	jr sub_FBDCD3__FBEDFD                      ; FBEE32  jr T,0xfbedfd
 sub_FBDCD3__FBEE34:
@@ -13062,7 +13062,7 @@ sub_FBDCD3__FBEE37:
 	push	xbc                                   ; FBEE3A  push XBC
 	push	0                                     ; FBEE3B  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEE3D  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBEE40  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBEE40  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBEE44  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEE47  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEE4C  inc 6,XSP
@@ -13087,7 +13087,7 @@ sub_FBDCD3__FBEE5C:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEE7C  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEE7F  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEE82  push WA
-	calr (0xFBD8B8 - 0xFBEE86)                 ; FBEE83  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEE83  calr 0xfbd8b8
 	add	xsp, 18                                ; FBEE86  add XSP,0x00000012
 	jr sub_FBDCD3__FBEE57                      ; FBEE8C  jr T,0xfbee57
 sub_FBDCD3__FBEE8E:
@@ -13097,7 +13097,7 @@ sub_FBDCD3__FBEE91:
 	push	xbc                                   ; FBEE94  push XBC
 	push	0                                     ; FBEE95  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEE97  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBEE9A  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBEE9A  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBEE9E  ld (XIZ+0xf4),WA
 	lda	xbc, (0x885A:24)                       ; FBEEA1  lda XBC,0x00885a
 	ld	(xiz-22), xbc                           ; FBEEA6  ld (XIZ+0xea),XBC
@@ -13108,7 +13108,7 @@ sub_FBDCD3__FBEE91:
 	extz	wa                                    ; FBEEB3  extz WA
 	extpfx3 0x9E, 0xF4, 0x80                   ; FBEEB5  add WA,(XIZ+0xf4)
 	pushw	wa                                   ; FBEEB8  push WA
-	calr (0xFBD88E - 0xFBEEBC)                 ; FBEEB9  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBEEB9  calr 0xfbd88e
 	ld	xbc, (xiz-22)                           ; FBEEBC  ld XBC,(XIZ+0xea)
 	ld	(xbc), a                                ; FBEEBF  ld (XBC),A
 	inc	6, xsp                                 ; FBEEC1  inc 6,XSP
@@ -13118,7 +13118,7 @@ sub_FBDCD3__FBEEC6:
 	push	xbc                                   ; FBEEC9  push XBC
 	push	0                                     ; FBEECA  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEECC  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBEECF  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBEECF  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBEED3  ld (XIZ+0xf4),WA
 	lda	xbc, (0x885B:24)                       ; FBEED6  lda XBC,0x00885b
 	ld	(xiz-22), xbc                           ; FBEEDB  ld (XIZ+0xea),XBC
@@ -13129,7 +13129,7 @@ sub_FBDCD3__FBEEC6:
 	extz	wa                                    ; FBEEE8  extz WA
 	extpfx3 0x9E, 0xF4, 0x80                   ; FBEEEA  add WA,(XIZ+0xf4)
 	pushw	wa                                   ; FBEEED  push WA
-	calr (0xFBD88E - 0xFBEEF1)                 ; FBEEEE  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBEEEE  calr 0xfbd88e
 	ld	xbc, (xiz-22)                           ; FBEEF1  ld XBC,(XIZ+0xea)
 	ld	(xbc), a                                ; FBEEF4  ld (XBC),A
 	inc	6, xsp                                 ; FBEEF6  inc 6,XSP
@@ -13139,7 +13139,7 @@ sub_FBDCD3__FBEEFB:
 	push	xbc                                   ; FBEEFE  push XBC
 	push	0                                     ; FBEEFF  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEF01  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBEF04  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBEF04  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBEF08  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEF0B  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEF10  inc 6,XSP
@@ -13164,7 +13164,7 @@ sub_FBDCD3__FBEF20:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEF40  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEF43  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEF46  push WA
-	calr (0xFBD8B8 - 0xFBEF4A)                 ; FBEF47  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEF47  calr 0xfbd8b8
 	add	xsp, 18                                ; FBEF4A  add XSP,0x00000012
 	jr sub_FBDCD3__FBEF1B                      ; FBEF50  jr T,0xfbef1b
 sub_FBDCD3__FBEF52:
@@ -13174,7 +13174,7 @@ sub_FBDCD3__FBEF55:
 	push	xbc                                   ; FBEF58  push XBC
 	push	0                                     ; FBEF59  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEF5B  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBEF5E  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBEF5E  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBEF62  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEF65  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEF6A  inc 6,XSP
@@ -13199,7 +13199,7 @@ sub_FBDCD3__FBEF7A:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEF9A  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEF9D  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEFA0  push WA
-	calr (0xFBD8B8 - 0xFBEFA4)                 ; FBEFA1  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEFA1  calr 0xfbd8b8
 	add	xsp, 18                                ; FBEFA4  add XSP,0x00000012
 	jr sub_FBDCD3__FBEF75                      ; FBEFAA  jr T,0xfbef75
 sub_FBDCD3__FBEFAC:
@@ -13209,7 +13209,7 @@ sub_FBDCD3__FBEFAF:
 	push	xbc                                   ; FBEFB2  push XBC
 	push	0                                     ; FBEFB3  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEFB5  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBEFB8  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBEFB8  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBEFBC  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEFBF  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEFC4  inc 6,XSP
@@ -13234,7 +13234,7 @@ sub_FBDCD3__FBEFD5:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBEFF5  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBEFF8  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBEFFB  push WA
-	calr (0xFBD8B8 - 0xFBEFFF)                 ; FBEFFC  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBEFFC  calr 0xfbd8b8
 	add	xsp, 18                                ; FBEFFF  add XSP,0x00000012
 	pushw	0                                    ; FBF005  push 0x0000
 	pushw	0x7F                                 ; FBF008  push 0x007f
@@ -13249,7 +13249,7 @@ sub_FBDCD3__FBEFD5:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF025  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF028  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF02B  push WA
-	calr (0xFBD8B8 - 0xFBF02F)                 ; FBF02C  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF02C  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF02F  add XSP,0x00000012
 	jr sub_FBDCD3__FBEFD0                      ; FBF035  jr T,0xfbefd0
 sub_FBDCD3__FBF037:
@@ -13259,7 +13259,7 @@ sub_FBDCD3__FBF03A:
 	push	xbc                                   ; FBF03D  push XBC
 	push	0                                     ; FBF03E  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBF040  push (XIZ+0x0a)
-	call	0xFAD5C2                              ; FBF043  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBF043  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBF047  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF04A  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF04F  inc 6,XSP
@@ -13284,7 +13284,7 @@ sub_FBDCD3__FBF05F:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF07F  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF082  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF085  push WA
-	calr (0xFBD8B8 - 0xFBF089)                 ; FBF086  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF086  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF089  add XSP,0x00000012
 	jr sub_FBDCD3__FBF05A                      ; FBF08F  jr T,0xfbf05a
 sub_FBDCD3__FBF091:
@@ -13294,7 +13294,7 @@ sub_FBDCD3__FBF094:
 	push	xbc                                   ; FBF097  push XBC
 	push	0                                     ; FBF098  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBF09A  push (XIZ+0x0a)
-	call	0xFAD4FE                              ; FBF09D  call 0xfad4fe
+	call	Scale7Bit_ByDepth_UniOrBipolar_Shl2                              ; FBF09D  call 0xfad4fe
 	ld	(xiz-12), wa                            ; FBF0A1  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF0A4  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF0A9  inc 6,XSP
@@ -13330,7 +13330,7 @@ sub_FBDCD3__FBF0DC:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF0FC  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF0FF  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF102  push WA
-	calr (0xFBD8B8 - 0xFBF106)                 ; FBF103  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF103  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF106  add XSP,0x00000012
 	jrl sub_FBDCD3__FBF1A0                     ; FBF10C  jrl T,0xfbf1a0
 sub_FBDCD3__FBF10F:
@@ -13347,7 +13347,7 @@ sub_FBDCD3__FBF10F:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF12F  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF132  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF135  push WA
-	calr (0xFBD8B8 - 0xFBF139)                 ; FBF136  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF136  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF139  add XSP,0x00000012
 	pushw	0                                    ; FBF13F  push 0x0000
 	pushw	5                                    ; FBF142  push 0x0005
@@ -13362,7 +13362,7 @@ sub_FBDCD3__FBF10F:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF15F  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF162  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF165  push WA
-	calr (0xFBD8B8 - 0xFBF169)                 ; FBF166  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF166  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF169  add XSP,0x00000012
 	jr sub_FBDCD3__FBF1A0                      ; FBF16F  jr T,0xfbf1a0
 sub_FBDCD3__FBF171:
@@ -13506,6 +13506,7 @@ sub_FBF280:
 	extz	wa                                    ; FBF28F  extz WA
 	ld	(xiz-24), wa                            ; FBF291  ld (XIZ+0xe8),WA
 	jrl sub_FBF280__FBFF43                     ; FBF294  jrl T,0xfbff43
+sub_FBF280_Loop:
 	ld	xbc, (xiz+14)                           ; FBF297  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBF29A  push XBC
 	ld	wa, (xiz+12)                            ; FBF29B  ld WA,(XIZ+0x0c)
@@ -13514,7 +13515,7 @@ sub_FBF280:
 	pushw	wa                                   ; FBF2A3  push WA
 	push	0                                     ; FBF2A4  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBF2A6  push (XIZ+0x08)
-	call	0xFAD2D5                              ; FBF2A9  call 0xfad2d5
+	call	sub_FAD2D5                              ; FBF2A9  call 0xfad2d5
 	ld	(xiz-12), wa                            ; FBF2AD  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF2B0  ld (XIZ+0xf6),0x0000
 	inc	8, xsp                                 ; FBF2B5  inc 0,XSP
@@ -13624,14 +13625,14 @@ sub_FBF280__FBF380:
 	ld	(xiz-18), bc                            ; FBF3C8  ld (XIZ+0xee),BC
 sub_FBF280__FBF3CB:
 	extpfx3 0x9E, 0xF2, 0x04                   ; FBF3CB  pushw (XIZ+0xf2)
-	calr (0xFBD9D4 - 0xFBF3D1)                 ; FBF3CE  calr 0xfbd9d4
+	calr sub_FBD9D4                 ; FBF3CE  calr 0xfbd9d4
 	ld	(xiz-14), wa                            ; FBF3D1  ld (XIZ+0xf2),WA
 	popw	bc                                    ; FBF3D4  pop BC
 	pushw	0xFFE8                               ; FBF3D5  push 0xffe8
 	pushw	24                                   ; FBF3D8  push 0x0018
 	sra	wa, 8                                  ; FBF3DB  sra 0x08,WA
 	pushw	wa                                   ; FBF3DE  push WA
-	calr (0xFBD88E - 0xFBF3E2)                 ; FBF3DF  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBF3DF  calr 0xfbd88e
 	ld	xbc, (xiz-4)                            ; FBF3E2  ld XBC,(XIZ+0xfc)
 	ld	(xbc+4), a                              ; FBF3E5  ld (XBC+0x04),A
 	ld	c, (xiz-14)                             ; FBF3E8  ld C,(XIZ+0xf2)
@@ -13641,14 +13642,14 @@ sub_FBF280__FBF3CB:
 	ld	(xbc+5), h                              ; FBF3F3  ld (XBC+0x05),H
 	inc	6, xsp                                 ; FBF3F6  inc 6,XSP
 	extpfx3 0x9E, 0xF0, 0x04                   ; FBF3F8  pushw (XIZ+0xf0)
-	calr (0xFBD9D4 - 0xFBF3FE)                 ; FBF3FB  calr 0xfbd9d4
+	calr sub_FBD9D4                 ; FBF3FB  calr 0xfbd9d4
 	ld	(xiz-16), wa                            ; FBF3FE  ld (XIZ+0xf0),WA
 	popw	bc                                    ; FBF401  pop BC
 	pushw	0xFFC4                               ; FBF402  push 0xffc4
 	pushw	60                                   ; FBF405  push 0x003c
 	sra	wa, 8                                  ; FBF408  sra 0x08,WA
 	pushw	wa                                   ; FBF40B  push WA
-	calr (0xFBD88E - 0xFBF40F)                 ; FBF40C  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBF40C  calr 0xfbd88e
 	ld	xbc, (xiz-8)                            ; FBF40F  ld XBC,(XIZ+0xf8)
 	ld	(xbc+29), a                             ; FBF412  ld (XBC+0x1d),A
 	ld	c, (xiz-16)                             ; FBF415  ld C,(XIZ+0xf0)
@@ -13658,14 +13659,14 @@ sub_FBF280__FBF3CB:
 	ld	(xbc+30), h                             ; FBF420  ld (XBC+0x1e),H
 	inc	6, xsp                                 ; FBF423  inc 6,XSP
 	extpfx3 0x9E, 0xEE, 0x04                   ; FBF425  pushw (XIZ+0xee)
-	calr (0xFBD9D4 - 0xFBF42B)                 ; FBF428  calr 0xfbd9d4
+	calr sub_FBD9D4                 ; FBF428  calr 0xfbd9d4
 	ld	(xiz-18), wa                            ; FBF42B  ld (XIZ+0xee),WA
 	popw	bc                                    ; FBF42E  pop BC
 	pushw	0xFFC4                               ; FBF42F  push 0xffc4
 	pushw	60                                   ; FBF432  push 0x003c
 	sra	wa, 8                                  ; FBF435  sra 0x08,WA
 	pushw	wa                                   ; FBF438  push WA
-	calr (0xFBD88E - 0xFBF43C)                 ; FBF439  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBF439  calr 0xfbd88e
 	ld	xbc, (xiz-8)                            ; FBF43C  ld XBC,(XIZ+0xf8)
 	ld	(xbc+41), a                             ; FBF43F  ld (XBC+0x29),A
 	ld	c, (xiz-18)                             ; FBF442  ld C,(XIZ+0xee)
@@ -13678,11 +13679,12 @@ sub_FBF280__FBF452:
 	jrl sub_FBF280__FBF2C1                     ; FBF452  jrl T,0xfbf2c1
 sub_FBF280__FBF455:
 	jrl sub_FBF280__FBFFCF                     ; FBF455  jrl T,0xfbffcf
+sub_FBF280_Loop2:
 	ld	xbc, (xiz+14)                           ; FBF458  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBF45B  push XBC
 	push	0                                     ; FBF45C  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF45E  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBF461  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBF461  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBF465  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF468  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF46D  inc 6,XSP
@@ -13775,7 +13777,7 @@ sub_FBF280__FBF54C:
 	pushw	0                                    ; FBF54C  push 0x0000
 	pushw	0xFF                                 ; FBF54F  push 0x00ff
 	extpfx3 0x9E, 0xF2, 0x04                   ; FBF552  pushw (XIZ+0xf2)
-	calr (0xFBD88E - 0xFBF558)                 ; FBF555  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBF555  calr 0xfbd88e
 	exts	wa                                    ; FBF558  exts WA
 	exts	xwa                                   ; FBF55A  exts XWA
 	add	xwa, 0xFDF0A3                          ; FBF55C  add XWA,0x00fdf0a3
@@ -13787,7 +13789,7 @@ sub_FBF280__FBF54C:
 	pushw	0                                    ; FBF56E  push 0x0000
 	pushw	0xFF                                 ; FBF571  push 0x00ff
 	extpfx3 0x9E, 0xF0, 0x04                   ; FBF574  pushw (XIZ+0xf0)
-	calr (0xFBD88E - 0xFBF57A)                 ; FBF577  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBF577  calr 0xfbd88e
 	exts	wa                                    ; FBF57A  exts WA
 	exts	xwa                                   ; FBF57C  exts XWA
 	add	xwa, 0xFDF0A3                          ; FBF57E  add XWA,0x00fdf0a3
@@ -13800,11 +13802,12 @@ sub_FBF280__FBF590:
 	jrl sub_FBF280__FBF479                     ; FBF590  jrl T,0xfbf479
 sub_FBF280__FBF593:
 	jrl sub_FBF280__FBFFCF                     ; FBF593  jrl T,0xfbffcf
+sub_FBF280_Loop3:
 	ld	xbc, (xiz+14)                           ; FBF596  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBF599  push XBC
 	push	0                                     ; FBF59A  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF59C  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBF59F  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBF59F  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBF5A3  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF5A6  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF5AB  inc 6,XSP
@@ -13844,7 +13847,7 @@ sub_FBF280__FBF5ED:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF604  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF607  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF60A  push WA
-	calr (0xFBD8B8 - 0xFBF60E)                 ; FBF60B  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF60B  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF60E  add XSP,0x00000012
 	jrl sub_FBF280__FBF696                     ; FBF614  jrl T,0xfbf696
 sub_FBF280__FBF617:
@@ -13859,7 +13862,7 @@ sub_FBF280__FBF617:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF62E  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF631  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF634  push WA
-	calr (0xFBD8B8 - 0xFBF638)                 ; FBF635  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF635  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF638  add XSP,0x00000012
 	pushw	0                                    ; FBF63E  push 0x0000
 	pushw	0x7F                                 ; FBF641  push 0x007f
@@ -13872,7 +13875,7 @@ sub_FBF280__FBF617:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF655  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF658  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF65B  push WA
-	calr (0xFBD8B8 - 0xFBF65F)                 ; FBF65C  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF65C  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF65F  add XSP,0x00000012
 	jr sub_FBF280__FBF696                      ; FBF665  jr T,0xfbf696
 sub_FBF280__FBF667:
@@ -13902,11 +13905,12 @@ sub_FBF280__FBF696:
 	jrl	-0xE2                                  ; FBF696  jrl T,0xfbf5b7
 sub_FBF280__FBF699:
 	jrl sub_FBF280__FBFFCF                     ; FBF699  jrl T,0xfbffcf
+sub_FBF280_Loop4:
 	ld	xbc, (xiz+14)                           ; FBF69C  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBF69F  push XBC
 	push	0                                     ; FBF6A0  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF6A2  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBF6A5  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBF6A5  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBF6A9  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF6AC  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF6B1  inc 6,XSP
@@ -13938,7 +13942,7 @@ sub_FBF280__FBF6C2:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF6F6  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF6F9  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF6FC  push WA
-	calr (0xFBD8B8 - 0xFBF700)                 ; FBF6FD  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF6FD  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF700  add XSP,0x00000012
 	pushw	0                                    ; FBF706  push 0x0000
 	pushw	0x7F                                 ; FBF709  push 0x007f
@@ -13951,7 +13955,7 @@ sub_FBF280__FBF6C2:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF71D  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF720  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF723  push WA
-	calr (0xFBD8B8 - 0xFBF727)                 ; FBF724  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF724  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF727  add XSP,0x00000012
 	ld	xbc, (xiz-8)                            ; FBF72D  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FBF730  push XBC
@@ -13959,18 +13963,19 @@ sub_FBF280__FBF6C2:
 	pushw	wa                                   ; FBF734  push WA
 	push	0                                     ; FBF735  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBF737  push (XIZ+0x08)
-	call	0xFC7B64                              ; FBF73A  call 0xfc7b64
+	call	sub_FC7B64                              ; FBF73A  call 0xfc7b64
 	ld	xbc, (xiz-8)                            ; FBF73E  ld XBC,(XIZ+0xf8)
 	ld	(xbc+20), a                             ; FBF741  ld (XBC+0x14),A
 	inc	8, xsp                                 ; FBF744  inc 0,XSP
 	jrl sub_FBF280__FBF6BD                     ; FBF746  jrl T,0xfbf6bd
 sub_FBF280__FBF749:
 	jrl sub_FBF280__FBFFCF                     ; FBF749  jrl T,0xfbffcf
+sub_FBF280_Loop5:
 	ld	xbc, (xiz+14)                           ; FBF74C  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBF74F  push XBC
 	push	0                                     ; FBF750  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF752  push (XIZ+0x0c)
-	call	0xFAD688                              ; FBF755  call 0xfad688
+	call	Scale7Bit_ByDepth_UniOrBipolar_Shl7                              ; FBF755  call 0xfad688
 	ld	(xiz-12), wa                            ; FBF759  ld (XIZ+0xf4),WA
 	inc	6, xsp                                 ; FBF75C  inc 6,XSP
 	cp	wa, 0:i3                                  ; FBF75E  cp WA,0
@@ -14015,7 +14020,7 @@ sub_FBF280__FBF78F:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF7C3  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF7C6  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF7C9  push WA
-	calr (0xFBD8B8 - 0xFBF7CD)                 ; FBF7CA  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF7CA  calr 0xfbd8b8
 	ld	bc, (xiz-10)                            ; FBF7CD  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBF7D0  extz XBC
 	add	xbc, 0xFDE6A5                          ; FBF7D2  add XBC,0x00fde6a5
@@ -14046,7 +14051,7 @@ sub_FBF280__FBF7FE:
 	extpfx3 0x9E, 0xF0, 0x04                   ; FBF815  pushw (XIZ+0xf0)
 	ld	a, (xiz-10)                             ; FBF818  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF81B  push WA
-	calr (0xFBD8B8 - 0xFBF81F)                 ; FBF81C  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF81C  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF81F  add XSP,0x00000012
 	ld	xbc, (xiz-8)                            ; FBF825  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FBF828  push XBC
@@ -14054,18 +14059,19 @@ sub_FBF280__FBF7FE:
 	pushw	wa                                   ; FBF82C  push WA
 	push	0                                     ; FBF82D  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FBF82F  push (XIZ+0x08)
-	call	0xFC7AB4                              ; FBF832  call 0xfc7ab4
+	call	sub_FC7AB4                              ; FBF832  call 0xfc7ab4
 	ld	xbc, (xiz-8)                            ; FBF836  ld XBC,(XIZ+0xf8)
 	ld	(xbc+20), a                             ; FBF839  ld (XBC+0x14),A
 	inc	8, xsp                                 ; FBF83C  inc 0,XSP
 	jrl sub_FBF280__FBF78A                     ; FBF83E  jrl T,0xfbf78a
 sub_FBF280__FBF841:
 	jrl sub_FBF280__FBFFCF                     ; FBF841  jrl T,0xfbffcf
+sub_FBF280_Loop6:
 	ld	xbc, (xiz+14)                           ; FBF844  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBF847  push XBC
 	push	0                                     ; FBF848  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF84A  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBF84D  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBF84D  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBF851  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF854  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF859  inc 6,XSP
@@ -14095,16 +14101,17 @@ sub_FBF280__FBF869:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF894  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF897  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF89A  push WA
-	calr (0xFBD8B8 - 0xFBF89E)                 ; FBF89B  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF89B  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF89E  add XSP,0x00000012
 	jr sub_FBF280__FBF864                      ; FBF8A4  jr T,0xfbf864
 sub_FBF280__FBF8A6:
 	jrl sub_FBF280__FBFFCF                     ; FBF8A6  jrl T,0xfbffcf
+sub_FBF280_Loop7:
 	ld	xbc, (xiz+14)                           ; FBF8A9  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBF8AC  push XBC
 	push	0                                     ; FBF8AD  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF8AF  push (XIZ+0x0c)
-	call	0xFAD561                              ; FBF8B2  call 0xfad561
+	call	sub_FAD561                              ; FBF8B2  call 0xfad561
 	ld	(xiz-12), wa                            ; FBF8B6  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF8B9  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF8BE  inc 6,XSP
@@ -14134,16 +14141,17 @@ sub_FBF280__FBF8CE:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF8F9  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF8FC  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF8FF  push WA
-	calr (0xFBD8B8 - 0xFBF903)                 ; FBF900  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF900  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF903  add XSP,0x00000012
 	jr sub_FBF280__FBF8C9                      ; FBF909  jr T,0xfbf8c9
 sub_FBF280__FBF90B:
 	jrl sub_FBF280__FBFFCF                     ; FBF90B  jrl T,0xfbffcf
+sub_FBF280_Loop8:
 	ld	xbc, (xiz+14)                           ; FBF90E  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBF911  push XBC
 	push	0                                     ; FBF912  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF914  push (XIZ+0x0c)
-	call	0xFAD561                              ; FBF917  call 0xfad561
+	call	sub_FAD561                              ; FBF917  call 0xfad561
 	ld	(xiz-12), wa                            ; FBF91B  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF91E  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF923  inc 6,XSP
@@ -14173,16 +14181,17 @@ sub_FBF280__FBF933:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF95E  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF961  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF964  push WA
-	calr (0xFBD8B8 - 0xFBF968)                 ; FBF965  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF965  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF968  add XSP,0x00000012
 	jr sub_FBF280__FBF92E                      ; FBF96E  jr T,0xfbf92e
 sub_FBF280__FBF970:
 	jrl sub_FBF280__FBFFCF                     ; FBF970  jrl T,0xfbffcf
+sub_FBF280_Loop9:
 	ld	xbc, (xiz+14)                           ; FBF973  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBF976  push XBC
 	push	0                                     ; FBF977  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF979  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBF97C  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBF97C  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBF980  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF983  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF988  inc 6,XSP
@@ -14212,7 +14221,7 @@ sub_FBF280__FBF999:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF9C4  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBF9C7  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBF9CA  push WA
-	calr (0xFBD8B8 - 0xFBF9CE)                 ; FBF9CB  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBF9CB  calr 0xfbd8b8
 	add	xsp, 18                                ; FBF9CE  add XSP,0x00000012
 	pushw	0                                    ; FBF9D4  push 0x0000
 	pushw	0x7F                                 ; FBF9D7  push 0x007f
@@ -14232,16 +14241,17 @@ sub_FBF280__FBF999:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBF9FF  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFA02  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFA05  push WA
-	calr (0xFBD8B8 - 0xFBFA09)                 ; FBFA06  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFA06  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFA09  add XSP,0x00000012
 	jr sub_FBF280__FBF994                      ; FBFA0F  jr T,0xfbf994
 sub_FBF280__FBFA11:
 	jrl sub_FBF280__FBFFCF                     ; FBFA11  jrl T,0xfbffcf
+sub_FBF280_Loop10:
 	ld	xbc, (xiz+14)                           ; FBFA14  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFA17  push XBC
 	push	0                                     ; FBFA18  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFA1A  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBFA1D  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBFA1D  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBFA21  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFA24  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFA29  inc 6,XSP
@@ -14271,7 +14281,7 @@ sub_FBF280__FBFA3A:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFA65  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFA68  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFA6B  push WA
-	calr (0xFBD943 - 0xFBFA6F)                 ; FBFA6C  calr 0xfbd943
+	calr sub_FBD943                 ; FBFA6C  calr 0xfbd943
 	add	xsp, 18                                ; FBFA6F  add XSP,0x00000012
 	pushw	0xFFC4                               ; FBFA75  push 0xffc4
 	pushw	60                                   ; FBFA78  push 0x003c
@@ -14291,16 +14301,17 @@ sub_FBF280__FBFA3A:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFAA0  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFAA3  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFAA6  push WA
-	calr (0xFBD943 - 0xFBFAAA)                 ; FBFAA7  calr 0xfbd943
+	calr sub_FBD943                 ; FBFAA7  calr 0xfbd943
 	add	xsp, 18                                ; FBFAAA  add XSP,0x00000012
 	jr sub_FBF280__FBFA35                      ; FBFAB0  jr T,0xfbfa35
 sub_FBF280__FBFAB2:
 	jrl sub_FBF280__FBFFCF                     ; FBFAB2  jrl T,0xfbffcf
+sub_FBF280_Loop11:
 	ld	xbc, (xiz+14)                           ; FBFAB5  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFAB8  push XBC
 	push	0                                     ; FBFAB9  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFABB  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBFABE  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBFABE  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBFAC2  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFAC5  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFACA  inc 6,XSP
@@ -14330,16 +14341,17 @@ sub_FBF280__FBFADA:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFB05  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFB08  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFB0B  push WA
-	calr (0xFBD943 - 0xFBFB0F)                 ; FBFB0C  calr 0xfbd943
+	calr sub_FBD943                 ; FBFB0C  calr 0xfbd943
 	add	xsp, 18                                ; FBFB0F  add XSP,0x00000012
 	jr sub_FBF280__FBFAD5                      ; FBFB15  jr T,0xfbfad5
 sub_FBF280__FBFB17:
 	jrl sub_FBF280__FBFFCF                     ; FBFB17  jrl T,0xfbffcf
+sub_FBF280_Loop12:
 	ld	xbc, (xiz+14)                           ; FBFB1A  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFB1D  push XBC
 	push	0                                     ; FBFB1E  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFB20  push (XIZ+0x0c)
-	call	0xFAD561                              ; FBFB23  call 0xfad561
+	call	sub_FAD561                              ; FBFB23  call 0xfad561
 	ld	(xiz-12), wa                            ; FBFB27  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFB2A  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFB2F  inc 6,XSP
@@ -14369,16 +14381,17 @@ sub_FBF280__FBFB3F:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFB6A  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFB6D  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFB70  push WA
-	calr (0xFBD8B8 - 0xFBFB74)                 ; FBFB71  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFB71  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFB74  add XSP,0x00000012
 	jr sub_FBF280__FBFB3A                      ; FBFB7A  jr T,0xfbfb3a
 sub_FBF280__FBFB7C:
 	jrl sub_FBF280__FBFFCF                     ; FBFB7C  jrl T,0xfbffcf
+sub_FBF280_Loop13:
 	ld	xbc, (xiz+14)                           ; FBFB7F  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFB82  push XBC
 	push	0                                     ; FBFB83  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFB85  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBFB88  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBFB88  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBFB8C  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFB8F  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFB94  inc 6,XSP
@@ -14408,16 +14421,17 @@ sub_FBF280__FBFBA4:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFBCF  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFBD2  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFBD5  push WA
-	calr (0xFBD8B8 - 0xFBFBD9)                 ; FBFBD6  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFBD6  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFBD9  add XSP,0x00000012
 	jr sub_FBF280__FBFB9F                      ; FBFBDF  jr T,0xfbfb9f
 sub_FBF280__FBFBE1:
 	jrl sub_FBF280__FBFFCF                     ; FBFBE1  jrl T,0xfbffcf
+sub_FBF280_Loop14:
 	ld	xbc, (xiz+14)                           ; FBFBE4  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFBE7  push XBC
 	push	0                                     ; FBFBE8  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFBEA  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBFBED  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBFBED  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBFBF1  ld (XIZ+0xf4),WA
 	ld	c, 0x96:opc                                ; FBFBF4  ld C,0x96
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBFBF6  mul BC,(XIZ+0x0a)
@@ -14432,16 +14446,17 @@ sub_FBF280__FBFBE1:
 	extz	wa                                    ; FBFC14  extz WA
 	extpfx3 0x9E, 0xF4, 0x80                   ; FBFC16  add WA,(XIZ+0xf4)
 	pushw	wa                                   ; FBFC19  push WA
-	calr (0xFBD88E - 0xFBFC1D)                 ; FBFC1A  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBFC1A  calr 0xfbd88e
 	ld	xbc, (xiz-22)                           ; FBFC1D  ld XBC,(XIZ+0xea)
 	ld	(xbc), a                                ; FBFC20  ld (XBC),A
 	inc	6, xsp                                 ; FBFC22  inc 6,XSP
 	jrl sub_FBF280__FBFFCF                     ; FBFC24  jrl T,0xfbffcf
+sub_FBF280_Loop15:
 	ld	xbc, (xiz+14)                           ; FBFC27  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFC2A  push XBC
 	push	0                                     ; FBFC2B  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFC2D  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBFC30  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBFC30  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBFC34  ld (XIZ+0xf4),WA
 	ld	c, 0x96:opc                                ; FBFC37  ld C,0x96
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBFC39  mul BC,(XIZ+0x0a)
@@ -14456,16 +14471,17 @@ sub_FBF280__FBFBE1:
 	extz	wa                                    ; FBFC57  extz WA
 	extpfx3 0x9E, 0xF4, 0x80                   ; FBFC59  add WA,(XIZ+0xf4)
 	pushw	wa                                   ; FBFC5C  push WA
-	calr (0xFBD88E - 0xFBFC60)                 ; FBFC5D  calr 0xfbd88e
+	calr Clamp_ToRange_LowByte_FBD88E                 ; FBFC5D  calr 0xfbd88e
 	ld	xbc, (xiz-22)                           ; FBFC60  ld XBC,(XIZ+0xea)
 	ld	(xbc), a                                ; FBFC63  ld (XBC),A
 	inc	6, xsp                                 ; FBFC65  inc 6,XSP
 	jrl sub_FBF280__FBFFCF                     ; FBFC67  jrl T,0xfbffcf
+sub_FBF280_Loop16:
 	ld	xbc, (xiz+14)                           ; FBFC6A  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFC6D  push XBC
 	push	0                                     ; FBFC6E  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFC70  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBFC73  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBFC73  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBFC77  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFC7A  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFC7F  inc 6,XSP
@@ -14495,16 +14511,17 @@ sub_FBF280__FBFC8F:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFCBA  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFCBD  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFCC0  push WA
-	calr (0xFBD8B8 - 0xFBFCC4)                 ; FBFCC1  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFCC1  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFCC4  add XSP,0x00000012
 	jr sub_FBF280__FBFC8A                      ; FBFCCA  jr T,0xfbfc8a
 sub_FBF280__FBFCCC:
 	jrl sub_FBF280__FBFFCF                     ; FBFCCC  jrl T,0xfbffcf
+sub_FBF280_Loop17:
 	ld	xbc, (xiz+14)                           ; FBFCCF  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFCD2  push XBC
 	push	0                                     ; FBFCD3  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFCD5  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBFCD8  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBFCD8  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBFCDC  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFCDF  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFCE4  inc 6,XSP
@@ -14534,16 +14551,17 @@ sub_FBF280__FBFCF4:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFD1F  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFD22  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFD25  push WA
-	calr (0xFBD8B8 - 0xFBFD29)                 ; FBFD26  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFD26  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFD29  add XSP,0x00000012
 	jr sub_FBF280__FBFCEF                      ; FBFD2F  jr T,0xfbfcef
 sub_FBF280__FBFD31:
 	jrl sub_FBF280__FBFFCF                     ; FBFD31  jrl T,0xfbffcf
+sub_FBF280_Loop18:
 	ld	xbc, (xiz+14)                           ; FBFD34  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFD37  push XBC
 	push	0                                     ; FBFD38  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFD3A  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBFD3D  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBFD3D  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBFD41  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFD44  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFD49  inc 6,XSP
@@ -14573,7 +14591,7 @@ sub_FBF280__FBFD5A:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFD85  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFD88  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFD8B  push WA
-	calr (0xFBD8B8 - 0xFBFD8F)                 ; FBFD8C  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFD8C  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFD8F  add XSP,0x00000012
 	pushw	0                                    ; FBFD95  push 0x0000
 	pushw	0x7F                                 ; FBFD98  push 0x007f
@@ -14593,16 +14611,17 @@ sub_FBF280__FBFD5A:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFDC0  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFDC3  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFDC6  push WA
-	calr (0xFBD8B8 - 0xFBFDCA)                 ; FBFDC7  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFDC7  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFDCA  add XSP,0x00000012
 	jr sub_FBF280__FBFD55                      ; FBFDD0  jr T,0xfbfd55
 sub_FBF280__FBFDD2:
 	jrl sub_FBF280__FBFFCF                     ; FBFDD2  jrl T,0xfbffcf
+sub_FBF280_Loop19:
 	ld	xbc, (xiz+14)                           ; FBFDD5  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFDD8  push XBC
 	push	0                                     ; FBFDD9  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFDDB  push (XIZ+0x0c)
-	call	0xFAD5C2                              ; FBFDDE  call 0xfad5c2
+	call	Scale7Bit_ByDepth_UniOrBipolar                              ; FBFDDE  call 0xfad5c2
 	ld	(xiz-12), wa                            ; FBFDE2  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFDE5  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFDEA  inc 6,XSP
@@ -14632,16 +14651,17 @@ sub_FBF280__FBFDFA:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFE25  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFE28  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFE2B  push WA
-	calr (0xFBD8B8 - 0xFBFE2F)                 ; FBFE2C  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFE2C  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFE2F  add XSP,0x00000012
 	jr sub_FBF280__FBFDF5                      ; FBFE35  jr T,0xfbfdf5
 sub_FBF280__FBFE37:
 	jrl sub_FBF280__FBFFCF                     ; FBFE37  jrl T,0xfbffcf
+sub_FBF280_Loop20:
 	ld	xbc, (xiz+14)                           ; FBFE3A  ld XBC,(XIZ+0x0e)
 	push	xbc                                   ; FBFE3D  push XBC
 	push	0                                     ; FBFE3E  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFE40  push (XIZ+0x0c)
-	call	0xFAD4FE                              ; FBFE43  call 0xfad4fe
+	call	Scale7Bit_ByDepth_UniOrBipolar_Shl2                              ; FBFE43  call 0xfad4fe
 	ld	(xiz-12), wa                            ; FBFE47  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFE4A  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFE4F  inc 6,XSP
@@ -14681,7 +14701,7 @@ sub_FBF280__FBFE91:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFEA8  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFEAB  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFEAE  push WA
-	calr (0xFBD8B8 - 0xFBFEB2)                 ; FBFEAF  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFEAF  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFEB2  add XSP,0x00000012
 	jrl sub_FBF280__FBFF3A                     ; FBFEB8  jrl T,0xfbff3a
 sub_FBF280__FBFEBB:
@@ -14696,7 +14716,7 @@ sub_FBF280__FBFEBB:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFED2  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFED5  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFED8  push WA
-	calr (0xFBD8B8 - 0xFBFEDC)                 ; FBFED9  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFED9  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFEDC  add XSP,0x00000012
 	pushw	0                                    ; FBFEE2  push 0x0000
 	pushw	5                                    ; FBFEE5  push 0x0005
@@ -14709,7 +14729,7 @@ sub_FBF280__FBFEBB:
 	extpfx3 0x9E, 0xF4, 0x04                   ; FBFEF9  pushw (XIZ+0xf4)
 	ld	a, (xiz-10)                             ; FBFEFC  ld A,(XIZ+0xf6)
 	pushw	wa                                   ; FBFEFF  push WA
-	calr (0xFBD8B8 - 0xFBFF03)                 ; FBFF00  calr 0xfbd8b8
+	calr ByteField_AddOrSub_Clamped                 ; FBFF00  calr 0xfbd8b8
 	add	xsp, 18                                ; FBFF03  add XSP,0x00000012
 	jr sub_FBF280__FBFF3A                      ; FBFF09  jr T,0xfbff3a
 sub_FBF280__FBFF0B:
@@ -14744,45 +14764,45 @@ sub_FBF280__FBFF40:
 sub_FBF280__FBFF43:
 	ld	bc, (xiz-24)                            ; FBFF43  ld BC,(XIZ+0xe8)
 	cp	bc, 1:i3                                  ; FBFF46  cp BC,1
-	jrl	z, -0xCB4                              ; FBFF48  jrl Z,0xfbf297
+	jrl	z, sub_FBF280_Loop                              ; FBFF48  jrl Z,0xfbf297
 	cp	bc, 2:i3                                  ; FBFF4B  cp BC,2
-	jrl	z, -0xAF8                              ; FBFF4D  jrl Z,0xfbf458
+	jrl	z, sub_FBF280_Loop2                              ; FBFF4D  jrl Z,0xfbf458
 	cp	bc, 3:i3                                  ; FBFF50  cp BC,3
-	jrl	z, -0x9BF                              ; FBFF52  jrl Z,0xfbf596
+	jrl	z, sub_FBF280_Loop3                              ; FBFF52  jrl Z,0xfbf596
 	cp	bc, 28                                  ; FBFF55  cp BC,0x001c
-	jrl	z, -0x8C0                              ; FBFF59  jrl Z,0xfbf69c
+	jrl	z, sub_FBF280_Loop4                              ; FBFF59  jrl Z,0xfbf69c
 	cp	bc, 29                                  ; FBFF5C  cp BC,0x001d
-	jrl	z, -0x817                              ; FBFF60  jrl Z,0xfbf74c
+	jrl	z, sub_FBF280_Loop5                              ; FBFF60  jrl Z,0xfbf74c
 	cp	bc, 30                                  ; FBFF63  cp BC,0x001e
-	jrl	z, -0x726                              ; FBFF67  jrl Z,0xfbf844
+	jrl	z, sub_FBF280_Loop6                              ; FBFF67  jrl Z,0xfbf844
 	cp	bc, 32                                  ; FBFF6A  cp BC,0x0020
-	jrl	z, -0x6C8                              ; FBFF6E  jrl Z,0xfbf8a9
+	jrl	z, sub_FBF280_Loop7                              ; FBFF6E  jrl Z,0xfbf8a9
 	cp	bc, 33                                  ; FBFF71  cp BC,0x0021
-	jrl	z, -0x66A                              ; FBFF75  jrl Z,0xfbf90e
+	jrl	z, sub_FBF280_Loop8                              ; FBFF75  jrl Z,0xfbf90e
 	cp	bc, 35                                  ; FBFF78  cp BC,0x0023
-	jrl	z, -0x60C                              ; FBFF7C  jrl Z,0xfbf973
+	jrl	z, sub_FBF280_Loop9                              ; FBFF7C  jrl Z,0xfbf973
 	cp	bc, 36                                  ; FBFF7F  cp BC,0x0024
-	jrl	z, -0x572                              ; FBFF83  jrl Z,0xfbfa14
+	jrl	z, sub_FBF280_Loop10                              ; FBFF83  jrl Z,0xfbfa14
 	cp	bc, 37                                  ; FBFF86  cp BC,0x0025
-	jrl	z, -0x4D8                              ; FBFF8A  jrl Z,0xfbfab5
+	jrl	z, sub_FBF280_Loop11                              ; FBFF8A  jrl Z,0xfbfab5
 	cp	bc, 38                                  ; FBFF8D  cp BC,0x0026
-	jrl	z, -0x47A                              ; FBFF91  jrl Z,0xfbfb1a
+	jrl	z, sub_FBF280_Loop12                              ; FBFF91  jrl Z,0xfbfb1a
 	cp	bc, 39                                  ; FBFF94  cp BC,0x0027
-	jrl	z, -0x41C                              ; FBFF98  jrl Z,0xfbfb7f
+	jrl	z, sub_FBF280_Loop13                              ; FBFF98  jrl Z,0xfbfb7f
 	cp	bc, 40                                  ; FBFF9B  cp BC,0x0028
-	jrl	z, -0x3BE                              ; FBFF9F  jrl Z,0xfbfbe4
+	jrl	z, sub_FBF280_Loop14                              ; FBFF9F  jrl Z,0xfbfbe4
 	cp	bc, 41                                  ; FBFFA2  cp BC,0x0029
-	jrl	z, -0x382                              ; FBFFA6  jrl Z,0xfbfc27
+	jrl	z, sub_FBF280_Loop15                              ; FBFFA6  jrl Z,0xfbfc27
 	cp	bc, 42                                  ; FBFFA9  cp BC,0x002a
-	jrl	z, -0x346                              ; FBFFAD  jrl Z,0xfbfc6a
+	jrl	z, sub_FBF280_Loop16                              ; FBFFAD  jrl Z,0xfbfc6a
 	cp	bc, 43                                  ; FBFFB0  cp BC,0x002b
-	jrl	z, -0x2E8                              ; FBFFB4  jrl Z,0xfbfccf
+	jrl	z, sub_FBF280_Loop17                              ; FBFFB4  jrl Z,0xfbfccf
 	cp	bc, 44                                  ; FBFFB7  cp BC,0x002c
-	jrl	z, -0x28A                              ; FBFFBB  jrl Z,0xfbfd34
+	jrl	z, sub_FBF280_Loop18                              ; FBFFBB  jrl Z,0xfbfd34
 	cp	bc, 45                                  ; FBFFBE  cp BC,0x002d
-	jrl	z, -0x1F0                              ; FBFFC2  jrl Z,0xfbfdd5
+	jrl	z, sub_FBF280_Loop19                              ; FBFFC2  jrl Z,0xfbfdd5
 	cp	bc, 46                                  ; FBFFC5  cp BC,0x002e
-	jrl	z, -0x192                              ; FBFFC9  jrl Z,0xfbfe3a
+	jrl	z, sub_FBF280_Loop20                              ; FBFFC9  jrl Z,0xfbfe3a
 	jrl sub_FBF280__FBFF40                     ; FBFFCC  jrl T,0xfbff40
 sub_FBF280__FBFFCF:
 	pop	xix                                    ; FBFFCF  pop XIX
@@ -14899,7 +14919,7 @@ sub_FBFFD4__FC0074:
 	pushw	wa                                   ; FC00A2  push WA
 	push	0                                     ; FC00A3  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FC00A5  push (XIZ+0xf9)
-	calr (0xFBDCD3 - 0xFC00AB)                 ; FC00A8  calr 0xfbdcd3
+	calr sub_FBDCD3                 ; FC00A8  calr 0xfbdcd3
 	inc	8, xsp                                 ; FC00AB  inc 0,XSP
 sub_FBFFD4__FC00AD:
 	ld	c, 2:opc                                   ; FC00AD  ld C,0x02
@@ -14922,7 +14942,7 @@ sub_FBFFD4__FC00AD:
 	extpfx3 0x8E, 0xF6, 0x04                   ; FC00DA  push (XIZ+0xf6)
 	push	0                                     ; FC00DD  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FC00DF  push (XIZ+0xf9)
-	calr (0xFBDCD3 - 0xFC00E5)                 ; FC00E2  calr 0xfbdcd3
+	calr sub_FBDCD3                 ; FC00E2  calr 0xfbdcd3
 	inc	8, xsp                                 ; FC00E5  inc 0,XSP
 sub_FBFFD4__FC00E7:
 	sub	xbc, xbc                               ; FC00E7  sub XBC,XBC
@@ -14959,7 +14979,7 @@ sub_FBFFD4__FC0129:
 	jr nc, sub_FBFFD4__FC0140                  ; FC012E  jr NC,0xfc0140
 	ld	c, (xiz-6)                              ; FC0130  ld C,(XIZ+0xfa)
 	pushw	bc                                   ; FC0133  push BC
-	call	0xFC39FA                              ; FC0134  call 0xfc39fa
+	call	sub_FC39FA                              ; FC0134  call 0xfc39fa
 	ldw (xiz-6), 0x0000                        ; FC0138  ld (XIZ+0xfa),0x0000
 	popw	bc                                    ; FC013D  pop BC
 	jr sub_FBFFD4__FC0145                      ; FC013E  jr T,0xfc0145
@@ -15072,7 +15092,7 @@ sub_FBFFD4__FC0234:
 	extpfx3 0x8E, 0xF5, 0x04                   ; FC023F  push (XIZ+0xf5)
 	push	0                                     ; FC0242  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FC0244  push (XIZ+0xf9)
-	calr (0xFBF280 - 0xFC024A)                 ; FC0247  calr 0xfbf280
+	calr sub_FBF280                 ; FC0247  calr 0xfbf280
 	inc	8, xsp                                 ; FC024A  inc 0,XSP
 	inc	2, xsp                                 ; FC024C  inc 2,XSP
 	jr sub_FBFFD4__FC022F                      ; FC024E  jr T,0xfc022f
@@ -15108,7 +15128,7 @@ sub_FBFFD4__FC0286:
 	extpfx3 0x8E, 0xF5, 0x04                   ; FC0293  push (XIZ+0xf5)
 	push	0                                     ; FC0296  push 0x00
 	extpfx3 0x8E, 0xF9, 0x04                   ; FC0298  push (XIZ+0xf9)
-	calr (0xFBF280 - 0xFC029E)                 ; FC029B  calr 0xfbf280
+	calr sub_FBF280                 ; FC029B  calr 0xfbf280
 	inc	8, xsp                                 ; FC029E  inc 0,XSP
 	inc	2, xsp                                 ; FC02A0  inc 2,XSP
 	jr sub_FBFFD4__FC0281                      ; FC02A2  jr T,0xfc0281
@@ -15124,7 +15144,7 @@ sub_FBFFD4__FC02AE:
 	jr nz, sub_FBFFD4__FC02CB                  ; FC02B8  jr NZ,0xfc02cb
 	push	0                                     ; FC02BA  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FC02BC  push (XIZ+0x0a)
-	call	0xFC3B24                              ; FC02BF  call 0xfc3b24
+	call	sub_FC3B24                              ; FC02BF  call 0xfc3b24
 	ldw (xiz-6), 0x0000                        ; FC02C3  ld (XIZ+0xfa),0x0000
 	popw	bc                                    ; FC02C8  pop BC
 	jr sub_FBFFD4__FC02D0                      ; FC02C9  jr T,0xfc02d0
@@ -15189,7 +15209,7 @@ ToneQuery_ReplyToneName:
 	ld	(0xD75D:24), c                         ; FC0310  ld (0x00d75d),C
 	extpfx3 0x9E, 0x0A, 0x04                   ; FC0315  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; FC0318  pushw (XIZ+0x08)
-	call	0xFB4124                              ; FC031B  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FC031B  call 0xfb4124
 	ld	(xiz-4), xiy                            ; FC031F  ld (XIZ+0xfc),XIY
 	ldw (xiz-6), 0x0011                        ; FC0322  ld (XIZ+0xfa),0x0011
 	ldw (xiz-8), 0x0000                        ; FC0327  ld (XIZ+0xf8),0x0000
@@ -16794,7 +16814,7 @@ ToneQuery_ReplyToneDspAlgoByte:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FC10BE  link XIZ,0xfffc
 	extpfx3 0x9E, 0x0A, 0x04                   ; FC10C2  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; FC10C5  pushw (XIZ+0x08)
-	call	0xFB4124                              ; FC10C8  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FC10C8  call 0xfb4124
 	ld	(xiz-4), xiy                            ; FC10CC  ld (XIZ+0xfc),XIY
 	ld	c, (xiy+0xD0)                           ; FC10CF  ld C,(XIY+0x00d0)
 	ld	(0xD94B:24), c                         ; FC10D4  ld (0x00d94b),C
@@ -17009,7 +17029,7 @@ ToneQuery_ReplyDrumNameForCurrentPart__FC128F:
 	push	xbc                                   ; FC1292  push XBC
 	extpfx3 0x9E, 0x0A, 0x04                   ; FC1293  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; FC1296  pushw (XIZ+0x08)
-	calr (0xFC10E0 - 0xFC129C)                 ; FC1299  calr 0xfc10e0
+	calr DrumKit_ResolveSourceNameRow                 ; FC1299  calr 0xfc10e0
 	ld	(xiz-8), xiy                            ; FC129C  ld (XIZ+0xf8),XIY
 	ld	(xiz-4), xiy                            ; FC129F  ld (XIZ+0xfc),XIY
 	inc	8, xsp                                 ; FC12A2  inc 0,XSP
@@ -17213,7 +17233,7 @@ ToneQuery_ReplyDrumSourceNameAndIndex:
 	push	xbc                                   ; FC13F0  push XBC
 	pushw	wa                                   ; FC13F1  push WA
 	extpfx3 0x9E, 0xEE, 0x04                   ; FC13F2  pushw (XIZ+0xee)
-	calr (0xFC10E0 - 0xFC13F8)                 ; FC13F5  calr 0xfc10e0
+	calr DrumKit_ResolveSourceNameRow                 ; FC13F5  calr 0xfc10e0
 	ld	(xiz-8), xiy                            ; FC13F8  ld (XIZ+0xf8),XIY
 	ld	bc, (xiz+8)                             ; FC13FB  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FC13FE  extz BC
@@ -17607,7 +17627,7 @@ ToneQuery_ReplyPercSourceName1AndIndex:
 	push	xwa                                   ; FC173D  push XWA
 	push	0                                     ; FC173E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FC1740  push (XIZ+0x08)
-	call	0xFB49EB                              ; FC1743  call 0xfb49eb
+	call	Part_ResolveDrumInstrumentRecord                              ; FC1743  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FC1747  ld (XIZ+0xf8),XIY
 	ld	c, 23:opc                                  ; FC174A  ld C,0x17
 	extpfx3 0x8E, 0xDD, 0x43                   ; FC174C  mul BC,(XIZ+0xdd)
@@ -17627,7 +17647,7 @@ ToneQuery_ReplyPercSourceName1AndIndex:
 	push	xbc                                   ; FC1774  push XBC
 	pushw	wa                                   ; FC1775  push WA
 	extpfx3 0x9E, 0xE6, 0x04                   ; FC1776  pushw (XIZ+0xe6)
-	calr (0xFC1555 - 0xFC177C)                 ; FC1779  calr 0xfc1555
+	calr ToneDB_PercSourceIndexMapB_Lookup                 ; FC1779  calr 0xfc1555
 	ld	(xiz-16), xiy                           ; FC177C  ld (XIZ+0xf0),XIY
 	ldw (xiz-32), 0x000D                       ; FC177F  ld (XIZ+0xe0),0x000d
 	ldw (xiz-34), 0x0000                       ; FC1784  ld (XIZ+0xde),0x0000
@@ -17755,7 +17775,7 @@ ToneQuery_ReplyPercSourceName2AndIndex:
 	push	xwa                                   ; FC1878  push XWA
 	push	0                                     ; FC1879  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FC187B  push (XIZ+0x08)
-	call	0xFB49EB                              ; FC187E  call 0xfb49eb
+	call	Part_ResolveDrumInstrumentRecord                              ; FC187E  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FC1882  ld (XIZ+0xf8),XIY
 	ld	c, 23:opc                                  ; FC1885  ld C,0x17
 	extpfx3 0x8E, 0xD5, 0x43                   ; FC1887  mul BC,(XIZ+0xd5)
@@ -17772,7 +17792,7 @@ ToneQuery_ReplyPercSourceName2AndIndex:
 	extpfx3 0x8E, 0xD5, 0x04                   ; FC18A5  push (XIZ+0xd5)
 	push	0                                     ; FC18A8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FC18AA  push (XIZ+0x08)
-	call	0xFB456F                              ; FC18AD  call 0xfb456f
+	call	Part_GetPercWaveSelectRecord                              ; FC18AD  call 0xfb456f
 	ld	(xiz-16), xiy                           ; FC18B1  ld (XIZ+0xf0),XIY
 	ld	c, 2:opc                                   ; FC18B4  ld C,0x02
 	extpfx3 0x8E, 0xD4, 0x43                   ; FC18B6  mul BC,(XIZ+0xd4)
@@ -17995,14 +18015,14 @@ ToneQuery_ReplyWholeToneRecord:
 	ld	(xiz-12), xwa                           ; FC1ABC  ld (XIZ+0xf4),XWA
 	extpfx3 0x9E, 0x0A, 0x04                   ; FC1ABF  pushw (XIZ+0x0a)
 	extpfx3 0x9E, 0x08, 0x04                   ; FC1AC2  pushw (XIZ+0x08)
-	call	0xFB4124                              ; FC1AC5  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FC1AC5  call 0xfb4124
 	ld	(xiz-8), xiy                            ; FC1AC9  ld (XIZ+0xf8),XIY
 	pop	xbc                                    ; FC1ACC  pop XBC
 	pushw	0xD9                                 ; FC1ACD  push 0x00d9
 	ld	xbc, (xiz-4)                            ; FC1AD0  ld XBC,(XIZ+0xfc)
 	push	xbc                                   ; FC1AD3  push XBC
 	push	xiy                                   ; FC1AD4  push XIY
-	call	0xF9A038                              ; FC1AD5  call 0xf9a038
+	call	MemCopyWords                              ; FC1AD5  call 0xf9a038
 	ld	(xiz-15), 0                             ; FC1AD9  ld (XIZ+0xf1),0x00
 	inc	8, xsp                                 ; FC1ADD  inc 0,XSP
 	inc	2, xsp                                 ; FC1ADF  inc 2,XSP
@@ -18026,10 +18046,10 @@ ToneQuery_ReplyWholeToneRecord__FC1AEF:
 	extpfx3 0x8E, 0xF1, 0x04                   ; FC1B08  push (XIZ+0xf1)
 	ld	xbc, (xiz-8)                            ; FC1B0B  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FC1B0E  push XBC
-	call	0xFB4324                              ; FC1B0F  call 0xfb4324
+	call	ToneRec_GetElementBlock                              ; FC1B0F  call 0xfb4324
 	inc	8, xsp                                 ; FC1B13  inc 0,XSP
 	push	xiy                                   ; FC1B15  push XIY
-	call	0xF9A038                              ; FC1B16  call 0xf9a038
+	call	MemCopyWords                              ; FC1B16  call 0xf9a038
 	ld	xbc, (0xD7F1:24)                       ; FC1B1A  ld XBC,(0x00d7f1)
 	ld	wa, (xbc+0xEA)                          ; FC1B1F  ld WA,(XBC+0x00ea)
 	inc	8, xsp                                 ; FC1B24  inc 0,XSP
@@ -18046,10 +18066,10 @@ ToneQuery_ReplyWholeToneRecord__FC1AEF:
 	push	0                                     ; FC1B3E  push 0x00
 	extpfx3 0x8E, 0xF1, 0x04                   ; FC1B40  push (XIZ+0xf1)
 	extpfx3 0x9E, 0x0A, 0x04                   ; FC1B43  pushw (XIZ+0x0a)
-	call	0xFB44A5                              ; FC1B46  call 0xfb44a5
+	call	ToneRec_GetWaveSelectRecord_ByBankSelector                              ; FC1B46  call 0xfb44a5
 	inc	8, xsp                                 ; FC1B4A  inc 0,XSP
 	push	xiy                                   ; FC1B4C  push XIY
-	call	0xF9A038                              ; FC1B4D  call 0xf9a038
+	call	MemCopyWords                              ; FC1B4D  call 0xf9a038
 	inc	8, xsp                                 ; FC1B51  inc 0,XSP
 	inc	2, xsp                                 ; FC1B53  inc 2,XSP
 	jr ToneQuery_ReplyWholeToneRecord__FC1AEA                      ; FC1B55  jr T,0xfc1aea
@@ -18119,7 +18139,7 @@ sub_FC1B6E:
 	pushw	wa                                   ; FC1B9B  push WA
 	push	0                                     ; FC1B9C  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FC1B9E  push (XIZ+0x08)
-	call	0xFB42B0                              ; FC1BA1  call 0xfb42b0
+	call	Part_ResolveToneRecord                              ; FC1BA1  call 0xfb42b0
 	ld	(xiz-4), xiy                            ; FC1BA5  ld (XIZ+0xfc),XIY
 	ld	c, 2:opc                                   ; FC1BA8  ld C,0x02
 	extpfx3 0x8E, 0x0A, 0x43                   ; FC1BAA  mul BC,(XIZ+0x0a)
@@ -18221,7 +18241,7 @@ ToneQuery_Dispatch__FC1C25:
 	ld	xbc, (xiz+8)                            ; FC1C25  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1C28  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1C2B  push WA
-	calr (0xFBD858 - 0xFC1C2F)                 ; FC1C2C  calr 0xfbd858
+	calr ToneQuery_ReplyPartStagingFlags                 ; FC1C2C  calr 0xfbd858
 	ld	(xiz-8), wa                             ; FC1C2F  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1C32  pop BC
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1C33  jrl T,0xfc1fa9
@@ -18237,19 +18257,19 @@ ToneQuery_Dispatch__FC1C36:
 	jr nz, ToneQuery_Dispatch__FC1C5E                  ; FC1C51  jr NZ,0xfc1c5e
 	ld	c, (0xD733:24)                         ; FC1C53  ld C,(0x00d733)
 	pushw	bc                                   ; FC1C58  push BC
-	call	0xFC3241                              ; FC1C59  call 0xfc3241
+	call	sub_FC3241                              ; FC1C59  call 0xfc3241
 	popw	bc                                    ; FC1C5D  pop BC
 ToneQuery_Dispatch__FC1C5E:
 	ld	c, (0xD733:24)                         ; FC1C5E  ld C,(0x00d733)
 	pushw	bc                                   ; FC1C63  push BC
-	calr (0xFBAAA2 - 0xFC1C67)                 ; FC1C64  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FC1C64  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FC1C67  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FC1C6A  ld A,(XBC+0x03)
 	popw	iy                                    ; FC1C6D  pop IY
 	pushw	wa                                   ; FC1C6E  push WA
 	ld	a, (xbc+1)                              ; FC1C6F  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1C72  push WA
-	calr (0xFBFFD4 - 0xFC1C76)                 ; FC1C73  calr 0xfbffd4
+	calr sub_FBFFD4                 ; FC1C73  calr 0xfbffd4
 	ld	(xiz-8), wa                             ; FC1C76  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1C79  pop XIY
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1C7A  jrl T,0xfc1fa9
@@ -18261,7 +18281,7 @@ ToneQuery_Dispatch__FC1C7D:
 	ld	a, (xbc+3)                              ; FC1C86  ld A,(XBC+0x03)
 	extz	wa                                    ; FC1C89  extz WA
 	pushw	wa                                   ; FC1C8B  push WA
-	calr (0xFC02FF - 0xFC1C8F)                 ; FC1C8C  calr 0xfc02ff
+	calr ToneQuery_ReplyToneName                 ; FC1C8C  calr 0xfc02ff
 	ld	(xiz-8), wa                             ; FC1C8F  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1C92  pop XIY
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1C93  jrl T,0xfc1fa9
@@ -18273,7 +18293,7 @@ ToneQuery_Dispatch__FC1C96:
 	ld	a, (xbc+3)                              ; FC1C9F  ld A,(XBC+0x03)
 	extz	wa                                    ; FC1CA2  extz WA
 	pushw	wa                                   ; FC1CA4  push WA
-	calr (0xFC035E - 0xFC1CA8)                 ; FC1CA5  calr 0xfc035e
+	calr ToneQuery_ReplySourceName1_ViaIndexMap                 ; FC1CA5  calr 0xfc035e
 	ld	(xiz-8), wa                             ; FC1CA8  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1CAB  pop XIY
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1CAC  jrl T,0xfc1fa9
@@ -18285,7 +18305,7 @@ ToneQuery_Dispatch__FC1CAF:
 	ld	a, (xbc+3)                              ; FC1CB8  ld A,(XBC+0x03)
 	extz	wa                                    ; FC1CBB  extz WA
 	pushw	wa                                   ; FC1CBD  push WA
-	calr (0xFC04EC - 0xFC1CC1)                 ; FC1CBE  calr 0xfc04ec
+	calr ToneQuery_ReplySourceName2_ViaIndexMap                 ; FC1CBE  calr 0xfc04ec
 	ld	(xiz-8), wa                             ; FC1CC1  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1CC4  pop XIY
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1CC5  jrl T,0xfc1fa9
@@ -18299,7 +18319,7 @@ ToneQuery_Dispatch__FC1CC8:
 	extz	wa                                    ; FC1CD8  extz WA
 	or	wa, hl                                  ; FC1CDA  or WA,HL
 	pushw	wa                                   ; FC1CDC  push WA
-	calr (0xFC067A - 0xFC1CE0)                 ; FC1CDD  calr 0xfc067a
+	calr ToneQuery_ReplySourceName1_ByRow                 ; FC1CDD  calr 0xfc067a
 	ld	(xiz-8), wa                             ; FC1CE0  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1CE3  pop BC
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1CE4  jrl T,0xfc1fa9
@@ -18313,7 +18333,7 @@ ToneQuery_Dispatch__FC1CE7:
 	extz	wa                                    ; FC1CF7  extz WA
 	or	wa, hl                                  ; FC1CF9  or WA,HL
 	pushw	wa                                   ; FC1CFB  push WA
-	calr (0xFC0746 - 0xFC1CFF)                 ; FC1CFC  calr 0xfc0746
+	calr ToneQuery_ReplySourceName2_ByRow                 ; FC1CFC  calr 0xfc0746
 	ld	(xiz-8), wa                             ; FC1CFF  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1D02  pop BC
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D03  jrl T,0xfc1fa9
@@ -18323,7 +18343,7 @@ ToneQuery_Dispatch__FC1D06:
 	pushw	wa                                   ; FC1D0C  push WA
 	ld	a, (xbc+1)                              ; FC1D0D  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1D10  push WA
-	calr (0xFC0817 - 0xFC1D14)                 ; FC1D11  calr 0xfc0817
+	calr ToneQuery_ReplyPartElementSourceName1                 ; FC1D11  calr 0xfc0817
 	ld	(xiz-8), wa                             ; FC1D14  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1D17  pop XIY
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D18  jrl T,0xfc1fa9
@@ -18333,7 +18353,7 @@ ToneQuery_Dispatch__FC1D1B:
 	pushw	wa                                   ; FC1D21  push WA
 	ld	a, (xbc+1)                              ; FC1D22  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1D25  push WA
-	calr (0xFC0AD4 - 0xFC1D29)                 ; FC1D26  calr 0xfc0ad4
+	calr ToneQuery_ReplyPartElementSourceName2                 ; FC1D26  calr 0xfc0ad4
 	ld	(xiz-8), wa                             ; FC1D29  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1D2C  pop XIY
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D2D  jrl T,0xfc1fa9
@@ -18341,7 +18361,7 @@ ToneQuery_Dispatch__FC1D30:
 	ld	xbc, (xiz+8)                            ; FC1D30  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FC1D33  ld A,(XBC+0x03)
 	pushw	wa                                   ; FC1D36  push WA
-	calr (0xFC0DB4 - 0xFC1D3A)                 ; FC1D37  calr 0xfc0db4
+	calr ToneQuery_ReplyCatalogueListFooter                 ; FC1D37  calr 0xfc0db4
 	ld	(xiz-8), wa                             ; FC1D3A  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1D3D  pop BC
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D3E  jrl T,0xfc1fa9
@@ -18349,7 +18369,7 @@ ToneQuery_Dispatch__FC1D41:
 	ld	xbc, (xiz+8)                            ; FC1D41  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC1D44  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1D47  push WA
-	calr (0xFC0F83 - 0xFC1D4B)                 ; FC1D48  calr 0xfc0f83
+	calr sub_FC0F83                 ; FC1D48  calr 0xfc0f83
 	ld	(xiz-8), wa                             ; FC1D4B  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1D4E  pop BC
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D4F  jrl T,0xfc1fa9
@@ -18361,7 +18381,7 @@ ToneQuery_Dispatch__FC1D52:
 	ld	a, (xbc+3)                              ; FC1D5B  ld A,(XBC+0x03)
 	extz	wa                                    ; FC1D5E  extz WA
 	pushw	wa                                   ; FC1D60  push WA
-	calr (0xFC10BE - 0xFC1D64)                 ; FC1D61  calr 0xfc10be
+	calr ToneQuery_ReplyToneDspAlgoByte                 ; FC1D61  calr 0xfc10be
 	ld	(xiz-8), wa                             ; FC1D64  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1D67  pop XIY
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D68  jrl T,0xfc1fa9
@@ -18373,7 +18393,7 @@ ToneQuery_Dispatch__FC1D6B:
 	ld	a, (xbc+3)                              ; FC1D74  ld A,(XBC+0x03)
 	extz	wa                                    ; FC1D77  extz WA
 	pushw	wa                                   ; FC1D79  push WA
-	calr (0xFC11D8 - 0xFC1D7D)                 ; FC1D7A  calr 0xfc11d8
+	calr ToneQuery_ReplyDrumNameForCurrentPart                 ; FC1D7A  calr 0xfc11d8
 	ld	(xiz-8), wa                             ; FC1D7D  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1D80  pop XIY
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1D81  jrl T,0xfc1fa9
@@ -18387,7 +18407,7 @@ ToneQuery_Dispatch__FC1D84:
 	extz	wa                                    ; FC1D94  extz WA
 	or	wa, hl                                  ; FC1D96  or WA,HL
 	pushw	wa                                   ; FC1D98  push WA
-	calr (0xFC12ED - 0xFC1D9C)                 ; FC1D99  calr 0xfc12ed
+	calr ToneQuery_ReplyDrumSourceName_ByRow                 ; FC1D99  calr 0xfc12ed
 	ld	(xiz-8), wa                             ; FC1D9C  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1D9F  pop BC
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1DA0  jrl T,0xfc1fa9
@@ -18415,7 +18435,7 @@ ToneQuery_Dispatch__FC1DA3:
 	pushw	wa                                   ; FC1DDC  push WA
 	push	0                                     ; FC1DDD  push 0x00
 	extpfx3 0x8E, 0xF6, 0x04                   ; FC1DDF  push (XIZ+0xf6)
-	calr (0xFC13B6 - 0xFC1DE5)                 ; FC1DE2  calr 0xfc13b6
+	calr ToneQuery_ReplyDrumSourceNameAndIndex                 ; FC1DE2  calr 0xfc13b6
 	ld	(xiz-8), wa                             ; FC1DE5  ld (XIZ+0xf8),WA
 	inc	8, xsp                                 ; FC1DE8  inc 0,XSP
 	inc	4, xsp                                 ; FC1DEA  inc 4,XSP
@@ -18430,7 +18450,7 @@ ToneQuery_Dispatch__FC1DEF:
 	extz	wa                                    ; FC1DFF  extz WA
 	or	wa, hl                                  ; FC1E01  or WA,HL
 	pushw	wa                                   ; FC1E03  push WA
-	calr (0xFC164D - 0xFC1E07)                 ; FC1E04  calr 0xfc164d
+	calr ToneQuery_ReplyPercSourceName1_ByRow                 ; FC1E04  calr 0xfc164d
 	ld	(xiz-8), wa                             ; FC1E07  ld (XIZ+0xf8),WA
 	popw	bc                                    ; FC1E0A  pop BC
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1E0B  jrl T,0xfc1fa9
@@ -18442,7 +18462,7 @@ ToneQuery_Dispatch__FC1E0E:
 	pushw	wa                                   ; FC1E1A  push WA
 	ld	a, (xbc+1)                              ; FC1E1B  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1E1E  push WA
-	calr (0xFC1716 - 0xFC1E22)                 ; FC1E1F  calr 0xfc1716
+	calr ToneQuery_ReplyPercSourceName1AndIndex                 ; FC1E1F  calr 0xfc1716
 	ld	(xiz-8), wa                             ; FC1E22  ld (XIZ+0xf8),WA
 	inc	6, xsp                                 ; FC1E25  inc 6,XSP
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1E27  jrl T,0xfc1fa9
@@ -18454,7 +18474,7 @@ ToneQuery_Dispatch__FC1E2A:
 	pushw	wa                                   ; FC1E36  push WA
 	ld	a, (xbc+1)                              ; FC1E37  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1E3A  push WA
-	calr (0xFC1845 - 0xFC1E3E)                 ; FC1E3B  calr 0xfc1845
+	calr ToneQuery_ReplyPercSourceName2AndIndex                 ; FC1E3B  calr 0xfc1845
 	ld	(xiz-8), wa                             ; FC1E3E  ld (XIZ+0xf8),WA
 	inc	6, xsp                                 ; FC1E41  inc 6,XSP
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1E43  jrl T,0xfc1fa9
@@ -18466,7 +18486,7 @@ ToneQuery_Dispatch__FC1E46:
 	ld	a, (xbc+3)                              ; FC1E4F  ld A,(XBC+0x03)
 	extz	wa                                    ; FC1E52  extz WA
 	pushw	wa                                   ; FC1E54  push WA
-	calr (0xFC1AA1 - 0xFC1E58)                 ; FC1E55  calr 0xfc1aa1
+	calr ToneQuery_ReplyWholeToneRecord                 ; FC1E55  calr 0xfc1aa1
 	ld	(xiz-8), wa                             ; FC1E58  ld (XIZ+0xf8),WA
 	srl	wa, 8                                  ; FC1E5B  srl 0x08,WA
 	ld	(0xD946:24), a                         ; FC1E5E  ld (0x00d946),A
@@ -18487,7 +18507,7 @@ ToneQuery_Dispatch__FC1E72:
 	pushw	bc                                   ; FC1E8E  push BC
 	extz	wa                                    ; FC1E8F  extz WA
 	pushw	wa                                   ; FC1E91  push WA
-	call	0xFB4124                              ; FC1E92  call 0xfb4124
+	call	ToneDB_ResolveToneRecord                              ; FC1E92  call 0xfb4124
 	ld	(xiz-4), xiy                            ; FC1E96  ld (XIZ+0xfc),XIY
 	ld	bc, (xiz-10)                            ; FC1E99  ld BC,(XIZ+0xf6)
 	extz	bc                                    ; FC1E9C  extz BC
@@ -18516,7 +18536,7 @@ ToneQuery_Dispatch__FC1E72:
 	pushw	wa                                   ; FC1EDD  push WA
 	push	0                                     ; FC1EDE  push 0x00
 	extpfx3 0x8E, 0xF6, 0x04                   ; FC1EE0  push (XIZ+0xf6)
-	calr (0xFC13B6 - 0xFC1EE6)                 ; FC1EE3  calr 0xfc13b6
+	calr ToneQuery_ReplyDrumSourceNameAndIndex                 ; FC1EE3  calr 0xfc13b6
 	ld	(xiz-8), wa                             ; FC1EE6  ld (XIZ+0xf8),WA
 	inc	8, xsp                                 ; FC1EE9  inc 0,XSP
 	inc	4, xsp                                 ; FC1EEB  inc 4,XSP
@@ -18532,7 +18552,7 @@ ToneQuery_Dispatch__FC1EEF:
 	ld	c, (xwa+3)                              ; FC1F00  ld C,(XWA+0x03)
 	pushw	bc                                   ; FC1F03  push BC
 	pushw	32                                   ; FC1F04  push 0x0020
-	calr (0xFC13B6 - 0xFC1F0A)                 ; FC1F07  calr 0xfc13b6
+	calr ToneQuery_ReplyDrumSourceNameAndIndex                 ; FC1F07  calr 0xfc13b6
 	ld	(xiz-8), wa                             ; FC1F0A  ld (XIZ+0xf8),WA
 	inc	8, xsp                                 ; FC1F0D  inc 0,XSP
 	inc	4, xsp                                 ; FC1F0F  inc 4,XSP
@@ -18545,7 +18565,7 @@ ToneQuery_Dispatch__FC1F19:
 	pushw	wa                                   ; FC1F1F  push WA
 	ld	a, (xbc+1)                              ; FC1F20  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC1F23  push WA
-	calr (0xFC1B6E - 0xFC1F27)                 ; FC1F24  calr 0xfc1b6e
+	calr sub_FC1B6E                 ; FC1F24  calr 0xfc1b6e
 	ld	(xiz-8), wa                             ; FC1F27  ld (XIZ+0xf8),WA
 	pop	xiy                                    ; FC1F2A  pop XIY
 	jrl ToneQuery_Dispatch__FC1FA9                     ; FC1F2B  jrl T,0xfc1fa9
@@ -18601,7 +18621,7 @@ ToneQuery_Dispatch__FC1FA9:
 	ld	xwa, (xiz+8)                            ; FC1FB5  ld XWA,(XIZ+0x08)
 	ld	c, (xwa+4)                              ; FC1FB8  ld C,(XWA+0x04)
 	pushw	bc                                   ; FC1FBB  push BC
-	call	0xF98B20                              ; FC1FBC  call 0xf98b20
+	call	Link_SendBuffer                              ; FC1FBC  call 0xf98b20
 	inc	8, xsp                                 ; FC1FC0  inc 0,XSP
 	pop	xix                                    ; FC1FC2  pop XIX
 	pop	xhl                                    ; FC1FC3  pop XHL
@@ -18704,7 +18724,7 @@ LinkQuery_ReplyPartRecordBytes__FC204F:
 	pushw	bc                                   ; FC205F  push BC
 	ld	c, (xwa+4)                              ; FC2060  ld C,(XWA+0x04)
 	pushw	bc                                   ; FC2063  push BC
-	call	0xF98B20                              ; FC2064  call 0xf98b20
+	call	Link_SendBuffer                              ; FC2064  call 0xf98b20
 	inc	8, xsp                                 ; FC2068  inc 0,XSP
 	pop	xix                                    ; FC206A  pop XIX
 	popw	hl                                    ; FC206B  pop HL
@@ -18845,7 +18865,7 @@ LinkQuery_ReplyElementBlockBytes_Elements01__FC2140:
 	pushw	bc                                   ; FC2150  push BC
 	ld	c, (xwa+4)                              ; FC2151  ld C,(XWA+0x04)
 	pushw	bc                                   ; FC2154  push BC
-	call	0xF98B20                              ; FC2155  call 0xf98b20
+	call	Link_SendBuffer                              ; FC2155  call 0xf98b20
 	inc	8, xsp                                 ; FC2159  inc 0,XSP
 	pop	xix                                    ; FC215B  pop XIX
 	popw	hl                                    ; FC215C  pop HL
@@ -18982,7 +19002,7 @@ LinkQuery_ReplyElementBlockBytes_Elements23__FC2231:
 	pushw	bc                                   ; FC2241  push BC
 	ld	c, (xwa+4)                              ; FC2242  ld C,(XWA+0x04)
 	pushw	bc                                   ; FC2245  push BC
-	call	0xF98B20                              ; FC2246  call 0xf98b20
+	call	Link_SendBuffer                              ; FC2246  call 0xf98b20
 	inc	8, xsp                                 ; FC224A  inc 0,XSP
 	pop	xix                                    ; FC224C  pop XIX
 	popw	hl                                    ; FC224D  pop HL
@@ -19148,7 +19168,7 @@ LinkQuery_ReplyElementWaveSelectBytes__FC2368:
 	pushw	bc                                   ; FC2378  push BC
 	ld	c, (xwa+4)                              ; FC2379  ld C,(XWA+0x04)
 	pushw	bc                                   ; FC237C  push BC
-	call	0xF98B20                              ; FC237D  call 0xf98b20
+	call	Link_SendBuffer                              ; FC237D  call 0xf98b20
 	inc	8, xsp                                 ; FC2381  inc 0,XSP
 	pop	xix                                    ; FC2383  pop XIX
 	popw	hl                                    ; FC2384  pop HL
@@ -19261,7 +19281,7 @@ LinkQuery_ReplyToneRecordBytes__FC2410:
 	pushw	bc                                   ; FC2420  push BC
 	ld	c, (xwa+4)                              ; FC2421  ld C,(XWA+0x04)
 	pushw	bc                                   ; FC2424  push BC
-	call	0xF98B20                              ; FC2425  call 0xf98b20
+	call	Link_SendBuffer                              ; FC2425  call 0xf98b20
 	inc	8, xsp                                 ; FC2429  inc 0,XSP
 	pop	xix                                    ; FC242B  pop XIX
 	popw	hl                                    ; FC242C  pop HL
@@ -19333,7 +19353,7 @@ sub_FC2430__FC2469:
 	push	xwa                                   ; FC2482  push XWA
 	push	0                                     ; FC2483  push 0x00
 	extpfx3 0x8E, 0xF5, 0x04                   ; FC2485  push (XIZ+0xf5)
-	call	0xFB49EB                              ; FC2488  call 0xfb49eb
+	call	Part_ResolveDrumInstrumentRecord                              ; FC2488  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FC248C  ld (XIZ+0xf8),XIY
 	ld	xbc, (xiz+8)                            ; FC248F  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+2)                              ; FC2492  ld A,(XBC+0x02)
@@ -19375,7 +19395,7 @@ sub_FC2430__FC24D6:
 	pushw	bc                                   ; FC24E6  push BC
 	ld	c, (xwa+4)                              ; FC24E7  ld C,(XWA+0x04)
 	pushw	bc                                   ; FC24EA  push BC
-	call	0xF98B20                              ; FC24EB  call 0xf98b20
+	call	Link_SendBuffer                              ; FC24EB  call 0xf98b20
 	inc	8, xsp                                 ; FC24EF  inc 0,XSP
 	pop	xix                                    ; FC24F1  pop XIX
 	popw	hl                                    ; FC24F2  pop HL
@@ -19448,7 +19468,7 @@ sub_FC24F6__FC252F:
 	push	xwa                                   ; FC2548  push XWA
 	push	0                                     ; FC2549  push 0x00
 	extpfx3 0x8E, 0xED, 0x04                   ; FC254B  push (XIZ+0xed)
-	call	0xFB49EB                              ; FC254E  call 0xfb49eb
+	call	Part_ResolveDrumInstrumentRecord                              ; FC254E  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FC2552  ld (XIZ+0xf8),XIY
 	ld	xbc, (xiz+8)                            ; FC2555  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+2)                              ; FC2558  ld A,(XBC+0x02)
@@ -19470,7 +19490,7 @@ sub_FC24F6__FC252F:
 	extpfx3 0x8E, 0xEC, 0x04                   ; FC2585  push (XIZ+0xec)
 	push	0                                     ; FC2588  push 0x00
 	extpfx3 0x8E, 0xED, 0x04                   ; FC258A  push (XIZ+0xed)
-	call	0xFB456F                              ; FC258D  call 0xfb456f
+	call	Part_GetPercWaveSelectRecord                              ; FC258D  call 0xfb456f
 	ld	(xiz-16), xiy                           ; FC2591  ld (XIZ+0xf0),XIY
 	ld	xbc, (xiz+8)                            ; FC2594  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+2)                              ; FC2597  ld A,(XBC+0x02)
@@ -19514,7 +19534,7 @@ sub_FC24F6__FC25E0:
 	pushw	bc                                   ; FC25F0  push BC
 	ld	c, (xwa+4)                              ; FC25F1  ld C,(XWA+0x04)
 	pushw	bc                                   ; FC25F4  push BC
-	call	0xF98B20                              ; FC25F5  call 0xf98b20
+	call	Link_SendBuffer                              ; FC25F5  call 0xf98b20
 	inc	8, xsp                                 ; FC25F9  inc 0,XSP
 	pop	xix                                    ; FC25FB  pop XIX
 	popw	hl                                    ; FC25FC  pop HL
@@ -19590,30 +19610,30 @@ ToneMsg_Dispatch:
 ToneMsg_Dispatch__FC2622:
 	ld	xbc, (xiz+8)                            ; FC2622  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC2625  push XBC
-	calr (0xFBAC24 - 0xFC2629)                 ; FC2626  calr 0xfbac24
+	calr ToneEdit_Dispatch                 ; FC2626  calr 0xfbac24
 	pop	xiy                                    ; FC2629  pop XIY
 	jrl ToneMsg_Dispatch__FC2774                     ; FC262A  jrl T,0xfc2774
 ToneMsg_Dispatch__FC262D:
 	ld	xbc, (xiz+8)                            ; FC262D  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC2630  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC2633  push WA
-	calr (0xFBAAA2 - 0xFC2637)                 ; FC2634  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FC2634  calr 0xfbaaa2
 	popw	bc                                    ; FC2637  pop BC
 	ld	xbc, (xiz+8)                            ; FC2638  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC263B  push XBC
-	calr (0xFBB793 - 0xFC263F)                 ; FC263C  calr 0xfbb793
+	calr sub_FBB793                 ; FC263C  calr 0xfbb793
 	ld	xbc, (xiz+8)                            ; FC263F  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC2642  ld A,(XBC+0x01)
 	pop	xiy                                    ; FC2645  pop XIY
 	pushw	wa                                   ; FC2646  push WA
-	call	0xFC81F8                              ; FC2647  call 0xfc81f8
+	call	sub_FC81F8                              ; FC2647  call 0xfc81f8
 	popw	bc                                    ; FC264B  pop BC
 	jrl ToneMsg_Dispatch__FC2774                     ; FC264C  jrl T,0xfc2774
 ToneMsg_Dispatch__FC264F:
 	ld	xbc, (xiz+8)                            ; FC264F  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC2652  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC2655  push WA
-	calr (0xFBAAA2 - 0xFC2659)                 ; FC2656  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FC2656  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FC2659  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+2)                              ; FC265C  ld A,(XBC+0x02)
 	ld	(xiz-1), a                              ; FC265F  ld (XIZ+0xff),A
@@ -19627,14 +19647,14 @@ ToneMsg_Dispatch__FC2670:
 	pushw	0                                    ; FC2670  push 0x0000
 	ld	xbc, (xiz+8)                            ; FC2673  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC2676  push XBC
-	calr (0xFBC39D - 0xFC267A)                 ; FC2677  calr 0xfbc39d
+	calr sub_FBC39D                 ; FC2677  calr 0xfbc39d
 	inc	6, xsp                                 ; FC267A  inc 6,XSP
 	jr ToneMsg_Dispatch__FC2699                      ; FC267C  jr T,0xfc2699
 ToneMsg_Dispatch__FC267E:
 	pushw	1                                    ; FC267E  push 0x0001
 	ld	xbc, (xiz+8)                            ; FC2681  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC2684  push XBC
-	calr (0xFBC39D - 0xFC2688)                 ; FC2685  calr 0xfbc39d
+	calr sub_FBC39D                 ; FC2685  calr 0xfbc39d
 	inc	6, xsp                                 ; FC2688  inc 6,XSP
 	jr ToneMsg_Dispatch__FC2699                      ; FC268A  jr T,0xfc2699
 ToneMsg_Dispatch__FC268C:
@@ -19649,7 +19669,7 @@ ToneMsg_Dispatch__FC269C:
 	ld	xbc, (xiz+8)                            ; FC269C  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC269F  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC26A2  push WA
-	calr (0xFBAAA2 - 0xFC26A6)                 ; FC26A3  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FC26A3  calr 0xfbaaa2
 	ld	xbc, (xiz+8)                            ; FC26A6  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+2)                              ; FC26A9  ld A,(XBC+0x02)
 	ld	(xiz-1), a                              ; FC26AC  ld (XIZ+0xff),A
@@ -19663,14 +19683,14 @@ ToneMsg_Dispatch__FC26BD:
 	pushw	2                                    ; FC26BD  push 0x0002
 	ld	xbc, (xiz+8)                            ; FC26C0  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC26C3  push XBC
-	calr (0xFBC39D - 0xFC26C7)                 ; FC26C4  calr 0xfbc39d
+	calr sub_FBC39D                 ; FC26C4  calr 0xfbc39d
 	inc	6, xsp                                 ; FC26C7  inc 6,XSP
 	jr ToneMsg_Dispatch__FC26E6                      ; FC26C9  jr T,0xfc26e6
 ToneMsg_Dispatch__FC26CB:
 	pushw	3                                    ; FC26CB  push 0x0003
 	ld	xbc, (xiz+8)                            ; FC26CE  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC26D1  push XBC
-	calr (0xFBC39D - 0xFC26D5)                 ; FC26D2  calr 0xfbc39d
+	calr sub_FBC39D                 ; FC26D2  calr 0xfbc39d
 	inc	6, xsp                                 ; FC26D5  inc 6,XSP
 	jr ToneMsg_Dispatch__FC26E6                      ; FC26D7  jr T,0xfc26e6
 ToneMsg_Dispatch__FC26D9:
@@ -19685,44 +19705,44 @@ ToneMsg_Dispatch__FC26E9:
 	ld	xbc, (xiz+8)                            ; FC26E9  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC26EC  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC26EF  push WA
-	calr (0xFBAAA2 - 0xFC26F3)                 ; FC26F0  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FC26F0  calr 0xfbaaa2
 	popw	bc                                    ; FC26F3  pop BC
 	ld	xbc, (xiz+8)                            ; FC26F4  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC26F7  push XBC
-	calr (0xFBC958 - 0xFC26FB)                 ; FC26F8  calr 0xfbc958
+	calr ToneMsg_WriteWaveSelectParam                 ; FC26F8  calr 0xfbc958
 	pop	xiy                                    ; FC26FB  pop XIY
 	jrl ToneMsg_Dispatch__FC2774                     ; FC26FC  jrl T,0xfc2774
 ToneMsg_Dispatch__FC26FF:
 	ld	xbc, (xiz+8)                            ; FC26FF  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC2702  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC2705  push WA
-	calr (0xFBAAA2 - 0xFC2709)                 ; FC2706  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FC2706  calr 0xfbaaa2
 	popw	bc                                    ; FC2709  pop BC
 	ld	xbc, (xiz+8)                            ; FC270A  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC270D  push XBC
-	calr (0xFBCD17 - 0xFC2711)                 ; FC270E  calr 0xfbcd17
+	calr sub_FBCD17                 ; FC270E  calr 0xfbcd17
 	pop	xiy                                    ; FC2711  pop XIY
 	jr ToneMsg_Dispatch__FC2774                      ; FC2712  jr T,0xfc2774
 ToneMsg_Dispatch__FC2714:
 	ld	xbc, (xiz+8)                            ; FC2714  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC2717  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC271A  push WA
-	calr (0xFBAAA2 - 0xFC271E)                 ; FC271B  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FC271B  calr 0xfbaaa2
 	popw	bc                                    ; FC271E  pop BC
 	ld	xbc, (xiz+8)                            ; FC271F  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC2722  push XBC
-	calr (0xFBD46B - 0xFC2726)                 ; FC2723  calr 0xfbd46b
+	calr sub_FBD46B                 ; FC2723  calr 0xfbd46b
 	pop	xiy                                    ; FC2726  pop XIY
 	jr ToneMsg_Dispatch__FC2774                      ; FC2727  jr T,0xfc2774
 ToneMsg_Dispatch__FC2729:
 	ld	xbc, (xiz+8)                            ; FC2729  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+1)                              ; FC272C  ld A,(XBC+0x01)
 	pushw	wa                                   ; FC272F  push WA
-	calr (0xFBAAA2 - 0xFC2733)                 ; FC2730  calr 0xfbaaa2
+	calr ToneStage_EnsurePartLoaded                 ; FC2730  calr 0xfbaaa2
 	popw	bc                                    ; FC2733  pop BC
 	ld	xbc, (xiz+8)                            ; FC2734  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC2737  push XBC
-	calr (0xFBD6FC - 0xFC273B)                 ; FC2738  calr 0xfbd6fc
+	calr sub_FBD6FC                 ; FC2738  calr 0xfbd6fc
 	pop	xiy                                    ; FC273B  pop XIY
 	jr ToneMsg_Dispatch__FC2774                      ; FC273C  jr T,0xfc2774
 ToneMsg_Dispatch__FC273E:
@@ -19760,49 +19780,49 @@ ToneMsg_Dispatch__FC2777:
 ToneMsg_Dispatch__FC2781:
 	ld	xbc, (xiz+8)                            ; FC2781  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC2784  push XBC
-	calr (0xFC1BDE - 0xFC2788)                 ; FC2785  calr 0xfc1bde
+	calr ToneQuery_Dispatch                 ; FC2785  calr 0xfc1bde
 	pop	xiy                                    ; FC2788  pop XIY
 	jrl ToneMsg_Dispatch__FC280A                     ; FC2789  jrl T,0xfc280a
 ToneMsg_Dispatch__FC278C:
 	ld	xbc, (xiz+8)                            ; FC278C  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC278F  push XBC
-	calr (0xFC1FC7 - 0xFC2793)                 ; FC2790  calr 0xfc1fc7
+	calr LinkQuery_ReplyPartRecordBytes                 ; FC2790  calr 0xfc1fc7
 	pop	xiy                                    ; FC2793  pop XIY
 	jrl ToneMsg_Dispatch__FC280A                     ; FC2794  jrl T,0xfc280a
 ToneMsg_Dispatch__FC2797:
 	ld	xbc, (xiz+8)                            ; FC2797  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC279A  push XBC
-	calr (0xFC206F - 0xFC279E)                 ; FC279B  calr 0xfc206f
+	calr LinkQuery_ReplyElementBlockBytes_Elements01                 ; FC279B  calr 0xfc206f
 	pop	xiy                                    ; FC279E  pop XIY
 	jrl ToneMsg_Dispatch__FC280A                     ; FC279F  jrl T,0xfc280a
 ToneMsg_Dispatch__FC27A2:
 	ld	xbc, (xiz+8)                            ; FC27A2  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC27A5  push XBC
-	calr (0xFC2160 - 0xFC27A9)                 ; FC27A6  calr 0xfc2160
+	calr LinkQuery_ReplyElementBlockBytes_Elements23                 ; FC27A6  calr 0xfc2160
 	pop	xiy                                    ; FC27A9  pop XIY
 	jr ToneMsg_Dispatch__FC280A                      ; FC27AA  jr T,0xfc280a
 ToneMsg_Dispatch__FC27AC:
 	ld	xbc, (xiz+8)                            ; FC27AC  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC27AF  push XBC
-	calr (0xFC2251 - 0xFC27B3)                 ; FC27B0  calr 0xfc2251
+	calr LinkQuery_ReplyElementWaveSelectBytes                 ; FC27B0  calr 0xfc2251
 	pop	xiy                                    ; FC27B3  pop XIY
 	jr ToneMsg_Dispatch__FC280A                      ; FC27B4  jr T,0xfc280a
 ToneMsg_Dispatch__FC27B6:
 	ld	xbc, (xiz+8)                            ; FC27B6  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC27B9  push XBC
-	calr (0xFC2388 - 0xFC27BD)                 ; FC27BA  calr 0xfc2388
+	calr LinkQuery_ReplyToneRecordBytes                 ; FC27BA  calr 0xfc2388
 	pop	xiy                                    ; FC27BD  pop XIY
 	jr ToneMsg_Dispatch__FC280A                      ; FC27BE  jr T,0xfc280a
 ToneMsg_Dispatch__FC27C0:
 	ld	xbc, (xiz+8)                            ; FC27C0  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC27C3  push XBC
-	calr (0xFC2430 - 0xFC27C7)                 ; FC27C4  calr 0xfc2430
+	calr sub_FC2430                 ; FC27C4  calr 0xfc2430
 	pop	xiy                                    ; FC27C7  pop XIY
 	jr ToneMsg_Dispatch__FC280A                      ; FC27C8  jr T,0xfc280a
 ToneMsg_Dispatch__FC27CA:
 	ld	xbc, (xiz+8)                            ; FC27CA  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC27CD  push XBC
-	calr (0xFC24F6 - 0xFC27D1)                 ; FC27CE  calr 0xfc24f6
+	calr sub_FC24F6                 ; FC27CE  calr 0xfc24f6
 	pop	xiy                                    ; FC27D1  pop XIY
 	jr ToneMsg_Dispatch__FC280A                      ; FC27D2  jr T,0xfc280a
 ToneMsg_Dispatch__FC27D4:
@@ -20563,7 +20583,7 @@ sub_FC2C2D:
 	ld	(xiz-10), xbc                           ; FC2C4C  ld (XIZ+0xf6),XBC
 	add	xbc, xix                               ; FC2C4F  add XBC,XIX
 	push	xbc                                   ; FC2C51  push XBC
-	calr (0xFC2AAF - 0xFC2C55)                 ; FC2C52  calr 0xfc2aaf
+	calr sub_FC2AAF                 ; FC2C52  calr 0xfc2aaf
 	ld	c, 2:opc                                   ; FC2C55  ld C,0x02
 	extpfx3 0x8E, 0xFA, 0x43                   ; FC2C57  mul BC,(XIZ+0xfa)
 	extz	xbc                                   ; FC2C5A  extz XBC
@@ -20699,7 +20719,7 @@ sub_FC2CD5__FC2D4B:
 sub_FC2CD5__FC2D4F:
 	push	0                                     ; FC2D4F  push 0x00
 	push	h                                     ; FC2D51  push H
-	calr (0xFC2C2D - 0xFC2D56)                 ; FC2D53  calr 0xfc2c2d
+	calr sub_FC2C2D                 ; FC2D53  calr 0xfc2c2d
 	ld	c, 23:opc                                  ; FC2D56  ld C,0x17
 	mul8rr	c, h                                ; FC2D58  mul BC,H
 	extz	xbc                                   ; FC2D5A  extz XBC
@@ -20826,7 +20846,7 @@ sub_FC2DA3__FC2E39:
 sub_FC2DA3__FC2E3D:
 	push	0                                     ; FC2E3D  push 0x00
 	push	h                                     ; FC2E3F  push H
-	calr (0xFC2C2D - 0xFC2E44)                 ; FC2E41  calr 0xfc2c2d
+	calr sub_FC2C2D                 ; FC2E41  calr 0xfc2c2d
 	popw	bc                                    ; FC2E44  pop BC
 	pop	xix                                    ; FC2E45  pop XIX
 	popw	de                                    ; FC2E46  pop DE
@@ -20949,7 +20969,7 @@ sub_FC2E4B__FC2F08:
 sub_FC2E4B__FC2F0C:
 	push	0                                     ; FC2F0C  push 0x00
 	push	h                                     ; FC2F0E  push H
-	calr (0xFC2C2D - 0xFC2F13)                 ; FC2F10  calr 0xfc2c2d
+	calr sub_FC2C2D                 ; FC2F10  calr 0xfc2c2d
 	popw	bc                                    ; FC2F13  pop BC
 	pop	xix                                    ; FC2F14  pop XIX
 	popw	de                                    ; FC2F15  pop DE
@@ -21072,7 +21092,7 @@ sub_FC2F1A__FC2FD7:
 sub_FC2F1A__FC2FDB:
 	push	0                                     ; FC2FDB  push 0x00
 	push	h                                     ; FC2FDD  push H
-	calr (0xFC2C2D - 0xFC2FE2)                 ; FC2FDF  calr 0xfc2c2d
+	calr sub_FC2C2D                 ; FC2FDF  calr 0xfc2c2d
 	popw	bc                                    ; FC2FE2  pop BC
 	pop	xix                                    ; FC2FE3  pop XIX
 	popw	de                                    ; FC2FE4  pop DE
@@ -21194,7 +21214,7 @@ sub_FC2FE9__FC30A5:
 sub_FC2FE9__FC30A9:
 	push	0                                     ; FC30A9  push 0x00
 	push	h                                     ; FC30AB  push H
-	calr (0xFC2C2D - 0xFC30B0)                 ; FC30AD  calr 0xfc2c2d
+	calr sub_FC2C2D                 ; FC30AD  calr 0xfc2c2d
 	popw	bc                                    ; FC30B0  pop BC
 	pop	xix                                    ; FC30B1  pop XIX
 	popw	de                                    ; FC30B2  pop DE
@@ -21311,7 +21331,7 @@ sub_FC30B7__FC3166:
 sub_FC30B7__FC316A:
 	push	0                                     ; FC316A  push 0x00
 	push	h                                     ; FC316C  push H
-	calr (0xFC2C2D - 0xFC3171)                 ; FC316E  calr 0xfc2c2d
+	calr sub_FC2C2D                 ; FC316E  calr 0xfc2c2d
 	popw	bc                                    ; FC3171  pop BC
 	pop	xix                                    ; FC3172  pop XIX
 	popw	de                                    ; FC3173  pop DE

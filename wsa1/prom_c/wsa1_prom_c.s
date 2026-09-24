@@ -373,14 +373,14 @@ Voice_RecomputeAllThreeBaseCurves__FABE3F:
 	and	c, 24                                  ; FABE4C  and C,0x18
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABEB3                   ; FABE4F  jr Z,0xfabeb3
 	pushw	hl                                   ; FABE51  push HL
-	calr (0xFABDAC - 0xFABE55)                 ; FABE52  calr 0xfabdac
+	calr EnvRec_AdvanceSegment                 ; FABE52  calr 0xfabdac
 	ld	hl, wa                                  ; FABE55  ld HL,WA
 	popw	bc                                    ; FABE57  pop BC
 	cp	wa, 0:i3                                  ; FABE58  cp WA,0
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABEB3                   ; FABE5A  jr Z,0xfabeb3
 	ld	c, (xiz-2)                              ; FABE5C  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABE5F  push BC
-	calr (0xFA796D - 0xFABE63)                 ; FABE60  calr 0xfa796d
+	calr EGEnv_Eval_BaseCurveA                 ; FABE60  calr 0xfa796d
 	ld	(0xD79E:24), wa                        ; FABE63  ld (0x00d79e),WA
 	popw	bc                                    ; FABE68  pop BC
 	cp	hl, 0x100                               ; FABE69  cp HL,0x0100
@@ -394,7 +394,7 @@ Voice_RecomputeAllThreeBaseCurves__FABE3F:
 	extz	xwa                                   ; FABE81  extz XWA
 	push	xwa                                   ; FABE83  push XWA
 	push	xbc                                   ; FABE84  push XBC
-	call	0xFCB11B                              ; FABE85  call 0xfcb11b
+	call	Multiply32                              ; FABE85  call 0xfcb11b
 	ld	(xiz-10), xiy                           ; FABE89  ld (XIZ+0xf6),XIY
 	ld	hl, ix                                  ; FABE8C  ld HL,IX
 	and	hl, 0xE000                             ; FABE8E  and HL,0xe000
@@ -407,7 +407,7 @@ Voice_RecomputeAllThreeBaseCurves__FABEA4:
 	lda	xbc, (0xD75E:24)                       ; FABEA4  lda XBC,0x00d75e
 	push	xbc                                   ; FABEA9  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FABEAA  pushw (XIZ+0xfe)
-	call	0xFB7C8F                              ; FABEAD  call 0xfb7c8f
+	call	Dev10C_SetChanReg_0600_b                              ; FABEAD  call 0xfb7c8f
 	inc	6, xsp                                 ; FABEB1  inc 6,XSP
 Voice_RecomputeAllThreeBaseCurves__FABEB3:
 	add	de, 27                                 ; FABEB3  add DE,0x001b
@@ -426,14 +426,14 @@ Voice_RecomputeAllThreeBaseCurves__FABECC:
 	and	a, 24                                  ; FABED7  and A,0x18
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABF40                   ; FABEDA  jr Z,0xfabf40
 	pushw	hl                                   ; FABEDC  push HL
-	calr (0xFABDAC - 0xFABEE0)                 ; FABEDD  calr 0xfabdac
+	calr EnvRec_AdvanceSegment                 ; FABEDD  calr 0xfabdac
 	ld	hl, wa                                  ; FABEE0  ld HL,WA
 	popw	bc                                    ; FABEE2  pop BC
 	cp	wa, 0:i3                                  ; FABEE3  cp WA,0
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABF40                   ; FABEE5  jr Z,0xfabf40
 	ld	c, (xiz-2)                              ; FABEE7  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABEEA  push BC
-	calr (0xFA7A4B - 0xFABEEE)                 ; FABEEB  calr 0xfa7a4b
+	calr EGEnv_Eval_BaseCurveB                 ; FABEEB  calr 0xfa7a4b
 	ld	(0xD796:24), wa                        ; FABEEE  ld (0x00d796),WA
 	popw	bc                                    ; FABEF3  pop BC
 	cp	hl, 0x100                               ; FABEF4  cp HL,0x0100
@@ -447,7 +447,7 @@ Voice_RecomputeAllThreeBaseCurves__FABECC:
 	extz	xwa                                   ; FABF0D  extz XWA
 	push	xwa                                   ; FABF0F  push XWA
 	push	xbc                                   ; FABF10  push XBC
-	call	0xFCB11B                              ; FABF11  call 0xfcb11b
+	call	Multiply32                              ; FABF11  call 0xfcb11b
 	ld	(xiz-12), xiy                           ; FABF15  ld (XIZ+0xf4),XIY
 	ld	hl, (xiz-4)                             ; FABF18  ld HL,(XIZ+0xfc)
 	and	hl, 0xE000                             ; FABF1B  and HL,0xe000
@@ -460,7 +460,7 @@ Voice_RecomputeAllThreeBaseCurves__FABF31:
 	lda	xbc, (0xD75E:24)                       ; FABF31  lda XBC,0x00d75e
 	push	xbc                                   ; FABF36  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FABF37  pushw (XIZ+0xfe)
-	call	0xFB7E7B                              ; FABF3A  call 0xfb7e7b
+	call	Dev10C_SetChanReg_01C0_b                              ; FABF3A  call 0xfb7e7b
 	inc	6, xsp                                 ; FABF3E  inc 6,XSP
 Voice_RecomputeAllThreeBaseCurves__FABF40:
 	add	de, 27                                 ; FABF40  add DE,0x001b
@@ -480,14 +480,14 @@ Voice_RecomputeAllThreeBaseCurves__FABF5D:
 	and	a, 24                                  ; FABF68  and A,0x18
 	jrl z, Voice_RecomputeAllThreeBaseCurves__FAC00E                  ; FABF6B  jrl Z,0xfac00e
 	pushw	hl                                   ; FABF6E  push HL
-	calr (0xFABDAC - 0xFABF72)                 ; FABF6F  calr 0xfabdac
+	calr EnvRec_AdvanceSegment                 ; FABF6F  calr 0xfabdac
 	ld	hl, wa                                  ; FABF72  ld HL,WA
 	popw	bc                                    ; FABF74  pop BC
 	cp	wa, 0:i3                                  ; FABF75  cp WA,0
 	jrl z, Voice_RecomputeAllThreeBaseCurves__FAC00E                  ; FABF77  jrl Z,0xfac00e
 	ld	c, (xiz-2)                              ; FABF7A  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABF7D  push BC
-	calr (0xFA7B31 - 0xFABF81)                 ; FABF7E  calr 0xfa7b31
+	calr EGEnv_Eval_FreqWriteBaseCurve                 ; FABF7E  calr 0xfa7b31
 	popw	bc                                    ; FABF81  pop BC
 	cp	hl, 0x100                               ; FABF82  cp HL,0x0100
 	jrl z, Voice_RecomputeAllThreeBaseCurves__FABFFF                  ; FABF86  jrl Z,0xfabfff
@@ -502,7 +502,7 @@ Voice_RecomputeAllThreeBaseCurves__FABF5D:
 	extz	xwa                                   ; FABFA2  extz XWA
 	push	xwa                                   ; FABFA4  push XWA
 	push	xbc                                   ; FABFA5  push XBC
-	call	0xFCB11B                              ; FABFA6  call 0xfcb11b
+	call	Multiply32                              ; FABFA6  call 0xfcb11b
 	ld	(xiz-12), xiy                           ; FABFAA  ld (XIZ+0xf4),XIY
 	ld	hl, (xiz-4)                             ; FABFAD  ld HL,(XIZ+0xfc)
 	and	hl, 0xE000                             ; FABFB0  and HL,0xe000
@@ -522,7 +522,7 @@ Voice_RecomputeAllThreeBaseCurves__FABFC8:
 	extz	xwa                                   ; FABFDB  extz XWA
 	push	xwa                                   ; FABFDD  push XWA
 	push	xbc                                   ; FABFDE  push XBC
-	call	0xFCB11B                              ; FABFDF  call 0xfcb11b
+	call	Multiply32                              ; FABFDF  call 0xfcb11b
 	ld	(xiz-12), xiy                           ; FABFE3  ld (XIZ+0xf4),XIY
 	ld	hl, (xiz-4)                             ; FABFE6  ld HL,(XIZ+0xfc)
 	and	hl, 0xE000                             ; FABFE9  and HL,0xe000
@@ -535,7 +535,7 @@ Voice_RecomputeAllThreeBaseCurves__FABFFF:
 	lda	xbc, (0xD75E:24)                       ; FABFFF  lda XBC,0x00d75e
 	push	xbc                                   ; FAC004  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FAC005  pushw (XIZ+0xfe)
-	call	0xFB7FCE                              ; FAC008  call 0xfb7fce
+	call	Dev10C_SetChanReg_01C0_or_0600_b                              ; FAC008  call 0xfb7fce
 	inc	6, xsp                                 ; FAC00C  inc 6,XSP
 Voice_RecomputeAllThreeBaseCurves__FAC00E:
 	add	de, 27                                 ; FAC00E  add DE,0x001b
@@ -588,10 +588,10 @@ sub_FAC026:
 	ld	a, (xde)                                ; FAC04F  ld A,(XDE)
 	extz	wa                                    ; FAC051  extz WA
 	pushw	wa                                   ; FAC053  push WA
-	call	0xFB732C                              ; FAC054  call 0xfb732c
+	call	Dev10C_WriteReg_c                              ; FAC054  call 0xfb732c
 	ld	c, (xde)                                ; FAC058  ld C,(XDE)
 	pushw	bc                                   ; FAC05A  push BC
-	call	0xFA6EA5                              ; FAC05B  call 0xfa6ea5
+	call	ChanRec_ClearHoldAndRelease                              ; FAC05B  call 0xfa6ea5
 	res	15, hl                                 ; FAC05F  res 0x0f,HL
 	inc	6, xsp                                 ; FAC062  inc 6,XSP
 sub_FAC026__FAC064:
@@ -605,7 +605,7 @@ sub_FAC026__FAC064:
 	extz	xde                                   ; FAC076  extz XDE
 	ld	c, (xde)                                ; FAC078  ld C,(XDE)
 	pushw	bc                                   ; FAC07A  push BC
-	call	0xFB3D26                              ; FAC07B  call 0xfb3d26
+	call	Voice_Retire_Mode20                              ; FAC07B  call 0xfb3d26
 	res	7, hl                                  ; FAC07F  res 0x07,HL
 	popw	bc                                    ; FAC082  pop BC
 sub_FAC026__FAC083:
@@ -674,7 +674,7 @@ sub_FAC08D__FAC0DC:
 	ld	c, (xix)                                ; FAC0DE  ld C,(XIX)
 	extz	bc                                    ; FAC0E0  extz BC
 	pushw	bc                                   ; FAC0E2  push BC
-	call	0xFB7502                              ; FAC0E3  call 0xfb7502
+	call	Dev10C_SetChanReg_0180_FromArg                              ; FAC0E3  call 0xfb7502
 	ld	bc, (xiz-2)                             ; FAC0E7  ld BC,(XIZ+0xfe)
 	and	bc, 0x7000                             ; FAC0EA  and BC,0x7000
 	pop	xiy                                    ; FAC0EE  pop XIY
@@ -757,7 +757,7 @@ sub_FAC08D__FAC174:
 	ld	c, (xix)                                ; FAC1B6  ld C,(XIX)
 	extz	bc                                    ; FAC1B8  extz BC
 	pushw	bc                                   ; FAC1BA  push BC
-	call	0xFB762F                              ; FAC1BB  call 0xfb762f
+	call	sub_FB762F                              ; FAC1BB  call 0xfb762f
 	jr sub_FAC08D__FAC1ED                      ; FAC1BF  jr T,0xfac1ed
 sub_FAC08D__FAC1C1:
 	extz	xix                                   ; FAC1C1  extz XIX
@@ -772,10 +772,10 @@ sub_FAC08D__FAC1D3:
 	extpfx5 0xBC, 0x2F, 0x02, 0x00, 0xFF       ; FAC1D5  ld (XIX+0x2f),0xff00
 	ld	c, (xix)                                ; FAC1DA  ld C,(XIX)
 	pushw	bc                                   ; FAC1DC  push BC
-	call	0xFA6EA5                              ; FAC1DD  call 0xfa6ea5
+	call	ChanRec_ClearHoldAndRelease                              ; FAC1DD  call 0xfa6ea5
 	ld	c, (xix)                                ; FAC1E1  ld C,(XIX)
 	pushw	bc                                   ; FAC1E3  push BC
-	call	0xFB3D26                              ; FAC1E4  call 0xfb3d26
+	call	Voice_Retire_Mode20                              ; FAC1E4  call 0xfb3d26
 	extpfx5 0x9E, 0xFE, 0x3C, 0xFF, 0x6F       ; FAC1E8  and (XIZ+0xfe),0x6fff
 sub_FAC08D__FAC1ED:
 	pop	xiy                                    ; FAC1ED  pop XIY
@@ -810,14 +810,14 @@ sub_FAC08D__FAC232:
 	extz	xix                                   ; FAC232  extz XIX
 	ld	(xix+47), hl                            ; FAC234  ld (XIX+0x2f),HL
 	pushw	ix                                   ; FAC237  push IX
-	calr (0xFAB79D - 0xFAC23B)                 ; FAC238  calr 0xfab79d
+	calr Voice_StageLevel_Reg0080_AB                 ; FAC238  calr 0xfab79d
 	pushw	ix                                   ; FAC23B  push IX
 	lda	xbc, (0xD75E:24)                       ; FAC23C  lda XBC,0x00d75e
 	push	xbc                                   ; FAC241  push XBC
 	ld	a, (xix)                                ; FAC242  ld A,(XIX)
 	extz	wa                                    ; FAC244  extz WA
 	pushw	wa                                   ; FAC246  push WA
-	call	0xFB7521                              ; FAC247  call 0xfb7521
+	call	sub_FB7521                              ; FAC247  call 0xfb7521
 	inc	8, xsp                                 ; FAC24B  inc 0,XSP
 	inc	2, xsp                                 ; FAC24D  inc 2,XSP
 	jr sub_FAC08D__FAC2A0                      ; FAC24F  jr T,0xfac2a0
@@ -958,7 +958,7 @@ sub_FAC34D:
 	jrl nz, sub_FAC34D__FAC426                 ; FAC36C  jrl NZ,0xfac426
 	lda	xbc, (xiz-14)                          ; FAC36F  lda XBC,XIZ+0xf2
 	push	xbc                                   ; FAC372  push XBC
-	call	0xFB3FA0                              ; FAC373  call 0xfb3fa0
+	call	VoiceRecords_InitFromAlloc                              ; FAC373  call 0xfb3fa0
 	ld	h, (xiz-4)                              ; FAC377  ld H,(XIZ+0xfc)
 	pop	xiy                                    ; FAC37A  pop XIY
 	cp	h, 64                                   ; FAC37B  cp H,0x40
@@ -991,25 +991,25 @@ sub_FAC34D:
 	push	xbc                                   ; FAC3C7  push XBC
 	push	0                                     ; FAC3C8  push 0x00
 	push	d                                     ; FAC3CA  push D
-	call	0xFC7DAF                              ; FAC3CC  call 0xfc7daf
+	call	Pack104_StageReg_0000_ForVoice                              ; FAC3CC  call 0xfc7daf
 	lda	xbc, (0xD7A2:24)                       ; FAC3D0  lda XBC,0x00d7a2
 	push	xbc                                   ; FAC3D5  push XBC
 	pushw	hl                                   ; FAC3D6  push HL
-	call	0xFB7A58                              ; FAC3D7  call 0xfb7a58
+	call	Dev104_WriteChanReg0                              ; FAC3D7  call 0xfb7a58
 	lda	xbc, (0xD7A2:24)                       ; FAC3DB  lda XBC,0x00d7a2
 	push	xbc                                   ; FAC3E0  push XBC
-	call	0xFC571A                              ; FAC3E1  call 0xfc571a
+	call	Dev104_LoadStageBImage                              ; FAC3E1  call 0xfc571a
 	lda	xbc, (0xD7A2:24)                       ; FAC3E5  lda XBC,0x00d7a2
 	push	xbc                                   ; FAC3EA  push XBC
 	pushw	hl                                   ; FAC3EB  push HL
-	call	0xFB77EF                              ; FAC3EC  call 0xfb77ef
+	call	Dev104_WriteAllChanRegs                              ; FAC3EC  call 0xfb77ef
 	push	0                                     ; FAC3F0  push 0x00
 	push	d                                     ; FAC3F2  push D
-	calr (0xFAC2AE - 0xFAC3F7)                 ; FAC3F4  calr 0xfac2ae
+	calr sub_FAC2AE                 ; FAC3F4  calr 0xfac2ae
 	lda	xbc, (0xD75E:24)                       ; FAC3F7  lda XBC,0x00d75e
 	push	xbc                                   ; FAC3FC  push XBC
 	pushw	hl                                   ; FAC3FD  push HL
-	call	0xFB713A                              ; FAC3FE  call 0xfb713a
+	call	Dev10C_WriteAllChanRegs                              ; FAC3FE  call 0xfb713a
 	ld	c, 68:opc                                  ; FAC402  ld C,0x44
 	mul8rr	c, d                                ; FAC404  mul BC,D
 	add	bc, 41                                 ; FAC406  add BC,0x0029
@@ -1017,7 +1017,7 @@ sub_FAC34D:
 	ld	wa, (xbc+0x3BCF)                        ; FAC40C  ld WA,(XBC+0x3bcf)
 	pushw	wa                                   ; FAC411  push WA
 	pushw	hl                                   ; FAC412  push HL
-	call	0xFB732C                              ; FAC413  call 0xfb732c
+	call	Dev10C_WriteReg_c                              ; FAC413  call 0xfb732c
 	add	xsp, 34                                ; FAC417  add XSP,0x00000022
 sub_FAC34D__FAC41D:
 	extz	xix                                   ; FAC41D  extz XIX
@@ -1056,7 +1056,7 @@ sub_FAC42C:
 	pushw	1                                    ; FAC433  push 0x0001
 	push	0                                     ; FAC436  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC438  push (XIZ+0x08)
-	call	0xFB59D2                              ; FAC43B  call 0xfb59d2
+	call	PartRec_StageChanFreqWord_0067                              ; FAC43B  call 0xfb59d2
 	extz	xwa                                   ; FAC43F  extz XWA
 	ld	(xiz-4), xwa                            ; FAC441  ld (XIZ+0xfc),XWA
 	ld	bc, (xiz+10)                            ; FAC444  ld BC,(XIZ+0x0a)
@@ -1064,7 +1064,7 @@ sub_FAC42C:
 	extz	xbc                                   ; FAC449  extz XBC
 	push	xbc                                   ; FAC44B  push XBC
 	push	xwa                                   ; FAC44C  push XWA
-	call	0xFCB11B                              ; FAC44D  call 0xfcb11b
+	call	Multiply32                              ; FAC44D  call 0xfcb11b
 	ld	xix, xiy                                ; FAC451  ld XIX,XIY
 	srl	xiy, 8                                 ; FAC453  srl 0x08,XIY
 	ld	xix, xiy                                ; FAC456  ld XIX,XIY
@@ -1092,7 +1092,7 @@ sub_FAC42C__FAC49B:
 	pushw	1                                    ; FAC49B  push 0x0001
 	push	0                                     ; FAC49E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC4A0  push (XIZ+0x08)
-	call	0xFB582A                              ; FAC4A3  call 0xfb582a
+	call	PartRec_StageChanFreqWord_0065                              ; FAC4A3  call 0xfb582a
 	extz	xwa                                   ; FAC4A7  extz XWA
 	ld	(xiz-4), xwa                            ; FAC4A9  ld (XIZ+0xfc),XWA
 	ld	bc, (xiz+10)                            ; FAC4AC  ld BC,(XIZ+0x0a)
@@ -1105,7 +1105,7 @@ sub_FAC42C__FAC49B:
 	extz	xiy                                   ; FAC4C0  extz XIY
 	push	xiy                                   ; FAC4C2  push XIY
 	push	xwa                                   ; FAC4C3  push XWA
-	call	0xFCB11B                              ; FAC4C4  call 0xfcb11b
+	call	Multiply32                              ; FAC4C4  call 0xfcb11b
 	srl	xiy, 8                                 ; FAC4C8  srl 0x08,XIY
 	ld	de, iy                                  ; FAC4CB  ld DE,IY
 	ld	(0xD79E:24), iy                        ; FAC4CD  ld (0x00d79e),IY
@@ -1119,7 +1119,7 @@ sub_FAC42C__FAC49B:
 	pushw	13                                   ; FAC4E9  push 0x000d
 	push	0                                     ; FAC4EC  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC4EE  push (XIZ+0x08)
-	call	0xFA6110                              ; FAC4F1  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FAC4F1  call 0xfa6110
 	ld	ix, iy                                  ; FAC4F5  ld IX,IY
 	ldw	hl, 0                                  ; FAC4F7  ld HL,0x0000
 	inc	8, xsp                                 ; FAC4FA  inc 0,XSP
@@ -1133,7 +1133,7 @@ sub_FAC42C__FAC4FE:
 	lda	xbc, (0xD75E:24)                       ; FAC50F  lda XBC,0x00d75e
 	push	xbc                                   ; FAC514  push XBC
 	pushw	de                                   ; FAC515  push DE
-	call	0xFB7C27                              ; FAC516  call 0xfb7c27
+	call	Dev10C_Slot2_WriteGateAndValue                              ; FAC516  call 0xfb7c27
 	inc	2, hl                                  ; FAC51A  inc 2,HL
 	inc	6, xsp                                 ; FAC51C  inc 6,XSP
 	jr sub_FAC42C__FAC4FE                      ; FAC51E  jr T,0xfac4fe
@@ -1169,18 +1169,18 @@ sub_FAC526:
 	pushw	1                                    ; FAC52D  push 0x0001
 	push	0                                     ; FAC530  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC532  push (XIZ+0x08)
-	call	0xFB59D2                              ; FAC535  call 0xfb59d2
+	call	PartRec_StageChanFreqWord_0067                              ; FAC535  call 0xfb59d2
 	ld	(0xD79A:24), wa                        ; FAC539  ld (0x00d79a),WA
 	pushw	1                                    ; FAC53E  push 0x0001
 	push	0                                     ; FAC541  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC543  push (XIZ+0x08)
-	call	0xFB582A                              ; FAC546  call 0xfb582a
+	call	PartRec_StageChanFreqWord_0065                              ; FAC546  call 0xfb582a
 	ld	(0xD79E:24), wa                        ; FAC54A  ld (0x00d79e),WA
 	pushw	0                                    ; FAC54F  push 0x0000
 	pushw	13                                   ; FAC552  push 0x000d
 	push	0                                     ; FAC555  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC557  push (XIZ+0x08)
-	call	0xFA6110                              ; FAC55A  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FAC55A  call 0xfa6110
 	ld	ix, iy                                  ; FAC55E  ld IX,IY
 	ldw	hl, 0                                  ; FAC560  ld HL,0x0000
 	inc	8, xsp                                 ; FAC563  inc 0,XSP
@@ -1194,7 +1194,7 @@ sub_FAC526__FAC567:
 	lda	xbc, (0xD75E:24)                       ; FAC578  lda XBC,0x00d75e
 	push	xbc                                   ; FAC57D  push XBC
 	pushw	de                                   ; FAC57E  push DE
-	call	0xFB7C27                              ; FAC57F  call 0xfb7c27
+	call	Dev10C_Slot2_WriteGateAndValue                              ; FAC57F  call 0xfb7c27
 	inc	2, hl                                  ; FAC583  inc 2,HL
 	inc	6, xsp                                 ; FAC585  inc 6,XSP
 	jr sub_FAC526__FAC567                      ; FAC587  jr T,0xfac567
@@ -1231,7 +1231,7 @@ sub_FAC58F:
 	pushw	0                                    ; FAC596  push 0x0000
 	push	0                                     ; FAC599  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC59B  push (XIZ+0x08)
-	call	0xFB59D2                              ; FAC59E  call 0xfb59d2
+	call	PartRec_StageChanFreqWord_0067                              ; FAC59E  call 0xfb59d2
 	extz	xwa                                   ; FAC5A2  extz XWA
 	ld	(xiz-4), xwa                            ; FAC5A4  ld (XIZ+0xfc),XWA
 	ld	bc, (xiz+10)                            ; FAC5A7  ld BC,(XIZ+0x0a)
@@ -1239,7 +1239,7 @@ sub_FAC58F:
 	extz	xbc                                   ; FAC5AC  extz XBC
 	push	xbc                                   ; FAC5AE  push XBC
 	push	xwa                                   ; FAC5AF  push XWA
-	call	0xFCB11B                              ; FAC5B0  call 0xfcb11b
+	call	Multiply32                              ; FAC5B0  call 0xfcb11b
 	ld	xix, xiy                                ; FAC5B4  ld XIX,XIY
 	srl	xiy, 8                                 ; FAC5B6  srl 0x08,XIY
 	ld	xix, xiy                                ; FAC5B9  ld XIX,XIY
@@ -1267,7 +1267,7 @@ sub_FAC58F__FAC5FE:
 	pushw	0                                    ; FAC5FE  push 0x0000
 	push	0                                     ; FAC601  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC603  push (XIZ+0x08)
-	call	0xFB582A                              ; FAC606  call 0xfb582a
+	call	PartRec_StageChanFreqWord_0065                              ; FAC606  call 0xfb582a
 	extz	xwa                                   ; FAC60A  extz XWA
 	ld	(xiz-4), xwa                            ; FAC60C  ld (XIZ+0xfc),XWA
 	ld	bc, (xiz+10)                            ; FAC60F  ld BC,(XIZ+0x0a)
@@ -1280,7 +1280,7 @@ sub_FAC58F__FAC5FE:
 	extz	xiy                                   ; FAC623  extz XIY
 	push	xiy                                   ; FAC625  push XIY
 	push	xwa                                   ; FAC626  push XWA
-	call	0xFCB11B                              ; FAC627  call 0xfcb11b
+	call	Multiply32                              ; FAC627  call 0xfcb11b
 	srl	xiy, 8                                 ; FAC62B  srl 0x08,XIY
 	ld	de, iy                                  ; FAC62E  ld DE,IY
 	ld	(0xD7A0:24), iy                        ; FAC630  ld (0x00d7a0),IY
@@ -1294,7 +1294,7 @@ sub_FAC58F__FAC5FE:
 	pushw	12                                   ; FAC64C  push 0x000c
 	push	0                                     ; FAC64F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC651  push (XIZ+0x08)
-	call	0xFA6110                              ; FAC654  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FAC654  call 0xfa6110
 	ld	ix, iy                                  ; FAC658  ld IX,IY
 	ldw	hl, 0                                  ; FAC65A  ld HL,0x0000
 	inc	8, xsp                                 ; FAC65D  inc 0,XSP
@@ -1308,7 +1308,7 @@ sub_FAC58F__FAC661:
 	lda	xbc, (0xD75E:24)                       ; FAC672  lda XBC,0x00d75e
 	push	xbc                                   ; FAC677  push XBC
 	pushw	de                                   ; FAC678  push DE
-	call	0xFB7D1D                              ; FAC679  call 0xfb7d1d
+	call	Dev10C_Slot3_WriteGateAndValue                              ; FAC679  call 0xfb7d1d
 	inc	2, hl                                  ; FAC67D  inc 2,HL
 	inc	6, xsp                                 ; FAC67F  inc 6,XSP
 	jr sub_FAC58F__FAC661                      ; FAC681  jr T,0xfac661
@@ -1344,18 +1344,18 @@ sub_FAC689:
 	pushw	0                                    ; FAC690  push 0x0000
 	push	0                                     ; FAC693  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC695  push (XIZ+0x08)
-	call	0xFB59D2                              ; FAC698  call 0xfb59d2
+	call	PartRec_StageChanFreqWord_0067                              ; FAC698  call 0xfb59d2
 	ld	(0xD79C:24), wa                        ; FAC69C  ld (0x00d79c),WA
 	pushw	0                                    ; FAC6A1  push 0x0000
 	push	0                                     ; FAC6A4  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC6A6  push (XIZ+0x08)
-	call	0xFB582A                              ; FAC6A9  call 0xfb582a
+	call	PartRec_StageChanFreqWord_0065                              ; FAC6A9  call 0xfb582a
 	ld	(0xD7A0:24), wa                        ; FAC6AD  ld (0x00d7a0),WA
 	pushw	0                                    ; FAC6B2  push 0x0000
 	pushw	12                                   ; FAC6B5  push 0x000c
 	push	0                                     ; FAC6B8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC6BA  push (XIZ+0x08)
-	call	0xFA6110                              ; FAC6BD  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FAC6BD  call 0xfa6110
 	ld	ix, iy                                  ; FAC6C1  ld IX,IY
 	ldw	hl, 0                                  ; FAC6C3  ld HL,0x0000
 	inc	8, xsp                                 ; FAC6C6  inc 0,XSP
@@ -1369,7 +1369,7 @@ sub_FAC689__FAC6CA:
 	lda	xbc, (0xD75E:24)                       ; FAC6DB  lda XBC,0x00d75e
 	push	xbc                                   ; FAC6E0  push XBC
 	pushw	de                                   ; FAC6E1  push DE
-	call	0xFB7D1D                              ; FAC6E2  call 0xfb7d1d
+	call	Dev10C_Slot3_WriteGateAndValue                              ; FAC6E2  call 0xfb7d1d
 	inc	2, hl                                  ; FAC6E6  inc 2,HL
 	inc	6, xsp                                 ; FAC6E8  inc 6,XSP
 	jr sub_FAC689__FAC6CA                      ; FAC6EA  jr T,0xfac6ca
@@ -1404,7 +1404,7 @@ sub_FAC6F2:
 	push	xix                                   ; FAC6F8  push XIX
 	push	0                                     ; FAC6F9  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC6FB  push (XIZ+0x08)
-	call	0xFB5C77                              ; FAC6FE  call 0xfb5c77
+	call	PartRec_StageChanFreqWord_006F                              ; FAC6FE  call 0xfb5c77
 	extz	xwa                                   ; FAC702  extz XWA
 	ld	(xiz-4), xwa                            ; FAC704  ld (XIZ+0xfc),XWA
 	ld	bc, (xiz+10)                            ; FAC707  ld BC,(XIZ+0x0a)
@@ -1412,7 +1412,7 @@ sub_FAC6F2:
 	extz	xbc                                   ; FAC70C  extz XBC
 	push	xbc                                   ; FAC70E  push XBC
 	push	xwa                                   ; FAC70F  push XWA
-	call	0xFCB11B                              ; FAC710  call 0xfcb11b
+	call	Multiply32                              ; FAC710  call 0xfcb11b
 	ld	xix, xiy                                ; FAC714  ld XIX,XIY
 	srl	xiy, 8                                 ; FAC716  srl 0x08,XIY
 	ld	xix, xiy                                ; FAC719  ld XIX,XIY
@@ -1441,7 +1441,7 @@ sub_FAC6F2__FAC75E:
 	pushw	16                                   ; FAC761  push 0x0010
 	push	0                                     ; FAC764  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC766  push (XIZ+0x08)
-	call	0xFA6110                              ; FAC769  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FAC769  call 0xfa6110
 	ld	ix, iy                                  ; FAC76D  ld IX,IY
 	ldw	hl, 0                                  ; FAC76F  ld HL,0x0000
 	jr sub_FAC6F2__FAC792                      ; FAC772  jr T,0xfac792
@@ -1454,7 +1454,7 @@ sub_FAC6F2__FAC774:
 	lda	xbc, (0xD75E:24)                       ; FAC785  lda XBC,0x00d75e
 	push	xbc                                   ; FAC78A  push XBC
 	pushw	de                                   ; FAC78B  push DE
-	call	0xFB7E9D                              ; FAC78C  call 0xfb7e9d
+	call	Dev10C_Slot1_StrobeGate                              ; FAC78C  call 0xfb7e9d
 	inc	2, hl                                  ; FAC790  inc 2,HL
 sub_FAC6F2__FAC792:
 	inc	6, xsp                                 ; FAC792  inc 6,XSP
@@ -1490,13 +1490,13 @@ sub_FAC79C:
 	push	xix                                   ; FAC7A2  push XIX
 	push	0                                     ; FAC7A3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC7A5  push (XIZ+0x08)
-	call	0xFB5C77                              ; FAC7A8  call 0xfb5c77
+	call	PartRec_StageChanFreqWord_006F                              ; FAC7A8  call 0xfb5c77
 	ld	(0xD798:24), wa                        ; FAC7AC  ld (0x00d798),WA
 	pushw	0                                    ; FAC7B1  push 0x0000
 	pushw	16                                   ; FAC7B4  push 0x0010
 	push	0                                     ; FAC7B7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC7B9  push (XIZ+0x08)
-	call	0xFA6110                              ; FAC7BC  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FAC7BC  call 0xfa6110
 	ld	ix, iy                                  ; FAC7C0  ld IX,IY
 	ldw	hl, 0                                  ; FAC7C2  ld HL,0x0000
 	inc	8, xsp                                 ; FAC7C5  inc 0,XSP
@@ -1509,7 +1509,7 @@ sub_FAC79C__FAC7C7:
 	lda	xbc, (0xD75E:24)                       ; FAC7D8  lda XBC,0x00d75e
 	push	xbc                                   ; FAC7DD  push XBC
 	pushw	de                                   ; FAC7DE  push DE
-	call	0xFB7E9D                              ; FAC7DF  call 0xfb7e9d
+	call	Dev10C_Slot1_StrobeGate                              ; FAC7DF  call 0xfb7e9d
 	inc	2, hl                                  ; FAC7E3  inc 2,HL
 	inc	6, xsp                                 ; FAC7E5  inc 6,XSP
 	jr sub_FAC79C__FAC7C7                      ; FAC7E7  jr T,0xfac7c7
@@ -1552,7 +1552,7 @@ sub_FAC7EF:
 	extz	xde                                   ; FAC806  extz XDE
 	extpfx4 0x8A, 0x71, 0x3E, 0x08             ; FAC808  or (XDE+0x71),0x08
 	pushw	hl                                   ; FAC80C  push HL
-	calr (0xFAC526 - 0xFAC810)                 ; FAC80D  calr 0xfac526
+	calr sub_FAC526                 ; FAC80D  calr 0xfac526
 	popw	bc                                    ; FAC810  pop BC
 	jr sub_FAC7EF__FAC835                      ; FAC811  jr T,0xfac835
 sub_FAC7EF__FAC813:
@@ -1568,7 +1568,7 @@ sub_FAC7EF__FAC813:
 	ld	a, (xbc)                                ; FAC82D  ld A,(XBC)
 	pushw	wa                                   ; FAC82F  push WA
 	pushw	hl                                   ; FAC830  push HL
-	calr (0xFAC42C - 0xFAC834)                 ; FAC831  calr 0xfac42c
+	calr sub_FAC42C                 ; FAC831  calr 0xfac42c
 	pop	xiy                                    ; FAC834  pop XIY
 sub_FAC7EF__FAC835:
 	extz	xde                                   ; FAC835  extz XDE
@@ -1576,9 +1576,9 @@ sub_FAC7EF__FAC835:
 	cp	h, 0x96                                 ; FAC83A  cp H,0x96
 	jr c, sub_FAC7EF__FAC84A                   ; FAC83D  jr C,0xfac84a
 	pushw	hl                                   ; FAC83F  push HL
-	calr (0xFAC689 - 0xFAC843)                 ; FAC840  calr 0xfac689
+	calr sub_FAC689                 ; FAC840  calr 0xfac689
 	pushw	hl                                   ; FAC843  push HL
-	calr (0xFAC79C - 0xFAC847)                 ; FAC844  calr 0xfac79c
+	calr sub_FAC79C                 ; FAC844  calr 0xfac79c
 	pop	xiy                                    ; FAC847  pop XIY
 	jr sub_FAC7EF__FAC882                      ; FAC848  jr T,0xfac882
 sub_FAC7EF__FAC84A:
@@ -1597,13 +1597,13 @@ sub_FAC7EF__FAC84A:
 	ld	a, (xbc)                                ; FAC86B  ld A,(XBC)
 	pushw	wa                                   ; FAC86D  push WA
 	pushw	hl                                   ; FAC86E  push HL
-	calr (0xFAC58F - 0xFAC872)                 ; FAC86F  calr 0xfac58f
+	calr sub_FAC58F                 ; FAC86F  calr 0xfac58f
 	lda	xbc, (0xFDE47B:24)                     ; FAC872  lda XBC,0xfde47b
 	add	xbc, xix                               ; FAC877  add XBC,XIX
 	ld	a, (xbc)                                ; FAC879  ld A,(XBC)
 	pushw	wa                                   ; FAC87B  push WA
 	pushw	hl                                   ; FAC87C  push HL
-	calr (0xFAC6F2 - 0xFAC880)                 ; FAC87D  calr 0xfac6f2
+	calr sub_FAC6F2                 ; FAC87D  calr 0xfac6f2
 	inc	8, xsp                                 ; FAC880  inc 0,XSP
 sub_FAC7EF__FAC882:
 	pop	xix                                    ; FAC882  pop XIX
@@ -1658,7 +1658,7 @@ sub_FAC888__FAC8AB:
 	ld	a, (xbc)                                ; FAC8C4  ld A,(XBC)
 	pushw	wa                                   ; FAC8C6  push WA
 	pushw	hl                                   ; FAC8C7  push HL
-	calr (0xFAC42C - 0xFAC8CB)                 ; FAC8C8  calr 0xfac42c
+	calr sub_FAC42C                 ; FAC8C8  calr 0xfac42c
 	pop	xiy                                    ; FAC8CB  pop XIY
 sub_FAC888__FAC8CC:
 	extz	xde                                   ; FAC8CC  extz XDE
@@ -1680,13 +1680,13 @@ sub_FAC888__FAC8CC:
 	ld	a, (xbc)                                ; FAC8F3  ld A,(XBC)
 	pushw	wa                                   ; FAC8F5  push WA
 	pushw	hl                                   ; FAC8F6  push HL
-	calr (0xFAC58F - 0xFAC8FA)                 ; FAC8F7  calr 0xfac58f
+	calr sub_FAC58F                 ; FAC8F7  calr 0xfac58f
 	ld	xbc, xix                                ; FAC8FA  ld XBC,XIX
 	extpfx3 0xAE, 0xFC, 0x81                   ; FAC8FC  add XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; FAC8FF  ld A,(XBC)
 	pushw	wa                                   ; FAC901  push WA
 	pushw	hl                                   ; FAC902  push HL
-	calr (0xFAC6F2 - 0xFAC906)                 ; FAC903  calr 0xfac6f2
+	calr sub_FAC6F2                 ; FAC903  calr 0xfac6f2
 	inc	8, xsp                                 ; FAC906  inc 0,XSP
 sub_FAC888__FAC908:
 	pop	xix                                    ; FAC908  pop XIX
@@ -1748,7 +1748,7 @@ sub_FAC90E__FAC948:
 	pushw	wa                                   ; FAC95B  push WA
 	push	0                                     ; FAC95C  push 0x00
 	push	d                                     ; FAC95E  push D
-	calr (0xFAC42C - 0xFAC963)                 ; FAC960  calr 0xfac42c
+	calr sub_FAC42C                 ; FAC960  calr 0xfac42c
 	ld	c, (xix+0x73)                           ; FAC963  ld C,(XIX+0x73)
 	extz	bc                                    ; FAC966  extz BC
 	div	c, 6                                   ; FAC968  div C,0x06
@@ -1764,14 +1764,14 @@ sub_FAC90E__FAC948:
 	pushw	wa                                   ; FAC983  push WA
 	push	0                                     ; FAC984  push 0x00
 	push	d                                     ; FAC986  push D
-	calr (0xFAC58F - 0xFAC98B)                 ; FAC988  calr 0xfac58f
+	calr sub_FAC58F                 ; FAC988  calr 0xfac58f
 	lda	xbc, (0xFDE47B:24)                     ; FAC98B  lda XBC,0xfde47b
 	add	xbc, xix                               ; FAC990  add XBC,XIX
 	ld	a, (xbc)                                ; FAC992  ld A,(XBC)
 	pushw	wa                                   ; FAC994  push WA
 	push	0                                     ; FAC995  push 0x00
 	push	d                                     ; FAC997  push D
-	calr (0xFAC6F2 - 0xFAC99C)                 ; FAC999  calr 0xfac6f2
+	calr sub_FAC6F2                 ; FAC999  calr 0xfac6f2
 	inc	8, xsp                                 ; FAC99C  inc 0,XSP
 	inc	4, xsp                                 ; FAC99E  inc 4,XSP
 	pop	xix                                    ; FAC9A0  pop XIX
@@ -1833,7 +1833,7 @@ sub_FAC9A6__FAC9E6:
 	pushw	wa                                   ; FAC9F5  push WA
 	push	0                                     ; FAC9F6  push 0x00
 	push	d                                     ; FAC9F8  push D
-	calr (0xFAC42C - 0xFAC9FD)                 ; FAC9FA  calr 0xfac42c
+	calr sub_FAC42C                 ; FAC9FA  calr 0xfac42c
 	ld	c, (xix+0x73)                           ; FAC9FD  ld C,(XIX+0x73)
 	extz	bc                                    ; FACA00  extz BC
 	div	c, 5                                   ; FACA02  div C,0x05
@@ -1849,14 +1849,14 @@ sub_FAC9A6__FAC9E6:
 	pushw	wa                                   ; FACA1D  push WA
 	push	0                                     ; FACA1E  push 0x00
 	push	d                                     ; FACA20  push D
-	calr (0xFAC58F - 0xFACA25)                 ; FACA22  calr 0xfac58f
+	calr sub_FAC58F                 ; FACA22  calr 0xfac58f
 	lda	xbc, (0xFDE47B:24)                     ; FACA25  lda XBC,0xfde47b
 	add	xbc, xix                               ; FACA2A  add XBC,XIX
 	ld	a, (xbc)                                ; FACA2C  ld A,(XBC)
 	pushw	wa                                   ; FACA2E  push WA
 	push	0                                     ; FACA2F  push 0x00
 	push	d                                     ; FACA31  push D
-	calr (0xFAC6F2 - 0xFACA36)                 ; FACA33  calr 0xfac6f2
+	calr sub_FAC6F2                 ; FACA33  calr 0xfac6f2
 	inc	8, xsp                                 ; FACA36  inc 0,XSP
 	inc	4, xsp                                 ; FACA38  inc 4,XSP
 	pop	xix                                    ; FACA3A  pop XIX
@@ -1887,8 +1887,8 @@ sub_FACA40:
 	push	xhl                                   ; FACA40  push XHL
 	pushw	de                                   ; FACA41  push DE
 	push	xix                                   ; FACA42  push XIX
-	calr (0xFABE30 - 0xFACA46)                 ; FACA43  calr 0xfabe30
-	call	0xFB3D09                              ; FACA46  call 0xfb3d09
+	calr Voice_RecomputeAllThreeBaseCurves                 ; FACA43  calr 0xfabe30
+	call	VoiceQuery_Tag00_All                              ; FACA46  call 0xfb3d09
 	ld	xix, xiy                                ; FACA4A  ld XIX,XIY
 	inc	5, xiy                                 ; FACA4C  inc 5,XIY
 	ld	xix, xiy                                ; FACA4E  ld XIX,XIY
@@ -1912,7 +1912,7 @@ sub_FACA40__FACA50:
 	and	bc, 0x8080                             ; FACA77  and BC,0x8080
 	jr z, sub_FACA40__FACAA5                   ; FACA7B  jr Z,0xfacaa5
 	pushw	hl                                   ; FACA7D  push HL
-	calr (0xFAC026 - 0xFACA81)                 ; FACA7E  calr 0xfac026
+	calr sub_FAC026                 ; FACA7E  calr 0xfac026
 	popw	bc                                    ; FACA81  pop BC
 	jr sub_FACA40__FACAA5                      ; FACA82  jr T,0xfacaa5
 sub_FACA40__FACA84:
@@ -1923,17 +1923,17 @@ sub_FACA40__FACA84:
 	extz	xhl                                   ; FACA8F  extz XHL
 	ld	c, (xhl)                                ; FACA91  ld C,(XHL)
 	pushw	bc                                   ; FACA93  push BC
-	call	0xFA6EA5                              ; FACA94  call 0xfa6ea5
+	call	ChanRec_ClearHoldAndRelease                              ; FACA94  call 0xfa6ea5
 	ld	c, (xhl)                                ; FACA98  ld C,(XHL)
 	pushw	bc                                   ; FACA9A  push BC
-	call	0xFB3D26                              ; FACA9B  call 0xfb3d26
+	call	Voice_Retire_Mode20                              ; FACA9B  call 0xfb3d26
 	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FACA9F  ld (XHL+0x2b),0x0000
 	pop	xiy                                    ; FACAA4  pop XIY
 sub_FACA40__FACAA5:
 	ld	c, (xix)                                ; FACAA5  ld C,(XIX)
 	extz	bc                                    ; FACAA7  extz BC
 	pushw	bc                                   ; FACAA9  push BC
-	call	0xFB6F2C                              ; FACAAA  call 0xfb6f2c
+	call	sub_FB6F2C                              ; FACAAA  call 0xfb6f2c
 	inc	1, xix                                 ; FACAAE  inc 1,XIX
 	popw	bc                                    ; FACAB0  pop BC
 	jr sub_FACA40__FACA50                      ; FACAB1  jr T,0xfaca50
@@ -1970,8 +1970,8 @@ sub_FACAB7:
 	push	xhl                                   ; FACABB  push XHL
 	pushw	de                                   ; FACABC  push DE
 	push	xix                                   ; FACABD  push XIX
-	calr (0xFAC34D - 0xFACAC1)                 ; FACABE  calr 0xfac34d
-	call	0xFB3D09                              ; FACAC1  call 0xfb3d09
+	calr sub_FAC34D                 ; FACABE  calr 0xfac34d
+	call	VoiceQuery_Tag00_All                              ; FACAC1  call 0xfb3d09
 	ld	xix, xiy                                ; FACAC5  ld XIX,XIY
 	inc	5, xiy                                 ; FACAC7  inc 5,XIY
 	ld	xix, xiy                                ; FACAC9  ld XIX,XIY
@@ -1999,7 +1999,7 @@ sub_FACAB7__FACACB:
 	and	bc, 0x8080                             ; FACAFE  and BC,0x8080
 	jr z, sub_FACAB7__FACB0A                   ; FACB02  jr Z,0xfacb0a
 	pushw	hl                                   ; FACB04  push HL
-	calr (0xFAC026 - 0xFACB08)                 ; FACB05  calr 0xfac026
+	calr sub_FAC026                 ; FACB05  calr 0xfac026
 	jr sub_FACAB7__FACB19                      ; FACB08  jr T,0xfacb19
 sub_FACAB7__FACB0A:
 	extz	xhl                                   ; FACB0A  extz XHL
@@ -2007,7 +2007,7 @@ sub_FACAB7__FACB0A:
 	and	bc, 0x8000                             ; FACB0F  and BC,0x8000
 	jr z, sub_FACAB7__FACB5F                   ; FACB13  jr Z,0xfacb5f
 	pushw	hl                                   ; FACB15  push HL
-	calr (0xFAC08D - 0xFACB19)                 ; FACB16  calr 0xfac08d
+	calr sub_FAC08D                 ; FACB16  calr 0xfac08d
 sub_FACAB7__FACB19:
 	popw	bc                                    ; FACB19  pop BC
 	jr sub_FACAB7__FACB5F                      ; FACB1A  jr T,0xfacb5f
@@ -2019,10 +2019,10 @@ sub_FACAB7__FACB1C:
 	extz	xhl                                   ; FACB27  extz XHL
 	ld	c, (xhl)                                ; FACB29  ld C,(XHL)
 	pushw	bc                                   ; FACB2B  push BC
-	call	0xFA6EA5                              ; FACB2C  call 0xfa6ea5
+	call	ChanRec_ClearHoldAndRelease                              ; FACB2C  call 0xfa6ea5
 	ld	c, (xhl)                                ; FACB30  ld C,(XHL)
 	pushw	bc                                   ; FACB32  push BC
-	call	0xFB3D26                              ; FACB33  call 0xfb3d26
+	call	Voice_Retire_Mode20                              ; FACB33  call 0xfb3d26
 	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FACB37  ld (XHL+0x2b),0x0000
 	jr sub_FACAB7__FACB5E                      ; FACB3C  jr T,0xfacb5e
 sub_FACAB7__FACB3E:
@@ -2033,10 +2033,10 @@ sub_FACAB7__FACB3E:
 	extz	xhl                                   ; FACB49  extz XHL
 	ld	c, (xhl)                                ; FACB4B  ld C,(XHL)
 	pushw	bc                                   ; FACB4D  push BC
-	call	0xFA6EA5                              ; FACB4E  call 0xfa6ea5
+	call	ChanRec_ClearHoldAndRelease                              ; FACB4E  call 0xfa6ea5
 	ld	c, (xhl)                                ; FACB52  ld C,(XHL)
 	pushw	bc                                   ; FACB54  push BC
-	call	0xFB3D26                              ; FACB55  call 0xfb3d26
+	call	Voice_Retire_Mode20                              ; FACB55  call 0xfb3d26
 	extpfx5 0xBB, 0x2D, 0x02, 0x00, 0x00       ; FACB59  ld (XHL+0x2d),0x0000
 sub_FACAB7__FACB5E:
 	pop	xiy                                    ; FACB5E  pop XIY
@@ -2045,7 +2045,7 @@ sub_FACAB7__FACB5F:
 	push	xbc                                   ; FACB64  push XBC
 	ld	a, (xix)                                ; FACB65  ld A,(XIX)
 	pushw	wa                                   ; FACB67  push WA
-	call	0xFC7C0D                              ; FACB68  call 0xfc7c0d
+	call	Pack104_TickPositionMovement_ForVoice                              ; FACB68  call 0xfc7c0d
 	extz	wa                                    ; FACB6C  extz WA
 	inc	6, xsp                                 ; FACB6E  inc 6,XSP
 	cp	wa, 1:i3                                  ; FACB70  cp WA,1
@@ -2059,7 +2059,7 @@ sub_FACAB7__FACB7A:
 	ld	a, (xix)                                ; FACB80  ld A,(XIX)
 	extz	wa                                    ; FACB82  extz WA
 	pushw	wa                                   ; FACB84  push WA
-	call	0xFB7A73                              ; FACB85  call 0xfb7a73
+	call	Dev104_SetChanRegs_00C0_0100_0240                              ; FACB85  call 0xfb7a73
 	jr sub_FACAB7__FACB9A                      ; FACB89  jr T,0xfacb9a
 sub_FACAB7__FACB8B:
 	lda	xbc, (0xD7A2:24)                       ; FACB8B  lda XBC,0x00d7a2
@@ -2067,7 +2067,7 @@ sub_FACAB7__FACB8B:
 	ld	a, (xix)                                ; FACB91  ld A,(XIX)
 	extz	wa                                    ; FACB93  extz WA
 	pushw	wa                                   ; FACB95  push WA
-	call	0xFB7AC9                              ; FACB96  call 0xfb7ac9
+	call	Dev104_SetChanRegs_00C0_0100                              ; FACB96  call 0xfb7ac9
 sub_FACAB7__FACB9A:
 	inc	6, xsp                                 ; FACB9A  inc 6,XSP
 sub_FACAB7__FACB9C:
@@ -2099,7 +2099,7 @@ sub_FACAB7__FACBAB:
 	pushw	hl                                   ; FACBD7  push HL
 	push	0                                     ; FACBD8  push 0x00
 	push	d                                     ; FACBDA  push D
-	calr (0xFAC7EF - 0xFACBDF)                 ; FACBDC  calr 0xfac7ef
+	calr sub_FAC7EF                 ; FACBDC  calr 0xfac7ef
 	jr sub_FACAB7__FACC17                      ; FACBDF  jr T,0xfacc17
 sub_FACAB7__FACBE1:
 	extz	xhl                                   ; FACBE1  extz XHL
@@ -2107,7 +2107,7 @@ sub_FACAB7__FACBE1:
 	pushw	hl                                   ; FACBE7  push HL
 	push	0                                     ; FACBE8  push 0x00
 	push	d                                     ; FACBEA  push D
-	calr (0xFAC9A6 - 0xFACBEF)                 ; FACBEC  calr 0xfac9a6
+	calr sub_FAC9A6                 ; FACBEC  calr 0xfac9a6
 	jr sub_FACAB7__FACC17                      ; FACBEF  jr T,0xfacc17
 sub_FACAB7__FACBF1:
 	ld	c, e                                    ; FACBF1  ld C,E
@@ -2119,7 +2119,7 @@ sub_FACAB7__FACBF1:
 	pushw	hl                                   ; FACBFF  push HL
 	push	0                                     ; FACC00  push 0x00
 	push	d                                     ; FACC02  push D
-	calr (0xFAC888 - 0xFACC07)                 ; FACC04  calr 0xfac888
+	calr sub_FAC888                 ; FACC04  calr 0xfac888
 	jr sub_FACAB7__FACC17                      ; FACC07  jr T,0xfacc17
 sub_FACAB7__FACC09:
 	extz	xhl                                   ; FACC09  extz XHL
@@ -2127,7 +2127,7 @@ sub_FACAB7__FACC09:
 	pushw	hl                                   ; FACC0F  push HL
 	push	0                                     ; FACC10  push 0x00
 	push	d                                     ; FACC12  push D
-	calr (0xFAC90E - 0xFACC17)                 ; FACC14  calr 0xfac90e
+	calr sub_FAC90E                 ; FACC14  calr 0xfac90e
 sub_FACAB7__FACC17:
 	pop	xiy                                    ; FACC17  pop XIY
 sub_FACAB7__FACC18:
@@ -2242,7 +2242,7 @@ sub_FACC75:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FACC7E  push (XIZ+0x0a)
 	push	0                                     ; FACC81  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACC83  push (XIZ+0x08)
-	call	0xFB582A                              ; FACC86  call 0xfb582a
+	call	PartRec_StageChanFreqWord_0065                              ; FACC86  call 0xfb582a
 	ld	hl, wa                                  ; FACC8A  ld HL,WA
 	pop	xiy                                    ; FACC8C  pop XIY
 	cp (xiz+10), 0x00                          ; FACC8D  cp (XIZ+0x0a),0x00
@@ -2254,7 +2254,7 @@ sub_FACC75:
 	pushw	bc                                   ; FACCA1  push BC
 	push	0                                     ; FACCA2  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACCA4  push (XIZ+0x08)
-	call	0xFA6110                              ; FACCA7  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FACCA7  call 0xfa6110
 	ld	ix, iy                                  ; FACCAB  ld IX,IY
 	ldw	hl, 0                                  ; FACCAD  ld HL,0x0000
 	jr sub_FACC75__FACCD0                      ; FACCB0  jr T,0xfaccd0
@@ -2267,7 +2267,7 @@ sub_FACC75__FACCB2:
 	lda	xbc, (0xD75E:24)                       ; FACCC3  lda XBC,0x00d75e
 	push	xbc                                   ; FACCC8  push XBC
 	pushw	de                                   ; FACCC9  push DE
-	call	0xFB7D85                              ; FACCCA  call 0xfb7d85
+	call	Dev10C_SetChanReg_0640                              ; FACCCA  call 0xfb7d85
 	inc	2, hl                                  ; FACCCE  inc 2,HL
 sub_FACC75__FACCD0:
 	inc	6, xsp                                 ; FACCD0  inc 6,XSP
@@ -2280,7 +2280,7 @@ sub_FACC75__FACCD4:
 	pushw	bc                                   ; FACCE2  push BC
 	push	0                                     ; FACCE3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACCE5  push (XIZ+0x08)
-	call	0xFA6110                              ; FACCE8  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FACCE8  call 0xfa6110
 	ld	ix, iy                                  ; FACCEC  ld IX,IY
 	ldw	hl, 0                                  ; FACCEE  ld HL,0x0000
 	jr sub_FACC75__FACD11                      ; FACCF1  jr T,0xfacd11
@@ -2293,7 +2293,7 @@ sub_FACC75__FACCF3:
 	lda	xbc, (0xD75E:24)                       ; FACD04  lda XBC,0x00d75e
 	push	xbc                                   ; FACD09  push XBC
 	pushw	de                                   ; FACD0A  push DE
-	call	0xFB7C8F                              ; FACD0B  call 0xfb7c8f
+	call	Dev10C_SetChanReg_0600_b                              ; FACD0B  call 0xfb7c8f
 	inc	2, hl                                  ; FACD0F  inc 2,HL
 sub_FACC75__FACD11:
 	inc	6, xsp                                 ; FACD11  inc 6,XSP
@@ -2332,7 +2332,7 @@ sub_FACD1B:
 	extpfx3 0x8E, 0x0A, 0x04                   ; FACD24  push (XIZ+0x0a)
 	push	0                                     ; FACD27  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACD29  push (XIZ+0x08)
-	call	0xFB59D2                              ; FACD2C  call 0xfb59d2
+	call	PartRec_StageChanFreqWord_0067                              ; FACD2C  call 0xfb59d2
 	ld	hl, wa                                  ; FACD30  ld HL,WA
 	pop	xiy                                    ; FACD32  pop XIY
 	cp (xiz+10), 0x00                          ; FACD33  cp (XIZ+0x0a),0x00
@@ -2344,7 +2344,7 @@ sub_FACD1B:
 	pushw	bc                                   ; FACD47  push BC
 	push	0                                     ; FACD48  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACD4A  push (XIZ+0x08)
-	call	0xFA6110                              ; FACD4D  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FACD4D  call 0xfa6110
 	ld	ix, iy                                  ; FACD51  ld IX,IY
 	ldw	hl, 0                                  ; FACD53  ld HL,0x0000
 	jr sub_FACD1B__FACD76                      ; FACD56  jr T,0xfacd76
@@ -2357,7 +2357,7 @@ sub_FACD1B__FACD58:
 	lda	xbc, (0xD75E:24)                       ; FACD69  lda XBC,0x00d75e
 	push	xbc                                   ; FACD6E  push XBC
 	pushw	de                                   ; FACD6F  push DE
-	call	0xFB7DA7                              ; FACD70  call 0xfb7da7
+	call	Dev10C_Slot3_StrobeGate                              ; FACD70  call 0xfb7da7
 	inc	2, hl                                  ; FACD74  inc 2,HL
 sub_FACD1B__FACD76:
 	inc	6, xsp                                 ; FACD76  inc 6,XSP
@@ -2370,7 +2370,7 @@ sub_FACD1B__FACD7A:
 	pushw	bc                                   ; FACD88  push BC
 	push	0                                     ; FACD89  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACD8B  push (XIZ+0x08)
-	call	0xFA6110                              ; FACD8E  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FACD8E  call 0xfa6110
 	ld	ix, iy                                  ; FACD92  ld IX,IY
 	ldw	hl, 0                                  ; FACD94  ld HL,0x0000
 	jr sub_FACD1B__FACDB7                      ; FACD97  jr T,0xfacdb7
@@ -2383,7 +2383,7 @@ sub_FACD1B__FACD99:
 	lda	xbc, (0xD75E:24)                       ; FACDAA  lda XBC,0x00d75e
 	push	xbc                                   ; FACDAF  push XBC
 	pushw	de                                   ; FACDB0  push DE
-	call	0xFB7CB1                              ; FACDB1  call 0xfb7cb1
+	call	Dev10C_Slot2_StrobeGate                              ; FACDB1  call 0xfb7cb1
 	inc	2, hl                                  ; FACDB5  inc 2,HL
 sub_FACD1B__FACDB7:
 	inc	6, xsp                                 ; FACDB7  inc 6,XSP
@@ -2418,13 +2418,13 @@ sub_FACDC1:
 	push	xix                                   ; FACDC7  push XIX
 	push	0                                     ; FACDC8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACDCA  push (XIZ+0x08)
-	call	0xFB5BAA                              ; FACDCD  call 0xfb5baa
+	call	PartRec_StageChanFreqWord_006D                              ; FACDCD  call 0xfb5baa
 	ld	(0xD796:24), wa                        ; FACDD1  ld (0x00d796),WA
 	pushw	0                                    ; FACDD6  push 0x0000
 	pushw	16                                   ; FACDD9  push 0x0010
 	push	0                                     ; FACDDC  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACDDE  push (XIZ+0x08)
-	call	0xFA6110                              ; FACDE1  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FACDE1  call 0xfa6110
 	ld	ix, iy                                  ; FACDE5  ld IX,IY
 	ldw	hl, 0                                  ; FACDE7  ld HL,0x0000
 	inc	8, xsp                                 ; FACDEA  inc 0,XSP
@@ -2437,7 +2437,7 @@ sub_FACDC1__FACDEC:
 	lda	xbc, (0xD75E:24)                       ; FACDFD  lda XBC,0x00d75e
 	push	xbc                                   ; FACE02  push XBC
 	pushw	de                                   ; FACE03  push DE
-	call	0xFB7E7B                              ; FACE04  call 0xfb7e7b
+	call	Dev10C_SetChanReg_01C0_b                              ; FACE04  call 0xfb7e7b
 	inc	2, hl                                  ; FACE08  inc 2,HL
 	inc	6, xsp                                 ; FACE0A  inc 6,XSP
 	jr sub_FACDC1__FACDEC                      ; FACE0C  jr T,0xfacdec
@@ -2471,13 +2471,13 @@ sub_FACE14:
 	push	xix                                   ; FACE1A  push XIX
 	push	0                                     ; FACE1B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACE1D  push (XIZ+0x08)
-	call	0xFB5C77                              ; FACE20  call 0xfb5c77
+	call	PartRec_StageChanFreqWord_006F                              ; FACE20  call 0xfb5c77
 	ld	(0xD798:24), wa                        ; FACE24  ld (0x00d798),WA
 	pushw	0                                    ; FACE29  push 0x0000
 	pushw	16                                   ; FACE2C  push 0x0010
 	push	0                                     ; FACE2F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACE31  push (XIZ+0x08)
-	call	0xFA6110                              ; FACE34  call 0xfa6110
+	call	VoiceSlots_ListSlotsOfPart                              ; FACE34  call 0xfa6110
 	ld	ix, iy                                  ; FACE38  ld IX,IY
 	ldw	hl, 0                                  ; FACE3A  ld HL,0x0000
 	inc	8, xsp                                 ; FACE3D  inc 0,XSP
@@ -2490,7 +2490,7 @@ sub_FACE14__FACE3F:
 	lda	xbc, (0xD75E:24)                       ; FACE50  lda XBC,0x00d75e
 	push	xbc                                   ; FACE55  push XBC
 	pushw	de                                   ; FACE56  push DE
-	call	0xFB7E9D                              ; FACE57  call 0xfb7e9d
+	call	Dev10C_Slot1_StrobeGate                              ; FACE57  call 0xfb7e9d
 	inc	2, hl                                  ; FACE5B  inc 2,HL
 	inc	6, xsp                                 ; FACE5D  inc 6,XSP
 	jr sub_FACE14__FACE3F                      ; FACE5F  jr T,0xface3f

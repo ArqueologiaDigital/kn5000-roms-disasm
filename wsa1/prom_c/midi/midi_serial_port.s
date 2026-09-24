@@ -262,7 +262,7 @@ Serial0_Init:
 MIDI_Rx_FreeSlots:
 	lda	xbc, (0x00F2FB:24)
 	push	xbc
-	calr	(0xF994D7 - 0xF991F2)
+	calr	Queue_FreeSlots
 	pop	xiy
 	ret
 
@@ -284,7 +284,7 @@ MIDI_Rx_FreeSlots:
 MIDI_Rx_Dequeue:
 	lda	xbc, (0x00F2FB:24)
 	push	xbc
-	calr	(0xF993D4 - 0xF991FD)
+	calr	Queue_Get_IrqGuarded
 	pop	xiy
 	ret
 
@@ -361,7 +361,7 @@ INTRX0_HANDLER__enqueue:
 	extpfx3 0x8e, 0xff, 0x04
 	lda xbc, (0x00F2FB:24)
 	push xbc
-	calr (0xF9932E - 0xF9925C)
+	calr Queue_Put
 	inc 6, xsp
 INTRX0_HANDLER__exit:
 	pop xiy
@@ -396,7 +396,7 @@ INTTX0_HANDLER:
 	push xwa
 	lda xbc, (0x00F311:24)
 	push xbc
-	calr (0xF9942F - 0xF99277)
+	calr Queue_Get
 	ld hl, wa
 	ld (xiz-2), wa
 	pop xiy
@@ -530,7 +530,7 @@ MIDI_Tx_SendUntilFF__F992AB:
 	pushw	wa                               ; F992B7  push WA
 	inc	1, xbc                             ; F992B8  inc 1,XBC
 	ld	(xiz+8), xbc                        ; F992BA  ld (XIZ+0x08),XBC
-	calr (0xF992C6 - 0xF992C0)             ; F992BD  calr 0xf992c6
+	calr MIDI_Tx_PutByte             ; F992BD  calr 0xf992c6
 	popw	bc                                ; F992C0  pop BC
 	jr MIDI_Tx_SendUntilFF__F992AB                           ; F992C1  jr T,0xf992ab
 MIDI_Tx_SendUntilFF__F992C3:
@@ -580,7 +580,7 @@ MIDI_Tx_PutByte__F992F8:
 	extpfx3 0x8E, 0x08, 0x04               ; F992FA  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	lda	xbc, (0xF311:24)                   ; F992FD  lda XBC,0x00f311
 	push	xbc                               ; F99302  push XBC
-	calr (0xF9932E - 0xF99306)             ; F99303  calr 0xf9932e
+	calr Queue_Put             ; F99303  calr 0xf9932e
 	ld	(xiz-2), wa                         ; F99306  ld (XIZ+0xfe),WA
 	inc	6, xsp                             ; F99309  inc 6,XSP
 MIDI_Tx_PutByte__F9930B:
@@ -592,7 +592,7 @@ MIDI_Tx_PutByte__F99313:
 	extpfx3 0x8E, 0x08, 0x04               ; F99315  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	lda	xbc, (0xF311:24)                   ; F99318  lda XBC,0x00f311
 	push	xbc                               ; F9931D  push XBC
-	calr (0xF9932E - 0xF99321)             ; F9931E  calr 0xf9932e
+	calr Queue_Put             ; F9931E  calr 0xf9932e
 	inc	6, xsp                             ; F99321  inc 6,XSP
 	cp	wa, 0xFFFF                          ; F99323  cp WA,0xffff
 	jr nz, MIDI_Tx_PutByte__F9932B                       ; F99327  jr NZ,0xf9932b
@@ -963,7 +963,7 @@ MIDI_Watchdogs_And_TransportSwitch:
 	ld	xwa, (0xF2F3:24)                   ; F994FD  ld XWA,(0x00f2f3)
 	ld	(0x7ED2:24), xwa                   ; F99502  ld (0x007ed2),XWA
 	pushw	0xFE                             ; F99507  push 0x00fe
-	calr (0xF992C6 - 0xF9950D)             ; F9950A  calr 0xf992c6
+	calr MIDI_Tx_PutByte             ; F9950A  calr 0xf992c6
 	popw	bc                                ; F9950D  pop BC
 MIDI_Watchdogs_And_TransportSwitch__F9950E:
 	cp (0x00F2F8:24), 0x00                 ; F9950E  cp (0x00f2f8),0x00   [llvm-mc cannot encode this]
@@ -978,7 +978,7 @@ MIDI_Watchdogs_And_TransportSwitch__F9950E:
 	push	xwa                               ; F99536  push XWA
 	pushw	1                                ; F99537  push 0x0001
 	pushw	6                                ; F9953A  push 0x0006
-	call	0xF98B20                          ; F9953D  call 0xf98b20
+	call	Link_SendBuffer                          ; F9953D  call 0xf98b20
 	inc	8, xsp                             ; F99541  inc 0,XSP
 MIDI_Watchdogs_And_TransportSwitch__F99543:
 	res_dd8	2, P8                          ; F99543  res 2,(0x18)
@@ -993,7 +993,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99543:
 	push	xbc                               ; F99560  push XBC
 	pushw	1                                ; F99561  push 0x0001
 	pushw	6                                ; F99564  push 0x0006
-	call	0xF98B20                          ; F99567  call 0xf98b20
+	call	Link_SendBuffer                          ; F99567  call 0xf98b20
 	ld	(0xF328:24), 0                    ; F9956B  ld (0x00f328),0x00
 	inc	8, xsp                             ; F99571  inc 0,XSP
 MIDI_Watchdogs_And_TransportSwitch__F99573:
@@ -1005,7 +1005,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99575:
 	push	xbc                               ; F99582  push XBC
 	pushw	1                                ; F99583  push 0x0001
 	pushw	6                                ; F99586  push 0x0006
-	call	0xF98B20                          ; F99589  call 0xf98b20
+	call	Link_SendBuffer                          ; F99589  call 0xf98b20
 	ld	(0xF328:24), 1                    ; F9958D  ld (0x00f328),0x01
 	inc	8, xsp                             ; F99593  inc 0,XSP
 MIDI_Watchdogs_And_TransportSwitch__F99595:

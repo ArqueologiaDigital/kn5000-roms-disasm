@@ -229,7 +229,7 @@ Flash_ReadDeviceId__FC85EB:
 	jr nz, Flash_ReadDeviceId__FC85F3                       ; FC85EF  jr NZ,0xfc85f3
 	ld	ix, hl                              ; FC85F1  ld IX,HL
 Flash_ReadDeviceId__FC85F3:
-	calr (0xFC856C - 0xFC85F6)             ; FC85F3  calr 0xfc856c
+	calr Flash_ReadResetMode             ; FC85F3  calr 0xfc856c
 Flash_ReadDeviceId__FC85F6:
 	ld	wa, ix                              ; FC85F6  ld WA,IX
 	popw	ix                                ; FC85F8  pop IX
@@ -454,18 +454,18 @@ Flash_ReprogramSector:
 	link32 0xEE, 0x0C, 0x00, 0x00          ; FC876C  link XIZ,0x0000   [llvm-mc cannot encode this]
 	push	xix                               ; FC8770  push XIX
 	ld	xix, (xiz+8)                        ; FC8771  ld XIX,(XIZ+0x08)
-	calr (0xFC856C - 0xFC8777)             ; FC8774  calr 0xfc856c
+	calr Flash_ReadResetMode             ; FC8774  calr 0xfc856c
 	push	xix                               ; FC8777  push XIX
-	calr (0xFC8646 - 0xFC877B)             ; FC8778  calr 0xfc8646
+	calr Flash_SectorErase             ; FC8778  calr 0xfc8646
 	pop	xiy                                ; FC877B  pop XIY
 Flash_ReprogramSector__FC877C:
 	push	xix                               ; FC877C  push XIX
-	call	0xFC898F                          ; FC877D  call 0xfc898f
+	call	Flash_SectorBlankCheck                          ; FC877D  call 0xfc898f
 	pop	xiy                                ; FC8781  pop XIY
 	cp	wa, 0xFFFF                          ; FC8782  cp WA,0xffff
 	jr z, Flash_ReprogramSector__FC877C                        ; FC8786  jr Z,0xfc877c
 	push	xix                               ; FC8788  push XIX
-	call	0xFC88F9                          ; FC8789  call 0xfc88f9
+	call	Flash_ProgramSectorFromBuffer                          ; FC8789  call 0xfc88f9
 	pop	xbc                                ; FC878D  pop XBC
 	pop	xix                                ; FC878E  pop XIX
 	unlk32 xiz                             ; FC878F  unlk XIZ   [llvm-mc cannot encode this]
@@ -499,13 +499,13 @@ Flash_WriteBlockIntoSector:
 	pushw	hl                               ; FC8796  push HL
 	pushw	de                               ; FC8797  push DE
 	push	xix                               ; FC8798  push XIX
-	calr (0xFC856C - 0xFC879C)             ; FC8799  calr 0xfc856c
+	calr Flash_ReadResetMode             ; FC8799  calr 0xfc856c
 	ld	xbc, (xiz+14)                       ; FC879C  ld XBC,(XIZ+0x0e)
 	push	xbc                               ; FC879F  push XBC
-	call	0xFC89AF                          ; FC87A0  call 0xfc89af
+	call	Flash_ReadSectorToBuffer                          ; FC87A0  call 0xfc89af
 	ld	xbc, (xiz+14)                       ; FC87A4  ld XBC,(XIZ+0x0e)
 	push	xbc                               ; FC87A7  push XBC
-	calr (0xFC8646 - 0xFC87AB)             ; FC87A8  calr 0xfc8646
+	calr Flash_SectorErase             ; FC87A8  calr 0xfc8646
 	ld	xbc, (xiz+14)                       ; FC87AB  ld XBC,(XIZ+0x0e)
 	sub	xbc, 0xE70000                      ; FC87AE  sub XBC,0x00e70000
 	ld	(xiz-4), xbc                        ; FC87B4  ld (XIZ+0xfc),XBC
@@ -531,13 +531,13 @@ Flash_WriteBlockIntoSector__FC87C9:
 Flash_WriteBlockIntoSector__FC87E1:
 	ld	xbc, (xiz+14)                       ; FC87E1  ld XBC,(XIZ+0x0e)
 	push	xbc                               ; FC87E4  push XBC
-	call	0xFC898F                          ; FC87E5  call 0xfc898f
+	call	Flash_SectorBlankCheck                          ; FC87E5  call 0xfc898f
 	pop	xiy                                ; FC87E9  pop XIY
 	cp	wa, 0xFFFF                          ; FC87EA  cp WA,0xffff
 	jr z, Flash_WriteBlockIntoSector__FC87E1                        ; FC87EE  jr Z,0xfc87e1
 	ld	xbc, (xiz+14)                       ; FC87F0  ld XBC,(XIZ+0x0e)
 	push	xbc                               ; FC87F3  push XBC
-	call	0xFC88F9                          ; FC87F4  call 0xfc88f9
+	call	Flash_ProgramSectorFromBuffer                          ; FC87F4  call 0xfc88f9
 	pop	xbc                                ; FC87F8  pop XBC
 	pop	xix                                ; FC87F9  pop XIX
 	popw	de                                ; FC87FA  pop DE
@@ -569,13 +569,13 @@ Flash_WriteTwoBlocksIntoSector:
 	pushw	hl                               ; FC8803  push HL
 	pushw	de                               ; FC8804  push DE
 	push	xix                               ; FC8805  push XIX
-	calr (0xFC856C - 0xFC8809)             ; FC8806  calr 0xfc856c
+	calr Flash_ReadResetMode             ; FC8806  calr 0xfc856c
 	ld	xbc, (xiz+14)                       ; FC8809  ld XBC,(XIZ+0x0e)
 	push	xbc                               ; FC880C  push XBC
-	call	0xFC89AF                          ; FC880D  call 0xfc89af
+	call	Flash_ReadSectorToBuffer                          ; FC880D  call 0xfc89af
 	ld	xbc, (xiz+14)                       ; FC8811  ld XBC,(XIZ+0x0e)
 	push	xbc                               ; FC8814  push XBC
-	calr (0xFC8646 - 0xFC8818)             ; FC8815  calr 0xfc8646
+	calr Flash_SectorErase             ; FC8815  calr 0xfc8646
 	ld	xbc, (xiz+14)                       ; FC8818  ld XBC,(XIZ+0x0e)
 	sub	xbc, 0xE70000                      ; FC881B  sub XBC,0x00e70000
 	ld	(xiz-4), xbc                        ; FC8821  ld (XIZ+0xfc),XBC
@@ -623,13 +623,13 @@ Flash_WriteTwoBlocksIntoSector__FC886A:
 Flash_WriteTwoBlocksIntoSector__FC8882:
 	ld	xbc, (xiz+14)                       ; FC8882  ld XBC,(XIZ+0x0e)
 	push	xbc                               ; FC8885  push XBC
-	call	0xFC898F                          ; FC8886  call 0xfc898f
+	call	Flash_SectorBlankCheck                          ; FC8886  call 0xfc898f
 	pop	xiy                                ; FC888A  pop XIY
 	cp	wa, 0xFFFF                          ; FC888B  cp WA,0xffff
 	jr z, Flash_WriteTwoBlocksIntoSector__FC8882                        ; FC888F  jr Z,0xfc8882
 	ld	xbc, (xiz+14)                       ; FC8891  ld XBC,(XIZ+0x0e)
 	push	xbc                               ; FC8894  push XBC
-	call	0xFC88F9                          ; FC8895  call 0xfc88f9
+	call	Flash_ProgramSectorFromBuffer                          ; FC8895  call 0xfc88f9
 	pop	xbc                                ; FC8899  pop XBC
 	pop	xix                                ; FC889A  pop XIX
 	popw	de                                ; FC889B  pop DE
@@ -653,8 +653,8 @@ Flash_WriteTwoBlocksIntoSector__FC8882:
 ;          the value is sampled from the device at boot.
 ; --------------------------------------------------------------------------
 Flash_ProbeAndStoreDeviceId:
-	calr (0xFC856C - 0xFC88A3)             ; FC88A0  calr 0xfc856c
-	calr (0xFC859E - 0xFC88A6)             ; FC88A3  calr 0xfc859e
+	calr Flash_ReadResetMode             ; FC88A0  calr 0xfc856c
+	calr Flash_ReadDeviceId             ; FC88A3  calr 0xfc859e
 	ld	(0xE29D:24), wa                    ; FC88A6  ld (0x00e29d),WA
 	ret                                    ; FC88AB  ret
 ; --------------------------------------------------------------------------
@@ -714,13 +714,13 @@ Flash_WriteRampPattern_E81000:
 	ld	(xiz-4), xbc                        ; FC88D9  ld (XIZ+0xfc),XBC
 	pushw	0x100                            ; FC88DC  push 0x0100
 	push	xix                               ; FC88DF  push XIX
-	calr (0xFC88AC - 0xFC88E3)             ; FC88E0  calr 0xfc88ac
+	calr MemFillWordRamp             ; FC88E0  calr 0xfc88ac
 	ld	xbc, (xiz-4)                        ; FC88E3  ld XBC,(XIZ+0xfc)
 	push	xbc                               ; FC88E6  push XBC
 	pushw	0x100                            ; FC88E7  push 0x0100
 	push	xix                               ; FC88EA  push XIX
-	calr (0xFC8792 - 0xFC88EE)             ; FC88EB  calr 0xfc8792
-	calr (0xFC856C - 0xFC88F1)             ; FC88EE  calr 0xfc856c
+	calr Flash_WriteBlockIntoSector             ; FC88EB  calr 0xfc8792
+	calr Flash_ReadResetMode             ; FC88EE  calr 0xfc856c
 	inc	8, xsp                             ; FC88F1  inc 0,XSP
 	inc	8, xsp                             ; FC88F3  inc 0,XSP
 	pop	xix                                ; FC88F5  pop XIX

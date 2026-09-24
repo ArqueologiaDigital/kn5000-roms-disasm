@@ -411,7 +411,7 @@ Rand_FromTickSquared:
 	extpfx5 0xD2, 0xF3, 0xF2, 0x00, 0x04       ; FA7F09  pushw (0x00f2f3)
 	extpfx5 0xD2, 0xF5, 0xF2, 0x00, 0x04       ; FA7F0E  pushw (0x00f2f5)
 	extpfx5 0xD2, 0xF3, 0xF2, 0x00, 0x04       ; FA7F13  pushw (0x00f2f3)
-	call	0xFCB11B                              ; FA7F18  call 0xfcb11b
+	call	Multiply32                              ; FA7F18  call 0xfcb11b
 	srl	xiy, 2                                 ; FA7F1C  srl 0x02,XIY
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA7F1F  ld C,IYL
 	and	c, 0xFF                                ; FA7F22  and C,0xff
@@ -519,7 +519,7 @@ Voice_ComputePitch:
 	pushw	wa                                   ; FA7F75  push WA
 	ld	c, (xix+4)                              ; FA7F76  ld C,(XIX+0x04)
 	pushw	bc                                   ; FA7F79  push BC
-	calr (0xFA72E9 - 0xFA7F7D)                 ; FA7F7A  calr 0xfa72e9
+	calr Voice_GetOctaveShift                 ; FA7F7A  calr 0xfa72e9
 	ld	de, wa                                  ; FA7F7D  ld DE,WA
 	add	de, hl                                 ; FA7F7F  add DE,HL
 	ld	bc, (0x14FF:16)                       ; FA7F81  ld BC,(0x14ff)
@@ -573,7 +573,7 @@ Voice_ComputePitch__FA7FE0:
 	jr z, Voice_ComputePitch__FA8072                   ; FA8002  jr Z,0xfa8072
 	jr Voice_ComputePitch__FA8046                      ; FA8004  jr T,0xfa8046
 Voice_ComputePitch__FA8006:
-	calr (0xFA7F04 - 0xFA8009)                 ; FA8006  calr 0xfa7f04
+	calr Rand_FromTickSquared                 ; FA8006  calr 0xfa7f04
 	exts	wa                                    ; FA8009  exts WA
 	muls	wa, 13                                ; FA800B  muls WA,0x000d
 	sra	wa, 7                                  ; FA800F  sra 0x07,WA
@@ -619,7 +619,7 @@ Voice_ComputePitch__FA8046:
 	add	de, wa                                 ; FA8070  add DE,WA
 Voice_ComputePitch__FA8072:
 	pushw	de                                   ; FA8072  push DE
-	calr (0xFA7570 - 0xFA8076)                 ; FA8073  calr 0xfa7570
+	calr Sat16_0_to_7FFF                 ; FA8073  calr 0xfa7570
 	extz	xix                                   ; FA8076  extz XIX
 	ld	(xix+8), wa                             ; FA8078  ld (XIX+0x08),WA
 	ld	xbc, (xix+23)                           ; FA807B  ld XBC,(XIX+0x17)
@@ -641,7 +641,7 @@ Voice_ComputePitch__FA8072:
 	push	0                                     ; FA80A3  push 0x00
 	push	h                                     ; FA80A5  push H
 	pushw	iy                                   ; FA80A7  push IY
-	call	0xFCAA2F                              ; FA80A8  call 0xfcaa2f
+	call	Shift16_ArithRight                              ; FA80A8  call 0xfcaa2f
 	ld	(xiz-6), wa                             ; FA80AC  ld (XIZ+0xfa),WA
 	ld	xbc, (xiz-4)                            ; FA80AF  ld XBC,(XIZ+0xfc)
 	ld	iy, (xbc+12)                            ; FA80B2  ld IY,(XBC+0x0c)
@@ -660,7 +660,7 @@ Voice_ComputePitch__FA80C3:
 	push	0                                     ; FA80CC  push 0x00
 	push	h                                     ; FA80CE  push H
 	pushw	de                                   ; FA80D0  push DE
-	call	0xFCAA2F                              ; FA80D1  call 0xfcaa2f
+	call	Shift16_ArithRight                              ; FA80D1  call 0xfcaa2f
 	ld	de, wa                                  ; FA80D5  ld DE,WA
 	add	wa, 0x4280                             ; FA80D7  add WA,0x4280
 	ld	de, wa                                  ; FA80DB  ld DE,WA
@@ -701,12 +701,12 @@ Voice_ComputePitch__FA80E2:
 	pushw	de                                   ; FA812D  push DE
 	cp	h, 0:i3                                   ; FA812E  cp H,0
 	jr nz, Voice_ComputePitch__FA813C                  ; FA8130  jr NZ,0xfa813c
-	calr (0xFA73EB - 0xFA8135)                 ; FA8132  calr 0xfa73eb
+	calr Pitch_FoldOctavesIntoRange                 ; FA8132  calr 0xfa73eb
 	extz	xix                                   ; FA8135  extz XIX
 	ld	(xix+6), wa                             ; FA8137  ld (XIX+0x06),WA
 	jr Voice_ComputePitch__FA8144                      ; FA813A  jr T,0xfa8144
 Voice_ComputePitch__FA813C:
-	calr (0xFA738F - 0xFA813F)                 ; FA813C  calr 0xfa738f
+	calr Pitch_ClampToNoteRange                 ; FA813C  calr 0xfa738f
 	extz	xix                                   ; FA813F  extz XIX
 	ld	(xix+6), wa                             ; FA8141  ld (XIX+0x06),WA
 Voice_ComputePitch__FA8144:
@@ -769,7 +769,7 @@ Voice_ComputePitch_FromToneRecord:
 	ld	a, (xbc+9)                              ; FA8187  ld A,(XBC+0x09)
 	pushw	wa                                   ; FA818A  push WA
 	pushw	de                                   ; FA818B  push DE
-	calr (0xFA73EB - 0xFA818F)                 ; FA818C  calr 0xfa73eb
+	calr Pitch_FoldOctavesIntoRange                 ; FA818C  calr 0xfa73eb
 	ld	(xhl+6), wa                             ; FA818F  ld (XHL+0x06),WA
 	inc	6, xsp                                 ; FA8192  inc 6,XSP
 	pop	xix                                    ; FA8194  pop XIX
@@ -865,7 +865,7 @@ Voice_SelectKeyZone_Reg0040__FA81C1:
 	ld	xbc, (xwa)                              ; FA81E0  ld XBC,(XWA)
 	add	xbc, xix                               ; FA81E2  add XBC,XIX
 	push	xbc                                   ; FA81E4  push XBC
-	calr (0xFA744F - 0xFA81E8)                 ; FA81E5  calr 0xfa744f
+	calr KeyMap_LookupByPitch                 ; FA81E5  calr 0xfa744f
 	extz	wa                                    ; FA81E8  extz WA
 	extz	xwa                                   ; FA81EA  extz XWA
 	inc	4, xwa                                 ; FA81EC  inc 4,XWA
@@ -884,10 +884,10 @@ Voice_SelectKeyZone_Reg0040__FA81C1:
 	push	xwa                                   ; FA820A  push XWA
 	extpfx3 0x9E, 0x08, 0x04                   ; FA820B  pushw (XIZ+0x08)
 	jr z, Voice_SelectKeyZone_Reg0040__FA8215                   ; FA820E  jr Z,0xfa8215
-	calr (0xFA7467 - 0xFA8213)                 ; FA8210  calr 0xfa7467
+	calr KeyZone_Stage_Reg0040_Stride8                 ; FA8210  calr 0xfa7467
 	jr Voice_SelectKeyZone_Reg0040__FA8231                      ; FA8213  jr T,0xfa8231
 Voice_SelectKeyZone_Reg0040__FA8215:
-	calr (0xFA74AB - 0xFA8218)                 ; FA8215  calr 0xfa74ab
+	calr KeyZone_Stage_Reg0040_Stride6A                 ; FA8215  calr 0xfa74ab
 	jr Voice_SelectKeyZone_Reg0040__FA8231                      ; FA8218  jr T,0xfa8231
 Voice_SelectKeyZone_Reg0040__FA821A:
 	ld	d, h                                    ; FA821A  ld D,H
@@ -897,10 +897,10 @@ Voice_SelectKeyZone_Reg0040__FA821A:
 	push	xbc                                   ; FA8223  push XBC
 	extpfx3 0x9E, 0x08, 0x04                   ; FA8224  pushw (XIZ+0x08)
 	jr z, Voice_SelectKeyZone_Reg0040__FA822E                   ; FA8227  jr Z,0xfa822e
-	calr (0xFA74ED - 0xFA822C)                 ; FA8229  calr 0xfa74ed
+	calr KeyZone_Stage_Reg0040_Stride6B                 ; FA8229  calr 0xfa74ed
 	jr Voice_SelectKeyZone_Reg0040__FA8231                      ; FA822C  jr T,0xfa8231
 Voice_SelectKeyZone_Reg0040__FA822E:
-	calr (0xFA752F - 0xFA8231)                 ; FA822E  calr 0xfa752f
+	calr KeyZone_Stage_Reg0040_Stride4                 ; FA822E  calr 0xfa752f
 Voice_SelectKeyZone_Reg0040__FA8231:
 	inc	8, xsp                                 ; FA8231  inc 0,XSP
 	ld	bc, (0x14FF:16)                       ; FA8233  ld BC,(0x14ff)
@@ -980,7 +980,7 @@ Voice_StageRegs_0040_B:
 	pushw	bc                                   ; FA8297  push BC
 	ld	c, (xde+4)                              ; FA8298  ld C,(XDE+0x04)
 	pushw	bc                                   ; FA829B  push BC
-	call	0xFC3407                              ; FA829C  call 0xfc3407
+	call	sub_FC3407                              ; FA829C  call 0xfc3407
 	ld	hl, wa                                  ; FA82A0  ld HL,WA
 	jr Voice_StageRegs_0040_B__FA82BB                      ; FA82A2  jr T,0xfa82bb
 Voice_StageRegs_0040_B__FA82A4:
@@ -993,12 +993,12 @@ Voice_StageRegs_0040_B__FA82A4:
 	pushw	bc                                   ; FA82B0  push BC
 	ld	c, (xde+4)                              ; FA82B1  ld C,(XDE+0x04)
 	pushw	bc                                   ; FA82B4  push BC
-	call	0xFC3480                              ; FA82B5  call 0xfc3480
+	call	sub_FC3480                              ; FA82B5  call 0xfc3480
 	ld	hl, wa                                  ; FA82B9  ld HL,WA
 Voice_StageRegs_0040_B__FA82BB:
 	inc	6, xsp                                 ; FA82BB  inc 6,XSP
 	pushw	hl                                   ; FA82BD  push HL
-	call	0xFC355B                              ; FA82BE  call 0xfc355b
+	call	sub_FC355B                              ; FA82BE  call 0xfc355b
 	mul	wa, 6                                  ; FA82C2  mul WA,0x0006
 	add	xix, xwa                               ; FA82C6  add XIX,XWA
 Voice_StageRegs_0040_B__FA82C8:
@@ -1006,7 +1006,7 @@ Voice_StageRegs_0040_B__FA82C8:
 	jr Voice_StageRegs_0040_B__FA82D8                      ; FA82C9  jr T,0xfa82d8
 Voice_StageRegs_0040_B__FA82CB:
 	pushw	de                                   ; FA82CB  push DE
-	call	0xFC3793                              ; FA82CC  call 0xfc3793
+	call	SlotRec_ReadWordAtArgIndex_0003                              ; FA82CC  call 0xfc3793
 	mul	wa, 6                                  ; FA82D0  mul WA,0x0006
 	add	xix, xwa                               ; FA82D4  add XIX,XWA
 	jr Voice_StageRegs_0040_B__FA82C8                      ; FA82D6  jr T,0xfa82c8
@@ -1072,7 +1072,7 @@ Voice_PitchAddZoneOffset_AB:
 	ld	wa, (0x5A4F:16)                       ; FA8330  ld WA,(0x5a4f)
 	add	wa, hl                                 ; FA8334  add WA,HL
 	pushw	wa                                   ; FA8336  push WA
-	calr (0xFA7570 - 0xFA833A)                 ; FA8337  calr 0xfa7570
+	calr Sat16_0_to_7FFF                 ; FA8337  calr 0xfa7570
 	ld	bc, (xiz+8)                             ; FA833A  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA833D  extz XBC
 	ld	(xbc+10), wa                            ; FA833F  ld (XBC+0x0a),WA
@@ -1150,7 +1150,7 @@ Voice_StagePitch_Reg0400_AB__FA8394:
 	add	de, bc                                 ; FA8396  add DE,BC
 Voice_StagePitch_Reg0400_AB__FA8398:
 	pushw	de                                   ; FA8398  push DE
-	calr (0xFA7570 - 0xFA839C)                 ; FA8399  calr 0xfa7570
+	calr Sat16_0_to_7FFF                 ; FA8399  calr 0xfa7570
 	ld	(0xD76C:24), wa                        ; FA839C  ld (0x00d76c),WA
 	popw	bc                                    ; FA83A1  pop BC
 	pop	xix                                    ; FA83A2  pop XIX
@@ -1186,7 +1186,7 @@ Voice_PitchAddZoneOffset_CD:
 	ld	wa, (xbc+6)                             ; FA83B6  ld WA,(XBC+0x06)
 	add	wa, hl                                 ; FA83B9  add WA,HL
 	pushw	wa                                   ; FA83BB  push WA
-	calr (0xFA7570 - 0xFA83BF)                 ; FA83BC  calr 0xfa7570
+	calr Sat16_0_to_7FFF                 ; FA83BC  calr 0xfa7570
 	ld	bc, (xiz+8)                             ; FA83BF  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA83C2  extz XBC
 	ld	(xbc+10), wa                            ; FA83C4  ld (XBC+0x0a),WA
@@ -1251,7 +1251,7 @@ Voice_StagePitch_Reg0400_CD__FA8419:
 	add	de, bc                                 ; FA841B  add DE,BC
 Voice_StagePitch_Reg0400_CD__FA841D:
 	pushw	de                                   ; FA841D  push DE
-	calr (0xFA7570 - 0xFA8421)                 ; FA841E  calr 0xfa7570
+	calr Sat16_0_to_7FFF                 ; FA841E  calr 0xfa7570
 	ld	(0xD76C:24), wa                        ; FA8421  ld (0x00d76c),WA
 	popw	bc                                    ; FA8426  pop BC
 	pop	xix                                    ; FA8427  pop XIX
@@ -1316,7 +1316,7 @@ Voice_StageRegs_0900_0940_0980_AB:
 	lda	xiy, (0xD75E:24)                       ; FA8448  lda XIY,0x00d75e
 	push	xiy                                   ; FA844D  push XIY
 	pushw	bc                                   ; FA844E  push BC
-	call	0xFC7FCA                              ; FA844F  call 0xfc7fca
+	call	sub_FC7FCA                              ; FA844F  call 0xfc7fca
 	inc	6, xsp                                 ; FA8453  inc 6,XSP
 	jrl Voice_StageRegs_0900_0940_0980_AB__FA8665                     ; FA8455  jrl T,0xfa8665
 Voice_StageRegs_0900_0940_0980_AB__FA8458:
@@ -1363,7 +1363,7 @@ Voice_StageRegs_0900_0940_0980_AB__FA84A3:
 	pushw	bc                                   ; FA84B9  push BC
 	push	0                                     ; FA84BA  push 0x00
 	push	h                                     ; FA84BC  push H
-	calr (0xFA75BA - 0xFA84C1)                 ; FA84BE  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FA84BE  calr 0xfa75ba
 	ld	(xiz-4), wa                             ; FA84C1  ld (XIZ+0xfc),WA
 	ld	xbc, (xiz-16)                           ; FA84C4  ld XBC,(XIZ+0xf0)
 	ld	h, (xbc+9)                              ; FA84C7  ld H,(XBC+0x09)
@@ -1449,7 +1449,7 @@ Voice_StageRegs_0900_0940_0980_AB__FA8570:
 	extz	xwa                                   ; FA858E  extz XWA
 	ld	iy, (xwa+8)                             ; FA8590  ld IY,(XWA+0x08)
 	pushw	iy                                   ; FA8593  push IY
-	calr (0xFA766C - 0xFA8597)                 ; FA8594  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FA8594  calr 0xfa766c
 	add	de, wa                                 ; FA8597  add DE,WA
 	inc	8, xsp                                 ; FA8599  inc 0,XSP
 	inc	2, xsp                                 ; FA859B  inc 2,XSP
@@ -1457,10 +1457,10 @@ Voice_StageRegs_0900_0940_0980_AB__FA859D:
 	pushw	0                                    ; FA859D  push 0x0000
 	pushw	0xFF                                 ; FA85A0  push 0x00ff
 	pushw	de                                   ; FA85A3  push DE
-	calr (0xFA7598 - 0xFA85A7)                 ; FA85A4  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA85A4  calr 0xfa7598
 	ld	(xiz-18), wa                            ; FA85A7  ld (XIZ+0xee),WA
 	extpfx3 0x9E, 0xF6, 0x04                   ; FA85AA  pushw (XIZ+0xf6)
-	calr (0xFA7602 - 0xFA85B0)                 ; FA85AD  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FA85AD  calr 0xfa7602
 	and	wa, 0xFF                               ; FA85B0  and WA,0x00ff
 	ld	(xiz-20), wa                            ; FA85B4  ld (XIZ+0xec),WA
 	ld	bc, (xiz-18)                            ; FA85B7  ld BC,(XIZ+0xee)
@@ -1482,13 +1482,13 @@ Voice_StageRegs_0900_0940_0980_AB__FA859D:
 	extz	xwa                                   ; FA85E2  extz XWA
 	ld	iy, (xwa+8)                             ; FA85E4  ld IY,(XWA+0x08)
 	pushw	iy                                   ; FA85E7  push IY
-	calr (0xFA766C - 0xFA85EB)                 ; FA85E8  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FA85E8  calr 0xfa766c
 	ld	(xiz-18), wa                            ; FA85EB  ld (XIZ+0xee),WA
 	pushw	0                                    ; FA85EE  push 0x0000
 	pushw	0xFF                                 ; FA85F1  push 0x00ff
 	add	wa, hl                                 ; FA85F4  add WA,HL
 	pushw	wa                                   ; FA85F6  push WA
-	calr (0xFA7598 - 0xFA85FA)                 ; FA85F7  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA85F7  calr 0xfa7598
 	ld	hl, wa                                  ; FA85FA  ld HL,WA
 	inc	8, xsp                                 ; FA85FC  inc 0,XSP
 	inc	8, xsp                                 ; FA85FE  inc 0,XSP
@@ -1502,20 +1502,20 @@ Voice_StageRegs_0900_0940_0980_AB__FA860E:
 	pushw	0                                    ; FA860E  push 0x0000
 	pushw	0xFF                                 ; FA8611  push 0x00ff
 	pushw	hl                                   ; FA8614  push HL
-	calr (0xFA7598 - 0xFA8618)                 ; FA8615  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA8615  calr 0xfa7598
 	ld	hl, wa                                  ; FA8618  ld HL,WA
 	inc	6, xsp                                 ; FA861A  inc 6,XSP
 	pushw	0                                    ; FA861C  push 0x0000
 	pushw	0xFF                                 ; FA861F  push 0x00ff
 	pushw	ix                                   ; FA8622  push IX
 Voice_StageRegs_0900_0940_0980_AB__FA8623:
-	calr (0xFA7598 - 0xFA8626)                 ; FA8623  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA8623  calr 0xfa7598
 	ld	ix, wa                                  ; FA8626  ld IX,WA
 	extpfx3 0x9E, 0xF4, 0x04                   ; FA8628  pushw (XIZ+0xf4)
-	calr (0xFA7602 - 0xFA862E)                 ; FA862B  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FA862B  calr 0xfa7602
 	ld	de, wa                                  ; FA862E  ld DE,WA
 	extpfx3 0x9E, 0xF8, 0x04                   ; FA8630  pushw (XIZ+0xf8)
-	calr (0xFA7602 - 0xFA8636)                 ; FA8633  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FA8633  calr 0xfa7602
 	ld	(xiz-18), wa                            ; FA8636  ld (XIZ+0xee),WA
 	ld	bc, de                                  ; FA8639  ld BC,DE
 	and	bc, 0xFF                               ; FA863B  and BC,0x00ff
@@ -1590,7 +1590,7 @@ VoiceParam_Build0100_0140_On36_Arm1:
 	pushw	bc                                   ; FA869F  push BC
 	extpfx3 0x9E, 0xF8, 0x04                   ; FA86A0  pushw (XIZ+0xf8)
 	pushw	ix                                   ; FA86A3  push IX
-	calr (0xFA76D6 - 0xFA86A7)                 ; FA86A4  calr 0xfa76d6
+	calr VoiceParam_AddCurveAndKeyDepth_Clamp                 ; FA86A4  calr 0xfa76d6
 	ld	(xiz-2), wa                             ; FA86A7  ld (XIZ+0xfe),WA
 	ld	hl, (xix+37)                            ; FA86AA  ld HL,(XIX+0x25)
 	extz	xhl                                   ; FA86AD  extz XHL
@@ -1622,7 +1622,7 @@ sub_FA866B__FA86E9:
 	add	bc, de                                 ; FA86EB  add BC,DE
 	pushw	bc                                   ; FA86ED  push BC
 sub_FA866B__FA86EE:
-	calr (0xFA7EE2 - 0xFA86F1)                 ; FA86EE  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA86EE  calr 0xfa7ee2
 	exts	wa                                    ; FA86F1  exts WA
 	ld	hl, wa                                  ; FA86F3  ld HL,WA
 	inc	6, xsp                                 ; FA86F5  inc 6,XSP
@@ -1645,7 +1645,7 @@ sub_FA866B__FA8703:
 	and	wa, 0x200                              ; FA871B  and WA,0x0200
 	jr z, sub_FA866B__FA8730                   ; FA871F  jr Z,0xfa8730
 	pushw	72                                   ; FA8721  push 0x0048
-	calr (0xFA77F3 - 0xFA8727)                 ; FA8724  calr 0xfa77f3
+	calr Add24_ClampTo120                 ; FA8724  calr 0xfa77f3
 	ld	(xiz-2), wa                             ; FA8727  ld (XIZ+0xfe),WA
 	popw	bc                                    ; FA872A  pop BC
 	pushw	0x8D                                 ; FA872B  push 0x008d
@@ -1655,14 +1655,14 @@ sub_FA866B__FA8730:
 	ld	a, (xbc+79)                             ; FA8733  ld A,(XBC+0x4f)
 	extz	wa                                    ; FA8736  extz WA
 	pushw	wa                                   ; FA8738  push WA
-	calr (0xFA77F3 - 0xFA873C)                 ; FA8739  calr 0xfa77f3
+	calr Add24_ClampTo120                 ; FA8739  calr 0xfa77f3
 	ld	(xiz-2), wa                             ; FA873C  ld (XIZ+0xfe),WA
 	ld	xbc, (xiz-6)                            ; FA873F  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+80)                             ; FA8742  ld A,(XBC+0x50)
 	popw	iy                                    ; FA8745  pop IY
 	pushw	wa                                   ; FA8746  push WA
 sub_FA866B__FA8747:
-	calr (0xFA7810 - 0xFA874A)                 ; FA8747  calr 0xfa7810
+	calr VoiceParam_LoadTriple_Set5A51                 ; FA8747  calr 0xfa7810
 	extpfx3 0x9E, 0xFE, 0xE0                   ; FA874A  or WA,(XIZ+0xfe)
 	extz	xix                                   ; FA874D  extz XIX
 	ld	(xix+65), wa                            ; FA874F  ld (XIX+0x41),WA
@@ -1734,7 +1734,7 @@ sub_FA8759__FA87AB:
 	add	bc, de                                 ; FA87AD  add BC,DE
 	pushw	bc                                   ; FA87AF  push BC
 sub_FA8759__FA87B0:
-	calr (0xFA7EE2 - 0xFA87B3)                 ; FA87B0  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA87B0  calr 0xfa7ee2
 	exts	wa                                    ; FA87B3  exts WA
 	ld	hl, wa                                  ; FA87B5  ld HL,WA
 	inc	6, xsp                                 ; FA87B7  inc 6,XSP
@@ -1770,7 +1770,7 @@ sub_FA8759__FA87C5:
 	pushw	bc                                   ; FA87FD  push BC
 	extpfx3 0x9E, 0xFA, 0x04                   ; FA87FE  pushw (XIZ+0xfa)
 	extpfx3 0x9E, 0x08, 0x04                   ; FA8801  pushw (XIZ+0x08)
-	calr (0xFA76D6 - 0xFA8807)                 ; FA8804  calr 0xfa76d6
+	calr VoiceParam_AddCurveAndKeyDepth_Clamp                 ; FA8804  calr 0xfa76d6
 	ld	de, wa                                  ; FA8807  ld DE,WA
 	ld	bc, hl                                  ; FA8809  ld BC,HL
 	sll	bc, 13                                 ; FA880B  sll 0x0d,BC
@@ -1780,7 +1780,7 @@ sub_FA8759__FA87C5:
 	extz	xwa                                   ; FA8817  extz XWA
 	ld	(xwa+63), bc                            ; FA8819  ld (XWA+0x3f),BC
 	pushw	72                                   ; FA881C  push 0x0048
-	calr (0xFA77F3 - 0xFA8822)                 ; FA881F  calr 0xfa77f3
+	calr Add24_ClampTo120                 ; FA881F  calr 0xfa77f3
 	ld	hl, wa                                  ; FA8822  ld HL,WA
 	inc	8, xsp                                 ; FA8824  inc 0,XSP
 	inc	2, xsp                                 ; FA8826  inc 2,XSP
@@ -1798,7 +1798,7 @@ sub_FA8759__FA882D:
 	pushw	bc                                   ; FA8840  push BC
 	extpfx3 0x9E, 0xFA, 0x04                   ; FA8841  pushw (XIZ+0xfa)
 	extpfx3 0x9E, 0x08, 0x04                   ; FA8844  pushw (XIZ+0x08)
-	calr (0xFA76D6 - 0xFA884A)                 ; FA8847  calr 0xfa76d6
+	calr VoiceParam_AddCurveAndKeyDepth_Clamp                 ; FA8847  calr 0xfa76d6
 	ld	de, wa                                  ; FA884A  ld DE,WA
 	ld	bc, hl                                  ; FA884C  ld BC,HL
 	sll	bc, 13                                 ; FA884E  sll 0x0d,BC
@@ -1811,7 +1811,7 @@ sub_FA8759__FA882D:
 	ld	a, (xbc+79)                             ; FA8862  ld A,(XBC+0x4f)
 	extz	wa                                    ; FA8865  extz WA
 	pushw	wa                                   ; FA8867  push WA
-	calr (0xFA77F3 - 0xFA886B)                 ; FA8868  calr 0xfa77f3
+	calr Add24_ClampTo120                 ; FA8868  calr 0xfa77f3
 	ld	hl, wa                                  ; FA886B  ld HL,WA
 	ld	xbc, (xiz-4)                            ; FA886D  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+80)                             ; FA8870  ld A,(XBC+0x50)
@@ -1819,7 +1819,7 @@ sub_FA8759__FA882D:
 	inc	2, xsp                                 ; FA8875  inc 2,XSP
 	pushw	wa                                   ; FA8877  push WA
 sub_FA8759__FA8878:
-	calr (0xFA7810 - 0xFA887B)                 ; FA8878  calr 0xfa7810
+	calr VoiceParam_LoadTriple_Set5A51                 ; FA8878  calr 0xfa7810
 	or	wa, hl                                  ; FA887B  or WA,HL
 	ld	bc, (xiz+8)                             ; FA887D  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA8880  extz XBC
@@ -1892,7 +1892,7 @@ sub_FA888C__FA88DE:
 	add	bc, de                                 ; FA88E0  add BC,DE
 	pushw	bc                                   ; FA88E2  push BC
 sub_FA888C__FA88E3:
-	calr (0xFA7EE2 - 0xFA88E6)                 ; FA88E3  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA88E3  calr 0xfa7ee2
 	exts	wa                                    ; FA88E6  exts WA
 	ld	(xiz-2), wa                             ; FA88E8  ld (XIZ+0xfe),WA
 	inc	6, xsp                                 ; FA88EB  inc 6,XSP
@@ -1924,7 +1924,7 @@ sub_FA888C__FA88F7:
 	pushw	bc                                   ; FA8929  push BC
 	pushw	wa                                   ; FA892A  push WA
 	extpfx3 0x9E, 0x08, 0x04                   ; FA892B  pushw (XIZ+0x08)
-	calr (0xFA76D6 - 0xFA8931)                 ; FA892E  calr 0xfa76d6
+	calr VoiceParam_AddCurveAndKeyDepth_Clamp                 ; FA892E  calr 0xfa76d6
 	ld	ix, wa                                  ; FA8931  ld IX,WA
 	ld	bc, (xiz-2)                             ; FA8933  ld BC,(XIZ+0xfe)
 	sll	bc, 13                                 ; FA8936  sll 0x0d,BC
@@ -1941,10 +1941,10 @@ sub_FA888C__FA88F7:
 	extz	xwa                                   ; FA8953  extz XWA
 	ld	(xwa+63), bc                            ; FA8955  ld (XWA+0x3f),BC
 	pushw	72                                   ; FA8958  push 0x0048
-	calr (0xFA77F3 - 0xFA895E)                 ; FA895B  calr 0xfa77f3
+	calr Add24_ClampTo120                 ; FA895B  calr 0xfa77f3
 	ld	hl, wa                                  ; FA895E  ld HL,WA
 	pushw	0x8D                                 ; FA8960  push 0x008d
-	calr (0xFA7810 - 0xFA8966)                 ; FA8963  calr 0xfa7810
+	calr VoiceParam_LoadTriple_Set5A51                 ; FA8963  calr 0xfa7810
 	or	wa, hl                                  ; FA8966  or WA,HL
 	ld	bc, (xiz+8)                             ; FA8968  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA896B  extz XBC
@@ -2027,7 +2027,7 @@ sub_FA8997__FA89D7:
 	pushw	bc                                   ; FA89E0  push BC
 	pushw	de                                   ; FA89E1  push DE
 	extpfx3 0x9E, 0x08, 0x04                   ; FA89E2  pushw (XIZ+0x08)
-	calr (0xFA76D6 - 0xFA89E8)                 ; FA89E5  calr 0xfa76d6
+	calr VoiceParam_AddCurveAndKeyDepth_Clamp                 ; FA89E5  calr 0xfa76d6
 	ld	de, wa                                  ; FA89E8  ld DE,WA
 	ld	hl, (xiz+8)                             ; FA89EA  ld HL,(XIZ+0x08)
 	extz	xhl                                   ; FA89ED  extz XHL
@@ -2061,7 +2061,7 @@ sub_FA8997__FA8A2E:
 	add	bc, ix                                 ; FA8A30  add BC,IX
 	pushw	bc                                   ; FA8A32  push BC
 sub_FA8997__FA8A33:
-	calr (0xFA7EE2 - 0xFA8A36)                 ; FA8A33  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8A33  calr 0xfa7ee2
 	exts	wa                                    ; FA8A36  exts WA
 	ld	hl, wa                                  ; FA8A38  ld HL,WA
 	inc	6, xsp                                 ; FA8A3A  inc 6,XSP
@@ -2158,7 +2158,7 @@ sub_FA8A79__FA8ACB:
 	pushw	bc                                   ; FA8AD4  push BC
 	extpfx3 0x9E, 0xFC, 0x04                   ; FA8AD5  pushw (XIZ+0xfc)
 	extpfx3 0x9E, 0x08, 0x04                   ; FA8AD8  pushw (XIZ+0x08)
-	calr (0xFA76D6 - 0xFA8ADE)                 ; FA8ADB  calr 0xfa76d6
+	calr VoiceParam_AddCurveAndKeyDepth_Clamp                 ; FA8ADB  calr 0xfa76d6
 	ld	(xiz-4), wa                             ; FA8ADE  ld (XIZ+0xfc),WA
 	ld	c, (xix+60)                             ; FA8AE1  ld C,(XIX+0x3c)
 	pushw	bc                                   ; FA8AE4  push BC
@@ -2167,7 +2167,7 @@ sub_FA8A79__FA8ACB:
 	pushw	bc                                   ; FA8AEA  push BC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FA8AEB  pushw (XIZ+0xfe)
 	extpfx3 0x9E, 0x08, 0x04                   ; FA8AEE  pushw (XIZ+0x08)
-	calr (0xFA76D6 - 0xFA8AF4)                 ; FA8AF1  calr 0xfa76d6
+	calr VoiceParam_AddCurveAndKeyDepth_Clamp                 ; FA8AF1  calr 0xfa76d6
 	ld	(xiz-2), wa                             ; FA8AF4  ld (XIZ+0xfe),WA
 	ld	hl, (xiz+8)                             ; FA8AF7  ld HL,(XIZ+0x08)
 	extz	xhl                                   ; FA8AFA  extz XHL
@@ -2196,7 +2196,7 @@ sub_FA8A79__FA8ACB:
 	ld	iy, hl                                  ; FA8B37  ld IY,HL
 	sub	iy, de                                 ; FA8B39  sub IY,DE
 	pushw	iy                                   ; FA8B3B  push IY
-	calr (0xFA7EE2 - 0xFA8B3F)                 ; FA8B3C  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8B3C  calr 0xfa7ee2
 	exts	wa                                    ; FA8B3F  exts WA
 	ld	hl, wa                                  ; FA8B41  ld HL,WA
 	inc	6, xsp                                 ; FA8B43  inc 6,XSP
@@ -2218,7 +2218,7 @@ sub_FA8A79__FA8B66:
 	ld	bc, hl                                  ; FA8B66  ld BC,HL
 	add	bc, de                                 ; FA8B68  add BC,DE
 	pushw	bc                                   ; FA8B6A  push BC
-	calr (0xFA7EE2 - 0xFA8B6E)                 ; FA8B6B  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8B6B  calr 0xfa7ee2
 	exts	wa                                    ; FA8B6E  exts WA
 	ld	hl, wa                                  ; FA8B70  ld HL,WA
 	inc	6, xsp                                 ; FA8B72  inc 6,XSP
@@ -2235,7 +2235,7 @@ sub_FA8A79__FA8B66:
 	add	bc, de                                 ; FA8B8E  add BC,DE
 	pushw	bc                                   ; FA8B90  push BC
 sub_FA8A79__FA8B91:
-	calr (0xFA7EE2 - 0xFA8B94)                 ; FA8B91  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8B91  calr 0xfa7ee2
 	exts	wa                                    ; FA8B94  exts WA
 	ld	de, wa                                  ; FA8B96  ld DE,WA
 	inc	6, xsp                                 ; FA8B98  inc 6,XSP
@@ -2335,27 +2335,27 @@ VoiceParam_DispatchOn_17_36:
 	.long 0x00FA8C3B	; 0xFA8C19  entry 5 -> 0xFA8C3B
 VoiceParam_DispatchOn_17_36__FA8C1D:
 	pushw	hl                                   ; FA8C1D  push HL
-	calr (0xFA78AB - 0xFA8C21)                 ; FA8C1E  calr 0xfa78ab
+	calr Rec_StoreConsts_003F_0041                 ; FA8C1E  calr 0xfa78ab
 	jr VoiceParam_DispatchOn_17_36__FA8C3F     ; FA8C21  jr T,0xfa8c3f
 VoiceParam_DispatchOn_17_36__FA8C23:
 	pushw	hl                                   ; FA8C23  push HL
-	calr (0xFA866B - 0xFA8C27)                 ; FA8C24  calr 0xfa866b
+	calr VoiceParam_Build0100_0140_On36_Arm1                 ; FA8C24  calr 0xfa866b
 	jr VoiceParam_DispatchOn_17_36__FA8C3F     ; FA8C27  jr T,0xfa8c3f
 VoiceParam_DispatchOn_17_36__FA8C29:
 	pushw	hl                                   ; FA8C29  push HL
-	calr (0xFA8759 - 0xFA8C2D)                 ; FA8C2A  calr 0xfa8759
+	calr VoiceParam_Build0100_0140_On36_Arm2                 ; FA8C2A  calr 0xfa8759
 	jr VoiceParam_DispatchOn_17_36__FA8C3F     ; FA8C2D  jr T,0xfa8c3f
 VoiceParam_DispatchOn_17_36__FA8C2F:
 	pushw	hl                                   ; FA8C2F  push HL
-	calr (0xFA888C - 0xFA8C33)                 ; FA8C30  calr 0xfa888c
+	calr VoiceParam_Build0100_0140_On36_Arm3                 ; FA8C30  calr 0xfa888c
 	jr VoiceParam_DispatchOn_17_36__FA8C3F     ; FA8C33  jr T,0xfa8c3f
 VoiceParam_DispatchOn_17_36__FA8C35:
 	pushw	hl                                   ; FA8C35  push HL
-	calr (0xFA8997 - 0xFA8C39)                 ; FA8C36  calr 0xfa8997
+	calr VoiceParam_Build0100_0140_On36_Arm4                 ; FA8C36  calr 0xfa8997
 	jr VoiceParam_DispatchOn_17_36__FA8C3F     ; FA8C39  jr T,0xfa8c3f
 VoiceParam_DispatchOn_17_36__FA8C3B:
 	pushw	hl                                   ; FA8C3B  push HL
-	calr (0xFA8A79 - 0xFA8C3F)                 ; FA8C3C  calr 0xfa8a79
+	calr VoiceParam_Build0100_0140_On36_Arm5                 ; FA8C3C  calr 0xfa8a79
 VoiceParam_DispatchOn_17_36__FA8C3F:
 	popw	bc                                    ; FA8C3F  pop BC
 	pop	xhl                                    ; FA8C40  pop XHL
@@ -2397,7 +2397,7 @@ VoiceParam_Build0100_0140_On11_Arm1:
 	extz	wa                                    ; FA8C59  extz WA
 	pushw	wa                                   ; FA8C5B  push WA
 	pushw	ix                                   ; FA8C5C  push IX
-	calr (0xFA778E - 0xFA8C60)                 ; FA8C5D  calr 0xfa778e
+	calr VoiceParam_AddCurveDepth_Clamp                 ; FA8C5D  calr 0xfa778e
 	ld	(xiz-2), wa                             ; FA8C60  ld (XIZ+0xfe),WA
 	ld	hl, (xix+37)                            ; FA8C63  ld HL,(XIX+0x25)
 	extz	xhl                                   ; FA8C66  extz XHL
@@ -2429,7 +2429,7 @@ sub_FA8C44__FA8CA1:
 	add	bc, de                                 ; FA8CA3  add BC,DE
 	pushw	bc                                   ; FA8CA5  push BC
 sub_FA8C44__FA8CA6:
-	calr (0xFA7EE2 - 0xFA8CA9)                 ; FA8CA6  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8CA6  calr 0xfa7ee2
 	exts	wa                                    ; FA8CA9  exts WA
 	ld	hl, wa                                  ; FA8CAB  ld HL,WA
 	inc	6, xsp                                 ; FA8CAD  inc 6,XSP
@@ -2450,12 +2450,12 @@ sub_FA8C44__FA8CBB:
 	ld	a, (xbc+21)                             ; FA8CCE  ld A,(XBC+0x15)
 	extz	wa                                    ; FA8CD1  extz WA
 	pushw	wa                                   ; FA8CD3  push WA
-	calr (0xFA77F3 - 0xFA8CD7)                 ; FA8CD4  calr 0xfa77f3
+	calr Add24_ClampTo120                 ; FA8CD4  calr 0xfa77f3
 	ld	hl, wa                                  ; FA8CD7  ld HL,WA
 	ld	xbc, (xiz-6)                            ; FA8CD9  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+22)                             ; FA8CDC  ld A,(XBC+0x16)
 	pushw	wa                                   ; FA8CDF  push WA
-	calr (0xFA7810 - 0xFA8CE3)                 ; FA8CE0  calr 0xfa7810
+	calr VoiceParam_LoadTriple_Set5A51                 ; FA8CE0  calr 0xfa7810
 	or	wa, hl                                  ; FA8CE3  or WA,HL
 	ld	(xix+65), wa                            ; FA8CE5  ld (XIX+0x41),WA
 	pop	xbc                                    ; FA8CE8  pop XBC
@@ -2499,7 +2499,7 @@ VoiceParam_Build0100_0140_On11_Arm2:
 	extz	wa                                    ; FA8D04  extz WA
 	pushw	wa                                   ; FA8D06  push WA
 	pushw	ix                                   ; FA8D07  push IX
-	calr (0xFA778E - 0xFA8D0B)                 ; FA8D08  calr 0xfa778e
+	calr VoiceParam_AddCurveDepth_Clamp                 ; FA8D08  calr 0xfa778e
 	ld	(xiz-2), wa                             ; FA8D0B  ld (XIZ+0xfe),WA
 	ld	hl, (xix+37)                            ; FA8D0E  ld HL,(XIX+0x25)
 	extz	xhl                                   ; FA8D11  extz XHL
@@ -2531,7 +2531,7 @@ sub_FA8CEF__FA8D4C:
 	add	bc, de                                 ; FA8D4E  add BC,DE
 	pushw	bc                                   ; FA8D50  push BC
 sub_FA8CEF__FA8D51:
-	calr (0xFA7EE2 - 0xFA8D54)                 ; FA8D51  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8D51  calr 0xfa7ee2
 	exts	wa                                    ; FA8D54  exts WA
 	ld	hl, wa                                  ; FA8D56  ld HL,WA
 	inc	6, xsp                                 ; FA8D58  inc 6,XSP
@@ -2552,12 +2552,12 @@ sub_FA8CEF__FA8D66:
 	ld	a, (xbc+21)                             ; FA8D7A  ld A,(XBC+0x15)
 	extz	wa                                    ; FA8D7D  extz WA
 	pushw	wa                                   ; FA8D7F  push WA
-	calr (0xFA77F3 - 0xFA8D83)                 ; FA8D80  calr 0xfa77f3
+	calr Add24_ClampTo120                 ; FA8D80  calr 0xfa77f3
 	ld	hl, wa                                  ; FA8D83  ld HL,WA
 	ld	xbc, (xiz-6)                            ; FA8D85  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+22)                             ; FA8D88  ld A,(XBC+0x16)
 	pushw	wa                                   ; FA8D8B  push WA
-	calr (0xFA7810 - 0xFA8D8F)                 ; FA8D8C  calr 0xfa7810
+	calr VoiceParam_LoadTriple_Set5A51                 ; FA8D8C  calr 0xfa7810
 	or	wa, hl                                  ; FA8D8F  or WA,HL
 	ld	(xix+65), wa                            ; FA8D91  ld (XIX+0x41),WA
 	pop	xbc                                    ; FA8D94  pop XBC
@@ -2600,7 +2600,7 @@ VoiceParam_Build0100_0140_On11_Arm3:
 	extz	bc                                    ; FA8DAF  extz BC
 	pushw	bc                                   ; FA8DB1  push BC
 	extpfx3 0x9E, 0x08, 0x04                   ; FA8DB2  pushw (XIZ+0x08)
-	calr (0xFA778E - 0xFA8DB8)                 ; FA8DB5  calr 0xfa778e
+	calr VoiceParam_AddCurveDepth_Clamp                 ; FA8DB5  calr 0xfa778e
 	ld	(xiz-2), wa                             ; FA8DB8  ld (XIZ+0xfe),WA
 	ld	hl, (xiz+8)                             ; FA8DBB  ld HL,(XIZ+0x08)
 	extz	xhl                                   ; FA8DBE  extz XHL
@@ -2634,7 +2634,7 @@ sub_FA8D9B__FA8DFE:
 	add	bc, de                                 ; FA8E00  add BC,DE
 	pushw	bc                                   ; FA8E02  push BC
 sub_FA8D9B__FA8E03:
-	calr (0xFA7EE2 - 0xFA8E06)                 ; FA8E03  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8E03  calr 0xfa7ee2
 	exts	wa                                    ; FA8E06  exts WA
 	ld	hl, wa                                  ; FA8E08  ld HL,WA
 	inc	6, xsp                                 ; FA8E0A  inc 6,XSP
@@ -2699,7 +2699,7 @@ VoiceParam_Build0100_0140_On11_Arm4:
 	extz	bc                                    ; FA8E5B  extz BC
 	pushw	bc                                   ; FA8E5D  push BC
 	extpfx3 0x9E, 0x08, 0x04                   ; FA8E5E  pushw (XIZ+0x08)
-	calr (0xFA778E - 0xFA8E64)                 ; FA8E61  calr 0xfa778e
+	calr VoiceParam_AddCurveDepth_Clamp                 ; FA8E61  calr 0xfa778e
 	ld	(xiz-2), wa                             ; FA8E64  ld (XIZ+0xfe),WA
 	ld	hl, (xiz+8)                             ; FA8E67  ld HL,(XIZ+0x08)
 	extz	xhl                                   ; FA8E6A  extz XHL
@@ -2733,7 +2733,7 @@ sub_FA8E47__FA8EAA:
 	add	bc, de                                 ; FA8EAC  add BC,DE
 	pushw	bc                                   ; FA8EAE  push BC
 sub_FA8E47__FA8EAF:
-	calr (0xFA7EE2 - 0xFA8EB2)                 ; FA8EAF  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8EAF  calr 0xfa7ee2
 	exts	wa                                    ; FA8EB2  exts WA
 	ld	hl, wa                                  ; FA8EB4  ld HL,WA
 	inc	6, xsp                                 ; FA8EB6  inc 6,XSP
@@ -2799,13 +2799,13 @@ VoiceParam_Build0100_0140_On11_Arm5:
 	extz	bc                                    ; FA8F0B  extz BC
 	pushw	bc                                   ; FA8F0D  push BC
 	extpfx3 0x9E, 0x08, 0x04                   ; FA8F0E  pushw (XIZ+0x08)
-	calr (0xFA778E - 0xFA8F14)                 ; FA8F11  calr 0xfa778e
+	calr VoiceParam_AddCurveDepth_Clamp                 ; FA8F11  calr 0xfa778e
 	ld	(xiz-4), wa                             ; FA8F14  ld (XIZ+0xfc),WA
 	ld	c, (xix+21)                             ; FA8F17  ld C,(XIX+0x15)
 	extz	bc                                    ; FA8F1A  extz BC
 	pushw	bc                                   ; FA8F1C  push BC
 	extpfx3 0x9E, 0x08, 0x04                   ; FA8F1D  pushw (XIZ+0x08)
-	calr (0xFA778E - 0xFA8F23)                 ; FA8F20  calr 0xfa778e
+	calr VoiceParam_AddCurveDepth_Clamp                 ; FA8F20  calr 0xfa778e
 	ld	(xiz-2), wa                             ; FA8F23  ld (XIZ+0xfe),WA
 	ld	hl, (xiz+8)                             ; FA8F26  ld HL,(XIZ+0x08)
 	extz	xhl                                   ; FA8F29  extz XHL
@@ -2833,7 +2833,7 @@ VoiceParam_Build0100_0140_On11_Arm5:
 	ld	iy, hl                                  ; FA8F64  ld IY,HL
 	sub	iy, de                                 ; FA8F66  sub IY,DE
 	pushw	iy                                   ; FA8F68  push IY
-	calr (0xFA7EE2 - 0xFA8F6C)                 ; FA8F69  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8F69  calr 0xfa7ee2
 	exts	wa                                    ; FA8F6C  exts WA
 	ld	hl, wa                                  ; FA8F6E  ld HL,WA
 	inc	6, xsp                                 ; FA8F70  inc 6,XSP
@@ -2855,7 +2855,7 @@ sub_FA8EF7__FA8F93:
 	ld	bc, hl                                  ; FA8F93  ld BC,HL
 	add	bc, de                                 ; FA8F95  add BC,DE
 	pushw	bc                                   ; FA8F97  push BC
-	calr (0xFA7EE2 - 0xFA8F9B)                 ; FA8F98  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8F98  calr 0xfa7ee2
 	exts	wa                                    ; FA8F9B  exts WA
 	ld	hl, wa                                  ; FA8F9D  ld HL,WA
 	inc	6, xsp                                 ; FA8F9F  inc 6,XSP
@@ -2872,7 +2872,7 @@ sub_FA8EF7__FA8F93:
 	add	bc, de                                 ; FA8FBB  add BC,DE
 	pushw	bc                                   ; FA8FBD  push BC
 sub_FA8EF7__FA8FBE:
-	calr (0xFA7EE2 - 0xFA8FC1)                 ; FA8FBE  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA8FBE  calr 0xfa7ee2
 	exts	wa                                    ; FA8FC1  exts WA
 	ld	de, wa                                  ; FA8FC3  ld DE,WA
 	inc	6, xsp                                 ; FA8FC5  inc 6,XSP
@@ -2962,7 +2962,7 @@ VoiceParam_DispatchOn_17_11:
 	.long 0x00FA9078	; 0xFA9046  entry 5 -> 0xFA9078
 VoiceParam_DispatchOn_17_11__FA904A:
 	pushw	hl                                   ; FA904A  push HL
-	calr (0xFA78AB - 0xFA904E)                 ; FA904B  calr 0xfa78ab
+	calr Rec_StoreConsts_003F_0041                 ; FA904B  calr 0xfa78ab
 	ld	bc, (xhl+63)                            ; FA904E  ld BC,(XHL+0x3f)
 	ld	(0xD766:24), bc                        ; FA9051  ld (0x00d766),BC
 	ld	bc, (xhl+65)                            ; FA9056  ld BC,(XHL+0x41)
@@ -2970,23 +2970,23 @@ VoiceParam_DispatchOn_17_11__FA904A:
 	jr VoiceParam_DispatchOn_17_11__FA907C     ; FA905E  jr T,0xfa907c
 VoiceParam_DispatchOn_17_11__FA9060:
 	pushw	hl                                   ; FA9060  push HL
-	calr (0xFA8C44 - 0xFA9064)                 ; FA9061  calr 0xfa8c44
+	calr VoiceParam_Build0100_0140_On11_Arm1                 ; FA9061  calr 0xfa8c44
 	jr VoiceParam_DispatchOn_17_11__FA907C     ; FA9064  jr T,0xfa907c
 VoiceParam_DispatchOn_17_11__FA9066:
 	pushw	hl                                   ; FA9066  push HL
-	calr (0xFA8CEF - 0xFA906A)                 ; FA9067  calr 0xfa8cef
+	calr VoiceParam_Build0100_0140_On11_Arm2                 ; FA9067  calr 0xfa8cef
 	jr VoiceParam_DispatchOn_17_11__FA907C     ; FA906A  jr T,0xfa907c
 VoiceParam_DispatchOn_17_11__FA906C:
 	pushw	hl                                   ; FA906C  push HL
-	calr (0xFA8D9B - 0xFA9070)                 ; FA906D  calr 0xfa8d9b
+	calr VoiceParam_Build0100_0140_On11_Arm3                 ; FA906D  calr 0xfa8d9b
 	jr VoiceParam_DispatchOn_17_11__FA907C     ; FA9070  jr T,0xfa907c
 VoiceParam_DispatchOn_17_11__FA9072:
 	pushw	hl                                   ; FA9072  push HL
-	calr (0xFA8E47 - 0xFA9076)                 ; FA9073  calr 0xfa8e47
+	calr VoiceParam_Build0100_0140_On11_Arm4                 ; FA9073  calr 0xfa8e47
 	jr VoiceParam_DispatchOn_17_11__FA907C     ; FA9076  jr T,0xfa907c
 VoiceParam_DispatchOn_17_11__FA9078:
 	pushw	hl                                   ; FA9078  push HL
-	calr (0xFA8EF7 - 0xFA907C)                 ; FA9079  calr 0xfa8ef7
+	calr VoiceParam_Build0100_0140_On11_Arm5                 ; FA9079  calr 0xfa8ef7
 VoiceParam_DispatchOn_17_11__FA907C:
 	popw	bc                                    ; FA907C  pop BC
 	pop	xhl                                    ; FA907D  pop XHL
@@ -3071,7 +3071,7 @@ Voice_StagePair_Reg0100_0140_First__FA90C6:
 	extpfx3 0x9E, 0xFE, 0x83                   ; FA90D5  add HL,(XIZ+0xfe)
 Voice_StagePair_Reg0100_0140_First__FA90D8:
 	pushw	hl                                   ; FA90D8  push HL
-	calr (0xFA76B2 - 0xFA90DC)                 ; FA90D9  calr 0xfa76b2
+	calr Clamp_36_to_120                 ; FA90D9  calr 0xfa76b2
 	ld	hl, wa                                  ; FA90DC  ld HL,WA
 	extz	xde                                   ; FA90DE  extz XDE
 	ld	bc, (xde+63)                            ; FA90E0  ld BC,(XDE+0x3f)
@@ -3163,7 +3163,7 @@ Voice_StagePair_Reg0100_0140_Both__FA914B:
 	extpfx3 0x9E, 0xFE, 0x83                   ; FA915A  add HL,(XIZ+0xfe)
 Voice_StagePair_Reg0100_0140_Both__FA915D:
 	pushw	hl                                   ; FA915D  push HL
-	calr (0xFA76B2 - 0xFA9161)                 ; FA915E  calr 0xfa76b2
+	calr Clamp_36_to_120                 ; FA915E  calr 0xfa76b2
 	ld	hl, wa                                  ; FA9161  ld HL,WA
 	extz	xde                                   ; FA9163  extz XDE
 	ld	bc, (xde+63)                            ; FA9165  ld BC,(XDE+0x3f)
@@ -3284,11 +3284,11 @@ Voice_StagePair_Reg0100_0140_AB__FA91DE:
 	jr z, Voice_StagePair_Reg0100_0140_AB__FA91F4                   ; FA91EC  jr Z,0xfa91f4
 Voice_StagePair_Reg0100_0140_AB__FA91EE:
 	pushw	ix                                   ; FA91EE  push IX
-	calr (0xFA9081 - 0xFA91F2)                 ; FA91EF  calr 0xfa9081
+	calr Voice_StagePair_Reg0100_0140_First                 ; FA91EF  calr 0xfa9081
 	jr Voice_StagePair_Reg0100_0140_AB__FA91F8                      ; FA91F2  jr T,0xfa91f8
 Voice_StagePair_Reg0100_0140_AB__FA91F4:
 	pushw	ix                                   ; FA91F4  push IX
-	calr (0xFA9105 - 0xFA91F8)                 ; FA91F5  calr 0xfa9105
+	calr Voice_StagePair_Reg0100_0140_Both                 ; FA91F5  calr 0xfa9105
 Voice_StagePair_Reg0100_0140_AB__FA91F8:
 	popw	bc                                    ; FA91F8  pop BC
 	jrl Voice_StagePair_Reg0100_0140_AB__FA929F                     ; FA91F9  jrl T,0xfa929f
@@ -3334,7 +3334,7 @@ Voice_StagePair_Reg0100_0140_AB__FA9240:
 	add	hl, wa                                 ; FA925E  add HL,WA
 Voice_StagePair_Reg0100_0140_AB__FA9260:
 	pushw	de                                   ; FA9260  push DE
-	calr (0xFA76B2 - 0xFA9264)                 ; FA9261  calr 0xfa76b2
+	calr Clamp_36_to_120                 ; FA9261  calr 0xfa76b2
 	ld	de, wa                                  ; FA9264  ld DE,WA
 	extz	xix                                   ; FA9266  extz XIX
 	ld	bc, (xix+63)                            ; FA9268  ld BC,(XIX+0x3f)
@@ -3342,7 +3342,7 @@ Voice_StagePair_Reg0100_0140_AB__FA9260:
 	or	bc, wa                                  ; FA926F  or BC,WA
 	ld	(0xD766:24), bc                        ; FA9271  ld (0x00d766),BC
 	pushw	hl                                   ; FA9276  push HL
-	calr (0xFA76B2 - 0xFA927A)                 ; FA9277  calr 0xfa76b2
+	calr Clamp_36_to_120                 ; FA9277  calr 0xfa76b2
 	ld	hl, wa                                  ; FA927A  ld HL,WA
 	ld	bc, (xix+65)                            ; FA927C  ld BC,(XIX+0x41)
 	and	bc, 0xFF80                             ; FA927F  and BC,0xff80
@@ -3436,11 +3436,11 @@ Voice_StagePair_Reg0100_0140_CD__FA92E8:
 	jr z, Voice_StagePair_Reg0100_0140_CD__FA92FE                   ; FA92F6  jr Z,0xfa92fe
 Voice_StagePair_Reg0100_0140_CD__FA92F8:
 	pushw	ix                                   ; FA92F8  push IX
-	calr (0xFA9081 - 0xFA92FC)                 ; FA92F9  calr 0xfa9081
+	calr Voice_StagePair_Reg0100_0140_First                 ; FA92F9  calr 0xfa9081
 	jr Voice_StagePair_Reg0100_0140_CD__FA9302                      ; FA92FC  jr T,0xfa9302
 Voice_StagePair_Reg0100_0140_CD__FA92FE:
 	pushw	ix                                   ; FA92FE  push IX
-	calr (0xFA9105 - 0xFA9302)                 ; FA92FF  calr 0xfa9105
+	calr Voice_StagePair_Reg0100_0140_Both                 ; FA92FF  calr 0xfa9105
 Voice_StagePair_Reg0100_0140_CD__FA9302:
 	popw	bc                                    ; FA9302  pop BC
 	jrl Voice_StagePair_Reg0100_0140_CD__FA93A9                     ; FA9303  jrl T,0xfa93a9
@@ -3486,7 +3486,7 @@ Voice_StagePair_Reg0100_0140_CD__FA934A:
 	add	hl, wa                                 ; FA9368  add HL,WA
 Voice_StagePair_Reg0100_0140_CD__FA936A:
 	pushw	de                                   ; FA936A  push DE
-	calr (0xFA76B2 - 0xFA936E)                 ; FA936B  calr 0xfa76b2
+	calr Clamp_36_to_120                 ; FA936B  calr 0xfa76b2
 	ld	de, wa                                  ; FA936E  ld DE,WA
 	extz	xix                                   ; FA9370  extz XIX
 	ld	bc, (xix+63)                            ; FA9372  ld BC,(XIX+0x3f)
@@ -3494,7 +3494,7 @@ Voice_StagePair_Reg0100_0140_CD__FA936A:
 	or	bc, wa                                  ; FA9379  or BC,WA
 	ld	(0xD766:24), bc                        ; FA937B  ld (0x00d766),BC
 	pushw	hl                                   ; FA9380  push HL
-	calr (0xFA76B2 - 0xFA9384)                 ; FA9381  calr 0xfa76b2
+	calr Clamp_36_to_120                 ; FA9381  calr 0xfa76b2
 	ld	hl, wa                                  ; FA9384  ld HL,WA
 	ld	bc, (xix+65)                            ; FA9386  ld BC,(XIX+0x41)
 	and	bc, 0xFF80                             ; FA9389  and BC,0xff80
@@ -3572,7 +3572,7 @@ Voice_StageRegs_09C0_0A00_0A40_AB:
 	pushw	wa                                   ; FA93CF  push WA
 	push	0                                     ; FA93D0  push 0x00
 	push	h                                     ; FA93D2  push H
-	calr (0xFA75BA - 0xFA93D7)                 ; FA93D4  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FA93D4  calr 0xfa75ba
 	ld	(xiz-4), wa                             ; FA93D7  ld (XIZ+0xfc),WA
 	ld	xbc, (xiz-10)                           ; FA93DA  ld XBC,(XIZ+0xf6)
 	ld	h, (xbc+63)                             ; FA93DD  ld H,(XBC+0x3f)
@@ -3658,7 +3658,7 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA9486:
 	extz	xwa                                   ; FA94A4  extz XWA
 	ld	iy, (xwa+8)                             ; FA94A6  ld IY,(XWA+0x08)
 	pushw	iy                                   ; FA94A9  push IY
-	calr (0xFA766C - 0xFA94AD)                 ; FA94AA  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FA94AA  calr 0xfa766c
 	add	de, wa                                 ; FA94AD  add DE,WA
 	inc	8, xsp                                 ; FA94AF  inc 0,XSP
 	inc	2, xsp                                 ; FA94B1  inc 2,XSP
@@ -3666,7 +3666,7 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3:
 	pushw	0                                    ; FA94B3  push 0x0000
 	pushw	0xFF                                 ; FA94B6  push 0x00ff
 	pushw	de                                   ; FA94B9  push DE
-	calr (0xFA7598 - 0xFA94BD)                 ; FA94BA  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA94BA  calr 0xfa7598
 	ld	(xiz-12), wa                            ; FA94BD  ld (XIZ+0xf4),WA
 	pushw	0xFFCE                               ; FA94C0  push 0xffce
 	pushw	50                                   ; FA94C3  push 0x0032
@@ -3678,9 +3678,9 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3:
 	exts	wa                                    ; FA94D4  exts WA
 	extpfx3 0x9E, 0xF2, 0x80                   ; FA94D6  add WA,(XIZ+0xf2)
 	pushw	wa                                   ; FA94D9  push WA
-	calr (0xFA7598 - 0xFA94DD)                 ; FA94DA  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA94DA  calr 0xfa7598
 	pushw	wa                                   ; FA94DD  push WA
-	calr (0xFA7602 - 0xFA94E1)                 ; FA94DE  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FA94DE  calr 0xfa7602
 	and	wa, 0xFF                               ; FA94E1  and WA,0x00ff
 	ld	(xiz-16), wa                            ; FA94E5  ld (XIZ+0xf0),WA
 	ld	bc, (xiz-12)                            ; FA94E8  ld BC,(XIZ+0xf4)
@@ -3703,13 +3703,13 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA94B3:
 	extz	xwa                                   ; FA9515  extz XWA
 	ld	iy, (xwa+8)                             ; FA9517  ld IY,(XWA+0x08)
 	pushw	iy                                   ; FA951A  push IY
-	calr (0xFA766C - 0xFA951E)                 ; FA951B  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FA951B  calr 0xfa766c
 	ld	(xiz-12), wa                            ; FA951E  ld (XIZ+0xf4),WA
 	pushw	0                                    ; FA9521  push 0x0000
 	pushw	0xFF                                 ; FA9524  push 0x00ff
 	add	wa, hl                                 ; FA9527  add WA,HL
 	pushw	wa                                   ; FA9529  push WA
-	calr (0xFA7598 - 0xFA952D)                 ; FA952A  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA952A  calr 0xfa7598
 	ld	hl, wa                                  ; FA952D  ld HL,WA
 	inc	8, xsp                                 ; FA952F  inc 0,XSP
 	inc	8, xsp                                 ; FA9531  inc 0,XSP
@@ -3723,14 +3723,14 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA9541:
 	pushw	0                                    ; FA9541  push 0x0000
 	pushw	0xFF                                 ; FA9544  push 0x00ff
 	pushw	hl                                   ; FA9547  push HL
-	calr (0xFA7598 - 0xFA954B)                 ; FA9548  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA9548  calr 0xfa7598
 	ld	hl, wa                                  ; FA954B  ld HL,WA
 	inc	6, xsp                                 ; FA954D  inc 6,XSP
 	pushw	0                                    ; FA954F  push 0x0000
 	pushw	0xFF                                 ; FA9552  push 0x00ff
 	pushw	ix                                   ; FA9555  push IX
 Voice_StageRegs_09C0_0A00_0A40_AB__FA9556:
-	calr (0xFA7598 - 0xFA9559)                 ; FA9556  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA9556  calr 0xfa7598
 	ld	ix, wa                                  ; FA9559  ld IX,WA
 	pushw	0xFFCE                               ; FA955B  push 0xffce
 	pushw	50                                   ; FA955E  push 0x0032
@@ -3742,9 +3742,9 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA9556:
 	exts	wa                                    ; FA956E  exts WA
 	add	wa, de                                 ; FA9570  add WA,DE
 	pushw	wa                                   ; FA9572  push WA
-	calr (0xFA7598 - 0xFA9576)                 ; FA9573  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA9573  calr 0xfa7598
 	pushw	wa                                   ; FA9576  push WA
-	calr (0xFA7602 - 0xFA957A)                 ; FA9577  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FA9577  calr 0xfa7602
 	ld	de, wa                                  ; FA957A  ld DE,WA
 	pushw	0xFFCE                               ; FA957C  push 0xffce
 	pushw	50                                   ; FA957F  push 0x0032
@@ -3756,9 +3756,9 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA9556:
 	exts	wa                                    ; FA9590  exts WA
 	extpfx3 0x9E, 0xF4, 0x80                   ; FA9592  add WA,(XIZ+0xf4)
 	pushw	wa                                   ; FA9595  push WA
-	calr (0xFA7598 - 0xFA9599)                 ; FA9596  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA9596  calr 0xfa7598
 	pushw	wa                                   ; FA9599  push WA
-	calr (0xFA7602 - 0xFA959D)                 ; FA959A  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FA959A  calr 0xfa7602
 	ld	(xiz-14), wa                            ; FA959D  ld (XIZ+0xf2),WA
 	ld	bc, de                                  ; FA95A0  ld BC,DE
 	and	bc, 0xFF                               ; FA95A2  and BC,0x00ff
@@ -3841,24 +3841,24 @@ Voice_StageRegs_0500_08C0_AB:
 	ld	xwa, (xiz-6)                            ; FA95ED  ld XWA,(XIZ+0xfa)
 	ld	c, (xwa+72)                             ; FA95F0  ld C,(XWA+0x48)
 	pushw	bc                                   ; FA95F3  push BC
-	calr (0xFA75BA - 0xFA95F7)                 ; FA95F4  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FA95F4  calr 0xfa75ba
 	ld	hl, wa                                  ; FA95F7  ld HL,WA
 	add	hl, 0x7F                               ; FA95F9  add HL,0x007f
 	pushw	0                                    ; FA95FD  push 0x0000
 	pushw	0x7F                                 ; FA9600  push 0x007f
 	pushw	hl                                   ; FA9603  push HL
-	calr (0xFA7598 - 0xFA9607)                 ; FA9604  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA9604  calr 0xfa7598
 	ld	ix, wa                                  ; FA9607  ld IX,WA
 	pushw	wa                                   ; FA9609  push WA
 	extpfx3 0x9E, 0x08, 0x04                   ; FA960A  pushw (XIZ+0x08)
-	call	0xFC810C                              ; FA960D  call 0xfc810c
+	call	sub_FC810C                              ; FA960D  call 0xfc810c
 	ld	xbc, (xiz-6)                            ; FA9611  ld XBC,(XIZ+0xfa)
 	ld	h, (xbc+61)                             ; FA9614  ld H,(XBC+0x3d)
 	ld	a, (xbc+62)                             ; FA9617  ld A,(XBC+0x3e)
 	add	a, h                                   ; FA961A  add A,H
 	exts	wa                                    ; FA961C  exts WA
 	pushw	wa                                   ; FA961E  push WA
-	calr (0xFA7602 - 0xFA9622)                 ; FA961F  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FA961F  calr 0xfa7602
 	ld	(xiz-2), wa                             ; FA9622  ld (XIZ+0xfe),WA
 	ld	bc, (xiz+8)                             ; FA9625  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA9628  extz XBC
@@ -3877,7 +3877,7 @@ Voice_StageRegs_0500_08C0_AB:
 	cpl	bc                                     ; FA964C  cpl BC
 	inc	1, bc                                  ; FA964E  inc 1,BC
 	pushw	bc                                   ; FA9650  push BC
-	calr (0xFA7654 - 0xFA9654)                 ; FA9651  calr 0xfa7654
+	calr DetuneCurve_LookupUnsigned                 ; FA9651  calr 0xfa7654
 	ld	hl, wa                                  ; FA9654  ld HL,WA
 	ld	xbc, (xiz-6)                            ; FA9656  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+8)                              ; FA9659  ld A,(XBC+0x08)
@@ -3889,7 +3889,7 @@ Voice_StageRegs_0500_08C0_AB:
 	jr Voice_StageRegs_0500_08C0_AB__FA9676                      ; FA9664  jr T,0xfa9676
 Voice_StageRegs_0500_08C0_AB__FA9666:
 	pushw	hl                                   ; FA9666  push HL
-	calr (0xFA7654 - 0xFA966A)                 ; FA9667  calr 0xfa7654
+	calr DetuneCurve_LookupUnsigned                 ; FA9667  calr 0xfa7654
 	ld	hl, wa                                  ; FA966A  ld HL,WA
 	ld	xbc, (xiz-6)                            ; FA966C  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+8)                              ; FA966F  ld A,(XBC+0x08)
@@ -3897,7 +3897,7 @@ Voice_StageRegs_0500_08C0_AB__FA9666:
 	popw	iy                                    ; FA9674  pop IY
 	pushw	wa                                   ; FA9675  push WA
 Voice_StageRegs_0500_08C0_AB__FA9676:
-	calr (0xFA7602 - 0xFA9679)                 ; FA9676  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FA9676  calr 0xfa7602
 	ld	de, wa                                  ; FA9679  ld DE,WA
 	pushw	6                                    ; FA967B  push 0x0006
 	ld	bc, (xiz+8)                             ; FA967E  ld BC,(XIZ+0x08)
@@ -3907,13 +3907,13 @@ Voice_StageRegs_0500_08C0_AB__FA9676:
 	ld	xwa, (xiz-6)                            ; FA9687  ld XWA,(XIZ+0xfa)
 	ld	c, (xwa+18)                             ; FA968A  ld C,(XWA+0x12)
 	pushw	bc                                   ; FA968D  push BC
-	calr (0xFA75BA - 0xFA9691)                 ; FA968E  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FA968E  calr 0xfa75ba
 	add	wa, hl                                 ; FA9691  add WA,HL
 	ld	(xiz-8), wa                             ; FA9693  ld (XIZ+0xf8),WA
 	pushw	0                                    ; FA9696  push 0x0000
 	pushw	0x7F                                 ; FA9699  push 0x007f
 	pushw	wa                                   ; FA969C  push WA
-	calr (0xFA7598 - 0xFA96A0)                 ; FA969D  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FA969D  calr 0xfa7598
 	ld	hl, wa                                  ; FA96A0  ld HL,WA
 	ld	bc, ix                                  ; FA96A2  ld BC,IX
 	and	bc, 0xFF                               ; FA96A4  and BC,0x00ff
@@ -4003,7 +4003,7 @@ Voice_StageRegs_CD:
 	ldw	(0xD788:24), 0                        ; FA9739  ld (0x00d788),0x0000
 	pushw	0                                    ; FA9740  push 0x0000
 	extpfx3 0x9E, 0x08, 0x04                   ; FA9743  pushw (XIZ+0x08)
-	call	0xFC810C                              ; FA9746  call 0xfc810c
+	call	sub_FC810C                              ; FA9746  call 0xfc810c
 	ld	bc, (xiz+8)                             ; FA974A  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA974D  extz XBC
 	ld	wa, (xbc+1)                             ; FA974F  ld WA,(XBC+0x01)
@@ -4013,7 +4013,7 @@ Voice_StageRegs_CD:
 	lda	xwa, (0xD75E:24)                       ; FA9759  lda XWA,0x00d75e
 	push	xwa                                   ; FA975E  push XWA
 	pushw	bc                                   ; FA975F  push BC
-	call	0xFC7FCA                              ; FA9760  call 0xfc7fca
+	call	sub_FC7FCA                              ; FA9760  call 0xfc7fca
 	ld	bc, (0xD77E:24)                        ; FA9764  ld BC,(0x00d77e)
 	sll	bc, 8                                  ; FA9769  sll 0x08,BC
 	or	(0xD77C:24), bc                     ; FA976C  or (0x00d77c),BC
@@ -4025,7 +4025,7 @@ Voice_StageRegs_CD__FA9773:
 	ld	(xiz-1), c                              ; FA9784  ld (XIZ+0xff),C
 	cp	c, 0x80                                 ; FA9787  cp C,0x80
 	jr nz, Voice_StageRegs_CD__FA979F                  ; FA978A  jr NZ,0xfa979f
-	calr (0xFA7F04 - 0xFA978F)                 ; FA978C  calr 0xfa7f04
+	calr Rand_FromTickSquared                 ; FA978C  calr 0xfa7f04
 	res	7, a                                   ; FA978F  res 0x07,A
 	exts	wa                                    ; FA9792  exts WA
 	ld	bc, (xiz+8)                             ; FA9794  ld BC,(XIZ+0x08)
@@ -4063,7 +4063,7 @@ Voice_StageRegs_CD__FA97DE:
 	add	bc, hl                                 ; FA97E0  add BC,HL
 	pushw	bc                                   ; FA97E2  push BC
 Voice_StageRegs_CD__FA97E3:
-	calr (0xFA7EE2 - 0xFA97E6)                 ; FA97E3  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FA97E3  calr 0xfa7ee2
 	exts	wa                                    ; FA97E6  exts WA
 	ld	bc, (xiz+8)                             ; FA97E8  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA97EB  extz XBC
@@ -4346,12 +4346,12 @@ Voice_StageChanSel_Reg0440_Reg0480:
 	pushw	wa                                   ; FA998C  push WA
 	push	0                                     ; FA998D  push 0x00
 	extpfx3 0x8E, 0xFD, 0x04                   ; FA998F  push (XIZ+0xfd)
-	call	0xFA5ED3                              ; FA9992  call 0xfa5ed3
+	call	Voice_LookupDev10CChanIndex                              ; FA9992  call 0xfa5ed3
 	ld	hl, wa                                  ; FA9996  ld HL,WA
 	ld	de, wa                                  ; FA9998  ld DE,WA
 	and	de, 0x7F                               ; FA999A  and DE,0x007f
 	pushw	de                                   ; FA999E  push DE
-	call	0xFB7CFF                              ; FA999F  call 0xfb7cff
+	call	Dev10C_Slot2_WriteGate8100                              ; FA999F  call 0xfb7cff
 	inc	8, xsp                                 ; FA99A3  inc 0,XSP
 	jr Voice_StageChanSel_Reg0440_Reg0480__FA99C7                      ; FA99A5  jr T,0xfa99c7
 Voice_StageChanSel_Reg0440_Reg0480__FA99A7:
@@ -4363,7 +4363,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA99A7:
 	pushw	wa                                   ; FA99B3  push WA
 	push	0                                     ; FA99B4  push 0x00
 	extpfx3 0x8E, 0xFD, 0x04                   ; FA99B6  push (XIZ+0xfd)
-	call	0xFA5ED3                              ; FA99B9  call 0xfa5ed3
+	call	Voice_LookupDev10CChanIndex                              ; FA99B9  call 0xfa5ed3
 	ld	hl, wa                                  ; FA99BD  ld HL,WA
 	ld	de, wa                                  ; FA99BF  ld DE,WA
 	and	de, 0x7F                               ; FA99C1  and DE,0x007f
@@ -4406,15 +4406,15 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9A14:
 	extpfx3 0x9E, 0xFA, 0x04                   ; FA9A24  pushw (XIZ+0xfa)
 	push	0                                     ; FA9A27  push 0x00
 	extpfx3 0x8E, 0xFD, 0x04                   ; FA9A29  push (XIZ+0xfd)
-	calr (0xFA981B - 0xFA9A2F)                 ; FA9A2C  calr 0xfa981b
+	calr EnvRec_LoadSlot                 ; FA9A2C  calr 0xfa981b
 	push	0                                     ; FA9A2F  push 0x00
 	extpfx3 0x8E, 0xF6, 0x04                   ; FA9A31  push (XIZ+0xf6)
-	calr (0xFA79F4 - 0xFA9A37)                 ; FA9A34  calr 0xfa79f4
+	calr EGEnv_Eval_ValueCurve_WithBaseCurveA                 ; FA9A34  calr 0xfa79f4
 	ld	(0xD79A:24), wa                        ; FA9A37  ld (0x00d79a),WA
 	lda	xbc, (0xD75E:24)                       ; FA9A3C  lda XBC,0x00d75e
 	push	xbc                                   ; FA9A41  push XBC
 	pushw	de                                   ; FA9A42  push DE
-	call	0xFB7CB1                              ; FA9A43  call 0xfb7cb1
+	call	Dev10C_Slot2_StrobeGate                              ; FA9A43  call 0xfb7cb1
 	add	xsp, 18                                ; FA9A47  add XSP,0x00000012
 Voice_StageChanSel_Reg0440_Reg0480__FA9A4D:
 	extz	xix                                   ; FA9A4D  extz XIX
@@ -4462,14 +4462,14 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9AA0:
 Voice_StageChanSel_Reg0440_Reg0480__FA9AAF:
 	ld	c, e                                    ; FA9AAF  ld C,E
 	pushw	bc                                   ; FA9AB1  push BC
-	calr (0xFA796D - 0xFA9AB5)                 ; FA9AB2  calr 0xfa796d
+	calr EGEnv_Eval_BaseCurveA                 ; FA9AB2  calr 0xfa796d
 	ld	(0xD79E:24), wa                        ; FA9AB5  ld (0x00d79e),WA
 	popw	bc                                    ; FA9ABA  pop BC
 Voice_StageChanSel_Reg0440_Reg0480__FA9ABB:
 	lda	xbc, (0xD75E:24)                       ; FA9ABB  lda XBC,0x00d75e
 	push	xbc                                   ; FA9AC0  push XBC
 	pushw	de                                   ; FA9AC1  push DE
-	call	0xFB7C8F                              ; FA9AC2  call 0xfb7c8f
+	call	Dev10C_SetChanReg_0600_b                              ; FA9AC2  call 0xfb7c8f
 Voice_StageChanSel_Reg0440_Reg0480__FA9AC6:
 	inc	6, xsp                                 ; FA9AC6  inc 6,XSP
 	jrl Voice_StageChanSel_Reg0440_Reg0480__FA9B74                     ; FA9AC8  jrl T,0xfa9b74
@@ -4484,7 +4484,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9ACB:
 	extpfx3 0x8E, 0xFE, 0x04                   ; FA9ADF  push (XIZ+0xfe)
 	push	0                                     ; FA9AE2  push 0x00
 	extpfx3 0x8E, 0xFD, 0x04                   ; FA9AE4  push (XIZ+0xfd)
-	call	0xFB5E39                              ; FA9AE7  call 0xfb5e39
+	call	Dev10C_ChanSelHighBits                              ; FA9AE7  call 0xfb5e39
 	ld	de, wa                                  ; FA9AEB  ld DE,WA
 	inc	6, xsp                                 ; FA9AED  inc 6,XSP
 	cp	wa, 0:i3                                  ; FA9AEF  cp WA,0
@@ -4496,7 +4496,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9ACB:
 	pushw	wa                                   ; FA9AFE  push WA
 	push	0                                     ; FA9AFF  push 0x00
 	extpfx3 0x8E, 0xFD, 0x04                   ; FA9B01  push (XIZ+0xfd)
-	call	0xFA5ED3                              ; FA9B04  call 0xfa5ed3
+	call	Voice_LookupDev10CChanIndex                              ; FA9B04  call 0xfa5ed3
 	ld	hl, wa                                  ; FA9B08  ld HL,WA
 	and	wa, 0xFF                               ; FA9B0A  and WA,0x00ff
 	inc	6, xsp                                 ; FA9B0E  inc 6,XSP
@@ -4507,7 +4507,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9ACB:
 	extpfx3 0xC7, 0xF0, 0x8B                   ; FA9B1C  ld C,IXL
 	pushw	bc                                   ; FA9B1F  push BC
 	pushw	0                                    ; FA9B20  push 0x0000
-	calr (0xFA78E8 - 0xFA9B26)                 ; FA9B23  calr 0xfa78e8
+	calr EnvRec_ClearSlot                 ; FA9B23  calr 0xfa78e8
 	ld	bc, de                                  ; FA9B26  ld BC,DE
 	or	bc, ix                                  ; FA9B28  or BC,IX
 	ld	(0xD76E:24), bc                        ; FA9B2A  ld (0x00d76e),BC
@@ -4534,7 +4534,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9B46:
 	ld	wa, hl                                  ; FA9B66  ld WA,HL
 	and	wa, 0x7F                               ; FA9B68  and WA,0x007f
 	pushw	wa                                   ; FA9B6C  push WA
-	call	0xFB7C27                              ; FA9B6D  call 0xfb7c27
+	call	Dev10C_Slot2_WriteGateAndValue                              ; FA9B6D  call 0xfb7c27
 	jrl Voice_StageChanSel_Reg0440_Reg0480__FA9AC6                     ; FA9B71  jrl T,0xfa9ac6
 Voice_StageChanSel_Reg0440_Reg0480__FA9B74:
 	ld	bc, (xiz-6)                             ; FA9B74  ld BC,(XIZ+0xfa)
@@ -4547,7 +4547,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9B74:
 	extpfx3 0x8E, 0xFE, 0x04                   ; FA9B88  push (XIZ+0xfe)
 	push	0                                     ; FA9B8B  push 0x00
 	extpfx3 0x8E, 0xFD, 0x04                   ; FA9B8D  push (XIZ+0xfd)
-	call	0xFB5E39                              ; FA9B90  call 0xfb5e39
+	call	Dev10C_ChanSelHighBits                              ; FA9B90  call 0xfb5e39
 	ld	de, wa                                  ; FA9B94  ld DE,WA
 	inc	6, xsp                                 ; FA9B96  inc 6,XSP
 	cp	wa, 0:i3                                  ; FA9B98  cp WA,0
@@ -4559,7 +4559,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9B74:
 	pushw	wa                                   ; FA9BA7  push WA
 	push	0                                     ; FA9BA8  push 0x00
 	extpfx3 0x8E, 0xFD, 0x04                   ; FA9BAA  push (XIZ+0xfd)
-	call	0xFA5ED3                              ; FA9BAD  call 0xfa5ed3
+	call	Voice_LookupDev10CChanIndex                              ; FA9BAD  call 0xfa5ed3
 	ld	hl, wa                                  ; FA9BB1  ld HL,WA
 	and	wa, 0xFF                               ; FA9BB3  and WA,0x00ff
 	inc	6, xsp                                 ; FA9BB7  inc 6,XSP
@@ -4571,7 +4571,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9B74:
 	ld	(0xD770:24), bc                        ; FA9BC8  ld (0x00d770),BC
 	push	0                                     ; FA9BCD  push 0x00
 	extpfx3 0x8E, 0xFD, 0x04                   ; FA9BCF  push (XIZ+0xfd)
-	call	0xFB5B56                              ; FA9BD2  call 0xfb5b56
+	call	Part_GetDspParam_00D2_Low6                              ; FA9BD2  call 0xfb5b56
 	ld	d, a                                    ; FA9BD6  ld D,A
 	popw	bc                                    ; FA9BD8  pop BC
 	cp	a, 0:i3                                   ; FA9BD9  cp A,0
@@ -4600,7 +4600,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9BF3:
 	ld	c, (xwa+12)                             ; FA9C13  ld C,(XWA+0x0c)
 	pushw	bc                                   ; FA9C16  push BC
 	push	xix                                   ; FA9C17  push XIX
-	calr (0xFA7927 - 0xFA9C1B)                 ; FA9C18  calr 0xfa7927
+	calr EGEnv_ScaleDepth_Shr12                 ; FA9C18  calr 0xfa7927
 	ld	xbc, xix                                ; FA9C1B  ld XBC,XIX
 	sub	xbc, xiy                               ; FA9C1D  sub XBC,XIY
 	ld	(xiz-12), xbc                           ; FA9C1F  ld (XIZ+0xf4),XBC
@@ -4618,7 +4618,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9BF3:
 	ld	wa, hl                                  ; FA9C4B  ld WA,HL
 	and	wa, 63                                 ; FA9C4D  and WA,0x003f
 	pushw	wa                                   ; FA9C51  push WA
-	call	0xFB7D1D                              ; FA9C52  call 0xfb7d1d
+	call	Dev10C_Slot3_WriteGateAndValue                              ; FA9C52  call 0xfb7d1d
 	inc	8, xsp                                 ; FA9C56  inc 0,XSP
 	inc	6, xsp                                 ; FA9C58  inc 6,XSP
 Voice_StageChanSel_Reg0440_Reg0480__FA9C5A:
@@ -4705,12 +4705,12 @@ Voice_StageRegs_0180_AB:
 	push	w                                     ; FA9CC2  push W
 	push	0                                     ; FA9CC4  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FA9CC6  push (XIZ+0xfe)
-	call	0xFA5ED3                              ; FA9CC9  call 0xfa5ed3
+	call	Voice_LookupDev10CChanIndex                              ; FA9CC9  call 0xfa5ed3
 	ld	hl, wa                                  ; FA9CCD  ld HL,WA
 	ld	ix, wa                                  ; FA9CCF  ld IX,WA
 	and	ix, 63                                 ; FA9CD1  and IX,0x003f
 	pushw	ix                                   ; FA9CD5  push IX
-	call	0xFB7EEB                              ; FA9CD6  call 0xfb7eeb
+	call	Dev10C_Slot1_WriteGate8100                              ; FA9CD6  call 0xfb7eeb
 	inc	8, xsp                                 ; FA9CDA  inc 0,XSP
 	jr Voice_StageRegs_0180_AB__FA9D00                      ; FA9CDC  jr T,0xfa9d00
 Voice_StageRegs_0180_AB__FA9CDE:
@@ -4723,7 +4723,7 @@ Voice_StageRegs_0180_AB__FA9CDE:
 	pushw	wa                                   ; FA9CEC  push WA
 	push	0                                     ; FA9CED  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FA9CEF  push (XIZ+0xfe)
-	call	0xFA5ED3                              ; FA9CF2  call 0xfa5ed3
+	call	Voice_LookupDev10CChanIndex                              ; FA9CF2  call 0xfa5ed3
 	ld	hl, wa                                  ; FA9CF6  ld HL,WA
 	ld	ix, wa                                  ; FA9CF8  ld IX,WA
 	and	ix, 63                                 ; FA9CFA  and IX,0x003f
@@ -4771,15 +4771,15 @@ Voice_StageRegs_0180_AB__FA9D5B:
 	extpfx3 0x9E, 0xFC, 0x04                   ; FA9D6A  pushw (XIZ+0xfc)
 	push	0                                     ; FA9D6D  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FA9D6F  push (XIZ+0xfe)
-	calr (0xFA981B - 0xFA9D75)                 ; FA9D72  calr 0xfa981b
+	calr EnvRec_LoadSlot                 ; FA9D72  calr 0xfa981b
 	push	0                                     ; FA9D75  push 0x00
 	extpfx3 0x8E, 0xF6, 0x04                   ; FA9D77  push (XIZ+0xf6)
-	calr (0xFA7AD6 - 0xFA9D7D)                 ; FA9D7A  calr 0xfa7ad6
+	calr EGEnv_Eval_ValueCurve_WithBaseCurveB                 ; FA9D7A  calr 0xfa7ad6
 	ld	(0xD798:24), wa                        ; FA9D7D  ld (0x00d798),WA
 	lda	xbc, (0xD75E:24)                       ; FA9D82  lda XBC,0x00d75e
 	push	xbc                                   ; FA9D87  push XBC
 	pushw	ix                                   ; FA9D88  push IX
-	call	0xFB7E9D                              ; FA9D89  call 0xfb7e9d
+	call	Dev10C_Slot1_StrobeGate                              ; FA9D89  call 0xfb7e9d
 	add	xsp, 18                                ; FA9D8D  add XSP,0x00000012
 Voice_StageRegs_0180_AB__FA9D93:
 	extz	xde                                   ; FA9D93  extz XDE
@@ -4827,14 +4827,14 @@ Voice_StageRegs_0180_AB__FA9DE6:
 Voice_StageRegs_0180_AB__FA9DF5:
 	extpfx3 0xC7, 0xF0, 0x8B                   ; FA9DF5  ld C,IXL
 	pushw	bc                                   ; FA9DF8  push BC
-	calr (0xFA7A4B - 0xFA9DFC)                 ; FA9DF9  calr 0xfa7a4b
+	calr EGEnv_Eval_BaseCurveB                 ; FA9DF9  calr 0xfa7a4b
 	ld	(0xD796:24), wa                        ; FA9DFC  ld (0x00d796),WA
 	popw	bc                                    ; FA9E01  pop BC
 Voice_StageRegs_0180_AB__FA9E02:
 	lda	xbc, (0xD75E:24)                       ; FA9E02  lda XBC,0x00d75e
 	push	xbc                                   ; FA9E07  push XBC
 	pushw	ix                                   ; FA9E08  push IX
-	call	0xFB7E7B                              ; FA9E09  call 0xfb7e7b
+	call	Dev10C_SetChanReg_01C0_b                              ; FA9E09  call 0xfb7e7b
 Voice_StageRegs_0180_AB__FA9E0D:
 	inc	6, xsp                                 ; FA9E0D  inc 6,XSP
 	jrl Voice_StageRegs_0180_AB__FA9EB5                     ; FA9E0F  jrl T,0xfa9eb5
@@ -4848,7 +4848,7 @@ Voice_StageRegs_0180_AB__FA9E12:
 	push	h                                     ; FA9E23  push H
 	push	0                                     ; FA9E25  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FA9E27  push (XIZ+0xfe)
-	call	0xFB5F91                              ; FA9E2A  call 0xfb5f91
+	call	Voice_Reg0180ModeBits_FromAlgoDesc                              ; FA9E2A  call 0xfb5f91
 	ld	(xiz-6), wa                             ; FA9E2E  ld (XIZ+0xfa),WA
 	pop	xiy                                    ; FA9E31  pop XIY
 	cp	wa, 0:i3                                  ; FA9E32  cp WA,0
@@ -4860,7 +4860,7 @@ Voice_StageRegs_0180_AB__FA9E12:
 	pushw	wa                                   ; FA9E41  push WA
 	push	0                                     ; FA9E42  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FA9E44  push (XIZ+0xfe)
-	call	0xFA5ED3                              ; FA9E47  call 0xfa5ed3
+	call	Voice_LookupDev10CChanIndex                              ; FA9E47  call 0xfa5ed3
 	ld	hl, wa                                  ; FA9E4B  ld HL,WA
 	and	wa, 0xFF                               ; FA9E4D  and WA,0x00ff
 	inc	6, xsp                                 ; FA9E51  inc 6,XSP
@@ -4871,7 +4871,7 @@ Voice_StageRegs_0180_AB__FA9E12:
 	ld	c, e                                    ; FA9E5F  ld C,E
 	pushw	bc                                   ; FA9E61  push BC
 	pushw	1                                    ; FA9E62  push 0x0001
-	calr (0xFA78E8 - 0xFA9E68)                 ; FA9E65  calr 0xfa78e8
+	calr EnvRec_ClearSlot                 ; FA9E65  calr 0xfa78e8
 	ld	bc, de                                  ; FA9E68  ld BC,DE
 	sll	bc, 8                                  ; FA9E6A  sll 0x08,BC
 	or	(xiz-6), bc                             ; FA9E6D  or (XIZ+0xfa),BC
@@ -4898,7 +4898,7 @@ Voice_StageRegs_0180_AB__FA9E87:
 	ld	wa, hl                                  ; FA9EA7  ld WA,HL
 	and	wa, 63                                 ; FA9EA9  and WA,0x003f
 	pushw	wa                                   ; FA9EAD  push WA
-	call	0xFB7E13                              ; FA9EAE  call 0xfb7e13
+	call	Dev10C_Slot1_WriteGateAndValue                              ; FA9EAE  call 0xfb7e13
 	jrl Voice_StageRegs_0180_AB__FA9E0D                     ; FA9EB2  jrl T,0xfa9e0d
 Voice_StageRegs_0180_AB__FA9EB5:
 	ld	bc, (xiz+8)                             ; FA9EB5  ld BC,(XIZ+0x08)
@@ -4916,7 +4916,7 @@ Voice_StageRegs_0180_AB__FA9EB5:
 	ld	c, (xwa+1)                              ; FA9ED4  ld C,(XWA+0x01)
 	cp	c, 0x80                                 ; FA9ED7  cp C,0x80
 	jr nz, Voice_StageRegs_0180_AB__FA9EF1                  ; FA9EDA  jr NZ,0xfa9ef1
-	calr (0xFA7F04 - 0xFA9EDF)                 ; FA9EDC  calr 0xfa7f04
+	calr Rand_FromTickSquared                 ; FA9EDC  calr 0xfa7f04
 	res	7, a                                   ; FA9EDF  res 0x07,A
 	exts	wa                                    ; FA9EE2  exts WA
 	extpfx3 0x9E, 0xFA, 0xE0                   ; FA9EE4  or WA,(XIZ+0xfa)
@@ -5028,13 +5028,13 @@ Voice_StageChanSel_Reg04C0:
 	push	0                                     ; FA9F77  push 0x00
 	push	w                                     ; FA9F79  push W
 	pushw	hl                                   ; FA9F7B  push HL
-	call	0xFA5ED3                              ; FA9F7C  call 0xfa5ed3
+	call	Voice_LookupDev10CChanIndex                              ; FA9F7C  call 0xfa5ed3
 	ld	(xiz-2), wa                             ; FA9F80  ld (XIZ+0xfe),WA
 	ld	ix, wa                                  ; FA9F83  ld IX,WA
 	and	wa, 0x7F                               ; FA9F85  and WA,0x007f
 	ld	ix, wa                                  ; FA9F89  ld IX,WA
 	pushw	wa                                   ; FA9F8B  push WA
-	call	0xFB80A9                              ; FA9F8C  call 0xfb80a9
+	call	Dev10C_Slot1or3_WriteGate8100                              ; FA9F8C  call 0xfb80a9
 	inc	8, xsp                                 ; FA9F90  inc 0,XSP
 	jr Voice_StageChanSel_Reg04C0__FA9FB4                      ; FA9F92  jr T,0xfa9fb4
 Voice_StageChanSel_Reg04C0__FA9F94:
@@ -5046,7 +5046,7 @@ Voice_StageChanSel_Reg04C0__FA9F94:
 	ld	a, (xbc)                                ; FA9F9F  ld A,(XBC)
 	pushw	wa                                   ; FA9FA1  push WA
 	pushw	hl                                   ; FA9FA2  push HL
-	call	0xFA5ED3                              ; FA9FA3  call 0xfa5ed3
+	call	Voice_LookupDev10CChanIndex                              ; FA9FA3  call 0xfa5ed3
 	ld	(xiz-2), wa                             ; FA9FA7  ld (XIZ+0xfe),WA
 	ld	ix, wa                                  ; FA9FAA  ld IX,WA
 	and	wa, 0x7F                               ; FA9FAC  and WA,0x007f
@@ -5091,14 +5091,14 @@ Voice_StageChanSel_Reg04C0__FAA00A:
 	push	h                                     ; FAA016  push H
 	extpfx3 0x9E, 0xFA, 0x04                   ; FAA018  pushw (XIZ+0xfa)
 	pushw	hl                                   ; FAA01B  push HL
-	calr (0xFA981B - 0xFAA01F)                 ; FAA01C  calr 0xfa981b
+	calr EnvRec_LoadSlot                 ; FAA01C  calr 0xfa981b
 	push	0                                     ; FAA01F  push 0x00
 	extpfx3 0x8E, 0xF8, 0x04                   ; FAA021  push (XIZ+0xf8)
-	calr (0xFA7C3A - 0xFAA027)                 ; FAA024  calr 0xfa7c3a
+	calr EGEnv_Eval_ValueCurve_WithFreqWriteCurve                 ; FAA024  calr 0xfa7c3a
 	lda	xbc, (0xD75E:24)                       ; FAA027  lda XBC,0x00d75e
 	push	xbc                                   ; FAA02C  push XBC
 	pushw	ix                                   ; FAA02D  push IX
-	call	0xFB8012                              ; FAA02E  call 0xfb8012
+	call	Dev10C_Slot1or3_StrobeGate                              ; FAA02E  call 0xfb8012
 	add	xsp, 18                                ; FAA032  add XSP,0x00000012
 Voice_StageChanSel_Reg04C0__FAA038:
 	extz	xde                                   ; FAA038  extz XDE
@@ -5147,13 +5147,13 @@ Voice_StageChanSel_Reg04C0__FAA093:
 Voice_StageChanSel_Reg04C0__FAA0A1:
 	extpfx3 0xC7, 0xF0, 0x8B                   ; FAA0A1  ld C,IXL
 	pushw	bc                                   ; FAA0A4  push BC
-	calr (0xFA7B31 - 0xFAA0A8)                 ; FAA0A5  calr 0xfa7b31
+	calr EGEnv_Eval_FreqWriteBaseCurve                 ; FAA0A5  calr 0xfa7b31
 	popw	bc                                    ; FAA0A8  pop BC
 Voice_StageChanSel_Reg04C0__FAA0A9:
 	lda	xbc, (0xD75E:24)                       ; FAA0A9  lda XBC,0x00d75e
 	push	xbc                                   ; FAA0AE  push XBC
 	pushw	ix                                   ; FAA0AF  push IX
-	call	0xFB7FCE                              ; FAA0B0  call 0xfb7fce
+	call	Dev10C_SetChanReg_01C0_or_0600_b                              ; FAA0B0  call 0xfb7fce
 	inc	6, xsp                                 ; FAA0B4  inc 6,XSP
 Voice_StageChanSel_Reg04C0__FAA0B6:
 	pop	xix                                    ; FAA0B6  pop XIX
@@ -5554,7 +5554,7 @@ sub_FAA2B6__FAA308:
 	add	bc, de                                 ; FAA30A  add BC,DE
 	pushw	bc                                   ; FAA30C  push BC
 sub_FAA2B6__FAA30D:
-	calr (0xFA7EE2 - 0xFAA310)                 ; FAA30D  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FAA30D  calr 0xfa7ee2
 	exts	wa                                    ; FAA310  exts WA
 	ld	ix, wa                                  ; FAA312  ld IX,WA
 	inc	6, xsp                                 ; FAA314  inc 6,XSP
@@ -5752,7 +5752,7 @@ sub_FAA3EB__FAA44A:
 	add	bc, hl                                 ; FAA44C  add BC,HL
 	pushw	bc                                   ; FAA44E  push BC
 sub_FAA3EB__FAA44F:
-	calr (0xFA7EE2 - 0xFAA452)                 ; FAA44F  calr 0xfa7ee2
+	calr Clamp_ToRange_LowByte                 ; FAA44F  calr 0xfa7ee2
 	exts	wa                                    ; FAA452  exts WA
 	ld	hl, wa                                  ; FAA454  ld HL,WA
 	inc	6, xsp                                 ; FAA456  inc 6,XSP
@@ -5783,7 +5783,7 @@ sub_FAA3EB__FAA478:
 	and	c, 15                                  ; FAA48D  and C,0x0f
 	pushw	bc                                   ; FAA490  push BC
 	pushw	de                                   ; FAA491  push DE
-	calr (0xFAA3B5 - 0xFAA495)                 ; FAA492  calr 0xfaa3b5
+	calr Voice_Field0029_EncodeSelector                 ; FAA492  calr 0xfaa3b5
 	extz	wa                                    ; FAA495  extz WA
 	ld	ix, wa                                  ; FAA497  ld IX,WA
 	sll	ix, 9                                  ; FAA499  sll 0x09,IX
@@ -5791,7 +5791,7 @@ sub_FAA3EB__FAA478:
 	srl	c, 4                                   ; FAA49E  srl 0x04,C
 	pushw	bc                                   ; FAA4A1  push BC
 	pushw	de                                   ; FAA4A2  push DE
-	calr (0xFAA3B5 - 0xFAA4A6)                 ; FAA4A3  calr 0xfaa3b5
+	calr Voice_Field0029_EncodeSelector                 ; FAA4A3  calr 0xfaa3b5
 	extz	wa                                    ; FAA4A6  extz WA
 	ld	de, wa                                  ; FAA4A8  ld DE,WA
 	sll	de, 12                                 ; FAA4AA  sll 0x0c,DE
@@ -5912,7 +5912,7 @@ Voice_StageRegs_0800_A__FAA54D:
 	add	bc, de                                 ; FAA54F  add BC,DE
 	pushw	bc                                   ; FAA551  push BC
 Voice_StageRegs_0800_A__FAA552:
-	calr (0xFA7598 - 0xFAA555)                 ; FAA552  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA552  calr 0xfa7598
 	ld	hl, wa                                  ; FAA555  ld HL,WA
 	inc	6, xsp                                 ; FAA557  inc 6,XSP
 	jr Voice_StageRegs_0800_A__FAA565                      ; FAA559  jr T,0xfaa565
@@ -5945,7 +5945,7 @@ Voice_StageRegs_0800_A__FAA565:
 	extz	xwa                                   ; FAA594  extz XWA
 	ld	iy, (xwa+8)                             ; FAA596  ld IY,(XWA+0x08)
 	pushw	iy                                   ; FAA599  push IY
-	calr (0xFA766C - 0xFAA59D)                 ; FAA59A  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FAA59A  calr 0xfa766c
 	ld	ix, wa                                  ; FAA59D  ld IX,WA
 	ld	xbc, (xiz-6)                            ; FAA59F  ld XBC,(XIZ+0xfa)
 	ld	d, (xbc+46)                             ; FAA5A2  ld D,(XBC+0x2e)
@@ -5960,7 +5960,7 @@ Voice_StageRegs_0800_A__FAA565:
 	pushw	wa                                   ; FAA5B8  push WA
 	push	0                                     ; FAA5B9  push 0x00
 	push	d                                     ; FAA5BB  push D
-	calr (0xFA75BA - 0xFAA5C0)                 ; FAA5BD  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAA5BD  calr 0xfa75ba
 	ld	(xiz-13), wa                            ; FAA5C0  ld (XIZ+0xf3),WA
 	inc	6, xsp                                 ; FAA5C3  inc 6,XSP
 	pushw	0                                    ; FAA5C5  push 0x0000
@@ -5989,7 +5989,7 @@ Voice_StageRegs_0800_A__FAA5E1:
 	pushw	bc                                   ; FAA5F6  push BC
 	push	0                                     ; FAA5F7  push 0x00
 	push	d                                     ; FAA5F9  push D
-	calr (0xFA75BA - 0xFAA5FE)                 ; FAA5FB  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAA5FB  calr 0xfa75ba
 	ld	ix, wa                                  ; FAA5FE  ld IX,WA
 	inc	6, xsp                                 ; FAA600  inc 6,XSP
 	pushw	0                                    ; FAA602  push 0x0000
@@ -5997,7 +5997,7 @@ Voice_StageRegs_0800_A__FAA5E1:
 	add	wa, hl                                 ; FAA608  add WA,HL
 	pushw	wa                                   ; FAA60A  push WA
 Voice_StageRegs_0800_A__FAA60B:
-	calr (0xFA7598 - 0xFAA60E)                 ; FAA60B  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA60B  calr 0xfa7598
 	ld	hl, wa                                  ; FAA60E  ld HL,WA
 	inc	6, xsp                                 ; FAA610  inc 6,XSP
 Voice_StageRegs_0800_A__FAA612:
@@ -6052,7 +6052,7 @@ Voice_StageRegs_0800_A__FAA624:
 	jr z, Voice_StageRegs_0800_A__FAA6C0                   ; FAA692  jr Z,0xfaa6c0
 	sub	wa, hl                                 ; FAA694  sub WA,HL
 	pushw	wa                                   ; FAA696  push WA
-	calr (0xFA7598 - 0xFAA69A)                 ; FAA697  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA697  calr 0xfa7598
 	ld	hl, wa                                  ; FAA69A  ld HL,WA
 	inc	6, xsp                                 ; FAA69C  inc 6,XSP
 	pushw	0                                    ; FAA69E  push 0x0000
@@ -6073,7 +6073,7 @@ Voice_StageRegs_0800_A__FAA6C0:
 	ld	bc, de                                  ; FAA6C0  ld BC,DE
 	add	bc, hl                                 ; FAA6C2  add BC,HL
 	pushw	bc                                   ; FAA6C4  push BC
-	calr (0xFA7598 - 0xFAA6C8)                 ; FAA6C5  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA6C5  calr 0xfa7598
 	ld	hl, wa                                  ; FAA6C8  ld HL,WA
 	inc	6, xsp                                 ; FAA6CA  inc 6,XSP
 	pushw	0                                    ; FAA6CC  push 0x0000
@@ -6090,7 +6090,7 @@ Voice_StageRegs_0800_A__FAA6C0:
 	add	wa, bc                                 ; FAA6E9  add WA,BC
 	pushw	wa                                   ; FAA6EB  push WA
 Voice_StageRegs_0800_A__FAA6EC:
-	calr (0xFA7598 - 0xFAA6EF)                 ; FAA6EC  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA6EC  calr 0xfa7598
 	ld	de, wa                                  ; FAA6EF  ld DE,WA
 	inc	6, xsp                                 ; FAA6F1  inc 6,XSP
 	jr Voice_StageRegs_0800_A__FAA706                      ; FAA6F3  jr T,0xfaa706
@@ -6137,7 +6137,7 @@ Voice_StageRegs_0800_A__FAA706:
 	extz	xbc                                   ; FAA754  extz XBC
 	ld	wa, (xbc+8)                             ; FAA756  ld WA,(XBC+0x08)
 	pushw	wa                                   ; FAA759  push WA
-	calr (0xFA766C - 0xFAA75D)                 ; FAA75A  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FAA75A  calr 0xfa766c
 	ld	ix, wa                                  ; FAA75D  ld IX,WA
 	ld	xbc, (xiz-6)                            ; FAA75F  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+47)                             ; FAA762  ld A,(XBC+0x2f)
@@ -6153,7 +6153,7 @@ Voice_StageRegs_0800_A__FAA706:
 	pushw	bc                                   ; FAA77B  push BC
 	push	0                                     ; FAA77C  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FAA77E  push (XIZ+0xff)
-	calr (0xFA75BA - 0xFAA784)                 ; FAA781  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAA781  calr 0xfa75ba
 	ld	(xiz-13), wa                            ; FAA784  ld (XIZ+0xf3),WA
 	pushw	0                                    ; FAA787  push 0x0000
 	pushw	0xFF                                 ; FAA78A  push 0x00ff
@@ -6161,7 +6161,7 @@ Voice_StageRegs_0800_A__FAA706:
 	add	bc, ix                                 ; FAA78F  add BC,IX
 	add	bc, wa                                 ; FAA791  add BC,WA
 	pushw	bc                                   ; FAA793  push BC
-	calr (0xFA7598 - 0xFAA797)                 ; FAA794  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA794  calr 0xfa7598
 	ld	hl, wa                                  ; FAA797  ld HL,WA
 	inc	8, xsp                                 ; FAA799  inc 0,XSP
 	inc	4, xsp                                 ; FAA79B  inc 4,XSP
@@ -6178,7 +6178,7 @@ Voice_StageRegs_0800_A__FAA7AD:
 	ld	bc, hl                                  ; FAA7B3  ld BC,HL
 	add	bc, ix                                 ; FAA7B5  add BC,IX
 	pushw	bc                                   ; FAA7B7  push BC
-	calr (0xFA7598 - 0xFAA7BB)                 ; FAA7B8  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA7B8  calr 0xfa7598
 	ld	hl, wa                                  ; FAA7BB  ld HL,WA
 	inc	6, xsp                                 ; FAA7BD  inc 6,XSP
 	pushw	0                                    ; FAA7BF  push 0x0000
@@ -6200,13 +6200,13 @@ Voice_StageRegs_0800_A__FAA7CC:
 	pushw	bc                                   ; FAA7E4  push BC
 	push	0                                     ; FAA7E5  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FAA7E7  push (XIZ+0xfe)
-	calr (0xFA75BA - 0xFAA7ED)                 ; FAA7EA  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAA7EA  calr 0xfa75ba
 	ld	ix, wa                                  ; FAA7ED  ld IX,WA
 	pushw	0                                    ; FAA7EF  push 0x0000
 	pushw	0xFF                                 ; FAA7F2  push 0x00ff
 	add	wa, hl                                 ; FAA7F5  add WA,HL
 	pushw	wa                                   ; FAA7F7  push WA
-	calr (0xFA7598 - 0xFAA7FB)                 ; FAA7F8  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA7F8  calr 0xfa7598
 	ld	hl, wa                                  ; FAA7FB  ld HL,WA
 	inc	8, xsp                                 ; FAA7FD  inc 0,XSP
 	inc	4, xsp                                 ; FAA7FF  inc 4,XSP
@@ -6216,7 +6216,7 @@ Voice_StageRegs_0800_A__FAA7CC:
 	add	bc, ix                                 ; FAA809  add BC,IX
 	pushw	bc                                   ; FAA80B  push BC
 Voice_StageRegs_0800_A__FAA80C:
-	calr (0xFA7598 - 0xFAA80F)                 ; FAA80C  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA80C  calr 0xfa7598
 	ld	de, wa                                  ; FAA80F  ld DE,WA
 	inc	6, xsp                                 ; FAA811  inc 6,XSP
 Voice_StageRegs_0800_A__FAA813:
@@ -6347,12 +6347,12 @@ Voice_StageRegs_0840_0880_AB__FAA8F5:
 	pushw	4                                    ; FAA8F5  push 0x0004
 	pushw	0x7F                                 ; FAA8F8  push 0x007f
 	pushw	ix                                   ; FAA8FB  push IX
-	calr (0xFA7598 - 0xFAA8FF)                 ; FAA8FC  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA8FC  calr 0xfa7598
 	ld	ix, wa                                  ; FAA8FF  ld IX,WA
 	pushw	0                                    ; FAA901  push 0x0000
 	pushw	0x7F                                 ; FAA904  push 0x007f
 	pushw	hl                                   ; FAA907  push HL
-	calr (0xFA7598 - 0xFAA90B)                 ; FAA908  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA908  calr 0xfa7598
 	ld	hl, wa                                  ; FAA90B  ld HL,WA
 	inc	8, xsp                                 ; FAA90D  inc 0,XSP
 	inc	4, xsp                                 ; FAA90F  inc 4,XSP
@@ -6478,7 +6478,7 @@ Voice_StageRegs_0800_CD__FAA9CB:
 	add	bc, hl                                 ; FAA9CD  add BC,HL
 	pushw	bc                                   ; FAA9CF  push BC
 Voice_StageRegs_0800_CD__FAA9D0:
-	calr (0xFA7598 - 0xFAA9D3)                 ; FAA9D0  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAA9D0  calr 0xfa7598
 	ld	hl, wa                                  ; FAA9D3  ld HL,WA
 	inc	6, xsp                                 ; FAA9D5  inc 6,XSP
 	jr Voice_StageRegs_0800_CD__FAA9E3                      ; FAA9D7  jr T,0xfaa9e3
@@ -6506,13 +6506,13 @@ Voice_StageRegs_0800_CD__FAA9E3:
 	pushw	wa                                   ; FAAA0A  push WA
 	push	0                                     ; FAAA0B  push 0x00
 	push	d                                     ; FAAA0D  push D
-	calr (0xFA75BA - 0xFAAA12)                 ; FAAA0F  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAAA0F  calr 0xfa75ba
 	ld	ix, wa                                  ; FAAA12  ld IX,WA
 	add	ix, hl                                 ; FAAA14  add IX,HL
 	pushw	0                                    ; FAAA16  push 0x0000
 	pushw	0xFF                                 ; FAAA19  push 0x00ff
 	pushw	ix                                   ; FAAA1C  push IX
-	calr (0xFA7598 - 0xFAAA20)                 ; FAAA1D  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAA1D  calr 0xfa7598
 	ld	hl, wa                                  ; FAAA20  ld HL,WA
 	inc	8, xsp                                 ; FAAA22  inc 0,XSP
 	inc	4, xsp                                 ; FAAA24  inc 4,XSP
@@ -6550,7 +6550,7 @@ Voice_StageRegs_0800_CD__FAAA26:
 	jr z, Voice_StageRegs_0800_CD__FAAAA8                   ; FAAA7A  jr Z,0xfaaaa8
 	sub	wa, hl                                 ; FAAA7C  sub WA,HL
 	pushw	wa                                   ; FAAA7E  push WA
-	calr (0xFA7598 - 0xFAAA82)                 ; FAAA7F  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAA7F  calr 0xfa7598
 	ld	hl, wa                                  ; FAAA82  ld HL,WA
 	inc	6, xsp                                 ; FAAA84  inc 6,XSP
 	pushw	0                                    ; FAAA86  push 0x0000
@@ -6571,7 +6571,7 @@ Voice_StageRegs_0800_CD__FAAAA8:
 	ld	bc, de                                  ; FAAAA8  ld BC,DE
 	add	bc, hl                                 ; FAAAAA  add BC,HL
 	pushw	bc                                   ; FAAAAC  push BC
-	calr (0xFA7598 - 0xFAAAB0)                 ; FAAAAD  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAAAD  calr 0xfa7598
 	ld	hl, wa                                  ; FAAAB0  ld HL,WA
 	inc	6, xsp                                 ; FAAAB2  inc 6,XSP
 	pushw	0                                    ; FAAAB4  push 0x0000
@@ -6588,7 +6588,7 @@ Voice_StageRegs_0800_CD__FAAAA8:
 	add	wa, bc                                 ; FAAAD1  add WA,BC
 	pushw	wa                                   ; FAAAD3  push WA
 Voice_StageRegs_0800_CD__FAAAD4:
-	calr (0xFA7598 - 0xFAAAD7)                 ; FAAAD4  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAAD4  calr 0xfa7598
 	ld	de, wa                                  ; FAAAD7  ld DE,WA
 	inc	6, xsp                                 ; FAAAD9  inc 6,XSP
 	jr Voice_StageRegs_0800_CD__FAAAEE                      ; FAAADB  jr T,0xfaaaee
@@ -6628,20 +6628,20 @@ Voice_StageRegs_0800_CD__FAAAEE:
 	pushw	wa                                   ; FAAB2D  push WA
 	push	0                                     ; FAAB2E  push 0x00
 	extpfx3 0x8E, 0xF7, 0x04                   ; FAAB30  push (XIZ+0xf7)
-	calr (0xFA75BA - 0xFAAB36)                 ; FAAB33  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAAB33  calr 0xfa75ba
 	ld	ix, wa                                  ; FAAB36  ld IX,WA
 	pushw	0                                    ; FAAB38  push 0x0000
 	pushw	0xFF                                 ; FAAB3B  push 0x00ff
 	add	wa, hl                                 ; FAAB3E  add WA,HL
 	pushw	wa                                   ; FAAB40  push WA
-	calr (0xFA7598 - 0xFAAB44)                 ; FAAB41  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAB41  calr 0xfa7598
 	ld	hl, wa                                  ; FAAB44  ld HL,WA
 	pushw	0                                    ; FAAB46  push 0x0000
 	pushw	0xFF                                 ; FAAB49  push 0x00ff
 	ld	bc, de                                  ; FAAB4C  ld BC,DE
 	add	bc, ix                                 ; FAAB4E  add BC,IX
 	pushw	bc                                   ; FAAB50  push BC
-	calr (0xFA7598 - 0xFAAB54)                 ; FAAB51  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAB51  calr 0xfa7598
 	ld	de, wa                                  ; FAAB54  ld DE,WA
 	add	xsp, 18                                ; FAAB56  add XSP,0x00000012
 Voice_StageRegs_0800_CD__FAAB5C:
@@ -6796,12 +6796,12 @@ Voice_StageRegs_0840_0880_CD__FAAC77:
 	pushw	4                                    ; FAAC77  push 0x0004
 	pushw	0x7F                                 ; FAAC7A  push 0x007f
 	pushw	ix                                   ; FAAC7D  push IX
-	calr (0xFA7598 - 0xFAAC81)                 ; FAAC7E  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAC7E  calr 0xfa7598
 	ld	ix, wa                                  ; FAAC81  ld IX,WA
 	pushw	0                                    ; FAAC83  push 0x0000
 	pushw	0x7F                                 ; FAAC86  push 0x007f
 	pushw	hl                                   ; FAAC89  push HL
-	calr (0xFA7598 - 0xFAAC8D)                 ; FAAC8A  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAC8A  calr 0xfa7598
 	ld	hl, wa                                  ; FAAC8D  ld HL,WA
 	inc	8, xsp                                 ; FAAC8F  inc 0,XSP
 	inc	4, xsp                                 ; FAAC91  inc 4,XSP
@@ -6918,7 +6918,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAD21:
 	jrl Voice_StageRegs_0800_B_ModeLt3__FAAE4C                     ; FAAD38  jrl T,0xfaae4c
 Voice_StageRegs_0800_B_ModeLt3__FAAD3B:
 	extpfx3 0x9E, 0x08, 0x04                   ; FAAD3B  pushw (XIZ+0x08)
-	call	0xFC37E2                              ; FAAD3E  call 0xfc37e2
+	call	SlotRec_ReadSignedByte_000A                              ; FAAD3E  call 0xfc37e2
 	ld	ix, wa                                  ; FAAD42  ld IX,WA
 	ld	xbc, (xiz-6)                            ; FAAD44  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+39)                             ; FAAD47  ld A,(XBC+0x27)
@@ -6959,7 +6959,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAD93:
 	pushw	0x64                                 ; FAAD96  push 0x0064
 	pushw	hl                                   ; FAAD99  push HL
 Voice_StageRegs_0800_B_ModeLt3__FAAD9A:
-	calr (0xFA7598 - 0xFAAD9D)                 ; FAAD9A  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAD9A  calr 0xfa7598
 	ld	hl, wa                                  ; FAAD9D  ld HL,WA
 	extz	wa                                    ; FAAD9F  extz WA
 	extz	xwa                                   ; FAADA1  extz XWA
@@ -6984,7 +6984,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAD9A:
 	extz	xbc                                   ; FAADCE  extz XBC
 	ld	iy, (xbc+8)                             ; FAADD0  ld IY,(XBC+0x08)
 	pushw	iy                                   ; FAADD3  push IY
-	calr (0xFA766C - 0xFAADD7)                 ; FAADD4  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FAADD4  calr 0xfa766c
 	ld	ix, wa                                  ; FAADD7  ld IX,WA
 	ld	xbc, (xiz-6)                            ; FAADD9  ld XBC,(XIZ+0xfa)
 	ld	d, (xbc+46)                             ; FAADDC  ld D,(XBC+0x2e)
@@ -6999,7 +6999,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAD9A:
 	pushw	wa                                   ; FAADF2  push WA
 	push	0                                     ; FAADF3  push 0x00
 	push	d                                     ; FAADF5  push D
-	calr (0xFA75BA - 0xFAADFA)                 ; FAADF7  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAADF7  calr 0xfa75ba
 	ld	(xiz-9), wa                             ; FAADFA  ld (XIZ+0xf7),WA
 	inc	6, xsp                                 ; FAADFD  inc 6,XSP
 	pushw	0                                    ; FAADFF  push 0x0000
@@ -7028,7 +7028,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAE1B:
 	pushw	bc                                   ; FAAE30  push BC
 	push	0                                     ; FAAE31  push 0x00
 	push	d                                     ; FAAE33  push D
-	calr (0xFA75BA - 0xFAAE38)                 ; FAAE35  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAAE35  calr 0xfa75ba
 	ld	ix, wa                                  ; FAAE38  ld IX,WA
 	inc	6, xsp                                 ; FAAE3A  inc 6,XSP
 	pushw	0                                    ; FAAE3C  push 0x0000
@@ -7036,7 +7036,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAE1B:
 	add	wa, hl                                 ; FAAE42  add WA,HL
 	pushw	wa                                   ; FAAE44  push WA
 Voice_StageRegs_0800_B_ModeLt3__FAAE45:
-	calr (0xFA7598 - 0xFAAE48)                 ; FAAE45  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAE45  calr 0xfa7598
 	ld	hl, wa                                  ; FAAE48  ld HL,WA
 	inc	6, xsp                                 ; FAAE4A  inc 6,XSP
 Voice_StageRegs_0800_B_ModeLt3__FAAE4C:
@@ -7093,7 +7093,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAE63:
 	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAEFF                   ; FAAED1  jr Z,0xfaaeff
 	sub	wa, hl                                 ; FAAED3  sub WA,HL
 	pushw	wa                                   ; FAAED5  push WA
-	calr (0xFA7598 - 0xFAAED9)                 ; FAAED6  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAED6  calr 0xfa7598
 	ld	hl, wa                                  ; FAAED9  ld HL,WA
 	inc	6, xsp                                 ; FAAEDB  inc 6,XSP
 	pushw	0                                    ; FAAEDD  push 0x0000
@@ -7114,7 +7114,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAEFF:
 	ld	bc, de                                  ; FAAEFF  ld BC,DE
 	add	bc, hl                                 ; FAAF01  add BC,HL
 	pushw	bc                                   ; FAAF03  push BC
-	calr (0xFA7598 - 0xFAAF07)                 ; FAAF04  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAF04  calr 0xfa7598
 	ld	hl, wa                                  ; FAAF07  ld HL,WA
 	inc	6, xsp                                 ; FAAF09  inc 6,XSP
 	pushw	0                                    ; FAAF0B  push 0x0000
@@ -7131,7 +7131,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAEFF:
 	add	wa, bc                                 ; FAAF28  add WA,BC
 	pushw	wa                                   ; FAAF2A  push WA
 Voice_StageRegs_0800_B_ModeLt3__FAAF2B:
-	calr (0xFA7598 - 0xFAAF2E)                 ; FAAF2B  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAF2B  calr 0xfa7598
 	ld	de, wa                                  ; FAAF2E  ld DE,WA
 	inc	6, xsp                                 ; FAAF30  inc 6,XSP
 	jr Voice_StageRegs_0800_B_ModeLt3__FAAF45                      ; FAAF32  jr T,0xfaaf45
@@ -7178,7 +7178,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAF45:
 	extz	xbc                                   ; FAAF93  extz XBC
 	ld	wa, (xbc+8)                             ; FAAF95  ld WA,(XBC+0x08)
 	pushw	wa                                   ; FAAF98  push WA
-	calr (0xFA766C - 0xFAAF9C)                 ; FAAF99  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FAAF99  calr 0xfa766c
 	ld	ix, wa                                  ; FAAF9C  ld IX,WA
 	ld	xbc, (xiz-6)                            ; FAAF9E  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+47)                             ; FAAFA1  ld A,(XBC+0x2f)
@@ -7194,7 +7194,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAF45:
 	pushw	bc                                   ; FAAFBA  push BC
 	push	0                                     ; FAAFBB  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FAAFBD  push (XIZ+0xff)
-	calr (0xFA75BA - 0xFAAFC3)                 ; FAAFC0  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAAFC0  calr 0xfa75ba
 	ld	(xiz-9), wa                             ; FAAFC3  ld (XIZ+0xf7),WA
 	pushw	0                                    ; FAAFC6  push 0x0000
 	pushw	0xFF                                 ; FAAFC9  push 0x00ff
@@ -7202,7 +7202,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAF45:
 	add	bc, ix                                 ; FAAFCE  add BC,IX
 	add	bc, wa                                 ; FAAFD0  add BC,WA
 	pushw	bc                                   ; FAAFD2  push BC
-	calr (0xFA7598 - 0xFAAFD6)                 ; FAAFD3  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAFD3  calr 0xfa7598
 	ld	hl, wa                                  ; FAAFD6  ld HL,WA
 	inc	8, xsp                                 ; FAAFD8  inc 0,XSP
 	inc	4, xsp                                 ; FAAFDA  inc 4,XSP
@@ -7219,7 +7219,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAFEC:
 	ld	bc, hl                                  ; FAAFF2  ld BC,HL
 	add	bc, ix                                 ; FAAFF4  add BC,IX
 	pushw	bc                                   ; FAAFF6  push BC
-	calr (0xFA7598 - 0xFAAFFA)                 ; FAAFF7  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAAFF7  calr 0xfa7598
 	ld	hl, wa                                  ; FAAFFA  ld HL,WA
 	inc	6, xsp                                 ; FAAFFC  inc 6,XSP
 	pushw	0                                    ; FAAFFE  push 0x0000
@@ -7241,13 +7241,13 @@ Voice_StageRegs_0800_B_ModeLt3__FAB00B:
 	pushw	bc                                   ; FAB023  push BC
 	push	0                                     ; FAB024  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FAB026  push (XIZ+0xfe)
-	calr (0xFA75BA - 0xFAB02C)                 ; FAB029  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAB029  calr 0xfa75ba
 	ld	ix, wa                                  ; FAB02C  ld IX,WA
 	pushw	0                                    ; FAB02E  push 0x0000
 	pushw	0xFF                                 ; FAB031  push 0x00ff
 	add	wa, hl                                 ; FAB034  add WA,HL
 	pushw	wa                                   ; FAB036  push WA
-	calr (0xFA7598 - 0xFAB03A)                 ; FAB037  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB037  calr 0xfa7598
 	ld	hl, wa                                  ; FAB03A  ld HL,WA
 	inc	8, xsp                                 ; FAB03C  inc 0,XSP
 	inc	4, xsp                                 ; FAB03E  inc 4,XSP
@@ -7257,7 +7257,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAB00B:
 	add	bc, ix                                 ; FAB048  add BC,IX
 	pushw	bc                                   ; FAB04A  push BC
 Voice_StageRegs_0800_B_ModeLt3__FAB04B:
-	calr (0xFA7598 - 0xFAB04E)                 ; FAB04B  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB04B  calr 0xfa7598
 	ld	de, wa                                  ; FAB04E  ld DE,WA
 	inc	6, xsp                                 ; FAB050  inc 6,XSP
 Voice_StageRegs_0800_B_ModeLt3__FAB052:
@@ -7399,7 +7399,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB132:
 	add	bc, hl                                 ; FAB134  add BC,HL
 	pushw	bc                                   ; FAB136  push BC
 Voice_StageRegs_0800_B_ModeGe3__FAB137:
-	calr (0xFA7598 - 0xFAB13A)                 ; FAB137  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB137  calr 0xfa7598
 	ld	hl, wa                                  ; FAB13A  ld HL,WA
 	inc	6, xsp                                 ; FAB13C  inc 6,XSP
 	jr Voice_StageRegs_0800_B_ModeGe3__FAB14A                      ; FAB13E  jr T,0xfab14a
@@ -7432,7 +7432,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB14A:
 	extz	xwa                                   ; FAB179  extz XWA
 	ld	iy, (xwa+8)                             ; FAB17B  ld IY,(XWA+0x08)
 	pushw	iy                                   ; FAB17E  push IY
-	calr (0xFA766C - 0xFAB182)                 ; FAB17F  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FAB17F  calr 0xfa766c
 	ld	ix, wa                                  ; FAB182  ld IX,WA
 	ld	xbc, (xiz-6)                            ; FAB184  ld XBC,(XIZ+0xfa)
 	ld	d, (xbc+46)                             ; FAB187  ld D,(XBC+0x2e)
@@ -7447,7 +7447,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB14A:
 	pushw	wa                                   ; FAB19D  push WA
 	push	0                                     ; FAB19E  push 0x00
 	push	d                                     ; FAB1A0  push D
-	calr (0xFA75BA - 0xFAB1A5)                 ; FAB1A2  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAB1A2  calr 0xfa75ba
 	ld	(xiz-9), wa                             ; FAB1A5  ld (XIZ+0xf7),WA
 	inc	6, xsp                                 ; FAB1A8  inc 6,XSP
 	pushw	0                                    ; FAB1AA  push 0x0000
@@ -7476,7 +7476,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB1C6:
 	pushw	bc                                   ; FAB1DB  push BC
 	push	0                                     ; FAB1DC  push 0x00
 	push	d                                     ; FAB1DE  push D
-	calr (0xFA75BA - 0xFAB1E3)                 ; FAB1E0  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAB1E0  calr 0xfa75ba
 	ld	ix, wa                                  ; FAB1E3  ld IX,WA
 	inc	6, xsp                                 ; FAB1E5  inc 6,XSP
 	pushw	0                                    ; FAB1E7  push 0x0000
@@ -7484,7 +7484,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB1C6:
 	add	wa, hl                                 ; FAB1ED  add WA,HL
 	pushw	wa                                   ; FAB1EF  push WA
 Voice_StageRegs_0800_B_ModeGe3__FAB1F0:
-	calr (0xFA7598 - 0xFAB1F3)                 ; FAB1F0  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB1F0  calr 0xfa7598
 	ld	hl, wa                                  ; FAB1F3  ld HL,WA
 	inc	6, xsp                                 ; FAB1F5  inc 6,XSP
 Voice_StageRegs_0800_B_ModeGe3__FAB1F7:
@@ -7520,7 +7520,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB20E:
 	pushw	0                                    ; FAB246  push 0x0000
 	pushw	0x64                                 ; FAB249  push 0x0064
 	extpfx3 0x9E, 0x08, 0x04                   ; FAB24C  pushw (XIZ+0x08)
-	call	0xFC37BE                              ; FAB24F  call 0xfc37be
+	call	SlotRec_ReadSignedByte_0009                              ; FAB24F  call 0xfc37be
 	ld	(xiz-13), wa                            ; FAB253  ld (XIZ+0xf3),WA
 	ld	xbc, (xiz-6)                            ; FAB256  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+41)                             ; FAB259  ld A,(XBC+0x29)
@@ -7528,13 +7528,13 @@ Voice_StageRegs_0800_B_ModeGe3__FAB20E:
 	extpfx3 0x9E, 0xF3, 0x80                   ; FAB25E  add WA,(XIZ+0xf3)
 	popw	iy                                    ; FAB261  pop IY
 	pushw	wa                                   ; FAB262  push WA
-	calr (0xFA7598 - 0xFAB266)                 ; FAB263  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB263  calr 0xfa7598
 	ld	hl, wa                                  ; FAB266  ld HL,WA
 	inc	6, xsp                                 ; FAB268  inc 6,XSP
 	pushw	0                                    ; FAB26A  push 0x0000
 	pushw	0x64                                 ; FAB26D  push 0x0064
 	extpfx3 0x9E, 0x08, 0x04                   ; FAB270  pushw (XIZ+0x08)
-	call	0xFC37BE                              ; FAB273  call 0xfc37be
+	call	SlotRec_ReadSignedByte_0009                              ; FAB273  call 0xfc37be
 	ld	(xiz-15), wa                            ; FAB277  ld (XIZ+0xf1),WA
 	ld	xbc, (xiz-6)                            ; FAB27A  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+43)                             ; FAB27D  ld A,(XBC+0x2b)
@@ -7542,7 +7542,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB20E:
 	extpfx3 0x9E, 0xF1, 0x80                   ; FAB282  add WA,(XIZ+0xf1)
 	popw	iy                                    ; FAB285  pop IY
 	pushw	wa                                   ; FAB286  push WA
-	calr (0xFA7598 - 0xFAB28A)                 ; FAB287  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB287  calr 0xfa7598
 	ld	de, wa                                  ; FAB28A  ld DE,WA
 	ld	ix, (xiz+8)                             ; FAB28C  ld IX,(XIZ+0x08)
 	extz	xix                                   ; FAB28F  extz XIX
@@ -7567,7 +7567,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB20E:
 	ld	iy, hl                                  ; FAB2C3  ld IY,HL
 	sub	iy, ix                                 ; FAB2C5  sub IY,IX
 	pushw	iy                                   ; FAB2C7  push IY
-	calr (0xFA7598 - 0xFAB2CB)                 ; FAB2C8  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB2C8  calr 0xfa7598
 	ld	hl, wa                                  ; FAB2CB  ld HL,WA
 	inc	6, xsp                                 ; FAB2CD  inc 6,XSP
 	pushw	0                                    ; FAB2CF  push 0x0000
@@ -7585,7 +7585,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB2E9:
 	ld	bc, hl                                  ; FAB2E9  ld BC,HL
 	add	bc, ix                                 ; FAB2EB  add BC,IX
 	pushw	bc                                   ; FAB2ED  push BC
-	calr (0xFA7598 - 0xFAB2F1)                 ; FAB2EE  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB2EE  calr 0xfa7598
 	ld	hl, wa                                  ; FAB2F1  ld HL,WA
 	inc	6, xsp                                 ; FAB2F3  inc 6,XSP
 	pushw	0                                    ; FAB2F5  push 0x0000
@@ -7598,7 +7598,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB2E9:
 	add	bc, de                                 ; FAB308  add BC,DE
 	pushw	bc                                   ; FAB30A  push BC
 Voice_StageRegs_0800_B_ModeGe3__FAB30B:
-	calr (0xFA7598 - 0xFAB30E)                 ; FAB30B  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB30B  calr 0xfa7598
 	ld	de, wa                                  ; FAB30E  ld DE,WA
 	inc	6, xsp                                 ; FAB310  inc 6,XSP
 Voice_StageRegs_0800_B_ModeGe3__FAB312:
@@ -7636,7 +7636,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB312:
 	extz	xbc                                   ; FAB360  extz XBC
 	ld	wa, (xbc+8)                             ; FAB362  ld WA,(XBC+0x08)
 	pushw	wa                                   ; FAB365  push WA
-	calr (0xFA766C - 0xFAB369)                 ; FAB366  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FAB366  calr 0xfa766c
 	ld	ix, wa                                  ; FAB369  ld IX,WA
 	ld	xbc, (xiz-6)                            ; FAB36B  ld XBC,(XIZ+0xfa)
 	ld	a, (xbc+47)                             ; FAB36E  ld A,(XBC+0x2f)
@@ -7652,7 +7652,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB312:
 	pushw	bc                                   ; FAB387  push BC
 	push	0                                     ; FAB388  push 0x00
 	extpfx3 0x8E, 0xFF, 0x04                   ; FAB38A  push (XIZ+0xff)
-	calr (0xFA75BA - 0xFAB390)                 ; FAB38D  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAB38D  calr 0xfa75ba
 	ld	(xiz-9), wa                             ; FAB390  ld (XIZ+0xf7),WA
 	pushw	0                                    ; FAB393  push 0x0000
 	pushw	0xFF                                 ; FAB396  push 0x00ff
@@ -7660,7 +7660,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB312:
 	add	bc, ix                                 ; FAB39B  add BC,IX
 	add	bc, wa                                 ; FAB39D  add BC,WA
 	pushw	bc                                   ; FAB39F  push BC
-	calr (0xFA7598 - 0xFAB3A3)                 ; FAB3A0  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB3A0  calr 0xfa7598
 	ld	hl, wa                                  ; FAB3A3  ld HL,WA
 	inc	8, xsp                                 ; FAB3A5  inc 0,XSP
 	inc	4, xsp                                 ; FAB3A7  inc 4,XSP
@@ -7677,7 +7677,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB3B9:
 	ld	bc, hl                                  ; FAB3BF  ld BC,HL
 	add	bc, ix                                 ; FAB3C1  add BC,IX
 	pushw	bc                                   ; FAB3C3  push BC
-	calr (0xFA7598 - 0xFAB3C7)                 ; FAB3C4  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB3C4  calr 0xfa7598
 	ld	hl, wa                                  ; FAB3C7  ld HL,WA
 	inc	6, xsp                                 ; FAB3C9  inc 6,XSP
 	pushw	0                                    ; FAB3CB  push 0x0000
@@ -7699,13 +7699,13 @@ Voice_StageRegs_0800_B_ModeGe3__FAB3D8:
 	pushw	bc                                   ; FAB3F0  push BC
 	push	0                                     ; FAB3F1  push 0x00
 	extpfx3 0x8E, 0xFE, 0x04                   ; FAB3F3  push (XIZ+0xfe)
-	calr (0xFA75BA - 0xFAB3F9)                 ; FAB3F6  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FAB3F6  calr 0xfa75ba
 	ld	ix, wa                                  ; FAB3F9  ld IX,WA
 	pushw	0                                    ; FAB3FB  push 0x0000
 	pushw	0xFF                                 ; FAB3FE  push 0x00ff
 	add	wa, hl                                 ; FAB401  add WA,HL
 	pushw	wa                                   ; FAB403  push WA
-	calr (0xFA7598 - 0xFAB407)                 ; FAB404  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB404  calr 0xfa7598
 	ld	hl, wa                                  ; FAB407  ld HL,WA
 	inc	8, xsp                                 ; FAB409  inc 0,XSP
 	inc	4, xsp                                 ; FAB40B  inc 4,XSP
@@ -7715,7 +7715,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB3D8:
 	add	bc, ix                                 ; FAB415  add BC,IX
 	pushw	bc                                   ; FAB417  push BC
 Voice_StageRegs_0800_B_ModeGe3__FAB418:
-	calr (0xFA7598 - 0xFAB41B)                 ; FAB418  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB418  calr 0xfa7598
 	ld	de, wa                                  ; FAB41B  ld DE,WA
 	inc	6, xsp                                 ; FAB41D  inc 6,XSP
 Voice_StageRegs_0800_B_ModeGe3__FAB41F:
@@ -8004,7 +8004,7 @@ sub_FAB5A5__FAB5CA:
 	push	0                                     ; FAB5E9  push 0x00
 	push	b                                     ; FAB5EB  push B
 	pushw	wa                                   ; FAB5ED  push WA
-	calr (0xFA7CC9 - 0xFAB5F1)                 ; FAB5EE  calr 0xfa7cc9
+	calr VelCurve_Lookup                 ; FAB5EE  calr 0xfa7cc9
 	sub	wa, 0xD0                               ; FAB5F1  sub WA,0x00d0
 	ld	(xiz-4), wa                             ; FAB5F5  ld (XIZ+0xfc),WA
 	ld	c, (xix+24)                             ; FAB5F8  ld C,(XIX+0x18)
@@ -8018,7 +8018,7 @@ sub_FAB5A5__FAB607:
 	ld	c, (xix+25)                             ; FAB607  ld C,(XIX+0x19)
 	pushw	bc                                   ; FAB60A  push BC
 	pushw	hl                                   ; FAB60B  push HL
-	calr (0xFA7CC9 - 0xFAB60F)                 ; FAB60C  calr 0xfa7cc9
+	calr VelCurve_Lookup                 ; FAB60C  calr 0xfa7cc9
 	sub	wa, 0xD0                               ; FAB60F  sub WA,0x00d0
 	ld	(xiz-2), wa                             ; FAB613  ld (XIZ+0xfe),WA
 	ld	c, (xix+24)                             ; FAB616  ld C,(XIX+0x18)
@@ -8042,7 +8042,7 @@ sub_FAB5A5__FAB61F:
 	extz	xde                                   ; FAB63C  extz XDE
 	ld	wa, (xde+8)                             ; FAB63E  ld WA,(XDE+0x08)
 	pushw	wa                                   ; FAB641  push WA
-	calr (0xFA7D03 - 0xFAB645)                 ; FAB642  calr 0xfa7d03
+	calr ScaleClampedDelta_Shr5_b                 ; FAB642  calr 0xfa7d03
 	extpfx3 0x9E, 0xFE, 0x80                   ; FAB645  add WA,(XIZ+0xfe)
 	ld	(xiz-4), wa                             ; FAB648  ld (XIZ+0xfc),WA
 	ld	bc, (xde+39)                            ; FAB64B  ld BC,(XDE+0x27)
@@ -8068,12 +8068,12 @@ sub_FAB5A5__FAB61F:
 	ld	(xiz-12), wa                            ; FAB688  ld (XIZ+0xf4),WA
 	push	xix                                   ; FAB68B  push XIX
 	pushw	de                                   ; FAB68C  push DE
-	calr (0xFAB48A - 0xFAB690)                 ; FAB68D  calr 0xfab48a
+	calr KeyScale_LevelFromPitch                 ; FAB68D  calr 0xfab48a
 	extpfx3 0x9E, 0xF4, 0x80                   ; FAB690  add WA,(XIZ+0xf4)
 	ld	(xiz-14), wa                            ; FAB693  ld (XIZ+0xf2),WA
 	push	xix                                   ; FAB696  push XIX
 	pushw	de                                   ; FAB697  push DE
-	calr (0xFAB517 - 0xFAB69B)                 ; FAB698  calr 0xfab517
+	calr VelScale_LevelFromVelocity                 ; FAB698  calr 0xfab517
 	ld	hl, wa                                  ; FAB69B  ld HL,WA
 	extpfx3 0x9E, 0xF2, 0x83                   ; FAB69D  add HL,(XIZ+0xf2)
 	ld	c, (xix)                                ; FAB6A0  ld C,(XIX)
@@ -8088,7 +8088,7 @@ sub_FAB5A5__FAB61F:
 	extz	wa                                    ; FAB6BB  extz WA
 	add	hl, wa                                 ; FAB6BD  add HL,WA
 sub_FAB5A5__FAB6BF:
-	call	0xFC578C                              ; FAB6BF  call 0xfc578c
+	call	sub_FC578C                              ; FAB6BF  call 0xfc578c
 	add	wa, hl                                 ; FAB6C3  add WA,HL
 	extz	xde                                   ; FAB6C5  extz XDE
 	ld	(xde+13), wa                            ; FAB6C7  ld (XDE+0x0d),WA
@@ -8147,7 +8147,7 @@ Voice_ComputeLevelBase_CD:
 	ld	a, (xbc+8)                              ; FAB70A  ld A,(XBC+0x08)
 	pushw	wa                                   ; FAB70D  push WA
 	extpfx3 0x9E, 0xFE, 0x04                   ; FAB70E  pushw (XIZ+0xfe)
-	calr (0xFA7CC9 - 0xFAB714)                 ; FAB711  calr 0xfa7cc9
+	calr VelCurve_Lookup                 ; FAB711  calr 0xfa7cc9
 	sub	wa, 0xD0                               ; FAB714  sub WA,0x00d0
 	ld	(xiz-4), wa                             ; FAB718  ld (XIZ+0xfc),WA
 	ld	c, (xix+7)                              ; FAB71B  ld C,(XIX+0x07)
@@ -8161,7 +8161,7 @@ sub_FAB6D5__FAB72A:
 	ld	c, (xix+8)                              ; FAB72A  ld C,(XIX+0x08)
 	pushw	bc                                   ; FAB72D  push BC
 	pushw	hl                                   ; FAB72E  push HL
-	calr (0xFA7CC9 - 0xFAB732)                 ; FAB72F  calr 0xfa7cc9
+	calr VelCurve_Lookup                 ; FAB72F  calr 0xfa7cc9
 	sub	wa, 0xD0                               ; FAB732  sub WA,0x00d0
 	ld	(xiz-2), wa                             ; FAB736  ld (XIZ+0xfe),WA
 	ld	c, (xix+7)                              ; FAB739  ld C,(XIX+0x07)
@@ -8195,7 +8195,7 @@ sub_FAB6D5__FAB742:
 	ld	wa, (0x5A51:16)                       ; FAB781  ld WA,(0x5a51)
 	ld	hl, wa                                  ; FAB785  ld HL,WA
 	add	hl, ix                                 ; FAB787  add HL,IX
-	call	0xFC578C                              ; FAB789  call 0xfc578c
+	call	sub_FC578C                              ; FAB789  call 0xfc578c
 	add	wa, hl                                 ; FAB78D  add WA,HL
 	ld	(xde+13), wa                            ; FAB78F  ld (XDE+0x0d),WA
 	extpfx5 0xBA, 0x2F, 0x02, 0x00, 0x00       ; FAB792  ld (XDE+0x2f),0x0000
@@ -8256,7 +8256,7 @@ sub_FAB79D__FAB7C6:
 	add	wa, de                                 ; FAB7D2  add WA,DE
 	pushw	wa                                   ; FAB7D4  push WA
 	pushw	ix                                   ; FAB7D5  push IX
-	calr (0xFA7D6A - 0xFAB7D9)                 ; FAB7D6  calr 0xfa7d6a
+	calr Voice_StageLevel_Reg0080                 ; FAB7D6  calr 0xfa7d6a
 	pop	xbc                                    ; FAB7D9  pop XBC
 	pop	xix                                    ; FAB7DA  pop XIX
 	popw	de                                    ; FAB7DB  pop DE
@@ -8308,7 +8308,7 @@ sub_FAB7E0__FAB808:
 sub_FAB7E0__FAB80C:
 	pushw	de                                   ; FAB80C  push DE
 	pushw	ix                                   ; FAB80D  push IX
-	calr (0xFA7D6A - 0xFAB811)                 ; FAB80E  calr 0xfa7d6a
+	calr Voice_StageLevel_Reg0080                 ; FAB80E  calr 0xfa7d6a
 	pop	xbc                                    ; FAB811  pop XBC
 	pop	xix                                    ; FAB812  pop XIX
 	popw	de                                    ; FAB813  pop DE
@@ -8395,7 +8395,7 @@ Dev10C_StageRegs_0800_0840_ForNoteOn:
 	ld	(0xD78C:24), wa                        ; FAB869  ld (0x00d78c),WA
 	push	0                                     ; FAB86E  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAB870  push (XIZ+0x08)
-	call	0xFB3CE0                              ; FAB873  call 0xfb3ce0
+	call	VoiceQuery_Tag00_Part                              ; FAB873  call 0xfb3ce0
 	ld	xix, xiy                                ; FAB877  ld XIX,XIY
 	inc	5, xiy                                 ; FAB879  inc 5,XIY
 	ld	xix, xiy                                ; FAB87B  ld XIX,XIY
@@ -8425,7 +8425,7 @@ Dev10C_StageRegs_0800_0840_ForNoteOn__FAB87E:
 	ld	a, (xix)                                ; FAB8B8  ld A,(XIX)
 	extz	wa                                    ; FAB8BA  extz WA
 	pushw	wa                                   ; FAB8BC  push WA
-	call	0xFB73F0                              ; FAB8BD  call 0xfb73f0
+	call	Dev10C_SetChanReg_0840_0800_b                              ; FAB8BD  call 0xfb73f0
 	inc	6, xsp                                 ; FAB8C1  inc 6,XSP
 Dev10C_StageRegs_0800_0840_ForNoteOn__FAB8C3:
 	inc	1, xix                                 ; FAB8C3  inc 1,XIX
@@ -8512,7 +8512,7 @@ Dev10C_StageRegs_0800_0840_FAB8CC__FAB916:
 	add	bc, hl                                 ; FAB918  add BC,HL
 	pushw	bc                                   ; FAB91A  push BC
 Dev10C_StageRegs_0800_0840_FAB8CC__FAB91B:
-	calr (0xFA7598 - 0xFAB91E)                 ; FAB91B  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB91B  calr 0xfa7598
 	ld	hl, wa                                  ; FAB91E  ld HL,WA
 	inc	6, xsp                                 ; FAB920  inc 6,XSP
 	jr Dev10C_StageRegs_0800_0840_FAB8CC__FAB92E                      ; FAB922  jr T,0xfab92e
@@ -8572,13 +8572,13 @@ Dev10C_StageRegs_0800_0840_FAB8CC__FAB987:
 	extz	xix                                   ; FAB9A1  extz XIX
 	ld	wa, (xix+8)                             ; FAB9A3  ld WA,(XIX+0x08)
 	pushw	wa                                   ; FAB9A6  push WA
-	calr (0xFA766C - 0xFAB9AA)                 ; FAB9A7  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FAB9A7  calr 0xfa766c
 	ld	ix, wa                                  ; FAB9AA  ld IX,WA
 	add	ix, hl                                 ; FAB9AC  add IX,HL
 	pushw	0                                    ; FAB9AE  push 0x0000
 	pushw	0xFF                                 ; FAB9B1  push 0x00ff
 	pushw	ix                                   ; FAB9B4  push IX
-	calr (0xFA7598 - 0xFAB9B8)                 ; FAB9B5  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FAB9B5  calr 0xfa7598
 	ld	hl, wa                                  ; FAB9B8  ld HL,WA
 	inc	8, xsp                                 ; FAB9BA  inc 0,XSP
 	inc	8, xsp                                 ; FAB9BC  inc 0,XSP
@@ -8648,7 +8648,7 @@ Dev10C_StageRegs_0800_0840_FAB9D8:
 	ld	xbc, (xix+23)                           ; FAB9E4  ld XBC,(XIX+0x17)
 	ld	(xiz-4), xbc                            ; FAB9E7  ld (XIZ+0xfc),XBC
 	pushw	ix                                   ; FAB9EA  push IX
-	call	0xFC3806                              ; FAB9EB  call 0xfc3806
+	call	SlotRec_ReadSignedByte_000B                              ; FAB9EB  call 0xfc3806
 	ld	(xiz-6), wa                             ; FAB9EF  ld (XIZ+0xfa),WA
 	ld	xbc, (xiz-4)                            ; FAB9F2  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+45)                             ; FAB9F5  ld A,(XBC+0x2d)
@@ -8686,7 +8686,7 @@ Dev10C_StageRegs_0800_0840_FAB9D8__FABA3B:
 	pushw	0x64                                 ; FABA3E  push 0x0064
 	pushw	de                                   ; FABA41  push DE
 Dev10C_StageRegs_0800_0840_FAB9D8__FABA42:
-	calr (0xFA7598 - 0xFABA45)                 ; FABA42  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FABA42  calr 0xfa7598
 	ld	de, wa                                  ; FABA45  ld DE,WA
 	extz	wa                                    ; FABA47  extz WA
 	exts	xwa                                   ; FABA49  exts XWA
@@ -8733,13 +8733,13 @@ Dev10C_StageRegs_0800_0840_FAB9D8__FABA92:
 	extz	xix                                   ; FABAAC  extz XIX
 	ld	wa, (xix+8)                             ; FABAAE  ld WA,(XIX+0x08)
 	pushw	wa                                   ; FABAB1  push WA
-	calr (0xFA766C - 0xFABAB5)                 ; FABAB2  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FABAB2  calr 0xfa766c
 	ld	ix, wa                                  ; FABAB5  ld IX,WA
 	add	ix, de                                 ; FABAB7  add IX,DE
 	pushw	0                                    ; FABAB9  push 0x0000
 	pushw	0xFF                                 ; FABABC  push 0x00ff
 	pushw	ix                                   ; FABABF  push IX
-	calr (0xFA7598 - 0xFABAC3)                 ; FABAC0  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FABAC0  calr 0xfa7598
 	ld	de, wa                                  ; FABAC3  ld DE,WA
 	inc	8, xsp                                 ; FABAC5  inc 0,XSP
 	inc	8, xsp                                 ; FABAC7  inc 0,XSP
@@ -8808,7 +8808,7 @@ Dev10C_StageRegs_0900_0940:
 	lda	xwa, (0xD75E:24)                       ; FABAF8  lda XWA,0x00d75e
 	push	xwa                                   ; FABAFD  push XWA
 	pushw	bc                                   ; FABAFE  push BC
-	call	0xFC8129                              ; FABAFF  call 0xfc8129
+	call	sub_FC8129                              ; FABAFF  call 0xfc8129
 	inc	6, xsp                                 ; FABB03  inc 6,XSP
 	jrl Dev10C_StageRegs_0900_0940__FABBF5                     ; FABB05  jrl T,0xfabbf5
 Dev10C_StageRegs_0900_0940__FABB08:
@@ -8860,7 +8860,7 @@ Dev10C_StageRegs_0900_0940__FABB61:
 	extz	xbc                                   ; FABB79  extz XBC
 	ld	wa, (xbc+8)                             ; FABB7B  ld WA,(XBC+0x08)
 	pushw	wa                                   ; FABB7E  push WA
-	calr (0xFA766C - 0xFABB82)                 ; FABB7F  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FABB7F  calr 0xfa766c
 	add	de, wa                                 ; FABB82  add DE,WA
 	ld	c, (xix+17)                             ; FABB84  ld C,(XIX+0x11)
 	inc	8, xsp                                 ; FABB87  inc 0,XSP
@@ -8880,14 +8880,14 @@ Dev10C_StageRegs_0900_0940__FABB98:
 	pushw	wa                                   ; FABBA3  push WA
 	ld	a, (xix+17)                             ; FABBA4  ld A,(XIX+0x11)
 	pushw	wa                                   ; FABBA7  push WA
-	calr (0xFA75BA - 0xFABBAB)                 ; FABBA8  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FABBA8  calr 0xfa75ba
 	add	de, wa                                 ; FABBAB  add DE,WA
 	inc	6, xsp                                 ; FABBAD  inc 6,XSP
 Dev10C_StageRegs_0900_0940__FABBAF:
 	pushw	0                                    ; FABBAF  push 0x0000
 	pushw	0xFF                                 ; FABBB2  push 0x00ff
 	pushw	de                                   ; FABBB5  push DE
-	calr (0xFA7598 - 0xFABBB9)                 ; FABBB6  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FABBB6  calr 0xfa7598
 	ld	de, wa                                  ; FABBB9  ld DE,WA
 	inc	6, xsp                                 ; FABBBB  inc 6,XSP
 Dev10C_StageRegs_0900_0940__FABBBD:
@@ -8905,7 +8905,7 @@ Dev10C_StageRegs_0900_0940__FABBBD:
 Dev10C_StageRegs_0900_0940__FABBD5:
 	pushw	hl                                   ; FABBD5  push HL
 Dev10C_StageRegs_0900_0940__FABBD6:
-	calr (0xFA7602 - 0xFABBD9)                 ; FABBD6  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FABBD6  calr 0xfa7602
 	ld	hl, wa                                  ; FABBD9  ld HL,WA
 	ld	ix, wa                                  ; FABBDB  ld IX,WA
 	and	ix, 0xFF                               ; FABBDD  and IX,0x00ff
@@ -9012,7 +9012,7 @@ Dev10C_StageRegs_09C0_0A00__FABC57:
 	extz	xix                                   ; FABC6F  extz XIX
 	ld	wa, (xix+8)                             ; FABC71  ld WA,(XIX+0x08)
 	pushw	wa                                   ; FABC74  push WA
-	calr (0xFA766C - 0xFABC78)                 ; FABC75  calr 0xfa766c
+	calr ScaleClampedDelta_Shr5                 ; FABC75  calr 0xfa766c
 	add	de, wa                                 ; FABC78  add DE,WA
 	ld	xbc, (xiz-4)                            ; FABC7A  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+71)                             ; FABC7D  ld A,(XBC+0x47)
@@ -9034,14 +9034,14 @@ Dev10C_StageRegs_09C0_0A00__FABC94:
 	ld	xbc, (xiz-4)                            ; FABC9D  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+71)                             ; FABCA0  ld A,(XBC+0x47)
 	pushw	wa                                   ; FABCA3  push WA
-	calr (0xFA75BA - 0xFABCA7)                 ; FABCA4  calr 0xfa75ba
+	calr ScaleCoeff_TimesAbsDepth_Shr                 ; FABCA4  calr 0xfa75ba
 	add	de, wa                                 ; FABCA7  add DE,WA
 	inc	6, xsp                                 ; FABCA9  inc 6,XSP
 Dev10C_StageRegs_09C0_0A00__FABCAB:
 	pushw	0                                    ; FABCAB  push 0x0000
 	pushw	0xFF                                 ; FABCAE  push 0x00ff
 	pushw	de                                   ; FABCB1  push DE
-	calr (0xFA7598 - 0xFABCB5)                 ; FABCB2  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FABCB2  calr 0xfa7598
 	ld	de, wa                                  ; FABCB5  ld DE,WA
 	inc	6, xsp                                 ; FABCB7  inc 6,XSP
 Dev10C_StageRegs_09C0_0A00__FABCB9:
@@ -9055,9 +9055,9 @@ Dev10C_StageRegs_09C0_0A00__FABCB9:
 	exts	wa                                    ; FABCCC  exts WA
 	add	wa, hl                                 ; FABCCE  add WA,HL
 	pushw	wa                                   ; FABCD0  push WA
-	calr (0xFA7598 - 0xFABCD4)                 ; FABCD1  calr 0xfa7598
+	calr Clamp_ToRange_Word                 ; FABCD1  calr 0xfa7598
 	pushw	wa                                   ; FABCD4  push WA
-	calr (0xFA7602 - 0xFABCD8)                 ; FABCD5  calr 0xfa7602
+	calr DetuneCurve_LookupSigned                 ; FABCD5  calr 0xfa7602
 	ld	hl, wa                                  ; FABCD8  ld HL,WA
 	and	hl, 0xFF                               ; FABCDA  and HL,0x00ff
 	ld	bc, de                                  ; FABCDE  ld BC,DE
@@ -9108,7 +9108,7 @@ Dev10C_StageSixChanRegs_ForRetire:
 	jr z, sub_FABCF9__FABD1C                   ; FABD10  jr Z,0xfabd1c
 	push	xix                                   ; FABD12  push XIX
 	pushw	hl                                   ; FABD13  push HL
-	call	0xFC8129                              ; FABD14  call 0xfc8129
+	call	sub_FC8129                              ; FABD14  call 0xfc8129
 	inc	6, xsp                                 ; FABD18  inc 6,XSP
 	jr sub_FABCF9__FABD26                      ; FABD1A  jr T,0xfabd26
 sub_FABCF9__FABD1C:
