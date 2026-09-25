@@ -387,38 +387,594 @@ MainFunc_ExcSend:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0xA90, 0xC
 MainFunc_PcgOutSend:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0xA9C, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_no_split
+; Bitmap_SplitPoint_no_split  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, none tinted: an
+; octave wholly above the split point.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t
+; Bitmap_SplitPoint_no_split[52][58] (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_no_split:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0xAAC, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_C
+; Bitmap_SplitPoint_C  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including C tinted (white keys cyan, black keys blue): the
+; octave that contains a split point at C.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t Bitmap_SplitPoint_C[52][58]
+; (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_C:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x1674, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_Db
+; Bitmap_SplitPoint_Db  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including D flat tinted (white keys cyan, black keys
+; blue): the octave that contains a split point at D flat.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t
+; Bitmap_SplitPoint_Db[52][58] (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_Db:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x223C, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_D
+; Bitmap_SplitPoint_D  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including D tinted (white keys cyan, black keys blue): the
+; octave that contains a split point at D.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t Bitmap_SplitPoint_D[52][58]
+; (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_D:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2E04, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_Eb
+; Bitmap_SplitPoint_Eb  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including E flat tinted (white keys cyan, black keys
+; blue): the octave that contains a split point at E flat.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t
+; Bitmap_SplitPoint_Eb[52][58] (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_Eb:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x39CC, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_E
+; Bitmap_SplitPoint_E  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including E tinted (white keys cyan, black keys blue): the
+; octave that contains a split point at E.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t Bitmap_SplitPoint_E[52][58]
+; (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_E:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x4594, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_F
+; Bitmap_SplitPoint_F  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including F tinted (white keys cyan, black keys blue): the
+; octave that contains a split point at F.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t Bitmap_SplitPoint_F[52][58]
+; (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_F:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x515C, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_Gb
+; Bitmap_SplitPoint_Gb  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including G flat tinted (white keys cyan, black keys
+; blue): the octave that contains a split point at G flat.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t
+; Bitmap_SplitPoint_Gb[52][58] (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_Gb:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x5D24, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_G
+; Bitmap_SplitPoint_G  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including G tinted (white keys cyan, black keys blue): the
+; octave that contains a split point at G.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t Bitmap_SplitPoint_G[52][58]
+; (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_G:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x68EC, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_Ab
+; Bitmap_SplitPoint_Ab  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including A flat tinted (white keys cyan, black keys
+; blue): the octave that contains a split point at A flat.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t
+; Bitmap_SplitPoint_Ab[52][58] (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_Ab:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x74B4, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_A
+; Bitmap_SplitPoint_A  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including A tinted (white keys cyan, black keys blue): the
+; octave that contains a split point at A.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t Bitmap_SplitPoint_A[52][58]
+; (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_A:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x807C, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_Bb
+; Bitmap_SplitPoint_Bb  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including B flat tinted (white keys cyan, black keys
+; blue): the octave that contains a split point at B flat.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t
+; Bitmap_SplitPoint_Bb[52][58] (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_Bb:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x8C44, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_SplitPoint_B
+; Bitmap_SplitPoint_B  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
+;
+; What it shows (render): One octave of keys, C to B, with the keys from
+; C up to and including B tinted (white keys cyan, black keys blue): the
+; octave that contains a split point at B; also drawn for every octave
+; wholly below the split.
+;
+; Reader: SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) draws a 5-octave
+; keyboard strip one octave at a time at x += 0x38 (56, so neighbours
+; overlap by one column): pushw 0x34 (height 52), ldw de,0x39 (width
+; 57), call DrawBitmapSPFast (v10/v9 0xfac3db, v7 0xfabfce). Octaves
+; wholly below the split octave use Bitmap_SplitPoint_B, the split
+; octave uses entry 1 + (split note mod 12) of the 13-entry table at
+; SplitPoint_NoteEntry_C_Code+4 (entry 0 = Bitmap_SplitPoint_no_split,
+; entries 1..12 = C..B), and the octaves above use
+; Bitmap_SplitPoint_no_split.
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t Bitmap_SplitPoint_B[52][58]
+; (rows of 58 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_B:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x980C, 0xBC8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_MIDIConnections_1
+; Bitmap_MIDIConnections_1  --  296 x 108 bitmap, 8 bpp, row stride 296, 31968 bytes
+;
+; What it shows (render): MIDI routing diagram for the COMPUTER-port
+; setting: boxes PC, MASTER KEYBOARD, EXTERNAL MODULE above a KN5000
+; panel with the COMPUTER, MIDI IN and MIDI OUT sockets. Variant 1: PC
+; <-> COMPUTER, the PC stream also routed to MIDI OUT; MIDI IN unused.
+;
+; Reader: MdCmptCnctFunc (v10/v9 0xf74b40, v7 0xf7473c), on message
+; 0x1e00042 (paint), reads the mode word at +4 of the message's
+; parameter block (the xde argument), Strcpy's a caption into the buffer
+; whose pointer is at +8, and draws this bitmap for mode 0 (caption
+; "NORMAL" at 0xe7f848) and for any mode other than 0/1/2 (caption
+; "Error!" at 0xe7f896): pushw 0x6c (height 108), ldw de,0x128 (width
+; 296), ld xbc,<this bitmap>, call DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t
+; Bitmap_MIDIConnections_1[108][296] (rows of 296 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_MIDIConnections_1:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0xA3D4, 0x7CE0
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_MIDIConnections_2
+; Bitmap_MIDIConnections_2  --  296 x 108 bitmap, 8 bpp, row stride 296, 31968 bytes
+;
+; What it shows (render): The same diagram, variant 2: the PC stream
+; goes to MIDI OUT only (no arrow into the KN5000), KN5000 -> PC.
+;
+; Reader: MdCmptCnctFunc (v10/v9 0xf74b40, v7 0xf7473c), on message
+; 0x1e00042 (paint), reads the mode word at +4 of the message's
+; parameter block (the xde argument), Strcpy's a caption into the buffer
+; whose pointer is at +8, and draws this bitmap for mode 1 (caption "KN
+; as master" at 0xe7f862): pushw 0x6c (height 108), ldw de,0x128 (width
+; 296), ld xbc,<this bitmap>, call DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t
+; Bitmap_MIDIConnections_2[108][296] (rows of 296 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_MIDIConnections_2:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x120B4, 0x7CE0
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_MIDIConnections_3
+; Bitmap_MIDIConnections_3  --  296 x 108 bitmap, 8 bpp, row stride 296, 31968 bytes
+;
+; What it shows (render): The same diagram, variant 3: MASTER KEYBOARD
+; -> MIDI IN, routed on to the PC through COMPUTER; PC -> KN5000 and
+; MIDI OUT.
+;
+; Reader: MdCmptCnctFunc (v10/v9 0xf74b40, v7 0xf7473c), on message
+; 0x1e00042 (paint), reads the mode word at +4 of the message's
+; parameter block (the xde argument), Strcpy's a caption into the buffer
+; whose pointer is at +8, and draws this bitmap for mode 2 (caption "KN
+; as slave" at 0xe7f87c): pushw 0x6c (height 108), ldw de,0x128 (width
+; 296), ld xbc,<this bitmap>, call DrawBitmapSPFast (v10/v9 0xfac3db, v7
+; 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t
+; Bitmap_MIDIConnections_3[108][296] (rows of 296 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_MIDIConnections_3:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x19D94, 0x7CE0
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_Bmphk
+; Bitmap_Bmphk  --  100 x 120 bitmap, 8 bpp, row stride 100, 12000 bytes
+;
+; What it shows (render): A picture of the KN5000 itself (keyboard,
+; display, panel) on a teal background. BitmapBmphk sits in the
+; MIDI-menu entry table
+; EmbeddedPtrTable_*_naka_widget_descriptors_024400, between the MIDI
+; preset functions and TtMdGm.
+;
+; Reader: BitmapBmphk (v10/v9 0xf73580, v7 0xf7317c) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0x64 (width 100) and 0x1e000a3 with
+; 0x78 (height 120). Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function with 0x1e000a1 (address), 0x1e000a2
+; (width) and 0x1e000a3 (height) and hands the three to DrawBitmapSPFast
+; (v10/v9 0xfac3db, v7 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_tables_2.c as uint8_t Bitmap_Bmphk[120][100]
+; (rows of 100 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_Bmphk:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x21A74, 0x2EE0
 MidiPart_PageDisplay_Data:

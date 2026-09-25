@@ -357,12 +357,137 @@ NakaInst_3d:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D28, 0xC8
 NakaInst_2d:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DF0, 0x228
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_Ntedt0k
+; Bitmap_Ntedt0k  --  16 x 127 bitmap, 8 bpp, row stride 16, 2032 bytes
+;
+; What it shows (render): A vertical piano-key strip (black keys
+; pointing left): the key column beside the note grid Bitmap_Ntedt0d.
+; Both procs sit in sequencer/sequencer_ui.s just before
+; bmdredit_routines.s.
+;
+; Reader: BitmapNtedt0k (v10/v9 0xf35d62, v7 0xf35d38) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0x10 (width 16) and 0x1e000a3 with
+; 0x7f (height 127). Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function with 0x1e000a1 (address), 0x1e000a2
+; (width) and 0x1e000a3 (height) and hands the three to DrawBitmapSPFast
+; (v10/v9 0xfac3db, v7 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_descriptors.c as uint8_t Bitmap_Ntedt0k[127][16]
+; (rows of 16 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_Ntedt0k:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x4018, 0x7F0
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_Ntedt0d
+; Bitmap_Ntedt0d  --  240 x 127 bitmap, 8 bpp, row stride 240, 30480 bytes
+;
+; What it shows (render): An empty dotted grid, 10 columns: the
+; background the note grid is drawn on, beside the key strip
+; Bitmap_Ntedt0k.
+;
+; Reader: BitmapNtedt0d (v10/v9 0xf35d8f, v7 0xf35d65) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0xf0 (width 240) and 0x1e000a3 with
+; 0x7f (height 127). Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function with 0x1e000a1 (address), 0x1e000a2
+; (width) and 0x1e000a3 (height) and hands the three to DrawBitmapSPFast
+; (v10/v9 0xfac3db, v7 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_descriptors.c as uint8_t Bitmap_Ntedt0d[127][240]
+; (rows of 240 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_Ntedt0d:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x4808, 0x7710
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_Dredt0k
+; Bitmap_Dredt0k  --  88 x 119 bitmap, 8 bpp, row stride 88, 10472 bytes
+;
+; What it shows (render): A ruled column (horizontal rules, right-hand
+; border): the row-name column beside the dotted grid Bitmap_Dredt0d.
+;
+; Reader: BitmapDredt0k (v10/v9 0xf35dbc, v7 0xf35d92) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0x58 (width 88) and 0x1e000a3 with
+; 0x77 (height 119). Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function with 0x1e000a1 (address), 0x1e000a2
+; (width) and 0x1e000a3 (height) and hands the three to DrawBitmapSPFast
+; (v10/v9 0xfac3db, v7 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_descriptors.c as uint8_t Bitmap_Dredt0k[119][88]
+; (rows of 88 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_Dredt0k:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBF18, 0x28E8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] Bitmap_Dredt0d
+; Bitmap_Dredt0d  --  168 x 119 bitmap, 8 bpp, row stride 168, 19992 bytes
+;
+; What it shows (render): An empty dotted grid, 7 columns, beside the
+; ruled name column Bitmap_Dredt0k. Its procs sit in
+; sequencer/sequencer_ui.s directly before `.include
+; "sequencer/bmdredit_routines.s"`.
+;
+; Reader: BitmapDredt0d (v10/v9 0xf35de9, v7 0xf35dbf) answers 0x1e000a1
+; with this address, 0x1e000a2 with 0xa8 (width 168) and 0x1e000a3 with
+; 0x77 (height 119). Drawn by the UserBitmap view class:
+; VwUserBitmapProc (v10/v9 0xf9c54c, v7 0xf9c13f), on paint (0x1c0000d),
+; calls the instance's function with 0x1e000a1 (address), 0x1e000a2
+; (width) and 0x1e000a3 (height) and hands the three to DrawBitmapSPFast
+; (v10/v9 0xfac3db, v7 0xfabfce).
+;
+; Pixel format, from DrawBitmapSPFast_Impl (v10/v9 0xfac457, v7
+; 0xfac04a): 8 bpp, one palette index per byte (palette:
+; Palette_8bit_RGBA), rows top to bottom. The routine copies `width`
+; bytes per row to VRAM 0x43c00 + 320*y + x with Mem_Copy and then
+; advances the source by (width + 1) & ~1, so a row occupies the width
+; rounded up to even; the pad byte of an odd-width row is never drawn.
+;
+; Dimensions pinned twice: the reader's own width/height constants, and
+; width-rounded-to-even x height == the slice length. A PNG render
+; (scripts/converters/naka_c_retype.py --render DIR) shows the drawing
+; upright; a wrong width would shear it.
+;
+; Typed in naka_widget_descriptors.c as uint8_t Bitmap_Dredt0d[119][168]
+; (rows of 168 bytes).
+; -----------------------------------------------------------------------------
 Bitmap_Dredt0d:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800, 0x4E18
 WidgetData_DrawbarPositionTable:
