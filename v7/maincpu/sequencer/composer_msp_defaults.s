@@ -26,8 +26,9 @@
 ;    - "HK" signature header
 ;    - Display layout parameters
 ;    - Bank name strings ("Compile Bank 1/2", "User Bank 1/2")
-;    - Callback function pointer table (72 entries + a .long 0 sentinel =
-;      73, the count InitializeSuna registers; see Composer_FunctionTable)
+;    - Callback function pointer table (73 entries -- the count 0x49
+;      InitializeSuna registers -- plus a .long 0 sentinel; see
+;      Composer_FunctionTable)
 ;    - Null-terminated (.long 0 sentinel)
 ;
 ; 3. Composer_CallbackNameTable - Debug name string table
@@ -197,10 +198,10 @@ Composer_SettingsBlock:
 	.ascii "   User Bank 1     User Bank 2                                  "
 
 ; -----------------------------------------------------------------------------
-; Composer_FunctionTable -- 73 x .long: 72 handler addresses and a 0.
+; Composer_FunctionTable -- 74 x .long: 73 handler addresses and a 0.
 ; Registered by InitializeSuna (storage/flash_floppy_handlers.s; v10/v9
 ; 0xF19636, v7 0xF1960C) as object table 0x124: RegisterObjectTable with the
-; record {0x01600002, ApFunctionProc, 0x49 entries, this table, id 0x124}
+; record {0x01600002, ApFunctionProc, 0x49 = 73 entries, this table, id 0x124}
 ; (`RegObjTabl 0x1600002, 0xfa496c, 0x49, 0xe16284, 0x124` in v10).  Entry i
 ; is named by Composer_CallbackNameTable entry i (object table 0x424).
 ; InitializeKubo registers the analogous pair of its own module (tables
@@ -282,10 +283,11 @@ Composer_FunctionTable:
 	.long PsStylCnvVerProc
 	.long 0
 ; -----------------------------------------------------------------------------
-; Composer_CallbackNameTable -- 73 x .long pointers to the FuncName_* strings
-; below, entry for entry parallel to Composer_FunctionTable (the last points
-; at the empty string).  Registered by InitializeSuna as object table 0x424:
-; {0x01600002, ApFunctionProc, 0x49 entries, this table, id 0x424}.
+; Composer_CallbackNameTable -- 74 x .long pointers to the FuncName_* strings
+; below, entry for entry parallel to Composer_FunctionTable; the 74th, past
+; the registered count like the 0 there, points at the empty string.
+; Registered by InitializeSuna as object table 0x424:
+; {0x01600002, ApFunctionProc, 0x49 = 73 entries, this table, id 0x424}.
 ; -----------------------------------------------------------------------------
 Composer_CallbackNameTable:
 	.long FuncName_CmpBndRngFunc
@@ -362,7 +364,7 @@ Composer_CallbackNameTable:
 	.long FuncName_SndArrLangCheck
 	.long FuncName_PsStylCnvVerProc
 	.long FuncName_Empty_0
-; The 73 name strings Composer_CallbackNameTable points at (aligned_string:
+; The 74 name strings Composer_CallbackNameTable points at (aligned_string:
 ; NUL-terminated, padded to an even length).  Each is the source-level name
 ; of the Composer_FunctionTable handler at the same index.
 FuncName_Empty_0:		aligned_string ""
