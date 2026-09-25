@@ -559,6 +559,67 @@ def build_seq_rodata(cb, data, off0):
     return SR.LO, SR.HI, new, reexp
 
 
+VALUE_TEXT_READERS = {
+    0x0: ('EntertainerGridCheck', 'EqFormat_PositiveValue'),
+    0x1F4: ('EqFormat_PositiveValue',), 0x272: ('Equalizer_FormatDefault',),
+    0x466: ('Equalizer_FormatDefault',), 0x65A: ('Equalizer_FormatDefault',),
+    0x84E: ('Equalizer_FormatDefault',), 0xA42: ('Equalizer_FormatDefault',),
+    0xBB0: ('Equalizer_FormatDefault',), 0xBBA: ('Equalizer_FormatDefault',),
+    0xDAE: ('Equalizer_FormatDefault',), 0xFA2: ('FormatParamString',),
+    0x1196: ('FormatParamString',), 0x11A6: ('FormatParamString',),
+    0x139A: ('EntertainerGridCheck', 'EqualizerCngFunc'),
+    0x1530: ('EntertainerGridCheck', 'Equalizer_LookupParamString'),
+}
+
+
+def build_value_text(cb, data, off0):
+    """Blob +0x0..+0x15B8: the parameter-value display texts -- fixed 5-char
+    cells, no terminator, one table per parameter scale.  Readers (from
+    scripts/analysis/nakabig_rodata_refs.py-style references through
+    NakaData_WidgetDescriptors and its positional labels): the table address
+    goes to FormatParamStr_CopyEnumName (sequencer/sequencer_ui.s), which
+    does `ld bc,(xde+2*i); xde = bc*5; add xwa,xde; Strncpy(dst, xwa, 5)`
+    after `pushw 5`.  A table whose cell count is odd is followed by one 0xFF
+    alignment byte; the table after the 0xFF at +0x148F has no reference."""
+    starts = sorted(list(VALUE_TEXT_READERS) + [0x1490])
+    bounds = starts + [0x15B8]
+    new = []
+    first = True
+    for lo_, hi_ in zip(bounds, bounds[1:]):
+        seg = data[lo_:hi_]
+        pad = 1 if seg[-1:] == b'\xff' else 0
+        n = (len(seg) - pad) // 5
+        assert 5 * n + pad == len(seg), (hex(lo_), len(seg))
+        assert all(0x20 <= c < 0x7F for c in seg[:5 * n]), hex(lo_)
+        cells = [seg[5 * i:5 * i + 5].decode('ascii') for i in range(n)]
+        name = 'DspValueText_%04X' % lo_
+        rd = VALUE_TEXT_READERS.get(lo_)
+        hdr = ('%s -- %d value texts of 5 characters (%s .. %s, space-padded), no '
+               'terminator%s.  %s'
+               % (name, n, cells[0].strip(), cells[-1].strip(),
+                  ', then one 0xFF alignment byte' if pad else '',
+                  ('Read by %s: the table address goes to FormatParamStr_CopyEnumName, which '
+                   'copies cell [value] with Strncpy(dst, table + 5*value, 5).'
+                   % ', '.join(a(r) for r in rd)) if rd else
+                  'No reference to this table was found (searched: NakaData_WidgetDescriptors '
+                  'and its positional labels in all v10 .s files); it sits between two '
+                  'referenced tables in the same 5-character format.  Its reader is not established.'))
+        if first:
+            hdr = ('Parameter-value display texts, blob +0x0..+0x15B8: one table per parameter '
+                   'scale, cells of exactly 5 characters.\n\n' + hdr)
+            first = False
+        rows = []
+        for i in range(0, n, 8):
+            rows.append('        ' + ', '.join('"%s"' % c.replace('\\', '\\\\').replace('"', '\\"')
+                                             for c in cells[i:i + 8]) + ',')
+        new.append(M.NewMember('char', name, '[%d][5]' % n, 5 * n,
+                               '{\n' + '\n'.join(rows) + '\n    }',
+                               M.comment_block(wrap(hdr))))
+        if pad:
+            new.append(M.NewMember('uint8_t', name + '_Pad', '[1]', 1, '{ 0xFF }', []))
+    return 0x0, 0x15B8, new, []
+
+
 def span_builder(span):
     """Builder for a naka_span.py span (registry + references + strings)."""
     def fn(cb, data, off0):
@@ -580,6 +641,7 @@ CUSTOM_AT = [
     ('naka_widget_tables_2', 0x24954, span_builder('t2b')),
     ('naka_widget_descriptors', 0x271A, span_builder('d_ui')),
     ('naka_widget_descriptors', 0x24906, span_builder('d_cls')),
+    ('naka_widget_descriptors', 0x0, build_value_text),
 ]
 
 
