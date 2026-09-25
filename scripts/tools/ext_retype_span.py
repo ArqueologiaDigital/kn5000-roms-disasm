@@ -5,7 +5,8 @@ QUESTION ANSWERED
 -----------------
 "Given the v10 line map, rewrite exactly the source lines that emit
 [lo, hi) so that the bytes come out as the typed items I specify -- keeping
-every label at its address and every comment line of the span -- and fill
+every label at its address and every comment line and every non-emitting directive line (`.set`,
+`.macro` blocks) of the span -- and fill
 whatever the items do not cover with `.byte` rows."  It is the mechanical
 half of each retyping step of the `ext` lane (2026-09-25); the byte gate is
 the certification, and this helper refuses rather than guess when a label
@@ -74,6 +75,12 @@ def retype(L, m, rom, lo, hi, items, header=None, keep_labels=True):
             for p in pending:
                 labels.setdefault(addr_of[i + 1], []).append(p)
             pending = []
+        elif s:
+            # a line that emits nothing and is no label -- a `.set`, or a
+            # `.macro` .. `.endm` block: keep it, in order, with the comments
+            # (a first version dropped a whole .macro definition this way; the
+            # assembler caught it)
+            comments.append(ln)
     for p in pending:
         labels.setdefault(hi, []).append(p)
     for la in labels:
