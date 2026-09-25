@@ -2990,6 +2990,17 @@ DSP_MixerGain_Curve:
 ; are unidentified two-parameter entries.  No literal reference to the three table
 ; bases exists in the payload image -- the consumer computes the addresses (or lives
 ; in code still held as raw bytes elsewhere in the payload).
+; RE-CHECKED 2026-09-25, forms searched: every 24-bit little-endian value in 0x012400-0x0147FF
+; anywhere in the payload ROM (covers lda :24, ld imm32, .long, d24 operands, and any
+; table-base-minus-index constant within that window); every 3- and 4-byte LE and 3-byte BE
+; occurrence of 0x0133CF / 0x013E49 / 0x0143AD / 0x014411 / 0x0145A1 in the main-CPU v10,
+; table-data, custom-data and HD-AE5000 dumps.  The only hits are the two pointer tables'
+; own entries plus byte patterns inside unrelated instructions (0x01F9D0-0x01FA90 init code).
+; And the "code still held as raw bytes" escape hatch is now closed: the payload's code files
+; hold no undecoded runs except 20 single instructions llvm-mc cannot spell (minc1, ldc to
+; control registers, and/bit on (reg+reg); each annotated with its unidasm reading), none of
+; which carries such an address, plus documented 0xFF / 0x0E fill bytes.  So no reader of these
+; three tables exists in any dumped image in any of those forms.
 ; ===========================================================================
 
 ; Shared placeholder range array (2 records) used by all effect numbers without a

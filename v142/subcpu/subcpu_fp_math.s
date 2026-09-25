@@ -62,6 +62,9 @@ FP_fabs_Negate:
 ; --- 0x03D44B-0x03D44B  FP_fabs_Pad (0xFF alignment byte)
 ; One 0xFF pad byte inserted by the linker between routines. There are ~14 of these in
 ; the region; each is already named *_Pad and none is reachable code.
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_ftoi starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_fabs_Pad:
 	.byte 0xff
 
@@ -85,6 +88,9 @@ FP_ftoi:
 	pop xiz
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_CmpZero64 starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_ftoi_Pad:
 	.byte 0xff
 
@@ -708,6 +714,9 @@ FP_DP_Sub_Done:
 	pop xiz
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_Sub starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_Sub_Pad:
 	.byte 0xff
 
@@ -1196,6 +1205,9 @@ FP_DP_Raw8Copy:
 	ld (xwa + 4), xiy
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_ftod starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_Raw8Copy_Pad:
 	.byte 0xff
 
@@ -1237,6 +1249,9 @@ FP_ftod_Store:
 	pop xiz
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_ScalarToDP starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_ScalarToDP_Pad:
 	.byte 0xff
 
@@ -1329,6 +1344,9 @@ FP_dtof_Encode:
 	pop xiz
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_Raw4Copy starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_Raw4Copy_Pad:
 	.byte 0xff
 
@@ -1339,6 +1357,9 @@ FP_SP_Raw4Copy:
 	ld (xwa), xix
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_CallWithBuf8 starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_CallWithBuf8_Pad:
 	.byte 0xff
 
@@ -1396,6 +1417,9 @@ FP_DP_DecodeToInt:
 
 ; --- 0x03DE19-0x03DE19  FP_DP_Normalize_Pad (0xFF alignment byte)
 ; Linker pad.
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_Normalize starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_Normalize_Pad:
 	.byte 0xff
 
@@ -1480,6 +1504,9 @@ FP_DP_NormCore_Zero:
 	ld (xiy + 2), 0x1
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_ShiftDecode starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_ShiftDecode_Pad:
 	.byte 0xff
 
@@ -1606,6 +1633,9 @@ FP_SP_AddMantissa_Store:
 	ld (xwa + 4), xix
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_Decode starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_Decode_Pad:
 	.byte 0xff
 
@@ -1821,6 +1851,9 @@ FP_DP_Encode_NormCheck:
 	mri_d2 0xB1, 0xEE
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_Encode starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_Encode_Pad:
 	.byte 0xff
 
@@ -1925,6 +1958,9 @@ FP_dadd_Encode:
 	pop xiz
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_fadd starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_fadd_Pad:
 	.byte 0xff
 
@@ -2114,6 +2150,9 @@ FP_frexp_Return:
 	inc 8, xsp
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_dmul starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_dmul_Pad:
 	.byte 0xff
 
@@ -2267,6 +2306,9 @@ FP_DP_AlignMantissa_MaxShift:
 	ld (xwa + 2), 0x1
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_AlignMantissa starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_AlignMantissa_Pad:
 	.byte 0xff
 
@@ -2414,6 +2456,9 @@ FP_DP_MulMantissaCore_Store:
 	pop xiz
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_DivCore starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_DivCore_Pad:
 	.byte 0xff
 
@@ -2921,6 +2966,9 @@ FP_log_Epilog:
 	lda xsp, (xsp + 102)
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_NaN_Handler starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_NaN_Handler_Pad:
 	.byte 0xff
 
@@ -3124,6 +3172,9 @@ FP_trunc_Return:
 	lda xsp, (xsp + 28)
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_CopyNoSign starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_CopyVariant_Pad:
 	.byte 0xff
 
@@ -3166,6 +3217,9 @@ FP_DP_Copy3Words:
 	ld (xwa + 8), xhl
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_SP_DecodeToInt starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_DecodeToInt_Pad:
 	.byte 0xff
 
@@ -3412,6 +3466,9 @@ FP_ldexp_Epilog:
 	lda xsp, (xsp + 16)
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_DP_MulAdd starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_DP_MulAdd_Pad:
 	.byte 0xff
 
@@ -3763,6 +3820,9 @@ FP_DP_Neg3Words:
 	xormi8 (xwa + 3), 0x80
 	ret
 
+; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
+; FP_Overflow_Handler starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_Overflow_Handler_Pad:
 	.byte 0xff
 
