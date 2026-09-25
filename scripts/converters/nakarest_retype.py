@@ -781,10 +781,18 @@ def fix_false_pointers(v, apply):
             continue
         data = compile_blob(v, blob)
         before = txt
+        todo = 0
         for _, old, n, new, in ((f[0], f[1], f[2], f[3]) for f in fixes):
+            if txt.count(old) == 0 and new not in txt:
+                # the member has since been retyped as a widget-record field by
+                # nakarest_type_records.py, which writes the value as a number
+                continue
             if txt.count(old) != n:
                 raise SystemExit('%s: %r occurs %d times, expected %d' % (cpath, old, txt.count(old), n))
             txt = txt.replace(old, new)
+            todo += 1
+        if not todo:
+            continue
         print('%s %s: %d false pointers made numeric' % (v, blob, len(fixes)))
         if apply:
             open(cpath, 'w', encoding='latin-1', newline='').write(txt)
@@ -887,7 +895,7 @@ def s_header_lines(o):
             out.append('; ' + ln)
     out.append(RULE)
     # CLAUDE.md "Lowercase Hex": hex in .s comments is written lowercase
-    return [re.sub(r'0x[0-9A-Fa-f]+', lambda m: m.group(0).lower(), l) for l in out]
+    return [lower_hex(l) for l in out]
 
 
 def apply_s(v, apply):
@@ -924,6 +932,12 @@ def apply_s(v, apply):
 CMARK = '; [nakarest] '
 
 
+def lower_hex(t):
+    """CLAUDE.md "Lowercase Hex" for comments -- but not the hex digits of a
+    symbol name such as CharMap_FullPermutation_0x7B0."""
+    return re.sub(r'(?<![A-Za-z0-9_])0x[0-9A-Fa-f]+', lambda m_: m_.group(0).lower(), t)
+
+
 def ascii_only(t):
     """Header text quotes ROM strings; keep the .s files ASCII (a high byte
     makes ugrep treat a whole source as binary): non-ASCII -> \\xNN."""
@@ -941,7 +955,7 @@ def piece_lines(p, blob):
         for ln in textwrap.wrap(' '.join(body.split()), width=96 - len(CMARK),
                                 break_long_words=False, break_on_hyphens=False):
             out.append(CMARK + ln)
-        out = [re.sub(r'0x[0-9A-Fa-f]+', lambda m: m.group(0).lower(), l) for l in out]
+        out = [lower_hex(l) for l in out]
     elif p.header:
         out += [RULE, MARK + p.name]
         for ln in p.header.split('\n'):
@@ -951,7 +965,7 @@ def piece_lines(p, blob):
             for ln in wrap(p.typed).split('\n'):
                 out.append('; ' + ln)
         out.append(RULE)
-        out = [re.sub(r'0x[0-9A-Fa-f]+', lambda m: m.group(0).lower(), l) for l in out]
+        out = [lower_hex(l) for l in out]
     out += ['%s:' % l for l in p.labels]
     out.append('\t.incbin "includes/generated/%s.bin", 0x%X, 0x%X' % (blob, p.off, p.size))
     return out
@@ -1381,10 +1395,44 @@ def reader_chain(v, lo, hi):
         if len(conts) > 3:
             cs.append('words in %d more objects' % (len(conts) - 3))
         parts.append('; '.join(cs))
+    for rlo, rhi in R.ram_mirror(lo, hi):
+        ru = R.ram_in_range(rlo, rhi)
+        parts.append('work-RAM image: Boot_InitWorkRAM copies these bytes to RAM 0x%05X..0x%05X '
+                     '(its ld xde/xhl/xbc + ldir blocks)%s' % (
+                         rlo, rhi, (', where they are read by ' + _uses_text(ru, 4)) if ru
+                         else '; no literal RAM reference into that copy was found'))
     rom = R.rom[lo - 0xE00000:hi - 0xE00000]
     pr = sum(1 for b in rom if 32 <= b < 127 or b in (0, 0x0A, 0x0D, 0xFF))
     is_text = len(rom) > 0 and pr / len(rom) >= 0.9 and sum(1 for b in rom if 32 <= b < 127) >= len(rom) / 2
     return '; '.join(parts), is_text
+
+
+WALLPAPER = (
+    "a wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte "
+    "of all 256 entries is 0; the channel order was not traced).  Its address is "
+    "entr%s %s of the 12-pointer table Naka_DrawbarReg_Table (0x%06X), which "
+    "Boot_InitWorkRAM copies to RAM 0x3F1E4 with the rest of the work-RAM image; "
+    "GetWallPaletteRGB (display/graphics_text_vga.s) takes that table's entry "
+    "[index] and returns the palette's entry [colour] (`sll 2` twice), and "
+    "ChangeWallPalette_Impl (ui/ui_window_procs.s) calls it for colours 0..15 and "
+    "writes DAC entries 0xE0..0xEF with SetPaletteRGB.  The 1024-byte size is the "
+    "spacing of the 11 palettes here; the reader shown only reads entries 0..15.")
+
+
+def piece_note(v, name):
+    """Hand-established purpose text for a piece, or None."""
+    if name.startswith('NakaColor_Palette'):
+        R = refs(v)
+        t = R.sym.get('Naka_DrawbarReg_Table')
+        a = R.sym.get(name)
+        if t is None or a is None:
+            return None
+        ks = [k for k in range(12)
+              if int.from_bytes(R.rom[t - 0xE00000 + 4 * k:t - 0xE00000 + 4 * k + 4], 'little') == a]
+        if not ks:
+            return None
+        return WALLPAPER % ('ies' if len(ks) > 1 else 'y', _ranges(ks), t)
+    return None
 
 
 def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
@@ -1437,7 +1485,10 @@ def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
         first = inside[0][0] if inside else e
         covered = max([o[1] for o in cont], default=c)
         admit = None
-        if first > covered:
+        note = piece_note(m.v, name) if first > covered else None
+        if note:
+            paras.append(note[0].upper() + note[1:])
+        elif first > covered:
             chain, is_text = reader_chain(m.v, base + covered, base + first)
             n = first - covered
             if chain and is_text:
@@ -1471,7 +1522,7 @@ def write_file_note(lines, blob, text):
     file's leading comment lines."""
     mark = MARK + 'registered NAKA tables: ' + blob
     block = [RULE, mark] + ['; ' + l if l else ';' for l in text.split('\n')] + [RULE]
-    block = [re.sub(r'0x[0-9A-Fa-f]+', lambda m_: m_.group(0).lower(), l).rstrip() for l in block]
+    block = [lower_hex(l).rstrip() for l in block]
     block.append('')      # keep it a separate comment run from the first piece
     if mark in lines:
         i = lines.index(mark) - 1
@@ -1657,6 +1708,16 @@ ErrorDialog_CautionHeader:
 # Evidence lines inserted directly above a label (idempotent): (file, label,
 # text).  Lines are `; [nakarest] ` comments, replaced on every run.
 LABEL_NOTES = [
+    ('sequencer_channel_containers.s', 'Naka_DrawbarReg_Table',
+     'Naka_DrawbarReg_Table: despite the name, entries 0-11 are the WALLPAPER PALETTE table: '
+     'pointers to NakaColor_Palette2, 1, 6, 5, 4, 3, 10, 9, 8, 7, Blank, Blank '
+     '(debug_naming_panel_sim.s).  This blob lies wholly inside the work-RAM initial image '
+     '(ROM 0xEED8C8 onward, CharMap_FullPermutation_0x7B0) that Boot_InitWorkRAM copies with '
+     'ldir, so the table '
+     'lives at RAM 0x3F1E4, where GetWallPaletteRGB (display/graphics_text_vga.s: `ld xde, '
+     '0x3f1e4`) indexes it (`sll 2`) and returns entry [colour] of the palette; '
+     'ChangeWallPalette_Impl sets DAC entries 0xE0..0xEF from it.  Entries 12 on '
+     '(SeqChan_Map_*) are not part of that table.'),
     ('naka_debug_proc_names.s', 'DbgStr_NakaProcName_Table',
      'DbgStr_NakaProcName_Table: entries 1-45 of the NAME table of ApFunction slot 0x427 '
      '(0xE2031C, 46 entries), registered by InitializeYoko with RegObjTabl 0x1600002, '
@@ -1690,7 +1751,7 @@ def apply_label_notes(v, apply):
             j = i
             while j > 0 and lines[j - 1].startswith(CMARK):
                 j -= 1
-            lines[j:i] = [re.sub(r'0x[0-9A-Fa-f]+', lambda m_: m_.group(0).lower(), CMARK + w)
+            lines[j:i] = [lower_hex(CMARK + w)
                           for w in textwrap.wrap(text, width=96 - len(CMARK),
                                                  break_long_words=False, break_on_hyphens=False)]
         out = '\n'.join(lines).encode('latin-1')
@@ -1761,7 +1822,7 @@ def apply_style_ui_params(v, apply):
                             ('; loaded directly by %s' % ', '.join(direct[:6])) if direct else ''))
             wrapped = textwrap.wrap(text, width=96 - len(CMARK), break_long_words=False,
                                     break_on_hyphens=False)
-            out += [re.sub(r'0x[0-9A-Fa-f]+', lambda m_: m_.group(0).lower(), CMARK + w)
+            out += [lower_hex(CMARK + w)
                     for w in wrapped]
         out.append(l)
     new = '\n'.join(out).encode('latin-1')

@@ -140,80 +140,135 @@ NakaDbg_LowerCaseChars2:
 ; [nakarest] "MainBitControl", ....
 	.incbin "includes/generated/naka_debug_naming.bin", 0xC0C, 0x4D4
 ; [nakarest] NakaColor_Palette1  +0x10e0..+0x14e0 (0xeb3bde, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb3bde not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette1`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef58c).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 1 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette1:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x10E0, 0x400
 ; [nakarest] NakaColor_Palette2  +0x14e0..+0x18e0 (0xeb3fde, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb3fde not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette2`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef588).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 0 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette2:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x14E0, 0x400
 ; [nakarest] NakaColor_Palette3  +0x18e0..+0x1ce0 (0xeb43de, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb43de not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette3`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef59c).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 5 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette3:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x18E0, 0x400
 ; [nakarest] NakaColor_Palette4  +0x1ce0..+0x20e0 (0xeb47de, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb47de not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette4`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef598).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 4 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette4:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x1CE0, 0x400
 ; [nakarest] NakaColor_Palette5  +0x20e0..+0x24e0 (0xeb4bde, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb4bde not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette5`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef594).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 3 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette5:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x20E0, 0x400
 ; [nakarest] NakaColor_Palette6  +0x24e0..+0x28e0 (0xeb4fde, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb4fde not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette6`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef590).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 2 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette6:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x24E0, 0x400
 ; [nakarest] NakaColor_Palette7  +0x28e0..+0x2ce0 (0xeb53de, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb53de not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette7`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef5ac).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 9 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette7:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x28E0, 0x400
 ; [nakarest] NakaColor_Palette8  +0x2ce0..+0x30e0 (0xeb57de, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb57de not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette8`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef5a8).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 8 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette8:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x2CE0, 0x400
 ; [nakarest] NakaColor_Palette9  +0x30e0..+0x34e0 (0xeb5bde, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb5bde not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette9`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef5a4).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 7 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette9:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x30E0, 0x400
 ; [nakarest] NakaColor_Palette10  +0x34e0..+0x38e0 (0xeb5fde, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb5fde not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_Palette10`); 1 data
-; [nakarest] word in Naka_DrawbarReg_Table (at 0xeef5a0).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 6 of the
+; [nakarest] 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM copies to
+; [nakarest] RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_Palette10:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x34E0, 0x400
 ; [nakarest] NakaColor_PaletteBlank  +0x38e0..+0x3ce0 (0xeb63de, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb63de not derived; readers below
-; [nakarest] Readers: source references Naka_DrawbarReg_Table
-; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long NakaColor_PaletteBlank`); 2 data
-; [nakarest] words in Naka_DrawbarReg_Table (at 0xeef5b0, 0xeef5b4).
+; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
+; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entries 10-11
+; [nakarest] of the 12-pointer table Naka_DrawbarReg_Table (0xeef588), which Boot_InitWorkRAM
+; [nakarest] copies to RAM 0x3f1e4 with the rest of the work-RAM image; GetWallPaletteRGB
+; [nakarest] (display/graphics_text_vga.s) takes that table's entry [index] and returns the
+; [nakarest] palette's entry [colour] (`sll 2` twice), and ChangeWallPalette_Impl
+; [nakarest] (ui/ui_window_procs.s) calls it for colours 0..15 and writes DAC entries 0xe0..0xef
+; [nakarest] with SetPaletteRGB. The 1024-byte size is the spacing of the 11 palettes here; the
+; [nakarest] reader shown only reads entries 0..15.
 NakaColor_PaletteBlank:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x38E0, 0x400
 ; [nakarest] NakaProp_FontEntry0  +0x3ce0..+0x3cf4 (0xeb67de, 20 B)

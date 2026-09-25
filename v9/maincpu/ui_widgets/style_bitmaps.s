@@ -443,7 +443,7 @@ Bitmap_FadeOutText:
 ; MasterSetup_DialDown_*) index it with 6*k (`muls wa, 0x6`), load +0
 ; and Strcpy the title into the view, and search it with String_Compare;
 ; their bounds are 0x3e8 (1000) -- an index of 1000 wraps to 0 and an
-; underflow reads entry 999 through StyleSong_MasterTable_0x176a (=
+; underflow reads entry 999 through StyleSong_MasterTable_0x176A (=
 ; +999*6, .set in shared/positional_labels.s), which is how the count is
 ; pinned. The cell-select paths of MasterSetup and
 ; MstStyleAlp_EventDispatch load the u16 at +4 of entry 9*(page-1) +
@@ -3628,7 +3628,7 @@ EmbeddedPtrTable_v9_naka_style_bitmaps_018800:
 ; [nakarest] MstStyle1Page_EventDispatch load (index*8)+4 -- the group table -- through the
 ; [nakarest] label 4 bytes into it (StyleGroup_LatinDance_Table) and store it at 0x0340d2;
 ; [nakarest] MstStyle1Grid_CellSelect and MstStyle2_NameB_Render load +0, the name, through
-; [nakarest] StyleGroup_LatinWorld_PairTable_0x2fa (= this address).
+; [nakarest] StyleGroup_LatinWorld_PairTable_0x2FA (= this address).
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18AE6, 0x4
 ; [nakarest] StyleGroup_LatinDance_Table  +0x18aea..+0x18b36 (0xecfca8, 76 B)
 ; [nakarest] Continues the root of the MstStyle browser tree (0xecfca4): 10 x {u32 group name,
@@ -3636,7 +3636,7 @@ EmbeddedPtrTable_v9_naka_style_bitmaps_018800:
 ; [nakarest] MstStyle1Page_EventDispatch load (index*8)+4 -- the group table -- through the
 ; [nakarest] label 4 bytes into it (StyleGroup_LatinDance_Table) and store it at 0x0340d2;
 ; [nakarest] MstStyle1Grid_CellSelect and MstStyle2_NameB_Render load +0, the name, through
-; [nakarest] StyleGroup_LatinWorld_PairTable_0x2fa (= this address) (starts 0xecfca4, 76 of its
+; [nakarest] StyleGroup_LatinWorld_PairTable_0x2FA (= this address) (starts 0xecfca4, 76 of its
 ; [nakarest] 80 bytes are here or later).
 StyleGroup_LatinDance_Table:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18AEA, 0x4C
@@ -3737,7 +3737,7 @@ NakaInst_MEMORY_B_ECFDEA:
 ; [nakarest] NakaInst_MEMORY_A_ECFDF4  +0x18c36..+0x18d22 (0xecfdf4, 236 B)
 ; [nakarest] Text (236 B at 0xecfdf4), first string "MEMORY-A"; no registered NAKA table points
 ; [nakarest] into it; reached through source references VariScreen_HandlePaint
-; [nakarest] (ui/ui_mode_handlers.s: `lda xhl, (NakaInst_MEMORY_A_ECFDF4_0xa:24)`); 1 data word
+; [nakarest] (ui/ui_mode_handlers.s: `lda xhl, (NakaInst_MEMORY_A_ECFDF4_0xA:24)`); 1 data word
 ; [nakarest] in SeqChan_Map_2ch_0x2 (at 0xecfdd4), which is read by RVari_Confirm_TypeF_SubItems
 ; [nakarest] (ui/rvari_routines.s: `lda xhl, (SeqChan_Map_2ch_0x2:24)`),
 ; [nakarest] RVari_Select_CheckSameBank (ui/ui_mode_handlers.s: `lda xhl,
@@ -3849,8 +3849,8 @@ MemScreen_NoteC:
 ; [nakarest] (kn5000_v9_program.s: `lda xbc, (Naka_MemoryC_Screens:24)`); 1 data word in
 ; [nakarest] Bitmap_DigitD_0x22 (at 0xe9e514), which is read by AcWelcomScreenProc
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, Bitmap_DigitD_0x22`); 1 data word in
-; [nakarest] Bitmap_DigitD_0x8da (at 0xe9edcc), which is read by AcWelcomScreenProc
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, Bitmap_DigitD_0x8da`); words in 1 more objects.
+; [nakarest] Bitmap_DigitD_0x8DA (at 0xe9edcc), which is read by AcWelcomScreenProc
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, Bitmap_DigitD_0x8DA`); words in 1 more objects.
 MemScreen_Blank:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18DA8, 0xA2
 ; External label offsets within the binary blob above.

@@ -43,6 +43,30 @@ LLVM = os.path.expanduser('~/compartilhado/llvm-project/build/bin')
 BASE = 0xE00000
 ID = re.compile(r'\b([A-Za-z_][A-Za-z0-9_]*)\b')
 HEX = re.compile(r'\b0x([0-9A-Fa-f]{5,8})\b')
+RAMHEX = re.compile(r'\b0x([0-9A-Fa-f]{3,5})\b')
+RAMDEC = re.compile(r'\((\d{3,6}):(?:16|24)\)')
+
+# The work-RAM initial image (the C runtime's .data copy): Boot_InitWorkRAM
+# (boot/system_handlers.s) copies two ROM blocks to RAM with `ldir` (83 11,
+# a byte copy).  Each block's setup is `ld xde, <RAM dest>` (42 imm32),
+# `ld xhl, <ROM src>` (43 imm32), `ld xbc, <count>` (41 imm32), read here
+# out of each version's ROM at the labels Boot_InitWorkRAM_ROMCopy1_Start /
+# _ROMCopy2_Start -- v10/v9 copy 0x219E bytes to 0x3D524 and 0x95B to
+# 0xE35E; v7's second block is 0x931 bytes to 0xE2C2.
+def ram_images(sym, rom):
+    out = []
+    for lab in ('Boot_InitWorkRAM_ROMCopy1_Start', 'Boot_InitWorkRAM_ROMCopy2_Start'):
+        a = sym.get(lab)
+        if a is None:
+            continue
+        b = rom[a - BASE:a - BASE + 15]
+        if b[0] != 0x42 or b[5] != 0x43 or b[10] != 0x41:
+            continue
+        dst = int.from_bytes(b[1:5], 'little')
+        src = int.from_bytes(b[6:10], 'little')
+        cnt = int.from_bytes(b[11:15], 'little')
+        out.append((src, src + cnt, dst))
+    return out
 
 
 class Refs:
@@ -61,9 +85,13 @@ class Refs:
         self.rev_a = [a for a, _ in rev]
         self.rev_n = [n for _, n in rev]
         self.uses = []          # (addr, kind, file, line, text, routine)
+        self.ram_uses = []
         self._scan()
         self.uses.sort()
         self.use_a = [u[0] for u in self.uses]
+        self.ram_uses.sort()
+        self.ram_a = [u[0] for u in self.ram_uses]
+        self.images = ram_images(self.sym, self.rom)
         self._data = None
 
     def _scan(self):
@@ -88,6 +116,10 @@ class Refs:
                     a = int(h, 16)
                     if BASE <= a < BASE + len(self.rom):
                         self.uses.append((a, 'numeric', rel, i + 1, s, routine))
+                for h in RAMHEX.findall(s):
+                    self.ram_uses.append((int(h, 16), 'RAM literal', rel, i + 1, s, routine))
+                for d in RAMDEC.findall(s):
+                    self.ram_uses.append((int(d), 'RAM literal', rel, i + 1, s, routine))
 
     def _build_words(self):
         r = self.rom
@@ -120,6 +152,20 @@ class Refs:
     def name_before(self, a):
         i = bisect.bisect_right(self.rev_a, a) - 1
         return '%s+0x%X' % (self.rev_n[i], a - self.rev_a[i]) if i >= 0 else '?'
+
+    def ram_mirror(self, lo, hi):
+        """[(ram_lo, ram_hi)] of the work-RAM copies of ROM [lo, hi)."""
+        out = []
+        for a, b, r in self.images:
+            x, y = max(lo, a), min(hi, b)
+            if x < y:
+                out.append((r + x - a, r + y - a))
+        return out
+
+    def ram_in_range(self, lo, hi):
+        i = bisect.bisect_left(self.ram_a, lo)
+        j = bisect.bisect_left(self.ram_a, hi)
+        return self.ram_uses[i:j]
 
     def in_range(self, lo, hi):
         i = bisect.bisect_left(self.use_a, lo)

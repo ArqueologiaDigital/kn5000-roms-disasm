@@ -51,14 +51,14 @@
 ; [nakarest] DiskWarning_ConfirmStrings  +0x0..+0x1226 (0xea8cac, 4646 B)
 ; [nakarest] purpose not established: layout of 4646 B at 0xea8cac not derived; readers below
 ; [nakarest] Readers: source references AcFileSfx_DrawLoop (ui/ui_control_panel.s: `lda xhl,
-; [nakarest] (DiskWarning_ConfirmStrings_0xb46:24)`), CtrlPanel_CheckButtonRelease
-; [nakarest] (boot/main_title_ctrl_panel.s: `ld xbc, DiskWarning_ConfirmStrings_0xcba`),
+; [nakarest] (DiskWarning_ConfirmStrings_0xB46:24)`), CtrlPanel_CheckButtonRelease
+; [nakarest] (boot/main_title_ctrl_panel.s: `ld xbc, DiskWarning_ConfirmStrings_0xCBA`),
 ; [nakarest] CtrlPanel_CheckDiskMenuRelease (boot/main_title_ctrl_panel.s: `ld xbc,
-; [nakarest] DiskWarning_ConfirmStrings_0xcba`), CtrlPanel_DispatchByIndex
-; [nakarest] (ui/ui_control_panel.s: `lda xix, (DiskWarning_ConfirmStrings_0xd58:24)`), 27 more;
-; [nakarest] 3 data words in NakaInst_WaitWinCtlSmf_0xe5c (at 0xea8c64, 0xea8c60, 0xea8c5c),
+; [nakarest] DiskWarning_ConfirmStrings_0xCBA`), CtrlPanel_DispatchByIndex
+; [nakarest] (ui/ui_control_panel.s: `lda xix, (DiskWarning_ConfirmStrings_0xD58:24)`), 27 more;
+; [nakarest] 3 data words in NakaInst_WaitWinCtlSmf_0xE5C (at 0xea8c64, 0xea8c60, 0xea8c5c),
 ; [nakarest] which is read by DiskSure (file_io/medley.s: `lda xhl,
-; [nakarest] (NakaInst_WaitWinCtlSmf_0xe5c:24)`); 3 data words in Data_SoundEditorCharsLayout
+; [nakarest] (NakaInst_WaitWinCtlSmf_0xE5C:24)`); 3 data words in Data_SoundEditorCharsLayout
 ; [nakarest] (at 0xea9ed2, 0xea9ed6, 0xea9eda), which is read by WndEvt_EventCodeDispatch
 ; [nakarest] (ui/ui_window_procs.s: `ld xde, Data_SoundEditorCharsLayout`),
 ; [nakarest] WndEvt_EventCodeDispatch_Join (ui/ui_window_procs.s: `ld xde,
@@ -70,9 +70,9 @@ DiskWarning_ConfirmStrings:
 ; [nakarest] Readers: source references AcGridBoxProc (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] Data_SoundEditorCharsLayout_0x386`), AcNaming_QueryCharSet
 ; [nakarest] (audio/presentation_sound_nav.s: `ld xbc, Data_SoundEditorCharsLayout_0x18`),
-; [nakarest] AcOnOff_GetText (ui/ui_widget_defs.s: `ld xbc, Data_SoundEditorCharsLayout_0x3c8`),
+; [nakarest] AcOnOff_GetText (ui/ui_widget_defs.s: `ld xbc, Data_SoundEditorCharsLayout_0x3C8`),
 ; [nakarest] BitEditCheck (ui/ui_widget_defs.s: `lda xbc,
-; [nakarest] (Data_SoundEditorCharsLayout_0x3fc:24)`), 25 more.
+; [nakarest] (Data_SoundEditorCharsLayout_0x3FC:24)`), 25 more.
 Data_SoundEditorCharsLayout:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1226, 0x428
 ; [nakarest] NakaInst_OK  +0x164e..+0x166a (0xeaa2fa, 28 B)
@@ -85,9 +85,9 @@ NakaInst_OK:
 ; [nakarest] purpose not established: layout of 3722 B at 0xeaa316 not derived; readers below
 ; [nakarest] Readers: source references AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s: `lda xix,
 ; [nakarest] (Str_No_0x26:24)`), AcMixerVol_Confirm (ui/ui_widget_defs.s: `ld xwa,
-; [nakarest] Str_No_0x1f6`), AcMixerVol_FastScroll (ui/ui_widget_defs.s: `ld xde,
-; [nakarest] Str_No_0x1f6`), AcMixerVol_FastScroll_Increment (ui/ui_widget_defs.s: `ld xde,
-; [nakarest] Str_No_0x1f6`), 112 more.
+; [nakarest] Str_No_0x1F6`), AcMixerVol_FastScroll (ui/ui_widget_defs.s: `ld xde,
+; [nakarest] Str_No_0x1F6`), AcMixerVol_FastScroll_Increment (ui/ui_widget_defs.s: `ld xde,
+; [nakarest] Str_No_0x1F6`), 112 more.
 Str_No:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x166A, 0xE8A
 ; [nakarest] Data_CharMapFormatBlock  +0x24f4..+0x2608 (0xeab1a0, 276 B)
