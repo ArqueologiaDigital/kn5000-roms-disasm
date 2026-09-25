@@ -225,6 +225,50 @@ typedef struct __attribute__((packed)) {
     uint32_t proc_addr;        /* +20: → Proc handler function */
 } naka_dispatch_t;             /* 24 bytes */
 
+/* ── Records that live inside the NAKA blobs but are not widgets ───── */
+
+/**
+ * AccompSeq style-data part descriptor, 16 bytes; accseq_record_t is two of
+ * them.  Field meanings are read off the code, nothing else:
+ *
+ *   AccompSeq_LookupStyleData (sequencer/accompseq_routines.s) takes an index
+ *   below 0x80 (from Voice_DecodeNoteChannel2), multiplies it by 0x20 and adds
+ *   AccompSeq_StyleDataTable.  AccompSeq_LoadParams then reads, for part 1
+ *   (+0x00) and part 2 (+0x10):
+ *     flags    (+0) part 1: 0x7E27 = flags & 0x1D (bit 0 = part 1 active);
+ *                   part 2: bit 0 sets bit 1 of 0x7E27.  AccompSeq_CompareChord
+ *                   tests bit 4 of part 1's flags.
+ *     stream   (+1) event stream; the cursor starts at stream + 6, past the
+ *                   6-byte header 80 FF FF FF FF 87 every stream carries.
+ *     loop     (+5) copied to the second cursor (0x7E34/0x7E36 for part 1,
+ *                   0x7E38/0x7E3A for part 2); 0 or a pointer into the stream.
+ *   AccompSeq_InitMidiEvents writes 3-byte events to the sequencer event
+ *   buffer (AccompSeq_WriteMidiToBuffer -> SeqEvtBuf_WriteByte x3):
+ *     program  (+9)  event (0xC1|0xC2, program & 0x7F, bank | (bit7 ? 0x10 : 0))
+ *     bank     (+10) low nibble used, see program
+ *     ctl04    (+12) event (0xD1|0xD2, 0x04, ctl04)
+ *     ctl07_on (+13) bit 0 -> event (0xD1|0xD2, 0x07, 0x7F or 0x00)
+ *     ctl03_on (+14) bit 0 -> event (0xD1|0xD2, 0x03, 0x7F or 0x00)
+ *   +11 (0x7F in every record) and +15 (0x00 in every record) are read by
+ *   none of these routines.
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t  flags;        /* +0x00 */
+    uint32_t stream;       /* +0x01 -> event stream (header 80 FF FF FF FF 87) */
+    uint32_t loop;         /* +0x05 -> 0, or a position inside the stream */
+    uint8_t  program;      /* +0x09 */
+    uint8_t  bank;         /* +0x0A */
+    uint8_t  field_0b;     /* +0x0B: 0x7F throughout, no reader found */
+    uint8_t  ctl04;        /* +0x0C */
+    uint8_t  ctl07_on;     /* +0x0D: bit 0 */
+    uint8_t  ctl03_on;     /* +0x0E: bit 0 */
+    uint8_t  field_0f;     /* +0x0F: 0x00 throughout, no reader found */
+} accseq_part_t;           /* 16 bytes */
+
+typedef struct __attribute__((packed)) {
+    accseq_part_t part[2];
+} accseq_record_t;         /* 32 bytes */
+
 /* ── String alignment helper ────────────────────────────────── */
 
 /**

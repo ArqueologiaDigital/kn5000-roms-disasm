@@ -46,6 +46,7 @@ TYPE_SIZES = {
     'naka_header_t': 4, 'naka_dispatch_t': 24, 'naka_container_t': 42,
     'naka_menu_item_t': 54, 'naka_label_t': 32, 'naka_group_t': 26,
     'naka_slider_t': 44, 'naka_type_0x48_t': 26,
+    'accseq_part_t': 16, 'accseq_record_t': 32,
 }
 
 MEMBER_RE = re.compile(
@@ -197,6 +198,16 @@ class CBlob:
 
     def member_at(self, off):
         return self.members[self.index_at(off)]
+
+    def elements(self, name):
+        """Initializer element texts of a 1-D array member (comments that
+        precede an element stay attached to it)."""
+        e = self.entries[self.by_name[name]].expr.strip()
+        assert e.startswith('{') and e.endswith('}'), (name, e[:60])
+        items = split_top_level(e[1:-1])
+        if items and not items[-1].strip():
+            items.pop()
+        return [' '.join(x.split()) for x in items]
 
     # ------------------------------------------------------------------ edits
     def split_word(self, off, blob):

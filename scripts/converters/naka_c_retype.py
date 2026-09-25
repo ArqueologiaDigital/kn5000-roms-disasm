@@ -72,8 +72,36 @@ ADDR = {
 }
 
 
+_NM = {}
+
+
+def _nm(v):
+    """name -> address from rebuilt_ROMs/kn5000_<v>_program.llvm.elf (llvm-nm),
+    for names the ADDR table does not pin."""
+    if v not in _NM:
+        import subprocess
+        nm = os.path.expanduser('~/compartilhado/llvm-project/build/bin/llvm-nm')
+        elf = os.path.join(ROOT, 'rebuilt_ROMs', 'kn5000_%s_program.llvm.elf' % v)
+        out = subprocess.run([nm, '--defined-only', elf], capture_output=True,
+                             text=True, check=True).stdout
+        d = {}
+        for ln in out.split('\n'):
+            f = ln.split()
+            if len(f) == 3 and f[1] in 'tT':
+                d.setdefault(f[2], '0x%06X' % int(f[0], 16))
+        _NM[v] = d
+    return _NM[v]
+
+
 def a(name):
-    v = ADDR[name]
+    v = ADDR.get(name)
+    if v is None:
+        v = tuple(_nm(ver).get(name) for ver in ('v10', 'v9', 'v7'))
+        if v[0] is None:
+            raise SystemExit('cannot resolve %s in the v10 ELF' % name)
+        ADDR[name] = v
+    if v[2] is None:
+        return '%s (v10 %s, v9 %s, not labelled in v7)' % (name, v[0], v[1])
     if v[0] == v[1] == v[2]:
         return '%s (%s in v10/v9/v7)' % (name, v[0])
     if v[0] == v[1]:
@@ -190,6 +218,245 @@ OBJECTS = [
 ]
 
 
+# ---------------------------------------------------------------------------
+# Non-bitmap objects.  Each builder receives the parsed blob, the compiled
+# bytes and the blob offset of its anchor label, asserts what it relies on
+# about the bytes, and returns (start, end, new_members, reexpressed) where
+# `reexpressed` names old members whose symbolic initializer the new typing
+# carries (so the model does not report it as dropped).
+# ---------------------------------------------------------------------------
+
+def _hexbytes(bs, per=16, indent='        '):
+    return '\n'.join(indent + ', '.join('0x%02X' % b for b in bs[i:i + per]) + ','
+                     for i in range(0, len(bs), per))
+
+
+def _barr(name, bs, pre=(), tail=''):
+    return M.NewMember('uint8_t', name, '[%d]' % len(bs), len(bs),
+                       '{\n' + _hexbytes(bs) + '\n    }', pre, tail)
+
+
+def _u32arr(name, vals, pre=(), tail=''):
+    body = '\n'.join('        %s,' % v for v in vals)
+    return M.NewMember('uint32_t', name, '[%d]' % len(vals), 4 * len(vals),
+                       '{\n' + body + '\n    }', pre, tail)
+
+
+def _astr(name, bs, pre=(), tail=''):
+    """A NUL-terminated string padded with 0xFF to even length, as
+    ALIGNED_STRING() writes it."""
+    n = len(bs)
+    text = bs.split(b'\0')[0]
+    if bs == text + b'\0':
+        expr = M.c_string(text)
+    elif bs == text + b'\0\xff':
+        expr = 'ALIGNED_STRING(%s)' % M.c_string(text)
+    else:
+        raise SystemExit('%s: %r is not an aligned string' % (name, bs))
+    return M.NewMember('char', name, '[%d]' % n, n, expr, pre, tail)
+
+
+def build_accseq_region(cb, data, off0):
+    """NakaInst_OFF_Str's slice (0xE4C0D2..0xE55260) is not one string: it is
+    "OFF", 208 B of constants that routines in sequencer/accompaniment_engine.s
+    copy or pass by address, the 78-record AccompSeq style-data table, and the
+    103 event streams those records point at.  (The last 80 B, the head of the
+    ApFunction table, are typed by build_apfunction_tables.)"""
+    base = cb.base()
+    u32 = lambda o: int.from_bytes(data[o:o + 4], 'little')
+    assert data[off0:off0 + 4] == b'OFF\0'
+    c = off0 + 4                               # 0x1B276 -- the constants
+    T = off0 + 0xD4                            # 0x1B346 -- the record table
+    first_stream = u32(T + 1) - base
+    nrec = (first_stream - T) // 32
+    assert (first_stream - T) % 32 == 0 and nrec == 78, (hex(first_stream), nrec)
+    parts, starts = [], set()
+    for i in range(nrec):
+        for h in (0, 16):
+            r = T + 32 * i + h
+            p1, p2 = u32(r + 1), u32(r + 5)
+            parts.append((i, h // 16, r, p1, p2))
+            if p1:
+                starts.add(p1 - base)
+    starts = sorted(starts)
+    end = off0 + 0x913E                        # 0x243B0 -- ApFunction table
+    assert all(first_stream <= s < end for s in starts)
+    for s_ in starts:
+        assert data[s_:s_ + 6] == bytes.fromhex('80ffffffff87'), hex(s_)
+    owner = {}
+    for i, part, r, p1, p2 in parts:
+        if p1:
+            owner[p1 - base] = 'AccompSeq_Stream_%02d_%s' % (i, 'ab'[part])
+    bounds = starts + [end]
+    streams = [(owner[a], a, b) for a, b in zip(bounds, bounds[1:])]
+
+    def ptr(v):
+        if v == 0:
+            return '0'
+        o = v - base
+        for nm, a, b in streams:
+            if a <= o < b:
+                return 'SELF(%s)' % nm if o == a else 'SELF(%s[%d])' % (nm, o - a)
+        raise SystemExit('record pointer 0x%X outside the streams' % v)
+
+    rodata = [
+        ('SndArgNmGet_Bytes5', 'u8', 6,
+         '{SndArgNmGet}: ld xiy,<this>; ld bc,2; ldirw; ldi -- copies the\n'
+         'first 5 bytes to its frame; the 6th is 0xFF padding.'),
+        ('SndArgNmGet_RamPtrsA', 'u32', 20,
+         '{SndArgNmGet}: ldirw 10 words to its frame.  Five RAM addresses,\n'
+         '0x39F8 + 0x11*k (v7 applies -0x9C through v7_c_divergence.json).'),
+        ('SndArgNmGet_RamPtrsB', 'u32', 20,
+         '{SndArgNmGet}: ldirw 10 words.  Five RAM addresses 0x39E4 + 4*k.'),
+        ('CmpStepTitleFunc_ProcTable', 'u32', 16,
+         '{CmpStepTitleFunc}: ldirw 8 words to its frame and passes the\n'
+         'copy to {DirmdEmulator_Entry}.  Four code addresses inside\n'
+         'CmpStepTitleFunc\'s own region (0xF6A2FF = CmpStep_DataBlock,\n'
+         '0xF6A32C, 0xF6A339, 0xF6A346 in v10/v9; v7 relocates them by -0x404\n'
+         'through v7_c_divergence.json) -- code entry points that the\n'
+         'accompaniment_engine.s framing does not yet show as code.'),
+        ('AccBankData_SlotOrder', 'u8', 30,
+         '{AccBankData_SlotScan_Loop}: lda xwa,<this> and indexes it with\n'
+         '3*slot + bank.  Entries 0-11 are 0,4,8,1,5,9,2,6,10,3,7,11 and\n'
+         '12-29 are 12,18,24,13,19,25,...: a column-major renumbering.'),
+        ('StylCnvModl_CnvFilter', 'u8', 12,
+         '{StylCnvModlTtlFunc}: ld xwa,<this>; call {ControlState_ProcessCommand}.\n'
+         'u16 2, then "*.CNV,***" -- a file-selector filter.'),
+        ('StylCnvModl_VerFilter', 'u8', 12,
+         '{StylCnvModl_ClearDisplayBuf}: ld xwa,<this>; call\n'
+         'ControlState_ProcessCommand.  u16 2, then "*.VER,***".'),
+        ('StylCnv_ModeRb_Select', 'str', 4,
+         '{StylCnvModl_OK_SelectItem}: ld xbc,<this>; call\n'
+         '{FileIO_OpenWithBuiltPath} -- the fopen-style mode "rb".'),
+        ('StylCnv_Str_Stars', 'str', 4,
+         '"***": no reader found (searched: label and 24-bit operand forms of\n'
+         '0xE4C14E across the v10 ROM).'),
+        ('StylCnv_ModeRb_Type3', 'str', 4, '{StylCnv_Type3_LoadFileLoop}: mode "rb" for FileIO_OpenWithBuiltPath.'),
+        ('StylCnv_ModeRb_Type4', 'str', 4, '{StylCnv_Type4_OpenFile}: mode "rb" for {FileIO_OpenWithMode}.'),
+        ('StylCnv_ModeRb_Type6', 'str', 4, '{StylCnv_Type6_AppendName}: mode "rb".'),
+        ('StylCnv_ModeRb_Type6b', 'str', 4, '{StylCnv_Type6_Case1_CopyName}: mode "rb".'),
+        ('StylCnv_ModeRb_Single', 'str', 4, '{StylCnv_Single_WriteTMExtension}: mode "rb".'),
+        ('StylCnv_ModeRb_LSW', 'str', 4, '{StylCnv_LSW_WriteExtension}: mode "rb".'),
+        ('AccStyle_SlotOrderA', 'u8', 30,
+         'Byte-identical to AccBankData_SlotOrder.  The code after\n'
+         '{AccStyle_TableDataEntry_Skip12} adds <this> to (a - 30) and\n'
+         '{AccStyle_TableDataEntry_Skip15} loads it with lda.'),
+        ('AccStyle_SlotOrderB', 'u8', 30,
+         '{AccStyle_TableDataEntry_Join}: ld xiy,<this>; ldirw 15 words to\n'
+         'its frame.  Rows of ten: {0..3, 12..17}, {4..7, 18..23},\n'
+         '{8..11, 24..29} -- the same slots grouped the other way.'),
+    ]
+    new = []
+    new.append(_astr('NakaInst_OFF_Str', data[off0:off0 + 4], pre=M.comment_block(wrap(
+        'NakaInst_OFF_Str -- "OFF".  With "ON " just before it, the pair is '
+        'pointed at by the 2-entry table at NakaInst_DashDash+4 that '
+        'SndArgNmGet copies to its frame.  Everything after it up to the '
+        'ApFunction table (0xE55210) was part of this label\'s .s slice and is '
+        'typed below.'))))
+    o = c
+    lines = []
+    for nm, kind, n, why in rodata:
+        bs = data[o:o + n]
+        pre = M.comment_block(wrap('%s (+0x%02X, ROM 0x%06X): %s'
+                                   % (nm, o - off0, base + o, fmt(why))))
+        if kind == 'u8':
+            new.append(_barr(nm, bs, pre))
+        elif kind == 'u32':
+            new.append(_u32arr(nm, ['0x%08X' % int.from_bytes(bs[k:k + 4], 'little')
+                                    for k in range(0, n, 4)], pre))
+        else:
+            new.append(_astr(nm, bs, pre))
+        o += n
+    assert o == T, hex(o)
+    assert data[c + 0x3E:c + 0x5C] == data[c + 0x94:c + 0xB2]   # SlotOrder == SlotOrderA
+    # the record table
+    recs = []
+    for i in range(nrec):
+        pp = []
+        for h in (0, 16):
+            r = T + 32 * i + h
+            f = data[r:r + 16]
+            pp.append('{ 0x%02X, %s, %s, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X }'
+                      % (f[0], ptr(u32(r + 1)), ptr(u32(r + 5)), f[9], f[10], f[11], f[12],
+                         f[13], f[14], f[15]))
+        recs.append('        /* %2d */ { {\n            %s,\n            %s } },' % (i, pp[0], pp[1]))
+    assert all(data[T + 32 * i + h + 11] == 0x7F and data[T + 32 * i + h + 15] == 0
+               for i in range(nrec) for h in (0, 16))
+    tab_hdr = wrap(
+        'AccompSeq_StyleDataTable (ROM 0x%06X) -- %d records x 32 bytes, each two '
+        'accseq_part_t (naka_types.h, where every field is tied to the code '
+        'that reads it).\n\n'
+        'Reader: %s multiplies an index below 0x80 (from %s, which maps a '
+        'program/bank pair through Voice_NoteChannelTable2) by 0x20 and adds '
+        'this table; %s, %s and %s read the fields.  An index of 0x80 or more '
+        'takes the other branch (0x1E8800 + ...), not this table.\n\n'
+        'Count: the table runs from here to the first stream it points at, '
+        '0x%06X: 0x%X bytes = %d records; every one of the %d non-null stream '
+        'pointers lands inside the stream block that follows, and every '
+        'stream starts with 80 FF FF FF FF 87.'
+        % (base + T, nrec, a('AccompSeq_LookupStyle_Internal'), a('Voice_DecodeNoteChannel2'),
+           a('AccompSeq_LoadParams'), a('AccompSeq_InitMidiEvents'), a('AccompSeq_CompareChord'),
+           base + first_stream, first_stream - T, nrec, len(starts)))
+    new.append(M.NewMember('accseq_record_t', 'AccompSeq_StyleDataTable', '[%d]' % nrec,
+                           32 * nrec, '{\n' + '\n'.join(recs) + '\n    }',
+                           M.comment_block(tab_hdr)))
+    st_hdr = wrap(
+        'AccompSeq_Stream_RR_P -- the %d event streams of AccompSeq_StyleDataTable, '
+        'one per used part (RR = record, P = a for part 1, b for part 2), in '
+        'record order, back to back, 0x%06X..0x%06X.  Boundaries are the stream '
+        'pointers themselves; no two parts share a stream.  Every stream begins '
+        'with the 6 bytes 80 FF FF FF FF 87, which AccompSeq_LoadParams skips '
+        '(`add xwa, 6`).\n\n'
+        'NOT ESTABLISHED: the event encoding after the header.  The player that '
+        'walks the cursors at 0x7E2C/0x7E2E and 0x7E30/0x7E32 was not read for '
+        'this; the streams are kept as bytes.'
+        % (len(streams), base + first_stream, base + end))
+    first = True
+    for nm, a_, b_ in streams:
+        new.append(_barr(nm, data[a_:b_], M.comment_block(st_hdr) if first else ()))
+        first = False
+    reexp = [mb.name for mb in cb.members if off0 <= mb.offset < end and
+             M.SYMBOLIC_RE.search(cb.entries[cb.by_name[mb.name]].expr)]
+    return off0, end, new, reexp
+
+
+def build_apfunction_tables(cb, data, off0):
+    """0xE55210 (blob +0x243B0): 60 procedure addresses + a 0, then 60 name
+    pointers + a pointer to "" -- the two object tables InitializeEast
+    registers with RegObjTabl (count 0x3C, ids 0x123 and 0x423)."""
+    k = cb.by_name['ptrs_37']
+    mb = cb.members[k]
+    assert mb.offset == off0 and mb.dims == '[122]', (hex(mb.offset), mb.dims)
+    el = cb.elements('ptrs_37')
+    assert len(el) == 122 and el[60] == '0x00000000', (len(el), el[60])
+    h1 = wrap(
+        'MidiMenu_ApFunctionTable (ROM 0xE55210) -- 60 procedure addresses and a '
+        '0 terminator.  %s registers it: RegObjTabl 0x1600002, ApFunctionProc, '
+        '0x3C, 0xE55210, 0x123 (class 0x1600002, 60 objects, ids from 0x123).  '
+        'The procedures are the MIDI-menu title and field functions (TtMdmenu, '
+        'MdPcgModeFunc, ... RevEqOnOffFunc).' % a('InitializeEast'))
+    h2 = wrap(
+        'MidiMenu_ApFunctionNameTable (ROM 0xE55304) -- the 60 procedures\' names, '
+        'in the same order, and a pointer to "" as terminator.  Registered by the '
+        'next line of %s: RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, '
+        '0x423.  The strings themselves follow, stored in reverse order.'
+        % a('InitializeEast'))
+    new = [_u32arr('MidiMenu_ApFunctionTable', el[:61], M.comment_block(h1)),
+           _u32arr('MidiMenu_ApFunctionNameTable', el[61:], M.comment_block(h2))]
+    return off0, off0 + 488, new, ['ptrs_37']
+
+
+CUSTOM = [
+    # (blob, anchor label, builder)
+    ('naka_widget_descriptors', 'NakaInst_OFF_Str', build_accseq_region),
+]
+CUSTOM_AT = [
+    # (blob, blob offset, builder) -- for objects whose .s label does not
+    # exist yet (it is written by naka_s_headers.py)
+    ('naka_widget_descriptors', 0x243B0, build_apfunction_tables),
+]
+
+
 def s_slices(sfile, blob):
     """label -> (off, len) from `Label:` + `.incbin ".../<blob>.bin", off, len`."""
     txt = open(sfile, encoding='latin-1').read()
@@ -253,8 +520,6 @@ def build(apply, render_dir):
                 runs[-1][2].append(o)
             else:
                 runs.append([off, off + ln, [o]])
-        if not runs and not apply:
-            continue
         for start, end, run in runs:
             new = []
             for o in run:
@@ -289,6 +554,12 @@ def build(apply, render_dir):
                 e.expr for e in []))))
             print('   run +0x%05X..+0x%05X: %d false pointers dropped, SELF remaps %s'
                   % (start, end, len(dropped), remap or '-'))
+        for cblob, anchor_label, fn in CUSTOM:
+            if cblob == blob:
+                run_custom(cb, data, sl[anchor_label][0], fn)
+        for cblob, off, fn in CUSTOM_AT:
+            if cblob == blob:
+                run_custom(cb, data, off, fn)
         bm = [o['label'] for o in objs if o['kind'] == 'bitmap']
         n = cb.symbolize_self_pointers(bm)
         print('   %d numeric pointers to these objects made SELF(...)' % n)
@@ -303,6 +574,20 @@ def build(apply, render_dir):
                     shutil.copyfile(src, src.replace(os.path.join(ROOT, 'v10'),
                                                      os.path.join(ROOT, v)))
             print('wrote %s (+ _link.ld, + v9, v7 copies)' % os.path.relpath(cpath, ROOT))
+
+
+def run_custom(cb, data, off, fn):
+    k = cb.index_at(off)
+    if cb.members[k].offset == off and cb.members[k].pre and any(
+            '[typed]' in l for l in cb.members[k].pre):
+        print('   %s: already typed' % fn.__name__)
+        return
+    start, end, new, reexp = fn(cb, data, off)
+    new[0].pre_lines = new[0].pre_lines[:1] + ['     * [typed] by %s' % fn.__name__] + \
+        new[0].pre_lines[1:]
+    dropped, remap = cb.retype(start, end, new, data, false_pointers=reexp)
+    print('   %s: +0x%05X..+0x%05X, %d members, %d symbolic initializers re-expressed, '
+          'SELF remaps %d' % (fn.__name__, start, end, len(new), len(dropped), len(remap)))
 
 
 def prune_externs(cpath, before):

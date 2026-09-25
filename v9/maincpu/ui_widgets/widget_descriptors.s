@@ -522,9 +522,282 @@ NakaInst_DashDash:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B262, 0xC
 NakaInst_ON_Str:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B26E, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_OFF_Str
+; NakaInst_OFF_Str -- "OFF". With "ON " just before it, the pair is
+; pointed at by the 2-entry table at NakaInst_DashDash+4 that
+; SndArgNmGet copies to its frame. Everything after it up to the
+; ApFunction table (0xe55210) was part of this label's .s slice and is
+; typed below.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_OFF_Str[4].
+; -----------------------------------------------------------------------------
 NakaInst_OFF_Str:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B272, 0x918E
-EmbeddedPtrTable_v9_naka_widget_descriptors_024400:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B272, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndArgNmGet_Bytes5
+; SndArgNmGet_Bytes5 (+0x04, ROM 0xe4c0d6): SndArgNmGet (v10/v9
+; 0xf6a0bb, v7 0xf69cb7): ld xiy,<this>; ld bc,2; ldirw; ldi -- copies
+; the first 5 bytes to its frame; the 6th is 0xff padding.
+;
+; Typed in naka_widget_descriptors.c as uint8_t SndArgNmGet_Bytes5[6].
+; -----------------------------------------------------------------------------
+SndArgNmGet_Bytes5:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B276, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndArgNmGet_RamPtrsA
+; SndArgNmGet_RamPtrsA (+0x0a, ROM 0xe4c0dc): SndArgNmGet (v10/v9
+; 0xf6a0bb, v7 0xf69cb7): ldirw 10 words to its frame. Five RAM
+; addresses, 0x39f8 + 0x11*k (v7 applies -0x9c through
+; v7_c_divergence.json).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; SndArgNmGet_RamPtrsA[5].
+; -----------------------------------------------------------------------------
+SndArgNmGet_RamPtrsA:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B27C, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndArgNmGet_RamPtrsB
+; SndArgNmGet_RamPtrsB (+0x1e, ROM 0xe4c0f0): SndArgNmGet (v10/v9
+; 0xf6a0bb, v7 0xf69cb7): ldirw 10 words. Five RAM addresses 0x39e4 +
+; 4*k.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; SndArgNmGet_RamPtrsB[5].
+; -----------------------------------------------------------------------------
+SndArgNmGet_RamPtrsB:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B290, 0x14
+; -----------------------------------------------------------------------------
+; [naka_s_headers] CmpStepTitleFunc_ProcTable
+; CmpStepTitleFunc_ProcTable (+0x32, ROM 0xe4c104): CmpStepTitleFunc
+; (v10/v9 0xf6a2e2, v7 0xf69ede): ldirw 8 words to its frame and passes
+; the copy to DirmdEmulator_Entry (v10/v9 0xf9ae97, v7 0xf9aa8a). Four
+; code addresses inside CmpStepTitleFunc's own region (0xf6a2ff =
+; CmpStep_DataBlock, 0xf6a32c, 0xf6a339, 0xf6a346 in v10/v9; v7
+; relocates them by -0x404 through v7_c_divergence.json) -- code entry
+; points that the accompaniment_engine.s framing does not yet show as
+; code.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; CmpStepTitleFunc_ProcTable[4].
+; -----------------------------------------------------------------------------
+CmpStepTitleFunc_ProcTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2A4, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccBankData_SlotOrder
+; AccBankData_SlotOrder (+0x42, ROM 0xe4c114): AccBankData_SlotScan_Loop
+; (v10/v9 0xf6befd, v7 0xf6baf9): lda xwa,<this> and indexes it with
+; 3*slot + bank. Entries 0-11 are 0,4,8,1,5,9,2,6,10,3,7,11 and 12-29
+; are 12,18,24,13,19,25,...: a column-major renumbering.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; AccBankData_SlotOrder[30].
+; -----------------------------------------------------------------------------
+AccBankData_SlotOrder:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2B4, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnvModl_CnvFilter
+; StylCnvModl_CnvFilter (+0x60, ROM 0xe4c132): StylCnvModlTtlFunc
+; (v10/v9 0xf6c229, v7 0xf6be25): ld xwa,<this>; call
+; ControlState_ProcessCommand (v10/v9 0xf8ad25, v7 0xf8a918). u16 2,
+; then "*.CNV,***" -- a file-selector filter.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; StylCnvModl_CnvFilter[12].
+; -----------------------------------------------------------------------------
+StylCnvModl_CnvFilter:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2D2, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnvModl_VerFilter
+; StylCnvModl_VerFilter (+0x6c, ROM 0xe4c13e):
+; StylCnvModl_ClearDisplayBuf (v10/v9 0xf6c323, v7 0xf6bf1f): ld
+; xwa,<this>; call ControlState_ProcessCommand. u16 2, then "*.VER,***".
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; StylCnvModl_VerFilter[12].
+; -----------------------------------------------------------------------------
+StylCnvModl_VerFilter:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2DE, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnv_ModeRb_Select
+; StylCnv_ModeRb_Select (+0x78, ROM 0xe4c14a): StylCnvModl_OK_SelectItem
+; (v10/v9 0xf6c543, v7 0xf6c13f): ld xbc,<this>; call
+; FileIO_OpenWithBuiltPath (v10/v9 0xf8ac27, v7 0xf8a81a) -- the
+; fopen-style mode "rb".
+;
+; Typed in naka_widget_descriptors.c as char StylCnv_ModeRb_Select[4].
+; -----------------------------------------------------------------------------
+StylCnv_ModeRb_Select:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2EA, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnv_Str_Stars
+; StylCnv_Str_Stars (+0x7c, ROM 0xe4c14e): "***": no reader found
+; (searched: label and 24-bit operand forms of 0xe4c14e across the v10
+; ROM).
+;
+; Typed in naka_widget_descriptors.c as char StylCnv_Str_Stars[4].
+; -----------------------------------------------------------------------------
+StylCnv_Str_Stars:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2EE, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnv_ModeRb_Type3
+; StylCnv_ModeRb_Type3 (+0x80, ROM 0xe4c152): StylCnv_Type3_LoadFileLoop
+; (v10/v9 0xf6d029, v7 0xf6cc25): mode "rb" for
+; FileIO_OpenWithBuiltPath.
+;
+; Typed in naka_widget_descriptors.c as char StylCnv_ModeRb_Type3[4].
+; -----------------------------------------------------------------------------
+StylCnv_ModeRb_Type3:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2F2, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnv_ModeRb_Type4
+; StylCnv_ModeRb_Type4 (+0x84, ROM 0xe4c156): StylCnv_Type4_OpenFile
+; (v10/v9 0xf6d198, v7 0xf6cd94): mode "rb" for FileIO_OpenWithMode
+; (v10/v9 0xf88bc7, v7 0xf887ba).
+;
+; Typed in naka_widget_descriptors.c as char StylCnv_ModeRb_Type4[4].
+; -----------------------------------------------------------------------------
+StylCnv_ModeRb_Type4:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2F6, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnv_ModeRb_Type6
+; StylCnv_ModeRb_Type6 (+0x88, ROM 0xe4c15a): StylCnv_Type6_AppendName
+; (v10/v9 0xf6d2a9, v7 0xf6cea5): mode "rb".
+;
+; Typed in naka_widget_descriptors.c as char StylCnv_ModeRb_Type6[4].
+; -----------------------------------------------------------------------------
+StylCnv_ModeRb_Type6:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2FA, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnv_ModeRb_Type6b
+; StylCnv_ModeRb_Type6b (+0x8c, ROM 0xe4c15e):
+; StylCnv_Type6_Case1_CopyName (v10/v9 0xf6d431, v7 0xf6d02d): mode
+; "rb".
+;
+; Typed in naka_widget_descriptors.c as char StylCnv_ModeRb_Type6b[4].
+; -----------------------------------------------------------------------------
+StylCnv_ModeRb_Type6b:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2FE, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnv_ModeRb_Single
+; StylCnv_ModeRb_Single (+0x90, ROM 0xe4c162):
+; StylCnv_Single_WriteTMExtension (v10/v9 0xf6d50a, v7 0xf6d106): mode
+; "rb".
+;
+; Typed in naka_widget_descriptors.c as char StylCnv_ModeRb_Single[4].
+; -----------------------------------------------------------------------------
+StylCnv_ModeRb_Single:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B302, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StylCnv_ModeRb_LSW
+; StylCnv_ModeRb_LSW (+0x94, ROM 0xe4c166): StylCnv_LSW_WriteExtension
+; (v10/v9 0xf6d5e4, v7 0xf6d1e0): mode "rb".
+;
+; Typed in naka_widget_descriptors.c as char StylCnv_ModeRb_LSW[4].
+; -----------------------------------------------------------------------------
+StylCnv_ModeRb_LSW:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B306, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_SlotOrderA
+; AccStyle_SlotOrderA (+0x98, ROM 0xe4c16a): Byte-identical to
+; AccBankData_SlotOrder. The code after AccStyle_TableDataEntry_Skip12
+; (v10 0xf6d9ca, v9 0xf6d9ca, not labelled in v7) adds <this> to (a -
+; 30) and AccStyle_TableDataEntry_Skip15 (v10 0xf6dab3, v9 0xf6dab3, not
+; labelled in v7) loads it with lda.
+;
+; Typed in naka_widget_descriptors.c as uint8_t AccStyle_SlotOrderA[30].
+; -----------------------------------------------------------------------------
+AccStyle_SlotOrderA:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B30A, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccStyle_SlotOrderB
+; AccStyle_SlotOrderB (+0xb6, ROM 0xe4c188):
+; AccStyle_TableDataEntry_Join (v10 0xf6d8d8, v9 0xf6d8d8, not labelled
+; in v7): ld xiy,<this>; ldirw 15 words to its frame. Rows of ten:
+; {0..3, 12..17}, {4..7, 18..23}, {8..11, 24..29} -- the same slots
+; grouped the other way.
+;
+; Typed in naka_widget_descriptors.c as uint8_t AccStyle_SlotOrderB[30].
+; -----------------------------------------------------------------------------
+AccStyle_SlotOrderB:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B328, 0x1E
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccompSeq_StyleDataTable
+; AccompSeq_StyleDataTable (ROM 0xe4c1a6) -- 78 records x 32 bytes, each
+; two accseq_part_t (naka_types.h, where every field is tied to the code
+; that reads it).
+;
+; Reader: AccompSeq_LookupStyle_Internal (v10/v9 0xf6e753, v7 0xf6e34f)
+; multiplies an index below 0x80 (from Voice_DecodeNoteChannel2 (v10/v9
+; 0xf71592, v7 0xf7118e), which maps a program/bank pair through
+; Voice_NoteChannelTable2) by 0x20 and adds this table;
+; AccompSeq_LoadParams (v10/v9 0xf6e770, v7 0xf6e36c),
+; AccompSeq_InitMidiEvents (v10/v9 0xf6e84e, v7 0xf6e44a) and
+; AccompSeq_CompareChord (v10/v9 0xf6ece5, v7 0xf6e8e1) read the fields.
+; An index of 0x80 or more takes the other branch (0x1e8800 + ...), not
+; this table.
+;
+; Count: the table runs from here to the first stream it points at,
+; 0xe4cb66: 0x9c0 bytes = 78 records; every one of the 103 non-null
+; stream pointers lands inside the stream block that follows, and every
+; stream starts with 80 FF FF FF FF 87.
+;
+; Typed in naka_widget_descriptors.c as accseq_record_t
+; AccompSeq_StyleDataTable[78].
+; -----------------------------------------------------------------------------
+AccompSeq_StyleDataTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B346, 0x9C0
+; -----------------------------------------------------------------------------
+; [naka_s_headers] AccompSeq_Streams
+; AccompSeq_Stream_RR_P -- the 103 event streams of
+; AccompSeq_StyleDataTable, one per used part (RR = record, P = a for
+; part 1, b for part 2), in record order, back to back,
+; 0xe4cb66..0xe55210. Boundaries are the stream pointers themselves; no
+; two parts share a stream. Every stream begins with the 6 bytes 80 FF
+; FF FF FF 87, which AccompSeq_LoadParams skips (`add xwa, 6`).
+;
+; NOT ESTABLISHED: the event encoding after the header. The player that
+; walks the cursors at 0x7e2c/0x7e2e and 0x7e30/0x7e32 was not read for
+; this; the streams are kept as bytes.
+;
+; Typed in naka_widget_descriptors.c as one uint8_t array per stream,
+; AccompSeq_Stream_00_a .. AccompSeq_Stream_77_b.
+; -----------------------------------------------------------------------------
+AccompSeq_Streams:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BD06, 0x86AA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MidiMenu_ApFunctionTable
+; MidiMenu_ApFunctionTable (ROM 0xe55210) -- 60 procedure addresses and
+; a 0 terminator. InitializeEast (v10/v9 0xf72bac, v7 0xf727a8)
+; registers it: RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55210,
+; 0x123 (class 0x1600002, 60 objects, ids from 0x123). The procedures
+; are the MIDI-menu title and field functions (TtMdmenu, MdPcgModeFunc,
+; ... RevEqOnOffFunc).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; MidiMenu_ApFunctionTable[61].
+; -----------------------------------------------------------------------------
+MidiMenu_ApFunctionTable:
+	.long TtMdmenu
+	.long TtMdRealMsg
+	.long MdPcgModeFunc
+	.long MdDrumTypeFunc
+	.long MdSetupLoadFunc
+	.long TtComputerConnection
+	.long MdCmptCnctFunc
+	.long R12OctaveFunc
+	.long TtMdParaLoad
+	.long ParaLoadOptGridCheck
+	.long ParaLoadOptOKFunc
+	.long TtMdPcgOut
+	.long PcgOutGridCheck
+	.long PcgOutSendFunc
+	.long TtComSet
+	.long ComSetGridCheck
+	.long TtMdPmemOut
+	.long PmemOutLGridCheck
+	.long PmemOutRGridCheck
+	.long TtMdCtlMsg
 	.long CtlMsgGridCheck
 	.long TtMdPart
 	.long MidiPartGridCheck
@@ -566,8 +839,19 @@ EmbeddedPtrTable_v9_naka_widget_descriptors_024400:
 	.long RevEqSelFunc
 	.long RevEqOnOffFunc
 	.long 0x00000000
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MidiMenu_ApFunctionNameTable
+; MidiMenu_ApFunctionNameTable (ROM 0xe55304) -- the 60 procedures'
+; names, in the same order, and a pointer to "" as terminator.
+; Registered by the next line of InitializeEast (v10/v9 0xf72bac, v7
+; 0xf727a8): RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304,
+; 0x423. The strings themselves follow, stored in reverse order.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; MidiMenu_ApFunctionNameTable[61].
+; -----------------------------------------------------------------------------
+MidiMenu_ApFunctionNameTable:
 	.long NakaInst_TtMdmenu
-Naka_UIStringRef_Table:
 	.long NakaInst_TtMdRealMsg
 	.long NakaInst_MdPcgModeFunc
 	.long NakaInst_MdDrumTypeFunc
@@ -590,7 +874,44 @@ Naka_UIStringRef_Table:
 	.long NakaInst_CtlMsgGridCheck
 	.long NakaInst_TtMdPart
 	.long NakaInst_MidiPartGridCheck
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24500, 0x98
+	.long NakaInst_TtMdExc
+	.long NakaInst_ExcSendFunc
+	.long NakaInst_ExcDotFunc
+	.long NakaInst_ExcPmemFunc
+	.long NakaInst_ExcSmemFunc
+	.long NakaInst_ExcCompFunc
+	.long NakaInst_ExcSeqFunc
+	.long NakaInst_ExcMspFunc
+	.long NakaInst_TtMdPreset
+	.long NakaInst_MdPresetOKFunc
+	.long NakaInst_MdPresetWithoutFunc
+	.long NakaInst_MdPresetWithFunc
+	.long NakaInst_BitmapBmphk
+	.long NakaInst_TtMdGm
+	.long NakaInst_GMOKFunc
+	.long NakaInst_StsAttentionCheck
+	.long NakaInst_StsGMOnCheck
+	.long NakaInst_StsGMOffCheck
+	.long NakaInst_StsAreYouSureCheck
+	.long NakaInst_GMYesFunc
+	.long NakaInst_GMNoFunc
+	.long NakaInst_HarmOnOffFunc
+	.long NakaInst_TtVocalistWorkstation
+	.long NakaInst_VocalistGridCheck
+	.long NakaInst_VocalistPage1OKFunc
+	.long NakaInst_VocalistPage2OKFunc
+	.long NakaInst_TtFadeInOut
+	.long NakaInst_FadeSetGridCheck
+	.long NakaInst_TtMdInOut
+	.long NakaInst_InOutGridCheck
+	.long NakaInst_StsSplitCheck
+	.long NakaInst_SplitPointFunc
+	.long NakaInst_RevSelFunc
+	.long NakaInst_EqSelFunc
+	.long NakaInst_EqOnOffFunc
+	.long NakaInst_RevEqSelFunc
+	.long NakaInst_RevEqOnOffFunc
+	.long NakaInst_EmptyFuncName
 NakaInst_EmptyFuncName:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24598, 0x2
 NakaInst_RevEqOnOffFunc:
