@@ -12205,7 +12205,6 @@ BoxStyle0_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-BoxStyle0_Return:
 
 uwordProc:
 	dec 8, xsp
@@ -12306,7 +12305,6 @@ BoxStyle2_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-BoxStyle2_Return:
 
 scharProc:
 	dec 8, xsp
@@ -12407,7 +12405,6 @@ BoxStyle4_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-BoxStyle4_Return:
 
 ulongProc:
 	dec 8, xsp
@@ -12507,7 +12504,6 @@ BoxStyle6_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-BoxStyle6_Return:
 
 pBoolProc:
 	lda_dri XSP, 0xfd, 0xf4, 0xfe
@@ -12630,7 +12626,6 @@ BoxStyle7_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle7_Return:
 
 pSwordProc:
 	lda_dri XSP, 0xfd, 0xf4, 0xfe
@@ -12753,7 +12748,6 @@ BoxStyle8_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle8_Return:
 
 pUwordProc:
 	lda_dri XSP, 0xfd, 0xf4, 0xfe
@@ -12876,7 +12870,6 @@ BoxStyle9_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle9_Return:
 
 pScharProc:
 	lda_dri XSP, 0xfd, 0xf4, 0xfe
@@ -13000,7 +12993,6 @@ BoxStyle10_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle10_Return:
 
 pUcharProc:
 	lda_dri XSP, 0xfd, 0xf4, 0xfe
@@ -13123,7 +13115,6 @@ BoxStyle11_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle11_Return:
 
 pSlongProc:
 	lda_dri XSP, 0xfd, 0xf4, 0xfe
@@ -13245,7 +13236,6 @@ BoxStyle12_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle12_Return:
 
 pUlongProc:
 	lda_dri XSP, 0xfd, 0xf4, 0xfe
@@ -13368,7 +13358,6 @@ BoxStyle13_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle13_Return:
 
 RECTWProc:
 	lda xsp, (xsp - 128)
@@ -13533,7 +13522,6 @@ EdgeDraw_BottomLeft_FinishAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-EdgeDraw_BottomLeft_Return:
 
 RectY1Proc:
 	lda xsp, (xsp - 12)
@@ -13696,7 +13684,6 @@ TabDraw_BottomEdge_Prologue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
-TabDraw_BottomEdge_Return:
 
 RectY2Proc:
 	lda xsp, (xsp - 12)
@@ -13856,7 +13843,6 @@ EdgeVariant_C_Setup:
 	popw iz
 	lda_dri XSP, 0xfd, 0x84, 0x00
 	ret
-EdgeVariant_C_Prologue:
 
 PointXProc:
 	lda_dri XSP, 0xfd, 0xf8, 0xfe
@@ -14260,7 +14246,6 @@ FrameVariant_A_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_A_Return:
 
 ColorIDProc:
 	dec 8, xsp
@@ -14361,7 +14346,6 @@ FrameVariant_C_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_C_Return:
 
 AlignmentIDProc:
 	dec 8, xsp
@@ -14412,7 +14396,6 @@ FrameVariant_D_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_D_Return:
 
 EditSwStyleIDProc:
 	dec 8, xsp
@@ -14591,7 +14574,6 @@ FrameVariant_G_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_G_Return:
 
 FrameIDProc:
 	dec 8, xsp
@@ -14642,7 +14624,6 @@ FrameVariant_H_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_H_Return:
 
 UserIDProc:
 	dec 8, xsp
@@ -14693,7 +14674,6 @@ FrameVariant_I_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_I_Return:
 
 PartIDProc:
 	dec 8, xsp
@@ -14744,7 +14724,6 @@ FrameVariant_J_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_J_Return:
 
 TrackIDProc:
 	dec 8, xsp
@@ -14795,7 +14774,6 @@ FrameVariant_K_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_K_Return:
 
 IntTimeIDProc:
 	dec 8, xsp
@@ -14846,7 +14824,6 @@ FrameVariant_L_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_L_Return:
 
 StringProc:
 	lda_dri XSP, 0xfd, 0xc6, 0xfe
@@ -15096,7 +15073,6 @@ SliderH_ReturnAlt5:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x08, 0x01
 	ret
-SliderH_Return:
 
 IconIDProc:
 	lda_dri XSP, 0xfd, 0xf8, 0xfe
@@ -15345,7 +15321,6 @@ ApFuncIDProc_Return:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x08, 0x01
 	ret
-DrawHelper_B_Setup:
 
 ApFuncIDProc:
 	lda_dri XSP, 0xfd, 0xe8, 0xee
@@ -16043,7 +16018,6 @@ ViewID_Return:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x18, 0x11
 	ret
-ViewID_Epilogue:
 
 ScreenIDProc:
 	lda_dri XSP, 0xfd, 0xe8, 0xee
@@ -16395,7 +16369,6 @@ ScreenID_Return:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x18, 0x11
 	ret
-ScreenID_Epilogue:
 
 WindowIDProc:
 	lda_dri XSP, 0xfd, 0xe8, 0xee
@@ -16747,7 +16720,6 @@ WindowID_Return:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x18, 0x11
 	ret
-WindowID_Epilogue:
 
 ModeIDProc:
 	lda_dri XSP, 0xfd, 0xec, 0xee
@@ -17308,7 +17280,6 @@ ConstFlagProc_Init:
 ConstFlagProc_ReturnZero:
 	pop xiz
 	ret
-ConstFlagProc_Return:
 
 ConstFlagProc:
 	dec 8, xsp
@@ -17392,24 +17363,21 @@ ConstFlagProc_Default_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-ConstFlagProc_Default_DoneAlt:
 
 ObjectIDProc:
 	jrl slongProc
 
 pFuncProc:
-	jrl DrawHelper_B_Setup
-ConstFlagProc_Epilogue:
+	jrl ApFuncIDProc
 
 pProcProc:
-	jrl DrawHelper_B_Setup
+	jrl ApFuncIDProc
 
 pPropProc:
-	jrl BoxStyle4_Return
+	jrl ulongProc
 ; WidgetType dispatch (pStringProc/EventIDProc)
-WidgetType_DispatchDSP:
 pStringProc:
-	jrl BoxStyle4_Return
+	jrl ulongProc
 
 EventIDProc:
 	jrl slongProc
@@ -19558,7 +19526,6 @@ LcdOff_Return:
 
 	call VGA_ScreenBlank
 	ret
-LcdOff_Epilogue:
 
 
 ; =============================================================================

@@ -58,6 +58,25 @@ EffectMode_CopyVoiceParams_Done:
 	ret
 
 
+; =============================================================================
+; EffectMode_ByteData_Block1..4 - four routines (CODE, despite the names)
+;
+; Block1: sets the word at 0x8d58 to 0xffff -- the value EffectMode_
+;   CheckTransposeAndLookup caches there -- and jumps to
+;   EffectMode_CheckTransposeChanged, i.e. forces the transpose re-check.
+;   No reference to it was found (searched: uses of the label anywhere in the
+;   v10 tree, and its address as a 32-bit little-endian word anywhere in the ROM).
+; Block2, Block3, Block4: panel-event callbacks, listed in
+;   UIState_ConfigA_108, _072 and _105 (ui_widgets/widget_dispatch.s).  They
+;   test the payload bytes at 0xc07d-0xc07f that SwbtWr_DispatchLoop stores for
+;   the current panel event (Block2: 0xc07d == 2, Block4: 0xc07d == 3, Block3:
+;   0xc07d == 0 or 7) and react by posting event 0x1e0009a / part- or
+;   mode-change events (Block2) or re-reading sound parameters 0x0400/0x0401/
+;   0x028002 via SndParam_LookupReadOnly and calling
+;   EffectMode_CheckModeAndReinit (Block3, Block4).
+; Names kept: widget_dispatch.s (another lane) refers to Block2-4.  Typed as
+; data (v7 verbatim romslices, v9/v10 misframed) until 2026-09-25.
+; =============================================================================
 EffectMode_ByteData_Block1:
 	ldw	(0x8d58:16), 0xffff
 	jrl	EffectMode_CheckTransposeChanged
@@ -1638,7 +1657,8 @@ SelfTest_SramAndRom:
 	ld xbc, 0x1e0009a
 	ld xde, 1:i3
 	call ApPostEvent
-	ld xwa, SeqData_ScanTracks_OuterLoop_0xC
+	; object handle 0xf40001 = class 0x0f4, instance 1 (SendEvent indexes its class table by bits 16-27; not an address -- was SeqData_ScanTracks_OuterLoop_0xC)
+	ld xwa, 0xf40001
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1676,7 +1696,8 @@ SelfTest_PostRomError:
 	ld xbc, 0x1e0009a
 	ld xde, 1:i3
 	call ApPostEvent
-	ld xwa, SeqData_ScanTracks_InnerLoop_0x5
+	; object handle 0xf40007 = class 0x0f4, instance 7 (SendEvent indexes its class table by bits 16-27; not an address -- was SeqData_ScanTracks_InnerLoop_0x5)
+	ld xwa, 0xf40007
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1816,7 +1837,8 @@ EffectMode_HandleTimerEvents:
 	jr z, EffectMode_TimerEvent_Step1E
 	cp a, 0:i3
 	jrl nz, EffectMode_TimerEvent_Default
-	ld xwa, AudioCtrl_PageHandler_0x11
+	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x11)
+	ld xwa, 0xf8000c
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1827,7 +1849,8 @@ EffectMode_HandleTimerEvents:
 	ret
 
 EffectMode_TimerEvent_Step1E:
-	ld xwa, AudioCtrl_PageHandler_0x13
+	; object handle 0xf8000e = class 0x0f8, instance 14 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x13)
+	ld xwa, 0xf8000e
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1838,7 +1861,8 @@ EffectMode_TimerEvent_Step1E:
 	ret
 
 EffectMode_TimerEvent_Step3C:
-	ld xwa, AudioCtrl_PageHandler_0x15
+	; object handle 0xf80010 = class 0x0f8, instance 16 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x15)
+	ld xwa, 0xf80010
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1849,7 +1873,8 @@ EffectMode_TimerEvent_Step3C:
 	ret
 
 EffectMode_TimerEvent_Step5A:
-	ld xwa, AudioCtrl_PageHandler_0xB
+	; object handle 0xf80006 = class 0x0f8, instance 6 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xB)
+	ld xwa, 0xf80006
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1860,7 +1885,8 @@ EffectMode_TimerEvent_Step5A:
 	ret
 
 EffectMode_TimerEvent_Step78:
-	ld xwa, AudioCtrl_PageHandler_0xD
+	; object handle 0xf80008 = class 0x0f8, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xD)
+	ld xwa, 0xf80008
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1871,7 +1897,8 @@ EffectMode_TimerEvent_Step78:
 	ret
 
 EffectMode_TimerEvent_Step96:
-	ld xwa, AudioCtrl_PageHandler_0xF
+	; object handle 0xf8000a = class 0x0f8, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xF)
+	ld xwa, 0xf8000a
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1888,31 +1915,36 @@ EffectMode_RunDiagSequence:
 	ld a, (0x8d7a:16)
 	cp a, 0:i3
 	jr nz, EffectMode_DiagSeq_AnimFrame
-	ld xwa, AudioCtrl_PageHandler_0xB
+	; object handle 0xf80006 = class 0x0f8, instance 6 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xB)
+	ld xwa, 0xf80006
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	ld xwa, AudioCtrl_PageHandler_0xD
+	; object handle 0xf80008 = class 0x0f8, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xD)
+	ld xwa, 0xf80008
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	ld xwa, AudioCtrl_PageHandler_0xF
+	; object handle 0xf8000a = class 0x0f8, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xF)
+	ld xwa, 0xf8000a
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	ld xwa, AudioCtrl_PageHandler_0x11
+	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x11)
+	ld xwa, 0xf8000c
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	ld xwa, AudioCtrl_PageHandler_0x13
+	; object handle 0xf8000e = class 0x0f8, instance 14 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x13)
+	ld xwa, 0xf8000e
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1992,7 +2024,8 @@ EffectMode_ByteData_DiagEvents_Skip2:
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip3:
-	ld	xwa, SeqStep_FileSectorPopReturn_0x367
+	; object handle 0xf50014 = class 0x0f5, instance 20 (SendEvent indexes its class table by bits 16-27; not an address -- was SeqStep_FileSectorPopReturn_0x367)
+	ld	xwa, 0xf50014
 	ld	xbc, 0x1c00001
 	ld	xde, 0:i3
 EffectMode_ByteData_DiagEvents_Join:
@@ -2527,7 +2560,6 @@ PmemExpLngCheck:
 PmemExpLngCheck_ReturnZero:
 	ld xhl, 0:i3
 	ret
-PmemExpLng_Boundary:
 
 AcMstSugAlpGridBoxProc:
 	jp InheritedProc
@@ -2535,7 +2567,6 @@ AcMstSugAlpGridBoxProc:
 MstSugAlpGridCheck:
 	ld xhl, 0:i3
 	ret
-AcMstStyleAlp_Boundary:
 
 AcMstStyleAlpGridBoxProc:
 	lda xsp, (xsp - 74)
@@ -3604,7 +3635,6 @@ EffectMode_SendEvent_Return:
 	pop xiz
 	lda xsp, (xsp + 58)
 	ret
-MstStyle1Grid_Boundary:
 
 AcMstStyle1GridBoxProc:
 	lda xsp, (xsp - 16)
@@ -4107,7 +4137,6 @@ MstStyle1Grid_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 38)
 	ret
-MstStyle1SubGrid_Boundary:
 
 AcMstStyle1SubGridBoxProc:
 	lda xsp, (xsp - 66)
@@ -4816,7 +4845,6 @@ MstStyle1SubGrid_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 30)
 	ret
-MstStyle2Grid_Boundary:
 
 AcMstStyle2GridBoxProc:
 	lda xsp, (xsp - 56)
@@ -6399,7 +6427,6 @@ MstGrid2_Return:
 	pop xiz
 	lda xsp, (xsp + 62)
 	ret
-MstGrid2_Boundary:
 
 AcMstSong1GridBoxProc:
 	jp InheritedProc
@@ -6407,7 +6434,6 @@ AcMstSong1GridBoxProc:
 MstSong1GridCheck:
 	ld xhl, 0:i3
 	ret
-MstSong1Grid_Boundary:
 
 AcMstSong2GridBoxProc:
 	jp InheritedProc
@@ -6415,7 +6441,6 @@ AcMstSong2GridBoxProc:
 MstSong2GridCheck:
 	ld xhl, 0:i3
 	ret
-MstSong2Grid_Boundary:
 
 IvMstStyleWindowPgCtlProc:
 	dec 4, xsp
@@ -6499,7 +6524,6 @@ MstStylePgCtl_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
-TchSensGrid_Boundary:
 
 AcTchSensGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -7077,7 +7101,6 @@ TchSensGrid_ReturnZero:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
-FSWAssGrid_Boundary:
 
 AcFSWAssGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -8192,7 +8215,6 @@ FSWAss_RefreshAllVoices:
 	ret
 
 
-IvPmemWindow_Boundary:
 
 IvPmemWindowPageCtlProc:
 	dec 4, xsp
@@ -8329,7 +8351,6 @@ PmemPageCtl_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
-PmemPageCtl_Boundary:
 
 AcPmExpFilterGridBoxProc:
 	lda_dri XSP, 0xfd, 0xdc, 0xfe
@@ -9126,7 +9147,6 @@ SeqLoad_StoreReturnZero:
 	ld xhl, 0:i3
 	lda_dri XSP, 0xfd, 0x08, 0x01
 	ret
-PmExpFilterCheck_Boundary:
 
 AcDispTimeSetGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -9986,7 +10006,6 @@ MainTimeFlash_DispatchCmd:
 MainTimeFlash_ReturnZero:
 	ld xhl, 0:i3
 	ret
-MainTimeFlash_Boundary:
 
 NormScreenProc:
 	dec 8, xsp
@@ -10039,7 +10058,6 @@ NormScreen_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
-NormScreen_Boundary:
 
 IvWindowPageControlProc:
 	dec 8, xsp
@@ -10247,7 +10265,6 @@ IvWindowPgCtl_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
-IvWindowPgCtl_Boundary:
 
 IvPageOverWrProc:
 	lda xsp, (xsp - 12)
@@ -10622,7 +10639,6 @@ NormScreenProc_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
-MssName_Boundary:
 
 AcPmBkNoBoxProc:
 	lda_dri XSP, 0xfd, 0xfc, 0xfe
@@ -10719,7 +10735,6 @@ AcPmBkNoBox_Epilogue:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
-AcPmBkNoBox_Boundary:
 
 AcBkNoBoxProc:
 	lda_dri XSP, 0xfd, 0xfc, 0xfe
@@ -10796,7 +10811,6 @@ AcBkNoBox_Epilogue:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
-AcBkNoBox_Boundary:
 
 MsaModeScreenProc:
 	lda xsp, (xsp - 24)
@@ -11040,7 +11054,6 @@ MsaMode_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret
-MsaMode_Boundary:
 
 PmemModeBoxProc:
 	lda_dri XSP, 0xfd, 0xe8, 0xfe
@@ -11299,7 +11312,6 @@ PmemMode_Epilogue:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x18, 0x01
 	ret
-PmemMode_Boundary:
 
 AcPmBkEditBoxProc:
 	lda_dri XSP, 0xfd, 0xce, 0xfe
@@ -11873,7 +11885,6 @@ VariScreen_CleanupRet:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
-GmOnOff_Boundary:
 
 VariScreenProc:
 	lda_dri XSP, 0xfd, 0xca, 0xfd
@@ -13664,7 +13675,6 @@ VariScreen_IsHalfRangeAbove:
 	cp a, c
 	scc8 nc, l
 	ret
-IsHalfRangeAbove_End:
 
 RVariScreenProc:
 	lda_dri XSP, 0xfd, 0xd8, 0xfd

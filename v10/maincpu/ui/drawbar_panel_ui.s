@@ -2447,7 +2447,8 @@ TtMdCtlMsg_EventDispatch_Join5:
 TtMdCtlMsg_EventDispatch_Join5_Skip:
 	ld	a, (xwa)
 	extz	wa
-	.long AudioStream_Property_Table
+	pushw	wa
+	pushw	232
 	pushw	560
 	push	xbc
 	call	Sprintf_Locked
@@ -4466,6 +4467,20 @@ MidiSetup_ReturnZero:
 	lda xsp, (xsp + 38)
 	ret
 
+; =============================================================================
+; MidiPart_DataBlock - a panel-event callback (CODE, despite the name)
+;
+; 7th entry of the callback list UIState_ConfigB_081 (ui_widgets/widget_dispatch.s).
+; It reads 0xc080 and 0xc07d-0xc07f, the type and payload bytes that
+; SwbtWr_DispatchLoop stores for the current panel event (see
+; ../technics-docs/data-wheel-investigation.md, "Key DRAM Addresses"), and acts
+; only for type 0xa8 with payload 0xc07d == 5, bit 6 of 0xc07f set and
+; (0xc07e & 0xc07f) != 0: then, unless the UI state byte 0x8d38 is 0x0f, it
+; calls SoundCtrl_SendCommand(15) (ui/ui_control_panel.s).  Which panel control
+; that type/payload is has NOT been established.  The name is kept because
+; widget_dispatch.s (another lane) refers to it; the bytes were a verbatim blob
+; in v7 and misframed code in v9/v10 until 2026-09-25.
+; =============================================================================
 MidiPart_DataBlock:
 	cp	(0xc080:16), 0xa8
 	ret	nz
@@ -9296,7 +9311,8 @@ IvAccordion_ShowHide:
 	jr nz, IvAccordion_ShowHide_UpdatePart
 	cpw (0x24782:24), 0
 	jr z, IvAccordion_ShowHide_NoBellows
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
+	ld xwa, 0xeb0009
 	ld xbc, 0x1c00002
 	ld xde, 5:i3
 	call SendEvent
@@ -9308,7 +9324,8 @@ IvAccordion_ShowHide:
 	jr IvAccordion_ShowHide_Toggle
 
 IvAccordion_ShowHide_NoBellows:
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
+	ld xwa, 0xeb0017
 	ld xbc, 0x1c00002
 	ld xde, 5:i3
 	call SendEvent
@@ -9353,11 +9370,13 @@ IvAccordion_Scroll:
 	cpw (0x24780:24), 0
 	jr nz, IvAccordion_Scroll_SetOff
 	ldw (0x024780:24), 0x0001
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
+	ld xwa, 0xeb0009
 	ld xbc, 0x1c00002
 	ld xde, 5:i3
 	call SendEvent
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
+	ld xwa, 0xeb0017
 	ld xbc, 0x1c00001
 	ld xde, 5:i3
 	call SendEvent
@@ -9376,11 +9395,13 @@ IvAccordion_Scroll:
 
 IvAccordion_Scroll_SetOff:
 	ldw (0x024780:24), 0x0000
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
+	ld xwa, 0xeb0017
 	ld xbc, 0x1c00002
 	ld xde, 5:i3
 	call SendEvent
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
+	ld xwa, 0xeb0009
 	ld xbc, 0x1c00001
 	ld xde, 5:i3
 	call SendEvent
@@ -9440,7 +9461,8 @@ IvAccordion_Update:
 	jr nc, IvAccordion_Update_BellowsOn
 	cpw (0x2477c:24), 0
 	jr z, IvAccordion_Update_SendPartParam
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
+	ld xwa, 0xeb0017
 	ld xbc, 0x1c00002
 	ld xde, 5:i3
 	call SendEvent
@@ -9454,7 +9476,8 @@ IvAccordion_Update:
 IvAccordion_Update_BellowsOn:
 	cpw (0x2477c:24), 1
 	jr z, IvAccordion_Update_SendPartParam
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
+	ld xwa, 0xeb0009
 	ld xbc, 0x1c00002
 	ld xde, 5:i3
 	call SendEvent
@@ -9520,7 +9543,8 @@ IvAccordion_Refresh:
 	sla hl, 2
 	lda xwa, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe0, 0xec
-	ld xwa, WidgetName_InitPtrTable_0x15
+	; object handle 0xeb0007 = class 0x0eb, instance 7 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_InitPtrTable_0x15)
+	ld xwa, 0xeb0007
 	ld xbc, 0x1c0000f
 	call SendEvent
 	ld wa, (0x02477e:24)
@@ -10854,7 +10878,8 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld xwa, StringData_APCModeNames_0x160
+	; object handle 0xf00001 = class 0x0f0, instance 1 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x160)
+	ld xwa, 0xf00001
 	ld xbc, 0x1c0000f
 	call SendEvent
 	call Boot_ParseTableDataTimestamp
@@ -10866,7 +10891,8 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld xwa, StringData_APCModeNames_0x161
+	; object handle 0xf00002 = class 0x0f0, instance 2 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x161)
+	ld xwa, 0xf00002
 	ld xbc, 0x1c0000f
 	call SendEvent
 	call Boot_GetSystemPointer
@@ -10878,7 +10904,8 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld xwa, StringData_APCModeNames_0x162
+	; object handle 0xf00003 = class 0x0f0, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x162)
+	ld xwa, 0xf00003
 	ld xbc, 0x1c0000f
 	call SendEvent
 	call Boot_ParseSubCPUTimestamp
@@ -10890,7 +10917,8 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld xwa, StringData_APCModeNames_0x163
+	; object handle 0xf00004 = class 0x0f0, instance 4 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x163)
+	ld xwa, 0xf00004
 	ld xbc, 0x1c0000f
 	jr Softver_SendEvent
 
@@ -10949,7 +10977,8 @@ MPver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld xwa, CharEncoding_PrintableHi_0xA
+	; object handle 0xef000a = class 0x0ef, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was CharEncoding_PrintableHi_0xA)
+	ld xwa, 0xef000a
 	ld xbc, 0x1c0000f
 	jr MPver_SendEvent
 
@@ -15309,7 +15338,8 @@ IvDrawbar_Init_SetupMode:
 	ld xbc, 0x1e0009e
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, Presentation_TagStrTable_0x1E
+	; object handle 0xea0026 = class 0x0ea, instance 38 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x1E)
+	ld xwa, 0xea0026
 	ld xbc, 0x1c00002
 	ld xde, 0:i3
 	call SendEvent
@@ -15327,7 +15357,8 @@ IvDrawbar_Init_SetupMode:
 	ld xbc, 0x1e0009e
 	ld xde, 0:i3
 	call SendEvent
-	ld xwa, Presentation_TagStrTable_0x16
+	; object handle 0xea001e = class 0x0ea, instance 30 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x16)
+	ld xwa, 0xea001e
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	call SendEvent
@@ -15344,7 +15375,8 @@ IvDrawbar_Init_ModernMode:
 	ld xbc, 0x1e0009e
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, Presentation_TagStrTable_0x16
+	; object handle 0xea001e = class 0x0ea, instance 30 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x16)
+	ld xwa, 0xea001e
 	ld xbc, 0x1c00002
 	ld xde, 0:i3
 	call SendEvent
@@ -15437,7 +15469,8 @@ IvDrawbar_DrawbarUpdate:
 	jrl nz, IvDrawbar_ReturnHandled
 	cpw (0x247c2:24), 0
 	jr z, IvDrawbar_DrawbarUpdate_UpperOff
-	ld xwa, Presentation_RootEntry_0x3
+	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_RootEntry_0x3)
+	ld xwa, 0xea0003
 	ld xbc, 0x1e0003b
 	ld xde, 1:i3
 	call SendEvent
@@ -15447,7 +15480,8 @@ IvDrawbar_DrawbarUpdate:
 	jrl IvDrawbar_DispatchEvent
 
 IvDrawbar_DrawbarUpdate_UpperOff:
-	ld xwa, Presentation_RootEntry_0x3
+	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_RootEntry_0x3)
+	ld xwa, 0xea0003
 	ld xbc, 0x1e0003b
 	ld xde, 0:i3
 	call SendEvent
@@ -16691,7 +16725,8 @@ IvDrawbar1_ShowHide:
 	call InheritedProc
 	ld de, (0x024798:24)
 	exts xde
-	ld xwa, Presentation_TagStrTable_0x4
+	; object handle 0xea000c = class 0x0ea, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x4)
+	ld xwa, 0xea000c
 	ld xbc, 0x1e0003b
 	call SendEvent
 	ld xwa, (xsp + 12)
@@ -17128,7 +17163,8 @@ IvDrawbar2_ShowHideHandler:
 	call InheritedProc
 	ld de, (0x024798:24)
 	exts xde
-	ld xwa, Presentation_TagStrTable_0x4
+	; object handle 0xea000c = class 0x0ea, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x4)
+	ld xwa, 0xea000c
 	ld xbc, 0x1e0003b
 	jr IvDrawbar2_SendEventShared
 
@@ -17328,7 +17364,8 @@ DrawbarNorm_Update:
 	ld xwa, 0x4003
 	call SndParam_LookupReadOnly
 	exts xhl
-	ld xwa, Presentation_TagStrTable_0x18
+	; object handle 0xea0020 = class 0x0ea, instance 32 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x18)
+	ld xwa, 0xea0020
 	ld xbc, 0x1e0003b
 	ld xde, xhl
 	jrl IvDrawbarNorm_SendEvent
@@ -17338,7 +17375,8 @@ DrawbarNorm_UpdateCase4:
 	sla wa, 2
 	lda xbc, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
-	ld xwa, Presentation_TagStrTable_0x17
+	; object handle 0xea001f = class 0x0ea, instance 31 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x17)
+	ld xwa, 0xea001f
 	ld xbc, 0x1c0000f
 	jr IvDrawbarNorm_SendEvent
 
@@ -18156,7 +18194,8 @@ Demofeat2_ShowHide:
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
-	ld xwa, Bitmap_Dredt0d_0x9A8
+	; object handle 0xe40008 = class 0x0e4, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was Bitmap_Dredt0d_0x9A8)
+	ld xwa, 0xe40008
 	ld xbc, 0x1c0000f
 	jr Demofeat2_SendEvent
 
@@ -18320,7 +18359,8 @@ PresBox_TimerExpired:
 	ld xbc, 0x1e0004d
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, Bitmap_Dredt0d_0x9AA
+	; object handle 0xe4000a = class 0x0e4, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was Bitmap_Dredt0d_0x9AA)
+	ld xwa, 0xe4000a
 	ld xbc, 0x1c00001
 	ld xde, 5:i3
 	call PostEvent
@@ -18508,7 +18548,8 @@ AcPresCtrl_Case5:
 	call ApFuncCall
 	ld wa, 2:i3
 	call ChangePalette
-	ld xwa, NakaData_ExternalBase
+	; object handle 0xe40000 = class 0x0e4, instance 0 (SendEvent indexes its class table by bits 16-27; not an address -- was NakaData_ExternalBase)
+	ld xwa, 0xe40000
 	ld xbc, 0x1c00001
 	ld xde, 0:i3
 	jr AcPresCtrl_SendEventReturn
