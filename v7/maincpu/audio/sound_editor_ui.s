@@ -7852,6 +7852,15 @@ SeMenu_ShowPopupDialog:
 	pop xiz
 	ret
 
+; -----------------------------------------------------------------------------
+; Screen-handler table: 48 LE32 entries, one per event code 0x20-0x4F.
+; Read by SeMenu_ShowPopupDialog: hl = (xiz+8) - 0x20, sla hl,2, xiy = (table+hl),
+; call (xiy); then Display_DeferOrDrawWall before and Display_DeferOrUpdateScreen after the
+; call (via SeMenu_WaveformSelect_Handler / _Process).  Entry count: the table ends where the next
+; routine begins.  Entries 32-47 point at SeMenu_WaveformSelect_End, a bare
+; `ret`: codes this screen set does not handle.  (Label name historical --
+; shared/positional_labels.s builds aliases on it.)
+; -----------------------------------------------------------------------------
 SeMenu_ShowPopupDialog_Draw:
 	.long SeMenu_WaveformSelect_Data
 	.long SeMenu_NameEdit_DataBlock2
@@ -7927,6 +7936,14 @@ SeMenu_ShowConfirmDialog:
 	pop	xwa
 	pop	xiz
 	ret
+; -----------------------------------------------------------------------------
+; Screen-handler table: 48 LE32 entries, one per event code 0x20-0x4F.
+; Read by SeMenu_ShowConfirmDialog: hl = (xiz+8) - 0x20, sla hl,2, xiy = (table+hl),
+; call (xiy); then `or (0xe3e2), 8`.  Entry count: the table ends where the next
+; routine begins.  Entries 21, 29, 32-47 point at SeMenu_WaveformSelect_End, a bare
+; `ret`: codes this screen set does not handle.  (Label name historical --
+; shared/positional_labels.s builds aliases on it.)
+; -----------------------------------------------------------------------------
 SeMenu_ShowConfirmDialog_Data:
 	.long SeMenu_PresetManager_Init
 	.long SeMenu_NameEdit_Dispatch
@@ -13592,6 +13609,8 @@ SeScreenData_0x25B7:
 	.long	SeScreenData_0x258E
 ; se_name_editor: 218 bytes (15 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_name_editor.c)
+; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
+; evidence: SeMenu_PresetBrowser_Init
 TuningSys_Param_01:
 	.set	SeScreenData_0x25EA, . + 11
 	.set	SeScreenData_0x25F5, . + 22

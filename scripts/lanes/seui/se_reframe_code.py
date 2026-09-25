@@ -285,8 +285,24 @@ class Reframer:
         table is flanked by data and is never touched)"""
         before = self.ends.get(st, [])
         after = self.at.get(T, [])
-        return (bool(before) and all(self.is_insn(li) for li in before) and
-                bool(after) and all(self.is_insn(li) for li in after))
+        left = (bool(before) and all(self.is_insn(li) for li in before)) or st in self.call_targets()
+        return left and bool(after) and all(self.is_insn(li) for li in after)
+
+    def call_targets(self):
+        """addresses some `call`/`calr` in this image names symbolically: a
+        routine entry, even when the line before it is a table"""
+        if getattr(self, "_ct", None) is None:
+            self._ct = set()
+            root = os.path.join(ROOT, self.v, "maincpu")
+            pat = re.compile(r"^\s*(?:[\w.$]+:\s*)?(?:call|calr)\s+(?:\w+,\s*)?([A-Za-z_][\w.$]*)\s*(?:;|$)")
+            for dp, _, fns in os.walk(root):
+                for fn in fns:
+                    if fn.endswith(".s"):
+                        for ln in open(os.path.join(dp, fn), encoding="latin-1"):
+                            m = pat.match(ln)
+                            if m and m.group(1) in self.byname:
+                                self._ct.add(self.byname[m.group(1)])
+        return self._ct
 
     def auto(self):
         done_until = 0

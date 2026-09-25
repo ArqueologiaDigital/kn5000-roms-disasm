@@ -4133,23 +4133,23 @@ SeMenu_CopyWriteUpdate_Skip58:
 	dec	2, c
 	extz	bc
 	call	SeMenu_BitShiftMask_End
-	.byte 0xc7
-	swi	2
-	cp	(xsp-57), de
-	ld	d, 143
-	ld	(33:8), 201:io
-	ldw	wa, 0xc907
-	dec	6, wa
-	push_f
+	ldb_erp	l, 250
+	and_erpb	250, 3
+	ld	a, (xsp+8)
+	res	7, a
+	cp	a, 0:i3
+	jr	nz, SeMenu_CopyWriteUpdate_Skip87
 	bitm	7, (xsp+2)
-	jrl	nz, 171
+	jrl	nz, SeMenu_CopyWriteUpdate_Epilogue54
 	cpib_erp	250, 1
-	jr	nz, 8
+	jr	nz, SeMenu_CopyWriteUpdate_Skip86
 	setm	7, (xsp+2)
 	ldib_erp	250, 0
 	jr	SeMenu_CopyWriteUpdate_Join28
+SeMenu_CopyWriteUpdate_Skip86:
 	inc1b_erp 250
 	jr SeMenu_CopyWriteUpdate_Join28
+SeMenu_CopyWriteUpdate_Skip87:
 	bitm	7, (xsp+2)
 	jr	z, SeMenu_CopyWriteUpdate_Skip59
 	resm	7, (xsp+2)
@@ -7893,6 +7893,15 @@ SeMenu_ShowPopupDialog:
 	pop xiz
 	ret
 
+; -----------------------------------------------------------------------------
+; Screen-handler table: 48 LE32 entries, one per event code 0x20-0x4F.
+; Read by SeMenu_ShowPopupDialog: hl = (xiz+8) - 0x20, sla hl,2, xiy = (table+hl),
+; call (xiy); then Display_DeferOrDrawWall before and Display_DeferOrUpdateScreen after the
+; call (via SeMenu_WaveformSelect_Handler / _Process).  Entry count: the table ends where the next
+; routine begins.  Entries 32-47 point at SeMenu_WaveformSelect_End, a bare
+; `ret`: codes this screen set does not handle.  (Label name historical --
+; shared/positional_labels.s builds aliases on it.)
+; -----------------------------------------------------------------------------
 SeMenu_ShowPopupDialog_Draw:
 	.long SeMenu_WaveformSelect_Data
 	.long SeMenu_NameEdit_DataBlock2
@@ -7970,6 +7979,14 @@ SeMenu_ShowConfirmDialog:
 	ret
 
 
+; -----------------------------------------------------------------------------
+; Screen-handler table: 48 LE32 entries, one per event code 0x20-0x4F.
+; Read by SeMenu_ShowConfirmDialog: hl = (xiz+8) - 0x20, sla hl,2, xiy = (table+hl),
+; call (xiy); then `or (0xe3e2), 8`.  Entry count: the table ends where the next
+; routine begins.  Entries 21, 29, 32-47 point at SeMenu_WaveformSelect_End, a bare
+; `ret`: codes this screen set does not handle.  (Label name historical --
+; shared/positional_labels.s builds aliases on it.)
+; -----------------------------------------------------------------------------
 SeMenu_ShowConfirmDialog_Data:
 	.long SeMenu_PresetManager_Init
 	.long SeMenu_NameEdit_Dispatch
@@ -8019,22 +8036,27 @@ SeMenu_ShowConfirmDialog_Data:
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
-	.ascii "89:;<=>ò"
-	.byte 0xa8, 0xef
-	pop	sr
-	nop
-	nop
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
+	push	xix
+	push	xiy
+	push	xiz
+	stib_da	(0x3efa8), 0
 	ld	xiy, SeScreenData_0x0833
 	ld	xix, SeScreenData_0x085A
 	call	SeGfx_DrawStaticList
 	cpdi8	(0x65c), 0
-	jr	z, 12
+	jr	z, SeMenu_ShowConfirmDialog_Data_Code_Skip6
 	ld	xiy, SeScreenData_0x085A
 	ld	xix, SeScreenData_0x0864
-	jr	16
+	jr	SeMenu_ShowConfirmDialog_Data_Code_Join4
+SeMenu_ShowConfirmDialog_Data_Code_Skip6:
 	ld	(0x03efa8:24), 1
 	ld	xiy, SeScreenData_0x0864
 	ld	xix, SeScreenData_0x086E
+SeMenu_ShowConfirmDialog_Data_Code_Join4:
 	call	SeGfx_DrawStaticList
 	pop	xiz
 	pop	xiy
@@ -13145,6 +13167,8 @@ SeScreenData_0x1F75:
 	sdb_box	0x03, 0x0660, 0x0f, 0, 0x05, SeScreenData_0x2105
 ; se_drumkit_display: 329 bytes (293 screen data + 36 DrumKit_VariantSelect_Table)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_drumkit_display.c)
+; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
+; evidence: SeMenu_BankEdit_LoopHelper
 SeScreenData_0x1F80:
 	.set	SeScreenData_0x1FA8, . + 40
 	.set	SeScreenData_0x1FDA, . + 90
@@ -13194,6 +13218,8 @@ SeScreenData_0x213C:
 	.ascii	" THRU "
 ; se_general_edit: 96 bytes (7 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_general_edit.c)
+; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
+; evidence: SeMenu_Utility_CompareBlock, SeMenu_Utility_FormatSigned_Data
 SeScreenData_0x2160:
 	.set	SeScreenData_0x216B, . + 11
 	.set	SeScreenData_0x2175, . + 21
@@ -13362,6 +13388,8 @@ SeScreenData_0x2363:
 	.long	SeScreenData_0x22D3
 ; se_compare_screen: 139 bytes (13 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_compare_screen.c)
+; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
+; evidence: SeMenu_CompareAndApply_Match
 SeScreenData_0x238F:
 	.set	SeScreenData_0x2399, . + 10
 	.set	SeScreenData_0x23A3, . + 20
@@ -13524,6 +13552,8 @@ SeScreenData_0x25B7:
 	.long	SeScreenData_0x258E
 ; se_name_editor: 218 bytes (15 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_name_editor.c)
+; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
+; evidence: SeMenu_PresetBrowser_Init
 TuningSys_Param_01:
 	.set	SeScreenData_0x25EA, . + 11
 	.set	SeScreenData_0x25F5, . + 22
@@ -14342,6 +14372,8 @@ SeScreenData_0x3660:
 ; se_rhythm_transport_tables: 220 bytes (16 commands + 2 dispatch tables)
 ; RhythmTransport_Control_Table (6 entries) + DrumSound_ParamEdit_Table (10 entries)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_rhythm_transport_tables.c)
+; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
+; evidence: bounds SeScreenData_0x3821
 SeScreenData_0x3805:
 	.set	SeScreenData_0x380C, . + 7
 	.set	SeScreenData_0x3813, . + 14
@@ -14357,6 +14389,8 @@ SeScreenData_0x3805:
 	.incbin "includes/generated/se_rhythm_transport_tables.bin"
 ; se_parameter_grid: 221 bytes (17 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_parameter_grid.c)
+; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
+; evidence: SeMenu_PresetInit_Main, SeMenu_FilterEdit_Dispatch
 SeScreenData_0x38E1:
 	.set	SeScreenData_0x391D, . + 60
 	.set	SeScreenData_0x3927, . + 70
@@ -14624,6 +14658,8 @@ SeScreenData_0x3D36:
 	sd_quad	0x01, 209, 228, 230, 228
 ; se_transport_display: 141 bytes (14 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_transport_display.c)
+; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
+; evidence: SeMenu_FilterEdit_DataBlock5, SeMenu_EqEdit_Dispatch
 SeScreenData_0x3DD3:
 	.set	SeScreenData_0x3DF1, . + 30
 	.set	SeScreenData_0x3E00, . + 45
@@ -14736,6 +14772,8 @@ SeScreenData_0x41EA:
 	.short	190, 110, 298, 125
 ; se_setup_sel3: 30 bytes (2 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel3.c)
+; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
+; evidence: SeMenu_EqEdit_Init, SeMenu_EqEdit_DrawInit
 SeScreenData_0x4222:
 	.incbin "includes/generated/se_setup_sel3.bin"
 ; string table, 4-char cells, indexed by a bound record's value (field +7 of

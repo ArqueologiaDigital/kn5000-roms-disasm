@@ -93,3 +93,15 @@ lands on a v10 data line -- `.long`/`.ascii`/`sd_*` -- with equal bytes):
 
 then `symbolize_numeric_branches.py --image v7 --only ...`: 376 operands, 202
 labels, verify PASS.
+
+## Evidence headers
+
+| script | question it answers | command |
+|---|---|---|
+| `se_cblock_headers.py` | Which reader draws the record list(s) that begin at each byte-exact C descriptor inside SeScreenData? Adds one `; reader (se_screendata_model.py): ...` + `; evidence: ...` pair directly above each C block's label (v10 23, v9 8, v7 1), from the model. Idempotent. | `python3 scripts/lanes/seui/se_cblock_headers.py --image v10 [--apply]` |
+| `se_dispatch_headers.py` | What are `SeMenu_ShowPopupDialog_Draw` / `SeMenu_ShowConfirmDialog_Data`? Derives from ROM + ELF: 48 LE32 handler entries (event 0x20-0x4F), the reader's index formula, the count (up to the next routine), and which entries are the bare `ret` SeMenu_WaveformSelect_End; writes that as a header. | `python3 scripts/lanes/seui/se_dispatch_headers.py --image v10 [--apply]` |
+
+Round 3 of the auto re-frame (a window may also start right after a table when
+its start is a `call` target named somewhere in the image): v10 2, v9 2
+windows, among them the routine at SeMenu_ShowConfirmDialog_Data + 0xC0, whose
+seven pushes were `.ascii "89:;<=>\xf1"`.
