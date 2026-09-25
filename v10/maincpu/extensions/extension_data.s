@@ -367,80 +367,127 @@ NoteStr3_D:
 NoteStr3_CSharp:	aligned_string "C~9e"
 NoteStr3_C:
 	aligned_string "C "
+; ---------------------------------------------------------------------------
+; LANGUAGE-INDEXED STRING TABLES (seven, 0xED04C4-0xED0D17 and 0xED1932)
+; ---------------------------------------------------------------------------
+; Each LngTable_* is six string pointers indexed by display language --
+; 0 EN, 1 DE, 2 FR, 3 ES, 4 IT, 5 ID -- followed by the six strings in
+; REVERSE order.  Each is returned, as the answer to event 0x1E0009F, by one
+; of the *LngCheck functions of Toshi_ApFunction_Table (`cp xbc, 0x1e0009f` /
+; `lda xhl, (<table>:24)` / `ret`, ui/ui_mode_handlers.s and, for
+; WallSureLngCheck, display/graphics_text_vga.s), which reach them through
+; positional names such as Str_Attention_EN_0xC.  Four tables are
+; translated except for Italian, whose entry is the literal "Italian"; the
+; three description tables (FactoryResetDesc, StoreSoundBalance,
+; StoreTotalSetting) have only EN and DE, the FR/ES/IT/ID slots pointing at
+; English copies -- the Str_*_EN0..EN3 labels (kept: positional names are
+; built on them) sit on those copies.  Layout checked by
+; scripts/analysis/ext_lane_checks.py lng.
+; ---------------------------------------------------------------------------
 NoteStr3_Blank_3:
-	.byte 0x20, 0x20, 0x00, 0xff, 0x12, 0x05, 0xed, 0x00
-Str_Attention_Multilingual:
-	.long Str_Attention_DE
-	.long Str_Attention_FR
-	.long Str_Attention_ES
-	.long Str_Attention_IT
-	.long Str_Attention_ID
-Str_Attention_ID:	aligned_string "PERHATIAN!"
-Str_Attention_IT:	aligned_string "Italian"
-Str_Attention_ES:	aligned_string "ATTENCI0N!"
-Str_Attention_FR:	aligned_string "ATTENTION!"
-Str_Attention_DE:	aligned_string "ACHTUNG!"
-Str_Attention_EN:	aligned_string "ATTENTION!"
-	.byte 0xe6, 0x06, 0xed, 0x00, 0x7e, 0x06, 0xed, 0x00, 0x18, 0x06, 0xed, 0x00, 0xac, 0x05, 0xed, 0x00
-	.byte 0xa4, 0x05, 0xed, 0x00, 0x36, 0x05, 0xed, 0x00
-Str_InitSettingWarn_ID:	aligned_string "Menggunakan Initial Setting akan menghapus semua data yang telah diset dengan susunan data asli dari pabrik."
-Str_InitSettingWarn_IT:	aligned_string "Italian"
-	aligned_string "El uso del ajuste inicial hará que se reemplacen los datos actuales por los ajustes originales de fá brica!"
-	aligned_string "La procédure d'initialisation va remplacer tous les réglages effectués par les présélections d'usine"
-	.byte 0x44, 0x75
-	aligned_string "rch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zurückversetzt."
-	aligned_string "Using Initial Setting will replace any current data with the original factory settings!"
-	.byte 0xa8, 0x07, 0xed, 0x00, 0x96, 0x07, 0xed, 0x00, 0x86, 0x07, 0xed, 0x00, 0x78, 0x07, 0xed, 0x00
-	.byte 0x70, 0x07, 0xed, 0x00, 0x56, 0x07, 0xed, 0x00
-Str_AreYouSure_ID:	aligned_string "Apakah Anda sudah yakin ?"
-Str_AreYouSure_IT:	aligned_string "Italian"
-	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1
-	aligned_string " seguro?"
-	.byte 0x45, 0x74
-	.ascii "es vous s"
-	.byte 0xfb, 0x72, 0x3f, 0x00, 0xff
-	aligned_string "SIND SIE SICHER?"
-	aligned_string "Are You Sure?"
-	.byte 0x04, 0x0a, 0xed, 0x00, 0x8e, 0x09, 0xed, 0x00
-Str_FactoryResetDesc_Multilingual:
-	.long Str_FactoryResetDesc_EN3
-	.long Str_FactoryResetDesc_EN2
-	.long Str_FactoryResetDesc_EN1
-	.long Str_FactoryResetDesc_EN0
-Str_FactoryResetDesc_EN0:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-Str_FactoryResetDesc_EN1:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-Str_FactoryResetDesc_EN2:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-Str_FactoryResetDesc_EN3:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-	.byte 0x53, 0x65
-	.ascii "tzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zurüc"
-	.byte 0x6b, 0x2e, 0x00, 0xff
+	aligned_string "  "
+LngTable_Attention:	; returned by AttnLngCheck
+	.long Str_Attention_EN	; EN
+	.long Str_Attention_DE	; DE
+	.long Str_Attention_FR	; FR
+	.long Str_Attention_ES	; ES
+	.long Str_Attention_IT	; IT
+	.long Str_Attention_ID	; ID
+Str_Attention_ID:
+	aligned_string "PERHATIAN!"
+Str_Attention_IT:
+	aligned_string "Italian"
+Str_Attention_ES:
+	aligned_string "ATTENCI0N!"
+Str_Attention_FR:
+	aligned_string "ATTENTION!"
+Str_Attention_DE:
+	aligned_string "ACHTUNG!"
+Str_Attention_EN:
+	aligned_string "ATTENTION!"
+LngTable_InitSettingWarn:	; returned by SysSureLngCheck
+	.long Str_InitSettingWarn_EN	; EN
+	.long Str_InitSettingWarn_DE	; DE
+	.long Str_InitSettingWarn_FR	; FR
+	.long Str_InitSettingWarn_ES	; ES
+	.long Str_InitSettingWarn_IT	; IT
+	.long Str_InitSettingWarn_ID	; ID
+Str_InitSettingWarn_ID:
+	aligned_string "Menggunakan Initial Setting akan menghapus semua data yang telah diset dengan susunan data asli dari pabrik."
+Str_InitSettingWarn_IT:
+	aligned_string "Italian"
+Str_InitSettingWarn_ES:	aligned_string "El uso del ajuste inicial hará que se reemplacen los datos actuales por los ajustes originales de fá brica!"
+Str_InitSettingWarn_FR:	aligned_string "La procédure d'initialisation va remplacer tous les réglages effectués par les présélections d'usine"
+Str_InitSettingWarn_DE:	aligned_string "Durch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zurückversetzt."
+Str_InitSettingWarn_EN:	aligned_string "Using Initial Setting will replace any current data with the original factory settings!"
+LngTable_AreYouSure:	; returned by SureLngCheck
+	.long Str_AreYouSure_EN	; EN
+	.long Str_AreYouSure_DE	; DE
+	.long Str_AreYouSure_FR	; FR
+	.long Str_AreYouSure_ES	; ES
+	.long Str_AreYouSure_IT	; IT
+	.long Str_AreYouSure_ID	; ID
+Str_AreYouSure_ID:
+	aligned_string "Apakah Anda sudah yakin ?"
+Str_AreYouSure_IT:
+	aligned_string "Italian"
+Str_AreYouSure_ES:	aligned_string "¿Está seguro?"
+Str_AreYouSure_FR:	aligned_string "Etes vous sûr?"
+Str_AreYouSure_DE:	aligned_string "SIND SIE SICHER?"
+Str_AreYouSure_EN:	aligned_string "Are You Sure?"
+LngTable_FactoryResetDesc:	; returned by CtlIniLngCheck
+	.long Str_FactoryResetDesc_EN	; EN
+	.long Str_FactoryResetDesc_DE	; DE
+	.long Str_FactoryResetDesc_EN3	; FR
+	.long Str_FactoryResetDesc_EN2	; ES
+	.long Str_FactoryResetDesc_EN1	; IT
+	.long Str_FactoryResetDesc_EN0	; ID
+Str_FactoryResetDesc_EN0:
 	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-	.byte 0x56, 0x0b, 0xed, 0x00
-Str_StoreSoundBalance_Multilingual:
-	.long Str_StoreSoundBalance_DE
-	.long Str_StoreSoundBalance_EN3
-	.long Str_StoreSoundBalance_EN2
-	.long Str_StoreSoundBalance_EN1
-	.long Str_StoreSoundBalance_EN0
-Str_StoreSoundBalance_EN0:	aligned_string "Stores sound & balance settings only."
-Str_StoreSoundBalance_EN1:	aligned_string "Stores sound & balance settings only."
-Str_StoreSoundBalance_EN2:	aligned_string "Stores sound & balance settings only."
-Str_StoreSoundBalance_EN3:	aligned_string "Stores sound & balance settings only."
-Str_StoreSoundBalance_DE:	.asciz "Speichert nur Klang- und Lautstärkeeinstellungen."
+Str_FactoryResetDesc_EN1:
+	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+Str_FactoryResetDesc_EN2:
+	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+Str_FactoryResetDesc_EN3:
+	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+Str_FactoryResetDesc_DE:	aligned_string "Setzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zurück."
+Str_FactoryResetDesc_EN:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+LngTable_StoreSoundBalance:	; returned by PmemNormLngCheck
+	.long Str_StoreSoundBalance_EN	; EN
+	.long Str_StoreSoundBalance_DE	; DE
+	.long Str_StoreSoundBalance_EN3	; FR
+	.long Str_StoreSoundBalance_EN2	; ES
+	.long Str_StoreSoundBalance_EN1	; IT
+	.long Str_StoreSoundBalance_EN0	; ID
+Str_StoreSoundBalance_EN0:
 	aligned_string "Stores sound & balance settings only."
-	.byte 0xda, 0x0c, 0xed, 0x00
-Str_StoreTotalSetting_Multilingual:
-	.long Str_StoreTotalSetting_DE
-	.long Str_StoreTotalSetting_EN3
-	.long Str_StoreTotalSetting_EN2
-	.long Str_StoreTotalSetting_EN1
-	.long Str_StoreTotalSetting_EN0
-Str_StoreTotalSetting_EN0:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_EN1:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_EN2:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_EN3:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschließlich Rhythmus, Transpose & Tempo."
+Str_StoreSoundBalance_EN1:
+	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_EN2:
+	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_EN3:
+	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_DE:
+	aligned_string "Speichert nur Klang- und Lautstärkeeinstellungen."
+Str_StoreSoundBalance_EN:	aligned_string "Stores sound & balance settings only."
+LngTable_StoreTotalSetting:	; returned by PmemExpLngCheck
+	.long Str_StoreTotalSetting_EN	; EN
+	.long Str_StoreTotalSetting_DE	; DE
+	.long Str_StoreTotalSetting_EN3	; FR
+	.long Str_StoreTotalSetting_EN2	; ES
+	.long Str_StoreTotalSetting_EN1	; IT
+	.long Str_StoreTotalSetting_EN0	; ID
+Str_StoreTotalSetting_EN0:
 	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_EN1:
+	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_EN2:
+	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_EN3:
+	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_DE:
+	aligned_string "Speichert die gesamte Einstellung einschließlich Rhythmus, Transpose & Tempo."
+Str_StoreTotalSetting_EN:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 	aligned_string "%c:%d/%d  "
 ; ---------------------------------------------------------------------------
 ; Event-offset tables and screen strings of the Toshi grid/box procedures
@@ -789,19 +836,21 @@ TransposeNoteStr_C:
 	aligned_string "DEFAULT"
 	aligned_string " USER  "
 	aligned_string " ERROR "
-	.byte 0x31, 0x00, 0x31, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x31, 0x00, 0x40, 0x00, 0x35, 0x00
-	.byte 0x3c, 0x00, 0x00, 0x00, 0xca, 0x1a, 0xed, 0x00, 0x7a, 0x1a, 0xed, 0x00, 0x36, 0x1a, 0xed, 0x00
-	.byte 0xd8, 0x19, 0xed, 0x00, 0xd0, 0x19, 0xed, 0x00, 0x4a, 0x19, 0xed, 0x00
-	aligned_string "USER INITIAL akan menggantikan penggunaan kertas tempel (stiker) yang sekarang dengan sticker/kertas tempel yg hitam-licin dan rata!"
-	aligned_string "Italian"
-	.byte 0xa1
-	.ascii "El USER INITIAL cambiará el patrÓn de fondo actual por un \"Plain Black\" (negro sin dise"
-	.byte 0xf1, 0x6f, 0x29, 0x21, 0x00, 0xff, 0x55, 0x53
-	aligned_string "ER INITIAL va remplacer votre fond de l'écran par un fond noir !"
-	aligned_string "USER INITIAL ersetzt das aktuelle Hintergrundbild durch eine schwarze Fläche !"
-	.asciz "USER INITIAL will replace the current user wallpaper with the \"Plain Black\" wallpaper!"
-	.byte 0xff, 0x00, 0x00, 0x26, 0x00, 0x2c, 0x00, 0x32, 0x00, 0x1a, 0x00, 0x08, 0x00, 0x0e, 0x00, 0x20
-	.byte 0x00, 0x14, 0x00, 0x00, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00
+	.short 49, 49, 64, 64, 64, 49, 64, 53, 60, 0
+LngTable_UserInitialWallpaper:	; returned by WallSureLngCheck
+	.long Str_UserInitialWallpaper_EN	; EN
+	.long Str_UserInitialWallpaper_DE	; DE
+	.long Str_UserInitialWallpaper_FR	; FR
+	.long Str_UserInitialWallpaper_ES	; ES
+	.long Str_UserInitialWallpaper_IT	; IT
+	.long Str_UserInitialWallpaper_ID	; ID
+Str_UserInitialWallpaper_ID:	aligned_string "USER INITIAL akan menggantikan penggunaan kertas tempel (stiker) yang sekarang dengan sticker/kertas tempel yg hitam-licin dan rata!"
+Str_UserInitialWallpaper_IT:	aligned_string "Italian"
+Str_UserInitialWallpaper_ES:	aligned_string "¡El USER INITIAL cambiará el patrÓn de fondo actual por un \"Plain Black\" (negro sin diseño)!"
+Str_UserInitialWallpaper_FR:	aligned_string "USER INITIAL va remplacer votre fond de l'écran par un fond noir !"
+Str_UserInitialWallpaper_DE:	aligned_string "USER INITIAL ersetzt das aktuelle Hintergrundbild durch eine schwarze Fläche !"
+Str_UserInitialWallpaper_EN:	aligned_string "USER INITIAL will replace the current user wallpaper with the \"Plain Black\" wallpaper!"
+	.short 0, 38, 44, 50, 26, 8, 14, 32, 20, 0, 8, 8, 8, 8, 8
 
 
 ParamStr_Table_06:

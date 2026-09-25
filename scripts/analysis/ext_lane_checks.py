@@ -28,6 +28,10 @@ FAIL and the numbers it saw; exit status is non-zero if any check fails.
   counts     the count words InitializeToshi reads with `ldw_da`: 0xED2D02 = 28,
              0xED2D92 = 8, 0xED2F64 = 26, and the tables they count end in NULL
              after exactly that many entries.
+  lng        the seven language-indexed string tables (LngTable_*): six
+             pointers EN DE FR ES IT ID, the six strings right after them in
+             reverse order, the IT one either the literal "Italian" or a copy
+             of the English one.
   vmaps      the 11 value-map descriptors the table at 0xEE0154 points at:
              {u32 map in 0xED...., u16 count, u8, u16 (+7) < count, 0xFF}.
   widgets    the NAKA widget records 0xED37DA-0xED3C95 are elements 25-62 of
@@ -204,7 +208,30 @@ def vmaps(r):
         bad or "none", zero_hits)
 
 
-CHECKS = {"vmaps": vmaps, "test1": test1, "chord": chord, "sharp": sharp, "class": klass, "objtabs": objtabs, "counts": counts, "widgets": widgets}
+LNG = ((0xED04C4, "ATTENTION!"), (0xED051E, "Using Initial Setting"), (0xED073E, "Are You Sure?"),
+       (0xED07B6, None), (0xED0A74, "Stores sound"), (0xED0B7C, "Stores to total"), (0xED1932, "USER INITIAL"))
+
+
+def lng(r):
+    bad = []
+    for t, en in LNG:
+        ptrs = [r.u32(t + 4 * k) for k in range(6)]
+        x = t + 24
+        for k in range(5, -1, -1):                 # strings follow in reverse order
+            if ptrs[k] != x:
+                bad.append((hex(t), k))
+                break
+            e = r.b.index(b"\0", x - B) + B
+            x = e + 1 + ((e + 1 - x) & 1 and r.u8(e + 1) == 0xFF)
+        if en and not r.cs(ptrs[0]).startswith(en):
+            bad.append((hex(t), "EN"))
+        it = r.cs(ptrs[4])
+        if it != "Italian" and it != r.cs(ptrs[0]):     # placeholder, or an English copy
+            bad.append((hex(t), "IT"))
+    return not bad, "7 tables x 6 languages (EN DE FR ES IT ID), strings in reverse order; failures: %s" % (bad or "none")
+
+
+CHECKS = {"lng": lng, "vmaps": vmaps, "test1": test1, "chord": chord, "sharp": sharp, "class": klass, "objtabs": objtabs, "counts": counts, "widgets": widgets}
 
 
 def main():
