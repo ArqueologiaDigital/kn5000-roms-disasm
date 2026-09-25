@@ -142,7 +142,7 @@ HDAE5000_Menu_Handler:	; 0x28AD48 (248 bytes)
 	call (xhl)
 	ld xbc, (xsp + 20)		; XBC = context
 	ld xwa, 0x007F0298		; event ID
-	calr HDAE5000_UI_Main_Handler
+	calr HDAE5000_UiObj_SetCaption
 	; --- Register display handlers ---
 	ld xwa, 0x01CA0002		; display param
 	push xwa
@@ -225,7 +225,7 @@ HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
 	call (xhl)
 	ld xbc, (xsp + 20)
 	ld xwa, 0x007F0298
-	calr HDAE5000_UI_Main_Handler
+	calr HDAE5000_UiObj_SetCaption
 	; --- Register display handlers ---
 	ld xwa, 0x01CA0002
 	push xwa
@@ -392,7 +392,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	; Register error display handlers
 	ld xbc, (xsp + 0x0e)			; af 0e 21
 	ld xwa, 0x007f029e			; 40 9e 02 7f 00
-	calr HDAE5000_UI_Main_Handler		; 1e xx xx
+	calr HDAE5000_UiObj_SetCaption		; 1e xx xx
 	; Register via +0x0418 vtable (timer handler)
 	ld xwa, 0x01ca0002			; 40 02 00 ca 01
 	push xwa				; 38
@@ -487,7 +487,7 @@ HDAE5000_SaveSongWithUi:	; 0x28B0F1 (271 bytes)
 	call (xhl)
 	ld xbc, (xsp + 40)		; XBC = context (XSP+0x28)
 	ld xwa, 0x007F0298
-	calr HDAE5000_UI_Main_Handler
+	calr HDAE5000_UiObj_SetCaption
 	; --- Register display handlers ---
 	ld xwa, 0x01CA0002
 	push xwa
@@ -736,8 +736,14 @@ HDAE5000_Count_Active_Files__skip:
 	ret
 
 ; --- UI Handler, File Operations, Path/String Utilities ---
-HDAE5000_UI_Main_Handler:	; 0x28B3EA (8731 bytes)
+HDAE5000_UiObj_SetCaption:	; 0x28B3EA
+	; XWA = UI object id, XBC = string: ask the main CPU for the object's
+	; record (workspace 0x0E0A table +0x2C4 -> XHL) and store the string
+	; pointer at +0x16 -- the caption slot of the label records (see the
+	; header of HDAE5000_UiObject_PtrTable's pool).  (Was UI_Main_Handler,
+	; "(8731 bytes)": it is 22 bytes.)
 ; LUIH: 0x28B3EA (8731 bytes)
+	; ^ conversion-region size (local-label prefix .LUIH_), not a routine size.
 
 	push xiz
 	ld	xiz, xbc
@@ -6787,7 +6793,12 @@ HDAE5000_LanguageTextReturn:	; 0x28F2F7
 	; ============================================================
 	; Format + ROM region setup helper
 	; ============================================================
-HDAE5000_Dir_Format_Setup:	; 0x28F308
+HDAE5000_PPORT_Svc28_FlashXapFile:	; 0x28F308
+	; PC-link service 28 (HDAE5000_PPORT_ServiceTable[28]; no trace banner):
+	; builds a descriptor on the stack -- "XAP" (0x2E5DC6), XBC, 0x280000,
+	; 0x2F0000 (this ROM's own range) -- and calls RAM 0x23FEB0 with it;
+	; command 20 is "Send XapFile flash".  Nothing in this ROM puts code at
+	; 0x23FEB0, so what runs there is not established here.
 	lda	xsp, (xsp-24)
 	push xiz
 	ld xiz, xbc			; save XBC in XIZ
@@ -6812,8 +6823,12 @@ HDAE5000_Dir_Format_Setup:	; 0x28F308
 
 	; ============================================================
 	; Vtable helper: call method 0x0538 (flush), return HL=0
+	; ^ "flush" is not established: see the header below.
 	; ============================================================
-HDAE5000_Dir_Flush:		; 0x28F343
+HDAE5000_PPORT_Svc29_MainHook0538:		; 0x28F343
+	; PC-link service 29: call the main-CPU hook 0x0E0A table +0x538 -- the
+	; one HDAE5000_LoadSong/SaveSong call before a long operation when their
+	; UI flag is 1 -- and return HL = 0.
 	ld xwa, (0x23a1a2:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XHL, (xwa + 0x0538)             ; method 0x0538
@@ -6823,8 +6838,11 @@ HDAE5000_Dir_Flush:		; 0x28F343
 
 	; ============================================================
 	; Vtable helper: call method 0x053C (close), return HL=0
+	; ^ "close" is not established: see the header below.
 	; ============================================================
-HDAE5000_Dir_Close:		; 0x28F357
+HDAE5000_PPORT_Svc30_MainHook053C:		; 0x28F357
+	; PC-link service 30: the matching +0x53C hook (called after the
+	; operation); HL = 0.
 	ld xwa, (0x23a1a2:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XHL, (xwa + 0x053c)             ; method 0x053C
@@ -7294,7 +7312,7 @@ HDAE5000_Boot_Init:	; 28F576h
 
 HDAE5000_Boot_Init__skip_hd_init:
 	call HDAE5000_Finalize_Init	; Final setup
-	call HDAE5000_Register_Frame	; Register frame handler
+	call HDAE5000_UiState_Reset	; Register frame handler
 
 	pop xiz
 	ret
@@ -10056,6 +10074,7 @@ HDAE5000_LoadSong_Tlx:	; 0x29103D (1023 bytes)
 	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
 	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 8.
 ; LTS: 0x29103D (1023 bytes)
+	; ^ conversion-region size (local-label prefix .LTS_), not a routine size.
 
 	lda	xsp, (xsp-24)
 	pushw iz                                ; push IZ
@@ -16353,21 +16372,21 @@ HDAE5000_PPORT_ServiceTable:
 .Lpps_handler_28:			; 0x2952B2
 	ld xwa, xbc
 	ld xbc, xde
-	call HDAE5000_Dir_Format_Setup
+	call HDAE5000_PPORT_Svc28_FlashXapFile
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_29:			; 0x2952BE
 	ld xwa, xbc
 	ld xbc, xde
-	call HDAE5000_Dir_Flush
+	call HDAE5000_PPORT_Svc29_MainHook0538
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_30:			; 0x2952CA
 	ld xwa, xbc
 	ld xbc, xde
-	call HDAE5000_Dir_Close
+	call HDAE5000_PPORT_Svc30_MainHook053C
 	ld wa, hl
 	ret
 	nop

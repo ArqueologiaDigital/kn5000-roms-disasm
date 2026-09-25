@@ -56,7 +56,7 @@
 ;   0x28030E  HDAE5000_Get_Display_Dimensions_A1 - Memory allocation parameter check
 ;   0x28033B  HDAE5000_Get_Display_Width_1 - Utility routine
 ;   0x280368  HDAE5000_Get_Display_Width_2 - Utility routine
-;   0x2803C2  HDAE5000_Register_Frame - Register frame handler callback
+;   0x2803C2  HDAE5000_UiState_Reset - Register frame handler callback
 ;   0x28F543  HDAE5000_Alloc_Memory - Display parameter lookup (DISASSEMBLED)
 ;   0x28F570  HDAE5000_Get_Init_Flag - Return HD presence flag (DISASSEMBLED)
 ;
@@ -641,8 +641,15 @@ HDAE5000_BitmapHdd_icon__type_A3:
 ;   0x28B3EA-0x28F542  UI handler, file ops, path/string utilities (16,857 bytes)
 ; ============================================================================
 
-HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
+HDAE5000_UiState_Reset:	; 0x2803C2
+	; Reset the browser selection (0x23A08E, 0x23A092 directory, 0x23A094
+	; song = 0), the load-by-number block 0x22AA58 (template 0x2E1CA2), and
+	; the save-option record 0x22AA4C (template 0x2E1C96, mask 0x1FF, then
+	; "YES" for the parts the selected song holds -- HDAE5000_TypeSel_Init);
+	; ends in HDAE5000_Set_Menu_Visibility(1).  Caller: HDAE5000_Boot_Init.
+	; (Was Register_Frame, "(9266 bytes)".)
 ; LRF: 0x2803C2 (9266 bytes)
+	; ^ conversion-region size (local-label prefix .LRF_), not a routine size.
 
 	ldw	(0x23A08E:24), 0
 	ldw	(0x23A092:24), 0

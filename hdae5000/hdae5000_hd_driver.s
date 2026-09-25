@@ -5625,7 +5625,7 @@ HDAE5000_AttenHDFormatSwCatch_Case6:
 	call (xhl)
 	ld xwa, 0x007f0298
 	ld xbc, 0x007f021a
-	calr HDAE5000_UI_Main_Handler
+	calr HDAE5000_UiObj_SetCaption
 	ld xwa, 0x01ca0002
 	push xwa
 	ld xwa, 0x007f021a

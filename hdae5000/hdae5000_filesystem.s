@@ -2683,7 +2683,7 @@ HDAE5000_FlsEditScreen:
 	call	(xhl)
 	ld	xwa, 0x007f0298
 	ld	xbc, 0x007f0163
-	calr	HDAE5000_UI_Main_Handler
+	calr	HDAE5000_UiObj_SetCaption
 	ld	xwa, 0x01ca0002
 	push xwa
 	ld	xwa, 0x007f0163
@@ -3777,7 +3777,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	call (xhl)
 	ld xwa, 0x007f0298
 	ld xbc, 0x007f00d2
-	calr HDAE5000_UI_Main_Handler
+	calr HDAE5000_UiObj_SetCaption
 	ld xwa, 0x01ca0002
 	push xwa
 	ld xwa, 0x007f00d2
