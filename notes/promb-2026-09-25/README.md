@@ -1,7 +1,7 @@
 # Lane `promb`, 2026-09-25 semantic push — instruments
 
-Every number this lane quotes in a commit message or in
-`notes/FINDINGS-promb-semantic-2026-09-25.md` comes from one of these.  Each
+Every number this lane quotes in a commit message or in its report comes
+from one of these.  Each
 re-derives its claims from the ROM dumps (`wsa1/original_ROMs/`) or the current
 source; none writes a `.s` unless it says `--apply`.
 
