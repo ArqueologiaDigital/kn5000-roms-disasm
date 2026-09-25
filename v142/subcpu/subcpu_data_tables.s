@@ -129,7 +129,7 @@ IRAM_Unreferenced_F00A:
 ; periodic re-init, reset to 0 once it passes 0x0A.
 AudioLoop_ReinitCounter:	.short 0
 ; u8, Timer_AudioTick_Handler (0x01FB41) reads it, increments it and dispatches on the old
-; value 0..5 through OFFSETS_F460; AudioTick_Variant_6 (0x01FB97) resets it to 0.
+; value 0..5 through AudioTick_CaseOffsets; AudioTick_Variant_6 (0x01FB97) resets it to 0.
 AudioTick_Phase:	.byte 0
 	.byte 0xff		; not referenced (high byte of a word slot)
 ; u8, counted 0..7 by AudioTick_Variant_6 (0x01FB97); at 8 it sets bit 5 of (0x103E) and
@@ -321,14 +321,14 @@ Serial1_RxBuf_Struct:	; Struct do buffer de recepção da serial #1
 	.short 0x1FF	; 14
 
 
-; --- 0x00F460-0x00F46B  OFFSETS_F460 -- 6 x u16 jump offsets for the audio tick round-robin
+; --- 0x00F460-0x00F46B  AudioTick_CaseOffsets -- 6 x u16 jump offsets for the audio tick round-robin
 ; Read by Timer_AudioTick_Handler (0x01FB41, hardware vector 21 = INTT1): it keeps a byte counter
 ; at DRAM 0xF014 (61460), gates it to 0..5, doubles it, indexes this table and jumps to
 ; base 0x01FB76 + offset (`lda_24 xix,0x00f460 / ldw_sri BC / lda_24 xix,0x01fb76 / jp_ind`).
 ; Contents 0x0000, 0x0008, 0x000C, 0x0010, 0x0018, 0x0021 -- all six resolve exactly onto existing
 ; symbols: AUDIO_PLAYNOTE_VARIANT_1 (0x01FB76), _VARIANT_2 (0x01FB7E), _VARIANT_3 (0x01FB82),
 ; LABEL_01FB86, LABEL_01FB8E, LABEL_01FB97. That six-way landing is what proves the decoding.
-OFFSETS_F460:
+AudioTick_CaseOffsets:
 	.short Audio_PlayNote_Variant_1 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_1
 	.short Audio_PlayNote_Variant_2 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_2
 	.short Audio_PlayNote_Variant_3 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_3
@@ -781,7 +781,7 @@ Voice_Selector_FieldSlot_Table:
 ;  "region" it was outside of was that proposal's code region, not this file.)
 ; FIVE adjacent u16 tables consumed by Voice_Selector_ComputeMixWeights (0x02AD03).  They
 ; tile the span exactly and end where Voice_Portamento_Rate_Table begins at 0x00F7E6:
-;   0x00F786  Const_Zero_Byte (+PitchDetune_OffsetTable)  10 entries, COUNT -> part+0x10E
+;   0x00F786  Voice_Part_Trim_Table_A (was Const_Zero_Byte + PitchDetune_OffsetTable)  10 entries, COUNT -> part+0x10E
 ;   0x00F79A  Voice_Part_Trim_Table_B                      9 entries, INDEX -> part+0x112
 ;   0x00F7AC  Voice_Part_Trim_Addend_1                     9 entries, INDEX  ]
 ;   0x00F7BE  Voice_Part_Trim_Addend_2                    10 entries, VALUE  }- summed into
@@ -792,8 +792,13 @@ Voice_Selector_FieldSlot_Table:
 ; code does not make: COUNT is bounded to 0..9 by the producer loop, but INDEX can come back
 ; as 0xFF and VALUE is an unclamped nibble.  The consumer's header in
 ; kn5000_subprogram_v142.s spells out all three cases.
-Const_Zero_Byte:
-	.byte 0x00
+; ★ 2026-09-25: the 20-byte table is now one object.  It used to be `Const_Zero_Byte: .byte 0x00`
+; here plus 19 bytes under a second label, PitchDetune_OffsetTable, at 0x00F787 -- the middle of
+; entry 0, referenced by nothing.  Relabelled Voice_Part_Trim_Table_A after its siblings
+; (Voice_Part_Trim_Table_B ...), typed as the 10 x s16 its reader loads (`ldw_sri`), and the
+; mid-entry label dropped.
+Voice_Part_Trim_Table_A:
+	.short 0, 0, -1, -2, -3, -4, -5, -6, -7, -8
 
 ; --- 0x00F787-0x012158  formerly one 10 KiB blob under PitchDetune_OffsetTable -- NOW SPLIT
 ; The name used to cover everything between two named symbols while the code indexes 60+
@@ -814,10 +819,6 @@ Const_Zero_Byte:
 ;   0x0118FE           Voice_EnvelopeLevel_Curve (38 references, hottest object confirmed)
 ;   0x011963/0x0119C8/0x011ACF/0x011ADF/0x011D16/0x011E16  named per-part tables below
 ;   0x012115-0x012158  the tone-generator voice template (own entry below)
-PitchDetune_OffsetTable:
-	.byte 0x00, 0x00, 0x00, 0xff, 0xff, 0xfe, 0xff, 0xfd, 0xff
-	.byte 0xfc, 0xff, 0xfb, 0xff, 0xfa, 0xff, 0xf9, 0xff
-	.byte 0xf8, 0xff
 ; 9 x s16 -> DRAM 0x04147A + part*0x11F (in Voice_Selector_ComputeMixWeights, 0x02AD03),
 ; same idiom as 0x00F786.
 ; Values -3072, 0, 1792, 3072, 4864, 6144, 7168, 7936, 9216 = 256 * (-12, 0, +7, +12, +19, +24,
@@ -1199,9 +1200,9 @@ SlotEnableMaskA:
 SlotEnableMaskB:
 	.short 0x0002, 0x0008, 0x0020, 0x0080
 
-; --- 0x00FB66-0x00FB7D  AlgoJumpTable1 -- 12 u16 jump offsets, base 0x033812
+; --- 0x00FB66-0x00FB7D  DSP_AlgoType_Dispatch1_CaseOffsets -- 12 u16 jump offsets, base 0x033812
 ; Computed jump in DSP_AlgoType_Dispatch1 (algorithm type 0..0x0B): `jp T, 0x033812 + table[index*2]`.
-AlgoJumpTable1:
+DSP_AlgoType_Dispatch1_CaseOffsets:
 	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 0
 	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 1
 	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 2
@@ -1215,9 +1216,9 @@ AlgoJumpTable1:
 	.short DSP_AlgoType_D1_Arm_TypeAB - DSP_AlgoType_Dispatch1_Arms	; index 10
 	.short DSP_AlgoType_D1_Arm_TypeAB - DSP_AlgoType_Dispatch1_Arms	; index 11
 
-; --- 0x00FB7E-0x00FB95  AlgoJumpTable2 -- 12 u16 jump offsets, base 0x0339DE
+; --- 0x00FB7E-0x00FB95  DSP_AlgoType_Dispatch2_CaseOffsets -- 12 u16 jump offsets, base 0x0339DE
 ; Computed jump in DSP_AlgoType_Dispatch2 (algorithm type 0..0x0B): `jp T, 0x0339DE + table[index*2]`.
-AlgoJumpTable2:
+DSP_AlgoType_Dispatch2_CaseOffsets:
 	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 0
 	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 1
 	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 2
@@ -1231,9 +1232,9 @@ AlgoJumpTable2:
 	.short DSP_AlgoType_D2_Arm_TypeAB - DSP_AlgoType_Dispatch2_Arms	; index 10
 	.short DSP_AlgoType_D2_Arm_TypeAB - DSP_AlgoType_Dispatch2_Arms	; index 11
 
-; --- 0x00FB96-0x00FBAD  AlgoJumpTable3 -- 12 u16 jump offsets, base 0x033E44
+; --- 0x00FB96-0x00FBAD  DSP_AlgoType_Dispatch3_CaseOffsets -- 12 u16 jump offsets, base 0x033E44
 ; Computed jump in DSP_AlgoType_Dispatch3 (algorithm type 0..0x0B; types 6, 8, 9 land on the bare ret): `jp T, 0x033E44 + table[index*2]`.
-AlgoJumpTable3:
+DSP_AlgoType_Dispatch3_CaseOffsets:
 	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 0
 	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 1
 	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 2
@@ -1247,9 +1248,9 @@ AlgoJumpTable3:
 	.short DSP_AlgoType_D3_Arm_TypeAB - DSP_AlgoType_D3_Arm_Types0to5_7	; index 10
 	.short DSP_AlgoType_D3_Arm_TypeAB - DSP_AlgoType_D3_Arm_Types0to5_7	; index 11
 
-; --- 0x00FBAE-0x00FBBF  AlgoJumpTable4 -- 9 u16 jump offsets, base 0x0340CC
+; --- 0x00FBAE-0x00FBBF  Algo_SubTable_DispatchB_CaseOffsets -- 9 u16 jump offsets, base 0x0340CC
 ; Computed jump in Algo_SubTable_DispatchB (algorithm type 0..8): `jp T, 0x0340CC + table[index*2]`.
-AlgoJumpTable4:
+Algo_SubTable_DispatchB_CaseOffsets:
 	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 0
 	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 1
 	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 2
@@ -1260,9 +1261,9 @@ AlgoJumpTable4:
 	.short Algo_SubTable_DispatchB_Return - Algo_SubTable_JumpTable1	; index 7
 	.short Algo_SubTable_DispatchB_Arm_Type8 - Algo_SubTable_JumpTable1	; index 8
 
-; --- 0x00FBC0-0x00FBD1  AlgoJumpTable5 -- 9 u16 jump offsets, base 0x0341BE
+; --- 0x00FBC0-0x00FBD1  Algo_SubTable_DispatchC_CaseOffsets -- 9 u16 jump offsets, base 0x0341BE
 ; Computed jump in Algo_SubTable_DispatchC (algorithm type 0..8): `jp T, 0x0341BE + table[index*2]`.
-AlgoJumpTable5:
+Algo_SubTable_DispatchC_CaseOffsets:
 	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 0
 	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 1
 	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 2
@@ -1273,9 +1274,9 @@ AlgoJumpTable5:
 	.short Algo_SubTable_Epilogue - Algo_SubTable_JumpTable2	; index 7
 	.short Algo_SubTable_DispatchC_Arm_Type68 - Algo_SubTable_JumpTable2	; index 8
 
-; --- 0x00FBD2-0x00FBE3  AlgoJumpTable6 -- 9 u16 jump offsets, base 0x03429D
+; --- 0x00FBD2-0x00FBE3  Algo_SubTable_Bit15Dispatch_CaseOffsets -- 9 u16 jump offsets, base 0x03429D
 ; Computed jump in Algo_SubTable_Bit15Dispatch (algorithm type 0..8): `jp T, 0x03429D + table[index*2]`.
-AlgoJumpTable6:
+Algo_SubTable_Bit15Dispatch_CaseOffsets:
 	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 0
 	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 1
 	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 2

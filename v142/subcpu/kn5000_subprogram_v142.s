@@ -226,7 +226,7 @@ Timer_AudioTick_Handler:
 	cp bc, 5:i3
 	jr gt, AudioTick_Done
 	add bc, bc
-	lda xix, (OFFSETS_F460:24)
+	lda xix, (AudioTick_CaseOffsets:24)
 	ldw_sri BC, 0x07, 0xF0, 0xE4
 	lda xix, (Audio_PlayNote_Variant_1:24)
 	jp_ind 8, 0x07, 0xF0, 0xE4
@@ -23089,7 +23089,7 @@ Voice_Selector_FindBestSlot_Exit:
 ; (0x00F786+0x14 = 0x00F79A, 0x00F79A+0x12 = 0x00F7AC, 0x00F7AC+0x12 = 0x00F7BE,
 ; 0x00F7BE+0x14 = 0x00F7D2, 0x00F7D2+0x14 = 0x00F7E6), so the five spans tile
 ; 0x00F786-0x00F7E5 exactly and end where Voice_Portamento_Rate_Table begins.  Their
-; labels are Const_Zero_Byte (+PitchDetune_OffsetTable) / Voice_Part_Trim_Table_B /
+; labels are Voice_Part_Trim_Table_A (was Const_Zero_Byte + PitchDetune_OffsetTable) / Voice_Part_Trim_Table_B /
 ; Voice_Part_Trim_Addend_1 / Voice_Part_Trim_Addend_2 / Voice_Part_Trim_Base.
 ; ★ CORRECTED: this used to read "The four tables are exactly 10/9/9/10 entries ... which
 ; is what pins COUNT to 0..9 and INDEX to 0..8".  The fifth table (0x00F7D2, loaded two
@@ -23135,7 +23135,7 @@ Voice_Selector_ComputeMixWeights:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
-	lda xbc, (Const_Zero_Byte:24)
+	lda xbc, (Voice_Part_Trim_Table_A:24)
 	ldw_sri WA, 0x07, 0xE4, 0xE0
 	stw_dri WA, 0x07, 0xEC, 0xE8
 	ld a, (xsp + 6)
@@ -39570,7 +39570,7 @@ AlgoType_StateWrite_Epilogue:
 ; Inputs: A = part index, C = channel (0 or 1).  Output: HL, and the store.
 ; Reads algorithm type = descriptor[0x5D] & 0x0F into B.  Types outside 0..0x0B fall straight
 ; through to the store with HL = 0 (i.e. "no coefficient").  Otherwise it takes a computed
-; jump: `jp T, 0x033812 + AlgoJumpTable1[type]` with AlgoJumpTable1 at 0x00FB66.
+; jump: `jp T, 0x033812 + DSP_AlgoType_Dispatch1_CaseOffsets[type]` with DSP_AlgoType_Dispatch1_CaseOffsets at 0x00FB66.
 ; Each arm reads a per-algorithm selector byte from 0x010FCE + 6*type + 2*channel, then uses
 ; it as a 0x66-byte stride into the word table at 0x011346, sub-indexed by 2*descriptor[0x5E]
 ; (or [0x60] for the second channel), and optionally ORs in a word from 0x011511.
@@ -39591,7 +39591,7 @@ DSP_AlgoType_Dispatch1:
 	cp de, 0xB
 	jrl gt, DSP_AlgoType_Dispatch1_Store
 	add de, de
-	lda xix, (AlgoJumpTable1:24)
+	lda xix, (DSP_AlgoType_Dispatch1_CaseOffsets:24)
 	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda xix, (DSP_AlgoType_Dispatch1_Arms:24)
 	jp_ind 8, 0x07, 0xF0, 0xE8
@@ -39632,7 +39632,7 @@ DSP_AlgoType_Dispatch1_Arms:
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
 	jrl	DSP_AlgoType_Dispatch1_Store
-; Arm for algorithm types 4, 5 and 7 (AlgoJumpTable1 offset 0x52).  Splits on the channel:
+; Arm for algorithm types 4, 5 and 7 (DSP_AlgoType_Dispatch1_CaseOffsets offset 0x52).  Splits on the channel:
 ; channel 0 uses descriptor[0x5E], channel 1 uses descriptor[0x60]; any other channel returns
 ; HL = 0.  No symbol exists here because the block was emitted as .byte.
 DSP_AlgoType_D1_Arm_Type457:
@@ -39687,7 +39687,7 @@ DSP_AlgoType_D1_Arm_Type457_Ch1:
 	add	xde, xhl
 	ld_rrw	hl, xde, ix
 	jrl	DSP_AlgoType_Dispatch1_Store
-; Arm for algorithm types 0x0A and 0x0B (AlgoJumpTable1 offset 0xE1).  If the selector byte is
+; Arm for algorithm types 0x0A and 0x0B (DSP_AlgoType_Dispatch1_CaseOffsets offset 0xE1).  If the selector byte is
 ; 0xFF the coefficient lookup is skipped; either way it then ORs in a word from 0x011511
 ; indexed by the top two bits of the algorithm-descriptor byte at 0x011E16 + 0x27*type +
 ; 3*channel + 0x02.
@@ -39743,7 +39743,7 @@ DSP_AlgoType_D1_Arm_TypeAB_Or:
 	or_sriw_rm	hl, 7, 240, 232
 
 ; Common store: (part + 0x57 + 4*channel) = HL.  Also the no-op arm for types 6, 8 and 9
-; (AlgoJumpTable1 offset 0x16C lands exactly here, leaving HL = 0).
+; (DSP_AlgoType_Dispatch1_CaseOffsets offset 0x16C lands exactly here, leaving HL = 0).
 DSP_AlgoType_Dispatch1_Store:
 	extz bc
 	sla bc, 2
@@ -39778,7 +39778,7 @@ DSP_AlgoType_Dispatch2:
 	cp de, 0xB
 	jrl gt, DSP_AlgoType_Dispatch2_Store
 	add de, de
-	lda xix, (AlgoJumpTable2:24)
+	lda xix, (DSP_AlgoType_Dispatch2_CaseOffsets:24)
 	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda xix, (DSP_AlgoType_Dispatch2_Arms:24)
 	jp_ind 8, 0x07, 0xF0, 0xE8
@@ -40235,7 +40235,7 @@ Voice_SecondaryParam_Epilogue:
 
 ; Input A = part index, C = channel, E = a sub-selector.  Returns HL = 0x0000, 0x0040 or
 ; 0x00C0 -- a two-bit routing/level field for the effect's send.
-; Computed jump `jp T, 0x033E44 + AlgoJumpTable3[type]`, table at 0x00FB96; types 6, 8 and 9
+; Computed jump `jp T, 0x033E44 + DSP_AlgoType_Dispatch3_CaseOffsets[type]`, table at 0x00FB96; types 6, 8 and 9
 ; land on the bare `ret` at 0x033F73 (HL = 0).
 ; Every arm reads a flag byte out of the algorithm-descriptor sub-record at
 ; 0x011E16 + 0x27*type + 0x13 + 5*channel and combines it with descriptor[0x5D] bit 6.
@@ -40256,7 +40256,7 @@ DSP_AlgoType_Dispatch3:
 	cp iy, 0xB
 	ret gt
 	add iy, iy
-	lda xix, (AlgoJumpTable3:24)
+	lda xix, (DSP_AlgoType_Dispatch3_CaseOffsets:24)
 	ldw_sri IY, 0x07, 0xF0, 0xF4
 	lda xix, (DSP_AlgoType_D3_Arm_Types0to5_7:24)
 	jp_ind 8, 0x07, 0xF0, 0xF4
@@ -40351,7 +40351,7 @@ DSP_AlgoType_D3_ENZ_Bit2Clear:
 DSP_AlgoType_D3_ENZ_DescBit6Clear:
 	ldw	hl, 0x0040
 	jr	t, DSP_AlgoType_D3_Return
-; Arm for algorithm types 0x0A and 0x0B (AlgoJumpTable3 offset 0xE7).  Returns immediately for
+; Arm for algorithm types 0x0A and 0x0B (DSP_AlgoType_Dispatch3_CaseOffsets offset 0xE7).  Returns immediately for
 ; E != 0 or descriptor[0x5E] == 0; otherwise 0x00C0 / 0x0040 on sub-record bit 3.
 ; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
 ; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
@@ -40497,7 +40497,7 @@ Algo_SubTable_DispatchA:
 	ret
 
 ; Same shape as DispatchA but reads sub-record byte +0x02, then post-processes it through a
-; computed jump `jp T, 0x0340CC + AlgoJumpTable4[type]` (table 0x00FBAE, 9 entries).
+; computed jump `jp T, 0x0340CC + Algo_SubTable_DispatchB_CaseOffsets[type]` (table 0x00FBAE, 9 entries).
 ; The arms replace L with 2*descriptor[0x60] (types 0..3), 2*descriptor[0x62] (types 4/5),
 ; 2*descriptor[0x5F] (type 8), or leave the sub-record byte untouched (types 6/7).
 ; All arms require C == 1; for any other sub-slot the sub-record byte is returned as-is.
@@ -40531,7 +40531,7 @@ Algo_SubTable_DispatchB:
 	cp de, 0x8
 	ret gt
 	add de, de
-	lda xix, (AlgoJumpTable4:24)
+	lda xix, (Algo_SubTable_DispatchB_CaseOffsets:24)
 	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda xix, (Algo_SubTable_JumpTable1:24)
 	jp_ind 8, 0x07, 0xF0, 0xE8
@@ -40612,7 +40612,7 @@ Algo_SubTable_PanTrim_From_PartFlags_Return:
 
 ; Input A = part index, C = sub-slot.  Returns L.
 ; Base value = sub-record byte +0x03 (0x011E16 + 0x27*type + 0x13 + 5*C + 0x03), then a
-; computed jump `jp T, 0x0341BE + AlgoJumpTable5[type]` (table 0x00FBC0, 9 entries) adjusts it:
+; computed jump `jp T, 0x0341BE + Algo_SubTable_DispatchC_CaseOffsets[type]` (table 0x00FBC0, 9 entries) adjusts it:
 ;   types 0..3 : if C == 1 the base is replaced by descriptor[0x62] - 0x64, then
 ;                Algo_SubTable_PanTrim_From_PartFlags is ADDED
 ;   types 4/5  : the base is REPLACED by Algo_SubTable_PanTrim_From_PartFlags
@@ -40650,7 +40650,7 @@ Algo_SubTable_DispatchC:
 	cp de, 0x8
 	jr gt, Algo_SubTable_Epilogue
 	add de, de
-	lda xix, (AlgoJumpTable5:24)
+	lda xix, (Algo_SubTable_DispatchC_CaseOffsets:24)
 	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda xix, (Algo_SubTable_JumpTable2:24)
 	jp_ind 8, 0x07, 0xF0, 0xE8
@@ -40707,7 +40707,7 @@ Algo_SubTable_Epilogue:
 
 ; Input A = part index, C = sub-slot.  Returns L = 0 immediately unless part+0x0A bit 15 is set.
 ; Otherwise: base = sub-record byte +0x04, then a computed jump
-; `jp T, 0x03429D + AlgoJumpTable6[type]` (table 0x00FBD2, 9 entries) may replace it with a
+; `jp T, 0x03429D + Algo_SubTable_Bit15Dispatch_CaseOffsets[type]` (table 0x00FBD2, 9 entries) may replace it with a
 ; byte from the 0x0114DE lookup table indexed by descriptor[0x61] (types 0..3),
 ; descriptor[0x63] (types 4/5) or descriptor[0x5E] (type 8); types 6 and 7 return the base.
 ; Every replacement arm requires C == 1.
@@ -40748,7 +40748,7 @@ Algo_SubTable_Bit15Dispatch:
 	cp de, 0x8
 	ret gt
 	add de, de
-	lda xix, (AlgoJumpTable6:24)
+	lda xix, (Algo_SubTable_Bit15Dispatch_CaseOffsets:24)
 	ldw_sri DE, 0x07, 0xF0, 0xE8
 	lda xix, (Algo_SubTable_JumpTable3:24)
 	jp_ind 8, 0x07, 0xF0, 0xE8
