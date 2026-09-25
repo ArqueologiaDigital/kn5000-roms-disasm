@@ -7739,7 +7739,7 @@ DL_F03455:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F03478	; +0x07 -> XIY: string table
+	.long DLText_FixMove	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x16E6	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -7766,7 +7766,7 @@ DL_F03455:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F03478 -- 32 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF03478-0xF03497 -- 32 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F03478 appears as a 32-bit word at 0xF0345C 0xF5C0CB;
 ;               converted code at 0xF5C0CA loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
@@ -7774,13 +7774,40 @@ DL_F03455:
 ; Measured: 62% printable ASCII; a linear decode runs 11 instructions and ends
 ;           `ld IX,0x00f0`, with 16% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F03478:
-	.byte	0x46, 0x49, 0x58, 0x20, 0x4D, 0x4F, 0x56, 0x45, 0x41, 0x34, 0xF0, 0x00, 0x55, 0x34, 0xF0, 0x00	; F03478  |FIX MOVEA4..U4..|
-	.byte	0x6E, 0x34, 0xF0, 0x00, 0x6E, 0x34, 0xF0, 0x00, 0x41, 0x34, 0xF0, 0x00, 0x4B, 0x34, 0xF0, 0x00	; F03488  |n4..n4..A4..K4..|
+; DLText_FixMove -- 0xF03478-0xF0347F, 2 entries of 4 bytes, text drawn by
+;   LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02 record at
+;   0xF03455 ((0x27A7) AND 0x80 >> 7) -- value = (byte at the +2 address)
+;   AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 4 as the width.
+;   Entry count: the 2 values the readers' masks admit (the bytes after that
+;   are not indexed by them).  This address is also the END of a display
+;   list: `ld XIY,0xF03441 / ld XIX,this / call T_DisplayListB_Run` at
+;   0xF5C0CA.
+; --------------------------------------------------------------------------
+DLText_FixMove:
+	.ascii	"FIX "	; F03478  [0]
+	.ascii	"MOVE"	; F0347C  [1]
+; --------------------------------------------------------------------------
+; DLBRecordPtrs_F03480 -- 0xF03480-0xF03497, 6 32-bit pointers, each to the
+;   first byte of an interpreter-B record.  Read by
+;   RunDisplayListBFromPointerArray (0xF09AE1: `sla 2,WA / add XIY,XWA / ld
+;   XIY,(XIY)`, then ONE record is run) with XIY = this address at 0xF5CD14.
+;   Entry count: the distance to the object's end over 4 -- the reader
+;   indexes by A and does not bound it.
+; --------------------------------------------------------------------------
+DLBRecordPtrs_F03480:
+	.long	DL_P0siti0n	; F03480  [0]
+	.long	DL_F03455	; F03484  [1]
+	.long	DL_F03455 + 0x19	; F03488  [2]
+	.long	DL_F03455 + 0x19	; F0348C  [3]
+	.long	DL_P0siti0n	; F03490  [4]
+	.long	DL_P0siti0n + 0xA	; F03494  [5]
 
 ; === END COVER-R1 0xF03478-0xF03498 ===
 
@@ -7818,7 +7845,7 @@ DL_F034AD:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F034C6 + 0xC	; +0x07 -> XIY: string table
+	.long DLText_OffOn	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x15CD	; +0x0D -> IX
 
@@ -7831,7 +7858,7 @@ DL_F034AD:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F034C6 -- 24 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF034C6-0xF034DD -- 24 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F034C6 appears as a 32-bit word at 0xF5C101 0xF5CD2D
 ;               0xF5CD3D; converted code at 0xF5C100 0xF5CD2C 0xF5CD3C loads
 ;               it as a 32-bit immediate.  No routine-directory slot and no
@@ -7839,13 +7866,52 @@ DL_F034AD:
 ; Measured: 62% printable ASCII; a linear decode runs 9 instructions and ends
 ;           `ld XIZ,0x204e4f46`, with 21% of the bytes in spellings llvm-mc
 ;           will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F034C6:
-	.byte	0x98, 0x34, 0xF0, 0x00, 0xA3, 0x34, 0xF0, 0x00, 0xAD, 0x34, 0xF0, 0x00, 0x4F, 0x46, 0x46, 0x20	; F034C6  |.4...4...4..OFF |
-	.byte	0x4F, 0x4E, 0x4F, 0x46, 0x46, 0x4F, 0x4E, 0x20	; F034D6  |ONOFFON |
+; DLBRecordPtrs_F034C6 -- 0xF034C6-0xF034D1, 3 32-bit pointers, each to the
+;   first byte of an interpreter-B record.  Read by
+;   RunDisplayListBFromPointerArray (0xF09AE1: `sla 2,WA / add XIY,XWA / ld
+;   XIY,(XIY)`, then ONE record is run) with XIY = this address at 0xF5CD3C.
+;   Entry count: the distance to the first table over 4 -- the reader
+;   indexes by A and does not bound it.  This address is also the END of a
+;   display list: `ld XIY,0xF03498 / ld XIX,this / call T_DisplayListB_Run`
+;   at 0xF5C100; `ld XIY,0xF034AD / ld XIX,this / call T_DisplayListB_Run`
+;   at 0xF5CD2C.
+; --------------------------------------------------------------------------
+DLBRecordPtrs_F034C6:
+	.long	DL_F03498	; F034C6  [0]
+	.long	DL_F03498 + 0xB	; F034CA  [1]
+	.long	DL_F034AD	; F034CE  [2]
+; --------------------------------------------------------------------------
+; DLText_OffOn -- 0xF034D2-0xF034D7, 2 entries of 3 bytes, text drawn by
+;   LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02 records at
+;   0xF034B7 ((0x27A8) AND 0x80 >> 7), 0xF053ED ((0x27A9) AND 0x80 >> 7),
+;   0xF33858 ((0x27A6) AND 0x20 >> 5) -- value = (byte at the +2 address)
+;   AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 3 as the width.
+;   Entry count: the distance to the next table over the width; the masks
+;   admit 2.
+; --------------------------------------------------------------------------
+DLText_OffOn:
+	.ascii	"OFF"	; F034D2  [0]
+	.ascii	" ON"	; F034D5  [1]
+; --------------------------------------------------------------------------
+; DLText_OffOn_F034D8 -- 0xF034D8-0xF034DD, 2 entries of 3 bytes, text drawn
+;   by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02 records
+;   at 0xF034F3 ((0x27A8) AND 0x80 >> 7), 0xF0352D ((0x27AC) AND 0x80 >> 7),
+;   0xF06508 ((0x27A8) AND 0x0F >> 0), 0xF06535 ((0x27AB) AND 0x0F >> 0) and
+;   1 more -- value = (byte at the +2 address) AND mask >> shift -- whose
+;   +0x07 names this address; DLB_Handler_StringTable draws entry [value]
+;   with +0x0B = 3 as the width.  Entry count: the distance to the object's
+;   end over the width; the masks admit 16.
+; --------------------------------------------------------------------------
+DLText_OffOn_F034D8:
+	.ascii	"OFF"	; F034D8  [0]
+	.ascii	"ON "	; F034DB  [1]
 
 ; === END COVER-R1 0xF034C6-0xF034DE ===
 
@@ -7876,7 +7942,7 @@ DL_F034E8:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F034D8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x187A	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -7916,7 +7982,7 @@ DL_F03522:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F034D8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D52	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -8150,7 +8216,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1870	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -8158,7 +8224,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1875	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -8166,7 +8232,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x187A	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -8182,7 +8248,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D48	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -8190,7 +8256,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D4D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -8198,7 +8264,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D52	; +0x0D -> IX
 DL_F036A3:
@@ -11511,7 +11577,7 @@ DL_F04D43:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F05CF8	; +0x07 -> XIY: string table
+	.long DLText_Frequencies65HzTo48K	; +0x07 -> XIY: string table
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x2289	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -11519,7 +11585,7 @@ DL_F04D43:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F04DA3 + 0x14	; +0x07 -> XIY: string table
+	.long DLText_Minus6ToPlus9By3	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x228F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -11527,7 +11593,7 @@ DL_F04D43:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F05CF8	; +0x07 -> XIY: string table
+	.long DLText_Frequencies65HzTo48K	; +0x07 -> XIY: string table
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x22A5	; +0x0D -> IX
 ; DL_LowHigh -- the display list at 0xF04D85, named by mechanism M2 of
@@ -11552,7 +11618,7 @@ DL_LowHigh:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F04DA3 + 0x32	; +0x07 -> XIY: string table
+	.long DLText_DashesMinus6ToPlus6	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22AA	; +0x0D -> IX
 
@@ -11565,7 +11631,7 @@ DL_LowHigh:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F04DA3 -- 92 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF04DA3-0xF04DFE -- 92 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F04DA3 appears as a 32-bit word at 0xF5C90D 0xF5C9C5
 ;               0xF5D0B8 0xF5D0C8 0xF5D0E0 +1 more; converted code at 0xF5C90C
 ;               0xF5C9C4 0xF5D0B7 0xF5D0C7 loads it as a 32-bit immediate.  No
@@ -11574,17 +11640,87 @@ DL_LowHigh:
 ; Measured: 89% printable ASCII; a linear decode runs 39 instructions and ends
 ;           `ld IZ,0x0000`, with 11% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F04DA3:
-	.byte	0x43, 0x4D, 0xF0, 0x00, 0x4E, 0x4D, 0xF0, 0x00, 0x58, 0x4D, 0xF0, 0x00, 0x67, 0x4D, 0xF0, 0x00	; F04DA3  |CM..NM..XM..gM..|
-	.byte	0x76, 0x4D, 0xF0, 0x00, 0x2D, 0x36, 0x2D, 0x33, 0x20, 0x30, 0x2B, 0x33, 0x2B, 0x36, 0x2B, 0x39	; F04DB3  |vM..-6-3 0+3+6+9|
-	.byte	0x2D, 0x31, 0x32, 0x2D, 0x20, 0x36, 0x20, 0x20, 0x30, 0x2B, 0x20, 0x36, 0x2B, 0x31, 0x32, 0x2B	; F04DC3  |-12- 6  0+ 6+12+|
-	.byte	0x31, 0x38, 0x20, 0x2D, 0x2D, 0x20, 0x2D, 0x36, 0x20, 0x2D, 0x35, 0x20, 0x2D, 0x34, 0x20, 0x2D	; F04DD3  |18 -- -6 -5 -4 -|
-	.byte	0x33, 0x20, 0x2D, 0x32, 0x20, 0x2D, 0x31, 0x20, 0x20, 0x30, 0x20, 0x2B, 0x31, 0x20, 0x2B, 0x32	; F04DE3  |3 -2 -1  0 +1 +2|
-	.byte	0x20, 0x2B, 0x33, 0x20, 0x2B, 0x34, 0x20, 0x2B, 0x35, 0x20, 0x2B, 0x36	; F04DF3  | +3 +4 +5 +6|
+; DLBRecordPtrs_F04DA3 -- 0xF04DA3-0xF04DB6, 5 32-bit pointers, each to the
+;   first byte of an interpreter-B record.  Read by
+;   RunDisplayListBFromPointerArray (0xF09AE1: `sla 2,WA / add XIY,XWA / ld
+;   XIY,(XIY)`, then ONE record is run) with XIY = this address at 0xF5D0C7,
+;   0xF5D0EF.  Entry count: the distance to the first table over 4 -- the
+;   reader indexes by A and does not bound it.  This address is also the END
+;   of a display list: `ld XIY,0xF04D43 / ld XIX,this / call
+;   T_DisplayListB_Run` at 0xF5C90C; `ld XIY,0xF04D43 / ld XIX,this / call
+;   T_DisplayListB_Run` at 0xF5C9C4; `ld XIY,0xF04D85 / ld XIX,this / call
+;   T_DisplayListB_Run` at 0xF5D0B7; `ld XIY,0xF04D85 / ld XIX,this / call
+;   T_DisplayListB_Run` at 0xF5D0DF.
+; --------------------------------------------------------------------------
+DLBRecordPtrs_F04DA3:
+	.long	DL_F04D43	; F04DA3  [0]
+	.long	DL_F04D43 + 0xB	; F04DA7  [1]
+	.long	DL_F04D43 + 0x15	; F04DAB  [2]
+	.long	DL_F04D43 + 0x24	; F04DAF  [3]
+	.long	DL_F04D43 + 0x33	; F04DB3  [4]
+; --------------------------------------------------------------------------
+; DLText_Minus6ToPlus9By3 -- 0xF04DB7-0xF04DC2, 6 entries of 2 bytes, text
+;   drawn by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02
+;   records at 0xF04D67 ((0x27A9) AND 0x07 >> 0), 0xF04E66 ((0x27A9) AND
+;   0x07 >> 0), 0xF04E84 ((0x27AB) AND 0x07 >> 0) -- value = (byte at the +2
+;   address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 2 as the width.
+;   Entry count: the distance to the next table over the width; the masks
+;   admit 8.
+; --------------------------------------------------------------------------
+DLText_Minus6ToPlus9By3:
+	.ascii	"-6"	; F04DB7  [0]
+	.ascii	"-3"	; F04DB9  [1]
+	.ascii	" 0"	; F04DBB  [2]
+	.ascii	"+3"	; F04DBD  [3]
+	.ascii	"+6"	; F04DBF  [4]
+	.ascii	"+9"	; F04DC1  [5]
+; --------------------------------------------------------------------------
+; DLText_Minus12ToPlus18By6 -- 0xF04DC3-0xF04DD4, 6 entries of 3 bytes, text
+;   drawn by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02
+;   record at 0xF04E23 ((0x27A9) AND 0x07 >> 0) -- value = (byte at the +2
+;   address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 3 as the width.
+;   Entry count: the distance to the next table over the width; the masks
+;   admit 8.
+; --------------------------------------------------------------------------
+DLText_Minus12ToPlus18By6:
+	.ascii	"-12"	; F04DC3  [0]
+	.ascii	"- 6"	; F04DC6  [1]
+	.ascii	"  0"	; F04DC9  [2]
+	.ascii	"+ 6"	; F04DCC  [3]
+	.ascii	"+12"	; F04DCF  [4]
+	.ascii	"+18"	; F04DD2  [5]
+; --------------------------------------------------------------------------
+; DLText_DashesMinus6ToPlus6 -- 0xF04DD5-0xF04DFE, 14 entries of 3 bytes,
+;   text drawn by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B
+;   op-0x02 record at 0xF04D94 ((0x27AB) AND 0x7F >> 0) -- value = (byte at
+;   the +2 address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 3 as the width.
+;   Entry count: the distance to the object's end over the width; the masks
+;   admit 128.
+; --------------------------------------------------------------------------
+DLText_DashesMinus6ToPlus6:
+	.ascii	" --"	; F04DD5  [0]
+	.ascii	" -6"	; F04DD8  [1]
+	.ascii	" -5"	; F04DDB  [2]
+	.ascii	" -4"	; F04DDE  [3]
+	.ascii	" -3"	; F04DE1  [4]
+	.ascii	" -2"	; F04DE4  [5]
+	.ascii	" -1"	; F04DE7  [6]
+	.ascii	"  0"	; F04DEA  [7]
+	.ascii	" +1"	; F04DED  [8]
+	.ascii	" +2"	; F04DF0  [9]
+	.ascii	" +3"	; F04DF3  [10]
+	.ascii	" +4"	; F04DF6  [11]
+	.ascii	" +5"	; F04DF9  [12]
+	.ascii	" +6"	; F04DFC  [13]
 
 ; === END COVER-R1 0xF04DA3-0xF04DFF ===
 
@@ -11614,7 +11750,7 @@ DL_F04DFF:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F05CF8	; +0x07 -> XIY: string table
+	.long DLText_Frequencies65HzTo48K	; +0x07 -> XIY: string table
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -11622,7 +11758,7 @@ DL_F04DFF:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F04DA3 + 0x20	; +0x07 -> XIY: string table
+	.long DLText_Minus12ToPlus18By6	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 
@@ -11687,7 +11823,7 @@ DL_F04E42:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F05CF8	; +0x07 -> XIY: string table
+	.long DLText_Frequencies65HzTo48K	; +0x07 -> XIY: string table
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x228C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -11695,7 +11831,7 @@ DL_F04E42:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F04DA3 + 0x14	; +0x07 -> XIY: string table
+	.long DLText_Minus6ToPlus9By3	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -11703,7 +11839,7 @@ DL_F04E42:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F05CF8	; +0x07 -> XIY: string table
+	.long DLText_Frequencies65HzTo48K	; +0x07 -> XIY: string table
 	.short 0x0005	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -11711,7 +11847,7 @@ DL_F04E42:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F04DA3 + 0x14	; +0x07 -> XIY: string table
+	.long DLText_Minus6ToPlus9By3	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x229E	; +0x0D -> IX
 
@@ -11829,7 +11965,7 @@ DL_F04EAB:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F04F20 + 0x2	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F04F22	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF04F20-0xF04F32 ===
 ; 0xF04F20-0xF04F31, coverage round 1: 18 of this span's 18 bytes are
@@ -11840,20 +11976,39 @@ DL_F04EAB:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F04F20 -- 18 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF04F20-0xF04F31 -- 18 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F04F20 appears as a 32-bit word at 0xF5CB15; converted
 ;               code at 0xF5CB14 loads it as a 32-bit immediate.  No routine-
 ;               directory slot and no branch decoded in converted code names
 ;               it.
 ; Measured: 17% printable ASCII; a linear decode runs 12 instructions and ends
 ;           `nop`, with 67% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; --------------------------------------------------------------------------
+; Data_F04F20 -- 0xF04F20-0xF04F21, 2 bytes in front of the tables below.
+;   No interpreter-B record's +0x07 and no pointer-array run names them;
+;   purpose not established.  This address is also the END of a display
+;   list: `ld XIY,0xF04EAB / ld XIX,this / call T_DisplayListB_Run` at
+;   0xF5CB14.
 ; --------------------------------------------------------------------------
 Data_F04F20:
-	.byte	0x2B, 0x2D, 0x3D, 0x00, 0xBD, 0x00, 0x1C, 0x01, 0xCA, 0x00, 0x04, 0x00, 0xDA, 0x00, 0x1C, 0x01	; F04F20  |+-=.............|
-	.byte	0xE7, 0x00	; F04F30  |..|
+	.byte	0x2B, 0x2D	; F04F20
+; --------------------------------------------------------------------------
+; DLBoxes_F04F22 -- 0xF04F22-0xF04F31, 2 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF04F15 ((0x27A6)
+;   AND 0x01 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the distance to the
+;   object's end over the width; the masks admit 2.
+; --------------------------------------------------------------------------
+DLBoxes_F04F22:
+	.short	61, 189, 284, 202	; F04F22  [0]
+	.short	4, 218, 284, 231	; F04F2A  [1]
 
 ; === END COVER-R1 0xF04F20-0xF04F32 ===
 
@@ -12015,7 +12170,7 @@ DL_F04F72:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F0503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F0503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF04FFD-0xF05063 ===
 ; 0xF04FFD-0xF05062, coverage round 1: 85 of this span's 102 bytes are
@@ -12070,21 +12225,33 @@ Data_F05031:
 	.byte 0x1B, 0x0A, 0x0D, 0x00, 0x4C, 0x00, 0xD2, 0x00, 0xC8, 0x00	; A op 1B, 10 bytes -> handler HTBL_A[0x1B]
 
 ; --------------------------------------------------------------------------
-; Data_F0503B -- 40 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF0503B-0xF05062 -- 40 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F0503B appears as a 32-bit word at 0xF04FF9 0xF5D00F;
 ;               converted code at 0xF5D00E loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
 ;               names it.
 ; Measured: 12% printable ASCII; a linear decode runs 20 instructions and ends
 ;           `db`, with 65% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F0503B:
-	.byte	0x0D, 0x00, 0x4C, 0x00, 0xD2, 0x00, 0x68, 0x00, 0x0D, 0x00, 0x4C, 0x00, 0xD2, 0x00, 0x68, 0x00	; F0503B  |..L...h...L...h.|
-	.byte	0x0D, 0x00, 0x6C, 0x00, 0xD2, 0x00, 0x88, 0x00, 0x0D, 0x00, 0x8C, 0x00, 0xD2, 0x00, 0xA8, 0x00	; F0504B  |..l.............|
-	.byte	0x0D, 0x00, 0xAC, 0x00, 0xD2, 0x00, 0xC8, 0x00	; F0505B  |........|
+; DLBoxes_F0503B -- 0xF0503B-0xF05062, 5 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF04FF2 ((0x27A3)
+;   AND 0x0F >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the distance to the
+;   object's end over the width; the masks admit 16.
+; --------------------------------------------------------------------------
+DLBoxes_F0503B:
+	.short	13, 76, 210, 104	; F0503B  [0]
+	.short	13, 76, 210, 104	; F05043  [1]
+	.short	13, 108, 210, 136	; F0504B  [2]
+	.short	13, 140, 210, 168	; F05053  [3]
+	.short	13, 172, 210, 200	; F0505B  [4]
 
 ; === END COVER-R1 0xF04FFD-0xF05063 ===
 
@@ -12107,7 +12274,7 @@ DL_F05063:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -12115,7 +12282,7 @@ DL_F05063:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -12123,7 +12290,7 @@ DL_F05063:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A2	; +0x0D -> IX
 
@@ -12270,7 +12437,7 @@ DL_F0510D:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -12278,7 +12445,7 @@ DL_F0510D:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2297	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -12286,7 +12453,7 @@ DL_F0510D:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A1	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -12318,7 +12485,7 @@ DL_F0510D:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F05182	; +0x07 -> XIY: string table
+	.long DLText_AttackDecayRelease	; +0x07 -> XIY: string table
 	.short 0x0008	; +0x0B -> BC: bytes per entry
 	.short 0x009D	; +0x0D -> (0x2530)
 	.short 0x003E	; +0x0F -> (0x2532)
@@ -12332,7 +12499,7 @@ DL_F0510D:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F05182 -- 64 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF05182-0xF051C1 -- 64 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F05182 appears as a 32-bit word at 0xF05178 0xF32BF8
 ;               0xF5C8C2; converted code at 0xF5C8C1 loads it as a 32-bit
 ;               immediate.  No routine-directory slot and no branch decoded in
@@ -12340,15 +12507,45 @@ DL_F0510D:
 ; Measured: 66% printable ASCII; a linear decode runs 29 instructions and ends
 ;           `ld (0x00),0x00`, with 38% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F05182:
-	.byte	0x41, 0x54, 0x54, 0x41, 0x43, 0x4B, 0x29, 0x20, 0x44, 0x45, 0x43, 0x41, 0x59, 0x29, 0x20, 0x20	; F05182  |ATTACK) DECAY)  |
-	.byte	0x52, 0x45, 0x4C, 0x45, 0x41, 0x53, 0x45, 0x29, 0x0D, 0x51, 0xF0, 0x00, 0x18, 0x51, 0xF0, 0x00	; F05192  |RELEASE).Q...Q..|
-	.byte	0x23, 0x51, 0xF0, 0x00, 0x32, 0x51, 0xF0, 0x00, 0x41, 0x51, 0xF0, 0x00, 0x50, 0x51, 0xF0, 0x00	; F051A2  |#Q..2Q..AQ..PQ..|
-	.byte	0x5B, 0x51, 0xF0, 0x00, 0x66, 0x51, 0xF0, 0x00, 0x71, 0x51, 0xF0, 0x00, 0x71, 0x51, 0xF0, 0x00	; F051B2  |[Q..fQ..qQ..qQ..|
+; DLText_AttackDecayRelease -- 0xF05182-0xF05199, 3 entries of 8 bytes, text
+;   drawn by LCD_Svc_17_DrawText8x8Packed.  Read by the interpreter-B
+;   op-0x07 records at 0xF05171 ((0x27AF) AND 0x03 >> 0), 0xF32BF1 ((0x27AF)
+;   AND 0x03 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_StringTable2 draws entry
+;   [value] with +0x0B = 8 as the width.  Entry count: the text: entry 3
+;   would hold 0x00 bytes, as does every slot after it; the masks admit 4.
+;   This address is also the END of a display list: `ld XIY,0xF0510D / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF5C8C1.
+; --------------------------------------------------------------------------
+DLText_AttackDecayRelease:
+	.ascii	"ATTACK) "	; F05182  [0]
+	.ascii	"DECAY)  "	; F0518A  [1]
+	.ascii	"RELEASE)"	; F05192  [2]
+; --------------------------------------------------------------------------
+; DLBRecordPtrs_F0519A -- 0xF0519A-0xF051C1, 10 32-bit pointers, each to the
+;   first byte of an interpreter-B record.  Read by
+;   RunDisplayListBFromPointerArray (0xF09AE1: `sla 2,WA / add XIY,XWA / ld
+;   XIY,(XIY)`, then ONE record is run) with XIY = this address at 0xF5D0A4.
+;   Entry count: the distance to the object's end over 4 -- the reader
+;   indexes by A and does not bound it.
+; --------------------------------------------------------------------------
+DLBRecordPtrs_F0519A:
+	.long	DL_F0510D	; F0519A  [0]
+	.long	DL_F0510D + 0xB	; F0519E  [1]
+	.long	DL_F0510D + 0x16	; F051A2  [2]
+	.long	DL_F0510D + 0x25	; F051A6  [3]
+	.long	DL_F0510D + 0x34	; F051AA  [4]
+	.long	DL_F0510D + 0x43	; F051AE  [5]
+	.long	DL_F0510D + 0x4E	; F051B2  [6]
+	.long	DL_F0510D + 0x59	; F051B6  [7]
+	.long	DL_F0510D + 0x64	; F051BA  [8]
+	.long	DL_F0510D + 0x64	; F051BE  [9]
 
 ; === END COVER-R1 0xF05182-0xF051C2 ===
 
@@ -12602,7 +12799,7 @@ DL_F053B6:
 	.byte 0xC0	; +0x04 AND mask
 	.byte 0x06	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F05469	; +0x07 -> XIY: string table
+	.long DLText_SinTriSqrSaw	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2294	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -12639,7 +12836,7 @@ DL_F053E3:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F034C6 + 0xC	; +0x07 -> XIY: string table
+	.long DLText_OffOn	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22AB	; +0x0D -> IX
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
@@ -12647,7 +12844,7 @@ DL_F053E3:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F05469 + 0xC	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F05475	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF05407-0xF0549D ===
 ; 0xF05407-0xF0549C, coverage round 1: 58 of this span's 150 bytes are
@@ -12771,21 +12968,46 @@ Data_F05459:
 	.long	DL_F05434	; F05465  entry 3
 
 ; --------------------------------------------------------------------------
-; Data_F05469 -- 52 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF05469-0xF0549C -- 52 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F05469 appears as a 32-bit word at 0xF053BD.  No routine-
 ;               directory slot and no branch decoded in converted code names
 ;               it.
 ; Measured: 37% printable ASCII; a linear decode runs 32 instructions and ends
 ;           `db`, with 44% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F05469:
-	.byte	0x53, 0x49, 0x4E, 0x54, 0x52, 0x49, 0x53, 0x51, 0x52, 0x53, 0x41, 0x57, 0xB6, 0x00, 0x3E, 0x00	; F05469  |SINTRISQRSAW..>.|
-	.byte	0xDA, 0x00, 0x4B, 0x00, 0xB6, 0x00, 0x3E, 0x00, 0xDA, 0x00, 0x4B, 0x00, 0xB6, 0x00, 0x5E, 0x00	; F05479  |..K...>...K...^.|
-	.byte	0xDA, 0x00, 0x6B, 0x00, 0xB6, 0x00, 0x7C, 0x00, 0xDA, 0x00, 0x89, 0x00, 0xB6, 0x00, 0x9C, 0x00	; F05489  |..k...|.........|
-	.byte	0xDA, 0x00, 0xA9, 0x00	; F05499  |....|
+; DLText_SinTriSqrSaw -- 0xF05469-0xF05474, 4 entries of 3 bytes, text drawn
+;   by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02 record at
+;   0xF053B6 ((0x27AA) AND 0xC0 >> 6) -- value = (byte at the +2 address)
+;   AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 3 as the width.
+;   Entry count: the distance to the next table over the width; the masks
+;   admit 4.
+; --------------------------------------------------------------------------
+DLText_SinTriSqrSaw:
+	.ascii	"SIN"	; F05469  [0]
+	.ascii	"TRI"	; F0546C  [1]
+	.ascii	"SQR"	; F0546F  [2]
+	.ascii	"SAW"	; F05472  [3]
+; --------------------------------------------------------------------------
+; DLBoxes_F05475 -- 0xF05475-0xF0549C, 5 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF053FC ((0x27A6)
+;   AND 0x07 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the distance to the
+;   object's end over the width; the masks admit 8.
+; --------------------------------------------------------------------------
+DLBoxes_F05475:
+	.short	182, 62, 218, 75	; F05475  [0]
+	.short	182, 62, 218, 75	; F0547D  [1]
+	.short	182, 94, 218, 107	; F05485  [2]
+	.short	182, 124, 218, 137	; F0548D  [3]
+	.short	182, 156, 218, 169	; F05495  [4]
 
 ; === END COVER-R1 0xF05407-0xF0549D ===
 
@@ -13245,7 +13467,7 @@ DL_MemoryBank:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F05801	; +0x07 -> XIY: string table
+	.long DLText_UserDrumKits	; +0x07 -> XIY: string table
 	.short 0x0009	; +0x0B -> BC: bytes per entry
 	.short 0x1373	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -13266,7 +13488,7 @@ DL_MemoryBank:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F05801 -- 45 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF05801-0xF0582D -- 45 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F05801 appears as a 32-bit word at 0xF057EA 0xF5D18C
 ;               0xF5D306; converted code at 0xF5D18B 0xF5D305 loads it as a
 ;               32-bit immediate.  No routine-directory slot and no branch
@@ -13274,14 +13496,28 @@ DL_MemoryBank:
 ; Measured: 100% printable ASCII; a linear decode runs 27 instructions and
 ;           ends `ld DE,0x0000`, with 18% of the bytes in spellings llvm-mc
 ;           will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F05801:
-	.byte	0x55, 0x53, 0x52, 0x31, 0x44, 0x52, 0x4D, 0x2D, 0x31, 0x55, 0x53, 0x52, 0x31, 0x44, 0x52, 0x4D	; F05801  |USR1DRM-1USR1DRM|
-	.byte	0x2D, 0x31, 0x55, 0x53, 0x52, 0x31, 0x44, 0x52, 0x4D, 0x2D, 0x32, 0x55, 0x53, 0x52, 0x32, 0x44	; F05811  |-1USR1DRM-2USR2D|
-	.byte	0x52, 0x4D, 0x2D, 0x31, 0x55, 0x53, 0x52, 0x32, 0x44, 0x52, 0x4D, 0x2D, 0x32	; F05821  |RM-1USR2DRM-2|
+; DLText_UserDrumKits -- 0xF05801-0xF0582D, 5 entries of 9 bytes, text drawn
+;   by LCD_Svc_07_DrawText8x16.  Read by the interpreter-B op-0x02 record at
+;   0xF057E3 ((0x27A7) AND 0xFF >> 0) -- value = (byte at the +2 address)
+;   AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 9 as the width.
+;   Entry count: the distance to the object's end over the width; the masks
+;   admit 256.  This address is also the END of a display list: `ld
+;   XIY,0xF057E3 / ld XIX,this / call T_DisplayListB_Run` at 0xF5D18B; `ld
+;   XIY,0xF057E3 / ld XIX,this / call T_DisplayListB_Run` at 0xF5D305.
+; --------------------------------------------------------------------------
+DLText_UserDrumKits:
+	.ascii	"USR1DRM-1"	; F05801  [0]
+	.ascii	"USR1DRM-1"	; F0580A  [1]
+	.ascii	"USR1DRM-2"	; F05813  [2]
+	.ascii	"USR2DRM-1"	; F0581C  [3]
+	.ascii	"USR2DRM-2"	; F05825  [4]
 
 ; === END COVER-R1 0xF05801-0xF0582E ===
 
@@ -13502,7 +13738,7 @@ DL_F05A4C:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F05A68:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x0000	; +0x02 source variable, 16-bit address
@@ -13518,7 +13754,7 @@ DL_F05A68:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F05A84:
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x0000	; +0x02 source variable, 16-bit address
@@ -13534,7 +13770,7 @@ DL_F05A84:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F05AB4	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F05AA0:
 	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
 	.short 0x0051
@@ -13562,7 +13798,7 @@ DL_F05AAA:
 ;   the extents below come from the code that RUNS these records.
 
 ; --------------------------------------------------------------------------
-; Data_F05AB4 -- 568 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF05AB4-0xF05CDF -- 568 bytes, EMITTED AS DATA (not promoted to code).
 ; ⚠ SUPERSEDED 2026-09-02 (lane res05x): 568 was the reachability walk's
 ;   extent and it is 12 bytes TOO LONG.  Its last 12 bytes are the first
 ;   byte-column of the 2x12 bitmap at 0xF05CE0, whose size three op-03
@@ -13577,46 +13813,192 @@ DL_F05AAA:
 ; Measured: 66% printable ASCII; a linear decode runs 250 instructions and
 ;           ends `reti`, with 40% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F05AB4:
-	.byte	0x51, 0x00, 0x3E, 0x00, 0x5C, 0x00, 0x4F, 0x00, 0x5C, 0x00, 0x3E, 0x00, 0x67, 0x00, 0x4F, 0x00	; F05AB4  |Q.>.\.O.\.>.g.O.|
-	.byte	0x67, 0x00, 0x3E, 0x00, 0x72, 0x00, 0x4F, 0x00, 0x72, 0x00, 0x3E, 0x00, 0x7D, 0x00, 0x4F, 0x00	; F05AC4  |g.>.r.O.r.>.}.O.|
-	.byte	0x7D, 0x00, 0x3E, 0x00, 0x88, 0x00, 0x4F, 0x00, 0x88, 0x00, 0x3E, 0x00, 0x93, 0x00, 0x4F, 0x00	; F05AD4  |}.>...O...>...O.|
-	.byte	0x93, 0x00, 0x3E, 0x00, 0x9E, 0x00, 0x4F, 0x00, 0x9E, 0x00, 0x3E, 0x00, 0xA9, 0x00, 0x4F, 0x00	; F05AE4  |..>...O...>...O.|
-	.byte	0xA9, 0x00, 0x3E, 0x00, 0xB4, 0x00, 0x4F, 0x00, 0xB4, 0x00, 0x3E, 0x00, 0xBF, 0x00, 0x4F, 0x00	; F05AF4  |..>...O...>...O.|
-	.byte	0xBF, 0x00, 0x3E, 0x00, 0xCA, 0x00, 0x4F, 0x00, 0xCA, 0x00, 0x3E, 0x00, 0xD5, 0x00, 0x4F, 0x00	; F05B04  |..>...O...>...O.|
-	.byte	0xD5, 0x00, 0x3E, 0x00, 0xE0, 0x00, 0x4F, 0x00, 0xE0, 0x00, 0x3E, 0x00, 0xEB, 0x00, 0x4F, 0x00	; F05B14  |..>...O...>...O.|
-	.byte	0xEB, 0x00, 0x3E, 0x00, 0xF6, 0x00, 0x4F, 0x00, 0xF6, 0x00, 0x3E, 0x00, 0x01, 0x01, 0x4F, 0x00	; F05B24  |..>...O...>...O.|
-	.byte	0x20, 0x00, 0x30, 0x00, 0x40, 0x00, 0x50, 0x00, 0x60, 0x00, 0x70, 0x00, 0x80, 0x00, 0x90, 0x00	; F05B34  | .0.@.P.`.p.....|
-	.byte	0xA0, 0x00, 0xB0, 0x00, 0xC0, 0x00, 0xD0, 0x00, 0xE0, 0x00, 0xF0, 0x00, 0x00, 0x01, 0x10, 0x01	; F05B44  |................|
-	.byte	0x67, 0x00, 0x76, 0x00, 0x85, 0x00, 0x94, 0x00, 0xA3, 0x00, 0xB2, 0x00, 0x43, 0x2D, 0x32, 0x44	; F05B54  |g.v.........C-2D|
-	.byte	0x88, 0xBC, 0x44, 0x2D, 0x32, 0x45, 0x88, 0xBC, 0x45, 0x2D, 0x32, 0x46, 0x2D, 0x32, 0x46, 0x8C	; F05B64  |..D-2E..E-2F-2F.|
-	.byte	0xBC, 0x47, 0x2D, 0x32, 0x41, 0x88, 0xBC, 0x41, 0x2D, 0x32, 0x42, 0x88, 0xBC, 0x42, 0x2D, 0x32	; F05B74  |.G-2A..A-2B..B-2|
-	.byte	0x43, 0x2D, 0x31, 0x44, 0x88, 0xB0, 0x44, 0x2D, 0x31, 0x45, 0x88, 0xB0, 0x45, 0x2D, 0x31, 0x46	; F05B84  |C-1D..D-1E..E-1F|
-	.byte	0x2D, 0x31, 0x46, 0x8C, 0xB0, 0x47, 0x2D, 0x31, 0x41, 0x88, 0xB0, 0x41, 0x2D, 0x31, 0x42, 0x88	; F05B94  |-1F..G-1A..A-1B.|
-	.byte	0xB0, 0x42, 0x2D, 0x31, 0x43, 0x30, 0x20, 0x44, 0x88, 0x30, 0x44, 0x30, 0x20, 0x45, 0x88, 0x30	; F05BA4  |.B-1C0 D.0D0 E.0|
-	.byte	0x45, 0x30, 0x20, 0x46, 0x30, 0x20, 0x46, 0x8C, 0x30, 0x47, 0x30, 0x20, 0x41, 0x88, 0x30, 0x41	; F05BB4  |E0 F0 F.0G0 A.0A|
-	.byte	0x30, 0x20, 0x42, 0x88, 0x30, 0x42, 0x30, 0x20, 0x43, 0x31, 0x20, 0x44, 0x88, 0x31, 0x44, 0x31	; F05BC4  |0 B.0B0 C1 D.1D1|
-	.byte	0x20, 0x45, 0x88, 0x31, 0x45, 0x31, 0x20, 0x46, 0x31, 0x20, 0x46, 0x8C, 0x31, 0x47, 0x31, 0x20	; F05BD4  | E.1E1 F1 F.1G1 |
-	.byte	0x41, 0x88, 0x31, 0x41, 0x31, 0x20, 0x42, 0x88, 0x31, 0x42, 0x31, 0x20, 0x43, 0x32, 0x20, 0x44	; F05BE4  |A.1A1 B.1B1 C2 D|
-	.byte	0x88, 0x32, 0x44, 0x32, 0x20, 0x45, 0x88, 0x32, 0x45, 0x32, 0x20, 0x46, 0x32, 0x20, 0x46, 0x8C	; F05BF4  |.2D2 E.2E2 F2 F.|
-	.byte	0x32, 0x47, 0x32, 0x20, 0x41, 0x88, 0x32, 0x41, 0x32, 0x20, 0x42, 0x88, 0x32, 0x42, 0x32, 0x20	; F05C04  |2G2 A.2A2 B.2B2 |
-	.byte	0x43, 0x33, 0x20, 0x44, 0x88, 0x33, 0x44, 0x33, 0x20, 0x45, 0x88, 0x33, 0x45, 0x33, 0x20, 0x46	; F05C14  |C3 D.3D3 E.3E3 F|
-	.byte	0x33, 0x20, 0x46, 0x8C, 0x33, 0x47, 0x33, 0x20, 0x41, 0x88, 0x33, 0x41, 0x33, 0x20, 0x42, 0x88	; F05C24  |3 F.3G3 A.3A3 B.|
-	.byte	0x33, 0x42, 0x33, 0x20, 0x43, 0x34, 0x20, 0x44, 0x88, 0x34, 0x44, 0x34, 0x20, 0x45, 0x88, 0x34	; F05C34  |3B3 C4 D.4D4 E.4|
-	.byte	0x45, 0x34, 0x20, 0x46, 0x34, 0x20, 0x46, 0x8C, 0x34, 0x47, 0x34, 0x20, 0x41, 0x88, 0x34, 0x41	; F05C44  |E4 F4 F.4G4 A.4A|
-	.byte	0x34, 0x20, 0x42, 0x88, 0x34, 0x42, 0x34, 0x20, 0x43, 0x35, 0x20, 0x44, 0x88, 0x35, 0x44, 0x35	; F05C54  |4 B.4B4 C5 D.5D5|
-	.byte	0x20, 0x45, 0x88, 0x35, 0x45, 0x35, 0x20, 0x46, 0x35, 0x20, 0x46, 0x8C, 0x35, 0x47, 0x35, 0x20	; F05C64  | E.5E5 F5 F.5G5 |
-	.byte	0x41, 0x88, 0x35, 0x41, 0x35, 0x20, 0x42, 0x88, 0x35, 0x42, 0x35, 0x20, 0x43, 0x36, 0x20, 0x44	; F05C74  |A.5A5 B.5B5 C6 D|
-	.byte	0x88, 0x36, 0x44, 0x36, 0x20, 0x45, 0x88, 0x36, 0x45, 0x36, 0x20, 0x46, 0x36, 0x20, 0x46, 0x8C	; F05C84  |.6D6 E.6E6 F6 F.|
-	.byte	0x36, 0x47, 0x36, 0x20, 0x41, 0x88, 0x36, 0x41, 0x36, 0x20, 0x42, 0x88, 0x36, 0x42, 0x36, 0x20	; F05C94  |6G6 A.6A6 B.6B6 |
-	.byte	0x43, 0x37, 0x20, 0x44, 0x88, 0x37, 0x44, 0x37, 0x20, 0x45, 0x88, 0x37, 0x45, 0x37, 0x20, 0x46	; F05CA4  |C7 D.7D7 E.7E7 F|
-	.byte	0x37, 0x20, 0x46, 0x8C, 0x37, 0x47, 0x37, 0x20, 0x41, 0x88, 0x37, 0x41, 0x37, 0x20, 0x42, 0x88	; F05CB4  |7 F.7G7 A.7A7 B.|
-	.byte	0x37, 0x42, 0x37, 0x20, 0x43, 0x38, 0x20, 0x44, 0x88, 0x38, 0x44, 0x38, 0x20, 0x45, 0x88, 0x38	; F05CC4  |7B7 C8 D.8D8 E.8|
-	.byte	0x45, 0x38, 0x20, 0x46, 0x38, 0x20, 0x46, 0x8C, 0x38, 0x47, 0x38, 0x20	; F05CD4  |E8 F8 F.8G8 |
+; DLBoxes_F05AB4 -- 0xF05AB4-0xF05B33, 16 entries of four words, left / top
+;   / right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 records at 0xF05A5D ((0x27A6)
+;   AND 0x0F >> 0), 0xF05A79 ((0x27A6) AND 0x0F >> 0), 0xF05A95 ((0x27A6)
+;   AND 0x0F >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the 16 values the
+;   readers' masks admit (the bytes after that are not indexed by them).
+;   This address is also the END of a display list: `ld XIY,0xF05AAA / ld
+;   XIX,this / call T_DisplayList_Run` at 0xF5D329; `ld XIY,0xF05AA0 / ld
+;   XIX,this / call T_DisplayList_Run` at 0xF5D36C; `ld XIY,0xF05AA0 / ld
+;   XIX,this / call T_DisplayList_Run` at 0xF5D38E.
+; --------------------------------------------------------------------------
+DLBoxes_F05AB4:
+	.short	81, 62, 92, 79	; F05AB4  [0]
+	.short	92, 62, 103, 79	; F05ABC  [1]
+	.short	103, 62, 114, 79	; F05AC4  [2]
+	.short	114, 62, 125, 79	; F05ACC  [3]
+	.short	125, 62, 136, 79	; F05AD4  [4]
+	.short	136, 62, 147, 79	; F05ADC  [5]
+	.short	147, 62, 158, 79	; F05AE4  [6]
+	.short	158, 62, 169, 79	; F05AEC  [7]
+	.short	169, 62, 180, 79	; F05AF4  [8]
+	.short	180, 62, 191, 79	; F05AFC  [9]
+	.short	191, 62, 202, 79	; F05B04  [10]
+	.short	202, 62, 213, 79	; F05B0C  [11]
+	.short	213, 62, 224, 79	; F05B14  [12]
+	.short	224, 62, 235, 79	; F05B1C  [13]
+	.short	235, 62, 246, 79	; F05B24  [14]
+	.short	246, 62, 257, 79	; F05B2C  [15]
+; --------------------------------------------------------------------------
+; Data_F05B34 -- 0xF05B34-0xF05B5F, 44 bytes after the last entry
+;   DLBoxes_F05AB4's readers index.  No interpreter-B record's +0x07 and no
+;   pointer-array run names them (a 32-bit immediate does: `ld XIZ,this` at
+;   0xF5D3CF); purpose not established.
+; --------------------------------------------------------------------------
+Data_F05B34:
+	.byte	0x20, 0x00, 0x30, 0x00, 0x40, 0x00, 0x50, 0x00, 0x60, 0x00, 0x70, 0x00, 0x80, 0x00, 0x90, 0x00	; F05B34
+	.byte	0xA0, 0x00, 0xB0, 0x00, 0xC0, 0x00, 0xD0, 0x00, 0xE0, 0x00, 0xF0, 0x00, 0x00, 0x01, 0x10, 0x01	; F05B44
+	.byte	0x67, 0x00, 0x76, 0x00, 0x85, 0x00, 0x94, 0x00, 0xA3, 0x00, 0xB2, 0x00	; F05B54
+; --------------------------------------------------------------------------
+; DLText_NoteNamesCm2ToG8 -- 0xF05B60-0xF05CDF, 128 entries of 3 bytes, text
+;   drawn by LCD_Svc_06_DrawText8x14 / LCD_Svc_1C_DrawText16x16Packed.  Read
+;   by the interpreter-B op-0x02/0x07 records at 0xF0363E ((0x27AA) AND 0x7F
+;   >> 0), 0xF0364D ((0x27A9) AND 0x7F >> 0), 0xF0365C ((0x27AB) AND 0x7F >>
+;   0), 0xF03676 ((0x27AE) AND 0x7F >> 0) and 14 more -- value = (byte at
+;   the +2 address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable/StringTable2 draws entry [value] with +0x0B = 3
+;   as the width.  Entry count: the distance to the object's end over the
+;   width; the masks admit 128.
+; --------------------------------------------------------------------------
+DLText_NoteNamesCm2ToG8:
+	.byte	0x43, 0x2D, 0x32	; F05B60  [0]
+	.byte	0x44, 0x88, 0xBC	; F05B63  [1]
+	.byte	0x44, 0x2D, 0x32	; F05B66  [2]
+	.byte	0x45, 0x88, 0xBC	; F05B69  [3]
+	.byte	0x45, 0x2D, 0x32	; F05B6C  [4]
+	.byte	0x46, 0x2D, 0x32	; F05B6F  [5]
+	.byte	0x46, 0x8C, 0xBC	; F05B72  [6]
+	.byte	0x47, 0x2D, 0x32	; F05B75  [7]
+	.byte	0x41, 0x88, 0xBC	; F05B78  [8]
+	.byte	0x41, 0x2D, 0x32	; F05B7B  [9]
+	.byte	0x42, 0x88, 0xBC	; F05B7E  [10]
+	.byte	0x42, 0x2D, 0x32	; F05B81  [11]
+	.byte	0x43, 0x2D, 0x31	; F05B84  [12]
+	.byte	0x44, 0x88, 0xB0	; F05B87  [13]
+	.byte	0x44, 0x2D, 0x31	; F05B8A  [14]
+	.byte	0x45, 0x88, 0xB0	; F05B8D  [15]
+	.byte	0x45, 0x2D, 0x31	; F05B90  [16]
+	.byte	0x46, 0x2D, 0x31	; F05B93  [17]
+	.byte	0x46, 0x8C, 0xB0	; F05B96  [18]
+	.byte	0x47, 0x2D, 0x31	; F05B99  [19]
+	.byte	0x41, 0x88, 0xB0	; F05B9C  [20]
+	.byte	0x41, 0x2D, 0x31	; F05B9F  [21]
+	.byte	0x42, 0x88, 0xB0	; F05BA2  [22]
+	.byte	0x42, 0x2D, 0x31	; F05BA5  [23]
+	.byte	0x43, 0x30, 0x20	; F05BA8  [24]
+	.byte	0x44, 0x88, 0x30	; F05BAB  [25]
+	.byte	0x44, 0x30, 0x20	; F05BAE  [26]
+	.byte	0x45, 0x88, 0x30	; F05BB1  [27]
+	.byte	0x45, 0x30, 0x20	; F05BB4  [28]
+	.byte	0x46, 0x30, 0x20	; F05BB7  [29]
+	.byte	0x46, 0x8C, 0x30	; F05BBA  [30]
+	.byte	0x47, 0x30, 0x20	; F05BBD  [31]
+	.byte	0x41, 0x88, 0x30	; F05BC0  [32]
+	.byte	0x41, 0x30, 0x20	; F05BC3  [33]
+	.byte	0x42, 0x88, 0x30	; F05BC6  [34]
+	.byte	0x42, 0x30, 0x20	; F05BC9  [35]
+	.byte	0x43, 0x31, 0x20	; F05BCC  [36]
+	.byte	0x44, 0x88, 0x31	; F05BCF  [37]
+	.byte	0x44, 0x31, 0x20	; F05BD2  [38]
+	.byte	0x45, 0x88, 0x31	; F05BD5  [39]
+	.byte	0x45, 0x31, 0x20	; F05BD8  [40]
+	.byte	0x46, 0x31, 0x20	; F05BDB  [41]
+	.byte	0x46, 0x8C, 0x31	; F05BDE  [42]
+	.byte	0x47, 0x31, 0x20	; F05BE1  [43]
+	.byte	0x41, 0x88, 0x31	; F05BE4  [44]
+	.byte	0x41, 0x31, 0x20	; F05BE7  [45]
+	.byte	0x42, 0x88, 0x31	; F05BEA  [46]
+	.byte	0x42, 0x31, 0x20	; F05BED  [47]
+	.byte	0x43, 0x32, 0x20	; F05BF0  [48]
+	.byte	0x44, 0x88, 0x32	; F05BF3  [49]
+	.byte	0x44, 0x32, 0x20	; F05BF6  [50]
+	.byte	0x45, 0x88, 0x32	; F05BF9  [51]
+	.byte	0x45, 0x32, 0x20	; F05BFC  [52]
+	.byte	0x46, 0x32, 0x20	; F05BFF  [53]
+	.byte	0x46, 0x8C, 0x32	; F05C02  [54]
+	.byte	0x47, 0x32, 0x20	; F05C05  [55]
+	.byte	0x41, 0x88, 0x32	; F05C08  [56]
+	.byte	0x41, 0x32, 0x20	; F05C0B  [57]
+	.byte	0x42, 0x88, 0x32	; F05C0E  [58]
+	.byte	0x42, 0x32, 0x20	; F05C11  [59]
+	.byte	0x43, 0x33, 0x20	; F05C14  [60]
+	.byte	0x44, 0x88, 0x33	; F05C17  [61]
+	.byte	0x44, 0x33, 0x20	; F05C1A  [62]
+	.byte	0x45, 0x88, 0x33	; F05C1D  [63]
+	.byte	0x45, 0x33, 0x20	; F05C20  [64]
+	.byte	0x46, 0x33, 0x20	; F05C23  [65]
+	.byte	0x46, 0x8C, 0x33	; F05C26  [66]
+	.byte	0x47, 0x33, 0x20	; F05C29  [67]
+	.byte	0x41, 0x88, 0x33	; F05C2C  [68]
+	.byte	0x41, 0x33, 0x20	; F05C2F  [69]
+	.byte	0x42, 0x88, 0x33	; F05C32  [70]
+	.byte	0x42, 0x33, 0x20	; F05C35  [71]
+	.byte	0x43, 0x34, 0x20	; F05C38  [72]
+	.byte	0x44, 0x88, 0x34	; F05C3B  [73]
+	.byte	0x44, 0x34, 0x20	; F05C3E  [74]
+	.byte	0x45, 0x88, 0x34	; F05C41  [75]
+	.byte	0x45, 0x34, 0x20	; F05C44  [76]
+	.byte	0x46, 0x34, 0x20	; F05C47  [77]
+	.byte	0x46, 0x8C, 0x34	; F05C4A  [78]
+	.byte	0x47, 0x34, 0x20	; F05C4D  [79]
+	.byte	0x41, 0x88, 0x34	; F05C50  [80]
+	.byte	0x41, 0x34, 0x20	; F05C53  [81]
+	.byte	0x42, 0x88, 0x34	; F05C56  [82]
+	.byte	0x42, 0x34, 0x20	; F05C59  [83]
+	.byte	0x43, 0x35, 0x20	; F05C5C  [84]
+	.byte	0x44, 0x88, 0x35	; F05C5F  [85]
+	.byte	0x44, 0x35, 0x20	; F05C62  [86]
+	.byte	0x45, 0x88, 0x35	; F05C65  [87]
+	.byte	0x45, 0x35, 0x20	; F05C68  [88]
+	.byte	0x46, 0x35, 0x20	; F05C6B  [89]
+	.byte	0x46, 0x8C, 0x35	; F05C6E  [90]
+	.byte	0x47, 0x35, 0x20	; F05C71  [91]
+	.byte	0x41, 0x88, 0x35	; F05C74  [92]
+	.byte	0x41, 0x35, 0x20	; F05C77  [93]
+	.byte	0x42, 0x88, 0x35	; F05C7A  [94]
+	.byte	0x42, 0x35, 0x20	; F05C7D  [95]
+	.byte	0x43, 0x36, 0x20	; F05C80  [96]
+	.byte	0x44, 0x88, 0x36	; F05C83  [97]
+	.byte	0x44, 0x36, 0x20	; F05C86  [98]
+	.byte	0x45, 0x88, 0x36	; F05C89  [99]
+	.byte	0x45, 0x36, 0x20	; F05C8C  [100]
+	.byte	0x46, 0x36, 0x20	; F05C8F  [101]
+	.byte	0x46, 0x8C, 0x36	; F05C92  [102]
+	.byte	0x47, 0x36, 0x20	; F05C95  [103]
+	.byte	0x41, 0x88, 0x36	; F05C98  [104]
+	.byte	0x41, 0x36, 0x20	; F05C9B  [105]
+	.byte	0x42, 0x88, 0x36	; F05C9E  [106]
+	.byte	0x42, 0x36, 0x20	; F05CA1  [107]
+	.byte	0x43, 0x37, 0x20	; F05CA4  [108]
+	.byte	0x44, 0x88, 0x37	; F05CA7  [109]
+	.byte	0x44, 0x37, 0x20	; F05CAA  [110]
+	.byte	0x45, 0x88, 0x37	; F05CAD  [111]
+	.byte	0x45, 0x37, 0x20	; F05CB0  [112]
+	.byte	0x46, 0x37, 0x20	; F05CB3  [113]
+	.byte	0x46, 0x8C, 0x37	; F05CB6  [114]
+	.byte	0x47, 0x37, 0x20	; F05CB9  [115]
+	.byte	0x41, 0x88, 0x37	; F05CBC  [116]
+	.byte	0x41, 0x37, 0x20	; F05CBF  [117]
+	.byte	0x42, 0x88, 0x37	; F05CC2  [118]
+	.byte	0x42, 0x37, 0x20	; F05CC5  [119]
+	.byte	0x43, 0x38, 0x20	; F05CC8  [120]
+	.byte	0x44, 0x88, 0x38	; F05CCB  [121]
+	.byte	0x44, 0x38, 0x20	; F05CCE  [122]
+	.byte	0x45, 0x88, 0x38	; F05CD1  [123]
+	.byte	0x45, 0x38, 0x20	; F05CD4  [124]
+	.byte	0x46, 0x38, 0x20	; F05CD7  [125]
+	.byte	0x46, 0x8C, 0x38	; F05CDA  [126]
+	.byte	0x47, 0x38, 0x20	; F05CDD  [127]
 
 ; ------------------------------------------------------------------
 ; Bitmap_F05CE0 -- 24 bytes, 2 bytes wide x 12 rows.
@@ -13632,6 +14014,8 @@ Data_F05AB4:
 ; note-frequency table.  Both edges and the length come from outside the
 ; span.  The first 12 bytes used to be the tail of Data_F05AB4, the last
 ; 12 were the `.incbin` at file offset 0x005CEC.
+; (Data_F05AB4 is now DLBoxes_F05AB4, Data_F05B34 and
+; DLText_NoteNamesCm2ToG8 -- notes/promb-2026-09-25/dlb_table_splitter.py.)
 ; Evidence: python3 notes/prom_b_res05x_spans.py --selftest, and
 ; notes/prom_b_dl_operand_tables.py, which reports it independently as
 ; `0xF05CE0 + 24  A bitmap, 2 bytes x 12 rows`.
@@ -13658,58 +14042,157 @@ Bitmap_F05CE0:
 	.byte	0x80, 0x60, 0x30, 0x50, 0x88, 0x0F, 0x08, 0x08, 0x10, 0x10, 0x60, 0x80	; F05CEC  byte-column 1, rows 0-11
 
 ; --------------------------------------------------------------------------
-; Data_F05CF8 -- 640 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF05CF8-0xF05F77 -- 640 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F05CF8 appears as a 32-bit word at 0xF04D5F 0xF04D7D
 ;               0xF04E1B 0xF04E5E 0xF04E7C.  No routine-directory slot and no
 ;               branch decoded in converted code names it.
 ; Measured: 100% printable ASCII; a linear decode runs 284 instructions and
 ;           ends `ld IX,0x4b38`, with 8% of the bytes in spellings llvm-mc
 ;           will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F05CF8:
-	.byte	0x20, 0x36, 0x35, 0x2E, 0x34, 0x20, 0x36, 0x39, 0x2E, 0x33, 0x20, 0x37, 0x33, 0x2E, 0x34, 0x20	; F05CF8  | 65.4 69.3 73.4 |
-	.byte	0x37, 0x37, 0x2E, 0x38, 0x20, 0x38, 0x32, 0x2E, 0x34, 0x20, 0x38, 0x37, 0x2E, 0x33, 0x20, 0x39	; F05D08  |77.8 82.4 87.3 9|
-	.byte	0x32, 0x2E, 0x35, 0x20, 0x39, 0x38, 0x2E, 0x30, 0x31, 0x30, 0x33, 0x2E, 0x38, 0x31, 0x31, 0x30	; F05D18  |2.5 98.0103.8110|
-	.byte	0x2E, 0x30, 0x31, 0x31, 0x36, 0x2E, 0x35, 0x31, 0x32, 0x33, 0x2E, 0x35, 0x31, 0x33, 0x30, 0x2E	; F05D28  |.0116.5123.5130.|
-	.byte	0x38, 0x31, 0x33, 0x38, 0x2E, 0x36, 0x31, 0x34, 0x36, 0x2E, 0x38, 0x31, 0x35, 0x35, 0x2E, 0x36	; F05D38  |8138.6146.8155.6|
-	.byte	0x31, 0x36, 0x34, 0x2E, 0x38, 0x31, 0x37, 0x34, 0x2E, 0x36, 0x31, 0x38, 0x35, 0x2E, 0x30, 0x31	; F05D48  |164.8174.6185.01|
-	.byte	0x39, 0x36, 0x2E, 0x30, 0x32, 0x30, 0x37, 0x2E, 0x36, 0x32, 0x32, 0x30, 0x2E, 0x30, 0x32, 0x33	; F05D58  |96.0207.6220.023|
-	.byte	0x33, 0x2E, 0x31, 0x32, 0x34, 0x36, 0x2E, 0x39, 0x32, 0x36, 0x31, 0x2E, 0x36, 0x32, 0x37, 0x37	; F05D68  |3.1246.9261.6277|
-	.byte	0x2E, 0x32, 0x32, 0x39, 0x33, 0x2E, 0x36, 0x33, 0x31, 0x31, 0x2E, 0x31, 0x33, 0x32, 0x39, 0x2E	; F05D78  |.2293.6311.1329.|
-	.byte	0x36, 0x33, 0x34, 0x39, 0x2E, 0x32, 0x33, 0x37, 0x30, 0x2E, 0x30, 0x33, 0x39, 0x32, 0x2E, 0x30	; F05D88  |6349.2370.0392.0|
-	.byte	0x34, 0x31, 0x35, 0x2E, 0x33, 0x34, 0x34, 0x30, 0x2E, 0x30, 0x34, 0x36, 0x36, 0x2E, 0x31, 0x34	; F05D98  |415.3440.0466.14|
-	.byte	0x39, 0x33, 0x2E, 0x38, 0x35, 0x32, 0x33, 0x2E, 0x32, 0x35, 0x35, 0x34, 0x2E, 0x33, 0x35, 0x38	; F05DA8  |93.8523.2554.358|
-	.byte	0x37, 0x2E, 0x33, 0x36, 0x32, 0x32, 0x2E, 0x32, 0x36, 0x35, 0x39, 0x2E, 0x32, 0x36, 0x39, 0x38	; F05DB8  |7.3622.2659.2698|
-	.byte	0x2E, 0x34, 0x37, 0x33, 0x39, 0x2E, 0x39, 0x37, 0x38, 0x33, 0x2E, 0x39, 0x38, 0x33, 0x30, 0x2E	; F05DC8  |.4739.9783.9830.|
-	.byte	0x35, 0x38, 0x37, 0x39, 0x2E, 0x39, 0x39, 0x33, 0x32, 0x2E, 0x32, 0x39, 0x38, 0x37, 0x2E, 0x37	; F05DD8  |5879.9932.2987.7|
-	.byte	0x31, 0x2E, 0x30, 0x35, 0x4B, 0x31, 0x2E, 0x31, 0x31, 0x4B, 0x31, 0x2E, 0x31, 0x37, 0x4B, 0x31	; F05DE8  |1.05K1.11K1.17K1|
-	.byte	0x2E, 0x32, 0x34, 0x4B, 0x31, 0x2E, 0x33, 0x32, 0x4B, 0x31, 0x2E, 0x34, 0x30, 0x4B, 0x31, 0x2E	; F05DF8  |.24K1.32K1.40K1.|
-	.byte	0x34, 0x38, 0x4B, 0x31, 0x2E, 0x35, 0x37, 0x4B, 0x31, 0x2E, 0x36, 0x36, 0x4B, 0x31, 0x2E, 0x37	; F05E08  |48K1.57K1.66K1.7|
-	.byte	0x36, 0x4B, 0x31, 0x2E, 0x38, 0x36, 0x4B, 0x31, 0x2E, 0x39, 0x38, 0x4B, 0x32, 0x2E, 0x30, 0x39	; F05E18  |6K1.86K1.98K2.09|
-	.byte	0x4B, 0x32, 0x2E, 0x32, 0x32, 0x4B, 0x32, 0x2E, 0x33, 0x35, 0x4B, 0x32, 0x2E, 0x34, 0x39, 0x4B	; F05E28  |K2.22K2.35K2.49K|
-	.byte	0x32, 0x2E, 0x36, 0x34, 0x4B, 0x32, 0x2E, 0x37, 0x39, 0x4B, 0x32, 0x2E, 0x39, 0x36, 0x4B, 0x33	; F05E38  |2.64K2.79K2.96K3|
-	.byte	0x2E, 0x31, 0x34, 0x4B, 0x33, 0x2E, 0x33, 0x32, 0x4B, 0x33, 0x2E, 0x35, 0x32, 0x4B, 0x33, 0x2E	; F05E48  |.14K3.32K3.52K3.|
-	.byte	0x37, 0x33, 0x4B, 0x33, 0x2E, 0x39, 0x35, 0x4B, 0x34, 0x2E, 0x31, 0x39, 0x4B, 0x34, 0x2E, 0x34	; F05E58  |73K3.95K4.19K4.4|
-	.byte	0x33, 0x4B, 0x34, 0x2E, 0x37, 0x30, 0x4B, 0x34, 0x2E, 0x39, 0x38, 0x4B, 0x35, 0x2E, 0x32, 0x37	; F05E68  |3K4.70K4.98K5.27|
-	.byte	0x4B, 0x35, 0x2E, 0x35, 0x39, 0x4B, 0x35, 0x2E, 0x39, 0x32, 0x4B, 0x36, 0x2E, 0x32, 0x37, 0x4B	; F05E78  |K5.59K5.92K6.27K|
-	.byte	0x36, 0x2E, 0x36, 0x34, 0x4B, 0x37, 0x2E, 0x30, 0x34, 0x4B, 0x37, 0x2E, 0x34, 0x36, 0x4B, 0x37	; F05E88  |6.64K7.04K7.46K7|
-	.byte	0x2E, 0x39, 0x30, 0x4B, 0x38, 0x2E, 0x33, 0x37, 0x4B, 0x38, 0x2E, 0x38, 0x37, 0x4B, 0x39, 0x2E	; F05E98  |.90K8.37K8.87K9.|
-	.byte	0x34, 0x30, 0x4B, 0x39, 0x2E, 0x39, 0x36, 0x4B, 0x31, 0x30, 0x2E, 0x35, 0x4B, 0x31, 0x31, 0x2E	; F05EA8  |40K9.96K10.5K11.|
-	.byte	0x32, 0x4B, 0x31, 0x31, 0x2E, 0x38, 0x4B, 0x31, 0x32, 0x2E, 0x35, 0x4B, 0x31, 0x33, 0x2E, 0x33	; F05EB8  |2K11.8K12.5K13.3|
-	.byte	0x4B, 0x31, 0x34, 0x2E, 0x31, 0x4B, 0x31, 0x34, 0x2E, 0x39, 0x4B, 0x31, 0x35, 0x2E, 0x38, 0x4B	; F05EC8  |K14.1K14.9K15.8K|
-	.byte	0x31, 0x36, 0x2E, 0x37, 0x4B, 0x31, 0x37, 0x2E, 0x37, 0x4B, 0x31, 0x38, 0x2E, 0x38, 0x4B, 0x31	; F05ED8  |16.7K17.7K18.8K1|
-	.byte	0x39, 0x2E, 0x39, 0x4B, 0x32, 0x31, 0x2E, 0x31, 0x4B, 0x20, 0x20, 0x32, 0x32, 0x4B, 0x20, 0x20	; F05EE8  |9.9K21.1K  22K  |
-	.byte	0x32, 0x33, 0x4B, 0x20, 0x20, 0x32, 0x34, 0x4B, 0x20, 0x20, 0x32, 0x35, 0x4B, 0x20, 0x20, 0x32	; F05EF8  |23K  24K  25K  2|
-	.byte	0x36, 0x4B, 0x20, 0x20, 0x32, 0x37, 0x4B, 0x20, 0x20, 0x32, 0x38, 0x4B, 0x20, 0x20, 0x32, 0x39	; F05F08  |6K  27K  28K  29|
-	.byte	0x4B, 0x20, 0x20, 0x33, 0x30, 0x4B, 0x20, 0x20, 0x33, 0x31, 0x4B, 0x20, 0x20, 0x33, 0x32, 0x4B	; F05F18  |K  30K  31K  32K|
-	.byte	0x20, 0x20, 0x33, 0x33, 0x4B, 0x20, 0x20, 0x33, 0x34, 0x4B, 0x20, 0x20, 0x33, 0x35, 0x4B, 0x20	; F05F28  |  33K  34K  35K |
-	.byte	0x20, 0x33, 0x36, 0x4B, 0x20, 0x20, 0x33, 0x37, 0x4B, 0x20, 0x20, 0x33, 0x38, 0x4B, 0x20, 0x20	; F05F38  | 36K  37K  38K  |
-	.byte	0x33, 0x39, 0x4B, 0x20, 0x20, 0x34, 0x30, 0x4B, 0x20, 0x20, 0x34, 0x31, 0x4B, 0x20, 0x20, 0x34	; F05F48  |39K  40K  41K  4|
-	.byte	0x32, 0x4B, 0x20, 0x20, 0x34, 0x33, 0x4B, 0x20, 0x20, 0x34, 0x34, 0x4B, 0x20, 0x20, 0x34, 0x35	; F05F58  |2K  43K  44K  45|
-	.byte	0x4B, 0x20, 0x20, 0x34, 0x36, 0x4B, 0x20, 0x20, 0x34, 0x37, 0x4B, 0x20, 0x20, 0x34, 0x38, 0x4B	; F05F68  |K  46K  47K  48K|
+; DLText_Frequencies65HzTo48K -- 0xF05CF8-0xF05F77, 128 entries of 5 bytes,
+;   text drawn by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B
+;   op-0x02 records at 0xF04D58 ((0x27A8) AND 0x7F >> 0), 0xF04D76 ((0x27AA)
+;   AND 0x7F >> 0), 0xF04E14 ((0x27A8) AND 0x7F >> 0), 0xF04E57 ((0x27A8)
+;   AND 0x7F >> 0) and 1 more -- value = (byte at the +2 address) AND mask
+;   >> shift -- whose +0x07 names this address; DLB_Handler_StringTable
+;   draws entry [value] with +0x0B = 5 as the width.  Entry count: the
+;   distance to the object's end over the width; the masks admit 128.
+; --------------------------------------------------------------------------
+DLText_Frequencies65HzTo48K:
+	.ascii	" 65.4"	; F05CF8  [0]
+	.ascii	" 69.3"	; F05CFD  [1]
+	.ascii	" 73.4"	; F05D02  [2]
+	.ascii	" 77.8"	; F05D07  [3]
+	.ascii	" 82.4"	; F05D0C  [4]
+	.ascii	" 87.3"	; F05D11  [5]
+	.ascii	" 92.5"	; F05D16  [6]
+	.ascii	" 98.0"	; F05D1B  [7]
+	.ascii	"103.8"	; F05D20  [8]
+	.ascii	"110.0"	; F05D25  [9]
+	.ascii	"116.5"	; F05D2A  [10]
+	.ascii	"123.5"	; F05D2F  [11]
+	.ascii	"130.8"	; F05D34  [12]
+	.ascii	"138.6"	; F05D39  [13]
+	.ascii	"146.8"	; F05D3E  [14]
+	.ascii	"155.6"	; F05D43  [15]
+	.ascii	"164.8"	; F05D48  [16]
+	.ascii	"174.6"	; F05D4D  [17]
+	.ascii	"185.0"	; F05D52  [18]
+	.ascii	"196.0"	; F05D57  [19]
+	.ascii	"207.6"	; F05D5C  [20]
+	.ascii	"220.0"	; F05D61  [21]
+	.ascii	"233.1"	; F05D66  [22]
+	.ascii	"246.9"	; F05D6B  [23]
+	.ascii	"261.6"	; F05D70  [24]
+	.ascii	"277.2"	; F05D75  [25]
+	.ascii	"293.6"	; F05D7A  [26]
+	.ascii	"311.1"	; F05D7F  [27]
+	.ascii	"329.6"	; F05D84  [28]
+	.ascii	"349.2"	; F05D89  [29]
+	.ascii	"370.0"	; F05D8E  [30]
+	.ascii	"392.0"	; F05D93  [31]
+	.ascii	"415.3"	; F05D98  [32]
+	.ascii	"440.0"	; F05D9D  [33]
+	.ascii	"466.1"	; F05DA2  [34]
+	.ascii	"493.8"	; F05DA7  [35]
+	.ascii	"523.2"	; F05DAC  [36]
+	.ascii	"554.3"	; F05DB1  [37]
+	.ascii	"587.3"	; F05DB6  [38]
+	.ascii	"622.2"	; F05DBB  [39]
+	.ascii	"659.2"	; F05DC0  [40]
+	.ascii	"698.4"	; F05DC5  [41]
+	.ascii	"739.9"	; F05DCA  [42]
+	.ascii	"783.9"	; F05DCF  [43]
+	.ascii	"830.5"	; F05DD4  [44]
+	.ascii	"879.9"	; F05DD9  [45]
+	.ascii	"932.2"	; F05DDE  [46]
+	.ascii	"987.7"	; F05DE3  [47]
+	.ascii	"1.05K"	; F05DE8  [48]
+	.ascii	"1.11K"	; F05DED  [49]
+	.ascii	"1.17K"	; F05DF2  [50]
+	.ascii	"1.24K"	; F05DF7  [51]
+	.ascii	"1.32K"	; F05DFC  [52]
+	.ascii	"1.40K"	; F05E01  [53]
+	.ascii	"1.48K"	; F05E06  [54]
+	.ascii	"1.57K"	; F05E0B  [55]
+	.ascii	"1.66K"	; F05E10  [56]
+	.ascii	"1.76K"	; F05E15  [57]
+	.ascii	"1.86K"	; F05E1A  [58]
+	.ascii	"1.98K"	; F05E1F  [59]
+	.ascii	"2.09K"	; F05E24  [60]
+	.ascii	"2.22K"	; F05E29  [61]
+	.ascii	"2.35K"	; F05E2E  [62]
+	.ascii	"2.49K"	; F05E33  [63]
+	.ascii	"2.64K"	; F05E38  [64]
+	.ascii	"2.79K"	; F05E3D  [65]
+	.ascii	"2.96K"	; F05E42  [66]
+	.ascii	"3.14K"	; F05E47  [67]
+	.ascii	"3.32K"	; F05E4C  [68]
+	.ascii	"3.52K"	; F05E51  [69]
+	.ascii	"3.73K"	; F05E56  [70]
+	.ascii	"3.95K"	; F05E5B  [71]
+	.ascii	"4.19K"	; F05E60  [72]
+	.ascii	"4.43K"	; F05E65  [73]
+	.ascii	"4.70K"	; F05E6A  [74]
+	.ascii	"4.98K"	; F05E6F  [75]
+	.ascii	"5.27K"	; F05E74  [76]
+	.ascii	"5.59K"	; F05E79  [77]
+	.ascii	"5.92K"	; F05E7E  [78]
+	.ascii	"6.27K"	; F05E83  [79]
+	.ascii	"6.64K"	; F05E88  [80]
+	.ascii	"7.04K"	; F05E8D  [81]
+	.ascii	"7.46K"	; F05E92  [82]
+	.ascii	"7.90K"	; F05E97  [83]
+	.ascii	"8.37K"	; F05E9C  [84]
+	.ascii	"8.87K"	; F05EA1  [85]
+	.ascii	"9.40K"	; F05EA6  [86]
+	.ascii	"9.96K"	; F05EAB  [87]
+	.ascii	"10.5K"	; F05EB0  [88]
+	.ascii	"11.2K"	; F05EB5  [89]
+	.ascii	"11.8K"	; F05EBA  [90]
+	.ascii	"12.5K"	; F05EBF  [91]
+	.ascii	"13.3K"	; F05EC4  [92]
+	.ascii	"14.1K"	; F05EC9  [93]
+	.ascii	"14.9K"	; F05ECE  [94]
+	.ascii	"15.8K"	; F05ED3  [95]
+	.ascii	"16.7K"	; F05ED8  [96]
+	.ascii	"17.7K"	; F05EDD  [97]
+	.ascii	"18.8K"	; F05EE2  [98]
+	.ascii	"19.9K"	; F05EE7  [99]
+	.ascii	"21.1K"	; F05EEC  [100]
+	.ascii	"  22K"	; F05EF1  [101]
+	.ascii	"  23K"	; F05EF6  [102]
+	.ascii	"  24K"	; F05EFB  [103]
+	.ascii	"  25K"	; F05F00  [104]
+	.ascii	"  26K"	; F05F05  [105]
+	.ascii	"  27K"	; F05F0A  [106]
+	.ascii	"  28K"	; F05F0F  [107]
+	.ascii	"  29K"	; F05F14  [108]
+	.ascii	"  30K"	; F05F19  [109]
+	.ascii	"  31K"	; F05F1E  [110]
+	.ascii	"  32K"	; F05F23  [111]
+	.ascii	"  33K"	; F05F28  [112]
+	.ascii	"  34K"	; F05F2D  [113]
+	.ascii	"  35K"	; F05F32  [114]
+	.ascii	"  36K"	; F05F37  [115]
+	.ascii	"  37K"	; F05F3C  [116]
+	.ascii	"  38K"	; F05F41  [117]
+	.ascii	"  39K"	; F05F46  [118]
+	.ascii	"  40K"	; F05F4B  [119]
+	.ascii	"  41K"	; F05F50  [120]
+	.ascii	"  42K"	; F05F55  [121]
+	.ascii	"  43K"	; F05F5A  [122]
+	.ascii	"  44K"	; F05F5F  [123]
+	.ascii	"  45K"	; F05F64  [124]
+	.ascii	"  46K"	; F05F69  [125]
+	.ascii	"  47K"	; F05F6E  [126]
+	.ascii	"  48K"	; F05F73  [127]
 
 ; === END COVER-R1 0xF05AB4-0xF05F78 ===
 
@@ -14421,7 +14904,7 @@ DL_F064F9:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F06598	; +0x07 -> XIY: string table
+	.long DLText_OffMainSub1To3	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1648	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -14429,7 +14912,7 @@ DL_F064F9:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F034D8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 DL_F06517:
@@ -14438,7 +14921,7 @@ DL_F06517:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F06598	; +0x07 -> XIY: string table
+	.long DLText_OffMainSub1To3	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x19B8	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -14446,7 +14929,7 @@ DL_F06517:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F06598	; +0x07 -> XIY: string table
+	.long DLText_OffMainSub1To3	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x22A2	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -14454,7 +14937,7 @@ DL_F06517:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F034D8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 DL_F06544:
@@ -14463,7 +14946,7 @@ DL_F06544:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E	; +0x07 -> XIY: string table
+	.long DLText_CtrLRRdm	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A8	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -14471,7 +14954,7 @@ DL_F06544:
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x02	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E	; +0x07 -> XIY: string table
+	.long DLText_CtrLRRdm	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22AC	; +0x0D -> IX
 
@@ -14513,7 +14996,7 @@ DL_F06576:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F06598	; +0x07 -> XIY: string table
+	.long DLText_OffMainSub1To3	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00BE	; +0x0D -> (0x2530)
 	.short 0x0044	; +0x0F -> (0x2532)
@@ -14522,7 +15005,7 @@ DL_F06576:
 	.byte 0xF0	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F06598	; +0x07 -> XIY: string table
+	.long DLText_OffMainSub1To3	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00BE	; +0x0D -> (0x2530)
 	.short 0x005D	; +0x0F -> (0x2532)
@@ -14536,7 +15019,7 @@ DL_F06576:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F06598 -- 72 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF06598-0xF065DF -- 72 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F06598 appears as a 32-bit word at 0xF06500 0xF0651E
 ;               0xF0652D 0xF0657D 0xF0658E +1 more; converted code at 0xF5C24A
 ;               loads it as a 32-bit immediate.  No routine-directory slot and
@@ -14544,16 +15027,52 @@ DL_F06576:
 ; Measured: 58% printable ASCII; a linear decode runs 33 instructions and ends
 ;           `ld (0x00),0x00`, with 12% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F06598:
-	.byte	0x4F, 0x46, 0x46, 0x20, 0x4D, 0x41, 0x49, 0x4E, 0x53, 0x55, 0x42, 0x31, 0x53, 0x55, 0x42, 0x32	; F06598  |OFF MAINSUB1SUB2|
-	.byte	0x53, 0x55, 0x42, 0x33, 0xE5, 0x64, 0xF0, 0x00, 0xEF, 0x64, 0xF0, 0x00, 0xF9, 0x64, 0xF0, 0x00	; F065A8  |SUB3.d...d...d..|
-	.byte	0x17, 0x65, 0xF0, 0x00, 0x35, 0x65, 0xF0, 0x00, 0x35, 0x65, 0xF0, 0x00, 0x35, 0x65, 0xF0, 0x00	; F065B8  |.e..5e..5e..5e..|
-	.byte	0x35, 0x65, 0xF0, 0x00, 0x35, 0x65, 0xF0, 0x00, 0x35, 0x65, 0xF0, 0x00, 0x44, 0x65, 0xF0, 0x00	; F065C8  |5e..5e..5e..De..|
-	.byte	0x62, 0x65, 0xF0, 0x00, 0x6C, 0x65, 0xF0, 0x00	; F065D8  |be..le..|
+; DLText_OffMainSub1To3 -- 0xF06598-0xF065AB, 5 entries of 4 bytes, text
+;   drawn by LCD_Svc_06_DrawText8x14 / LCD_Svc_17_DrawText8x8Packed /
+;   LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02/0x07 records
+;   at 0xF064F9 ((0x27A8) AND 0x0F >> 0), 0xF06517 ((0x27A9) AND 0x0F >> 0),
+;   0xF06526 ((0x27A9) AND 0x0F >> 0), 0xF06576 ((0x27AC) AND 0x0F >> 0) and
+;   1 more -- value = (byte at the +2 address) AND mask >> shift -- whose
+;   +0x07 names this address; DLB_Handler_StringTable/StringTable2 draws
+;   entry [value] with +0x0B = 4 as the width.  Entry count: the text: entry
+;   5 would hold 0x00 bytes, as does every slot after it; the masks admit
+;   16.  This address is also the END of a display list: `ld XIY,0xF06576 /
+;   ld XIX,this / call T_DisplayListB_Run` at 0xF5C24A.
+; --------------------------------------------------------------------------
+DLText_OffMainSub1To3:
+	.ascii	"OFF "	; F06598  [0]
+	.ascii	"MAIN"	; F0659C  [1]
+	.ascii	"SUB1"	; F065A0  [2]
+	.ascii	"SUB2"	; F065A4  [3]
+	.ascii	"SUB3"	; F065A8  [4]
+; --------------------------------------------------------------------------
+; DLBRecordPtrs_F065AC -- 0xF065AC-0xF065DF, 13 32-bit pointers, each to the
+;   first byte of an interpreter-B record.  Read by
+;   RunDisplayListBFromPointerArray (0xF09AE1: `sla 2,WA / add XIY,XWA / ld
+;   XIY,(XIY)`, then ONE record is run) with XIY = this address at 0xF5BFAE,
+;   0xF5CE57.  Entry count: the distance to the object's end over 4 -- the
+;   reader indexes by A and does not bound it.
+; --------------------------------------------------------------------------
+DLBRecordPtrs_F065AC:
+	.long	DL_F064E5	; F065AC  [0]
+	.long	DL_F064E5 + 0xA	; F065B0  [1]
+	.long	DL_F064F9	; F065B4  [2]
+	.long	DL_F06517	; F065B8  [3]
+	.long	DL_F06517 + 0x1E	; F065BC  [4]
+	.long	DL_F06517 + 0x1E	; F065C0  [5]
+	.long	DL_F06517 + 0x1E	; F065C4  [6]
+	.long	DL_F06517 + 0x1E	; F065C8  [7]
+	.long	DL_F06517 + 0x1E	; F065CC  [8]
+	.long	DL_F06517 + 0x1E	; F065D0  [9]
+	.long	DL_F06544	; F065D4  [10]
+	.long	Data_F06562	; F065D8  [11]
+	.long	Data_F06562 + 0xA	; F065DC  [12]
 
 ; === END COVER-R1 0xF06598-0xF065E0 ===
 
@@ -16105,7 +16624,7 @@ SoundEditController_PaintPage2:
 	call	T_DisplayList_Run	; F09873  call 0xf417f0
 	ld	(9536:16), 0	; F09877  ld (0x2540),0x00
 	ld	xiy, DL_F3341C	; F0987C  ld XIY,0x00f3341c
-	ld	xix, Data_F334AE	; F09881  ld XIX,0x00f334ae
+	ld	xix, DLBoxes_F334AE	; F09881  ld XIX,0x00f334ae
 	call	T_DisplayListB_Run	; F09886  call 0xf417f4
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F0988A  cp (0x27f5),0x01
 	jr	z, SoundEditController_PaintPage2_Skip	; F0988F  jr Z,0xf098a4
@@ -16234,7 +16753,7 @@ SoundEditController_PaintHeader_Skip5:
 	call	T_DisplayList_Run	; F0999B  call 0xf417f0
 	ld	(9536:16), 0	; F0999F  ld (0x2540),0x00
 	ld	xiy, DL_F3341C	; F099A4  ld XIY,0x00f3341c
-	ld	xix, Data_F334AE	; F099A9  ld XIX,0x00f334ae
+	ld	xix, DLBoxes_F334AE	; F099A9  ld XIX,0x00f334ae
 	call	T_DisplayListB_Run	; F099AE  call 0xf417f4
 	call	sub_F099C7	; F099B2  call 0xf099c7
 	jr	SoundEditController_PaintHeader_Return3	; F099B6  jr T,0xf099c6
@@ -24073,13 +24592,13 @@ DL_F0D04B:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long Data_F0D061	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F0D061	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x2720	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F0D061	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F0D061	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; The module above continues here -- `notes/prom_b_anchored_tiler.py 0xF0C800
 ; 0xF0D79C` tiles this tail as well, but NO call site anchors any of it, and the
@@ -24094,24 +24613,37 @@ DL_F0D04B:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F0D061 -- 32 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF0D061-0xF0D080 -- 32 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F0D061 appears as a 32-bit word at 0xF0D052 0xF0D05D.  No
 ;               routine-directory slot and no branch decoded in converted code
 ;               names it.
 ; Measured: 38% printable ASCII; a linear decode runs 13 instructions and ends
 ;           `halt`, with 0% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F0D061:
-	.byte	0x31, 0x00, 0x32, 0x00, 0xF1, 0x00, 0x3F, 0x00, 0x31, 0x00, 0x44, 0x00, 0xF1, 0x00, 0x51, 0x00	; F0D061  |1.2...?.1.D...Q.|
-	.byte	0x31, 0x00, 0x56, 0x00, 0xF1, 0x00, 0x63, 0x00, 0x31, 0x00, 0x68, 0x00, 0xF1, 0x00, 0x75, 0x00	; F0D071  |1.V...c.1.h...u.|
+; DLBoxes_F0D061 -- 0xF0D061-0xF0D080, 4 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect /
+;   LCD_Svc_1B_EraseRect fills or erases.  Read by the interpreter-B
+;   op-0x03/0x08 records at 0xF0D04B ((0x2721) AND 0xFF >> 0), 0xF0D056
+;   ((0x2720) AND 0xFF >> 0) -- value = (byte at the +2 address) AND mask >>
+;   shift -- whose +0x07 names this address; DLB_Handler_Array8 copies entry
+;   [value] to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the distance
+;   to the object's end over the width; the masks admit 256.
+; --------------------------------------------------------------------------
+DLBoxes_F0D061:
+	.short	49, 50, 241, 63	; F0D061  [0]
+	.short	49, 68, 241, 81	; F0D069  [1]
+	.short	49, 86, 241, 99	; F0D071  [2]
+	.short	49, 104, 241, 117	; F0D079  [3]
 
 
 ; ------------------------------------------------------------------
 ; 0xF0D081-0xF0D4D1 -- 129 display-list records, 1105 bytes -- interpreter A
-; RECOVERED FROM A 2-BYTE OBJECT-BOUNDARY ERROR: Data_F0D061 (above)
+; RECOVERED FROM A 2-BYTE OBJECT-BOUNDARY ERROR: DLBoxes_F0D061 (above)
 ; used to include these 2 bytes (op 0x23, len 5) as array padding; the
 ; walk from here lands with ZERO DRIFT on 129 consecutive record
 ; boundaries, ending exactly where op 0x98 (over the 0x24 bound, a
@@ -53237,7 +53769,7 @@ Data_F2843D:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F28522	; +0x07 -> XIY: string table
+	.long DLText_PanL64CtrR63	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x005A	; +0x0D -> (0x2530)
 	.short 0x00E2	; +0x0F -> (0x2532)
@@ -53309,7 +53841,7 @@ DLTable_F284A2:
 	.ascii "2-16"	; [31]
 
 ; --------------------------------------------------------------------------
-; Data_F28522 -- 426 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF28522-0xF286A1 -- 426 bytes, EMITTED AS DATA (not promoted to code).
 ; ⚠ SUPERSEDED 2026-09-02 (lane res3xx): 426 was the reachability walk's
 ;   extent, and it is 42 bytes TOO LONG.  The record at 0xF28468 that
 ;   names 0x00F28522 declares 3 bytes per entry and mask 0x7F, i.e. 128
@@ -53323,39 +53855,154 @@ DLTable_F284A2:
 ; Measured: 96% printable ASCII; a linear decode runs 155 instructions and
 ;           ends `reti`, with 5% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F28522:
-	.byte	0x4C, 0x36, 0x34, 0x4C, 0x36, 0x33, 0x4C, 0x36, 0x32, 0x4C, 0x36, 0x31, 0x4C, 0x36, 0x30, 0x4C	; F28522  |L64L63L62L61L60L|
-	.byte	0x35, 0x39, 0x4C, 0x35, 0x38, 0x4C, 0x35, 0x37, 0x4C, 0x35, 0x36, 0x4C, 0x35, 0x35, 0x4C, 0x35	; F28532  |59L58L57L56L55L5|
-	.byte	0x34, 0x4C, 0x35, 0x33, 0x4C, 0x35, 0x32, 0x4C, 0x35, 0x31, 0x4C, 0x35, 0x30, 0x4C, 0x34, 0x39	; F28542  |4L53L52L51L50L49|
-	.byte	0x4C, 0x34, 0x38, 0x4C, 0x34, 0x37, 0x4C, 0x34, 0x36, 0x4C, 0x34, 0x35, 0x4C, 0x34, 0x34, 0x4C	; F28552  |L48L47L46L45L44L|
-	.byte	0x34, 0x33, 0x4C, 0x34, 0x32, 0x4C, 0x34, 0x31, 0x4C, 0x34, 0x30, 0x4C, 0x33, 0x39, 0x4C, 0x33	; F28562  |43L42L41L40L39L3|
-	.byte	0x38, 0x4C, 0x33, 0x37, 0x4C, 0x33, 0x36, 0x4C, 0x33, 0x35, 0x4C, 0x33, 0x34, 0x4C, 0x33, 0x33	; F28572  |8L37L36L35L34L33|
-	.byte	0x4C, 0x33, 0x32, 0x4C, 0x33, 0x31, 0x4C, 0x33, 0x30, 0x4C, 0x32, 0x39, 0x4C, 0x32, 0x38, 0x4C	; F28582  |L32L31L30L29L28L|
-	.byte	0x32, 0x37, 0x4C, 0x32, 0x36, 0x4C, 0x32, 0x35, 0x4C, 0x32, 0x34, 0x4C, 0x32, 0x33, 0x4C, 0x32	; F28592  |27L26L25L24L23L2|
-	.byte	0x32, 0x4C, 0x32, 0x31, 0x4C, 0x32, 0x30, 0x4C, 0x31, 0x39, 0x4C, 0x31, 0x38, 0x4C, 0x31, 0x37	; F285A2  |2L21L20L19L18L17|
-	.byte	0x4C, 0x31, 0x36, 0x4C, 0x31, 0x35, 0x4C, 0x31, 0x34, 0x4C, 0x31, 0x33, 0x4C, 0x31, 0x32, 0x4C	; F285B2  |L16L15L14L13L12L|
-	.byte	0x31, 0x31, 0x4C, 0x31, 0x30, 0x4C, 0x20, 0x39, 0x4C, 0x20, 0x38, 0x4C, 0x20, 0x37, 0x4C, 0x20	; F285C2  |11L10L 9L 8L 7L |
-	.byte	0x36, 0x4C, 0x20, 0x35, 0x4C, 0x20, 0x34, 0x4C, 0x20, 0x33, 0x4C, 0x20, 0x32, 0x4C, 0x20, 0x31	; F285D2  |6L 5L 4L 3L 2L 1|
-	.byte	0x43, 0x54, 0x52, 0x52, 0x20, 0x31, 0x52, 0x20, 0x32, 0x52, 0x20, 0x33, 0x52, 0x20, 0x34, 0x52	; F285E2  |CTRR 1R 2R 3R 4R|
-	.byte	0x20, 0x35, 0x52, 0x20, 0x36, 0x52, 0x20, 0x37, 0x52, 0x20, 0x38, 0x52, 0x20, 0x39, 0x52, 0x31	; F285F2  | 5R 6R 7R 8R 9R1|
-	.byte	0x30, 0x52, 0x31, 0x31, 0x52, 0x31, 0x32, 0x52, 0x31, 0x33, 0x52, 0x31, 0x34, 0x52, 0x31, 0x35	; F28602  |0R11R12R13R14R15|
-	.byte	0x52, 0x31, 0x36, 0x52, 0x31, 0x37, 0x52, 0x31, 0x38, 0x52, 0x31, 0x39, 0x52, 0x32, 0x30, 0x52	; F28612  |R16R17R18R19R20R|
-	.byte	0x32, 0x31, 0x52, 0x32, 0x32, 0x52, 0x32, 0x33, 0x52, 0x32, 0x34, 0x52, 0x32, 0x35, 0x52, 0x32	; F28622  |21R22R23R24R25R2|
-	.byte	0x36, 0x52, 0x32, 0x37, 0x52, 0x32, 0x38, 0x52, 0x32, 0x39, 0x52, 0x33, 0x30, 0x52, 0x33, 0x31	; F28632  |6R27R28R29R30R31|
-	.byte	0x52, 0x33, 0x32, 0x52, 0x33, 0x33, 0x52, 0x33, 0x34, 0x52, 0x33, 0x35, 0x52, 0x33, 0x36, 0x52	; F28642  |R32R33R34R35R36R|
-	.byte	0x33, 0x37, 0x52, 0x33, 0x38, 0x52, 0x33, 0x39, 0x52, 0x34, 0x30, 0x52, 0x34, 0x31, 0x52, 0x34	; F28652  |37R38R39R40R41R4|
-	.byte	0x32, 0x52, 0x34, 0x33, 0x52, 0x34, 0x34, 0x52, 0x34, 0x35, 0x52, 0x34, 0x36, 0x52, 0x34, 0x37	; F28662  |2R43R44R45R46R47|
-	.byte	0x52, 0x34, 0x38, 0x52, 0x34, 0x39, 0x52, 0x35, 0x30, 0x52, 0x35, 0x31, 0x52, 0x35, 0x32, 0x52	; F28672  |R48R49R50R51R52R|
-	.byte	0x35, 0x33, 0x52, 0x35, 0x34, 0x52, 0x35, 0x35, 0x52, 0x35, 0x36, 0x52, 0x35, 0x37, 0x52, 0x35	; F28682  |53R54R55R56R57R5|
-	.byte	0x38, 0x52, 0x35, 0x39, 0x52, 0x36, 0x30, 0x52, 0x36, 0x31, 0x52, 0x36, 0x32, 0x52, 0x36, 0x33	; F28692  |8R59R60R61R62R63|
+; DLText_PanL64CtrR63 -- 0xF28522-0xF286A1, 128 entries of 3 bytes, text
+;   drawn by LCD_Svc_17_DrawText8x8Packed.  Read by the interpreter-B
+;   op-0x07 records at 0xF28468 ((0x2641) AND 0x7F >> 0), 0xF29ADE ((0x76AA)
+;   AND 0x7F >> 0), 0xF29AEF ((0x76EA) AND 0x7F >> 0), 0xF29B00 ((0x772A)
+;   AND 0x7F >> 0) and 5 more -- value = (byte at the +2 address) AND mask
+;   >> shift -- whose +0x07 names this address; DLB_Handler_StringTable2
+;   draws entry [value] with +0x0B = 3 as the width.  Entry count: the
+;   distance to the object's end over the width; the masks admit 128.
+; --------------------------------------------------------------------------
+DLText_PanL64CtrR63:
+	.ascii	"L64"	; F28522  [0]
+	.ascii	"L63"	; F28525  [1]
+	.ascii	"L62"	; F28528  [2]
+	.ascii	"L61"	; F2852B  [3]
+	.ascii	"L60"	; F2852E  [4]
+	.ascii	"L59"	; F28531  [5]
+	.ascii	"L58"	; F28534  [6]
+	.ascii	"L57"	; F28537  [7]
+	.ascii	"L56"	; F2853A  [8]
+	.ascii	"L55"	; F2853D  [9]
+	.ascii	"L54"	; F28540  [10]
+	.ascii	"L53"	; F28543  [11]
+	.ascii	"L52"	; F28546  [12]
+	.ascii	"L51"	; F28549  [13]
+	.ascii	"L50"	; F2854C  [14]
+	.ascii	"L49"	; F2854F  [15]
+	.ascii	"L48"	; F28552  [16]
+	.ascii	"L47"	; F28555  [17]
+	.ascii	"L46"	; F28558  [18]
+	.ascii	"L45"	; F2855B  [19]
+	.ascii	"L44"	; F2855E  [20]
+	.ascii	"L43"	; F28561  [21]
+	.ascii	"L42"	; F28564  [22]
+	.ascii	"L41"	; F28567  [23]
+	.ascii	"L40"	; F2856A  [24]
+	.ascii	"L39"	; F2856D  [25]
+	.ascii	"L38"	; F28570  [26]
+	.ascii	"L37"	; F28573  [27]
+	.ascii	"L36"	; F28576  [28]
+	.ascii	"L35"	; F28579  [29]
+	.ascii	"L34"	; F2857C  [30]
+	.ascii	"L33"	; F2857F  [31]
+	.ascii	"L32"	; F28582  [32]
+	.ascii	"L31"	; F28585  [33]
+	.ascii	"L30"	; F28588  [34]
+	.ascii	"L29"	; F2858B  [35]
+	.ascii	"L28"	; F2858E  [36]
+	.ascii	"L27"	; F28591  [37]
+	.ascii	"L26"	; F28594  [38]
+	.ascii	"L25"	; F28597  [39]
+	.ascii	"L24"	; F2859A  [40]
+	.ascii	"L23"	; F2859D  [41]
+	.ascii	"L22"	; F285A0  [42]
+	.ascii	"L21"	; F285A3  [43]
+	.ascii	"L20"	; F285A6  [44]
+	.ascii	"L19"	; F285A9  [45]
+	.ascii	"L18"	; F285AC  [46]
+	.ascii	"L17"	; F285AF  [47]
+	.ascii	"L16"	; F285B2  [48]
+	.ascii	"L15"	; F285B5  [49]
+	.ascii	"L14"	; F285B8  [50]
+	.ascii	"L13"	; F285BB  [51]
+	.ascii	"L12"	; F285BE  [52]
+	.ascii	"L11"	; F285C1  [53]
+	.ascii	"L10"	; F285C4  [54]
+	.ascii	"L 9"	; F285C7  [55]
+	.ascii	"L 8"	; F285CA  [56]
+	.ascii	"L 7"	; F285CD  [57]
+	.ascii	"L 6"	; F285D0  [58]
+	.ascii	"L 5"	; F285D3  [59]
+	.ascii	"L 4"	; F285D6  [60]
+	.ascii	"L 3"	; F285D9  [61]
+	.ascii	"L 2"	; F285DC  [62]
+	.ascii	"L 1"	; F285DF  [63]
+	.ascii	"CTR"	; F285E2  [64]
+	.ascii	"R 1"	; F285E5  [65]
+	.ascii	"R 2"	; F285E8  [66]
+	.ascii	"R 3"	; F285EB  [67]
+	.ascii	"R 4"	; F285EE  [68]
+	.ascii	"R 5"	; F285F1  [69]
+	.ascii	"R 6"	; F285F4  [70]
+	.ascii	"R 7"	; F285F7  [71]
+	.ascii	"R 8"	; F285FA  [72]
+	.ascii	"R 9"	; F285FD  [73]
+	.ascii	"R10"	; F28600  [74]
+	.ascii	"R11"	; F28603  [75]
+	.ascii	"R12"	; F28606  [76]
+	.ascii	"R13"	; F28609  [77]
+	.ascii	"R14"	; F2860C  [78]
+	.ascii	"R15"	; F2860F  [79]
+	.ascii	"R16"	; F28612  [80]
+	.ascii	"R17"	; F28615  [81]
+	.ascii	"R18"	; F28618  [82]
+	.ascii	"R19"	; F2861B  [83]
+	.ascii	"R20"	; F2861E  [84]
+	.ascii	"R21"	; F28621  [85]
+	.ascii	"R22"	; F28624  [86]
+	.ascii	"R23"	; F28627  [87]
+	.ascii	"R24"	; F2862A  [88]
+	.ascii	"R25"	; F2862D  [89]
+	.ascii	"R26"	; F28630  [90]
+	.ascii	"R27"	; F28633  [91]
+	.ascii	"R28"	; F28636  [92]
+	.ascii	"R29"	; F28639  [93]
+	.ascii	"R30"	; F2863C  [94]
+	.ascii	"R31"	; F2863F  [95]
+	.ascii	"R32"	; F28642  [96]
+	.ascii	"R33"	; F28645  [97]
+	.ascii	"R34"	; F28648  [98]
+	.ascii	"R35"	; F2864B  [99]
+	.ascii	"R36"	; F2864E  [100]
+	.ascii	"R37"	; F28651  [101]
+	.ascii	"R38"	; F28654  [102]
+	.ascii	"R39"	; F28657  [103]
+	.ascii	"R40"	; F2865A  [104]
+	.ascii	"R41"	; F2865D  [105]
+	.ascii	"R42"	; F28660  [106]
+	.ascii	"R43"	; F28663  [107]
+	.ascii	"R44"	; F28666  [108]
+	.ascii	"R45"	; F28669  [109]
+	.ascii	"R46"	; F2866C  [110]
+	.ascii	"R47"	; F2866F  [111]
+	.ascii	"R48"	; F28672  [112]
+	.ascii	"R49"	; F28675  [113]
+	.ascii	"R50"	; F28678  [114]
+	.ascii	"R51"	; F2867B  [115]
+	.ascii	"R52"	; F2867E  [116]
+	.ascii	"R53"	; F28681  [117]
+	.ascii	"R54"	; F28684  [118]
+	.ascii	"R55"	; F28687  [119]
+	.ascii	"R56"	; F2868A  [120]
+	.ascii	"R57"	; F2868D  [121]
+	.ascii	"R58"	; F28690  [122]
+	.ascii	"R59"	; F28693  [123]
+	.ascii	"R60"	; F28696  [124]
+	.ascii	"R61"	; F28699  [125]
+	.ascii	"R62"	; F2869C  [126]
+	.ascii	"R63"	; F2869F  [127]
 
 ; ------------------------------------------------------------------
 ; 0xF286A2-0xF286F8 -- 3 display-list records and their 3 string tables,
-; 87 bytes -- interpreter B.  Formerly the last 42 bytes of Data_F28522
+; 87 bytes -- interpreter B.  Formerly the last 42 bytes of DLText_PanL64CtrR63
 ; plus the 45-byte `.incbin` that followed it.
 ;
 ; BOTH ENDS ARE FIXED FROM OUTSIDE THE BYTES, not from a stride read off
@@ -53675,7 +54322,7 @@ DL_F28820:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F2882B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F2882B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF2882B-0xF2885B ===
 ; 0xF2882B-0xF2885A, coverage round 1: 48 of this span's 48 bytes are
@@ -53686,21 +54333,36 @@ DL_F28820:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F2882B -- 48 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF2882B-0xF2885A -- 48 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F2882B appears as a 32-bit word at 0xF28827.  No routine-
 ;               directory slot and no branch decoded in converted code names
 ;               it.
 ; Measured: 25% printable ASCII; a linear decode runs 25 instructions and ends
 ;           `ld (XDE+0x00),0x00`, with 35% of the bytes in spellings llvm-mc
 ;           will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F2882B:
-	.byte	0x30, 0x00, 0xB2, 0x00, 0x38, 0x00, 0xBA, 0x00, 0x3E, 0x00, 0xB2, 0x00, 0x46, 0x00, 0xBA, 0x00	; F2882B  |0...8...>...F...|
-	.byte	0x4C, 0x00, 0xB2, 0x00, 0x54, 0x00, 0xBA, 0x00, 0x5A, 0x00, 0xB2, 0x00, 0x62, 0x00, 0xBA, 0x00	; F2883B  |L...T...Z...b...|
-	.byte	0x68, 0x00, 0xB2, 0x00, 0x70, 0x00, 0xBA, 0x00, 0x76, 0x00, 0xB2, 0x00, 0x7E, 0x00, 0xBA, 0x00	; F2884B  |h...p...v...~...|
+; DLBoxes_F2882B -- 0xF2882B-0xF2885A, 6 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF28820 ((0x2640)
+;   AND 0x3F >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the distance to the
+;   object's end over the width; the masks admit 64.  This address is also
+;   the END of a display list: `ld XIY,0xF28820 / ld XIX,this / call
+;   T_DisplayListB_Run` at 0xF91004.
+; --------------------------------------------------------------------------
+DLBoxes_F2882B:
+	.short	48, 178, 56, 186	; F2882B  [0]
+	.short	62, 178, 70, 186	; F28833  [1]
+	.short	76, 178, 84, 186	; F2883B  [2]
+	.short	90, 178, 98, 186	; F28843  [3]
+	.short	104, 178, 112, 186	; F2884B  [4]
+	.short	118, 178, 126, 186	; F28853  [5]
 
 ; === END COVER-R1 0xF2882B-0xF2885B ===
 
@@ -55668,7 +56330,7 @@ DL_F29765:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F297A0	; +0x07 -> XIY: string table
+	.long DLText_PartCodes	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0F6D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -55685,7 +56347,7 @@ DL_F29783:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F297A0	; +0x07 -> XIY: string table
+	.long DLText_PartCodes	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x000C	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
@@ -55707,31 +56369,97 @@ DL_F29783:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F297A0 -- 195 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF297A0-0xF29862 -- 195 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F297A0 appears as a 32-bit word at 0xF2976C 0xF2978A
 ;               0xF2986A 0xF29887 0xF298A4 +4 more.  No routine-directory slot
 ;               and no branch decoded in converted code names it.
 ; Measured: 100% printable ASCII; a linear decode runs 91 instructions and
 ;           ends `ld W,0x20`, with 2% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F297A0:
-	.byte	0x52, 0x31, 0x2D, 0x52, 0x32, 0x2D, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F297A0  |R1-R2-          |
-	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x31, 0x2D, 0x55, 0x32, 0x2D, 0x20, 0x20	; F297B0  |        U1-U2-  |
-	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F297C0  |                |
-	.byte	0x45, 0x31, 0x2D, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F297D0  |E1-             |
-	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x4D, 0x31, 0x2D, 0x4D, 0x32, 0x2D, 0x4D, 0x33	; F297E0  |        M1-M2-M3|
-	.byte	0x2D, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F297F0  |-               |
-	.byte	0x52, 0x44, 0x31, 0x52, 0x44, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F29800  |RD1RD2          |
-	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x44, 0x31, 0x55, 0x44, 0x32, 0x20, 0x20	; F29810  |        UD1UD2  |
-	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F29820  |                |
-	.byte	0x45, 0x44, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F29830  |ED1             |
-	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F29840  |                |
-	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F29850  |                |
-	.byte	0x20, 0x20, 0x20	; F29860  |   |
+; DLText_PartCodes -- 0xF297A0-0xF29862, 65 entries of 3 bytes, text drawn
+;   by LCD_Svc_06_DrawText8x14 / LCD_Svc_17_DrawText8x8Packed.  Read by the
+;   interpreter-B op-0x02/0x07 records at 0xF29765 ((0x2640) AND 0xFF >> 0),
+;   0xF29783 ((0x76DF) AND 0xFF >> 0), 0xF29863 ((0x771F) AND 0x7F >> 0),
+;   0xF29880 ((0x775F) AND 0x7F >> 0) and 5 more -- value = (byte at the +2
+;   address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable/StringTable2 draws entry [value] with +0x0B = 3
+;   as the width.  Entry count: the distance to the object's end over the
+;   width; the masks admit 256.  This address is also the END of a display
+;   list: `ld XIY,0xF29783 / ld XIX,this / call T_DisplayListB_Run` at
+;   0xF9193C.
+; --------------------------------------------------------------------------
+DLText_PartCodes:
+	.ascii	"R1-"	; F297A0  [0]
+	.ascii	"R2-"	; F297A3  [1]
+	.ascii	"   "	; F297A6  [2]
+	.ascii	"   "	; F297A9  [3]
+	.ascii	"   "	; F297AC  [4]
+	.ascii	"   "	; F297AF  [5]
+	.ascii	"   "	; F297B2  [6]
+	.ascii	"   "	; F297B5  [7]
+	.ascii	"U1-"	; F297B8  [8]
+	.ascii	"U2-"	; F297BB  [9]
+	.ascii	"   "	; F297BE  [10]
+	.ascii	"   "	; F297C1  [11]
+	.ascii	"   "	; F297C4  [12]
+	.ascii	"   "	; F297C7  [13]
+	.ascii	"   "	; F297CA  [14]
+	.ascii	"   "	; F297CD  [15]
+	.ascii	"E1-"	; F297D0  [16]
+	.ascii	"   "	; F297D3  [17]
+	.ascii	"   "	; F297D6  [18]
+	.ascii	"   "	; F297D9  [19]
+	.ascii	"   "	; F297DC  [20]
+	.ascii	"   "	; F297DF  [21]
+	.ascii	"   "	; F297E2  [22]
+	.ascii	"   "	; F297E5  [23]
+	.ascii	"M1-"	; F297E8  [24]
+	.ascii	"M2-"	; F297EB  [25]
+	.ascii	"M3-"	; F297EE  [26]
+	.ascii	"   "	; F297F1  [27]
+	.ascii	"   "	; F297F4  [28]
+	.ascii	"   "	; F297F7  [29]
+	.ascii	"   "	; F297FA  [30]
+	.ascii	"   "	; F297FD  [31]
+	.ascii	"RD1"	; F29800  [32]
+	.ascii	"RD2"	; F29803  [33]
+	.ascii	"   "	; F29806  [34]
+	.ascii	"   "	; F29809  [35]
+	.ascii	"   "	; F2980C  [36]
+	.ascii	"   "	; F2980F  [37]
+	.ascii	"   "	; F29812  [38]
+	.ascii	"   "	; F29815  [39]
+	.ascii	"UD1"	; F29818  [40]
+	.ascii	"UD2"	; F2981B  [41]
+	.ascii	"   "	; F2981E  [42]
+	.ascii	"   "	; F29821  [43]
+	.ascii	"   "	; F29824  [44]
+	.ascii	"   "	; F29827  [45]
+	.ascii	"   "	; F2982A  [46]
+	.ascii	"   "	; F2982D  [47]
+	.ascii	"ED1"	; F29830  [48]
+	.ascii	"   "	; F29833  [49]
+	.ascii	"   "	; F29836  [50]
+	.ascii	"   "	; F29839  [51]
+	.ascii	"   "	; F2983C  [52]
+	.ascii	"   "	; F2983F  [53]
+	.ascii	"   "	; F29842  [54]
+	.ascii	"   "	; F29845  [55]
+	.ascii	"   "	; F29848  [56]
+	.ascii	"   "	; F2984B  [57]
+	.ascii	"   "	; F2984E  [58]
+	.ascii	"   "	; F29851  [59]
+	.ascii	"   "	; F29854  [60]
+	.ascii	"   "	; F29857  [61]
+	.ascii	"   "	; F2985A  [62]
+	.ascii	"   "	; F2985D  [63]
+	.ascii	"   "	; F29860  [64]
 
 ; === END COVER-R1 0xF297A0-0xF29863 ===
 
@@ -55746,7 +56474,7 @@ DL_F29863:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F297A0	; +0x07 -> XIY: string table
+	.long DLText_PartCodes	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0034	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
@@ -55764,7 +56492,7 @@ DL_F29880:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F297A0	; +0x07 -> XIY: string table
+	.long DLText_PartCodes	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x005C	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
@@ -55782,7 +56510,7 @@ DL_F2989D:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F297A0	; +0x07 -> XIY: string table
+	.long DLText_PartCodes	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0084	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
@@ -55800,7 +56528,7 @@ DL_F298BA:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F297A0	; +0x07 -> XIY: string table
+	.long DLText_PartCodes	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x00AC	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
@@ -55818,7 +56546,7 @@ DL_F298D7:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F297A0	; +0x07 -> XIY: string table
+	.long DLText_PartCodes	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x00D4	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
@@ -55836,7 +56564,7 @@ DL_F298F4:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F297A0	; +0x07 -> XIY: string table
+	.long DLText_PartCodes	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x00FC	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
@@ -55854,7 +56582,7 @@ DL_F29911:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F297A0	; +0x07 -> XIY: string table
+	.long DLText_PartCodes	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0124	; +0x0D -> (0x2530)
 	.short 0x0030	; +0x0F -> (0x2532)
@@ -56304,7 +57032,7 @@ DL_F29ADE:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F28522	; +0x07 -> XIY: string table
+	.long DLText_PanL64CtrR63	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x000A	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
@@ -56314,7 +57042,7 @@ DL_F29AEF:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F28522	; +0x07 -> XIY: string table
+	.long DLText_PanL64CtrR63	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0032	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
@@ -56324,7 +57052,7 @@ DL_F29B00:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F28522	; +0x07 -> XIY: string table
+	.long DLText_PanL64CtrR63	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x005A	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
@@ -56334,7 +57062,7 @@ DL_F29B11:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F28522	; +0x07 -> XIY: string table
+	.long DLText_PanL64CtrR63	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0082	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
@@ -56344,7 +57072,7 @@ DL_F29B22:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F28522	; +0x07 -> XIY: string table
+	.long DLText_PanL64CtrR63	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x00AA	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
@@ -56354,7 +57082,7 @@ DL_F29B33:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F28522	; +0x07 -> XIY: string table
+	.long DLText_PanL64CtrR63	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x00D2	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
@@ -56364,7 +57092,7 @@ DL_F29B44:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F28522	; +0x07 -> XIY: string table
+	.long DLText_PanL64CtrR63	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x00FA	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
@@ -56374,7 +57102,7 @@ DL_F29B55:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F28522	; +0x07 -> XIY: string table
+	.long DLText_PanL64CtrR63	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0122	; +0x0D -> (0x2530)
 	.short 0x007B	; +0x0F -> (0x2532)
@@ -65883,7 +66611,7 @@ DL_F328DC:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E + 0xC	; +0x07 -> XIY: string table
+	.long DLText_KeyOnKeyOffLegato	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x0D4F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65891,7 +66619,7 @@ DL_F328DC:
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x02	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E + 0xC	; +0x07 -> XIY: string table
+	.long DLText_KeyOnKeyOffLegato	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1277	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65899,7 +66627,7 @@ DL_F328DC:
 	.byte 0x30	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E + 0xC	; +0x07 -> XIY: string table
+	.long DLText_KeyOnKeyOffLegato	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x174F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65907,7 +66635,7 @@ DL_F328DC:
 	.byte 0xC0	; +0x04 AND mask
 	.byte 0x06	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E + 0xC	; +0x07 -> XIY: string table
+	.long DLText_KeyOnKeyOffLegato	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1C4F	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -65943,14 +66671,14 @@ DL_F328DC:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F32A87	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F32A87	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F3294B:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x27B1	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F32A4E	; +0x07 -> XIY: string table
+	.long DLText_CtrLRRdm	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0D52	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65958,7 +66686,7 @@ DL_F3294B:
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x02	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F32A4E	; +0x07 -> XIY: string table
+	.long DLText_CtrLRRdm	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x127A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65966,7 +66694,7 @@ DL_F3294B:
 	.byte 0x30	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F32A4E	; +0x07 -> XIY: string table
+	.long DLText_CtrLRRdm	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1752	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65974,7 +66702,7 @@ DL_F3294B:
 	.byte 0xC0	; +0x04 AND mask
 	.byte 0x06	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F32A4E	; +0x07 -> XIY: string table
+	.long DLText_CtrLRRdm	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1C52	; +0x0D -> IX
 DL_F32987:
@@ -65983,7 +66711,7 @@ DL_F32987:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F32A87 + 0x28	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F32AAF	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF32992-0xF32A7D ===
 ; 0xF32992-0xF32A7C, coverage round 1: 158 of this span's 235 bytes are
@@ -66041,7 +66769,7 @@ DL_F329FA:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E + 0x21	; +0x07 -> XIY: string table
+	.long DLText_NonLegChord	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x0D4F	; +0x0D -> IX
 
@@ -66062,7 +66790,7 @@ DL_F329FA:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E + 0x21	; +0x07 -> XIY: string table
+	.long DLText_NonLegChord	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1277	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -66070,7 +66798,7 @@ DL_F329FA:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E + 0x21	; +0x07 -> XIY: string table
+	.long DLText_NonLegChord	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x174F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -66078,7 +66806,7 @@ DL_F329FA:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F32A4E + 0x21	; +0x07 -> XIY: string table
+	.long DLText_NonLegChord	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1C4F	; +0x0D -> IX
 
@@ -66109,21 +66837,61 @@ Data_F32A36:
 	.long	DL_F329FA + 0x2D	; F32A4A  entry 5
 
 ; --------------------------------------------------------------------------
-; Data_F32A4E -- 47 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF32A4E-0xF32A7C -- 47 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F32A4E appears as a 32-bit word at 0xF0654B 0xF0655A
 ;               0xF32952 0xF32961 0xF32970 +1 more.  No routine-directory slot
 ;               and no branch decoded in converted code names it.
 ; Measured: 100% printable ASCII; a linear decode runs 19 instructions and
 ;           ends `ld XIX,0x00002020`, with 13% of the bytes in spellings llvm-
 ;           mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F32A4E:
-	.byte	0x43, 0x54, 0x52, 0x4C, 0x20, 0x20, 0x52, 0x20, 0x20, 0x52, 0x44, 0x4D, 0x4B, 0x45, 0x59, 0x20	; F32A4E  |CTRL  R  RDMKEY |
-	.byte	0x4F, 0x4E, 0x20, 0x4B, 0x45, 0x59, 0x20, 0x4F, 0x46, 0x46, 0x4C, 0x45, 0x47, 0x41, 0x54, 0x4F	; F32A5E  |ON KEY OFFLEGATO|
-	.byte	0x20, 0x4E, 0x4F, 0x4E, 0x20, 0x4C, 0x45, 0x47, 0x43, 0x48, 0x4F, 0x52, 0x44, 0x20, 0x20	; F32A6E  | NON LEGCHORD  |
+; DLText_CtrLRRdm -- 0xF32A4E-0xF32A59, 4 entries of 3 bytes, text drawn by
+;   LCD_Svc_06_DrawText8x14 / LCD_Svc_20_DrawText8x10.  Read by the
+;   interpreter-B op-0x02 records at 0xF06544 ((0x27B0) AND 0x03 >> 0),
+;   0xF06553 ((0x27B0) AND 0x0C >> 2), 0xF3294B ((0x27B1) AND 0x03 >> 0),
+;   0xF3295A ((0x27B1) AND 0x0C >> 2) and 2 more -- value = (byte at the +2
+;   address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 3 as the width.
+;   Entry count: the distance to the next table over the width; the masks
+;   admit 4.
+; --------------------------------------------------------------------------
+DLText_CtrLRRdm:
+	.ascii	"CTR"	; F32A4E  [0]
+	.ascii	"L  "	; F32A51  [1]
+	.ascii	"R  "	; F32A54  [2]
+	.ascii	"RDM"	; F32A57  [3]
+; --------------------------------------------------------------------------
+; DLText_KeyOnKeyOffLegato -- 0xF32A5A-0xF32A6E, 3 entries of 7 bytes, text
+;   drawn by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02
+;   records at 0xF328DC ((0x27A7) AND 0x03 >> 0), 0xF328EB ((0x27A7) AND
+;   0x0C >> 2), 0xF328FA ((0x27A7) AND 0x30 >> 4), 0xF32909 ((0x27A7) AND
+;   0xC0 >> 6) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_StringTable draws entry
+;   [value] with +0x0B = 7 as the width.  Entry count: the distance to the
+;   next table over the width; the masks admit 4.
+; --------------------------------------------------------------------------
+DLText_KeyOnKeyOffLegato:
+	.ascii	"KEY ON "	; F32A5A  [0]
+	.ascii	"KEY OFF"	; F32A61  [1]
+	.ascii	"LEGATO "	; F32A68  [2]
+; --------------------------------------------------------------------------
+; DLText_NonLegChord -- 0xF32A6F-0xF32A7C, 2 entries of 7 bytes, text drawn
+;   by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02 records
+;   at 0xF329FA ((0x27A8) AND 0x80 >> 7), 0xF32A09 ((0x27A9) AND 0x80 >> 7),
+;   0xF32A18 ((0x27AA) AND 0x80 >> 7), 0xF32A27 ((0x27AB) AND 0x80 >> 7) --
+;   value = (byte at the +2 address) AND mask >> shift -- whose +0x07 names
+;   this address; DLB_Handler_StringTable draws entry [value] with +0x0B = 7
+;   as the width.  Entry count: the distance to the object's end over the
+;   width; the masks admit 2.
+; --------------------------------------------------------------------------
+DLText_NonLegChord:
+	.ascii	"NON LEG"	; F32A6F  [0]
+	.ascii	"CHORD  "	; F32A76  [1]
 
 ; === END COVER-R1 0xF32992-0xF32A7D ===
 
@@ -66148,23 +66916,50 @@ DL_F32A7D:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F32A87 -- 80 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF32A87-0xF32AD6 -- 80 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F32A87 appears as a 32-bit word at 0xF32947 0xF5D675;
 ;               converted code at 0xF5D674 loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
 ;               names it.
 ; Measured: 12% printable ASCII; a linear decode runs 51 instructions and ends
 ;           `db`, with 50% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F32A87:
-	.byte	0x0D, 0x00, 0x4C, 0x00, 0xAC, 0x00, 0x68, 0x00, 0x0D, 0x00, 0x4C, 0x00, 0xAC, 0x00, 0x68, 0x00	; F32A87  |..L...h...L...h.|
-	.byte	0x0D, 0x00, 0x6C, 0x00, 0xAC, 0x00, 0x88, 0x00, 0x0D, 0x00, 0x8C, 0x00, 0xAC, 0x00, 0xA8, 0x00	; F32A97  |..l.............|
-	.byte	0x0D, 0x00, 0xAC, 0x00, 0xAC, 0x00, 0xC8, 0x00, 0x0D, 0x00, 0x4C, 0x00, 0x84, 0x00, 0x68, 0x00	; F32AA7  |..........L...h.|
-	.byte	0x0D, 0x00, 0x4C, 0x00, 0x84, 0x00, 0x68, 0x00, 0x0D, 0x00, 0x6C, 0x00, 0x84, 0x00, 0x88, 0x00	; F32AB7  |..L...h...l.....|
-	.byte	0x0D, 0x00, 0x8C, 0x00, 0x84, 0x00, 0xA8, 0x00, 0x0D, 0x00, 0xAC, 0x00, 0x84, 0x00, 0xC8, 0x00	; F32AC7  |................|
+; DLBoxes_F32A87 -- 0xF32A87-0xF32AAE, 5 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF32940 ((0x27A3)
+;   AND 0x0F >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the distance to the
+;   next table over the width; the masks admit 16.  This address is also the
+;   END of a display list: `ld XIY,0xF32A7D / ld XIX,this / call
+;   T_DisplayList_Run` at 0xF5D674.
+; --------------------------------------------------------------------------
+DLBoxes_F32A87:
+	.short	13, 76, 172, 104	; F32A87  [0]
+	.short	13, 76, 172, 104	; F32A8F  [1]
+	.short	13, 108, 172, 136	; F32A97  [2]
+	.short	13, 140, 172, 168	; F32A9F  [3]
+	.short	13, 172, 172, 200	; F32AA7  [4]
+; --------------------------------------------------------------------------
+; DLBoxes_F32AAF -- 0xF32AAF-0xF32AD6, 5 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF32987 ((0x27A3)
+;   AND 0x0F >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the distance to the
+;   object's end over the width; the masks admit 16.
+; --------------------------------------------------------------------------
+DLBoxes_F32AAF:
+	.short	13, 76, 132, 104	; F32AAF  [0]
+	.short	13, 76, 132, 104	; F32AB7  [1]
+	.short	13, 108, 132, 136	; F32ABF  [2]
+	.short	13, 140, 132, 168	; F32AC7  [3]
+	.short	13, 172, 132, 200	; F32ACF  [4]
 
 ; === END COVER-R1 0xF32A87-0xF32AD7 ===
 
@@ -66179,7 +66974,7 @@ DL_F32AD7:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -66187,7 +66982,7 @@ DL_F32AD7:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -66195,7 +66990,7 @@ DL_F32AD7:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -66203,7 +66998,7 @@ DL_F32AD7:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A2	; +0x0D -> IX
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
@@ -66388,7 +67183,7 @@ DL_F32BAB:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -66420,7 +67215,7 @@ DL_F32BAB:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long Data_F05182	; +0x07 -> XIY: string table
+	.long DLText_AttackDecayRelease	; +0x07 -> XIY: string table
 	.short 0x0008	; +0x0B -> BC: bytes per entry
 	.short 0x009D	; +0x0D -> (0x2530)
 	.short 0x003E	; +0x0F -> (0x2532)
@@ -67261,7 +68056,7 @@ DL_F3341C:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F334AE	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F334AE	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF334AE-0xF334FE ===
 ; 0xF334AE-0xF334FD, coverage round 1: 80 of this span's 80 bytes are
@@ -67272,23 +68067,42 @@ DL_F3341C:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F334AE -- 80 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF334AE-0xF334FD -- 80 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F334AE appears as a 32-bit word at 0xF09882 0xF099AA
 ;               0xF334AA 0xF5D749; converted code at 0xF09881 0xF099A9
 ;               0xF5D748 loads it as a 32-bit immediate.  No routine-directory
 ;               slot and no branch decoded in converted code names it.
 ; Measured: 28% printable ASCII; a linear decode runs 47 instructions and ends
 ;           `db`, with 52% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F334AE:
-	.byte	0x4D, 0x00, 0x25, 0x00, 0xBA, 0x00, 0x34, 0x00, 0x4D, 0x00, 0x25, 0x00, 0xBA, 0x00, 0x34, 0x00	; F334AE  |M.%...4.M.%...4.|
-	.byte	0x4D, 0x00, 0x45, 0x00, 0xBA, 0x00, 0x54, 0x00, 0xBE, 0x00, 0x45, 0x00, 0x2A, 0x01, 0x54, 0x00	; F334BE  |M.E...T...E.*.T.|
-	.byte	0x4D, 0x00, 0x67, 0x00, 0xBA, 0x00, 0x76, 0x00, 0xBE, 0x00, 0x67, 0x00, 0x2A, 0x01, 0x76, 0x00	; F334CE  |M.g...v...g.*.v.|
-	.byte	0x4D, 0x00, 0xAA, 0x00, 0xBA, 0x00, 0xB9, 0x00, 0xBE, 0x00, 0xAA, 0x00, 0x2A, 0x01, 0xB9, 0x00	; F334DE  |M...........*...|
-	.byte	0x4D, 0x00, 0x87, 0x00, 0xBA, 0x00, 0x96, 0x00, 0xBE, 0x00, 0x87, 0x00, 0x2A, 0x01, 0x96, 0x00	; F334EE  |M...........*...|
+; DLBoxes_F334AE -- 0xF334AE-0xF334FD, 10 entries of four words, left / top
+;   / right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF334A3 ((0x27A6)
+;   AND 0x0F >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the distance to the
+;   object's end over the width; the masks admit 16.  This address is also
+;   the END of a display list: `ld XIY,0xF3341C / ld XIX,this / call
+;   T_DisplayListB_Run` at 0xF09881; `ld XIY,0xF3341C / ld XIX,this / call
+;   T_DisplayListB_Run` at 0xF099A9; `ld XIY,0xF3341C / ld XIX,this / call
+;   T_DisplayListB_Run` at 0xF5D748.
+; --------------------------------------------------------------------------
+DLBoxes_F334AE:
+	.short	77, 37, 186, 52	; F334AE  [0]
+	.short	77, 37, 186, 52	; F334B6  [1]
+	.short	77, 69, 186, 84	; F334BE  [2]
+	.short	190, 69, 298, 84	; F334C6  [3]
+	.short	77, 103, 186, 118	; F334CE  [4]
+	.short	190, 103, 298, 118	; F334D6  [5]
+	.short	77, 170, 186, 185	; F334DE  [6]
+	.short	190, 170, 298, 185	; F334E6  [7]
+	.short	77, 135, 186, 150	; F334EE  [8]
+	.short	190, 135, 298, 150	; F334F6  [9]
 
 ; === END COVER-R1 0xF334AE-0xF334FE ===
 
@@ -67343,7 +68157,7 @@ DL_F33538:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
-	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesCm2ToG8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0020	; +0x0D -> (0x2530)
 	.short 0x00D6	; +0x0F -> (0x2532)
@@ -67659,7 +68473,7 @@ DL_F33796:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F034D8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x227F	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -67734,7 +68548,7 @@ DL_F33796:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F33840	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F33840	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3380E-0xF33836 ===
 ; 0xF3380E-0xF33835, coverage round 1: 40 of this span's 40 bytes are
@@ -67785,20 +68599,33 @@ DL_F33836:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F33840 -- 24 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF33840-0xF33857 -- 24 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F33840 appears as a 32-bit word at 0xF3380A 0xF5D020;
 ;               converted code at 0xF5D01F loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
 ;               names it.
 ; Measured: 21% printable ASCII; a linear decode runs 12 instructions and ends
 ;           `db`, with 58% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F33840:
-	.byte	0x0D, 0x00, 0x4C, 0x00, 0xD2, 0x00, 0x68, 0x00, 0x0D, 0x00, 0x4C, 0x00, 0xD2, 0x00, 0x68, 0x00	; F33840  |..L...h...L...h.|
-	.byte	0x0D, 0x00, 0x6C, 0x00, 0xD2, 0x00, 0x88, 0x00	; F33850  |..l.....|
+; DLBoxes_F33840 -- 0xF33840-0xF33857, 3 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF33803 ((0x27A3)
+;   AND 0x0F >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`).  Entry count: the distance to the
+;   object's end over the width; the masks admit 16.  This address is also
+;   the END of a display list: `ld XIY,0xF33836 / ld XIX,this / call
+;   T_DisplayList_Run` at 0xF5D01F.
+; --------------------------------------------------------------------------
+DLBoxes_F33840:
+	.short	13, 76, 210, 104	; F33840  [0]
+	.short	13, 76, 210, 104	; F33848  [1]
+	.short	13, 108, 210, 136	; F33850  [2]
 
 ; === END COVER-R1 0xF33840-0xF33858 ===
 
@@ -67813,7 +68640,7 @@ DL_F33858:
 	.byte 0x20	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F034C6 + 0xC	; +0x07 -> XIY: string table
+	.long DLText_OffOn	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D70	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -69302,7 +70129,7 @@ DL_F34361:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F343B6	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F343B6	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0573	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -69310,7 +70137,7 @@ DL_F34361:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F349BB	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F349BB	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0BB3	; +0x0D -> IX
 ; DL_MasterSongMeasure -- the display list at 0xF3437F, named by mechanism M3
@@ -69331,7 +70158,7 @@ DL_MasterSongMeasure:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F349BB + 0x6	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F349C1	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0B2C	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -69384,7 +70211,7 @@ DL_TimeSig:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F343B6 -- 6 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF343B6-0xF343BB -- 6 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F343B6 appears as a 32-bit word at 0xF34368 0xF351BD
 ;               0xF55D4B; converted code at 0xF55D4A loads it as a 32-bit
 ;               immediate.  No routine-directory slot and no branch decoded in
@@ -69392,12 +70219,25 @@ DL_TimeSig:
 ; Measured: 100% printable ASCII; a linear decode runs 2 instructions and ends
 ;           `ld XIZ,0x4e4f2046`, with 0% of the bytes in spellings llvm-mc
 ;           will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F343B6:
-	.byte	0x4F, 0x46, 0x46, 0x20, 0x4F, 0x4E	; F343B6  |OFF ON|
+; DLText_OffOn_F343B6 -- 0xF343B6-0xF343BB, 2 entries of 3 bytes, text drawn
+;   by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02 records
+;   at 0xF34361 ((0x2648) AND 0xFF >> 0), 0xF351B6 ((0x2648) AND 0x01 >> 0)
+;   -- value = (byte at the +2 address) AND mask >> shift -- whose +0x07
+;   names this address; DLB_Handler_StringTable draws entry [value] with
+;   +0x0B = 3 as the width.  Entry count: the distance to the object's end
+;   over the width; the masks admit 256.  This address is also the END of a
+;   display list: `ld XIY,0xF34361 / ld XIX,this / call T_DisplayListB_Run`
+;   at 0xF55D4A.
+; --------------------------------------------------------------------------
+DLText_OffOn_F343B6:
+	.ascii	"OFF"	; F343B6  [0]
+	.ascii	" ON"	; F343B9  [1]
 
 ; === END COVER-R1 0xF343B6-0xF343BC ===
 
@@ -70185,7 +71025,7 @@ DL_CycleMasterS0ngMeasureTimeSig:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F349BB	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F349BB	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0573	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70193,7 +71033,7 @@ DL_CycleMasterS0ngMeasureTimeSig:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F349BB + 0x6	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F349C1	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x11A3	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70235,7 +71075,7 @@ DL_CycleMasterS0ngMeasureTimeSig:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F349BB -- 12 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF349BB-0xF349C6 -- 12 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F349BB appears as a 32-bit word at 0xF34377 0xF34977
 ;               0xF55C9A; converted code at 0xF55C99 loads it as a 32-bit
 ;               immediate.  No routine-directory slot and no branch decoded in
@@ -70243,12 +71083,38 @@ DL_CycleMasterS0ngMeasureTimeSig:
 ; Measured: 100% printable ASCII; a linear decode runs 4 instructions and ends
 ;           `ld XIZ,0x4e4f2046`, with 0% of the bytes in spellings llvm-mc
 ;           will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F349BB:
-	.byte	0x4F, 0x46, 0x46, 0x20, 0x4F, 0x4E, 0x4F, 0x46, 0x46, 0x20, 0x4F, 0x4E	; F349BB  |OFF ONOFF ON|
+; DLText_OffOn_F349BB -- 0xF349BB-0xF349C0, 2 entries of 3 bytes, text drawn
+;   by LCD_Svc_20_DrawText8x10.  Read by the interpreter-B op-0x02 records
+;   at 0xF34370 ((0x2647) AND 0xFF >> 0), 0xF34970 ((0x2647) AND 0xFF >> 0)
+;   -- value = (byte at the +2 address) AND mask >> shift -- whose +0x07
+;   names this address; DLB_Handler_StringTable draws entry [value] with
+;   +0x0B = 3 as the width.  Entry count: the distance to the next table
+;   over the width; the masks admit 256.  This address is also the END of a
+;   display list: `ld XIY,0xF34970 / ld XIX,this / call T_DisplayListB_Run`
+;   at 0xF55C99.
+; --------------------------------------------------------------------------
+DLText_OffOn_F349BB:
+	.ascii	"OFF"	; F349BB  [0]
+	.ascii	" ON"	; F349BE  [1]
+; --------------------------------------------------------------------------
+; DLText_OffOn_F349C1 -- 0xF349C1-0xF349C6, 2 entries of 3 bytes, text drawn
+;   by LCD_Svc_07_DrawText8x16 / LCD_Svc_20_DrawText8x10.  Read by the
+;   interpreter-B op-0x02 records at 0xF3437F ((0x1309) AND 0xFF >> 0),
+;   0xF3497F ((0x1309) AND 0xFF >> 0) -- value = (byte at the +2 address)
+;   AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 3 as the width.
+;   Entry count: the distance to the object's end over the width; the masks
+;   admit 256.
+; --------------------------------------------------------------------------
+DLText_OffOn_F349C1:
+	.ascii	"OFF"	; F349C1  [0]
+	.ascii	" ON"	; F349C4  [1]
 
 ; === END COVER-R1 0xF349BB-0xF349C7 ===
 
@@ -70736,7 +71602,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B59	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70744,7 +71610,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B5E	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70752,7 +71618,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B63	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70760,7 +71626,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B68	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70768,7 +71634,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B6D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70776,7 +71642,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B72	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70784,7 +71650,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B77	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70792,7 +71658,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B7C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70800,7 +71666,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22B1	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70808,7 +71674,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22B6	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70816,7 +71682,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22BB	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70824,7 +71690,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22C0	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70832,7 +71698,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22C5	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70840,7 +71706,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22CA	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70848,7 +71714,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22CF	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -70856,7 +71722,7 @@ DL_F34D98:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F34E88	; +0x07 -> XIY: string table
+	.long DLText_P1ToP32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22D4	; +0x0D -> IX
 
@@ -70869,7 +71735,7 @@ DL_F34D98:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F34E88 -- 96 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF34E88-0xF34EE7 -- 96 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F34E88 appears as a 32-bit word at 0xF3401D 0xF3402E
 ;               0xF3403F 0xF34050 0xF34061 +28 more; converted code at
 ;               0xF55D86 loads it as a 32-bit immediate.  No routine-directory
@@ -70877,17 +71743,57 @@ DL_F34D98:
 ; Measured: 100% printable ASCII; a linear decode runs 42 instructions and
 ;           ends `ld HL,0x0032`, with 12% of the bytes in spellings llvm-mc
 ;           will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F34E88:
-	.byte	0x50, 0x20, 0x31, 0x50, 0x20, 0x32, 0x50, 0x20, 0x33, 0x50, 0x20, 0x34, 0x50, 0x20, 0x35, 0x50	; F34E88  |P 1P 2P 3P 4P 5P|
-	.byte	0x20, 0x36, 0x50, 0x20, 0x37, 0x50, 0x20, 0x38, 0x50, 0x20, 0x39, 0x50, 0x31, 0x30, 0x50, 0x31	; F34E98  | 6P 7P 8P 9P10P1|
-	.byte	0x31, 0x50, 0x31, 0x32, 0x50, 0x31, 0x33, 0x50, 0x31, 0x34, 0x50, 0x31, 0x35, 0x50, 0x31, 0x36	; F34EA8  |1P12P13P14P15P16|
-	.byte	0x50, 0x31, 0x37, 0x50, 0x31, 0x38, 0x50, 0x31, 0x39, 0x50, 0x32, 0x30, 0x50, 0x32, 0x31, 0x50	; F34EB8  |P17P18P19P20P21P|
-	.byte	0x32, 0x32, 0x50, 0x32, 0x33, 0x50, 0x32, 0x34, 0x50, 0x32, 0x35, 0x50, 0x32, 0x36, 0x50, 0x32	; F34EC8  |22P23P24P25P26P2|
-	.byte	0x37, 0x50, 0x32, 0x38, 0x50, 0x32, 0x39, 0x50, 0x33, 0x30, 0x50, 0x33, 0x31, 0x50, 0x33, 0x32	; F34ED8  |7P28P29P30P31P32|
+; DLText_P1ToP32 -- 0xF34E88-0xF34EE7, 32 entries of 3 bytes, text drawn by
+;   LCD_Svc_06_DrawText8x14 / LCD_Svc_17_DrawText8x8Packed.  Read by the
+;   interpreter-B op-0x02/0x07 records at 0xF34016 ((0x12F6) AND 0xFF >> 0),
+;   0xF34027 ((0x12F7) AND 0xFF >> 0), 0xF34038 ((0x12F8) AND 0xFF >> 0),
+;   0xF34049 ((0x12F9) AND 0xFF >> 0) and 28 more -- value = (byte at the +2
+;   address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable/StringTable2 draws entry [value] with +0x0B = 3
+;   as the width.  Entry count: the distance to the object's end over the
+;   width; the masks admit 256.  This address is also the END of a display
+;   list: `ld XIY,0xF34D98 / ld XIX,this / call T_DisplayListB_Run` at
+;   0xF55D86.
+; --------------------------------------------------------------------------
+DLText_P1ToP32:
+	.ascii	"P 1"	; F34E88  [0]
+	.ascii	"P 2"	; F34E8B  [1]
+	.ascii	"P 3"	; F34E8E  [2]
+	.ascii	"P 4"	; F34E91  [3]
+	.ascii	"P 5"	; F34E94  [4]
+	.ascii	"P 6"	; F34E97  [5]
+	.ascii	"P 7"	; F34E9A  [6]
+	.ascii	"P 8"	; F34E9D  [7]
+	.ascii	"P 9"	; F34EA0  [8]
+	.ascii	"P10"	; F34EA3  [9]
+	.ascii	"P11"	; F34EA6  [10]
+	.ascii	"P12"	; F34EA9  [11]
+	.ascii	"P13"	; F34EAC  [12]
+	.ascii	"P14"	; F34EAF  [13]
+	.ascii	"P15"	; F34EB2  [14]
+	.ascii	"P16"	; F34EB5  [15]
+	.ascii	"P17"	; F34EB8  [16]
+	.ascii	"P18"	; F34EBB  [17]
+	.ascii	"P19"	; F34EBE  [18]
+	.ascii	"P20"	; F34EC1  [19]
+	.ascii	"P21"	; F34EC4  [20]
+	.ascii	"P22"	; F34EC7  [21]
+	.ascii	"P23"	; F34ECA  [22]
+	.ascii	"P24"	; F34ECD  [23]
+	.ascii	"P25"	; F34ED0  [24]
+	.ascii	"P26"	; F34ED3  [25]
+	.ascii	"P27"	; F34ED6  [26]
+	.ascii	"P28"	; F34ED9  [27]
+	.ascii	"P29"	; F34EDC  [28]
+	.ascii	"P30"	; F34EDF  [29]
+	.ascii	"P31"	; F34EE2  [30]
+	.ascii	"P32"	; F34EE5  [31]
 
 ; === END COVER-R1 0xF34E88-0xF34EE8 ===
 
@@ -71281,7 +72187,7 @@ DL_F351A7:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long Data_F343B6	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F343B6	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0573	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -71456,7 +72362,7 @@ DL_F352F9:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3533C	; +0x07 -> XIY: string table
+	.long DLText_OffOn_F3533C	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0BC3	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -71502,7 +72408,7 @@ DL_F352F9:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3533C -- 6 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3533C-0xF35341 -- 6 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3533C appears as a 32-bit word at 0xF35300 0xF55EA1;
 ;               converted code at 0xF55EA0 loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
@@ -71510,12 +72416,24 @@ DL_F352F9:
 ; Measured: 100% printable ASCII; a linear decode runs 2 instructions and ends
 ;           `ld XIZ,0x4e4f2046`, with 0% of the bytes in spellings llvm-mc
 ;           will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3533C:
-	.byte	0x4F, 0x46, 0x46, 0x20, 0x4F, 0x4E	; F3533C  |OFF ON|
+; DLText_OffOn_F3533C -- 0xF3533C-0xF35341, 2 entries of 3 bytes, text drawn
+;   by LCD_Svc_07_DrawText8x16.  Read by the interpreter-B op-0x02 record at
+;   0xF352F9 ((0x1308) AND 0xFF >> 0) -- value = (byte at the +2 address)
+;   AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 3 as the width.
+;   Entry count: the distance to the object's end over the width; the masks
+;   admit 256.  This address is also the END of a display list: `ld
+;   XIY,0xF352F9 / ld XIX,this / call T_DisplayListB_Run` at 0xF55EA0.
+; --------------------------------------------------------------------------
+DLText_OffOn_F3533C:
+	.ascii	"OFF"	; F3533C  [0]
+	.ascii	" ON"	; F3533F  [1]
 
 ; === END COVER-R1 0xF3533C-0xF35342 ===
 
@@ -77717,7 +78635,7 @@ DL_LastMeasure:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
+	.long DLText_0To16MasterAll	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C1C	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -77739,7 +78657,7 @@ DL_LastMeasure:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F3A6D9	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F3A6D9	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3A6D9-0xF3A7DA ===
 ; 0xF3A6D9-0xF3A7D9, coverage round 1: 257 of this span's 257 bytes are
@@ -77750,7 +78668,7 @@ DL_LastMeasure:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3A6D9 -- 257 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3A6D9-0xF3A7D9 -- 257 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3A6D9 appears as a 32-bit word at 0xF3A6D5 0xF7EFEE;
 ;               converted code at 0xF7EFED loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
@@ -77758,28 +78676,118 @@ DL_LastMeasure:
 ; Measured: 89% printable ASCII; a linear decode runs 114 instructions and
 ;           ends `pop IX`, with 9% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3A6D9:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x00, 0x43, 0x00, 0xDF, 0x00, 0x62, 0x00	; F3A6D9  |..........C...b.|
-	.byte	0x0B, 0x00, 0x67, 0x00, 0xDF, 0x00, 0x86, 0x00, 0x0B, 0x00, 0x8B, 0x00, 0xDF, 0x00, 0xAA, 0x00	; F3A6E9  |..g.............|
-	.byte	0x20, 0x20, 0x30, 0x20, 0x20, 0x31, 0x20, 0x20, 0x32, 0x20, 0x20, 0x33, 0x20, 0x20, 0x34, 0x20	; F3A6F9  |  0  1  2  3  4 |
-	.byte	0x20, 0x35, 0x20, 0x20, 0x36, 0x20, 0x20, 0x37, 0x20, 0x20, 0x38, 0x20, 0x20, 0x39, 0x20, 0x31	; F3A709  | 5  6  7  8  9 1|
-	.byte	0x30, 0x20, 0x31, 0x31, 0x20, 0x31, 0x32, 0x20, 0x31, 0x33, 0x20, 0x31, 0x34, 0x20, 0x31, 0x35	; F3A719  |0 11 12 13 14 15|
-	.byte	0x20, 0x31, 0x36, 0x41, 0x4C, 0x4C, 0x20, 0x20, 0x30, 0x20, 0x20, 0x20, 0x20, 0x20, 0x31, 0x20	; F3A729  | 16ALL  0     1 |
-	.byte	0x20, 0x20, 0x20, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20, 0x33, 0x20, 0x20, 0x20, 0x20, 0x20	; F3A739  |    2     3     |
-	.byte	0x34, 0x20, 0x20, 0x20, 0x20, 0x20, 0x35, 0x20, 0x20, 0x20, 0x20, 0x20, 0x36, 0x20, 0x20, 0x20	; F3A749  |4     5     6   |
-	.byte	0x20, 0x20, 0x37, 0x20, 0x20, 0x20, 0x20, 0x20, 0x38, 0x20, 0x20, 0x20, 0x20, 0x20, 0x39, 0x20	; F3A759  |  7     8     9 |
-	.byte	0x20, 0x20, 0x20, 0x31, 0x30, 0x20, 0x20, 0x20, 0x20, 0x31, 0x31, 0x20, 0x20, 0x20, 0x20, 0x31	; F3A769  |   10    11    1|
-	.byte	0x32, 0x20, 0x20, 0x20, 0x20, 0x31, 0x33, 0x20, 0x20, 0x20, 0x20, 0x31, 0x34, 0x20, 0x20, 0x20	; F3A779  |2    13    14   |
-	.byte	0x20, 0x31, 0x35, 0x20, 0x20, 0x20, 0x20, 0x31, 0x36, 0x20, 0x20, 0x20, 0x4D, 0x41, 0x53, 0x54	; F3A789  | 15    16   MAST|
-	.byte	0x45, 0x52, 0x41, 0x4C, 0x4C, 0x20, 0x20, 0x20, 0x20, 0x20, 0x30, 0x20, 0x20, 0x31, 0x20, 0x20	; F3A799  |ERALL     0  1  |
-	.byte	0x32, 0x20, 0x20, 0x33, 0x20, 0x20, 0x34, 0x20, 0x20, 0x35, 0x20, 0x20, 0x36, 0x20, 0x20, 0x37	; F3A7A9  |2  3  4  5  6  7|
-	.byte	0x20, 0x20, 0x38, 0x20, 0x20, 0x39, 0x20, 0x31, 0x30, 0x20, 0x31, 0x31, 0x20, 0x31, 0x32, 0x20	; F3A7B9  |  8  9 10 11 12 |
-	.byte	0x31, 0x33, 0x20, 0x31, 0x34, 0x20, 0x31, 0x35, 0x20, 0x31, 0x36, 0x20, 0x31, 0x37, 0x41, 0x4C	; F3A7C9  |13 14 15 16 17AL|
-	.byte	0x4C	; F3A7D9  |L|
+; DLBoxes_F3A6D9 -- 0xF3A6D9-0xF3A6F8, 4 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF3A6CE ((0x12FB)
+;   AND 0x03 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`); entry 0 is (0,0)-(1,1), a 2 x
+;   2-pixel box in the panel's top-left corner, so value 0 draws next to
+;   nothing (wsa1/scripts/analysis/sizing_defect_hunt.py calls this shape an
+;   8-byte header; the reader indexes it as entry 0).  Entry count: the
+;   distance to the next table over the width; the masks admit 4.  This
+;   address is also the END of a display list: `ld XIY,0xF3A6AB / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF7EFED.
+; --------------------------------------------------------------------------
+DLBoxes_F3A6D9:
+	.short	0, 0, 1, 1	; F3A6D9  [0]
+	.short	11, 67, 223, 98	; F3A6E1  [1]
+	.short	11, 103, 223, 134	; F3A6E9  [2]
+	.short	11, 139, 223, 170	; F3A6F1  [3]
+; --------------------------------------------------------------------------
+; DLText_0To16All -- 0xF3A6F9-0xF3A72E, 18 entries of 3 bytes, text drawn by
+;   LCD_Svc_07_DrawText8x16.  Read by the interpreter-B op-0x02 records at
+;   0xF3AB3B ((0x12F6) AND 0x1F >> 0), 0xF3ACF0 ((0x12F6) AND 0x1F >> 0),
+;   0xF3AFE7 ((0x12F6) AND 0x1F >> 0), 0xF3B1E3 ((0x12F6) AND 0xFF >> 0) and
+;   1 more -- value = (byte at the +2 address) AND mask >> shift -- whose
+;   +0x07 names this address; DLB_Handler_StringTable draws entry [value]
+;   with +0x0B = 3 as the width.  Entry count: the distance to the next
+;   table over the width; the masks admit 256.
+; --------------------------------------------------------------------------
+DLText_0To16All:
+	.ascii	"  0"	; F3A6F9  [0]
+	.ascii	"  1"	; F3A6FC  [1]
+	.ascii	"  2"	; F3A6FF  [2]
+	.ascii	"  3"	; F3A702  [3]
+	.ascii	"  4"	; F3A705  [4]
+	.ascii	"  5"	; F3A708  [5]
+	.ascii	"  6"	; F3A70B  [6]
+	.ascii	"  7"	; F3A70E  [7]
+	.ascii	"  8"	; F3A711  [8]
+	.ascii	"  9"	; F3A714  [9]
+	.ascii	" 10"	; F3A717  [10]
+	.ascii	" 11"	; F3A71A  [11]
+	.ascii	" 12"	; F3A71D  [12]
+	.ascii	" 13"	; F3A720  [13]
+	.ascii	" 14"	; F3A723  [14]
+	.ascii	" 15"	; F3A726  [15]
+	.ascii	" 16"	; F3A729  [16]
+	.ascii	"ALL"	; F3A72C  [17]
+; --------------------------------------------------------------------------
+; DLText_0To16MasterAll -- 0xF3A72F-0xF3A7A0, 19 entries of 6 bytes, text
+;   drawn by LCD_Svc_07_DrawText8x16.  Read by the interpreter-B op-0x02
+;   records at 0xF3A6AB ((0x12F6) AND 0x1F >> 0), 0xF3A9DA ((0x12F6) AND
+;   0x1F >> 0), 0xF3BD07 ((0x12F6) AND 0x1F >> 0), 0xF3BD16 ((0x12FB) AND
+;   0x1F >> 0) and 2 more -- value = (byte at the +2 address) AND mask >>
+;   shift -- whose +0x07 names this address; DLB_Handler_StringTable draws
+;   entry [value] with +0x0B = 6 as the width.  Entry count: the distance to
+;   the next table over the width; the masks admit 32.
+; --------------------------------------------------------------------------
+DLText_0To16MasterAll:
+	.ascii	"  0   "	; F3A72F  [0]
+	.ascii	"  1   "	; F3A735  [1]
+	.ascii	"  2   "	; F3A73B  [2]
+	.ascii	"  3   "	; F3A741  [3]
+	.ascii	"  4   "	; F3A747  [4]
+	.ascii	"  5   "	; F3A74D  [5]
+	.ascii	"  6   "	; F3A753  [6]
+	.ascii	"  7   "	; F3A759  [7]
+	.ascii	"  8   "	; F3A75F  [8]
+	.ascii	"  9   "	; F3A765  [9]
+	.ascii	" 10   "	; F3A76B  [10]
+	.ascii	" 11   "	; F3A771  [11]
+	.ascii	" 12   "	; F3A777  [12]
+	.ascii	" 13   "	; F3A77D  [13]
+	.ascii	" 14   "	; F3A783  [14]
+	.ascii	" 15   "	; F3A789  [15]
+	.ascii	" 16   "	; F3A78F  [16]
+	.ascii	"MASTER"	; F3A795  [17]
+	.ascii	"ALL   "	; F3A79B  [18]
+; --------------------------------------------------------------------------
+; DLText_0To17All -- 0xF3A7A1-0xF3A7D9, 19 entries of 3 bytes, text drawn by
+;   LCD_Svc_07_DrawText8x16.  Read by the interpreter-B op-0x02 records at
+;   0xF3C17B ((0x1304) AND 0x7F >> 0), 0xF3C18A ((0x1305) AND 0xFF >> 0) --
+;   value = (byte at the +2 address) AND mask >> shift -- whose +0x07 names
+;   this address; DLB_Handler_StringTable draws entry [value] with +0x0B = 3
+;   as the width.  Entry count: the distance to the object's end over the
+;   width; the masks admit 256.
+; --------------------------------------------------------------------------
+DLText_0To17All:
+	.ascii	"  0"	; F3A7A1  [0]
+	.ascii	"  1"	; F3A7A4  [1]
+	.ascii	"  2"	; F3A7A7  [2]
+	.ascii	"  3"	; F3A7AA  [3]
+	.ascii	"  4"	; F3A7AD  [4]
+	.ascii	"  5"	; F3A7B0  [5]
+	.ascii	"  6"	; F3A7B3  [6]
+	.ascii	"  7"	; F3A7B6  [7]
+	.ascii	"  8"	; F3A7B9  [8]
+	.ascii	"  9"	; F3A7BC  [9]
+	.ascii	" 10"	; F3A7BF  [10]
+	.ascii	" 11"	; F3A7C2  [11]
+	.ascii	" 12"	; F3A7C5  [12]
+	.ascii	" 13"	; F3A7C8  [13]
+	.ascii	" 14"	; F3A7CB  [14]
+	.ascii	" 15"	; F3A7CE  [15]
+	.ascii	" 16"	; F3A7D1  [16]
+	.ascii	" 17"	; F3A7D4  [17]
+	.ascii	"ALL"	; F3A7D7  [18]
 
 ; === END COVER-R1 0xF3A6D9-0xF3A7DA ===
 
@@ -78032,7 +79040,7 @@ DL_F3A9DA:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
+	.long DLText_0To16MasterAll	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x067C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78040,7 +79048,7 @@ DL_F3A9DA:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3AA17 + 0x28	; +0x07 -> XIY: string table
+	.long DLText_AllNoteControl	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x17AC	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -78062,7 +79070,7 @@ DL_F3A9DA:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F3AA17	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F3AA17	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3AA17-0xF3AA54 ===
 ; 0xF3AA17-0xF3AA53, coverage round 1: 61 of this span's 61 bytes are
@@ -78073,7 +79081,7 @@ DL_F3A9DA:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3AA17 -- 61 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3AA17-0xF3AA53 -- 61 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3AA17 appears as a 32-bit word at 0xF3AA13 0xF7F2C9;
 ;               converted code at 0xF7F2C8 loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
@@ -78081,15 +79089,44 @@ DL_F3A9DA:
 ; Measured: 41% printable ASCII; a linear decode runs 39 instructions and ends
 ;           `pop IX`, with 30% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3AA17:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x00, 0x1F, 0x00, 0xDF, 0x00, 0x3E, 0x00	; F3AA17  |..............>.|
-	.byte	0x0B, 0x00, 0x43, 0x00, 0xDF, 0x00, 0x62, 0x00, 0x0B, 0x00, 0x67, 0x00, 0xDF, 0x00, 0x86, 0x00	; F3AA27  |..C...b...g.....|
-	.byte	0x0B, 0x00, 0x8C, 0x00, 0xDF, 0x00, 0xAB, 0x00, 0x41, 0x4C, 0x4C, 0x20, 0x20, 0x20, 0x20, 0x4E	; F3AA37  |........ALL    N|
-	.byte	0x4F, 0x54, 0x45, 0x20, 0x20, 0x20, 0x43, 0x4F, 0x4E, 0x54, 0x52, 0x4F, 0x4C	; F3AA47  |OTE   CONTROL|
+; DLBoxes_F3AA17 -- 0xF3AA17-0xF3AA3E, 5 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF3AA0C ((0x12FC)
+;   AND 0x07 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`); entry 0 is (0,0)-(1,1), a 2 x
+;   2-pixel box in the panel's top-left corner, so value 0 draws next to
+;   nothing (wsa1/scripts/analysis/sizing_defect_hunt.py calls this shape an
+;   8-byte header; the reader indexes it as entry 0).  Entry count: the
+;   distance to the next table over the width; the masks admit 8.  This
+;   address is also the END of a display list: `ld XIY,0xF3A9DA / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF7F2C8.
+; --------------------------------------------------------------------------
+DLBoxes_F3AA17:
+	.short	0, 0, 1, 1	; F3AA17  [0]
+	.short	11, 31, 223, 62	; F3AA1F  [1]
+	.short	11, 67, 223, 98	; F3AA27  [2]
+	.short	11, 103, 223, 134	; F3AA2F  [3]
+	.short	11, 140, 223, 171	; F3AA37  [4]
+; --------------------------------------------------------------------------
+; DLText_AllNoteControl -- 0xF3AA3F-0xF3AA53, 3 entries of 7 bytes, text
+;   drawn by LCD_Svc_07_DrawText8x16.  Read by the interpreter-B op-0x02
+;   record at 0xF3A9E9 ((0x12FB) AND 0x03 >> 0) -- value = (byte at the +2
+;   address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 7 as the width.
+;   Entry count: the distance to the object's end over the width; the masks
+;   admit 4.
+; --------------------------------------------------------------------------
+DLText_AllNoteControl:
+	.ascii	"ALL    "	; F3AA3F  [0]
+	.ascii	"NOTE   "	; F3AA46  [1]
+	.ascii	"CONTROL"	; F3AA4D  [2]
 
 ; === END COVER-R1 0xF3AA17-0xF3AA54 ===
 
@@ -78198,7 +79235,7 @@ DL_F3AB3B:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
+	.long DLText_0To16All	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x06A4	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -78228,7 +79265,7 @@ DL_F3AB3B:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F3AB74	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F3AB74	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3AB74-0xF3AB9C ===
 ; 0xF3AB74-0xF3AB9B, coverage round 1: 40 of this span's 40 bytes are
@@ -78239,21 +79276,38 @@ DL_F3AB3B:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3AB74 -- 40 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3AB74-0xF3AB9B -- 40 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3AB74 appears as a 32-bit word at 0xF3AB70 0xF7F929;
 ;               converted code at 0xF7F928 loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
 ;               names it.
 ; Measured: 12% printable ASCII; a linear decode runs 25 instructions and ends
 ;           `db`, with 35% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3AB74:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x00, 0x20, 0x00, 0xDF, 0x00, 0x3F, 0x00	; F3AB74  |.......... ...?.|
-	.byte	0x0B, 0x00, 0x44, 0x00, 0xDF, 0x00, 0x63, 0x00, 0x0B, 0x00, 0x68, 0x00, 0xDF, 0x00, 0x87, 0x00	; F3AB84  |..D...c...h.....|
-	.byte	0x0B, 0x00, 0x8C, 0x00, 0xDF, 0x00, 0xAB, 0x00	; F3AB94  |........|
+; DLBoxes_F3AB74 -- 0xF3AB74-0xF3AB9B, 5 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF3AB69 ((0x12FC)
+;   AND 0x07 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`); entry 0 is (0,0)-(1,1), a 2 x
+;   2-pixel box in the panel's top-left corner, so value 0 draws next to
+;   nothing (wsa1/scripts/analysis/sizing_defect_hunt.py calls this shape an
+;   8-byte header; the reader indexes it as entry 0).  Entry count: the
+;   distance to the object's end over the width; the masks admit 8.  This
+;   address is also the END of a display list: `ld XIY,0xF3AB3B / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF7F928.
+; --------------------------------------------------------------------------
+DLBoxes_F3AB74:
+	.short	0, 0, 1, 1	; F3AB74  [0]
+	.short	11, 32, 223, 63	; F3AB7C  [1]
+	.short	11, 68, 223, 99	; F3AB84  [2]
+	.short	11, 104, 223, 135	; F3AB8C  [3]
+	.short	11, 140, 223, 171	; F3AB94  [4]
 
 ; === END COVER-R1 0xF3AB74-0xF3AB9C ===
 
@@ -78446,7 +79500,7 @@ DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
+	.long DLText_0To16All	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0651	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78454,7 +79508,7 @@ DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3AD42 + 0x38	; +0x07 -> XIY: string table
+	.long DLText_GlyphPairs_F3AD7A	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x1751	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -78491,7 +79545,7 @@ DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F3AD42	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F3AD42	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3AD42-0xF3AD88 ===
 ; 0xF3AD42-0xF3AD87, coverage round 1: 70 of this span's 70 bytes are
@@ -78502,23 +79556,57 @@ DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3AD42 -- 70 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3AD42-0xF3AD87 -- 70 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3AD42 appears as a 32-bit word at 0xF3AD3E 0xF7F5F7;
 ;               converted code at 0xF7F5F6 loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
 ;               names it.
 ; Measured: 19% printable ASCII; a linear decode runs 42 instructions and ends
 ;           `db`, with 31% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3AD42:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x00, 0x1D, 0x00, 0xA2, 0x00, 0x3C, 0x00	; F3AD42  |..............<.|
-	.byte	0x0B, 0x00, 0x41, 0x00, 0xA2, 0x00, 0x60, 0x00, 0x0B, 0x00, 0x65, 0x00, 0xA2, 0x00, 0x84, 0x00	; F3AD52  |..A...`...e.....|
-	.byte	0x0B, 0x00, 0x8A, 0x00, 0xA2, 0x00, 0xA9, 0x00, 0xAA, 0x00, 0x1D, 0x00, 0x33, 0x01, 0x3C, 0x00	; F3AD62  |............3.<.|
-	.byte	0xAA, 0x00, 0x41, 0x00, 0x33, 0x01, 0x60, 0x00, 0x15, 0x20, 0x16, 0x20, 0x17, 0x20, 0x18, 0x20	; F3AD72  |..A.3.`.. . . . |
-	.byte	0x16, 0x1F, 0x17, 0x1F, 0x18, 0x1F	; F3AD82  |......|
+; DLBoxes_F3AD42 -- 0xF3AD42-0xF3AD79, 7 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF3AD37 ((0x12FE)
+;   AND 0x07 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`); entry 0 is (0,0)-(1,1), a 2 x
+;   2-pixel box in the panel's top-left corner, so value 0 draws next to
+;   nothing (wsa1/scripts/analysis/sizing_defect_hunt.py calls this shape an
+;   8-byte header; the reader indexes it as entry 0).  Entry count: the
+;   distance to the next table over the width; the masks admit 8.  This
+;   address is also the END of a display list: `ld XIY,0xF3ACF0 / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF7F5F6.
+; --------------------------------------------------------------------------
+DLBoxes_F3AD42:
+	.short	0, 0, 1, 1	; F3AD42  [0]
+	.short	11, 29, 162, 60	; F3AD4A  [1]
+	.short	11, 65, 162, 96	; F3AD52  [2]
+	.short	11, 101, 162, 132	; F3AD5A  [3]
+	.short	11, 138, 162, 169	; F3AD62  [4]
+	.short	170, 29, 307, 60	; F3AD6A  [5]
+	.short	170, 65, 307, 96	; F3AD72  [6]
+; --------------------------------------------------------------------------
+; DLText_GlyphPairs_F3AD7A -- 0xF3AD7A-0xF3AD87, 7 entries of 2 bytes, text
+;   drawn by LCD_Svc_07_DrawText8x16.  Read by the interpreter-B op-0x02
+;   record at 0xF3ACFF ((0x12FB) AND 0xFF >> 0) -- value = (byte at the +2
+;   address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 2 as the width.
+;   Entry count: the distance to the object's end over the width; the masks
+;   admit 256.
+; --------------------------------------------------------------------------
+DLText_GlyphPairs_F3AD7A:
+	.byte	0x15, 0x20	; F3AD7A  [0]  "<15> "
+	.byte	0x16, 0x20	; F3AD7C  [1]  "<16> "
+	.byte	0x17, 0x20	; F3AD7E  [2]  "<17> "
+	.byte	0x18, 0x20	; F3AD80  [3]  "<18> "
+	.byte	0x16, 0x1F	; F3AD82  [4]  "<16><1F>"
+	.byte	0x17, 0x1F	; F3AD84  [5]  "<17><1F>"
+	.byte	0x18, 0x1F	; F3AD86  [6]  "<18><1F>"
 
 ; === END COVER-R1 0xF3AD42-0xF3AD88 ===
 
@@ -78751,7 +79839,7 @@ DL_F3AFE7:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
+	.long DLText_0To16All	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0B79	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78759,7 +79847,7 @@ DL_F3AFE7:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3B065 + 0x30	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesInOctave	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x0C9B	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78767,7 +79855,7 @@ DL_F3AFE7:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3B065 + 0x48	; +0x07 -> XIY: string table
+	.long DLText_OctavesMinus2To8	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x0C9D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78775,7 +79863,7 @@ DL_F3AFE7:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3B065 + 0x30	; +0x07 -> XIY: string table
+	.long DLText_NoteNamesInOctave	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x12DB	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78783,7 +79871,7 @@ DL_F3AFE7:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3B065 + 0x48	; +0x07 -> XIY: string table
+	.long DLText_OctavesMinus2To8	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x12DD	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -78819,7 +79907,7 @@ DL_F3AFE7:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F3B065	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F3B065	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3B065-0xF3B0C3 ===
 ; 0xF3B065-0xF3B0C2, coverage round 1: 94 of this span's 94 bytes are
@@ -78830,24 +79918,82 @@ DL_F3AFE7:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3B065 -- 94 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3B065-0xF3B0C2 -- 94 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3B065 appears as a 32-bit word at 0xF3B061.  No routine-
 ;               directory slot and no branch decoded in converted code names
 ;               it.
 ; Measured: 52% printable ASCII; a linear decode runs 44 instructions and ends
 ;           `ld W,0x00`, with 24% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3B065:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0A, 0x00, 0x3E, 0x00, 0xA6, 0x00, 0x5D, 0x00	; F3B065  |..........>...].|
-	.byte	0x0A, 0x00, 0x67, 0x00, 0xA6, 0x00, 0x85, 0x00, 0x0A, 0x00, 0x8F, 0x00, 0xA6, 0x00, 0xAE, 0x00	; F3B075  |..g.............|
-	.byte	0xBB, 0x00, 0x3E, 0x00, 0x31, 0x01, 0x60, 0x00, 0xBB, 0x00, 0x66, 0x00, 0x31, 0x01, 0x88, 0x00	; F3B085  |..>.1.`...f.1...|
-	.byte	0x20, 0x43, 0x44, 0x88, 0x20, 0x44, 0x45, 0x88, 0x20, 0x45, 0x20, 0x46, 0x46, 0x8C, 0x20, 0x47	; F3B095  | CD. DE. E FF. G|
-	.byte	0x41, 0x88, 0x20, 0x41, 0x42, 0x88, 0x20, 0x42, 0x2D, 0x32, 0x2D, 0x31, 0x30, 0x20, 0x31, 0x20	; F3B0A5  |A. AB. B-2-10 1 |
-	.byte	0x32, 0x20, 0x33, 0x20, 0x34, 0x20, 0x35, 0x20, 0x36, 0x20, 0x37, 0x20, 0x38, 0x20	; F3B0B5  |2 3 4 5 6 7 8 |
+; DLBoxes_F3B065 -- 0xF3B065-0xF3B094, 6 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF3B05A ((0x1301)
+;   AND 0x07 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`); entry 0 is (0,0)-(1,1), a 2 x
+;   2-pixel box in the panel's top-left corner, so value 0 draws next to
+;   nothing (wsa1/scripts/analysis/sizing_defect_hunt.py calls this shape an
+;   8-byte header; the reader indexes it as entry 0).  Entry count: the
+;   distance to the next table over the width; the masks admit 8.  This
+;   address is also the END of a display list: `ld XIY,0xF3AFE7 / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF804DF.
+; --------------------------------------------------------------------------
+DLBoxes_F3B065:
+	.short	0, 0, 1, 1	; F3B065  [0]
+	.short	10, 62, 166, 93	; F3B06D  [1]
+	.short	10, 103, 166, 133	; F3B075  [2]
+	.short	10, 143, 166, 174	; F3B07D  [3]
+	.short	187, 62, 305, 96	; F3B085  [4]
+	.short	187, 102, 305, 136	; F3B08D  [5]
+; --------------------------------------------------------------------------
+; DLText_NoteNamesInOctave -- 0xF3B095-0xF3B0AC, 12 entries of 2 bytes, text
+;   drawn by LCD_Svc_07_DrawText8x16.  Read by the interpreter-B op-0x02
+;   records at 0xF3AFF6 ((0x12F7) AND 0xFF >> 0), 0xF3B014 ((0x12F9) AND
+;   0xFF >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_StringTable draws entry
+;   [value] with +0x0B = 2 as the width.  Entry count: the distance to the
+;   next table over the width; the masks admit 256.
+; --------------------------------------------------------------------------
+DLText_NoteNamesInOctave:
+	.ascii	" C"	; F3B095  [0]
+	.byte	0x44, 0x88	; F3B097  [1]  "D<88>"
+	.ascii	" D"	; F3B099  [2]
+	.byte	0x45, 0x88	; F3B09B  [3]  "E<88>"
+	.ascii	" E"	; F3B09D  [4]
+	.ascii	" F"	; F3B09F  [5]
+	.byte	0x46, 0x8C	; F3B0A1  [6]  "F<8C>"
+	.ascii	" G"	; F3B0A3  [7]
+	.byte	0x41, 0x88	; F3B0A5  [8]  "A<88>"
+	.ascii	" A"	; F3B0A7  [9]
+	.byte	0x42, 0x88	; F3B0A9  [10]  "B<88>"
+	.ascii	" B"	; F3B0AB  [11]
+; --------------------------------------------------------------------------
+; DLText_OctavesMinus2To8 -- 0xF3B0AD-0xF3B0C2, 11 entries of 2 bytes, text
+;   drawn by LCD_Svc_07_DrawText8x16.  Read by the interpreter-B op-0x02
+;   records at 0xF3B005 ((0x12F8) AND 0xFF >> 0), 0xF3B023 ((0x12FA) AND
+;   0xFF >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_StringTable draws entry
+;   [value] with +0x0B = 2 as the width.  Entry count: the distance to the
+;   object's end over the width; the masks admit 256.
+; --------------------------------------------------------------------------
+DLText_OctavesMinus2To8:
+	.ascii	"-2"	; F3B0AD  [0]
+	.ascii	"-1"	; F3B0AF  [1]
+	.ascii	"0 "	; F3B0B1  [2]
+	.ascii	"1 "	; F3B0B3  [3]
+	.ascii	"2 "	; F3B0B5  [4]
+	.ascii	"3 "	; F3B0B7  [5]
+	.ascii	"4 "	; F3B0B9  [6]
+	.ascii	"5 "	; F3B0BB  [7]
+	.ascii	"6 "	; F3B0BD  [8]
+	.ascii	"7 "	; F3B0BF  [9]
+	.ascii	"8 "	; F3B0C1  [10]
 
 ; === END COVER-R1 0xF3B065-0xF3B0C3 ===
 
@@ -78988,7 +80134,7 @@ DL_F3B1E3:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
+	.long DLText_0To16All	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x06A4	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -79018,7 +80164,7 @@ DL_F3B1E3:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F3B21C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F3B21C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3B21C-0xF3B244 ===
 ; 0xF3B21C-0xF3B243, coverage round 1: 40 of this span's 40 bytes are
@@ -79029,21 +80175,38 @@ DL_F3B1E3:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3B21C -- 40 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3B21C-0xF3B243 -- 40 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3B21C appears as a 32-bit word at 0xF3B218 0xF7FC8D;
 ;               converted code at 0xF7FC8C loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
 ;               names it.
 ; Measured: 12% printable ASCII; a linear decode runs 25 instructions and ends
 ;           `db`, with 35% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3B21C:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x00, 0x20, 0x00, 0xDF, 0x00, 0x3F, 0x00	; F3B21C  |.......... ...?.|
-	.byte	0x0B, 0x00, 0x44, 0x00, 0xDF, 0x00, 0x63, 0x00, 0x0B, 0x00, 0x68, 0x00, 0xDF, 0x00, 0x87, 0x00	; F3B22C  |..D...c...h.....|
-	.byte	0x0B, 0x00, 0x8C, 0x00, 0xDF, 0x00, 0xAB, 0x00	; F3B23C  |........|
+; DLBoxes_F3B21C -- 0xF3B21C-0xF3B243, 5 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF3B211 ((0x12FC)
+;   AND 0x07 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`); entry 0 is (0,0)-(1,1), a 2 x
+;   2-pixel box in the panel's top-left corner, so value 0 draws next to
+;   nothing (wsa1/scripts/analysis/sizing_defect_hunt.py calls this shape an
+;   8-byte header; the reader indexes it as entry 0).  Entry count: the
+;   distance to the object's end over the width; the masks admit 8.  This
+;   address is also the END of a display list: `ld XIY,0xF3B1E3 / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF7FC8C.
+; --------------------------------------------------------------------------
+DLBoxes_F3B21C:
+	.short	0, 0, 1, 1	; F3B21C  [0]
+	.short	11, 32, 223, 63	; F3B224  [1]
+	.short	11, 68, 223, 99	; F3B22C  [2]
+	.short	11, 104, 223, 135	; F3B234  [3]
+	.short	11, 140, 223, 171	; F3B23C  [4]
 
 ; === END COVER-R1 0xF3B21C-0xF3B244 ===
 
@@ -79179,7 +80342,7 @@ DL_F3B379:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
+	.long DLText_0To16All	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x06A4	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -79209,7 +80372,7 @@ DL_F3B379:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F3B3B2	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F3B3B2	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3B3B2-0xF3B7C3 ===
 ; 0xF3B3B2-0xF3B7C2, coverage round 1: 92 of this span's 1041 bytes are
@@ -79220,7 +80383,7 @@ DL_F3B379:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3B3B2 -- 40 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3B3B2-0xF3B3D9 -- 40 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3B3B2 appears as a 32-bit word at 0xF3B3AE 0xF7FFBC;
 ;               converted code at 0xF7FFBB loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
@@ -79228,14 +80391,31 @@ DL_F3B379:
 ; Measured: 19% printable ASCII; a linear decode runs 31 instructions and ends
 ;           `halt`, with 30% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3B3B2:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x00, 0x20, 0x00, 0xDF, 0x00, 0x3F, 0x00	; F3B3B2  |.......... ...?.|
-	.byte	0x0B, 0x00, 0x44, 0x00, 0xDF, 0x00, 0x63, 0x00, 0x0B, 0x00, 0x68, 0x00, 0xDF, 0x00, 0x87, 0x00	; F3B3C2  |..D...c...h.....|
-	.byte	0x0B, 0x00, 0x8C, 0x00, 0xDF, 0x00, 0xAB, 0x00	; F3B3D2  |....|
+; DLBoxes_F3B3B2 -- 0xF3B3B2-0xF3B3D9, 5 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF3B3A7 ((0x12FC)
+;   AND 0x07 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`); entry 0 is (0,0)-(1,1), a 2 x
+;   2-pixel box in the panel's top-left corner, so value 0 draws next to
+;   nothing (wsa1/scripts/analysis/sizing_defect_hunt.py calls this shape an
+;   8-byte header; the reader indexes it as entry 0).  Entry count: the
+;   distance to the object's end over the width; the masks admit 8.  This
+;   address is also the END of a display list: `ld XIY,0xF3B379 / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF7FFBB.
+; --------------------------------------------------------------------------
+DLBoxes_F3B3B2:
+	.short	0, 0, 1, 1	; F3B3B2  [0]
+	.short	11, 32, 223, 63	; F3B3BA  [1]
+	.short	11, 68, 223, 99	; F3B3C2  [2]
+	.short	11, 104, 223, 135	; F3B3CA  [3]
+	.short	11, 140, 223, 171	; F3B3D2  [4]
 
 
 ; ------------------------------------------------------------------
@@ -79243,7 +80423,7 @@ Data_F3B3B2:
 ; DL_F3B3DA, the "TRACK ASSIGN" screen -- ALREADY NAMED AND CITED
 ; elsewhere in this file (search "draws display list 0xF3B3DA"),
 ; from a real `ld XIY,0x00F3B3DA` immediate inside 0xF7E440 (still
-; .incbin).  Its first 13 bytes had been folded into Data_F3B3B2
+; .incbin).  Its first 13 bytes had been folded into DLBoxes_F3B3B2
 ; above (now shrunk to its real 40-byte extent); walking from here
 ; lands with ZERO DRIFT on Data_F3B5A9, already committed below.
 ; notes/gen_prom_b_f3b3da_module.py
@@ -80319,7 +81499,7 @@ DL_F3BD07:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
+	.long DLText_0To16MasterAll	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C89	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -80327,7 +81507,7 @@ DL_F3BD07:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
+	.long DLText_0To16MasterAll	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C9E	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -80363,7 +81543,7 @@ DL_F3BD07:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F3BD58	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F3BD58	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3BD58-0xF3BD90 ===
 ; 0xF3BD58-0xF3BD8F, coverage round 1: 56 of this span's 56 bytes are
@@ -80374,21 +81554,39 @@ DL_F3BD07:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3BD58 -- 56 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3BD58-0xF3BD8F -- 56 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3BD58 appears as a 32-bit word at 0xF3BD54.  No routine-
 ;               directory slot and no branch decoded in converted code names
 ;               it.
 ; Measured: 16% printable ASCII; a linear decode runs 32 instructions and ends
 ;           `nop`, with 20% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3BD58:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x00, 0x3D, 0x00, 0x88, 0x00, 0x5C, 0x00	; F3BD58  |..........=...\.|
-	.byte	0x0B, 0x00, 0x63, 0x00, 0x88, 0x00, 0x82, 0x00, 0x0B, 0x00, 0x89, 0x00, 0x88, 0x00, 0xA8, 0x00	; F3BD68  |..c.............|
-	.byte	0xB3, 0x00, 0x3D, 0x00, 0x30, 0x01, 0x5C, 0x00, 0xB3, 0x00, 0x63, 0x00, 0x30, 0x01, 0x82, 0x00	; F3BD78  |..=.0.\...c.0...|
-	.byte	0xB3, 0x00, 0x8D, 0x00, 0x30, 0x01, 0xA4, 0x00	; F3BD88  |....0...|
+; DLBoxes_F3BD58 -- 0xF3BD58-0xF3BD8F, 7 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF3BD4D ((0x12FF)
+;   AND 0x07 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`); entry 0 is (0,0)-(1,1), a 2 x
+;   2-pixel box in the panel's top-left corner, so value 0 draws next to
+;   nothing (wsa1/scripts/analysis/sizing_defect_hunt.py calls this shape an
+;   8-byte header; the reader indexes it as entry 0).  Entry count: the
+;   distance to the object's end over the width; the masks admit 8.  This
+;   address is also the END of a display list: `ld XIY,0xF3BD07 / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF807FB.
+; --------------------------------------------------------------------------
+DLBoxes_F3BD58:
+	.short	0, 0, 1, 1	; F3BD58  [0]
+	.short	11, 61, 136, 92	; F3BD60  [1]
+	.short	11, 99, 136, 130	; F3BD68  [2]
+	.short	11, 137, 136, 168	; F3BD70  [3]
+	.short	179, 61, 304, 92	; F3BD78  [4]
+	.short	179, 99, 304, 130	; F3BD80  [5]
+	.short	179, 141, 304, 164	; F3BD88  [6]
 
 ; === END COVER-R1 0xF3BD58-0xF3BD90 ===
 
@@ -80572,7 +81770,7 @@ DL_F3BEF7:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
+	.long DLText_0To16MasterAll	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C89	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -80580,7 +81778,7 @@ DL_F3BEF7:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
+	.long DLText_0To16MasterAll	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C9E	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -80616,7 +81814,7 @@ DL_F3BEF7:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long Data_F3BF48	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLBoxes_F3BF48	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3BF48-0xF3BF80 ===
 ; 0xF3BF48-0xF3BF7F, coverage round 1: 56 of this span's 56 bytes are
@@ -80627,21 +81825,39 @@ DL_F3BEF7:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3BF48 -- 56 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3BF48-0xF3BF7F -- 56 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3BF48 appears as a 32-bit word at 0xF3BF44.  No routine-
 ;               directory slot and no branch decoded in converted code names
 ;               it.
 ; Measured: 16% printable ASCII; a linear decode runs 32 instructions and ends
 ;           `nop`, with 20% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3BF48:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x00, 0x3D, 0x00, 0x88, 0x00, 0x5C, 0x00	; F3BF48  |..........=...\.|
-	.byte	0x0B, 0x00, 0x63, 0x00, 0x88, 0x00, 0x82, 0x00, 0x0B, 0x00, 0x89, 0x00, 0x88, 0x00, 0xA8, 0x00	; F3BF58  |..c.............|
-	.byte	0xB3, 0x00, 0x3D, 0x00, 0x30, 0x01, 0x5C, 0x00, 0xB3, 0x00, 0x63, 0x00, 0x30, 0x01, 0x82, 0x00	; F3BF68  |..=.0.\...c.0...|
-	.byte	0xB3, 0x00, 0x8D, 0x00, 0x30, 0x01, 0xA4, 0x00	; F3BF78  |....0...|
+; DLBoxes_F3BF48 -- 0xF3BF48-0xF3BF7F, 7 entries of four words, left / top /
+;   right / bottom of the inclusive pixel box LCD_Svc_05_FillRect fills or
+;   erases.  Read by the interpreter-B op-0x03 record at 0xF3BF3D ((0x12FF)
+;   AND 0x07 >> 0) -- value = (byte at the +2 address) AND mask >> shift --
+;   whose +0x07 names this address; DLB_Handler_Array8 copies entry [value]
+;   to (0x2530)..(0x2536) (`sla 3,HL`); entry 0 is (0,0)-(1,1), a 2 x
+;   2-pixel box in the panel's top-left corner, so value 0 draws next to
+;   nothing (wsa1/scripts/analysis/sizing_defect_hunt.py calls this shape an
+;   8-byte header; the reader indexes it as entry 0).  Entry count: the
+;   distance to the object's end over the width; the masks admit 8.  This
+;   address is also the END of a display list: `ld XIY,0xF3BEF7 / ld
+;   XIX,this / call T_DisplayListB_Run` at 0xF80B58.
+; --------------------------------------------------------------------------
+DLBoxes_F3BF48:
+	.short	0, 0, 1, 1	; F3BF48  [0]
+	.short	11, 61, 136, 92	; F3BF50  [1]
+	.short	11, 99, 136, 130	; F3BF58  [2]
+	.short	11, 137, 136, 168	; F3BF60  [3]
+	.short	179, 61, 304, 92	; F3BF68  [4]
+	.short	179, 99, 304, 130	; F3BF70  [5]
+	.short	179, 141, 304, 164	; F3BF78  [6]
 
 ; === END COVER-R1 0xF3BF48-0xF3BF80 ===
 
@@ -80897,7 +82113,7 @@ DL_F3C17B:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0xC8	; +0x07 -> XIY: string table
+	.long DLText_0To17All	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1344	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -80905,7 +82121,7 @@ DL_F3C17B:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long Data_F3A6D9 + 0xC8	; +0x07 -> XIY: string table
+	.long DLText_0To17All	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1355	; +0x0D -> IX
 
@@ -81333,7 +82549,7 @@ DL_F3C530:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long Data_F3C53F	; +0x07 -> XIY: string table
+	.long DLText_ChordApcControlRhythm	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x186D	; +0x0D -> IX
 
@@ -81346,21 +82562,34 @@ DL_F3C530:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3C53F -- 35 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3C53F-0xF3C561 -- 35 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3C53F appears as a 32-bit word at 0xF3C537.  No routine-
 ;               directory slot and no branch decoded in converted code names
 ;               it.
 ; Measured: 100% printable ASCII; a linear decode runs 21 instructions and
 ;           ends `ld W,0x00`, with 17% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the display-list records that read these bytes now fix the pieces below
+;   (notes/promb-2026-09-25/dlb_table_splitter.py).  The rest of this span
+;   is unreachable and stays `.incbin`.  Why this is data and not code: THE
+;   PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3C53F:
-	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x43, 0x48, 0x4F, 0x52, 0x44, 0x20, 0x20, 0x20	; F3C53F  |        CHORD   |
-	.byte	0x41, 0x50, 0x43, 0x20, 0x20, 0x43, 0x4F, 0x4E, 0x54, 0x52, 0x4F, 0x4C, 0x52, 0x48, 0x59, 0x54	; F3C54F  |APC  CONTROLRHYT|
-	.byte	0x48, 0x4D, 0x20	; F3C55F  |HM |
+; DLText_ChordApcControlRhythm -- 0xF3C53F-0xF3C561, 5 entries of 7 bytes,
+;   text drawn by LCD_Svc_06_DrawText8x14.  Read by the interpreter-B
+;   op-0x02 record at 0xF3C530 ((0x1307) AND 0x7F >> 0) -- value = (byte at
+;   the +2 address) AND mask >> shift -- whose +0x07 names this address;
+;   DLB_Handler_StringTable draws entry [value] with +0x0B = 7 as the width.
+;   Entry count: the distance to the object's end over the width; the masks
+;   admit 128.  This address is also the END of a display list: `ld
+;   XIY,0xF3C530 / ld XIX,this / call T_DisplayListB_Run` at 0xF802C2.
+; --------------------------------------------------------------------------
+DLText_ChordApcControlRhythm:
+	.ascii	"       "	; F3C53F  [0]
+	.ascii	" CHORD "	; F3C546  [1]
+	.ascii	"  APC  "	; F3C54D  [2]
+	.ascii	"CONTROL"	; F3C554  [3]
+	.ascii	"RHYTHM "	; F3C55B  [4]
 
 ; === END COVER-R1 0xF3C53F-0xF3C562 ===
 
@@ -114315,7 +115544,7 @@ sub_F55C8C:
 	calr	SeqPlayScreen_StageValues	; F55C8C  calr 0xf57453
 	ld	(9536:16), 2	; F55C8F  ld (0x2540),0x02
 	ld	xiy, DL_CycleMasterS0ngMeasureTimeSig	; F55C94  ld XIY,0x00f34970
-	ld	xix, Data_F349BB	; F55C99  ld XIX,0x00f349bb
+	ld	xix, DLText_OffOn_F349BB	; F55C99  ld XIX,0x00f349bb
 	call	T_DisplayListB_Run	; F55C9E  call 0xf417f4
 	ld	wa, (13650:16)	; F55CA2  ld WA,(0x3552)
 	ld	xiy, DL_F3434C	; F55CA6  ld XIY,0x00f3434c
@@ -114366,7 +115595,7 @@ sub_F55D3D:
 	calr	RealtimeRecordScreen_StageValues	; F55D3D  calr 0xf57498
 	ld	(9536:16), 2	; F55D40  ld (0x2540),0x02
 	ld	xiy, DL_F34361	; F55D45  ld XIY,0x00f34361
-	ld	xix, Data_F343B6	; F55D4A  ld XIX,0x00f343b6
+	ld	xix, DLText_OffOn_F343B6	; F55D4A  ld XIX,0x00f343b6
 	call	T_DisplayListB_Run	; F55D4F  call 0xf417f4
 	ld	wa, (13650:16)	; F55D53  ld WA,(0x3552)
 	ld	xiy, DL_F3434C	; F55D57  ld XIY,0x00f3434c
@@ -114399,7 +115628,7 @@ sub_F55D67_Join:
 	jr	sub_F55D67_Join	; F55D7F  jr T,0xf55d73
 sub_F55D67_Skip:
 	ld	xiy, DL_F34D98	; F55D81  ld XIY,0x00f34d98
-	ld	xix, Data_F34E88	; F55D86  ld XIX,0x00f34e88
+	ld	xix, DLText_P1ToP32	; F55D86  ld XIX,0x00f34e88
 	call	T_DisplayListB_Run	; F55D8B  call 0xf417f4
 	ret	; F55D8F  ret
 
@@ -114543,7 +115772,7 @@ sub_F55E8F:
 	ld	(9536:16), 0	; F55E92  ld (0x2540),0x00
 	m_or_mi8 MB8, 0xc6, 0x01	; F55E97  or (0xc6),0x01
 	ld	xiy, DL_F352F9	; F55E9B  ld XIY,0x00f352f9
-	ld	xix, Data_F3533C	; F55EA0  ld XIX,0x00f3533c
+	ld	xix, DLText_OffOn_F3533C	; F55EA0  ld XIX,0x00f3533c
 	call	T_DisplayListB_Run	; F55EA5  call 0xf417f4
 	ld	(9536:16), 1	; F55EA9  ld (0x2540),0x01
 	ld	a, (14166:16)	; F55EAE  ld A,(0x3756)
@@ -118634,7 +119863,7 @@ sub_F57443:
 ;   SeqPlayScreen_StageValues          F55C8C   DL_CycleMasterS0ngMeasureTimeSig   6/6
 ;   RealtimeRecordScreen_StageValues   F55D3D   DL_F34361 .. 0xF343B6              7/7
 ;   CyclePlayScreen_StageValues        F55EEA   DL_F34FF2 .. Data_F35035           5/5
-;   CyclePlayEditScreen_StageValues    F55E8F   DL_F352F9 .. Data_F3533C           5/5
+;   CyclePlayEditScreen_StageValues    F55E8F   DL_F352F9 .. DLText_OffOn_F3533C           5/5
 ;   CycleRecordScreen_StageValues      F55F45   DL_F351A7 .. Data_F351F9           6/6
 ;
 ; The screen names are those of the CAPTION list the same screen's other arm
@@ -118758,7 +119987,7 @@ CyclePlayScreen_StageValues:
 ; CyclePlayEditScreen_StageValues
 ; Called from: 0xF55E8F (`calr`), the values arm of the screen whose captions
 ;          are DL_CyclePlayCurrentMeasureEdit; that arm then runs
-;          DisplayListB_Run from DL_F352F9 to Data_F3533C.
+;          DisplayListB_Run from DL_F352F9 to DLText_OffOn_F3533C.
 ; Writes:  (0x12F6) <- (0x3627)           (0x2644) <- word (0x3552)
 ;          (0x2652) <- word (0x361E)      (0x2654) <- word (0x3620)
 ;          (0x1308) <- (0x3626)
@@ -125682,7 +126911,7 @@ sub_F5BF9F:
 	ld	d, (xbc)	; F5BFA8  ld D,(XBC)
 	cp	d, 0:i3	; F5BFAA  cp D,0
 	jr	z, sub_F5BF9F_Return	; F5BFAC  jr Z,0xf5bfbc
-	ld	xiy, Data_F06598 + 0x14	; F5BFAE  ld XIY,0x00f065ac
+	ld	xiy, DLBRecordPtrs_F065AC	; F5BFAE  ld XIY,0x00f065ac
 	ld	(9536:16), 0	; F5BFB3  ld (0x2540),0x00
 	call	RunDisplayListBFromPointerArray	; F5BFB8  call 0xf09ae1
 sub_F5BF9F_Return:
@@ -125780,7 +127009,7 @@ sub_F5C09E:
 	call	UiPaint_Ordinals	; F5C0BC  call 0xf5bb00
 	ld	(9536:16), 0	; F5C0C0  ld (0x2540),0x00
 	ld	xiy, DL_P0siti0n	; F5C0C5  ld XIY,0x00f03441
-	ld	xix, Data_F03478	; F5C0CA  ld XIX,0x00f03478
+	ld	xix, DLText_FixMove	; F5C0CA  ld XIX,0x00f03478
 	call	T_DisplayListB_Run	; F5C0CF  call 0xf417f4
 	ret	; F5C0D3  ret
 sub_F5C0D4:
@@ -125794,7 +127023,7 @@ sub_F5C0D4:
 	call	UiPaint_Ordinals	; F5C0F2  call 0xf5bb00
 	ld	(9536:16), 0	; F5C0F6  ld (0x2540),0x00
 	ld	xiy, DL_F03498	; F5C0FB  ld XIY,0x00f03498
-	ld	xix, Data_F034C6	; F5C100  ld XIX,0x00f034c6
+	ld	xix, DLBRecordPtrs_F034C6	; F5C100  ld XIX,0x00f034c6
 	call	T_DisplayListB_Run	; F5C105  call 0xf417f4
 	ret	; F5C109  ret
 sub_F5C10A:
@@ -125899,7 +127128,7 @@ sub_F5C144_Skip2:
 	ld	xix, DL_F064E5	; F5C23C  ld XIX,0x00f064e5
 	call	T_DisplayList_Run	; F5C241  call 0xf417f0
 	ld	xiy, DL_F06576	; F5C245  ld XIY,0x00f06576
-	ld	xix, Data_F06598	; F5C24A  ld XIX,0x00f06598
+	ld	xix, DLText_OffMainSub1To3	; F5C24A  ld XIX,0x00f06598
 	call	T_DisplayListB_Run	; F5C24F  call 0xf417f4
 sub_F5C144_Join2:
 	ld	(9536:16), 0	; F5C253  ld (0x2540),0x00
@@ -126609,7 +127838,7 @@ sub_F5C876:
 	call	UiPaint_Ordinals	; F5C8B3  call 0xf5bb00
 	ld	(9536:16), 0	; F5C8B7  ld (0x2540),0x00
 	ld	xiy, DL_F0510D	; F5C8BC  ld XIY,0x00f0510d
-	ld	xix, Data_F05182	; F5C8C1  ld XIX,0x00f05182
+	ld	xix, DLText_AttackDecayRelease	; F5C8C1  ld XIX,0x00f05182
 	call	T_DisplayListB_Run	; F5C8C6  call 0xf417f4
 	ret	; F5C8CA  ret
 sub_F5C8CB:
@@ -126629,7 +127858,7 @@ sub_F5C823_Skip2:
 	call	sub_F5C94B	; F5C8FE  call 0xf5c94b
 	ld	(9536:16), 0	; F5C902  ld (0x2540),0x00
 	ld	xiy, DL_F04D43	; F5C907  ld XIY,0x00f04d43
-	ld	xix, Data_F04DA3	; F5C90C  ld XIX,0x00f04da3
+	ld	xix, DLBRecordPtrs_F04DA3	; F5C90C  ld XIX,0x00f04da3
 	call	T_DisplayListB_Run	; F5C911  call 0xf417f4
 	ret	; F5C915  ret
 
@@ -126725,7 +127954,7 @@ sub_F5C94B_Skip2:
 	call	sub_F5C94B	; F5C9B6  call 0xf5c94b
 	ld	(9536:16), 0	; F5C9BA  ld (0x2540),0x00
 	ld	xiy, DL_F04D43	; F5C9BF  ld XIY,0x00f04d43
-	ld	xix, Data_F04DA3	; F5C9C4  ld XIX,0x00f04da3
+	ld	xix, DLBRecordPtrs_F04DA3	; F5C9C4  ld XIX,0x00f04da3
 	call	T_DisplayListB_Run	; F5C9C9  call 0xf417f4
 	ret	; F5C9CD  ret
 sub_F5C9CE:
@@ -127035,7 +128264,7 @@ sub_F5CCF6:
 	jr	sub_F5CC64_Return	; F5CD0D  jr T,0xf5cd1d
 sub_F5CC64_Skip2:
 	ld	(9536:16), 0	; F5CD0F  ld (0x2540),0x00
-	ld	xiy, Data_F03478 + 0x8	; F5CD14  ld XIY,0x00f03480
+	ld	xiy, DLBRecordPtrs_F03480	; F5CD14  ld XIY,0x00f03480
 	call	RunDisplayListBFromPointerArray	; F5CD19  call 0xf09ae1
 sub_F5CC64_Return:
 	ret	; F5CD1D  ret
@@ -127044,12 +128273,12 @@ sub_F5CD1E:
 	jr	nz, sub_F5CC64_Skip3	; F5CD20  jr NZ,0xf5cd37
 	ld	(9536:16), 0	; F5CD22  ld (0x2540),0x00
 	ld	xiy, DL_F034AD	; F5CD27  ld XIY,0x00f034ad
-	ld	xix, Data_F034C6	; F5CD2C  ld XIX,0x00f034c6
+	ld	xix, DLBRecordPtrs_F034C6	; F5CD2C  ld XIX,0x00f034c6
 	call	T_DisplayListB_Run	; F5CD31  call 0xf417f4
 	jr	sub_F5CC64_Return2	; F5CD35  jr T,0xf5cd45
 sub_F5CC64_Skip3:
 	ld	(9536:16), 0	; F5CD37  ld (0x2540),0x00
-	ld	xiy, Data_F034C6	; F5CD3C  ld XIY,0x00f034c6
+	ld	xiy, DLBRecordPtrs_F034C6	; F5CD3C  ld XIY,0x00f034c6
 	call	RunDisplayListBFromPointerArray	; F5CD41  call 0xf09ae1
 sub_F5CC64_Return2:
 	ret	; F5CD45  ret
@@ -127144,7 +128373,7 @@ sub_F5CC64_Join3:
 	jr	sub_F5CC64_Return4	; F5CE50  jr T,0xf5ce64
 sub_F5CC64_Skip11:
 	ld	(9536:16), 0	; F5CE52  ld (0x2540),0x00
-	ld	xiy, Data_F06598 + 0x14	; F5CE57  ld XIY,0x00f065ac
+	ld	xiy, DLBRecordPtrs_F065AC	; F5CE57  ld XIY,0x00f065ac
 	call	RunDisplayListBFromPointerArray	; F5CE5C  call 0xf09ae1
 	call	sub_F5C27D	; F5CE60  call 0xf5c27d
 sub_F5CC64_Return4:
@@ -127305,12 +128534,12 @@ sub_F5CFA4_Join:
 	jr	z, sub_F5CFA4_Skip3	; F5D002  jr Z,0xf5d015
 	ld	(9536:16), 1	; F5D004  ld (0x2540),0x01
 	ld	xiy, Data_F05031	; F5D009  ld XIY,0x00f05031
-	ld	xix, Data_F0503B	; F5D00E  ld XIX,0x00f0503b
+	ld	xix, DLBoxes_F0503B	; F5D00E  ld XIX,0x00f0503b
 	jr	sub_F5CFA4_Join2	; F5D013  jr T,0xf5d024
 sub_F5CFA4_Skip3:
 	ld	(9536:16), 1	; F5D015  ld (0x2540),0x01
 	ld	xiy, DL_F33836	; F5D01A  ld XIY,0x00f33836
-	ld	xix, Data_F33840	; F5D01F  ld XIX,0x00f33840
+	ld	xix, DLBoxes_F33840	; F5D01F  ld XIX,0x00f33840
 sub_F5CFA4_Join2:
 	call	T_DisplayList_Run	; F5D024  call 0xf417f0
 	ld	a, 0:opc	; F5D028  ld A,0x00
@@ -127360,19 +128589,19 @@ sub_F5CFA4_Return2:
 	ret	; F5D09E  ret
 sub_F5D09F:
 	ld	(9536:16), 0	; F5D09F  ld (0x2540),0x00
-	ld	xiy, Data_F05182 + 0x18	; F5D0A4  ld XIY,0x00f0519a
+	ld	xiy, DLBRecordPtrs_F0519A	; F5D0A4  ld XIY,0x00f0519a
 	call	RunDisplayListBFromPointerArray	; F5D0A9  call 0xf09ae1
 	ret	; F5D0AD  ret
 sub_F5D0AE:
 	cp	a, 5:i3	; F5D0AE  cp A,5
 	jr	nz, sub_F5CFA4_Skip8	; F5D0B0  jr NZ,0xf5d0c2
 	ld	xiy, DL_LowHigh	; F5D0B2  ld XIY,0x00f04d85
-	ld	xix, Data_F04DA3	; F5D0B7  ld XIX,0x00f04da3
+	ld	xix, DLBRecordPtrs_F04DA3	; F5D0B7  ld XIX,0x00f04da3
 	call	T_DisplayListB_Run	; F5D0BC  call 0xf417f4
 	jr	sub_F5CFA4_Return3	; F5D0C0  jr T,0xf5d0d0
 sub_F5CFA4_Skip8:
 	ld	(9536:16), 0	; F5D0C2  ld (0x2540),0x00
-	ld	xiy, Data_F04DA3	; F5D0C7  ld XIY,0x00f04da3
+	ld	xiy, DLBRecordPtrs_F04DA3	; F5D0C7  ld XIY,0x00f04da3
 	call	RunDisplayListBFromPointerArray	; F5D0CC  call 0xf09ae1
 sub_F5CFA4_Return3:
 	ret	; F5D0D0  ret
@@ -127381,12 +128610,12 @@ sub_F5D0D1:
 	jr	nz, sub_F5CFA4_Skip9	; F5D0D3  jr NZ,0xf5d0ea
 	ld	(9536:16), 0	; F5D0D5  ld (0x2540),0x00
 	ld	xiy, DL_LowHigh	; F5D0DA  ld XIY,0x00f04d85
-	ld	xix, Data_F04DA3	; F5D0DF  ld XIX,0x00f04da3
+	ld	xix, DLBRecordPtrs_F04DA3	; F5D0DF  ld XIX,0x00f04da3
 	call	T_DisplayListB_Run	; F5D0E4  call 0xf417f4
 	jr	sub_F5CFA4_Return4	; F5D0E8  jr T,0xf5d0f8
 sub_F5CFA4_Skip9:
 	ld	(9536:16), 0	; F5D0EA  ld (0x2540),0x00
-	ld	xiy, Data_F04DA3	; F5D0EF  ld XIY,0x00f04da3
+	ld	xiy, DLBRecordPtrs_F04DA3	; F5D0EF  ld XIY,0x00f04da3
 	call	RunDisplayListBFromPointerArray	; F5D0F4  call 0xf09ae1
 sub_F5CFA4_Return4:
 	ret	; F5D0F8  ret
@@ -127434,7 +128663,7 @@ sub_F5CFA4_Skip11:
 	ld	xix, DL_Mem0ryWriteSoundEditName + 0xF5	; F5D17D  ld XIX,0x00f05740
 	call	T_DisplayList_Run	; F5D182  call 0xf417f0
 	ld	xiy, DL_MemoryBank	; F5D186  ld XIY,0x00f057e3
-	ld	xix, Data_F05801	; F5D18B  ld XIX,0x00f05801
+	ld	xix, DLText_UserDrumKits	; F5D18B  ld XIX,0x00f05801
 	call	T_DisplayListB_Run	; F5D190  call 0xf417f4
 sub_F5CFA4_Join6:
 	call	sub_F5D199	; F5D194  call 0xf5d199
@@ -127568,7 +128797,7 @@ sub_F5D2E9:
 	jr	sub_F5D199_Join3	; F5D2FE  jr T,0xf5d30e
 sub_F5D199_Skip7:
 	ld	xiy, DL_MemoryBank	; F5D300  ld XIY,0x00f057e3
-	ld	xix, Data_F05801	; F5D305  ld XIX,0x00f05801
+	ld	xix, DLText_UserDrumKits	; F5D305  ld XIX,0x00f05801
 	call	T_DisplayListB_Run	; F5D30A  call 0xf417f4
 sub_F5D199_Join3:
 	call	sub_F5D199	; F5D30E  call 0xf5d199
@@ -127583,7 +128812,7 @@ sub_F5D313:
 sub_F5D199_Skip8:
 	ld	(9536:16), 1	; F5D31F  ld (0x2540),0x01
 	ld	xiy, DL_F05AAA	; F5D324  ld XIY,0x00f05aaa
-	ld	xix, Data_F05AB4	; F5D329  ld XIX,0x00f05ab4
+	ld	xix, DLBoxes_F05AB4	; F5D329  ld XIX,0x00f05ab4
 	call	T_DisplayList_Run	; F5D32E  call 0xf417f0
 	ld	(9536:16), 0	; F5D332  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x27a8, 0x0d	; F5D337  cp (0x27a8),0x0d
@@ -127604,7 +128833,7 @@ sub_F5D199_Join4:
 sub_F5D199_Skip11:
 	ld	(9536:16), 1	; F5D362  ld (0x2540),0x01
 	ld	xiy, DL_F05AA0	; F5D367  ld XIY,0x00f05aa0
-	ld	xix, Data_F05AB4	; F5D36C  ld XIX,0x00f05ab4
+	ld	xix, DLBoxes_F05AB4	; F5D36C  ld XIX,0x00f05ab4
 	call	T_DisplayList_Run	; F5D371  call 0xf417f0
 	ld	xiy, DL_F05A4C + 0x11	; F5D375  ld XIY,0x00f05a5d
 	call	T_DisplayListB_RunOne	; F5D37A  call 0xf41830
@@ -127613,7 +128842,7 @@ sub_F5D199_Skip11:
 sub_F5D199_Skip12:
 	ld	(9536:16), 1	; F5D384  ld (0x2540),0x01
 	ld	xiy, DL_F05AA0	; F5D389  ld XIY,0x00f05aa0
-	ld	xix, Data_F05AB4	; F5D38E  ld XIX,0x00f05ab4
+	ld	xix, DLBoxes_F05AB4	; F5D38E  ld XIX,0x00f05ab4
 	call	T_DisplayList_Run	; F5D393  call 0xf417f0
 	ld	(9536:16), 0	; F5D397  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x27a8, 0x0d	; F5D39C  cp (0x27a8),0x0d
@@ -127649,7 +128878,7 @@ sub_F5D3C6:
 	xor	wa, wa	; F5D3C6  xor WA,WA
 	ld	a, (10151:16)	; F5D3C8  ld A,(0x27a7)
 	div	a, 16	; F5D3CC  div A,0x10
-	ld	xiz, Data_F05AB4 + 0x80	; F5D3CF  ld XIZ,0x00f05b34
+	ld	xiz, Data_F05B34	; F5D3CF  ld XIZ,0x00f05b34
 	xor	hl, hl	; F5D3D4  xor HL,HL
 	ld	l, w	; F5D3D6  ld L,W
 	sla	hl, 1	; F5D3D8  sla 0x01,HL
@@ -127657,7 +128886,7 @@ sub_F5D3C6:
 	ld	(9520:16), ix	; F5D3E0  ld (0x2530),IX
 	add	ix, 8	; F5D3E4  add IX,0x0008
 	ld	(9524:16), ix	; F5D3E8  ld (0x2534),IX
-	ld	xiz, Data_F05AB4 + 0xA0	; F5D3EC  ld XIZ,0x00f05b54
+	ld	xiz, Data_F05B34 + 0x20	; F5D3EC  ld XIZ,0x00f05b54
 	xor	hl, hl	; F5D3F1  xor HL,HL
 	ld	l, a	; F5D3F3  ld L,A
 	sla	hl, 1	; F5D3F5  sla 0x01,HL
@@ -127924,7 +129153,7 @@ sub_F5D5C8_Skip:
 sub_F5D5C8_Skip2:
 	ld	(9536:16), 1	; F5D66A  ld (0x2540),0x01
 	ld	xiy, DL_F32A7D	; F5D66F  ld XIY,0x00f32a7d
-	ld	xix, Data_F32A87	; F5D674  ld XIX,0x00f32a87
+	ld	xix, DLBoxes_F32A87	; F5D674  ld XIX,0x00f32a87
 	call	T_DisplayList_Run	; F5D679  call 0xf417f0
 	ld	a, 0:opc	; F5D67D  ld A,0x00
 	ldw	bc, 10166	; F5D67F  ld BC,0x27b6
@@ -127987,7 +129216,7 @@ sub_F5D6FC:
 	call	T_DisplayList_Run	; F5D73A  call 0xf417f0
 	ld	(9536:16), 0	; F5D73E  ld (0x2540),0x00
 	ld	xiy, DL_F3341C	; F5D743  ld XIY,0x00f3341c
-	ld	xix, Data_F334AE	; F5D748  ld XIX,0x00f334ae
+	ld	xix, DLBoxes_F334AE	; F5D748  ld XIX,0x00f334ae
 	call	T_DisplayListB_Run	; F5D74D  call 0xf417f4
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5D751  cp (0x27f5),0x01
 	jr	z, sub_F5D5C8_Skip6	; F5D756  jr Z,0xf5d76b
@@ -193611,7 +194840,7 @@ Paint_MeasureDelete_Skip2:
 	call	T_DisplayList_Run	; F7EFE4  call 0xf417f0
 Paint_MeasureDelete_Join:
 	ld	xiy, DL_LastMeasure	; F7EFE8  ld XIY,0x00f3a6ab
-	ld	xix, Data_F3A6D9	; F7EFED  ld XIX,0x00f3a6d9
+	ld	xix, DLBoxes_F3A6D9	; F7EFED  ld XIX,0x00f3a6d9
 	call	T_DisplayListB_Run	; F7EFF2  call 0xf417f4
 	calr	62190	; F7EFF6  calr 0xf7e2e7
 	ret	; F7EFF9  ret
@@ -194306,7 +195535,7 @@ Paint_MeasureErase_Skip2:
 	call	T_DisplayList_Run	; F7F2BF  call 0xf417f0
 Paint_MeasureErase_Join:
 	ld	xiy, DL_F3A9DA	; F7F2C3  ld XIY,0x00f3a9da
-	ld	xix, Data_F3AA17	; F7F2C8  ld XIX,0x00f3aa17
+	ld	xix, DLBoxes_F3AA17	; F7F2C8  ld XIX,0x00f3aa17
 	call	T_DisplayListB_Run	; F7F2CD  call 0xf417f4
 	calr	61459	; F7F2D1  calr 0xf7e2e7
 	ret	; F7F2D4  ret
@@ -195101,7 +196330,7 @@ Paint_Quantize_Skip2:
 	call	T_DisplayList_Run	; F7F5ED  call 0xf417f0
 Paint_Quantize_Join:
 	ld	xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F5F1  ld XIY,0x00f3acf0
-	ld	xix, Data_F3AD42	; F7F5F6  ld XIX,0x00f3ad42
+	ld	xix, DLBoxes_F3AD42	; F7F5F6  ld XIX,0x00f3ad42
 	call	T_DisplayListB_Run	; F7F5FB  call 0xf417f4
 	calr	60645	; F7F5FF  calr 0xf7e2e7
 	ret	; F7F602  ret
@@ -195855,7 +197084,7 @@ Paint_Vel0cityChange_Join:
 	calr	sub_F7E2D8	; F7F91D  calr 0xf7e2d8
 	calr	sub_F7F935	; F7F920  calr 0xf7f935
 	ld	xiy, DL_F3AB3B	; F7F923  ld XIY,0x00f3ab3b
-	ld	xix, Data_F3AB74	; F7F928  ld XIX,0x00f3ab74
+	ld	xix, DLBoxes_F3AB74	; F7F928  ld XIX,0x00f3ab74
 	call	T_DisplayListB_Run	; F7F92D  call 0xf417f4
 	calr	59827	; F7F931  calr 0xf7e2e7
 	ret	; F7F934  ret
@@ -196639,7 +197868,7 @@ Paint_Transp0se_Join2:
 	ld	(9536:16), 0	; F7FC7F  ld (0x2540),0x00
 	calr	sub_F7E2D8	; F7FC84  calr 0xf7e2d8
 	ld	xiy, DL_F3B1E3	; F7FC87  ld XIY,0x00f3b1e3
-	ld	xix, Data_F3B21C	; F7FC8C  ld XIX,0x00f3b21c
+	ld	xix, DLBoxes_F3B21C	; F7FC8C  ld XIX,0x00f3b21c
 	call	T_DisplayListB_Run	; F7FC91  call 0xf417f4
 	calr	58959	; F7FC95  calr 0xf7e2e7
 	ret	; F7FC98  ret
@@ -197403,7 +198632,7 @@ Paint_AdvanceDelay_Join2:
 	ld	(9536:16), 0	; F7FFAE  ld (0x2540),0x00
 	calr	sub_F7E2D8	; F7FFB3  calr 0xf7e2d8
 	ld	xiy, DL_F3B379	; F7FFB6  ld XIY,0x00f3b379
-	ld	xix, Data_F3B3B2	; F7FFBB  ld XIX,0x00f3b3b2
+	ld	xix, DLBoxes_F3B3B2	; F7FFBB  ld XIX,0x00f3b3b2
 	call	T_DisplayListB_Run	; F7FFC0  call 0xf417f4
 	calr	58144	; F7FFC4  calr 0xf7e2e7
 	ret	; F7FFC7  ret
