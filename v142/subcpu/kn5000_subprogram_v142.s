@@ -22280,7 +22280,12 @@ Voice_AllVoices_PortamentoReset_Exit:
 ; A = value.  Stores the global pitch-bend range and then drives
 ; Voice_PerVoice_PortamentoPitchUpdate so sounding notes pick it up.  Reached from SysEx
 ; dispatch entry 3 and from Voice_ResetAllControllers with WA = 0x40.
-Voice_SetPitchBendRangeAndApply:
+; ★ CORRECTED 2026-09-25: the code below calls Voice_SetMasterTune (the (A - 0x40) * 2 word at
+; 0x041347), not the pitch-bend-range setter, and then Pitch_Refresh_Sounding_Voices over
+; Voice_Query_AllChannels, not Voice_PerVoice_PortamentoPitchUpdate; and its table slot is
+; Voice_SystemMsg_CaseOffsets index 2 (sub-command 0x82).  Renamed from
+; Voice_SetPitchBendRangeAndApply to Voice_SetMasterTuneAndApply to say what it calls.
+Voice_SetMasterTuneAndApply:
 	exts wa
 	calr Voice_SetMasterTune
 	call Voice_Query_AllChannels
@@ -22431,7 +22436,7 @@ Voice_SystemMsg_DispatchJump:
 ;                                             Voice_SetPolyphonyMode
 ;   index 0 (sub-cmd 0x80) offset 0x0008 -> 0x02A804 VoiceCC_Stub_Ret1
 ;   index 1 (0x81)         offset 0x0010 -> 0x02A80C VoiceCC_Stub_Ret2
-;   index 2 (0x82)         offset 0x0018 -> 0x02A814 Voice_SetPitchBendRangeAndApply
+;   index 2 (0x82)         offset 0x0018 -> 0x02A814 Voice_SetMasterTuneAndApply
 ;   index 3 (0x83)         offset 0x001E -> 0x02A81A Voice_SetPitchBendRange
 ;   index 4 (0x84)         offset 0x00F6 -> 0x02A8F2 a bare `ret` (sub-command ignored)
 ;   index 5 (0x85)         offset 0x0024 -> 0x02A820 Voice_SetKeyShiftEnable
@@ -22456,7 +22461,7 @@ Voice_SystemMsg_Sub81:
 	jrl VoiceCC_Stub_Ret2
 Voice_SystemMsg_Sub82:
 	ld a, (xwa + 3)
-	jrl Voice_SetPitchBendRangeAndApply
+	jrl Voice_SetMasterTuneAndApply
 Voice_SystemMsg_Sub83:
 	ld a, (xwa + 3)
 	jrl Voice_SetPitchBendRange
@@ -22587,7 +22592,7 @@ Voice_SystemMsg_Sub84:
 ; portamento time 0x40, reverb depth 0, chorus enable 0, chorus depth 6, delay depth 1,
 ; delay enable 0, delay feedback 0.
 ; Then globally: Voice_SetPolyphonyMode(2), the two ret-stubs with 0x7F,
-; Voice_SetPitchBendRangeAndApply(0x40), Voice_SetPitchBendRange(0), Voice_SetKeyShiftEnable(0),
+; Voice_SetMasterTuneAndApply(0x40), Voice_SetPitchBendRange(0), Voice_SetKeyShiftEnable(0),
 ; ScaleTune_Set_Global_Mode(0), Voice_SetRhythmMode(0), Voice_SetParam_04134B(0),
 ; Voice_AllVoices_PortamentoUpdate, Voice_SetCCMaxFlag(0), Voice_AllVoices_PortamentoReset,
 ; ScaleTune_Set_User_Offset(index 0..0x0B, value 0), Voice_AllVoices_UpdateVelocity(1),
@@ -22692,7 +22697,7 @@ Voice_ResetAllControllers_PostLoop:
 	ldw wa, 0x7F
 	calr VoiceCC_Stub_Ret2
 	ldw wa, 0x40
-	calr Voice_SetPitchBendRangeAndApply
+	calr Voice_SetMasterTuneAndApply
 	ld wa, 0:i3
 	calr Voice_SetPitchBendRange
 	ld wa, 0:i3
