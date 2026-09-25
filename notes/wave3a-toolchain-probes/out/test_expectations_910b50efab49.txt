@@ -1,0 +1,88 @@
+toolchain: llvm-project HEAD ac3f1ed19ab6 (DIRTY), llvm-mc sha256 b211a23195df
+basic.txt:649 OK  e1 34 12 20        old: ldda32 xwa, (4660)             new: ld xwa, (4660:16)              mame: ld XWA,(0x1234)
+basic.txt:653 OK  e1 34 12 21        old: ldda32 xbc, (4660)             new: ld xbc, (4660:16)              mame: ld XBC,(0x1234)
+basic.txt:657 OK  e1 34 12 88        old: adddm32 (4660), xwa            new: add (4660:16), xwa             mame: add (0x1234),XWA
+basic.txt:663 OK  e2 56 34 12 20     old: ldl_da xwa, (1193046)          new: ld xwa, (1193046:24)           mame: ld XWA,(0x123456)
+basic.txt:669 OK  f1 34 12 60        old: stda32 (4660), xwa             new: ld (4660:16), xwa              mame: ld (0x1234),XWA
+basic.txt:673 OK  f1 34 12 30        old: lda_d16 xwa, (4660)            new: lda xwa, (4660:16)             mame: lda XWA,0x1234
+llvm/test/MC/Disassembler/TLCS900/basic.txt: 6 rewritten, 0 left for review
+d8-direct.txt:7 OK  f0 0a 31           old: lda_dd8l xbc, 10               new: lda xbc, (10:8)                mame: lda XBC,0x0a
+d8-direct.txt:11 OK  f0 08 30           old: lda_dd8l xwa, 8                new: lda xwa, (8:8)                 mame: lda XWA,0x08
+d8-direct.txt:15 OK  f0 ff 32           old: lda_dd8l xde, 255              new: lda xde, (255:8)               mame: lda XDE,0xff
+d8-direct.txt:19 OK  f0 34 41           old: st_dd8b a, 52                  new: ld (52:8), a                   mame: ld (0x34),A
+d8-direct.txt:23 OK  f0 34 50           old: st_dd8w wa, 52                 new: ld (52:8), wa                  mame: ld (0x34),WA
+d8-direct.txt:27 OK  f0 0a 61           old: st_dd8l xbc, 10                new: ld (10:8), xbc                 mame: ld (0x0a),XBC
+d8-direct.txt:43 OK  f0 34 b3           old: res_dd8 3, 52                  new: res 3, (52:8)                  mame: res 3,(0x34)
+d8-direct.txt:47 OK  f0 34 b8           old: set_dd8 0, 52                  new: set 0, (52:8)                  mame: set 0,(0x34)
+d8-direct.txt:50 OK  f0 ff bf           old: set_dd8 7, 255                 new: set 7, (255:8)                 mame: set 7,(0xff)
+d8-direct.txt:54 OK  f0 64 cd           old: bit_dd8 5, 100                 new: bit 5, (100:8)                 mame: bit 5,(0x64)
+d8-direct.txt:58 OK  f0 10 c2           old: chg_dd8 2, 16                  new: chg 2, (16:8)                  mame: chg 2,(0x10)
+d8-direct.txt:62 OK  f0 20 ac           old: tset_dd8 4, 32                 new: tset 4, (32:8)                 mame: tset 4,(0x20)
+d8-direct.txt:66 OK  f0 40 a1           old: stcf_dd8 1, 64                 new: stcf 1, (64:8)                 mame: stcf 1,(0x40)
+d8-direct.txt:70 OK  f0 80 9e           old: ldcf_dd8 6, 128                new: ldcf 6, (128:8)                mame: ldcf 6,(0x80)
+d8-direct.txt:74 OK  f0 10 28           old: andcf_dd8 16                   new: andcf a, (16:8)                mame: andcf A,(0x10)
+d8-direct.txt:78 OK  f0 d8 29           old: orcf_dd8 216                   new: orcf a, (216:8)                mame: orcf A,(0xd8)
+d8-direct.txt:82 OK  f0 07 2a           old: xorcf_dd8 7                    new: xorcf a, (7:8)                 mame: xorcf A,(0x07)
+d8-direct.txt:86 OK  f0 20 2c           old: stcfa_dd8 32                   new: stcf a, (32:8)                 mame: stcf A,(0x20)
+d8-direct.txt:101 OK  f0 20 04           old: popb_dd8 32                    new: pop (32:8)                     mame: pop (0x20)
+d8-direct.txt:105 OK  f0 20 06           old: popw_dd8 32                    new: popw (32:8)                    mame: popw (0x20)
+d8-direct.txt:109 OK  c0 10 21           old: ld_sd8b a, 16                  new: ld a, (16:8)                   mame: ld A,(0x10)
+llvm/test/MC/Disassembler/TLCS900/d8-direct.txt: 21 rewritten, 0 left for review
+roundtrip.txt:41 OK  02                 old: push                           new: push sr                        mame: push SR
+roundtrip.txt:44 OK  03                 old: pop                            new: pop sr                         mame: pop SR
+roundtrip.txt:923 OK  e1 34 12 20        old: ldda32 xwa, (4660)             new: ld xwa, (4660:16)              mame: ld XWA,(0x1234)
+roundtrip.txt:926 OK  e1 34 12 21        old: ldda32 xbc, (4660)             new: ld xbc, (4660:16)              mame: ld XBC,(0x1234)
+roundtrip.txt:929 OK  e1 34 12 88        old: adddm32 (4660), xwa            new: add (4660:16), xwa             mame: add (0x1234),XWA
+roundtrip.txt:932 OK  f1 34 12 60        old: stda32 (4660), xwa             new: ld (4660:16), xwa              mame: ld (0x1234),XWA
+roundtrip.txt:935 OK  f1 34 12 30        old: lda_d16 xwa, (4660)            new: lda xwa, (4660:16)             mame: lda XWA,0x1234
+llvm/test/MC/Disassembler/TLCS900/roundtrip.txt: 7 rewritten, 0 left for review
+mem-prefix-subopcodes.s:514 OK  c1 81 11 38 30     old: adddi8 (4481), 48              new: add (4481:16), 48              mame: add (0x1181),0x30
+mem-prefix-subopcodes.s:520 OK  c1 a2 25 3a 28     old: subdi8 (9634), 40              new: sub (9634:16), 40              mame: sub (0x25a2),0x28
+mem-prefix-subopcodes.s:526 OK  c1 22 04 3c 6e     old: anddi8 (1058), 110             new: and (1058:16), 110             mame: and (0x0422),0x6e
+mem-prefix-subopcodes.s:532 OK  c1 91 33 3d 01     old: xordi8 (13201), 1              new: xor (13201:16), 1              mame: xor (0x3391),0x01
+mem-prefix-subopcodes.s:538 OK  c1 29 04 3e 10     old: ordi8 (1065), 16               new: or (1065:16), 16               mame: or (0x0429),0x10
+mem-prefix-subopcodes.s:544 OK  c1 02 04 3f 04     old: cpdi8 (1026), 4                new: cp (1026:16), 4                mame: cp (0x0402),0x04
+mem-prefix-subopcodes.s:550 OK  d1 52 06 38 12 00  old: adddi16 (1618), 18             new: addw (1618:16), 18             mame: add (0x0652),0x0012
+mem-prefix-subopcodes.s:556 OK  d1 9a d0 3a 01 00  old: subdi16 (53402), 1             new: subw (53402:16), 1             mame: sub (0xd09a),0x0001
+mem-prefix-subopcodes.s:562 OK  d1 44 8f 3c fb ff  old: anddi16 (36676), 65531         new: andw (36676:16), 65531         mame: and (0x8f44),0xfffb
+mem-prefix-subopcodes.s:568 OK  d1 a2 1d 3e 02 00  old: ordi16 (7586), 2               new: orw (7586:16), 2               mame: or (0x1da2),0x0002
+mem-prefix-subopcodes.s:574 OK  d1 aa 28 3f 00 00  old: cpdi16 (10410), 0              new: cpw (10410:16), 0              mame: cp (0x28aa),0x0000
+mem-prefix-subopcodes.s:580 OK  c2 ee 47 02 3c 78  old: anddi8_24 (149486), 120        new: and (149486:24), 120           mame: and (0x0247ee),0x78
+mem-prefix-subopcodes.s:586 OK  c2 ee 47 02 3e 07  old: ordi8_24 (149486), 7           new: or (149486:24), 7              mame: or (0x0247ee),0x07
+mem-prefix-subopcodes.s:592 OK  c2 38 0c 02 3f 10  old: cpib_da (134200), 16           new: cp (134200:24), 16             mame: cp (0x020c38),0x10
+mem-prefix-subopcodes.s:598 OK  d2 d4 ff 00 38 e8 03 old: adddi16_24 (65492), 1000       new: addw (65492:24), 1000          mame: add (0x00ffd4),0x03e8
+mem-prefix-subopcodes.s:604 OK  d2 80 35 02 3a 01 00 old: subdi16_24 (144768), 1         new: subw (144768:24), 1            mame: sub (0x023580),0x0001
+mem-prefix-subopcodes.s:610 OK  d2 86 10 02 3c fe ff old: anddi16_24 (135302), 65534     new: andw (135302:24), 65534        mame: and (0x021086),0xfffe
+mem-prefix-subopcodes.s:616 OK  d2 86 10 02 3e 01 00 old: ordi16_24 (135302), 1          new: orw (135302:24), 1             mame: or (0x021086),0x0001
+mem-prefix-subopcodes.s:622 OK  d2 ca ff 00 3f a5 5a old: cpw_da (65482), 23205          new: cpw (65482:24), 23205          mame: cp (0x00ffca),0x5aa5
+mem-prefix-subopcodes.s:631 OK  c1 60 29 19 62 29  old: ldmm8 10594, 10592             new: ld (10594), (10592:16)         mame: ld (0x2962),(0x2960)
+mem-prefix-subopcodes.s:637 OK  d1 fe 27 19 f6 27  old: ldmm16 10230, 10238            new: ldw (10230), (10238:16)        mame: ldw (0x27f6),(0x27fe)
+mem-prefix-subopcodes.s:646 OK  f1 73 04 b0        old: resda 0, (1139)                new: res 0, (1139:16)               mame: res 0,(0x0473)
+mem-prefix-subopcodes.s:652 OK  f1 13 04 b3        old: resda 3, (1043)                new: res 3, (1043:16)               mame: res 3,(0x0413)
+mem-prefix-subopcodes.s:658 OK  f1 06 04 b7        old: resda 7, (1030)                new: res 7, (1030:16)               mame: res 7,(0x0406)
+mem-prefix-subopcodes.s:664 OK  f1 5c 8f b8        old: setda 0, (36700)               new: set 0, (36700:16)              mame: set 0,(0x8f5c)
+mem-prefix-subopcodes.s:670 OK  f1 54 0d bb        old: setda 3, (3412)                new: set 3, (3412:16)               mame: set 3,(0x0d54)
+mem-prefix-subopcodes.s:676 OK  f1 06 04 bf        old: setda 7, (1030)                new: set 7, (1030:16)               mame: set 7,(0x0406)
+mem-prefix-subopcodes.s:682 OK  f1 20 04 c8        old: bitda 0, (1056)                new: bit 0, (1056:16)               mame: bit 0,(0x0420)
+mem-prefix-subopcodes.s:688 OK  f1 1e 04 cb        old: bitda 3, (1054)                new: bit 3, (1054:16)               mame: bit 3,(0x041e)
+mem-prefix-subopcodes.s:694 OK  f1 1e 04 cf        old: bitda 7, (1054)                new: bit 7, (1054:16)               mame: bit 7,(0x041e)
+mem-prefix-subopcodes.s:700 OK  f2 04 00 16 b0     old: resda_24 0, (1441796)          new: res 0, (1441796:24)            mame: res 0,(0x160004)
+mem-prefix-subopcodes.s:706 OK  f2 04 00 16 b8     old: setda_24 0, (1441796)          new: set 0, (1441796:24)            mame: set 0,(0x160004)
+mem-prefix-subopcodes.s:712 OK  f2 04 00 16 c2     old: chgda_24 2, (1441796)          new: chg 2, (1441796:24)            mame: chg 2,(0x160004)
+mem-prefix-subopcodes.s:718 OK  f2 e6 05 02 c8     old: bitda_24 0, (132582)           new: bit 0, (132582:24)             mame: bit 0,(0x0205e6)
+mem-prefix-subopcodes.s:724 OK  f2 e4 05 02 cf     old: bitda_24 7, (132580)           new: bit 7, (132580:24)             mame: bit 7,(0x0205e4)
+mem-prefix-subopcodes.s:733 OK  d2 03 d8 03 d2     old: xorda16_24 xde, (251907)       new: xor de, (251907:24)            mame: xor DE,(0x03d803)
+mem-prefix-subopcodes.s:742 OK  f1 88 c4 9c        old: ldcfda 4, (50312)              new: ldcf 4, (50312:16)             mame: ldcf 4,(0xc488)
+mem-prefix-subopcodes.s:748 OK  f1 06 04 9f        old: ldcfda 7, (1030)               new: ldcf 7, (1030:16)              mame: ldcf 7,(0x0406)
+mem-prefix-subopcodes.s:754 OK  f1 22 04 a8        old: tsetda16 0, (1058)             new: tset 0, (1058:16)              mame: tset 0,(0x0422)
+mem-prefix-subopcodes.s:760 OK  f1 13 04 af        old: tsetda16 7, (1043)             new: tset 7, (1043:16)              mame: tset 7,(0x0413)
+mem-prefix-subopcodes.s:769 OK  d1 58 0d 04        old: pushdi_w (3416)                new: pushw (3416:16)                mame: pushw (0x0d58)
+mem-prefix-subopcodes.s:775 OK  c1 2e 34 04        old: pushdi_b (13358)               new: push (13358:16)                mame: push (0x342e)
+mem-prefix-subopcodes.s:781 OK  d2 8c 47 02 04     old: pushdi_24 (149388)             new: pushw (149388:24)              mame: pushw (0x02478c)
+mem-prefix-subopcodes.s:790 OK  c0 2c 3c f0        old: and_sd8b_im 44, 240            new: and (44:8), 240                mame: and (0x2c),0xf0
+mem-prefix-subopcodes.s:796 OK  c0 c8 3e 10        old: or_sd8b_im 200, 16             new: or (200:8), 16                 mame: or (0xc8),0x10
+mem-prefix-subopcodes.s:805 OK  e2 9e 74 02 c0     old: andda32_24 xwa, (160926)       new: and xwa, (160926:24)           mame: and XWA,(0x02749e)
+mem-prefix-subopcodes.s:811 OK  e2 9a 74 02 c8     old: anddm32_24 (160922), xwa       new: and (160922:24), xwa           mame: and (0x02749a),XWA
+mem-prefix-subopcodes.s:817 OK  e2 9e 74 02 e0     old: orda32_24 xwa, (160926)        new: or xwa, (160926:24)            mame: or XWA,(0x02749e)
+mem-prefix-subopcodes.s:823 OK  e2 9a 74 02 e8     old: ordm32_24 (160922), xwa        new: or (160922:24), xwa            mame: or (0x02749a),XWA
+llvm/test/MC/TLCS900/mem-prefix-subopcodes.s: 49 rewritten, 0 left for review
