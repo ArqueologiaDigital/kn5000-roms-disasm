@@ -250,9 +250,8 @@ PercInst_Template_Silent:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 321, 196 distinct.
 ; KN5000 label at the same directory slot: ToneDB_ToneIndexMapA.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x1C965, which is directory slot +0x0C's value, and ends at 0x1D165,
@@ -261,14 +260,28 @@ PercInst_Template_Silent:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x0C is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x0C: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x00 and 0xC0.
+; Value: a record number in ToneDB_MixerDefaultTable (+0x18, 322 x 43).
+; Reader: ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3): 0xFB8369 `ld XWA,(XBC+0x0c)`,
+; then +0x18 at 0xFB836F and the stride word +0xEA (43) at 0xFB837A.
+; Measured over all 1024 entries: max 321 < 322, 196 distinct.
+; ★ DEFAULTS: a melodic element's selector, through this map and its
+; sibling, lands on an array record equal to that element's OWN
+; wave-select record in all bytes but +0x0B (the tail preset prom_c
+; rewrites) for 213 of 451 elements; record n+1, n-1 or the swapped
+; family map score 0.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_ToneIndexMapA:
 	.short 0x0015, 0x0016, 0x0015, 0x00CF, 0x00D4, 0x00D2, 0x00D8, 0x0021	; 1C965  [0]
@@ -407,9 +420,8 @@ ToneDB_ToneIndexMapA:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 316, 125 distinct.
 ; KN5000 label at the same directory slot: ToneDB_ToneIndexMapB.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x1D165, which is directory slot +0x10's value, and ends at 0x1D965,
@@ -418,14 +430,28 @@ ToneDB_ToneIndexMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x10 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x10: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x80.
+; Value: a record number in the same 43-byte array, through +0x1C (the +0x18 alias).
+; Reader: ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3): 0xFB83C6 `ld XWA,(XBC+0x10)`,
+; then +0x1C at 0xFB83CC and the stride word +0xEA (43) at 0xFB83D7.
+; Measured over all 1024 entries: max 316 < 322, 125 distinct.
+; ★ DEFAULTS: a melodic element's selector, through this map and its
+; sibling, lands on an array record equal to that element's OWN
+; wave-select record in all bytes but +0x0B (the tail preset prom_c
+; rewrites) for 213 of 451 elements; record n+1, n-1 or the swapped
+; family map score 0.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_ToneIndexMapB:
 	.short 0x0055, 0x0055, 0x0056, 0x0055, 0x0056, 0x00FE, 0x0100, 0x00FB	; 1D165  [0]
@@ -6438,9 +6464,8 @@ ToneDB_WaveSelTailPresets_063:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 316, 192 distinct.
 ; KN5000 label at the same directory slot: ToneDB_ToneIndexMapC.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x21A3B, which is directory slot +0x24's value, and ends at 0x2223B,
@@ -6449,17 +6474,28 @@ ToneDB_WaveSelTailPresets_063:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x24 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x24: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
 ; ★ BUT A READER EXISTS OUTSIDE IT.  prom_c parks the base with
 ; `ld (XIZ+0xF6),XWA` at 0xFB4616 and reads this slot through the frame
 ; slot: `ld XWA,(XBC+0x24)` at 0xFB4668, feeding the tone-index lookup
 ; that produces a descriptor pointer.  The KN5000 name is no longer
 ; unconfirmed-by-everything, though the FIELD meanings still are.
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x00 and 0xC0.
+; Value: a descriptor number in ToneDB_EnvDescTable (+0x30, 318 x 14).
+; Reader: ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0): 0xFB4668 `ld XWA,(XBC+0x24)`,
+; then +0x30 at 0xFB466E and the stride word +0xEC (14) at 0xFB4679.
+; Measured over all 1024 entries: max 316 < 318, 192 distinct.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_ToneIndexMapC:
 	.short 0x0005, 0x0017, 0x0005, 0x00D0, 0x00D5, 0x00D3, 0x00D9, 0x0022	; 21A3B  [0]
@@ -6598,12 +6634,11 @@ ToneDB_ToneIndexMapC:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 317, 125 distinct.
 ; KN5000 label at the same directory slot: ToneDB_ToneIndexMapD.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; ⚠ CORRECTED in wave 7 round 2.  This map is 2048 bytes, exactly like
 ; its eleven siblings.  The 768 bytes that used to be counted into it,
-; and recorded as 'what the extra 384 entries are is NOT established',
+; and once recorded as 384 extra entries of this map,
 ; are a separate object: see ToneDB_DescCurveBank immediately below.
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
@@ -6615,14 +6650,25 @@ ToneDB_ToneIndexMapC:
 ; for the reason this header used to give.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x28 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x28: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
 ; ★ BUT A READER EXISTS OUTSIDE IT: `ld XWA,(XBC+0x28)` at 0xFB46B3,
 ; through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616.
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x80.
+; Value: a descriptor number in the same 14-byte array, through +0x34 (the +0x30 alias).
+; Reader: ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0): 0xFB46B3 `ld XWA,(XBC+0x28)`,
+; then +0x34 at 0xFB46B9 and the stride word +0xEC (14) at 0xFB46C4.
+; Measured over all 1024 entries: max 317 < 318, 125 distinct.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_ToneIndexMapD:
 	.short 0x0056, 0x0056, 0x0057, 0x0056, 0x0057, 0x00FF, 0x0101, 0x00FC	; 2223B  [0]
@@ -18962,9 +19008,8 @@ DrumKit_NoteMapA:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 207, 208 distinct.
 ; KN5000 label at the same directory slot: ToneDB_PercSourceIndexMapA.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x2DF5C, which is directory slot +0x14's value, and ends at 0x2E75C,
@@ -18973,14 +19018,23 @@ DrumKit_NoteMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x14 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x14: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x40.
+; Value: a record number in ToneDB_PercMixerDefaultTable (+0x20, 208 x 43).
+; Reader: ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3): 0xFB8398 `ld XWA,(XBC+0x14)`,
+; then +0x20 at 0xFB839E and the stride word +0xF0 (43) at 0xFB83A9.
+; Measured over all 1024 entries: max 207 < 208, 208 distinct.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_PercSourceIndexMapA:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x000B	; 2DF5C  [0]
@@ -19119,9 +19173,8 @@ ToneDB_PercSourceIndexMapA:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 160, 161 distinct.
 ; KN5000 label at the same directory slot: ToneDB_DrumToneIndexMap.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x2E75C, which is directory slot +0x2C's value, and ends at 0x2EF5C,
@@ -19130,14 +19183,25 @@ ToneDB_PercSourceIndexMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x2C is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x2C: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
 ; ★ BUT A READER EXISTS OUTSIDE IT: `ld XWA,(XBC+0x2C)` at 0xFB468C,
 ; through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616.
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x40.
+; Value: a descriptor number in ToneDB_EnvDescTable_Perc (+0x38, 161 x 14).
+; Reader: ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0): 0xFB468C `ld XWA,(XBC+0x2c)`,
+; then +0x38 at 0xFB4692 and the stride word +0xF2 (14) at 0xFB469D.
+; Measured over all 1024 entries: max 160 < 161, 161 distinct.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_DrumToneIndexMap:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 2E75C  [0]
@@ -36639,9 +36703,8 @@ ToneDB_SourceNameList1:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 181, 182 distinct.
 ; KN5000 label at the same directory slot: ToneDB_SourceIndexMapA.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4809A, which is directory slot +0x44's value, and ends at 0x4889A,
@@ -36659,10 +36722,27 @@ ToneDB_SourceNameList1:
 ; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
 ; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
 ; 
-; The chain this reader belongs to has NOT been decoded end to end.
-; For the one that has -- slot +0x4C -- see its banner: the map value
-; turns out to be a ROW NUMBER in a catalogue.  Whether that reading
-; carries over to this map is NOT asserted here.
+; The chain is now decoded end to end and the +0x4C reading DOES carry
+; over: see WHAT THE INDEX SELECTS below (corrected 2026-09-25, lane
+; promcd).
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x00 and 0xC0.
+; Value: a ROW of ToneDB_SourceNameList1 (+0x50, 307 x 16).
+; Reader: ToneQuery_ReplySourceName1_ViaIndexMap (prom_c 0xFC035E): 0xFC03FD and
+; 0xFC0450 `ld XWA,(XBC+0x44)`, the list +0x50 at 0xFC049C, row stride
+; `ld BC,0x0010` at 0xFC04C1; ToneQuery_ReplySourceName1_ByRow (0xFC067A)
+; takes entry 127 (0xFC06DE, `add XWA,0x000000fe` 0xFC06E4) as its fallback.
+; Measured over all 1024 entries: max 181 < 307, 182 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 182 rows of
+; +0x50 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 182 of 182.  Control: all 307 rows
+; through each of the other name maps return themselves at most 7 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_SourceIndexMapA:
 	.short 0x0002, 0x0004, 0x0002, 0x0005, 0x0008, 0x0006, 0x0009, 0x0033	; 4809A  [0]
@@ -36801,9 +36881,8 @@ ToneDB_SourceIndexMapA:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 306, 126 distinct.
 ; KN5000 label at the same directory slot: ToneDB_SourceIndexMapB.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4889A, which is directory slot +0x48's value, and ends at 0x4909A,
@@ -36812,14 +36891,27 @@ ToneDB_SourceIndexMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x48 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x48: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x80.
+; Value: a ROW of ToneDB_SourceNameList1 (+0x50, 307 x 16).
+; Reader: ToneQuery_ReplySourceName1_ViaIndexMap (prom_c 0xFC035E): 0xFC0435
+; `ld XWA,(XBC+0x48)`, the list +0x50 at 0xFC049C.
+; Measured over all 1024 entries: max 306 < 307, 126 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 125 rows of
+; +0x50 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 125 of 125.  Control: all 307 rows
+; through each of the other name maps return themselves at most 7 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_SourceIndexMapB:
 	.short 0x00B6, 0x00B6, 0x00B7, 0x00B7, 0x00B7, 0x00BB, 0x00BD, 0x00B8	; 4889A  [0]
@@ -37648,9 +37740,8 @@ ToneDB_SourceNameList2:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 188, 189 distinct.
 ; KN5000 label at the same directory slot: ToneDB_SourceIndexMapC.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4A44C, which is directory slot +0x58's value, and ends at 0x4AC4C,
@@ -37668,10 +37759,25 @@ ToneDB_SourceNameList2:
 ; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
 ; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
 ; 
-; The chain this reader belongs to has NOT been decoded end to end.
-; For the one that has -- slot +0x4C -- see its banner: the map value
-; turns out to be a ROW NUMBER in a catalogue.  Whether that reading
-; carries over to this map is NOT asserted here.
+; The chain is now decoded end to end and the +0x4C reading DOES carry
+; over: see WHAT THE INDEX SELECTS below (corrected 2026-09-25, lane
+; promcd).
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x00 and 0xC0.
+; Value: a ROW of ToneDB_SourceNameList2 (+0x64, 314 x 16).
+; Reader: ToneQuery_ReplySourceName2_ViaIndexMap (prom_c 0xFC04EC): 0xFC058B and
+; 0xFC05DE `ld XWA,(XBC+0x58)`, the list +0x64 at 0xFC062A.
+; Measured over all 1024 entries: max 188 < 314, 189 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 189 rows of
+; +0x64 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 189 of 189.  Control: all 314 rows
+; through each of the other name maps return themselves at most 7 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_SourceIndexMapC:
 	.short 0x0002, 0x0004, 0x0002, 0x0005, 0x000C, 0x0008, 0x0010, 0x003D	; 4A44C  [0]
@@ -37810,9 +37916,8 @@ ToneDB_SourceIndexMapC:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 313, 126 distinct.
 ; KN5000 label at the same directory slot: ToneDB_SourceIndexMapD.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4AC4C, which is directory slot +0x5C's value, and ends at 0x4B44C,
@@ -37821,14 +37926,27 @@ ToneDB_SourceIndexMapC:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x5C is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x5C: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x80.
+; Value: a ROW of ToneDB_SourceNameList2 (+0x64, 314 x 16).
+; Reader: ToneQuery_ReplySourceName2_ViaIndexMap (prom_c 0xFC04EC): 0xFC05C3
+; `ld XWA,(XBC+0x5c)`, the list +0x64 at 0xFC062A.
+; Measured over all 1024 entries: max 313 < 314, 126 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 125 rows of
+; +0x64 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 125 of 125.  Control: all 314 rows
+; through each of the other name maps return themselves at most 7 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_SourceIndexMapD:
 	.short 0x00BD, 0x00BD, 0x00BE, 0x00BE, 0x00BE, 0x00C2, 0x00C4, 0x00BF	; 4AC4C  [0]
@@ -39795,9 +39913,8 @@ ToneDB_PercSourceNameList1:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 207, 208 distinct.
 ; KN5000 label at the same directory slot: ToneDB_PercSourceIndexMapB.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4F0DC, which is directory slot +0x4C's value, and ends at 0x4F8DC,
@@ -39832,6 +39949,23 @@ ToneDB_PercSourceNameList1:
 ; So: (row, column) -> a row of ToneDB_PercSourceNameList1, 0xFFFF = none.
 ; notes/prom_d_documentation_round3.py Q4g decodes all sixteen instructions
 ; from the ROM bytes and checks 16 x 208 against that catalogue's own footer.
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x40.
+; Value: a ROW of ToneDB_PercSourceNameList1 (+0x8C, 208 x 16), or 0xFFFF.
+; Reader: ToneDB_PercSourceIndexMapB_Lookup (prom_c 0xFC1555), decoded above; also
+; ToneQuery_ReplySourceName1_ViaIndexMap (0xFC035E) at 0xFC0419 -- which
+; names the row from +0x50, not +0x8C, on this arm too (0xFC049C is shared).
+; Measured over all 1024 entries: max 207 < 208, 209 distinct, 128 x 0xFFFF (the NO-ENTRY value, 16 in each bank).
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 208 rows of
+; +0x8C whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 208 of 208.  Control: all 208 rows
+; through each of the other name maps return themselves at most 16 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_PercSourceIndexMapB:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 4F0DC  [0]
@@ -40354,9 +40488,8 @@ ToneDB_PercSourceNameList2:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 160, 161 distinct.
 ; KN5000 label at the same directory slot: ToneDB_PercSourceIndexMapC.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x502FA, which is directory slot +0x60's value, and ends at 0x50AFA,
@@ -40374,10 +40507,26 @@ ToneDB_PercSourceNameList2:
 ; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
 ; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
 ; 
-; The chain this reader belongs to has NOT been decoded end to end.
-; For the one that has -- slot +0x4C -- see its banner: the map value
-; turns out to be a ROW NUMBER in a catalogue.  Whether that reading
-; carries over to this map is NOT asserted here.
+; The chain is now decoded end to end and the +0x4C reading DOES carry
+; over: see WHAT THE INDEX SELECTS below (corrected 2026-09-25, lane
+; promcd).
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x40.
+; Value: a ROW of ToneDB_PercSourceNameList2 (+0x94, 161 x 16).
+; Reader: ToneQuery_ReplyPercSourceName2AndIndex (prom_c 0xFC1845): 0xFC1904 and
+; 0xFC1977 `ld XWA,(XBC+0x60)`, the list +0x94 at 0xFC1924/0xFC199C;
+; ToneQuery_ReplySourceName2_ViaIndexMap (0xFC04EC) at 0xFC05A7.
+; Measured over all 1024 entries: max 160 < 161, 161 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 161 rows of
+; +0x94 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 161 of 161.  Control: all 161 rows
+; through each of the other name maps return themselves at most 16 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_PercSourceIndexMapC:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 502FA  [0]
