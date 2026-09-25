@@ -121,6 +121,10 @@ def wrapc(text, first="; ", cont=";   ", width=96):
                          break_long_words=False, break_on_hyphens=False)
 
 
+IDXMAP_ANCHOR = '; --------------------------------------------------------------------------\nIndexMap_F4FA9B:'
+IDXMAP_NOTE = "; ⚠ ANSWERED 2026-09-25 (lane promb): what the two index spaces are.  The input k is\n;   a SYSEX MESSAGE BYTE: both readers first call prom_a sub_FB62D3 for field 11\n;   of the decode result at (0x60FCD8), the byte SysExDecodeTree_Root's walk\n;   matched at level 6 -- the parameter byte of `.. gg pp` -- and the dense index\n;   is an EFFECT PARAMETER NUMBER: 0xFB3AFD hands it to T_F434A0 =\n;   DspParam_WriteByNumber and 0xFB4A41 to T_F434A4 = DspParam_ReadByNumber, which\n;   look it up in EffectParamNumberMap.  So byte 0x20+i is the i-th addressable\n;   byte of DSP effect block 97 (i < 23), 0x40+i of block 98 and 0x60+i of block\n;   99 (i < 22, block 99 having no byte 21).  Checked by\n;   python3 notes/promb-2026-09-25/dsp_effect_tables.py.\n"
+
+
 def check(msg, cond):
     print("  %-4s %s" % ("ok" if cond else "FAIL", msg))
     if not cond:
@@ -284,6 +288,25 @@ def derive(rom):
           rom.at(0xF11C37, 5).hex()[-4:] == "4800" and
           rom.at(0xF11C3F, 14).hex() == "3103009e0841e98cecc87438f100")
     d["pnum"] = pn
+    # IndexMap_F4FA9B + 1 (0xF4FA9C): SysEx message byte -> parameter number n
+    im = [rom.at(0xF4FA9C + k, 1)[0] for k in range(128)]
+    want = [0xFF] * 128
+    for base, n0, cnt in ((0x20, 1, 23), (0x40, 24, 23), (0x60, 47, 22)):
+        for i in range(cnt):
+            want[base + i] = n0 + i
+    check("IndexMap_F4FA9B + 1 (0xF4FA9C): message byte 0x20+i -> n = 1+i (i < 23), 0x40+i -> "
+          "24+i (i < 23), 0x60+i -> 47+i (i < 22), all else 0xFF -- i.e. the i-th SysEx-"
+          "addressable byte of block 97 / 98 / 99 in EffectParamNumberMap", im == want)
+    pa = open(os.path.join(ROOT, "wsa1", "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
+    ga = lambda a, n: pa[a - 0xF80000:a - 0xF80000 + n].hex()
+    ok = True
+    for push, ld, call, add, thunk, th in ((0xFB3AD1, 0xFB3AD4, 0xFB3ADA, 0xFB3AE2, 0xFB3AFD, "a034f4"),
+                                           (0xFB4A17, 0xFB4A1A, 0xFB4A20, 0xFB4A28, 0xFB4A41, "a434f4")):
+        ok &= (ga(push, 3) == "0b0b00" and ga(ld, 5) == "e2d8fc6021" and ga(call, 4) == "1dd362fb"
+               and ga(add, 6) == "e8c89cfaf400" and ga(thunk, 4) == "1d" + th)
+    check("prom_a 0xFB3AD1..0xFB3AFD and 0xFB4A17..0xFB4A41: `push 0x0b / ld XBC,(0x60FCD8) / "
+          "call sub_FB62D3` (field 11 of the SysEx decode result = the message byte matched at "
+          "level 6) / `add XWA,0xF4FA9C` ... `call 0xF434A0` resp. `call 0xF434A4`", ok)
     starts = routine_starts()
     d["rd"] = {a: readers_text(rom, a, starts) for a in
                [x for blk in BLOCKS for x in blk[1:]] + [ADJ, ADJ + 9, ADJ + 18]}
@@ -719,6 +742,10 @@ def apply(d):
         ";   dsp_effect_tables.py.  Re-pasting the emitter's output would discard all of\n"
         ";   that; --checks (ROM framing only) still passes and is still worth running.\n"
     ).encode("utf-8").decode("latin-1"))
+    if "ANSWERED 2026-09-25 (lane promb): what the two index spaces are" not in txt:
+        assert txt.count(IDXMAP_ANCHOR) == 1
+        txt = txt.replace(IDXMAP_ANCHOR, IDXMAP_NOTE.encode("utf-8").decode("latin-1")
+                          + IDXMAP_ANCHOR)
     data = txt.encode("latin-1")
     open(SRC, "wb").write(data)
     print("wrote", SRC)

@@ -105239,6 +105239,16 @@ Pointer_F4FA76:
 ;                       rule's name as if it were a description.
 ; Evidence: the bands and the live count are re-derived by index_bands() and
 ;           checked in --selftest, last band included.
+; ⚠ ANSWERED 2026-09-25 (lane promb): what the two index spaces are.  The input k is
+;   a SYSEX MESSAGE BYTE: both readers first call prom_a sub_FB62D3 for field 11
+;   of the decode result at (0x60FCD8), the byte SysExDecodeTree_Root's walk
+;   matched at level 6 -- the parameter byte of `.. gg pp` -- and the dense index
+;   is an EFFECT PARAMETER NUMBER: 0xFB3AFD hands it to T_F434A0 =
+;   DspParam_WriteByNumber and 0xFB4A41 to T_F434A4 = DspParam_ReadByNumber, which
+;   look it up in EffectParamNumberMap.  So byte 0x20+i is the i-th addressable
+;   byte of DSP effect block 97 (i < 23), 0x40+i of block 98 and 0x60+i of block
+;   99 (i < 22, block 99 having no byte 21).  Checked by
+;   python3 notes/promb-2026-09-25/dsp_effect_tables.py.
 ; --------------------------------------------------------------------------
 IndexMap_F4FA9B:
 	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; F4FA9B  ................
