@@ -15130,10 +15130,8 @@ AccPatch_CountSlotsAlt_Store:
 
 AccPatch_MiscDataBlock:
 	ld	xwa, 100
-	.byte 0xd1, 0xd4
-	ldw	ix, 0x3340
-	.byte 0xbe
-	nop
+	.byte	0xd1, 0xd4, 0x34, 0x40	; mul XWA, (0x34d4) (unidasm; no llvm-mc spelling)
+	ldw	hl, 190
 	div	xwa, xhl
 	cp	a, 100
 	jr	c, AccPatch_CountSlotsAlt_Body_Skip
@@ -22570,18 +22568,11 @@ RhythmROM_LoadPattern:
 	reti
 RhythmROM_PatternDisp_InitLoop:
 	neg	wa
-	.byte 0xd3
+	.byte	0xd3, 0x03, 0xd3, 0x07, 0xd3	; xor HL, (rD3L+QB0) (unidasm; no llvm-mc spelling)
 	pop	sr
-	.byte 0xd3
-	reti
-	.byte 0xd3
+	.byte	0xd3, 0x07, 0xd2, 0x03, 0xd2	; xor DE, (XWA-1+r03W) (unidasm; no llvm-mc spelling)
 	pop	sr
-	.byte 0xd3
-	reti
-	.byte 0xd2
-	pop	sr
-	xor	(0x3d803:24), wa
-	pop	sr
+	ld	wa, 984
 	xor	(0x07d207:24), wa
 	reti
 	neg	wa
@@ -26314,8 +26305,7 @@ TimeSig_DisplayStrings_Code_Skip15:
 	bit	4, (0x34cd:16)
 	jr	z, 2
 	jr	73
-	.byte 0xc1, 0xcd
-	ldw	ix, 0xcf3c
+	and	(0x34cd:16), 207
 	or	(0x34cd:16), 32
 	ld	(0x34d6:16), 31
 	ld	(0x34ef:16), 26
@@ -26327,9 +26317,8 @@ TimeSig_DisplayStrings_Code_Skip15:
 	ld	(0x34ef:16), 26
 	jr	TimeSig_DisplayStrings_Code_Return3
 DrumVoice_Handler7_Code_Helper2_Entry:
-	.byte 0xf1, 0xcd
-	ldw	ix, 0x66cc
-	ex_ff
+	bit	4, (0x34cd:16)
+	jr	z, TimeSig_DisplayStrings_Code_Return3
 	and	(0x34cd:16), 207
 	or	(0x34cd:16), 32
 	ld	(0x34d6:16), 31

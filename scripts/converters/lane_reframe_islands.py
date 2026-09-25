@@ -274,7 +274,14 @@ def fallback_insn(rom_path, rom, addr):
         if OPWORD.get(w, w) != uop and not (uop == "ld" and w == "ld"):
             continue
         return n, c
-    return None
+    # No backend mnemonic encodes it (e.g. `f3 07 ec f4 00 d0`, unidasm
+    # "ld (XHL+IY),0xd0": the store-immediate SRI form has no llvm-mc
+    # spelling).  Policy 11 allows `.byte` exactly for such encodings: emit the
+    # instruction's own bytes with unidasm's reading as the comment.
+    if ABS.match(re.sub(r'\s+', ' ', utext.lower())) or uop in ("db", "halt", "swi", "reti"):
+        return None
+    return n, ".byte " + ", ".join("0x%02x" % x for x in b) + \
+        "\t; %s (unidasm; no llvm-mc spelling)" % utext.replace(",", ", ")
 
 
 def robust_decode(rom_path, rom, start, length):
@@ -584,6 +591,10 @@ def _analyse_island(isl):
     E, Eline = conv
     res["E"] = "0x%06X" % E
     texts = [t for (_, _, t) in used]
+    nbyte = sum(1 for t in texts if t.startswith(".byte"))
+    if nbyte > 2:
+        res["verdict"] = "refused: %d instructions have no llvm-mc spelling" % nbyte
+        return res, None
     # marker check
     prevt = ""
     mk = None
