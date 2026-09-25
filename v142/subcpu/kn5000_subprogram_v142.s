@@ -1030,6 +1030,12 @@ TaskSched_SpawnTask:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 	jrl TaskSched_Dispatch
+
+; Terminate the calling task: back on the scheduler stack (SP = 0x40B1E, the value
+; TaskSched_Init uses), the current TCB (pointer at 0x1046) gets state +0x09 = 0 and pending
+; count +0x0A = 0, 0x1046 is cleared, the TCB is unlinked from its queue and
+; TaskSched_Dispatch picks the next task.  No caller in v1.42.
+TaskSched_ExitCurrentTask:
 	ei 6
 	ld xsp, 0x40B1E
 	ld ix, (4166:16)
@@ -1046,6 +1052,10 @@ TaskSched_SpawnTask:
 	ld (xhl + 256), wa
 	ld (xwa + 2), hl
 	jrl TaskSched_Dispatch
+
+; HL = the running task's id (TCB +0x0B, the byte TaskSched_SpawnTask stores), or 0 when the
+; scheduler lock depth at 0x10D2 is non-zero.  No caller in v1.42.
+TaskSched_GetCurrentTaskId:
 	ld hl, (4306:16)
 	or hl, hl
 	jr nz, TaskSched_ReturnZero
@@ -1621,6 +1631,11 @@ TaskSched_Wait_Block:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 	jrl TaskSched_Dispatch
+
+; Non-blocking P() on semaphore A: under interrupt level 6, if the count at 0x1091 + A is 0
+; return HL = 0xFFFF, else decrement it and return HL = 0.  Named in TaskSem_GetCount's header;
+; no caller in v1.42.
+TaskSem_TryDec:
 	extz wa
 	add wa, 0x1091
 	extz xwa
@@ -1730,6 +1745,12 @@ TaskMsgQ_Send_DirectDeliver:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 	jrl TaskSched_Dispatch
+
+; TaskMsgQ_Send without rescheduling: saves six registers instead of the full context frame,
+; then the same queue logic (waiter list 0x1092 + 4*A, message list 0x109A + 4*A, free nodes
+; at 0x10C6); a waiting receiver is made READY and linked, and the routine RETURNS to its
+; caller.  Main-CPU twin: TaskMsg_Send_NB.  No caller in v1.42.
+TaskMsgQ_Send_NoResched:
 	push xwa
 	push xix
 	push xiy
@@ -1950,6 +1971,12 @@ Task_ConfigTimer:
 	ld xwa, (xix + 4)
 	ld (xiy + 4), xwa
 	jrl TaskSched_Dispatch
+
+; Give task A priority C: TCB = 0x103C + 12*A.  If the task is READY (state +0x09 == 4) it is
+; unlinked, its priority byte +0x08 set and it is relinked at the tail of ready queue
+; 0x1068 + 4*C, then TaskSched_Dispatch runs; otherwise only +0x08 is written
+; (Task_Reassign_NotRunning).  Main-CPU twin: TaskSched_ChangePriority.  No caller in v1.42.
+TaskSched_ChangePriority:
 	push	sr
 	ei 6
 	push xhl
@@ -1991,6 +2018,10 @@ Task_ConfigTimer:
 Task_Reassign_NotRunning:
 	ld (xix + 8), e
 	jrl TaskSched_ContextRestore
+
+; TaskSched_ChangePriority without the context frame and without rescheduling: the same
+; relink under `push sr / ei 6`, then return to the caller.  No caller in v1.42.
+TaskSched_ChangePriority_NoResched:
 	push xwa
 	push xix
 	push xiy
