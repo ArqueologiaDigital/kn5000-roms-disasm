@@ -141,3 +141,66 @@ in place.
 
 Correction to 02d072ed: v7 scoop_editor_data.s held 9 romslices, not 11
 (the 7,434 B figure was right).
+
+
+## Semantic pass (after the re-frame)
+
+| step | tool | what it does |
+|---|---|---|
+| pop-up family | `scripts/converters/scoop_popup_names.py` | the hand-written record: 27 routines (ParamPopup_*, Disp_ShowNoteNameAndVelocity, Disp_ShowNoteValueFields) and 41 text tables, each header naming the instructions it rests on; v9 same addresses, v7 located by byte context with its moved RAM block learned by aligning unidasm streams |
+| drafts | `scripts/analysis/scoop_data_readers.py`, `scripts/analysis/scoop_data_headers.py` | every data object, split at every address something loads, with its readers and their index arithmetic |
+| headers | `scripts/converters/scoop_auto_headers.py` + `scoop_annotate.py` | reader-cited header (and a label when missing) for every object not already KNOWN-A; dispatch/pointer tables re-spelled one `.long <label>` per entry, unlabelled handler targets get `<Table>_Target<k>` |
+| numbers | `scripts/converters/scoop_symbolize_imm.py`, `scoop_label_numeric_targets.py` | ROM addresses written as numbers in instruction operands made symbolic (label added first where the target is in these files) |
+| corrections | `scripts/converters/scoop_refresh_headers.py`, `scoop_rename_unref.py` | re-derive generated headers after readers became visible; rename `Unref_*` placeholders that turned out to be read |
+| 2-line rule | `scripts/converters/scoop_header_second_line.py` | the census credits only >= 2-line headers: adds the reader's instruction line under one-liners |
+| spellings | `scripts/converters/scoop_respell_byte_insns.py` | `.byte`-written instructions the backend can spell after all (`srla e`, `popw (0x0d5c:16)`, `xorcf a, (m:16)`, `add xhl, (0x2a:8)`, `rrc_i_8 a, 3`) |
+| branches | `scripts/converters/scoop_symbolize_rel.py` | numeric relative branches the shared symboliser refused (R3/R5), re-checked site by site against unidasm |
+| labels | `scripts/renaming/scoop_reparent_structural.py` (+ committed `rename_scoop_reparent_*.sed`) | structural labels on code whose parent was a DATA label, re-parented onto the enclosing routine |
+
+## Measured before / after (all three versions, the three files summed)
+
+    python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json X.json
+    python3 scripts/analysis/scoop_lane_measure.py --census X.json [--base BEFORE.json]
+
+Before = branch base 3958235e; after = this branch's head.  Toolchain
+tlcs900_backend@4d7fa4f6b37c for every figure.
+
+| | before | after |
+|---|---:|---:|
+| CODE | 200,392 | 229,279 |
+| KNOWN-A | 747 | 16,871 |
+| KNOWN-B | 45,644 | 231 |
+| UNKNOWN (honest admissions) | 0 | 402 |
+| research targets | 31,574 | 624 |
+| data-as-code markers (lane_worklists.py ABS rule) | 1,701 | 0 |
+| numeric branch operands | 2,154 | 39 (v7 only, targets in other lanes' files) |
+| v7 romslice bytes | 23,038 | 0 |
+
+The per-file table is `measure_final.txt` next to this file.
+
+The 46 retired romslice files are listed in `retired_romslices.txt`; none
+is referenced by any v7 source any more (checked with a byte-safe search),
+and they belong to lane `sys` to delete.
+
+## What remains (and why)
+
+* v7: 16 `calr` to 0xFAFAC0 and 23 absolute `call`/`jp` (0xFDD89E x5,
+  0xFE2F1D x2, 0xFE2CBC x6, ...) point into OTHER lanes' files at addresses
+  where no label stands -- in each case inside a data line there, so the
+  owners' files are misframed or mis-typed at those addresses.
+* backend has no spelling for `cp BC/IY,(XIX+IZ)` (d3 07 f0 f8 f1/f5) and
+  `ldcf/stcf A,RH3` (c7 3d 2b/2c): still `.byte` with unidasm's reading.
+* honest unknowns: the 64-byte second part-name scheme after Str_TuningEq,
+  Str_ExtTabEffectEnDis, Unref_EF6BD3_Tbl / Unref_EFA7C5_Tbl (v10/v9),
+  ClockConfig_Select_Table (no reader by name or 32-bit value), and the role of
+  the 0x09 bytes in Tbl_AccompPartNames.
+* `.long OscScope_DrawWaveform` (sequencer/smf_event_processor.s) and
+  `.long OscScope_FinalizeRender` (ui/drawbar_panel_ui.s, ui/ui_mode_handlers.s)
+  point into the middle of instructions (now `.set NAME, . + k` here): the
+  referring lines are probably misframed code in those files.
+* ui/drawbar_panel_ui.s loads StringData_APCModeNames_0x160..0x163
+  (0xF00001-0xF00004) and hands them to SendEvent: most likely numeric event
+  arguments that a positional-label pass symbolised by accident.
+* naming: handler routines reached through the dispatch tables carry
+  `<Table>_Target<k>` names; the sound-editor code (all of
+  scoop_editor_data.s, 3,4xx instructions) has only structural labels.

@@ -1,0 +1,20 @@
+img  file                          CODE   KNOWN-A   KNOWN-B   UNKNOWN    FILLER  RESEARCH markers   numbr romslice
+v10  display/scoop_display.s      +1759     +5083     -6976      +134         .     -5861  (delta)
+                                  50507      5625        77       134         0       208       0       0        0
+v10  display/scoop_editor_data.s      +272         .      -272         .         .      -272  (delta)
+                                   9200         0         0         0         0         0       0       0        0
+v10  display/graphics_text_vga.s      +220         .      -220         .         .      -220  (delta)
+                                  16718         0         0         0         0         0       0       0        0
+v9   display/scoop_display.s      +1549     +5528     -7211      +134         .     -6136  (delta)
+                                  50507      5625        77       134         0       208       0       0        0
+v9   display/scoop_editor_data.s      +272         .      -272         .         .      -272  (delta)
+                                   9200         0         0         0         0         0       0       0        0
+v9   display/graphics_text_vga.s      +220         .      -220         .         .      -220  (delta)
+                                  16718         0         0         0         0         0       0       0        0
+v7   display/scoop_display.s     +15700     +5519    -21353      +134         .    -12526  (delta)
+                                  50511      5621        77       134         0       208       0      10        0
+v7   display/scoop_editor_data.s     +7434         .     -7434         .         .     -4316  (delta)
+                                   9200         0         0         0         0         0       0       0        0
+v7   display/graphics_text_vga.s     +1461        -6     -1455         .         .     -1127  (delta)
+                                  16718         0         0         0         0         0       0      29        0
+TOTAL CODE=229279 KNOWN-A=16871 KNOWN-B=231 UNKNOWN=402 FILLER=0 RESEARCH=624 markers=0 numbr=39 romslice=0
