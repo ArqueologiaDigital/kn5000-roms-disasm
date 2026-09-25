@@ -3173,54 +3173,84 @@ typedef struct __attribute__((packed)) {
      * the 12 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint32_t MainCmpCpFunc_LocalInit[3];
-    char str_2605[14];
-    char str_2606[14];
-    char str_2607[14];
-    uint8_t pad_1153[2];  /* zero padding */
-    char str_2608[2];
-    char str_2609[2];
-    uint16_t field_1b214;
-    uint16_t field_1b216;
-    uint16_t field_1b218;
-    uint16_t field_1b21a;
-    uint16_t field_1b21c;
-    uint16_t field_1b21e;
-    uint16_t field_1b220;
-    uint16_t field_1b222;
-    uint16_t field_1b224;
-    uint8_t pad_1154[2];  /* zero padding */
-    char str_2610[2];
-    char str_2611[2];
-    char str_2612[2];
-    char str_2613[2];
-    char str_2614[2];
-    char str_2615[2];
-    uint8_t pad_1155[2];  /* zero padding */
-    char str_2616[2];
-    char str_2617[2];
-    char str_2618[2];
-    char str_2619[2];
-    char str_2620[2];
-    char str_2621[2];
-    uint8_t pad_1156[2];  /* zero padding */
-    char str_2622[2];
-    uint16_t field_1b246;
-    uint16_t field_1b248;
-    uint16_t field_1b24a;
-    uint16_t field_1b24c;
-    uint16_t field_1b24e;
-    uint8_t pad_1157[2];  /* zero padding */
-    char str_2623[2];
-    char str_2624[2];
-    char str_2625[2];
-    char str_2626[2];
-    char str_2627[2];
-    char str_2628[2];
-    uint32_t ptr_1b25e;
-    char str_2629[4];
-    uint32_t ptr_1b266;
-    uint32_t ptr_1b26a;
-    char str_2630[4];
+    /* ---------------------------------------------------------------------
+     * [typed] by span_d_mem
+     * NakaInst_MEMORY_C -- " MEMORY-C " (14 bytes with NUL and pad): entry 2
+     * of MainCmpCpFunc_LocalInit, the three string pointers MainCmpCpFunc
+     * (v10/v9 0xF6985D, v7 0xF69459) copies into its stack frame.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MEMORY_C[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MEMORY_B -- " MEMORY-B ": entry 1 of MainCmpCpFunc_LocalInit
+     * (MainCmpCpFunc (v10/v9 0xF6985D, v7 0xF69459)).
+     * --------------------------------------------------------------------- */
+    char NakaInst_MEMORY_B[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MEMORY_A -- " MEMORY-A ": entry 0 of MainCmpCpFunc_LocalInit
+     * (MainCmpCpFunc (v10/v9 0xF6985D, v7 0xF69459)). The label also anchors
+     * the positional labels NakaInst_MEMORY_A_0xE .. _0x5E that the switch
+     * tables below are reached through.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MEMORY_A[14];
+    /* ---------------------------------------------------------------------
+     * MainCmpSetFunc_CaseTable -- jump table of a compiled `switch` in
+     * MainCmpSetFunc (v10/v9 0xF699BC, v7 0xF695B8) (`add xhl,
+     * NakaInst_MEMORY_A_0xE`): 8 u16 case offsets from MainCmpSet_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t MainCmpSetFunc_CaseTable[8];
+    /* ---------------------------------------------------------------------
+     * MainCmpSetFunc_CaseTable_Tail -- 8 bytes after
+     * MainCmpSetFunc_CaseTable that no registration or code reference
+     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t MainCmpSetFunc_CaseTable_Tail[8];
+    /* ---------------------------------------------------------------------
+     * MspMenuTtlFunc_CaseTable -- jump table of a compiled `switch` in
+     * MspMenuTtlFunc (v10/v9 0xF69E22, v7 0xF69A1E) (`add xde,
+     * NakaInst_MEMORY_A_0x26`): 7 u16 case offsets from MspMenuTtl_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t MspMenuTtlFunc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * MspNameTtlFunc_CaseTable -- jump table of a compiled `switch` in
+     * MspNameTtlFunc (v10/v9 0xF69EA9, v7 0xF69AA5) (`add xde,
+     * NakaInst_MEMORY_A_0x34`): 7 u16 case offsets from MspNameTtl_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t MspNameTtlFunc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * MspRecTtlFunc_CaseTable -- jump table of a compiled `switch` in
+     * MspRecTtlFunc (v10/v9 0xF69F2B, v7 0xF69B27) (`add xde,
+     * NakaInst_MEMORY_A_0x42`): 7 u16 case offsets from MspRecTtl_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t MspRecTtlFunc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * SndArgTtlFunc_CaseTable -- jump table of a compiled `switch` in
+     * SndArgTtlFunc (v10/v9 0xF6A064, v7 0xF69C60) (`add xde,
+     * NakaInst_MEMORY_A_0x50`): 7 u16 case offsets from SndArgTtl_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t SndArgTtlFunc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * SndArgNmGet_PtrTable -- 1 u32 addresses, read by SndArgNmGet (v10/v9
+     * 0xF6A0BB, v7 0xF69CB7) (`ld xiy, NakaInst_MEMORY_A_0x5E`).
+     * --------------------------------------------------------------------- */
+    uint32_t SndArgNmGet_PtrTable[1];
+    /* ---------------------------------------------------------------------
+     * NakaInst_DashDash -- "-- ": the string the one-entry table before it
+     * points at (SndArgNmGet (v10/v9 0xF6A0BB, v7 0xF69CB7) copies that
+     * pointer to its frame).
+     * --------------------------------------------------------------------- */
+    char NakaInst_DashDash[4];
+    /* ---------------------------------------------------------------------
+     * SndArgNmGet_PtrTable_2 -- 2 u32 addresses, read by SndArgNmGet (v10/v9
+     * 0xF6A0BB, v7 0xF69CB7) (`ld xiy, NakaInst_DashDash_0x4`).
+     * --------------------------------------------------------------------- */
+    uint32_t SndArgNmGet_PtrTable_2[2];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ON_Str -- "ON ": entry 1 of the {OFF, ON} pointer pair just
+     * before it, which SndArgNmGet (v10/v9 0xF6A0BB, v7 0xF69CB7) copies to
+     * its frame (NakaInst_OFF_Str follows).
+     * --------------------------------------------------------------------- */
+    char NakaInst_ON_Str[4];
     /* ---------------------------------------------------------------------
      * [typed] by build_accseq_region
      * NakaInst_OFF_Str -- "OFF". With "ON " just before it, the pair is
@@ -12195,106 +12225,41 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     },
 
     .MainCmpCpFunc_LocalInit = {
-        SELF(str_2607),
-        SELF(str_2606),
-        SELF(str_2605),
+        SELF(NakaInst_MEMORY_A),
+        SELF(NakaInst_MEMORY_B),
+        SELF(NakaInst_MEMORY_C),
     },
 
-    .str_2605 = "  MEMORY-C   ",
+    .NakaInst_MEMORY_C = "  MEMORY-C   ",
 
-    .str_2606 = "  MEMORY-B   ",
+    .NakaInst_MEMORY_B = "  MEMORY-B   ",
 
-    .str_2607 = "  MEMORY-A   ",
+    .NakaInst_MEMORY_A = "  MEMORY-A   ",
 
-    .pad_1153 = { 0 },
+    .MainCmpSetFunc_CaseTable = { 0x0000, 0x0034, 0x0067, 0x009B, 0x013B, 0x013B, 0x00CD, 0x0103 },
 
-    .str_2608 = "4",
+    .MainCmpSetFunc_CaseTable_Tail = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0xFF },
 
-    .str_2609 = "g",
+    .MspMenuTtlFunc_CaseTable = { 0x0000, 0x0056, 0x0056, 0x0056, 0x0056, 0x0056, 0x0056 },
 
-    .field_1b214 = 0x009B,
+    .MspNameTtlFunc_CaseTable = { 0x0000, 0x0035, 0x0035, 0x0035, 0x0035, 0x0035, 0x0035 },
 
-    .field_1b216 = 0x013B,
+    .MspRecTtlFunc_CaseTable = { 0x0000, 0x004C, 0x0093, 0x0093, 0x0093, 0x0093, 0x0093 },
 
-    .field_1b218 = 0x013B,
+    .SndArgTtlFunc_CaseTable = { 0x0000, 0x0026, 0x0026, 0x0026, 0x0026, 0x0026, 0x0026 },
 
-    .field_1b21a = 0x00CD,
+    .SndArgNmGet_PtrTable = {
+        SELF(NakaInst_DashDash),
+    },
 
-    .field_1b21c = 0x0103,
+    .NakaInst_DashDash = "-- ",
 
-    .field_1b21e = 0x0201,
+    .SndArgNmGet_PtrTable_2 = {
+        SELF(NakaInst_OFF_Str),
+        SELF(NakaInst_ON_Str),
+    },
 
-    .field_1b220 = 0x0804,
-
-    .field_1b222 = 0x2010,
-
-    .field_1b224 = 0xFF40,
-
-    .pad_1154 = { 0 },
-
-    .str_2610 = "V",
-
-    .str_2611 = "V",
-
-    .str_2612 = "V",
-
-    .str_2613 = "V",
-
-    .str_2614 = "V",
-
-    .str_2615 = "V",
-
-    .pad_1155 = { 0 },
-
-    .str_2616 = "5",
-
-    .str_2617 = "5",
-
-    .str_2618 = "5",
-
-    .str_2619 = "5",
-
-    .str_2620 = "5",
-
-    .str_2621 = "5",
-
-    .pad_1156 = { 0 },
-
-    .str_2622 = "L",
-
-    .field_1b246 = 0x0093,
-
-    .field_1b248 = 0x0093,
-
-    .field_1b24a = 0x0093,
-
-    .field_1b24c = 0x0093,
-
-    .field_1b24e = 0x0093,
-
-    .pad_1157 = { 0 },
-
-    .str_2623 = "&",
-
-    .str_2624 = "&",
-
-    .str_2625 = "&",
-
-    .str_2626 = "&",
-
-    .str_2627 = "&",
-
-    .str_2628 = "&",
-
-    .ptr_1b25e = SELF(str_2629),
-
-    .str_2629 = "-- ",
-
-    .ptr_1b266 = SELF(NakaInst_OFF_Str),
-
-    .ptr_1b26a = SELF(str_2630),
-
-    .str_2630 = "ON ",
+    .NakaInst_ON_Str = "ON ",
 
     .NakaInst_OFF_Str = "OFF",
 

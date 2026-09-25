@@ -70,6 +70,25 @@ SPANS = {
     # after the MIDI-menu ApFunction names
     'd_ui': dict(blob='naka_widget_descriptors', sfile='widget_descriptors.s',
                  base=0xE30E60, lo=0x271A, hi=0x4018, manual={}),
+    'd_mem': dict(blob='naka_widget_descriptors', sfile='widget_descriptors.s',
+                  base=0xE30E60, lo=0x1B1E4, hi=0x1B272, manual={
+        0x1B1E4: (14, 'NakaInst_MEMORY_C', 'char', '[14]',
+                  '" MEMORY-C " (14 bytes with NUL and pad): entry 2 of '
+                  'MainCmpCpFunc_LocalInit, the three string pointers {MainCmpCpFunc} '
+                  'copies into its stack frame.'),
+        0x1B1F2: (14, 'NakaInst_MEMORY_B', 'char', '[14]',
+                  '" MEMORY-B ": entry 1 of MainCmpCpFunc_LocalInit ({MainCmpCpFunc}).'),
+        0x1B200: (14, 'NakaInst_MEMORY_A', 'char', '[14]',
+                  '" MEMORY-A ": entry 0 of MainCmpCpFunc_LocalInit ({MainCmpCpFunc}).  '
+                  'The label also anchors the positional labels NakaInst_MEMORY_A_0xE .. '
+                  '_0x5E that the switch tables below are reached through.'),
+        0x1B262: (4, 'NakaInst_DashDash', 'char', '[4]',
+                  '"-- ": the string the one-entry table before it points at '
+                  '({SndArgNmGet} copies that pointer to its frame).'),
+        0x1B26E: (4, 'NakaInst_ON_Str', 'char', '[4]',
+                  '"ON ": entry 1 of the {OFF, ON} pointer pair just before it, which '
+                  '{SndArgNmGet} copies to its frame (NakaInst_OFF_Str follows).'),
+    }),
     'd_cls': dict(blob='naka_widget_descriptors', sfile='widget_descriptors.s',
                   base=0xE30E60, lo=0x24906, hi=0x24D68, manual={}),
     't2b': dict(blob='naka_widget_tables_2', sfile='naka_widget_tables_2.s',

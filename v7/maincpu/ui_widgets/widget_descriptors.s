@@ -5471,14 +5471,141 @@ MainCstmNameFunc_LocalInit:
 ; -----------------------------------------------------------------------------
 MainCmpCpFunc_LocalInit:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B1D8, 0xC
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MEMORY_C
+; NakaInst_MEMORY_C -- " MEMORY-C " (14 bytes with NUL and pad): entry 2
+; of MainCmpCpFunc_LocalInit, the three string pointers MainCmpCpFunc
+; (v10/v9 0xf6985d, v7 0xf69459) copies into its stack frame.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_MEMORY_C[14].
+; -----------------------------------------------------------------------------
 NakaInst_MEMORY_C:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B1E4, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MEMORY_B
+; NakaInst_MEMORY_B -- " MEMORY-B ": entry 1 of MainCmpCpFunc_LocalInit
+; (MainCmpCpFunc (v10/v9 0xf6985d, v7 0xf69459)).
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_MEMORY_B[14].
+; -----------------------------------------------------------------------------
 NakaInst_MEMORY_B:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B1F2, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MEMORY_A
+; NakaInst_MEMORY_A -- " MEMORY-A ": entry 0 of MainCmpCpFunc_LocalInit
+; (MainCmpCpFunc (v10/v9 0xf6985d, v7 0xf69459)). The label also anchors
+; the positional labels NakaInst_MEMORY_A_0xe .. _0x5e that the switch
+; tables below are reached through.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_MEMORY_A[14].
+; -----------------------------------------------------------------------------
 NakaInst_MEMORY_A:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B200, 0x62
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B200, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MainCmpSetFunc_CaseTable
+; MainCmpSetFunc_CaseTable -- jump table of a compiled `switch` in
+; MainCmpSetFunc (v10/v9 0xf699bc, v7 0xf695b8) (`add xhl,
+; NakaInst_MEMORY_A_0xe`): 8 u16 case offsets from MainCmpSet_Dispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; MainCmpSetFunc_CaseTable[8].
+; -----------------------------------------------------------------------------
+MainCmpSetFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B20E, 0x10
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MainCmpSetFunc_CaseTable_Tail
+; MainCmpSetFunc_CaseTable_Tail -- 8 bytes after
+; MainCmpSetFunc_CaseTable that no registration or code reference
+; reaches (searched: RegObjTabl tables, slice and positional labels).
+; Contents not established.
+;
+; Typed in naka_widget_descriptors.c as uint8_t
+; MainCmpSetFunc_CaseTable_Tail[8].
+; -----------------------------------------------------------------------------
+MainCmpSetFunc_CaseTable_Tail:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B21E, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MspMenuTtlFunc_CaseTable
+; MspMenuTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; MspMenuTtlFunc (v10/v9 0xf69e22, v7 0xf69a1e) (`add xde,
+; NakaInst_MEMORY_A_0x26`): 7 u16 case offsets from MspMenuTtl_Dispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; MspMenuTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+MspMenuTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B226, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MspNameTtlFunc_CaseTable
+; MspNameTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; MspNameTtlFunc (v10/v9 0xf69ea9, v7 0xf69aa5) (`add xde,
+; NakaInst_MEMORY_A_0x34`): 7 u16 case offsets from MspNameTtl_Dispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; MspNameTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+MspNameTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B234, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] MspRecTtlFunc_CaseTable
+; MspRecTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; MspRecTtlFunc (v10/v9 0xf69f2b, v7 0xf69b27) (`add xde,
+; NakaInst_MEMORY_A_0x42`): 7 u16 case offsets from MspRecTtl_Dispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; MspRecTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+MspRecTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B242, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndArgTtlFunc_CaseTable
+; SndArgTtlFunc_CaseTable -- jump table of a compiled `switch` in
+; SndArgTtlFunc (v10/v9 0xf6a064, v7 0xf69c60) (`add xde,
+; NakaInst_MEMORY_A_0x50`): 7 u16 case offsets from SndArgTtl_Dispatch.
+;
+; Typed in naka_widget_descriptors.c as uint16_t
+; SndArgTtlFunc_CaseTable[7].
+; -----------------------------------------------------------------------------
+SndArgTtlFunc_CaseTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B250, 0xE
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndArgNmGet_PtrTable
+; SndArgNmGet_PtrTable -- 1 u32 addresses, read by SndArgNmGet (v10/v9
+; 0xf6a0bb, v7 0xf69cb7) (`ld xiy, NakaInst_MEMORY_A_0x5e`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; SndArgNmGet_PtrTable[1].
+; -----------------------------------------------------------------------------
+SndArgNmGet_PtrTable:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B25E, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_DashDash
+; NakaInst_DashDash -- "-- ": the string the one-entry table before it
+; points at (SndArgNmGet (v10/v9 0xf6a0bb, v7 0xf69cb7) copies that
+; pointer to its frame).
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_DashDash[4].
+; -----------------------------------------------------------------------------
 NakaInst_DashDash:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B262, 0xC
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B262, 0x4
+; -----------------------------------------------------------------------------
+; [naka_s_headers] SndArgNmGet_PtrTable_2
+; SndArgNmGet_PtrTable_2 -- 2 u32 addresses, read by SndArgNmGet (v10/v9
+; 0xf6a0bb, v7 0xf69cb7) (`ld xiy, NakaInst_DashDash_0x4`).
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; SndArgNmGet_PtrTable_2[2].
+; -----------------------------------------------------------------------------
+SndArgNmGet_PtrTable_2:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B266, 0x8
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ON_Str
+; NakaInst_ON_Str -- "ON ": entry 1 of the {OFF, ON} pointer pair just
+; before it, which SndArgNmGet (v10/v9 0xf6a0bb, v7 0xf69cb7) copies to
+; its frame (NakaInst_OFF_Str follows).
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_ON_Str[4].
+; -----------------------------------------------------------------------------
 NakaInst_ON_Str:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B26E, 0x4
 ; -----------------------------------------------------------------------------

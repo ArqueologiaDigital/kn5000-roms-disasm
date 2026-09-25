@@ -642,6 +642,7 @@ CUSTOM_AT = [
     ('naka_widget_descriptors', 0x271A, span_builder('d_ui')),
     ('naka_widget_descriptors', 0x24906, span_builder('d_cls')),
     ('naka_widget_descriptors', 0x0, build_value_text),
+    ('naka_widget_descriptors', 0x1B1E4, span_builder('d_mem')),
 ]
 
 
