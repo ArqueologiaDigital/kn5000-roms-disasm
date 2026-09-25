@@ -7,7 +7,6 @@ Files owned: `wsa1/prom_c/*`, `wsa1/prom_d/*`, `wsa1/kernel/*`, `wsa1/dsp/*`
 |---|---|---|
 | `lane_measure.py` | per-file census bytes (CODE / KNOWN-A / KNOWN-B / UNKNOWN / FILLER / research targets) for this lane's files, before vs after, plus the data-as-code marker count | `python3 scripts/analysis/data_range_census.py --images prom_a,prom_c,prom_d --json X.json` then `python3 notes/lanes/promcd-2026-09-25/lane_measure.py --lane promcd BEFORE.json AFTER.json` |
 | `preset_bank_readers.py` | who reads prom_c 0xF80000-0xF965BF (the preset bank) and what each record is; asserts every instruction byte of the six prom_a readers and the link thunks against `wsa1/original_ROMs`; `--apply` writes the evidence into `wsa1/prom_c/data_tables/preset_bank.s` (run from the parent commit it reproduces the committed edit byte for byte) | `python3 notes/lanes/promcd-2026-09-25/preset_bank_readers.py` -- PASS = `ALL ASSERTIONS HOLD` |
-
 | `prom_d_index_maps.py` | what each of prom_d's twelve 1024-entry index maps selects; asserts the readers' encodings, value ranges, the exact catalogue inverses (307/307, 314/314, 208/208, 161/161) and the defaults test (213/451, controls 0); `--apply` rewrites the 12 banners | `python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py` |
 | `prom_d_tone_elements.py` | which wave each of the 451 melodic element blocks plays, and whether each wave-select record is its wave's default; `--apply` writes 902 object headers | same pattern |
 | `prom_d_descriptors.py` | which catalogue waves reach each 14-byte descriptor at +0x30/+0x38 | same pattern |
@@ -25,8 +24,8 @@ Files owned: `wsa1/prom_c/*`, `wsa1/prom_d/*`, `wsa1/kernel/*`, `wsa1/dsp/*`
 | `rename_param_appliers.py` + `param_appliers.rename-map` | evidence for five routine names; the rename is `scripts/renaming/rename_promcd_param_appliers.sed` | `... [--apply]` |
 | `symbolize_rom_operands_prom_c.json` | the per-site record of the `scripts/converters/symbolize_rom_operands.py` run on prom_c (2,668 operands) | data, not a script |
 
-Every `--apply` in this directory refuses to run twice and was run once, from the parent
-commit, to produce the committed edit.
+Each `--apply` produced its script's committed edit when run on the file as it stood
+before that commit; most refuse a second run (they look for their own marker text).
 
 ## Baseline (census of `main` @ 3958235e, toolchain tlcs900_backend@4d7fa4f6b37c)
 
