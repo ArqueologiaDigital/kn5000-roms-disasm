@@ -51783,7 +51783,7 @@ DSP_ParamFetch_AlgoTypeReturn:
 ; it through the double-precision helpers before converting back to an integer.
 ; In: XWA = &cursor, XBC = 0..99 parameter value.  Out: XHL = 32-bit result; cursor += 1.
 ;   type != 1 : the fetched word is two's-complement NEGATED first, then
-;               FP_SP_CallWithBuf8 -> FP_DP_NegMantissaLS -> FP_DP_Add_Outer(const 0x012CC3)
+;               FP_SP_CallWithBuf8 -> FP_ftod -> FP_dmul(const 0x012CC3)
 ;               -> FP_DP_DecodeToInt
 ;   type == 1 : same chain, no negation, constant 0x012CCB
 ; Both constants decode as the double 0.552.  I have NOT proved the exact arithmetic because
@@ -51812,11 +51812,11 @@ DSP_AlgoParam_Decode:
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 8)
 	lda xwa, (xsp + 12)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 12)
 	lda xde, (0x012cc3:24)
 	lda xwa, (xsp + 12)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 24)
 	call FP_DP_DecodeToInt
@@ -51832,11 +51832,11 @@ DSP_AlgoParam_Decode_Type1:
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 8)
 	lda xwa, (xsp + 12)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 12)
 	lda xde, (0x012ccb:24)
 	lda xwa, (xsp + 12)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 24)
 	call FP_DP_DecodeToInt
@@ -52231,8 +52231,8 @@ DSP_ParamInterp_Div0xB4:
 ; Two branches on the value: x <= 75 (0x4B) uses the constant group at 0x012CD3..0x012CE7
 ; (30, 44100, 3307500 = 44100*75, 75, 1800, and the double 2.0); x > 75 uses 0x012CEF..0x012D03
 ; (30, 44100, 65091600, 24, 576, 2.0).  Both branches end in the same five-push call to
-; VoiceFloat_CompareAndConvert with the double 2.0 as one operand -- which is almost certainly
-; pow(2.0, y) (see [UNCERTAIN]) -- then FP_DP_NormalizeMantissa, then a shared finalisation.
+; FP_pow with the double 2.0 as one operand -- which is almost certainly
+; pow(2.0, y) (see [UNCERTAIN]) -- then FP_dtof, then a shared finalisation.
 ; Frame is 0x44 bytes; returns XHL = the 32-bit result read back from (XSP+0x38).
 ; I am naming the SHAPE (two-range exponential curve driven by the sample rate 44100) with
 ; confidence; I am NOT claiming the routine controls "volume".
@@ -52248,15 +52248,15 @@ DSP_VolumeCurve_FP:
 	lda xbc, (xsp + 36)
 	lda xde, (0x012cd3:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xde, (0x012cd7:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xde, (0x012cdb:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (0x012cdf:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
@@ -52264,10 +52264,10 @@ DSP_VolumeCurve_FP:
 	lda xbc, (0x012ce3:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 36)
 	lda xwa, (xsp + 28)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 28)
 	ld xix, (xiy + 4)
 	push xix
@@ -52280,11 +52280,11 @@ DSP_VolumeCurve_FP:
 	push xix
 	lda xwa, (xsp + 64)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 48)
 	lda xwa, (xsp + 60)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jrl DSP_VolumeCurve_FP_Finalize
 
 ; x > 75 arm; constant group 0x012CEF..0x012D03.
@@ -52295,11 +52295,11 @@ DSP_VolumeCurve_FP_HighRange:
 	lda xbc, (xsp + 36)
 	lda xde, (0x012cef:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xde, (0x012cf3:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xde, (0x012cf7:24)
 	lda xwa, (xsp + 36)
@@ -52311,10 +52311,10 @@ DSP_VolumeCurve_FP_HighRange:
 	lda xbc, (0x012cff:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 36)
 	lda xwa, (xsp + 28)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 28)
 	ld xix, (xiy + 4)
 	push xix
@@ -52327,22 +52327,22 @@ DSP_VolumeCurve_FP_HighRange:
 	push xix
 	lda xwa, (xsp + 56)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 40)
 	lda xwa, (xsp + 60)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 
-; Shared tail: FP_SP_Add_Outer with the constant at 0x012D0B, then FP_SP_Decode_ReadSign to
+; Shared tail: FP_fmul with the constant at 0x012D0B, then FP_ftoi to
 ; produce the integer result at (XSP+0x38); unwind the 0x44-byte frame.
 DSP_VolumeCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
 	lda xde, (0x012d0b:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xwa, (xsp + 56)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xhl, (xsp + 56)
 	lda xsp, (xsp + 68)
 	ret
@@ -52504,7 +52504,7 @@ DSP_ParamInterp_3Point_WithOffset:
 ; no stream field, branch at x > 89 (0x59), a chain of single- and double-precision helpers
 ; over the constant groups 0x012D0F..0x012D2B (low range: 1, 441, 10, 0.427042, 1) and
 ; 0x012D33..0x012D4F (high range: 44100, 3924900 = 44100*89, 10, 0.427042, 1), both ending in
-; the VoiceFloat_CompareAndConvert / FP_DP_NormalizeMantissa pair and a shared finalisation.
+; the FP_pow / FP_dtof pair and a shared finalisation.
 ; The 441 / 44100 / 3924900 constants and the 0.427042 exponent-like factor say this is a
 ; time-constant or decay curve computed against the sample rate; "reverb" is plausible from the
 ; opcode's neighbours but is NOT proved here.  Frame 0x44 bytes; result in XHL.
@@ -52520,18 +52520,18 @@ DSP_ReverbCurve_FP:
 	lda xbc, (xsp + 28)
 	lda xde, (0x012d0f:24)
 	lda xwa, (xsp + 28)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 28)
 	lda xwa, (xsp + 40)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 40)
 	lda xde, (0x012d13:24)
 	lda xwa, (xsp + 40)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (0x012d1b:24)
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 40)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xiy, (xsp + 40)
 	ld xix, (xiy + 4)
 	push xix
@@ -52544,7 +52544,7 @@ DSP_ReverbCurve_FP:
 	push xix
 	lda xwa, (xsp + 64)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (0x012d2b:24)
 	lda xde, (xsp + 48)
@@ -52552,7 +52552,7 @@ DSP_ReverbCurve_FP:
 	call FP_DP_Sub
 	lda xbc, (xsp + 40)
 	lda xwa, (xsp + 60)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jr DSP_ReverbCurve_FP_Finalize
 
 ; x > 89 arm; constant group 0x012D33..0x012D4F.
@@ -52563,7 +52563,7 @@ DSP_ReverbCurve_FP_HighRange:
 	lda xbc, (xsp + 28)
 	lda xde, (0x012d33:24)
 	lda xwa, (xsp + 28)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 28)
 	lda xde, (0x012d37:24)
 	lda xwa, (xsp + 28)
@@ -52571,10 +52571,10 @@ DSP_ReverbCurve_FP_HighRange:
 	lda xbc, (0x012d3b:24)
 	lda xde, (xsp + 28)
 	lda xwa, (xsp + 28)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 28)
 	lda xwa, (xsp + 40)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 40)
 	ld xix, (xiy + 4)
 	push xix
@@ -52587,7 +52587,7 @@ DSP_ReverbCurve_FP_HighRange:
 	push xix
 	lda xwa, (xsp + 48)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (0x012d47:24)
 	lda xde, (xsp + 32)
@@ -52595,17 +52595,17 @@ DSP_ReverbCurve_FP_HighRange:
 	call FP_DP_Sub
 	lda xbc, (xsp + 40)
 	lda xwa, (xsp + 60)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 
-; Shared tail: FP_SP_Add_Outer(0x012D4F), FP_SP_Decode_ReadSign, result from (XSP+0x38).
+; Shared tail: FP_fmul(0x012D4F), FP_ftoi, result from (XSP+0x38).
 DSP_ReverbCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
 	lda xde, (0x012d4f:24)
 	lda xwa, (xsp + 28)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 28)
 	lda xwa, (xsp + 56)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xhl, (xsp + 56)
 	lda xsp, (xsp + 68)
 	ret
@@ -52617,10 +52617,10 @@ DSP_ReverbCurve_FP_Finalize:
 ;   value[0] -> float, combined with the constants at 0x012D53 (32768) and 0x012D57 (65536)
 ;   value[1] -> float, top byte kept as an integer at (XSP+0x24)
 ;   XBC      -> float
-;   the three are combined through FP_SP_Sub / FP_SP_Add_Outer / FP_SP_Mul against
+;   the three are combined through FP_SP_Sub / FP_fmul / FP_fadd against
 ;   0x012D5B (99), 0x012D5F (44100), 0x012D63 (99), 0x012D67 (2376)
-;   -> promoted to double, VoiceFloat_CompareAndConvert with the double at 0x012D6B (2.0)
-;   -> FP_DP_NormalizeMantissa, then FP_SP_Add_Outer(0x012D73) and FP_SP_Decode_ReadSign.
+;   -> promoted to double, FP_pow with the double at 0x012D6B (2.0)
+;   -> FP_dtof, then FP_fmul(0x012D73) and FP_ftoi.
 ; The 32768/65536/99/44100 group is the same normalisation vocabulary as the rest of the file.
 ; The advanced cursor is written back BEFORE the finalisation (at 0x0397CD).
 DSP_ParamInterp_FPComplex:
@@ -52641,11 +52641,11 @@ DSP_ParamInterp_FPComplex:
 	lda xbc, (xsp + 20)
 	lda xde, (0x012d53:24)
 	lda xwa, (xsp + 20)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 20)
 	lda xde, (0x012d57:24)
 	lda xwa, (xsp + 28)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xwa, (xsp + 36)
 	ld xbc, xwa
 	ld xwa, xiz
@@ -52668,19 +52668,19 @@ DSP_ParamInterp_FPComplex:
 	lda xbc, (xsp + 24)
 	lda xde, (xsp + 20)
 	lda xwa, (xsp + 24)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 28)
 	lda xde, (0x012d5b:24)
 	lda xwa, (xsp + 20)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 20)
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 24)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 24)
 	lda xde, (0x012d5f:24)
 	lda xwa, (xsp + 24)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (0x012d63:24)
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 24)
@@ -52688,10 +52688,10 @@ DSP_ParamInterp_FPComplex:
 	lda xbc, (0x012d67:24)
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 24)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 4)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 4)
 	ld xix, (xiy + 4)
 	push xix
@@ -52704,20 +52704,20 @@ DSP_ParamInterp_FPComplex:
 	push xix
 	lda xwa, (xsp + 28)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 44)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	ld xwa, (xsp + 52)
 	ld (xwa), xiz
 	lda xbc, (xsp + 44)
 	lda xde, (0x012d73:24)
 	lda xwa, (xsp + 24)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xhl, (xsp + 32)
 	pop xiz
 	lda xsp, (xsp + 52)
@@ -52822,10 +52822,10 @@ DSP_PanCurve_Return:
 ;   |x| <= 31   -> float(|x|), + 0x012D83 (100), - 0x012D87 (1700)
 ;   else        -> float(|x|), + 0x012D8B (200), - 0x012D8F (4800)
 ; then, if x < 0, FP_SP_CopyOrNegate4 flips the sign (DSP_DetuneCurve_ApplySign), and the shared
-; finalisation runs the value through VoiceFloat_SubSP(0x012D93), a promotion to double,
-; VoiceFloat_CompareAndConvert against the double at 0x012D97 (2.0), FP_DP_Sub(0x012D9F, 1.0),
-; VoiceFloat_SubDP(0x012DA7, 2400.0), FP_DP_NormalizeMantissa, FP_SP_Add_Outer(0x012DAF) and
-; FP_SP_Decode_ReadSign.  The 2400 is cents-per-octave x 2, and the 2.0 base again points at a
+; finalisation runs the value through FP_fdiv(0x012D93), a promotion to double,
+; FP_pow against the double at 0x012D97 (2.0), FP_DP_Sub(0x012D9F, 1.0),
+; FP_ddiv(0x012DA7, 2400.0), FP_dtof, FP_fmul(0x012DAF) and
+; FP_ftoi.  The 2400 is cents-per-octave x 2, and the 2.0 base again points at a
 ; pow(2, cents/2400) pitch-ratio computation.  Frame 0x48 bytes.
 DSP_DetuneCurve_SignedFP:
 	lda xsp, (xsp - 72)
@@ -52868,7 +52868,7 @@ DSP_DetuneCurve_Range1_Compute:
 	lda xbc, (xsp + 36)
 	lda xde, (0x012d77:24)
 	lda xwa, (xsp + 68)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	jrl DSP_DetuneCurve_ApplySign
 
 ; Recompute |x| for the second range test.
@@ -52910,7 +52910,7 @@ DSP_DetuneCurve_Range2_Compute:
 	lda xbc, (xsp + 36)
 	lda xde, (0x012d7b:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xde, (0x012d7f:24)
 	lda xwa, (xsp + 68)
@@ -52956,7 +52956,7 @@ DSP_DetuneCurve_Range3_Compute:
 	lda xbc, (xsp + 36)
 	lda xde, (0x012d83:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xde, (0x012d87:24)
 	lda xwa, (xsp + 68)
@@ -52986,7 +52986,7 @@ DSP_DetuneCurve_Range4_Compute:
 	lda xbc, (xsp + 36)
 	lda xde, (0x012d8b:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xde, (0x012d8f:24)
 	lda xwa, (xsp + 68)
@@ -53006,10 +53006,10 @@ DSP_DetuneCurve_Finalize:
 	lda xbc, (xsp + 68)
 	lda xde, (0x012d93:24)
 	lda xwa, (xsp + 36)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 36)
 	lda xwa, (xsp + 28)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 28)
 	ld xix, (xiy + 4)
 	push xix
@@ -53022,7 +53022,7 @@ DSP_DetuneCurve_Finalize:
 	push xix
 	lda xwa, (xsp + 56)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (0x012d9f:24)
 	lda xde, (xsp + 40)
@@ -53031,17 +53031,17 @@ DSP_DetuneCurve_Finalize:
 	lda xbc, (xsp + 28)
 	lda xde, (0x012da7:24)
 	lda xwa, (xsp + 28)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 28)
 	lda xwa, (xsp + 72)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda xbc, (xsp + 72)
 	lda xde, (0x012daf:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xwa, (xsp + 64)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xhl, (xsp + 64)
 	pop xiz
 	lda xsp, (xsp + 72)
@@ -53060,12 +53060,12 @@ DSP_DetuneCurve_Finalize:
 ;   DSP_FilterLUT_Fetch and DSP_ParamInterp_MultiStep).
 ; Step 2 -- clamp: HL to <= 0x59 (89), IZ to <= 0x58 (88).
 ; Step 3 -- for each of the two, compute (99 - v) as a signed int, promote to double, add the
-;   constant at 0x012DB3 / 0x012DCB (-0.0697), call VoiceFloat_CompareAndConvert against the
+;   constant at 0x012DB3 / 0x012DCB (-0.0697), call FP_pow against the
 ;   double 10.0 at 0x012DBB / 0x012DD3 -- i.e. pow(10, -0.0697*(99-v)), a dB-to-linear
-;   conversion with a 0.697 dB step -- then FP_DP_Add_Outer with 0.9999 (0x012DC3 / 0x012DDB)
+;   conversion with a 0.697 dB step -- then FP_dmul with 0.9999 (0x012DC3 / 0x012DDB)
 ;   and normalise to a float.  Results land at (XSP+0x52) and (XSP+0x4A).
 ; Step 4 -- with the literal 3.0 (0x40400000) at (XSP+0x4E) it computes five coefficient floats
-;   through FP_SP_Sub / FP_SP_Add_Outer / FP_SP_Mul / VoiceFloat_SubSP against the constants
+;   through FP_SP_Sub / FP_fmul / FP_fadd / FP_fdiv against the constants
 ;   0x012DE3..0x012E03 (2, 2, 1, 3, 2097152, 8388608, 4194304, 2097152, 2097152 -- note
 ;   2^21/2^23/2^22, the Q23 scalings).
 ; Step 5 -- emits: one DSP_WriteOscParam then FOUR DSP_WriteCoeffData_5B_Direct calls, i.e. a
@@ -53137,7 +53137,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 58)
 	lda xde, (0x012db3:24)
 	lda xwa, (xsp + 58)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 58)
 	ld xix, (xiy + 4)
 	push xix
@@ -53150,15 +53150,15 @@ DSP_BiquadWarp_ComputeCoeffs:
 	push xix
 	lda xwa, (xsp + 66)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 50)
 	lda xde, (0x012dc3:24)
 	lda xwa, (xsp + 58)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 58)
 	lda xwa, (xsp + 82)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	ldw wa, 0x63
 	sub wa, iz
 	exts xwa
@@ -53169,7 +53169,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 58)
 	lda xde, (0x012dcb:24)
 	lda xwa, (xsp + 58)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 58)
 	ld xix, (xiy + 4)
 	push xix
@@ -53182,15 +53182,15 @@ DSP_BiquadWarp_ComputeCoeffs:
 	push xix
 	lda xwa, (xsp + 58)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 42)
 	lda xde, (0x012ddb:24)
 	lda xwa, (xsp + 58)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 58)
 	lda xwa, (xsp + 74)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	ld xwa, 0x40400000
 	ld (xsp + 78), xwa
 	lda xbc, (xsp + 82)
@@ -53204,7 +53204,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 10)
 	lda xwa, (xsp + 6)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 6)
 	lda xde, (0x012deb:24)
 	lda xwa, (xsp + 6)
@@ -53216,22 +53216,22 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 10)
 	lda xde, (xsp + 6)
 	lda xwa, (xsp + 70)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 70)
 	lda xde, (0x012def:24)
 	lda xwa, (xsp + 6)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 74)
 	lda xwa, (xsp + 66)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 78)
 	lda xde, (0x012df3:24)
 	lda xwa, (xsp + 6)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 6)
 	lda xwa, (xsp + 38)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	pushm (xsp + 94)
 	ld wa, (xsp + 100)
 	ld xbc, (xsp + 40)
@@ -53240,10 +53240,10 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 82)
 	lda xde, (0x012df7:24)
 	lda xwa, (xsp + 6)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 6)
 	lda xwa, (xsp + 34)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 34)
 	ld bc, (xsp + 96)
 	ld de, (xsp + 94)
@@ -53254,10 +53254,10 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 6)
 	lda xde, (0x012dfb:24)
 	lda xwa, (xsp + 6)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 6)
 	lda xwa, (xsp + 30)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 30)
 	ld bc, (xsp + 96)
 	ld de, (xsp + 94)
@@ -53265,10 +53265,10 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 70)
 	lda xde, (0x012dff:24)
 	lda xwa, (xsp + 6)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 6)
 	lda xwa, (xsp + 26)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 26)
 	ld bc, (xsp + 96)
 	ld de, (xsp + 94)
@@ -53276,10 +53276,10 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 66)
 	lda xde, (0x012e03:24)
 	lda xwa, (xsp + 6)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 6)
 	lda xwa, (xsp + 22)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 22)
 	ld bc, (xsp + 96)
 	ld de, (xsp + 94)
@@ -53374,11 +53374,11 @@ DSP_ParamEQ_Curve_FP:
 	lda xbc, (xsp + 12)
 	lda xde, (0x012e07:24)
 	lda xwa, (xsp + 12)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 12)
 	lda xde, (0x012e0b:24)
 	lda xwa, (xsp + 80)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	ld xwa, (xsp + 96)
 	cp xwa, 0xF
 	jrl gt, DSP_ParamEQ_Range2
@@ -53387,42 +53387,42 @@ DSP_ParamEQ_Curve_FP:
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 40)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 40)
 	lda xde, (0x012e0f:24)
 	lda xwa, (xsp + 40)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 40)
 	lda xde, (0x012e17:24)
 	lda xwa, (xsp + 40)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (0x012e1f:24)
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 40)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 40)
 	lda xwa, (xsp + 76)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda xbc, (xsp + 76)
 	lda xwa, (xsp + 40)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 64)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 64)
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 64)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 64)
 	lda xde, (0x012e27:24)
 	lda xwa, (xsp + 64)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 72)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda xbc, (xsp + 72)
 	lda xwa, (xsp + 64)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xwa, (xsp + 64)
 	lda xbc, (0x012e2f:24)
 	ld de, 1:i3
@@ -53431,7 +53431,7 @@ DSP_ParamEQ_Curve_FP:
 	jr nz, DSP_ParamEQ_Range1_NonzeroCoeff
 	lda xbc, (xsp + 72)
 	lda xwa, (xsp + 64)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 64)
 	ld xix, (xiy + 4)
 	push xix
@@ -53444,7 +53444,7 @@ DSP_ParamEQ_Curve_FP:
 	push xix
 	lda xwa, (xsp + 72)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 56)
 	lda xwa, (xsp + 64)
@@ -53452,10 +53452,10 @@ DSP_ParamEQ_Curve_FP:
 	lda xbc, (xsp + 64)
 	lda xde, (0x012e3f:24)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jrl DSP_ParamEQ_Finalize
 
 ; Range 1, taken when the FP comparison at 0x039E81 reports non-zero: multiplies by the
@@ -53464,10 +53464,10 @@ DSP_ParamEQ_Range1_NonzeroCoeff:
 	lda xbc, (xsp + 72)
 	lda xde, (0x012e47:24)
 	lda xwa, (xsp + 12)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 64)
 	ld xix, (xiy + 4)
 	push xix
@@ -53480,7 +53480,7 @@ DSP_ParamEQ_Range1_NonzeroCoeff:
 	push xix
 	lda xwa, (xsp + 64)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 48)
 	lda xwa, (xsp + 64)
@@ -53488,14 +53488,14 @@ DSP_ParamEQ_Range1_NonzeroCoeff:
 	lda xbc, (xsp + 64)
 	lda xde, (0x012e53:24)
 	lda xwa, (xsp + 64)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 64)
 	lda xde, (0x012e5b:24)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jrl DSP_ParamEQ_Finalize
 
 ; 15 < XBC <= 23; bias 16 (0x012E63).
@@ -53512,26 +53512,26 @@ DSP_ParamEQ_Range2:
 	call FP_SP_Sub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 64)
 	lda xde, (0x012e67:24)
 	lda xwa, (xsp + 64)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 64)
 	lda xde, (0x012e6f:24)
 	lda xwa, (xsp + 64)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 40)
 	lda xde, (0x012e77:24)
 	lda xwa, (xsp + 40)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 40)
 	lda xde, (xsp + 64)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xiy, (xsp + 64)
 	ld xix, (xiy + 4)
 	push xix
@@ -53544,7 +53544,7 @@ DSP_ParamEQ_Range2:
 	push xix
 	lda xwa, (xsp + 48)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 32)
 	lda xwa, (xsp + 64)
@@ -53552,10 +53552,10 @@ DSP_ParamEQ_Range2:
 	lda xbc, (xsp + 64)
 	lda xde, (0x012e87:24)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jrl DSP_ParamEQ_Finalize
 
 ; 23 < XBC <= 55; bias 24 (0x012E8F).
@@ -53572,26 +53572,26 @@ DSP_ParamEQ_Range3:
 	call FP_SP_Sub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 64)
 	lda xde, (0x012e93:24)
 	lda xwa, (xsp + 64)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 64)
 	lda xde, (0x012e9b:24)
 	lda xwa, (xsp + 64)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 40)
 	lda xde, (0x012ea3:24)
 	lda xwa, (xsp + 40)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 40)
 	lda xde, (xsp + 64)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xiy, (xsp + 64)
 	ld xix, (xiy + 4)
 	push xix
@@ -53604,7 +53604,7 @@ DSP_ParamEQ_Range3:
 	push xix
 	lda xwa, (xsp + 40)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 64)
@@ -53612,10 +53612,10 @@ DSP_ParamEQ_Range3:
 	lda xbc, (xsp + 64)
 	lda xde, (0x012eb3:24)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jrl DSP_ParamEQ_Finalize
 
 ; 55 < XBC <= 75; bias 56 (0x012EBB).
@@ -53632,26 +53632,26 @@ DSP_ParamEQ_Range4:
 	call FP_SP_Sub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 64)
 	lda xde, (0x012ebf:24)
 	lda xwa, (xsp + 64)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 64)
 	lda xde, (0x012ec7:24)
 	lda xwa, (xsp + 64)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 40)
 	lda xde, (0x012ecf:24)
 	lda xwa, (xsp + 40)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 40)
 	lda xde, (xsp + 64)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xiy, (xsp + 64)
 	ld xix, (xiy + 4)
 	push xix
@@ -53664,7 +53664,7 @@ DSP_ParamEQ_Range4:
 	push xix
 	lda xwa, (xsp + 32)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 16)
 	lda xwa, (xsp + 64)
@@ -53672,13 +53672,13 @@ DSP_ParamEQ_Range4:
 	lda xbc, (xsp + 64)
 	lda xde, (0x012edf:24)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jrl DSP_ParamEQ_Finalize
 
-; XBC > 75; bias 67 (0x012EE7).  The only range with no FP_DP_Mul step.
+; XBC > 75; bias 67 (0x012EE7).  The only range with no FP_dadd step.
 DSP_ParamEQ_Range5:
 	lda xbc, (xsp + 96)
 	lda xwa, (xsp + 12)
@@ -53689,18 +53689,18 @@ DSP_ParamEQ_Range5:
 	call FP_SP_Sub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 80)
 	lda xwa, (xsp + 40)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 40)
 	lda xde, (0x012eeb:24)
 	lda xwa, (xsp + 40)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 40)
 	lda xde, (xsp + 64)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xiy, (xsp + 64)
 	ld xix, (xiy + 4)
 	push xix
@@ -53713,7 +53713,7 @@ DSP_ParamEQ_Range5:
 	push xix
 	lda xwa, (xsp + 20)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 4)
 	lda xwa, (xsp + 64)
@@ -53721,13 +53721,13 @@ DSP_ParamEQ_Range5:
 	lda xbc, (xsp + 64)
 	lda xde, (0x012efb:24)
 	lda xwa, (xsp + 64)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 64)
 	lda xwa, (xsp + 92)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 
 ; Shared tail: write the advanced cursor back through the caller's pointer, then
-; FP_SP_Add_Outer(0x012F03 = 8388608.0 = 2^23) and FP_SP_Decode_ReadSign to land the result as
+; FP_fmul(0x012F03 = 8388608.0 = 2^23) and FP_ftoi to land the result as
 ; a Q23 integer in XHL.  The 2^23 here is the same Q23 convention used by the integer decoders.
 DSP_ParamEQ_Finalize:
 	ld xwa, (xsp + 100)
@@ -53735,10 +53735,10 @@ DSP_ParamEQ_Finalize:
 	lda xbc, (xsp + 92)
 	lda xde, (0x012f03:24)
 	lda xwa, (xsp + 12)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 84)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xhl, (xsp + 84)
 	pop xiz
 	lda xsp, (xsp + 100)
@@ -54273,14 +54273,14 @@ DSP_FilterLUT_Fetch:
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f07:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f0f:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jrl DSP_FilterLUT_StoreResults
 
 ; Type 0, high nibble 0x10: freq = arr[i-1], Q = arr[i], gain = arr[i+1].
@@ -54320,14 +54320,14 @@ DSP_FilterLUT_Mode0x10:
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f17:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f1f:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jrl DSP_FilterLUT_StoreResults
 
 ; Type 0, high nibble 0x20: freq = arr[i-2], Q = arr[i-1], gain = arr[i].
@@ -54367,14 +54367,14 @@ DSP_FilterLUT_Mode0x20:
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f27:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f2f:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jrl DSP_FilterLUT_StoreResults
 
 ; Type 1: Q := 0.1 (0x3DCCCCCD), freq = arr[i], no gain term.  Jumps straight to the store.
@@ -54426,14 +54426,14 @@ DSP_FilterLUT_ModeType2:
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f37:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f3f:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jr DSP_FilterLUT_StoreResults
 
 ; Type 2, high nibble 0x10 or 0x20: freq = arr[i-1], gain = arr[i].
@@ -54462,14 +54462,14 @@ DSP_FilterLUT_ModeType2_SubMode:
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f47:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 24)
 	lda xde, (0x012f4f:24)
 	lda xwa, (xsp + 24)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 24)
 	lda xwa, (xsp + 32)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 
 ; Common tail: store type, frequency, Q and the gain scalar through the four caller pointers,
 ; return the advanced stream cursor in XHL, `retd 0x0010`.  Note that on an unrecognised type
@@ -54508,10 +54508,10 @@ DSP_FilterLUT_StoreResults:
 ;   2. three-way switch on that selector: 2 -> DSP_BiquadCoeff_Algo2, 1 -> ..._Algo1,
 ;      0 -> falls through to the Algo0 body.  ★ ANY OTHER VALUE JUMPS STRAIGHT TO
 ;      DSP_BiquadCoeff_Epilogue AND WRITES NOTHING TO THE DSP -- silently.
-;   3. Algo0 body: widen the cutoff to double; w = f * (pi/44100) [FP_DP_Add_Outer = multiply];
-;      K = tan(w) [VoiceFloat_MulAddDispatch]; narrow to float; build the {1,-2,1}-shaped
+;   3. Algo0 body: widen the cutoff to double; w = f * (pi/44100) [FP_dmul = multiply];
+;      K = tan(w) [FP_tan]; narrow to float; build the {1,-2,1}-shaped
 ;      numerator from the float literals at 0x012F5F..0x012F6B; A = 10^(gain_dB/20) via
-;      VoiceFloat_SubSP (divide by 20.0) then VoiceFloat_CompareAndConvert (pow, base 10.0 at
+;      FP_fdiv (divide by 20.0) then FP_pow (pow, base 10.0 at
 ;      0x012F73); combine into b0,b1,b2,a1,a2.
 ; Hardware: no direct MMIO -- everything goes through DSP_WriteOscParam (0x0387E6) and
 ; DSP_WriteCoeffData_5B_Direct (0x0388B3) in the Fixup block.
@@ -54541,11 +54541,11 @@ DSP_BiquadCoeff_Compute:
 	jrl nz, DSP_BiquadCoeff_Epilogue
 	lda_dri XBC, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 78)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 78)
 	lda xde, (0x012f57:24)
 	lda xwa, (xsp + 78)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 78)
 	ld xix, (xiy + 4)
 	push xix
@@ -54553,27 +54553,27 @@ DSP_BiquadCoeff_Compute:
 	push xix
 	lda_dri XWA, 0xFD, 0x9E, 0x00
 	push xwa
-	call VoiceFloat_MulAddDispatch
+	call FP_tan
 	lda xsp, (xsp + 12)
 	lda_dri XBC, 0xFD, 0x96, 0x00
 	lda_dri XWA, 0xFD, 0xDA, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XBC, 0xFD, 0xDA, 0x00
 	lda_dri XDE, 0xFD, 0xE2, 0x00
 	lda_dri XWA, 0xFD, 0xAA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xDA, 0x00
 	lda_dri XDE, 0xFD, 0xDA, 0x00
 	lda_dri XWA, 0xFD, 0xA6, 0x00
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda_dri XBC, 0xFD, 0xAA, 0x00
 	lda_dri XDE, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 86)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 86)
 	lda xde, (0x012f5f:24)
 	lda_dri XWA, 0xFD, 0xD6, 0x00
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (0x012f63:24)
 	lda_dri XDE, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 86)
@@ -54581,7 +54581,7 @@ DSP_BiquadCoeff_Compute:
 	lda xbc, (xsp + 86)
 	lda xde, (0x012f67:24)
 	lda_dri XWA, 0xFD, 0xD2, 0x00
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda_dri XBC, 0xFD, 0xA6, 0x00
 	lda_dri XDE, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 86)
@@ -54589,7 +54589,7 @@ DSP_BiquadCoeff_Compute:
 	lda xbc, (xsp + 86)
 	lda xde, (0x012f6b:24)
 	lda_dri XWA, 0xFD, 0xCE, 0x00
-	call FP_SP_Mul
+	call FP_fadd
 	lda_dri XWA, 0xFD, 0xDE, 0x00
 	ld bc, 1:i3
 	call FP_SP_CmpZero32
@@ -54610,10 +54610,10 @@ DSP_BiquadCoeff_Algo0_AfterSign:
 	lda_dri XBC, 0xFD, 0x8A, 0x00
 	lda xde, (0x012f6f:24)
 	lda xwa, (xsp + 86)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 86)
 	lda xwa, (xsp + 78)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 78)
 	ld xix, (xiy + 4)
 	push xix
@@ -54626,29 +54626,29 @@ DSP_BiquadCoeff_Algo0_AfterSign:
 	push xix
 	lda_dri XWA, 0xFD, 0x9E, 0x00
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda_dri XBC, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 78)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 78)
 	lda_dri XDE, 0xFD, 0x8E, 0x00
 	lda xwa, (xsp + 78)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 78)
 	lda xde, (0x012f7b:24)
 	lda xwa, (xsp + 78)
-	call FP_DP_Mul
+	call FP_dadd
 	lda_dri XBC, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 118)
 	lda xde, (xsp + 78)
 	lda xwa, (xsp + 118)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 118)
 	lda_dri XWA, 0xFD, 0xCA, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	ld_sril XWA, (xsp + 0x00d2)
 	stl_dri XWA, 0xFD, 0xC6, 0x00
 	lda_dri XWA, 0xFD, 0xDE, 0x00
@@ -54671,10 +54671,10 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	lda xbc, (xsp + 126)
 	lda xde, (0x012f83:24)
 	lda xwa, (xsp + 86)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 86)
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 118)
 	ld xix, (xiy + 4)
 	push xix
@@ -54687,29 +54687,29 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	push xix
 	lda_dri XWA, 0xFD, 0x92, 0x00
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda_dri XBC, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 118)
 	lda_dri XDE, 0xFD, 0x82, 0x00
 	lda xwa, (xsp + 118)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (0x012f8f:24)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
 	call FP_DP_Sub
 	lda_dri XBC, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 78)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 78)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 118)
 	lda_dri XWA, 0xFD, 0xC2, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XWA, 0xFD, 0xDE, 0x00
 	ld bc, 1:i3
 	call FP_SP_CmpZero32
@@ -54718,29 +54718,29 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	lda_dri XBC, 0xFD, 0xCA, 0x00
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xBE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xBA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xC2, 0x00
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 86)
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xB2, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xCE, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 86)
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xAE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	jr DSP_BiquadCoeff_Algo0_Assembly
 
 ; Algo0: negative-argument arm of the denominator chain (sign-corrected duplicate of the
@@ -54749,29 +54749,29 @@ DSP_BiquadCoeff_Algo0_NegBranch:
 	lda_dri XBC, 0xFD, 0xD6, 0x00
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xBE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xD2, 0x00
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xBA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xCE, 0x00
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 86)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xB2, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xC2, 0x00
 	lda xwa, (xsp + 86)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 86)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xAE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 
 ; Algo0: assembles the five raw taps from K and A before normalisation.  Ends with a guard at
 ; 0x03AD0C: it compares the computed a0 against the float 1.0 at 0x012F9B (via
@@ -54782,11 +54782,11 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	lda_dri XBC, 0xFD, 0xBE, 0x00
 	lda_dri XDE, 0xFD, 0xBA, 0x00
 	lda xwa, (xsp + 86)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 86)
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 86)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (0x012f97:24)
 	lda_dri XDE, 0xFD, 0xB2, 0x00
 	lda xwa, (xsp + 2)
@@ -54798,7 +54798,7 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	lda xbc, (xsp + 2)
 	lda xde, (xsp + 86)
 	lda_dri XWA, 0xFD, 0x9E, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XWA, 0xFD, 0x9E, 0x00
 	lda xbc, (0x012f9b:24)
 	ld de, 0:i3
@@ -54809,9 +54809,9 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	stl_dri XWA, 0xFD, 0x9E, 0x00
 
 ; ★ The store block, and the clearest evidence for what the whole routine is.  For each of the
-; five taps it does: tap = tap * something [FP_SP_Add_Outer = multiply], tap = tap / a0
-; [VoiceFloat_SubSP = divide], tap = tap * 2^22 (0x012FAB/AF/B3/B7) -- the FIFTH tap by 2^23
-; (0x012FBB) -- then FP_SP_Decode_ReadSign to convert float->int, then writes it:
+; five taps it does: tap = tap * something [FP_fmul = multiply], tap = tap / a0
+; [FP_fdiv = divide], tap = tap * 2^22 (0x012FAB/AF/B3/B7) -- the FIFTH tap by 2^23
+; (0x012FBB) -- then FP_ftoi to convert float->int, then writes it:
 ;   tap 1 via DSP_WriteOscParam (0x0387E6), taps 2..5 via DSP_WriteCoeffData_5B_Direct
 ;   (0x0388B3).  Each write's HL status is accumulated in IZ.
 ; So the DSP's biquad registers are Q22 (Q23 for the last), five per section.
@@ -54819,34 +54819,34 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda_dri XBC, 0xFD, 0x9E, 0x00
 	lda_dri XDE, 0xFD, 0xBE, 0x00
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xde, (0x012f9f:24)
 	lda_dri XWA, 0xFD, 0xBE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0x9E, 0x00
 	lda_dri XDE, 0xFD, 0xBA, 0x00
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xde, (0x012fa3:24)
 	lda_dri XWA, 0xFD, 0xBA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0x9E, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xde, (0x012fa7:24)
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xBA, 0x00
 	lda xde, (0x012fab:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 114)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	push_sriw 0xFD, 0xF6, 0x00
 	ldw_sri0 WA, (xsp + 0x00fe)
 	ld xbc, (xsp + 116)
@@ -54856,10 +54856,10 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda_dri XBC, 0xFD, 0xBE, 0x00
 	lda xde, (0x012faf:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 110)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 110)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	ldw_sri0 DE, (xsp + 0x00f6)
@@ -54868,10 +54868,10 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda_dri XBC, 0xFD, 0xB6, 0x00
 	lda xde, (0x012fb3:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 106)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 106)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	ldw_sri0 DE, (xsp + 0x00f6)
@@ -54880,10 +54880,10 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda xde, (0x012fb7:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 102)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 102)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	ldw_sri0 DE, (xsp + 0x00f6)
@@ -54892,10 +54892,10 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda_dri XBC, 0xFD, 0xAE, 0x00
 	lda xde, (0x012fbb:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 98)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 98)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	ldw_sri0 DE, (xsp + 0x00f6)
@@ -54911,11 +54911,11 @@ DSP_BiquadCoeff_Algo0_Fixup:
 DSP_BiquadCoeff_Algo1:
 	lda_dri XBC, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 118)
 	lda xde, (0x012fbf:24)
 	lda xwa, (xsp + 118)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 118)
 	ld xix, (xiy + 4)
 	push xix
@@ -54923,27 +54923,27 @@ DSP_BiquadCoeff_Algo1:
 	push xix
 	lda xwa, (xsp + 98)
 	push xwa
-	call VoiceFloat_MulAddDispatch
+	call FP_tan
 	lda xsp, (xsp + 12)
 	lda xbc, (xsp + 90)
 	lda_dri XWA, 0xFD, 0xDA, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XBC, 0xFD, 0xDA, 0x00
 	lda_dri XDE, 0xFD, 0xE2, 0x00
 	lda_dri XWA, 0xFD, 0xAA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xDA, 0x00
 	lda_dri XDE, 0xFD, 0xDA, 0x00
 	lda_dri XWA, 0xFD, 0xA6, 0x00
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda_dri XBC, 0xFD, 0xAA, 0x00
 	lda_dri XDE, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 2)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 2)
 	lda xde, (0x012fc7:24)
 	lda_dri XWA, 0xFD, 0xD6, 0x00
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (0x012fcb:24)
 	lda_dri XDE, 0xFD, 0xA6, 0x00
 	lda xwa, (xsp + 2)
@@ -54951,7 +54951,7 @@ DSP_BiquadCoeff_Algo1:
 	lda xbc, (xsp + 2)
 	lda xde, (0x012fcf:24)
 	lda_dri XWA, 0xFD, 0xD2, 0x00
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda_dri XBC, 0xFD, 0xA6, 0x00
 	lda_dri XDE, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 2)
@@ -54959,11 +54959,11 @@ DSP_BiquadCoeff_Algo1:
 	lda xbc, (xsp + 2)
 	lda xde, (0x012fd3:24)
 	lda_dri XWA, 0xFD, 0xCE, 0x00
-	call FP_SP_Mul
+	call FP_fadd
 	lda_dri XBC, 0xFD, 0xAA, 0x00
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xBE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	ld xwa, 0:i3
 	stl_dri XWA, 0xFD, 0xBA, 0x00
 	lda_dri XBC, 0xFD, 0xBE, 0x00
@@ -54975,21 +54975,21 @@ DSP_BiquadCoeff_Algo1:
 	lda xbc, (xsp + 2)
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xB2, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xCE, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 2)
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xAE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xBA, 0x00
 	lda xde, (0x012fd7:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 74)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	push_sriw 0xFD, 0xF6, 0x00
 	ldw_sri0 WA, (xsp + 0x00fe)
 	ld xbc, (xsp + 76)
@@ -54999,10 +54999,10 @@ DSP_BiquadCoeff_Algo1:
 	lda_dri XBC, 0xFD, 0xBE, 0x00
 	lda xde, (0x012fdb:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 70)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 70)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	ldw_sri0 DE, (xsp + 0x00f6)
@@ -55011,10 +55011,10 @@ DSP_BiquadCoeff_Algo1:
 	lda_dri XBC, 0xFD, 0xB6, 0x00
 	lda xde, (0x012fdf:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 66)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 66)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	ldw_sri0 DE, (xsp + 0x00f6)
@@ -55023,10 +55023,10 @@ DSP_BiquadCoeff_Algo1:
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda xde, (0x012fe3:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 62)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 62)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	ldw_sri0 DE, (xsp + 0x00f6)
@@ -55035,10 +55035,10 @@ DSP_BiquadCoeff_Algo1:
 	lda_dri XBC, 0xFD, 0xAE, 0x00
 	lda xde, (0x012fe7:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 58)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 58)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	ldw_sri0 DE, (xsp + 0x00f6)
@@ -55052,11 +55052,11 @@ DSP_BiquadCoeff_Algo1:
 DSP_BiquadCoeff_Algo2:
 	lda_dri XBC, 0xFD, 0xE6, 0x00
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 118)
 	lda xde, (0x012feb:24)
 	lda xwa, (xsp + 118)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 118)
 	ld xix, (xiy + 4)
 	push xix
@@ -55064,58 +55064,58 @@ DSP_BiquadCoeff_Algo2:
 	push xix
 	lda xwa, (xsp + 58)
 	push xwa
-	call VoiceFloat_MulAddDispatch
+	call FP_tan
 	lda xsp, (xsp + 12)
 	lda xbc, (xsp + 50)
 	lda xde, (0x012ff3:24)
 	lda xwa, (xsp + 118)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 118)
 	lda_dri XWA, 0xFD, 0xDA, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XBC, 0xFD, 0xDA, 0x00
 	lda_dri XDE, 0xFD, 0xE2, 0x00
 	lda xwa, (xsp + 2)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 118)
 	lda xde, (0x012ffb:24)
 	lda xwa, (xsp + 118)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 118)
 	lda_dri XWA, 0xFD, 0xAA, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XBC, 0xFD, 0xDA, 0x00
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 118)
 	lda xde, (0x013003:24)
 	lda xwa, (xsp + 118)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda_dri XBC, 0xFD, 0xDA, 0x00
 	lda xwa, (xsp + 78)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 78)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 118)
 	lda xde, (0x01300b:24)
 	lda xwa, (xsp + 118)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 118)
 	lda_dri XWA, 0xFD, 0xA2, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XBC, 0xFD, 0xAA, 0x00
 	lda_dri XDE, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 2)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 2)
 	lda xde, (0x013013:24)
 	lda_dri XWA, 0xFD, 0xD6, 0x00
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (0x013017:24)
 	lda_dri XDE, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 2)
@@ -55123,7 +55123,7 @@ DSP_BiquadCoeff_Algo2:
 	lda xbc, (xsp + 2)
 	lda xde, (0x01301b:24)
 	lda_dri XWA, 0xFD, 0xD2, 0x00
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda_dri XBC, 0xFD, 0xA2, 0x00
 	lda_dri XDE, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 2)
@@ -55131,7 +55131,7 @@ DSP_BiquadCoeff_Algo2:
 	lda xbc, (xsp + 2)
 	lda xde, (0x01301f:24)
 	lda_dri XWA, 0xFD, 0xCE, 0x00
-	call FP_SP_Mul
+	call FP_fadd
 	lda_dri XWA, 0xFD, 0xDE, 0x00
 	ld bc, 1:i3
 	call FP_SP_CmpZero32
@@ -55152,10 +55152,10 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	lda xbc, (xsp + 38)
 	lda xde, (0x013023:24)
 	lda xwa, (xsp + 2)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 118)
 	ld xix, (xiy + 4)
 	push xix
@@ -55168,29 +55168,29 @@ DSP_BiquadCoeff_Algo2_AfterSign1:
 	push xix
 	lda xwa, (xsp + 58)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda_dri XBC, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 118)
 	lda xde, (xsp + 42)
 	lda xwa, (xsp + 118)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 118)
 	lda xde, (0x01302f:24)
 	lda xwa, (xsp + 118)
-	call FP_DP_Mul
+	call FP_dadd
 	lda_dri XBC, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 78)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 78)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 118)
 	lda_dri XWA, 0xFD, 0xCA, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	ld_sril XWA, (xsp + 0x00d2)
 	stl_dri XWA, 0xFD, 0xC6, 0x00
 	lda_dri XWA, 0xFD, 0xDE, 0x00
@@ -55213,10 +55213,10 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda xbc, (xsp + 26)
 	lda xde, (0x013037:24)
 	lda xwa, (xsp + 2)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 118)
 	ld xix, (xiy + 4)
 	push xix
@@ -55229,29 +55229,29 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	push xix
 	lda xwa, (xsp + 46)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda_dri XBC, 0xFD, 0xAA, 0x00
 	lda xwa, (xsp + 118)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 118)
 	lda xde, (xsp + 30)
 	lda xwa, (xsp + 118)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (0x013043:24)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
 	call FP_DP_Sub
 	lda_dri XBC, 0xFD, 0xA2, 0x00
 	lda xwa, (xsp + 78)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 78)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 118)
 	lda_dri XWA, 0xFD, 0xC2, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XWA, 0xFD, 0xDE, 0x00
 	ld bc, 1:i3
 	call FP_SP_CmpZero32
@@ -55263,26 +55263,26 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda xbc, (xsp + 2)
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xB2, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xCE, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 2)
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xAE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xCA, 0x00
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xBE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xBA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xC2, 0x00
 	lda_dri XDE, 0xFD, 0xD6, 0x00
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	jr DSP_BiquadCoeff_Algo2_WriteParams
 
 ; Algo2: negative-argument arm of the final chain.
@@ -55293,26 +55293,26 @@ DSP_BiquadCoeff_Algo2_NegBranch:
 	lda xbc, (xsp + 2)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xB2, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xC2, 0x00
 	lda xwa, (xsp + 2)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 2)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xAE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xD6, 0x00
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xBE, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xD2, 0x00
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xBA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xCE, 0x00
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 
 ; Algo2's store block: scales by 2^22 (0x01304B, 0x01304F, 0x013057, 0x01305B) and 2^23
 ; (0x013053), converts to integer and emits five coefficients exactly like
@@ -55321,10 +55321,10 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda_dri XBC, 0xFD, 0xBA, 0x00
 	lda xde, (0x01304b:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 22)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	push_sriw 0xFD, 0xF6, 0x00
 	ldw_sri0 WA, (xsp + 0x00fe)
 	ld xbc, (xsp + 24)
@@ -55334,10 +55334,10 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda_dri XBC, 0xFD, 0xB6, 0x00
 	lda xde, (0x01304f:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 18)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 18)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	call DSP_WriteParamWord
@@ -55345,10 +55345,10 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda_dri XBC, 0xFD, 0xAE, 0x00
 	lda xde, (0x013053:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 14)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 14)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	call DSP_WriteParamWord
@@ -55356,10 +55356,10 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda_dri XBC, 0xFD, 0xBE, 0x00
 	lda xde, (0x013057:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 10)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 10)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	call DSP_WriteParamWord
@@ -55367,10 +55367,10 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda xde, (0x01305b:24)
 	lda xwa, (xsp + 2)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 2)
 	lda xwa, (xsp + 6)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 6)
 	ldw_sri0 BC, (xsp + 0x00ec)
 	call DSP_WriteParamWord
@@ -55400,7 +55400,7 @@ DSP_BiquadCoeff_Epilogue:
 ;   word[IZ] for the gain; every other mode uses word[IZ] and word[IZ+1].  The frequency word
 ;   indexes the ISO 1/3-octave float table at 0x012397 (copied out with FP_SP_Raw4Copy).  The
 ;   gain word is widened with FP_ScalarToDP then mapped to dB as raw*0.5 - 12.0
-;   (FP_DP_Add_Outer with 0.5 at 0x01305F = multiply, then FP_DP_Mul with -12.0 at 0x013067 =
+;   (FP_dmul with 0.5 at 0x01305F = multiply, then FP_dadd with -12.0 at 0x013067 =
 ;   add) and narrowed back to a float.
 ; If the type nibble is 2 it consumes ONE MORE stream byte, masks it with 0x1F and re-fetches
 ; the frequency float from 0x012397 with that index -- i.e. indices 27..31 select the
@@ -55447,14 +55447,14 @@ DSP_SOS_LUT_Fetch:
 	lda xbc, (xsp + 12)
 	lda xde, (0x01305f:24)
 	lda xwa, (xsp + 12)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 12)
 	lda xde, (0x013067:24)
 	lda xwa, (xsp + 12)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 20)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	jr DSP_SOS_LUT_CheckType2
 
 ; Alternate indexing when the header's high nibble is 0x10: frequency from word[IZ-1], gain
@@ -55484,14 +55484,14 @@ DSP_SOS_LUT_Mode0x10:
 	lda xbc, (xsp + 12)
 	lda xde, (0x01306f:24)
 	lda xwa, (xsp + 12)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xbc, (xsp + 12)
 	lda xde, (0x013077:24)
 	lda xwa, (xsp + 12)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 20)
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 
 ; Join point; if the type nibble is 2, consume one extra stream byte and re-fetch the float
 ; from 0x012397 masked with 0x1F.
@@ -55563,10 +55563,10 @@ DSP_SOS_Coeff_Compute:
 	lda_dri XBC, 0xFD, 0xCE, 0x00
 	lda xde, (0x01307f:24)
 	lda xwa, (xsp + 56)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 56)
 	lda xwa, (xsp + 72)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -55579,11 +55579,11 @@ DSP_SOS_Coeff_Compute:
 	push xix
 	lda_dri XWA, 0xFD, 0xB8, 0x00
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda_dri XBC, 0xFD, 0xA8, 0x00
 	lda_dri XWA, 0xFD, 0xB2, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XWA, 0xFD, 0xCE, 0x00
 	ld bc, 1:i3
 	call FP_SP_CmpZero32
@@ -55591,11 +55591,11 @@ DSP_SOS_Coeff_Compute:
 	jrl nz, DSP_SOS_Algo0_NonzeroCoeff
 	lda_dri XBC, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 72)
 	lda xde, (0x01308b:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -55603,14 +55603,14 @@ DSP_SOS_Coeff_Compute:
 	push xix
 	lda_dri XWA, 0xFD, 0xA8, 0x00
 	push xwa
-	call VoiceFloat_DispatchMulAdd
+	call FP_cos
 	lda_dri XBC, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 84)
 	lda xde, (0x013093:24)
 	lda xwa, (xsp + 84)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 84)
 	ld xix, (xiy + 4)
 	push xix
@@ -55618,7 +55618,7 @@ DSP_SOS_Coeff_Compute:
 	push xix
 	lda_dri XWA, 0xFD, 0xAC, 0x00
 	push xwa
-	call VoiceFloat_MulAddVariant2
+	call FP_sin
 	lda xsp, (xsp + 24)
 	lda_dri XBC, 0xFD, 0x98, 0x00
 	lda xde, (0x01309b:24)
@@ -55627,10 +55627,10 @@ DSP_SOS_Coeff_Compute:
 	lda xbc, (xsp + 72)
 	lda_dri XDE, 0xFD, 0xA0, 0x00
 	lda xwa, (xsp + 72)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 72)
 	lda_dri XWA, 0xFD, 0xCA, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda xbc, (0x0130a3:24)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
@@ -55638,15 +55638,15 @@ DSP_SOS_Coeff_Compute:
 	lda_dri XBC, 0xFD, 0xCA, 0x00
 	lda xde, (0x0130a7:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 120)
 	lda xde, (xsp + 56)
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (0x0130ab:24)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
@@ -55654,15 +55654,15 @@ DSP_SOS_Coeff_Compute:
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 56)
 	lda xde, (0x0130af:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 120)
 	lda xde, (xsp + 56)
 	lda_dri XWA, 0xFD, 0xC6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	jrl DSP_SOS_Algo0_FinalChain
 
 ; Algo0: arm taken when the tested coefficient is non-zero (the zero arm skips a whole
@@ -55670,11 +55670,11 @@ DSP_SOS_Coeff_Compute:
 DSP_SOS_Algo0_NonzeroCoeff:
 	lda_dri XBC, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 72)
 	lda xde, (0x0130b3:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -55682,14 +55682,14 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	push xix
 	lda_dri XWA, 0xFD, 0x98, 0x00
 	push xwa
-	call VoiceFloat_DispatchMulAdd
+	call FP_cos
 	lda_dri XBC, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 84)
 	lda xde, (0x0130bb:24)
 	lda xwa, (xsp + 84)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 84)
 	ld xix, (xiy + 4)
 	push xix
@@ -55697,7 +55697,7 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	push xix
 	lda_dri XWA, 0xFD, 0x9C, 0x00
 	push xwa
-	call VoiceFloat_MulAddVariant2
+	call FP_sin
 	lda xsp, (xsp + 24)
 	lda_dri XBC, 0xFD, 0x88, 0x00
 	lda xde, (0x0130c3:24)
@@ -55706,14 +55706,14 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xbc, (xsp + 72)
 	lda_dri XDE, 0xFD, 0x90, 0x00
 	lda xwa, (xsp + 72)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 72)
 	lda_dri XWA, 0xFD, 0xC6, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda xde, (0x0130cb:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (0x0130cf:24)
 	lda_dri XDE, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 56)
@@ -55721,19 +55721,19 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 120)
 	lda xde, (0x0130d3:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Mul
+	call FP_fadd
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 56)
 	lda xde, (0x0130d7:24)
 	lda xwa, (xsp + 56)
@@ -55741,9 +55741,9 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xCA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 
-; Algo0's store block: normalises by a0 (VoiceFloat_SubSP = divide), scales by 2^22
+; Algo0's store block: normalises by a0 (FP_fdiv = divide), scales by 2^22
 ; (0x0130E3, 0x0130E7), converts float->int and emits the taps through DSP_WriteOscParam /
 ; DSP_WriteCoeffData_5B_Direct, accumulating status in IZ.
 DSP_SOS_Algo0_FinalChain:
@@ -55758,21 +55758,21 @@ DSP_SOS_Algo0_FinalChain:
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xC2, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xCA, 0x00
 	lda_dri XDE, 0xFD, 0xC2, 0x00
 	lda_dri XWA, 0xFD, 0xBE, 0x00
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda_dri XWA, 0xFD, 0xBA, 0x00
 	call FP_SP_CopyOrNegate4
 	lda_dri XBC, 0xFD, 0xBE, 0x00
 	lda xde, (0x0130e3:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 120)
 	lda_dri XWA, 0xFD, 0x84, 0x00
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	push_sriw 0xFD, 0xDA, 0x00
 	ldw_sri0 WA, (xsp + 0x00e6)
 	ld_sril XBC, (xsp + 0x0086)
@@ -55782,10 +55782,10 @@ DSP_SOS_Algo0_FinalChain:
 	lda_dri XBC, 0xFD, 0xBA, 0x00
 	lda xde, (0x0130e7:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 120)
 	lda_dri XWA, 0xFD, 0x80, 0x00
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld_sril XWA, (xsp + 0x0080)
 	ld bc, iz
 	call DSP_WriteParamWord
@@ -55793,10 +55793,10 @@ DSP_SOS_Algo0_FinalChain:
 	lda_dri XBC, 0xFD, 0xC2, 0x00
 	lda xde, (0x0130eb:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 120)
 	lda xwa, (xsp + 124)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 124)
 	ld bc, iz
 	call DSP_WriteParamWord
@@ -55811,10 +55811,10 @@ DSP_SOS_Algo1:
 	lda_dri XBC, 0xFD, 0xCE, 0x00
 	lda xde, (0x0130ef:24)
 	lda xwa, (xsp + 120)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 120)
 	lda xwa, (xsp + 72)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -55827,11 +55827,11 @@ DSP_SOS_Algo1:
 	push xix
 	lda_dri XWA, 0xFD, 0x80, 0x00
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 112)
 	lda_dri XWA, 0xFD, 0xB2, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XWA, 0xFD, 0xCE, 0x00
 	ld bc, 1:i3
 	call FP_SP_CmpZero32
@@ -55839,11 +55839,11 @@ DSP_SOS_Algo1:
 	jrl nz, DSP_SOS_Algo1_NonzeroCoeff
 	lda_dri XBC, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 72)
 	lda xde, (0x0130fb:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -55851,14 +55851,14 @@ DSP_SOS_Algo1:
 	push xix
 	lda xwa, (xsp + 112)
 	push xwa
-	call VoiceFloat_DispatchMulAdd
+	call FP_cos
 	lda_dri XBC, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 84)
 	lda xde, (0x013103:24)
 	lda xwa, (xsp + 84)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 84)
 	ld xix, (xiy + 4)
 	push xix
@@ -55866,7 +55866,7 @@ DSP_SOS_Algo1:
 	push xix
 	lda xwa, (xsp + 116)
 	push xwa
-	call VoiceFloat_MulAddVariant2
+	call FP_sin
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 96)
 	lda xde, (0x01310b:24)
@@ -55875,14 +55875,14 @@ DSP_SOS_Algo1:
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 104)
 	lda xwa, (xsp + 72)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 72)
 	lda_dri XWA, 0xFD, 0xCA, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XBC, 0xFD, 0xCA, 0x00
 	lda xde, (0x013113:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (0x013117:24)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
@@ -55890,19 +55890,19 @@ DSP_SOS_Algo1:
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 120)
 	lda xde, (0x01311b:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Mul
+	call FP_fadd
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 56)
 	lda xde, (0x01311f:24)
 	lda xwa, (xsp + 56)
@@ -55910,18 +55910,18 @@ DSP_SOS_Algo1:
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xC6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	jrl DSP_SOS_Algo1_FinalChain
 
 ; Algo1: non-zero-coefficient arm.
 DSP_SOS_Algo1_NonzeroCoeff:
 	lda_dri XBC, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 72)
 	lda xde, (0x013123:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -55929,14 +55929,14 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	push xix
 	lda xwa, (xsp + 96)
 	push xwa
-	call VoiceFloat_DispatchMulAdd
+	call FP_cos
 	lda_dri XBC, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 84)
 	lda xde, (0x01312b:24)
 	lda xwa, (xsp + 84)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 84)
 	ld xix, (xiy + 4)
 	push xix
@@ -55944,7 +55944,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	push xix
 	lda xwa, (xsp + 100)
 	push xwa
-	call VoiceFloat_MulAddVariant2
+	call FP_sin
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 80)
 	lda xde, (0x013133:24)
@@ -55953,10 +55953,10 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 88)
 	lda xwa, (xsp + 72)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 72)
 	lda_dri XWA, 0xFD, 0xC6, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda xbc, (0x01313b:24)
 	lda_dri XDE, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 120)
@@ -55964,15 +55964,15 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda xde, (0x01313f:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (0x013143:24)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
@@ -55980,44 +55980,44 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 56)
 	lda xde, (0x013147:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 120)
 	lda xde, (xsp + 56)
 	lda_dri XWA, 0xFD, 0xCA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 
 ; Algo1's normalise / scale / float->int / write chain.
 DSP_SOS_Algo1_FinalChain:
 	lda_dri XBC, 0xFD, 0xCA, 0x00
 	lda xde, (0x01314b:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Mul
+	call FP_fadd
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda xde, (0x01314f:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xC2, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xCA, 0x00
 	lda_dri XDE, 0xFD, 0xC2, 0x00
 	lda_dri XWA, 0xFD, 0xBE, 0x00
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda_dri XWA, 0xFD, 0xBA, 0x00
 	call FP_SP_CopyOrNegate4
 	lda_dri XBC, 0xFD, 0xBE, 0x00
 	lda xde, (0x013153:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 120)
 	lda xwa, (xsp + 68)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	push_sriw 0xFD, 0xDA, 0x00
 	ldw_sri0 WA, (xsp + 0x00e6)
 	ld xbc, (xsp + 70)
@@ -56027,10 +56027,10 @@ DSP_SOS_Algo1_FinalChain:
 	lda_dri XBC, 0xFD, 0xBA, 0x00
 	lda xde, (0x013157:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 120)
 	lda xwa, (xsp + 64)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 64)
 	ld bc, iz
 	call DSP_WriteParamWord
@@ -56038,10 +56038,10 @@ DSP_SOS_Algo1_FinalChain:
 	lda_dri XBC, 0xFD, 0xC2, 0x00
 	lda xde, (0x01315b:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 120)
 	lda xwa, (xsp + 60)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 60)
 	ld bc, iz
 	call DSP_WriteParamWord
@@ -56055,10 +56055,10 @@ DSP_SOS_Algo2:
 	lda_dri XBC, 0xFD, 0xCE, 0x00
 	lda xde, (0x01315f:24)
 	lda xwa, (xsp + 120)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 120)
 	lda xwa, (xsp + 72)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -56071,11 +56071,11 @@ DSP_SOS_Algo2:
 	push xix
 	lda xwa, (xsp + 64)
 	push xwa
-	call VoiceFloat_CompareAndConvert
+	call FP_pow
 	lda xsp, (xsp + 20)
 	lda xbc, (xsp + 48)
 	lda_dri XWA, 0xFD, 0xB2, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XWA, 0xFD, 0xCE, 0x00
 	ld bc, 1:i3
 	call FP_SP_CmpZero32
@@ -56083,11 +56083,11 @@ DSP_SOS_Algo2:
 	jrl nz, DSP_SOS_Algo2_NonzeroCoeff
 	lda_dri XBC, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 72)
 	lda xde, (0x01316b:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -56095,14 +56095,14 @@ DSP_SOS_Algo2:
 	push xix
 	lda xwa, (xsp + 48)
 	push xwa
-	call VoiceFloat_DispatchMulAdd
+	call FP_cos
 	lda_dri XBC, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 84)
 	lda xde, (0x013173:24)
 	lda xwa, (xsp + 84)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 84)
 	ld xix, (xiy + 4)
 	push xix
@@ -56110,7 +56110,7 @@ DSP_SOS_Algo2:
 	push xix
 	lda xwa, (xsp + 52)
 	push xwa
-	call VoiceFloat_MulAddVariant2
+	call FP_sin
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 32)
 	lda xde, (0x01317b:24)
@@ -56119,14 +56119,14 @@ DSP_SOS_Algo2:
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 72)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 72)
 	lda_dri XWA, 0xFD, 0xCA, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda_dri XBC, 0xFD, 0xCA, 0x00
 	lda xde, (0x013183:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (0x013187:24)
 	lda_dri XDE, 0xFD, 0xCA, 0x00
 	lda xwa, (xsp + 56)
@@ -56134,19 +56134,19 @@ DSP_SOS_Algo2:
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 120)
 	lda xde, (0x01318b:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Mul
+	call FP_fadd
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 56)
 	lda xde, (0x01318f:24)
 	lda xwa, (xsp + 56)
@@ -56154,18 +56154,18 @@ DSP_SOS_Algo2:
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xC6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	jrl DSP_SOS_Algo2_FinalChain
 
 ; Algo2: non-zero-coefficient arm.
 DSP_SOS_Algo2_NonzeroCoeff:
 	lda_dri XBC, 0xFD, 0xD2, 0x00
 	lda xwa, (xsp + 72)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 72)
 	lda xde, (0x013193:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 72)
 	ld xix, (xiy + 4)
 	push xix
@@ -56173,14 +56173,14 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	push xix
 	lda xwa, (xsp + 32)
 	push xwa
-	call VoiceFloat_DispatchMulAdd
+	call FP_cos
 	lda_dri XBC, 0xFD, 0xDE, 0x00
 	lda xwa, (xsp + 84)
-	call FP_DP_NegMantissaLS
+	call FP_ftod
 	lda xbc, (xsp + 84)
 	lda xde, (0x01319b:24)
 	lda xwa, (xsp + 84)
-	call FP_DP_Add_Outer
+	call FP_dmul
 	lda xiy, (xsp + 84)
 	ld xix, (xiy + 4)
 	push xix
@@ -56188,7 +56188,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	push xix
 	lda xwa, (xsp + 36)
 	push xwa
-	call VoiceFloat_MulAddVariant2
+	call FP_sin
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 16)
 	lda xde, (0x0131a3:24)
@@ -56197,10 +56197,10 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 72)
-	call VoiceFloat_SubDP
+	call FP_ddiv
 	lda xbc, (xsp + 72)
 	lda_dri XWA, 0xFD, 0xC6, 0x00
-	call FP_DP_NormalizeMantissa
+	call FP_dtof
 	lda xbc, (0x0131ab:24)
 	lda_dri XDE, 0xFD, 0xC6, 0x00
 	lda xwa, (xsp + 120)
@@ -56208,15 +56208,15 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda xde, (0x0131af:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xB6, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 120)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (0x0131b3:24)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
@@ -56224,30 +56224,30 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda_dri XBC, 0xFD, 0xB2, 0x00
 	lda_dri XDE, 0xFD, 0xB6, 0x00
 	lda xwa, (xsp + 56)
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	lda xbc, (xsp + 56)
 	lda xde, (0x0131b7:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 120)
 	lda xde, (xsp + 56)
 	lda_dri XWA, 0xFD, 0xCA, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 
 ; Algo2's normalise / scale / float->int / write chain.
 DSP_SOS_Algo2_FinalChain:
 	lda_dri XBC, 0xFD, 0xCA, 0x00
 	lda xde, (0x0131bb:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Mul
+	call FP_fadd
 	lda_dri XBC, 0xFD, 0xC6, 0x00
 	lda xde, (0x0131bf:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Mul
+	call FP_fadd
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda_dri XWA, 0xFD, 0xC2, 0x00
-	call VoiceFloat_SubSP
+	call FP_fdiv
 	ld_sril XWA, (xsp + 0x00ca)
 	stl_dri XWA, 0xFD, 0xBE, 0x00
 	lda_dri XBC, 0xFD, 0xC6, 0x00
@@ -56256,10 +56256,10 @@ DSP_SOS_Algo2_FinalChain:
 	lda_dri XBC, 0xFD, 0xBA, 0x00
 	lda xde, (0x0131c3:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 120)
 	lda xwa, (xsp + 12)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	push_sriw 0xFD, 0xDA, 0x00
 	ldw_sri0 WA, (xsp + 0x00e6)
 	ld xbc, (xsp + 14)
@@ -56269,10 +56269,10 @@ DSP_SOS_Algo2_FinalChain:
 	lda_dri XBC, 0xFD, 0xC2, 0x00
 	lda xde, (0x0131c7:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 120)
 	lda xwa, (xsp + 8)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 8)
 	ld bc, iz
 	ldw_sri0 DE, (xsp + 0x00da)
@@ -56281,10 +56281,10 @@ DSP_SOS_Algo2_FinalChain:
 	lda_dri XBC, 0xFD, 0xBE, 0x00
 	lda xde, (0x0131cb:24)
 	lda xwa, (xsp + 120)
-	call FP_SP_Add_Outer
+	call FP_fmul
 	lda xbc, (xsp + 120)
 	lda xwa, (xsp + 4)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ld xwa, (xsp + 4)
 	ld bc, iz
 	ldw_sri0 DE, (xsp + 0x00da)
@@ -56318,7 +56318,7 @@ DSP_SOS_Coeff_Epilogue:
 ;       / ld xwa, (xwa)`), and they are two of the three mixer parameters the main CPU sets
 ;       through CmdHandler2C global sub-commands 0x01 and 0x06 (DRAM 0x45B2 and 0x45B6). An index
 ;       above 127 reads past the curve into the double-precision constant pool at 0x00F34E.
-;       The same WA index is then run through FP_SP_CallWithBuf8 / FP_SP_Decode_ReadSign to get a
+;       The same WA index is then run through FP_SP_CallWithBuf8 / FP_ftoi to get a
 ;       second, float-derived integer.
 ; Writes, for each of the two results, the sequence
 ;       DSP_DispatchCommand(0x30) ; DispatchData(0x00) ; DispatchData(0xD0 or 0xD3) ;
@@ -56369,7 +56369,7 @@ DSP_MixerCoeff_Compute:
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 16)
-	call FP_SP_Decode_ReadSign
+	call FP_ftoi
 	ldw wa, 0x30
 	ld bc, 1:i3
 	call DSP_DispatchCommand
@@ -58788,13 +58788,15 @@ ToneGen_Cmp32_Greater:	; 03D342h
 ; A double-precision transcendental wrapper, almost certainly cos(x) implemented as
 ; sin(pi/2 - x) -- called once from the FP library (subcpu_fp_math.s:127).
 ; In:  one 8-byte double pushed by the caller plus a destination pointer; 48 bytes of frame.
-; Body: FP_DP_CmpAndCopy to fetch/normalise the argument; then
-;       FP_DP_Mul(dest, 0x00F3CA = 1.5707963267948966 = pi/2, arg)  -- FP_DP_Mul is ADD/SUB,
-;       so this is the pi/2 - x fold; then VoiceFloat_BlendAndMerge (0x03D98A), which is the
+; Body: FP_fabs to fetch/normalise the argument; then
+;       FP_dadd(dest, 0x00F3CA = 1.5707963267948966 = pi/2, arg)  -- FP_dadd is ADD/SUB,
+;       so this is the pi/2 - x fold; then FP_SinCos_Kernel (0x03D98A), which is the
 ;       polynomial/series evaluator; then FP_DP_Raw8Copy to publish the result.
-; Medium confidence because the series constants inside VoiceFloat_BlendAndMerge were not
+; Medium confidence because the series constants inside FP_SinCos_Kernel were not
 ; decoded in this pass; the pi/2 fold and the call graph are certain.
-VoiceFloat_DispatchMulAdd:
+; RENAMED 2026-09-25: was VoiceFloat_DispatchMulAdd (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_cos:
 	lda xsp, (xsp - 48)
 	pushw 0x0
 	lda xiy, (xsp + 58)
@@ -58804,12 +58806,12 @@ VoiceFloat_DispatchMulAdd:
 	push xix
 	lda xwa, (xsp + 34)
 	push xwa
-	call FP_DP_CmpAndCopy
+	call FP_fabs
 	lda xsp, (xsp + 12)
 	lda xbc, (0x00f3ca:24)
 	lda xde, (xsp + 26)
 	lda xwa, (xsp + 34)
-	call FP_DP_Mul
+	call FP_dadd
 	lda xiy, (xsp + 34)
 	ld xix, (xiy + 4)
 	push xix
@@ -58822,7 +58824,7 @@ VoiceFloat_DispatchMulAdd:
 	push xix
 	lda xwa, (xsp + 58)
 	push xwa
-	call VoiceFloat_BlendAndMerge
+	call FP_SinCos_Kernel
 	lda xsp, (xsp + 22)
 	ld xwa, (xsp + 52)
 	lda xbc, (xsp + 40)
@@ -58834,10 +58836,12 @@ VoiceFloat_DispatchMulAdd:
 ; 20 in the DSP curve/coefficient code).
 ; In:  XWA = destination (8-byte double), XBC = dividend pointer, XDE = divisor pointer.
 ; Body: FP_DP_Decode both operands into 12-byte scratch buffers on the stack, call
-;       FP_DP_Mul_Outer (0x03E3F6) -- which SUBTRACTS the exponents and XORs the signs, i.e.
+;       FP_DP_DivCore (0x03E3F6) -- which SUBTRACTS the exponents and XORs the signs, i.e.
 ;       divides -- then FP_DP_Encode the result to *(XWA).
 ; No hardware access.  See [UNCERTAIN] for the naming.
-VoiceFloat_SubDP:
+; RENAMED 2026-09-25: was VoiceFloat_SubDP (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_ddiv:
 	push xiz
 	lda xsp, (xsp - 28)
 	ld xiz, xde
@@ -58850,7 +58854,7 @@ VoiceFloat_SubDP:
 	call FP_DP_Decode
 	ld xwa, xsp
 	lda xbc, (xiz)
-	call FP_DP_Mul_Outer
+	call FP_DP_DivCore
 	ld xwa, (xsp + 24)
 	ld xbc, xsp
 	call FP_DP_Encode
@@ -58861,9 +58865,11 @@ VoiceFloat_SubDP:
 ; ⚠ NOT a subtraction: SINGLE-PRECISION DIVIDE.  74 call sites -- it is how every coefficient
 ; in this region gets normalised by a0 and how every dB value gets divided by 20.0.
 ; In:  XWA = destination (4-byte float), XBC = dividend pointer, XDE = divisor pointer.
-; Body: FP_SP_Decode both operands, FP_SP_Mul_Outer (0x03E4B4) = divide, FP_SP_Encode.
+; Body: FP_SP_Decode both operands, FP_SP_DivCore (0x03E4B4) = divide, FP_SP_Encode.
 ; Region 15 ends at 0x03D403, the last byte of this routine.
-VoiceFloat_SubSP:
+; RENAMED 2026-09-25: was VoiceFloat_SubSP (scripts/renaming/rename_v142_fp_libm.sed); the name now says
+; what the header above established.
+FP_fdiv:
 	push xiz
 	lda xsp, (xsp - 20)
 	ld xiz, xde
@@ -58876,7 +58882,7 @@ VoiceFloat_SubSP:
 	call FP_SP_Decode
 	ld xwa, xsp
 	lda xbc, (xiz)
-	call FP_SP_Mul_Outer
+	call FP_SP_DivCore
 	ld xwa, (xsp + 16)
 	ld xbc, xsp
 	call FP_SP_Encode

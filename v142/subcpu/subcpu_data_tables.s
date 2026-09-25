@@ -90,7 +90,7 @@ SubCPU_Payload_Loaded_Flag:
 ;               0x00F396 1/pi = 0x3FD45F306DC9C883 [795]   0x00F3A6 2.3283e-10 [907]
 ;               0x00F3AE FLT_EPSILON  0x00F3B2 FLT_MAX  0x00F3B6 FLT_MIN  (single precision)
 ;               0x00F3BA pi   0x00F3C2 2*pi   0x00F3CA pi/2 (0x3FF921FB54442D18, read by
-;                    VoiceFloat_DispatchMulAdd in kn5000_subprogram_v142.s)
+;                    FP_cos in kn5000_subprogram_v142.s)
 ;               0x00F3D2 ln 2 = 0x3FE62E42FEFA39EF [2851]   0x00F3DA log10 2   0x00F3E2 ln 10
 ;               0x00F3EA DBL_EPSILON  0x00F3F2 DBL_MAX  0x00F3FA DBL_MIN  0x00F402 -0.0
 ;                    (EPSILON/MAX/MIN appear in the same order in both precisions)
@@ -2684,7 +2684,7 @@ DSP_CoeffCurve_Op62:
 	.long 0x0028619b, 0x002d4efb, 0x0032d646, 0x00390a41
 	.long 0x00400000, 0x0047cf26, 0x0050923c, 0x005a6704
 
-; --- 0x012cc3  two IEEE double constants 0.552, the FP_DP_Add_Outer operands of the
+; --- 0x012cc3  two IEEE double constants 0.552, the FP_dmul operands of the
 ; two arms of DSP_AlgoParam_Decode (bytecode opcode 0x79): _Sub for the negated
 ; (type != 1) path, _Add for the type == 1 path.
 FP_Const_0p552_Sub:
