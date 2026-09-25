@@ -12,10 +12,7 @@ SetWall_X:
 	ret
 
 SetWall_JumpStubData:
-	.byte 0xc1, 0xe0
-	incf
-	push	xix
-	swi	6
+	anddi8 (3296), 254
 	ld	(3295:16), 0
 	call	CDlikeSwTtl_SendStartEvt
 	call	SetWall_UpdateSlotIndex
@@ -35,10 +32,7 @@ SetWall_InlineCodeBlock:
 	ret
 MiddleFuncCall_DispatchData_Code_Helper:
 	call	SetWall_InlineCodeBlock2
-	.byte 0xc1, 0xdf
-	incf
-	push	xsp
-	reti
+	cpdi8 (3295), 7
 	jr	z, 4
 	call	CDlikeSwTtl_DispatchData_0x6
 	call	CDlikeSwTtl_SendStartEvt

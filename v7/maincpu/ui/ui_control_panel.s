@@ -2580,13 +2580,16 @@ MainPmanControl:
 MainPmanCtrl_DispatchTable:
 	.incbin "includes/romslices/v7_transplant_MainPmanCtrl_DispatchTable.bin"
 MainPmanCtrl_HandleA0:
-	.byte 0xbf, 0x06, 0x14, 0x9e, 0x8c, 0xea, 0xcf, 0x10
-	.byte 0x00, 0x00, 0x00, 0x67, 0x10, 0xea, 0xcf, 0x15
-	.byte 0x00, 0x00, 0x00, 0x66, 0x08, 0xea, 0xcf, 0x16
-	.byte 0x00, 0x00, 0x00, 0x6e, 0x06
+	ld (xsp+6), (35998)
+	cp xde, 16
+	jr c, MainPmanCtrl_StorePartSelect
+	cp xde, 21
+	jr z, MainPmanCtrl_StorePartSelect
+	cp xde, 22
+	jr nz, MainPmanCtrl_CheckSoundParam
 MainPmanCtrl_StorePartSelect:
 	ld	(35998:16), e
-	jr	31
+	jr	MainPmanCtrl_LoadPartSelect
 MainPmanCtrl_CheckSoundParam:
 	ld	xwa, 16640
 	call	AcApcToggleProc_Helper
@@ -2603,9 +2606,13 @@ MainPmanCtrl_SetPartSelectZero:
 MainPmanCtrl_LoadPartSelect:
 	ld	e, (35998:16)
 MainPmanCtrl_CompareAndUpdate:
-	.byte 0x8f, 0x06, 0xf5, 0x66, 0x0f, 0xda, 0x12, 0x0b
-	.byte 0xff, 0x00, 0x30, 0x90, 0x00, 0x31, 0x10, 0x00
-	.byte 0x1d, 0x53, 0xaa, 0xfd
+	cp e, (xsp+6)
+	jr z, 15
+	extz de
+	pushw 255
+	ldw wa, 144
+	ldw bc, 16
+	call 16624211
 MainTitle_SendEventDone:
 	ld xhl, 0:i3
 	pop xiz
@@ -2632,7 +2639,7 @@ MainTitleControl:
 	jr	z, SeqState_TransitionMode
 	cp	xbc, 29360148
 	jrl	nz, UIWidget_ReturnZero
-	.byte 0xc1, 0x98, 0x8c, 0x19, 0x99, 0x8c
+	ldmm8 35993, 35992
 	ld	(35992:16), l
 	ldw	wa, 72
 	call	CtrlPanel_SetIndicatorBit
@@ -2643,13 +2650,13 @@ MainTitleControl:
 	jrl	UIWidget_ReturnZero
 SeqState_TransitionMode:
 	ld	(35995:16), a
-	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
+	ldmm8 35997, 35996
 	ld	(35994:16), l
 	ld	(35996:16), l
 	ldw	wa, 97
 	jr	MainTitleCtrl_SetIndicatorAndClear
 MainTitleCtrl_SaveAndTransition:
-	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c
+	ldmm8 35997, 35996
 	ld	(35996:16), l
 	ldw	wa, 97
 MainTitleCtrl_SetIndicatorAndClear:
@@ -2667,8 +2674,9 @@ SeqState_DemoModeHandler:
 	jr	nz, SeqDemo_SaveCurrentState
 	ld	(35995:16), a
 SeqDemo_SaveCurrentState:
-	.byte 0xc1, 0x9c, 0x8c, 0x19, 0x9d, 0x8c, 0xc1, 0x98
-	.byte 0x8c, 0x19, 0x99, 0x8c, 0x68, 0x68
+	ldmm8 35997, 35996
+	ldmm8 35993, 35992
+	jr UIWidget_ReturnZero
 MainTitleCtrl_HandleAB:
 	ld (0x0274ac:24), de
 	ldw (0x0274ae:24), 0x000a
@@ -2691,13 +2699,19 @@ MainTitleCtrl_HandleBB:
 	ld (0x0274a6:24), wa
 
 MainTitleCtrl_CheckSecondTimer:
-	.byte 0xd2, 0xae, 0x74, 0x02, 0x20, 0xd8, 0xd8, 0x66
-	.byte 0x25, 0xd8, 0x69, 0xf2, 0xae, 0x74, 0x02, 0x50
-	.byte 0xd8, 0xd8, 0x6e, 0x1a, 0xd2, 0xac, 0x74, 0x02
-	.byte 0x3f, 0x00, 0x00, 0x66, 0x06, 0xf1, 0xc0, 0x8e
-	.byte 0xb8, 0x68, 0x04
+	ldw_da wa, (160942)
+	cp wa, 0:i3
+	jr z, UIWidget_ReturnZero
+	dec 1, wa
+	stw_da (160942), wa
+	cp wa, 0:i3
+	jr nz, UIWidget_ReturnZero
+	cpw_da (160940), 0
+	jr z, MainTitleCtrl_ClearIndicatorBit
+	setda 0, (36544)
+	jr MainTitleCtrl_SetIndicator60
 MainTitleCtrl_ClearIndicatorBit:
-	.byte 0xf1, 0xc0, 0x8e, 0xb0	; resda 0, 0x8f5c (v7 patched)
+	resda 0, (36544)	; resda 0, 0x8f5c (v7 patched)
 
 
 

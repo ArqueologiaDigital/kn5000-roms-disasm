@@ -2098,22 +2098,19 @@ NameGetFuncCall_Dispatch:
 	lda	xwa, (7304:16)
 	ld	(xwa+20), 0
 	ldw	de, 19
-	.byte 0xf3	; v10 does not spell this byte either
-	reti
-	.byte 0xe0	; v10 does not spell this byte either
-	.byte 0xe8	; v10 does not spell this byte either
-	ldw	bc, 16257
-	ld	w, 110:opc
-	push	177
-	nop
-	nop
+NameGetFuncCall_Loop:
+	lda_rr xbc, xwa, de
+	cp (xbc), 32
+	jr nz, NameGetFuncCall_Skip2
+	ld (xbc), 0
 	sub	de, 1
-	jr	gt, -19
+	jr	gt, NameGetFuncCall_Loop
+NameGetFuncCall_Skip2:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818883
 	ld	xde, 0:i3
-	jrl	424
+	jrl	NameGetFuncCall_Join2
 	call	FileIO_GetCurrentFileIndex_Alt
 	inc	1, hl
 	pushw	hl
@@ -2140,22 +2137,19 @@ NameGetFuncCall_Dispatch:
 	lda	xwa, (7326:16)
 	ld	(xwa+12), 0
 	ldw	de, 11
-	.byte 0xf3	; v10 does not spell this byte either
-	reti
-	.byte 0xe0	; v10 does not spell this byte either
-	.byte 0xe8	; v10 does not spell this byte either
-	ldw	bc, 16257
-	ld	w, 110:opc
-	push	177
-	nop
-	nop
+NameGetFuncCall_Loop2:
+	lda_rr xbc, xwa, de
+	cp (xbc), 32
+	jr nz, NameGetFuncCall_Skip3
+	ld (xbc), 0
 	sub	de, 1
-	jr	gt, -19
+	jr	gt, NameGetFuncCall_Loop2
+NameGetFuncCall_Skip3:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818885
 	ld	xde, 0:i3
-	jrl	302
+	jrl	NameGetFuncCall_Join2
 	call	GetCurrentFileIndexAlt
 	inc	1, hl
 	pushw	hl
@@ -2169,7 +2163,7 @@ NameGetFuncCall_Dispatch:
 	ld	xwa, 4294967295
 	ld	xbc, 29818888
 	ld	xde, 0:i3
-	jrl	256
+	jrl	NameGetFuncCall_Join2
 	call	GetCurrentFileIndexAlt
 	ld	wa, hl
 	call	GetFileRecordPtr
@@ -2181,22 +2175,19 @@ NameGetFuncCall_Dispatch:
 	lda	xwa, (7340:16)
 	ld	(xwa+20), 0
 	ldw	de, 19
-	.byte 0xf3	; v10 does not spell this byte either
-	reti
-	.byte 0xe0	; v10 does not spell this byte either
-	.byte 0xe8	; v10 does not spell this byte either
-	ldw	bc, 16257
-	ld	w, 110:opc
-	push	177
-	nop
-	nop
+NameGetFuncCall_Loop3:
+	lda_rr xbc, xwa, de
+	cp (xbc), 32
+	jr nz, NameGetFuncCall_Skip4
+	ld (xbc), 0
 	sub	de, 1
-	jr	gt, -19
+	jr	gt, NameGetFuncCall_Loop3
+NameGetFuncCall_Skip4:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818887
 	ld	xde, 0:i3
-	jrl	184
+	jrl	NameGetFuncCall_Join2
 	call	GetFirstPageBase
 	ld	wa, hl
 	call	GetFileEntryByIndex
@@ -2214,22 +2205,19 @@ NameGetFuncCall_Dispatch:
 	lda	xwa, (135246:24)
 	ld	(xwa+20), 0
 	ldw	de, 19
-	.byte 0xf3	; v10 does not spell this byte either
-	reti
-	.byte 0xe0	; v10 does not spell this byte either
-	.byte 0xe8	; v10 does not spell this byte either
-	ldw	bc, 16257
-	ld	w, 110:opc
-	push	177
-	nop
-	nop
+NameGetFuncCall_Loop4:
+	lda_rr xbc, xwa, de
+	cp (xbc), 32
+	jr nz, NameGetFuncCall_Skip5
+	ld (xbc), 0
 	sub	de, 1
-	jr	gt, -19
+	jr	gt, NameGetFuncCall_Loop4
+NameGetFuncCall_Skip5:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818895
 	ld	xde, 0:i3
-	jr	92
+	jr	NameGetFuncCall_Join2
 	call	GetFirstPageBase
 	ld	wa, hl
 	call	GetFileEntryByIndex
@@ -2932,7 +2920,7 @@ DpSmfTtlFunc:
 ; DpSmfTtlFunc title dispatch
 DpSmfTtl_Dispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 16 of 21 slots byte-identical
-	.byte 0xc1, 0x9b, 0x8c, 0x3f, 0x72	; differs from v10 here and llvm-objdump cannot read it
+	cpdi8 (35995), 114	; differs from v10 here and llvm-objdump cannot read it
 	jrl	z, 255
 	ld	(135304:24), 0
 	ldw	(135302:24), 0
@@ -2940,7 +2928,7 @@ DpSmfTtl_Dispatch:
 	calr	61829
 	calr	63632
 	jrl	230
-	.byte 0xc1, 0x9a, 0x8c, 0x3f, 0x72	; differs from v10 here and llvm-objdump cannot read it
+	cpdi8 (35994), 114	; differs from v10 here and llvm-objdump cannot read it
 	jrl	z, 222
 	call	16693163
 	bit	0, hl

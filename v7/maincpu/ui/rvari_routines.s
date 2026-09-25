@@ -109,8 +109,7 @@ RVari_SelectE_FirstItem_Draw:
 	exts	xwa
 	divs	wa, 4
 	inc	1, wa
-	.byte 0x91	; llvm-mc cannot spell this byte
-	.byte 0xf0	; llvm-mc cannot spell this byte
+	cp wa, (xbc)
 	jr	nz, RVari_SelectE_SecondItem_Setup	; -> 0xFBF59B
 	ld	xwa, (xiz+44)
 	ld	bc, (xwa)
@@ -201,7 +200,7 @@ RVari_SelectE_SecondItem_Draw:
 	ld	wa, (xbc)
 	add	wa, 16
 	ld	(xde+6), wa
-	.byte 0x93, 0x3f, 0x00, 0x00
+	cpw (xhl), 0
 	jr	nz, RVari_SelectE_SecondItem_BtnNotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
@@ -364,7 +363,7 @@ RVari_SelectO_SecondItem_Draw:
 	ld	wa, (xbc)
 	add	wa, 16
 	ld	(xde+6), wa
-	.byte 0x93, 0x3f, 0x00, 0x00
+	cpw (xhl), 0
 	jr	nz, RVari_SelectO_SecondBtn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
@@ -778,7 +777,7 @@ RVari_ConfirmF_Item_Draw:
 	ld	wa, (xbc)
 	add	wa, 16
 	ld	(xde+6), wa
-	.byte 0x93, 0x3f, 0x00, 0x00
+	cpw (xhl), 0
 	jr	nz, RVari_ConfirmF_Btn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
@@ -1045,7 +1044,7 @@ RVari_ConfirmE_Item_Draw:
 	ld	wa, (xbc)
 	add	wa, 16
 	ld	(xde+6), wa
-	.byte 0x93, 0x3f, 0x00, 0x00
+	cpw (xhl), 0
 	jr	nz, RVari_ConfirmE_Btn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
@@ -1289,7 +1288,7 @@ RVari_EnumNotifyF_Item_Draw:
 	ld	wa, (xbc)
 	add	wa, 16
 	ld	(xde+6), wa
-	.byte 0x93, 0x3f, 0x00, 0x00
+	cpw (xhl), 0
 	jr	nz, RVari_EnumNotifyF_Btn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
@@ -1458,7 +1457,7 @@ RVari_EnumNotifyE_Item_Draw:
 	ld	wa, (xbc)
 	add	wa, 16
 	ld	(xde+6), wa
-	.byte 0x93, 0x3f, 0x00, 0x00
+	cpw (xhl), 0
 	jr	nz, RVari_EnumNotifyE_Btn_NotFirst
 	lda	xwa, (xsp+536)
 	ldw	(xwa), 28
