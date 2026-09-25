@@ -37,8 +37,16 @@ RUN:  python3 scripts/analysis/assert_images_assemble.py
 import os, subprocess, sys, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-MC = os.path.join(os.environ.get("PROJECTS_ROOT", os.path.expanduser("~/compartilhado")),
-                  "llvm-project", "build", "bin", "llvm-mc")
+# ⚠ Honour LLVM_MC, exactly as the Makefile and assert_toolchain_is_a_
+# prerequisite.py do.  `make LLVM_MC=<binary> gate-all` exports it; this check
+# used to ignore it and always ran the SHARED build/bin/llvm-mc, so during a
+# null run of one assembler (2026-09-25, toolchain lane) the byte gate was
+# about to certify objects built by LLVM_MC while this check judged a
+# different binary that a backend rebuild had just replaced -- and failed 7 of
+# 8 images for errors the binary under test does not produce.
+MC = os.environ.get("LLVM_MC") or os.path.join(
+    os.environ.get("PROJECTS_ROOT", os.path.expanduser("~/compartilhado")),
+    "llvm-project", "build", "bin", "llvm-mc")
 
 # (include dir, root source) -- exactly the eight `llvm-mc -filetype=obj`
 # invocations in the Makefile.
