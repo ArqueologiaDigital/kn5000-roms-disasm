@@ -170,3 +170,14 @@ VERIFIED: v7 byte-identical after 9 span(s)
     0xF382FC  ldb_erp l, 250                           || unidasm: ld QIZL,L
     0xF38308  stb_erp a, 250                           || unidasm: ld A,QIZL
 VERIFIED: v7 byte-identical after 2 span(s)
+0xF3882C-0xF3884E: 5 old lines (5 dirty) -> 9 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF3882C  ldmm8 0x28b1, 0x283c                     || unidasm: ld (0x28b1),(0x283c)
+    0xF38832  ldw (0xf19e:16), 0                       || unidasm: ld (0xf19e),0x0000
+    0xF38838  call 16635550                            || unidasm: call 0xfdd69e
+    0xF3883C  call AccWrap_PlayModeDispatch            || unidasm: call 0xf596b5
+    0xF38840  ld a, (0x8c9c:16)                        || unidasm: ld A,(0x8c9c)
+    0xF38844  cp a, 149                                || unidasm: cp A,0x95
+    0xF38847  jr z, 5                                  || unidasm: jr Z,0xf3884e
+    0xF38849  cp a, 152                                || unidasm: cp A,0x98
+    0xF3884C  ret nz                                   || unidasm: ret NZ
+VERIFIED: v7 byte-identical after 1 span(s)

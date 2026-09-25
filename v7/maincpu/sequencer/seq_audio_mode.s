@@ -656,8 +656,8 @@ AccVoice_ComputeParamOffset:
 ; Stride 4 (`sla wa, 2`); 8 entries = 32 bytes, to AccVoice_ComputeChannelIndex.
 ; Entry 0 is RAM 0x094800, the RAM copy of the composer factory user-style
 ; memory (technics-docs memory-map.md); entries 1-7 lie in the Custom Data
-; Flash window 0x300000-0x3FFFFF.  Which user-style slots they are is not
-; established.
+; Flash window 0x300000-0x3FFFFF.  Which style slot each bank index stands
+; for is decided by the writers of the index byte, not examined here.
 ; -----------------------------------------------------------------------------
 AccVoice_BankBaseTable:
 	.long 0x00094800
@@ -776,7 +776,7 @@ AccVoice_LoadTuningBlock:
 
 	pop xiy
 
-	call	16094128
+	call	AccTuning_LoadFromROM
 
 	nop
 

@@ -2026,8 +2026,8 @@ BmDrEdit_CleanupCommon:
 	call	16635550
 
 	res 0, (0x27b0:16)
-	calr 64147	; calr BmDrEdit_ClearAllSlotsAlt (v7 displacement)
-	jrl -1496	; jrl BmDrEdit_ClearAllSlots (v7 displacement)
+	calr BmDrEdit_ClearAllSlotsAlt	; calr BmDrEdit_ClearAllSlotsAlt (v7 displacement)
+	jrl BmDrEdit_ClearAllSlots	; jrl BmDrEdit_ClearAllSlots (v7 displacement)
 
 
 
@@ -3027,10 +3027,10 @@ BmDrEdit_DrumVoiceUp_IncrementOctave:
 	ld (0x27a0:16), wa
 
 BmDrEdit_DrumVoiceUp_UpdateDisplay:
-	call	16017364
-	calr	2034
-	call	16017945
-	calr	64669
+	call	NoteEditSy_SendWidgetCmd0
+	calr	NoteEdit_SendScrollCmds
+	call	NoteEditSy_UpdateChordDisplay
+	calr	BmDrEdit_SendMetronomeNoteOn_Alt
 	ld	(10588:16), 131
 	ld	(10589:16), 5
 	jp	16635550
@@ -3062,10 +3062,10 @@ BmDrEdit_DrumVoiceDown_DecrementOctave:
 	ld (0x27a0:16), wa
 
 BmDrEdit_DrumVoiceDown_UpdateDisplay:
-	call	16017364
-	calr	1951
-	call	16017945
-	calr	64586
+	call	NoteEditSy_SendWidgetCmd0
+	calr	NoteEdit_SendScrollCmds
+	call	NoteEditSy_UpdateChordDisplay
+	calr	BmDrEdit_SendMetronomeNoteOn_Alt
 	ld	(10588:16), 131
 	ld	(10589:16), 5
 	jp	16635550
@@ -4526,7 +4526,7 @@ BmDrEdit_EnterPlay_CheckAudio:
 	ld	wa, (10052:16)
 	ld	(9500:16), wa
 	cp	wa, (9502:16)
-	jr	ule, 4	; -> 0xF3880C
+	jr	ule, BmDrEdit_EnterPlay_UpdateProgress	; -> 0xF3880C
 	ld	(9502:16), wa
 BmDrEdit_EnterPlay_UpdateProgress:
 	ldmm16 9832, 9500
@@ -4541,11 +4541,15 @@ BmDrEdit_ExitPlayMode:
 	ld a, (0x8c9a:16)
 	cp a, (0x8c9b:16)
 	ret Z
-	.byte 0xc1, 0x3c, 0x28, 0x19, 0xb1, 0x28, 0xf1, 0x9e
-	.byte 0xf1, 0x02, 0x00, 0x00, 0x1d, 0x9e, 0xd6, 0xfd
-	.byte 0x1d, 0xb5, 0x96, 0xf5, 0xc1, 0x9c, 0x8c, 0x21
-	.byte 0xc9, 0xcf, 0x95, 0x66, 0x05, 0xc9, 0xcf, 0x98
-	.byte 0xb0, 0xfe
+	ldmm8 0x28b1, 0x283c
+	ldw (0xf19e:16), 0
+	call 16635550
+	call AccWrap_PlayModeDispatch
+	ld a, (0x8c9c:16)
+	cp a, 149
+	jr z, BmDrEdit_ExitPlay_RestoreSequencer
+	cp a, 152
+	ret nz
 BmDrEdit_ExitPlay_RestoreSequencer:
 	ldmm16 3407, 0x2963
 	call SeqVoice_FindSingleActive

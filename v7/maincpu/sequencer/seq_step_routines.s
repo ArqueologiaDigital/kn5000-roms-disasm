@@ -3128,18 +3128,18 @@ SeqStep_MemAllocWrapper:
 	exts	xwa
 	push	xwa
 	pushw	0
-	call	16051728
+	call	SeqStep_MallocWrapper
 	inc	6, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, 16
+	jr	z, SeqStep_MemAllocFail
 	ld	wa, (xsp+8)
 	pushw	wa
 	pushw	0
 	push	xiz
 	call	16713757
 	inc	8, xsp
-	jr	7
+	jr	SeqStep_MemAllocReturn
 SeqStep_MemAllocFail:
 	ldw (0x01e53c:24), 0x0003
 

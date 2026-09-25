@@ -686,7 +686,8 @@ AccVoice_ComputeParamOffset:
 ; Entry 0 is RAM 0x094800, the RAM copy of the composer factory user-style
 ; memory (technics-docs memory-map.md); entries 1-7 lie in the Custom Data
 ; Flash window 0x300000-0x3FFFFF, alternately 0x19800 and 0x16800 apart.
-; Which user-style slots banks 1-7 are is not established.
+; Which style slot each bank index stands for is decided by the writers of the
+; index byte, which were not examined for this header.
 ; -----------------------------------------------------------------------------
 AccVoice_BankBaseTable:
 	.long 0x00094800

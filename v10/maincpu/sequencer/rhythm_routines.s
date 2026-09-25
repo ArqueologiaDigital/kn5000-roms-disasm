@@ -514,7 +514,8 @@ Rhythm_InstrBaseLookup:
 ; being tested second, wins over bit 2;
 ; Rhythm_TranspMod_BaseApply always uses +0x31.  Stride 0x31 = 49 is pinned by
 ; those two aliases; the tables end exactly at Rhythm_TransposeNote (147 B).
-; Values 0..20 = row numbers.  What the rows mean musically is not established.
+; Values 0..20 = row numbers.  What each 16-byte row holds belongs to the
+; documentation of Display_FontPalette_Table_0x136A (C data, another file).
 ; -----------------------------------------------------------------------------
 Rhythm_InstrMapTable_Default:
 	; +0x00: default (bits 2 and 3 of 0x32F4 clear)
@@ -1513,8 +1514,8 @@ Rhythm_SeqReset_Store:
 ; interrupts masked (`ei 6` .. `ei 0`) the word at (xix+6) is copied to
 ; (xix+4).  Stride 4 from `sla l, 2`; 17 entries = 68 bytes, to
 ; Rhythm_TransposeWithMod.  Non-zero entries: [1] 0x2D94, [2] 0x2E94,
-; [4] 0x2F94, [8] 0x2C94, [16] 0x2A94.  What those RAM structures are is not
-; established.
+; [4] 0x2F94, [8] 0x2C94, [16] 0x2A94.  This table only selects which structure Rhythm_SeqResetCheck
+; updates; the structures themselves are not described here.
 ; -----------------------------------------------------------------------------
 Rhythm_SeqResetTable:
 	.long 0x00000000	; [0]
