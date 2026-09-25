@@ -1345,7 +1345,7 @@ CompIface_PostProcess:
 	ld	xwa, 0x40c1
 	ld	bc, 0:i3
 	ld	de, 3:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	res	3, (0xc154:16)
 	ldw	wa, 0x4e
 	call	CtrlPanel_SetIndicatorLED
@@ -1374,14 +1374,14 @@ CompIface_RampUp_Clamp:
 	extz	bc
 	ld	xwa, 0x4005
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	cp	(0xc150:16), 127
 	ret	nz
 	res	0, (0xc154:16)
 	ld	xwa, 0x40c0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	ret
 CompIface_RampDown_Apply:
 	bit	1, (0xc154:16)
@@ -1403,7 +1403,7 @@ CompIface_RampDown_Clamp:
 	extz	bc
 	ld	xwa, 0x4005
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	cp	(0xc150:16), 0
 	ret	nz
 	res	1, (0xc154:16)
@@ -1478,7 +1478,7 @@ CompIface_WriteVolume:
 	extz	bc
 	ld	xwa, 0x4005
 	ld	de, 3:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	ret
 Audio_ConfigureDSP:
 	and	(0xc154:16), 243
@@ -1486,13 +1486,13 @@ Audio_ConfigureDSP:
 	ld	xwa, 0x40c0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	ldw	wa, 0x4d
 	call	CtrlPanel_SetIndicatorLED
 	ld	xwa, 0x40c1
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	ldw	wa, 0x4e
 	call	CtrlPanel_SetIndicatorLED
 	.byte 0x30
@@ -2804,7 +2804,7 @@ DSPCfg_WriteParamFull_Notify4003:
 	ld	bc, (xsp + 18)
 	ld	xwa, 0x4003
 	ld	de, 3:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	jr	DSPCfg_WriteParamFull_Return
 DSPCfg_WriteParamFull_UnknownType:
 	ldw	iz, 0xffff
@@ -2890,7 +2890,7 @@ DSPCfg_WriteParamSimple_Notify4003:
 	ld	bc, (xsp + 22)
 	ld	xwa, 0x4003
 	ld	de, 3:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	jr	DSPCfg_WriteParamSimple_Return
 DSPCfg_WriteParamSimple_UnknownType:
 	ldw	iz, 0xffff
@@ -3111,64 +3111,65 @@ DSPCfg_WriteAllSlots_Combined_Done:
 	ret
 ; v10 name for this address: DSPCfg_Data_ParamDispatch -- not a label here: v7 keeps that name at 0xFDC920 for shared/positional_labels.s
 DSPCfg_Data_ParamDispatch_Helper_Helper:
-	lda	xsp, (xsp-14)
+	lda	xsp, (xsp-0xe)
 	push	xiz
-	ld	(xsp+14), xde
+	ld	(xsp+0xe), xde
 	ld	xde, xbc
 	ld	xbc, xwa
 	ld	qiz, 0
-	ldw	(xsp+8), 0
-	ld	l, (xbc+1)
+	ldw	(xsp+0x8), 0
+	ld	l, (xbc+0x1)
 	extz	hl
 	ld	a, (xbc)
 	extz	wa
 	ld	iz, wa
 	sll	iz, 8
 	add	iz, hl
-	ld	xwa, (xsp+34)
+	ld	xwa, (xsp+0x22)
 	ld	a, (xwa)
-	ld	(xsp+4), a
-	ld	a, (xde+2)
-	ld	(xsp+6), a
-	lda	xwa, (xsp+12)
-	cp	(xsp+6), 118
+	ld	(xsp+0x4), a
+	ld	a, (xde+0x2)
+	ld	(xsp+0x6), a
+	lda	xwa, (xsp+0xc)
+	cp	(xsp+0x6), 118
 	jrl	z, DSPCfg_Data_ParamDispatch_Skip4
 	ld	hl, iz
-	cp	(xsp+6), 112
+	cp	(xsp+0x6), 112
 	jr	z, DSPCfg_Data_ParamDispatch_Skip2
-	cp	(xsp+6), 103
+	cp	(xsp+0x6), 103
 	jr	z, DSPCfg_Data_ParamDispatch_Skip
-	.byte	0x8f, 0x06
-	.ascii	"?df5Å"
-	ld	l, 219:opc
-	zcf
+	cp	(xsp+0x6), 100
+	jr	z, DSPCfg_Data_ParamDispatch_Skip
+	ld	l, (xbc)
+	exts	hl
 	ld	qiz, 1
 DSPCfg_Data_ParamDispatch_Join:
 	ld	e, 255:opc
-	ld	xwa, (xsp+14)
+DSPCfg_Data_ParamDispatch_Helper_Helper_Loop:
+	ld	xwa, (xsp+0xe)
 	ld	bc, qiz
 	ld	(xwa), bc
-	ld	xwa, (xsp+34)
-	ld	c, (xsp+4)
+	ld	xwa, (xsp+0x22)
+	ld	c, (xsp+0x4)
 	ld	(xwa), c
-	ld	xwa, (xsp+30)
+	ld	xwa, (xsp+0x1e)
 	ld	(xwa), e
-	ld	xbc, (xsp+26)
-	ld	a, (xsp+6)
+	ld	xbc, (xsp+0x1a)
+	ld	a, (xsp+0x6)
 	ld	(xbc), a
-	ld	xbc, (xsp+22)
-	ld	wa, (xsp+8)
+	ld	xbc, (xsp+0x16)
+	ld	wa, (xsp+0x8)
 	ld	(xbc), a
 	pop	xiz
-	lda	xsp, (xsp+14)
+	lda	xsp, (xsp+0xe)
 	retd	16
 DSPCfg_Data_ParamDispatch_Skip:
 	ld	qiz, 2
 	jr	DSPCfg_Data_ParamDispatch_Join
 DSPCfg_Data_ParamDispatch_Skip2:
-	lda	xbc, (xsp+8)
+	lda	xbc, (xsp+0x8)
 	calr	DSPCfg_ExtractFieldSingle
-	ld	wa, (xsp+12)
+	ld	wa, (xsp+0xc)
 	cp	wa, 32
 	jr	z, DSPCfg_Data_ParamDispatch_Loop
 	cp	wa, 16
@@ -3178,127 +3179,130 @@ DSPCfg_Data_ParamDispatch_Skip2:
 	and	wa, 31
 	ld	hl, wa
 	ld	e, 7:opc
-	cpw	(xsp+8), 1
-	jr	nz, -90
+	cpw	(xsp+0x8), 1
+	jr	nz, DSPCfg_Data_ParamDispatch_Helper_Helper_Loop
 	ld	qiz, 1
-	incm8	1, (xsp+4)
-	jr	-98
+	incm8	1, (xsp+0x4)
+	jr	DSPCfg_Data_ParamDispatch_Helper_Helper_Loop
 DSPCfg_Data_ParamDispatch_Skip3:
 	ld	wa, iz
 	srl	wa, 11
 	and	wa, 31
 	ld	hl, wa
 	ld	e, 248:opc
-	jr	-113
+	jr	DSPCfg_Data_ParamDispatch_Helper_Helper_Loop
 DSPCfg_Data_ParamDispatch_Loop:
 	ld	hl, iz
 	and	hl, 63
-	.byte	0xd7
-	swi	2
-	.byte	0xa9, 0x8f, 0x04
-	.ascii	"a%?x~"
-	swi	7
+	ld	qiz, 1
+	incm8	1, (xsp+0x4)
+DSPCfg_Data_ParamDispatch_Helper_Helper_Join:
+	ld	e, 63:opc
+	jrl	DSPCfg_Data_ParamDispatch_Helper_Helper_Loop
 DSPCfg_Data_ParamDispatch_Skip4:
-	lda	xbc, (xsp+10)
+	lda	xbc, (xsp+0xa)
 	calr	DSPCfg_ExtractFieldPair
-	ld	wa, (xsp+12)
+	ld	wa, (xsp+0xc)
 	cp	wa, 16
-	jr	z, 16
+	jr	z, DSPCfg_Data_ParamDispatch_Helper_Helper_Skip
 	ld	wa, iz
 	srl	wa, 6
 	and	wa, 31
 	ld	hl, wa
 	ld	e, 7:opc
-	jrl	-161
-	cpw	(xsp+10), 2
+	jrl	DSPCfg_Data_ParamDispatch_Helper_Helper_Loop
+DSPCfg_Data_ParamDispatch_Helper_Helper_Skip:
+	cpw	(xsp+0xa), 2
 	jr	nz, DSPCfg_Data_ParamDispatch_Loop
 	ld	wa, iz
 	srl	wa, 8
 	and	wa, 63
 	ld	hl, wa
 	ld	qiz, 1
-	jr	-59
+	jr	DSPCfg_Data_ParamDispatch_Helper_Helper_Join
 DSPCfg_Data_ParamDispatch_Helper:
-	lda	xsp, (xsp-24)
+	lda	xsp, (xsp-0x18)
 	pushw	iz
-	ld	(xsp+16), e
-	ld	(xsp+18), xbc
-	ld	(xsp+22), xwa
-	ldw	(xsp+14), 0
+	ld	(xsp+0x10), e
+	ld	(xsp+0x12), xbc
+	ld	(xsp+0x16), xwa
+	ldw	(xsp+0xe), 0
 	ldw	iz, 0xffff
-	ld	(xsp+10), 0
-	ld	(xsp+8), 122
-	ld	xwa, (xsp+30)
+	ld	(xsp+0xa), 0
+	ld	(xsp+0x8), 122
+	ld	xwa, (xsp+0x1e)
 	ld	a, (xwa)
-	ld	(xsp+2), a
+	ld	(xsp+0x2), a
+DSPCfg_Data_ParamDispatch_Helper_Loop:
 	inc	1, iz
-	ld	wa, (xsp+14)
-	add	(xsp+10), a
-	ld	a, (xsp+8)
-	ld	(xsp+4), a
-	lda	xde, (xsp+14)
-	lda	xwa, (xsp+10)
+	ld	wa, (xsp+0xe)
+	add	(xsp+0xa), a
+	ld	a, (xsp+0x8)
+	ld	(xsp+0x4), a
+	lda	xde, (xsp+0xe)
+	lda	xwa, (xsp+0xa)
 	push	xwa
-	lda	xwa, (xsp+16)
+	lda	xwa, (xsp+0x10)
 	push	xwa
-	lda	xwa, (xsp+16)
+	lda	xwa, (xsp+0x10)
 	push	xwa
-	lda	xwa, (xsp+18)
+	lda	xwa, (xsp+0x12)
 	push	xwa
-	ld	xwa, (xsp+38)
-	ld	xbc, (xsp+34)
+	ld	xwa, (xsp+0x26)
+	ld	xbc, (xsp+0x22)
 	calr	DSPCfg_Data_ParamDispatch_Helper_Helper
 	ld	bc, 0:i3
-	cpw	(xsp+14), 0
+	cpw	(xsp+0xe), 0
 	jr	ule, DSPCfg_Data_ParamDispatch_Skip5
+DSPCfg_Data_ParamDispatch_Helper_Loop2:
 	ld	xwa, 1:i3
-	add	(xsp+22), xwa
+	add	(xsp+0x16), xwa
 	inc	1, bc
-	cp	bc, (xsp+14)
-	jr	c, -12
+	cp	bc, (xsp+0xe)
+	jr	c, DSPCfg_Data_ParamDispatch_Helper_Loop2
 DSPCfg_Data_ParamDispatch_Skip5:
-	ld	xwa, (xsp+18)
+	ld	xwa, (xsp+0x12)
 	calr	DSPCfg_PackAddress
-	ld	(xsp+18), xhl
-	ld	a, (xsp+10)
-	cp	a, (xsp+16)
-	jr	ugt, 16
-	ld	a, (xsp+10)
-	cp	a, (xsp+16)
-	jr	nz, -88
-	ld	a, (xsp+2)
-	.byte	0x8f
-	incf
-	add	(0xa066:16), l
-	ldw	(33:8), 4239:io
-	.byte	0xf1
-	jr	ule, 20
-	.byte	0x8f, 0x04
-	push	xsp
-	jrl	f, 1134
+	ld	(xsp+0x12), xhl
+	ld	a, (xsp+0xa)
+	cp	a, (xsp+0x10)
+	jr	ugt, DSPCfg_Data_ParamDispatch_Helper_Skip
+	ld	a, (xsp+0xa)
+	cp	a, (xsp+0x10)
+	jr	nz, DSPCfg_Data_ParamDispatch_Helper_Loop
+	ld	a, (xsp+0x2)
+	and	a, (xsp+0xc)
+	jr	z, DSPCfg_Data_ParamDispatch_Helper_Loop
+DSPCfg_Data_ParamDispatch_Helper_Skip:
+	ld	a, (xsp+0xa)
+	cp	a, (xsp+0x10)
+	jr	ule, DSPCfg_Data_ParamDispatch_Helper_Skip3
+	cp	(xsp+0x4), 112
+	jr	nz, DSPCfg_Data_ParamDispatch_Helper_Skip2
 	dec	3, iz
-	jr	2
+	jr	DSPCfg_Data_ParamDispatch_Helper_Join
+DSPCfg_Data_ParamDispatch_Helper_Skip2:
 	dec	1, iz
-	.byte	0x8f, 0x06
-	push	xsp
-	normal
-	jr	nz, 2
+DSPCfg_Data_ParamDispatch_Helper_Join:
+	cp	(xsp+0x6), 1
+	jr	nz, DSPCfg_Data_ParamDispatch_Helper_Skip3
 	inc	1, iz
-	ld	a, (xsp+12)
+DSPCfg_Data_ParamDispatch_Helper_Skip3:
+	ld	a, (xsp+0xc)
 	cpl	a
-	.byte	0x8f
-	push	sr
-	sub	(0x8bc9:16), l
-	calr	-20448
-	ld	xhl, 0xbf4e8bde
-	push_f
-	.byte	0x37
+	and	a, (xsp+0x2)
+	ld	c, a
+	ld	xwa, (xsp+0x1e)
+	ld	(xwa), c
+	ld	hl, iz
+	popw	iz
+	lda	xsp, (xsp+0x18)
 	retd	4
-	lda	xsp, (xsp-10)
+	lda	xsp, (xsp-0xa)
 	push	xiz
-	ld	(xsp+10), e
-	ld	(xsp+12), c
-	ldw	(xsp+4), 0
+	ld	(xsp+0xa), e
+	ld	(xsp+0xc), c
+	ldw	(xsp+0x4), 0
 	extz	wa
 	sub	wa, 97
 	cp	wa, 0:i3
@@ -3306,11 +3310,11 @@ DSPCfg_Data_ParamDispatch_Skip5:
 	cp	wa, 5:i3
 	jr	gt, DSPCfg_Data_ParamDispatch_Skip6
 	add	wa, wa
-	lda	xix, (ToneKit_VoiceDispatch_Table_0x33C:24)
+	lda_24	xix, (0xee6384)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfdc702:24)
+	lda_24	xix, (0xfdc702)
 	jp_rr	8, xix, wa
-	ld	xiz, 18688
+	ld	xiz, 0x4900
 	ld	wa, 0:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
 	ld	xiz, 0x4a00
@@ -3329,7 +3333,7 @@ DSPCfg_Data_ParamDispatch_Join2:
 	ld	wa, 3:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
 DSPCfg_Data_ParamDispatch_Skip6:
-	ldw	(xsp+4), 65535
+	ldw	(xsp+0x4), 0xffff
 DSPCfg_Data_ParamDispatch_Join3:
 	cp	(xsp+12), 1
 	jr	c, DSPCfg_Data_ParamDispatch_Join4
@@ -4904,466 +4908,358 @@ UIStateEvt_DrumAssign_Notify:
 	jr	z, UIStateEvt_TransposeUpdate_Clear
 	ld	a, l
 	extz	wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	lda_24	xbc, (0xee8df4)
+	ld_rrb	a, xbc, wa
 	extz	wa
 	add	wa, wa
 	ld	bc, wa
-	add	bc, 0xe4
-	lda	xde, (0xc163:16)
-	ld	a, (0xfc6a:16)
-	and	a, 0xff
-	sub	a, 0x40
-	stb_dri	A, 0x07, 0xe8, 0xe4
+	add	bc, 228
+	lda_d16	xde, (0xc163)
+	ldb_d8	a, (0xfc6a)
+	and	a, 255
+	sub	a, 64
+	st_rrb	a, xde, bc
 	jr	UIStateEvt_TransposeUpdate_Apply
 UIStateEvt_TransposeUpdate_Clear:
 	ld	a, l
 	extz	wa
-	.byte 0xf2, 0xf4, 0x8d, 0xee
+	.set	Audio_CheckSubsystemReady, . + 4	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
+	lda_24	xbc, (0xee8df4)
 ; Audio_CheckSubsystemReady is kept at this address only for ui_widgets/widget_dispatch.s; v10's Audio_CheckSubsystemReady is the code at 0xFDD69E
-Audio_CheckSubsystemReady:
-	.byte 0x31
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld_rrb	a, xbc, wa
 	extz	wa
 	add	wa, wa
-	add	wa, 0xe4
-	lda	xbc, (0xc163:16)
-	stib_ind	0x07, 0xe4, 0xe0, 0x00
+	add	wa, 228
+	lda_d16	xbc, (0xc163)
+	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x00	; ld (XBC+WA),0x00
 UIStateEvt_TransposeUpdate_Apply:
-	orw	(0xc4f8:16), 4
+	ordi16	(0xc4f8), 4
 	ret
 ; v10 name for this address: UIStateEvt_ParamEdit_Data -- not a label here: v7 defines that name outside this span (= 0xFDDEF1)
 	pushw	iz
-	ld	a, (0xbfe1:16)
+	ldb_d8	a, (0xbfe1)
 	extz	wa
 	cp	wa, 0:i3
 	jrl	mi, UIStateEvt_ParamEdit_Data_Epilogue
 	cp	wa, 6:i3
 	jrl	gt, UIStateEvt_ParamEdit_Data_Epilogue
 	add	wa, wa
-	lda	xix, (AudioInit_VoiceDispatch_Table_0x150:24)
+	lda_24	xix, (0xee8e48)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfddafe:24)
+	lda_24	xix, (0xfddafe)
 	jp_rr	8, xix, wa
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	and	a, 7
 	jrl	z, UIStateEvt_ParamEdit_Data_Entry
-	ld	wa, (0xc4fc:16)
+	ldw_d16	wa, (0xc4fc)
 	bit	6, wa
-	jr	z, 44
-	ld	a, (0xfc5e:16)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip
+	ldb_d8	a, (0xfc5e)
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
+	lda_24	xbc, (0xee8e28)
 	ld_rrw	iz, xbc, wa
-	ld	a, (64605:16)
+	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
-	.byte	0xd3
-	reti
-	.byte	0xe4, 0xe0, 0xe6
-	jr	60
-	ld	wa, (0xc4fc:16)
+	lda_24	xbc, (0xee8e28)
+	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	jr	AudioDispatch_CheckStereoMode_Code_Join
+AudioDispatch_CheckStereoMode_Code_Skip:
+	ldw_d16	wa, (0xc4fc)
 	and	wa, 34
 	cp	wa, 32
-	jr	nz, 25
+	jr	nz, AudioDispatch_CheckStereoMode_Code_Skip2
 	ld	iz, 2:i3
-	ld	a, (0xfc5d:16)
+	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
-	.byte	0xd3
-	reti
-	.byte	0xe4, 0xe0, 0xe6
-	jr	21
-	ld	a, (0xfc5d:16)
+	lda_24	xbc, (0xee8e28)
+	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	jr	AudioDispatch_CheckStereoMode_Code_Join
+AudioDispatch_CheckStereoMode_Code_Skip2:
+	ldb_d8	a, (0xfc5d)
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
+	lda_24	xbc, (0xee8e28)
 	ld_rrw	iz, xbc, wa
-	ld	wa, (0xc4fa:16)
+AudioDispatch_CheckStereoMode_Code_Join:
+	ldw_d16	wa, (0xc4fa)
 	and	wa, 6
-	jr	z, 18
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip3
 	ld	wa, iz
 	and	wa, 6
-	jr	z, 10
-	ld	wa, (0xc4fa:16)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip3
+	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
-	jr	nz, 4
+	jr	nz, AudioDispatch_CheckStereoMode_Code_Skip4
+AudioDispatch_CheckStereoMode_Code_Skip3:
 	call	AudioInit_RefreshToneBank
-	.byte	0xd1, 0xfa, 0xc4
-	push	xix
-	.byte	0xe8
-	swi	7
-	.byte	0xd1, 0xfa, 0xc4
-	xor	xbc, xiz
-	.byte	0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
-	ld	wa, (0xc4fa:16)
+AudioDispatch_CheckStereoMode_Code_Skip4:
+	anddi16	(0xc4fa), 0xffe8
+	orddm16	(0xc4fa), xiz
+	ordi16	(0xc4f8), 4
+	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
-	jr	z, 7
-	ld	(0xc504:16), 31
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip5
+	stdi8	(0xc504), 31
 	jr	UIStateEvt_ParamEdit_Data_Entry
-	ld	(0xc504:16), 16
+AudioDispatch_CheckStereoMode_Code_Skip5:
+	stdi8	(0xc504), 16
 UIStateEvt_ParamEdit_Data_Entry:
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xcb
+	bitda	3, (0xbfe3)
 	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
-	.byte	0xf1
-	.byte 0xe2, 0xbf, 0xcb
-	jr	z, 8
-	.byte	0xd1, 0xfa, 0xc4
-	push	xiz
-	rcf
-	nop
-	jr	6
-	.byte	0xd1, 0xfa, 0xc4
-	push	xix
-	.byte	0xef
-	swi	7
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	nop
-	ld	w, 209:opc
-	.byte	0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	bitda	3, (0xbfe2)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip6
+	ordi16	(0xc4fa), 16
+	jr	AudioDispatch_CheckStereoMode_Code_Join2
+AudioDispatch_CheckStereoMode_Code_Skip6:
+	anddi16	(0xc4fa), 0xffef
+AudioDispatch_CheckStereoMode_Code_Join2:
+	ordi16	(0xc4fe), 0x2000
+	ordi16	(0xc4f8), 4
 	jrl	UIStateEvt_ParamEdit_Data_Epilogue
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xce
-	jr	z, 32
-	.byte	0xf1
-	.byte 0xe2, 0xbf, 0xce
-	jr	z, 8
-	.byte	0xd1, 0xfa, 0xc4
-	push	xiz
-	nop
-	max
-	jr	6
-	.byte	0xd1, 0xfa, 0xc4
-	push	xix
-	swi	7
-	swi	3
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	nop
-	ld	xwa, 0x3ec4f8d1
-	max
-	nop
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xcc
-	jr	z, 32
-	.byte	0xd1, 0xfa, 0xc4
-	push	xix
-	swi	7
-	ldx
-	.byte	0xf1
-	.byte 0xe2, 0xbf, 0xcc
-	jr	z, 8
-	.byte	0xd1, 0xfa, 0xc4
-	push	xiz
-	nop
-	ld	(104:8), 6:io
-	.byte	0xd1, 0xfa, 0xc4
-	push	xix
-	swi	7
-	ldx
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
-	ld	a, (0xbfe3:16)
+	bitda	6, (0xbfe3)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip8
+	bitda	6, (0xbfe2)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip7
+	ordi16	(0xc4fa), 0x400
+	jr	AudioDispatch_CheckStereoMode_Code_Join3
+AudioDispatch_CheckStereoMode_Code_Skip7:
+	anddi16	(0xc4fa), 0xfbff
+AudioDispatch_CheckStereoMode_Code_Join3:
+	ordi16	(0xc4fe), 0x4000
+	ordi16	(0xc4f8), 4
+AudioDispatch_CheckStereoMode_Code_Skip8:
+	bitda	4, (0xbfe3)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip10
+	anddi16	(0xc4fa), 0xf7ff
+	bitda	4, (0xbfe2)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip9
+	ordi16	(0xc4fa), 0x800
+	jr	AudioDispatch_CheckStereoMode_Code_Join4
+AudioDispatch_CheckStereoMode_Code_Skip9:
+	anddi16	(0xc4fa), 0xf7ff
+AudioDispatch_CheckStereoMode_Code_Join4:
+	ordi16	(0xc4f8), 4
+AudioDispatch_CheckStereoMode_Code_Skip10:
+	ldb_d8	a, (0xbfe3)
 	and	a, 7
 	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
-	ld	wa, (0xc4fc:16)
+	ldw_d16	wa, (0xc4fc)
 	bit	6, wa
-	jr	z, 44
-	ld	a, (0xfc5e:16)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip11
+	ldb_d8	a, (0xfc5e)
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
+	lda_24	xbc, (0xee8e28)
 	ld_rrw	iz, xbc, wa
-	ld	a, (64605:16)
+	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
-	.byte	0xd3
-	reti
-	.byte	0xe4, 0xe0, 0xe6
-	jr	55
-	ld	wa, (0xc4fc:16)
+	lda_24	xbc, (0xee8e28)
+	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	jr	AudioDispatch_CheckStereoMode_Code_Join5
+AudioDispatch_CheckStereoMode_Code_Skip11:
+	ldw_d16	wa, (0xc4fc)
 	bit	5, wa
-	jr	z, 25
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip12
 	ld	iz, 2:i3
-	ld	a, (0xfc5d:16)
+	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
-	.byte	0xd3
-	reti
-	.byte	0xe4, 0xe0, 0xe6
-	jr	21
-	ld	a, (0xfc5d:16)
+	lda_24	xbc, (0xee8e28)
+	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	jr	AudioDispatch_CheckStereoMode_Code_Join5
+AudioDispatch_CheckStereoMode_Code_Skip12:
+	ldb_d8	a, (0xfc5d)
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
-	.byte	0xd3
-	reti
-	.byte	0xe4, 0xe0
-	ld	h, 209:opc
-	.byte	0xfa, 0xc4
-	push	xix
-	.byte	0xe8
-	swi	7
-	.byte	0xd1, 0xfa, 0xc4
-	xor	xbc, xiz
-	.byte	0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
-	ld	wa, (0xc4fa:16)
+	lda_24	xbc, (0xee8e28)
+	ld_rrw	iz, xbc, wa
+AudioDispatch_CheckStereoMode_Code_Join5:
+	anddi16	(0xc4fa), 0xffe8
+	orddm16	(0xc4fa), xiz
+	ordi16	(0xc4f8), 4
+	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
-	jr	z, 7
-	ld	(0xc504:16), 31
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip13
+	stdi8	(0xc504), 31
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
-	ld	(0xc504:16), 16
-	jr	UIStateEvt_ParamEdit_Data_Epilogue
-	ld	a, (0xbfe3:16)
+AudioDispatch_CheckStereoMode_Code_Skip13:
+	stdi8	(0xc504), 16
+	jr	110
+	ldb_d8	a, (0xbfe3)
 	and	a, 252
 	jr	z, 30
-	.byte	0xf1, 0xe8
-	.byte 0x31, 0xc8, 0x6e
-	ccf
-	ld	wa, (0xc4fa:16)
+	bitda	0, (0x31e8)
+	jr	nz, 18
+	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
 	jr	z, 9
-	ld	a, (0xfc5f:16)
+	ldb_d8	a, (0xfc5f)
 	and	a, 252
 	jr	nz, 0
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xc9
-	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
-	.byte	0xf1
-	pop	xsp
-	swi	4
-	inc	6, a
-	incf
-	ld	wa, (0xc4fa:16)
+	ordi16	(0xc4f8), 4
+	bitda	1, (0xbfe3)
+	jr	z, 65
+	bitda	1, (0xfc5f)
+	jr	z, 12
+	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
-	.byte 0xf2, 0x26, 0xee
-	swi	5
-	.byte	0xe6, 0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
-	.byte 0x68
-UIStateEvt_PartRouting:
-	.byte 0x27
-	ld	a, (0xbfe3:16)
+	call_24	z, (0xfdee26)
+	ordi16	(0xc4f8), 4
+	.set	UIStateEvt_PartRouting, . + 1	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
+	jr	39
+	ldb_d8	a, (0xbfe3)
 	and	a, 252
-	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
-	.byte	0xf1, 0xe8
-	.byte 0x31, 0xc8, 0x6e
-	ccf
-	ld	wa, (0xc4fa:16)
+	jr	z, 30
+	bitda	0, (0x31e8)
+	jr	nz, 18
+	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
 	jr	z, 9
-	ld	a, (0xfc5f:16)
+	ldb_d8	a, (0xfc5f)
 	and	a, 252
 	jr	nz, 0
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	ordi16	(0xc4f8), 4
 UIStateEvt_ParamEdit_Data_Epilogue:
 	popw	iz
 	ret
 ; v10 name for this address: UIStateEvt_VolumeMixer_Data -- not a label here: v7 defines that name outside this span (= 0xFDE15D)
-	ld	a, (0xbfe1:16)
+	ldb_d8	a, (0xbfe1)
 	extz	wa
 	cp	wa, 0:i3
 	ret	mi
 	cp	wa, 5:i3
 	ret	gt
 	add	wa, wa
-	lda	xix, (AudioInit_VoiceDispatch_Table_0x15E:24)
+	lda_24	xix, (0xee8e56)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfddd67:24)
+	lda_24	xix, (0xfddd67)
 	jp_rr	8, xix, wa
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	and	a, 31
 	jr	z, UIStateEvt_PartRouting_Code_Skip
-	.byte	0xc1
-	.byte 0x62
-	and	a, (0xfc3c:16)
-	.byte 0xe2, 0xbf, 0x21
+	anddi8	(0xc162), 252
+	ldb_d8	a, (0xbfe2)
 	and	a, 3
-	or	(0xc162:16), a
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	orddm8	(0xc162), xbc
+	ordi16	(0xc4f8), 4
 UIStateEvt_PartRouting_Code_Skip:
-	ld	wa, (0xc4f8:16)
+	ldw_d16	wa, (0xc4f8)
 	bit	4, wa
 	ret	z
-	ld	(0xc162:16), 0
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	stdi8	(0xc162), 0
+	ordi16	(0xc4fe), 4
 	ret
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	and	a, 31
-	jr	z, 58
-	.byte	0xf1
-	.byte 0xe2, 0xbf, 0xc9
-	jr	z, 8
-	.byte	0xd1, 0xfa, 0xc4
-	push	xiz
-	ld	w, 0:opc
-	jr	19
-	.byte	0xd1, 0xfa, 0xc4
-	push	xix
-	.byte	0xdf
-	swi	7
-	ld	wa, (0xc4fa:16)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip15
+	bitda	1, (0xbfe2)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip14
+	ordi16	(0xc4fa), 32
+	jr	AudioDispatch_CheckStereoMode_Code_Join6
+AudioDispatch_CheckStereoMode_Code_Skip14:
+	anddi16	(0xc4fa), 0xffdf
+	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
-	.byte 0xf2, 0x26, 0xee
-	swi	5
-	.byte	0xe6, 0xf1
-	.byte 0x62
-	.byte	0xc1, 0xb2
-	ld	a, (0xbfe2:16)
+	call_24	z, (0xfdee26)
+AudioDispatch_CheckStereoMode_Code_Join6:
+	resda	2, (0xc162)
+	ldb_d8	a, (0xbfe2)
 	and	a, 2
 	ld	c, a
 	add	a, c
-	or	(0xc162:16), a
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
-	ld	wa, (0xc4f8:16)
+	orddm8	(0xc162), xbc
+	ordi16	(0xc4f8), 4
+AudioDispatch_CheckStereoMode_Code_Skip15:
+	ldw_d16	wa, (0xc4f8)
 	bit	4, wa
 	ret	z
-	ld	(0xc162:16), 0
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	stdi8	(0xc162), 0
+	ordi16	(0xc4fe), 4
 	ret
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xc8
+	bitda	0, (0xbfe3)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry2
-	.byte	0xf1
-	.byte 0xe2, 0xbf, 0xc8
+	bitda	0, (0xbfe2)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry
-	.byte	0xd1, 0xfa, 0xc4
-	push	xiz
-	.byte	0x80
-	nop
-	jr	6
+	ordi16	(0xc4fa), 128
+	jr	AudioDispatch_CheckStereoMode_Code_Join7
 UIStateEvt_VolumeMixer_Data_Entry:
-	.byte	0xd1, 0xfa, 0xc4
-	push	xix
-	jrl	nc, -11777
-	.byte	0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	anddi16	(0xc4fa), 0xff7f
+AudioDispatch_CheckStereoMode_Code_Join7:
+	ordi16	(0xc4f8), 4
 UIStateEvt_VolumeMixer_Data_Entry2:
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xc9
+	bitda	1, (0xbfe3)
 	ret	z
-	.byte	0xf1
-	.byte 0xe2, 0xbf, 0xc9
-	jr	z, 8
-	.byte	0xd1, 0xfa, 0xc4
-	push	xiz
-	ld	(0:8), 104:io
-	.byte	0x06, 0xd1, 0xfa, 0xc4
-	push	xix
-	ldx
-	swi	7
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	bitda	1, (0xbfe2)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip16
+	ordi16	(0xc4fa), 8
+	jr	AudioDispatch_CheckStereoMode_Code_Join8
+AudioDispatch_CheckStereoMode_Code_Skip16:
+	anddi16	(0xc4fa), 0xfff7
+AudioDispatch_CheckStereoMode_Code_Join8:
+	ordi16	(0xc4f8), 4
 	ret
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	and	a, 255
 	ret	z
 	ld	de, 0:i3
 	cp	de, 26
-	jr	ge, 79
+	jr	ge, AudioDispatch_CheckStereoMode_Code_Skip18
 UIStateEvt_VolumeMixer_Data_Loop:
 	ld	wa, de
 	sla	wa, 2
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x7C:24)
-	.byte	0xe3
-	reti
-	.byte	0xe4, 0xe0
-	ld	w, 184:opc
-	ex_ff
-	inc	6, w
-	ld	w, 218:opc
-	add	w, (xwa-40)
+	lda_24	xbc, (0xee8d74)
+	ld_rrl	xwa, xbc, wa
+	bitm	0, (xwa+0x16)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip17
+	ld	wa, de
+	add	wa, wa
 	add	wa, 228
-	lda	xbc, (0xc163:16)
+	lda_d16	xbc, (0xc163)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
-	ld	a, (0xbfe2:16)
+	ldb_d8	a, (0xbfe2)
 	and	a, 255
 	sub	a, 64
 	ld	(xhl), a
 	jr	UIStateEvt_VolumeMixer_Data_Join
+AudioDispatch_CheckStereoMode_Code_Skip17:
 	ld	wa, de
 	add	wa, wa
 	add	wa, 228
-	lda	xbc, (0xc163:16)
+	lda_d16	xbc, (0xc163)
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 0
 UIStateEvt_VolumeMixer_Data_Join:
 	inc	1, de
 	cp	de, 26
-	.byte 0x61
+	.set	UIStateEvt_TransposeUpdate, . + 1	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
+	jr	lt, UIStateEvt_VolumeMixer_Data_Loop
 ; UIStateEvt_TransposeUpdate is kept at this address only for kn5000_v7_program.s, ui_widgets/widget_dispatch.s; v10's UIStateEvt_TransposeUpdate is the code at 0xFDDA79
-UIStateEvt_TransposeUpdate:
-	.byte 0xb1
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+AudioDispatch_CheckStereoMode_Code_Skip18:
+	ordi16	(0xc4f8), 4
 	ret
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	and	a, 255
 	ret	z
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	ordi16	(0xc4f8), 4
 	ret
 	ret
 ; v10 name for this address: UIStateEvt_EffectSelect_Data -- not a label here: v7 defines that name outside this span (= 0xFDE2C6)
-	ld	a, (0xbfe1:16)
+	ldb_d8	a, (0xbfe1)
 	cp	a, 4:i3
 	jrl	z, UIStateEvt_EffectSelect_Data_Skip4
 	cp	a, 3:i3
@@ -5374,159 +5270,130 @@ UIStateEvt_TransposeUpdate:
 	jr	z, UIStateEvt_EffectSelect_Data_Skip
 	cp	a, 0:i3
 	ret	nz
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	and	a, 3
-	jr	z, 79
-	ld	a, (0xbfe2:16)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Join9
+	ldb_d8	a, (0xbfe2)
 	and	a, 3
 	cp	a, 3:i3
-	jr	z, 57
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip21
 	cp	a, 2:i3
-	jr	z, 40
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip20
 	cp	a, 1:i3
-	jr	z, 23
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip19
 	cp	a, 0:i3
-	jr	nz, 56
-	ld	a, (0xfd03:16)
+	jr	nz, AudioDispatch_CheckStereoMode_Code_Join9
+	ldb_d8	a, (0xfd03)
 	res	7, a
-	ld	(0xc506:16), a
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	nop
-	max
-	jr	37
-	ld	(0xc506:16), 55
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	nop
-	max
-	jr	24
-	ld	(0xc506:16), 60
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	nop
-	max
-	jr	11
-	ld	(0xc506:16), 67
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	nop
-	.byte	0x04, 0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	stb_d8	(0xc506), a
+	ordi16	(0xc4fe), 0x400
+	jr	AudioDispatch_CheckStereoMode_Code_Join9
+AudioDispatch_CheckStereoMode_Code_Skip19:
+	stdi8	(0xc506), 55
+	ordi16	(0xc4fe), 0x400
+	jr	AudioDispatch_CheckStereoMode_Code_Join9
+AudioDispatch_CheckStereoMode_Code_Skip20:
+	stdi8	(0xc506), 60
+	ordi16	(0xc4fe), 0x400
+	jr	AudioDispatch_CheckStereoMode_Code_Join9
+AudioDispatch_CheckStereoMode_Code_Skip21:
+	stdi8	(0xc506), 67
+	ordi16	(0xc4fe), 0x400
+AudioDispatch_CheckStereoMode_Code_Join9:
+	ordi16	(0xc4f8), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip:
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	res	7, a
 	cp	a, 0:i3
 	ret	z
-	ld	a, (0xfd02:16)
+	ldb_d8	a, (0xfd02)
 	and	a, 3
-	jr	nz, 11
-	ld	a, (0xbfe2:16)
+	jr	nz, AudioDispatch_CheckStereoMode_Code_Skip22
+	ldb_d8	a, (0xbfe2)
 	res	7, a
-	ld	(0xc506:16), a
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	nop
-	.byte	0x04, 0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	stb_d8	(0xc506), a
+AudioDispatch_CheckStereoMode_Code_Skip22:
+	ordi16	(0xc4fe), 0x400
+	ordi16	(0xc4f8), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip2:
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	and	a, 255
 	ret	z
-	.byte	0xf1, 0x50
-	swi	5
-	sbc	w, e
-	.byte	0xf6
-	ld	a, (0xbfe2:16)
+	bitda	5, (0xfd50)
+	ret	z
+	ldb_d8	a, (0xbfe2)
 	and	a, 255
 	extz	wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x124:24)
+	lda_24	xbc, (0xee8e1c)
 	ld_rrb	e, xbc, wa
 	ld	hl, 0:i3
 	cp	hl, 26
-	jr	nc, 37
+	jr	nc, AudioDispatch_CheckStereoMode_Code_Skip23
 UIStateEvt_EffectSelect_Data_Loop:
 	ld	wa, hl
 	add	wa, wa
-	add	wa, 292
-	lda	xbc, (0xc163:16)
+	add	wa, 0x124
+	lda_d16	xbc, (0xc163)
 	extz	xwa
 	add	xwa, xbc
 	ld	c, e
 	and	c, 15
 	sla	c, 4
-	.byte	0x80
-	push	xix
-	retd	0xeb80
+	andmi8	(xwa), 15
+	or	(xwa), c
 	inc	1, hl
 	cp	hl, 26
 	jr	c, UIStateEvt_EffectSelect_Data_Loop
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+AudioDispatch_CheckStereoMode_Code_Skip23:
+	ordi16	(0xc4f8), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip3:
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	and	a, 255
 	ret	z
-	ld	a, (0xbfe2:16)
+	ldb_d8	a, (0xbfe2)
 	and	a, 255
-	ld	(0xe8fa:16), a
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	stb_d8	(0xe8fa), a
+	ordi16	(0xc4f8), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip4:
-	ld	a, (0xbfe3:16)
+	ldb_d8	a, (0xbfe3)
 	and	a, 15
 	ret	z
-	ld	a, (0xbfe2:16)
+	ldb_d8	a, (0xbfe2)
 	and	a, 15
-	ld	(0xe8f8:16), a
-	.byte	0xd1, 0xfe, 0xc4
-	push	xiz
-	nop
-	ld	xwa, 0x3ec4f8d1
-	max
-	nop
+	stb_d8	(0xe8f8), a
+	ordi16	(0xc4fe), 0x4000
+	ordi16	(0xc4f8), 4
 	ret
 ; v10 name for this address: UIStateEvt_PlayModeGuard_Data -- not a label here: v7 defines that name outside this span (= 0xFDE3FE)
-	; --- Guard/dispatch: check flags, set/clear bits, conditional calls (54 bytes) ---
-	cp	(0xbfe1:16), 2
+; --- Guard/dispatch: check flags, set/clear bits, conditional calls (54 bytes) ---
+	cpdi8	(0xbfe1), 2
 	ret	nz
-	bit	6, (0xbfe2:16)
+	bitda	6, (0xbfe2)
 	jr	z, UIStateEvt_PlayModeGuard_ClearBit
-	orw	(0xc4fa:16), 8192
+	ordi16	(0xc4fa), 0x2000
 	ret
 UIStateEvt_PlayModeGuard_ClearBit:
-	andw	(0xc4fa:16), 0xdfff
+	anddi16	(0xc4fa), 0xdfff
 	call	Voice_UpdatePlayModeState
-	cp	hl, 0x00ff
-	.byte	0xf2, 0xe9
-	.byte 0x0a
-	swi	6
-	.byte	0xee
+	cp	hl, 255
+	call_24	nz, (0xfe0ae9)
 	call	NoteMap_FindBestMatch
-	cp	hl, 0x00ff
+	cp	hl, 255
 	ret	z
 	call	VoiceEvent_DispatchTable
 	ret
 ; v10 name for this address: UIStateEvt_ChannelConfig_Data -- not a label here: v7 defines that name outside this span (= 0xFDE434)
-	ld	a, (0xbfe1:16)
+	ldb_d8	a, (0xbfe1)
 	cp	a, 11
-	jrl	z, 326
+	jrl	z, AudioDispatch_CheckStereoMode_Code_Skip25
 	cp	a, 12
-	jrl	z, 320
+	jrl	z, AudioDispatch_CheckStereoMode_Code_Skip25
 	cp	a, 10
-	jrl	z, 314
+	jrl	z, AudioDispatch_CheckStereoMode_Code_Skip25
 	cp	a, 3:i3
 	jrl	z, UIStateEvt_ChannelConfig_Data_Entry3
 	cp	a, 2:i3
@@ -5535,155 +5402,107 @@ UIStateEvt_PlayModeGuard_ClearBit:
 	ret	z
 	cp	a, 0:i3
 	ret	nz
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xce
+	bitda	6, (0xbfe3)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry
-	.byte	0xd1, 0x0, 0xc5
-	push	xiz
-	ld	(0:8), 209:io
-	.byte	0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	ordi16	(0xc500), 8
+	ordi16	(0xc4f8), 4
 UIStateEvt_ChannelConfig_Data_Entry:
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xcd
+	bitda	5, (0xbfe3)
 	ret	z
-	.byte	0xf1
-	.byte 0xe2, 0xbf, 0xcd
+	bitda	5, (0xbfe2)
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip
 	ld	de, 0:i3
 	cp	de, 26
-	jr	nc, 93
+	jr	nc, AudioDispatch_CheckStereoMode_Code_Join10
+AudioDispatch_CheckStereoMode_Code_Loop:
 	ld	wa, de
 	add	wa, wa
-	add	wa, 292
-	lda	xbc, (0xc163:16)
+	add	wa, 0x124
+	lda_d16	xbc, (0xc163)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
-	ld	a, (0xfd04:16)
+	ldb_d8	a, (0xfd04)
 	and	a, 255
 	extz	wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x124:24)
-	.byte	0xc3
-	reti
-	.byte	0xe4, 0xe0
-	ld	a, 201:opc
-	.byte	0xcc
-	retd	0xecc9
-	.byte	0x04, 0x83
-	push	xix
-	retd	0xe983
+	lda_24	xbc, (0xee8e1c)
+	ld_rrb	a, xbc, wa
+	and	a, 15
+	sla	a, 4
+	andmi8	(xhl), 15
+	or	(xhl), a
 	inc	1, de
 	cp	de, 26
-	jr	c, -56
-	jr	35
+	jr	c, AudioDispatch_CheckStereoMode_Code_Loop
+	jr	AudioDispatch_CheckStereoMode_Code_Join10
 UIStateEvt_ChannelConfig_Data_Skip:
 	ld	de, 0:i3
 	cp	de, 26
-	jr	nc, 27
+	jr	nc, AudioDispatch_CheckStereoMode_Code_Join10
 UIStateEvt_ChannelConfig_Data_Loop:
 	ld	wa, de
 	add	wa, wa
-	add	wa, 292
-	lda	xbc, (0xc163:16)
+	add	wa, 0x124
+	lda_d16	xbc, (0xc163)
 	extz	xwa
 	add	xwa, xbc
-	.byte	0x80
-	push	xix
-	retd	0x61da
+	andmi8	(xwa), 15
+	inc	1, de
 	cp	de, 26
 	jr	c, UIStateEvt_ChannelConfig_Data_Loop
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+AudioDispatch_CheckStereoMode_Code_Join10:
+	ordi16	(0xc4f8), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Entry2:
-	.byte	0xd1, 0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	ordi16	(0xc4f8), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Entry3:
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xc8
+	bitda	0, (0xbfe3)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry4
-	.byte	0xf1
-	.byte 0xe2, 0xbf, 0xc8
-	jr	z, 12
-	.byte	0xf1
-	.byte 0x86, 0xc2
-	.byte	0xb4, 0xd1, 0x0, 0xc5
-	push	xiz
-	ld	(0:8), 104:io
-	ldw	(241:8), 0xc286:io
-	.byte	0xbc, 0xd1, 0x0, 0xc5
-	push	xiz
-	ld	(0:8), 209:io
-	.byte	0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	bitda	0, (0xbfe2)
+	jr	z, AudioDispatch_CheckStereoMode_Code_Skip24
+	resda	4, (0xc286)
+	ordi16	(0xc500), 8
+	jr	AudioDispatch_CheckStereoMode_Code_Join11
+AudioDispatch_CheckStereoMode_Code_Skip24:
+	setda	4, (0xc286)
+	ordi16	(0xc500), 8
+AudioDispatch_CheckStereoMode_Code_Join11:
+	ordi16	(0xc4f8), 4
 UIStateEvt_ChannelConfig_Data_Entry4:
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xca
+	bitda	2, (0xbfe3)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry6
-	.byte	0xf1
-	.byte 0xe2, 0xbf, 0xca
+	bitda	2, (0xbfe2)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry5
-	.byte	0xf1
-	.byte 0xa6, 0xc2, 0xbe, 0xf1, 0xa8
-	.byte	0xc2
-	.byte 0xbe, 0xf1, 0xaa
-	.byte	0xc2, 0xbe, 0xf1
-	.byte 0xac
-	.byte	0xc2, 0xbe, 0xf1
-	.byte 0xae
-	.byte	0xc2, 0xbe, 0xf1
-	.byte 0xb0
-	.byte	0xc2, 0xbe
-	jr	30
+	setda	6, (0xc2a6)
+	setda	6, (0xc2a8)
+	setda	6, (0xc2aa)
+	setda	6, (0xc2ac)
+	setda	6, (0xc2ae)
+	setda	6, (0xc2b0)
+	jr	AudioDispatch_CheckStereoMode_Code_Join12
 UIStateEvt_ChannelConfig_Data_Entry5:
-	.byte	0xf1
-	.byte 0xa6, 0xc2, 0xb6, 0xf1, 0xa8
-	.byte	0xc2, 0xb6, 0xf1
-	.byte 0xaa, 0xc2, 0xb6, 0xf1, 0xac
-	.byte	0xc2, 0xb6, 0xf1
-	.byte 0xae
-	.byte	0xc2, 0xb6, 0xf1
-	.byte 0xb0
-	.byte	0xc2, 0xb6, 0xd1, 0x0, 0xc5
-	push	xiz
-	ld	(0:8), 209:io
-	.byte	0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	resda	6, (0xc2a6)
+	resda	6, (0xc2a8)
+	resda	6, (0xc2aa)
+	resda	6, (0xc2ac)
+	resda	6, (0xc2ae)
+	resda	6, (0xc2b0)
+	ordi16	(0xc500), 8
+AudioDispatch_CheckStereoMode_Code_Join12:
+	ordi16	(0xc4f8), 4
 UIStateEvt_ChannelConfig_Data_Entry6:
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xce
+	bitda	6, (0xbfe3)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry7
-	.byte	0xd1, 0x0, 0xc5
-	push	xiz
-	ld	(0:8), 209:io
-	.byte	0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	ordi16	(0xc500), 8
+	ordi16	(0xc4f8), 4
 UIStateEvt_ChannelConfig_Data_Entry7:
-	.byte	0xf1
-	.byte 0xe3, 0xbf, 0xcf
+	bitda	7, (0xbfe3)
 	ret	z
-	.byte	0xd1, 0x0, 0xc5
-	push	xiz
-	ld	(0:8), 209:io
-	.byte	0xf8, 0xc4
-	push	xiz
-	.byte	0x04
-	nop
+	ordi16	(0xc500), 8
+	ordi16	(0xc4f8), 4
 	ret
+AudioDispatch_CheckStereoMode_Code_Skip25:
 	ld	xwa, 0x5000
 	call	AcApcToggleProc_Helper
 	cp	hl, 2:i3
@@ -5692,38 +5511,38 @@ UIStateEvt_ChannelConfig_Data_Entry7:
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip2
 	cp	hl, 0:i3
 	ret	nz
-	ld	(0xc2c6:16), 0
-	ld	(0xc2c7:16), 255
+	stdi8	(0xc2c6), 0
+	stdi8	(0xc2c7), 255
 	ret
 UIStateEvt_ChannelConfig_Data_Skip2:
 	ld	xwa, 0x5001
 	call	AcApcToggleProc_Helper
-	ld	(0xc2c6:16), l
-	ld	(0xc2c7:16), 255
+	stb_d8	(0xc2c6), l
+	stdi8	(0xc2c7), 255
 	ret
 UIStateEvt_ChannelConfig_Data_Skip3:
-	ld	(0xc2c6:16), 0
+	stdi8	(0xc2c6), 0
 	ld	xwa, 0x5002
 	call	AcApcToggleProc_Helper
-	ld	(0xc2c7:16), l
+	stb_d8	(0xc2c7), l
 	ret
 ; v10 name for this address: UIStateEvt_StubReturn -- not a label here: v7 defines that name outside this span (= 0xFDE5CA)
 	ret
 	ret
 ; v10 name for this address: UIStateEvt_MuteToggle_Data -- not a label here: v7 defines that name outside this span (= 0xFDE5CC)
-	ld	a, (0xbfe1:16)
+	ldb_d8	a, (0xbfe1)
 	cp	a, 16
 	ret	nz
-	bit	0, (0xbfe3:16)
+	bitda	0, (0xbfe3)
 	ret	z
-	bit	0, (0xbfe2:16)
+	bitda	0, (0xbfe2)
 	jr	z, UIStateEvt_MuteToggle_Data_Skip
-	orw	(0xc4f8:16), 1
+	ordi16	(0xc4f8), 1
 	jr	UIStateEvt_MuteToggle_Data_Join
 UIStateEvt_MuteToggle_Data_Skip:
-	andw	(0xc4f8:16), 0xfffe
+	anddi16	(0xc4f8), 0xfffe
 UIStateEvt_MuteToggle_Data_Join:
-	orw	(0xc4f8:16), 4
+	ordi16	(0xc4f8), 4
 	ret
 	ret
 	.include "audio/audioinit_routines.s"
