@@ -8371,7 +8371,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Join3:
 	call	SeGfx_StaticOp00_FromBuf
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Return
 SeMenu_ShowConfirmDialog_Data_Code_Skip5:
-	ld	xiz, SeMenu_ShowConfirmDialog_Data_0x54C
+	ld	xiz, SeEnvCurve_BitmapTable
 	xor	w, w
 	sll	wa, 2
 	ld_rrl	xiy, xiz, wa
@@ -8387,13 +8387,19 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip5:
 	call	SeGfx_StaticOp03_BlitAtCell
 SeMenu_ShowConfirmDialog_Data_Code_Return:
 	ret
-	.byte 0x96
-	rcf
-	.byte 0xf1
-	nop
 
-
-SeMenu_WaveformSelect_Init:
+; -----------------------------------------------------------------------------
+; SeEnvCurve_BitmapTable -- 7 LE32 pointers to the 40x40 envelope-curve bitmaps
+; in SeScreenData, indexed 0..6.  Read by the code just above: `ld xiz, table /
+; sll 2,wa / ld xiy,(xiz+wa)`, then drawn with SeGfx_StaticOp03_BlitAtCell with
+; BC = 5 bytes per row and HL = 40 rows (static ScreenData op 03 layout; the
+; bitmaps are stored column by column -- see the SeScreenData header).
+; Entry 0 was spelled `.byte 0x96 / rcf / .byte 0xf1 / nop` (a pointer framed as
+; instructions); entries 1-6 were under the label SeMenu_WaveformSelect_Init,
+; which nothing references and which named a routine -- removed.
+; -----------------------------------------------------------------------------
+SeEnvCurve_BitmapTable:
+	.long SeBitmap_EnvCurve6
 	.long SeBitmap_EnvCurve5
 	.long SeBitmap_EnvCurve4
 	.long SeBitmap_EnvCurve1

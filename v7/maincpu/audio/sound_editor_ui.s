@@ -8205,8 +8205,166 @@ UpdSeSel_DetailedUpdate_Helper4_Helper:
 	ld DE,(XIZ+0x02)
 	add XIZ,0x00000004
 	ld (0x06cc:16), ix
-	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_tail_tail.bin"
-SeMenu_WaveformSelect_Init:
+	adddm16	(0x6cc), xhl
+	stda16	(0x6d0), ix
+	adddm16	(0x6d0), xde
+	stda16	(0x6ce), iy
+	adddi16	(0x6ce), 1
+	stda16	(0x6d2), iy
+	adddi16	(0x6d2), 7
+	push	c
+	push	xiz
+	pushw	ix
+	pushw	iy
+	call	SeGfx_StaticOp09_FromBuf
+	popw	iy
+	popw	ix
+	pop	xiz
+	pop	c
+	dec	1, c
+	jr	nz, .Lc_f0f2e0
+	ld	c, 6:opc
+	add	ix, 4
+	stda16	(0x6cc), ix
+	stda16	(0x6d0), ix
+	stda16	(0x6ce), iy
+	adddi16	(0x6ce), 1
+	stda16	(0x6d2), iy
+	adddi16	(0x6d2), 11
+	push	c
+	pushw	ix
+	pushw	iy
+	call	SeGfx_StaticOp02_FromBuf
+	popw	iy
+	popw	ix
+	pop	c
+	dec	1, c
+	jr	nz, -48
+	ret
+	pop	sr
+	nop
+	halt
+	nop
+	reti
+	nop
+	push	0
+	retd	4352
+	nop
+	zcf
+	nop
+	pop_a
+	nop
+	ldf	0
+	pop_f
+	nop
+UpdSeSel_DetailedUpdate_Helper4_Helper_Sub:
+	cpdi8	(0x6ae), 1
+	jr	nz, 22
+	stib_da	(0x3efa8), 0
+	ld	xiy, SeBitmap_EnvCurve5_0xD82
+	ld	xix, SeBitmap_EnvCurve5_0xD8C
+	call	SeGfx_DrawStaticList
+	jr	20
+	stib_da	(0x3efa8), 0
+	ld	xiy, SeBitmap_EnvCurve5_0xD78
+	ld	xix, SeBitmap_EnvCurve5_0xD82
+	call	SeGfx_DrawStaticList
+	xor	xwa, xwa
+	ldb_d8	a, (0x65d)
+	sla	wa, 2
+	cpdi8	(0x6ae), 1
+	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip
+	ld	xiz, SeBitmap_EnvCurve5_0xEBC
+	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join
+UpdSeSel_DetailedUpdate_Helper4_Helper_Skip:
+	ld	xiz, SeBitmap_EnvCurve5_0xEA8
+UpdSeSel_DetailedUpdate_Helper4_Helper_Join:
+	push	xwa
+	add	xiz, xwa
+	ld	wa, (xiz)
+	stda16	(0x6c6), wa
+	ld	wa, (xiz+2)
+	stda16	(0x6c8), wa
+	cpdi8	(0x6ae), 1
+	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip2
+	ld	xiz, 1634
+	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join2
+UpdSeSel_DetailedUpdate_Helper4_Helper_Skip2:
+	ld	xiz, 1640
+UpdSeSel_DetailedUpdate_Helper4_Helper_Join2:
+	xor	xwa, xwa
+	ldb_d8	a, (0x65d)
+	add	xiz, xwa
+	call	SeMenu_ShowConfirmDialog_Data_0x4A9
+	pop	xwa
+	cpdi8	(0x6ae), 1
+	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip3
+	ld	xiz, SeBitmap_EnvCurve5_0xE9C
+	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join3
+UpdSeSel_DetailedUpdate_Helper4_Helper_Skip3:
+	ld	xiz, SeBitmap_EnvCurve5_0xE88
+UpdSeSel_DetailedUpdate_Helper4_Helper_Join3:
+	add	xiz, xwa
+	ld	xiy, (xiz)
+	ld	xix, xiy
+	add	xix, 42
+	call	SeGfx_DrawStaticList
+	ret
+	ld	a, (xiz)
+	and	a, 224
+	srl	a, 5
+	cp	a, 3:i3
+	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip4
+	ldw_d16	ix, (0x6c6)
+	ldw_d16	iy, (0x6c8)
+	stda16	(0x6cc), ix
+	adddi16	(0x6cc), 1
+	stda16	(0x6d0), ix
+	adddi16	(0x6d0), 37
+	stda16	(0x6ce), iy
+	adddi16	(0x6ce), 1
+	stda16	(0x6d2), iy
+	adddi16	(0x6d2), 37
+	call	SeGfx_StaticOp1B_FromBuf
+	ldw_d16	ix, (0x6c6)
+	ldw_d16	iy, (0x6c8)
+	stda16	(0x6cc), ix
+	adddi16	(0x6cc), 1
+	stda16	(0x6d0), ix
+	adddi16	(0x6d0), 38
+	stda16	(0x6ce), iy
+	adddi16	(0x6ce), 38
+	stda16	(0x6d2), iy
+	adddi16	(0x6d2), 1
+	call	SeGfx_StaticOp00_FromBuf
+	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Return
+UpdSeSel_DetailedUpdate_Helper4_Helper_Skip4:
+	ld	xiz, SeEnvCurve_BitmapTable
+	xor	w, w
+	sll	wa, 2
+	ld_rrl	xiy, xiz, wa
+	ldw_d16	wa, (0x6c6)
+	div	a, 8
+	xor	w, w
+	ldw_d16	hl, (0x6c8)
+	mul	l, 40
+	add	hl, wa
+	ld	ix, hl
+	ld	bc, 5:i3
+	ldw	hl, 40
+	call	SeGfx_StaticOp03_BlitAtCell
+UpdSeSel_DetailedUpdate_Helper4_Helper_Return:
+	ret
+; -----------------------------------------------------------------------------
+; SeEnvCurve_BitmapTable (see v10): 7 LE32 pointers to the 40x40 envelope-curve
+; bitmaps, read by the code just above (`ld xiz, table / ld xiy,(xiz+wa*4)`),
+; drawn by SeGfx_StaticOp03_BlitAtCell with BC = 5 bytes/row, HL = 40 rows.
+; Entry 0 was the last 4 bytes of a verbatim ROM slice here; entries 1-6
+; follow (they were under the label SeMenu_WaveformSelect_Init, which nothing
+; references and which named a routine -- removed, as in v10/v9).
+; -----------------------------------------------------------------------------
+SeEnvCurve_BitmapTable:
+	.long	SeBitmap_EnvCurve6
 	.long SeBitmap_EnvCurve5
 	.long SeBitmap_EnvCurve4
 	.long SeBitmap_EnvCurve1
@@ -8738,16 +8896,16 @@ SeMenu_CompareAndApply_Check:
 	ld	xix, 15819433
 	call	SeGfx_DrawStaticList
 SeMenu_CompareAndApply_Match:
-	call	15790112
-	call	15791995
-	call	15790952
+	call	SeMenu_PresetManager_Data_Helper
+	call	SeMenu_PresetBrowser_Init_Helper
+	call	UpdSeSel_DetailedUpdate_Helper4_Helper_Sub
 	cp	(1710:16), 1
-	jr	z, 22
+	jr	z, SeMenu_CompareAndApply_Apply
 	ld	(257960:24), 0
 	ld	xiy, 15806315
 	ld	xix, 15806454
-	call	15789027
-	jr	20
+	call	SeGfx_DrawBoundList
+	jr	SeMenu_CompareAndApply_End
 SeMenu_CompareAndApply_Apply:
 	ld	(257960:24), 0
 	ld	xiy, 15819648
