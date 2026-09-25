@@ -1,0 +1,26 @@
+{
+  "_comment": "Semantic-push lane roster, 2026-09-25. Each lane OWNS the files matched by its globs. 'maincpu' globs are relative to v10/maincpu, v9/maincpu AND v7/maincpu (a lane owns the path in all three versions). 'repo' globs are relative to the repo root. A file matched by no lane or by two lanes is a roster bug: scripts/analysis/lane_worklists.py --check asserts every tracked source file is owned exactly once.",
+  "lanes": [
+    {"id": "ext",      "maincpu": ["extensions/*"]},
+    {"id": "accomp",   "maincpu": ["sequencer/accompaniment_engine.s", "sequencer/accomp_screens/*", "sequencer/accompseq_routines.s"]},
+    {"id": "scoop",    "maincpu": ["display/*"]},
+    {"id": "seui",     "maincpu": ["audio/sound_editor_ui.s", "audio/sound_editor_routines.s", "audio/sound_editor_screens/*", "audio/semenu_routines.s", "audio/sndparam_routines.s", "audio/sndparam_records/*"]},
+    {"id": "seqeng",   "maincpu": ["sequencer/sequencer_engine.s", "sequencer/seq_event_playback.s", "sequencer/smf_event_processor.s", "sequencer/smf_tonegen_core.s", "sequencer/smf_playback.s"]},
+    {"id": "sequi",    "maincpu": ["sequencer/sequencer_ui.s", "sequencer/seq_audio_mode.s", "sequencer/smf_config_routines.s", "sequencer/seq_step_routines.s", "sequencer/rhythm_routines.s", "sequencer/bmdredit_routines.s", "sequencer/composer_msp_defaults.s", "sequencer/ssf_gate_states.s"]},
+    {"id": "audio",    "maincpu": ["audio/*", "msp_factory_defaults.c", "msp_factory_defaults.s"]},
+    {"id": "midi",     "maincpu": ["midi/*"]},
+    {"id": "uiproc",   "maincpu": ["ui/drawbar_panel_ui.s", "ui/ui_widget_defs.s", "ui/ui_mode_handlers.s", "ui/ui_window_procs.s"]},
+    {"id": "uimisc",   "maincpu": ["ui/*", "ui_widgets/widget_dispatch.s", "ui_widgets/*_dispatch.s", "ui_widgets/naka_property_descriptors.s", "ui_widgets/naka_direct_play_property_tables.s"]},
+    {"id": "sys",      "maincpu": ["storage/*", "file_io/*", "demo/*", "boot/*", "factory_test/*", "shared/*", "includes/*", "style_ui/*", "*.s", "*.c", "*.ld"]},
+    {"id": "nakabig",  "maincpu": ["ui_widgets/widget_descriptors.s", "ui_widgets/naka_widget_descriptors*", "ui_widgets/naka_widget_tables_1*", "ui_widgets/naka_widget_tables_2*", "ui_widgets/naka_types.h"]},
+    {"id": "nakarest", "maincpu": ["ui_widgets/*"]},
+    {"id": "tdata",    "repo": ["table_data/*"]},
+    {"id": "tonedb",   "repo": ["table_data/style_records.s", "table_data/tone_database_*"]},
+    {"id": "proma",    "repo": ["wsa1/prom_a/*"]},
+    {"id": "promb",    "repo": ["wsa1/prom_b/*"]},
+    {"id": "promcd",   "repo": ["wsa1/prom_c/*", "wsa1/prom_d/*", "wsa1/kernel/*", "wsa1/dsp/*"]},
+    {"id": "subcpu",   "repo": ["v142/subcpu/*", "subcpu/boot/*"]},
+    {"id": "hdae",     "repo": ["hdae5000/*", "custom_data/*"]}
+  ],
+  "_precedence": "When several globs match, the MOST SPECIFIC wins: an exact path beats a glob with a directory part, which beats a bare-directory glob, which beats a root-level '*.s' glob. So audio/sound_editor_ui.s belongs to seui, not audio; ui/drawbar_panel_ui.s to uiproc, not uimisc; ui_widgets/widget_descriptors.s to nakabig, not nakarest; table_data/style_records.s to tonedb, not tdata."
+}
