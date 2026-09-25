@@ -12,6 +12,7 @@ ssf_gate_states}.s` in `v10/`, `v9/` and `v7/` maincpu.
 | `scripts/converters/sequi_regmode_macroize.py` | are v7 `InitializeKubo`'s trailing 1,289 `.byte` the RegMode/RegTitle records v10 spells as macros? rewrite them as those macros | see its docstring (dry by default) |
 | `scripts/analysis/sequi_find_refs.py` | before writing "no caller / no reader found": which reference FORMS were searched (absolute 24-bit value in every KN5000 image, +-window for base-minus-index, calr/jr/jrl landing on it) and what they hit | `python3 scripts/analysis/sequi_find_refs.py v10 [--window 64] 0xADDR ...` |
 | `scripts/converters/sequi_symbolize_labelled_targets.py` | which branch sites did the symboliser refuse on a neighbourhood heuristic (R1/R3) although the target already carries a label? write those symbolically, rebuild, compare | `--image v7 --report R.json --file sequencer/sequencer_ui.s --kinds R1,R3 [--apply]` |
+| `scripts/renaming/sequi_reparent_structural_labels.py` | which symboliser-made `<Parent>_<Role>` labels name a parent that is demonstrably wrong (itself structural, or > 1000 lines away) and what the nearest descriptive label is; rename them | `python3 scripts/renaming/sequi_reparent_structural_labels.py [--apply] FILE...` |
 | `scripts/converters/sequi_reframe.py` | re-frame MISFRAMED code: framing from unidasm, text from the LLVM disassembler, every new instruction re-encoded and compared, whole image rebuilt and compared | `python3 scripts/converters/sequi_reframe.py --image v10 --file sequencer/sequencer_ui.s --auto [--apply]` |
 
 ## Logs

@@ -7378,36 +7378,36 @@ NoteEditBox_SetupGrid:
 NoteEditBox_EventDispatch1:
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80054
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80055
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80057
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80058
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e8005a
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80056
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8005b
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80059
-	jr	InitializeKubo_Join
+	jr	NoteEditBoxProc_SetupGridDisplay_Join
 
 NoteEditBoxProc_SetupGridDisplay:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e8003e
-InitializeKubo_Join:
+NoteEditBoxProc_SetupGridDisplay_Join:
 	call ApFuncCall
 	lda xwa, (xsp + 28)
 	lda xbc, (xsp + 24)
@@ -7447,9 +7447,9 @@ NoteEditBox_EventDispatch2:
 	call	GetTitleNow
 	ld	(xsp+10), 3
 	cp	xhl, 27263125
-	jr	nz, InitializeKubo_Skip
+	jr	nz, NoteEditBox_EventDispatch2_Skip
 	ld	(xsp+10), 2
-InitializeKubo_Skip:
+NoteEditBox_EventDispatch2_Skip:
 	lda	xwa, (xsp+28)
 	ld	c, (xsp+10)
 	extz	bc
@@ -7473,9 +7473,9 @@ InitializeKubo_Skip:
 	call	GetTitleNow
 	ld	(xsp+10), 7
 	cp	xhl, 27263125
-	jr	nz, InitializeKubo_Skip2
+	jr	nz, NoteEditBox_EventDispatch2_Skip2
 	ld	(xsp+10), 6
-InitializeKubo_Skip2:
+NoteEditBox_EventDispatch2_Skip2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981649
@@ -7484,7 +7484,7 @@ InitializeKubo_Skip2:
 	lda	xix, (xsp+28)
 	ld	(xix), hl
 	cpw (xix), 0
-	jr	z, InitializeKubo_Skip3
+	jr	z, NoteEditBox_EventDispatch2_Skip3
 	lda	xde, (xix+2)
 	ld	a, (xsp+10)
 	extz	wa
@@ -7530,7 +7530,7 @@ InitializeKubo_Skip2:
 	pushw 251
 	pushw 245
 	call	DrawStringLeftJustify
-InitializeKubo_Skip3:
+NoteEditBox_EventDispatch2_Skip3:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981650
@@ -7582,7 +7582,7 @@ InitializeKubo_Skip3:
 	push	xhl
 	pushw 251
 	pushw 245
-	jrl	InitializeKubo_Join8
+	jrl	NoteEditBox_EventDispatch2_Join7
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981651
@@ -7606,11 +7606,11 @@ InitializeKubo_Skip3:
 	ld	xwa, 9764884
 	ld	xbc, 29360141
 	ld	xde, (xsp+90)
-	jr	InitializeKubo_Join2
+	jr	NoteEditBox_EventDispatch2_Join
 	ld	xwa, 9961489
 	ld	xbc, 29360141
 	ld	xde, (xsp+90)
-InitializeKubo_Join2:
+NoteEditBox_EventDispatch2_Join:
 	call	SendEvent
 	jrl	NoteEdit_ReturnZero
 	ld	xwa, (xsp+12)
@@ -7621,7 +7621,7 @@ InitializeKubo_Join2:
 	ld	(xsp+8), hl
 	ldw	(xsp+10), 1
 	ldib_erp	251, 0
-InitializeKubo_Loop:
+NoteEditBox_EventDispatch2_Loop:
 	stb_erp	a, 251
 	extz	wa
 	add	wa, wa
@@ -7635,18 +7635,18 @@ InitializeKubo_Loop:
 	ld	xbc, 31981661
 	call	ApFuncCall
 	or	xhl, xhl
-	jr	z, InitializeKubo_Skip5
+	jr	z, NoteEditBox_EventDispatch2_Skip5
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
 	ldw	(xwa+2), 32
 	ldw	(xwa+6), 43
 	cpib_erp	251, 0
-	jr	nz, InitializeKubo_Skip4
+	jr	nz, NoteEditBox_EventDispatch2_Skip4
 	pushm (xsp+8)
 	ld	xwa, 14894612
-	jr	InitializeKubo_Join3
-InitializeKubo_Skip4:
+	jr	NoteEditBox_EventDispatch2_Join2
+NoteEditBox_EventDispatch2_Skip4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	wa, 100
@@ -7654,7 +7654,7 @@ InitializeKubo_Skip4:
 	pushw	wa
 	ld	(xsp+10), wa
 	ld	xwa, 14894616
-InitializeKubo_Join3:
+NoteEditBox_EventDispatch2_Join2:
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
@@ -7662,8 +7662,8 @@ InitializeKubo_Join3:
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+8)
 	ldw	(xsp+10), 2
-	jr	InitializeKubo_Join4
-InitializeKubo_Skip5:
+	jr	NoteEditBox_EventDispatch2_Join3
+NoteEditBox_EventDispatch2_Skip5:
 	ld	xwa, 3:i3
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
@@ -7677,7 +7677,7 @@ InitializeKubo_Skip5:
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+10)
-InitializeKubo_Join4:
+NoteEditBox_EventDispatch2_Join3:
 	lda	xwa, (xsp+28)
 	ld	bc, (xwa)
 	add	bc, 32
@@ -7704,7 +7704,7 @@ InitializeKubo_Join4:
 	call	DrawStringLeftJustify
 	inc1b_erp	251
 	cp_erpb	251, 11
-	jrl	c, InitializeKubo_Loop
+	jrl	c, NoteEditBox_EventDispatch2_Loop
 	jrl	NoteEdit_ReturnZero
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -7714,7 +7714,7 @@ InitializeKubo_Join4:
 	ld	(xsp+8), hl
 	ldw	(xsp+10), 1
 	ldib_erp	251, 0
-InitializeKubo_Loop2:
+NoteEditBox_EventDispatch2_Loop2:
 	stb_erp	a, 251
 	extz	wa
 	add	wa, wa
@@ -7732,17 +7732,17 @@ InitializeKubo_Loop2:
 	lda	xbc, (xwa+2)
 	lda	xix, (xwa+6)
 	or	xhl, xhl
-	jr	z, InitializeKubo_Skip7
+	jr	z, NoteEditBox_EventDispatch2_Skip7
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
 	ldw	(xbc), 38
 	ldw	(xix), 49
 	cpib_erp	251, 0
-	jr	nz, InitializeKubo_Skip6
+	jr	nz, NoteEditBox_EventDispatch2_Skip6
 	pushm (xsp+8)
 	ld	xwa, 14894624
-	jr	InitializeKubo_Join5
-InitializeKubo_Skip6:
+	jr	NoteEditBox_EventDispatch2_Join4
+NoteEditBox_EventDispatch2_Skip6:
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	wa, 100
@@ -7750,15 +7750,15 @@ InitializeKubo_Skip6:
 	pushw	wa
 	ld	(xsp+10), wa
 	ld	xwa, 14894628
-InitializeKubo_Join5:
+NoteEditBox_EventDispatch2_Join4:
 	push	xwa
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+8)
 	ldw	(xsp+10), 2
-	jr	InitializeKubo_Join6
-InitializeKubo_Skip7:
+	jr	NoteEditBox_EventDispatch2_Join5
+NoteEditBox_EventDispatch2_Skip7:
 	ld	xwa, 3:i3
 	ld	(xsp+4), xwa
 	ldw	(xbc), 40
@@ -7770,7 +7770,7 @@ InitializeKubo_Skip7:
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+10)
-InitializeKubo_Join6:
+NoteEditBox_EventDispatch2_Join5:
 	lda	xwa, (xsp+28)
 	ld	bc, (xwa)
 	add	bc, 32
@@ -7797,23 +7797,23 @@ InitializeKubo_Join6:
 	call	DrawStringLeftJustify
 	inc1b_erp	251
 	cp_erpb	251, 8
-	jrl	c, InitializeKubo_Loop2
+	jrl	c, NoteEditBox_EventDispatch2_Loop2
 	jrl	NoteEdit_ReturnZero
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981662
 	ld	xde, 0:i3
-	jr	InitializeKubo_Join7
+	jr	NoteEditBox_EventDispatch2_Join6
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981663
 	ld	xde, 0:i3
-	jr	InitializeKubo_Join7
+	jr	NoteEditBox_EventDispatch2_Join6
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981664
 	ld	xde, 0:i3
-InitializeKubo_Join7:
+NoteEditBox_EventDispatch2_Join6:
 	call	ApFuncCall
 	jrl	NoteEdit_ReturnZero
 	lda	xix, (xsp+28)
@@ -7854,10 +7854,10 @@ InitializeKubo_Join7:
 	ld	(xde+18), xbc
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-InitializeKubo_Loop3:
+NoteEditBox_EventDispatch2_Loop3:
 	stib_dsp	224, 0
 	cp	xwa, xbc
-	jr	c, InitializeKubo_Loop3
+	jr	c, NoteEditBox_EventDispatch2_Loop3
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981674
@@ -7910,7 +7910,7 @@ InitializeKubo_Loop3:
 	push	xhl
 	pushw 0
 	pushw 255
-InitializeKubo_Join8:
+NoteEditBox_EventDispatch2_Join7:
 	call	DrawStringLeftJustify
 	jrl	NoteEdit_ReturnZero
 	ld	xwa, (xsp+12)
@@ -7924,12 +7924,12 @@ InitializeKubo_Join8:
 	ld	(xwa+18), xbc
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-InitializeKubo_Loop4:
+NoteEditBox_EventDispatch2_Loop4:
 	stib_dsp	224, 0
 	cp	xwa, xbc
-	jr	c, InitializeKubo_Loop4
+	jr	c, NoteEditBox_EventDispatch2_Loop4
 	ld	(135318:24), 0
-InitializeKubo_Loop5:
+NoteEditBox_EventDispatch2_Loop5:
 	lda	xix, (xsp+28)
 	ldw	(xix), 2
 	lda	xde, (xix+4)
@@ -7968,22 +7968,22 @@ InitializeKubo_Loop5:
 	lda	xbc, (xsp+24)
 	ld	a, (135318:24)
 	cp	a, (10144:16)
-	jr	nz, InitializeKubo_Skip8
+	jr	nz, NoteEditBox_EventDispatch2_Skip8
 	lda	xwa, (xsp+28)
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
 	pushw 255
 	pushw 242
-	jr	InitializeKubo_Join9
-InitializeKubo_Skip8:
+	jr	NoteEditBox_EventDispatch2_Join8
+NoteEditBox_EventDispatch2_Skip8:
 	lda	xwa, (xsp+28)
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
 	pushw 242
 	pushw 255
-InitializeKubo_Join9:
+NoteEditBox_EventDispatch2_Join8:
 	call	DrawStringLeftJustify
 	lda	xix, (xsp+28)
 	ldw	(xix), 23
@@ -8032,7 +8032,7 @@ InitializeKubo_Join9:
 	inc	1, a
 	ld	(135318:24), a
 	cp	a, 11
-	jrl	ule, InitializeKubo_Loop5
+	jrl	ule, NoteEditBox_EventDispatch2_Loop5
 	jrl	NoteEdit_ReturnZero
 NoteEditBoxProc_ClassifyGridPosition:
 	ld xwa, (xsp + 90)
@@ -15463,26 +15463,26 @@ EffectBoxProc_CopyNameAndSetup_Code_Join10:
 	jp_rr	8, xix, hl
 	pushm (0x2612:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x69E
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
 	pushm (0x2620:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6A4
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
 	pushm (0x262c:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6AA
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
 	pushm (0x2626:16)
 	ld xwa, NakaInst_3d
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
 	pushm (0x25fc:16)
 	ld	xwa, NakaInst_3d_0x6
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
 	pushm (0x25fa:16)
 	ld	xwa, NakaInst_3d_0xC
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
+	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
 EffectBoxProc_CopyNameAndSetup_Code_Entry4:
 	pushm (0x2608:16)
 	ld	xwa, NakaInst_3d_0x12
-EffectBoxProc_CopyNameAndSetup_Code_Join10_Join:
+EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -15793,7 +15793,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	ld	(xsp+4), xwa
 	pushw	3
 	ld a, (0x270c:16)
-	jr EffectBoxProc_CopyNameAndSetup_Code_Join16_Join
+	jr EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join2
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9994:16)
@@ -15805,7 +15805,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	ld	(xsp+4), xwa
 	pushw	3
 	ld	a, (9998:16)
-EffectBoxProc_CopyNameAndSetup_Code_Join16_Join:
+EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join2:
 	extz	wa
 	muls	wa, 3
 	ld	xbc, ExtDevice_ModeDispatch_Table_0x4C6
