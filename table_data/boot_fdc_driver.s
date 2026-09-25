@@ -183,9 +183,9 @@ FDC_MediaConfigAndRecalibrate__media_dispatch:
 	cp wa, 5:i3	; cp WA,5
 	jrl gt, FDC_MediaStanza_Default	; jrl GT,0xffda23
 	add wa, wa	; add WA,WA
-	lda xix, (0xffb496:24)	; lda XIX,0xffb496 - XIX = FDC_DiskTypeStanza_Offsets (boot alias of ROM 0x9FB496)
+	lda xix, (FDC_DiskTypeStanza_Offsets + 0x600000:24)	; lda XIX,0xffb496 - XIX = FDC_DiskTypeStanza_Offsets (boot alias of ROM 0x9FB496)
 	ldw_sri wa, 0x07, 0xf0, 0xe0	; ld WA,(XIX+WA) - fetch stanza offset
-	lda xix, (0xffd9a2:24)	; lda XIX,0xffd9a2
+	lda xix, (FDC_MediaStanza_Type0 + 0x600000:24)	; lda XIX,0xffd9a2
 	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA
 
 ; -----------------------------------------------------------------------------
@@ -309,9 +309,9 @@ FDC_ValidateRequest:
 	cp wa, 0x0b	; cp WA,0x000b
 	jr ugt, FDC_Validate_DriveTrackSector	; jr UGT,0xffdab9
 	add wa, wa	; add WA,WA
-	lda xix, (0xffb4a2:24)	; lda XIX,0xffb4a2
+	lda xix, (FDC_ValidateCmd_Offsets + 0x600000:24)	; lda XIX,0xffb4a2
 	ldw_sri wa, 0x07, 0xf0, 0xe0	; ld WA,(XIX+WA) - XIX = FDC_ValidateCmd_Offsets (boot alias of ROM 0x9FB4A2)
-	lda xix, (0xffdaab:24)	; lda XIX,0xffdaab
+	lda xix, (FDC_Validate_FormatParams + 0x600000:24)	; lda XIX,0xffdaab
 	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA - XIX = FDC_Validate_FormatParams (validator base)
 
 ; -----------------------------------------------------------------------------
@@ -777,7 +777,7 @@ FDC_WaitRQM_Timeout__done:
 FDC_ReadResultPhase:
 	dec 2, xsp	; dec 2,XSP
 	push xiz	; push XIZ
-	.byte 0xbf, 0x04, 0x16, 0x00, 0x0c	; LDW (XSP+0x04), (0x0C00) - snapshot the tick counter (word mem-to-mem store, no assembler mnemonic)
+	ldw (xsp+4), (0x0c00)	; LDW (XSP+0x04), (0x0C00) - snapshot the tick counter (word mem-to-mem store; bf 04 16 00 0c, formerly emitted as .byte because the assembler lacked the form)
 	ldi_erpw 0xfa, 0x80, 0x00	; ld QIZ,0x0080
 	cpw qiz, 0x80	; cp QIZ,0x0080
 	jr nz, FDC_ReadResultPhase__check_result	; jr NZ,0xffde9c
@@ -1841,7 +1841,7 @@ FDC_CmdFormat__check_more_tracks:
 	jr ule, FDC_CmdFormat__track_loop	; jr ULE,0xffe674
 FDC_CmdFormat__finish:
 	cp (0x0c52:16), 0	; cp (0x0c52),0x00
-	call nz, (0xffd8a5:24)	; call NZ,0xffd8a5 - on error, re-run the media configuration (F2-form CALL cannot take a label; 0xFFD8A5 = FDC_MediaConfigAndRecalibrate)
+	call nz, (FDC_MediaConfigAndRecalibrate + 0x600000:24)	; call NZ,0xffd8a5 - on error, re-run the media configuration (F2-form CALL cannot take a label; 0xFFD8A5 = FDC_MediaConfigAndRecalibrate)
 	calr FDC_CmdRecalibrate	; calr 0xffe2d6
 	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 	ret	; ret
@@ -2218,9 +2218,9 @@ FDC_Request__start:
 	cp wa, 0x0b	; cp WA,0x000b - commands are 0..11
 	jr ugt, FDC_Request__invalid_command	; jr UGT,0xffea43
 	add wa, wa	; add WA,WA
-	lda xix, (0xffb4ba:24)	; lda XIX,0xffb4ba - XIX = FDC_CommandDispatch_Offsets (boot alias of ROM 0x9FB4BA)
+	lda xix, (FDC_CommandDispatch_Offsets + 0x600000:24)	; lda XIX,0xffb4ba - XIX = FDC_CommandDispatch_Offsets (boot alias of ROM 0x9FB4BA)
 	ldw_sri wa, 0x07, 0xf0, 0xe0	; ld WA,(XIX+WA) - fetch stub offset (entries are 5 bytes apart)
-	lda xix, (0xffea07:24)	; lda XIX,0xffea07 - XIX = FDC_Dispatch_Initialize (stub base)
+	lda xix, (FDC_Dispatch_Initialize + 0x600000:24)	; lda XIX,0xffea07 - XIX = FDC_Dispatch_Initialize (stub base)
 	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA
 
 ; -----------------------------------------------------------------------------

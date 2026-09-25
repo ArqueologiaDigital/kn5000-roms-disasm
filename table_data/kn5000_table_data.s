@@ -18,6 +18,11 @@
 ;                     - Factory defaults: 0xF7 (erased flash), 0x07, 0x00, or 0xFF
 ;                     - Entries 12-24: 13 x 3,016-byte slots (52 x 58-B records)
 ;                     - Entries 25-27: 3 x 31,968-byte slots (0xFF-dominant)
+;                     CORRECTED 2026-09-25: all 33 directory entries are 8bpp
+;                     bitmaps (0xF7 = transparent), byte-identical to images
+;                     the program ROM also carries -- entries 12-24 are the
+;                     58x52 split-point pictures, 25-27 the 296x108 MIDI
+;                     connection diagrams; see preset_banks.s
 ; 0x830000-0x87FFEF  Tone Database (copied to SubCPU RAM 0x50000 at boot)
 ;                     - 0x830000 directory/program maps/offset table (tone_database_directory.s)
 ;                     - 0x8324D4 579 tone/voice records (tone_database_records.s)
@@ -70,20 +75,33 @@
 ;   Help Lang Index  @ 0x988000: 12 entries, 4 bytes/entry (6 intro-string ptrs
 ;                      + 6 SLIDE8K help-database ptrs; slot 4 of each = English)
 ;   Section Directory@ 0x800000: 33 entries indexing preset data banks for floppy I/O
+;                      (CORRECTED 2026-09-25: 33 bitmaps; no firmware reader
+;                      found -- see preset_banks.s)
 ; =============================================================================
 
 ; =============================================================================
 ; Subcpu boot ROM handler addresses (cross-ROM references for IVT)
 ; =============================================================================
-.equ BOOT_RESET_HANDLER, 0x00FFFEE0
-.equ BOOT_EMPTY_HANDLER, 0x00FFB705
-.equ BOOT_NMI_HANDLER, 0x00FFB7FB
-.equ BOOT_INT4_HANDLER, 0x00FFEAB2
-.equ BOOT_INTA_HANDLER, 0x00FFF229
-.equ BOOT_INTT1_HANDLER, 0x00FFB7F2
-.equ BOOT_INTRX1_HANDLER, 0x00FFF2D0
-.equ BOOT_INTTX1_HANDLER, 0x00FFF2AE
-.equ BOOT_INTTC3_HANDLER, 0x00FFEA9D
+; CORRECTED 2026-09-25: these are not sub-CPU boot ROM addresses.  Each value
+; is the boot-time alias (ROM label + 0x600000) of a handler in THIS ROM --
+; e.g. 0xFFFEE0 = RESET_HANDLER at 0x9FFEE0 -- which the IVT at 0x9FFF00
+; must hold because the CPU fetches it while this ROM is mapped at 0xE00000.
+; Now written symbolically; values unchanged (byte gate).
+.equ BOOT_RESET_HANDLER, RESET_HANDLER + 0x600000
+.equ BOOT_EMPTY_HANDLER, Empty_Handler + 0x600000
+.equ BOOT_NMI_HANDLER, BootCode_NMI_Handler + 0x600000
+.equ BOOT_INT4_HANDLER, Handler_INT4 + 0x600000
+.equ BOOT_INTA_HANDLER, Handler_INTA + 0x600000
+.equ BOOT_INTT1_HANDLER, BootCode_INTT1_Handler + 0x600000
+.equ BOOT_INTRX1_HANDLER, Handler_INTRX1 + 0x600000
+.equ BOOT_INTTX1_HANDLER, Handler_INTTX1 + 0x600000
+.equ BOOT_INTTC3_HANDLER, BootTimer_InterruptHandler + 0x600000
+
+; Program-ROM fixed entry stubs the bootloader jumps to once the program ROM
+; is mapped (cross-ROM).  Each is a 4-byte `jp` at the same address in v7, v9
+; and v10 (targets differ per version; v10 shown, read from the dumps):
+.equ PROGRAM_ROM_ENTRY_HDAE5000, 0x00FFFED8	; v10: jp HDAE5000_Init_DetectAndVerify (0xEF4B54)
+.equ PROGRAM_ROM_ENTRY_BOOT, 0x00FFFEDC	; v10: jp Boot_InitIOPorts (0xEF050F)
 
 ; =============================================================================
 ; Constants for shared boot routines
@@ -98,6 +116,8 @@
 	; and the fill-pattern legend.  (includes/initial_data.bin is no longer
 	; referenced by the LLVM build; the file stays on disk because the
 	; archived ASL mirror still bincludes it in full.)
+	; Since 2026-09-25 that header shows the "banks" are bitmaps, emitted
+	; from v10/maincpu/images/.
 	.org 0x800000 - 0x800000, 0xFF
 	.include "preset_banks.s"
 
@@ -115,6 +135,21 @@
 ; also the table-data revision number that boot parses.
 ; Cross-ref: v10/maincpu/kn5000_v10_program.s (Boot_ParseSubCPUTimestamp),
 ; same in v9; v7 predates the check.
+;
+; Record layout (28 bytes, 0x87FFF0-0x88000B) as its readers use it (v10):
+;   +0x00  "hkst_55.ssf",0   digits at +0x05 parsed by Boot_ParseSubCPUTimestamp
+;                            (0xEF07E6)
+;   +0x0C  .long 0           } neither field is read by the routines listed
+;   +0x10  .long -> HKstSSF_Padding (two zero bytes) } here
+;   +0x14  .long -> Feature_Demo_XML: Seq_CopyResourcePtrs (0xF862B5) handles
+;          demo number 18 only -- it loads (0x880000 + 12*(n-18) + 4), i.e.
+;          this field, and stores it at RAM 0x0249CC/0x0249D4 as the SSF
+;          script position (any other n takes the pointer at RAM 0x0249D0)
+;   +0x18  .long -> FeatureDemo_FileEntry1: FDemo_LinkedListSearch (0xF8682F)
+;          starts its bitmap-name search with `ld xiz, (0x880008)`
+; A v10 search for 0x87FFxx/0x8800xx constants finds only those three
+; readers.  Demo number 18 is also the Feature Demo's preset slot
+; (DemoSongPreset18 at 0x8E0000).
 FeatureDemo_FileMetadata:
 	.asciz "hkst_55.ssf"	; Filename for the feature demo SSF file
 	.long 0x0
@@ -169,27 +204,65 @@ Feature_Demo_XML:
 ; Feature-demo slide images: standard Windows 3.x BMP files (8bpp indexed,
 ; 256-color palette, 320 px wide), stored verbatim; the sizes and addresses
 ; are echoed by the FeatureDemo_FileEntry records below.
+; What the firmware checks (DrawBitmapFile_Impl, 0xFAC6F3): "BM" against the
+; string at 0xEAADF2, biSize == 40, biPlanes == 1, biBitCount <= 8,
+; biClrUsed <= 256 and bfOffBits - 54 <= 1024; it then copies the palette
+; from file offset 54.  FDemoText_RenderTextLine (0xF85F8C) also reads
+; biWidth (file offset 18) to lay out text around a slide.  All six pass.
 	.org 0x880418 - 0x800000, 0xFF
+; FTBMP01.BMP, 320x240 8bpp, 256-colour palette, 77,878 B: the "Technics" wordmark over a world-map globe.
+; FeatureDemo_FileEntry1 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP01", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_1:	.incbin "images/FTBMP01.BMP"
 
 	.org 0x89344E - 0x800000, 0xFF
+; FTBMP02.BMP, 320x130 8bpp, 256-colour palette, 42,678 B: the keyboard seen from above with coloured rings
+; marking its speaker positions.
+; FeatureDemo_FileEntry2 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP02", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_2:	.incbin "images/FTBMP02.BMP"
 
 	.org 0x89DB04 - 0x800000, 0xFF
+; FTBMP03.BMP, 320x120 8bpp, 256-colour palette, 39,478 B: a fan of floppy disks.
+; FeatureDemo_FileEntry3 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP03", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_3:	.incbin "images/FTBMP03.BMP"
 
 	.org 0x8A753A - 0x800000, 0xFF
+; FTBMP04.BMP, 320x120 8bpp, 256-colour palette, 39,478 B: floppy disks going into the keyboard's disk drive.
+; FeatureDemo_FileEntry4 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP04", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_4:	.incbin "images/FTBMP04.BMP"
 
 	.org 0x8B0F70 - 0x800000, 0xFF
+; FTBMP05.BMP, 320x125 8bpp, 256-colour palette, 41,078 B: the keyboard circled by two curved arrows.
+; FeatureDemo_FileEntry5 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP05", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_5:	.incbin "images/FTBMP05.BMP"
 
 	.org 0x8BAFE6 - 0x800000, 0xFF
+; FTBMP06.BMP, 320x240 8bpp, 256-colour palette, 77,878 B: "KN5000" and a rainbow comet over a starfield.
+; FeatureDemo_FileEntry6 names it; VwUserBitmapByNameProc (0xF9C5FC) appends
+; ".BMP" to a widget's key "FTBMP06", FDemo_LinkedListLookupField (0xF868EF)
+; returns this address and DrawBitmapFile (0xFAC697) draws it.
 Feature_Bitmap_6:	.incbin "images/FTBMP06.BMP"
 
 
 	.org 0x8CE01C - 0x800000, 0xFF
 
+; Feature-demo bitmap file list: 24-byte records walked by
+; FDemo_LinkedListSearch (0xF8682F) from the pointer at 0x880008:
+;   +0x00  12-byte NUL-padded name, compared with Strcmp
+;   +0x0C  .long 0 (not read by the search)
+;   +0x10  .long data pointer; 0 ends the list (the 24 zero bytes after
+;          entry 6 are that terminator)
+;   +0x14  .long size in bytes (equals each BMP's own bfSize field)
+; FDemo_LinkedListLookupField (0xF868EF) returns +0x10 of the match.
 FeatureDemo_FileEntry1:
 	.asciz "FTBMP01.BMP"
 	.long 0x0
@@ -250,6 +323,17 @@ Compressed_Preset_Data_LZSS:
 	; Referenced by LABEL_EF41E3 in maincpu via SubCPU_Send_Payload.
 	; If decompression fails, firmware falls back to data at 0x830000.
 	;
+	; CORRECTED 2026-09-25: the two lines above do not hold for this block.
+	; LABEL_EF41E3 is now SLIDE_Parse_Header (v10 0xEF41E3), and
+	; SubCPU_Send_Payload (v10 kn5000_v10_program.s) calls it on 0x3E0000
+	; (custom-data flash), falling back to xiz = 0x800000 -- neither is
+	; 0x8E0000.  This block's reader is DemoSongPreset_PointerTable[18]
+	; (0x9C4048): Demo_ParseSlideHeader (0xF87189) passes it to
+	; SLIDE_Parse_Header with destination RAM 0x69800, like demo songs 0-17.
+	; The decompressed image starts "ZZZZ" like theirs (demo song format; see
+	; includes/demo_presets/README.md), and Seq_CopyResourcePtrs (0xF862B5)
+	; pairs demo number 18 with the Feature Demo script (hkst_55.ssf).
+	;
 	; Files:
 	;   includes/demo_presets/demo_preset_18.bin            - decompressed source (38,144 bytes)
 	;   includes/demo_presets/demo_preset_18_compressed.bin - LZSS payload (27,956 bytes)
@@ -278,9 +362,27 @@ DemoSongPreset18:
 ; These 320x240 8bpp wallpaper images are referenced by the SetWallPaper
 ; routine in the Main CPU ROM via the wallpaper table at 0xEAAE62.
 ; Each wallpaper is 76,800 bytes (320 * 240).
+;
+; Readers, precisely (v10): the table at 0xEAAE62 holds five 10-byte records
+; {+0 pixel pointer, +4 palette pointer, +8 zero word}; records 0 and 1 are
+; {Wallpaper_0, 0x8FFC00} and {Wallpaper_1, 0x912C00}, i.e. each image and
+; the 1 KB trailer that follows it (records 2-4 point into custom-data flash
+; 0x3C0000 and RAM).  SetWallPaper (0xF9A9EF) jumps to ChangeWall;
+; ChangeWall_Impl (0xFAF237) stores record+0 at RAM 0x03EF98 and 0x030452,
+; and DrawWall (0xFABB73) copies 2 x 0x9600 bytes from (0x030452) to the
+; offscreen buffer at 0x43C00.  ChangePalette_Impl (0xFAF2F3) reads
+; record+4 and copies trailer entries 0x20-0xDF (4 bytes each) into the RAM
+; palette at 0x324FC via SetPaletteRGB (0xFB2895); VGA_WritePaletteEntry
+; (0xFB31AB) later sends entry bytes +0, +1, +2 to the DAC data port 0x3C9
+; in that order -- so the trailer entries are {red, green, blue, 0}.
+; Every pixel of both images is in 0xE0-0xEF (a 16-shade ramp), matching the
+; only non-zero entries of Wallpaper_0's trailer (+0x380-+0x3BF).
 ; =============================================================================
 
 	.org 0x8ED000 - 0x800000, 0xFF
+; Wallpaper record 0 (0xEAAE62): 320 x 240 x 8bpp, row-major, pixel values
+; 0xE0-0xEF only; drawn by DrawWall (0xFABB73) after ChangeWall_Impl
+; (0xFAF237) selects it.  Source: images/Wallpaper_0.bin (+ .png).
 Wallpaper_0:	; Blue textured pattern
 	.incbin "images/Wallpaper_0.bin"
 
@@ -290,6 +392,14 @@ Wallpaper_0:	; Blue textured pattern
 	; slot holds a 16-entry shade ramp of ascending {r, g, b, 0x00}
 	; quadruplets; this one matches WallpaperRamp_Navy.  No code reference
 	; found yet, so the RGB interpretation is tentative.
+	; CORRECTED 2026-09-25: the sentence above is superseded.  This
+	; trailer is the 256 x 4-byte palette that wallpaper record 0
+	; (0xEAAE62+4) points at; see the PRESET WALLPAPERS banner for
+	; ChangePalette_Impl and the DAC byte order.
+	; Only entries 0xE0-0xEF (this ramp) are non-zero, and the image uses
+	; exactly those pixel values.  The routine that loads entries 0xE0-0xEF
+	; for a wallpaper (ChangeWallPalette_Impl, via the RAM table at 0x3F1E4)
+	; was not traced to this slot.
 	.zero 896
 Wallpaper0_ShadeRamp:
 	.byte 0x1f, 0x1f, 0x28, 0x00
@@ -311,6 +421,10 @@ Wallpaper0_ShadeRamp:
 	.zero 64
 
 	.org 0x900000 - 0x800000, 0xFF
+; Wallpaper record 1 (0xEAAE6C): 320 x 240 x 8bpp, row-major, pixel values
+; 0xE0-0xEF only; drawn by DrawWall (0xFABB73) after ChangeWall_Impl
+; (0xFAF237) selects it; its palette trailer follows (see ui_bitmaps.s).
+; Source: images/Wallpaper_1.bin (+ .png).
 Wallpaper_1:	; Technics branded texture
 	.incbin "images/Wallpaper_1.bin"
 
@@ -324,6 +438,8 @@ Wallpaper_1:	; Technics branded texture
 ; =============================================================================
 ; These icons are used in menus and UI elements. Referenced by the
 ; DrawIcons routine at 0xFABF9B in Main CPU ROM.
+; (In v10 0xFABF9B is DrawIcons_Impl, reached through DrawIcons at 0xFABF3F;
+; it loads 0x938000 and indexes it by icon number * 8.)
 ;
 ; Format: ALL 176 icons are 24x24 pixels @ 4bpp (16 colors), 288 bytes each
 ;   - 2 pixels per byte: high nibble = first pixel, low nibble = second
@@ -551,6 +667,8 @@ Icon_175:	desc_entry	28, 28, IconPixels_175
 ; icon; DrawIcons hardcodes the geometry).  Emitted as offset/length slices of
 ; includes/icon_pixel_data.bin so each icon is individually addressable.
 ; Extracted gallery: table_data/images/icons/Icon_NNN.png.
+; DrawIcons_Impl (v10 0xFABF9B) reaches each run through the +4 pointer of
+; its IconTable entry.
 IconPixels_000:	.incbin "includes/generated/IconPixels_000.bin"
 IconPixels_001:	.incbin "includes/generated/IconPixels_001.bin"
 IconPixels_002:	.incbin "includes/generated/IconPixels_002.bin"
@@ -875,6 +993,9 @@ HelpDB_TrailingResidue:
 ; RAM 0x94800 by the v10 maincpu routine at 0xF6413A (LABEL_F6413A):
 ;   ld XIY,0x9b4000 / ld XIX,0x94800 / ld BC,0x8000 / ldirw
 ; (0x8000 words = 64KB; v7/v9 carry the same routine at shifted addresses).
+; [2026-09-25: LABEL_F6413A no longer exists; in v10 the routine at 0xF6413A
+; is labelled AccWidget_DispatchTable (sequencer/accompaniment_engine.s),
+; a name that does not describe this copy.]
 ;
 ; Observed layout (image offsets):
 ;   +0x0000  header (memory-config words, part lists 01 02 03 04, "ZZZ" tag)
@@ -902,7 +1023,15 @@ Composer_FactoryMemoryImage:	.incbin	"includes/generated/Composer_FactoryMemoryI
 ; decompressed to RAM 0x69800; a null index 0-18 falls back to the live
 ; preset area at 0x0AB000.  Entry 18 is the Feature Demo preset, stored apart
 ; from the others at 0x8E0000.
-DemoSongPreset_PointerTable:
+; v10 readers of this table (file_demo_proc.s; all compute 0x9C4000 + 4*n):
+;   Demo_ParseSlideHeader (0xF87189)  if the entry is non-null, calls
+;       SLIDE_Parse_Header (0xEF41E3) with it and destination RAM 0x69800;
+;       "SLIDE" + '4' dispatches to SLIDE_Decompress_4K_Init (0xEF3FAB)
+;   Demo_GetPresetBaseForPart (0xF86F48), ..Alt (0xF86F6D), ..Ext (0xF86F92)
+;       null test only: non-null -> 0x69800, null -> 0x0AB000
+;   Voice_GetPresetFieldWord (0xF86FB7) / Voice_GetPresetFieldAddr (0xF86FDC)
+;       the same test, then the u16 at +0x1E (track-enable mask) / the address
+;       +0x20 (track types) of the decompressed image
 	.long	DemoSongPreset00
 	.long	DemoSongPreset01
 	.long	DemoSongPreset02
@@ -940,108 +1069,198 @@ DemoSongPreset_PointerTable:
 ; -----------------------------------------------------------------------------
 
 	.org 0x9C4050 - 0x800000, 0xFF
+; Demo song 00 (pointer-table slot 0): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 26,880 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "MAIN".
+; Built from includes/demo_presets/midi/demo_preset_00.mid + sidecar/.yaml.
 DemoSongPreset00:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x69, 0x00	; uncompressed size = 26880 bytes
 	.incbin "includes/demo_presets/demo_preset_00_compressed.bin"
 
 	.org 0x9C9018 - 0x800000, 0xFF
+; Demo song 01 (pointer-table slot 1): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 28,928 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "ACCORD".
+; Built from includes/demo_presets/midi/demo_preset_01.mid + sidecar/.yaml.
 DemoSongPreset01:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x71, 0x00	; uncompressed size = 28928 bytes
 	.incbin "includes/demo_presets/demo_preset_01_compressed.bin"
 
 	.org 0x9CE17C - 0x800000, 0xFF
+; Demo song 02 (pointer-table slot 2): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 18,944 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_02.mid + sidecar/.yaml.
 DemoSongPreset02:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x4A, 0x00	; uncompressed size = 18944 bytes
 	.incbin "includes/demo_presets/demo_preset_02_compressed.bin"
 
 	.org 0x9D16F2 - 0x800000, 0xFF
+; Demo song 03 (pointer-table slot 3): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 27,392 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_03.mid + sidecar/.yaml.
 DemoSongPreset03:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x6B, 0x00	; uncompressed size = 27392 bytes
 	.incbin "includes/demo_presets/demo_preset_03_compressed.bin"
 
 	.org 0x9D645C - 0x800000, 0xFF
+; Demo song 04 (pointer-table slot 4): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 22,016 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "SHOW".
+; Built from includes/demo_presets/midi/demo_preset_04.mid + sidecar/.yaml.
 DemoSongPreset04:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x56, 0x00	; uncompressed size = 22016 bytes
 	.incbin "includes/demo_presets/demo_preset_04_compressed.bin"
 
 	.org 0x9DA016 - 0x800000, 0xFF
+; Demo song 05 (pointer-table slot 5): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 25,088 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "CONTEMP".
+; Built from includes/demo_presets/midi/demo_preset_05.mid + sidecar/.yaml.
 DemoSongPreset05:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x62, 0x00	; uncompressed size = 25088 bytes
 	.incbin "includes/demo_presets/demo_preset_05_compressed.bin"
 
 	.org 0x9DE072 - 0x800000, 0xFF
+; Demo song 06 (pointer-table slot 6): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 17,408 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "STRINGS".
+; Built from includes/demo_presets/midi/demo_preset_06.mid + sidecar/.yaml.
 DemoSongPreset06:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x44, 0x00	; uncompressed size = 17408 bytes
 	.incbin "includes/demo_presets/demo_preset_06_compressed.bin"
 
 	.org 0x9E0CE2 - 0x800000, 0xFF
+; Demo song 07 (pointer-table slot 7): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 8,448 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_07.mid + sidecar/.yaml.
 DemoSongPreset07:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x21, 0x00	; uncompressed size = 8448 bytes
 	.incbin "includes/demo_presets/demo_preset_07_compressed.bin"
 
 	.org 0x9E2358 - 0x800000, 0xFF
+; Demo song 08 (pointer-table slot 8): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 23,040 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "GUITAR".
+; Built from includes/demo_presets/midi/demo_preset_08.mid + sidecar/.yaml.
 DemoSongPreset08:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x5A, 0x00	; uncompressed size = 23040 bytes
 	.incbin "includes/demo_presets/demo_preset_08_compressed.bin"
 
 	.org 0x9E61C2 - 0x800000, 0xFF
+; Demo song 09 (pointer-table slot 9): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 6,912 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_09.mid + sidecar/.yaml.
 DemoSongPreset09:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x1B, 0x00	; uncompressed size = 6912 bytes
 	.incbin "includes/demo_presets/demo_preset_09_compressed.bin"
 
 	.org 0x9E72E8 - 0x800000, 0xFF
+; Demo song 10 (pointer-table slot 10): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 17,408 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "SAX".
+; Built from includes/demo_presets/midi/demo_preset_10.mid + sidecar/.yaml.
 DemoSongPreset10:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x44, 0x00	; uncompressed size = 17408 bytes
 	.incbin "includes/demo_presets/demo_preset_10_compressed.bin"
 
 	.org 0x9EA1F2 - 0x800000, 0xFF
+; Demo song 11 (pointer-table slot 11): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 23,296 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "JAZZORG".
+; Built from includes/demo_presets/midi/demo_preset_11.mid + sidecar/.yaml.
 DemoSongPreset11:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x5B, 0x00	; uncompressed size = 23296 bytes
 	.incbin "includes/demo_presets/demo_preset_11_compressed.bin"
 
 	.org 0x9EDFFC - 0x800000, 0xFF
+; Demo song 12 (pointer-table slot 12): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 6,912 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "Hokie Dance".
+; Built from includes/demo_presets/midi/demo_preset_12.mid + sidecar/.yaml.
 DemoSongPreset12:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x1B, 0x00	; uncompressed size = 6912 bytes
 	.incbin "includes/demo_presets/demo_preset_12_compressed.bin"
 
 	.org 0x9EEC62 - 0x800000, 0xFF
+; Demo song 13 (pointer-table slot 13): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 11,264 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is blank.
+; Built from includes/demo_presets/midi/demo_preset_13.mid + sidecar/.yaml.
 DemoSongPreset13:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x2C, 0x00	; uncompressed size = 11264 bytes
 	.incbin "includes/demo_presets/demo_preset_13_compressed.bin"
 
 	.org 0x9F0E72 - 0x800000, 0xFF
+; Demo song 14 (pointer-table slot 14): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 6,656 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "Organ Combo Demo".
+; Built from includes/demo_presets/midi/demo_preset_14.mid + sidecar/.yaml.
 DemoSongPreset14:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x1A, 0x00	; uncompressed size = 6656 bytes
 	.incbin "includes/demo_presets/demo_preset_14_compressed.bin"
 
 	.org 0x9F1C70 - 0x800000, 0xFF
+; Demo song 15 (pointer-table slot 15): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 11,520 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "Big Band Mid".
+; Built from includes/demo_presets/midi/demo_preset_15.mid + sidecar/.yaml.
 DemoSongPreset15:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x2D, 0x00	; uncompressed size = 11520 bytes
 	.incbin "includes/demo_presets/demo_preset_15_compressed.bin"
 
 	.org 0x9F3B52 - 0x800000, 0xFF
+; Demo song 16 (pointer-table slot 16): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 6,656 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) reads "Bavarian Polka".
+; Built from includes/demo_presets/midi/demo_preset_16.mid + sidecar/.yaml.
 DemoSongPreset16:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x1A, 0x00	; uncompressed size = 6656 bytes
 	.incbin "includes/demo_presets/demo_preset_16_compressed.bin"
 
 	.org 0x9F494E - 0x800000, 0xFF
+; Demo song 17 (pointer-table slot 17): Demo_ParseSlideHeader (0xF87189)
+; hands this block to SLIDE_Parse_Header (0xEF41E3), which inflates it to
+; RAM 0x69800 -- 5,888 B, an image starting "ZZZZ";
+; its 16-character title field (+0x100) is all underscores.
+; Built from includes/demo_presets/midi/demo_preset_17.mid + sidecar/.yaml.
 DemoSongPreset17:
 	.asciz "SLIDE4K"
 	.byte 0x00, 0x17, 0x00	; uncompressed size = 5888 bytes
@@ -1061,8 +1280,28 @@ FileIdentifierStringsTable:
 	.asciz "Technics KN5000 HD-AEPRG DATA FILE    "
 	.byte 0xf0	; 9FA118
 	; Data between strings and SLIDE marker (0x9FA140 - 0x9FA14F)
-	.byte 0x00, 0x00, 0x9b, 0x00, 0x20, 0x00, 0x9b, 0x00
-	.byte 0x43, 0x00, 0x5b, 0x00, 0x76, 0x00, 0x8f, 0x00
+; IDENTIFIED 2026-09-25: Boot_LoadDiskData's jump-offset table.  Boot_LoadDiskData
+; (0x9FC40B) checks disk type 1..8, computes 2*(type-1), loads the word at
+; boot address 0xFFA140 + 2*(type-1) (ldw_sri) and jumps to
+; Boot_LoadDiskData__ldd_Program12 + word (jp_ind).  Types as Boot_DetectDiskType
+; (0x9FBFC4) assigns them from the FileIdentifierStringsTable slot matched:
+; 1 Program 1/2, 2 Program 2/2, 3 Table 1/2, 4 Table 2/2, 5 CMPCUSTOMDATA,
+; 6 HD-AEPRG, 7 Program PCK, 8 Table PCK.  The second disks of a set (2, 4)
+; go to the error handler.  The program ROM's own update dispatcher
+; (HANDLE_UPDATE_OFFSETS, the commented ASL listing further down) has the same
+; 8-way shape, with its two second-disk slots sending to
+; SHOW_ILLEGAL_DISK_MESSAGE.  (The handlers were labelled __ldd_type1..5 and
+; __ldd_type678 in address order until 2026-09-25; renamed after the disk
+; type that reaches them -- scripts/renaming/rename_tdata_loaddiskdata_handlers.sed.)
+Boot_LoadDiskData_JumpOffsets:
+	.short	Boot_LoadDiskData__ldd_Program12 - Boot_LoadDiskData__ldd_Program12	; type 1
+	.short	Boot_LoadDiskData__ldd_error - Boot_LoadDiskData__ldd_Program12	; type 2
+	.short	Boot_LoadDiskData__ldd_Table12 - Boot_LoadDiskData__ldd_Program12	; type 3
+	.short	Boot_LoadDiskData__ldd_error - Boot_LoadDiskData__ldd_Program12	; type 4
+	.short	Boot_LoadDiskData__ldd_CustomData - Boot_LoadDiskData__ldd_Program12	; type 5
+	.short	Boot_LoadDiskData__ldd_HDAEPrg - Boot_LoadDiskData__ldd_Program12	; type 6
+	.short	Boot_LoadDiskData__ldd_ProgramPCK - Boot_LoadDiskData__ldd_Program12	; type 7
+	.short	Boot_LoadDiskData__ldd_TablePCK - Boot_LoadDiskData__ldd_Program12	; type 8
 
 ;HANDLE_UPDATE_BASE_ADDR		EQU HANDLE_UPDATE_FILE_TYPE_ID_001h
 ;
@@ -1079,7 +1318,11 @@ FileIdentifierStringsTable:
 
 	.org 0x9FA150 - 0x800000, 0xFF
 
-BootscreenSlideMarker:
+; The 5-byte signature LZSS_ParseHeader (0x9FC9B3) compares the first bytes
+; of a compressed update stream against: it pushes 0x00FF / 0xA150, i.e. the
+; pointer 0x00FFA150 = this string's boot-time alias, with length 5.  (Renamed
+; from BootscreenSlideMarker 2026-09-25; nothing referenced the old name.)
+LZSS_SlideSignature:
 	.asciz "SLIDE"
 
 ; Boot/flash-update screen bitmaps (headerless 1bpp, 224x22, 616 bytes
@@ -1256,7 +1499,7 @@ Boot_Init:
 	calr Detect_Region_Code
 
 	; === Call Main Hardware Init ===
-	call 0xFFBBF3	; Flash_Init_Custom_And_Table (boot-time address)
+	call Flash_Init_Custom_And_Table + 0x600000	; Flash_Init_Custom_And_Table (boot-time address)
 
 	; === Configure Interrupt Enable Register ===
 	lda_dd8l XBC, (0xE4)
@@ -1274,39 +1517,39 @@ __jrt_nop_9FB652:
 	; === Get Boot Mode and Check FDC ===
 	calr Get_Region_Code
 	cp l, 4:i3
-	call nz, (0xFFC6B2:24)	; CALL NZ, HDAE5000_InitializeParallelPort (boot-time alias of 0x9FC6B2)
+	call nz, (HDAE5000_InitializeParallelPort + 0x600000:24)	; CALL NZ, HDAE5000_InitializeParallelPort (boot-time alias of 0x9FC6B2)
 
 Boot_SkipFDCCheck:
-	call 0xFFEC63	; Boot_CheckDiskPresent: L=1 disk present (PD6 low)
+	call Boot_CheckDiskPresent + 0x600000	; Boot_CheckDiskPresent: L=1 disk present (PD6 low)
 	cp l, 0:i3
 	jr z, Boot_PrepareJump
 
 	; === Bring up the boot CP-serial link ===
-	ld xhl, (0xffec6e:24)	; BootSerial_InitVectorTable[0] -> BootSerial_Init
+	ld xhl, (BootSerial_InitVectorTable + 0x600000:24)	; BootSerial_InitVectorTable[0] -> BootSerial_Init
 	call (xhl)
 
 	; === Probe the device on the CP-serial link ===
-	call 0xFFED0E	; Boot_ProbeExternalDevice: HL=device class
+	call Boot_ProbeExternalDevice + 0x600000	; Boot_ProbeExternalDevice: HL=device class
 	cp l, 4:i3
 	jr nz, Boot_PrepareJump
 
 	; === Flash Update Sequence ===
-	call 0xFFBF07	; Boot_InitDisplay
-	call 0xFFD262	; Boot_ShowMessage
+	call FDC_Reset + 0x600000	; was "Boot_InitDisplay": the target issues FDC_Request cmd 0 (FDC init)
+	call VGA_Setup + 0x600000	; was "Boot_ShowMessage": the target programs the VGA controller
 	pushw 0x8
 	pushw 0x3
-	ld xwa, 0xFFAAF6	; message addr
+	ld xwa, Bitmap_1bit_Please_Wait + 0x600000	; message addr
 	ldw bc, 0x30	; width
 	ldw de, 0x50	; height
-	call 0xFFCCFB	; Boot_DrawBitmap
-	call 0xFFBFC4	; Boot_WaitForInput
+	call DrawBitmap_UpdateDisplay + 0x600000	; Boot_DrawBitmap
+	call Boot_DetectDiskType + 0x600000	; was "Boot_WaitForInput": returns L = update-disk type 1-8 or 0xFF
 	cp l, 3:i3
 	jr z, Boot_PrepareJump
 	cp l, 0x8
 	jr z, Boot_PrepareJump
 	cp l, 0xFF
 	jr z, Boot_PrepareJump
-	call 0xFFCC2A	; Boot_PerformUpdate
+	call Boot_FlashUpdate_Main + 0x600000	; Boot_PerformUpdate
 
 Boot_HaltLoop:
 	jr Boot_HaltLoop
@@ -1324,7 +1567,7 @@ Boot_PrepareJump:
 
 	; === Setup for Jump to Main Program ===
 	ld xsp, 0xC00
-	ld xwa, 0xFFFEDC	; target address
+	ld xwa, PROGRAM_ROM_ENTRY_BOOT	; target address
 	ldw ix, 0x14B	; CS2 register
 	extz xix
 	sll xbc, 0	; alignment/padding
@@ -1416,7 +1659,7 @@ Boot_ClearRAM__clear2_aligned:
 
 	; === Copy ROM data 1: 12 bytes from 0xFFB4DC to RAM 0x9998 ===
 	ld xde, 0x9998	; destination
-	ld xhl, 0xFFB4DC	; source in boot ROM
+	ld xhl, Boot_InitParams + 0x600000	; source in boot ROM
 	ld xbc, 0xC	; count = 12 bytes
 	or xbc, xbc
 	jr z, Boot_ClearRAM__copy1_done
@@ -1430,7 +1673,7 @@ Boot_ClearRAM__copy1_done:
 
 	; === Copy ROM data 2: 10 bytes from 0xFFB4D2 to RAM 0x1044 ===
 	ld xde, 0x1044	; destination
-	ld xhl, 0xFFB4D2	; source in boot ROM
+	ld xhl, Boot_BitMaskTable + 0x600000	; source in boot ROM
 	ld xbc, 0xA	; count = 10 bytes
 	or xbc, xbc
 	jr z, Boot_ClearRAM__copy2_done
@@ -1542,7 +1785,7 @@ Flash_Reset_16bit__wait_ready:
 	ldw_sri0 WA, (xiz + 0x3232)              ; LD WA, (XIZ+3232h)
 	ei 0	; 06 00 - Re-enable interrupts
 	; Check if region code = 4 (high bank exists)
-	call 0xFFB700	; Get_Region_Code - returns region code in L
+	call Get_Region_Code + 0x600000	; Get_Region_Code - returns region code in L
 	cp l, 4:i3
 	jr nz, Flash_Reset_16bit__done
 	; Reset high bank at base+0x80000
@@ -1652,7 +1895,7 @@ Flash_ProgramWord_16bit__wait_ready:
 	jr nz, Flash_ProgramWord_16bit__hdae_target	; 6e 20
 	; Custom Data target - check for high bank
 	lda xiz, (0x300000:24); f2 00 00 30 36
-	call 0xFFB700	; CALL Boot_Get_Region_Code (at 0xFFB700)
+	call Get_Region_Code + 0x600000	; CALL Boot_Get_Region_Code (at 0xFFB700)
 	cp l, 4:i3	; cf dc
 	jr nz, Flash_ProgramWord_16bit__do_program	; 6e 18
 	; Check if address is in high bank (>= 0x380000)
@@ -1723,7 +1966,7 @@ Flash_ChipErase_16bit__got_base:
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0x10	; LD (XWA), 0010h (word store)
 	; Check region code for high bank
-	call 0xFFB700	; CALL Boot_Get_Region_Code (at 0xFFB700)
+	call Get_Region_Code + 0x600000	; CALL Boot_Get_Region_Code (at 0xFFB700)
 	cp l, 4:i3	; cf dc
 	jr nz, Flash_ChipErase_16bit__done	; 6e 49
 	cp (xsp + 4), 0x1	; CP (XSP+04h), 01h
@@ -1777,7 +2020,7 @@ Flash_SectorErase_16bit__got_base:
 	ld xwa, 0xFF0000	; 40 00 00 ff 00
 	and (xsp + 4), xwa	; AND (XSP+04h), XWA
 	; Check region and bank for Custom Data
-	call 0xFFB700	; CALL Boot_Get_Region_Code (at 0xFFB700)
+	call Get_Region_Code + 0x600000	; CALL Boot_Get_Region_Code (at 0xFFB700)
 	cp l, 4:i3	; cf dc
 	jr nz, Flash_SectorErase_16bit__do_erase	; 6e 11
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h)
@@ -1806,7 +2049,7 @@ Flash_SectorErase_16bit__do_erase:
 	; This is complex sector layout handling for AM29F400B/AM29F800B
 
 	; Check if Custom Data flash (target 1) with region code 4
-	call 0xFFB700	; CALL Boot_Get_Region_Code (0xFFB700)
+	call Get_Region_Code + 0x600000	; CALL Boot_Get_Region_Code (0xFFB700)
 	cp l, 4:i3	; cf dc
 	jr nz, Flash_SectorErase_16bit__check_non_region4	; 6e 5f - skip if not region 4
 
@@ -1991,9 +2234,9 @@ Flash_Init_Custom_And_Table:
 	calr Flash_Reset_16bit	; CALR Flash_Reset_16bit (0x9FB812)
 
 	; Check region and reset Table Data ROM if not region 4
-	call 0xFFB700	; CALL Boot_Get_Region_Code (0xFFB700)
+	call Get_Region_Code + 0x600000	; CALL Boot_Get_Region_Code (0xFFB700)
 	cp l, 4:i3	; cf dc
-	call nz, (0xFFBC2D:24)	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
+	call nz, (Flash_Reset_32bit + 0x600000:24)	; CALL NZ, Flash_Reset_32bit (0xFFBC2D)
 
 	; Read Custom Data device ID
 	ld wa, 1:i3	; d8 a9
@@ -2468,7 +2711,7 @@ Flash_Update_TableData__flash_detected:
 	; Initialize destination and count
 	ld xwa, 0x80000	; 40 00 00 08 00 - reinit src ptr
 	ld xbc, 0x10000	; 41 00 00 01 00 - count = 64K dwords
-	call 0xFFBC1D	; CALL MemBlock_FillWithZeros (0xFFBC1D)
+	call MemBlock_FillWithZeros + 0x600000	; CALL MemBlock_FillWithZeros (0xFFBC1D)
 
 	; Wait for erase to complete
 Flash_Update_TableData__wait_erase:
@@ -2539,7 +2782,7 @@ FDC_Reset:
 	ld xwa, 0:i3	; e8 a8
 	ld (xbc + 12), xwa	; LD (XBC+0Ch), XWA
 	push xbc	; 39
-	call 0xFFE944	; CALL 0xFFE944 (FDC_Init)
+	call FDC_Request + 0x600000	; CALL 0xFFE944 (FDC_Init)
 	lda xsp, (xsp + 20)	; LDA XSP, XSP+14h - deallocate 20 bytes
 	ret	; 0e
 
@@ -2567,7 +2810,7 @@ FDC_ReadSector:
 	ld (xsp + 14), xwa	; LD (XSP+0Eh), XWA - save sector info
 	ld xwa, (xsp + 14)	; LD XWA, (XSP+0Eh)
 	ld xbc, 0x12	; 41 12 00 00 00 - param size
-	call 0xFFFC63	; CALL 0xFFFC63
+	call Boot_UDivMod32 + 0x600000	; CALL 0xFFFC63
 	lda xiz, (3088:16); LDA XIZ, 0x0C10 - FDC params in RAM
 	ldw (xiz + 2), 0x0	; LD (XIZ+02h), 0000h
 	ld wa, hl	; LD WA, HL
@@ -2579,7 +2822,7 @@ FDC_ReadSector:
 	ld (xsp + 4), xwa	; LD (XSP+04h), XWA
 	ld xwa, (xsp + 14)	; LD XWA, (XSP+0Eh)
 	ld xbc, 0x12	; 41 12 00 00 00
-	call 0xFFFC5D	; CALL 0xFFFC5D
+	call Boot_UMod32 + 0x600000	; CALL 0xFFFC5D
 	inc 1, xhl	; INC 1, XHL
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h)
 	ld (xwa), hl	; LD (XWA), HL
@@ -2615,7 +2858,7 @@ FDC_ReadSectorWrapper__retry:
 	lda xwa, (3088:16); LDA XWA, 0x0C10
 	ldw (xwa), 0x3	; LD (XWA), 0003h
 	push xwa	; 38
-	call 0xFFE944	; CALL 0xFFE944
+	call FDC_Request + 0x600000	; CALL 0xFFE944
 	inc 4, xsp	; INC 4, XSP - deallocate
 	cp hl, 0:i3	; CP HL, 0
 	jr z, FDC_ReadSectorWrapper__read_ok	; 66 05 - skip retry if success
@@ -2649,7 +2892,7 @@ Boot_DetectDiskType:
 	push xiz	; 3e
 	ld (xsp + 4), 0xFF	; LD (XSP+04h), 0xFF - default type
 	pushw 0x200	; PUSH 0200h - sector size
-	call 0xFFFB56	; CALL 0xFFFB56 - allocate buffer
+	call Boot_malloc + 0x600000	; CALL 0xFFFB56 - allocate buffer
 	inc 2, xsp	; INC 2, XSP - pop arg
 	ld xiz, xhl	; LD XIZ, XHL - save buffer ptr
 	ld xwa, 0x21	; 40 21 00 00 00 - sector 33 (boot sector)
@@ -2659,10 +2902,10 @@ Boot_DetectDiskType:
 
 	; Check signature at offset 0xA000 -> type 1
 	pushw 0x26	; PUSH 0026h - signature length
-	pushw 0xFF	; PUSH 00FFh - ???
+	pushw 0xFF	; PUSH 00FFh - high word of the pointer 0x00FFA000 = boot alias of FileIdentifierStringsTable
 	pushw 0xA000	; PUSH 0A000h - offset
 	push xiz	; 3e - buffer ptr
-	call 0xFFFBDC	; CALL 0xFFFBDC - check signature
+	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC - check signature
 	add xsp, 0xA	; ADD XSP, 0Ah - pop 10 bytes
 	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type2	; 6e 07
@@ -2674,7 +2917,7 @@ Boot_DetectDiskType__check_type2:
 	pushw 0xFF	; PUSH 00FFh
 	pushw 0xA028	; PUSH 0A028h - offset
 	push xiz	; 3e
-	call 0xFFFBDC	; CALL 0xFFFBDC
+	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
 	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type3	; 6e 07
@@ -2686,7 +2929,7 @@ Boot_DetectDiskType__check_type3:
 	pushw 0xFF	; PUSH 00FFh
 	pushw 0xA078	; PUSH 0A078h - offset
 	push xiz	; 3e
-	call 0xFFFBDC	; CALL 0xFFFBDC
+	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
 	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type4	; 6e 07
@@ -2698,7 +2941,7 @@ Boot_DetectDiskType__check_type4:
 	pushw 0xFF	; PUSH 00FFh
 	pushw 0xA0A0	; PUSH 0A0A0h - offset
 	push xiz	; 3e
-	call 0xFFFBDC	; CALL 0xFFFBDC
+	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
 	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type5	; 6e 06
@@ -2710,7 +2953,7 @@ Boot_DetectDiskType__check_type5:
 	pushw 0xFF	; PUSH 00FFh
 	pushw 0xA0F0	; PUSH 0A0F0h - offset
 	push xiz	; 3e
-	call 0xFFFBDC	; CALL 0xFFFBDC
+	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
 	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type6	; 6e 06
@@ -2722,7 +2965,7 @@ Boot_DetectDiskType__check_type6:
 	pushw 0xFF	; PUSH 00FFh
 	pushw 0xA118	; PUSH 0A118h - offset
 	push xiz	; 3e
-	call 0xFFFBDC	; CALL 0xFFFBDC
+	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
 	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type7	; 6e 06
@@ -2734,7 +2977,7 @@ Boot_DetectDiskType__check_type7:
 	pushw 0xFF	; PUSH 00FFh
 	pushw 0xA050	; PUSH 0A050h - offset
 	push xiz	; 3e
-	call 0xFFFBDC	; CALL 0xFFFBDC
+	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
 	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__check_type8	; 6e 06
@@ -2746,7 +2989,7 @@ Boot_DetectDiskType__check_type8:
 	pushw 0xFF	; PUSH 00FFh
 	pushw 0xA0C8	; PUSH 0A0C8h - offset
 	push xiz	; 3e
-	call 0xFFFBDC	; CALL 0xFFFBDC
+	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC
 	add xsp, 0xA	; ADD XSP, 0Ah
 	cp hl, 0:i3	; CP HL, 0
 	jr nz, Boot_DetectDiskType__done	; 6e 04
@@ -2754,7 +2997,7 @@ Boot_DetectDiskType__check_type8:
 
 Boot_DetectDiskType__done:
 	push xiz	; 3e - free buffer
-	call 0xFFFCDD	; CALL 0xFFFCDD - free memory
+	call Boot_free + 0x600000	; CALL 0xFFFCDD - free memory
 	inc 4, xsp	; INC 4, XSP
 	ld l, (xsp + 4)	; LD L, (XSP+04h) - return type
 	pop xiz	; 5e
@@ -2808,7 +3051,7 @@ Boot_CopySectors__cs_partial_loop:
 	ld xde, (xsp + 10)	; LD XDE, (XSP+0x0A) - source ptr
 	ld_spil XBC, 0xEA	; LD XBC, (XDE+) - get callback addr
 	ld (xsp + 10), xde	; LD (XSP+0x0A), XDE
-	call 0xFFBCD7	; CALL 0xFFBCD7 - write with callback
+	call Flash_ProgramWord_32bit + 0x600000	; CALL 0xFFBCD7 - write with callback
 	inc1w_erp 0xFA	; INC 1, QIZ
 Boot_CopySectors__cs_partial_check:
 	ld bc, iz	; LD BC, IZ
@@ -2849,7 +3092,7 @@ Boot_CopySectors__cs_full_loop:
 	ld xde, (xsp + 10)	; LD XDE, (XSP+0x0A)
 	ld_spil XBC, 0xEA	; LD XBC, (XDE+)
 	ld (xsp + 10), xde	; LD (XSP+0x0A), XDE
-	call 0xFFBCD7	; CALL 0xFFBCD7
+	call Flash_ProgramWord_32bit + 0x600000	; CALL 0xFFBCD7
 	inc1w_erp 0xFA	; INC 1, QIZ
 	cp_erpw 0xFA, 0x00, 0x09	; CP QIZ, 0x0900 (18*128)
 	jr c, Boot_CopySectors__cs_full_loop	; 67 de
@@ -2885,7 +3128,7 @@ Boot_CopySectors__cs_rem_loop:
 	ld xde, (xsp + 10)	; LD XDE, (XSP+0x0A)
 	ld_spil XBC, 0xEA	; LD XBC, (XDE+)
 	ld (xsp + 10), xde	; LD (XSP+0x0A), XDE
-	call 0xFFBCD7	; CALL 0xFFBCD7
+	call Flash_ProgramWord_32bit + 0x600000	; CALL 0xFFBCD7
 	inc1w_erp 0xFA	; INC 1, QIZ
 Boot_CopySectors__cs_rem_check:
 	ld bc, iz	; LD BC, IZ
@@ -2943,7 +3186,7 @@ Boot_CopySectorsEx__cse_partial_loop:
 	ld xhl, (xsp + 10)	; LD XHL, (XSP+0x0A)
 	ld_spiw DE, 0xED	; LD DE, (XHL+)
 	ld (xsp + 10), xhl	; LD (XSP+0x0A), XHL
-	call 0xFFB903	; CALL 0xFFB903 (Flash_ProgramWord_16bit)
+	call Flash_ProgramWord_16bit + 0x600000	; CALL 0xFFB903 (Flash_ProgramWord_16bit)
 	inc1w_erp 0xFA	; INC 1, QIZ
 Boot_CopySectorsEx__cse_partial_check:
 	ld bc, iz	; LD BC, IZ
@@ -2986,7 +3229,7 @@ Boot_CopySectorsEx__cse_full_loop:
 	ld xhl, (xsp + 10)	; LD XHL, (XSP+0x0A)
 	ld_spiw DE, 0xED	; LD DE, (XHL+)
 	ld (xsp + 10), xhl	; LD (XSP+0x0A), XHL
-	call 0xFFB903	; CALL 0xFFB903
+	call Flash_ProgramWord_16bit + 0x600000	; CALL 0xFFB903
 	inc1w_erp 0xFA	; INC 1, QIZ
 	cp_erpw 0xFA, 0x00, 0x12	; CP QIZ, 0x1200 (18*256)
 	jr c, Boot_CopySectorsEx__cse_full_loop	; 67 d9
@@ -3023,7 +3266,7 @@ Boot_CopySectorsEx__cse_rem_loop:
 	ld xhl, (xsp + 10)	; LD XHL, (XSP+0x0A)
 	ld_spiw DE, 0xED	; LD DE, (XHL+)
 	ld (xsp + 10), xhl	; LD (XSP+0x0A), XHL
-	call 0xFFB903	; CALL 0xFFB903
+	call Flash_ProgramWord_16bit + 0x600000	; CALL 0xFFB903
 	inc1w_erp 0xFA	; INC 1, QIZ
 Boot_CopySectorsEx__cse_rem_check:
 	ld bc, iz	; LD BC, IZ
@@ -3044,10 +3287,10 @@ Boot_CopySectorsEx__cse_done:
 Boot_ClearScreen:
 	pushw 0x8	; PUSH 0x0008 - color
 	pushw 0x2	; PUSH 0x0002 - mode
-	ld xwa, 0xFFA626	; LD XWA, 0x00FFA626 - bitmap addr
+	ld xwa, Bitmap_1bit_FD_to_Flash_Memory + 0x600000	; LD XWA, 0x00FFA626 - bitmap addr
 	ldw bc, 0x30	; LD BC, 0x0030 - X pos
 	ldw de, 0xA0	; LD DE, 0x00A0 - Y pos
-	call 0xFFCCFB	; CALL 0xFFCCFB (DrawBitmap_UpdateDisplay)
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL 0xFFCCFB (DrawBitmap_UpdateDisplay)
 	ret	; 0e
 
 ; =============================================================================
@@ -3061,17 +3304,17 @@ Boot_WaitDiskInsert:
 Boot_WaitDiskInsert__display_prompt:
 	pushw 0x8	; PUSH 0x0008
 	pushw 0x2	; PUSH 0x0002
-	ld xwa, 0xFFAD5E	; LD XWA, 0x00FFAD5E - insert disk msg
+	ld xwa, Bitmap_1bit_Change_FD_2_of_2 + 0x600000	; LD XWA, 0x00FFAD5E - insert disk msg
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
-	call 0xFFCCFB	; CALL 0xFFCCFB
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL 0xFFCCFB
 
 Boot_WaitDiskInsert__wdi_wait_remove:
-	call 0xFFEC63	; CALL 0xFFEC63 - check disk present
+	call Boot_CheckDiskPresent + 0x600000	; CALL 0xFFEC63 - check disk present
 	cp l, 0:i3	; CP L, 0
 	jr z, Boot_WaitDiskInsert__wdi_check_insert	; 66 08
 Boot_WaitDiskInsert__wdi_recheck_remove:
-	call 0xFFEC63	; CALL 0xFFEC63
+	call Boot_CheckDiskPresent + 0x600000	; CALL 0xFFEC63
 	cp l, 0:i3	; CP L, 0
 	jr nz, Boot_WaitDiskInsert__wdi_recheck_remove	; JR NZ, recheck disk removal
 
@@ -3083,11 +3326,11 @@ Boot_WaitDiskInsert__wdi_delay1:
 	jr c, Boot_WaitDiskInsert__wdi_delay1	; 67 f6
 
 Boot_WaitDiskInsert__wdi_wait_insert:
-	call 0xFFEC63	; CALL 0xFFEC63
+	call Boot_CheckDiskPresent + 0x600000	; CALL 0xFFEC63
 	cp l, 0:i3	; CP L, 0
 	jr nz, Boot_WaitDiskInsert__wdi_delay2	; 6e 08
 Boot_WaitDiskInsert__wdi_recheck_insert:
-	call 0xFFEC63	; CALL 0xFFEC63
+	call Boot_CheckDiskPresent + 0x600000	; CALL 0xFFEC63
 	cp l, 0:i3	; CP L, 0
 	jr z, Boot_WaitDiskInsert__wdi_recheck_insert	; JR Z, recheck disk insert
 
@@ -3119,8 +3362,8 @@ Boot_WaitFDCReady:
 Boot_WaitFDCReady__wfdc_poll:
 	ld xwa, 0:i3	; LD XWA, 0
 	ld (3072:16), xwa	; LD (0x0C00), XWA
-	call 0xFFBD17	; CALL 0xFFBD17 - reset FDC
-	call 0xFFBE85	; CALL 0xFFBE85 - check FDC ready
+	call Flash_ChipErase_32bit + 0x600000	; CALL 0xFFBD17 - reset FDC
+	call Flash_WaitComplete_32bit + 0x600000	; CALL 0xFFBE85 - check FDC ready
 	cp hl, 0xFFFF	; CP HL, 0xFFFF - error?
 	jr nz, Boot_WaitFDCReady__wfdc_done	; 6e 29
 
@@ -3135,12 +3378,12 @@ Boot_WaitFDCReady__wfdc_timeout_check:
 	ld wa, iz	; LD WA, IZ
 	ldw bc, 0xB4	; LD BC, 0x00B4 - X pos
 	ld de, 5:i3	; LD DE, 5 - mode
-	call 0xFFCD9A	; CALL 0xFFCD9A (display progress)
+	call InitProgressDisplay_FillRegion + 0x600000	; CALL 0xFFCD9A (display progress)
 	ld xwa, 0:i3	; LD XWA, 0
 	ld (3072:16), xwa	; LD (0x0C00), XWA
 
 Boot_WaitFDCReady__wfdc_continue:
-	call 0xFFBE85	; CALL 0xFFBE85
+	call Flash_WaitComplete_32bit + 0x600000	; CALL 0xFFBE85
 	cp hl, 0xFFFF	; CP HL, 0xFFFF
 	jr z, Boot_WaitFDCReady__wfdc_timeout_check	; JR Z, recheck with timeout
 
@@ -3158,10 +3401,10 @@ Boot_LoadDiskData:
 	ld (xsp), a	; LD (XSP), A - save disk type
 	pushw 0x8	; PUSH 0x0008
 	pushw 0x2	; PUSH 0x0002
-	ld xwa, 0xFFA3BE	; LD XWA, 0x00FFA3BE - loading msg
+	ld xwa, Bitmap_1bit_Now_Erasing + 0x600000	; LD XWA, 0x00FFA3BE - loading msg
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
-	call 0xFFCCFB	; CALL 0xFFCCFB
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL 0xFFCCFB
 
 	; Validate disk type 1-8
 	ld a, (xsp)	; LD A, (XSP)
@@ -3174,13 +3417,14 @@ Boot_LoadDiskData:
 
 	; Dispatch via jump table
 	add wa, wa	; ADD WA, WA - WA *= 2
-	lda xix, (0xffa140:24); LDA XIX, 0xFFA140 - jump table
+	lda xix, (Boot_LoadDiskData_JumpOffsets + 0x600000:24); LDA XIX, 0xFFA140 - jump table
 	ldw_sri WA, 0x07, 0xF0, 0xE0	; LD WA, (XIX+WA)
-	lda xix, (0xffc44a:24); LDA XIX, 0xFFC44A - base addr
+	lda xix, (Boot_LoadDiskData__ldd_Program12 + 0x600000:24); LDA XIX, 0xFFC44A - base addr
 	jp_ind 8, 0x07, 0xF0, 0xE0	; JP T, XIX+WA - dispatch
 
-; Type 1 handler (0x9FC44A): Table data disk 1
-Boot_LoadDiskData__ldd_type1:
+; Disk type 1 handler, "Program DATA FILE 1/2" (0x9FC44A): copies disk 1 to
+; 0x800000, asks for disk 2 (type 2) and copies it to 0x900000
+Boot_LoadDiskData__ldd_Program12:
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	ldw wa, 0x24	; LD WA, 0x0024 - start sector
@@ -3192,8 +3436,10 @@ Boot_LoadDiskData__ldd_type1:
 	ld xbc, 0x900000	; LD XBC, 0x00900000
 	jr Boot_LoadDiskData__ldd_copy2	; 68 1e
 
-; Type 2 handler (0x9FC46A): Table data disk 2 (start from disk 2)
-Boot_LoadDiskData__ldd_type2:
+; Disk type 3 handler, "Table DATA FILE 1/2" (0x9FC46A): same shape as type 1,
+; asking for disk type 4 (Table 2/2) second.  Boot_Init skips the update for
+; types 3 and 8 (cp l,3 / cp l,8 -> Boot_PrepareJump)
+Boot_LoadDiskData__ldd_Table12:
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	ldw wa, 0x24	; LD WA, 0x0024
@@ -3208,10 +3454,10 @@ Boot_LoadDiskData__ldd_copy2:
 	calr Boot_CopySectors	; CALR Boot_CopySectors
 	jr Boot_LoadDiskData__ldd_done	; 68 55
 
-; Type 3 handler (0x9FC48D): Custom data flash
-Boot_LoadDiskData__ldd_type3:
+; Disk type 5 handler, "CMPCUSTOMDATA" (0x9FC48D): Custom data flash
+Boot_LoadDiskData__ldd_CustomData:
 	ld wa, 1:i3	; LD WA, 1
-	call 0xFFBBDB	; CALL 0xFFBBDB
+	call Flash_ChipErase_16bit_Wait + 0x600000	; CALL 0xFFBBDB
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	pushw 0x800	; PUSH 0x0800 - size
 	ld wa, 1:i3	; LD WA, 1 - bank 1
@@ -3219,10 +3465,10 @@ Boot_LoadDiskData__ldd_type3:
 	ld xde, 0x300000	; LD XDE, 0x00300000 - dest
 	jr Boot_LoadDiskData__ldd_copy_ext	; 68 16
 
-; Type 4 handler (0x9FC4A5): HDAE5000 firmware
-Boot_LoadDiskData__ldd_type4:
+; Disk type 6 handler, "HD-AEPRG" (0x9FC4A5): HDAE5000 firmware
+Boot_LoadDiskData__ldd_HDAEPrg:
 	ld wa, 2:i3	; LD WA, 2
-	call 0xFFBBDB	; CALL 0xFFBBDB
+	call Flash_ChipErase_16bit_Wait + 0x600000	; CALL 0xFFBBDB
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	pushw 0x400	; PUSH 0x0400 - size
 	ld wa, 2:i3	; LD WA, 2 - bank 2
@@ -3233,19 +3479,20 @@ Boot_LoadDiskData__ldd_copy_ext:
 	calr Boot_CopySectorsEx	; CALR Boot_CopySectorsEx
 	jr Boot_LoadDiskData__ldd_done	; 68 22
 
-; Type 5 handler (0x9FC4C0): Erase and reprogram
-Boot_LoadDiskData__ldd_type5:
+; Disk type 7 handler, "Program DATA FILE PCK" (0x9FC4C0): Erase and reprogram
+Boot_LoadDiskData__ldd_ProgramPCK:
 	ld wa, 1:i3	; LD WA, 1
 	ld xbc, 0x3FFFFF	; LD XBC, 0x003FFFFF - end addr
-	call 0xFFBA17	; CALL 0xFFBA17 (Flash_SectorErase)
+	call Flash_SectorErase_16bit + 0x600000	; CALL 0xFFBA17 (Flash_SectorErase)
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	calr LZSS_Decompress	; CALR Flash_ProgramHDAE_Initialization
 	calr LZSS_ParseHeader	; CALR Boot_ProgramCustomFlash
 	jr Boot_LoadDiskData__ldd_done	; 68 09
 
-; Type 6/7/8 handlers continue
-Boot_LoadDiskData__ldd_type678:
+; Disk type 8 handler, "Table DATA FILE PCK" (0x9FC4D9) -- the only type that
+; reaches this entry (the old "Type 6/7/8" note predates the jump table)
+Boot_LoadDiskData__ldd_TablePCK:
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	calr LZSS_Decompress	; CALR Flash_ProgramHDAE_Initialization
@@ -3257,10 +3504,10 @@ Boot_LoadDiskData__ldd_done:
 Boot_LoadDiskData__ldd_error:
 	pushw 0x8	; PUSH 0x0008
 	pushw 0x2	; PUSH 0x0002
-	ld xwa, 0xFFAFC6	; LD XWA, 0x00FFAFC6 - error msg
+	ld xwa, Bitmap_1bit_Illegal_Disk + 0x600000	; LD XWA, 0x00FFAFC6 - error msg
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
-	call 0xFFCCFB	; CALL 0xFFCCFB
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL 0xFFCCFB
 	inc 2, xsp	; INC 2, XSP
 Boot_LoadDiskData__ldd_halt:
 	jr Boot_LoadDiskData__ldd_halt	; 68 fe - infinite loop
@@ -3423,7 +3670,7 @@ Boot_ProgramCustomFlash__pcf_copy_loop:
 	ld_spiw DE, 0xE1	; LD DE, (XWA+)
 	ld (xsp + 4), xwa	; LD (XSP+0x04), XWA
 	ld wa, 1:i3	; LD WA, 1 - bank 1
-	call 0xFFB903	; CALL 0xFFB903 (Flash_ProgramWord_16bit)
+	call Flash_ProgramWord_16bit + 0x600000	; CALL 0xFFB903 (Flash_ProgramWord_16bit)
 	inc 1, xiz	; INC 1, XIZ
 	cp xiz, 0x40000	; CP XIZ, 0x00040000 (256K)
 	jr c, Boot_ProgramCustomFlash__pcf_copy_loop	; 67 de
@@ -3463,7 +3710,7 @@ Flash_ProgramHDAE_Initialization__phd1_copy_loop:
 	ld xde, (xsp + 4)	; LD XDE, (XSP+0x04)
 	ld_spil XBC, 0xEA	; LD XBC, (XDE+)
 	ld (xsp + 4), xde	; LD (XSP+0x04), XDE
-	call 0xFFBCD7	; CALL 0xFFBCD7 (write with callback)
+	call Flash_ProgramWord_32bit + 0x600000	; CALL 0xFFBCD7 (write with callback)
 	inc 1, xiz	; INC 1, XIZ
 	cp xiz, 0x20000	; CP XIZ, 0x00020000 (128K)
 	jr c, Flash_ProgramHDAE_Initialization__phd1_copy_loop	; 67 de
@@ -3502,7 +3749,7 @@ Flash_ProgramHDAE_Payload__phd2_copy_loop:
 	ld xde, (xsp + 4)	; LD XDE, (XSP+0x04)
 	ld_spil XBC, 0xEA	; LD XBC, (XDE+)
 	ld (xsp + 4), xde	; LD (XSP+0x04), XDE
-	call 0xFFBCD7	; CALL 0xFFBCD7
+	call Flash_ProgramWord_32bit + 0x600000	; CALL 0xFFBCD7
 	inc 1, xiz	; INC 1, XIZ
 	cp xiz, 0x20000	; CP XIZ, 0x00020000
 	jr c, Flash_ProgramHDAE_Payload__phd2_copy_loop	; 67 de
@@ -3561,14 +3808,14 @@ HDAE5000_InitializeParallelPort__ppi_wait_loop:
 	jr nz, HDAE5000_InitializeParallelPort__ppi_wait_loop	; 6e f4
 
 	; === Probe both flash devices; light an LED and halt on failure ===
-	call 0xFFBC6A	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
+	call Flash_ReadID_32bit + 0x600000	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
 	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF - no/unknown device?
 	jr nz, HDAE5000_InitializeParallelPort__probe_16bit	; 6e 08
 	set 2, (0x160004:24)	; SET 2, (0x160004) - LED bit 2 = table flash probe failed
 	ldib_erp 0xFB, 1	; LD QIZH, 1 - record probe failure
 HDAE5000_InitializeParallelPort__probe_16bit:
 	ld wa, 1:i3	; LD WA, 1 - custom-data flash bank
-	call 0xFFB888	; CALL Flash_ReadID_16bit (boot-time alias of 0x9FB888)
+	call Flash_ReadID_16bit + 0x600000	; CALL Flash_ReadID_16bit (boot-time alias of 0x9FB888)
 	cp hl, 0xFFFF	; CP HL, 0xFFFF - no/unknown device?
 	jr nz, HDAE5000_InitializeParallelPort__check_probe_result	; 6e 0a
 	set 3, (0x160004:24)	; SET 3, (0x160004) - LED bit 3 = custom flash probe failed
@@ -3588,7 +3835,7 @@ HDAE5000_InitializeParallelPort__erase_flash:
 	ld xbc, 0xA00000	; table-data flash end
 	calr Flash_SearchFirstNonEmptyBlock
 	or xhl, xhl	; XHL != 0 -> data present, needs erase
-	call nz, (0xFFBD17:24)	; CALL NZ, Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
+	call nz, (Flash_ChipErase_32bit + 0x600000:24)	; CALL NZ, Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
 	lda xwa, (0x300000:24)	; custom-data flash start
 	ld xbc, xwa	; LD XBC, XWA
 	add xbc, 0x100000	; custom-data flash end = 0x400000
@@ -3596,14 +3843,14 @@ HDAE5000_InitializeParallelPort__erase_flash:
 	or xhl, xhl
 	jr z, HDAE5000_InitializeParallelPort__wait_erase	; 66 06
 	ld wa, 1:i3	; LD WA, 1
-	call 0xFFB968	; CALL Flash_ChipErase_16bit (boot-time alias of 0x9FB968)
+	call Flash_ChipErase_16bit + 0x600000	; CALL Flash_ChipErase_16bit (boot-time alias of 0x9FB968)
 HDAE5000_InitializeParallelPort__wait_erase:
-	call 0xFFBE85	; CALL Flash_WaitComplete_32bit (boot-time alias of 0x9FBE85)
+	call Flash_WaitComplete_32bit + 0x600000	; CALL Flash_WaitComplete_32bit (boot-time alias of 0x9FBE85)
 	cp hl, 0xFFFF	; still busy?
 	jr nz, HDAE5000_InitializeParallelPort__program_flash	; 6e 0d
 HDAE5000_InitializeParallelPort__erase_blink:
 	calr Boot_BlinkLED	; cycle LED pattern while the chip erase runs
-	call 0xFFBE85	; CALL Flash_WaitComplete_32bit
+	call Flash_WaitComplete_32bit + 0x600000	; CALL Flash_WaitComplete_32bit
 	cp hl, 0xFFFF
 	jr z, HDAE5000_InitializeParallelPort__erase_blink	; 66 f3
 
@@ -3627,14 +3874,14 @@ HDAE5000_InitializeParallelPort__program_flash:
 	ld de, 0:i3	; LD DE, 0 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
-	call nz, (0xFFC54B:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
+	call nz, (LED_ToggleBit2 + 0x600000:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
 	pushw 0x1	; last bank to verify = 1
 	ld xwa, 0x300000	; reference: custom-data flash
 	ld xbc, 0x200000	; source window
 	ld de, 0:i3	; LD DE, 0 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
-	call nz, (0xFFC55A:24)	; CALL NZ, LED_ToggleBit3 (boot-time alias of 0x9FC55A; never returns)
+	call nz, (LED_ToggleBit3 + 0x600000:24)	; CALL NZ, LED_ToggleBit3 (boot-time alias of 0x9FC55A; never returns)
 
 	; === Check "hkt_" signature, remap CS2 and jump into the Program ROM ===
 	ld (0x160000:24), 0x07	; LD (0x160000), 0x07 - select HDAE5000 bank 7
@@ -3646,7 +3893,7 @@ HDAE5000_InitializeParallelPort__sig_fail_halt:
 	jr HDAE5000_InitializeParallelPort__sig_fail_halt	; 68 fe - bad signature, halt
 HDAE5000_InitializeParallelPort__handoff:
 	ei 7	; disable maskable interrupts
-	ld xwa, 0xFFFED8	; entry in Program ROM (Boot_Init's own handoff uses 0xFFFEDC)
+	ld xwa, PROGRAM_ROM_ENTRY_HDAE5000	; entry in Program ROM (Boot_Init's own handoff uses 0xFFFEDC)
 	ldw ix, 0x14B	; CS2 register
 	extz xix
 	sll xbc, 0	; alignment/padding
@@ -3673,7 +3920,7 @@ HDAE5000_InitializeParallelPort__handoff:
 ; =============================================================================
 HDAE5000_ProgramPayloadOnly:
 	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off
-	call 0xFFBC6A	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
+	call Flash_ReadID_32bit + 0x600000	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
 	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF - no/unknown device?
 	jr nz, HDAE5000_ProgramPayloadOnly__erase_flash	; 6e 07
 	set 2, (0x160004:24)	; SET 2, (0x160004) - LED bit 2 = probe failed
@@ -3685,14 +3932,14 @@ HDAE5000_ProgramPayloadOnly__erase_flash:
 	calr Flash_SearchFirstNonEmptyBlock
 	or xhl, xhl	; XHL != 0 -> data present, needs erase
 	jr z, HDAE5000_ProgramPayloadOnly__program_flash	; 66 21
-	call 0xFFBD17	; CALL Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
-	call 0xFFBE85	; CALL Flash_WaitComplete_32bit (boot-time alias of 0x9FBE85)
+	call Flash_ChipErase_32bit + 0x600000	; CALL Flash_ChipErase_32bit (boot-time alias of 0x9FBD17)
+	call Flash_WaitComplete_32bit + 0x600000	; CALL Flash_WaitComplete_32bit (boot-time alias of 0x9FBE85)
 	cp hl, 0xFFFF	; still busy?
 	jr nz, HDAE5000_ProgramPayloadOnly__program_flash	; 6e 13
 HDAE5000_ProgramPayloadOnly__erase_blink:
 	calr Boot_BlinkLED	; cycle LED pattern while the chip erase runs
 	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off between patterns
-	call 0xFFBE85	; CALL Flash_WaitComplete_32bit
+	call Flash_WaitComplete_32bit + 0x600000	; CALL Flash_WaitComplete_32bit
 	cp hl, 0xFFFF
 	jr z, HDAE5000_ProgramPayloadOnly__erase_blink	; 66 ed
 HDAE5000_ProgramPayloadOnly__program_flash:
@@ -3706,7 +3953,7 @@ HDAE5000_ProgramPayloadOnly__program_flash:
 	ld de, 4:i3	; LD DE, 4 - first bank
 	calr Boot_VerifyFlash
 	or xhl, xhl
-	call nz, (0xFFC54B:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
+	call nz, (LED_ToggleBit2 + 0x600000:24)	; CALL NZ, LED_ToggleBit2 (boot-time alias of 0x9FC54B; never returns)
 HDAE5000_ProgramPayloadOnly__done_halt:
 	jr HDAE5000_ProgramPayloadOnly__done_halt	; 68 fe - done, halt
 
@@ -3798,7 +4045,7 @@ LZSS_ReadByte__not_eof:
 	ld wa, (3120:16); LD WA, (0x0C30)
 	ld bc, (3122:16); LD BC, (0x0C32)
 	ld de, 6:i3	; LD DE, 6 - sector size index
-	call 0xFFCD9A	; CALL 0xFFCD9A (display progress)
+	call InitProgressDisplay_FillRegion + 0x600000	; CALL 0xFFCD9A (display progress)
 	ld iz, 0:i3	; LD IZ, 0
 LZSS_ReadByte__read_sectors:
 	ld wa, (3124:16); LD WA, (0x0C34)
@@ -3852,7 +4099,7 @@ LZSS_OutputByte:
 	ld (3112:16), xwa	; LD (0x0C28), XWA
 	ld xbc, (xbc)	; LD XBC, (XBC) - load 4 bytes from buffer
 	ld xwa, xde	; LD XWA, XDE
-	call 0xFFBCD7	; CALL 0xFFBCD7 (write to dest)
+	call Flash_ProgramWord_32bit + 0x600000	; CALL 0xFFBCD7 (write to dest)
 	ld (3126:16), 0; LD (0x0C36), 0x00 - reset index
 LZSS_OutputByte__not_full:
 	ld xwa, 1:i3	; LD XWA, 1
@@ -3882,7 +4129,7 @@ LZSS_OutputByte_Alt:
 	ld (3128:16), xwa	; LD (0x0C38), XWA
 	ld de, (xde)	; LD DE, (XDE)
 	ld wa, 1:i3	; LD WA, 1
-	call 0xFFB903	; CALL 0xFFB903
+	call Flash_ProgramWord_16bit + 0x600000	; CALL 0xFFB903
 	ld (3126:16), 0; LD (0x0C36), 0x00
 LZSS_OutputByte_Alt__not_full:
 	ld xwa, 1:i3	; LD XWA, 1
@@ -3920,7 +4167,7 @@ LZSS_ParseHeader__read_header:
 	pushw 0xFF	; PUSH 0x00FF
 	pushw 0xA150	; PUSH 0xA150 (expected signature addr)
 	push xwa	; PUSH XWA
-	call 0xFFFBDC	; CALL 0xFFFBDC (memcmp)
+	call Boot_memcmp + 0x600000	; CALL 0xFFFBDC (memcmp)
 	add xsp, 0xA	; ADD XSP, 0x0A
 	cp hl, 0:i3	; CP HL, 0
 	jr z, LZSS_ParseHeader__valid	; JR Z, .valid
@@ -3978,7 +4225,7 @@ LZSS_Decompress:
 
 	; === Allocate 4KB sliding window buffer ===
 	pushw 0x1000	; PUSH 0x1000 (4KB)
-	call 0xFFFB56	; CALL 0xFFFB56 (malloc)
+	call Boot_malloc + 0x600000	; CALL 0xFFFB56 (malloc)
 	inc 2, xsp	; INC 2, XSP (pop arg)
 	ld (xsp + 16), xhl	; LD (XSP+0x10), XHL - save window ptr
 	ld xwa, (xsp + 16)	; LD XWA, (XSP+0x10)
@@ -4015,7 +4262,7 @@ LZSS_Decompress__prefill_loop:
 	ldw wa, 0x32	; LD WA, 0x0032
 	ldw bc, 0xB4	; LD BC, 0x00B4
 	ld de, 6:i3	; LD DE, 6
-	call 0xFFCD9A	; CALL 0xFFCD9A (init display)
+	call InitProgressDisplay_FillRegion + 0x600000	; CALL 0xFFCD9A (init display)
 
 	; === Read expected decompressed size (3 bytes, little-endian) ===
 	ld xwa, 0x3E8	; LD XWA, 0x000003E8 - initial guess
@@ -4176,7 +4423,7 @@ LZSS_Decompress__done:
 	; === Epilogue: Free window buffer and return ===
 	ld xwa, (xsp + 16)	; LD XWA, (XSP+0x10)
 	push xwa	; PUSH XWA
-	call 0xFFFCDD	; CALL 0xFFFCDD (free)
+	call Boot_free + 0x600000	; CALL 0xFFFCDD (free)
 	inc 4, xsp	; INC 4, XSP
 	pop xiz	; POP XIZ
 	lda xsp, (xsp + 16)	; LDA XSP, XSP+0x10 (deallocate frame)
@@ -4232,7 +4479,7 @@ LZSS_Decompress__done:
 ; =============================================================================
 Boot_FlashUpdate_Main:
 	pushw_erp 0xFA	; PUSH QIZ
-	call 0xFFEC63	; CALL 0xFFEC63 - check disk present
+	call Boot_CheckDiskPresent + 0x600000	; CALL 0xFFEC63 - check disk present
 	cp l, 0:i3	; CP L, 0
 	jrl z, Boot_FlashUpdate_Main__update_done	; JRL Z, .update_done - no disk
 
@@ -4242,12 +4489,12 @@ Boot_FlashUpdate_Main:
 	ldb_erp L, 0xFB	; LD QIZH, L - save disk type
 
 	; Check region code
-	call 0xFFB700	; CALL 0xFFB700 (Boot_Get_Region_Code)
+	call Get_Region_Code + 0x600000	; CALL 0xFFB700 (Boot_Get_Region_Code)
 	cp l, 4:i3	; CP L, 4
 	jr z, Boot_FlashUpdate_Main__update_check_flash	; 66 58
 
 	; Check flash ID
-	call 0xFFBC6A	; CALL 0xFFBC6A
+	call Flash_ReadID_32bit + 0x600000	; CALL 0xFFBC6A
 	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF
 	jr z, Boot_FlashUpdate_Main__update_check_flash	; 66 4c
 
@@ -4258,10 +4505,10 @@ Boot_FlashUpdate_Main:
 	; Display "Flash Memory Update" message
 	pushw 0x8	; PUSH 0x0008 - color
 	pushw 0x2	; PUSH 0x0002 - mode
-	ld xwa, 0xFFA156	; LD XWA, 0x00FFA156 - bitmap addr
+	ld xwa, Bitmap_1bit_Flash_Memory_Update + 0x600000	; LD XWA, 0x00FFA156 - bitmap addr
 	ldw bc, 0x30	; LD BC, 0x0030 - X
 	ldw de, 0x50	; LD DE, 0x0050 - Y
-	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL DrawBitmap_UpdateDisplay
 
 	; Execute disk type handler
 	stb_erp A, 0xFB	; LD A, QIZH
@@ -4271,23 +4518,23 @@ Boot_FlashUpdate_Main:
 	; Display "Completed" message
 	pushw 0x8	; PUSH 0x0008
 	pushw 0x1	; PUSH 0x0001
-	ld xwa, 0xFFA88E	; LD XWA, 0x00FFA88E
+	ld xwa, Bitmap_1bit_Completed + 0x600000	; LD XWA, 0x00FFA88E
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
-	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL DrawBitmap_UpdateDisplay
 
 	; Display "Turn On Again" message
 	pushw 0x8	; PUSH 0x0008
 	pushw 0x1	; PUSH 0x0001
-	ld xwa, 0xFFB22E	; LD XWA, 0x00FFB22E
+	ld xwa, Bitmap_1bit_Turn_On_AGAIN + 0x600000	; LD XWA, 0x00FFB22E
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xC8	; LD DE, 0x00C8
-	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL DrawBitmap_UpdateDisplay
 
 Boot_FlashUpdate_Main__update_check_flash:
 	; Read flash ID with bank 2
 	ld wa, 2:i3	; LD WA, 2
-	call 0xFFB888	; CALL 0xFFB888 (Flash_ReadID_16bit)
+	call Flash_ReadID_16bit + 0x600000	; CALL 0xFFB888 (Flash_ReadID_16bit)
 	cp hl, 0xFFFF	; CP HL, 0xFFFF
 	jr z, Boot_FlashUpdate_Main__update_done	; 66 4c
 
@@ -4298,10 +4545,10 @@ Boot_FlashUpdate_Main__update_check_flash:
 	; Display update messages and perform update
 	pushw 0x8	; PUSH 0x0008
 	pushw 0x2	; PUSH 0x0002
-	ld xwa, 0xFFA156	; LD XWA, 0x00FFA156
+	ld xwa, Bitmap_1bit_Flash_Memory_Update + 0x600000	; LD XWA, 0x00FFA156
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0x50	; LD DE, 0x0050
-	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL DrawBitmap_UpdateDisplay
 
 	stb_erp A, 0xFB	; LD A, QIZH
 	extz wa	; EXTZ WA
@@ -4309,17 +4556,17 @@ Boot_FlashUpdate_Main__update_check_flash:
 
 	pushw 0x8	; PUSH 0x0008
 	pushw 0x1	; PUSH 0x0001
-	ld xwa, 0xFFA88E	; LD XWA, 0x00FFA88E
+	ld xwa, Bitmap_1bit_Completed + 0x600000	; LD XWA, 0x00FFA88E
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xA0	; LD DE, 0x00A0
-	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL DrawBitmap_UpdateDisplay
 
 	pushw 0x8	; PUSH 0x0008
 	pushw 0x1	; PUSH 0x0001
-	ld xwa, 0xFFB22E	; LD XWA, 0x00FFB22E
+	ld xwa, Bitmap_1bit_Turn_On_AGAIN + 0x600000	; LD XWA, 0x00FFB22E
 	ldw bc, 0x30	; LD BC, 0x0030
 	ldw de, 0xC8	; LD DE, 0x00C8
-	call 0xFFCCFB	; CALL DrawBitmap_UpdateDisplay
+	call DrawBitmap_UpdateDisplay + 0x600000	; CALL DrawBitmap_UpdateDisplay
 
 Boot_FlashUpdate_Main__update_done:
 	popw_erp 0xFA	; POP QIZ
@@ -4856,10 +5103,17 @@ RESET_HANDLER:
 
 ; Reserved area between RESET_HANDLER and interrupt vector table
 	.fill 9, 1, 0xff	; Padding
-	.byte 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00	; Reserved entry 1?
-	.byte 0x04, 0x00, 0x00, 0x00	; Reserved entry 2?
-	.byte 0x04, 0x00, 0x00, 0x00	; Reserved entry 3?
-	.byte 0x04, 0x00, 0x00	; Partial entry
+; IDENTIFIED 2026-09-25 (the four ".byte ... Reserved entry N?" lines that
+; stood here, re-framed on the reader's boundaries): Boot_CallInitHandlers
+; (shared/boot_call_init_handlers.s, table_data variant) compares the word
+; at boot address 0xFFFEEE with 0xFFFF and, only if equal, walks four 32-bit
+; entries at 0xFFFEF0 (ld_sril3 xbc,(xde+4*i)) and calls
+; AudioMix_WriteChannelGroup with each.  Here the word is 0x0000, so the
+; loop never runs; the entries all hold 0x00000400.
+BootInit_EnableFlag:
+	.short	0x0000
+BootInit_EntryTable:
+	.long	0x00000400, 0x00000400, 0x00000400, 0x00000400
 
 
 

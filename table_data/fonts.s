@@ -16,6 +16,10 @@
 ; (v10/maincpu/ui/drawing_primitives.s) both compute 0x945C00 + 16*font_id;
 ; when the kern pointer is null they read +0x00 and +0x06 for fixed-width
 ; advance, otherwise the kern table drives per-character widths.
+; v10 addresses (2026-09-25): TextRender_LoadFontData 0xFB1000; DrawString_Impl
+; 0xFACB95 (ld xwa,0x945c00 at DrawString_Impl_ClipCursorYMin); also
+; GetCharHeight (0xFB260A) returns +0x02, GetCharDescent (0xFB2617) returns
+; +0x04, and CalcTotalWidth (0xFB26D1) indexes the table the same way.
 ;
 ; GLYPH BANK FORMAT: every bank covers characters 0x20-0xFF (224 glyphs; the
 ; renderer subtracts 0x20, see DrawString_Impl_KerningLookup `sub c, 0x20`).
@@ -53,6 +57,9 @@
 ; -----------------------------------------------------------------------------
 ; Font descriptor table: 10 entries {w, h, descender, ascender, glyphs, kern}
 ; plus one all-zero unused slot.
+; Entry = 0x945C00 + 16*font_id, read by
+; GetCharHeight (0xFB260A, +0x02), GetCharDescent (0xFB2617, +0x04),
+; CalcTotalWidth (0xFB26D1) and DrawString_Impl (0xFACB95).
 ; -----------------------------------------------------------------------------
 FontDescriptor_Table:
 	; Font 0 -- 8x16 fixed, UI-symbol upper page; same letterforms as
