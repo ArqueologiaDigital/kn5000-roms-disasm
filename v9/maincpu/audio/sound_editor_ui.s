@@ -8092,7 +8092,7 @@ SeMenu_NameEditor_End:
 	or	w, a
 	ld	(1632:16), w
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x242C
+	ld	xiy, SeScreenData_0x4C6D
 	call	SeGfx_DrawBoundRecord
 SeMenu_NameEditor_End_Code_Return:
 	ret
@@ -8379,20 +8379,20 @@ SeMenu_ShowConfirmDialog_Data:
 	pop	sr
 	nop
 	nop
-	ld	xiy, SeBitmap_EnvCurve5_0x46B
-	ld	xix, SeBitmap_EnvCurve5_0x492
+	ld	xiy, SeScreenData_0x0833
+	ld	xix, SeScreenData_0x085A
 	call	SeGfx_DrawStaticList
 	.byte 0xc1
 	pop	xix
 	ei	63
 	nop
 	jr	z, 12
-	ld	xiy, SeBitmap_EnvCurve5_0x492
-	ld	xix, SeBitmap_EnvCurve5_0x49C
+	ld	xiy, SeScreenData_0x085A
+	ld	xix, SeScreenData_0x0864
 	jr	16
 	ld	(0x03efa8:24), 1
-	ld	xiy, SeBitmap_EnvCurve5_0x49C
-	ld	xix, SeBitmap_EnvCurve5_0x4A6
+	ld	xiy, SeScreenData_0x0864
+	ld	xix, SeScreenData_0x086E
 	call	SeGfx_DrawStaticList
 	.ascii "^]\\[ZYX"
 	ret
@@ -8402,15 +8402,15 @@ SeMenu_ShowConfirmDialog_Data:
 	.byte 0x01
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x313
-	ld	xix, SeBitmap_EnvCurve5_0x31D
+	ld	xiy, SeScreenData_0x06DB
+	ld	xix, SeScreenData_0x06DB + 10
 	call	SeGfx_DrawStaticList
 	ld	c, 2:opc
 	jr	22
 SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x313
-	ld	xix, SeBitmap_EnvCurve5_0x327
+	ld	xiy, SeScreenData_0x06DB
+	ld	xix, SeBitmap_Picture40x40
 	call	SeGfx_DrawStaticList
 	ld	c, 4:opc
 	ld	w, (1630:16)
@@ -8423,7 +8423,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeBitmap_EnvCurve5_0x453
+	ld	xiz, SeScreenData_0x081B
 	.byte 0xe3
 	reti
 	swi	0
@@ -8443,7 +8443,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeBitmap_EnvCurve5_0x40B
+	ld	xiz, SeScreenData_0x07D3
 	.byte 0xe3
 	reti
 	swi	0
@@ -8461,10 +8461,10 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	pop	c
 	djnz8	c, -84
 	ld	(0x03efa8:24), 1
-	ld	xiy, SeBitmap_EnvCurve5_0x4A6
-	ld	xix, SeBitmap_EnvCurve5_0x4B0
+	ld	xiy, SeScreenData_0x086E
+	ld	xix, SeScreenData_0x0878
 	call	SeGfx_DrawStaticList
-	ld	xiy, SeBitmap_EnvCurve5_0x4B0
+	ld	xiy, SeScreenData_0x0878
 	call	SeGfx_BoundOp03
 	pop	xiz
 	.ascii "]\\[ZYX"
@@ -8737,13 +8737,13 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	.byte 0x01
 	jr	nz, 22
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0xD82
-	ld	xix, SeBitmap_EnvCurve5_0xD8C
+	ld	xiy, SeScreenData_0x114A
+	ld	xix, SeScreenData_0x1154
 	call	SeGfx_DrawStaticList
 	jr	20
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0xD78
-	ld	xix, SeBitmap_EnvCurve5_0xD82
+	ld	xiy, SeScreenData_0x1140
+	ld	xix, SeScreenData_0x114A
 	call	SeGfx_DrawStaticList
 	xor	xwa, xwa
 	ld	a, (1629:16)
@@ -8752,10 +8752,10 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	push	xsp
 	.byte 0x01
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip2
-	ld	xiz, SeBitmap_EnvCurve5_0xEBC
+	ld	xiz, SeScreenData_0x1284
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join
 SeMenu_ShowConfirmDialog_Data_Code_Skip2:
-	ld	xiz, SeBitmap_EnvCurve5_0xEA8
+	ld	xiz, SeScreenData_0x1270
 SeMenu_ShowConfirmDialog_Data_Code_Join:
 	push	xwa
 	add	xiz, xwa
@@ -8781,10 +8781,10 @@ SeMenu_ShowConfirmDialog_Data_Code_Join2:
 	push	xsp
 	.byte 0x01
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip4
-	ld	xiz, SeBitmap_EnvCurve5_0xE9C
+	ld	xiz, SeScreenData_0x1264
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join3
 SeMenu_ShowConfirmDialog_Data_Code_Skip4:
-	ld	xiz, SeBitmap_EnvCurve5_0xE88
+	ld	xiz, SeScreenData_0x1250
 SeMenu_ShowConfirmDialog_Data_Code_Join3:
 	add	xiz, xwa
 	ld	xiy, (xiz)
@@ -8895,7 +8895,7 @@ SeMenu_WaveformSelect_Process:
 
 SeMenu_WaveformSelect_Apply:
 	ld	(0x03efa8:24), 0
-	ld	xiz, TuningSystem_Handler_Table_0x1E73
+	ld	xiz, SeScreenData_0x46B4
 	xor	xwa, xwa
 	ld	a, (0x0340e4:24)
 	sla	wa, 2
@@ -8903,8 +8903,8 @@ SeMenu_WaveformSelect_Apply:
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x1C06
-	ld	xix, TuningSystem_Handler_Table_0x1C45
+	ld	xiy, SeScreenData_0x4447
+	ld	xix, SeScreenData_0x4486
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_WaveformSelect_Data:
@@ -8916,8 +8916,8 @@ SeMenu_WaveformSelect_Data_Skip:
 	ld	(0x03efa8:24), 0
 	cp	(1710:16), 1
 	jr	z, 20
-	ld	xiy, SeBitmap_EnvCurve5_0x19A
-	ld	xix, SeBitmap_EnvCurve5_0x2BD
+	ld	xiy, SeScreenData_0x0562
+	ld	xix, SeScreenData_0x0685
 	call	SeGfx_DrawStaticList
 	call	SeMenu_WaveformSelect_Data_0x6D
 	.ascii "h>E&]"
@@ -8943,12 +8943,12 @@ SeMenu_WaveformSelect_Data_Return:
 	push	xsp
 	normal
 	jr	z, 16
-	ld	xiy, SeBitmap_EnvCurve5_0x2BD
-	ld	xix, SeBitmap_EnvCurve5_0x2E9
+	ld	xiy, SeScreenData_0x0685
+	ld	xix, SeScreenData_0x06B1
 	call	SeGfx_DrawStaticList
 	jr	14
-	ld	xiy, SeBitmap_EnvCurve5_0x2E9
-	ld	xix, SeBitmap_EnvCurve5_0x313
+	ld	xiy, SeScreenData_0x06B1
+	ld	xix, SeScreenData_0x06DB
 	call	SeGfx_DrawStaticList
 	ret
 	ld	(0x03efa8:24), 0
@@ -9047,8 +9047,8 @@ SeMenu_PresetManager_End:
 SeMenu_PresetManager_Save:
 	; --- Wrapper 2: XIY/XIX setup + 2 calls (25 bytes) ---
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f1115e
-	ld xix, 0x00f11168
+	ld xiy, SeScreenData_0x0558
+	ld xix, SeScreenData_0x0562
 	call SeGfx_DrawStaticList
 	call Display_DeferOrUpdateScreen_Direct_0xF
 	ret
@@ -9057,14 +9057,14 @@ SeMenu_PresetManager_Save:
 SeMenu_PresetManager_SaveApply:
 	call	SeMenu_PresetManager_Data_0x1AF
 	call	SeMenu_PresetManager_Save
-	ld	xiy, SeBitmap_EnvCurve5_0x612
-	ld	xix, SeBitmap_EnvCurve5_0x7B6
+	ld	xiy, SeScreenData_0x09DA
+	ld	xix, SeScreenData_0x0B7E
 	call	SeGfx_DrawStaticList
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_PresetManager_Data_0xEA
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1A03
-	ld	xix, SeBitmap_EnvCurve5_0x1B06
+	ld	xiy, SeScreenData_0x1DCB
+	ld	xix, SeScreenData_0x1ECE
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetManager_Data_0x1C4
 	ret
@@ -9074,22 +9074,22 @@ SeMenu_PresetManager_Data:
 	push	xsp
 	normal
 	jr	z, 20
-	ld	xiy, TuningSystem_Handler_Table_0x1A15
-	ld	xix, TuningSystem_Handler_Table_0x1BD9
+	ld	xiy, SeScreenData_0x4256
+	ld	xix, SeScreenData_0x441A
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
 	jr	28
-	ld	xiy, TuningSystem_Handler_Table_0x1BD9
-	ld	xix, TuningSystem_Handler_Table_0x1C06
+	ld	xiy, SeScreenData_0x441A
+	ld	xix, SeScreenData_0x4447
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x1A20
-	ld	xix, TuningSystem_Handler_Table_0x1BD9
+	ld	xiy, SeScreenData_0x4261
+	ld	xix, SeScreenData_0x441A
 	call	SeGfx_DrawStaticList
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1BAD
-	ld	xix, SeBitmap_EnvCurve5_0x1BB8
+	ld	xiy, SeScreenData_0x1F75
+	ld	xix, SeScreenData_0x1F80
 	call	SeGfx_DrawBoundList
 	call	SeMenu_BankEdit_LoopHelper
 	call	SeMenu_PresetManager_Data_0x1C4
@@ -9099,14 +9099,14 @@ SeMenu_PresetManager_Data:
 	normal
 	jr	nz, 24
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x7B6
-	ld	xix, SeBitmap_EnvCurve5_0x7C0
+	ld	xiy, SeScreenData_0x0B7E
+	ld	xix, SeScreenData_0x0B7E + 10
 	call	SeGfx_DrawStaticList
 	ld	c, 2:opc
 	jr	22
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x7B6
-	ld	xix, SeBitmap_EnvCurve5_0x7CA
+	ld	xiy, SeScreenData_0x0B7E
+	ld	xix, SeScreenData_0x0B92
 	call	SeGfx_DrawStaticList
 	ld	c, 4:opc
 	ld	w, (1630:16)
@@ -9119,7 +9119,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeBitmap_EnvCurve5_0x82E
+	ld	xiz, SeScreenData_0x0BF6
 	.byte 0xe3
 	reti
 	swi	0
@@ -9139,7 +9139,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeBitmap_EnvCurve5_0x7E6
+	ld	xiz, SeScreenData_0x0BAE
 	.byte 0xe3
 	reti
 	swi	0
@@ -9175,7 +9175,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeBitmap_EnvCurve5_0x90A
+	ld	xiz, SeScreenData_0x0CD2
 	.byte 0xe3
 	reti
 	swi	0
@@ -9195,7 +9195,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeBitmap_EnvCurve5_0x892
+	ld	xiz, SeScreenData_0x0C5A
 	.byte 0xe3
 	reti
 	swi	0
@@ -9225,7 +9225,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeBitmap_EnvCurve5_0x986
+	ld	xiz, SeScreenData_0x0D4E
 	.byte 0xe3
 	reti
 	swi	0
@@ -9245,7 +9245,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeBitmap_EnvCurve5_0x94C
+	ld	xiz, SeScreenData_0x0D14
 	.byte 0xe3
 	reti
 	swi	0
@@ -9264,47 +9264,47 @@ SeMenu_PresetManager_Data:
 	djnz8	c, -84
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x5E2
-	ld	xix, SeBitmap_EnvCurve5_0x60D
+	ld	xiy, SeScreenData_0x09AA
+	ld	xix, SeScreenData_0x09D5
 	call	SeGfx_DrawStaticList
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x60D
-	ld	xix, SeBitmap_EnvCurve5_0x612
+	ld	xiy, SeScreenData_0x09D5
+	ld	xix, SeScreenData_0x09DA
 	call	SeGfx_DrawStaticList
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x50F
-	ld	xix, SeBitmap_EnvCurve5_0x5E2
+	ld	xiy, SeScreenData_0x08D7
+	ld	xix, SeScreenData_0x09AA
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
 	ret
 SeMenu_PresetBrowser_Init:
 	; --- Main: call sub, setup XIY/XIX, call F0EC00, 3 more calls (51 bytes) ---
 	call SeMenu_PresetBrowser_Navigate
-	ld xiy, 0x00f11a37
-	ld xix, 0x00f11c49
+	ld xiy, SeScreenData_0x0E31
+	ld xix, SeScreenData_0x1043
 	call SeGfx_DrawStaticList
 	call SeMenu_ShowConfirmDialog_Data_0xC0
 	call SeMenu_PresetManager_Data_0x60
 	ld	(0x03efa8:24), 0
 	ld xiy, TuningSys_Param_01
-	ld xix, 0x00f132bf
+	ld xix, SeScreenData_0x26B9
 	call SeGfx_DrawBoundList
 	call SeMenu_PresetBrowser_Select
 	ret
 SeMenu_PresetBrowser_Navigate:
 	; --- Helper 1: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f11964
-	ld xix, 0x00f11a14
+	ld xiy, SeScreenData_0x0D5E
+	ld xix, SeScreenData_0x0E0E
 	call SeGfx_DrawStaticList
 	ret
 SeMenu_PresetBrowser_Select:
 	; --- Helper 2: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f11a14
-	ld xix, 0x00f11a19
+	ld xiy, SeScreenData_0x0E0E
+	ld xix, SeScreenData_0x0E13
 	call SeGfx_DrawStaticList
 	ret
 
@@ -9312,16 +9312,16 @@ SeMenu_PresetBrowser_Select:
 SeMenu_PresetBrowser_Data:
 	call	SeMenu_PresetBrowser_Navigate
 	call	SeMenu_PresetBrowser_Select
-	ld	xiy, TuningSystem_Handler_Table_0xE1F
-	ld	xix, TuningSystem_Handler_Table_0xFC4
+	ld	xiy, SeScreenData_0x3660
+	ld	xix, SeScreenData_0x3805
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetBrowser_Data_0x3B
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_PresetBrowser_Data_0x98
 	call	Data_UnknownBlock_0x6E
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x3C
-	ld	xix, TuningSystem_Handler_Table_0x8D
+	ld	xiy, SeScreenData_0x287D
+	ld	xix, SeScreenData_0x28CE
 	call	SeGfx_DrawBoundList
 	ret
 	ld	(0x03efa8:24), 0
@@ -9336,7 +9336,7 @@ SeMenu_PresetBrowser_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, TuningSystem_Handler_Table_0x1028
+	ld	xiz, SeScreenData_0x385D + 12
 	.byte 0xe3
 	reti
 	swi	0
@@ -9356,7 +9356,7 @@ SeMenu_PresetBrowser_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, TuningSystem_Handler_Table_0xFE0
+	ld	xiz, SeScreenData_0x381A + 7
 	.byte 0xe3
 	reti
 	swi	0
@@ -9375,19 +9375,19 @@ SeMenu_PresetBrowser_Data:
 	djnz8	c, -84
 	ret
 	ld	(0x03efa8:24), 1
-	ld	xiy, TuningSystem_Handler_Table_0x12D
-	ld	xix, TuningSystem_Handler_Table_0x137
+	ld	xiy, SeScreenData_0x296E
+	ld	xix, SeScreenData_0x2978
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x17D
-	ld	xix, TuningSystem_Handler_Table_0x187
+	ld	xiy, SeScreenData_0x29BE
+	ld	xix, SeScreenData_0x29C8
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x187
-	ld	xix, TuningSystem_Handler_Table_0x191
+	ld	xiy, SeScreenData_0x29C8
+	ld	xix, SeScreenData_0x29D2
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 2
-	ld	xiy, TuningSystem_Handler_Table_0x187
-	ld	xix, TuningSystem_Handler_Table_0x191
+	ld	xiy, SeScreenData_0x29C8
+	ld	xix, SeScreenData_0x29D2
 	call	SeGfx_DrawStaticList
 	ld	c, 4:opc
 	ld	xiy, 1637
@@ -9403,7 +9403,7 @@ SeMenu_PresetBrowser_Data_Loop:
 	ld	e, d
 	xor	d, d
 	sla	de, 2
-	ld	xiz, TuningSystem_Handler_Table_0x15F
+	ld	xiz, SeScreenData_0x29A0
 	ld_rrl xiy, xiz, de
 	pushw de
 	add	de, 4
@@ -9421,7 +9421,7 @@ SeMenu_PresetBrowser_Data_Loop:
 	ld	(0x03efa8:24), 0
 	push	c
 	push	xiy
-	ld	xiz, TuningSystem_Handler_Table_0x2C1
+	ld	xiz, SeScreenData_0x2B02
 	ld_rrl xiy, xiz, de
 	ld xix, xiy
 	add xix, 7
@@ -9437,7 +9437,7 @@ SeMenu_PresetBrowser_Data_Loop:
 	srl	a, 6
 	xor	w, w
 	mul	a, 10
-	ld	xiz, TuningSystem_Handler_Table_0x295
+	ld	xiz, SeScreenData_0x2AD6
 	ld_rrl xiy, xiz, de
 	extz xwa
 	add	xiy, xwa
@@ -9450,7 +9450,7 @@ SeMenu_PresetBrowser_Data_Loop:
 	pop	c
 	push	c
 	push	xiy
-	ld	xiz, TuningSystem_Handler_Table_0xDF
+	ld	xiz, SeScreenData_0x2920
 	ld_rrl xiy, xiz, de
 	pushw de
 	call	SeGfx_DrawBoundRecord
@@ -9460,7 +9460,7 @@ SeMenu_PresetBrowser_Data_Loop:
 	ld	(0x03efa8:24), 2
 	push	c
 	push	xiy
-	ld	xiz, TuningSystem_Handler_Table_0x1040
+	ld	xiz, SeScreenData_0x385D + 36
 	ld_rrl xiy, xiz, de
 	ld xix, xiy
 	add xix, 20
@@ -9479,8 +9479,8 @@ SeMenu_CompareAndApply_Init:
 	cp	(1710:16), 1
 	jr z, SeMenu_CompareAndApply_Check
 	call SeMenu_PresetManager_Save
-	ld xiy, 0x00f11e96
-	ld xix, 0x00f11f83
+	ld xiy, SeScreenData_0x1290
+	ld xix, SeScreenData_0x137D
 	call SeGfx_DrawStaticList
 	jr t, SeMenu_CompareAndApply_Match
 SeMenu_CompareAndApply_Check:
@@ -9494,8 +9494,8 @@ SeMenu_CompareAndApply_Match:
 	cp	(1710:16), 1
 	jr z, SeMenu_CompareAndApply_Apply
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f12f95
-	ld xix, 0x00f13020
+	ld xiy, SeScreenData_0x238F
+	ld xix, SeScreenData_0x241A
 	call SeGfx_DrawBoundList
 	jr t, SeMenu_CompareAndApply_End
 SeMenu_CompareAndApply_Apply:
@@ -9509,21 +9509,21 @@ SeMenu_CompareAndApply_End:
 SeMenu_CompareAndApply_Data:
 	; --- Init helper: language-conditional XIX setup (35 bytes) ---
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f11c8f
+	ld xiy, SeScreenData_0x1089
 	cp	(1710:16), 1
 	jr z, SeMenu_CompareAndApply_Data2
-	ld xix, 0x00f11d41
+	ld xix, SeScreenData_0x113B
 	jr t, SeMenu_CompareAndApply_Data3
 SeMenu_CompareAndApply_Data2:
-	ld xix, 0x00f11d06
+	ld xix, SeScreenData_0x1089 + 119
 SeMenu_CompareAndApply_Data3:
 	call SeGfx_DrawStaticList
 	ret
 SeMenu_CompareAndApply_Data4:
 	; --- Tail helper: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f11d41
-	ld xix, 0x00f11d46
+	ld xiy, SeScreenData_0x113B
+	ld xix, SeScreenData_0x1140
 	call SeGfx_DrawStaticList
 	ret
 
@@ -9537,20 +9537,20 @@ SeMenu_CompareAndApply_Data6:
 	.byte 0xf0
 	call	SeMenu_PresetManager_Save
 	ld	(0x03efa8:24), 2
-	ld	xiy, SeBitmap_EnvCurve5_0x108A
-	ld	xix, SeBitmap_EnvCurve5_0x109E
+	ld	xiy, SeScreenData_0x1452
+	ld	xix, SeScreenData_0x1466
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0xFB5
-	ld	xix, SeBitmap_EnvCurve5_0x108A
+	ld	xiy, SeScreenData_0x137D
+	ld	xix, SeScreenData_0x1452
 	call	SeGfx_DrawStaticList
 	call	SeMenu_CompareAndApply_Data4
 	ldw	(1734:16), 56
 	ldw	(1736:16), 139
 	call	SeMenu_ShowConfirmDialog_Data_0x1F6
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeMenu_CompareScreen_DataTable_0x141
-	ld	xix, SeMenu_CompareScreen_DataTable_0x179
+	ld	xiy, SeScreenData_0x2480
+	ld	xix, SeScreenData_0x24B8
 	call	SeGfx_DrawBoundList
 	ret
 SeMenu_Utility_CopyBlock:
@@ -9559,16 +9559,16 @@ SeMenu_Utility_CopyBlock:
 	.ascii "f(El "
 	.byte 0xf1
 	nop
-	ld	xix, SeBitmap_EnvCurve5_0x115B
+	ld	xix, SeScreenData_0x1523
 	call	SeGfx_DrawStaticList
 	call	SeMenu_Utility_CompareBlock_End
 	ld	(0x03efa8:24), 2
-	ld	xiy, SeBitmap_EnvCurve5_0x1723
-	ld	xix, SeBitmap_EnvCurve5_0x172D
+	ld	xiy, SeScreenData_0x1AEB
+	ld	xix, SeScreenData_0x1AEB + 10
 	call	SeGfx_DrawStaticList
 	jr	28
-	ld	xiy, SeBitmap_EnvCurve5_0x109E
-	ld	xix, SeBitmap_EnvCurve5_0x10B6
+	ld	xiy, SeScreenData_0x1466
+	ld	xix, SeScreenData_0x1466 + 24
 	call	SeGfx_DrawStaticList
 	ld	xiy, DrumDetailEdit_Menu_Table_0x1A4
 	ld	xix, DrumDetailEdit_Menu_Table_0x27B
@@ -9580,8 +9580,8 @@ SeMenu_Utility_CopyBlock:
 	push	xsp
 	normal
 	jr	z, 16
-	ld	xiy, SeMenu_CompareScreen_DataTable_0x189
-	ld	xix, SeMenu_CompareScreen_DataTable_0x1CF
+	ld	xiy, SeScreenData_0x24C8
+	ld	xix, SeScreenData_0x250E
 	call	SeGfx_DrawBoundList
 	jr	18
 	ld	xiy, DrumDetailEdit_Menu_Table_0x2E8
@@ -9600,27 +9600,27 @@ SeMenu_Utility_CopyBlock:
 	ld	xix, DrumDetailEdit_Menu_Table_0x35E
 	call	SeGfx_DrawBoundList
 	ld	(0x03efa8:24), 2
-	ld	xiy, SeBitmap_EnvCurve5_0x1723
-	ld	xix, SeBitmap_EnvCurve5_0x1739
+	ld	xiy, SeScreenData_0x1AEB
+	ld	xix, SeScreenData_0x1B01
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_Utility_CopyBlock_Return
 	ld	xiy, DrumDetailEdit_Menu_Table_0x35E
 	ld	xix, EffectParamEdit_Entry_01
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 2
-	ld	xiy, SeBitmap_EnvCurve5_0x1739
-	ld	xix, SeBitmap_EnvCurve5_0x1743
+	ld	xiy, SeScreenData_0x1B01
+	ld	xix, SeScreenData_0x1B0B
 	call	SeGfx_DrawStaticList
 SeMenu_Utility_CopyBlock_Return:
 	ret
 SeMenu_Utility_FillBlock:
 	call	SeMenu_CompareAndApply_Data
-	ld	xiy, SeBitmap_EnvCurve5_0x115B
-	ld	xix, SeBitmap_EnvCurve5_0x12A6
+	ld	xiy, SeScreenData_0x1523
+	ld	xix, SeScreenData_0x166E
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 2
-	ld	xiy, SeBitmap_EnvCurve5_0x12A6
-	ld	xix, SeBitmap_EnvCurve5_0x12BA
+	ld	xiy, SeScreenData_0x166E
+	ld	xix, SeScreenData_0x1682
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
 	ldw	(1734:16), 56
@@ -9629,19 +9629,19 @@ SeMenu_Utility_FillBlock:
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeMenu_CompareScreen_DataTable_0x1EB
-	ld	xix, SeMenu_CompareScreen_DataTable_0x260
+	ld	xiy, SeScreenData_0x252A
+	ld	xix, SeScreenData_0x259F
 	call	SeGfx_DrawBoundList
 	call	SeMenu_CompareAndApply_Data4
 	ret
 SeMenu_Utility_CompareBlock:
 	; --- Main: init, 2x XIY/XIX setup, language branch, 3 calls (80 bytes) ---
 	call SeMenu_Utility_SearchByte
-	ld xiy, 0x00f12391
-	ld xix, 0x00f124de
+	ld xiy, SeScreenData_0x178B
+	ld xix, SeScreenData_0x18D8
 	call SeGfx_DrawStaticList
-	ld xiy, 0x00f124f3
-	ld xix, 0x00f12507
+	ld xiy, SeScreenData_0x18ED
+	ld xix, SeScreenData_0x1901
 	call SeGfx_DrawStaticList
 	cp	(1710:16), 1
 	jr z, SeMenu_Utility_CompareBlock_Loop
@@ -9651,15 +9651,15 @@ SeMenu_Utility_CompareBlock_Loop:
 	call SeMenu_ShowConfirmDialog_Data_0x10A
 	call SeMenu_Utility_FormatNumber_End
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f12d66
-	ld xix, 0x00f12dc6
+	ld xiy, SeScreenData_0x2160
+	ld xix, SeScreenData_0x21C0
 	call SeGfx_DrawBoundList
 	call SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_CompareBlock_End:
 	; --- Helper: XIY/XIX setup + call F0EC00, call F0F6F5 (19 bytes) ---
-	ld xiy, 0x00f12386
-	ld xix, 0x00f12391
+	ld xiy, SeScreenData_0x1780
+	ld xix, SeScreenData_0x178B
 	call SeGfx_DrawStaticList
 	call SeMenu_PresetManager_Save
 	ret
@@ -9668,19 +9668,19 @@ SeMenu_Utility_SearchByte:
 	ld	(0x03efa8:24), 0
 	cp	(1710:16), 1
 	jr z, SeMenu_Utility_SearchByte_End
-	ld xix, 0x00f12341
+	ld xix, SeScreenData_0x173B
 	jr t, SeMenu_Utility_FormatNumber
 SeMenu_Utility_SearchByte_End:
-	ld xix, 0x00f122ae
+	ld xix, SeScreenData_0x1682 + 38
 SeMenu_Utility_FormatNumber:
-	ld xiy, 0x00f12288
+	ld xiy, SeScreenData_0x1682
 	call SeGfx_DrawStaticList
 	ret
 SeMenu_Utility_FormatNumber_Loop:
 	; --- Tail: clear flag, XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f12341
-	ld xix, 0x00f12346
+	ld xiy, SeScreenData_0x173B
+	ld xix, SeScreenData_0x1740
 	call SeGfx_DrawStaticList
 	ret
 SeMenu_Utility_FormatNumber_End:
@@ -9688,28 +9688,28 @@ SeMenu_Utility_FormatNumber_End:
 	ld	a, (0x8d36:16)
 	ld	(1656:16), a
 	ld	(0x03efa8:24), 2
-	ld xiy, 0x00f12364
+	ld xiy, SeScreenData_0x175E
 	cp	(1710:16), 1
 	jr z, SeMenu_Utility_FormatNumber_Data
-	ld xix, 0x00f12386
+	ld xix, SeScreenData_0x1780
 	jr t, SeMenu_Utility_FormatSigned
 SeMenu_Utility_FormatNumber_Data:
-	ld xix, 0x00f1237c
+	ld xix, SeScreenData_0x175E + 24
 SeMenu_Utility_FormatSigned:
 	call SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f12d33
+	ld xiy, SeScreenData_0x212D
 	call SeGfx_DrawBoundRecord
 	ret
 
 
 SeMenu_Utility_FormatSigned_Data:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeBitmap_EnvCurve5_0x13C3
-	ld	xix, SeBitmap_EnvCurve5_0x1510
+	ld	xiy, SeScreenData_0x178B
+	ld	xix, SeScreenData_0x18D8
 	call	SeGfx_DrawStaticList
-	ld	xiy, SeBitmap_EnvCurve5_0x1510
-	ld	xix, SeBitmap_EnvCurve5_0x1525
+	ld	xiy, SeScreenData_0x18D8
+	ld	xix, SeScreenData_0x18ED
 	call	SeGfx_DrawStaticList
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
@@ -9720,18 +9720,18 @@ SeMenu_Utility_FormatSigned_Data:
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1D98
-	ld	xix, SeBitmap_EnvCurve5_0x1DF8
+	ld	xiy, SeScreenData_0x2160
+	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatPercent:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeBitmap_EnvCurve5_0x1539
-	ld	xix, SeBitmap_EnvCurve5_0x15CF
+	ld	xiy, SeScreenData_0x1901
+	ld	xix, SeScreenData_0x1997
 	call	SeGfx_DrawStaticList
-	ld	xiy, SeBitmap_EnvCurve5_0x15CF
-	ld	xix, SeBitmap_EnvCurve5_0x15E3
+	ld	xiy, SeScreenData_0x1997
+	ld	xix, SeScreenData_0x19AB
 	call	SeGfx_DrawStaticList
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
@@ -9742,18 +9742,18 @@ SeMenu_Utility_FormatPercent:
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1E54
-	ld	xix, SeBitmap_EnvCurve5_0x1E87
+	ld	xiy, SeScreenData_0x221C
+	ld	xix, SeScreenData_0x224F
 	call	SeGfx_DrawBoundList
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatPercent_Data:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeBitmap_EnvCurve5_0x1539
-	ld	xix, SeBitmap_EnvCurve5_0x15CF
+	ld	xiy, SeScreenData_0x1901
+	ld	xix, SeScreenData_0x1997
 	call	SeGfx_DrawStaticList
-	ld	xiy, SeBitmap_EnvCurve5_0x15E3
-	ld	xix, SeBitmap_EnvCurve5_0x15F8
+	ld	xiy, SeScreenData_0x19AB
+	ld	xix, SeScreenData_0x19C0
 	call	SeGfx_DrawStaticList
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
@@ -9764,15 +9764,15 @@ SeMenu_Utility_FormatPercent_Data:
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1E54
-	ld	xix, SeBitmap_EnvCurve5_0x1E87
+	ld	xiy, SeScreenData_0x221C
+	ld	xix, SeScreenData_0x224F
 	call	SeGfx_DrawBoundList
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatHex:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeBitmap_EnvCurve5_0x15F8
-	ld	xix, SeBitmap_EnvCurve5_0x1702
+	ld	xiy, SeScreenData_0x19C0
+	ld	xix, SeScreenData_0x1ACA
 	call	SeGfx_DrawStaticList
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
@@ -9783,15 +9783,15 @@ SeMenu_Utility_FormatHex:
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1E97
-	ld	xix, SeBitmap_EnvCurve5_0x1EE8
+	ld	xiy, SeScreenData_0x225F
+	ld	xix, SeScreenData_0x22B0
 	call	SeGfx_DrawBoundList
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatHex_Data:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeBitmap_EnvCurve5_0x1702
-	ld	xix, SeBitmap_EnvCurve5_0x1719
+	ld	xiy, SeScreenData_0x1ACA
+	ld	xix, SeScreenData_0x1AE1
 	call	SeGfx_DrawStaticList
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
@@ -9805,22 +9805,22 @@ SeMenu_Utility_FormatHex_Data:
 	ret
 SeMenu_Utility_End:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeBitmap_EnvCurve5_0x1865
-	ld	xix, SeBitmap_EnvCurve5_0x18B2
+	ld	xiy, SeScreenData_0x1C2D
+	ld	xix, SeScreenData_0x1C7A
 	call	SeGfx_DrawStaticList
-	ld	xiy, SeBitmap_EnvCurve5_0x1743
-	ld	xix, SeBitmap_EnvCurve5_0x1865
+	ld	xiy, SeScreenData_0x1B0B
+	ld	xix, SeScreenData_0x1C2D
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
 	ld	(0x03efa8:24), 2
-	ld	xiy, SeBitmap_EnvCurve5_0x1719
-	ld	xix, SeBitmap_EnvCurve5_0x172D
+	ld	xiy, SeScreenData_0x1AE1
+	ld	xix, SeScreenData_0x1AEB + 10
 	call	SeGfx_DrawStaticList
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1F00
-	ld	xix, SeBitmap_EnvCurve5_0x1F75
+	ld	xiy, SeScreenData_0x22C8
+	ld	xix, SeScreenData_0x233D
 	call	SeGfx_DrawBoundList
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
@@ -9830,22 +9830,22 @@ SeMenu_NameEdit_DataBlock1:
 	ld	(1648:16), a
 	cp	a, 10
 	jr	nz, SeMenu_NameEdit_DataBlock1_Skip
-	ld	xiy, TuningSystem_Handler_Table_0x1F9A
+	ld	xiy, SeScreenData_0x47DB
 	jr	SeMenu_NameEdit_DataBlock1_Join
 SeMenu_NameEdit_DataBlock1_Skip:
-	ld	xiy, TuningSystem_Handler_Table_0x1F7B
+	ld	xiy, SeScreenData_0x47BC
 SeMenu_NameEdit_DataBlock1_Join:
-	ld	xix, TuningSystem_Handler_Table_0x209A
+	ld	xix, SeScreenData_0x48DB
 	call	SeGfx_DrawStaticList
 	xor	xwa, xwa
 	ld	a, (1648:16)
 	sla	wa, 3
-	ld	xiz, TuningSystem_Handler_Table_0x23BD
+	ld	xiz, SeScreenData_0x4BFE
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x1E8B
+	ld	xiy, SeScreenData_0x46CC
 	xor	xbc, xbc
 	ld	xiz, FlashWrite_BlockRef_Type6_0x40
 	ld	c, (1648:16)
@@ -9860,12 +9860,12 @@ SeMenu_NameEdit_DataBlock1_Join:
 	ld	a, (1648:16)
 	cp	a, 10
 	jr	nz, 7
-	ld	xiy, TuningSystem_Handler_Table_0x1F5D
+	ld	xiy, SeScreenData_0x479E
 	jr	5
-	ld	xiy, TuningSystem_Handler_Table_0x1F3F
-	ld	xix, TuningSystem_Handler_Table_0x1F7B
+	ld	xiy, SeScreenData_0x4780
+	ld	xix, SeScreenData_0x47BC
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x241D
+	ld	xiy, SeScreenData_0x4C5E
 	ld	a, (1648:16)
 	cp	a, 10
 	jr	nz, SeMenu_NameEdit_DataBlock1_Skip2
@@ -9940,7 +9940,7 @@ SeMenu_PatchEdit_DataBlock:
 	ld_rrl xiy, xiz, bc
 	jr SeMenu_PatchEdit_DataBlock_Join
 SeMenu_PatchEdit_DataBlock_Skip:
-	ld	xiy, TuningSystem_Handler_Table_0x242C
+	ld	xiy, SeScreenData_0x4C6D
 	ld	xix, FlashRead_BlockData_Field8
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_PatchEdit_DataBlock_Return
@@ -9959,7 +9959,7 @@ SeMenu_PatchEdit_Dispatch:
 	jr z, SeMenu_PatchEdit_CallHelper
 	cp a, 0x0e
 	jr c, SeMenu_PatchEdit_DefaultPath
-	ld xiy, 0x00f12afd
+	ld xiy, SeScreenData_0x1EF7
 	extz xwa
 	xor w, w
 	sla	wa, 2
@@ -9972,8 +9972,8 @@ SeMenu_PatchEdit_Dispatch:
 	jr t, SeMenu_PatchEdit_Return
 SeMenu_PatchEdit_SetupPath:
 	ld	(0x03efa8:24), 1
-	ld xiy, 0x00f12b49
-	ld xix, 0x00f12b53
+	ld xiy, SeScreenData_0x1F43
+	ld xix, SeScreenData_0x1F4D
 	call SeGfx_DrawStaticList
 	ld a, 0x00:opc
 	jr t, SeMenu_PatchEdit_DefaultPath
@@ -9981,7 +9981,7 @@ SeMenu_PatchEdit_CallHelper:
 	call SeMenu_PresetManager_Data_0xEA
 	jr t, SeMenu_PatchEdit_Return
 SeMenu_PatchEdit_DefaultPath:
-	ld xiy, 0x00f12afd
+	ld xiy, SeScreenData_0x1EF7
 	ld	(0x03efa8:24), 0
 	call SeMenu_EqEdit_DrawInit_0x15
 SeMenu_PatchEdit_Return:
@@ -9996,21 +9996,21 @@ SeMenu_BankEdit_Dispatch:
 	jr t, SeMenu_BankEdit_Return
 SeMenu_BankEdit_SetupPath:
 	ld	(0x03efa8:24), 1
-	ld xiy, 0x00f12d01
-	ld xix, 0x00f12d0b
+	ld xiy, SeScreenData_0x20FB
+	ld xix, SeScreenData_0x2105
 	call SeGfx_DrawStaticList
-	ld xiy, 0x00f12b7b
+	ld xiy, SeScreenData_0x1F75
 	call SeGfx_DrawBoundRecord
 SeMenu_BankEdit_Return:
 	ret
 SeMenu_BankEdit_LoopHelper:
 	; --- Loop over 3 entries: indexed XIY/XIX pointer table lookups ---
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f12c44
-	ld xix, 0x00f12c4c
+	ld xiy, SeScreenData_0x203E
+	ld xix, SeScreenData_0x2046
 	call SeGfx_DrawStaticList
-	ld xiy, 0x00f12b86
-	ld xix, 0x00f12bae
+	ld xiy, SeScreenData_0x1F80
+	ld xix, SeScreenData_0x1FA8
 	call SeGfx_DrawBoundList
 	ld c, 0x00:opc
 	ld xiz, 0x00000664
@@ -10019,7 +10019,7 @@ SeMenu_BankEdit_LoopBody:
 	push xiz
 	cp (xiz), 0x00
 	jr z, SeMenu_BankEdit_EmptyEntry
-	ld xiy, 0x00f12cab
+	ld xiy, SeScreenData_0x2091 + 20
 	extz xbc
 	xor b, b
 	sla	bc, 2
@@ -10030,7 +10030,7 @@ SeMenu_BankEdit_LoopBody:
 	push xbc
 	call SeGfx_DrawBoundList
 	pop xbc
-	ld xiy, 0x00f12cc3
+	ld xiy, SeScreenData_0x2091 + 44
 	add xiy, xbc
 	ld xiy, (xiy)
 	ld xix, xiy
@@ -10038,7 +10038,7 @@ SeMenu_BankEdit_LoopBody:
 	call SeGfx_DrawStaticList
 	jr t, SeMenu_BankEdit_LoopContinue
 SeMenu_BankEdit_EmptyEntry:
-	ld xiy, 0x00f12cb7
+	ld xiy, SeScreenData_0x2091 + 32
 	extz xbc
 	xor b, b
 	sla	bc, 2
@@ -10065,26 +10065,26 @@ SeMenu_DrumKit_Dispatch:
 	cp	a, 16
 	jr	nz, SeMenu_DrumKit_Dispatch_Join
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSys_Param_01_0xAE
-	ld	xix, TuningSys_Param_01_0xC4
+	ld	xiy, SeScreenData_0x268D
+	ld	xix, SeScreenData_0x26A3
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_DrumKit_Dispatch_Return
 SeMenu_DrumKit_Dispatch_Skip:
 	ld	(0x03efa8:24), 1
-	ld	xiy, TuningSys_Param_01_0x24A
-	ld	xix, TuningSys_Param_01_0x254
+	ld	xiy, SeScreenData_0x2829
+	ld	xix, SeScreenData_0x2833
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 	jr	SeMenu_DrumKit_Dispatch_Join
 SeMenu_DrumKit_Dispatch_Skip2:
 	ld	(0x03efa8:24), 1
-	ld	xiy, TuningSys_Param_01_0x254
-	ld	xix, TuningSys_Param_01_0x25E
+	ld	xiy, SeScreenData_0x2833
+	ld	xix, SeScreenData_0x283D
 	call	SeGfx_DrawStaticList
 	ld	a, 13:opc
 SeMenu_DrumKit_Dispatch_Join:
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSys_Param_01_0x25E
+	ld	xiy, SeScreenData_0x283D
 	call	SeMenu_EqEdit_DrawInit_0x15
 SeMenu_DrumKit_Dispatch_Return:
 	ret
@@ -10101,38 +10101,38 @@ Data_UnknownBlock:
 	pop	sr
 	nop
 	.byte 0x01
-	ld	xiy, TuningSystem_Handler_Table_0x123
-	ld	xix, TuningSystem_Handler_Table_0x12D
+	ld	xiy, SeScreenData_0x2964
+	ld	xix, SeScreenData_0x296E
 	call	SeGfx_DrawStaticList
 	call	Data_UnknownBlock_0x6E
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip:
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x69
-	ld	xix, TuningSystem_Handler_Table_0x82
+	ld	xiy, SeScreenData_0x28AA
+	ld	xix, SeScreenData_0x28C3
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip2:
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x3C
-	ld	xix, TuningSystem_Handler_Table_0x55
+	ld	xiy, SeScreenData_0x287D
+	ld	xix, SeScreenData_0x2896
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return
 	call	SeMenu_PresetBrowser_Data_0x98
 	jr	Data_UnknownBlock_Return
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0xCB
+	ld	xiy, SeScreenData_0x290C
 	call	SeMenu_EqEdit_DrawInit_0x15
 Data_UnknownBlock_Return:
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x173
-	ld	xix, TuningSystem_Handler_Table_0x17D
+	ld	xiy, SeScreenData_0x29B4
+	ld	xix, SeScreenData_0x29BE
 	call	SeGfx_DrawStaticList
 	ld	c, (1632:16)
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, TuningSystem_Handler_Table_0x1E1
+	ld	xiz, SeScreenData_0x2A22
 	ld_rrl xiy, xiz, bc
 	ld xix, xiy
 	add xix, 20
@@ -10159,8 +10159,8 @@ Data_UnknownBlock_Return:
 	normal
 	jr	z, 18
 	ld	(0x03efa8:24), 1
-	ld	xiy, SeMenu_CompareScreen_DataTable_0x10F
-	ld	xix, SeMenu_CompareScreen_DataTable_0x119
+	ld	xiy, SeScreenData_0x244E
+	ld	xix, SeScreenData_0x2458
 	jr	16
 	ld	(0x03efa8:24), 1
 	ld	xiy, DrumDetailEdit_Menu_Table_0x2C6
@@ -10172,20 +10172,20 @@ Data_UnknownBlock_Return:
 	push	xsp
 	normal
 	jr	z, 7
-	ld	xiy, SeMenu_CompareScreen_DataTable_0xDB
+	ld	xiy, SeScreenData_0x241A
 	jr	5
 	ld	xiy, DrumDetailEdit_Menu_Table_0x2B2
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeMenu_CompareScreen_DataTable_0x179
+	ld	xiy, SeScreenData_0x24B8
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	normal
 	jr	z, 7
-	ld	xiy, SeMenu_CompareScreen_DataTable_0x1CF
+	ld	xiy, SeScreenData_0x250E
 	jr	30
 	cp	a, 0:i3
 	jr	nz, 21
@@ -10199,65 +10199,65 @@ Data_UnknownBlock_Return:
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeMenu_CompareScreen_DataTable_0x278
+	ld	xiy, SeScreenData_0x25B7
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip3
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1DDA
-	ld	xix, SeBitmap_EnvCurve5_0x1DF8
+	ld	xiy, SeScreenData_0x21A2
+	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return2
 Data_UnknownBlock_Skip3:
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1DF8
+	ld	xiy, SeScreenData_0x21C0
 	call	SeMenu_EqEdit_DrawInit_0x15
 Data_UnknownBlock_Return2:
 	ret
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip4
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1DDA
-	ld	xix, SeBitmap_EnvCurve5_0x1DF8
+	ld	xiy, SeScreenData_0x21A2
+	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return3
 Data_UnknownBlock_Skip4:
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1DF8
+	ld	xiy, SeScreenData_0x21C0
 	call	SeMenu_EqEdit_DrawInit_0x15
 Data_UnknownBlock_Return3:
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1E87
+	ld	xiy, SeScreenData_0x224F
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1E87
+	ld	xiy, SeScreenData_0x224F
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeBitmap_EnvCurve5_0x1EE8
+	ld	xiy, SeScreenData_0x22B0
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Skip5
 	ld	(0x03efa8:24), 1
-	ld	xiy, SeMenu_CompareScreen_DataTable_0x10
-	ld	xix, SeMenu_CompareScreen_DataTable_0x24
+	ld	xiy, SeScreenData_0x234F
+	ld	xix, SeScreenData_0x2363
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 Data_UnknownBlock_Skip5:
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeMenu_CompareScreen_DataTable_0x24
+	ld	xiy, SeScreenData_0x2363
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x2D1
-	ld	xix, TuningSystem_Handler_Table_0x3C9
+	ld	xiy, SeScreenData_0x2B12
+	ld	xix, SeScreenData_0x2C0A
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x3C9
-	ld	xix, TuningSystem_Handler_Table_0x3F1
+	ld	xiy, SeScreenData_0x2C0A
+	ld	xix, SeScreenData_0x2C32
 	call	SeGfx_DrawBoundList
 	call	Data_UnknownBlock_0x23D
 	ret
@@ -10318,16 +10318,16 @@ Data_UnknownBlock_Skip7:
 	push	xsp
 	normal
 	jr	z, 14
-	ld	xiy, TuningSystem_Handler_Table_0x3F4
-	ld	xix, TuningSystem_Handler_Table_0x416
+	ld	xiy, SeScreenData_0x2C35
+	ld	xix, SeScreenData_0x2C57
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x416
-	ld	xix, TuningSystem_Handler_Table_0x5F9
+	ld	xiy, SeScreenData_0x2C57
+	ld	xix, SeScreenData_0x2E3A
 	call	SeGfx_DrawStaticList
 	jr	14
-	ld	xiy, TuningSystem_Handler_Table_0x442
-	ld	xix, TuningSystem_Handler_Table_0x5F9
+	ld	xiy, SeScreenData_0x2C83
+	ld	xix, SeScreenData_0x2E3A
 	call	SeGfx_DrawStaticList
 	.byte 0xc1
 	jr	le, 6
@@ -10343,30 +10343,30 @@ Data_UnknownBlock_Skip7:
 	push	xde
 	ld	(7424:16), 236
 	.byte 0xf0
-	ld	xiy, TuningSystem_Handler_Table_0x633
-	ld	xix, TuningSystem_Handler_Table_0x64F
+	ld	xiy, SeScreenData_0x2E74
+	ld	xix, SeScreenData_0x2E90
 	call	SeGfx_DrawBoundList
 	call	Data_UnknownBlock_0x46B
 	.ascii "hBE@:ñ"
 	nop
-	ld	xix, TuningSystem_Handler_Table_0x603
+	ld	xix, SeScreenData_0x2E44
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x617
-	ld	xix, TuningSystem_Handler_Table_0x633
+	ld	xiy, SeScreenData_0x2E58
+	ld	xix, SeScreenData_0x2E74
 	call	SeGfx_DrawBoundList
 	call	Data_UnknownBlock_0x46B
 	.ascii "h ET:"
 	.byte 0xf1
 	nop
-	ld	xix, TuningSystem_Handler_Table_0x617
+	ld	xix, SeScreenData_0x2E58
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x64F
-	ld	xix, TuningSystem_Handler_Table_0x66B
+	ld	xiy, SeScreenData_0x2E90
+	ld	xix, SeScreenData_0x2EAC
 	call	SeGfx_DrawBoundList
 	call	Data_UnknownBlock_0x46B
 	ret
-	ld	xiy, TuningSystem_Handler_Table_0x3C9
-	ld	xix, TuningSystem_Handler_Table_0x3F1
+	ld	xiy, SeScreenData_0x2C0A
+	ld	xix, SeScreenData_0x2C32
 	call	SeGfx_DrawBoundList
 	call	Data_UnknownBlock_0x23D
 	ret
@@ -10377,8 +10377,8 @@ Data_UnknownBlock_Skip7:
 	cp	a, 2:i3
 	jr	z, 119
 	ld	(0x03efa8:24), 1
-	ld	xiy, TuningSystem_Handler_Table_0x675
-	ld	xix, TuningSystem_Handler_Table_0x67F
+	ld	xiy, SeScreenData_0x2EB6
+	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
 	.byte 0xc1
@@ -10391,28 +10391,28 @@ Data_UnknownBlock_Skip7:
 	push	xsp
 	push	sr
 	jr	z, 24
-	ld	xiy, TuningSystem_Handler_Table_0x617
-	ld	xix, TuningSystem_Handler_Table_0x633
+	ld	xiy, SeScreenData_0x2E58
+	ld	xix, SeScreenData_0x2E74
 	jr	22
-	ld	xiy, TuningSystem_Handler_Table_0x633
-	ld	xix, TuningSystem_Handler_Table_0x64F
+	ld	xiy, SeScreenData_0x2E74
+	ld	xix, SeScreenData_0x2E90
 	jr	10
-	ld	xiy, TuningSystem_Handler_Table_0x64F
-	ld	xix, TuningSystem_Handler_Table_0x66B
+	ld	xiy, SeScreenData_0x2E90
+	ld	xix, SeScreenData_0x2EAC
 	call	SeGfx_DrawBoundList
 	call	Data_UnknownBlock_0x46B
 	jr	Data_UnknownBlock_Return4
 	ld	(0x03efa8:24), 1
-	ld	xiy, TuningSystem_Handler_Table_0x66B
-	ld	xix, TuningSystem_Handler_Table_0x67F
+	ld	xiy, SeScreenData_0x2EAC
+	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x628
+	ld	xiy, SeScreenData_0x2E69
 	call	SeGfx_DrawBoundRecord
 	call	Data_UnknownBlock_0x46B
 	jr	90
 	ld	(0x03efa8:24), 1
-	ld	xiy, TuningSystem_Handler_Table_0x66B
-	ld	xix, TuningSystem_Handler_Table_0x67F
+	ld	xiy, SeScreenData_0x2EAC
+	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
 	.byte 0xc1
@@ -10427,15 +10427,15 @@ Data_UnknownBlock_Skip7:
 	.ascii "f E^:"
 	.byte 0xf1
 	nop
-	ld	xix, TuningSystem_Handler_Table_0x633
+	ld	xix, SeScreenData_0x2E74
 	call	SeGfx_DrawBoundList
 	jr	30
-	ld	xiy, TuningSystem_Handler_Table_0x633
-	ld	xix, TuningSystem_Handler_Table_0x64F
+	ld	xiy, SeScreenData_0x2E74
+	ld	xix, SeScreenData_0x2E90
 	call	SeGfx_DrawBoundList
 	jr	14
-	ld	xiy, TuningSystem_Handler_Table_0x64F
-	ld	xix, TuningSystem_Handler_Table_0x66B
+	ld	xiy, SeScreenData_0x2E90
+	ld	xix, SeScreenData_0x2EAC
 	call	SeGfx_DrawBoundList
 	call	Data_UnknownBlock_0x46B
 Data_UnknownBlock_Return4:
@@ -10443,7 +10443,7 @@ Data_UnknownBlock_Return4:
 	xor	wa, wa
 	ld	a, (1633:16)
 	div	a, 16
-	ld	xiz, TuningSystem_Handler_Table_0x6FF
+	ld	xiz, SeScreenData_0x2F40
 	xor	hl, hl
 	ld	l, w
 	sla	hl, 1
@@ -10451,7 +10451,7 @@ Data_UnknownBlock_Return4:
 	ld (1740:16), ix
 	add	ix, 8
 	ld	(1744:16), ix
-	ld	xiz, TuningSystem_Handler_Table_0x71F
+	ld	xiz, SeScreenData_0x2F60
 	xor	hl, hl
 	ld	l, a
 	sla	hl, 1
@@ -10465,14 +10465,14 @@ SeMenu_PresetInit_Main:
 	; --- Main: init, XIY/XIX setup, 2 loops, 9 calls (63 bytes) ---
 	call SeMenu_PresetManager_Data_0x1AF
 	call SeMenu_PresetManager_Save
-	ld xiy, 0x00f13f72
-	ld xix, 0x00f140ef
+	ld xiy, SeScreenData_0x336C
+	ld xix, SeScreenData_0x34E9
 	call SeGfx_DrawStaticList
 	call SeMenu_ShowConfirmDialog_Data_0xC0
 	call SeMenu_PresetManager_Data_0x60
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f144e7
-	ld xix, 0x00f1459c
+	ld xiy, SeScreenData_0x38E1
+	ld xix, SeScreenData_0x3996
 	call SeGfx_DrawBoundList
 	call SeMenu_PresetInit_Loop1
 	call SeMenu_PresetInit_Loop2
@@ -10499,7 +10499,7 @@ SeMenu_PresetInit_TableLookup1:
 	ld d, (xbc)
 	and d, 0x80
 	jr z, SeMenu_PresetInit_Lookup1Return
-	ld xiy, 0x00f14640
+	ld xiy, SeScreenData_0x3A3A
 	ld	(0x03efa8:24), 0
 	call SeMenu_EqEdit_DrawInit_0x15
 SeMenu_PresetInit_Lookup1Return:
@@ -10525,7 +10525,7 @@ SeMenu_PresetInit_TableLookup2:
 	ld d, (xbc)
 	cp	d, 0:i3
 	jr z, SeMenu_PresetInit_Lookup2Return
-	ld xiy, 0x00f145c4
+	ld xiy, SeScreenData_0x39BE
 	ld	(0x03efa8:24), 0
 	call SeMenu_EqEdit_DrawInit_0x15
 SeMenu_PresetInit_Lookup2Return:
@@ -10535,12 +10535,12 @@ SeMenu_PresetInit_Lookup2Return:
 SeMenu_FxEdit_Init:
 	call	SeMenu_PresetManager_Data_0x1D9
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0xCB2
-	ld	xix, TuningSystem_Handler_Table_0xD22
+	ld	xiy, SeScreenData_0x34F3
+	ld	xix, SeScreenData_0x3563
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 2
-	ld	xiy, TuningSystem_Handler_Table_0xCA8
-	ld	xix, TuningSystem_Handler_Table_0xCB2
+	ld	xiy, SeScreenData_0x34E9
+	ld	xix, SeScreenData_0x34F3
 	call	SeGfx_DrawStaticList
 	ldw	(1734:16), 47
 	ldw	(1736:16), 51
@@ -10548,31 +10548,31 @@ SeMenu_FxEdit_Init:
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x126F
-	ld	xix, TuningSystem_Handler_Table_0x12B6
+	ld	xiy, SeScreenData_0x3AB0
+	ld	xix, SeScreenData_0x3AF7
 	call	SeGfx_DrawBoundList
 	ret
 SeMenu_FxEdit_DataBlock1:
 	call	SeMenu_PresetManager_Data_0x1D9
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0xD22
-	ld	xix, TuningSystem_Handler_Table_0xDF2
+	ld	xiy, SeScreenData_0x3563
+	ld	xix, SeScreenData_0x3633
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 2
-	ld	xiy, TuningSystem_Handler_Table_0xCA8
-	ld	xix, TuningSystem_Handler_Table_0xCB2
+	ld	xiy, SeScreenData_0x34E9
+	ld	xix, SeScreenData_0x34F3
 	call	SeGfx_DrawStaticList
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x12FC
-	ld	xix, TuningSystem_Handler_Table_0x132F
+	ld	xiy, SeScreenData_0x3B3D
+	ld	xix, SeScreenData_0x3B70
 	call	SeGfx_DrawBoundList
 	ret
 SeMenu_FxEdit_DataBlock2:
 	call	SeMenu_PresetBrowser_Navigate
-	ld	xiy, SeBitmap_EnvCurve5_0xC7B
-	ld	xix, SeBitmap_EnvCurve5_0xCC1
+	ld	xiy, SeScreenData_0x1043
+	ld	xix, SeScreenData_0x1089
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
 	call	SeMenu_Utility_End_0x12
@@ -10585,16 +10585,16 @@ SeMenu_FxEdit_DataBlock3:
 	ret
 SeMenu_FxEdit_DataBlock4:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeBitmap_EnvCurve5_0xFB5
-	ld	xix, SeBitmap_EnvCurve5_0x1069
+	ld	xiy, SeScreenData_0x137D
+	ld	xix, SeScreenData_0x137D + 180
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 2
-	ld	xiy, SeBitmap_EnvCurve5_0x108A
-	ld	xix, SeBitmap_EnvCurve5_0x109E
+	ld	xiy, SeScreenData_0x1452
+	ld	xix, SeScreenData_0x1466
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0xDF2
-	ld	xix, TuningSystem_Handler_Table_0xE1F
+	ld	xiy, SeScreenData_0x3633
+	ld	xix, SeScreenData_0x3660
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
 	call	SeMenu_CompareAndApply_Data6_0x32
@@ -10602,12 +10602,12 @@ SeMenu_FxEdit_DataBlock4:
 	ret
 SeMenu_FilterEdit_Init:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeBitmap_EnvCurve5_0x18B2
-	ld	xix, SeBitmap_EnvCurve5_0x19EF
+	ld	xiy, SeScreenData_0x1C7A
+	ld	xix, SeScreenData_0x1DB7
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 2
-	ld	xiy, SeBitmap_EnvCurve5_0x19EF
-	ld	xix, SeBitmap_EnvCurve5_0x1A03
+	ld	xiy, SeScreenData_0x1DB7
+	ld	xix, SeScreenData_0x1DCB
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
 	ldw	(1734:16), 56
@@ -10616,8 +10616,8 @@ SeMenu_FilterEdit_Init:
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x1343
-	ld	xix, TuningSystem_Handler_Table_0x139A
+	ld	xiy, SeScreenData_0x3B84
+	ld	xix, SeScreenData_0x3BDB
 	call	SeGfx_DrawBoundList
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
@@ -10639,26 +10639,26 @@ SeMenu_FilterEdit_Dispatch:
 	cp	a, 11
 	jr	c, SeMenu_FilterEdit_Dispatch_Skip3
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x110E
-	ld	xix, TuningSystem_Handler_Table_0x114A
+	ld	xiy, SeScreenData_0x394F
+	ld	xix, SeScreenData_0x398B
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop2
 	jr	SeMenu_FilterEdit_Dispatch_Return
 SeMenu_FilterEdit_Dispatch_Skip:
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x10A0
-	ld	xix, TuningSystem_Handler_Table_0x10DC
+	ld	xiy, SeScreenData_0x38E1
+	ld	xix, SeScreenData_0x391D
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop1
 	jr	SeMenu_FilterEdit_Dispatch_Return
 SeMenu_FilterEdit_Dispatch_Skip2:
 	ld	(0x03efa8:24), 1
-	ld	xiy, TuningSystem_Handler_Table_0x123D
-	ld	xix, TuningSystem_Handler_Table_0x1247
+	ld	xiy, SeScreenData_0x3A7E
+	ld	xix, SeScreenData_0x3A88
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 SeMenu_FilterEdit_Dispatch_Skip3:
-	ld	xiy, TuningSystem_Handler_Table_0x117D
+	ld	xiy, SeScreenData_0x39BE
 	ld	(0x03efa8:24), 0
 	call	SeMenu_EqEdit_DrawInit_0x15
 SeMenu_FilterEdit_Dispatch_Return:
@@ -10667,31 +10667,31 @@ SeMenu_FilterEdit_AltDispatch:
 	cp	a, 0:i3
 	jr	nz, SeMenu_FilterEdit_AltDispatch_Skip
 	ld	(0x03efa8:24), 1
-	ld	xiy, TuningSystem_Handler_Table_0x12CA
-	ld	xix, TuningSystem_Handler_Table_0x12D4
+	ld	xiy, SeScreenData_0x3B0B
+	ld	xix, SeScreenData_0x3B15
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 SeMenu_FilterEdit_AltDispatch_Skip:
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x12B6
+	ld	xiy, SeScreenData_0x3AF7
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_FilterEdit_DataBlock3:
 	cp	a, 0:i3
 	jr	nz, SeMenu_FilterEdit_DataBlock3_Skip
 	ld	(0x03efa8:24), 1
-	ld	xiy, TuningSystem_Handler_Table_0x12CA
-	ld	xix, TuningSystem_Handler_Table_0x12D4
+	ld	xiy, SeScreenData_0x3B0B
+	ld	xix, SeScreenData_0x3B15
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 SeMenu_FilterEdit_DataBlock3_Skip:
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x132F
+	ld	xiy, SeScreenData_0x3B70
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_FilterEdit_DataBlock4:
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x139A
+	ld	xiy, SeScreenData_0x3BDB
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_FilterEdit_DataBlock5:
@@ -10701,24 +10701,24 @@ SeMenu_FilterEdit_DataBlock5:
 	normal
 	jr	z, 26
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x13F6
-	ld	xix, TuningSystem_Handler_Table_0x14D6
+	ld	xiy, SeScreenData_0x3C37
+	ld	xix, SeScreenData_0x3D17
 	call	SeGfx_DrawStaticList
 	call	SeMenu_Utility_CompareBlock_End
 	jr	41
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x13F6
-	ld	xix, TuningSystem_Handler_Table_0x14A5
+	ld	xiy, SeScreenData_0x3C37
+	ld	xix, SeScreenData_0x3C37 + 175
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x14D6
-	ld	xix, TuningSystem_Handler_Table_0x14F5
+	ld	xiy, SeScreenData_0x3D17
+	ld	xix, SeScreenData_0x3D36
 	call	SeGfx_DrawStaticList
-	ld	xiy, TuningSystem_Handler_Table_0x15B0
+	ld	xiy, SeScreenData_0x3DF1
 	jr	SeMenu_FilterEdit_DataBlock5_Join
-	ld	xiy, TuningSystem_Handler_Table_0x1592
+	ld	xiy, SeScreenData_0x3DD3
 SeMenu_FilterEdit_DataBlock5_Join:
 	ld	(0x03efa8:24), 0
-	ld	xix, TuningSystem_Handler_Table_0x161F
+	ld	xix, SeScreenData_0x3E60
 	call	SeGfx_DrawBoundList
 	call	SeMenu_EqEdit_SetupHelper2
 	ret
@@ -10727,27 +10727,27 @@ SeMenu_EqEdit_Init:
 	call SeMenu_EqEdit_SetupHelper1
 	call SeMenu_PresetManager_Save
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f1493c
-	ld xix, 0x00f149d9
+	ld xiy, SeScreenData_0x3D36
+	ld xix, SeScreenData_0x3DD3
 	call SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f14e28
-	ld xix, 0x00f14e46
+	ld xiy, SeScreenData_0x4222
+	ld xix, SeScreenData_0x4240
 	call SeGfx_DrawBoundList
 	call SeMenu_EqEdit_SetupHelper2
 	ret
 SeMenu_EqEdit_SetupHelper1:
 	; --- Helper 1: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f14809
-	ld xix, 0x00f14838
+	ld xiy, SeScreenData_0x3C03
+	ld xix, SeScreenData_0x3C32
 	call SeGfx_DrawStaticList
 	ret
 SeMenu_EqEdit_SetupHelper2:
 	; --- Helper 2: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f14838
-	ld xix, 0x00f1483d
+	ld xiy, SeScreenData_0x3C32
+	ld xix, SeScreenData_0x3C37
 	call SeGfx_DrawStaticList
 	ret
 
@@ -10763,18 +10763,18 @@ SeMenu_EqEdit_Dispatch:
 	ld	(0x03efa8:24), 0
 	cp	(1710:16), 1
 	jr z, SeMenu_EqEdit_DrawTable
-	ld xiy, 0x00f149d9
-	ld xix, 0x00f149f7
+	ld xiy, SeScreenData_0x3DD3
+	ld xix, SeScreenData_0x3DF1
 	call SeGfx_DrawBoundList
 SeMenu_EqEdit_DrawTable:
-	ld xiy, 0x00f14a3d
-	ld xix, 0x00f14a5b
+	ld xiy, SeScreenData_0x3E37
+	ld xix, SeScreenData_0x3E55
 	call SeGfx_DrawBoundList
 	jr t, SeMenu_EqEdit_Return
 SeMenu_EqEdit_SetupPath:
 	ld	(0x03efa8:24), 1
-	ld xiy, 0x00f14dd2
-	ld xix, 0x00f14df0
+	ld xiy, SeScreenData_0x41CC
+	ld xix, SeScreenData_0x41EA
 	call SeGfx_DrawStaticList
 	ld a, 0x00:opc
 	jr t, SeMenu_EqEdit_DefaultPath
@@ -10782,7 +10782,7 @@ SeMenu_EqEdit_SetConstA:
 	ld a, 0x07:opc
 SeMenu_EqEdit_DefaultPath:
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f14a66
+	ld xiy, SeScreenData_0x3E60
 	call SeMenu_EqEdit_DrawInit_0x15
 SeMenu_EqEdit_Return:
 	ret
@@ -10790,8 +10790,8 @@ SeMenu_EqEdit_Return:
 
 SeMenu_EqEdit_DrawInit:
 	ld	(0x03efa8:24), 0
-	ld	xiy, TuningSystem_Handler_Table_0x19E1
-	ld	xix, TuningSystem_Handler_Table_0x19FF
+	ld	xiy, SeScreenData_0x4222
+	ld	xix, SeScreenData_0x4240
 	call	SeGfx_DrawBoundList
 	ret
 	extz	xwa
@@ -12437,7 +12437,9 @@ SeScreenData_0x06DB:
 ; tables beside it.
 ; Shape only: read column by column like the six SeBitmap_EnvCurve* bitmaps
 ; it follows, it is a coherent 40x40 picture.
-SeBitmap_Unreferenced40x40:
+; Its address occurs in code only as the exclusive END (XIX) of the record
+; list SeScreenData_0x06DB.
+SeBitmap_Picture40x40:
 	; column 0 (x 0-7)
 	.byte	0b00000000
 	.byte	0b00000000
@@ -14107,20 +14109,6 @@ TuningSys_Param_01:
 	.set	SeScreenData_0x26A3, . + 196
 	.set	SeScreenData_0x26AE, . + 207
 	.incbin "includes/generated/se_name_editor.bin"
-.set TuningSys_Param_02, TuningSys_Param_01 + 11
-.set TuningSys_Param_03, TuningSys_Param_01 + 22
-.set TuningSys_Param_04, TuningSys_Param_01 + 37
-.set TuningSys_Param_05, TuningSys_Param_01 + 48
-.set TuningSys_Param_06, TuningSys_Param_01 + 59
-.set TuningSys_Param_07, TuningSys_Param_01 + 74
-.set TuningSys_Param_08, TuningSys_Param_01 + 85
-.set TuningSys_Param_09, TuningSys_Param_01 + 96
-.set TuningSys_Param_10, TuningSys_Param_01 + 111
-.set TuningSys_Param_11, TuningSys_Param_01 + 122
-.set TuningSys_Param_12, TuningSys_Param_01 + 133
-.set TuningSys_Param_13, TuningSys_Param_01 + 148
-.set TuningSys_Param_NamesAndCoords, TuningSys_Param_01 + 163
-.set TuningSys_Param_ModeSelect, TuningSys_Param_01 + 207
 ; string table, 8-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value range up to 32)
 ; evidence: bound op02 record at SeScreenData_0x2673

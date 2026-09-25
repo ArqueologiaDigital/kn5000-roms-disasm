@@ -21,6 +21,7 @@ an earlier pass and is deliberately left as it was.
 |---|---|---|
 | `se_screendata_model.py` | What is every byte of the 19,617-byte block v10/v9 0xF10C06-0xF158A7 (v7 -0x2A), and which code or pointer field pins it? Seeds on every `ld xiy/xix/xiz, imm32` into the block, walks the code symbolically to the `SeGfx_*` call, parses each list exactly as the interpreter does, follows every pointer field the handlers dereference. | `python3 scripts/lanes/seui/se_screendata_model.py --image v10 [--json out.json]` |
 | `se_screendata_render.py` | Re-spell the block as typed data (one macro line per record, `.long` tables, `.ascii` cells, `.short` boxes, one `.byte 0b........` per bitmap byte) keeping the C-descriptor `.incbin`s, comments, `.set`s and referenced labels. `--apply` writes; `make gate` certifies. | `python3 scripts/lanes/seui/seui_amap.py --image v10 --out A.json --files audio/sound_editor_ui.s && python3 scripts/lanes/seui/se_screendata_render.py --image v10 --amap A.json --apply` |
+| `se_screendata_symbolize_refs.py` | Rewrite the code's operands into the block (numeric `0x00f1xxxx`, and positional aliases of the old wrong base names such as `SeBitmap_EnvCurve5_0x46B`) to the label the block now defines at that address; a list END that is no object's start becomes `<nearest label> + N`. Only this lane's files, only operands. | `python3 scripts/lanes/seui/se_screendata_symbolize_refs.py --image v10 [--apply]` (needs the linked ELF) |
 | `gate_perturbed_2026-09-25.log` | Does the byte gate SEE the rendered data? One number changed in one record (`sd_quad 0x09, 5, 30, 43, 47` -> `48`): `make gate` went red, `kn5000_v10_program 1 BYTES DIFFER` (at 0xF1144A). Restored before commit. | (a log, not a script) |
 
 What the model established (v10; v9 and v7 have identical structure):
@@ -46,6 +47,10 @@ What the model established (v10; v9 and v7 have identical structure):
 * 314 B have no reader (listed with their admission in the source): a 40x40
   picture, a duplicate of a referenced string table, two identical 30-byte
   record groups and a 20-byte one inside C blocks, and `"+-"`.
+* Hand refinements after the render (so a re-render will not reproduce them
+  byte-for-byte in the text): the 40x40 picture is `SeBitmap_Picture40x40`
+  with a note that its address occurs only as a list END, and the 14 dead
+  `.set TuningSys_Param_02..13/_NamesAndCoords/_ModeSelect` aliases are gone.
 * ⚠ Correction to `sound_editor_screens/*.c`: `SD_LABELED_REF_TYPE.addr`
   (op 06) is not an address -- the op-06 handler divides it by 40; it is the
   y*40 + x/8 cell position.  The "op 0x02 subtype" there is the ordinary length
