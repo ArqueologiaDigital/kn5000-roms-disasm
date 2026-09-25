@@ -753,12 +753,25 @@ AccompSeq_StyleDataTable:
 ; AccompSeq_StyleDataTable, one per used part (RR = record, P = a for
 ; part 1, b for part 2), in record order, back to back,
 ; 0xe4cb66..0xe55210. Boundaries are the stream pointers themselves; no
-; two parts share a stream. Every stream begins with the 6 bytes 80 FF
-; FF FF FF 87, which AccompSeq_LoadParams skips (`add xwa, 6`).
+; two parts share a stream.
 ;
-; NOT ESTABLISHED: the event encoding after the header. The player that
-; walks the cursors at 0x7e2c/0x7e2e and 0x7e30/0x7e32 was not read for
-; this; the streams are kept as bytes.
+; Format (the ASEQ_* macros in naka_types.h, where each opcode is tied
+; to the code that reads it): the header 80 FF FF FF FF 87, which
+; AccompSeq_LoadParams skips (`add xwa, 6`), then events -- 0x90 (6 B)
+; and 0x91 (8 B) timed events, 0xc0 program (6 B), 0xdn controller n (3
+; B), 0x81 end of a 96-tick unit -- and 0x83 end of stream, 0x87 block
+; end. Readers: AccompSeq_ParseEvents (v10/v9 0xf6e07a, v7 0xf6dc76),
+; AccompSeq_InitEventDispatch (v10/v9 0xf6de14, v7 0xf6da10) and
+; AccompSeq_ParseSequenceData (v10/v9 0xf6ee26, v7 0xf6ea22).
+;
+; Proof of the framing: that grammar consumes every byte of all 103
+; streams (3036 x 0x90, 1435 x 0x91, 1284 x 0x81, 740 x 0xdn, 74 x
+; 0xc0), each ending 83 87 (one ends 83 81 83 87, the last 83 87 87 87
+; 87 87 87 87 up to the ApFunction table); naka_c_retype.py refuses to
+; write a stream the grammar does not consume exactly. What the 4/6
+; parameter bytes of the 0x90 / 0x91 events mean musically is not named
+; here: the consumers copy them to the output buffer unchanged except p1
+; (tested against 0x78) and p3 (0 -> 1).
 ;
 ; Typed in naka_widget_descriptors.c as one uint8_t array per stream,
 ; AccompSeq_Stream_00_a .. AccompSeq_Stream_77_b.

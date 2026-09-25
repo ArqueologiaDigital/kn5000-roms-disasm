@@ -446,6 +446,107 @@ def build_apfunction_tables(cb, data, off0):
     return off0, off0 + 488, new, ['ptrs_37']
 
 
+ASEQ_LEN = {0x90: 6, 0x91: 8, 0xC0: 6, 0xD1: 3, 0xD2: 3, 0xD3: 3, 0xD4: 3,
+            0xD5: 3, 0xD7: 3, 0x81: 1, 0x83: 1, 0x84: 1, 0x87: 1}
+ASEQ_HDR = bytes.fromhex('80ffffffff87')
+
+
+def aseq_events(bs):
+    """Split an AccompSeq stream into macro calls (naka_types.h ASEQ_*).
+    Refuses (SystemExit) unless the grammar consumes every byte."""
+    if bs[:6] != ASEQ_HDR:
+        raise SystemExit('stream without the 80 FF FF FF FF 87 header')
+    out, i, ended = ['ASEQ_HEADER'], 6, False
+    while i < len(bs):
+        op = bs[i]
+        n = ASEQ_LEN.get(op)
+        if n is None or i + n > len(bs):
+            raise SystemExit('stream byte 0x%02X at +%d is not in the grammar' % (op, i))
+        f = bs[i + 1:i + n]
+        if ended and op not in (0x81, 0x83, 0x87):
+            raise SystemExit('event after the end mark at +%d' % i)
+        if op == 0x90:
+            out.append('ASEQ_EV6(%d, %d, %d, %d, %d)' % tuple(f))
+        elif op == 0x91:
+            out.append('ASEQ_EV8(%d, %d, %d, %d, %d, %d, %d)' % tuple(f))
+        elif op == 0xC0:
+            out.append('ASEQ_PROG(%d, %d, 0x%02X, 0x%02X, 0x%02X)' % tuple(f))
+        elif op & 0xF0 == 0xD0:
+            out.append('ASEQ_CTL(%d, %d, %d)' % ((op & 0xF,) + tuple(f)))
+        else:
+            out.append({0x81: 'ASEQ_UNIT', 0x83: 'ASEQ_END', 0x84: 'ASEQ_LOOP',
+                        0x87: 'ASEQ_BLOCK_END'}[op])
+            ended = ended or op == 0x83
+        i += n
+    return out
+
+
+def render_accseq_streams(cb, data):
+    """Re-express every AccompSeq_Stream_* initializer as ASEQ_* events
+    (same bytes; the layout is untouched)."""
+    n = 0
+    for mb, e in zip(cb.members, cb.entries):
+        if not mb.name.startswith('AccompSeq_Stream_'):
+            continue
+        ev = aseq_events(data[mb.offset:mb.offset + mb.size])
+        lines, cur = [], []
+        for x in ev:
+            cur.append(x)
+            if x in ('ASEQ_UNIT', 'ASEQ_HEADER'):     # one line per 96-tick unit
+                lines.append(', '.join(cur))
+                cur = []
+        if cur:
+            lines.append(', '.join(cur))
+        e.expr = '{\n' + '\n'.join('        %s,' % l for l in lines) + '\n    }'
+        n += 1
+    return n
+
+
+ACCSEQ_STREAM_HDR = (
+    'AccompSeq_Stream_RR_P -- the {n} event streams of AccompSeq_StyleDataTable, '
+    'one per used part (RR = record, P = a for part 1, b for part 2), in record '
+    'order, back to back, 0x{lo:06X}..0x{hi:06X}.  Boundaries are the stream '
+    'pointers themselves; no two parts share a stream.\n\n'
+    'Format (the ASEQ_* macros in naka_types.h, where each opcode is tied to '
+    'the code that reads it): the header 80 FF FF FF FF 87, which '
+    'AccompSeq_LoadParams skips (`add xwa, 6`), then events -- 0x90 (6 B) and '
+    '0x91 (8 B) timed events, 0xC0 program (6 B), 0xDn controller n (3 B), 0x81 '
+    'end of a 96-tick unit -- and 0x83 end of stream, 0x87 block end.  '
+    'Readers: {r1}, {r2} and {r3}.\n\n'
+    'Proof of the framing: that grammar consumes every byte of all {n} streams '
+    '({ev6} x 0x90, {ev8} x 0x91, {units} x 0x81, {ctl} x 0xDn, {prog} x 0xC0), '
+    'each ending 83 87 (one ends 83 81 83 87, the last 83 87 87 87 87 87 87 87 up '
+    'to the ApFunction table); naka_c_retype.py refuses to write a stream the '
+    'grammar does not consume exactly.  What the 4/6 parameter bytes of the 0x90 '
+    '/ 0x91 events mean musically is not named here: the consumers copy them to '
+    'the output buffer unchanged except p1 (tested against 0x78) and p3 (0 -> 1).')
+
+
+def update_accseq_stream_header(cb, data):
+    import collections
+    k = cb.by_name['AccompSeq_Stream_00_a']
+    streams = [mb for mb in cb.members if mb.name.startswith('AccompSeq_Stream_')]
+    ops = collections.Counter()
+    for mb in streams:
+        for ev in aseq_events(data[mb.offset:mb.offset + mb.size]):
+            ops[ev.split('(')[0]] += 1
+    base = cb.base()
+    text = wrap(ACCSEQ_STREAM_HDR.format(
+        n=len(streams), lo=base + streams[0].offset,
+        hi=base + streams[-1].offset + streams[-1].size,
+        r1=a('AccompSeq_ParseEvents'), r2=a('AccompSeq_InitEventDispatch'),
+        r3=a('AccompSeq_ParseSequenceData'), ev6=ops['ASEQ_EV6'], ev8=ops['ASEQ_EV8'],
+        units=ops['ASEQ_UNIT'], ctl=ops['ASEQ_CTL'], prog=ops['ASEQ_PROG']))
+    block = M.comment_block(text)
+    block[1:1] = ['     * [typed] by build_accseq_region']
+    mb = cb.members[k]
+    # replace the previous header block (the last comment block in `pre`)
+    pre = mb.pre
+    end = max(i for i, l in enumerate(pre) if l.rstrip().endswith('*/'))
+    start = max(i for i in range(end + 1) if pre[i].lstrip().startswith('/*'))
+    mb.pre = pre[:start] + block + pre[end + 1:]
+
+
 CUSTOM = [
     # (blob, anchor label, builder)
     ('naka_widget_descriptors', 'NakaInst_OFF_Str', build_accseq_region),
@@ -560,6 +661,10 @@ def build(apply, render_dir):
         for cblob, off, fn in CUSTOM_AT:
             if cblob == blob:
                 run_custom(cb, data, off, fn)
+        if blob == 'naka_widget_descriptors':
+            print('   %d AccompSeq streams rendered as ASEQ_* events'
+                  % render_accseq_streams(cb, data))
+            update_accseq_stream_header(cb, data)
         bm = [o['label'] for o in objs if o['kind'] == 'bitmap']
         n = cb.symbolize_self_pointers(bm)
         print('   %d numeric pointers to these objects made SELF(...)' % n)

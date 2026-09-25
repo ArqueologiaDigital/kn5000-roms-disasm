@@ -269,6 +269,44 @@ typedef struct __attribute__((packed)) {
     accseq_part_t part[2];
 } accseq_record_t;         /* 32 bytes */
 
+/**
+ * AccompSeq event streams (the byte arrays accseq_part_t.stream points at).
+ * The grammar is the one AccompSeq_ParseEvents / AccompSeq_InitEventDispatch
+ * and AccompSeq_ParseSequenceData (sequencer/accompseq_routines.s) walk; it
+ * consumes every byte of all 103 streams in naka_widget_descriptors.c with
+ * no opcode left over (checked by scripts/converters/naka_c_retype.py, which
+ * refuses to emit a stream it cannot parse exactly).
+ *
+ *   ASEQ_HEADER   80 FF FF FF FF 87 -- skipped: AccompSeq_LoadParams starts
+ *                 the cursor at stream + 6
+ *   0x90  6 bytes tick, then 4 bytes AccompSeq_ReadParams stores at
+ *                 0x7E56..0x7E59 and AccompSeq_ProcessNoteOn6 re-emits
+ *                 (p1 is also tested against 0x78 by AccompSeq_CheckVelocityFlags;
+ *                 p3 == 0 is emitted as 1)
+ *   0x91  8 bytes tick, then 6 bytes (0x7E56..0x7E5B) -> AccompSeq_ProcessNoteOn8
+ *   0xC0  6 bytes tick, program, flags (bit 0 -> program bit 7 / bank bit 4),
+ *                 bank (low nibble), one byte not read by ParseSequenceData
+ *   0xDn  3 bytes (n = 1..5, 7) tick, value: controller n; ParseSequenceData
+ *                 emits (0xD1|0xD2, n, value); n = 5 also stores value at the
+ *                 part's 0x7E72/0x7E73
+ *   0x81  1 byte  end of a 96-tick unit (0x7E46 += 1; ticks are 0..95 within it)
+ *   0x83  1 byte  end of stream (AccompSeq_CleanupSequence / part transition)
+ *   0x84  1 byte  jump back to the loop point (not present in the ROM streams)
+ *   0x87  1 byte  block end: in the RAM variant (index >= 0x80, 256-byte blocks
+ *                 at 0x1E8B00) it links to the next block; every ROM stream
+ *                 ends 83 87
+ *   "tick" is the event's position inside the current 96-tick unit.
+ */
+#define ASEQ_HEADER              0x80, 0xFF, 0xFF, 0xFF, 0xFF, 0x87
+#define ASEQ_EV6(t, a, b, c, d)  0x90, (t), (a), (b), (c), (d)
+#define ASEQ_EV8(t, a, b, c, d, e, f) 0x91, (t), (a), (b), (c), (d), (e), (f)
+#define ASEQ_PROG(t, p, f, b, x) 0xC0, (t), (p), (f), (b), (x)
+#define ASEQ_CTL(n, t, v)        (0xD0 | (n)), (t), (v)
+#define ASEQ_UNIT                0x81
+#define ASEQ_END                 0x83
+#define ASEQ_LOOP                0x84
+#define ASEQ_BLOCK_END           0x87
+
 /* ── String alignment helper ────────────────────────────────── */
 
 /**
