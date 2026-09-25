@@ -151,7 +151,10 @@ def apply(v, dry):
     lines = open(path, "rb").read().decode("latin-1").split("\n")
     print("%s %s: header above line %d" % (v, TC, first["line"]))
     if not dry:
-        lines[first["line"] - 1:first["line"] - 1] = tc_header(d)
+        k = first["line"] - 1
+        while lines[k].startswith(("//", ";")) or not lines[k].strip():
+            k += 1               # directly above the first data line, below the file's own header
+        lines[k:k] = tc_header(d)
         open(path, "wb").write("\n".join(lines).encode("latin-1"))
 
 
