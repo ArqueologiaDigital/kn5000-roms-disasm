@@ -2968,7 +2968,7 @@ VwMenuBox_Confirm_MultiLine:
 	lda_dri XWA, 0x07, 0xe8, 0xf8
 	push xwa
 	call Strlen
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	lda xwa, (xsp + 14)
 	push xwa
 	call Strlen
@@ -3560,20 +3560,20 @@ PsWideESBox_GetEditRange:
 	ld xwa, (xsp + 20)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld xwa, (xsp + 20)
 	ld iz, wa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, iz
 	jr c, PsWideESBox_ComputePoints
-	stw_erp HL, 0xfa
-	stw_erp WA, 0xfa
+	ldto_werp HL, 0xfa
+	ldto_werp WA, 0xfa
 	ex16 wa, iz
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 
 PsWideESBox_ComputePoints:
 	lda xbc, (xsp + 16)
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	calr GetEditSwPoint
 	lda xbc, (xsp + 12)
 	ld wa, iz
@@ -3605,12 +3605,12 @@ PsWideESBox_GetRange:
 	ld wa, de
 	cp wa, (xhl)
 	jr nc, PsWideESBox_GetRange_SwapMax
-	ldw_erp DE, 0xfa
+	ldfr_werp DE, 0xfa
 	ld iz, bc
 	jr PsWideESBox_GetRange_SendEvent
 
 PsWideESBox_GetRange_SwapMax:
-	ldw_erp BC, 0xfa
+	ldfr_werp BC, 0xfa
 	ld iz, de
 
 PsWideESBox_GetRange_SendEvent:
@@ -4694,20 +4694,20 @@ PsWideToggle_GetBounds:
 	ld xwa, (xsp + 20)
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld xwa, (xsp + 20)
 	ld iz, wa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, iz
 	jr c, PsWideToggle_GetBounds_CalcPts
-	stw_erp HL, 0xfa
-	stw_erp WA, 0xfa
+	ldto_werp HL, 0xfa
+	ldto_werp WA, 0xfa
 	ex16 wa, iz
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 
 PsWideToggle_GetBounds_CalcPts:
 	lda xbc, (xsp + 16)
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	calr GetEditSwPoint
 	lda xbc, (xsp + 12)
 	ld wa, iz
@@ -4739,12 +4739,12 @@ PsWideToggle_HitTest:
 	ld wa, de
 	cp wa, (xhl)
 	jr nc, PsWideToggle_HitTest_SwapOrder
-	ldw_erp DE, 0xfa
+	ldfr_werp DE, 0xfa
 	ld iz, bc
 	jr PsWideToggle_HitTest_Check
 
 PsWideToggle_HitTest_SwapOrder:
-	ldw_erp BC, 0xfa
+	ldfr_werp BC, 0xfa
 	ld iz, de
 
 PsWideToggle_HitTest_Check:
@@ -7308,7 +7308,7 @@ PsCursorBox_Confirm_CheckCursor:
 	ld iz, hl
 	ld xwa, (xsp + 6)
 	call GetCharDescent
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	ld xwa, (xsp + 6)
 	call GetCenteredDelta
 	lda_dri XDE, 0xfd, 0x12, 0x02
@@ -8792,12 +8792,12 @@ CountObject:
 	push xiz
 	ld (xsp + 8), bc
 	ld iz, 0:i3
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	cp wa, (xsp + 8)
 	jr ugt, InputDialog_GetText_CopyAndReturn
 	lda xwa, (0x027ed2:24)
 	ld (xsp + 4), xwa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	ld xbc, 0xe
 	call Math_MultiplyAccumulate
@@ -8808,7 +8808,7 @@ InputDialog_GetText:
 	add iz, (xwa + 8)
 	inc1w_erp 0xfa
 	add xhl, 0xe
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, (xsp + 8)
 	jr ule, InputDialog_GetText
 
@@ -17629,7 +17629,7 @@ IDCountHelper_Loop:
 	add wa, hl
 	ld iz, wa
 	inc1w_erp 0xfa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cpw_sri_rm WA, 0xfd, 0x08, 0x01
 	jr c, IDCountHelper_Loop
 
@@ -18177,13 +18177,13 @@ DeleteSpecEvent_ScanLoop:
 	ld e, a					; E = filter byte 1
 	ld c, b					; C = filter byte 0
 	cpl c					; C = ~filter byte 0 (complement)
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	and a, c				; clear bits in QIZH where filter has 1s
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	and e, b				; E = filter & filter (= filter)
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	add a, e				; set bits in QIZH where filter has 1s
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	or (xsp + 8), b				; accumulate filter byte 0 into (xsp+8)
 DeleteSpecEvent_Match:
 	; --- Advance to next registration entry ---
@@ -18204,21 +18204,21 @@ DeleteSpecEvent_Epilogue:
 	call TaskSched_SignalEvent				; release lock/semaphore
 	ld c, (xsp + 6)				; C = param byte 0
 	cpl c					; C = ~param byte 0
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	and a, c				; clear bits
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld c, (xsp + 10)			; C = param byte 1
 	and c, (xsp + 6)			; C = byte1 & byte0
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	add a, c				; accumulate
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld a, (xsp + 6)				; A = param byte 0
 	or (xsp + 8), a				; accumulate into (xsp+8)
 	; --- Build final XDE from accumulated data ---
 	ld xwa, 0xffff0000			; mask for upper 16 bits
 	and (xsp + 2), xwa			; keep upper 16 bits of working param
 	ld	xbc, 0:i3
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	sll xbc, 8				; shift QIZH value into byte 1 position
 	ld	xwa, 0:i3
 	ld a, (xsp + 8)				; A = accumulator byte
@@ -19625,7 +19625,7 @@ Gfx_BlitDirty_ScanLoop:
 	ld wa, iz
 	call Table_LookupDword
 	ld (xsp + 6), xhl
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	ld xbc, (xsp + 2)
 	call VGA_WritePaletteEntry
@@ -19645,7 +19645,7 @@ Gfx_BlitDirty_ScanDone:
 	ld wa, iz
 	call Table_LookupDword
 	ld (xsp + 6), xhl
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	ld xbc, (xsp + 2)
 	call VGA_WritePaletteEntry
@@ -19828,7 +19828,7 @@ ModifyPixel:
 	extz xbc
 	add xbc, (0x030452:24)
 	ld a, (xbc)
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	extz iz
 
 ReadPixel_Prologue:
@@ -19844,7 +19844,7 @@ ReadPixel_Prologue:
 	add xwa, xbc
 	ld xbc, 0x43c00
 	add xbc, xwa
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (xbc), a
 
 ReadPixel_Calculate:
@@ -19902,7 +19902,7 @@ ModifyPixelEx:
 	extz xbc
 	add xbc, (0x030452:24)
 	ld a, (xbc)
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	extz iz
 
 ModifyPixel_Prologue:
@@ -19929,7 +19929,7 @@ ModifyPixel_Prologue:
 	jrl DrawLine_Epilogue
 
 ModifyPixel_Calculate:
-	stb_erp C, 0xf8
+	ldto_berp C, 0xf8
 	cpw (xsp + 2), 0x205
 	jrl z, ModifyPixelEx_Prologue
 	lda xde, (0x043c00:24)

@@ -450,7 +450,7 @@ DispFileList_LoopBody:
 	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
-	stb_erp	a, 248
+	ldto_berp	a, 248
 	ld	(xde), a
 	ld	wa, (xsp+2)
 	add	wa, iz
@@ -647,7 +647,7 @@ SmfFN_PageDown:
 	jrl	ge, SmfFN_UpdateDisplay
 	exts	xhl
 	divs	hl, 0xa
-	stw_erp	WA, 0xee
+	ldto_werp	WA, 0xee
 	cp	wa, 0:i3
 	jrl	z, SmfFN_UpdateDisplay
 	ld	(0x8110:16), bc
@@ -1227,7 +1227,7 @@ DispSeqList_LoopBody:
 	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
-	stb_erp	a, 248
+	ldto_berp	a, 248
 	ld	(xde), a
 	ld	wa, (xsp+2)
 	add	wa, iz

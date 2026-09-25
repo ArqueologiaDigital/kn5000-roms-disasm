@@ -37,7 +37,7 @@ EffectMode_CopyVoiceParams:
 	ld (xiy), c
 	ld c, (xwa + 32)
 	and c, 0xcf
-	ldb_erp C, 0xf8
+	ldfr_berp C, 0xf8
 	lda xbc, (xix + 4)
 	sub xbc, xhl
 	ld xiy, xbc
@@ -869,7 +869,7 @@ EffectMode_CopyPresetBits:
 
 	res 7, c
 
-	ldb_erp C, 0xf0
+	ldfr_berp C, 0xf0
 
 	lda xhl, (xde + 1)
 
@@ -887,7 +887,7 @@ EffectMode_CopyPresetBits:
 
 	and a, 0x7
 
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 
 	lda xbc, (xde + 4)
 
@@ -1265,13 +1265,13 @@ RomTest_ProgramTableData_OuterLoop:
 	ld xix, 0:i3
 
 RomTest_ProgramTableData_SumLoop:
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	extz wa
 	sla wa, 1
 	ld iy, wa
 	lda_dri XIZ, 0x07, 0xe4, 0xf4
 	ld wa, (xiz)
-	ldw_erp WA, 0xf6
+	ldfr_werp WA, 0xf6
 	ld wa, (xhl)
 	addw_erp WA, 0xf6
 	ld (xiz), wa
@@ -1317,13 +1317,13 @@ RomTest_TableData_OuterLoop:
 	ld xix, 0:i3
 
 RomTest_TableData_SumLoop:
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	extz wa
 	sla wa, 1
 	ld iy, wa
 	lda_dri XIZ, 0x07, 0xe4, 0xf4
 	ld wa, (xiz)
-	ldw_erp WA, 0xf6
+	ldfr_werp WA, 0xf6
 	ld wa, (xhl)
 	addw_erp WA, 0xf6
 	ld (xiz), wa
@@ -1380,7 +1380,7 @@ RhythmRomTest_SumLoop:
 	add bc, bc
 	lda_dri XDE, 0x07, 0xf0, 0xe4
 	ld bc, (xde)
-	ldw_erp BC, 0xe2
+	ldfr_werp BC, 0xe2
 	ld BC, (xiy+)
 	addw_erp BC, 0xe2
 	ld (xde), bc
@@ -1441,7 +1441,7 @@ CustomRomTest_OuterLoop:
 	ld xiy, 0:i3
 
 CustomRomTest_SumLoop:
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	extz wa
 	add wa, wa
 	lda_dri XBC, 0x07, 0xec, 0xe0
@@ -1582,7 +1582,7 @@ SelfTest_WaitDone_CountBits:
 	ldib_erp	251, 0	; ld qizh, 0
 
 SelfTest_CountBits_Loop:
-	stb_erp	c, 251	; ld c, qizh
+	ldto_berp	c, 251	; ld c, qizh
 	extz	bc
 	lda	xwa, (0x8cc8:16)
 	extz	xbc
@@ -1590,9 +1590,9 @@ SelfTest_CountBits_Loop:
 	ld	a, (xbc)
 	extz	wa
 	calr	SelfTest_PopCount
-	stb_erp	a, 250	; ld a, qizl
+	ldto_berp	a, 250	; ld a, qizl
 	add	a, l
-	ldb_erp	a, 250	; ld qizl, a
+	ldfr_berp	a, 250	; ld qizl, a
 	inc1b_erp	251	; inc 1, qizh
 	cp_erpb	251, 8
 	jr	c, SelfTest_CountBits_Loop
@@ -2034,11 +2034,11 @@ EffectMode_ByteData_DiagEvents:
 	pop XDE
 	ld a, (0x8ce0:16)
 	cpl	a
-	ldb_erp	a, 251	; ld qizh, a
+	ldfr_berp	a, 251	; ld qizh, a
 	and	a, 9
 	extz	wa
 	calr	Report_test_result_by_blinking_LED
-	stb_erp	a, 251	; ld a, qizh
+	ldto_berp	a, 251	; ld a, qizh
 	and	a, 9
 	jr	nz, EffectMode_ByteData_DiagEvents_Skip
 	ld	xwa, 0xf5000b
@@ -2121,7 +2121,7 @@ EffectMode_SetAllLEDs_SetOne:
 	inc1b_erp 0xfb
 
 EffectMode_SetAllLEDs_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	add wa, wa
 	lda xbc, (WidgetStyleDataTable_0x6BA:24)
@@ -2143,7 +2143,7 @@ LED_SetAll_BlankOne:
 	inc1b_erp 0xfb
 
 LED_SetAll_BlankLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	add wa, wa
 	lda xbc, (WidgetStyleDataTable_0x6BA:24)
@@ -3031,7 +3031,7 @@ MasterSetup_DialDown_AdjustView:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x9
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 74)
@@ -3873,7 +3873,7 @@ MstStyle_DialUp_CheckLimit:
 	ld hl, wa
 	exts xde
 	divs de, 0xa
-	stw_erp DE, 0xea
+	ldto_werp DE, 0xea
 	add de, hl
 	ld wa, bc
 	cp bc, de
@@ -4278,7 +4278,7 @@ MstStyle1Sub_HandleScroll:
 	ld wa, (0x0340c6:24)
 	extz xwa
 	div wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 66)
@@ -4526,7 +4526,7 @@ MstStyle1Sub_DialUp_CheckLimit:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0xa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp hl, wa
 	jrl ge, SeqFile_ReturnZeroJmp
 	inc 1, bc
@@ -4771,7 +4771,7 @@ MstStyle1SubGrid_PadLeft_Check:
 	inc	4, xsp
 	ldw	bc, 16
 	sub	bc, hl
-	stb_erp	a, 251	; ld a, qizh
+	ldto_berp	a, 251	; ld a, qizh
 	extz	wa
 	cp	wa, bc
 	jr	c, MstStyle1SubGrid_PadLeft_Loop
@@ -4830,7 +4830,7 @@ MstStyle1SubGrid_PadLeft_CheckB:
 	inc	4, xsp
 	ldw	bc, 16
 	sub	bc, hl
-	stb_erp	a, 251	; ld a, qizh
+	ldto_berp	a, 251	; ld a, qizh
 	extz	wa
 	cp	wa, bc
 	jr	c, MstStyle1SubGrid_PadLeft_LoopB
@@ -5189,7 +5189,7 @@ MstStyle2_HandleDialTurn:
 	ld wa, (xix)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr z, MstStyle2_DialDown_PageDec
 	decw	1, (xix)
@@ -5319,7 +5319,7 @@ MstStyle2_DialUp_Scroll:
 	ld wa, (xiy)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr nz, MstStyle2_DialUp_PageInc
 	incw 1, (xiy)
@@ -12214,7 +12214,7 @@ VariScreen_CalcRowOffset:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0xa
-	stw_erp BC, 0xe2
+	ldto_werp BC, 0xe2
 	ld_sril3 XWA, 0x07, 0xec, 0xe8
 	ldb_sri A, 0x07, 0xe0, 0xe4
 	extz wa
@@ -12495,7 +12495,7 @@ VariScreen_DrawRightPanel:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0xa
-	stw_erp BC, 0xe2
+	ldto_werp BC, 0xe2
 	ld_sril3 XWA, 0x07, 0xec, 0xe8
 	ldb_sri A, 0x07, 0xe0, 0xe4
 	extz wa

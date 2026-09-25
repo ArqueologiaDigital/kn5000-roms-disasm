@@ -261,7 +261,7 @@ SongBank_StoreCurrentSong:
 	ld xwa, (7116:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (7500:16), a
 	ld wa, (7120:16)
 	ld (7502:16), a

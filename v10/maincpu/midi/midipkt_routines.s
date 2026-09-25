@@ -1384,15 +1384,15 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldda32	xwa, (0xbcac)
 	ldw	bc, 9
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	sub_erpb	251, 16
 	cp_erpb	251, 16
 	jrl	nc, MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (0xee337c:24)
 	ld	a, (xbc+wa)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ldda32	xwa, (0xbcac)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
@@ -1400,7 +1400,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	jrl	ugt, MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue
 	cp_erpb	251, 15
 	jrl	z, MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	cp	l, 0:i3
 	jr	z, MidiPkt_SysExBulkTransfer_Data_Helper2_Skip
@@ -1408,7 +1408,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ld	bc, 0:i3
 	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
@@ -1419,7 +1419,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+10)
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x344
@@ -1427,7 +1427,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+6)
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x348
@@ -1435,7 +1435,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+2)
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	ld	(xwa), c
 	jr	MidiPkt_SysExBulkTransfer_Data_Join2
 MidiPkt_SysExBulkTransfer_Data_Helper2_Skip:
@@ -1443,7 +1443,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip:
 	ld	bc, 0:i3
 	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
@@ -1454,7 +1454,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+10)
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x350
@@ -1462,7 +1462,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+6)
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x354
@@ -1470,7 +1470,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+2)
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	ld	(xwa), c
 MidiPkt_SysExBulkTransfer_Data_Join2:
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper2
@@ -1507,7 +1507,7 @@ MidiPkt_SysExBulkTransfer_Data_Join4:
 MidiPkt_SysExBulkTransfer_Data_Loop:
 	ld	a, (xsp+4)
 	extz	wa
-	stb_erp	c, 248
+	ldto_berp	c, 248
 	extz	bc
 	calr	SysEx_DispatchByChannel_49
 	ld	bc, hl

@@ -1814,7 +1814,7 @@ SMF_MetaTiming_ApplyMultiplier:
 	ld wa, (3946:16)
 	ldw de, 0x60
 	mul xwa, de
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	add (3938:16), wa
 	ld (3940:16), de
 	ldw (3946:16), 0
@@ -5427,7 +5427,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop10:
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip25
-	stb_erp	c, 248
+	ldto_berp	c, 248
 	ld	xwa, (xsp+38)
 	ld	(xwa+51), c
 	ld	xwa, (xsp+8)
@@ -7797,7 +7797,7 @@ SeqStep_CountLoop_Compare:
 	jr ule, SeqStep_CountLoop_Body
 
 SeqStep_CountLoop_Done:
-	stw_erp HL, 0xfa
+	ldto_werp HL, 0xfa
 	pop xiz
 	ret
 
@@ -8479,10 +8479,10 @@ FDC_Format2DD_Start:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_Step2
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld hl, 0:i3
@@ -8493,10 +8493,10 @@ FDC_Format2DD_Step2:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cpib_erp 0xfb, 0
 	jr z, FDC_Format2DD_AllocBuf
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld hl, 0:i3
@@ -8536,10 +8536,10 @@ FDC_Format2DD_WriteBoot:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+22)
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2DD_WriteFAT1	; -> 0xF51B78
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -8572,10 +8572,10 @@ FDC_Format2DD_WriteFAT1:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+22)
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2DD_WriteFAT2	; -> 0xF51BE5
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -8595,10 +8595,10 @@ FDC_Format2DD_WriteFAT2:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+12)
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, 23	; -> 0xF51C22
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	65096
 	ld	xwa, (xsp+2)
@@ -8618,10 +8618,10 @@ FDC_Format2DD_WriteRoot:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+12)
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, 23	; -> 0xF51C5F
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	65035
 	ld	xwa, (xsp+2)
@@ -8654,10 +8654,10 @@ FDC_Format2DD_WriteDataSec1:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+22)
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2DD_WriteDataSec2	; -> 0xF51CCC
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -8677,10 +8677,10 @@ FDC_Format2DD_WriteDataSec2:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+12)
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, 23	; -> 0xF51D09
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	64865
 	ld	xwa, (xsp+2)
@@ -8700,10 +8700,10 @@ FDC_Format2DD_WriteDataSec3:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+12)
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, 23	; -> 0xF51D46
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	64804
 	ld	xwa, (xsp+2)
@@ -8733,10 +8733,10 @@ FDC_Format2DD_TrackBody:
 	push	xwa
 	call	FDC_CommandEntry
 	inc	4, xsp
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2DD_TrackInc	; -> 0xF51DA5
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -8760,10 +8760,10 @@ FDC_Format2DD_Side1Body:
 	push	xwa
 	call	FDC_CommandEntry
 	inc	4, xsp
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2DD_Side1Inc	; -> 0xF51DE4
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -8790,10 +8790,10 @@ FDC_Format2DD_Side1Test:
 	push	xwa
 	call	FDC_CommandEntry
 	inc	4, xsp
-	ldb_erp	l, 251	; ld qizh,l
+	ldfr_berp	l, 251	; ld qizh,l
 	cpib_erp	251, 0	; cp qizh,0
 	jr	z, FDC_Format2DD_FinalTrack
-	stb_erp	a, 251	; ld a,qizh
+	ldto_berp	a, 251	; ld a,qizh
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -8814,7 +8814,7 @@ FDC_Format2DD_FinalTrack:
 	lda	xwa, (xsp+6)
 	push	xwa
 	call	FDC_CommandEntry
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	ld	xwa, (xsp+6)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
@@ -8824,7 +8824,7 @@ FDC_Format2DD_FinalTrack:
 	ld	hl, 1:i3
 	jr	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_SetSectorAndRet:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld hl, 0:i3
@@ -8843,10 +8843,10 @@ FDC_Format2HD_Start:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_Step2
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld hl, 0:i3
@@ -8857,10 +8857,10 @@ FDC_Format2HD_Step2:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cpib_erp 0xfb, 0
 	jr z, FDC_Format2HD_AllocBuf
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld hl, 0:i3
@@ -8900,10 +8900,10 @@ FDC_Format2HD_WriteBoot:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+22)
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2HD_WriteFAT1	; -> 0xF51F5E
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -8936,10 +8936,10 @@ FDC_Format2HD_WriteFAT1:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+22)
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2HD_InitTrackLoop	; -> 0xF51FCB
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -8962,10 +8962,10 @@ FDC_Format2HD_TrackBody:
 	push	xwa
 	call	FDC_CommandEntry
 	inc	4, xsp
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2HD_TrackInc	; -> 0xF5200B
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -9003,10 +9003,10 @@ FDC_Format2HD_TrackTest:
 	push	xwa
 	call	FDC_CommandEntry
 	lda	xsp, (xsp+22)
-	ldb_erp	l, 251	; ld qizh,l
+	ldfr_berp	l, 251	; ld qizh,l
 	cpib_erp	251, 0	; cp qizh,0
 	jr	z, FDC_Format2HD_WriteFAT2
-	stb_erp	a, 251	; ld a,qizh
+	ldto_berp	a, 251	; ld a,qizh
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -9029,10 +9029,10 @@ FDC_Format2HD_Side2Body:
 	push	xwa
 	call	FDC_CommandEntry
 	inc	4, xsp
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2HD_Side2Inc	; -> 0xF520C2
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -9053,10 +9053,10 @@ FDC_Format2HD_Side2Test:
 	push	xwa
 	call	FDC_CommandEntry
 	inc	4, xsp
-	ldb_erp	l, 251	; ld qizh,l
+	ldfr_berp	l, 251	; ld qizh,l
 	cpib_erp	251, 0	; cp qizh,0
 	jr	z, FDC_Format2HD_InitSide1Loop
-	stb_erp	a, 251	; ld a,qizh
+	ldto_berp	a, 251	; ld a,qizh
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -9079,10 +9079,10 @@ FDC_Format2HD_Side1Body:
 	push	xwa
 	call	FDC_CommandEntry
 	inc	4, xsp
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 0
 	jr	z, FDC_Format2HD_Side1Inc	; -> 0xF5213F
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -9109,10 +9109,10 @@ FDC_Format2HD_Side1Test:
 	push	xwa
 	call	FDC_CommandEntry
 	inc	4, xsp
-	ldb_erp	l, 251	; ld qizh,l
+	ldfr_berp	l, 251	; ld qizh,l
 	cpib_erp	251, 0	; cp qizh,0
 	jr	z, FDC_Format2HD_FinalTrack
-	stb_erp	a, 251	; ld a,qizh
+	ldto_berp	a, 251	; ld a,qizh
 	extz	wa
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
@@ -9133,7 +9133,7 @@ FDC_Format2HD_FinalTrack:
 	lda	xwa, (xsp+6)
 	push	xwa
 	call	FDC_CommandEntry
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	ld	xwa, (xsp+6)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
@@ -9143,7 +9143,7 @@ FDC_Format2HD_FinalTrack:
 	ld	hl, 1:i3
 	jr	FdcOp_Epilogue20	; -> 0xF521E1
 FDC_Format2HD_SetSectorAndRet:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDC_SetSectorLength
 	ld hl, 0:i3
@@ -9296,7 +9296,7 @@ GetMediaType_Epilogue:
 
 	call	SLIDE_Decompress_4K_Init_Helper
 
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 
 	extz wa
 
@@ -9306,7 +9306,7 @@ GetMediaType_Epilogue:
 
 	inc 6, xsp
 
-	stb_erp L, 0xfb
+	ldto_berp L, 0xfb
 
 
 
@@ -10185,7 +10185,7 @@ TaskBuf_ReadAndDecrement:
 	ld xwa, 1:i3
 	add (0x023586:24), xwa
 	ld a, (xbc)
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	extz iz
 	subw (0x23580:24), 1
 	jr nz, TaskBuf_ReturnByte
@@ -10303,7 +10303,7 @@ SndTable_CalcSectorPosition:
 	ld hl, wa
 	extz xhl
 	div hl, 0x9
-	stw_erp HL, 0xee
+	ldto_werp HL, 0xee
 	inc 1, hl
 	ld (xbc), hl
 	ld bc, wa
@@ -10521,11 +10521,11 @@ FileIO_ReadDir_SectorLoop:
 	ld xbc, xwa
 	ld wa, de
 	calr FDC_ExecuteSectorCommand
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	calr FDC_RecalibrateCommand
 	cpiw_erp 0xfa, 0
 	jr z, FileIO_ReadDir_NextSector
-	stw_erp HL, 0xfa
+	ldto_werp HL, 0xfa
 	jrl FileIO_ReadDir_Return
 
 FileIO_ReadDir_NextSector:
@@ -10582,7 +10582,7 @@ FileIO_FillRemaining_Loop:
 	cp	iz, 80
 	jr	lt, -36
 FileIO_ReadDir_GetRetVal:
-	stw_erp HL, 0xfa
+	ldto_werp HL, 0xfa
 
 FileIO_ReadDir_Return:
 	pop xiz

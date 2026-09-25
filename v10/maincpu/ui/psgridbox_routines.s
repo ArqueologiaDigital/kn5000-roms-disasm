@@ -251,7 +251,7 @@ PsGridBox_ShowHide_RowLoop:
 PsGridBox_ShowHide_ClassifyCell:
 	ld xwa, (xsp + 16)
 	ld a, (xwa)
-	ldb_erp A, 0xee
+	ldfr_berp A, 0xee
 	ld de, (xsp + 12)
 	dec 1, de
 	extz xde

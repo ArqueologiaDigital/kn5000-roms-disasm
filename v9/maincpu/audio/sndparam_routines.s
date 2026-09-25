@@ -27,7 +27,7 @@ SndParam_ProbeAdvance:
 	inc 3, wa
 	extz xwa
 	div wa, 0x7ff
-	stw_erp IX, 0xe2
+	ldto_werp IX, 0xe2
 
 SndParam_ProbeEntry:
 	ld bc, ix
@@ -159,7 +159,7 @@ SndParam_Lkp2_ProbeAdvance:
 	inc 3, wa
 	extz xwa
 	div wa, 0x7ff
-	stw_erp IX, 0xe2
+	ldto_werp IX, 0xe2
 
 SndParam_Lkp2_ProbeEntry:
 	ld bc, ix
@@ -274,7 +274,7 @@ SndParam_RO_ProbeAdvance:
 	inc 3, wa
 	extz xwa
 	div wa, 0x7ff
-	stw_erp IX, 0xe2
+	ldto_werp IX, 0xe2
 
 SndParam_RO_ProbeEntry:
 	ld bc, ix
@@ -671,7 +671,7 @@ SndParam_DMA_ProbeAdvance:
 	inc 3, wa
 	extz xwa
 	div wa, 0x7ff
-	stw_erp IX, 0xe2
+	ldto_werp IX, 0xe2
 
 SndParam_DMA_ProbeEntry:
 	ld bc, ix
@@ -1022,7 +1022,7 @@ SndParam_RegisterEntry_Data:
 	ld	(xsp+12), de
 	ld	xde, xwa
 	ld	a, c
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	lda	xwa, (xde+4)
 	ld	(xsp+4), xwa
 	ld	a, (xwa)
@@ -1033,24 +1033,24 @@ SndParam_RegisterEntry_Data:
 	or xhl, xhl
 	jrl	z, SndParam_RegisterEntry_Data_Skip3
 	ld	a, (xde+7)
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	extz	ix
 	cp	ix, bc
 	jr	le, SndParam_RegisterEntry_Data_Skip
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 SndParam_RegisterEntry_Data_Skip:
 	ld	a, (xde+8)
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	extz	ix
 	cp	ix, bc
 	jr	ge, 3
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x96e0
 	ld	bc, 6:i3
 	ldirw
 	ld	b, (xde+10)
-	stb_erp	c, 230
+	ldto_berp	c, 230
 	ld	a, (xde+9)
 	and	a, 15
 	jr	z, 2
@@ -1072,12 +1072,12 @@ SndParam_RegisterEntry_Data_Skip:
 	extz	wa
 	lda_rr xiz, xhl, wa
 	ld w, (xiz)
-	ldb_erp w, 231
+	ldfr_berp w, 231
 	ld c, (xix)
-	ldb_erp	c, 230
-	stb_erp	a, 230
+	ldfr_berp	c, 230
+	ldto_berp	a, 230
 	and	a, b
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	cpl	c
 	and	w, c
 	ld	(xiz), w
@@ -1090,7 +1090,7 @@ SndParam_RegisterEntry_Data_Skip:
 	ld	xwa, (xsp+8)
 	ld	(xwa), c
 	lda	xhl, (0x96e0:16)
-	stb_erp	a, 231
+	ldto_berp	a, 231
 	cp	a, (xhl+6)
 	jr	nz, SndParam_RegisterEntry_Data_Skip2
 	cpw	(xsp+12), 4
@@ -1117,7 +1117,7 @@ SndParam_RegisterEntryAlt_Data:
 	ld	hl, de
 	ld	xde, xwa
 	ld	a, c
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	lda	xwa, (xde+4)
 	ld	(xsp+6), xwa
 	ld	a, (xwa)
@@ -1129,24 +1129,24 @@ SndParam_RegisterEntryAlt_Data:
 	or xwa, xwa
 	jrl	z, SndParam_RegisterEntryAlt_Data_Skip2
 	ld	a, (xde+7)
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	extz	ix
 	cp	ix, bc
 	jr	le, SndParam_RegisterEntryAlt_Data_Skip
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 SndParam_RegisterEntryAlt_Data_Skip:
 	ld	a, (xde+8)
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	extz	ix
 	cp	ix, bc
 	jr	ge, 3
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x96ec
 	ld	bc, 6:i3
 	ldirw
 	ld	b, (xde+10)
-	stb_erp	c, 230
+	ldto_berp	c, 230
 	ld	a, (xde+9)
 	and	a, 15
 	jr	z, 2
@@ -1162,10 +1162,10 @@ SndParam_RegisterEntryAlt_Data_Skip:
 	ld	(xiy), a
 	jr	50
 	ld	c, (xix)
-	ldb_erp	c, 230
-	stb_erp	a, 230
+	ldfr_berp	c, 230
+	ldto_berp	a, 230
 	and	a, b
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	lda	xhl, (xde+5)
 	ld	a, (xhl)
 	extz	wa
@@ -1213,12 +1213,12 @@ SndParam_UpdateEntry_Data:
 	ld	c, (xwa+5)
 	ld	(xhl+5), c
 	ld	c, e
-	ldb_erp	c, 234
+	ldfr_berp	c, 234
 	lda	xbc, (xhl+6)
 	lda	xix, (xhl+7)
 	cp	(xiy), 177
 	jr	nz, SndParam_UpdateEntry_Data_Skip
-	stb_erp a, 234
+	ldto_berp a, 234
 	res	7, a
 	ld	(xbc), a
 	sra	de, 7
@@ -1227,7 +1227,7 @@ SndParam_UpdateEntry_Data:
 SndParam_UpdateEntry_Data_Skip:
 	lda	xiy, (xwa+6)
 	ld	e, (xiy)
-	stb_erp a, 234
+	ldto_berp a, 234
 	and	a, e
 	ld	(xbc), a
 	ld	a, (xiy)
@@ -1282,13 +1282,13 @@ SndParam_RegisterMultiField_Data:
 	jr	56
 	lda	xiy, (xde+5)
 	ld	a, (xiy)
-	ldb_erp a, 248
+	ldfr_berp a, 248
 	extz	iz
 	ld	xwa, (xsp+4)
 	exts	xiz
 	add	xiz, xwa
 	ld	w, (xiz)
-	ldb_erp w, 238
+	ldfr_berp w, 238
 	ld a, (xix)
 	ld	l, a
 	and	l, h
@@ -1296,7 +1296,7 @@ SndParam_RegisterMultiField_Data:
 	and	w, a
 	ld	(xiz), w
 	ld	a, (xiy)
-	ldb_erp	a, 244
+	ldfr_berp	a, 244
 	extz	iy
 	ld	xwa, (xsp+4)
 	exts	xiy
@@ -1306,7 +1306,7 @@ SndParam_RegisterMultiField_Data:
 	ld	(xiy), a
 	ld	(xbc), a
 	lda	xbc, (0x9704:16)
-	stb_erp a, 238
+	ldto_berp a, 238
 	.byte 0x89, 0x06, 0xf1
 	jr	nz, SndParam_RegisterMultiField_Data_Skip
 	cpw	(xsp+12), 4
@@ -1410,7 +1410,7 @@ SndParam_RegisterLinked_Data:
 	ld	de, bc
 	ld	xhl, xwa
 	ld	a, e
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	lda	xwa, (xhl+4)
 	ld	(xsp+4), xwa
 	ld	a, (xwa)
@@ -1426,14 +1426,14 @@ SndParam_RegisterLinked_Data:
 	extz	bc
 	cp	bc, de
 	jr	le, SndParam_RegisterLinked_Data_Skip
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 SndParam_RegisterLinked_Data_Skip:
 	ld	a, (xhl+8)
 	ld	c, a
 	extz	bc
 	cp	bc, de
 	jr	ge, SndParam_RegisterLinked_Data_Skip2
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 SndParam_RegisterLinked_Data_Skip2:
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x971c
@@ -1458,11 +1458,11 @@ SndParam_RegisterLinked_Data_Skip2:
 	jr	z, 2
 	.byte 0xcb
 	swi	7
-	stb_erp	a, 230
+	ldto_berp	a, 230
 	xor	a, c
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	ld	e, (xhl+10)
-	stb_erp	c, 230
+	ldto_berp	c, 230
 	ld	a, (xhl+9)
 	and	a, 15
 	jr	z, 2
@@ -1482,7 +1482,7 @@ SndParam_RegisterLinked_Data_Skip2:
 	ld	(xwa), c
 	jr	SndParam_RegisterLinked_Data_Join
 	ld	a, (xix)
-	ldb_erp	a, 244
+	ldfr_berp	a, 244
 	extz	iy
 	ld	xwa, (xsp)
 	exts	xiy
@@ -1490,10 +1490,10 @@ SndParam_RegisterLinked_Data_Skip2:
 	ld	w, (xiy)
 	ld	e, w
 	ld	c, (xbc)
-	ldb_erp	c, 230
-	stb_erp	a, 230
+	ldfr_berp	c, 230
+	ldto_berp	a, 230
 	and	a, d
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	cpl	c
 	and	w, c
 	ld	(xiy), w
@@ -1618,13 +1618,13 @@ SndParam_RegisterLinked2_Data_Join2:
 	jr	56
 	lda	xiy, (xde+5)
 	ld	a, (xiy)
-	ldb_erp a, 248
+	ldfr_berp a, 248
 	extz	iz
 	ld	xwa, (xsp+4)
 	exts	xiz
 	add	xiz, xwa
 	ld	w, (xiz)
-	ldb_erp w, 238
+	ldfr_berp w, 238
 	ld a, (xbc)
 	ld	l, a
 	and	l, h
@@ -1632,7 +1632,7 @@ SndParam_RegisterLinked2_Data_Join2:
 	and	w, a
 	ld	(xiz), w
 	ld	a, (xiy)
-	ldb_erp	a, 244
+	ldfr_berp	a, 244
 	extz	iy
 	ld	xwa, (xsp+4)
 	exts	xiy
@@ -1642,7 +1642,7 @@ SndParam_RegisterLinked2_Data_Join2:
 	ld	(xiy), a
 	ld	(xix), a
 	lda	xix, (0x9728:16)
-	stb_erp a, 238
+	ldto_berp a, 238
 	.byte 0x8c, 0x06, 0xf1
 	jr	nz, SndParam_RegisterLinked2_Data_Skip
 	cpw	(xsp+12), 4
@@ -1691,7 +1691,7 @@ SndParam_RegisterSimple_Data_Skip:
 	ldw	de, 300
 SndParam_RegisterSimple_Data_Join:
 	ld	a, e
-	ldb_erp	a, 234
+	ldfr_berp	a, 234
 	lda	xwa, (0x9734:16)
 	lda	xbc, (xwa+4)
 	lda	xhl, (xwa+5)
@@ -1703,7 +1703,7 @@ SndParam_RegisterSimple_Data_Join:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	(xhl), 8
-	stb_erp a, 234
+	ldto_berp a, 234
 	ld	(xix), a
 	sra	de, 8
 	ld	(xiy), e
@@ -1718,7 +1718,7 @@ SndParam_RegisterSimple_Data_Skip2:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	(xhl), 8
-	stb_erp a, 234
+	ldto_berp a, 234
 	ld	(xix), a
 	ld	(xiy), 255
 	jr	SndParam_RegisterSimple_Data_Join2
@@ -1762,7 +1762,7 @@ SndParam_RegisterChained_Data:
 	extz	wa
 	lda_rr xix, xiz, wa
 	ld a, (xix)
-	ldb_erp	a, 234
+	ldfr_berp	a, 234
 	extz	wa
 	ld	(xsp+4), wa
 	ld	bc, wa
@@ -1770,7 +1770,7 @@ SndParam_RegisterChained_Data:
 	lda	xwa, (xhl+6)
 	ld	(xsp+6), xwa
 	ld	a, (xwa)
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	extz	wa
 	ld	qwa, wa
 	and	wa, bc
@@ -1793,7 +1793,7 @@ SndParam_RegisterChained_Data:
 	jr	ge, 2
 	ld	bc, wa
 	ld	w, c
-	stb_erp	e, 230
+	ldto_berp	e, 230
 	cpl	e
 	lda	xbc, (0x9752:16)
 	cpw	(xsp+18), 4
@@ -1810,9 +1810,9 @@ SndParam_RegisterChained_Data:
 	or	l, e
 	ld	(xbc), l
 	jr	41
-	stb_erp a, 234
+	ldto_berp a, 234
 	and	a, e
-	ldb_erp	a, 234
+	ldfr_berp	a, 234
 	ld	(xix), a
 	ld	e, w
 	ld	a, (xiy)
@@ -1874,14 +1874,14 @@ SndParam_RegisterChained2_Data:
 	extz	wa
 	lda_rr xix, xiz, wa
 	ld a, (xix)
-	ldb_erp a, 238
-	stb_erp c, 238
+	ldfr_berp a, 238
+	ldto_berp c, 238
 	extz	bc
 	lda	xiy, (xde+9)
 	lda	xwa, (xde+6)
 	ld	(xsp+4), xwa
 	ld	a, (xwa)
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	extz	wa
 	ld	qwa, wa
 	and	wa, bc
@@ -1904,7 +1904,7 @@ SndParam_RegisterChained2_Data:
 	jr	ge, 2
 	ld	bc, wa
 	ld	w, c
-	stb_erp	e, 230
+	ldto_berp	e, 230
 	cpl	e
 	lda	xbc, (0x975e:16)
 	cpw	(xsp+16), 4
@@ -1921,9 +1921,9 @@ SndParam_RegisterChained2_Data:
 	or	l, e
 	ld	(xbc), l
 	jr	41
-	stb_erp a, 238
+	ldto_berp a, 238
 	and	a, e
-	ldb_erp	a, 238
+	ldfr_berp	a, 238
 	ld	(xix), a
 	ld	e, w
 	ld	a, (xiy)
@@ -2025,10 +2025,10 @@ SndParam_RegisterComplex_Data_Skip:
 	extz	hl
 	ld	xwa, (xsp)
 	ld_rrb a, xwa, hl
-	ldb_erp a, 234
+	ldfr_berp a, 234
 	lda xix, (38756:16)
 	lda xhl, (xix+6)
-	stb_erp e, 234
+	ldto_berp e, 234
 	ld a, e
 	ld	(xhl), a
 	ld	a, (xiy+9)
@@ -2038,7 +2038,7 @@ SndParam_RegisterComplex_Data_Skip:
 	swi	6
 	ld	a, (xiy+10)
 	xor	a, d
-	ldb_erp a, 235
+	ldfr_berp a, 235
 	inc 6, xiy
 	ld	w, (xiy)
 	ld	d, w
@@ -2049,7 +2049,7 @@ SndParam_RegisterComplex_Data_Skip:
 	ld	(xhl), a
 	or	e, d
 	ld	(xhl), e
-	stb_erp a, 234
+	ldto_berp a, 234
 	cp	a, e
 	jr	z, SndParam_RegisterComplex_Data_Join3
 	cpw	(xsp+8), 4
@@ -2148,7 +2148,7 @@ SndParam_RegisterDual_Data:
 	ld	h, l
 	ld	xwa, (xsp)
 	ld_rrb a, xwa, bc
-	ldb_erp a, 238
+	ldfr_berp a, 238
 	andb_erp h, 238
 	ld	c, h
 	ld	h, (xde+9)
@@ -2205,23 +2205,23 @@ SndParam_RegisterDual_Data_Skip:
 	ld	xwa, (xde)
 	ld_rrb e, xwa, bc
 SndParam_RegisterDual_Data_Join:
-	stb_erp b, 238
-	stb_erp a, 238
-	ldb_erp	a, 230
+	ldto_berp b, 238
+	ldto_berp a, 238
+	ldfr_berp	a, 230
 	cpl	l
-	stb_erp	a, 230
+	ldto_berp	a, 230
 	and	a, l
-	ldb_erp a, 230
+	ldfr_berp a, 230
 	ld a, h
 	and	a, 15
 	jr	z, 2
 	.byte 0xcd
 	swi	6
-	stb_erp	a, 230
+	ldto_berp	a, 230
 	or	a, e
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	lda	xde, (0x9774:16)
-	stb_erp	a, 230
+	ldto_berp	a, 230
 	ld	(xde+6), a
 	cpw	(xsp+16), 4
 	jr	z, 17
@@ -2229,9 +2229,9 @@ SndParam_RegisterDual_Data_Join:
 	ld	l, (xwa)
 	extz	hl
 	ld	xwa, (xsp)
-	stb_erp c, 230
+	ldto_berp c, 230
 	st_rrb c, xwa, hl
-	stb_erp a, 230
+	ldto_berp a, 230
 	cp a, b
 	jr	z, SndParam_RegisterDual_Data_Join2
 	ld	xwa, (xsp+12)
@@ -2284,7 +2284,7 @@ SndParam_RegisterOffset_Data_Join:
 	ld	a, c
 	ld	(xsp+2), a
 	ld	a, (xde)
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	lda	xwa, (0x9780:16)
 	lda	xde, (xwa+4)
 	lda	xhl, (xwa+5)
@@ -2295,7 +2295,7 @@ SndParam_RegisterOffset_Data_Join:
 	jr	nz, SndParam_RegisterOffset_Data_Skip2
 	cp	iz, bc
 	jr	z, SndParam_RegisterOffset_Data_Join2
-	stb_erp	a, 230
+	ldto_berp	a, 230
 	ld	(xde), a
 	ld	(xhl), 8
 	ld	a, (xsp+2)
@@ -2309,7 +2309,7 @@ SndParam_RegisterOffset_Data_Skip2:
 	ld	(xiy), bc
 	cp	iz, bc
 	jr	z, SndParam_RegisterOffset_Data_Join2
-	stb_erp	a, 230
+	ldto_berp	a, 230
 	ld	(xde), a
 	ld	(xhl), 8
 	ld	a, (xsp+2)
@@ -2358,7 +2358,7 @@ SndParam_RegisterWide_Data:
 	lda	xwa, (xde+6)
 	ld	(xsp+10), xwa
 	ld	a, (xwa)
-	ldb_erp	a, 230
+	ldfr_berp	a, 230
 	extz	wa
 	ld	iz, wa
 	and	iz, bc
@@ -2411,7 +2411,7 @@ SndParam_RegisterWide_Data_Join:
 	ld	xhl, xbc
 	jr	79
 SndParam_RegisterWide_Data_Skip3:
-	stb_erp	w, 230
+	ldto_berp	w, 230
 	cpl	w
 	and	l, w
 	ld	(xix), l
@@ -2704,12 +2704,12 @@ SndParam_BatchUpdate_Data:
 	call	SndParam_FetchOscTableEntry
 	lda	xbc, (xsp+10)
 	ld	a, (xbc+1)
-	ldb_erp a, 250
+	ldfr_berp a, 250
 	res_erpb 250, 7
 	srl a, 7
-	ldb_erp a, 249
+	ldfr_berp a, 249
 	ld a, (xbc)
-	ldb_erp a, 251
+	ldfr_berp a, 251
 	bit_erpb 251, 7
 	jr z, SndParam_BatchUpdate_Data_Join
 	res_erpb 251, 7
@@ -2722,9 +2722,9 @@ SndParam_BatchUpdate_Data_Skip:
 	ld_rrw wa, xix, wa
 	and wa, 7
 	sll	a, 4
-	ldb_erp a, 250
+	ldfr_berp a, 250
 	ldib_erp 249, 0
-	ldb_erp d, 251
+	ldfr_berp d, 251
 	bit	7, d
 	jr	z, SndParam_BatchUpdate_Data_Join
 	res_erpb 251, 7
@@ -2744,20 +2744,20 @@ SndParam_BatchUpdate_Data_Skip2:
 	call	SndParam_ComputeVoiceIndex
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
-	ldb_erp a, 250
+	ldfr_berp a, 250
 	ld	a, (xbc+1)
-	ldb_erp a, 249
+	ldfr_berp a, 249
 	ld	a, (xbc+2)
-	ldb_erp a, 251
+	ldfr_berp a, 251
 SndParam_BatchUpdate_Data_Join:
 	lda	xwa, (xsp+16)
 	ld	(xwa), 129
 	ld	xbc, (xsp+22)
 	ld	c, (xbc+4)
 	ld	(xwa+1), c
-	stb_erp c, 250
+	ldto_berp c, 250
 	ld	(xwa+2), c
-	stb_erp c, 249
+	ldto_berp c, 249
 	ld	(xwa+3), c
 	calr	SndParam_WriteFieldDirect_Data_Helper
 	lda	xwa, (xsp+16)
@@ -2765,7 +2765,7 @@ SndParam_BatchUpdate_Data_Join:
 	ld	c, (xbc+4)
 	ld	(xwa), c
 	ld	(xwa+1), 0
-	stb_erp c, 251
+	ldto_berp c, 251
 	ld	(xwa+2), c
 	ld	(xwa+3), 255
 	calr	SndParam_WriteFieldDirect_Data_Helper
@@ -2810,7 +2810,7 @@ SndParam_WidgetDispatch:
 	ld xiz, xbc
 	ld hl, wa
 	ld a, (xiz + 7)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	ld e, (xiz + 6)
 	extz de
@@ -2883,7 +2883,7 @@ SndParam_WidgetNotifyType1:
 	cp e, 0:i3
 	jrl z, SndParam_Widget1_Done
 	lda xiy, (xiz + 6)
-	ldb_erp E, 0xf0
+	ldfr_berp E, 0xf0
 	extz ix
 	ld c, (xiz + 5)
 	extz bc
@@ -3133,7 +3133,7 @@ SndParam_InsertNextSlot:
 	inc 3, hl
 	extz xhl
 	div hl, 0x7ff
-	stw_erp WA, 0xee
+	ldto_werp WA, 0xee
 	ld hl, wa
 	cp wa, 0x7ff
 	jr c, SndParam_InsertProbe

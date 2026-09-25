@@ -37,7 +37,7 @@ EffectMode_CopyVoiceParams:
 	ld (xiy), c
 	ld c, (xwa + 32)
 	and c, 0xcf
-	ldb_erp C, 0xf8
+	ldfr_berp C, 0xf8
 	lda xbc, (xix + 4)
 	sub xbc, xhl
 	ld xiy, xbc
@@ -853,7 +853,7 @@ EffectMode_CopyPresetBits:
 	ld (xde), c
 	ld c, (xwa + 1)
 	res 7, c
-	ldb_erp C, 0xf0
+	ldfr_berp C, 0xf0
 	lda xhl, (xde + 1)
 	ld c, (xhl)
 	and c, 0x80
@@ -862,7 +862,7 @@ EffectMode_CopyPresetBits:
 	ld (xhl), c
 	ld a, (xwa + 4)
 	and a, 0x7
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	lda xbc, (xde + 4)
 	ld a, (xbc)
 	and a, 0xf8
@@ -947,7 +947,7 @@ SndOutput_ReinitByMode_TypeB:
 	push xiz
 	ld iz, (0x8d58:16)
 	ld wa, (0x8d56:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ldw (0x8d58:16), 0xffff
 	calr EffectMode_CheckTransposeChanged
 	ld bc, (0x8d56:16)
@@ -962,7 +962,7 @@ SndOutput_ReinitByMode_TypeB:
 	call SwbtWr_ReinitOutputBank
 
 SndOutput_ReinitByMode_Restore:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (0x8d56:16), wa
 	ld (0x8d58:16), iz
 	pop xiz
@@ -1240,13 +1240,13 @@ RomTest_ProgramTableData_OuterLoop:
 	ld xix, 0:i3
 
 RomTest_ProgramTableData_SumLoop:
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	extz wa
 	sla wa, 1
 	ld iy, wa
 	lda_dri XIZ, 0x07, 0xe4, 0xf4
 	ld wa, (xiz)
-	ldw_erp WA, 0xf6
+	ldfr_werp WA, 0xf6
 	ld wa, (xhl)
 	addw_erp WA, 0xf6
 	ld (xiz), wa
@@ -1292,13 +1292,13 @@ RomTest_TableData_OuterLoop:
 	ld xix, 0:i3
 
 RomTest_TableData_SumLoop:
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	extz wa
 	sla wa, 1
 	ld iy, wa
 	lda_dri XIZ, 0x07, 0xe4, 0xf4
 	ld wa, (xiz)
-	ldw_erp WA, 0xf6
+	ldfr_werp WA, 0xf6
 	ld wa, (xhl)
 	addw_erp WA, 0xf6
 	ld (xiz), wa
@@ -1355,7 +1355,7 @@ RhythmRomTest_SumLoop:
 	add bc, bc
 	lda_dri XDE, 0x07, 0xf0, 0xe4
 	ld bc, (xde)
-	ldw_erp BC, 0xe2
+	ldfr_werp BC, 0xe2
 	ld BC, (xiy+)
 	addw_erp BC, 0xe2
 	ld (xde), bc
@@ -1416,7 +1416,7 @@ CustomRomTest_OuterLoop:
 	ld xiy, 0:i3
 
 CustomRomTest_SumLoop:
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	extz wa
 	add wa, wa
 	lda_dri XBC, 0x07, 0xec, 0xe0
@@ -1559,7 +1559,7 @@ SelfTest_WaitDone_CountBits:
 	ldib_erp 0xfb, 0
 
 SelfTest_CountBits_Loop:
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	lda xwa, (0x8d64:16)
 	extz xbc
@@ -1567,9 +1567,9 @@ SelfTest_CountBits_Loop:
 	ld a, (xbc)
 	extz wa
 	calr SelfTest_PopCount
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	add a, l
-	ldb_erp A, 0xfa
+	ldfr_berp A, 0xfa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x08
 	jr c, SelfTest_CountBits_Loop
@@ -1998,11 +1998,11 @@ EffectMode_ByteData_DiagEvents:
 	pop	xde
 	ld	a, (0x8d7c:16)
 	cpl	a
-	ldb_erp a, 251
+	ldfr_berp a, 251
 	and a, 9
 	extz wa
 	calr	Report_test_result_by_blinking_LED
-	stb_erp a, 251
+	ldto_berp a, 251
 	and a, 9
 	jr nz, EffectMode_ByteData_DiagEvents_Skip
 	ld	xwa, SeqStep_FileSectorPopReturn_0x35E
@@ -2089,7 +2089,7 @@ EffectMode_SetAllLEDs_SetOne:
 	inc1b_erp 0xfb
 
 EffectMode_SetAllLEDs_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	add wa, wa
 	lda xbc, (WidgetStyleDataTable_0x6BA:24)
@@ -2111,7 +2111,7 @@ LED_SetAll_BlankOne:
 	inc1b_erp 0xfb
 
 LED_SetAll_BlankLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	add wa, wa
 	lda xbc, (WidgetStyleDataTable_0x6BA:24)
@@ -3022,7 +3022,7 @@ MasterSetup_DialDown_AdjustView:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x9
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 74)
@@ -3135,7 +3135,7 @@ AcMstStyleAlpGridBoxProc_Evt1C00018:
 	ld wa, (xde)
 	exts xwa
 	divs wa, 0x9
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, hl
 	jrl nz, MstStyleAlp_SelectAndAutoInc
 	lda xix, (xix + 78)
@@ -3868,7 +3868,7 @@ MstStyle_DialUp_CheckLimit:
 	ld hl, wa
 	exts xde
 	divs de, 0xa
-	stw_erp DE, 0xea
+	ldto_werp DE, 0xea
 	add de, hl
 	ld wa, bc
 	cp bc, de
@@ -4282,7 +4282,7 @@ MstStyle1Sub_HandleScroll:
 	ld wa, (0x0340c6:24)
 	extz xwa
 	div wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 66)
@@ -4530,7 +4530,7 @@ MstStyle1Sub_DialUp_CheckLimit:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0xa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp hl, wa
 	jrl ge, SeqFile_ReturnZeroJmp
 	inc 1, bc
@@ -4770,7 +4770,7 @@ MstStyle1SubGrid_PadLeft_Check:
 	inc 4, xsp
 	ldw bc, 0x10
 	sub bc, hl
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	cp wa, bc
 	jr c, MstStyle1SubGrid_PadLeft_Loop
@@ -4823,7 +4823,7 @@ MstStyle1SubGrid_PadLeft_CheckB:
 	inc 4, xsp
 	ldw bc, 0x10
 	sub bc, hl
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	cp wa, bc
 	jr c, MstStyle1SubGrid_PadLeft_LoopB
@@ -5183,7 +5183,7 @@ MstStyle2_HandleDialTurn:
 	ld wa, (xix)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr z, MstStyle2_DialDown_PageDec
 	decw	1, (xix)
@@ -5313,7 +5313,7 @@ MstStyle2_DialUp_Scroll:
 	ld wa, (xiy)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr nz, MstStyle2_DialUp_PageInc
 	incw 1, (xiy)
@@ -10709,7 +10709,7 @@ AcPmBkNoBox_FormatBankNo:
 	ld wa, bc
 	exts xwa
 	divs wa, 0x8
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	inc 1, wa
 	pushw wa
 	exts xbc
@@ -12160,7 +12160,7 @@ VariScreen_CalcRowOffset:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0xa
-	stw_erp BC, 0xe2
+	ldto_werp BC, 0xe2
 	ld_sril3 XWA, 0x07, 0xec, 0xe8
 	ldb_sri A, 0x07, 0xe0, 0xe4
 	extz wa
@@ -12444,7 +12444,7 @@ VariScreen_DrawRightPanel:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0xa
-	stw_erp BC, 0xe2
+	ldto_werp BC, 0xe2
 	ld_sril3 XWA, 0x07, 0xec, 0xe8
 	ldb_sri A, 0x07, 0xe0, 0xe4
 	extz wa
@@ -13886,7 +13886,7 @@ RVari_Select:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -13926,12 +13926,12 @@ RVari_Select:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp BC, 0xe2
+	ldto_werp BC, 0xe2
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, bc
 	jr nz, RVari_Select_CheckSameBank
 	ld (xsp + 10), 0x0
@@ -13942,7 +13942,7 @@ RVari_Select_CheckSameBank:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -13951,7 +13951,7 @@ RVari_Select_CheckSameBank:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -13972,7 +13972,7 @@ RVari_Select_CheckSameBank:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	sla wa, 2
 	lda xbc, (ParamStr_Table_04:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
@@ -14025,7 +14025,7 @@ RVari_Select_CheckSameBank:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -14063,7 +14063,7 @@ RVari_Select_CheckSameBank:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -14072,7 +14072,7 @@ RVari_Select_CheckSameBank:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -14093,7 +14093,7 @@ RVari_Select_CheckSameBank:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	sla wa, 2
 	lda xbc, (ParamStr_Table_04:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0

@@ -10,10 +10,11 @@ respells that followed each fix.  Run from the tree root.
 | `update_disasm_test_expectations.py` | When a decoder change alters what an llvm-project lit test expects the disassembler to print, which expectations moved, to what, and does unidasm agree?  It rewrites a line ONLY on two-decoder AGREE. | `python3 notes/wave3a-toolchain-probes/update_disasm_test_expectations.py [--apply] <llvm test file>...` |
 
 The source respells themselves are `scripts/converters/wave3a_respell.py`
-(families `muldiv`, `autoinc`, `disp256`; every site is assembled old-line-by-
+(families `muldiv`, `autoinc`, `disp256`, `erp`; every site is assembled old-line-by-
 old-binary and new-line-by-new-binary and must match before anything is written)
 and, for the direct-address pseudo mnemonics, the existing
-`scripts/converters/convert_direct_address_family.py --only-misnamed`.
+`scripts/converters/convert_direct_address_family.py --only-misnamed`, and
+for `.byte` post-increment instructions `scripts/converters/wave3a_byte_autoinc.py`.
 
 ## What the signal means
 
@@ -36,3 +37,9 @@ and, for the direct-address pseudo mnemonics, the existing
 | `gate_di_respell_da00420dba8d.txt` | the 13 reintroduced `di` lines respelled `ei 0`, gated with the PINNED binary before the `di` fix landed. |
 | `respell_muldiv_8e188b215251.txt` | the respell tool's report (sites, refusals, verification). |
 | `test_expectations_910b50efab49.txt` | every lit expectation the direct-address decode change moved, with MAME's reading beside it (83/83 AGREE). |
+| `gate_<family>_respell_<commit>.txt`, `gate_<family>_foil_<commit>.txt` | each source respell (autoinc, stidsp, disp256, direct_misnamed, byte_autoinc, erp) gated green, and its foil: one converted line changed back or to the other spelling, and the gate going red. |
+| `respell_<family>_<commit>.txt` | the respell tool's report per family: sites, refusals with reasons, old-vs-new verification counts. |
+| `byte_autoinc_decisions_8e188b215251.txt` | every `.byte` line that starts with a post-increment prefix, CONVERT or keep, with the reason. |
+| `gate_L6a_*_wip.txt`, `gate_L6b_*_wip.txt` | the converted tree gated under each phase-B backend change BEFORE it was committed (256 as a real displacement; the lying pseudos deleted). |
+| `gate_final_4867e03232a6.txt` | the final pin (llvm-mc c949d618, built from scratch twice) on the final tree: 13/13. |
+| `two_decoder_sweep_disagreements_4867e03232a6.tsv` | the sweep at the final pin: what is still false or unspellable (TOOLCHAIN_VERSION UPDATE 17 lists the classes). |

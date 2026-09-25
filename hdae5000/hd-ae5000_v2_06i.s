@@ -4112,7 +4112,7 @@ HDAE5000_HardTest_PortTest:	; 0x282C27 (71 bytes)
 	cp iz, 0x0100
 	jr ge, .Lppi_rd_loop_end
 .Lppi_rd_loop:
-	stb_erp a, 0xf8		; ld a, izl (extended register)
+	ldto_berp a, 0xf8		; ld a, izl (extended register)
 	extz wa
 	calr HDAE5000_PPI_LoopbackByte
 	ld a, l				; result byte from transfer

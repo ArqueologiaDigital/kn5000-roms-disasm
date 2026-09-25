@@ -109,7 +109,7 @@ MainTitle_PrepareAndDispatch:
 	cp e, 0x10
 	jrl ugt, CtrlPanel_HandlePortCommands
 	ld xiz, 0:i3
-	ldb_erp E, 0xf8
+	ldfr_berp E, 0xf8
 	cp e, 0xe
 	jr nz, SndParam_SendDiskMenuEvents
 	ld e, (0xc07f:16)

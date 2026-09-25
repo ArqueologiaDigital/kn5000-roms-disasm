@@ -333,7 +333,7 @@ FmmIntMedleyFunc:
 	ld iz, 0:i3
 
 IntMed_CheckSlotLoop:
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	call SongBank_ScanActiveVoices
 	cp l, 0:i3
@@ -383,7 +383,7 @@ IntMed_FindCurrentSong:
 	ld xwa, (xsp + 6)
 	ld xbc, 0x1e50002
 	calr FmmSeqSongNameFunc
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	call SongBank_SwitchAndUpdateTempo
 	inc 1, (0x889c:16)
@@ -418,7 +418,7 @@ IntMed_PlayFromStart:
 	ld xwa, (xsp + 6)
 	ld xbc, 0x1e50002
 	calr FmmSeqSongNameFunc
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	call SongBank_SwitchAndUpdateTempo
 	inc 1, (0x889c:16)
@@ -722,7 +722,7 @@ IntMed_StartPlayLoop:
 	ld xwa, (xsp + 6)
 	ld xbc, 0x1e50002
 	calr FmmSeqSongNameFunc
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	call SongBank_SwitchAndUpdateTempo
 	inc 1, (0x889c:16)
@@ -874,7 +874,7 @@ DiskMed_FindSongLoop:
 	add xde, xbc
 	cp (xde), a
 	jr nz, DiskMed_NextSong
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	jrl DiskMed_PlaySong
 
@@ -897,7 +897,7 @@ DiskMed_InitPlayOrder:
 	ld iz, 0:i3
 
 DiskMed_CheckSlotLoop:
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	call SongBank_ScanActiveVoices
 	lda xbc, (0x8890:16)
@@ -942,7 +942,7 @@ DiskMed_FindFirstSong:
 	ld a, (xwa)
 	cp a, (0x889c:16)
 	jr nz, DiskMed_NextFirst
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	jr DiskMed_PlaySong
 
@@ -969,7 +969,7 @@ DiskMed_FindFirstLoop:
 	ld a, (xwa)
 	cp a, (0x889c:16)
 	jr nz, DiskMed_NextFindFirst
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 
 DiskMed_PlaySong:
@@ -1118,7 +1118,7 @@ DiskSel_CheckFinished:
 	ld iz, 0:i3
 
 DiskSel_ClearSelections:
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	call FileIO_FormatName_Loop
 	inc 1, iz
@@ -1142,7 +1142,7 @@ DiskSel_FindSongLoop:
 	ldiw_erp 0xfa, 0
 
 DiskSel_SendFileInfo:
-	stw_erp DE, 0xfa
+	ldto_werp DE, 0xfa
 	sll de, 5
 	lda xbc, (0x850c:16)
 	extz xde
@@ -1176,7 +1176,7 @@ DiskSel_SendFileInfo:
 	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_ParseDirectoryEntry
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -1191,7 +1191,7 @@ DiskSel_SendFileInfo:
 	ld (0x84fe:16), 0
 	ldw wa, 0x60
 	call UI_PostModeChangeEvent
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
@@ -1230,7 +1230,7 @@ DiskSel_CheckRepeat:
 	ld iz, 0:i3
 
 DiskSel_RepeatClear:
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	call FileIO_FormatName_Loop
 	inc 1, iz
@@ -1254,7 +1254,7 @@ DiskSel_RepeatFindLoop:
 	ldiw_erp 0xfa, 0
 
 DiskSel_RepeatSendInfo:
-	stw_erp DE, 0xfa
+	ldto_werp DE, 0xfa
 	sll de, 5
 	lda xbc, (0x850c:16)
 	extz xde
@@ -1288,7 +1288,7 @@ DiskSel_RepeatSendInfo:
 	ld wa, 0:i3
 	calr InitializeOperationState
 	call FileIO_ParseDirectoryEntry
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -1303,7 +1303,7 @@ DiskSel_RepeatSendInfo:
 	ld (0x84fe:16), 0
 	ldw wa, 0x60
 	call UI_PostModeChangeEvent
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
@@ -1401,7 +1401,7 @@ DiskSel_DisplayLoop:
 	lda xde, (0x850c:16)
 	extz xhl
 	add xhl, xde
-	stb_erp C, 0xf8
+	ldto_berp C, 0xf8
 	ld (xhl), c
 	ld bc, 2:i3
 	call FileIO_CheckRecordByFile
@@ -1634,7 +1634,7 @@ DiskSel_HandlePlayStart:
 	ld iz, 0:i3
 
 DiskSel_PlayClearLoop:
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	call FileIO_FormatName_Loop
 	inc 1, iz
@@ -1660,7 +1660,7 @@ DiskSel_PlayFindLoop:
 	ld xde, 5:i3
 	call ApPostEvent
 	call FileIO_ParseDirectoryEntry
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -1675,7 +1675,7 @@ DiskSel_PlayFindLoop:
 	ld (0x84fe:16), 0
 	ldw wa, 0x60
 	call UI_PostModeChangeEvent
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld bc, 1:i3
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
@@ -1894,20 +1894,20 @@ SmfMed_FormatSlotList:
 	ld xbc, 0x1e50003
 	ld xde, 0:i3
 	calr FmmSmfFileNameFunc
-	ldw_erp HL, 0xfa
-	stw_erp WA, 0xfa
+	ldfr_werp HL, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	div wa, 0xa
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	mul wa, 0xa
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ldw (xsp + 4), 0xa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, 0xa
 	cp wa, iz
 	jr c, SmfFmt_CalcVisible
 	ld (xsp + 4), iz
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	sub (xsp + 4), wa
 
 SmfFmt_CalcVisible:
@@ -1921,7 +1921,7 @@ SmfFmt_FormatLoop:
 	lda xbc, (0x83e0:16)
 	extz xwa
 	add xwa, xbc
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	add bc, iz
 	lda xde, (0x88a0:16)
 	extz xbc
@@ -2487,7 +2487,7 @@ PdFmt_FormatLoop:
 	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
@@ -2554,7 +2554,7 @@ PdName_UpdateIndex:
 	ld wa, (0x8442:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x843e:16)
 	ld xbc, 0x1e50002
@@ -2628,7 +2628,7 @@ PdName_CheckEndBound:
 	jr ge, PdName_GetCurrentIndex
 	exts xde
 	divs de, 0xa
-	stw_erp WA, 0xea
+	ldto_werp WA, 0xea
 	cp wa, 0:i3
 	jr z, PdName_GetCurrentIndex
 	ld (0x8442:16), bc
@@ -2643,7 +2643,7 @@ PdName_UpdateDisplay:
 	ld wa, (0x8442:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x843e:16)
 	ld xbc, 0x1e50002
@@ -2660,7 +2660,7 @@ PdName_UpdateDisplay:
 	ld bc, iz
 	exts xbc
 	divs bc, 0xa
-	stw_erp BC, 0xe6
+	ldto_werp BC, 0xe6
 	sll bc, 5
 	lda xhl, (0x850c:16)
 	ld de, bc
@@ -2671,7 +2671,7 @@ PdName_UpdateDisplay:
 	ld wa, (0x8442:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	sll wa, 5
 	lda xbc, (0x850c:16)
 	ld de, wa
@@ -2700,7 +2700,7 @@ PdName_SetIndexPlaying:
 	ld wa, (0x8442:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x843e:16)
 	ld xbc, 0x1e50002
@@ -2727,20 +2727,20 @@ PdMed_FormatSlotList:
 	ld xbc, 0x1e50003
 	ld xde, 0:i3
 	calr FmmPdFileNameFunc
-	ldw_erp HL, 0xfa
-	stw_erp WA, 0xfa
+	ldfr_werp HL, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	div wa, 0xa
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	mul wa, 0xa
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ldw (xsp + 4), 0xa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, 0xa
 	cp wa, iz
 	jr c, PdFmtSlot_CalcVisible
 	ld (xsp + 4), iz
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	sub (xsp + 4), wa
 
 PdFmtSlot_CalcVisible:
@@ -2754,7 +2754,7 @@ PdFmtSlot_FormatLoop:
 	lda xbc, (0x8444:16)
 	extz xwa
 	add xwa, xbc
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	add bc, iz
 	lda xde, (0x88a0:16)
 	extz xbc
@@ -3294,7 +3294,7 @@ DocFmt_FormatLoop:
 	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
@@ -3361,7 +3361,7 @@ DocName_UpdateIndex:
 	ld wa, (0x84a2:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x849e:16)
 	ld xbc, 0x1e50002
@@ -3435,7 +3435,7 @@ DocName_CheckEndBound:
 	jr ge, DocName_GetCurrentIndex
 	exts xde
 	divs de, 0xa
-	stw_erp WA, 0xea
+	ldto_werp WA, 0xea
 	cp wa, 0:i3
 	jr z, DocName_GetCurrentIndex
 	ld (0x84a2:16), bc
@@ -3450,7 +3450,7 @@ DocName_UpdateDisplay:
 	ld wa, (0x84a2:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x849e:16)
 	ld xbc, 0x1e50002
@@ -3467,7 +3467,7 @@ DocName_UpdateDisplay:
 	ld bc, iz
 	exts xbc
 	divs bc, 0xa
-	stw_erp BC, 0xe6
+	ldto_werp BC, 0xe6
 	sll bc, 5
 	lda xhl, (0x850c:16)
 	ld de, bc
@@ -3478,7 +3478,7 @@ DocName_UpdateDisplay:
 	ld wa, (0x84a2:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	sll wa, 5
 	lda xbc, (0x850c:16)
 	ld de, wa
@@ -3507,7 +3507,7 @@ DocName_SetIndexPlaying:
 	ld wa, (0x84a2:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x849e:16)
 	ld xbc, 0x1e50002
@@ -3535,20 +3535,20 @@ DocMed_FormatSlotList:
 	ld xbc, 0x1e50003
 	ld xde, 0:i3
 	calr FmmDocFileNameFunc
-	ldw_erp HL, 0xfa
-	stw_erp WA, 0xfa
+	ldfr_werp HL, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	div wa, 0xa
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	mul wa, 0xa
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ldw (xsp + 4), 0xa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, 0xa
 	cp wa, iz
 	jr c, DocFmtSlot_CalcVisible
 	ld (xsp + 4), iz
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	sub (xsp + 4), wa
 
 DocFmtSlot_CalcVisible:
@@ -3562,7 +3562,7 @@ DocFmtSlot_FormatLoop:
 	lda xbc, (0x84a4:16)
 	extz xwa
 	add xwa, xbc
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	add bc, iz
 	lda xde, (0x88a0:16)
 	extz xbc
@@ -4120,7 +4120,7 @@ ClearAllSongSlots:
 	ldiw_erp 0xfa, 0
 
 ClearSlots_Loop:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld bc, iz
 	calr SetSongSlotValue
 	inc1w_erp 0xfa

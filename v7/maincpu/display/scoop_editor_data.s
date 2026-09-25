@@ -230,14 +230,14 @@ Scoop_SoundEditorData_Skip3:
 	jr	nz, Scoop_SoundEditorData_Skip4
 	ld	a, (xsp+16)
 	inc	4, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	jr	Scoop_SoundEditorData_Join3
 Scoop_SoundEditorData_Skip4:
 	ld	a, (xsp+16)
 	inc	2, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 Scoop_SoundEditorData_Join3:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -272,7 +272,7 @@ Scoop_SoundEditorData_Skip5:
 	inc	7, xwa
 	ld	(xsp+16), 0
 Scoop_SoundEditorData_Join4:
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -298,7 +298,7 @@ Scoop_SoundEditorData_Join4:
 	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+16)
 	inc	8, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -311,7 +311,7 @@ Scoop_SoundEditorData_Join4:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -658,7 +658,7 @@ Scoop_SoundEditorData_Join6:
 	call	SeMenu_LoadObjEntries
 	cp	(xsp+14), 0
 	scc	nz, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -685,7 +685,7 @@ Scoop_SoundEditorData_Skip13:
 	inc	8, xwa
 	ld	(xsp+16), 0
 Scoop_SoundEditorData_Join7:
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -722,7 +722,7 @@ Scoop_SoundEditorData_Skip14:
 	ld	(xbc), 0
 	ld	(xde), 100
 	ld	(xhl), 0
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -744,7 +744,7 @@ Scoop_SoundEditorData_Skip15:
 	lda	xwa, (xwa+9)
 	ld	(xsp+16), 0
 Scoop_SoundEditorData_Join8:
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -781,7 +781,7 @@ Scoop_SoundEditorData_Skip16:
 	ld	(xbc), 0
 	ld	(xde), 100
 	ld	(xhl), 0
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -803,7 +803,7 @@ Scoop_SoundEditorData_Skip17:
 	lda	xwa, (xwa+10)
 	ld	(xsp+16), 0
 Scoop_SoundEditorData_Join9:
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -840,7 +840,7 @@ Scoop_SoundEditorData_Skip18:
 	ld	(xbc), 0
 	ld	(xde), 100
 	ld	(xhl), 0
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -862,7 +862,7 @@ Scoop_SoundEditorData_Skip19:
 	lda	xwa, (xwa+11)
 	ld	(xsp+16), 0
 Scoop_SoundEditorData_Join10:
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -906,7 +906,7 @@ Scoop_SoundEditorData_Skip20:
 	ld	(xwa+8), 100
 Scoop_SoundEditorData_Join11:
 	ld	(xwa+9), 0
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -928,7 +928,7 @@ Scoop_SoundEditorData_Skip21:
 	lda	xwa, (xwa+12)
 	ld	(xsp+18), 0
 Scoop_SoundEditorData_Join12:
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+18)
 	extz	de
@@ -973,7 +973,7 @@ Scoop_SoundEditorData_Skip22:
 	ld	(xwa+8), 100
 Scoop_SoundEditorData_Join13:
 	ld	(xwa+9), 0
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -995,7 +995,7 @@ Scoop_SoundEditorData_Skip23:
 	lda	xwa, (xwa+13)
 	ld	(xsp+18), 0
 Scoop_SoundEditorData_Join14:
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+18)
 	extz	de

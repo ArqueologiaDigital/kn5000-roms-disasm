@@ -54,11 +54,11 @@ Boot_CallInitHandlers:
 
 Boot_CallInitHandlers__handler_loop:
 	; LD A, QIZH
-	stb_erp a, 0xfb
+	ldto_berp a, 0xfb
 	; EXTZ WA
 	extz	wa
 	; LD C, QIZH
-	stb_erp c, 0xfb
+	ldto_berp c, 0xfb
 	; EXTZ BC
 	extz	bc
 	; SLA 2, BC (multiply by 4 for 32-bit table entries)

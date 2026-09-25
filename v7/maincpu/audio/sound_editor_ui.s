@@ -227,7 +227,7 @@ UpdSeSel_SimpleUpdate_Step6:
 	ldib_erp 0xfb, 1
 
 UpdSeSel_SimpleUpdate_Step6_RegLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	pushw 0x20
 	ldw bc, 0x17
@@ -399,7 +399,7 @@ UpdSeSel_DetailedUpdate_Step4:
 	ldib_erp 0xfb, 0
 
 UpdSeSel_DetailedUpdate_Step4_RegLoop1:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x15
 	extz xwa
@@ -416,7 +416,7 @@ UpdSeSel_DetailedUpdate_Step4_RegLoop1:
 	ldib_erp 0xfb, 0
 
 UpdSeSel_DetailedUpdate_Step4_RegLoop2:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x15
 	extz xwa
@@ -433,7 +433,7 @@ UpdSeSel_DetailedUpdate_Step4_RegLoop2:
 	ldib_erp 0xfb, 0
 
 UpdSeSel_DetailedUpdate_Step4_RegLoop3:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x15
 	extz xwa
@@ -450,7 +450,7 @@ UpdSeSel_DetailedUpdate_Step4_RegLoop3:
 	ldib_erp 0xfb, 0
 
 UpdSeSel_DetailedUpdate_Step4_RegLoop4:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x15
 	extz xwa
@@ -1081,7 +1081,7 @@ UpdSeSel_DetailedUpdate_Helper7:
 UpdSeSel_DetailedUpdate_Loop2:
 	ldib_erp	251, 1
 UpdSeSel_DetailedUpdate_Loop3:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	ld	c, 23:opc
 	addb_erp	c, 250
@@ -1102,7 +1102,7 @@ UpdSeSel_DetailedUpdate_Helper8:
 UpdSeSel_DetailedUpdate_Loop4:
 	ldib_erp	251, 0
 UpdSeSel_DetailedUpdate_Loop5:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 21
 	extz	xwa
@@ -1402,7 +1402,7 @@ UpdSeSel_DetailedUpdate_Helper11:
 	push	qiz
 	ldib_erp	251, 0
 UpdSeSel_DetailedUpdate_Helper11_Loop:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	mul	a, 3
 	add	a, 24
 	ld	c, a
@@ -1449,7 +1449,7 @@ UpdSeSel_DetailedUpdate_Helper12:
 	push	qiz
 	ldib_erp	251, 0
 UpdSeSel_DetailedUpdate_Helper12_Loop:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	mul	a, 3
 	add	a, 22
 	ld	c, a
@@ -1866,19 +1866,19 @@ SeMenu_AltUpdate:
 	ldib_erp 0xfb, 1
 
 SeMenu_AltUpdate_RegLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	pushw 0x22
 	ldw bc, 0x17
 	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	pushw 0x22
 	ld bc, 4:i3
 	ld de, 1:i3
 	call SeMenu_RegisterElement_Type1
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	pushw 0x22
 	ld bc, 5:i3
@@ -2486,7 +2486,7 @@ SeMenu_CopyWriteUpdate_Skip2:
 	call	SeMenu_FillEntryTable
 	ldib_erp	251, 0
 SeMenu_CopyWriteUpdate_Loop:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+6)
 	lda_rr	xbc, xbc, wa
@@ -3067,7 +3067,7 @@ SeMenu_CopyWriteUpdate_Epilogue7:
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue8
 	ld	a, (xsp+6)
 	res	7, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	lda	xbc, (xsp+4)
 	ld	wa, 0:i3
 	call	SeMenu_LoadPartParam
@@ -3212,7 +3212,7 @@ SeMenu_CopyWriteUpdate_Epilogue10:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+16)
 	inc	2, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -3225,7 +3225,7 @@ SeMenu_CopyWriteUpdate_Epilogue10:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	a, (xsp+16)
 	dec	1, a
@@ -3271,7 +3271,7 @@ SeMenu_CopyWriteUpdate_Epilogue11:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+16)
 	inc	4, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -3284,7 +3284,7 @@ SeMenu_CopyWriteUpdate_Epilogue11:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	a, (xsp+16)
 	dec	1, a
@@ -3322,7 +3322,7 @@ SeMenu_CopyWriteUpdate_Epilogue12:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+16)
 	inc	6, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -3335,7 +3335,7 @@ SeMenu_CopyWriteUpdate_Epilogue12:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	a, (xsp+16)
 	dec	1, a
@@ -3373,15 +3373,15 @@ SeMenu_CopyWriteUpdate_Epilogue13:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+8)
 	inc	8, a
-	ldb_erp	a, 250
+	ldfr_berp	a, 250
 	ld	a, (xsp+10)
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+10)
 	res	7, a
-	ldb_erp	a, 251
-	stb_erp	a, 250
+	ldfr_berp	a, 251
+	ldto_berp	a, 250
 	extz	wa
 	lda	xbc, (xsp+6)
 	call	SeMenu_LoadPartParam
@@ -3406,7 +3406,7 @@ SeMenu_CopyWriteUpdate_Entry5:
 	jr	ge, SeMenu_CopyWriteUpdate_Join8
 	ld	(xsp+6), 0
 SeMenu_CopyWriteUpdate_Join8:
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
@@ -3427,7 +3427,7 @@ SeMenu_CopyWriteUpdate_Join8:
 	call	SeMenu_ApplyPartEdit
 	ld	a, (xsp+8)
 	add	a, 12
-	ldb_erp	a, 250
+	ldfr_berp	a, 250
 	extz	wa
 	pushw	wa
 	pushw 32
@@ -3841,7 +3841,7 @@ SeMenu_CopyWriteUpdate_Epilogue20:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	res	7, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld	a, (xsp+2)
 	extz	wa
 	call	SeMenu_IsPartEnabled
@@ -3961,9 +3961,9 @@ SeMenu_CopyWriteUpdate_Epilogue23:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+14)
 	mul	a, 3
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	dec1b_erp	251
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -3976,7 +3976,7 @@ SeMenu_CopyWriteUpdate_Epilogue23:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -4006,7 +4006,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+14)
 	mul	a, 3
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -4019,7 +4019,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -4041,9 +4041,9 @@ SeMenu_CopyWriteUpdate_Skip21:
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+14)
 	mul	a, 3
-	ldb_erp a, 251
+	ldfr_berp a, 251
 	inc1b_erp 251
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -4056,7 +4056,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -4134,7 +4134,7 @@ SeMenu_CopyWriteUpdate_Skip21:
 	dec	2, c
 	extz	bc
 	call	SeMenu_BitShiftMask_End
-	ldb_erp l, 250
+	ldfr_berp l, 250
 	and_erpb 250, 3
 	ld	a, (xsp+8)
 	res	7, a
@@ -4168,11 +4168,11 @@ SeMenu_CopyWriteUpdate_Join16:
 	extz	bc
 	ld	wa, 3:i3
 	call	SeMenu_BitShiftMask
-	ldb_erp	l, 251
-	stb_erp	a, 251
+	ldfr_berp	l, 251
+	ldto_berp	a, 251
 	cpl	a
 	and	(xsp+4), a
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	extz	wa
 	ld	c, (xsp+6)
 	.byte 0x8f, 0x06, 0x83
@@ -4187,7 +4187,7 @@ SeMenu_CopyWriteUpdate_Join16:
 	ld	bc, 0:i3
 	call	SeMenu_RegisterElement_Extended
 	lda	xde, (xsp+4)
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	pushw	wa
 	ld	wa, 0:i3
@@ -4220,7 +4220,7 @@ SeMenu_CopyWriteUpdate_Epilogue24:
 	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+14)
 	inc	1, a
-	ldb_erp a, 251
+	ldfr_berp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -4233,7 +4233,7 @@ SeMenu_CopyWriteUpdate_Epilogue24:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -4261,7 +4261,7 @@ SeMenu_CopyWriteUpdate_Epilogue24:
 	call	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+10)
 	res	7, a
-	ldb_erp a, 251
+	ldfr_berp a, 251
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp+6)
@@ -4842,7 +4842,7 @@ SeMenu_CopyWriteUpdate_Join19:
 	ret
 	dec	4, xsp
 	push	qiz
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	res_erpb	251, 7
 	lda	xbc, (xsp+4)
 	ld	wa, 0:i3
@@ -5043,7 +5043,7 @@ SeMenu_CopyWriteUpdate_Skip35:
 	jrl	ule, SeMenu_CopyWriteUpdate_Epilogue29
 	cp	a, 127
 	jr	nz, 13
-	stb_erp a, 226
+	ldto_berp a, 226
 	inc	2, a
 	extz	wa
 	.byte 0xf3, 0x07, 0xec, 0xe0, 0x00, 0x7f, 0xbf, 0x16, 0xcf
@@ -5060,16 +5060,16 @@ SeMenu_CopyWriteUpdate_Skip36:
 SeMenu_CopyWriteUpdate_Skip37:
 	decm8	1, (xde)
 SeMenu_CopyWriteUpdate_Join24:
-	stb_erp	a, 226
+	ldto_berp	a, 226
 	extz	wa
 	lda	xhl, (xsp+12)
 	lda_rr	xde, xhl, wa
 	ld	c, (xde)
 	cp	c, 127
 	jr	z, SeMenu_CopyWriteUpdate_Skip38
-	stb_erp	a, 226
+	ldto_berp	a, 226
 	inc	1, a
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	extz	ix
 	inc	1, c
 	st_rrb	c, xhl, ix
@@ -5094,36 +5094,36 @@ SeMenu_CopyWriteUpdate_Skip39:
 	cp	c, 4:i3
 	jr	c, SeMenu_CopyWriteUpdate_Loop3
 SeMenu_CopyWriteUpdate_Join25:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	addb_erp	a, 251
-	ldb_erp	a, 226
+	ldfr_berp	a, 226
 	extz	wa
 	lda_rr	xiy, xhl, wa
 	ld	c, (xiy)
 	ld	b, c
-	stb_erp	a, 226
+	ldto_berp	a, 226
 	inc	1, a
 	extz	wa
 	lda_rr	xix, xhl, wa
 	ld	a, (xix)
-	ldb_erp	a, 226
-	stb_erp	w, 251
+	ldfr_berp	a, 226
+	ldto_berp	w, 251
 	inc	1, w
 	cp	(xsp+8), w
 	jr	ule, SeMenu_CopyWriteUpdate_Skip40
 	ld	a, (xsp+8)
 	sub	a, w
 	ld	w, a
-	stb_erp	a, 226
+	ldto_berp	a, 226
 	add	a, w
 	cp	(xsp+4), a
 	jr	nc, SeMenu_CopyWriteUpdate_Join26
 	ld	a, (xsp+4)
 	sub	a, w
-	ldb_erp	a, 226
+	ldfr_berp	a, 226
 	cp	a, c
 	jr	nc, SeMenu_CopyWriteUpdate_Join26
-	stb_erp	b, 226
+	ldto_berp	b, 226
 	jr	SeMenu_CopyWriteUpdate_Join26
 SeMenu_CopyWriteUpdate_Skip40:
 	cp	(xsp+8), w
@@ -5143,10 +5143,10 @@ SeMenu_CopyWriteUpdate_Entry16:
 	jr	ule, SeMenu_CopyWriteUpdate_Skip42
 	ld	b, a
 SeMenu_CopyWriteUpdate_Skip42:
-	stb_erp	a, 226
+	ldto_berp	a, 226
 	cp	a, b
 	jr	nc, SeMenu_CopyWriteUpdate_Join26
-	ldb_erp	b, 226
+	ldfr_berp	b, 226
 	jr	SeMenu_CopyWriteUpdate_Join26
 SeMenu_CopyWriteUpdate_Skip43:
 	cp	(xsp+4), b
@@ -5154,7 +5154,7 @@ SeMenu_CopyWriteUpdate_Skip43:
 	ld	b, (xsp+4)
 SeMenu_CopyWriteUpdate_Join26:
 	ld	(xiy), b
-	stb_erp	a, 226
+	ldto_berp	a, 226
 	ld	(xix), a
 	inc1b_erp	251
 	cpib_erp	251, 4
@@ -5215,7 +5215,7 @@ SeMenu_CopyWriteUpdate_Skip44:
 	call	SeMenu_ValidatePartNumber
 	ldib_erp 251, 1
 SeMenu_CopyWriteUpdate_Loop4:
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	lda	xbc, (xsp+4)
 	call	SeMenu_LoadPartParam
@@ -5553,7 +5553,7 @@ Scoop_SoundEditorData_Helper_Skip5:
 	ld	(xsp+18), 10
 	ld	a, (xsp+20)
 	res	7, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ldw	wa, 10
 	call	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
@@ -6448,14 +6448,14 @@ Scoop_SoundEditorData_Helper_Skip26:
 	jr	z, Scoop_SoundEditorData_Helper_Epilogue20
 	ldib_erp	251, 0
 Scoop_SoundEditorData_Helper_Loop2:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+4)
 	call	SeMenu_SetupPartDisplay_End_0x1C6
 	lda	xbc, (xsp+4)
 	ld	xwa, xbc
 	call	FontGlyph_ByteData
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	extz	xwa
 	ld	c, a
@@ -6492,7 +6492,7 @@ Scoop_SoundEditorData_Helper_Epilogue20:
 	call	SeMenu_SetupPartDisplay_End
 	ldib_erp	251, 0
 Scoop_SoundEditorData_Helper_Loop3:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	ld	bc, wa
 	extz	xbc
@@ -6510,11 +6510,11 @@ Scoop_SoundEditorData_Helper_Loop3:
 Scoop_SoundEditorData_Helper_Skip27:
 	ldib_erp	251, 0
 Scoop_SoundEditorData_Helper_Loop4:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+20)
 	call	SeMenu_SetupPartDisplay_End_0x1C6
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	extz	xwa
 	ld	c, a
@@ -6656,7 +6656,7 @@ Scoop_SoundEditorData_Helper_Join20:
 	call	SeMenu_LoadPartParam
 	ldib_erp	251, 0
 Scoop_SoundEditorData_Helper_Loop5:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+6)
 	lda_rr	xbc, xbc, wa
@@ -6677,7 +6677,7 @@ Scoop_SoundEditorData_Helper_Loop5:
 	ld	a, (xsp+2)
 	sub	a, (xsp+24)
 	dec	1, a
-	ldb_erp	a, 226
+	ldfr_berp	a, 226
 	ld	l, (xsp+2)
 	dec	1, l
 	lda	xbc, (xsp+6)
@@ -6686,7 +6686,7 @@ Scoop_SoundEditorData_Helper_Loop5:
 	add	e, 254
 	extz	de
 	extz	hl
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	cpb_erp	a, 226
 	jr	nc, Scoop_SoundEditorData_Helper_Skip29
 Scoop_SoundEditorData_Helper_Loop6:
@@ -6697,7 +6697,7 @@ Scoop_SoundEditorData_Helper_Loop6:
 	inc1b_erp	251
 	dec	1, hl
 	dec	1, de
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	cpb_erp	a, 226
 	jr	c, Scoop_SoundEditorData_Helper_Loop6
 Scoop_SoundEditorData_Helper_Skip29:
@@ -6734,7 +6734,7 @@ Scoop_SoundEditorData_Helper_Join21:
 	call	SeMenu_LoadPartParam
 	ldib_erp	251, 0
 Scoop_SoundEditorData_Helper_Loop7:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+6)
 	lda_rr	xbc, xbc, wa
@@ -6746,15 +6746,15 @@ Scoop_SoundEditorData_Helper_Loop7:
 	ld	wa, 0:i3
 	call	SeMenu_LoadPartParam
 	ld	a, (xsp+24)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld	c, (xsp+2)
 	dec	1, c
 	ld	l, c
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	cp	a, l
 	jr	nc, Scoop_SoundEditorData_Helper_Skip30
 	lda	xde, (xsp+6)
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	wa, 1:i3
 	add	bc, wa
@@ -6767,7 +6767,7 @@ Scoop_SoundEditorData_Helper_Loop8:
 	st_rrb	a, xde, ix
 	inc1b_erp	251
 	inc	1, bc
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	cp	a, l
 	jr	c, Scoop_SoundEditorData_Helper_Loop8
 Scoop_SoundEditorData_Helper_Skip30:
@@ -6883,7 +6883,7 @@ Scoop_SoundEditorData_Helper_Join25:
 	and	wa, 32768
 	cp	wa, 0:i3
 	scc	nz, a
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	lda	xbc, (xsp+4)
 	ld	wa, 1:i3
 	call	SeMenu_LoadPartParam
@@ -6959,7 +6959,7 @@ Scoop_SoundEditorData_Helper_Helper:
 	push	qiz
 	ldib_erp	251, 0
 Scoop_SoundEditorData_Helper_Loop9:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	ldw	bc, 32
 	call	SeMenu_SetupPartDisplay_End_0x1B4
@@ -6993,7 +6993,7 @@ Scoop_SoundEditorData_Helper_Join28:
 	call	SeMenu_LoadPartParam
 	ldib_erp	250, 0
 Scoop_SoundEditorData_Helper_Loop10:
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	extz	wa
 	lda	xbc, (xsp+28)
 	lda_rr	xbc, xbc, wa
@@ -7009,25 +7009,25 @@ Scoop_SoundEditorData_Helper_Loop10:
 	jr	c, Scoop_SoundEditorData_Helper_Skip33
 	lda	xde, (xsp+28)
 Scoop_SoundEditorData_Helper_Loop11:
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	extz	wa
 	.byte	0xc3,	0x07, 0xe8, 0xe0, 0x3f, 0x20
 	jr	nz, Scoop_SoundEditorData_Helper_Skip34
 	inc1b_erp	249
 	inc1b_erp	250
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	cp	a, c
 	jr	ule, Scoop_SoundEditorData_Helper_Loop11
 Scoop_SoundEditorData_Helper_Skip33:
-	stb_erp	a, 249
+	ldto_berp	a, 249
 	cp	a, c
 	jr	ule, Scoop_SoundEditorData_Helper_Skip35
 Scoop_SoundEditorData_Helper_Loop12:
 	jrl	Scoop_SoundEditorData_Helper_Epilogue29
 Scoop_SoundEditorData_Helper_Skip34:
-	stb_erp	a, 250
-	ldb_erp	a, 251
-	stb_erp	a, 249
+	ldto_berp	a, 250
+	ldfr_berp	a, 251
+	ldto_berp	a, 249
 	cp	a, c
 	jr	ugt, Scoop_SoundEditorData_Helper_Loop12
 Scoop_SoundEditorData_Helper_Skip35:
@@ -7043,14 +7043,14 @@ Scoop_SoundEditorData_Helper_Loop13:
 	jr	nz, Scoop_SoundEditorData_Helper_Skip36
 	inc1b_erp	249
 	inc1b_erp	250
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	cp	a, c
 	jr	ule, Scoop_SoundEditorData_Helper_Loop13
 Scoop_SoundEditorData_Helper_Skip36:
 	ld	a, (xsp+4)
-	ldb_erp	a, 248
+	ldfr_berp	a, 248
 	subb_erp	a, 249
-	ldb_erp	a, 248
+	ldfr_berp	a, 248
 	srl_erpb	249, 1
 	lda	xwa, (xsp+10)
 	lda	xbc, (xsp+28)
@@ -7066,41 +7066,41 @@ Scoop_SoundEditorData_Helper_Loop14:
 	.byte	0xf3,	0x07, 0xe8, 0xe0, 0x00, 0x20
 	inc1b_erp	250
 	inc	1, bc
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	cpb_erp	a, 249
 	jr	c, Scoop_SoundEditorData_Helper_Loop14
 Scoop_SoundEditorData_Helper_Skip37:
-	stb_erp	a, 249
+	ldto_berp	a, 249
 	extz	wa
 	lda	xbc, (xsp+10)
 	exts	xwa
 	add	xwa, xbc
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	lda	xde, (xsp+28)
 	exts	xbc
 	add	xbc, xde
-	stb_erp	e, 248
+	ldto_berp	e, 248
 	extz	de
 	call	SeMenu_SetupPartDisplay_End_0xD3
-	stb_erp	a, 249
+	ldto_berp	a, 249
 	addb_erp	a, 248
-	ldb_erp	a, 250
+	ldfr_berp	a, 250
 	ld	c, (xsp+4)
 	dec	1, c
 	ld	e, c
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	cp	a, e
 	jr	ugt, Scoop_SoundEditorData_Helper_Skip38
 	lda	xhl, (xsp+10)
-	stb_erp	c, 250
+	ldto_berp	c, 250
 	extz	bc
 Scoop_SoundEditorData_Helper_Loop15:
 	ld	wa, bc
 	.byte	0xf3,	0x07, 0xec, 0xe0, 0x00, 0x20
 	inc1b_erp	250
 	inc	1, bc
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	cp	a, e
 	jr	ule, Scoop_SoundEditorData_Helper_Loop15
 Scoop_SoundEditorData_Helper_Skip38:
@@ -7168,7 +7168,7 @@ SeMenu_PopupDialog_Init:
 	jr SeMenu_PopupDialog_Setup
 
 SeMenu_PopupDialog_CheckState:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	ld xbc, 0x20c33
 	add xbc, xwa
@@ -7208,7 +7208,7 @@ SeMenu_PopupDialog_ShowBody_Data:
 	jr SeMenu_PopupDialog_HandleInput_Data
 
 SeMenu_PopupDialog_HandleInput:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	inc1w_erp 0xfa
 	extz xwa
 	ld xbc, 0x20c33
@@ -7245,7 +7245,7 @@ SeMenu_PopupDialog_Close:
 	call SeqBuf_SoundEdit_ReadByte
 	cp hl, 0:i3
 	jr lt, SeMenu_PopupDialog_Close_Data
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	inc1w_erp 0xfa
 	extz xwa
 	ld xbc, 0x20c33
@@ -7288,7 +7288,7 @@ SeMenu_ValueEditor_Setup:
 	lda xwa, (0x020c33:24)
 	cp hl, 0:i3
 	jr lt, SeMenu_ValueEditor_Draw
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	inc1w_erp 0xfa
 	extz xbc
 	ld xde, xwa
@@ -7365,12 +7365,12 @@ SeMenu_ValueEditor_Data3:
 
 SeMenu_ValueEditor_Data4:
 	ld a, (xde + 3)
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	extz iz
 	jr SeMenu_ListSelector_Init
 
 SeMenu_ValueEditor_Data5:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	inc1w_erp 0xfa
 	extz xwa
 	ld xbc, 0x20c33
@@ -17404,7 +17404,7 @@ VwVariBox_Confirm_ClearBuf:
 	lda_dri XDE, 0xfd, 0x08, 0x01
 	lda xiy, (xwa + 28)
 	ld a, (xwa + 34)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	lda xhl, (xsp + 8)
 	cpw (xiz), 0x0
@@ -17684,7 +17684,7 @@ MspBnkSlBox_HandleEvt1C:
 	cp xwa, 0x28800
 	jr nz, MspBnkSlBox_ReturnZeroJmp
 	ld a, (xhl + 50)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	lda xde, (xhl + 46)
 	ld xbc, (xde)
@@ -18138,11 +18138,11 @@ MspRGrpSetBnk_OuterLoop:
 	ldib_erp 0xfb, 1
 
 MspRGrpSetBnk_InnerLoop:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	ld bc, wa
 	extz xbc
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	extz xwa
 	sll xwa, 0
@@ -18845,7 +18845,7 @@ SndArgGridCheck:
 	ld xiy, xbc
 	ld wa, de
 	srl xde, 0
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ldiw_erp 0xea, 0
 	ld wa, de
 	lda xix, (xsp + 24)
@@ -18876,7 +18876,7 @@ SndArgGridCheck_JumpTableFallthrough:
 
 SndArgGridCheck_CellSelect:
 	ld (xix), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (xde), wa
 	ld (xhl), xiz
 	ld wa, (xix)
@@ -19167,7 +19167,7 @@ ParaListBox_HandleEvtF:
 	ld	xix, (xbc+38)
 	ld	xwa, (xsp+158)
 	ld	a, (xwa)
-	ldb_erp	a, 244
+	ldfr_berp	a, 244
 	exts	iy
 	lda	xde, (xsp+14)
 	lda	xhl, (xbc+28)

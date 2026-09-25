@@ -62,7 +62,7 @@ SMF_IncrementPosition:
 	ld wa, (3946:16)
 	ldw de, 0x60
 	mul xwa, de
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	add (3938:16), wa
 	ld (3940:16), de
 	ldw (3946:16), 0
@@ -231,14 +231,14 @@ SMF_ScanChannels:
 	xor bc, bc
 
 SMF_ScanChannels_Loop:
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jr c, SMF_ScanChannels_Inactive
 	push xde
 	ld xde, 0xf250
@@ -390,14 +390,14 @@ SMF_ClearWork_Loop:
 SMF_CalcTempoRate:
 	ldw de, 0x9
 	ldw wa, 0x27c0
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ldw hl, 0x64
 	xor de, de
 	extz xwa
 	muls xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld (3948:16), wa
 	ld (3950:16), de
 	ret
@@ -605,9 +605,9 @@ SMF_WriteByte_NewSector:
 	ld wa, (4327:16)
 	xor de, de
 	ld hl, 4:i3
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	cp de, 0:i3
 	jr nz, SMF_WriteByte_AlignCheck
 
@@ -948,14 +948,14 @@ SMF_Dispatch_DrumChannel:
 
 SMF_Dispatch_DrumSearch:
 	ld bc, iy
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jr c, SMF_Dispatch_DrumFound
 	push xix
 	ld xix, 0xf1a0
@@ -1000,14 +1000,14 @@ SMF_Dispatch_Ch15Remap:
 
 SMF_Dispatch_Ch15Search:
 	ld bc, iy
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jr c, SMF_Dispatch_DrumFound
 	push xix
 	ld xix, 0xf1a0
@@ -1156,14 +1156,14 @@ SMF_ProgChg_NotFound:
 
 SMF_ProgChg_Found:
 	ld c, l
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jr c, SMF_ProgChg_SearchNext
 	calr SMF_ResolveChannel
 	jr SMF_ProgChg_Write
@@ -1227,14 +1227,14 @@ SMF_CtrlChg_NotFound:
 
 SMF_CtrlChg_Found:
 	ld c, l
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jr c, SMF_CtrlChg_SearchNext
 	calr SMF_ResolveChannel
 	jr SMF_CtrlChg_Write
@@ -1481,14 +1481,14 @@ SMF_Resolve_DrumCh9:
 
 SMF_Resolve_DrumSearch:
 	ld bc, iy
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jr c, SMF_Resolve_DrumFound
 	push xix
 	ld xix, 0xf1a0
@@ -1530,14 +1530,14 @@ SMF_Resolve_Ch15Check:
 
 SMF_Resolve_Ch15Search:
 	ld bc, iy
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jr c, SMF_Resolve_Ch15Found
 	push xix
 	ld xix, 0xf1a0
@@ -1652,7 +1652,7 @@ SMF_CalcFilePosition:
 	sub xhl, 0x13fa
 	add xwa, xhl
 	sub xwa, 0x16
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld (4002:16), d
 	ld (4003:16), e
 	ld (4004:16), w
@@ -1713,14 +1713,14 @@ SMF_GlobalCh_FreeSearch:
 
 SMF_GlobalCh_SearchLoop:
 	ld bc, iy
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jr c, SMF_GlobalCh_Found
 	ld xix, 0xf1a0
 	cpb_sri_mr A, 0x07, 0xf0, 0xf4

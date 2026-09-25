@@ -2191,7 +2191,7 @@ IvNamingExit_ScreenData_Skip2:
 	ld	xix, (xbc+42)
 	ld	xwa, (xsp+170)
 	ld	a, (xwa)
-	ldb_erp	a, 244
+	ldfr_berp	a, 244
 	exts	iy
 	lda	xde, (xsp+26)
 	lda	xhl, (xbc+28)
@@ -5448,12 +5448,12 @@ AcIndexToggle_CheckNoteRange:
 	cp wa, (xhl)
 	jr nc, AcIndexToggle_SetFromDE
 	ld iz, de
-	ldw_erp BC, 0xfa
+	ldfr_werp BC, 0xfa
 	jr AcIndexToggle_SendNoteEvent
 
 AcIndexToggle_SetFromDE:
 	ld iz, bc
-	ldw_erp DE, 0xfa
+	ldfr_werp DE, 0xfa
 
 AcIndexToggle_SendNoteEvent:
 	ld xwa, 0x2600024
@@ -6076,14 +6076,14 @@ NoteEditBox_EventDispatch2_Join:
 	ldw (xsp+10), 1
 	ldib_erp 251, 0
 NoteEditBox_EventDispatch2_Loop:
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	add	wa, wa
 	lda	xbc, (NakaInst_NO_OPERATION_0x250:24)
 	ld_rrw wa, xbc, wa
 	ld (xsp+28), wa
 	ld	xde, 0:i3
-	stb_erp e, 251
+	ldto_berp e, 251
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8005d
@@ -6169,14 +6169,14 @@ NoteEditBox_EventDispatch2_Join3:
 	ldw (xsp+10), 1
 	ldib_erp 251, 0
 NoteEditBox_EventDispatch2_Loop2:
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	add	wa, wa
 	lda	xbc, (NakaInst_NO_OPERATION_0x268:24)
 	ld_rrw wa, xbc, wa
 	ld (xsp+28), wa
 	ld	xde, 0:i3
-	stb_erp e, 251
+	ldto_berp e, 251
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8005d
@@ -8462,16 +8462,16 @@ SqplyVal_HandleUpScrollEvent:
 	ld xbc, 0x1e80036
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
-	stb_erp E, 0xfb
+	ldfr_berp L, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfb
-	stb_erp E, 0xfb
+	ldfr_berp L, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, 0x1480003
@@ -8524,16 +8524,16 @@ SqplyVal_HandleDownScrollEvent:
 	ld xbc, 0x1e80036
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
-	stb_erp E, 0xfb
+	ldfr_berp L, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfb
-	stb_erp E, 0xfb
+	ldfr_berp L, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, 0x1480003
@@ -8622,7 +8622,7 @@ SqplyVal_SelectTrack:
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld xwa, (xsp + 6)
 	lda xbc, (xwa + 26)
 	cpib_erp 0xfb, 0
@@ -8632,7 +8632,7 @@ SqplyVal_SelectTrack:
 	ld xwa, (xbc)
 	ld xbc, 0x1e80035
 	call ApFuncCall
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 68)
@@ -8647,10 +8647,10 @@ SqplyVal_SelectTrack:
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cpib_erp 0xfb, 0
 	jr lt, SqplyVal_ReturnZero
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 68)
@@ -8675,10 +8675,10 @@ SqplyVal_SelectTrack_NegRange:
 	ld xwa, (xbc)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cpib_erp 0xfb, 0
 	jr lt, SqplyVal_ReturnZero
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 68)
@@ -8936,16 +8936,16 @@ SqedtVal_HandleUpScrollEvent:
 	ld xbc, 0x1e80036
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfa
-	stb_erp E, 0xfa
+	ldfr_berp L, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfa
-	stb_erp E, 0xfa
+	ldfr_berp L, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, 0x1480000
@@ -8972,16 +8972,16 @@ SqedtVal_HandleDownScrollEvent:
 	ld xbc, 0x1e80036
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfa
-	stb_erp E, 0xfa
+	ldfr_berp L, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfa
-	stb_erp E, 0xfa
+	ldfr_berp L, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, 0x1480000
@@ -9054,7 +9054,7 @@ SqedtVal_SelectDefault:
 	ld xbc, 0x1e80036
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 
 SqedtVal_SelectDispatch:
 	ld xwa, (xsp + 4)
@@ -9064,28 +9064,28 @@ SqedtVal_SelectDispatch:
 	call ApFuncCall
 	ld (xsp + 2), l
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfa
+	ldfr_berp L, 0xfa
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 26)
 	cpib_erp 0xfa, 0
 	jr lt, SqedtVal_Select_NegRange
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xbc)
 	ld xbc, 0x1e80035
 	call ApFuncCall
-	stb_erp E, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000f
 	call SendEvent
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	cp a, (xsp + 2)
 	jr z, SqedtVal_ReturnZero
 	ld xde, 0:i3
@@ -9094,10 +9094,10 @@ SqedtVal_SelectDispatch:
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfa
+	ldfr_berp L, 0xfa
 	cpib_erp 0xfa, 0
 	jr lt, SqedtVal_ReturnZero
-	stb_erp E, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 74)
@@ -9110,10 +9110,10 @@ SqedtVal_Select_NegRange:
 	ld xwa, (xbc)
 	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldb_erp L, 0xfa
+	ldfr_berp L, 0xfa
 	cpib_erp 0xfa, 0
 	jr lt, SqedtVal_ReturnZero
-	stb_erp E, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 74)
@@ -10669,7 +10669,7 @@ SqedtVal2_HandleUpScrollEvent:
 	ld c, a
 	ld xwa, (xsp + 66)
 	and xwa, 0xff
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	cp c, 0:i3
 	jr nz, SqedtVal2_HandleDownScrollEvent
 	lda xix, (xsp + 58)
@@ -10682,7 +10682,7 @@ SqedtVal2_HandleUpScrollEvent:
 	jr nz, SqedtVal2_UpScrollDefault
 
 SqedtVal2_UpScrollModeA2:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	sla wa, 3
 	lda xiy, (ExtDevice_ModeDispatch_Table_0x37A:24)
@@ -10698,7 +10698,7 @@ SqedtVal2_UpScrollModeA2:
 	jr SqedtVal2_UpScrollCalcOffset
 
 SqedtVal2_UpScrollDefault:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	sla wa, 3
 	lda xiy, (ExtDevice_ModeDispatch_Table_0x362:24)
@@ -10719,7 +10719,7 @@ SqedtVal2_UpScrollCalcOffset:
 	jr SqedtVal2_DrawScrollFrame
 
 SqedtVal2_HandleDownScrollEvent:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	sla wa, 3
 	cp (xsp + 6), 0x91
@@ -10806,23 +10806,23 @@ SqedtVal2_HandleSelectEvent:
 	ld xbc, 0x1e8003a
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cpib_erp 0xfb, 0
 	jr z, SqedtVal2_CheckModeA2
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000e
 	call SendEvent
 	dec1b_erp 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e8003b
 	call ApFuncCall
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0x100
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000e
@@ -10921,24 +10921,24 @@ SqedtVal2_HandleSelectCase3:
 	ld xbc, 0x1e8003c
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cpib_erp 0xfb, 0
 	jr z, SqedtVal2_SelectCase3_ModeA2
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0x10000
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000e
 	call SendEvent
 	dec1b_erp 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e8003d
 	call ApFuncCall
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0x10100
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000e
@@ -11037,10 +11037,10 @@ SqedtVal2_HandleSelectCase2:
 	ld xbc, 0x1e8003a
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_SelectCase2_ModeA4
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0xf
 	ld d, 0x0:opc
 	extz xde
@@ -11051,7 +11051,7 @@ SqedtVal2_HandleSelectCase2:
 SqedtVal2_SelectCase2_ModeA4:
 	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_SelectCase2_Default
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x15
 	ld d, 0x0:opc
 	extz xde
@@ -11060,7 +11060,7 @@ SqedtVal2_SelectCase2_ModeA4:
 	jr SqedtVal2_SelectCase2_PostEvent
 
 SqedtVal2_SelectCase2_Default:
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x1b
 	ld d, 0x0:opc
 	extz xde
@@ -11091,10 +11091,10 @@ SqedtVal2_HandleSelectCase4:
 	ld xbc, 0x1e8003c
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_SelectCase4_ModeA4
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x12
 	ld d, 0x0:opc
 	extz xde
@@ -11105,7 +11105,7 @@ SqedtVal2_HandleSelectCase4:
 SqedtVal2_SelectCase4_ModeA4:
 	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_SelectCase4_Default
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x18
 	ld d, 0x0:opc
 	extz xde
@@ -11114,7 +11114,7 @@ SqedtVal2_SelectCase4_ModeA4:
 	jr SqedtVal2_SelectCase4_PostEvent
 
 SqedtVal2_SelectCase4_Default:
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x1d
 	ld d, 0x0:opc
 	extz xde
@@ -11155,9 +11155,9 @@ SqedtVal2_HandleUpScrollInner:
 	ld xbc, 0x1e8003a
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	cp (xsp + 6), 0x91
 	jr z, SqedtVal2_UpInner_CheckA8
 	cp (xsp + 6), 0xa8
@@ -11171,7 +11171,7 @@ SqedtVal2_UpInner_CheckA8:
 	call SendEvent
 	inc1b_erp 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e8003b
@@ -11179,7 +11179,7 @@ SqedtVal2_UpInner_CheckA8:
 
 SqedtVal2_UpInner_SendExtra:
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0x100
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000e
@@ -11209,13 +11209,13 @@ SqedtVal2_UpInner_CheckA4:
 	call SendEvent
 	inc1b_erp 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e8003b
 	call ApFuncCall
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0x100
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000e
@@ -11296,9 +11296,9 @@ SqedtVal2_HandleDownScrollInner:
 	ld xbc, 0x1e8003c
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0x10000
 	cp (xsp + 6), 0x91
 	jr z, SqedtVal2_DownInner_CheckA8
@@ -11313,13 +11313,13 @@ SqedtVal2_DownInner_CheckA8:
 	call SendEvent
 	inc1b_erp 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e8003d
 	call ApFuncCall
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0x10100
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000e
@@ -11351,13 +11351,13 @@ SqedtVal2_DownInner_CheckA4:
 	call SendEvent
 	inc1b_erp 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e8003d
 	call ApFuncCall
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0x10100
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000e
@@ -11436,10 +11436,10 @@ SqedtVal2_HandleDownCase2:
 	ld xbc, 0x1e8003a
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_DownCase2_ModeA4
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0xf
 	ld d, 0x0:opc
 	extz xde
@@ -11450,7 +11450,7 @@ SqedtVal2_HandleDownCase2:
 SqedtVal2_DownCase2_ModeA4:
 	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_DownCase2_Default
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x15
 	ld d, 0x0:opc
 	extz xde
@@ -11459,7 +11459,7 @@ SqedtVal2_DownCase2_ModeA4:
 	jr SqedtVal2_DownCase2_PostEvent
 
 SqedtVal2_DownCase2_Default:
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x1b
 	ld d, 0x0:opc
 	extz xde
@@ -11490,10 +11490,10 @@ SqedtVal2_HandleDownCase4:
 	ld xbc, 0x1e8003c
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_DownCase4_ModeA4
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x12
 	ld d, 0x0:opc
 	extz xde
@@ -11504,7 +11504,7 @@ SqedtVal2_HandleDownCase4:
 SqedtVal2_DownCase4_ModeA4:
 	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_DownCase4_Default
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x18
 	ld d, 0x0:opc
 	extz xde
@@ -11513,7 +11513,7 @@ SqedtVal2_DownCase4_ModeA4:
 	jr SqedtVal2_DownCase4_PostEvent
 
 SqedtVal2_DownCase4_Default:
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add e, 0x1d
 	ld d, 0x0:opc
 	extz xde
@@ -12260,11 +12260,11 @@ EffectBox_DrawField1:
 	ld xbc, 0x1e8000d
 	ld xde, 0:i3
 	call ApFuncCall
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	add a, l
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	inc 1, xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
@@ -12480,18 +12480,18 @@ EffectBox_HandleDefaultEvent:
 	ld xbc, 0x1e8000b
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfa
+	ldfr_berp L, 0xfa
 	cpib_erp 0xfa, 0
 	jr z, EffectBox_RedrawAfterChange
 	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	ld xde, 0:i3
 	call SendEvent
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	dec 1, a
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000a
@@ -12501,12 +12501,12 @@ EffectBox_HandleDefaultEvent:
 	ld xde, 1:i3
 	call SendEvent
 	ld xde, 0:i3
-	stb_erp E, 0xfa
+	ldto_berp E, 0xfa
 	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
@@ -12518,12 +12518,12 @@ EffectBox_RedrawAfterChange:
 	ld xbc, 0x1e8000d
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cpib_erp 0xfb, 0
 	jr z, EffectBoxProc_RestoreAndJumpToDispatch
 	dec1b_erp 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000c
@@ -12558,17 +12558,17 @@ EffectBox_HandleCase2:
 	ld xbc, 0x1e8000d
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000b
 	ld xde, 0:i3
 	call ApFuncCall
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	add a, l
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0x100
 	ld xwa, 0x1480002
 	ld xbc, 0x1e80012
@@ -12625,12 +12625,12 @@ EffectBox_HandleCase0_Post:
 	ld xbc, 0x1e8000b
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfa
+	ldfr_berp L, 0xfa
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 28)
 	cpib_erp 0xfa, 7
 	jr nc, EffectBox_RedrawFullLoop
-	stb_erp E, 0xfa
+	ldto_berp E, 0xfa
 	inc 1, e
 	ld d, 0x0:opc
 	extz xde
@@ -12643,11 +12643,11 @@ EffectBox_HandleCase0_Post:
 	ld xbc, 0x1c0000e
 	ld xde, 0:i3
 	call SendEvent
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	inc 1, a
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000a
@@ -12657,12 +12657,12 @@ EffectBox_HandleCase0_Post:
 	ld xde, 1:i3
 	call SendEvent
 	ld xde, 0:i3
-	stb_erp E, 0xfa
+	ldto_berp E, 0xfa
 	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
@@ -12673,10 +12673,10 @@ EffectBox_RedrawFullLoop:
 	ld xbc, 0x1e8000d
 	ld xde, 0:i3
 	call ApFuncCall
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	add a, l
-	ldb_erp A, 0xfa
-	stb_erp E, 0xfa
+	ldfr_berp A, 0xfa
+	ldto_berp E, 0xfa
 	inc 1, e
 	ld d, 0x0:opc
 	extz xde
@@ -12692,9 +12692,9 @@ EffectBox_RedrawFullLoop:
 	ld xde, 0:i3
 	call ApFuncCall
 	inc 1, l
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000c
@@ -12728,17 +12728,17 @@ EffectBox_HandleAppFunc:
 	ld xbc, 0x1e8000d
 	ld xde, 0:i3
 	call ApFuncCall
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000b
 	ld xde, 0:i3
 	call ApFuncCall
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	add a, l
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	add xde, 0xffffff00
 	ld xwa, 0x1480002
 	ld xbc, 0x1e80012
@@ -14946,24 +14946,24 @@ DspItem0CngFunc:
 	inc 3, h
 	ld a, l
 	inc 4, a
-	ldb_erp A, 0xe2
+	ldfr_berp A, 0xe2
 	ld a, l
 	inc 5, a
-	ldb_erp A, 0xe6
+	ldfr_berp A, 0xe6
 	ld a, l
 	inc 6, a
-	ldb_erp A, 0xee
+	ldfr_berp A, 0xee
 	ld a, l
 	inc 7, a
 	extz wa
 	ld (xsp + 18), wa
-	stb_erp A, 0xee
+	ldto_berp A, 0xee
 	extz wa
 	ld (xsp + 16), wa
-	stb_erp A, 0xe6
+	ldto_berp A, 0xe6
 	extz wa
 	ld (xsp + 14), wa
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	extz wa
 	ld (xsp + 12), wa
 	ld a, h

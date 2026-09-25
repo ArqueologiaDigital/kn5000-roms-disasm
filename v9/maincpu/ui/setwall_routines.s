@@ -455,7 +455,7 @@ SetWall_WriteAllSlots:
 SetWall_WriteAll_Loop:
 	ld xix, 0xab000
 	xor xwa, xwa
-	stb_erp A, 0x34
+	ldto_berp A, 0x34
 	sla xwa, 11
 	add xix, xwa
 	ld xwa, 0x20
@@ -465,7 +465,7 @@ SetWall_WriteAll_Loop:
 	ldir85
 	ld xix, 0xab000
 	xor xwa, xwa
-	stb_erp A, 0x34
+	ldto_berp A, 0x34
 	sla xwa, 11
 	add xix, xwa
 	ld xwa, 0xbd
@@ -479,7 +479,7 @@ SetWall_WriteAll_ModeSet:
 	ld (xix), a
 	ld xix, 0xab000
 	xor xwa, xwa
-	stb_erp A, 0x34
+	ldto_berp A, 0x34
 	sla xwa, 11
 	add xix, xwa
 	ld xwa, 0x110
@@ -533,7 +533,7 @@ SetWall_LocalWriteAll:
 SetWall_LocalWriteAll_Loop:
 	ld xix, 0xab000
 	xor xwa, xwa
-	stb_erp A, 0x34
+	ldto_berp A, 0x34
 	sla xwa, 11
 	add xix, xwa
 	ld xwa, 0x20
@@ -543,7 +543,7 @@ SetWall_LocalWriteAll_Loop:
 	ldir85
 	ld xix, 0xab000
 	xor xwa, xwa
-	stb_erp A, 0x34
+	ldto_berp A, 0x34
 	sla xwa, 11
 	add xix, xwa
 	ld xwa, 0xbd
@@ -557,7 +557,7 @@ SetWall_LocalWriteAll_Mode:
 	ld (xix), a
 	ld xix, 0xab000
 	xor xwa, xwa
-	stb_erp A, 0x34
+	ldto_berp A, 0x34
 	sla xwa, 11
 	add xix, xwa
 	ld xwa, 0x110
@@ -718,15 +718,15 @@ SetWall_SlotOrderTable:
 	.byte 0x04, 0x0c, 0x06, 0x07, 0x11, 0x12, 0x13, 0x05
 
 SetWall_SlotBitUpdate:
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, (3295:16)
 	rcf
 	stcf_a_16 de
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	ld (0x00ffec:24), de
-	stw_erp DE, 0x3e
+	ldto_werp DE, 0x3e
 	ret
 
 SetWall_ParsePatternStream:
@@ -816,10 +816,10 @@ SetWall_ParseStream_ReadEvent:
 	jr SetWall_ParseStream_ReadEvent
 
 SetWall_ParseStream_TypeC0:
-	ldb_erp A, 0x3c
+	ldfr_berp A, 0x3c
 	ld a, (0x2879:16)
 	and a, 0x3
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	jr nz, SetWall_ParseStream_Advance
 	bit 1, (4393:16)
 	jr nz, SetWall_ParseStream_TypeC0_Loop
@@ -1127,10 +1127,10 @@ SetWall_ParseB0ControlChange:
 	jr ugt, SetWall_B0CC_ClearFlags
 	cp a, 6:i3
 	jr z, SetWall_B0CC_ClearFlags
-	ldb_erp A, 0x3c
+	ldfr_berp A, 0x3c
 	ld a, (0x2879:16)
 	and a, 0x3
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	jr z, SetWall_B0CC_BankSelect
 	ld c, 0x3:opc
 	cp a, c
@@ -1170,9 +1170,9 @@ SetWall_B0CC_Type48:
 	pop xde
 	and a, 0x7f
 	or a, (3310:16)
-	ldb_erp A, 0x3c
+	ldfr_berp A, 0x3c
 	and a, 0xfc
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	jr nz, SetWall_B0CC_Type48_SetFlag
 	and (0x289d:16), 251
 	jr SetWall_B0CC_Return

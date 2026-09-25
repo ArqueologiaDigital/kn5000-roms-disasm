@@ -320,7 +320,7 @@ Boot_InitWorkRAM:
 	ldirw93
 	cpiw_erp 0xe6, 0
 	jr z, MemCopy_DataValidation
-	stw_erp WA, 0xe6
+	ldto_werp WA, 0xe6
 
 Boot_InitWorkRAM_ZeroBlock1_Loop:
 	ldirw93
@@ -345,7 +345,7 @@ Boot_InitWorkRAM_ZeroBlock1_Done:
 	ldirw93
 	cpiw_erp 0xe6, 0
 	jr z, MemCopy_SetupAndDMA
-	stw_erp WA, 0xe6
+	ldto_werp WA, 0xe6
 
 Boot_InitWorkRAM_ZeroBlock2_Loop:
 	ldirw93
@@ -365,7 +365,7 @@ Boot_InitWorkRAM_ROMCopy1_Start:
 	ldir83
 	cpiw_erp 0xe6, 0
 	jr z, Boot_InitWorkRAM_ROMCopy2_Start
-	stw_erp WA, 0xe6
+	ldto_werp WA, 0xe6
 
 Boot_InitWorkRAM_ROMCopy1_Loop:
 	ldir83
@@ -380,7 +380,7 @@ Boot_InitWorkRAM_ROMCopy2_Start:
 	ldir83
 	cpiw_erp 0xe6, 0
 	jr z, Boot_InitWorkRAM_Done
-	stw_erp WA, 0xe6
+	ldto_werp WA, 0xe6
 
 Boot_InitWorkRAM_ROMCopy2_Loop:
 	ldir83
@@ -5469,7 +5469,7 @@ sendCOMM_ChunkLoop:
 sendCOMM_FinalChunk:
 	ld a, (xsp + 6)
 	extz wa
-	stb_erp C, 0xf8
+	ldto_berp C, 0xf8
 	extz bc
 	ld xde, (xsp + 2)
 	calr InterCPU_Send_Data_Block
@@ -6186,7 +6186,7 @@ Flash_IdentifyValidate_UseBank1:
 	stiw_ind 0xe9, 0x54, 0x55, 0x55, 0x00
 	ldw (xbc), 0x90
 	ld wa, (xde)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld xbc, xde
 	ld iz, (xbc + 2)
 	ei 0
@@ -7039,11 +7039,11 @@ SLIDE_Decompress_4K_MainLoop:
 	ld E, (xbc3+)
 	ld a, e
 	extz wa
-	ldw_erp WA, 0x30
+	ldfr_werp WA, 0x30
 	or_erpw 0x30, 0x00, 0xff
 
 SLIDE_Decompress_4K_CheckLiteral:
-	stw_erp WA, 0x30
+	ldto_werp WA, 0x30
 	bit 0, wa
 	jr z, SLIDE_Decompress_4K_CopyMatch
 	cp xhl, xix
@@ -7067,11 +7067,11 @@ SLIDE_Decompress_4K_CopyMatch:
 	jr nc, SLIDE_Decompress_4K_Done
 	ld A, (xbc3+)
 	extz wa
-	ldw_erp WA, 0x32
+	ldfr_werp WA, 0x32
 	cp xhl, xix
 	jr nc, SLIDE_Decompress_4K_Done
 	ld A, (xbc3+)
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	extz iz
 	ld wa, iz
 	and wa, 0xf0
@@ -7086,7 +7086,7 @@ SLIDE_Decompress_4K_CopyMatch:
 	jr c, SLIDE_Decompress_4K_Continue
 
 SLIDE_Decompress_4K_CopyLoop:
-	stw_erp WA, 0x32
+	ldto_werp WA, 0x32
 	add wa, iy
 	and wa, 0xfff
 	extz xwa
@@ -7162,11 +7162,11 @@ SLIDE_Decompress_8K_MainLoop:
 	ld E, (xbc3+)
 	ld a, e
 	extz wa
-	ldw_erp WA, 0x30
+	ldfr_werp WA, 0x30
 	or_erpw 0x30, 0x00, 0xff
 
 SLIDE_Decompress_8K_CheckLiteral:
-	stw_erp WA, 0x30
+	ldto_werp WA, 0x30
 	bit 0, wa
 	jr z, SLIDE_Decompress_8K_CopyMatch
 	cp xhl, xix
@@ -7190,11 +7190,11 @@ SLIDE_Decompress_8K_CopyMatch:
 	jr nc, SLIDE_Decompress_8K_Done
 	ld A, (xbc3+)
 	extz wa
-	ldw_erp WA, 0x32
+	ldfr_werp WA, 0x32
 	cp xhl, xix
 	jr nc, SLIDE_Decompress_8K_Done
 	ld A, (xbc3+)
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	extz iz
 	ld wa, iz
 	and wa, 0xf8
@@ -7209,7 +7209,7 @@ SLIDE_Decompress_8K_CopyMatch:
 	jr c, SLIDE_Decompress_8K_Continue
 
 SLIDE_Decompress_8K_CopyLoop:
-	stw_erp WA, 0x32
+	ldto_werp WA, 0x32
 	add wa, iy
 	and wa, 0x1fff
 	extz xwa
@@ -7489,7 +7489,7 @@ FDC_WriteSectors:
 	ld wa, (xsp + 6)
 	extz xwa
 	div wa, 0x12
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld iz, 0:i3
 	cp wa, 0:i3
 	jr z, FDC_WriteSectors_FullTracks
@@ -7519,7 +7519,7 @@ FDC_WriteSectors_TrackLoop:
 FDC_WriteSectors_TrackLoopCheck:
 	ld bc, iz
 	sla bc, 7
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, bc
 	jr c, FDC_WriteSectors_TrackLoop
 
@@ -7595,7 +7595,7 @@ FDC_WriteSectors_RemainderLoop:
 FDC_WriteSectors_RemainderCheck:
 	ld bc, iz
 	sla bc, 7
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, bc
 	jr c, FDC_WriteSectors_RemainderLoop
 
@@ -7615,7 +7615,7 @@ FDC_WriteSectors_Compressed:
 	ld wa, (xsp + 6)
 	extz xwa
 	div wa, 0x12
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld iz, 0:i3
 	cp wa, 0:i3
 	jr z, FDC_WriteCompressed_FullTracks
@@ -7647,7 +7647,7 @@ FDC_WriteCompressed_PartialTrackLoop:
 FDC_WriteCompressed_PartialTrackCheck:
 	ld bc, iz
 	sla bc, 8
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, bc
 	jr c, FDC_WriteCompressed_PartialTrackLoop
 
@@ -7727,7 +7727,7 @@ FDC_WriteCompressed_RemainderLoop:
 FDC_WriteCompressed_RemainderCheck:
 	ld bc, iz
 	sla bc, 8
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, bc
 	jr c, FDC_WriteCompressed_RemainderLoop
 
@@ -8601,21 +8601,21 @@ LZ_Decompress_LiteralByte:
 	ld iz, hl
 	cp iz, 0xffff
 	jrl z, LZ_Decompress_Done
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	calr Flash_AccumWrite_Byte
 	ld bc, (xsp + 10)
 	incw 1, (xsp + 10)
 	extz xbc
 	add xbc, (xsp + 16)
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (xbc), a
 	andmi16 (xsp + 10), 0xfff
 	jr LZ_Decompress_LoopCheck
 
 LZ_Decompress_MatchRef:
 	calr Parport_ReadNextByte
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cp_erpw 0xfa, 0xff, 0xff
 	jr z, LZ_Decompress_Done
 	calr Parport_ReadNextByte
@@ -8625,9 +8625,9 @@ LZ_Decompress_MatchRef:
 	ld bc, (xsp + 8)
 	and bc, 0xf0
 	sll bc, 4
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	or wa, bc
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	andmi16 (xsp + 8), 0xf
 	incw 2, (xsp + 8)
 	ldw (xsp + 6), 0x0
@@ -8635,22 +8635,22 @@ LZ_Decompress_MatchRef:
 	jr c, LZ_Decompress_LoopCheck
 
 LZ_Decompress_CopyMatchLoop:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, (xsp + 6)
 	and wa, 0xfff
 	extz xwa
 	add xwa, (xsp + 12)
 	ld a, (xwa)
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	extz iz
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	calr Flash_AccumWrite_Byte
 	ld bc, (xsp + 10)
 	incw 1, (xsp + 10)
 	extz xbc
 	add xbc, (xsp + 12)
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (xbc), a
 	andmi16 (xsp + 10), 0xfff
 	incw 1, (xsp + 6)
@@ -8679,7 +8679,7 @@ FLASH_MEM_UPDATE:
 	jrl z, flash_update__not_today
 	calr FDC_InitRecalibrate
 	calr Detect_Disk_Type
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	call Get_Region_Code
 	cp l, 4:i3
 	jr z, Flash_CheckAndValidate
@@ -8694,7 +8694,7 @@ FLASH_MEM_UPDATE:
 	ldw bc, 0x30
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr Erase_and_Burn____when_disk_is_valid
 	pushw 0x8
@@ -8723,7 +8723,7 @@ Flash_CheckAndValidate:
 	ldw bc, 0x30
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr Erase_and_Burn____when_disk_is_valid
 	pushw 0x8
@@ -8776,7 +8776,7 @@ DrawBitmap_RowLoop:
 	ld wa, iz
 	extz xwa
 	div wa, 0x1c	; 28 bytes = 224 pixels de largura da imagem a ser desenhada
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr nz, DrawBitmap_CheckNewRow
 	ld iy, hl	; IY = coordanada X do canto esquerdo da imagem a ser desenhada
@@ -8790,12 +8790,12 @@ DrawBitmap_BitLoop:
 	extz xde
 	add xde, (xsp + 2)
 	lda xwa, (0xe36a:16); table of bit masks (equivalent to 1044h on boot "table_data" rom)
-	stw_erp BC, 0xee
+	ldto_werp BC, 0xee
 	extz xbc
 	add xbc, xwa	; indexing bit masks with value of QHL
 	ld a, (xbc)
 	and a, (xde)	; here XDE points at one of the bytes of the image we're drawing and we select the bit we need
-	ldb_erp A, 0xf2
+	ldfr_berp A, 0xf2
 	ld de, ix
 	extz xde
 	lda xbc, (0x043c00:24); aparentemente isso é um buffer offscreen

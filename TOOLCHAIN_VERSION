@@ -7,18 +7,24 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 8e188b215251 (8e188b2152519310f5dc5e4af593e2fb50c51e90)
+Commit: 4867e03232a6 (4867e03232a63bcf3f9eba89052d8b75a6c85d98)
 Date: 2026-09-25
-Subject: [TLCS900] MUL/MULS/DIV/DIVS name the register the CPU writes
+Subject: [TLCS900] Refuse the one direct memory-to-memory decode that cannot round-trip
 
-Binary: llvm-mc sha256 a67c563269fc72817bfaab561e4f8df41bfd8c629a87910c018aedafe132ce55
+Binary: llvm-mc sha256 c949d618903c20e52c376b26c833e0da55c1153671ba012a9dfdf1225efe249a
         preserved at ~/compartilhado/toolchain-snapshot/llvm-mc.snap
-        (built from the committed tree; `ninja -n llvm-mc` = no work to do)
+        built FROM SCRATCH from the committed, clean tree (every TLCS900
+        object, .inc and library deleted, CCACHE_DISABLE=1) -- twice, same
+        sha.  llvm-objdump e5a7fcc4b4eb, llc 65b0e1eff0dd from the same tree.
 
-⚠ PIN PROMOTED 2026-09-25 (UPDATE 17, toolchain lane wave 3a): da00420dba8d /
-  a7ee33d5 -> 8e188b215251 / a67c5632, in the same commit as the MUL/DIV
-  source respell, which only this binary assembles.  Prior snapshot kept at
-  llvm-mc.snap.da00420dba8d-a7ee33d5.  The LLVM: trailer is now 8e188b215251.
+⚠ PIN PROMOTED TWICE ON 2026-09-25 (UPDATE 17, toolchain lane wave 3a):
+  da00420dba8d / a7ee33d5 -> 8e188b215251 / a67c5632 (with the MUL/DIV
+  source respell, which only that binary assembles), then -> 4867e03232a6 /
+  c949d618 (with the extended-register LD rename, likewise).  Prior
+  snapshots kept at llvm-mc.snap.da00420dba8d-a7ee33d5 and
+  llvm-mc.snap.8e188b215251-a67c5632; llvm-mc.snap.bcb142d6ee97-e09c359a and
+  llvm-mc.snap.ff454781b90e-e325bcaa are intermediate builds the respell
+  verifications used, never pinned.  The LLVM: trailer is now 4867e03232a6.
 
 ⚠ PIN PROMOTED TWICE ON 2026-09-05: 86332721969d / 850b013e ->
   7a7a3fd6318b / 35829d3c to enable the encoding-selector source conversion
@@ -73,6 +79,7 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # real code from every automated audit for months.
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 8e188b215251  [TLCS900] MUL/MULS/DIV/DIVS name the register the CPU writes  (binary a67c5632)
 #   Commit: da00420dba8d  [TLCS900] Delete the nine encoding-selector legacy aliases  (binary a7ee33d5)
 #   Commit: 58fb7f2afaed  [TLCS900] Narrow the ALU-direct-address register fix; add GPR-typed _da24 siblings
 #   Commit: 6fe210fb0a81  [TLCS900] Add a regression test for the signed-d8 spelling-trap warning
@@ -935,4 +942,108 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #   MAME_ONLY          2,722                847               992 (+145 = the
 #                                             refused even-field byte MUL/DIV)
 #   ASYM (llvm text does not re-encode) 100 -> 42 -> 42;  LEN_DIFF 0 throughout.
+
+# UPDATE 17, CONTINUED (2026-09-25): the legacy spellings retired, one more
+# swapped pair found and fixed, and the pin moved to the end of the lane.
+# Four more commits on tlcs900_backend:
+#
+#   24782ed406f3  A displacement of 256 is 256.  With no source spelling the
+#                 sentinel (disp256 respell above), the legacy readings go:
+#                 `lda xwa, (xsp+256)` -> f3 fd 00 01 30 (the ROM's bytes;
+#                 unidasm lda XWA,XSP+0x0100), 65536 is out of range, and a
+#                 real d16 256 prints plain.  ⚠ The lit test addressing-
+#                 modes.s had PINNED THE MISCOMPILE: under "8-bit memory load
+#                 + d16" it checked `ld a, (xhl+256)` -> 8b 00 21, i.e. +0.
+#                 gate-all 13/13 under it before the commit, so no source
+#                 reached the sentinel through a computed expression either.
+#   bcb142d6ee97  DELETED the pseudo-instructions whose text could lie: the 89
+#                 post-increment/pre-decrement pseudos (C4/C5/F4/F5) and the
+#                 57 GPR-typed 8/16-bit direct-address pseudos (cpda8, addda16,
+#                 andda16, cpdm8, xorda16_24 ...) whose 32-bit register name was
+#                 encoded by index -- `cpda8 xbc, (8990)` assembled cp A.  The
+#                 correctly-typed _r8/_r16 siblings stay (1,694 tree sites).
+#                 `llvm-tblgen -print-records` before/after: 146 records gone,
+#                 every other record byte-identical.
+#   ff454781b90e  The EXTENDED-REGISTER LD pair was named BACKWARDS -- the same
+#                 class as the F5 swap, found by the two-decoder sweep: 0x88+R
+#                 is LD R,r and 0x98+R is LD r,R (MAME `c7 fb 89` = ld A,QIZH,
+#                 `d7 30 98` = ld RWA3,WA), but the byte/word forms were
+#                 `stb_erp a, 0xFB` (a LOAD of A) / `ldb_erp` / `stw_erp` /
+#                 `ldw_erp` (`ldw_erp WA, 0x30` STORES WA into RWA3; the SLIDE
+#                 decompressor's `ldw_erp WA,0x30 / or_erpw 0x30,0x00,0xff /
+#                 stw_erp WA,0x30 / bit 0,wa` reads right only the right way
+#                 round).  Renamed to the long form's names: ldto_berp /
+#                 ldfr_berp / ldto_werp / ldfr_werp (ldto = load TO the named
+#                 register).  Old names refused -> LOCKSTEP respell below.
+#   4867e03232a6  The one decode 910b50efab49 introduced that cannot round-
+#                 trip: F1 + 0x14/0x16 (memory-to-memory, both addresses
+#                 direct, 16-bit destination) printed `ld (8990:16), (4660)`,
+#                 which the assembler matches as the SOURCE-direct form.
+#                 Refused again; F0/F2 destinations stay decoded (sweep ASYM
+#                 42 -> 40).
+#
+# SOURCE RESPELL gated with the final pin:
+#   erp      9,929 lines, 170 files: stb_erp -> ldto_berp, ldb_erp ->
+#            ldfr_berp, stw_erp -> ldto_werp, ldw_erp -> ldfr_werp
+#            (wave3a_respell.py erp, each line old-binary e09c359a vs new-
+#            binary e325bcaa, 9,929/9,929 identical).  Many sites already
+#            carried a hand-written comment saying the true direction ("WA =
+#            QIZ", "ld a, izl") beside the backwards mnemonic.  FOIL: v10
+#            system_handlers.s `ldfr_werp WA, 0x30` -> `ldto_werp` -> v10
+#            "1 BYTES DIFFER".
+#
+# THE FINAL PIN, 4867e03232a6 / c949d618:
+#   * built from scratch twice from the clean committed tree: same sha.
+#     ⚠ An INCREMENTAL build of the same commit (bcb142d6ee97 was measured)
+#     gives a DIFFERENT sha -- same size, same function sizes, rodata shifted
+#     by 0x230 and two static-function TUs swapped, so the bytes differ while
+#     every lit test, the gate and the synthetic sweep are identical.  "The
+#     binary is deterministic" (UPDATE 15) holds for a relink of the same
+#     objects, not across incremental vs clean builds; pin the clean build.
+#   * llvm-lit TLCS900 (MC 36 + Disassembler 7 + CodeGen 51 + the ambiguity
+#     .td 1): 95/95 (was 87/87 at da00420dba8d: 8 new test files).  Ambiguity
+#     guard: 1 pair (LINK/LINK32r), unchanged.
+#   * make gate-all: 9/9 KN5000 IDENTICAL, 4/4 SX-WSA1R ok, 8/8 images
+#     assemble, prerequisite 8/8 + 4/4, every object rebuilt after the
+#     binary (notes/wave3a-toolchain-probes/out/gate_final_4867e03232a6.txt).
+#   * two-decoder sweep at the final pin (9,984 probes): AGREE 5,956,
+#     REG_DIFF 126, MNEM_DIFF 95, LEN_DIFF 0, LLVM_ONLY 36, MAME_ONLY 994,
+#     ASYM 40 (was 2,882 / 1,247 / 320 / 0 / 39 / 2,722 / 100 at da00420dba8d).
+#
+# ⚠ WHAT IS STILL FALSE OR UNSPELLABLE (found by the sweep and the respells,
+# NOT fixed here; out/two_decoder_sweep_disagreements_4867e03232a6.tsv lists
+# every probe):
+#   * MUL/DIV IMMEDIATE forms: MAME prints the prefix register (`c9 08 05` =
+#     mul A,0x05; `d8 08 05 00` = mul WA,0x0005) and so does this backend; ASL
+#     (Toshiba syntax) writes the RESULT register (`MUL WA,5`, `MUL XWA,5`).
+#     The references disagree; owner's call.  Same for MAME's `mul W,0x05`
+#     (even field): valid per MAME's ri decoder, `??` in its rr/mem decoders.
+#   * The rest of the ERP family (C7/D7/E7: addb_erp, cpib_erp, ldi_erpb, ...
+#     126 REG_DIFF rows) writes the register-file register as a raw number
+#     (`addb_erp w, 228` = add W,C); names are right, the operand unreadable.
+#     D7 with a register byte outside E2..FA (e.g. `d7 30 88`, ld WA,RWA3 --
+#     real code in the SLIDE decompressor) does not decode at all.
+#   * The E8+r (32-bit register) prefix DECODES instructions MAME says do not
+#     exist: tset/res/set/chg/bit/cpl/neg/daa/scc/djnz on a 32-bit register
+#     (36 LLVM_ONLY probes); 17 of them also do not re-encode.
+#   * Masked immediates: `c9 30 34` prints `res 20, a` (0x34 masked to its
+#     low bits), `06 34` prints `ei 4`, `c9 e8 34` prints `rlc a` -- texts that
+#     do not re-encode to their bytes (the UPDATE 15 "ei masking, rrc/rlc
+#     counts" class; garbage input, but the text is still false).
+#   * Destination 0x80-0x97 (ANDCF/ORCF/XORCF #n,(mem)) has no decode
+#     (MAME_ONLY); `f4 21 8d` = orcf 5,(-XWA2) in wsa1 prom_a stays .byte.
+#   * The codegen-only LD32mi keeps the encoding dst 0x08 + imm32 -- a store
+#     the CPU does not have (MAME `db`).  If isel ever selects it, clang emits
+#     an invalid instruction.  Not exercised by any CodeGen test.
+#   * clang in llvm-project/build/bin was last built 2026-04-19 and is NOT at
+#     any pin in this file; the C sources the gate compiles are data-only, and
+#     their bins are not rebuilt unless a .c/.h changes.  Rebuild clang at the
+#     pin before trusting any C-side result.
+#   * Pseudo mnemonics with correct meaning remain (ret_cc_ri, jp_24, call_24,
+#     jp_dd8, ex8/ex16, djnz8/16, unlk32, push_a/pop_a/push_f/pop_f/ex_ff,
+#     jp16/call16; ldb_sri0/ldw_sri0/ld_sril, whose 4 tree sites spelling a
+#     real +256 could now be `ld wa, (xde+256)`), and ~4,600 correctly-named
+#     direct-address pseudos (convert_direct_address_family.py --all).
+#   * `(xrr+d8)` with a raw byte 0x80..0xFF written positive still warns and
+#     takes d16 (UPDATE 11 policy; `(xrr+D:8)` now spells the d8 choice).
 

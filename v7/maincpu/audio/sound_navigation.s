@@ -24,11 +24,11 @@ MainGetSoundName:
 GetSoundName_BuildString:
 	ld	bc, 0:i3
 	call	DkMdlyPly_CheckState_Helper
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	ld	xwa, (xsp+20)
 	ldw	bc, 32
 	call	DkMdlyPly_CheckState_Helper
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	extz	hl
 	ld	bc, hl
@@ -170,7 +170,7 @@ Sound_Navigate_Init:
 
 	ld a, (xbc + 1)
 
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 
 	extz iz
 
@@ -192,7 +192,7 @@ Sound_Navigate_SearchLoop:
 	cpw (xsp + 8), 0x0
 	jr le, Sound_Navigate_AtBottom
 	ld wa, (xsp + 8)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld (xsp + 10), iz
 	ld hl, (xsp + 6)
 	cpiw_erp 0xfa, 0
@@ -201,7 +201,7 @@ Sound_Navigate_SearchLoop:
 Sound_Navigate_ScanBackward:
 	dec1w_erp 0xfa
 	ld wa, (xsp + 4)
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	calr GetSoundBankCount
 	ld wa, hl
 	inc 1, wa
@@ -211,7 +211,7 @@ Sound_Navigate_ScanBackward:
 	cpiw_erp 0xfa, 0
 	jr gt, Sound_Navigate_BackwardCheck
 	ld wa, (xsp + 8)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ldw (xsp + 10), 0x0
 	ld hl, (xsp + 6)
 	jr Sound_Navigate_UpdateState
@@ -233,7 +233,7 @@ Sound_Navigate_ScanForward:
 	cpw (xsp + 8), 0x11
 	jrl ge, Sound_Navigate_AtTop
 	ld wa, (xsp + 8)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld (xsp + 10), iz
 	ld hl, (xsp + 6)
 	cp_erpw 0xfa, 0x11, 0x00
@@ -244,14 +244,14 @@ Sound_Navigate_ForwardLoop:
 	inc 1, hl
 	sub (xsp + 10), hl
 	ld wa, (xsp + 4)
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	calr GetSoundBankCount
 	cp hl, 0xffff
 	jr nz, Sound_Navigate_ForwardCheck
 	cp_erpw 0xfa, 0x11, 0x00
 	jr lt, Sound_Navigate_ForwardCheck
 	ld wa, (xsp + 8)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld wa, (xsp + 6)
 	ld (xsp + 10), wa
 	ld hl, (xsp + 6)
@@ -264,7 +264,7 @@ Sound_Navigate_ForwardCheck:
 	jr lt, Sound_Navigate_ForwardLoop
 
 Sound_Navigate_UpdateState:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (xsp + 8), wa
 	ld iz, (xsp + 10)
 	ld (xsp + 6), hl
@@ -291,7 +291,7 @@ Sound_Navigate_ApplyChange:
 
 	extz bc
 
-	stb_erp E, 0xf8
+	ldto_berp E, 0xf8
 
 	extz de
 
@@ -307,7 +307,7 @@ Sound_Navigate_ApplyChange:
 
 	extz de
 
-	stb_erp C, 0xf8
+	ldto_berp C, 0xf8
 
 	extz bc
 
@@ -381,18 +381,18 @@ MainGetRhythmName:
 	jrl	nz, MainGetRhythmName_Return	; -> 0xF98C6F
 	ld	xwa, 163840
 	call	AcApcToggleProc_Helper
-	ldb_erp	l, 250
+	ldfr_berp	l, 250
 	ld	xwa, 163841
 	call	AcApcToggleProc_Helper
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	pushw	17
 	call	SLIDE_Decompress_4K_Init_Helper2
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	lda	xbc, (36942:16)
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	ld	(xbc), a
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	ld	(xbc+1), a
 	ld	(xbc+2), 72
 	push	xde
@@ -443,7 +443,7 @@ MainGetPmemName:
 	inc	4, xsp
 	ld	(xsp+6), xhl
 	call	BitMapOut_PrepareRender_CheckBit1
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	ld	xwa, 768
 	call	AcApcToggleProc_Helper
 	ld	xwa, (xsp+2)
@@ -460,7 +460,7 @@ MainGetPmemName:
 	ld	de, (xbc)
 	dec	1, de
 	srl	de, 3
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	cp	wa, de
 	jr	nz, MainGetPmemName_CalcOffset	; -> 0xF98CE3
@@ -474,7 +474,7 @@ MainGetPmemName_PageNotFirst:
 	jr MainGetPmemName_StoreResult
 
 MainGetPmemName_CalcOffset:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	sll a, 3
 	inc 1, a
 	extz wa

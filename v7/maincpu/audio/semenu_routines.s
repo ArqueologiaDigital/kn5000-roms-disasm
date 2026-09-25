@@ -388,7 +388,7 @@ SeMenu_RegisterParamDisplay_Data_Loop:
 	srl	wa, 8
 	ld	(xhl), a
 	lda	xde, (xhl+1)
-	stb_erp a, 248
+	ldto_berp a, 248
 	and a, 255
 	ld	(xde), a
 	lda	xwa, (xsp+2)
@@ -437,7 +437,7 @@ SeMenu_RegisterParamDisplay_Data_Loop2:
 	srl	wa, 8
 	ld	(xhl), a
 	lda	xde, (xhl+1)
-	stb_erp a, 248
+	ldto_berp a, 248
 	and a, 255
 	ld	(xde), a
 	lda	xwa, (xsp+2)
@@ -518,7 +518,7 @@ SeMenu_SetupDisplayObject_Data_Loop:
 	srl	wa, 8
 	ld	(xhl), a
 	lda	xde, (xhl+1)
-	stb_erp a, 248
+	ldto_berp a, 248
 	and a, 255
 	ld	(xde), a
 	lda	xwa, (xsp+2)
@@ -946,10 +946,10 @@ SeMenu_SetupMenuDisplay_Data:
 	ldib_erp 0xfb, 0
 
 SeMenu_SetupMenuDisplay_Data2:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	inc 1, a
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	lda xde, (xsp + 2)
 	exts xbc
@@ -976,10 +976,10 @@ SeMenu_SetupMenuDisplay_Section2_Loop:
 	jr nz, SeMenu_SetupMenuDisplay_Section3
 
 SeMenu_SetupMenuDisplay_Section2_End:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	inc 1, a
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	lda xde, (xsp + 2)
 	lda_dri XDE, 0x07, 0xe8, 0xe4
@@ -992,7 +992,7 @@ SeMenu_SetupMenuDisplay_Section2_End:
 	jr SeMenu_SetupMenuDisplay_Section3_Loop
 
 SeMenu_SetupMenuDisplay_Section3:
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	ld wa, de
 	muls wa, 0x15
@@ -1064,12 +1064,12 @@ SeMenu_ValidatePartNumber_CheckEnabled:
 	ldib_erp 0xfb, 1
 
 SeMenu_ValidatePartNumber_ScanLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr SeMenu_IsPartEnabled
 	cp hl, 0:i3
 	jr z, SeMenu_ValidatePartNumber_NextPart
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	jr SeMenu_ValidatePartNumber_Store
 
 SeMenu_ValidatePartNumber_NextPart:
@@ -1694,11 +1694,11 @@ SeMenu_ApplyPartEdit_Helper2:
 	jr	z, SeMenu_TransferPartValues_EndData_Epilogue
 	ld	a, (xsp+22)
 	inc	2, a
-	ldb_erp a, 251
+	ldfr_berp a, 251
 	ldw	wa, 127
 	ld	bc, 0:i3
 	calr	SeMenu_BitShiftMask
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	extz	hl
 	lda	xde, (xsp+5)
@@ -1914,8 +1914,8 @@ SeMenu_ApplyPartEdit_Helper4:
 	ld	c, (xsp+2)
 	extz	bc
 	calr	64149
-	ldb_erp l, 251
-	stb_erp a, 251
+	ldfr_berp l, 251
+	ldto_berp a, 251
 	and a, 3
 	.byte 0xc7
 	swi	2
@@ -1946,11 +1946,11 @@ SeMenu_TransferPartValues_EndData_Join7:
 	extz	bc
 	ld	wa, 3:i3
 	calr	SeMenu_BitShiftMask
-	ldb_erp l, 251
-	stb_erp a, 251
+	ldfr_berp l, 251
+	ldto_berp a, 251
 	cpl	a
 	and	(xsp+8), a
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
@@ -1958,7 +1958,7 @@ SeMenu_TransferPartValues_EndData_Join7:
 	or	(xsp+8), l
 	ld	c, (xsp+6)
 	extz	bc
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	lda	xde, (xsp+8)
 	.byte 0x8f, 0x04
@@ -2045,7 +2045,7 @@ SeMenu_CheckObjValid:
 SeMenu_FillEntryTable:
 	lda xhl, (0x020c33:24)
 	ld c, (xhl + 3)
-	ldb_erp C, 0xe6
+	ldfr_berp C, 0xe6
 	ldib_erp 0xea, 0
 	cpib_erp 0xe6, 0
 	ret ule
@@ -2060,7 +2060,7 @@ SeMenu_FillEntryTable_Loop:
 	stb_dri C, 0x07, 0xe0, 0xf0
 	inc1b_erp 0xea
 	inc 1, de
-	stb_erp C, 0xea
+	ldto_berp C, 0xea
 	cpb_erp C, 0xe6
 	jr c, SeMenu_FillEntryTable_Loop
 	ret
@@ -2290,7 +2290,7 @@ SeMenu_SetupPartDisplay_End_Join:
 	call	0xfee01b
 	lda	xbc, (xsp+8)
 	ld	a, (xbc)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld	a, (xbc+1)
 	ld	(xsp+2), a
 	cp_erpb	251, 16
@@ -2317,7 +2317,7 @@ SeMenu_SetupPartDisplay_End_Join2:
 	ld	xwa, (xsp+14)
 	ld	c, (xsp+2)
 	ld	(xwa), c
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	mul	c, 20
 	add	(xwa), c
 	ld	(0x6ad), (xwa)
@@ -2451,12 +2451,12 @@ SeMenu_ApplyPartEdit_Helper5_Skip4:
 	cpib_erp	250, 1
 	jr	c, SeMenu_ApplyPartEdit_Helper5_Skip6
 SeMenu_ApplyPartEdit_Helper5_Loop:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	SeMenu_IsPartEnabled
 	cp	hl, 0:i3
 	jr	z, SeMenu_ApplyPartEdit_Helper5_Skip5
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	calr	SeMenu_SetupMenuDisplay_Finalize_Data
 	ld	a, (xsp+6)
@@ -2465,7 +2465,7 @@ SeMenu_ApplyPartEdit_Helper5_Loop:
 	jr	SeMenu_ApplyPartEdit_Helper5_Join2
 SeMenu_ApplyPartEdit_Helper5_Skip5:
 	inc1b_erp	251
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	cpb_erp	a, 250
 	jr	ule, SeMenu_ApplyPartEdit_Helper5_Loop
 SeMenu_ApplyPartEdit_Helper5_Skip6:
@@ -2557,13 +2557,13 @@ SeMenu_ApplyPartEdit_End:
 	extz bc
 	ld wa, 3:i3
 	calr SeMenu_BitShiftMask
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld a, (xsp + 2)
 	extz wa
 	lda xbc, (xsp + 11)
 	calr SeMenu_LoadPartParam
 	lda xde, (xsp + 11)
-	stb_erp L, 0xfb
+	ldto_berp L, 0xfb
 	cpl l
 	ld c, (xde)
 	and c, l
@@ -3001,7 +3001,7 @@ SeMenu_ApplyPartEdit_Epilogue4:
 	ld	(xwa+8), 50
 	ld	(xwa+9), 206
 	ld	a, (xsp+20)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	jr	SeMenu_ApplyPartEdit_Join3
 SeMenu_ApplyPartEdit_Skip5:
 	ldib_erp	250, 5
@@ -3013,17 +3013,17 @@ SeMenu_ApplyPartEdit_Skip5:
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0
 	ld	a, (xsp+18)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 SeMenu_ApplyPartEdit_Join3:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
 	calr	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 250
+	ldto_berp	c, 250
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	pushw	wa
 	lda	xwa, (xsp+4)
@@ -3096,7 +3096,7 @@ SeMenu_ApplyPartEdit_Epilogue5:
 	ld	(xwa+8), 50
 	ld	(xwa+9), 206
 	ld	a, (xsp+20)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	jr	SeMenu_ApplyPartEdit_Join4
 SeMenu_ApplyPartEdit_Skip6:
 	ldib_erp	250, 7
@@ -3108,17 +3108,17 @@ SeMenu_ApplyPartEdit_Skip6:
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0
 	ld	a, (xsp+18)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 SeMenu_ApplyPartEdit_Join4:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
 	calr	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 250
+	ldto_berp	c, 250
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	pushw	wa
 	lda	xwa, (xsp+4)
@@ -3191,7 +3191,7 @@ SeMenu_ApplyPartEdit_Epilogue6:
 	ld	(xwa+8), 50
 	ld	(xwa+9), 206
 	ld	a, (xsp+20)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	jr	SeMenu_ApplyPartEdit_Join5
 SeMenu_ApplyPartEdit_Skip7:
 	ldi_erpb	250, 9
@@ -3203,17 +3203,17 @@ SeMenu_ApplyPartEdit_Skip7:
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0
 	ld	a, (xsp+18)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 SeMenu_ApplyPartEdit_Join5:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
 	calr	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 250
+	ldto_berp	c, 250
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	pushw	wa
 	lda	xwa, (xsp+4)
@@ -3495,7 +3495,7 @@ SeMenu_ApplyPartEdit_Join6:
 	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+18)
 	ld	a, (xbc)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	extz	wa
 	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
@@ -3520,12 +3520,12 @@ SeMenu_ApplyPartEdit_Join7:
 	calr	SeMenu_TransferPartValues_EndData_Helper
 	cp	l, 0:i3
 	jr	z, SeMenu_ApplyPartEdit_Epilogue7
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	ld	c, (xsp+5)
 	extz	bc
 	calr	SeMenu_StorePartParam
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	.byte 0x8f, 0x16, 0x3f, 0x02
 	jr	nz, SeMenu_ApplyPartEdit_Entry4
@@ -3754,7 +3754,7 @@ SeMenu_ApplyPartEdit_Join14:
 	div	wa, 100
 	ld	qiz, wa
 	ld	e, (xbc+4)
-	ldb_erp	e, 248
+	ldfr_berp	e, 248
 	extz	iz
 	ld	wa, qiz
 	.byte 0x9f, 0x0a, 0xf0
@@ -5291,7 +5291,7 @@ SeMenu_ApplyPartEdit_Join35:
 	ldw (XSP+0x0a), 0x001a
 	.byte 0x9f, 0x0a, 0x38, 0x4d, 0x00
 	ld	a, (xsp+24)
-	ldb_erp	a, 248
+	ldfr_berp	a, 248
 	extz	iz
 	add	iz, 86
 	ld	a, (xsp+20)
@@ -5459,10 +5459,10 @@ SeMenu_ProcessEffect:
 	jr SeMenu_ProcessEffect_CompareLoop
 
 SeMenu_ProcessEffect_StoreLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	add a, 0x12
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	inc 3, c
 	extz bc
 	ldb_sri C, 0x07, 0xe8, 0xe4
@@ -5474,7 +5474,7 @@ SeMenu_ProcessEffect_StoreLoop:
 
 SeMenu_ProcessEffect_CompareLoop:
 	lda xde, (xsp + 2)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	cp a, (xde + 2)
 	jr c, SeMenu_ProcessEffect_StoreLoop
 
@@ -5512,10 +5512,10 @@ SeMenu_ProcessEffect_AltStore:
 	jr SeMenu_ProcessEffect_AltData2
 
 SeMenu_ProcessEffect_AltData:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	add a, 0x11
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	inc 3, c
 	extz bc
 	ldb_sri C, 0x07, 0xe8, 0xe4
@@ -5527,7 +5527,7 @@ SeMenu_ProcessEffect_AltData:
 
 SeMenu_ProcessEffect_AltData2:
 	lda xde, (xsp + 2)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	cp a, (xde + 2)
 	jr c, SeMenu_ProcessEffect_AltData
 
@@ -5545,10 +5545,10 @@ SeMenu_ProcessEffect_AltEnd:
 	jr SeMenu_ProcessEffect_Section2_End
 
 SeMenu_ProcessEffect_Section2:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	add a, 0xc
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	inc 3, c
 	extz bc
 	ldb_sri C, 0x07, 0xe8, 0xe4
@@ -5560,7 +5560,7 @@ SeMenu_ProcessEffect_Section2:
 
 SeMenu_ProcessEffect_Section2_End:
 	lda xde, (xsp + 2)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	cp a, (xde + 2)
 	jr c, SeMenu_ProcessEffect_Section2
 
@@ -6310,19 +6310,19 @@ SeMenu_StoreEffectCoeff_Data_Loop2:
 	extz	hl
 	lda_rr xiy, xde, hl
 	ld	a, (xiy)
-	ldb_erp	a, 238
+	ldfr_berp	a, 238
 	lda	xwa, (xsp+26)
 	lda_rr xix, xwa, hl
 	ld w, (xix)
 	sla	w, 1
-	stb_erp a, 238
+	ldto_berp a, 238
 	add	a, w
-	ldb_erp a, 238
-	ldb_erp a, 238
+	ldfr_berp a, 238
+	ldfr_berp a, 238
 	ld	(xiy), a
 	lda	xwa, (xsp+22)
 	ld_rrb l, xwa, hl
-	stb_erp a, 238
+	ldto_berp a, 238
 	cp	a, l
 	jr	ule, SeMenu_StoreEffectCoeff_Data_Join
 	.byte 0x84
@@ -6512,9 +6512,9 @@ SeMenu_RefreshPartDisplay_Data:
 	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+14)
 	mul	a, 3
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	decb_erp	251, 2
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -6527,7 +6527,7 @@ SeMenu_RefreshPartDisplay_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -6548,9 +6548,9 @@ SeMenu_RefreshPartDisplay_Data:
 	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+14)
 	mul	a, 3
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	dec1b_erp	251
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -6563,7 +6563,7 @@ SeMenu_RefreshPartDisplay_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -6584,7 +6584,7 @@ SeMenu_RefreshPartDisplay_Data:
 	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+14)
 	mul	a, 3
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -6597,7 +6597,7 @@ SeMenu_RefreshPartDisplay_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_ApplyPartEdit_Helper5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de

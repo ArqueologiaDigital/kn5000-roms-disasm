@@ -87,7 +87,7 @@ AcApcToggleProc_Helper_Join:
 	inc	3, wa
 	extz	xwa
 	div	wa, 0x7ff
-	stw_erp	IX, 0xe2
+	ldto_werp	IX, 0xe2
 ; (v7 label .Lc_fccce0 stood here; dropped, see the file header)
 AcApcToggleProc_Helper_Join2:
 	ld	bc, ix

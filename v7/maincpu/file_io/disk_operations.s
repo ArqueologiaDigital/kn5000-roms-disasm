@@ -720,7 +720,7 @@ FmmLoadTtl_LoadSlots:
 	ld	(35180:16), 0
 	ld	iz, 0:i3
 FmmLoadTtl_SlotLoop:
-	stb_erp	a, 248
+	ldto_berp	a, 248
 	extz	wa
 	call	FileIO_FormatName_Loop
 	inc	1, iz
@@ -795,7 +795,7 @@ FmmSaveTtl_CheckFont:
 	jr	z, FmmSaveTtl_CommitSave
 	ld	iz, 0:i3
 FmmSaveTtl_SlotLoop:
-	stb_erp	a, 248
+	ldto_berp	a, 248
 	extz	wa
 	call	FileIO_BuildRecordPath_Done
 	inc	1, iz

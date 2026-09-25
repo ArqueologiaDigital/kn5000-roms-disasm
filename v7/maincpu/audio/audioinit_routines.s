@@ -675,7 +675,7 @@ AudioInit_ProcessVoiceAssign_Code_Loop:
 	extz	xwa
 	add	xwa, xix
 	ld	a, (xwa)
-	ldb_erp	A, 0xe2
+	ldfr_berp	A, 0xe2
 	jr	AudioInit_CheckVoiceChanged
 AudioInit_VoiceNotAssigned:
 	ldi_erpb	0xe2, 0xff
@@ -861,7 +861,7 @@ AudioInit_StoreChannelMapping:
 	ld	iy, wa
 	extz	xiy
 	add	xiy, xix
-	stb_erp	A, 0xe2
+	ldto_berp	A, 0xe2
 	ld	(xiy), a
 AudioInit_CheckGroupB_Channel:
 	ld	wa, (0xc4fc:16)
@@ -1603,7 +1603,7 @@ AudioInit_PartCompare_Loop:
 	ld	a, (xwa)
 	cp	a, (xde)
 	jr	z, AudioInit_PartCompare_SameVoice
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	l, a
 	extz	hl
 	ld	wa, iz
@@ -1647,7 +1647,7 @@ AudioInit_PartCompare_SameVoice:
 	scc8	c, a
 	cp	a, e
 	jr	z, AudioInit_PartCompare_Next
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	e, a
 	extz	de
 	ld	wa, iz
@@ -1891,7 +1891,7 @@ AudioInit_ChannelMap_Loop:
 	ld	a, (xwa)
 	cp	a, (xde)
 	jr	z, 45
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	l, a
 	extz	hl
 	ld	wa, iz
@@ -1962,7 +1962,7 @@ AudioInit_Priority_Loop:
 	ld	a, (xwa)
 	cp	a, (xde)
 	jr	z, AudioInit_Priority_Next
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	l, a
 	extz	hl
 	ld	wa, iz
@@ -2046,7 +2046,7 @@ AudioInit_PartAssign_CheckIdx16:
 	cp	(0xc385:16), 22
 	jr	nz, AudioInit_PartAssign_Next
 AudioInit_PartAssign_QueueChange:
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	l, a
 	extz	hl
 	ld	wa, iz
@@ -2091,7 +2091,7 @@ AudioInit_PartConfig_Loop:
 	ld	a, (xwa)
 	cp	a, (xde)
 	jr	z, AudioInit_PartConfig_SameVoice
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	l, a
 	extz	hl
 	ld	wa, iz
@@ -2138,7 +2138,7 @@ AudioInit_PartConfig_SameVoice:
 	scc8	c, a
 	cp	a, e
 	jr	z, AudioInit_PartConfig_Next
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	e, a
 	extz	de
 	ld	a, (0xc220:16)
@@ -2178,7 +2178,7 @@ AudioInit_PartConfig_CheckCarry:
 	scc8	c, a
 	cp	a, e
 	jr	z, AudioInit_PartConfig_Next
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	e, a
 	extz	de
 	ld	wa, iz
@@ -2217,7 +2217,7 @@ AudioInit_ChannelConfig_Loop:
 	ld	a, (xwa)
 	cp	a, (xde)
 	jr	z, AudioInit_ChannelConfig_Next
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	l, a
 	extz	hl
 	ld	wa, iz
@@ -2262,7 +2262,7 @@ AudioInit_Volume_Loop:
 	ld	a, (xwa)
 	cp	a, (xde)
 	jr	z, AudioInit_Volume_Next
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	l, a
 	extz	hl
 	ld	wa, iz

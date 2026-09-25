@@ -769,9 +769,9 @@ TONE_GEN_CHANNEL_INIT:
 	jr nz, TONE_GEN_CHANNEL_INIT__done	; Skip if memory not 0xFFFF (already initialized)
 	ldib_erp 0xFB, 0	; Clear loop counter (QIZH = 0)
 TONE_GEN_CHANNEL_INIT__loop:
-	stb_erp A, 0xFB	; A = loop counter (QIZH)
+	ldto_berp A, 0xFB	; A = loop counter (QIZH)
 	extz wa	; Zero-extend A to WA
-	stb_erp C, 0xFB	; C = loop counter (QIZH)
+	ldto_berp C, 0xFB	; C = loop counter (QIZH)
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; BC <<= 2 (multiply by 4 for table index)
 	lda xde, (ToneGen_ChannelInit_Config:24); XDE = pointer to channel config table
@@ -797,7 +797,7 @@ COPY_VECTORS:
 	mrib2 0x83, 0x11	; Block copy (TMP94C241 encoding)
 	cpiw_erp 0xE6, 0
 	jr z, COPY_VECTORS__done
-	stw_erp WA, 0xE6
+	ldto_werp WA, 0xE6
 COPY_VECTORS__copy_rest:
 	mrib2 0x83, 0x11	; TMP94C241 encoding
 	djnz xwa, COPY_VECTORS__copy_rest
@@ -962,7 +962,7 @@ WRITE_TONE_REG_SINGLE_CHANNEL:
 	ld (xiy + 2), b	; Write B
 	inc 1, a
 	ld (xiy), a
-	stw_erp BC, 0xE6	; ld BC, QBC (high word of XBC)
+	ldto_werp BC, 0xE6	; ld BC, QBC (high word of XBC)
 	ld (xiy + 2), c
 	inc 1, a
 	ld (xiy), a
@@ -975,7 +975,7 @@ WRITE_TONE_REG_SINGLE_CHANNEL:
 	ld (xiy + 2), d	; Write D
 	inc 1, a
 	ld (xiy), a
-	stw_erp BC, 0xEA	; ld BC, QDE (high word of XDE)
+	ldto_werp BC, 0xEA	; ld BC, QDE (high word of XDE)
 	ld (xiy + 2), c
 	inc 1, a
 	ld (xiy), a
@@ -1156,7 +1156,7 @@ SendData_Chunked__chunk_loop:
 SendData_Chunked__send_final:
 	mrdb3 0x8F, 0x06, 0x21	; A = channel/command
 	extpfx2 0xD8, 0x12	; Zero-extend A to WA
-	stb_erp C, 0xF8	; C = remaining count (low byte)
+	ldto_berp C, 0xF8	; C = remaining count (low byte)
 	extpfx2 0xD9, 0x12	; Zero-extend C to BC
 	mrdl3 0xAF, 0x02, 0x22	; XDE = current source address
 	calr SendData_Block	; Send final chunk
@@ -1899,7 +1899,7 @@ ROM_CHECKSUM__word_loop:
 	add bc, bc	; Bank offset
 	lda_dri XDE, 0x07, 0xF0, 0xE4
 	ld bc, (xde)	; Get current sum
-	ldw_erp BC, 0xE2
+	ldfr_werp BC, 0xE2
 	ld BC, (xiy+)	; Read word from ROM
 	addw_erp BC, 0xE2	; Add to sum
 	ld (xde), bc	; Store result
@@ -1958,9 +1958,9 @@ SERIAL_INIT:
 	ld xbc, xwa
 	lda xde, (xwa + 8)
 SERIAL_INIT__check_loop:
-	stb_erp A, 0xFB
+	ldto_berp A, 0xFB
 	or A, (xbc+)	; OR all status bytes
-	ldb_erp A, 0xFB
+	ldfr_berp A, 0xFB
 	cp xbc, xde
 	jr c, SERIAL_INIT__check_loop
 	cpib_erp 0xFB, 0

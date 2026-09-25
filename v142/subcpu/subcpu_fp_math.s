@@ -657,12 +657,12 @@ FP_sin_Epilog:
 ; result in XHL. Three `mul` instructions plus the cross-term adds; no rounding, no
 ; exponent handling - this is an integer helper, not floating point.
 FP_MulAccum64:
-	stw_erp HL, 0xE2
+	ldto_werp HL, 0xE2
 	mul xhl, bc
-	stw_erp DE, 0xE6
+	ldto_werp DE, 0xE6
 	mul xde, wa
 	add xhl, xde
-	ldw_erp HL, 0xEE
+	ldfr_werp HL, 0xEE
 	ld hl, 0:i3
 	mul xwa, bc
 	add xhl, xwa
@@ -1128,19 +1128,19 @@ FP_UnsignedDiv:
 	ld xhl, 0:i3
 	ld xde, xhl
 	ld hl, wa
-	stw_erp DE, 0xE2
+	ldto_werp DE, 0xE2
 	ret
 
 ; Hardware `div` overflowed: redo it as two 16-bit-at-a-time divisions.
 FP_UnsignedDiv_Overflow:
-	stw_erp WA, 0xEA
+	ldto_werp WA, 0xEA
 	extz xwa
 	div xwa, bc
-	ldw_erp WA, 0xEE
+	ldfr_werp WA, 0xEE
 	ld wa, de
 	div xwa, bc
 	ld hl, wa
-	stw_erp DE, 0xE2
+	ldto_werp DE, 0xE2
 	extz xde
 	ret
 
@@ -1494,7 +1494,7 @@ FP_DP_NormCore_ShiftLeft:
 	sub a, l
 	cp a, 0x10
 	jr lt, FP_DP_NormCore_ShiftLeftLoop
-	ldw_erp BC, 0xE6
+	ldfr_werp BC, 0xE6
 	ld bc, 0:i3
 	sub a, 0x10
 	jr z, FP_DP_NormCore_StoreResult
@@ -1547,7 +1547,7 @@ FP_DP_ShiftDecode_ShiftRight:
 	sub a, e
 	cp a, 0x10
 	jr lt, FP_DP_ShiftDecode_ShiftRightLoop
-	stw_erp IX, 0xF2
+	ldto_werp IX, 0xF2
 	extz xix
 	sub a, 0x10
 	jr z, FP_DP_ShiftDecode_SignCorrect
@@ -1658,7 +1658,7 @@ FP_DP_Decode:
 	ld xhl, 0:i3
 	ld xde, (xbc)
 	ld xbc, (xbc + 4)
-	stw_erp HL, 0xE6
+	ldto_werp HL, 0xE6
 	and_erpw 0xE6, 0x0F, 0x00
 	extpfx3 0xDB, 0x23, 0x0F
 	stcf_erpw 0xEE, 0x0F
@@ -1668,7 +1668,7 @@ FP_DP_Decode:
 	sub hl, 0x3FF
 	set_erpw 0xE6, 0x04
 	ld (xwa), xhl
-	stb_erp L, 0xEE
+	ldto_berp L, 0xEE
 	ld (xwa + 4), xde
 	ld (xwa + 8), xbc
 	ret
@@ -1685,7 +1685,7 @@ FP_DP_Decode_Zero:
 FP_SP_Decode:
 	ld xhl, 0:i3
 	ld xix, (xbc)
-	stw_erp DE, 0xF2
+	ldto_werp DE, 0xF2
 	extpfx3 0xDA, 0x23, 0x0F
 	stcf_erpw 0xEE, 0x0F
 	ld hl, de
@@ -1696,14 +1696,14 @@ FP_SP_Decode:
 	jr z, FP_SP_Decode_Zero
 	and de, 0x7F
 	set 7, de
-	ldw_erp DE, 0xF2
+	ldfr_werp DE, 0xF2
 	sub hl, 0x7F
 
 ; Store exponent and mantissa into the record; return the special flag in L.
 FP_SP_Decode_Store:
 	ld (xwa), xhl
 	ld (xwa + 4), xix
-	stb_erp L, 0xEE
+	ldto_berp L, 0xEE
 	ret
 
 ; Zero input: mantissa 0, zero flag 1.
@@ -1775,7 +1775,7 @@ FP_SP_NormCore_ShiftLeft:
 	sub a, l
 	cp a, 0x10
 	jr lt, FP_SP_NormCore_ShiftLeftLoop
-	ldw_erp BC, 0xE6
+	ldfr_werp BC, 0xE6
 	ld bc, 0:i3
 	sub a, 0x10
 	jr z, FP_SP_NormCore_StoreResult
@@ -1814,7 +1814,7 @@ FP_DP_Encode:
 	sll hl, 4
 	or_erpb_rr H, 0xEF
 	or_erpw_rr HL, 0xF2
-	ldw_erp HL, 0xF2
+	ldfr_werp HL, 0xF2
 
 ; Write the packed 8 bytes to *XWA.
 FP_DP_Encode_Store:
@@ -1841,9 +1841,9 @@ FP_DP_Encode_Overflow:
 	dec 1, xde
 	ld (xwa), xde
 	ld xde, 0x7FEFFFFF
-	stb_erp C, 0xEF
+	ldto_berp C, 0xEF
 	orb_erp C, 0xEB
-	ldb_erp C, 0xEB
+	ldfr_berp C, 0xEB
 	ld (xwa + 4), xde
 	jr __jrt_nop_03E0A5
 __jrt_nop_03E0A5:
@@ -1878,18 +1878,18 @@ FP_SP_Encode:
 	cp hl, 0xFF82
 	jr lt, FP_SP_Encode_Zero
 	add hl, 0x7F
-	stw_erp BC, 0xEA
+	ldto_werp BC, 0xEA
 	res 7, bc
 	sll hl, 7
 	or_erpb_rr H, 0xEF
 	or hl, bc
-	ldw_erp HL, 0xEA
+	ldfr_werp HL, 0xEA
 	ld (xwa), xde
 	ret
 
 ; Special flag 8 (NaN/overflow marker) -> the overflow store; anything else -> zero.
 FP_SP_Encode_NaN:
-	stb_erp E, 0xEE
+	ldto_berp E, 0xEE
 	cp e, 0x8
 	jr nz, FP_SP_Encode_Zero
 	ld xde, 0:i3
@@ -1906,7 +1906,7 @@ FP_SP_Encode_Overflow:
 	ldw de, 0xFFFF
 	ldw bc, 0x7F7F
 	or_erpb_rr B, 0xEF
-	ldw_erp BC, 0xEA
+	ldfr_werp BC, 0xEA
 
 ; errno = ERANGE, store the saturated value, then the same indirect hook call through
 ; the pointer at 0x00F428.
@@ -2264,9 +2264,9 @@ FP_DP_AlignMantissa_Shift:
 FP_DP_AlignMantissa_Shift16:
 	cp ix, 0x10
 	jr lt, FP_DP_AlignMantissa_Shift8
-	stw_erp DE, 0xEA
-	ldw_erp HL, 0xEA
-	stw_erp HL, 0xEE
+	ldto_werp DE, 0xEA
+	ldfr_werp HL, 0xEA
+	ldto_werp HL, 0xEE
 	ldiw_erp 0xEE, 0
 	sub ix, 0x10
 	jr z, FP_DP_AlignMantissa_Round
@@ -2276,7 +2276,7 @@ FP_DP_AlignMantissa_Shift8:
 	cp ix, 0x8
 	jr lt, FP_DP_AlignMantissa_ShiftBit
 	srl xde, 8
-	ldb_erp L, 0xEB
+	ldfr_berp L, 0xEB
 	srl xhl, 8
 	sub ix, 0x8
 	jr z, FP_DP_AlignMantissa_Round
@@ -2292,7 +2292,7 @@ FP_DP_AlignMantissa_ShiftBit:
 FP_DP_AlignMantissa_Round:
 	ld c, e
 	srl xde, 8
-	ldb_erp L, 0xEB
+	ldfr_berp L, 0xEB
 	srl xhl, 8
 	cp c, 0x80
 	jr c, FP_DP_AlignMantissa_Store
@@ -2411,7 +2411,7 @@ FP_DP_MulMantissaCore:
 	ld xiy, (xwa + 8)
 	ld xix, (xwa + 4)
 	ld c, 0x8:opc
-	stb_erp B, 0xEF
+	ldto_berp B, 0xEF
 	ld xiz, 0:i3
 	call FP_Div_Step_Bit3
 	ld (xsp), xiz
@@ -2434,8 +2434,8 @@ FP_DP_MulMantissaCore_Round:
 	ld bc, ix
 	srl bc, 3
 	srl xix, 8
-	stb_erp E, 0xF4
-	ldb_erp E, 0xF3
+	ldto_berp E, 0xF4
+	ldfr_berp E, 0xF3
 	srl xiy, 8
 	srl xiy, 1
 	extpfx3 0xDC, 0x24, 0x00
@@ -2614,9 +2614,9 @@ FP_DP_SubMantissa_Normalize:
 FP_DP_SubMantissa_NormLoop:
 	bs1b_erpw 0xEE
 	jr nov, FP_DP_SubMantissa_Shift
-	ldw_erp HL, 0xEE
-	stw_erp HL, 0xEA
-	ldw_erp DE, 0xEA
+	ldfr_werp HL, 0xEE
+	ldto_werp HL, 0xEA
+	ldfr_werp DE, 0xEA
 	ld de, 0:i3
 	sub ix, 0x10
 	jr FP_DP_SubMantissa_NormLoop
@@ -2631,7 +2631,7 @@ FP_DP_SubMantissa_Shift:
 	cp a, 0x8
 	jr lt, FP_DP_SubMantissa_ShiftBit
 	srl xde, 8
-	ldb_erp L, 0xEB
+	ldfr_berp L, 0xEB
 	srl xhl, 8
 	dec 8, a
 	jr z, FP_DP_SubMantissa_StoreExp
@@ -3090,7 +3090,7 @@ FP_trunc_BlendLoop:
 	divs iy, 0x8
 	exts xwa
 	divs wa, 0x8
-	stw_erp WA, 0xE2
+	ldto_werp WA, 0xE2
 	ld (xsp + 6), wa
 	lda xhl, (xsp + 16)
 	lda xix, (xsp + 8)
@@ -3270,7 +3270,7 @@ FP_SP_DecodeToInt_ShiftRight:
 	sub a, e
 	cp a, 0x10
 	jr lt, FP_SP_DecodeToInt_ShiftRightLoop
-	stw_erp IY, 0xF6
+	ldto_werp IY, 0xF6
 	extz xiy
 	sub a, 0x10
 	jr z, FP_SP_DecodeToInt_SignCorrect
@@ -3377,7 +3377,7 @@ FP_ldexp_NibbleAdjust:
 	inc 6, xwa
 	ld (xsp + 6), xwa
 	ld a, (xwa)
-	ldb_erp A, 0xE2
+	ldfr_berp A, 0xE2
 	and a, 0xF0
 	extz wa
 	ld iy, wa
@@ -3452,7 +3452,7 @@ FP_ldexp_DecStep:
 ; Reassemble the exponent nibbles with the retained top mantissa nibble.
 FP_ldexp_StoreResult:
 	sll iy, 4
-	stb_erp C, 0xE2
+	ldto_berp C, 0xE2
 	and c, 0xF
 	extz bc
 	ld wa, iy
@@ -3498,7 +3498,7 @@ FP_DP_MulAdd:
 	lda xsp, (xsp - 16)
 	ld xhl, (xbc)
 	add (xwa + 0:8), hl
-	stb_erp L, 0xEF
+	ldto_berp L, 0xEF
 	xor (xwa + 3), l
 	ld xhl, (xwa + 4)
 	ld xiy, (xbc + 4)
@@ -3546,8 +3546,8 @@ FP_DP_MulAdd_Sum2:
 
 ; Shift the product down to 53 bits and round to nearest, re-normalising on carry.
 FP_DP_MulAdd_Round:
-	stb_erp C, 0xF1
-	stb_erp B, 0xEB
+	ldto_berp C, 0xF1
+	ldto_berp B, 0xEB
 	srl c, 4
 	srl b, 4
 	sll xhl, 4
@@ -3585,13 +3585,13 @@ FP_SP_MulAdd:
 	ld xiz, xwa
 	ld xhl, (xbc)
 	add (xwa + 0:8), hl
-	stb_erp L, 0xEF
+	ldto_berp L, 0xEF
 	xor (xwa + 3), l
 	ld xwa, (xwa + 4)
 	ld xbc, (xbc + 4)
-	stw_erp DE, 0xE2
+	ldto_werp DE, 0xE2
 	ld hl, de
-	stw_erp IX, 0xE6
+	ldto_werp IX, 0xE6
 	mul xde, ix
 	mul xhl, bc
 	mul xix, wa
@@ -3599,7 +3599,7 @@ FP_SP_MulAdd:
 	add xhl, xix
 	ex_erpw_rr DE, 0xEA
 	add xde, xhl
-	stw_erp HL, 0xE2
+	ldto_werp HL, 0xE2
 	extz xhl
 	add xde, xhl
 	bit_erpw 0xEA, 0x0F
@@ -3635,9 +3635,9 @@ FP_SP_MulAdd_Store:
 ; per double multiply by FP_DP_MulAdd. Name is accurate about intent though the operand
 ; width is 32, not 64.
 FP_MulMantissa64x64:
-	stw_erp DE, 0xEE
+	ldto_werp DE, 0xEE
 	ld ix, de
-	stw_erp IZ, 0xF6
+	ldto_werp IZ, 0xF6
 	mul xde, iz
 	mul xix, iy
 	mul xiz, hl

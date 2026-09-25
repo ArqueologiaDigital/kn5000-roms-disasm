@@ -134,21 +134,21 @@ FDemoText_ProcessVoiceFlags_CheckBits:
 	ldib_erp 0xfb, 0
 
 FDemoText_ProbeVoice_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
-	ldb_erp C, 0xfa
+	ldfr_berp C, 0xfa
 	calr FDemoText_CheckVoiceState
 	cp l, 1:i3
 	jr z, FDemoText_ProbeVoice_SetActive
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	cpl a
 	and (0x0247ee:24), a
 	jr FDemoText_ProbeVoice_ClearActive
 
 FDemoText_ProbeVoice_SetActive:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	or (0x0247ee:24), a
 
 FDemoText_ProbeVoice_ClearActive:
@@ -160,7 +160,7 @@ FDemoText_ProcessChannels:
 	ldib_erp 0xfb, 0
 
 FDemoText_ProcessChannels_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
@@ -174,20 +174,20 @@ FDemoText_ProcessChannels_Loop:
 	calr FDemoText_CheckVoiceState
 	cp l, 1:i3
 	jr nz, FDemoText_ProcessChannel_Activate
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDemoText_ActivateVoice
 	jr FDemoText_ProcessChannel_CheckMask
 
 FDemoText_ProcessChannel_Activate:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDemoText_DeactivateVoice
 	jr FDemoText_ProcessChannel_CheckMask
 
 FDemoText_ProcessChannel_CheckNoFlag:
 	calr FDemoText_CheckVoiceState
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	cp l, 1:i3
 	jr nz, FDemoText_ProcessChannel_Deactivate
@@ -198,7 +198,7 @@ FDemoText_ProcessChannel_Deactivate:
 	calr FDemoText_DeactivateVoice_RetOnly
 
 FDemoText_ProcessChannel_CheckMask:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
@@ -214,7 +214,7 @@ FDemoText_ProcessOutputChannels:
 	ld c, (0x0247ec:24)
 	bit 6, c
 	jr z, FDemoText_ProcessOutput_CheckFlags
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	lda xwa, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri A, 0x07, 0xe0, 0xe8
@@ -224,7 +224,7 @@ FDemoText_ProcessOutputChannels:
 	ld (0x0247ec:24), c
 
 FDemoText_ProcessOutput_CheckFlags:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
@@ -358,10 +358,10 @@ FDemoText_SyncVoicePreset:
 	ldib_erp 0xfb, 0
 
 FDemoText_SyncPreset_ActiveLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDemoText_CheckVoiceState
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	cp l, 1:i3
 	jr nz, FDemoText_SyncPreset_CallUpdate
@@ -388,7 +388,7 @@ FDemoText_SyncPreset_DirectCopy:
 	ldib_erp 0xfb, 0
 
 FDemoText_SyncPreset_DirectLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	calr FDemoText_UpdateChannelVoice
 	inc1b_erp 0xfb
@@ -654,7 +654,7 @@ FDemoText_SendVoiceParams:
 
 FDemoText_SendParams_NoteLoop:
 	lda xde, (xsp + 6)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	ld (xde + 2), a
 	ld xwa, (xsp + 2)
 	ld a, (xwa)
@@ -678,7 +678,7 @@ FDemoText_SendParams_NoteLoop:
 
 FDemoText_SendParams_LevelLoop:
 	lda xde, (xsp + 6)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	ld (xde + 2), a
 	ld xwa, (xsp + 2)
 	ld a, (xwa)
@@ -727,7 +727,7 @@ FDemoText_SendExtVoiceParams:
 
 FDemoText_SendExtParams_NoteLoop:
 	lda xde, (xsp + 16)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	ld (xde + 2), a
 	ld xwa, (xsp + 2)
 	ld a, (xwa)
@@ -744,7 +744,7 @@ FDemoText_SendExtParams_NoteLoop:
 
 FDemoText_SendExtParams_LevelLoop:
 	lda xde, (xsp + 16)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	ld (xde + 2), a
 	ld xwa, (xsp + 2)
 	ld a, (xwa)
@@ -835,7 +835,7 @@ FDemoText_SendExtParamsAlt:
 
 FDemoText_SendExtAlt_NoteLoop:
 	lda xde, (xsp + 16)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	ld (xde + 2), a
 	ld xwa, (xsp + 2)
 	ld a, (xwa)
@@ -1113,21 +1113,21 @@ FDemoText_RescanAllVoices:
 	ldib_erp 0xfb, 0
 
 FDemoText_Rescan_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
-	ldb_erp C, 0xfa
+	ldfr_berp C, 0xfa
 	calr FDemoText_CheckVoiceState
 	cp l, 1:i3
 	jr z, FDemoText_Rescan_SetFlag
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	cpl a
 	and (0x0247ee:24), a
 	jr FDemoText_Rescan_NextVoice
 
 FDemoText_Rescan_SetFlag:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	or (0x0247ee:24), a
 
 FDemoText_Rescan_NextVoice:
@@ -1137,7 +1137,7 @@ FDemoText_Rescan_NextVoice:
 	ldib_erp 0xfb, 0
 
 FDemoText_Rescan_SendUpdates:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
@@ -1162,7 +1162,7 @@ FDemoText_NotifyUIChange:
 	call AddswbWr
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
 	jr ule, FDemoText_NotifyUI_Done
@@ -2602,8 +2602,8 @@ FDemoText_Layout_Setup:
 	ld xwa, (xsp + 32)
 	push xwa
 	call Strlen
-	ldw_erp HL, 0xfa
-	stw_erp WA, 0xfa
+	ldfr_werp HL, 0xfa
+	ldto_werp WA, 0xfa
 	inc 1, wa
 	pushw wa
 	call Malloc
@@ -2826,20 +2826,20 @@ Seq_InitVoiceStructures:
 Seq_InitVoiceLoop:
 	pushw 0xea
 	pushw 0x4
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	muls bc, 0x18
 	lda xwa, (0x0249d8:24)
 	lda_dri XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	muls wa, 0x18
 	lda xbc, (0x0249d8:24)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, 0:i3
 	ld (xde + 16), xwa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	muls wa, 0x18
 	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xwa, 0:i3

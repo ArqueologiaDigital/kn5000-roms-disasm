@@ -1268,7 +1268,7 @@ Flash_InitBytecodeBlock:
 Flash_InitBytecodeBlock_Loop:
 	ld	c, (xsp+6)
 	extz	bc
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	muls	wa, 3
 	ld	de, wa
@@ -1288,7 +1288,7 @@ Flash_InitBytecodeBlock_Loop:
 Flash_InitBytecodeBlock_Loop2:
 	ld	e, (xsp+12)
 	extz	de
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	muls	wa, 3
 	ld	bc, wa
@@ -1384,7 +1384,7 @@ Flash_InitBytecodeBlock_Skip7:
 Flash_InitBytecodeBlock_Loop4:
 	ld	c, (xsp+10)
 	extz	bc
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	muls	wa, 3
 	ld	de, wa
@@ -1406,7 +1406,7 @@ Flash_InitBytecodeBlock_Loop4:
 Flash_InitBytecodeBlock_Loop5:
 	ld	e, (xsp+6)
 	extz	de
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	muls	wa, 3
 	ld	bc, wa
@@ -1740,7 +1740,7 @@ PartGrid_ColumnDispatch_Default:
 	ldiw_erp 0xfa, 0
 
 PartGrid_DefaultLoop_Outer:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	ld xbc, xwa
 	add xbc, xbc
@@ -1753,7 +1753,7 @@ PartGrid_DefaultLoop_Outer:
 	extz bc
 	calr Pack12BitValueWithBank
 	ld wa, hl
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	extz xbc
 	ld xde, xbc
 	add xde, xde
@@ -1768,7 +1768,7 @@ PartGrid_DefaultLoop_Inner:
 	ld bc, iz
 	extz xbc
 	add xbc, xbc
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	ld xde, xwa
 	add xde, xde
@@ -1784,7 +1784,7 @@ PartGrid_DefaultLoop_Inner:
 	ld de, iz
 	extz xde
 	add xde, xde
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	extz xbc
 	ld xhl, xbc
 	add xhl, xhl
@@ -1803,7 +1803,7 @@ PartGrid_DefaultLoop_Inner:
 
 ; NoteEventBuffer CopyToSlot dispatch (7-entry, table 0xe16128)
 NoteEvent_CopyToSlot:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	sll xwa, 8
 	add xwa, 0x1400
@@ -1813,7 +1813,7 @@ NoteEvent_CopyToSlot:
 	extz bc
 	calr Pack12BitValueWithBank
 	ld wa, hl
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	extz xbc
 	sll xbc, 8
 	add xbc, 0x1400
@@ -1826,7 +1826,7 @@ NoteEvent_CopyToSlot:
 	extz bc
 	calr Pack12BitValueWithBank
 	ld wa, hl
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	extz xbc
 	sll xbc, 8
 	add xbc, 0x1400
@@ -2129,7 +2129,7 @@ Flash_InitBytecodeBlock_Helper_Join:
 	ld	l, 0:opc
 	ldib_erp 234, 0
 Flash_InitBytecodeBlock_Helper_Loop2:
-	stb_erp a, 234
+	ldto_berp a, 234
 	extz	wa
 	add	wa, wa
 	inc	2, wa
@@ -2215,7 +2215,7 @@ Flash_StoreBaseAndInitAccPatch_Loop3:
 	lda	xix, (3074:16)
 	lda_rr xde, xix, wa
 	ld wa, (xde)
-	ldb_erp a, 226
+	ldfr_berp a, 226
 	ld a, (xsp+2)
 	extz	wa
 	cp_erpb 226, 255
@@ -2248,7 +2248,7 @@ Flash_InitBytecodeBlock_Helper_Loop5:
 	inc	2, wa
 	lda_rr xde, xix, wa
 	ld wa, (xde)
-	ldb_erp a, 226
+	ldfr_berp a, 226
 	cpib_erp 226, 1
 	jr nz, Flash_StoreBaseAndInitAccPatch_Skip4
 	ld	wa, iy
@@ -2288,12 +2288,12 @@ Flash_StoreBaseAndInitAccPatch_Sub:
 Flash_StoreBaseAndInitAccPatch_Sub_Loop:
 	ld	a, (xsp+4)
 	add	a, 30
-	ldb_erp a, 250
-	stb_erp a, 249
-	ldb_erp a, 251
-	stb_erp a, 250
+	ldfr_berp a, 250
+	ldto_berp a, 249
+	ldfr_berp a, 251
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	ld	de, 0:i3
 	calr	Util_FrameSetup10
@@ -2301,9 +2301,9 @@ Flash_StoreBaseAndInitAccPatch_Sub_Loop:
 	cp	hl, (xwa)
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip5
 	ld	hl, (xwa+2)
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	pushw	hl
 	ld	de, 0:i3
@@ -2315,7 +2315,7 @@ Flash_StoreBaseAndInitAccPatch_Skip5:
 Flash_StoreBaseAndInitAccPatch_Sub_Skip:
 	ldib_erp 248, 0
 Flash_StoreBaseAndInitAccPatch_Loop4:
-	stb_erp c, 248
+	ldto_berp c, 248
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (1956:16)
@@ -2325,16 +2325,16 @@ Flash_StoreBaseAndInitAccPatch_Loop4:
 Flash_StoreBaseAndInitAccPatch_Loop5:
 	ld	a, (xsp+4)
 	add	a, 30
-	ldb_erp a, 250
-	stb_erp a, 249
-	ldb_erp a, 251
-	stb_erp a, 250
+	ldfr_berp a, 250
+	ldto_berp a, 249
+	ldfr_berp a, 251
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	ld	de, 1:i3
 	calr	Util_FrameSetup10
-	stb_erp a, 248
+	ldto_berp a, 248
 	extz	wa
 	sla	wa, 2
 	ld	de, wa
@@ -2344,21 +2344,21 @@ Flash_StoreBaseAndInitAccPatch_Loop5:
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Sub_Skip2
 	inc	6, wa
 	ld_rrw hl, xbc, wa
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	pushw	hl
 	ld	de, 1:i3
 	calr	PartGrid_OperationsBlock
 Flash_StoreBaseAndInitAccPatch_Sub_Skip2:
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	ld	de, 2:i3
 	calr	Util_FrameSetup10
-	stb_erp a, 248
+	ldto_berp a, 248
 	extz	wa
 	sla	wa, 2
 	ld	de, wa
@@ -2368,21 +2368,21 @@ Flash_StoreBaseAndInitAccPatch_Sub_Skip2:
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Sub_Skip3
 	inc	6, wa
 	ld_rrw hl, xbc, wa
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	pushw	hl
 	ld	de, 2:i3
 	calr	PartGrid_OperationsBlock
 Flash_StoreBaseAndInitAccPatch_Sub_Skip3:
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	ld	de, 3:i3
 	calr	Util_FrameSetup10
-	stb_erp a, 248
+	ldto_berp a, 248
 	extz	wa
 	sla	wa, 2
 	ld	de, wa
@@ -2392,21 +2392,21 @@ Flash_StoreBaseAndInitAccPatch_Sub_Skip3:
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Sub_Skip4
 	inc	6, wa
 	ld_rrw hl, xbc, wa
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	pushw	hl
 	ld	de, 3:i3
 	calr	PartGrid_OperationsBlock
 Flash_StoreBaseAndInitAccPatch_Sub_Skip4:
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	ld	de, 4:i3
 	calr	Util_FrameSetup10
-	stb_erp a, 248
+	ldto_berp a, 248
 	extz	wa
 	sla	wa, 2
 	ld	de, wa
@@ -2416,9 +2416,9 @@ Flash_StoreBaseAndInitAccPatch_Sub_Skip4:
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Sub_Skip5
 	inc	6, wa
 	ld_rrw hl, xbc, wa
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	pushw	hl
 	ld	de, 4:i3
@@ -2491,7 +2491,7 @@ Flash_StoreBaseAndInitAccPatch_Join3:
 	ld	w, 0:opc
 	ldib_erp 226, 0
 Flash_StoreBaseAndInitAccPatch_Loop8:
-	stb_erp c, 226
+	ldto_berp c, 226
 	extz	bc
 	sla	bc, 2
 	inc	6, bc
@@ -2845,7 +2845,7 @@ Flash_StoreBaseAndInitAccPatch_Loop11:
 	cp	w, (xsp+0xa)
 	jr	nz, Flash_InitBytecodeBlock_Helper4_Skip2
 Flash_StoreBaseAndInitAccPatch_Skip16:
-	ldb_erp	e, 240
+	ldfr_berp	e, 240
 	extz	ix
 	sla	ix, 2
 	ld	iz, ix
@@ -2896,7 +2896,7 @@ Flash_InitBytecodeBlock_Helper4_Loop2:
 	ld	d, c
 Flash_InitBytecodeBlock_Helper4_Skip4:
 	inc	1, c
-	ldb_erp	e, 244
+	ldfr_berp	e, 244
 	extz	iy
 	cp	c, 40
 	jr	c, Flash_InitBytecodeBlock_Helper4_Loop2
@@ -2954,17 +2954,17 @@ Flash_InitBytecodeBlock_Helper5_Loop:
 	jr	z, Flash_InitBytecodeBlock_Helper5_Skip
 	ld	wa, (xwa)
 	ld	w, 0:opc
-	ldb_erp a, 249
+	ldfr_berp a, 249
 	extz	wa
 	calr	Flash_StoreBaseAndInitAccPatch_Helper
-	ldb_erp l, 248
-	stb_erp a, 249
+	ldfr_berp l, 248
+	ldto_berp a, 249
 	extz	wa
 	calr	Flash_StoreBaseAndInitAccPatch_Helper2
 	lda	xbc, (0x3a4f:16)
 	ld	(xbc), 35
 	ld	(xbc+1), l
-	stb_erp a, 248
+	ldto_berp a, 248
 	ld	(xbc+2), a
 	ld	(xbc+3), 40
 	ld	(xbc+4), 68
@@ -2975,7 +2975,7 @@ Flash_InitBytecodeBlock_Helper5_Loop:
 Flash_InitBytecodeBlock_Helper5_Skip:
 	ldib_erp 250, 0
 Flash_StoreBaseAndInitAccPatch_Loop12:
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
 	sla	wa, 2
 	ld	de, wa
@@ -2985,11 +2985,11 @@ Flash_StoreBaseAndInitAccPatch_Loop12:
 	jrl	z, Flash_StoreBaseAndInitAccPatch_Epilogue2
 	inc	6, wa
 	ld_rrw wa, xbc, wa
-	ldb_erp a, 249
+	ldfr_berp a, 249
 	ld bc, 0:i3
 	cpib_erp 250, 0
 	jr z, Flash_InitBytecodeBlock_Helper5_Skip2
-	stb_erp a, 249
+	ldto_berp a, 249
 	cp	a, l
 	jr	z, Flash_InitBytecodeBlock_Helper5_Skip2
 	ld	bc, 1:i3
@@ -2998,51 +2998,51 @@ Flash_InitBytecodeBlock_Helper5_Skip2:
 	scc z, wa
 	or wa, bc
 	jr	z, Flash_StoreBaseAndInitAccPatch_Skip17
-	stb_erp a, 249
+	ldto_berp a, 249
 	sub a, 10
 	extz wa
 	calr Flash_StoreBaseAndInitAccPatch_Helper
-	ldb_erp l, 248
-	stb_erp a, 249
+	ldfr_berp l, 248
+	ldto_berp a, 249
 	sub a, 10
 	extz wa
 	calr Flash_StoreBaseAndInitAccPatch_Helper2
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	lda	xbc, (0x3a4f:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 35
-	stb_erp a, 251
+	ldto_berp a, 251
 	inc 1, a
 	extz	wa
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), l
-	stb_erp a, 251
+	ldto_berp a, 251
 	inc 2, a
 	extz	wa
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
-	stb_erp a, 248
+	ldto_berp a, 248
 	ld	(xde), a
 	incb_erp 251, 4
 	cp_erpb 251, 26
 	jr	ule, Flash_StoreBaseAndInitAccPatch_Skip17
 	decb_erp 251, 4
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 46
-	stb_erp a, 251
+	ldto_berp a, 251
 	inc 1, a
 	extz	wa
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 46
-	stb_erp a, 251
+	ldto_berp a, 251
 	inc 2, a
 	extz	wa
 	extz	xwa
@@ -3050,7 +3050,7 @@ Flash_InitBytecodeBlock_Helper5_Skip2:
 	ld	(xwa), 46
 	jr	Flash_StoreBaseAndInitAccPatch_Epilogue2
 Flash_StoreBaseAndInitAccPatch_Skip17:
-	stb_erp l, 249
+	ldto_berp l, 249
 	inc1b_erp 250
 	cp_erpb 250, 50
 	jrl c, Flash_StoreBaseAndInitAccPatch_Loop12
@@ -3132,7 +3132,7 @@ Flash_StoreBaseAndInitAccPatch_Helper2_Loop:
 Flash_StoreBaseAndInitAccPatch_Helper2_Skip:
 	ldib_erp 249, 0
 Flash_StoreBaseAndInitAccPatch_Helper2_Loop2:
-	stb_erp a, 249
+	ldto_berp a, 249
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (1958:16)
@@ -3140,11 +3140,11 @@ Flash_StoreBaseAndInitAccPatch_Helper2_Loop2:
 	cp wa, 65535
 	jrl	z, Flash_StoreBaseAndInitAccPatch_Epilogue3
 	res	7, a
-	ldb_erp a, 250
+	ldfr_berp a, 250
 	ld bc, 0:i3
 	cpib_erp 249, 0
 	jr z, Flash_StoreBaseAndInitAccPatch_Skip25
-	stb_erp a, 250
+	ldto_berp a, 250
 	cp	a, e
 	jr	z, Flash_StoreBaseAndInitAccPatch_Skip25
 	ld	bc, 1:i3
@@ -3153,49 +3153,49 @@ Flash_StoreBaseAndInitAccPatch_Skip25:
 	scc z, wa
 	or wa, bc
 	jr	z, Flash_StoreBaseAndInitAccPatch_Skip26
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz	wa
 	calr	Flash_StoreBaseAndInitAccPatch_Helper
-	ldb_erp l, 251
-	stb_erp a, 250
+	ldfr_berp l, 251
+	ldto_berp a, 250
 	extz	wa
 	calr	Flash_StoreBaseAndInitAccPatch_Helper2
-	stb_erp a, 248
+	ldto_berp a, 248
 	extz	wa
 	lda	xbc, (0x3a4f:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 35
-	stb_erp a, 248
+	ldto_berp a, 248
 	inc 1, a
 	extz	wa
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), l
-	stb_erp a, 248
+	ldto_berp a, 248
 	inc 2, a
 	extz	wa
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
-	stb_erp a, 251
+	ldto_berp a, 251
 	ld	(xde), a
 	incb_erp 248, 4
 	cp_erpb 248, 26
 	jr	ule, Flash_StoreBaseAndInitAccPatch_Skip26
 	decb_erp 248, 4
-	stb_erp a, 248
+	ldto_berp a, 248
 	extz	wa
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 46
-	stb_erp a, 248
+	ldto_berp a, 248
 	inc 1, a
 	extz	wa
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 46
-	stb_erp a, 248
+	ldto_berp a, 248
 	inc 2, a
 	extz	wa
 	extz	xwa
@@ -3203,7 +3203,7 @@ Flash_StoreBaseAndInitAccPatch_Skip25:
 	ld	(xwa), 46
 	jr	Flash_StoreBaseAndInitAccPatch_Epilogue3
 Flash_StoreBaseAndInitAccPatch_Skip26:
-	stb_erp e, 250
+	ldto_berp e, 250
 	inc1b_erp 249
 	cp_erpb 249, 50
 	jrl c, Flash_StoreBaseAndInitAccPatch_Helper2_Loop2
@@ -3225,7 +3225,7 @@ Flash_InitBytecodeBlock_Helper6_Skip:
 	ldib_erp 234, 0
 	ldib_erp 226, 0
 Flash_InitBytecodeBlock_Helper6_Loop:
-	stb_erp e, 226
+	ldto_berp e, 226
 	extz	de
 	sla	de, 2
 	ld	wa, de
@@ -3233,7 +3233,7 @@ Flash_InitBytecodeBlock_Helper6_Loop:
 	lda_rr	xbc, xhl, wa
 	cpw	(xbc), 0xffff
 	ret	z
-	stb_erp a, 234
+	ldto_berp a, 234
 	extz	wa
 	add	wa, wa
 	ld	iy, wa
@@ -3243,7 +3243,7 @@ Flash_InitBytecodeBlock_Helper6_Loop:
 	ld_rrw wa, xhl, de
 	st_rrw wa, xix, iy
 	ld	de, (xbc)
-	stb_erp a, 234
+	ldto_berp a, 234
 	extz	wa
 	sla	wa, 2
 	ld	bc, wa
@@ -3386,7 +3386,7 @@ DualVoice_ScanAllColumns:
 DualVoice_ScanColumnLoop:
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 0:i3
 	calr Util_FrameSetup10
@@ -3404,7 +3404,7 @@ DualVoice_StoreBankMatch:
 DualVoice_ScanRow1:
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 1:i3
 	calr Util_FrameSetup10
@@ -3415,7 +3415,7 @@ DualVoice_ScanRow1:
 	call nc, (SlotTable_Insert1748:24)
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 2:i3
 	calr Util_FrameSetup10
@@ -3426,7 +3426,7 @@ DualVoice_ScanRow1:
 	call nc, (SlotTable_Insert1748:24)
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 3:i3
 	calr Util_FrameSetup10
@@ -3437,7 +3437,7 @@ DualVoice_ScanRow1:
 	call nc, (SlotTable_Insert1748:24)
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 4:i3
 	calr Util_FrameSetup10
@@ -3463,7 +3463,7 @@ DualVoice_ScanAllColumnsAlt:
 DualVoice_ScanColumnLoopAlt:
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 0:i3
 	calr Util_FrameSetup10
@@ -3481,7 +3481,7 @@ DualVoice_StoreBankMatchAlt:
 DualVoice_ScanRow1Alt:
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 1:i3
 	calr Util_FrameSetup10
@@ -3492,7 +3492,7 @@ DualVoice_ScanRow1Alt:
 	call nc, (SlotTable_Insert1850:24)
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 2:i3
 	calr Util_FrameSetup10
@@ -3503,7 +3503,7 @@ DualVoice_ScanRow1Alt:
 	call nc, (SlotTable_Insert1850:24)
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 3:i3
 	calr Util_FrameSetup10
@@ -3514,7 +3514,7 @@ DualVoice_ScanRow1Alt:
 	call nc, (SlotTable_Insert1850:24)
 	ld a, (xsp + 2)
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 4:i3
 	calr Util_FrameSetup10
@@ -3664,7 +3664,7 @@ SlotTable_Insert1748:
 	lda xhl, (1748:16)
 
 SlotTable_Insert1748_Loop:
-	stb_erp C, 0xe2
+	ldto_berp C, 0xe2
 	extz bc
 	add bc, bc
 	inc 2, bc
@@ -3688,7 +3688,7 @@ SlotTable_Insert1850:
 	lda xhl, (1850:16)
 
 SlotTable_Insert1850_Loop:
-	stb_erp C, 0xe2
+	ldto_berp C, 0xe2
 	extz bc
 	add bc, bc
 	inc 2, bc
@@ -3727,7 +3727,7 @@ Flash_WriteBackSlot_StartLoop:
 	ldib_erp 0xfb, 0
 
 Flash_WriteBackSlot_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	add wa, wa
 	inc 2, wa
@@ -3825,7 +3825,7 @@ Flash_SlotUpdateOpsBlock_Helper3:
 Flash_SlotUpdateOpsBlock_Loop2:
 	ld	a, (xsp+2)
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
 	ld	de, 0:i3
 	calr	Util_FrameSetup10
@@ -3833,9 +3833,9 @@ Flash_SlotUpdateOpsBlock_Loop2:
 Flash_SlotUpdateOpsBlock_Loop3:
 	ld	a, (xsp+2)
 	extz	wa
-	stb_erp c, 251
+	ldto_berp c, 251
 	extz	bc
-	stb_erp e, 250
+	ldto_berp e, 250
 	extz	de
 	calr	Util_FrameSetup10
 	ld	h, 0:opc
@@ -3966,7 +3966,7 @@ Flash_InitBytecodeBlock_Helper8_Epilogue:
 Flash_WriteBackSlotTable_Skip:
 	ldib_erp 226, 0
 Flash_WriteBackSlotTable_Loop:
-	stb_erp c, 226
+	ldto_berp c, 226
 	extz	bc
 	sla	bc, 2
 	ld	wa, bc
@@ -4031,7 +4031,7 @@ Flash_InitBytecodeBlock_Helper9:
 Flash_WriteBackSlotTable_Skip3:
 	ldib_erp 226, 0
 Flash_WriteBackSlotTable_Loop2:
-	stb_erp c, 226
+	ldto_berp c, 226
 	extz	bc
 	sla	bc, 2
 	ld	wa, bc
@@ -4185,7 +4185,7 @@ Flash_InitBytecodeBlock_Helper9_Epilogue:
 	ld	l, (xbc+46)
 	ld	a, (xbc+47)
 	ld	xix, 0:i3
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	lda	xbc, (xsp+16)
 	lda	xwa, (xbc+68)
 	ld	(xsp+12), xwa
@@ -4199,7 +4199,7 @@ Flash_InitBytecodeBlock_Helper9_Epilogue:
 	ld	l, (xde+46)
 	ld	a, (xde+47)
 	ld	xix, 0:i3
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	lda	xwa, (xbc+72)
 	ld	(xsp+8), xwa
 	sll	xix, 8
@@ -4212,7 +4212,7 @@ Flash_InitBytecodeBlock_Helper9_Epilogue:
 	ld	l, (xde+46)
 	ld	a, (xde+47)
 	ld	xix, 0:i3
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	lda	xwa, (xbc+76)
 	ld	(xsp+4), xwa
 	sll	xix, 8
@@ -4225,7 +4225,7 @@ Flash_InitBytecodeBlock_Helper9_Epilogue:
 	ld	l, (xde+46)
 	ld	a, (xde+47)
 	ld	xix, 0:i3
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	lda	xde, (xbc+80)
 	sll	xix, 8
 	add	xix, xhl
@@ -4236,7 +4236,7 @@ Flash_InitBytecodeBlock_Helper9_Epilogue:
 	ld	l, (xix+46)
 	ld	a, (xix+47)
 	ld	xix, 0:i3
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	lda	xiy, (xbc+84)
 	sll	xix, 8
 	add	xix, xhl
@@ -4247,7 +4247,7 @@ Flash_InitBytecodeBlock_Helper9_Epilogue:
 	ld	l, (xix+46)
 	ld	a, (xix+47)
 	ld	xix, 0:i3
-	ldb_erp	a, 240
+	ldfr_berp	a, 240
 	lda	xiz, (xbc+88)
 	sll	xix, 8
 	add	xix, xhl
@@ -4258,7 +4258,7 @@ Flash_InitBytecodeBlock_Helper9_Epilogue:
 	ld	l, (xix+46)
 	ld	a, (xix+47)
 	ld	xix, 0:i3
-	ldb_erp a, 240
+	ldfr_berp a, 240
 	sll xix, 8
 	add xix, xhl
 	ld	xhl, xix
@@ -4562,7 +4562,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xbc + 46)
 	ld a, (xbc + 47)
 	ld xix, 0:i3
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	lda xbc, (xsp + 16)
 	lda xwa, (xbc + 68)
 	ld (xsp + 12), xwa
@@ -4576,7 +4576,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xde + 46)
 	ld a, (xde + 47)
 	ld xix, 0:i3
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	lda xwa, (xbc + 72)
 	ld (xsp + 8), xwa
 	sll xix, 8
@@ -4589,7 +4589,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xde + 46)
 	ld a, (xde + 47)
 	ld xix, 0:i3
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	lda xwa, (xbc + 76)
 	ld (xsp + 4), xwa
 	sll xix, 8
@@ -4602,7 +4602,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xde + 46)
 	ld a, (xde + 47)
 	ld xix, 0:i3
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	lda xde, (xbc + 80)
 	sll xix, 8
 	add xix, xhl
@@ -4613,7 +4613,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xix + 46)
 	ld a, (xix + 47)
 	ld xix, 0:i3
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	lda xiy, (xbc + 84)
 	sll xix, 8
 	add xix, xhl
@@ -4624,7 +4624,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xix + 46)
 	ld a, (xix + 47)
 	ld xix, 0:i3
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	lda xiz, (xbc + 88)
 	sll xix, 8
 	add xix, xhl
@@ -4635,7 +4635,7 @@ FloppyDisk_ComputeToneParams:
 	ld l, (xix + 46)
 	ld a, (xix + 47)
 	ld xix, 0:i3
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	sll xix, 8
 	add xix, xhl
 	ld xhl, xix
@@ -4835,7 +4835,7 @@ ToneParam_ExtendedOpsBlock_Helper:
 	calr	Flash_InitExtMemAddrs
 	ld	xde, (3182:16)
 	ld	a, (xde)
-	ldb_erp	a, 238
+	ldfr_berp	a, 238
 	lda	xwa, (xde+1)
 	ld	h, (xwa)
 	lda	xbc, (xde+2)
@@ -5123,11 +5123,11 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	push	xiz
 	ld	hl, wa
 	ld	c, (0x34ed:16)
-	ldb_erp c, 251
+	ldfr_berp c, 251
 	ld c, (13550:16)
-	ldb_erp c, 250
+	ldfr_berp c, 250
 	ld	c, (0x34ef:16)
-	ldb_erp	c, 249
+	ldfr_berp	c, 249
 	ldda32	xbc, (0xc6e)
 	ld	(0x34ed), (xbc+0x70)
 	ldda32	xbc, (0xc6e)
@@ -5212,11 +5212,11 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	ld	(0x34d6:16), 27
 	ld	wa, hl
 	calr	ToneParam_ExtendedOpsBlock_Helper4
-	stb_erp c, 251
+	ldto_berp c, 251
 	ld (13549:16), c
-	stb_erp c, 250
+	ldto_berp c, 250
 	ld (13550:16), c
-	stb_erp c, 249
+	ldto_berp c, 249
 	ld (13551:16), c
 	pop xiz
 	ret
@@ -5273,7 +5273,7 @@ DualVoice_LoadAndScan:
 DualVoice_AccPatchLoop:
 	ld c, (xsp + 8)
 	extz bc
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x3
 	ld de, wa
@@ -5294,7 +5294,7 @@ DualVoice_AccPatchLoop:
 DualVoice_ParamCompareLoop:
 	ld e, (xsp + 14)
 	extz de
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x3
 	ld bc, wa
@@ -6569,7 +6569,7 @@ AcApcMdBox_HandleLswUpdate:
 	cp xwa, 0x28080
 	jr nz, AcS2cMem_ReturnZeroJmp
 	ld a, (xhl + 50)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	lda xde, (xhl + 46)
 	ld xbc, (xde)
@@ -6600,7 +6600,7 @@ AcApcMdBox_HandleTitleDisp:
 	ld xwa, xiz
 	call GetViewInstance
 	ld a, (xhl + 50)
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	extz iz
 	ld xwa, 0x28080
 	call SndParam_LookupReadOnly

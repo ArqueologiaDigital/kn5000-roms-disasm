@@ -224,7 +224,7 @@ AccompSeq_CheckPatternEnd:
 	cp a, 0x87
 	jr nz, AccompSeq_PatternEndReturn
 	calr AccompSeq_ReadBeatHeader
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, 6:i3
 	calr AccompSeq_BuildVRAMAddr
 	ld a, (xiy)
@@ -261,7 +261,7 @@ AccompSeq_AdvanceCheckPattern:
 	jr nz, AccompSeq_AdvanceDone
 	calr AccompSeq_ReadBeatHeader
 	ld (0x7e42:16), wa
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, 6:i3
 	ld (0x7e44:16), wa
 	calr AccompSeq_BuildVRAMAddr
@@ -305,7 +305,7 @@ ResolveVRAMAddressForVoice:
 
 AccompSeq_ResolveVRAMFallback:
 	ld wa, (0x7e42:16)
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, (0x7e44:16)
 	ld xiy, xwa
 
@@ -315,7 +315,7 @@ AccompSeq_ResolveVRAMDone:
 AccompSeq_BuildVRAMAddr:
 	push xhl
 	ld xhl, xwa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	and xwa, 0xfff
 	sla xwa, 8
 	ld xiy, xwa
@@ -855,11 +855,11 @@ AccompSeq_FadeOutApplyVol:
 	xor h, h
 	ld wa, (0x7e70:16)
 	mul xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ldw hl, 0x800
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld e, a
 	ld w, 0x5:opc
 	ld a, 0xd1:opc
@@ -872,11 +872,11 @@ AccompSeq_FadeOut_Ch2Volume:
 	xor h, h
 	ld wa, (0x7e70:16)
 	mul xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ldw hl, 0x800
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld e, a
 	ld w, 0x5:opc
 	ld a, 0xd2:opc
@@ -900,11 +900,11 @@ AccompSeq_PortaFadeOut:
 	xor h, h
 	ld wa, (0x7e70:16)
 	mul xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ldw hl, 0x800
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	pop xde
 	pop xhl
 
@@ -1044,7 +1044,7 @@ AccompSeq_UpdatePos_Part2:
 
 AccompSeq_UpdatePos_Store:
 	ld (0x7e44:16), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x7e42:16), wa
 	ret
 
@@ -1168,7 +1168,7 @@ AccompSeq_LookupStyleData:
 	ld xwa, xhl
 	add xwa, 0x1e8800
 	ld (0x7e2a:16), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x7e28:16), wa
 	jr AccompSeq_LookupStyle_Return
 
@@ -1179,7 +1179,7 @@ AccompSeq_LookupStyle_Internal:
 	mul xwa, hl
 	add xwa, NakaInst_OFF_Str_0xD4
 	ld (0x7e2a:16), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x7e28:16), wa
 
 AccompSeq_LookupStyle_Return:
@@ -1187,7 +1187,7 @@ AccompSeq_LookupStyle_Return:
 
 AccompSeq_LoadParams:
 	ld wa, (0x7e28:16)
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, (0x7e2a:16)
 	ld xiy, xwa
 	cp (0x7e25:16), 128
@@ -1198,11 +1198,11 @@ AccompSeq_LoadParams:
 	ld xwa, (xiy + 1)
 	add xwa, 0x6
 	ld (0x7e2e:16), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x7e2c:16), wa
 	ld xwa, (xiy + 5)
 	ld (0x7e36:16), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x7e34:16), wa
 	ld a, (xiy + 16)
 	bit 0, a
@@ -1213,11 +1213,11 @@ AccompSeq_LoadParams_Bit0Set:
 	ld xwa, (xiy + 17)
 	add xwa, 0x6
 	ld (0x7e32:16), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x7e30:16), wa
 	ld xwa, (xiy + 21)
 	ld (0x7e3a:16), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x7e38:16), wa
 	jr AccompSeq_LoadParams_OverrideCheck
 
@@ -1234,11 +1234,11 @@ AccompSeq_LoadParams_OverrideCheck:
 	bit 0, (0x7e5f:16)
 	jr z, AccompSeq_LoadParams_Return
 	ld wa, (0x7e2c:16)
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, (0x7e2e:16)
 	ld (0x7e65:16), xwa
 	ld wa, (0x7e30:16)
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, (0x7e32:16)
 	ld (0x7e69:16), xwa
 	ld wa, 0:i3
@@ -1251,7 +1251,7 @@ AccompSeq_LoadParams_OverrideCheck:
 	add xwa, 0x6
 	ld (0x7e2e:16), wa
 	ld (0x7e32:16), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x7e2c:16), wa
 	ld (0x7e30:16), wa
 
@@ -1266,7 +1266,7 @@ AccompSeq_InitMidiEvents:
 	ld (0x7e72:16), 127
 	ld (0x7e73:16), 127
 	ld wa, (0x7e28:16)
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, (0x7e2a:16)
 	ld xiy, xwa
 	bit 0, (0x7e27:16)
@@ -1859,7 +1859,7 @@ AccompSeq_CompareChord:
 	calr AccompSeq_ResetMidiState
 	calr AccompSeq_LookupStyleData
 	ld wa, (0x7e28:16)
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, (0x7e2a:16)
 	ld xiy, xwa
 	ld a, (xiy + 0:8)
@@ -2134,7 +2134,7 @@ AccompSeq_SeqParse_TempoReset:
 
 AccompSeq_SeqParse_TempoStore:
 	ld (0x7e44:16), wa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x7e42:16), wa
 	jp AccompSeq_SeqParse_Loop
 

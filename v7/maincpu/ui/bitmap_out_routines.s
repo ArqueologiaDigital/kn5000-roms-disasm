@@ -45,7 +45,7 @@ BitMapOut_PaletteLoadLoop:
 
 BitMapOut_PixelBlitLoop:
 	ld a, (xix)
-	ldb_erp A, 0xf4
+	ldfr_berp A, 0xf4
 	extz iy
 	ld a, (xhl)
 	extz wa
@@ -358,7 +358,7 @@ BitMapOut_ByteData_PresetCopy:
 	jr nz, BitMapOut_ByteData_PresetCopy_Join
 	ldb_d8 a, (49122)
 	res 7, a
-	ldb_erp a, 251
+	ldfr_berp a, 251
 	cpib_erp 251, 0
 	jr z, BitMapOut_ByteData_PresetCopy_Join
 	dec1b_erp 251
@@ -368,7 +368,7 @@ BitMapOut_ByteData_PresetCopy:
 	jr z, BitMapOut_ByteData_PresetCopy_Join
 	ld xwa, 769
 	call AcApcToggleProc_Helper
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz wa
 	cp hl, 0:i3
 	jr nz, BitMapOut_ByteData_PresetCopy_Skip
@@ -610,19 +610,19 @@ BitMapOut_Snapshot_Execute:
 BitMapOut_RestoreFull_FieldLoop:
 	inc 1, xiy
 	ld A, (xiy+)
-	ldb_erp A, 0xe6
+	ldfr_berp A, 0xe6
 	inc 1, xhl
 	inc 1, xhl
 	ld bc, 0:i3
-	stb_erp E, 0xe6
+	ldto_berp E, 0xe6
 	extz de
 	cp de, 0:i3
 	jr ule, BitMapOut_RestoreFull_FieldDone
 
 BitMapOut_RestoreFull_CopyField:
-	stb_erp A, 0xe6
+	ldto_berp A, 0xe6
 	ld xiz, 0:i3
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	lda xwa, (0xf9ce:16)
 	sub xwa, 0xf9b6
 	cp bc, 0xc
@@ -845,33 +845,33 @@ BitMapOut_SelectiveFieldRestore:
 	ld (xix), a
 	lda xiy, (xbc + 4)
 	ld a, (xiy)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	res_erpb 0xf0, 0x04
-	stb_erp A, 0xf0
+	ldto_berp A, 0xf0
 	ld (xiy), a
 	ld xwa, xiy
 	sub xwa, xde
 	add xwa, xhl
 	ld w, (xwa)
 	and w, 0x10
-	stb_erp A, 0xf0
+	ldto_berp A, 0xf0
 	or a, w
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	ld (xiy), a
 	lda xiy, (xbc + 7)
 	ld a, (xiy)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	and_erpb 0xf0, 0xcf
-	stb_erp A, 0xf0
+	ldto_berp A, 0xf0
 	ld (xiy), a
 	ld xwa, xiy
 	sub xwa, xde
 	add xwa, xhl
 	ld w, (xwa)
 	and w, 0x30
-	stb_erp A, 0xf0
+	ldto_berp A, 0xf0
 	or a, w
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	ld (xiy), a
 	lda xix, (xbc + 5)
 	ld c, (xix)
@@ -1484,18 +1484,18 @@ BitMapOut_RestoreParts_InnerLoop:
 	extz xiz
 	add xiz, xix
 	ld a, (xiz)
-	ldb_erp A, 0xea
+	ldfr_berp A, 0xea
 	and_erpb 0xea, 0x07
-	stb_erp A, 0xea
+	ldto_berp A, 0xea
 	ld (xiz), a
 	ld xwa, xiz
 	sub xwa, xbc
 	add xwa, xiy
 	ld w, (xwa)
 	and w, 0xf8
-	stb_erp A, 0xea
+	ldto_berp A, 0xea
 	or a, w
-	ldb_erp A, 0xea
+	ldfr_berp A, 0xea
 	ld (xiz), a
 	inc 2, hl
 	jr BitMapOut_RestoreParts_CheckPartEnd
@@ -2807,7 +2807,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	add xhl, xbc
 	lda xde, (xsp + 2)
 	ld a, (xde)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	ld xbc, (xhl)
 	ld a, (xde + 1)
@@ -3072,23 +3072,23 @@ BitMapOut_ByteData_RenderState:
 	cp	a, 2:i3
 	jr	nz, BitMapOut_ByteData_RenderState_Skip4
 	calr	BitMapOut_PrepareRender_CheckBit1
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	inc1b_erp	251
 	cp_erpb	251, 9
 	jr	le, BitMapOut_ByteData_RenderState_Skip
 	ldib_erp	251, 0
 BitMapOut_ByteData_RenderState_Skip:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	jr	BitMapOut_ByteData_RenderState_Join
 BitMapOut_ByteData_RenderState_Skip2:
 	calr	BitMapOut_PrepareRender_CheckBit1
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	dec1b_erp	251
 	jr	ge, BitMapOut_ByteData_RenderState_Skip3
 	ldi_erpb	251, 9
 BitMapOut_ByteData_RenderState_Skip3:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 BitMapOut_ByteData_RenderState_Join:
 	calr	BitMapOut_PrepareRender_CheckBit2
@@ -3096,7 +3096,7 @@ BitMapOut_ByteData_RenderState_Skip4:
 	call	GetTitleNow
 	cp	xhl, 27263184
 	jr	nz, BitMapOut_ByteData_RenderState_Skip5
-	stb_erp	e, 251
+	ldto_berp	e, 251
 	exts	de
 	exts	xde
 	ld	xwa, 4294967295
@@ -3360,14 +3360,14 @@ BitMapOut_ApplyPatch_Execute:
 	jr ule, BitMapOut_ApplyPatch_Store
 
 BitMapOut_ApplyPatch_Loop:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	call	AccVoice_GetChannelCount_Wrap
 	extz	hl
 	add	iz, hl
 	inc	1, iz
 	inc1b_erp	251
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	cp	a, (36032:16)
 	jr	c, BitMapOut_ApplyPatch_Loop
 BitMapOut_ApplyPatch_Store:
@@ -3386,11 +3386,11 @@ BitMapOut_ApplyPatch_Return:
 	push QIZ
 	ld XWA,0x00028000
 	call AcApcToggleProc_Helper
-	ldb_erp l, 251
+	ldfr_berp l, 251
 	ld xwa, 163841
 	call AcApcToggleProc_Helper
 	lda_d16 xbc, (36942)
-	stb_erp a, 251
+	ldto_berp a, 251
 	ld (xbc), a
 	ld (xbc+1), l
 	ld (xbc+2), 72
@@ -3439,7 +3439,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xiy), c
 	ld c, (xwa + 4)
 	and c, 0xcf
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	lda xbc, (xhl + 4)
 	sub xbc, xix
 	ld xiz, xbc
@@ -3499,7 +3499,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xiy), c
 	ld c, (xwa + 14)
 	and c, 0xcf
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	lda xbc, (xhl + 4)
 	sub xbc, xix
 	ld xiz, xbc
@@ -3559,7 +3559,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xiy), c
 	ld c, (xwa + 24)
 	and c, 0xcf
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	lda xbc, (xhl + 4)
 	sub xbc, xix
 	ld xiz, xbc
@@ -3792,7 +3792,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xhl), c
 	ld c, (xwa + 72)
 	and c, 0x40
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	lda xhl, (0xfc5e:16)
 	sub xhl, xix
 	add xhl, xde
@@ -3803,7 +3803,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xhl), c
 	ld c, (xwa + 76)
 	and c, 0x1f
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	lda xhl, (0xfc66:16)
 	ld xbc, xhl
 	sub xbc, xix
@@ -3816,7 +3816,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xiz), c
 	ld c, (xwa + 77)
 	and c, 0x1f
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	lda xbc, (xhl + 1)
 	sub xbc, xix
 	ld xiz, xbc
@@ -3834,7 +3834,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xiy), c
 	ld c, (xwa + 79)
 	and c, 0x1
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	inc 3, xhl
 	sub xhl, xix
 	add xhl, xde
@@ -4007,7 +4007,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xhl), c
 	ld c, (xwa + 80)
 	and c, 0xc0
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	lda xhl, (0xfc6f:16)
 	sub xhl, xix
 	add xhl, xde
@@ -4030,7 +4030,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xhl), c
 	ld c, (xwa + 110)
 	and c, 0x4
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	lda xhl, (0xfd02:16)
 	ld xbc, xhl
 	sub xbc, xix
@@ -4049,7 +4049,7 @@ BitMapOut_ByteData_PatchTable:
 	ld (xiy), c
 	ld a, (xwa + 112)
 	and a, 0xf
-	ldb_erp A, 0xf4
+	ldfr_berp A, 0xf4
 	lda xbc, (xhl + 4)
 	sub xbc, xix
 	add xbc, xde

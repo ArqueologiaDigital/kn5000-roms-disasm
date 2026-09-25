@@ -301,7 +301,7 @@ BmDrEdit_CalcNotePos_ReadFields:
 	ld xbc, 0xb0000
 	add xbc, xwa
 	ld a, (xbc)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	calr BmDrEdit_AdvanceStreamPos
 	ld bc, (0x0210a6:24)
 	extz xbc
@@ -317,7 +317,7 @@ BmDrEdit_CalcNotePos_ReadFields:
 	res 7, c
 	extz bc
 	mul bc, 0x60
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	add bc, wa
 	ld (0x280a:16), bc
@@ -1129,14 +1129,14 @@ BmDrEdit_SelectActiveChannel:
 	lda xbc, (0xf1a0:16)
 
 BmDrEdit_SelectChannel_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x10
 	jr nz, BmDrEdit_SelectChannel_NextCh
 	ld bc, 1:i3
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	and a, 0xf
 	jr z, BmDrEdit_SelectChannel_TestBit
 	slaa bc
@@ -1146,19 +1146,19 @@ BmDrEdit_SelectChannel_TestBit:
 	jr z, BmDrEdit_SelectChannel_NotFound
 	bit 0, (0x2776:16)
 	jr z, BmDrEdit_SelectChannel_NotFound
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	inc 1, c
 	extz bc
 	ld wa, 0:i3
 	call Part_ReadVoiceBit7
 	cp l, 0:i3
 	jr z, BmDrEdit_SelectChannel_NotFound
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	inc 1, a
 	ld (3414:16), a
 	set 0, (3412:16)
 	set 2, (0x287b:16)
-	stb_erp L, 0xfb
+	ldto_berp L, 0xfb
 	inc 1, l
 	jr BmDrEdit_SelectChannel_Done
 
@@ -1198,12 +1198,12 @@ BmDrEdit_CompareVelocity:
 	jr z, BmDrEdit_CompareVelocity_Equal
 	ld iz, (0x28af:16)
 	ld wa, (9830:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	ld (0x28af:16), iz
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (9830:16), wa
 	cp l, (0x2786:16)
 	jr z, BmDrEdit_CompareVelocity_Equal
@@ -1237,12 +1237,12 @@ BmDrEdit_ReadEventAtPosition:
 	push xiz
 	ld iz, (0x28af:16)
 	ld wa, (9830:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	ld (0x2760:16), l
 	ld (0x28af:16), iz
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (9830:16), wa
 	pop xiz
 	ret
@@ -1365,7 +1365,7 @@ BmDrEdit_SetupAndWalkToNote:
 	ld (0x2788:16), l
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	res 7, l
@@ -1374,7 +1374,7 @@ BmDrEdit_SetupAndWalkToNote:
 	ld bc, hl
 	mul bc, 0x60
 	ld hl, bc
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	add hl, wa
 	ld (0x278c:16), hl
@@ -1516,7 +1516,7 @@ BmDrEdit_CalcBeatFromGridPos:
 	ld wa, (0x279a:16)
 	extz xwa
 	div wa, 0x60
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x2760:16), a
 	ld wa, (0x279a:16)
 	extz xwa
@@ -1664,7 +1664,7 @@ BmDrEdit_CalcDurationPosition:
 	ld wa, (0x278c:16)
 	extz xwa
 	div wa, 0x60
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	and wa, 0x7f
 	extz wa
 	call PartCtrl_WriteByte_Indexed
@@ -2430,14 +2430,14 @@ BmDrEdit_ReadNoteData_Advance:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cp (0x287a:16), 0
 	jr z, BmDrEdit_ReadNoteData_StoreDuration
 	ldw wa, 0xba
 	call SeqData_SetErrorCode
 
 BmDrEdit_ReadNoteData_StoreDuration:
-	stb_erp L, 0xfb
+	ldto_berp L, 0xfb
 	popw_erp 0xfa
 	ret
 
@@ -2693,7 +2693,7 @@ BmDrEdit_WriteNoteOffEntry:
 BmDrEdit_InsertNoteSequence:
 	push xiz
 	ld wa, (0x28af:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld iz, (9830:16)
 	res 2, (0x295f:16)
 	calr BmDrEdit_LoadAlternateAndValidate
@@ -2726,7 +2726,7 @@ BmDrEdit_InsertSeq_DecrementCount:
 	jr nz, BmDrEdit_InsertSeq_StepLoop
 
 BmDrEdit_SavePositionAndReturn:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (0x28af:16), wa
 	ld (9830:16), iz
 
@@ -3303,14 +3303,14 @@ BmDrEdit_PrepareAndInsertNote:
 	ld wa, (0x279a:16)
 	extz xwa
 	div wa, 0x60
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x2968:16), a
 	ldmm8 0x2969, 0x2960
 	ldmm8 0x296a, 0x2961
 	ld wa, (0x278e:16)
 	extz xwa
 	div wa, 0x60
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	res 7, a
 	ld (0x296b:16), a
 	ld wa, (0x278e:16)
@@ -3345,10 +3345,10 @@ BmDrEdit_ValidateAndProcessVoice:
 BmDrEdit_ValidateVoice_ProcessState:
 	ld iz, (0x28af:16)
 	ld wa, (9830:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	call SeqVoice_ValidateAndProcessState
 	ld (0x28af:16), iz
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (9830:16), wa
 	ldw (xsp + 4), 0x1
 	ld xwa, (xsp + 6)
@@ -3435,8 +3435,8 @@ BmDrEdit_CopyEventLoop:
 	ld wa, (xsp + 4)
 	ld bc, (xsp + 2)
 	calr PartCtrl_ReadByteExtended
-	ldb_erp L, 0xfb
-	stb_erp E, 0xfb
+	ldfr_berp L, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	ld wa, (xsp + 8)
 	ld bc, (xsp + 6)
@@ -3506,12 +3506,12 @@ BmDrEdit_DeleteNote_CheckStep:
 
 BmDrEdit_DeleteNote_ReadNextEvent:
 	ld wa, (0x28af:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld iz, (9830:16)
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	ld (0x2760:16), l
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (0x28af:16), wa
 	ld (9830:16), iz
 
@@ -3554,7 +3554,7 @@ BmDrEdit_ScanChannel_UseChannel:
 	jr z, BmDrEdit_ScanChannel_StoreAndContinue
 	ld xbc, xwa
 	ld a, (0x27a2:16)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	ld wa, (xsp + 2)
 
@@ -3747,7 +3747,7 @@ BmDrEdit_CountMeasuresInit:
 	ld (0x287a:16), 0
 	calr BmDrEdit_SaveEditState
 	calr BmDrEdit_ReadNoteDataFields
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	inc1b_erp 0xfb
 	cp (0x287a:16), 0
 	jr z, BmDrEdit_CountInit_ValidateAndInsert
@@ -3757,15 +3757,15 @@ BmDrEdit_CountMeasuresInit:
 BmDrEdit_CountInit_ValidateAndInsert:
 	calr BmDrEdit_CountMeasuresAndValidate
 	inc1b_erp 0xfb
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	ld bc, (0x2772:16)
 	cp wa, bc
 	jr c, BmDrEdit_RestoreEditRet
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	sub a, c
 	inc 1, a
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	extz wa
 	ld (0x2772:16), wa
 	cp wa, 0:i3
@@ -3839,7 +3839,7 @@ BmDrEdit_ProcessVoiceSection:
 	ld wa, (3299:16)
 	extz xwa
 	div xwa, bc
-	stw_erp BC, 0xe2
+	ldto_werp BC, 0xe2
 	ld xwa, (xsp)
 	ld (xwa), bc
 	incw 1, (xde)
@@ -4007,11 +4007,11 @@ BmDrEdit_CompoundWidgetUpdate:
 	sub (xsp+8), wa
 	ldw (0x27ce), (xsp+8)
 	call SeqData_ReadNextByte
-	ldb_erp l, 250
+	ldfr_berp l, 250
 	lda xwa, (xsp+4)
 	lda xbc, (xsp+2)
 	calr BmDrEdit_SetupScrollRegion
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz wa
 	ld c, (xsp+4)
 	extz bc
@@ -4019,18 +4019,18 @@ BmDrEdit_CompoundWidgetUpdate:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	ldb_erp l, 250
-	stb_erp a, 250
-	ldb_erp a, 251
+	ldfr_berp l, 250
+	ldto_berp a, 250
+	ldfr_berp a, 251
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	ldb_erp l, 250
+	ldfr_berp l, 250
 	res_erpb 251, 7
 	res_erpb 250, 7
-	stb_erp c, 250
+	ldto_berp c, 250
 	extz bc
 	mul bc, 96
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz wa
 	add bc, wa
 	ld (0x27d0:16), bc
@@ -4141,7 +4141,7 @@ BmDrEdit_ComputeMeasureAndBeat:
 	ld wa, (0x279a:16)
 	extz xwa
 	div wa, 0x60
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x2784:16), a
 	jr BmDrEdit_CalcSongPosition
 
@@ -4493,7 +4493,7 @@ BmDrEdit_PrepareSecondaryNoteDisplay:
 	call SeqData_AdvancePosition
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
-	ldb_erp L, 0xf8
+	ldfr_berp L, 0xf8
 	extz iz
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte

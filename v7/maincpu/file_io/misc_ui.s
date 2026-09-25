@@ -808,7 +808,7 @@ PsFileNameBox_Confirm_MultiItem:
 	ld	xix, (xwa+42)
 	ld	xwa, (xsp+162)
 	ld	a, (xwa)
-	ldb_erp	a, 244
+	ldfr_berp	a, 244
 	exts	iy
 	ld	xwa, (xsp+4)
 	lda	xhl, (xwa+28)

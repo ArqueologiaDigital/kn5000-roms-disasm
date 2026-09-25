@@ -467,7 +467,7 @@ FileIO_BytecodeData_Code_Skip31:
 	cp	l, 255
 	jrl	z, FileIO_BytecodeData_Code_Epilogue9
 	call	GetCurrentPartSelect
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	ld	xwa, (xsp+2)
 	inc	2, xwa
 	cpib_erp	251, 2
@@ -974,10 +974,10 @@ FileIO_BytecodeData_Code_Epilogue22:
 	extz	wa
 	extz	xwa
 	call	Util_FindLowestSetBit
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	ld	xwa, 165888
 	call	AcApcToggleProc_Helper
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	ld	wa, bc
 	sla	wa, 2
@@ -1019,7 +1019,7 @@ FileIO_BytecodeData_Code_Epilogue23:
 	ld	(xsp+8), xwa
 	ld	xwa, (xsp+8)
 	ld	a, (xwa+2)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	cpib_erp	251, 0
 	jrl	z, FileIO_BytecodeData_Code_Epilogue24
 	ld	a, (0x8c98:16)
@@ -1028,9 +1028,9 @@ FileIO_BytecodeData_Code_Epilogue23:
 	cp	a, 19
 	jr	z, FileIO_BytecodeData_Code_Skip62
 	ld	xwa, 0:i3
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	call	Util_FindLowestSetBit
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	ld	(xsp+4), 72
 	ld	xwa, 163840
 	call	AcApcToggleProc_Helper
@@ -1046,7 +1046,7 @@ FileIO_BytecodeData_Code_Epilogue23:
 	lda	xde, (xwa+3)
 	.byte	0x83, 0x3f, 0x0e
 	jr	nc, FileIO_BytecodeData_Code_Skip63
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xhl, (15572384:24)
 	ld_rrb	a, xhl, wa
@@ -2374,8 +2374,8 @@ MidiParam_ProcessChannel0:
 	ld	(xsp + 2), xwa
 	ld	wa, 0:i3
 	calr	MidiChannel_GetParamByIndex
-	ldb_erp	L, 0xfb
-	stb_erp	A, 0xfb
+	ldfr_berp	L, 0xfb
+	ldto_berp	A, 0xfb
 	extz	wa
 	ld	c, (0x8e60:16)
 	extz	bc
@@ -2385,9 +2385,9 @@ MidiParam_ProcessChannel0:
 	bitm	3, (xwa)
 	jr	z, MidiParam_Ch0_Done
 	resm	3, (xwa)
-	stb_erp	A, 0xfb
+	ldto_berp	A, 0xfb
 	ld	(0x8e60:16), a
-	stb_erp	A, 0xfb
+	ldto_berp	A, 0xfb
 	extz	wa
 	ld	bc, 2:i3
 	call	CPanel_EncoderDispatch
@@ -2406,8 +2406,8 @@ MidiParam_ProcessChannel1:
 	ld	(xsp + 2), xwa
 	ld	wa, 1:i3
 	calr	MidiChannel_GetParamByIndex
-	ldb_erp	L, 0xfb
-	stb_erp	A, 0xfb
+	ldfr_berp	L, 0xfb
+	ldto_berp	A, 0xfb
 	extz	wa
 	ld	c, (0x8e62:16)
 	extz	bc
@@ -2417,9 +2417,9 @@ MidiParam_ProcessChannel1:
 	bitm	3, (xwa)
 	jr	z, MidiParam_Ch1_Done
 	resm	3, (xwa)
-	stb_erp	A, 0xfb
+	ldto_berp	A, 0xfb
 	ld	(0x8e62:16), a
-	stb_erp	A, 0xfb
+	ldto_berp	A, 0xfb
 	extz	wa
 	ld	bc, 5:i3
 	call	CPanel_EncoderDispatch
@@ -2633,22 +2633,22 @@ CtrlPanel_UpdateLEDState:
 	jr	z, LEDUpdate_Cleanup
 	ldib_erp	0xfb, 0
 LEDUpdate_ProcessChannel:
-	stb_erp	A, 0xfb
+	ldto_berp	A, 0xfb
 	extz	wa
 	ld	xbc, (xsp + 2)
 	ldb_sri	C, 0x07, 0xe4, 0xe0
-	ldb_erp	C, 0xfa
+	ldfr_berp	C, 0xfa
 	ld	xbc, (xsp + 6)
 	ldb_sri	C, 0x07, 0xe4, 0xe0
 	cpb_erp	C, 0xfa
 	jr	z, LEDUpdate_NextChannel
-	stb_erp	C, 0xfa
+	ldto_berp	C, 0xfa
 	extz	bc
 	calr	Set_LEDs
-	stb_erp	E, 0xfb
+	ldto_berp	E, 0xfb
 	extz	de
 	ld	xwa, (xsp + 6)
-	stb_erp	C, 0xfa
+	ldto_berp	C, 0xfa
 	stb_dri	C, 0x07, 0xe0, 0xe8
 LEDUpdate_NextChannel:
 	inc1b_erp	0xfb
@@ -3729,7 +3729,7 @@ CtrlPanel_SetIndicatorBit:
 	pushw_erp	0xfa
 	ld	c, a
 	and	c, 0xf0
-	ldb_erp	C, 0xfb
+	ldfr_berp	C, 0xfb
 	and	a, 0xf
 	extz	wa
 	call	CtrlPanel_LookupIndicatorEntry
@@ -3760,7 +3760,7 @@ CtrlPanel_IndicatorDispatch:
 	pushw_erp	0xfa
 	ld	c, a
 	and	c, 0xf0
-	ldb_erp	C, 0xfb
+	ldfr_berp	C, 0xfb
 	and	a, 0xf
 	extz	wa
 	call	CtrlPanel_LookupIndicatorEntry
@@ -3791,7 +3791,7 @@ CtrlPanel_SetIndicatorLED:
 	pushw_erp	0xfa
 	ld	c, a
 	and	c, 0xf0
-	ldb_erp	C, 0xfb
+	ldfr_berp	C, 0xfb
 	and	a, 0xf
 	extz	wa
 	call	CtrlPanel_LookupIndicatorEntry
@@ -4496,7 +4496,7 @@ VoiceData_ExtendedParamSetup:
 	ld	xde, (xsp+8)
 	ld_rrb	a, xde, bc
 	extz	wa
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	add	hl, bc
 	lda_rr	xde, xde, hl
@@ -4582,7 +4582,7 @@ VoiceData_ExtendedParamSetup_Loop:
 	ld	(xsp+8), xwa
 	ldib_erp	251, 0
 VoiceData_ExtendedParamSetup_Loop2:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 26
 	ld	hl, wa
@@ -4951,7 +4951,7 @@ Audio_InitAllChannelParams:
 	pushw_erp	0xfa
 	ldib_erp	0xfb, 0
 AudioParamInit_Loop:
-	stb_erp	A, 0xfb
+	ldto_berp	A, 0xfb
 	extz	wa
 	calr	Audio_InitSingleChannelParams
 	inc1b_erp	0xfb
@@ -6012,7 +6012,7 @@ ExtData_Voice_FullHandler_Helper:
 	.byte	0x04
 	ld	a, (0xfda1:16)
 	and	a, 192
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ldw	wa, 128
 	calr	ExtData_ToneParam_DispatchHandler_Helper
 	ldw	wa, 64
@@ -6049,7 +6049,7 @@ ExtData_Voice_FullHandler_Helper:
 	ld	(0x908e:16), 0
 	ld	l, (xde)
 	and	l, 128
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	and	a, 128
 	cp	a, l
 	jr	z, 7
@@ -6526,7 +6526,7 @@ CtrlPanel_BuildIndicatorBitmask:
 	jr	nz, IndBitmask_LookupByChannel
 	ld	c, (xwa)
 	ld	xiz, 0:i3
-	ldb_erp	C, 0xf8
+	ldfr_berp	C, 0xf8
 	and	xiz, 0x7
 	ldb_sri0	A, (xwa + 0x00be)
 	cp	a, 0xff
@@ -6630,14 +6630,14 @@ Audio_IteratePartsWithExpression:
 	ld	c, a
 	sll	c, 6
 	and	c, 0x40
-	ldb_erp	C, 0xfa
+	ldfr_berp	C, 0xfa
 	srl	a, 1
-	ldb_erp	A, 0xfb
+	ldfr_berp	A, 0xfb
 	res_erpb	0xfb, 0x07
-	stb_erp	C, 0xfb
+	ldto_berp	C, 0xfb
 	extz	bc
 	sll	bc, 8
-	stb_erp	A, 0xfa
+	ldto_berp	A, 0xfa
 	extz	wa
 	add	wa, bc
 	cp	wa, 0x7f40
@@ -6661,9 +6661,9 @@ ExprIter_NextPart:
 ExprIter_ApplyParam:
 	ld	(0x90e2:16), 177
 	mrib4	0x81, 0x19, 0xe3, 0x90
-	stb_erp	A, 0xfa
+	ldto_berp	A, 0xfa
 	ld	(0x90e4:16), a
-	stb_erp	A, 0xfb
+	ldto_berp	A, 0xfb
 	ld	(0x90e5:16), a
 	call	MIDI_LoadParamsAndDispatchCC
 	lda	xwa, (0x905f:16)
@@ -7272,11 +7272,11 @@ ToneGen_DispatchStartVoice:
 	ld	(xsp + 2), xhl
 	ld	xbc, (xsp + 2)
 	ld	a, (xbc)
-	ldb_erp	A, 0xfb
+	ldfr_berp	A, 0xfb
 	ld	a, (xbc + 1)
 	ld	(xsp + 6), a
 	call	ToneGen_DispatchByMode
-	stb_erp	C, 0xfb
+	ldto_berp	C, 0xfb
 	ld	xwa, (xsp + 2)
 	xor	c, (xwa)
 	and	c, 0x3
@@ -7603,7 +7603,7 @@ SndParamUpdate_SetResBit6:
 SndParamUpdate_DispatchWrite:
 	ld	a, (xsp + 8)
 	extz	wa
-	stb_erp	E, 0xfb
+	ldto_berp	E, 0xfb
 	extz	de
 	ld	c, (xsp + 2)
 	extz	bc
@@ -7766,7 +7766,7 @@ VoiceChannels_InitPanFromPreset:
 	ldiw_erp	0xfa, 0
 VoicePanInit_Loop:
 	lda	xwa, (0x9032:16)
-	stw_erp	BC, 0xfa
+	ldto_werp	BC, 0xfa
 	extz	xbc
 	add	xbc, xwa
 	ld	(xbc), 0x10
@@ -7775,7 +7775,7 @@ VoicePanInit_Loop:
 ; -> 0xFC96B7
 	jr	z, ToneGen_IncrementAndExit
 	lda	xwa, (0xf1a0:16)
-	stw_erp	BC, 0xfa
+	ldto_werp	BC, 0xfa
 	extz	xbc
 	add	xbc, xwa
 	ld	a, (xbc)
@@ -7794,7 +7794,7 @@ VoicePanInit_Loop:
 ; -> 0xFC96B7
 	jr	nz, ToneGen_IncrementAndExit
 	lda	xwa, (0x9032:16)
-	stw_erp	DE, 0xfa
+	ldto_werp	DE, 0xfa
 	extz	xde
 	add	xde, xwa
 	and	c, 0xf
@@ -7968,7 +7968,7 @@ ReverbPreset_Load:
 	lda	xsp, (xsp + 10)
 	ld	iz, 0:i3
 ReverbPreset_SendLoop:
-	stb_erp	C, 0xf8
+	ldto_berp	C, 0xf8
 	extz	bc
 	lda	xwa, (0xfc8e:16)
 	ld	de, iz
@@ -8010,7 +8010,7 @@ EQPreset_Load:
 	lda	xsp, (xsp + 10)
 	ld	iz, 0:i3
 EQPreset_SendLoop:
-	stb_erp	C, 0xf8
+	ldto_berp	C, 0xf8
 	extz	bc
 	lda	xwa, (0xfca8:16)
 	ld	de, iz
@@ -8055,7 +8055,7 @@ CombinedPreset_Load:
 	lda	xsp, (xsp + 10)
 	ld	iz, 0:i3
 CombinedPreset_SendReverbLoop:
-	stb_erp	C, 0xf8
+	ldto_berp	C, 0xf8
 	extz	bc
 	lda	xwa, (0xfc8e:16)
 	ld	de, iz
@@ -8081,7 +8081,7 @@ CombinedPreset_SendReverbLoop:
 	lda	xsp, (xsp + 10)
 	ld	iz, 0:i3
 CombinedPreset_SendEQLoop:
-	stb_erp	C, 0xf8
+	ldto_berp	C, 0xf8
 	extz	bc
 	lda	xwa, (0xfca8:16)
 	ld	de, iz
@@ -9273,14 +9273,14 @@ TempoCC_Return:
 TempoRing_InitPartStream:
 	ld	(0x9136:16), 255
 	ld	c, (0x912b:16)
-	ldb_erp	A, 0x3c
-	ldw_erp	DE, 0x3e
+	ldfr_berp	A, 0x3c
+	ldfr_werp	DE, 0x3e
 	ld	de, (0x9129:16)
 	ld	a, c
 	scf
 	xorcf_a_16	de
-	stw_erp	DE, 0x3e
-	stb_erp	A, 0x3c
+	ldto_werp	DE, 0x3e
+	ldto_berp	A, 0x3c
 	jr	c, TempoPartStream_Done
 	extz	hl
 	ld	l, (0x912b:16)
@@ -9399,14 +9399,14 @@ Part_ReinitAllActive:
 	ld	(0x912c:16), 0
 PartReinit_ProcessNextPart:
 	ld	c, (0x912c:16)
-	ldb_erp	A, 0x3c
-	ldw_erp	DE, 0x3e
+	ldfr_berp	A, 0x3c
+	ldfr_werp	DE, 0x3e
 	ld	de, (0xf19e:16)
 	ld	a, c
 	scf
 	xorcf_a_16	de
-	stw_erp	DE, 0x3e
-	stb_erp	A, 0x3c
+	ldto_werp	DE, 0x3e
+	ldto_berp	A, 0x3c
 	jr	c, PartReinit_AdvancePart
 	extz	hl
 	ld	l, c

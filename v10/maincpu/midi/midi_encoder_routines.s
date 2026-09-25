@@ -88,7 +88,7 @@ Encoder_ProcessVolume:
 	cp a, (0x8ef4:16)	; Compare with current
 	jr z, Encoder_ProcessVolume_NoChange
 	ld (0x8ef4:16), a; Store new value
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	extz iz	; IZ = new value
 
 Encoder_ProcessVolume_NoChange:

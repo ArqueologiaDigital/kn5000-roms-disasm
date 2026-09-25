@@ -4586,7 +4586,7 @@ SplitPointFunc:
 	ld de, 1:i3
 	call SoundParam_NotifyChange
 	ld xwa, (xsp + 8)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	cp_erpb 0xfb, 0x24
 	jr c, SplitPoint_ClampToMiddle
 	cp_erpb 0xfb, 0x60
@@ -4608,7 +4608,7 @@ SplitPoint_DrawOctaveLoop:
 	inc 1, iz
 
 Draw_keybed_maybe_for_indicating_split_point:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	div a, 0xc
 	dec 3, a
@@ -4619,7 +4619,7 @@ Draw_keybed_maybe_for_indicating_split_point:
 	jr c, SplitPoint_DrawOctaveLoop
 	cp_erpb 0xfb, 0x60
 	jr nc, SplitPoint_UpdateScreen
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	div c, 0xc
 	ld c, b
@@ -4671,7 +4671,7 @@ SplitPoint_HandleNoteEvt:
 	pushw wa
 	exts xbc
 	divs bc, 0xc
-	stw_erp WA, 0xe6
+	ldto_werp WA, 0xe6
 	sla wa, 2
 	lda xbc, (SplitPoint_NoteNameTable:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0

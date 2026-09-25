@@ -1050,7 +1050,7 @@ HDAE5000_Float_Unpack:
 .LMUL_b76d:
 	ld (xwa), xhl                           ; ld (XWA),XHL
 	ld (xwa + 0x04), xix                    ; ld (XWA+0x04),XIX
-	stb_erp l, 0xee		; ld L,QL
+	ldto_berp l, 0xee		; ld L,QL
 	ret
 
 .LMUL_b776:
@@ -1083,7 +1083,7 @@ HDAE5000_Float_Pack:
 	ret
 
 .LMUL_b7ac:
-	stb_erp e, 0xee		; ld E,QL
+	ldto_berp e, 0xee		; ld E,QL
 	cp	e, 0x08
 	jr nz, .LMUL_b7b8                      ; [6e 04] jr NZ,0x29b7b8
 	ld	xde, 0:i3
@@ -1382,9 +1382,9 @@ HDAE5000_Double_Pack:
 	dec	1, xde
 	ld (xwa), xde                           ; ld (XWA),XDE
 	ld	xde, 0x7fefffff
-	stb_erp c, 0xef		; ld C,QH
+	ldto_berp c, 0xef		; ld C,QH
 	orb_erp c, 0xeb		; or C,QD
-	ldb_erp c, 0xeb		; ld QD,C
+	ldfr_berp c, 0xeb		; ld QD,C
 	ld (xwa + 0x04), xde                    ; ld (XWA+0x04),XDE
 	jr t, .LDIV_b9a1                       ; [68 00] jr T,0x29b9a1
 .LDIV_b9a1:

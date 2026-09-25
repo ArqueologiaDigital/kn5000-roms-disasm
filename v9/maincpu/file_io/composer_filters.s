@@ -150,7 +150,7 @@ CompLoad_DrawItemLoop:
 	lda xde, (0x850c:16)
 	extz xhl
 	add xhl, xde
-	stb_erp C, 0xf8
+	ldto_berp C, 0xf8
 	ld (xhl), c
 	ld bc, 3:i3
 	call FileIO_CheckRecordByFile
@@ -245,7 +245,7 @@ CompLoad_OpLoad:
 	ld iz, 0:i3
 
 CompLoad_HideButtons_Loop:
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	call FileIO_FormatName_Copy
 	inc 1, iz

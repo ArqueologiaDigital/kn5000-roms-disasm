@@ -216,7 +216,7 @@ AccompSeq_CheckPatternEnd:
 	cp a, 0x87
 	jr nz, AccompSeq_PatternEndReturn
 	calr AccompSeq_ReadBeatHeader
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, 6:i3
 	calr AccompSeq_BuildVRAMAddr
 	ld a, (xiy)
@@ -302,7 +302,7 @@ AccompSeq_ResolveVRAMDone:
 AccompSeq_BuildVRAMAddr:
 	push xhl
 	ld xhl, xwa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	and xwa, 0xfff
 	sla xwa, 8
 	ld xiy, xwa

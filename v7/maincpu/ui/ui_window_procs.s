@@ -172,7 +172,7 @@ WndScroll_DrawCurrentItem:
 
 	div wa, 0xd
 
-	stw_erp HL, 0xe2
+	ldto_werp HL, 0xe2
 
 	sll hl, 4
 
@@ -248,7 +248,7 @@ WndScroll_DrawSingleItem:
 	ld wa, iz
 	extz xwa
 	div wa, 0xd
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	sll de, 4
 	lda xwa, (xsp + 34)
 	ld hl, (xwa)
@@ -3118,7 +3118,7 @@ PsRadioBox_Confirm_Draw:
 	lda xiz, (xbc + 28)
 	lda xiy, (xbc + 32)
 	ld c, (xbc + 34)
-	ldb_erp C, 0xf0
+	ldfr_berp C, 0xf0
 	extz ix
 	cpl_sri_rm XHL, 0xfd, 0x24, 0x01
 	jr nz, PsRadioBox_Confirm_DrawUnfocused
@@ -3727,7 +3727,7 @@ PsListBox_SelectUpd_CheckDone:
 	lda xiz, (xwa + 28)
 	ld xwa, (xsp + 4)
 	ld a, (xwa + 34)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	cpl_sri_rm XHL, 0xfd, 0x2a, 0x01
 	jr nz, PsListBox_SelectUpd_DrawUnfocused
@@ -5149,7 +5149,7 @@ DrawPartGroup_Loop:
 	call GetFrameSPSize
 	lda xbc, (xsp + 30)
 	lda xde, (xsp + 22)
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	call GetFrameSPSize
 	cpw (xsp + 16), 0x1
 	jr z, DrawPartGroup_CheckAltFlag
@@ -5189,7 +5189,7 @@ DrawPartGroup_CopyBoxRect:
 	ld bc, (xde + 6)
 	sub bc, (xsp + 22)
 	ld (xwa + 2), bc
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	incw 1, (xsp + 62)
@@ -5430,7 +5430,7 @@ DrawPartGroup_DrawCAFrames:
 	call GetFrameSPSize
 	lda xbc, (xsp + 30)
 	lda xde, (xsp + 22)
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	call GetFrameSPSize
 	ld xwa, (xsp + 74)
 	ld xiy, xwa
@@ -5454,7 +5454,7 @@ DrawPartGroup_DrawCAFrames:
 	sub bc, (xsp + 22)
 	inc 1, bc
 	ld (xwa + 2), bc
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	lda xbc, (xsp + 62)
@@ -6308,7 +6308,7 @@ SplashBMP_DecodePalette:
 	add xix, xwa
 	ld a, (xix)
 	ld xix, 0:i3
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	sll xix, 8
 	ld xwa, xbc
 	ld xiy, xhl
@@ -6861,7 +6861,7 @@ PaletteReduce_CheckDone:
 
 PaletteReduce_RemapPixels:
 	ld A, (xde+)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	ld b, c
 	ld xwa, (xsp + 32)
@@ -7253,12 +7253,12 @@ WallPalette_SetupLoop:
 	ldi_erpw 0xfa, 0xe0, 0x00
 
 WallPalette_IterateEntries:
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	sub bc, 0xe0
 	ld wa, iz
 	call GetWallPaletteRGB
 	ld xbc, xhl
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	call SetPaletteRGB
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0xf0, 0x00
@@ -7332,8 +7332,8 @@ ChangePalette_Impl:
 	ldi_erpw 0xfa, 0x20, 0x00
 
 UIRender_IterateCallbacks:
-	stw_erp WA, 0xfa
-	stw_erp BC, 0xfa
+	ldto_werp WA, 0xfa
+	ldto_werp BC, 0xfa
 	extz xbc
 	sll xbc, 2
 	add xbc, (0x03ef94:24)
@@ -10030,7 +10030,7 @@ DrawDottedLineWithMode_Impl_Skip22:
 	cp	(xsp+24), 1
 	jrl	ugt, Voice_FactoryPresetData_Code_Join
 	ld	a, (0x03efaa:24)
-	ldb_erp	a, 240	; ld ixl, a
+	ldfr_berp	a, 240	; ld ixl, a
 	ld	wa, (xbc+2)
 	exts	xwa
 	ld	xhl, xwa

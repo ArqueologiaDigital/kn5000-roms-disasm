@@ -88,7 +88,7 @@ Encoder_ProcessVolume:
 	cp	a, (36440:16)
 	jr	z, Encoder_ProcessVolume_NoChange	; -> 0xFC650B
 	ld	(36440:16), a
-	ldb_erp	a, 248
+	ldfr_berp	a, 248
 	extz	iz
 Encoder_ProcessVolume_NoChange:
 	ld hl, iz	; Return value in HL

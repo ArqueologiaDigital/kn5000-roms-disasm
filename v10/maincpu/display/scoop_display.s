@@ -622,12 +622,12 @@ ChannelFilter_ApplyMask:
 	xor bc, bc
 
 ChannelFilter_BitScanLoop:
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld a, c
 	scf
 	xorcfw_erp 0x3e
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	jr c, ChannelFilter_NextBit
 	ld iy, bc
 	ldb_sri A, 0x07, 0xec, 0xf4
@@ -637,13 +637,13 @@ ChannelFilter_BitScanLoop:
 	jr nz, ChannelFilter_NextBit
 
 ChannelFilter_ClearBit:
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld a, c
 	rcf
 	stcfw_erp 0x3e
-	stb_erp A, 0x3c
-	stw_erp DE, 0x3e
+	ldto_berp A, 0x3c
+	ldto_werp DE, 0x3e
 
 ChannelFilter_NextBit:
 	inc 1, c
@@ -2238,17 +2238,17 @@ VoiceBank_BitsAndLoad:
 	ret
 
 VoiceBank_StatusDoubleRCF:
-	ldb_erp A, 0x3c
+	ldfr_berp A, 0x3c
 	ld a, c
 	rcf
 	stcfa_dd16 0x52, 0x0f
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	inc 1, c
-	ldb_erp A, 0x3c
+	ldfr_berp A, 0x3c
 	ld a, c
 	rcf
 	stcfa_dd16 0x52, 0x0f
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	dec 1, c
 	ld a, (3765:16)
 	cp a, 0x81
@@ -2257,11 +2257,11 @@ VoiceBank_StatusDoubleRCF:
 	jrl z, Display_NullRet2
 	cp a, 0x84
 	jrl z, Display_NullRet2
-	ldb_erp A, 0x3c
+	ldfr_berp A, 0x3c
 	ld a, c
 	scf
 	stcfa_dd16 0x52, 0x0f
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 
 Display_RedrawFooter_Main:
 	pushw bc
@@ -2282,17 +2282,17 @@ Display_RedrawFooter_Main:
 	jrl nz, Display_RedrawFooter_Main
 
 Display_RedrawTitleString:
-	ldb_erp A, 0x3c
+	ldfr_berp A, 0x3c
 	ld a, c
 	rcf
 	stcfa_dd16 0x52, 0x0f
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	inc 1, c
-	ldb_erp A, 0x3c
+	ldfr_berp A, 0x3c
 	ld a, c
 	scf
 	stcfa_dd16 0x52, 0x0f
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 
 Display_NullRet2:
 	ret
@@ -2390,12 +2390,12 @@ TitleString_MaskAndFormat:
 	xor c, c
 
 TitleString_BitScanLoop:
-	ldb_erp A, 0x3c
-	ldb_erp A, 0x3d
+	ldfr_berp A, 0x3c
+	ldfr_berp A, 0x3d
 	ld a, c
 	scf
 	xorcfb_erp 0x3d
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	jrl nc, TitleString_CheckRhythmBank
 	inc 1, c
 	cp c, 7:i3
@@ -2715,29 +2715,29 @@ PerfMode_Handler_EvtB_Return2:
 	ret
 	ld	a, (0xc07e:16)
 	and	a, (0xc07f:16)
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	and a, 3
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	nz, PerfMode_Handler_EvtB_Skip6
 	ld	a, (0xc07e:16)
 	xor	c, c
-	ldb_erp a, 60
-	ldb_erp a, 61
+	ldfr_berp a, 60
+	ldfr_berp a, 61
 	ld a, c
 	.byte	0xc7, 0x3d, 0x2b	; ldcf A,RH3
 	ccf
 	.byte	0xc7, 0x3d, 0x2c	; stcf A,RH3
-	stb_erp a, 60
-	stb_erp a, 61
+	ldto_berp a, 60
+	ldto_berp a, 61
 	inc 1, c
-	ldb_erp a, 60
-	ldb_erp a, 61
+	ldfr_berp a, 60
+	ldfr_berp a, 61
 	ld a, c
 	.byte	0xc7, 0x3d, 0x2b	; ldcf A,RH3
 	ccf
 	.byte	0xc7, 0x3d, 0x2c	; stcf A,RH3
-	stb_erp a, 60
-	stb_erp a, 61
+	ldto_berp a, 60
+	ldto_berp a, 61
 	and	a, (0xc07f:16)
 	ld	(3520:16), a
 	push	xhl
@@ -2945,15 +2945,15 @@ Timer_ModeHandler_0_Return:
 	jrl	ule, Timer_ModeHandler_0_Skip2
 	add	iy, 2
 Timer_ModeHandler_0_Skip2:
-	ldb_erp	a, 60
-	ldw_erp DE, 0x3e	; ld QHL3,DE
+	ldfr_berp	a, 60
+	ldfr_werp DE, 0x3e	; ld QHL3,DE
 	ld	de, (xiy)
 	ld	a, c
 	scf
 	stcf_a_16 de	; stcf A,DE
-	stb_erp a, 60
+	ldto_berp a, 60
 	ld	(xiy), de
-	stw_erp DE, 0x3e	; ld DE,QHL3
+	ldto_werp DE, 0x3e	; ld DE,QHL3
 	bitda	0, (0x0f57)
 	jrl	nz, Timer_ModeHandler_0_Return3
 	call	Display_UpdateRegion4
@@ -3976,9 +3976,9 @@ ToneParam_Evt09_BytecodeHandler_Skip17:
 	cp	a, 72
 	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip19
 	call	VoiceSlot_FinalRetZ
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	and a, 31
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip19
 	srl	a, 5
 	and	a, 3
@@ -5337,11 +5337,11 @@ VoiceSlot_TableSetup_Code_Skip4:
 	div	wa, l
 	ld	c, a
 	pop	xix
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	ld a, c
 	scf
 	stcf	a, (xix)
-	stb_erp a, 60
+	ldto_berp a, 60
 	push	xix
 	jp	VoiceSlot_TableSetup_0x1F2
 VoiceSlot_TableSetup_Code_Skip5:
@@ -5706,7 +5706,7 @@ VoiceCtrl_BytecodeHandler:
 	cp	a, 72
 	jrl	nz, VoiceCtrl_BytecodeHandler_Skip
 	call	VoiceSlot_FinalRetZ
-	ldb_erp a, 56
+	ldfr_berp a, 56
 	cp a, 6:i3
 	jrl	z, VoiceCtrl_BytecodeHandler_Skip2
 	cp	a, 5:i3
@@ -5724,12 +5724,12 @@ VoiceCtrl_BytecodeHandler_Skip3:
 	or	a, 128
 VoiceCtrl_BytecodeHandler_Skip4:
 	ld	c, 7:opc
-	ldb_erp a, 60
-	ldb_erp a, 61
+	ldfr_berp a, 60
+	ldfr_berp a, 61
 	ld a, c
 	scf
 	xorcfb_erp 61
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	nc, VoiceCtrl_BytecodeHandler_Skip5
 	cp	c, 0:i3
 	jrl	z, VoiceCtrl_BytecodeHandler_Skip
@@ -5743,11 +5743,11 @@ VoiceCtrl_BytecodeHandler_Loop:
 	jp	VoiceCtrl_BytecodeHandler_0xB9
 VoiceCtrl_BytecodeHandler_Skip5:
 	ld	b, c
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	ld a, c
 	scf
 	xorcf a,(0x0dc7:16)	; xorcf A,(0x0dc7)
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	c, VoiceCtrl_BytecodeHandler_Skip6
 	cpib_erp 56, 6
 	jrl nz, VoiceCtrl_BytecodeHandler_Loop
@@ -5915,10 +5915,10 @@ VoiceCtrl_ParamSetupBytecode_Skip7:
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Skip9
 	jp	VoiceCtrl_ParamSetupBytecode_0x19C
 VoiceCtrl_ParamSetupBytecode_Skip8:
-	ldb_erp	a, 60
+	ldfr_berp	a, 60
 	ld	a, (xiy+4)
 	and	a, 127
-	stb_erp	a, 60
+	ldto_berp	a, 60
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Loop
 	jp	VoiceCtrl_ParamSetupBytecode_0x1C4
 VoiceCtrl_ParamSetupBytecode_Skip9:
@@ -5959,10 +5959,10 @@ VoiceCtrl_ParamSetupBytecode_Loop:
 	ld_rr8b	a, xhl, a
 	jp	VoiceCtrl_ParamSetupBytecode_0x1CA
 VoiceCtrl_ParamSetupBytecode_Skip11:
-	ldb_erp	a, 60
+	ldfr_berp	a, 60
 	ld	a, (xiy)
 	and	a, 3
-	stb_erp	a, 60
+	ldto_berp	a, 60
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Loop
 	ld	a, 27:opc
 	jp	VoiceCtrl_ParamSetupBytecode_0x1CA
@@ -6039,9 +6039,9 @@ VoiceCtrl_ParamSetupBytecode_Skip19:
 	or	a, 128
 VoiceCtrl_ParamSetupBytecode_Skip20:
 	ld	(3569:16), a
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	and a, 240
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Skip21
 	call	VoiceCtrl_ParamSetupBytecode_0x303
 VoiceCtrl_ParamSetupBytecode_Skip21:
@@ -6054,12 +6054,12 @@ VoiceCtrl_ParamSetupBytecode_Return2:
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Epilogue3
 	xor	c, c
 	ld	w, (3569:16)
-	ldb_erp a, 60
-	ldb_erp w, 61
+	ldfr_berp a, 60
+	ldfr_berp w, 61
 	ld a, c
 	scf
 	xorcfb_erp 61
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	nc, VoiceCtrl_ParamSetupBytecode_Skip22
 	inc	1, c
 	cp	c, 8
@@ -6751,52 +6751,52 @@ SerialPort_ModeHandler_0_Entry2:
 	ld	(3409:16), wa
 	ld	c, (3822:16)
 	dec	1, c
-	ldb_erp	a, 60
-	ldw_erp DE, 0x3e	; ld QHL3,DE
+	ldfr_berp	a, 60
+	ldfr_werp DE, 0x3e	; ld QHL3,DE
 	ld	de, (3407:16)
 	ld	a, c
 	scf
 	stcf_a_16 de	; stcf A,DE
-	stb_erp	a, 60
+	ldto_berp	a, 60
 	ld	(3407:16), de
-	stw_erp DE, 0x3e	; ld DE,QHL3
-	ldb_erp	a, 60
-	ldw_erp DE, 0x3e	; ld QHL3,DE
+	ldto_werp DE, 0x3e	; ld DE,QHL3
+	ldfr_berp	a, 60
+	ldfr_werp DE, 0x3e	; ld QHL3,DE
 	ld	de, (3409:16)
 	ld	a, c
 	scf
 	stcf_a_16 de	; stcf A,DE
-	stb_erp	a, 60
+	ldto_berp	a, 60
 	ld	(3409:16), de
-	stw_erp DE, 0x3e	; ld DE,QHL3
-	ldb_erp	a, 60
-	ldw_erp DE, 0x3e	; ld QHL3,DE
+	ldto_werp DE, 0x3e	; ld DE,QHL3
+	ldfr_berp	a, 60
+	ldfr_werp DE, 0x3e	; ld QHL3,DE
 	ld	de, (65516:24)
 	ld	a, c
 	rcf
 	stcf_a_16 de	; stcf A,DE
-	stb_erp	a, 60
+	ldto_berp	a, 60
 	ld	(65516:24), de
-	stw_erp DE, 0x3e	; ld DE,QHL3
-	ldb_erp	a, 60
-	ldw_erp DE, 0x3e	; ld QHL3,DE
+	ldto_werp DE, 0x3e	; ld DE,QHL3
+	ldfr_berp	a, 60
+	ldfr_werp DE, 0x3e	; ld QHL3,DE
 	ld	de, (61854:16)
 	ld	a, c
 	rcf
 	stcf_a_16 de	; stcf A,DE
-	stb_erp	a, 60
+	ldto_berp	a, 60
 	ld	(61854:16), de
-	stw_erp DE, 0x3e	; ld DE,QHL3
+	ldto_werp DE, 0x3e	; ld DE,QHL3
 	ldw	(61854:16), 0
-	ldb_erp	a, 60
-	ldw_erp DE, 0x3e	; ld QHL3,DE
+	ldfr_berp	a, 60
+	ldfr_werp DE, 0x3e	; ld QHL3,DE
 	ld	de, (10357:16)
 	ld	a, c
 	rcf
 	stcf_a_16 de	; stcf A,DE
-	stb_erp	a, 60
+	ldto_berp	a, 60
 	ld	(10357:16), de
-	stw_erp DE, 0x3e	; ld DE,QHL3
+	ldto_werp DE, 0x3e	; ld DE,QHL3
 	ldw	(3928:16), 65535
 	call	Audio_CheckSubsystemReady
 	call	VoiceState_DataBlock2_Helper
@@ -7427,13 +7427,13 @@ ScoopParam_ValueTable_Helper6_Skip3:
 	jrl	nz, ScoopParam_ValueTable_Helper6_Skip4
 	ld	c, (3822:16)
 	dec	1, c
-	ldb_erp	a, 60
-	ldw_erp DE, 0x3e	; ld QHL3,DE
+	ldfr_berp	a, 60
+	ldfr_werp DE, 0x3e	; ld QHL3,DE
 	ld	a, c
 	scf
 	stcfw_erp 0x3e	; stcf A,QHL3
-	stb_erp	a, 60
-	stw_erp DE, 0x3e	; ld DE,QHL3
+	ldto_berp	a, 60
+	ldto_werp DE, 0x3e	; ld DE,QHL3
 ScoopParam_ValueTable_Helper6_Skip4:
 	ld	(0xf19e:16), de
 	ld	(0xffec:24), de
@@ -7529,14 +7529,14 @@ SysEx_ControllerBitCheck:
 	ld xwa, (0x02749a:24)
 	or xwa, (0x02749e:24)
 	ld (4560:16), xwa
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (4560:16)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jrl nc, SysEx_ModeChangeCheck
 	and (3924:16), 254
 	call VoiceCtrl_SendNoteOffSequence
@@ -9270,11 +9270,11 @@ SystemInit_StepHandler_0_Return7:
 	pushw	bc
 	xor	c, c
 SystemInit_StepHandler_0_Loop4:
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	ld a, c
 	scf
 	xorcf	a, (xiy)
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	nc, SystemInit_StepHandler_0_Skip21
 	inc	1, c
 	cp	c, 8
@@ -9290,11 +9290,11 @@ SystemInit_StepHandler_0_Skip21:
 	pushw	bc
 	xor	c, c
 SystemInit_StepHandler_0_Loop5:
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	ld a, c
 	scf
 	xorcf	a, (xiy)
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	nc, SystemInit_StepHandler_0_Skip22
 	inc	1, c
 	cp	c, 8
@@ -9302,11 +9302,11 @@ SystemInit_StepHandler_0_Loop5:
 	xor	c, c
 	inc	1, xiy
 SystemInit_StepHandler_0_Loop6:
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	ld a, c
 	scf
 	xorcf	a, (xiy)
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	nc, SystemInit_StepHandler_0_Skip23
 	inc	1, c
 	cp	c, 8
@@ -10497,9 +10497,9 @@ VoiceSlot_StatusRet_Code_Skip5:
 	rrc_i_8 h, 2	; rrc 0x02,H
 	or	a, h
 	ld	(4341:16), a
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	and a, 7
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	z, VoiceSlot_StatusRet_Code_Skip6
 	call	ParamPopup_ApcMode
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -10509,9 +10509,9 @@ VoiceSlot_StatusRet_Code_Skip6:
 	call	ParamPopup_ApcMemory
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Code_Skip7:
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	and a, 224
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	z, VoiceSlot_StatusRet_Code_Skip8
 	call	ParamPopup_AccompPart
 VoiceSlot_StatusRet_Code_Skip8:
@@ -10543,7 +10543,7 @@ VoiceSlot_StatusRet_Skip15:
 VoiceSlot_StatusRet_Skip16:
 	jp	VoiceSlot_StatusRet_0x1C5
 VoiceSlot_StatusRet_Code_Skip10:
-	ldb_erp a, 56
+	ldfr_berp a, 56
 	ld	(4338:16), a
 	call	VoiceSlot_FinalRetZ
 	ld	c, a
@@ -10559,13 +10559,13 @@ VoiceSlot_StatusRet_Skip17:
 	or	a, 128
 VoiceSlot_StatusRet_Skip18:
 	ld	xiy, 0x3728
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	and a, 192
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	nz, VoiceSlot_StatusRet_Skip19
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	and a, 48
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	nz, VoiceSlot_StatusRet_Skip21
 	bit	2, a
 	jrl	nz, VoiceSlot_StatusRet_Code_Skip11
@@ -10573,9 +10573,9 @@ VoiceSlot_StatusRet_Skip18:
 	jrl	nz, VoiceSlot_StatusRet_Code_Skip12
 	jp	VoiceSlot_StatusRet_0x1C5
 VoiceSlot_StatusRet_Skip19:
-	ldb_erp c, 60
+	ldfr_berp c, 60
 	and c, 192
-	stb_erp c, 60
+	ldto_berp c, 60
 	jrl	z, VoiceSlot_StatusRet_Loop2
 	bit	6, c
 	jrl	z, VoiceSlot_StatusRet_Skip20
@@ -10589,9 +10589,9 @@ VoiceSlot_StatusRet_Loop2:
 	setda	5, (0x0d54)
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip21:
-	ldb_erp	c, 60
+	ldfr_berp	c, 60
 	and	c, 48
-	stb_erp	c, 60
+	ldto_berp	c, 60
 	jrl	z, VoiceSlot_StatusRet_Loop2
 	ld	(xiy), 7
 	bit	4, c
@@ -10713,10 +10713,10 @@ VoiceSlot_StatusRet_Skip25:
 	jrl	z, VoiceSlot_StatusRet_Skip26
 	cp	l, 3:i3
 	jrl	nz, VoiceSlot_StatusRet_Code_Skip20
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	ld	a, (4341:16)
 	and	a, 1
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	z, VoiceSlot_StatusRet_Code_Skip20
 	call	ParamPopup_Msa
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -10852,10 +10852,10 @@ VoiceSlot_StatusRet_Code_Skip29:
 	call	ParamPopup_PartReverb
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Code_Skip30:
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	ld	a, (4341:16)
 	and	a, 192
-	stb_erp a, 60
+	ldto_berp a, 60
 	jrl	z, VoiceSlot_StatusRet_Code_Loop
 	call	ParamPopup_PartTimbre
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -11736,11 +11736,11 @@ VoiceState_DataBlock2_Code_Skip19:
 	div	wa, l
 	pushw	bc
 	ld	c, a
-	ldb_erp a, 60
+	ldfr_berp a, 60
 	ld a, c
 	scf
 	stcf	a, (xix)
-	stb_erp a, 60
+	ldto_berp a, 60
 	popw	bc
 	jp	VoiceState_DataBlock2_0x563
 VoiceState_DataBlock2_Code_Skip20:
@@ -13084,12 +13084,12 @@ PerfMode_ParamHandler_11_Skip63:
 	or	a, (4461:16)
 	xor	bc, bc
 PerfMode_ParamHandler_11_Loop7:
-	ldb_erp	a, 60
-	ldb_erp	a, 61
+	ldfr_berp	a, 60
+	ldfr_berp	a, 61
 	ld	a, c
 	scf
 	xorcfb_erp	61
-	stb_erp	a, 60
+	ldto_berp	a, 60
 	jrl	nc, PerfMode_ParamHandler_11_Entry2
 	inc	1, c
 	cp	c, 7:i3
@@ -16807,9 +16807,9 @@ Scoop_EventHandler_MenuSwitch:
 	ld wa, (3299:16)
 	xor bc, bc
 	ld c, (1075:16)
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, bc
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld c, e
 	ld de, wa
 	inc 1, de
@@ -17904,7 +17904,7 @@ Scoop_EnvCalc_Handler3:
 	sll bc, 3
 	ld	(xsp+10), bc
 	ld	a, (xwa+2)
-	ldb_erp a, 248
+	ldfr_berp a, 248
 	extz	iz
 	ld	wa, (xsp+10)
 	dec	2, wa

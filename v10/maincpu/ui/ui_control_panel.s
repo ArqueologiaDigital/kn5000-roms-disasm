@@ -1084,10 +1084,10 @@ DrawProgV_CalcDimensions:
 	ld wa, bc
 	sub wa, (xhl)
 	mul xwa, de
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	extz xwa
 	div wa, 0x64
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	lda xde, (xhl + 6)
 	lda xiy, (xhl + 2)
 	ld wa, (xde)
@@ -1100,7 +1100,7 @@ DrawProgV_CalcDimensions:
 	ld wa, bc
 	sub wa, (xhl)
 	ld (xsp + 4), wa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	sub (xsp + 4), wa
 	cpw (xsp + 6), 0x0
 	jr z, DrawProgV_SetTopPos

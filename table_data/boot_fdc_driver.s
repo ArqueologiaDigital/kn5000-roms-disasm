@@ -254,7 +254,7 @@ FDC_MediaStanza_Default:
 ; and recalibrate.  Any failure clears the 0x0C4E guard and exits.
 ; -----------------------------------------------------------------------------
 FDC_MediaStanza_Submit:
-	stb_erp a, 0xfb	; ld A,QIZH - A = data-rate bits saved by the stanza
+	ldto_berp a, 0xfb	; ld A,QIZH - A = data-rate bits saved by the stanza
 	or a, 0x0b	; or A,0x0b - 0x0B = aux control internal mode; rate: 0x00=250k 0x40=500k 0xC0=300kbps
 	extz wa	; extz WA
 	calr FDC_IssueCommand	; calr 0xffdfc3
@@ -1470,7 +1470,7 @@ FDC_CmdInitialize:
 FDC_CmdRecalibrate:
 	pushw_erp 0xfa	; push QIZ - cmd 1 entry
 	ld a, (0x0c64:16)	; ld A,(0x0c64)
-	ldb_erp a, 0xfb	; ld QIZH,A
+	ldfr_berp a, 0xfb	; ld QIZH,A
 	ld (0x0c64:16), 5	; ld (0x0c64),0x05
 	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff - recalibrate homes via track 5 first (head-load settling)
 	calr FDC_CmdSeek	; calr 0xffe31a
@@ -1483,7 +1483,7 @@ FDC_CmdRecalibrate:
 	jr z, FDC_CmdRecalibrate__restore	; jr Z,0xffe309
 	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 FDC_CmdRecalibrate__restore:
-	stb_erp a, 0xfb	; ld A,QIZH
+	ldto_berp a, 0xfb	; ld A,QIZH
 	ld (0x0c64:16), a	; ld (0x0c64),A
 	ldw wa, 0x10	; ld WA,0x0010
 	calr Boot_Delay	; calr 0xffe296
@@ -1553,10 +1553,10 @@ FDC_CmdReadSectors__retry:
 	cp (0x0c52:16), 0	; cp (0x0c52),0x00
 	jr z, FDC_CmdReadSectors__seek_ok	; jr Z,0xffe3a5
 	ld a, (0x0c52:16)	; ld A,(0x0c52)
-	ldb_erp a, 0xf8	; ld IZL,A
+	ldfr_berp a, 0xf8	; ld IZL,A
 	exts iz	; exts IZ
 	calr FDC_MediaConfigAndRecalibrate	; calr 0xffd8a5
-	stb_erp a, 0xf8	; ld A,IZL
+	ldto_berp a, 0xf8	; ld A,IZL
 	ld (0x0c52:16), a	; ld (0x0c52),A
 	jrl FDC_CmdReadSectors__done	; jrl T,0xffe4a8
 FDC_CmdReadSectors__seek_ok:
@@ -1662,10 +1662,10 @@ FDC_CmdWriteSectors__retry:
 	cp (0x0c52:16), 0	; cp (0x0c52),0x00
 	jr z, FDC_CmdWriteSectors__seek_ok	; jr Z,0xffe4d8
 	ld a, (0x0c52:16)	; ld A,(0x0c52)
-	ldb_erp a, 0xf8	; ld IZL,A
+	ldfr_berp a, 0xf8	; ld IZL,A
 	exts iz	; exts IZ
 	calr FDC_MediaConfigAndRecalibrate	; calr 0xffd8a5
-	stb_erp a, 0xf8	; ld A,IZL
+	ldto_berp a, 0xf8	; ld A,IZL
 	ld (0x0c52:16), a	; ld (0x0c52),A
 	jrl FDC_CmdWriteSectors__done	; jrl T,0xffe5e1
 FDC_CmdWriteSectors__seek_ok:
@@ -2127,7 +2127,7 @@ FDC_CmdSenseDriveStatus:
 	cp (0x0c52:16), 0	; cp (0x0c52),0x00
 	jr nz, FDC_CmdSenseDriveStatus__done	; jr NZ,0xffe940
 	calr FDC_ReadData	; calr 0xffd7ee
-	ldb_erp l, 0xfb	; ld QIZH,L - QIZH = ST3
+	ldfr_berp l, 0xfb	; ld QIZH,L - QIZH = ST3
 	bit_erpb 0xfb, 7	; bit 0x07,QIZH - ST3 bit 7 = fault
 	jr z, FDC_CmdSenseDriveStatus__check_ready	; jr Z,0xffe928
 	ldw wa, 0x32	; ld WA,0x0032 - error 0x32 = drive fault

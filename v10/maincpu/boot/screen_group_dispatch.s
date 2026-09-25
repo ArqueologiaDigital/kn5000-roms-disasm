@@ -53,7 +53,7 @@ VoiceInit_Dispatch:
 	ld de, iz
 	extz xde
 	sll xde, 2
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	sll xwa, 2
 	ld xbc, SystemConfig_PointerTable
@@ -66,7 +66,7 @@ VoiceInit_Dispatch:
 	inc1w_erp 0xfa
 
 ScreenGroup_WidgetLoop:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	sll xwa, 2
 	ld xbc, SystemConfig_PointerTable

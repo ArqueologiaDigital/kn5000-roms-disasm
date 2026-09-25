@@ -1630,7 +1630,7 @@ Snd_ParamLookupSetupWerp:
 
 ; DkMdlyPly handle result
 DkMdlyPly_HandleResult:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, wa
 	lda xbc, (SepaOut_Config_0_0x8E:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
@@ -1641,7 +1641,7 @@ DkMdlyPly_HandleResult:
 	calr DkMdlyPly_SendAudioCmd
 	cp hl, iz
 	jr nz, DkMdlyPly_ExtendedCheck
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, wa
 	lda xbc, (SepaOut_Config_0_0x8E:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0

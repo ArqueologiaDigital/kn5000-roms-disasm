@@ -475,7 +475,7 @@ DispFileList_LoopBody:
 	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
@@ -678,7 +678,7 @@ SmfFN_PageDown:
 	jrl ge, SmfFN_UpdateDisplay
 	exts xhl
 	divs hl, 0xa
-	stw_erp WA, 0xee
+	ldto_werp WA, 0xee
 	cp wa, 0:i3
 	jrl z, SmfFN_UpdateDisplay
 	ld (0x81ac:16), bc
@@ -707,7 +707,7 @@ SmfFN_PageDown_ClampCheck:
 	jrl ge, SmfFN_UpdateDisplay
 	exts xbc
 	divs bc, 0xa
-	stw_erp WA, 0xe6
+	ldto_werp WA, 0xe6
 	cp wa, 0:i3
 	jrl z, SmfFN_UpdateDisplay
 	ld (0x81ac:16), hl
@@ -1164,7 +1164,7 @@ SmfFN_RefreshIfChanged:
 	ld wa, (0x81ac:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x81a0:16)
 	ld xbc, 0x1e50002
@@ -1181,7 +1181,7 @@ SmfFN_RefreshIfChanged:
 	ld bc, (xsp + 4)
 	exts xbc
 	divs bc, 0xa
-	stw_erp BC, 0xe6
+	ldto_werp BC, 0xe6
 	sll bc, 5
 	lda xhl, (0x850c:16)
 	ld de, bc
@@ -1192,7 +1192,7 @@ SmfFN_RefreshIfChanged:
 	ld wa, (0x81ac:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	sll wa, 5
 	lda xbc, (0x850c:16)
 	ld de, wa
@@ -1262,7 +1262,7 @@ SmfFN_SendOkState:
 	ld wa, (0x81ac:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x81a0:16)
 	ld xbc, 0x1e50002
@@ -1293,7 +1293,7 @@ DispSeqList_LoopBody:
 	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz

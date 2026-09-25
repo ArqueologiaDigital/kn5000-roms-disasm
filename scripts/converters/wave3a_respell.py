@@ -32,6 +32,14 @@ right bytes but name the wrong instruction or register
             swapped)` / `; = ... (unidasm)`) are removed from the lines this
             rewrites -- the instruction now says it.
 
+  erp       the byte/word extended-register LD pair, whose names read
+            BACKWARDS: 0x88+R is LD R,r and 0x98+R is LD r,R (MAME `c7 fb 89`
+            = ld A,QIZH), but they were `stb_erp a, 0xFB` / `ldb_erp a, 0xFB`
+            -- `ldw_erp WA, 0x30` stores WA INTO RWA3.  Renamed to the long
+            form's names: stb_erp -> ldto_berp, ldb_erp -> ldfr_berp,
+            stw_erp -> ldto_werp, ldw_erp -> ldfr_werp (ldto = load TO the
+            named register, ldfr = load FROM it).  Operands untouched.
+
   disp256   `(xrr+256)` -- the retired sentinel for "(Xrr+d8) carrying 0" --
             becomes `(xrr+0:8)`.  The value is matched, not the text
             (256, 0x100, 0x0100).
@@ -267,6 +275,16 @@ def rw_autoinc(mn, ops, equs):
     return None
 
 
+# ------------------------------------------------------------------ erp
+ERP = {"stb_erp": "ldto_berp", "ldb_erp": "ldfr_berp",
+       "stw_erp": "ldto_werp", "ldw_erp": "ldfr_werp"}
+
+
+def rw_erp(mn, ops):
+    new = ERP.get(mn.lower())
+    return (new, ops) if new else None
+
+
 # ------------------------------------------------------------------ disp256
 D256 = re.compile(r'(\(\s*x(?:wa|bc|de|hl|ix|iy|iz|sp)\s*\+\s*)(0x0*100|256)(\s*\))', re.I)
 
@@ -309,10 +327,16 @@ def rewrite_line(fam, line, equs):
     if not m:
         return None, None
     head, mn, ws, ops, ws2, com = m.groups()
-    if "\\" in ops:
-        r = rw_muldiv(mn, split_ops(ops)) if fam == "muldiv" else rw_autoinc(mn, split_ops(ops), equs)
+    def rw(o):
+        if fam == "muldiv":
+            return rw_muldiv(mn, o)
+        if fam == "erp":
+            return rw_erp(mn, o)
+        return rw_autoinc(mn, o, equs)
+    if "\\" in ops and fam != "erp":
+        r = rw(split_ops(ops))
         return (None, "REFUSE:macro-parameter") if r else (None, None)
-    r = rw_muldiv(mn, split_ops(ops)) if fam == "muldiv" else rw_autoinc(mn, split_ops(ops), equs)
+    r = rw(split_ops(ops))
     if r is None:
         return None, None
     if isinstance(r, str):
@@ -383,7 +407,7 @@ def assemble(mc, lines, equs=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("family", choices=("muldiv", "autoinc", "disp256"))
+    ap.add_argument("family", choices=("muldiv", "autoinc", "disp256", "erp"))
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--old-mc", default=OLD_MC)
     ap.add_argument("--new-mc", default=NEW_MC)

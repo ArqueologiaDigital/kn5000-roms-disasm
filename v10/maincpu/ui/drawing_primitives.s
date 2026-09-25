@@ -932,7 +932,7 @@ DrawLineEx_ShallowSetup:
 DrawLineEx_ShallowLoop:
 	ld iz, (xsp + 58)
 	ld wa, (xsp + 44)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	lda xiy, (0x043c00:24)
 	ld wa, (xde)
 	exts xwa
@@ -948,7 +948,7 @@ DrawLineEx_ShallowLoop:
 	exts xwa
 	add xwa, xhl
 	add xiy, xwa
-	stb_erp A, 0xf0
+	ldto_berp A, 0xf0
 	ld (xiy), a
 
 DrawLineEx_ShallowAdvance:
@@ -987,7 +987,7 @@ DrawLineEx_ShallowXorPixel:
 	exts xwa
 	add xwa, xhl
 	add xiy, xwa
-	stb_erp A, 0xf0
+	ldto_berp A, 0xf0
 	xor (xiy), a
 	jr DrawLineEx_ShallowAdvance
 
@@ -1752,7 +1752,7 @@ DrawFrameEx_TopBottomLoop:
 	ld xiy, xix
 	add xiy, xbc
 	ld bc, (xsp + 16)
-	ldb_erp C, 0xee
+	ldfr_berp C, 0xee
 	ld (xiy), c
 	ld xbc, (xsp + 4)
 	ld bc, (xbc)
@@ -1763,7 +1763,7 @@ DrawFrameEx_TopBottomLoop:
 	sll xiy, 6
 	lda_dri XBC, 0x07, 0xf4, 0xec
 	add xix, xbc
-	stb_erp C, 0xee
+	ldto_berp C, 0xee
 	ld (xix), c
 
 DrawFrameEx_TopBottomAdvance:
@@ -1805,7 +1805,7 @@ DrawFrameEx_TopBottomXorPixel:
 	ld xiy, xix
 	add xiy, xbc
 	ld bc, (xsp + 16)
-	ldb_erp C, 0xee
+	ldfr_berp C, 0xee
 	xor (xiy), c
 	ld xbc, (xsp + 4)
 	ld bc, (xbc)
@@ -1816,7 +1816,7 @@ DrawFrameEx_TopBottomXorPixel:
 	sll xiy, 6
 	lda_dri XBC, 0x07, 0xf4, 0xec
 	add xix, xbc
-	stb_erp C, 0xee
+	ldto_berp C, 0xee
 	xor (xix), c
 	jr DrawFrameEx_TopBottomAdvance
 
@@ -2355,7 +2355,7 @@ DrawBitmap_Impl_ColLoop:
 	ld wa, (xhl)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr z, DrawBitmap_Impl_RowAdvance
 	cp (xix), 0xf7
@@ -2517,7 +2517,7 @@ DrawBitmapFast_Impl_RowLoop:
 	ld wa, (xiz)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	add wa, (xiz)
 	exts xwa
 	divs wa, 0x2
@@ -2812,7 +2812,7 @@ DrawFrameSP_Impl_ColLoop:
 	ld (xde), wa
 	ld xwa, (xsp)
 	ld a, (xwa)
-	ldb_erp A, 0xee
+	ldfr_berp A, 0xee
 	cp_erpb 0xee, 0xf7
 	jr z, DrawFrameSP_Impl_PixelAdvance
 	lda xiy, (0x043c00:24)
@@ -3066,7 +3066,7 @@ DrawBitmapSP_Impl_ColLoop:
 	ld wa, (xsp + 20)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr z, DrawBitmapSP_Impl_RowAdvance
 	ld xix, (xsp + 22)
@@ -3359,7 +3359,7 @@ DrawBitmapSP2_Impl_LoadMaskWord:
 
 DrawBitmapSP2_Impl_BitLoop:
 	ld wa, (xsp + 14)
-	ldw_erp WA, 0xe2
+	ldfr_werp WA, 0xe2
 	ld wa, iz
 	sll wa, 4
 	addw_erp WA, 0xe6
@@ -3373,8 +3373,8 @@ DrawBitmapSP2_Impl_BitLoop:
 	slaw_erp 0xea
 
 DrawBitmapSP2_Impl_DrawPixel:
-	stw_erp WA, 0xea
-	ldw_erp WA, 0xe2
+	ldto_werp WA, 0xea
+	ldfr_werp WA, 0xe2
 	ld wa, iy
 	andw_erp WA, 0xe2
 	jr z, DrawBitmapSP2_Impl_BitAdvance
@@ -3555,7 +3555,7 @@ DrawBitmapFile_Impl_LoadPalette:
 	add xix, xwa
 	ld a, (xix)
 	ld xix, 0:i3
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	sll xix, 8
 	ld xwa, xde
 	ld xiy, xhl

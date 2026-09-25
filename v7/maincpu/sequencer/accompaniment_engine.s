@@ -778,11 +778,11 @@ AccVoice_ParamIndexData:
 
 AccPart_GetVoiceParamOffsetTable:
 	ld xhl, AccPart_VoiceParamDispatchTable
-	ldb_erp W, 0x31
+	ldfr_berp W, 0x31
 	extz wa
 	sla wa, 2
 	ld_sril3 XHL, 0x07, 0xec, 0xe0
-	stb_erp W, 0x31
+	ldto_berp W, 0x31
 	sla w, 1
 	ldw_sri HL, 0x03, 0xec, 0xe1
 	extz xhl
@@ -4963,7 +4963,7 @@ AccTiming_HelperReturn:
 AccVoice_SelectByMask:
 	cp (0x3249:16), 0x80
 	jr c, AccVoice_SelectByMask_Default
-	ldb_erp w, 0x31
+	ldfr_berp w, 0x31
 	and w, (0x327b:16)
 	jr nz, AccVoice_SelectByMask_Default
 	bit 0, (0x32c7:16)
@@ -11520,7 +11520,7 @@ AccTone_Process_Cleanup:
 	ret
 
 AccTone_NoteLookup:
-	ldb_erp A, 0xf4
+	ldfr_berp A, 0xf4
 	extz iy
 	ld de, (4360:16)
 	ld ix, de
@@ -11579,7 +11579,7 @@ AccTone_ExtendAndDispatch_Body:
 	extz wa
 	lda xhl, (Display_FontPalette_Table_0x1D32:24)
 	ldb_sri A, 0x07, 0xec, 0xe0
-	ldb_erp A, 0xe2
+	ldfr_berp A, 0xe2
 	lda xiz, (Display_FontPalette_Table_0x511C:24)
 	ld_sril3 XBC, 0x07, 0xf8, 0xe4
 	add de, 0x11
@@ -11598,7 +11598,7 @@ AccTone_ExtendAndDispatch_Body:
 	add_sril_rm XIZ, 0x07, 0xf0, 0xe0
 	ld c, (xiz + 12)
 	extz bc
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	cpb_sri_rm A, 0x07, 0xec, 0xe4
 	jr z, AccTone_FoundMatch_IncRet
 
@@ -11622,7 +11622,7 @@ AccTone_CheckBit10Flag:
 	add_sril_rm XIZ, 0x07, 0xf0, 0xe0
 	ld c, (xiz + 12)
 	extz bc
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	cpb_sri_rm A, 0x07, 0xec, 0xe4
 	jr nz, AccTone_SetupExit
 
@@ -11635,7 +11635,7 @@ AccTone_CheckBit3Flag:
 	and wa, 0x8
 	cp wa, 0x8
 	jr nz, AccTone_SetupExit
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	extz wa
 	lda xbc, (Display_FontPalette_Table_0x1D58:24)
 	bit_dri 0, 0x07, 0xe4, 0xe0
@@ -19814,7 +19814,7 @@ ToneGen_CalcTempo_Mode0:
 	add wa, de
 	xor de, de
 	ldw hl, 0x14
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
 	jr ToneGen_CalcTempoBeatsAndTicks
 
@@ -25545,7 +25545,7 @@ Tempo_DisplayParamReturn:
 	calr Part_StoreVoiceTableIndex
 	ld wa, 0:i3
 	calr Tempo_FormatBPM
-	ldb_erp l, 0xfb
+	ldfr_berp l, 0xfb
 	cps_erpb 0xfb, 1
 	jrl z, Tempo_DisplayEffect
 Tempo_DisplayStartMeasure:
@@ -25569,7 +25569,7 @@ Tempo_DisplayStartMeasure:
 	calr Part_StoreVoiceTableIndex
 	ld wa, 1:i3
 	calr Tempo_FormatBPM
-	ldb_erp l, 0xfb
+	ldfr_berp l, 0xfb
 	cps_erpb 0xfb, 1
 	jrl z, Tempo_DisplayEffect
 Tempo_DisplayEndMeasure:
@@ -25593,7 +25593,7 @@ Tempo_DisplayEndMeasure:
 	calr Part_StoreVoiceTableIndex
 	ld wa, 2:i3
 	calr Tempo_FormatBPM
-	ldb_erp l, 0xfb
+	ldfr_berp l, 0xfb
 	cps_erpb 0xfb, 1
 	jr z, Tempo_DisplayEffect
 Tempo_DisplayQuantize:
@@ -25617,7 +25617,7 @@ Tempo_DisplayQuantize:
 	calr Part_StoreVoiceTableIndex
 	ld wa, 3:i3
 	calr Tempo_FormatBPM
-	ldb_erp l, 0xfb
+	ldfr_berp l, 0xfb
 	cps_erpb 0xfb, 1
 	jr z, Tempo_DisplayEffect
 Tempo_DisplayTimeSigNum:
@@ -25641,14 +25641,14 @@ Tempo_DisplayTimeSigNum:
 	calr Part_StoreVoiceTableIndex
 	ld wa, 4:i3
 	calr Tempo_FormatBPM
-	ldb_erp l, 0xfb
+	ldfr_berp l, 0xfb
 	cps_erpb 0xfb, 1
 	jr nz, Tempo_DisplayEffectLookup
 Tempo_DisplayEffect:
 	calr Tempo_DisplayEffectRender
 
 Tempo_DisplayEffectLookup:
-	stb_erp L, 0xfb
+	ldto_berp L, 0xfb
 	popw_erp 0xfa
 	ret
 
@@ -25695,11 +25695,11 @@ Tempo_DisplayBPMValue:
 
 	inc 1, a
 
-	ldb_erp A, 0xfa
+	ldfr_berp A, 0xfa
 
 	; mul_sd16b 1, 0x86, 0x39 (v7 patched)
 	.byte	0xc1, 0xea, 0x38, 0x41	; mul WA, (0x38ea) (unidasm; no llvm-mc spelling)
-	ldb_erp A, 0xfa
+	ldfr_berp A, 0xfa
 
 
 
@@ -25734,7 +25734,7 @@ Tempo_DisplayBPMFinal:
 	cp	l, 1:i3
 	jr	z, Tempo_DisplayBPMExit
 	inc1b_erp	251
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	cpb_erp	a, 250
 	jr	nz, Tempo_DisplayBPMFinal
 Tempo_DisplayBPMClean:
@@ -25850,28 +25850,28 @@ Tempo_DisplayEffectValLookup:
 	cp	(xsp+10), 0
 	jr	nz, Tempo_RefreshDisplay5
 	ld	a, (0x38f5:16)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld	(xsp+8), 24
 	jr	Tempo_RefreshDisplay5
 Tempo_RefreshDisplay1:
 	ld	a, (0x38f6:16)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld	(xsp+8), 32
 	jr	Tempo_RefreshDisplay5
 Tempo_RefreshDisplay2:
 	ld	a, (0x38f7:16)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld	(xsp+8), 40
 	jr	Tempo_RefreshDisplay5
 Tempo_RefreshDisplay3:
 	ld	a, (0x38f8:16)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld	(xsp+8), 48
 	jr	Tempo_RefreshDisplay5
 Tempo_RefreshDisplay4:
 	ld a, (14585:16)
 
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 
 	ld (xsp + 8), 0x38
 
@@ -25888,7 +25888,7 @@ Tempo_RefreshDisplay5:
 	sll	xhl, 5
 	add	xhl, 608352
 	ld	(xsp+4), xhl
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	dec	1, a
 	extz	wa
 	lda	xbc, (0xf1a0:16)
@@ -25918,7 +25918,7 @@ SeqRec_InitState:
 	calr SeqRec_OverflowCleanup
 
 SeqRec_InitChannels:
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 
 	extz bc
 
@@ -25934,11 +25934,11 @@ SeqRec_InitChannels:
 
 	extz wa
 
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 
 	mul xwa, bc
 
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 
 	ld iz, 0:i3
 
@@ -26092,9 +26092,9 @@ Part_LoadAndIndexVoiceTable:
 	pop	xix
 	pop	xhl
 	pop	xde
-	stb_erp	a, 250
+	ldto_berp	a, 250
 	ld	(13370:16), a
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	ld	(14079:16), a
 	pop qiz
 	ret
@@ -32101,9 +32101,9 @@ SndArgNmGet:
 SndArgNm_ChannelLoop:
 	ld a, (xsp + 4)
 	call AccVoice_GetChannelCount_Wrap
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	inc1b_erp 0xfb
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	add (xsp + 2), wa
 	incm8 1, (xsp + 4)
@@ -32138,7 +32138,7 @@ SndArgNm_CheckChannelDone:
 	jrl nz, SndArgNm_ReturnZero
 	ld xix, xhl
 	ld a, (xhl)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld xiy, xde
 	or xde, xde
 	jr nz, SndArgNm_ProcessEntry
@@ -32147,7 +32147,7 @@ SndArgNm_CheckChannelDone:
 SndArgNm_ProcessEntry:
 	lda xde, (xbc + 3)
 
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 
 	ld (xde), a
 
@@ -32155,11 +32155,11 @@ SndArgNm_ProcessEntry:
 
 	res 7, a
 
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 
 	lda xhl, (xbc + 4)
 
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 
 	ld (xhl), a
 
@@ -32169,7 +32169,7 @@ SndArgNm_ProcessEntry:
 
 	ld a, (xwa)
 
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 
 	ld (xbc + 2), a
 
@@ -32177,7 +32177,7 @@ SndArgNm_ProcessEntry:
 
 	dec 2, a
 
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 
 	ld a, (xde)
 
@@ -32187,7 +32187,7 @@ SndArgNm_ProcessEntry:
 
 	extz bc
 
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 
 	extz de
 
@@ -32199,7 +32199,7 @@ SndArgNm_ProcessEntry:
 
 	call	Display_BytecodeBlock_F_Helper2
 
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 
 	extz wa
 
@@ -32244,7 +32244,7 @@ SndArgNm_HandleEvent21_Copy:
 
 	srl a, 7
 
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 
 	ld xwa, (xsp + 70)
 
@@ -32254,7 +32254,7 @@ SndArgNm_HandleEvent21_Copy:
 
 	pushw 0x3
 
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 
 	extz wa
 
@@ -32280,7 +32280,7 @@ SndArgNm_HandleEvent21_Copy:
 
 	lda xsp, (xsp + 10)
 
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 
 	extz wa
 
@@ -34443,16 +34443,16 @@ AccBankData_PadSpaces_Done:
 AccBankData_ProcessSlot:
 	lda	xwa, (432128:24)
 	ld	(14610:16), xwa
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	ld	(14608:16), a
 	call	AccPatch_InitFromSlotIndex
 	ld	xwa, (15552:16)
 	ld	(14610:16), xwa
 	lda	xwa, (432128:24)
 	ld	(14614:16), xwa
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	ld	(14609:16), a
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	ld	(14608:16), a
 	call	DualVoice_ParamLoadDone
 	ld	a, (13588:16)
@@ -34477,7 +34477,7 @@ AccBankData_ReInitAllSlots:
 
 
 AccBankData_ReInit_Loop:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	ld	(14608:16), a
 	call	AccPatch_InitFromSlotIndex
 	inc1b_erp	251
@@ -34499,7 +34499,7 @@ AccBankData_FinalizeCheck:
 	ldib_erp	251, 0
 	lda	xde, (0xe2f4:16)
 AccBankData_CompareLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	ld hl, wa
 	extz xhl
@@ -34594,7 +34594,7 @@ AccBankData_SlotScan_Loop:
 	ld	(14610:16), xwa
 	ld	c, (xsp+2)
 	extz	bc
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	de, wa
@@ -34606,7 +34606,7 @@ AccBankData_SlotScan_Loop:
 	ld	(14610:16), xwa
 	lda	xwa, (432128:24)
 	ld	(14614:16), xwa
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	bc, wa
@@ -34641,7 +34641,7 @@ AccBankData_SlotScan_ReInit:
 AccBankData_ReInit_ScanLoop:
 	ld	c, (xsp+2)
 	extz	bc
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	de, wa
@@ -34751,7 +34751,7 @@ StyleConvInit_StoreChar:
 	ld iy, wa
 	extz xiy
 	add xiy, xde
-	stb_erp A, 0xe2
+	ldto_berp A, 0xe2
 	ld (xiy + 1), a
 	inc 1, iz
 	cp iz, 0x20
@@ -36098,7 +36098,7 @@ StylCnv_Type4_CalcCenter:
 	ld wa, (xsp + 16)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ldiw_erp 0xfa, 1
 	cp wa, 0:i3
 	jr nz, StylCnv_Type4_CheckNull
@@ -36358,7 +36358,7 @@ StylCnv_Type3_CopyNameChars:
 	ld a, (xwa)
 	cp a, 0:i3
 	jr z, StylCnv_Type3_TerminateName
-	stw_erp HL, 0xfa
+	ldto_werp HL, 0xfa
 	inc 2, hl
 	extz xhl
 	add xhl, 0xffc00
@@ -36369,7 +36369,7 @@ StylCnv_Type3_CopyNameChars:
 	jr lt, StylCnv_Type3_CopyNameChars
 
 StylCnv_Type3_TerminateName:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	inc 2, wa
 	extz xwa
 	add xwa, 0xffc00
@@ -36378,10 +36378,10 @@ StylCnv_Type3_TerminateName:
 	ld wa, iz
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr nz, StylCnv_Type3_NextBlock
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	inc 2, wa
 	extz xwa
 	add xwa, 0xffc00
@@ -36603,7 +36603,7 @@ StylCnv_Type6_TerminateName:
 	ld wa, (xsp + 6)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr nz, StylCnv_Type6_NextBlock
 	ld wa, iz
@@ -36927,7 +36927,7 @@ StylCnv_Final_TerminateName:
 	ld wa, (xsp + 6)
 	exts xwa
 	divs wa, 0x2
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	cp wa, 0:i3
 	jr nz, StylCnv_Final_NextBlock
 	ld wa, iz
@@ -37124,11 +37124,11 @@ AccStyle_TableDataEntry_Join:
 	ld	(0x7a4c:16), xwa
 	ld	(0x38b4:16), 0
 	ld	a, (xbc)
-	ldb_erp	a, 249
+	ldfr_berp	a, 249
 	ld	a, (xbc+1)
-	ldb_erp	a, 250
+	ldfr_berp	a, 250
 	ld	a, (xbc+2)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	cp_erpb	249, 72
 	jr	nz, AccStyle_TableDataEntry_Skip7
 	cpib_erp	250, 0
@@ -37342,7 +37342,7 @@ AccStyle_TableDataEntry_Loop2:
 	ld	c, (xsp+34)
 	sub	c, 30
 	extz	bc
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	de, wa
@@ -37378,7 +37378,7 @@ AccStyle_TableDataEntry_Loop3:
 	ld	c, (xsp+2)
 	sub	c, 30
 	extz	bc
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	de, wa
@@ -37400,7 +37400,7 @@ AccStyle_TableDataEntry_Loop4:
 	ld	e, (xsp+4)
 	sub	e, 30
 	extz	de
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	bc, wa

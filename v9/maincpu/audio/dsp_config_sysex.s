@@ -105,7 +105,7 @@ SysEx_ApplyToSlot49_Data:
 SysEx_ClampVoiceIndex128_Loop:
 	ld	a, (xsp+4)
 	extz	wa
-	stb_erp c, 248
+	ldto_berp c, 248
 	extz	bc
 	calr	SysEx_DispatchByChannel
 	ld	bc, hl
@@ -401,7 +401,7 @@ SysEx_ApplyVoiceParam_4B:
 SysEx_ApplyVoiceParam_4B_ReadSubParams:
 	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr ge, SysEx_ApplyVoiceParam_4B_IterateSlots
 	lda xbc, (0xfc8e:16)
@@ -421,7 +421,7 @@ SysEx_ApplyVoiceParam_4B_IterateSlots:
 SysEx_ApplyVoiceParam_4B_SlotLoop:
 	ld a, (xsp + 10)
 	extz wa
-	stb_erp C, 0xf8
+	ldto_berp C, 0xf8
 	extz bc
 	calr SysEx_DispatchByChannel_49
 	ld bc, hl
@@ -474,7 +474,7 @@ SysEx_ApplyVoiceParam_4B_128:
 SysEx_ApplyVoiceParam_4B_128_ReadSub:
 	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr ge, SysEx_ApplyVoiceParam_4B_128_IterateSlots
 	lda xbc, (0xfc8e:16)
@@ -559,7 +559,7 @@ SysEx_ApplyVoiceParam_49:
 SysEx_ApplyVoiceParam_49_ReadSubParams:
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr ge, SysEx_ApplyVoiceParam_49_IterateSlots
 	lda xbc, (0xfc74:16)
@@ -579,7 +579,7 @@ SysEx_ApplyVoiceParam_49_IterateSlots:
 SysEx_ApplyVoiceParam_49_SlotLoop:
 	ld a, (xsp + 10)
 	extz wa
-	stb_erp C, 0xf8
+	ldto_berp C, 0xf8
 	extz bc
 	calr SysEx_DispatchByChannel
 	ld bc, hl
@@ -632,7 +632,7 @@ SysEx_ApplyVoiceParam_49_128:
 SysEx_ApplyVoiceParam_49_128_ReadSub:
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr ge, SysEx_ApplyVoiceParam_49_128_IterateSlots
 	lda xbc, (0xfc74:16)
@@ -704,7 +704,7 @@ SysEx_ApplyAndReloadPreset_Type61:
 	jrl lt, AssswbWr_ReturnFail
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jrl lt, AssswbWr_ReturnFail
 	ld iz, 0:i3
@@ -735,7 +735,7 @@ SysEx_ApplyAndReloadPreset_Type63:
 	jr lt, AssswbWr_ReturnFail
 	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr lt, AssswbWr_ReturnFail
 	ld iz, 0:i3
@@ -1085,7 +1085,7 @@ VoiceParam_SaveReverbChorus:
 	ldib_erp 0xfb, 0
 
 VoiceParam_SaveReverbChorus_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	call VoiceData_LookupPtrByIndex
 	lda xbc, (xhl + 12)
@@ -1120,7 +1120,7 @@ VoiceParam_RestoreReverbChorus:
 	ldib_erp 0xfb, 0
 
 VoiceParam_RestoreReverbChorus_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	call VoiceData_LookupPtrByIndex
 	lda xde, (xhl + 12)
@@ -1179,9 +1179,9 @@ BitMapOut_RenderDisplay:
 	call BitMapOut_SaveDisplayToROM
 	lda xbc, (0xfc5a:16)
 	ld a, (xbc + 8)
-	ldb_erp A, 0xf9
+	ldfr_berp A, 0xf9
 	ld a, (xbc + 9)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ldmi16 (xsp + 4), 0x8d3a
 	lda xbc, (0xfd96:16)
 	ld a, (xbc + 1)
@@ -1256,7 +1256,7 @@ BitMapOut_MergeOutputFields:
 	res 7, w
 	ld a, (xbc)
 	and a, 0x80
-	ldb_erp A, 0xe2
+	ldfr_berp A, 0xe2
 	ld a, w
 	orb_erp A, 0xe2
 	ld w, a
@@ -1269,17 +1269,17 @@ BitMapOut_MergeOutputFields:
 	and w, 0xc0
 	ld a, (xbc)
 	and a, 0x3f
-	ldb_erp A, 0xe2
+	ldfr_berp A, 0xe2
 	orb_erp W, 0xe2
 	ld (xbc), w
 	lda xbc, (0xfc5a:16)
 	ld a, (xbc + 5)
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	ld a, (xbc + 6)
-	ldb_erp A, 0xfa
-	stb_erp A, 0xf9
+	ldfr_berp A, 0xfa
+	ldto_berp A, 0xf9
 	ld (xbc + 8), a
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	ld (xbc + 9), a
 	mrdb5 0x8f, 0x04, 0x19, 0x3a, 0x8d
 	call ToneGen_InitAllChannelEntries_Skip
@@ -1327,10 +1327,10 @@ BitMapOut_MergeOutputFields:
 	ldw bc, 0xb
 	call AddswbWr
 	lda xbc, (0xfc5a:16)
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	and a, 0x3f
 	ld (xbc + 5), a
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	and a, 0x3c
 	ld (xbc + 6), a
 	call PartSelect_UpdateDisplayState
@@ -1384,7 +1384,7 @@ SeqOut_WriteTimedBytes:
 	pushw iz
 	call SeqBuf_MidiOut_WriteBytes
 	inc 6, xsp
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	call MIDI_SC0_ENABLE_TX
 	jr MIDI_SeqProcess_DisableIntReturn
 
@@ -1410,17 +1410,17 @@ SeqOut_WriteTimedBytes_SerialWrite:
 	pushw iz
 	call SeqBuf3_WriteBytes
 	inc 6, xsp
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	calr SeqBuf3_EnableTx_Stub
 	jr MIDI_SeqProcess_DisableIntReturn
 
 SeqOut_WriteTimedBytes_PC2Timing:
 	call SeqBuf3_GetTimingValue
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 
 MIDI_SeqProcess_DisableIntReturn:
 	ei 0
-	stw_erp HL, 0xfa
+	ldto_werp HL, 0xfa
 	pop xiz
 	ret
 
@@ -1654,7 +1654,7 @@ MIDI_BroadcastControlChange:
 	ldib_erp 0xfb, 0
 
 MIDI_BroadcastCC_MidiOutLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	or a, 0xb0
 	ld (xsp + 2), a
 	ei 6
@@ -1672,7 +1672,7 @@ MIDI_BroadcastCC_MidiOutLoop:
 
 MIDI_BroadcastCC_CommLoop:
 	lda xde, (xsp + 2)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	or a, 0xb0
 	ld (xde), a
 	ld wa, 4:i3
@@ -2313,7 +2313,7 @@ DSPCfg_ExtractFieldPair:
 	ld w, (xix + 4)
 	ld a, w
 	and a, 0xf0
-	ldb_erp A, 0xf4
+	ldfr_berp A, 0xf4
 	extz iy
 	and w, 0xf
 	ld a, w
@@ -2332,7 +2332,7 @@ DSPCfg_ExtractFieldSingle:
 	ld l, (xde + 4)
 	ld e, l
 	and e, 0xf0
-	ldb_erp E, 0xf0
+	ldfr_berp E, 0xf0
 	extz ix
 	and l, 0xf
 	extz hl
@@ -2350,7 +2350,7 @@ DSPCfg_WriteParam:
 	ld wa, (xwa)
 	ld (xsp + 4), wa
 	ld a, (xde + 2)
-	ldb_erp A, 0xe6
+	ldfr_berp A, 0xe6
 	lda xwa, (xsp + 10)
 	ld bc, (xsp + 12)
 	ld hl, bc
@@ -2525,7 +2525,7 @@ DSPCfg_ReadField:
 	ld wa, (xwa)
 	ld (xsp + 4), wa
 	ld a, (xde + 2)
-	ldb_erp A, 0xee
+	ldfr_berp A, 0xee
 	lda xwa, (xsp + 10)
 	cp_erpb 0xee, 0x76
 	jr z, DSPCfg_ReadField_Type76
@@ -2546,7 +2546,7 @@ DSPCfg_ReadField_SetWidth1:
 
 DSPCfg_ReadField_StoreAndReturn:
 	ld xwa, (xsp + 12)
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	ld (xwa), bc
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 4)
@@ -2794,7 +2794,7 @@ DSPCfg_ExtractPairFromStruct:
 	ld xhl, xbc
 	ld c, (xwa + 1)
 	and c, 0xff
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	extz iy
 	ld c, (xwa)
 	exts bc
@@ -2814,7 +2814,7 @@ DSPCfg_ExtractPairFromStruct:
 	ld xwa, xbc
 	inc 1, xwa
 	ld c, (xbc)
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	ld c, (xwa)
 	exts bc
 	ld (xhl), ix
@@ -2822,7 +2822,7 @@ DSPCfg_ExtractPairFromStruct:
 	ld xwa, (xsp + 10)
 	ld (xwa), bc
 	ld xbc, (xsp + 6)
-	stb_erp A, 0xf4
+	ldto_berp A, 0xf4
 	ld (xbc), a
 	popw iz
 	retd 0x8
@@ -2877,7 +2877,7 @@ DSPCfg_FindSlot63:
 	ldw (xsp + 4), 0xffff
 	ld wa, iz
 	calr DSPCfg_GetSlotCount
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	ld wa, iz
 	exts xwa
 	sll xwa, 2
@@ -3693,13 +3693,13 @@ DSPCfg_WriteAllSlots_Direct_Loop:
 	ld wa, iz
 	ld xbc, (xsp + 8)
 	calr DSPCfg_ReadViaTableLookup
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	lda xwa, (xsp + 14)
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
 	ld wa, iz
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	ld xde, (xsp + 24)
 	calr DSPCfg_WriteViaTableLookup
 	ld wa, (xsp + 20)
@@ -3711,7 +3711,7 @@ DSPCfg_WriteAllSlots_Direct_Loop:
 	ld c, (xsp + 14)
 	inc 1, c
 	extz bc
-	stw_erp DE, 0xfa
+	ldto_werp DE, 0xfa
 	ld d, 0x0:opc
 	extz de
 	ld l, (xsp + 12)
@@ -3798,7 +3798,7 @@ DSPCfg_WriteAllSlots_Clamped_CheckCount:
 	calr DSPCfg_GetSlotCount
 	cp iz, hl
 	jr c, DSPCfg_WriteAllSlots_Clamped_Loop
-	stw_erp HL, 0xfa
+	ldto_werp HL, 0xfa
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
@@ -3811,11 +3811,11 @@ DSPCfg_WriteAllSlots_Combined:
 	ld wa, iz
 	ld xbc, (xsp + 4)
 	calr DSPCfg_WriteAllSlots_Direct
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	ld wa, iz
 	ld xbc, (xsp + 4)
 	calr DSPCfg_WriteAllSlots_Clamped
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, hl
 	ldiw_erp 0xfa, 0
 	cp wa, 0:i3
@@ -3823,7 +3823,7 @@ DSPCfg_WriteAllSlots_Combined:
 	ldi_erpw 0xfa, 0xff, 0xff
 
 DSPCfg_WriteAllSlots_Combined_Done:
-	stw_erp HL, 0xfa
+	ldto_werp HL, 0xfa
 	pop xiz
 	inc 4, xsp
 	ret
@@ -4137,7 +4137,7 @@ DSPCfg_ReadFieldSimple:
 
 DSPCfg_ReadFieldSimple_StoreReturn:
 	ld xwa, (xsp + 10)
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	ld (xwa), bc
 	ld xwa, (xsp + 18)
 	ld bc, (xsp + 4)
@@ -4498,33 +4498,33 @@ AssSwb_SwapEntriesAndDispatch:
 	ld d, (xbc)
 	ld xbc, (xsp + 64)
 	ld c, (xbc)
-	ldb_erp C, 0xea
+	ldfr_berp C, 0xea
 	ld xbc, (xsp + 60)
 	ld c, (xbc)
-	ldb_erp C, 0xeb
+	ldfr_berp C, 0xeb
 	ld xbc, (xsp + 56)
 	ld c, (xbc)
-	ldb_erp C, 0xf0
+	ldfr_berp C, 0xf0
 	ld xbc, (xsp + 52)
 	ld c, (xbc)
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldb_erp C, 0xf8
+	ldfr_berp C, 0xf8
 	ld (xwa), d
-	stb_erp A, 0xea
+	ldto_berp A, 0xea
 	ld (xhl), a
 	ld xbc, (xsp + 68)
-	stb_erp A, 0xeb
+	ldto_berp A, 0xeb
 	ld (xbc), a
 	ld xbc, (xsp + 64)
-	stb_erp A, 0xf0
+	ldto_berp A, 0xf0
 	ld (xbc), a
 	ld xbc, (xsp + 60)
-	stb_erp A, 0xf4
+	ldto_berp A, 0xf4
 	ld (xbc), a
 	ld xbc, (xsp + 56)
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (xbc), a
 	ld xwa, (xsp + 52)
 	ld (xwa), 0x5b
@@ -4711,7 +4711,7 @@ DSPCfg_EventType35:
 	ld (xsp + 6), c
 	lda xix, (xwa + 1)
 	ld c, (xix)
-	ldb_erp C, 0xea
+	ldfr_berp C, 0xea
 	ld xbc, (xsp + 68)
 	ld h, (xbc)
 	ld xbc, (xsp + 64)
@@ -4722,13 +4722,13 @@ DSPCfg_EventType35:
 	ld e, (xiz)
 	ld xbc, (xsp + 52)
 	ld c, (xbc)
-	ldb_erp C, 0xee
+	ldfr_berp C, 0xee
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldb_erp C, 0xeb
+	ldfr_berp C, 0xeb
 	ld xbc, (xsp + 44)
 	ld b, (xbc)
-	stb_erp C, 0xeb
+	ldto_berp C, 0xeb
 	ld (xwa), c
 	ld (xix), b
 	ld xwa, (xsp + 68)
@@ -4744,14 +4744,14 @@ DSPCfg_EventType35:
 	ld xwa, (xsp + 44)
 	ld (xwa), e
 	ld xbc, (xsp + 40)
-	stb_erp A, 0xee
+	ldto_berp A, 0xee
 	ld (xbc), a
 	ld xwa, (xsp + 36)
 	ld (xwa), 0x48
 	ld xwa, (xsp + 32)
 	ld (xwa), 0x4f
 	ld xwa, (xsp + 60)
-	stb_erp C, 0xea
+	ldto_berp C, 0xea
 	ld (xwa), c
 	ld xwa, (xsp + 16)
 	ld c, (xsp + 6)
@@ -4804,33 +4804,33 @@ DSPCfg_EventType36_StoreTail:
 	ld d, (xbc)
 	ld xbc, (xsp + 64)
 	ld c, (xbc)
-	ldb_erp C, 0xea
+	ldfr_berp C, 0xea
 	ld xbc, (xsp + 60)
 	ld c, (xbc)
-	ldb_erp C, 0xeb
+	ldfr_berp C, 0xeb
 	ld xbc, (xsp + 56)
 	ld c, (xbc)
-	ldb_erp C, 0xf0
+	ldfr_berp C, 0xf0
 	ld xbc, (xsp + 52)
 	ld c, (xbc)
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldb_erp C, 0xf8
+	ldfr_berp C, 0xf8
 	ld (xwa), d
-	stb_erp A, 0xea
+	ldto_berp A, 0xea
 	ld (xhl), a
 	ld xbc, (xsp + 68)
-	stb_erp A, 0xeb
+	ldto_berp A, 0xeb
 	ld (xbc), a
 	ld xbc, (xsp + 64)
-	stb_erp A, 0xf0
+	ldto_berp A, 0xf0
 	ld (xbc), a
 	ld xbc, (xsp + 60)
-	stb_erp A, 0xf4
+	ldto_berp A, 0xf4
 	ld (xbc), a
 	ld xbc, (xsp + 56)
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (xbc), a
 	ld xwa, (xsp + 52)
 	ld (xwa), 0x12
@@ -4847,13 +4847,13 @@ DSPCfg_EventType40:
 	lda xbc, (xwa + 1)
 	ld (xsp + 56), xbc
 	ld c, (xbc)
-	ldb_erp C, 0xea
+	ldfr_berp C, 0xea
 	ld xbc, (xsp + 68)
 	ld c, (xbc)
-	ldb_erp C, 0xee
+	ldfr_berp C, 0xee
 	ld xbc, (xsp + 64)
 	ld c, (xbc)
-	ldb_erp C, 0xe6
+	ldfr_berp C, 0xe6
 	lda xix, (xwa + 4)
 	ld h, (xix)
 	lda xiy, (xwa + 5)
@@ -4866,17 +4866,17 @@ DSPCfg_EventType40:
 	ld e, (xiz)
 	ld xiz, (xsp + 40)
 	ld c, (xiz)
-	ldb_erp C, 0xe7
+	ldfr_berp C, 0xe7
 	ld xiz, (xsp + 36)
 	ld c, (xiz)
-	ldb_erp C, 0xeb
+	ldfr_berp C, 0xeb
 	ld xiz, (xsp + 32)
 	ld c, (xiz)
-	ldb_erp C, 0xef
-	stb_erp C, 0xee
+	ldfr_berp C, 0xef
+	ldto_berp C, 0xee
 	ld (xwa), c
 	ld xiz, (xsp + 56)
-	stb_erp A, 0xe6
+	ldto_berp A, 0xe6
 	ld (xiz), a
 	ld xiz, (xsp + 68)
 	ld (xiz), h
@@ -4887,13 +4887,13 @@ DSPCfg_EventType40:
 	ld xwa, (xsp + 52)
 	ld (xwa), e
 	ld xwa, (xsp + 48)
-	stb_erp C, 0xe7
+	ldto_berp C, 0xe7
 	ld (xwa), c
 	ld xwa, (xsp + 44)
-	stb_erp C, 0xeb
+	ldto_berp C, 0xeb
 	ld (xwa), c
 	ld xwa, (xsp + 40)
-	stb_erp C, 0xef
+	ldto_berp C, 0xef
 	ld (xwa), c
 	ld xwa, (xsp + 36)
 	ld (xwa), 0x0
@@ -4901,7 +4901,7 @@ DSPCfg_EventType40:
 	ld c, (xsp + 6)
 	ld (xwa), c
 	ld xwa, (xsp + 60)
-	stb_erp C, 0xea
+	ldto_berp C, 0xea
 	ld (xwa), c
 	jrl DSPCfg_Epilogue
 
@@ -4922,55 +4922,55 @@ DSPCfg_EventType42:
 	lda xbc, (xwa + 5)
 	ld (xsp + 24), xbc
 	ld c, (xbc)
-	ldb_erp C, 0xea
+	ldfr_berp C, 0xea
 	ld xbc, (xsp + 52)
 	ld c, (xbc)
-	ldb_erp C, 0xee
+	ldfr_berp C, 0xee
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldb_erp C, 0xeb
+	ldfr_berp C, 0xeb
 	ld xbc, (xsp + 44)
 	ld h, (xbc)
 	lda xbc, (xwa + 9)
 	ld (xsp + 20), xbc
 	ld c, (xbc)
-	ldb_erp C, 0xef
+	ldfr_berp C, 0xef
 	ld xbc, (xsp + 36)
 	ld c, (xbc)
-	ldb_erp C, 0xf0
+	ldfr_berp C, 0xf0
 	ld xbc, (xsp + 32)
 	ld b, (xbc)
 	ld xiy, (xsp + 60)
 	ld c, (xiy)
-	ldb_erp C, 0xe6
+	ldfr_berp C, 0xe6
 	ld (xwa), e
 	ld xwa, (xsp + 40)
 	ld (xwa), l
 	ld xiy, (xsp + 68)
 	ld (xiy), d
 	ld xiy, (xsp + 64)
-	stb_erp A, 0xea
+	ldto_berp A, 0xea
 	ld (xiy), a
 	ld xiy, (xsp + 28)
-	stb_erp A, 0xee
+	ldto_berp A, 0xee
 	ld (xiy), a
-	stb_erp C, 0xeb
+	ldto_berp C, 0xeb
 	ld xwa, (xsp + 24)
 	ld (xwa), c
 	ld xwa, (xsp + 52)
 	ld (xwa), h
 	ld xwa, (xsp + 48)
-	stb_erp C, 0xef
+	ldto_berp C, 0xef
 	ld (xwa), c
 	ld xwa, (xsp + 44)
 	ld (xwa), 0x50
-	stb_erp C, 0xf0
+	ldto_berp C, 0xf0
 	ld xwa, (xsp + 20)
 	ld (xwa), c
 	ld xwa, (xsp + 36)
 	ld (xwa), b
 	ld xwa, (xsp + 32)
-	stb_erp C, 0xe6
+	ldto_berp C, 0xe6
 	ld (xwa), c
 	ld xwa, (xsp + 60)
 	ld (xwa), 0x5a
@@ -4993,7 +4993,7 @@ DSPCfg_EventType44:
 	ld (xsp + 58), c
 	ld xbc, (xsp + 68)
 	ld c, (xbc)
-	ldb_erp C, 0xea
+	ldfr_berp C, 0xea
 	ld xbc, (xsp + 64)
 	ld h, (xbc)
 	lda xbc, (xwa + 4)
@@ -5006,24 +5006,24 @@ DSPCfg_EventType44:
 	ld e, (xbc)
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldb_erp C, 0xee
+	ldfr_berp C, 0xee
 	ld xbc, (xsp + 44)
 	ld c, (xbc)
-	ldb_erp C, 0xeb
+	ldfr_berp C, 0xeb
 	lda xbc, (xwa + 9)
 	ld (xsp + 24), xbc
 	ld c, (xbc)
-	ldb_erp C, 0xef
+	ldfr_berp C, 0xef
 	ld xbc, (xsp + 36)
 	ld c, (xbc)
-	ldb_erp C, 0xf0
+	ldfr_berp C, 0xf0
 	lda xbc, (xwa + 11)
 	ld (xsp + 20), xbc
 	ld c, (xbc)
-	ldb_erp C, 0xf4
+	ldfr_berp C, 0xf4
 	ld xbc, (xsp + 60)
 	ld b, (xbc)
-	stb_erp C, 0xea
+	ldto_berp C, 0xea
 	ld (xwa), c
 	ld xwa, (xsp + 40)
 	ld (xwa), h
@@ -5034,21 +5034,21 @@ DSPCfg_EventType44:
 	ld xwa, (xsp + 32)
 	ld (xwa), e
 	ld xiz, (xsp + 28)
-	stb_erp A, 0xee
+	ldto_berp A, 0xee
 	ld (xiz), a
 	ld xiz, (xsp + 52)
-	stb_erp A, 0xeb
+	ldto_berp A, 0xeb
 	ld (xiz), a
 	ld xwa, (xsp + 48)
-	stb_erp C, 0xef
+	ldto_berp C, 0xef
 	ld (xwa), c
 	ld xwa, (xsp + 44)
 	ld (xwa), 0x50
-	stb_erp C, 0xf0
+	ldto_berp C, 0xf0
 	ld xwa, (xsp + 24)
 	ld (xwa), c
 	ld xwa, (xsp + 36)
-	stb_erp C, 0xf4
+	ldto_berp C, 0xf4
 	ld (xwa), c
 	ld xwa, (xsp + 20)
 	ld (xwa), b
@@ -5072,10 +5072,10 @@ DSPCfg_EventType46:
 	ld e, (xbc)
 	ld xbc, (xsp + 68)
 	ld c, (xbc)
-	ldb_erp C, 0xee
+	ldfr_berp C, 0xee
 	ld xbc, (xsp + 64)
 	ld c, (xbc)
-	ldb_erp C, 0xea
+	ldfr_berp C, 0xea
 	lda xix, (xwa + 4)
 	ld h, (xix)
 	lda xiy, (xwa + 5)
@@ -5084,19 +5084,19 @@ DSPCfg_EventType46:
 	ld l, (xbc)
 	ld xbc, (xsp + 48)
 	ld c, (xbc)
-	ldb_erp C, 0xeb
+	ldfr_berp C, 0xeb
 	ld xbc, (xsp + 44)
 	ld c, (xbc)
-	ldb_erp C, 0xef
+	ldfr_berp C, 0xef
 	ld (xwa), 0x2
 	ld xbc, (xsp + 60)
 	ld (xbc), 0x0
 	ld xbc, (xsp + 68)
 	ld (xbc), 0x63
 	ld xiz, (xsp + 64)
-	stb_erp C, 0xee
+	ldto_berp C, 0xee
 	ld (xiz), c
-	stb_erp C, 0xea
+	ldto_berp C, 0xea
 	ld (xix), c
 	ld (xiy), h
 	ld xbc, (xsp + 52)
@@ -5104,9 +5104,9 @@ DSPCfg_EventType46:
 	ld xbc, (xsp + 48)
 	ld (xbc), l
 	ld xix, (xsp + 44)
-	stb_erp C, 0xeb
+	ldto_berp C, 0xeb
 	ld (xix), c
-	stb_erp C, 0xef
+	ldto_berp C, 0xef
 	ld (xwa + 9), c
 	ld xhl, (xsp + 36)
 	ld c, (xsp + 6)
@@ -5145,21 +5145,21 @@ DSPCfg_EventType50:
 	lda xbc, (xwa + 1)
 	ld (xsp + 44), xbc
 	ld c, (xbc)
-	ldb_erp C, 0xe7
+	ldfr_berp C, 0xe7
 	ld xde, (xsp + 68)
 	ld c, (xde)
-	ldb_erp C, 0xeb
+	ldfr_berp C, 0xeb
 	ld xhl, (xsp + 64)
 	ld c, (xhl)
-	ldb_erp C, 0xee
+	ldfr_berp C, 0xee
 	lda xix, (xwa + 4)
 	ld (xsp + 40), xix
 	ld c, (xix)
-	ldb_erp C, 0xea
+	ldfr_berp C, 0xea
 	lda xix, (xwa + 5)
 	ld (xsp + 32), xix
 	ld c, (xix)
-	ldb_erp C, 0xe6
+	ldfr_berp C, 0xe6
 	ld xix, (xsp + 52)
 	ld h, (xix)
 	ld xix, (xsp + 48)
@@ -5176,16 +5176,16 @@ DSPCfg_EventType50:
 	ld xiz, (xsp + 44)
 	ld (xiz), 0x98
 	ld xiz, (xsp + 68)
-	stb_erp C, 0xeb
+	ldto_berp C, 0xeb
 	ld (xiz), c
 	ld xiz, (xsp + 64)
-	stb_erp C, 0xee
+	ldto_berp C, 0xee
 	ld (xiz), c
 	ld xiz, (xsp + 40)
-	stb_erp C, 0xea
+	ldto_berp C, 0xea
 	ld (xiz), c
 	ld xiz, (xsp + 32)
-	stb_erp C, 0xe6
+	ldto_berp C, 0xe6
 	ld (xiz), c
 	ld xiz, (xsp + 52)
 	ld (xiz), h
@@ -5198,7 +5198,7 @@ DSPCfg_EventType50:
 	ld c, (xsp + 6)
 	ld (xwa + 11), c
 	ld xwa, (xsp + 60)
-	stb_erp C, 0xe7
+	ldto_berp C, 0xe7
 	ld (xwa), c
 	ld xwa, (xsp + 16)
 	ld (xwa), 0x0
@@ -5212,7 +5212,7 @@ DSPCfg_EventType51:
 	ld l, (xbc)
 	ld xbc, (xsp + 68)
 	ld c, (xbc)
-	ldb_erp C, 0xea
+	ldfr_berp C, 0xea
 	lda xbc, (xwa + 3)
 	ld (xsp + 48), xbc
 	ld h, (xbc)
@@ -5222,20 +5222,20 @@ DSPCfg_EventType51:
 	lda xbc, (xwa + 5)
 	ld (xsp + 40), xbc
 	ld c, (xbc)
-	ldb_erp C, 0xee
+	ldfr_berp C, 0xee
 	ld xbc, (xsp + 52)
 	ld e, (xbc)
 	lda xbc, (xwa + 7)
 	ld (xsp + 32), xbc
 	ld c, (xbc)
-	ldb_erp C, 0xeb
+	ldfr_berp C, 0xeb
 	lda xbc, (xwa + 8)
 	ld (xsp + 28), xbc
 	ld c, (xbc)
-	ldb_erp C, 0xe7
+	ldfr_berp C, 0xe7
 	lda xix, (xwa + 9)
 	ld c, (xix)
-	ldb_erp C, 0xe6
+	ldfr_berp C, 0xe6
 	ld xiy, (xsp + 36)
 	ld b, (xiy)
 	ld xiy, (xsp + 56)
@@ -5244,24 +5244,24 @@ DSPCfg_EventType51:
 	ld xiy, (xsp + 64)
 	ld (xiy), 0x98
 	ld xiy, (xsp + 68)
-	stb_erp C, 0xea
+	ldto_berp C, 0xea
 	ld (xiy), c
 	ld xiy, (xsp + 48)
 	ld (xiy), h
 	ld xiy, (xsp + 44)
 	ld (xiy), d
 	ld xiy, (xsp + 40)
-	stb_erp C, 0xee
+	ldto_berp C, 0xee
 	ld (xiy), c
 	ld xiy, (xsp + 52)
 	ld (xiy), e
 	ld xiy, (xsp + 32)
-	stb_erp C, 0xeb
+	ldto_berp C, 0xeb
 	ld (xiy), c
-	stb_erp C, 0xe7
+	ldto_berp C, 0xe7
 	ld xde, (xsp + 28)
 	ld (xde), c
-	stb_erp C, 0xe6
+	ldto_berp C, 0xe6
 	ld (xix), c
 	ld xde, (xsp + 36)
 	ld (xde), b

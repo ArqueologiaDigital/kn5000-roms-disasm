@@ -102,7 +102,7 @@ SeqStep_NoteCases_Skip:
 
 SeqStep_NoteConsumeAdvance:
 	inc1b_erp 0xfb
-	stb_erp A, 0xf9
+	ldto_berp A, 0xf9
 	cpb_erp A, 0xfb
 	jr nz, SeqStep_NoteCheckVel
 	call SeqData_AdvancePosition
@@ -135,7 +135,7 @@ SeqStep_NoteVelSave:
 	extz hl
 	ld wa, hl
 	call PartCtrl_WriteByte_Indexed
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	cpb_erp A, 0xf9
 	jr z, SeqStep_NoteReturn
 	cpib_erp 0xfa, 1
@@ -143,7 +143,7 @@ SeqStep_NoteVelSave:
 	jrl SeqStep_NoteReadEvent
 
 SeqStep_NoteVelSkip:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	cpb_erp A, 0xf9
 	jr z, SeqStep_NoteReturn
 
@@ -159,7 +159,7 @@ SeqStep_NoteExit:
 
 SeqStep_NoteExitRestore:
 	inc1b_erp 0xfb
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	cpb_erp A, 0xf9
 	jr nz, SeqStep_NoteCheckVel
 
@@ -278,7 +278,7 @@ SeqStep_EventPosConsumeLoop:
 	cp (0x287a:16), 0
 	jrl nz, SeqStep_EventExit
 	inc1b_erp 0xf9
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	cpb_erp A, 0xf9
 	jr nz, SeqStep_EventPosReturn
 
@@ -334,7 +334,7 @@ SeqStep_EventPosExit:
 	call z, (SeqStep_DecrementPos:24)
 
 SeqStep_EventPosComplete:
-	stb_erp A, 0xf9
+	ldto_berp A, 0xf9
 	cpb_erp A, 0xfa
 	jr z, SeqStep_EventRestore
 
@@ -352,7 +352,7 @@ SeqStep_EventExit:
 
 SeqStep_EventCleanup:
 	inc1b_erp 0xf9
-	stb_erp A, 0xf9
+	ldto_berp A, 0xf9
 	cpb_erp A, 0xfa
 	jr nz, SeqStep_EventPosExit
 
@@ -389,7 +389,7 @@ SeqStep_EventAdvancePos:
 	extz hl
 	ld wa, hl
 	call PartCtrl_WriteByte_Indexed
-	stb_erp A, 0xf9
+	ldto_berp A, 0xf9
 	cpb_erp A, 0xfa
 	jrl z, SeqStep_EventPosConsumeCheck
 	jrl SeqStep_EventPosConsumeLoop
@@ -468,7 +468,7 @@ SeqStep_DeleteConsumeLoop:
 	cp (0x287a:16), 0
 	jrl nz, SeqStep_DeleteExitRestore
 	inc 1, iz
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	cp wa, iz
 	jr z, SeqStep_DeleteCleanup
@@ -496,13 +496,13 @@ SeqStep_DeleteConsumeAdvance:
 SeqStep_DeleteFinish:
 	ldw wa, 0x5f
 	call PartCtrl_WriteByte_Indexed
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	cp wa, iz
 	jr z, SeqStep_DeleteCheck
 
 SeqStep_DeleteReturn:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	cp wa, iz
 	jr nz, SeqStep_DeleteConsumeAdvance
@@ -516,7 +516,7 @@ SeqStep_DeleteExit:
 	cp (0x287a:16), 0
 	jr nz, SeqStep_DeleteExitRestore
 	inc 1, iz
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	cp wa, iz
 	jr nz, SeqStep_DeleteConsumeAdvance
@@ -599,14 +599,14 @@ SeqStep_TrackChangeCompare:
 	jr SeqStep_TrackChangeSetup
 
 SeqStep_TrackChangeClear:
-	ldb_erp E, 0xfa
+	ldfr_berp E, 0xfa
 
 SeqStep_TrackChangeSetup:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	extz bc
 	call Part_ReadSubBlock32
-	ldb_erp L, 0xf9
+	ldfr_berp L, 0xf9
 	cp_erpb 0xf9, 0x0d
 	jr z, SeqStep_TrackChangeDrum
 	cp_erpb 0xf9, 0x0e
@@ -626,14 +626,14 @@ SeqStep_TrackChangeDrum:
 	jr SeqStep_TrackChangeDrumSetup
 
 SeqStep_TrackChangeDrumClear:
-	ldb_erp C, 0xfa
+	ldfr_berp C, 0xfa
 
 SeqStep_TrackChangeDrumSetup:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	ldw bc, 0xbd
 	call Part_ReadByteDirect
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cp_erpb 0xfb, 0xff
 	jr nz, SeqStep_TrackChangeProcess
 	ldw wa, 0x3a
@@ -650,18 +650,18 @@ SeqStep_TrackChangeProcess:
 	jr SeqStep_TrackChangeUpdate
 
 SeqStep_TrackChangeStore:
-	ldb_erp C, 0xfa
+	ldfr_berp C, 0xfa
 
 SeqStep_TrackChangeUpdate:
 	ldib_erp 0xfb, 1
 
 SeqStep_TrackChangeAdvance:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	call Part_ReadSubBlock32
-	stb_erp A, 0xf9
+	ldto_berp A, 0xf9
 	cp a, l
 	jr z, SeqStep_TrackChangeLoopBody
 	cp_erpb 0xf9, 0x0e
@@ -694,13 +694,13 @@ SeqStep_TrackChangeLoopBody:
 	ld a, (9994:16)
 	dec 1, a
 	ld (0x2710:16), a
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	dec 1, a
 	ld (0x271a:16), a
 	calr SeqStep_BoundaryReturn
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, 0:i3
 	call Part_WriteSubBlock32
@@ -724,16 +724,16 @@ SeqStep_TrackChangeLoopDone:
 	jr SeqStep_TrackChangeLoopExit
 
 SeqStep_TrackChangeLoopReturn:
-	ldb_erp C, 0xfa
+	ldfr_berp C, 0xfa
 
 SeqStep_TrackChangeLoopExit:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	ld c, (9996:16)
 	extz bc
 	call Part_ReadVoiceWord
 	ld (xsp + 4), hl
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	ld c, (9996:16)
 	extz bc
@@ -789,12 +789,12 @@ SeqStep_TrackChangeValidate:
 	jrl	SeqStep_TrackChangeExit
 SeqStep_TrackChangeFinal:
 	call Part_ProcessAndDecrementVoice
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	ld wa, (xsp + 6)
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	call PartCtrl_WriteWord
 	ld iz, (xsp + 6)
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	ld wa, bc
 	ld (xsp + 6), bc
 	ld bc, 1:i3
@@ -863,21 +863,21 @@ SeqStep_TrackChangeError:
 	jr SeqStep_TrackChangeRecover
 
 SeqStep_TrackChangeErrorExit:
-	ldb_erp C, 0xfa
+	ldfr_berp C, 0xfa
 
 SeqStep_TrackChangeRecover:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	ld c, (9996:16)
 	extz bc
 	call Part_ReadByte_Indexed
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld a, (9994:16)
 	extz wa
 	ld c, (0x2877:16)
 	inc 1, c
 	extz bc
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	call Part_WriteByte_Indexed
 	ld a, (9994:16)
@@ -887,7 +887,7 @@ SeqStep_TrackChangeRecover:
 	ld c, (0x2877:16)
 	inc 1, c
 	extz bc
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	ld wa, 0:i3
 	call Part_WriteByte_Indexed
@@ -902,20 +902,20 @@ SeqStep_TrackChangeRecoverDone:
 	jr SeqStep_TrackChangeRecoverReturn
 
 SeqStep_TrackChangeRecoverStore:
-	ldb_erp C, 0xfa
+	ldfr_berp C, 0xfa
 
 SeqStep_TrackChangeRecoverReturn:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
 	ld c, (9996:16)
 	extz bc
 	call Part_ReadSubBlock32
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld a, (9994:16)
 	extz wa
 	ld c, (9998:16)
 	extz bc
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	call Part_WriteSubBlock32
 	ld a, (9994:16)
@@ -924,7 +924,7 @@ SeqStep_TrackChangeRecoverReturn:
 	jr nz, SeqStep_TrackChangeRecoverAdvance
 	ld c, (9998:16)
 	extz bc
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	ld wa, 0:i3
 	call Part_WriteSubBlock32
@@ -984,10 +984,10 @@ SeqStep_MultiTrackLoop:
 	jr SeqStep_MultiTrackAdvance
 
 SeqStep_MultiTrackCheck:
-	ldb_erp C, 0xf9
+	ldfr_berp C, 0xf9
 
 SeqStep_MultiTrackAdvance:
-	stb_erp A, 0xf9
+	ldto_berp A, 0xf9
 	extz wa
 	ld c, (0x2877:16)
 	inc 1, c
@@ -995,7 +995,7 @@ SeqStep_MultiTrackAdvance:
 	call Part_ReadVoiceBit7
 	cp l, 0:i3
 	jrl z, SeqStep_PartCopyComplete
-	stb_erp A, 0xf9
+	ldto_berp A, 0xf9
 	extz wa
 	ld c, (0x2877:16)
 	inc 1, c
@@ -1039,7 +1039,7 @@ SeqStep_MultiTrackCopyCheck:
 SeqStep_MultiTrackCleanup:
 	ld a, (0x2878:16)
 
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 
 	ld a, (9994:16)
 
@@ -1049,7 +1049,7 @@ SeqStep_MultiTrackCleanup:
 
 	call	SeqVoice_InitAllChannelParams
 
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 
 	ld (0x2878:16), a
 	ld (0x7ea6:16), 15	; stdi8 (0x7f42), 15 (v7 patched)
@@ -1061,22 +1061,22 @@ SeqStep_MultiTrackCleanup:
 
 SeqStep_PartCopy:
 	call Part_ProcessAndDecrementVoice
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	ld wa, (xsp + 4)
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	call PartCtrl_WriteWord
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld bc, 1:i3
 	call PartCtrl_SetClearBit7
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld bc, (xsp + 4)
 	call PartCtrl_WriteWord_Off1
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ldw bc, 0xffff
 	call PartCtrl_WriteWord
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (xsp + 4), wa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (0x28af:16), wa
 	ld wa, iz
 	dec 1, wa
@@ -1086,7 +1086,7 @@ SeqStep_PartCopy:
 	lda xhl, (0x0b0000:24)
 	ld xde, xhl
 	add xde, xwa
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	dec 1, bc
 	extz xbc
 	sll xbc, 8
@@ -1135,22 +1135,22 @@ SeqStep_PartCopyUpdateSrc:
 	jr SeqStep_PartCopySetupDest
 
 SeqStep_PartCopyClearSrc:
-	ldb_erp C, 0xf9
+	ldfr_berp C, 0xf9
 
 SeqStep_PartCopySetupDest:
-	stb_erp A, 0xf9
+	ldto_berp A, 0xf9
 	extz wa
 	ld c, (0x2877:16)
 	inc 1, c
 	extz bc
 	call Part_ReadByte_Indexed
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld a, (9994:16)
 	extz wa
 	ld c, (0x2877:16)
 	inc 1, c
 	extz bc
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	call Part_WriteByte_Indexed
 	ld a, (9994:16)
@@ -1160,7 +1160,7 @@ SeqStep_PartCopySetupDest:
 	ld c, (0x2877:16)
 	inc 1, c
 	extz bc
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	ld wa, 0:i3
 	call Part_WriteByte_Indexed
@@ -1177,7 +1177,7 @@ SeqStep_VoiceReassign:
 	ld e, (9992:16)
 	ld a, e
 	dec 1, a
-	stb_erp C, 0xfa
+	ldto_berp C, 0xfa
 	extz bc
 	cp a, (0xffe3:24)
 	jr nz, SeqStep_VoiceReassignCheck
@@ -1190,21 +1190,21 @@ SeqStep_VoiceReassignCheck:
 
 SeqStep_VoiceReassignSetup:
 	call Part_ReadSubBlock32
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ld a, (9994:16)
 	extz wa
-	stb_erp C, 0xfa
+	ldto_berp C, 0xfa
 	extz bc
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	call Part_WriteSubBlock32
 	ld a, (9994:16)
 	dec 1, a
 	cp a, (0xffe3:24)
 	jr nz, SeqStep_VoiceReassignProcess
-	stb_erp C, 0xfa
+	ldto_berp C, 0xfa
 	extz bc
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	extz de
 	ld wa, 0:i3
 	call Part_WriteSubBlock32
@@ -1254,7 +1254,7 @@ SeqStep_VoiceReassignDone:
 	jr SeqStep_VoiceReassignExit
 
 SeqStep_VoiceReassignReturn:
-	ldb_erp C, 0xf9
+	ldfr_berp C, 0xf9
 
 ; === v7-specific block: SeqStep_VoiceReassignExit (120 bytes) ===
 SeqStep_VoiceReassignExit:
@@ -1266,30 +1266,30 @@ SeqStep_VoiceReassignExit:
 	ldib_erp 250, 0
 	jr SeqStep_VoiceReassignCleanup
 SeqStep_VoiceReassignError:
-	ldb_erp c, 250
+	ldfr_berp c, 250
 SeqStep_VoiceReassignCleanup:
-	stb_erp a, 249
+	ldto_berp a, 249
 	extz wa
 	ldw bc, 189
 	call Part_ReadByteDirect
-	ldb_erp l, 251
-	stb_erp a, 250
+	ldfr_berp l, 251
+	ldto_berp a, 250
 	extz wa
-	stb_erp e, 251
+	ldto_berp e, 251
 	extz de
 	ldw bc, 189
 	call Part_WriteByte
-	stb_erp a, 249
+	ldto_berp a, 249
 	extz wa
 	lda xbc, (xsp+6)
 	call SeqData_CopyBlock2K
-	stb_erp a, 250
+	ldto_berp a, 250
 	extz wa
 	lda xbc, (xsp+6)
 	call Part_CopyBlock16
-	stb_erp a, 249
+	ldto_berp a, 249
 	extz wa
-	stb_erp c, 250
+	ldto_berp c, 250
 	extz bc
 	call Part_CopyToBuffer
 	ld c, (0x270a:16)
@@ -1350,7 +1350,7 @@ SeqStep_EventAdvanceDone:
 	ldmm16 9830, 0x273e
 	ldmm16 0x28af, 0x273c
 	call SeqData_ReadNextByte
-	ldb_erp L, 0xfa
+	ldfr_berp L, 0xfa
 	ldw wa, 0x81
 	call PartCtrl_WriteByte_Indexed
 
@@ -1362,11 +1362,11 @@ SeqStep_EventAdvanceError:
 	call SeqData_AdvancePosition
 	cp (0x287a:16), 0
 	jr nz, SeqStep_EventAdvanceLoop
-	stb_erp A, 0xfa
-	ldb_erp A, 0xfb
+	ldto_berp A, 0xfa
+	ldfr_berp A, 0xfb
 	call SeqData_ReadNextByte
-	ldb_erp L, 0xfa
-	stb_erp A, 0xfb
+	ldfr_berp L, 0xfa
+	ldto_berp A, 0xfb
 	extz wa
 	call PartCtrl_WriteByte_Indexed
 	bit_erpb 0xfb, 0x07
@@ -1378,7 +1378,7 @@ SeqStep_MeasureRead:
 	push xiz
 	ld iz, (0x28af:16)
 	ld wa, (9830:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld wa, (0x273c:16)
 	ld (0x28af:16), wa
 	ldmm16 9798, 0x273c
@@ -1447,7 +1447,7 @@ SeqStep_MeasureReadProcess:
 
 SeqStep_MeasureReadDone:
 	ld (0x28af:16), iz
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (9830:16), wa
 	pop xiz
 	ret
@@ -1655,24 +1655,24 @@ SeqStep_InsertValidate:
 	ldw wa, 0x81
 	call PartCtrl_WriteByte_Indexed
 	call PartCtrl_ReadWordRoutine
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	ld wa, (0x28af:16)
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	call PartCtrl_WriteWord
 	ld bc, (0x28af:16)
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	call PartCtrl_WriteWord_Off1
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ldw bc, 0xffff
 	call PartCtrl_WriteWord
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld bc, 5:i3
 	ldw de, 0x82
 	call PartCtrl_WriteByteToBuf
 	ld c, (9780:16)
 	extz bc
 	ld wa, 0:i3
-	stw_erp DE, 0xfa
+	ldto_werp DE, 0xfa
 	call Part_WriteWord_Indexed
 	ld c, (9780:16)
 	extz bc
@@ -1693,7 +1693,7 @@ SeqStep_PrepareReadBack:
 	push xiz
 	ld iz, (0x28af:16)
 	ld wa, (9830:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld (0x28c1:16), wa
 	ld wa, (9830:16)
 	cp wa, 5:i3
@@ -1711,7 +1711,7 @@ SeqStep_PrepareCheck:
 SeqStep_PrepareDone:
 	call SeqData_ReadNextByte
 	ld (0x28af:16), iz
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (9830:16), wa
 	pop xiz
 	ret
@@ -1740,7 +1740,7 @@ SeqStep_DeleteShiftLoop:
 
 SeqStep_DeleteShiftAdvance:
 	call SeqPart_ReadByte_Secondary
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	inc1w_erp 0xfa
 	extz xwa
 	lda xbc, (xsp + 4)
@@ -1876,10 +1876,10 @@ SeqStep_BoundaryReturn:
 
 SeqStep_BoundaryProcess:
 	inc 1, a
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 
 SeqStep_BoundaryAdvance:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	ld c, (0x271a:16)
 	inc 1, c
@@ -1887,7 +1887,7 @@ SeqStep_BoundaryAdvance:
 	call Part_ReadVoiceBit7
 	cp l, 0:i3
 	jrl z, SeqStep_BoundaryFinal
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	ld c, (0x271a:16)
 	inc 1, c
@@ -2088,12 +2088,12 @@ SeqStep_ProcessC0:
 
 SeqStep_ProcessC0SavePos:
 	ld wa, (0x288b:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld iz, (0x2889:16)
 	calr SeqStep_SkipThreeEvents
 	cp hl, 0:i3
 	jr nz, SeqStep_ProcessC0Done
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (0x288b:16), wa
 	ld (0x2889:16), iz
 	ld (xsp + 4), 0x0
@@ -2147,10 +2147,10 @@ SeqStep_ProcessB0:
 	sll a, 6
 	ld (3310:16), a
 	ld wa, (0x288b:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld iz, (0x2889:16)
 	calr SeqStep_ParseRhythm
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (0x288b:16), wa
 	ld (0x2889:16), iz
 	cp (0x287a:16), 0
@@ -2374,12 +2374,12 @@ SeqStep_ProcessC0ExtCheck:
 	bit 1, (4393:16)
 	jr nz, SeqStep_ProcessC0ExtProcess
 	ld wa, (0x288b:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld iz, (0x2889:16)
 	calr SeqStep_SkipThreeEvents
 	cp hl, 0:i3
 	jr nz, SeqStep_ProcessC0ExtFinal
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (0x288b:16), wa
 	ld (0x2889:16), iz
 
@@ -2437,10 +2437,10 @@ SeqStep_ProcessB0Ext:
 	bit 1, (4393:16)
 	jr nz, SeqStep_ProcessB0ExtSkip
 	ld wa, (0x288b:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ld iz, (0x2889:16)
 	calr SeqPart_EventLoopContinue
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (0x288b:16), wa
 	ld (0x2889:16), iz
 	cp (0x287a:16), 0
@@ -2567,7 +2567,7 @@ SeqStep_PlaybackStateMachine:
 SeqStep_PlaybackDecrCount:
 	ei 6
 	ld a, (1057:16)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	res 1, a
 	res 4, a
 	ld (1057:16), a
@@ -2864,23 +2864,23 @@ SeqStep_UpdateRefsCheck:
 	ldib_erp 0xfb, 1
 
 SeqStep_UpdateRefsAdvance:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	call Part_ReadVoiceBit7
 	cp l, 0:i3
 	jr z, SeqStep_UpdateRefsDone
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	call Part_ReadVoiceWord
 	cp hl, (xsp + 4)
 	jr nz, SeqStep_UpdateRefsDone
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	ld de, iz
 	call Part_WriteVoiceWord
@@ -2919,18 +2919,18 @@ SeqStep_UpdateLinksCheck:
 	ldib_erp 0xfb, 1
 
 SeqStep_UpdateLinksAdvance:
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	addb_erp C, 0xfb
 	add c, 0x76
 	extz bc
 	call Part_ReadWord
 	cp hl, (xsp + 4)
 	jr nz, SeqStep_UpdateLinksDone
-	stb_erp A, 0xfa
+	ldto_berp A, 0xfa
 	extz wa
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	addb_erp C, 0xfb
 	add c, 0x76
 	extz bc
@@ -3096,23 +3096,23 @@ SeqStep_ReinitPartTable:
 	ld (xsp + 4), xhl
 	ld iz, (0xf1ce:16)
 	ld wa, (0xf22f:16)
-	ldw_erp WA, 0xfa
+	ldfr_werp WA, 0xfa
 	ldmw2 (xsp + 8), 0xf231
 	ld a, (0x00ffe3:24)
 	extz wa
 	call VoicePreset_LoadAndInitPan
 	ld (0xf1ce:16), iz
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	ld (0xf22f:16), wa
 	mrdw5 0x9f, 0x08, 0x19, 0x31, 0xf2
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	call Part_WriteWordBlock_OffsetAF
 	ld wa, (0xf231:16)
 	call Part_SetAllVoicePos
 	ldib_erp 0xfb, 1
 
 SeqStep_ReinitLoop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	ld de, (0xf1ce:16)
 	ldw bc, 0x4e

@@ -1008,7 +1008,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	sll bc, 3
 	ld	(xhl), bc
 	ld	a, (xwa+2)
-	ldb_erp a, 248
+	ldfr_berp a, 248
 	extz	iz
 	lda	xwa, (xsp+2)
 	ld	bc, (xhl)
@@ -1046,13 +1046,13 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	wa, (xwa+8)
 	ld	(xbc+6), wa
 	ld	a, (0x03efa8:24)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	stib_da	(0x3efa8), 1
 	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
 	calr	ColorBlit
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	stb_da	(0x3efa8), a
 	pop	qiz
 	inc	8, xsp
@@ -1071,7 +1071,7 @@ ColorBlit_ComputeRectAndBlit:
 	ld de, (xix)
 	extz xde
 	div de, 0x28
-	stw_erp DE, 0xea
+	ldto_werp DE, 0xea
 	sll de, 3
 	ld (xwa), de
 	ld de, (xhl)
@@ -1304,7 +1304,7 @@ DrawFunc_Init:
 DrawFunc_Init_SkipShift:
 	ld de, (xiz + 7)
 	ld a, (xiz + 9)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	lda_dri XBC, 0xfd, 0x04, 0x01
 	ld wa, de
@@ -1767,11 +1767,11 @@ ColorBlit_PalSave_SkipShift:
 	ld bc, (xde + 6)
 	ld (xwa + 6), bc
 	ld c, (0x03efa8:24)
-	ldb_erp C, 0xfb
+	ldfr_berp C, 0xfb
 	ld (0x03efa8:24), 0x01
 	ld bc, (0x03efa4:24)
 	calr ColorBlit
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	ld (0x03efa8:24), a
 	popw_erp 0xfa
 	inc 8, xsp
@@ -2882,7 +2882,7 @@ VGA_CRTCTiming_ByteData:
 	ld	(xsp+2), xwa
 	ldib_erp 251, 0
 VGA_WritePaletteEntry_Join:
-	stb_erp a, 251
+	ldto_berp a, 251
 	extz	wa
 	ld	xbc, (xsp+2)
 	calr	VGA_WritePaletteEntry
@@ -3520,13 +3520,13 @@ PmBank_EnumNotify:
 	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld XWA, (xsp + 0x0114)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000f
 	ld xde, 0:i3
 	call SendEvent
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000e
 	call SendEvent
@@ -3653,7 +3653,7 @@ PmBank_Confirm:
 
 PmBank_Confirm_Loop:
 	ld xwa, 0:i3
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	stl_dri XWA, 0xfd, 0x14, 0x01
 	ld xwa, 0x1420008
 	ld xbc, 0x1e20010
@@ -5035,11 +5035,11 @@ MainPmGet_HandleBankData:
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 6)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld xde, (xsp + 2)
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	ld (xde), c
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	lda xbc, (xde + 1)
 	call BitMapOut_UpdateWidget_PostDraw
@@ -5054,11 +5054,11 @@ MainPmGet_HandleBankData:
 
 MainPmGet_HandleCheckBit2:
 	ld xwa, (xsp + 6)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	extz wa
 	call BitMapOut_PrepareRender_CheckBit2
 	ld xde, 0:i3
-	stb_erp E, 0xfb
+	ldto_berp E, 0xfb
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0000e
 	jr MainPmGet_PostEvent
@@ -5069,15 +5069,15 @@ MainPmGet_HandleBankDisplay:
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 6)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld xwa, (xsp + 2)
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	ld (xwa), c
 	ld xwa, 0x300
 	call SndParam_LookupReadOnly
 	ld xbc, (xsp + 2)
 	ld (xbc + 1), l
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	inc 2, xbc
 	call BitMapOut_UpdateDisplayWidget
@@ -5108,7 +5108,7 @@ MainSysControl:
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	ld xwa, (xsp + 2)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	push xde
 	push xhl
 	push xix
@@ -5118,7 +5118,7 @@ MainSysControl:
 	pop xix
 	pop xhl
 	pop xde
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	cp wa, 0:i3
 	jr mi, MainSysControl_PostDispatchFinalize
@@ -5313,7 +5313,7 @@ AcFreeSplit_LookupNoteLabel:
 	call SndParam_LookupReadOnly
 	exts xhl
 	divs hl, 0xc
-	stw_erp WA, 0xee
+	ldto_werp WA, 0xee
 	sla wa, 2
 	lda xbc, (ParamStr_Table_06:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
@@ -5359,7 +5359,7 @@ AcFreeSplit_LookupSecondNote:
 	call SndParam_LookupReadOnly
 	exts xhl
 	divs hl, 0xc
-	stw_erp WA, 0xee
+	ldto_werp WA, 0xee
 	sla wa, 2
 	lda xbc, (ParamStr_Table_06:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0

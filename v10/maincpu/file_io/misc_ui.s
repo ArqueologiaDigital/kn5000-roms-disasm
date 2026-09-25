@@ -775,8 +775,8 @@ PsFileNameBox_Confirm_MultiItem:
 	exts wa
 	exts xwa
 	divs xwa, de
-	stw_erp WA, 0xe2
-	ldw_erp WA, 0xea
+	ldto_werp WA, 0xe2
+	ldfr_werp WA, 0xea
 	ld_sril XWA, (xsp + 0x00a2)
 	ld a, (xwa)
 	exts wa
@@ -814,7 +814,7 @@ PsFileNameBox_Confirm_MultiItem:
 	ld xix, (xwa + 42)
 	ld_sril XWA, (xsp + 0x00a2)
 	ld a, (xwa)
-	ldb_erp A, 0xf4
+	ldfr_berp A, 0xf4
 	exts iy
 	ld xwa, (xsp + 4)
 	lda xhl, (xwa + 28)

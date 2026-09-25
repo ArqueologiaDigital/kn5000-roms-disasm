@@ -138,9 +138,9 @@ FloppyIO_ReadNextByte:
 	ld wa, (4327:16)
 	xor de, de
 	ld hl, 4:i3
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	cp de, 0:i3
 	jrl nz, FloppyIO_ReadNextByte_DivDone
 
@@ -457,9 +457,9 @@ SeqTrack_ComputeTempoScaling:
 	pushw wa
 	xor wa, wa
 	ld hl, (3936:16)
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	add (3946:16), wa
 	popw wa
 	ldiw_erp 0xea, 0
@@ -471,9 +471,9 @@ SeqTrack_ComputeTempoScaling:
 	ld wa, de
 	ld de, 1:i3
 	ld hl, (3936:16)
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	add (3946:16), wa
 	popw wa
 
@@ -484,9 +484,9 @@ SeqTrack_ComputeTempo_Phase2:
 	cpiw_erp 0xe2, 0
 	jrl ule, SeqTrack_ComputeTempo_Phase3
 	ld de, 1:i3
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	add (3946:16), wa
 	pushw wa
 	pushw de
@@ -507,9 +507,9 @@ SeqTrack_ComputeTempo_Phase3:
 	cp wa, (3936:16)
 	jrl c, SeqTrack_ComputeTempo_Phase3Store
 	xor de, de
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	add (3946:16), wa
 	ld wa, de
 
@@ -537,9 +537,9 @@ SeqTrack_ComputeTempo_NoDelta:
 	jrl ule, SeqTrack_ComputeTempo_NoDeltaDirect
 	ld de, 1:i3
 	ld hl, (3936:16)
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	add (3946:16), wa
 	pushw wa
 	pushw de
@@ -559,9 +559,9 @@ SeqTrack_ComputeTempo_NoDeltaDirect:
 	cp wa, hl
 	jrl c, SeqTrack_ComputeTempo_NoDeltaStore
 	xor de, de
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	add (3946:16), wa
 	pushw wa
 	pushw de
@@ -1630,31 +1630,31 @@ SeqTrack_ComputeScaledDelta:
 	jrl z, SeqTrack_ScaledDelta_NoDivide3
 	ldw hl, 0x60
 	mul xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld (4333:16), wa
 	ld (4335:16), de
 	xor w, w
 	ld a, (4213:16)
 	mul xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	add wa, (4335:16)
 	ld de, wa
 	ld wa, (4333:16)
 	ld hl, (3936:16)
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	jrl SeqTrack_ScaledDelta_Return
 
 SeqTrack_ScaledDelta_NoDivide3:
 	ld wa, (4211:16)
 	ldw hl, 0x60
 	mul xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld hl, (3936:16)
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	jrl SeqTrack_ScaledDelta_Return
 
 SeqTrack_ScaledDelta_PassThrough:
@@ -1704,9 +1704,9 @@ Sequencer_AdvanceBlockPosition:
 	ld wa, (4327:16)
 	xor de, de
 	ld hl, 4:i3
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	cp de, 0:i3
 	jrl nz, Sequencer_Advance_DivDone
 
@@ -1778,9 +1778,9 @@ SMF_SetTempo_ComputeBPM:
 	ld l, (3948:16)
 	ldw wa, 0x9387
 	ld de, 3:i3
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	cp wa, 0x28
 	jrl ugt, SMF_SetTempo_ClampMax
 	ldw wa, 0x28
@@ -2479,14 +2479,14 @@ ToneGen_SyncVoiceBitmapFromSlots:
 	xor bc, bc
 
 ToneGen_SyncBitmap_Loop:
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jrl c, ToneGen_UpdateBlocks_NextChannel
 	ld xix, 0xf250
 	bit_dri 7, 0x07, 0xf0, 0xec
@@ -2569,11 +2569,11 @@ SoundGen_ScalePitchByTempo:
 	jrl z, SoundGen_ScalePitch_NoScale
 	ldw hl, 0x60
 	mul xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld hl, (3936:16)
-	ldw_erp DE, 0xe2
+	ldfr_werp DE, 0xe2
 	div xwa, hl
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 
 SoundGen_ScalePitch_NoScale:
 	ret
@@ -4595,24 +4595,24 @@ VoiceChannel_PrevParam_Done:
 VoiceChannel_ClearChannelFlags:
 	ld c, (4011:16)
 	and c, 0xf
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (4239:16)
 	ld a, c
 	rcf
 	stcf_a_16 de
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	ld (4239:16), de
-	stw_erp DE, 0x3e
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldto_werp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (4241:16)
 	ld a, c
 	rcf
 	stcf_a_16 de
-	stb_erp A, 0x3c
+	ldto_berp A, 0x3c
 	ld (4241:16), de
-	stw_erp DE, 0x3e
+	ldto_werp DE, 0x3e
 	xor b, b
 	ld iy, bc
 	push xix
@@ -4635,7 +4635,7 @@ VoiceChannel_NoteOnByChannel:
 	and c, 0xf
 	ld wa, (4239:16)
 	and wa, (4241:16)
-	ldw_erp WA, 0x3e
+	ldfr_werp WA, 0x3e
 	ld a, c
 	scf
 	xorcfw_erp 0x3e
@@ -4690,7 +4690,7 @@ VoiceChannel_NoteOffByChannel:
 	and c, 0xf
 	ld wa, (4239:16)
 	and wa, (4241:16)
-	ldw_erp WA, 0x3e
+	ldfr_werp WA, 0x3e
 	ld a, c
 	scf
 	xorcfw_erp 0x3e
@@ -4700,14 +4700,14 @@ VoiceChannel_NoteOffByChannel:
 	scf
 	stcf_a_16 de
 	ld (4241:16), de
-	ldb_erp A, 0x3c
-	ldw_erp DE, 0x3e
+	ldfr_berp A, 0x3c
+	ldfr_werp DE, 0x3e
 	ld de, (4239:16)
 	ld a, c
 	scf
 	xorcf_a_16 de
-	stw_erp DE, 0x3e
-	stb_erp A, 0x3c
+	ldto_werp DE, 0x3e
+	ldto_berp A, 0x3c
 	jr c, VoiceChannel_NoteOff_Done
 
 VoiceChannel_NoteOff_LookupBank:

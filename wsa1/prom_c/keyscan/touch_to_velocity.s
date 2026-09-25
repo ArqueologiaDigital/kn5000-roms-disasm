@@ -278,7 +278,7 @@ ToneGen_VelocityFromTouch:
 	inc	1, xwa
 	add	xwa, ToneGen_VelCurve_ModeParams
 	ld	w, (xwa)
-	ldb_erp	w, 0xF4
+	ldfr_berp	w, 0xF4
 	extz	iy
 	extz	xiy
 	add	xbc, xiy

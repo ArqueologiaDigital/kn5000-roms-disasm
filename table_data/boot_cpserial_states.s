@@ -1078,7 +1078,7 @@ AudioMix_WriteChannelPair:
 	ld	(xiy + 2), b
 	inc	1, a
 	ld	(xiy), a
-	stw_erp	bc, 0xe6		; LD BC, QBC (high word of XBC)
+	ldto_werp	bc, 0xe6		; LD BC, QBC (high word of XBC)
 	ld	(xiy + 2), c
 	inc	1, a
 	ld	(xiy), a
@@ -1091,7 +1091,7 @@ AudioMix_WriteChannelPair:
 	ld	(xiy + 2), d
 	inc	1, a
 	ld	(xiy), a
-	stw_erp	bc, 0xea		; LD BC, QDE (high word of XDE)
+	ldto_werp	bc, 0xea		; LD BC, QDE (high word of XDE)
 	ld	(xiy + 2), c
 	inc	1, a
 	ld	(xiy), a

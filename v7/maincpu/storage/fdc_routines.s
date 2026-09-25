@@ -251,7 +251,7 @@ FDC_WaitReady_Skip11:
 	ld	wa, 2:i3
 	calr	FDC_Write_Data_Entry_Helper
 FDC_WaitReady_Join:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	or	a, 11
 	extz	wa
 	calr	FDC_WaitReady_Helper3
@@ -1345,7 +1345,7 @@ FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin 
 ; [v10] not re-checked in this pass.
 	push	qiz
 	ld	a, (0x899a:16)
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	ld	(0x899a:16), 5
 	ld	(0x8a68:16), 255
 	calr	FDC_CmdRecalibrate_Helper3
@@ -1358,7 +1358,7 @@ FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin 
 	jr	z, FDC_CmdRecalibrate_Skip
 	ld	(0x8a68:16), 255
 FDC_CmdRecalibrate_Skip:
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	ld	(0x899a:16), a
 	ldw	wa, 16
 	calr	SOME_DELAY
@@ -1426,10 +1426,10 @@ FDC_CMD_EXEC_Loop:
 	cp	(0x8988:16), 0
 	jr	z, FDC_CMD_EXEC_Skip3
 	ld	a, (0x8988:16)
-	ldb_erp	a, 248
+	ldfr_berp	a, 248
 	exts	iz
 	calr	FDC_Write_Data_Entry
-	stb_erp	a, 248
+	ldto_berp	a, 248
 	stb_d8	(0x8988), a
 	jrl	FDC_CMD_EXEC_Epilogue
 FDC_CMD_EXEC_Skip3:
@@ -1527,10 +1527,10 @@ FDC_CMD_EXEC_Loop2:
 	cp	(0x8988:16), 0
 	jr	z, FDC_CMD_EXEC_Skip9
 	ld	a, (0x8988:16)
-	ldb_erp	a, 248
+	ldfr_berp	a, 248
 	exts	iz
 	calr	FDC_Write_Data_Entry
-	stb_erp	a, 248
+	ldto_berp	a, 248
 	stb_d8	(0x8988), a
 	jrl	FDC_CMD_EXEC_Epilogue2
 FDC_CMD_EXEC_Skip9:
@@ -1954,7 +1954,7 @@ FDC_INTERRUPT_HANDLER_Code:
 	nop	
 	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
 	calr	FDC_Read_Data
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	bit_erpb	251, 7
 	jr	z, FDC_INTERRUPT_HANDLER_Code_Skip
 	ldw	wa, 50

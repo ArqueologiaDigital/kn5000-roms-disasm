@@ -91,6 +91,7 @@ max normal push_f pop_f push_a pop_a ex_ff""".split())
 # Pseudo stems -> operation family.  Order matters (first match wins).
 FAMILY = [
     (r'^st[bwl]?(_|$)', 'ld'), (r'^st[bwl]?_', 'ld'), (r'^sti[bwl]?(_|$)', 'ld'),
+    (r'^ldto_', 'ld'), (r'^ldfr_', 'ld'),
     (r'^ldi[bwl]?_', 'ld'), (r'^ld[bwl]?_', 'ld'), (r'^ldmi', 'ld'),
     (r'^ldmw', 'ld'), (r'^ldmm', 'ld'), (r'^ldda', 'ld'), (r'^mx_lda', 'lda'),
     (r'^m_lda', 'lda'), (r'^lda', 'lda'), (r'^cpm', 'cp'), (r'^cpd[am]', 'cp'),

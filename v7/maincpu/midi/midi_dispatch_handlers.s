@@ -3704,7 +3704,7 @@ DataBuf_LoadAndDispatchFormat2:
 	ld (xbc), a
 	ld xwa, 0x4904
 	call	16629800
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DataBuf_Format2_Type61_RestoreSlotId
 	ld iz, 0:i3
@@ -3750,7 +3750,7 @@ DataBuf_Format2_Type63:
 	ld (xbc), a
 	ld xwa, 0x4b04
 	call	16629800
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DataBuf_Format2_Type63_RestoreSlotId
 	ld iz, 0:i3
@@ -3813,7 +3813,7 @@ DataBuf_Format2_FormatType2:
 	ld (xbc), a
 	ld xwa, 0x4904
 	call	16629800
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DataBuf_FormatType2_RestoreSlotId
 	ld iz, 0:i3
@@ -3863,7 +3863,7 @@ DataBuf_FormatType2_Type63:
 	ld (xbc), a
 	ld xwa, 0x4b04
 	call	16629800
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DataBuf_FormatType2_Type63_RestoreSlotId
 	ld iz, 0:i3
@@ -5978,7 +5978,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	ld (xbc), a
 	ld xwa, 0x4904
 	call	16629800
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DSPCfg_VoiceSlotA_RestoreContext
 	ld iz, 0:i3
@@ -6034,7 +6034,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	ld (xbc), a
 	ld xwa, 0x4b04
 	call	16629800
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DSPCfg_VoiceSlotB_RestorePort
 	ld iz, 0:i3
@@ -6685,7 +6685,7 @@ SndParam_SetMode2:
 SndParam_ReadAndApply:
 	ld	a, (0xb750:16)
 	and a, 0x3f
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ld	(0xb750:16), a
 	cp	(0xb754:16), 0
 	jr	nz, SndParam_CheckRangeForDisplay
@@ -6702,7 +6702,7 @@ SndParam_ReadAndApply:
 	pop xix
 	pop xhl
 	pop xde
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	ld	(0xb750:16), a
 	ld	(0xb754:16), a
 SndParam_CheckRangeForDisplay:
@@ -6995,7 +6995,7 @@ SndParam_UpdateAll_Loop:
 	jr	nz, SndParam_UpdateChannels_Done
 	ld iz, 0:i3
 SndParam_UpdateAll_Body:
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	extz wa
 	ld c, (xsp + 2)
 	extz bc
@@ -7861,7 +7861,7 @@ MidiSeq_AssignVoiceSlots:
 	ldib_erp 0xfb, 0
 	lda	xbc, (0xee493e:24)
 MidiSeq_ScanSlot0_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	exts xwa
@@ -7883,7 +7883,7 @@ MidiSeq_Slot0_WriteParams:
 	ld bc, 5:i3
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	lda	xbc, (0xee493e:24)
@@ -7895,7 +7895,7 @@ MidiSeq_Slot0_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -7905,7 +7905,7 @@ MidiSeq_Slot0_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -7928,7 +7928,7 @@ MidiSeq_PrepSlot1:
 	calr	MidiChan_DequeueVoiceEntry
 	ldib_erp 0xfb, 0
 MidiSeq_ScanSlot1_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -7951,7 +7951,7 @@ MidiSeq_Slot1_WriteParams:
 	ld bc, 6:i3
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -7961,7 +7961,7 @@ MidiSeq_Slot1_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -7973,7 +7973,7 @@ MidiSeq_Slot1_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -7984,7 +7984,7 @@ MidiSeq_Slot1_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8002,7 +8002,7 @@ MidiSeq_Slot1_StorePtr:
 	calr	MidiChan_DequeueVoiceEntry
 	ldib_erp 0xfb, 0
 MidiSeq_ScanSlot2_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8028,7 +8028,7 @@ MidiSeq_Slot2_WriteParams:
 	ld bc, 7:i3
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8038,7 +8038,7 @@ MidiSeq_Slot2_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8050,7 +8050,7 @@ MidiSeq_Slot2_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8061,7 +8061,7 @@ MidiSeq_Slot2_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8079,7 +8079,7 @@ MidiSeq_Slot2_StorePtr:
 	calr	MidiChan_DequeueVoiceEntry
 	ldib_erp 0xfb, 0
 MidiSeq_ScanSlot3_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8105,7 +8105,7 @@ MidiSeq_Slot3_WriteParams:
 	ldw bc, 0x8
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8115,7 +8115,7 @@ MidiSeq_Slot3_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8127,7 +8127,7 @@ MidiSeq_Slot3_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8138,7 +8138,7 @@ MidiSeq_Slot3_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8156,7 +8156,7 @@ MidiSeq_Slot3_StorePtr:
 	calr	MidiChan_DequeueVoiceEntry
 	ldib_erp 0xfb, 0
 MidiSeq_ScanSlot4_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8182,7 +8182,7 @@ MidiSeq_Slot4_WriteParams:
 	ldw bc, 0x9
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8192,7 +8192,7 @@ MidiSeq_Slot4_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8204,7 +8204,7 @@ MidiSeq_Slot4_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8215,7 +8215,7 @@ MidiSeq_Slot4_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8233,7 +8233,7 @@ MidiSeq_Slot4_StorePtr:
 	calr	MidiChan_DequeueVoiceEntry
 	ldib_erp 0xfb, 0
 MidiSeq_ScanSlot5_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8259,7 +8259,7 @@ MidiSeq_Slot5_WriteParams:
 	ldw bc, 0xa
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8269,7 +8269,7 @@ MidiSeq_Slot5_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8281,7 +8281,7 @@ MidiSeq_Slot5_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8292,7 +8292,7 @@ MidiSeq_Slot5_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8310,7 +8310,7 @@ MidiSeq_Slot5_StorePtr:
 	calr	MidiChan_DequeueVoiceEntry
 	ldib_erp 0xfb, 0
 MidiSeq_ScanSlot6_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8336,7 +8336,7 @@ MidiSeq_Slot6_WriteParams:
 	ldw bc, 0xb
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8346,7 +8346,7 @@ MidiSeq_Slot6_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8358,7 +8358,7 @@ MidiSeq_Slot6_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8369,7 +8369,7 @@ MidiSeq_Slot6_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8387,7 +8387,7 @@ MidiSeq_Slot6_StorePtr:
 	calr	MidiChan_DequeueVoiceEntry
 	ldib_erp 0xfb, 0
 MidiSeq_ScanSlot7_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8413,7 +8413,7 @@ MidiSeq_Slot7_WriteParams:
 	ldw bc, 0xc
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8423,7 +8423,7 @@ MidiSeq_Slot7_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8435,7 +8435,7 @@ MidiSeq_Slot7_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8446,7 +8446,7 @@ MidiSeq_Slot7_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8464,7 +8464,7 @@ MidiSeq_Slot7_StorePtr:
 	calr	MidiChan_DequeueVoiceEntry
 	ldib_erp 0xfb, 0
 MidiSeq_ScanSlot8_Loop:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8490,7 +8490,7 @@ MidiSeq_Slot8_WriteParams:
 	ldw bc, 0xd
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8500,7 +8500,7 @@ MidiSeq_Slot8_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8512,7 +8512,7 @@ MidiSeq_Slot8_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8523,7 +8523,7 @@ MidiSeq_Slot8_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8542,7 +8542,7 @@ MidiSeq_Slot8_StorePtr:
 	ldib_erp 0xfb, 0
 	ldda32	xwa, (0xbc10)
 MidiSeq_ScanSlot9_Loop:
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	muls bc, 0x6
 	ld de, bc
@@ -8566,7 +8566,7 @@ MidiSeq_Slot9_WriteParams:
 	ldw bc, 0xe
 	ld de, hl
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8576,7 +8576,7 @@ MidiSeq_Slot9_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8588,7 +8588,7 @@ MidiSeq_Slot9_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8599,7 +8599,7 @@ MidiSeq_Slot9_WriteParams:
 	ldda32	xwa, (0xbc10)
 	ld bc, 1:i3
 	calr	MIDI_ReadChannelParam
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -8630,7 +8630,7 @@ MidiSeq_ValidateVoiceRange:
 	ldda32	xwa, (0xbc10)
 	ld bc, 0:i3
 	calr	SeqData_ReadFieldByIndex
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cp_erpb 0xfb, 0x11
 	jr	z, MidiSeq_Dequeue3Voices
 	cp_erpb 0xfb, 0x14
@@ -8640,21 +8640,21 @@ MidiSeq_ValidateVoiceRange:
 MidiSeq_Dequeue3Voices:
 	ldda32	xwa, (0xbbb8)
 	calr	MidiChan_DequeueVoiceEntry
-	ldb_erp L, 0xf8
+	ldfr_berp L, 0xf8
 	ldda32	xwa, (0xbbb8)
 	calr	MidiChan_DequeueVoiceEntry
-	ldb_erp L, 0xf9
+	ldfr_berp L, 0xf9
 	ldda32	xwa, (0xbbb8)
 	calr	MidiChan_DequeueVoiceEntry
-	ldb_erp L, 0xfa
+	ldfr_berp L, 0xfa
 	ld xde, 0:i3
-	stb_erp E, 0xfa
+	ldto_berp E, 0xfa
 	ld xwa, 0:i3
-	stb_erp A, 0xf9
+	ldto_berp A, 0xf9
 	sll xwa, 7
 	or xde, xwa
 	ld xwa, 0:i3
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	sll xwa, 14
 	or xde, xwa
 	cp_erpb 0xfb, 0x14
@@ -8674,16 +8674,16 @@ MidiSeq_CompareRange:
 	ldda32	xwa, (0xbc10)
 	cp xde, xbc
 	jr	ugt, MidiSeq_RangeOverflow
-	stb_erp E, 0xf8
+	ldto_berp E, 0xf8
 	extz de
 	ldw bc, 0xc
 	calr	MIDI_ReadChannelParam
-	stb_erp E, 0xf9
+	ldto_berp E, 0xf9
 	extz de
 	ldda32	xwa, (0xbc10)
 	ldw bc, 0xd
 	calr	MIDI_ReadChannelParam
-	stb_erp E, 0xfa
+	ldto_berp E, 0xfa
 	extz de
 	ldda32	xwa, (0xbc10)
 	ldw bc, 0xe
@@ -8705,17 +8705,17 @@ MidiSeq_ReadBitfield:
 	jr	nz, MidiSeq_PopIzRet
 	ldda32	xwa, (0xbbb8)
 	calr	MidiChan_DequeueVoiceEntry
-	ldb_erp L, 0xf8
+	ldfr_berp L, 0xf8
 	ldda32	xwa, (0xbbb8)
 	calr	MidiChan_DequeueVoiceEntry
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	or a, l
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	ldda32	xwa, (0xbbb8)
 	calr	MidiChan_DequeueVoiceEntry
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	or a, l
-	ldb_erp A, 0xf8
+	ldfr_berp A, 0xf8
 	cpib_erp 0xf8, 1
 	jr	z, MidiSeq_PopIzRet
 	ldda32	xwa, (0xbc10)
@@ -8736,25 +8736,25 @@ MidiSeq_CheckQueuePosition:
 	ldda32	xwa, (0xbc10)
 	ldw bc, 0xc
 	calr	SeqData_ReadFieldByIndex
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ldda32	xwa, (0xbc10)
 	ldw bc, 0xd
 	calr	SeqData_ReadFieldByIndex
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	or a, l
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	ldda32	xwa, (0xbc10)
 	ldw bc, 0xe
 	calr	SeqData_ReadFieldByIndex
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	or a, l
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	and a, 0xff
 	jr	z, MidiSeq_PopRetFA
 	ldda32	xwa, (0xbc10)
 	ld bc, 5:i3
 	calr	SeqData_ReadFieldByIndex
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	cp_erpb 0xfb, 0x7e
 	jr	z, MidiSeq_TrimQueue
 	cp_erpb 0xfb, 0x2d
@@ -8827,15 +8827,15 @@ MidiSeq_DequeueWriteField15:
 	cp xbc, xde
 	jr	z, MidiSeq_NegateAndCheck
 MidiSeq_CountEntriesLoop:
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	add C, (xhl+)
-	ldb_erp C, 0xfb
+	ldfr_berp C, 0xfb
 	cp xhl, xde
 	jr	nz, MidiSeq_CountEntriesLoop
 MidiSeq_NegateAndCheck:
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	neg c
-	ldb_erp C, 0xfb
+	ldfr_berp C, 0xfb
 	res_erpb 0xfb, 0x07
 	calr	MidiChan_DequeueVoiceEntry
 	cpb_erp L, 0xfb
@@ -9205,7 +9205,7 @@ MidiPkt_ArpConfigChain_Data_Helper18_Helper2:
 	ldw	bc, 12
 	calr	SeqData_ReadFieldByIndex
 	ld	xiz, 0:i3
-	ldb_erp l, 248
+	ldfr_berp l, 248
 	sll xiz, 14
 	ldda32	xwa, (0xbc10)
 	ldw	bc, 13
@@ -9648,7 +9648,7 @@ MidiTG_WriteRegByDescriptor:
 	and (xde), a
 	lda xbc, (xiz + 1)
 	ld a, (xbc)
-	ldb_erp A, 0xf4
+	ldfr_berp A, 0xf4
 	extz iy
 	ld a, (xix)
 	cpl a
@@ -9681,13 +9681,13 @@ AssSwb_ApplyBitDescriptor:
 	and (xde), a
 	lda xbc, (xiz + 1)
 	ld a, (xbc)
-	ldb_erp A, 0xf4
+	ldfr_berp A, 0xf4
 	extz iy
 	ld a, (xix)
 	cpl a
 	and_srib_mr A, 0x07, 0xec, 0xf4
 	ld a, (xbc)
-	ldb_erp A, 0xf4
+	ldfr_berp A, 0xf4
 	extz iy
 	ld a, (xde)
 	or_srib_mr A, 0x07, 0xec, 0xf4
@@ -9727,14 +9727,14 @@ AssSwb_ProcessLoop_Data:
 	and	(xix), wa
 	lda	xde, (xiz+1)
 	ld	a, (xde)
-	ldb_erp	a, 244
+	ldfr_berp	a, 244
 	extz	iy
 	ld	wa, (xhl)
 	cpl	a
 	; and (xbc+iy),a -- the backend cannot spell this form
 	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xc9	; and (xbc+iy),a -- the backend cannot spell this form
 	ld	a, (xde)
-	ldb_erp	a, 244
+	ldfr_berp	a, 244
 	extz	iy
 	ld	wa, (xix)
 	; or (xbc+iy),a -- the backend cannot spell this form
@@ -11874,7 +11874,7 @@ MidiCtrl_FullReconfigure:
 	pop xhl
 	pop xde
 	ld a, (0xfc5f:16)
-	ldb_erp A, 0xfb
+	ldfr_berp A, 0xfb
 	bit	2, (0xbfe2:16)
 	jr	z, MidiCtrl_RenderAndProcess
 	calr	SoundMode_RetStub_E
@@ -11929,7 +11929,7 @@ SoundMode_ProcessToneAndParams:
 	ld c, (xde)
 	res 0, c
 	ld (xde), c
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	and a, 0x1
 	or c, a
 	ld (xde), c
@@ -12530,10 +12530,10 @@ SysEx_ParserLoop:
 	call	SeqBuf2_ReadByte
 	cp hl, 0xffff
 	jr	z, SysEx_ParseAndDispatch_Ret
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	call	SeqAlt_CheckInitBuffer
 	ld	c, (0xbc82:16)
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	cp c, 1:i3
 	jr	z, SysEx_ParseState1_CheckManufID
@@ -12784,10 +12784,10 @@ SeqData_FormatOutput_Data_Helper_Join:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cp_erpb	251, 11
 	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4e2a:24)
@@ -12795,7 +12795,7 @@ SeqData_FormatOutput_Data_Helper_Join:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4e2a:24)
@@ -12817,10 +12817,10 @@ SeqData_FormatOutput_Data_Helper_Join2:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 1
 	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue2
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4e82:24)
@@ -12828,7 +12828,7 @@ SeqData_FormatOutput_Data_Helper_Join2:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue2
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4e82:24)
@@ -12850,10 +12850,10 @@ SeqData_FormatOutput_Data_Helper_Join3:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cp_erpb	251, 12
 	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue3
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4e8a:24)
@@ -12861,7 +12861,7 @@ SeqData_FormatOutput_Data_Helper_Join3:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue3
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4e8a:24)
@@ -12885,10 +12885,10 @@ SeqData_FormatOutput_Data_Helper_Join4:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 1
 	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue4
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4eea:24)
@@ -12896,7 +12896,7 @@ SeqData_FormatOutput_Data_Helper_Join4:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue4
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4eea:24)
@@ -12918,10 +12918,10 @@ SeqData_FormatOutput_Data_Helper_Join5:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 1
 	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4ef2:24)
@@ -12929,7 +12929,7 @@ SeqData_FormatOutput_Data_Helper_Join5:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue5
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4ef2:24)
@@ -12951,10 +12951,10 @@ SeqData_FormatOutput_Data_Helper_Helper:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cp_erpb	251, 14
 	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue6
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4efa:24)
@@ -12962,7 +12962,7 @@ SeqData_FormatOutput_Data_Helper_Helper:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue6
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4efa:24)
@@ -13301,7 +13301,7 @@ SeqAlt_NibbleSearch_Epilogue:
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue2
 	ldda32	xwa, (0xbbb8)
 	call	MIDI_PackNibbleParam
-	ldb_erp	l, 248
+	ldfr_berp	l, 248
 	extz	iz
 	sll	iz, 8
 	ldda32	xwa, (0xbbb8)
@@ -13319,17 +13319,17 @@ SeqAlt_NibbleSearch_Epilogue:
 	ld	xwa, (xsp+10)
 	ld	a, (xwa+6)
 	or	a, l
-	ldb_erp	a, 251
+	ldfr_berp	a, 251
 	lda	xwa, (xsp+6)
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	ld	(xwa), c
 	ld	(xwa+1), 1
-	stb_erp	c, 248
+	ldto_berp	c, 248
 	ld	(xwa+2), c
 	ld	(xwa+3), 127
 	call	AssSwb_ApplyBitDescriptor
 	lda	xwa, (xsp+6)
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	ld	(xwa), c
 	ld	xde, (xsp+10)
 	ld	c, (xde+7)
@@ -13564,7 +13564,7 @@ SeqAlt_ApplyDescriptor_WithAssSwb:
 ; The v7 code v10 calls `SeqAlt_DescriptorBlock_Data` is 0x41A earlier, at v7 0xFD8B68.
 ; Kept because another v7 file references this address by this name.
 SeqAlt_DescriptorBlock_Data:
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	lda xbc, (xsp + 2)
 	lda xde, (xbc + 1)
 	lda xhl, (xbc + 2)
@@ -13581,7 +13581,7 @@ SeqAlt_AssSwb_NoShift:
 	ld a, (xiy + 9)
 	cpb_erp A, 0xfb
 	jr	ugt, SeqAlt_AssSwb_Cleanup
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	cp a, (xiy + 10)
 	jr	ugt, SeqAlt_AssSwb_Cleanup
 	set	3, (0x8cb6:16)
@@ -13594,7 +13594,7 @@ SeqAlt_AssSwb_NoShift:
 	lda xwa, (xsp + 2)
 	ld (xwa), 0x48
 	ld (xwa + 1), 0x7
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	ld (xwa + 2), c
 	ld (xwa + 3), 0x30
 	jr	SeqAlt_AssSwb_FinalCall
@@ -13667,7 +13667,7 @@ DSPParam_StoreWithLoop_NoShift:
 	ld xwa, (xsp + 4)
 	add xwa, 0x4904
 	call	16629800
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DSP_ParamLoop_Cleanup
 	ld iz, 0:i3
@@ -13706,7 +13706,7 @@ VoiceParam_ApplyBoundsCheck:
 VoiceParam_ApplyBoundsValidated:
 	ldda32	xwa, (0xbbb8)
 	call	MIDI_PackNibbleParam
-	ldb_erp L, 0xfb
+	ldfr_berp L, 0xfb
 	ldda32	xwa, (0xbbb8)
 	call	MIDI_PackNibbleParam
 	bit 7, l
@@ -13718,7 +13718,7 @@ VoiceParam_ApplyNibbleLookup:
 	ld a, (xde + 9)
 	cpb_erp A, 0xfb
 	jr	ugt, VoiceParam_ApplyCleanupRet
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	cp c, (xde + 10)
 	jr	ugt, VoiceParam_ApplyCleanupRet
 	and l, 0x7
@@ -13740,7 +13740,7 @@ VoiceParam_ApplyNibble_NoShiftBit:
 	ld (xwa), c
 	ld c, (xde + 7)
 	ld (xwa + 1), c
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	ld (xwa + 2), c
 	ld c, (xde + 8)
 	ld (xwa + 3), c
@@ -13869,10 +13869,10 @@ SeqAlt_DescriptorBlock_Data_Join:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cp_erpb	251, 11
 	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4e56:24)
@@ -13880,7 +13880,7 @@ SeqAlt_DescriptorBlock_Data_Join:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4e56:24)
@@ -13902,10 +13902,10 @@ SeqAlt_DescriptorBlock_Data_Join2:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 1
 	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4e86:24)
@@ -13913,7 +13913,7 @@ SeqAlt_DescriptorBlock_Data_Join2:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4e86:24)
@@ -13935,10 +13935,10 @@ SeqAlt_DescriptorBlock_Data_Join3:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cp_erpb	251, 12
 	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue3
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4eba:24)
@@ -13946,7 +13946,7 @@ SeqAlt_DescriptorBlock_Data_Join3:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue3
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4eba:24)
@@ -13970,10 +13970,10 @@ SeqAlt_DescriptorBlock_Data_Join4:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 1
 	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4eee:24)
@@ -13981,7 +13981,7 @@ SeqAlt_DescriptorBlock_Data_Join4:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4eee:24)
@@ -14003,10 +14003,10 @@ SeqAlt_DescriptorBlock_Data_Join5:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cpib_erp	251, 1
 	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4ef6:24)
@@ -14014,7 +14014,7 @@ SeqAlt_DescriptorBlock_Data_Join5:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4ef6:24)
@@ -14036,10 +14036,10 @@ SeqAlt_DescriptorBlock_Data_Helper3:
 	ldda32	xwa, (0xbc10)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp	l, 251
+	ldfr_berp	l, 251
 	cp_erpb	251, 8
 	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue6
-	stb_erp	c, 251
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda	xwa, (0xee4f32:24)
@@ -14047,7 +14047,7 @@ SeqAlt_DescriptorBlock_Data_Helper3:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue6
-	stb_erp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (0xee4f32:24)

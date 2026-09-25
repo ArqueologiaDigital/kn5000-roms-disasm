@@ -6729,12 +6729,12 @@ HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
 	; Sorted insertion search
 .Ldh_search:
 	ldiw_erp 0xfa, 0		; QIZ = 0 (search index)
-	stw_erp wa, 0xfa		; WA = QIZ
+	ldto_werp wa, 0xfa		; WA = QIZ
 	cp wa, (HDAE5000_RAM_FdLyricCount:24); compare QIZ with count
 	jrl nc, .Ldh_append
 
 .Ldh_search_loop:
-	stw_erp wa, 0xfa		; WA = QIZ
+	ldto_werp wa, 0xfa		; WA = QIZ
 	muls wa, 0x0009			; slot offset = QIZ * 9
 	lda xbc, (HDAE5000_RAM_FdLyricNames:24)
 	exts xwa
@@ -6775,7 +6775,7 @@ HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
 .Ldh_do_insert:
 	lda xwa, (xsp + 0x04)
 	push xwa
-	stw_erp wa, 0xfa
+	ldto_werp wa, 0xfa
 	muls wa, 0x0009
 	lda xbc, (HDAE5000_RAM_FdLyricNames:24)
 	exts xwa
@@ -6789,7 +6789,7 @@ HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
 
 .Ldh_next_slot:
 	inc1w_erp 0xfa			; QIZ++
-	stw_erp wa, 0xfa
+	ldto_werp wa, 0xfa
 	cp wa, (HDAE5000_RAM_FdLyricCount:24)
 	jrl c, .Ldh_search_loop
 
@@ -6973,7 +6973,7 @@ HDAE5000_VarInt_Decode:		; 0x28F3BD
 	ld xhl, 0:i3			; XHL = accumulator
 
 	ld a, (xde)			; A = first byte (for length check)
-	ldb_erp a, 0xf4		; IYL = A (save first byte)
+	ldfr_berp a, 0xf4		; IYL = A (save first byte)
 
 .Lvd_loop:
 	ldb_sri a, 0x07, 0xe8, 0xf0	; A = data[IX] — load current byte
@@ -6985,7 +6985,7 @@ HDAE5000_VarInt_Decode:		; 0x28F3BD
 	bit_dri 7, 0x07, 0xe8, 0xf0	; test continuation bit of data[IX]
 	jr nz, .Lvd_continue
 	; Continuation=0 → this was the last byte, decoding complete
-	stb_erp a, 0xf0		; A = IXL (byte index)
+	ldto_berp a, 0xf0		; A = IXL (byte index)
 	inc 1, a			; A = bytes consumed
 	ld (xbc), a			; store byte count to caller's pointer
 	ret
@@ -7534,7 +7534,7 @@ HDAE5000_Clear_Work_Buffer:	; 28F785h
 	mriw2 0x93, 0x11	; ldirw  ; copy words (fills with zeros)
 	cpiw_erp 0xE6, 0	; cp QBC, 0  ; check high word
 	jr z, HDAE5000_Clear_Work_Buffer__clear_done
-	stw_erp WA, 0xE6	; ld WA, QBC  ; get high word count
+	ldto_werp WA, 0xE6	; ld WA, QBC  ; get high word count
 HDAE5000_Clear_Work_Buffer__clear_loop:
 	mriw2 0x93, 0x11	; ldirw  ; continue word copy
 	djnz xwa, HDAE5000_Clear_Work_Buffer__clear_loop	; djnz WA, .clear_loop
@@ -7552,7 +7552,7 @@ HDAE5000_Clear_Work_Buffer__no_odd_byte:
 	ldir83	; ldir  ; copy bytes
 	cpiw_erp 0xE6, 0	; cp QBC, 0
 	jr z, HDAE5000_Clear_Work_Buffer__copy_done
-	stw_erp WA, 0xE6	; ld WA, QBC
+	ldto_werp WA, 0xE6	; ld WA, QBC
 HDAE5000_Clear_Work_Buffer__copy_loop:
 	ldir83	; ldir
 	djnz xwa, HDAE5000_Clear_Work_Buffer__copy_loop	; djnz WA, .copy_loop
@@ -7719,7 +7719,7 @@ HDAE5000_Load_Palette:	; 28F8E0h
 	cp iz, 0:i3	; initial check
 	jr lt, HDAE5000_Load_Palette__done	; skip loop if IZ < 0 (never happens here)
 HDAE5000_Load_Palette__loop:
-	stb_erp E, 0xF8	; E = current palette index
+	ldto_berp E, 0xF8	; E = current palette index
 	ld wa, iz
 	exts xwa	; sign-extend WA to XWA
 	sll xwa, 2	; sll 2, XWA  ; XWA = index × 4
@@ -15973,7 +15973,7 @@ HDAE5000_PPORT_Svc24_ReadOpenHD:
 	add	xhl, (xsp+2)
 	ld	xbc, HDAE5000_RAM_DirNames
 	add	xbc, xhl
-	stb_erp a, 0xfb		; ld A,QIZH
+	ldto_berp a, 0xfb		; ld A,QIZH
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	add	wa, 0x0024
@@ -23515,7 +23515,7 @@ HDAE5000_DoPrintf:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 	ld	wa, iz
 	cp	iz, 0x0030
@@ -23546,7 +23546,7 @@ HDAE5000_DoPrintf:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 	jr t, .LDSR_9bd2                       ; [68 50] jr T,0x299bd2
 .LDSR_9b82:
@@ -23574,10 +23574,10 @@ HDAE5000_DoPrintf:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 .LDSR_9bc1:
-	stb_erp a, 0xf8		; ld A,IZL
+	ldto_berp a, 0xf8		; ld A,IZL
 	extz wa                                 ; extz WA
 	lda xbc, (HDAE5000_CType_Table:24)
 	bit_dri 2, 0x07, 0xE4, 0xE0	; bit 2,(XBC+WA)
@@ -23589,7 +23589,7 @@ HDAE5000_DoPrintf:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 	cp	iz, 0x002a
 	jr nz, .LDSR_9c39                      ; [6e 4a] jr NZ,0x299c39
@@ -23606,7 +23606,7 @@ HDAE5000_DoPrintf:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 	jr t, .LDSR_9c4a                       ; [68 32] jr T,0x299c4a
 .LDSR_9c18:
@@ -23619,10 +23619,10 @@ HDAE5000_DoPrintf:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 .LDSR_9c39:
-	stb_erp a, 0xf8		; ld A,IZL
+	ldto_berp a, 0xf8		; ld A,IZL
 	extz wa                                 ; extz WA
 	lda xbc, (HDAE5000_CType_Table:24)
 	bit_dri 2, 0x07, 0xE4, 0xE0	; bit 2,(XBC+WA)
@@ -23634,7 +23634,7 @@ HDAE5000_DoPrintf:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 	jr t, .LDSR_9c93                       ; [68 30] jr T,0x299c93
 .LDSR_9c63:
@@ -23644,7 +23644,7 @@ HDAE5000_DoPrintf:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 	jr t, .LDSR_9c93                       ; [68 17] jr T,0x299c93
 .LDSR_9c7c:
@@ -23654,7 +23654,7 @@ HDAE5000_DoPrintf:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 .LDSR_9c93:
 	ld	wa, iz
@@ -24439,7 +24439,7 @@ HDAE5000_DoPrintf_Case_Float:
 	push xwa
 	ld xwa, (xsp + 0x64)                    ; ld XWA,(XSP+0x64)
 	push xwa
-	stb_erp a, 0xf8		; ld A,IZL
+	ldto_berp a, 0xf8		; ld A,IZL
 	exts wa                                 ; exts WA
 	pushw wa                                ; push WA
 	calr	HDAE5000_FormatFloat
@@ -24450,7 +24450,7 @@ HDAE5000_DoPrintf_NextChar:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
 	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
-	ldb_erp c, 0xf8		; ld IZL,C
+	ldfr_berp c, 0xf8		; ld IZL,C
 	exts	iz
 	cp	iz, 0:i3
 	jrl nz, .LDSR_9af3                     ; [7e 29 f7] jrl NZ,0x299af3
@@ -25825,7 +25825,7 @@ HDAE5000_MemFill__aligned:
 	srl bc, 2	; srl 2, BC - divide by 4
 	jr z, HDAE5000_MemFill__remainder
 	ld w, a	; W = A (fill byte)
-	ldw_erp WA, 0xE2	; ld QWA, WA - expand to 32-bit
+	ldfr_werp WA, 0xE2	; ld QWA, WA - expand to 32-bit
 HDAE5000_MemFill__fill_dwords:
 	ld (xix+), XWA	; ld (XIX+), XWA - store 4 bytes
 	djnz xbc, HDAE5000_MemFill__fill_dwords	; djnz BC, .fill_dwords

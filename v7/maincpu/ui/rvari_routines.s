@@ -52,7 +52,7 @@ RVari_Select_CheckTypeE:
 	divs wa, 0x4
 	exts xwa
 	divs wa, 0xa
-	stw_erp HL, 0xe2
+	ldto_werp HL, 0xe2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
 	ldb_sri A, 0x07, 0xe0, 0xec
 	extz wa
@@ -248,7 +248,7 @@ RVari_Select_OtherItem:
 	divs wa, 0x4
 	exts xwa
 	divs wa, 0xa
-	stw_erp HL, 0xe2
+	ldto_werp HL, 0xe2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
 	ldb_sri A, 0x07, 0xe0, 0xec
 	extz wa
@@ -440,7 +440,7 @@ RVari_Select_TypeNotE:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0xa
-	stw_erp HL, 0xe2
+	ldto_werp HL, 0xe2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
 	ldb_sri A, 0x07, 0xe0, 0xec
 	extz wa
@@ -608,7 +608,7 @@ RVari_SelNE_SecondItem:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0xa
-	stw_erp HL, 0xe2
+	ldto_werp HL, 0xe2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
 	ldb_sri A, 0x07, 0xe0, 0xec
 	extz wa
@@ -1325,7 +1325,7 @@ RVari_EnumNotify:
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	stw_erp BC, 0xe2
+	ldto_werp BC, 0xe2
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
@@ -1709,7 +1709,7 @@ RVari_OK:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
@@ -1734,7 +1734,7 @@ RVari_OK_TypeF_Input8A:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	inc 4, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
@@ -1760,7 +1760,7 @@ RVari_OK_TypeF_Input8B:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	inc 8, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
@@ -1924,7 +1924,7 @@ RVari_OK_TypeE_DispatchInput:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
 	muls wa, 0xa
@@ -1959,7 +1959,7 @@ RVari_OK_TypeE_Input89:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
 	muls wa, 0xa
@@ -1994,7 +1994,7 @@ RVari_OK_TypeE_Input8A:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
 	muls wa, 0xa
@@ -2029,7 +2029,7 @@ RVari_OK_TypeE_Input8B:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
 	muls wa, 0xa
@@ -2064,7 +2064,7 @@ RVari_OK_TypeE_Input8C:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
 	muls wa, 0xa
@@ -2111,7 +2111,7 @@ RVari_OK_TypeE_Input8:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
@@ -2153,7 +2153,7 @@ RVari_OK_TypeE_Input9:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
@@ -2195,7 +2195,7 @@ RVari_OK_TypeE_InputA:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
@@ -2237,7 +2237,7 @@ RVari_OK_TypeE_InputB:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
@@ -2279,7 +2279,7 @@ RVari_OK_TypeE_InputC:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)

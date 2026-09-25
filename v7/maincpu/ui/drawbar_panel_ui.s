@@ -5145,7 +5145,7 @@ SndParam_ResolveOscEntry:
 
 	ld (xwa + 4), l
 
-	stb_erp C, 0xf8
+	ldto_berp C, 0xf8
 
 	ld (xwa + 2), c
 
@@ -9307,7 +9307,7 @@ PleaseWait_BuildScrollStr:
 	ld wa, (0x02477a:24)
 	exts xwa
 	divs xwa, ix
-	stw_erp HL, 0xe2
+	ldto_werp HL, 0xe2
 	ld a, (0x0340e4:24)
 	extz wa
 	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5A2:24)
@@ -12149,8 +12149,8 @@ PsMixer_GridLoop:
 	jrl c, PsMixer_ControlHelper
 	ld wa, (0x024790:24)
 	calr PsMixer_ReadWordArrayEntry
-	ldw_erp HL, 0xfa
-	stw_erp WA, 0xfa
+	ldfr_werp HL, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, wa
 	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
@@ -12385,15 +12385,15 @@ AudioCtrl_PageAdvance:
 	ld wa, (0x024790:24)
 	exts xwa
 	divs wa, 0x8
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	ld (0x024790:24), wa
 	ldw (0x024794:24), 0x0000
 	ld wa, (0x024790:24)
 	calr PsMixer_ReadWordArrayEntry
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 
 AudioCtrl_SetupPartDisplay:
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, wa
 	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
@@ -12401,7 +12401,7 @@ AudioCtrl_SetupPartDisplay:
 	ld xwa, 0x1400002
 	ld xbc, 0x1e000a0
 	call MainFuncCall
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, wa
 	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
@@ -12632,15 +12632,15 @@ PsMixer_MidiScanOuterLoop:
 PsMixer_ArrayReadHandler:
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
-	ldw_erp HL, 0xfa
-	stw_erp DE, 0xfa
+	ldfr_werp HL, 0xfa
+	ldto_werp DE, 0xfa
 	exts xde
 	ld xwa, (xsp + 14)
 	ld xbc, 0x1e10000
 	call ApFuncCall
 	cp hl, (xsp + 68)
 	jrl nz, AudioCtrl_MixerLoopNext
-	stw_erp DE, 0xfa
+	ldto_werp DE, 0xfa
 	exts xde
 	ld xwa, (xsp + 14)
 	ld xbc, 0x1e10001
@@ -12731,8 +12731,8 @@ PsMixer_UnmatchedPartScan:
 AudioCtrl_ArrayReadHandler:
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
-	ldw_erp HL, 0xfa
-	stw_erp DE, 0xfa
+	ldfr_werp HL, 0xfa
+	ldto_werp DE, 0xfa
 	exts xde
 	ld xwa, (xsp + 14)
 	ld xbc, 0x1e10001
@@ -12823,12 +12823,12 @@ PsMixer_ControlCase9:
 	ld xwa, MixerPartTable_Start_0x12C
 	ld bc, hl
 	calr SdpartLookupPartId
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cp_erpw 0xfa, 0xff, 0xff
 	jrl z, AudioCtrl_ReturnZero
 	ld wa, (0x024790:24)
 	calr PsMixer_ReadWordArrayEntry
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, hl
 	jr nz, PsMixer_VolSel_SearchGrid
 	ld iz, (0x024790:24)
@@ -12842,7 +12842,7 @@ PsMixer_VolSel_SearchGrid:
 PsMixer_VolSel_SearchLoop:
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, hl
 	jr z, PsMixer_VolSel_CheckFound
 	inc 1, iz
@@ -12862,7 +12862,7 @@ PsMixer_VolSel_CheckFound:
 PsMixer_VolSel_SearchFallback:
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, hl
 	jr z, PsMixer_VolumeSelect_Continue
 	inc 1, iz
@@ -12884,7 +12884,7 @@ PsMixer_VolumeSelect_Continue:
 	exts xwa
 	divs wa, 0x8
 	ld (0x024794:24), wa
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	add wa, wa
 	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
@@ -17319,7 +17319,7 @@ IvDrawbar1_OK:
 	ld xbc, 0x1e00029
 	ld xde, (xsp + 4)
 	call SendEvent
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 7
 	jr le, IvDrawbar1_OK_CheckSixteen
 	cp_erpw 0xfa, 0x10, 0x00
@@ -17331,7 +17331,7 @@ IvDrawbar1_OK_CheckSixteen:
 	ldi_erpw 0xfa, 0x08, 0x00
 
 IvDrawbar1_OK_ComputeNewValue:
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	add bc, bc
 	lda xwa, (0x0247b0:24)
 	ldw_sri IZ, 0x07, 0xe0, 0xe4
@@ -17345,7 +17345,7 @@ IvDrawbar1_OK_ComputeNewValue:
 	cp xhl, 0x1800003
 	jr z, IvDrawbar1_OK_ScrollUp_DualMode
 	ld wa, (0x02479a:24)
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	add bc, bc
 	lda xde, (MidiParam_MixerCfgData_0x78:24)
 	ldw_sri BC, 0x07, 0xe8, 0xe4
@@ -17355,7 +17355,7 @@ IvDrawbar1_OK_ComputeNewValue:
 	jr IvDrawbar1_OK_ScrollRelease
 
 IvDrawbar1_OK_ScrollUp_DualMode:
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	add bc, bc
 	lda xwa, (0x0247b0:24)
 	ldw_sri WA, 0x07, 0xe0, 0xe4
@@ -17364,7 +17364,7 @@ IvDrawbar1_OK_ScrollUp_DualMode:
 	inc 1, wa
 	ld bc, wa
 	extz xbc
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	sll xwa, 0
 	ld xde, xwa
@@ -17383,7 +17383,7 @@ IvDrawbar1_OK_ScrollDown:
 	sub iz, 0x1
 	jrl lt, IvDrawbar1_ReturnHandled
 	call GetModeNow
-	stw_erp BC, 0xfa
+	ldto_werp BC, 0xfa
 	add bc, bc
 	cp xhl, 0x1800003
 	jr z, IvDrawbar1_OK_ScrollDown_DualMode
@@ -17403,7 +17403,7 @@ IvDrawbar1_OK_ScrollDown_DualMode:
 	dec 1, wa
 	ld bc, wa
 	extz xbc
-	stw_erp WA, 0xfa
+	ldto_werp WA, 0xfa
 	extz xwa
 	sll xwa, 0
 	ld xde, xwa
@@ -18358,7 +18358,7 @@ PsVari_Confirm:
 	lda xhl, (xsp + 8)
 	lda xiy, (xwa + 28)
 	ld a, (xwa + 34)
-	ldb_erp A, 0xf0
+	ldfr_berp A, 0xf0
 	extz ix
 	cpw (xiz), 0x0
 	jr z, PsVari_DrawInactive

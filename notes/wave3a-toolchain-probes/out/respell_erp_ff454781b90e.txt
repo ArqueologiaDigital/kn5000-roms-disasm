@@ -1,0 +1,6 @@
+old llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap sha256 e09c359a66fa
+new llvm-mc /home/fsanches/compartilhado/disasm-lanes/wave3a-scratch/llvm-mc.final-ff454781b90e-e325bcaa sha256 e325bcaa3b65
+candidate sites: 9929; refused before assembly: 0
+verified identical: 9929   mismatched/unassemblable: 0
+files: 170
+wrote 9929 lines in 170 files

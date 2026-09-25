@@ -1357,7 +1357,7 @@ SLSrcBankList_FuncBody_Loop:
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
-	stb_erp a, 248
+	ldto_berp a, 248
 	ld	(xhl), a
 	ld	wa, 1:i3
 	add	wa, de
@@ -2689,7 +2689,7 @@ SLDstBankList_FuncBody_Loop5:
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
-	stb_erp a, 248
+	ldto_berp a, 248
 	ld	(xhl), a
 	ld	wa, 1:i3
 	add	wa, de

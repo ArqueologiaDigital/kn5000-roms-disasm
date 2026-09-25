@@ -399,7 +399,7 @@ WPScan_Generic_Mark:
 	cp	(0x895c:16), 4
 	jr	c, WPScan_LoopContinue
 WPScan_LimitReached:
-	stb_erp	A, 0xf8
+	ldto_berp	A, 0xf8
 	ld	(0x895c:16), a
 WPScan_LoopContinue:
 	inc 1, iz
@@ -421,7 +421,7 @@ WP_FindNextSlot:
 	ld	qbc, wa
 	lda	xde, (15337386:24)
 WPFind_SearchLoop:
-	stw_erp HL, 0xe6
+	ldto_werp HL, 0xe6
 	add hl, iz
 	and hl, 0x3
 	ld wa, hl

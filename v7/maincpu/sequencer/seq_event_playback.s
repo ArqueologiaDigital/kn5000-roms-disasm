@@ -5132,7 +5132,7 @@ SplitPointFunc:
 	ld	de, 1:i3
 	call	16566832
 	ld	xwa, (xsp+8)
-	ldb_erp	a, 251	; ld qizh,a
+	ldfr_berp	a, 251	; ld qizh,a
 	cp_erpb	251, 36	; cp qizh,0x24
 	jr	c, SplitPoint_ClampToMiddle
 	cp_erpb	251, 96	; cp qizh,0x60
@@ -5153,7 +5153,7 @@ SplitPoint_DrawOctaveLoop:
 	inc 1, iz
 
 Draw_keybed_maybe_for_indicating_split_point:
-	stb_erp A, 0xfb
+	ldto_berp A, 0xfb
 	extz wa
 	div a, 0xc
 	dec 3, a
@@ -5164,7 +5164,7 @@ Draw_keybed_maybe_for_indicating_split_point:
 	jr c, SplitPoint_DrawOctaveLoop
 	cp_erpb 0xfb, 0x60
 	jr nc, SplitPoint_UpdateScreen
-	stb_erp C, 0xfb
+	ldto_berp C, 0xfb
 	extz bc
 	div c, 0xc
 	ld c, b

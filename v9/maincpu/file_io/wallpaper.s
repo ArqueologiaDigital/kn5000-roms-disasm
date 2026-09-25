@@ -136,7 +136,7 @@ WPLoad_Selection_Positive:
 	ld wa, (0x81b4:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x81b0:16)
 	ld xbc, 0x1e50002
@@ -214,7 +214,7 @@ WPLoad_PageDown_Boundary:
 	jrl ge, WPLoad_GetSelection
 	exts xde
 	divs de, 0xa
-	stw_erp WA, 0xea
+	ldto_werp WA, 0xea
 	cp wa, 0:i3
 	jr z, WPLoad_GetSelection
 	ld (0x81b4:16), bc
@@ -264,7 +264,7 @@ WPLoad_UpdateDisplay:
 	ld wa, (0x81b4:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp DE, 0xe2
+	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x81b0:16)
 	ld xbc, 0x1e50002
@@ -281,7 +281,7 @@ WPLoad_UpdateDisplay:
 	ld bc, (xsp + 4)
 	exts xbc
 	divs bc, 0xa
-	stw_erp BC, 0xe6
+	ldto_werp BC, 0xe6
 	sll bc, 5
 	lda xhl, (0x850c:16)
 	ld de, bc
@@ -292,7 +292,7 @@ WPLoad_UpdateDisplay:
 	ld wa, (0x81b4:16)
 	exts xwa
 	divs wa, 0xa
-	stw_erp WA, 0xe2
+	ldto_werp WA, 0xe2
 	sll wa, 5
 	lda xbc, (0x850c:16)
 	ld de, wa
@@ -324,7 +324,7 @@ WPLoad_Return:
 WP_ScanAvailability:
 	push xiz
 	call CheckFileSystemStatus
-	ldw_erp HL, 0xfa
+	ldfr_werp HL, 0xfa
 	ldw (0x89f6:16), 0
 	ld iz, 0:i3
 
@@ -410,7 +410,7 @@ WPScan_Generic_Mark:
 	jr c, WPScan_LoopContinue
 
 WPScan_LimitReached:
-	stb_erp A, 0xf8
+	ldto_berp A, 0xf8
 	ld (0x89f8:16), a
 
 WPScan_LoopContinue:
@@ -430,11 +430,11 @@ WP_FindNextSlot:
 	jr z, WPFind_NotFound
 	ld iz, 1:i3
 	extz wa
-	ldw_erp WA, 0xe6
+	ldfr_werp WA, 0xe6
 	lda xde, (Str_SmfConvert_GmToGm_0x2A:24)
 
 WPFind_SearchLoop:
-	stw_erp HL, 0xe6
+	ldto_werp HL, 0xe6
 	add hl, iz
 	and hl, 0x3
 	ld wa, hl

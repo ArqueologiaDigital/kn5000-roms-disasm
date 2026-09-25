@@ -424,7 +424,7 @@ DSPCfg_Init_BoundsCheck_Helper5:
 	ld	(xsp+0x2), xbc
 	ld	c, (xbc)
 	ld	(xsp+0x6), c
-	ldb_erp	c, 248
+	ldfr_berp	c, 248
 	extz	iz
 	ld	l, (xde+0x2)
 	ld	h, l
@@ -469,7 +469,7 @@ DSPCfg_Init_BoundsCheck_Helper6:
 	lda	xbc, (xde+0x3)
 	ld	(xsp+0x2), xbc
 	ld	c, (xbc)
-	ldb_erp	c, 248
+	ldfr_berp	c, 248
 	extz	iz
 	ld	l, (xde+0x2)
 	ld	h, l
