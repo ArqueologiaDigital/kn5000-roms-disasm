@@ -52,7 +52,8 @@ for a, s in TUNE:
         "0x40-0x42, 0, 0x10-0x16 through SeqVoiceSel_SwitchOffsets) to one of them",
         "and returns its address in xhl (`lda_24 xhl,(table)` at 14 case labels;",
         "the 15th returns RAM 0xFD1E).  [INFERENCE] scale-tuning presets."] if first else
-        ["12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`)."]))
+        ["12 x u8 semitone table (one byte per pitch class, 0x80 centre): a",
+         "SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`)."]))
     first = False
 obj(0xEEC0CA, 0xEEC0E2, "NoRef_SemitoneBias_EEC0CA", "byte", [
     "24 bytes shaped like two more 12-byte semitone tables, but no reader: no",
@@ -61,7 +62,8 @@ obj(0xEEC0CA, 0xEEC0E2, "NoRef_SemitoneBias_EEC0CA", "byte", [
 for a, s in [(0xEEC0E2, "E"), (0xEEC0EE, "F"), (0xEEC0FA, "G"), (0xEEC106, "H"), (0xEEC112, "I"),
              (0xEEC11E, "J"), (0xEEC12A, "K"), (0xEEC136, "L"), (0xEEC142, "M"), (0xEEC14E, "N")]:
     obj(a, a + 12, "SemitoneBias_Table%s" % s, "byte",
-        ["12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`)."])
+        ["12 x u8 semitone table (one byte per pitch class, 0x80 centre): a",
+         "SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`)."])
 switch(0xEEC15A, 7, "SeqVoiceSel_SwitchOffsets", "SeqVoice_CheckAndRet_Data", 0xFEBC56, 0xFEBCA0)
 switch(0xEEC168, 7, "SendEpilogueC_SwitchOffsets", "SendEpilogue_Data_Helper", 0xFEBD0E, 0xFEBD57)
 switch(0xEEC176, 9, "ChannelData_SwitchOffsets", "MIDI_WriteChannelData_Block", 0xFEBF1D, 0xFEBF45)
@@ -91,7 +93,8 @@ for i, a in enumerate(range(0xEEC208, 0xEEC268, 16)):
         "Six 16-byte slot maps (permutations of 0..0x13): SoundParam_InitDefaultBanks",
         "(0xFEDDA2) copies each into its frame (`ld xiy,<map>; lda xix,(xsp+82/66/",
         "50/34/18/2); ldw bc,8; ldirw`)."] if i == 0 else
-        ["16-byte slot map %d, copied by SoundParam_InitDefaultBanks (`ldw bc,8; ldirw`)." % i]),
+        ["16-byte slot map %d (a permutation of 0..0x13), copied into a frame slot by" % i,
+         "SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`."]),
         per_line=16)
 obj(0xEEC268, 0xEEC288, "Disk_DefaultPath", "byte", [
     "32-byte path buffer template \"A:\\\" + 29 NULs: NotifyChangeComplete_Prologue",

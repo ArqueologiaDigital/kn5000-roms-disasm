@@ -7165,15 +7165,18 @@ SendEpilogueB_SwitchOffsets:
 SemitoneBias_TableA:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableB:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableC:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableD:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
@@ -7183,43 +7186,53 @@ SemitoneBias_TableD:
 NoRef_SemitoneBias_EEC0CA:
 	.byte 0x93, 0x70, 0x98, 0xa8, 0x83, 0x92, 0x6f, 0x96, 0xf4, 0x80, 0x2a, 0x84
 	.byte 0x93, 0xbf, 0x98, 0xa8, 0x83, 0x92, 0xbb, 0x96, 0xa5, 0x80, 0xaa, 0x84
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableE:
 	.byte 0x78, 0x8a, 0x7d, 0x71, 0x83, 0x76, 0x88, 0x7b
 	.byte 0x8d, 0x80, 0x74, 0x71
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableF:
 	.byte 0x8f, 0x83, 0x85, 0x88, 0x83, 0x8d, 0x80, 0x8a
 	.byte 0x85, 0x80, 0x8a, 0x7d
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableG:
 	.byte 0x8d, 0x80, 0x84, 0x85, 0x83, 0x8a, 0x80, 0x89
 	.byte 0x83, 0x80, 0x88, 0x85
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableH:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x40, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x40
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableI:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x40, 0x80, 0x80, 0x80
 	.byte 0x80, 0x40, 0x80, 0x80
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableJ:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x40, 0x80
 	.byte 0x80, 0x80, 0x80, 0x40
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableK:
 	.byte 0x80, 0x80, 0x40, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x40, 0x80, 0x80
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableL:
 	.byte 0x80, 0x40, 0x80, 0x80, 0x80, 0x80, 0x40, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableM:
 	.byte 0x80, 0x80, 0xd1, 0x80, 0x80, 0x6f, 0x80, 0xb2
 	.byte 0x80, 0xe0, 0x80, 0x80
-; 12 x u8, returned by a SeqVoice_CheckAndRet_Data case (`lda_24 xhl,(<this>)`).
+; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
+; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableN:
 	.byte 0x80, 0x80, 0x56, 0x80, 0x8f, 0xaf, 0x80, 0x6b
 	.byte 0x80, 0xad, 0x80, 0x80
@@ -7276,19 +7289,24 @@ MidiSysMsg_SwitchOffsets:
 ; 50/34/18/2); ldw bc,8; ldirw`).
 SoundParam_DefaultBankMap0:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
-; 16-byte slot map 1, copied by SoundParam_InitDefaultBanks (`ldw bc,8; ldirw`).
+; 16-byte slot map 1 (a permutation of 0..0x13), copied into a frame slot by
+; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap1:
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x0c
-; 16-byte slot map 2, copied by SoundParam_InitDefaultBanks (`ldw bc,8; ldirw`).
+; 16-byte slot map 2 (a permutation of 0..0x13), copied into a frame slot by
+; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap2:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x09
-; 16-byte slot map 3, copied by SoundParam_InitDefaultBanks (`ldw bc,8; ldirw`).
+; 16-byte slot map 3 (a permutation of 0..0x13), copied into a frame slot by
+; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap3:
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x0c, 0x06, 0x07, 0x11, 0x12, 0x13, 0x05
-; 16-byte slot map 4, copied by SoundParam_InitDefaultBanks (`ldw bc,8; ldirw`).
+; 16-byte slot map 4 (a permutation of 0..0x13), copied into a frame slot by
+; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap4:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0f, 0x0e
-; 16-byte slot map 5, copied by SoundParam_InitDefaultBanks (`ldw bc,8; ldirw`).
+; 16-byte slot map 5 (a permutation of 0..0x13), copied into a frame slot by
+; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap5:
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x0c, 0x13
 ; 32-byte path buffer template "A:\" + 29 NULs: NotifyChangeComplete_Prologue
