@@ -12178,547 +12178,586 @@ HDAE5000_Bitmap_HddIcon:	; 0x2E198E
 	; Was: .incbin "includes/code_29af2d_2fffff.bin", 289377, 756
 	.incbin "includes/generated/HDAE5000_Icon.bin"
 
-HDAE5000_Config_Strings:	; 0x2E1C82
-	; Configuration and version strings
+; ============================================================================
+; HD-AE5000 PROGRAM .RODATA, 0x2E1C82-0x2E3703 (the C program's read-only data)
+; Rebuilt object by object by scripts/generators/gen_hdae5000_rodata.py: every
+; object starts at an address the code names (lda / ld # / ld (mem) / add #
+; operands and pushw 0x002e/low pairs) or that a pointer table here points
+; at, and its note names the routines that read it.  String-pointer tables
+; are `.long <label>`; the compiled `switch` tables (their own headers) are
+; kept from scripts/converters/hdae5000_switch_tables.py.  This replaces six
+; coarse blocks named by guess (HDAE5000_Config_Strings, _Test_Strings,
+; _Dir_Strings, _Char_Tables, _Path_Strings, _UI_Icons) whose bytes were
+; typed as text throughout.
+; ============================================================================
+HDAE5000_Str_V206i:	; 0x2E1C82
+	; read by Display_Clear at 0x28B20D (ld #, pushed operand)
 	.asciz "V2.06i"
-	.zero 3
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
-	.zero 23
-	.ascii "   "
-	.byte 0x09
-	.zero 2
-	.ascii "                "
-	.byte 0x09
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "   "
-	.byte 0x09
-	.zero 2
-	.ascii "                          "
-	.byte 0x09
+HDAE5000_TypeSel_TemplateAllNo:	; 0x2E1C8A
+	; read by FILE_LOAD_Screen, HDDNamingCheck, SaveOptSwEventCatch at 0x283E0A (lda operand)
+	; a part-selection record template (HDAE5000_TypeSel_Init copies 12 bytes: u16 mask, nine part flags, pad): mask 0, every flag 1 ("NO ")
+	.byte 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00
+HDAE5000_TypeSel_TemplateBlank:	; 0x2E1C96
+	; read by FILE_LOAD_Screen, FlsFileSelScreen, LBNLoadSwCatch, Lbn_StepDigit, Lbn_TypeDigit, UiState_Reset at 0x2803E5 (ld #, lda operand)
+	; a part-selection record template: mask 0, every flag 0 ("---")
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+HDAE5000_Lbn_BlockTemplate:	; 0x2E1CA2
+	; read by UiState_Reset at 0x2803D7 (ld # operand)
+	; the 10-byte load-by-number block copied to 0x22AA58 by HDAE5000_UiState_Reset (5 words, all 0)
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+HDAE5000_Str_Blank3Tab:	; 0x2E1CAC
+	; read by Lbn_ShowEntry at 0x287104 (lda operand)
+	.asciz "   \t"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "            "
-	.byte 0x09
+HDAE5000_Str_Blank16Tab:	; 0x2E1CB2
+	; read by Lbn_ShowEntry at 0x287117 (lda operand)
+	.asciz "                \t"
+HDAE5000_Str_Blank3Tab_Lbn_ShowEntry:	; 0x2E1CC4
+	; read by Lbn_ShowEntry at 0x28712A (lda operand)
+	.asciz "   \t"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "01:        "
-	.byte 0x09
-	.ascii "02:        "
-	.byte 0x09
-	.ascii "03:        "
-	.byte 0x09
-	.ascii "04:        "
-	.byte 0x09
-	.ascii "05:        "
-	.byte 0x09
-	.ascii "06:        "
-	.byte 0x09
-	.ascii "07:        "
-	.byte 0x09
-	.ascii "08:        "
-	.byte 0x09
-	.ascii "09:        "
-	.byte 0x09
-	.ascii "10:        "
-	.byte 0x09
-	.ascii "11:        "
-	.byte 0x09
-	.ascii "12:        "
-	.byte 0x09
-	.ascii "13:        "
-	.byte 0x09
-	.ascii "14:        "
-	.byte 0x09
-	.ascii "15:        "
-	.byte 0x09
-	.ascii "16:        "
-	.byte 0x09
-	.ascii "17:        "
-	.byte 0x09
-	.ascii "18:        "
-	.byte 0x09
-	.ascii "19:        "
-	.byte 0x09
-	.ascii "20:        "
-	.byte 0x09
-	.zero 2
-	.ascii "STATUS:                        "
-	.byte 0x09
-	.zero 14
-	.ascii "("
-	.byte 0x1e
-	.asciz "."
-	.ascii "$"
-	.byte 0x1e
-	.asciz "."
-	.ascii " "
-	.byte 0x1e
-	.asciz "."
+HDAE5000_Str_Blank26Tab:	; 0x2E1CCA
+	; read by Lbn_ShowEntry at 0x287140 (lda operand)
+	.asciz "                          \t"
+HDAE5000_Str_Blank12Tab:	; 0x2E1CE6
+	; read by FdList_Clear at 0x282D31 (lda operand)
+	.asciz "            \t"
+HDAE5000_FdList_RowsTemplate:	; 0x2E1CF4
+	; read by FdList_Clear at 0x282D89 (lda operand)
+	.asciz "01:        \t02:        \t03:        \t04:        \t05:        \t06:        \t07:        \t08:        \t09:        \t10:        \t11:        \t12:        \t13:        \t14:        \t15:        \t16:        \t17:        \t18:        \t19:        \t20:        \t"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_STATUS:	; 0x2E1DE6
+	; read by HDAETitleFunc at 0x2835EB (lda operand)
+	.asciz "STATUS:                        \t"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_DelOpt_TemplateBlank:	; 0x2E1E08
+	; read by DelOptSwEventCatch, DelOpt_InitFromSong at 0x28A577 (lda operand)
+	; the delete-option record template: mask 0, every flag 0 ("---")
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:	; 0x2E1E14, 3 x .long -> string
+	; read by DelCmpEditCheck, DelLswEditCheck, DelMdEditCheck, DelMspEditCheck, DelOpt_ShowFlags, DelPmtEditCheck, DelRcmEditCheck, DelSqtEditCheck, DelTlxEditCheck, DelTmEditCheck at 0x28A2FA (ld #, lda operand); 3 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_Chr2D2D2D
+	.long	HDAE5000_Str_OFF
+	.long	HDAE5000_Str_DEL
+HDAE5000_Str_DEL:	; 0x2E1E20
+	; pointed at by entry 2 of HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL, a table read by DelCmpEditCheck, DelLswEditCheck, DelMdEditCheck, DelMspEditCheck, DelOpt_ShowFlags, DelPmtEditCheck, DelRcmEditCheck, DelSqtEditCheck, DelTlxEditCheck, DelTmEditCheck
 	.asciz "DEL"
+HDAE5000_Str_OFF:	; 0x2E1E24
+	; pointed at by entry 1 of HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL, a table read by DelCmpEditCheck, DelLswEditCheck, DelMdEditCheck, DelMspEditCheck, DelOpt_ShowFlags, DelPmtEditCheck, DelRcmEditCheck, DelSqtEditCheck, DelTlxEditCheck, DelTmEditCheck
 	.asciz "OFF"
+HDAE5000_Str_Chr2D2D2D:	; 0x2E1E28
+	; pointed at by entry 0 of HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL, a table read by DelCmpEditCheck, DelLswEditCheck, DelMdEditCheck, DelMspEditCheck, DelOpt_ShowFlags, DelPmtEditCheck, DelRcmEditCheck, DelSqtEditCheck, DelTlxEditCheck, DelTmEditCheck
 	.asciz "---"
+HDAE5000_Str_050354:	; 0x2E1E2C
+	; read by FormatDialog_CodeDigit at 0x286617 (pushed operand)
 	.asciz "050354"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_965768:	; 0x2E1E34
+	; read by FormatDialog_CodeDigit at 0x286631 (pushed operand)
 	.asciz "965768"
-	.byte 0x00
-	.byte 0x48
-	.byte 0x1e
-	.asciz "."
-	.ascii "D"
-	.byte 0x1e
-	.asciz "."
-	.asciz "ON "
-	.asciz "OFF"
-	.ascii "P"
-	.byte 0x1e
-	.asciz "."
-	.ascii "01:SelectList"
-	.byte 0x09
-	.byte 0x30, 0x32
-	.byte 0x09
-	.byte 0x30, 0x33
-	.byte 0x09
-	.byte 0x30, 0x34
-	.byte 0x09
-	.byte 0x30, 0x35
-	.byte 0x09
-	.byte 0x30, 0x36
-	.byte 0x09
-	.byte 0x30, 0x37
-	.byte 0x09
-	.byte 0x30, 0x38
-	.byte 0x09
-	.byte 0x30, 0x39
-	.byte 0x09
-	.byte 0x31, 0x30
-	.byte 0x09
-	.byte 0x31, 0x31
-	.byte 0x09
-	.byte 0x31, 0x32
-	.byte 0x09
-	.byte 0x31, 0x33
-	.byte 0x09
-	.byte 0x31, 0x34
-	.byte 0x09
-	.byte 0x31, 0x35
-	.byte 0x09
-	.byte 0x31, 0x36
-	.byte 0x09
-	.byte 0x31, 0x37
-	.byte 0x09
-	.byte 0x31, 0x38
-	.byte 0x09
-	.byte 0x31, 0x39
-	.byte 0x09
-	.byte 0x32, 0x30
-	.byte 0x09
-	.byte 0x32, 0x31
-	.byte 0x09
-	.byte 0x32, 0x32
-	.byte 0x09
-	.byte 0x32, 0x33
-	.byte 0x09
-	.byte 0x32, 0x34
-	.byte 0x09
-	.byte 0x32, 0x35
-	.byte 0x09
-	.byte 0x32, 0x36
-	.byte 0x09
-	.byte 0x32, 0x37
-	.byte 0x09
-	.byte 0x32, 0x38
-	.byte 0x09
-	.byte 0x32, 0x39
-	.byte 0x09
-	.asciz "30"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_TextPtrs_OFF_ON:	; 0x2E1E3C, 2 x .long -> string
+	; read by TitleInfo_Build, WriteConfirmEditCheck, WriteProtectEditCheck at 0x283313 (ld #, lda operand); 2 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_OFF_2
+	.long	HDAE5000_Str_ON
+HDAE5000_Str_ON:	; 0x2E1E44
+	; pointed at by entry 1 of HDAE5000_TextPtrs_OFF_ON, a table read by TitleInfo_Build, WriteConfirmEditCheck, WriteProtectEditCheck
+	.asciz "ON "
+HDAE5000_Str_OFF_2:	; 0x2E1E48
+	; pointed at by entry 0 of HDAE5000_TextPtrs_OFF_ON, a table read by TitleInfo_Build, WriteConfirmEditCheck, WriteProtectEditCheck
+	.asciz "OFF"
+HDAE5000_TextPtrs_01Selectlist0203040506070809:	; 0x2E1E4C, 1 x .long -> string
+	; read by SelectListProc at 0x280AB3 (ld (mem) operand); 1 string pointer, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_SelectList_Text
+HDAE5000_SelectList_Text:	; 0x2E1E50
+	; pointed at by entry 0 of HDAE5000_TextPtrs_01Selectlist0203040506070809, a table read by SelectListProc
+	.asciz "01:SelectList\t02\t03\t04\t05\t06\t07\t08\t09\t10\t11\t12\t13\t14\t15\t16\t17\t18\t19\t20\t21\t22\t23\t24\t25\t26\t27\t28\t29\t30"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_DebugTime:	; 0x2E1EB6
+	; read by DbMemoClProc at 0x2812CA (lda operand)
 	.asciz "Debug Time!"
-	.byte 0xea  ; "ê"
-	.byte 0x1e
-	.asciz "."
-	.byte 0xdc  ; "Ü"
-	.byte 0x1e
-	.asciz "."
-	.byte 0xce  ; "Î"
-	.byte 0x1e
-	.asciz "."
+HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526:	; 0x2E1EC2, 3 x .long -> string
+	; read by AcHddNamingWindowProc at 0x28228E (ld # operand); 3 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_ABC123
+	.long	HDAE5000_Str_Abc123
+	.long	HDAE5000_Str_Chr202123242526
+HDAE5000_Str_Chr202123242526:	; 0x2E1ECE
+	; pointed at by entry 2 of HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526, a table read by AcHddNamingWindowProc
 	.asciz " !#$%&?.... "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Abc123:	; 0x2E1EDC
+	; pointed at by entry 1 of HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526, a table read by AcHddNamingWindowProc
 	.asciz "abc...123..."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_ABC123:	; 0x2E1EEA
+	; pointed at by entry 0 of HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526, a table read by AcHddNamingWindowProc
 	.asciz "ABC...123..."
-	.byte 0x00
-	.byte 0xe2  ; "â"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xe0  ; "à"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xde  ; "Þ"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xdc  ; "Ü"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xda  ; "Ú"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xd8  ; "Ø"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xd6  ; "Ö"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xd4  ; "Ô"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xd2  ; "Ò"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xd0  ; "Ð"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xce  ; "Î"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xcc  ; "Ì"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xca  ; "Ê"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xc8  ; "È"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xc6  ; "Æ"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xc4  ; "Ä"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xc2  ; "Â"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xc0  ; "À"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xbe  ; "¾"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xbc  ; "¼"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xba  ; "º"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xb8  ; "¸"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xb6  ; "¶"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xb4  ; "´"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xb2  ; "²"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xb0  ; "°"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xae  ; "®"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xac  ; "¬"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xaa  ; "ª"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xa8  ; "¨"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xa6  ; "¦"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xa4  ; "¤"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xa2  ; "¢"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xa0  ; " "
-	.byte 0x1f
-	.asciz "."
-	.byte 0x9e  ; ""
-	.byte 0x1f
-	.asciz "."
-	.byte 0x9c  ; ""
-	.byte 0x1f
-	.asciz "."
-	.byte 0x9a  ; ""
-	.byte 0x1f
-	.asciz "."
-	.byte 0x96  ; ""
-	.byte 0x1f
-	.asciz "."
-	.byte 0x94  ; ""
-	.byte 0x1f
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_TextPtrs_A_to_SPC:	; 0x2E1EF8, 38 x .long -> string
+	; pointed at by entry 0 of HDAE5000_TablePtrs_AcHddNamingWindowProc, a table read by AcHddNamingWindowProc; 38 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_A
+	.long	HDAE5000_Str_B
+	.long	HDAE5000_Str_C
+	.long	HDAE5000_Str_D
+	.long	HDAE5000_Str_E
+	.long	HDAE5000_Str_F
+	.long	HDAE5000_Str_G
+	.long	HDAE5000_Str_H
+	.long	HDAE5000_Str_I
+	.long	HDAE5000_Str_J
+	.long	HDAE5000_Str_K
+	.long	HDAE5000_Str_L
+	.long	HDAE5000_Str_M
+	.long	HDAE5000_Str_N
+	.long	HDAE5000_Str_O
+	.long	HDAE5000_Str_P
+	.long	HDAE5000_Str_Q
+	.long	HDAE5000_Str_R
+	.long	HDAE5000_Str_S
+	.long	HDAE5000_Str_T
+	.long	HDAE5000_Str_U
+	.long	HDAE5000_Str_V
+	.long	HDAE5000_Str_W
+	.long	HDAE5000_Str_X
+	.long	HDAE5000_Str_Y
+	.long	HDAE5000_Str_Z
+	.long	HDAE5000_Str_Chr5F
+	.long	HDAE5000_Str_0
+	.long	HDAE5000_Str_1
+	.long	HDAE5000_Str_2
+	.long	HDAE5000_Str_3
+	.long	HDAE5000_Str_4
+	.long	HDAE5000_Str_5
+	.long	HDAE5000_Str_6
+	.long	HDAE5000_Str_7
+	.long	HDAE5000_Str_8
+	.long	HDAE5000_Str_9
+	.long	HDAE5000_Str_SPC
+	.byte 0x94, 0x1f
 	.asciz "."
 	.zero 2
+HDAE5000_Str_SPC:	; 0x2E1F96
+	; pointed at by entry 37 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "SPC"
+HDAE5000_Str_9:	; 0x2E1F9A
+	; pointed at by entry 36 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "9"
+HDAE5000_Str_8:	; 0x2E1F9C
+	; pointed at by entry 35 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "8"
+HDAE5000_Str_7:	; 0x2E1F9E
+	; pointed at by entry 34 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "7"
+HDAE5000_Str_6:	; 0x2E1FA0
+	; pointed at by entry 33 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "6"
+HDAE5000_Str_5:	; 0x2E1FA2
+	; pointed at by entry 32 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "5"
+HDAE5000_Str_4:	; 0x2E1FA4
+	; pointed at by entry 31 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "4"
+HDAE5000_Str_3:	; 0x2E1FA6
+	; pointed at by entry 30 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "3"
+HDAE5000_Str_2:	; 0x2E1FA8
+	; pointed at by entry 29 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "2"
+HDAE5000_Str_1:	; 0x2E1FAA
+	; pointed at by entry 28 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "1"
+HDAE5000_Str_0:	; 0x2E1FAC
+	; pointed at by entry 27 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "0"
+HDAE5000_Str_Chr5F:	; 0x2E1FAE
+	; pointed at by entry 26 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "_"
+HDAE5000_Str_Z:	; 0x2E1FB0
+	; pointed at by entry 25 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "Z"
+HDAE5000_Str_Y:	; 0x2E1FB2
+	; pointed at by entry 24 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "Y"
+HDAE5000_Str_X:	; 0x2E1FB4
+	; pointed at by entry 23 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "X"
+HDAE5000_Str_W:	; 0x2E1FB6
+	; pointed at by entry 22 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "W"
+HDAE5000_Str_V:	; 0x2E1FB8
+	; pointed at by entry 21 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "V"
+HDAE5000_Str_U:	; 0x2E1FBA
+	; pointed at by entry 20 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "U"
+HDAE5000_Str_T:	; 0x2E1FBC
+	; pointed at by entry 19 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "T"
+HDAE5000_Str_S:	; 0x2E1FBE
+	; pointed at by entry 18 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "S"
+HDAE5000_Str_R:	; 0x2E1FC0
+	; pointed at by entry 17 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "R"
+HDAE5000_Str_Q:	; 0x2E1FC2
+	; pointed at by entry 16 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "Q"
+HDAE5000_Str_P:	; 0x2E1FC4
+	; pointed at by entry 15 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "P"
+HDAE5000_Str_O:	; 0x2E1FC6
+	; pointed at by entry 14 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "O"
+HDAE5000_Str_N:	; 0x2E1FC8
+	; pointed at by entry 13 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "N"
+HDAE5000_Str_M:	; 0x2E1FCA
+	; pointed at by entry 12 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "M"
+HDAE5000_Str_L:	; 0x2E1FCC
+	; pointed at by entry 11 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "L"
+HDAE5000_Str_K:	; 0x2E1FCE
+	; pointed at by entry 10 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "K"
+HDAE5000_Str_J:	; 0x2E1FD0
+	; pointed at by entry 9 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "J"
+HDAE5000_Str_I:	; 0x2E1FD2
+	; pointed at by entry 8 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "I"
+HDAE5000_Str_H:	; 0x2E1FD4
+	; pointed at by entry 7 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "H"
+HDAE5000_Str_G:	; 0x2E1FD6
+	; pointed at by entry 6 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "G"
+HDAE5000_Str_F:	; 0x2E1FD8
+	; pointed at by entry 5 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "F"
+HDAE5000_Str_E:	; 0x2E1FDA
+	; pointed at by entry 4 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "E"
+HDAE5000_Str_D:	; 0x2E1FDC
+	; pointed at by entry 3 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "D"
+HDAE5000_Str_C:	; 0x2E1FDE
+	; pointed at by entry 2 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "C"
+HDAE5000_Str_B:	; 0x2E1FE0
+	; pointed at by entry 1 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "B"
+HDAE5000_Str_A:	; 0x2E1FE2
+	; pointed at by entry 0 of HDAE5000_TextPtrs_A_to_SPC
 	.asciz "A"
-	.byte 0xce  ; "Î"
-	.asciz " ."
-	.byte 0xcc  ; "Ì"
-	.asciz " ."
-	.byte 0xca  ; "Ê"
-	.asciz " ."
-	.byte 0xc8  ; "È"
-	.asciz " ."
-	.byte 0xc6  ; "Æ"
-	.asciz " ."
-	.byte 0xc4  ; "Ä"
-	.asciz " ."
-	.byte 0xc2  ; "Â"
-	.asciz " ."
-	.byte 0xc0  ; "À"
-	.asciz " ."
-	.byte 0xbe  ; "¾"
-	.asciz " ."
-	.byte 0xbc  ; "¼"
-	.asciz " ."
-	.byte 0xba  ; "º"
-	.asciz " ."
-	.byte 0xb8  ; "¸"
-	.asciz " ."
-	.byte 0xb6  ; "¶"
-	.asciz " ."
-	.byte 0xb4  ; "´"
-	.asciz " ."
-	.byte 0xb2  ; "²"
-	.asciz " ."
-	.byte 0xb0  ; "°"
-	.asciz " ."
-	.byte 0xae  ; "®"
-	.asciz " ."
-	.byte 0xac  ; "¬"
-	.asciz " ."
-	.byte 0xaa  ; "ª"
-	.asciz " ."
-	.byte 0xa8  ; "¨"
-	.asciz " ."
-	.byte 0xa6  ; "¦"
-	.asciz " ."
-	.byte 0xa4  ; "¤"
-	.asciz " ."
-	.byte 0xa2  ; "¢"
-	.asciz " ."
-	.byte 0xa0  ; " "
-	.asciz " ."
-	.byte 0x9e  ; ""
-	.asciz " ."
-	.byte 0x9c  ; ""
-	.asciz " ."
-	.byte 0x9a  ; ""
-	.asciz " ."
-	.byte 0x98  ; ""
-	.asciz " ."
-	.byte 0x96  ; ""
-	.asciz " ."
-	.byte 0x94  ; ""
-	.asciz " ."
-	.byte 0x92  ; ""
-	.asciz " ."
-	.byte 0x90  ; ""
-	.asciz " ."
-	.byte 0x8e  ; ""
-	.asciz " ."
-	.byte 0x8c  ; ""
-	.asciz " ."
-	.byte 0x8a  ; ""
-	.asciz " ."
-	.byte 0x88  ; ""
-	.asciz " ."
-	.byte 0x86  ; ""
-	.asciz " ."
-	.byte 0x82  ; ""
-	.asciz " ."
-	.byte 0x80  ; ""
+HDAE5000_TextPtrs_A_to_SPC_2:	; 0x2E1FE4, 38 x .long -> string
+	; pointed at by entry 1 of HDAE5000_TablePtrs_AcHddNamingWindowProc, a table read by AcHddNamingWindowProc; 38 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_A_2
+	.long	HDAE5000_Str_B_2
+	.long	HDAE5000_Str_C_2
+	.long	HDAE5000_Str_D_2
+	.long	HDAE5000_Str_E_2
+	.long	HDAE5000_Str_F_2
+	.long	HDAE5000_Str_G_2
+	.long	HDAE5000_Str_H_2
+	.long	HDAE5000_Str_I_2
+	.long	HDAE5000_Str_J_2
+	.long	HDAE5000_Str_K_2
+	.long	HDAE5000_Str_L_2
+	.long	HDAE5000_Str_M_2
+	.long	HDAE5000_Str_N_2
+	.long	HDAE5000_Str_O_2
+	.long	HDAE5000_Str_P_2
+	.long	HDAE5000_Str_Q_2
+	.long	HDAE5000_Str_R_2
+	.long	HDAE5000_Str_S_2
+	.long	HDAE5000_Str_T_2
+	.long	HDAE5000_Str_U_2
+	.long	HDAE5000_Str_V_2
+	.long	HDAE5000_Str_W_2
+	.long	HDAE5000_Str_X_2
+	.long	HDAE5000_Str_Y_2
+	.long	HDAE5000_Str_Z_2
+	.long	HDAE5000_Str_Chr5F_2
+	.long	HDAE5000_Str_0_2
+	.long	HDAE5000_Str_1_2
+	.long	HDAE5000_Str_2_2
+	.long	HDAE5000_Str_3_2
+	.long	HDAE5000_Str_4_2
+	.long	HDAE5000_Str_5_2
+	.long	HDAE5000_Str_6_2
+	.long	HDAE5000_Str_7_2
+	.long	HDAE5000_Str_8_2
+	.long	HDAE5000_Str_9_2
+	.long	HDAE5000_Str_SPC_2
+	.byte 0x80
 	.asciz " ."
 	.zero 2
+HDAE5000_Str_SPC_2:	; 0x2E2082
+	; pointed at by entry 37 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "SPC"
+HDAE5000_Str_9_2:	; 0x2E2086
+	; pointed at by entry 36 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "9"
+HDAE5000_Str_8_2:	; 0x2E2088
+	; pointed at by entry 35 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "8"
+HDAE5000_Str_7_2:	; 0x2E208A
+	; pointed at by entry 34 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "7"
+HDAE5000_Str_6_2:	; 0x2E208C
+	; pointed at by entry 33 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "6"
+HDAE5000_Str_5_2:	; 0x2E208E
+	; pointed at by entry 32 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "5"
+HDAE5000_Str_4_2:	; 0x2E2090
+	; pointed at by entry 31 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "4"
+HDAE5000_Str_3_2:	; 0x2E2092
+	; pointed at by entry 30 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "3"
+HDAE5000_Str_2_2:	; 0x2E2094
+	; pointed at by entry 29 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "2"
+HDAE5000_Str_1_2:	; 0x2E2096
+	; pointed at by entry 28 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "1"
+HDAE5000_Str_0_2:	; 0x2E2098
+	; pointed at by entry 27 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "0"
+HDAE5000_Str_Chr5F_2:	; 0x2E209A
+	; pointed at by entry 26 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "_"
+HDAE5000_Str_Z_2:	; 0x2E209C
+	; pointed at by entry 25 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "z"
+HDAE5000_Str_Y_2:	; 0x2E209E
+	; pointed at by entry 24 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "y"
+HDAE5000_Str_X_2:	; 0x2E20A0
+	; pointed at by entry 23 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "x"
+HDAE5000_Str_W_2:	; 0x2E20A2
+	; pointed at by entry 22 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "w"
+HDAE5000_Str_V_2:	; 0x2E20A4
+	; pointed at by entry 21 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "v"
+HDAE5000_Str_U_2:	; 0x2E20A6
+	; pointed at by entry 20 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "u"
+HDAE5000_Str_T_2:	; 0x2E20A8
+	; pointed at by entry 19 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "t"
+HDAE5000_Str_S_2:	; 0x2E20AA
+	; pointed at by entry 18 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "s"
+HDAE5000_Str_R_2:	; 0x2E20AC
+	; pointed at by entry 17 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "r"
+HDAE5000_Str_Q_2:	; 0x2E20AE
+	; pointed at by entry 16 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "q"
+HDAE5000_Str_P_2:	; 0x2E20B0
+	; pointed at by entry 15 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "p"
+HDAE5000_Str_O_2:	; 0x2E20B2
+	; pointed at by entry 14 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "o"
+HDAE5000_Str_N_2:	; 0x2E20B4
+	; pointed at by entry 13 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "n"
+HDAE5000_Str_M_2:	; 0x2E20B6
+	; pointed at by entry 12 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "m"
+HDAE5000_Str_L_2:	; 0x2E20B8
+	; pointed at by entry 11 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "l"
+HDAE5000_Str_K_2:	; 0x2E20BA
+	; pointed at by entry 10 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "k"
+HDAE5000_Str_J_2:	; 0x2E20BC
+	; pointed at by entry 9 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "j"
+HDAE5000_Str_I_2:	; 0x2E20BE
+	; pointed at by entry 8 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "i"
+HDAE5000_Str_H_2:	; 0x2E20C0
+	; pointed at by entry 7 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "h"
+HDAE5000_Str_G_2:	; 0x2E20C2
+	; pointed at by entry 6 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "g"
+HDAE5000_Str_F_2:	; 0x2E20C4
+	; pointed at by entry 5 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "f"
+HDAE5000_Str_E_2:	; 0x2E20C6
+	; pointed at by entry 4 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "e"
+HDAE5000_Str_D_2:	; 0x2E20C8
+	; pointed at by entry 3 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "d"
+HDAE5000_Str_C_2:	; 0x2E20CA
+	; pointed at by entry 2 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "c"
+HDAE5000_Str_B_2:	; 0x2E20CC
+	; pointed at by entry 1 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "b"
+HDAE5000_Str_A_2:	; 0x2E20CE
+	; pointed at by entry 0 of HDAE5000_TextPtrs_A_to_SPC_2
 	.asciz "a"
-	.byte 0xa0  ; " "
-	.asciz "!."
-	.byte 0x9e  ; ""
-	.asciz "!."
-	.byte 0x9c  ; ""
-	.asciz "!."
-	.byte 0x9a  ; ""
-	.asciz "!."
-	.byte 0x98  ; ""
-	.asciz "!."
-	.byte 0x96  ; ""
-	.asciz "!."
-	.byte 0x92  ; ""
-	.asciz "!."
-	.byte 0x8e  ; ""
-	.asciz "!."
-	.byte 0x8c  ; ""
-	.asciz "!."
-	.byte 0x8a  ; ""
-	.asciz "!."
-	.byte 0x86  ; ""
-	.asciz "!."
-	.byte 0x82  ; ""
-	.asciz "!."
-	.byte 0x80  ; ""
-	.asciz "!."
-	.asciz "~!."
-	.asciz "|!."
-	.asciz "z!."
-	.asciz "x!."
-	.asciz "v!."
-	.asciz "t!."
-	.asciz "r!."
-	.asciz "p!."
-	.asciz "n!."
-	.asciz "j!."
-	.asciz "f!."
-	.asciz "d!."
-	.asciz "b!."
-	.asciz "`!."
-	.asciz "^!."
-	.asciz "\\!."
-	.asciz "Z!."
-	.asciz "X!."
-	.asciz "V!."
+HDAE5000_TextPtrs_Chr21_to_Chr7D:	; 0x2E20D0, 32 x .long -> string
+	; pointed at by entry 2 of HDAE5000_TablePtrs_AcHddNamingWindowProc, a table read by AcHddNamingWindowProc; also read by AcHddNamingWindowProc at 0x282435 (lda operand); 32 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_Chr21
+	.long	HDAE5000_Str_Chr23
+	.long	HDAE5000_Str_Chr24
+	.long	HDAE5000_Str_Chr25
+	.long	HDAE5000_Str_Chr26
+	.long	HDAE5000_Str_Chr3F
+	.long	HDAE5000_Str_40
+	.long	HDAE5000_Str_5c
+	.long	HDAE5000_Str_Chr5E
+	.long	HDAE5000_Str_Chr7C
+	.long	HDAE5000_Str_22
+	.long	HDAE5000_Str_27
+	.long	HDAE5000_Str_Chr60
+	.long	HDAE5000_Str_Chr2C
+	.long	HDAE5000_Str_Chr2E
+	.long	HDAE5000_Str_Chr3A
+	.long	HDAE5000_Str_Chr3B
+	.long	HDAE5000_Str_Chr2B
+	.long	HDAE5000_Str_Chr2D
+	.long	HDAE5000_Str_Chr2A
+	.long	HDAE5000_Str_Chr2F
+	.long	HDAE5000_Str_Chr3D
+	.long	HDAE5000_Str_8b
+	.long	HDAE5000_Str_8d
+	.long	HDAE5000_Str_Chr28
+	.long	HDAE5000_Str_Chr29
+	.long	HDAE5000_Str_Chr3C
+	.long	HDAE5000_Str_Chr3E
+	.long	HDAE5000_Str_Chr5B
+	.long	HDAE5000_Str_Chr5D
+	.long	HDAE5000_Str_Chr7B
+	.long	HDAE5000_Str_Chr7D
 	.asciz "T!."
 	.zero 2
+HDAE5000_Str_Chr7D:	; 0x2E2156
+	; pointed at by entry 31 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "}"
+HDAE5000_Str_Chr7B:	; 0x2E2158
+	; pointed at by entry 30 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "{"
+HDAE5000_Str_Chr5D:	; 0x2E215A
+	; pointed at by entry 29 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "]"
+HDAE5000_Str_Chr5B:	; 0x2E215C
+	; pointed at by entry 28 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "["
+HDAE5000_Str_Chr3E:	; 0x2E215E
+	; pointed at by entry 27 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz ">"
+HDAE5000_Str_Chr3C:	; 0x2E2160
+	; pointed at by entry 26 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "<"
+HDAE5000_Str_Chr29:	; 0x2E2162
+	; pointed at by entry 25 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz ")"
+HDAE5000_Str_Chr28:	; 0x2E2164
+	; pointed at by entry 24 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "("
+HDAE5000_Str_8d:	; 0x2E2166
+	; pointed at by entry 23 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "~8d"
+HDAE5000_Str_8b:	; 0x2E216A
+	; pointed at by entry 22 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "~8b"
+HDAE5000_Str_Chr3D:	; 0x2E216E
+	; pointed at by entry 21 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "="
+HDAE5000_Str_Chr2F:	; 0x2E2170
+	; pointed at by entry 20 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "/"
+HDAE5000_Str_Chr2A:	; 0x2E2172
+	; pointed at by entry 19 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "*"
+HDAE5000_Str_Chr2D:	; 0x2E2174
+	; pointed at by entry 18 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "-"
+HDAE5000_Str_Chr2B:	; 0x2E2176
+	; pointed at by entry 17 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "+"
+HDAE5000_Str_Chr3B:	; 0x2E2178
+	; pointed at by entry 16 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz ";"
+HDAE5000_Str_Chr3A:	; 0x2E217A
+	; pointed at by entry 15 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz ":"
+HDAE5000_Str_Chr2E:	; 0x2E217C
+	; pointed at by entry 14 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "."
+HDAE5000_Str_Chr2C:	; 0x2E217E
+	; pointed at by entry 13 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz ","
+HDAE5000_Str_Chr60:	; 0x2E2180
+	; pointed at by entry 12 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "`"
+HDAE5000_Str_27:	; 0x2E2182
+	; pointed at by entry 11 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "~27"
+HDAE5000_Str_22:	; 0x2E2186
+	; pointed at by entry 10 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "~22"
+HDAE5000_Str_Chr7C:	; 0x2E218A
+	; pointed at by entry 9 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "|"
+HDAE5000_Str_Chr5E:	; 0x2E218C
+	; pointed at by entry 8 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "^"
+HDAE5000_Str_5c:	; 0x2E218E
+	; pointed at by entry 7 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "~5c"
+HDAE5000_Str_40:	; 0x2E2192
+	; pointed at by entry 6 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "~40"
+HDAE5000_Str_Chr3F:	; 0x2E2196
+	; pointed at by entry 5 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "?"
+HDAE5000_Str_Chr26:	; 0x2E2198
+	; pointed at by entry 4 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "&"
+HDAE5000_Str_Chr25:	; 0x2E219A
+	; pointed at by entry 3 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "%"
+HDAE5000_Str_Chr24:	; 0x2E219C
+	; pointed at by entry 2 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "$"
+HDAE5000_Str_Chr23:	; 0x2E219E
+	; pointed at by entry 1 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "#"
+HDAE5000_Str_Chr21:	; 0x2E21A0
+	; pointed at by entry 0 of HDAE5000_TextPtrs_Chr21_to_Chr7D, a table read by AcHddNamingWindowProc
 	.asciz "!"
-	.byte 0xf8  ; "ø"
-	.byte 0x1e
-	.asciz "."
-	.byte 0xe4  ; "ä"
-	.byte 0x1f
-	.asciz "."
-	.byte 0xd0  ; "Ð"
-	.asciz " ."
-	.asciz "%"
-	.asciz "%"
-	.byte 0x1f
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "$"
-	.asciz "$"
-	.byte 0x1f
-	.byte 0x00
-	.byte 0xc4  ; "Ä"
-	.asciz "!."
-	.byte 0xc2  ; "Â"
-	.asciz "!."
+HDAE5000_TablePtrs_AcHddNamingWindowProc:	; 0x2E21A2, 3 x .long -> string
+	; read by AcHddNamingWindowProc at 0x281764 (ld # operand); 3 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_TextPtrs_A_to_SPC
+	.long	HDAE5000_TextPtrs_A_to_SPC_2
+	.long	HDAE5000_TextPtrs_Chr21_to_Chr7D
+HDAE5000_Str_Chr25_AcHddNamingWindowProc:	; 0x2E21AE
+	; read by AcHddNamingWindowProc at 0x28199F (ld # operand)
+	; u16 x 6, indexed by (0x22A032 * 3 + 0x22A02A) * 2 and compared with the column (`cp iz,(xbc)`) by HDAE5000_AcHddNamingWindowProc: the last column of each name-editor character page
+	.short 37, 37, 31, 36, 36, 31
+HDAE5000_TextPtrs_Blank1_Chr5F:	; 0x2E21BA, 2 x .long -> string
+	; read by AcHddNamingWindowProc at 0x281557 (ld # operand); 2 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_Blank1
+	.long	HDAE5000_Str_Chr5F_3
+HDAE5000_Str_Chr5F_3:	; 0x2E21C2
+	; pointed at by entry 1 of HDAE5000_TextPtrs_Blank1_Chr5F, a table read by AcHddNamingWindowProc
 	.asciz "_"
+HDAE5000_Str_Blank1:	; 0x2E21C4
+	; pointed at by entry 0 of HDAE5000_TextPtrs_Blank1_Chr5F, a table read by AcHddNamingWindowProc
 	.asciz " "
 ;
 ; HDAE5000_AcHddNamingWindowProc_CaseTable (0x2E21C6, 9 x u16): the switch of HDAE5000_AcHddNamingWindowProc
@@ -12737,83 +12776,125 @@ HDAE5000_AcHddNamingWindowProc_CaseTable:
 	.short	HDAE5000_AcHddNamingWindowProc_Case7 - HDAE5000_AcHddNamingWindowProc_Case1	; 7
 	.short	HDAE5000_AcHddNamingWindowProc_Case8 - HDAE5000_AcHddNamingWindowProc_Case1	; 8
 	.short	HDAE5000_AcHddNamingWindowProc_Case9 - HDAE5000_AcHddNamingWindowProc_Case1	; 9
-
-HDAE5000_Test_Strings:	; 0x2E21D8
-	; PPORT test and debug strings
+HDAE5000_Str_Name:	; 0x2E21D8
+	; read by IvHddNamingProc at 0x2826DD (lda operand)
 	.asciz "Name"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Test:	; 0x2E21DE
+	; read by HardTestPage at 0x282856 (lda operand)
 	.asciz "Test"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_PPORTTEST:	; 0x2E21E4
+	; read by HardTestPage at 0x2828D5 (lda operand)
 	.asciz "PPORT TEST"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_HDDIDREAD:	; 0x2E21F0
+	; read by HardTestPage at 0x282981 (lda operand)
 	.asciz "HDD ID READ"
+HDAE5000_Str_FDTEST:	; 0x2E21FC
+	; read by HardTestPage at 0x282A2D (lda operand)
 	.asciz "FD TEST"
+HDAE5000_Str_OK:	; 0x2E2204
+	; read by HardTestPage at 0x282A5F (lda operand)
 	.asciz "OK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_ERROR:	; 0x2E2208
+	; read by HardTestPage at 0x282A69 (lda operand)
 	.asciz "ERROR"
+HDAE5000_Str_ERROR_HardTestPage:	; 0x2E220E
+	; read by HardTestPage at 0x282A73 (lda operand)
 	.asciz "ERROR"
+HDAE5000_Str_STOPTESTLOOP:	; 0x2E2214
+	; read by HardTestPage at 0x282B2C (lda operand)
 	.asciz "STOP TEST LOOP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_STARTTESTLOOP:	; 0x2E2224
+	; read by HardTestPage at 0x282B53 (lda operand)
 	.asciz "START TEST LOOP"
+HDAE5000_Str_PortTestOK:	; 0x2E2234
+	; read by HardTest_PortTest at 0x282C58 (lda operand)
 	.asciz "=======> Port Test OK"
+HDAE5000_Str_PortTestError:	; 0x2E224A
+	; read by HardTest_PortTest at 0x282C62 (lda operand)
 	.asciz "=======> Port Test Error"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_HDTYPE:	; 0x2E2264
+	; read by HardTest_HddIdRead at 0x282C94 (pushed operand)
 	.asciz "HD-TYPE : "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_Fre_Capa_3_1f_MB:	; 0x2E2270
+	; read by HardTest_HddIdRead at 0x282CFC (pushed operand)
 	.asciz "Fre Capa: %3.1f [MB]"
-	.zero 3
-	.asciz "=======> HDD OK"
-	.asciz "=======> HDD NG!"
-	.zero 3
-	.byte 0xc8  ; "È"
-	.asciz "B%2.2d"
-	.asciz "*.*"
-	.asciz "CpHD"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "CpHD"
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "WRITE PROTECTION   :ON     QUICK LOAD MODE:     1"
-	.byte 0x09
-	.ascii "WRITE CONFIRM      :OFF    JUMP AFTER LOAD:     2"
-	.byte 0x09
-	.ascii "LOAD BY NUMBER MODE:  1    FREE HDD SPACE :1251MB"
-	.byte 0x09
+HDAE5000_Str_Empty:	; 0x2E2286
+	; read by HardTest_HddIdRead at 0x282D10 (lda operand)
 	.zero 2
+HDAE5000_Str_HDDOK:	; 0x2E2288
+	; read by HardTest_HddIdRead at 0x282D18 (lda operand)
+	.asciz "=======> HDD OK"
+HDAE5000_Str_HDDNG:	; 0x2E2298
+	; read by HardTest_HddIdRead at 0x282D22 (lda operand)
+	.asciz "=======> HDD NG!"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Float_100_HddIdRead:	; 0x2E22AA
+	; read by HardTest_HddIdRead at 0x282CD9 (lda operand)
+	; IEEE single 100.0 (0x42C80000): the divisor HDAE5000_HardTest_HddIdRead passes to HDAE5000_FloatDiv to turn the free space (units of 10,000 bytes) into MB for "Fre Capa: %3.1f [MB]"
+	.long 0x42c80000		; 100.0f
+HDAE5000_Fmt_2_2d:	; 0x2E22AE
+	; read by FdName_SongNumber at 0x282E4E (pushed operand)
+	.asciz "%2.2d"
+HDAE5000_Str_AllFilesPattern:	; 0x2E22B4
+	; read by FdList_Scan at 0x282F46 (lda operand)
+	.asciz "*.*"
+HDAE5000_Str_Cphd:	; 0x2E22B8
+	; read by AttenCpToHDSwCatch at 0x2831C6 (lda operand)
+	.asciz "CpHD"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Cphd_AttenCpToMarkSwCatch:	; 0x2E22BE
+	; read by AttenCpToMarkSwCatch at 0x283282 (lda operand)
+	.asciz "CpHD"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_TitleInfo_Template:	; 0x2E22C4
+	; read by TitleInfo_Build at 0x2832F9 (lda operand)
+	.asciz "WRITE PROTECTION   :ON     QUICK LOAD MODE:     1\tWRITE CONFIRM      :OFF    JUMP AFTER LOAD:     2\tLOAD BY NUMBER MODE:  1    FREE HDD SPACE :1251MB\t"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_s:	; 0x2E235C
+	; read by TitleInfo_Build at 0x283321 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_s_TitleInfo_Build:	; 0x2E2360
+	; read by TitleInfo_Build at 0x28335E (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_d:	; 0x2E2364
+	; read by TitleInfo_Build at 0x28338E (pushed operand)
 	.asciz "  %d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_d_TitleInfo_Build:	; 0x2E236A
+	; read by TitleInfo_Build at 0x2833BE (pushed operand)
 	.asciz "     %d"
+HDAE5000_Fmt_d_TitleInfo_Build_2:	; 0x2E2372
+	; read by TitleInfo_Build at 0x2833EE (pushed operand)
 	.asciz "     %d"
+HDAE5000_Fmt_4ldMB:	; 0x2E237A
+	; read by TitleInfo_Build at 0x28342D (pushed operand)
 	.asciz "%4ldMB"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_HDAE:	; 0x2E2382
+	; read by HdTitleEventCatch at 0x2834F0 (lda operand)
 	.asciz "HDAE"
-	.zero 3
-	.byte 0x7f, 0x00, 0x52
-	.byte 0x02
-	.byte 0x7f, 0x00, 0x57
-	.byte 0x02
-	.byte 0x7f, 0x00
-	.byte 0x5c
-	.byte 0x02
-	.byte 0x7f, 0x00
-	.ascii "a"
-	.byte 0x02, 0x7f
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "f"
-	.byte 0x02, 0x7f
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "k"
-	.byte 0x02, 0x7f
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "p"
-	.byte 0x02, 0x7f
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "u"
-	.byte 0x02, 0x7f
-	.zero 1				; 0x2E23AB (split off by the table below/above)
+HDAE5000_HDAETitleFunc_ObjIds:	; 0x2E2388
+	; read by HDAETitleFunc at 0x2836FC (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f0000		; UI object 0 "HDDMENU"
+	.long 0x007f0252		; UI object 594 "ERR_HD_NOT_FMT"
+	.long 0x007f0257		; UI object 599 "ERR_HD_SRAM"
+	.long 0x007f025c		; UI object 604 "ERR_HD_RESET"
+	.long 0x007f0261		; UI object 609 "ERR_HD_READ"
+	.long 0x007f0266		; UI object 614 "ERR_HD_ID_READ"
+	.long 0x007f026b		; UI object 619 "ERR_HD_TRACK_0"
+	.long 0x007f0270		; UI object 624 "ERR_HD_FAT"
+	.long 0x007f0275		; UI object 629 "ERR_HD_FSB"
 ;
 ; HDAE5000_HDAETitleFunc_CaseTable (0x2E23AC, 8 x u16): the switch of HDAE5000_HDAETitleFunc
 ; (dispatch at 0x283546, hdae5000_hd_driver.s:629: `dec 2,xwa`, bound `cp xwa,7`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
@@ -12830,78 +12911,55 @@ HDAE5000_HDAETitleFunc_CaseTable:
 	.short	.Lri_done - .Lri_jt_base	; 7 (default)
 	.short	.Lri_case8 - .Lri_jt_base	; 8
 	.short	.Lri_case9 - .Lri_jt_base	; 9
-	.ascii "   :                "
-	.byte 0x09
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Chr2020203A2020:	; 0x2E23BC
+	; read by DirList_BuildPage at 0x283732 (lda operand)
+	.asciz "   :                \t"
+HDAE5000_Fmt_3_3d:	; 0x2E23D2
+	; read by DirList_BuildPage at 0x283758 (pushed operand)
 	.asciz "%3.3d"
-	.ascii "CURRENT PANEL"
-	.byte 0x09
-	.ascii " PANEL MEMORY"
-	.byte 0x09
-	.ascii "  SEQUENCER  "
-	.byte 0x09
-	.ascii "  COMPOSER   "
-	.byte 0x09
-	.ascii " SOUND MEMORY"
-	.byte 0x09
-	.ascii "     MSP     "
-	.byte 0x09
-	.ascii "RHYTHM CUSTOM"
-	.byte 0x09
-	.ascii "  USER MIDI  "
-	.byte 0x09
-	.ascii "    LYRICS   "
-	.byte 0x09
-	.zero 2
-	.ascii "             "
-	.byte 0x09
-	.ascii "             "
-	.byte 0x09
-	.ascii "             "
-	.byte 0x09
-	.ascii "             "
-	.byte 0x09
-	.ascii "             "
-	.byte 0x09
-	.ascii "             "
-	.byte 0x09
-	.ascii "             "
-	.byte 0x09
-	.ascii "             "
-	.byte 0x09
-	.ascii "             "
-	.byte 0x09
-	.zero 2
-	.ascii "             "
-	.byte 0x09
-	.zero 2
-	.byte 0x04
-	.byte 0x01
-	.byte 0x7f, 0x00
-	.byte 0x5b
-	.byte 0x01
-	.byte 0x7f, 0x00, 0x03
-	.byte 0x01
-	.byte 0x7f, 0x00
-	.byte 0x5c
-	.byte 0x01
-	.byte 0x7f, 0x00, 0x02
-	.byte 0x01
-	.byte 0x7f, 0x00, 0x60
-	.byte 0x01
-	.byte 0x7f, 0x00
-
-HDAE5000_Dir_Strings:	; 0x2E2500
-	; Directory management strings
+HDAE5000_PartNames_Text:	; 0x2E23D8
+	; read by PartList_Build at 0x2839FD (lda operand)
+	.asciz "CURRENT PANEL\t PANEL MEMORY\t  SEQUENCER  \t  COMPOSER   \t SOUND MEMORY\t     MSP     \tRHYTHM CUSTOM\t  USER MIDI  \t    LYRICS   \t"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_PartNames_BlankText:	; 0x2E2458
+	; read by PartList_Build at 0x2839E4 (lda operand)
+	.asciz "             \t             \t             \t             \t             \t             \t             \t             \t             \t"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_PartName_Blank:	; 0x2E24D8
+	; read by PartList_Build at 0x283A1F (lda operand)
+	.asciz "             \t"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_SongScreen_Refresh_ObjIds:	; 0x2E24E8
+	; read by SongScreen_Refresh at 0x283C05 (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f0104		; UI object 260 "FILE_LOAD_DIRBOX"
+	.long 0x007f015b		; UI object 347 "FLS_FILE_SEL_DIRBOX"
+HDAE5000_SongScreen_Refresh_ObjIds_2:	; 0x2E24F0
+	; read by SongScreen_Refresh at 0x283CED (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f0103		; UI object 259 "HD_FILE_LIST"
+	.long 0x007f015c		; UI object 348 "FLS_FILE_SEL_LISTBOX"
+HDAE5000_SongScreen_Refresh_ObjIds_3:	; 0x2E24F8
+	; read by SongScreen_Refresh at 0x283D63 (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f0102		; UI object 258 "HD_FILE_OPTION"
+	.long 0x007f0160		; UI object 352 "FLS_FILE_SEL_OPTBOX"
+HDAE5000_Str_DIRECTORY:	; 0x2E2500
+	; read by SongScreen_Refresh at 0x283B8C (pushed operand)
 	.asciz "DIRECTORY "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_2_2d_SongScreen_Refresh:	; 0x2E250C
+	; read by SongScreen_Refresh at 0x283BA4 (pushed operand)
 	.asciz "%2.2d"
+HDAE5000_Str_Chr3A_SongScreen_Refresh:	; 0x2E2512
+	; read by SongScreen_Refresh at 0x283BC3 (pushed operand)
 	.asciz ":"
-	.byte 0x09
+HDAE5000_Str_Blank0Tab:	; 0x2E2514
+	; read by SongScreen_Refresh at 0x283BED (pushed operand)
+	.asciz "\t"
+HDAE5000_Str_Chr3A2020202020:	; 0x2E2516
+	; read by SongScreen_Refresh at 0x283C6F (lda operand)
+	.asciz ":                          \t"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii ":                          "
-	.byte 0x09
-	.zero 2
+HDAE5000_Fmt_2_2d_SongScreen_Refresh_2:	; 0x2E2534
+	; read by SongScreen_Refresh at 0x283C90 (pushed operand)
 	.asciz "%2.2d"
 ;
 ; HDAE5000_FILE_LOAD_Screen_CaseTable (0x2E253A, 14 x u16): the switch of HDAE5000_FILE_LOAD_Screen
@@ -12925,72 +12983,160 @@ HDAE5000_FILE_LOAD_Screen_CaseTable:
 	.short	HDAE5000_FILE_LOAD_Screen_Default - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA000B (default)
 	.short	HDAE5000_FILE_LOAD_Screen_Ev01EA000C - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA000C
 	.short	HDAE5000_FILE_LOAD_Screen_Ev01EA000D - HDAE5000_FILE_LOAD_Screen_Ev01C00001	; 0x01EA000D
+HDAE5000_Str_DELD:	; 0x2E2556
+	; read by AttenDelDirSwCatch at 0x283FCA (lda operand)
 	.asciz "DELD"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_DELF:	; 0x2E255C
+	; read by AttenDelFileSwCatch at 0x2840EE (lda operand)
 	.asciz "DELF"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_UTIL:	; 0x2E2562
+	; read by HDD_UTIL_PAGE at 0x2845DB (lda operand)
 	.asciz "UTIL"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_LSWFileInfo:	; 0x2E2568
+	; read by HDD_UTIL_PAGE at 0x28463A (pushed operand)
 	.asciz "---[ LSW File Info. ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Adr:	; 0x2E2582
+	; read by HDD_UTIL_PAGE at 0x28465F (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size:	; 0x2E258A
+	; read by HDD_UTIL_PAGE at 0x28469E (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_SDAFileInfo:	; 0x2E2592
+	; read by HDD_UTIL_PAGE at 0x2846F5 (pushed operand)
 	.asciz "---[ SDA File Info. ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Adr_HDD_UTIL_PAGE:	; 0x2E25AC
+	; read by HDD_UTIL_PAGE at 0x28471A (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size_HDD_UTIL_PAGE:	; 0x2E25B4
+	; read by HDD_UTIL_PAGE at 0x284759 (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_PMTFileInfo:	; 0x2E25BC
+	; read by HDD_UTIL_PAGE at 0x2847B0 (pushed operand)
 	.asciz "---[ PMT File Info. ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Adr_HDD_UTIL_PAGE_2:	; 0x2E25D6
+	; read by HDD_UTIL_PAGE at 0x2847D5 (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size_HDD_UTIL_PAGE_2:	; 0x2E25DE
+	; read by HDD_UTIL_PAGE at 0x284814 (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_SQFFileInfo:	; 0x2E25E6
+	; read by HDD_UTIL_PAGE at 0x28486B (pushed operand)
 	.asciz "---[ SQF File Info. ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Adr_HDD_UTIL_PAGE_3:	; 0x2E2600
+	; read by HDD_UTIL_PAGE at 0x284890 (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size_HDD_UTIL_PAGE_3:	; 0x2E2608
+	; read by HDD_UTIL_PAGE at 0x2848CF (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_SEQFileInfo:	; 0x2E2610
+	; read by HDD_UTIL_PAGE at 0x284926 (pushed operand)
 	.asciz "---[ SEQ File Info. ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Adr_HDD_UTIL_PAGE_4:	; 0x2E262A
+	; read by HDD_UTIL_PAGE at 0x28494B (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size_HDD_UTIL_PAGE_4:	; 0x2E2632
+	; read by HDD_UTIL_PAGE at 0x28498A (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_CMPFileInfo:	; 0x2E263A
+	; read by HDD_UTIL_PAGE at 0x2849E1 (pushed operand)
 	.asciz "---[ CMP File Info. ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Adr_HDD_UTIL_PAGE_5:	; 0x2E2654
+	; read by HDD_UTIL_PAGE at 0x284A06 (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size_HDD_UTIL_PAGE_5:	; 0x2E265C
+	; read by HDD_UTIL_PAGE at 0x284A45 (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_TMFileInfo:	; 0x2E2664
+	; read by HDD_UTIL_PAGE at 0x284A9C (pushed operand)
 	.asciz "---[ TM File Info. ]---"
+HDAE5000_Str_Adr_HDD_UTIL_PAGE_6:	; 0x2E267C
+	; read by HDD_UTIL_PAGE at 0x284AC1 (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size_HDD_UTIL_PAGE_6:	; 0x2E2684
+	; read by HDD_UTIL_PAGE at 0x284B00 (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_MSPFileInfo:	; 0x2E268C
+	; read by HDD_UTIL_PAGE at 0x284B57 (pushed operand)
 	.asciz "---[ MSP File Info. ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Adr_HDD_UTIL_PAGE_7:	; 0x2E26A6
+	; read by HDD_UTIL_PAGE at 0x284B7C (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size_HDD_UTIL_PAGE_7:	; 0x2E26AE
+	; read by HDD_UTIL_PAGE at 0x284BBB (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_RCMFileInfo:	; 0x2E26B6
+	; read by HDD_UTIL_PAGE at 0x284C13 (pushed operand)
 	.asciz "---[ RCM File Info. ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Adr_HDD_UTIL_PAGE_8:	; 0x2E26D0
+	; read by HDD_UTIL_PAGE at 0x284C38 (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size_HDD_UTIL_PAGE_8:	; 0x2E26D8
+	; read by HDD_UTIL_PAGE at 0x284C77 (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_MDFileInfo:	; 0x2E26E0
+	; read by HDD_UTIL_PAGE at 0x284CCF (pushed operand)
 	.asciz "---[ MD File Info. ]---"
+HDAE5000_Str_Adr_HDD_UTIL_PAGE_9:	; 0x2E26F8
+	; read by HDD_UTIL_PAGE at 0x284CF4 (pushed operand)
 	.asciz "adr  : "
+HDAE5000_Str_Size_HDD_UTIL_PAGE_9:	; 0x2E2700
+	; read by HDD_UTIL_PAGE at 0x284D33 (pushed operand)
 	.asciz "size : "
+HDAE5000_Str_PCLK:	; 0x2E2708
+	; read by PC_DATA_LINK_PAGE at 0x284E97 (lda operand)
 	.asciz "PCLK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_PORTISACTIVE:	; 0x2E270E
+	; read by PC_DATA_LINK_PAGE at 0x284EF8 (lda operand)
 	.asciz "PORT IS ACTIVE"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Blank14:	; 0x2E271E
+	; read by PC_DATA_LINK_PAGE at 0x284F0A (lda operand)
 	.asciz "              "
-	.byte 0x00
-	.byte 0xb0  ; "°"
-	.byte 0x00
-	.byte 0x9b  ; ""
-	.byte 0x00
-	.byte 0xb0  ; "°"
-	.byte 0x00
-	.byte 0x9d  ; ""
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "v'."
-	.asciz "f'."
-	.asciz "V'."
-	.asciz "F'."
+HDAE5000_SeparateOutput_SendPartMsg_Data:	; 0x2E272E
+	; read by SeparateOutput_SendPartMsg at 0x284F50 (ld # operand)
+	.byte 0xb0
+	.zero 1
+	.byte 0x9b
+	.zero 1
+HDAE5000_SeparateOutput_SendPartMsg_Data_2:	; 0x2E2732
+	; read by SeparateOutput_SendPartMsg at 0x284F5C (ld # operand)
+	.byte 0xb0
+	.zero 1
+	.byte 0x9d
+	.zero 1
+HDAE5000_TextPtrs_OFF_DRUMSLR_BASSDRUMSMIX_BASSDRUMSMONO:	; 0x2E2736, 4 x .long -> string
+	; read by SeparateOutputModeCheck at 0x28512B (ld # operand); 4 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_OFF_3
+	.long	HDAE5000_Str_DRUMSLR
+	.long	HDAE5000_Str_BASSDRUMSMIX
+	.long	HDAE5000_Str_BASSDRUMSMONO
+HDAE5000_Str_BASSDRUMSMONO:	; 0x2E2746
+	; pointed at by entry 3 of HDAE5000_TextPtrs_OFF_DRUMSLR_BASSDRUMSMIX_BASSDRUMSMONO, a table read by SeparateOutputModeCheck
 	.asciz "BASS/DRUMS MONO"
+HDAE5000_Str_BASSDRUMSMIX:	; 0x2E2756
+	; pointed at by entry 2 of HDAE5000_TextPtrs_OFF_DRUMSLR_BASSDRUMSMIX_BASSDRUMSMONO, a table read by SeparateOutputModeCheck
 	.asciz "BASS+DRUMS MIX "
+HDAE5000_Str_DRUMSLR:	; 0x2E2766
+	; pointed at by entry 1 of HDAE5000_TextPtrs_OFF_DRUMSLR_BASSDRUMSMIX_BASSDRUMSMONO, a table read by SeparateOutputModeCheck
 	.asciz "   DRUMS L/R   "
+HDAE5000_Str_OFF_3:	; 0x2E2776
+	; pointed at by entry 0 of HDAE5000_TextPtrs_OFF_DRUMSLR_BASSDRUMSMIX_BASSDRUMSMONO, a table read by SeparateOutputModeCheck
 	.asciz "      OFF      "
+HDAE5000_Fmt_s_SeparateOutputModeCheck:	; 0x2E2786
+	; read by SeparateOutputModeCheck at 0x285138 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13011,68 +13157,95 @@ HDAE5000_SeparateOutputModeCheck_CaseTable:
 	.short	.LHD_SC__h1_case7 - .LHD_SC__h1_case9	; 0x01E00045
 	.short	.LHD_SC__h1_case8 - .LHD_SC__h1_case9	; 0x01E00046
 	.short	.LHD_SC__h1_case9 - .LHD_SC__h1_case9	; 0x01E00047
-	.asciz "B(."
-	.asciz "<(."
-	.asciz "6(."
-	.asciz "0(."
-	.asciz "*(."
-	.asciz "$(."
-	.byte 0x1e
-	.asciz "(."
-	.byte 0x18
-	.asciz "(."
-	.byte 0x12
-	.asciz "(."
-	.byte 0x0c
-	.asciz "(."
-	.byte 0x06
-	.asciz "(."
-	.byte 0x00
-	.asciz "(."
-	.byte 0xfa  ; "ú"
-	.asciz "'."
-	.byte 0xf4  ; "ô"
-	.asciz "'."
-	.byte 0xee  ; "î"
-	.asciz "'."
-	.byte 0xe8  ; "è"
-	.asciz "'."
-	.byte 0xe2  ; "â"
-	.asciz "'."
+HDAE5000_TextPtrs_NONE_to_16:	; 0x2E279E, 17 x .long -> string
+	; read by SeparateDrumPartCheck at 0x2851D1 (ld # operand); 17 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_NONE
+	.long	HDAE5000_Str_1_3
+	.long	HDAE5000_Str_2_3
+	.long	HDAE5000_Str_3_3
+	.long	HDAE5000_Str_4_3
+	.long	HDAE5000_Str_5_3
+	.long	HDAE5000_Str_6_3
+	.long	HDAE5000_Str_7_3
+	.long	HDAE5000_Str_8_3
+	.long	HDAE5000_Str_9_3
+	.long	HDAE5000_Str_10
+	.long	HDAE5000_Str_11
+	.long	HDAE5000_Str_12
+	.long	HDAE5000_Str_13
+	.long	HDAE5000_Str_14
+	.long	HDAE5000_Str_15
+	.long	HDAE5000_Str_16
+HDAE5000_Str_16:	; 0x2E27E2
+	; pointed at by entry 16 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz " 16 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_15:	; 0x2E27E8
+	; pointed at by entry 15 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz " 15 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_14:	; 0x2E27EE
+	; pointed at by entry 14 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz " 14 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_13:	; 0x2E27F4
+	; pointed at by entry 13 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz " 13 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_12:	; 0x2E27FA
+	; pointed at by entry 12 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz " 12 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_11:	; 0x2E2800
+	; pointed at by entry 11 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz " 11 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_10:	; 0x2E2806
+	; pointed at by entry 10 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz " 10 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_9_3:	; 0x2E280C
+	; pointed at by entry 9 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "  9 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_8_3:	; 0x2E2812
+	; pointed at by entry 8 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "  8 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_7_3:	; 0x2E2818
+	; pointed at by entry 7 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "  7 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_6_3:	; 0x2E281E
+	; pointed at by entry 6 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "  6 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_5_3:	; 0x2E2824
+	; pointed at by entry 5 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "  5 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_4_3:	; 0x2E282A
+	; pointed at by entry 4 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "  4 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_3_3:	; 0x2E2830
+	; pointed at by entry 3 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "  3 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_2_3:	; 0x2E2836
+	; pointed at by entry 2 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "  2 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_1_3:	; 0x2E283C
+	; pointed at by entry 1 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "  1 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_NONE:	; 0x2E2842
+	; pointed at by entry 0 of HDAE5000_TextPtrs_NONE_to_16, a table read by SeparateDrumPartCheck
 	.asciz "NONE"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_s_SeparateDrumPartCheck:	; 0x2E2848
+	; read by SeparateDrumPartCheck at 0x2851DE (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13093,74 +13266,95 @@ HDAE5000_SeparateDrumPartCheck_CaseTable:
 	.short	.LHD_SC__h2_case7 - .LHD_SC__h2_case9	; 0x01E00045
 	.short	.LHD_SC__h2_case8 - .LHD_SC__h2_case9	; 0x01E00046
 	.short	.LHD_SC__h2_case9 - .LHD_SC__h2_case9	; 0x01E00047
-	.byte 0x04
-	.asciz ")."
-	.byte 0xfe  ; "þ"
-	.asciz "(."
-	.byte 0xf8  ; "ø"
-	.asciz "(."
-	.byte 0xf2  ; "ò"
-	.asciz "(."
-	.byte 0xec  ; "ì"
-	.asciz "(."
-	.byte 0xe6  ; "æ"
-	.asciz "(."
-	.byte 0xe0  ; "à"
-	.asciz "(."
-	.byte 0xda  ; "Ú"
-	.asciz "(."
-	.byte 0xd4  ; "Ô"
-	.asciz "(."
-	.byte 0xce  ; "Î"
-	.asciz "(."
-	.byte 0xc8  ; "È"
-	.asciz "(."
-	.byte 0xc2  ; "Â"
-	.asciz "(."
-	.byte 0xbc  ; "¼"
-	.asciz "(."
-	.byte 0xb6  ; "¶"
-	.asciz "(."
-	.byte 0xb0  ; "°"
-	.asciz "(."
-	.byte 0xaa  ; "ª"
-	.asciz "(."
-	.byte 0xa4  ; "¤"
-	.asciz "(."
+HDAE5000_TextPtrs_NONE_to_16_2:	; 0x2E2860, 17 x .long -> string
+	; read by SeparateBassPartCheck at 0x28527A (ld # operand); 17 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_NONE_2
+	.long	HDAE5000_Str_1_4
+	.long	HDAE5000_Str_2_4
+	.long	HDAE5000_Str_3_4
+	.long	HDAE5000_Str_4_4
+	.long	HDAE5000_Str_5_4
+	.long	HDAE5000_Str_6_4
+	.long	HDAE5000_Str_7_4
+	.long	HDAE5000_Str_8_4
+	.long	HDAE5000_Str_9_4
+	.long	HDAE5000_Str_10_2
+	.long	HDAE5000_Str_11_2
+	.long	HDAE5000_Str_12_2
+	.long	HDAE5000_Str_13_2
+	.long	HDAE5000_Str_14_2
+	.long	HDAE5000_Str_15_2
+	.long	HDAE5000_Str_16_2
+HDAE5000_Str_16_2:	; 0x2E28A4
+	; pointed at by entry 16 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz " 16 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_15_2:	; 0x2E28AA
+	; pointed at by entry 15 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz " 15 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_14_2:	; 0x2E28B0
+	; pointed at by entry 14 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz " 14 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_13_2:	; 0x2E28B6
+	; pointed at by entry 13 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz " 13 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_12_2:	; 0x2E28BC
+	; pointed at by entry 12 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz " 12 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_11_2:	; 0x2E28C2
+	; pointed at by entry 11 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz " 11 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_10_2:	; 0x2E28C8
+	; pointed at by entry 10 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz " 10 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_9_4:	; 0x2E28CE
+	; pointed at by entry 9 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "  9 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_8_4:	; 0x2E28D4
+	; pointed at by entry 8 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "  8 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_7_4:	; 0x2E28DA
+	; pointed at by entry 7 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "  7 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_6_4:	; 0x2E28E0
+	; pointed at by entry 6 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "  6 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_5_4:	; 0x2E28E6
+	; pointed at by entry 5 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "  5 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_4_4:	; 0x2E28EC
+	; pointed at by entry 4 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "  4 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_3_4:	; 0x2E28F2
+	; pointed at by entry 3 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "  3 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_2_4:	; 0x2E28F8
+	; pointed at by entry 2 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "  2 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_1_4:	; 0x2E28FE
+	; pointed at by entry 1 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "  1 "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_NONE_2:	; 0x2E2904
+	; pointed at by entry 0 of HDAE5000_TextPtrs_NONE_to_16_2, a table read by SeparateBassPartCheck
 	.asciz "NONE"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_s_SeparateBassPartCheck:	; 0x2E290A
+	; read by SeparateBassPartCheck at 0x285287 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13181,14 +13375,24 @@ HDAE5000_SeparateBassPartCheck_CaseTable:
 	.short	.LHD_SC__h3_case7 - .LHD_SC__h3_case9	; 0x01E00045
 	.short	.LHD_SC__h3_case8 - .LHD_SC__h3_case9	; 0x01E00046
 	.short	.LHD_SC__h3_case9 - .LHD_SC__h3_case9	; 0x01E00047
-	.asciz "6)."
-	.asciz "2)."
-	.asciz ".)."
+HDAE5000_TextPtrs_Chr2D2D2D_NO_YES:	; 0x2E2922, 3 x .long -> string
+	; read by LBNCmpBitCheck, LBNLswBitCheck, LBNMdBitCheck, LBNMspBitCheck, LBNPmtBitCheck, LBNRcmBitCheck, LBNSqtBitCheck, LBNTlxBitCheck_Unregistered, LBNTmBitCheck, SfxCmpBitCheck, SfxLswBitCheck, SfxMdBitCheck, SfxMspBitCheck, SfxPmtBitCheck, SfxRcmBitCheck, SfxSqtBitCheck, SfxTlxBitCheck, SfxTmBitCheck, TypeSel_ShowSaveFlags at 0x285426 (ld #, ld (mem), lda operand); 3 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_Chr2D2D2D_2
+	.long	HDAE5000_Str_NO
+	.long	HDAE5000_Str_YES
+HDAE5000_Str_YES:	; 0x2E292E
+	; pointed at by entry 2 of HDAE5000_TextPtrs_Chr2D2D2D_NO_YES, a table read by LBNCmpBitCheck, LBNLswBitCheck, LBNMdBitCheck, LBNMspBitCheck, LBNPmtBitCheck, LBNRcmBitCheck, LBNSqtBitCheck, LBNTlxBitCheck_Unregistered, LBNTmBitCheck, SfxCmpBitCheck, SfxLswBitCheck, SfxMdBitCheck, SfxMspBitCheck, SfxPmtBitCheck, SfxRcmBitCheck, SfxSqtBitCheck, SfxTlxBitCheck, SfxTmBitCheck, TypeSel_ShowSaveFlags
 	.asciz "YES"
+HDAE5000_Str_NO:	; 0x2E2932
+	; pointed at by entry 1 of HDAE5000_TextPtrs_Chr2D2D2D_NO_YES, a table read by LBNCmpBitCheck, LBNLswBitCheck, LBNMdBitCheck, LBNMspBitCheck, LBNPmtBitCheck, LBNRcmBitCheck, LBNSqtBitCheck, LBNTlxBitCheck_Unregistered, LBNTmBitCheck, SfxCmpBitCheck, SfxLswBitCheck, SfxMdBitCheck, SfxMspBitCheck, SfxPmtBitCheck, SfxRcmBitCheck, SfxSqtBitCheck, SfxTlxBitCheck, SfxTmBitCheck, TypeSel_ShowSaveFlags
 	.asciz "NO "
+HDAE5000_Str_Chr2D2D2D_2:	; 0x2E2936
+	; pointed at by entry 0 of HDAE5000_TextPtrs_Chr2D2D2D_NO_YES, a table read by LBNCmpBitCheck, LBNLswBitCheck, LBNMdBitCheck, LBNMspBitCheck, LBNPmtBitCheck, LBNRcmBitCheck, LBNSqtBitCheck, LBNTlxBitCheck_Unregistered, LBNTmBitCheck, SfxCmpBitCheck, SfxLswBitCheck, SfxMdBitCheck, SfxMspBitCheck, SfxPmtBitCheck, SfxRcmBitCheck, SfxSqtBitCheck, SfxTlxBitCheck, SfxTmBitCheck, TypeSel_ShowSaveFlags
 	.asciz "---"
+HDAE5000_Fmt_s_SaveOptNameCheck:	; 0x2E293A
+	; read by SaveOptNameCheck at 0x2853DF (pushed operand)
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
 ; HDAE5000_SaveOptNameCheck_CaseTable (0x2E293E, 10 x u16): the switch of HDAE5000_SaveOptNameCheck
 ; (dispatch at 0x2853D1, hdae5000_hd_driver.s:3440: `sub xwa,0x01e0003e`, bound `cp xwa,9`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
@@ -13207,8 +13411,12 @@ HDAE5000_SaveOptNameCheck_CaseTable:
 	.short	.Lhbi_case5 - .Lhbi_case0	; 0x01E00045
 	.short	.Lhbi_case6 - .Lhbi_case0	; 0x01E00046
 	.short	.Lhbi_case0 - .Lhbi_case0	; 0x01E00047
+HDAE5000_Str_SVOP:	; 0x2E2952
+	; read by SaveOptSwEventCatch at 0x28560E (lda operand)
 	.asciz "SVOP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_s_FileOptNameCheck:	; 0x2E2958
+	; read by FileOptNameCheck at 0x2857CA (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13229,6 +13437,8 @@ HDAE5000_FileOptNameCheck_CaseTable:
 	.short	HDAE5000_FileOptNameCheck_Ev01E00045 - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_FileOptNameCheck_Ev01E00046 - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_FileOptNameCheck_Ev01E00047 - HDAE5000_FileOptNameCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_SfxLswBitCheck:	; 0x2E2970
+	; read by SfxLswBitCheck at 0x28584F (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13249,6 +13459,8 @@ HDAE5000_SfxLswBitCheck_CaseTable:
 	.short	HDAE5000_SfxLswBitCheck_Ev01E00045 - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_SfxLswBitCheck_Ev01E00046 - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_SfxLswBitCheck_Ev01E00047 - HDAE5000_SfxLswBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_SfxPmtBitCheck:	; 0x2E2988
+	; read by SfxPmtBitCheck at 0x285905 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13269,6 +13481,8 @@ HDAE5000_SfxPmtBitCheck_CaseTable:
 	.short	HDAE5000_SfxPmtBitCheck_Ev01E00045 - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_SfxPmtBitCheck_Ev01E00046 - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_SfxPmtBitCheck_Ev01E00047 - HDAE5000_SfxPmtBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_SfxSqtBitCheck:	; 0x2E29A0
+	; read by SfxSqtBitCheck at 0x2859BB (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13289,6 +13503,8 @@ HDAE5000_SfxSqtBitCheck_CaseTable:
 	.short	HDAE5000_SfxSqtBitCheck_Ev01E00045 - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_SfxSqtBitCheck_Ev01E00046 - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_SfxSqtBitCheck_Ev01E00047 - HDAE5000_SfxSqtBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_SfxCmpBitCheck:	; 0x2E29B8
+	; read by SfxCmpBitCheck at 0x285A71 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13309,6 +13525,8 @@ HDAE5000_SfxCmpBitCheck_CaseTable:
 	.short	HDAE5000_SfxCmpBitCheck_Ev01E00045 - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_SfxCmpBitCheck_Ev01E00046 - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_SfxCmpBitCheck_Ev01E00047 - HDAE5000_SfxCmpBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_SfxTmBitCheck:	; 0x2E29D0
+	; read by SfxTmBitCheck at 0x285B27 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13329,6 +13547,8 @@ HDAE5000_SfxTmBitCheck_CaseTable:
 	.short	HDAE5000_SfxTmBitCheck_Ev01E00045 - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_SfxTmBitCheck_Ev01E00046 - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_SfxTmBitCheck_Ev01E00047 - HDAE5000_SfxTmBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_SfxMspBitCheck:	; 0x2E29E8
+	; read by SfxMspBitCheck at 0x285BDD (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13349,6 +13569,8 @@ HDAE5000_SfxMspBitCheck_CaseTable:
 	.short	HDAE5000_SfxMspBitCheck_Ev01E00045 - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_SfxMspBitCheck_Ev01E00046 - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_SfxMspBitCheck_Ev01E00047 - HDAE5000_SfxMspBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_SfxRcmBitCheck:	; 0x2E2A00
+	; read by SfxRcmBitCheck at 0x285C93 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13369,6 +13591,8 @@ HDAE5000_SfxRcmBitCheck_CaseTable:
 	.short	HDAE5000_SfxRcmBitCheck_Ev01E00045 - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_SfxRcmBitCheck_Ev01E00046 - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_SfxRcmBitCheck_Ev01E00047 - HDAE5000_SfxRcmBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_SfxMdBitCheck:	; 0x2E2A18
+	; read by SfxMdBitCheck at 0x285D49 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13389,6 +13613,8 @@ HDAE5000_SfxMdBitCheck_CaseTable:
 	.short	HDAE5000_SfxMdBitCheck_Ev01E00045 - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_SfxMdBitCheck_Ev01E00046 - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_SfxMdBitCheck_Ev01E00047 - HDAE5000_SfxMdBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_SfxTlxBitCheck:	; 0x2E2A30
+	; read by SfxTlxBitCheck at 0x285E04 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13409,6 +13635,8 @@ HDAE5000_SfxTlxBitCheck_CaseTable:
 	.short	HDAE5000_SfxTlxBitCheck_Ev01E00045 - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_SfxTlxBitCheck_Ev01E00046 - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_SfxTlxBitCheck_Ev01E00047 - HDAE5000_SfxTlxBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_WriteProtectEditCheck:	; 0x2E2A48
+	; read by WriteProtectEditCheck at 0x285EE1 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13429,6 +13657,8 @@ HDAE5000_WriteProtectEditCheck_CaseTable:
 	.short	HDAE5000_WriteProtectEditCheck_Ev01E00045 - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_WriteProtectEditCheck_Ev01E00046 - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_WriteProtectEditCheck_Ev01E00047 - HDAE5000_WriteProtectEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_1d:	; 0x2E2A60
+	; read by LyricJumpEditCheck at 0x285F5A (pushed operand)
 	.asciz "%1d"
 ;
 ; HDAE5000_LyricJumpEditCheck_CaseTable (0x2E2A64, 10 x u16): the switch of HDAE5000_LyricJumpEditCheck
@@ -13448,22 +13678,33 @@ HDAE5000_LyricJumpEditCheck_CaseTable:
 	.short	HDAE5000_LyricJumpEditCheck_Ev01E00045 - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LyricJumpEditCheck_Ev01E00046 - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LyricJumpEditCheck_Ev01E00047 - HDAE5000_LyricJumpEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_1d_LyricJumpEditCheck:	; 0x2E2A78
+	; read by LyricJumpEditCheck at 0x285FAD (pushed operand)
 	.asciz "%1d"
-	.byte 0xb0  ; "°"
-	.asciz "*."
-	.byte 0xa8  ; "¨"
-	.asciz "*."
-	.byte 0xa0  ; " "
-	.asciz "*."
-	.byte 0x98  ; ""
-	.asciz "*."
-	.byte 0x90  ; ""
-	.asciz "*."
+HDAE5000_TextPtrs_RED_to_YELLOW:	; 0x2E2A7C, 5 x .long -> string
+	; read by LyricForeColorCheck at 0x286023 (ld # operand); 5 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_RED
+	.long	HDAE5000_Str_GREEN
+	.long	HDAE5000_Str_BLUE
+	.long	HDAE5000_Str_BLACK
+	.long	HDAE5000_Str_YELLOW
+HDAE5000_Str_YELLOW:	; 0x2E2A90
+	; pointed at by entry 4 of HDAE5000_TextPtrs_RED_to_YELLOW, a table read by LyricForeColorCheck
 	.asciz " YELLOW"
+HDAE5000_Str_BLACK:	; 0x2E2A98
+	; pointed at by entry 3 of HDAE5000_TextPtrs_RED_to_YELLOW, a table read by LyricForeColorCheck
 	.asciz " BLACK "
+HDAE5000_Str_BLUE:	; 0x2E2AA0
+	; pointed at by entry 2 of HDAE5000_TextPtrs_RED_to_YELLOW, a table read by LyricForeColorCheck
 	.asciz " BLUE  "
+HDAE5000_Str_GREEN:	; 0x2E2AA8
+	; pointed at by entry 1 of HDAE5000_TextPtrs_RED_to_YELLOW, a table read by LyricForeColorCheck
 	.asciz " GREEN "
+HDAE5000_Str_RED:	; 0x2E2AB0
+	; pointed at by entry 0 of HDAE5000_TextPtrs_RED_to_YELLOW, a table read by LyricForeColorCheck
 	.asciz " RED   "
+HDAE5000_Fmt_s_LyricForeColorCheck:	; 0x2E2AB8
+	; read by LyricForeColorCheck at 0x286030 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13484,21 +13725,30 @@ HDAE5000_LyricForeColorCheck_CaseTable:
 	.short	HDAE5000_LyricForeColorCheck_Ev01E00045 - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LyricForeColorCheck_Ev01E00046 - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LyricForeColorCheck_Ev01E00047 - HDAE5000_LyricForeColorCheck_Ev01E00047	; 0x01E00047
-	.byte 0x04
-	.asciz "+."
-	.byte 0xfc  ; "ü"
-	.asciz "*."
-	.byte 0xf4  ; "ô"
-	.asciz "*."
-	.byte 0xec  ; "ì"
-	.asciz "*."
-	.byte 0xe4  ; "ä"
-	.asciz "*."
+HDAE5000_TextPtrs_RED_to_YELLOW_2:	; 0x2E2AD0, 5 x .long -> string
+	; read by LyricBackColorCheck at 0x2860A2 (ld # operand); 5 string pointers, 4 bytes each, entry i at +4*i
+	.long	HDAE5000_Str_RED_2
+	.long	HDAE5000_Str_GREEN_2
+	.long	HDAE5000_Str_BLUE_2
+	.long	HDAE5000_Str_BLACK_2
+	.long	HDAE5000_Str_YELLOW_2
+HDAE5000_Str_YELLOW_2:	; 0x2E2AE4
+	; pointed at by entry 4 of HDAE5000_TextPtrs_RED_to_YELLOW_2, a table read by LyricBackColorCheck
 	.asciz " YELLOW"
+HDAE5000_Str_BLACK_2:	; 0x2E2AEC
+	; pointed at by entry 3 of HDAE5000_TextPtrs_RED_to_YELLOW_2, a table read by LyricBackColorCheck
 	.asciz " BLACK "
+HDAE5000_Str_BLUE_2:	; 0x2E2AF4
+	; pointed at by entry 2 of HDAE5000_TextPtrs_RED_to_YELLOW_2, a table read by LyricBackColorCheck
 	.asciz " BLUE  "
+HDAE5000_Str_GREEN_2:	; 0x2E2AFC
+	; pointed at by entry 1 of HDAE5000_TextPtrs_RED_to_YELLOW_2, a table read by LyricBackColorCheck
 	.asciz " GREEN "
+HDAE5000_Str_RED_2:	; 0x2E2B04
+	; pointed at by entry 0 of HDAE5000_TextPtrs_RED_to_YELLOW_2, a table read by LyricBackColorCheck
 	.asciz " RED   "
+HDAE5000_Fmt_s_LyricBackColorCheck:	; 0x2E2B0C
+	; read by LyricBackColorCheck at 0x2860AF (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13519,6 +13769,8 @@ HDAE5000_LyricBackColorCheck_CaseTable:
 	.short	HDAE5000_LyricBackColorCheck_Ev01E00045 - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LyricBackColorCheck_Ev01E00046 - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LyricBackColorCheck_Ev01E00047 - HDAE5000_LyricBackColorCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_WriteConfirmEditCheck:	; 0x2E2B24
+	; read by WriteConfirmEditCheck at 0x28612E (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13539,6 +13791,8 @@ HDAE5000_WriteConfirmEditCheck_CaseTable:
 	.short	HDAE5000_WriteConfirmEditCheck_Ev01E00045 - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_WriteConfirmEditCheck_Ev01E00046 - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_WriteConfirmEditCheck_Ev01E00047 - HDAE5000_WriteConfirmEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_1d_QuickLoadModeEditCheck:	; 0x2E2B3C
+	; read by QuickLoadModeEditCheck at 0x28619D (pushed operand)
 	.asciz "%1d"
 ;
 ; HDAE5000_QuickLoadModeEditCheck_CaseTable (0x2E2B40, 10 x u16): the switch of HDAE5000_QuickLoadModeEditCheck
@@ -13558,6 +13812,8 @@ HDAE5000_QuickLoadModeEditCheck_CaseTable:
 	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E00045 - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E00046 - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_QuickLoadModeEditCheck_Ev01E00047 - HDAE5000_QuickLoadModeEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_1d_LoadByNumberModeEditCheck:	; 0x2E2B54
+	; read by LoadByNumberModeEditCheck at 0x28620C (pushed operand)
 	.asciz "%1d"
 ;
 ; HDAE5000_LoadByNumberModeEditCheck_CaseTable (0x2E2B58, 10 x u16): the switch of HDAE5000_LoadByNumberModeEditCheck
@@ -13577,6 +13833,8 @@ HDAE5000_LoadByNumberModeEditCheck_CaseTable:
 	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E00045 - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E00046 - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LoadByNumberModeEditCheck_Ev01E00047 - HDAE5000_LoadByNumberModeEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_1d_JumpAfterLoadModeEditCheck:	; 0x2E2B6C
+	; read by JumpAfterLoadModeEditCheck at 0x28627B (pushed operand)
 	.asciz "%1d"
 ;
 ; HDAE5000_JumpAfterLoadModeEditCheck_CaseTable (0x2E2B70, 10 x u16): the switch of HDAE5000_JumpAfterLoadModeEditCheck
@@ -13596,36 +13854,35 @@ HDAE5000_JumpAfterLoadModeEditCheck_CaseTable:
 	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00045 - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00046 - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047 - HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047	; 0x01E00047
-	.ascii "HD-TYPE             :                 "
-	.byte 0x09
-	.ascii "TRACKS              :                 "
-	.byte 0x09
-	.ascii "HEADS               :                 "
-	.byte 0x09
-	.ascii "SECTORS PER TRACK   :                 "
-	.byte 0x09
-	.ascii "TOTAL HD       (MB) :                 "
-	.byte 0x09
-	.ascii "USED BY SYSTEM (MB) :                 "
-	.byte 0x09
-	.ascii "FREE FOR USE   (MB) :                 "
-	.byte 0x09
-	.ascii "SOFTWARE RELEASE    :                 "
-	.byte 0x09
-	.zero 2
+HDAE5000_DriveInfo_Template:	; 0x2E2B84
+	; read by SetupPage_BuildDriveInfo at 0x2862B2 (lda operand)
+	.asciz "HD-TYPE             :                 \tTRACKS              :                 \tHEADS               :                 \tSECTORS PER TRACK   :                 \tTOTAL HD       (MB) :                 \tUSED BY SYSTEM (MB) :                 \tFREE FOR USE   (MB) :                 \tSOFTWARE RELEASE    :                 \t"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_6_1f:	; 0x2E2CBE
+	; read by SetupPage_BuildDriveInfo at 0x28639D (pushed operand)
 	.asciz "%6.1f"
+HDAE5000_Fmt_6_1f_SetupPage_BuildDriveInfo:	; 0x2E2CC4
+	; read by SetupPage_BuildDriveInfo at 0x286403 (pushed operand)
 	.asciz "%6.1f"
+HDAE5000_Fmt_6_1f_SetupPage_BuildDriveInfo_2:	; 0x2E2CCA
+	; read by SetupPage_BuildDriveInfo at 0x286466 (pushed operand)
 	.asciz "%6.1f"
-	.zero 2
-	.byte 0xc8  ; "È"
-	.asciz "B"
-	.byte 0x00
-	.byte 0xc8  ; "È"
-	.asciz "B"
-	.byte 0x00
-	.byte 0xc8  ; "È"
-	.asciz "BFMT!"
-	.zero 1				; 0x2E2CE1 (split off by the table below/above)
+HDAE5000_Float_100_DriveInfo:	; 0x2E2CD0
+	; read by SetupPage_BuildDriveInfo at 0x28637A (lda operand)
+	; IEEE single 100.0: a divisor of HDAE5000_SetupPage_BuildDriveInfo (10,000-byte units -> MB)
+	.long 0x42c80000		; 100.0f
+HDAE5000_Float_100_DriveInfo_2:	; 0x2E2CD4
+	; read by SetupPage_BuildDriveInfo at 0x2863E0 (lda operand)
+	; IEEE single 100.0: a divisor of HDAE5000_SetupPage_BuildDriveInfo
+	.long 0x42c80000		; 100.0f
+HDAE5000_Float_100_DriveInfo_3:	; 0x2E2CD8
+	; read by SetupPage_BuildDriveInfo at 0x286443 (lda operand)
+	; IEEE single 100.0: a divisor of HDAE5000_SetupPage_BuildDriveInfo
+	.long 0x42c80000		; 100.0f
+HDAE5000_Str_FMT:	; 0x2E2CDC
+	; read by AttenHDFormatSwCatch at 0x2866C5 (lda operand)
+	.asciz "FMT!"
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
 ; HDAE5000_AttenHDFormatSwCatch_CaseTable (0x2E2CE2, 8 x u16): the switch of HDAE5000_AttenHDFormatSwCatch
 ; (dispatch at 0x286728, hdae5000_hd_driver.s:5233: bound `cp xwa,7`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
@@ -13656,6 +13913,8 @@ HDAE5000_Lbn_StepDigit_CaseTable:
 	.short	HDAE5000_Lbn_StepDigit_Case3 - HDAE5000_Lbn_StepDigit_Case0	; 3
 	.short	HDAE5000_Lbn_StepDigit_Case4 - HDAE5000_Lbn_StepDigit_Case0	; 4
 	.short	HDAE5000_Lbn_StepDigit_Case5 - HDAE5000_Lbn_StepDigit_Case0	; 5
+HDAE5000_Str_LBNS:	; 0x2E2CFE
+	; read by LBNPage1SwCatch at 0x286BB7 (lda operand)
 	.asciz "LBNS"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13679,15 +13938,27 @@ HDAE5000_LBNPage1SwCatch_CaseTable:
 	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 10 (default)
 	.short	.LHD_SR__a_exit - HDAE5000_LBNPage1SwCatch_Case12	; 11 (default)
 	.short	HDAE5000_LBNPage1SwCatch_Case12 - HDAE5000_LBNPage1SwCatch_Case12	; 12
+HDAE5000_Str_LBN:	; 0x2E2D1E
+	; read by LBNLoadSwCatch at 0x286D7A (lda operand)
 	.asciz "LBN!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_1_1d:	; 0x2E2D24
+	; read by Lbn_ShowEntry at 0x287162 (pushed operand)
 	.asciz "%1.1d"
+HDAE5000_Fmt_2_2d_Lbn_ShowEntry:	; 0x2E2D2A
+	; read by Lbn_ShowEntry at 0x287196 (pushed operand)
 	.asciz "%2.2d"
+HDAE5000_Fmt_3_3d_Lbn_ShowEntry:	; 0x2E2D30
+	; read by Lbn_ShowEntry at 0x2871C2 (pushed operand)
 	.asciz "%3.3d"
+HDAE5000_Fmt_1_1d_Lbn_ShowEntry:	; 0x2E2D36
+	; read by Lbn_ShowEntry at 0x287222 (pushed operand)
 	.asciz " %1.1d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_2_2d_Lbn_ShowEntry_2:	; 0x2E2D3E
+	; read by Lbn_ShowEntry at 0x287250 (pushed operand)
 	.asciz " %2.2d"
-	.zero 1				; 0x2E2D45 (split off by the table below/above)
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
 ; HDAE5000_Lbn_ShowEntry_CaseTable (0x2E2D46, 7 x u16): the switch of HDAE5000_Lbn_ShowEntry
 ; (dispatch at 0x2870FC, hdae5000_filesystem.s:17: bound `cp xwa,6`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
@@ -13703,8 +13974,12 @@ HDAE5000_Lbn_ShowEntry_CaseTable:
 	.short	HDAE5000_Lbn_ShowEntry_Case4 - HDAE5000_Lbn_ShowEntry_Case0	; 4
 	.short	HDAE5000_Lbn_ShowEntry_Case5 - HDAE5000_Lbn_ShowEntry_Case0	; 5
 	.short	HDAE5000_Lbn_ShowEntry_Case6 - HDAE5000_Lbn_ShowEntry_Case0	; 6
+HDAE5000_Str_Blank26:	; 0x2E2D54
+	; read by FileLBNNameCheck at 0x2875C4 (pushed operand)
 	.asciz "                          "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_s_FileLBNNameCheck:	; 0x2E2D70
+	; read by FileLBNNameCheck at 0x2875B1 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13725,6 +14000,8 @@ HDAE5000_FileLBNNameCheck_CaseTable:
 	.short	HDAE5000_FileLBNNameCheck_Ev01E00045 - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_FileLBNNameCheck_Ev01E00046 - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_FileLBNNameCheck_Ev01E00047 - HDAE5000_FileLBNNameCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_LBNLswBitCheck:	; 0x2E2D88
+	; read by LBNLswBitCheck at 0x287651 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13745,6 +14022,8 @@ HDAE5000_LBNLswBitCheck_CaseTable:
 	.short	HDAE5000_LBNLswBitCheck_Ev01E00045 - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LBNLswBitCheck_Ev01E00046 - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LBNLswBitCheck_Ev01E00047 - HDAE5000_LBNLswBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_LBNPmtBitCheck:	; 0x2E2DA0
+	; read by LBNPmtBitCheck at 0x28775B (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13765,6 +14044,8 @@ HDAE5000_LBNPmtBitCheck_CaseTable:
 	.short	HDAE5000_LBNPmtBitCheck_Ev01E00045 - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LBNPmtBitCheck_Ev01E00046 - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LBNPmtBitCheck_Ev01E00047 - HDAE5000_LBNPmtBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_LBNSqtBitCheck:	; 0x2E2DB8
+	; read by LBNSqtBitCheck at 0x287865 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13785,6 +14066,8 @@ HDAE5000_LBNSqtBitCheck_CaseTable:
 	.short	HDAE5000_LBNSqtBitCheck_Ev01E00045 - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LBNSqtBitCheck_Ev01E00046 - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LBNSqtBitCheck_Ev01E00047 - HDAE5000_LBNSqtBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_LBNCmpBitCheck:	; 0x2E2DD0
+	; read by LBNCmpBitCheck at 0x28796F (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13805,6 +14088,8 @@ HDAE5000_LBNCmpBitCheck_CaseTable:
 	.short	HDAE5000_LBNCmpBitCheck_Ev01E00045 - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LBNCmpBitCheck_Ev01E00046 - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LBNCmpBitCheck_Ev01E00047 - HDAE5000_LBNCmpBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_LBNTmBitCheck:	; 0x2E2DE8
+	; read by LBNTmBitCheck at 0x287A79 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13825,6 +14110,8 @@ HDAE5000_LBNTmBitCheck_CaseTable:
 	.short	HDAE5000_LBNTmBitCheck_Ev01E00045 - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LBNTmBitCheck_Ev01E00046 - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LBNTmBitCheck_Ev01E00047 - HDAE5000_LBNTmBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_LBNMspBitCheck:	; 0x2E2E00
+	; read by LBNMspBitCheck at 0x287B83 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13845,6 +14132,8 @@ HDAE5000_LBNMspBitCheck_CaseTable:
 	.short	HDAE5000_LBNMspBitCheck_Ev01E00045 - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LBNMspBitCheck_Ev01E00046 - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LBNMspBitCheck_Ev01E00047 - HDAE5000_LBNMspBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_LBNRcmBitCheck:	; 0x2E2E18
+	; read by LBNRcmBitCheck at 0x287C8D (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13865,6 +14154,8 @@ HDAE5000_LBNRcmBitCheck_CaseTable:
 	.short	HDAE5000_LBNRcmBitCheck_Ev01E00045 - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LBNRcmBitCheck_Ev01E00046 - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LBNRcmBitCheck_Ev01E00047 - HDAE5000_LBNRcmBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_LBNMdBitCheck:	; 0x2E2E30
+	; read by LBNMdBitCheck at 0x287D97 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13885,6 +14176,8 @@ HDAE5000_LBNMdBitCheck_CaseTable:
 	.short	HDAE5000_LBNMdBitCheck_Ev01E00045 - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LBNMdBitCheck_Ev01E00046 - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LBNMdBitCheck_Ev01E00047 - HDAE5000_LBNMdBitCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_LBNTlxBitCheck_Unregistered:	; 0x2E2E48
+	; read by LBNTlxBitCheck_Unregistered at 0x287EA1 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -13905,93 +14198,124 @@ HDAE5000_LBNTlxBitCheck_Unregistered_CaseTable:
 	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00045 - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00046 - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047 - HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047	; 0x01E00047
-	.ascii "   :                "
-	.byte 0x09
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-
-HDAE5000_Char_Tables:	; 0x2E2E76
-	; Character set tables
+HDAE5000_Str_Chr2020203A2020_FlsList_BuildPage:	; 0x2E2E60
+	; read by FlsList_BuildPage at 0x287F77 (lda operand)
+	.asciz "   :                \t"
+HDAE5000_Fmt_3_3d_FlsList_BuildPage:	; 0x2E2E76
+	; read by FlsList_BuildPage at 0x287F9B (pushed operand)
 	.asciz "%3.3d"
-	.ascii "E"
-	.byte 0x01, 0x7f
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "f"
-	.byte 0x01
-	.byte 0x7f, 0x00
-	.byte 0x48
-	.byte 0x01
-	.byte 0x7f, 0x00
-	.ascii "i"
-	.byte 0x01, 0x7f
-	.byte 0x00
-	.byte 0x44
-	.byte 0x01, 0x7f
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "v"
-	.byte 0x01, 0x7f
-	.byte 0x00
-	.byte 0x43
-	.byte 0x01, 0x7f
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii "w"
-	.byte 0x01
-	.byte 0x7f, 0x00
-	.byte 0x49
-	.byte 0x01
-	.byte 0x7f, 0x00
-	.ascii "k"
-	.byte 0x01
-	.byte 0x7f, 0x00
-	.byte 0x4a
-	.byte 0x01
-	.byte 0x7f, 0x00
-	.ascii "j"
-	.byte 0x01, 0x7f
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_FlsScreen_Refresh_ObjIds:	; 0x2E2E7C
+	; read by FlsScreen_Refresh at 0x288338 (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f0145		; UI object 325 "FLS_NAME_BOX"
+	.long 0x007f0166		; UI object 358 "FLS_EDIT_NAME_BOX"
+HDAE5000_FlsScreen_Refresh_ObjIds_2:	; 0x2E2E84
+	; read by FlsScreen_Refresh at 0x28848E (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f0148		; UI object 328 "FLS_FILE_BOX"
+	.long 0x007f0169		; UI object 361 "FLS_EDIT_LIST_BOX"
+HDAE5000_FlsScreen_Refresh_ObjIds_3:	; 0x2E2E8C
+	; read by FlsScreen_Refresh at 0x288566 (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f0144		; UI object 324 "FLS_LOC_BOX"
+	.long 0x007f0176		; UI object 374 "FLS_EDIT_LOC_BOX"
+HDAE5000_FlsScreen_Refresh_ObjIds_4:	; 0x2E2E94
+	; read by FlsScreen_Refresh at 0x2885D8 (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f0143		; UI object 323 "FLS_OPT_BOX"
+	.long 0x007f0177		; UI object 375 "FLS_EDIT_OPT_BOX"
+HDAE5000_FlsScreen_Refresh_ObjIds_5:	; 0x2E2E9C
+	; read by FlsScreen_Refresh at 0x28861A (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f0149		; UI object 329 "FLS_LOAD_LINE1"
+	.long 0x007f016b		; UI object 363 "FLS_EDIT_LINE1"
+HDAE5000_FlsScreen_Refresh_ObjIds_6:	; 0x2E2EA4
+	; read by FlsScreen_Refresh at 0x288644 (lda operand); UI object ids (0x007F0000 + index into HDAE5000_UiObjectName_PtrTable), 4 bytes each
+	.long 0x007f014a		; UI object 330 "FLS_LOAD_LINE2"
+	.long 0x007f016a		; UI object 362 "FLS_EDIT_LINE2"
+HDAE5000_Str_FLSNAME:	; 0x2E2EAC
+	; read by FlsScreen_Refresh at 0x2882BF (pushed operand)
 	.asciz "FLS NAME "
+HDAE5000_Fmt_2_2d_FlsScreen_Refresh:	; 0x2E2EB6
+	; read by FlsScreen_Refresh at 0x2882D7 (pushed operand)
 	.asciz "%2.2d"
+HDAE5000_Str_Chr3A_FlsScreen_Refresh:	; 0x2E2EBC
+	; read by FlsScreen_Refresh at 0x2882F6 (pushed operand)
 	.asciz ":"
-	.byte 0x09
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.ascii ":                                 "
-	.byte 0x09
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Blank0Tab_FlsScreen_Refresh:	; 0x2E2EBE
+	; read by FlsScreen_Refresh at 0x288320 (pushed operand)
+	.asciz "\t"
+HDAE5000_Str_Chr3A2020202020_FlsScreen_Refresh:	; 0x2E2EC0
+	; read by FlsScreen_Refresh at 0x2883A9 (lda operand)
+	.asciz ":                                 \t"
+HDAE5000_Fmt_2_2d_FlsScreen_Refresh_2:	; 0x2E2EE4
+	; read by FlsScreen_Refresh at 0x2883D1 (pushed operand)
 	.asciz "%2.2d"
-	.ascii " LOC. %3.3d/%2.2d"
-	.byte 0x09
-	.zero 2
-	.ascii " LOC. 000/00"
-	.byte 0x09
+HDAE5000_Fmt_LOC_3_3d_2_2d:	; 0x2E2EEA
+	; read by FlsScreen_Refresh at 0x288524 (pushed operand)
+	.asciz " LOC. %3.3d/%2.2d\t"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_LOC00000:	; 0x2E2EFE
+	; read by FlsScreen_Refresh at 0x288537 (pushed operand)
+	.asciz " LOC. 000/00\t"
+HDAE5000_Str_FLS:	; 0x2E2F0C
+	; read by FlsFileLoadSwCatch at 0x288C64 (lda operand)
 	.asciz "FLS!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_DEL1:	; 0x2E2F12
+	; read by FlsDel1SwCatch at 0x289038 (lda operand)
 	.asciz "DEL1"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_DEL2:	; 0x2E2F18
+	; read by FlsDel2SwCatch at 0x289135 (lda operand)
 	.asciz "DEL2"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_OVWR:	; 0x2E2F1E
+	; read by FlsOverWrSwCatch at 0x289579 (lda operand)
 	.asciz "OVWR"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_2_2d_CopyToHd_Execute:	; 0x2E2F24
+	; read by CopyToHd_Execute at 0x2898D2 (pushed operand)
 	.asciz "%2.2d"
+HDAE5000_Str_LSW:	; 0x2E2F2A
+	; read by CopyToHd_Execute at 0x28996D (pushed operand)
 	.asciz ".LSW"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_PMT:	; 0x2E2F30
+	; read by CopyToHd_Execute at 0x2899BA (pushed operand)
 	.asciz ".PMT"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_SQT:	; 0x2E2F36
+	; read by CopyToHd_Execute at 0x289A08 (pushed operand)
 	.asciz ".SQT"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_CMP:	; 0x2E2F3C
+	; read by CopyToHd_Execute at 0x289A56 (pushed operand)
 	.asciz ".CMP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_TM:	; 0x2E2F42
+	; read by CopyToHd_Execute at 0x289AA4 (pushed operand)
 	.asciz ".TM"
+HDAE5000_Str_MSP:	; 0x2E2F46
+	; read by CopyToHd_Execute at 0x289AF2 (pushed operand)
 	.asciz ".MSP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_RCM:	; 0x2E2F4C
+	; read by CopyToHd_Execute at 0x289B40 (pushed operand)
 	.asciz ".RCM"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_MD:	; 0x2E2F52
+	; read by CopyToHd_Execute at 0x289B8E (pushed operand)
 	.asciz ".MD"
+HDAE5000_Str_TLX:	; 0x2E2F56
+	; read by CopyToHd_Execute at 0x289BDC (pushed operand)
 	.asciz ".TLX"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_Wrcn:	; 0x2E2F5C
+	; read by WrConfirmEventCatch at 0x28A1EB (lda operand)
 	.asciz "WrCn"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_DEL_DelOptSwEventCatch:	; 0x2E2F62
+	; read by DelOptSwEventCatch at 0x28A4DB (lda operand)
 	.asciz "DEL!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Fmt_s_DelOptNameCheck:	; 0x2E2F68
+	; read by DelOptNameCheck at 0x28A665 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14012,6 +14336,8 @@ HDAE5000_DelOptNameCheck_CaseTable:
 	.short	HDAE5000_DelOptNameCheck_Ev01E00045 - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelOptNameCheck_Ev01E00046 - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelOptNameCheck_Ev01E00047 - HDAE5000_DelOptNameCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_DelLswEditCheck:	; 0x2E2F80
+	; read by DelLswEditCheck at 0x28A6E7 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14032,6 +14358,8 @@ HDAE5000_DelLswEditCheck_CaseTable:
 	.short	HDAE5000_DelLswEditCheck_Ev01E00045 - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelLswEditCheck_Ev01E00046 - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelLswEditCheck_Ev01E00047 - HDAE5000_DelLswEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_DelPmtEditCheck:	; 0x2E2F98
+	; read by DelPmtEditCheck at 0x28A782 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14052,6 +14380,8 @@ HDAE5000_DelPmtEditCheck_CaseTable:
 	.short	HDAE5000_DelPmtEditCheck_Ev01E00045 - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelPmtEditCheck_Ev01E00046 - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelPmtEditCheck_Ev01E00047 - HDAE5000_DelPmtEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_DelSqtEditCheck:	; 0x2E2FB0
+	; read by DelSqtEditCheck at 0x28A81D (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14072,6 +14402,8 @@ HDAE5000_DelSqtEditCheck_CaseTable:
 	.short	HDAE5000_DelSqtEditCheck_Ev01E00045 - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelSqtEditCheck_Ev01E00046 - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelSqtEditCheck_Ev01E00047 - HDAE5000_DelSqtEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_DelCmpEditCheck:	; 0x2E2FC8
+	; read by DelCmpEditCheck at 0x28A8B8 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14092,6 +14424,8 @@ HDAE5000_DelCmpEditCheck_CaseTable:
 	.short	HDAE5000_DelCmpEditCheck_Ev01E00045 - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelCmpEditCheck_Ev01E00046 - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelCmpEditCheck_Ev01E00047 - HDAE5000_DelCmpEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_DelTmEditCheck:	; 0x2E2FE0
+	; read by DelTmEditCheck at 0x28A953 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14112,6 +14446,8 @@ HDAE5000_DelTmEditCheck_CaseTable:
 	.short	HDAE5000_DelTmEditCheck_Ev01E00045 - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelTmEditCheck_Ev01E00046 - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelTmEditCheck_Ev01E00047 - HDAE5000_DelTmEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_DelMspEditCheck:	; 0x2E2FF8
+	; read by DelMspEditCheck at 0x28A9EE (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14132,6 +14468,8 @@ HDAE5000_DelMspEditCheck_CaseTable:
 	.short	HDAE5000_DelMspEditCheck_Ev01E00045 - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelMspEditCheck_Ev01E00046 - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelMspEditCheck_Ev01E00047 - HDAE5000_DelMspEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_DelRcmEditCheck:	; 0x2E3010
+	; read by DelRcmEditCheck at 0x28AA89 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14152,6 +14490,8 @@ HDAE5000_DelRcmEditCheck_CaseTable:
 	.short	HDAE5000_DelRcmEditCheck_Ev01E00045 - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelRcmEditCheck_Ev01E00046 - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelRcmEditCheck_Ev01E00047 - HDAE5000_DelRcmEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_DelMdEditCheck:	; 0x2E3028
+	; read by DelMdEditCheck at 0x28AB24 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14172,6 +14512,8 @@ HDAE5000_DelMdEditCheck_CaseTable:
 	.short	HDAE5000_DelMdEditCheck_Ev01E00045 - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelMdEditCheck_Ev01E00046 - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelMdEditCheck_Ev01E00047 - HDAE5000_DelMdEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Fmt_s_DelTlxEditCheck:	; 0x2E3040
+	; read by DelTlxEditCheck at 0x28ABC2 (pushed operand)
 	.asciz "%s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 ;
@@ -14192,617 +14534,122 @@ HDAE5000_DelTlxEditCheck_CaseTable:
 	.short	HDAE5000_DelTlxEditCheck_Ev01E00045 - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00045
 	.short	HDAE5000_DelTlxEditCheck_Ev01E00046 - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00046
 	.short	HDAE5000_DelTlxEditCheck_Ev01E00047 - HDAE5000_DelTlxEditCheck_Ev01E00047	; 0x01E00047
+HDAE5000_Str_Timb:	; 0x2E3058
+	; read by ErrMsgTimerCatch at 0x28B44C (lda operand)
 	.asciz "TimB"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_TLBN:	; 0x2E305E
+	; read by ErrMsgTimerCatchLBN at 0x28B4D8 (lda operand)
 	.asciz "TLBN"
-	.zero 5
-	.byte 0x01
-	.byte 0x01
-	.byte 0x01
-	.byte 0x00
-	.byte 0x02
-	.byte 0x02
-	.byte 0x02
-	.byte 0x00
-	.byte 0x03
-	.byte 0x03
-	.byte 0x03
-	.byte 0x00
-	.byte 0x04
-	.byte 0x04
-	.byte 0x04
-	.byte 0x00
-	.byte 0x05
-	.byte 0x05
-	.byte 0x05
-	.byte 0x00
-	.byte 0x06, 0x06
-	.byte 0x06, 0x00
-	.byte 0x07
-	.byte 0x07
-	.byte 0x07
-	.byte 0x00
-	.byte 0x08, 0x08, 0x08
-	.byte 0x00
-	.byte 0x09, 0x09
-	.byte 0x09, 0x00
-	.byte 0x0a, 0x0a, 0x0a, 0x00
-	.byte 0x0b, 0x0b, 0x0b
-	.byte 0x00
-	.byte 0x0c
-	.byte 0x0c
-	.byte 0x0c
-	.byte 0x00
-	.byte 0x0d
-	.byte 0x0d
-	.byte 0x0d
-	.byte 0x00
-	.byte 0x0e
-	.byte 0x0e
-	.byte 0x0e
-	.byte 0x00
-	.byte 0x0f, 0x0f, 0x0f
-	.byte 0x00
-	.byte 0x10
-	.byte 0x10
-	.byte 0x10
-	.byte 0x00
-	.byte 0x11
-	.byte 0x11
-	.byte 0x11
-	.byte 0x00
-	.byte 0x12
-	.byte 0x12
-	.byte 0x12
-	.byte 0x00
-	.byte 0x13
-	.byte 0x13
-	.byte 0x13
-	.byte 0x00
-	.byte 0x14
-	.byte 0x14
-	.byte 0x14
-	.byte 0x00
-	.byte 0x15
-	.byte 0x15
-	.byte 0x15
-	.byte 0x00
-	.byte 0x16
-	.byte 0x16
-	.byte 0x16
-	.byte 0x00
-	.byte 0x17, 0x17
-	.byte 0x17, 0x00
-	.byte 0x18
-	.byte 0x18
-	.byte 0x18
-	.byte 0x00
-	.byte 0x19
-	.byte 0x19
-	.byte 0x19
-	.byte 0x00
-	.byte 0x1a, 0x1a, 0x1a
-	.byte 0x00
-	.byte 0x1b, 0x1b, 0x1b, 0x00
-	.byte 0x1c, 0x1c, 0x1c
-	.byte 0x00
-	.byte 0x1d, 0x1d, 0x1d, 0x00
-	.byte 0x1e, 0x1e, 0x1e
-	.byte 0x00
-	.byte 0x1f, 0x1f, 0x1f
-	.byte 0x00
-	.asciz "   "
-	.asciz "!!!"
-	.asciz "\"\"\""
-	.asciz "###"
-	.asciz "$$$"
-	.asciz "%%%"
-	.asciz "&&&"
-	.asciz "'''"
-	.asciz "((("
-	.asciz ")))"
-	.asciz "***"
-	.asciz "+++"
-	.asciz ",,,"
-	.asciz "---"
-	.asciz "..."
-	.asciz "///"
-	.asciz "000"
-	.asciz "111"
-	.asciz "222"
-	.asciz "333"
-	.asciz "444"
-	.asciz "555"
-	.asciz "666"
-	.asciz "777"
-	.asciz "888"
-	.asciz "999"
-	.asciz ":::"
-	.asciz ";;;"
-	.asciz "<<<"
-	.asciz "==="
-	.asciz ">>>"
-	.asciz "???"
-	.asciz "@@@"
-	.asciz "AAA"
-	.asciz "BBB"
-	.asciz "CCC"
-	.asciz "DDD"
-	.asciz "EEE"
-	.asciz "FFF"
-	.asciz "GGG"
-	.asciz "HHH"
-	.asciz "III"
-	.asciz "JJJ"
-	.asciz "KKK"
-	.asciz "LLL"
-	.asciz "MMM"
-	.asciz "NNN"
-	.asciz "OOO"
-	.asciz "PPP"
-	.asciz "QQQ"
-	.asciz "RRR"
-	.asciz "SSS"
-	.asciz "TTT"
-	.asciz "UUU"
-	.asciz "VVV"
-	.asciz "WWW"
-	.asciz "XXX"
-	.asciz "YYY"
-	.asciz "ZZZ"
-	.asciz "[[["
-	.asciz "\\\\\\"
-	.asciz "]]]"
-	.asciz "^^^"
-	.asciz "___"
-	.asciz "```"
-	.asciz "aaa"
-	.asciz "bbb"
-	.asciz "ccc"
-	.asciz "ddd"
-	.asciz "eee"
-	.asciz "fff"
-	.asciz "ggg"
-	.asciz "hhh"
-	.asciz "iii"
-	.asciz "jjj"
-	.asciz "kkk"
-	.asciz "lll"
-	.asciz "mmm"
-	.asciz "nnn"
-	.asciz "ooo"
-	.asciz "ppp"
-	.asciz "qqq"
-	.asciz "rrr"
-	.asciz "sss"
-	.asciz "ttt"
-	.asciz "uuu"
-	.asciz "vvv"
-	.asciz "www"
-	.asciz "xxx"
-	.asciz "yyy"
-	.asciz "zzz"
-	.asciz "{{{"
-	.asciz "|||"
-	.asciz "}}}"
-	.asciz "~~~"
-	.byte 0x7f, 0x7f, 0x7f
-	.byte 0x00
-	.byte 0x80, 0x80
-	.byte 0x80, 0x00
-	.byte 0x81, 0x81
-	.byte 0x81, 0x00
-	.byte 0x82, 0x82
-	.byte 0x82, 0x00
-	.byte 0x83, 0x83
-	.byte 0x83, 0x00
-	.byte 0x84, 0x84
-	.byte 0x84, 0x00
-	.byte 0x85, 0x85
-	.byte 0x85, 0x00
-	.byte 0x86, 0x86
-	.byte 0x86, 0x00
-	.byte 0x87, 0x87
-	.byte 0x87, 0x00
-	.byte 0x88, 0x88, 0x88
-	.byte 0x00
-	.byte 0x89, 0x89, 0x89
-	.byte 0x00
-	.byte 0x8a, 0x8a, 0x8a
-	.byte 0x00
-	.byte 0x8b, 0x8b, 0x8b
-	.byte 0x00
-	.byte 0x8c, 0x8c, 0x8c
-	.byte 0x00
-	.byte 0x8d, 0x8d, 0x8d
-	.byte 0x00
-	.byte 0x8e, 0x8e, 0x8e
-	.byte 0x00
-	.byte 0x8f, 0x8f, 0x8f
-	.byte 0x00
-	.byte 0x90, 0x90
-	.byte 0x90, 0x00
-	.byte 0x91, 0x91
-	.byte 0x91, 0x00
-	.byte 0x92, 0x92
-	.byte 0x92, 0x00
-	.byte 0x93, 0x93
-	.byte 0x93, 0x00
-	.byte 0x94, 0x94
-	.byte 0x94, 0x00
-	.byte 0x95, 0x95
-	.byte 0x95, 0x00
-	.byte 0x96, 0x96
-	.byte 0x96, 0x00, 0x97, 0x97, 0x97, 0x00
-	.byte 0x98, 0x98, 0x98
-	.byte 0x00
-	.byte 0x99, 0x99, 0x99
-	.byte 0x00
-	.byte 0x9a, 0x9a, 0x9a
-	.byte 0x00
-	.byte 0x9b, 0x9b, 0x9b
-	.byte 0x00
-	.byte 0x9c, 0x9c, 0x9c
-	.byte 0x00
-	.byte 0x9d, 0x9d, 0x9d
-	.byte 0x00
-	.byte 0x9e, 0x9e, 0x9e
-	.byte 0x00
-	.byte 0x9f, 0x9f, 0x9f
-	.byte 0x00
-	.byte 0xa0, 0xa0
-	.byte 0xa0, 0x00
-	.byte 0xa1, 0xa1
-	.byte 0xa1, 0x00
-	.byte 0xa2, 0xa2
-	.byte 0xa2, 0x00
-	.byte 0xa3, 0xa3
-	.byte 0xa3, 0x00
-	.byte 0xa4, 0xa4
-	.byte 0xa4, 0x00
-	.byte 0xa5, 0xa5
-	.byte 0xa5, 0x00
-	.byte 0xa6, 0xa6
-	.byte 0xa6, 0x00
-	.byte 0xa7, 0xa7
-	.byte 0xa7, 0x00
-	.byte 0xa8, 0xa8, 0xa8
-	.byte 0x00
-	.byte 0xa9, 0xa9, 0xa9
-	.byte 0x00
-	.byte 0xaa, 0xaa, 0xaa
-	.byte 0x00
-	.byte 0xab, 0xab, 0xab
-	.byte 0x00
-	.byte 0xac, 0xac, 0xac
-	.byte 0x00
-	.byte 0xad, 0xad, 0xad
-	.byte 0x00
-	.byte 0xae, 0xae, 0xae
-	.byte 0x00
-	.byte 0xaf, 0xaf, 0xaf
-	.byte 0x00
-	.byte 0xb0, 0xb0
-	.byte 0xb0, 0x00, 0xb1
-	.byte 0xb1, 0xb1
-	.byte 0x00
-	.byte 0xb2, 0xb2
-	.byte 0xb2, 0x00, 0xb3
-	.byte 0xb3, 0xb3
-	.byte 0x00
-	.byte 0xb4, 0xb4
-	.byte 0xb4, 0x00, 0xb5
-	.byte 0xb5, 0xb5
-	.byte 0x00
-	.byte 0xb6, 0xb6
-	.byte 0xb6, 0x00, 0xb7
-	.byte 0xb7, 0xb7
-	.byte 0x00
-	.byte 0xb8, 0xb8, 0xb8
-	.byte 0x00
-	.byte 0xb9, 0xb9, 0xb9
-	.byte 0x00
-	.byte 0xba, 0xba, 0xba
-	.byte 0x00
-	.byte 0xbb, 0xbb, 0xbb
-	.byte 0x00
-	.byte 0xbc, 0xbc, 0xbc
-	.byte 0x00
-	.byte 0xbd, 0xbd, 0xbd
-	.byte 0x00
-	.byte 0xbe, 0xbe, 0xbe
-	.byte 0x00
-	.byte 0xbf, 0xbf, 0xbf
-	.byte 0x00
-	.byte 0xc0, 0xc0, 0xc0
-	.byte 0x00
-	.byte 0xc1, 0xc1, 0xc1, 0x00
-	.byte 0xc2, 0xc2, 0xc2, 0x00, 0xc3
-	.byte 0xc3, 0xc3, 0x00, 0xc4, 0xc4, 0xc4
-	.byte 0x00
-	.byte 0xc5, 0xc5, 0xc5
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6
-	.byte 0x00
-	.byte 0xc7, 0xc7, 0xc7
-	.byte 0x00
-	.byte 0xc8, 0xc8, 0xc8
-	.byte 0x00
-	.byte 0xc9, 0xc9, 0xc9
-	.byte 0x00
-	.byte 0xca, 0xca, 0xca
-	.byte 0x00
-	.byte 0xcb, 0xcb, 0xcb
-	.byte 0x00
-	.byte 0xcc, 0xcc, 0xcc
-	.byte 0x00
-	.byte 0xcd, 0xcd, 0xcd
-	.byte 0x00
-	.byte 0xce, 0xce, 0xce
-	.byte 0x00
-	.byte 0xcf, 0xcf, 0xcf	; "ÏÏÏ"
-	.byte 0x00
-	.byte 0xd0, 0xd0, 0xd0
-	.byte 0x00
-	.byte 0xd1, 0xd1, 0xd1, 0x00
-	.byte 0xd2, 0xd2, 0xd2, 0x00, 0xd3
-	.byte 0xd3, 0xd3, 0x00, 0xd4, 0xd4, 0xd4
-	.byte 0x00
-	.byte 0xd5, 0xd5, 0xd5
-	.byte 0x00
-	.byte 0xd6, 0xd6, 0xd6
-	.byte 0x00
-	.byte 0xd7, 0xd7, 0xd7
-	.byte 0x00
-	.byte 0xd8, 0xd8
-	.byte 0xd8, 0x00
-	.byte 0xd9, 0xd9
-	.byte 0xd9, 0x00
-	.byte 0xda, 0xda
-	.byte 0xda, 0x00
-	.byte 0xdb, 0xdb
-	.byte 0xdb, 0x00
-	.byte 0xdc, 0xdc
-	.byte 0xdc, 0x00
-	.byte 0xdd, 0xdd
-	.byte 0xdd, 0x00
-	.byte 0xde, 0xde
-	.byte 0xde, 0x00, 0xdf, 0xdf, 0xdf, 0x00, 0xe0, 0xe0
-	.byte 0xe0
-	.byte 0x00
-	.byte 0xe1, 0xe1, 0xe1, 0x00
-	.byte 0xe2, 0xe2, 0xe2, 0x00, 0xe3
-	.byte 0xe3, 0xe3, 0x00, 0xe4, 0xe4, 0xe4
-	.byte 0x00
-	.byte 0xe5, 0xe5, 0xe5
-	.byte 0x00
-	.byte 0xe6, 0xe6, 0xe6
-	.byte 0x00
-	.byte 0xe7, 0xe7, 0xe7
-	.byte 0x00
-	.byte 0xe8, 0xe8, 0xe8
-	.byte 0x00
-	.byte 0xe9, 0xe9, 0xe9
-	.byte 0x00
-	.byte 0xea, 0xea, 0xea
-	.byte 0x00
-	.byte 0xeb, 0xeb, 0xeb
-	.byte 0x00
-	.byte 0xec, 0xec, 0xec
-	.byte 0x00
-	.byte 0xed, 0xed, 0xed
-	.byte 0x00
-	.byte 0xee, 0xee, 0xee
-	.byte 0x00
-	.byte 0xef, 0xef, 0xef
-	.byte 0x00
-	.byte 0xf0, 0xf0, 0xf0
-	.byte 0x00
-	.byte 0xf1, 0xf1, 0xf1, 0x00, 0xf2
-	.byte 0xf2, 0xf2, 0x00, 0xf3, 0xf3, 0xf3, 0x00, 0xf4
-	.byte 0xf4, 0xf4, 0x00, 0xf5
-	.byte 0xf5, 0xf5, 0x00, 0xf6
-	.byte 0xf6, 0xf6
-	.byte 0x00
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0x00
-	.byte 0xf8
-	.byte 0xf8
-	.byte 0xf8
-	.byte 0x00
-	.byte 0xf9
-	.byte 0xf9
-	.byte 0xf9
-	.byte 0x00
-	.byte 0xfa
-	.byte 0xfa
-	.byte 0xfa
-	.byte 0x00
-	.byte 0xfb
-	.byte 0xfb
-	.byte 0xfb
-	.byte 0x00
-	.byte 0xfc
-	.byte 0xfc
-	.byte 0xfc
-	.byte 0x00
-	.byte 0xfd
-	.byte 0xfd
-	.byte 0xfd
-	.byte 0x00
-	.byte 0xfe
-	.byte 0xfe
-	.byte 0xfe
-	.byte 0x00
-	.byte 0xff
-	.fill 2, 1, 0xff
-	.zero 44
-
-HDAE5000_Path_Strings:	; 0x2E348F
-	; File path and config strings
-	.asciz ")BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB)"
-	.asciz "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZB"
-	.asciz "BZ{{{{"
-	.zero 2
-	.asciz "{{"
-	.zero 4
-	.asciz "{{"
-	.zero 2
-	.asciz "{{{"
-	.zero 3
-	.asciz "{{{"
-	.zero 3
-	.asciz "{{{{ZB"
-	.ascii "BZ"
-	.byte 0x9c, 0xad, 0xad
-	.byte 0x00
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0x00
-	.byte 0xad, 0xf7, 0xf7
-	.byte 0x00
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0xad, 0x00, 0xf7
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0x00
-	.byte 0xad, 0xad, 0x00
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0x00
-	.byte 0xad, 0xad, 0x00
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0xad, 0xad, 0xad
-	.asciz "{kB"
-	.ascii "BZ{"
-	.byte 0xc6, 0xc6  ; "ÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6, 0xf7, 0xc6, 0xc6, 0xc6  ; "ÆÆÆ÷ÆÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6  ; "ÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6  ; "ÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6, 0xc6, 0xc6, 0xb5  ; "ÆÆÆÆÆµ"
-	.asciz "{ZB"
-	.ascii "BZ{"
-	.byte 0xde, 0xde, 0xf7  ; "ÞÞ÷"
-	.byte 0x00
-	.zero 2
-	.byte 0xde, 0xde
-	.byte 0xde, 0xde
-	.byte 0x00
-	.byte 0xde, 0xde
-	.byte 0xde, 0x00
-	.byte 0xde, 0xde
-	.byte 0xde, 0x00
-	.byte 0xde, 0xde
-	.byte 0x00
-	.byte 0xde, 0xde
-	.byte 0xde, 0x00
-	.byte 0xde, 0xde
-	.byte 0x00
-	.zero 2
-	.byte 0xde, 0xde, 0xde, 0xc6  ; "ÞÞÞÆ"
-	.asciz "{ZB"
-	.ascii "BZ{"
-	.byte 0xef, 0xef, 0xef
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0xf7
-	.byte 0x00
-	.byte 0xef, 0xef, 0xef
-	.byte 0x00
-	.byte 0xef, 0xef, 0xef
-	.byte 0x00
-	.byte 0xef, 0xef, 0xef
-	.byte 0x00
-	.byte 0xef, 0xef, 0x00
-	.zero 3
-	.byte 0xf7, 0xef, 0xef  ; "÷ïï"
-	.byte 0x00
-	.byte 0xf7, 0xf7, 0xef, 0xef, 0xef, 0xc6  ; "÷÷ïïïÆ"
-	.asciz "{ZB"
-	.ascii ")Z{"
-	.byte 0xd6, 0xd6, 0xd6, 0xd6, 0xd6, 0xd6  ; "ÖÖÖÖÖÖ"
-	.byte 0x00
-	.byte 0xd6, 0xd6, 0xd6  ; "ÖÖÖ"
-	.byte 0x00
-	.byte 0xd6, 0xd6, 0xd6  ; "ÖÖÖ"
-	.byte 0x00
-	.byte 0xd6, 0xd6, 0xd6  ; "ÖÖÖ"
-	.byte 0x00
-	.byte 0xd6, 0xd6  ; "ÖÖ"
-	.byte 0x00
-	.byte 0xf7  ; "÷"
-	.byte 0x00
-	.byte 0xf7, 0xd6, 0xd6, 0xd6  ; "÷ÖÖÖ"
-	.byte 0x00
-	.byte 0xd6, 0xd6, 0xd6, 0xd6, 0xd6, 0xc6  ; "ÖÖÖÖÖÆ"
-	.asciz "{k)"
-	.ascii "BZk"
-	.byte 0xc6, 0xc6  ; "ÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6  ; "ÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xf7  ; "Æ÷"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6  ; "ÆÆÆ"
-	.byte 0x00
-	.byte 0xc6, 0xc6, 0xc6, 0xc6, 0xc6, 0xb5  ; "ÆÆÆÆÆµ"
-	.asciz "{Z)"
-	.ascii ")Z{"
-	.byte 0xad, 0xad, 0xf7
-	.byte 0x00
-	.zero 2
-	.byte 0xf7, 0xad, 0xad, 0xad  ; "÷­­­"
-	.byte 0x00
-	.byte 0xad, 0xad, 0xad, 0xf7  ; "­­­÷"
-	.byte 0x00
-	.zero 2
-	.byte 0xf7
-	.byte 0xad, 0xad, 0x00
-	.byte 0xad, 0xad, 0xf7
-	.byte 0x00
-	.byte 0xad, 0xad, 0x00
-	.zero 3
-	.byte 0xad, 0xad, 0xad
-	.asciz "{Z)"
-	.ascii ")Z{"
-	.byte 0x9c, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x8c  ; "÷÷÷÷÷÷÷÷÷÷÷÷÷"
-	.asciz "{Z)"
-
-HDAE5000_UI_Icons:	; 0x2E365D
-	; UI icon/pattern data with language IDs
-	.asciz ")Bkk{{{kk{k{{kkk{{kkk{{kkkk{{kk{kkkkkkkB)"
-	.asciz ")B)B))))))B)B)B))))B)BB)BB)B)))B)B)BB)))B"
-	.zero 41
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+;
+; HDAE5000_Palette_Button01 (0x2E3064, 1024 B): 256 RGBX entries, entry i =
+; (i, i, i, 0) -- a grey ramp -- placed, as everywhere in this ROM's
+; graphics bank, immediately before its bitmap (HDAE5000_Bitmap_Button01).
+; No code in this ROM reads it; whether the main CPU does (at the bitmap
+; pointer - 0x400) is not established.
+;
+HDAE5000_Palette_Button01:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x00, 0x02, 0x02, 0x02, 0x00, 0x03, 0x03, 0x03, 0x00
+	.byte 0x04, 0x04, 0x04, 0x00, 0x05, 0x05, 0x05, 0x00, 0x06, 0x06, 0x06, 0x00, 0x07, 0x07, 0x07, 0x00
+	.byte 0x08, 0x08, 0x08, 0x00, 0x09, 0x09, 0x09, 0x00, 0x0a, 0x0a, 0x0a, 0x00, 0x0b, 0x0b, 0x0b, 0x00
+	.byte 0x0c, 0x0c, 0x0c, 0x00, 0x0d, 0x0d, 0x0d, 0x00, 0x0e, 0x0e, 0x0e, 0x00, 0x0f, 0x0f, 0x0f, 0x00
+	.byte 0x10, 0x10, 0x10, 0x00, 0x11, 0x11, 0x11, 0x00, 0x12, 0x12, 0x12, 0x00, 0x13, 0x13, 0x13, 0x00
+	.byte 0x14, 0x14, 0x14, 0x00, 0x15, 0x15, 0x15, 0x00, 0x16, 0x16, 0x16, 0x00, 0x17, 0x17, 0x17, 0x00
+	.byte 0x18, 0x18, 0x18, 0x00, 0x19, 0x19, 0x19, 0x00, 0x1a, 0x1a, 0x1a, 0x00, 0x1b, 0x1b, 0x1b, 0x00
+	.byte 0x1c, 0x1c, 0x1c, 0x00, 0x1d, 0x1d, 0x1d, 0x00, 0x1e, 0x1e, 0x1e, 0x00, 0x1f, 0x1f, 0x1f, 0x00
+	.byte 0x20, 0x20, 0x20, 0x00, 0x21, 0x21, 0x21, 0x00, 0x22, 0x22, 0x22, 0x00, 0x23, 0x23, 0x23, 0x00
+	.byte 0x24, 0x24, 0x24, 0x00, 0x25, 0x25, 0x25, 0x00, 0x26, 0x26, 0x26, 0x00, 0x27, 0x27, 0x27, 0x00
+	.byte 0x28, 0x28, 0x28, 0x00, 0x29, 0x29, 0x29, 0x00, 0x2a, 0x2a, 0x2a, 0x00, 0x2b, 0x2b, 0x2b, 0x00
+	.byte 0x2c, 0x2c, 0x2c, 0x00, 0x2d, 0x2d, 0x2d, 0x00, 0x2e, 0x2e, 0x2e, 0x00, 0x2f, 0x2f, 0x2f, 0x00
+	.byte 0x30, 0x30, 0x30, 0x00, 0x31, 0x31, 0x31, 0x00, 0x32, 0x32, 0x32, 0x00, 0x33, 0x33, 0x33, 0x00
+	.byte 0x34, 0x34, 0x34, 0x00, 0x35, 0x35, 0x35, 0x00, 0x36, 0x36, 0x36, 0x00, 0x37, 0x37, 0x37, 0x00
+	.byte 0x38, 0x38, 0x38, 0x00, 0x39, 0x39, 0x39, 0x00, 0x3a, 0x3a, 0x3a, 0x00, 0x3b, 0x3b, 0x3b, 0x00
+	.byte 0x3c, 0x3c, 0x3c, 0x00, 0x3d, 0x3d, 0x3d, 0x00, 0x3e, 0x3e, 0x3e, 0x00, 0x3f, 0x3f, 0x3f, 0x00
+	.byte 0x40, 0x40, 0x40, 0x00, 0x41, 0x41, 0x41, 0x00, 0x42, 0x42, 0x42, 0x00, 0x43, 0x43, 0x43, 0x00
+	.byte 0x44, 0x44, 0x44, 0x00, 0x45, 0x45, 0x45, 0x00, 0x46, 0x46, 0x46, 0x00, 0x47, 0x47, 0x47, 0x00
+	.byte 0x48, 0x48, 0x48, 0x00, 0x49, 0x49, 0x49, 0x00, 0x4a, 0x4a, 0x4a, 0x00, 0x4b, 0x4b, 0x4b, 0x00
+	.byte 0x4c, 0x4c, 0x4c, 0x00, 0x4d, 0x4d, 0x4d, 0x00, 0x4e, 0x4e, 0x4e, 0x00, 0x4f, 0x4f, 0x4f, 0x00
+	.byte 0x50, 0x50, 0x50, 0x00, 0x51, 0x51, 0x51, 0x00, 0x52, 0x52, 0x52, 0x00, 0x53, 0x53, 0x53, 0x00
+	.byte 0x54, 0x54, 0x54, 0x00, 0x55, 0x55, 0x55, 0x00, 0x56, 0x56, 0x56, 0x00, 0x57, 0x57, 0x57, 0x00
+	.byte 0x58, 0x58, 0x58, 0x00, 0x59, 0x59, 0x59, 0x00, 0x5a, 0x5a, 0x5a, 0x00, 0x5b, 0x5b, 0x5b, 0x00
+	.byte 0x5c, 0x5c, 0x5c, 0x00, 0x5d, 0x5d, 0x5d, 0x00, 0x5e, 0x5e, 0x5e, 0x00, 0x5f, 0x5f, 0x5f, 0x00
+	.byte 0x60, 0x60, 0x60, 0x00, 0x61, 0x61, 0x61, 0x00, 0x62, 0x62, 0x62, 0x00, 0x63, 0x63, 0x63, 0x00
+	.byte 0x64, 0x64, 0x64, 0x00, 0x65, 0x65, 0x65, 0x00, 0x66, 0x66, 0x66, 0x00, 0x67, 0x67, 0x67, 0x00
+	.byte 0x68, 0x68, 0x68, 0x00, 0x69, 0x69, 0x69, 0x00, 0x6a, 0x6a, 0x6a, 0x00, 0x6b, 0x6b, 0x6b, 0x00
+	.byte 0x6c, 0x6c, 0x6c, 0x00, 0x6d, 0x6d, 0x6d, 0x00, 0x6e, 0x6e, 0x6e, 0x00, 0x6f, 0x6f, 0x6f, 0x00
+	.byte 0x70, 0x70, 0x70, 0x00, 0x71, 0x71, 0x71, 0x00, 0x72, 0x72, 0x72, 0x00, 0x73, 0x73, 0x73, 0x00
+	.byte 0x74, 0x74, 0x74, 0x00, 0x75, 0x75, 0x75, 0x00, 0x76, 0x76, 0x76, 0x00, 0x77, 0x77, 0x77, 0x00
+	.byte 0x78, 0x78, 0x78, 0x00, 0x79, 0x79, 0x79, 0x00, 0x7a, 0x7a, 0x7a, 0x00, 0x7b, 0x7b, 0x7b, 0x00
+	.byte 0x7c, 0x7c, 0x7c, 0x00, 0x7d, 0x7d, 0x7d, 0x00, 0x7e, 0x7e, 0x7e, 0x00, 0x7f, 0x7f, 0x7f, 0x00
+	.byte 0x80, 0x80, 0x80, 0x00, 0x81, 0x81, 0x81, 0x00, 0x82, 0x82, 0x82, 0x00, 0x83, 0x83, 0x83, 0x00
+	.byte 0x84, 0x84, 0x84, 0x00, 0x85, 0x85, 0x85, 0x00, 0x86, 0x86, 0x86, 0x00, 0x87, 0x87, 0x87, 0x00
+	.byte 0x88, 0x88, 0x88, 0x00, 0x89, 0x89, 0x89, 0x00, 0x8a, 0x8a, 0x8a, 0x00, 0x8b, 0x8b, 0x8b, 0x00
+	.byte 0x8c, 0x8c, 0x8c, 0x00, 0x8d, 0x8d, 0x8d, 0x00, 0x8e, 0x8e, 0x8e, 0x00, 0x8f, 0x8f, 0x8f, 0x00
+	.byte 0x90, 0x90, 0x90, 0x00, 0x91, 0x91, 0x91, 0x00, 0x92, 0x92, 0x92, 0x00, 0x93, 0x93, 0x93, 0x00
+	.byte 0x94, 0x94, 0x94, 0x00, 0x95, 0x95, 0x95, 0x00, 0x96, 0x96, 0x96, 0x00, 0x97, 0x97, 0x97, 0x00
+	.byte 0x98, 0x98, 0x98, 0x00, 0x99, 0x99, 0x99, 0x00, 0x9a, 0x9a, 0x9a, 0x00, 0x9b, 0x9b, 0x9b, 0x00
+	.byte 0x9c, 0x9c, 0x9c, 0x00, 0x9d, 0x9d, 0x9d, 0x00, 0x9e, 0x9e, 0x9e, 0x00, 0x9f, 0x9f, 0x9f, 0x00
+	.byte 0xa0, 0xa0, 0xa0, 0x00, 0xa1, 0xa1, 0xa1, 0x00, 0xa2, 0xa2, 0xa2, 0x00, 0xa3, 0xa3, 0xa3, 0x00
+	.byte 0xa4, 0xa4, 0xa4, 0x00, 0xa5, 0xa5, 0xa5, 0x00, 0xa6, 0xa6, 0xa6, 0x00, 0xa7, 0xa7, 0xa7, 0x00
+	.byte 0xa8, 0xa8, 0xa8, 0x00, 0xa9, 0xa9, 0xa9, 0x00, 0xaa, 0xaa, 0xaa, 0x00, 0xab, 0xab, 0xab, 0x00
+	.byte 0xac, 0xac, 0xac, 0x00, 0xad, 0xad, 0xad, 0x00, 0xae, 0xae, 0xae, 0x00, 0xaf, 0xaf, 0xaf, 0x00
+	.byte 0xb0, 0xb0, 0xb0, 0x00, 0xb1, 0xb1, 0xb1, 0x00, 0xb2, 0xb2, 0xb2, 0x00, 0xb3, 0xb3, 0xb3, 0x00
+	.byte 0xb4, 0xb4, 0xb4, 0x00, 0xb5, 0xb5, 0xb5, 0x00, 0xb6, 0xb6, 0xb6, 0x00, 0xb7, 0xb7, 0xb7, 0x00
+	.byte 0xb8, 0xb8, 0xb8, 0x00, 0xb9, 0xb9, 0xb9, 0x00, 0xba, 0xba, 0xba, 0x00, 0xbb, 0xbb, 0xbb, 0x00
+	.byte 0xbc, 0xbc, 0xbc, 0x00, 0xbd, 0xbd, 0xbd, 0x00, 0xbe, 0xbe, 0xbe, 0x00, 0xbf, 0xbf, 0xbf, 0x00
+	.byte 0xc0, 0xc0, 0xc0, 0x00, 0xc1, 0xc1, 0xc1, 0x00, 0xc2, 0xc2, 0xc2, 0x00, 0xc3, 0xc3, 0xc3, 0x00
+	.byte 0xc4, 0xc4, 0xc4, 0x00, 0xc5, 0xc5, 0xc5, 0x00, 0xc6, 0xc6, 0xc6, 0x00, 0xc7, 0xc7, 0xc7, 0x00
+	.byte 0xc8, 0xc8, 0xc8, 0x00, 0xc9, 0xc9, 0xc9, 0x00, 0xca, 0xca, 0xca, 0x00, 0xcb, 0xcb, 0xcb, 0x00
+	.byte 0xcc, 0xcc, 0xcc, 0x00, 0xcd, 0xcd, 0xcd, 0x00, 0xce, 0xce, 0xce, 0x00, 0xcf, 0xcf, 0xcf, 0x00
+	.byte 0xd0, 0xd0, 0xd0, 0x00, 0xd1, 0xd1, 0xd1, 0x00, 0xd2, 0xd2, 0xd2, 0x00, 0xd3, 0xd3, 0xd3, 0x00
+	.byte 0xd4, 0xd4, 0xd4, 0x00, 0xd5, 0xd5, 0xd5, 0x00, 0xd6, 0xd6, 0xd6, 0x00, 0xd7, 0xd7, 0xd7, 0x00
+	.byte 0xd8, 0xd8, 0xd8, 0x00, 0xd9, 0xd9, 0xd9, 0x00, 0xda, 0xda, 0xda, 0x00, 0xdb, 0xdb, 0xdb, 0x00
+	.byte 0xdc, 0xdc, 0xdc, 0x00, 0xdd, 0xdd, 0xdd, 0x00, 0xde, 0xde, 0xde, 0x00, 0xdf, 0xdf, 0xdf, 0x00
+	.byte 0xe0, 0xe0, 0xe0, 0x00, 0xe1, 0xe1, 0xe1, 0x00, 0xe2, 0xe2, 0xe2, 0x00, 0xe3, 0xe3, 0xe3, 0x00
+	.byte 0xe4, 0xe4, 0xe4, 0x00, 0xe5, 0xe5, 0xe5, 0x00, 0xe6, 0xe6, 0xe6, 0x00, 0xe7, 0xe7, 0xe7, 0x00
+	.byte 0xe8, 0xe8, 0xe8, 0x00, 0xe9, 0xe9, 0xe9, 0x00, 0xea, 0xea, 0xea, 0x00, 0xeb, 0xeb, 0xeb, 0x00
+	.byte 0xec, 0xec, 0xec, 0x00, 0xed, 0xed, 0xed, 0x00, 0xee, 0xee, 0xee, 0x00, 0xef, 0xef, 0xef, 0x00
+	.byte 0xf0, 0xf0, 0xf0, 0x00, 0xf1, 0xf1, 0xf1, 0x00, 0xf2, 0xf2, 0xf2, 0x00, 0xf3, 0xf3, 0xf3, 0x00
+	.byte 0xf4, 0xf4, 0xf4, 0x00, 0xf5, 0xf5, 0xf5, 0x00, 0xf6, 0xf6, 0xf6, 0x00, 0xf7, 0xf7, 0xf7, 0x00
+	.byte 0xf8, 0xf8, 0xf8, 0x00, 0xf9, 0xf9, 0xf9, 0x00, 0xfa, 0xfa, 0xfa, 0x00, 0xfb, 0xfb, 0xfb, 0x00
+	.byte 0xfc, 0xfc, 0xfc, 0x00, 0xfd, 0xfd, 0xfd, 0x00, 0xfe, 0xfe, 0xfe, 0x00, 0xff, 0xff, 0xff, 0x00
+;
+; HDAE5000_Bitmap_Button01 (0x2E3464, 42 x 15 = 630 B, 8 bpp, one row per
+; line): the image of UI object "BitmapButt01".  Its handler
+; HDAE5000_BitmapButt01 (0x28B527) answers EVT_ALLOC_DATA_PTR 0x01E000A1 with
+; this address, EVT_ALLOC_WIDTH 0x01E000A2 with 42 and EVT_ALLOC_HEIGHT
+; 0x01E000A3 with 15 (the same protocol the main CPU's bitmap objects use).
+;
+HDAE5000_Bitmap_Button01:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x29, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x29
+	.byte 0x00, 0x42, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a, 0x42
+	.byte 0x00, 0x42, 0x5a, 0x7b, 0x7b, 0x7b, 0x7b, 0x00, 0x00, 0x00, 0x7b, 0x7b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7b, 0x7b, 0x00, 0x00, 0x00, 0x7b, 0x7b, 0x7b, 0x00, 0x00, 0x00, 0x00, 0x7b, 0x7b, 0x7b, 0x00, 0x00, 0x00, 0x00, 0x7b, 0x7b, 0x7b, 0x7b, 0x5a, 0x42
+	.byte 0x00, 0x42, 0x5a, 0x9c, 0xad, 0xad, 0x00, 0xf7, 0xf7, 0xf7, 0x00, 0xad, 0xf7, 0xf7, 0x00, 0xf7, 0xf7, 0xad, 0x00, 0xf7, 0xf7, 0xf7, 0x00, 0xad, 0xad, 0x00, 0xf7, 0xf7, 0xf7, 0x00, 0xad, 0xad, 0x00, 0xf7, 0xf7, 0xf7, 0xad, 0xad, 0xad, 0x7b, 0x6b, 0x42
+	.byte 0x00, 0x42, 0x5a, 0x7b, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0xf7, 0xc6, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0xc6, 0xc6, 0xb5, 0x7b, 0x5a, 0x42
+	.byte 0x00, 0x42, 0x5a, 0x7b, 0xde, 0xde, 0xf7, 0x00, 0x00, 0x00, 0xde, 0xde, 0xde, 0xde, 0x00, 0xde, 0xde, 0xde, 0x00, 0xde, 0xde, 0xde, 0x00, 0xde, 0xde, 0x00, 0xde, 0xde, 0xde, 0x00, 0xde, 0xde, 0x00, 0x00, 0x00, 0xde, 0xde, 0xde, 0xc6, 0x7b, 0x5a, 0x42
+	.byte 0x00, 0x42, 0x5a, 0x7b, 0xef, 0xef, 0xef, 0xf7, 0xf7, 0xf7, 0x00, 0xef, 0xef, 0xef, 0x00, 0xef, 0xef, 0xef, 0x00, 0xef, 0xef, 0xef, 0x00, 0xef, 0xef, 0x00, 0x00, 0x00, 0x00, 0xf7, 0xef, 0xef, 0x00, 0xf7, 0xf7, 0xef, 0xef, 0xef, 0xc6, 0x7b, 0x5a, 0x42
+	.byte 0x00, 0x29, 0x5a, 0x7b, 0xd6, 0xd6, 0xd6, 0xd6, 0xd6, 0xd6, 0x00, 0xd6, 0xd6, 0xd6, 0x00, 0xd6, 0xd6, 0xd6, 0x00, 0xd6, 0xd6, 0xd6, 0x00, 0xd6, 0xd6, 0x00, 0xf7, 0x00, 0xf7, 0xd6, 0xd6, 0xd6, 0x00, 0xd6, 0xd6, 0xd6, 0xd6, 0xd6, 0xc6, 0x7b, 0x6b, 0x29
+	.byte 0x00, 0x42, 0x5a, 0x6b, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0x00, 0xc6, 0xf7, 0x00, 0xc6, 0xc6, 0xc6, 0x00, 0xc6, 0xc6, 0xc6, 0xc6, 0xc6, 0xb5, 0x7b, 0x5a, 0x29
+	.byte 0x00, 0x29, 0x5a, 0x7b, 0xad, 0xad, 0xf7, 0x00, 0x00, 0x00, 0xf7, 0xad, 0xad, 0xad, 0x00, 0xad, 0xad, 0xad, 0xf7, 0x00, 0x00, 0x00, 0xf7, 0xad, 0xad, 0x00, 0xad, 0xad, 0xf7, 0x00, 0xad, 0xad, 0x00, 0x00, 0x00, 0x00, 0xad, 0xad, 0xad, 0x7b, 0x5a, 0x29
+	.byte 0x00, 0x29, 0x5a, 0x7b, 0x9c, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x8c, 0x7b, 0x5a, 0x29
+	.byte 0x00, 0x29, 0x42, 0x6b, 0x6b, 0x7b, 0x7b, 0x7b, 0x6b, 0x6b, 0x7b, 0x6b, 0x7b, 0x7b, 0x6b, 0x6b, 0x6b, 0x7b, 0x7b, 0x6b, 0x6b, 0x6b, 0x7b, 0x7b, 0x6b, 0x6b, 0x6b, 0x6b, 0x7b, 0x7b, 0x6b, 0x6b, 0x7b, 0x6b, 0x6b, 0x6b, 0x6b, 0x6b, 0x6b, 0x6b, 0x42, 0x29
+	.byte 0x00, 0x29, 0x42, 0x29, 0x42, 0x29, 0x29, 0x29, 0x29, 0x29, 0x29, 0x42, 0x29, 0x42, 0x29, 0x42, 0x29, 0x29, 0x29, 0x29, 0x42, 0x29, 0x42, 0x42, 0x29, 0x42, 0x42, 0x29, 0x42, 0x29, 0x29, 0x29, 0x42, 0x29, 0x42, 0x29, 0x42, 0x42, 0x29, 0x29, 0x29, 0x42
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+HDAE5000_Str_Aclanguage1:	; 0x2E36DA
+	; read by AcLanguageText1Proc at 0x28B5A1 (lda operand)
 	.asciz "AcLanguage1"
+HDAE5000_Str_LANENG00:	; 0x2E36E6
+	; read by AcLanguageText1Proc at 0x28B60B (pushed operand)
 	.asciz "LANENG00"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_LANDEU00:	; 0x2E36F0
+	; read by AcLanguageText1Proc at 0x28B62A (pushed operand)
 	.asciz "LANDEU00"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_Str_LANFRA00:	; 0x2E36FA
+	; read by AcLanguageText1Proc at 0x28B649 (pushed operand)
 	.asciz "LANFRA00"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 

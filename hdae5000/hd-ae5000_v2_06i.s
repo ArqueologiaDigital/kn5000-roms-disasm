@@ -654,11 +654,11 @@ HDAE5000_UiState_Reset:	; 0x2803C2
 	ldw	(0x23A08E:24), 0
 	ldw	(0x23A092:24), 0
 	ldw	(0x23A094:24), 0
-	ld	xiy, 0x002e1ca2
+	ld	xiy, HDAE5000_Lbn_BlockTemplate
 	ld	xix, 0x0022aa58
 	ld	bc, 5:i3
 	ldirw                                   ; ldirw
-	ld	xiy, 0x002e1c96
+	ld	xiy, HDAE5000_TypeSel_TemplateBlank
 	ld	xix, 0x0022aa4c
 	ld	bc, 6:i3
 	ldirw                                   ; ldirw
@@ -672,13 +672,13 @@ HDAE5000_UiState_Reset:	; 0x2803C2
 	lda xwa, (0x22aa4c:24)
 	pushw 0x0002
 	ld	bc, hl
-	lda xde, (0x2e1c96:24)
+	lda xde, (HDAE5000_TypeSel_TemplateBlank:24)
 	calr	HDAE5000_TypeSel_Init
 	jr t, .LRF_0436                        ; [68 12] jr T,0x280436
 .LRF_0424:
 	lda xwa, (0x22aa4c:24)
 	pushw 0x0002
-	lda xde, (0x2e1c96:24)
+	lda xde, (HDAE5000_TypeSel_TemplateBlank:24)
 	ld	bc, 0:i3
 	calr	HDAE5000_TypeSel_Init
 .LRF_0436:
@@ -1224,7 +1224,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xwa)                           ; ld XWA,(XWA)
 	or xwa, xwa                             ; or XWA,XWA
 	jr nz, .LRF_0abd                       ; [6e 0a] jr NZ,0x280abd
-	ld	xwa, (0x2e1e4c)
+	ld	xwa, (HDAE5000_TextPtrs_01Selectlist0203040506070809)
 	ld (xsp + 0x10), xwa                    ; ld (XSP+0x10),XWA
 	jr t, .LRF_0ac8                        ; [68 0b] jr T,0x280ac8
 .LRF_0abd:
@@ -1915,7 +1915,7 @@ HDAE5000_DbMemoClProc:
 	ld	xhl, (xbc + 0x02dc)
 	ldw	bc, 0x00c6
 	call	(xhl)
-	lda xwa, (0x2e1eb6:24)
+	lda xwa, (HDAE5000_Str_DebugTime:24)
 	ld	xbc, xwa
 	ld	xwa, xiz
 	ld	xde, xbc
@@ -2115,7 +2115,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	wa, (0x22A032:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e21ba
+	ld	xbc, HDAE5000_TextPtrs_Blank1_Chr5F
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld	(0x22a034), xwa
@@ -2264,7 +2264,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e21a2
+	ld	xbc, HDAE5000_TablePtrs_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
@@ -2397,7 +2397,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e21a2
+	ld	xbc, HDAE5000_TablePtrs_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
@@ -2449,7 +2449,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	wa, (0x22A02A:24)
 	extz xwa
 	add	xwa, xwa
-	ld	xbc, 0x002e21ae
+	ld	xbc, HDAE5000_Str_Chr25_AcHddNamingWindowProc
 	add	xbc, xwa
 	cp	iz, (xbc)
 	jrl ule, .LRF_1921                     ; [73 76 ff] jrl ULE,0x281921
@@ -2525,7 +2525,7 @@ HDAE5000_AcHddNamingWindowProc_Case3:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e21a2
+	ld	xbc, HDAE5000_TablePtrs_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
@@ -2589,7 +2589,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e21a2
+	ld	xbc, HDAE5000_TablePtrs_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
@@ -2639,7 +2639,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e21a2
+	ld	xbc, HDAE5000_TablePtrs_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
@@ -2660,7 +2660,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	add	wa, (0x22A02A:24)
 	extz xwa
 	add	xwa, xwa
-	ld	xbc, 0x002e21ae
+	ld	xbc, HDAE5000_Str_Chr25_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld	wa, (0x22A02E:24)
 	add	wa, 0x000c
@@ -2678,7 +2678,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	add	wa, (0x22A02A:24)
 	extz xwa
 	add	xwa, xwa
-	ld	xbc, 0x002e21ae
+	ld	xbc, HDAE5000_Str_Chr25_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld	wa, (0x22A02E:24)
 	add	wa, 0x000d
@@ -2688,7 +2688,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e21a2
+	ld	xbc, HDAE5000_TablePtrs_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
@@ -2752,7 +2752,7 @@ HDAE5000_AcHddNamingWindowProc_Case5:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e21a2
+	ld	xbc, HDAE5000_TablePtrs_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
@@ -2761,7 +2761,7 @@ HDAE5000_AcHddNamingWindowProc_Case5:
 	add	wa, (0x22A02A:24)
 	extz xwa
 	add	xwa, xwa
-	ld	xbc, 0x002e21ae
+	ld	xbc, HDAE5000_Str_Chr25_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld	wa, (0x22A02E:24)
 	inc	1, wa
@@ -3145,7 +3145,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e1ec2
+	ld	xbc, HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526
 	add	xbc, xwa
 	ld xde, (xbc)                           ; ld XDE,(XBC)
 	ld	xwa, (0x23a1a2)
@@ -3266,7 +3266,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ldw	(0x22A02E:24), 26
 	jr t, .LRF_24a2                        ; [68 6d] jr T,0x2824a2
 .LRF_2435:
-	lda xwa, (0x2e20d0:24)
+	lda xwa, (HDAE5000_TextPtrs_Chr21_to_Chr7D:24)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
 	ld	iz, 0:i3
 	jr t, .LRF_2488                        ; [68 47] jr T,0x282488
@@ -3300,7 +3300,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	inc	2, wa
 	extz xwa
 	add	xwa, xwa
-	ld	xbc, 0x002e21ae
+	ld	xbc, HDAE5000_Str_Chr25_AcHddNamingWindowProc
 	add	xbc, xwa
 	cp	iz, (xbc)
 	jr ule, .LRF_2441                      ; [63 9f] jr ULE,0x282441
@@ -3368,7 +3368,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	add	wa, (0x22A02A:24)
 	extz xwa
 	add	xwa, xwa
-	ld	xbc, 0x002e21ae
+	ld	xbc, HDAE5000_Str_Chr25_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld	wa, (0x22A02E:24)
 	cp	wa, (xbc)
@@ -3378,7 +3378,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	add	wa, (0x22A02A:24)
 	extz xwa
 	add	xwa, xwa
-	ld	xbc, 0x002e21ae
+	ld	xbc, HDAE5000_Str_Chr25_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld	wa, (xbc)
 	ld	(0x22a02e), wa
@@ -3386,7 +3386,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	wa, (0x22A02A:24)
 	extz xwa
 	sll	xwa, 0x02
-	ld	xbc, 0x002e21a2
+	ld	xbc, HDAE5000_TablePtrs_AcHddNamingWindowProc
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
@@ -3484,7 +3484,7 @@ HDAE5000_IvHddNamingProc:
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
-	lda xwa, (0x2e21d8:24)
+	lda xwa, (HDAE5000_Str_Name:24)
 	ld	xbc, xwa
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xde, xbc
@@ -3610,7 +3610,7 @@ HDAE5000_HardTestPage:
 	ld xhl, (xhl + 0x0e0a)             ; e3 ed 0a 0e 23 — xhl = (xhl+0x0e0a)
 	ld_sril xhl, (xhl + 0x00dc)             ; e3 ed dc 00 23 — xhl = (xhl+0x00dc) indirect call
 	call (xhl)					; b3 e8
-	lda xwa, (0x2e21de:24); f2 de 21 2e 30
+	lda xwa, (HDAE5000_Str_Test:24); f2 de 21 2e 30
 	ld xbc, xwa					; e8 89
 	ld xwa, xiz					; ee 88
 	ld xde, xbc					; e9 8a
@@ -3646,7 +3646,7 @@ HDAE5000_HardTestPage:
 	ld_sril xhl, (xwa + 0x0084)             ; e3 e1 84 00 23 — (xwa+0x0084) init fn
 	call (xhl)					; b3 e8 — call init
 	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
-	lda xwa, (0x2e21e4:24); f2 e4 21 2e 30
+	lda xwa, (HDAE5000_Str_PPORTTEST:24); f2 e4 21 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 17 ff — register handler
 	calr HDAE5000_HardTest_PortTest		; 1e 47 03
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
@@ -3692,7 +3692,7 @@ HDAE5000_HardTestPage:
 	ld_sril xhl, (xwa + 0x0084)             ; e3 e1 84 00 23 — init fn
 	call (xhl)					; b3 e8
 	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
-	lda xwa, (0x2e21f0:24); f2 f0 21 2e 30
+	lda xwa, (HDAE5000_Str_HDDIDREAD:24); f2 f0 21 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 6b fe
 	calr HDAE5000_HardTest_HddIdRead			; 1e e2 02
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
@@ -3737,7 +3737,7 @@ HDAE5000_HardTestPage:
 	ld_sril xhl, (xwa + 0x0084)             ; e3 e1 84 00 23
 	call (xhl)					; b3 e8
 	call HDAE5000_Wait_Callback_Loop		; 1d 2b b2 28
-	lda xwa, (0x2e21fc:24); f2 fc 21 2e 30
+	lda xwa, (HDAE5000_Str_FDTEST:24); f2 fc 21 2e 30
 	calr HDAE5000_HardTest_Print			; 1e bf fd
 	; Check disk status via 0x0e88 table
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
@@ -3755,15 +3755,15 @@ HDAE5000_HardTestPage:
 	call (xix)					; b4 e8
 	cp hl, 0:i3					; db d8
 	jr nz, .Leh_status_nonzero			; 6e 0a
-	lda xwa, (0x2e2204:24); f2 04 22 2e 30
+	lda xwa, (HDAE5000_Str_OK:24); f2 04 22 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 8d fd
 	jr t, .Leh_after_status			; 68 12
 .Leh_status_nonzero:
-	lda xwa, (0x2e2208:24); f2 08 22 2e 30
+	lda xwa, (HDAE5000_Str_ERROR:24); f2 08 22 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 83 fd
 	jr t, .Leh_after_status			; 68 08
 .Leh_status_other:
-	lda xwa, (0x2e220e:24); f2 0e 22 2e 30
+	lda xwa, (HDAE5000_Str_ERROR_HardTestPage:24); f2 0e 22 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 79 fd
 .Leh_after_status:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
@@ -3813,7 +3813,7 @@ HDAE5000_HardTestPage:
 	ld xbc, 0x01e0003b				; 41 3b 00 e0 01
 	ld xde, 0:i3					; ea a8
 	call (xhl)					; b3 e8
-	lda xwa, (0x2e2214:24); f2 14 22 2e 30
+	lda xwa, (HDAE5000_Str_STOPTESTLOOP:24); f2 14 22 2e 30
 	calr HDAE5000_HardTest_Print			; 1e c0 fc
 	jr t, .Leh_epilogue				; 68 45
 .Leh_xde_0c_no_device:
@@ -3825,7 +3825,7 @@ HDAE5000_HardTestPage:
 	ld xbc, 0x01e0003b				; 41 3b 00 e0 01
 	ld xde, 1:i3					; ea a9
 	call (xhl)					; b3 e8
-	lda xwa, (0x2e2224:24); f2 24 22 2e 30
+	lda xwa, (HDAE5000_Str_STARTTESTLOOP:24); f2 24 22 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 99 fc
 	; Final cleanup: call deregister via vtable
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
@@ -3935,11 +3935,11 @@ HDAE5000_HardTest_PortTest:	; 0x282C27 (71 bytes)
 .Lppi_rd_loop_end:
 	cpw (xsp + 2), 0x0000	; test if result is zero
 	jr nz, .Lppi_rd_nonzero
-	lda xwa, (0x2e2234:24); 0x2E2234 - error event string
+	lda xwa, (HDAE5000_Str_PortTestOK:24); 0x2E2234 - error event string
 	calr HDAE5000_HardTest_Print
 	jr t, .Lppi_rd_done
 .Lppi_rd_nonzero:
-	lda xwa, (0x2e224a:24); 0x2E224A - success event string
+	lda xwa, (HDAE5000_Str_PortTestError:24); 0x2E224A - success event string
 	calr HDAE5000_HardTest_Print
 .Lppi_rd_done:
 	popw iz
@@ -3967,7 +3967,7 @@ HDAE5000_HardTest_HddIdRead:	; 0x282C6E (192 bytes)
 	call HDAE5000_MemFill
 	; MemCopy_Block: copy 46 bytes from 0x2264 offset
 	pushw 0x002E			; count = 46
-	pushw 0x2264			; source offset
+	pushw 0x2264			; source offset		; low half of HDAE5000_Str_HDTYPE
 	lda xwa, (xsp + 36)
 	push xwa			; dest address
 	call HDAE5000_StrCpy
@@ -3996,7 +3996,7 @@ HDAE5000_HardTest_HddIdRead:	; 0x282C6E (192 bytes)
 	lda xwa, (xsp + 20)
 	call HDAE5000_ULongToFloat
 	lda xbc, (xsp + 20)
-	lda xde, (0x2e22aa:24); 0x2E22AA
+	lda xde, (HDAE5000_Float_100_HddIdRead:24); 0x2E22AA
 	lda xwa, (xsp + 20)
 	call HDAE5000_FloatDiv
 	lda xbc, (xsp + 20)
@@ -4009,7 +4009,7 @@ HDAE5000_HardTest_HddIdRead:	; 0x282C6E (192 bytes)
 	ld xix, (xiy + 0)
 	push xix
 	pushw 0x002E			; count = 46
-	pushw 0x2270			; offset
+	pushw 0x2270			; offset		; low half of HDAE5000_Fmt_Fre_Capa_3_1f_MB
 	lda xwa, (xsp + 44)
 	push xwa
 	call HDAE5000_SPrintf
@@ -4017,13 +4017,13 @@ HDAE5000_HardTest_HddIdRead:	; 0x282C6E (192 bytes)
 	; Transfer results
 	lda xwa, (xsp + 24)
 	calr HDAE5000_HardTest_Print
-	lda xwa, (0x2e2286:24); 0x2E2286
+	lda xwa, (HDAE5000_Str_Empty:24); 0x2E2286
 	calr HDAE5000_HardTest_Print
-	lda xwa, (0x2e2288:24); 0x2E2288
+	lda xwa, (HDAE5000_Str_HDDOK:24); 0x2E2288
 	calr HDAE5000_HardTest_Print
 	jr t, .Lpws_done
 .Lpws_error:
-	lda xwa, (0x2e2298:24); 0x2E2298
+	lda xwa, (HDAE5000_Str_HDDNG:24); 0x2E2298
 	calr HDAE5000_HardTest_Print
 .Lpws_done:
 	lda xsp, (xsp + 124)		; deallocate stack frame
@@ -4038,7 +4038,7 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	; PPI ... registers PPI device handlers": no PPI access here.)
 	; Copy 14 bytes: source table → PPI buffer
 	pushw 0x000E			; count = 14
-	lda xwa, (0x2e1ce6:24); 0x2E1CE6
+	lda xwa, (HDAE5000_Str_Blank12Tab:24); 0x2E1CE6
 	push xwa			; source
 	lda xwa, (0x22aa9c:24); 0x22AA9C
 	push xwa			; dest
@@ -4063,7 +4063,7 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	call (xhl)
 	; Copy 241 bytes: second table → PPI buffer
 	pushw 0x00F1			; count = 241
-	lda xwa, (0x2e1cf4:24); 0x2E1CF4
+	lda xwa, (HDAE5000_FdList_RowsTemplate:24); 0x2E1CF4
 	push xwa			; source
 	lda xwa, (0x22aaaa:24); 0x22AAAA
 	push xwa			; dest
@@ -4131,7 +4131,7 @@ HDAE5000_FdName_SongNumber:	; 0x282E3C (81 bytes)
 .Lptb_loop:
 	pushw iz
 	pushw 0x002E			; block size = 46
-	pushw 0x22AE			; source base address
+	pushw 0x22AE			; source base address		; low half of HDAE5000_Fmt_2_2d
 	lda xwa, (xsp + 8)		; pointer to local buffer
 	push xwa
 	call HDAE5000_SPrintf

@@ -530,7 +530,7 @@ HDAE5000_Display_Clear__loop:
 	stb_dpi c, 0xE0		; lda XHL, (XWA+) - get next dest addr, post-inc XWA
 	ld bc, ix			; BC = current index
 	extz xbc			; zero-extend to 32 bits
-	ld xde, 0x002E1C82		; ROM source table
+	ld xde, HDAE5000_Str_V206i		; ROM source table
 	add xde, xbc			; XDE = &table[index]
 	ld c, (xde)			; C = table byte
 	ld (xhl), c			; store to display buffer
@@ -539,7 +539,7 @@ HDAE5000_Display_Clear__loop:
 	jr c, HDAE5000_Display_Clear__loop
 HDAE5000_Display_Clear__push:
 	pushw 0x002E			; push 0x2E (size param)
-	pushw 0x1C82			; push 0x1C82 (offset param)
+	pushw 0x1C82			; push 0x1C82 (offset param)		; low half of HDAE5000_Str_V206i
 	call HDAE5000_StrLen
 	inc 4, xsp			; deallocate 4 bytes from stack
 	ret
@@ -781,7 +781,7 @@ HDAE5000_ErrMsgTimerCatch:
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
-	lda xwa, (0x2e3058:24)
+	lda xwa, (HDAE5000_Str_Timb:24)
 	ld	xbc, xwa
 	ld	xwa, xiz
 	ld	xde, xbc
@@ -831,7 +831,7 @@ HDAE5000_ErrMsgTimerCatchLBN:
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
-	lda xwa, (0x2e305e:24)
+	lda xwa, (HDAE5000_Str_TLBN:24)
 	ld	xbc, xwa
 	ld	xwa, xiz
 	ld	xde, xbc
@@ -872,7 +872,7 @@ HDAE5000_BitmapButt01:
 	ret
 
 .LUIH_b542:
-	lda xhl, (0x2e3464:24)
+	lda xhl, (HDAE5000_Bitmap_Button01:24)
 	ret
 
 .LUIH_b548:
@@ -904,7 +904,7 @@ HDAE5000_AcLanguageText1Proc:
 	call	(xix)
 	jrl t, .LUIH_cd01                      ; [78 60 17] jrl T,0x28cd01
 .LUIH_b5a1:
-	lda xhl, (0x2e36da:24)
+	lda xhl, (HDAE5000_Str_Aclanguage1:24)
 	jrl t, .LUIH_cd01                      ; [78 58 17] jrl T,0x28cd01
 .LUIH_b5a9:
 	ld_sril	xwa, (xsp + 0x00ce)
@@ -935,7 +935,7 @@ HDAE5000_AcLanguageText1Proc:
 	ldw (xsp + 0x04), 65535
 	pushw 0x0008
 	pushw 0x002e
-	pushw 0x36e6
+	pushw 0x36e6		; low half of HDAE5000_Str_LANENG00
 	ld	xwa, xiz
 	push xwa
 	call HDAE5000_StrNCmp
@@ -946,7 +946,7 @@ HDAE5000_AcLanguageText1Proc:
 .LUIH_b624:
 	pushw 0x0008
 	pushw 0x002e
-	pushw 0x36f0
+	pushw 0x36f0		; low half of HDAE5000_Str_LANDEU00
 	ld	xwa, xiz
 	push xwa
 	call HDAE5000_StrNCmp
@@ -957,7 +957,7 @@ HDAE5000_AcLanguageText1Proc:
 .LUIH_b643:
 	pushw 0x0008
 	pushw 0x002e
-	pushw 0x36fa
+	pushw 0x36fa		; low half of HDAE5000_Str_LANFRA00
 	ld	xwa, xiz
 	push xwa
 	call HDAE5000_StrNCmp
