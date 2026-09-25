@@ -167,8 +167,7 @@ GraphicsRender_ByteData_Loop3:
 	ld	wa, iz
 	sub	wa, 192
 	extz	xwa
-	.byte 0x41
-	.long Pad_AfterStr_No
+	ld	xbc, Pad_AfterStr_No
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
@@ -177,7 +176,7 @@ GraphicsRender_ByteData_Loop3:
 	ld	wa, iz
 	call	SetPaletteRGB
 	inc	1, iz
-	.long GUI_DisplayStructData
+	cp	iz, 224
 	jr	c, GraphicsRender_ByteData_Loop3
 	ldw	(0x03ef9e:24), 4
 	ldw	(0x030460:24), 1
@@ -384,8 +383,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	xiy, Str_No_0xCC6
 	lda	xix, (xsp+270)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	ld	hl, (xwa+2)
 	ld	c, (xwa+1)
 	dec	4, c
@@ -403,13 +401,11 @@ DrawText_LayoutAndRender_Variant1:
 	sll	hl, 3
 	ld	(xbc), hl
 	ld	iy, 0:i3
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jr	ule, 35
+	cpw	(xsp+4), 0
+	jr	ule, DrawText_LayoutAndRender_Variant1_Skip
 	lda	xhl, (xsp+10)
 	ld	xde, 4:i3
+DrawText_LayoutAndRender_Variant1_Loop2:
 	ld	xix, xde
 	ld	xbc, 0xfffffffc
 	add	xix, xbc
@@ -421,56 +417,39 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xiz), c
 	inc	1, iy
 	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
-	jr	c, -30
+	cp	iy, (xsp+4)
+	jr	c, DrawText_LayoutAndRender_Variant1_Loop2
+DrawText_LayoutAndRender_Variant1_Skip:
 	ld	wa, iy
 	extz	xwa
 	lda	xde, (xsp+10)
 	ld	xbc, xde
 	add	xbc, xwa
 	ld	(xbc), 0
-	.byte 0xf3
-	swi	5
-	ret
-	.byte 0x01
-	ldw	wa, 0xa9e9
+	lda	xwa, (xsp+270)
+	ld	xbc, 1:i3
 	push	xbc
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
 	ld	xbc, (xsp+14)
-	calr	63234
+	calr	DrawText_QueueOrDirect
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	ccf
-	.byte 0x01, 0x37
+	lda	xsp, (xsp+274)
 	ret
 	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCCE
-	.byte 0xf3
-	swi	5
-	ret
-	.byte 0x01
-	ldw	ix, 0xacd9
-	.byte 0x95
-	scf
+	lda	xix, (xsp+270)
+	ld	bc, 4:i3
+	ldirw
 	ld	hl, (xwa+2)
 	ld	c, (xwa+1)
 	dec	4, c
 	extz	bc
 	ld	(xsp+4), bc
-	.byte 0xf3
-	swi	5
-	ldw	(1:8), 0xbf31:io
-	.byte 0x06
-	jr	lt, -37
-	.byte 0x8a
+	lda	xbc, (xsp+266)
+	ld	(xsp+6), xbc
+	ld	de, hl
 	extz	xde
 	div	de, 40
 	ld	xbc, (xsp+6)
@@ -480,13 +459,11 @@ DrawText_LayoutAndRender_Variant1:
 	sll	hl, 3
 	ld	(xbc), hl
 	ld	iy, 0:i3
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jr	ule, 35
+	cpw	(xsp+4), 0
+	jr	ule, DrawText_LayoutAndRender_Variant1_Skip2
 	lda	xhl, (xsp+10)
 	ld	xde, 4:i3
+DrawText_LayoutAndRender_Variant1_Loop3:
 	ld	xix, xde
 	ld	xbc, 0xfffffffc
 	add	xix, xbc
@@ -498,117 +475,31 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xiz), c
 	inc	1, iy
 	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
-	jr	c, -30
+	cp	iy, (xsp+4)
+	jr	c, DrawText_LayoutAndRender_Variant1_Loop3
+DrawText_LayoutAndRender_Variant1_Skip2:
 	ld	wa, iy
 	extz	xwa
 	lda	xde, (xsp+10)
 	ld	xbc, xde
 	add	xbc, xwa
 	ld	(xbc), 0
-	.byte 0xf3
-	swi	5
-	ret
-	.byte 0x01
-	ldw	wa, 0xaae9
+	lda	xwa, (xsp+270)
+	ld	xbc, 2:i3
 	push	xbc
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
 	ld	xbc, (xsp+14)
-	calr	63079
+	calr	DrawText_QueueOrDirect
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	ccf
-	.byte 0x01, 0x37
+	lda	xsp, (xsp+274)
 	ret
 	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCD6
 	lda	xix, (xsp+270)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
-	ld	c, (xwa+1)
-	dec	6, c
-	extz	bc
-	ld	(xsp+4), bc
-	.byte 0xf3
-	swi	5
-	ldw	(1:8), 0xbf31:io
-	.byte 0x06
-	jr	lt, -104
-	.byte 0x04
-	ld	b, 175:opc
-	.byte 0x06
-	ld	a, 185:opc
-	push	sr
-	.byte 0x52
-	ld	de, (xwa+2)
-	ld	(xbc), de
-	ld	iy, 0:i3
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jr	ule, 35
-	lda	xhl, (xsp+10)
-	ld	xde, 6:i3
-	ld	xix, xde
-	ld	xbc, 0xfffffffa
-	add	xix, xbc
-	ld	xiz, xhl
-	add	xiz, xix
-	ld	xbc, xde
-	add	xbc, xwa
-	ld	c, (xbc)
-	ld	(xiz), c
-	inc	1, iy
-	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
-	jr	c, -30
-	ld	wa, iy
-	extz	xwa
-	lda	xde, (xsp+10)
-	ld	xbc, xde
-	add	xbc, xwa
-	ld	(xbc), 0
-	.byte 0xf3
-	swi	5
-	ret
-	.byte 0x01
-	ldw	wa, 0xabe9
-	push	xbc
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
-	ld	xbc, (xsp+14)
-	calr	62938
-	pop	xiz
-	.byte 0xf3
-	swi	5
-	ccf
-	.byte 0x01, 0x37
-	ret
-	lda xsp, (xsp-274)
-	push	xiz
-	ld	xiy, Str_No_0xCDE
-	.byte 0xf3
-	swi	5
-	ret
-	.byte 0x01
-	ldw	ix, 0xacd9
-	.byte 0x95
-	scf
+	ldirw
 	ld	c, (xwa+1)
 	dec	6, c
 	extz	bc
@@ -621,11 +512,61 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xwa+2)
 	ld	(xbc), de
 	ld	iy, 0:i3
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jr	ule, 35
+	cpw	(xsp+4), 0
+	jr	ule, DrawText_LayoutAndRender_Variant1_Skip3
+	lda	xhl, (xsp+10)
+	ld	xde, 6:i3
+DrawText_LayoutAndRender_Variant1_Loop4:
+	ld	xix, xde
+	ld	xbc, 0xfffffffa
+	add	xix, xbc
+	ld	xiz, xhl
+	add	xiz, xix
+	ld	xbc, xde
+	add	xbc, xwa
+	ld	c, (xbc)
+	ld	(xiz), c
+	inc	1, iy
+	inc	1, xde
+	cp	iy, (xsp+4)
+	jr	c, DrawText_LayoutAndRender_Variant1_Loop4
+DrawText_LayoutAndRender_Variant1_Skip3:
+	ld	wa, iy
+	extz	xwa
+	lda	xde, (xsp+10)
+	ld	xbc, xde
+	add	xbc, xwa
+	ld	(xbc), 0
+	lda	xwa, (xsp+270)
+	ld	xbc, 3:i3
+	push	xbc
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
+	ld	xbc, (xsp+14)
+	calr	DrawText_QueueOrDirect
+	pop	xiz
+	lda	xsp, (xsp+274)
+	ret
+	lda xsp, (xsp-274)
+	push	xiz
+	ld	xiy, Str_No_0xCDE
+	lda	xix, (xsp+270)
+	ld	bc, 4:i3
+	ldirw
+	ld	c, (xwa+1)
+	dec	6, c
+	extz	bc
+	ld	(xsp+4), bc
+	lda	xbc, (xsp+266)
+	ld	(xsp+6), xbc
+	ld	de, (xwa+4)
+	ld	xbc, (xsp+6)
+	ld	(xbc+2), de
+	ld	de, (xwa+2)
+	ld	(xbc), de
+	ld	iy, 0:i3
+	cpw	(xsp+4), 0
+	jr	ule, DrawText_LayoutAndRender_Variant1_Skip4
 	lda	xhl, (xsp+10)
 	ld	xde, 6:i3
 DrawText_LayoutAndRender_Variant1_Loop:
@@ -640,8 +581,9 @@ DrawText_LayoutAndRender_Variant1_Loop:
 	ld	(xiz), c
 	inc	1, iy
 	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
+	cp	iy, (xsp+4)
 	jr	c, DrawText_LayoutAndRender_Variant1_Loop
+DrawText_LayoutAndRender_Variant1_Skip4:
 	ld	wa, iy
 	extz	xwa
 	lda	xde, (xsp+10)
@@ -651,28 +593,19 @@ DrawText_LayoutAndRender_Variant1_Loop:
 	lda	xwa, (xsp+270)
 	ld	xbc, 4:i3
 	push	xbc
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
 	ld	xbc, (xsp+14)
-	calr	62797
+	calr	DrawText_QueueOrDirect
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	ccf
-	.byte 0x01, 0x37
+	lda	xsp, (xsp+274)
 	ret
 	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCE6
 	lda	xix, (xsp+270)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	ld	hl, (xwa+2)
 	ld	c, (xwa+1)
 	dec	4, c
@@ -690,13 +623,11 @@ DrawText_LayoutAndRender_Variant1_Loop:
 	sll	hl, 3
 	ld	(xbc), hl
 	ld	iy, 0:i3
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jr	ule, 35
+	cpw	(xsp+4), 0
+	jr	ule, DrawText_LayoutAndRender_Variant1_Skip5
 	lda	xhl, (xsp+10)
 	ld	xde, 4:i3
+DrawText_LayoutAndRender_Variant1_Loop5:
 	ld	xix, xde
 	ld	xbc, 0xfffffffc
 	add	xix, xbc
@@ -708,34 +639,24 @@ DrawText_LayoutAndRender_Variant1_Loop:
 	ld	(xiz), c
 	inc	1, iy
 	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
-	jr	c, -30
+	cp	iy, (xsp+4)
+	jr	c, DrawText_LayoutAndRender_Variant1_Loop5
+DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	wa, iy
 	extz	xwa
 	lda	xde, (xsp+10)
 	ld	xbc, xde
 	add	xbc, xwa
 	ld	(xbc), 0
-	.byte 0xf3
-	swi	5
-	ret
-	.byte 0x01
-	ldw	wa, 0xaee9
+	lda	xwa, (xsp+270)
+	ld	xbc, 6:i3
 	push	xbc
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
 	ld	xbc, (xsp+14)
-	calr	62642
+	calr	DrawText_QueueOrDirect
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	ccf
-	.byte 0x01, 0x37
+	lda	xsp, (xsp+274)
 	ret
 	dec	8, xsp
 	ld	xde, xwa
@@ -1058,9 +979,8 @@ DrawText_LayoutAndRender_Variant1_Loop:
 	sll bc, 3
 	ld	(xhl), bc
 	ld	bc, (xde)
-	.byte 0x98
-	ldw	(129:8), 1723:io
-	.byte 0x51
+	add	bc, (xwa+10)
+	ld	(xhl+6), bc
 	ld	bc, (xwa+8)
 	sll	bc, 3
 	ld	de, (xhl)
@@ -1105,19 +1025,17 @@ DrawText_LayoutAndRender_Variant1_Loop:
 	ld	(xwa+6), bc
 	ldw	bc, 196
 	ldw	de, 240
-	calr	47031
+	calr	DrawDesignBox
 	lda	xwa, (xsp+10)
 	ld	bc, iz
 	inc	2, bc
 	extz	xbc
-	calr	41361
+	calr	DrawIcons
 	popw	iz
 	lda	xsp, (xsp+12)
 	ret
 	dec	8, xsp
-	.byte 0xd7
-	swi	2
-	.byte 0x04
+	push	qiz
 	lda	xbc, (xsp+2)
 	ld	de, (xwa+2)
 	ld	(xbc), de
@@ -1128,24 +1046,17 @@ DrawText_LayoutAndRender_Variant1_Loop:
 	ld	wa, (xwa+8)
 	ld	(xbc+6), wa
 	ld	a, (0x03efa8:24)
-	.byte 0xc7
-	swi	3
-	sub	(xbc-14), wa
-	.byte 0xef
-	pop	sr
-	nop
-	.byte 0x01
+	ldb_erp	a, 251
+	stib_da	(0x3efa8), 1
 	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
-	calr	55432
-	.byte 0xc7
-	swi	3
-	sub	(xbc-14), w
-	.byte 0xef
-	pop	sr
-	ld	xbc, 0xef05fad7
-	jr	f, 14
+	calr	ColorBlit
+	stb_erp	a, 251
+	stb_da	(0x3efa8), a
+	pop	qiz
+	inc	8, xsp
+	ret
 
 ColorBlit_ComputeRectAndBlit:
 	dec 8, xsp
@@ -1190,9 +1101,9 @@ ColorBlit_ByteData:
 	ld	de, (0x03efa2:24)
 	ld	xwa, xbc
 	ld	bc, de
-	calr	55897
-	.byte 0xef
-	jr	f, 0x0e
+	calr	ColorBlit2
+	inc	8, xsp
+	ret
 
 DrawText_ExtendedLayout:
 	lda_dri XSP, 0xfd, 0xe4, 0xfe
@@ -1307,9 +1218,9 @@ DrawText_ExtLayout_Variant1:
 	ld	a, (xsp+14)
 	ld	c, (xsp+6)
 	and	a, 15
-	jr	z, 2
-	.byte 0xcb
-	swi	7
+	jr	z, DrawText_ExtendedLayout_Skip2
+	.byte	0xcb, 0xff	; srl A,C
+DrawText_ExtendedLayout_Skip2:
 	ld	(xsp+6), c
 	lda	xwa, (xsp+272)
 	ld	(xsp+12), xwa
@@ -1329,7 +1240,7 @@ DrawText_ExtLayout_Variant1:
 	lda	xix, (xsp+16)
 	ld	a, (xsp+6)
 	extz	wa
-	.byte 0x9f, 0x04, 0x40
+	mul	wa, (xsp+4)
 	ld	xbc, xwa
 	ld	xde, 0:i3
 DrawText_ExtendedLayout_Loop:
@@ -1448,12 +1359,9 @@ DrawFunc_Init_Variant1:
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, Str_No_0xE22
-	.byte 0xf3
-	swi	5
-	ld	(1:8), 52:io
+	lda	xix, (xsp+264)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	ld	wa, (xiz+2)
 	extz	xwa
 	ld	e, (xiz+4)
@@ -1463,9 +1371,9 @@ DrawFunc_Init_Variant1:
 	ld	e, a
 	ld	a, c
 	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	7
+	jr	z, DrawFunc_Init_Skip12
+	.byte	0xcd, 0xff	; srl A,E
+DrawFunc_Init_Skip12:
 	ld	ix, (xiz+7)
 	ld	l, (xiz+9)
 	extz	hl
@@ -1505,18 +1413,21 @@ DrawFunc_Init_Join:
 	jr	z, DrawFunc_Init_Skip3
 	pushw	bc
 	cp	hl, 1:i3
-	jr	nz, 17
+	jr	nz, DrawFunc_Init_Skip13
 	ld	xwa, Str_No_0xE2A
 	jr	DrawFunc_Init_Entry
 DrawFunc_Init_Skip3:
 	pushw	bc
 	pushw	234
 	pushw 0xb144
-	.ascii ":h,@H"
-	.byte 0xb1, 0xea
-	nop
+	push	xde
+	jr	DrawFunc_Init_Join8
+DrawFunc_Init_Skip13:
+	ld	xwa, 0xeab148
 DrawFunc_Init_Entry:
-	.ascii "8:h#"
+	push	xwa
+	push	xde
+	jr	DrawFunc_Init_Join8
 DrawFunc_Init_Skip4:
 	pushw	0
 	cp	hl, 2:i3
@@ -1527,13 +1438,14 @@ DrawFunc_Init_Skip4:
 	jr	DrawFunc_Init_Join2
 DrawFunc_Init_Skip5:
 	ld	xwa, Str_No_0xE3A
-	jr	5
+	jr	DrawFunc_Init_Join2
 DrawFunc_Init_Skip6:
 	ld	xwa, Str_No_0xE3E
 DrawFunc_Init_Join2:
 	push	xwa
 	lda	xwa, (xsp+10)
 	push	xwa
+DrawFunc_Init_Join8:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
@@ -1541,39 +1453,24 @@ DrawFunc_Init_Join2:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Str_No_0xCEE:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	c, 243:opc
-	swi	5
-	ld	(1:8), 48:io
+	ld_rrl	xhl, xbc, wa
+	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
-	calr	60549
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
+	calr	DrawText_QueueOrDirect
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, Str_No_0xE42
-	.byte 0xf3
-	swi	5
-	ld	(1:8), 52:io
+	lda	xix, (xsp+264)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	ld	ix, (xiz+2)
 	extz	xix
 	ld	de, (xiz+7)
@@ -1593,15 +1490,15 @@ DrawFunc_Init_Join2:
 	jr	z, DrawFunc_Init_Entry2
 	cp	hl, 1:i3
 	jr	nz, DrawFunc_Init_Entry3
-	.byte 0x94, 0x04
+	pushm	(xix)
 	ld	xwa, Str_No_0xE4A
 	jr	DrawFunc_Init_Join3
 DrawFunc_Init_Entry2:
-	.byte 0x94, 0x04
+	pushm	(xix)
 	ld	xwa, Str_No_0xE4E
 	jr	DrawFunc_Init_Join3
 DrawFunc_Init_Entry3:
-	.byte 0x94, 0x04
+	pushm	(xix)
 	ld	xwa, Str_No_0xE52
 DrawFunc_Init_Join3:
 	push	xwa
@@ -1615,34 +1512,22 @@ DrawFunc_Init_Join3:
 	lda	xbc, (Str_No_0xCEE:24)
 	ld_rrl xhl, xbc, wa
 	lda	xwa, (xsp+264)
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	bc, 1215
-	ldw	de, 0xd23b
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
-	calr	60387
+	lda	xbc, (xsp+260)
+	lda	xde, (xsp+4)
+	push	xhl
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
+	calr	DrawText_QueueOrDirect
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, Str_No_0xE56
-	.byte 0xf3
-	swi	5
-	ld	(1:8), 52:io
+	lda	xix, (xsp+264)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	ld	wa, (xiz+2)
 	extz	xwa
 	ld	e, (xiz+4)
@@ -1652,29 +1537,28 @@ DrawFunc_Init_Join3:
 	ld	e, a
 	ld	a, c
 	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	7
+	jr	z, DrawFunc_Init_Skip14
+	.byte	0xcd, 0xff	; srl A,E
+DrawFunc_Init_Skip14:
 	ld	l, (xiz+11)
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	bc, 1950
-	ld	w, 177:opc
-	.byte 0x50
+	lda	xbc, (xsp+260)
+	ld	wa, (xiz+7)
+	ld	(xbc), wa
 	ld	wa, (xiz+9)
 	ld	(xbc+2), wa
 	extz	de
 	lda	xbc, (xsp+4)
 	pushw	de
 	cp	l, 2:i3
-	jr	z, 11
+	jr	z, DrawFunc_Init_Skip15
 	cp	l, 1:i3
-	jr	nz, 14
+	jr	nz, DrawFunc_Init_Skip16
 	ld	xwa, Str_No_0xE5E
 	jr	DrawFunc_Init_Join4
+DrawFunc_Init_Skip15:
 	ld	xwa, Str_No_0xE62
 	jr	DrawFunc_Init_Join4
+DrawFunc_Init_Skip16:
 	ld	xwa, Str_No_0xE66
 DrawFunc_Init_Join4:
 	push	xwa
@@ -1691,19 +1575,11 @@ DrawFunc_Init_Join4:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
-	calr	60224
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
+	calr	DrawText_QueueOrDirect
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 	lda xsp, (xsp-268)
 	push	xiz
@@ -1711,8 +1587,7 @@ DrawFunc_Init_Join4:
 	ld	xiy, Str_No_0xE6A
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	ld	wa, (xiz+2)
 	extz	xwa
 	ld	e, (xiz+4)
@@ -1722,9 +1597,9 @@ DrawFunc_Init_Join4:
 	ld	e, a
 	ld	a, c
 	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	7
+	jr	z, DrawFunc_Init_Skip17
+	.byte	0xcd, 0xff	; srl A,E
+DrawFunc_Init_Skip17:
 	ld	l, (xiz+11)
 	lda	xbc, (xsp+260)
 	ld	wa, (xiz+7)
@@ -1733,9 +1608,9 @@ DrawFunc_Init_Join4:
 	ld	(xbc+2), wa
 	ld	a, (xiz+12)
 	cp	a, e
-	jr	z, 72
+	jr	z, DrawFunc_Init_Skip18
 	cp	a, 128
-	jr	nc, 10
+	jr	nc, DrawFunc_Init_Skip7
 	cp	e, 128
 	jr	c, DrawFunc_Init_Skip7
 	ld	a, 128:opc
@@ -1761,16 +1636,17 @@ DrawFunc_Init_Join5:
 	ld	xwa, Str_No_0xE72
 	jr	DrawFunc_Init_Entry5
 DrawFunc_Init_Entry4:
-	.byte 0x40
-	.long FmtStr_pct2d
+	ld	xwa, FmtStr_pct2d
 	jr	DrawFunc_Init_Entry5
 DrawFunc_Init_Skip9:
 	ld	xwa, Str_No_0xE7A
 DrawFunc_Init_Entry5:
-	.ascii "89h#¿"
-	.byte 0x04
-	ldw	bc, 11
-	nop
+	push	xwa
+	push	xbc
+	jr	DrawFunc_Init_Join9
+DrawFunc_Init_Skip18:
+	lda	xbc, (xsp+4)
+	pushw	0
 	cp	l, 2:i3
 	jr	z, DrawFunc_Init_Skip10
 	cp	l, 1:i3
@@ -1779,12 +1655,13 @@ DrawFunc_Init_Entry5:
 	jr	DrawFunc_Init_Join6
 DrawFunc_Init_Skip10:
 	ld	xwa, Str_No_0xE82
-	jr	5
+	jr	DrawFunc_Init_Join6
 DrawFunc_Init_Skip11:
 	ld	xwa, Str_No_0xE86
 DrawFunc_Init_Join6:
 	push	xwa
 	push	xbc
+DrawFunc_Init_Join9:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
@@ -1792,66 +1669,50 @@ DrawFunc_Init_Join6:
 	extz	wa
 	lda	xbc, (Str_No_0xDEE:24)
 	ld	xhl, 0:i3
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ld	l, 243:opc
-	swi	5
-	ld	(1:8), 48:io
+	ld_rrb	l, xbc, wa
+	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	.byte 0xd2
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
-	calr	59982
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
+	calr	DrawText_QueueOrDirect
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	.byte 0x45
-	.long Data_CharMapFormatBlock
-	.byte 0xf3
-	swi	5
-	ld	(1:8), 52:io
+	ld	xiy, Data_CharMapFormatBlock
+	lda	xix, (xsp+264)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	ld	de, (xiz+2)
 	extz	xde
 	ld	l, (xiz+11)
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	bc, 1950
-	ld	w, 177:opc
-	.byte 0x50
+	lda	xbc, (xsp+260)
+	ld	wa, (xiz+7)
+	ld	(xbc), wa
 	ld	wa, (xiz+9)
 	ld	(xbc+2), wa
 	lda	xbc, (xsp+4)
 	cp	l, 2:i3
-	jr	z, 13
+	jr	z, DrawFunc_Init_Skip19
 	cp	l, 1:i3
-	jr	nz, 20
-	.byte 0x92, 0x04
+	jr	nz, DrawFunc_Init_Skip20
+	pushm	(xde)
 	ld	xwa, Data_CharMapFormatBlock_0x8
-	jr	18
-	.byte 0x92, 0x04
+	jr	DrawFunc_Init_Join10
+DrawFunc_Init_Skip19:
+	pushm	(xde)
 	pushw	234
 	pushw	0xb1ac
 	push	xbc
 	jr	DrawFunc_Init_Join7
-	.byte 0x92, 0x04
+DrawFunc_Init_Skip20:
+	pushm	(xde)
 	ld	xwa, Data_CharMapFormatBlock_0x10
+DrawFunc_Init_Join10:
 	push	xwa
 	push	xbc
 DrawFunc_Init_Join7:
@@ -1864,23 +1725,14 @@ DrawFunc_Init_Join7:
 	ld	xhl, 0:i3
 	ld_rrb l, xbc, wa
 	lda	xwa, (xsp+264)
-	.byte 0xf3
-	swi	5
-	.byte 0x04, 0x01
-	ldw	bc, 1215
-	ldw	de, 0xd23b
-	or	(xix), xsp
-	pop	sr
-	.byte 0x04, 0xd2
-	or	(xde), xsp
-	pop	sr
-	max
-	calr	59835
+	lda	xbc, (xsp+260)
+	lda	xde, (xsp+4)
+	push	xhl
+	pushdi_24	(0x3efa4)
+	pushdi_24	(0x3efa2)
+	calr	DrawText_QueueOrDirect
 	pop	xiz
-	.byte 0xf3
-	swi	5
-	incf
-	.byte 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 
 ColorBlit_WithPaletteSave:
@@ -1937,9 +1789,9 @@ ColorBlit_Variant_ByteData:
 	ld	l, a
 	ld	a, e
 	and	a, 15
-	jr	z, 2
-	.byte 0xcf
-	swi	7
+	jr	z, ColorBlit_WithPaletteSave_Skip
+	.byte	0xcf, 0xff	; srl A,L
+ColorBlit_WithPaletteSave_Skip:
 	mul	l, 3
 	extz	hl
 	add	hl, hl
@@ -1959,7 +1811,7 @@ ColorBlit_Variant_ByteData:
 	sll bc, 3
 	ld	(xwa), bc
 	ld	bc, (xde)
-	.byte 0x9b, 0x04, 0x81
+	add	bc, (xhl+4)
 	ld	(xwa+6), bc
 	ld	bc, (xhl+2)
 	sll	bc, 3
@@ -1981,9 +1833,9 @@ ColorBlit_Variant_ByteData:
 	ld	l, a
 	ld	a, e
 	and	a, 15
-	jr	z, 2
-	.byte 0xcf
-	swi	7
+	jr	z, ColorBlit_WithPaletteSave_Skip2
+	.byte	0xcf, 0xff	; srl A,L
+ColorBlit_WithPaletteSave_Skip2:
 	sll	l, 2
 	extz	hl
 	add	hl, hl
@@ -2377,33 +2229,33 @@ FontGlyph_ByteData:
 	ld	a, (xwa)
 	extz	wa
 	lda	xde, (Data_CharMapFormatBlock_0x14:24)
-	.byte 0xc3
-	reti
-	or	xwa, xwa
-	ld	a, 177:opc
-	ld	xbc, 0xcd25800e
-	.byte 0xcf
-	ld	w, 102:opc
-	.byte 0x04
+	ld_rrb	a, xde, wa
+	ld	(xbc), a
+	ret
+	ld	e, (xwa)
+	cp	e, 32
+	jr	z, FontGlyph_ByteData_Skip
 	cp	e, 0:i3
-	jr	nz, 5
+	jr	nz, FontGlyph_ByteData_Skip2
+FontGlyph_ByteData_Skip:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ret
+FontGlyph_ByteData_Skip2:
 	ld	de, 0:i3
 	lda	xhl, (Data_CharMapFormatBlock_0x14:24)
 	ld	a, (xwa)
-	.byte 0xc3
-	reti
-	.byte 0xec, 0xe8
-	swi	1
-	jr	nz, 6
+FontGlyph_ByteData_Loop:
+	cpb_sri_mr A, 0x07, 0xec, 0xe8	; cp (XHL+DE),A
+	jr	nz, FontGlyph_ByteData_Skip3
 	ld	a, e
 	ld	(xbc), a
-	jr	8
+	jr	FontGlyph_ByteData_Join
+FontGlyph_ByteData_Skip3:
 	inc	1, de
 	cp	de, 256
-	jr	lt, -21
+	jr	lt, FontGlyph_ByteData_Loop
+FontGlyph_ByteData_Join:
 	cp	de, 256
 	ret	nz
 	ld	(xbc), 32
@@ -3026,19 +2878,18 @@ VGA_WritePalEntry_WriteBlue:
 
 VGA_CRTCTiming_ByteData:
 	dec	4, xsp
-	.byte 0xd7
-	swi	2
-	.byte 0x04
+	push	qiz
 	ld	(xsp+2), xwa
 	ldib_erp 251, 0
+VGA_WritePaletteEntry_Join:
 	stb_erp a, 251
 	extz	wa
 	ld	xbc, (xsp+2)
-	calr	65361
+	calr	VGA_WritePaletteEntry
 	ld	xwa, 4:i3
 	add	(xsp+2), xwa
 	inc1b_erp 251
-	jr -21
+	jr VGA_WritePaletteEntry_Join
 	ldw	wa, 964
 	ld	bc, 6:i3
 	calr	_Write_VGA_Register
@@ -4423,8 +4274,7 @@ ToneGen_ParamWriteDispatch:
 	inc	8, xiy
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	lda	xde, (xsp+2)
 	lda	xbc, (xsp+6)
 	ld	hl, (xbc)
@@ -4458,8 +4308,7 @@ ToneGen_ParamWriteDispatch:
 	lda	xiy, (xiy+16)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	lda	xbc, (xsp+2)
 	lda	xde, (xsp+6)
 	ld	hl, (xde)
@@ -4478,8 +4327,7 @@ ToneGen_ParamWriteDispatch:
 	lda	xiy, (xiy+24)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	lda	xbc, (xsp+2)
 	lda	xde, (xsp+6)
 	ld	hl, (xde)
@@ -4498,8 +4346,7 @@ ToneGen_ParamWriteDispatch:
 	lda	xiy, (xiy+32)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	lda	xbc, (xsp+2)
 	lda	xde, (xsp+6)
 	ld	hl, (xde)
@@ -4518,8 +4365,7 @@ ToneGen_ParamWriteDispatch:
 	lda	xiy, (xiy+40)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
-	.byte 0x95
-	scf
+	ldirw
 	lda	xbc, (xsp+2)
 	lda	xde, (xsp+6)
 	ld	hl, (xde)

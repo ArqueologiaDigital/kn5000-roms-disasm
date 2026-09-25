@@ -157,7 +157,18 @@ def symbols(elf):
             a2n.setdefault(a, []).append(p[2])
         elif len(p) == 3 and p[1] in "aA" and 0xE00000 <= int(p[0], 16) < 0x1000000:
             n2a[p[2]] = int(p[0], 16)      # `.set NAME, 0xefdb94` style names
+            ABS_NAMES.add(p[2])
+    # absolute names are a FALLBACK: only where no text label exists
+    for n in ABS_NAMES:
+        a = n2a.get(n)
+        if a is not None and a not in a2n:
+            a2n.setdefault(("abs", a), []).append(n)
+    for k in [k for k in a2n if isinstance(k, tuple)]:
+        a2n[k[1]] = a2n.pop(k)
     return a2n, n2a
+
+
+ABS_NAMES = set()
 
 
 def linemap(img, files):
@@ -1231,6 +1242,46 @@ def data_segments(rb, a, b):
     return out
 
 
+def data_evidence(img, rb, a, b, insns=None):
+    """Positive evidence that [a,b) is DATA and not unreached code.  Returns a
+    list of reasons (empty = no evidence: keep whatever the source says)."""
+    seg = rb[a - BASE:b - BASE]
+    why = []
+    if is_text(seg):
+        why.append("text")
+    if (b - a) % 4 == 0 and all(0xE00000 <= int.from_bytes(rb[x - BASE:x - BASE + 4], "little") <= 0xFFFFFF
+                                for x in range(a, b, 4)):
+        why.append("pointers")
+    for x in range(a, b - 7):
+        v1 = int.from_bytes(rb[x - BASE:x - BASE + 4], "little")
+        v2 = int.from_bytes(rb[x + 4 - BASE:x + 8 - BASE], "little")
+        if 0xE00000 <= v1 <= 0xFFFFFF and 0xE00000 <= v2 <= 0xFFFFFF:
+            why.append("pointers")
+            break
+    dec = unidasm(img, a, b - a)
+    tot = 0
+    for x, n, t in dec:
+        tot += n
+        low = t.lower()
+        op = low.split()[0]
+        args = t.split(None, 1)[1] if " " in t else ""
+        if t.startswith("db") or ABSURD.match(t):
+            why.append("absurd:" + t)
+            break
+        if op in ("jr", "jrl") and (args.startswith("F,") or (re.match(r'^[A-Z/]+,0x[0-9a-f]+$', args)
+                                                              and uni_target(t) == x + n and not args.startswith("T,"))):
+            why.append("absurd:" + t)
+            break
+        if op in ("jr", "jrl", "jp", "call", "calr", "djnz") and "(" not in args:
+            tg = uni_target(t)
+            if tg is not None and not (0xE00000 <= tg <= 0xFFFFFF):
+                why.append("branch out of ROM")
+                break
+    if dec and dec[-1][0] + dec[-1][1] > b:
+        why.append("last instruction runs past the segment")
+    return why
+
+
 def cmd_islands(args):
     """Turn a whole-span PLAN into a spec that touches only the source lines
     whose framing disagrees with the plan (the islands); every line whose bytes
@@ -1274,6 +1325,29 @@ def cmd_islands(args):
     bound |= istarts
     for (x, y) in datseg:
         bound.update(range(x, y + 1))      # data may be cut anywhere
+    # a planned data segment that the source spells as CODE is only re-typed
+    # with positive evidence (text, pointers, absurd decode, framing that runs
+    # past it); otherwise it is unreached code and is left exactly as written
+    cur_code = set()
+    for i, ln in enumerate(lines):
+        ad, n = addrs[i], ext[i]
+        if ad is None or not n:
+            continue
+        c = strip_comment(ln)[0].strip()
+        while LABEL_RE.match(c):
+            c = c[LABEL_RE.match(c).end():].strip()
+        if c and not c.startswith("."):
+            cur_code.update(range(ad, ad + n))
+    kept = []
+    for (x, y) in list(datseg):
+        if all(k in cur_code for k in range(x, y)):
+            ev = data_evidence(img, rb, x, y)
+            if not ev:
+                kept.append((x, y))
+                datseg.remove((x, y))
+                code.update(range(x, y))
+                bound.update(range(x, y + 1))
+                print("KEPT AS CODE (no data evidence): 0x%06X-0x%06X" % (x, y))
     seg_of = {}
     for i, (x, y) in enumerate(datseg):
         for k in range(x, y):

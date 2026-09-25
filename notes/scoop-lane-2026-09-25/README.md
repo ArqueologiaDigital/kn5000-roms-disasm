@@ -79,3 +79,27 @@ Manual overrides and why:
 
 Idempotence check: re-running `plan` on the re-framed file gives the SAME
 instruction set (16,189 instructions) and `islands` then reports **0 islands**.
+
+### v10 / v9 `display/graphics_text_vga.s` and `display/scoop_editor_data.s`
+
+`graphics_text_vga.s` has two spans of its own (it `.include`s
+`ui/bitmap_out_routines.s` and `ui/ui_mode_handlers.s` in the middle):
+
+    plan --image v10 --file v10/maincpu/display/graphics_text_vga.s --lo 0xFB13B0 --hi 0xFB3F8C
+    plan --image v10 --file v10/maincpu/display/graphics_text_vga.s --lo 0xFC1A22 --hi 0xFC2F93
+    plan --image v10 --file v10/maincpu/display/scoop_editor_data.s --lo 0xF03D80 --hi 0xF0616F
+
+(then `islands`, `apply`, symboliser; the same for v9, whose plans are
+instruction-for-instruction identical to v10's).  No manual overrides.
+
+`islands` only re-types code as data on POSITIVE evidence (text, ROM pointers,
+an absurd or undecodable decode, a branch out of ROM, or a decode that runs past
+the segment).  Unreached code without such evidence is left as the source had
+it and printed as `KEPT AS CODE`: here `BitMapOut` (0xFB3F67, the routine that
+runs on into `ui/bitmap_out_routines.s`), the `VGA_Stub_1..3` `ret`s,
+`WallSureShowHideFunc`, `MainSysCtrl_Entry8`, `AcTranspose_ParamData`
+(`ld xhl, 0x01020004 / ret`), two `jr t,+0` join bytes and three short tails in
+`scoop_editor_data.s`.  (The same rule applied retroactively to the
+`scoop_display.s` plan flags only two segments, both data by their reader: a
+4-byte slice of the `.long` table at 0xEFB2B3-0xEFB307 and the display list
+`Scoop_DisplayData_ButtonLayout` handed to `UIRender_TwoTableGeneral` in xiy.)
