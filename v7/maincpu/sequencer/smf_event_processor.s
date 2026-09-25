@@ -10914,14 +10914,11 @@ TableLoad_Return:
 
 Rhythm_InitDataBlock:
 	ret
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.zero 121
+; 128 zero bytes after the lone `ret` above (the first 7 were spelled `nop`).
+; Nothing references Rhythm_InitDataBlock or the byte after it: searched for the
+; label name tree-wide and for the 24-bit little-endian forms of the `ret`'s
+; address and address+1 in the whole dump (2026-09-25, lane seqeng).
+	.zero 128
 
 Rhythm_QueuePartChangeEvent:
 	call	16624672

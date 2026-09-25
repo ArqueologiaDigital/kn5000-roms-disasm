@@ -206,4 +206,14 @@ RETYPES = [
              "(SoundBank_DefaultNamePadding_0xA) go to record +0x100; then 10 spaces",
              "from +0 follow them, and 6 spaces from +0 go to record +0xC1.",
          ]),
+    dict(file="sequencer/seq_event_playback.s", label="Voice_SlotTemplateData",
+         size=16, fmt="short8",
+         header=[
+             "16-byte template of one voice slot, copied as 8 LE16 words.  Read by",
+             "Voice_InitSlotTemplate ({@Voice_InitSlotTemplate}): XIX = the slot (XIY on",
+             "entry), XIY = this, BC = 8, ldirw; the slot's byte +0 then gets back its",
+             "own old high nibble (and 0xF0), so only the template's low nibble of",
+             "byte +0 survives.  TYPED 2026-09-25 (lane seqeng); was spelled",
+             "nop / swi 7 / jrl nc,64 (0xFF bytes read as swi 7).",
+         ]),
 ]
