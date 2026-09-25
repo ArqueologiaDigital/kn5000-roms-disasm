@@ -1,20 +1,25 @@
-HDAE5000_Code_Remainder:	; 29AF2Dh
+HDAE5000_StrPrefixCmp:	; 29AF2Dh
+	; returns HDAE5000_MemCmp(s, t, HDAE5000_StrLen(s)): 0 when t BEGINS WITH
+	; s (a string compare that ignores whatever follows in t).  Callers use
+	; it as a string-equality test (CHS code entry, slot names).
 	; Validate display buffer and read file data
 	; Input: (XSP+8) = XIZ context, (XSP+0x12) = XWA file params
 	push xiz
 	ld xiz, (xsp + 8)		; load context pointer
 	push xiz			; arg for Display_Buffer_Validate
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	pushw hl			; save validation result
 	ld xwa, (xsp + 0x12)		; load file params
 	push xwa			; arg 2
 	push xiz			; arg 1
-	call HDAE5000_File_Read
+	call HDAE5000_MemCmp
 	lda xsp, (xsp + 0x0E)		; clean up 14 bytes
 	pop xiz
 	ret
 
-HDAE5000_MemCopy_Block:	; 0x29AF45
+HDAE5000_StrCpy:	; 0x29AF45
+	; strcpy(dest, src) = HDAE5000_MemCCpy(dest, src, 0, 0xFFFE), then a
+	; forced terminator if no NUL was found.  328 call sites.
 	; Block memory copy with null-termination
 	; Stack: [+0x10] source ptr, [+0x0C] dest ptr (XIZ context)
 	; Calls String_Copy_N with limit 0xFFFE, null-terminates if successful
@@ -26,7 +31,7 @@ HDAE5000_MemCopy_Block:	; 0x29AF45
 	push xwa
 	ld xiz, (xsp + 0x10)		; dest pointer
 	push xiz
-	call HDAE5000_String_Copy_N
+	call HDAE5000_MemCCpy
 	add xsp, 0x0000000C		; clean up 12 bytes
 	or xhl, xhl			; test result
 	jr nz, .Lmcb_done
@@ -38,7 +43,8 @@ HDAE5000_MemCopy_Block:	; 0x29AF45
 	pop xiz
 	ret
 
-HDAE5000_Display_Buffer_Validate:	; 0x29AF71
+HDAE5000_StrLen:	; 0x29AF71
+	; strlen(s) = HDAE5000_MemChr(s, 0, 0xFFFF) - s, or 0xFFFF if no NUL.
 	; Validate display buffer - call String_Length, return offset or -1
 	; Stack: [+0x0C] = buffer pointer (XIZ)
 	; Returns: HL = offset from XIZ or -1 on failure
@@ -47,7 +53,7 @@ HDAE5000_Display_Buffer_Validate:	; 0x29AF71
 	pushw 0x0000			; flags
 	ld xiz, (xsp + 0x0C)		; buffer pointer
 	push xiz
-	call HDAE5000_String_Length
+	call HDAE5000_MemChr
 	inc 0, xsp			; clean up 8 bytes
 	or xhl, xhl			; test result
 	jr nz, .Ldbv_ok
@@ -61,7 +67,9 @@ HDAE5000_Display_Buffer_Validate:	; 0x29AF71
 	; --- String copy with length limit (secondary entry) ---
 	; Stack: [+0x04] dest, [+0x08] source, [+0x0C] count
 	; Returns: XHL = end of copied string
-HDAE5000_HD_Read_Write_Helper:
+	; strncat(dest, src, n): walks to dest's terminator first (.Lscl_entry
+	; loop), then appends at most n bytes and terminates.  XHL = dest.
+HDAE5000_StrNCat:
 	ld xix, (xsp + 4)		; XIX = dest
 	ld xhl, xix			; XHL = dest (for return)
 	jr t, .Lscl_entry
@@ -88,7 +96,8 @@ HDAE5000_HD_Read_Write_Helper:
 	ld (xix), 0x00		; null-terminate
 	ret
 
-HDAE5000_MemCompare_Block:	; 0x29AFBE
+HDAE5000_StrNCmp:	; 0x29AFBE
+	; strncmp(a, b, n): stops at n or at a NUL in a.
 	; Compare two memory blocks byte-by-byte
 	; Stack: [+0x04] block A (XIX), [+0x08] block B (XDE), [+0x0C] count (BC)
 	; Returns: HL = 0 if match, else sign-extended difference of first mismatch
@@ -122,9 +131,13 @@ HDAE5000_MemCompare_Block:	; 0x29AFBE
 	exts hl				; sign-extend L to HL
 	ret
 
-HDAE5000_MemCopy_Reverse:	; 0x29AFF0
-	; Memory copy (reverse direction)
+HDAE5000_StrNCpy:	; 0x29AFF0
+	; strncpy(dest, src, n): copies until n or src's NUL, then zero-fills
+	; the rest of the n bytes (.LMCR_b010 loop).  XHL = dest.  (Was named
+	; MemCopy_Reverse; nothing here runs backwards.)
 ; LMCR: 0x29AFF0 (1853 bytes)
+	; ^ the 1853 bytes are the whole run of library routines from here to
+	;   HDAE5000_Multiply, NOT this routine (43 bytes); see the labels below.
 
 	ld	bc, (xsp+12)
 	ld xde, (xsp + 0x08)                    ; ld XDE,(XSP+0x08)
@@ -150,11 +163,12 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	jr nz, .LMCR_b010                      ; [6e f6] jr NZ,0x29b010
 	ret
 
-HDAE5000_Directory_Handler_Helper:
+HDAE5000_StrRev:
+	; strrev(s): swaps s[i] and s[strlen(s)-1-i] in place; returns XHL = s.
 	push xiz
 	ld xiz, (xsp + 0x08)                    ; ld XIZ,(XSP+0x08)
 	push xiz
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	inc 4, xsp                              ; inc 4,XSP
 	extz xhl                                ; extz XHL
 	ld	xix, xhl
@@ -179,7 +193,9 @@ HDAE5000_Directory_Handler_Helper:
 	pop xiz                                 ; pop XIZ
 	ret
 
-HDAE5000_Directory_Handler_Helper2:
+HDAE5000_StrUpr:
+	; strupr(s): subtracts 0x20 from every byte whose HDAE5000_CType_Table
+	; entry has bit 1 (lower case) set; returns XHL = s.
 	ld xix, (xsp + 0x04)                    ; ld XIX,(XSP+0x04)
 	ld	xhl, xix
 	jr t, .LMCR_b074                       ; [68 1f] jr T,0x29b074
@@ -187,7 +203,7 @@ HDAE5000_Directory_Handler_Helper2:
 	ld	xde, xix
 	ld	a, (xix)
 	extz wa                                 ; extz WA
-	lda xbc, (0x2f9362:24)
+	lda xbc, (HDAE5000_CType_Table:24)
 	bit_dri 1, 0x07, 0xE4, 0xE0	; bit 1,(XBC+WA)
 	jr z, .LMCR_b06e                       ; [66 07] jr Z,0x29b06e
 	ld	a, (xix)
@@ -203,7 +219,24 @@ HDAE5000_Directory_Handler_Helper2:
 	jr nz, .LMCR_b055                      ; [6e dc] jr NZ,0x29b055
 	ret
 
-HDAE5000_String_Format_Helper:
+; ----------------------------------------------------------------------------
+; Floating point -> decimal digits (used by HDAE5000_FormatFloat)
+;
+; HDAE5000_FltDec_Convert and the ten FltDec_* helpers below turn the IEEE
+; bytes of a double (or, with flag bit 7, the 10-byte long double) into a
+; string of decimal digits plus a decimal exponent, using multi-precision
+; arithmetic on arrays of u16 limbs that each hold one byte (every helper
+; masks with 0x00ff and carries the high byte into the neighbour).  Buffers
+; are in RAM: 0x2394AA (the binary mantissa, limbs), 0x2394EA (fraction
+; work area, 10 limbs), 0x23948A (the decimal digits, 32 bytes).
+; Each helper's name says what its loop does; which C library source
+; routine each corresponds to is not recoverable from the ROM.
+; ----------------------------------------------------------------------------
+HDAE5000_FltDec_Convert:
+	; five stack arguments (HDAE5000_FormatFloat pushes them): +0x18 value
+	; bytes *, +0x1C digit output buffer, +0x20 flags (bit 7 = 10-byte long
+	; double), +0x22 int *decimal exponent, +0x26 int *sign (offsets as
+	; read inside the 20-byte frame below).
 	lda	xsp, (xsp-16)
 	push xiz
 	ld	iz, 0:i3
@@ -298,7 +331,7 @@ HDAE5000_String_Format_Helper:
 	sub	iz, bc
 .LMCR_b164:
 	pushw iz                                ; push IZ
-	calr	HDAE5000_MemCopy_Reverse_Helper10
+	calr	HDAE5000_FltDec_DecimalExponent
 	inc 2, xsp                              ; inc 2,XSP
 	ld (xsp + 0x04), hl
 	cp	iz, 0:i3
@@ -357,7 +390,7 @@ HDAE5000_String_Format_Helper:
 	pushm	(xsp+8)
 	pushw 0x0023
 	pushw 0x94aa
-	calr	HDAE5000_MemCopy_Reverse_Helper8
+	calr	HDAE5000_FltDec_NormalizeLeft
 	inc	6, xsp
 	ld	qiz, 0
 	cp	iz, 0:i3
@@ -367,11 +400,11 @@ HDAE5000_String_Format_Helper:
 .LMCR_b215:
 	pushw 0x0023
 	pushw 0x94aa
-	calr	HDAE5000_MemCopy_Reverse_Helper5
+	calr	HDAE5000_FltDec_DivBy10
 	pushm	(xsp+12)
 	pushw 0x0023
 	pushw 0x94aa
-	calr	HDAE5000_MemCopy_Reverse_Helper8
+	calr	HDAE5000_FltDec_NormalizeLeft
 	lda	xsp, (xsp+10)
 	sub	iz, hl
 	inc	1, qiz
@@ -388,11 +421,11 @@ HDAE5000_String_Format_Helper:
 	jr t, .LMCR_b27c                       ; [68 32] jr T,0x29b27c
 .LMCR_b24a:
 	push xbc
-	calr	HDAE5000_MemCopy_Reverse_Helper6
+	calr	HDAE5000_FltDec_MulBy10
 	pushm	(xsp+12)
 	pushw 0x0023
 	pushw 0x94aa
-	calr	HDAE5000_MemCopy_Reverse_Helper9
+	calr	HDAE5000_FltDec_NormalizeRight
 	lda	xsp, (xsp+10)
 	add	iz, hl
 	inc	1, qiz
@@ -409,7 +442,7 @@ HDAE5000_String_Format_Helper:
 	pushw wa                                ; push WA
 	push xbc
 .LMCR_b27c:
-	calr	HDAE5000_MemCopy_Reverse_Helper
+	calr	HDAE5000_FltDec_ShiftRightBits
 	inc 0, xsp                              ; inc 0,XSP
 	ld	qiz, 1
 .LMCR_b284:
@@ -418,7 +451,7 @@ HDAE5000_String_Format_Helper:
 	add	bc, bc
 	lda xwa, (0x2394aa:24)
 	push_sriw 0x07, 0xE0, 0xE4	; pushw (XWA+BC)
-	calr	HDAE5000_MemCopy_Reverse_Helper3
+	calr	HDAE5000_FltDec_FractionDigits
 	inc 4, xsp                              ; inc 4,XSP
 	inc	1, qiz
 	cpw	qiz, 0x0009
@@ -499,7 +532,8 @@ HDAE5000_String_Format_Helper:
 	lda	xsp, (xsp+16)
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper:
+HDAE5000_FltDec_ShiftRightBits:
+	; shift a limb array right by N bits (limbs hold 8 bits each)
 	dec 0, xsp                              ; dec 0,XSP
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
@@ -567,7 +601,8 @@ HDAE5000_MemCopy_Reverse_Helper:
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper2:
+HDAE5000_FltDec_ShiftLeftBits:
+	; shift a limb array left by N bits, carrying each limb's high byte up
 	ld xiy, (xsp + 0x04)                    ; ld XIY,(XSP+0x04)
 	and16_imm_ri xiy, 0xff, 0x00		; and (XIY),0x00ff
 	ld	ix, 1:i3
@@ -602,7 +637,9 @@ HDAE5000_MemCopy_Reverse_Helper2:
 	jr lt, .LMCR_b3fa                      ; [61 cd] jr LT,0x29b3fa
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper3:
+HDAE5000_FltDec_FractionDigits:
+	; zero the 0x2394EA work area, then repeatedly x10 (FracMulBy10) and
+	; add the integer part as the next decimal digit (AddDigit)
 	pushw iz                                ; push IZ
 	lda xde, (0x2394ea:24)
 	ld	xwa, xde
@@ -637,7 +674,7 @@ HDAE5000_MemCopy_Reverse_Helper3:
 	jr t, .LMCR_b4cc                       ; [68 3d] jr T,0x29b4cc
 .LMCR_b48f:
 	inc	1, iz
-	calr	HDAE5000_MemCopy_Reverse_Helper7
+	calr	HDAE5000_FltDec_FracMulBy10
 .LMCR_b494:
 	ldw	wa, 0x0008
 	sub	wa, (xsp+8)
@@ -648,7 +685,7 @@ HDAE5000_MemCopy_Reverse_Helper3:
 	jr z, .LMCR_b48f                       ; [66 e5] jr Z,0x29b48f
 	pushw iz                                ; push IZ
 	pushw wa                                ; push WA
-	calr	HDAE5000_MemCopy_Reverse_Helper4
+	calr	HDAE5000_FltDec_AddDigit
 	inc 4, xsp                              ; inc 4,XSP
 	ldw	bc, 0x0008
 	sub	bc, (xsp+8)
@@ -661,7 +698,9 @@ HDAE5000_MemCopy_Reverse_Helper3:
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper4:
+HDAE5000_FltDec_AddDigit:
+	; add a value at a position of the 0x23948A decimal digit buffer, with
+	; decimal carry (subtract 10, increment the digit to the left)
 	ld	de, (xsp+6)
 	cp	de, 0x0020
 	jr ge, .LMCR_b4e4                      ; [69 0d] jr GE,0x29b4e4
@@ -692,7 +731,8 @@ HDAE5000_MemCopy_Reverse_Helper4:
 	jr gt, .LMCR_b4f5                      ; [6a e1] jr GT,0x29b4f5
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper5:
+HDAE5000_FltDec_DivBy10:
+	; divide a limb array by 10 in place (DIV per limb, remainder carried down)
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld	xbc, xwa
 	lda	xde, (xwa+18)
@@ -711,7 +751,8 @@ HDAE5000_MemCopy_Reverse_Helper5:
 	jr c, .LMCR_b51d                       ; [67 e0] jr C,0x29b51d
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper6:
+HDAE5000_FltDec_MulBy10:
+	; multiply a 16-limb array by 10 in place with carry propagation
 	pushw iz                                ; push IZ
 	ld	ix, 0:i3
 	ld	xbc, 0:i3
@@ -761,7 +802,8 @@ HDAE5000_MemCopy_Reverse_Helper6:
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper7:
+HDAE5000_FltDec_FracMulBy10:
+	; multiply the 0x2394EA work area (10 limbs) by 10 and normalise carries
 	lda xhl, (0x2394ea:24)
 	ld	xbc, xhl
 	lda	xde, (xhl+20)
@@ -793,7 +835,8 @@ HDAE5000_MemCopy_Reverse_Helper7:
 	jr gt, .LMCR_b5c4                      ; [6a e0] jr GT,0x29b5c4
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper8:
+HDAE5000_FltDec_NormalizeLeft:
+	; shift left until the top limb has bit 7 set; returns HL = shift count
 	dec	2, xsp
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
@@ -838,7 +881,7 @@ HDAE5000_MemCopy_Reverse_Helper8:
 	pushm	(xsp+14)
 	ld xwa, (xsp + 0x0c)                    ; ld XWA,(XSP+0x0c)
 	push xwa
-	calr	HDAE5000_MemCopy_Reverse_Helper2
+	calr	HDAE5000_FltDec_ShiftLeftBits
 	inc 0, xsp                              ; inc 0,XSP
 .LMCR_b643:
 	add	(xsp+2), iz
@@ -853,7 +896,8 @@ HDAE5000_MemCopy_Reverse_Helper8:
 	inc 2, xsp                              ; inc 2,XSP
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper9:
+HDAE5000_FltDec_NormalizeRight:
+	; if the top limb exceeds 8 bits, shift right until it fits; HL = count
 	pushw iz                                ; push IZ
 	ld xde, (xsp + 0x06)                    ; ld XDE,(XSP+0x06)
 	ld	iz, 0:i3
@@ -894,7 +938,7 @@ HDAE5000_MemCopy_Reverse_Helper9:
 	pushw bc                                ; push BC
 	pushw iz                                ; push IZ
 	push xde
-	calr	HDAE5000_MemCopy_Reverse_Helper
+	calr	HDAE5000_FltDec_ShiftRightBits
 	inc 0, xsp                              ; inc 0,XSP
 .LMCR_b6a5:
 	ld	hl, iz
@@ -902,7 +946,9 @@ HDAE5000_MemCopy_Reverse_Helper9:
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_MemCopy_Reverse_Helper10:
+HDAE5000_FltDec_DecimalExponent:
+	; decimal exponent from the binary one: e * 301 / 1000 (log10 2 ~ 0.301),
+	; with the remainder deciding the rounding (HDAE5000_SMod32/_SDiv32 by 1000)
 	dec 0, xsp                              ; dec 0,XSP
 	push xiz
 	ld	wa, (xsp+16)
@@ -924,11 +970,11 @@ HDAE5000_MemCopy_Reverse_Helper10:
 	ld xiz, (xsp + 0x04)                    ; ld XIZ,(XSP+0x04)
 	ld	xwa, xiz
 	lda	xbc, (1000:16)
-	call HDAE5000_Cell_Copy_Buffer_Helper
+	call HDAE5000_SMod32
 	ld (xsp + 0x08), xhl                    ; ld (XSP+0x08),XHL
 	ld	xwa, xiz
 	lda	xbc, (1000:16)
-	call HDAE5000_Cell_Copy_Buffer_Helper2
+	call HDAE5000_SDiv32
 	ld	xiz, xhl
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	cp	xwa, 0x000003d4
@@ -962,7 +1008,12 @@ HDAE5000_MemCopy_Reverse_Helper10:
 
 HDAE5000_Multiply:	; 0x29B72D
 	; 32-bit multiply routine
+	; XHL = low 32 bits of XWA * XBC, from three 16x16 MULs (hi*lo, lo*hi,
+	; lo*lo).  23 bytes.
 ; LMUL: 0x29B72D (402 bytes)
+	; ^ region size, not routine size: soft-float Float_Unpack/Pack, Copy8,
+	;   Copy10, (U)LongToFloat, FloatDiv and the signed divide front end
+	;   follow, each under its own label below.
 
 	ld	hl, qwa
 	mul	xhl, xbc
@@ -976,7 +1027,11 @@ HDAE5000_Multiply:	; 0x29B72D
 	ret
 
 	nop                                     ; nop
-HDAE5000_Multiply_Sub:
+HDAE5000_Float_Unpack:
+	; unpack the IEEE single at (XBC) into the internal form at (XWA):
+	;   +0 s16 unbiased exponent, +2 u8 class flag (1 = zero), +3 u8 sign
+	;   (bit 7), +4 u32 mantissa with the hidden bit restored (bit 23).
+	; Returns L = class flag.
 	ld	xhl, 0:i3
 	ld xix, (xbc)                           ; ld XIX,(XBC)
 	ld	de, qix
@@ -1003,7 +1058,12 @@ HDAE5000_Multiply_Sub:
 	ldib_erp 0xee, 1		; ld QL,1
 	jr t, .LMUL_b76d                       ; [68 f0] jr T,0x29b76d
 	nop                                     ; nop
-HDAE5000_Multiply_Sub2:
+HDAE5000_Float_Pack:
+	; pack the internal form at (XBC) into an IEEE single at (XWA).  Exponent
+	; overflow stores +/-0x7F7FFFFF (FLT_MAX); class flag 8 stores 0; both
+	; set errno (RAM 0x230ECA) = 34 (ERANGE) and call the hook pointer at
+	; RAM 0x23A1A8 when it is non-zero.  Zero (class 1) and exponent
+	; underflow store 0 silently.
 	ld xhl, (xbc)                           ; ld XHL,(XBC)
 	cpib_erp 0xee, 0		; cp QL,0
 	jr nz, .LMUL_b7ac                      ; [6e 27] jr NZ,0x29b7ac
@@ -1046,7 +1106,9 @@ HDAE5000_Multiply_Sub2:
 	call_cc_ri xbc, 14		; call NZ,XBC
 	ret
 
-HDAE5000_Display_String_Render_Helper25:
+HDAE5000_Copy8:
+	; *(double *)XWA = *(double *)XBC -- 8-byte copy.  HDAE5000_DoPrintf uses
+	; it to fetch a double va_arg for %e/%f/%g (ap += 8 first).
 	ld xix, (xbc)                           ; ld XIX,(XBC)
 	ld xiy, (xbc + 0x04)                    ; ld XIY,(XBC+0x04)
 	ld (xwa), xix                           ; ld (XWA),XIX
@@ -1054,7 +1116,9 @@ HDAE5000_Display_String_Render_Helper25:
 	ret
 
 	nop                                     ; nop
-HDAE5000_Multiply_Sub3:
+HDAE5000_Copy10:
+	; 10-byte copy (XBC) -> (XWA): HDAE5000_DoPrintf's long double va_arg
+	; fetch, taken when its flag bit 7 is set (ap += 10 first).
 	ld xix, (xbc)                           ; ld XIX,(XBC)
 	ld xiy, (xbc + 0x04)                    ; ld XIY,(XBC+0x04)
 	ld	hl, (xbc+8)
@@ -1064,33 +1128,43 @@ HDAE5000_Multiply_Sub3:
 	ret
 
 	nop                                     ; nop
+HDAE5000_LongToFloat:
+	; *(float *)XWA = (float)*(long *)XBC.  No caller in this ROM (searched:
+	; symbolic references to this label, which did not exist before, and
+	; the literal 0x29B7FA in every hdae5000 source); library code linked in.
 	push xiz
 	lda	xsp, (xsp-8)
 	ld	xiz, xwa
 	ld	xwa, xsp
 	ld xbc, (xbc)                           ; ld XBC,(XBC)
-	call HDAE5000_Divide_Signed_Sub
+	call HDAE5000_Long_To_Unpacked
 	ld	xwa, xiz
 	ld	xbc, xsp
-	call HDAE5000_Multiply_Sub2
+	call HDAE5000_Float_Pack
 	lda	xsp, (xsp+8)
 	pop xiz                                 ; pop XIZ
 	ret
 
-HDAE5000_PPI_Write_Sector_Helper4:
+HDAE5000_ULongToFloat:
+	; *(float *)XWA = (float)*(unsigned long *)XBC.
 	push xiz
 	lda	xsp, (xsp-8)
 	ld	xiz, xwa
 	ld	xwa, xsp
 	ld xbc, (xbc)                           ; ld XBC,(XBC)
-	call HDAE5000_Multiply_Helper
+	call HDAE5000_ULong_To_Unpacked
 	ld	xwa, xiz
 	ld	xbc, xsp
-	call HDAE5000_Multiply_Sub2
+	call HDAE5000_Float_Pack
 	lda	xsp, (xsp+8)
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FloatDiv_Special:
+	; entered from HDAE5000_Unpacked_Div when either operand's class flag
+	; (+2) is non-zero: a zero divisor (flag bit 0) makes the quotient's
+	; class 8, which HDAE5000_Float_Pack stores as 0 with errno = ERANGE;
+	; otherwise the dividend's special class stands.
 	ld	h, (xwa+2)
 	ld8_src_rid8 xbc, 0x02, l		; ld L,(XBC+0x02)
 	bit 0x00, l		; bit 0x00,L
@@ -1099,28 +1173,34 @@ HDAE5000_PPI_Write_Sector_Helper4:
 	ld	(xwa+2), 0x08
 	ret
 
-HDAE5000_PPI_Write_Sector_Helper5:
+HDAE5000_FloatDiv:
+	; *(float *)XWA = *(float *)XBC / *(float *)XDE: unpack both
+	; (HDAE5000_Float_Unpack), HDAE5000_Unpacked_Div, HDAE5000_Float_Pack.
 	push xiz
 	lda	xsp, (xsp-20)
 	ld	xiz, xde
 	ld (xsp + 0x10), xwa                    ; ld (XSP+0x10),XWA
 	ld	xwa, xsp
-	call HDAE5000_Multiply_Sub
+	call HDAE5000_Float_Unpack
 	ld	xbc, xiz
 	lda	xiz, (xsp+8)
 	lda	xwa, (xiz)
-	call HDAE5000_Multiply_Sub
+	call HDAE5000_Float_Unpack
 	ld	xwa, xsp
 	lda	xbc, (xiz)
-	call HDAE5000_Divide_Signed_Sub3
+	call HDAE5000_Unpacked_Div
 	ld xwa, (xsp + 0x10)                    ; ld XWA,(XSP+0x10)
 	ld	xbc, xsp
-	call HDAE5000_Multiply_Sub2
+	call HDAE5000_Float_Pack
 	lda	xsp, (xsp+20)
 	pop xiz                                 ; pop XIZ
 	ret
 
-.LMUL_b870:
+HDAE5000_SDivMod32_Common:
+	; signed front end of HDAE5000_UDivMod32.  D = 0: remainder (sign of the
+	; dividend); D = 1: quotient (negated when exactly one operand is
+	; negative).  E collects the operand signs (bit 0 dividend, bit 1
+	; divisor) before both are made positive.
 	ld	e, 0x00:opc
 	bit	0x0f, qwa
 	jr z, .LMUL_b881                       ; [66 09] jr Z,0x29b881
@@ -1137,7 +1217,7 @@ HDAE5000_PPI_Write_Sector_Helper5:
 	inc 1, xbc                              ; inc 1,XBC
 .LMUL_b891:
 	pushw de                                ; push DE
-	calr	HDAE5000_Divide_Signed
+	calr	HDAE5000_UDivMod32
 	popw wa                                 ; pop WA
 	cp	w, 1:i3
 	jr z, .LMUL_b8a3                       ; [66 09] jr Z,0x29b8a3
@@ -1161,23 +1241,33 @@ HDAE5000_PPI_Write_Sector_Helper5:
 	inc 1, xhl                              ; inc 1,XHL
 	ret
 
-HDAE5000_Cell_Copy_Buffer_Helper:
+HDAE5000_SMod32:
+	; XHL = XWA % XBC, signed (D = 0 into HDAE5000_SDivMod32_Common)
 	ld	d, 0x00:opc
-	jr t, .LMUL_b870                       ; [68 b5] jr T,0x29b870
-HDAE5000_Cell_Copy_Buffer_Helper2:
+	jr t, HDAE5000_SDivMod32_Common                       ; [68 b5] jr T,0x29b870
+HDAE5000_SDiv32:
+	; XHL = XWA / XBC, signed (D = 1 into HDAE5000_SDivMod32_Common)
 	ld	d, 0x01:opc
-	jr t, .LMUL_b870                       ; [68 b1] jr T,0x29b870
+	jr t, HDAE5000_SDivMod32_Common                       ; [68 b1] jr T,0x29b870
 
 
-HDAE5000_Divide_Unsigned:	; 0x29B8BF (6 bytes)
-	; Unsigned 32÷32 divide - calls signed divide then copies result
-	calr HDAE5000_Divide_Signed
-	ld xhl, xde		; copy quotient from XDE to XHL
+HDAE5000_UMod32:	; 0x29B8BF (6 bytes)
+	; XHL = XWA % XBC, unsigned: calls HDAE5000_UDivMod32 and returns its
+	; remainder.  (Was named Divide_Unsigned: XDE is the REMAINDER, and the
+	; decimal converters' own comments already read it as one.)
+	calr HDAE5000_UDivMod32
+	ld xhl, xde		; XHL = remainder (XDE)
 	ret
 
-HDAE5000_Divide_Signed:	; 0x29B8C5
-	; Signed 32÷32 divide (used by decimal string conversion)
+HDAE5000_UDivMod32:	; 0x29B8C5
+	; UNSIGNED 32/32 divide: XHL = XWA / XBC, XDE = XWA % XBC.
+	; Unsigned throughout: `jr c`/`jr ule` compares, a 32/16 DIV fast path
+	; when QBC = 0, else a shift-and-subtract loop.  XBC = 0 returns
+	; XHL = 0xFFFFFFFF.  (Was named Divide_Signed; the signed forms are
+	; HDAE5000_SDiv32 / HDAE5000_SMod32, which call this core.)
 ; LDIV: 0x29B8C5 (1819 bytes)
+	; ^ region size: the double-precision pack, (U)long->unpacked and
+	;   float->double routines below share it; this routine is 125 bytes.
 
 	cp	xbc, 0x00000001
 	jr z, .LDIV_b8fe                       ; [66 31] jr Z,0x29b8fe
@@ -1253,7 +1343,12 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	ld	xde, xwa
 	ret
 
-HDAE5000_Divide_Signed_Helper:
+HDAE5000_Double_Pack:
+	; pack the 12-byte internal form at (XBC) (exponent/class/sign word,
+	; +4 low and +8 high mantissa longs) into an IEEE double at (XWA),
+	; bias 0x3FF; exponent overflow and class 8 store DBL_MAX
+	; (0x7FEFFFFF FFFFFFFF) with the sign, set errno = 34 (ERANGE) and call
+	; the RAM 0x23A1A8 hook; class 1 (zero) and underflow store 0.
 	ld xhl, (xbc)                           ; ld XHL,(XBC)
 	cpib_erp 0xee, 0		; cp QL,0
 	jr nz, .LDIV_b97b                      ; [6e 32] jr NZ,0x29b97b
@@ -1299,7 +1394,9 @@ HDAE5000_Divide_Signed_Helper:
 	ret
 
 	nop                                     ; nop
-HDAE5000_Divide_Signed_Sub:
+HDAE5000_Long_To_Unpacked:
+	; signed long XBC -> internal form at (XWA): records the sign, negates,
+	; then HDAE5000_ULong_To_Unpacked.
 	ld	e, 0x00:opc
 	ldcf	0x0f, qbc
 	stcf8ri 7, e		; stcf 0x07,E
@@ -1308,11 +1405,14 @@ HDAE5000_Divide_Signed_Sub:
 	cpl	bc
 	inc 1, xbc                              ; inc 1,XBC
 .LDIV_b9be:
-	calr	HDAE5000_Multiply_Helper
+	calr	HDAE5000_ULong_To_Unpacked
 	ld	(xiy+3), e
 	ret
 
-HDAE5000_Multiply_Helper:
+HDAE5000_ULong_To_Unpacked:
+	; unsigned long XBC -> internal form at (XWA): BS1B finds the top bit,
+	; the value is shifted to a 24-bit mantissa (rounded) and the exponent
+	; stored; XBC = 0 sets class flag 1 (zero).
 	ld	xiy, xwa
 	or xbc, xbc                             ; or XBC,XBC
 	jr z, .LDIV_ba1a                       ; [66 4f] jr Z,0x29ba1a
@@ -1360,12 +1460,14 @@ HDAE5000_Multiply_Helper:
 	ret
 
 	nop                                     ; nop
-HDAE5000_Divide_Signed_Sub2:
+HDAE5000_FloatToDouble:
+	; *(double *)XWA = (double)*(float *)XBC: Float_Unpack, widen the
+	; mantissa by three right shifts into a high/low pair, Double_Pack.
 	push xiz
 	lda	xsp, (xsp-12)
 	ld	xiz, xwa
 	ld	xwa, xsp
-	call HDAE5000_Multiply_Sub
+	call HDAE5000_Float_Unpack
 	cp	l, 0:i3
 	jr nz, .LDIV_ba56                      ; [6e 26] jr NZ,0x29ba56
 	ld xhl, (xsp + 0x04)                    ; ld XHL,(XSP+0x04)
@@ -1384,16 +1486,19 @@ HDAE5000_Divide_Signed_Sub2:
 .LDIV_ba56:
 	ld	xwa, xiz
 	ld	xbc, xsp
-	call HDAE5000_Divide_Signed_Helper
+	call HDAE5000_Double_Pack
 	lda	xsp, (xsp+12)
 	pop xiz                                 ; pop XIZ
 	ret
 
 	nop                                     ; nop
-HDAE5000_Divide_Signed_Sub3:
+HDAE5000_Unpacked_Div:
+	; (XWA) /= (XBC) on the internal form: exponents subtracted, signs
+	; XORed, mantissas divided four quotient bits per pass; special
+	; classes go to HDAE5000_FloatDiv_Special.
 	ld	e, (xwa+2)
 	or	e, (xwa+2)
-	jp	nz, (0x29B830:24)
+	jp	nz, (HDAE5000_FloatDiv_Special:24)
 	push xiz
 	push xwa
 	ld16_src_rid8 xbc, 0x00, hl		; ld HL,(XBC+0x00)
