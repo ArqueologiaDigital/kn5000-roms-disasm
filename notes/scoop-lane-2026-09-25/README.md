@@ -207,3 +207,12 @@ and they belong to lane `sys` to delete.
 * naming: handler routines reached through the dispatch tables carry
   `<Table>_Target<k>` names; the sound-editor code (all of
   scoop_editor_data.s, 3,4xx instructions) has only structural labels.
+* scoop_editor_data.s is entered through the pointer table
+  `EmbeddedPtrTable_v*_gui_display_struct_data_000B00` in
+  `kn5000_v*_program.s`: one entry is `.long Scoop_SoundEditorData`, 187 more
+  point into this file as bare numbers (lines 182-449 there, v10 and v7 alike;
+  counted by matching each `.long 0x...` against the file's span).  Those, and
+  the name `Scoop_SoundEditorData` itself (code, not data), belong to the lane
+  that owns `kn5000_v*_program.s` and `shared/positional_labels.s`.
+  The file's header, which called it "display data ... parameter bytecode ...
+  configuration tables ... dirty-region data", was corrected in this lane.

@@ -1,10 +1,30 @@
 ; =============================================================================
-; Scoop Editor & Display Parameter Data (1.2K lines)
+; Sound-editor title-function handlers (code; historical file name)
 ; =============================================================================
 ;
-; Sound editor display data, performance mode parameter
-; bytecode, Scoop oscilloscope editor configuration tables,
-; and display dirty-region data.
+; CODE, not data: 3,422 TLCS-900 instructions and not one .byte/.ascii/.long
+; directive, re-assembled byte-identical to the dump.  Entered at
+; Scoop_SoundEditorData -- named by one `.long` of the pointer table
+; EmbeddedPtrTable_v*_gui_display_struct_data_000B00 in kn5000_v*_program.s,
+; where 187 more `.long`s point into this file as bare numbers -- and at the
+; 15 interior offsets that the title-function stubs of
+; audio/sound_editor_routines.s reach by `jp Scoop_SoundEditorData_0x..`
+; (e.g. SeAmpAmp1TitleFunc_DisplayData).  The body is almost all calls to
+; SeMenu_* (SeMenu_SendEvent, SeMenu_LoadPartParam, SeMenu_LoadObjEntries...).
+; Framing: control-flow trace, `scripts/converters/scoop_reframe.py plan`
+; (commands in notes/scoop-lane-2026-09-25/README.md).  In v10 it reaches
+; 9,162 of the 9,199 bytes from 16 named entries plus 185 it takes from
+; pointer/`ld` references and anchored runs; the other 37 B are three short
+; tails that decode cleanly and show no data evidence, so they stay code.
+;
+; CORRECTED 2026-09-25: this header used to say "Sound editor display data,
+; performance mode parameter bytecode, Scoop oscilloscope editor configuration
+; tables, and display dirty-region data."  No reader treats these bytes as
+; data and every byte assembles back to the ROM as an instruction, so the
+; claim is withdrawn (the 177 .byte/.long lines of the v10/v9 source and the 9
+; romslices of v7 that it may have rested on are re-spelled as instructions).
+; The label name Scoop_SoundEditorData is kept: it is referenced from files
+; outside this lane.
 ; =============================================================================
 
 
