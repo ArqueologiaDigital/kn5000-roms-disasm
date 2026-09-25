@@ -9502,7 +9502,7 @@ Sprintf_HexDigitsUpper:
 ; ROM image of initialised RAM: Boot_InitWorkRAM_ROMCopy1_Start (0xEF0BB0) copies
 ; 8,606 bytes from here to RAM 0x3D524 (`ld xde,0x3D524; ld xhl,<this>;
 ; ld xbc,8606; ldir`) -- so byte <this>+k is the power-on value of RAM
-; 0x3D524+k.  The image runs on through ScaleNote_Display_Table and into
+; 0x3D524+k.  The image runs on through the RamInit_* tables and into
 ; ui_widgets/sequencer_channel_containers.s (to 0xEEFA65).  The code reads
 ; the RAM copy, not these bytes: RAM 0x3D528 / 0x3D52C are Heap_Alloc's and
 ; Free's variables; 213 more cells up to 0x3D991 are named by 32-bit pointers
@@ -9585,7 +9585,9 @@ WorkRamInit_Image:
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x07, 0x00, 0x64, 0x01, 0x00, 0x00	; RAM 0x3D964
 	.byte 0xff, 0xff, 0x20, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x37, 0x00, 0x97, 0x00, 0x59, 0x00, 0xa4, 0x00	; RAM 0x3D974
 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00	; RAM 0x3D984
-ScaleNote_Display_Table:
+; Initial value of RAM 0x3D992: 13 x u32 pointers to the number strings NumStr_0..11 and NoteStepDisplayData.
+; Read from RAM by CmpBndRng_BoundCase (0xF1A35A): `cp bc,12; jr gt`, `sla bc,2; lda xde,(0x3D992); ld_rrl xbc,xde,bc`.
+RamInit_NumStrPtrs:
 	.long NumStr_0
 	.long NumStr_1
 	.long NumStr_2
@@ -9599,6 +9601,9 @@ ScaleNote_Display_Table:
 	.long NumStr_10
 	.long NumStr_11
 	.long NoteStepDisplayData
+; Initial value of RAM 0x3D9C6: 12 x u32 pointers to the note-name strings (C, Db, D ... B).
+; Read from RAM by UI_COMPONENT_DISPATCH_CASE2 (0xF1A820): `ld xwa,0x3D9C6` (also GridCheck_SetMode1 0xF1A98B).
+RamInit_NoteNamePtrs:
 	.long NoteDataC_Natural
 	.long NoteDataD_Flat
 	.long NoteDataD_Natural
@@ -9611,12 +9616,24 @@ ScaleNote_Display_Table:
 	.long NoteDataA_Natural
 	.long NoteDataB_Flat
 	.long NoteDataB_Natural
+; Initial value of RAM 0x3D9F6: 2 x u32 pointers to StrDisable / StrEnable.
+; Read from RAM by UI_COMPONENT_DISPATCH_CASE1 (0xF1A7E5): `sla wa,2; lda xbc,(0x3D9F6); ld_rrl xwa,xbc,wa`.
+RamInit_DisableEnablePtrs:
 	.long StrDisable
 	.long StrEnable
+; Initial value of RAM 0x3D9FE: 2 x u32 pointers to StrMajor / StrMinor.
+; Read from RAM by UI_COMPONENT_DISPATCH_CASE3 (0xF1A82B): `ld xwa,0x3D9FE`, index = bit 4 of RAM 0x34EA.
+RamInit_MajorMinorPtrs:
 	.long StrMajor
 	.long StrMinor
+; Initial value of RAM 0x3DA06: 2 x u32 pointers to StrNormal / StrSeventh.
+; Read from RAM by CmpSetP1_GridCheck_Return (0xF1A78B): `lda xhl,(0x3DA06)`, index = value - 1.
+RamInit_NormalSeventhPtrs:
 	.long StrNormal
 	.long StrSeventh
+; Initial value of RAM 0x3DA0E: 16 x u32 pointers to the time-signature strings 1/2 .. 4/8.
+; Read from RAM by UI_COMPONENT_DISPATCH_CASE1 (0xF1A7E5): `ldb_d8 a,(0x34D8); sla wa,2; lda xbc,(0x3DA0E); ld_rrl`.
+RamInit_TimeSigPtrs:
 	.long StrTimeSig_1_2
 	.long StrTimeSig_2_2
 	.long StrTimeSig_3_2
@@ -9633,6 +9650,9 @@ ScaleNote_Display_Table:
 	.long StrTimeSig_2_8
 	.long StrTimeSig_3_8
 	.long StrTimeSig_4_8
+; Initial value of RAM 0x3DA4E: 128 x u32 pointers to the pan strings StrPanLeft64 .. StrPanCenter .. StrPanRight63.
+; Read from RAM by CmpSet_GridCheck_Dispatch (0xF1A95C): `ld xiz,0x3DA4E` then a lookup by pan value.
+RamInit_PanStrPtrs:
 	.long StrPanLeft64
 	.long StrPanLeft63
 	.long StrPanLeft62
@@ -9761,6 +9781,9 @@ ScaleNote_Display_Table:
 	.long StrPanRight61
 	.long StrPanRight62
 	.long StrPanRight63
+; Initial value of RAM 0x3DC4E: 17 x u32 pointers to StrBeatOff, StrBeat01 .. StrBeat16.
+; Read from RAM by S2c_GridCheck_Dispatch (0xF1B341): `sla wa,2; lda xbc,(0x3DC4E); ld_rrl xwa,xbc,wa`.
+RamInit_BeatStrPtrs:
 	.long StrBeatOff
 	.long StrBeat01
 	.long StrBeat02
@@ -9778,6 +9801,9 @@ ScaleNote_Display_Table:
 	.long StrBeat14
 	.long StrBeat15
 	.long StrBeat16
+; Initial value of RAM 0x3DC92: 10 x u32 pointers to the style-genre strings (8 Beat .. Waltz).
+; Read from RAM by EasyCmp_GridCheck_EventEnc (0xF1C372): `sla wa,2; lda xbc,(0x3DC92); ld_rrl xwa,xbc,wa`.
+RamInit_GenreStrPtrs:
 	.long StrGenre_8Beat
 	.long StrGenre_16Beat
 	.long StrGenre_DancePop
@@ -9788,8 +9814,12 @@ ScaleNote_Display_Table:
 	.long StrGenre_Country
 	.long StrGenre_RockBallad
 	.long StrGenre_Waltz
-	.byte 0xff, 0xff
-	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x80, 0xf9
-	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00
+; Initial values of RAM 0x3DCBA..0x3DCD3: per-widget state cells named by
+; 32-bit pointers in NAKA widget descriptors (NakaData_SeqChannels+0x1E,
+; FDTest_DiagList_Total/NG/OK+0x2E, FDTest_Container_DebugHDAE1/2+0x1E,
+; FDTest_ConsoleArea1/2+0x26, FDTest_StatusBar1+0x16).  The image continues
+; in ui_widgets/sequencer_channel_containers.s.
+RamInit_WidgetState_3DCBA:
+	.byte 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff	; RAM 0x3DCBA
+	.byte 0xff, 0x00, 0x00, 0x80, 0xf9, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00	; RAM 0x3DCC7
 .include "ui_widgets/sequencer_channel_containers.s"

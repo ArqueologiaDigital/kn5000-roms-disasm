@@ -148,7 +148,7 @@ obj(0xEED8C8, 0xEEDD36, "WorkRamInit_Image", "byte", [
     "ROM image of initialised RAM: Boot_InitWorkRAM_ROMCopy1_Start (0xEF0BB0) copies",
     "8,606 bytes from here to RAM 0x3D524 (`ld xde,0x3D524; ld xhl,<this>;",
     "ld xbc,8606; ldir`) -- so byte <this>+k is the power-on value of RAM",
-    "0x3D524+k.  The image runs on through ScaleNote_Display_Table and into",
+    "0x3D524+k.  The image runs on through the RamInit_* tables and into",
     "ui_widgets/sequencer_channel_containers.s (to 0xEEFA65).  The code reads",
     "the RAM copy, not these bytes: RAM 0x3D528 / 0x3D52C are Heap_Alloc's and",
     "Free's variables; 213 more cells up to 0x3D991 are named by 32-bit pointers",
