@@ -74489,7 +74489,7 @@ sub_FAA967:
 	ld XIX,XIY                                           ; FAA9A2  ed 8c
 	ld BC,DE                                             ; FAA9A4  da 89
 	extz XBC                                             ; FAA9A6  e9 12
-	add XBC,PtrTable_FAD28A                              ; FAA9A8  e9 c8 8a d2 fa 00
+	add XBC,ParamNumber_DefaultRecordPtrs                              ; FAA9A8  e9 c8 8a d2 fa 00
 	ld XBC,(XBC)                                         ; FAA9AE  a1 21
 	inc 2,XBC                                            ; FAA9B0  e9 62
 	ld (xiz-4), xbc                                      ; FAA9B2  be fc 61
@@ -74986,7 +74986,7 @@ sub_FAAE2A:
 	ld (xiz-14), xiy                                     ; FAAE3F  be f2 65
 	ld BC,DE                                             ; FAAE42  da 89
 	extz XBC                                             ; FAAE44  e9 12
-	add XBC,PtrTable_FAD28A                              ; FAAE46  e9 c8 8a d2 fa 00
+	add XBC,ParamNumber_DefaultRecordPtrs                              ; FAAE46  e9 c8 8a d2 fa 00
 	ld XBC,(XBC)                                         ; FAAE4C  a1 21
 	ld XIX,XBC                                           ; FAAE4E  e9 8c
 	ld h, 0x00:opc                                          ; FAAE50  26 00
@@ -75028,7 +75028,7 @@ sub_FAAE2A:
 	ld (xiz-14), xiy                                     ; FAAEA0  be f2 65
 	ld BC,DE                                             ; FAAEA3  da 89
 	extz XBC                                             ; FAAEA5  e9 12
-	add XBC,PtrTable_FAD28A+0x80                         ; FAAEA7  e9 c8 0a d3 fa 00
+	add XBC,ParamNumber_DefaultRecordPtrs+0x80                         ; FAAEA7  e9 c8 0a d3 fa 00
 	ld XBC,(XBC)                                         ; FAAEAD  a1 21
 	ld XIX,XBC                                           ; FAAEAF  e9 8c
 	ld h, 0x00:opc                                          ; FAAEB1  26 00
@@ -78713,7 +78713,8 @@ BitMask32_Table:
 	.long 0x40000000                                 ; FAD282  [ 30]
 	.long 0x80000000                                 ; FAD286  [ 31]
 ; ---------------------------------------------------------------------
-; PtrTable_FAD28A -- 64 LE32 addresses inside prom_b, stepping by 0x40
+; ParamNumber_DefaultRecordPtrs -- 64 LE32 addresses inside prom_b, stepping by 0x40
+;          (was ParamNumber_DefaultRecordPtrs): the default record of each parameter number.
 ;
 ; Read by: TWO sites, both `add XBC,0x00FAD28A / ld XBC,(XBC)` -- 0xFAA9A8 and
 ;          0xFAAE46 -- so a 32-bit value indexed by an already-scaled register.
@@ -78727,10 +78728,23 @@ BitMask32_Table:
 ;          (0xFAD38A - 0xFAD28A) / 4 = 64.  ★ LAST-ENTRY TEST: entry 63 is
 ;          0x00F3FCA0 and the four bytes after it are 78 60 61 62 -- not an
 ;          address, and the start of a run of small bytes.
-; Unknown:  what lives at 0xF3Fxxx in prom_b.  That is another lane's image and
-;          nothing here reads through the pointer.
+; WHAT THE ENTRIES ARE -- established 2026-09-25 (lane proma), checks D1-D3 of
+;          notes/proma-2026-09-25/gen_default_records.py: entry[n] is the ROM
+;          DEFAULT of the RAM record ParamNumber_RecordPtrs[n].  The two tables
+;          move in lockstep, entry[n] = ParamNumber_RecordPtrs[n] + 0xF37DDE for
+;          all 64 (the +0x80 jump after part 7 and the +0x20 second halves
+;          included); the prom_b record at entry[n] is `[op][len][payload]`
+;          (prom_b's 0xF3F400 module framing) with op == n and len == 0x1E;
+;          and both readers copy payload bytes into the RAM record of the same
+;          number -- sub_FAAE2A all `len` bytes from +2 (numbers 0x00-0x1F,
+;          then 0x20-0x3F through +0x80), sub_FAA967 bytes 0x0D..0x15 of the
+;          32 first halves.  So prom_b 0xF3F480-0xF3FCBF is the part records'
+;          factory defaults.
+; ★ CORRECTED: the two lines this replaces said what lives at 0xF3Fxxx was
+;          open and that nothing here reads through the pointer; both readers
+;          above do.
 ; ---------------------------------------------------------------------
-PtrTable_FAD28A:
+ParamNumber_DefaultRecordPtrs:
 	.long Rec_F3F480                                 ; FAD28A  [  0]
 	.long Rec_F3F4C0                                 ; FAD28E  [  1]
 	.long Rec_F3F500                                 ; FAD292  [  2]
@@ -78871,7 +78885,7 @@ Bytes_0F_FAD3CB:
 ; the first byte of the module's padding).
 ;
 ; What that copy contains, read as the original's structure: the last 14 of
-; PtrTable_FAD28A's 64 entries (0x00F3F960 ... 0x00F3FCA0), then all 13 bytes
+; ParamNumber_DefaultRecordPtrs's 64 entries (0x00F3F960 ... 0x00F3FCA0), then all 13 bytes
 ; of ByteTable_FAD38A, then all 13 entries of PtrTable_FAD397, then 32 more
 ; 0x0F bytes.  ⚠ That is the ORIGINAL's framing carried over, not a framing
 ; derived here: NOTHING NAMES 0xFAD3EB, 0xFAD3EC, 0xFAD424, 0xFAD431 or
