@@ -6016,6 +6016,16 @@ MidiMenu_ApFunctionNameTable:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423. This empty name is the table's terminator.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_EmptyFuncName
+; NakaInst_EmptyFuncName -- name string of MIDI-menu procedure 60 (""):
+; entry 60 of MidiMenu_ApFunctionNameTable, registered by InitializeEast
+; (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423; this empty name is the
+; terminator.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_EmptyFuncName[2].
+; -----------------------------------------------------------------------------
 NakaInst_EmptyFuncName:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24598, 0x2
 ; [naka_s_headers:short] NakaInst_RevEqOnOffFunc
@@ -6023,6 +6033,16 @@ NakaInst_EmptyFuncName:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_RevEqOnOffFunc
+; NakaInst_RevEqOnOffFunc -- name string of MIDI-menu procedure 59
+; ("RevEqOnOffFunc"): entry 59 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_RevEqOnOffFunc[16].
+; -----------------------------------------------------------------------------
 NakaInst_RevEqOnOffFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2459A, 0x10
 ; [naka_s_headers:short] NakaInst_RevEqSelFunc
@@ -6030,6 +6050,15 @@ NakaInst_RevEqOnOffFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_RevEqSelFunc
+; NakaInst_RevEqSelFunc -- name string of MIDI-menu procedure 58
+; ("RevEqSelFunc"): entry 58 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_RevEqSelFunc[14].
+; -----------------------------------------------------------------------------
 NakaInst_RevEqSelFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245AA, 0xE
 ; [naka_s_headers:short] NakaInst_EqOnOffFunc
@@ -6037,6 +6066,15 @@ NakaInst_RevEqSelFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_EqOnOffFunc
+; NakaInst_EqOnOffFunc -- name string of MIDI-menu procedure 57
+; ("EqOnOffFunc"): entry 57 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_EqOnOffFunc[12].
+; -----------------------------------------------------------------------------
 NakaInst_EqOnOffFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245B8, 0xC
 ; [naka_s_headers:short] NakaInst_EqSelFunc
@@ -6044,6 +6082,15 @@ NakaInst_EqOnOffFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_EqSelFunc
+; NakaInst_EqSelFunc -- name string of MIDI-menu procedure 56
+; ("EqSelFunc"): entry 56 of MidiMenu_ApFunctionNameTable, registered by
+; InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_EqSelFunc[10].
+; -----------------------------------------------------------------------------
 NakaInst_EqSelFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245C4, 0xA
 ; [naka_s_headers:short] NakaInst_RevSelFunc
@@ -6051,6 +6098,15 @@ NakaInst_EqSelFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_RevSelFunc
+; NakaInst_RevSelFunc -- name string of MIDI-menu procedure 55
+; ("RevSelFunc"): entry 55 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_RevSelFunc[12].
+; -----------------------------------------------------------------------------
 NakaInst_RevSelFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245CE, 0xC
 ; [naka_s_headers:short] NakaInst_SplitPointFunc
@@ -6058,6 +6114,16 @@ NakaInst_RevSelFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_SplitPointFunc
+; NakaInst_SplitPointFunc -- name string of MIDI-menu procedure 54
+; ("SplitPointFunc"): entry 54 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_SplitPointFunc[16].
+; -----------------------------------------------------------------------------
 NakaInst_SplitPointFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245DA, 0x10
 ; [naka_s_headers:short] NakaInst_StsSplitCheck
@@ -6065,6 +6131,15 @@ NakaInst_SplitPointFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_StsSplitCheck
+; NakaInst_StsSplitCheck -- name string of MIDI-menu procedure 53
+; ("StsSplitCheck"): entry 53 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_StsSplitCheck[14].
+; -----------------------------------------------------------------------------
 NakaInst_StsSplitCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245EA, 0xE
 ; [naka_s_headers:short] NakaInst_InOutGridCheck
@@ -6072,6 +6147,16 @@ NakaInst_StsSplitCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_InOutGridCheck
+; NakaInst_InOutGridCheck -- name string of MIDI-menu procedure 52
+; ("InOutGridCheck"): entry 52 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_InOutGridCheck[16].
+; -----------------------------------------------------------------------------
 NakaInst_InOutGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245F8, 0x10
 ; [naka_s_headers:short] NakaInst_TtMdInOut
@@ -6079,6 +6164,15 @@ NakaInst_InOutGridCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdInOut
+; NakaInst_TtMdInOut -- name string of MIDI-menu procedure 51
+; ("TtMdInOut"): entry 51 of MidiMenu_ApFunctionNameTable, registered by
+; InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdInOut[10].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdInOut:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24608, 0xA
 ; [naka_s_headers:short] NakaInst_FadeSetGridCheck
@@ -6086,6 +6180,16 @@ NakaInst_TtMdInOut:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_FadeSetGridCheck
+; NakaInst_FadeSetGridCheck -- name string of MIDI-menu procedure 50
+; ("FadeSetGridCheck"): entry 50 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_FadeSetGridCheck[18].
+; -----------------------------------------------------------------------------
 NakaInst_FadeSetGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24612, 0x12
 ; [naka_s_headers:short] NakaInst_TtFadeInOut
@@ -6093,6 +6197,15 @@ NakaInst_FadeSetGridCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtFadeInOut
+; NakaInst_TtFadeInOut -- name string of MIDI-menu procedure 49
+; ("TtFadeInOut"): entry 49 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtFadeInOut[12].
+; -----------------------------------------------------------------------------
 NakaInst_TtFadeInOut:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24624, 0xC
 ; [naka_s_headers:short] NakaInst_VocalistPage2OKFunc
@@ -6100,6 +6213,16 @@ NakaInst_TtFadeInOut:
 ; 48 of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_VocalistPage2OKFunc
+; NakaInst_VocalistPage2OKFunc -- name string of MIDI-menu procedure 48
+; ("VocalistPage2OKFunc"): entry 48 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_VocalistPage2OKFunc[20].
+; -----------------------------------------------------------------------------
 NakaInst_VocalistPage2OKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24630, 0x14
 ; [naka_s_headers:short] NakaInst_VocalistPage1OKFunc
@@ -6107,6 +6230,16 @@ NakaInst_VocalistPage2OKFunc:
 ; 47 of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_VocalistPage1OKFunc
+; NakaInst_VocalistPage1OKFunc -- name string of MIDI-menu procedure 47
+; ("VocalistPage1OKFunc"): entry 47 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_VocalistPage1OKFunc[20].
+; -----------------------------------------------------------------------------
 NakaInst_VocalistPage1OKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24644, 0x14
 ; [naka_s_headers:short] NakaInst_VocalistGridCheck
@@ -6114,6 +6247,16 @@ NakaInst_VocalistPage1OKFunc:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_VocalistGridCheck
+; NakaInst_VocalistGridCheck -- name string of MIDI-menu procedure 46
+; ("VocalistGridCheck"): entry 46 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_VocalistGridCheck[18].
+; -----------------------------------------------------------------------------
 NakaInst_VocalistGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24658, 0x12
 ; [naka_s_headers:short] NakaInst_TtVocalistWorkstation
@@ -6121,6 +6264,17 @@ NakaInst_VocalistGridCheck:
 ; 45 of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtVocalistWorkstation
+; NakaInst_TtVocalistWorkstation -- name string of MIDI-menu procedure
+; 45 ("TtVocalistWorkstation"): entry 45 of
+; MidiMenu_ApFunctionNameTable, registered by InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_TtVocalistWorkstation[22].
+; -----------------------------------------------------------------------------
 NakaInst_TtVocalistWorkstation:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2466A, 0x16
 ; [naka_s_headers:short] NakaInst_HarmOnOffFunc
@@ -6128,6 +6282,15 @@ NakaInst_TtVocalistWorkstation:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_HarmOnOffFunc
+; NakaInst_HarmOnOffFunc -- name string of MIDI-menu procedure 44
+; ("HarmOnOffFunc"): entry 44 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_HarmOnOffFunc[14].
+; -----------------------------------------------------------------------------
 NakaInst_HarmOnOffFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24680, 0xE
 ; [naka_s_headers:short] NakaInst_GMNoFunc
@@ -6135,6 +6298,15 @@ NakaInst_HarmOnOffFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_GMNoFunc
+; NakaInst_GMNoFunc -- name string of MIDI-menu procedure 43
+; ("GMNoFunc"): entry 43 of MidiMenu_ApFunctionNameTable, registered by
+; InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_GMNoFunc[10].
+; -----------------------------------------------------------------------------
 NakaInst_GMNoFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2468E, 0xA
 ; [naka_s_headers:short] NakaInst_GMYesFunc
@@ -6142,6 +6314,15 @@ NakaInst_GMNoFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_GMYesFunc
+; NakaInst_GMYesFunc -- name string of MIDI-menu procedure 42
+; ("GMYesFunc"): entry 42 of MidiMenu_ApFunctionNameTable, registered by
+; InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_GMYesFunc[10].
+; -----------------------------------------------------------------------------
 NakaInst_GMYesFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24698, 0xA
 ; [naka_s_headers:short] NakaInst_StsAreYouSureCheck
@@ -6149,6 +6330,16 @@ NakaInst_GMYesFunc:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_StsAreYouSureCheck
+; NakaInst_StsAreYouSureCheck -- name string of MIDI-menu procedure 41
+; ("StsAreYouSureCheck"): entry 41 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_StsAreYouSureCheck[20].
+; -----------------------------------------------------------------------------
 NakaInst_StsAreYouSureCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246A2, 0x14
 ; [naka_s_headers:short] NakaInst_StsGMOffCheck
@@ -6156,6 +6347,15 @@ NakaInst_StsAreYouSureCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_StsGMOffCheck
+; NakaInst_StsGMOffCheck -- name string of MIDI-menu procedure 40
+; ("StsGMOffCheck"): entry 40 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_StsGMOffCheck[14].
+; -----------------------------------------------------------------------------
 NakaInst_StsGMOffCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246B6, 0xE
 ; [naka_s_headers:short] NakaInst_StsGMOnCheck
@@ -6163,6 +6363,15 @@ NakaInst_StsGMOffCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_StsGMOnCheck
+; NakaInst_StsGMOnCheck -- name string of MIDI-menu procedure 39
+; ("StsGMOnCheck"): entry 39 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_StsGMOnCheck[14].
+; -----------------------------------------------------------------------------
 NakaInst_StsGMOnCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246C4, 0xE
 ; [naka_s_headers:short] NakaInst_StsAttentionCheck
@@ -6170,6 +6379,16 @@ NakaInst_StsGMOnCheck:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_StsAttentionCheck
+; NakaInst_StsAttentionCheck -- name string of MIDI-menu procedure 38
+; ("StsAttentionCheck"): entry 38 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_StsAttentionCheck[18].
+; -----------------------------------------------------------------------------
 NakaInst_StsAttentionCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246D2, 0x12
 ; [naka_s_headers:short] NakaInst_GMOKFunc
@@ -6177,6 +6396,15 @@ NakaInst_StsAttentionCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_GMOKFunc
+; NakaInst_GMOKFunc -- name string of MIDI-menu procedure 37
+; ("GMOKFunc"): entry 37 of MidiMenu_ApFunctionNameTable, registered by
+; InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_GMOKFunc[10].
+; -----------------------------------------------------------------------------
 NakaInst_GMOKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246E4, 0xA
 ; [naka_s_headers:short] NakaInst_TtMdGm
@@ -6184,6 +6412,15 @@ NakaInst_GMOKFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdGm
+; NakaInst_TtMdGm -- name string of MIDI-menu procedure 36 ("TtMdGm"):
+; entry 36 of MidiMenu_ApFunctionNameTable, registered by InitializeEast
+; (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdGm[8].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdGm:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246EE, 0x8
 ; [naka_s_headers:short] NakaInst_BitmapBmphk
@@ -6191,6 +6428,15 @@ NakaInst_TtMdGm:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_BitmapBmphk
+; NakaInst_BitmapBmphk -- name string of MIDI-menu procedure 35
+; ("BitmapBmphk"): entry 35 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_BitmapBmphk[12].
+; -----------------------------------------------------------------------------
 NakaInst_BitmapBmphk:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246F6, 0xC
 ; [naka_s_headers:short] NakaInst_MdPresetWithFunc
@@ -6198,6 +6444,16 @@ NakaInst_BitmapBmphk:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MdPresetWithFunc
+; NakaInst_MdPresetWithFunc -- name string of MIDI-menu procedure 34
+; ("MdPresetWithFunc"): entry 34 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_MdPresetWithFunc[18].
+; -----------------------------------------------------------------------------
 NakaInst_MdPresetWithFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24702, 0x12
 ; [naka_s_headers:short] NakaInst_MdPresetWithoutFunc
@@ -6205,6 +6461,16 @@ NakaInst_MdPresetWithFunc:
 ; 33 of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MdPresetWithoutFunc
+; NakaInst_MdPresetWithoutFunc -- name string of MIDI-menu procedure 33
+; ("MdPresetWithoutFunc"): entry 33 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_MdPresetWithoutFunc[20].
+; -----------------------------------------------------------------------------
 NakaInst_MdPresetWithoutFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24714, 0x14
 ; [naka_s_headers:short] NakaInst_MdPresetOKFunc
@@ -6212,6 +6478,16 @@ NakaInst_MdPresetWithoutFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MdPresetOKFunc
+; NakaInst_MdPresetOKFunc -- name string of MIDI-menu procedure 32
+; ("MdPresetOKFunc"): entry 32 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_MdPresetOKFunc[16].
+; -----------------------------------------------------------------------------
 NakaInst_MdPresetOKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24728, 0x10
 ; [naka_s_headers:short] NakaInst_TtMdPreset
@@ -6219,6 +6495,15 @@ NakaInst_MdPresetOKFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdPreset
+; NakaInst_TtMdPreset -- name string of MIDI-menu procedure 31
+; ("TtMdPreset"): entry 31 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdPreset[12].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdPreset:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24738, 0xC
 ; [naka_s_headers:short] NakaInst_ExcMspFunc
@@ -6226,6 +6511,15 @@ NakaInst_TtMdPreset:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ExcMspFunc
+; NakaInst_ExcMspFunc -- name string of MIDI-menu procedure 30
+; ("ExcMspFunc"): entry 30 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_ExcMspFunc[12].
+; -----------------------------------------------------------------------------
 NakaInst_ExcMspFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24744, 0xC
 ; [naka_s_headers:short] NakaInst_ExcSeqFunc
@@ -6233,6 +6527,15 @@ NakaInst_ExcMspFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ExcSeqFunc
+; NakaInst_ExcSeqFunc -- name string of MIDI-menu procedure 29
+; ("ExcSeqFunc"): entry 29 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_ExcSeqFunc[12].
+; -----------------------------------------------------------------------------
 NakaInst_ExcSeqFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24750, 0xC
 ; [naka_s_headers:short] NakaInst_ExcCompFunc
@@ -6240,6 +6543,15 @@ NakaInst_ExcSeqFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ExcCompFunc
+; NakaInst_ExcCompFunc -- name string of MIDI-menu procedure 28
+; ("ExcCompFunc"): entry 28 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_ExcCompFunc[12].
+; -----------------------------------------------------------------------------
 NakaInst_ExcCompFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2475C, 0xC
 ; [naka_s_headers:short] NakaInst_ExcSmemFunc
@@ -6247,6 +6559,15 @@ NakaInst_ExcCompFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ExcSmemFunc
+; NakaInst_ExcSmemFunc -- name string of MIDI-menu procedure 27
+; ("ExcSmemFunc"): entry 27 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_ExcSmemFunc[12].
+; -----------------------------------------------------------------------------
 NakaInst_ExcSmemFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24768, 0xC
 ; [naka_s_headers:short] NakaInst_ExcPmemFunc
@@ -6254,6 +6575,15 @@ NakaInst_ExcSmemFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ExcPmemFunc
+; NakaInst_ExcPmemFunc -- name string of MIDI-menu procedure 26
+; ("ExcPmemFunc"): entry 26 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_ExcPmemFunc[12].
+; -----------------------------------------------------------------------------
 NakaInst_ExcPmemFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24774, 0xC
 ; [naka_s_headers:short] NakaInst_ExcDotFunc
@@ -6261,6 +6591,15 @@ NakaInst_ExcPmemFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ExcDotFunc
+; NakaInst_ExcDotFunc -- name string of MIDI-menu procedure 25
+; ("ExcDotFunc"): entry 25 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_ExcDotFunc[12].
+; -----------------------------------------------------------------------------
 NakaInst_ExcDotFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24780, 0xC
 ; [naka_s_headers:short] NakaInst_ExcSendFunc
@@ -6268,6 +6607,15 @@ NakaInst_ExcDotFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ExcSendFunc
+; NakaInst_ExcSendFunc -- name string of MIDI-menu procedure 24
+; ("ExcSendFunc"): entry 24 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_ExcSendFunc[12].
+; -----------------------------------------------------------------------------
 NakaInst_ExcSendFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2478C, 0xC
 ; [naka_s_headers:short] NakaInst_TtMdExc
@@ -6275,6 +6623,15 @@ NakaInst_ExcSendFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdExc
+; NakaInst_TtMdExc -- name string of MIDI-menu procedure 23 ("TtMdExc"):
+; entry 23 of MidiMenu_ApFunctionNameTable, registered by InitializeEast
+; (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdExc[8].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdExc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24798, 0x8
 ; [naka_s_headers:short] NakaInst_MidiPartGridCheck
@@ -6282,6 +6639,16 @@ NakaInst_TtMdExc:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MidiPartGridCheck
+; NakaInst_MidiPartGridCheck -- name string of MIDI-menu procedure 22
+; ("MidiPartGridCheck"): entry 22 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_MidiPartGridCheck[18].
+; -----------------------------------------------------------------------------
 NakaInst_MidiPartGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247A0, 0x12
 ; [naka_s_headers:short] NakaInst_TtMdPart
@@ -6289,6 +6656,15 @@ NakaInst_MidiPartGridCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdPart
+; NakaInst_TtMdPart -- name string of MIDI-menu procedure 21
+; ("TtMdPart"): entry 21 of MidiMenu_ApFunctionNameTable, registered by
+; InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdPart[10].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdPart:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247B2, 0xA
 ; [naka_s_headers:short] NakaInst_CtlMsgGridCheck
@@ -6296,6 +6672,16 @@ NakaInst_TtMdPart:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_CtlMsgGridCheck
+; NakaInst_CtlMsgGridCheck -- name string of MIDI-menu procedure 20
+; ("CtlMsgGridCheck"): entry 20 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_CtlMsgGridCheck[16].
+; -----------------------------------------------------------------------------
 NakaInst_CtlMsgGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247BC, 0x10
 ; [naka_s_headers:short] NakaInst_TtMdCtlMsg
@@ -6303,6 +6689,15 @@ NakaInst_CtlMsgGridCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdCtlMsg
+; NakaInst_TtMdCtlMsg -- name string of MIDI-menu procedure 19
+; ("TtMdCtlMsg"): entry 19 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdCtlMsg[12].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdCtlMsg:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247CC, 0xC
 ; [naka_s_headers:short] NakaInst_PmemOutRGridCheck
@@ -6310,6 +6705,16 @@ NakaInst_TtMdCtlMsg:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_PmemOutRGridCheck
+; NakaInst_PmemOutRGridCheck -- name string of MIDI-menu procedure 18
+; ("PmemOutRGridCheck"): entry 18 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_PmemOutRGridCheck[18].
+; -----------------------------------------------------------------------------
 NakaInst_PmemOutRGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247D8, 0x12
 ; [naka_s_headers:short] NakaInst_PmemOutLGridCheck
@@ -6317,6 +6722,16 @@ NakaInst_PmemOutRGridCheck:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_PmemOutLGridCheck
+; NakaInst_PmemOutLGridCheck -- name string of MIDI-menu procedure 17
+; ("PmemOutLGridCheck"): entry 17 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_PmemOutLGridCheck[18].
+; -----------------------------------------------------------------------------
 NakaInst_PmemOutLGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247EA, 0x12
 ; [naka_s_headers:short] NakaInst_TtMdPmemOut
@@ -6324,6 +6739,15 @@ NakaInst_PmemOutLGridCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdPmemOut
+; NakaInst_TtMdPmemOut -- name string of MIDI-menu procedure 16
+; ("TtMdPmemOut"): entry 16 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdPmemOut[12].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdPmemOut:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247FC, 0xC
 ; [naka_s_headers:short] NakaInst_ComSetGridCheck
@@ -6331,6 +6755,16 @@ NakaInst_TtMdPmemOut:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ComSetGridCheck
+; NakaInst_ComSetGridCheck -- name string of MIDI-menu procedure 15
+; ("ComSetGridCheck"): entry 15 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_ComSetGridCheck[16].
+; -----------------------------------------------------------------------------
 NakaInst_ComSetGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24808, 0x10
 ; [naka_s_headers:short] NakaInst_TtComSet
@@ -6338,6 +6772,15 @@ NakaInst_ComSetGridCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtComSet
+; NakaInst_TtComSet -- name string of MIDI-menu procedure 14
+; ("TtComSet"): entry 14 of MidiMenu_ApFunctionNameTable, registered by
+; InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtComSet[10].
+; -----------------------------------------------------------------------------
 NakaInst_TtComSet:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24818, 0xA
 ; [naka_s_headers:short] NakaInst_PcgOutSendFunc
@@ -6345,6 +6788,16 @@ NakaInst_TtComSet:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_PcgOutSendFunc
+; NakaInst_PcgOutSendFunc -- name string of MIDI-menu procedure 13
+; ("PcgOutSendFunc"): entry 13 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_PcgOutSendFunc[16].
+; -----------------------------------------------------------------------------
 NakaInst_PcgOutSendFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24822, 0x10
 ; [naka_s_headers:short] NakaInst_PcgOutGridCheck
@@ -6352,6 +6805,16 @@ NakaInst_PcgOutSendFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_PcgOutGridCheck
+; NakaInst_PcgOutGridCheck -- name string of MIDI-menu procedure 12
+; ("PcgOutGridCheck"): entry 12 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_PcgOutGridCheck[16].
+; -----------------------------------------------------------------------------
 NakaInst_PcgOutGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24832, 0x10
 ; [naka_s_headers:short] NakaInst_TtMdPcgOut
@@ -6359,6 +6822,15 @@ NakaInst_PcgOutGridCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdPcgOut
+; NakaInst_TtMdPcgOut -- name string of MIDI-menu procedure 11
+; ("TtMdPcgOut"): entry 11 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdPcgOut[12].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdPcgOut:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24842, 0xC
 ; [naka_s_headers:short] NakaInst_ParaLoadOptOKFunc
@@ -6366,6 +6838,16 @@ NakaInst_TtMdPcgOut:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ParaLoadOptOKFunc
+; NakaInst_ParaLoadOptOKFunc -- name string of MIDI-menu procedure 10
+; ("ParaLoadOptOKFunc"): entry 10 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_ParaLoadOptOKFunc[18].
+; -----------------------------------------------------------------------------
 NakaInst_ParaLoadOptOKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2484E, 0x12
 ; [naka_s_headers:short] NakaInst_ParaLoadOptGridCheck
@@ -6373,6 +6855,16 @@ NakaInst_ParaLoadOptOKFunc:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_ParaLoadOptGridCheck
+; NakaInst_ParaLoadOptGridCheck -- name string of MIDI-menu procedure 9
+; ("ParaLoadOptGridCheck"): entry 9 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_ParaLoadOptGridCheck[22].
+; -----------------------------------------------------------------------------
 NakaInst_ParaLoadOptGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24860, 0x16
 ; [naka_s_headers:short] NakaInst_TtMdParaLoad
@@ -6380,6 +6872,15 @@ NakaInst_ParaLoadOptGridCheck:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdParaLoad
+; NakaInst_TtMdParaLoad -- name string of MIDI-menu procedure 8
+; ("TtMdParaLoad"): entry 8 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdParaLoad[14].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdParaLoad:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24876, 0xE
 ; [naka_s_headers:short] NakaInst_R12OctaveFunc
@@ -6387,6 +6888,15 @@ NakaInst_TtMdParaLoad:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_R12OctaveFunc
+; NakaInst_R12OctaveFunc -- name string of MIDI-menu procedure 7
+; ("R12OctaveFunc"): entry 7 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_R12OctaveFunc[14].
+; -----------------------------------------------------------------------------
 NakaInst_R12OctaveFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24884, 0xE
 ; [naka_s_headers:short] NakaInst_MdCmptCnctFunc
@@ -6394,6 +6904,16 @@ NakaInst_R12OctaveFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MdCmptCnctFunc
+; NakaInst_MdCmptCnctFunc -- name string of MIDI-menu procedure 6
+; ("MdCmptCnctFunc"): entry 6 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_MdCmptCnctFunc[16].
+; -----------------------------------------------------------------------------
 NakaInst_MdCmptCnctFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24892, 0x10
 ; [naka_s_headers:short] NakaInst_TtComputerConnection
@@ -6401,6 +6921,16 @@ NakaInst_MdCmptCnctFunc:
 ; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
 ; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
 ; ApFunctionProc, 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtComputerConnection
+; NakaInst_TtComputerConnection -- name string of MIDI-menu procedure 5
+; ("TtComputerConnection"): entry 5 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_TtComputerConnection[22].
+; -----------------------------------------------------------------------------
 NakaInst_TtComputerConnection:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248A2, 0x16
 ; [naka_s_headers:short] NakaInst_MdSetupLoadFunc
@@ -6408,6 +6938,16 @@ NakaInst_TtComputerConnection:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MdSetupLoadFunc
+; NakaInst_MdSetupLoadFunc -- name string of MIDI-menu procedure 4
+; ("MdSetupLoadFunc"): entry 4 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_MdSetupLoadFunc[16].
+; -----------------------------------------------------------------------------
 NakaInst_MdSetupLoadFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248B8, 0x10
 ; [naka_s_headers:short] NakaInst_MdDrumTypeFunc
@@ -6415,6 +6955,16 @@ NakaInst_MdSetupLoadFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MdDrumTypeFunc
+; NakaInst_MdDrumTypeFunc -- name string of MIDI-menu procedure 3
+; ("MdDrumTypeFunc"): entry 3 of MidiMenu_ApFunctionNameTable,
+; registered by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with
+; RegObjTabl 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char
+; NakaInst_MdDrumTypeFunc[16].
+; -----------------------------------------------------------------------------
 NakaInst_MdDrumTypeFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248C8, 0x10
 ; [naka_s_headers:short] NakaInst_MdPcgModeFunc
@@ -6422,6 +6972,15 @@ NakaInst_MdDrumTypeFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_MdPcgModeFunc
+; NakaInst_MdPcgModeFunc -- name string of MIDI-menu procedure 2
+; ("MdPcgModeFunc"): entry 2 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_MdPcgModeFunc[14].
+; -----------------------------------------------------------------------------
 NakaInst_MdPcgModeFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248D8, 0xE
 ; [naka_s_headers:short] NakaInst_TtMdRealMsg
@@ -6429,6 +6988,15 @@ NakaInst_MdPcgModeFunc:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
+; -----------------------------------------------------------------------------
+; [naka_s_headers] NakaInst_TtMdRealMsg
+; NakaInst_TtMdRealMsg -- name string of MIDI-menu procedure 1
+; ("TtMdRealMsg"): entry 1 of MidiMenu_ApFunctionNameTable, registered
+; by InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
+;
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdRealMsg[12].
+; -----------------------------------------------------------------------------
 NakaInst_TtMdRealMsg:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248E6, 0xC
 ; [naka_s_headers:short] NakaInst_TtMdmenu
@@ -6436,20 +7004,43 @@ NakaInst_TtMdRealMsg:
 ; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
 ; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
 ; 0x3c, 0xe55304, 0x423.
-NakaInst_TtMdmenu:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248F2, 0x14
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] NakaDesc_PageWindow_Sentinel
-; NakaDesc_PageWindow_Sentinel -- 2 bytes of NUL-terminated strings at
-; the start of the blob; no registration or code reference reaches them
-; (searched: RegObjTabl tables, slice and positional labels). Which code
-; uses them is not established.
+; [naka_s_headers] NakaInst_TtMdmenu
+; NakaInst_TtMdmenu -- name string of MIDI-menu procedure 0
+; ("TtMdmenu"): entry 0 of MidiMenu_ApFunctionNameTable, registered by
+; InitializeEast (v10/v9 0xf72bac, v7 0xf727a8) with RegObjTabl
+; 0x1600002, ApFunctionProc, 0x3c, 0xe55304, 0x423.
 ;
-; Typed in naka_widget_descriptors.c as char
-; NakaDesc_PageWindow_Sentinel[2].
+; Typed in naka_widget_descriptors.c as char NakaInst_TtMdmenu[10].
 ; -----------------------------------------------------------------------------
-NakaDesc_PageWindow_Sentinel:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24906, 0x2
+NakaInst_TtMdmenu:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248F2, 0xA
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_PsHarmOnOffBox
+; ClassProps_PsHarmOnOffBox -- property names of class PsHarmOnOffBox
+; (descriptor 0 of East_ClassTable_163, whose +0x14 points here): 0
+; pointers, one per letter of its signature "" -- none -- then a pointer
+; to "", then the names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_PsHarmOnOffBox[1] and char
+; ClassProps_PsHarmOnOffBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_PsHarmOnOffBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248FC, 0x6
+; -----------------------------------------------------------------------------
+; [naka_s_headers] ClassProps_AcVocalistListBox
+; ClassProps_AcVocalistListBox -- property names of class
+; AcVocalistListBox (descriptor 1 of East_ClassTable_163, whose +0x14
+; points here): 0 pointers, one per letter of its signature "" -- none
+; -- then a pointer to "", then the names themselves.
+;
+; Typed in naka_widget_descriptors.c as uint32_t
+; ClassProps_AcVocalistListBox[1] and char
+; ClassProps_AcVocalistListBox_Names[].
+; -----------------------------------------------------------------------------
+ClassProps_AcVocalistListBox:
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24902, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvMpstPageControl
 ; ClassProps_IvMpstPageControl -- property names of class

@@ -3541,78 +3541,453 @@ typedef struct __attribute__((packed)) {
      * 0x423. The strings themselves follow, stored in reverse order.
      * --------------------------------------------------------------------- */
     uint32_t MidiMenu_ApFunctionNameTable[61];
-    char w4_code[2];
-    char w4_name[16];
-    char str_3373[14];
-    char str_3374[12];
-    char w5_code[10];
-    char w5_name[12];
-    char str_3375[16];
-    char str_3376[14];
-    char str_3377[16];
-    char w6_code[10];
-    char w6_name[18];
-    char str_3378[12];
-    char str_3379[20];
-    char str_3380[20];
-    char str_3381[18];
-    char str_3382[22];
-    char str_3383[14];
-    char str_3384[10];
-    char w7_code[10];
-    char w7_name[20];
-    char str_3385[14];
-    char str_3386[14];
-    char str_3387[18];
-    char w8_code[10];
-    char w8_name[8];
-    char str_3388[12];
-    char str_3389[18];
-    char str_3390[20];
-    char str_3391[16];
-    char w9_code[12];
-    char w9_name[12];
-    char w10_code[12];
-    char w10_name[12];
-    char str_3392[12];
-    char str_3393[12];
-    char w11_code[12];
-    char w11_name[12];
-    char w12_code[8];
-    char w12_name[18];
-    char w13_code[10];
-    char w13_name[16];
-    char w14_code[12];
-    char w14_name[18];
-    char str_3394[18];
-    char str_3395[12];
-    char str_3396[16];
-    char w15_code[10];
-    char w15_name[16];
-    char str_3397[16];
-    char w16_code[12];
-    char w16_name[18];
-    char str_3398[22];
-    char str_3399[14];
-    char str_3400[14];
-    char str_3401[16];
-    char str_3402[22];
-    char str_3403[16];
-    char str_3404[16];
-    char str_3405[14];
-    char str_3406[12];
-    char str_3407[10];
-    uint32_t ptr_248fc;
-    char str_3408[2];
-    uint32_t ptr_24902;
+    /* ---------------------------------------------------------------------
+     * [typed] by span_d_names
+     * NakaInst_EmptyFuncName -- name string of MIDI-menu procedure 60 (""):
+     * entry 60 of MidiMenu_ApFunctionNameTable, registered by InitializeEast
+     * (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl 0x1600002,
+     * ApFunctionProc, 0x3C, 0xE55304, 0x423; this empty name is the
+     * terminator.
+     * --------------------------------------------------------------------- */
+    char NakaInst_EmptyFuncName[2];
+    /* ---------------------------------------------------------------------
+     * NakaInst_RevEqOnOffFunc -- name string of MIDI-menu procedure 59
+     * ("RevEqOnOffFunc"): entry 59 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_RevEqOnOffFunc[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_RevEqSelFunc -- name string of MIDI-menu procedure 58
+     * ("RevEqSelFunc"): entry 58 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_RevEqSelFunc[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_EqOnOffFunc -- name string of MIDI-menu procedure 57
+     * ("EqOnOffFunc"): entry 57 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_EqOnOffFunc[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_EqSelFunc -- name string of MIDI-menu procedure 56
+     * ("EqSelFunc"): entry 56 of MidiMenu_ApFunctionNameTable, registered by
+     * InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_EqSelFunc[10];
+    /* ---------------------------------------------------------------------
+     * NakaInst_RevSelFunc -- name string of MIDI-menu procedure 55
+     * ("RevSelFunc"): entry 55 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_RevSelFunc[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_SplitPointFunc -- name string of MIDI-menu procedure 54
+     * ("SplitPointFunc"): entry 54 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_SplitPointFunc[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_StsSplitCheck -- name string of MIDI-menu procedure 53
+     * ("StsSplitCheck"): entry 53 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_StsSplitCheck[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_InOutGridCheck -- name string of MIDI-menu procedure 52
+     * ("InOutGridCheck"): entry 52 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_InOutGridCheck[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdInOut -- name string of MIDI-menu procedure 51
+     * ("TtMdInOut"): entry 51 of MidiMenu_ApFunctionNameTable, registered by
+     * InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdInOut[10];
+    /* ---------------------------------------------------------------------
+     * NakaInst_FadeSetGridCheck -- name string of MIDI-menu procedure 50
+     * ("FadeSetGridCheck"): entry 50 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_FadeSetGridCheck[18];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtFadeInOut -- name string of MIDI-menu procedure 49
+     * ("TtFadeInOut"): entry 49 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtFadeInOut[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_VocalistPage2OKFunc -- name string of MIDI-menu procedure 48
+     * ("VocalistPage2OKFunc"): entry 48 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_VocalistPage2OKFunc[20];
+    /* ---------------------------------------------------------------------
+     * NakaInst_VocalistPage1OKFunc -- name string of MIDI-menu procedure 47
+     * ("VocalistPage1OKFunc"): entry 47 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_VocalistPage1OKFunc[20];
+    /* ---------------------------------------------------------------------
+     * NakaInst_VocalistGridCheck -- name string of MIDI-menu procedure 46
+     * ("VocalistGridCheck"): entry 46 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_VocalistGridCheck[18];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtVocalistWorkstation -- name string of MIDI-menu procedure
+     * 45 ("TtVocalistWorkstation"): entry 45 of
+     * MidiMenu_ApFunctionNameTable, registered by InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) with RegObjTabl 0x1600002, ApFunctionProc,
+     * 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtVocalistWorkstation[22];
+    /* ---------------------------------------------------------------------
+     * NakaInst_HarmOnOffFunc -- name string of MIDI-menu procedure 44
+     * ("HarmOnOffFunc"): entry 44 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_HarmOnOffFunc[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_GMNoFunc -- name string of MIDI-menu procedure 43
+     * ("GMNoFunc"): entry 43 of MidiMenu_ApFunctionNameTable, registered by
+     * InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_GMNoFunc[10];
+    /* ---------------------------------------------------------------------
+     * NakaInst_GMYesFunc -- name string of MIDI-menu procedure 42
+     * ("GMYesFunc"): entry 42 of MidiMenu_ApFunctionNameTable, registered by
+     * InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_GMYesFunc[10];
+    /* ---------------------------------------------------------------------
+     * NakaInst_StsAreYouSureCheck -- name string of MIDI-menu procedure 41
+     * ("StsAreYouSureCheck"): entry 41 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_StsAreYouSureCheck[20];
+    /* ---------------------------------------------------------------------
+     * NakaInst_StsGMOffCheck -- name string of MIDI-menu procedure 40
+     * ("StsGMOffCheck"): entry 40 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_StsGMOffCheck[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_StsGMOnCheck -- name string of MIDI-menu procedure 39
+     * ("StsGMOnCheck"): entry 39 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_StsGMOnCheck[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_StsAttentionCheck -- name string of MIDI-menu procedure 38
+     * ("StsAttentionCheck"): entry 38 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_StsAttentionCheck[18];
+    /* ---------------------------------------------------------------------
+     * NakaInst_GMOKFunc -- name string of MIDI-menu procedure 37
+     * ("GMOKFunc"): entry 37 of MidiMenu_ApFunctionNameTable, registered by
+     * InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_GMOKFunc[10];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdGm -- name string of MIDI-menu procedure 36 ("TtMdGm"):
+     * entry 36 of MidiMenu_ApFunctionNameTable, registered by InitializeEast
+     * (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl 0x1600002,
+     * ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdGm[8];
+    /* ---------------------------------------------------------------------
+     * NakaInst_BitmapBmphk -- name string of MIDI-menu procedure 35
+     * ("BitmapBmphk"): entry 35 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_BitmapBmphk[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MdPresetWithFunc -- name string of MIDI-menu procedure 34
+     * ("MdPresetWithFunc"): entry 34 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MdPresetWithFunc[18];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MdPresetWithoutFunc -- name string of MIDI-menu procedure 33
+     * ("MdPresetWithoutFunc"): entry 33 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MdPresetWithoutFunc[20];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MdPresetOKFunc -- name string of MIDI-menu procedure 32
+     * ("MdPresetOKFunc"): entry 32 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MdPresetOKFunc[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdPreset -- name string of MIDI-menu procedure 31
+     * ("TtMdPreset"): entry 31 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdPreset[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ExcMspFunc -- name string of MIDI-menu procedure 30
+     * ("ExcMspFunc"): entry 30 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ExcMspFunc[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ExcSeqFunc -- name string of MIDI-menu procedure 29
+     * ("ExcSeqFunc"): entry 29 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ExcSeqFunc[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ExcCompFunc -- name string of MIDI-menu procedure 28
+     * ("ExcCompFunc"): entry 28 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ExcCompFunc[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ExcSmemFunc -- name string of MIDI-menu procedure 27
+     * ("ExcSmemFunc"): entry 27 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ExcSmemFunc[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ExcPmemFunc -- name string of MIDI-menu procedure 26
+     * ("ExcPmemFunc"): entry 26 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ExcPmemFunc[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ExcDotFunc -- name string of MIDI-menu procedure 25
+     * ("ExcDotFunc"): entry 25 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ExcDotFunc[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ExcSendFunc -- name string of MIDI-menu procedure 24
+     * ("ExcSendFunc"): entry 24 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ExcSendFunc[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdExc -- name string of MIDI-menu procedure 23 ("TtMdExc"):
+     * entry 23 of MidiMenu_ApFunctionNameTable, registered by InitializeEast
+     * (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl 0x1600002,
+     * ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdExc[8];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MidiPartGridCheck -- name string of MIDI-menu procedure 22
+     * ("MidiPartGridCheck"): entry 22 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MidiPartGridCheck[18];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdPart -- name string of MIDI-menu procedure 21
+     * ("TtMdPart"): entry 21 of MidiMenu_ApFunctionNameTable, registered by
+     * InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdPart[10];
+    /* ---------------------------------------------------------------------
+     * NakaInst_CtlMsgGridCheck -- name string of MIDI-menu procedure 20
+     * ("CtlMsgGridCheck"): entry 20 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_CtlMsgGridCheck[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdCtlMsg -- name string of MIDI-menu procedure 19
+     * ("TtMdCtlMsg"): entry 19 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdCtlMsg[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_PmemOutRGridCheck -- name string of MIDI-menu procedure 18
+     * ("PmemOutRGridCheck"): entry 18 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_PmemOutRGridCheck[18];
+    /* ---------------------------------------------------------------------
+     * NakaInst_PmemOutLGridCheck -- name string of MIDI-menu procedure 17
+     * ("PmemOutLGridCheck"): entry 17 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_PmemOutLGridCheck[18];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdPmemOut -- name string of MIDI-menu procedure 16
+     * ("TtMdPmemOut"): entry 16 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdPmemOut[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ComSetGridCheck -- name string of MIDI-menu procedure 15
+     * ("ComSetGridCheck"): entry 15 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ComSetGridCheck[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtComSet -- name string of MIDI-menu procedure 14
+     * ("TtComSet"): entry 14 of MidiMenu_ApFunctionNameTable, registered by
+     * InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtComSet[10];
+    /* ---------------------------------------------------------------------
+     * NakaInst_PcgOutSendFunc -- name string of MIDI-menu procedure 13
+     * ("PcgOutSendFunc"): entry 13 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_PcgOutSendFunc[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_PcgOutGridCheck -- name string of MIDI-menu procedure 12
+     * ("PcgOutGridCheck"): entry 12 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_PcgOutGridCheck[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdPcgOut -- name string of MIDI-menu procedure 11
+     * ("TtMdPcgOut"): entry 11 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdPcgOut[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ParaLoadOptOKFunc -- name string of MIDI-menu procedure 10
+     * ("ParaLoadOptOKFunc"): entry 10 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ParaLoadOptOKFunc[18];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ParaLoadOptGridCheck -- name string of MIDI-menu procedure 9
+     * ("ParaLoadOptGridCheck"): entry 9 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_ParaLoadOptGridCheck[22];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdParaLoad -- name string of MIDI-menu procedure 8
+     * ("TtMdParaLoad"): entry 8 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdParaLoad[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_R12OctaveFunc -- name string of MIDI-menu procedure 7
+     * ("R12OctaveFunc"): entry 7 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_R12OctaveFunc[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MdCmptCnctFunc -- name string of MIDI-menu procedure 6
+     * ("MdCmptCnctFunc"): entry 6 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MdCmptCnctFunc[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtComputerConnection -- name string of MIDI-menu procedure 5
+     * ("TtComputerConnection"): entry 5 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtComputerConnection[22];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MdSetupLoadFunc -- name string of MIDI-menu procedure 4
+     * ("MdSetupLoadFunc"): entry 4 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MdSetupLoadFunc[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MdDrumTypeFunc -- name string of MIDI-menu procedure 3
+     * ("MdDrumTypeFunc"): entry 3 of MidiMenu_ApFunctionNameTable,
+     * registered by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with
+     * RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MdDrumTypeFunc[16];
+    /* ---------------------------------------------------------------------
+     * NakaInst_MdPcgModeFunc -- name string of MIDI-menu procedure 2
+     * ("MdPcgModeFunc"): entry 2 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_MdPcgModeFunc[14];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdRealMsg -- name string of MIDI-menu procedure 1
+     * ("TtMdRealMsg"): entry 1 of MidiMenu_ApFunctionNameTable, registered
+     * by InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdRealMsg[12];
+    /* ---------------------------------------------------------------------
+     * NakaInst_TtMdmenu -- name string of MIDI-menu procedure 0
+     * ("TtMdmenu"): entry 0 of MidiMenu_ApFunctionNameTable, registered by
+     * InitializeEast (v10/v9 0xF72BAC, v7 0xF727A8) with RegObjTabl
+     * 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423.
+     * --------------------------------------------------------------------- */
+    char NakaInst_TtMdmenu[10];
     /* ---------------------------------------------------------------------
      * [typed] by span_d_cls
-     * NakaDesc_PageWindow_Sentinel -- 2 bytes of NUL-terminated strings at
-     * the start of the blob; no registration or code reference reaches them
-     * (searched: RegObjTabl tables, slice and positional labels). Which code
-     * uses them is not established.
+     * ClassProps_PsHarmOnOffBox -- property names of class PsHarmOnOffBox
+     * (descriptor 0 of East_ClassTable_163, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
      * --------------------------------------------------------------------- */
-    char NakaDesc_PageWindow_Sentinel[2];
+    uint32_t ClassProps_PsHarmOnOffBox[1];
+    char ClassProps_PsHarmOnOffBox_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcVocalistListBox -- property names of class
+     * AcVocalistListBox (descriptor 1 of East_ClassTable_163, whose +0x14
+     * points here): 0 pointers, one per letter of its signature "" -- none
+     * -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcVocalistListBox[1];
+    char ClassProps_AcVocalistListBox_Names[2];
     /* ---------------------------------------------------------------------
      * ClassProps_IvMpstPageControl -- property names of class
      * IvMpstPageControl (descriptor 2 of East_ClassTable_163, whose +0x14
@@ -14430,198 +14805,202 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     },
 
     .MidiMenu_ApFunctionNameTable = {
-        SELF(str_3407),
-        SELF(str_3406),
-        SELF(str_3405),
-        SELF(str_3404),
-        SELF(str_3403),
-        SELF(str_3402),
-        SELF(str_3401),
-        SELF(str_3400),
-        SELF(str_3399),
-        SELF(str_3398),
-        SELF(w16_name),
-        SELF(w16_code),
-        SELF(str_3397),
-        SELF(w15_name),
-        SELF(w15_code),
-        SELF(str_3396),
-        SELF(str_3395),
-        SELF(str_3394),
-        SELF(w14_name),
-        SELF(w14_code),
-        SELF(w13_name),
-        SELF(w13_code),
-        SELF(w12_name),
-        SELF(w12_code),
-        SELF(w11_name),
-        SELF(w11_code),
-        SELF(str_3393),
-        SELF(str_3392),
-        SELF(w10_name),
-        SELF(w10_code),
-        SELF(w9_name),
-        SELF(w9_code),
-        SELF(str_3391),
-        SELF(str_3390),
-        SELF(str_3389),
-        SELF(str_3388),
-        SELF(w8_name),
-        SELF(w8_code),
-        SELF(str_3387),
-        SELF(str_3386),
-        SELF(str_3385),
-        SELF(w7_name),
-        SELF(w7_code),
-        SELF(str_3384),
-        SELF(str_3383),
-        SELF(str_3382),
-        SELF(str_3381),
-        SELF(str_3380),
-        SELF(str_3379),
-        SELF(str_3378),
-        SELF(w6_name),
-        SELF(w6_code),
-        SELF(str_3377),
-        SELF(str_3376),
-        SELF(str_3375),
-        SELF(w5_name),
-        SELF(w5_code),
-        SELF(str_3374),
-        SELF(str_3373),
-        SELF(w4_name),
-        SELF(w4_code),
+        SELF(NakaInst_TtMdmenu),
+        SELF(NakaInst_TtMdRealMsg),
+        SELF(NakaInst_MdPcgModeFunc),
+        SELF(NakaInst_MdDrumTypeFunc),
+        SELF(NakaInst_MdSetupLoadFunc),
+        SELF(NakaInst_TtComputerConnection),
+        SELF(NakaInst_MdCmptCnctFunc),
+        SELF(NakaInst_R12OctaveFunc),
+        SELF(NakaInst_TtMdParaLoad),
+        SELF(NakaInst_ParaLoadOptGridCheck),
+        SELF(NakaInst_ParaLoadOptOKFunc),
+        SELF(NakaInst_TtMdPcgOut),
+        SELF(NakaInst_PcgOutGridCheck),
+        SELF(NakaInst_PcgOutSendFunc),
+        SELF(NakaInst_TtComSet),
+        SELF(NakaInst_ComSetGridCheck),
+        SELF(NakaInst_TtMdPmemOut),
+        SELF(NakaInst_PmemOutLGridCheck),
+        SELF(NakaInst_PmemOutRGridCheck),
+        SELF(NakaInst_TtMdCtlMsg),
+        SELF(NakaInst_CtlMsgGridCheck),
+        SELF(NakaInst_TtMdPart),
+        SELF(NakaInst_MidiPartGridCheck),
+        SELF(NakaInst_TtMdExc),
+        SELF(NakaInst_ExcSendFunc),
+        SELF(NakaInst_ExcDotFunc),
+        SELF(NakaInst_ExcPmemFunc),
+        SELF(NakaInst_ExcSmemFunc),
+        SELF(NakaInst_ExcCompFunc),
+        SELF(NakaInst_ExcSeqFunc),
+        SELF(NakaInst_ExcMspFunc),
+        SELF(NakaInst_TtMdPreset),
+        SELF(NakaInst_MdPresetOKFunc),
+        SELF(NakaInst_MdPresetWithoutFunc),
+        SELF(NakaInst_MdPresetWithFunc),
+        SELF(NakaInst_BitmapBmphk),
+        SELF(NakaInst_TtMdGm),
+        SELF(NakaInst_GMOKFunc),
+        SELF(NakaInst_StsAttentionCheck),
+        SELF(NakaInst_StsGMOnCheck),
+        SELF(NakaInst_StsGMOffCheck),
+        SELF(NakaInst_StsAreYouSureCheck),
+        SELF(NakaInst_GMYesFunc),
+        SELF(NakaInst_GMNoFunc),
+        SELF(NakaInst_HarmOnOffFunc),
+        SELF(NakaInst_TtVocalistWorkstation),
+        SELF(NakaInst_VocalistGridCheck),
+        SELF(NakaInst_VocalistPage1OKFunc),
+        SELF(NakaInst_VocalistPage2OKFunc),
+        SELF(NakaInst_TtFadeInOut),
+        SELF(NakaInst_FadeSetGridCheck),
+        SELF(NakaInst_TtMdInOut),
+        SELF(NakaInst_InOutGridCheck),
+        SELF(NakaInst_StsSplitCheck),
+        SELF(NakaInst_SplitPointFunc),
+        SELF(NakaInst_RevSelFunc),
+        SELF(NakaInst_EqSelFunc),
+        SELF(NakaInst_EqOnOffFunc),
+        SELF(NakaInst_RevEqSelFunc),
+        SELF(NakaInst_RevEqOnOffFunc),
+        SELF(NakaInst_EmptyFuncName),
     },
 
-    .w4_code = ALIGNED_STRING(""),
+    .NakaInst_EmptyFuncName = "\0\xFF",
 
-    .w4_name = ALIGNED_STRING("RevEqOnOffFunc"),
+    .NakaInst_RevEqOnOffFunc = "RevEqOnOffFunc\0\xFF",
 
-    .str_3373 = ALIGNED_STRING("RevEqSelFunc"),
+    .NakaInst_RevEqSelFunc = "RevEqSelFunc\0\xFF",
 
-    .str_3374 = "EqOnOffFunc",
+    .NakaInst_EqOnOffFunc = "EqOnOffFunc",
 
-    .w5_code = "EqSelFunc",
+    .NakaInst_EqSelFunc = "EqSelFunc",
 
-    .w5_name = ALIGNED_STRING("RevSelFunc"),
+    .NakaInst_RevSelFunc = "RevSelFunc\0\xFF",
 
-    .str_3375 = ALIGNED_STRING("SplitPointFunc"),
+    .NakaInst_SplitPointFunc = "SplitPointFunc\0\xFF",
 
-    .str_3376 = "StsSplitCheck",
+    .NakaInst_StsSplitCheck = "StsSplitCheck",
 
-    .str_3377 = ALIGNED_STRING("InOutGridCheck"),
+    .NakaInst_InOutGridCheck = "InOutGridCheck\0\xFF",
 
-    .w6_code = "TtMdInOut",
+    .NakaInst_TtMdInOut = "TtMdInOut",
 
-    .w6_name = ALIGNED_STRING("FadeSetGridCheck"),
+    .NakaInst_FadeSetGridCheck = "FadeSetGridCheck\0\xFF",
 
-    .str_3378 = "TtFadeInOut",
+    .NakaInst_TtFadeInOut = "TtFadeInOut",
 
-    .str_3379 = "VocalistPage2OKFunc",
+    .NakaInst_VocalistPage2OKFunc = "VocalistPage2OKFunc",
 
-    .str_3380 = "VocalistPage1OKFunc",
+    .NakaInst_VocalistPage1OKFunc = "VocalistPage1OKFunc",
 
-    .str_3381 = "VocalistGridCheck",
+    .NakaInst_VocalistGridCheck = "VocalistGridCheck",
 
-    .str_3382 = "TtVocalistWorkstation",
+    .NakaInst_TtVocalistWorkstation = "TtVocalistWorkstation",
 
-    .str_3383 = "HarmOnOffFunc",
+    .NakaInst_HarmOnOffFunc = "HarmOnOffFunc",
 
-    .str_3384 = ALIGNED_STRING("GMNoFunc"),
+    .NakaInst_GMNoFunc = "GMNoFunc\0\xFF",
 
-    .w7_code = "GMYesFunc",
+    .NakaInst_GMYesFunc = "GMYesFunc",
 
-    .w7_name = ALIGNED_STRING("StsAreYouSureCheck"),
+    .NakaInst_StsAreYouSureCheck = "StsAreYouSureCheck\0\xFF",
 
-    .str_3385 = "StsGMOffCheck",
+    .NakaInst_StsGMOffCheck = "StsGMOffCheck",
 
-    .str_3386 = ALIGNED_STRING("StsGMOnCheck"),
+    .NakaInst_StsGMOnCheck = "StsGMOnCheck\0\xFF",
 
-    .str_3387 = "StsAttentionCheck",
+    .NakaInst_StsAttentionCheck = "StsAttentionCheck",
 
-    .w8_code = ALIGNED_STRING("GMOKFunc"),
+    .NakaInst_GMOKFunc = "GMOKFunc\0\xFF",
 
-    .w8_name = ALIGNED_STRING("TtMdGm"),
+    .NakaInst_TtMdGm = "TtMdGm\0\xFF",
 
-    .str_3388 = "BitmapBmphk",
+    .NakaInst_BitmapBmphk = "BitmapBmphk",
 
-    .str_3389 = ALIGNED_STRING("MdPresetWithFunc"),
+    .NakaInst_MdPresetWithFunc = "MdPresetWithFunc\0\xFF",
 
-    .str_3390 = "MdPresetWithoutFunc",
+    .NakaInst_MdPresetWithoutFunc = "MdPresetWithoutFunc",
 
-    .str_3391 = ALIGNED_STRING("MdPresetOKFunc"),
+    .NakaInst_MdPresetOKFunc = "MdPresetOKFunc\0\xFF",
 
-    .w9_code = ALIGNED_STRING("TtMdPreset"),
+    .NakaInst_TtMdPreset = "TtMdPreset\0\xFF",
 
-    .w9_name = ALIGNED_STRING("ExcMspFunc"),
+    .NakaInst_ExcMspFunc = "ExcMspFunc\0\xFF",
 
-    .w10_code = ALIGNED_STRING("ExcSeqFunc"),
+    .NakaInst_ExcSeqFunc = "ExcSeqFunc\0\xFF",
 
-    .w10_name = "ExcCompFunc",
+    .NakaInst_ExcCompFunc = "ExcCompFunc",
 
-    .str_3392 = "ExcSmemFunc",
+    .NakaInst_ExcSmemFunc = "ExcSmemFunc",
 
-    .str_3393 = "ExcPmemFunc",
+    .NakaInst_ExcPmemFunc = "ExcPmemFunc",
 
-    .w11_code = ALIGNED_STRING("ExcDotFunc"),
+    .NakaInst_ExcDotFunc = "ExcDotFunc\0\xFF",
 
-    .w11_name = "ExcSendFunc",
+    .NakaInst_ExcSendFunc = "ExcSendFunc",
 
-    .w12_code = "TtMdExc",
+    .NakaInst_TtMdExc = "TtMdExc",
 
-    .w12_name = "MidiPartGridCheck",
+    .NakaInst_MidiPartGridCheck = "MidiPartGridCheck",
 
-    .w13_code = ALIGNED_STRING("TtMdPart"),
+    .NakaInst_TtMdPart = "TtMdPart\0\xFF",
 
-    .w13_name = "CtlMsgGridCheck",
+    .NakaInst_CtlMsgGridCheck = "CtlMsgGridCheck",
 
-    .w14_code = ALIGNED_STRING("TtMdCtlMsg"),
+    .NakaInst_TtMdCtlMsg = "TtMdCtlMsg\0\xFF",
 
-    .w14_name = "PmemOutRGridCheck",
+    .NakaInst_PmemOutRGridCheck = "PmemOutRGridCheck",
 
-    .str_3394 = "PmemOutLGridCheck",
+    .NakaInst_PmemOutLGridCheck = "PmemOutLGridCheck",
 
-    .str_3395 = "TtMdPmemOut",
+    .NakaInst_TtMdPmemOut = "TtMdPmemOut",
 
-    .str_3396 = "ComSetGridCheck",
+    .NakaInst_ComSetGridCheck = "ComSetGridCheck",
 
-    .w15_code = ALIGNED_STRING("TtComSet"),
+    .NakaInst_TtComSet = "TtComSet\0\xFF",
 
-    .w15_name = ALIGNED_STRING("PcgOutSendFunc"),
+    .NakaInst_PcgOutSendFunc = "PcgOutSendFunc\0\xFF",
 
-    .str_3397 = "PcgOutGridCheck",
+    .NakaInst_PcgOutGridCheck = "PcgOutGridCheck",
 
-    .w16_code = ALIGNED_STRING("TtMdPcgOut"),
+    .NakaInst_TtMdPcgOut = "TtMdPcgOut\0\xFF",
 
-    .w16_name = "ParaLoadOptOKFunc",
+    .NakaInst_ParaLoadOptOKFunc = "ParaLoadOptOKFunc",
 
-    .str_3398 = ALIGNED_STRING("ParaLoadOptGridCheck"),
+    .NakaInst_ParaLoadOptGridCheck = "ParaLoadOptGridCheck\0\xFF",
 
-    .str_3399 = ALIGNED_STRING("TtMdParaLoad"),
+    .NakaInst_TtMdParaLoad = "TtMdParaLoad\0\xFF",
 
-    .str_3400 = "R12OctaveFunc",
+    .NakaInst_R12OctaveFunc = "R12OctaveFunc",
 
-    .str_3401 = ALIGNED_STRING("MdCmptCnctFunc"),
+    .NakaInst_MdCmptCnctFunc = "MdCmptCnctFunc\0\xFF",
 
-    .str_3402 = ALIGNED_STRING("TtComputerConnection"),
+    .NakaInst_TtComputerConnection = "TtComputerConnection\0\xFF",
 
-    .str_3403 = "MdSetupLoadFunc",
+    .NakaInst_MdSetupLoadFunc = "MdSetupLoadFunc",
 
-    .str_3404 = ALIGNED_STRING("MdDrumTypeFunc"),
+    .NakaInst_MdDrumTypeFunc = "MdDrumTypeFunc\0\xFF",
 
-    .str_3405 = "MdPcgModeFunc",
+    .NakaInst_MdPcgModeFunc = "MdPcgModeFunc",
 
-    .str_3406 = "TtMdRealMsg",
+    .NakaInst_TtMdRealMsg = "TtMdRealMsg",
 
-    .str_3407 = ALIGNED_STRING("TtMdmenu"),
+    .NakaInst_TtMdmenu = "TtMdmenu\0\xFF",
 
-    .ptr_248fc = SELF(str_3408),
+    .ClassProps_PsHarmOnOffBox = {
+        SELF(ClassProps_PsHarmOnOffBox_Names),
+    },
 
-    .str_3408 = ALIGNED_STRING(""),
+    .ClassProps_PsHarmOnOffBox_Names = "\0\xFF",
 
-    .ptr_24902 = SELF(NakaDesc_PageWindow_Sentinel),
+    .ClassProps_AcVocalistListBox = {
+        SELF(ClassProps_AcVocalistListBox_Names),
+    },
 
-    .NakaDesc_PageWindow_Sentinel = "\0\xFF",
+    .ClassProps_AcVocalistListBox_Names = "\0\xFF",
 
     .ClassProps_IvMpstPageControl = {
         SELF(ClassProps_IvMpstPageControl_Names[18]),
@@ -14800,8 +15179,8 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         "fixedcol\0\xFF",
 
     .East_ClassTable_163 = {
-        { NAKA_ADDR(PsHarmOnOffBoxProc), 0x01600044, 44, 0, 0x00E55CC4, 0x00E55CC2, SELF(ptr_248fc) },
-        { NAKA_ADDR(AcVocalistListBoxProc), 0x01600055, 48, 0, 0x00E55CB0, 0x00E55CAE, SELF(ptr_24902) },
+        { NAKA_ADDR(PsHarmOnOffBoxProc), 0x01600044, 44, 0, 0x00E55CC4, 0x00E55CC2, SELF(ClassProps_PsHarmOnOffBox) },
+        { NAKA_ADDR(AcVocalistListBoxProc), 0x01600055, 48, 0, 0x00E55CB0, 0x00E55CAE, SELF(ClassProps_AcVocalistListBox) },
         { NAKA_ADDR(IvMpstPageControlProc), 0x01600027, 32, 10, 0x00E55C9C, 0x00E55C98, SELF(ClassProps_IvMpstPageControl) },
         { NAKA_ADDR(AcSendEditSwProc), 0x0160001E, 52, 14, 0x00E55C8A, 0x00E55C84, SELF(ClassProps_AcSendEditSw) },
         { NAKA_ADDR(AcGMOnOffBoxProc), 0x01600018, 54, 0, 0x00E55C76, 0x00E55C74, SELF(ClassProps_AcGMOnOffBox) },

@@ -59,6 +59,27 @@ CLASSES = {0x1600010: ('ViewableProc', 'View', 'pointers to widget records'),
 OWN = ('ui_widgets/widget_descriptors.s', 'ui_widgets/naka_widget_tables_1.s',
        'ui_widgets/naka_widget_tables_2.s')
 
+def _midimenu_names(data):
+    """Manual objects for the 61 strings MidiMenu_ApFunctionNameTable
+    (blob +0x244A4, 61 u32) points at, named by the .s labels they already
+    have."""
+    base = 0xE30E60
+    sl = slices(os.path.join(ROOT, 'v10/maincpu/ui_widgets/widget_descriptors.s'),
+                'naka_widget_descriptors')
+    byoff = {v[0]: k for k, v in sl.items()}
+    out = {}
+    for k in range(61):
+        t = int.from_bytes(data[0x244A4 + 4 * k:0x244A8 + 4 * k], 'little') - base
+        ln = string_run_one(data, t, len(data))
+        nm = data[t:data.index(b'\0', t)].decode('latin-1')
+        out[t] = (ln, byoff[t], 'char', '[%d]' % ln,
+                  'name string of MIDI-menu procedure %d ("%s"): entry %d of '
+                  'MidiMenu_ApFunctionNameTable, registered by {InitializeEast} with '
+                  'RegObjTabl 0x1600002, ApFunctionProc, 0x3C, 0xE55304, 0x423%s.'
+                  % (k, nm, k, '; this empty name is the terminator' if k == 60 else ''))
+    return out
+
+
 SPANS = {
     't1': dict(blob='naka_widget_tables_1', sfile='naka_widget_tables_1.s',
                base=0xE24056, lo=0x0, hi=0x324E, manual={}),
@@ -89,8 +110,11 @@ SPANS = {
                   '"ON ": entry 1 of the {OFF, ON} pointer pair just before it, which '
                   '{SndArgNmGet} copies to its frame (NakaInst_OFF_Str follows).'),
     }),
+    'd_names': dict(blob='naka_widget_descriptors', sfile='widget_descriptors.s',
+                    base=0xE30E60, lo=0x24598, hi=0x248FC, manual={},
+                    manual_fn=_midimenu_names),
     'd_cls': dict(blob='naka_widget_descriptors', sfile='widget_descriptors.s',
-                  base=0xE30E60, lo=0x24906, hi=0x24D68, manual={}),
+                  base=0xE30E60, lo=0x248FC, hi=0x24D68, manual={}),
     't2b': dict(blob='naka_widget_tables_2', sfile='naka_widget_tables_2.s',
                 base=0xE5A39E, lo=0x24954, hi=0x26C44, manual={
         0x25444: (52, 'SplitPoint_BitmapTable', 'uint32_t', '[13]',
@@ -415,7 +439,8 @@ def build(span, cb, data, fmt, srcs=None):
     # --- 1b. strings / records that tables registered ELSEWHERE point at
     allregs = registry(srcs)
     for r in allregs:
-        if base + lo <= r['table'] < base + hi or r['count'] is None or r['count'] > 4096:
+        if base + lo <= r['table'] < base + hi or r['count'] is None or r['count'] > 4096 \
+                or r['cls'] == 0x1600004:          # ClassProc tables hold records
             continue
         o_tab = r['table']
         rom = _rom()
@@ -473,7 +498,10 @@ def build(span, cb, data, fmt, srcs=None):
                                  % (tname, k, k, tname, r['routine'], r['file'], r['line'],
                                     cid, cname, rsize)))
     # --- 2. manual
-    for o, (size, name, ctype, dims, text) in sp['manual'].items():
+    manual = dict(sp['manual'])
+    if sp.get('manual_fn'):
+        manual.update(sp['manual_fn'](data))
+    for o, (size, name, ctype, dims, text) in manual.items():
         objs[o] = dict(size=size, name=name, ctype=ctype, dims=dims,
                        text='%s -- %s' % (name, text), kind='manual')
     # --- 3. code references
