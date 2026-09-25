@@ -8790,8 +8790,13 @@ PoolDir_Records:
 ; then `mul A,0x19 / add XWA,0x00FDBFD9` (PoolDir_Records) at 0xFA2B44, 0xFA2C78, 0xFA2D2B
 ; and 0xFA4986, and `mul C,0x04 / add XBC,0x00FDD1CB` (PoolDir_FieldRec_PtrTable) at
 ; 0xFA2BBE.  Reproduced by notes/prom_c_understanding_round5.py --program.
-; ⚠ "Program" is defined by that mechanism and by nothing else: it is the 0..127 selector
-; that chooses which streams a unit is sent.  What any program SOUNDS like is not known.
+; ★ CORRECTED 2026-09-25 (lane promcd).  This paragraph said "Program" was defined by
+; that mechanism and by nothing else, and that what a program sounds like was unknown.
+; A program is a DSP EFFECT NUMBER: prom_b's EffectNames_F147AC[k] names program k
+; (1 CHORUS, 5 PHASER, 20 ENSEMBLE ...), its 56 real names falling onto the 56 records
+; one to one (notes/prom_c_p7_program_is_effect.py, and this file's extraction header);
+; each PoolDir_Records entry above now carries its effect's name.  What an effect's
+; stream bytes mean, field by field, remains undecoded.
 ; Evidence: the three clamp/lookup/store triples listed above -- 0xFA5572-0xFA558A,
 ;          0xFA5597-0xFA55AF and 0xFA55BC-0xFA55D4 -- all instruction operands.
 ; ------------------------------------------------------------------------------
