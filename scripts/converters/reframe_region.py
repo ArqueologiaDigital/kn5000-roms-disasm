@@ -178,6 +178,11 @@ def main():
             if rest:
                 q = y - rest
                 new.append([q, rest, ".byte\t" + ", ".join("0x%02x" % c for c in rom[q - BASE:y - BASE]), None, None])
+        elif kind == "short":
+            for q in range(x, y - 1, 16):
+                e = min(y - (y - x) % 2, q + 16)
+                vals = [int.from_bytes(rom[k - BASE:k - BASE + 2], "little") for k in range(q, e, 2)]
+                new.append([q, e - q, ".short\t" + ", ".join("0x%04x" % v for v in vals), None, None])
         else:
             for q in range(x, y, 8):
                 e = min(y, q + 8)

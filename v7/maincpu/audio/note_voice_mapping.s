@@ -12630,24 +12630,24 @@ ProcessEventDispatch_LoadParam:
 	pushw	0x5
 	ld	de, (xsp + 8)
 	ld	bc, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 4)
 	pushw	0x5
 	ld	de, (xsp + 10)
 	ldw	bc, 0x20
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	cp	(0x8c9a:16), 220
 	jr	z, ProcessEventDispatch_InitVal
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 8)
 	ld	bc, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 10)
 	ldw	bc, 0x20
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 ProcessEventDispatch_InitVal:
 	ld	wa, 0:i3
 	cpw	(xsp + 10), 0x0
@@ -12663,14 +12663,14 @@ ProcessEventDispatch_LoadParam2:
 	pushw	0x5
 	ld	de, (xsp + 12)
 	ldw	bc, 0x5e
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	cp	(0x8c9a:16), 220
 	jr	z, ProcessEventDispatch_LoadParam3
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 12)
 	ldw	bc, 0x5e
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 ProcessEventDispatch_LoadParam3:
 	ld	wa, (xsp + 4)
 	ld	de, (xsp + 12)
@@ -12680,12 +12680,12 @@ ProcessEventDispatch_LoadParam3:
 	pushw	0x5
 	ld	de, (xsp + 14)
 	ldw	bc, 0xa
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 14)
 	ldw	bc, 0xa
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ldw	wa, 0x7f
 	cpw	(xsp + 14), 0x48
 	jr	ge, ProcessEventDispatch_LoadParam4
@@ -12701,12 +12701,12 @@ ProcessEventDispatch_LoadParam4:
 	pushw	0x5
 	ld	de, (xsp + 16)
 	ldw	bc, 0xb
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 16)
 	ldw	bc, 0xb
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	RhythmBuf_EventDispatchLoop
 	call	RhythmBuf_ReadAlternate
 	ldw_erp	HL, 0xfa
@@ -12734,7 +12734,7 @@ ProcessEventDispatch_LoadIter:
 	pushw	0x5
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, iz
 	ldw	bc, 0x1b0
 	ldw	de, 0x2000
@@ -12743,7 +12743,7 @@ ProcessEventDispatch_LoadIter:
 	pushw	0x5
 	ldw	bc, 0x1b0
 	ldw	de, 0x2000
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, iz
 	ldw	bc, 0x40
 	ld	de, 0:i3
@@ -12752,12 +12752,12 @@ ProcessEventDispatch_LoadIter:
 	pushw	0x5
 	ldw	bc, 0x40
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, iz
 	pushw	0x3
 	ldw	bc, 0x40
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, iz
 	ldw	bc, 0xb
 	ldw	de, 0x7f
@@ -12766,7 +12766,7 @@ ProcessEventDispatch_LoadIter:
 	pushw	0x5
 	ldw	bc, 0xb
 	ldw	de, 0x7f
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	inc	1, iz
 	cp	iz, 0x14
 	jr	lt, ProcessEventDispatch_LoadIter
@@ -12808,7 +12808,7 @@ ProcessEventDispatch_LoadIter:
 	pushw	0x5
 	ld	de, iz
 	ld	bc, 1:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_InitVal2:
 	ld	wa, 0:i3
@@ -12831,7 +12831,7 @@ ProcessEventDispatch_LoadReg:
 	pushw	0x5
 	ld	de, bc
 	ldw	bc, 0x1b0
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_LoadParam5:
 	ld	wa, (xsp + 4)
@@ -12842,12 +12842,12 @@ ProcessEventDispatch_LoadParam5:
 	pushw	0x5
 	ld	de, iz
 	ldw	bc, 0x40
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, iz
 	ldw	bc, 0x40
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_LoadParam6:
 	ld	wa, (xsp + 4)
@@ -12858,12 +12858,12 @@ ProcessEventDispatch_LoadParam6:
 	pushw	0x5
 	ld	de, iz
 	ldw	bc, 0xa
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, iz
 	ldw	bc, 0xa
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_LoadParam7:
 	ld	wa, (xsp + 4)
@@ -12874,7 +12874,7 @@ ProcessEventDispatch_LoadParam7:
 	pushw	0x5
 	ld	de, iz
 	ldw	bc, 0xb
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_DoInit:
 	stb_erp	A, 0xf8
@@ -12949,17 +12949,17 @@ NonNoteDispatchLoop_LoadParam:
 	pushw	0x3
 	ld	de, (xsp + 8)
 	ld	bc, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 10)
 	ldw	bc, 0x20
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ldw	bc, 0x5e
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
 NonNoteDispatchLoop_ReadAlt2:
 	call	SeqEvtBuf_ReadAlternate
@@ -13000,22 +13000,22 @@ NonNoteDispatchLoop_LoadParam2:
 	pushw	0x3
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 8)
 	pushw	0x3
 	ldw	bc, 0x1b0
 	ldw	de, 0x2000
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 8)
 	pushw	0x3
 	ldw	bc, 0x40
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	wa, (xsp + 8)
 	pushw	0x3
 	ldw	bc, 0xb
 	ldw	de, 0x7f
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	incw	1, (xsp + 8)
 	cpw	(xsp + 8), 0x18
 	jr	lt, NonNoteDispatchLoop_LoadParam2
@@ -13060,7 +13060,7 @@ SeqPart_EmitPercussionNote_Skip:
 	pushw	3
 	ld	de, iz
 	ld	bc, 1:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
 	ld	wa, 0:i3
 	cp	iz, 64
@@ -13082,7 +13082,7 @@ ProcessEventDispatch_Prologue_Skip:
 	pushw	3
 	ld	de, bc
 	ldw	bc, 432
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
 	ld	wa, (xsp+4)
 	ld	de, iz
@@ -13092,7 +13092,7 @@ ProcessEventDispatch_Prologue_Skip:
 	pushw	3
 	ld	de, iz
 	ldw	bc, 64
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
 	ld	wa, (xsp+4)
 	ld	de, iz
@@ -13102,7 +13102,7 @@ ProcessEventDispatch_Prologue_Skip:
 	pushw	3
 	ld	de, iz
 	ldw	bc, 10
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
 	ld	wa, (xsp+4)
 	ld	de, iz
@@ -13112,7 +13112,7 @@ ProcessEventDispatch_Prologue_Skip:
 	pushw	3
 	ld	de, iz
 	ldw	bc, 11
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
 	ld	wa, (xsp+4)
 	ld	de, iz
@@ -13122,7 +13122,7 @@ ProcessEventDispatch_Prologue_Skip:
 	pushw	3
 	ld	de, iz
 	ldw	bc, 94
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
 SeqPerformance_Event_Block:
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
@@ -14515,10 +14515,10 @@ VoiceSlot_StoreParams_OrBits:
 	xor	h, h
 VoiceSlot_StoreParams_LoadReg:
 	ld	l, (xiy + 5)
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	C, 0x03, 0xf8, 0xec
 	stw_erp	WA, 0x30
-	ld	xiz, 0xfe9d45
+	ld	xiz, Chord_BitMask16
 	and_sriw_rm	WA, 0x03, 0xf8, 0xe4
 	jr	nz, VoiceSlot_StoreParams_Decrement
 	or_sriw_rm	WA, 0x03, 0xf8, 0xe4
@@ -14561,7 +14561,7 @@ VoiceSlot_StoreParams_LoadReg4:
 	ld	l, (xiy + 5)
 	cp	l, (0xce4a:24)
 	jr	z, VoiceSlot_StoreParams_Increment
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	L, 0x07, 0xf8, 0xec
 	dec	1, hl
 	ld	xiz, 0xfe903d
@@ -14574,7 +14574,7 @@ VoiceSlot_StoreParams_LoadReg5:
 	ld	xiz, 0xfe9049
 	ldb_sri	A, 0x07, 0xf8, 0xec
 	ld	l, (0xce4a:24)
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	W, 0x07, 0xf8, 0xec
 	and	(0xce42:24), 127
 	and	(0xce42:24), 239
@@ -14613,7 +14613,7 @@ ComputeNoteBitPositi_Prologue:
 	ld	xiz, 0xce4a
 	ldb_sri	L, 0x07, 0xf8, 0xf4
 	sub	l, w
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	A, 0x07, 0xf8, 0xec
 	dec	1, a
 	ld	c, 0xb:opc
@@ -14640,7 +14640,7 @@ ComputeNoteBitPositi_Data:
 	ld_rrb	w, xiz, iy
 	sub	l, h
 	xor	h, h
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ld_rrb	c, xiz, hl
 	dec	1, c
 	ldb_erp	a, 60
@@ -14721,7 +14721,7 @@ Voice_PitchCalcStep:
 	ld	xiz, 0xce4a
 	ldb_sri	L, 0x07, 0xf8, 0xec
 	add	l, b
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	W, 0x07, 0xf8, 0xec
 	jr	PitchCalc_Return_Return
 PitchCalcStep_ClearByte:
@@ -14843,7 +14843,7 @@ VoiceSlot_LoadResult_SetByte:
 	ld	a, 0x1:opc
 	ld	l, (0xce4a:24)
 	xor	h, h
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	W, 0x07, 0xf8, 0xec
 VoiceSlot_LoadResult_Block2:
 	and	(0xce42:24), 127
@@ -15210,7 +15210,7 @@ NoteDisplay_LookupEntry:
 	ld	xiz, 0xce4a
 	ldb_sri	L, 0x07, 0xf8, 0xec
 	add	l, w
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	W, 0x07, 0xf8, 0xec
 	dec	1, w
 	ld	l, (0xce49:24)
@@ -15247,7 +15247,7 @@ NoteDisplay_FoundEntry:
 	ld	xiz, 0xce4a
 	ldb_sri	L, 0x07, 0xf8, 0xec
 	add	l, w
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	W, 0x07, 0xf8, 0xec
 	jr	NoteDisplay_StoreBoundsReturn
 NoteDisplay_NotFound:
@@ -15286,7 +15286,7 @@ NoteDisplay_AlternateLookup:
 	ld	l, (0xce98:24)
 	add	l, w
 	xor	h, h
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	W, 0x07, 0xf8, 0xec
 	jr	NoteDisplay_AltReturn
 Voice_ZeroInitConverge:
@@ -15338,7 +15338,7 @@ NoteDisplay_LookupFromCurrent:
 	ld	xiz, 0xce4a
 	ldb_sri	L, 0x07, 0xf8, 0xec
 NoteDisplay_LookupFromTable:
-	ld	xiz, 0xfe9b87
+	ld	xiz, Chord_Tables + 0xd
 	ldb_sri	A, 0x07, 0xf8, 0xec
 	cp	(0xce44:24), a
 	jr	z, NoteDisplay_SameNote
@@ -15441,10 +15441,10 @@ InitPartAllocState_TestBit242:
 	ld	l, (0xce43:24)
 	xor	h, h
 	dec	1, hl
-	ld	xiz, 0xfe9c0b
+	ld	xiz, Chord_Tables + 0x91
 	ldb_sri	A, 0x07, 0xf8, 0xec
 	ld	(0xce49:24), a
-	ld	xiz, 0xfe9c34
+	ld	xiz, Chord_Tables + 0xba
 	sla	hl, 2
 	ldw_sri	BC, 0x07, 0xf8, 0xec
 	inc	2, hl
@@ -15458,7 +15458,7 @@ InitPartAllocState_TestBit242:
 	xor	h, h
 	ld	l, c
 	sla	hl, 1
-	ld	xiz, 0xfe9d03
+	ld	xiz, Chord_Tables + 0x189
 	ldw_sri	WA, 0x07, 0xf8, 0xec
 	ld	l, b
 	sla	hl, 1
@@ -15495,7 +15495,7 @@ InitPartAllocState_Block5:
 	jr	VoiceSlot_SetPitchParams
 VoiceSlot_SetPitchParams:
 VoiceSlot_SetPitchParams_LoadReg:
-	ld	xiz, 0xfe9b7a
+	ld	xiz, Chord_Tables
 	ldb_sri	W, 0x07, 0xf8, 0xec
 	ld	a, 0x40:opc
 	ldw	(0xcedb:24), 0x0001
@@ -15507,12 +15507,12 @@ VoiceSlot_SetPitchParams_TestBit24:
 	ld	l, (0xce43:24)
 	xor	h, h
 	dec	1, hl
-	ld	xiz, 0xfe9c0b
+	ld	xiz, Chord_Tables + 0x91
 	ldb_sri	C, 0x07, 0xf8, 0xec
 	ld	(0xce55:24), c
 	inc	1, (0xce55:24)
 	xor	b, b
-	ld	xiy, 0xfe9c34
+	ld	xiy, Chord_Tables + 0xba
 	ld	xix, 0xce56
 	sla	hl, 2
 	ld	d, (0xce45:24)
@@ -15549,11 +15549,11 @@ VoiceSlot_IterateAlloc_Block:
 	ld	l, (0xce43:24)
 	xor	h, h
 	dec	1, hl
-	ld	xiz, 0xfe9c0b
+	ld	xiz, Chord_Tables + 0x91
 	ldb_sri	C, 0x07, 0xf8, 0xec
 	ld	(0xce55:24), c
 	xor	b, b
-	ld	xiy, 0xfe9c34
+	ld	xiy, Chord_Tables + 0xba
 	ld	xix, 0xce56
 	sla	hl, 2
 	ld	e, (0xce44:24)
@@ -15572,15 +15572,15 @@ VoiceSlot_IterateAlloc_Block2:
 	ld	l, (0xce43:24)
 	xor	h, h
 	dec	1, hl
-	ld	xiz, 0xfe9c0b
+	ld	xiz, Chord_Tables + 0x91
 	ldb_sri	A, 0x07, 0xf8, 0xec
 	ld	(0xce55:24), a
-	ld	xiz, 0xfe9c34
+	ld	xiz, Chord_Tables + 0xba
 	sla	hl, 2
 	ldw_sri	BC, 0x07, 0xf8, 0xec
 	inc	2, hl
 	ldw_sri	DE, 0x07, 0xf8, 0xec
-	ld	xiz, 0xfe9b7a
+	ld	xiz, Chord_Tables
 	ld	l, (0xce44:24)
 	ldb_sri	L, 0x03, 0xf8, 0xec
 	add	l, 0xc
@@ -15660,6 +15660,22 @@ VoiceSlot_CheckAndApply_DoCheckDis:
 VoiceSlot_CheckAndApply_Return:
 	ret
 ; v10 name for this address: VoiceSlot_CheckAndApply_Data -- not a label here: v7 keeps that name at 0xFE9F94 for shared/positional_labels.s
+; CHORD TABLES used by the fingered-chord code, 441 bytes, five parts, byte-
+; identical to v9/v10 (see the header there for the readers in detail).  In v7
+; the readers sit 0x7CF lower than in v10 (InitPartAllocState_TestBit242's code
+; at 0xFE98F8, the bass-note reader at 0xFE99A2) and the RAM they use 0x9C
+; lower: chord type 0xCE43, root 0xCE44, bits 0xCE42, note count 0xCE49, bass
+; event 0xCEDB/0xCEDF.  The v7 names of this table and of its parts are
+; positional aliases 0x41A too high (the v7 label drift), so the readers here
+; hold numeric addresses.  Offsets:
+;   +0x000   1 B   0x00, never read
+;   +0x001  12 B   ROOT (1-12) -> BASS NOTE 0x24..0x2C, 0x21..0x23
+;   +0x00D 132 B   NOTE -> PITCH CLASS + 1 (11 rows of 1..12)
+;   +0x091  41 B   CHORD TYPE -> NOTE COUNT (3 or 4)
+;   +0x0BA 164 B   CHORD TYPE -> 4 INTERVALS above the root (41 x 4)
+;   +0x15E  43 B   0x00..0x2A in order; no reader found (in v10 either)
+;   +0x189  48 B   PITCH INDEX -> BIT MASK, 24 x .hword, 1 << ((i + 5) mod 12)
+Chord_Tables:
 	.byte	0x00
 	; index row
 	.byte	0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x21, 0x22, 0x23
@@ -15747,87 +15763,80 @@ VoiceSlot_CheckAndApply_LoadReg:
 	ldirw
 	ret
 ; v10 name for this address: VoiceSlot_CheckAndApply_Data2 -- not a label here: v7 keeps that name at 0xFEA15F for ui_widgets/widget_dispatch.s
-	normal
-	nop
-	push	sr
-	nop
-	max
-	nop
-	ld	(0:8), 16:io
-	nop
-	ld	w, 0:opc
-	ld	xwa, 32768
-	normal
-	nop
-	push	sr
-	nop
-	max
-	nop
-	ld	(0:8), 16:io
-	nop
-	ld	w, 0:opc
-	ld	xwa, 960004096
+; 16 x .short 1 << i.  Reader VoiceSlot_StoreParams_LoadReg (v7 0xFE8F80; v9/v10 0xFE974F):
+;   ld c, (xiz + l)  with XIZ = the note -> pitch-class+1 part of the chord
+;                    tables (_Data_0xD), then  ld xiz, <this table> /
+;   and wa, (xiz + c) / jr nz, <already seen> / or wa, (xiz + c)
+; i.e. a WORD read at BYTE offset 1..12, misaligned for odd offsets; the 12
+; words it can read (0x0200, 0x0002, 0x0400, 0x0004, ... 0x4000, 0x0040) are
+; still 12 distinct single bits, so WA works as a set of pitch classes seen
+; while collecting the held notes (no duplicates stored).
+Chord_BitMask16:
+	.short	0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080
+	.short	0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000
+; Evaluate a chord from the ALTERNATE note buffer at RAM 0xCEB6 without
+; disturbing the current one: saves 0xCEDE-0xCEE4 to 0xCEC0 and the 10-byte
+; buffer at 0xCEE5 to 0xCECA, copies 0xCEB6.. into 0xCEE5.., and when it holds
+; more than 2 notes runs Voice_UpdateNoteBitmap and NoteDisplay_InitState /
+; NoteDisplay_LookupBitmap on it; the result (0xCEDF, 0xCEE0, 0xCEE1, 0xCEDE)
+; is written to 0xCEB6..0xCEB9 and the saved state restored.
+; No caller found: no branch lands here and no 24-bit pointer to this address
+; occurs in the dump.  Its entry is simply the byte after the mask table.
+Chord_EvalAltNoteBuffer:
+	push	xwa
+	push	xbc
 	push	xhl
 	push	xde
 	push	xix
 	push	xiy
 	push	xiz
-	; index row
-	ld	a, (0xce42:24)
-	ld	(0xce24:16), a
-	ld	a, (0xce43:24)
-	ld	(0xce25:16), a
-	ld	a, (0xce44:24)
-	ld	(0xce26:16), a
-	ld	a, (0xce45:24)
-	ld	(0xce27:16), a
-	ld	a, (0xce46:24)
-	ld	(0xce28:16), a
-	ld	a, (0xce47:24)
-	ld	(0xce29:16), a
-	ld	a, (0xce48:24)
-	ld	(0xce2a:16), a
+; index row
+	ldb_da	a, (0xce42)
+	stb_d8	(0xce24), a
+	ldb_da	a, (0xce43)
+	stb_d8	(0xce25), a
+	ldb_da	a, (0xce44)
+	stb_d8	(0xce26), a
+	ldb_da	a, (0xce45)
+	stb_d8	(0xce27), a
+	ldb_da	a, (0xce46)
+	stb_d8	(0xce28), a
+	ldb_da	a, (0xce47)
+	stb_d8	(0xce29), a
+	ldb_da	a, (0xce48)
+	stb_d8	(0xce2a), a
 	ld	xiy, 0xce49
 	ld	xix, 0xce2e
 	ldw	bc, 10
-	.byte	0x85
-	scf
+	ldir85
 	ld	xiy, 0xce1a
 	ld	xix, 0xce49
 	ldw	bc, 10
-	.byte	0x85
-	scf
-	.byte	0xc2, 0x49, 0xce
-	nop
-	push	xsp
-	push	sr
+	ldir85
+	cpib_da	(0xce49), 2
 	jrl	ule, VoiceSlot_CheckAndApply_LoadReg_Skip3
 	calr	Voice_UpdateNoteBitmap
 	cp	w, 0:i3
 	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Entry
-	dec	1, (0xce49:24)
+	decdi8_24	1, (0xce49)
 	calr	Voice_UpdateNoteBitmap
-	inc	1, (0xce49:24)
+	incdi8_24	1, (0xce49)
 	jr	VoiceSlot_CheckAndApply_LoadReg_Entry
 	cp	w, 0:i3
 	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Entry
-	ld	a, (0xce46:24)
-	ld	w, (0xce47:24)
+	ldb_da	a, (0xce46)
+	ldb_da	w, (0xce47)
 VoiceSlot_CheckAndApply_LoadReg_Entry:
-	.byte	0xf2
-	.byte 0x42, 0xce, 0x00, 0xce
+	bitda_24	6, (0xce42)
 	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Skip
-	.byte	0xd7
-	push	xiz
-	.byte	0x9a
-	ld	de, (0xc4fa:16)
+	.byte	0xd7, 0x3e, 0x9a	; ld QHL3,DE
+	ldw_d16	de, (0xc4fa)
 	and	de, 8
-	.byte	0xd7
-	push	xiz
-	ld	c, (xde+110)
+	.byte	0xd7, 0x3e, 0x8a	; ld DE,QHL3
+	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Skip2
 	jr	VoiceSlot_CheckAndApply_LoadReg_Join
 VoiceSlot_CheckAndApply_LoadReg_Skip:
-	ld	l, (0xce49:24)
+	ldb_da	l, (0xce49)
 	xor	h, h
 	dec	1, hl
 	ld	xiz, 0xce4a
@@ -15842,38 +15851,37 @@ VoiceSlot_CheckAndApply_LoadReg_Join:
 VoiceSlot_CheckAndApply_LoadReg_Skip2:
 	calr	NoteDisplay_LookupBitmap
 VoiceSlot_CheckAndApply_LoadReg_Join2:
-	ld	a, (0xce43:24)
-	ld	(0xce1a:16), a
-	ld	a, (0xce44:24)
-	ld	(0xce1b:16), a
-	ld	a, (0xce45:24)
-	ld	(0xce1c:16), a
-	ld	a, (0xce42:24)
-	ld	(0xce1d:16), a
+	ldb_da	a, (0xce43)
+	stb_d8	(0xce1a), a
+	ldb_da	a, (0xce44)
+	stb_d8	(0xce1b), a
+	ldb_da	a, (0xce45)
+	stb_d8	(0xce1c), a
+	ldb_da	a, (0xce42)
+	stb_d8	(0xce1d), a
 	jr	VoiceSlot_CheckAndApply_LoadReg_Join3
 VoiceSlot_CheckAndApply_LoadReg_Skip3:
-	ld	(0xce1a:16), 0
-	ld	(0xce1b:16), 0
+	stdi8	(0xce1a), 0
+	stdi8	(0xce1b), 0
 VoiceSlot_CheckAndApply_LoadReg_Join3:
-	ld	a, (0xce24:16)
-	ld	(0xce42:24), a
-	ld	a, (0xce25:16)
-	ld	(0xce43:24), a
-	ld	a, (0xce26:16)
-	ld	(0xce44:24), a
-	ld	a, (0xce27:16)
-	ld	(0xce45:24), a
-	ld	a, (0xce28:16)
-	ld	(0xce46:24), a
-	ld	a, (0xce29:16)
-	ld	(0xce47:24), a
-	ld	a, (0xce2a:16)
-	ld	(0xce48:24), a
+	ldb_d8	a, (0xce24)
+	stb_da	(0xce42), a
+	ldb_d8	a, (0xce25)
+	stb_da	(0xce43), a
+	ldb_d8	a, (0xce26)
+	stb_da	(0xce44), a
+	ldb_d8	a, (0xce27)
+	stb_da	(0xce45), a
+	ldb_d8	a, (0xce28)
+	stb_da	(0xce46), a
+	ldb_d8	a, (0xce29)
+	stb_da	(0xce47), a
+	ldb_d8	a, (0xce2a)
+	stb_da	(0xce48), a
 	ld	xiy, 0xce2e
 	ld	xix, 0xce49
 	ldw	bc, 10
-	.byte	0x85
-	scf
+	ldir85
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -19539,20 +19547,20 @@ SeqInit_SetDefaultMode:
 	calr	SoundParam_InitDefaultBanks
 SeqInit_ConfigureBanks:
 	ld	xwa, 4:i3
-	call	0xfccc66
+	call	AcApcToggleProc_Helper
 	ld	wa, hl
 	exts	xwa
 	set	15, wa
 	ld	(4597:16), wa
 	ld	xwa, 0xc0
-	call	0xfccc66
+	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
 	jr	nz, ConfigureBanks_Send
 	ld	(4330:16), 1
 	ld	xwa, 0xc0
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -19742,7 +19750,7 @@ ConfigureBanks_LoadReg4:
 	ld	bc, iz
 	ld	xwa, 4:i3
 	ld	de, 3:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	call	SeqTimer_UpdateTempoReg
 	ld	(0xe925:16), xiz
 	jr	FileIO_SeekRecord_LoopDone
@@ -20705,7 +20713,7 @@ RecordReadOK_LoadReg6:
 	ld	bc, wa
 	ld	xwa, 4:i3
 	ld	de, 3:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	call	SeqTimer_UpdateTempoReg
 	ld	xwa, 0:i3
 	ld	(0xe921:16), xwa
@@ -20729,32 +20737,32 @@ Epilogue_Prologue:
 	ld	wa, 0:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 0:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 0:i3
 	ld	bc, 7:i3
 	ldw	de, 0x78
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 1:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 1:i3
 	ld	bc, 7:i3
 	ldw	de, 0x78
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ldw	wa, 0x63
 	ldw	bc, 0x14
 	call	SysEx_ApplyAndReloadPreset
@@ -20783,7 +20791,7 @@ Epilogue_LoadIter:
 	pushw	0x2
 	ldw	bc, 0x80
 	ld	de, 3:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	inc	1, iz
 	cp	iz, 0x10
 	jr	lt, Epilogue_LoadIter
@@ -20809,162 +20817,162 @@ Epilogue_Prologue2:
 	ld	wa, 0:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 0:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 1:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 2:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 2:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 3:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 3:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 4:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 4:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 5:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 5:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 6:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 6:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 7:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 7:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0x8
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0x8
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0x9
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0x9
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xa
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xa
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xb
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xb
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xc
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xc
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xd
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xd
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xe
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xe
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xf
 	ld	bc, 0:i3
 	ldw	de, 0xf0
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ldw	wa, 0xf
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ldw	wa, 0x63
 	ldw	bc, 0x14
 	call	SysEx_ApplyAndReloadPreset
@@ -20993,7 +21001,7 @@ Epilogue_LoadIter2:
 	pushw	0x2
 	ldw	bc, 0x80
 	ld	de, 3:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	inc	1, iz
 	cp	iz, 0x10
 	jr	lt, Epilogue_LoadIter2
@@ -21278,7 +21286,7 @@ Dispatch_Data_Join:
 	ld	bc, wa
 	ld	xwa, 4:i3
 	ld	de, 3:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	call	SeqTimer_UpdateTempoReg
 	ld	xwa, xiz
 	set	15, wa
@@ -21437,23 +21445,23 @@ ToneGen_ResetAndInitBanks:
 	ld	xwa, 4:i3
 	ldw	bc, 0x76
 	ld	de, 3:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	call	SeqTimer_UpdateTempoReg
 	pushw	0x2
 	ld	wa, 0:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 0:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	pushw	0x2
 	ld	wa, 0:i3
 	ld	bc, 7:i3
 	ldw	de, 0x7f
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	hl, 0:i3
 	ret
 MidiRealtime_ReadAndProcess:
@@ -21873,7 +21881,7 @@ SoundParam_InitDefaultBanks:
 	ld	xwa, 0xc1
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21881,7 +21889,7 @@ SoundParam_InitDefaultBanks:
 	ld	xwa, 0xc0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21898,7 +21906,7 @@ SoundParam_InitDefau_LoadReg:
 	ld	wa, de
 	ld	de, bc
 	ldw	bc, 0x401
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	lda	xbc, (0xf1a0:16)
 	lda	xwa, (xsp + 66)
 	ldb_sri	A, 0x07, 0xe0, 0xf8
@@ -21912,7 +21920,7 @@ SoundParam_InitDefau_Block:
 	ld	xwa, 0xc1
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21920,7 +21928,7 @@ SoundParam_InitDefau_Block:
 	ld	xwa, 0xc0
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21937,7 +21945,7 @@ SoundParam_InitDefau_LoadReg2:
 	ld	wa, de
 	ld	de, bc
 	ldw	bc, 0x401
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	lda	xbc, (0xf1a0:16)
 	lda	xwa, (xsp + 34)
 	ldb_sri	A, 0x07, 0xe0, 0xf8
@@ -21951,7 +21959,7 @@ SoundParam_InitDefau_Block2:
 	ld	xwa, 0xc0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21959,7 +21967,7 @@ SoundParam_InitDefau_Block2:
 	ld	xwa, 0xc1
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21976,7 +21984,7 @@ SoundParam_InitDefau_LoadReg3:
 	ld	wa, de
 	ld	de, bc
 	ldw	bc, 0x401
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	lda	xbc, (0xf1a0:16)
 	lda	xwa, (xsp + 2)
 	ldb_sri	A, 0x07, 0xe0, 0xf8
@@ -21988,11 +21996,11 @@ SoundParam_InitDefau_LoadReg4:
 	ld	xwa, 0x2201
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	xwa, 0x2205
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 ToneGen_NotifyChangeComplete_Return:
 	popw	iz
 	lda	xsp, (xsp + 96)
