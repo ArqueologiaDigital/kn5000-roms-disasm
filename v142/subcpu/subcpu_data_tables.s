@@ -534,15 +534,18 @@ Voice_Pitch_Table_High:
 Voice_KeyTable_Remapping:
 	.byte 0x06, 0x05, 0x02, 0x04, 0x03, 0x01, 0x00, 0xff
 ; 0xFF-terminated search order, 14 entries, referenced from record 0 of the table at 0x00F633.
+; (Voice_SFX_ModulationTable record +0 pointer); walked by Voice_Find_Candidate (0x02229A) until 0xFF.
 Voice_Search_Order_List_1:
 	.byte 0x86, 0x85, 0x06, 0x05, 0x84, 0x83, 0x82, 0x04
 	.byte 0x03, 0x02, 0x81, 0x80, 0x01, 0x00, 0xff
 ; 0xFF-terminated search order, 13 entries, referenced from record 1 of the table at 0x00F633.
+; (Voice_SFX_ModulationTable record +0 pointer); walked by Voice_Find_Candidate (0x02229A) until 0xFF.
 Voice_Search_Order_List_2:
 	.byte 0x86
 	.byte 0x85, 0x06, 0x05, 0x84, 0x83, 0x82, 0x04, 0x03
 	.byte 0x02, 0x81, 0x80, 0x01, 0xff
 ; 0xFF-terminated search order, 10 entries, referenced from records 2..15 of the table at 0x00F633.
+; (Voice_SFX_ModulationTable record +0 pointer); walked by Voice_Find_Candidate (0x02229A) until 0xFF.
 Voice_Search_Order_List_3:
 	.byte 0x86, 0x85, 0x06
 	.byte 0x05, 0x84, 0x83, 0x82, 0x04, 0x03, 0x02, 0xff
@@ -13038,8 +13041,19 @@ Serial1_Enable_TX_Interrupt:	; 01F801h
 	pop	sr
 	ret
 
-Serial1_BaudRate_Config_Table:
-	.byte 0x02, 0x06, 0x06, 0x08, 0xeb, 0xfd, 0x03, 0x0e
+; Writes INTES1 (SFR 0xEB, serial-1 interrupt enable/level) = 0xFD under `push sr / ei 6` --
+; instruction for instruction the shape of Serial1_Enable_TX_Interrupt just above, which
+; writes 0xDD; the two values differ only in the high (TX) nibble, 0xF against 0xD.  No caller
+; found: the address 0x01F809 occurs nowhere in the image as a 3-byte LE value and no calr
+; displacement lands on it, so what 0xFD selects is not established.
+; ★ Renamed 2026-09-25 from Serial1_BaudRate_Config_Table and written as instructions: the 8
+; bytes decode cleanly (MAME unidasm and llvm-mc agree) as this routine, not as a table.
+Serial1_Write_INTES1_FD:
+	push	sr
+	ei 6
+	ld (0xEB:8), 0xFD:io
+	pop	sr
+	ret
 
 Serial1_CommandHandler_RX_F4F5:
 	cp a, 0xF5
@@ -13165,7 +13179,13 @@ INIT_RING_BUFFERS:
 	ei 0
 	ret
 
-Serial1_Config_Constants:
+; 5 bytes right before RESET (0x01F924).  They decode (MAME unidasm) as `halt / ret / jr T,RESET
+; / ret` -- the jr skips the last 0x0E and lands exactly on RESET -- but the same bytes also
+; decode cleanly one byte later, nothing refers to 0x01F91F..0x01F923 (3-byte LE address, calr
+; and jr displacements searched), and nothing here is serial configuration.  Purpose not
+; established; kept as bytes.
+; ★ Renamed 2026-09-25 from Serial1_Config_Constants, a name no reader supports.
+PreReset_Unreferenced_Bytes:
 	.byte 0x05, 0x0e, 0x68, 0x01, 0x0e
 
 
