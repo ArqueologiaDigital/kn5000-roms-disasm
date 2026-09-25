@@ -715,13 +715,92 @@ def type_palettes(v, apply):
         print('     %s %s: recompiled, byte-identical' % (v, blob))
 
 
+MSG_T = ('msg_record_t', 14, """/* One record of the IvMesage message catalog (14 bytes).  Readers
+ * (ui/drawbar_panel_ui.s): IvMesageProc on init (0x1C00001) and
+ * IvMessage_SelectionChange / LanguageCheckReturn index the catalog with
+ * `muls wa, 0xe` and load `kind`, which selects one of the 6 window object
+ * ids that follow the catalog (`sla wa, 2`); MessageText (event 0x1E0009F)
+ * returns `text`; CheckMsg_IncrementCheck stops at a record whose `text` is
+ * 0; IvMessage_Paint compares `kind` with 5.  `header` and `text` point at
+ * 6-entry per-language string tables (English, German, French, Spanish,
+ * Italian, Indonesian). */
+typedef struct __attribute__((packed)) {
+    uint16_t kind;     /* +0  window: 0 NoMessage, 1 Completed, 2 Reminder,
+                              3 Error, 4 Other, 5 PleaseWait */
+    uint32_t code;     /* +2  0x00NNFFFF: NN = the error number shown;
+                              0xFFFFFFFF none */
+    uint32_t header;   /* +6  per-language header strings */
+    uint32_t text;     /* +10 per-language message texts */
+} msg_record_t;
+""")
+
+
+def type_message_catalog(v, apply):
+    blob = 'naka_technichord_strings'
+    cb = M.CBlob(RT.c_path(v, blob))
+    if 'IvMesage_Catalog' in cb.by_name:
+        print('%s %s: message catalog already typed' % (v, blob))
+        return
+    data = RT.compile_blob(v, blob)
+    base = cb.base()
+    m = RT.objmap(v)
+    T, n = m.msgcat['table'], m.msgcat['count']
+    lo, hi = T - base, T - base + 14 * (n + 1) + 24
+    layouts = naka_layouts(os.path.join(RT.ui(v), 'naka_types.h'))
+    cb.split_word(lo, data)
+    cb.split_word(hi, data)
+    k0, k1 = cb.index_at(lo), cb.index_at(hi - 1)
+    sym = {}
+    for kk in range(k0, k1 + 1):
+        for o, sn, x in (symbolic_at(cb, kk, layouts) or []):
+            sym[o] = x
+    rows = []
+    for k in range(n + 1):
+        a = lo + 14 * k
+        kind = int.from_bytes(data[a:a + 2], 'little')
+        code = int.from_bytes(data[a + 2:a + 6], 'little')
+        hd = sym.pop(a + 6, '0x%08X' % int.from_bytes(data[a + 6:a + 10], 'little'))
+        tx = sym.pop(a + 10, '0x%08X' % int.from_bytes(data[a + 10:a + 14], 'little'))
+        rows.append('        /* %2d */ { %d, 0x%08X, %s, %s },' % (k, kind, code, hd, tx))
+    wl = lo + 14 * (n + 1)
+    wins = [int.from_bytes(data[wl + 4 * i:wl + 4 * i + 4], 'little') for i in range(6)]
+    if sym:
+        print('%s: unplaced symbolic values %s -- not typed' % (v, list(sym.items())[:3]))
+        return
+    M.TYPE_SIZES[MSG_T[0]] = MSG_T[1]
+    ensure_typedef(cb, MSG_T[0], MSG_T[2])
+    new = [M.NewMember(MSG_T[0], 'IvMesage_Catalog', '[%d]' % (n + 1), 14 * (n + 1),
+                       '{\n' + '\n'.join(rows) + '\n    }',
+                       ['    /* the IvMesage message catalog: %d records + an all-zero terminator '
+                        '(see msg_record_t) */' % n]),
+           M.NewMember('uint32_t', 'IvMesage_Windows', '[6]', 24,
+                       '{ ' + ', '.join('0x%08X' % w for w in wins) + ' }',
+                       ['    /* the 6 window object ids `kind` selects: Viewable slot 0xEE '
+                        'elements 0x14 NoMessage, 0x02 Completed, 0x05 Reminder, 0x09 Error, '
+                        '0x0D Other, 0x16 PleaseWait (all class Window) */'])]
+    keeps = [cb.members[kk].name for kk in range(k0, k1 + 1)
+             if M.SYMBOLIC_RE.search(cb.entries[kk].expr)]
+    cb.retype(lo, hi, new, data, false_pointers=keeps)
+    print('%s %s: message catalog typed (%d records + terminator, window ids)' % (v, blob, n))
+    if apply:
+        cb.write()
+        if RT.compile_blob(v, blob) != data:
+            raise SystemExit('%s %s: typed C compiles to different bytes' % (v, blob))
+        print('     %s %s: recompiled, byte-identical' % (v, blob))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--apply', action='store_true')
     ap.add_argument('--blob', action='append')
     ap.add_argument('--style-browser', action='store_true')
     ap.add_argument('--palettes', action='store_true')
+    ap.add_argument('--messages', action='store_true')
     a = ap.parse_args()
+    if a.messages:
+        for v in RT.VERSIONS:
+            type_message_catalog(v, a.apply)
+        return
     if a.palettes:
         for v in RT.VERSIONS:
             type_palettes(v, a.apply)
