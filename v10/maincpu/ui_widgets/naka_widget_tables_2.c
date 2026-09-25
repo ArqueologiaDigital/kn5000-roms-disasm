@@ -1161,23 +1161,28 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint32_t StsGMOnCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
-     * StsGMOnCheck_PtrTable_Tail -- 608 bytes after StsGMOnCheck_PtrTable
-     * that no registration or code reference reaches (searched: RegObjTabl
-     * tables, slice and positional labels). Contents not established.
+     * StsGMOffCheck_Strings -- the 5 strings StsGMOffCheck_PtrTable points
+     * at (NUL-terminated, 0xFF pad to even length), 608 bytes.
      * --------------------------------------------------------------------- */
-    uint8_t StsGMOnCheck_PtrTable_Tail[608];
+    char StsGMOffCheck_Strings[608];
     /* ---------------------------------------------------------------------
-     * StsGMOffCheck_PtrTable -- 12 u32 addresses, read by StsGMOffCheck
+     * StsGMOffCheck_PtrTable -- 6 u32 addresses, read by StsGMOffCheck
      * (v10/v9 0xF74784, v7 0xF74380) (`lda xhl,
      * (GMMode_Attention_English2_0x47C:24)`).
      * --------------------------------------------------------------------- */
-    uint32_t StsGMOffCheck_PtrTable[12];
+    uint32_t StsGMOffCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
-     * StsGMOffCheck_PtrTable_Tail -- 104 bytes after StsGMOffCheck_PtrTable
-     * that no registration or code reference reaches (searched: RegObjTabl
-     * tables, slice and positional labels). Contents not established.
+     * StsAreYouSureCheck_PtrTable -- 6 u32 addresses, read by
+     * StsAreYouSureCheck (v10/v9 0xF74795, v7 0xF74391) (`lda xhl,
+     * (GMMode_Attention_English2_0x494:24)`).
      * --------------------------------------------------------------------- */
-    uint8_t StsGMOffCheck_PtrTable_Tail[104];
+    uint32_t StsAreYouSureCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsAreYouSureCheck_Strings -- the 6 strings
+     * StsAreYouSureCheck_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 104 bytes.
+     * --------------------------------------------------------------------- */
+    char StsAreYouSureCheck_Strings[104];
     /* ---------------------------------------------------------------------
      * StsSplitCheck_PtrTable -- 6 u32 addresses, read by StsSplitCheck
      * (v10/v9 0xF748A6, v7 0xF744A2) (`lda xhl,
@@ -2556,8 +2561,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_352),
     },
 
-    .East_ResNames_352 = 
-        "\0\xFF"
+    .East_ResNames_352 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2577,8 +2581,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_353),
     },
 
-    .East_ResNames_353 = 
-        "\0\xFF"
+    .East_ResNames_353 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "ClockBox\0\xFF"
@@ -2595,8 +2598,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_354),
     },
 
-    .East_ResNames_354 = 
-        "\0\xFF"
+    .East_ResNames_354 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2612,8 +2614,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_355),
     },
 
-    .East_ResNames_355 = 
-        "\0\xFF"
+    .East_ResNames_355 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2691,8 +2692,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_356),
     },
 
-    .East_ResNames_356 = 
-        "\0\xFF"
+    .East_ResNames_356 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2793,8 +2793,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_357),
     },
 
-    .East_ResNames_357 = 
-        "\0\xFF"
+    .East_ResNames_357 = "\0\xFF"
         "ExcRcvDotBox\0\xFF"
         "ExcRcvMspBox\0\xFF"
         "ExcRcvSeqBox\0\xFF"
@@ -2849,8 +2848,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_358),
     },
 
-    .East_ResNames_358 = 
-        "\0\xFF"
+    .East_ResNames_358 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2883,8 +2881,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_359),
     },
 
-    .East_ResNames_359 = 
-        "\0\xFF"
+    .East_ResNames_359 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2902,8 +2899,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_35A),
     },
 
-    .East_ResNames_35A = 
-        "\0\xFF"
+    .East_ResNames_35A = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2932,8 +2928,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_35B),
     },
 
-    .East_ResNames_35B = 
-        "\0\xFF"
+    .East_ResNames_35B = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2964,8 +2959,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_35C),
     },
 
-    .East_ResNames_35C = 
-        "\0\xFF"
+    .East_ResNames_35C = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -3003,8 +2997,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_3D7),
     },
 
-    .East_ResNames_3D7 = 
-        "\0\xFF"
+    .East_ResNames_3D7 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -3042,8 +3035,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_3D8),
     },
 
-    .East_ResNames_3D8 = 
-        "\0\xFF"
+    .East_ResNames_3D8 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -3063,8 +3055,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_ResNames_3EC),
     },
 
-    .East_ResNames_3EC = 
-        "\0\xFF"
+    .East_ResNames_3EC = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -3072,8 +3063,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         "\0\xFF"
         "SplitSetting\0\xFF",
 
-    .East_ResNames_3EC_Strings = 
-        "MD_MIDI\0"
+    .East_ResNames_3EC_Strings = "MD_MIDI\0"
         "TT_REVEQMENU\0\xFF"
         "TT_SDOCT\0\xFF"
         "TT_REVPRESET\0\xFF"
@@ -3118,8 +3108,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(East_MainFuncNames_443),
     },
 
-    .East_MainFuncNames_443 = 
-        "\0\xFF"
+    .East_MainFuncNames_443 = "\0\xFF"
         "MainRevEqPresetLoad\0"
         "MainVocalistPage2OKFunc\0"
         "MainVocalistPage1OKFunc\0"
@@ -12268,8 +12257,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(AcCtlMsgGrid_Show_Strings),
     },
 
-    .AcCtlMsgGrid_Show_Strings = 
-        "PAGE 2/2\0\xFF"
+    .AcCtlMsgGrid_Show_Strings = "PAGE 2/2\0\xFF"
         "PAGE 1/2\0\xFF",
 
     .MidiSetup_TtlCase4_PtrTable = {
@@ -12278,8 +12266,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(MidiSetup_TtlCase4_Strings),
     },
 
-    .MidiSetup_TtlCase4_Strings = 
-        "PAGE 3/3\0\xFF"
+    .MidiSetup_TtlCase4_Strings = "PAGE 3/3\0\xFF"
         "PAGE 2/3\0\xFF"
         "PAGE 1/3\0\xFF",
 
@@ -12302,8 +12289,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(VocalistGrid_DispatchData_Strings),
     },
 
-    .VocalistGrid_DispatchData_Strings = 
-        "ABOVE\0"
+    .VocalistGrid_DispatchData_Strings = "ABOVE\0"
         "BELOW",
 
     .MidiPart_NoteNameTable = {
@@ -12321,8 +12307,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(MidiPart_NoteNameTable_Strings),
     },
 
-    .MidiPart_NoteNameTable_Strings = 
-        "B \0\xFF"
+    .MidiPart_NoteNameTable_Strings = "B \0\xFF"
         "B~a0\0\xFF"
         "A \0\xFF"
         "A~a0\0\xFF"
@@ -12349,8 +12334,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(MidiPart_OctaveTable_Strings),
     },
 
-    .MidiPart_OctaveTable_Strings = 
-        " 8\0\xFF"
+    .MidiPart_OctaveTable_Strings = " 8\0\xFF"
         " 7\0\xFF"
         " 6\0\xFF"
         " 5\0\xFF"
@@ -12376,76 +12360,57 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     },
 
-    .VocalistGrid_DispatchData_Str = 
-        "   OFF    \0\xFF",
+    .VocalistGrid_DispatchData_Str = "   OFF    \0\xFF",
 
-    .VocalistGrid_DispatchData_Str_2 = 
-        "   OMNI   \0\xFF"
+    .VocalistGrid_DispatchData_Str_2 = "   OMNI   \0\xFF"
         "    %2d    \0"
         "   %3d    \0\xFF"
         "     %d    \0"
         "     %s   \0\xFF"
         "   OFF    \0\xFF",
 
-    .VocalistGrid_DispatchData_Str_3 = 
-        "   Recv   \0\xFF",
+    .VocalistGrid_DispatchData_Str_3 = "   Recv   \0\xFF",
 
-    .VocalistGrid_DispatchData_Str_4 = 
-        "  Trans   \0\xFF",
+    .VocalistGrid_DispatchData_Str_4 = "  Trans   \0\xFF",
 
-    .VocalistGrid_DispatchData_Str_5 = 
-        "Recv+Trans\0\xFF",
+    .VocalistGrid_DispatchData_Str_5 = "Recv+Trans\0\xFF",
 
-    .VocalistGrid_DispatchData_Str_6 = 
-        "   NONE   \0\xFF",
+    .VocalistGrid_DispatchData_Str_6 = "   NONE   \0\xFF",
 
-    .VocalistGrid_DispatchData_Str_7 = 
-        "  AFTER   \0\xFF"
+    .VocalistGrid_DispatchData_Str_7 = "  AFTER   \0\xFF"
         "  CC%3d   \0\xFF"
         "%s %s%s",
 
-    .VocalistGrid_DispatchData_Str_8 = 
-        " ON  ",
+    .VocalistGrid_DispatchData_Str_8 = " ON  ",
 
-    .VocalistGrid_DispatchData_Str_9 = 
-        " OFF ",
+    .VocalistGrid_DispatchData_Str_9 = " OFF ",
 
-    .VocalistGrid_DispatchData_Str_10 = 
-        "   OFF    \0\xFF",
+    .VocalistGrid_DispatchData_Str_10 = "   OFF    \0\xFF",
 
-    .VocalistGrid_DispatchData_Str_11 = 
-        "   OMNI   \0\xFF"
+    .VocalistGrid_DispatchData_Str_11 = "   OMNI   \0\xFF"
         "    %2d    \0"
         "   %3d    \0\xFF"
         "     %d    \0"
         "     %s   \0\xFF",
 
-    .VocalistGrid_DispatchData_Str_12 = 
-        "   OFF    \0\xFF",
+    .VocalistGrid_DispatchData_Str_12 = "   OFF    \0\xFF",
 
-    .VocalistGrid_DispatchData_Str_13 = 
-        "   Recv   \0\xFF",
+    .VocalistGrid_DispatchData_Str_13 = "   Recv   \0\xFF",
 
-    .VocalistGrid_DispatchData_Str_14 = 
-        "  Trans   \0\xFF",
+    .VocalistGrid_DispatchData_Str_14 = "  Trans   \0\xFF",
 
-    .MidiPart_RecvTransStr = 
-        "Recv+Trans\0\xFF",
+    .MidiPart_RecvTransStr = "Recv+Trans\0\xFF",
 
-    .VocalistGrid_DispatchData_Str_15 = 
-        "   NONE   \0\xFF",
+    .VocalistGrid_DispatchData_Str_15 = "   NONE   \0\xFF",
 
-    .MidiPart_AfterStr = 
-        "  AFTER   \0\xFF"
+    .MidiPart_AfterStr = "  AFTER   \0\xFF"
         "  CC%3d   \0\xFF"
         "%s %s%s\0"
         "%s %s%s",
 
-    .VocalistGrid_DispatchData_Str_16 = 
-        " ON  ",
+    .VocalistGrid_DispatchData_Str_16 = " ON  ",
 
-    .VocalistGrid_DispatchData_Str_17 = 
-        " OFF ",
+    .VocalistGrid_DispatchData_Str_17 = " OFF ",
 
     .VocalistGrid_DispatchData_CaseTable = {
         0x0000, 0x0285, 0x005C, 0x0285, 0x008A, 0x0285, 0x00B8, 0x0285,
@@ -12478,14 +12443,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .MainVocalistPage1OKFunc_CaseTable = { 0x0000, 0x0060, 0x0000, 0x0060, 0x00AB, 0x0106 },
 
-    .RevSel_HandleConfirm_Str = 
-        "CcEv\0\xFF",
+    .RevSel_HandleConfirm_Str = "CcEv\0\xFF",
 
-    .EqSel_HandleConfirm_Str = 
-        "CcEv\0\xFF",
+    .EqSel_HandleConfirm_Str = "CcEv\0\xFF",
 
-    .RevEqSel_HandleConfirm_Str = 
-        "CcEv\0\xFF",
+    .RevEqSel_HandleConfirm_Str = "CcEv\0\xFF",
 
     .GMMode_AttentionTable = {
         SELF(GMMode_AttentionTable_Strings[58]),
@@ -12496,16 +12458,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(GMMode_AttentionTable_Strings),
     },
 
-    .GMMode_AttentionTable_Strings = 
-        "Perhatian !\0"
+    .GMMode_AttentionTable_Strings = "Perhatian !\0"
         "ATTENTION!\0\xFF"
         "\xA1" "ATENCI\xD3N!\0\xFF"
         "ATTENTION!\0\xFF"
         "ACHTUNG !\0"
         "ATTENTION!\0\xFF",
 
-    .StsGMOnCheck_Strings = 
-        "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!\0"
+    .StsGMOnCheck_Strings = "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!\0"
         "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge\xE4ndert!\0"
         "L'activation du mode GENERAL MIDI MODE remplacera tous les r\xE9glages actuels par les r\xE9glages GENERAL MIDI!\0\xFF"
         "\xA1" "Al activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!\0"
@@ -12520,71 +12480,36 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(StsGMOnCheck_Strings[422]),
     },
 
-    .StsGMOnCheck_PtrTable_Tail = {
-        0x54, 0x75, 0x72, 0x6E, 0x69, 0x6E, 0x67, 0x20, 0x6F, 0x66, 0x66, 0x20, 0x47, 0x45, 0x4E, 0x45,
-        0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x4D, 0x4F, 0x44, 0x45, 0x20, 0x77, 0x69,
-        0x6C, 0x6C, 0x20, 0x72, 0x65, 0x70, 0x6C, 0x61, 0x63, 0x65, 0x20, 0x74, 0x68, 0x65, 0x20, 0x47,
-        0x45, 0x4E, 0x45, 0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x73, 0x65, 0x74, 0x74,
-        0x69, 0x6E, 0x67, 0x73, 0x20, 0x77, 0x69, 0x74, 0x68, 0x20, 0x74, 0x68, 0x65, 0x20, 0x6F, 0x72,
-        0x69, 0x67, 0x69, 0x6E, 0x61, 0x6C, 0x20, 0x66, 0x61, 0x63, 0x74, 0x6F, 0x72, 0x79, 0x20, 0x73,
-        0x65, 0x74, 0x74, 0x69, 0x6E, 0x67, 0x73, 0x21, 0x00, 0xFF, 0x44, 0x75, 0x72, 0x63, 0x68, 0x20,
-        0x64, 0x61, 0x73, 0x20, 0x41, 0x75, 0x73, 0x73, 0x63, 0x68, 0x61, 0x6C, 0x74, 0x65, 0x6E, 0x20,
-        0x64, 0x65, 0x73, 0x20, 0x47, 0x45, 0x4E, 0x45, 0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49,
-        0x20, 0x4D, 0x4F, 0x44, 0x45, 0x20, 0x77, 0x65, 0x72, 0x64, 0x65, 0x6E, 0x20, 0x64, 0x69, 0x65,
-        0x20, 0x47, 0x45, 0x4E, 0x45, 0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x45, 0x69,
-        0x6E, 0x73, 0x74, 0x65, 0x6C, 0x6C, 0x75, 0x6E, 0x67, 0x65, 0x6E, 0x20, 0x64, 0x75, 0x72, 0x63,
-        0x68, 0x20, 0x64, 0x69, 0x65, 0x20, 0x57, 0x65, 0x72, 0x6B, 0x73, 0x65, 0x69, 0x6E, 0x73, 0x74,
-        0x65, 0x6C, 0x6C, 0x75, 0x6E, 0x67, 0x65, 0x6E, 0x20, 0x65, 0x72, 0x73, 0x65, 0x74, 0x7A, 0x74,
-        0x2E, 0x00, 0x4C, 0x61, 0x20, 0x64, 0xE9, 0x73, 0x61, 0x63, 0x74, 0x69, 0x76, 0x61, 0x74, 0x69,
-        0x6F, 0x6E, 0x20, 0x64, 0x75, 0x20, 0x6D, 0x6F, 0x64, 0x65, 0x20, 0x47, 0x45, 0x4E, 0x45, 0x52,
-        0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x4D, 0x4F, 0x44, 0x45, 0x20, 0x72, 0x65, 0x6D,
-        0x70, 0x6C, 0x61, 0x63, 0x65, 0x72, 0x61, 0x20, 0x74, 0x6F, 0x75, 0x73, 0x20, 0x6C, 0x65, 0x73,
-        0x20, 0x72, 0xE9, 0x67, 0x6C, 0x61, 0x67, 0x65, 0x73, 0x20, 0x47, 0x45, 0x4E, 0x45, 0x52, 0x41,
-        0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x70, 0x61, 0x72, 0x20, 0x6C, 0x65, 0x73, 0x20, 0x72,
-        0xE9, 0x67, 0x6C, 0x61, 0x67, 0x65, 0x73, 0x20, 0x64, 0x27, 0x75, 0x73, 0x69, 0x6E, 0x65, 0x73,
-        0x21, 0x00, 0xA1, 0x41, 0x6C, 0x20, 0x64, 0x65, 0x73, 0x63, 0x6F, 0x6E, 0x65, 0x63, 0x74, 0x61,
-        0x72, 0x20, 0x65, 0x6C, 0x20, 0x6D, 0x6F, 0x64, 0x6F, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x47,
-        0x65, 0x6E, 0x65, 0x72, 0x61, 0x6C, 0x20, 0x73, 0x65, 0x20, 0x72, 0x65, 0x65, 0x6D, 0x70, 0x6C,
-        0x61, 0x7A, 0x61, 0x6E, 0x20, 0x6C, 0x61, 0x73, 0x20, 0x63, 0x6F, 0x6E, 0x66, 0x69, 0x67, 0x75,
-        0x72, 0x61, 0x63, 0x69, 0x6F, 0x6E, 0x65, 0x73, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x47, 0x65,
-        0x6E, 0x65, 0x72, 0x61, 0x6C, 0x65, 0x73, 0x20, 0x70, 0x6F, 0x72, 0x20, 0x6C, 0x61, 0x73, 0x20,
-        0x63, 0x6F, 0x6E, 0x66, 0x69, 0x67, 0x75, 0x72, 0x61, 0x63, 0x69, 0x6F, 0x6E, 0x65, 0x73, 0x20,
-        0x6F, 0x72, 0x69, 0x67, 0x69, 0x6E, 0x61, 0x6C, 0x65, 0x73, 0x20, 0x64, 0x65, 0x20, 0x66, 0xE1,
-        0x62, 0x72, 0x69, 0x63, 0x61, 0x21, 0x00, 0xFF, 0x4E, 0x6F, 0x6E, 0x2D, 0x61, 0x6B, 0x74, 0x69,
-        0x66, 0x6B, 0x61, 0x6E, 0x20, 0x66, 0x75, 0x6E, 0x67, 0x73, 0x69, 0x20, 0x47, 0x45, 0x4E, 0x45,
-        0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x4D, 0x4F, 0x44, 0x45, 0x20, 0x62, 0x69,
-        0x6C, 0x61, 0x20, 0x61, 0x6B, 0x61, 0x6E, 0x20, 0x6B, 0x65, 0x6D, 0x62, 0x61, 0x6C, 0x69, 0x20,
-        0x6B, 0x65, 0x20, 0x73, 0x75, 0x73, 0x75, 0x6E, 0x61, 0x6E, 0x20, 0x47, 0x45, 0x4E, 0x45, 0x52,
-        0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x73, 0x65, 0x73, 0x75, 0x61, 0x69, 0x20, 0x73,
-        0x75, 0x73, 0x75, 0x6E, 0x61, 0x6E, 0x20, 0x64, 0x61, 0x72, 0x69, 0x20, 0x70, 0x61, 0x62, 0x72,
-        0x69, 0x6B, 0x28, 0x6F, 0x72, 0x69, 0x67, 0x69, 0x6E, 0x69, 0x6C, 0x20, 0x66, 0x61, 0x63, 0x74,
-        0x6F, 0x72, 0x79, 0x20, 0x73, 0x65, 0x74, 0x74, 0x69, 0x6E, 0x67, 0x73, 0x29, 0x2E, 0x00, 0xFF,
-    },
+    .StsGMOffCheck_Strings = "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!\0\xFF"
+        "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt.\0"
+        "La d\xE9sactivation du mode GENERAL MIDI MODE remplacera tous les r\xE9glages GENERAL MIDI par les r\xE9glages d'usines!\0"
+        "\xA1" "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de f\xE1" "brica!\0\xFF"
+        "Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings).\0\xFF",
 
     .StsGMOffCheck_PtrTable = {
-        SELF(StsGMOnCheck_PtrTable_Tail),
-        SELF(StsGMOnCheck_PtrTable_Tail[106]),
-        SELF(StsGMOnCheck_PtrTable_Tail[226]),
-        SELF(StsGMOnCheck_PtrTable_Tail[338]),
-        SELF(StsGMOnCheck_PtrTable_Tail),
-        SELF(StsGMOnCheck_PtrTable_Tail[472]),
-        SELF(StsGMOffCheck_PtrTable_Tail[90]),
-        SELF(StsGMOffCheck_PtrTable_Tail[72]),
-        SELF(StsGMOffCheck_PtrTable_Tail[56]),
-        SELF(StsGMOffCheck_PtrTable_Tail[42]),
-        SELF(StsGMOffCheck_PtrTable_Tail[28]),
-        SELF(StsGMOffCheck_PtrTable_Tail),
+        SELF(StsGMOffCheck_Strings),
+        SELF(StsGMOffCheck_Strings[106]),
+        SELF(StsGMOffCheck_Strings[226]),
+        SELF(StsGMOffCheck_Strings[338]),
+        SELF(StsGMOffCheck_Strings),
+        SELF(StsGMOffCheck_Strings[472]),
     },
 
-    .StsGMOffCheck_PtrTable_Tail = {
-        0x41, 0x70, 0x61, 0x6B, 0x61, 0x68, 0x20, 0x79, 0x61, 0x6B, 0x69, 0x6E, 0x20, 0x61, 0x6B, 0x61,
-        0x6E, 0x20, 0x64, 0x69, 0x68, 0x61, 0x70, 0x75, 0x73, 0x20, 0x3F, 0x00, 0x41, 0x72, 0x65, 0x20,
-        0x59, 0x6F, 0x75, 0x20, 0x53, 0x75, 0x72, 0x65, 0x3F, 0x00, 0xBF, 0x45, 0x73, 0x74, 0xE1, 0x20,
-        0x73, 0x65, 0x67, 0x75, 0x72, 0x6F, 0x3F, 0x00, 0x45, 0x74, 0x65, 0x73, 0x20, 0x76, 0x6F, 0x75,
-        0x73, 0x20, 0x73, 0xFB, 0x72, 0x3F, 0x00, 0xFF, 0x53, 0x69, 0x6E, 0x64, 0x20, 0x53, 0x69, 0x65,
-        0x20, 0x73, 0x69, 0x63, 0x68, 0x65, 0x72, 0x20, 0x3F, 0x00, 0x41, 0x72, 0x65, 0x20, 0x59, 0x6F,
-        0x75, 0x20, 0x53, 0x75, 0x72, 0x65, 0x3F, 0x00,
+    .StsAreYouSureCheck_PtrTable = {
+        SELF(StsAreYouSureCheck_Strings[90]),
+        SELF(StsAreYouSureCheck_Strings[72]),
+        SELF(StsAreYouSureCheck_Strings[56]),
+        SELF(StsAreYouSureCheck_Strings[42]),
+        SELF(StsAreYouSureCheck_Strings[28]),
+        SELF(StsAreYouSureCheck_Strings),
     },
+
+    .StsAreYouSureCheck_Strings = "Apakah yakin akan dihapus ?\0"
+        "Are You Sure?\0"
+        "\xBF" "Est\xE1 seguro?\0"
+        "Etes vous s\xFBr?\0\xFF"
+        "Sind Sie sicher ?\0"
+        "Are You Sure?",
 
     .StsSplitCheck_PtrTable = {
         SELF(StsSplitCheck_Strings[218]),
@@ -12595,8 +12520,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(StsSplitCheck_Strings),
     },
 
-    .StsSplitCheck_Strings = 
-        "Press a key to select the split point.\0\xFF"
+    .StsSplitCheck_Strings = "Press a key to select the split point.\0\xFF"
         "Press a key to select the split point.\0\xFF"
         "Press a key to select the split point.\0\xFF"
         "Press a key to select the split point.\0\xFF"
@@ -12618,8 +12542,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(SplitPoint_NoteNameTable_Strings),
     },
 
-    .SplitPoint_NoteNameTable_Strings = 
-        "B \0\xFF"
+    .SplitPoint_NoteNameTable_Strings = "B \0\xFF"
         "B~a0\0\xFF"
         "A \0\xFF"
         "A~a0\0\xFF"
@@ -12650,54 +12573,40 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .SplitPointFunc_LocalInit = { 0x000F, 0x009C },
 
-    .SplitPointFunc_LocalInit_Strings = 
-        "%s%2d",
+    .SplitPointFunc_LocalInit_Strings = "%s%2d",
 
-    .R12Octave_HandleNoteEvt_Str = 
-        " - 2 ",
+    .R12Octave_HandleNoteEvt_Str = " - 2 ",
 
-    .R12Octave_Octave2_Str = 
-        " - 1 ",
+    .R12Octave_Octave2_Str = " - 1 ",
 
-    .R12Octave_Octave3_Str = 
-        "   0 ",
+    .R12Octave_Octave3_Str = "   0 ",
 
-    .R12Octave_Octave4_Str = 
-        " + 1 ",
+    .R12Octave_Octave4_Str = " + 1 ",
 
-    .R12Octave_Octave5_Str = 
-        " + 2 ",
+    .R12Octave_Octave5_Str = " + 2 ",
 
-    .R12Octave_OctaveDefault_Str = 
-        "Error",
+    .R12Octave_OctaveDefault_Str = "Error",
 
     .MdCmptCnctFunc_LocalInit = { 0x000A, 0x0052 },
 
-    .MdCmptCnctFunc_LocalInit_Strings = 
-        "         NORMAL         \0\xFF"
+    .MdCmptCnctFunc_LocalInit_Strings = "         NORMAL         \0\xFF"
         "      KN as master      \0\xFF"
         "      KN as slave       \0\xFF"
         "         Error!         \0\xFF",
 
-    .PcgModeGridEventStart_Str = 
-        " NORMAL \0\xFF",
+    .PcgModeGridEventStart_Str = " NORMAL \0\xFF",
 
-    .PcgModeDisplayString_Bank1_Str = 
-        "  TECH  \0\xFF"
+    .PcgModeDisplayString_Bank1_Str = "  TECH  \0\xFF"
         "   GM   \0\xFF",
 
-    .PcgModeDefaultCase_Str = 
-        " Error! \0\xFF",
+    .PcgModeDefaultCase_Str = " Error! \0\xFF",
 
-    .DrumType_GridEvent_Str = 
-        " NORMAL \0\xFF",
+    .DrumType_GridEvent_Str = " NORMAL \0\xFF",
 
-    .DrumType_CopyStrBank1_Str = 
-        "  TECH  \0\xFF"
+    .DrumType_CopyStrBank1_Str = "  TECH  \0\xFF"
         "   GM   \0\xFF",
 
-    .DrumType_CopyStrDefault_Str = 
-        " Error! \0\xFF",
+    .DrumType_CopyStrDefault_Str = " Error! \0\xFF",
 
     .DisplayMode_OnOff_Table = {
         SELF(DisplayMode_OnOff_Table_Strings[18]),
@@ -12706,8 +12615,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(DisplayMode_OnOff_Table_Strings),
     },
 
-    .DisplayMode_OnOff_Table_Strings = 
-        " ON  \0"
+    .DisplayMode_OnOff_Table_Strings = " ON  \0"
         " ON  \0"
         " OFF \0"
         " OFF ",
@@ -12717,8 +12625,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         0x0035, 0x0000,
     },
 
-    .MdSetupLoadFunc_CaseTable_Strings = 
-        "Error\0"
+    .MdSetupLoadFunc_CaseTable_Strings = "Error\0"
         "Error",
 
     .VoiceParam_ListHandler_Table = { 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00 },
@@ -12734,19 +12641,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .FadeSetGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .FadeSetGridCheck_LocalInit_Strings = 
-        " %2d measure \0"
+    .FadeSetGridCheck_LocalInit_Strings = " %2d measure \0"
         " ON  ",
 
-    .Data_FadeSetGridDispatch_Str = 
-        " OFF \0"
+    .Data_FadeSetGridDispatch_Str = " OFF \0"
         " %2d measure ",
 
-    .SndParam_FormatAndDisplay_Str = 
-        " ON  ",
+    .SndParam_FormatAndDisplay_Str = " ON  ",
 
-    .SndParam_FormatAndDisplay_Str_2 = 
-        " OFF ",
+    .SndParam_FormatAndDisplay_Str_2 = " OFF ",
 
     .FadeSetGridCheck_CaseTable = { 0x0000, 0x004B, 0x0000, 0x004B, 0x01FE, 0x009C, 0x009C },
 
@@ -12770,14 +12673,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         0x01, 0x00,
     },
 
-    .AcInOutGrid_GetRowText_Str = 
-        " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| |-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
+    .AcInOutGrid_GetRowText_Str = " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| |-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
 
-    .AcInOutGrid_GetRowText_Src1_Str = 
-        " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY OFFSET VALUE  :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
+    .AcInOutGrid_GetRowText_Src1_Str = " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY OFFSET VALUE  :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
 
-    .AcInOutGrid_GetRowText_Src2_Str = 
-        " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY FIXED VALUE   :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
+    .AcInOutGrid_GetRowText_Src2_Str = " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY FIXED VALUE   :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
 
     .AcInOutGridBoxProc_CaseTable = { 0x006C, 0x015B, 0x006C, 0x015B, 0x02B5, 0x028B, 0x028B },
 
@@ -12786,8 +12686,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(Data_InOutGridDispatch_Strings),
     },
 
-    .Data_InOutGridDispatch_Strings = 
-        " ON  \0"
+    .Data_InOutGridDispatch_Strings = " ON  \0"
         " OFF ",
 
     .Data_InOutGridDispatch_PtrTable_2 = {
@@ -12795,8 +12694,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(Data_InOutGridDispatch_Strings_2),
     },
 
-    .Data_InOutGridDispatch_Strings_2 = 
-        " DIRECT  \0"
+    .Data_InOutGridDispatch_Strings_2 = " DIRECT  \0"
         "CONDUCTOR",
 
     .Data_InOutGridDispatch_PtrTable_3 = {
@@ -12805,15 +12703,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(Data_InOutGridDispatch_Strings_3),
     },
 
-    .Data_InOutGridDispatch_Strings_3 = 
-        "  FIX   \0\xFF"
+    .Data_InOutGridDispatch_Strings_3 = "  FIX   \0\xFF"
         " OFFSET \0\xFF"
         " DIRECT \0\xFF",
 
     .InOutGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .InOutGridCheck_LocalInit_Strings = 
-        " %3d \0"
+    .InOutGridCheck_LocalInit_Strings = " %3d \0"
         "     \0"
         " %3d \0"
         "     \0"
@@ -12841,8 +12737,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .InOutGridCheck_CaseTable = { 0x0000, 0x00CC, 0x0000, 0x00CC, 0x071A, 0x019D, 0x071A },
 
-    .InOutGridCheck_CaseTable_Strings = 
-        "PAGE\0\xFF",
+    .InOutGridCheck_CaseTable_Strings = "PAGE\0\xFF",
 
     .MainExcSend_ClampIndexToRange_Table = { 0x00, 0x04, 0x01, 0x02, 0x06, 0x03 },
 
@@ -12858,8 +12753,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(FileTransfer_Status_Table_Strings),
     },
 
-    .FileTransfer_Status_Table_Strings = 
-        "COMPLETED\0"
+    .FileTransfer_Status_Table_Strings = "COMPLETED\0"
         "RECIEVING\0"
         " SENDING \0"
         "         ",
@@ -12921,8 +12815,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ParaLoadOptGridCheck_Strings),
     },
 
-    .ParaLoadOptGridCheck_Strings = 
-        " YES \0"
+    .ParaLoadOptGridCheck_Strings = " YES \0"
         " NO  ",
 
     .UserMemory_Config_Table = {
@@ -12932,8 +12825,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(UserMemory_Config_Table_Strings),
     },
 
-    .UserMemory_Config_Table_Strings = 
-        "  USER3  \0"
+    .UserMemory_Config_Table_Strings = "  USER3  \0"
         "  USER2  \0"
         "  USER1  \0"
         " INITIAL ",
@@ -12951,8 +12843,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .PcgOutGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .PcgOutGridCheck_LocalInit_Strings = 
-        " %3d \0"
+    .PcgOutGridCheck_LocalInit_Strings = " %3d \0"
         " %3d \0"
         " --- \0"
         "  OFF  \0"
@@ -12997,8 +12888,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ComSetGridCheck_LocalInit_2 = { 0x0000, 0x0000, 0x0000 },
 
-    .NakaToggle_OnOff_Data = 
-        "\0"
+    .NakaToggle_OnOff_Data = "\0"
         "\0"
         "\0"
         "",
@@ -13007,45 +12897,33 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .NakaInst_OFF_E80048 = { 0x20, 0x00 },
 
-    .ComSetGridCheck_JumpTable_Str = 
-        " OFF ",
+    .ComSetGridCheck_JumpTable_Str = " OFF ",
 
-    .ComSetGridCheck_JumpTable_Str_2 = 
-        "  ----  \0\xFF",
+    .ComSetGridCheck_JumpTable_Str_2 = "  ----  \0\xFF",
 
-    .NakaInst_NORMAL = 
-        " NORMAL \0\xFF",
+    .NakaInst_NORMAL = " NORMAL \0\xFF",
 
-    .ComSetGridCheck_JumpTable_Str_3 = 
-        "  TECH  \0\xFF",
+    .ComSetGridCheck_JumpTable_Str_3 = "  TECH  \0\xFF",
 
     .ComSetGridCheck_JumpTable_Table_3 = { 0x20, 0x20 },
 
     .NakaInst_GM = { 0x20, 0x47, 0x4D, 0x20, 0x20, 0x20, 0x00, 0xFF },
 
-    .ComSetGridCheck_JumpTable_Str_4 = 
-        " Error! \0\xFF",
+    .ComSetGridCheck_JumpTable_Str_4 = " Error! \0\xFF",
 
-    .ComSetGridCheck_ParamDisplay_Str = 
-        " ON  ",
+    .ComSetGridCheck_ParamDisplay_Str = " ON  ",
 
-    .ComSetGridCheck_ParamDisplay_Str_2 = 
-        " OFF ",
+    .ComSetGridCheck_ParamDisplay_Str_2 = " OFF ",
 
-    .ComSetGrid_CopyStrAndDispatch_Str = 
-        "  ----  \0\xFF",
+    .ComSetGrid_CopyStrAndDispatch_Str = "  ----  \0\xFF",
 
-    .ComSetGrid_LookupByColumn_Str = 
-        " NORMAL \0\xFF",
+    .ComSetGrid_LookupByColumn_Str = " NORMAL \0\xFF",
 
-    .ComSetGrid_ParamStr1_Str = 
-        "  TECH  \0\xFF",
+    .ComSetGrid_ParamStr1_Str = "  TECH  \0\xFF",
 
-    .ComSetGrid_ParamStr3_Str = 
-        "   GM   \0\xFF",
+    .ComSetGrid_ParamStr3_Str = "   GM   \0\xFF",
 
-    .ComSetGrid_ParamStrDefault_Str = 
-        " Error! \0\xFF",
+    .ComSetGrid_ParamStrDefault_Str = " Error! \0\xFF",
 
     .ComSetGridCheck_CaseTable = { 0x0000, 0x0074, 0x0000, 0x0074, 0x0310, 0x00EE, 0x00EE },
 
@@ -13061,15 +12939,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(PmemOutLGridCheck_Strings),
     },
 
-    .PmemOutLGridCheck_Strings = 
-        " LEFT  \0"
+    .PmemOutLGridCheck_Strings = " LEFT  \0"
         "RIGHT 2\0"
         "RIGHT 1",
 
     .NakaData_PartFlags = { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 },
 
-    .NakaInst_2d_d = 
-        "\0"
+    .NakaInst_2d_d = "\0"
         "\0"
         "\0"
         "\0"
@@ -13079,8 +12955,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .PmemOutLGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .PmemOutLGridCheck_LocalInit_Strings = 
-        " %2d-%d \0\xFF"
+    .PmemOutLGridCheck_LocalInit_Strings = " %2d-%d \0\xFF"
         " ON  \0"
         " OFF \0"
         " OFF \0"
@@ -13098,11 +12973,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         0x00, 0xFF,
     },
 
-    .PmemOutL_BitCheckDisplay_Str = 
-        " ON  ",
+    .PmemOutL_BitCheckDisplay_Str = " ON  ",
 
-    .PmemOutL_LoadOffStr_Str = 
-        " OFF ",
+    .PmemOutL_LoadOffStr_Str = " OFF ",
 
     .PmemOutLGridCheck_CaseTable = { 0x0000, 0x00C7, 0x0000, 0x00C7, 0x07CC, 0x07CC, 0x01A6 },
 
@@ -13113,8 +12986,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .PmemOutRGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .PmemOutRGridCheck_LocalInit_Strings = 
-        " OFF \0"
+    .PmemOutRGridCheck_LocalInit_Strings = " OFF \0"
         " %3d \0"
         " %3d \0"
         " OFF \0"
@@ -13141,11 +13013,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .AcCtlMsgGridBoxProc_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .AcCtlMsgGrid_GetRowText_Str = 
-        " |-| PRG.CHANGE     | BANK SELECT    | PITCH BEND     | VOLUME         | EXPRESSION     | PAN            | SUSTAIN        \0\xFF",
+    .AcCtlMsgGrid_GetRowText_Str = " |-| PRG.CHANGE     | BANK SELECT    | PITCH BEND     | VOLUME         | EXPRESSION     | PAN            | SUSTAIN        \0\xFF",
 
-    .AcCtlMsgGrid_GetRowText_Page1_Str = 
-        " |-| EFFECT & REVERB| MODULATION     | TUNING         | BEND RANGE     | AFTER TOUCH    | RESET ALL CONT.",
+    .AcCtlMsgGrid_GetRowText_Page1_Str = " |-| EFFECT & REVERB| MODULATION     | TUNING         | BEND RANGE     | AFTER TOUCH    | RESET ALL CONT.",
 
     .AcCtlMsgGridBoxProc_CaseTable = { 0x017E, 0x029C, 0x017E, 0x029C, 0x0419, 0x03EF, 0x03EF },
 
@@ -13159,22 +13029,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .CtlMsgGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .CtlMsgGridCheck_JumpTable_Str = 
-        " ON  ",
+    .CtlMsgGridCheck_JumpTable_Str = " ON  ",
 
-    .CtlMsgGridCheck_JumpTable_Str_2 = 
-        " OFF ",
+    .CtlMsgGridCheck_JumpTable_Str_2 = " OFF ",
 
-    .MidiSetup_TtlDispatch_Str = 
-        " ON  ",
+    .MidiSetup_TtlDispatch_Str = " ON  ",
 
-    .MidiSetup_TtlDispatch_Str_2 = 
-        " OFF ",
+    .MidiSetup_TtlDispatch_Str_2 = " OFF ",
 
     .CtlMsgGridCheck_CaseTable = { 0x0000, 0x0053, 0x0000, 0x0053, 0x0194, 0x00AC, 0x0194 },
 
-    .MidiPart_CallMainFunc_Str = 
-        "\0"
+    .MidiPart_CallMainFunc_Str = "\0"
         "",
 
     .MidiSetup_TtlCase5_Table = {
@@ -13196,14 +13061,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .AcMidiPartGridBoxProc_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .MidiSetup_GridBoxCase1_Str = 
-        "|-| RIGHT1| RIGHT2| LEFT| PART4| PART5| PART6| PART7| PART8",
+    .MidiSetup_GridBoxCase1_Str = "|-| RIGHT1| RIGHT2| LEFT| PART4| PART5| PART6| PART7| PART8",
 
-    .MidiSetup_GridStr1_Str = 
-        "|-| PART9| PART10| PART11| PART12| PART13| PART14| PART15| PART16",
+    .MidiSetup_GridStr1_Str = "|-| PART9| PART10| PART11| PART12| PART13| PART14| PART15| PART16",
 
-    .MidiSetup_GridStr2_Str = 
-        "|-| CONTROL| | ACCOMP1| ACCOMP2| ACCOMP3| BASS| DRUMS| CHORD\0\xFF",
+    .MidiSetup_GridStr2_Str = "|-| CONTROL| | ACCOMP1| ACCOMP2| ACCOMP3| BASS| DRUMS| CHORD\0\xFF",
 
     .AcMidiPartGridBoxProc_CaseTable = { 0x01C8, 0x03B3, 0x01C8, 0x03B3, 0x05E2, 0x05B8, 0x05DE },
 
@@ -13243,8 +13105,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(Transpose_ValueDisplay_Table_Strings),
     },
 
-    .Transpose_ValueDisplay_Table_Strings = 
-        " -1  \0"
+    .Transpose_ValueDisplay_Table_Strings = " -1  \0"
         " -2  \0"
         " -3  \0"
         "Error\0"
@@ -13255,8 +13116,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .MidiPartGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .MidiPartGridCheck_LocalInit_Strings = 
-        " OFF \0"
+    .MidiPartGridCheck_LocalInit_Strings = " OFF \0"
         " %2d  \0\xFF"
         " OFF \0"
         " %2d  \0\xFF"
@@ -13265,11 +13125,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         " OFF \0"
         " %2d  \0\xFF",
 
-    .MidiPart_LookupFromTable_Str = 
-        " ON  ",
+    .MidiPart_LookupFromTable_Str = " ON  ",
 
-    .MidiPart_LookupFromTable_Str_2 = 
-        " OFF ",
+    .MidiPart_LookupFromTable_Str_2 = " OFF ",
 
     .MidiPartGridCheck_CaseTable = { 0x0000, 0x00E4, 0x0000, 0x00E4, 0x046E, 0x01D0, 0x046E },
 
@@ -13369,8 +13227,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(Murai_ApFuncNames_421),
     },
 
-    .Murai_ApFuncNames_421 = 
-        "\0\xFF"
+    .Murai_ApFuncNames_421 = "\0\xFF"
         "FDemoText\0"
         "BitmapKn5000\0\xFF"
         "BitmapTechnics\0\xFF"
@@ -13420,8 +13277,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_IvSdpart_Names),
     },
 
-    .ClassProps_IvSdpart_Names = 
-        "\0\xFF",
+    .ClassProps_IvSdpart_Names = "\0\xFF",
 
     .ClassProps_AcLswPartEditBox = {
         SELF(ClassProps_AcLswPartEditBox_Names[8]),
@@ -13429,8 +13285,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_AcLswPartEditBox_Names),
     },
 
-    .ClassProps_AcLswPartEditBox_Names = 
-        "\0\xFF"
+    .ClassProps_AcLswPartEditBox_Names = "\0\xFF"
         "data\0\xFF"
         "func\0\xFF",
 
@@ -13441,8 +13296,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_AcVolPartEditBox_Names),
     },
 
-    .ClassProps_AcVolPartEditBox_Names = 
-        "\0\xFF"
+    .ClassProps_AcVolPartEditBox_Names = "\0\xFF"
         "data\0\xFF"
         "fmute\0"
         "fvol\0\xFF",
@@ -13451,22 +13305,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_IvMesage_Names),
     },
 
-    .ClassProps_IvMesage_Names = 
-        "\0\xFF",
+    .ClassProps_IvMesage_Names = "\0\xFF",
 
     .ClassProps_IvAccordion = {
         SELF(ClassProps_IvAccordion_Names),
     },
 
-    .ClassProps_IvAccordion_Names = 
-        "\0\xFF",
+    .ClassProps_IvAccordion_Names = "\0\xFF",
 
     .ClassProps_IvAccordionX = {
         SELF(ClassProps_IvAccordionX_Names),
     },
 
-    .ClassProps_IvAccordionX_Names = 
-        "\0\xFF",
+    .ClassProps_IvAccordionX_Names = "\0\xFF",
 
     .AudioStream_Property_Table = {
         SELF(AudioStream_Property_Table_Names[8]),
@@ -13474,8 +13325,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(AudioStream_Property_Table_Names),
     },
 
-    .AudioStream_Property_Table_Names = 
-        "\0\xFF"
+    .AudioStream_Property_Table_Names = "\0\xFF"
         "str3\0\xFF"
         "str1\0\xFF",
 
@@ -13489,8 +13339,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_PsLabelBox_Names),
     },
 
-    .ClassProps_PsLabelBox_Names = 
-        "\0\xFF"
+    .ClassProps_PsLabelBox_Names = "\0\xFF"
         "dialfocus\0"
         "selected\0\xFF"
         "align\0"
@@ -13502,57 +13351,49 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_IvSdtecd_Names),
     },
 
-    .ClassProps_IvSdtecd_Names = 
-        "\0\xFF",
+    .ClassProps_IvSdtecd_Names = "\0\xFF",
 
     .ClassProps_IvSdtecd1 = {
         SELF(ClassProps_IvSdtecd1_Names),
     },
 
-    .ClassProps_IvSdtecd1_Names = 
-        "\0\xFF",
+    .ClassProps_IvSdtecd1_Names = "\0\xFF",
 
     .ClassProps_IvSdscltyp2 = {
         SELF(ClassProps_IvSdscltyp2_Names),
     },
 
-    .ClassProps_IvSdscltyp2_Names = 
-        "\0\xFF",
+    .ClassProps_IvSdscltyp2_Names = "\0\xFF",
 
     .ClassProps_AcWelcomScreen = {
         SELF(ClassProps_AcWelcomScreen_Names),
     },
 
-    .ClassProps_AcWelcomScreen_Names = 
-        "\0\xFF",
+    .ClassProps_AcWelcomScreen_Names = "\0\xFF",
 
     .ClassProps_PsMixerControl = {
         SELF(ClassProps_PsMixerControl_Names),
     },
 
-    .ClassProps_PsMixerControl_Names = 
-        "\0\xFF",
+    .ClassProps_PsMixerControl_Names = "\0\xFF",
 
     .ClassProps_AcPartMixer = {
         SELF(ClassProps_AcPartMixer_Names),
     },
 
-    .ClassProps_AcPartMixer_Names = 
-        "\0\xFF",
+    .ClassProps_AcPartMixer_Names = "\0\xFF",
 
     .ClassProps_AcTrackMixer = {
         SELF(ClassProps_AcTrackMixer_Names),
     },
 
-    .ClassProps_AcTrackMixer_Names = 
-        "\0\xFF",
+    .ClassProps_AcTrackMixer_Names = "\0\xFF",
 
     .ClassProps_IvSoftver = {
         SELF(ClassProps_IvSoftver_Names),
     },
 
-    .ClassProps_IvSoftver_Names = 
-        "\0\xFF",
+    .ClassProps_IvSoftver_Names = "\0\xFF",
 
     .ClassProps_IvPageOverWrite = {
         SELF(ClassProps_IvPageOverWrite_Names[10]),
@@ -13560,8 +13401,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_IvPageOverWrite_Names),
     },
 
-    .ClassProps_IvPageOverWrite_Names = 
-        "\0\xFF"
+    .ClassProps_IvPageOverWrite_Names = "\0\xFF"
         "window\0\xFF"
         "page\0\xFF",
 
@@ -13569,43 +13409,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_IvDrawbar_Names),
     },
 
-    .ClassProps_IvDrawbar_Names = 
-        "\0\xFF",
+    .ClassProps_IvDrawbar_Names = "\0\xFF",
 
     .ClassProps_IvDrawbar1 = {
         SELF(ClassProps_IvDrawbar1_Names),
     },
 
-    .ClassProps_IvDrawbar1_Names = 
-        "\0\xFF",
+    .ClassProps_IvDrawbar1_Names = "\0\xFF",
 
     .ClassProps_IvDrawbar2 = {
         SELF(ClassProps_IvDrawbar2_Names),
     },
 
-    .ClassProps_IvDrawbar2_Names = 
-        "\0\xFF",
+    .ClassProps_IvDrawbar2_Names = "\0\xFF",
 
     .ClassProps_IvDrawbarNorm = {
         SELF(ClassProps_IvDrawbarNorm_Names),
     },
 
-    .ClassProps_IvDrawbarNorm_Names = 
-        "\0\xFF",
+    .ClassProps_IvDrawbarNorm_Names = "\0\xFF",
 
     .ClassProps_IvDrawbarSndE = {
         SELF(ClassProps_IvDrawbarSndE_Names),
     },
 
-    .ClassProps_IvDrawbarSndE_Names = 
-        "\0\xFF",
+    .ClassProps_IvDrawbarSndE_Names = "\0\xFF",
 
     .ClassProps_AcResetPage = {
         SELF(ClassProps_AcResetPage_Names),
     },
 
-    .ClassProps_AcResetPage_Names = 
-        "\0\xFF",
+    .ClassProps_AcResetPage_Names = "\0\xFF",
 
     .ClassProps_PsVariBox = {
         SELF(ClassProps_PsVariBox_Names[36]),
@@ -13616,8 +13450,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_PsVariBox_Names),
     },
 
-    .ClassProps_PsVariBox_Names = 
-        "\0\xFF"
+    .ClassProps_PsVariBox_Names = "\0\xFF"
         "selected\0\xFF"
         "editsw\0\xFF"
         "align\0"
@@ -13628,29 +13461,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_AcPresentationControl_Names),
     },
 
-    .ClassProps_AcPresentationControl_Names = 
-        "\0\xFF",
+    .ClassProps_AcPresentationControl_Names = "\0\xFF",
 
     .ClassProps_IvDemofeature1 = {
         SELF(ClassProps_IvDemofeature1_Names),
     },
 
-    .ClassProps_IvDemofeature1_Names = 
-        "\0\xFF",
+    .ClassProps_IvDemofeature1_Names = "\0\xFF",
 
     .ClassProps_IvDemofeature2 = {
         SELF(ClassProps_IvDemofeature2_Names),
     },
 
-    .ClassProps_IvDemofeature2_Names = 
-        "\0\xFF",
+    .ClassProps_IvDemofeature2_Names = "\0\xFF",
 
     .ClassProps_AcDrawEditBox = {
         SELF(ClassProps_AcDrawEditBox_Names),
     },
 
-    .ClassProps_AcDrawEditBox_Names = 
-        "\0\xFF",
+    .ClassProps_AcDrawEditBox_Names = "\0\xFF",
 
     .ClassProps_AcLswPartPan = {
         SELF(ClassProps_AcLswPartPan_Names[8]),
@@ -13658,8 +13487,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_AcLswPartPan_Names),
     },
 
-    .ClassProps_AcLswPartPan_Names = 
-        "\0\xFF"
+    .ClassProps_AcLswPartPan_Names = "\0\xFF"
         "data\0\xFF"
         "func\0\xFF",
 
@@ -13671,8 +13499,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_AcPresentationBox_Names),
     },
 
-    .ClassProps_AcPresentationBox_Names = 
-        "\0\xFF"
+    .ClassProps_AcPresentationBox_Names = "\0\xFF"
         "song\0\xFF"
         "selected\0\xFF"
         "editsw\0\xFF"
@@ -13682,29 +13509,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_VwUserBitmapSp_Names),
     },
 
-    .ClassProps_VwUserBitmapSp_Names = 
-        "\0\xFF",
+    .ClassProps_VwUserBitmapSp_Names = "\0\xFF",
 
     .ClassProps_AcFdemoScreen = {
         SELF(ClassProps_AcFdemoScreen_Names),
     },
 
-    .ClassProps_AcFdemoScreen_Names = 
-        "\0\xFF",
+    .ClassProps_AcFdemoScreen_Names = "\0\xFF",
 
     .ClassProps_AcSndEMenu = {
         SELF(ClassProps_AcSndEMenu_Names),
     },
 
-    .ClassProps_AcSndEMenu_Names = 
-        "\0\xFF",
+    .ClassProps_AcSndEMenu_Names = "\0\xFF",
 
     .ClassProps_AcPleaseWait = {
         SELF(ClassProps_AcPleaseWait_Names),
     },
 
-    .ClassProps_AcPleaseWait_Names = 
-        "\0\xFF",
+    .ClassProps_AcPleaseWait_Names = "\0\xFF",
 
     .ClassProps_AcDrawSetting = {
         SELF(ClassProps_AcDrawSetting_Names[6]),
@@ -13712,8 +13535,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_AcDrawSetting_Names),
     },
 
-    .ClassProps_AcDrawSetting_Names = 
-        "\0\xFF"
+    .ClassProps_AcDrawSetting_Names = "\0\xFF"
         "tag\0"
         "index",
 
@@ -13723,8 +13545,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_AcDrawbarName_Names),
     },
 
-    .ClassProps_AcDrawbarName_Names = 
-        "\0\xFF"
+    .ClassProps_AcDrawbarName_Names = "\0\xFF"
         "editsw\0\xFF"
         "part\0\xFF",
 
@@ -13732,8 +13553,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(ClassProps_IvMPver_Names),
     },
 
-    .ClassProps_IvMPver_Names = 
-        "\0\xFF",
+    .ClassProps_IvMPver_Names = "\0\xFF",
 
     .Murai_ClassTable_161 = {
         { NAKA_ADDR(IvSdpartProc), 0x01600027, 22, 0, 0x00E812D8, 0x00E812D6, SELF(ClassProps_IvSdpart) },

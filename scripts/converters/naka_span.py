@@ -442,7 +442,8 @@ def build(span, cb, data, fmt, srcs=None):
             continue
         kind, info = SR.classify(refs[o])
         nsym = 0
-        while o + 4 * nsym in symolds:
+        while o + 4 * nsym in symolds and (nsym == 0 or (o + 4 * nsym not in refs and
+                                                         o + 4 * nsym not in objs)):
             nsym += 1
         if nsym:
             # the generator (or a previous pass) already resolved these words to
@@ -671,7 +672,7 @@ def new_members(span, cb, data, fmt, objs=None):
             out.append(M.NewMember('uint32_t', name, '[%d]' % n, 4 * n, ptr_expr, pre))
             sb = data[off + 4 * n:off + size]
             out.append(M.NewMember('char', name + '_Names', '[%d]' % len(sb), len(sb),
-                                   '\n' + c_strings(sb), []))
+                                   c_strings(sb).lstrip(), []))
             continue
         if ctype == 'naka_class_t':
             n = int(dims[1:-1])
@@ -684,7 +685,7 @@ def new_members(span, cb, data, fmt, objs=None):
             out.append(M.NewMember(ctype, name, dims, size, '{\n' + '\n'.join(rows) + '\n    }', pre))
             continue
         if ctype == 'char':
-            out.append(M.NewMember('char', name, dims, size, '\n' + c_strings(data[off:off + size]), pre))
+            out.append(M.NewMember('char', name, dims, size, c_strings(data[off:off + size]).lstrip(), pre))
             continue
         w = {'uint8_t': 1, 'uint16_t': 2, 'uint32_t': 4}[ctype]
         if ctype == 'uint32_t':

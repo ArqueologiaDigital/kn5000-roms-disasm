@@ -945,7 +945,7 @@ GmOffSureLangCheck_Strings:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1B30, 0x2CA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsSureLangCheck_PtrTable
-; TrAsSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+; TrAsSureLangCheck_PtrTable -- 6 u32 addresses, read by
 ; TrAsSureLangCheck (v10/v9 0xf2a9a3, v7 0xf2a979) (`lda xbc,
 ; (NakaWidgetPtrTbl_SmfDp_0x1da0:24)`).
 ;
@@ -966,8 +966,8 @@ TrAsSureLangCheck_Strings:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1E12, 0x210
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PartSelLangCheck_PtrTable
-; PartSelLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
-; PartSelLangCheck (v10/v9 0xf2a92c, v7 0xf2a902) (`lda xhl,
+; PartSelLangCheck_PtrTable -- 6 u32 addresses, read by PartSelLangCheck
+; (v10/v9 0xf2a92c, v7 0xf2a902) (`lda xhl,
 ; (NakaWidgetPtrTbl_SmfDp_0x1fc8:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
@@ -977,8 +977,8 @@ PartSelLangCheck_PtrTable:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2022, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AfterLangCheck_PtrTable
-; AfterLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
-; AfterLangCheck (v10/v9 0xf2a93d, v7 0xf2a913) (`lda xhl,
+; AfterLangCheck_PtrTable -- 6 u32 addresses, read by AfterLangCheck
+; (v10/v9 0xf2a93d, v7 0xf2a913) (`lda xhl,
 ; (NakaWidgetPtrTbl_SmfDp_0x1fe0:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
@@ -988,8 +988,8 @@ AfterLangCheck_PtrTable:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x203A, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsPreLangCheck_PtrTable
-; TrAsPreLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
-; TrAsPreLangCheck (v10/v9 0xf2a94e, v7 0xf2a924) (`lda xhl,
+; TrAsPreLangCheck_PtrTable -- 6 u32 addresses, read by TrAsPreLangCheck
+; (v10/v9 0xf2a94e, v7 0xf2a924) (`lda xhl,
 ; (NakaWidgetPtrTbl_SmfDp_0x1ff8:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
@@ -999,7 +999,7 @@ TrAsPreLangCheck_PtrTable:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2052, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AtentionLangCheck_PtrTable
-; AtentionLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+; AtentionLangCheck_PtrTable -- 6 u32 addresses, read by
 ; AtentionLangCheck (v10/v9 0xf2a95f, v7 0xf2a935) (`lda xhl,
 ; (NakaWidgetPtrTbl_SmfDp_0x2010:24)`).
 ;
@@ -1010,7 +1010,7 @@ AtentionLangCheck_PtrTable:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x206A, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AreYouSureLangCheck_PtrTable
-; AreYouSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+; AreYouSureLangCheck_PtrTable -- 6 u32 addresses, read by
 ; AreYouSureLangCheck (v10/v9 0xf2a970, v7 0xf2a946) (`lda xhl,
 ; (NakaWidgetPtrTbl_SmfDp_0x2028:24)`).
 ;
@@ -1021,7 +1021,7 @@ AreYouSureLangCheck_PtrTable:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2082, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GmOnSureLangCheck_PtrTable
-; GmOnSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+; GmOnSureLangCheck_PtrTable -- 6 u32 addresses, read by
 ; GmOnSureLangCheck (v10/v9 0xf2a981, v7 0xf2a957) (`lda xhl,
 ; (NakaWidgetPtrTbl_SmfDp_0x2040:24)`).
 ;
@@ -1032,7 +1032,7 @@ GmOnSureLangCheck_PtrTable:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x209A, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GmOffSureLangCheck_PtrTable
-; GmOffSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+; GmOffSureLangCheck_PtrTable -- 6 u32 addresses, read by
 ; GmOffSureLangCheck (v10/v9 0xf2a992, v7 0xf2a968) (`lda xhl,
 ; (NakaWidgetPtrTbl_SmfDp_0x2058:24)`).
 ;
@@ -1043,7 +1043,7 @@ GmOffSureLangCheck_PtrTable:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x20B2, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsSureLangCheck_PtrTable_2
-; TrAsSureLangCheck_PtrTable_2 -- 20 u32 ROM addresses (or 0), read by
+; TrAsSureLangCheck_PtrTable_2 -- 20 u32 addresses, read by
 ; TrAsSureLangCheck (v10/v9 0xf2a9a3, v7 0xf2a979) (`lda xbc,
 ; (NakaWidgetPtrTbl_SmfDp_0x2070:24)`).
 ;
@@ -1076,9 +1076,9 @@ PtrTarget_Strings:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x21A4, 0xD0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part1_SendAudio_PtrTable
-; TrAsGridChk_Part1_SendAudio_PtrTable -- 20 u32 ROM addresses (or 0),
-; read by TrAsGridChk_Part1_SendAudio (v10/v9 0xf2c798, v7 0xf2c76e)
-; (`ld xbc, NakaWidgetPtrTbl_SmfDp_0x221a`).
+; TrAsGridChk_Part1_SendAudio_PtrTable -- 20 u32 addresses, read by
+; TrAsGridChk_Part1_SendAudio (v10/v9 0xf2c798, v7 0xf2c76e) (`ld xbc,
+; NakaWidgetPtrTbl_SmfDp_0x221a`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; TrAsGridChk_Part1_SendAudio_PtrTable[20].
@@ -1392,7 +1392,7 @@ VoiceConfig_LoadTableB_Table:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2494, 0x26
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MuteChSel_Dispatch_PtrTable
-; MuteChSel_Dispatch_PtrTable -- 16 u32 ROM addresses (or 0), read by
+; MuteChSel_Dispatch_PtrTable -- 16 u32 addresses, read by
 ; MuteChSel_Dispatch (v10/v9 0xf2cc54, v7 0xf2cc2a) (`ld xbc,
 ; NakaWidgetPtrTbl_SmfDp_0x2460`).
 ;
@@ -1426,7 +1426,7 @@ SmfMuteChSelFunc_CaseTable:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x255A, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqTrAsPsSong_Dispatch_PtrTable
-; SqTrAsPsSong_Dispatch_PtrTable -- 11 u32 ROM addresses (or 0), read by
+; SqTrAsPsSong_Dispatch_PtrTable -- 11 u32 addresses, read by
 ; SqTrAsPsSong_Dispatch (v10/v9 0xf2ccb5, v7 0xf2cc8b) (`ld xbc,
 ; NakaWidgetPtrTbl_SmfDp_0x2514`).
 ;
@@ -1460,8 +1460,8 @@ SqTrAsPsSongFunc_CaseTable:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2608, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqAftSetFunc_PtrTable
-; SqAftSetFunc_PtrTable -- 2 u32 ROM addresses (or 0), read by
-; SqAftSetFunc (v10/v9 0xf2cce8, v7 0xf2ccbe) (`lda xbc,
+; SqAftSetFunc_PtrTable -- 2 u32 addresses, read by SqAftSetFunc (v10/v9
+; 0xf2cce8, v7 0xf2ccbe) (`lda xbc,
 ; (NakaWidgetPtrTbl_SmfDp_0x25c2:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t SqAftSetFunc_PtrTable[2].
@@ -1491,7 +1491,7 @@ SqAftSet_LookupTableEntry_Table:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2630, 0x20
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MuteChSet_Dispatch_PtrTable
-; MuteChSet_Dispatch_PtrTable -- 16 u32 ROM addresses (or 0), read by
+; MuteChSet_Dispatch_PtrTable -- 16 u32 addresses, read by
 ; MuteChSet_Dispatch (v10/v9 0xf2cd84, v7 0xf2cd5a) (`ld xbc,
 ; NakaWidgetPtrTbl_SmfDp_0x25f6`).
 ;

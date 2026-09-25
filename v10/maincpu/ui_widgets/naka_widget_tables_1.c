@@ -971,7 +971,7 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     char GmOffSureLangCheck_Strings[714];
     /* ---------------------------------------------------------------------
-     * TrAsSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * TrAsSureLangCheck_PtrTable -- 6 u32 addresses, read by
      * TrAsSureLangCheck (v10/v9 0xF2A9A3, v7 0xF2A979) (`lda xbc,
      * (NakaWidgetPtrTbl_SmfDp_0x1DA0:24)`).
      * --------------------------------------------------------------------- */
@@ -982,49 +982,49 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     char TrAsSureLangCheck_Strings[528];
     /* ---------------------------------------------------------------------
-     * PartSelLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
-     * PartSelLangCheck (v10/v9 0xF2A92C, v7 0xF2A902) (`lda xhl,
+     * PartSelLangCheck_PtrTable -- 6 u32 addresses, read by PartSelLangCheck
+     * (v10/v9 0xF2A92C, v7 0xF2A902) (`lda xhl,
      * (NakaWidgetPtrTbl_SmfDp_0x1FC8:24)`).
      * --------------------------------------------------------------------- */
     uint32_t PartSelLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
-     * AfterLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
-     * AfterLangCheck (v10/v9 0xF2A93D, v7 0xF2A913) (`lda xhl,
+     * AfterLangCheck_PtrTable -- 6 u32 addresses, read by AfterLangCheck
+     * (v10/v9 0xF2A93D, v7 0xF2A913) (`lda xhl,
      * (NakaWidgetPtrTbl_SmfDp_0x1FE0:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AfterLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
-     * TrAsPreLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
-     * TrAsPreLangCheck (v10/v9 0xF2A94E, v7 0xF2A924) (`lda xhl,
+     * TrAsPreLangCheck_PtrTable -- 6 u32 addresses, read by TrAsPreLangCheck
+     * (v10/v9 0xF2A94E, v7 0xF2A924) (`lda xhl,
      * (NakaWidgetPtrTbl_SmfDp_0x1FF8:24)`).
      * --------------------------------------------------------------------- */
     uint32_t TrAsPreLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
-     * AtentionLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * AtentionLangCheck_PtrTable -- 6 u32 addresses, read by
      * AtentionLangCheck (v10/v9 0xF2A95F, v7 0xF2A935) (`lda xhl,
      * (NakaWidgetPtrTbl_SmfDp_0x2010:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AtentionLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
-     * AreYouSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * AreYouSureLangCheck_PtrTable -- 6 u32 addresses, read by
      * AreYouSureLangCheck (v10/v9 0xF2A970, v7 0xF2A946) (`lda xhl,
      * (NakaWidgetPtrTbl_SmfDp_0x2028:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AreYouSureLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
-     * GmOnSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * GmOnSureLangCheck_PtrTable -- 6 u32 addresses, read by
      * GmOnSureLangCheck (v10/v9 0xF2A981, v7 0xF2A957) (`lda xhl,
      * (NakaWidgetPtrTbl_SmfDp_0x2040:24)`).
      * --------------------------------------------------------------------- */
     uint32_t GmOnSureLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
-     * GmOffSureLangCheck_PtrTable -- 6 u32 ROM addresses (or 0), read by
+     * GmOffSureLangCheck_PtrTable -- 6 u32 addresses, read by
      * GmOffSureLangCheck (v10/v9 0xF2A992, v7 0xF2A968) (`lda xhl,
      * (NakaWidgetPtrTbl_SmfDp_0x2058:24)`).
      * --------------------------------------------------------------------- */
     uint32_t GmOffSureLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
-     * TrAsSureLangCheck_PtrTable_2 -- 20 u32 ROM addresses (or 0), read by
+     * TrAsSureLangCheck_PtrTable_2 -- 20 u32 addresses, read by
      * TrAsSureLangCheck (v10/v9 0xF2A9A3, v7 0xF2A979) (`lda xbc,
      * (NakaWidgetPtrTbl_SmfDp_0x2070:24)`).
      * --------------------------------------------------------------------- */
@@ -1043,9 +1043,9 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     char PtrTarget_Strings[208];
     /* ---------------------------------------------------------------------
-     * TrAsGridChk_Part1_SendAudio_PtrTable -- 20 u32 ROM addresses (or 0),
-     * read by TrAsGridChk_Part1_SendAudio (v10/v9 0xF2C798, v7 0xF2C76E)
-     * (`ld xbc, NakaWidgetPtrTbl_SmfDp_0x221A`).
+     * TrAsGridChk_Part1_SendAudio_PtrTable -- 20 u32 addresses, read by
+     * TrAsGridChk_Part1_SendAudio (v10/v9 0xF2C798, v7 0xF2C76E) (`ld xbc,
+     * NakaWidgetPtrTbl_SmfDp_0x221A`).
      * --------------------------------------------------------------------- */
     uint32_t TrAsGridChk_Part1_SendAudio_PtrTable[20];
     /* ---------------------------------------------------------------------
@@ -1219,7 +1219,7 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint8_t VoiceConfig_LoadTableB_Table[38];
     /* ---------------------------------------------------------------------
-     * MuteChSel_Dispatch_PtrTable -- 16 u32 ROM addresses (or 0), read by
+     * MuteChSel_Dispatch_PtrTable -- 16 u32 addresses, read by
      * MuteChSel_Dispatch (v10/v9 0xF2CC54, v7 0xF2CC2A) (`ld xbc,
      * NakaWidgetPtrTbl_SmfDp_0x2460`).
      * --------------------------------------------------------------------- */
@@ -1238,7 +1238,7 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint16_t SmfMuteChSelFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
-     * SqTrAsPsSong_Dispatch_PtrTable -- 11 u32 ROM addresses (or 0), read by
+     * SqTrAsPsSong_Dispatch_PtrTable -- 11 u32 addresses, read by
      * SqTrAsPsSong_Dispatch (v10/v9 0xF2CCB5, v7 0xF2CC8B) (`ld xbc,
      * NakaWidgetPtrTbl_SmfDp_0x2514`).
      * --------------------------------------------------------------------- */
@@ -1257,8 +1257,8 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint16_t SqTrAsPsSongFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
-     * SqAftSetFunc_PtrTable -- 2 u32 ROM addresses (or 0), read by
-     * SqAftSetFunc (v10/v9 0xF2CCE8, v7 0xF2CCBE) (`lda xbc,
+     * SqAftSetFunc_PtrTable -- 2 u32 addresses, read by SqAftSetFunc (v10/v9
+     * 0xF2CCE8, v7 0xF2CCBE) (`lda xbc,
      * (NakaWidgetPtrTbl_SmfDp_0x25C2:24)`).
      * --------------------------------------------------------------------- */
     uint32_t SqAftSetFunc_PtrTable[2];
@@ -1275,7 +1275,7 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint8_t SqAftSet_LookupTableEntry_Table[32];
     /* ---------------------------------------------------------------------
-     * MuteChSet_Dispatch_PtrTable -- 16 u32 ROM addresses (or 0), read by
+     * MuteChSet_Dispatch_PtrTable -- 16 u32 addresses, read by
      * MuteChSet_Dispatch (v10/v9 0xF2CD84, v7 0xF2CD5A) (`ld xbc,
      * NakaWidgetPtrTbl_SmfDp_0x25F6`).
      * --------------------------------------------------------------------- */
@@ -2060,8 +2060,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_36F),
     },
 
-    .Yoko_ResNames_36F = 
-        "\0\xFF"
+    .Yoko_ResNames_36F = "\0\xFF"
         "Comporser\0"
         "LyricsSong\0\xFF"
         "\0\xFF"
@@ -2122,8 +2121,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_370),
     },
 
-    .Yoko_ResNames_370 = 
-        "\0\xFF"
+    .Yoko_ResNames_370 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "DOCOrchSw\0"
@@ -2152,8 +2150,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_371),
     },
 
-    .Yoko_ResNames_371 = 
-        "\0\xFF"
+    .Yoko_ResNames_371 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "PDOrchSw\0\xFF"
@@ -2177,8 +2174,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_372),
     },
 
-    .Yoko_ResNames_372 = 
-        "\0\xFF"
+    .Yoko_ResNames_372 = "\0\xFF"
         "LyricsFunc\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2207,8 +2203,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_373),
     },
 
-    .Yoko_ResNames_373 = 
-        "\0\xFF"
+    .Yoko_ResNames_373 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2245,8 +2240,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_374),
     },
 
-    .Yoko_ResNames_374 = 
-        "\0\xFF"
+    .Yoko_ResNames_374 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "DOCMedOrchSw\0\xFF"
@@ -2280,8 +2274,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_375),
     },
 
-    .Yoko_ResNames_375 = 
-        "\0\xFF"
+    .Yoko_ResNames_375 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "PDMedOrchSw\0"
@@ -2308,8 +2301,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_376),
     },
 
-    .Yoko_ResNames_376 = 
-        "\0\xFF"
+    .Yoko_ResNames_376 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2353,8 +2345,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_378),
     },
 
-    .Yoko_ResNames_378 = 
-        "\0\xFF"
+    .Yoko_ResNames_378 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2402,8 +2393,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_37A),
     },
 
-    .Yoko_ResNames_37A = 
-        "\0\xFF"
+    .Yoko_ResNames_37A = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2426,8 +2416,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_389),
     },
 
-    .Yoko_ResNames_389 = 
-        "\0\xFF"
+    .Yoko_ResNames_389 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2439,8 +2428,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_38A),
     },
 
-    .Yoko_ResNames_38A = 
-        "\0\xFF"
+    .Yoko_ResNames_38A = "\0\xFF"
         "\0\xFF",
 
     .Yoko_ResNameTable_38B = {
@@ -2469,8 +2457,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_38B),
     },
 
-    .Yoko_ResNames_38B = 
-        "\0\xFF"
+    .Yoko_ResNames_38B = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2526,8 +2513,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_38C),
     },
 
-    .Yoko_ResNames_38C = 
-        "\0\xFF"
+    .Yoko_ResNames_38C = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2566,8 +2552,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_38E),
     },
 
-    .Yoko_ResNames_38E = 
-        "\0\xFF"
+    .Yoko_ResNames_38E = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2584,8 +2569,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_38F),
     },
 
-    .Yoko_ResNames_38F = 
-        "\0\xFF"
+    .Yoko_ResNames_38F = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2601,8 +2585,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_392),
     },
 
-    .Yoko_ResNames_392 = 
-        "\0\xFF"
+    .Yoko_ResNames_392 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2612,8 +2595,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_3A7),
     },
 
-    .Yoko_ResNames_3A7 = 
-        "\0\xFF",
+    .Yoko_ResNames_3A7 = "\0\xFF",
 
     .Yoko_ResNameTable_3A9 = {
         SELF(Yoko_ResNames_3A9[12]),
@@ -2625,8 +2607,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_3A9),
     },
 
-    .Yoko_ResNames_3A9 = 
-        "\0\xFF"
+    .Yoko_ResNames_3A9 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2642,8 +2623,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_3E0),
     },
 
-    .Yoko_ResNames_3E0 = 
-        "\0\xFF"
+    .Yoko_ResNames_3E0 = "\0\xFF"
         "\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2665,8 +2645,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_3E1),
     },
 
-    .Yoko_ResNames_3E1 = 
-        "\0\xFF"
+    .Yoko_ResNames_3E1 = "\0\xFF"
         "DemoMed1\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2696,8 +2675,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_3E2),
     },
 
-    .Yoko_ResNames_3E2 = 
-        "\0\xFF"
+    .Yoko_ResNames_3E2 = "\0\xFF"
         "DemoMed2\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2727,8 +2705,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_ResNames_3E3),
     },
 
-    .Yoko_ResNames_3E3 = 
-        "\0\xFF"
+    .Yoko_ResNames_3E3 = "\0\xFF"
         "DemoMed3\0\xFF"
         "\0\xFF"
         "\0\xFF"
@@ -2742,8 +2719,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         "DemoSong12\0\xFF"
         "DemoRhy",
 
-    .Yoko_ResNames_3E3_Strings = 
-        "MD_SEQ_STEP\0"
+    .Yoko_ResNames_3E3_Strings = "MD_SEQ_STEP\0"
         "MD_DEMO\0"
         "TT_DPSMF\0\xFF"
         "TT_DPDOC\0\xFF"
@@ -2839,8 +2815,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Yoko_MainFuncNames_447),
     },
 
-    .Yoko_MainFuncNames_447 = 
-        "\0\xFF"
+    .Yoko_MainFuncNames_447 = "\0\xFF"
         "ApPlaySyori\0"
         "NameGetFuncCall\0"
         "MiddleFuncCall\0\xFF"
@@ -2873,56 +2848,49 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         "SeqSongMemoryFunc\0"
         "SeqSongNameFunc",
 
-    .PartSelLangCheck_Strings = 
-        "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF"
+    .PartSelLangCheck_Strings = "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF"
         "Dr\xFC" "cken Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie per STEP RECORD aufnehmen m\xF6" "chten.\0\xFF"
         "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF"
         "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF"
         "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF"
         "Press the up/down button under the screen corresponding to the track that you want to STEP RECORD.\0\xFF",
 
-    .AfterLangCheck_Strings = 
-        "Select whether or not After Touch is recorded by Sequencer.\0"
+    .AfterLangCheck_Strings = "Select whether or not After Touch is recorded by Sequencer.\0"
         "W\xE4hlen Sie, ob After Touch Effekte vom Sequenzer aufgezeichnet werden sollen.\0"
         "Select whether or not After Touch is recorded by Sequencer.\0"
         "Select whether or not After Touch is recorded by Sequencer.\0"
         "Select whether or not After Touch is recorded by Sequencer.\0"
         "Select whether or not After Touch is recorded by Sequencer.",
 
-    .TrAsPreLangCheck_Strings = 
-        "Any existing song will be cleared. Press OK to proceed.\0"
+    .TrAsPreLangCheck_Strings = "Any existing song will be cleared. Press OK to proceed.\0"
         "Jeder Song im Arbeitsspeicher wird gel\xF6scht. Dr\xFC" "cken Sie OK zur Best\xE4tigung.\0\xFF"
         "Any existing song will be cleared. Press OK to proceed.\0"
         "Any existing song will be cleared. Press OK to proceed.\0"
         "Any existing song will be cleared. Press OK to proceed.\0"
         "Any existing song will be cleared. Press OK to proceed.",
 
-    .AtentionLangCheck_Strings = 
-        "ATTENTION!\0\xFF"
+    .AtentionLangCheck_Strings = "ATTENTION!\0\xFF"
         "ACHTUNG !\0"
         "ATTENTION!\0\xFF"
         "\xA1" "ATENCI\xD3N!\0\xFF"
         "ATTENTION!\0\xFF"
         "Perhatian !",
 
-    .AreYouSureLangCheck_Strings = 
-        "Are You Sure?\0"
+    .AreYouSureLangCheck_Strings = "Are You Sure?\0"
         "Sind Sie sicher ?\0"
         "Etes vous s\xFBr?\0\xFF"
         "\xBF" "Est\xE1 seguro?\0"
         "Are You Sure?\0"
         "Apakah yakin akan dihapus ?",
 
-    .GmOnSureLangCheck_Strings = 
-        "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!\0"
+    .GmOnSureLangCheck_Strings = "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!\0"
         "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge\xE4ndert!\0"
         "L'activation du mode GENERAL MIDI MODE remplacera tous les r\xE9glages actuels par les r\xE9glages GENERAL MIDI!\0\xFF"
         "\xA1" "Al activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!\0"
         "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!\0"
         "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang. ",
 
-    .GmOffSureLangCheck_Strings = 
-        "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!\0\xFF"
+    .GmOffSureLangCheck_Strings = "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!\0\xFF"
         "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt.\0"
         "La d\xE9sactivation du mode GENERAL MIDI MODE remplacera tous les r\xE9glages GENERAL MIDI par les r\xE9glages d'usines!\0"
         "\xA1" "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de f\xE1" "brica!\0\xFF"
@@ -2938,8 +2906,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(TrAsSureLangCheck_Strings),
     },
 
-    .TrAsSureLangCheck_Strings = 
-        "Ubahlah assignment dari Tracks %2d dari %s ke %s akan menghapus semua data yang sekarang.\0"
+    .TrAsSureLangCheck_Strings = "Ubahlah assignment dari Tracks %2d dari %s ke %s akan menghapus semua data yang sekarang.\0"
         "Changing the assignment of Track %2d from %s to %s will erase all the current data.\0"
         "Al cambiar la asignaci\xF3n de pistas %2d de %s a %s se borrar\xE1n todos los datos actuales.\0"
         "Tout changement d'assignation des pistes %2d de%s \xE0%s effacera toutes les donn\xE9" "es actuelles.\0\xFF"
@@ -3032,8 +2999,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(TrAsSureLangCheck_Strings_2),
     },
 
-    .TrAsSureLangCheck_Strings_2 = 
-        "PART15\0\xFF"
+    .TrAsSureLangCheck_Strings_2 = "PART15\0\xFF"
         "PART14\0\xFF"
         "PART13\0\xFF"
         "RHYTHM\0\xFF"
@@ -3054,8 +3020,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         "LEFT\0\xFF"
         "RIGHT1\0\xFF",
 
-    .PtrTarget_Strings = 
-        "Lyrc\0\xFF"
+    .PtrTarget_Strings = "Lyrc\0\xFF"
         "MEASURE = %3d\0"
         "                         \0"
         "                         \0"
@@ -3089,8 +3054,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(TrAsGridChk_Part1_SendAudio_Strings),
     },
 
-    .TrAsGridChk_Part1_SendAudio_Strings = 
-        " PART 15 \0"
+    .TrAsGridChk_Part1_SendAudio_Strings = " PART 15 \0"
         " PART 14 \0"
         " PART 13 \0"
         " RHYTHM  \0"
@@ -3111,11 +3075,9 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         " LEFT    \0"
         " RIGHT1  ",
 
-    .TrAsGrid_GetDirectionLabel_Str = 
-        "|-|TR 1|TR 2|TR 3|TR 4|TR 5|TR 6|TR 7|TR 8\0\xFF",
+    .TrAsGrid_GetDirectionLabel_Str = "|-|TR 1|TR 2|TR 3|TR 4|TR 5|TR 6|TR 7|TR 8\0\xFF",
 
-    .TrAsGrid_DirectionLabel2_Str = 
-        "|-|TR 9|TR10|TR11|TR12|TR13|TR14|TR15|TR16\0\xFF",
+    .TrAsGrid_DirectionLabel2_Str = "|-|TR 9|TR10|TR11|TR12|TR13|TR14|TR15|TR16\0\xFF",
 
     .AcTrAsGridBoxProc_CaseTable = { 0x008D, 0x01FA, 0x008D, 0x01FA, 0x0470, 0x0396, 0x0396 },
 
@@ -3134,53 +3096,37 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         0x0E, 0x0F, 0x0D, 0x10,
     },
 
-    .TrAsGridChk_Part2_Start_Str = 
-        "ON ",
+    .TrAsGridChk_Part2_Start_Str = "ON ",
 
-    .TrAsGridChk_Part2_Start_Str_2 = 
-        "OFF",
+    .TrAsGridChk_Part2_Start_Str_2 = "OFF",
 
-    .TrAsGridChk_Part2_PushCmd_Str = 
-        "-- ",
+    .TrAsGridChk_Part2_PushCmd_Str = "-- ",
 
-    .TrAsGridChk_Part2_PushCmd_Str_2 = 
-        "-- ",
+    .TrAsGridChk_Part2_PushCmd_Str_2 = "-- ",
 
-    .TrAsGridChk_Part2_UpDir_Str = 
-        "ON ",
+    .TrAsGridChk_Part2_UpDir_Str = "ON ",
 
-    .TrAsGridChk_Part2_UpDir_Str_2 = 
-        "OFF",
+    .TrAsGridChk_Part2_UpDir_Str_2 = "OFF",
 
-    .TrAsGridChk_Part2_UpPushCmd_Str = 
-        "-- ",
+    .TrAsGridChk_Part2_UpPushCmd_Str = "-- ",
 
-    .TrAsGridChk_Part2_UpCheckType0_Str = 
-        "-- ",
+    .TrAsGridChk_Part2_UpCheckType0_Str = "-- ",
 
-    .TrAsGridChk_Part3_Start_Str = 
-        "ON ",
+    .TrAsGridChk_Part3_Start_Str = "ON ",
 
-    .TrAsGridChk_Part3_Start_Str_2 = 
-        "OFF",
+    .TrAsGridChk_Part3_Start_Str_2 = "OFF",
 
-    .TrAsGridChk_Part3_PushCmd_Str = 
-        "-- ",
+    .TrAsGridChk_Part3_PushCmd_Str = "-- ",
 
-    .TrAsGridChk_Part3_PushCmd_Str_2 = 
-        "-- ",
+    .TrAsGridChk_Part3_PushCmd_Str_2 = "-- ",
 
-    .TrAsGridChk_Part3_UpDir_Str = 
-        "ON ",
+    .TrAsGridChk_Part3_UpDir_Str = "ON ",
 
-    .TrAsGridChk_Part3_UpDir_Str_2 = 
-        "OFF",
+    .TrAsGridChk_Part3_UpDir_Str_2 = "OFF",
 
-    .TrAsGridChk_Part3_UpPushCmd_Str = 
-        "-- ",
+    .TrAsGridChk_Part3_UpPushCmd_Str = "-- ",
 
-    .TrAsGridChk_Part3_UpCheckType0_Str = 
-        "-- ",
+    .TrAsGridChk_Part3_UpCheckType0_Str = "-- ",
 
     .TrAsGridCheck_CaseTable = { 0x0000, 0x013C, 0x0000, 0x013C, 0x04E2, 0x04E2, 0x04E2 },
 
@@ -3213,8 +3159,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(MuteChSel_Dispatch_Strings),
     },
 
-    .MuteChSel_Dispatch_Strings = 
-        " 16 \0\xFF"
+    .MuteChSel_Dispatch_Strings = " 16 \0\xFF"
         " 15 \0\xFF"
         " 14 \0\xFF"
         " 13 \0\xFF"
@@ -3250,8 +3195,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(SqTrAsPsSong_Dispatch_Strings),
     },
 
-    .SqTrAsPsSong_Dispatch_Strings = 
-        "  ALL   \0\xFF"
+    .SqTrAsPsSong_Dispatch_Strings = "  ALL   \0\xFF"
         " SONG10 \0\xFF"
         " SONG 9 \0\xFF"
         " SONG 8 \0\xFF"
@@ -3273,8 +3217,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(SqAftSetFunc_Strings),
     },
 
-    .SqAftSetFunc_Strings = 
-        " ON  \0"
+    .SqAftSetFunc_Strings = " ON  \0"
         " OFF ",
 
     .SqAftSet_LookupTableEntry_Table = {
@@ -3301,8 +3244,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(MuteChSet_Dispatch_Strings),
     },
 
-    .MuteChSet_Dispatch_Strings = 
-        " CH16 \0\xFF"
+    .MuteChSet_Dispatch_Strings = " CH16 \0\xFF"
         " CH15 \0\xFF"
         " CH14 \0\xFF"
         " CH13 \0\xFF"
@@ -3324,47 +3266,38 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         0x001E, 0x0000,
     },
 
-    .AcDemoMedley_HandleScrollEvent_Str = 
-        "( MEDLEY )\0\xFF",
+    .AcDemoMedley_HandleScrollEvent_Str = "( MEDLEY )\0\xFF",
 
-    .AcDemoMedley_HandleScrollEvent_Str_2 = 
-        "          \0\xFF",
+    .AcDemoMedley_HandleScrollEvent_Str_2 = "          \0\xFF",
 
-    .MedleyDisp_Blank = 
-        "          \0\xFF",
+    .MedleyDisp_Blank = "          \0\xFF",
 
-    .DemoMedDsp_Dispatch_Str = 
-        "( MEDLEY )\0\xFF",
+    .DemoMedDsp_Dispatch_Str = "( MEDLEY )\0\xFF",
 
     .DemoMedDspCheck_CaseTable = {
         0x0020, 0x0024, 0x003D, 0x003D, 0x003D, 0x0028, 0x002F, 0x0036,
         0x0024, 0x0000,
     },
 
-    .PlayModeStr_Play = 
-        "    \0\xFF",
+    .PlayModeStr_Play = "    \0\xFF",
 
-    .DPPlayDsp_Dispatch_Str = 
-        "PLAY\0\xFF",
+    .DPPlayDsp_Dispatch_Str = "PLAY\0\xFF",
 
     .DPPlayDspCheck_CaseTable = {
         0x0020, 0x0024, 0x003D, 0x003D, 0x003D, 0x0028, 0x002F, 0x0036,
         0x0024, 0x0000,
     },
 
-    .PlayModeStr_Pause = 
-        "     ",
+    .PlayModeStr_Pause = "     ",
 
-    .DPPauseDsp_Dispatch_Str = 
-        "PAUSE",
+    .DPPauseDsp_Dispatch_Str = "PAUSE",
 
     .DPPauseDspCheck_CaseTable = {
         0x0020, 0x0024, 0x003D, 0x003D, 0x003D, 0x0028, 0x002F, 0x0036,
         0x0024, 0x0000,
     },
 
-    .DPPauseDspCheck_CaseTable_Strings = 
-        "ExMD\0\xFF",
+    .DPPauseDspCheck_CaseTable_Strings = "ExMD\0\xFF",
 
     .Kubo_ApFuncTable_128 = {
         NAKA_ADDR(EffectBoxProc),
@@ -3520,8 +3453,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(Kubo_ApFuncNames_428),
     },
 
-    .Kubo_ApFuncNames_428 = 
-        "\0\xFF"
+    .Kubo_ApFuncNames_428 = "\0\xFF"
         "AutoPunchTtlRqFunc\0\xFF"
         "PanicFunc\0"
         "SureJudgeFunc\0"
@@ -3604,8 +3536,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_EffectBox_Names),
     },
 
-    .ClassProps_EffectBox_Names = 
-        "\0\xFF"
+    .ClassProps_EffectBox_Names = "\0\xFF"
         "ttl_no\0\xFF"
         "data2\0"
         "data\0\xFF"
@@ -3617,8 +3548,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_EqualizerBox_Names),
     },
 
-    .ClassProps_EqualizerBox_Names = 
-        "\0\xFF"
+    .ClassProps_EqualizerBox_Names = "\0\xFF"
         "ttl_no\0\xFF"
         "func\0\xFF",
 
@@ -3630,8 +3560,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_SqedtVal_Names),
     },
 
-    .ClassProps_SqedtVal_Names = 
-        "\0\xFF"
+    .ClassProps_SqedtVal_Names = "\0\xFF"
         "ttl_no\0\xFF"
         "func\0\xFF"
         "fontcolor\0"
@@ -3644,8 +3573,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_SqedtVal2_Names),
     },
 
-    .ClassProps_SqedtVal2_Names = 
-        "\0\xFF"
+    .ClassProps_SqedtVal2_Names = "\0\xFF"
         "func\0\xFF"
         "fontcolor\0"
         "color",
@@ -3657,8 +3585,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_SqedtFix_Names),
     },
 
-    .ClassProps_SqedtFix_Names = 
-        "\0\xFF"
+    .ClassProps_SqedtFix_Names = "\0\xFF"
         "border\0\xFF"
         "fontcolor\0"
         "color",
@@ -3667,8 +3594,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_IvSongCopyExit_Names),
     },
 
-    .ClassProps_IvSongCopyExit_Names = 
-        "\0\xFF",
+    .ClassProps_IvSongCopyExit_Names = "\0\xFF",
 
     .ClassProps_SqplyVal = {
         SELF(ClassProps_SqplyVal_Names[26]),
@@ -3678,8 +3604,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_SqplyVal_Names),
     },
 
-    .ClassProps_SqplyVal_Names = 
-        "\0\xFF"
+    .ClassProps_SqplyVal_Names = "\0\xFF"
         "ttl_no\0\xFF"
         "func\0\xFF"
         "fontcolor\0"
@@ -3692,8 +3617,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_SqedtVal3_Names),
     },
 
-    .ClassProps_SqedtVal3_Names = 
-        "\0\xFF"
+    .ClassProps_SqedtVal3_Names = "\0\xFF"
         "func\0\xFF"
         "fontcolor\0"
         "color",
@@ -3706,8 +3630,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_AccIll_Names),
     },
 
-    .ClassProps_AccIll_Names = 
-        "\0\xFF"
+    .ClassProps_AccIll_Names = "\0\xFF"
         "ttl_no\0\xFF"
         "func\0\xFF"
         "fontcolor\0"
@@ -3720,8 +3643,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_AcEntertainerGridBox_Names),
     },
 
-    .ClassProps_AcEntertainerGridBox_Names = 
-        "\0\xFF"
+    .ClassProps_AcEntertainerGridBox_Names = "\0\xFF"
         "func\0\xFF"
         "fixedrow\0\xFF"
         "fixedcol\0\xFF",
@@ -3735,8 +3657,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_SngSel_Names),
     },
 
-    .ClassProps_SngSel_Names = 
-        "\0\xFF"
+    .ClassProps_SngSel_Names = "\0\xFF"
         "ttl_no\0\xFF"
         "func\0\xFF"
         "fontcolor\0"
@@ -3747,8 +3668,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_SngSel2_Names),
     },
 
-    .ClassProps_SngSel2_Names = 
-        "\0\xFF",
+    .ClassProps_SngSel2_Names = "\0\xFF",
 
     .ClassProps_NoteEditBox = {
         SELF(ClassProps_NoteEditBox_Names[10]),
@@ -3756,8 +3676,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_NoteEditBox_Names),
     },
 
-    .ClassProps_NoteEditBox_Names = 
-        "\0\xFF"
+    .ClassProps_NoteEditBox_Names = "\0\xFF"
         "ttl_no\0\xFF"
         "func\0\xFF",
 
@@ -3765,15 +3684,13 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_EqOnOffFuncToggle_Names),
     },
 
-    .ClassProps_EqOnOffFuncToggle_Names = 
-        "\0\xFF",
+    .ClassProps_EqOnOffFuncToggle_Names = "\0\xFF",
 
     .ClassProps_MsgToTtl = {
         SELF(ClassProps_MsgToTtl_Names),
     },
 
-    .ClassProps_MsgToTtl_Names = 
-        "\0\xFF",
+    .ClassProps_MsgToTtl_Names = "\0\xFF",
 
     .ClassProps_AcIndexWideToggle = {
         SELF(ClassProps_AcIndexWideToggle_Names[12]),
@@ -3782,8 +3699,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_AcIndexWideToggle_Names),
     },
 
-    .ClassProps_AcIndexWideToggle_Names = 
-        "\0\xFF"
+    .ClassProps_AcIndexWideToggle_Names = "\0\xFF"
         "func\0\xFF"
         "tag\0"
         "index",
@@ -3793,8 +3709,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_IvPlayExit_Names),
     },
 
-    .ClassProps_IvPlayExit_Names = 
-        "\0\xFF"
+    .ClassProps_IvPlayExit_Names = "\0\xFF"
         "mode\0\xFF",
 
     .ClassProps_HelpTtl = {
@@ -3806,8 +3721,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_HelpTtl_Names),
     },
 
-    .ClassProps_HelpTtl_Names = 
-        "\0\xFF"
+    .ClassProps_HelpTtl_Names = "\0\xFF"
         "func\0\xFF"
         "page\0\xFF"
         "font\0\xFF"
@@ -3818,43 +3732,37 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_IvPnlWrExit_Names),
     },
 
-    .ClassProps_IvPnlWrExit_Names = 
-        "\0\xFF",
+    .ClassProps_IvPnlWrExit_Names = "\0\xFF",
 
     .ClassProps_IvSdrev = {
         SELF(ClassProps_IvSdrev_Names),
     },
 
-    .ClassProps_IvSdrev_Names = 
-        "\0\xFF",
+    .ClassProps_IvSdrev_Names = "\0\xFF",
 
     .ClassProps_IvSddsp = {
         SELF(ClassProps_IvSddsp_Names),
     },
 
-    .ClassProps_IvSddsp_Names = 
-        "\0\xFF",
+    .ClassProps_IvSddsp_Names = "\0\xFF",
 
     .ClassProps_IvSdacc = {
         SELF(ClassProps_IvSdacc_Names),
     },
 
-    .ClassProps_IvSdacc_Names = 
-        "\0\xFF",
+    .ClassProps_IvSdacc_Names = "\0\xFF",
 
     .ClassProps_IvPunchExit = {
         SELF(ClassProps_IvPunchExit_Names),
     },
 
-    .ClassProps_IvPunchExit_Names = 
-        "\0\xFF",
+    .ClassProps_IvPunchExit_Names = "\0\xFF",
 
     .ClassProps_IvAutoPunchExit = {
         SELF(ClassProps_IvAutoPunchExit_Names),
     },
 
-    .ClassProps_IvAutoPunchExit_Names = 
-        "\0\xFF",
+    .ClassProps_IvAutoPunchExit_Names = "\0\xFF",
 
     .ClassProps_AcPanicEditSw = {
         SELF(ClassProps_AcPanicEditSw_Names[8]),
@@ -3862,8 +3770,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_AcPanicEditSw_Names),
     },
 
-    .ClassProps_AcPanicEditSw_Names = 
-        "\0\xFF"
+    .ClassProps_AcPanicEditSw_Names = "\0\xFF"
         "func\0\xFF"
         "style",
 
@@ -3871,8 +3778,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         SELF(ClassProps_IvRealRecExit_Names),
     },
 
-    .ClassProps_IvRealRecExit_Names = 
-        "\0\xFF",
+    .ClassProps_IvRealRecExit_Names = "\0\xFF",
 
     .Kubo_ClassTable_168 = {
         { NAKA_ADDR(EffectBoxProc), 0x01600011, 38, 10, 0x00E2758C, NAKA_ADDR(NakaInst_EqualizerBox), SELF(ClassProps_EffectBox) },

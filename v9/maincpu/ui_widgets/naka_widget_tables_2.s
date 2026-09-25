@@ -1546,37 +1546,45 @@ StsGMOnCheck_Strings:
 StsGMOnCheck_PtrTable:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24FB0, 0x18
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] StsGMOnCheck_PtrTable_Tail
-; StsGMOnCheck_PtrTable_Tail -- 608 bytes after StsGMOnCheck_PtrTable
-; that no registration or code reference reaches (searched: RegObjTabl
-; tables, slice and positional labels). Contents not established.
+; [naka_s_headers] StsGMOffCheck_Strings
+; StsGMOffCheck_Strings -- the 5 strings StsGMOffCheck_PtrTable points
+; at (NUL-terminated, 0xff pad to even length), 608 bytes.
 ;
-; Typed in naka_widget_tables_2.c as uint8_t
-; StsGMOnCheck_PtrTable_Tail[608].
+; Typed in naka_widget_tables_2.c as char StsGMOffCheck_Strings[608].
 ; -----------------------------------------------------------------------------
-StsGMOnCheck_PtrTable_Tail:
+StsGMOffCheck_Strings:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24FC8, 0x260
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StsGMOffCheck_PtrTable
-; StsGMOffCheck_PtrTable -- 12 u32 addresses, read by StsGMOffCheck
+; StsGMOffCheck_PtrTable -- 6 u32 addresses, read by StsGMOffCheck
 ; (v10/v9 0xf74784, v7 0xf74380) (`lda xhl,
 ; (GMMode_Attention_English2_0x47c:24)`).
 ;
-; Typed in naka_widget_tables_2.c as uint32_t
-; StsGMOffCheck_PtrTable[12].
+; Typed in naka_widget_tables_2.c as uint32_t StsGMOffCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
 StsGMOffCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25228, 0x30
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25228, 0x18
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] StsGMOffCheck_PtrTable_Tail
-; StsGMOffCheck_PtrTable_Tail -- 104 bytes after StsGMOffCheck_PtrTable
-; that no registration or code reference reaches (searched: RegObjTabl
-; tables, slice and positional labels). Contents not established.
+; [naka_s_headers] StsAreYouSureCheck_PtrTable
+; StsAreYouSureCheck_PtrTable -- 6 u32 addresses, read by
+; StsAreYouSureCheck (v10/v9 0xf74795, v7 0xf74391) (`lda xhl,
+; (GMMode_Attention_English2_0x494:24)`).
 ;
-; Typed in naka_widget_tables_2.c as uint8_t
-; StsGMOffCheck_PtrTable_Tail[104].
+; Typed in naka_widget_tables_2.c as uint32_t
+; StsAreYouSureCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-StsGMOffCheck_PtrTable_Tail:
+StsAreYouSureCheck_PtrTable:
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25240, 0x18
+; -----------------------------------------------------------------------------
+; [naka_s_headers] StsAreYouSureCheck_Strings
+; StsAreYouSureCheck_Strings -- the 6 strings
+; StsAreYouSureCheck_PtrTable points at (NUL-terminated, 0xff pad to
+; even length), 104 bytes.
+;
+; Typed in naka_widget_tables_2.c as char
+; StsAreYouSureCheck_Strings[104].
+; -----------------------------------------------------------------------------
+StsAreYouSureCheck_Strings:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25258, 0x68
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StsSplitCheck_PtrTable
