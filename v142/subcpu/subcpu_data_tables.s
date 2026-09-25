@@ -380,20 +380,23 @@ Voice_CommandIndexTable:
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x10, 0x20
 	.ascii "!\"#$%&'()*+"
 
-// Voice_Pool_Quota_ModeA - per-pool polyphony quota, allocation mode A
-// 18 bytes, one per voice pool (0x112D + g*0x1E); copied into pool.quota by
-// Voice_Reset_Engine (0x021ECB) when called with A = 0.
-// 32+16+4+12 = 64 = the machine's full polyphony -> these are ALLOCATION
-// QUOTAS, not the envelope stage widths the old name claimed.
+;  Voice_Pool_Quota_ModeA - per-pool polyphony quota, allocation mode A
+;  18 bytes, one per voice pool (0x112D + g*0x1E); copied into pool.quota by
+;  Voice_Reset_Engine (0x021ECB) when called with A = 0.
+;  32+16+4+12 = 64 = the machine's full polyphony -> these are ALLOCATION
+;  QUOTAS, not the envelope stage widths the old name claimed.
+; Read by CmdTable_InitEntry_Loop (0x021FB4, inside Voice_Reset_Engine) when the caller flag at
+; (xsp+6) is 0: `lda xbc,(this:24) / ldb_sri` byte i -> offset 0 of the 30-byte pool record at
+; 0x112D + 30*i, for i = 0..0x11 (18 entries, the loop's `cp (xsp+4),0x12`).
 Voice_Pool_Quota_ModeA:
-	.byte 0x20, 0x10, 0x04, 0x0c, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x40, 0x40
+	.byte 32, 16, 4, 12, 0, 0, 0, 0		; pools 0-7
+	.byte 0, 0, 0, 0, 0, 0, 0, 0		; pools 8-15
+	.byte 64, 64				; pools 16-17
 
-// Voice_Pool_Quota_ModeB - per-pool polyphony quota, allocation mode B
-// Same meaning; used when Voice_Reset_Engine is called with A != 0.
-// 12+6+6+4+4+4+4+4+2*7+6 = 64 voices exactly across pools 0..15.
-// The real parameter->envelope-rate table is at 0x011963.
+;  Voice_Pool_Quota_ModeB - per-pool polyphony quota, allocation mode B
+;  Same meaning; used when Voice_Reset_Engine is called with A != 0.
+;  12+6+6+4+4+4+4+4+2*7+6 = 64 voices exactly across pools 0..15.
+;  The real parameter->envelope-rate table is at 0x011963.
 ; --- 0x00F519-0x00F52A  Voice_Pool_Quota_ModeB -- 18 bytes, per-section polyphony quota, mode B
 ; Both read by CmdTable_InitEntry_Loop (0x021FB4) / _AltPtr (0x021FDF): it walks i = 0..0x11 (18),
 ; computes i*0x1E and stores table[i] into offset 0 of the 30-byte section record at
@@ -404,42 +407,46 @@ Voice_Pool_Quota_ModeA:
 ;   64-voice pool. Entries 16 and 17 are 64 = "the whole pool" (unpartitioned/SFX section).
 ;   Mode A concentrates the pool in 4 sections; mode B spreads it over 16 (see 0x00F597).
 Voice_Pool_Quota_ModeB:
-	.byte 0x0c, 0x06, 0x06, 0x04, 0x04, 0x04, 0x04, 0x04
-	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x06
-	.byte 0x40, 0x40
+	.byte 12, 6, 6, 4, 4, 4, 4, 4		; pools 0-7
+	.byte 2, 2, 2, 2, 2, 2, 2, 6		; pools 8-15
+	.byte 64, 64				; pools 16-17
 
-// Voice_Part_PoolPtr_ModeA - part -> voice-pool binding, allocation mode A
-// 27 little-endian 32-bit pointers, one per part-allocation descriptor
-// (0x1349 + p*0x0C).  Every value is 0x112D + g*0x1E, the address of one of
-// the 18 voice pools.  Mode-B counterpart is the table at 0x00F597.
+;  Voice_Part_PoolPtr_ModeA - part -> voice-pool binding, allocation mode A
+;  27 little-endian 32-bit pointers, one per part-allocation descriptor
+;  (0x1349 + p*0x0C).  Every value is 0x112D + g*0x1E, the address of one of
+;  the 18 voice pools.  Mode-B counterpart is the table at 0x00F597.
+; Read by ChanStruct_Init_Entry (0x02205A) when the caller flag at (xsp+6) is 0: entry p
+; (`sla wa,2 / lda xbc,(this:24) / ld_sril3`) is stored at offset 0 of the 12-byte part record
+; at 0x1349 + 12*p, for p = 0..0x1A (27 entries, the loop's `cp (xsp+4),0x1B`).  Written below
+; as pool-record addresses 0x112D + 30*g, g = pool index.
 Voice_Part_PoolPtr_ModeA:
-	.byte 0x2d, 0x11, 0x00, 0x00
-	.byte 0x2d, 0x11, 0x00, 0x00
-	.byte 0x2d, 0x11, 0x00, 0x00
-	.byte 0x2d, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x69, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x69, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x2b, 0x13, 0x00, 0x00
+	.long 0x112d + 30*0		; part 0 -> pool 0
+	.long 0x112d + 30*0		; part 1 -> pool 0
+	.long 0x112d + 30*0		; part 2 -> pool 0
+	.long 0x112d + 30*0		; part 3 -> pool 0
+	.long 0x112d + 30*1		; part 4 -> pool 1
+	.long 0x112d + 30*1		; part 5 -> pool 1
+	.long 0x112d + 30*1		; part 6 -> pool 1
+	.long 0x112d + 30*1		; part 7 -> pool 1
+	.long 0x112d + 30*1		; part 8 -> pool 1
+	.long 0x112d + 30*1		; part 9 -> pool 1
+	.long 0x112d + 30*1		; part 10 -> pool 1
+	.long 0x112d + 30*1		; part 11 -> pool 1
+	.long 0x112d + 30*1		; part 12 -> pool 1
+	.long 0x112d + 30*1		; part 13 -> pool 1
+	.long 0x112d + 30*1		; part 14 -> pool 1
+	.long 0x112d + 30*3		; part 15 -> pool 3
+	.long 0x112d + 30*1		; part 16 -> pool 1
+	.long 0x112d + 30*1		; part 17 -> pool 1
+	.long 0x112d + 30*1		; part 18 -> pool 1
+	.long 0x112d + 30*2		; part 19 -> pool 2
+	.long 0x112d + 30*3		; part 20 -> pool 3
+	.long 0x112d + 30*1		; part 21 -> pool 1
+	.long 0x112d + 30*2		; part 22 -> pool 2
+	.long 0x112d + 30*3		; part 23 -> pool 3
+	.long 0x112d + 30*3		; part 24 -> pool 3
+	.long 0x112d + 30*3		; part 25 -> pool 3
+	.long 0x112d + 30*17		; part 26 -> pool 17
 
 ; --- 0x00F597-0x00F602  (Voice_Pitch_Table_High) -- 27 x u32 pointers, channel -> section record, mode B
 ; ★ 0x00F597 is NOT a pitch table. Both tables have identical shape and are read by the same
@@ -2579,54 +2586,65 @@ Str_DspReset_Prefix:
 Str_DspReset_Suffix:
 	.asciz " reset."
 ; DSP_AntiReset_WithDebug: "\nDSP <n> anti reset."
+; DSP_AntiReset_WithDebug (0x037E93) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_DspAntiReset_Prefix:
 	.asciz "\nDSP "
 Str_DspAntiReset_Suffix:
 	.asciz " anti reset."
 ; EFF_Mute_WithDebug: "\nEFF <n> mute."
+; EFF_Mute_WithDebug (0x037EB4) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffMute_Prefix:
 	.asciz "\nEFF "
 Str_EffMute_Suffix:
 	.asciz " mute."
 ; DSP_Mute_WithDebug: "\nDSP <n> mute."
+; DSP_Mute_WithDebug (0x037EE9) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_DspMute_Prefix:
 	.asciz "\nDSP "
 Str_DspMute_Suffix:
 	.asciz " mute."
 ; DSP_Unmute_WithDebug: "\nDSP <n> antimute."
+; DSP_Unmute_WithDebug (0x037F1C) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_DspUnmute_Prefix:
 	.asciz "\nDSP "
 Str_DspUnmute_Suffix:
 	.asciz " antimute."
 ; EFF_Disconnect: "\nEFF <n> disconnect."
+; EFF_Disconnect (0x037F4F) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffDisconnect_Prefix:
 	.asciz "\nEFF "
 Str_EffDisconnect_Suffix:
 	.asciz " disconnect."
 ; EFF_Link: "\nEFF <n> link."
+; EFF_Link (0x037FAE) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffLink_Prefix:
 	.asciz "\nEFF "
 Str_EffLink_Suffix:
 	.asciz " link."
 ; DSP_AlgorithmChange (sic -- probably meant "algo change")
+; DSP_AlgorithmChange (0x03800D) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_DspAlgoChange_Msg:
 	.asciz "\nargo change "
 ; EFF_WriteHeader: "\nEFF <n> headder" (sic)
+; EFF_WriteHeader (0x0380AB) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffHeader_Prefix:
 	.asciz "\nEFF "
 Str_EffHeader_Suffix:
 	.asciz " headder"
 ; EFF_Change_WithDebug: "\nEFF <n> change "
+; EFF_Change_WithDebug (0x0380EC) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffChange_Prefix:
 	.asciz "\nEFF "
 Str_EffChange_Suffix:
 	.asciz " change "
 ; EFF_DataChange_WithDebug: "\nEFF <n> data change "
+; EFF_DataChange_WithDebug (0x0381BC) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffDataChange_Prefix:
 	.asciz "\nEFF "
 Str_EffDataChange_Suffix:
 	.asciz " data change "
 ; EFF_ParamEdit_WithDebug: "\nEFF <n> para<m> edit "
+; EFF_ParamEdit_WithDebug (0x038200) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffParamEdit_Prefix:
 	.asciz "\nEFF "
 Str_EffParamEdit_Mid:
@@ -2634,6 +2652,7 @@ Str_EffParamEdit_Mid:
 Str_EffParamEdit_Suffix:
 	.asciz " edit "
 ; EFF_VolumeUpdate_WithDebug: "\nEFF <n> vol "
+; EFF_VolumeUpdate_WithDebug (0x03826E) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffVolume_Prefix:
 	.asciz "\nEFF "
 Str_EffVolume_Suffix:
@@ -11881,6 +11900,8 @@ EFF_Mute_Program_Slot4:
 ; closed by COMMAND 0x03.  9 rows = 109 bytes; 8 rows = 97 bytes, and each 8-row table
 ; carries 3 MORE bytes (a 33rd coefficient) that the loop never reads.
 ; 9-row table, variant 0: read by DSP_WriteLUTParamSet when C != 1 and XDE == 0.
+; Address loaded on the fall-through path in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 109 bytes =
+; base index 0x1D + 9 rows x 4 coefficients x 3 bytes (layout: the note above).
 DSP_Op74_LUT_Rows9_Var0:
 	.byte 0x1d								; base index
 	.byte 0x0c, 0x23, 0xc6,  0x2b, 0x0a, 0x8f,  0x47, 0x02, 0x73,  0x5e, 0x23, 0x82	; row 0
@@ -11893,6 +11914,8 @@ DSP_Op74_LUT_Rows9_Var0:
 	.byte 0x6e, 0xda, 0x3a,  0x78, 0x03, 0x04,  0x78, 0xfe, 0x14,  0x71, 0xba, 0x50	; row 7
 	.byte 0x62, 0xb6, 0x74,  0x4c, 0xf8, 0x74,  0x31, 0xfb, 0xa1,  0x13, 0x96, 0xcd	; row 8
 ; 9-row table, variant 1: read by DSP_WriteLUTParamSet when C != 1 and XDE == 1.
+; Address loaded at DSP_WriteLUT_AlgoC0_TypeDE1 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 109 bytes =
+; base index 0x1D + 9 rows x 4 coefficients x 3 bytes (layout: the note above).
 DSP_Op74_LUT_Rows9_Var1:
 	.byte 0x1d								; base index
 	.byte 0x00, 0x00, 0x00,  0x15, 0x55, 0x55,  0x2a, 0xaa, 0xaa,  0x40, 0x00, 0x00	; row 0
@@ -11905,6 +11928,8 @@ DSP_Op74_LUT_Rows9_Var1:
 	.byte 0x55, 0x55, 0x55,  0x6a, 0xaa, 0xaa,  0x7f, 0xff, 0xff,  0x6a, 0xaa, 0xaa	; row 7
 	.byte 0x55, 0x55, 0x55,  0x40, 0x00, 0x00,  0x2a, 0xaa, 0xaa,  0x15, 0x55, 0x55	; row 8
 ; 9-row table, variant 2: read by DSP_WriteLUTParamSet when C != 1 and XDE == 2.
+; Address loaded at DSP_WriteLUT_AlgoC0_TypeDE2 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 109 bytes =
+; base index 0x1D + 9 rows x 4 coefficients x 3 bytes (layout: the note above).
 DSP_Op74_LUT_Rows9_Var2:
 	.byte 0x1d								; base index
 	.byte 0x14, 0x72, 0x25,  0x48, 0x7d, 0x93,  0x77, 0x98, 0x57,  0x7f, 0xff, 0xff	; row 0
@@ -11917,6 +11942,8 @@ DSP_Op74_LUT_Rows9_Var2:
 	.byte 0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff	; row 7
 	.byte 0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff,  0x54, 0x2e, 0x88,  0x20, 0xfd, 0xfb	; row 8
 ; 8-row table, variant 0: read by DSP_WriteLUTParamSet when C == 1 and XDE == 0.
+; Address loaded at DSP_WriteLUT_AlgoC1 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 100 bytes =
+; base index 0x1D + 8 rows x 4 coefficients x 3 bytes + 3 unread (layout: the note above).
 DSP_Op74_LUT_Rows8_Var0:
 	.byte 0x1d								; base index
 	.byte 0xc0, 0xa3, 0xd7,  0xc1, 0x25, 0x99,  0xc1, 0x66, 0x7b,  0xc1, 0xca, 0xc0	; row 0
@@ -11929,6 +11956,8 @@ DSP_Op74_LUT_Rows8_Var0:
 	.byte 0x3d, 0xd6, 0xe0,  0x3e, 0x17, 0xc1,  0x3e, 0x99, 0x84,  0x3e, 0xda, 0x66	; row 7
 	.byte 0x3f, 0x5c, 0x28	; not read (3 bytes after the object's last read byte)
 ; 8-row table, variant 1: read by DSP_WriteLUTParamSet when C == 1 and XDE == 1.
+; Address loaded at DSP_WriteLUT_AlgoC1_TypeDE1 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 100 bytes =
+; base index 0x1D + 8 rows x 4 coefficients x 3 bytes + 3 unread (layout: the note above).
 DSP_Op74_LUT_Rows8_Var1:
 	.byte 0x1d								; base index
 	.byte 0xc0, 0xa3, 0xd7,  0xc4, 0x99, 0x99,  0xc8, 0x8f, 0x5c,  0xcc, 0x85, 0x1e	; row 0
@@ -11941,6 +11970,8 @@ DSP_Op74_LUT_Rows8_Var1:
 	.byte 0x3c, 0xd3, 0x5a,  0x3d, 0x75, 0x8e,  0x3e, 0x58, 0xa3,  0x3e, 0xb9, 0xf5	; row 7
 	.byte 0x3f, 0x5c, 0x28	; not read (3 bytes after the object's last read byte)
 ; 8-row table, variant 2: read by DSP_WriteLUTParamSet when C == 1 and XDE == 2.
+; Address loaded at DSP_WriteLUT_AlgoC1_TypeDE2 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 100 bytes =
+; base index 0x1D + 8 rows x 4 coefficients x 3 bytes + 3 unread (layout: the note above).
 DSP_Op74_LUT_Rows8_Var2:
 	.byte 0x1d								; base index
 	.byte 0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7	; row 0
@@ -12399,6 +12430,8 @@ DSP_Param_Block_Ptrs_B:
 	.long	DSP_Eff99_Param_Descriptors	; effect 99 PEQ+OVERDR+DELAY
 ; ----- per-slot / per-chip program pointer tables (u32) -----
 ; EFF_Mute_WithDebug: `sll xwa,2 / ld xbc,EFF_Mute_Program_PtrTable / add xbc,xwa`, slot 0..4.
+; Reader EFF_Mute_WithDebug is at 0x037EB4; 5 x u32 program pointers, one per effect slot (its
+; entry contract WA = slot 0..4), the program then goes to DSP_WriteEFFConfig.
 EFF_Mute_Program_PtrTable:
 	.long	EFF_Mute_Program_Slot0		; 0
 	.long	EFF_Mute_Program_Slot1		; 1
@@ -12406,12 +12439,16 @@ EFF_Mute_Program_PtrTable:
 	.long	EFF_Mute_Program_Slot3		; 3
 	.long	EFF_Mute_Program_Slot4		; 4
 ; DSP_Mute_WithDebug, indexed by chip (four entries, two chips).
+; Reader DSP_Mute_WithDebug is at 0x037EE9 (`sll xwa,2 / ld xbc,table`); 4 x u32 program
+; pointers -- the count is pinned by DSP_Unmute_Program_PtrTable starting right after.
 DSP_Mute_Program_PtrTable:
 	.long	DSP_Mute_Program_Chip0		; 0
 	.long	DSP_Mute_Program_Chip1		; 1
 	.long	DSP_Mute_Program_Chip2		; 2
 	.long	DSP_Mute_Program_Chip3		; 3
 ; DSP_Unmute_WithDebug, indexed by chip.
+; Reader DSP_Unmute_WithDebug is at 0x037F1C (`sll xwa,2 / ld xbc,table`); 4 x u32 program
+; pointers -- the count is pinned by EFF_Disconnect_Program_PtrTable starting right after.
 DSP_Unmute_Program_PtrTable:
 	.long	DSP_Unmute_Program_Chip0	; 0
 	.long	DSP_Unmute_Program_Chip1	; 1
@@ -12427,6 +12464,7 @@ EFF_Disconnect_Program_PtrTable:
 	.long	EFF_Disconnect_Program_Slot3	; 3
 	.long	EFF_Disconnect_Program_Slot4	; 4
 ; EFF_Link: same 12*mode + 4*slot indexing; with mode 1, slots 2-4 would read past this table.
+; Reader EFF_Link is at 0x037FAE; 5 x u32 program pointers, one per effect slot 0..4.
 EFF_Link_Program_PtrTable:
 	.long	EFF_Link_Program_Slot0		; 0
 	.long	EFF_Link_Program_Slot1		; 1
