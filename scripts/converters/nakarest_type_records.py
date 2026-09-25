@@ -659,12 +659,73 @@ def type_style_browser(v, apply):
         print('     %s %s: recompiled, byte-identical' % (v, blob))
 
 
+def type_palettes(v, apply):
+    """naka_debug_naming.c: the default palette (0xEB37DE, InitPaletteRGB) and
+    the 11 wallpaper palettes (NakaColor_Palette1..10, _PaletteBlank; entries
+    of the wallpaper-palette table GetWallPaletteRGB reads) as
+    uint8_t name[256][4]."""
+    blob = 'naka_debug_naming'
+    cpath = RT.c_path(v, blob)
+    cb = M.CBlob(cpath)
+    if 'DefaultPalette' in cb.by_name:
+        print('%s %s: palettes already typed' % (v, blob))
+        return
+    data = RT.compile_blob(v, blob)
+    base = cb.base()
+    R = RT.refs(v)
+    objs = [(0xEB37DE, 'DefaultPalette',
+             'the default 256-colour palette: InitPaletteRGB (display/graphics_text_vga.s) '
+             'copies these 0x400 bytes to the palette RAM at 0x0324FC (SetPaletteRGB / '
+             'Table_LookupDword index it 4 bytes per colour)')]
+    t = R.sym['Naka_DrawbarReg_Table']
+    for nm in ['NakaColor_Palette%d' % i for i in range(1, 11)] + ['NakaColor_PaletteBlank']:
+        a = R.sym[nm]
+        ks = [k for k in range(12)
+              if int.from_bytes(R.rom[t - 0xE00000 + 4 * k:t - 0xE00000 + 4 * k + 4], 'little') == a]
+        objs.append((a, nm, 'a wallpaper palette, entr%s %s of the wallpaper-palette table '
+                            'Naka_DrawbarReg_Table (RAM 0x3F1E4 after Boot_InitWorkRAM), read by '
+                            'GetWallPaletteRGB' % ('ies' if len(ks) > 1 else 'y',
+                                                   ', '.join(map(str, ks)))))
+    objs.sort()
+    lo, hi = objs[0][0] - base, objs[-1][0] + 1024 - base
+    for (a, _, _), (b, _, _) in zip(objs, objs[1:]):
+        assert a + 1024 == b
+    new = []
+    for a, nm, why in objs:
+        off = a - base
+        pix = data[off:off + 1024]
+        assert all(pix[i + 3] == 0 for i in range(0, 1024, 4)), nm
+        rows = ['        /* %3d */ { 0x%02X, 0x%02X, 0x%02X, 0x%02X },' % ((i,) + tuple(pix[4 * i:4 * i + 4]))
+                for i in range(256)]
+        pre = ['    /* %s: %s.  256 x {3 colour bytes, 0}; the channel order was not traced. */'
+               % (nm, why)]
+        new.append(M.NewMember('uint8_t', nm, '[256][4]', 1024, '{\n' + '\n'.join(rows) + '\n    }', pre))
+    cb.split_word(lo, data)
+    cb.split_word(hi, data)
+    k0, k1 = cb.index_at(lo), cb.index_at(hi - 1)
+    keeps = [cb.members[kk].name for kk in range(k0, k1 + 1)
+             if M.SYMBOLIC_RE.search(cb.entries[kk].expr)]
+    cb.retype(lo, hi, new, data, false_pointers=keeps)
+    print('%s %s: 12 palettes typed (0x%06X..0x%06X); %d symbolic initializers inside them retired '
+          'as false pointers (colour bytes)' % (v, blob, lo + base, hi + base, len(keeps)))
+    if apply:
+        cb.write()
+        if RT.compile_blob(v, blob) != data:
+            raise SystemExit('%s %s: typed C compiles to different bytes' % (v, blob))
+        print('     %s %s: recompiled, byte-identical' % (v, blob))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--apply', action='store_true')
     ap.add_argument('--blob', action='append')
     ap.add_argument('--style-browser', action='store_true')
+    ap.add_argument('--palettes', action='store_true')
     a = ap.parse_args()
+    if a.palettes:
+        for v in RT.VERSIONS:
+            type_palettes(v, a.apply)
+        return
     if a.style_browser:
         for v in RT.VERSIONS:
             type_style_browser(v, a.apply)

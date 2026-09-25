@@ -140,9 +140,12 @@ NakaDbg_LowerCaseChars2:
 ; [nakarest] "MainBitControl", ....
 	.incbin "includes/generated/naka_debug_naming.bin", 0xC0C, 0xD4
 ; [nakarest] naka_debug_naming+0xce0  +0xce0..+0x10e0 (0xeb37de, 1024 B)
-; [nakarest] purpose not established: layout of 1024 B at 0xeb37de not derived; readers below
-; [nakarest] Readers: source references InitPaletteRGB (display/graphics_text_vga.s: `lda xwa,
-; [nakarest] (0xeb37de:24)`).
+; [nakarest] The DEFAULT 256-colour palette: InitPaletteRGB (display/graphics_text_vga.s) points
+; [nakarest] xbc at this address (`lda xwa, (0xeb37de:24)`), sets the end to +0x400 (`lda_dri
+; [nakarest] XHL, 0xe1, 0x00, 0x04`) and copies the 1024 bytes, 4 at a time, to the palette RAM
+; [nakarest] at 0x0324fc -- which SetPaletteRGB writes and Table_LookupDword reads 4 bytes per
+; [nakarest] colour (`sll xwa, 2`). 256 x {3 colour bytes, 0}: the 4th byte of all 256 entries
+; [nakarest] is 0; the channel order was not traced.
 	.incbin "includes/generated/naka_debug_naming.bin", 0xCE0, 0x400
 ; [nakarest] NakaColor_Palette1  +0x10e0..+0x14e0 (0xeb3bde, 1024 B)
 ; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all

@@ -1448,8 +1448,19 @@ WALLPAPER = (
     "spacing of the 11 palettes here; the reader shown only reads entries 0..15.")
 
 
+DEFAULT_PALETTE = (
+    "the DEFAULT 256-colour palette: InitPaletteRGB (display/graphics_text_vga.s) "
+    "points xbc at this address (`lda xwa, (0xeb37de:24)`), sets the end to +0x400 "
+    "(`lda_dri XHL, 0xe1, 0x00, 0x04`) and copies the 1024 bytes, 4 at a time, to the "
+    "palette RAM at 0x0324FC -- which SetPaletteRGB writes and Table_LookupDword reads "
+    "4 bytes per colour (`sll xwa, 2`).  256 x {3 colour bytes, 0}: the 4th byte of all "
+    "256 entries is 0; the channel order was not traced.")
+
+
 def piece_note(v, name):
     """Hand-established purpose text for a piece, or None."""
+    if name == 'naka_debug_naming+0xCE0':
+        return DEFAULT_PALETTE
     if name.startswith('NakaColor_Palette'):
         R = refs(v)
         t = R.sym.get('Naka_DrawbarReg_Table')
