@@ -787,7 +787,7 @@ FadeSetGridCheck:
 Data_FadeSetGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -801,7 +801,7 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
-	lda	xbc, (NakaInst_OFF_WidgetTbl2_0x5C:24)
+	lda	xbc, (0xe7f972:24)
 	ld	xwa, (xbc+wa)
 	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
@@ -810,7 +810,7 @@ Data_FadeSetGridDispatch:
 	jr	FadeSetGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -824,7 +824,7 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
-	lda	xbc, (NakaInst_OFF_WidgetTbl2_0x5C:24)
+	lda	xbc, (0xe7f972:24)
 	ld	xwa, (xbc+wa)
 	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
@@ -832,26 +832,27 @@ Data_FadeSetGridDispatch:
 	ld	de, 2:i3
 FadeSetGridCheck_Join:
 	call	MainLswAdd
-	jrl	354
+	jrl	SndParam_ReturnZero2
 	lda	xhl, (xsp+4)
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
 	ldw	(xde), 0
-	lda	xix, (NakaInst_OFF_WidgetTbl2_0x5C:24)
+	lda	xix, (0xe7f972:24)
 	ld	xiz, (xsp+28)
-	jr	18
+	jr	FadeSetGridCheck_Join2
+FadeSetGridCheck_Loop:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xf4, 0xf0
-	jr	z, 10
+	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0	; cp xwa,(xix+iy) -- the backend cannot spell this form
+	jr	z, FadeSetGridCheck_Skip4
 	inc	1, bc
 	ld	(xde), bc
+FadeSetGridCheck_Join2:
 	ld	bc, (xde)
 	cp	bc, 7:i3
-	jr	lt, -24
+	jr	lt, FadeSetGridCheck_Loop
+FadeSetGridCheck_Skip4:
 	lda	xbc, (xsp+12)
 	ld	(xhl+4), xbc
 	ld	xwa, (xsp+28)
@@ -869,22 +870,21 @@ FadeSetGridCheck_Join:
 	jrl	nz, SndParam_ReturnZero2
 FadeSetGridCheck_Skip:
 	pushm	(xde)
-	pushw 231
-	pushw 0xf99e
+	pushw	231
+	pushw	0xf99e
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
+	ld	xbc, 0x1e0008c
 	jrl	SndParam_SendEventAndReturn
 FadeSetGridCheck_Skip2:
 	ld	xwa, NakaInst_OFF_WidgetTbl2_0x9C
 	cpw	(xde), 0
 	jr	z, FadeSetGridCheck_Skip3
-	.byte 0x40
-	.long Data_AcGridParamTable
+	ld	xwa, 0xe7f9ac
 FadeSetGridCheck_Skip3:
 	push	xwa
 	push	xbc
@@ -893,7 +893,7 @@ FadeSetGridCheck_Skip3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01e0008c
+	ld	xbc, 0x1e0008c
 	jrl	SndParam_SendEventAndReturn
 
 ; AcInOutGrid handler
@@ -1310,7 +1310,7 @@ InOutGridCheck:
 Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -1328,15 +1328,15 @@ Data_InOutGridDispatch:
 	cp	bc, 8
 	jrl	gt, MdPreset_ReturnZero2
 	add	bc, bc
-	lda	xix, (NakaInst_DIRECT_E7FCE4_0x7A:24)
+	lda	xix, (0xe7fd5e:24)
 	ld	bc, (xix+bc)
-	lda xix, (16210732:24)
-	jp_rr 8, xix, bc
-	ld xwa, 8448
+	lda	xix, (0xf75b2c:24)
+	jp_rr	8, xix, bc
+	ld	xwa, 0x2100
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-	ld	xwa, 8449
+	ld	xwa, 0x2101
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
@@ -1359,14 +1359,14 @@ InOutGridCheck_Skip:
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-	ld	xwa, 8577
+	ld	xwa, 0x2181
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-	ld	xwa, 8580
+	ld	xwa, 0x2184
 	ld	bc, 1:i3
-	.byte 0xda
-	.long Data_NakaPresetConfig
+	ld	de, 1:i3
+	jrl	InOutGridCheck_Join
 	ld	xwa, 0x2182
 	ld	bc, 1:i3
 	ld	de, 1:i3

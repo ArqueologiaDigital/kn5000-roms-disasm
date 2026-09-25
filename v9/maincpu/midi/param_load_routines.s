@@ -608,7 +608,7 @@ ParaLoadOptGridCheck:
 ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+20)
@@ -632,7 +632,7 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda	xbc, (0x0340f6:24)
+	lda	xbc, (0x340f6:24)
 	ld	(xwa), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
@@ -643,7 +643,7 @@ ParaLoadOpt_PostDualEvent_Skip:
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda	xbc, (0x0340f7:24)
+	lda	xbc, (0x340f7:24)
 	ld	(xwa), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
@@ -654,7 +654,7 @@ ParaLoadOpt_PostDualEvent_Skip2:
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda	xbc, (0x0340f8:24)
+	lda	xbc, (0x340f8:24)
 	ld	(xwa), xbc
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
@@ -665,14 +665,14 @@ ParaLoadOpt_PostDualEvent_Skip3:
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda	xbc, (0x0340f9:24)
+	lda	xbc, (0x340f9:24)
 	ld	(xwa), xbc
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
 	jrl	ParaLoadOpt_PostDualEvent_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+20)
@@ -684,9 +684,9 @@ ParaLoadOpt_PostDualEvent_Skip3:
 	cpw	(xwa), 1
 	jrl	nz, ParaLoadOpt_ReturnZero
 	cp	hl, 8
-	jrl	z, 127
+	jrl	z, ParaLoadOpt_PostDualEvent_Skip9
 	cp	hl, 7:i3
-	jr	z, 85
+	jr	z, ParaLoadOpt_PostDualEvent_Skip8
 	cp	hl, 3:i3
 	jr	z, ParaLoadOpt_PostDualEvent_Skip4
 	cp	hl, 2:i3
@@ -696,7 +696,7 @@ ParaLoadOpt_PostDualEvent_Skip3:
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda	xbc, (0x0340f6:24)
+	lda	xbc, (0x340f6:24)
 	ld	(xwa), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
@@ -709,35 +709,33 @@ ParaLoadOpt_PostDualEvent_Skip4:
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda	xbc, (0x0340f7:24)
+	lda	xbc, (0x340f7:24)
 	ld	(xwa), xbc
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
 	ld	xbc, 0xffffffff
-	.byte 0xb8
-	ret
-	.ascii "ahJE"
-	.long UserMemory_ConfirmData
+	ld	(xwa+14), xbc
+	jr	ParaLoadOpt_PostDualEvent_Join
+ParaLoadOpt_PostDualEvent_Skip8:
+	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda	xbc, (0x0340f8:24)
+	lda	xbc, (0x340f8:24)
 	ld	(xwa), xbc
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
 	ld	xbc, 0xffffffff
-	.byte 0xb8
-	ret
-	.ascii "ah$E"
-	cp	(xwa), xiz
-	.byte 0xe7
-	nop
+	ld	(xwa+14), xbc
+	jr	ParaLoadOpt_PostDualEvent_Join
+ParaLoadOpt_PostDualEvent_Skip9:
+	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda	xbc, (0x0340f9:24)
+	lda	xbc, (0x340f9:24)
 	ld	(xwa), xbc
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
@@ -753,7 +751,7 @@ ParaLoadOpt_PostDualEvent_Join:
 	ld	(xde), xbc
 	ld	xbc, xiz
 	lda	xde, (xhl+14)
-	.byte 0xa3, 0xf6
+	cp	xiz, (xhl)
 	jr	nz, ParaLoadOpt_PostDualEvent_Skip5
 	ldw	(xwa), 2
 	ld	xwa, (xde)
@@ -769,11 +767,11 @@ ParaLoadOpt_PostDualEvent_Join:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x01e0008c
+	ld	xbc, 0x1e0008c
 	jrl	ParaLoadOptSendEvtReturn
 ParaLoadOpt_PostDualEvent_Skip5:
 	lda	xhl, (xbc+1)
-	.byte 0xa4, 0xf3
+	cp	xhl, (xix)
 	jr	nz, ParaLoadOpt_PostDualEvent_Skip6
 	ldw	(xwa), 3
 	ld	xwa, (xde)
@@ -789,11 +787,11 @@ ParaLoadOpt_PostDualEvent_Skip5:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x01e0008c
+	ld	xbc, 0x1e0008c
 	jrl	ParaLoadOptSendEvtReturn
 ParaLoadOpt_PostDualEvent_Skip6:
 	lda	xhl, (xbc+2)
-	.byte 0xa4, 0xf3
+	cp	xhl, (xix)
 	jr	nz, ParaLoadOpt_PostDualEvent_Skip7
 	ldw	(xwa), 7
 	ld	xwa, (xde)
@@ -809,15 +807,15 @@ ParaLoadOpt_PostDualEvent_Skip6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x01e0008c
+	ld	xbc, 0x1e0008c
 	jrl	ParaLoadOptSendEvtReturn
 ParaLoadOpt_PostDualEvent_Skip7:
 	inc	3, xbc
-	.byte 0xa4, 0xf1
+	cp	xbc, (xix)
 	jrl	nz, ParaLoadOpt_ReturnZero
-	ldw (xwa), 8
-	ld xwa, (xde)
-	sll xwa, 2
+	ldw	(xwa), 8
+	ld	xwa, (xde)
+	sll	xwa, 2
 	ld	xbc, (xsp+4)
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -829,7 +827,7 @@ ParaLoadOpt_PostDualEvent_Skip7:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x01e0008c
+	ld	xbc, 0x1e0008c
 	jrl	ParaLoadOptSendEvtReturn
 
 ; Voice UI misc handler

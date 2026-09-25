@@ -1,0 +1,5 @@
+[
+ {"file": "midi/param_load_routines.s", "start": "0xF76FE2", "end": "0xF7724E", "kind": "code"},
+ {"file": "midi/ac_listener_handlers.s", "start": "0xF75517", "end": "0xF75664", "kind": "code"},
+ {"file": "midi/ac_listener_handlers.s", "start": "0xF75ADE", "end": "0xF75B92", "kind": "code"}
+]
