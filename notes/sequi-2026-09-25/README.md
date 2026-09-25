@@ -35,3 +35,25 @@ ssf_gate_states}.s` in `v10/`, `v9/` and `v7/` maincpu.
 v9's `sequencer/sequencer_ui.s` was byte-identical to v10's before and after
 (the two images are identical over this file's range); the v10 result was
 copied and v9 rebuilt byte-identical.
+
+## Measured result (toolchain `tlcs900_backend@4d7fa4f6b37c`)
+
+`python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json C.json`
+then `python3 scripts/analysis/sequi_lane_figures.py C.json`, summed over the
+24 owned files.  BEFORE = branch base `3958235e` (the v7 part measured on a
+clean `git archive` export of that commit, because the first v7 run raced an
+edit); AFTER = `558d1fbd`.  Bytes:
+
+| | CODE | KNOWN-A | KNOWN-B | UNKNOWN | FILLER | research targets | data-as-code markers | numeric branches |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| before | 244,726 | 3,786 | 22,380 | 0 | 4,074 | 5,598 B in 445 regions | 258 | 218 |
+| after | 250,573 | 8,283 | 12,084 | 0 | 4,026 | 270 B in 6 regions | 36 | 39 |
+
+The 270 B left are two honest admissions per version: AccPedal_BankBaseTableCopy
+(28 B, no reader found) and SMF_SlotParam_RPNReturn (62 B, the second
+lookup's index is inconsistent with the table's extent).  The 36 markers are
+the genuine 4-`nop` slots after six `call`s in seq_audio_mode.s (v10 and v9;
+v7 has the same nops, its marker count reads them differently).  The 39
+numeric branches are all v7 `call`s into C-runtime routines that another
+lane's v7 file frames as data (0xFF0516 = v10 Strncpy x30, 0xFDD69E = v10
+Audio_CheckSubsystemReady x6, 0xFF081D = v10 Memset, 0xFF05BC, 0xFDD7C0).
