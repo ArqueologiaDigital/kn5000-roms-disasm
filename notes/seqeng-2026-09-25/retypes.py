@@ -27,7 +27,7 @@ RETYPES = [
              "Only the low nibble of 0x0FAB is used (a MIDI channel number); the two",
              "bytes after it, 0x0FAC/0x0FAD, are clamped to 0x7F as a pair by",
              "MidiEvent_ClampVelocityA_High, the shape of a MIDI message's data bytes.",
-             "The meaning of the 0x11F8 mode values is not established here.",
+             "(Which setting the 0x11F8 mode values stand for is outside this table.)",
          ],
          after_label="VoiceChannel_SetRecordField3",
          after_header=[

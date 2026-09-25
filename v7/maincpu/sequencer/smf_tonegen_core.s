@@ -381,7 +381,7 @@ FloppyIO_ReadTrackBuf_EarlyExit:
 	jp FloppyIO_ReadTrackBuf_Done
 
 FloppyIO_ReadTrackBuf_StoreByte:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	bit 7, a
 	jrl nz, FloppyIO_ReadTrackBuf_ReadLoop
 	sub xix, 0x106e
@@ -847,7 +847,7 @@ SMF_ReadMidiEventToBuffer:
 	ld (4010:16), a
 	xor bc, bc
 	ld xix, 0xfab
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, c
 
 SMF_ReadMidiEvt_ReadLoop:
@@ -872,7 +872,7 @@ SMF_ReadMidiEvt_ReadFailed:
 	jp SMF_ReadMidiEvt_Done
 
 SMF_ReadMidiEvt_CheckSize:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, c
 	ld a, (4010:16)
 	and a, 0xf0
@@ -899,12 +899,12 @@ FloppyIO_ReadMidiEventBytes:
 	ld l, a
 	and l, 0xf0
 	ld xix, 0xfab
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	xor h, h
 	ld a, c
 
 FloppyIO_ReadMidiEvtBytes_Loop:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, h
 	ld c, 0x1:opc
 	cp l, 0xd0
@@ -2090,7 +2090,7 @@ SMF_ReadMidiEventWithStatus:
 	ld (4010:16), a
 	xor bc, bc
 	ld xix, 0xfab
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, c
 
 SMF_ReadMidiStatus_ReadLoop:
@@ -2115,7 +2115,7 @@ SMF_ReadMidiStatus_ReadFailed:
 	jp SMF_ReadMidiStatus_Done
 
 SMF_ReadMidiStatus_StoreByte:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	inc 1, c
 	ld a, (4010:16)
 	and a, 0xf0
@@ -2555,7 +2555,7 @@ FloppyIO_ReadVarLen_ReadFailed:
 	jp FloppyIO_ReadVarLen_Done
 
 FloppyIO_ReadVarLen_StoreByte:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	bit 7, a
 	jrl nz, FloppyIO_ReadVarLen_ReadLoop
 	sub xix, 0x106e

@@ -354,7 +354,7 @@ VoiceChannel_ParamTable1:
 ; Only the low nibble of 0x0FAB is used (a MIDI channel number); the two
 ; bytes after it, 0x0FAC/0x0FAD, are clamped to 0x7F as a pair by
 ; MidiEvent_ClampVelocityA_High, the shape of a MIDI message's data bytes.
-; The meaning of the 0x11F8 mode values is not established here.
+; (Which setting the 0x11F8 mode values stand for is outside this table.)
 	.long 0x0000f496, 0x0000f4b0, 0x0000f4ca, 0x0000f4e4
 	.long 0x0000f4fe, 0x0000f518, 0x0000f532, 0x0000f54c
 	.long 0x0000f566, 0x0000f580, 0x0000f59a, 0x0000f5b4
@@ -970,7 +970,7 @@ SMF_SetupActiveChannel:
 
 SMF_WaitForReady:
 	ldb_spi A, 0xf4
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	bit 7, a
 	jr nz, SMF_WaitForReady
 	ldw wa, 0x58ff
@@ -981,7 +981,7 @@ SMF_WaitForReady:
 	ldw wa, 0x1802
 	stw_dpi WA, 0xf1
 	ld a, 0x8:opc
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	ld (4376:16), xix
 	ld l, (0xfc62:16)
 	xor h, h
@@ -1020,7 +1020,7 @@ SMF_Setup_SelectTablePtr:
 
 SMF_WriteChannelDataLoop:
 	ldb_spi A, 0xf4
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	pushw bc
 	push xiy
 	push xix
@@ -2136,11 +2136,11 @@ SMF_NoteOn_StoreVoiceData:
 	ld xix, 0x11f9
 	lda_dri XIX, 0x07, 0xf0, 0xec
 	ld a, 0x80:opc
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	ld a, (4211:16)
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	ld a, (4213:16)
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	ld a, (4216:16)
 	ld w, 0x60:opc
 	muls8rr a, w
@@ -5240,6 +5240,7 @@ SeqByteBlock_PathNormalize_Helper3_Skip:
 	ld	de, 0:i3
 	cp	de, 11
 	jr	ge, SeqByteBlock_PathNormalize_Join
+SeqByteBlock_PathNormalize_Helper3_Loop2:
 	ld	xwa, (xiz)
 	cp	(xwa), 0
 	jr	z, SeqByteBlock_PathNormalize_Join
@@ -5260,37 +5261,45 @@ SeqStep_FileSectorPopReturn_Skip10:
 	cp	de, 1:i3
 	jr	gt, SeqStep_FileSectorPopReturn_Skip11
 	cp	de, 1:i3
-	jr	nz, 16
+	jr	nz, SeqByteBlock_TechnichordCfgA
 	ld	xwa, (xsp+8)
 	cp	(xwa), 46
-	jr	z, 8
+	jr	z, SeqByteBlock_TechnichordCfgA
 SeqStep_FileSectorPopReturn_Skip11:
 	ld	de, 7:i3
 	ld	xwa, 1:i3
 	add	(xiz), xwa
-	jr	16
+	jr	SeqByteBlock_PathNormalize_Helper3_Join
 SeqByteBlock_TechnichordCfgA:
-	.byte 0xa6
-SeqByteBlock_PathNormalize:
-	ld	a, 175:opc
-	ld	(32:8), 129:io
-	ld	c, 243:opc
-	reti
-	.byte 0xe0, 0xe8
-	ld	xhl, 0x88a6a9e8
+; SeqByteBlock_PathNormalize (0xF500D7) sits INSIDE the instruction below;
+; it was a phantom label.  Its only reference is `.long SeqByteBlock_PathNormalize`
+; in ui_widgets/widget_dispatch.s, where the bytes d7 00 f5 00 are two LE16
+; values (215, 245) of a row of coordinates like the rows around it -- a
+; phantom pointer.  When that line is written as `.short 0x00d7, 0x00f5` this
+; .set can be deleted (2026-09-25, lane seqeng).
+	.set SeqByteBlock_PathNormalize, . + 1	; mid-instruction: kept only for its 1 reference(s) elsewhere
+	ld	xbc, (xiz)
+	ld	xwa, (xsp+8)
+	ld	c, (xbc)
+	st_rrb	c, xwa, de
+	ld	xwa, 1:i3
+	add	(xiz), xwa
+SeqByteBlock_PathNormalize_Helper3_Join:
 	inc	1, de
 	cp	de, 11
 SeqByteBlock_StyleBitmapRef:
-	jr	lt, -80
+	jr	lt, SeqByteBlock_PathNormalize_Helper3_Loop2
 SeqByteBlock_PathNormalize_Join:
 	ld	xwa, (xiz)
 	cp	(xwa), 47
-	jr	z, 7
+	jr	z, SeqByteBlock_PathNormalize_Helper3_Skip2
 	ld	xwa, (xiz)
 	cp	(xwa), 92
-	jr	nz, 4
+	jr	nz, SeqByteBlock_PathNormalize_Helper3_Skip3
+SeqByteBlock_PathNormalize_Helper3_Skip2:
 	ld	hl, 1:i3
-	jr	10
+	jr	SeqByteBlock_PathNormalize_Skip
+SeqByteBlock_PathNormalize_Helper3_Skip3:
 	ld	xwa, (xiz)
 	cp	(xwa), 0
 	jr	z, SeqByteBlock_PathNormalize_Skip
@@ -7140,7 +7149,7 @@ SeqByteBlock_PathNormalize_Helper9_Skip10:
 	incw	1, (xsp+2)
 	ldb_spi e, 228
 	ld xwa, (xsp+14)
-	lda_dpi xiy, 224
+	lda_dpi xiy, 224	; = ld (xwa+),e (backend mnemonic is swapped)
 	ld (xsp+14), xwa
 	ld xwa, (xsp+10)
 	cp (xwa+2), e
@@ -7375,29 +7384,28 @@ SeqByteBlock_PathNormalize_Helper10_Loop2:
 	ldw (xsp+6), 0
 	decm	1, (xsp+20)
 	cpw	(xsp+22), 0
-	jr	z, 95
+	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip11
 	ldw (xsp+20), 0
 	ld	iz, 1:i3
-	jr	86
+	jr	SeqByteBlock_PathNormalize_Helper10_Skip11
 SeqByteBlock_PathNormalize_Helper10_Skip9:
 	ld	xwa, (xsp+16)
-	.byte 0x80
-	push	xsp
-	ldw	(110:8), 0xf510:io
-	.byte 0xe8
-	nop
-	decf
+	cp	(xwa), 10
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip20
+	stib_dsp	232, 13
 	ld	xwa, 1:i3
 	add	(xsp+16), xwa
 	ldw	(xsp+6), 1
-	jr	15
+	jr	SeqByteBlock_PathNormalize_Helper10_Join4
+SeqByteBlock_PathNormalize_Helper10_Skip20:
 	ld	xwa, (xsp+16)
 	ldb_spi c, 224
-	lda_dpi xhl, 232
+	lda_dpi xhl, 232	; = ld (xde+),c (backend mnemonic is swapped)
 	ld (xsp+16), xwa
 	decm 1, (xsp+20)
+SeqByteBlock_PathNormalize_Helper10_Join4:
 	incw 1, (xsp+2)
-	jr 42
+	jr SeqByteBlock_PathNormalize_Helper10_Skip11
 SeqByteBlock_PathNormalize_Helper10_Skip10:
 	ld	xwa, (xsp+16)
 	ldb_spi c, 224
@@ -9837,7 +9845,7 @@ WildMatch_ScanLoop:
 
 WildMatch_CopyChar:
 	ldb_spi A, 0xf8
-	lda_dpi XBC, 0xe4
+	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
 
 WildMatch_CheckEnd:
 	cp (xiz), 0x0

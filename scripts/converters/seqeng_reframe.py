@@ -118,6 +118,7 @@ def refs_outside(name, image, rel, l0, l1):
 
 PAIRS = []
 DISAGREE = []
+ALLOW_SET = False
 
 # ★ OPERATION AGREEMENT.  A round trip proves llvm can re-emit the bytes; it
 # cannot tell an LDA printed as a store from an LDA (seen here: f5 e0 31 is
@@ -335,6 +336,25 @@ def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True, fresh=Fals
             print("REFUSE %d-%d: no misframe signature (no .byte/.ascii fragment, no absurd mnemonic)" % (l0, l1))
             continue
         # label / comment / directive positions
+        # old instruction lines that spell exactly one of the new instructions
+        # (same address and length, not absurd) are reused whole, trailing
+        # comment included
+        ilen = {a: len(bs) for a, bs, _ in insns}
+        reuse = {}
+        for ln in range(l0, l1 + 1):
+            if ln in by_line and (by_line[ln][1] or 0) > 0:
+                c = strip_comment(src[ln - 1]).strip()
+                while LABEL_RE.match(c):
+                    c = c[LABEL_RE.match(c).end():].strip()
+                ad, sz = by_line[ln]
+                ut = next((t for a_, _, t in insns if a_ == ad), "")
+                symbolic = bool(re.search(r'\b[A-Z][A-Za-z0-9]*_\w+|\b[A-Z][a-z]+[A-Z]\w*', c.split(None, 1)[1] if " " in c or "\t" in c else ""))
+                if c and not c.startswith(".") and ilen.get(ad) == sz and not ABS.match(c.lower()) \
+                        and (symbolic or agree(re.sub(r'\s+', ' ', c), ut)
+                             or "(backend mnemonic is swapped)" in src[ln - 1]):
+                    cm = src[ln - 1][len(strip_comment(src[ln - 1])):].strip() if ";" in src[ln - 1] else ""
+                    reuse[ad] = (ln, c + ("\t" + cm if cm else ""))
+        reuse_lines = {v[0] for v in reuse.values()}
         pre = {}     # addr -> list of lines to emit before the insn at addr
         tail = []    # items at a1 (after the last insn)
         refuse = None
@@ -357,12 +377,20 @@ def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True, fresh=Fals
             if code and ln not in by_line:
                 # non-emitting directive (.set etc): keep verbatim
                 items.append(("raw", "\t" + code))
-            if cm:
+            if cm and ln not in reuse_lines:
                 items.append(("raw", cm if text.lstrip().startswith(";") else "\t" + cm))
             for kind_, val in items:
                 if kind_ == "label" and at not in starts and at != a1:
                     # the label's address may be mid-instruction
                     k = refs_outside(val, image, rel, l0, l1)
+                    if k and ALLOW_SET:
+                        # keep the name for its (phantom) references as an
+                        # offset into the real instruction that holds it
+                        host = max(a for a in starts if a <= at)
+                        pre.setdefault(host, []).append(
+                            "\t.set %s, . + %d\t; mid-instruction: kept only for its %d reference(s) elsewhere"
+                            % (val, at - host, k))
+                        continue
                     if k:
                         refuse = "label %s at 0x%06X is mid-instruction and has %d outside refs" % (val, at, k)
                     else:
@@ -390,7 +418,15 @@ def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True, fresh=Fals
         prefer = set()
         for ln in range(l0, l1 + 1):
             prefer |= set(re.findall(r'\b[A-Za-z_]\w+\b', strip_comment(src[ln - 1])))
+        # an instruction line of the old text that already spells exactly this
+        # instruction (same address, same length, not data) is kept verbatim --
+        # its operands may be symbolic, which a fresh decode would lose
         for a, bs, t in insns:
+            if a in reuse:
+                out += pre.get(a, [])
+                out.append("\t" + reuse[a][1])
+                n_insn += 1
+                continue
             out += pre.get(a, [])
             txt = llvm_decode(bs)
             if txt is not None:
@@ -494,7 +530,12 @@ def main():
                          "byte (not the global listing); skips the misframe-signature and shape "
                          "guards, KEEPS the decode-absurdity guard and the agreement check")
     ap.add_argument("--pairs", help="write llvm-text / unidasm-text pairs here for review")
+    ap.add_argument("--allow-set", action="store_true",
+                    help="a referenced label that lands mid-instruction becomes `.set NAME, . + k` "
+                         "(for PHANTOM references you have checked; say why in the commit)")
     a = ap.parse_args()
+    global ALLOW_SET
+    ALLOW_SET = a.allow_set
     up = a.unidasm or os.path.join(ROOT, "original_ROMs/kn5000_%s_program.rom.unidasm" % a.image)
     uni = load_unidasm(up)
     rom = open(os.path.join(ROOT, IMAGES[a.image]["rom"]), "rb").read()

@@ -554,7 +554,7 @@ SMF_ReadTrackData_FloppyErr:
 	jp SeqPlay_ResetAndStop
 
 SMF_ReadTrackData_Continue:
-	lda_dpi XBC, 0xf0
+	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
 	djnz xbc, SMF_ReadTrackData_Loop
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return
