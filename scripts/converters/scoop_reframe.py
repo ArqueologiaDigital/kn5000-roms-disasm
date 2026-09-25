@@ -582,6 +582,34 @@ def spelling_templates(img):
     return _TMPL[img]
 
 
+R8 = {"w", "a", "b", "c", "d", "e", "h", "l"}
+R16 = {"wa", "bc", "de", "hl", "ix", "iy", "iz", "sp"}
+
+
+def alt_spellings(ut, llvm_text):
+    """Candidate LLVM spellings for an instruction the backend's own printout
+    does not round-trip: explicit address widths, and the backend's names for
+    forms its disassembler cannot print (shift/rotate by A or by an
+    immediate count)."""
+    cands = []
+    base = [x for x in (llvm_text, ut.lower()) if x]
+    for t in base:
+        t = t.replace("\t", " ")
+        def width(m):
+            v = int(m.group(1), 0)
+            return "(0x%02x:8)" % v if v < 0x100 else "(0x%04x:16)" % v if v < 0x10000 else m.group(0)
+        cands.append(re.sub(r'\((0x[0-9a-f]+|\d+)\)', width, t))
+    m = re.match(r'^(srl|sla|sra|sll|rlc|rrc|rl|rr) a,(\w+)$', ut.lower())
+    if m:
+        cands.append("%sa %s" % (m.group(1), m.group(2)))
+    m = re.match(r'^(srl|sla|sra|sll|rlc|rrc|rl|rr) 0x([0-9a-f]+),(\w+)$', ut.lower())
+    if m:
+        r = m.group(3)
+        w = 8 if r in R8 else 16 if r in R16 else 32
+        cands.append("%s_i_%d %s, %d" % (m.group(1), w, r, int(m.group(2), 16)))
+    return [c for c in cands if c]
+
+
 def render_code(img, start, data, a2n, local=None, allow_mismatch=False):
     """Frame by unidasm (independent decoder); spell each instruction with the
     LLVM backend when its decode has the same length AND re-assembles to the
@@ -615,6 +643,11 @@ def render_code(img, start, data, a2n, local=None, allow_mismatch=False):
                 tmpl_try.setdefault(a, []).append(
                     tpl.format(b1="0x%02x" % want[1], b2="0x%02x" % want[2], b3="0x%02x" % want[3],
                                last="0x%02x" % want[-1]))
+    for (a, n, ut, t), er, eh in zip(cands, enc_raw, enc_hex):
+        want = bytes(data[a - start:a - start + n])
+        if not (t is not None and (eh == want or er == want)) and want.hex() not in known_spellings(img):
+            tmpl_try.setdefault(a, [])
+            tmpl_try[a] = alt_spellings(ut, t) + tmpl_try[a]
     flat = [(a, x) for a, xs in tmpl_try.items() for x in xs]
     tenc = assemble_lines([x for _, x in flat]) if flat else []
     tmpl_ok = {}

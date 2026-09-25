@@ -3185,8 +3185,8 @@ Timer_ParamCompareAlt_Skip13:
 	jp	Timer_ParamCompareAlt_0x141
 Timer_ParamCompareAlt_Skip14:
 	ld	(3415:16), 84
-	.byte	0xf1, 0x5c, 0x0d, 0x06	; popw (0x0d5c)
-	.byte	0xf1, 0x1a, 0x37, 0x06	; popw (0x371a)
+	popw (0x0d5c:16)	; popw (0x0d5c)
+	popw (0x371a:16)	; popw (0x371a)
 	xor	a, a
 	call	VoiceSlot_RestoreState
 	call	DisplayMode_Handler_3_0x775
@@ -3303,8 +3303,8 @@ Timer_ParamCompareAlt_Skip20:
 	call	DMA_FlagCheckWithCalls
 	ret
 	ld	(3415:16), e
-	.byte	0xf1, 0x5c, 0x0d, 0x06	; popw (0x0d5c)
-	.byte	0xf1, 0x1a, 0x37, 0x06	; popw (0x371a)
+	popw (0x0d5c:16)	; popw (0x0d5c)
+	popw (0x371a:16)	; popw (0x371a)
 	xor	a, a
 	call	VoiceSlot_RestoreState
 	call	DisplayMode_Handler_3_0x775
@@ -5727,7 +5727,7 @@ VoiceCtrl_BytecodeHandler_Skip5:
 	ldb_erp a, 60
 	ld a, c
 	scf
-	.byte	0xf1, 0xc7, 0x0d, 0x2a	; xorcf A,(0x0dc7)
+	xorcf a,(0x0dc7:16)	; xorcf A,(0x0dc7)
 	stb_erp a, 60
 	jrl	c, VoiceCtrl_BytecodeHandler_Skip6
 	cpib_erp 56, 6
@@ -6093,9 +6093,9 @@ VoiceCtrl_ParamSetupBytecode_Skip24:
 	pushdi_w	(0x0d93)
 	ld	(0x7f42:16), 255
 	call	DisplayMode_Handler_3_0x30C
-	.byte	0xf1, 0x93, 0x0d, 0x06	; popw (0x0d93)
-	.byte	0xf1, 0x91, 0x0d, 0x06	; popw (0x0d91)
-	.byte	0xf1, 0x8f, 0x0d, 0x06	; popw (0x0d8f)
+	popw (0x0d93:16)	; popw (0x0d93)
+	popw (0x0d91:16)	; popw (0x0d91)
+	popw (0x0d8f:16)	; popw (0x0d8f)
 	res	2, (3412:16)
 	ld	xiy, 3471
 	ld	(xiy), 176
@@ -6111,10 +6111,10 @@ VoiceCtrl_ParamSetupBytecode_Skip25:
 	push xhl
 	call	SysInit_BytecodeBlock_0x486
 	pop xhl
-	.byte	0xf1, 0x57, 0x0d, 0x06	; popw (0x0d57)
-	.byte	0xf1, 0x5c, 0x0d, 0x06	; popw (0x0d5c)
-	.byte	0xf1, 0x1a, 0x37, 0x06	; popw (0x371a)
-	.byte	0xf1, 0x5a, 0x0d, 0x06	; popw (0x0d5a)
+	popw (0x0d57:16)	; popw (0x0d57)
+	popw (0x0d5c:16)	; popw (0x0d5c)
+	popw (0x371a:16)	; popw (0x371a)
+	popw (0x0d5a:16)	; popw (0x0d5a)
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	ret
@@ -6140,7 +6140,7 @@ VoiceCtrl_ParamSetupBytecode_Skip26:
 	ld	(xiy+2), a
 	ld	l, (3828:16)
 	and	l, 4
-	.byte	0xcf, 0xe9, 0x03	; rrc 0x03,L  (llvm-mc: rrc	l does not round-trip)
+	rrc_i_8 l, 3	; rrc 0x03,L  (llvm-mc: rrc	l does not round-trip)
 	or	a, l
 	ld	(4539:16), a
 	ld	(0x90f7:16), a
@@ -10345,7 +10345,7 @@ VoiceSlot_StatusRet_Skip8:
 	call	VoiceSlot_StatusRet_0x8A1
 	call	VoiceSlot_StatusRet_0x8A1
 	and	a, 32
-	.byte	0xc9, 0xe8, 0x03	; rlc 0x03,A  (llvm-mc: rlc	a does not round-trip)
+	rlc_i_8 a, 3	; rlc 0x03,A  (llvm-mc: rlc	a does not round-trip)
 	ld	e, a
 	call	VoiceSlot_ReadCurrentParams
 	and	a, 7
@@ -13645,8 +13645,8 @@ DisplayStr_BytecodeBlock_A_Skip7:
 	pop	xix
 	pop	xiy
 	pop	xhl
-	.byte	0xf1, 0xc1, 0x28, 0x06	; popw (0x28c1)
-	.byte	0xf1, 0xbf, 0x28, 0x06	; popw (0x28bf)
+	popw (0x28c1:16)	; popw (0x28c1)
+	popw (0x28bf:16)	; popw (0x28bf)
 	ret
 
 DisplayStr_ComputeTableAddr:
@@ -15543,7 +15543,7 @@ StringData_APCModeNames_Code_Loop:
 	jrl	nz, StringData_APCModeNames_Code_Skip40
 	push	xhl
 	ld	xhl, 3583
-	.byte	0xe0, 0x2a, 0x83	; add XHL,(0x2a)
+	add xhl,(0x2a:8)	; add XHL,(0x2a)
 	cp	a, (xhl)
 	pop	xhl
 	jrl	nc, StringData_APCModeNames_Code_Skip
@@ -15592,7 +15592,7 @@ StringData_APCModeNames_Code_Loop4:
 StringData_APCModeNames_Code_Skip2:
 	ld	a, (3765:16)
 	and	a, 4
-	.byte	0xc9, 0xe9, 0x03	; rrc 0x03,A  (llvm-mc: rrc	a does not round-trip)
+	rrc_i_8 a, 3	; rrc 0x03,A  (llvm-mc: rrc	a does not round-trip)
 	ld	w, (3767:16)
 	and	w, 127
 	or	a, w
@@ -15983,8 +15983,8 @@ StringData_APCModeNames_Code_Join:
 	lda_dpi xbc, 240
 	jp StringData_APCModeNames_Code_Join
 StringData_APCModeNames_Code_Entry5:
-	.byte	0xf1, 0x78, 0x11, 0x06	; popw (0x1178)
-	.byte	0xf1, 0x7a, 0x11, 0x06	; popw (0x117a)
+	popw (0x1178:16)	; popw (0x1178)
+	popw (0x117a:16)	; popw (0x117a)
 	ret
 
 ;=============================================================================
@@ -17590,7 +17590,7 @@ Scoop_EnvelopeCalc_Data:
 	ld	e, (xsp+8)
 	and	a, 15
 	jr	z, Scoop_CurveUpdate_SegmentEnd_Skip
-	.byte	0xcd, 0xff	; srl A,E
+	srla e	; srl A,E
 Scoop_CurveUpdate_SegmentEnd_Skip:
 	ld	(xsp+8), e
 	ld	hl, (xbc+13)
@@ -17688,7 +17688,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip2:
 	ld	a, e
 	and	a, 15
 	jr	z, Scoop_CurveUpdate_SegmentEnd_Skip3
-	.byte	0xcf, 0xff	; srl A,L
+	srla l	; srl A,L
 Scoop_CurveUpdate_SegmentEnd_Skip3:
 	ld	a, l
 	mul	a, 3
@@ -17731,7 +17731,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip3:
 	ld	a, e
 	and	a, 15
 	jr	z, Scoop_CurveUpdate_SegmentEnd_Skip4
-	.byte	0xcf, 0xff	; srl A,L
+	srla l	; srl A,L
 Scoop_CurveUpdate_SegmentEnd_Skip4:
 	ld	a, l
 	sll	a, 2
@@ -18304,7 +18304,7 @@ Scoop_EnvProcessor_Data:
 	ld	a, c
 	and	a, 15
 	jr	z, Scoop_EventLoop_12Entry_Skip9
-	.byte	0xcd, 0xff	; srl A,E
+	srla e	; srl A,E
 Scoop_EventLoop_12Entry_Skip9:
 	ld	bc, (xiz+7)
 	ld	a, (xiz+9)
@@ -18393,7 +18393,7 @@ Scoop_EventLoop_12Entry_Join:
 	ld	a, c
 	and	a, 15
 	jr	z, Scoop_EventLoop_12Entry_Skip10
-	.byte	0xcd, 0xff	; srl A,E
+	srla e	; srl A,E
 Scoop_EventLoop_12Entry_Skip10:
 	ld	bc, (xiz+7)
 	ld	a, (xiz+9)
@@ -18648,7 +18648,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	a, c
 	and	a, 15
 	jr	z, Scoop_EventLoop_36Entry_Skip5
-	.byte	0xcd, 0xff	; srl A,E
+	srla e	; srl A,E
 Scoop_EventLoop_36Entry_Skip5:
 	ld	c, (xiz+11)
 	ld	wa, (xiz+7)
@@ -18729,7 +18729,7 @@ Scoop_EventLoop_36Entry_Join:
 	ld	a, c
 	and	a, 15
 	jr	z, Scoop_EventLoop_36Entry_Skip8
-	.byte	0xcd, 0xff	; srl A,E
+	srla e	; srl A,E
 Scoop_EventLoop_36Entry_Skip8:
 	ld	c, (xiz+11)
 	ld	wa, (xiz+7)
@@ -18935,7 +18935,7 @@ Scoop_EventLoop_36Entry_Join4:
 	ld	c, (xsp+4)
 	and	a, 15
 	jr	z, Scoop_EventLoop_36Entry_Skip14
-	.byte	0xcb, 0xff	; srl A,C
+	srla c	; srl A,C
 Scoop_EventLoop_36Entry_Skip14:
 	ld	(xsp+4), c
 	ld	wa, (xde+13)

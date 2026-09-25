@@ -1219,7 +1219,7 @@ DrawText_ExtLayout_Variant1:
 	ld	c, (xsp+6)
 	and	a, 15
 	jr	z, DrawText_ExtendedLayout_Skip2
-	.byte	0xcb, 0xff	; srl A,C
+	srla c	; srl A,C
 DrawText_ExtendedLayout_Skip2:
 	ld	(xsp+6), c
 	lda	xwa, (xsp+272)
@@ -1372,7 +1372,7 @@ DrawFunc_Init_Variant1:
 	ld	a, c
 	and	a, 15
 	jr	z, DrawFunc_Init_Skip12
-	.byte	0xcd, 0xff	; srl A,E
+	srla e	; srl A,E
 DrawFunc_Init_Skip12:
 	ld	ix, (xiz+7)
 	ld	l, (xiz+9)
@@ -1538,7 +1538,7 @@ DrawFunc_Init_Join3:
 	ld	a, c
 	and	a, 15
 	jr	z, DrawFunc_Init_Skip14
-	.byte	0xcd, 0xff	; srl A,E
+	srla e	; srl A,E
 DrawFunc_Init_Skip14:
 	ld	l, (xiz+11)
 	lda	xbc, (xsp+260)
@@ -1598,7 +1598,7 @@ DrawFunc_Init_Join4:
 	ld	a, c
 	and	a, 15
 	jr	z, DrawFunc_Init_Skip17
-	.byte	0xcd, 0xff	; srl A,E
+	srla e	; srl A,E
 DrawFunc_Init_Skip17:
 	ld	l, (xiz+11)
 	lda	xbc, (xsp+260)
@@ -1790,7 +1790,7 @@ ColorBlit_Variant_ByteData:
 	ld	a, e
 	and	a, 15
 	jr	z, ColorBlit_Variant_ByteData_Skip
-	.byte	0xcf, 0xff	; srl A,L
+	srla l	; srl A,L
 ColorBlit_Variant_ByteData_Skip:
 	mul	l, 3
 	extz	hl
@@ -1834,7 +1834,7 @@ ColorBlit_Variant_ByteData_Skip:
 	ld	a, e
 	and	a, 15
 	jr	z, ColorBlit_Variant_ByteData_Skip2
-	.byte	0xcf, 0xff	; srl A,L
+	srla l	; srl A,L
 ColorBlit_Variant_ByteData_Skip2:
 	sll	l, 2
 	extz	hl
