@@ -62,12 +62,7 @@ FDTest_Label_Tilde80:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x5e, 0x00, 0xdd, 0x00
 	.long CharEncoding_ExtendedHi
 	.long FDTest_String_Tilde80
-	normal
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte	0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 FDTest_String_Tilde80:	.asciz "~80"
 FDTest_Panel_SubElements:
 
@@ -94,27 +89,15 @@ FDTest_Label_RunningTest:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x07, 0x00, 0x08, 0x00
 	.byte 0x1e, 0x00, 0xc5, 0x00, 0x81, 0x00, 0xd7, 0x00
 	.long FDTest_String_RunningTest
-	nop
-	nop
-	nop
-	nop
-	swi 7
-	nop
+	.byte	0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 FDTest_String_RunningTest:	aligned_string "RUNNING TEST"
 FDTest_Container_DebugHDAE1:
 
 
 	naka_header NAKA_TYPE_CONTAINER
-	swi 7
-	swi 7
-	pushw 65280
-	swi 7
-	swi 7
-	swi 7
-	ldw (0:8), 0:io
-	nop
-	nop
-	.long Naka_PresentationRootState
+	.byte	0xff, 0xff, 0x0b, 0x00, 0xff, 0xff, 0xff, 0xff, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00
+	.short 319, 239	; two u16 fields, 320-1 and 240-1 (lane ext: a coordinate pair); not a
+				; pointer -- 3F 01 EF 00 only equals Naka_PresentationRootState's address
 	.byte 0xff, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0x01, 0xc4, 0xdc
 	.byte 0x03, 0x00
@@ -167,10 +150,7 @@ FDTest_ConsoleArea1:
 	.byte 0x03, 0x00
 	.long FDTest_String_Console1
 	.long RVari_SelectO_SecondItem_Draw_0x32
-	nop
-	nop
-	nop
-	nop
+	.byte	0x00, 0x00, 0x00, 0x00
 FDTest_String_Console1:	aligned_string "CONSOLE"
 FDTest_Label_MemoryDump:
 
@@ -390,15 +370,9 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	.byte 0x4f, 0x4b
 	.byte 0x00, 0xff, 0x4e, 0x47, 0x00, 0xff
 	aligned_string "A:IMMUNITY.TST"
-	ldw (70:8), 27753:io
-	jr mi, 32
-	jrl le, 28005
-	jr nc, 118
-	jr mi, 32
-	push xiy
-	push xiz
-	nop
-	ld	w, 0x65:opc
+	.byte	0x0a
+	.ascii	"File remove =>"
+	.byte	0x00, 0x20, 0x65
 	aligned_string "rror"
 	.byte 0x20, 0x4f
 	.byte 0x4b, 0x00, 0x0a
@@ -411,70 +385,30 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	aligned_string " Error"
 	.byte 0x20, 0x4f, 0x4b, 0x00, 0x0a
 	aligned_string "File Read =>"
-	jrl le, 98
-	swi 7
-	ldw (99:8), 28257:io
-	jr nz, 111
-	jrl ov, 28448
-	jrl f, 28261
-	ld w, 114:opc
-	jr mi, 97
-	jr ov, 32
-	jr z, 105
-	jr nov, 101
-	nop
-	swi 7
+	.byte	0x72, 0x62, 0x00, 0xff, 0x0a
+	.ascii	"cannot open read file"
+	.byte	0x00, 0xff
 	aligned_string " error"
-	ld w, 79:opc
-	popw hl
-	nop
-	ldw (68:8), 29793:io
-	jr lt, 32
-	ld xhl, 1634757999
-	jrl le, 8293
-	push xiy
-	push xiz
-	nop
-	swi 7
+	.byte	0x20, 0x4f, 0x4b, 0x00, 0x0a
+	.ascii	"Data Compare =>"
+	.byte	0x00, 0xff
 	aligned_string " Error!!!!!!!!"
-	ld w, 79:opc
-	popw hl
-	nop
-	pushw de
-	pushw iz
-	pushw de
-	nop
+	.byte	0x20, 0x4f, 0x4b, 0x00, 0x2a, 0x2e, 0x2a, 0x00
 	aligned_string "File Name 20 charact"
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	ldw hl, 0
-	nop
-	nop
-	nop
+	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00
 	aligned_string "TEST_HAMA"
 	aligned_string "TESTHAMA2HD"
-	popw ix
-	popw sp
-	ld xbc, 1291780164
-	popw sp
-	ld xbc, 1313153092
-	ld xix, 1330118400
-	nop
-	swi 7
+	.ascii	"LOAD"
+	.byte	0x00, 0xff
+	.ascii	"LOAD END"
+	.byte	0x00, 0xff, 0x47, 0x4f, 0x00, 0xff
 	aligned_string "Finishd"
 	aligned_string "Media Error"
-	jrl	le, 98
-	swi	7
+	.byte	0x72, 0x62, 0x00, 0xff
 	aligned_string "A:HKEXT.XAP"
 	aligned_string "Cannot open"
-	pop xwa
-	ld xbc, 4278211152
+	.ascii	"XAPR"
+	.byte	0x00, 0xff
 	aligned_string "Different ID"
 	aligned_string "XAPR"
 	.byte 0xa9, 0xe9
