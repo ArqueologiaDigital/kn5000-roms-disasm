@@ -20,7 +20,7 @@ CharEncoding_ExtendedLo:
 	add	(xhl-117), d
 	add	(xix-115), e
 	add	(xiz-114), l
-	.byte 0x8f, 0x90, 0x90
+	adc w, (xsp-112)
 	adc	bc, (xbc)
 	adc	de, (xde)
 	adc	hl, (xhl)

@@ -20,39 +20,31 @@ UIStateEvt_VoiceParamHandler:
 	jp	UIStateEvt_VoiceParamHandler_0x24
 UIStateEvt_VoiceParamHandler_Skip:
 	ld	(4330:16), 0
-	jrl	164
+	jrl	UIStateEvt_VoiceParamHandler_Return
 UIStateEvt_VoiceParamHandler_Skip2:
 	ld	a, (0xc07d:16)
 	cp	a, 3:i3
-	.byte 0xf2, 0xb4
-	pop	sr
-	.byte 0xf2
-	and	bc, iz
-	jrl	nz, 8640
+	jp_24 nz, (15860660)
+	ldb_d8 a, (49278)
 	ld	w, (0xc07f:16)
 	cp	w, 255
-	jr	nz, 8
-	.byte 0xc1, 0xea
-	rcf
-	push	xix
-	swi	6
-	jrl	132
+	jr	nz, UIStateEvt_VoiceParamHandler_Skip4
+	anddi8 (4330), 254
+	jrl	UIStateEvt_VoiceParamHandler_Return
+UIStateEvt_VoiceParamHandler_Skip4:
 	bit	2, w
-	jr	nz, 2
-	jr	125
-	.byte 0xf1, 0xea
-	rcf
-	inc	6, w
-	reti
-	.byte 0xc1, 0xea
-	rcf
-	push	xix
-	swi	6
-	jr	112
+	jr	nz, UIStateEvt_VoiceParamHandler_Skip5
+	jr	UIStateEvt_VoiceParamHandler_Return
+UIStateEvt_VoiceParamHandler_Skip5:
+	bitda 0, (4330)
+	jr z, UIStateEvt_VoiceParamHandler_Skip6
+	anddi8 (4330), 254
+	jr	UIStateEvt_VoiceParamHandler_Return
+UIStateEvt_VoiceParamHandler_Skip6:
 	and	a, w
 	and	a, 4
 	bit	2, a
-	jr	z, 53
+	jr	z, UIStateEvt_VoiceParamHandler_Skip7
 	pushw	wa
 	xor	a, a
 	call	Part_WriteAllVoiceSubBlocks_B
@@ -62,18 +54,13 @@ UIStateEvt_VoiceParamHandler_Skip2:
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
-	.byte 0xc1, 0xb3
-	pushw	wa
-	push	xiz
-	rcf
+	ordi8 (10419), 16
 	ldw	(0xf19e:16), 0
-	.byte 0xc1, 0xa5
-	pushw	wa
-	push	xix
-	swi	6
+	anddi8 (10405), 254
 	ld	a, 76:opc
 	call	CtrlPanel_SetIndicatorBit
-	jr	49
+	jr	UIStateEvt_VoiceParamHandler_Return
+UIStateEvt_VoiceParamHandler_Skip7:
 	pushw	wa
 	xor	a, a
 	call	Part_WriteAllVoiceSubBlocks_A
@@ -83,13 +70,11 @@ UIStateEvt_VoiceParamHandler_Skip2:
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
-	.byte 0xc1, 0xb3
-	pushw	wa
-	push	xiz
-	rcf
+	ordi8 (10419), 16
 	ldw	(0xf19e:16), 0
 	ld	(4596:16), 0
 	call	SeqPlay_CheckStartConditions
+UIStateEvt_VoiceParamHandler_Return:
 	ret
 	ld	xix, 0xf1a0
 	xor	bc, bc
@@ -137,13 +122,8 @@ UIStateEvt_VoiceParamHandler_Skip3:
 	jrl	ugt, 15912
 	max
 	jr	12
-	.byte 0xc1, 0x54
-	decf
-	push	xix
-	swi	6
-	.byte 0xc1
-	jrl	ugt, 15400
-	swi	3
+	anddi8 (3412), 254
+	anddi8 (10363), 251
 	xor	w, w
 	ret
 
@@ -386,9 +366,7 @@ DispatchHandler_ClearActiveFlag:
 PlayMode_InitFlagBlock:
 	call	PlayMode_InitFlagBlock_0x5
 	ret
-	.byte 0xc1
-	ldw	ix, 0x3f0d
-	nop
+	cpdi8 (3380), 0
 	jr	nz, 9
 	ld	(3380:16), 1
 	call	PlayMode_InitFlagBlock_0x16
@@ -552,9 +530,7 @@ SongMode_InitFlagBlock:
 	ret
 	call	SongMode_InitFlagBlock_0x7
 	ret
-	.byte 0xc1
-	ldw	ix, 0x3f0d
-	nop
+	cpdi8 (3380), 0
 	jr	nz, 9
 	ld	(3380:16), 1
 	call	SongMode_InitFlagBlock_0x18
@@ -705,9 +681,7 @@ PartFormat_InitFlagBlock:
 	ret
 	call	PartFormat_InitFlagBlock_0xA
 	ret
-	.byte 0xc1
-	ldw	ix, 0x3f0d
-	nop
+	cpdi8 (3380), 0
 	jr	nz, 9
 	ld	(3380:16), 1
 	call	PartFormat_InitFlagBlock_0x1B
@@ -767,9 +741,7 @@ PlayModeStop_InitFlagBlock:
 	jrl	z, 1126
 	call	PlayModeStop_InitFlagBlock_0x10
 	ret
-	.byte 0xc1
-	ldw	ix, 0x3f0d
-	nop
+	cpdi8 (3380), 0
 	jr	nz, 9
 	ld	(3380:16), 1
 	call	PlayModeStop_InitFlagBlock_0x21
@@ -780,10 +752,8 @@ PlayModeStop_InitFlagBlock:
 	max
 	ld	(4420:16), 10
 	ret
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	jr	nov, 110
-	halt
+	cpdi8 (36150), 108
+	jr nz, 5
 	ld	(3380:16), 0
 	ret
 
@@ -830,11 +800,10 @@ PlayModeStop_ClearFlagBlock:
 	ret
 	ret
 	ret
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	jr	nov, 110
-	halt
+	cpdi8 (36150), 108
+	jr nz, PlayMode_SendCommand6C_Return
 	ld	(3380:16), 0
+PlayMode_SendCommand6C_Return:
 	ret
 
 ; SqSngNameTtlFunc title dispatch
@@ -2199,21 +2168,19 @@ NameGetFuncCall_Dispatch:
 	lda	xwa, (7304:16)
 	ld	(xwa+20), 0
 	ldw	de, 19
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe8
-	ldw	bc, 0x3f81
-	ld	w, 110:opc
-	push	177
-	nop
-	nop
+NameGetFuncCall_Loop:
+	lda_rr xbc, xwa, de
+	cp (xbc), 32
+	jr nz, NameGetFuncCall_Skip2
+	ld (xbc), 0
 	sub	de, 1
-	jr	gt, -19
+	jr	gt, NameGetFuncCall_Loop
+NameGetFuncCall_Skip2:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c70003
 	ld	xde, 0:i3
-	jrl	424
+	jrl	NameGetFuncCall_Join2
 	call	FileIO_GetCurrentFileIndex_Alt
 	inc	1, hl
 	pushw	hl
@@ -2240,21 +2207,19 @@ NameGetFuncCall_Dispatch:
 	lda	xwa, (7326:16)
 	ld	(xwa+12), 0
 	ldw	de, 11
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe8
-	ldw	bc, 0x3f81
-	ld	w, 110:opc
-	push	177
-	nop
-	nop
+NameGetFuncCall_Loop2:
+	lda_rr xbc, xwa, de
+	cp (xbc), 32
+	jr nz, NameGetFuncCall_Skip3
+	ld (xbc), 0
 	sub	de, 1
-	jr	gt, -19
+	jr	gt, NameGetFuncCall_Loop2
+NameGetFuncCall_Skip3:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c70005
 	ld	xde, 0:i3
-	jrl	302
+	jrl	NameGetFuncCall_Join2
 	call	GetCurrentFileIndexAlt
 	inc	1, hl
 	pushw	hl
@@ -2268,7 +2233,7 @@ NameGetFuncCall_Dispatch:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c70008
 	ld	xde, 0:i3
-	jrl	256
+	jrl	NameGetFuncCall_Join2
 	call	GetCurrentFileIndexAlt
 	ld	wa, hl
 	call	GetFileRecordPtr
@@ -2280,21 +2245,19 @@ NameGetFuncCall_Dispatch:
 	lda	xwa, (7340:16)
 	ld	(xwa+20), 0
 	ldw	de, 19
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe8
-	ldw	bc, 0x3f81
-	ld	w, 110:opc
-	push	177
-	nop
-	nop
+NameGetFuncCall_Loop3:
+	lda_rr xbc, xwa, de
+	cp (xbc), 32
+	jr nz, NameGetFuncCall_Skip4
+	ld (xbc), 0
 	sub	de, 1
-	jr	gt, -19
+	jr	gt, NameGetFuncCall_Loop3
+NameGetFuncCall_Skip4:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c70007
 	ld	xde, 0:i3
-	jrl	184
+	jrl	NameGetFuncCall_Join2
 	call	GetFirstPageBase
 	ld	wa, hl
 	call	GetFileEntryByIndex
@@ -2312,21 +2275,19 @@ NameGetFuncCall_Dispatch:
 	lda	xwa, (0x02104e:24)
 	ld	(xwa+20), 0
 	ldw	de, 19
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe8
-	ldw	bc, 0x3f81
-	ld	w, 110:opc
-	push	177
-	nop
-	nop
+NameGetFuncCall_Loop4:
+	lda_rr xbc, xwa, de
+	cp (xbc), 32
+	jr nz, NameGetFuncCall_Skip5
+	ld (xbc), 0
 	sub	de, 1
-	jr	gt, -19
+	jr	gt, NameGetFuncCall_Loop4
+NameGetFuncCall_Skip5:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c7000f
 	ld	xde, 0:i3
-	jr	92
+	jr	NameGetFuncCall_Join2
 	call	GetFirstPageBase
 	ld	wa, hl
 	call	GetFileEntryByIndex

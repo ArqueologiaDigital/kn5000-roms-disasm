@@ -12,10 +12,7 @@ SetWall_X:
 	ret
 
 SetWall_JumpStubData:
-	.byte 0xc1, 0xe0
-	incf
-	push	xix
-	swi	6
+	anddi8 (3296), 254
 	ld	(3295:16), 0
 	call	CDlikeSwTtl_SendStartEvt
 	call	SetWall_UpdateSlotIndex
@@ -35,10 +32,7 @@ SetWall_InlineCodeBlock:
 	ret
 MiddleFuncCall_DispatchData_Code_Helper:
 	call	SetWall_InlineCodeBlock2
-	.byte 0xc1, 0xdf
-	incf
-	push	xsp
-	reti
+	cpdi8 (3295), 7
 	jr	z, 4
 	call	CDlikeSwTtl_DispatchData_0x6
 	call	CDlikeSwTtl_SendStartEvt
@@ -1934,6 +1928,7 @@ SetWall_InlineCodeBlock3:
 	pushw	bc
 	ld	xix, 4421
 	ld	bc, 0:i3
+SetWall_ForwardSkip_Loop2:
 	ld	(0x286b:16), c
 	push	xix
 	call	SetWall_MiscDataAndCode_0x52
@@ -1944,14 +1939,11 @@ SetWall_InlineCodeBlock3:
 	st_rrb a, xix, bc
 	inc 1, bc
 	cp bc, 10
-	jr lt, -33
+	jr lt, SetWall_ForwardSkip_Loop2
 	popw	bc
 	pop	xix
 	ret
-	.byte 0xc1, 0xa7
-	pushw	wa
-	push	xix
-	swi	3
+	anddi8 (10407), 251
 	xor	wa, wa
 	ld	a, 76:opc
 	call	CtrlPanel_SetIndicatorBit
@@ -1978,8 +1970,7 @@ SetWall_MiscDataAndCode:
 	ld	xix, 0xf280
 	ld	xiy, 4441
 	ldw	bc, 16
-	.byte 0x85
-	scf
+	ldir85
 	xor	xwa, xwa
 	ld	a, (0xffe3:24)
 	sla	xwa, 11
@@ -1989,15 +1980,10 @@ SetWall_MiscDataAndCode:
 	add	xix, xwa
 	ld	xiy, 4441
 	ldw	bc, 16
-	.byte 0x85
-	scf
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0x8f
+	ldir85
+	cpdi8 (36150), 143
 	jr	z, SetWall_MiscDataAndCode_Skip
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0xa7
+	cpdi8 (36150), 167
 	jr	z, SetWall_MiscDataAndCode_Skip2
 SetWall_MiscDataAndCode_Skip:
 	ld	a, 142:opc
@@ -2078,8 +2064,7 @@ SetWall_MiscDataAndCode_Entry:
 	ldw	ix, 7428
 	max
 	push	sr
-	.byte 0xf2, 0xe7
-	ldw	ix, 0xe105
+	call_24 lt, (341223)
 	swi	5
 	rcf
 	ld	c, 179:opc
