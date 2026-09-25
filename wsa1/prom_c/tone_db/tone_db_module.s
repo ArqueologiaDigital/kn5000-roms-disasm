@@ -2363,7 +2363,7 @@ ToneDB_SourceNameList1_SelectEntry__FB91E3:
 	ld	c, 2:opc                                   ; FB91F5  ld C,0x02
 	extpfx3 0x8E, 0xF1, 0x43                   ; FB91F7  mul BC,(XIZ+0xf1)
 	extz	xbc                                   ; FB91FA  extz XBC
-	add	xbc, 0xFDE695                          ; FB91FC  add XBC,0x00fde695
+	add	xbc, BitMask_Table_FDE695                          ; FB91FC  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FB9202  ld BC,(XBC)
 	and	bc, hl                                 ; FB9204  and BC,HL
 	jr z, ToneDB_SourceNameList1_SelectEntry__FB923D                   ; FB9206  jr Z,0xfb923d
@@ -2542,7 +2542,7 @@ ToneDB_SourceNameList2_SelectEntry__FB92D2:
 	ld	c, 2:opc                                   ; FB9384  ld C,0x02
 	extpfx3 0x8E, 0xF3, 0x43                   ; FB9386  mul BC,(XIZ+0xf3)
 	extz	xbc                                   ; FB9389  extz XBC
-	add	xbc, 0xFDE695                          ; FB938B  add XBC,0x00fde695
+	add	xbc, BitMask_Table_FDE695                          ; FB938B  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FB9391  ld BC,(XBC)
 	and	bc, hl                                 ; FB9393  and BC,HL
 	inc	6, xsp                                 ; FB9395  inc 6,XSP
@@ -2683,7 +2683,7 @@ sub_FB9414__FB9492:
 sub_FB9414__FB94AF:
 	ld	bc, (xiz-14)                            ; FB94AF  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB94B2  extz XBC
-	add	xbc, 0xFDE69D                          ; FB94B4  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FB94B4  add XBC,0x00fde69d
 	ld	h, (xbc)                                ; FB94BA  ld H,(XBC)
 	ld	xbc, (xiz-4)                            ; FB94BC  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+13)                             ; FB94BF  ld A,(XBC+0x0d)
@@ -2943,7 +2943,7 @@ ToneDB_DrumSourceNameList_SelectEntry__FB9709:
 	ld	bc, (xiz-36)                            ; FB972A  ld BC,(XIZ+0xdc)
 	extz	bc                                    ; FB972D  extz BC
 	extz	xbc                                   ; FB972F  extz XBC
-	add	xbc, 0xFDE69D                          ; FB9731  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FB9731  add XBC,0x00fde69d
 	ld	h, (xbc)                                ; FB9737  ld H,(XBC)
 	ld	xbc, (xiz-8)                            ; FB9739  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+13)                             ; FB973C  ld A,(XBC+0x0d)
@@ -3135,7 +3135,7 @@ ToneDB_PercSourceNameList1_SelectEntry__FB98D5:
 	ld	bc, (xiz-22)                            ; FB98F6  ld BC,(XIZ+0xea)
 	extz	bc                                    ; FB98F9  extz BC
 	extz	xbc                                   ; FB98FB  extz XBC
-	add	xbc, 0xFDE69D                          ; FB98FD  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FB98FD  add XBC,0x00fde69d
 	ld	b, (xbc)                                ; FB9903  ld B,(XBC)
 	extpfx3 0x8E, 0xE7, 0xC2                   ; FB9905  and B,(XIZ+0xe7)
 	jr z, ToneDB_PercSourceNameList1_SelectEntry__FB9922                   ; FB9908  jr Z,0xfb9922
@@ -3295,7 +3295,7 @@ ToneDB_PercSourceNameList2_SelectEntry__FB9A48:
 	ld	bc, (xiz-18)                            ; FB9A69  ld BC,(XIZ+0xee)
 	extz	bc                                    ; FB9A6C  extz BC
 	extz	xbc                                   ; FB9A6E  extz XBC
-	add	xbc, 0xFDE69D                          ; FB9A70  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FB9A70  add XBC,0x00fde69d
 	ld	b, (xbc)                                ; FB9A76  ld B,(XBC)
 	extpfx3 0x8E, 0xEC, 0xC2                   ; FB9A78  and B,(XIZ+0xec)
 	jr z, ToneDB_PercSourceNameList2_SelectEntry__FB9A95                   ; FB9A7B  jr Z,0xfb9a95
@@ -3433,7 +3433,7 @@ Field2Bit_CopyField:
 	ld	bc, (xiz+10)                            ; FB9B15  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FB9B18  extz BC
 	extz	xbc                                   ; FB9B1A  extz XBC
-	add	xbc, 0xFE1361                          ; FB9B1C  add XBC,0x00fe1361
+	add	xbc, Field2Bit_Masks_b                          ; FB9B1C  add XBC,0x00fe1361
 	ld	a, (xbc)                                ; FB9B22  ld A,(XBC)
 	cpl	a                                      ; FB9B24  cpl A
 	ld	xbc, (xiz+14)                           ; FB9B26  ld XBC,(XIZ+0x0e)
@@ -3441,7 +3441,7 @@ Field2Bit_CopyField:
 	ld	bc, (xiz+8)                             ; FB9B2B  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB9B2E  extz BC
 	extz	xbc                                   ; FB9B30  extz XBC
-	add	xbc, 0xFE1361                          ; FB9B32  add XBC,0x00fe1361
+	add	xbc, Field2Bit_Masks_b                          ; FB9B32  add XBC,0x00fe1361
 	ld	a, (xbc)                                ; FB9B38  ld A,(XBC)
 	and	(xiz+12), a                            ; FB9B3A  and (XIZ+0x0c),A
 	ld	b, (xiz+8)                              ; FB9B3D  ld B,(XIZ+0x08)
@@ -5440,7 +5440,7 @@ ToneEdit_Dispatch__FBAEB0:
 	cp	bc, 26                                  ; FBAEB5  cp BC,0x001a
 	jr ugt, ToneEdit_Dispatch__FBAEAD                 ; FBAEB9  jr UGT,0xfbaead
 	sll	bc, 2                                  ; FBAEBB  sll 0x02,BC
-	add	xbc, 0xFBAEC8                          ; FBAEBE  add XBC,0x00fbaec8
+	add	xbc, ToneEdit_Dispatch_JumpTable_FBAEC8                          ; FBAEBE  add XBC,0x00fbaec8
 	ld	xbc, (xbc)                              ; FBAEC4  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBAEC6  jp T,XBC
 ; 27 x u32 computed-goto table, 0xFBAEC8-0xFBAF33, 108 bytes.
@@ -5451,33 +5451,34 @@ ToneEdit_Dispatch__FBAEB0:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBAC37	; 0xFBAEC8  entry 0 -> 0xFBAC37   (also the out-of-range arm)
-	.long 0x00FBAEAD	; 0xFBAECC  entry 1 -> 0xFBAEAD
-	.long 0x00FBAEAD	; 0xFBAED0  entry 2 -> 0xFBAEAD
-	.long 0x00FBAEAD	; 0xFBAED4  entry 3 -> 0xFBAEAD
-	.long 0x00FBAC49	; 0xFBAED8  entry 4 -> 0xFBAC49
-	.long 0x00FBAC67	; 0xFBAEDC  entry 5 -> 0xFBAC67
-	.long 0x00FBAC85	; 0xFBAEE0  entry 6 -> 0xFBAC85
-	.long 0x00FBACA3	; 0xFBAEE4  entry 7 -> 0xFBACA3
-	.long 0x00FBACC1	; 0xFBAEE8  entry 8 -> 0xFBACC1
-	.long 0x00FBACDF	; 0xFBAEEC  entry 9 -> 0xFBACDF
-	.long 0x00FBAD14	; 0xFBAEF0  entry 10 -> 0xFBAD14
-	.long 0x00FBAD49	; 0xFBAEF4  entry 11 -> 0xFBAD49
-	.long 0x00FBAD9A	; 0xFBAEF8  entry 12 -> 0xFBAD9A
-	.long 0x00FBAD77	; 0xFBAEFC  entry 13 -> 0xFBAD77
-	.long 0x00FBAEAD	; 0xFBAF00  entry 14 -> 0xFBAEAD
-	.long 0x00FBAEAD	; 0xFBAF04  entry 15 -> 0xFBAEAD
-	.long 0x00FBAEAD	; 0xFBAF08  entry 16 -> 0xFBAEAD
-	.long 0x00FBAEAD	; 0xFBAF0C  entry 17 -> 0xFBAEAD
-	.long 0x00FBAEAD	; 0xFBAF10  entry 18 -> 0xFBAEAD
-	.long 0x00FBADC8	; 0xFBAF14  entry 19 -> 0xFBADC8
-	.long 0x00FBADDA	; 0xFBAF18  entry 20 -> 0xFBADDA
-	.long 0x00FBAE08	; 0xFBAF1C  entry 21 -> 0xFBAE08
-	.long 0x00FBAE3D	; 0xFBAF20  entry 22 -> 0xFBAE3D
-	.long 0x00FBAE72	; 0xFBAF24  entry 23 -> 0xFBAE72
-	.long 0x00FBAE7D	; 0xFBAF28  entry 24 -> 0xFBAE7D
-	.long 0x00FBAEAD	; 0xFBAF2C  entry 25 -> 0xFBAEAD
-	.long 0x00FBAE84	; 0xFBAF30  entry 26 -> 0xFBAE84
+ToneEdit_Dispatch_JumpTable_FBAEC8:
+	.long ToneEdit_Dispatch__FBAC37	; 0xFBAEC8  entry 0 -> 0xFBAC37   (also the out-of-range arm)
+	.long ToneEdit_Dispatch__FBAEAD	; 0xFBAECC  entry 1 -> 0xFBAEAD
+	.long ToneEdit_Dispatch__FBAEAD	; 0xFBAED0  entry 2 -> 0xFBAEAD
+	.long ToneEdit_Dispatch__FBAEAD	; 0xFBAED4  entry 3 -> 0xFBAEAD
+	.long ToneEdit_Dispatch__FBAC49	; 0xFBAED8  entry 4 -> 0xFBAC49
+	.long ToneEdit_Dispatch__FBAC67	; 0xFBAEDC  entry 5 -> 0xFBAC67
+	.long ToneEdit_Dispatch__FBAC85	; 0xFBAEE0  entry 6 -> 0xFBAC85
+	.long ToneEdit_Dispatch__FBACA3	; 0xFBAEE4  entry 7 -> 0xFBACA3
+	.long ToneEdit_Dispatch__FBACC1	; 0xFBAEE8  entry 8 -> 0xFBACC1
+	.long ToneEdit_Dispatch__FBACDF	; 0xFBAEEC  entry 9 -> 0xFBACDF
+	.long ToneEdit_Dispatch__FBAD14	; 0xFBAEF0  entry 10 -> 0xFBAD14
+	.long ToneEdit_Dispatch__FBAD49	; 0xFBAEF4  entry 11 -> 0xFBAD49
+	.long ToneEdit_Dispatch__FBAD9A	; 0xFBAEF8  entry 12 -> 0xFBAD9A
+	.long ToneEdit_Dispatch__FBAD77	; 0xFBAEFC  entry 13 -> 0xFBAD77
+	.long ToneEdit_Dispatch__FBAEAD	; 0xFBAF00  entry 14 -> 0xFBAEAD
+	.long ToneEdit_Dispatch__FBAEAD	; 0xFBAF04  entry 15 -> 0xFBAEAD
+	.long ToneEdit_Dispatch__FBAEAD	; 0xFBAF08  entry 16 -> 0xFBAEAD
+	.long ToneEdit_Dispatch__FBAEAD	; 0xFBAF0C  entry 17 -> 0xFBAEAD
+	.long ToneEdit_Dispatch__FBAEAD	; 0xFBAF10  entry 18 -> 0xFBAEAD
+	.long ToneEdit_Dispatch__FBADC8	; 0xFBAF14  entry 19 -> 0xFBADC8
+	.long ToneEdit_Dispatch__FBADDA	; 0xFBAF18  entry 20 -> 0xFBADDA
+	.long ToneEdit_Dispatch__FBAE08	; 0xFBAF1C  entry 21 -> 0xFBAE08
+	.long ToneEdit_Dispatch__FBAE3D	; 0xFBAF20  entry 22 -> 0xFBAE3D
+	.long ToneEdit_Dispatch__FBAE72	; 0xFBAF24  entry 23 -> 0xFBAE72
+	.long ToneEdit_Dispatch__FBAE7D	; 0xFBAF28  entry 24 -> 0xFBAE7D
+	.long ToneEdit_Dispatch__FBAEAD	; 0xFBAF2C  entry 25 -> 0xFBAEAD
+	.long ToneEdit_Dispatch__FBAE84	; 0xFBAF30  entry 26 -> 0xFBAE84
 ToneEdit_Dispatch__FBAF34:
 	popw	hl                                    ; FBAF34  pop HL
 	unlk32 xiz                                 ; FBAF35  unlk XIZ
@@ -5536,7 +5537,7 @@ ToneRec_LoadDspParams_AlgoTypes0to3:
 	ld	c, 39:opc                                  ; FBAF50  ld C,0x27
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBAF52  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBAF55  extz XBC
-	add	xbc, 0xFDF4F1                          ; FBAF57  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FBAF57  add XBC,0x00fdf4f1
 	ld	(xiz-8), xbc                            ; FBAF5D  ld (XIZ+0xf8),XBC
 	ld	a, (xbc)                                ; FBAF60  ld A,(XBC)
 	ld	h, a                                    ; FBAF62  ld H,A
@@ -5622,7 +5623,7 @@ ToneRec_LoadDspParams_AlgoTypes4and5:
 	ld	c, 39:opc                                  ; FBAFE8  ld C,0x27
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBAFEA  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBAFED  extz XBC
-	add	xbc, 0xFDF4F1                          ; FBAFEF  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FBAFEF  add XBC,0x00fdf4f1
 	ld	(xiz-8), xbc                            ; FBAFF5  ld (XIZ+0xf8),XBC
 	ld	a, (xbc)                                ; FBAFF8  ld A,(XBC)
 	ld	h, a                                    ; FBAFFA  ld H,A
@@ -5710,7 +5711,7 @@ ToneRec_LoadDspParams_AlgoType6:
 	ld	c, 39:opc                                  ; FBB090  ld C,0x27
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBB092  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBB095  extz XBC
-	add	xbc, 0xFDF4F1                          ; FBB097  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FBB097  add XBC,0x00fdf4f1
 	ld	(xiz-8), xbc                            ; FBB09D  ld (XIZ+0xf8),XBC
 	ld	a, (xbc+6)                              ; FBB0A0  ld A,(XBC+0x06)
 	ld	h, a                                    ; FBB0A3  ld H,A
@@ -5787,7 +5788,7 @@ ToneRec_LoadDspParams_AlgoType7:
 	ld	c, 39:opc                                  ; FBB119  ld C,0x27
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBB11B  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBB11E  extz XBC
-	add	xbc, 0xFDF4F1                          ; FBB120  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FBB120  add XBC,0x00fdf4f1
 	ld	(xiz-8), xbc                            ; FBB126  ld (XIZ+0xf8),XBC
 	ld	a, (xbc)                                ; FBB129  ld A,(XBC)
 	ld	h, a                                    ; FBB12B  ld H,A
@@ -5864,7 +5865,7 @@ ToneRec_LoadDspParams_AlgoType8:
 	ld	c, 39:opc                                  ; FBB1A1  ld C,0x27
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBB1A3  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBB1A6  extz XBC
-	add	xbc, 0xFDF4F1                          ; FBB1A8  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FBB1A8  add XBC,0x00fdf4f1
 	ld	(xiz-8), xbc                            ; FBB1AE  ld (XIZ+0xf8),XBC
 	ld	a, (xbc+28)                             ; FBB1B1  ld A,(XBC+0x1c)
 	ld	h, a                                    ; FBB1B4  ld H,A
@@ -5941,7 +5942,7 @@ ToneRec_LoadDspParams_AlgoType9:
 	ld	c, 39:opc                                  ; FBB22A  ld C,0x27
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBB22C  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBB22F  extz XBC
-	add	xbc, 0xFDF4F1                          ; FBB231  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FBB231  add XBC,0x00fdf4f1
 	ld	(xiz-8), xbc                            ; FBB237  ld (XIZ+0xf8),XBC
 	ld	a, (xbc+9)                              ; FBB23A  ld A,(XBC+0x09)
 	ld	h, a                                    ; FBB23D  ld H,A
@@ -6018,7 +6019,7 @@ ToneRec_LoadDspParams_AlgoType10:
 	ld	c, 39:opc                                  ; FBB2B3  ld C,0x27
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBB2B5  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBB2B8  extz XBC
-	add	xbc, 0xFDF4F1                          ; FBB2BA  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FBB2BA  add XBC,0x00fdf4f1
 	ld	(xiz-8), xbc                            ; FBB2C0  ld (XIZ+0xf8),XBC
 	ld	a, (xbc+19)                             ; FBB2C3  ld A,(XBC+0x13)
 	and	a, 0x80                                ; FBB2C6  and A,0x80
@@ -6092,7 +6093,7 @@ ToneRec_LoadDspParams_AlgoType11:
 	ld	c, 39:opc                                  ; FBB32D  ld C,0x27
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBB32F  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBB332  extz XBC
-	add	xbc, 0xFDF4F1                          ; FBB334  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FBB334  add XBC,0x00fdf4f1
 	ld	(xiz-8), xbc                            ; FBB33A  ld (XIZ+0xf8),XBC
 	ld	a, (xbc+19)                             ; FBB33D  ld A,(XBC+0x13)
 	and	a, 0x80                                ; FBB340  and A,0x80
@@ -6282,7 +6283,7 @@ ToneRec_LoadDspParams_ByAlgoType__FBB474:
 	cp	bc, 11                                  ; FBB479  cp BC,0x000b
 	jr ugt, ToneRec_LoadDspParams_ByAlgoType__FBB4BC                 ; FBB47D  jr UGT,0xfbb4bc
 	sll	bc, 2                                  ; FBB47F  sll 0x02,BC
-	add	xbc, 0xFBB48C                          ; FBB482  add XBC,0x00fbb48c
+	add	xbc, ToneRec_LoadDspParams_ByAlgoType_JumpTable_FBB48C                          ; FBB482  add XBC,0x00fbb48c
 	ld	xbc, (xbc)                              ; FBB488  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBB48A  jp T,XBC
 ; 12 x u32 computed-goto table, 0xFBB48C-0xFBB4BB, 48 bytes.
@@ -6293,18 +6294,19 @@ ToneRec_LoadDspParams_ByAlgoType__FBB474:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBB3C3	; 0xFBB48C  entry 0 -> 0xFBB3C3   (also the out-of-range arm)
-	.long 0x00FBB3D2	; 0xFBB490  entry 1 -> 0xFBB3D2
-	.long 0x00FBB3E1	; 0xFBB494  entry 2 -> 0xFBB3E1
-	.long 0x00FBB3F0	; 0xFBB498  entry 3 -> 0xFBB3F0
-	.long 0x00FBB3FF	; 0xFBB49C  entry 4 -> 0xFBB3FF
-	.long 0x00FBB40E	; 0xFBB4A0  entry 5 -> 0xFBB40E
-	.long 0x00FBB41D	; 0xFBB4A4  entry 6 -> 0xFBB41D
-	.long 0x00FBB42C	; 0xFBB4A8  entry 7 -> 0xFBB42C
-	.long 0x00FBB43B	; 0xFBB4AC  entry 8 -> 0xFBB43B
-	.long 0x00FBB44A	; 0xFBB4B0  entry 9 -> 0xFBB44A
-	.long 0x00FBB458	; 0xFBB4B4  entry 10 -> 0xFBB458
-	.long 0x00FBB466	; 0xFBB4B8  entry 11 -> 0xFBB466
+ToneRec_LoadDspParams_ByAlgoType_JumpTable_FBB48C:
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB3C3	; 0xFBB48C  entry 0 -> 0xFBB3C3   (also the out-of-range arm)
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB3D2	; 0xFBB490  entry 1 -> 0xFBB3D2
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB3E1	; 0xFBB494  entry 2 -> 0xFBB3E1
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB3F0	; 0xFBB498  entry 3 -> 0xFBB3F0
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB3FF	; 0xFBB49C  entry 4 -> 0xFBB3FF
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB40E	; 0xFBB4A0  entry 5 -> 0xFBB40E
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB41D	; 0xFBB4A4  entry 6 -> 0xFBB41D
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB42C	; 0xFBB4A8  entry 7 -> 0xFBB42C
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB43B	; 0xFBB4AC  entry 8 -> 0xFBB43B
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB44A	; 0xFBB4B0  entry 9 -> 0xFBB44A
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB458	; 0xFBB4B4  entry 10 -> 0xFBB458
+	.long ToneRec_LoadDspParams_ByAlgoType__FBB466	; 0xFBB4B8  entry 11 -> 0xFBB466
 ToneRec_LoadDspParams_ByAlgoType__FBB4BC:
 	unlk32 xiz                                 ; FBB4BC  unlk XIZ
 	ret                                        ; FBB4BE  ret
@@ -6399,7 +6401,7 @@ sub_FBB4BF__FBB543:
 	cp	bc, 7:i3                                  ; FBB548  cp BC,7
 	jr ugt, sub_FBB4BF__FBB579                 ; FBB54A  jr UGT,0xfbb579
 	sll	bc, 2                                  ; FBB54C  sll 0x02,BC
-	add	xbc, 0xFBB559                          ; FBB54F  add XBC,0x00fbb559
+	add	xbc, sub_FBB4BF_JumpTable_FBB559                          ; FBB54F  add XBC,0x00fbb559
 	ld	xbc, (xbc)                              ; FBB555  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBB557  jp T,XBC
 ; 8 x u32 computed-goto table, 0xFBB559-0xFBB578, 32 bytes.
@@ -6410,14 +6412,15 @@ sub_FBB4BF__FBB543:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBB4E2	; 0xFBB559  entry 0 -> 0xFBB4E2   (also the out-of-range arm)
-	.long 0x00FBB4E2	; 0xFBB55D  entry 1 -> 0xFBB4E2
-	.long 0x00FBB4E2	; 0xFBB561  entry 2 -> 0xFBB4E2
-	.long 0x00FBB4E2	; 0xFBB565  entry 3 -> 0xFBB4E2
-	.long 0x00FBB4FF	; 0xFBB569  entry 4 -> 0xFBB4FF
-	.long 0x00FBB4FF	; 0xFBB56D  entry 5 -> 0xFBB4FF
-	.long 0x00FBB50E	; 0xFBB571  entry 6 -> 0xFBB50E
-	.long 0x00FBB51A	; 0xFBB575  entry 7 -> 0xFBB51A
+sub_FBB4BF_JumpTable_FBB559:
+	.long sub_FBB4BF__FBB4E2	; 0xFBB559  entry 0 -> 0xFBB4E2   (also the out-of-range arm)
+	.long sub_FBB4BF__FBB4E2	; 0xFBB55D  entry 1 -> 0xFBB4E2
+	.long sub_FBB4BF__FBB4E2	; 0xFBB561  entry 2 -> 0xFBB4E2
+	.long sub_FBB4BF__FBB4E2	; 0xFBB565  entry 3 -> 0xFBB4E2
+	.long sub_FBB4BF__FBB4FF	; 0xFBB569  entry 4 -> 0xFBB4FF
+	.long sub_FBB4BF__FBB4FF	; 0xFBB56D  entry 5 -> 0xFBB4FF
+	.long sub_FBB4BF__FBB50E	; 0xFBB571  entry 6 -> 0xFBB50E
+	.long sub_FBB4BF__FBB51A	; 0xFBB575  entry 7 -> 0xFBB51A
 sub_FBB4BF__FBB579:
 	unlk32 xiz                                 ; FBB579  unlk XIZ
 	ret                                        ; FBB57B  ret
@@ -6516,7 +6519,7 @@ sub_FBB57C__FBB60C:
 	cp	bc, 7:i3                                  ; FBB611  cp BC,7
 	jr ugt, sub_FBB57C__FBB642                 ; FBB613  jr UGT,0xfbb642
 	sll	bc, 2                                  ; FBB615  sll 0x02,BC
-	add	xbc, 0xFBB622                          ; FBB618  add XBC,0x00fbb622
+	add	xbc, sub_FBB57C_JumpTable_FBB622                          ; FBB618  add XBC,0x00fbb622
 	ld	xbc, (xbc)                              ; FBB61E  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBB620  jp T,XBC
 ; 8 x u32 computed-goto table, 0xFBB622-0xFBB641, 32 bytes.
@@ -6527,14 +6530,15 @@ sub_FBB57C__FBB60C:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBB5A0	; 0xFBB622  entry 0 -> 0xFBB5A0   (also the out-of-range arm)
-	.long 0x00FBB5A0	; 0xFBB626  entry 1 -> 0xFBB5A0
-	.long 0x00FBB5A0	; 0xFBB62A  entry 2 -> 0xFBB5A0
-	.long 0x00FBB5A0	; 0xFBB62E  entry 3 -> 0xFBB5A0
-	.long 0x00FBB5BD	; 0xFBB632  entry 4 -> 0xFBB5BD
-	.long 0x00FBB5BD	; 0xFBB636  entry 5 -> 0xFBB5BD
-	.long 0x00FBB5CD	; 0xFBB63A  entry 6 -> 0xFBB5CD
-	.long 0x00FBB5D9	; 0xFBB63E  entry 7 -> 0xFBB5D9
+sub_FBB57C_JumpTable_FBB622:
+	.long sub_FBB57C__FBB5A0	; 0xFBB622  entry 0 -> 0xFBB5A0   (also the out-of-range arm)
+	.long sub_FBB57C__FBB5A0	; 0xFBB626  entry 1 -> 0xFBB5A0
+	.long sub_FBB57C__FBB5A0	; 0xFBB62A  entry 2 -> 0xFBB5A0
+	.long sub_FBB57C__FBB5A0	; 0xFBB62E  entry 3 -> 0xFBB5A0
+	.long sub_FBB57C__FBB5BD	; 0xFBB632  entry 4 -> 0xFBB5BD
+	.long sub_FBB57C__FBB5BD	; 0xFBB636  entry 5 -> 0xFBB5BD
+	.long sub_FBB57C__FBB5CD	; 0xFBB63A  entry 6 -> 0xFBB5CD
+	.long sub_FBB57C__FBB5D9	; 0xFBB63E  entry 7 -> 0xFBB5D9
 sub_FBB57C__FBB642:
 	unlk32 xiz                                 ; FBB642  unlk XIZ
 	ret                                        ; FBB644  ret
@@ -6625,7 +6629,7 @@ sub_FBB645__FBB6BD:
 	cp	bc, 7:i3                                  ; FBB6C4  cp BC,7
 	jr ugt, sub_FBB645__FBB6F5                 ; FBB6C6  jr UGT,0xfbb6f5
 	sll	bc, 2                                  ; FBB6C8  sll 0x02,BC
-	add	xbc, 0xFBB6D5                          ; FBB6CB  add XBC,0x00fbb6d5
+	add	xbc, sub_FBB645_JumpTable_FBB6D5                          ; FBB6CB  add XBC,0x00fbb6d5
 	ld	xbc, (xbc)                              ; FBB6D1  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBB6D3  jp T,XBC
 ; 8 x u32 computed-goto table, 0xFBB6D5-0xFBB6F4, 32 bytes.
@@ -6636,14 +6640,15 @@ sub_FBB645__FBB6BD:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBB668	; 0xFBB6D5  entry 0 -> 0xFBB668   (also the out-of-range arm)
-	.long 0x00FBB668	; 0xFBB6D9  entry 1 -> 0xFBB668
-	.long 0x00FBB678	; 0xFBB6DD  entry 2 -> 0xFBB678
-	.long 0x00FBB685	; 0xFBB6E1  entry 3 -> 0xFBB685
-	.long 0x00FBB6F5	; 0xFBB6E5  entry 4 -> 0xFBB6F5
-	.long 0x00FBB6F5	; 0xFBB6E9  entry 5 -> 0xFBB6F5
-	.long 0x00FBB6AE	; 0xFBB6ED  entry 6 -> 0xFBB6AE
-	.long 0x00FBB6AE	; 0xFBB6F1  entry 7 -> 0xFBB6AE
+sub_FBB645_JumpTable_FBB6D5:
+	.long sub_FBB645__FBB668	; 0xFBB6D5  entry 0 -> 0xFBB668   (also the out-of-range arm)
+	.long sub_FBB645__FBB668	; 0xFBB6D9  entry 1 -> 0xFBB668
+	.long sub_FBB645__FBB678	; 0xFBB6DD  entry 2 -> 0xFBB678
+	.long sub_FBB645__FBB685	; 0xFBB6E1  entry 3 -> 0xFBB685
+	.long sub_FBB645__FBB6F5	; 0xFBB6E5  entry 4 -> 0xFBB6F5
+	.long sub_FBB645__FBB6F5	; 0xFBB6E9  entry 5 -> 0xFBB6F5
+	.long sub_FBB645__FBB6AE	; 0xFBB6ED  entry 6 -> 0xFBB6AE
+	.long sub_FBB645__FBB6AE	; 0xFBB6F1  entry 7 -> 0xFBB6AE
 sub_FBB645__FBB6F5:
 	unlk32 xiz                                 ; FBB6F5  unlk XIZ
 	ret                                        ; FBB6F7  ret
@@ -7120,7 +7125,7 @@ sub_FBB793__FBBAE4:
 	ld	c, 2:opc                                   ; FBBAF6  ld C,0x02
 	extpfx3 0x8E, 0xF6, 0x43                   ; FBBAF8  mul BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBBAFB  extz XBC
-	add	xbc, 0xFDE695                          ; FBBAFD  add XBC,0x00fde695
+	add	xbc, BitMask_Table_FDE695                          ; FBBAFD  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FBBB03  ld BC,(XBC)
 	and	bc, hl                                 ; FBBB05  and BC,HL
 	jr z, sub_FBB793__FBBB3E                   ; FBBB07  jr Z,0xfbbb3e
@@ -7365,7 +7370,7 @@ sub_FBB793__FBBD1F:
 	ld	c, 2:opc                                   ; FBBD31  ld C,0x02
 	extpfx3 0x8E, 0xF6, 0x43                   ; FBBD33  mul BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBBD36  extz XBC
-	add	xbc, 0xFDE695                          ; FBBD38  add XBC,0x00fde695
+	add	xbc, BitMask_Table_FDE695                          ; FBBD38  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FBBD3E  ld BC,(XBC)
 	and	bc, hl                                 ; FBBD40  and BC,HL
 	jr z, sub_FBB793__FBBD79                   ; FBBD42  jr Z,0xfbbd79
@@ -7689,7 +7694,7 @@ sub_FBBFFB__FBC06C:
 	ld	c, 2:opc                                   ; FBC07E  ld C,0x02
 	extpfx3 0x8E, 0x0A, 0x43                   ; FBC080  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FBC083  extz XBC
-	add	xbc, 0xFDE695                          ; FBC085  add XBC,0x00fde695
+	add	xbc, BitMask_Table_FDE695                          ; FBC085  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FBC08B  ld BC,(XBC)
 	and	bc, hl                                 ; FBC08D  and BC,HL
 	jr z, sub_FBBFFB__FBC0C6                   ; FBC08F  jr Z,0xfbc0c6
@@ -7972,7 +7977,7 @@ sub_FBC10A__FBC2EA:
 	cp	bc, 4:i3                                  ; FBC2F1  cp BC,4
 	jr ugt, sub_FBC10A__FBC316                 ; FBC2F3  jr UGT,0xfbc316
 	sll	bc, 2                                  ; FBC2F5  sll 0x02,BC
-	add	xbc, 0xFBC302                          ; FBC2F8  add XBC,0x00fbc302
+	add	xbc, sub_FBC10A_JumpTable_FBC302                          ; FBC2F8  add XBC,0x00fbc302
 	ld	xbc, (xbc)                              ; FBC2FE  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBC300  jp T,XBC
 ; 5 x u32 computed-goto table, 0xFBC302-0xFBC315, 20 bytes.
@@ -7983,11 +7988,12 @@ sub_FBC10A__FBC2EA:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBC197	; 0xFBC302  entry 0 -> 0xFBC197   (also the out-of-range arm)
-	.long 0x00FBC200	; 0xFBC306  entry 1 -> 0xFBC200
-	.long 0x00FBC197	; 0xFBC30A  entry 2 -> 0xFBC197
-	.long 0x00FBC200	; 0xFBC30E  entry 3 -> 0xFBC200
-	.long 0x00FBC26C	; 0xFBC312  entry 4 -> 0xFBC26C
+sub_FBC10A_JumpTable_FBC302:
+	.long sub_FBC10A__FBC197	; 0xFBC302  entry 0 -> 0xFBC197   (also the out-of-range arm)
+	.long sub_FBC10A__FBC200	; 0xFBC306  entry 1 -> 0xFBC200
+	.long sub_FBC10A__FBC197	; 0xFBC30A  entry 2 -> 0xFBC197
+	.long sub_FBC10A__FBC200	; 0xFBC30E  entry 3 -> 0xFBC200
+	.long sub_FBC10A__FBC26C	; 0xFBC312  entry 4 -> 0xFBC26C
 sub_FBC10A__FBC316:
 	pop	xix                                    ; FBC316  pop XIX
 	popw	hl                                    ; FBC317  pop HL
@@ -8354,7 +8360,7 @@ sub_FBC39D__FBC5C3:
 	cp	bc, 80                                  ; FBC5C8  cp BC,0x0050
 	jrl ugt, sub_FBC39D__FBC720                ; FBC5CC  jrl UGT,0xfbc720
 	sll	bc, 2                                  ; FBC5CF  sll 0x02,BC
-	add	xbc, 0xFBC5DC                          ; FBC5D2  add XBC,0x00fbc5dc
+	add	xbc, sub_FBC39D_JumpTable_FBC5DC                          ; FBC5D2  add XBC,0x00fbc5dc
 	ld	xbc, (xbc)                              ; FBC5D8  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBC5DA  jp T,XBC
 ; 81 x u32 computed-goto table, 0xFBC5DC-0xFBC71F, 324 bytes.
@@ -8365,87 +8371,88 @@ sub_FBC39D__FBC5C3:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBC3EC	; 0xFBC5DC  entry 0 -> 0xFBC3EC   (also the out-of-range arm)
-	.long 0x00FBC3EF	; 0xFBC5E0  entry 1 -> 0xFBC3EF
-	.long 0x00FBC3FC	; 0xFBC5E4  entry 2 -> 0xFBC3FC
-	.long 0x00FBC3FC	; 0xFBC5E8  entry 3 -> 0xFBC3FC
-	.long 0x00FBC437	; 0xFBC5EC  entry 4 -> 0xFBC437
-	.long 0x00FBC43A	; 0xFBC5F0  entry 5 -> 0xFBC43A
-	.long 0x00FBC450	; 0xFBC5F4  entry 6 -> 0xFBC450
-	.long 0x00FBC49F	; 0xFBC5F8  entry 7 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC5FC  entry 8 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC600  entry 9 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC604  entry 10 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC608  entry 11 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC60C  entry 12 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC610  entry 13 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC614  entry 14 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC618  entry 15 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC61C  entry 16 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC620  entry 17 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC624  entry 18 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC628  entry 19 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC62C  entry 20 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC630  entry 21 -> 0xFBC49F
-	.long 0x00FBC49F	; 0xFBC634  entry 22 -> 0xFBC49F
-	.long 0x00FBC4AC	; 0xFBC638  entry 23 -> 0xFBC4AC
-	.long 0x00FBC4C2	; 0xFBC63C  entry 24 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC640  entry 25 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC644  entry 26 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC648  entry 27 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC64C  entry 28 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC650  entry 29 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC654  entry 30 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC658  entry 31 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC65C  entry 32 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC660  entry 33 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC664  entry 34 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC668  entry 35 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC66C  entry 36 -> 0xFBC4C2
-	.long 0x00FBC4C2	; 0xFBC670  entry 37 -> 0xFBC4C2
-	.long 0x00FBC4C5	; 0xFBC674  entry 38 -> 0xFBC4C5
-	.long 0x00FBC514	; 0xFBC678  entry 39 -> 0xFBC514
-	.long 0x00FBC514	; 0xFBC67C  entry 40 -> 0xFBC514
-	.long 0x00FBC514	; 0xFBC680  entry 41 -> 0xFBC514
-	.long 0x00FBC514	; 0xFBC684  entry 42 -> 0xFBC514
-	.long 0x00FBC514	; 0xFBC688  entry 43 -> 0xFBC514
-	.long 0x00FBC514	; 0xFBC68C  entry 44 -> 0xFBC514
-	.long 0x00FBC517	; 0xFBC690  entry 45 -> 0xFBC517
-	.long 0x00FBC531	; 0xFBC694  entry 46 -> 0xFBC531
-	.long 0x00FBC531	; 0xFBC698  entry 47 -> 0xFBC531
-	.long 0x00FBC531	; 0xFBC69C  entry 48 -> 0xFBC531
-	.long 0x00FBC531	; 0xFBC6A0  entry 49 -> 0xFBC531
-	.long 0x00FBC531	; 0xFBC6A4  entry 50 -> 0xFBC531
-	.long 0x00FBC531	; 0xFBC6A8  entry 51 -> 0xFBC531
-	.long 0x00FBC531	; 0xFBC6AC  entry 52 -> 0xFBC531
-	.long 0x00FBC531	; 0xFBC6B0  entry 53 -> 0xFBC531
-	.long 0x00FBC534	; 0xFBC6B4  entry 54 -> 0xFBC534
-	.long 0x00FBC557	; 0xFBC6B8  entry 55 -> 0xFBC557
-	.long 0x00FBC55A	; 0xFBC6BC  entry 56 -> 0xFBC55A
-	.long 0x00FBC5A9	; 0xFBC6C0  entry 57 -> 0xFBC5A9
-	.long 0x00FBC5A9	; 0xFBC6C4  entry 58 -> 0xFBC5A9
-	.long 0x00FBC5A9	; 0xFBC6C8  entry 59 -> 0xFBC5A9
-	.long 0x00FBC5A9	; 0xFBC6CC  entry 60 -> 0xFBC5A9
-	.long 0x00FBC5AC	; 0xFBC6D0  entry 61 -> 0xFBC5AC
-	.long 0x00FBC5AF	; 0xFBC6D4  entry 62 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6D8  entry 63 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6DC  entry 64 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6E0  entry 65 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6E4  entry 66 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6E8  entry 67 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6EC  entry 68 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6F0  entry 69 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6F4  entry 70 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6F8  entry 71 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC6FC  entry 72 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC700  entry 73 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC704  entry 74 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC708  entry 75 -> 0xFBC5AF
-	.long 0x00FBC5AF	; 0xFBC70C  entry 76 -> 0xFBC5AF
-	.long 0x00FBC5B2	; 0xFBC710  entry 77 -> 0xFBC5B2
-	.long 0x00FBC5B2	; 0xFBC714  entry 78 -> 0xFBC5B2
-	.long 0x00FBC5B2	; 0xFBC718  entry 79 -> 0xFBC5B2
-	.long 0x00FBC5B2	; 0xFBC71C  entry 80 -> 0xFBC5B2
+sub_FBC39D_JumpTable_FBC5DC:
+	.long sub_FBC39D__FBC3EC	; 0xFBC5DC  entry 0 -> 0xFBC3EC   (also the out-of-range arm)
+	.long sub_FBC39D__FBC3EF	; 0xFBC5E0  entry 1 -> 0xFBC3EF
+	.long sub_FBC39D__FBC3FC	; 0xFBC5E4  entry 2 -> 0xFBC3FC
+	.long sub_FBC39D__FBC3FC	; 0xFBC5E8  entry 3 -> 0xFBC3FC
+	.long sub_FBC39D__FBC437	; 0xFBC5EC  entry 4 -> 0xFBC437
+	.long sub_FBC39D__FBC43A	; 0xFBC5F0  entry 5 -> 0xFBC43A
+	.long sub_FBC39D__FBC450	; 0xFBC5F4  entry 6 -> 0xFBC450
+	.long sub_FBC39D__FBC49F	; 0xFBC5F8  entry 7 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC5FC  entry 8 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC600  entry 9 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC604  entry 10 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC608  entry 11 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC60C  entry 12 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC610  entry 13 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC614  entry 14 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC618  entry 15 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC61C  entry 16 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC620  entry 17 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC624  entry 18 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC628  entry 19 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC62C  entry 20 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC630  entry 21 -> 0xFBC49F
+	.long sub_FBC39D__FBC49F	; 0xFBC634  entry 22 -> 0xFBC49F
+	.long sub_FBC39D__FBC4AC	; 0xFBC638  entry 23 -> 0xFBC4AC
+	.long sub_FBC39D__FBC4C2	; 0xFBC63C  entry 24 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC640  entry 25 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC644  entry 26 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC648  entry 27 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC64C  entry 28 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC650  entry 29 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC654  entry 30 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC658  entry 31 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC65C  entry 32 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC660  entry 33 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC664  entry 34 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC668  entry 35 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC66C  entry 36 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C2	; 0xFBC670  entry 37 -> 0xFBC4C2
+	.long sub_FBC39D__FBC4C5	; 0xFBC674  entry 38 -> 0xFBC4C5
+	.long sub_FBC39D__FBC514	; 0xFBC678  entry 39 -> 0xFBC514
+	.long sub_FBC39D__FBC514	; 0xFBC67C  entry 40 -> 0xFBC514
+	.long sub_FBC39D__FBC514	; 0xFBC680  entry 41 -> 0xFBC514
+	.long sub_FBC39D__FBC514	; 0xFBC684  entry 42 -> 0xFBC514
+	.long sub_FBC39D__FBC514	; 0xFBC688  entry 43 -> 0xFBC514
+	.long sub_FBC39D__FBC514	; 0xFBC68C  entry 44 -> 0xFBC514
+	.long sub_FBC39D__FBC517	; 0xFBC690  entry 45 -> 0xFBC517
+	.long sub_FBC39D__FBC531	; 0xFBC694  entry 46 -> 0xFBC531
+	.long sub_FBC39D__FBC531	; 0xFBC698  entry 47 -> 0xFBC531
+	.long sub_FBC39D__FBC531	; 0xFBC69C  entry 48 -> 0xFBC531
+	.long sub_FBC39D__FBC531	; 0xFBC6A0  entry 49 -> 0xFBC531
+	.long sub_FBC39D__FBC531	; 0xFBC6A4  entry 50 -> 0xFBC531
+	.long sub_FBC39D__FBC531	; 0xFBC6A8  entry 51 -> 0xFBC531
+	.long sub_FBC39D__FBC531	; 0xFBC6AC  entry 52 -> 0xFBC531
+	.long sub_FBC39D__FBC531	; 0xFBC6B0  entry 53 -> 0xFBC531
+	.long sub_FBC39D__FBC534	; 0xFBC6B4  entry 54 -> 0xFBC534
+	.long sub_FBC39D__FBC557	; 0xFBC6B8  entry 55 -> 0xFBC557
+	.long sub_FBC39D__FBC55A	; 0xFBC6BC  entry 56 -> 0xFBC55A
+	.long sub_FBC39D__FBC5A9	; 0xFBC6C0  entry 57 -> 0xFBC5A9
+	.long sub_FBC39D__FBC5A9	; 0xFBC6C4  entry 58 -> 0xFBC5A9
+	.long sub_FBC39D__FBC5A9	; 0xFBC6C8  entry 59 -> 0xFBC5A9
+	.long sub_FBC39D__FBC5A9	; 0xFBC6CC  entry 60 -> 0xFBC5A9
+	.long sub_FBC39D__FBC5AC	; 0xFBC6D0  entry 61 -> 0xFBC5AC
+	.long sub_FBC39D__FBC5AF	; 0xFBC6D4  entry 62 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6D8  entry 63 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6DC  entry 64 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6E0  entry 65 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6E4  entry 66 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6E8  entry 67 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6EC  entry 68 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6F0  entry 69 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6F4  entry 70 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6F8  entry 71 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC6FC  entry 72 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC700  entry 73 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC704  entry 74 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC708  entry 75 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5AF	; 0xFBC70C  entry 76 -> 0xFBC5AF
+	.long sub_FBC39D__FBC5B2	; 0xFBC710  entry 77 -> 0xFBC5B2
+	.long sub_FBC39D__FBC5B2	; 0xFBC714  entry 78 -> 0xFBC5B2
+	.long sub_FBC39D__FBC5B2	; 0xFBC718  entry 79 -> 0xFBC5B2
+	.long sub_FBC39D__FBC5B2	; 0xFBC71C  entry 80 -> 0xFBC5B2
 sub_FBC39D__FBC720:
 	pop	xix                                    ; FBC720  pop XIX
 	popw	hl                                    ; FBC721  pop HL
@@ -8922,7 +8929,7 @@ ToneMsg_WriteWaveSelectParam__FBCA44:
 	cp	bc, 42                                  ; FBCA49  cp BC,0x002a
 	jrl ugt, ToneMsg_WriteWaveSelectParam__FBCB09                ; FBCA4D  jrl UGT,0xfbcb09
 	sll	bc, 2                                  ; FBCA50  sll 0x02,BC
-	add	xbc, 0xFBCA5D                          ; FBCA53  add XBC,0x00fbca5d
+	add	xbc, ToneMsg_WriteWaveSelectParam_JumpTable_FBCA5D                          ; FBCA53  add XBC,0x00fbca5d
 	ld	xbc, (xbc)                              ; FBCA59  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBCA5B  jp T,XBC
 ; 43 x u32 computed-goto table, 0xFBCA5D-0xFBCB08, 172 bytes.
@@ -8933,49 +8940,50 @@ ToneMsg_WriteWaveSelectParam__FBCA44:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBC9BC	; 0xFBCA5D  entry 0 -> 0xFBC9BC   (also the out-of-range arm)
-	.long 0x00FBC9BC	; 0xFBCA61  entry 1 -> 0xFBC9BC
-	.long 0x00FBC9BC	; 0xFBCA65  entry 2 -> 0xFBC9BC
-	.long 0x00FBC9BF	; 0xFBCA69  entry 3 -> 0xFBC9BF
-	.long 0x00FBC9BF	; 0xFBCA6D  entry 4 -> 0xFBC9BF
-	.long 0x00FBC9D5	; 0xFBCA71  entry 5 -> 0xFBC9D5
-	.long 0x00FBC9D5	; 0xFBCA75  entry 6 -> 0xFBC9D5
-	.long 0x00FBC9EB	; 0xFBCA79  entry 7 -> 0xFBC9EB
-	.long 0x00FBC9EB	; 0xFBCA7D  entry 8 -> 0xFBC9EB
-	.long 0x00FBCA01	; 0xFBCA81  entry 9 -> 0xFBCA01
-	.long 0x00FBCA01	; 0xFBCA85  entry 10 -> 0xFBCA01
-	.long 0x00FBCA17	; 0xFBCA89  entry 11 -> 0xFBCA17
-	.long 0x00FBCA3B	; 0xFBCA8D  entry 12 -> 0xFBCA3B
-	.long 0x00FBCA3B	; 0xFBCA91  entry 13 -> 0xFBCA3B
-	.long 0x00FBCA3B	; 0xFBCA95  entry 14 -> 0xFBCA3B
-	.long 0x00FBCA3B	; 0xFBCA99  entry 15 -> 0xFBCA3B
-	.long 0x00FBCA3B	; 0xFBCA9D  entry 16 -> 0xFBCA3B
-	.long 0x00FBCA3B	; 0xFBCAA1  entry 17 -> 0xFBCA3B
-	.long 0x00FBCA3B	; 0xFBCAA5  entry 18 -> 0xFBCA3B
-	.long 0x00FBCA3B	; 0xFBCAA9  entry 19 -> 0xFBCA3B
-	.long 0x00FBCA3B	; 0xFBCAAD  entry 20 -> 0xFBCA3B
-	.long 0x00FBCA3E	; 0xFBCAB1  entry 21 -> 0xFBCA3E
-	.long 0x00FBCA3E	; 0xFBCAB5  entry 22 -> 0xFBCA3E
-	.long 0x00FBCA3E	; 0xFBCAB9  entry 23 -> 0xFBCA3E
-	.long 0x00FBCA3E	; 0xFBCABD  entry 24 -> 0xFBCA3E
-	.long 0x00FBCA3E	; 0xFBCAC1  entry 25 -> 0xFBCA3E
-	.long 0x00FBCA3E	; 0xFBCAC5  entry 26 -> 0xFBCA3E
-	.long 0x00FBCA3E	; 0xFBCAC9  entry 27 -> 0xFBCA3E
-	.long 0x00FBCA3E	; 0xFBCACD  entry 28 -> 0xFBCA3E
-	.long 0x00FBCA3E	; 0xFBCAD1  entry 29 -> 0xFBCA3E
-	.long 0x00FBCA3E	; 0xFBCAD5  entry 30 -> 0xFBCA3E
-	.long 0x00FBCA41	; 0xFBCAD9  entry 31 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCADD  entry 32 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCAE1  entry 33 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCAE5  entry 34 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCAE9  entry 35 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCAED  entry 36 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCAF1  entry 37 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCAF5  entry 38 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCAF9  entry 39 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCAFD  entry 40 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCB01  entry 41 -> 0xFBCA41
-	.long 0x00FBCA41	; 0xFBCB05  entry 42 -> 0xFBCA41
+ToneMsg_WriteWaveSelectParam_JumpTable_FBCA5D:
+	.long ToneMsg_WriteWaveSelectParam__FBC9BC	; 0xFBCA5D  entry 0 -> 0xFBC9BC   (also the out-of-range arm)
+	.long ToneMsg_WriteWaveSelectParam__FBC9BC	; 0xFBCA61  entry 1 -> 0xFBC9BC
+	.long ToneMsg_WriteWaveSelectParam__FBC9BC	; 0xFBCA65  entry 2 -> 0xFBC9BC
+	.long ToneMsg_WriteWaveSelectParam__FBC9BF	; 0xFBCA69  entry 3 -> 0xFBC9BF
+	.long ToneMsg_WriteWaveSelectParam__FBC9BF	; 0xFBCA6D  entry 4 -> 0xFBC9BF
+	.long ToneMsg_WriteWaveSelectParam__FBC9D5	; 0xFBCA71  entry 5 -> 0xFBC9D5
+	.long ToneMsg_WriteWaveSelectParam__FBC9D5	; 0xFBCA75  entry 6 -> 0xFBC9D5
+	.long ToneMsg_WriteWaveSelectParam__FBC9EB	; 0xFBCA79  entry 7 -> 0xFBC9EB
+	.long ToneMsg_WriteWaveSelectParam__FBC9EB	; 0xFBCA7D  entry 8 -> 0xFBC9EB
+	.long ToneMsg_WriteWaveSelectParam__FBCA01	; 0xFBCA81  entry 9 -> 0xFBCA01
+	.long ToneMsg_WriteWaveSelectParam__FBCA01	; 0xFBCA85  entry 10 -> 0xFBCA01
+	.long ToneMsg_WriteWaveSelectParam__FBCA17	; 0xFBCA89  entry 11 -> 0xFBCA17
+	.long ToneMsg_WriteWaveSelectParam__FBCA3B	; 0xFBCA8D  entry 12 -> 0xFBCA3B
+	.long ToneMsg_WriteWaveSelectParam__FBCA3B	; 0xFBCA91  entry 13 -> 0xFBCA3B
+	.long ToneMsg_WriteWaveSelectParam__FBCA3B	; 0xFBCA95  entry 14 -> 0xFBCA3B
+	.long ToneMsg_WriteWaveSelectParam__FBCA3B	; 0xFBCA99  entry 15 -> 0xFBCA3B
+	.long ToneMsg_WriteWaveSelectParam__FBCA3B	; 0xFBCA9D  entry 16 -> 0xFBCA3B
+	.long ToneMsg_WriteWaveSelectParam__FBCA3B	; 0xFBCAA1  entry 17 -> 0xFBCA3B
+	.long ToneMsg_WriteWaveSelectParam__FBCA3B	; 0xFBCAA5  entry 18 -> 0xFBCA3B
+	.long ToneMsg_WriteWaveSelectParam__FBCA3B	; 0xFBCAA9  entry 19 -> 0xFBCA3B
+	.long ToneMsg_WriteWaveSelectParam__FBCA3B	; 0xFBCAAD  entry 20 -> 0xFBCA3B
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCAB1  entry 21 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCAB5  entry 22 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCAB9  entry 23 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCABD  entry 24 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCAC1  entry 25 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCAC5  entry 26 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCAC9  entry 27 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCACD  entry 28 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCAD1  entry 29 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA3E	; 0xFBCAD5  entry 30 -> 0xFBCA3E
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCAD9  entry 31 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCADD  entry 32 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCAE1  entry 33 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCAE5  entry 34 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCAE9  entry 35 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCAED  entry 36 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCAF1  entry 37 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCAF5  entry 38 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCAF9  entry 39 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCAFD  entry 40 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCB01  entry 41 -> 0xFBCA41
+	.long ToneMsg_WriteWaveSelectParam__FBCA41	; 0xFBCB05  entry 42 -> 0xFBCA41
 ToneMsg_WriteWaveSelectParam__FBCB09:
 	ld	bc, (xiz-5)                             ; FBCB09  ld BC,(XIZ+0xfb)
 	extz	bc                                    ; FBCB0C  extz BC
@@ -8986,7 +8994,7 @@ ToneMsg_WriteWaveSelectParam__FBCB09:
 	ld	c, 2:opc                                   ; FBCB1B  ld C,0x02
 	extpfx3 0x8E, 0xFA, 0x43                   ; FBCB1D  mul BC,(XIZ+0xfa)
 	extz	xbc                                   ; FBCB20  extz XBC
-	add	xbc, 0xFDE695                          ; FBCB22  add XBC,0x00fde695
+	add	xbc, BitMask_Table_FDE695                          ; FBCB22  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FBCB28  ld BC,(XBC)
 	and	bc, hl                                 ; FBCB2A  and BC,HL
 	jr z, ToneMsg_WriteWaveSelectParam__FBCB63                   ; FBCB2C  jr Z,0xfbcb63
@@ -9177,7 +9185,7 @@ sub_FBCBA7__FBCC95:
 	ld	bc, (xiz-11)                            ; FBCCB6  ld BC,(XIZ+0xf5)
 	extz	bc                                    ; FBCCB9  extz BC
 	extz	xbc                                   ; FBCCBB  extz XBC
-	add	xbc, 0xFDE69D                          ; FBCCBD  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FBCCBD  add XBC,0x00fde69d
 	ld	h, (xbc)                                ; FBCCC3  ld H,(XBC)
 	ld	xbc, (xiz-4)                            ; FBCCC5  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc+13)                             ; FBCCC8  ld A,(XBC+0x0d)
@@ -9683,7 +9691,7 @@ sub_FBD0A2__FBD15A:
 	ld	bc, (xiz+10)                            ; FBD17B  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FBD17E  extz BC
 	extz	xbc                                   ; FBD180  extz XBC
-	add	xbc, 0xFDE69D                          ; FBD182  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FBD182  add XBC,0x00fde69d
 	ld	b, (xbc)                                ; FBD188  ld B,(XBC)
 	extpfx3 0x8E, 0xF5, 0xC2                   ; FBD18A  and B,(XIZ+0xf5)
 	jr z, sub_FBD0A2__FBD1A7                   ; FBD18D  jr Z,0xfbd1a7
@@ -9950,7 +9958,7 @@ sub_FBD1D3__FBD3B7:
 	cp	bc, 4:i3                                  ; FBD3BE  cp BC,4
 	jr ugt, sub_FBD1D3__FBD3E3                 ; FBD3C0  jr UGT,0xfbd3e3
 	sll	bc, 2                                  ; FBD3C2  sll 0x02,BC
-	add	xbc, 0xFBD3CF                          ; FBD3C5  add XBC,0x00fbd3cf
+	add	xbc, sub_FBD1D3_JumpTable_FBD3CF                          ; FBD3C5  add XBC,0x00fbd3cf
 	ld	xbc, (xbc)                              ; FBD3CB  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBD3CD  jp T,XBC
 ; 5 x u32 computed-goto table, 0xFBD3CF-0xFBD3E2, 20 bytes.
@@ -9961,11 +9969,12 @@ sub_FBD1D3__FBD3B7:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBD264	; 0xFBD3CF  entry 0 -> 0xFBD264   (also the out-of-range arm)
-	.long 0x00FBD2CD	; 0xFBD3D3  entry 1 -> 0xFBD2CD
-	.long 0x00FBD264	; 0xFBD3D7  entry 2 -> 0xFBD264
-	.long 0x00FBD2CD	; 0xFBD3DB  entry 3 -> 0xFBD2CD
-	.long 0x00FBD339	; 0xFBD3DF  entry 4 -> 0xFBD339
+sub_FBD1D3_JumpTable_FBD3CF:
+	.long sub_FBD1D3__FBD264	; 0xFBD3CF  entry 0 -> 0xFBD264   (also the out-of-range arm)
+	.long sub_FBD1D3__FBD2CD	; 0xFBD3D3  entry 1 -> 0xFBD2CD
+	.long sub_FBD1D3__FBD264	; 0xFBD3D7  entry 2 -> 0xFBD264
+	.long sub_FBD1D3__FBD2CD	; 0xFBD3DB  entry 3 -> 0xFBD2CD
+	.long sub_FBD1D3__FBD339	; 0xFBD3DF  entry 4 -> 0xFBD339
 sub_FBD1D3__FBD3E3:
 	pop	xix                                    ; FBD3E3  pop XIX
 	popw	hl                                    ; FBD3E4  pop HL
@@ -10134,7 +10143,7 @@ sub_FBD46B__FBD4DB:
 	ld	bc, (xiz-18)                            ; FBD4DB  ld BC,(XIZ+0xee)
 	extz	bc                                    ; FBD4DE  extz BC
 	extz	xbc                                   ; FBD4E0  extz XBC
-	add	xbc, 0xFDE69D                          ; FBD4E2  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FBD4E2  add XBC,0x00fde69d
 	ld	h, (xbc)                                ; FBD4E8  ld H,(XBC)
 	ld	xbc, (xiz+8)                            ; FBD4EA  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+4)                              ; FBD4ED  ld A,(XBC+0x04)
@@ -10476,7 +10485,7 @@ sub_FBD6FC__FBD7D3:
 	ld	wa, (xiz-22)                            ; FBD7F7  ld WA,(XIZ+0xea)
 	extz	wa                                    ; FBD7FA  extz WA
 	extz	xwa                                   ; FBD7FC  extz XWA
-	add	xwa, 0xFDE69D                          ; FBD7FE  add XWA,0x00fde69d
+	add	xwa, BitMask_Table_FDE695+8                          ; FBD7FE  add XWA,0x00fde69d
 	ld	h, (xwa)                                ; FBD804  ld H,(XWA)
 	ld	xwa, (xiz-8)                            ; FBD806  ld XWA,(XIZ+0xf8)
 	ld	c, (xwa+13)                             ; FBD809  ld C,(XWA+0x0d)
@@ -10694,7 +10703,7 @@ ByteField_AddOrSub_Clamped:
 	ld	bc, (xiz+8)                             ; FBD8BD  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FBD8C0  extz BC
 	extz	xbc                                   ; FBD8C2  extz XBC
-	add	xbc, 0xFDE6A1                          ; FBD8C4  add XBC,0x00fde6a1
+	add	xbc, BitMask_Table_FDE695+12                          ; FBD8C4  add XBC,0x00fde6a1
 	ld	h, (xbc)                                ; FBD8CA  ld H,(XBC)
 	ld	xbc, (xiz+12)                           ; FBD8CC  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc)                                ; FBD8CF  ld A,(XBC)
@@ -10703,7 +10712,7 @@ ByteField_AddOrSub_Clamped:
 	ld	wa, (xiz+8)                             ; FBD8D6  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FBD8D9  extz WA
 	extz	xwa                                   ; FBD8DB  extz XWA
-	add	xwa, 0xFDE6A5                          ; FBD8DD  add XWA,0x00fde6a5
+	add	xwa, BitMask_Table_FDE695+16                          ; FBD8DD  add XWA,0x00fde6a5
 	ld	h, (xwa)                                ; FBD8E3  ld H,(XWA)
 	ld	w, (xbc)                                ; FBD8E5  ld W,(XBC)
 	and	w, h                                   ; FBD8E7  and W,H
@@ -10782,7 +10791,7 @@ sub_FBD943:
 	ld	bc, (xiz+8)                             ; FBD948  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FBD94B  extz BC
 	extz	xbc                                   ; FBD94D  extz XBC
-	add	xbc, 0xFDE6A1                          ; FBD94F  add XBC,0x00fde6a1
+	add	xbc, BitMask_Table_FDE695+12                          ; FBD94F  add XBC,0x00fde6a1
 	ld	h, (xbc)                                ; FBD955  ld H,(XBC)
 	ld	xbc, (xiz+12)                           ; FBD957  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc)                                ; FBD95A  ld A,(XBC)
@@ -10791,7 +10800,7 @@ sub_FBD943:
 	ld	wa, (xiz+8)                             ; FBD961  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FBD964  extz WA
 	extz	xwa                                   ; FBD966  extz XWA
-	add	xwa, 0xFDE6A5                          ; FBD968  add XWA,0x00fde6a5
+	add	xwa, BitMask_Table_FDE695+16                          ; FBD968  add XWA,0x00fde6a5
 	ld	h, (xwa)                                ; FBD96E  ld H,(XWA)
 	ld	w, (xbc)                                ; FBD970  ld W,(XBC)
 	and	w, h                                   ; FBD972  and W,H
@@ -10966,7 +10975,7 @@ sub_FBDA2C__FBDA63:
 	ld	c, (xwa)                                ; FBDA81  ld C,(XWA)
 	mul	c, 2                                   ; FBDA83  mul C,0x02
 	extz	xbc                                   ; FBDA86  extz XBC
-	add	xbc, 0xFDE12B                          ; FBDA88  add XBC,0x00fde12b
+	add	xbc, EGEnv_BaseCurve_A                          ; FBDA88  add XBC,0x00fde12b
 	ld	bc, (xbc)                               ; FBDA8E  ld BC,(XBC)
 	extz	xbc                                   ; FBDA90  extz XBC
 	push	xbc                                   ; FBDA92  push XBC
@@ -10988,7 +10997,7 @@ sub_FBDA2C__FBDAB7:
 	ld	c, 2:opc                                   ; FBDAB7  ld C,0x02
 	extpfx3 0x8E, 0xFB, 0x43                   ; FBDAB9  mul BC,(XIZ+0xfb)
 	extz	xbc                                   ; FBDABC  extz XBC
-	add	xbc, 0xFDE12B                          ; FBDABE  add XBC,0x00fde12b
+	add	xbc, EGEnv_BaseCurve_A                          ; FBDABE  add XBC,0x00fde12b
 	ld	bc, (xbc)                               ; FBDAC4  ld BC,(XBC)
 	extz	xbc                                   ; FBDAC6  extz XBC
 	extpfx3 0xAE, 0xFC, 0xF1                   ; FBDAC8  cp XBC,(XIZ+0xfc)
@@ -11012,7 +11021,7 @@ sub_FBDA2C__FBDAD4:
 	ld	c, (xwa)                                ; FBDAF2  ld C,(XWA)
 	mul	c, 2                                   ; FBDAF4  mul C,0x02
 	extz	xbc                                   ; FBDAF7  extz XBC
-	add	xbc, 0xFDE22B                          ; FBDAF9  add XBC,0x00fde22b
+	add	xbc, EGEnv_BaseCurve_B                          ; FBDAF9  add XBC,0x00fde22b
 	ld	bc, (xbc)                               ; FBDAFF  ld BC,(XBC)
 	extz	xbc                                   ; FBDB01  extz XBC
 	push	xbc                                   ; FBDB03  push XBC
@@ -11034,7 +11043,7 @@ sub_FBDA2C__FBDB28:
 	ld	c, 2:opc                                   ; FBDB28  ld C,0x02
 	extpfx3 0x8E, 0xFB, 0x43                   ; FBDB2A  mul BC,(XIZ+0xfb)
 	extz	xbc                                   ; FBDB2D  extz XBC
-	add	xbc, 0xFDE22B                          ; FBDB2F  add XBC,0x00fde22b
+	add	xbc, EGEnv_BaseCurve_B                          ; FBDB2F  add XBC,0x00fde22b
 	ld	bc, (xbc)                               ; FBDB35  ld BC,(XBC)
 	extz	xbc                                   ; FBDB37  extz XBC
 	extpfx3 0xAE, 0xFC, 0xF1                   ; FBDB39  cp XBC,(XIZ+0xfc)
@@ -11058,7 +11067,7 @@ sub_FBDA2C__FBDB45:
 	ld	c, (xwa)                                ; FBDB63  ld C,(XWA)
 	mul	c, 2                                   ; FBDB65  mul C,0x02
 	extz	xbc                                   ; FBDB68  extz XBC
-	add	xbc, 0xFDE32B                          ; FBDB6A  add XBC,0x00fde32b
+	add	xbc, Voice_FreqWrite_BaseCurve                          ; FBDB6A  add XBC,0x00fde32b
 	ld	bc, (xbc)                               ; FBDB70  ld BC,(XBC)
 	extz	xbc                                   ; FBDB72  extz XBC
 	push	xbc                                   ; FBDB74  push XBC
@@ -11080,7 +11089,7 @@ sub_FBDA2C__FBDB99:
 	ld	c, 2:opc                                   ; FBDB99  ld C,0x02
 	extpfx3 0x8E, 0xFB, 0x43                   ; FBDB9B  mul BC,(XIZ+0xfb)
 	extz	xbc                                   ; FBDB9E  extz XBC
-	add	xbc, 0xFDE32B                          ; FBDBA0  add XBC,0x00fde32b
+	add	xbc, Voice_FreqWrite_BaseCurve                          ; FBDBA0  add XBC,0x00fde32b
 	ld	bc, (xbc)                               ; FBDBA6  ld BC,(XBC)
 	extz	xbc                                   ; FBDBA8  extz XBC
 	extpfx3 0xAE, 0xFC, 0xF1                   ; FBDBAA  cp XBC,(XIZ+0xfc)
@@ -11163,7 +11172,7 @@ sub_FBDBCE:
 	ld	c, b                                    ; FBDC16  ld C,B
 	mul	c, 2                                   ; FBDC18  mul C,0x02
 	extz	xbc                                   ; FBDC1B  extz XBC
-	add	xbc, 0xFDE02B                          ; FBDC1D  add XBC,0x00fde02b
+	add	xbc, EGEnv_ValueCurve_Simple                          ; FBDC1D  add XBC,0x00fde02b
 	ld	bc, (xbc)                               ; FBDC23  ld BC,(XBC)
 	extz	xbc                                   ; FBDC25  extz XBC
 	push	xbc                                   ; FBDC27  push XBC
@@ -11186,7 +11195,7 @@ sub_FBDBCE__FBDC4B:
 	ld	c, 2:opc                                   ; FBDC4B  ld C,0x02
 	extpfx3 0x8E, 0xFB, 0x43                   ; FBDC4D  mul BC,(XIZ+0xfb)
 	extz	xbc                                   ; FBDC50  extz XBC
-	add	xbc, 0xFDE02B                          ; FBDC52  add XBC,0x00fde02b
+	add	xbc, EGEnv_ValueCurve_Simple                          ; FBDC52  add XBC,0x00fde02b
 	ld	bc, (xbc)                               ; FBDC58  ld BC,(XBC)
 	extz	xbc                                   ; FBDC5A  extz XBC
 	extpfx3 0xAE, 0xFC, 0xF1                   ; FBDC5C  cp XBC,(XIZ+0xfc)
@@ -11242,7 +11251,7 @@ BitPair_TestAndEncode_Bits4to7:
 	ld	bc, (xiz+8)                             ; FBDC77  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FBDC7A  extz BC
 	extz	xbc                                   ; FBDC7C  extz XBC
-	add	xbc, 0xFDE6A1                          ; FBDC7E  add XBC,0x00fde6a1
+	add	xbc, BitMask_Table_FDE695+12                          ; FBDC7E  add XBC,0x00fde6a1
 	ld	h, (xbc)                                ; FBDC84  ld H,(XBC)
 	ld	xbc, (xiz+10)                           ; FBDC86  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc)                                ; FBDC89  ld A,(XBC)
@@ -11251,7 +11260,7 @@ BitPair_TestAndEncode_Bits4to7:
 	ld	wa, (xiz+8)                             ; FBDC8F  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FBDC92  extz WA
 	extz	xwa                                   ; FBDC94  extz XWA
-	add	xwa, 0xFDE6A5                          ; FBDC96  add XWA,0x00fde6a5
+	add	xwa, BitMask_Table_FDE695+16                          ; FBDC96  add XWA,0x00fde6a5
 	ld	h, (xwa)                                ; FBDC9C  ld H,(XWA)
 	ld	w, (xbc)                                ; FBDC9E  ld W,(XBC)
 	and	w, h                                   ; FBDCA0  and W,H
@@ -11287,7 +11296,7 @@ BitPair_TestAndEncode_Bits4to7__FBDCCF:
 ; Inputs:  frame `link XIZ,-32`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: writes 0x008829, 0x00882A, 0x00882D, 0x00882E, 0x008831, 0x008832, 0x008835, 0x008836, 0x008839, 0x00883A, 0x00883D, 0x00883E, 0x008841, 0x008842, 0x008845, 0x008846, 0x008849, 0x00884A, 0x00884D, 0x00884E, 0x008851, 0x008852, 0x008855, 0x008856
 ; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = Scale7Bit_ByDepth_UniOrBipolar_Shl2
-;          0xFAD561 = sub_FAD561, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+;          0xFAD561 = Scale7Bit_ByDepth_UniOrBipolar_x25, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFAD688 = Scale7Bit_ByDepth_UniOrBipolar_Shl7, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
 ;          0xFBD8B8 = ByteField_AddOrSub_Clamped, 0xFBD943 = sub_FBD943
 ;          0xFBD9D4 = sub_FBD9D4, 0xFBDA2C = sub_FBDA2C
@@ -11345,7 +11354,7 @@ sub_FBDCD3__FBDD14:
 sub_FBDCD3__FBDD19:
 	ld	bc, (xiz-10)                            ; FBDD19  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBDD1C  extz XBC
-	add	xbc, 0xFDE6A1                          ; FBDD1E  add XBC,0x00fde6a1
+	add	xbc, BitMask_Table_FDE695+12                          ; FBDD1E  add XBC,0x00fde6a1
 	ld	h, (xbc)                                ; FBDD24  ld H,(XBC)
 	ld	xbc, (xiz+12)                           ; FBDD26  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc)                                ; FBDD29  ld A,(XBC)
@@ -11363,7 +11372,7 @@ sub_FBDCD3__FBDD19:
 	ld	(xiz-8), xiy                            ; FBDD57  ld (XIZ+0xf8),XIY
 	ld	bc, (xiz-10)                            ; FBDD5A  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBDD5D  extz XBC
-	add	xbc, 0xFDE6A5                          ; FBDD5F  add XBC,0x00fde6a5
+	add	xbc, BitMask_Table_FDE695+16                          ; FBDD5F  add XBC,0x00fde6a5
 	ld	h, (xbc)                                ; FBDD65  ld H,(XBC)
 	ld	xbc, (xiz+12)                           ; FBDD67  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc)                                ; FBDD6A  ld A,(XBC)
@@ -11503,7 +11512,7 @@ sub_FBDCD3__FBDEB3:
 sub_FBDCD3__FBDEB8:
 	ld	bc, (xiz-10)                            ; FBDEB8  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBDEBB  extz XBC
-	add	xbc, 0xFDE6A1                          ; FBDEBD  add XBC,0x00fde6a1
+	add	xbc, BitMask_Table_FDE695+12                          ; FBDEBD  add XBC,0x00fde6a1
 	ld	h, (xbc)                                ; FBDEC3  ld H,(XBC)
 	ld	xbc, (xiz+12)                           ; FBDEC5  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc)                                ; FBDEC8  ld A,(XBC)
@@ -11516,7 +11525,7 @@ sub_FBDCD3__FBDEB8:
 	ld	(xiz-4), xwa                            ; FBDEE1  ld (XIZ+0xfc),XWA
 	ld	iy, (xiz-10)                            ; FBDEE4  ld IY,(XIZ+0xf6)
 	extz	xiy                                   ; FBDEE7  extz XIY
-	add	xiy, 0xFDE6A5                          ; FBDEE9  add XIY,0x00fde6a5
+	add	xiy, BitMask_Table_FDE695+16                          ; FBDEE9  add XIY,0x00fde6a5
 	ld	h, (xiy)                                ; FBDEEF  ld H,(XIY)
 	ld	a, (xbc)                                ; FBDEF1  ld A,(XBC)
 	and	a, h                                   ; FBDEF3  and A,H
@@ -11529,7 +11538,7 @@ sub_FBDCD3__FBDEB8:
 	ld	iy, (xiz-12)                            ; FBDF03  ld IY,(XIZ+0xf4)
 	exts	xiy                                   ; FBDF06  exts XIY
 	sub	xbc, xiy                               ; FBDF08  sub XBC,XIY
-	add	xbc, 0xFDF03E                          ; FBDF0A  add XBC,0x00fdf03e
+	add	xbc, Voice_EnvelopeRate_Table                          ; FBDF0A  add XBC,0x00fdf03e
 	ld	b, (xbc)                                ; FBDF10  ld B,(XBC)
 	ld	c, b                                    ; FBDF12  ld C,B
 	extz	bc                                    ; FBDF14  extz BC
@@ -11541,7 +11550,7 @@ sub_FBDCD3__FBDEB8:
 	ld	iy, (xiz-12)                            ; FBDF22  ld IY,(XIZ+0xf4)
 	exts	xiy                                   ; FBDF25  exts XIY
 	sub	xbc, xiy                               ; FBDF27  sub XBC,XIY
-	add	xbc, 0xFDF03E                          ; FBDF29  add XBC,0x00fdf03e
+	add	xbc, Voice_EnvelopeRate_Table                          ; FBDF29  add XBC,0x00fdf03e
 	ld	b, (xbc)                                ; FBDF2F  ld B,(XBC)
 	ld	c, b                                    ; FBDF31  ld C,B
 	extz	bc                                    ; FBDF33  extz BC
@@ -11556,7 +11565,7 @@ sub_FBDCD3__FBDF3A:
 	ld	iy, (xiz-12)                            ; FBDF46  ld IY,(XIZ+0xf4)
 	exts	xiy                                   ; FBDF49  exts XIY
 	add	xwa, xiy                               ; FBDF4B  add XWA,XIY
-	add	xwa, 0xFDF03E                          ; FBDF4D  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FBDF4D  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FBDF53  ld W,(XWA)
 	ld	a, w                                    ; FBDF55  ld A,W
 	extz	wa                                    ; FBDF57  extz WA
@@ -11568,7 +11577,7 @@ sub_FBDCD3__FBDF3A:
 	ld	iy, (xiz-12)                            ; FBDF65  ld IY,(XIZ+0xf4)
 	exts	xiy                                   ; FBDF68  exts XIY
 	add	xwa, xiy                               ; FBDF6A  add XWA,XIY
-	add	xwa, 0xFDF03E                          ; FBDF6C  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FBDF6C  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FBDF72  ld W,(XWA)
 	ld	a, w                                    ; FBDF74  ld A,W
 	extz	wa                                    ; FBDF76  extz WA
@@ -11580,7 +11589,7 @@ sub_FBDCD3__FBDF7B:
 	calr Clamp_ToRange_LowByte_FBD88E                 ; FBDF84  calr 0xfbd88e
 	exts	wa                                    ; FBDF87  exts WA
 	exts	xwa                                   ; FBDF89  exts XWA
-	add	xwa, 0xFDF0A3                          ; FBDF8B  add XWA,0x00fdf0a3
+	add	xwa, Ramp_0_to_100_Curve                          ; FBDF8B  add XWA,0x00fdf0a3
 	ld	c, (xwa)                                ; FBDF91  ld C,(XWA)
 	ld	h, c                                    ; FBDF93  ld H,C
 	ld	xbc, (xiz-4)                            ; FBDF95  ld XBC,(XIZ+0xfc)
@@ -11592,7 +11601,7 @@ sub_FBDCD3__FBDF7B:
 	calr Clamp_ToRange_LowByte_FBD88E                 ; FBDFA6  calr 0xfbd88e
 	exts	wa                                    ; FBDFA9  exts WA
 	exts	xwa                                   ; FBDFAB  exts XWA
-	add	xwa, 0xFDF0A3                          ; FBDFAD  add XWA,0x00fdf0a3
+	add	xwa, Ramp_0_to_100_Curve                          ; FBDFAD  add XWA,0x00fdf0a3
 	ld	c, (xwa)                                ; FBDFB3  ld C,(XWA)
 	ld	h, c                                    ; FBDFB5  ld H,C
 	ld	xbc, (xiz-4)                            ; FBDFB7  ld XBC,(XIZ+0xfc)
@@ -11615,6 +11624,7 @@ sub_FBDCD3__FBDFDC:
 	cpw (xiz-10), 0x0004                       ; FBDFDC  cp (XIZ+0xf6),0x0004
 	jrl nc, sub_FBDCD3__FBE0D4                 ; FBDFE1  jrl NC,0xfbe0d4
 	jr sub_FBDCD3__FBDFEB                      ; FBDFE4  jr T,0xfbdfeb
+sub_FBDCD3__FBDFE6:
 	incw	1, (xiz-10)                           ; FBDFE6  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBDFDC                      ; FBDFE9  jr T,0xfbdfdc
 sub_FBDCD3__FBDFEB:
@@ -11684,7 +11694,7 @@ sub_FBDCD3__FBE0A2:
 	cp	bc, 5:i3                                  ; FBE0A7  cp BC,5
 	jrl ugt, sub_FBDCD3__FBE00A                ; FBE0A9  jrl UGT,0xfbe00a
 	sll	bc, 2                                  ; FBE0AC  sll 0x02,BC
-	add	xbc, 0xFBE0B9                          ; FBE0AF  add XBC,0x00fbe0b9
+	add	xbc, sub_FBDCD3_JumpTable_FBE0B9                          ; FBE0AF  add XBC,0x00fbe0b9
 	ld	xbc, (xbc)                              ; FBE0B5  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBE0B7  jp T,XBC
 ; 6 x u32 computed-goto table, 0xFBE0B9-0xFBE0D0, 24 bytes.
@@ -11695,14 +11705,15 @@ sub_FBDCD3__FBE0A2:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBE00A	; 0xFBE0B9  entry 0 -> 0xFBE00A   (also the out-of-range arm)
-	.long 0x00FBE00D	; 0xFBE0BD  entry 1 -> 0xFBE00D
-	.long 0x00FBE00D	; 0xFBE0C1  entry 2 -> 0xFBE00D
-	.long 0x00FBE00D	; 0xFBE0C5  entry 3 -> 0xFBE00D
-	.long 0x00FBE00D	; 0xFBE0C9  entry 4 -> 0xFBE00D
-	.long 0x00FBE040	; 0xFBE0CD  entry 5 -> 0xFBE040
+sub_FBDCD3_JumpTable_FBE0B9:
+	.long sub_FBDCD3__FBE00A	; 0xFBE0B9  entry 0 -> 0xFBE00A   (also the out-of-range arm)
+	.long sub_FBDCD3__FBE00D	; 0xFBE0BD  entry 1 -> 0xFBE00D
+	.long sub_FBDCD3__FBE00D	; 0xFBE0C1  entry 2 -> 0xFBE00D
+	.long sub_FBDCD3__FBE00D	; 0xFBE0C5  entry 3 -> 0xFBE00D
+	.long sub_FBDCD3__FBE00D	; 0xFBE0C9  entry 4 -> 0xFBE00D
+	.long sub_FBDCD3__FBE040	; 0xFBE0CD  entry 5 -> 0xFBE040
 sub_FBDCD3__FBE0D1:
-	jrl	-0xEE                                  ; FBE0D1  jrl T,0xfbdfe6
+	jrl	sub_FBDCD3__FBDFE6                                  ; FBE0D1  jrl T,0xfbdfe6
 sub_FBDCD3__FBE0D4:
 	jrl sub_FBDCD3__FBF27B                     ; FBE0D4  jrl T,0xfbf27b
 sub_FBDCD3__FBE0D7:
@@ -12730,7 +12741,7 @@ sub_FBDCD3__FBEA96:
 	calr ByteField_AddOrSub_Clamped                 ; FBEABD  calr 0xfbd8b8
 	ld	bc, (xiz-10)                            ; FBEAC0  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBEAC3  extz XBC
-	add	xbc, 0xFDE6A5                          ; FBEAC5  add XBC,0x00fde6a5
+	add	xbc, BitMask_Table_FDE695+16                          ; FBEAC5  add XBC,0x00fde6a5
 	ld	h, (xbc)                                ; FBEACB  ld H,(XBC)
 	ld	xbc, (xiz+12)                           ; FBEACD  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc)                                ; FBEAD0  ld A,(XBC)
@@ -12822,7 +12833,7 @@ sub_FBDCD3__FBEBB9:
 	push	xbc                                   ; FBEBBC  push XBC
 	push	0                                     ; FBEBBD  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEBBF  push (XIZ+0x0a)
-	call	sub_FAD561                              ; FBEBC2  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBEBC2  call 0xfad561
 	ld	(xiz-12), wa                            ; FBEBC6  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEBC9  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEBCE  inc 6,XSP
@@ -12857,7 +12868,7 @@ sub_FBDCD3__FBEC13:
 	push	xbc                                   ; FBEC16  push XBC
 	push	0                                     ; FBEC17  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEC19  push (XIZ+0x0a)
-	call	sub_FAD561                              ; FBEC1C  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBEC1C  call 0xfad561
 	ld	(xiz-12), wa                            ; FBEC20  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEC23  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEC28  inc 6,XSP
@@ -13027,7 +13038,7 @@ sub_FBDCD3__FBEDDD:
 	push	xbc                                   ; FBEDE0  push XBC
 	push	0                                     ; FBEDE1  push 0x00
 	extpfx3 0x8E, 0x0A, 0x04                   ; FBEDE3  push (XIZ+0x0a)
-	call	sub_FAD561                              ; FBEDE6  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBEDE6  call 0xfad561
 	ld	(xiz-12), wa                            ; FBEDEA  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBEDED  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBEDF2  inc 6,XSP
@@ -13302,6 +13313,7 @@ sub_FBDCD3__FBF0AB:
 	cpw (xiz-10), 0x0004                       ; FBF0AB  cp (XIZ+0xf6),0x0004
 	jrl nc, sub_FBDCD3__FBF1A3                 ; FBF0B0  jrl NC,0xfbf1a3
 	jr sub_FBDCD3__FBF0BA                      ; FBF0B3  jr T,0xfbf0ba
+sub_FBDCD3__FBF0B5:
 	incw	1, (xiz-10)                           ; FBF0B5  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBF0AB                      ; FBF0B8  jr T,0xfbf0ab
 sub_FBDCD3__FBF0BA:
@@ -13371,7 +13383,7 @@ sub_FBDCD3__FBF171:
 	cp	bc, 5:i3                                  ; FBF176  cp BC,5
 	jrl ugt, sub_FBDCD3__FBF0D9                ; FBF178  jrl UGT,0xfbf0d9
 	sll	bc, 2                                  ; FBF17B  sll 0x02,BC
-	add	xbc, 0xFBF188                          ; FBF17E  add XBC,0x00fbf188
+	add	xbc, sub_FBDCD3_JumpTable_FBF188                          ; FBF17E  add XBC,0x00fbf188
 	ld	xbc, (xbc)                              ; FBF184  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBF186  jp T,XBC
 ; 6 x u32 computed-goto table, 0xFBF188-0xFBF19F, 24 bytes.
@@ -13382,14 +13394,15 @@ sub_FBDCD3__FBF171:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBF0D9	; 0xFBF188  entry 0 -> 0xFBF0D9   (also the out-of-range arm)
-	.long 0x00FBF0DC	; 0xFBF18C  entry 1 -> 0xFBF0DC
-	.long 0x00FBF0DC	; 0xFBF190  entry 2 -> 0xFBF0DC
-	.long 0x00FBF0DC	; 0xFBF194  entry 3 -> 0xFBF0DC
-	.long 0x00FBF0DC	; 0xFBF198  entry 4 -> 0xFBF0DC
-	.long 0x00FBF10F	; 0xFBF19C  entry 5 -> 0xFBF10F
+sub_FBDCD3_JumpTable_FBF188:
+	.long sub_FBDCD3__FBF0D9	; 0xFBF188  entry 0 -> 0xFBF0D9   (also the out-of-range arm)
+	.long sub_FBDCD3__FBF0DC	; 0xFBF18C  entry 1 -> 0xFBF0DC
+	.long sub_FBDCD3__FBF0DC	; 0xFBF190  entry 2 -> 0xFBF0DC
+	.long sub_FBDCD3__FBF0DC	; 0xFBF194  entry 3 -> 0xFBF0DC
+	.long sub_FBDCD3__FBF0DC	; 0xFBF198  entry 4 -> 0xFBF0DC
+	.long sub_FBDCD3__FBF10F	; 0xFBF19C  entry 5 -> 0xFBF10F
 sub_FBDCD3__FBF1A0:
-	jrl	-0xEE                                  ; FBF1A0  jrl T,0xfbf0b5
+	jrl	sub_FBDCD3__FBF0B5                                  ; FBF1A0  jrl T,0xfbf0b5
 sub_FBDCD3__FBF1A3:
 	jrl sub_FBDCD3__FBF27B                     ; FBF1A3  jrl T,0xfbf27b
 sub_FBDCD3__FBF1A6:
@@ -13401,7 +13414,7 @@ sub_FBDCD3__FBF1A9:
 	cp	bc, 45                                  ; FBF1B0  cp BC,0x002d
 	jr ugt, sub_FBDCD3__FBF1A6                 ; FBF1B4  jr UGT,0xfbf1a6
 	sll	bc, 2                                  ; FBF1B6  sll 0x02,BC
-	add	xbc, 0xFBF1C3                          ; FBF1B9  add XBC,0x00fbf1c3
+	add	xbc, sub_FBDCD3_JumpTable_FBF1C3                          ; FBF1B9  add XBC,0x00fbf1c3
 	ld	xbc, (xbc)                              ; FBF1BF  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBF1C1  jp T,XBC
 ; 46 x u32 computed-goto table, 0xFBF1C3-0xFBF27A, 184 bytes.
@@ -13412,52 +13425,53 @@ sub_FBDCD3__FBF1A9:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBDCEA	; 0xFBF1C3  entry 0 -> 0xFBDCEA   (also the out-of-range arm)
-	.long 0x00FBDE92	; 0xFBF1C7  entry 1 -> 0xFBDE92
-	.long 0x00FBDFC5	; 0xFBF1CB  entry 2 -> 0xFBDFC5
-	.long 0x00FBE0D7	; 0xFBF1CF  entry 3 -> 0xFBE0D7
-	.long 0x00FBE134	; 0xFBF1D3  entry 4 -> 0xFBE134
-	.long 0x00FBE191	; 0xFBF1D7  entry 5 -> 0xFBE191
-	.long 0x00FBE1EE	; 0xFBF1DB  entry 6 -> 0xFBE1EE
-	.long 0x00FBE24B	; 0xFBF1DF  entry 7 -> 0xFBE24B
-	.long 0x00FBE2A8	; 0xFBF1E3  entry 8 -> 0xFBE2A8
-	.long 0x00FBE305	; 0xFBF1E7  entry 9 -> 0xFBE305
-	.long 0x00FBE362	; 0xFBF1EB  entry 10 -> 0xFBE362
-	.long 0x00FBE3BF	; 0xFBF1EF  entry 11 -> 0xFBE3BF
-	.long 0x00FBE41C	; 0xFBF1F3  entry 12 -> 0xFBE41C
-	.long 0x00FBE479	; 0xFBF1F7  entry 13 -> 0xFBE479
-	.long 0x00FBE4D6	; 0xFBF1FB  entry 14 -> 0xFBE4D6
-	.long 0x00FBE533	; 0xFBF1FF  entry 15 -> 0xFBE533
-	.long 0x00FBE590	; 0xFBF203  entry 16 -> 0xFBE590
-	.long 0x00FBE5ED	; 0xFBF207  entry 17 -> 0xFBE5ED
-	.long 0x00FBE64A	; 0xFBF20B  entry 18 -> 0xFBE64A
-	.long 0x00FBE6A7	; 0xFBF20F  entry 19 -> 0xFBE6A7
-	.long 0x00FBE704	; 0xFBF213  entry 20 -> 0xFBE704
-	.long 0x00FBE761	; 0xFBF217  entry 21 -> 0xFBE761
-	.long 0x00FBE7BE	; 0xFBF21B  entry 22 -> 0xFBE7BE
-	.long 0x00FBE81B	; 0xFBF21F  entry 23 -> 0xFBE81B
-	.long 0x00FBE878	; 0xFBF223  entry 24 -> 0xFBE878
-	.long 0x00FBE8D5	; 0xFBF227  entry 25 -> 0xFBE8D5
-	.long 0x00FBE932	; 0xFBF22B  entry 26 -> 0xFBE932
-	.long 0x00FBE98F	; 0xFBF22F  entry 27 -> 0xFBE98F
-	.long 0x00FBEA53	; 0xFBF233  entry 28 -> 0xFBEA53
-	.long 0x00FBEB5F	; 0xFBF237  entry 29 -> 0xFBEB5F
-	.long 0x00FBF1A6	; 0xFBF23B  entry 30 -> 0xFBF1A6
-	.long 0x00FBEBB9	; 0xFBF23F  entry 31 -> 0xFBEBB9
-	.long 0x00FBEC13	; 0xFBF243  entry 32 -> 0xFBEC13
-	.long 0x00FBF1A6	; 0xFBF247  entry 33 -> 0xFBF1A6
-	.long 0x00FBEC6D	; 0xFBF24B  entry 34 -> 0xFBEC6D
-	.long 0x00FBECF8	; 0xFBF24F  entry 35 -> 0xFBECF8
-	.long 0x00FBED83	; 0xFBF253  entry 36 -> 0xFBED83
-	.long 0x00FBEDDD	; 0xFBF257  entry 37 -> 0xFBEDDD
-	.long 0x00FBEE37	; 0xFBF25B  entry 38 -> 0xFBEE37
-	.long 0x00FBEE91	; 0xFBF25F  entry 39 -> 0xFBEE91
-	.long 0x00FBEEC6	; 0xFBF263  entry 40 -> 0xFBEEC6
-	.long 0x00FBEEFB	; 0xFBF267  entry 41 -> 0xFBEEFB
-	.long 0x00FBEF55	; 0xFBF26B  entry 42 -> 0xFBEF55
-	.long 0x00FBEFAF	; 0xFBF26F  entry 43 -> 0xFBEFAF
-	.long 0x00FBF03A	; 0xFBF273  entry 44 -> 0xFBF03A
-	.long 0x00FBF094	; 0xFBF277  entry 45 -> 0xFBF094
+sub_FBDCD3_JumpTable_FBF1C3:
+	.long sub_FBDCD3__FBDCEA	; 0xFBF1C3  entry 0 -> 0xFBDCEA   (also the out-of-range arm)
+	.long sub_FBDCD3__FBDE92	; 0xFBF1C7  entry 1 -> 0xFBDE92
+	.long sub_FBDCD3__FBDFC5	; 0xFBF1CB  entry 2 -> 0xFBDFC5
+	.long sub_FBDCD3__FBE0D7	; 0xFBF1CF  entry 3 -> 0xFBE0D7
+	.long sub_FBDCD3__FBE134	; 0xFBF1D3  entry 4 -> 0xFBE134
+	.long sub_FBDCD3__FBE191	; 0xFBF1D7  entry 5 -> 0xFBE191
+	.long sub_FBDCD3__FBE1EE	; 0xFBF1DB  entry 6 -> 0xFBE1EE
+	.long sub_FBDCD3__FBE24B	; 0xFBF1DF  entry 7 -> 0xFBE24B
+	.long sub_FBDCD3__FBE2A8	; 0xFBF1E3  entry 8 -> 0xFBE2A8
+	.long sub_FBDCD3__FBE305	; 0xFBF1E7  entry 9 -> 0xFBE305
+	.long sub_FBDCD3__FBE362	; 0xFBF1EB  entry 10 -> 0xFBE362
+	.long sub_FBDCD3__FBE3BF	; 0xFBF1EF  entry 11 -> 0xFBE3BF
+	.long sub_FBDCD3__FBE41C	; 0xFBF1F3  entry 12 -> 0xFBE41C
+	.long sub_FBDCD3__FBE479	; 0xFBF1F7  entry 13 -> 0xFBE479
+	.long sub_FBDCD3__FBE4D6	; 0xFBF1FB  entry 14 -> 0xFBE4D6
+	.long sub_FBDCD3__FBE533	; 0xFBF1FF  entry 15 -> 0xFBE533
+	.long sub_FBDCD3__FBE590	; 0xFBF203  entry 16 -> 0xFBE590
+	.long sub_FBDCD3__FBE5ED	; 0xFBF207  entry 17 -> 0xFBE5ED
+	.long sub_FBDCD3__FBE64A	; 0xFBF20B  entry 18 -> 0xFBE64A
+	.long sub_FBDCD3__FBE6A7	; 0xFBF20F  entry 19 -> 0xFBE6A7
+	.long sub_FBDCD3__FBE704	; 0xFBF213  entry 20 -> 0xFBE704
+	.long sub_FBDCD3__FBE761	; 0xFBF217  entry 21 -> 0xFBE761
+	.long sub_FBDCD3__FBE7BE	; 0xFBF21B  entry 22 -> 0xFBE7BE
+	.long sub_FBDCD3__FBE81B	; 0xFBF21F  entry 23 -> 0xFBE81B
+	.long sub_FBDCD3__FBE878	; 0xFBF223  entry 24 -> 0xFBE878
+	.long sub_FBDCD3__FBE8D5	; 0xFBF227  entry 25 -> 0xFBE8D5
+	.long sub_FBDCD3__FBE932	; 0xFBF22B  entry 26 -> 0xFBE932
+	.long sub_FBDCD3__FBE98F	; 0xFBF22F  entry 27 -> 0xFBE98F
+	.long sub_FBDCD3__FBEA53	; 0xFBF233  entry 28 -> 0xFBEA53
+	.long sub_FBDCD3__FBEB5F	; 0xFBF237  entry 29 -> 0xFBEB5F
+	.long sub_FBDCD3__FBF1A6	; 0xFBF23B  entry 30 -> 0xFBF1A6
+	.long sub_FBDCD3__FBEBB9	; 0xFBF23F  entry 31 -> 0xFBEBB9
+	.long sub_FBDCD3__FBEC13	; 0xFBF243  entry 32 -> 0xFBEC13
+	.long sub_FBDCD3__FBF1A6	; 0xFBF247  entry 33 -> 0xFBF1A6
+	.long sub_FBDCD3__FBEC6D	; 0xFBF24B  entry 34 -> 0xFBEC6D
+	.long sub_FBDCD3__FBECF8	; 0xFBF24F  entry 35 -> 0xFBECF8
+	.long sub_FBDCD3__FBED83	; 0xFBF253  entry 36 -> 0xFBED83
+	.long sub_FBDCD3__FBEDDD	; 0xFBF257  entry 37 -> 0xFBEDDD
+	.long sub_FBDCD3__FBEE37	; 0xFBF25B  entry 38 -> 0xFBEE37
+	.long sub_FBDCD3__FBEE91	; 0xFBF25F  entry 39 -> 0xFBEE91
+	.long sub_FBDCD3__FBEEC6	; 0xFBF263  entry 40 -> 0xFBEEC6
+	.long sub_FBDCD3__FBEEFB	; 0xFBF267  entry 41 -> 0xFBEEFB
+	.long sub_FBDCD3__FBEF55	; 0xFBF26B  entry 42 -> 0xFBEF55
+	.long sub_FBDCD3__FBEFAF	; 0xFBF26F  entry 43 -> 0xFBEFAF
+	.long sub_FBDCD3__FBF03A	; 0xFBF273  entry 44 -> 0xFBF03A
+	.long sub_FBDCD3__FBF094	; 0xFBF277  entry 45 -> 0xFBF094
 sub_FBDCD3__FBF27B:
 	pop	xix                                    ; FBF27B  pop XIX
 	popw	hl                                    ; FBF27C  pop HL
@@ -13472,7 +13486,7 @@ sub_FBDCD3__FBF27B:
 ; Inputs:  frame `link XIZ,-32`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFAD2D5 = sub_FAD2D5, 0xFAD4FE = Scale7Bit_ByDepth_UniOrBipolar_Shl2
-;          0xFAD561 = sub_FAD561, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
+;          0xFAD561 = Scale7Bit_ByDepth_UniOrBipolar_x25, 0xFAD5C2 = Scale7Bit_ByDepth_UniOrBipolar
 ;          0xFAD688 = Scale7Bit_ByDepth_UniOrBipolar_Shl7, 0xFBD88E = Clamp_ToRange_LowByte_FBD88E
 ;          0xFBD8B8 = ByteField_AddOrSub_Clamped, 0xFBD943 = sub_FBD943
 ;          0xFBD9D4 = sub_FBD9D4, 0xFC7AB4 = sub_FC7AB4
@@ -13529,7 +13543,7 @@ sub_FBF280__FBF2C1:
 sub_FBF280__FBF2C6:
 	ld	bc, (xiz-10)                            ; FBF2C6  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBF2C9  extz XBC
-	add	xbc, 0xFDE6A1                          ; FBF2CB  add XBC,0x00fde6a1
+	add	xbc, BitMask_Table_FDE695+12                          ; FBF2CB  add XBC,0x00fde6a1
 	ld	h, (xbc)                                ; FBF2D1  ld H,(XBC)
 	ld	xbc, (xiz+14)                           ; FBF2D3  ld XBC,(XIZ+0x0e)
 	ld	a, (xbc)                                ; FBF2D6  ld A,(XBC)
@@ -13557,7 +13571,7 @@ sub_FBF280__FBF2C6:
 	ld	(xiz-8), xbc                            ; FBF31A  ld (XIZ+0xf8),XBC
 	ld	iy, (xiz-10)                            ; FBF31D  ld IY,(XIZ+0xf6)
 	extz	xiy                                   ; FBF320  extz XIY
-	add	xiy, 0xFDE6A5                          ; FBF322  add XIY,0x00fde6a5
+	add	xiy, BitMask_Table_FDE695+16                          ; FBF322  add XIY,0x00fde6a5
 	ld	h, (xiy)                                ; FBF328  ld H,(XIY)
 	ld	xiy, (xiz+14)                           ; FBF32A  ld XIY,(XIZ+0x0e)
 	ld	c, (xiy)                                ; FBF32D  ld C,(XIY)
@@ -13698,7 +13712,7 @@ sub_FBF280__FBF479:
 sub_FBF280__FBF47E:
 	ld	bc, (xiz-10)                            ; FBF47E  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBF481  extz XBC
-	add	xbc, 0xFDE6A1                          ; FBF483  add XBC,0x00fde6a1
+	add	xbc, BitMask_Table_FDE695+12                          ; FBF483  add XBC,0x00fde6a1
 	ld	h, (xbc)                                ; FBF489  ld H,(XBC)
 	ld	xbc, (xiz+14)                           ; FBF48B  ld XBC,(XIZ+0x0e)
 	ld	a, (xbc)                                ; FBF48E  ld A,(XBC)
@@ -13716,7 +13730,7 @@ sub_FBF280__FBF47E:
 	ld	(xiz-4), xwa                            ; FBF4B2  ld (XIZ+0xfc),XWA
 	ld	iy, (xiz-10)                            ; FBF4B5  ld IY,(XIZ+0xf6)
 	extz	xiy                                   ; FBF4B8  extz XIY
-	add	xiy, 0xFDE6A5                          ; FBF4BA  add XIY,0x00fde6a5
+	add	xiy, BitMask_Table_FDE695+16                          ; FBF4BA  add XIY,0x00fde6a5
 	ld	h, (xiy)                                ; FBF4C0  ld H,(XIY)
 	ld	a, (xbc)                                ; FBF4C2  ld A,(XBC)
 	and	a, h                                   ; FBF4C4  and A,H
@@ -13729,7 +13743,7 @@ sub_FBF280__FBF47E:
 	ld	iy, (xiz-12)                            ; FBF4D4  ld IY,(XIZ+0xf4)
 	exts	xiy                                   ; FBF4D7  exts XIY
 	sub	xbc, xiy                               ; FBF4D9  sub XBC,XIY
-	add	xbc, 0xFDF03E                          ; FBF4DB  add XBC,0x00fdf03e
+	add	xbc, Voice_EnvelopeRate_Table                          ; FBF4DB  add XBC,0x00fdf03e
 	ld	b, (xbc)                                ; FBF4E1  ld B,(XBC)
 	ld	c, b                                    ; FBF4E3  ld C,B
 	extz	bc                                    ; FBF4E5  extz BC
@@ -13741,7 +13755,7 @@ sub_FBF280__FBF47E:
 	ld	iy, (xiz-12)                            ; FBF4F3  ld IY,(XIZ+0xf4)
 	exts	xiy                                   ; FBF4F6  exts XIY
 	sub	xbc, xiy                               ; FBF4F8  sub XBC,XIY
-	add	xbc, 0xFDF03E                          ; FBF4FA  add XBC,0x00fdf03e
+	add	xbc, Voice_EnvelopeRate_Table                          ; FBF4FA  add XBC,0x00fdf03e
 	ld	b, (xbc)                                ; FBF500  ld B,(XBC)
 	ld	c, b                                    ; FBF502  ld C,B
 	extz	bc                                    ; FBF504  extz BC
@@ -13756,7 +13770,7 @@ sub_FBF280__FBF50B:
 	ld	iy, (xiz-12)                            ; FBF517  ld IY,(XIZ+0xf4)
 	exts	xiy                                   ; FBF51A  exts XIY
 	add	xwa, xiy                               ; FBF51C  add XWA,XIY
-	add	xwa, 0xFDF03E                          ; FBF51E  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FBF51E  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FBF524  ld W,(XWA)
 	ld	a, w                                    ; FBF526  ld A,W
 	extz	wa                                    ; FBF528  extz WA
@@ -13768,7 +13782,7 @@ sub_FBF280__FBF50B:
 	ld	iy, (xiz-12)                            ; FBF536  ld IY,(XIZ+0xf4)
 	exts	xiy                                   ; FBF539  exts XIY
 	add	xwa, xiy                               ; FBF53B  add XWA,XIY
-	add	xwa, 0xFDF03E                          ; FBF53D  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FBF53D  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FBF543  ld W,(XWA)
 	ld	a, w                                    ; FBF545  ld A,W
 	extz	wa                                    ; FBF547  extz WA
@@ -13780,7 +13794,7 @@ sub_FBF280__FBF54C:
 	calr Clamp_ToRange_LowByte_FBD88E                 ; FBF555  calr 0xfbd88e
 	exts	wa                                    ; FBF558  exts WA
 	exts	xwa                                   ; FBF55A  exts XWA
-	add	xwa, 0xFDF0A3                          ; FBF55C  add XWA,0x00fdf0a3
+	add	xwa, Ramp_0_to_100_Curve                          ; FBF55C  add XWA,0x00fdf0a3
 	ld	c, (xwa)                                ; FBF562  ld C,(XWA)
 	ld	h, c                                    ; FBF564  ld H,C
 	ld	xbc, (xiz-4)                            ; FBF566  ld XBC,(XIZ+0xfc)
@@ -13792,7 +13806,7 @@ sub_FBF280__FBF54C:
 	calr Clamp_ToRange_LowByte_FBD88E                 ; FBF577  calr 0xfbd88e
 	exts	wa                                    ; FBF57A  exts WA
 	exts	xwa                                   ; FBF57C  exts XWA
-	add	xwa, 0xFDF0A3                          ; FBF57E  add XWA,0x00fdf0a3
+	add	xwa, Ramp_0_to_100_Curve                          ; FBF57E  add XWA,0x00fdf0a3
 	ld	c, (xwa)                                ; FBF584  ld C,(XWA)
 	ld	h, c                                    ; FBF586  ld H,C
 	ld	xbc, (xiz-4)                            ; FBF588  ld XBC,(XIZ+0xfc)
@@ -13815,6 +13829,7 @@ sub_FBF280__FBF5AD:
 	cpw (xiz-10), 0x0002                       ; FBF5AD  cp (XIZ+0xf6),0x0002
 	jrl nc, sub_FBF280__FBF699                 ; FBF5B2  jrl NC,0xfbf699
 	jr sub_FBF280__FBF5BC                      ; FBF5B5  jr T,0xfbf5bc
+sub_FBF280__FBF5B7:
 	incw	1, (xiz-10)                           ; FBF5B7  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF5AD                      ; FBF5BA  jr T,0xfbf5ad
 sub_FBF280__FBF5BC:
@@ -13884,7 +13899,7 @@ sub_FBF280__FBF667:
 	cp	bc, 5:i3                                  ; FBF66C  cp BC,5
 	jrl ugt, sub_FBF280__FBF5EA                ; FBF66E  jrl UGT,0xfbf5ea
 	sll	bc, 2                                  ; FBF671  sll 0x02,BC
-	add	xbc, 0xFBF67E                          ; FBF674  add XBC,0x00fbf67e
+	add	xbc, sub_FBF280_Loop3_JumpTable_FBF67E                          ; FBF674  add XBC,0x00fbf67e
 	ld	xbc, (xbc)                              ; FBF67A  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBF67C  jp T,XBC
 ; 6 x u32 computed-goto table, 0xFBF67E-0xFBF695, 24 bytes.
@@ -13895,14 +13910,15 @@ sub_FBF280__FBF667:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBF5EA	; 0xFBF67E  entry 0 -> 0xFBF5EA   (also the out-of-range arm)
-	.long 0x00FBF5ED	; 0xFBF682  entry 1 -> 0xFBF5ED
-	.long 0x00FBF5ED	; 0xFBF686  entry 2 -> 0xFBF5ED
-	.long 0x00FBF5ED	; 0xFBF68A  entry 3 -> 0xFBF5ED
-	.long 0x00FBF5ED	; 0xFBF68E  entry 4 -> 0xFBF5ED
-	.long 0x00FBF617	; 0xFBF692  entry 5 -> 0xFBF617
+sub_FBF280_Loop3_JumpTable_FBF67E:
+	.long sub_FBF280__FBF5EA	; 0xFBF67E  entry 0 -> 0xFBF5EA   (also the out-of-range arm)
+	.long sub_FBF280__FBF5ED	; 0xFBF682  entry 1 -> 0xFBF5ED
+	.long sub_FBF280__FBF5ED	; 0xFBF686  entry 2 -> 0xFBF5ED
+	.long sub_FBF280__FBF5ED	; 0xFBF68A  entry 3 -> 0xFBF5ED
+	.long sub_FBF280__FBF5ED	; 0xFBF68E  entry 4 -> 0xFBF5ED
+	.long sub_FBF280__FBF617	; 0xFBF692  entry 5 -> 0xFBF617
 sub_FBF280__FBF696:
-	jrl	-0xE2                                  ; FBF696  jrl T,0xfbf5b7
+	jrl	sub_FBF280__FBF5B7                                  ; FBF696  jrl T,0xfbf5b7
 sub_FBF280__FBF699:
 	jrl sub_FBF280__FBFFCF                     ; FBF699  jrl T,0xfbffcf
 sub_FBF280_Loop4:
@@ -14023,7 +14039,7 @@ sub_FBF280__FBF78F:
 	calr ByteField_AddOrSub_Clamped                 ; FBF7CA  calr 0xfbd8b8
 	ld	bc, (xiz-10)                            ; FBF7CD  ld BC,(XIZ+0xf6)
 	extz	xbc                                   ; FBF7D0  extz XBC
-	add	xbc, 0xFDE6A5                          ; FBF7D2  add XBC,0x00fde6a5
+	add	xbc, BitMask_Table_FDE695+16                          ; FBF7D2  add XBC,0x00fde6a5
 	ld	h, (xbc)                                ; FBF7D8  ld H,(XBC)
 	ld	xbc, (xiz+14)                           ; FBF7DA  ld XBC,(XIZ+0x0e)
 	ld	a, (xbc)                                ; FBF7DD  ld A,(XBC)
@@ -14111,7 +14127,7 @@ sub_FBF280_Loop7:
 	push	xbc                                   ; FBF8AC  push XBC
 	push	0                                     ; FBF8AD  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF8AF  push (XIZ+0x0c)
-	call	sub_FAD561                              ; FBF8B2  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBF8B2  call 0xfad561
 	ld	(xiz-12), wa                            ; FBF8B6  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF8B9  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF8BE  inc 6,XSP
@@ -14151,7 +14167,7 @@ sub_FBF280_Loop8:
 	push	xbc                                   ; FBF911  push XBC
 	push	0                                     ; FBF912  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBF914  push (XIZ+0x0c)
-	call	sub_FAD561                              ; FBF917  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBF917  call 0xfad561
 	ld	(xiz-12), wa                            ; FBF91B  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBF91E  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBF923  inc 6,XSP
@@ -14351,7 +14367,7 @@ sub_FBF280_Loop12:
 	push	xbc                                   ; FBFB1D  push XBC
 	push	0                                     ; FBFB1E  push 0x00
 	extpfx3 0x8E, 0x0C, 0x04                   ; FBFB20  push (XIZ+0x0c)
-	call	sub_FAD561                              ; FBFB23  call 0xfad561
+	call	Scale7Bit_ByDepth_UniOrBipolar_x25                              ; FBFB23  call 0xfad561
 	ld	(xiz-12), wa                            ; FBFB27  ld (XIZ+0xf4),WA
 	ldw (xiz-10), 0x0000                       ; FBFB2A  ld (XIZ+0xf6),0x0000
 	inc	6, xsp                                 ; FBFB2F  inc 6,XSP
@@ -14669,6 +14685,7 @@ sub_FBF280__FBFE51:
 	cpw (xiz-10), 0x0002                       ; FBFE51  cp (XIZ+0xf6),0x0002
 	jrl nc, sub_FBF280__FBFF3D                 ; FBFE56  jrl NC,0xfbff3d
 	jr sub_FBF280__FBFE60                      ; FBFE59  jr T,0xfbfe60
+sub_FBF280__FBFE5B:
 	incw	1, (xiz-10)                           ; FBFE5B  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFE51                      ; FBFE5E  jr T,0xfbfe51
 sub_FBF280__FBFE60:
@@ -14738,7 +14755,7 @@ sub_FBF280__FBFF0B:
 	cp	bc, 5:i3                                  ; FBFF10  cp BC,5
 	jrl ugt, sub_FBF280__FBFE8E                ; FBFF12  jrl UGT,0xfbfe8e
 	sll	bc, 2                                  ; FBFF15  sll 0x02,BC
-	add	xbc, 0xFBFF22                          ; FBFF18  add XBC,0x00fbff22
+	add	xbc, sub_FBF280_Loop20_JumpTable_FBFF22                          ; FBFF18  add XBC,0x00fbff22
 	ld	xbc, (xbc)                              ; FBFF1E  ld XBC,(XBC)
 	jp	(xbc)                                   ; FBFF20  jp T,XBC
 ; 6 x u32 computed-goto table, 0xFBFF22-0xFBFF39, 24 bytes.
@@ -14749,14 +14766,15 @@ sub_FBF280__FBFF0B:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FBFE8E	; 0xFBFF22  entry 0 -> 0xFBFE8E   (also the out-of-range arm)
-	.long 0x00FBFE91	; 0xFBFF26  entry 1 -> 0xFBFE91
-	.long 0x00FBFE91	; 0xFBFF2A  entry 2 -> 0xFBFE91
-	.long 0x00FBFE91	; 0xFBFF2E  entry 3 -> 0xFBFE91
-	.long 0x00FBFE91	; 0xFBFF32  entry 4 -> 0xFBFE91
-	.long 0x00FBFEBB	; 0xFBFF36  entry 5 -> 0xFBFEBB
+sub_FBF280_Loop20_JumpTable_FBFF22:
+	.long sub_FBF280__FBFE8E	; 0xFBFF22  entry 0 -> 0xFBFE8E   (also the out-of-range arm)
+	.long sub_FBF280__FBFE91	; 0xFBFF26  entry 1 -> 0xFBFE91
+	.long sub_FBF280__FBFE91	; 0xFBFF2A  entry 2 -> 0xFBFE91
+	.long sub_FBF280__FBFE91	; 0xFBFF2E  entry 3 -> 0xFBFE91
+	.long sub_FBF280__FBFE91	; 0xFBFF32  entry 4 -> 0xFBFE91
+	.long sub_FBF280__FBFEBB	; 0xFBFF36  entry 5 -> 0xFBFEBB
 sub_FBF280__FBFF3A:
-	jrl	-0xE2                                  ; FBFF3A  jrl T,0xfbfe5b
+	jrl	sub_FBF280__FBFE5B                                  ; FBFF3A  jrl T,0xfbfe5b
 sub_FBF280__FBFF3D:
 	jrl sub_FBF280__FBFFCF                     ; FBFF3D  jrl T,0xfbffcf
 sub_FBF280__FBFF40:
@@ -16475,7 +16493,7 @@ ToneQuery_ReplyCatalogueListFooter__FC0E64:
 	cp	bc, 4:i3                                  ; FC0E69  cp BC,4
 	jr ugt, ToneQuery_ReplyCatalogueListFooter__FC0E4C                 ; FC0E6B  jr UGT,0xfc0e4c
 	sll	bc, 2                                  ; FC0E6D  sll 0x02,BC
-	add	xbc, 0xFC0E7A                          ; FC0E70  add XBC,0x00fc0e7a
+	add	xbc, ToneQuery_ReplyCatalogueListFooter_JumpTable_FC0E7A                          ; FC0E70  add XBC,0x00fc0e7a
 	ld	xbc, (xbc)                              ; FC0E76  ld XBC,(XBC)
 	jp	(xbc)                                   ; FC0E78  jp T,XBC
 ; 5 x u32 computed-goto table, 0xFC0E7A-0xFC0E8D, 20 bytes.
@@ -16486,11 +16504,12 @@ ToneQuery_ReplyCatalogueListFooter__FC0E64:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FC0DC5	; 0xFC0E7A  entry 0 -> 0xFC0DC5   (also the out-of-range arm)
-	.long 0x00FC0DDE	; 0xFC0E7E  entry 1 -> 0xFC0DDE
-	.long 0x00FC0DF7	; 0xFC0E82  entry 2 -> 0xFC0DF7
-	.long 0x00FC0E14	; 0xFC0E86  entry 3 -> 0xFC0E14
-	.long 0x00FC0E30	; 0xFC0E8A  entry 4 -> 0xFC0E30
+ToneQuery_ReplyCatalogueListFooter_JumpTable_FC0E7A:
+	.long ToneQuery_ReplyCatalogueListFooter__FC0DC5	; 0xFC0E7A  entry 0 -> 0xFC0DC5   (also the out-of-range arm)
+	.long ToneQuery_ReplyCatalogueListFooter__FC0DDE	; 0xFC0E7E  entry 1 -> 0xFC0DDE
+	.long ToneQuery_ReplyCatalogueListFooter__FC0DF7	; 0xFC0E82  entry 2 -> 0xFC0DF7
+	.long ToneQuery_ReplyCatalogueListFooter__FC0E14	; 0xFC0E86  entry 3 -> 0xFC0E14
+	.long ToneQuery_ReplyCatalogueListFooter__FC0E30	; 0xFC0E8A  entry 4 -> 0xFC0E30
 ToneQuery_ReplyCatalogueListFooter__FC0E8E:
 	ld	xbc, (0xD7ED:24)                       ; FC0E8E  ld XBC,(0x00d7ed)
 	extpfx3 0xAE, 0xF4, 0x81                   ; FC0E93  add XBC,(XIZ+0xf4)
@@ -16724,7 +16743,7 @@ sub_FC0F83__FC106D:
 sub_FC0F83__FC1072:
 	ld	ix, (xiz-4)                             ; FC1072  ld IX,(XIZ+0xfc)
 	extz	xix                                   ; FC1075  extz XIX
-	lda	xbc, (0xFE1365:24)                     ; FC1077  lda XBC,0xfe1365
+	lda	xbc, (Table_FE1365:24)                     ; FC1077  lda XBC,0xfe1365
 	add	xbc, xix                               ; FC107C  add XBC,XIX
 	ld	h, (xbc)                                ; FC107E  ld H,(XBC)
 	ld	xbc, xix                                ; FC1080  ld XBC,XIX
@@ -18578,7 +18597,7 @@ ToneQuery_Dispatch__FC1F35:
 	cp	bc, 22                                  ; FC1F3A  cp BC,0x0016
 	jr ugt, ToneQuery_Dispatch__FC1F2E                 ; FC1F3E  jr UGT,0xfc1f2e
 	sll	bc, 2                                  ; FC1F40  sll 0x02,BC
-	add	xbc, 0xFC1F4D                          ; FC1F43  add XBC,0x00fc1f4d
+	add	xbc, ToneQuery_Dispatch_JumpTable_FC1F4D                          ; FC1F43  add XBC,0x00fc1f4d
 	ld	xbc, (xbc)                              ; FC1F49  ld XBC,(XBC)
 	jp	(xbc)                                   ; FC1F4B  jp T,XBC
 ; 23 x u32 computed-goto table, 0xFC1F4D-0xFC1FA8, 92 bytes.
@@ -18589,29 +18608,30 @@ ToneQuery_Dispatch__FC1F35:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FC1C25	; 0xFC1F4D  entry 0 -> 0xFC1C25   (also the out-of-range arm)
-	.long 0x00FC1C36	; 0xFC1F51  entry 1 -> 0xFC1C36
-	.long 0x00FC1F2E	; 0xFC1F55  entry 2 -> 0xFC1F2E
-	.long 0x00FC1F2E	; 0xFC1F59  entry 3 -> 0xFC1F2E
-	.long 0x00FC1C7D	; 0xFC1F5D  entry 4 -> 0xFC1C7D
-	.long 0x00FC1C96	; 0xFC1F61  entry 5 -> 0xFC1C96
-	.long 0x00FC1CAF	; 0xFC1F65  entry 6 -> 0xFC1CAF
-	.long 0x00FC1CC8	; 0xFC1F69  entry 7 -> 0xFC1CC8
-	.long 0x00FC1CE7	; 0xFC1F6D  entry 8 -> 0xFC1CE7
-	.long 0x00FC1D06	; 0xFC1F71  entry 9 -> 0xFC1D06
-	.long 0x00FC1D1B	; 0xFC1F75  entry 10 -> 0xFC1D1B
-	.long 0x00FC1D30	; 0xFC1F79  entry 11 -> 0xFC1D30
-	.long 0x00FC1D41	; 0xFC1F7D  entry 12 -> 0xFC1D41
-	.long 0x00FC1D52	; 0xFC1F81  entry 13 -> 0xFC1D52
-	.long 0x00FC1D6B	; 0xFC1F85  entry 14 -> 0xFC1D6B
-	.long 0x00FC1D84	; 0xFC1F89  entry 15 -> 0xFC1D84
-	.long 0x00FC1DA3	; 0xFC1F8D  entry 16 -> 0xFC1DA3
-	.long 0x00FC1DEF	; 0xFC1F91  entry 17 -> 0xFC1DEF
-	.long 0x00FC1E0E	; 0xFC1F95  entry 18 -> 0xFC1E0E
-	.long 0x00FC1E2A	; 0xFC1F99  entry 19 -> 0xFC1E2A
-	.long 0x00FC1E46	; 0xFC1F9D  entry 20 -> 0xFC1E46
-	.long 0x00FC1E72	; 0xFC1FA1  entry 21 -> 0xFC1E72
-	.long 0x00FC1F19	; 0xFC1FA5  entry 22 -> 0xFC1F19
+ToneQuery_Dispatch_JumpTable_FC1F4D:
+	.long ToneQuery_Dispatch__FC1C25	; 0xFC1F4D  entry 0 -> 0xFC1C25   (also the out-of-range arm)
+	.long ToneQuery_Dispatch__FC1C36	; 0xFC1F51  entry 1 -> 0xFC1C36
+	.long ToneQuery_Dispatch__FC1F2E	; 0xFC1F55  entry 2 -> 0xFC1F2E
+	.long ToneQuery_Dispatch__FC1F2E	; 0xFC1F59  entry 3 -> 0xFC1F2E
+	.long ToneQuery_Dispatch__FC1C7D	; 0xFC1F5D  entry 4 -> 0xFC1C7D
+	.long ToneQuery_Dispatch__FC1C96	; 0xFC1F61  entry 5 -> 0xFC1C96
+	.long ToneQuery_Dispatch__FC1CAF	; 0xFC1F65  entry 6 -> 0xFC1CAF
+	.long ToneQuery_Dispatch__FC1CC8	; 0xFC1F69  entry 7 -> 0xFC1CC8
+	.long ToneQuery_Dispatch__FC1CE7	; 0xFC1F6D  entry 8 -> 0xFC1CE7
+	.long ToneQuery_Dispatch__FC1D06	; 0xFC1F71  entry 9 -> 0xFC1D06
+	.long ToneQuery_Dispatch__FC1D1B	; 0xFC1F75  entry 10 -> 0xFC1D1B
+	.long ToneQuery_Dispatch__FC1D30	; 0xFC1F79  entry 11 -> 0xFC1D30
+	.long ToneQuery_Dispatch__FC1D41	; 0xFC1F7D  entry 12 -> 0xFC1D41
+	.long ToneQuery_Dispatch__FC1D52	; 0xFC1F81  entry 13 -> 0xFC1D52
+	.long ToneQuery_Dispatch__FC1D6B	; 0xFC1F85  entry 14 -> 0xFC1D6B
+	.long ToneQuery_Dispatch__FC1D84	; 0xFC1F89  entry 15 -> 0xFC1D84
+	.long ToneQuery_Dispatch__FC1DA3	; 0xFC1F8D  entry 16 -> 0xFC1DA3
+	.long ToneQuery_Dispatch__FC1DEF	; 0xFC1F91  entry 17 -> 0xFC1DEF
+	.long ToneQuery_Dispatch__FC1E0E	; 0xFC1F95  entry 18 -> 0xFC1E0E
+	.long ToneQuery_Dispatch__FC1E2A	; 0xFC1F99  entry 19 -> 0xFC1E2A
+	.long ToneQuery_Dispatch__FC1E46	; 0xFC1F9D  entry 20 -> 0xFC1E46
+	.long ToneQuery_Dispatch__FC1E72	; 0xFC1FA1  entry 21 -> 0xFC1E72
+	.long ToneQuery_Dispatch__FC1F19	; 0xFC1FA5  entry 22 -> 0xFC1F19
 ToneQuery_Dispatch__FC1FA9:
 	lda	xbc, (0xD945:24)                       ; FC1FA9  lda XBC,0x00d945
 	push	xbc                                   ; FC1FAE  push XBC
@@ -19751,7 +19771,7 @@ ToneMsg_Dispatch__FC273E:
 	cp	bc, 7:i3                                  ; FC2743  cp BC,7
 	jr ugt, ToneMsg_Dispatch__FC2774                 ; FC2745  jr UGT,0xfc2774
 	sll	bc, 2                                  ; FC2747  sll 0x02,BC
-	add	xbc, 0xFC2754                          ; FC274A  add XBC,0x00fc2754
+	add	xbc, ToneMsg_Dispatch_JumpTable_FC2754                          ; FC274A  add XBC,0x00fc2754
 	ld	xbc, (xbc)                              ; FC2750  ld XBC,(XBC)
 	jp	(xbc)                                   ; FC2752  jp T,XBC
 ; 8 x u32 computed-goto table, 0xFC2754-0xFC2773, 32 bytes.
@@ -19762,14 +19782,15 @@ ToneMsg_Dispatch__FC273E:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FC2622	; 0xFC2754  entry 0 -> 0xFC2622   (also the out-of-range arm)
-	.long 0x00FC262D	; 0xFC2758  entry 1 -> 0xFC262D
-	.long 0x00FC264F	; 0xFC275C  entry 2 -> 0xFC264F
-	.long 0x00FC269C	; 0xFC2760  entry 3 -> 0xFC269C
-	.long 0x00FC26E9	; 0xFC2764  entry 4 -> 0xFC26E9
-	.long 0x00FC26FF	; 0xFC2768  entry 5 -> 0xFC26FF
-	.long 0x00FC2714	; 0xFC276C  entry 6 -> 0xFC2714
-	.long 0x00FC2729	; 0xFC2770  entry 7 -> 0xFC2729
+ToneMsg_Dispatch_JumpTable_FC2754:
+	.long ToneMsg_Dispatch__FC2622	; 0xFC2754  entry 0 -> 0xFC2622   (also the out-of-range arm)
+	.long ToneMsg_Dispatch__FC262D	; 0xFC2758  entry 1 -> 0xFC262D
+	.long ToneMsg_Dispatch__FC264F	; 0xFC275C  entry 2 -> 0xFC264F
+	.long ToneMsg_Dispatch__FC269C	; 0xFC2760  entry 3 -> 0xFC269C
+	.long ToneMsg_Dispatch__FC26E9	; 0xFC2764  entry 4 -> 0xFC26E9
+	.long ToneMsg_Dispatch__FC26FF	; 0xFC2768  entry 5 -> 0xFC26FF
+	.long ToneMsg_Dispatch__FC2714	; 0xFC276C  entry 6 -> 0xFC2714
+	.long ToneMsg_Dispatch__FC2729	; 0xFC2770  entry 7 -> 0xFC2729
 ToneMsg_Dispatch__FC2774:
 	jrl ToneMsg_Dispatch__FC280A                     ; FC2774  jrl T,0xfc280a
 ToneMsg_Dispatch__FC2777:
@@ -19831,7 +19852,7 @@ ToneMsg_Dispatch__FC27D4:
 	cp	bc, 7:i3                                  ; FC27D9  cp BC,7
 	jr ugt, ToneMsg_Dispatch__FC280A                 ; FC27DB  jr UGT,0xfc280a
 	sll	bc, 2                                  ; FC27DD  sll 0x02,BC
-	add	xbc, 0xFC27EA                          ; FC27E0  add XBC,0x00fc27ea
+	add	xbc, ToneMsg_Dispatch_JumpTable_FC27EA                          ; FC27E0  add XBC,0x00fc27ea
 	ld	xbc, (xbc)                              ; FC27E6  ld XBC,(XBC)
 	jp	(xbc)                                   ; FC27E8  jp T,XBC
 ; 8 x u32 computed-goto table, 0xFC27EA-0xFC2809, 32 bytes.
@@ -19842,14 +19863,15 @@ ToneMsg_Dispatch__FC27D4:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB828E 0xFC3407;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FC2781	; 0xFC27EA  entry 0 -> 0xFC2781   (also the out-of-range arm)
-	.long 0x00FC278C	; 0xFC27EE  entry 1 -> 0xFC278C
-	.long 0x00FC2797	; 0xFC27F2  entry 2 -> 0xFC2797
-	.long 0x00FC27A2	; 0xFC27F6  entry 3 -> 0xFC27A2
-	.long 0x00FC27AC	; 0xFC27FA  entry 4 -> 0xFC27AC
-	.long 0x00FC27B6	; 0xFC27FE  entry 5 -> 0xFC27B6
-	.long 0x00FC27C0	; 0xFC2802  entry 6 -> 0xFC27C0
-	.long 0x00FC27CA	; 0xFC2806  entry 7 -> 0xFC27CA
+ToneMsg_Dispatch_JumpTable_FC27EA:
+	.long ToneMsg_Dispatch__FC2781	; 0xFC27EA  entry 0 -> 0xFC2781   (also the out-of-range arm)
+	.long ToneMsg_Dispatch__FC278C	; 0xFC27EE  entry 1 -> 0xFC278C
+	.long ToneMsg_Dispatch__FC2797	; 0xFC27F2  entry 2 -> 0xFC2797
+	.long ToneMsg_Dispatch__FC27A2	; 0xFC27F6  entry 3 -> 0xFC27A2
+	.long ToneMsg_Dispatch__FC27AC	; 0xFC27FA  entry 4 -> 0xFC27AC
+	.long ToneMsg_Dispatch__FC27B6	; 0xFC27FE  entry 5 -> 0xFC27B6
+	.long ToneMsg_Dispatch__FC27C0	; 0xFC2802  entry 6 -> 0xFC27C0
+	.long ToneMsg_Dispatch__FC27CA	; 0xFC2806  entry 7 -> 0xFC27CA
 ToneMsg_Dispatch__FC280A:
 	unlk32 xiz                                 ; FC280A  unlk XIZ
 	ret                                        ; FC280C  ret
@@ -20100,7 +20122,7 @@ PartElement_SetWaveSelectPointer_ToRomDefault:
 	add	wa, bc                                 ; FC2945  add WA,BC
 	add	wa, 0x8C                               ; FC2947  add WA,0x008c
 	extz	xwa                                   ; FC294B  extz XWA
-	lda	xbc, (0xFE14A0:24)                     ; FC294D  lda XBC,0xfe14a0
+	lda	xbc, (Table_FE14A0:24)                     ; FC294D  lda XBC,0xfe14a0
 	ld	(xwa+0x1523), xbc                       ; FC2952  ld (XWA+0x1523),XBC
 	popw	hl                                    ; FC2957  pop HL
 	unlk32 xiz                                 ; FC2958  unlk XIZ
@@ -20301,7 +20323,7 @@ sub_FC2A3C:
 	extpfx3 0x8E, 0x0E, 0x43                   ; FC2A50  mul BC,(XIZ+0x0e)
 	extz	xbc                                   ; FC2A53  extz XBC
 	ld	(xiz-4), xbc                            ; FC2A55  ld (XIZ+0xfc),XBC
-	add	xbc, 0xFE136D                          ; FC2A58  add XBC,0x00fe136d
+	add	xbc, Table_FE136D                          ; FC2A58  add XBC,0x00fe136d
 	ld	a, (xbc)                                ; FC2A5E  ld A,(XBC)
 	extz	wa                                    ; FC2A60  extz WA
 	extz	xwa                                   ; FC2A62  extz XWA
@@ -20314,7 +20336,7 @@ sub_FC2A3C:
 	and	d, 15                                  ; FC2A72  and D,0x0f
 	ld	xbc, (xiz-4)                            ; FC2A75  ld XBC,(XIZ+0xfc)
 	inc	1, xbc                                 ; FC2A78  inc 1,XBC
-	add	xbc, 0xFE136D                          ; FC2A7A  add XBC,0x00fe136d
+	add	xbc, Table_FE136D                          ; FC2A7A  add XBC,0x00fe136d
 	ld	a, (xbc)                                ; FC2A80  ld A,(XBC)
 	extz	wa                                    ; FC2A82  extz WA
 	extz	xwa                                   ; FC2A84  extz XWA
@@ -20326,7 +20348,7 @@ sub_FC2A3C:
 	and	h, 15                                  ; FC2A91  and H,0x0f
 	ld	xbc, (xiz-4)                            ; FC2A94  ld XBC,(XIZ+0xfc)
 	inc	2, xbc                                 ; FC2A97  inc 2,XBC
-	add	xbc, 0xFE136D                          ; FC2A99  add XBC,0x00fe136d
+	add	xbc, Table_FE136D                          ; FC2A99  add XBC,0x00fe136d
 	ld	a, (xbc)                                ; FC2A9F  ld A,(XBC)
 	extz	wa                                    ; FC2AA1  extz WA
 	extz	xwa                                   ; FC2AA3  extz XWA
@@ -20374,7 +20396,7 @@ sub_FC2AAF:
 	pushw	hl                                   ; FC2AB3  push HL
 	pushw	de                                   ; FC2AB4  push DE
 	push	xix                                   ; FC2AB5  push XIX
-	lda	xix, (0xFE136D:24)                     ; FC2AB6  lda XIX,0xfe136d
+	lda	xix, (Table_FE136D:24)                     ; FC2AB6  lda XIX,0xfe136d
 	ld	xbc, (xiz+8)                            ; FC2ABB  ld XBC,(XIZ+0x08)
 	ld	wa, (xbc)                               ; FC2ABE  ld WA,(XBC)
 	ld	(xiz-12), wa                            ; FC2AC0  ld (XIZ+0xf4),WA
@@ -20588,7 +20610,7 @@ sub_FC2C2D:
 	extpfx3 0x8E, 0xFA, 0x43                   ; FC2C57  mul BC,(XIZ+0xfa)
 	extz	xbc                                   ; FC2C5A  extz XBC
 	ld	(xiz-14), xbc                           ; FC2C5C  ld (XIZ+0xf2),XBC
-	add	xbc, 0xFE1376                          ; FC2C5F  add XBC,0x00fe1376
+	add	xbc, Table_FE1376                          ; FC2C5F  add XBC,0x00fe1376
 	ld	hl, (xbc)                               ; FC2C65  ld HL,(XBC)
 	ld	xbc, (xiz-10)                           ; FC2C67  ld XBC,(XIZ+0xf6)
 	add	xbc, 12                                ; FC2C6A  add XBC,0x0000000c
@@ -20598,16 +20620,16 @@ sub_FC2C2D:
 	extpfx3 0x8E, 0xFC, 0x43                   ; FC2C76  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FC2C79  extz XBC
 	ld	(xiz-18), xbc                           ; FC2C7B  ld (XIZ+0xee),XBC
-	add	xbc, 0xFE138A                          ; FC2C7E  add XBC,0x00fe138a
+	add	xbc, Table_FE138A                          ; FC2C7E  add XBC,0x00fe138a
 	ld	hl, (xbc)                               ; FC2C84  ld HL,(XBC)
 	ld	xbc, (xiz-10)                           ; FC2C86  ld XBC,(XIZ+0xf6)
 	add	xbc, 16                                ; FC2C89  add XBC,0x00000010
 	add	xbc, xix                               ; FC2C8F  add XBC,XIX
 	ld	(xbc), hl                               ; FC2C91  ld (XBC),HL
-	lda	xbc, (0xFE13C2:24)                     ; FC2C93  lda XBC,0xfe13c2
+	lda	xbc, (Table_FE13C2:24)                     ; FC2C93  lda XBC,0xfe13c2
 	extpfx3 0xAE, 0xF2, 0x81                   ; FC2C98  add XBC,(XIZ+0xf2)
 	ld	hl, (xbc)                               ; FC2C9B  ld HL,(XBC)
-	lda	xbc, (0xFE139C:24)                     ; FC2C9D  lda XBC,0xfe139c
+	lda	xbc, (Table_FE139C:24)                     ; FC2C9D  lda XBC,0xfe139c
 	extpfx3 0xAE, 0xEE, 0x81                   ; FC2CA2  add XBC,(XIZ+0xee)
 	ld	wa, (xbc)                               ; FC2CA5  ld WA,(XBC)
 	ld	de, wa                                  ; FC2CA7  ld DE,WA
@@ -20615,7 +20637,7 @@ sub_FC2C2D:
 	ld	c, 2:opc                                   ; FC2CAB  ld C,0x02
 	extpfx3 0x8E, 0xFE, 0x43                   ; FC2CAD  mul BC,(XIZ+0xfe)
 	extz	xbc                                   ; FC2CB0  extz XBC
-	add	xbc, 0xFE13AE                          ; FC2CB2  add XBC,0x00fe13ae
+	add	xbc, Table_FE13AE                          ; FC2CB2  add XBC,0x00fe13ae
 	ld	bc, (xbc)                               ; FC2CB8  ld BC,(XBC)
 	ld	hl, bc                                  ; FC2CBA  ld HL,BC
 	add	hl, de                                 ; FC2CBC  add HL,DE

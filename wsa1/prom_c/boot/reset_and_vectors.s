@@ -149,7 +149,7 @@ RESET__clear_dram:
 				; counter, the scheduler phase and the touch
 				; controls all live.  See
 				; notes/FINDINGS-prom_c-ram-image.md.
-	jp 0xF9816B		; -> Kernel_InitRam.  ★ CORRECTED 2026-08-25: this
+	jp Kernel_InitRam		; -> Kernel_InitRam.  ★ CORRECTED 2026-08-25: this
 				; is not "the main loop" -- it is the kernel's
 				; RAM initialiser, which falls into Kernel_Start,
 				; which starts MAIN as TASK 1 and enters the
@@ -174,7 +174,7 @@ IRQ_SWI1_REBOOT:			; vector 0x04
 ;          entries in VECTORS below -- every slot listed on the right.
 IRQ_UNUSED:				; vectors 0x08-0x1C, 0x30-0x40,
 					; 0x50-0x5C, 0x68-0x78
-	jp 0xF9816B		; -> Kernel_InitRam, exactly as the end of RESET
+	jp Kernel_InitRam		; -> Kernel_InitRam, exactly as the end of RESET
 				; does: an unexpected interrupt REBUILDS the
 				; kernel's RAM and restarts every task
 ; Evidence: VECTORS slot 0x20 (below) holds 0x00FFF0AC, this label's address, and
@@ -256,46 +256,46 @@ UNREFERENCED_TRAMPOLINES:
 ;               corroboration, not a citation.
 ;
 VECTORS:
-	.long 0x00FFF000	; 0x00  RESET
-	.long 0x00FFF0A5	; 0x04  SWI1        -> IRQ_SWI1_REBOOT
-	.long 0x00FFF0A8	; 0x08  SWI2 / INTUNDEF -> IRQ_UNUSED
-	.long 0x00FFF0A8	; 0x0C  SWI3
-	.long 0x00FFF0A8	; 0x10  SWI4
-	.long 0x00FFF0A8	; 0x14  SWI5
-	.long 0x00FFF0A8	; 0x18  SWI6
-	.long 0x00FFF0A8	; 0x1C  SWI7
-	.long 0x00FFF0AC	; 0x20  NMI         -> IRQ_NMI
-	.long 0x00FFF0A2	; 0x24  INTWD       -> IRQ_WATCHDOG_REBOOT
-	.long 0x00FFF0B4	; 0x28  INT0        -> IRQ_INT0
-	.long 0x00F995C2	; 0x2C  INT4        -> INT4_HANDLER, a bare RETI,
+	.long RESET	; 0x00  RESET
+	.long IRQ_SWI1_REBOOT	; 0x04  SWI1        -> IRQ_SWI1_REBOOT
+	.long IRQ_UNUSED	; 0x08  SWI2 / INTUNDEF -> IRQ_UNUSED
+	.long IRQ_UNUSED	; 0x0C  SWI3
+	.long IRQ_UNUSED	; 0x10  SWI4
+	.long IRQ_UNUSED	; 0x14  SWI5
+	.long IRQ_UNUSED	; 0x18  SWI6
+	.long IRQ_UNUSED	; 0x1C  SWI7
+	.long IRQ_NMI	; 0x20  NMI         -> IRQ_NMI
+	.long IRQ_WATCHDOG_REBOOT	; 0x24  INTWD       -> IRQ_WATCHDOG_REBOOT
+	.long IRQ_INT0	; 0x28  INT0        -> IRQ_INT0
+	.long INT4_HANDLER	; 0x2C  INT4        -> INT4_HANDLER, a bare RETI,
 				;                      converted above
-	.long 0x00FFF0A8	; 0x30  INT5
-	.long 0x00FFF0A8	; 0x34  INT6
-	.long 0x00FFF0A8	; 0x38  INT7
-	.long 0x00FFF0A8	; 0x3C  (reserved; MAME skips this slot)
-	.long 0x00FFF0A8	; 0x40  INTT0
-	.long 0x00FFF0BC	; 0x44  INTT1       -> IRQ_INTT1 -> INTT1_HANDLER
-	.long 0x00FFF0B8	; 0x48  INTT2       -> IRQ_INTT2.  This is the
+	.long IRQ_UNUSED	; 0x30  INT5
+	.long IRQ_UNUSED	; 0x34  INT6
+	.long IRQ_UNUSED	; 0x38  INT7
+	.long IRQ_UNUSED	; 0x3C  (reserved; MAME skips this slot)
+	.long IRQ_UNUSED	; 0x40  INTT0
+	.long IRQ_INTT1	; 0x44  INTT1       -> IRQ_INTT1 -> INTT1_HANDLER
+	.long IRQ_INTT2	; 0x48  INTT2       -> IRQ_INTT2.  This is the
 				;                      interrupt CPU 2's micro-DMA
 				;                      channel 2 is armed on at
 				;                      0xF99A2A (DMA2V = 0x12,
 				;                      0x12<<2 = 0x48).
-	.long 0x00F98165	; 0x4C  INTT3       -> INTT3_KernelTick, converted
+	.long INTT3_KernelTick	; 0x4C  INTT3       -> INTT3_KernelTick, converted
 				;                      above.  Timer 3 is started
 				;                      by Timer3_Init (0xF98B6D)
-	.long 0x00FFF0A8	; 0x50  INTTR4
-	.long 0x00FFF0A8	; 0x54  INTTR5
-	.long 0x00FFF0A8	; 0x58  INTTR6
-	.long 0x00FFF0A8	; 0x5C  INTTR7
-	.long 0x00F991FF	; 0x60  INTRX0     -> INTRX0_HANDLER (MIDI in)
-	.long 0x00F99265	; 0x64  INTTX0     -> INTTX0_HANDLER (MIDI out)
-	.long 0x00FFF0A8	; 0x68  INTRX1
-	.long 0x00FFF0A8	; 0x6C  INTTX1
-	.long 0x00FFF0A8	; 0x70  INTAD
-	.long 0x00FFF0A8	; 0x74  INTTC0
-	.long 0x00FFF0A8	; 0x78  INTTC1
-	.long 0x00FFF0C0	; 0x7C  INTTC2      -> IRQ_INTTC2
-	.long 0x00FFF0C4	; 0x80  INTTC3      -> IRQ_INTTC3
+	.long IRQ_UNUSED	; 0x50  INTTR4
+	.long IRQ_UNUSED	; 0x54  INTTR5
+	.long IRQ_UNUSED	; 0x58  INTTR6
+	.long IRQ_UNUSED	; 0x5C  INTTR7
+	.long INTRX0_HANDLER	; 0x60  INTRX0     -> INTRX0_HANDLER (MIDI in)
+	.long INTTX0_HANDLER	; 0x64  INTTX0     -> INTTX0_HANDLER (MIDI out)
+	.long IRQ_UNUSED	; 0x68  INTRX1
+	.long IRQ_UNUSED	; 0x6C  INTTX1
+	.long IRQ_UNUSED	; 0x70  INTAD
+	.long IRQ_UNUSED	; 0x74  INTTC0
+	.long IRQ_UNUSED	; 0x78  INTTC1
+	.long IRQ_INTTC2	; 0x7C  INTTC2      -> IRQ_INTTC2
+	.long IRQ_INTTC3	; 0x80  INTTC3      -> IRQ_INTTC3
 
 ; ==============================================================================
 ; 0xFFFF84-0xFFFFEE -- padding

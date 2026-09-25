@@ -326,7 +326,7 @@
 ;   sub_F9F9FA, sub_F9FBA9, sub_F9FD0E, sub_F9FEA5   the four siblings around
 ;       P7Stream_StageAndSend, each opening a 0x01/0x03 record and reading globals
 ;       0x00863A/3E/42.  What those three globals are is not established here.
-;   sub_FA237C, sub_FA26CB, sub_FA2784, sub_FA294F, sub_FA2A19, sub_FA3A3C,
+;   sub_FA237C, sub_FA26CB, P7Unit_SendModulatedField, P7Field_ModulateClamped, sub_FA2A19, sub_FA3A3C,
 ;   sub_FA4A0D, sub_FA4C5E, sub_FA4CE5, sub_FA4E23, sub_FA4E97   the unit
 ;       state-machine's helpers.  Several are one switch away from a name; none was
 ;       taken on the strength of position or of a plausible-looking caller.
@@ -2461,9 +2461,9 @@ P7Group_SendOp0AddrValueScaled:
 	push	xbc                                   ; F9AF28  push XBC
 	ld	xbc, (xiz-12)                           ; F9AF29  ld XBC,(XIZ+0xf4)
 	push	xbc                                   ; F9AF2C  push XBC
-	ld	xbc, (0xFCCA7E:24)                     ; F9AF2D  ld XBC,(0xfcca7e)
+	ld	xbc, (F64_2147483648+4:24)                     ; F9AF2D  ld XBC,(0xfcca7e)
 	push	xbc                                   ; F9AF32  push XBC
-	ld	xbc, (0xFCCA7A:24)                     ; F9AF33  ld XBC,(0xfcca7a)
+	ld	xbc, (F64_2147483648:24)                     ; F9AF33  ld XBC,(0xfcca7a)
 	push	xbc                                   ; F9AF38  push XBC
 	lda	xiy, (xiz-20)                          ; F9AF39  lda XIY,XIZ+0xec
 	call	Double_Multiply                              ; F9AF3C  call 0xfca252
@@ -2820,9 +2820,9 @@ P7Group_SendOp1AddrValueScaled:
 	push	xbc                                   ; F9B1D7  push XBC
 	ld	xbc, (xiz-12)                           ; F9B1D8  ld XBC,(XIZ+0xf4)
 	push	xbc                                   ; F9B1DB  push XBC
-	ld	xbc, (0xFCCA7E:24)                     ; F9B1DC  ld XBC,(0xfcca7e)
+	ld	xbc, (F64_2147483648+4:24)                     ; F9B1DC  ld XBC,(0xfcca7e)
 	push	xbc                                   ; F9B1E1  push XBC
-	ld	xbc, (0xFCCA7A:24)                     ; F9B1E2  ld XBC,(0xfcca7a)
+	ld	xbc, (F64_2147483648:24)                     ; F9B1E2  ld XBC,(0xfcca7a)
 	push	xbc                                   ; F9B1E7  push XBC
 	lda	xiy, (xiz-20)                          ; F9B1E8  lda XIY,XIZ+0xec
 	call	Double_Multiply                              ; F9B1EB  call 0xfca252
@@ -3129,9 +3129,9 @@ P7Group_SendValueScaled:
 	push	xbc                                   ; F9B392  push XBC
 	ld	xbc, (xiz-12)                           ; F9B393  ld XBC,(XIZ+0xf4)
 	push	xbc                                   ; F9B396  push XBC
-	ld	xbc, (0xFCCA7E:24)                     ; F9B397  ld XBC,(0xfcca7e)
+	ld	xbc, (F64_2147483648+4:24)                     ; F9B397  ld XBC,(0xfcca7e)
 	push	xbc                                   ; F9B39C  push XBC
-	ld	xbc, (0xFCCA7A:24)                     ; F9B39D  ld XBC,(0xfcca7a)
+	ld	xbc, (F64_2147483648:24)                     ; F9B39D  ld XBC,(0xfcca7a)
 	push	xbc                                   ; F9B3A2  push XBC
 	lda	xiy, (xiz-20)                          ; F9B3A3  lda XIY,XIZ+0xec
 	call	Double_Multiply                              ; F9B3A6  call 0xfca252
@@ -3406,7 +3406,7 @@ sub_F9B54B__F9B59D:
 ; Inputs:  no frame; argument slots read: (XIZ+0x08), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCCA32, 0xFCCA36, 0xFCCA3A, 0xFCCA3E, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA52, 0xFCCA56, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66, 0xFCCA6A, 0xFCCA6E, 0xFCCA72, 0xFCCA76
-; Calls:   0xF9B167 = P7Group_SendOp1AddrValueScaled, 0xFC9576 = sub_FC9576
+; Calls:   0xF9B167 = P7Group_SendOp1AddrValueScaled, 0xFC9576 = Double_Pow
 ;          0xFCA252 = Double_Multiply, 0xFCA626 = Double_Subtract
 ;          0xFCAA50 = Float32_ToDouble, 0xFCABC6 = Int32_ToFloat32
 ;          0xFCADD6 = Double_ToFloat32
@@ -3428,9 +3428,9 @@ sub_F9B5A5:
 	push	xbc                                   ; F9B5B9  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9B5BA  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9B5BF  push XBC
-	ld	xbc, (0xFCCA76:24)                     ; F9B5C0  ld XBC,(0xfcca76)
+	ld	xbc, (F64_24+4:24)                     ; F9B5C0  ld XBC,(0xfcca76)
 	push	xbc                                   ; F9B5C5  push XBC
-	ld	xbc, (0xFCCA72:24)                     ; F9B5C6  ld XBC,(0xfcca72)
+	ld	xbc, (F64_24:24)                     ; F9B5C6  ld XBC,(0xfcca72)
 	push	xbc                                   ; F9B5CB  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9B5CC  lda XIY,XIZ+0xff6a
 	call	Double_Subtract                              ; F9B5D1  call 0xfca626
@@ -3438,9 +3438,9 @@ sub_F9B5A5:
 	push	xbc                                   ; F9B5DA  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9B5DB  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9B5E0  push XBC
-	ld	xbc, (0xFCCA6E:24)                     ; F9B5E1  ld XBC,(0xfcca6e)
+	ld	xbc, (F64_0p0125+4:24)                     ; F9B5E1  ld XBC,(0xfcca6e)
 	push	xbc                                   ; F9B5E6  push XBC
-	ld	xbc, (0xFCCA6A:24)                     ; F9B5E7  ld XBC,(0xfcca6a)
+	ld	xbc, (F64_0p0125:24)                     ; F9B5E7  ld XBC,(0xfcca6a)
 	push	xbc                                   ; F9B5EC  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9B5ED  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9B5F2  call 0xfca252
@@ -3448,19 +3448,19 @@ sub_F9B5A5:
 	push	xbc                                   ; F9B5FB  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9B5FC  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9B601  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9B602  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9B602  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9B607  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9B608  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9B608  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9B60D  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9B60E  lda XIY,XIZ+0xff5a
-	call	sub_FC9576                              ; F9B613  call 0xfc9576
+	call	Double_Pow                              ; F9B613  call 0xfc9576
 	ld	xbc, (xiz-0xA2)                         ; F9B617  ld XBC,(XIZ+0xff5e)
 	push	xbc                                   ; F9B61C  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9B61D  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9B622  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9B623  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9B623  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9B628  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9B629  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9B629  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9B62E  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9B62F  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9B634  call 0xfca252
@@ -3492,9 +3492,9 @@ sub_F9B5A5__F9B65B:
 	push	xbc                                   ; F9B682  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9B683  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9B688  push XBC
-	ld	xbc, (0xFCCA56:24)                     ; F9B689  ld XBC,(0xfcca56)
+	ld	xbc, (F64_3+4:24)                     ; F9B689  ld XBC,(0xfcca56)
 	push	xbc                                   ; F9B68E  push XBC
-	ld	xbc, (0xFCCA52:24)                     ; F9B68F  ld XBC,(0xfcca52)
+	ld	xbc, (F64_3:24)                     ; F9B68F  ld XBC,(0xfcca52)
 	push	xbc                                   ; F9B694  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9B695  lda XIY,XIZ+0xff6a
 	call	Double_Subtract                              ; F9B69A  call 0xfca626
@@ -3502,9 +3502,9 @@ sub_F9B5A5__F9B65B:
 	push	xbc                                   ; F9B6A3  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9B6A4  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9B6A9  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; F9B6AA  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; F9B6AA  ld XBC,(0xfcca4e)
 	push	xbc                                   ; F9B6AF  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; F9B6B0  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; F9B6B0  ld XBC,(0xfcca4a)
 	push	xbc                                   ; F9B6B5  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9B6B6  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9B6BB  call 0xfca252
@@ -3512,19 +3512,19 @@ sub_F9B5A5__F9B65B:
 	push	xbc                                   ; F9B6C4  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9B6C5  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9B6CA  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9B6CB  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9B6CB  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9B6D0  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9B6D1  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9B6D1  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9B6D6  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9B6D7  lda XIY,XIZ+0xff5a
-	call	sub_FC9576                              ; F9B6DC  call 0xfc9576
+	call	Double_Pow                              ; F9B6DC  call 0xfc9576
 	ld	xbc, (xiz-0xA2)                         ; F9B6E0  ld XBC,(XIZ+0xff5e)
 	push	xbc                                   ; F9B6E5  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9B6E6  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9B6EB  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9B6EC  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9B6EC  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9B6F1  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9B6F2  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9B6F2  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9B6F7  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9B6F8  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9B6FD  call 0xfca252
@@ -3538,9 +3538,9 @@ sub_F9B5A5__F9B65B:
 	inc	8, xsp                                 ; F9B716  inc 0,XSP
 	jr sub_F9B5A5__F9B72D                      ; F9B718  jr T,0xf9b72d
 sub_F9B5A5__F9B71A:
-	ld	xbc, (0xFCCA46:24)                     ; F9B71A  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9B71A  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9B71F  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9B720  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9B720  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9B725  push XBC
 	call	Double_ToFloat32                              ; F9B726  call 0xfcadd6
 	ld	(xiz-18), xiy                           ; F9B72A  ld (XIZ+0xee),XIY
@@ -3570,9 +3570,9 @@ sub_F9B5A5__F9B73C:
 	push	xbc                                   ; F9B76D  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9B76E  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9B773  push XBC
-	ld	xbc, (0xFCCA3E:24)                     ; F9B774  ld XBC,(0xfcca3e)
+	ld	xbc, (F64_0p2+4:24)                     ; F9B774  ld XBC,(0xfcca3e)
 	push	xbc                                   ; F9B779  push XBC
-	ld	xbc, (0xFCCA3A:24)                     ; F9B77A  ld XBC,(0xfcca3a)
+	ld	xbc, (F64_0p2:24)                     ; F9B77A  ld XBC,(0xfcca3a)
 	push	xbc                                   ; F9B77F  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9B780  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9B785  call 0xfca252
@@ -3580,9 +3580,9 @@ sub_F9B5A5__F9B73C:
 	push	xbc                                   ; F9B78E  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9B78F  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9B794  push XBC
-	ld	xbc, (0xFCCA56:24)                     ; F9B795  ld XBC,(0xfcca56)
+	ld	xbc, (F64_3+4:24)                     ; F9B795  ld XBC,(0xfcca56)
 	push	xbc                                   ; F9B79A  push XBC
-	ld	xbc, (0xFCCA52:24)                     ; F9B79B  ld XBC,(0xfcca52)
+	ld	xbc, (F64_3:24)                     ; F9B79B  ld XBC,(0xfcca52)
 	push	xbc                                   ; F9B7A0  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9B7A1  lda XIY,XIZ+0xff62
 	call	Double_Subtract                              ; F9B7A6  call 0xfca626
@@ -3590,9 +3590,9 @@ sub_F9B5A5__F9B73C:
 	push	xbc                                   ; F9B7AF  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9B7B0  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9B7B5  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; F9B7B6  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; F9B7B6  ld XBC,(0xfcca4e)
 	push	xbc                                   ; F9B7BB  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; F9B7BC  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; F9B7BC  ld XBC,(0xfcca4a)
 	push	xbc                                   ; F9B7C1  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9B7C2  lda XIY,XIZ+0xff5a
 	call	Double_Multiply                              ; F9B7C7  call 0xfca252
@@ -3600,19 +3600,19 @@ sub_F9B5A5__F9B73C:
 	push	xbc                                   ; F9B7D0  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9B7D1  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9B7D6  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9B7D7  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9B7D7  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9B7DC  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9B7DD  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9B7DD  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9B7E2  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9B7E3  lda XIY,XIZ+0xff52
-	call	sub_FC9576                              ; F9B7E8  call 0xfc9576
+	call	Double_Pow                              ; F9B7E8  call 0xfc9576
 	ld	xbc, (xiz-0xAA)                         ; F9B7EC  ld XBC,(XIZ+0xff56)
 	push	xbc                                   ; F9B7F1  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9B7F2  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9B7F7  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9B7F8  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9B7F8  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9B7FD  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9B7FE  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9B7FE  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9B803  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9B804  lda XIY,XIZ+0xff4a
 	call	Double_Multiply                              ; F9B809  call 0xfca252
@@ -3640,9 +3640,9 @@ sub_F9B5A5__F9B827:
 	push	xbc                                   ; F9B84E  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9B84F  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9B854  push XBC
-	ld	xbc, (0xFCCA36:24)                     ; F9B855  ld XBC,(0xfcca36)
+	ld	xbc, (F64_0p4+4:24)                     ; F9B855  ld XBC,(0xfcca36)
 	push	xbc                                   ; F9B85A  push XBC
-	ld	xbc, (0xFCCA32:24)                     ; F9B85B  ld XBC,(0xfcca32)
+	ld	xbc, (F64_0p4:24)                     ; F9B85B  ld XBC,(0xfcca32)
 	push	xbc                                   ; F9B860  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9B861  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9B866  call 0xfca252
@@ -3650,9 +3650,9 @@ sub_F9B5A5__F9B827:
 	push	xbc                                   ; F9B86F  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9B870  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9B875  push XBC
-	ld	xbc, (0xFCCA46:24)                     ; F9B876  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9B876  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9B87B  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9B87C  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9B87C  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9B881  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9B882  lda XIY,XIZ+0xff62
 ; --------------------------------------------------------------------------
@@ -3669,7 +3669,7 @@ sub_F9B5A5__F9B827:
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCCA0A, 0xFCCA0E, 0xFCCA12, 0xFCCA16, 0xFCCA1A, 0xFCCA1E, 0xFCCA22, 0xFCCA26, 0xFCCA2A, 0xFCCA2E, 0xFCCA32, 0xFCCA36, 0xFCCA3A, 0xFCCA3E, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA52, 0xFCCA56, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66
 ; Calls:   0xF9AEB6 = P7Group_SendOp0AddrValueScaled, 0xF9E020 = Stream_ReadU24BE
-;          0xFC9576 = sub_FC9576, 0xFCA252 = Double_Multiply
+;          0xFC9576 = Double_Pow, 0xFCA252 = Double_Multiply
 ;          0xFCA626 = Double_Subtract, 0xFCAA50 = Float32_ToDouble
 ;          0xFCABC6 = Int32_ToFloat32, 0xFCADD6 = Double_ToFloat32
 ;          0xFCAE60 = Float32_Divide
@@ -3687,9 +3687,9 @@ sub_F9B887:
 	push	xbc                                   ; F9B890  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9B891  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9B896  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; F9B897  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; F9B897  ld XBC,(0xfcca4e)
 	push	xbc                                   ; F9B89C  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; F9B89D  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; F9B89D  ld XBC,(0xfcca4a)
 	push	xbc                                   ; F9B8A2  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9B8A3  lda XIY,XIZ+0xff5a
 	call	Double_Multiply                              ; F9B8A8  call 0xfca252
@@ -3697,19 +3697,19 @@ sub_F9B887:
 	push	xbc                                   ; F9B8B1  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9B8B2  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9B8B7  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9B8B8  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9B8B8  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9B8BD  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9B8BE  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9B8BE  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9B8C3  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9B8C4  lda XIY,XIZ+0xff52
-	call	sub_FC9576                              ; F9B8C9  call 0xfc9576
+	call	Double_Pow                              ; F9B8C9  call 0xfc9576
 	ld	xbc, (xiz-0xAA)                         ; F9B8CD  ld XBC,(XIZ+0xff56)
 	push	xbc                                   ; F9B8D2  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9B8D3  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9B8D8  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9B8D9  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9B8D9  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9B8DE  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9B8DF  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9B8DF  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9B8E4  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9B8E5  lda XIY,XIZ+0xff4a
 	call	Double_Multiply                              ; F9B8EA  call 0xfca252
@@ -3737,9 +3737,9 @@ sub_F9B887__F9B908:
 	push	xbc                                   ; F9B92F  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9B930  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9B935  push XBC
-	ld	xbc, (0xFCCA2E:24)                     ; F9B936  ld XBC,(0xfcca2e)
+	ld	xbc, (F64_0p6+4:24)                     ; F9B936  ld XBC,(0xfcca2e)
 	push	xbc                                   ; F9B93B  push XBC
-	ld	xbc, (0xFCCA2A:24)                     ; F9B93C  ld XBC,(0xfcca2a)
+	ld	xbc, (F64_0p6:24)                     ; F9B93C  ld XBC,(0xfcca2a)
 	push	xbc                                   ; F9B941  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9B942  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9B947  call 0xfca252
@@ -3747,9 +3747,9 @@ sub_F9B887__F9B908:
 	push	xbc                                   ; F9B950  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9B951  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9B956  push XBC
-	ld	xbc, (0xFCCA26:24)                     ; F9B957  ld XBC,(0xfcca26)
+	ld	xbc, (F64_neg12+4:24)                     ; F9B957  ld XBC,(0xfcca26)
 	push	xbc                                   ; F9B95C  push XBC
-	ld	xbc, (0xFCCA22:24)                     ; F9B95D  ld XBC,(0xfcca22)
+	ld	xbc, (F64_neg12:24)                     ; F9B95D  ld XBC,(0xfcca22)
 	push	xbc                                   ; F9B962  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9B963  lda XIY,XIZ+0xff62
 	call	Double_Subtract                              ; F9B968  call 0xfca626
@@ -3757,9 +3757,9 @@ sub_F9B887__F9B908:
 	push	xbc                                   ; F9B971  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9B972  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9B977  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; F9B978  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; F9B978  ld XBC,(0xfcca4e)
 	push	xbc                                   ; F9B97D  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; F9B97E  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; F9B97E  ld XBC,(0xfcca4a)
 	push	xbc                                   ; F9B983  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9B984  lda XIY,XIZ+0xff5a
 	call	Double_Multiply                              ; F9B989  call 0xfca252
@@ -3767,19 +3767,19 @@ sub_F9B887__F9B908:
 	push	xbc                                   ; F9B992  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9B993  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9B998  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9B999  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9B999  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9B99E  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9B99F  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9B99F  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9B9A4  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9B9A5  lda XIY,XIZ+0xff52
-	call	sub_FC9576                              ; F9B9AA  call 0xfc9576
+	call	Double_Pow                              ; F9B9AA  call 0xfc9576
 	ld	xbc, (xiz-0xAA)                         ; F9B9AE  ld XBC,(XIZ+0xff56)
 	push	xbc                                   ; F9B9B3  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9B9B4  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9B9B9  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9B9BA  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9B9BA  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9B9BF  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9B9C0  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9B9C0  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9B9C5  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9B9C6  lda XIY,XIZ+0xff4a
 	call	Double_Multiply                              ; F9B9CB  call 0xfca252
@@ -3793,9 +3793,9 @@ sub_F9B887__F9B908:
 	inc	8, xsp                                 ; F9B9E4  inc 0,XSP
 	jr sub_F9B887__F9B9FB                      ; F9B9E6  jr T,0xf9b9fb
 sub_F9B887__F9B9E8:
-	ld	xbc, (0xFCCA46:24)                     ; F9B9E8  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9B9E8  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9B9ED  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9B9EE  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9B9EE  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9B9F3  push XBC
 	call	Double_ToFloat32                              ; F9B9F4  call 0xfcadd6
 	ld	(xiz-18), xiy                           ; F9B9F8  ld (XIZ+0xee),XIY
@@ -3820,9 +3820,9 @@ sub_F9B887__F9B9FE:
 	push	xbc                                   ; F9BA2F  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9BA30  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9BA35  push XBC
-	ld	xbc, (0xFCCA3E:24)                     ; F9BA36  ld XBC,(0xfcca3e)
+	ld	xbc, (F64_0p2+4:24)                     ; F9BA36  ld XBC,(0xfcca3e)
 	push	xbc                                   ; F9BA3B  push XBC
-	ld	xbc, (0xFCCA3A:24)                     ; F9BA3C  ld XBC,(0xfcca3a)
+	ld	xbc, (F64_0p2:24)                     ; F9BA3C  ld XBC,(0xfcca3a)
 	push	xbc                                   ; F9BA41  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9BA42  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9BA47  call 0xfca252
@@ -3830,9 +3830,9 @@ sub_F9B887__F9B9FE:
 	push	xbc                                   ; F9BA50  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9BA51  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9BA56  push XBC
-	ld	xbc, (0xFCCA56:24)                     ; F9BA57  ld XBC,(0xfcca56)
+	ld	xbc, (F64_3+4:24)                     ; F9BA57  ld XBC,(0xfcca56)
 	push	xbc                                   ; F9BA5C  push XBC
-	ld	xbc, (0xFCCA52:24)                     ; F9BA5D  ld XBC,(0xfcca52)
+	ld	xbc, (F64_3:24)                     ; F9BA5D  ld XBC,(0xfcca52)
 	push	xbc                                   ; F9BA62  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9BA63  lda XIY,XIZ+0xff62
 	call	Double_Subtract                              ; F9BA68  call 0xfca626
@@ -3840,9 +3840,9 @@ sub_F9B887__F9B9FE:
 	push	xbc                                   ; F9BA71  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9BA72  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9BA77  push XBC
-	ld	xbc, (0xFCCA1E:24)                     ; F9BA78  ld XBC,(0xfcca1e)
+	ld	xbc, (F64_0p025+4:24)                     ; F9BA78  ld XBC,(0xfcca1e)
 	push	xbc                                   ; F9BA7D  push XBC
-	ld	xbc, (0xFCCA1A:24)                     ; F9BA7E  ld XBC,(0xfcca1a)
+	ld	xbc, (F64_0p025:24)                     ; F9BA7E  ld XBC,(0xfcca1a)
 	push	xbc                                   ; F9BA83  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9BA84  lda XIY,XIZ+0xff5a
 	call	Double_Multiply                              ; F9BA89  call 0xfca252
@@ -3850,19 +3850,19 @@ sub_F9B887__F9B9FE:
 	push	xbc                                   ; F9BA92  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9BA93  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9BA98  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9BA99  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9BA99  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9BA9E  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9BA9F  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9BA9F  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9BAA4  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9BAA5  lda XIY,XIZ+0xff52
-	call	sub_FC9576                              ; F9BAAA  call 0xfc9576
+	call	Double_Pow                              ; F9BAAA  call 0xfc9576
 	ld	xbc, (xiz-0xAA)                         ; F9BAAE  ld XBC,(XIZ+0xff56)
 	push	xbc                                   ; F9BAB3  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9BAB4  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9BAB9  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9BABA  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9BABA  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9BABF  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9BAC0  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9BAC0  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9BAC5  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9BAC6  lda XIY,XIZ+0xff4a
 	call	Double_Multiply                              ; F9BACB  call 0xfca252
@@ -3890,9 +3890,9 @@ sub_F9B887__F9BAE9:
 	push	xbc                                   ; F9BB10  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9BB11  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9BB16  push XBC
-	ld	xbc, (0xFCCA36:24)                     ; F9BB17  ld XBC,(0xfcca36)
+	ld	xbc, (F64_0p4+4:24)                     ; F9BB17  ld XBC,(0xfcca36)
 	push	xbc                                   ; F9BB1C  push XBC
-	ld	xbc, (0xFCCA32:24)                     ; F9BB1D  ld XBC,(0xfcca32)
+	ld	xbc, (F64_0p4:24)                     ; F9BB1D  ld XBC,(0xfcca32)
 	push	xbc                                   ; F9BB22  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9BB23  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9BB28  call 0xfca252
@@ -3900,9 +3900,9 @@ sub_F9B887__F9BAE9:
 	push	xbc                                   ; F9BB31  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9BB32  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9BB37  push XBC
-	ld	xbc, (0xFCCA46:24)                     ; F9BB38  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9BB38  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9BB3D  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9BB3E  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9BB3E  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9BB43  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9BB44  lda XIY,XIZ+0xff62
 	call	Double_Subtract                              ; F9BB49  call 0xfca626
@@ -3910,9 +3910,9 @@ sub_F9B887__F9BAE9:
 	push	xbc                                   ; F9BB52  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9BB53  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9BB58  push XBC
-	ld	xbc, (0xFCCA1E:24)                     ; F9BB59  ld XBC,(0xfcca1e)
+	ld	xbc, (F64_0p025+4:24)                     ; F9BB59  ld XBC,(0xfcca1e)
 	push	xbc                                   ; F9BB5E  push XBC
-	ld	xbc, (0xFCCA1A:24)                     ; F9BB5F  ld XBC,(0xfcca1a)
+	ld	xbc, (F64_0p025:24)                     ; F9BB5F  ld XBC,(0xfcca1a)
 	push	xbc                                   ; F9BB64  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9BB65  lda XIY,XIZ+0xff5a
 	call	Double_Multiply                              ; F9BB6A  call 0xfca252
@@ -3920,19 +3920,19 @@ sub_F9B887__F9BAE9:
 	push	xbc                                   ; F9BB73  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9BB74  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9BB79  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9BB7A  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9BB7A  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9BB7F  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9BB80  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9BB80  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9BB85  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9BB86  lda XIY,XIZ+0xff52
-	call	sub_FC9576                              ; F9BB8B  call 0xfc9576
+	call	Double_Pow                              ; F9BB8B  call 0xfc9576
 	ld	xbc, (xiz-0xAA)                         ; F9BB8F  ld XBC,(XIZ+0xff56)
 	push	xbc                                   ; F9BB94  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9BB95  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9BB9A  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9BB9B  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9BB9B  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9BBA0  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9BBA1  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9BBA1  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9BBA6  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9BBA7  lda XIY,XIZ+0xff4a
 	call	Double_Multiply                              ; F9BBAC  call 0xfca252
@@ -3960,9 +3960,9 @@ sub_F9B887__F9BBCA:
 	push	xbc                                   ; F9BBF1  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9BBF2  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9BBF7  push XBC
-	ld	xbc, (0xFCCA3E:24)                     ; F9BBF8  ld XBC,(0xfcca3e)
+	ld	xbc, (F64_0p2+4:24)                     ; F9BBF8  ld XBC,(0xfcca3e)
 	push	xbc                                   ; F9BBFD  push XBC
-	ld	xbc, (0xFCCA3A:24)                     ; F9BBFE  ld XBC,(0xfcca3a)
+	ld	xbc, (F64_0p2:24)                     ; F9BBFE  ld XBC,(0xfcca3a)
 	push	xbc                                   ; F9BC03  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9BC04  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9BC09  call 0xfca252
@@ -3970,9 +3970,9 @@ sub_F9B887__F9BBCA:
 	push	xbc                                   ; F9BC12  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9BC13  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9BC18  push XBC
-	ld	xbc, (0xFCCA26:24)                     ; F9BC19  ld XBC,(0xfcca26)
+	ld	xbc, (F64_neg12+4:24)                     ; F9BC19  ld XBC,(0xfcca26)
 	push	xbc                                   ; F9BC1E  push XBC
-	ld	xbc, (0xFCCA22:24)                     ; F9BC1F  ld XBC,(0xfcca22)
+	ld	xbc, (F64_neg12:24)                     ; F9BC1F  ld XBC,(0xfcca22)
 	push	xbc                                   ; F9BC24  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9BC25  lda XIY,XIZ+0xff62
 	call	Double_Subtract                              ; F9BC2A  call 0xfca626
@@ -3980,9 +3980,9 @@ sub_F9B887__F9BBCA:
 	push	xbc                                   ; F9BC33  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9BC34  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9BC39  push XBC
-	ld	xbc, (0xFCCA1E:24)                     ; F9BC3A  ld XBC,(0xfcca1e)
+	ld	xbc, (F64_0p025+4:24)                     ; F9BC3A  ld XBC,(0xfcca1e)
 	push	xbc                                   ; F9BC3F  push XBC
-	ld	xbc, (0xFCCA1A:24)                     ; F9BC40  ld XBC,(0xfcca1a)
+	ld	xbc, (F64_0p025:24)                     ; F9BC40  ld XBC,(0xfcca1a)
 	push	xbc                                   ; F9BC45  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9BC46  lda XIY,XIZ+0xff5a
 	call	Double_Multiply                              ; F9BC4B  call 0xfca252
@@ -3990,19 +3990,19 @@ sub_F9B887__F9BBCA:
 	push	xbc                                   ; F9BC54  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9BC55  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9BC5A  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9BC5B  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9BC5B  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9BC60  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9BC61  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9BC61  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9BC66  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9BC67  lda XIY,XIZ+0xff52
-	call	sub_FC9576                              ; F9BC6C  call 0xfc9576
+	call	Double_Pow                              ; F9BC6C  call 0xfc9576
 	ld	xbc, (xiz-0xAA)                         ; F9BC70  ld XBC,(XIZ+0xff56)
 	push	xbc                                   ; F9BC75  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9BC76  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9BC7B  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9BC7C  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9BC7C  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9BC81  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9BC82  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9BC82  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9BC87  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9BC88  lda XIY,XIZ+0xff4a
 	call	Double_Multiply                              ; F9BC8D  call 0xfca252
@@ -4016,9 +4016,9 @@ sub_F9B887__F9BBCA:
 	inc	8, xsp                                 ; F9BCA6  inc 0,XSP
 	jr sub_F9B887__F9BCBD                      ; F9BCA8  jr T,0xf9bcbd
 sub_F9B887__F9BCAA:
-	ld	xbc, (0xFCCA46:24)                     ; F9BCAA  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9BCAA  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9BCAF  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9BCB0  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9BCB0  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9BCB5  push XBC
 	call	Double_ToFloat32                              ; F9BCB6  call 0xfcadd6
 	ld	(xiz-18), xiy                           ; F9BCBA  ld (XIZ+0xee),XIY
@@ -4039,9 +4039,9 @@ sub_F9B887__F9BCC0:
 	push	xbc                                   ; F9BCE7  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9BCE8  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9BCED  push XBC
-	ld	xbc, (0xFCCA16:24)                     ; F9BCEE  ld XBC,(0xfcca16)
+	ld	xbc, (F64_0p516+4:24)                     ; F9BCEE  ld XBC,(0xfcca16)
 	push	xbc                                   ; F9BCF3  push XBC
-	ld	xbc, (0xFCCA12:24)                     ; F9BCF4  ld XBC,(0xfcca12)
+	ld	xbc, (F64_0p516:24)                     ; F9BCF4  ld XBC,(0xfcca12)
 	push	xbc                                   ; F9BCF9  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9BCFA  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9BCFF  call 0xfca252
@@ -4049,9 +4049,9 @@ sub_F9B887__F9BCC0:
 	push	xbc                                   ; F9BD08  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9BD09  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9BD0E  push XBC
-	ld	xbc, (0xFCCA56:24)                     ; F9BD0F  ld XBC,(0xfcca56)
+	ld	xbc, (F64_3+4:24)                     ; F9BD0F  ld XBC,(0xfcca56)
 	push	xbc                                   ; F9BD14  push XBC
-	ld	xbc, (0xFCCA52:24)                     ; F9BD15  ld XBC,(0xfcca52)
+	ld	xbc, (F64_3:24)                     ; F9BD15  ld XBC,(0xfcca52)
 	push	xbc                                   ; F9BD1A  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9BD1B  lda XIY,XIZ+0xff62
 	call	Double_Subtract                              ; F9BD20  call 0xfca626
@@ -4059,9 +4059,9 @@ sub_F9B887__F9BCC0:
 	push	xbc                                   ; F9BD29  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9BD2A  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9BD2F  push XBC
-	ld	xbc, (0xFCCA1E:24)                     ; F9BD30  ld XBC,(0xfcca1e)
+	ld	xbc, (F64_0p025+4:24)                     ; F9BD30  ld XBC,(0xfcca1e)
 	push	xbc                                   ; F9BD35  push XBC
-	ld	xbc, (0xFCCA1A:24)                     ; F9BD36  ld XBC,(0xfcca1a)
+	ld	xbc, (F64_0p025:24)                     ; F9BD36  ld XBC,(0xfcca1a)
 	push	xbc                                   ; F9BD3B  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9BD3C  lda XIY,XIZ+0xff5a
 	call	Double_Multiply                              ; F9BD41  call 0xfca252
@@ -4069,19 +4069,19 @@ sub_F9B887__F9BCC0:
 	push	xbc                                   ; F9BD4A  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9BD4B  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9BD50  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9BD51  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9BD51  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9BD56  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9BD57  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9BD57  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9BD5C  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9BD5D  lda XIY,XIZ+0xff52
-	call	sub_FC9576                              ; F9BD62  call 0xfc9576
+	call	Double_Pow                              ; F9BD62  call 0xfc9576
 	ld	xbc, (xiz-0xAA)                         ; F9BD66  ld XBC,(XIZ+0xff56)
 	push	xbc                                   ; F9BD6B  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9BD6C  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9BD71  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9BD72  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9BD72  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9BD77  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9BD78  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9BD78  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9BD7D  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9BD7E  lda XIY,XIZ+0xff4a
 	call	Double_Multiply                              ; F9BD83  call 0xfca252
@@ -4095,9 +4095,9 @@ sub_F9B887__F9BCC0:
 	inc	8, xsp                                 ; F9BD9C  inc 0,XSP
 	jr sub_F9B887__F9BDB3                      ; F9BD9E  jr T,0xf9bdb3
 sub_F9B887__F9BDA0:
-	ld	xbc, (0xFCCA46:24)                     ; F9BDA0  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9BDA0  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9BDA5  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9BDA6  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9BDA6  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9BDAB  push XBC
 	call	Double_ToFloat32                              ; F9BDAC  call 0xfcadd6
 	ld	(xiz-18), xiy                           ; F9BDB0  ld (XIZ+0xee),XIY
@@ -4135,9 +4135,9 @@ sub_F9B887__F9BDC9:
 	push	xbc                                   ; F9BE02  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9BE03  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9BE08  push XBC
-	ld	xbc, (0xFCCA0E:24)                     ; F9BE09  ld XBC,(0xfcca0e)
+	ld	xbc, (F64_0p999999+4:24)                     ; F9BE09  ld XBC,(0xfcca0e)
 	push	xbc                                   ; F9BE0E  push XBC
-	ld	xbc, (0xFCCA0A:24)                     ; F9BE0F  ld XBC,(0xfcca0a)
+	ld	xbc, (F64_0p999999:24)                     ; F9BE0F  ld XBC,(0xfcca0a)
 	push	xbc                                   ; F9BE14  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9BE15  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9BE1A  call 0xfca252
@@ -4170,7 +4170,7 @@ sub_F9B887__F9BDC9:
 ;          0xF9DFB7 = Stream_ReadU24BE_Shl8, 0xF9E020 = Stream_ReadU24BE
 ;          0xF9E077 = Int32_ToFloat32_Q31, 0xF9E1ED = sub_F9E1ED
 ;          0xF9ECF1 = sub_F9ECF1, 0xF9F765 = P7Unit_SendValueTable
-;          0xFC9576 = sub_FC9576, 0xFCA1B6 = Double_Negate
+;          0xFC9576 = Double_Pow, 0xFCA1B6 = Double_Negate
 ;          0xFCA252 = Double_Multiply, 0xFCA41F = Double_Add
 ;          0xFCA626 = Double_Subtract, 0xFCA6FD = Int32_ToDouble
 ;          0xFCA7A5 = Double_Divide, 0xFCA997 = Int16_ToDouble
@@ -4212,9 +4212,9 @@ sub_F9BE3A__F9BE3F:
 	push	xbc                                   ; F9BE72  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9BE73  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9BE78  push XBC
-	ld	xbc, (0xFCCA06:24)                     ; F9BE79  ld XBC,(0xfcca06)
+	ld	xbc, (F64_2p267573696em06+4:24)                     ; F9BE79  ld XBC,(0xfcca06)
 	push	xbc                                   ; F9BE7E  push XBC
-	ld	xbc, (0xFCCA02:24)                     ; F9BE7F  ld XBC,(0xfcca02)
+	ld	xbc, (F64_2p267573696em06:24)                     ; F9BE7F  ld XBC,(0xfcca02)
 	push	xbc                                   ; F9BE84  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9BE85  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9BE8A  call 0xfca252
@@ -4245,9 +4245,9 @@ sub_F9BE3A__F9BEA4:
 	push	xbc                                   ; F9BED8  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9BED9  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9BEDE  push XBC
-	ld	xbc, (0xFCC9FE:24)                     ; F9BEDF  ld XBC,(0xfcc9fe)
+	ld	xbc, (F64_4p535147392em06+4:24)                     ; F9BEDF  ld XBC,(0xfcc9fe)
 	push	xbc                                   ; F9BEE4  push XBC
-	ld	xbc, (0xFCC9FA:24)                     ; F9BEE5  ld XBC,(0xfcc9fa)
+	ld	xbc, (F64_4p535147392em06:24)                     ; F9BEE5  ld XBC,(0xfcc9fa)
 	push	xbc                                   ; F9BEEA  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9BEEB  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9BEF0  call 0xfca252
@@ -4285,9 +4285,9 @@ sub_F9BE3A__F9BF0A:
 	push	xbc                                   ; F9BF59  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9BF5A  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9BF5F  push XBC
-	ld	xbc, (0xFCC9FE:24)                     ; F9BF60  ld XBC,(0xfcc9fe)
+	ld	xbc, (F64_4p535147392em06+4:24)                     ; F9BF60  ld XBC,(0xfcc9fe)
 	push	xbc                                   ; F9BF65  push XBC
-	ld	xbc, (0xFCC9FA:24)                     ; F9BF66  ld XBC,(0xfcc9fa)
+	ld	xbc, (F64_4p535147392em06:24)                     ; F9BF66  ld XBC,(0xfcc9fa)
 	push	xbc                                   ; F9BF6B  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9BF6C  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9BF71  call 0xfca252
@@ -4323,9 +4323,9 @@ sub_F9BE3A__F9BF8A:
 	push	xbc                                   ; F9BFD1  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9BFD2  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9BFD7  push XBC
-	ld	xbc, (0xFCC9FE:24)                     ; F9BFD8  ld XBC,(0xfcc9fe)
+	ld	xbc, (F64_4p535147392em06+4:24)                     ; F9BFD8  ld XBC,(0xfcc9fe)
 	push	xbc                                   ; F9BFDD  push XBC
-	ld	xbc, (0xFCC9FA:24)                     ; F9BFDE  ld XBC,(0xfcc9fa)
+	ld	xbc, (F64_4p535147392em06:24)                     ; F9BFDE  ld XBC,(0xfcc9fa)
 	push	xbc                                   ; F9BFE3  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9BFE4  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9BFE9  call 0xfca252
@@ -4350,9 +4350,9 @@ sub_F9BE3A__F9C003:
 	push	xbc                                   ; F9C022  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9C023  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9C028  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; F9C029  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; F9C029  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; F9C02E  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; F9C02F  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; F9C02F  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; F9C034  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9C035  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9C03A  call 0xfca252
@@ -4391,9 +4391,9 @@ sub_F9BE3A__F9C054:
 	push	xbc                                   ; F9C0A1  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9C0A2  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9C0A7  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; F9C0A8  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; F9C0A8  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; F9C0AD  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; F9C0AE  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; F9C0AE  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; F9C0B3  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9C0B4  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9C0B9  call 0xfca252
@@ -4431,9 +4431,9 @@ sub_F9BE3A__F9C0D3:
 	push	xbc                                   ; F9C122  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9C123  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9C128  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; F9C129  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; F9C129  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; F9C12E  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; F9C12F  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; F9C12F  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; F9C134  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9C135  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9C13A  call 0xfca252
@@ -4471,9 +4471,9 @@ sub_F9BE3A__F9C154:
 	push	xbc                                   ; F9C1A3  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9C1A4  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9C1A9  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; F9C1AA  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; F9C1AA  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; F9C1AF  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; F9C1B0  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; F9C1B0  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; F9C1B5  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9C1B6  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9C1BB  call 0xfca252
@@ -4509,9 +4509,9 @@ sub_F9BE3A__F9C1D4:
 	push	xbc                                   ; F9C21B  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9C21C  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9C221  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; F9C222  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; F9C222  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; F9C227  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; F9C228  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; F9C228  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; F9C22D  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9C22E  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9C233  call 0xfca252
@@ -4579,9 +4579,9 @@ sub_F9BE3A__F9C2A6:
 	push	xbc                                   ; F9C2D7  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9C2D8  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9C2DD  push XBC
-	ld	xbc, (0xFCC9EE:24)                     ; F9C2DE  ld XBC,(0xfcc9ee)
+	ld	xbc, (F64_0p0101010101+4:24)                     ; F9C2DE  ld XBC,(0xfcc9ee)
 	push	xbc                                   ; F9C2E3  push XBC
-	ld	xbc, (0xFCC9EA:24)                     ; F9C2E4  ld XBC,(0xfcc9ea)
+	ld	xbc, (F64_0p0101010101:24)                     ; F9C2E4  ld XBC,(0xfcc9ea)
 	push	xbc                                   ; F9C2E9  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9C2EA  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9C2EF  call 0xfca252
@@ -4625,9 +4625,9 @@ sub_F9BE3A__F9C342:
 	push	xbc                                   ; F9C364  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9C365  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9C36A  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9C36B  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9C36B  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9C370  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9C371  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9C371  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9C376  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9C377  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9C37C  call 0xfca252
@@ -4728,9 +4728,9 @@ sub_F9BE3A__F9C44C:
 	push	xbc                                   ; F9C496  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9C497  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9C49C  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9C49D  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9C49D  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9C4A2  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9C4A3  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9C4A3  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9C4A8  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9C4A9  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9C4AE  call 0xfca252
@@ -4764,12 +4764,12 @@ sub_F9BE3A__F9C44C:
 	push	xbc                                   ; F9C511  push XBC
 	ld	xbc, (xiz-0xBA)                         ; F9C512  ld XBC,(XIZ+0xff46)
 	push	xbc                                   ; F9C517  push XBC
-	ld	xbc, (0xFCC9DE:24)                     ; F9C518  ld XBC,(0xfcc9de)
+	ld	xbc, (F64_2+4:24)                     ; F9C518  ld XBC,(0xfcc9de)
 	push	xbc                                   ; F9C51D  push XBC
-	ld	xbc, (0xFCC9DA:24)                     ; F9C51E  ld XBC,(0xfcc9da)
+	ld	xbc, (F64_2:24)                     ; F9C51E  ld XBC,(0xfcc9da)
 	push	xbc                                   ; F9C523  push XBC
 	lda	xiy, (xiz-0xC2)                        ; F9C524  lda XIY,XIZ+0xff3e
-	call	sub_FC9576                              ; F9C529  call 0xfc9576
+	call	Double_Pow                              ; F9C529  call 0xfc9576
 	ld	xbc, (xiz-0xBE)                         ; F9C52D  ld XBC,(XIZ+0xff42)
 	push	xbc                                   ; F9C532  push XBC
 	ld	xbc, (xiz-0xC2)                         ; F9C533  ld XBC,(XIZ+0xff3e)
@@ -4803,9 +4803,9 @@ sub_F9BE3A__F9C547:
 	push	xbc                                   ; F9C58A  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9C58B  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9C590  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9C591  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9C591  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9C596  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9C597  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9C597  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9C59C  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9C59D  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9C5A2  call 0xfca252
@@ -4839,12 +4839,12 @@ sub_F9BE3A__F9C547:
 	push	xbc                                   ; F9C605  push XBC
 	ld	xbc, (xiz-0xBA)                         ; F9C606  ld XBC,(XIZ+0xff46)
 	push	xbc                                   ; F9C60B  push XBC
-	ld	xbc, (0xFCC9DE:24)                     ; F9C60C  ld XBC,(0xfcc9de)
+	ld	xbc, (F64_2+4:24)                     ; F9C60C  ld XBC,(0xfcc9de)
 	push	xbc                                   ; F9C611  push XBC
-	ld	xbc, (0xFCC9DA:24)                     ; F9C612  ld XBC,(0xfcc9da)
+	ld	xbc, (F64_2:24)                     ; F9C612  ld XBC,(0xfcc9da)
 	push	xbc                                   ; F9C617  push XBC
 	lda	xiy, (xiz-0xC2)                        ; F9C618  lda XIY,XIZ+0xff3e
-	call	sub_FC9576                              ; F9C61D  call 0xfc9576
+	call	Double_Pow                              ; F9C61D  call 0xfc9576
 	ld	xbc, (xiz-0xBE)                         ; F9C621  ld XBC,(XIZ+0xff42)
 	push	xbc                                   ; F9C626  push XBC
 	ld	xbc, (xiz-0xC2)                         ; F9C627  ld XBC,(XIZ+0xff3e)
@@ -5089,9 +5089,9 @@ sub_F9BE3A__F9C8D6:
 	push	xiy                                   ; F9C8E7  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9C8E8  lda XIY,XIZ+0xff72
 	call	Float32_ToDouble                              ; F9C8ED  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; F9C8F1  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9C8F1  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9C8F6  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9C8F7  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9C8F7  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9C8FC  push XBC
 	ld	xbc, (xiz-0x8A)                         ; F9C8FD  ld XBC,(XIZ+0xff76)
 	push	xbc                                   ; F9C902  push XBC
@@ -5103,9 +5103,9 @@ sub_F9BE3A__F9C8D6:
 	push	xbc                                   ; F9C917  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9C918  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9C91D  push XBC
-	ld	xbc, (0xFCC9CE:24)                     ; F9C91E  ld XBC,(0xfcc9ce)
+	ld	xbc, (F64_441+4:24)                     ; F9C91E  ld XBC,(0xfcc9ce)
 	push	xbc                                   ; F9C923  push XBC
-	ld	xbc, (0xFCC9CA:24)                     ; F9C924  ld XBC,(0xfcc9ca)
+	ld	xbc, (F64_441:24)                     ; F9C924  ld XBC,(0xfcc9ca)
 	push	xbc                                   ; F9C929  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9C92A  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9C92F  call 0xfca252
@@ -5113,9 +5113,9 @@ sub_F9BE3A__F9C8D6:
 	push	xbc                                   ; F9C938  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9C939  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9C93E  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9C93F  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9C93F  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9C944  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9C945  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9C945  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9C94A  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9C94B  lda XIY,XIZ+0xff5a
 	call	Double_Divide                              ; F9C950  call 0xfca7a5
@@ -5123,19 +5123,19 @@ sub_F9BE3A__F9C8D6:
 	push	xbc                                   ; F9C959  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9C95A  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9C95F  push XBC
-	ld	xbc, (0xFCC9C6:24)                     ; F9C960  ld XBC,(0xfcc9c6)
+	ld	xbc, (F64_0p4270422+4:24)                     ; F9C960  ld XBC,(0xfcc9c6)
 	push	xbc                                   ; F9C965  push XBC
-	ld	xbc, (0xFCC9C2:24)                     ; F9C966  ld XBC,(0xfcc9c2)
+	ld	xbc, (F64_0p4270422:24)                     ; F9C966  ld XBC,(0xfcc9c2)
 	push	xbc                                   ; F9C96B  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9C96C  lda XIY,XIZ+0xff52
-	call	sub_FC9576                              ; F9C971  call 0xfc9576
+	call	Double_Pow                              ; F9C971  call 0xfc9576
 	ld	xbc, (xiz-0xAA)                         ; F9C975  ld XBC,(XIZ+0xff56)
 	push	xbc                                   ; F9C97A  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9C97B  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9C980  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9C981  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9C981  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9C986  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9C987  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9C987  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9C98C  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9C98D  lda XIY,XIZ+0xff4a
 	call	Double_Subtract                              ; F9C992  call 0xfca626
@@ -5155,9 +5155,9 @@ sub_F9BE3A__F9C9B0:
 	push	xiy                                   ; F9C9BA  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9C9BB  lda XIY,XIZ+0xff72
 	call	Float32_ToDouble                              ; F9C9C0  call 0xfcaa50
-	ld	xbc, (0xFCC9BE:24)                     ; F9C9C4  ld XBC,(0xfcc9be)
+	ld	xbc, (F64_89+4:24)                     ; F9C9C4  ld XBC,(0xfcc9be)
 	push	xbc                                   ; F9C9C9  push XBC
-	ld	xbc, (0xFCC9BA:24)                     ; F9C9CA  ld XBC,(0xfcc9ba)
+	ld	xbc, (F64_89:24)                     ; F9C9CA  ld XBC,(0xfcc9ba)
 	push	xbc                                   ; F9C9CF  push XBC
 	ld	xbc, (xiz-0x8A)                         ; F9C9D0  ld XBC,(XIZ+0xff76)
 	push	xbc                                   ; F9C9D5  push XBC
@@ -5169,9 +5169,9 @@ sub_F9BE3A__F9C9B0:
 	push	xbc                                   ; F9C9EA  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9C9EB  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9C9F0  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9C9F1  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9C9F1  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9C9F6  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9C9F7  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9C9F7  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9C9FC  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9C9FD  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9CA02  call 0xfca252
@@ -5179,9 +5179,9 @@ sub_F9BE3A__F9C9B0:
 	push	xbc                                   ; F9CA0B  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9CA0C  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9CA11  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9CA12  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9CA12  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9CA17  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9CA18  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9CA18  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9CA1D  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9CA1E  lda XIY,XIZ+0xff5a
 	call	Double_Divide                              ; F9CA23  call 0xfca7a5
@@ -5189,19 +5189,19 @@ sub_F9BE3A__F9C9B0:
 	push	xbc                                   ; F9CA2C  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9CA2D  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9CA32  push XBC
-	ld	xbc, (0xFCC9C6:24)                     ; F9CA33  ld XBC,(0xfcc9c6)
+	ld	xbc, (F64_0p4270422+4:24)                     ; F9CA33  ld XBC,(0xfcc9c6)
 	push	xbc                                   ; F9CA38  push XBC
-	ld	xbc, (0xFCC9C2:24)                     ; F9CA39  ld XBC,(0xfcc9c2)
+	ld	xbc, (F64_0p4270422:24)                     ; F9CA39  ld XBC,(0xfcc9c2)
 	push	xbc                                   ; F9CA3E  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9CA3F  lda XIY,XIZ+0xff52
-	call	sub_FC9576                              ; F9CA44  call 0xfc9576
+	call	Double_Pow                              ; F9CA44  call 0xfc9576
 	ld	xbc, (xiz-0xAA)                         ; F9CA48  ld XBC,(XIZ+0xff56)
 	push	xbc                                   ; F9CA4D  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9CA4E  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9CA53  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9CA54  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9CA54  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9CA59  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9CA5A  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9CA5A  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9CA5F  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9CA60  lda XIY,XIZ+0xff4a
 	call	Double_Subtract                              ; F9CA65  call 0xfca626
@@ -5264,9 +5264,9 @@ sub_F9BE3A__F9CA8F:
 	push	xbc                                   ; F9CAFD  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9CAFE  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9CB03  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; F9CB04  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; F9CB04  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; F9CB09  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; F9CB0A  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; F9CB0A  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; F9CB0F  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9CB10  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9CB15  call 0xfca252
@@ -5284,9 +5284,9 @@ sub_F9BE3A__F9CA8F:
 	push	xbc                                   ; F9CB3F  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9CB40  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9CB45  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9CB46  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9CB46  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9CB4B  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9CB4C  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9CB4C  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9CB51  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9CB52  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9CB57  call 0xfca252
@@ -5294,9 +5294,9 @@ sub_F9BE3A__F9CA8F:
 	push	xbc                                   ; F9CB60  push XBC
 	ld	xbc, (xiz-0xAE)                         ; F9CB61  ld XBC,(XIZ+0xff52)
 	push	xbc                                   ; F9CB66  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; F9CB67  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; F9CB67  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; F9CB6C  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; F9CB6D  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; F9CB6D  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; F9CB72  push XBC
 	lda	xiy, (xiz-0xB6)                        ; F9CB73  lda XIY,XIZ+0xff4a
 	call	Double_Subtract                              ; F9CB78  call 0xfca626
@@ -5318,12 +5318,12 @@ sub_F9BE3A__F9CA8F:
 	push	xbc                                   ; F9CBB0  push XBC
 	ld	xbc, (xiz-0xC6)                         ; F9CBB1  ld XBC,(XIZ+0xff3a)
 	push	xbc                                   ; F9CBB6  push XBC
-	ld	xbc, (0xFCC9DE:24)                     ; F9CBB7  ld XBC,(0xfcc9de)
+	ld	xbc, (F64_2+4:24)                     ; F9CBB7  ld XBC,(0xfcc9de)
 	push	xbc                                   ; F9CBBC  push XBC
-	ld	xbc, (0xFCC9DA:24)                     ; F9CBBD  ld XBC,(0xfcc9da)
+	ld	xbc, (F64_2:24)                     ; F9CBBD  ld XBC,(0xfcc9da)
 	push	xbc                                   ; F9CBC2  push XBC
 	lda	xiy, (xiz-0xCE)                        ; F9CBC3  lda XIY,XIZ+0xff32
-	call	sub_FC9576                              ; F9CBC8  call 0xfc9576
+	call	Double_Pow                              ; F9CBC8  call 0xfc9576
 	ld	xbc, (xiz-0xCA)                         ; F9CBCC  ld XBC,(XIZ+0xff36)
 	push	xbc                                   ; F9CBD1  push XBC
 	ld	xbc, (xiz-0xCE)                         ; F9CBD2  ld XBC,(XIZ+0xff32)
@@ -5363,9 +5363,9 @@ sub_F9BE3A__F9CBEF:
 	push	xbc                                   ; F9CC39  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9CC3A  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9CC3F  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9CC40  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9CC40  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9CC45  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9CC46  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9CC46  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9CC4B  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9CC4C  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9CC51  call 0xfca252
@@ -5415,9 +5415,9 @@ sub_F9BE3A__F9CC98:
 	push	xbc                                   ; F9CCE2  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9CCE3  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9CCE8  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9CCE9  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9CCE9  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9CCEE  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9CCEF  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9CCEF  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9CCF4  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9CCF5  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9CCFA  call 0xfca252
@@ -5467,9 +5467,9 @@ sub_F9BE3A__F9CD41:
 	push	xbc                                   ; F9CD8B  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9CD8C  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9CD91  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9CD92  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9CD92  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9CD97  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9CD98  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9CD98  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9CD9D  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9CD9E  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9CDA3  call 0xfca252
@@ -5519,9 +5519,9 @@ sub_F9BE3A__F9CDEA:
 	push	xbc                                   ; F9CE34  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9CE35  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9CE3A  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9CE3B  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9CE3B  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9CE40  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9CE41  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9CE41  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9CE46  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9CE47  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9CE4C  call 0xfca252
@@ -5569,9 +5569,9 @@ sub_F9BE3A__F9CE93:
 	push	xbc                                   ; F9CED6  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9CED7  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9CEDC  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9CEDD  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9CEDD  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9CEE2  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9CEE3  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9CEE3  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9CEE8  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9CEE9  lda XIY,XIZ+0xff66
 	call	Double_Multiply                              ; F9CEEE  call 0xfca252
@@ -5652,9 +5652,9 @@ sub_F9BE3A__F9CFA5:
 	push	xbc                                   ; F9CFBE  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9CFBF  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9CFC4  push XBC
-	ld	xbc, (0xFCC9DE:24)                     ; F9CFC5  ld XBC,(0xfcc9de)
+	ld	xbc, (F64_2+4:24)                     ; F9CFC5  ld XBC,(0xfcc9de)
 	push	xbc                                   ; F9CFCA  push XBC
-	ld	xbc, (0xFCC9DA:24)                     ; F9CFCB  ld XBC,(0xfcc9da)
+	ld	xbc, (F64_2:24)                     ; F9CFCB  ld XBC,(0xfcc9da)
 	push	xbc                                   ; F9CFD0  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9CFD1  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9CFD6  call 0xfca252
@@ -5701,9 +5701,9 @@ sub_F9BE3A__F9D03C:
 	push	xiy                                   ; F9D046  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9D047  lda XIY,XIZ+0xff72
 	call	Float32_ToDouble                              ; F9D04C  call 0xfcaa50
-	ld	xbc, (0xFCCA66:24)                     ; F9D050  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9D050  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9D055  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9D056  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9D056  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9D05B  push XBC
 	ld	xbc, (xiz-0x8A)                         ; F9D05C  ld XBC,(XIZ+0xff76)
 	push	xbc                                   ; F9D061  push XBC
@@ -5715,15 +5715,15 @@ sub_F9BE3A__F9D03C:
 	push	xbc                                   ; F9D076  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9D077  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9D07C  push XBC
-	ld	xbc, (0xFCC9AE:24)                     ; F9D07D  ld XBC,(0xfcc9ae)
+	ld	xbc, (F64_20+4:24)                     ; F9D07D  ld XBC,(0xfcc9ae)
 	push	xbc                                   ; F9D082  push XBC
-	ld	xbc, (0xFCC9AA:24)                     ; F9D083  ld XBC,(0xfcc9aa)
+	ld	xbc, (F64_20:24)                     ; F9D083  ld XBC,(0xfcc9aa)
 	push	xbc                                   ; F9D088  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D089  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9D08E  call 0xfca252
-	ld	xbc, (0xFCC9AE:24)                     ; F9D092  ld XBC,(0xfcc9ae)
+	ld	xbc, (F64_20+4:24)                     ; F9D092  ld XBC,(0xfcc9ae)
 	push	xbc                                   ; F9D097  push XBC
-	ld	xbc, (0xFCC9AA:24)                     ; F9D098  ld XBC,(0xfcc9aa)
+	ld	xbc, (F64_20:24)                     ; F9D098  ld XBC,(0xfcc9aa)
 	push	xbc                                   ; F9D09D  push XBC
 	ld	xbc, (xiz-0x9A)                         ; F9D09E  ld XBC,(XIZ+0xff66)
 	push	xbc                                   ; F9D0A3  push XBC
@@ -5774,9 +5774,9 @@ sub_F9BE3A__F9D115:
 	push	xiy                                   ; F9D11F  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9D120  lda XIY,XIZ+0xff72
 	call	Float32_ToDouble                              ; F9D125  call 0xfcaa50
-	ld	xbc, (0xFCC9A6:24)                     ; F9D129  ld XBC,(0xfcc9a6)
+	ld	xbc, (F64_19+4:24)                     ; F9D129  ld XBC,(0xfcc9a6)
 	push	xbc                                   ; F9D12E  push XBC
-	ld	xbc, (0xFCC9A2:24)                     ; F9D12F  ld XBC,(0xfcc9a2)
+	ld	xbc, (F64_19:24)                     ; F9D12F  ld XBC,(0xfcc9a2)
 	push	xbc                                   ; F9D134  push XBC
 	ld	xbc, (xiz-0x8A)                         ; F9D135  ld XBC,(XIZ+0xff76)
 	push	xbc                                   ; F9D13A  push XBC
@@ -5788,15 +5788,15 @@ sub_F9BE3A__F9D115:
 	push	xbc                                   ; F9D14F  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9D150  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9D155  push XBC
-	ld	xbc, (0xFCC99E:24)                     ; F9D156  ld XBC,(0xfcc99e)
+	ld	xbc, (F64_100+4:24)                     ; F9D156  ld XBC,(0xfcc99e)
 	push	xbc                                   ; F9D15B  push XBC
-	ld	xbc, (0xFCC99A:24)                     ; F9D15C  ld XBC,(0xfcc99a)
+	ld	xbc, (F64_100:24)                     ; F9D15C  ld XBC,(0xfcc99a)
 	push	xbc                                   ; F9D161  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D162  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9D167  call 0xfca252
-	ld	xbc, (0xFCC996:24)                     ; F9D16B  ld XBC,(0xfcc996)
+	ld	xbc, (F64_200+4:24)                     ; F9D16B  ld XBC,(0xfcc996)
 	push	xbc                                   ; F9D170  push XBC
-	ld	xbc, (0xFCC992:24)                     ; F9D171  ld XBC,(0xfcc992)
+	ld	xbc, (F64_200:24)                     ; F9D171  ld XBC,(0xfcc992)
 	push	xbc                                   ; F9D176  push XBC
 	ld	xbc, (xiz-0x9A)                         ; F9D177  ld XBC,(XIZ+0xff66)
 	push	xbc                                   ; F9D17C  push XBC
@@ -5831,9 +5831,9 @@ sub_F9BE3A__F9D1C4:
 	push	xiy                                   ; F9D1CE  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9D1CF  lda XIY,XIZ+0xff72
 	call	Float32_ToDouble                              ; F9D1D4  call 0xfcaa50
-	ld	xbc, (0xFCC98E:24)                     ; F9D1D8  ld XBC,(0xfcc98e)
+	ld	xbc, (F64_31+4:24)                     ; F9D1D8  ld XBC,(0xfcc98e)
 	push	xbc                                   ; F9D1DD  push XBC
-	ld	xbc, (0xFCC98A:24)                     ; F9D1DE  ld XBC,(0xfcc98a)
+	ld	xbc, (F64_31:24)                     ; F9D1DE  ld XBC,(0xfcc98a)
 	push	xbc                                   ; F9D1E3  push XBC
 	ld	xbc, (xiz-0x8A)                         ; F9D1E4  ld XBC,(XIZ+0xff76)
 	push	xbc                                   ; F9D1E9  push XBC
@@ -5845,15 +5845,15 @@ sub_F9BE3A__F9D1C4:
 	push	xbc                                   ; F9D1FE  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9D1FF  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9D204  push XBC
-	ld	xbc, (0xFCC996:24)                     ; F9D205  ld XBC,(0xfcc996)
+	ld	xbc, (F64_200+4:24)                     ; F9D205  ld XBC,(0xfcc996)
 	push	xbc                                   ; F9D20A  push XBC
-	ld	xbc, (0xFCC992:24)                     ; F9D20B  ld XBC,(0xfcc992)
+	ld	xbc, (F64_200:24)                     ; F9D20B  ld XBC,(0xfcc992)
 	push	xbc                                   ; F9D210  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D211  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9D216  call 0xfca252
-	ld	xbc, (0xFCC986:24)                     ; F9D21A  ld XBC,(0xfcc986)
+	ld	xbc, (F64_1400+4:24)                     ; F9D21A  ld XBC,(0xfcc986)
 	push	xbc                                   ; F9D21F  push XBC
-	ld	xbc, (0xFCC982:24)                     ; F9D220  ld XBC,(0xfcc982)
+	ld	xbc, (F64_1400:24)                     ; F9D220  ld XBC,(0xfcc982)
 	push	xbc                                   ; F9D225  push XBC
 	ld	xbc, (xiz-0x9A)                         ; F9D226  ld XBC,(XIZ+0xff66)
 	push	xbc                                   ; F9D22B  push XBC
@@ -5884,9 +5884,9 @@ sub_F9BE3A__F9D266:
 	push	xbc                                   ; F9D27A  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9D27B  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9D280  push XBC
-	ld	xbc, (0xFCC97E:24)                     ; F9D281  ld XBC,(0xfcc97e)
+	ld	xbc, (F64_0p0004166666667+4:24)                     ; F9D281  ld XBC,(0xfcc97e)
 	push	xbc                                   ; F9D286  push XBC
-	ld	xbc, (0xFCC97A:24)                     ; F9D287  ld XBC,(0xfcc97a)
+	ld	xbc, (F64_0p0004166666667:24)                     ; F9D287  ld XBC,(0xfcc97a)
 	push	xbc                                   ; F9D28C  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9D28D  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9D292  call 0xfca252
@@ -5894,19 +5894,19 @@ sub_F9BE3A__F9D266:
 	push	xbc                                   ; F9D29B  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9D29C  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9D2A1  push XBC
-	ld	xbc, (0xFCC9DE:24)                     ; F9D2A2  ld XBC,(0xfcc9de)
+	ld	xbc, (F64_2+4:24)                     ; F9D2A2  ld XBC,(0xfcc9de)
 	push	xbc                                   ; F9D2A7  push XBC
-	ld	xbc, (0xFCC9DA:24)                     ; F9D2A8  ld XBC,(0xfcc9da)
+	ld	xbc, (F64_2:24)                     ; F9D2A8  ld XBC,(0xfcc9da)
 	push	xbc                                   ; F9D2AD  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D2AE  lda XIY,XIZ+0xff62
-	call	sub_FC9576                              ; F9D2B3  call 0xfc9576
+	call	Double_Pow                              ; F9D2B3  call 0xfc9576
 	ld	xbc, (xiz-0x9A)                         ; F9D2B7  ld XBC,(XIZ+0xff66)
 	push	xbc                                   ; F9D2BC  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9D2BD  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9D2C2  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9D2C3  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9D2C3  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9D2C8  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9D2C9  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9D2C9  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9D2CE  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9D2CF  lda XIY,XIZ+0xff5a
 	call	Double_Subtract                              ; F9D2D4  call 0xfca626
@@ -5914,9 +5914,9 @@ sub_F9BE3A__F9D266:
 	push	xbc                                   ; F9D2DD  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9D2DE  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9D2E3  push XBC
-	ld	xbc, (0xFCC97E:24)                     ; F9D2E4  ld XBC,(0xfcc97e)
+	ld	xbc, (F64_0p0004166666667+4:24)                     ; F9D2E4  ld XBC,(0xfcc97e)
 	push	xbc                                   ; F9D2E9  push XBC
-	ld	xbc, (0xFCC97A:24)                     ; F9D2EA  ld XBC,(0xfcc97a)
+	ld	xbc, (F64_0p0004166666667:24)                     ; F9D2EA  ld XBC,(0xfcc97a)
 	push	xbc                                   ; F9D2EF  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9D2F0  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9D2F5  call 0xfca252
@@ -5950,9 +5950,9 @@ sub_F9BE3A__F9D31C:
 	push	xbc                                   ; F9D347  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9D348  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9D34D  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; F9D34E  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; F9D34E  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; F9D353  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; F9D354  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; F9D354  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; F9D359  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9D35A  lda XIY,XIZ+0xff6a
 	call	Double_Subtract                              ; F9D35F  call 0xfca626
@@ -5960,9 +5960,9 @@ sub_F9BE3A__F9D31C:
 	push	xbc                                   ; F9D368  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9D369  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9D36E  push XBC
-	ld	xbc, (0xFCC976:24)                     ; F9D36F  ld XBC,(0xfcc976)
+	ld	xbc, (F64_neg0p0697+4:24)                     ; F9D36F  ld XBC,(0xfcc976)
 	push	xbc                                   ; F9D374  push XBC
-	ld	xbc, (0xFCC972:24)                     ; F9D375  ld XBC,(0xfcc972)
+	ld	xbc, (F64_neg0p0697:24)                     ; F9D375  ld XBC,(0xfcc972)
 	push	xbc                                   ; F9D37A  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D37B  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9D380  call 0xfca252
@@ -5970,19 +5970,19 @@ sub_F9BE3A__F9D31C:
 	push	xbc                                   ; F9D389  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9D38A  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9D38F  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9D390  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9D390  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9D395  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9D396  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9D396  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9D39B  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9D39C  lda XIY,XIZ+0xff5a
-	call	sub_FC9576                              ; F9D3A1  call 0xfc9576
+	call	Double_Pow                              ; F9D3A1  call 0xfc9576
 	ld	xbc, (xiz-0xA2)                         ; F9D3A5  ld XBC,(XIZ+0xff5e)
 	push	xbc                                   ; F9D3AA  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9D3AB  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9D3B0  push XBC
-	ld	xbc, (0xFCC96E:24)                     ; F9D3B1  ld XBC,(0xfcc96e)
+	ld	xbc, (F64_0p9999+4:24)                     ; F9D3B1  ld XBC,(0xfcc96e)
 	push	xbc                                   ; F9D3B6  push XBC
-	ld	xbc, (0xFCC96A:24)                     ; F9D3B7  ld XBC,(0xfcc96a)
+	ld	xbc, (F64_0p9999:24)                     ; F9D3B7  ld XBC,(0xfcc96a)
 	push	xbc                                   ; F9D3BC  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9D3BD  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9D3C2  call 0xfca252
@@ -6001,9 +6001,9 @@ sub_F9BE3A__F9D31C:
 	push	xbc                                   ; F9D3EF  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9D3F0  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9D3F5  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; F9D3F6  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; F9D3F6  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; F9D3FB  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; F9D3FC  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; F9D3FC  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; F9D401  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9D402  lda XIY,XIZ+0xff6a
 	call	Double_Subtract                              ; F9D407  call 0xfca626
@@ -6011,9 +6011,9 @@ sub_F9BE3A__F9D31C:
 	push	xbc                                   ; F9D410  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9D411  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9D416  push XBC
-	ld	xbc, (0xFCC976:24)                     ; F9D417  ld XBC,(0xfcc976)
+	ld	xbc, (F64_neg0p0697+4:24)                     ; F9D417  ld XBC,(0xfcc976)
 	push	xbc                                   ; F9D41C  push XBC
-	ld	xbc, (0xFCC972:24)                     ; F9D41D  ld XBC,(0xfcc972)
+	ld	xbc, (F64_neg0p0697:24)                     ; F9D41D  ld XBC,(0xfcc972)
 	push	xbc                                   ; F9D422  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D423  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9D428  call 0xfca252
@@ -6023,19 +6023,19 @@ sub_F9BE3A__F9D31C:
 	push	xbc                                   ; F9D435  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9D436  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9D43B  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9D43C  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9D43C  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9D441  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9D442  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9D442  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9D447  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9D448  lda XIY,XIZ+0xff5a
-	call	sub_FC9576                              ; F9D44D  call 0xfc9576
+	call	Double_Pow                              ; F9D44D  call 0xfc9576
 	ld	xbc, (xiz-0xA2)                         ; F9D451  ld XBC,(XIZ+0xff5e)
 	push	xbc                                   ; F9D456  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9D457  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9D45C  push XBC
-	ld	xbc, (0xFCC96E:24)                     ; F9D45D  ld XBC,(0xfcc96e)
+	ld	xbc, (F64_0p9999+4:24)                     ; F9D45D  ld XBC,(0xfcc96e)
 	push	xbc                                   ; F9D462  push XBC
-	ld	xbc, (0xFCC96A:24)                     ; F9D463  ld XBC,(0xfcc96a)
+	ld	xbc, (F64_0p9999:24)                     ; F9D463  ld XBC,(0xfcc96a)
 	push	xbc                                   ; F9D468  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9D469  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9D46E  call 0xfca252
@@ -6222,15 +6222,15 @@ sub_F9BE3A__F9D622:
 	push	xbc                                   ; F9D65D  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9D65E  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9D663  push XBC
-	ld	xbc, (0xFCC966:24)                     ; F9D664  ld XBC,(0xfcc966)
+	ld	xbc, (F64_0p02+4:24)                     ; F9D664  ld XBC,(0xfcc966)
 	push	xbc                                   ; F9D669  push XBC
-	ld	xbc, (0xFCC962:24)                     ; F9D66A  ld XBC,(0xfcc962)
+	ld	xbc, (F64_0p02:24)                     ; F9D66A  ld XBC,(0xfcc962)
 	push	xbc                                   ; F9D66F  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9D670  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9D675  call 0xfca252
-	ld	xbc, (0xFCC95E:24)                     ; F9D679  ld XBC,(0xfcc95e)
+	ld	xbc, (F64_0p1+4:24)                     ; F9D679  ld XBC,(0xfcc95e)
 	push	xbc                                   ; F9D67E  push XBC
-	ld	xbc, (0xFCC95A:24)                     ; F9D67F  ld XBC,(0xfcc95a)
+	ld	xbc, (F64_0p1:24)                     ; F9D67F  ld XBC,(0xfcc95a)
 	push	xbc                                   ; F9D684  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9D685  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9D68A  push XBC
@@ -6246,9 +6246,9 @@ sub_F9BE3A__F9D622:
 	push	xbc                                   ; F9D6AE  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9D6AF  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9D6B4  push XBC
-	ld	xbc, (0xFCC956:24)                     ; F9D6B5  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; F9D6B5  ld XBC,(0xfcc956)
 	push	xbc                                   ; F9D6BA  push XBC
-	ld	xbc, (0xFCC952:24)                     ; F9D6BB  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; F9D6BB  ld XBC,(0xfcc952)
 	push	xbc                                   ; F9D6C0  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9D6C1  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9D6C6  call 0xfca252
@@ -6266,12 +6266,12 @@ sub_F9BE3A__F9D622:
 	push	xbc                                   ; F9D6F0  push XBC
 	ld	xbc, (xiz-0xB6)                         ; F9D6F1  ld XBC,(XIZ+0xff4a)
 	push	xbc                                   ; F9D6F6  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9D6F7  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9D6F7  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9D6FC  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9D6FD  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9D6FD  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9D702  push XBC
 	lda	xiy, (xiz-0xBE)                        ; F9D703  lda XIY,XIZ+0xff42
-	call	sub_FC9576                              ; F9D708  call 0xfc9576
+	call	Double_Pow                              ; F9D708  call 0xfc9576
 	ld	xbc, (xiz-0xBA)                         ; F9D70C  ld XBC,(XIZ+0xff46)
 	push	xbc                                   ; F9D711  push XBC
 	ld	xbc, (xiz-0xBE)                         ; F9D712  ld XBC,(XIZ+0xff42)
@@ -6282,9 +6282,9 @@ sub_F9BE3A__F9D622:
 	push	xbc                                   ; F9D726  push XBC
 	ld	xbc, (xiz-0xC6)                         ; F9D727  ld XBC,(XIZ+0xff3a)
 	push	xbc                                   ; F9D72C  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9D72D  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9D72D  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9D732  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9D733  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9D733  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9D738  push XBC
 	lda	xiy, (xiz-0xCE)                        ; F9D739  lda XIY,XIZ+0xff32
 	call	Double_Multiply                              ; F9D73E  call 0xfca252
@@ -6312,15 +6312,15 @@ sub_F9BE3A__F9D75C:
 	push	xbc                                   ; F9D780  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9D781  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9D786  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; F9D787  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; F9D787  ld XBC,(0xfcca4e)
 	push	xbc                                   ; F9D78C  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; F9D78D  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; F9D78D  ld XBC,(0xfcca4a)
 	push	xbc                                   ; F9D792  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9D793  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9D798  call 0xfca252
-	ld	xbc, (0xFCC94E:24)                     ; F9D79C  ld XBC,(0xfcc94e)
+	ld	xbc, (F64_0p45+4:24)                     ; F9D79C  ld XBC,(0xfcc94e)
 	push	xbc                                   ; F9D7A1  push XBC
-	ld	xbc, (0xFCC94A:24)                     ; F9D7A2  ld XBC,(0xfcc94a)
+	ld	xbc, (F64_0p45:24)                     ; F9D7A2  ld XBC,(0xfcc94a)
 	push	xbc                                   ; F9D7A7  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9D7A8  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9D7AD  push XBC
@@ -6336,9 +6336,9 @@ sub_F9BE3A__F9D75C:
 	push	xbc                                   ; F9D7D1  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9D7D2  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9D7D7  push XBC
-	ld	xbc, (0xFCC956:24)                     ; F9D7D8  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; F9D7D8  ld XBC,(0xfcc956)
 	push	xbc                                   ; F9D7DD  push XBC
-	ld	xbc, (0xFCC952:24)                     ; F9D7DE  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; F9D7DE  ld XBC,(0xfcc952)
 	push	xbc                                   ; F9D7E3  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9D7E4  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9D7E9  call 0xfca252
@@ -6356,12 +6356,12 @@ sub_F9BE3A__F9D75C:
 	push	xbc                                   ; F9D813  push XBC
 	ld	xbc, (xiz-0xB6)                         ; F9D814  ld XBC,(XIZ+0xff4a)
 	push	xbc                                   ; F9D819  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9D81A  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9D81A  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9D81F  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9D820  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9D820  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9D825  push XBC
 	lda	xiy, (xiz-0xBE)                        ; F9D826  lda XIY,XIZ+0xff42
-	call	sub_FC9576                              ; F9D82B  call 0xfc9576
+	call	Double_Pow                              ; F9D82B  call 0xfc9576
 	ld	xbc, (xiz-0xBA)                         ; F9D82F  ld XBC,(XIZ+0xff46)
 	push	xbc                                   ; F9D834  push XBC
 	ld	xbc, (xiz-0xBE)                         ; F9D835  ld XBC,(XIZ+0xff42)
@@ -6372,9 +6372,9 @@ sub_F9BE3A__F9D75C:
 	push	xbc                                   ; F9D849  push XBC
 	ld	xbc, (xiz-0xC6)                         ; F9D84A  ld XBC,(XIZ+0xff3a)
 	push	xbc                                   ; F9D84F  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9D850  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9D850  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9D855  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9D856  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9D856  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9D85B  push XBC
 	lda	xiy, (xiz-0xCE)                        ; F9D85C  lda XIY,XIZ+0xff32
 	call	Double_Multiply                              ; F9D861  call 0xfca252
@@ -6401,15 +6401,15 @@ sub_F9BE3A__F9D87F:
 	push	xbc                                   ; F9D8A5  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9D8A6  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9D8AB  push XBC
-	ld	xbc, (0xFCC95E:24)                     ; F9D8AC  ld XBC,(0xfcc95e)
+	ld	xbc, (F64_0p1+4:24)                     ; F9D8AC  ld XBC,(0xfcc95e)
 	push	xbc                                   ; F9D8B1  push XBC
-	ld	xbc, (0xFCC95A:24)                     ; F9D8B2  ld XBC,(0xfcc95a)
+	ld	xbc, (F64_0p1:24)                     ; F9D8B2  ld XBC,(0xfcc95a)
 	push	xbc                                   ; F9D8B7  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9D8B8  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9D8BD  call 0xfca252
-	ld	xbc, (0xFCC946:24)                     ; F9D8C1  ld XBC,(0xfcc946)
+	ld	xbc, (F64_0p9+4:24)                     ; F9D8C1  ld XBC,(0xfcc946)
 	push	xbc                                   ; F9D8C6  push XBC
-	ld	xbc, (0xFCC942:24)                     ; F9D8C7  ld XBC,(0xfcc942)
+	ld	xbc, (F64_0p9:24)                     ; F9D8C7  ld XBC,(0xfcc942)
 	push	xbc                                   ; F9D8CC  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9D8CD  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9D8D2  push XBC
@@ -6425,9 +6425,9 @@ sub_F9BE3A__F9D87F:
 	push	xbc                                   ; F9D8F6  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9D8F7  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9D8FC  push XBC
-	ld	xbc, (0xFCC956:24)                     ; F9D8FD  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; F9D8FD  ld XBC,(0xfcc956)
 	push	xbc                                   ; F9D902  push XBC
-	ld	xbc, (0xFCC952:24)                     ; F9D903  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; F9D903  ld XBC,(0xfcc952)
 	push	xbc                                   ; F9D908  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9D909  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9D90E  call 0xfca252
@@ -6445,12 +6445,12 @@ sub_F9BE3A__F9D87F:
 	push	xbc                                   ; F9D938  push XBC
 	ld	xbc, (xiz-0xB6)                         ; F9D939  ld XBC,(XIZ+0xff4a)
 	push	xbc                                   ; F9D93E  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9D93F  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9D93F  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9D944  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9D945  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9D945  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9D94A  push XBC
 	lda	xiy, (xiz-0xBE)                        ; F9D94B  lda XIY,XIZ+0xff42
-	call	sub_FC9576                              ; F9D950  call 0xfc9576
+	call	Double_Pow                              ; F9D950  call 0xfc9576
 	ld	xbc, (xiz-0xBA)                         ; F9D954  ld XBC,(XIZ+0xff46)
 	push	xbc                                   ; F9D959  push XBC
 	ld	xbc, (xiz-0xBE)                         ; F9D95A  ld XBC,(XIZ+0xff42)
@@ -6461,9 +6461,9 @@ sub_F9BE3A__F9D87F:
 	push	xbc                                   ; F9D96E  push XBC
 	ld	xbc, (xiz-0xC6)                         ; F9D96F  ld XBC,(XIZ+0xff3a)
 	push	xbc                                   ; F9D974  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9D975  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9D975  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9D97A  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9D97B  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9D97B  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9D980  push XBC
 	lda	xiy, (xiz-0xCE)                        ; F9D981  lda XIY,XIZ+0xff32
 	call	Double_Multiply                              ; F9D986  call 0xfca252
@@ -6490,15 +6490,15 @@ sub_F9BE3A__F9D9A4:
 	push	xbc                                   ; F9D9CA  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9D9CB  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9D9D0  push XBC
-	ld	xbc, (0xFCCA3E:24)                     ; F9D9D1  ld XBC,(0xfcca3e)
+	ld	xbc, (F64_0p2+4:24)                     ; F9D9D1  ld XBC,(0xfcca3e)
 	push	xbc                                   ; F9D9D6  push XBC
-	ld	xbc, (0xFCCA3A:24)                     ; F9D9D7  ld XBC,(0xfcca3a)
+	ld	xbc, (F64_0p2:24)                     ; F9D9D7  ld XBC,(0xfcca3a)
 	push	xbc                                   ; F9D9DC  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9D9DD  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9D9E2  call 0xfca252
-	ld	xbc, (0xFCC93E:24)                     ; F9D9E6  ld XBC,(0xfcc93e)
+	ld	xbc, (F64_4p2+4:24)                     ; F9D9E6  ld XBC,(0xfcc93e)
 	push	xbc                                   ; F9D9EB  push XBC
-	ld	xbc, (0xFCC93A:24)                     ; F9D9EC  ld XBC,(0xfcc93a)
+	ld	xbc, (F64_4p2:24)                     ; F9D9EC  ld XBC,(0xfcc93a)
 	push	xbc                                   ; F9D9F1  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9D9F2  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9D9F7  push XBC
@@ -6514,9 +6514,9 @@ sub_F9BE3A__F9D9A4:
 	push	xbc                                   ; F9DA1B  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9DA1C  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9DA21  push XBC
-	ld	xbc, (0xFCC956:24)                     ; F9DA22  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; F9DA22  ld XBC,(0xfcc956)
 	push	xbc                                   ; F9DA27  push XBC
-	ld	xbc, (0xFCC952:24)                     ; F9DA28  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; F9DA28  ld XBC,(0xfcc952)
 	push	xbc                                   ; F9DA2D  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9DA2E  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9DA33  call 0xfca252
@@ -6534,12 +6534,12 @@ sub_F9BE3A__F9D9A4:
 	push	xbc                                   ; F9DA5D  push XBC
 	ld	xbc, (xiz-0xB6)                         ; F9DA5E  ld XBC,(XIZ+0xff4a)
 	push	xbc                                   ; F9DA63  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9DA64  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9DA64  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9DA69  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9DA6A  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9DA6A  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9DA6F  push XBC
 	lda	xiy, (xiz-0xBE)                        ; F9DA70  lda XIY,XIZ+0xff42
-	call	sub_FC9576                              ; F9DA75  call 0xfc9576
+	call	Double_Pow                              ; F9DA75  call 0xfc9576
 	ld	xbc, (xiz-0xBA)                         ; F9DA79  ld XBC,(XIZ+0xff46)
 	push	xbc                                   ; F9DA7E  push XBC
 	ld	xbc, (xiz-0xBE)                         ; F9DA7F  ld XBC,(XIZ+0xff42)
@@ -6550,9 +6550,9 @@ sub_F9BE3A__F9D9A4:
 	push	xbc                                   ; F9DA93  push XBC
 	ld	xbc, (xiz-0xC6)                         ; F9DA94  ld XBC,(XIZ+0xff3a)
 	push	xbc                                   ; F9DA99  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9DA9A  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9DA9A  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9DA9F  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9DAA0  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9DAA0  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9DAA5  push XBC
 	lda	xiy, (xiz-0xCE)                        ; F9DAA6  lda XIY,XIZ+0xff32
 	call	Double_Multiply                              ; F9DAAB  call 0xfca252
@@ -6577,15 +6577,15 @@ sub_F9BE3A__F9DAC9:
 	push	xbc                                   ; F9DAE6  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9DAE7  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9DAEC  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9DAED  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9DAED  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9DAF2  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9DAF3  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9DAF3  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9DAF8  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9DAF9  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9DAFE  call 0xfca252
-	ld	xbc, (0xFCC936:24)                     ; F9DB02  ld XBC,(0xfcc936)
+	ld	xbc, (F64_9+4:24)                     ; F9DB02  ld XBC,(0xfcc936)
 	push	xbc                                   ; F9DB07  push XBC
-	ld	xbc, (0xFCC932:24)                     ; F9DB08  ld XBC,(0xfcc932)
+	ld	xbc, (F64_9:24)                     ; F9DB08  ld XBC,(0xfcc932)
 	push	xbc                                   ; F9DB0D  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9DB0E  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9DB13  push XBC
@@ -6601,9 +6601,9 @@ sub_F9BE3A__F9DAC9:
 	push	xbc                                   ; F9DB37  push XBC
 	ld	xbc, (xiz-0xA6)                         ; F9DB38  ld XBC,(XIZ+0xff5a)
 	push	xbc                                   ; F9DB3D  push XBC
-	ld	xbc, (0xFCC956:24)                     ; F9DB3E  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; F9DB3E  ld XBC,(0xfcc956)
 	push	xbc                                   ; F9DB43  push XBC
-	ld	xbc, (0xFCC952:24)                     ; F9DB44  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; F9DB44  ld XBC,(0xfcc952)
 	push	xbc                                   ; F9DB49  push XBC
 	lda	xiy, (xiz-0xAE)                        ; F9DB4A  lda XIY,XIZ+0xff52
 	call	Double_Multiply                              ; F9DB4F  call 0xfca252
@@ -6621,12 +6621,12 @@ sub_F9BE3A__F9DAC9:
 	push	xbc                                   ; F9DB79  push XBC
 	ld	xbc, (xiz-0xB6)                         ; F9DB7A  ld XBC,(XIZ+0xff4a)
 	push	xbc                                   ; F9DB7F  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9DB80  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9DB80  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9DB85  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9DB86  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9DB86  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9DB8B  push XBC
 	lda	xiy, (xiz-0xBE)                        ; F9DB8C  lda XIY,XIZ+0xff42
-	call	sub_FC9576                              ; F9DB91  call 0xfc9576
+	call	Double_Pow                              ; F9DB91  call 0xfc9576
 	ld	xbc, (xiz-0xBA)                         ; F9DB95  ld XBC,(XIZ+0xff46)
 	push	xbc                                   ; F9DB9A  push XBC
 	ld	xbc, (xiz-0xBE)                         ; F9DB9B  ld XBC,(XIZ+0xff42)
@@ -6637,9 +6637,9 @@ sub_F9BE3A__F9DAC9:
 	push	xbc                                   ; F9DBAF  push XBC
 	ld	xbc, (xiz-0xC6)                         ; F9DBB0  ld XBC,(XIZ+0xff3a)
 	push	xbc                                   ; F9DBB5  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9DBB6  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9DBB6  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9DBBB  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9DBBC  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9DBBC  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9DBC1  push XBC
 	lda	xiy, (xiz-0xCE)                        ; F9DBC2  lda XIY,XIZ+0xff32
 	call	Double_Multiply                              ; F9DBC7  call 0xfca252
@@ -6712,9 +6712,9 @@ sub_F9BE3A__F9DC59:
 	exts	xwa                                   ; F9DC68  exts XWA
 	extpfx3 0xAE, 0x10, 0xF0                   ; F9DC6A  cp XWA,(XIZ+0x10)
 	jr nz, sub_F9BE3A__F9DC84                  ; F9DC6D  jr NZ,0xf9dc84
-	ld	xwa, (0xFCCA5E:24)                     ; F9DC6F  ld XWA,(0xfcca5e)
+	ld	xwa, (F64_0p5+4:24)                     ; F9DC6F  ld XWA,(0xfcca5e)
 	push	xwa                                   ; F9DC74  push XWA
-	ld	xwa, (0xFCCA5A:24)                     ; F9DC75  ld XWA,(0xfcca5a)
+	ld	xwa, (F64_0p5:24)                     ; F9DC75  ld XWA,(0xfcca5a)
 	push	xwa                                   ; F9DC7A  push XWA
 	call	Double_ToFloat32                              ; F9DC7B  call 0xfcadd6
 	ld	(xiz-18), xiy                           ; F9DC7F  ld (XIZ+0xee),XIY
@@ -6938,9 +6938,9 @@ sub_F9BE3A__F9DE6E:
 	push	xbc                                   ; F9DE87  push XBC
 	ld	xbc, (xiz-0x8E)                         ; F9DE88  ld XBC,(XIZ+0xff72)
 	push	xbc                                   ; F9DE8D  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; F9DE8E  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; F9DE8E  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; F9DE93  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; F9DE94  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; F9DE94  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; F9DE99  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9DE9A  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9DE9F  call 0xfca252
@@ -6948,9 +6948,9 @@ sub_F9BE3A__F9DE6E:
 	push	xbc                                   ; F9DEA8  push XBC
 	ld	xbc, (xiz-0x96)                         ; F9DEA9  ld XBC,(XIZ+0xff6a)
 	push	xbc                                   ; F9DEAE  push XBC
-	ld	xbc, (0xFCC92E:24)                     ; F9DEAF  ld XBC,(0xfcc92e)
+	ld	xbc, (F64_0p001+4:24)                     ; F9DEAF  ld XBC,(0xfcc92e)
 	push	xbc                                   ; F9DEB4  push XBC
-	ld	xbc, (0xFCC92A:24)                     ; F9DEB5  ld XBC,(0xfcc92a)
+	ld	xbc, (F64_0p001:24)                     ; F9DEB5  ld XBC,(0xfcc92a)
 	push	xbc                                   ; F9DEBA  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9DEBB  lda XIY,XIZ+0xff62
 	call	Double_Multiply                              ; F9DEC0  call 0xfca252
@@ -7517,7 +7517,7 @@ P7Block_ReportStatus__F9E1BE:
 	cp	bc, 4:i3                                  ; F9E1C5  cp BC,4
 	jr ugt, P7Block_ReportStatus__F9E1BC                 ; F9E1C7  jr UGT,0xf9e1bc
 	sll	bc, 2                                  ; F9E1C9  sll 0x02,BC
-	add	xbc, 0xF9E1D6                          ; F9E1CC  add XBC,0x00f9e1d6
+	add	xbc, P7Block_ReportStatus_JumpTable_F9E1D6                          ; F9E1CC  add XBC,0x00f9e1d6
 	ld	xbc, (xbc)                              ; F9E1D2  ld XBC,(XBC)
 	jp	(xbc)                                   ; F9E1D4  jp T,XBC
 ; 5 x u32 computed-goto table, 0xF9E1D6-0xF9E1E9, 20 bytes.
@@ -7528,11 +7528,12 @@ P7Block_ReportStatus__F9E1BE:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xF9A050 0xFA5949;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00F9E1B2	; 0xF9E1D6  entry 0 -> 0xF9E1B2   (also the out-of-range arm)
-	.long 0x00F9E1B4	; 0xF9E1DA  entry 1 -> 0xF9E1B4
-	.long 0x00F9E1B6	; 0xF9E1DE  entry 2 -> 0xF9E1B6
-	.long 0x00F9E1B8	; 0xF9E1E2  entry 3 -> 0xF9E1B8
-	.long 0x00F9E1BA	; 0xF9E1E6  entry 4 -> 0xF9E1BA
+P7Block_ReportStatus_JumpTable_F9E1D6:
+	.long P7Block_ReportStatus__F9E1B2	; 0xF9E1D6  entry 0 -> 0xF9E1B2   (also the out-of-range arm)
+	.long P7Block_ReportStatus__F9E1B4	; 0xF9E1DA  entry 1 -> 0xF9E1B4
+	.long P7Block_ReportStatus__F9E1B6	; 0xF9E1DE  entry 2 -> 0xF9E1B6
+	.long P7Block_ReportStatus__F9E1B8	; 0xF9E1E2  entry 3 -> 0xF9E1B8
+	.long P7Block_ReportStatus__F9E1BA	; 0xF9E1E6  entry 4 -> 0xF9E1BA
 P7Block_ReportStatus__F9E1EA:
 	unlk32 xiz                                 ; F9E1EA  unlk XIZ
 	ret                                        ; F9E1EC  ret
@@ -7546,7 +7547,7 @@ P7Block_ReportStatus__F9E1EA:
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCC912, 0xFCC916, 0xFCC91A, 0xFCC91E, 0xFCC922, 0xFCC926, 0xFCC95A, 0xFCC95E, 0xFCC9D2, 0xFCC9D6, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66
 ; Calls:   0xF9B167 = P7Group_SendOp1AddrValueScaled, 0xF9B37E = P7Group_SendValueScaled
-;          0xFC9140 = sub_FC9140, 0xFC9576 = sub_FC9576
+;          0xFC9140 = Double_Tan, 0xFC9576 = Double_Pow
 ;          0xFCA121 = Double_Compare, 0xFCA252 = Double_Multiply
 ;          0xFCA41F = Double_Add, 0xFCA626 = Double_Subtract
 ;          0xFCA7A5 = Double_Divide, 0xFCAA50 = Float32_ToDouble
@@ -7570,7 +7571,7 @@ sub_F9E1ED:
 	sra	xiy, 11                                ; F9E1F5  sra 0x0b,XIY
 	and	xiy, 31                                ; F9E1F8  and XIY,0x0000001f
 	sll	xiy, 2                                 ; F9E1FE  sll 0x02,XIY
-	add	xiy, 0xFCCAEE                          ; F9E201  add XIY,0x00fccaee
+	add	xiy, DSP_EQ_Q_Table                          ; F9E201  add XIY,0x00fccaee
 	ld	xbc, (xiy)                              ; F9E207  ld XBC,(XIY)
 	ld	(xiz-12), xbc                           ; F9E209  ld (XIZ+0xf4),XBC
 	ld	xix, (xiz+8)                            ; F9E20C  ld XIX,(XIZ+0x08)
@@ -7594,15 +7595,15 @@ sub_F9E1ED__F9E222:
 	push	xbc                                   ; F9E23B  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E23C  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E23F  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9E240  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9E240  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9E245  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9E246  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9E246  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9E24B  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E24C  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E24F  call 0xfca252
-	ld	xbc, (0xFCC926:24)                     ; F9E253  ld XBC,(0xfcc926)
+	ld	xbc, (F64_12+4:24)                     ; F9E253  ld XBC,(0xfcc926)
 	push	xbc                                   ; F9E258  push XBC
-	ld	xbc, (0xFCC922:24)                     ; F9E259  ld XBC,(0xfcc922)
+	ld	xbc, (F64_12:24)                     ; F9E259  ld XBC,(0xfcc922)
 	push	xbc                                   ; F9E25E  push XBC
 	ld	xbc, (xiz-0x76)                         ; F9E25F  ld XBC,(XIZ+0x8a)
 	push	xbc                                   ; F9E262  push XBC
@@ -7620,12 +7621,12 @@ sub_F9E1ED__F9E222:
 	sra	xiy, 6                                 ; F9E284  sra 0x06,XIY
 	and	xiy, 31                                ; F9E287  and XIY,0x0000001f
 	sll	xiy, 2                                 ; F9E28D  sll 0x02,XIY
-	add	xiy, 0xFCCA82                          ; F9E290  add XIY,0x00fcca82
+	add	xiy, DSP_EQ_FreqHz_Table                          ; F9E290  add XIY,0x00fcca82
 	ld	xbc, (xiy)                              ; F9E296  ld XBC,(XIY)
 	ld	(xiz-76), xbc                           ; F9E298  ld (XIZ+0xb4),XBC
-	ld	xwa, (0xFCC9D6:24)                     ; F9E29B  ld XWA,(0xfcc9d6)
+	ld	xwa, (F64_1+4:24)                     ; F9E29B  ld XWA,(0xfcc9d6)
 	push	xwa                                   ; F9E2A0  push XWA
-	ld	xwa, (0xFCC9D2:24)                     ; F9E2A1  ld XWA,(0xfcc9d2)
+	ld	xwa, (F64_1:24)                     ; F9E2A1  ld XWA,(0xfcc9d2)
 	push	xwa                                   ; F9E2A6  push XWA
 	call	Double_ToFloat32                              ; F9E2A7  call 0xfcadd6
 	ld	(xiz-84), xiy                           ; F9E2AB  ld (XIZ+0xac),XIY
@@ -7637,9 +7638,9 @@ sub_F9E1ED__F9E222:
 	push	xbc                                   ; F9E2BE  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E2BF  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E2C2  push XBC
-	ld	xbc, (0xFCC91E:24)                     ; F9E2C3  ld XBC,(0xfcc91e)
+	ld	xbc, (F64_7p123792865em05+4:24)                     ; F9E2C3  ld XBC,(0xfcc91e)
 	push	xbc                                   ; F9E2C8  push XBC
-	ld	xbc, (0xFCC91A:24)                     ; F9E2C9  ld XBC,(0xfcc91a)
+	ld	xbc, (F64_7p123792865em05:24)                     ; F9E2C9  ld XBC,(0xfcc91a)
 	push	xbc                                   ; F9E2CE  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E2CF  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E2D2  call 0xfca252
@@ -7648,7 +7649,7 @@ sub_F9E1ED__F9E222:
 	ld	xbc, (xiz-0x7A)                         ; F9E2DA  ld XBC,(XIZ+0x86)
 	push	xbc                                   ; F9E2DD  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9E2DE  lda XIY,XIZ+0xff7e
-	call	sub_FC9140                              ; F9E2E3  call 0xfc9140
+	call	Double_Tan                              ; F9E2E3  call 0xfc9140
 	ld	xbc, (xiz-0x7E)                         ; F9E2E7  ld XBC,(XIZ+0x82)
 	push	xbc                                   ; F9E2EA  push XBC
 	ld	xbc, (xiz-0x82)                         ; F9E2EB  ld XBC,(XIZ+0xff7e)
@@ -7683,9 +7684,9 @@ sub_F9E1ED__F9E222:
 	push	xbc                                   ; F9E33D  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9E33E  lda XIY,XIZ+0xff7e
 	call	Double_Add                              ; F9E343  call 0xfca41f
-	ld	xbc, (0xFCC9D6:24)                     ; F9E347  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9E347  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9E34C  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9E34D  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9E34D  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9E352  push XBC
 	ld	xbc, (xiz-0x7E)                         ; F9E353  ld XBC,(XIZ+0x82)
 	push	xbc                                   ; F9E356  push XBC
@@ -7712,9 +7713,9 @@ sub_F9E1ED__F9E222:
 	push	xbc                                   ; F9E396  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E397  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E39A  push XBC
-	ld	xbc, (0xFCC916:24)                     ; F9E39B  ld XBC,(0xfcc916)
+	ld	xbc, (F64_neg2+4:24)                     ; F9E39B  ld XBC,(0xfcc916)
 	push	xbc                                   ; F9E3A0  push XBC
-	ld	xbc, (0xFCC912:24)                     ; F9E3A1  ld XBC,(0xfcc912)
+	ld	xbc, (F64_neg2:24)                     ; F9E3A1  ld XBC,(0xfcc912)
 	push	xbc                                   ; F9E3A6  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E3A7  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E3AA  call 0xfca252
@@ -7732,9 +7733,9 @@ sub_F9E1ED__F9E222:
 	push	xbc                                   ; F9E3CD  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E3CE  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E3D1  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9E3D2  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9E3D2  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9E3D7  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9E3D8  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9E3D8  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9E3DD  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E3DE  lda XIY,XIZ+0x86
 	call	Double_Subtract                              ; F9E3E1  call 0xfca626
@@ -7785,9 +7786,9 @@ sub_F9E1ED__F9E452:
 	push	xbc                                   ; F9E462  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E463  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E466  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; F9E467  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; F9E467  ld XBC,(0xfcca4e)
 	push	xbc                                   ; F9E46C  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; F9E46D  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; F9E46D  ld XBC,(0xfcca4a)
 	push	xbc                                   ; F9E472  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E473  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E476  call 0xfca252
@@ -7795,12 +7796,12 @@ sub_F9E1ED__F9E452:
 	push	xbc                                   ; F9E47D  push XBC
 	ld	xbc, (xiz-0x7A)                         ; F9E47E  ld XBC,(XIZ+0x86)
 	push	xbc                                   ; F9E481  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9E482  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9E482  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9E487  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9E488  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9E488  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9E48D  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9E48E  lda XIY,XIZ+0xff7e
-	call	sub_FC9576                              ; F9E493  call 0xfc9576
+	call	Double_Pow                              ; F9E493  call 0xfc9576
 	extpfx3 0x9E, 0xC6, 0x04                   ; F9E497  pushw (XIZ+0xc6)
 	extpfx3 0x9E, 0xC4, 0x04                   ; F9E49A  pushw (XIZ+0xc4)
 	lda	xiy, (xiz-0x8A)                        ; F9E49D  lda XIY,XIZ+0xff76
@@ -7829,9 +7830,9 @@ sub_F9E1ED__F9E452:
 	push	xbc                                   ; F9E4EB  push XBC
 	lda	xiy, (xiz-0xA2)                        ; F9E4EC  lda XIY,XIZ+0xff5e
 	call	Double_Add                              ; F9E4F1  call 0xfca41f
-	ld	xbc, (0xFCC9D6:24)                     ; F9E4F5  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9E4F5  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9E4FA  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9E4FB  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9E4FB  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9E500  push XBC
 	ld	xbc, (xiz-0x9E)                         ; F9E501  ld XBC,(XIZ+0xff62)
 	push	xbc                                   ; F9E506  push XBC
@@ -7875,9 +7876,9 @@ sub_F9E1ED__F9E561:
 	push	xbc                                   ; F9E571  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E572  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E575  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; F9E576  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; F9E576  ld XBC,(0xfcca4e)
 	push	xbc                                   ; F9E57B  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; F9E57C  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; F9E57C  ld XBC,(0xfcca4a)
 	push	xbc                                   ; F9E581  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E582  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E585  call 0xfca252
@@ -7885,12 +7886,12 @@ sub_F9E1ED__F9E561:
 	push	xbc                                   ; F9E58C  push XBC
 	ld	xbc, (xiz-0x7A)                         ; F9E58D  ld XBC,(XIZ+0x86)
 	push	xbc                                   ; F9E590  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9E591  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9E591  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9E596  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9E597  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9E597  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9E59C  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9E59D  lda XIY,XIZ+0xff7e
-	call	sub_FC9576                              ; F9E5A2  call 0xfc9576
+	call	Double_Pow                              ; F9E5A2  call 0xfc9576
 	extpfx3 0x9E, 0xC6, 0x04                   ; F9E5A6  pushw (XIZ+0xc6)
 	extpfx3 0x9E, 0xC4, 0x04                   ; F9E5A9  pushw (XIZ+0xc4)
 	lda	xiy, (xiz-0x8A)                        ; F9E5AC  lda XIY,XIZ+0xff76
@@ -7909,9 +7910,9 @@ sub_F9E1ED__F9E561:
 	push	xbc                                   ; F9E5D9  push XBC
 	ld	xbc, (xiz-0x92)                         ; F9E5DA  ld XBC,(XIZ+0xff6e)
 	push	xbc                                   ; F9E5DF  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9E5E0  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9E5E0  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9E5E5  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9E5E6  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9E5E6  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9E5EB  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9E5EC  lda XIY,XIZ+0xff66
 	call	Double_Subtract                              ; F9E5F1  call 0xfca626
@@ -7941,9 +7942,9 @@ sub_F9E1ED__F9E561:
 	call	Float32_ToDouble                              ; F9E641  call 0xfcaa50
 	inc	8, xsp                                 ; F9E645  inc 0,XSP
 	inc	8, xsp                                 ; F9E647  inc 0,XSP
-	ld	xbc, (0xFCCA46:24)                     ; F9E649  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9E649  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9E64E  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9E64F  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9E64F  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9E654  push XBC
 	ld	xbc, (xiz-0x6E)                         ; F9E655  ld XBC,(XIZ+0x92)
 	push	xbc                                   ; F9E658  push XBC
@@ -8043,9 +8044,9 @@ sub_F9E1ED__F9E73B:
 	push	xbc                                   ; F9E76E  push XBC
 	ld	xbc, (xiz-0x7A)                         ; F9E76F  ld XBC,(XIZ+0x86)
 	push	xbc                                   ; F9E772  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9E773  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9E773  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9E778  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9E779  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9E779  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9E77E  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9E77F  lda XIY,XIZ+0xff7e
 	call	Double_Subtract                              ; F9E784  call 0xfca626
@@ -8082,9 +8083,9 @@ sub_F9E1ED__F9E73B:
 	push	xiy                                   ; F9E7E6  push XIY
 	lda	xiy, (xiz-0x72)                        ; F9E7E7  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E7EA  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; F9E7EE  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9E7EE  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9E7F3  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9E7F4  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9E7F4  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9E7F9  push XBC
 	ld	xbc, (xiz-0x6E)                         ; F9E7FA  ld XBC,(XIZ+0x92)
 	push	xbc                                   ; F9E7FD  push XBC
@@ -8093,9 +8094,9 @@ sub_F9E1ED__F9E73B:
 	call	Double_Compare                              ; F9E802  call 0xfca121
 	cp	wa, 1:i3                                  ; F9E806  cp WA,1
 	jr nz, sub_F9E1ED__F9E81D                  ; F9E808  jr NZ,0xf9e81d
-	ld	xbc, (0xFCC9D6:24)                     ; F9E80A  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9E80A  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9E80F  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9E810  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9E810  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9E815  push XBC
 	call	Double_ToFloat32                              ; F9E816  call 0xfcadd6
 	ld	(xiz-88), xiy                           ; F9E81A  ld (XIZ+0xa8),XIY
@@ -8132,9 +8133,9 @@ sub_F9E1ED__F9E81D:
 	push	xbc                                   ; F9E879  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E87A  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E87D  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9E87E  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9E87E  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9E883  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9E884  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9E884  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9E889  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E88A  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E88D  call 0xfca252
@@ -8154,9 +8155,9 @@ sub_F9E1ED__F9E81D:
 	push	xbc                                   ; F9E8B4  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E8B5  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E8B8  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9E8B9  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9E8B9  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9E8BE  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9E8BF  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9E8BF  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9E8C4  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E8C5  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E8C8  call 0xfca252
@@ -8176,9 +8177,9 @@ sub_F9E1ED__F9E81D:
 	push	xbc                                   ; F9E8EE  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E8EF  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E8F2  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9E8F3  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9E8F3  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9E8F8  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9E8F9  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9E8F9  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9E8FE  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E8FF  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E902  call 0xfca252
@@ -8198,9 +8199,9 @@ sub_F9E1ED__F9E81D:
 	push	xbc                                   ; F9E927  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E928  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E92B  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9E92C  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9E92C  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9E931  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9E932  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9E932  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9E937  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E938  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E93B  call 0xfca252
@@ -8224,9 +8225,9 @@ sub_F9E1ED__F9E81D:
 	push	xbc                                   ; F9E968  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E969  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E96C  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9E96D  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9E96D  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9E972  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9E973  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9E973  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9E978  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E979  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E97C  call 0xfca252
@@ -8245,18 +8246,18 @@ sub_F9E1ED__F9E995:
 	sra	xiy, 6                                 ; F9E998  sra 0x06,XIY
 	and	xiy, 31                                ; F9E99B  and XIY,0x0000001f
 	sll	xiy, 2                                 ; F9E9A1  sll 0x02,XIY
-	add	xiy, 0xFCCA82                          ; F9E9A4  add XIY,0x00fcca82
+	add	xiy, DSP_EQ_FreqHz_Table                          ; F9E9A4  add XIY,0x00fcca82
 	ld	xbc, (xiy)                              ; F9E9AA  ld XBC,(XIY)
 	ld	(xiz-76), xbc                           ; F9E9AC  ld (XIZ+0xb4),XBC
-	ld	xwa, (0xFCC95E:24)                     ; F9E9AF  ld XWA,(0xfcc95e)
+	ld	xwa, (F64_0p1+4:24)                     ; F9E9AF  ld XWA,(0xfcc95e)
 	push	xwa                                   ; F9E9B4  push XWA
-	ld	xwa, (0xFCC95A:24)                     ; F9E9B5  ld XWA,(0xfcc95a)
+	ld	xwa, (F64_0p1:24)                     ; F9E9B5  ld XWA,(0xfcc95a)
 	push	xwa                                   ; F9E9BA  push XWA
 	call	Double_ToFloat32                              ; F9E9BB  call 0xfcadd6
 	ld	(xiz-12), xiy                           ; F9E9BF  ld (XIZ+0xf4),XIY
-	ld	xbc, (0xFCC9D6:24)                     ; F9E9C2  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9E9C2  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9E9C7  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9E9C8  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9E9C8  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9E9CD  push XBC
 	call	Double_ToFloat32                              ; F9E9CE  call 0xfcadd6
 	ld	(xiz-84), xiy                           ; F9E9D2  ld (XIZ+0xac),XIY
@@ -8268,9 +8269,9 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9E9E5  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9E9E6  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9E9E9  push XBC
-	ld	xbc, (0xFCC91E:24)                     ; F9E9EA  ld XBC,(0xfcc91e)
+	ld	xbc, (F64_7p123792865em05+4:24)                     ; F9E9EA  ld XBC,(0xfcc91e)
 	push	xbc                                   ; F9E9EF  push XBC
-	ld	xbc, (0xFCC91A:24)                     ; F9E9F0  ld XBC,(0xfcc91a)
+	ld	xbc, (F64_7p123792865em05:24)                     ; F9E9F0  ld XBC,(0xfcc91a)
 	push	xbc                                   ; F9E9F5  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E9F6  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9E9F9  call 0xfca252
@@ -8279,7 +8280,7 @@ sub_F9E1ED__F9E995:
 	ld	xbc, (xiz-0x7A)                         ; F9EA01  ld XBC,(XIZ+0x86)
 	push	xbc                                   ; F9EA04  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9EA05  lda XIY,XIZ+0xff7e
-	call	sub_FC9140                              ; F9EA0A  call 0xfc9140
+	call	Double_Tan                              ; F9EA0A  call 0xfc9140
 	ld	xbc, (xiz-0x7E)                         ; F9EA0E  ld XBC,(XIZ+0x82)
 	push	xbc                                   ; F9EA11  push XBC
 	ld	xbc, (xiz-0x82)                         ; F9EA12  ld XBC,(XIZ+0xff7e)
@@ -8314,9 +8315,9 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EA64  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9EA65  lda XIY,XIZ+0xff7e
 	call	Double_Add                              ; F9EA6A  call 0xfca41f
-	ld	xbc, (0xFCC9D6:24)                     ; F9EA6E  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9EA6E  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9EA73  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9EA74  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9EA74  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9EA79  push XBC
 	ld	xbc, (xiz-0x7E)                         ; F9EA7A  ld XBC,(XIZ+0x82)
 	push	xbc                                   ; F9EA7D  push XBC
@@ -8343,9 +8344,9 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EABD  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9EABE  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9EAC1  push XBC
-	ld	xbc, (0xFCC916:24)                     ; F9EAC2  ld XBC,(0xfcc916)
+	ld	xbc, (F64_neg2+4:24)                     ; F9EAC2  ld XBC,(0xfcc916)
 	push	xbc                                   ; F9EAC7  push XBC
-	ld	xbc, (0xFCC912:24)                     ; F9EAC8  ld XBC,(0xfcc912)
+	ld	xbc, (F64_neg2:24)                     ; F9EAC8  ld XBC,(0xfcc912)
 	push	xbc                                   ; F9EACD  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9EACE  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9EAD1  call 0xfca252
@@ -8363,9 +8364,9 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EAF4  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9EAF5  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9EAF8  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9EAF9  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9EAF9  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9EAFE  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9EAFF  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9EAFF  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9EB04  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9EB05  lda XIY,XIZ+0x86
 	call	Double_Subtract                              ; F9EB08  call 0xfca626
@@ -8395,9 +8396,9 @@ sub_F9E1ED__F9E995:
 	extpfx3 0x9E, 0xC4, 0x04                   ; F9EB52  pushw (XIZ+0xc4)
 	call	Float32_Divide                              ; F9EB55  call 0xfcae60
 	ld	(xiz-40), xiy                           ; F9EB59  ld (XIZ+0xd8),XIY
-	ld	xbc, (0xFCCA46:24)                     ; F9EB5C  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9EB5C  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9EB61  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9EB62  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9EB62  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9EB67  push XBC
 	call	Double_ToFloat32                              ; F9EB68  call 0xfcadd6
 	ld	(xiz-44), xiy                           ; F9EB6C  ld (XIZ+0xd4),XIY
@@ -8429,9 +8430,9 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EBBC  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9EBBD  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9EBC0  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9EBC1  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9EBC1  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9EBC6  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9EBC7  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9EBC7  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9EBCC  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9EBCD  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9EBD0  call 0xfca252
@@ -8452,9 +8453,9 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EBF9  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9EBFA  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9EBFD  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9EBFE  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9EBFE  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9EC03  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9EC04  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9EC04  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9EC09  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9EC0A  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9EC0D  call 0xfca252
@@ -8474,9 +8475,9 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EC33  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9EC34  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9EC37  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9EC38  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9EC38  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9EC3D  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9EC3E  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9EC3E  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9EC43  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9EC44  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9EC47  call 0xfca252
@@ -8496,9 +8497,9 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EC6C  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9EC6D  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9EC70  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9EC71  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9EC71  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9EC76  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9EC77  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9EC77  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9EC7C  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9EC7D  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9EC80  call 0xfca252
@@ -8522,9 +8523,9 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9ECAD  push XBC
 	ld	xbc, (xiz-0x72)                         ; F9ECAE  ld XBC,(XIZ+0x8e)
 	push	xbc                                   ; F9ECB1  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9ECB2  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9ECB2  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9ECB7  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9ECB8  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9ECB8  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9ECBD  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9ECBE  lda XIY,XIZ+0x86
 	call	Double_Multiply                              ; F9ECC1  call 0xfca252
@@ -8562,8 +8563,8 @@ sub_F9E1ED__F9ECEA:
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCC8FE, 0xFCC902, 0xFCC906, 0xFCC90A, 0xFCC90E, 0xFCC9D2, 0xFCC9D6, 0xFCCA42, 0xFCCA46, 0xFCCA4A, 0xFCCA4E, 0xFCCA5A, 0xFCCA5E, 0xFCCA62, 0xFCCA66, 0xFCCA72, 0xFCCA76
 ; Calls:   0xF9B167 = P7Group_SendOp1AddrValueScaled, 0xF9B37E = P7Group_SendValueScaled
-;          0xFC8BB2 = sub_FC8BB2, 0xFC8C45 = sub_FC8C45
-;          0xFC9576 = sub_FC9576, 0xFCA121 = Double_Compare
+;          0xFC8BB2 = Double_Cos, 0xFC8C45 = Double_Sin
+;          0xFC9576 = Double_Pow, 0xFCA121 = Double_Compare
 ;          0xFCA252 = Double_Multiply, 0xFCA41F = Double_Add
 ;          0xFCA626 = Double_Subtract, 0xFCA7A5 = Double_Divide
 ;          0xFCAA50 = Float32_ToDouble, 0xFCABC6 = Int32_ToFloat32
@@ -8582,9 +8583,9 @@ sub_F9E1ED__F9ECEA:
 sub_F9ECF1:
 	link32 0xEE, 0x0C, 0x8E, 0xFF              ; F9ECF1  link XIZ,0xff8e
 	push	xix                                   ; F9ECF5  push XIX
-	ld	xbc, (0xFCC90E:24)                     ; F9ECF6  ld XBC,(0xfcc90e)
+	ld	xbc, (F64_0p51+4:24)                     ; F9ECF6  ld XBC,(0xfcc90e)
 	push	xbc                                   ; F9ECFB  push XBC
-	ld	xbc, (0xFCC90A:24)                     ; F9ECFC  ld XBC,(0xfcc90a)
+	ld	xbc, (F64_0p51:24)                     ; F9ECFC  ld XBC,(0xfcc90a)
 	push	xbc                                   ; F9ED01  push XBC
 	call	Double_ToFloat32                              ; F9ED02  call 0xfcadd6
 	ld	(xiz-20), xiy                           ; F9ED06  ld (XIZ+0xec),XIY
@@ -8595,9 +8596,9 @@ sub_F9ECF1:
 	push	xiy                                   ; F9ED17  push XIY
 	lda	xiy, (xiz-58)                          ; F9ED18  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9ED1B  call 0xfcaa50
-	ld	xbc, (0xFCCA76:24)                     ; F9ED1F  ld XBC,(0xfcca76)
+	ld	xbc, (F64_24+4:24)                     ; F9ED1F  ld XBC,(0xfcca76)
 	push	xbc                                   ; F9ED24  push XBC
-	ld	xbc, (0xFCCA72:24)                     ; F9ED25  ld XBC,(0xfcca72)
+	ld	xbc, (F64_24:24)                     ; F9ED25  ld XBC,(0xfcca72)
 	push	xbc                                   ; F9ED2A  push XBC
 	ld	xbc, (xiz-54)                           ; F9ED2B  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9ED2E  push XBC
@@ -8609,9 +8610,9 @@ sub_F9ECF1:
 	push	xbc                                   ; F9ED3D  push XBC
 	ld	xbc, (xiz-66)                           ; F9ED3E  ld XBC,(XIZ+0xbe)
 	push	xbc                                   ; F9ED41  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9ED42  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9ED42  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9ED47  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9ED48  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9ED48  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9ED4D  push XBC
 	lda	xiy, (xiz-74)                          ; F9ED4E  lda XIY,XIZ+0xb6
 	call	Double_Multiply                              ; F9ED51  call 0xfca252
@@ -8635,7 +8636,7 @@ sub_F9ECF1__F9ED7A:
 	sra	xiy, 6                                 ; F9ED7D  sra 0x06,XIY
 	and	xiy, 31                                ; F9ED80  and XIY,0x0000001f
 	sll	xiy, 2                                 ; F9ED86  sll 0x02,XIY
-	add	xiy, 0xFCCA82                          ; F9ED89  add XIY,0x00fcca82
+	add	xiy, DSP_EQ_FreqHz_Table                          ; F9ED89  add XIY,0x00fcca82
 	ld	xbc, (xiy)                              ; F9ED8F  ld XBC,(XIY)
 	ld	(xiz-12), xbc                           ; F9ED91  ld (XIZ+0xf4),XBC
 	ld	(xiz-8), xbc                            ; F9ED94  ld (XIZ+0xf8),XBC
@@ -8647,9 +8648,9 @@ sub_F9ECF1__F9ED7A:
 	push	xbc                                   ; F9EDA7  push XBC
 	ld	xbc, (xiz-58)                           ; F9EDA8  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9EDAB  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; F9EDAC  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; F9EDAC  ld XBC,(0xfcca4e)
 	push	xbc                                   ; F9EDB1  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; F9EDB2  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; F9EDB2  ld XBC,(0xfcca4a)
 	push	xbc                                   ; F9EDB7  push XBC
 	lda	xiy, (xiz-66)                          ; F9EDB8  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9EDBB  call 0xfca252
@@ -8657,12 +8658,12 @@ sub_F9ECF1__F9ED7A:
 	push	xbc                                   ; F9EDC2  push XBC
 	ld	xbc, (xiz-66)                           ; F9EDC3  ld XBC,(XIZ+0xbe)
 	push	xbc                                   ; F9EDC6  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9EDC7  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9EDC7  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9EDCC  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9EDCD  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9EDCD  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9EDD2  push XBC
 	lda	xiy, (xiz-74)                          ; F9EDD3  lda XIY,XIZ+0xb6
-	call	sub_FC9576                              ; F9EDD6  call 0xfc9576
+	call	Double_Pow                              ; F9EDD6  call 0xfc9576
 	ld	xbc, (xiz-70)                           ; F9EDDA  ld XBC,(XIZ+0xba)
 	push	xbc                                   ; F9EDDD  push XBC
 	ld	xbc, (xiz-74)                           ; F9EDDE  ld XBC,(XIZ+0xb6)
@@ -8675,9 +8676,9 @@ sub_F9ECF1__F9ED7A:
 	call	Float32_ToDouble                              ; F9EDF2  call 0xfcaa50
 	inc	8, xsp                                 ; F9EDF6  inc 0,XSP
 	inc	8, xsp                                 ; F9EDF8  inc 0,XSP
-	ld	xbc, (0xFCCA46:24)                     ; F9EDFA  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9EDFA  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9EDFF  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9EE00  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9EE00  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9EE05  push XBC
 	ld	xbc, (xiz-54)                           ; F9EE06  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9EE09  push XBC
@@ -8694,9 +8695,9 @@ sub_F9ECF1__F9ED7A:
 	push	xbc                                   ; F9EE27  push XBC
 	ld	xbc, (xiz-58)                           ; F9EE28  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9EE2B  push XBC
-	ld	xbc, (0xFCC906:24)                     ; F9EE2C  ld XBC,(0xfcc906)
+	ld	xbc, (F64_0p0001424758573+4:24)                     ; F9EE2C  ld XBC,(0xfcc906)
 	push	xbc                                   ; F9EE31  push XBC
-	ld	xbc, (0xFCC902:24)                     ; F9EE32  ld XBC,(0xfcc902)
+	ld	xbc, (F64_0p0001424758573:24)                     ; F9EE32  ld XBC,(0xfcc902)
 	push	xbc                                   ; F9EE37  push XBC
 	lda	xiy, (xiz-66)                          ; F9EE38  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9EE3B  call 0xfca252
@@ -8705,7 +8706,7 @@ sub_F9ECF1__F9ED7A:
 	ld	xbc, (xiz-66)                           ; F9EE43  ld XBC,(XIZ+0xbe)
 	push	xbc                                   ; F9EE46  push XBC
 	lda	xiy, (xiz-74)                          ; F9EE47  lda XIY,XIZ+0xb6
-	call	sub_FC8BB2                              ; F9EE4A  call 0xfc8bb2
+	call	Double_Cos                              ; F9EE4A  call 0xfc8bb2
 	extpfx3 0x9E, 0xFA, 0x04                   ; F9EE4E  pushw (XIZ+0xfa)
 	extpfx3 0x9E, 0xF8, 0x04                   ; F9EE51  pushw (XIZ+0xf8)
 	lda	xiy, (xiz-82)                          ; F9EE54  lda XIY,XIZ+0xae
@@ -8714,9 +8715,9 @@ sub_F9ECF1__F9ED7A:
 	push	xbc                                   ; F9EE5E  push XBC
 	ld	xbc, (xiz-82)                           ; F9EE5F  ld XBC,(XIZ+0xae)
 	push	xbc                                   ; F9EE62  push XBC
-	ld	xbc, (0xFCC906:24)                     ; F9EE63  ld XBC,(0xfcc906)
+	ld	xbc, (F64_0p0001424758573+4:24)                     ; F9EE63  ld XBC,(0xfcc906)
 	push	xbc                                   ; F9EE68  push XBC
-	ld	xbc, (0xFCC902:24)                     ; F9EE69  ld XBC,(0xfcc902)
+	ld	xbc, (F64_0p0001424758573:24)                     ; F9EE69  ld XBC,(0xfcc902)
 	push	xbc                                   ; F9EE6E  push XBC
 	lda	xiy, (xiz-90)                          ; F9EE6F  lda XIY,XIZ+0xa6
 	call	Double_Multiply                              ; F9EE72  call 0xfca252
@@ -8726,10 +8727,10 @@ sub_F9ECF1__F9ED7A:
 	ld	xbc, (xiz-90)                           ; F9EE7C  ld XBC,(XIZ+0xa6)
 	push	xbc                                   ; F9EE7F  push XBC
 	lda	xiy, (xiz-98)                          ; F9EE80  lda XIY,XIZ+0x9e
-	call	sub_FC8C45                              ; F9EE83  call 0xfc8c45
-	ld	xbc, (0xFCC9D6:24)                     ; F9EE87  ld XBC,(0xfcc9d6)
+	call	Double_Sin                              ; F9EE83  call 0xfc8c45
+	ld	xbc, (F64_1+4:24)                     ; F9EE87  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9EE8C  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9EE8D  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9EE8D  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9EE92  push XBC
 	ld	xbc, (xiz-94)                           ; F9EE93  ld XBC,(XIZ+0xa2)
 	push	xbc                                   ; F9EE96  push XBC
@@ -8760,15 +8761,15 @@ sub_F9ECF1__F9ED7A:
 	push	xbc                                   ; F9EED3  push XBC
 	ld	xbc, (xiz-58)                           ; F9EED4  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9EED7  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9EED8  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9EED8  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9EEDD  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9EEDE  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9EEDE  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9EEE3  push XBC
 	lda	xiy, (xiz-66)                          ; F9EEE4  lda XIY,XIZ+0xbe
 	call	Double_Subtract                              ; F9EEE7  call 0xfca626
-	ld	xbc, (0xFCC9D6:24)                     ; F9EEEB  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9EEEB  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9EEF0  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9EEF1  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9EEF1  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9EEF6  push XBC
 	ld	xbc, (xiz-54)                           ; F9EEF7  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9EEFA  push XBC
@@ -8799,9 +8800,9 @@ sub_F9ECF1__F9ED7A:
 	push	xiy                                   ; F9EF37  push XIY
 	lda	xiy, (xiz-58)                          ; F9EF38  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9EF3B  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; F9EF3F  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9EF3F  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9EF44  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9EF45  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9EF45  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9EF4A  push XBC
 	ld	xbc, (xiz-54)                           ; F9EF4B  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9EF4E  push XBC
@@ -8813,9 +8814,9 @@ sub_F9ECF1__F9ED7A:
 	push	xbc                                   ; F9EF5D  push XBC
 	ld	xbc, (xiz-58)                           ; F9EF5E  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9EF61  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9EF62  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9EF62  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9EF67  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9EF68  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9EF68  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9EF6D  push XBC
 	lda	xiy, (xiz-74)                          ; F9EF6E  lda XIY,XIZ+0xb6
 	call	Double_Subtract                              ; F9EF71  call 0xfca626
@@ -8846,9 +8847,9 @@ sub_F9ECF1__F9EFA0:
 	push	xbc                                   ; F9EFB0  push XBC
 	ld	xbc, (xiz-58)                           ; F9EFB1  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9EFB4  push XBC
-	ld	xbc, (0xFCC906:24)                     ; F9EFB5  ld XBC,(0xfcc906)
+	ld	xbc, (F64_0p0001424758573+4:24)                     ; F9EFB5  ld XBC,(0xfcc906)
 	push	xbc                                   ; F9EFBA  push XBC
-	ld	xbc, (0xFCC902:24)                     ; F9EFBB  ld XBC,(0xfcc902)
+	ld	xbc, (F64_0p0001424758573:24)                     ; F9EFBB  ld XBC,(0xfcc902)
 	push	xbc                                   ; F9EFC0  push XBC
 	lda	xiy, (xiz-66)                          ; F9EFC1  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9EFC4  call 0xfca252
@@ -8857,7 +8858,7 @@ sub_F9ECF1__F9EFA0:
 	ld	xbc, (xiz-66)                           ; F9EFCC  ld XBC,(XIZ+0xbe)
 	push	xbc                                   ; F9EFCF  push XBC
 	lda	xiy, (xiz-74)                          ; F9EFD0  lda XIY,XIZ+0xb6
-	call	sub_FC8BB2                              ; F9EFD3  call 0xfc8bb2
+	call	Double_Cos                              ; F9EFD3  call 0xfc8bb2
 	extpfx3 0x9E, 0xFA, 0x04                   ; F9EFD7  pushw (XIZ+0xfa)
 	extpfx3 0x9E, 0xF8, 0x04                   ; F9EFDA  pushw (XIZ+0xf8)
 	lda	xiy, (xiz-82)                          ; F9EFDD  lda XIY,XIZ+0xae
@@ -8866,9 +8867,9 @@ sub_F9ECF1__F9EFA0:
 	push	xbc                                   ; F9EFE7  push XBC
 	ld	xbc, (xiz-82)                           ; F9EFE8  ld XBC,(XIZ+0xae)
 	push	xbc                                   ; F9EFEB  push XBC
-	ld	xbc, (0xFCC906:24)                     ; F9EFEC  ld XBC,(0xfcc906)
+	ld	xbc, (F64_0p0001424758573+4:24)                     ; F9EFEC  ld XBC,(0xfcc906)
 	push	xbc                                   ; F9EFF1  push XBC
-	ld	xbc, (0xFCC902:24)                     ; F9EFF2  ld XBC,(0xfcc902)
+	ld	xbc, (F64_0p0001424758573:24)                     ; F9EFF2  ld XBC,(0xfcc902)
 	push	xbc                                   ; F9EFF7  push XBC
 	lda	xiy, (xiz-90)                          ; F9EFF8  lda XIY,XIZ+0xa6
 	call	Double_Multiply                              ; F9EFFB  call 0xfca252
@@ -8878,10 +8879,10 @@ sub_F9ECF1__F9EFA0:
 	ld	xbc, (xiz-90)                           ; F9F005  ld XBC,(XIZ+0xa6)
 	push	xbc                                   ; F9F008  push XBC
 	lda	xiy, (xiz-98)                          ; F9F009  lda XIY,XIZ+0x9e
-	call	sub_FC8C45                              ; F9F00C  call 0xfc8c45
-	ld	xbc, (0xFCC9D6:24)                     ; F9F010  ld XBC,(0xfcc9d6)
+	call	Double_Sin                              ; F9F00C  call 0xfc8c45
+	ld	xbc, (F64_1+4:24)                     ; F9F010  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F015  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F016  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F016  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F01B  push XBC
 	ld	xbc, (xiz-94)                           ; F9F01C  ld XBC,(XIZ+0xa2)
 	push	xbc                                   ; F9F01F  push XBC
@@ -8929,9 +8930,9 @@ sub_F9ECF1__F9EFA0:
 	push	xiy                                   ; F9F08C  push XIY
 	lda	xiy, (xiz-58)                          ; F9F08D  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F090  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; F9F094  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F094  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F099  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F09A  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F09A  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F09F  push XBC
 	ld	xbc, (xiz-54)                           ; F9F0A0  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9F0A3  push XBC
@@ -8939,9 +8940,9 @@ sub_F9ECF1__F9EFA0:
 	push	xbc                                   ; F9F0A7  push XBC
 	lda	xiy, (xiz-66)                          ; F9F0A8  lda XIY,XIZ+0xbe
 	call	Double_Add                              ; F9F0AB  call 0xfca41f
-	ld	xbc, (0xFCC9D6:24)                     ; F9F0AF  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F0AF  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F0B4  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F0B5  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F0B5  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F0BA  push XBC
 	ld	xbc, (xiz-54)                           ; F9F0BB  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9F0BE  push XBC
@@ -8975,9 +8976,9 @@ sub_F9ECF1__F9F0F2:
 	push	xbc                                   ; F9F102  push XBC
 	ld	xbc, (xiz-58)                           ; F9F103  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F106  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9F107  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F107  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F10C  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F10D  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F10D  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F112  push XBC
 	lda	xiy, (xiz-66)                          ; F9F113  lda XIY,XIZ+0xbe
 	call	Double_Subtract                              ; F9F116  call 0xfca626
@@ -8989,9 +8990,9 @@ sub_F9ECF1__F9F0F2:
 	push	xbc                                   ; F9F12A  push XBC
 	ld	xbc, (xiz-74)                           ; F9F12B  ld XBC,(XIZ+0xb6)
 	push	xbc                                   ; F9F12E  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9F12F  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F12F  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F134  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F135  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F135  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F13A  push XBC
 	lda	xiy, (xiz-82)                          ; F9F13B  lda XIY,XIZ+0xae
 	call	Double_Subtract                              ; F9F13E  call 0xfca626
@@ -9028,9 +9029,9 @@ sub_F9ECF1__F9F0F2:
 	push	xbc                                   ; F9F193  push XBC
 	ld	xbc, (xiz-58)                           ; F9F194  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F197  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9F198  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9F198  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9F19D  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9F19E  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9F19E  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9F1A3  push XBC
 	lda	xiy, (xiz-66)                          ; F9F1A4  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9F1A7  call 0xfca252
@@ -9050,9 +9051,9 @@ sub_F9ECF1__F9F0F2:
 	push	xbc                                   ; F9F1CE  push XBC
 	ld	xbc, (xiz-58)                           ; F9F1CF  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F1D2  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9F1D3  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9F1D3  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9F1D8  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9F1D9  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9F1D9  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9F1DE  push XBC
 	lda	xiy, (xiz-66)                          ; F9F1DF  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9F1E2  call 0xfca252
@@ -9072,9 +9073,9 @@ sub_F9ECF1__F9F0F2:
 	push	xbc                                   ; F9F208  push XBC
 	ld	xbc, (xiz-58)                           ; F9F209  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F20C  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9F20D  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9F20D  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9F212  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9F213  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9F213  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9F218  push XBC
 	lda	xiy, (xiz-66)                          ; F9F219  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9F21C  call 0xfca252
@@ -9093,7 +9094,7 @@ sub_F9ECF1__F9F235:
 	sra	xiy, 6                                 ; F9F238  sra 0x06,XIY
 	and	xiy, 31                                ; F9F23B  and XIY,0x0000001f
 	sll	xiy, 2                                 ; F9F241  sll 0x02,XIY
-	add	xiy, 0xFCCA82                          ; F9F244  add XIY,0x00fcca82
+	add	xiy, DSP_EQ_FreqHz_Table                          ; F9F244  add XIY,0x00fcca82
 	ld	xbc, (xiy)                              ; F9F24A  ld XBC,(XIY)
 	ld	(xiz-12), xbc                           ; F9F24C  ld (XIZ+0xf4),XBC
 	ld	(xiz-4), xbc                            ; F9F24F  ld (XIZ+0xfc),XBC
@@ -9105,9 +9106,9 @@ sub_F9ECF1__F9F235:
 	push	xbc                                   ; F9F262  push XBC
 	ld	xbc, (xiz-58)                           ; F9F263  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F266  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; F9F267  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; F9F267  ld XBC,(0xfcca4e)
 	push	xbc                                   ; F9F26C  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; F9F26D  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; F9F26D  ld XBC,(0xfcca4a)
 	push	xbc                                   ; F9F272  push XBC
 	lda	xiy, (xiz-66)                          ; F9F273  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9F276  call 0xfca252
@@ -9115,12 +9116,12 @@ sub_F9ECF1__F9F235:
 	push	xbc                                   ; F9F27D  push XBC
 	ld	xbc, (xiz-66)                           ; F9F27E  ld XBC,(XIZ+0xbe)
 	push	xbc                                   ; F9F281  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; F9F282  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; F9F282  ld XBC,(0xfcca66)
 	push	xbc                                   ; F9F287  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; F9F288  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; F9F288  ld XBC,(0xfcca62)
 	push	xbc                                   ; F9F28D  push XBC
 	lda	xiy, (xiz-74)                          ; F9F28E  lda XIY,XIZ+0xb6
-	call	sub_FC9576                              ; F9F291  call 0xfc9576
+	call	Double_Pow                              ; F9F291  call 0xfc9576
 	ld	xbc, (xiz-70)                           ; F9F295  ld XBC,(XIZ+0xba)
 	push	xbc                                   ; F9F298  push XBC
 	ld	xbc, (xiz-74)                           ; F9F299  ld XBC,(XIZ+0xb6)
@@ -9133,9 +9134,9 @@ sub_F9ECF1__F9F235:
 	call	Float32_ToDouble                              ; F9F2AD  call 0xfcaa50
 	inc	8, xsp                                 ; F9F2B1  inc 0,XSP
 	inc	8, xsp                                 ; F9F2B3  inc 0,XSP
-	ld	xbc, (0xFCCA46:24)                     ; F9F2B5  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; F9F2B5  ld XBC,(0xfcca46)
 	push	xbc                                   ; F9F2BA  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; F9F2BB  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; F9F2BB  ld XBC,(0xfcca42)
 	push	xbc                                   ; F9F2C0  push XBC
 	ld	xbc, (xiz-54)                           ; F9F2C1  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9F2C4  push XBC
@@ -9152,9 +9153,9 @@ sub_F9ECF1__F9F235:
 	push	xbc                                   ; F9F2E2  push XBC
 	ld	xbc, (xiz-58)                           ; F9F2E3  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F2E6  push XBC
-	ld	xbc, (0xFCC906:24)                     ; F9F2E7  ld XBC,(0xfcc906)
+	ld	xbc, (F64_0p0001424758573+4:24)                     ; F9F2E7  ld XBC,(0xfcc906)
 	push	xbc                                   ; F9F2EC  push XBC
-	ld	xbc, (0xFCC902:24)                     ; F9F2ED  ld XBC,(0xfcc902)
+	ld	xbc, (F64_0p0001424758573:24)                     ; F9F2ED  ld XBC,(0xfcc902)
 	push	xbc                                   ; F9F2F2  push XBC
 	lda	xiy, (xiz-66)                          ; F9F2F3  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9F2F6  call 0xfca252
@@ -9163,7 +9164,7 @@ sub_F9ECF1__F9F235:
 	ld	xbc, (xiz-66)                           ; F9F2FE  ld XBC,(XIZ+0xbe)
 	push	xbc                                   ; F9F301  push XBC
 	lda	xiy, (xiz-74)                          ; F9F302  lda XIY,XIZ+0xb6
-	call	sub_FC8BB2                              ; F9F305  call 0xfc8bb2
+	call	Double_Cos                              ; F9F305  call 0xfc8bb2
 	extpfx3 0x9E, 0xFE, 0x04                   ; F9F309  pushw (XIZ+0xfe)
 	extpfx3 0x9E, 0xFC, 0x04                   ; F9F30C  pushw (XIZ+0xfc)
 	lda	xiy, (xiz-82)                          ; F9F30F  lda XIY,XIZ+0xae
@@ -9172,9 +9173,9 @@ sub_F9ECF1__F9F235:
 	push	xbc                                   ; F9F319  push XBC
 	ld	xbc, (xiz-82)                           ; F9F31A  ld XBC,(XIZ+0xae)
 	push	xbc                                   ; F9F31D  push XBC
-	ld	xbc, (0xFCC906:24)                     ; F9F31E  ld XBC,(0xfcc906)
+	ld	xbc, (F64_0p0001424758573+4:24)                     ; F9F31E  ld XBC,(0xfcc906)
 	push	xbc                                   ; F9F323  push XBC
-	ld	xbc, (0xFCC902:24)                     ; F9F324  ld XBC,(0xfcc902)
+	ld	xbc, (F64_0p0001424758573:24)                     ; F9F324  ld XBC,(0xfcc902)
 	push	xbc                                   ; F9F329  push XBC
 	lda	xiy, (xiz-90)                          ; F9F32A  lda XIY,XIZ+0xa6
 	call	Double_Multiply                              ; F9F32D  call 0xfca252
@@ -9184,10 +9185,10 @@ sub_F9ECF1__F9F235:
 	ld	xbc, (xiz-90)                           ; F9F337  ld XBC,(XIZ+0xa6)
 	push	xbc                                   ; F9F33A  push XBC
 	lda	xiy, (xiz-98)                          ; F9F33B  lda XIY,XIZ+0x9e
-	call	sub_FC8C45                              ; F9F33E  call 0xfc8c45
-	ld	xbc, (0xFCC9D6:24)                     ; F9F342  ld XBC,(0xfcc9d6)
+	call	Double_Sin                              ; F9F33E  call 0xfc8c45
+	ld	xbc, (F64_1+4:24)                     ; F9F342  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F347  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F348  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F348  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F34D  push XBC
 	ld	xbc, (xiz-94)                           ; F9F34E  ld XBC,(XIZ+0xa2)
 	push	xbc                                   ; F9F351  push XBC
@@ -9214,9 +9215,9 @@ sub_F9ECF1__F9F235:
 	push	xiy                                   ; F9F383  push XIY
 	lda	xiy, (xiz-58)                          ; F9F384  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F387  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; F9F38B  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F38B  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F390  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F391  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F391  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F396  push XBC
 	ld	xbc, (xiz-54)                           ; F9F397  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9F39A  push XBC
@@ -9228,9 +9229,9 @@ sub_F9ECF1__F9F235:
 	push	xbc                                   ; F9F3A9  push XBC
 	ld	xbc, (xiz-58)                           ; F9F3AA  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F3AD  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9F3AE  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F3AE  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F3B3  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F3B4  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F3B4  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F3B9  push XBC
 	lda	xiy, (xiz-74)                          ; F9F3BA  lda XIY,XIZ+0xb6
 	call	Double_Subtract                              ; F9F3BD  call 0xfca626
@@ -9257,9 +9258,9 @@ sub_F9ECF1__F9F235:
 	push	xiy                                   ; F9F3F2  push XIY
 	lda	xiy, (xiz-58)                          ; F9F3F3  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F3F6  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; F9F3FA  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F3FA  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F3FF  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F400  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F400  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F405  push XBC
 	ld	xbc, (xiz-54)                           ; F9F406  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9F409  push XBC
@@ -9267,9 +9268,9 @@ sub_F9ECF1__F9F235:
 	push	xbc                                   ; F9F40D  push XBC
 	lda	xiy, (xiz-66)                          ; F9F40E  lda XIY,XIZ+0xbe
 	call	Double_Add                              ; F9F411  call 0xfca41f
-	ld	xbc, (0xFCC9D6:24)                     ; F9F415  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F415  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F41A  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F41B  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F41B  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F420  push XBC
 	ld	xbc, (xiz-54)                           ; F9F421  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9F424  push XBC
@@ -9304,9 +9305,9 @@ sub_F9ECF1__F9F45B:
 	push	xbc                                   ; F9F46B  push XBC
 	ld	xbc, (xiz-58)                           ; F9F46C  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F46F  push XBC
-	ld	xbc, (0xFCC906:24)                     ; F9F470  ld XBC,(0xfcc906)
+	ld	xbc, (F64_0p0001424758573+4:24)                     ; F9F470  ld XBC,(0xfcc906)
 	push	xbc                                   ; F9F475  push XBC
-	ld	xbc, (0xFCC902:24)                     ; F9F476  ld XBC,(0xfcc902)
+	ld	xbc, (F64_0p0001424758573:24)                     ; F9F476  ld XBC,(0xfcc902)
 	push	xbc                                   ; F9F47B  push XBC
 	lda	xiy, (xiz-66)                          ; F9F47C  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9F47F  call 0xfca252
@@ -9315,7 +9316,7 @@ sub_F9ECF1__F9F45B:
 	ld	xbc, (xiz-66)                           ; F9F487  ld XBC,(XIZ+0xbe)
 	push	xbc                                   ; F9F48A  push XBC
 	lda	xiy, (xiz-74)                          ; F9F48B  lda XIY,XIZ+0xb6
-	call	sub_FC8BB2                              ; F9F48E  call 0xfc8bb2
+	call	Double_Cos                              ; F9F48E  call 0xfc8bb2
 	extpfx3 0x9E, 0xFE, 0x04                   ; F9F492  pushw (XIZ+0xfe)
 	extpfx3 0x9E, 0xFC, 0x04                   ; F9F495  pushw (XIZ+0xfc)
 	lda	xiy, (xiz-82)                          ; F9F498  lda XIY,XIZ+0xae
@@ -9324,9 +9325,9 @@ sub_F9ECF1__F9F45B:
 	push	xbc                                   ; F9F4A2  push XBC
 	ld	xbc, (xiz-82)                           ; F9F4A3  ld XBC,(XIZ+0xae)
 	push	xbc                                   ; F9F4A6  push XBC
-	ld	xbc, (0xFCC906:24)                     ; F9F4A7  ld XBC,(0xfcc906)
+	ld	xbc, (F64_0p0001424758573+4:24)                     ; F9F4A7  ld XBC,(0xfcc906)
 	push	xbc                                   ; F9F4AC  push XBC
-	ld	xbc, (0xFCC902:24)                     ; F9F4AD  ld XBC,(0xfcc902)
+	ld	xbc, (F64_0p0001424758573:24)                     ; F9F4AD  ld XBC,(0xfcc902)
 	push	xbc                                   ; F9F4B2  push XBC
 	lda	xiy, (xiz-90)                          ; F9F4B3  lda XIY,XIZ+0xa6
 	call	Double_Multiply                              ; F9F4B6  call 0xfca252
@@ -9336,10 +9337,10 @@ sub_F9ECF1__F9F45B:
 	ld	xbc, (xiz-90)                           ; F9F4C0  ld XBC,(XIZ+0xa6)
 	push	xbc                                   ; F9F4C3  push XBC
 	lda	xiy, (xiz-98)                          ; F9F4C4  lda XIY,XIZ+0x9e
-	call	sub_FC8C45                              ; F9F4C7  call 0xfc8c45
-	ld	xbc, (0xFCC9D6:24)                     ; F9F4CB  ld XBC,(0xfcc9d6)
+	call	Double_Sin                              ; F9F4C7  call 0xfc8c45
+	ld	xbc, (F64_1+4:24)                     ; F9F4CB  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F4D0  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F4D1  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F4D1  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F4D6  push XBC
 	ld	xbc, (xiz-94)                           ; F9F4D7  ld XBC,(XIZ+0xa2)
 	push	xbc                                   ; F9F4DA  push XBC
@@ -9370,15 +9371,15 @@ sub_F9ECF1__F9F45B:
 	push	xbc                                   ; F9F517  push XBC
 	ld	xbc, (xiz-58)                           ; F9F518  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F51B  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9F51C  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F51C  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F521  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F522  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F522  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F527  push XBC
 	lda	xiy, (xiz-66)                          ; F9F528  lda XIY,XIZ+0xbe
 	call	Double_Subtract                              ; F9F52B  call 0xfca626
-	ld	xbc, (0xFCC9D6:24)                     ; F9F52F  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F52F  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F534  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F535  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F535  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F53A  push XBC
 	ld	xbc, (xiz-54)                           ; F9F53B  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9F53E  push XBC
@@ -9409,9 +9410,9 @@ sub_F9ECF1__F9F45B:
 	push	xiy                                   ; F9F57B  push XIY
 	lda	xiy, (xiz-58)                          ; F9F57C  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F57F  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; F9F583  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F583  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F588  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F589  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F589  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F58E  push XBC
 	ld	xbc, (xiz-54)                           ; F9F58F  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9F592  push XBC
@@ -9423,9 +9424,9 @@ sub_F9ECF1__F9F45B:
 	push	xbc                                   ; F9F5A1  push XBC
 	ld	xbc, (xiz-58)                           ; F9F5A2  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F5A5  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; F9F5A6  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F5A6  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F5AB  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F5AC  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F5AC  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F5B1  push XBC
 	lda	xiy, (xiz-74)                          ; F9F5B2  lda XIY,XIZ+0xb6
 	call	Double_Subtract                              ; F9F5B5  call 0xfca626
@@ -9451,9 +9452,9 @@ sub_F9ECF1__F9F5E1:
 	extpfx3 0x9E, 0xE4, 0x04                   ; F9F5E4  pushw (XIZ+0xe4)
 	lda	xiy, (xiz-58)                          ; F9F5E7  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F5EA  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; F9F5EE  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F5EE  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F5F3  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F5F4  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F5F4  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F5F9  push XBC
 	ld	xbc, (xiz-54)                           ; F9F5FA  ld XBC,(XIZ+0xca)
 	push	xbc                                   ; F9F5FD  push XBC
@@ -9479,9 +9480,9 @@ sub_F9ECF1__F9F5E1:
 	extpfx3 0x9E, 0xE8, 0x04                   ; F9F630  pushw (XIZ+0xe8)
 	lda	xiy, (xiz-90)                          ; F9F633  lda XIY,XIZ+0xa6
 	call	Float32_ToDouble                              ; F9F636  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; F9F63A  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; F9F63A  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; F9F63F  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; F9F640  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; F9F640  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; F9F645  push XBC
 	ld	xbc, (xiz-86)                           ; F9F646  ld XBC,(XIZ+0xaa)
 	push	xbc                                   ; F9F649  push XBC
@@ -9522,9 +9523,9 @@ sub_F9ECF1__F9F5E1:
 	push	xbc                                   ; F9F6A6  push XBC
 	ld	xbc, (xiz-58)                           ; F9F6A7  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F6AA  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9F6AB  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9F6AB  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9F6B0  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9F6B1  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9F6B1  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9F6B6  push XBC
 	lda	xiy, (xiz-66)                          ; F9F6B7  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9F6BA  call 0xfca252
@@ -9544,9 +9545,9 @@ sub_F9ECF1__F9F5E1:
 	push	xbc                                   ; F9F6E1  push XBC
 	ld	xbc, (xiz-58)                           ; F9F6E2  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F6E5  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9F6E6  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9F6E6  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9F6EB  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9F6EC  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9F6EC  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9F6F1  push XBC
 	lda	xiy, (xiz-66)                          ; F9F6F2  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9F6F5  call 0xfca252
@@ -9566,9 +9567,9 @@ sub_F9ECF1__F9F5E1:
 	push	xbc                                   ; F9F71B  push XBC
 	ld	xbc, (xiz-58)                           ; F9F71C  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9F71F  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; F9F720  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; F9F720  ld XBC,(0xfcca5e)
 	push	xbc                                   ; F9F725  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; F9F726  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; F9F726  ld XBC,(0xfcca5a)
 	push	xbc                                   ; F9F72B  push XBC
 	lda	xiy, (xiz-66)                          ; F9F72C  lda XIY,XIZ+0xbe
 	call	Double_Multiply                              ; F9F72F  call 0xfca252
@@ -9581,7 +9582,7 @@ sub_F9ECF1__F9F5E1:
 	push	xiy                                   ; F9F740  push XIY
 	calr P7Group_SendValueScaled                 ; F9F741  calr 0xf9b37e
 	pop	xiy                                    ; F9F744  pop XIY
-	ld	xbc, (0xFCC8FE:24)                     ; F9F745  ld XBC,(0xfcc8fe)
+	ld	xbc, (F32_0p980392158:24)                     ; F9F745  ld XBC,(0xfcc8fe)
 	push	xbc                                   ; F9F74A  push XBC
 	calr P7Group_SendValueScaled                 ; F9F74B  calr 0xf9b37e
 	pop	xiy                                    ; F9F74E  pop XIY
@@ -10383,9 +10384,9 @@ sub_F9FD0E__F9FD59:
 	push	xbc                                   ; F9FDE4  push XBC
 	ld	xbc, (xiz-20)                           ; F9FDE5  ld XBC,(XIZ+0xec)
 	push	xbc                                   ; F9FDE8  push XBC
-	ld	xbc, (0xFCCA7E:24)                     ; F9FDE9  ld XBC,(0xfcca7e)
+	ld	xbc, (F64_2147483648+4:24)                     ; F9FDE9  ld XBC,(0xfcca7e)
 	push	xbc                                   ; F9FDEE  push XBC
-	ld	xbc, (0xFCCA7A:24)                     ; F9FDEF  ld XBC,(0xfcca7a)
+	ld	xbc, (F64_2147483648:24)                     ; F9FDEF  ld XBC,(0xfcca7a)
 	push	xbc                                   ; F9FDF4  push XBC
 	lda	xiy, (xiz-28)                          ; F9FDF5  lda XIY,XIZ+0xe4
 	call	Double_Multiply                              ; F9FDF8  call 0xfca252
@@ -10613,7 +10614,7 @@ sub_F9FEA5__F9FEF0:
 ; Calls:   0xF9DFB7 = Stream_ReadU24BE_Shl8, 0xF9E020 = Stream_ReadU24BE
 ;          0xF9E077 = Int32_ToFloat32_Q31, 0xF9E0B7 = sub_F9E0B7
 ;          0xF9FD0E = sub_F9FD0E, 0xF9FEA5 = sub_F9FEA5
-;          0xFC9576 = sub_FC9576, 0xFCA1B6 = Double_Negate
+;          0xFC9576 = Double_Pow, 0xFCA1B6 = Double_Negate
 ;          0xFCA252 = Double_Multiply, 0xFCA41F = Double_Add
 ;          0xFCA626 = Double_Subtract, 0xFCA6FD = Int32_ToDouble
 ;          0xFCA7A5 = Double_Divide, 0xFCA997 = Int16_ToDouble
@@ -10665,9 +10666,9 @@ sub_FA000B__FA0047:
 	push	xbc                                   ; FA005C  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA005D  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA0060  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; FA0061  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; FA0061  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; FA0066  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; FA0067  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; FA0067  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; FA006C  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA006D  lda XIY,XIZ+0x88
 	call	Double_Subtract                              ; FA0070  call 0xfca626
@@ -10683,9 +10684,9 @@ sub_FA000B__FA0047:
 	push	xbc                                   ; FA008B  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA008C  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA008F  push XBC
-	ld	xbc, (0xFCCA76:24)                     ; FA0090  ld XBC,(0xfcca76)
+	ld	xbc, (F64_24+4:24)                     ; FA0090  ld XBC,(0xfcca76)
 	push	xbc                                   ; FA0095  push XBC
-	ld	xbc, (0xFCCA72:24)                     ; FA0096  ld XBC,(0xfcca72)
+	ld	xbc, (F64_24:24)                     ; FA0096  ld XBC,(0xfcca72)
 	push	xbc                                   ; FA009B  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA009C  lda XIY,XIZ+0xff78
 	call	Double_Subtract                              ; FA00A1  call 0xfca626
@@ -10693,9 +10694,9 @@ sub_FA000B__FA0047:
 	push	xbc                                   ; FA00AA  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA00AB  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA00B0  push XBC
-	ld	xbc, (0xFCCA6E:24)                     ; FA00B1  ld XBC,(0xfcca6e)
+	ld	xbc, (F64_0p0125+4:24)                     ; FA00B1  ld XBC,(0xfcca6e)
 	push	xbc                                   ; FA00B6  push XBC
-	ld	xbc, (0xFCCA6A:24)                     ; FA00B7  ld XBC,(0xfcca6a)
+	ld	xbc, (F64_0p0125:24)                     ; FA00B7  ld XBC,(0xfcca6a)
 	push	xbc                                   ; FA00BC  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA00BD  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA00C2  call 0xfca252
@@ -10703,19 +10704,19 @@ sub_FA000B__FA0047:
 	push	xbc                                   ; FA00CB  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA00CC  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA00D1  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA00D2  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA00D2  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA00D7  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA00D8  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA00D8  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA00DD  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA00DE  lda XIY,XIZ+0xff68
-	call	sub_FC9576                              ; FA00E3  call 0xfc9576
+	call	Double_Pow                              ; FA00E3  call 0xfc9576
 	ld	xbc, (xiz-0x94)                         ; FA00E7  ld XBC,(XIZ+0xff6c)
 	push	xbc                                   ; FA00EC  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA00ED  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA00F2  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA00F3  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA00F3  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA00F8  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA00F9  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA00F9  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA00FE  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA00FF  lda XIY,XIZ+0xff60
 	call	Double_Multiply                              ; FA0104  call 0xfca252
@@ -10742,9 +10743,9 @@ sub_FA000B__FA0127:
 	push	xbc                                   ; FA013E  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA013F  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA0142  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; FA0143  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; FA0143  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; FA0148  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; FA0149  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; FA0149  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; FA014E  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA014F  lda XIY,XIZ+0x88
 	call	Double_Subtract                              ; FA0152  call 0xfca626
@@ -10760,9 +10761,9 @@ sub_FA000B__FA0127:
 	push	xbc                                   ; FA016D  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA016E  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0171  push XBC
-	ld	xbc, (0xFCCA56:24)                     ; FA0172  ld XBC,(0xfcca56)
+	ld	xbc, (F64_3+4:24)                     ; FA0172  ld XBC,(0xfcca56)
 	push	xbc                                   ; FA0177  push XBC
-	ld	xbc, (0xFCCA52:24)                     ; FA0178  ld XBC,(0xfcca52)
+	ld	xbc, (F64_3:24)                     ; FA0178  ld XBC,(0xfcca52)
 	push	xbc                                   ; FA017D  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA017E  lda XIY,XIZ+0xff78
 	call	Double_Subtract                              ; FA0183  call 0xfca626
@@ -10770,9 +10771,9 @@ sub_FA000B__FA0127:
 	push	xbc                                   ; FA018C  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA018D  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA0192  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; FA0193  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; FA0193  ld XBC,(0xfcca4e)
 	push	xbc                                   ; FA0198  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; FA0199  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; FA0199  ld XBC,(0xfcca4a)
 	push	xbc                                   ; FA019E  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA019F  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA01A4  call 0xfca252
@@ -10780,19 +10781,19 @@ sub_FA000B__FA0127:
 	push	xbc                                   ; FA01AD  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA01AE  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA01B3  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA01B4  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA01B4  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA01B9  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA01BA  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA01BA  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA01BF  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA01C0  lda XIY,XIZ+0xff68
-	call	sub_FC9576                              ; FA01C5  call 0xfc9576
+	call	Double_Pow                              ; FA01C5  call 0xfc9576
 	ld	xbc, (xiz-0x94)                         ; FA01C9  ld XBC,(XIZ+0xff6c)
 	push	xbc                                   ; FA01CE  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA01CF  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA01D4  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA01D5  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA01D5  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA01DA  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA01DB  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA01DB  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA01E0  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA01E1  lda XIY,XIZ+0xff60
 	call	Double_Multiply                              ; FA01E6  call 0xfca252
@@ -10806,9 +10807,9 @@ sub_FA000B__FA0127:
 	inc	8, xsp                                 ; FA01FF  inc 0,XSP
 	jr sub_FA000B__FA0216                      ; FA0201  jr T,0xfa0216
 sub_FA000B__FA0203:
-	ld	xbc, (0xFCCA46:24)                     ; FA0203  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; FA0203  ld XBC,(0xfcca46)
 	push	xbc                                   ; FA0208  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; FA0209  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; FA0209  ld XBC,(0xfcca42)
 	push	xbc                                   ; FA020E  push XBC
 	call	Double_ToFloat32                              ; FA020F  call 0xfcadd6
 	ld	(xiz-16), xiy                           ; FA0213  ld (XIZ+0xf0),XIY
@@ -10833,9 +10834,9 @@ sub_FA000B__FA0221:
 	push	xbc                                   ; FA0242  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA0243  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA0246  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; FA0247  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; FA0247  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; FA024C  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; FA024D  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; FA024D  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; FA0252  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA0253  lda XIY,XIZ+0x88
 	call	Double_Subtract                              ; FA0256  call 0xfca626
@@ -10851,9 +10852,9 @@ sub_FA000B__FA0221:
 	push	xbc                                   ; FA0271  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0272  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0275  push XBC
-	ld	xbc, (0xFCCA3E:24)                     ; FA0276  ld XBC,(0xfcca3e)
+	ld	xbc, (F64_0p2+4:24)                     ; FA0276  ld XBC,(0xfcca3e)
 	push	xbc                                   ; FA027B  push XBC
-	ld	xbc, (0xFCCA3A:24)                     ; FA027C  ld XBC,(0xfcca3a)
+	ld	xbc, (F64_0p2:24)                     ; FA027C  ld XBC,(0xfcca3a)
 	push	xbc                                   ; FA0281  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0282  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA0287  call 0xfca252
@@ -10861,9 +10862,9 @@ sub_FA000B__FA0221:
 	push	xbc                                   ; FA0290  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA0291  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA0296  push XBC
-	ld	xbc, (0xFCCA56:24)                     ; FA0297  ld XBC,(0xfcca56)
+	ld	xbc, (F64_3+4:24)                     ; FA0297  ld XBC,(0xfcca56)
 	push	xbc                                   ; FA029C  push XBC
-	ld	xbc, (0xFCCA52:24)                     ; FA029D  ld XBC,(0xfcca52)
+	ld	xbc, (F64_3:24)                     ; FA029D  ld XBC,(0xfcca52)
 	push	xbc                                   ; FA02A2  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA02A3  lda XIY,XIZ+0xff70
 	call	Double_Subtract                              ; FA02A8  call 0xfca626
@@ -10871,9 +10872,9 @@ sub_FA000B__FA0221:
 	push	xbc                                   ; FA02B1  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA02B2  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA02B7  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; FA02B8  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; FA02B8  ld XBC,(0xfcca4e)
 	push	xbc                                   ; FA02BD  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; FA02BE  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; FA02BE  ld XBC,(0xfcca4a)
 	push	xbc                                   ; FA02C3  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA02C4  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA02C9  call 0xfca252
@@ -10881,19 +10882,19 @@ sub_FA000B__FA0221:
 	push	xbc                                   ; FA02D2  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA02D3  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA02D8  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA02D9  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA02D9  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA02DE  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA02DF  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA02DF  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA02E4  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA02E5  lda XIY,XIZ+0xff60
-	call	sub_FC9576                              ; FA02EA  call 0xfc9576
+	call	Double_Pow                              ; FA02EA  call 0xfc9576
 	ld	xbc, (xiz-0x9C)                         ; FA02EE  ld XBC,(XIZ+0xff64)
 	push	xbc                                   ; FA02F3  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA02F4  ld XBC,(XIZ+0xff60)
 	push	xbc                                   ; FA02F9  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA02FA  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA02FA  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA02FF  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA0300  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA0300  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA0305  push XBC
 	lda	xiy, (xiz-0xA8)                        ; FA0306  lda XIY,XIZ+0xff58
 	call	Double_Multiply                              ; FA030B  call 0xfca252
@@ -10917,9 +10918,9 @@ sub_FA000B__FA0329:
 	push	xbc                                   ; FA0340  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA0341  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA0344  push XBC
-	ld	xbc, (0xFCC8FA:24)                     ; FA0345  ld XBC,(0xfcc8fa)
+	ld	xbc, (F64_84+4:24)                     ; FA0345  ld XBC,(0xfcc8fa)
 	push	xbc                                   ; FA034A  push XBC
-	ld	xbc, (0xFCC8F6:24)                     ; FA034B  ld XBC,(0xfcc8f6)
+	ld	xbc, (F64_84:24)                     ; FA034B  ld XBC,(0xfcc8f6)
 	push	xbc                                   ; FA0350  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA0351  lda XIY,XIZ+0x88
 	call	Double_Subtract                              ; FA0354  call 0xfca626
@@ -10935,9 +10936,9 @@ sub_FA000B__FA0329:
 	push	xbc                                   ; FA036F  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0370  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0373  push XBC
-	ld	xbc, (0xFCCA36:24)                     ; FA0374  ld XBC,(0xfcca36)
+	ld	xbc, (F64_0p4+4:24)                     ; FA0374  ld XBC,(0xfcca36)
 	push	xbc                                   ; FA0379  push XBC
-	ld	xbc, (0xFCCA32:24)                     ; FA037A  ld XBC,(0xfcca32)
+	ld	xbc, (F64_0p4:24)                     ; FA037A  ld XBC,(0xfcca32)
 	push	xbc                                   ; FA037F  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0380  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA0385  call 0xfca252
@@ -10945,9 +10946,9 @@ sub_FA000B__FA0329:
 	push	xbc                                   ; FA038E  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA038F  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA0394  push XBC
-	ld	xbc, (0xFCCA46:24)                     ; FA0395  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; FA0395  ld XBC,(0xfcca46)
 	push	xbc                                   ; FA039A  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; FA039B  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; FA039B  ld XBC,(0xfcca42)
 	push	xbc                                   ; FA03A0  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA03A1  lda XIY,XIZ+0xff70
 	call	Double_Subtract                              ; FA03A6  call 0xfca626
@@ -10955,9 +10956,9 @@ sub_FA000B__FA0329:
 	push	xbc                                   ; FA03AF  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA03B0  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA03B5  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; FA03B6  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; FA03B6  ld XBC,(0xfcca4e)
 	push	xbc                                   ; FA03BB  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; FA03BC  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; FA03BC  ld XBC,(0xfcca4a)
 	push	xbc                                   ; FA03C1  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA03C2  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA03C7  call 0xfca252
@@ -10965,19 +10966,19 @@ sub_FA000B__FA0329:
 	push	xbc                                   ; FA03D0  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA03D1  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA03D6  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA03D7  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA03D7  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA03DC  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA03DD  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA03DD  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA03E2  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA03E3  lda XIY,XIZ+0xff60
-	call	sub_FC9576                              ; FA03E8  call 0xfc9576
+	call	Double_Pow                              ; FA03E8  call 0xfc9576
 	ld	xbc, (xiz-0x9C)                         ; FA03EC  ld XBC,(XIZ+0xff64)
 	push	xbc                                   ; FA03F1  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA03F2  ld XBC,(XIZ+0xff60)
 	push	xbc                                   ; FA03F7  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA03F8  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA03F8  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA03FD  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA03FE  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA03FE  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA0403  push XBC
 	lda	xiy, (xiz-0xA8)                        ; FA0404  lda XIY,XIZ+0xff58
 	call	Double_Multiply                              ; FA0409  call 0xfca252
@@ -11001,9 +11002,9 @@ sub_FA000B__FA0427:
 	push	xbc                                   ; FA043E  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA043F  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA0442  push XBC
-	ld	xbc, (0xFCC8F2:24)                     ; FA0443  ld XBC,(0xfcc8f2)
+	ld	xbc, (F64_54+4:24)                     ; FA0443  ld XBC,(0xfcc8f2)
 	push	xbc                                   ; FA0448  push XBC
-	ld	xbc, (0xFCC8EE:24)                     ; FA0449  ld XBC,(0xfcc8ee)
+	ld	xbc, (F64_54:24)                     ; FA0449  ld XBC,(0xfcc8ee)
 	push	xbc                                   ; FA044E  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA044F  lda XIY,XIZ+0x88
 	call	Double_Subtract                              ; FA0452  call 0xfca626
@@ -11019,9 +11020,9 @@ sub_FA000B__FA0427:
 	push	xbc                                   ; FA046D  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA046E  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0471  push XBC
-	ld	xbc, (0xFCCA2E:24)                     ; FA0472  ld XBC,(0xfcca2e)
+	ld	xbc, (F64_0p6+4:24)                     ; FA0472  ld XBC,(0xfcca2e)
 	push	xbc                                   ; FA0477  push XBC
-	ld	xbc, (0xFCCA2A:24)                     ; FA0478  ld XBC,(0xfcca2a)
+	ld	xbc, (F64_0p6:24)                     ; FA0478  ld XBC,(0xfcca2a)
 	push	xbc                                   ; FA047D  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA047E  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA0483  call 0xfca252
@@ -11029,9 +11030,9 @@ sub_FA000B__FA0427:
 	push	xbc                                   ; FA048C  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA048D  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA0492  push XBC
-	ld	xbc, (0xFCCA26:24)                     ; FA0493  ld XBC,(0xfcca26)
+	ld	xbc, (F64_neg12+4:24)                     ; FA0493  ld XBC,(0xfcca26)
 	push	xbc                                   ; FA0498  push XBC
-	ld	xbc, (0xFCCA22:24)                     ; FA0499  ld XBC,(0xfcca22)
+	ld	xbc, (F64_neg12:24)                     ; FA0499  ld XBC,(0xfcca22)
 	push	xbc                                   ; FA049E  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA049F  lda XIY,XIZ+0xff70
 	call	Double_Subtract                              ; FA04A4  call 0xfca626
@@ -11039,9 +11040,9 @@ sub_FA000B__FA0427:
 	push	xbc                                   ; FA04AD  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA04AE  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA04B3  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; FA04B4  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; FA04B4  ld XBC,(0xfcca4e)
 	push	xbc                                   ; FA04B9  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; FA04BA  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; FA04BA  ld XBC,(0xfcca4a)
 	push	xbc                                   ; FA04BF  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA04C0  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA04C5  call 0xfca252
@@ -11049,19 +11050,19 @@ sub_FA000B__FA0427:
 	push	xbc                                   ; FA04CE  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA04CF  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA04D4  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA04D5  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA04D5  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA04DA  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA04DB  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA04DB  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA04E0  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA04E1  lda XIY,XIZ+0xff60
-	call	sub_FC9576                              ; FA04E6  call 0xfc9576
+	call	Double_Pow                              ; FA04E6  call 0xfc9576
 	ld	xbc, (xiz-0x9C)                         ; FA04EA  ld XBC,(XIZ+0xff64)
 	push	xbc                                   ; FA04EF  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA04F0  ld XBC,(XIZ+0xff60)
 	push	xbc                                   ; FA04F5  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA04F6  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA04F6  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA04FB  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA04FC  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA04FC  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA0501  push XBC
 	lda	xiy, (xiz-0xA8)                        ; FA0502  lda XIY,XIZ+0xff58
 	call	Double_Multiply                              ; FA0507  call 0xfca252
@@ -11075,9 +11076,9 @@ sub_FA000B__FA0427:
 	inc	8, xsp                                 ; FA0520  inc 0,XSP
 	jr sub_FA000B__FA0537                      ; FA0522  jr T,0xfa0537
 sub_FA000B__FA0524:
-	ld	xbc, (0xFCCA46:24)                     ; FA0524  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; FA0524  ld XBC,(0xfcca46)
 	push	xbc                                   ; FA0529  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; FA052A  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; FA052A  ld XBC,(0xfcca42)
 	push	xbc                                   ; FA052F  push XBC
 	call	Double_ToFloat32                              ; FA0530  call 0xfcadd6
 	ld	(xiz-16), xiy                           ; FA0534  ld (XIZ+0xf0),XIY
@@ -11098,9 +11099,9 @@ sub_FA000B__FA053A:
 	push	xbc                                   ; FA055B  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA055C  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA055F  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; FA0560  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; FA0560  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; FA0565  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; FA0566  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; FA0566  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; FA056B  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA056C  lda XIY,XIZ+0x88
 	call	Double_Subtract                              ; FA056F  call 0xfca626
@@ -11116,9 +11117,9 @@ sub_FA000B__FA053A:
 	push	xbc                                   ; FA058A  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA058B  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA058E  push XBC
-	ld	xbc, (0xFCCA3E:24)                     ; FA058F  ld XBC,(0xfcca3e)
+	ld	xbc, (F64_0p2+4:24)                     ; FA058F  ld XBC,(0xfcca3e)
 	push	xbc                                   ; FA0594  push XBC
-	ld	xbc, (0xFCCA3A:24)                     ; FA0595  ld XBC,(0xfcca3a)
+	ld	xbc, (F64_0p2:24)                     ; FA0595  ld XBC,(0xfcca3a)
 	push	xbc                                   ; FA059A  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA059B  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA05A0  call 0xfca252
@@ -11126,9 +11127,9 @@ sub_FA000B__FA053A:
 	push	xbc                                   ; FA05A9  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA05AA  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA05AF  push XBC
-	ld	xbc, (0xFCCA56:24)                     ; FA05B0  ld XBC,(0xfcca56)
+	ld	xbc, (F64_3+4:24)                     ; FA05B0  ld XBC,(0xfcca56)
 	push	xbc                                   ; FA05B5  push XBC
-	ld	xbc, (0xFCCA52:24)                     ; FA05B6  ld XBC,(0xfcca52)
+	ld	xbc, (F64_3:24)                     ; FA05B6  ld XBC,(0xfcca52)
 	push	xbc                                   ; FA05BB  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA05BC  lda XIY,XIZ+0xff70
 	call	Double_Subtract                              ; FA05C1  call 0xfca626
@@ -11136,9 +11137,9 @@ sub_FA000B__FA053A:
 	push	xbc                                   ; FA05CA  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA05CB  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA05D0  push XBC
-	ld	xbc, (0xFCCA1E:24)                     ; FA05D1  ld XBC,(0xfcca1e)
+	ld	xbc, (F64_0p025+4:24)                     ; FA05D1  ld XBC,(0xfcca1e)
 	push	xbc                                   ; FA05D6  push XBC
-	ld	xbc, (0xFCCA1A:24)                     ; FA05D7  ld XBC,(0xfcca1a)
+	ld	xbc, (F64_0p025:24)                     ; FA05D7  ld XBC,(0xfcca1a)
 	push	xbc                                   ; FA05DC  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA05DD  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA05E2  call 0xfca252
@@ -11146,19 +11147,19 @@ sub_FA000B__FA053A:
 	push	xbc                                   ; FA05EB  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA05EC  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA05F1  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA05F2  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA05F2  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA05F7  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA05F8  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA05F8  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA05FD  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA05FE  lda XIY,XIZ+0xff60
-	call	sub_FC9576                              ; FA0603  call 0xfc9576
+	call	Double_Pow                              ; FA0603  call 0xfc9576
 	ld	xbc, (xiz-0x9C)                         ; FA0607  ld XBC,(XIZ+0xff64)
 	push	xbc                                   ; FA060C  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA060D  ld XBC,(XIZ+0xff60)
 	push	xbc                                   ; FA0612  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA0613  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA0613  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA0618  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA0619  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA0619  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA061E  push XBC
 	lda	xiy, (xiz-0xA8)                        ; FA061F  lda XIY,XIZ+0xff58
 	call	Double_Multiply                              ; FA0624  call 0xfca252
@@ -11182,9 +11183,9 @@ sub_FA000B__FA0642:
 	push	xbc                                   ; FA0659  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA065A  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA065D  push XBC
-	ld	xbc, (0xFCC8FA:24)                     ; FA065E  ld XBC,(0xfcc8fa)
+	ld	xbc, (F64_84+4:24)                     ; FA065E  ld XBC,(0xfcc8fa)
 	push	xbc                                   ; FA0663  push XBC
-	ld	xbc, (0xFCC8F6:24)                     ; FA0664  ld XBC,(0xfcc8f6)
+	ld	xbc, (F64_84:24)                     ; FA0664  ld XBC,(0xfcc8f6)
 	push	xbc                                   ; FA0669  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA066A  lda XIY,XIZ+0x88
 	call	Double_Subtract                              ; FA066D  call 0xfca626
@@ -11200,9 +11201,9 @@ sub_FA000B__FA0642:
 	push	xbc                                   ; FA0688  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0689  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA068C  push XBC
-	ld	xbc, (0xFCCA36:24)                     ; FA068D  ld XBC,(0xfcca36)
+	ld	xbc, (F64_0p4+4:24)                     ; FA068D  ld XBC,(0xfcca36)
 	push	xbc                                   ; FA0692  push XBC
-	ld	xbc, (0xFCCA32:24)                     ; FA0693  ld XBC,(0xfcca32)
+	ld	xbc, (F64_0p4:24)                     ; FA0693  ld XBC,(0xfcca32)
 	push	xbc                                   ; FA0698  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0699  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA069E  call 0xfca252
@@ -11210,9 +11211,9 @@ sub_FA000B__FA0642:
 	push	xbc                                   ; FA06A7  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA06A8  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA06AD  push XBC
-	ld	xbc, (0xFCCA46:24)                     ; FA06AE  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; FA06AE  ld XBC,(0xfcca46)
 	push	xbc                                   ; FA06B3  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; FA06B4  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; FA06B4  ld XBC,(0xfcca42)
 	push	xbc                                   ; FA06B9  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA06BA  lda XIY,XIZ+0xff70
 	call	Double_Subtract                              ; FA06BF  call 0xfca626
@@ -11220,9 +11221,9 @@ sub_FA000B__FA0642:
 	push	xbc                                   ; FA06C8  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA06C9  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA06CE  push XBC
-	ld	xbc, (0xFCCA1E:24)                     ; FA06CF  ld XBC,(0xfcca1e)
+	ld	xbc, (F64_0p025+4:24)                     ; FA06CF  ld XBC,(0xfcca1e)
 	push	xbc                                   ; FA06D4  push XBC
-	ld	xbc, (0xFCCA1A:24)                     ; FA06D5  ld XBC,(0xfcca1a)
+	ld	xbc, (F64_0p025:24)                     ; FA06D5  ld XBC,(0xfcca1a)
 	push	xbc                                   ; FA06DA  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA06DB  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA06E0  call 0xfca252
@@ -11230,19 +11231,19 @@ sub_FA000B__FA0642:
 	push	xbc                                   ; FA06E9  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA06EA  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA06EF  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA06F0  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA06F0  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA06F5  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA06F6  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA06F6  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA06FB  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA06FC  lda XIY,XIZ+0xff60
-	call	sub_FC9576                              ; FA0701  call 0xfc9576
+	call	Double_Pow                              ; FA0701  call 0xfc9576
 	ld	xbc, (xiz-0x9C)                         ; FA0705  ld XBC,(XIZ+0xff64)
 	push	xbc                                   ; FA070A  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA070B  ld XBC,(XIZ+0xff60)
 	push	xbc                                   ; FA0710  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA0711  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA0711  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA0716  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA0717  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA0717  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA071C  push XBC
 	lda	xiy, (xiz-0xA8)                        ; FA071D  lda XIY,XIZ+0xff58
 	call	Double_Multiply                              ; FA0722  call 0xfca252
@@ -11266,9 +11267,9 @@ sub_FA000B__FA0740:
 	push	xbc                                   ; FA0757  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA0758  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA075B  push XBC
-	ld	xbc, (0xFCC8F2:24)                     ; FA075C  ld XBC,(0xfcc8f2)
+	ld	xbc, (F64_54+4:24)                     ; FA075C  ld XBC,(0xfcc8f2)
 	push	xbc                                   ; FA0761  push XBC
-	ld	xbc, (0xFCC8EE:24)                     ; FA0762  ld XBC,(0xfcc8ee)
+	ld	xbc, (F64_54:24)                     ; FA0762  ld XBC,(0xfcc8ee)
 	push	xbc                                   ; FA0767  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA0768  lda XIY,XIZ+0x88
 	call	Double_Subtract                              ; FA076B  call 0xfca626
@@ -11284,9 +11285,9 @@ sub_FA000B__FA0740:
 	push	xbc                                   ; FA0786  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0787  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA078A  push XBC
-	ld	xbc, (0xFCCA2E:24)                     ; FA078B  ld XBC,(0xfcca2e)
+	ld	xbc, (F64_0p6+4:24)                     ; FA078B  ld XBC,(0xfcca2e)
 	push	xbc                                   ; FA0790  push XBC
-	ld	xbc, (0xFCCA2A:24)                     ; FA0791  ld XBC,(0xfcca2a)
+	ld	xbc, (F64_0p6:24)                     ; FA0791  ld XBC,(0xfcca2a)
 	push	xbc                                   ; FA0796  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0797  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA079C  call 0xfca252
@@ -11294,9 +11295,9 @@ sub_FA000B__FA0740:
 	push	xbc                                   ; FA07A5  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA07A6  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA07AB  push XBC
-	ld	xbc, (0xFCCA26:24)                     ; FA07AC  ld XBC,(0xfcca26)
+	ld	xbc, (F64_neg12+4:24)                     ; FA07AC  ld XBC,(0xfcca26)
 	push	xbc                                   ; FA07B1  push XBC
-	ld	xbc, (0xFCCA22:24)                     ; FA07B2  ld XBC,(0xfcca22)
+	ld	xbc, (F64_neg12:24)                     ; FA07B2  ld XBC,(0xfcca22)
 	push	xbc                                   ; FA07B7  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA07B8  lda XIY,XIZ+0xff70
 	call	Double_Subtract                              ; FA07BD  call 0xfca626
@@ -11304,9 +11305,9 @@ sub_FA000B__FA0740:
 	push	xbc                                   ; FA07C6  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA07C7  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA07CC  push XBC
-	ld	xbc, (0xFCCA1E:24)                     ; FA07CD  ld XBC,(0xfcca1e)
+	ld	xbc, (F64_0p025+4:24)                     ; FA07CD  ld XBC,(0xfcca1e)
 	push	xbc                                   ; FA07D2  push XBC
-	ld	xbc, (0xFCCA1A:24)                     ; FA07D3  ld XBC,(0xfcca1a)
+	ld	xbc, (F64_0p025:24)                     ; FA07D3  ld XBC,(0xfcca1a)
 	push	xbc                                   ; FA07D8  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA07D9  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA07DE  call 0xfca252
@@ -11314,19 +11315,19 @@ sub_FA000B__FA0740:
 	push	xbc                                   ; FA07E7  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA07E8  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA07ED  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA07EE  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA07EE  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA07F3  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA07F4  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA07F4  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA07F9  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA07FA  lda XIY,XIZ+0xff60
-	call	sub_FC9576                              ; FA07FF  call 0xfc9576
+	call	Double_Pow                              ; FA07FF  call 0xfc9576
 	ld	xbc, (xiz-0x9C)                         ; FA0803  ld XBC,(XIZ+0xff64)
 	push	xbc                                   ; FA0808  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA0809  ld XBC,(XIZ+0xff60)
 	push	xbc                                   ; FA080E  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA080F  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA080F  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA0814  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA0815  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA0815  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA081A  push XBC
 	lda	xiy, (xiz-0xA8)                        ; FA081B  lda XIY,XIZ+0xff58
 	call	Double_Multiply                              ; FA0820  call 0xfca252
@@ -11340,9 +11341,9 @@ sub_FA000B__FA0740:
 	inc	8, xsp                                 ; FA0839  inc 0,XSP
 	jr sub_FA000B__FA0850                      ; FA083B  jr T,0xfa0850
 sub_FA000B__FA083D:
-	ld	xbc, (0xFCCA46:24)                     ; FA083D  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; FA083D  ld XBC,(0xfcca46)
 	push	xbc                                   ; FA0842  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; FA0843  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; FA0843  ld XBC,(0xfcca42)
 	push	xbc                                   ; FA0848  push XBC
 	call	Double_ToFloat32                              ; FA0849  call 0xfcadd6
 	ld	(xiz-16), xiy                           ; FA084D  ld (XIZ+0xf0),XIY
@@ -11359,9 +11360,9 @@ sub_FA000B__FA0853:
 	push	xbc                                   ; FA086A  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA086B  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA086E  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; FA086F  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; FA086F  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; FA0874  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; FA0875  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; FA0875  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; FA087A  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA087B  lda XIY,XIZ+0x88
 	call	Double_Subtract                              ; FA087E  call 0xfca626
@@ -11377,9 +11378,9 @@ sub_FA000B__FA0853:
 	push	xbc                                   ; FA0899  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA089A  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA089D  push XBC
-	ld	xbc, (0xFCCA16:24)                     ; FA089E  ld XBC,(0xfcca16)
+	ld	xbc, (F64_0p516+4:24)                     ; FA089E  ld XBC,(0xfcca16)
 	push	xbc                                   ; FA08A3  push XBC
-	ld	xbc, (0xFCCA12:24)                     ; FA08A4  ld XBC,(0xfcca12)
+	ld	xbc, (F64_0p516:24)                     ; FA08A4  ld XBC,(0xfcca12)
 	push	xbc                                   ; FA08A9  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA08AA  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA08AF  call 0xfca252
@@ -11387,9 +11388,9 @@ sub_FA000B__FA0853:
 	push	xbc                                   ; FA08B8  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA08B9  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA08BE  push XBC
-	ld	xbc, (0xFCCA56:24)                     ; FA08BF  ld XBC,(0xfcca56)
+	ld	xbc, (F64_3+4:24)                     ; FA08BF  ld XBC,(0xfcca56)
 	push	xbc                                   ; FA08C4  push XBC
-	ld	xbc, (0xFCCA52:24)                     ; FA08C5  ld XBC,(0xfcca52)
+	ld	xbc, (F64_3:24)                     ; FA08C5  ld XBC,(0xfcca52)
 	push	xbc                                   ; FA08CA  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA08CB  lda XIY,XIZ+0xff70
 	call	Double_Subtract                              ; FA08D0  call 0xfca626
@@ -11397,9 +11398,9 @@ sub_FA000B__FA0853:
 	push	xbc                                   ; FA08D9  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA08DA  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA08DF  push XBC
-	ld	xbc, (0xFCCA1E:24)                     ; FA08E0  ld XBC,(0xfcca1e)
+	ld	xbc, (F64_0p025+4:24)                     ; FA08E0  ld XBC,(0xfcca1e)
 	push	xbc                                   ; FA08E5  push XBC
-	ld	xbc, (0xFCCA1A:24)                     ; FA08E6  ld XBC,(0xfcca1a)
+	ld	xbc, (F64_0p025:24)                     ; FA08E6  ld XBC,(0xfcca1a)
 	push	xbc                                   ; FA08EB  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA08EC  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA08F1  call 0xfca252
@@ -11407,19 +11408,19 @@ sub_FA000B__FA0853:
 	push	xbc                                   ; FA08FA  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA08FB  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA0900  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA0901  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA0901  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA0906  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA0907  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA0907  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA090C  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA090D  lda XIY,XIZ+0xff60
-	call	sub_FC9576                              ; FA0912  call 0xfc9576
+	call	Double_Pow                              ; FA0912  call 0xfc9576
 	ld	xbc, (xiz-0x9C)                         ; FA0916  ld XBC,(XIZ+0xff64)
 	push	xbc                                   ; FA091B  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA091C  ld XBC,(XIZ+0xff60)
 	push	xbc                                   ; FA0921  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA0922  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA0922  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA0927  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA0928  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA0928  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA092D  push XBC
 	lda	xiy, (xiz-0xA8)                        ; FA092E  lda XIY,XIZ+0xff58
 	call	Double_Multiply                              ; FA0933  call 0xfca252
@@ -11433,9 +11434,9 @@ sub_FA000B__FA0853:
 	inc	8, xsp                                 ; FA094C  inc 0,XSP
 	jr sub_FA000B__FA0963                      ; FA094E  jr T,0xfa0963
 sub_FA000B__FA0950:
-	ld	xbc, (0xFCCA46:24)                     ; FA0950  ld XBC,(0xfcca46)
+	ld	xbc, (F64_0+4:24)                     ; FA0950  ld XBC,(0xfcca46)
 	push	xbc                                   ; FA0955  push XBC
-	ld	xbc, (0xFCCA42:24)                     ; FA0956  ld XBC,(0xfcca42)
+	ld	xbc, (F64_0:24)                     ; FA0956  ld XBC,(0xfcca42)
 	push	xbc                                   ; FA095B  push XBC
 	call	Double_ToFloat32                              ; FA095C  call 0xfcadd6
 	ld	(xiz-16), xiy                           ; FA0960  ld (XIZ+0xf0),XIY
@@ -11472,9 +11473,9 @@ sub_FA000B__FA0975:
 	push	xbc                                   ; FA09AA  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA09AB  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA09AE  push XBC
-	ld	xbc, (0xFCCA0E:24)                     ; FA09AF  ld XBC,(0xfcca0e)
+	ld	xbc, (F64_0p999999+4:24)                     ; FA09AF  ld XBC,(0xfcca0e)
 	push	xbc                                   ; FA09B4  push XBC
-	ld	xbc, (0xFCCA0A:24)                     ; FA09B5  ld XBC,(0xfcca0a)
+	ld	xbc, (F64_0p999999:24)                     ; FA09B5  ld XBC,(0xfcca0a)
 	push	xbc                                   ; FA09BA  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA09BB  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA09BE  call 0xfca252
@@ -11510,9 +11511,9 @@ sub_FA000B__FA09DB:
 	push	xbc                                   ; FA0A0A  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA0A0B  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA0A0E  push XBC
-	ld	xbc, (0xFCCA06:24)                     ; FA0A0F  ld XBC,(0xfcca06)
+	ld	xbc, (F64_2p267573696em06+4:24)                     ; FA0A0F  ld XBC,(0xfcca06)
 	push	xbc                                   ; FA0A14  push XBC
-	ld	xbc, (0xFCCA02:24)                     ; FA0A15  ld XBC,(0xfcca02)
+	ld	xbc, (F64_2p267573696em06:24)                     ; FA0A15  ld XBC,(0xfcca02)
 	push	xbc                                   ; FA0A1A  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA0A1B  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA0A1E  call 0xfca252
@@ -11530,9 +11531,9 @@ sub_FA000B__FA0A34:
 	push	xbc                                   ; FA0A40  push XBC
 	lda	xiy, (xiz-0x70)                        ; FA0A41  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA0A44  call 0xfca6fd
-	ld	xbc, (0xFCC8EA:24)                     ; FA0A48  ld XBC,(0xfcc8ea)
+	ld	xbc, (F64_51+4:24)                     ; FA0A48  ld XBC,(0xfcc8ea)
 	push	xbc                                   ; FA0A4D  push XBC
-	ld	xbc, (0xFCC8E6:24)                     ; FA0A4E  ld XBC,(0xfcc8e6)
+	ld	xbc, (F64_51:24)                     ; FA0A4E  ld XBC,(0xfcc8e6)
 	push	xbc                                   ; FA0A53  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA0A54  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA0A57  push XBC
@@ -11548,9 +11549,9 @@ sub_FA000B__FA0A34:
 	push	xiy                                   ; FA0A6F  push XIY
 	lda	xiy, (xiz-0x80)                        ; FA0A70  lda XIY,XIZ+0x80
 	call	Float32_ToDouble                              ; FA0A73  call 0xfcaa50
-	ld	xbc, (0xFCC8E2:24)                     ; FA0A77  ld XBC,(0xfcc8e2)
+	ld	xbc, (F64_26+4:24)                     ; FA0A77  ld XBC,(0xfcc8e2)
 	push	xbc                                   ; FA0A7C  push XBC
-	ld	xbc, (0xFCC8DE:24)                     ; FA0A7D  ld XBC,(0xfcc8de)
+	ld	xbc, (F64_26:24)                     ; FA0A7D  ld XBC,(0xfcc8de)
 	push	xbc                                   ; FA0A82  push XBC
 	ld	xbc, (xiz-0x7C)                         ; FA0A83  ld XBC,(XIZ+0x84)
 	push	xbc                                   ; FA0A86  push XBC
@@ -11562,9 +11563,9 @@ sub_FA000B__FA0A34:
 	push	xbc                                   ; FA0A99  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA0A9A  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA0A9F  push XBC
-	ld	xbc, (0xFCC9FE:24)                     ; FA0AA0  ld XBC,(0xfcc9fe)
+	ld	xbc, (F64_4p535147392em06+4:24)                     ; FA0AA0  ld XBC,(0xfcc9fe)
 	push	xbc                                   ; FA0AA5  push XBC
-	ld	xbc, (0xFCC9FA:24)                     ; FA0AA6  ld XBC,(0xfcc9fa)
+	ld	xbc, (F64_4p535147392em06:24)                     ; FA0AA6  ld XBC,(0xfcc9fa)
 	push	xbc                                   ; FA0AAB  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA0AAC  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA0AB1  call 0xfca252
@@ -11582,9 +11583,9 @@ sub_FA000B__FA0ACB:
 	push	xbc                                   ; FA0AD7  push XBC
 	lda	xiy, (xiz-0x70)                        ; FA0AD8  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA0ADB  call 0xfca6fd
-	ld	xbc, (0xFCC8DA:24)                     ; FA0ADF  ld XBC,(0xfcc8da)
+	ld	xbc, (F64_76+4:24)                     ; FA0ADF  ld XBC,(0xfcc8da)
 	push	xbc                                   ; FA0AE4  push XBC
-	ld	xbc, (0xFCC8D6:24)                     ; FA0AE5  ld XBC,(0xfcc8d6)
+	ld	xbc, (F64_76:24)                     ; FA0AE5  ld XBC,(0xfcc8d6)
 	push	xbc                                   ; FA0AEA  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA0AEB  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA0AEE  push XBC
@@ -11604,15 +11605,15 @@ sub_FA000B__FA0ACB:
 	push	xbc                                   ; FA0B11  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0B12  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0B15  push XBC
-	ld	xbc, (0xFCC8D2:24)                     ; FA0B16  ld XBC,(0xfcc8d2)
+	ld	xbc, (F64_4+4:24)                     ; FA0B16  ld XBC,(0xfcc8d2)
 	push	xbc                                   ; FA0B1B  push XBC
-	ld	xbc, (0xFCC8CE:24)                     ; FA0B1C  ld XBC,(0xfcc8ce)
+	ld	xbc, (F64_4:24)                     ; FA0B1C  ld XBC,(0xfcc8ce)
 	push	xbc                                   ; FA0B21  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0B22  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA0B27  call 0xfca252
-	ld	xbc, (0xFCC8F2:24)                     ; FA0B2B  ld XBC,(0xfcc8f2)
+	ld	xbc, (F64_54+4:24)                     ; FA0B2B  ld XBC,(0xfcc8f2)
 	push	xbc                                   ; FA0B30  push XBC
-	ld	xbc, (0xFCC8EE:24)                     ; FA0B31  ld XBC,(0xfcc8ee)
+	ld	xbc, (F64_54:24)                     ; FA0B31  ld XBC,(0xfcc8ee)
 	push	xbc                                   ; FA0B36  push XBC
 	ld	xbc, (xiz-0x84)                         ; FA0B37  ld XBC,(XIZ+0xff7c)
 	push	xbc                                   ; FA0B3C  push XBC
@@ -11624,9 +11625,9 @@ sub_FA000B__FA0ACB:
 	push	xbc                                   ; FA0B51  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA0B52  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA0B57  push XBC
-	ld	xbc, (0xFCC9FE:24)                     ; FA0B58  ld XBC,(0xfcc9fe)
+	ld	xbc, (F64_4p535147392em06+4:24)                     ; FA0B58  ld XBC,(0xfcc9fe)
 	push	xbc                                   ; FA0B5D  push XBC
-	ld	xbc, (0xFCC9FA:24)                     ; FA0B5E  ld XBC,(0xfcc9fa)
+	ld	xbc, (F64_4p535147392em06:24)                     ; FA0B5E  ld XBC,(0xfcc9fa)
 	push	xbc                                   ; FA0B63  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA0B64  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA0B69  call 0xfca252
@@ -11642,9 +11643,9 @@ sub_FA000B__FA0B83:
 	extpfx3 0x9E, 0x10, 0x04                   ; FA0B86  pushw (XIZ+0x10)
 	lda	xiy, (xiz-0x70)                        ; FA0B89  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA0B8C  call 0xfca6fd
-	ld	xbc, (0xFCC9BE:24)                     ; FA0B90  ld XBC,(0xfcc9be)
+	ld	xbc, (F64_89+4:24)                     ; FA0B90  ld XBC,(0xfcc9be)
 	push	xbc                                   ; FA0B95  push XBC
-	ld	xbc, (0xFCC9BA:24)                     ; FA0B96  ld XBC,(0xfcc9ba)
+	ld	xbc, (F64_89:24)                     ; FA0B96  ld XBC,(0xfcc9ba)
 	push	xbc                                   ; FA0B9B  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA0B9C  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA0B9F  push XBC
@@ -11664,15 +11665,15 @@ sub_FA000B__FA0B83:
 	push	xbc                                   ; FA0BC2  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0BC3  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0BC6  push XBC
-	ld	xbc, (0xFCC936:24)                     ; FA0BC7  ld XBC,(0xfcc936)
+	ld	xbc, (F64_9+4:24)                     ; FA0BC7  ld XBC,(0xfcc936)
 	push	xbc                                   ; FA0BCC  push XBC
-	ld	xbc, (0xFCC932:24)                     ; FA0BCD  ld XBC,(0xfcc932)
+	ld	xbc, (F64_9:24)                     ; FA0BCD  ld XBC,(0xfcc932)
 	push	xbc                                   ; FA0BD2  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0BD3  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA0BD8  call 0xfca252
-	ld	xbc, (0xFCC8CA:24)                     ; FA0BDC  ld XBC,(0xfcc8ca)
+	ld	xbc, (F64_111+4:24)                     ; FA0BDC  ld XBC,(0xfcc8ca)
 	push	xbc                                   ; FA0BE1  push XBC
-	ld	xbc, (0xFCC8C6:24)                     ; FA0BE2  ld XBC,(0xfcc8c6)
+	ld	xbc, (F64_111:24)                     ; FA0BE2  ld XBC,(0xfcc8c6)
 	push	xbc                                   ; FA0BE7  push XBC
 	ld	xbc, (xiz-0x84)                         ; FA0BE8  ld XBC,(XIZ+0xff7c)
 	push	xbc                                   ; FA0BED  push XBC
@@ -11684,9 +11685,9 @@ sub_FA000B__FA0B83:
 	push	xbc                                   ; FA0C02  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA0C03  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA0C08  push XBC
-	ld	xbc, (0xFCC9FE:24)                     ; FA0C09  ld XBC,(0xfcc9fe)
+	ld	xbc, (F64_4p535147392em06+4:24)                     ; FA0C09  ld XBC,(0xfcc9fe)
 	push	xbc                                   ; FA0C0E  push XBC
-	ld	xbc, (0xFCC9FA:24)                     ; FA0C0F  ld XBC,(0xfcc9fa)
+	ld	xbc, (F64_4p535147392em06:24)                     ; FA0C0F  ld XBC,(0xfcc9fa)
 	push	xbc                                   ; FA0C14  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA0C15  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA0C1A  call 0xfca252
@@ -11711,9 +11712,9 @@ sub_FA000B__FA0C34:
 	push	xbc                                   ; FA0C4F  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA0C50  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA0C53  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; FA0C54  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; FA0C54  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; FA0C59  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; FA0C5A  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; FA0C5A  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; FA0C5F  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA0C60  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA0C63  call 0xfca252
@@ -11731,9 +11732,9 @@ sub_FA000B__FA0C79:
 	push	xbc                                   ; FA0C85  push XBC
 	lda	xiy, (xiz-0x70)                        ; FA0C86  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA0C89  call 0xfca6fd
-	ld	xbc, (0xFCC8C2:24)                     ; FA0C8D  ld XBC,(0xfcc8c2)
+	ld	xbc, (F64_11+4:24)                     ; FA0C8D  ld XBC,(0xfcc8c2)
 	push	xbc                                   ; FA0C92  push XBC
-	ld	xbc, (0xFCC8BE:24)                     ; FA0C93  ld XBC,(0xfcc8be)
+	ld	xbc, (F64_11:24)                     ; FA0C93  ld XBC,(0xfcc8be)
 	push	xbc                                   ; FA0C98  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA0C99  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA0C9C  push XBC
@@ -11753,15 +11754,15 @@ sub_FA000B__FA0C79:
 	push	xbc                                   ; FA0CBF  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0CC0  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0CC3  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA0CC4  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA0CC4  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA0CC9  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA0CCA  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA0CCA  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA0CCF  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0CD0  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA0CD5  call 0xfca252
-	ld	xbc, (0xFCC9AE:24)                     ; FA0CD9  ld XBC,(0xfcc9ae)
+	ld	xbc, (F64_20+4:24)                     ; FA0CD9  ld XBC,(0xfcc9ae)
 	push	xbc                                   ; FA0CDE  push XBC
-	ld	xbc, (0xFCC9AA:24)                     ; FA0CDF  ld XBC,(0xfcc9aa)
+	ld	xbc, (F64_20:24)                     ; FA0CDF  ld XBC,(0xfcc9aa)
 	push	xbc                                   ; FA0CE4  push XBC
 	ld	xbc, (xiz-0x84)                         ; FA0CE5  ld XBC,(XIZ+0xff7c)
 	push	xbc                                   ; FA0CEA  push XBC
@@ -11773,9 +11774,9 @@ sub_FA000B__FA0C79:
 	push	xbc                                   ; FA0CFF  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA0D00  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA0D05  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; FA0D06  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; FA0D06  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; FA0D0B  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; FA0D0C  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; FA0D0C  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; FA0D11  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA0D12  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA0D17  call 0xfca252
@@ -11793,9 +11794,9 @@ sub_FA000B__FA0D31:
 	push	xbc                                   ; FA0D3D  push XBC
 	lda	xiy, (xiz-0x70)                        ; FA0D3E  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA0D41  call 0xfca6fd
-	ld	xbc, (0xFCC9AE:24)                     ; FA0D45  ld XBC,(0xfcc9ae)
+	ld	xbc, (F64_20+4:24)                     ; FA0D45  ld XBC,(0xfcc9ae)
 	push	xbc                                   ; FA0D4A  push XBC
-	ld	xbc, (0xFCC9AA:24)                     ; FA0D4B  ld XBC,(0xfcc9aa)
+	ld	xbc, (F64_20:24)                     ; FA0D4B  ld XBC,(0xfcc9aa)
 	push	xbc                                   ; FA0D50  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA0D51  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA0D54  push XBC
@@ -11815,15 +11816,15 @@ sub_FA000B__FA0D31:
 	push	xbc                                   ; FA0D77  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0D78  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0D7B  push XBC
-	ld	xbc, (0xFCC9AE:24)                     ; FA0D7C  ld XBC,(0xfcc9ae)
+	ld	xbc, (F64_20+4:24)                     ; FA0D7C  ld XBC,(0xfcc9ae)
 	push	xbc                                   ; FA0D81  push XBC
-	ld	xbc, (0xFCC9AA:24)                     ; FA0D82  ld XBC,(0xfcc9aa)
+	ld	xbc, (F64_20:24)                     ; FA0D82  ld XBC,(0xfcc9aa)
 	push	xbc                                   ; FA0D87  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0D88  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA0D8D  call 0xfca252
-	ld	xbc, (0xFCC8BA:24)                     ; FA0D91  ld XBC,(0xfcc8ba)
+	ld	xbc, (F64_120+4:24)                     ; FA0D91  ld XBC,(0xfcc8ba)
 	push	xbc                                   ; FA0D96  push XBC
-	ld	xbc, (0xFCC8B6:24)                     ; FA0D97  ld XBC,(0xfcc8b6)
+	ld	xbc, (F64_120:24)                     ; FA0D97  ld XBC,(0xfcc8b6)
 	push	xbc                                   ; FA0D9C  push XBC
 	ld	xbc, (xiz-0x84)                         ; FA0D9D  ld XBC,(XIZ+0xff7c)
 	push	xbc                                   ; FA0DA2  push XBC
@@ -11835,9 +11836,9 @@ sub_FA000B__FA0D31:
 	push	xbc                                   ; FA0DB7  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA0DB8  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA0DBD  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; FA0DBE  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; FA0DBE  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; FA0DC3  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; FA0DC4  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; FA0DC4  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; FA0DC9  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA0DCA  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA0DCF  call 0xfca252
@@ -11855,9 +11856,9 @@ sub_FA000B__FA0DE9:
 	push	xbc                                   ; FA0DF5  push XBC
 	lda	xiy, (xiz-0x70)                        ; FA0DF6  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA0DF9  call 0xfca6fd
-	ld	xbc, (0xFCC8B2:24)                     ; FA0DFD  ld XBC,(0xfcc8b2)
+	ld	xbc, (F64_65+4:24)                     ; FA0DFD  ld XBC,(0xfcc8b2)
 	push	xbc                                   ; FA0E02  push XBC
-	ld	xbc, (0xFCC8AE:24)                     ; FA0E03  ld XBC,(0xfcc8ae)
+	ld	xbc, (F64_65:24)                     ; FA0E03  ld XBC,(0xfcc8ae)
 	push	xbc                                   ; FA0E08  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA0E09  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA0E0C  push XBC
@@ -11877,15 +11878,15 @@ sub_FA000B__FA0DE9:
 	push	xbc                                   ; FA0E2F  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0E30  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0E33  push XBC
-	ld	xbc, (0xFCC8AA:24)                     ; FA0E34  ld XBC,(0xfcc8aa)
+	ld	xbc, (F64_400+4:24)                     ; FA0E34  ld XBC,(0xfcc8aa)
 	push	xbc                                   ; FA0E39  push XBC
-	ld	xbc, (0xFCC8A6:24)                     ; FA0E3A  ld XBC,(0xfcc8a6)
+	ld	xbc, (F64_400:24)                     ; FA0E3A  ld XBC,(0xfcc8a6)
 	push	xbc                                   ; FA0E3F  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0E40  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA0E45  call 0xfca252
-	ld	xbc, (0xFCC8A2:24)                     ; FA0E49  ld XBC,(0xfcc8a2)
+	ld	xbc, (F64_1200+4:24)                     ; FA0E49  ld XBC,(0xfcc8a2)
 	push	xbc                                   ; FA0E4E  push XBC
-	ld	xbc, (0xFCC89E:24)                     ; FA0E4F  ld XBC,(0xfcc89e)
+	ld	xbc, (F64_1200:24)                     ; FA0E4F  ld XBC,(0xfcc89e)
 	push	xbc                                   ; FA0E54  push XBC
 	ld	xbc, (xiz-0x84)                         ; FA0E55  ld XBC,(XIZ+0xff7c)
 	push	xbc                                   ; FA0E5A  push XBC
@@ -11897,9 +11898,9 @@ sub_FA000B__FA0DE9:
 	push	xbc                                   ; FA0E6F  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA0E70  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA0E75  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; FA0E76  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; FA0E76  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; FA0E7B  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; FA0E7C  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; FA0E7C  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; FA0E81  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA0E82  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA0E87  call 0xfca252
@@ -11915,9 +11916,9 @@ sub_FA000B__FA0EA1:
 	extpfx3 0x9E, 0x10, 0x04                   ; FA0EA4  pushw (XIZ+0x10)
 	lda	xiy, (xiz-0x70)                        ; FA0EA7  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA0EAA  call 0xfca6fd
-	ld	xbc, (0xFCC89A:24)                     ; FA0EAE  ld XBC,(0xfcc89a)
+	ld	xbc, (F64_88+4:24)                     ; FA0EAE  ld XBC,(0xfcc89a)
 	push	xbc                                   ; FA0EB3  push XBC
-	ld	xbc, (0xFCC896:24)                     ; FA0EB4  ld XBC,(0xfcc896)
+	ld	xbc, (F64_88:24)                     ; FA0EB4  ld XBC,(0xfcc896)
 	push	xbc                                   ; FA0EB9  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA0EBA  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA0EBD  push XBC
@@ -11937,15 +11938,15 @@ sub_FA000B__FA0EA1:
 	push	xbc                                   ; FA0EE0  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA0EE1  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA0EE4  push XBC
-	ld	xbc, (0xFCC892:24)                     ; FA0EE5  ld XBC,(0xfcc892)
+	ld	xbc, (F64_800+4:24)                     ; FA0EE5  ld XBC,(0xfcc892)
 	push	xbc                                   ; FA0EEA  push XBC
-	ld	xbc, (0xFCC88E:24)                     ; FA0EEB  ld XBC,(0xfcc88e)
+	ld	xbc, (F64_800:24)                     ; FA0EEB  ld XBC,(0xfcc88e)
 	push	xbc                                   ; FA0EF0  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA0EF1  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA0EF6  call 0xfca252
-	ld	xbc, (0xFCC88A:24)                     ; FA0EFA  ld XBC,(0xfcc88a)
+	ld	xbc, (F64_10800+4:24)                     ; FA0EFA  ld XBC,(0xfcc88a)
 	push	xbc                                   ; FA0EFF  push XBC
-	ld	xbc, (0xFCC886:24)                     ; FA0F00  ld XBC,(0xfcc886)
+	ld	xbc, (F64_10800:24)                     ; FA0F00  ld XBC,(0xfcc886)
 	push	xbc                                   ; FA0F05  push XBC
 	ld	xbc, (xiz-0x84)                         ; FA0F06  ld XBC,(XIZ+0xff7c)
 	push	xbc                                   ; FA0F0B  push XBC
@@ -11957,9 +11958,9 @@ sub_FA000B__FA0EA1:
 	push	xbc                                   ; FA0F20  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA0F21  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA0F26  push XBC
-	ld	xbc, (0xFCC9F6:24)                     ; FA0F27  ld XBC,(0xfcc9f6)
+	ld	xbc, (F64_2p267573696em05+4:24)                     ; FA0F27  ld XBC,(0xfcc9f6)
 	push	xbc                                   ; FA0F2C  push XBC
-	ld	xbc, (0xFCC9F2:24)                     ; FA0F2D  ld XBC,(0xfcc9f2)
+	ld	xbc, (F64_2p267573696em05:24)                     ; FA0F2D  ld XBC,(0xfcc9f2)
 	push	xbc                                   ; FA0F32  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA0F33  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA0F38  call 0xfca252
@@ -12018,9 +12019,9 @@ sub_FA000B__FA0F5A:
 	push	xbc                                   ; FA0FBC  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA0FBD  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA0FC0  push XBC
-	ld	xbc, (0xFCC9EE:24)                     ; FA0FC1  ld XBC,(0xfcc9ee)
+	ld	xbc, (F64_0p0101010101+4:24)                     ; FA0FC1  ld XBC,(0xfcc9ee)
 	push	xbc                                   ; FA0FC6  push XBC
-	ld	xbc, (0xFCC9EA:24)                     ; FA0FC7  ld XBC,(0xfcc9ea)
+	ld	xbc, (F64_0p0101010101:24)                     ; FA0FC7  ld XBC,(0xfcc9ea)
 	push	xbc                                   ; FA0FCC  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA0FCD  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA0FD0  call 0xfca252
@@ -12114,9 +12115,9 @@ sub_FA000B__FA1042:
 	push	xbc                                   ; FA10A4  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA10A5  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA10A8  push XBC
-	ld	xbc, (0xFCC9EE:24)                     ; FA10A9  ld XBC,(0xfcc9ee)
+	ld	xbc, (F64_0p0101010101+4:24)                     ; FA10A9  ld XBC,(0xfcc9ee)
 	push	xbc                                   ; FA10AE  push XBC
-	ld	xbc, (0xFCC9EA:24)                     ; FA10AF  ld XBC,(0xfcc9ea)
+	ld	xbc, (F64_0p0101010101:24)                     ; FA10AF  ld XBC,(0xfcc9ea)
 	push	xbc                                   ; FA10B4  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA10B5  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA10B8  call 0xfca252
@@ -12169,9 +12170,9 @@ sub_FA000B__FA111E:
 	push	xiy                                   ; FA112F  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA1130  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA1133  call 0xfcaa50
-	ld	xbc, (0xFCC9D6:24)                     ; FA1137  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; FA1137  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; FA113C  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; FA113D  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; FA113D  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; FA1142  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA1143  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA1146  push XBC
@@ -12183,9 +12184,9 @@ sub_FA000B__FA111E:
 	push	xbc                                   ; FA1155  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA1156  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA1159  push XBC
-	ld	xbc, (0xFCC9CE:24)                     ; FA115A  ld XBC,(0xfcc9ce)
+	ld	xbc, (F64_441+4:24)                     ; FA115A  ld XBC,(0xfcc9ce)
 	push	xbc                                   ; FA115F  push XBC
-	ld	xbc, (0xFCC9CA:24)                     ; FA1160  ld XBC,(0xfcc9ca)
+	ld	xbc, (F64_441:24)                     ; FA1160  ld XBC,(0xfcc9ca)
 	push	xbc                                   ; FA1165  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA1166  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA1169  call 0xfca252
@@ -12193,9 +12194,9 @@ sub_FA000B__FA111E:
 	push	xbc                                   ; FA1170  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA1171  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA1174  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA1175  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA1175  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA117A  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA117B  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA117B  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA1180  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA1181  lda XIY,XIZ+0xff78
 	call	Double_Divide                              ; FA1186  call 0xfca7a5
@@ -12203,19 +12204,19 @@ sub_FA000B__FA111E:
 	push	xbc                                   ; FA118F  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA1190  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA1195  push XBC
-	ld	xbc, (0xFCC9C6:24)                     ; FA1196  ld XBC,(0xfcc9c6)
+	ld	xbc, (F64_0p4270422+4:24)                     ; FA1196  ld XBC,(0xfcc9c6)
 	push	xbc                                   ; FA119B  push XBC
-	ld	xbc, (0xFCC9C2:24)                     ; FA119C  ld XBC,(0xfcc9c2)
+	ld	xbc, (F64_0p4270422:24)                     ; FA119C  ld XBC,(0xfcc9c2)
 	push	xbc                                   ; FA11A1  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA11A2  lda XIY,XIZ+0xff70
-	call	sub_FC9576                              ; FA11A7  call 0xfc9576
+	call	Double_Pow                              ; FA11A7  call 0xfc9576
 	ld	xbc, (xiz-0x8C)                         ; FA11AB  ld XBC,(XIZ+0xff74)
 	push	xbc                                   ; FA11B0  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA11B1  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA11B6  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; FA11B7  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; FA11B7  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; FA11BC  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; FA11BD  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; FA11BD  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; FA11C2  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA11C3  lda XIY,XIZ+0xff68
 	call	Double_Subtract                              ; FA11C8  call 0xfca626
@@ -12235,9 +12236,9 @@ sub_FA000B__FA11E6:
 	push	xiy                                   ; FA11F0  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA11F1  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA11F4  call 0xfcaa50
-	ld	xbc, (0xFCC9BE:24)                     ; FA11F8  ld XBC,(0xfcc9be)
+	ld	xbc, (F64_89+4:24)                     ; FA11F8  ld XBC,(0xfcc9be)
 	push	xbc                                   ; FA11FD  push XBC
-	ld	xbc, (0xFCC9BA:24)                     ; FA11FE  ld XBC,(0xfcc9ba)
+	ld	xbc, (F64_89:24)                     ; FA11FE  ld XBC,(0xfcc9ba)
 	push	xbc                                   ; FA1203  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA1204  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA1207  push XBC
@@ -12249,9 +12250,9 @@ sub_FA000B__FA11E6:
 	push	xbc                                   ; FA1216  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA1217  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA121A  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; FA121B  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; FA121B  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; FA1220  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; FA1221  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; FA1221  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; FA1226  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA1227  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA122A  call 0xfca252
@@ -12259,9 +12260,9 @@ sub_FA000B__FA11E6:
 	push	xbc                                   ; FA1231  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA1232  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA1235  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA1236  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA1236  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA123B  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA123C  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA123C  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA1241  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA1242  lda XIY,XIZ+0xff78
 	call	Double_Divide                              ; FA1247  call 0xfca7a5
@@ -12269,19 +12270,19 @@ sub_FA000B__FA11E6:
 	push	xbc                                   ; FA1250  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA1251  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA1256  push XBC
-	ld	xbc, (0xFCC9C6:24)                     ; FA1257  ld XBC,(0xfcc9c6)
+	ld	xbc, (F64_0p4270422+4:24)                     ; FA1257  ld XBC,(0xfcc9c6)
 	push	xbc                                   ; FA125C  push XBC
-	ld	xbc, (0xFCC9C2:24)                     ; FA125D  ld XBC,(0xfcc9c2)
+	ld	xbc, (F64_0p4270422:24)                     ; FA125D  ld XBC,(0xfcc9c2)
 	push	xbc                                   ; FA1262  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA1263  lda XIY,XIZ+0xff70
-	call	sub_FC9576                              ; FA1268  call 0xfc9576
+	call	Double_Pow                              ; FA1268  call 0xfc9576
 	ld	xbc, (xiz-0x8C)                         ; FA126C  ld XBC,(XIZ+0xff74)
 	push	xbc                                   ; FA1271  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA1272  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA1277  push XBC
-	ld	xbc, (0xFCC9D6:24)                     ; FA1278  ld XBC,(0xfcc9d6)
+	ld	xbc, (F64_1+4:24)                     ; FA1278  ld XBC,(0xfcc9d6)
 	push	xbc                                   ; FA127D  push XBC
-	ld	xbc, (0xFCC9D2:24)                     ; FA127E  ld XBC,(0xfcc9d2)
+	ld	xbc, (F64_1:24)                     ; FA127E  ld XBC,(0xfcc9d2)
 	push	xbc                                   ; FA1283  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA1284  lda XIY,XIZ+0xff68
 	call	Double_Subtract                              ; FA1289  call 0xfca626
@@ -12343,9 +12344,9 @@ sub_FA000B__FA12AF:
 	push	xbc                                   ; FA1317  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA1318  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA131B  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; FA131C  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; FA131C  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; FA1321  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; FA1322  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; FA1322  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; FA1327  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA1328  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA132B  call 0xfca252
@@ -12363,9 +12364,9 @@ sub_FA000B__FA12AF:
 	push	xbc                                   ; FA134D  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA134E  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA1353  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; FA1354  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; FA1354  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; FA1359  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; FA135A  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; FA135A  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; FA135F  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA1360  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA1365  call 0xfca252
@@ -12373,9 +12374,9 @@ sub_FA000B__FA12AF:
 	push	xbc                                   ; FA136E  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA136F  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA1374  push XBC
-	ld	xbc, (0xFCC9B6:24)                     ; FA1375  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; FA1375  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; FA137A  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; FA137B  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; FA137B  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; FA1380  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA1381  lda XIY,XIZ+0xff68
 	call	Double_Subtract                              ; FA1386  call 0xfca626
@@ -12383,9 +12384,9 @@ sub_FA000B__FA12AF:
 	push	xbc                                   ; FA138F  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA1390  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA1395  push XBC
-	ld	xbc, (0xFCC882:24)                     ; FA1396  ld XBC,(0xfcc882)
+	ld	xbc, (F64_2376+4:24)                     ; FA1396  ld XBC,(0xfcc882)
 	push	xbc                                   ; FA139B  push XBC
-	ld	xbc, (0xFCC87E:24)                     ; FA139C  ld XBC,(0xfcc87e)
+	ld	xbc, (F64_2376:24)                     ; FA139C  ld XBC,(0xfcc87e)
 	push	xbc                                   ; FA13A1  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA13A2  lda XIY,XIZ+0xff60
 	call	Double_Divide                              ; FA13A7  call 0xfca7a5
@@ -12394,12 +12395,12 @@ sub_FA000B__FA12AF:
 	push	xbc                                   ; FA13B2  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA13B3  ld XBC,(XIZ+0xff60)
 	push	xbc                                   ; FA13B8  push XBC
-	ld	xbc, (0xFCC9DE:24)                     ; FA13B9  ld XBC,(0xfcc9de)
+	ld	xbc, (F64_2+4:24)                     ; FA13B9  ld XBC,(0xfcc9de)
 	push	xbc                                   ; FA13BE  push XBC
-	ld	xbc, (0xFCC9DA:24)                     ; FA13BF  ld XBC,(0xfcc9da)
+	ld	xbc, (F64_2:24)                     ; FA13BF  ld XBC,(0xfcc9da)
 	push	xbc                                   ; FA13C4  push XBC
 	lda	xiy, (xiz-0xA8)                        ; FA13C5  lda XIY,XIZ+0xff58
-	call	sub_FC9576                              ; FA13CA  call 0xfc9576
+	call	Double_Pow                              ; FA13CA  call 0xfc9576
 	ld	xbc, (xiz-0xA4)                         ; FA13CE  ld XBC,(XIZ+0xff5c)
 	push	xbc                                   ; FA13D3  push XBC
 	ld	xbc, (xiz-0xA8)                         ; FA13D4  ld XBC,(XIZ+0xff58)
@@ -12425,15 +12426,15 @@ sub_FA000B__FA13ED:
 	push	xbc                                   ; FA1409  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA140A  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA140D  push XBC
-	ld	xbc, (0xFCC9DE:24)                     ; FA140E  ld XBC,(0xfcc9de)
+	ld	xbc, (F64_2+4:24)                     ; FA140E  ld XBC,(0xfcc9de)
 	push	xbc                                   ; FA1413  push XBC
-	ld	xbc, (0xFCC9DA:24)                     ; FA1414  ld XBC,(0xfcc9da)
+	ld	xbc, (F64_2:24)                     ; FA1414  ld XBC,(0xfcc9da)
 	push	xbc                                   ; FA1419  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA141A  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA141D  call 0xfca252
-	ld	xbc, (0xFCCA66:24)                     ; FA1421  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA1421  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA1426  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA1427  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA1427  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA142C  push XBC
 	ld	xbc, (xiz-0x74)                         ; FA142D  ld XBC,(XIZ+0x8c)
 	push	xbc                                   ; FA1430  push XBC
@@ -12445,9 +12446,9 @@ sub_FA000B__FA13ED:
 	push	xbc                                   ; FA143F  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA1440  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA1443  push XBC
-	ld	xbc, (0xFCC92E:24)                     ; FA1444  ld XBC,(0xfcc92e)
+	ld	xbc, (F64_0p001+4:24)                     ; FA1444  ld XBC,(0xfcc92e)
 	push	xbc                                   ; FA1449  push XBC
-	ld	xbc, (0xFCC92A:24)                     ; FA144A  ld XBC,(0xfcc92a)
+	ld	xbc, (F64_0p001:24)                     ; FA144A  ld XBC,(0xfcc92a)
 	push	xbc                                   ; FA144F  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA1450  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA1455  call 0xfca252
@@ -12455,9 +12456,9 @@ sub_FA000B__FA13ED:
 	push	xbc                                   ; FA145E  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA145F  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA1464  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; FA1465  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; FA1465  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; FA146A  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; FA146B  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; FA146B  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; FA1470  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA1471  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA1476  call 0xfca252
@@ -12477,9 +12478,9 @@ sub_FA000B__FA1490:
 	push	xiy                                   ; FA14A1  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA14A2  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA14A5  call 0xfcaa50
-	ld	xbc, (0xFCC87A:24)                     ; FA14A9  ld XBC,(0xfcc87a)
+	ld	xbc, (F64_21+4:24)                     ; FA14A9  ld XBC,(0xfcc87a)
 	push	xbc                                   ; FA14AE  push XBC
-	ld	xbc, (0xFCC876:24)                     ; FA14AF  ld XBC,(0xfcc876)
+	ld	xbc, (F64_21:24)                     ; FA14AF  ld XBC,(0xfcc876)
 	push	xbc                                   ; FA14B4  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA14B5  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA14B8  push XBC
@@ -12491,15 +12492,15 @@ sub_FA000B__FA1490:
 	push	xbc                                   ; FA14C7  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA14C8  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA14CB  push XBC
-	ld	xbc, (0xFCC872:24)                     ; FA14CC  ld XBC,(0xfcc872)
+	ld	xbc, (F64_5+4:24)                     ; FA14CC  ld XBC,(0xfcc872)
 	push	xbc                                   ; FA14D1  push XBC
-	ld	xbc, (0xFCC86E:24)                     ; FA14D2  ld XBC,(0xfcc86e)
+	ld	xbc, (F64_5:24)                     ; FA14D2  ld XBC,(0xfcc86e)
 	push	xbc                                   ; FA14D7  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA14D8  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA14DB  call 0xfca252
-	ld	xbc, (0xFCC86A:24)                     ; FA14DF  ld XBC,(0xfcc86a)
+	ld	xbc, (F64_55+4:24)                     ; FA14DF  ld XBC,(0xfcc86a)
 	push	xbc                                   ; FA14E4  push XBC
-	ld	xbc, (0xFCC866:24)                     ; FA14E5  ld XBC,(0xfcc866)
+	ld	xbc, (F64_55:24)                     ; FA14E5  ld XBC,(0xfcc866)
 	push	xbc                                   ; FA14EA  push XBC
 	ld	xbc, (xiz-0x7C)                         ; FA14EB  ld XBC,(XIZ+0x84)
 	push	xbc                                   ; FA14EE  push XBC
@@ -12511,9 +12512,9 @@ sub_FA000B__FA1490:
 	push	xbc                                   ; FA1501  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA1502  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA1507  push XBC
-	ld	xbc, (0xFCC92E:24)                     ; FA1508  ld XBC,(0xfcc92e)
+	ld	xbc, (F64_0p001+4:24)                     ; FA1508  ld XBC,(0xfcc92e)
 	push	xbc                                   ; FA150D  push XBC
-	ld	xbc, (0xFCC92A:24)                     ; FA150E  ld XBC,(0xfcc92a)
+	ld	xbc, (F64_0p001:24)                     ; FA150E  ld XBC,(0xfcc92a)
 	push	xbc                                   ; FA1513  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA1514  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA1519  call 0xfca252
@@ -12521,9 +12522,9 @@ sub_FA000B__FA1490:
 	push	xbc                                   ; FA1522  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA1523  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA1528  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; FA1529  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; FA1529  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; FA152E  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; FA152F  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; FA152F  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; FA1534  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA1535  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA153A  call 0xfca252
@@ -12543,9 +12544,9 @@ sub_FA000B__FA1554:
 	push	xiy                                   ; FA1565  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA1566  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA1569  call 0xfcaa50
-	ld	xbc, (0xFCC98E:24)                     ; FA156D  ld XBC,(0xfcc98e)
+	ld	xbc, (F64_31+4:24)                     ; FA156D  ld XBC,(0xfcc98e)
 	push	xbc                                   ; FA1572  push XBC
-	ld	xbc, (0xFCC98A:24)                     ; FA1573  ld XBC,(0xfcc98a)
+	ld	xbc, (F64_31:24)                     ; FA1573  ld XBC,(0xfcc98a)
 	push	xbc                                   ; FA1578  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA1579  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA157C  push XBC
@@ -12557,15 +12558,15 @@ sub_FA000B__FA1554:
 	push	xbc                                   ; FA158B  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA158C  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA158F  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA1590  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA1590  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA1595  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA1596  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA1596  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA159B  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA159C  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA159F  call 0xfca252
-	ld	xbc, (0xFCC862:24)                     ; FA15A3  ld XBC,(0xfcc862)
+	ld	xbc, (F64_110+4:24)                     ; FA15A3  ld XBC,(0xfcc862)
 	push	xbc                                   ; FA15A8  push XBC
-	ld	xbc, (0xFCC85E:24)                     ; FA15A9  ld XBC,(0xfcc85e)
+	ld	xbc, (F64_110:24)                     ; FA15A9  ld XBC,(0xfcc85e)
 	push	xbc                                   ; FA15AE  push XBC
 	ld	xbc, (xiz-0x7C)                         ; FA15AF  ld XBC,(XIZ+0x84)
 	push	xbc                                   ; FA15B2  push XBC
@@ -12577,9 +12578,9 @@ sub_FA000B__FA1554:
 	push	xbc                                   ; FA15C5  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA15C6  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA15CB  push XBC
-	ld	xbc, (0xFCC92E:24)                     ; FA15CC  ld XBC,(0xfcc92e)
+	ld	xbc, (F64_0p001+4:24)                     ; FA15CC  ld XBC,(0xfcc92e)
 	push	xbc                                   ; FA15D1  push XBC
-	ld	xbc, (0xFCC92A:24)                     ; FA15D2  ld XBC,(0xfcc92a)
+	ld	xbc, (F64_0p001:24)                     ; FA15D2  ld XBC,(0xfcc92a)
 	push	xbc                                   ; FA15D7  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA15D8  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA15DD  call 0xfca252
@@ -12587,9 +12588,9 @@ sub_FA000B__FA1554:
 	push	xbc                                   ; FA15E6  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA15E7  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA15EC  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; FA15ED  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; FA15ED  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; FA15F2  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; FA15F3  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; FA15F3  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; FA15F8  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA15F9  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA15FE  call 0xfca252
@@ -12609,9 +12610,9 @@ sub_FA000B__FA1618:
 	push	xiy                                   ; FA1629  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA162A  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA162D  call 0xfcaa50
-	ld	xbc, (0xFCC85A:24)                     ; FA1631  ld XBC,(0xfcc85a)
+	ld	xbc, (F64_71+4:24)                     ; FA1631  ld XBC,(0xfcc85a)
 	push	xbc                                   ; FA1636  push XBC
-	ld	xbc, (0xFCC856:24)                     ; FA1637  ld XBC,(0xfcc856)
+	ld	xbc, (F64_71:24)                     ; FA1637  ld XBC,(0xfcc856)
 	push	xbc                                   ; FA163C  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA163D  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA1640  push XBC
@@ -12623,15 +12624,15 @@ sub_FA000B__FA1618:
 	push	xbc                                   ; FA164F  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA1650  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA1653  push XBC
-	ld	xbc, (0xFCC852:24)                     ; FA1654  ld XBC,(0xfcc852)
+	ld	xbc, (F64_50+4:24)                     ; FA1654  ld XBC,(0xfcc852)
 	push	xbc                                   ; FA1659  push XBC
-	ld	xbc, (0xFCC84E:24)                     ; FA165A  ld XBC,(0xfcc84e)
+	ld	xbc, (F64_50:24)                     ; FA165A  ld XBC,(0xfcc84e)
 	push	xbc                                   ; FA165F  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA1660  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA1663  call 0xfca252
-	ld	xbc, (0xFCC84A:24)                     ; FA1667  ld XBC,(0xfcc84a)
+	ld	xbc, (F64_550+4:24)                     ; FA1667  ld XBC,(0xfcc84a)
 	push	xbc                                   ; FA166C  push XBC
-	ld	xbc, (0xFCC846:24)                     ; FA166D  ld XBC,(0xfcc846)
+	ld	xbc, (F64_550:24)                     ; FA166D  ld XBC,(0xfcc846)
 	push	xbc                                   ; FA1672  push XBC
 	ld	xbc, (xiz-0x7C)                         ; FA1673  ld XBC,(XIZ+0x84)
 	push	xbc                                   ; FA1676  push XBC
@@ -12643,9 +12644,9 @@ sub_FA000B__FA1618:
 	push	xbc                                   ; FA1689  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA168A  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA168F  push XBC
-	ld	xbc, (0xFCC92E:24)                     ; FA1690  ld XBC,(0xfcc92e)
+	ld	xbc, (F64_0p001+4:24)                     ; FA1690  ld XBC,(0xfcc92e)
 	push	xbc                                   ; FA1695  push XBC
-	ld	xbc, (0xFCC92A:24)                     ; FA1696  ld XBC,(0xfcc92a)
+	ld	xbc, (F64_0p001:24)                     ; FA1696  ld XBC,(0xfcc92a)
 	push	xbc                                   ; FA169B  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA169C  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA16A1  call 0xfca252
@@ -12653,9 +12654,9 @@ sub_FA000B__FA1618:
 	push	xbc                                   ; FA16AA  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA16AB  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA16B0  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; FA16B1  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; FA16B1  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; FA16B6  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; FA16B7  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; FA16B7  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; FA16BC  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA16BD  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA16C2  call 0xfca252
@@ -12673,9 +12674,9 @@ sub_FA000B__FA16DC:
 	push	xiy                                   ; FA16E6  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA16E7  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA16EA  call 0xfcaa50
-	ld	xbc, (0xFCC842:24)                     ; FA16EE  ld XBC,(0xfcc842)
+	ld	xbc, (F64_81+4:24)                     ; FA16EE  ld XBC,(0xfcc842)
 	push	xbc                                   ; FA16F3  push XBC
-	ld	xbc, (0xFCC83E:24)                     ; FA16F4  ld XBC,(0xfcc83e)
+	ld	xbc, (F64_81:24)                     ; FA16F4  ld XBC,(0xfcc83e)
 	push	xbc                                   ; FA16F9  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA16FA  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA16FD  push XBC
@@ -12687,15 +12688,15 @@ sub_FA000B__FA16DC:
 	push	xbc                                   ; FA170C  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA170D  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA1710  push XBC
-	ld	xbc, (0xFCC99E:24)                     ; FA1711  ld XBC,(0xfcc99e)
+	ld	xbc, (F64_100+4:24)                     ; FA1711  ld XBC,(0xfcc99e)
 	push	xbc                                   ; FA1716  push XBC
-	ld	xbc, (0xFCC99A:24)                     ; FA1717  ld XBC,(0xfcc99a)
+	ld	xbc, (F64_100:24)                     ; FA1717  ld XBC,(0xfcc99a)
 	push	xbc                                   ; FA171C  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA171D  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA1720  call 0xfca252
-	ld	xbc, (0xFCC83A:24)                     ; FA1724  ld XBC,(0xfcc83a)
+	ld	xbc, (F64_1100+4:24)                     ; FA1724  ld XBC,(0xfcc83a)
 	push	xbc                                   ; FA1729  push XBC
-	ld	xbc, (0xFCC836:24)                     ; FA172A  ld XBC,(0xfcc836)
+	ld	xbc, (F64_1100:24)                     ; FA172A  ld XBC,(0xfcc836)
 	push	xbc                                   ; FA172F  push XBC
 	ld	xbc, (xiz-0x7C)                         ; FA1730  ld XBC,(XIZ+0x84)
 	push	xbc                                   ; FA1733  push XBC
@@ -12707,9 +12708,9 @@ sub_FA000B__FA16DC:
 	push	xbc                                   ; FA1746  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA1747  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA174C  push XBC
-	ld	xbc, (0xFCC92E:24)                     ; FA174D  ld XBC,(0xfcc92e)
+	ld	xbc, (F64_0p001+4:24)                     ; FA174D  ld XBC,(0xfcc92e)
 	push	xbc                                   ; FA1752  push XBC
-	ld	xbc, (0xFCC92A:24)                     ; FA1753  ld XBC,(0xfcc92a)
+	ld	xbc, (F64_0p001:24)                     ; FA1753  ld XBC,(0xfcc92a)
 	push	xbc                                   ; FA1758  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA1759  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA175E  call 0xfca252
@@ -12717,9 +12718,9 @@ sub_FA000B__FA16DC:
 	push	xbc                                   ; FA1767  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA1768  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA176D  push XBC
-	ld	xbc, (0xFCC9E6:24)                     ; FA176E  ld XBC,(0xfcc9e6)
+	ld	xbc, (F64_44100+4:24)                     ; FA176E  ld XBC,(0xfcc9e6)
 	push	xbc                                   ; FA1773  push XBC
-	ld	xbc, (0xFCC9E2:24)                     ; FA1774  ld XBC,(0xfcc9e2)
+	ld	xbc, (F64_44100:24)                     ; FA1774  ld XBC,(0xfcc9e2)
 	push	xbc                                   ; FA1779  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA177A  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA177F  call 0xfca252
@@ -12777,9 +12778,9 @@ sub_FA000B__FA17F0:
 	push	xbc                                   ; FA1805  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA1806  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA1809  push XBC
-	ld	xbc, (0xFCC9DE:24)                     ; FA180A  ld XBC,(0xfcc9de)
+	ld	xbc, (F64_2+4:24)                     ; FA180A  ld XBC,(0xfcc9de)
 	push	xbc                                   ; FA180F  push XBC
-	ld	xbc, (0xFCC9DA:24)                     ; FA1810  ld XBC,(0xfcc9da)
+	ld	xbc, (F64_2:24)                     ; FA1810  ld XBC,(0xfcc9da)
 	push	xbc                                   ; FA1815  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA1816  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA1819  call 0xfca252
@@ -12826,9 +12827,9 @@ sub_FA000B__FA187B:
 	push	xiy                                   ; FA1885  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA1886  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA1889  call 0xfcaa50
-	ld	xbc, (0xFCCA66:24)                     ; FA188D  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA188D  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA1892  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA1893  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA1893  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA1898  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA1899  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA189C  push XBC
@@ -12840,15 +12841,15 @@ sub_FA000B__FA187B:
 	push	xbc                                   ; FA18AB  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA18AC  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA18AF  push XBC
-	ld	xbc, (0xFCC9AE:24)                     ; FA18B0  ld XBC,(0xfcc9ae)
+	ld	xbc, (F64_20+4:24)                     ; FA18B0  ld XBC,(0xfcc9ae)
 	push	xbc                                   ; FA18B5  push XBC
-	ld	xbc, (0xFCC9AA:24)                     ; FA18B6  ld XBC,(0xfcc9aa)
+	ld	xbc, (F64_20:24)                     ; FA18B6  ld XBC,(0xfcc9aa)
 	push	xbc                                   ; FA18BB  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA18BC  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA18BF  call 0xfca252
-	ld	xbc, (0xFCC9AE:24)                     ; FA18C3  ld XBC,(0xfcc9ae)
+	ld	xbc, (F64_20+4:24)                     ; FA18C3  ld XBC,(0xfcc9ae)
 	push	xbc                                   ; FA18C8  push XBC
-	ld	xbc, (0xFCC9AA:24)                     ; FA18C9  ld XBC,(0xfcc9aa)
+	ld	xbc, (F64_20:24)                     ; FA18C9  ld XBC,(0xfcc9aa)
 	push	xbc                                   ; FA18CE  push XBC
 	ld	xbc, (xiz-0x7C)                         ; FA18CF  ld XBC,(XIZ+0x84)
 	push	xbc                                   ; FA18D2  push XBC
@@ -12899,9 +12900,9 @@ sub_FA000B__FA1942:
 	push	xiy                                   ; FA194C  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA194D  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA1950  call 0xfcaa50
-	ld	xbc, (0xFCC9A6:24)                     ; FA1954  ld XBC,(0xfcc9a6)
+	ld	xbc, (F64_19+4:24)                     ; FA1954  ld XBC,(0xfcc9a6)
 	push	xbc                                   ; FA1959  push XBC
-	ld	xbc, (0xFCC9A2:24)                     ; FA195A  ld XBC,(0xfcc9a2)
+	ld	xbc, (F64_19:24)                     ; FA195A  ld XBC,(0xfcc9a2)
 	push	xbc                                   ; FA195F  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA1960  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA1963  push XBC
@@ -12913,15 +12914,15 @@ sub_FA000B__FA1942:
 	push	xbc                                   ; FA1972  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA1973  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA1976  push XBC
-	ld	xbc, (0xFCC99E:24)                     ; FA1977  ld XBC,(0xfcc99e)
+	ld	xbc, (F64_100+4:24)                     ; FA1977  ld XBC,(0xfcc99e)
 	push	xbc                                   ; FA197C  push XBC
-	ld	xbc, (0xFCC99A:24)                     ; FA197D  ld XBC,(0xfcc99a)
+	ld	xbc, (F64_100:24)                     ; FA197D  ld XBC,(0xfcc99a)
 	push	xbc                                   ; FA1982  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA1983  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA1986  call 0xfca252
-	ld	xbc, (0xFCC996:24)                     ; FA198A  ld XBC,(0xfcc996)
+	ld	xbc, (F64_200+4:24)                     ; FA198A  ld XBC,(0xfcc996)
 	push	xbc                                   ; FA198F  push XBC
-	ld	xbc, (0xFCC992:24)                     ; FA1990  ld XBC,(0xfcc992)
+	ld	xbc, (F64_200:24)                     ; FA1990  ld XBC,(0xfcc992)
 	push	xbc                                   ; FA1995  push XBC
 	ld	xbc, (xiz-0x7C)                         ; FA1996  ld XBC,(XIZ+0x84)
 	push	xbc                                   ; FA1999  push XBC
@@ -12956,9 +12957,9 @@ sub_FA000B__FA19DD:
 	push	xiy                                   ; FA19E7  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA19E8  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA19EB  call 0xfcaa50
-	ld	xbc, (0xFCC98E:24)                     ; FA19EF  ld XBC,(0xfcc98e)
+	ld	xbc, (F64_31+4:24)                     ; FA19EF  ld XBC,(0xfcc98e)
 	push	xbc                                   ; FA19F4  push XBC
-	ld	xbc, (0xFCC98A:24)                     ; FA19F5  ld XBC,(0xfcc98a)
+	ld	xbc, (F64_31:24)                     ; FA19F5  ld XBC,(0xfcc98a)
 	push	xbc                                   ; FA19FA  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA19FB  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA19FE  push XBC
@@ -12970,15 +12971,15 @@ sub_FA000B__FA19DD:
 	push	xbc                                   ; FA1A0D  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA1A0E  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA1A11  push XBC
-	ld	xbc, (0xFCC996:24)                     ; FA1A12  ld XBC,(0xfcc996)
+	ld	xbc, (F64_200+4:24)                     ; FA1A12  ld XBC,(0xfcc996)
 	push	xbc                                   ; FA1A17  push XBC
-	ld	xbc, (0xFCC992:24)                     ; FA1A18  ld XBC,(0xfcc992)
+	ld	xbc, (F64_200:24)                     ; FA1A18  ld XBC,(0xfcc992)
 	push	xbc                                   ; FA1A1D  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA1A1E  lda XIY,XIZ+0x80
 	call	Double_Multiply                              ; FA1A21  call 0xfca252
-	ld	xbc, (0xFCC986:24)                     ; FA1A25  ld XBC,(0xfcc986)
+	ld	xbc, (F64_1400+4:24)                     ; FA1A25  ld XBC,(0xfcc986)
 	push	xbc                                   ; FA1A2A  push XBC
-	ld	xbc, (0xFCC982:24)                     ; FA1A2B  ld XBC,(0xfcc982)
+	ld	xbc, (F64_1400:24)                     ; FA1A2B  ld XBC,(0xfcc982)
 	push	xbc                                   ; FA1A30  push XBC
 	ld	xbc, (xiz-0x7C)                         ; FA1A31  ld XBC,(XIZ+0x84)
 	push	xbc                                   ; FA1A34  push XBC
@@ -13009,9 +13010,9 @@ sub_FA000B__FA1A6D:
 	push	xbc                                   ; FA1A7D  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA1A7E  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA1A81  push XBC
-	ld	xbc, (0xFCC97E:24)                     ; FA1A82  ld XBC,(0xfcc97e)
+	ld	xbc, (F64_0p0004166666667+4:24)                     ; FA1A82  ld XBC,(0xfcc97e)
 	push	xbc                                   ; FA1A87  push XBC
-	ld	xbc, (0xFCC97A:24)                     ; FA1A88  ld XBC,(0xfcc97a)
+	ld	xbc, (F64_0p0004166666667:24)                     ; FA1A88  ld XBC,(0xfcc97a)
 	push	xbc                                   ; FA1A8D  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA1A8E  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA1A91  call 0xfca252
@@ -13019,12 +13020,12 @@ sub_FA000B__FA1A6D:
 	push	xbc                                   ; FA1A98  push XBC
 	ld	xbc, (xiz-0x78)                         ; FA1A99  ld XBC,(XIZ+0x88)
 	push	xbc                                   ; FA1A9C  push XBC
-	ld	xbc, (0xFCC9DE:24)                     ; FA1A9D  ld XBC,(0xfcc9de)
+	ld	xbc, (F64_2+4:24)                     ; FA1A9D  ld XBC,(0xfcc9de)
 	push	xbc                                   ; FA1AA2  push XBC
-	ld	xbc, (0xFCC9DA:24)                     ; FA1AA3  ld XBC,(0xfcc9da)
+	ld	xbc, (F64_2:24)                     ; FA1AA3  ld XBC,(0xfcc9da)
 	push	xbc                                   ; FA1AA8  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA1AA9  lda XIY,XIZ+0x80
-	call	sub_FC9576                              ; FA1AAC  call 0xfc9576
+	call	Double_Pow                              ; FA1AAC  call 0xfc9576
 	pushw	1                                    ; FA1AB0  push 0x0001
 	lda	xiy, (xiz-0x88)                        ; FA1AB3  lda XIY,XIZ+0xff78
 	call	Int16_ToDouble                              ; FA1AB8  call 0xfca997
@@ -13042,9 +13043,9 @@ sub_FA000B__FA1A6D:
 	push	xbc                                   ; FA1ADE  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA1ADF  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA1AE4  push XBC
-	ld	xbc, (0xFCC97E:24)                     ; FA1AE5  ld XBC,(0xfcc97e)
+	ld	xbc, (F64_0p0004166666667+4:24)                     ; FA1AE5  ld XBC,(0xfcc97e)
 	push	xbc                                   ; FA1AEA  push XBC
-	ld	xbc, (0xFCC97A:24)                     ; FA1AEB  ld XBC,(0xfcc97a)
+	ld	xbc, (F64_0p0004166666667:24)                     ; FA1AEB  ld XBC,(0xfcc97a)
 	push	xbc                                   ; FA1AF0  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA1AF1  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA1AF6  call 0xfca252
@@ -13090,9 +13091,9 @@ sub_FA000B__FA1B1C:
 	extpfx3 0x9E, 0x10, 0x04                   ; FA1B54  pushw (XIZ+0x10)
 	lda	xiy, (xiz-0x70)                        ; FA1B57  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA1B5A  call 0xfca6fd
-	ld	xbc, (0xFCC9B6:24)                     ; FA1B5E  ld XBC,(0xfcc9b6)
+	ld	xbc, (F64_99+4:24)                     ; FA1B5E  ld XBC,(0xfcc9b6)
 	push	xbc                                   ; FA1B63  push XBC
-	ld	xbc, (0xFCC9B2:24)                     ; FA1B64  ld XBC,(0xfcc9b2)
+	ld	xbc, (F64_99:24)                     ; FA1B64  ld XBC,(0xfcc9b2)
 	push	xbc                                   ; FA1B69  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA1B6A  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA1B6D  push XBC
@@ -13121,9 +13122,9 @@ sub_FA000B__FA1B1C:
 	push	xbc                                   ; FA1BA8  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA1BA9  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA1BAC  push XBC
-	ld	xbc, (0xFCC832:24)                     ; FA1BAD  ld XBC,(0xfcc832)
+	ld	xbc, (F64_0p005050505051+4:24)                     ; FA1BAD  ld XBC,(0xfcc832)
 	push	xbc                                   ; FA1BB2  push XBC
-	ld	xbc, (0xFCC82E:24)                     ; FA1BB3  ld XBC,(0xfcc82e)
+	ld	xbc, (F64_0p005050505051:24)                     ; FA1BB3  ld XBC,(0xfcc82e)
 	push	xbc                                   ; FA1BB8  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA1BB9  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA1BBE  call 0xfca252
@@ -13179,15 +13180,15 @@ sub_FA000B__FA1C11:
 	push	xbc                                   ; FA1C48  push XBC
 	ld	xbc, (xiz-0x70)                         ; FA1C49  ld XBC,(XIZ+0x90)
 	push	xbc                                   ; FA1C4C  push XBC
-	ld	xbc, (0xFCC966:24)                     ; FA1C4D  ld XBC,(0xfcc966)
+	ld	xbc, (F64_0p02+4:24)                     ; FA1C4D  ld XBC,(0xfcc966)
 	push	xbc                                   ; FA1C52  push XBC
-	ld	xbc, (0xFCC962:24)                     ; FA1C53  ld XBC,(0xfcc962)
+	ld	xbc, (F64_0p02:24)                     ; FA1C53  ld XBC,(0xfcc962)
 	push	xbc                                   ; FA1C58  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA1C59  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA1C5C  call 0xfca252
-	ld	xbc, (0xFCC95E:24)                     ; FA1C60  ld XBC,(0xfcc95e)
+	ld	xbc, (F64_0p1+4:24)                     ; FA1C60  ld XBC,(0xfcc95e)
 	push	xbc                                   ; FA1C65  push XBC
-	ld	xbc, (0xFCC95A:24)                     ; FA1C66  ld XBC,(0xfcc95a)
+	ld	xbc, (F64_0p1:24)                     ; FA1C66  ld XBC,(0xfcc95a)
 	push	xbc                                   ; FA1C6B  push XBC
 	ld	xbc, (xiz-0x74)                         ; FA1C6C  ld XBC,(XIZ+0x8c)
 	push	xbc                                   ; FA1C6F  push XBC
@@ -13203,9 +13204,9 @@ sub_FA000B__FA1C11:
 	push	xbc                                   ; FA1C8F  push XBC
 	ld	xbc, (xiz-0x88)                         ; FA1C90  ld XBC,(XIZ+0xff78)
 	push	xbc                                   ; FA1C95  push XBC
-	ld	xbc, (0xFCC956:24)                     ; FA1C96  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; FA1C96  ld XBC,(0xfcc956)
 	push	xbc                                   ; FA1C9B  push XBC
-	ld	xbc, (0xFCC952:24)                     ; FA1C9C  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; FA1C9C  ld XBC,(0xfcc952)
 	push	xbc                                   ; FA1CA1  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA1CA2  lda XIY,XIZ+0xff70
 	call	Double_Multiply                              ; FA1CA7  call 0xfca252
@@ -13223,12 +13224,12 @@ sub_FA000B__FA1C11:
 	push	xbc                                   ; FA1CCD  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA1CCE  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA1CD3  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA1CD4  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA1CD4  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA1CD9  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA1CDA  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA1CDA  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA1CDF  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA1CE0  lda XIY,XIZ+0xff60
-	call	sub_FC9576                              ; FA1CE5  call 0xfc9576
+	call	Double_Pow                              ; FA1CE5  call 0xfc9576
 	ld	xbc, (xiz-0x9C)                         ; FA1CE9  ld XBC,(XIZ+0xff64)
 	push	xbc                                   ; FA1CEE  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA1CEF  ld XBC,(XIZ+0xff60)
@@ -13239,9 +13240,9 @@ sub_FA000B__FA1C11:
 	push	xbc                                   ; FA1D03  push XBC
 	ld	xbc, (xiz-0xA8)                         ; FA1D04  ld XBC,(XIZ+0xff58)
 	push	xbc                                   ; FA1D09  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA1D0A  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA1D0A  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA1D0F  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA1D10  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA1D10  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA1D15  push XBC
 	lda	xiy, (xiz-0xB0)                        ; FA1D16  lda XIY,XIZ+0xff50
 	call	Double_Multiply                              ; FA1D1B  call 0xfca252
@@ -13261,9 +13262,9 @@ sub_FA000B__FA1D39:
 	push	xbc                                   ; FA1D45  push XBC
 	lda	xiy, (xiz-0x70)                        ; FA1D46  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA1D49  call 0xfca6fd
-	ld	xbc, (0xFCC82A:24)                     ; FA1D4D  ld XBC,(0xfcc82a)
+	ld	xbc, (F64_16+4:24)                     ; FA1D4D  ld XBC,(0xfcc82a)
 	push	xbc                                   ; FA1D52  push XBC
-	ld	xbc, (0xFCC826:24)                     ; FA1D53  ld XBC,(0xfcc826)
+	ld	xbc, (F64_16:24)                     ; FA1D53  ld XBC,(0xfcc826)
 	push	xbc                                   ; FA1D58  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA1D59  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA1D5C  push XBC
@@ -13283,15 +13284,15 @@ sub_FA000B__FA1D39:
 	push	xbc                                   ; FA1D7F  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA1D80  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA1D83  push XBC
-	ld	xbc, (0xFCCA4E:24)                     ; FA1D84  ld XBC,(0xfcca4e)
+	ld	xbc, (F64_0p05+4:24)                     ; FA1D84  ld XBC,(0xfcca4e)
 	push	xbc                                   ; FA1D89  push XBC
-	ld	xbc, (0xFCCA4A:24)                     ; FA1D8A  ld XBC,(0xfcca4a)
+	ld	xbc, (F64_0p05:24)                     ; FA1D8A  ld XBC,(0xfcca4a)
 	push	xbc                                   ; FA1D8F  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA1D90  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA1D95  call 0xfca252
-	ld	xbc, (0xFCC94E:24)                     ; FA1D99  ld XBC,(0xfcc94e)
+	ld	xbc, (F64_0p45+4:24)                     ; FA1D99  ld XBC,(0xfcc94e)
 	push	xbc                                   ; FA1D9E  push XBC
-	ld	xbc, (0xFCC94A:24)                     ; FA1D9F  ld XBC,(0xfcc94a)
+	ld	xbc, (F64_0p45:24)                     ; FA1D9F  ld XBC,(0xfcc94a)
 	push	xbc                                   ; FA1DA4  push XBC
 	ld	xbc, (xiz-0x84)                         ; FA1DA5  ld XBC,(XIZ+0xff7c)
 	push	xbc                                   ; FA1DAA  push XBC
@@ -13307,9 +13308,9 @@ sub_FA000B__FA1D39:
 	push	xbc                                   ; FA1DCE  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA1DCF  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA1DD4  push XBC
-	ld	xbc, (0xFCC956:24)                     ; FA1DD5  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; FA1DD5  ld XBC,(0xfcc956)
 	push	xbc                                   ; FA1DDA  push XBC
-	ld	xbc, (0xFCC952:24)                     ; FA1DDB  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; FA1DDB  ld XBC,(0xfcc952)
 	push	xbc                                   ; FA1DE0  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA1DE1  lda XIY,XIZ+0xff60
 	call	Double_Multiply                              ; FA1DE6  call 0xfca252
@@ -13327,12 +13328,12 @@ sub_FA000B__FA1D39:
 	push	xbc                                   ; FA1E10  push XBC
 	ld	xbc, (xiz-0xA8)                         ; FA1E11  ld XBC,(XIZ+0xff58)
 	push	xbc                                   ; FA1E16  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA1E17  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA1E17  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA1E1C  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA1E1D  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA1E1D  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA1E22  push XBC
 	lda	xiy, (xiz-0xB0)                        ; FA1E23  lda XIY,XIZ+0xff50
-	call	sub_FC9576                              ; FA1E28  call 0xfc9576
+	call	Double_Pow                              ; FA1E28  call 0xfc9576
 	ld	xbc, (xiz-0xAC)                         ; FA1E2C  ld XBC,(XIZ+0xff54)
 	push	xbc                                   ; FA1E31  push XBC
 	ld	xbc, (xiz-0xB0)                         ; FA1E32  ld XBC,(XIZ+0xff50)
@@ -13343,9 +13344,9 @@ sub_FA000B__FA1D39:
 	push	xbc                                   ; FA1E46  push XBC
 	ld	xbc, (xiz-0xB8)                         ; FA1E47  ld XBC,(XIZ+0xff48)
 	push	xbc                                   ; FA1E4C  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA1E4D  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA1E4D  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA1E52  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA1E53  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA1E53  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA1E58  push XBC
 	lda	xiy, (xiz-0xC0)                        ; FA1E59  lda XIY,XIZ+0xff40
 	call	Double_Multiply                              ; FA1E5E  call 0xfca252
@@ -13365,9 +13366,9 @@ sub_FA000B__FA1E7C:
 	push	xbc                                   ; FA1E88  push XBC
 	lda	xiy, (xiz-0x70)                        ; FA1E89  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA1E8C  call 0xfca6fd
-	ld	xbc, (0xFCCA76:24)                     ; FA1E90  ld XBC,(0xfcca76)
+	ld	xbc, (F64_24+4:24)                     ; FA1E90  ld XBC,(0xfcca76)
 	push	xbc                                   ; FA1E95  push XBC
-	ld	xbc, (0xFCCA72:24)                     ; FA1E96  ld XBC,(0xfcca72)
+	ld	xbc, (F64_24:24)                     ; FA1E96  ld XBC,(0xfcca72)
 	push	xbc                                   ; FA1E9B  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA1E9C  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA1E9F  push XBC
@@ -13387,15 +13388,15 @@ sub_FA000B__FA1E7C:
 	push	xbc                                   ; FA1EC2  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA1EC3  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA1EC6  push XBC
-	ld	xbc, (0xFCC95E:24)                     ; FA1EC7  ld XBC,(0xfcc95e)
+	ld	xbc, (F64_0p1+4:24)                     ; FA1EC7  ld XBC,(0xfcc95e)
 	push	xbc                                   ; FA1ECC  push XBC
-	ld	xbc, (0xFCC95A:24)                     ; FA1ECD  ld XBC,(0xfcc95a)
+	ld	xbc, (F64_0p1:24)                     ; FA1ECD  ld XBC,(0xfcc95a)
 	push	xbc                                   ; FA1ED2  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA1ED3  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA1ED8  call 0xfca252
-	ld	xbc, (0xFCC946:24)                     ; FA1EDC  ld XBC,(0xfcc946)
+	ld	xbc, (F64_0p9+4:24)                     ; FA1EDC  ld XBC,(0xfcc946)
 	push	xbc                                   ; FA1EE1  push XBC
-	ld	xbc, (0xFCC942:24)                     ; FA1EE2  ld XBC,(0xfcc942)
+	ld	xbc, (F64_0p9:24)                     ; FA1EE2  ld XBC,(0xfcc942)
 	push	xbc                                   ; FA1EE7  push XBC
 	ld	xbc, (xiz-0x84)                         ; FA1EE8  ld XBC,(XIZ+0xff7c)
 	push	xbc                                   ; FA1EED  push XBC
@@ -13411,9 +13412,9 @@ sub_FA000B__FA1E7C:
 	push	xbc                                   ; FA1F11  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA1F12  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA1F17  push XBC
-	ld	xbc, (0xFCC956:24)                     ; FA1F18  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; FA1F18  ld XBC,(0xfcc956)
 	push	xbc                                   ; FA1F1D  push XBC
-	ld	xbc, (0xFCC952:24)                     ; FA1F1E  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; FA1F1E  ld XBC,(0xfcc952)
 	push	xbc                                   ; FA1F23  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA1F24  lda XIY,XIZ+0xff60
 	call	Double_Multiply                              ; FA1F29  call 0xfca252
@@ -13431,12 +13432,12 @@ sub_FA000B__FA1E7C:
 	push	xbc                                   ; FA1F53  push XBC
 	ld	xbc, (xiz-0xA8)                         ; FA1F54  ld XBC,(XIZ+0xff58)
 	push	xbc                                   ; FA1F59  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA1F5A  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA1F5A  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA1F5F  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA1F60  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA1F60  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA1F65  push XBC
 	lda	xiy, (xiz-0xB0)                        ; FA1F66  lda XIY,XIZ+0xff50
-	call	sub_FC9576                              ; FA1F6B  call 0xfc9576
+	call	Double_Pow                              ; FA1F6B  call 0xfc9576
 	ld	xbc, (xiz-0xAC)                         ; FA1F6F  ld XBC,(XIZ+0xff54)
 	push	xbc                                   ; FA1F74  push XBC
 	ld	xbc, (xiz-0xB0)                         ; FA1F75  ld XBC,(XIZ+0xff50)
@@ -13447,9 +13448,9 @@ sub_FA000B__FA1E7C:
 	push	xbc                                   ; FA1F89  push XBC
 	ld	xbc, (xiz-0xB8)                         ; FA1F8A  ld XBC,(XIZ+0xff48)
 	push	xbc                                   ; FA1F8F  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA1F90  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA1F90  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA1F95  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA1F96  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA1F96  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA1F9B  push XBC
 	lda	xiy, (xiz-0xC0)                        ; FA1F9C  lda XIY,XIZ+0xff40
 	call	Double_Multiply                              ; FA1FA1  call 0xfca252
@@ -13469,9 +13470,9 @@ sub_FA000B__FA1FBF:
 	push	xbc                                   ; FA1FCB  push XBC
 	lda	xiy, (xiz-0x70)                        ; FA1FCC  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA1FCF  call 0xfca6fd
-	ld	xbc, (0xFCC822:24)                     ; FA1FD3  ld XBC,(0xfcc822)
+	ld	xbc, (F64_56+4:24)                     ; FA1FD3  ld XBC,(0xfcc822)
 	push	xbc                                   ; FA1FD8  push XBC
-	ld	xbc, (0xFCC81E:24)                     ; FA1FD9  ld XBC,(0xfcc81e)
+	ld	xbc, (F64_56:24)                     ; FA1FD9  ld XBC,(0xfcc81e)
 	push	xbc                                   ; FA1FDE  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA1FDF  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA1FE2  push XBC
@@ -13491,15 +13492,15 @@ sub_FA000B__FA1FBF:
 	push	xbc                                   ; FA2005  push XBC
 	ld	xbc, (xiz-0x80)                         ; FA2006  ld XBC,(XIZ+0x80)
 	push	xbc                                   ; FA2009  push XBC
-	ld	xbc, (0xFCCA3E:24)                     ; FA200A  ld XBC,(0xfcca3e)
+	ld	xbc, (F64_0p2+4:24)                     ; FA200A  ld XBC,(0xfcca3e)
 	push	xbc                                   ; FA200F  push XBC
-	ld	xbc, (0xFCCA3A:24)                     ; FA2010  ld XBC,(0xfcca3a)
+	ld	xbc, (F64_0p2:24)                     ; FA2010  ld XBC,(0xfcca3a)
 	push	xbc                                   ; FA2015  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA2016  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA201B  call 0xfca252
-	ld	xbc, (0xFCC93E:24)                     ; FA201F  ld XBC,(0xfcc93e)
+	ld	xbc, (F64_4p2+4:24)                     ; FA201F  ld XBC,(0xfcc93e)
 	push	xbc                                   ; FA2024  push XBC
-	ld	xbc, (0xFCC93A:24)                     ; FA2025  ld XBC,(0xfcc93a)
+	ld	xbc, (F64_4p2:24)                     ; FA2025  ld XBC,(0xfcc93a)
 	push	xbc                                   ; FA202A  push XBC
 	ld	xbc, (xiz-0x84)                         ; FA202B  ld XBC,(XIZ+0xff7c)
 	push	xbc                                   ; FA2030  push XBC
@@ -13515,9 +13516,9 @@ sub_FA000B__FA1FBF:
 	push	xbc                                   ; FA2054  push XBC
 	ld	xbc, (xiz-0x98)                         ; FA2055  ld XBC,(XIZ+0xff68)
 	push	xbc                                   ; FA205A  push XBC
-	ld	xbc, (0xFCC956:24)                     ; FA205B  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; FA205B  ld XBC,(0xfcc956)
 	push	xbc                                   ; FA2060  push XBC
-	ld	xbc, (0xFCC952:24)                     ; FA2061  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; FA2061  ld XBC,(0xfcc952)
 	push	xbc                                   ; FA2066  push XBC
 	lda	xiy, (xiz-0xA0)                        ; FA2067  lda XIY,XIZ+0xff60
 	call	Double_Multiply                              ; FA206C  call 0xfca252
@@ -13535,12 +13536,12 @@ sub_FA000B__FA1FBF:
 	push	xbc                                   ; FA2096  push XBC
 	ld	xbc, (xiz-0xA8)                         ; FA2097  ld XBC,(XIZ+0xff58)
 	push	xbc                                   ; FA209C  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA209D  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA209D  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA20A2  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA20A3  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA20A3  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA20A8  push XBC
 	lda	xiy, (xiz-0xB0)                        ; FA20A9  lda XIY,XIZ+0xff50
-	call	sub_FC9576                              ; FA20AE  call 0xfc9576
+	call	Double_Pow                              ; FA20AE  call 0xfc9576
 	ld	xbc, (xiz-0xAC)                         ; FA20B2  ld XBC,(XIZ+0xff54)
 	push	xbc                                   ; FA20B7  push XBC
 	ld	xbc, (xiz-0xB0)                         ; FA20B8  ld XBC,(XIZ+0xff50)
@@ -13551,9 +13552,9 @@ sub_FA000B__FA1FBF:
 	push	xbc                                   ; FA20CC  push XBC
 	ld	xbc, (xiz-0xB8)                         ; FA20CD  ld XBC,(XIZ+0xff48)
 	push	xbc                                   ; FA20D2  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA20D3  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA20D3  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA20D8  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA20D9  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA20D9  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA20DE  push XBC
 	lda	xiy, (xiz-0xC0)                        ; FA20DF  lda XIY,XIZ+0xff40
 	call	Double_Multiply                              ; FA20E4  call 0xfca252
@@ -13571,9 +13572,9 @@ sub_FA000B__FA2102:
 	extpfx3 0x9E, 0x10, 0x04                   ; FA2105  pushw (XIZ+0x10)
 	lda	xiy, (xiz-0x70)                        ; FA2108  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA210B  call 0xfca6fd
-	ld	xbc, (0xFCC8DA:24)                     ; FA210F  ld XBC,(0xfcc8da)
+	ld	xbc, (F64_76+4:24)                     ; FA210F  ld XBC,(0xfcc8da)
 	push	xbc                                   ; FA2114  push XBC
-	ld	xbc, (0xFCC8D6:24)                     ; FA2115  ld XBC,(0xfcc8d6)
+	ld	xbc, (F64_76:24)                     ; FA2115  ld XBC,(0xfcc8d6)
 	push	xbc                                   ; FA211A  push XBC
 	ld	xbc, (xiz-0x6C)                         ; FA211B  ld XBC,(XIZ+0x94)
 	push	xbc                                   ; FA211E  push XBC
@@ -13589,9 +13590,9 @@ sub_FA000B__FA2102:
 	push	xiy                                   ; FA2136  push XIY
 	lda	xiy, (xiz-0x80)                        ; FA2137  lda XIY,XIZ+0x80
 	call	Float32_ToDouble                              ; FA213A  call 0xfcaa50
-	ld	xbc, (0xFCC936:24)                     ; FA213E  ld XBC,(0xfcc936)
+	ld	xbc, (F64_9+4:24)                     ; FA213E  ld XBC,(0xfcc936)
 	push	xbc                                   ; FA2143  push XBC
-	ld	xbc, (0xFCC932:24)                     ; FA2144  ld XBC,(0xfcc932)
+	ld	xbc, (F64_9:24)                     ; FA2144  ld XBC,(0xfcc932)
 	push	xbc                                   ; FA2149  push XBC
 	ld	xbc, (xiz-0x7C)                         ; FA214A  ld XBC,(XIZ+0x84)
 	push	xbc                                   ; FA214D  push XBC
@@ -13607,9 +13608,9 @@ sub_FA000B__FA2102:
 	push	xbc                                   ; FA216F  push XBC
 	ld	xbc, (xiz-0x90)                         ; FA2170  ld XBC,(XIZ+0xff70)
 	push	xbc                                   ; FA2175  push XBC
-	ld	xbc, (0xFCC956:24)                     ; FA2176  ld XBC,(0xfcc956)
+	ld	xbc, (F64_neg4p816+4:24)                     ; FA2176  ld XBC,(0xfcc956)
 	push	xbc                                   ; FA217B  push XBC
-	ld	xbc, (0xFCC952:24)                     ; FA217C  ld XBC,(0xfcc952)
+	ld	xbc, (F64_neg4p816:24)                     ; FA217C  ld XBC,(0xfcc952)
 	push	xbc                                   ; FA2181  push XBC
 	lda	xiy, (xiz-0x98)                        ; FA2182  lda XIY,XIZ+0xff68
 	call	Double_Multiply                              ; FA2187  call 0xfca252
@@ -13627,12 +13628,12 @@ sub_FA000B__FA2102:
 	push	xbc                                   ; FA21B1  push XBC
 	ld	xbc, (xiz-0xA0)                         ; FA21B2  ld XBC,(XIZ+0xff60)
 	push	xbc                                   ; FA21B7  push XBC
-	ld	xbc, (0xFCCA66:24)                     ; FA21B8  ld XBC,(0xfcca66)
+	ld	xbc, (F64_10+4:24)                     ; FA21B8  ld XBC,(0xfcca66)
 	push	xbc                                   ; FA21BD  push XBC
-	ld	xbc, (0xFCCA62:24)                     ; FA21BE  ld XBC,(0xfcca62)
+	ld	xbc, (F64_10:24)                     ; FA21BE  ld XBC,(0xfcca62)
 	push	xbc                                   ; FA21C3  push XBC
 	lda	xiy, (xiz-0xA8)                        ; FA21C4  lda XIY,XIZ+0xff58
-	call	sub_FC9576                              ; FA21C9  call 0xfc9576
+	call	Double_Pow                              ; FA21C9  call 0xfc9576
 	ld	xbc, (xiz-0xA4)                         ; FA21CD  ld XBC,(XIZ+0xff5c)
 	push	xbc                                   ; FA21D2  push XBC
 	ld	xbc, (xiz-0xA8)                         ; FA21D3  ld XBC,(XIZ+0xff58)
@@ -13643,9 +13644,9 @@ sub_FA000B__FA2102:
 	push	xbc                                   ; FA21E7  push XBC
 	ld	xbc, (xiz-0xB0)                         ; FA21E8  ld XBC,(XIZ+0xff50)
 	push	xbc                                   ; FA21ED  push XBC
-	ld	xbc, (0xFCCA5E:24)                     ; FA21EE  ld XBC,(0xfcca5e)
+	ld	xbc, (F64_0p5+4:24)                     ; FA21EE  ld XBC,(0xfcca5e)
 	push	xbc                                   ; FA21F3  push XBC
-	ld	xbc, (0xFCCA5A:24)                     ; FA21F4  ld XBC,(0xfcca5a)
+	ld	xbc, (F64_0p5:24)                     ; FA21F4  ld XBC,(0xfcca5a)
 	push	xbc                                   ; FA21F9  push XBC
 	lda	xiy, (xiz-0xB8)                        ; FA21FA  lda XIY,XIZ+0xff48
 	call	Double_Multiply                              ; FA21FF  call 0xfca252
@@ -14093,7 +14094,7 @@ sub_FA237C__FA25DF:
 	cp	bc, 25                                  ; FA25E8  cp BC,0x0019
 	jr ugt, sub_FA237C__FA25D2                 ; FA25EC  jr UGT,0xfa25d2
 	sll	bc, 2                                  ; FA25EE  sll 0x02,BC
-	add	xbc, 0xFA25FB                          ; FA25F1  add XBC,0x00fa25fb
+	add	xbc, sub_FA237C_Join_JumpTable_FA25FB                          ; FA25F1  add XBC,0x00fa25fb
 	ld	xbc, (xbc)                              ; FA25F7  ld XBC,(XBC)
 	jp	(xbc)                                   ; FA25F9  jp T,XBC
 ; 26 x u32 computed-goto table, 0xFA25FB-0xFA2662, 104 bytes.
@@ -14104,32 +14105,33 @@ sub_FA237C__FA25DF:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xF9A050 0xFA5949;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FA23F1	; 0xFA25FB  entry 0 -> 0xFA23F1   (also the out-of-range arm)
-	.long 0x00FA23FE	; 0xFA25FF  entry 1 -> 0xFA23FE
-	.long 0x00FA240B	; 0xFA2603  entry 2 -> 0xFA240B
-	.long 0x00FA241F	; 0xFA2607  entry 3 -> 0xFA241F
-	.long 0x00FA243C	; 0xFA260B  entry 4 -> 0xFA243C
-	.long 0x00FA2450	; 0xFA260F  entry 5 -> 0xFA2450
-	.long 0x00FA247A	; 0xFA2613  entry 6 -> 0xFA247A
-	.long 0x00FA248D	; 0xFA2617  entry 7 -> 0xFA248D
-	.long 0x00FA24A0	; 0xFA261B  entry 8 -> 0xFA24A0
-	.long 0x00FA24A3	; 0xFA261F  entry 9 -> 0xFA24A3
-	.long 0x00FA24A6	; 0xFA2623  entry 10 -> 0xFA24A6
-	.long 0x00FA24D0	; 0xFA2627  entry 11 -> 0xFA24D0
-	.long 0x00FA24F0	; 0xFA262B  entry 12 -> 0xFA24F0
-	.long 0x00FA24FD	; 0xFA262F  entry 13 -> 0xFA24FD
-	.long 0x00FA2527	; 0xFA2633  entry 14 -> 0xFA2527
-	.long 0x00FA2534	; 0xFA2637  entry 15 -> 0xFA2534
-	.long 0x00FA2537	; 0xFA263B  entry 16 -> 0xFA2537
-	.long 0x00FA2544	; 0xFA263F  entry 17 -> 0xFA2544
-	.long 0x00FA2547	; 0xFA2643  entry 18 -> 0xFA2547
-	.long 0x00FA2571	; 0xFA2647  entry 19 -> 0xFA2571
-	.long 0x00FA2574	; 0xFA264B  entry 20 -> 0xFA2574
-	.long 0x00FA2591	; 0xFA264F  entry 21 -> 0xFA2591
-	.long 0x00FA2594	; 0xFA2653  entry 22 -> 0xFA2594
-	.long 0x00FA25B4	; 0xFA2657  entry 23 -> 0xFA25B4
-	.long 0x00FA25D2	; 0xFA265B  entry 24 -> 0xFA25D2
-	.long 0x00FA25BE	; 0xFA265F  entry 25 -> 0xFA25BE
+sub_FA237C_Join_JumpTable_FA25FB:
+	.long sub_FA237C__FA23F1	; 0xFA25FB  entry 0 -> 0xFA23F1   (also the out-of-range arm)
+	.long sub_FA237C__FA23FE	; 0xFA25FF  entry 1 -> 0xFA23FE
+	.long sub_FA237C__FA240B	; 0xFA2603  entry 2 -> 0xFA240B
+	.long sub_FA237C__FA241F	; 0xFA2607  entry 3 -> 0xFA241F
+	.long sub_FA237C__FA243C	; 0xFA260B  entry 4 -> 0xFA243C
+	.long sub_FA237C__FA2450	; 0xFA260F  entry 5 -> 0xFA2450
+	.long sub_FA237C__FA247A	; 0xFA2613  entry 6 -> 0xFA247A
+	.long sub_FA237C__FA248D	; 0xFA2617  entry 7 -> 0xFA248D
+	.long sub_FA237C__FA24A0	; 0xFA261B  entry 8 -> 0xFA24A0
+	.long sub_FA237C__FA24A3	; 0xFA261F  entry 9 -> 0xFA24A3
+	.long sub_FA237C__FA24A6	; 0xFA2623  entry 10 -> 0xFA24A6
+	.long sub_FA237C__FA24D0	; 0xFA2627  entry 11 -> 0xFA24D0
+	.long sub_FA237C__FA24F0	; 0xFA262B  entry 12 -> 0xFA24F0
+	.long sub_FA237C__FA24FD	; 0xFA262F  entry 13 -> 0xFA24FD
+	.long sub_FA237C__FA2527	; 0xFA2633  entry 14 -> 0xFA2527
+	.long sub_FA237C__FA2534	; 0xFA2637  entry 15 -> 0xFA2534
+	.long sub_FA237C__FA2537	; 0xFA263B  entry 16 -> 0xFA2537
+	.long sub_FA237C__FA2544	; 0xFA263F  entry 17 -> 0xFA2544
+	.long sub_FA237C__FA2547	; 0xFA2643  entry 18 -> 0xFA2547
+	.long sub_FA237C__FA2571	; 0xFA2647  entry 19 -> 0xFA2571
+	.long sub_FA237C__FA2574	; 0xFA264B  entry 20 -> 0xFA2574
+	.long sub_FA237C__FA2591	; 0xFA264F  entry 21 -> 0xFA2591
+	.long sub_FA237C__FA2594	; 0xFA2653  entry 22 -> 0xFA2594
+	.long sub_FA237C__FA25B4	; 0xFA2657  entry 23 -> 0xFA25B4
+	.long sub_FA237C__FA25D2	; 0xFA265B  entry 24 -> 0xFA25D2
+	.long sub_FA237C__FA25BE	; 0xFA265F  entry 25 -> 0xFA25BE
 sub_FA237C__FA2663:
 	jr sub_FA237C__FA266F                      ; FA2663  jr T,0xfa266f
 sub_FA237C__FA2665:
@@ -14212,7 +14214,7 @@ Rec8644_Store3Bytes_AndFlagChanged:
 ;          0xFA5511 0xFA552B
 ; Inputs:  frame `link XIZ,-14`; no positive frame slot is read
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA2784 = sub_FA2784
+; Calls:   0xFA2784 = P7Unit_SendModulatedField
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA26CB-0xFA2783
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -14281,7 +14283,7 @@ sub_FA26CB__FA2756:
 	pushw	wa                                   ; FA2766  push WA
 	ld	a, (xiz-2)                              ; FA2767  ld A,(XIZ+0xfe)
 	pushw	wa                                   ; FA276A  push WA
-	calr sub_FA2784                 ; FA276B  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA276B  calr 0xfa2784
 	ld	xix, (xiz-10)                           ; FA276E  ld XIX,(XIZ+0xf6)
 	ld	xiy, (xiz-6)                            ; FA2771  ld XIY,(XIZ+0xfa)
 	ldw	bc, 3                                  ; FA2774  ld BC,0x0003
@@ -14343,12 +14345,15 @@ sub_FA26CB__FA277F:
 ;   * what a PROGRAM 0..127 sounds like.  The word means the selector at block +0
 ;     and nothing more; 128 programs map onto 56 directory records, with record 53
 ;     as the catch-all for 73 of them.
-;   * what the descriptor type letters {b, w, v, s, h, c, B} mean, or the flag at
-;     descriptor +5 (four values in the whole table: 0x62, 0x20, 0x42, 0x77).
+;   * (CORRECTED 2026-09-25, lane promcd: the descriptor type letters and the +5 byte
+;     are decoded from their readers -- see P7Unit_EmitChangedParams and
+;     P7Unit_SendModulatedField.  What remains is what 'v' and 's' select beyond a
+;     one-byte width: the generic walker reads both as one byte, and 's' occurs only in
+;     records 12 and 13, which take hand-coded paths.)
 ;   * what any P7Stream object CONTAINS.  297 of them keep an address for a name.
 ; ==============================================================================
 ; --------------------------------------------------------------------------
-; sub_FA2784 -- 0xFA2784..0xFA294E (459 bytes)
+; P7Unit_SendModulatedField -- 0xFA2784..0xFA294E (459 bytes)
 ;
 ; Called from: no site outside this module.
 ;          11 site(s) inside this module:
@@ -14356,17 +14361,31 @@ sub_FA26CB__FA277F:
 ;          0xFA41BC 0xFA424A 0xFA42DB 0xFA45CF 0xFA47B8
 ; Inputs:  frame `link XIZ,-36`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E), (XIZ+0x10)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFA294F = sub_FA294F, 0xFA2D11 = P7Unit_SendParamValue
+; Calls:   0xFA294F = P7Field_ModulateClamped, 0xFA2D11 = P7Unit_SendParamValue
 ;          0xFA3CD7 = P7Unit_EmitChangedParams
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2784-0xFA294E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd; notes/lanes/promcd-2026-09-25/p7_descriptor_letters.py).
+; Name:    sends ONE field of a unit -- the one its block names at +22 -- offset by a
+;          caller's amount: (unit, amount, flag, depth, mode).
+; Evidence: block +22 is a descriptor index (`add XBC,0x00000016` 0xFA27A8; 0xFF = none,
+;          return at 0xFA27B9) into the field descriptors of the record at block +24
+;          (0xFA2790).  The field is read at block +1+desc[+4] (0xFA2895-0xFA28A4) by
+;          the desc[+5] letter (switch 0xFA28F3: ' ' returns, 'B' exts, 'W'/'w' 16-bit,
+;          'b' extz), handed with desc[+0] min and desc[+2] max (0xFA286F, 0xFA2860)
+;          and amount/flag/depth to P7Field_ModulateClamped (0xFA292C), and the result is sent as
+;          parameter desc[+6] (0xFA2880) by P7Unit_SendParamValue (0xFA2946), the
+;          fifth argument as its mode.  Record 14 (ROTARY SPEAKER) with descriptor 14
+;          is special-cased at 0xFA27C1-0xFA2805: block +15 and its twin at RAM
+;          0x7E7E + 26*unit + 15 become 1 when the amount is >= 0x40, else 0, and
+;          P7Unit_EmitChangedParams runs.  The calls at 0xFA2BEC and 0xFA2C04 pass
+;          amount 64 and depth 0 -- an offset of zero, i.e. the field as it stands.
+;          (Corrected: this header said nothing here read the meaning of a field.)
 ; --------------------------------------------------------------------------
-sub_FA2784:
+P7Unit_SendModulatedField:
 	link32 0xEE, 0x0C, 0xDC, 0xFF              ; FA2784  link XIZ,0xffdc
 	push	xix                                   ; FA2788  push XIX
 	ld	c, 26:opc                                  ; FA2789  ld C,0x1a
@@ -14384,15 +14403,15 @@ sub_FA2784:
 	ld	b, (xbc)                                ; FA27B4  ld B,(XBC)
 	ld	(xiz-2), b                              ; FA27B6  ld (XIZ+0xfe),B
 	cp	b, 0xFF                                 ; FA27B9  cp B,0xff
-	jr nz, sub_FA2784__FA27C1                  ; FA27BC  jr NZ,0xfa27c1
-	jrl sub_FA2784__FA294B                     ; FA27BE  jrl T,0xfa294b
-sub_FA2784__FA27C1:
+	jr nz, P7Unit_SendModulatedField__FA27C1                  ; FA27BC  jr NZ,0xfa27c1
+	jrl P7Unit_SendModulatedField__FA294B                     ; FA27BE  jrl T,0xfa294b
+P7Unit_SendModulatedField__FA27C1:
 	cp (xiz-1), 0x0E                           ; FA27C1  cp (XIZ+0xff),0x0e
-	jrl nz, sub_FA2784__FA2843                 ; FA27C5  jrl NZ,0xfa2843
+	jrl nz, P7Unit_SendModulatedField__FA2843                 ; FA27C5  jrl NZ,0xfa2843
 	cp (xiz-2), 0x0E                           ; FA27C8  cp (XIZ+0xfe),0x0e
-	jrl nz, sub_FA2784__FA2843                 ; FA27CC  jrl NZ,0xfa2843
+	jrl nz, P7Unit_SendModulatedField__FA2843                 ; FA27CC  jrl NZ,0xfa2843
 	cp (xiz+10), 0x40                          ; FA27CF  cp (XIZ+0x0a),0x40
-	jr c, sub_FA2784__FA2807                   ; FA27D3  jr C,0xfa2807
+	jr c, P7Unit_SendModulatedField__FA2807                   ; FA27D3  jr C,0xfa2807
 	ei	6                                       ; FA27D5  ei 0x06
 	ld	c, 26:opc                                  ; FA27D7  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA27D9  mul BC,(XIZ+0x08)
@@ -14407,8 +14426,8 @@ sub_FA2784__FA27C1:
 	add	xbc, 0x7E7E                            ; FA27FA  add XBC,0x00007e7e
 	ld	(xbc), 1                                ; FA2800  ld (XBC),0x01
 	ei	0                                       ; FA2803  ei 0x00
-	jr sub_FA2784__FA2837                      ; FA2805  jr T,0xfa2837
-sub_FA2784__FA2807:
+	jr P7Unit_SendModulatedField__FA2837                      ; FA2805  jr T,0xfa2837
+P7Unit_SendModulatedField__FA2807:
 	ei	6                                       ; FA2807  ei 0x06
 	ld	c, 26:opc                                  ; FA2809  ld C,0x1a
 	extpfx3 0x8E, 0x08, 0x43                   ; FA280B  mul BC,(XIZ+0x08)
@@ -14423,17 +14442,17 @@ sub_FA2784__FA2807:
 	add	xbc, 0x7E7E                            ; FA282C  add XBC,0x00007e7e
 	ld	(xbc), 0                                ; FA2832  ld (XBC),0x00
 	ei	0                                       ; FA2835  ei 0x00
-sub_FA2784__FA2837:
+P7Unit_SendModulatedField__FA2837:
 	push	0                                     ; FA2837  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA2839  push (XIZ+0x08)
 	calr P7Unit_EmitChangedParams                 ; FA283C  calr 0xfa3cd7
 	popw	bc                                    ; FA283F  pop BC
-	jrl sub_FA2784__FA294B                     ; FA2840  jrl T,0xfa294b
-sub_FA2784__FA2843:
+	jrl P7Unit_SendModulatedField__FA294B                     ; FA2840  jrl T,0xfa294b
+P7Unit_SendModulatedField__FA2843:
 	ld	c, 4:opc                                   ; FA2843  ld C,0x04
 	extpfx3 0x8E, 0xFF, 0x43                   ; FA2845  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA2848  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA284A  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA284A  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA2850  ld XBC,(XBC)
 	ld	(xiz-34), xbc                           ; FA2852  ld (XIZ+0xde),XBC
 	ld	a, 7:opc                                   ; FA2855  ld A,0x07
@@ -14480,45 +14499,45 @@ sub_FA2784__FA2843:
 	ld	c, (xwa)                                ; FA28B9  ld C,(XWA)
 	extz	bc                                    ; FA28BB  extz BC
 	ld	(xiz-36), bc                            ; FA28BD  ld (XIZ+0xdc),BC
-	jr sub_FA2784__FA28F3                      ; FA28C0  jr T,0xfa28f3
-sub_FA2784__FA28C2:
+	jr P7Unit_SendModulatedField__FA28F3                      ; FA28C0  jr T,0xfa28f3
+P7Unit_SendModulatedField__FA28C2:
 	ld	xbc, (xiz-30)                           ; FA28C2  ld XBC,(XIZ+0xe2)
 	ld	a, (xbc)                                ; FA28C5  ld A,(XBC)
 	extz	wa                                    ; FA28C7  extz WA
 	ld	(xiz-12), wa                            ; FA28C9  ld (XIZ+0xf4),WA
-	jr sub_FA2784__FA2914                      ; FA28CC  jr T,0xfa2914
-sub_FA2784__FA28CE:
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28CC  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28CE:
 	ld	xbc, (xiz-30)                           ; FA28CE  ld XBC,(XIZ+0xe2)
 	ld	wa, (xbc)                               ; FA28D1  ld WA,(XBC)
 	ld	(xiz-12), wa                            ; FA28D3  ld (XIZ+0xf4),WA
-	jr sub_FA2784__FA2914                      ; FA28D6  jr T,0xfa2914
-sub_FA2784__FA28D8:
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28D6  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28D8:
 	ld	xbc, (xiz-30)                           ; FA28D8  ld XBC,(XIZ+0xe2)
 	ld	a, (xbc)                                ; FA28DB  ld A,(XBC)
 	exts	wa                                    ; FA28DD  exts WA
 	ld	(xiz-12), wa                            ; FA28DF  ld (XIZ+0xf4),WA
-	jr sub_FA2784__FA2914                      ; FA28E2  jr T,0xfa2914
-sub_FA2784__FA28E4:
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28E2  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28E4:
 	ld	xbc, (xiz-30)                           ; FA28E4  ld XBC,(XIZ+0xe2)
 	ld	wa, (xbc)                               ; FA28E7  ld WA,(XBC)
 	ld	(xiz-12), wa                            ; FA28E9  ld (XIZ+0xf4),WA
-	jr sub_FA2784__FA2914                      ; FA28EC  jr T,0xfa2914
-sub_FA2784__FA28EE:
-	jrl sub_FA2784__FA294B                     ; FA28EE  jrl T,0xfa294b
-	jr sub_FA2784__FA2914                      ; FA28F1  jr T,0xfa2914
-sub_FA2784__FA28F3:
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28EC  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28EE:
+	jrl P7Unit_SendModulatedField__FA294B                     ; FA28EE  jrl T,0xfa294b
+	jr P7Unit_SendModulatedField__FA2914                      ; FA28F1  jr T,0xfa2914
+P7Unit_SendModulatedField__FA28F3:
 	ld	bc, (xiz-36)                            ; FA28F3  ld BC,(XIZ+0xdc)
 	cp	bc, 32                                  ; FA28F6  cp BC,0x0020
-	jr z, sub_FA2784__FA28EE                   ; FA28FA  jr Z,0xfa28ee
+	jr z, P7Unit_SendModulatedField__FA28EE                   ; FA28FA  jr Z,0xfa28ee
 	cp	bc, 66                                  ; FA28FC  cp BC,0x0042
-	jr z, sub_FA2784__FA28D8                   ; FA2900  jr Z,0xfa28d8
+	jr z, P7Unit_SendModulatedField__FA28D8                   ; FA2900  jr Z,0xfa28d8
 	cp	bc, 87                                  ; FA2902  cp BC,0x0057
-	jr z, sub_FA2784__FA28E4                   ; FA2906  jr Z,0xfa28e4
+	jr z, P7Unit_SendModulatedField__FA28E4                   ; FA2906  jr Z,0xfa28e4
 	cp	bc, 98                                  ; FA2908  cp BC,0x0062
-	jr z, sub_FA2784__FA28C2                   ; FA290C  jr Z,0xfa28c2
+	jr z, P7Unit_SendModulatedField__FA28C2                   ; FA290C  jr Z,0xfa28c2
 	cp	bc, 0x77                                ; FA290E  cp BC,0x0077
-	jr z, sub_FA2784__FA28CE                   ; FA2912  jr Z,0xfa28ce
-sub_FA2784__FA2914:
+	jr z, P7Unit_SendModulatedField__FA28CE                   ; FA2912  jr Z,0xfa28ce
+P7Unit_SendModulatedField__FA2914:
 	push	0                                     ; FA2914  push 0x00
 	extpfx3 0x8E, 0x0E, 0x04                   ; FA2916  push (XIZ+0x0e)
 	push	0                                     ; FA2919  push 0x00
@@ -14528,7 +14547,7 @@ sub_FA2784__FA2914:
 	extpfx3 0x9E, 0xF6, 0x04                   ; FA2923  pushw (XIZ+0xf6)
 	extpfx3 0x9E, 0xF8, 0x04                   ; FA2926  pushw (XIZ+0xf8)
 	extpfx3 0x9E, 0xF4, 0x04                   ; FA2929  pushw (XIZ+0xf4)
-	calr sub_FA294F                 ; FA292C  calr 0xfa294f
+	calr P7Field_ModulateClamped                 ; FA292C  calr 0xfa294f
 	ld	(xiz-6), wa                             ; FA292F  ld (XIZ+0xfa),WA
 	inc	8, xsp                                 ; FA2932  inc 0,XSP
 	inc	4, xsp                                 ; FA2934  inc 4,XSP
@@ -14541,12 +14560,12 @@ sub_FA2784__FA2914:
 	extpfx3 0x8E, 0x08, 0x04                   ; FA2943  push (XIZ+0x08)
 	calr P7Unit_SendParamValue                 ; FA2946  calr 0xfa2d11
 	inc	8, xsp                                 ; FA2949  inc 0,XSP
-sub_FA2784__FA294B:
+P7Unit_SendModulatedField__FA294B:
 	pop	xix                                    ; FA294B  pop XIX
 	unlk32 xiz                                 ; FA294C  unlk XIZ
 	ret                                        ; FA294E  ret
 ; --------------------------------------------------------------------------
-; sub_FA294F -- 0xFA294F..0xFA2A18 (202 bytes)
+; P7Field_ModulateClamped -- 0xFA294F..0xFA2A18 (202 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -14559,15 +14578,25 @@ sub_FA2784__FA294B:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd; notes/lanes/promcd-2026-09-25/p7_descriptor_letters.py).
+; Name:    (value, max, min, amount, flag, depth) ->
+;              clamp(value + (max - min) * (amount - 64) * depth / 16256, min, max)
+; Evidence: `sub XWA,0x00000040` 0xFA29BD (amount - 64), `sub XBC,XIY` 0xFA29D3
+;          (max - min), Multiply32_Signed at 0xFA29D7 and 0xFA29E2, Divide32_Signed by
+;          0x00003F80 = 16256 = 127*128 (0xFA29E6-0xFA29ED), `add XIY,XIX` 0xFA29F1
+;          (+ value), then the clamp to max (0xFA29F9) and to min (0xFA2A07).  The only
+;          caller, 0xFA292C, passes the field descriptor's min and max.  The flag
+;          argument cannot choose the other arm (the same sum without the -64):
+;          `ld C,(XIZ+0x10) / and C,0x00` at 0xFA2954-0xFA2957 is always zero, so
+;          `jr Z` at 0xFA295A always takes the -64 arm.
+;          (Corrected: this header said nothing here read the meaning of a field.)
 ; --------------------------------------------------------------------------
-sub_FA294F:
+P7Field_ModulateClamped:
 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FA294F  link XIZ,0xfff2
 	push	xix                                   ; FA2953  push XIX
 	ld	c, (xiz+16)                             ; FA2954  ld C,(XIZ+0x10)
 	and	c, 0                                   ; FA2957  and C,0x00
-	jr z, sub_FA294F__FA29A7                   ; FA295A  jr Z,0xfa29a7
+	jr z, P7Field_ModulateClamped__FA29A7                   ; FA295A  jr Z,0xfa29a7
 	ld	ix, (xiz+8)                             ; FA295C  ld IX,(XIZ+0x08)
 	exts	xix                                   ; FA295F  exts XIX
 	ld	bc, (xiz+18)                            ; FA2961  ld BC,(XIZ+0x12)
@@ -14597,8 +14626,8 @@ sub_FA294F:
 	call	Divide32_Signed                              ; FA299C  call 0xfcb141
 	add	xiy, xix                               ; FA29A0  add XIY,XIX
 	ld	(xiz-2), iy                             ; FA29A2  ld (XIZ+0xfe),IY
-	jr sub_FA294F__FA29F6                      ; FA29A5  jr T,0xfa29f6
-sub_FA294F__FA29A7:
+	jr P7Field_ModulateClamped__FA29F6                      ; FA29A5  jr T,0xfa29f6
+P7Field_ModulateClamped__FA29A7:
 	ld	ix, (xiz+8)                             ; FA29A7  ld IX,(XIZ+0x08)
 	exts	xix                                   ; FA29AA  exts XIX
 	ld	bc, (xiz+18)                            ; FA29AC  ld BC,(XIZ+0x12)
@@ -14629,19 +14658,19 @@ sub_FA294F__FA29A7:
 	call	Divide32_Signed                              ; FA29ED  call 0xfcb141
 	add	xiy, xix                               ; FA29F1  add XIY,XIX
 	ld	(xiz-2), iy                             ; FA29F3  ld (XIZ+0xfe),IY
-sub_FA294F__FA29F6:
+P7Field_ModulateClamped__FA29F6:
 	ld	bc, (xiz-2)                             ; FA29F6  ld BC,(XIZ+0xfe)
 	extpfx3 0x9E, 0x0A, 0xF1                   ; FA29F9  cp BC,(XIZ+0x0a)
-	jr le, sub_FA294F__FA2A04                  ; FA29FC  jr LE,0xfa2a04
+	jr le, P7Field_ModulateClamped__FA2A04                  ; FA29FC  jr LE,0xfa2a04
 	ld	wa, (xiz+10)                            ; FA29FE  ld WA,(XIZ+0x0a)
 	ld	(xiz-2), wa                             ; FA2A01  ld (XIZ+0xfe),WA
-sub_FA294F__FA2A04:
+P7Field_ModulateClamped__FA2A04:
 	ld	bc, (xiz-2)                             ; FA2A04  ld BC,(XIZ+0xfe)
 	extpfx3 0x9E, 0x0C, 0xF1                   ; FA2A07  cp BC,(XIZ+0x0c)
-	jr ge, sub_FA294F__FA2A12                  ; FA2A0A  jr GE,0xfa2a12
+	jr ge, P7Field_ModulateClamped__FA2A12                  ; FA2A0A  jr GE,0xfa2a12
 	ld	wa, (xiz+12)                            ; FA2A0C  ld WA,(XIZ+0x0c)
 	ld	(xiz-2), wa                             ; FA2A0F  ld (XIZ+0xfe),WA
-sub_FA294F__FA2A12:
+P7Field_ModulateClamped__FA2A12:
 	ld	wa, (xiz-2)                             ; FA2A12  ld WA,(XIZ+0xfe)
 	pop	xix                                    ; FA2A15  pop XIX
 	unlk32 xiz                                 ; FA2A16  unlk XIZ
@@ -14748,7 +14777,7 @@ sub_FA2A19__FA2A9D:
 	extz	wa                                    ; FA2ADE  extz WA
 	inc	1, wa                                  ; FA2AE0  inc 1,WA
 	pushw	wa                                   ; FA2AE2  push WA
-	lda	xwa, (0xFD4B97:24)                     ; FA2AE3  lda XWA,0xfd4b97
+	lda	xwa, (P7Stream_Data_FD4B97:24)                     ; FA2AE3  lda XWA,0xfd4b97
 	push	xwa                                   ; FA2AE8  push XWA
 	ld	iy, (xiz-9)                             ; FA2AE9  ld IY,(XIZ+0xf7)
 	extz	iy                                    ; FA2AEC  extz IY
@@ -14774,7 +14803,7 @@ sub_FA2A19__FA2A9D:
 ; Inputs:  frame `link XIZ,-13`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00F35D
-; Calls:   0xF9F8E1 = P7Stream_StageAndSend, 0xFA2784 = sub_FA2784
+; Calls:   0xF9F8E1 = P7Stream_StageAndSend, 0xFA2784 = P7Unit_SendModulatedField
 ;          0xFA2A19 = sub_FA2A19, 0xFA2C5E = P7Unit_LoadProgramStreams
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA2B09-0xFA2C5D
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -14790,7 +14819,7 @@ sub_FA2A19__FA2A9D:
 ;          That byte becomes P7Stream_StageAndSend's +0x10 slot; the value slot
 ;          +0x12 is `sub XIY,XIY / push XIY` at 0xFA2C40.
 ; Unknown:  why zero, and what the two MixerGain_ProductOfCurves-shaped calls to
-;          sub_FA2784 with 0x0076 and 0x0064 (0xFA2BDB, 0xFA2BF3) contribute.
+;          P7Unit_SendModulatedField with 0x0076 and 0x0064 (0xFA2BDB, 0xFA2BF3) contribute.
 ; --------------------------------------------------------------------------
 P7Unit_SendFieldParamZero:
 	link32 0xEE, 0x0C, 0xF3, 0xFF              ; FA2B09  link XIZ,0xfff3
@@ -14815,7 +14844,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	mul	a, 25                                  ; FA2B44  mul A,0x19
 	extz	xwa                                   ; FA2B47  extz XWA
 	inc	8, xwa                                 ; FA2B49  inc 0,XWA
-	add	xwa, 0xFDBFD9                          ; FA2B4B  add XWA,0x00fdbfd9
+	add	xwa, PoolDir_Records                          ; FA2B4B  add XWA,0x00fdbfd9
 	ld	xbc, (xwa)                              ; FA2B51  ld XBC,(XWA)
 	ld	(xiz-4), xbc                            ; FA2B53  ld (XIZ+0xfc),XBC
 	ld	a, 26:opc                                  ; FA2B56  ld A,0x1a
@@ -14827,7 +14856,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	ld	c, w                                    ; FA2B6B  ld C,W
 	mul	c, 25                                  ; FA2B6D  mul C,0x19
 	extz	xbc                                   ; FA2B70  extz XBC
-	add	xbc, 0xFDBFD9                          ; FA2B72  add XBC,0x00fdbfd9
+	add	xbc, PoolDir_Records                          ; FA2B72  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA2B78  ld XBC,(XBC)
 	ld	(xiz-8), xbc                            ; FA2B7A  ld (XIZ+0xf8),XBC
 	ld	a, 4:opc                                   ; FA2B7D  ld A,0x04
@@ -14855,7 +14884,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	ld	c, w                                    ; FA2BBC  ld C,W
 	mul	c, 4                                   ; FA2BBE  mul C,0x04
 	extz	xbc                                   ; FA2BC1  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA2BC3  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA2BC3  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA2BC9  ld XBC,(XBC)
 	add	xbc, xix                               ; FA2BCB  add XBC,XIX
 	ld	a, (xbc)                                ; FA2BCD  ld A,(XBC)
@@ -14870,7 +14899,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	pushw	64                                   ; FA2BE4  push 0x0040
 	push	0                                     ; FA2BE7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA2BE9  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA2BEC  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA2BEC  calr 0xfa2784
 	inc	8, xsp                                 ; FA2BEF  inc 0,XSP
 	inc	2, xsp                                 ; FA2BF1  inc 2,XSP
 	pushw	0x64                                 ; FA2BF3  push 0x0064
@@ -14879,7 +14908,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	pushw	64                                   ; FA2BFC  push 0x0040
 	push	0                                     ; FA2BFF  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA2C01  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA2C04  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA2C04  calr 0xfa2784
 	inc	8, xsp                                 ; FA2C07  inc 0,XSP
 	inc	2, xsp                                 ; FA2C09  inc 2,XSP
 	push	0                                     ; FA2C0B  push 0x00
@@ -14890,7 +14919,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	ld	bc, (xiz+8)                             ; FA2C18  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA2C1B  extz BC
 	extz	xbc                                   ; FA2C1D  extz XBC
-	add	xbc, 0xFCCB6E                          ; FA2C1F  add XBC,0x00fccb6e
+	add	xbc, unexplained_FCCB6E                          ; FA2C1F  add XBC,0x00fccb6e
 	ld	a, (xbc)                                ; FA2C25  ld A,(XBC)
 	extz	wa                                    ; FA2C27  extz WA
 	pop	xiy                                    ; FA2C29  pop XIY
@@ -14902,7 +14931,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	extz	wa                                    ; FA2C35  extz WA
 	inc	1, wa                                  ; FA2C37  inc 1,WA
 	pushw	wa                                   ; FA2C39  push WA
-	lda	xwa, (0xFD4B85:24)                     ; FA2C3A  lda XWA,0xfd4b85
+	lda	xwa, (P7Stream_Data_FD4B85:24)                     ; FA2C3A  lda XWA,0xfd4b85
 	push	xwa                                   ; FA2C3F  push XWA
 	sub	xiy, xiy                               ; FA2C40  sub XIY,XIY
 	push	xiy                                   ; FA2C42  push XIY
@@ -14960,7 +14989,7 @@ P7Unit_LoadProgramStreams:
 	mul	a, 25                                  ; FA2C78  mul A,0x19
 	extz	xwa                                   ; FA2C7B  extz XWA
 	inc	8, xwa                                 ; FA2C7D  inc 0,XWA
-	add	xwa, 0xFDBFD9                          ; FA2C7F  add XWA,0x00fdbfd9
+	add	xwa, PoolDir_Records                          ; FA2C7F  add XWA,0x00fdbfd9
 	ld	xbc, (xwa)                              ; FA2C85  ld XBC,(XWA)
 	ld	(xiz-4), xbc                            ; FA2C87  ld (XIZ+0xfc),XBC
 	ld	a, 26:opc                                  ; FA2C8A  ld A,0x1a
@@ -14972,7 +15001,7 @@ P7Unit_LoadProgramStreams:
 	ld	c, w                                    ; FA2C9F  ld C,W
 	mul	c, 25                                  ; FA2CA1  mul C,0x19
 	extz	xbc                                   ; FA2CA4  extz XBC
-	add	xbc, 0xFDBFD9                          ; FA2CA6  add XBC,0x00fdbfd9
+	add	xbc, PoolDir_Records                          ; FA2CA6  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA2CAC  ld XBC,(XBC)
 	ld	(xiz-8), xbc                            ; FA2CAE  ld (XIZ+0xf8),XBC
 	ld	a, 4:opc                                   ; FA2CB1  ld A,0x04
@@ -14989,7 +15018,7 @@ P7Unit_LoadProgramStreams:
 	ld	wa, (xiz+8)                             ; FA2CD0  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA2CD3  extz WA
 	extz	xwa                                   ; FA2CD5  extz XWA
-	add	xwa, 0xFCCB6E                          ; FA2CD7  add XWA,0x00fccb6e
+	add	xwa, unexplained_FCCB6E                          ; FA2CD7  add XWA,0x00fccb6e
 	ld	w, (xwa)                                ; FA2CDD  ld W,(XWA)
 	ld	a, w                                    ; FA2CDF  ld A,W
 	extz	wa                                    ; FA2CE1  extz WA
@@ -15000,7 +15029,7 @@ P7Unit_LoadProgramStreams:
 	extz	wa                                    ; FA2CEB  extz WA
 	inc	1, wa                                  ; FA2CED  inc 1,WA
 	pushw	wa                                   ; FA2CEF  push WA
-	lda	xwa, (0xFD4B85:24)                     ; FA2CF0  lda XWA,0xfd4b85
+	lda	xwa, (P7Stream_Data_FD4B85:24)                     ; FA2CF0  lda XWA,0xfd4b85
 	push	xwa                                   ; FA2CF5  push XWA
 	sub	xiy, xiy                               ; FA2CF6  sub XIY,XIY
 	push	xiy                                   ; FA2CF8  push XIY
@@ -15053,7 +15082,7 @@ P7Unit_SendParamValue:
 	mul	a, 25                                  ; FA2D2B  mul A,0x19
 	extz	xwa                                   ; FA2D2E  extz XWA
 	inc	8, xwa                                 ; FA2D30  inc 0,XWA
-	add	xwa, 0xFDBFD9                          ; FA2D32  add XWA,0x00fdbfd9
+	add	xwa, PoolDir_Records                          ; FA2D32  add XWA,0x00fdbfd9
 	ld	xbc, (xwa)                              ; FA2D38  ld XBC,(XWA)
 	ld	(xiz-4), xbc                            ; FA2D3A  ld (XIZ+0xfc),XBC
 	ld	a, 26:opc                                  ; FA2D3D  ld A,0x1a
@@ -15065,7 +15094,7 @@ P7Unit_SendParamValue:
 	ld	c, w                                    ; FA2D52  ld C,W
 	mul	c, 25                                  ; FA2D54  mul C,0x19
 	extz	xbc                                   ; FA2D57  extz XBC
-	add	xbc, 0xFDBFD9                          ; FA2D59  add XBC,0x00fdbfd9
+	add	xbc, PoolDir_Records                          ; FA2D59  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA2D5F  ld XBC,(XBC)
 	ld	(xiz-8), xbc                            ; FA2D61  ld (XIZ+0xf8),XBC
 	ld	a, 4:opc                                   ; FA2D64  ld A,0x04
@@ -15082,7 +15111,7 @@ P7Unit_SendParamValue:
 	ld	wa, (xiz+8)                             ; FA2D83  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA2D86  extz WA
 	extz	xwa                                   ; FA2D88  extz XWA
-	add	xwa, 0xFCCB6E                          ; FA2D8A  add XWA,0x00fccb6e
+	add	xwa, unexplained_FCCB6E                          ; FA2D8A  add XWA,0x00fccb6e
 	ld	w, (xwa)                                ; FA2D90  ld W,(XWA)
 	ld	a, w                                    ; FA2D92  ld A,W
 	extz	wa                                    ; FA2D94  extz WA
@@ -15095,7 +15124,7 @@ P7Unit_SendParamValue:
 	extz	wa                                    ; FA2DA1  extz WA
 	inc	1, wa                                  ; FA2DA3  inc 1,WA
 	pushw	wa                                   ; FA2DA5  push WA
-	lda	xwa, (0xFD4B85:24)                     ; FA2DA6  lda XWA,0xfd4b85
+	lda	xwa, (P7Stream_Data_FD4B85:24)                     ; FA2DA6  lda XWA,0xfd4b85
 	push	xwa                                   ; FA2DAB  push XWA
 	ld	iy, (xiz+12)                            ; FA2DAC  ld IY,(XIZ+0x0c)
 	exts	xiy                                   ; FA2DAF  exts XIY
@@ -15143,7 +15172,7 @@ P7Mixer_RequestGain:
 	ld	a, (xiz+10)                             ; FA2DD9  ld A,(XIZ+0x0a)
 	ld	(0xF3B4:24), a                         ; FA2DDC  ld (0x00f3b4),A
 	pushw	2                                    ; FA2DE1  push 0x0002
-	call	0xF98510                              ; FA2DE4  call 0xf98510
+	call	Kernel_SemaSignal_StackArg                              ; FA2DE4  call 0xf98510
 	popw	bc                                    ; FA2DE8  pop BC
 	unlk32 xiz                                 ; FA2DE9  unlk XIZ
 	ret                                        ; FA2DEB  ret
@@ -15472,13 +15501,13 @@ MixerGain_ProductOfCurves:
 	ld	(xiz-4), xbc                            ; FA30C2  ld (XIZ+0xfc),XBC
 	ldw	wa, 4                                  ; FA30C5  ld WA,0x0004
 	extpfx3 0x9E, 0x0A, 0x48                   ; FA30C8  muls XWA,(XIZ+0x0a)
-	add	xwa, 0xFCCD71                          ; FA30CB  add XWA,0x00fccd71
+	add	xwa, DSP_MixerGain_Curve_A                          ; FA30CB  add XWA,0x00fccd71
 	ld	xwa, (xwa)                              ; FA30D1  ld XWA,(XWA)
 	ld	xix, xwa                                ; FA30D3  ld XIX,XWA
 	sra	xix, 15                                ; FA30D5  sra 0x0f,XIX
 	ldw	wa, 4                                  ; FA30D8  ld WA,0x0004
 	extpfx3 0x9E, 0x08, 0x48                   ; FA30DB  muls XWA,(XIZ+0x08)
-	add	xwa, 0xFCCB71                          ; FA30DE  add XWA,0x00fccb71
+	add	xwa, DSP_MixerGain_Curve_B                          ; FA30DE  add XWA,0x00fccb71
 	ld	xwa, (xwa)                              ; FA30E4  ld XWA,(XWA)
 	sra	xwa, 0                                 ; FA30E6  sra 0x00,XWA
 	push	xix                                   ; FA30E9  push XIX
@@ -15527,7 +15556,7 @@ Wait_Ticks_Yield__FA3103:
 	cp	xwa, xbc                                ; FA3115  cp XWA,XBC
 	jr nc, Wait_Ticks_Yield__FA3123                  ; FA3117  jr NC,0xfa3123
 	pushw	2                                    ; FA3119  push 0x0002
-	call	0xF983D9                              ; FA311C  call 0xf983d9
+	call	Kernel_YieldRotate_StackArg                              ; FA311C  call 0xf983d9
 	popw	bc                                    ; FA3120  pop BC
 	jr Wait_Ticks_Yield__FA3103                      ; FA3121  jr T,0xfa3103
 Wait_Ticks_Yield__FA3123:
@@ -15569,189 +15598,189 @@ P7Units_BootLoadAndStartTask:
 	call	Delay_CountdownArg_Z                              ; FA3136  call 0xf98b39
 	set_dd8	2, PB                              ; FA313A  set 2,(0x1f)
 	popw	bc                                    ; FA313D  pop BC
-	lda	xbc, (0xFD4B97:24)                     ; FA313E  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA313E  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3143  push XBC
 	pushw	1                                    ; FA3144  push 0x0001
-	lda	xwa, (0xFCD2C6:24)                     ; FA3147  lda XWA,0xfcd2c6
+	lda	xwa, (P7Stream_FCD2C6:24)                     ; FA3147  lda XWA,0xfcd2c6
 	push	xwa                                   ; FA314C  push XWA
 	call	P7Stream_Run                              ; FA314D  call 0xf9a646
 	inc	8, xsp                                 ; FA3151  inc 0,XSP
 	inc	2, xsp                                 ; FA3153  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3155  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3155  lda XBC,0xfd4b97
 	push	xbc                                   ; FA315A  push XBC
 	pushw	3                                    ; FA315B  push 0x0003
-	lda	xwa, (0xFCD5E2:24)                     ; FA315E  lda XWA,0xfcd5e2
+	lda	xwa, (P7Stream_FCD5E2:24)                     ; FA315E  lda XWA,0xfcd5e2
 	push	xwa                                   ; FA3163  push XWA
 	call	P7Stream_Run                              ; FA3164  call 0xf9a646
 	inc	8, xsp                                 ; FA3168  inc 0,XSP
 	inc	2, xsp                                 ; FA316A  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA316C  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA316C  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3171  push XBC
 	pushw	4                                    ; FA3172  push 0x0004
-	lda	xwa, (0xFCDA77:24)                     ; FA3175  lda XWA,0xfcda77
+	lda	xwa, (P7Stream_FCDA77:24)                     ; FA3175  lda XWA,0xfcda77
 	push	xwa                                   ; FA317A  push XWA
 	call	P7Stream_Run                              ; FA317B  call 0xf9a646
 	inc	8, xsp                                 ; FA317F  inc 0,XSP
 	inc	2, xsp                                 ; FA3181  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3183  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3183  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3188  push XBC
 	pushw	1                                    ; FA3189  push 0x0001
-	lda	xwa, (0xFD26C7:24)                     ; FA318C  lda XWA,0xfd26c7
+	lda	xwa, (P7Stream_FD26C7:24)                     ; FA318C  lda XWA,0xfd26c7
 	push	xwa                                   ; FA3191  push XWA
 	call	P7Stream_Run                              ; FA3192  call 0xf9a646
 	set_dd8	3, PB                              ; FA3196  set 3,(0x1f)
 	inc	8, xsp                                 ; FA3199  inc 0,XSP
 	inc	2, xsp                                 ; FA319B  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA319D  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA319D  lda XBC,0xfd4b97
 	push	xbc                                   ; FA31A2  push XBC
 	pushw	3                                    ; FA31A3  push 0x0003
-	lda	xwa, (0xFD26EB:24)                     ; FA31A6  lda XWA,0xfd26eb
+	lda	xwa, (P7Stream_FD26EB:24)                     ; FA31A6  lda XWA,0xfd26eb
 	push	xwa                                   ; FA31AB  push XWA
 	call	P7Stream_Run                              ; FA31AC  call 0xf9a646
 	set_dd8	4, PB                              ; FA31B0  set 4,(0x1f)
 	inc	8, xsp                                 ; FA31B3  inc 0,XSP
 	inc	2, xsp                                 ; FA31B5  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA31B7  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA31B7  lda XBC,0xfd4b97
 	push	xbc                                   ; FA31BC  push XBC
 	pushw	4                                    ; FA31BD  push 0x0004
-	lda	xwa, (0xFD270F:24)                     ; FA31C0  lda XWA,0xfd270f
+	lda	xwa, (P7Stream_FD270F:24)                     ; FA31C0  lda XWA,0xfd270f
 	push	xwa                                   ; FA31C5  push XWA
 	call	P7Stream_Run                              ; FA31C6  call 0xf9a646
 	set_dd8	1, PB                              ; FA31CA  set 1,(0x1f)
 	inc	8, xsp                                 ; FA31CD  inc 0,XSP
 	inc	2, xsp                                 ; FA31CF  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA31D1  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA31D1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA31D6  push XBC
 	pushw	1                                    ; FA31D7  push 0x0001
-	lda	xwa, (0xFCD243:24)                     ; FA31DA  lda XWA,0xfcd243
+	lda	xwa, (P7Stream_FCD243:24)                     ; FA31DA  lda XWA,0xfcd243
 	push	xwa                                   ; FA31DF  push XWA
 	call	P7Stream_Run                              ; FA31E0  call 0xf9a646
 	inc	8, xsp                                 ; FA31E4  inc 0,XSP
 	inc	2, xsp                                 ; FA31E6  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA31E8  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA31E8  lda XBC,0xfd4b97
 	push	xbc                                   ; FA31ED  push XBC
 	pushw	3                                    ; FA31EE  push 0x0003
-	lda	xwa, (0xFCD42F:24)                     ; FA31F1  lda XWA,0xfcd42f
+	lda	xwa, (P7Stream_FCD42F:24)                     ; FA31F1  lda XWA,0xfcd42f
 	push	xwa                                   ; FA31F6  push XWA
 	call	P7Stream_Run                              ; FA31F7  call 0xf9a646
 	inc	8, xsp                                 ; FA31FB  inc 0,XSP
 	inc	2, xsp                                 ; FA31FD  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA31FF  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA31FF  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3204  push XBC
 	pushw	4                                    ; FA3205  push 0x0004
-	lda	xwa, (0xFCDA18:24)                     ; FA3208  lda XWA,0xfcda18
+	lda	xwa, (P7Stream_FCDA18:24)                     ; FA3208  lda XWA,0xfcda18
 	push	xwa                                   ; FA320D  push XWA
 	call	P7Stream_Run                              ; FA320E  call 0xf9a646
 	inc	8, xsp                                 ; FA3212  inc 0,XSP
 	inc	2, xsp                                 ; FA3214  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3216  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3216  lda XBC,0xfd4b97
 	push	xbc                                   ; FA321B  push XBC
 	pushw	1                                    ; FA321C  push 0x0001
-	lda	xwa, (0xFD26B8:24)                     ; FA321F  lda XWA,0xfd26b8
+	lda	xwa, (P7Stream_FD26B8:24)                     ; FA321F  lda XWA,0xfd26b8
 	push	xwa                                   ; FA3224  push XWA
 	call	P7Stream_Run                              ; FA3225  call 0xf9a646
 	inc	8, xsp                                 ; FA3229  inc 0,XSP
 	inc	2, xsp                                 ; FA322B  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA322D  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA322D  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3232  push XBC
 	pushw	3                                    ; FA3233  push 0x0003
-	lda	xwa, (0xFD26DC:24)                     ; FA3236  lda XWA,0xfd26dc
+	lda	xwa, (P7Stream_FD26DC:24)                     ; FA3236  lda XWA,0xfd26dc
 	push	xwa                                   ; FA323B  push XWA
 	call	P7Stream_Run                              ; FA323C  call 0xf9a646
 	inc	8, xsp                                 ; FA3240  inc 0,XSP
 	inc	2, xsp                                 ; FA3242  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3244  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3244  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3249  push XBC
 	pushw	4                                    ; FA324A  push 0x0004
-	lda	xwa, (0xFD2700:24)                     ; FA324D  lda XWA,0xfd2700
+	lda	xwa, (P7Stream_FD2700:24)                     ; FA324D  lda XWA,0xfd2700
 	push	xwa                                   ; FA3252  push XWA
 	call	P7Stream_Run                              ; FA3253  call 0xf9a646
 	inc	8, xsp                                 ; FA3257  inc 0,XSP
 	inc	2, xsp                                 ; FA3259  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA325B  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA325B  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3260  push XBC
 	pushw	1                                    ; FA3261  push 0x0001
-	lda	xwa, (0xFD4093:24)                     ; FA3264  lda XWA,0xfd4093
+	lda	xwa, (P7Stream_FD4093:24)                     ; FA3264  lda XWA,0xfd4093
 	push	xwa                                   ; FA3269  push XWA
 	call	P7Stream_Run                              ; FA326A  call 0xf9a646
 	inc	8, xsp                                 ; FA326E  inc 0,XSP
 	inc	2, xsp                                 ; FA3270  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA3272  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3272  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3277  push XBC
 	pushw	1                                    ; FA3278  push 0x0001
-	lda	xwa, (0xFD4B4C:24)                     ; FA327B  lda XWA,0xfd4b4c
+	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA327B  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA3280  push XWA
 	call	P7Stream_Run                              ; FA3281  call 0xf9a646
 	inc	8, xsp                                 ; FA3285  inc 0,XSP
 	inc	2, xsp                                 ; FA3287  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA3289  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3289  lda XBC,0xfd4b85
 	push	xbc                                   ; FA328E  push XBC
 	pushw	1                                    ; FA328F  push 0x0001
-	lda	xwa, (0xFD4AFD:24)                     ; FA3292  lda XWA,0xfd4afd
+	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA3292  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3297  push XWA
 	call	P7Stream_Run                              ; FA3298  call 0xf9a646
 	inc	8, xsp                                 ; FA329C  inc 0,XSP
 	inc	2, xsp                                 ; FA329E  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA32A0  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA32A0  lda XBC,0xfd4b97
 	push	xbc                                   ; FA32A5  push XBC
 	pushw	1                                    ; FA32A6  push 0x0001
-	lda	xwa, (0xFCD209:24)                     ; FA32A9  lda XWA,0xfcd209
+	lda	xwa, (P7Stream_FCD209:24)                     ; FA32A9  lda XWA,0xfcd209
 	push	xwa                                   ; FA32AE  push XWA
 	call	P7Stream_Run                              ; FA32AF  call 0xf9a646
 	inc	8, xsp                                 ; FA32B3  inc 0,XSP
 	inc	2, xsp                                 ; FA32B5  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA32B7  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA32B7  lda XBC,0xfd4b85
 	push	xbc                                   ; FA32BC  push XBC
 	pushw	2                                    ; FA32BD  push 0x0002
-	lda	xwa, (0xFD4B4C:24)                     ; FA32C0  lda XWA,0xfd4b4c
+	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA32C0  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA32C5  push XWA
 	call	P7Stream_Run                              ; FA32C6  call 0xf9a646
 	inc	8, xsp                                 ; FA32CA  inc 0,XSP
 	inc	2, xsp                                 ; FA32CC  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA32CE  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA32CE  lda XBC,0xfd4b85
 	push	xbc                                   ; FA32D3  push XBC
 	pushw	2                                    ; FA32D4  push 0x0002
-	lda	xwa, (0xFD4AFD:24)                     ; FA32D7  lda XWA,0xfd4afd
+	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA32D7  lda XWA,0xfd4afd
 	push	xwa                                   ; FA32DC  push XWA
 	call	P7Stream_Run                              ; FA32DD  call 0xf9a646
 	inc	8, xsp                                 ; FA32E1  inc 0,XSP
 	inc	2, xsp                                 ; FA32E3  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA32E5  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA32E5  lda XBC,0xfd4b97
 	push	xbc                                   ; FA32EA  push XBC
 	pushw	2                                    ; FA32EB  push 0x0002
-	lda	xwa, (0xFCD221:24)                     ; FA32EE  lda XWA,0xfcd221
+	lda	xwa, (P7Stream_FCD221:24)                     ; FA32EE  lda XWA,0xfcd221
 	push	xwa                                   ; FA32F3  push XWA
 	call	P7Stream_Run                              ; FA32F4  call 0xf9a646
 	inc	8, xsp                                 ; FA32F8  inc 0,XSP
 	inc	2, xsp                                 ; FA32FA  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA32FC  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA32FC  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3301  push XBC
 	pushw	3                                    ; FA3302  push 0x0003
-	lda	xwa, (0xFD4093:24)                     ; FA3305  lda XWA,0xfd4093
+	lda	xwa, (P7Stream_FD4093:24)                     ; FA3305  lda XWA,0xfd4093
 	push	xwa                                   ; FA330A  push XWA
 	call	P7Stream_Run                              ; FA330B  call 0xf9a646
 	inc	8, xsp                                 ; FA330F  inc 0,XSP
 	inc	2, xsp                                 ; FA3311  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA3313  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3313  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3318  push XBC
 	pushw	3                                    ; FA3319  push 0x0003
-	lda	xwa, (0xFD4B4C:24)                     ; FA331C  lda XWA,0xfd4b4c
+	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA331C  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA3321  push XWA
 	call	P7Stream_Run                              ; FA3322  call 0xf9a646
 	inc	8, xsp                                 ; FA3326  inc 0,XSP
 	inc	2, xsp                                 ; FA3328  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA332A  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA332A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA332F  push XBC
 	pushw	3                                    ; FA3330  push 0x0003
-	lda	xwa, (0xFD4AFD:24)                     ; FA3333  lda XWA,0xfd4afd
+	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA3333  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3338  push XWA
 	call	P7Stream_Run                              ; FA3339  call 0xf9a646
 	inc	8, xsp                                 ; FA333D  inc 0,XSP
 	inc	2, xsp                                 ; FA333F  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3341  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3341  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3346  push XBC
 	pushw	3                                    ; FA3347  push 0x0003
-	lda	xwa, (0xFCD403:24)                     ; FA334A  lda XWA,0xfcd403
+	lda	xwa, (P7Stream_FCD403:24)                     ; FA334A  lda XWA,0xfcd403
 	push	xwa                                   ; FA334F  push XWA
 	call	P7Stream_Run                              ; FA3350  call 0xf9a646
 	inc	8, xsp                                 ; FA3354  inc 0,XSP
@@ -15761,7 +15790,7 @@ P7Units_BootLoadAndStartTask:
 	calr P7Mixer_SendGain                 ; FA335E  calr 0xfa2e2d
 	pop	xiy                                    ; FA3361  pop XIY
 	pushw	2                                    ; FA3362  push 0x0002
-	call	0xF9833B                              ; FA3365  call 0xf9833b
+	call	Kernel_StartTask_StackArg                              ; FA3365  call 0xf9833b
 	popw	bc                                    ; FA3369  pop BC
 	ret                                        ; FA336A  ret
 ; --------------------------------------------------------------------------
@@ -15799,210 +15828,210 @@ P7Units_ReloadFixedStreams:
 	call	Delay_CountdownArg_Z                              ; FA337A  call 0xf98b39
 	set_dd8	2, PB                              ; FA337E  set 2,(0x1f)
 	popw	bc                                    ; FA3381  pop BC
-	lda	xbc, (0xFD4B97:24)                     ; FA3382  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3382  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3387  push XBC
 	pushw	1                                    ; FA3388  push 0x0001
-	lda	xwa, (0xFCD2C6:24)                     ; FA338B  lda XWA,0xfcd2c6
+	lda	xwa, (P7Stream_FCD2C6:24)                     ; FA338B  lda XWA,0xfcd2c6
 	push	xwa                                   ; FA3390  push XWA
 	call	P7Stream_Run                              ; FA3391  call 0xf9a646
 	inc	8, xsp                                 ; FA3395  inc 0,XSP
 	inc	2, xsp                                 ; FA3397  inc 2,XSP
 	cp (0x00F35F:24), 0x02                     ; FA3399  cp (0x00f35f),0x02
 	jr z, P7Units_ReloadFixedStreams__FA33D1                   ; FA339F  jr Z,0xfa33d1
-	lda	xbc, (0xFD4B97:24)                     ; FA33A1  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA33A1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33A6  push XBC
 	pushw	3                                    ; FA33A7  push 0x0003
-	lda	xwa, (0xFCD5E2:24)                     ; FA33AA  lda XWA,0xfcd5e2
+	lda	xwa, (P7Stream_FCD5E2:24)                     ; FA33AA  lda XWA,0xfcd5e2
 	push	xwa                                   ; FA33AF  push XWA
 	call	P7Stream_Run                              ; FA33B0  call 0xf9a646
 	inc	8, xsp                                 ; FA33B4  inc 0,XSP
 	inc	2, xsp                                 ; FA33B6  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA33B8  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA33B8  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33BD  push XBC
 	pushw	4                                    ; FA33BE  push 0x0004
-	lda	xwa, (0xFCDA77:24)                     ; FA33C1  lda XWA,0xfcda77
+	lda	xwa, (P7Stream_FCDA77:24)                     ; FA33C1  lda XWA,0xfcda77
 	push	xwa                                   ; FA33C6  push XWA
 	call	P7Stream_Run                              ; FA33C7  call 0xf9a646
 	inc	8, xsp                                 ; FA33CB  inc 0,XSP
 	inc	2, xsp                                 ; FA33CD  inc 2,XSP
 	jr P7Units_ReloadFixedStreams__FA33FF                      ; FA33CF  jr T,0xfa33ff
 P7Units_ReloadFixedStreams__FA33D1:
-	lda	xbc, (0xFD4B97:24)                     ; FA33D1  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA33D1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33D6  push XBC
 	pushw	3                                    ; FA33D7  push 0x0003
-	lda	xwa, (0xFDBC5A:24)                     ; FA33DA  lda XWA,0xfdbc5a
+	lda	xwa, (P7Stream_FDBC5A:24)                     ; FA33DA  lda XWA,0xfdbc5a
 	push	xwa                                   ; FA33DF  push XWA
 	call	P7Stream_Run                              ; FA33E0  call 0xf9a646
 	inc	8, xsp                                 ; FA33E4  inc 0,XSP
 	inc	2, xsp                                 ; FA33E6  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA33E8  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA33E8  lda XBC,0xfd4b97
 	push	xbc                                   ; FA33ED  push XBC
 	pushw	4                                    ; FA33EE  push 0x0004
-	lda	xwa, (0xFDBE94:24)                     ; FA33F1  lda XWA,0xfdbe94
+	lda	xwa, (P7Stream_FDBE94:24)                     ; FA33F1  lda XWA,0xfdbe94
 	push	xwa                                   ; FA33F6  push XWA
 	call	P7Stream_Run                              ; FA33F7  call 0xf9a646
 	inc	8, xsp                                 ; FA33FB  inc 0,XSP
 	inc	2, xsp                                 ; FA33FD  inc 2,XSP
 P7Units_ReloadFixedStreams__FA33FF:
-	lda	xbc, (0xFD4B97:24)                     ; FA33FF  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA33FF  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3404  push XBC
 	pushw	1                                    ; FA3405  push 0x0001
-	lda	xwa, (0xFD26C7:24)                     ; FA3408  lda XWA,0xfd26c7
+	lda	xwa, (P7Stream_FD26C7:24)                     ; FA3408  lda XWA,0xfd26c7
 	push	xwa                                   ; FA340D  push XWA
 	call	P7Stream_Run                              ; FA340E  call 0xf9a646
 	set_dd8	3, PB                              ; FA3412  set 3,(0x1f)
 	inc	8, xsp                                 ; FA3415  inc 0,XSP
 	inc	2, xsp                                 ; FA3417  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3419  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3419  lda XBC,0xfd4b97
 	push	xbc                                   ; FA341E  push XBC
 	pushw	3                                    ; FA341F  push 0x0003
-	lda	xwa, (0xFD26EB:24)                     ; FA3422  lda XWA,0xfd26eb
+	lda	xwa, (P7Stream_FD26EB:24)                     ; FA3422  lda XWA,0xfd26eb
 	push	xwa                                   ; FA3427  push XWA
 	call	P7Stream_Run                              ; FA3428  call 0xf9a646
 	set_dd8	4, PB                              ; FA342C  set 4,(0x1f)
 	inc	8, xsp                                 ; FA342F  inc 0,XSP
 	inc	2, xsp                                 ; FA3431  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3433  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3433  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3438  push XBC
 	pushw	4                                    ; FA3439  push 0x0004
-	lda	xwa, (0xFD270F:24)                     ; FA343C  lda XWA,0xfd270f
+	lda	xwa, (P7Stream_FD270F:24)                     ; FA343C  lda XWA,0xfd270f
 	push	xwa                                   ; FA3441  push XWA
 	call	P7Stream_Run                              ; FA3442  call 0xf9a646
 	set_dd8	1, PB                              ; FA3446  set 1,(0x1f)
 	inc	8, xsp                                 ; FA3449  inc 0,XSP
 	inc	2, xsp                                 ; FA344B  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA344D  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA344D  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3452  push XBC
 	pushw	1                                    ; FA3453  push 0x0001
-	lda	xwa, (0xFCD243:24)                     ; FA3456  lda XWA,0xfcd243
+	lda	xwa, (P7Stream_FCD243:24)                     ; FA3456  lda XWA,0xfcd243
 	push	xwa                                   ; FA345B  push XWA
 	call	P7Stream_Run                              ; FA345C  call 0xf9a646
 	inc	8, xsp                                 ; FA3460  inc 0,XSP
 	inc	2, xsp                                 ; FA3462  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3464  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3464  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3469  push XBC
 	pushw	3                                    ; FA346A  push 0x0003
-	lda	xwa, (0xFCD42F:24)                     ; FA346D  lda XWA,0xfcd42f
+	lda	xwa, (P7Stream_FCD42F:24)                     ; FA346D  lda XWA,0xfcd42f
 	push	xwa                                   ; FA3472  push XWA
 	call	P7Stream_Run                              ; FA3473  call 0xf9a646
 	inc	8, xsp                                 ; FA3477  inc 0,XSP
 	inc	2, xsp                                 ; FA3479  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA347B  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA347B  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3480  push XBC
 	pushw	4                                    ; FA3481  push 0x0004
-	lda	xwa, (0xFCDA18:24)                     ; FA3484  lda XWA,0xfcda18
+	lda	xwa, (P7Stream_FCDA18:24)                     ; FA3484  lda XWA,0xfcda18
 	push	xwa                                   ; FA3489  push XWA
 	call	P7Stream_Run                              ; FA348A  call 0xf9a646
 	inc	8, xsp                                 ; FA348E  inc 0,XSP
 	inc	2, xsp                                 ; FA3490  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3492  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3492  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3497  push XBC
 	pushw	1                                    ; FA3498  push 0x0001
-	lda	xwa, (0xFD26B8:24)                     ; FA349B  lda XWA,0xfd26b8
+	lda	xwa, (P7Stream_FD26B8:24)                     ; FA349B  lda XWA,0xfd26b8
 	push	xwa                                   ; FA34A0  push XWA
 	call	P7Stream_Run                              ; FA34A1  call 0xf9a646
 	inc	8, xsp                                 ; FA34A5  inc 0,XSP
 	inc	2, xsp                                 ; FA34A7  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA34A9  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA34A9  lda XBC,0xfd4b97
 	push	xbc                                   ; FA34AE  push XBC
 	pushw	3                                    ; FA34AF  push 0x0003
-	lda	xwa, (0xFD26DC:24)                     ; FA34B2  lda XWA,0xfd26dc
+	lda	xwa, (P7Stream_FD26DC:24)                     ; FA34B2  lda XWA,0xfd26dc
 	push	xwa                                   ; FA34B7  push XWA
 	call	P7Stream_Run                              ; FA34B8  call 0xf9a646
 	inc	8, xsp                                 ; FA34BC  inc 0,XSP
 	inc	2, xsp                                 ; FA34BE  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA34C0  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA34C0  lda XBC,0xfd4b97
 	push	xbc                                   ; FA34C5  push XBC
 	pushw	4                                    ; FA34C6  push 0x0004
-	lda	xwa, (0xFD2700:24)                     ; FA34C9  lda XWA,0xfd2700
+	lda	xwa, (P7Stream_FD2700:24)                     ; FA34C9  lda XWA,0xfd2700
 	push	xwa                                   ; FA34CE  push XWA
 	call	P7Stream_Run                              ; FA34CF  call 0xf9a646
 	inc	8, xsp                                 ; FA34D3  inc 0,XSP
 	inc	2, xsp                                 ; FA34D5  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA34D7  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA34D7  lda XBC,0xfd4b97
 	push	xbc                                   ; FA34DC  push XBC
 	pushw	1                                    ; FA34DD  push 0x0001
-	lda	xwa, (0xFD4093:24)                     ; FA34E0  lda XWA,0xfd4093
+	lda	xwa, (P7Stream_FD4093:24)                     ; FA34E0  lda XWA,0xfd4093
 	push	xwa                                   ; FA34E5  push XWA
 	call	P7Stream_Run                              ; FA34E6  call 0xf9a646
 	inc	8, xsp                                 ; FA34EA  inc 0,XSP
 	inc	2, xsp                                 ; FA34EC  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA34EE  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA34EE  lda XBC,0xfd4b85
 	push	xbc                                   ; FA34F3  push XBC
 	pushw	1                                    ; FA34F4  push 0x0001
-	lda	xwa, (0xFD4B4C:24)                     ; FA34F7  lda XWA,0xfd4b4c
+	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA34F7  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA34FC  push XWA
 	call	P7Stream_Run                              ; FA34FD  call 0xf9a646
 	inc	8, xsp                                 ; FA3501  inc 0,XSP
 	inc	2, xsp                                 ; FA3503  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA3505  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3505  lda XBC,0xfd4b85
 	push	xbc                                   ; FA350A  push XBC
 	pushw	1                                    ; FA350B  push 0x0001
-	lda	xwa, (0xFD4AFD:24)                     ; FA350E  lda XWA,0xfd4afd
+	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA350E  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3513  push XWA
 	call	P7Stream_Run                              ; FA3514  call 0xf9a646
 	inc	8, xsp                                 ; FA3518  inc 0,XSP
 	inc	2, xsp                                 ; FA351A  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA351C  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA351C  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3521  push XBC
 	pushw	1                                    ; FA3522  push 0x0001
-	lda	xwa, (0xFCD209:24)                     ; FA3525  lda XWA,0xfcd209
+	lda	xwa, (P7Stream_FCD209:24)                     ; FA3525  lda XWA,0xfcd209
 	push	xwa                                   ; FA352A  push XWA
 	call	P7Stream_Run                              ; FA352B  call 0xf9a646
 	inc	8, xsp                                 ; FA352F  inc 0,XSP
 	inc	2, xsp                                 ; FA3531  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA3533  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3533  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3538  push XBC
 	pushw	2                                    ; FA3539  push 0x0002
-	lda	xwa, (0xFD4B4C:24)                     ; FA353C  lda XWA,0xfd4b4c
+	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA353C  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA3541  push XWA
 	call	P7Stream_Run                              ; FA3542  call 0xf9a646
 	inc	8, xsp                                 ; FA3546  inc 0,XSP
 	inc	2, xsp                                 ; FA3548  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA354A  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA354A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA354F  push XBC
 	pushw	2                                    ; FA3550  push 0x0002
-	lda	xwa, (0xFD4AFD:24)                     ; FA3553  lda XWA,0xfd4afd
+	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA3553  lda XWA,0xfd4afd
 	push	xwa                                   ; FA3558  push XWA
 	call	P7Stream_Run                              ; FA3559  call 0xf9a646
 	inc	8, xsp                                 ; FA355D  inc 0,XSP
 	inc	2, xsp                                 ; FA355F  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3561  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3561  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3566  push XBC
 	pushw	2                                    ; FA3567  push 0x0002
-	lda	xwa, (0xFCD221:24)                     ; FA356A  lda XWA,0xfcd221
+	lda	xwa, (P7Stream_FCD221:24)                     ; FA356A  lda XWA,0xfcd221
 	push	xwa                                   ; FA356F  push XWA
 	call	P7Stream_Run                              ; FA3570  call 0xf9a646
 	inc	8, xsp                                 ; FA3574  inc 0,XSP
 	inc	2, xsp                                 ; FA3576  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA3578  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3578  lda XBC,0xfd4b97
 	push	xbc                                   ; FA357D  push XBC
 	pushw	3                                    ; FA357E  push 0x0003
-	lda	xwa, (0xFD4093:24)                     ; FA3581  lda XWA,0xfd4093
+	lda	xwa, (P7Stream_FD4093:24)                     ; FA3581  lda XWA,0xfd4093
 	push	xwa                                   ; FA3586  push XWA
 	call	P7Stream_Run                              ; FA3587  call 0xf9a646
 	inc	8, xsp                                 ; FA358B  inc 0,XSP
 	inc	2, xsp                                 ; FA358D  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA358F  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA358F  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3594  push XBC
 	pushw	3                                    ; FA3595  push 0x0003
-	lda	xwa, (0xFD4B4C:24)                     ; FA3598  lda XWA,0xfd4b4c
+	lda	xwa, (P7Stream_FD4B4C:24)                     ; FA3598  lda XWA,0xfd4b4c
 	push	xwa                                   ; FA359D  push XWA
 	call	P7Stream_Run                              ; FA359E  call 0xf9a646
 	inc	8, xsp                                 ; FA35A2  inc 0,XSP
 	inc	2, xsp                                 ; FA35A4  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA35A6  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA35A6  lda XBC,0xfd4b85
 	push	xbc                                   ; FA35AB  push XBC
 	pushw	3                                    ; FA35AC  push 0x0003
-	lda	xwa, (0xFD4AFD:24)                     ; FA35AF  lda XWA,0xfd4afd
+	lda	xwa, (P7Stream_FD4AFD:24)                     ; FA35AF  lda XWA,0xfd4afd
 	push	xwa                                   ; FA35B4  push XWA
 	call	P7Stream_Run                              ; FA35B5  call 0xf9a646
 	inc	8, xsp                                 ; FA35B9  inc 0,XSP
 	inc	2, xsp                                 ; FA35BB  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA35BD  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA35BD  lda XBC,0xfd4b97
 	push	xbc                                   ; FA35C2  push XBC
 	pushw	3                                    ; FA35C3  push 0x0003
-	lda	xwa, (0xFCD403:24)                     ; FA35C6  lda XWA,0xfcd403
+	lda	xwa, (P7Stream_FCD403:24)                     ; FA35C6  lda XWA,0xfcd403
 	push	xwa                                   ; FA35CB  push XWA
 	call	P7Stream_Run                              ; FA35CC  call 0xf9a646
 	inc	8, xsp                                 ; FA35D0  inc 0,XSP
@@ -16043,13 +16072,13 @@ P7Unit_SendPreambleOnce:
 	ld	bc, (xbc)                               ; FA35E6  ld BC,(XBC)
 	cp	bc, 0:i3                                  ; FA35E8  cp BC,0
 	jr nz, P7Unit_SendPreambleOnce__FA3620                  ; FA35EA  jr NZ,0xfa3620
-	lda	xbc, (0xFD4B85:24)                     ; FA35EC  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA35EC  lda XBC,0xfd4b85
 	push	xbc                                   ; FA35F1  push XBC
 	ld	wa, (xiz+8)                             ; FA35F2  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA35F5  extz WA
 	inc	1, wa                                  ; FA35F7  inc 1,WA
 	pushw	wa                                   ; FA35F9  push WA
-	lda	xwa, (0xFD2C2B:24)                     ; FA35FA  lda XWA,0xfd2c2b
+	lda	xwa, (P7Stream_UnitPreamble:24)                     ; FA35FA  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA35FF  push XWA
 	call	P7Stream_Run                              ; FA3600  call 0xf9a646
 	inc	8, xsp                                 ; FA3604  inc 0,XSP
@@ -16098,30 +16127,30 @@ sub_FA362C__FA363B:
 	ld	(xiz-4), bc                             ; FA3640  ld (XIZ+0xfc),BC
 	jr sub_FA362C__FA3690                      ; FA3643  jr T,0xfa3690
 sub_FA362C__FA3645:
-	lda	xbc, (0xFD4B97:24)                     ; FA3645  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3645  lda XBC,0xfd4b97
 	push	xbc                                   ; FA364A  push XBC
 	pushw	1                                    ; FA364B  push 0x0001
-	lda	xwa, (0xFCD1FD:24)                     ; FA364E  lda XWA,0xfcd1fd
+	lda	xwa, (P7Stream_FCD1FD:24)                     ; FA364E  lda XWA,0xfcd1fd
 	push	xwa                                   ; FA3653  push XWA
 	call	P7Stream_Run                              ; FA3654  call 0xf9a646
 	inc	8, xsp                                 ; FA3658  inc 0,XSP
 	inc	2, xsp                                 ; FA365A  inc 2,XSP
 	jr sub_FA362C__FA369F                      ; FA365C  jr T,0xfa369f
 sub_FA362C__FA365E:
-	lda	xbc, (0xFD4B97:24)                     ; FA365E  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA365E  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3663  push XBC
 	pushw	2                                    ; FA3664  push 0x0002
-	lda	xwa, (0xFCD215:24)                     ; FA3667  lda XWA,0xfcd215
+	lda	xwa, (P7Stream_FCD215:24)                     ; FA3667  lda XWA,0xfcd215
 	push	xwa                                   ; FA366C  push XWA
 	call	P7Stream_Run                              ; FA366D  call 0xf9a646
 	inc	8, xsp                                 ; FA3671  inc 0,XSP
 	inc	2, xsp                                 ; FA3673  inc 2,XSP
 	jr sub_FA362C__FA369F                      ; FA3675  jr T,0xfa369f
 sub_FA362C__FA3677:
-	lda	xbc, (0xFD4B97:24)                     ; FA3677  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3677  lda XBC,0xfd4b97
 	push	xbc                                   ; FA367C  push XBC
 	pushw	3                                    ; FA367D  push 0x0003
-	lda	xwa, (0xFCD3F7:24)                     ; FA3680  lda XWA,0xfcd3f7
+	lda	xwa, (P7Stream_FCD3F7:24)                     ; FA3680  lda XWA,0xfcd3f7
 	push	xwa                                   ; FA3685  push XWA
 	call	P7Stream_Run                              ; FA3686  call 0xf9a646
 	inc	8, xsp                                 ; FA368A  inc 0,XSP
@@ -16143,30 +16172,30 @@ sub_FA362C__FA36A2:
 	ld	(xiz-6), bc                             ; FA36A7  ld (XIZ+0xfa),BC
 	jr sub_FA362C__FA36F7                      ; FA36AA  jr T,0xfa36f7
 sub_FA362C__FA36AC:
-	lda	xbc, (0xFD4B97:24)                     ; FA36AC  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA36AC  lda XBC,0xfd4b97
 	push	xbc                                   ; FA36B1  push XBC
 	pushw	1                                    ; FA36B2  push 0x0001
-	lda	xwa, (0xFCD94D:24)                     ; FA36B5  lda XWA,0xfcd94d
+	lda	xwa, (P7Stream_FCD94D:24)                     ; FA36B5  lda XWA,0xfcd94d
 	push	xwa                                   ; FA36BA  push XWA
 	call	P7Stream_Run                              ; FA36BB  call 0xf9a646
 	inc	8, xsp                                 ; FA36BF  inc 0,XSP
 	inc	2, xsp                                 ; FA36C1  inc 2,XSP
 	jr sub_FA362C__FA3706                      ; FA36C3  jr T,0xfa3706
 sub_FA362C__FA36C5:
-	lda	xbc, (0xFD4B97:24)                     ; FA36C5  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA36C5  lda XBC,0xfd4b97
 	push	xbc                                   ; FA36CA  push XBC
 	pushw	2                                    ; FA36CB  push 0x0002
-	lda	xwa, (0xFCD965:24)                     ; FA36CE  lda XWA,0xfcd965
+	lda	xwa, (P7Stream_FCD965:24)                     ; FA36CE  lda XWA,0xfcd965
 	push	xwa                                   ; FA36D3  push XWA
 	call	P7Stream_Run                              ; FA36D4  call 0xf9a646
 	inc	8, xsp                                 ; FA36D8  inc 0,XSP
 	inc	2, xsp                                 ; FA36DA  inc 2,XSP
 	jr sub_FA362C__FA3706                      ; FA36DC  jr T,0xfa3706
 sub_FA362C__FA36DE:
-	lda	xbc, (0xFD4B97:24)                     ; FA36DE  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA36DE  lda XBC,0xfd4b97
 	push	xbc                                   ; FA36E3  push XBC
 	pushw	3                                    ; FA36E4  push 0x0003
-	lda	xwa, (0xFCD3F7:24)                     ; FA36E7  lda XWA,0xfcd3f7
+	lda	xwa, (P7Stream_FCD3F7:24)                     ; FA36E7  lda XWA,0xfcd3f7
 	push	xwa                                   ; FA36EC  push XWA
 	call	P7Stream_Run                              ; FA36ED  call 0xf9a646
 	inc	8, xsp                                 ; FA36F1  inc 0,XSP
@@ -16220,30 +16249,30 @@ sub_FA3717__FA3726:
 	ld	(xiz-4), bc                             ; FA372B  ld (XIZ+0xfc),BC
 	jr sub_FA3717__FA377B                      ; FA372E  jr T,0xfa377b
 sub_FA3717__FA3730:
-	lda	xbc, (0xFD4B97:24)                     ; FA3730  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3730  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3735  push XBC
 	pushw	1                                    ; FA3736  push 0x0001
-	lda	xwa, (0xFCD209:24)                     ; FA3739  lda XWA,0xfcd209
+	lda	xwa, (P7Stream_FCD209:24)                     ; FA3739  lda XWA,0xfcd209
 	push	xwa                                   ; FA373E  push XWA
 	call	P7Stream_Run                              ; FA373F  call 0xf9a646
 	inc	8, xsp                                 ; FA3743  inc 0,XSP
 	inc	2, xsp                                 ; FA3745  inc 2,XSP
 	jr sub_FA3717__FA378A                      ; FA3747  jr T,0xfa378a
 sub_FA3717__FA3749:
-	lda	xbc, (0xFD4B97:24)                     ; FA3749  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3749  lda XBC,0xfd4b97
 	push	xbc                                   ; FA374E  push XBC
 	pushw	2                                    ; FA374F  push 0x0002
-	lda	xwa, (0xFCD221:24)                     ; FA3752  lda XWA,0xfcd221
+	lda	xwa, (P7Stream_FCD221:24)                     ; FA3752  lda XWA,0xfcd221
 	push	xwa                                   ; FA3757  push XWA
 	call	P7Stream_Run                              ; FA3758  call 0xf9a646
 	inc	8, xsp                                 ; FA375C  inc 0,XSP
 	inc	2, xsp                                 ; FA375E  inc 2,XSP
 	jr sub_FA3717__FA378A                      ; FA3760  jr T,0xfa378a
 sub_FA3717__FA3762:
-	lda	xbc, (0xFD4B97:24)                     ; FA3762  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3762  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3767  push XBC
 	pushw	3                                    ; FA3768  push 0x0003
-	lda	xwa, (0xFCD403:24)                     ; FA376B  lda XWA,0xfcd403
+	lda	xwa, (P7Stream_FCD403:24)                     ; FA376B  lda XWA,0xfcd403
 	push	xwa                                   ; FA3770  push XWA
 	call	P7Stream_Run                              ; FA3771  call 0xf9a646
 	inc	8, xsp                                 ; FA3775  inc 0,XSP
@@ -16265,30 +16294,30 @@ sub_FA3717__FA378D:
 	ld	(xiz-6), bc                             ; FA3792  ld (XIZ+0xfa),BC
 	jr sub_FA3717__FA37E2                      ; FA3795  jr T,0xfa37e2
 sub_FA3717__FA3797:
-	lda	xbc, (0xFD4B97:24)                     ; FA3797  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3797  lda XBC,0xfd4b97
 	push	xbc                                   ; FA379C  push XBC
 	pushw	1                                    ; FA379D  push 0x0001
-	lda	xwa, (0xFCD959:24)                     ; FA37A0  lda XWA,0xfcd959
+	lda	xwa, (P7Stream_FCD959:24)                     ; FA37A0  lda XWA,0xfcd959
 	push	xwa                                   ; FA37A5  push XWA
 	call	P7Stream_Run                              ; FA37A6  call 0xf9a646
 	inc	8, xsp                                 ; FA37AA  inc 0,XSP
 	inc	2, xsp                                 ; FA37AC  inc 2,XSP
 	jr sub_FA3717__FA37F1                      ; FA37AE  jr T,0xfa37f1
 sub_FA3717__FA37B0:
-	lda	xbc, (0xFD4B97:24)                     ; FA37B0  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA37B0  lda XBC,0xfd4b97
 	push	xbc                                   ; FA37B5  push XBC
 	pushw	2                                    ; FA37B6  push 0x0002
-	lda	xwa, (0xFCD971:24)                     ; FA37B9  lda XWA,0xfcd971
+	lda	xwa, (P7Stream_FCD971:24)                     ; FA37B9  lda XWA,0xfcd971
 	push	xwa                                   ; FA37BE  push XWA
 	call	P7Stream_Run                              ; FA37BF  call 0xf9a646
 	inc	8, xsp                                 ; FA37C3  inc 0,XSP
 	inc	2, xsp                                 ; FA37C5  inc 2,XSP
 	jr sub_FA3717__FA37F1                      ; FA37C7  jr T,0xfa37f1
 sub_FA3717__FA37C9:
-	lda	xbc, (0xFD4B97:24)                     ; FA37C9  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA37C9  lda XBC,0xfd4b97
 	push	xbc                                   ; FA37CE  push XBC
 	pushw	3                                    ; FA37CF  push 0x0003
-	lda	xwa, (0xFCD403:24)                     ; FA37D2  lda XWA,0xfcd403
+	lda	xwa, (P7Stream_FCD403:24)                     ; FA37D2  lda XWA,0xfcd403
 	push	xwa                                   ; FA37D7  push XWA
 	call	P7Stream_Run                              ; FA37D8  call 0xf9a646
 	inc	8, xsp                                 ; FA37DC  inc 0,XSP
@@ -16358,26 +16387,26 @@ P7Units_ReloadForGroup__FA3811:
 	pushw	2                                    ; FA381F  push 0x0002
 	calr P7Unit_LoadProgramStreams                 ; FA3822  calr 0xfa2c5e
 	popw	bc                                    ; FA3825  pop BC
-	lda	xbc, (0xFD4B85:24)                     ; FA3826  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3826  lda XBC,0xfd4b85
 	push	xbc                                   ; FA382B  push XBC
 	pushw	1                                    ; FA382C  push 0x0001
-	lda	xwa, (0xFD2C2B:24)                     ; FA382F  lda XWA,0xfd2c2b
+	lda	xwa, (P7Stream_UnitPreamble:24)                     ; FA382F  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3834  push XWA
 	call	P7Stream_Run                              ; FA3835  call 0xf9a646
 	inc	8, xsp                                 ; FA3839  inc 0,XSP
 	inc	2, xsp                                 ; FA383B  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA383D  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA383D  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3842  push XBC
 	pushw	2                                    ; FA3843  push 0x0002
-	lda	xwa, (0xFD2C2B:24)                     ; FA3846  lda XWA,0xfd2c2b
+	lda	xwa, (P7Stream_UnitPreamble:24)                     ; FA3846  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA384B  push XWA
 	call	P7Stream_Run                              ; FA384C  call 0xf9a646
 	inc	8, xsp                                 ; FA3850  inc 0,XSP
 	inc	2, xsp                                 ; FA3852  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA3854  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3854  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3859  push XBC
 	pushw	3                                    ; FA385A  push 0x0003
-	lda	xwa, (0xFD2C2B:24)                     ; FA385D  lda XWA,0xfd2c2b
+	lda	xwa, (P7Stream_UnitPreamble:24)                     ; FA385D  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3862  push XWA
 	call	P7Stream_Run                              ; FA3863  call 0xf9a646
 	inc	8, xsp                                 ; FA3867  inc 0,XSP
@@ -16385,36 +16414,36 @@ P7Units_ReloadForGroup__FA3811:
 	pushw	20                                   ; FA386B  push 0x0014
 	calr Wait_Ticks_Yield                 ; FA386E  calr 0xfa30f6
 	popw	bc                                    ; FA3871  pop BC
-	lda	xbc, (0xFD4B97:24)                     ; FA3872  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3872  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3877  push XBC
 	pushw	1                                    ; FA3878  push 0x0001
-	lda	xwa, (0xFD26C7:24)                     ; FA387B  lda XWA,0xfd26c7
+	lda	xwa, (P7Stream_FD26C7:24)                     ; FA387B  lda XWA,0xfd26c7
 	push	xwa                                   ; FA3880  push XWA
 	call	P7Stream_Run                              ; FA3881  call 0xf9a646
 	res_dd8	3, PB                              ; FA3885  res 3,(0x1f)
 	inc	8, xsp                                 ; FA3888  inc 0,XSP
 	inc	2, xsp                                 ; FA388A  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA388C  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA388C  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3891  push XBC
 	pushw	1                                    ; FA3892  push 0x0001
-	lda	xwa, (0xFCD2C6:24)                     ; FA3895  lda XWA,0xfcd2c6
+	lda	xwa, (P7Stream_FCD2C6:24)                     ; FA3895  lda XWA,0xfcd2c6
 	push	xwa                                   ; FA389A  push XWA
 	call	P7Stream_Run                              ; FA389B  call 0xf9a646
 	set_dd8	3, PB                              ; FA389F  set 3,(0x1f)
 	inc	8, xsp                                 ; FA38A2  inc 0,XSP
 	inc	2, xsp                                 ; FA38A4  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA38A6  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA38A6  lda XBC,0xfd4b97
 	push	xbc                                   ; FA38AB  push XBC
 	pushw	1                                    ; FA38AC  push 0x0001
-	lda	xwa, (0xFCD243:24)                     ; FA38AF  lda XWA,0xfcd243
+	lda	xwa, (P7Stream_FCD243:24)                     ; FA38AF  lda XWA,0xfcd243
 	push	xwa                                   ; FA38B4  push XWA
 	call	P7Stream_Run                              ; FA38B5  call 0xf9a646
 	inc	8, xsp                                 ; FA38B9  inc 0,XSP
 	inc	2, xsp                                 ; FA38BB  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA38BD  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA38BD  lda XBC,0xfd4b97
 	push	xbc                                   ; FA38C2  push XBC
 	pushw	1                                    ; FA38C3  push 0x0001
-	lda	xwa, (0xFD26B8:24)                     ; FA38C6  lda XWA,0xfd26b8
+	lda	xwa, (P7Stream_FD26B8:24)                     ; FA38C6  lda XWA,0xfd26b8
 	push	xwa                                   ; FA38CB  push XWA
 	call	P7Stream_Run                              ; FA38CC  call 0xf9a646
 	ld	c, (0x8586:24)                         ; FA38D0  ld C,(0x008586)
@@ -16448,26 +16477,26 @@ P7Units_ReloadForGroup__FA391F:
 	pushw	2                                    ; FA392D  push 0x0002
 	calr P7Unit_LoadProgramStreams                 ; FA3930  calr 0xfa2c5e
 	popw	bc                                    ; FA3933  pop BC
-	lda	xbc, (0xFD4B85:24)                     ; FA3934  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3934  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3939  push XBC
 	pushw	1                                    ; FA393A  push 0x0001
-	lda	xwa, (0xFD2C2B:24)                     ; FA393D  lda XWA,0xfd2c2b
+	lda	xwa, (P7Stream_UnitPreamble:24)                     ; FA393D  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3942  push XWA
 	call	P7Stream_Run                              ; FA3943  call 0xf9a646
 	inc	8, xsp                                 ; FA3947  inc 0,XSP
 	inc	2, xsp                                 ; FA3949  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA394B  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA394B  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3950  push XBC
 	pushw	2                                    ; FA3951  push 0x0002
-	lda	xwa, (0xFD2C2B:24)                     ; FA3954  lda XWA,0xfd2c2b
+	lda	xwa, (P7Stream_UnitPreamble:24)                     ; FA3954  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3959  push XWA
 	call	P7Stream_Run                              ; FA395A  call 0xf9a646
 	inc	8, xsp                                 ; FA395E  inc 0,XSP
 	inc	2, xsp                                 ; FA3960  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA3962  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3962  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3967  push XBC
 	pushw	3                                    ; FA3968  push 0x0003
-	lda	xwa, (0xFD2C2B:24)                     ; FA396B  lda XWA,0xfd2c2b
+	lda	xwa, (P7Stream_UnitPreamble:24)                     ; FA396B  lda XWA,0xfd2c2b
 	push	xwa                                   ; FA3970  push XWA
 	call	P7Stream_Run                              ; FA3971  call 0xf9a646
 	inc	8, xsp                                 ; FA3975  inc 0,XSP
@@ -16475,36 +16504,36 @@ P7Units_ReloadForGroup__FA391F:
 	pushw	20                                   ; FA3979  push 0x0014
 	calr Wait_Ticks_Yield                 ; FA397C  calr 0xfa30f6
 	popw	bc                                    ; FA397F  pop BC
-	lda	xbc, (0xFD4B97:24)                     ; FA3980  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA3980  lda XBC,0xfd4b97
 	push	xbc                                   ; FA3985  push XBC
 	pushw	1                                    ; FA3986  push 0x0001
-	lda	xwa, (0xFD26C7:24)                     ; FA3989  lda XWA,0xfd26c7
+	lda	xwa, (P7Stream_FD26C7:24)                     ; FA3989  lda XWA,0xfd26c7
 	push	xwa                                   ; FA398E  push XWA
 	call	P7Stream_Run                              ; FA398F  call 0xf9a646
 	res_dd8	3, PB                              ; FA3993  res 3,(0x1f)
 	inc	8, xsp                                 ; FA3996  inc 0,XSP
 	inc	2, xsp                                 ; FA3998  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA399A  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA399A  lda XBC,0xfd4b97
 	push	xbc                                   ; FA399F  push XBC
 	pushw	1                                    ; FA39A0  push 0x0001
-	lda	xwa, (0xFCD81C:24)                     ; FA39A3  lda XWA,0xfcd81c
+	lda	xwa, (P7Stream_FCD81C:24)                     ; FA39A3  lda XWA,0xfcd81c
 	push	xwa                                   ; FA39A8  push XWA
 	call	P7Stream_Run                              ; FA39A9  call 0xf9a646
 	set_dd8	3, PB                              ; FA39AD  set 3,(0x1f)
 	inc	8, xsp                                 ; FA39B0  inc 0,XSP
 	inc	2, xsp                                 ; FA39B2  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA39B4  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA39B4  lda XBC,0xfd4b97
 	push	xbc                                   ; FA39B9  push XBC
 	pushw	1                                    ; FA39BA  push 0x0001
-	lda	xwa, (0xFCD993:24)                     ; FA39BD  lda XWA,0xfcd993
+	lda	xwa, (P7Stream_FCD993:24)                     ; FA39BD  lda XWA,0xfcd993
 	push	xwa                                   ; FA39C2  push XWA
 	call	P7Stream_Run                              ; FA39C3  call 0xf9a646
 	inc	8, xsp                                 ; FA39C7  inc 0,XSP
 	inc	2, xsp                                 ; FA39C9  inc 2,XSP
-	lda	xbc, (0xFD4B97:24)                     ; FA39CB  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA39CB  lda XBC,0xfd4b97
 	push	xbc                                   ; FA39D0  push XBC
 	pushw	1                                    ; FA39D1  push 0x0001
-	lda	xwa, (0xFD26B8:24)                     ; FA39D4  lda XWA,0xfd26b8
+	lda	xwa, (P7Stream_FD26B8:24)                     ; FA39D4  lda XWA,0xfd26b8
 	push	xwa                                   ; FA39D9  push XWA
 	call	P7Stream_Run                              ; FA39DA  call 0xf9a646
 	ld	c, (0x8586:24)                         ; FA39DE  ld C,(0x008586)
@@ -16584,24 +16613,24 @@ sub_FA3A3C:
 	pushw	bc                                   ; FA3A76  push BC
 	calr sub_FA362C                 ; FA3A77  calr 0xfa362c
 	pop	xiy                                    ; FA3A7A  pop XIY
-	lda	xbc, (0xFD4B85:24)                     ; FA3A7B  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3A7B  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3A80  push XBC
 	ld	wa, (xiz+8)                             ; FA3A81  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA3A84  extz WA
 	inc	1, wa                                  ; FA3A86  inc 1,WA
 	pushw	wa                                   ; FA3A88  push WA
-	lda	xwa, (0xFD29F9:24)                     ; FA3A89  lda XWA,0xfd29f9
+	lda	xwa, (P7Stream_FD29F9:24)                     ; FA3A89  lda XWA,0xfd29f9
 	push	xwa                                   ; FA3A8E  push XWA
 	call	P7Stream_Run                              ; FA3A8F  call 0xf9a646
 	inc	8, xsp                                 ; FA3A93  inc 0,XSP
 	inc	2, xsp                                 ; FA3A95  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA3A97  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3A97  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3A9C  push XBC
 	ld	wa, (xiz+8)                             ; FA3A9D  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA3AA0  extz WA
 	inc	1, wa                                  ; FA3AA2  inc 1,WA
 	pushw	wa                                   ; FA3AA4  push WA
-	lda	xwa, (0xFD292B:24)                     ; FA3AA5  lda XWA,0xfd292b
+	lda	xwa, (P7Stream_FD292B:24)                     ; FA3AA5  lda XWA,0xfd292b
 	push	xwa                                   ; FA3AAA  push XWA
 	call	P7Stream_Run                              ; FA3AAB  call 0xf9a646
 	inc	8, xsp                                 ; FA3AAF  inc 0,XSP
@@ -16625,7 +16654,7 @@ sub_FA3A3C:
 	mul	a, 25                                  ; FA3ADF  mul A,0x19
 	extz	xwa                                   ; FA3AE2  extz XWA
 	add	xwa, 12                                ; FA3AE4  add XWA,0x0000000c
-	add	xwa, 0xFDBFD9                          ; FA3AEA  add XWA,0x00fdbfd9
+	add	xwa, PoolDir_Records                          ; FA3AEA  add XWA,0x00fdbfd9
 	ld	xbc, (xwa)                              ; FA3AF0  ld XBC,(XWA)
 	ld	(xiz-6), xbc                            ; FA3AF2  ld (XIZ+0xfa),XBC
 	ld	a, 26:opc                                  ; FA3AF5  ld A,0x1a
@@ -16638,7 +16667,7 @@ sub_FA3A3C:
 	mul	c, 25                                  ; FA3B0C  mul C,0x19
 	extz	xbc                                   ; FA3B0F  extz XBC
 	inc	4, xbc                                 ; FA3B11  inc 4,XBC
-	add	xbc, 0xFDBFD9                          ; FA3B13  add XBC,0x00fdbfd9
+	add	xbc, PoolDir_Records                          ; FA3B13  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA3B19  ld XBC,(XBC)
 	ld	(xiz-10), xbc                           ; FA3B1B  ld (XIZ+0xf6),XBC
 	ld	a, 26:opc                                  ; FA3B1E  ld A,0x1a
@@ -16651,7 +16680,7 @@ sub_FA3A3C:
 	mul	c, 25                                  ; FA3B35  mul C,0x19
 	extz	xbc                                   ; FA3B38  extz XBC
 	add	xbc, 16                                ; FA3B3A  add XBC,0x00000010
-	add	xbc, 0xFDBFD9                          ; FA3B40  add XBC,0x00fdbfd9
+	add	xbc, PoolDir_Records                          ; FA3B40  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA3B46  ld XBC,(XBC)
 	ld	(xiz-14), xbc                           ; FA3B48  ld (XIZ+0xf2),XBC
 	ld	a, 26:opc                                  ; FA3B4B  ld A,0x1a
@@ -16664,7 +16693,7 @@ sub_FA3A3C:
 	mul	c, 25                                  ; FA3B62  mul C,0x19
 	extz	xbc                                   ; FA3B65  extz XBC
 	add	xbc, 24                                ; FA3B67  add XBC,0x00000018
-	add	xbc, 0xFDBFD9                          ; FA3B6D  add XBC,0x00fdbfd9
+	add	xbc, PoolDir_Records                          ; FA3B6D  add XBC,0x00fdbfd9
 	ld	a, (xbc)                                ; FA3B73  ld A,(XBC)
 	ld	(xiz-1), a                              ; FA3B75  ld (XIZ+0xff),A
 	popw	iy                                    ; FA3B78  pop IY
@@ -16676,7 +16705,7 @@ sub_FA3A3C:
 	pushw	bc                                   ; FA3B85  push BC
 	calr sub_FA362C                 ; FA3B86  calr 0xfa362c
 	pop	xiy                                    ; FA3B89  pop XIY
-	lda	xbc, (0xFD4B85:24)                     ; FA3B8A  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3B8A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3B8F  push XBC
 	ld	wa, (xiz+8)                             ; FA3B90  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA3B93  extz WA
@@ -16687,7 +16716,7 @@ sub_FA3A3C:
 	call	P7Stream_Run                              ; FA3B9C  call 0xf9a646
 	inc	8, xsp                                 ; FA3BA0  inc 0,XSP
 	inc	2, xsp                                 ; FA3BA2  inc 2,XSP
-	lda	xbc, (0xFD4B85:24)                     ; FA3BA4  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3BA4  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3BA9  push XBC
 	ld	wa, (xiz+8)                             ; FA3BAA  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FA3BAD  extz WA
@@ -16857,7 +16886,7 @@ Base36DigitToValue__FA3CD4:
 ;          0xFA283C 0xFA3C48 0xFA49CC 0xFA57B5 0xFA585E 0xFA58D9
 ; Inputs:  frame `link XIZ,-54`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xF9ADB5 = P7Block_Run, 0xFA2784 = sub_FA2784
+; Calls:   0xF9ADB5 = P7Block_Run, 0xFA2784 = P7Unit_SendModulatedField
 ;          0xFA3CA6 = Base36DigitToValue, 0xFA4819 = P7Unit_SelectStreamsForRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA3CD7-0xFA4818
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -16875,8 +16904,22 @@ Base36DigitToValue__FA3CD4:
 ;          instructions, indexes PoolDir_FieldRec_PtrTable at ten sites
 ;          (0xFA3DCD, 0xFA3FFE, 0xFA40F0, 0xFA419B, 0xFA4229, 0xFA42BA, 0xFA4591,
 ;          0xFA4793 ...), and calls Base36DigitToValue at 0xFA4764.
-; Unknown:  what the descriptor TYPE LETTERS mean.  The comparison and the emission
-;          are traced; the alphabet {b,w,v,s,h,c,B} is not decoded.
+; ★ TYPE LETTERS (lane promcd, 2026-09-25; notes/lanes/promcd-2026-09-25/p7_descriptor_letters.py).
+;          Records 12, 13, 14, 43 and 55 take hand-coded paths (switch at 0xFA47EB);
+;          for every other record the GENERIC walker steps the type string (+16,
+;          cursor XIZ-22) and the digit string (+20, XIZ-26) in lockstep, one character
+;          each (0xFA460F-0xFA4616), stops at the NUL (0xFA4608), and reads each field
+;          of the live block (XIZ-14) and of the shadow (XIZ-18) by its letter:
+;            'B'   one byte, sign-extended           0xFA46ED  exts WA / exts BC
+;            'c'   two bytes, BIG-endian (b0<<8|b1)  0xFA469E  sll 0x08,XIX / add XWA,XIX
+;            'h'   one byte, plus 0x500              0xFA4628  add XWA,0x00000500
+;            'w'   two bytes, little-endian          0xFA4659  mul WA,0x0100
+;            else  one byte ('b', 'v'; 's' is never seen here)  0xFA4711
+;          and where they differ the digit is the field index (Base36DigitToValue,
+;          0xFA4764).  The widths agree with the descriptors' +4 offsets in all 51
+;          records this walker handles (390/390).  Still open: what 'v' (once in every
+;          record) and 's' select beyond width.  (Corrected: this said the alphabet was
+;          not decoded.)
 ; --------------------------------------------------------------------------
 P7Unit_EmitChangedParams:
 	link32 0xEE, 0x0C, 0xCA, 0xFF              ; FA3CD7  link XIZ,0xffca
@@ -16895,27 +16938,27 @@ P7Unit_EmitChangedParams:
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA3CFB  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3CFE  extz XBC
 	inc	8, xbc                                 ; FA3D00  inc 0,XBC
-	add	xbc, 0xFDBFD9                          ; FA3D02  add XBC,0x00fdbfd9
+	add	xbc, PoolDir_Records                          ; FA3D02  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA3D08  ld XBC,(XBC)
 	ld	(xiz-10), xbc                           ; FA3D0A  ld (XIZ+0xf6),XBC
 	ld	a, 25:opc                                  ; FA3D0D  ld A,0x19
 	extpfx3 0x8E, 0xD9, 0x41                   ; FA3D0F  mul WA,(XIZ+0xd9)
 	extz	xwa                                   ; FA3D12  extz XWA
-	add	xwa, 0xFDBFD9                          ; FA3D14  add XWA,0x00fdbfd9
+	add	xwa, PoolDir_Records                          ; FA3D14  add XWA,0x00fdbfd9
 	ld	xwa, (xwa)                              ; FA3D1A  ld XWA,(XWA)
 	ld	(xiz-6), xwa                            ; FA3D1C  ld (XIZ+0xfa),XWA
 	ld	c, 25:opc                                  ; FA3D1F  ld C,0x19
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA3D21  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3D24  extz XBC
 	add	xbc, 16                                ; FA3D26  add XBC,0x00000010
-	add	xbc, 0xFDBFD9                          ; FA3D2C  add XBC,0x00fdbfd9
+	add	xbc, PoolDir_Records                          ; FA3D2C  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA3D32  ld XBC,(XBC)
 	ld	(xiz-22), xbc                           ; FA3D34  ld (XIZ+0xea),XBC
 	ld	c, 25:opc                                  ; FA3D37  ld C,0x19
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA3D39  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3D3C  extz XBC
 	add	xbc, 20                                ; FA3D3E  add XBC,0x00000014
-	add	xbc, 0xFDBFD9                          ; FA3D44  add XBC,0x00fdbfd9
+	add	xbc, PoolDir_Records                          ; FA3D44  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA3D4A  ld XBC,(XBC)
 	ld	(xiz-26), xbc                           ; FA3D4C  ld (XIZ+0xe6),XBC
 	ld	c, 26:opc                                  ; FA3D4F  ld C,0x1a
@@ -16966,7 +17009,7 @@ P7Unit_EmitChangedParams__FA3D7F:
 	ld	c, 4:opc                                   ; FA3DC6  ld C,0x04
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA3DC8  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3DCB  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA3DCD  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA3DCD  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA3DD3  ld XBC,(XBC)
 	add	xbc, xix                               ; FA3DD5  add XBC,XIX
 	ld	a, (xbc)                                ; FA3DD7  ld A,(XBC)
@@ -16978,7 +17021,7 @@ P7Unit_EmitChangedParams__FA3D7F:
 	pushw	0                                    ; FA3DE6  push 0x0000
 	push	0                                     ; FA3DE9  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA3DEB  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA3DEE  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA3DEE  calr 0xfa2784
 	inc	8, xsp                                 ; FA3DF1  inc 0,XSP
 	inc	2, xsp                                 ; FA3DF3  inc 2,XSP
 P7Unit_EmitChangedParams__FA3DF5:
@@ -16986,7 +17029,7 @@ P7Unit_EmitChangedParams__FA3DF5:
 	extz	bc                                    ; FA3DF8  extz BC
 	inc	1, bc                                  ; FA3DFA  inc 1,BC
 	pushw	bc                                   ; FA3DFC  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA3DFD  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3DFD  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3E02  push XBC
 	ld	xwa, (xiz-30)                           ; FA3E03  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA3E06  push XWA
@@ -17036,7 +17079,7 @@ P7Unit_EmitChangedParams__FA3E1C:
 	extz	bc                                    ; FA3E72  extz BC
 	inc	1, bc                                  ; FA3E74  inc 1,BC
 	pushw	bc                                   ; FA3E76  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA3E77  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3E77  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3E7C  push XBC
 	ld	xwa, (xiz-30)                           ; FA3E7D  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA3E80  push XWA
@@ -17051,7 +17094,7 @@ P7Unit_EmitChangedParams__FA3E1C:
 	inc	1, bc                                  ; FA3E95  inc 1,BC
 	add	xsp, 20                                ; FA3E97  add XSP,0x00000014
 	pushw	bc                                   ; FA3E9D  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA3E9E  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3E9E  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3EA3  push XBC
 	ld	xwa, (xiz-34)                           ; FA3EA4  ld XWA,(XIZ+0xde)
 	push	xwa                                   ; FA3EA7  push XWA
@@ -17066,7 +17109,7 @@ P7Unit_EmitChangedParams__FA3E1C:
 	inc	1, bc                                  ; FA3EBC  inc 1,BC
 	add	xsp, 20                                ; FA3EBE  add XSP,0x00000014
 	pushw	bc                                   ; FA3EC4  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA3EC5  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3EC5  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3ECA  push XBC
 	ld	xwa, (xiz-38)                           ; FA3ECB  ld XWA,(XIZ+0xda)
 	push	xwa                                   ; FA3ECE  push XWA
@@ -17091,7 +17134,7 @@ P7Unit_EmitChangedParams__FA3EE7:
 	extz	bc                                    ; FA3EFC  extz BC
 	inc	1, bc                                  ; FA3EFE  inc 1,BC
 	pushw	bc                                   ; FA3F00  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA3F01  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3F01  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3F06  push XBC
 	ld	xwa, (xiz-34)                           ; FA3F07  ld XWA,(XIZ+0xde)
 	push	xwa                                   ; FA3F0A  push XWA
@@ -17115,7 +17158,7 @@ P7Unit_EmitChangedParams__FA3F20:
 	extz	bc                                    ; FA3F35  extz BC
 	inc	1, bc                                  ; FA3F37  inc 1,BC
 	pushw	bc                                   ; FA3F39  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA3F3A  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA3F3A  lda XBC,0xfd4b85
 	push	xbc                                   ; FA3F3F  push XBC
 	ld	xwa, (xiz-38)                           ; FA3F40  ld XWA,(XIZ+0xda)
 	push	xwa                                   ; FA3F43  push XWA
@@ -17192,7 +17235,7 @@ P7Unit_EmitChangedParams__FA3FCE:
 	ld	c, 4:opc                                   ; FA3FF7  ld C,0x04
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA3FF9  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3FFC  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA3FFE  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA3FFE  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA4004  ld XBC,(XBC)
 	add	xbc, xix                               ; FA4006  add XBC,XIX
 	ld	a, (xbc)                                ; FA4008  ld A,(XBC)
@@ -17205,7 +17248,7 @@ P7Unit_EmitChangedParams__FA3FCE:
 	pushw	0                                    ; FA401A  push 0x0000
 	push	0                                     ; FA401D  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA401F  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA4022  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA4022  calr 0xfa2784
 	inc	8, xsp                                 ; FA4025  inc 0,XSP
 	inc	2, xsp                                 ; FA4027  inc 2,XSP
 P7Unit_EmitChangedParams__FA4029:
@@ -17213,7 +17256,7 @@ P7Unit_EmitChangedParams__FA4029:
 	extz	bc                                    ; FA402C  extz BC
 	inc	1, bc                                  ; FA402E  inc 1,BC
 	pushw	bc                                   ; FA4030  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA4031  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA4031  lda XBC,0xfd4b85
 	push	xbc                                   ; FA4036  push XBC
 	ld	xwa, (xiz-30)                           ; FA4037  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA403A  push XWA
@@ -17289,7 +17332,7 @@ P7Unit_EmitChangedParams__FA40C0:
 	ld	c, 4:opc                                   ; FA40E9  ld C,0x04
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA40EB  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA40EE  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA40F0  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA40F0  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA40F6  ld XBC,(XBC)
 	add	xbc, xix                               ; FA40F8  add XBC,XIX
 	ld	a, (xbc)                                ; FA40FA  ld A,(XBC)
@@ -17302,7 +17345,7 @@ P7Unit_EmitChangedParams__FA40C0:
 	pushw	0                                    ; FA410C  push 0x0000
 	push	0                                     ; FA410F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA4111  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA4114  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA4114  calr 0xfa2784
 	inc	8, xsp                                 ; FA4117  inc 0,XSP
 	inc	2, xsp                                 ; FA4119  inc 2,XSP
 P7Unit_EmitChangedParams__FA411B:
@@ -17310,7 +17353,7 @@ P7Unit_EmitChangedParams__FA411B:
 	extz	bc                                    ; FA411E  extz BC
 	inc	1, bc                                  ; FA4120  inc 1,BC
 	pushw	bc                                   ; FA4122  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA4123  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA4123  lda XBC,0xfd4b85
 	push	xbc                                   ; FA4128  push XBC
 	ld	xwa, (xiz-30)                           ; FA4129  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA412C  push XWA
@@ -17358,7 +17401,7 @@ P7Unit_EmitChangedParams__FA4148:
 	ld	c, 4:opc                                   ; FA4194  ld C,0x04
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA4196  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA4199  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA419B  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA419B  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA41A1  ld XBC,(XBC)
 	add	xbc, xix                               ; FA41A3  add XBC,XIX
 	ld	a, (xbc)                                ; FA41A5  ld A,(XBC)
@@ -17370,7 +17413,7 @@ P7Unit_EmitChangedParams__FA4148:
 	pushw	0                                    ; FA41B4  push 0x0000
 	push	0                                     ; FA41B7  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA41B9  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA41BC  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA41BC  calr 0xfa2784
 	inc	8, xsp                                 ; FA41BF  inc 0,XSP
 	inc	2, xsp                                 ; FA41C1  inc 2,XSP
 P7Unit_EmitChangedParams__FA41C3:
@@ -17378,7 +17421,7 @@ P7Unit_EmitChangedParams__FA41C3:
 	extz	bc                                    ; FA41C6  extz BC
 	inc	1, bc                                  ; FA41C8  inc 1,BC
 	pushw	bc                                   ; FA41CA  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA41CB  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA41CB  lda XBC,0xfd4b85
 	push	xbc                                   ; FA41D0  push XBC
 	ld	xwa, (xiz-30)                           ; FA41D1  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA41D4  push XWA
@@ -17414,7 +17457,7 @@ P7Unit_EmitChangedParams__FA41EA:
 	ld	c, 4:opc                                   ; FA4222  ld C,0x04
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA4224  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA4227  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA4229  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA4229  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA422F  ld XBC,(XBC)
 	add	xbc, xix                               ; FA4231  add XBC,XIX
 	ld	a, (xbc)                                ; FA4233  ld A,(XBC)
@@ -17426,7 +17469,7 @@ P7Unit_EmitChangedParams__FA41EA:
 	pushw	0                                    ; FA4242  push 0x0000
 	push	0                                     ; FA4245  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA4247  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA424A  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA424A  calr 0xfa2784
 	inc	8, xsp                                 ; FA424D  inc 0,XSP
 	inc	2, xsp                                 ; FA424F  inc 2,XSP
 P7Unit_EmitChangedParams__FA4251:
@@ -17434,7 +17477,7 @@ P7Unit_EmitChangedParams__FA4251:
 	extz	bc                                    ; FA4254  extz BC
 	inc	1, bc                                  ; FA4256  inc 1,BC
 	pushw	bc                                   ; FA4258  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA4259  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA4259  lda XBC,0xfd4b85
 	push	xbc                                   ; FA425E  push XBC
 	ld	xwa, (xiz-30)                           ; FA425F  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA4262  push XWA
@@ -17472,7 +17515,7 @@ P7Unit_EmitChangedParams__FA427B:
 	ld	c, 4:opc                                   ; FA42B3  ld C,0x04
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA42B5  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA42B8  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA42BA  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA42BA  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA42C0  ld XBC,(XBC)
 	add	xbc, xix                               ; FA42C2  add XBC,XIX
 	ld	a, (xbc)                                ; FA42C4  ld A,(XBC)
@@ -17484,7 +17527,7 @@ P7Unit_EmitChangedParams__FA427B:
 	pushw	0                                    ; FA42D3  push 0x0000
 	push	0                                     ; FA42D6  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA42D8  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA42DB  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA42DB  calr 0xfa2784
 	inc	8, xsp                                 ; FA42DE  inc 0,XSP
 	inc	2, xsp                                 ; FA42E0  inc 2,XSP
 P7Unit_EmitChangedParams__FA42E2:
@@ -17492,7 +17535,7 @@ P7Unit_EmitChangedParams__FA42E2:
 	extz	bc                                    ; FA42E5  extz BC
 	inc	1, bc                                  ; FA42E7  inc 1,BC
 	pushw	bc                                   ; FA42E9  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA42EA  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA42EA  lda XBC,0xfd4b85
 	push	xbc                                   ; FA42EF  push XBC
 	ld	xwa, (xiz-30)                           ; FA42F0  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA42F3  push XWA
@@ -17743,7 +17786,7 @@ P7Unit_EmitChangedParams__FA4561:
 	ld	c, 4:opc                                   ; FA458A  ld C,0x04
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA458C  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA458F  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA4591  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA4591  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA4597  ld XBC,(XBC)
 	add	xbc, xix                               ; FA4599  add XBC,XIX
 	ld	a, (xbc)                                ; FA459B  ld A,(XBC)
@@ -17764,7 +17807,7 @@ P7Unit_EmitChangedParams__FA4561:
 	pushw	0                                    ; FA45C7  push 0x0000
 	push	0                                     ; FA45CA  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA45CC  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA45CF  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA45CF  calr 0xfa2784
 	inc	8, xsp                                 ; FA45D2  inc 0,XSP
 	inc	2, xsp                                 ; FA45D4  inc 2,XSP
 P7Unit_EmitChangedParams__FA45D6:
@@ -17772,7 +17815,7 @@ P7Unit_EmitChangedParams__FA45D6:
 	extz	bc                                    ; FA45D9  extz BC
 	inc	1, bc                                  ; FA45DB  inc 1,BC
 	pushw	bc                                   ; FA45DD  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA45DE  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA45DE  lda XBC,0xfd4b85
 	push	xbc                                   ; FA45E3  push XBC
 	ld	xwa, (xiz-30)                           ; FA45E4  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA45E7  push XWA
@@ -17952,7 +17995,7 @@ P7Unit_EmitChangedParams__FA4755:
 	ld	c, 4:opc                                   ; FA478C  ld C,0x04
 	extpfx3 0x8E, 0xD9, 0x43                   ; FA478E  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA4791  extz XBC
-	add	xbc, 0xFDD1CB                          ; FA4793  add XBC,0x00fdd1cb
+	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA4793  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA4799  ld XBC,(XBC)
 	add	xbc, xix                               ; FA479B  add XBC,XIX
 	ld	a, (xbc)                                ; FA479D  ld A,(XBC)
@@ -17966,7 +18009,7 @@ P7Unit_EmitChangedParams__FA4755:
 	pushw	0                                    ; FA47B0  push 0x0000
 	push	0                                     ; FA47B3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FA47B5  push (XIZ+0x08)
-	calr sub_FA2784                 ; FA47B8  calr 0xfa2784
+	calr P7Unit_SendModulatedField                 ; FA47B8  calr 0xfa2784
 	inc	8, xsp                                 ; FA47BB  inc 0,XSP
 	inc	2, xsp                                 ; FA47BD  inc 2,XSP
 P7Unit_EmitChangedParams__FA47BF:
@@ -17974,7 +18017,7 @@ P7Unit_EmitChangedParams__FA47BF:
 	extz	bc                                    ; FA47C2  extz BC
 	inc	1, bc                                  ; FA47C4  inc 1,BC
 	pushw	bc                                   ; FA47C6  push BC
-	lda	xbc, (0xFD4B85:24)                     ; FA47C7  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA47C7  lda XBC,0xfd4b85
 	push	xbc                                   ; FA47CC  push XBC
 	ld	xwa, (xiz-30)                           ; FA47CD  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA47D0  push XWA
@@ -18043,18 +18086,18 @@ P7Unit_SelectStreamsForRecord:
 	ld	(xiz-2), bc                             ; FA4822  ld (XIZ+0xfe),BC
 	jrl P7Unit_SelectStreamsForRecord__FA48FA                     ; FA4825  jrl T,0xfa48fa
 P7Unit_SelectStreamsForRecord__FA4828:
-	lda	xbc, (0xFD28C7:24)                     ; FA4828  lda XBC,0xfd28c7
+	lda	xbc, (P7Stream_Data_FD28C7:24)                     ; FA4828  lda XBC,0xfd28c7
 	ld	(0x8622:24), xbc                       ; FA482D  ld (0x008622),XBC
-	lda	xwa, (0xFD4E13:24)                     ; FA4832  lda XWA,0xfd4e13
+	lda	xwa, (P7Stream_Data_FD4E13:24)                     ; FA4832  lda XWA,0xfd4e13
 	ld	(0x8626:24), xwa                       ; FA4837  ld (0x008626),XWA
-	lda	xiy, (0xFD3B60:24)                     ; FA483C  lda XIY,0xfd3b60
+	lda	xiy, (P7Stream_Data_FD3B60:24)                     ; FA483C  lda XIY,0xfd3b60
 	ld	(0x862A:24), xiy                       ; FA4841  ld (0x00862a),XIY
 	ldw	(0xF365:24), 99                       ; FA4846  ld (0x00f365),0x0063
 	ldw	(0xF367:24), 99                       ; FA484D  ld (0x00f367),0x0063
 	ldw	(0xF369:24), 99                       ; FA4854  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA485B  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA485E:
-	lda	xbc, (0xFD28C7:24)                     ; FA485E  lda XBC,0xfd28c7
+	lda	xbc, (P7Stream_Data_FD28C7:24)                     ; FA485E  lda XBC,0xfd28c7
 	ld	(0x8622:24), xbc                       ; FA4863  ld (0x008622),XBC
 	ld	(0x8626:24), xbc                       ; FA4868  ld (0x008626),XBC
 	ld	xwa, (0x8622:24)                       ; FA486D  ld XWA,(0x008622)
@@ -18064,22 +18107,22 @@ P7Unit_SelectStreamsForRecord__FA485E:
 	ldw	(0xF369:24), 99                       ; FA4885  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA488C  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA488F:
-	lda	xbc, (0xFD06FA:24)                     ; FA488F  lda XBC,0xfd06fa
+	lda	xbc, (P7Stream_Data_FD06FA:24)                     ; FA488F  lda XBC,0xfd06fa
 	ld	(0x8622:24), xbc                       ; FA4894  ld (0x008622),XBC
-	lda	xwa, (0xFD06FA:24)                     ; FA4899  lda XWA,0xfd06fa
+	lda	xwa, (P7Stream_Data_FD06FA:24)                     ; FA4899  lda XWA,0xfd06fa
 	ld	(0x8626:24), xwa                       ; FA489E  ld (0x008626),XWA
-	lda	xiy, (0xFD06FA:24)                     ; FA48A3  lda XIY,0xfd06fa
+	lda	xiy, (P7Stream_Data_FD06FA:24)                     ; FA48A3  lda XIY,0xfd06fa
 	ld	(0x862A:24), xiy                       ; FA48A8  ld (0x00862a),XIY
 	ldw	(0xF365:24), 99                       ; FA48AD  ld (0x00f365),0x0063
 	ldw	(0xF367:24), 99                       ; FA48B4  ld (0x00f367),0x0063
 	ldw	(0xF369:24), 99                       ; FA48BB  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA48C2  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA48C5:
-	lda	xbc, (0xFDA4E7:24)                     ; FA48C5  lda XBC,0xfda4e7
+	lda	xbc, (P7Stream_Data_FDA4E7:24)                     ; FA48C5  lda XBC,0xfda4e7
 	ld	(0x8622:24), xbc                       ; FA48CA  ld (0x008622),XBC
-	lda	xwa, (0xFDA5C1:24)                     ; FA48CF  lda XWA,0xfda5c1
+	lda	xwa, (P7Stream_Data_FDA5C1:24)                     ; FA48CF  lda XWA,0xfda5c1
 	ld	(0x8626:24), xwa                       ; FA48D4  ld (0x008626),XWA
-	lda	xiy, (0xFDA554:24)                     ; FA48D9  lda XIY,0xfda554
+	lda	xiy, (P7Stream_Data_FDA554:24)                     ; FA48D9  lda XIY,0xfda554
 	ld	(0x862A:24), xiy                       ; FA48DE  ld (0x00862a),XIY
 	ldw	(0xF365:24), 0x6C                     ; FA48E3  ld (0x00f365),0x006c
 	ldw	(0xF367:24), 0x6C                     ; FA48EA  ld (0x00f367),0x006c
@@ -18187,7 +18230,7 @@ P7Unit_FlushDirtyParams:
 	mul	a, 25                                  ; FA4986  mul A,0x19
 	extz	xwa                                   ; FA4989  extz XWA
 	add	xwa, 24                                ; FA498B  add XWA,0x00000018
-	add	xwa, 0xFDBFD9                          ; FA4991  add XWA,0x00fdbfd9
+	add	xwa, PoolDir_Records                          ; FA4991  add XWA,0x00fdbfd9
 	ld	b, (xwa)                                ; FA4997  ld B,(XWA)
 	ld	(xiz-1), b                              ; FA4999  ld (XIZ+0xff),B
 	ld	a, 26:opc                                  ; FA499C  ld A,0x1a
@@ -18368,28 +18411,28 @@ sub_FA4A0D__FA4B37:
 	popw	bc                                    ; FA4B57  pop BC
 sub_FA4A0D__FA4B58:
 	pushw	3                                    ; FA4B58  push 0x0003
-	lda	xbc, (0xFD4B97:24)                     ; FA4B5B  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4B5B  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4B60  push XBC
 	ld	wa, (xiz-4)                             ; FA4B61  ld WA,(XIZ+0xfc)
 	extz	xwa                                   ; FA4B64  extz XWA
 	push	xwa                                   ; FA4B66  push XWA
 	pushw	0                                    ; FA4B67  push 0x0000
-	lda	xwa, (0xFCD199:24)                     ; FA4B6A  lda XWA,0xfcd199
+	lda	xwa, (P7Stream_FCD199:24)                     ; FA4B6A  lda XWA,0xfcd199
 	push	xwa                                   ; FA4B6F  push XWA
-	lda	xiy, (0xFCD188:24)                     ; FA4B70  lda XIY,0xfcd188
+	lda	xiy, (P7Stream_FCD188:24)                     ; FA4B70  lda XIY,0xfcd188
 	push	xiy                                   ; FA4B75  push XIY
 	call	P7Block_Run                              ; FA4B76  call 0xf9adb5
 	add	xsp, 20                                ; FA4B7A  add XSP,0x00000014
 	pushw	3                                    ; FA4B80  push 0x0003
-	lda	xbc, (0xFD4B97:24)                     ; FA4B83  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4B83  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4B88  push XBC
 	ld	wa, (xiz-2)                             ; FA4B89  ld WA,(XIZ+0xfe)
 	extz	xwa                                   ; FA4B8C  extz XWA
 	push	xwa                                   ; FA4B8E  push XWA
 	pushw	1                                    ; FA4B8F  push 0x0001
-	lda	xwa, (0xFCD199:24)                     ; FA4B92  lda XWA,0xfcd199
+	lda	xwa, (P7Stream_FCD199:24)                     ; FA4B92  lda XWA,0xfcd199
 	push	xwa                                   ; FA4B97  push XWA
-	lda	xiy, (0xFCD188:24)                     ; FA4B98  lda XIY,0xfcd188
+	lda	xiy, (P7Stream_FCD188:24)                     ; FA4B98  lda XIY,0xfcd188
 	push	xiy                                   ; FA4B9D  push XIY
 	call	P7Block_Run                              ; FA4B9E  call 0xf9adb5
 	add	xsp, 20                                ; FA4BA2  add XSP,0x00000014
@@ -18423,28 +18466,28 @@ sub_FA4A0D__FA4BCD:
 	popw	bc                                    ; FA4BED  pop BC
 sub_FA4A0D__FA4BEE:
 	pushw	3                                    ; FA4BEE  push 0x0003
-	lda	xbc, (0xFD4B97:24)                     ; FA4BF1  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4BF1  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4BF6  push XBC
 	ld	wa, (xiz-4)                             ; FA4BF7  ld WA,(XIZ+0xfc)
 	extz	xwa                                   ; FA4BFA  extz XWA
 	push	xwa                                   ; FA4BFC  push XWA
 	pushw	0                                    ; FA4BFD  push 0x0000
-	lda	xwa, (0xFCD1C0:24)                     ; FA4C00  lda XWA,0xfcd1c0
+	lda	xwa, (P7Stream_FCD1C0:24)                     ; FA4C00  lda XWA,0xfcd1c0
 	push	xwa                                   ; FA4C05  push XWA
-	lda	xiy, (0xFCD1AF:24)                     ; FA4C06  lda XIY,0xfcd1af
+	lda	xiy, (P7Stream_FCD1AF:24)                     ; FA4C06  lda XIY,0xfcd1af
 	push	xiy                                   ; FA4C0B  push XIY
 	call	P7Block_Run                              ; FA4C0C  call 0xf9adb5
 	add	xsp, 20                                ; FA4C10  add XSP,0x00000014
 	pushw	3                                    ; FA4C16  push 0x0003
-	lda	xbc, (0xFD4B97:24)                     ; FA4C19  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4C19  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4C1E  push XBC
 	ld	wa, (xiz-2)                             ; FA4C1F  ld WA,(XIZ+0xfe)
 	extz	xwa                                   ; FA4C22  extz XWA
 	push	xwa                                   ; FA4C24  push XWA
 	pushw	1                                    ; FA4C25  push 0x0001
-	lda	xwa, (0xFCD1C0:24)                     ; FA4C28  lda XWA,0xfcd1c0
+	lda	xwa, (P7Stream_FCD1C0:24)                     ; FA4C28  lda XWA,0xfcd1c0
 	push	xwa                                   ; FA4C2D  push XWA
-	lda	xiy, (0xFCD1AF:24)                     ; FA4C2E  lda XIY,0xfcd1af
+	lda	xiy, (P7Stream_FCD1AF:24)                     ; FA4C2E  lda XIY,0xfcd1af
 	push	xiy                                   ; FA4C33  push XIY
 	call	P7Block_Run                              ; FA4C34  call 0xf9adb5
 	add	xsp, 20                                ; FA4C38  add XSP,0x00000014
@@ -18490,15 +18533,15 @@ sub_FA4C5E:
 	cp	bc, hl                                  ; FA4C69  cp BC,HL
 	jr z, sub_FA4C5E__FA4C97                   ; FA4C6B  jr Z,0xfa4c97
 	pushw	3                                    ; FA4C6D  push 0x0003
-	lda	xbc, (0xFD4B85:24)                     ; FA4C70  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA4C70  lda XBC,0xfd4b85
 	push	xbc                                   ; FA4C75  push XBC
 	ld	wa, (0x860A:24)                        ; FA4C76  ld WA,(0x00860a)
 	extz	xwa                                   ; FA4C7B  extz XWA
 	push	xwa                                   ; FA4C7D  push XWA
 	pushw	0                                    ; FA4C7E  push 0x0000
-	lda	xwa, (0xFCD1E7:24)                     ; FA4C81  lda XWA,0xfcd1e7
+	lda	xwa, (P7Stream_FCD1E7:24)                     ; FA4C81  lda XWA,0xfcd1e7
 	push	xwa                                   ; FA4C86  push XWA
-	lda	xiy, (0xFCD1D6:24)                     ; FA4C87  lda XIY,0xfcd1d6
+	lda	xiy, (P7Stream_FCD1D6:24)                     ; FA4C87  lda XIY,0xfcd1d6
 	push	xiy                                   ; FA4C8C  push XIY
 	call	P7Block_Run                              ; FA4C8D  call 0xf9adb5
 	add	xsp, 20                                ; FA4C91  add XSP,0x00000014
@@ -18510,15 +18553,15 @@ sub_FA4C5E__FA4C97:
 	cp	bc, hl                                  ; FA4CAB  cp BC,HL
 	jr z, sub_FA4C5E__FA4CD9                   ; FA4CAD  jr Z,0xfa4cd9
 	pushw	3                                    ; FA4CAF  push 0x0003
-	lda	xbc, (0xFD4B85:24)                     ; FA4CB2  lda XBC,0xfd4b85
+	lda	xbc, (P7Stream_Data_FD4B85:24)                     ; FA4CB2  lda XBC,0xfd4b85
 	push	xbc                                   ; FA4CB7  push XBC
 	ld	wa, (0x860C:24)                        ; FA4CB8  ld WA,(0x00860c)
 	extz	xwa                                   ; FA4CBD  extz XWA
 	push	xwa                                   ; FA4CBF  push XWA
 	pushw	1                                    ; FA4CC0  push 0x0001
-	lda	xwa, (0xFCD1E7:24)                     ; FA4CC3  lda XWA,0xfcd1e7
+	lda	xwa, (P7Stream_FCD1E7:24)                     ; FA4CC3  lda XWA,0xfcd1e7
 	push	xwa                                   ; FA4CC8  push XWA
-	lda	xiy, (0xFCD1D6:24)                     ; FA4CC9  lda XIY,0xfcd1d6
+	lda	xiy, (P7Stream_FCD1D6:24)                     ; FA4CC9  lda XIY,0xfcd1d6
 	push	xiy                                   ; FA4CCE  push XIY
 	call	P7Block_Run                              ; FA4CCF  call 0xf9adb5
 	add	xsp, 20                                ; FA4CD3  add XSP,0x00000014
@@ -18579,7 +18622,7 @@ sub_FA4CE5__FA4D2F:
 	jrl sub_FA4CE5__FA4E06                     ; FA4D37  jrl T,0xfa4e06
 sub_FA4CE5__FA4D3A:
 	pushw	3                                    ; FA4D3A  push 0x0003
-	lda	xbc, (0xFD4B97:24)                     ; FA4D3D  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4D3D  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4D42  push XBC
 	ld	a, 26:opc                                  ; FA4D43  ld A,0x1a
 	extpfx3 0x8E, 0x08, 0x41                   ; FA4D45  mul WA,(XIZ+0x08)
@@ -18592,9 +18635,9 @@ sub_FA4CE5__FA4D3A:
 	extz	xiy                                   ; FA4D5D  extz XIY
 	push	xiy                                   ; FA4D5F  push XIY
 	pushw	0                                    ; FA4D60  push 0x0000
-	lda	xwa, (0xFCD149:24)                     ; FA4D63  lda XWA,0xfcd149
+	lda	xwa, (P7Stream_FCD149:24)                     ; FA4D63  lda XWA,0xfcd149
 	push	xwa                                   ; FA4D68  push XWA
-	lda	xiy, (0xFCD40F:24)                     ; FA4D69  lda XIY,0xfcd40f
+	lda	xiy, (P7Stream_FCD40F:24)                     ; FA4D69  lda XIY,0xfcd40f
 	push	xiy                                   ; FA4D6E  push XIY
 	call	P7Block_Run                              ; FA4D6F  call 0xf9adb5
 	add	xsp, 20                                ; FA4D73  add XSP,0x00000014
@@ -18603,7 +18646,7 @@ sub_FA4CE5__FA4D7C:
 	cp (0x00F35D:24), 0x00                     ; FA4D7C  cp (0x00f35d),0x00
 	jr nz, sub_FA4CE5__FA4DC5                  ; FA4D82  jr NZ,0xfa4dc5
 	pushw	1                                    ; FA4D84  push 0x0001
-	lda	xbc, (0xFD4B97:24)                     ; FA4D87  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4D87  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4D8C  push XBC
 	ld	a, 26:opc                                  ; FA4D8D  ld A,0x1a
 	extpfx3 0x8E, 0x08, 0x41                   ; FA4D8F  mul WA,(XIZ+0x08)
@@ -18616,16 +18659,16 @@ sub_FA4CE5__FA4D7C:
 	extz	xiy                                   ; FA4DA7  extz XIY
 	push	xiy                                   ; FA4DA9  push XIY
 	pushw	0                                    ; FA4DAA  push 0x0000
-	lda	xwa, (0xFCD15E:24)                     ; FA4DAD  lda XWA,0xfcd15e
+	lda	xwa, (P7Stream_FCD15E:24)                     ; FA4DAD  lda XWA,0xfcd15e
 	push	xwa                                   ; FA4DB2  push XWA
-	lda	xiy, (0xFCD22D:24)                     ; FA4DB3  lda XIY,0xfcd22d
+	lda	xiy, (P7Stream_FCD22D:24)                     ; FA4DB3  lda XIY,0xfcd22d
 	push	xiy                                   ; FA4DB8  push XIY
 	call	P7Block_Run                              ; FA4DB9  call 0xf9adb5
 	add	xsp, 20                                ; FA4DBD  add XSP,0x00000014
 	jr sub_FA4CE5__FA4E04                      ; FA4DC3  jr T,0xfa4e04
 sub_FA4CE5__FA4DC5:
 	pushw	1                                    ; FA4DC5  push 0x0001
-	lda	xbc, (0xFD4B97:24)                     ; FA4DC8  lda XBC,0xfd4b97
+	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4DC8  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4DCD  push XBC
 	ld	a, 26:opc                                  ; FA4DCE  ld A,0x1a
 	extpfx3 0x8E, 0x08, 0x41                   ; FA4DD0  mul WA,(XIZ+0x08)
@@ -18638,9 +18681,9 @@ sub_FA4CE5__FA4DC5:
 	extz	xiy                                   ; FA4DE8  extz XIY
 	push	xiy                                   ; FA4DEA  push XIY
 	pushw	0                                    ; FA4DEB  push 0x0000
-	lda	xwa, (0xFCD173:24)                     ; FA4DEE  lda XWA,0xfcd173
+	lda	xwa, (P7Stream_FCD173:24)                     ; FA4DEE  lda XWA,0xfcd173
 	push	xwa                                   ; FA4DF3  push XWA
-	lda	xiy, (0xFCD97D:24)                     ; FA4DF4  lda XIY,0xfcd97d
+	lda	xiy, (P7Stream_FCD97D:24)                     ; FA4DF4  lda XIY,0xfcd97d
 	push	xiy                                   ; FA4DF9  push XIY
 	call	P7Block_Run                              ; FA4DFA  call 0xf9adb5
 	add	xsp, 20                                ; FA4DFE  add XSP,0x00000014
@@ -19358,11 +19401,11 @@ P7Units_ServiceTask__FA54D5:
 	ret                                        ; FA54DA  ret
 P7Units_ServiceTask__FA54DB:
 	pushw	2                                    ; FA54DB  push 0x0002
-	call	0xF985F8                              ; FA54DE  call 0xf985f8
+	call	Kernel_SemaWait_StackArg                              ; FA54DE  call 0xf985f8
 	popw	bc                                    ; FA54E2  pop BC
 P7Units_ServiceTask__FA54E3:
 	pushw	2                                    ; FA54E3  push 0x0002
-	call	0xF98654                              ; FA54E6  call 0xf98654
+	call	Kernel_SemaTryWait                              ; FA54E6  call 0xf98654
 	popw	bc                                    ; FA54EA  pop BC
 	cp	wa, 0:i3                                  ; FA54EB  cp WA,0
 	jr nz, P7Units_ServiceTask__FA54F1                  ; FA54ED  jr NZ,0xfa54f1
@@ -19389,7 +19432,7 @@ P7Units_ServiceTask__FA5509:
 	calr sub_FA26CB                 ; FA552B  calr 0xfa26cb
 P7Units_ServiceTask__FA552E:
 	jr P7Units_ServiceTask__FA54DB                      ; FA552E  jr T,0xfa54db
-	call	0xF983AF                              ; FA5530  call 0xf983af
+	call	Kernel_ExitTask                              ; FA5530  call 0xf983af
 	ret                                        ; FA5534  ret
 ; --------------------------------------------------------------------------
 ; P7Units_ResolveProgramsAndReload -- 0xFA5535..0xFA5948 (1044 bytes)
@@ -19453,7 +19496,7 @@ P7Units_ResolveProgramsAndReload__FA557B:
 	ld	bc, (xiz-2)                             ; FA557B  ld BC,(XIZ+0xfe)
 	extz	bc                                    ; FA557E  extz BC
 	extz	xbc                                   ; FA5580  extz XBC
-	add	xbc, 0xFDC551                          ; FA5582  add XBC,0x00fdc551
+	add	xbc, PoolDir_RecordForUnitProgram                          ; FA5582  add XBC,0x00fdc551
 	ld	a, (xbc)                                ; FA5588  ld A,(XBC)
 	ld	(0x8586:24), a                         ; FA558A  ld (0x008586),A
 	ld	c, (0x8588:24)                         ; FA558F  ld C,(0x008588)
@@ -19465,7 +19508,7 @@ P7Units_ResolveProgramsAndReload__FA55A0:
 	ld	bc, (xiz-2)                             ; FA55A0  ld BC,(XIZ+0xfe)
 	extz	bc                                    ; FA55A3  extz BC
 	extz	xbc                                   ; FA55A5  extz XBC
-	add	xbc, 0xFDC551                          ; FA55A7  add XBC,0x00fdc551
+	add	xbc, PoolDir_RecordForUnitProgram                          ; FA55A7  add XBC,0x00fdc551
 	ld	a, (xbc)                                ; FA55AD  ld A,(XBC)
 	ld	(0x85A0:24), a                         ; FA55AF  ld (0x0085a0),A
 	ld	c, (0x85A2:24)                         ; FA55B4  ld C,(0x0085a2)
@@ -19477,7 +19520,7 @@ P7Units_ResolveProgramsAndReload__FA55C5:
 	ld	bc, (xiz-2)                             ; FA55C5  ld BC,(XIZ+0xfe)
 	extz	bc                                    ; FA55C8  extz BC
 	extz	xbc                                   ; FA55CA  extz XBC
-	add	xbc, 0xFDC551                          ; FA55CC  add XBC,0x00fdc551
+	add	xbc, PoolDir_RecordForUnitProgram                          ; FA55CC  add XBC,0x00fdc551
 	ld	a, (xbc)                                ; FA55D2  ld A,(XBC)
 	ld	(0x85BA:24), a                         ; FA55D4  ld (0x0085ba),A
 	ld	bc, (0x7ECD:24)                        ; FA55D9  ld BC,(0x007ecd)

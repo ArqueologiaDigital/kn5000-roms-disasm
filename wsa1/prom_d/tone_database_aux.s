@@ -111,6 +111,11 @@ ToneDB_DefaultLayerParams_Elem:
 	.byte 0x42, 0x18, 0x7F, 0x00, 0x00, 0x00, 0x61, 0x14, 0x00, 0x42, 0x42, 0x7F, 0xFC, 0x00, 0x00, 0x00	; 1C5BA  |B.....a..BB.....|
 	.byte 0x00, 0x3C, 0x00, 0x50, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x64, 0x02, 0x40	; 1C5CA  |.<.P.<...B...d.@|
 	.byte 0x87	; 1C5DA  |.|
+; The wave-select half of slot +0xAC, at +0x51.  Read by ToneRec_GetWaveSelectRecord (prom_c
+; 0xFB43CB) when the element index maps to 0xFF: dir[+0xAC] at 0xFB43F3, + 0x51 at 0xFB4401;
+; and by sub_FB9B69's template arm (dir[+0xAC] 0xFB9D9A, + 0x51 0xFB9DAB), which builds each
+; of the four staged wave-select records (RAM 0x0087D2 + 0x21D + 43*j, 0xFB9DCA/0xFB9DD1)
+; from bytes 0..10 and 13..42 of this one.
 ToneDB_DefaultLayerParams_WaveSel:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x00, 0x01, 0x7D, 0x80, 0x54	; 1C5DB  |.............}.T|
 	.byte 0x00, 0x00, 0x17, 0x7F, 0x64, 0x30, 0x4C, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30	; 1C5EB  |....d0L..B.`...0|
@@ -157,6 +162,11 @@ ToneRec_Template_Clear:
 	.byte 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3C, 0x12, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46	; 1C6B6  |T.......<..#..2F|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 1C6C6  |.............X..|
 	.byte 0x43, 0x0A, 0x14, 0x0A, 0x01, 0x64, 0x00, 0x00, 0x00	; 1C6D6  |C....d...|
+; Element block 0 of the Clear template: record + 0xD9 + 81*0.  sub_FB9B69 (prom_c 0xFB9B69)
+; copies the template's first 0x21D = 541 bytes -- the 217-byte head and these four blocks
+; -- into the tone staging image at RAM 0x0087D2 (dir[+0xB0] 0xFB9D76, `push 0x021d`
+; 0xFB9D87, MemCopyWords 0xFB9D91).  Selector +0x02/+0x03 = 0x7F/0x00, bank 0 program 127:
+; ToneDB_SourceIndexMapA entry 127, the fallback entry, row 181 'Silent'.
 ToneRec_Template_Clear_Elem0:
 	.byte 0x00, 0x40, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x32, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x1E	; 1C6DF  |.@.....2........|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x5A, 0x14, 0x60, 0x42, 0x18, 0x66, 0x00, 0x00, 0x00	; 1C6EF  |...B...Z.`B.f...|
@@ -164,6 +174,11 @@ ToneRec_Template_Clear_Elem0:
 	.byte 0x42, 0x18, 0x7F, 0x00, 0x00, 0x00, 0x61, 0x14, 0x00, 0x42, 0x42, 0x7F, 0xFC, 0x00, 0x00, 0x00	; 1C70F  |B.....a..BB.....|
 	.byte 0x00, 0x3C, 0x00, 0x50, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x64, 0x02, 0x40	; 1C71F  |.<.P.<...B...d.@|
 	.byte 0x87	; 1C72F  |.|
+; Element block 1 of the Clear template: record + 0xD9 + 81*1.  sub_FB9B69 (prom_c 0xFB9B69)
+; copies the template's first 0x21D = 541 bytes -- the 217-byte head and these four blocks
+; -- into the tone staging image at RAM 0x0087D2 (dir[+0xB0] 0xFB9D76, `push 0x021d`
+; 0xFB9D87, MemCopyWords 0xFB9D91).  Selector +0x02/+0x03 = 0x7F/0x00, bank 0 program 127:
+; ToneDB_SourceIndexMapA entry 127, the fallback entry, row 181 'Silent'.
 ToneRec_Template_Clear_Elem1:
 	.byte 0x00, 0x40, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x32, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x1E	; 1C730  |.@.....2........|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x5A, 0x14, 0x60, 0x42, 0x18, 0x66, 0x00, 0x00, 0x00	; 1C740  |...B...Z.`B.f...|
@@ -171,6 +186,11 @@ ToneRec_Template_Clear_Elem1:
 	.byte 0x42, 0x18, 0x7F, 0x00, 0x00, 0x00, 0x61, 0x14, 0x00, 0x42, 0x42, 0x7F, 0xFC, 0x00, 0x00, 0x00	; 1C760  |B.....a..BB.....|
 	.byte 0x00, 0x3C, 0x00, 0x50, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x64, 0x02, 0x40	; 1C770  |.<.P.<...B...d.@|
 	.byte 0x87	; 1C780  |.|
+; Element block 2 of the Clear template: record + 0xD9 + 81*2.  sub_FB9B69 (prom_c 0xFB9B69)
+; copies the template's first 0x21D = 541 bytes -- the 217-byte head and these four blocks
+; -- into the tone staging image at RAM 0x0087D2 (dir[+0xB0] 0xFB9D76, `push 0x021d`
+; 0xFB9D87, MemCopyWords 0xFB9D91).  Selector +0x02/+0x03 = 0x7F/0x00, bank 0 program 127:
+; ToneDB_SourceIndexMapA entry 127, the fallback entry, row 181 'Silent'.
 ToneRec_Template_Clear_Elem2:
 	.byte 0x00, 0x40, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x32, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x1E	; 1C781  |.@.....2........|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x5A, 0x14, 0x60, 0x42, 0x18, 0x66, 0x00, 0x00, 0x00	; 1C791  |...B...Z.`B.f...|
@@ -178,6 +198,11 @@ ToneRec_Template_Clear_Elem2:
 	.byte 0x42, 0x18, 0x7F, 0x00, 0x00, 0x00, 0x61, 0x14, 0x00, 0x42, 0x42, 0x7F, 0xFC, 0x00, 0x00, 0x00	; 1C7B1  |B.....a..BB.....|
 	.byte 0x00, 0x3C, 0x00, 0x50, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x64, 0x02, 0x40	; 1C7C1  |.<.P.<...B...d.@|
 	.byte 0x87	; 1C7D1  |.|
+; Element block 3 of the Clear template: record + 0xD9 + 81*3.  sub_FB9B69 (prom_c 0xFB9B69)
+; copies the template's first 0x21D = 541 bytes -- the 217-byte head and these four blocks
+; -- into the tone staging image at RAM 0x0087D2 (dir[+0xB0] 0xFB9D76, `push 0x021d`
+; 0xFB9D87, MemCopyWords 0xFB9D91).  Selector +0x02/+0x03 = 0x7F/0x00, bank 0 program 127:
+; ToneDB_SourceIndexMapA entry 127, the fallback entry, row 181 'Silent'.
 ToneRec_Template_Clear_Elem3:
 	.byte 0x00, 0x40, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x32, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x1E, 0x00, 0x1E	; 1C7D2  |.@.....2........|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x5A, 0x14, 0x60, 0x42, 0x18, 0x66, 0x00, 0x00, 0x00	; 1C7E2  |...B...Z.`B.f...|
@@ -185,18 +210,38 @@ ToneRec_Template_Clear_Elem3:
 	.byte 0x42, 0x18, 0x7F, 0x00, 0x00, 0x00, 0x61, 0x14, 0x00, 0x42, 0x42, 0x7F, 0xFC, 0x00, 0x00, 0x00	; 1C802  |B.....a..BB.....|
 	.byte 0x00, 0x3C, 0x00, 0x50, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x64, 0x02, 0x40	; 1C812  |.<.P.<...B...d.@|
 	.byte 0x87	; 1C822  |.|
+; Wave-select record 0 of the Clear template: record + 0x21D + 43*0.  The template arm of
+; sub_FB9B69 does NOT copy it -- it builds the staged records from
+; ToneDB_DefaultLayerParams_WaveSel (0xFB9DCA-0xFB9E23) -- and no instruction that reads
+; these 43 bytes has been pinned; the template's mask +0x11 = 0x01 gives one element, so
+; ToneRec_GetWaveSelectRecord would not reach record 0 here either.
 ToneRec_Template_Clear_WaveSel0:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x00, 0x01, 0x7D, 0x80, 0x54	; 1C823  |.............}.T|
 	.byte 0x00, 0x00, 0x17, 0x7F, 0x64, 0x30, 0x4C, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30	; 1C833  |....d0L..B.`...0|
 	.byte 0x4C, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1C843  |Ld...B.`...|
+; Wave-select record 1 of the Clear template: record + 0x21D + 43*1.  The template arm of
+; sub_FB9B69 does NOT copy it -- it builds the staged records from
+; ToneDB_DefaultLayerParams_WaveSel (0xFB9DCA-0xFB9E23) -- and no instruction that reads
+; these 43 bytes has been pinned; the template's mask +0x11 = 0x01 gives one element, so
+; ToneRec_GetWaveSelectRecord would not reach record 1 here either.
 ToneRec_Template_Clear_WaveSel1:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x00, 0x01, 0x7D, 0x80, 0x54	; 1C84E  |.............}.T|
 	.byte 0x00, 0x00, 0x17, 0x7F, 0x64, 0x30, 0x4C, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30	; 1C85E  |....d0L..B.`...0|
 	.byte 0x4C, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1C86E  |Ld...B.`...|
+; Wave-select record 2 of the Clear template: record + 0x21D + 43*2.  The template arm of
+; sub_FB9B69 does NOT copy it -- it builds the staged records from
+; ToneDB_DefaultLayerParams_WaveSel (0xFB9DCA-0xFB9E23) -- and no instruction that reads
+; these 43 bytes has been pinned; the template's mask +0x11 = 0x01 gives one element, so
+; ToneRec_GetWaveSelectRecord would not reach record 2 here either.
 ToneRec_Template_Clear_WaveSel2:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x00, 0x01, 0x7D, 0x80, 0x54	; 1C879  |.............}.T|
 	.byte 0x00, 0x00, 0x17, 0x7F, 0x64, 0x30, 0x4C, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30	; 1C889  |....d0L..B.`...0|
 	.byte 0x4C, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1C899  |Ld...B.`...|
+; Wave-select record 3 of the Clear template: record + 0x21D + 43*3.  The template arm of
+; sub_FB9B69 does NOT copy it -- it builds the staged records from
+; ToneDB_DefaultLayerParams_WaveSel (0xFB9DCA-0xFB9E23) -- and no instruction that reads
+; these 43 bytes has been pinned; the template's mask +0x11 = 0x01 gives one element, so
+; ToneRec_GetWaveSelectRecord would not reach record 3 here either.
 ToneRec_Template_Clear_WaveSel3:
 	.byte 0x7F, 0x7F, 0x7F, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x7F, 0x00, 0x00, 0x01, 0x7D, 0x80, 0x54	; 1C8A4  |.............}.T|
 	.byte 0x00, 0x00, 0x17, 0x7F, 0x64, 0x30, 0x4C, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30	; 1C8B4  |....d0L..B.`...0|
@@ -209,7 +254,11 @@ ToneRec_Template_Clear_WaveSel3:
 ; DRUM-INSTRUMENT RECORD, stride 150 = the directory's own word at +0xEE.
 ; 
 ;     +0x00  13 B   name, ASCII, space-padded  ('Rock Bass Drm', 'Slap Shot')
-;     +0x0D 137 B   parameters, unidentified
+;     +0x0D  51 B   head, no field named
+;     +0x40  43 B   wave-select record 0 \ prom_c copies 0x40 bytes of head
+;     +0x6B  43 B   wave-select record 1 / (0xFB85F4), then 43*j, j < 2
+;                   (0xFB868F, 0xFB897D); 64 + 2*43 = 150.  Corrected
+;                   2026-09-25, lane promcd: this gave 137 undivided bytes.
 ; 
 ; Same directory slot and same shape as the KN5000's PercInst_000_Silent
 ; block (stride 58 there).  Every one of the 504 records in this image starts
@@ -250,9 +299,8 @@ PercInst_Template_Silent:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 321, 196 distinct.
 ; KN5000 label at the same directory slot: ToneDB_ToneIndexMapA.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x1C965, which is directory slot +0x0C's value, and ends at 0x1D165,
@@ -261,14 +309,28 @@ PercInst_Template_Silent:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x0C is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x0C: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x00 and 0xC0.
+; Value: a record number in ToneDB_MixerDefaultTable (+0x18, 322 x 43).
+; Reader: ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3): 0xFB8369 `ld XWA,(XBC+0x0c)`,
+; then +0x18 at 0xFB836F and the stride word +0xEA (43) at 0xFB837A.
+; Measured over all 1024 entries: max 321 < 322, 196 distinct.
+; ★ DEFAULTS: a melodic element's selector, through this map and its
+; sibling, lands on an array record equal to that element's OWN
+; wave-select record in all bytes but +0x0B (the tail preset prom_c
+; rewrites) for 213 of 451 elements; record n+1, n-1 or the swapped
+; family map score 0.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_ToneIndexMapA:
 	.short 0x0015, 0x0016, 0x0015, 0x00CF, 0x00D4, 0x00D2, 0x00D8, 0x0021	; 1C965  [0]
@@ -407,9 +469,8 @@ ToneDB_ToneIndexMapA:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 316, 125 distinct.
 ; KN5000 label at the same directory slot: ToneDB_ToneIndexMapB.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x1D165, which is directory slot +0x10's value, and ends at 0x1D965,
@@ -418,14 +479,28 @@ ToneDB_ToneIndexMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x10 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x10: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x80.
+; Value: a record number in the same 43-byte array, through +0x1C (the +0x18 alias).
+; Reader: ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3): 0xFB83C6 `ld XWA,(XBC+0x10)`,
+; then +0x1C at 0xFB83CC and the stride word +0xEA (43) at 0xFB83D7.
+; Measured over all 1024 entries: max 316 < 322, 125 distinct.
+; ★ DEFAULTS: a melodic element's selector, through this map and its
+; sibling, lands on an array record equal to that element's OWN
+; wave-select record in all bytes but +0x0B (the tail preset prom_c
+; rewrites) for 213 of 451 elements; record n+1, n-1 or the swapped
+; family map score 0.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_ToneIndexMapB:
 	.short 0x0055, 0x0055, 0x0056, 0x0055, 0x0056, 0x00FE, 0x0100, 0x00FB	; 1D165  [0]
@@ -579,18 +654,16 @@ ToneDB_ToneIndexMapB:
 ; count 322 is fixed at BOTH ends and is not a stride guess.  43 is the
 ; directory's own word at +0xEA, and prom_c reads that word at 11 sites.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x18 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
-; 
-; ⚠ NO reader was found for THIS array.  What follows is about the
-; array at slot +0x3C, which has the same record shape, and is quoted
-; as corroboration for the 43 -- not as evidence about this block.
+; ★ READER (corrected 2026-09-25, lane promcd -- this paragraph said there
+; was none, that nothing confirmed the name, and that it lacked a reader).
+; ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3) reads this slot with `ld XIY,(XBC+0x18)` at 0xFB836F (its +0x1C alias at
+; 0xFB83CC), stride +0xEA at 0xFB837A,
+; multiplies the index-map value by the stride word and adds the base: this
+; array's record n is the wave-select record a wave selector resolves to (see
+; ToneDB_ToneIndexMapA's banner).  Round 3's base-load census missed it
+; because that routine parks the base in a frame slot first.
+; What follows is about the array at slot +0x3C, which has the same record
+; shape, and is quoted as further corroboration for the 43.
 ; One prom_c routine
 ; reaches a record by multiplying the directory's stride word, and then
 ; uses the SAME word as the loop bound of a byte copy out of it:
@@ -6438,9 +6511,8 @@ ToneDB_WaveSelTailPresets_063:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 316, 192 distinct.
 ; KN5000 label at the same directory slot: ToneDB_ToneIndexMapC.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x21A3B, which is directory slot +0x24's value, and ends at 0x2223B,
@@ -6449,17 +6521,28 @@ ToneDB_WaveSelTailPresets_063:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x24 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x24: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
 ; ★ BUT A READER EXISTS OUTSIDE IT.  prom_c parks the base with
 ; `ld (XIZ+0xF6),XWA` at 0xFB4616 and reads this slot through the frame
 ; slot: `ld XWA,(XBC+0x24)` at 0xFB4668, feeding the tone-index lookup
 ; that produces a descriptor pointer.  The KN5000 name is no longer
 ; unconfirmed-by-everything, though the FIELD meanings still are.
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x00 and 0xC0.
+; Value: a descriptor number in ToneDB_EnvDescTable (+0x30, 318 x 14).
+; Reader: ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0): 0xFB4668 `ld XWA,(XBC+0x24)`,
+; then +0x30 at 0xFB466E and the stride word +0xEC (14) at 0xFB4679.
+; Measured over all 1024 entries: max 316 < 318, 192 distinct.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_ToneIndexMapC:
 	.short 0x0005, 0x0017, 0x0005, 0x00D0, 0x00D5, 0x00D3, 0x00D9, 0x0022	; 21A3B  [0]
@@ -6598,12 +6681,11 @@ ToneDB_ToneIndexMapC:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 317, 125 distinct.
 ; KN5000 label at the same directory slot: ToneDB_ToneIndexMapD.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; ⚠ CORRECTED in wave 7 round 2.  This map is 2048 bytes, exactly like
 ; its eleven siblings.  The 768 bytes that used to be counted into it,
-; and recorded as 'what the extra 384 entries are is NOT established',
+; and once recorded as 384 extra entries of this map,
 ; are a separate object: see ToneDB_DescCurveBank immediately below.
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
@@ -6615,14 +6697,25 @@ ToneDB_ToneIndexMapC:
 ; for the reason this header used to give.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x28 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x28: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
 ; ★ BUT A READER EXISTS OUTSIDE IT: `ld XWA,(XBC+0x28)` at 0xFB46B3,
 ; through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616.
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x80.
+; Value: a descriptor number in the same 14-byte array, through +0x34 (the +0x30 alias).
+; Reader: ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0): 0xFB46B3 `ld XWA,(XBC+0x28)`,
+; then +0x34 at 0xFB46B9 and the stride word +0xEC (14) at 0xFB46C4.
+; Measured over all 1024 entries: max 317 < 318, 125 distinct.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_ToneIndexMapD:
 	.short 0x0056, 0x0056, 0x0057, 0x0056, 0x0057, 0x00FF, 0x0101, 0x00FC	; 2223B  [0]
@@ -6972,8 +7065,9 @@ ToneDB_DescCurve_Step1:
 ; WAVE 14: +0x0C is the base pitch (above), and at slot +0x70 every field of
 ; an element is placed as well.  What is still unidentified is +0x09/+0x0A,
 ; and every byte of an element at slots +0x30 and +0x38.
-; ⚠ And no prom_c instruction that reads THIS block has been found; the Evidence
-; note below states what that leaves standing and what it does not.
+; ★ CORRECTED 2026-09-25 (lane promcd): this block IS read -- by
+; ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0), see the reader paragraph at
+; the end of this banner; each descriptor below names the waves that reach it.
 ; 
 ; This is the LARGEST of the three, and the only one whose descriptors each own
 ; a PRIVATE part A.  Its 318 (part A, part B) pairs partition the pool exactly:
@@ -7080,12 +7174,9 @@ ToneDB_DescCurve_Step1:
 ; last.  Re-derived on every run by notes/prom_d_structures_round2.py, which
 ; this emitter refuses to run without.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x30 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x30: it does not
+; follow a base parked in a frame slot, which is what the reader does.
 ; ★ BUT A READER EXISTS OUTSIDE IT, and it is this block's: prom_c
 ; reads the slot with `ld XIY,(XBC+0x30)` at 0xFB466E through the base
 ; parked by `ld (XIZ+0xF6),XWA` at 0xFB4616, multiplies an index-map
@@ -7095,649 +7186,1601 @@ ToneDB_DescCurve_Step1:
 ; with `ld H,(XBC)` at 0xFA81F6.  So this block IS read, and the
 ; KN5000 name is corroborated rather than merely transplanted.
 ; 
-; ⚠ No reader was found for THIS block.  What round 3 adds is indirect and
-; is stated as such: the stride word this block uses (directory +0xEC = 14)
-; IS read by prom_c -- at 0xFB4679, 0xFB46C4, 0xFC299A -- and at 0xFC299A the SAME stride word is
-; multiplied by a record index to walk the descriptor array at slot +0x70,
-; which is the same record class.  That corroborates the 14-byte array; it
-; does NOT show anything reading this block, and the label stays a KN5000
-; transplant on that basis.
+; Round 3's indirect evidence stands: the stride word this block uses
+; (directory +0xEC = 14) is read by prom_c at 0xFB4679, 0xFB46C4, 0xFC299A, and at
+; 0xFC299A the same stride word walks the descriptor array at slot +0x70.
+; The DIRECT reader is the one above (corrected 2026-09-25, lane promcd:
+; this paragraph said none had been found and kept the name a transplant).
 ; ==========================================================================
 ToneDB_EnvDescTable:
+; descriptor 0 = base + dir[+0x30] + 14*0, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). No entry of ToneDB_ToneIndexMapC or D holds 0, so no selector reaches it
+; through them.
 ToneDB_EnvDescTable_Desc000:		; tag 0x40  A=0x23E9F  B=0x23EAE
 	.byte 0x40, 0x9F, 0x3E, 0x02, 0x00, 0xAE, 0x3E, 0x02, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x42	; 22D3B  |@.>...>....B.B|
+; descriptor 1 = base + dir[+0x30] + 14*1, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sine Wave' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc001:		; tag 0x40  A=0x23EB4  B=0x23EC3
 	.byte 0x40, 0xB4, 0x3E, 0x02, 0x00, 0xC3, 0x3E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D49  |@.>...>...xB.B|
+; descriptor 2 = base + dir[+0x30] + 14*2, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Silent' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc002:		; tag 0x40  A=0x23EC9  B=0x23ED8
 	.byte 0x40, 0xC9, 0x3E, 0x02, 0x00, 0xD8, 0x3E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D57  |@.>...>...xB.B|
+; descriptor 3 = base + dir[+0x30] + 14*3, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Piano L' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc003:		; tag 0xC0  A=0x23EDE  B=0x23F4E
 	.byte 0xC0, 0xDE, 0x3E, 0x02, 0x00, 0x4E, 0x3F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D65  |..>..N?...xB.B|
+; descriptor 4 = base + dir[+0x30] + 14*4, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'BrightPiano L'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc004:		; tag 0xC0  A=0x23FD6  B=0x24046
 	.byte 0xC0, 0xD6, 0x3F, 0x02, 0x00, 0x46, 0x40, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D73  |..?..F@...xB.B|
+; descriptor 5 = base + dir[+0x30] + 14*5, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mono Piano' (22
+; map entries hold it).
 ToneDB_EnvDescTable_Desc005:		; tag 0xC0  A=0x240D6  B=0x24146
 	.byte 0xC0, 0xD6, 0x40, 0x02, 0x00, 0x46, 0x41, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D81  |..@..FA...xB.B|
+; descriptor 6 = base + dir[+0x30] + 14*6, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Piccolo' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc006:		; tag 0xC0  A=0x241CE  B=0x2423E
 	.byte 0xC0, 0xCE, 0x41, 0x02, 0x00, 0x3E, 0x42, 0x02, 0x00, 0x19, 0x78, 0x42, 0x80, 0x42	; 22D8F  |..A..>B...xB.B|
+; descriptor 7 = base + dir[+0x30] + 14*7, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz Flute' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc007:		; tag 0xC0  A=0x2425E  B=0x242CE
 	.byte 0xC0, 0x5E, 0x42, 0x02, 0x00, 0xCE, 0x42, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D9D  |.^B...B...xB.B|
+; descriptor 8 = base + dir[+0x30] + 14*8, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Classic Flute'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc008:		; tag 0xC0  A=0x242F6  B=0x24366
 	.byte 0xC0, 0xF6, 0x42, 0x02, 0x00, 0x66, 0x43, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DAB  |..B..fC...xB.B|
+; descriptor 9 = base + dir[+0x30] + 14*9, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Alto Flute'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc009:		; tag 0xC0  A=0x24396  B=0x24406
 	.byte 0xC0, 0x96, 0x43, 0x02, 0x00, 0x06, 0x44, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DB9  |..C...D...xB.B|
+; descriptor 10 = base + dir[+0x30] + 14*10, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pan Flute' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc010:		; tag 0xC0  A=0x2443E  B=0x244AE
 	.byte 0xC0, 0x3E, 0x44, 0x02, 0x00, 0xAE, 0x44, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DC7  |.>D...D...xB.B|
+; descriptor 11 = base + dir[+0x30] + 14*11, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Recorder' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc011:		; tag 0xC0  A=0x244C6  B=0x24536
 	.byte 0xC0, 0xC6, 0x44, 0x02, 0x00, 0x36, 0x45, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22DD5  |..D..6E...xB.B|
+; descriptor 12 = base + dir[+0x30] + 14*12, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ocarina' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc012:		; tag 0xC0  A=0x24556  B=0x24565
 	.byte 0xC0, 0x56, 0x45, 0x02, 0x00, 0x65, 0x45, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22DE3  |.VE..eE...xB.B|
+; descriptor 13 = base + dir[+0x30] + 14*13, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Whistle' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc013:		; tag 0x40  A=0x2456D  B=0x2457C
 	.byte 0x40, 0x6D, 0x45, 0x02, 0x00, 0x7C, 0x45, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DF1  |@mE..|E...xB.B|
+; descriptor 14 = base + dir[+0x30] + 14*14, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Shakuhachi' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc014:		; tag 0xC0  A=0x2458E  B=0x245FE
 	.byte 0xC0, 0x8E, 0x45, 0x02, 0x00, 0xFE, 0x45, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DFF  |..E...E...xB.B|
+; descriptor 15 = base + dir[+0x30] + 14*15, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ney' (the only
+; map entry holding it).
 ToneDB_EnvDescTable_Desc015:		; tag 0xC0  A=0x2462E  B=0x2469E
 	.byte 0xC0, 0x2E, 0x46, 0x02, 0x00, 0x9E, 0x46, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22E0D  |..F...F...xB.B|
+; descriptor 16 = base + dir[+0x30] + 14*16, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Analog Bass' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc016:		; tag 0x40  A=0x246B6  B=0x246CF
 	.byte 0x40, 0xB6, 0x46, 0x02, 0x00, 0xCF, 0x46, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E1B  |@.F...F...xB.B|
+; descriptor 17 = base + dir[+0x30] + 14*17, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Dance Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc017:		; tag 0x40  A=0x246DB  B=0x2474B
 	.byte 0x40, 0xDB, 0x46, 0x02, 0x00, 0x4B, 0x47, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E29  |@.F..KG...xB.B|
+; descriptor 18 = base + dir[+0x30] + 14*18, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'House Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc018:		; tag 0x40  A=0x2478D  B=0x2479C
 	.byte 0x40, 0x8D, 0x47, 0x02, 0x00, 0x9C, 0x47, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E37  |@.G...G...xB.B|
+; descriptor 19 = base + dir[+0x30] + 14*19, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Organ Click' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc019:		; tag 0xC0  A=0x247D2  B=0x247F9
 	.byte 0xC0, 0xD2, 0x47, 0x02, 0x00, 0xF9, 0x47, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E45  |..G...G...xB.B|
+; descriptor 20 = base + dir[+0x30] + 14*20, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave '16' & 8'' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc020:		; tag 0x40  A=0x24869  B=0x248D9
 	.byte 0x40, 0x69, 0x48, 0x02, 0x00, 0xD9, 0x48, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E53  |@iH...H...xB.B|
+; descriptor 21 = base + dir[+0x30] + 14*21, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave '16'' (the only
+; map entry holding it).
 ToneDB_EnvDescTable_Desc021:		; tag 0x40  A=0x248EB  B=0x2495B
 	.byte 0x40, 0xEB, 0x48, 0x02, 0x00, 0x5B, 0x49, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E61  |@.H..[I...xB.B|
+; descriptor 22 = base + dir[+0x30] + 14*22, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Piano R' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc022:		; tag 0xC0  A=0x24967  B=0x249D7
 	.byte 0xC0, 0x67, 0x49, 0x02, 0x00, 0xD7, 0x49, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E6F  |.gI...I...xB.B|
+; descriptor 23 = base + dir[+0x30] + 14*23, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'BrightPiano R'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc023:		; tag 0xC0  A=0x24A5F  B=0x24ACF
 	.byte 0xC0, 0x5F, 0x4A, 0x02, 0x00, 0xCF, 0x4A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E7D  |._J...J...xB.B|
+; descriptor 24 = base + dir[+0x30] + 14*24, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 24; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc024:		; tag 0x40  A=0x24B5F  B=0x24BCF
 	.byte 0x40, 0x5F, 0x4B, 0x02, 0x00, 0xCF, 0x4B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E8B  |@_K...K...xB.B|
+; descriptor 25 = base + dir[+0x30] + 14*25, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'E.Piano 2' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc025:		; tag 0x40  A=0x24C35  B=0x24CA5
 	.byte 0x40, 0x35, 0x4C, 0x02, 0x00, 0xA5, 0x4C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E99  |@5L...L...xB.B|
+; descriptor 26 = base + dir[+0x30] + 14*26, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Modern E.P.2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc026:		; tag 0x40  A=0x24D0B  B=0x24D32
 	.byte 0x40, 0x0B, 0x4D, 0x02, 0x00, 0x32, 0x4D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EA7  |@.M..2M...xB.B|
+; descriptor 27 = base + dir[+0x30] + 14*27, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bell Piano'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc027:		; tag 0xC0  A=0x24D62  B=0x24D89
 	.byte 0xC0, 0x62, 0x4D, 0x02, 0x00, 0x89, 0x4D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EB5  |.bM...M...xB.B|
+; descriptor 28 = base + dir[+0x30] + 14*28, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bell Pad' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc028:		; tag 0xC1  A=0x24DC1  B=0x24DE8
 	.byte 0xC1, 0xC1, 0x4D, 0x02, 0x00, 0xE8, 0x4D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EC3  |..M...M...xB.B|
+; descriptor 29 = base + dir[+0x30] + 14*29, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Banjo' (16 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc029:		; tag 0x40  A=0x24E28  B=0x24E98
 	.byte 0x40, 0x28, 0x4E, 0x02, 0x00, 0x98, 0x4E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22ED1  |@(N...N...xB.B|
+; descriptor 30 = base + dir[+0x30] + 14*30, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mandolin' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc030:		; tag 0x40  A=0x24ED4  B=0x24F44
 	.byte 0x40, 0xD4, 0x4E, 0x02, 0x00, 0x44, 0x4F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EDF  |@.N..DO...xB.B|
+; descriptor 31 = base + dir[+0x30] + 14*31, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Harp' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc031:		; tag 0x40  A=0x24F80  B=0x24FF0
 	.byte 0x40, 0x80, 0x4F, 0x02, 0x00, 0xF0, 0x4F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EED  |@.O...O...xB.B|
+; descriptor 32 = base + dir[+0x30] + 14*32, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Orchestra Hit'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc032:		; tag 0x40  A=0x25044  B=0x25053
 	.byte 0x40, 0x44, 0x50, 0x02, 0x00, 0x53, 0x50, 0x02, 0x00, 0x0C, 0x69, 0x42, 0x80, 0x42	; 22EFB  |@DP..SP...iB.B|
+; descriptor 33 = base + dir[+0x30] + 14*33, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Timpani' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc033:		; tag 0xC0  A=0x25059  B=0x25068
 	.byte 0xC0, 0x59, 0x50, 0x02, 0x00, 0x68, 0x50, 0x02, 0x00, 0x0C, 0x5B, 0x42, 0x80, 0x42	; 22F09  |.YP..hP...[B.B|
+; descriptor 34 = base + dir[+0x30] + 14*34, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Music Box' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc034:		; tag 0x40  A=0x25070  B=0x25089
 	.byte 0x40, 0x70, 0x50, 0x02, 0x00, 0x89, 0x50, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22F17  |@pP...P...xB.B|
+; descriptor 35 = base + dir[+0x30] + 14*35, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Koto' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc035:		; tag 0x40  A=0x250AD  B=0x2511D
 	.byte 0x40, 0xAD, 0x50, 0x02, 0x00, 0x1D, 0x51, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F25  |@.P...Q...xB.B|
+; descriptor 36 = base + dir[+0x30] + 14*36, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Shamisen' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc036:		; tag 0x40  A=0x2515F  B=0x251CF
 	.byte 0x40, 0x5F, 0x51, 0x02, 0x00, 0xCF, 0x51, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F33  |@_Q...Q...xB.B|
+; descriptor 37 = base + dir[+0x30] + 14*37, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Kalimba' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc037:		; tag 0x40  A=0x25205  B=0x25214
 	.byte 0x40, 0x05, 0x52, 0x02, 0x00, 0x14, 0x52, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22F41  |@.R...R...xB.B|
+; descriptor 38 = base + dir[+0x30] + 14*38, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sitar' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc038:		; tag 0x40  A=0x25232  B=0x252A2
 	.byte 0x40, 0x32, 0x52, 0x02, 0x00, 0xA2, 0x52, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F4F  |@2R...R...xB.B|
+; descriptor 39 = base + dir[+0x30] + 14*39, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Dulcimer' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc039:		; tag 0x40  A=0x252E4  B=0x25354
 	.byte 0x40, 0xE4, 0x52, 0x02, 0x00, 0x54, 0x53, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F5D  |@.R..TS...xB.B|
+; descriptor 40 = base + dir[+0x30] + 14*40, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Gamelan 1' (5
+; map entries hold it).
 ToneDB_EnvDescTable_Desc040:		; tag 0x40  A=0x2539C  B=0x253B5
 	.byte 0x40, 0x9C, 0x53, 0x02, 0x00, 0xB5, 0x53, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F6B  |@.S...S...xB.B|
+; descriptor 41 = base + dir[+0x30] + 14*41, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Gamelan 2' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc041:		; tag 0x40  A=0x253C1  B=0x253D0
 	.byte 0x40, 0xC1, 0x53, 0x02, 0x00, 0xD0, 0x53, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F79  |@.S...S...xB.B|
+; descriptor 42 = base + dir[+0x30] + 14*42, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Gamelan 3' (2
+; map entries hold it).
 ToneDB_EnvDescTable_Desc042:		; tag 0x40  A=0x253DC  B=0x2544C
 	.byte 0x40, 0xDC, 0x53, 0x02, 0x00, 0x4C, 0x54, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F87  |@.S..LT...xB.B|
+; descriptor 43 = base + dir[+0x30] + 14*43, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Crystal Wave'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc043:		; tag 0x40  A=0x25476  B=0x254E6
 	.byte 0x40, 0x76, 0x54, 0x02, 0x00, 0xE6, 0x54, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F95  |@vT...T...xB.B|
+; descriptor 44 = base + dir[+0x30] + 14*44, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Funky E.Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc044:		; tag 0x40  A=0x254F8  B=0x25507
 	.byte 0x40, 0xF8, 0x54, 0x02, 0x00, 0x07, 0x55, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FA3  |@.T...U...xB.B|
+; descriptor 45 = base + dir[+0x30] + 14*45, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'FretlessBass1'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc045:		; tag 0x40  A=0x2553D  B=0x255AD
 	.byte 0x40, 0x3D, 0x55, 0x02, 0x00, 0xAD, 0x55, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FB1  |@=U...U...xB.B|
+; descriptor 46 = base + dir[+0x30] + 14*46, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'FretlessBass2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc046:		; tag 0x40  A=0x255D1  B=0x255F8
 	.byte 0x40, 0xD1, 0x55, 0x02, 0x00, 0xF8, 0x55, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FBF  |@.U...U...xB.B|
+; descriptor 47 = base + dir[+0x30] + 14*47, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rock Snare' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc047:		; tag 0xC0  A=0x25616  B=0x25625
 	.byte 0xC0, 0x16, 0x56, 0x02, 0x00, 0x25, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FCD  |..V..%V...xB.B|
+; descriptor 48 = base + dir[+0x30] + 14*48, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Reverse Snare'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc048:		; tag 0xC0  A=0x2562D  B=0x2563C
 	.byte 0xC0, 0x2D, 0x56, 0x02, 0x00, 0x3C, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FDB  |.-V..<V...xB.B|
+; descriptor 49 = base + dir[+0x30] + 14*49, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'House Snare'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc049:		; tag 0xC0  A=0x25644  B=0x25653
 	.byte 0xC0, 0x44, 0x56, 0x02, 0x00, 0x53, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FE9  |.DV..SV...xB.B|
+; descriptor 50 = base + dir[+0x30] + 14*50, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Soul Snare' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc050:		; tag 0xC0  A=0x2565B  B=0x2566A
 	.byte 0xC0, 0x5B, 0x56, 0x02, 0x00, 0x6A, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FF7  |.[V..jV...xB.B|
+; descriptor 51 = base + dir[+0x30] + 14*51, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Analog Snare'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc051:		; tag 0xC0  A=0x25672  B=0x25681
 	.byte 0xC0, 0x72, 0x56, 0x02, 0x00, 0x81, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23005  |.rV...V...xB.B|
+; descriptor 52 = base + dir[+0x30] + 14*52, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Piccolo Snare'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc052:		; tag 0xC0  A=0x25689  B=0x25698
 	.byte 0xC0, 0x89, 0x56, 0x02, 0x00, 0x98, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23013  |..V...V...xB.B|
+; descriptor 53 = base + dir[+0x30] + 14*53, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Harpsichord 2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc053:		; tag 0x40  A=0x256A0  B=0x25710
 	.byte 0x40, 0xA0, 0x56, 0x02, 0x00, 0x10, 0x57, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23021  |@.V...W...xB.B|
+; descriptor 54 = base + dir[+0x30] + 14*54, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Harpsichord 1'
+; (23 map entries hold it).
 ToneDB_EnvDescTable_Desc054:		; tag 0x40  A=0x2576A  B=0x257DA
 	.byte 0x40, 0x6A, 0x57, 0x02, 0x00, 0xDA, 0x57, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2302F  |@jW...W...xB.B|
+; descriptor 55 = base + dir[+0x30] + 14*55, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clavi' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc055:		; tag 0x40  A=0x2583A  B=0x258AA
 	.byte 0x40, 0x3A, 0x58, 0x02, 0x00, 0xAA, 0x58, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2303D  |@:X...X...xB.B|
+; descriptor 56 = base + dir[+0x30] + 14*56, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Synth Clavi' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc056:		; tag 0x40  A=0x258FE  B=0x25925
 	.byte 0x40, 0xFE, 0x58, 0x02, 0x00, 0x25, 0x59, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2304B  |@.X..%Y...xB.B|
+; descriptor 57 = base + dir[+0x30] + 14*57, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vibraphone' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc057:		; tag 0x40  A=0x25955  B=0x259C5
 	.byte 0x40, 0x55, 0x59, 0x02, 0x00, 0xC5, 0x59, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23059  |@UY...Y...xB.B|
+; descriptor 58 = base + dir[+0x30] + 14*58, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Marimba' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc058:		; tag 0x40  A=0x259FB  B=0x25A14
 	.byte 0x40, 0xFB, 0x59, 0x02, 0x00, 0x14, 0x5A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23067  |@.Y...Z...xB.B|
+; descriptor 59 = base + dir[+0x30] + 14*59, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Xylophone' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc059:		; tag 0x40  A=0x25A44  B=0x25A5D
 	.byte 0x40, 0x44, 0x5A, 0x02, 0x00, 0x5D, 0x5A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23075  |@DZ..]Z...xB.B|
+; descriptor 60 = base + dir[+0x30] + 14*60, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Celesta' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc060:		; tag 0x40  A=0x25A8D  B=0x25AFD
 	.byte 0x40, 0x8D, 0x5A, 0x02, 0x00, 0xFD, 0x5A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23083  |@.Z...Z...xB.B|
+; descriptor 61 = base + dir[+0x30] + 14*61, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Solid Bars'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc061:		; tag 0x40  A=0x25B4B  B=0x25BBB
 	.byte 0x40, 0x4B, 0x5B, 0x02, 0x00, 0xBB, 0x5B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23091  |@K[...[...xB.B|
+; descriptor 62 = base + dir[+0x30] + 14*62, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'BottleMarimba'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc062:		; tag 0x40  A=0x25BDF  B=0x25C4F
 	.byte 0x40, 0xDF, 0x5B, 0x02, 0x00, 0x4F, 0x5C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2309F  |@.[..O\...xB.B|
+; descriptor 63 = base + dir[+0x30] + 14*63, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'AfricanMallet',
+; 'Pulse Wave 1', 'Pulse Wave 2', 'Pulse Wave 3' and 1 more (40 map entries hold it).
 ToneDB_EnvDescTable_Desc063:		; tag 0x40  A=0x25C7F  B=0x25CEF
 	.byte 0x40, 0x7F, 0x5C, 0x02, 0x00, 0xEF, 0x5C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 230AD  |@.\...\...xB.B|
+; descriptor 64 = base + dir[+0x30] + 14*64, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Classical Gtr'
+; (6 map entries hold it).
 ToneDB_EnvDescTable_Desc064:		; tag 0x40  A=0x25D0D  B=0x25D7D
 	.byte 0x40, 0x0D, 0x5D, 0x02, 0x00, 0x7D, 0x5D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 230BB  |@.]..}]...xB.B|
+; descriptor 65 = base + dir[+0x30] + 14*65, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clas.Strings1'
+; (29 map entries hold it).
 ToneDB_EnvDescTable_Desc065:		; tag 0xC0  A=0x25DA7  B=0x25E17
 	.byte 0xC0, 0xA7, 0x5D, 0x02, 0x00, 0x17, 0x5E, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 230C9  |..]...^...nB.B|
+; descriptor 66 = base + dir[+0x30] + 14*66, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clas.Strings2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc066:		; tag 0xC1  A=0x25E67  B=0x25ED7
 	.byte 0xC1, 0x67, 0x5E, 0x02, 0x00, 0xD7, 0x5E, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 230D7  |.g^...^...nB.B|
+; descriptor 67 = base + dir[+0x30] + 14*67, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mellow Ens.'
+; (17 map entries hold it).
 ToneDB_EnvDescTable_Desc067:		; tag 0xC1  A=0x25F27  B=0x25F40
 	.byte 0xC1, 0x27, 0x5F, 0x02, 0x00, 0x40, 0x5F, 0x02, 0x00, 0x15, 0x6E, 0x42, 0x80, 0x42	; 230E5  |.'_..@_...nB.B|
+; descriptor 68 = base + dir[+0x30] + 14*68, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Marcato Str.1'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc068:		; tag 0xC0  A=0x25F50  B=0x25FC0
 	.byte 0xC0, 0x50, 0x5F, 0x02, 0x00, 0xC0, 0x5F, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 230F3  |.P_..._...nB.B|
+; descriptor 69 = base + dir[+0x30] + 14*69, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Marcato Str.2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc069:		; tag 0xC1  A=0x26010  B=0x26080
 	.byte 0xC1, 0x10, 0x60, 0x02, 0x00, 0x80, 0x60, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23101  |..`...`...nB.B|
+; descriptor 70 = base + dir[+0x30] + 14*70, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pizzicato' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc070:		; tag 0x40  A=0x260D0  B=0x26140
 	.byte 0x40, 0xD0, 0x60, 0x02, 0x00, 0x40, 0x61, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2310F  |@.`..@a...xB.B|
+; descriptor 71 = base + dir[+0x30] + 14*71, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Violin' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc071:		; tag 0x40  A=0x2619A  B=0x2620A
 	.byte 0x40, 0x9A, 0x61, 0x02, 0x00, 0x0A, 0x62, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2311D  |@.a...b...xB.B|
+; descriptor 72 = base + dir[+0x30] + 14*72, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz Violin'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc072:		; tag 0x40  A=0x26234  B=0x262A4
 	.byte 0x40, 0x34, 0x62, 0x02, 0x00, 0xA4, 0x62, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2312B  |@4b...b...xB.B|
+; descriptor 73 = base + dir[+0x30] + 14*73, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Viola' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc073:		; tag 0x40  A=0x262CE  B=0x2633E
 	.byte 0x40, 0xCE, 0x62, 0x02, 0x00, 0x3E, 0x63, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23139  |@.b..>c...xB.B|
+; descriptor 74 = base + dir[+0x30] + 14*74, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cello' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc074:		; tag 0x40  A=0x26368  B=0x263D8
 	.byte 0x40, 0x68, 0x63, 0x02, 0x00, 0xD8, 0x63, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23147  |@hc...c...xB.B|
+; descriptor 75 = base + dir[+0x30] + 14*75, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bowed Bass' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc075:		; tag 0x40  A=0x2640E  B=0x2647E
 	.byte 0x40, 0x0E, 0x64, 0x02, 0x00, 0x7E, 0x64, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23155  |@.d..~d...xB.B|
+; descriptor 76 = base + dir[+0x30] + 14*76, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal Ah 1'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc076:		; tag 0xC1  A=0x264A8  B=0x264C1
 	.byte 0xC1, 0xA8, 0x64, 0x02, 0x00, 0xC1, 0x64, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23163  |..d...d...nB.B|
+; descriptor 77 = base + dir[+0x30] + 14*77, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal Ah 2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc077:		; tag 0xC0  A=0x264F9  B=0x26569
 	.byte 0xC0, 0xF9, 0x64, 0x02, 0x00, 0x69, 0x65, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23171  |..d..ie...nB.B|
+; descriptor 78 = base + dir[+0x30] + 14*78, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal Doo' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc078:		; tag 0x40  A=0x265C9  B=0x26639
 	.byte 0x40, 0xC9, 0x65, 0x02, 0x00, 0x39, 0x66, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2317F  |@.e..9f...xB.B|
+; descriptor 79 = base + dir[+0x30] + 14*79, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Fog Vox' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc079:		; tag 0xC0  A=0x26657  B=0x26666
 	.byte 0xC0, 0x57, 0x66, 0x02, 0x00, 0x66, 0x66, 0x02, 0x00, 0x0C, 0x73, 0x42, 0x80, 0x42	; 2318D  |.Wf..ff...sB.B|
+; descriptor 80 = base + dir[+0x30] + 14*80, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Acoustic Bass'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc080:		; tag 0x40  A=0x2666E  B=0x266DE
 	.byte 0x40, 0x6E, 0x66, 0x02, 0x00, 0xDE, 0x66, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2319B  |@nf...f...xB.B|
+; descriptor 81 = base + dir[+0x30] + 14*81, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bright E.Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc081:		; tag 0x40  A=0x2671A  B=0x2678A
 	.byte 0x40, 0x1A, 0x67, 0x02, 0x00, 0x8A, 0x67, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231A9  |@.g...g...xB.B|
+; descriptor 82 = base + dir[+0x30] + 14*82, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Picked E.Bass'
+; (5 map entries hold it).
 ToneDB_EnvDescTable_Desc082:		; tag 0x40  A=0x267C0  B=0x267D9
 	.byte 0x40, 0xC0, 0x67, 0x02, 0x00, 0xD9, 0x67, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231B7  |@.g...g...xB.B|
+; descriptor 83 = base + dir[+0x30] + 14*83, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute Bass' (4
+; map entries hold it).
 ToneDB_EnvDescTable_Desc083:		; tag 0x40  A=0x2680F  B=0x26828
 	.byte 0x40, 0x0F, 0x68, 0x02, 0x00, 0x28, 0x68, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231C5  |@.h..(h...xB.B|
+; descriptor 84 = base + dir[+0x30] + 14*84, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Click Bass' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc084:		; tag 0x40  A=0x2685E  B=0x26885
 	.byte 0x40, 0x5E, 0x68, 0x02, 0x00, 0x85, 0x68, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231D3  |@^h...h...xB.B|
+; descriptor 85 = base + dir[+0x30] + 14*85, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Plastic Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc085:		; tag 0x40  A=0x268A9  B=0x268D0
 	.byte 0x40, 0xA9, 0x68, 0x02, 0x00, 0xD0, 0x68, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231E1  |@.h...h...xB.B|
+; descriptor 86 = base + dir[+0x30] + 14*86, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'White Noise'
+; (24 map entries hold it).
 ToneDB_EnvDescTable_Desc086:		; tag 0xC0  A=0x268E8  B=0x268F7
 	.byte 0xC0, 0xE8, 0x68, 0x02, 0x00, 0xF7, 0x68, 0x02, 0x00, 0x0E, 0x65, 0x42, 0x80, 0x42	; 231EF  |..h...h...eB.B|
+; descriptor 87 = base + dir[+0x30] + 14*87, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'HiPass Noise'
+; (16 map entries hold it).
 ToneDB_EnvDescTable_Desc087:		; tag 0xC0  A=0x268FF  B=0x2690E
 	.byte 0xC0, 0xFF, 0x68, 0x02, 0x00, 0x0E, 0x69, 0x02, 0x00, 0x24, 0x57, 0x42, 0x80, 0x42	; 231FD  |..h...i..$WB.B|
+; descriptor 88 = base + dir[+0x30] + 14*88, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Harpsi.KeyOff'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc088:		; tag 0x40  A=0x26916  B=0x26925
 	.byte 0x40, 0x16, 0x69, 0x02, 0x00, 0x25, 0x69, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2320B  |@.i..%i...xB.B|
+; descriptor 89 = base + dir[+0x30] + 14*89, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clavi KeyOff'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc089:		; tag 0x40  A=0x2692B  B=0x2693A
 	.byte 0x40, 0x2B, 0x69, 0x02, 0x00, 0x3A, 0x69, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 23219  |@+i..:i...xB.B|
+; descriptor 90 = base + dir[+0x30] + 14*90, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap Shot' (232
+; map entries hold it).
 ToneDB_EnvDescTable_Desc090:		; tag 0x40  A=0x26940  B=0x2694F
 	.byte 0x40, 0x40, 0x69, 0x02, 0x00, 0x4F, 0x69, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23227  |@@i..Oi...xB.B|
+; descriptor 91 = base + dir[+0x30] + 14*91, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Scratch 1' (5
+; map entries hold it).
 ToneDB_EnvDescTable_Desc091:		; tag 0xC0  A=0x26955  B=0x26964
 	.byte 0xC0, 0x55, 0x69, 0x02, 0x00, 0x64, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23235  |.Ui..di...xB.B|
+; descriptor 92 = base + dir[+0x30] + 14*92, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Scratch 2' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc092:		; tag 0xC0  A=0x2696C  B=0x2697B
 	.byte 0xC0, 0x6C, 0x69, 0x02, 0x00, 0x7B, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23243  |.li..{i...xB.B|
+; descriptor 93 = base + dir[+0x30] + 14*93, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Voice Ah' (6
+; map entries hold it).
 ToneDB_EnvDescTable_Desc093:		; tag 0xC0  A=0x26983  B=0x26992
 	.byte 0xC0, 0x83, 0x69, 0x02, 0x00, 0x92, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23251  |..i...i...xB.B|
+; descriptor 94 = base + dir[+0x30] + 14*94, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Voice Yeh' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc094:		; tag 0xC0  A=0x2699A  B=0x269A9
 	.byte 0xC0, 0x9A, 0x69, 0x02, 0x00, 0xA9, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2325F  |..i...i...xB.B|
+; descriptor 95 = base + dir[+0x30] + 14*95, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Voice Uh' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc095:		; tag 0xC0  A=0x269B1  B=0x269C0
 	.byte 0xC0, 0xB1, 0x69, 0x02, 0x00, 0xC0, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2326D  |..i...i...xB.B|
+; descriptor 96 = base + dir[+0x30] + 14*96, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bird 1' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc096:		; tag 0xC0  A=0x269C8  B=0x269D7
 	.byte 0xC0, 0xC8, 0x69, 0x02, 0x00, 0xD7, 0x69, 0x02, 0x00, 0x11, 0x67, 0x42, 0x80, 0x42	; 2327B  |..i...i...gB.B|
+; descriptor 97 = base + dir[+0x30] + 14*97, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bird 2' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc097:		; tag 0xC0  A=0x269DF  B=0x269EE
 	.byte 0xC0, 0xDF, 0x69, 0x02, 0x00, 0xEE, 0x69, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23289  |..i...i...eB.B|
+; descriptor 98 = base + dir[+0x30] + 14*98, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Seashore' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc098:		; tag 0xC0  A=0x269F6  B=0x26A05
 	.byte 0xC0, 0xF6, 0x69, 0x02, 0x00, 0x05, 0x6A, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23297  |..i...j...eB.B|
+; descriptor 99 = base + dir[+0x30] + 14*99, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Telephone' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc099:		; tag 0xC0  A=0x26A0D  B=0x26A1C
 	.byte 0xC0, 0x0D, 0x6A, 0x02, 0x00, 0x1C, 0x6A, 0x02, 0x00, 0x0C, 0x58, 0x42, 0x80, 0x42	; 232A5  |..j...j...XB.B|
+; descriptor 100 = base + dir[+0x30] + 14*100, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Helicopter' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc100:		; tag 0xC0  A=0x26A24  B=0x26A33
 	.byte 0xC0, 0x24, 0x6A, 0x02, 0x00, 0x33, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232B3  |.$j..3j...xB.B|
+; descriptor 101 = base + dir[+0x30] + 14*101, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Gun
+; Shot' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc101:		; tag 0xC0  A=0x26A3B  B=0x26A4A
 	.byte 0xC0, 0x3B, 0x6A, 0x02, 0x00, 0x4A, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232C1  |.;j..Jj...xB.B|
+; descriptor 102 = base + dir[+0x30] + 14*102, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Applause' (24 map entries hold it).
 ToneDB_EnvDescTable_Desc102:		; tag 0xC0  A=0x26A52  B=0x26A61
 	.byte 0xC0, 0x52, 0x6A, 0x02, 0x00, 0x61, 0x6A, 0x02, 0x00, 0x11, 0x52, 0x42, 0x80, 0x42	; 232CF  |.Rj..aj...RB.B|
+; descriptor 103 = base + dir[+0x30] + 14*103, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rock
+; Bass Dr.' (21 map entries hold it).
 ToneDB_EnvDescTable_Desc103:		; tag 0xC0  A=0x26A69  B=0x26A78
 	.byte 0xC0, 0x69, 0x6A, 0x02, 0x00, 0x78, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232DD  |.ij..xj...xB.B|
+; descriptor 104 = base + dir[+0x30] + 14*104, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'House
+; BassDr.' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc104:		; tag 0xC0  A=0x26A80  B=0x26A8F
 	.byte 0xC0, 0x80, 0x6A, 0x02, 0x00, 0x8F, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232EB  |..j...j...xB.B|
+; descriptor 105 = base + dir[+0x30] + 14*105, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Soul
+; Bass Dr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc105:		; tag 0xC0  A=0x26A97  B=0x26AA6
 	.byte 0xC0, 0x97, 0x6A, 0x02, 0x00, 0xA6, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232F9  |..j...j...xB.B|
+; descriptor 106 = base + dir[+0x30] + 14*106, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Dance
+; BassDr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc106:		; tag 0xC0  A=0x26AAE  B=0x26ABD
 	.byte 0xC0, 0xAE, 0x6A, 0x02, 0x00, 0xBD, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23307  |..j...j...xB.B|
+; descriptor 107 = base + dir[+0x30] + 14*107, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Elect.BassDr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc107:		; tag 0xC0  A=0x26AC5  B=0x26AD4
 	.byte 0xC0, 0xC5, 0x6A, 0x02, 0x00, 0xD4, 0x6A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23315  |..j...j...xB.B|
+; descriptor 108 = base + dir[+0x30] + 14*108, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Click
+; Sine' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc108:		; tag 0x40  A=0x26ADC  B=0x26B03
 	.byte 0x40, 0xDC, 0x6A, 0x02, 0x00, 0x03, 0x6B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23323  |@.j...k...xB.B|
+; descriptor 109 = base + dir[+0x30] + 14*109, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Organ' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc109:		; tag 0x40  A=0x26B0F  B=0x26B7F
 	.byte 0x40, 0x0F, 0x6B, 0x02, 0x00, 0x7F, 0x6B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23331  |@.k...k...xB.B|
+; descriptor 110 = base + dir[+0x30] + 14*110, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Full
+; Drawbars' (32 map entries hold it).
 ToneDB_EnvDescTable_Desc110:		; tag 0x40  A=0x26B9D  B=0x26C0D
 	.byte 0x40, 0x9D, 0x6B, 0x02, 0x00, 0x0D, 0x6C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2333F  |@.k...l...xB.B|
+; descriptor 111 = base + dir[+0x30] + 14*111, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Drawbars' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc111:		; tag 0x40  A=0x26C43  B=0x26CB3
 	.byte 0x40, 0x43, 0x6C, 0x02, 0x00, 0xB3, 0x6C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2334D  |@Cl...l...xB.B|
+; descriptor 112 = base + dir[+0x30] + 14*112, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave '16' &
+; 1'' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc112:		; tag 0x40  A=0x26CDD  B=0x26D4D
 	.byte 0x40, 0xDD, 0x6C, 0x02, 0x00, 0x4D, 0x6D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2335B  |@.l..Mm...xB.B|
+; descriptor 113 = base + dir[+0x30] + 14*113, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pipe
+; Organ 1' (24 map entries hold it).
 ToneDB_EnvDescTable_Desc113:		; tag 0xC0  A=0x26D65  B=0x26DD5
 	.byte 0xC0, 0x65, 0x6D, 0x02, 0x00, 0xD5, 0x6D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23369  |.em...m...xB.B|
+; descriptor 114 = base + dir[+0x30] + 14*114, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pipe
+; Organ 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc114:		; tag 0xC0  A=0x26E55  B=0x26EC5
 	.byte 0xC0, 0x55, 0x6E, 0x02, 0x00, 0xC5, 0x6E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23377  |.Un...n...xB.B|
+; descriptor 115 = base + dir[+0x30] + 14*115, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Mel.Accordion' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc115:		; tag 0x40  A=0x26F1D  B=0x26F8D
 	.byte 0x40, 0x1D, 0x6F, 0x02, 0x00, 0x8D, 0x6F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23385  |@.o...o...xB.B|
+; descriptor 116 = base + dir[+0x30] + 14*116, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Brt.Accordion' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc116:		; tag 0x40  A=0x26FC9  B=0x27039
 	.byte 0x40, 0xC9, 0x6F, 0x02, 0x00, 0x39, 0x70, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23393  |@.o..9p...xB.B|
+; descriptor 117 = base + dir[+0x30] + 14*117, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Musette' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc117:		; tag 0x40  A=0x2705D  B=0x270CD
 	.byte 0x40, 0x5D, 0x70, 0x02, 0x00, 0xCD, 0x70, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233A1  |@]p...p...xB.B|
+; descriptor 118 = base + dir[+0x30] + 14*118, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Triangle Wave' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc118:		; tag 0x40  A=0x27103  B=0x27173
 	.byte 0x40, 0x03, 0x71, 0x02, 0x00, 0x73, 0x71, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233AF  |@.q..sq...xB.B|
+; descriptor 119 = base + dir[+0x30] + 14*119, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Sawtooth Wave' (2 map entries hold it).
 ToneDB_EnvDescTable_Desc119:		; tag 0x40  A=0x271A3  B=0x271BC
 	.byte 0x40, 0xA3, 0x71, 0x02, 0x00, 0xBC, 0x71, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233BD  |@.q...q...xB.B|
+; descriptor 120 = base + dir[+0x30] + 14*120, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Square
+; Wave' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc120:		; tag 0x40  A=0x271FE  B=0x27217
 	.byte 0x40, 0xFE, 0x71, 0x02, 0x00, 0x17, 0x72, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233CB  |@.q...r...xB.B|
+; descriptor 121 = base + dir[+0x30] + 14*121, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Lead' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc121:		; tag 0x40  A=0x2724D  B=0x272BD
 	.byte 0x40, 0x4D, 0x72, 0x02, 0x00, 0xBD, 0x72, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233D9  |@Mr...r...xB.B|
+; descriptor 122 = base + dir[+0x30] + 14*122, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Wire' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc122:		; tag 0x40  A=0x272ED  B=0x2735D
 	.byte 0x40, 0xED, 0x72, 0x02, 0x00, 0x5D, 0x73, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233E7  |@.r..]s...xB.B|
+; descriptor 123 = base + dir[+0x30] + 14*123, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Wave 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc123:		; tag 0x40  A=0x2738D  B=0x273A6
 	.byte 0x40, 0x8D, 0x73, 0x02, 0x00, 0xA6, 0x73, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233F5  |@.s...s...xB.B|
+; descriptor 124 = base + dir[+0x30] + 14*124, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Wave 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc124:		; tag 0x40  A=0x273C4  B=0x273EB
 	.byte 0x40, 0xC4, 0x73, 0x02, 0x00, 0xEB, 0x73, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23403  |@.s...s...xB.B|
+; descriptor 125 = base + dir[+0x30] + 14*125, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Wave 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc125:		; tag 0x40  A=0x27415  B=0x27435
 	.byte 0x40, 0x15, 0x74, 0x02, 0x00, 0x35, 0x74, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23411  |@.t..5t...xB.B|
+; descriptor 126 = base + dir[+0x30] + 14*126, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Organ
+; Bell' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc126:		; tag 0x41  A=0x27459  B=0x27480
 	.byte 0x41, 0x59, 0x74, 0x02, 0x00, 0x80, 0x74, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2341F  |AYt...t...xB.B|
+; descriptor 127 = base + dir[+0x30] + 14*127, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bright
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc127:		; tag 0x40  A=0x27492  B=0x27502
 	.byte 0x40, 0x92, 0x74, 0x02, 0x00, 0x02, 0x75, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2342D  |@.t...u...xB.B|
+; descriptor 128 = base + dir[+0x30] + 14*128, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc128:		; tag 0x40  A=0x27526  B=0x27596
 	.byte 0x40, 0x26, 0x75, 0x02, 0x00, 0x96, 0x75, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2343B  |@&u...u...xB.B|
+; descriptor 129 = base + dir[+0x30] + 14*129, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pulse
+; Mod.1' (15 map entries hold it).
 ToneDB_EnvDescTable_Desc129:		; tag 0xC0  A=0x275BA  B=0x2762A
 	.byte 0xC0, 0xBA, 0x75, 0x02, 0x00, 0x2A, 0x76, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23449  |..u..*v...xB.B|
+; descriptor 130 = base + dir[+0x30] + 14*130, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pulse
+; Mod.2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc130:		; tag 0xC1  A=0x27662  B=0x276D2
 	.byte 0xC1, 0x62, 0x76, 0x02, 0x00, 0xD2, 0x76, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23457  |.bv...v...xB.B|
+; descriptor 131 = base + dir[+0x30] + 14*131, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Fusion
+; E.Bass' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc131:		; tag 0x40  A=0x2770A  B=0x2772A
 	.byte 0x40, 0x0A, 0x77, 0x02, 0x00, 0x2A, 0x77, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23465  |@.w..*w...xB.B|
+; descriptor 132 = base + dir[+0x30] + 14*132, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Melodic
+; Tom' (16 map entries hold it).
 ToneDB_EnvDescTable_Desc132:		; tag 0xC0  A=0x27760  B=0x2776F
 	.byte 0xC0, 0x60, 0x77, 0x02, 0x00, 0x6F, 0x77, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23473  |.`w..ow...xB.B|
+; descriptor 133 = base + dir[+0x30] + 14*133, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Tom' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc133:		; tag 0xC0  A=0x27777  B=0x27786
 	.byte 0xC0, 0x77, 0x77, 0x02, 0x00, 0x86, 0x77, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23481  |.ww...w...xB.B|
+; descriptor 134 = base + dir[+0x30] + 14*134, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Electric Tom' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc134:		; tag 0xC0  A=0x2778E  B=0x2779D
 	.byte 0xC0, 0x8E, 0x77, 0x02, 0x00, 0x9D, 0x77, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2348F  |..w...w...xB.B|
+; descriptor 135 = base + dir[+0x30] + 14*135, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Analog
+; Tom' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc135:		; tag 0xC0  A=0x277A5  B=0x277B4
 	.byte 0xC0, 0xA5, 0x77, 0x02, 0x00, 0xB4, 0x77, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2349D  |..w...w...xB.B|
+; descriptor 136 = base + dir[+0x30] + 14*136, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ElectBassTom' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc136:		; tag 0xC0  A=0x277BC  B=0x277CB
 	.byte 0xC0, 0xBC, 0x77, 0x02, 0x00, 0xCB, 0x77, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 234AB  |..w...w...xB.B|
+; descriptor 137 = base + dir[+0x30] + 14*137, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rim 1'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc137:		; tag 0xC0  A=0x277D3  B=0x277E2
 	.byte 0xC0, 0xD3, 0x77, 0x02, 0x00, 0xE2, 0x77, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 234B9  |..w...w...xB.B|
+; descriptor 138 = base + dir[+0x30] + 14*138, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rim 2'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc138:		; tag 0xC0  A=0x277EA  B=0x277F9
 	.byte 0xC0, 0xEA, 0x77, 0x02, 0x00, 0xF9, 0x77, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 234C7  |..w...w...xB.B|
+; descriptor 139 = base + dir[+0x30] + 14*139, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rim 3'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc139:		; tag 0xC0  A=0x27801  B=0x27810
 	.byte 0xC0, 0x01, 0x78, 0x02, 0x00, 0x10, 0x78, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 234D5  |..x...x...xB.B|
+; descriptor 140 = base + dir[+0x30] + 14*140, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Brush
+; Long' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc140:		; tag 0xC0  A=0x27818  B=0x27827
 	.byte 0xC0, 0x18, 0x78, 0x02, 0x00, 0x27, 0x78, 0x02, 0x00, 0x0C, 0x5B, 0x42, 0x80, 0x42	; 234E3  |..x..'x...[B.B|
+; descriptor 141 = base + dir[+0x30] + 14*141, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Brush
+; Short' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc141:		; tag 0xC0  A=0x2782F  B=0x2783E
 	.byte 0xC0, 0x2F, 0x78, 0x02, 0x00, 0x3E, 0x78, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 234F1  |./x..>x...xB.B|
+; descriptor 142 = base + dir[+0x30] + 14*142, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'HiHatClosed 1' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc142:		; tag 0xC0  A=0x27846  B=0x27855
 	.byte 0xC0, 0x46, 0x78, 0x02, 0x00, 0x55, 0x78, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 234FF  |.Fx..Ux...xB.B|
+; descriptor 143 = base + dir[+0x30] + 14*143, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'HiHatClosed 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc143:		; tag 0xC0  A=0x2785D  B=0x2786C
 	.byte 0xC0, 0x5D, 0x78, 0x02, 0x00, 0x6C, 0x78, 0x02, 0x00, 0x0C, 0x5D, 0x42, 0x80, 0x42	; 2350D  |.]x..lx...]B.B|
+; descriptor 144 = base + dir[+0x30] + 14*144, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'HiHat
+; Open 1' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc144:		; tag 0xC0  A=0x27874  B=0x27883
 	.byte 0xC0, 0x74, 0x78, 0x02, 0x00, 0x83, 0x78, 0x02, 0x00, 0x11, 0x5A, 0x42, 0x80, 0x42	; 2351B  |.tx...x...ZB.B|
+; descriptor 145 = base + dir[+0x30] + 14*145, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'HiHat
+; Open 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc145:		; tag 0x40  A=0x2788B  B=0x2789A
 	.byte 0x40, 0x8B, 0x78, 0x02, 0x00, 0x9A, 0x78, 0x02, 0x00, 0x11, 0x4E, 0x42, 0x80, 0x42	; 23529  |@.x...x...NB.B|
+; descriptor 146 = base + dir[+0x30] + 14*146, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ride
+; Cymbal 1' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc146:		; tag 0x40  A=0x278A0  B=0x278AF
 	.byte 0x40, 0xA0, 0x78, 0x02, 0x00, 0xAF, 0x78, 0x02, 0x00, 0x11, 0x62, 0x42, 0x80, 0x42	; 23537  |@.x...x...bB.B|
+; descriptor 147 = base + dir[+0x30] + 14*147, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ride
+; Cymbal 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc147:		; tag 0x40  A=0x278B5  B=0x278C4
 	.byte 0x40, 0xB5, 0x78, 0x02, 0x00, 0xC4, 0x78, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23545  |@.x...x...eB.B|
+; descriptor 148 = base + dir[+0x30] + 14*148, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ride
+; Bell' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc148:		; tag 0x40  A=0x278CA  B=0x278D9
 	.byte 0x40, 0xCA, 0x78, 0x02, 0x00, 0xD9, 0x78, 0x02, 0x00, 0x11, 0x64, 0x42, 0x80, 0x42	; 23553  |@.x...x...dB.B|
+; descriptor 149 = base + dir[+0x30] + 14*149, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ReverseCymbl1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc149:		; tag 0x40  A=0x278DF  B=0x278EE
 	.byte 0x40, 0xDF, 0x78, 0x02, 0x00, 0xEE, 0x78, 0x02, 0x00, 0x11, 0x64, 0x42, 0x80, 0x42	; 23561  |@.x...x...dB.B|
+; descriptor 150 = base + dir[+0x30] + 14*150, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ReverseCymbl2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc150:		; tag 0x40  A=0x278F4  B=0x27903
 	.byte 0x40, 0xF4, 0x78, 0x02, 0x00, 0x03, 0x79, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 2356F  |@.x...y...eB.B|
+; descriptor 151 = base + dir[+0x30] + 14*151, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Crash
+; Cymbal1' (5 map entries hold it).
 ToneDB_EnvDescTable_Desc151:		; tag 0x40  A=0x27909  B=0x27918
 	.byte 0x40, 0x09, 0x79, 0x02, 0x00, 0x18, 0x79, 0x02, 0x00, 0x1C, 0x65, 0x42, 0x80, 0x42	; 2357D  |@.y...y...eB.B|
+; descriptor 152 = base + dir[+0x30] + 14*152, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Crash
+; Cymbal2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc152:		; tag 0x40  A=0x2791E  B=0x2792D
 	.byte 0x40, 0x1E, 0x79, 0x02, 0x00, 0x2D, 0x79, 0x02, 0x00, 0x1C, 0x5D, 0x42, 0x80, 0x42	; 2358B  |@.y..-y...]B.B|
+; descriptor 153 = base + dir[+0x30] + 14*153, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Splash
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc153:		; tag 0x40  A=0x27933  B=0x27942
 	.byte 0x40, 0x33, 0x79, 0x02, 0x00, 0x42, 0x79, 0x02, 0x00, 0x1C, 0x67, 0x42, 0x80, 0x42	; 23599  |@3y..By...gB.B|
+; descriptor 154 = base + dir[+0x30] + 14*154, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'China
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc154:		; tag 0x40  A=0x27948  B=0x27957
 	.byte 0x40, 0x48, 0x79, 0x02, 0x00, 0x57, 0x79, 0x02, 0x00, 0x1C, 0x67, 0x42, 0x80, 0x42	; 235A7  |@Hy..Wy...gB.B|
+; descriptor 155 = base + dir[+0x30] + 14*155, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Agogo'
+; (6 map entries hold it).
 ToneDB_EnvDescTable_Desc155:		; tag 0xC0  A=0x2795D  B=0x2796C
 	.byte 0xC0, 0x5D, 0x79, 0x02, 0x00, 0x6C, 0x79, 0x02, 0x00, 0x13, 0x63, 0x42, 0x80, 0x42	; 235B5  |.]y..ly...cB.B|
+; descriptor 156 = base + dir[+0x30] + 14*156, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sleigh
+; Bell' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc156:		; tag 0xC0  A=0x27974  B=0x27983
 	.byte 0xC0, 0x74, 0x79, 0x02, 0x00, 0x83, 0x79, 0x02, 0x00, 0x0C, 0x45, 0x42, 0x80, 0x42	; 235C3  |.ty...y...EB.B|
+; descriptor 157 = base + dir[+0x30] + 14*157, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Cowbell' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc157:		; tag 0xC0  A=0x2798B  B=0x2799A
 	.byte 0xC0, 0x8B, 0x79, 0x02, 0x00, 0x9A, 0x79, 0x02, 0x00, 0x15, 0x6C, 0x42, 0x80, 0x42	; 235D1  |..y...y...lB.B|
+; descriptor 158 = base + dir[+0x30] + 14*158, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Wind
+; Chime 1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc158:		; tag 0xC0  A=0x279A2  B=0x279B1
 	.byte 0xC0, 0xA2, 0x79, 0x02, 0x00, 0xB1, 0x79, 0x02, 0x00, 0x1D, 0x50, 0x42, 0x80, 0x42	; 235DF  |..y...y...PB.B|
+; descriptor 159 = base + dir[+0x30] + 14*159, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Wind
+; Chime 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc159:		; tag 0xC0  A=0x279B9  B=0x279C8
 	.byte 0xC0, 0xB9, 0x79, 0x02, 0x00, 0xC8, 0x79, 0x02, 0x00, 0x1D, 0x50, 0x42, 0x80, 0x42	; 235ED  |..y...y...PB.B|
+; descriptor 160 = base + dir[+0x30] + 14*160, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bongo'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc160:		; tag 0xC0  A=0x279D0  B=0x279DF
 	.byte 0xC0, 0xD0, 0x79, 0x02, 0x00, 0xDF, 0x79, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 235FB  |..y...y...xB.B|
+; descriptor 161 = base + dir[+0x30] + 14*161, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Conga
+; 1' (16 map entries hold it).
 ToneDB_EnvDescTable_Desc161:		; tag 0xC0  A=0x279E7  B=0x279F6
 	.byte 0xC0, 0xE7, 0x79, 0x02, 0x00, 0xF6, 0x79, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23609  |..y...y...xB.B|
+; descriptor 162 = base + dir[+0x30] + 14*162, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Conga
+; 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc162:		; tag 0xC0  A=0x279FE  B=0x27A0D
 	.byte 0xC0, 0xFE, 0x79, 0x02, 0x00, 0x0D, 0x7A, 0x02, 0x00, 0x1A, 0x78, 0x42, 0x80, 0x42	; 23617  |..y...z...xB.B|
+; descriptor 163 = base + dir[+0x30] + 14*163, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cuica
+; 1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc163:		; tag 0xC0  A=0x27A15  B=0x27A24
 	.byte 0xC0, 0x15, 0x7A, 0x02, 0x00, 0x24, 0x7A, 0x02, 0x00, 0x21, 0x78, 0x42, 0x80, 0x42	; 23625  |..z..$z..!xB.B|
+; descriptor 164 = base + dir[+0x30] + 14*164, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cuica
+; 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc164:		; tag 0xC0  A=0x27A2C  B=0x27A3B
 	.byte 0xC0, 0x2C, 0x7A, 0x02, 0x00, 0x3B, 0x7A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23633  |.,z..;z...xB.B|
+; descriptor 165 = base + dir[+0x30] + 14*165, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Guiro
+; long' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc165:		; tag 0xC0  A=0x27A43  B=0x27A52
 	.byte 0xC0, 0x43, 0x7A, 0x02, 0x00, 0x52, 0x7A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23641  |.Cz..Rz...xB.B|
+; descriptor 166 = base + dir[+0x30] + 14*166, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Guiro
+; Short' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc166:		; tag 0xC0  A=0x27A5A  B=0x27A69
 	.byte 0xC0, 0x5A, 0x7A, 0x02, 0x00, 0x69, 0x7A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2364F  |.Zz..iz...xB.B|
+; descriptor 167 = base + dir[+0x30] + 14*167, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Hand
+; Claps' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc167:		; tag 0xC0  A=0x27A71  B=0x27A80
 	.byte 0xC0, 0x71, 0x7A, 0x02, 0x00, 0x80, 0x7A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2365D  |.qz...z...xB.B|
+; descriptor 168 = base + dir[+0x30] + 14*168, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Bass Dr.' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc168:		; tag 0xC0  A=0x27A88  B=0x27A97
 	.byte 0xC0, 0x88, 0x7A, 0x02, 0x00, 0x97, 0x7A, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 2366B  |..z...z...xB.B|
+; descriptor 169 = base + dir[+0x30] + 14*169, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Snare' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc169:		; tag 0xC0  A=0x27A9F  B=0x27AAE
 	.byte 0xC0, 0x9F, 0x7A, 0x02, 0x00, 0xAE, 0x7A, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23679  |..z...z...eB.B|
+; descriptor 170 = base + dir[+0x30] + 14*170, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Cymbal' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc170:		; tag 0xC0  A=0x27AB6  B=0x27AC5
 	.byte 0xC0, 0xB6, 0x7A, 0x02, 0x00, 0xC5, 0x7A, 0x02, 0x00, 0x0C, 0x62, 0x42, 0x80, 0x42	; 23687  |..z...z...bB.B|
+; descriptor 171 = base + dir[+0x30] + 14*171, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Tamb.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc171:		; tag 0xC0  A=0x27ACD  B=0x27ADC
 	.byte 0xC0, 0xCD, 0x7A, 0x02, 0x00, 0xDC, 0x7A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23695  |..z...z...xB.B|
+; descriptor 172 = base + dir[+0x30] + 14*172, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Shaker'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc172:		; tag 0xC0  A=0x27AE4  B=0x27AF3
 	.byte 0xC0, 0xE4, 0x7A, 0x02, 0x00, 0xF3, 0x7A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 236A3  |..z...z...xB.B|
+; descriptor 173 = base + dir[+0x30] + 14*173, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cabasa'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc173:		; tag 0xC0  A=0x27AFB  B=0x27B0A
 	.byte 0xC0, 0xFB, 0x7A, 0x02, 0x00, 0x0A, 0x7B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 236B1  |..z...{...xB.B|
+; descriptor 174 = base + dir[+0x30] + 14*174, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Maracas' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc174:		; tag 0xC0  A=0x27B12  B=0x27B21
 	.byte 0xC0, 0x12, 0x7B, 0x02, 0x00, 0x21, 0x7B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 236BF  |..{..!{...xB.B|
+; descriptor 175 = base + dir[+0x30] + 14*175, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Samba
+; Whistle' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc175:		; tag 0xC0  A=0x27B29  B=0x27B38
 	.byte 0xC0, 0x29, 0x7B, 0x02, 0x00, 0x38, 0x7B, 0x02, 0x00, 0x22, 0x5C, 0x42, 0x80, 0x42	; 236CD  |.){..8{.."\B.B|
+; descriptor 176 = base + dir[+0x30] + 14*176, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc176:		; tag 0xC0  A=0x27B40  B=0x27B4F
 	.byte 0xC0, 0x40, 0x7B, 0x02, 0x00, 0x4F, 0x7B, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 236DB  |.@{..O{...xB.B|
+; descriptor 177 = base + dir[+0x30] + 14*177, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Timbales 1' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc177:		; tag 0xC0  A=0x27B57  B=0x27B66
 	.byte 0xC0, 0x57, 0x7B, 0x02, 0x00, 0x66, 0x7B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 236E9  |.W{..f{...xB.B|
+; descriptor 178 = base + dir[+0x30] + 14*178, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Timbales 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc178:		; tag 0xC0  A=0x27B6E  B=0x27B7D
 	.byte 0xC0, 0x6E, 0x7B, 0x02, 0x00, 0x7D, 0x7B, 0x02, 0x00, 0x0C, 0x65, 0x42, 0x80, 0x42	; 236F7  |.n{..}{...eB.B|
+; descriptor 179 = base + dir[+0x30] + 14*179, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Samba
+; Drum' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc179:		; tag 0xC0  A=0x27B85  B=0x27B94
 	.byte 0xC0, 0x85, 0x7B, 0x02, 0x00, 0x94, 0x7B, 0x02, 0x00, 0x15, 0x78, 0x42, 0x80, 0x42	; 23705  |..{...{...xB.B|
+; descriptor 180 = base + dir[+0x30] + 14*180, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'SambaDrumMute' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc180:		; tag 0xC0  A=0x27B9C  B=0x27BAB
 	.byte 0xC0, 0x9C, 0x7B, 0x02, 0x00, 0xAB, 0x7B, 0x02, 0x00, 0x15, 0x78, 0x42, 0x80, 0x42	; 23713  |..{...{...xB.B|
+; descriptor 181 = base + dir[+0x30] + 14*181, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Tambourine 1' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc181:		; tag 0x40  A=0x27BB3  B=0x27BC2
 	.byte 0x40, 0xB3, 0x7B, 0x02, 0x00, 0xC2, 0x7B, 0x02, 0x00, 0x11, 0x47, 0x42, 0x80, 0x42	; 23721  |@.{...{...GB.B|
+; descriptor 182 = base + dir[+0x30] + 14*182, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Tambourine 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc182:		; tag 0x40  A=0x27BC8  B=0x27BD7
 	.byte 0x40, 0xC8, 0x7B, 0x02, 0x00, 0xD7, 0x7B, 0x02, 0x00, 0x11, 0x60, 0x42, 0x80, 0x42	; 2372F  |@.{...{...`B.B|
+; descriptor 183 = base + dir[+0x30] + 14*183, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Triangle Open' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc183:		; tag 0xC0  A=0x27BDD  B=0x27BEC
 	.byte 0xC0, 0xDD, 0x7B, 0x02, 0x00, 0xEC, 0x7B, 0x02, 0x00, 0x11, 0x52, 0x42, 0x80, 0x42	; 2373D  |..{...{...RB.B|
+; descriptor 184 = base + dir[+0x30] + 14*184, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Triangle Mute' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc184:		; tag 0x40  A=0x27BF4  B=0x27C03
 	.byte 0x40, 0xF4, 0x7B, 0x02, 0x00, 0x03, 0x7C, 0x02, 0x00, 0x10, 0x5B, 0x42, 0x80, 0x42	; 2374B  |@.{...|...[B.B|
+; descriptor 185 = base + dir[+0x30] + 14*185, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Vibraslap' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc185:		; tag 0x40  A=0x27C09  B=0x27C18
 	.byte 0x40, 0x09, 0x7C, 0x02, 0x00, 0x18, 0x7C, 0x02, 0x00, 0x1C, 0x5C, 0x42, 0x80, 0x42	; 23759  |@.|...|...\B.B|
+; descriptor 186 = base + dir[+0x30] + 14*186, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Wood
+; Block' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc186:		; tag 0xC0  A=0x27C1E  B=0x27C2D
 	.byte 0xC0, 0x1E, 0x7C, 0x02, 0x00, 0x2D, 0x7C, 0x02, 0x00, 0x0C, 0x75, 0x42, 0x80, 0x42	; 23767  |..|..-|...uB.B|
+; descriptor 187 = base + dir[+0x30] + 14*187, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Castanets' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc187:		; tag 0xC0  A=0x27C35  B=0x27C44
 	.byte 0xC0, 0x35, 0x7C, 0x02, 0x00, 0x44, 0x7C, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 23775  |.5|..D|...xB.B|
+; descriptor 188 = base + dir[+0x30] + 14*188, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Claves'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc188:		; tag 0xC0  A=0x27C4C  B=0x27C5B
 	.byte 0xC0, 0x4C, 0x7C, 0x02, 0x00, 0x5B, 0x7C, 0x02, 0x00, 0x21, 0x77, 0x42, 0x80, 0x42	; 23783  |.L|..[|..!wB.B|
+; descriptor 189 = base + dir[+0x30] + 14*189, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Crickets' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc189:		; tag 0xC0  A=0x27C63  B=0x27C72
 	.byte 0xC0, 0x63, 0x7C, 0x02, 0x00, 0x72, 0x7C, 0x02, 0x00, 0x1F, 0x78, 0x42, 0x80, 0x42	; 23791  |.c|..r|...xB.B|
+; descriptor 190 = base + dir[+0x30] + 14*190, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Nutshell Tree' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc190:		; tag 0x40  A=0x27C7A  B=0x27C89
 	.byte 0x40, 0x7A, 0x7C, 0x02, 0x00, 0x89, 0x7C, 0x02, 0x00, 0x29, 0x60, 0x42, 0x80, 0x42	; 2379F  |@z|...|..)`B.B|
+; descriptor 191 = base + dir[+0x30] + 14*191, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Talking
+; Drum1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc191:		; tag 0xC0  A=0x27C8F  B=0x27C9E
 	.byte 0xC0, 0x8F, 0x7C, 0x02, 0x00, 0x9E, 0x7C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 237AD  |..|...|...xB.B|
+; descriptor 192 = base + dir[+0x30] + 14*192, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Talking
+; Drum2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc192:		; tag 0xC0  A=0x27CA6  B=0x27CB5
 	.byte 0xC0, 0xA6, 0x7C, 0x02, 0x00, 0xB5, 0x7C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 237BB  |..|...|...xB.B|
+; descriptor 193 = base + dir[+0x30] + 14*193, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'BataDrum Open' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc193:		; tag 0xC0  A=0x27CBD  B=0x27CCC
 	.byte 0xC0, 0xBD, 0x7C, 0x02, 0x00, 0xCC, 0x7C, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 237C9  |..|...|...xB.B|
+; descriptor 194 = base + dir[+0x30] + 14*194, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'BataDrum Slap' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc194:		; tag 0xC0  A=0x27CD4  B=0x27CE3
 	.byte 0xC0, 0xD4, 0x7C, 0x02, 0x00, 0xE3, 0x7C, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 237D7  |..|...|...xB.B|
+; descriptor 195 = base + dir[+0x30] + 14*195, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Darbuka' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc195:		; tag 0xC0  A=0x27CEB  B=0x27CFA
 	.byte 0xC0, 0xEB, 0x7C, 0x02, 0x00, 0xFA, 0x7C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 237E5  |..|...|...xB.B|
+; descriptor 196 = base + dir[+0x30] + 14*196, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Caxixi'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc196:		; tag 0x40  A=0x27D02  B=0x27D11
 	.byte 0x40, 0x02, 0x7D, 0x02, 0x00, 0x11, 0x7D, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 237F3  |@.}...}...xB.B|
+; descriptor 197 = base + dir[+0x30] + 14*197, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Shekele' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc197:		; tag 0x40  A=0x27D17  B=0x27D26
 	.byte 0x40, 0x17, 0x7D, 0x02, 0x00, 0x26, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23801  |@.}..&}...xB.B|
+; descriptor 198 = base + dir[+0x30] + 14*198, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Surdo
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc198:		; tag 0xC0  A=0x27D2C  B=0x27D3B
 	.byte 0xC0, 0x2C, 0x7D, 0x02, 0x00, 0x3B, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2380F  |.,}..;}...xB.B|
+; descriptor 199 = base + dir[+0x30] + 14*199, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Zap 1'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc199:		; tag 0xC0  A=0x27D43  B=0x27D52
 	.byte 0xC0, 0x43, 0x7D, 0x02, 0x00, 0x52, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2381D  |.C}..R}...xB.B|
+; descriptor 200 = base + dir[+0x30] + 14*200, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Zap 2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc200:		; tag 0xC0  A=0x27D5A  B=0x27D69
 	.byte 0xC0, 0x5A, 0x7D, 0x02, 0x00, 0x69, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2382B  |.Z}..i}...xB.B|
+; descriptor 201 = base + dir[+0x30] + 14*201, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ElectroUnison' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc201:		; tag 0xC0  A=0x27D71  B=0x27D80
 	.byte 0xC0, 0x71, 0x7D, 0x02, 0x00, 0x80, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23839  |.q}...}...xB.B|
+; descriptor 202 = base + dir[+0x30] + 14*202, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Electro
+; Shot1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc202:		; tag 0xC0  A=0x27D88  B=0x27D97
 	.byte 0xC0, 0x88, 0x7D, 0x02, 0x00, 0x97, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23847  |..}...}...xB.B|
+; descriptor 203 = base + dir[+0x30] + 14*203, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Electro
+; Shot2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc203:		; tag 0xC0  A=0x27D9F  B=0x27DAE
 	.byte 0xC0, 0x9F, 0x7D, 0x02, 0x00, 0xAE, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23855  |..}...}...xB.B|
+; descriptor 204 = base + dir[+0x30] + 14*204, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'FingerCymbal1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc204:		; tag 0x40  A=0x27DB6  B=0x27DC5
 	.byte 0x40, 0xB6, 0x7D, 0x02, 0x00, 0xC5, 0x7D, 0x02, 0x00, 0x11, 0x6C, 0x42, 0x80, 0x42	; 23863  |@.}...}...lB.B|
+; descriptor 205 = base + dir[+0x30] + 14*205, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'FingerCymbal2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc205:		; tag 0x40  A=0x27DCB  B=0x27DDA
 	.byte 0x40, 0xCB, 0x7D, 0x02, 0x00, 0xDA, 0x7D, 0x02, 0x00, 0x11, 0x6C, 0x42, 0x80, 0x42	; 23871  |@.}...}...lB.B|
+; descriptor 206 = base + dir[+0x30] + 14*206, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Berimbau 1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc206:		; tag 0x40  A=0x27DE0  B=0x27DEF
 	.byte 0x40, 0xE0, 0x7D, 0x02, 0x00, 0xEF, 0x7D, 0x02, 0x00, 0x0C, 0x56, 0x42, 0x80, 0x42	; 2387F  |@.}...}...VB.B|
+; descriptor 207 = base + dir[+0x30] + 14*207, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Berimbau 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc207:		; tag 0x40  A=0x27DF5  B=0x27E04
 	.byte 0x40, 0xF5, 0x7D, 0x02, 0x00, 0x04, 0x7E, 0x02, 0x00, 0x0C, 0x4D, 0x42, 0x80, 0x42	; 2388D  |@.}...~...MB.B|
+; descriptor 208 = base + dir[+0x30] + 14*208, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'E.Grand' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc208:		; tag 0xC0  A=0x27E0A  B=0x27E7A
 	.byte 0xC0, 0x0A, 0x7E, 0x02, 0x00, 0x7A, 0x7E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2389B  |..~..z~...xB.B|
+; descriptor 209 = base + dir[+0x30] + 14*209, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 209; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc209:		; tag 0x40  A=0x27ECA  B=0x27EE3
 	.byte 0x40, 0xCA, 0x7E, 0x02, 0x00, 0xE3, 0x7E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238A9  |@.~...~...xB.B|
+; descriptor 210 = base + dir[+0x30] + 14*210, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 210; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc210:		; tag 0x40  A=0x27F1F  B=0x27F38
 	.byte 0x40, 0x1F, 0x7F, 0x02, 0x00, 0x38, 0x7F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238B7  |@....8....xB.B|
+; descriptor 211 = base + dir[+0x30] + 14*211, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'E.Piano
+; 1' (3 map entries hold it).
 ToneDB_EnvDescTable_Desc211:		; tag 0x40  A=0x27F74  B=0x27F8D
 	.byte 0x40, 0x74, 0x7F, 0x02, 0x00, 0x8D, 0x7F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238C5  |@t........xB.B|
+; descriptor 212 = base + dir[+0x30] + 14*212, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 212; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc212:		; tag 0x40  A=0x27FC9  B=0x27FE2
 	.byte 0x40, 0xC9, 0x7F, 0x02, 0x00, 0xE2, 0x7F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238D3  |@.........xB.B|
+; descriptor 213 = base + dir[+0x30] + 14*213, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Suitcase E.P.' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc213:		; tag 0x40  A=0x2801E  B=0x2808E
 	.byte 0x40, 0x1E, 0x80, 0x02, 0x00, 0x8E, 0x80, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238E1  |@.........xB.B|
+; descriptor 214 = base + dir[+0x30] + 14*214, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 214; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc214:		; tag 0x40  A=0x280E8  B=0x28158
 	.byte 0x40, 0xE8, 0x80, 0x02, 0x00, 0x58, 0x81, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238EF  |@....X....xB.B|
+; descriptor 215 = base + dir[+0x30] + 14*215, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 215; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc215:		; tag 0x40  A=0x281B2  B=0x281D2
 	.byte 0x40, 0xB2, 0x81, 0x02, 0x00, 0xD2, 0x81, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238FD  |@.........xB.B|
+; descriptor 216 = base + dir[+0x30] + 14*216, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 216; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc216:		; tag 0x40  A=0x28202  B=0x28222
 	.byte 0x40, 0x02, 0x82, 0x02, 0x00, 0x22, 0x82, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2390B  |@...."....xB.B|
+; descriptor 217 = base + dir[+0x30] + 14*217, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Modern
+; E.P.1' (2 map entries hold it).
 ToneDB_EnvDescTable_Desc217:		; tag 0x40  A=0x28252  B=0x28272
 	.byte 0x40, 0x52, 0x82, 0x02, 0x00, 0x72, 0x82, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23919  |@R...r....xB.B|
+; descriptor 218 = base + dir[+0x30] + 14*218, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 218; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc218:		; tag 0x40  A=0x282A2  B=0x282C2
 	.byte 0x40, 0xA2, 0x82, 0x02, 0x00, 0xC2, 0x82, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23927  |@.........xB.B|
+; descriptor 219 = base + dir[+0x30] + 14*219, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 219; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc219:		; tag 0x40  A=0x282F2  B=0x28362
 	.byte 0x40, 0xF2, 0x82, 0x02, 0x00, 0x62, 0x83, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23935  |@....b....xB.B|
+; descriptor 220 = base + dir[+0x30] + 14*220, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Glockenspiel' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc220:		; tag 0x40  A=0x283AA  B=0x283D1
 	.byte 0x40, 0xAA, 0x83, 0x02, 0x00, 0xD1, 0x83, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23943  |@.........xB.B|
+; descriptor 221 = base + dir[+0x30] + 14*221, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Steel
+; Drum' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc221:		; tag 0x40  A=0x28407  B=0x28420
 	.byte 0x40, 0x07, 0x84, 0x02, 0x00, 0x20, 0x84, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23951  |@.... ....xB.B|
+; descriptor 222 = base + dir[+0x30] + 14*222, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tubular
+; Bells' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc222:		; tag 0x41  A=0x28450  B=0x28470
 	.byte 0x41, 0x50, 0x84, 0x02, 0x00, 0x70, 0x84, 0x02, 0x00, 0x0C, 0x68, 0x42, 0x80, 0x42	; 2395F  |AP...p....hB.B|
+; descriptor 223 = base + dir[+0x30] + 14*223, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Spanish
+; Gtr' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc223:		; tag 0x40  A=0x2847C  B=0x284EC
 	.byte 0x40, 0x7C, 0x84, 0x02, 0x00, 0xEC, 0x84, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2396D  |@|........xB.B|
+; descriptor 224 = base + dir[+0x30] + 14*224, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 224; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc224:		; tag 0x40  A=0x28534  B=0x285A4
 	.byte 0x40, 0x34, 0x85, 0x02, 0x00, 0xA4, 0x85, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2397B  |@4........xB.B|
+; descriptor 225 = base + dir[+0x30] + 14*225, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Ac.Gtr.' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc225:		; tag 0x40  A=0x285E6  B=0x28656
 	.byte 0x40, 0xE6, 0x85, 0x02, 0x00, 0x56, 0x86, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23989  |@....V....xB.B|
+; descriptor 226 = base + dir[+0x30] + 14*226, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Gtr.Harmonics' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc226:		; tag 0x40  A=0x2869E  B=0x2870E
 	.byte 0x40, 0x9E, 0x86, 0x02, 0x00, 0x0E, 0x87, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23997  |@.........xB.B|
+; descriptor 227 = base + dir[+0x30] + 14*227, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'GtrResonance1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc227:		; tag 0x40  A=0x2874A  B=0x28759
 	.byte 0x40, 0x4A, 0x87, 0x02, 0x00, 0x59, 0x87, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 239A5  |@J...Y....xB.B|
+; descriptor 228 = base + dir[+0x30] + 14*228, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'GtrResonance3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc228:		; tag 0x40  A=0x2875F  B=0x2876E
 	.byte 0x40, 0x5F, 0x87, 0x02, 0x00, 0x6E, 0x87, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 239B3  |@_...n....xB.B|
+; descriptor 229 = base + dir[+0x30] + 14*229, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'GtrResonance2' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc229:		; tag 0x40  A=0x28774  B=0x28783
 	.byte 0x40, 0x74, 0x87, 0x02, 0x00, 0x83, 0x87, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 239C1  |@t........xB.B|
+; descriptor 230 = base + dir[+0x30] + 14*230, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'GtrResonance4' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc230:		; tag 0x40  A=0x28789  B=0x28798
 	.byte 0x40, 0x89, 0x87, 0x02, 0x00, 0x98, 0x87, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 239CF  |@.........xB.B|
+; descriptor 231 = base + dir[+0x30] + 14*231, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Folk
+; Guitar' (16 map entries hold it).
 ToneDB_EnvDescTable_Desc231:		; tag 0x42  A=0x2879E  B=0x2880E
 	.byte 0x42, 0x9E, 0x87, 0x02, 0x00, 0x0E, 0x88, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 239DD  |B.........xB.B|
+; descriptor 232 = base + dir[+0x30] + 14*232, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pick
+; Noise 1' (16 map entries hold it).
 ToneDB_EnvDescTable_Desc232:		; tag 0xC0  A=0x28850  B=0x2885F
 	.byte 0xC0, 0x50, 0x88, 0x02, 0x00, 0x5F, 0x88, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 239EB  |.P..._....xB.B|
+; descriptor 233 = base + dir[+0x30] + 14*233, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ElectroAc.Gtr' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc233:		; tag 0x40  A=0x28867  B=0x288D7
 	.byte 0x40, 0x67, 0x88, 0x02, 0x00, 0xD7, 0x88, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 239F9  |@g........xB.B|
+; descriptor 234 = base + dir[+0x30] + 14*234, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Guitar' (15 map entries hold it).
 ToneDB_EnvDescTable_Desc234:		; tag 0x42  A=0x28925  B=0x2893E
 	.byte 0x42, 0x25, 0x89, 0x02, 0x00, 0x3E, 0x89, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A07  |B%...>....xB.B|
+; descriptor 235 = base + dir[+0x30] + 14*235, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bright
+; Solid' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc235:		; tag 0x42  A=0x2896E  B=0x289DE
 	.byte 0x42, 0x6E, 0x89, 0x02, 0x00, 0xDE, 0x89, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A15  |Bn........xB.B|
+; descriptor 236 = base + dir[+0x30] + 14*236, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Fret
+; Noise' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc236:		; tag 0xC0  A=0x28A32  B=0x28A41
 	.byte 0xC0, 0x32, 0x8A, 0x02, 0x00, 0x41, 0x8A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23A23  |.2...A....xB.B|
+; descriptor 237 = base + dir[+0x30] + 14*237, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'PickNoise2Acc' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc237:		; tag 0xC0  A=0x28A49  B=0x28A58
 	.byte 0xC0, 0x49, 0x8A, 0x02, 0x00, 0x58, 0x8A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23A31  |.I...X....xB.B|
+; descriptor 238 = base + dir[+0x30] + 14*238, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pick
+; Noise 2' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc238:		; tag 0xBF  A=0x28A60  B=0x28A6F
 	.byte 0xBF, 0x60, 0x8A, 0x02, 0x00, 0x6F, 0x8A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A3F  |.`...o....xB.B|
+; descriptor 239 = base + dir[+0x30] + 14*239, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mellow
+; Solid' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc239:		; tag 0x42  A=0x28A77  B=0x28A90
 	.byte 0x42, 0x77, 0x8A, 0x02, 0x00, 0x90, 0x8A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A4D  |Bw........xB.B|
+; descriptor 240 = base + dir[+0x30] + 14*240, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clean
+; Solid' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc240:		; tag 0x42  A=0x28AD2  B=0x28B42
 	.byte 0x42, 0xD2, 0x8A, 0x02, 0x00, 0x42, 0x8B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A5B  |B....B....xB.B|
+; descriptor 241 = base + dir[+0x30] + 14*241, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Fusion
+; Solid' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc241:		; tag 0x42  A=0x28B8A  B=0x28BFA
 	.byte 0x42, 0x8A, 0x8B, 0x02, 0x00, 0xFA, 0x8B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A69  |B.........xB.B|
+; descriptor 242 = base + dir[+0x30] + 14*242, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute
+; Guitar' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc242:		; tag 0x40  A=0x28C48  B=0x28C6F
 	.byte 0x40, 0x48, 0x8C, 0x02, 0x00, 0x6F, 0x8C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A77  |@H...o....xB.B|
+; descriptor 243 = base + dir[+0x30] + 14*243, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pick
+; Noise 3' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc243:		; tag 0x40  A=0x28CB7  B=0x28CC6
 	.byte 0x40, 0xB7, 0x8C, 0x02, 0x00, 0xC6, 0x8C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A85  |@.........xB.B|
+; descriptor 244 = base + dir[+0x30] + 14*244, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Funk
+; Mute Gtr' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc244:		; tag 0x40  A=0x28CCC  B=0x28D3C
 	.byte 0x40, 0xCC, 0x8C, 0x02, 0x00, 0x3C, 0x8D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A93  |@....<....xB.B|
+; descriptor 245 = base + dir[+0x30] + 14*245, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'DistortionGtr' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc245:		; tag 0x40  A=0x28D90  B=0x28DA9
 	.byte 0x40, 0x90, 0x8D, 0x02, 0x00, 0xA9, 0x8D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AA1  |@.........xB.B|
+; descriptor 246 = base + dir[+0x30] + 14*246, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Hard
+; Dist.Gtr' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc246:		; tag 0x40  A=0x28DF1  B=0x28E61
 	.byte 0x40, 0xF1, 0x8D, 0x02, 0x00, 0x61, 0x8E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AAF  |@....a....xB.B|
+; descriptor 247 = base + dir[+0x30] + 14*247, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'OverdriveGtr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc247:		; tag 0x40  A=0x28EAF  B=0x28F1F
 	.byte 0x40, 0xAF, 0x8E, 0x02, 0x00, 0x1F, 0x8F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23ABD  |@.........xB.B|
+; descriptor 248 = base + dir[+0x30] + 14*248, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'RockHarmonics' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc248:		; tag 0x40  A=0x28F73  B=0x28FE3
 	.byte 0x40, 0x73, 0x8F, 0x02, 0x00, 0xE3, 0x8F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23ACB  |@s........xB.B|
+; descriptor 249 = base + dir[+0x30] + 14*249, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Country
+; Gtr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc249:		; tag 0x42  A=0x29001  B=0x2901A
 	.byte 0x42, 0x01, 0x90, 0x02, 0x00, 0x1A, 0x90, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AD9  |B.........xB.B|
+; descriptor 250 = base + dir[+0x30] + 14*250, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'HawaiianGtr.1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc250:		; tag 0x40  A=0x2904A  B=0x290BA
 	.byte 0x40, 0x4A, 0x90, 0x02, 0x00, 0xBA, 0x90, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AE7  |@J........xB.B|
+; descriptor 251 = base + dir[+0x30] + 14*251, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'HawaiianGtr.2' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc251:		; tag 0x40  A=0x29102  B=0x2911B
 	.byte 0x40, 0x02, 0x91, 0x02, 0x00, 0x1B, 0x91, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AF5  |@.........xB.B|
+; descriptor 252 = base + dir[+0x30] + 14*252, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sax
+; Breath 1' (22 map entries hold it).
 ToneDB_EnvDescTable_Desc252:		; tag 0x40  A=0x29133  B=0x29142
 	.byte 0x40, 0x33, 0x91, 0x02, 0x00, 0x42, 0x91, 0x02, 0x00, 0x0C, 0x4E, 0x42, 0x80, 0x42	; 23B03  |@3...B....NB.B|
+; descriptor 253 = base + dir[+0x30] + 14*253, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sax
+; Breath 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc253:		; tag 0x40  A=0x29148  B=0x29157
 	.byte 0x40, 0x48, 0x91, 0x02, 0x00, 0x57, 0x91, 0x02, 0x00, 0x0C, 0x4E, 0x42, 0x80, 0x42	; 23B11  |@H...W....NB.B|
+; descriptor 254 = base + dir[+0x30] + 14*254, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sax
+; Breath 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc254:		; tag 0x40  A=0x2915D  B=0x2916C
 	.byte 0x40, 0x5D, 0x91, 0x02, 0x00, 0x6C, 0x91, 0x02, 0x00, 0x0C, 0x4E, 0x42, 0x80, 0x42	; 23B1F  |@]...l....NB.B|
+; descriptor 255 = base + dir[+0x30] + 14*255, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Flute
+; Breath1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc255:		; tag 0x40  A=0x29172  B=0x29181
 	.byte 0x40, 0x72, 0x91, 0x02, 0x00, 0x81, 0x91, 0x02, 0x00, 0x11, 0x55, 0x42, 0x80, 0x42	; 23B2D  |@r........UB.B|
+; descriptor 256 = base + dir[+0x30] + 14*256, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Flute
+; Breath2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc256:		; tag 0x41  A=0x29187  B=0x29196
 	.byte 0x41, 0x87, 0x91, 0x02, 0x00, 0x96, 0x91, 0x02, 0x00, 0x11, 0x55, 0x42, 0x80, 0x42	; 23B3B  |A.........UB.B|
+; descriptor 257 = base + dir[+0x30] + 14*257, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pan
+; Breath 1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc257:		; tag 0x40  A=0x2919C  B=0x291AB
 	.byte 0x40, 0x9C, 0x91, 0x02, 0x00, 0xAB, 0x91, 0x02, 0x00, 0x0C, 0x55, 0x42, 0x80, 0x42	; 23B49  |@.........UB.B|
+; descriptor 258 = base + dir[+0x30] + 14*258, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pan
+; Breath 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc258:		; tag 0x41  A=0x291B1  B=0x291C0
 	.byte 0x41, 0xB1, 0x91, 0x02, 0x00, 0xC0, 0x91, 0x02, 0x00, 0x0C, 0x55, 0x42, 0x80, 0x42	; 23B57  |A.........UB.B|
+; descriptor 259 = base + dir[+0x30] + 14*259, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'AmbientHammer' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc259:		; tag 0xC0  A=0x291C6  B=0x291D5
 	.byte 0xC0, 0xC6, 0x91, 0x02, 0x00, 0xD5, 0x91, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23B65  |..........eB.B|
+; descriptor 260 = base + dir[+0x30] + 14*260, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Hammer'
+; (31 map entries hold it).
 ToneDB_EnvDescTable_Desc260:		; tag 0xC0  A=0x291DD  B=0x291EC
 	.byte 0xC0, 0xDD, 0x91, 0x02, 0x00, 0xEC, 0x91, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23B73  |..........eB.B|
+; descriptor 261 = base + dir[+0x30] + 14*261, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rain
+; Stick' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc261:		; tag 0xC0  A=0x291F4  B=0x29203
 	.byte 0xC0, 0xF4, 0x91, 0x02, 0x00, 0x03, 0x92, 0x02, 0x00, 0x17, 0x56, 0x42, 0x80, 0x42	; 23B81  |..........VB.B|
+; descriptor 262 = base + dir[+0x30] + 14*262, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal
+; Ooh 1' (12 map entries hold it).
 ToneDB_EnvDescTable_Desc262:		; tag 0xC1  A=0x2920B  B=0x2927B
 	.byte 0xC1, 0x0B, 0x92, 0x02, 0x00, 0x7B, 0x92, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23B8F  |.....{....nB.B|
+; descriptor 263 = base + dir[+0x30] + 14*263, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal
+; Ooh 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc263:		; tag 0xC1  A=0x292AB  B=0x2931B
 	.byte 0xC1, 0xAB, 0x92, 0x02, 0x00, 0x1B, 0x93, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23B9D  |..........nB.B|
+; descriptor 264 = base + dir[+0x30] + 14*264, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal
+; Mmm' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc264:		; tag 0xC0  A=0x29353  B=0x293C3
 	.byte 0xC0, 0x53, 0x93, 0x02, 0x00, 0xC3, 0x93, 0x02, 0x00, 0x0C, 0x74, 0x42, 0x80, 0x42	; 23BAB  |.S........tB.B|
+; descriptor 265 = base + dir[+0x30] + 14*265, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal
+; Daa' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc265:		; tag 0xC0  A=0x293EB  B=0x2945B
 	.byte 0xC0, 0xEB, 0x93, 0x02, 0x00, 0x5B, 0x94, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BB9  |.....[....xB.B|
+; descriptor 266 = base + dir[+0x30] + 14*266, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Brass
+; 1' (31 map entries hold it).
 ToneDB_EnvDescTable_Desc266:		; tag 0xC0  A=0x2948B  B=0x294FB
 	.byte 0xC0, 0x8B, 0x94, 0x02, 0x00, 0xFB, 0x94, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BC7  |..........xB.B|
+; descriptor 267 = base + dir[+0x30] + 14*267, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Trumpet
+; 1' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc267:		; tag 0xC0  A=0x29553  B=0x295C3
 	.byte 0xC0, 0x53, 0x95, 0x02, 0x00, 0xC3, 0x95, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BD5  |.S........xB.B|
+; descriptor 268 = base + dir[+0x30] + 14*268, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Trumpet
+; 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc268:		; tag 0xC0  A=0x2960B  B=0x2967B
 	.byte 0xC0, 0x0B, 0x96, 0x02, 0x00, 0x7B, 0x96, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BE3  |.....{....xB.B|
+; descriptor 269 = base + dir[+0x30] + 14*269, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Trumpet' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc269:		; tag 0x40  A=0x296C3  B=0x29733
 	.byte 0x40, 0xC3, 0x96, 0x02, 0x00, 0x33, 0x97, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BF1  |@....3....xB.B|
+; descriptor 270 = base + dir[+0x30] + 14*270, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute
+; Trumpet1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc270:		; tag 0x40  A=0x29763  B=0x297D3
 	.byte 0x40, 0x63, 0x97, 0x02, 0x00, 0xD3, 0x97, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BFF  |@c........xB.B|
+; descriptor 271 = base + dir[+0x30] + 14*271, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute
+; Trumpet2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc271:		; tag 0x40  A=0x29803  B=0x29873
 	.byte 0x40, 0x03, 0x98, 0x02, 0x00, 0x73, 0x98, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C0D  |@....s....xB.B|
+; descriptor 272 = base + dir[+0x30] + 14*272, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Flugel
+; Horn' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc272:		; tag 0x40  A=0x2989D  B=0x2990D
 	.byte 0x40, 0x9D, 0x98, 0x02, 0x00, 0x0D, 0x99, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C1B  |@.........xB.B|
+; descriptor 273 = base + dir[+0x30] + 14*273, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cornet'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc273:		; tag 0x40  A=0x29937  B=0x299A7
 	.byte 0x40, 0x37, 0x99, 0x02, 0x00, 0xA7, 0x99, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C29  |@7........xB.B|
+; descriptor 274 = base + dir[+0x30] + 14*274, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Brt.Trombone' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc274:		; tag 0xC0  A=0x299D7  B=0x29A47
 	.byte 0xC0, 0xD7, 0x99, 0x02, 0x00, 0x47, 0x9A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C37  |.....G....xB.B|
+; descriptor 275 = base + dir[+0x30] + 14*275, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Brass
+; 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc275:		; tag 0xC0  A=0x29A97  B=0x29B07
 	.byte 0xC0, 0x97, 0x9A, 0x02, 0x00, 0x07, 0x9B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C45  |..........xB.B|
+; descriptor 276 = base + dir[+0x30] + 14*276, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Mel.Trombone' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc276:		; tag 0x40  A=0x29B67  B=0x29B80
 	.byte 0x40, 0x67, 0x9B, 0x02, 0x00, 0x80, 0x9B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C53  |@g........xB.B|
+; descriptor 277 = base + dir[+0x30] + 14*277, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute
+; Trombone' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc277:		; tag 0xC0  A=0x29BB0  B=0x29C20
 	.byte 0xC0, 0xB0, 0x9B, 0x02, 0x00, 0x20, 0x9C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C61  |..... ....xB.B|
+; descriptor 278 = base + dir[+0x30] + 14*278, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ClosedFr.Horn' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc278:		; tag 0x40  A=0x29C60  B=0x29CD0
 	.byte 0x40, 0x60, 0x9C, 0x02, 0x00, 0xD0, 0x9C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C6F  |@`........xB.B|
+; descriptor 279 = base + dir[+0x30] + 14*279, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Open
+; Fr.Horn' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc279:		; tag 0x40  A=0x29CF4  B=0x29D1B
 	.byte 0x40, 0xF4, 0x9C, 0x02, 0x00, 0x1B, 0x9D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C7D  |@.........xB.B|
+; descriptor 280 = base + dir[+0x30] + 14*280, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tuba'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc280:		; tag 0xC0  A=0x29D4B  B=0x29DBB
 	.byte 0xC0, 0x4B, 0x9D, 0x02, 0x00, 0xBB, 0x9D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C8B  |.K........xB.B|
+; descriptor 281 = base + dir[+0x30] + 14*281, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Analog
+; Brass' (24 map entries hold it).
 ToneDB_EnvDescTable_Desc281:		; tag 0xC0  A=0x29E0B  B=0x29E7B
 	.byte 0xC0, 0x0B, 0x9E, 0x02, 0x00, 0x7B, 0x9E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C99  |.....{....xB.B|
+; descriptor 282 = base + dir[+0x30] + 14*282, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Saw
+; Brass' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc282:		; tag 0x40  A=0x29EBB  B=0x29F2B
 	.byte 0x40, 0xBB, 0x9E, 0x02, 0x00, 0x2B, 0x9F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CA7  |@....+....xB.B|
+; descriptor 283 = base + dir[+0x30] + 14*283, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Soprano
+; Sax' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc283:		; tag 0x40  A=0x29F5B  B=0x29FCB
 	.byte 0x40, 0x5B, 0x9F, 0x02, 0x00, 0xCB, 0x9F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CB5  |@[........xB.B|
+; descriptor 284 = base + dir[+0x30] + 14*284, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Mel.Alto Sax' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc284:		; tag 0x40  A=0x29FFB  B=0x2A06B
 	.byte 0x40, 0xFB, 0x9F, 0x02, 0x00, 0x6B, 0xA0, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CC3  |@....k....xB.B|
+; descriptor 285 = base + dir[+0x30] + 14*285, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 6 entries of ToneDB_ToneIndexMapC/D hold 285; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc285:		; tag 0x40  A=0x2A0A1  B=0x2A111
 	.byte 0x40, 0xA1, 0xA0, 0x02, 0x00, 0x11, 0xA1, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CD1  |@.........xB.B|
+; descriptor 286 = base + dir[+0x30] + 14*286, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Alto
+; Sax' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc286:		; tag 0x40  A=0x2A141  B=0x2A1B1
 	.byte 0x40, 0x41, 0xA1, 0x02, 0x00, 0xB1, 0xA1, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CDF  |@A........xB.B|
+; descriptor 287 = base + dir[+0x30] + 14*287, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tenor
+; Sax 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc287:		; tag 0x40  A=0x2A1E7  B=0x2A257
 	.byte 0x40, 0xE7, 0xA1, 0x02, 0x00, 0x57, 0xA2, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CED  |@....W....xB.B|
+; descriptor 288 = base + dir[+0x30] + 14*288, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tenor
+; Sax 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc288:		; tag 0x40  A=0x2A287  B=0x2A2F7
 	.byte 0x40, 0x87, 0xA2, 0x02, 0x00, 0xF7, 0xA2, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CFB  |@.........xB.B|
+; descriptor 289 = base + dir[+0x30] + 14*289, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tenor
+; Sax 2' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc289:		; tag 0xC0  A=0x2A33F  B=0x2A3AF
 	.byte 0xC0, 0x3F, 0xA3, 0x02, 0x00, 0xAF, 0xA3, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D09  |.?........xB.B|
+; descriptor 290 = base + dir[+0x30] + 14*290, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'RockTenorSax' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc290:		; tag 0x40  A=0x2A3EF  B=0x2A45F
 	.byte 0x40, 0xEF, 0xA3, 0x02, 0x00, 0x5F, 0xA4, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D17  |@...._....xB.B|
+; descriptor 291 = base + dir[+0x30] + 14*291, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Baritone Sax' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc291:		; tag 0x40  A=0x2A48F  B=0x2A4FF
 	.byte 0x40, 0x8F, 0xA4, 0x02, 0x00, 0xFF, 0xA4, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D25  |@.........xB.B|
+; descriptor 292 = base + dir[+0x30] + 14*292, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'JazzClarinet1' (14 map entries hold it).
 ToneDB_EnvDescTable_Desc292:		; tag 0x40  A=0x2A52F  B=0x2A59F
 	.byte 0x40, 0x2F, 0xA5, 0x02, 0x00, 0x9F, 0xA5, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D33  |@/........xB.B|
+; descriptor 293 = base + dir[+0x30] + 14*293, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Mel.Clarinet' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc293:		; tag 0x40  A=0x2A5C9  B=0x2A639
 	.byte 0x40, 0xC9, 0xA5, 0x02, 0x00, 0x39, 0xA6, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D41  |@....9....xB.B|
+; descriptor 294 = base + dir[+0x30] + 14*294, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'JazzClarinet2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc294:		; tag 0x40  A=0x2A669  B=0x2A6D9
 	.byte 0x40, 0x69, 0xA6, 0x02, 0x00, 0xD9, 0xA6, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D4F  |@i........xB.B|
+; descriptor 295 = base + dir[+0x30] + 14*295, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Clas.Clarinet' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc295:		; tag 0x40  A=0x2A703  B=0x2A773
 	.byte 0x40, 0x03, 0xA7, 0x02, 0x00, 0x73, 0xA7, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D5D  |@....s....xB.B|
+; descriptor 296 = base + dir[+0x30] + 14*296, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bass
+; Clarinet' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc296:		; tag 0x40  A=0x2A7AF  B=0x2A81F
 	.byte 0x40, 0xAF, 0xA7, 0x02, 0x00, 0x1F, 0xA8, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D6B  |@.........xB.B|
+; descriptor 297 = base + dir[+0x30] + 14*297, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Oboe'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc297:		; tag 0x40  A=0x2A861  B=0x2A8D1
 	.byte 0x40, 0x61, 0xA8, 0x02, 0x00, 0xD1, 0xA8, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D79  |@a........xB.B|
+; descriptor 298 = base + dir[+0x30] + 14*298, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'English
+; Horn' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc298:		; tag 0x40  A=0x2A8FB  B=0x2A96B
 	.byte 0x40, 0xFB, 0xA8, 0x02, 0x00, 0x6B, 0xA9, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D87  |@....k....xB.B|
+; descriptor 299 = base + dir[+0x30] + 14*299, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Bassoon' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc299:		; tag 0x40  A=0x2A995  B=0x2AA05
 	.byte 0x40, 0x95, 0xA9, 0x02, 0x00, 0x05, 0xAA, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D95  |@.........xB.B|
+; descriptor 300 = base + dir[+0x30] + 14*300, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Harmonica' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc300:		; tag 0x40  A=0x2AA3B  B=0x2AAAB
 	.byte 0x40, 0x3B, 0xAA, 0x02, 0x00, 0xAB, 0xAA, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DA3  |@;........xB.B|
+; descriptor 301 = base + dir[+0x30] + 14*301, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Blues
+; Harm.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc301:		; tag 0x40  A=0x2AACF  B=0x2AB3F
 	.byte 0x40, 0xCF, 0xAA, 0x02, 0x00, 0x3F, 0xAB, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DB1  |@....?....xB.B|
+; descriptor 302 = base + dir[+0x30] + 14*302, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Bagpipe' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc302:		; tag 0x40  A=0x2AB5D  B=0x2ABCD
 	.byte 0x40, 0x5D, 0xAB, 0x02, 0x00, 0xCD, 0xAB, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DBF  |@]........xB.B|
+; descriptor 303 = base + dir[+0x30] + 14*303, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'MellowAc.Bass' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc303:		; tag 0x40  A=0x2ABEB  B=0x2AC5B
 	.byte 0x40, 0xEB, 0xAB, 0x02, 0x00, 0x5B, 0xAC, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DCD  |@....[....xB.B|
+; descriptor 304 = base + dir[+0x30] + 14*304, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Electric Bass' (3 map entries hold it).
 ToneDB_EnvDescTable_Desc304:		; tag 0x40  A=0x2AC85  B=0x2ACF5
 	.byte 0x40, 0x85, 0xAC, 0x02, 0x00, 0xF5, 0xAC, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DDB  |@.........xB.B|
+; descriptor 305 = base + dir[+0x30] + 14*305, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap
+; Bass 1' (3 map entries hold it).
 ToneDB_EnvDescTable_Desc305:		; tag 0x40  A=0x2AD31  B=0x2AD4A
 	.byte 0x40, 0x31, 0xAD, 0x02, 0x00, 0x4A, 0xAD, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DE9  |@1...J....xB.B|
+; descriptor 306 = base + dir[+0x30] + 14*306, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pull
+; Bass 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc306:		; tag 0x40  A=0x2AD86  B=0x2AD9F
 	.byte 0x40, 0x86, 0xAD, 0x02, 0x00, 0x9F, 0xAD, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DF7  |@.........xB.B|
+; descriptor 307 = base + dir[+0x30] + 14*307, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 307; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc307:		; tag 0x40  A=0x2ADD5  B=0x2ADEE
 	.byte 0x40, 0xD5, 0xAD, 0x02, 0x00, 0xEE, 0xAD, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E05  |@.........xB.B|
+; descriptor 308 = base + dir[+0x30] + 14*308, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap
+; Bass 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc308:		; tag 0x40  A=0x2AE30  B=0x2AEA0
 	.byte 0x40, 0x30, 0xAE, 0x02, 0x00, 0xA0, 0xAE, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E13  |@0........xB.B|
+; descriptor 309 = base + dir[+0x30] + 14*309, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pull
+; Bass 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc309:		; tag 0x40  A=0x2AEE2  B=0x2AEFB
 	.byte 0x40, 0xE2, 0xAE, 0x02, 0x00, 0xFB, 0xAE, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E21  |@.........xB.B|
+; descriptor 310 = base + dir[+0x30] + 14*310, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 310; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc310:		; tag 0x40  A=0x2AF31  B=0x2AFA1
 	.byte 0x40, 0x31, 0xAF, 0x02, 0x00, 0xA1, 0xAF, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E2F  |@1........xB.B|
+; descriptor 311 = base + dir[+0x30] + 14*311, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap
+; Bass 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc311:		; tag 0x40  A=0x2AFE9  B=0x2B010
 	.byte 0x40, 0xE9, 0xAF, 0x02, 0x00, 0x10, 0xB0, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E3D  |@.........xB.B|
+; descriptor 312 = base + dir[+0x30] + 14*312, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pull
+; Bass 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc312:		; tag 0x40  A=0x2B046  B=0x2B06D
 	.byte 0x40, 0x46, 0xB0, 0x02, 0x00, 0x6D, 0xB0, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E4B  |@F...m....xB.B|
+; descriptor 313 = base + dir[+0x30] + 14*313, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 313; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc313:		; tag 0x40  A=0x2B09D  B=0x2B0C4
 	.byte 0x40, 0x9D, 0xB0, 0x02, 0x00, 0xC4, 0xB0, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E59  |@.........xB.B|
+; descriptor 314 = base + dir[+0x30] + 14*314, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Soul
+; Bass' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc314:		; tag 0x40  A=0x2B106  B=0x2B12D
 	.byte 0x40, 0x06, 0xB1, 0x02, 0x00, 0x2D, 0xB1, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E67  |@....-....xB.B|
+; descriptor 315 = base + dir[+0x30] + 14*315, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Synth
+; Chopper' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc315:		; tag 0x40  A=0x2B163  B=0x2B1D3
 	.byte 0x40, 0x63, 0xB1, 0x02, 0x00, 0xD3, 0xB1, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E75  |@c........xB.B|
+; descriptor 316 = base + dir[+0x30] + 14*316, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Metallic Bass' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc316:		; tag 0x40  A=0x2B1E5  B=0x2B255
 	.byte 0x40, 0xE5, 0xB1, 0x02, 0x00, 0x55, 0xB2, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E83  |@....U....xB.B|
+; descriptor 317 = base + dir[+0x30] + 14*317, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tabla
+; Hit' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc317:		; tag 0x40  A=0x2B297  B=0x2B2A6
 	.byte 0x40, 0x97, 0xB2, 0x02, 0x00, 0xA6, 0xB2, 0x02, 0x00, 0x0C, 0x67, 0x42, 0x80, 0x42	; 23E91  |@.........gB.B|
 
@@ -15825,9 +16868,11 @@ ToneDB_EnvDescTable_317_ElemArray:
 ; 
 ; The per-note LE16 selects a drum instrument.  Values run up to 0x0530,
 ; beyond the 504 drum-instrument records, so it is not a direct index into
-; them; it is consistent with an index into DrumKit_NoteMapA/B (slots +0x74
-; /+0x7C, 2048 entries each, whose values ARE valid drum-instrument
-; indices), but that chain has NOT been confirmed against code.
+; them; it is a (program, bank) byte pair resolved through DrumKit_NoteMapA
+; (slot +0x74, 2048 entries, whose values ARE valid drum-instrument
+; indices) -- confirmed against code; each kit's NoteMap header gives the
+; chain and the instrument every note plays (corrected 2026-09-25, lane
+; promcd: this sentence said the chain was unconfirmed).
 ; 
 ; The head is RELATED to the melodic tone-record head but is not the same
 ; structure.  The 8-byte token 11 00 01 63 1E 06 00 54 sits at melodic
@@ -15846,7 +16891,8 @@ ToneDB_EnvDescTable_317_ElemArray:
 ; +0x74) and 0xFB495A multiplies the value it finds by the +0xEE stride
 ; word, 150, i.e. into the drum-instrument records.  That is the chain this
 ; banner previously said had NOT been confirmed against code, for the note
-; map; it is still NOT confirmed for the per-record map emitted below.
+; map; and for the per-record map emitted below it is confirmed too, by
+; 0xFB891C / 0xFB892A (corrected 2026-09-25, lane promcd).
 ; notes/prom_d_documentation_round3.py Q4a and Q4d.
 ; 
 ; ★ WAVE 7 ROUND 4 -- THESE LABELS NOW CARRY THE RECORD'S OWN NAME.
@@ -15896,6 +16942,38 @@ DrumKit_103_StandardKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B31C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B32C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B33C  |.....X..|
+; Note map of tone 0x103 'Standard Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 9 notes to PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4
+; 'ElectroUnizon', 5 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9
+; 'Voice Ah', 10 'Voice Yeh', 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14
+; 'HiHatAccent 1', 15 'HiHat HfOpen1', 16 'HiHatClosed 7', 17 'ReverseCymbl1', 18
+; 'ElectricTom 3', 19 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22
+; 'Rock Snare 2', 23 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31
+; 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Trad BassDrm1',
+; 36 'Rock Bass Drm', 37 'Rock Rim', 38 'Rock Snare 1', 39 'Hand Claps', 40 'Piccolo Snare',
+; 41 'RockBassTomLo', 42 'HiHatClosed 1', 43 'RockBassTomHi', 44 'HiHat Pedal 1', 45
+; 'Rock Tom 3', 46 'HiHat Open 1', 47 'Rock Tom 2', 48 'Rock Tom 1', 49 'CrashCymbal 1', 50
+; 'Rock Tom High', 51 'Ride Cymbal 1', 52 'ChinaCymbal 1', 53 'Ride Bell 1', 54
+; 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2', 57 'CrashCymbal 6', 58 'Vibraslap',
+; 59 'Ride Cymbal 8', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_103_StandardKit_NoteMap:
 	.short 0x0000	; 2B344  [  0] note   0
 	.short 0x0000	; 2B346  [  1] note   1
@@ -16052,6 +17130,38 @@ DrumKit_104_RoomKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B4B4  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B4C4  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B4D4  |.....X..|
+; Note map of tone 0x104 'Room Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 5', 15
+; 'HiHat HfOpen5', 16 'HiHatClosed11', 17 'ReverseCymbl1', 18 'ElectricTom 3', 19
+; 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22 'Room Snare 2', 23
+; 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'PowerBassDrm2', 36
+; 'Room BassDrm1', 37 'Rock Rim', 38 'Room Snare 1', 39 'Hand Claps', 40 'Funk Snare 1', 41
+; 'RoomBassTomLo', 42 'HiHatClosed 5', 43 'RoomBassTomHi', 44 'HiHat Pedal 1', 45
+; 'Room Tom 3', 46 'HiHat Open 5', 47 'Room Tom 2', 48 'Room Tom 1', 49 'CrashCymbal 1', 50
+; 'Room Tom High', 51 'Ride Cymbal 8', 52 'ChinaCymbal 1', 53 'Ride Bell 1', 54
+; 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2', 57 'CrashCymbal 6', 58 'Vibraslap',
+; 59 'Ride Cymbal 1', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_104_RoomKit_NoteMap:
 	.short 0x0000	; 2B4DC  [  0] note   0
 	.short 0x0000	; 2B4DE  [  1] note   1
@@ -16208,6 +17318,38 @@ DrumKit_106_PowerKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B64C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B65C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B66C  |.....X..|
+; Note map of tone 0x106 'Power Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 6', 15
+; 'HiHat HfOpen6', 16 'HiHatClosed12', 17 'ReverseCymbl3', 18 'ElectricTom 3', 19
+; 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare3', 22 'Power Snare 2', 23
+; 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'ElectBassDrm2', 36
+; 'PowerBassDrm1', 37 'Rock Rim', 38 'Power Snare 1', 39 'Hand Claps', 40 'Funk Snare 1', 41
+; 'PowerBassTomL', 42 'HiHatClosed 6', 43 'PowerBassTomH', 44 'HiHat Pedal 2', 45
+; 'Power Tom 3', 46 'HiHat Open 6', 47 'Power Tom 2', 48 'Power Tom 1', 49 'CrashCymbal 1',
+; 50 'PowerTom High', 51 'Ride Cymbal11', 52 'ChinaCymbal 3', 53 'Ride Bell 4', 54
+; 'TambourinAcc1', 55 'SplashCymbal1', 56 'Cowbell 2', 57 'CrashCymbal 8', 58 'Vibraslap',
+; 59 'Ride Cymbal 4', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_106_PowerKit_NoteMap:
 	.short 0x0000	; 2B674  [  0] note   0
 	.short 0x0000	; 2B676  [  1] note   1
@@ -16364,6 +17506,38 @@ DrumKit_105_LightRockKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B7E4  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B7F4  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B804  |.....X..|
+; Note map of tone 0x105 'Light Rock Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 9 notes to PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4
+; 'ElectroUnizon', 5 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9
+; 'Voice Ah', 10 'Voice Yeh', 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14
+; 'HiHatAccent 3', 15 'HiHat HfOpen3', 16 'HiHatClosed 8', 17 'ReverseCymbl2', 18
+; 'ElectricTom 3', 19 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare2', 22
+; 'LtRockSnare 2', 23 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31
+; 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Room BassDrm2',
+; 36 'LtRockBassDrm', 37 'Rock Rim', 38 'LtRockSnare 1', 39 'Hand Claps', 40 'Funk Snare 2',
+; 41 'RockBassTomLo', 42 'HiHatClosed 2', 43 'RockBassTomHi', 44 'HiHat Pedal 3', 45
+; 'Rock Tom 3', 46 'HiHat Open 2', 47 'Rock Tom 2', 48 'Rock Tom 1', 49 'CrashCymbal 3', 50
+; 'Rock Tom High', 51 'Ride Cymbal12', 52 'ChinaCymbal 4', 53 'Ride Bell 5', 54
+; 'TambourinAcc1', 55 'SplashCymbal4', 56 'Cowbell 2', 57 'CrashCymbal 9', 58 'Vibraslap',
+; 59 'Ride Cymbal 5', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_105_LightRockKit_NoteMap:
 	.short 0x0000	; 2B80C  [  0] note   0
 	.short 0x0000	; 2B80E  [  1] note   1
@@ -16520,6 +17694,38 @@ DrumKit_107_FunkKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B97C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2B98C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2B99C  |.....X..|
+; Note map of tone 0x107 'Funk Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 5', 15
+; 'HiHat HfOpen5', 16 'HiHatClosed11', 17 'ReverseCymbl1', 18 'ElectricTom 3', 19
+; 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22 'Funk Snare 2', 23
+; 'Elect.Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Room BassDrm1', 36
+; 'Funk Bass Drm', 37 'Rock Rim', 38 'Funk Snare 1', 39 'Hand Claps', 40 'Piccolo Snare', 41
+; 'RockBassTomLo', 42 'HiHatClosed 5', 43 'RockBassTomHi', 44 'HiHat Pedal 1', 45
+; 'Rock Tom 3', 46 'HiHat Open 5', 47 'Rock Tom 2', 48 'Rock Tom 1', 49 'CrashCymbal 1', 50
+; 'Rock Tom High', 51 'Ride Cymbal 8', 52 'ChinaCymbal 1', 53 'Ride Bell 1', 54
+; 'TambourinAcc1', 55 'SplashCymbal4', 56 'Cowbell 2', 57 'CrashCymbal 6', 58 'Vibraslap',
+; 59 'Ride Cymbal 1', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_107_FunkKit_NoteMap:
 	.short 0x0000	; 2B9A4  [  0] note   0
 	.short 0x0000	; 2B9A6  [  1] note   1
@@ -16676,6 +17882,38 @@ DrumKit_100_JazzKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BB14  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BB24  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2BB34  |.....X..|
+; Note map of tone 0x100 'Jazz Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 1', 15
+; 'HiHat HfOpen1', 16 'HiHatClosed 7', 17 'ReverseCymbl1', 18 'Jazz Tom 6', 19 'Jazz Tom 5',
+; 20 'Jazz Tom 4', 21 'ReverseSnare1', 22 'Brush Hit', 23 'Brush Short', 28 'Slap 1', 29
+; 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34
+; 'MetronomeBell', 35 'Trad BassDrm2', 36 'Jazz BassDrm1', 37 'Rock Rim', 38 'Jazz Snare',
+; 39 'Hand Claps', 40 'Piccolo Snare', 41 'JazzBassTomLo', 42 'HiHatClosed 1', 43
+; 'JazzBassTomHi', 44 'HiHat Pedal 1', 45 'Jazz Tom 3', 46 'HiHat Open 1', 47 'Jazz Tom 2',
+; 48 'Jazz Tom 1', 49 'CrashCymbal 1', 50 'Jazz Tom High', 51 'Ride Cymbal 2', 52
+; 'ChinaCymbal 1', 53 'Ride Bell 2', 54 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2',
+; 57 'CrashCymbal 6', 58 'Vibraslap', 59 'Ride Cymbal 9', 60 'Bongo High', 61 'Bongo Low',
+; 62 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66
+; 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71
+; 'SambaWhiShort', 72 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves',
+; 76 'WoodBlockHigh', 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80
+; 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85
+; 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1', 89 'Orch.Snare 1', 90
+; 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap',
+; 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104
+; 'SambaWhistleL', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110
+; 'Cowbell 3', 111 'Cowbell 4', 112 'TimbalesOpenH', 113 'TimbalesPaila', 114
+; 'TambourineBt1', 115 'Shaker Off', 116 'Maracas Off', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Hand Claps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_100_JazzKit_NoteMap:
 	.short 0x0000	; 2BB3C  [  0] note   0
 	.short 0x0000	; 2BB3E  [  1] note   1
@@ -16832,6 +18070,38 @@ DrumKit_102_TradKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BCAC  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BCBC  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2BCCC  |.....X..|
+; Note map of tone 0x102 'Trad Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 5', 15
+; 'HiHat HfOpen5', 16 'HiHatClosed11', 17 'ReverseCymbl1', 18 'Jazz Tom 6', 19 'Jazz Tom 5',
+; 20 'Jazz Tom 4', 21 'ReverseSnare1', 22 'Brush Hit', 23 'Brush Short', 28 'Slap 1', 29
+; 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34
+; 'MetronomeBell', 35 'Jazz BassDrm1', 36 'Trad BassDrm1', 37 'Rock Rim', 38 'Trad Snare',
+; 39 'Hand Claps', 40 'Piccolo Snare', 41 'JazzBassTomLo', 42 'HiHatClosed 1', 43
+; 'JazzBassTomHi', 44 'HiHat Pedal 1', 45 'Jazz Tom 3', 46 'HiHat Open 5', 47 'Jazz Tom 2',
+; 48 'Jazz Tom 1', 49 'CrashCymbal 1', 50 'Jazz Tom High', 51 'Ride Cymbal 9', 52
+; 'ChinaCymbal 1', 53 'Ride Bell 2', 54 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2',
+; 57 'CrashCymbal 6', 58 'Vibraslap', 59 'Ride Cymbal 2', 60 'Bongo High', 61 'Bongo Low',
+; 62 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66
+; 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71
+; 'SambaWhiShort', 72 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves',
+; 76 'WoodBlockHigh', 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80
+; 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85
+; 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1', 89 'Orch.Snare 1', 90
+; 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap',
+; 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104
+; 'SambaWhistleL', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110
+; 'Cowbell 3', 111 'Cowbell 4', 112 'TimbalesOpenH', 113 'TimbalesPaila', 114
+; 'TambourineBt1', 115 'Shaker Off', 116 'Maracas Off', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Hand Claps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_102_TradKit_NoteMap:
 	.short 0x0000	; 2BCD4  [  0] note   0
 	.short 0x0000	; 2BCD6  [  1] note   1
@@ -16988,6 +18258,38 @@ DrumKit_101_BrushKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BE44  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BE54  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2BE64  |.....X..|
+; Note map of tone 0x101 'Brush Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 2', 15
+; 'HiHat HfOpen1', 16 'HiHatClosed 7', 17 'ReverseCymbl1', 18 'Brush Tom 6', 19
+; 'Brush Tom 5', 20 'Brush Tom 4', 21 'ReverseSnare1', 22 'Brush Hit', 23 'Brush Long', 28
+; 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33
+; 'MetronomeClik', 34 'MetronomeBell', 35 'Trad BassDrm2', 36 'Jazz BassDrm2', 37
+; 'Rock Rim', 38 'Brush Short', 39 'Brush Hit', 40 'Brush Long', 41 'BrushBassTomL', 42
+; 'HiHatClosed 4', 43 'BrushBassTomH', 44 'HiHat Pedal 1', 45 'Brush Tom 3', 46
+; 'HiHat Open 4', 47 'Brush Tom 2', 48 'Brush Tom 1', 49 'CrashCymbal 2', 50
+; 'BrushTom High', 51 'Ride Cymbal 2', 52 'ChinaCymbal 2', 53 'Ride Bell 3', 54
+; 'TambourinAcc1', 55 'SplashCymbal3', 56 'Cowbell 2', 57 'CrashCymbal 7', 58 'Vibraslap',
+; 59 'Ride Cymbal10', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_101_BrushKit_NoteMap:
 	.short 0x0000	; 2BE6C  [  0] note   0
 	.short 0x0000	; 2BE6E  [  1] note   1
@@ -17144,6 +18446,38 @@ DrumKit_108_DanceKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BFDC  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2BFEC  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2BFFC  |.....X..|
+; Note map of tone 0x108 'Dance Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'DanceHHClose1', 15
+; 'Dance HH.Open', 16 'DanceHHClose2', 17 'ReverseCymbl4', 18 'Soul Tom 3', 19 'Soul Tom 2',
+; 20 'Soul Tom 1', 21 'ReverseSnare1', 22 'Dance Snare 2', 23 'House Snare 1', 28 'Slap 1',
+; 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34
+; 'MetronomeBell', 35 'Soul BassDrm2', 36 'Dance BassDrm', 37 'Dance Rim', 38
+; 'Dance Snare 1', 39 'ReverseCymbl4', 40 'Soul Snare 1', 41 'DanceBassTomL', 42
+; 'DanceHHClose1', 43 'DanceBassTomH', 44 'DanceHHClose1', 45 'Dance Tom 3', 46
+; 'Dance HH.Open', 47 'Dance Tom 2', 48 'Dance Tom 1', 49 'CrashCymbal 4', 50
+; 'DanceTom High', 51 'Ride Cymbal13', 52 'ChinaCymbal 5', 53 'Ride Bell 6', 54
+; 'TambourinAcc1', 55 'SplashCymbal5', 56 'Cowbell 2', 57 'CrashCymbal 5', 58 'Vibraslap',
+; 59 'Ride Cymbal 6', 60 'Bongo High', 61 'Bongo Low', 62 'CongaMutCrash', 63 'Conga High',
+; 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low',
+; 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72 'SambaWhi Long', 73
+; 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh', 77 'WoodBlock Low',
+; 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On',
+; 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88
+; 'Orch.BassDrm1', 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92
+; 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97
+; 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101
+; 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104 'SambaWhistleL', 105
+; 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110 'Cowbell 3', 111 'Cowbell 4',
+; 112 'TimbalesOpenH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Shaker Off', 116
+; 'Maracas Off', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_108_DanceKit_NoteMap:
 	.short 0x0000	; 2C004  [  0] note   0
 	.short 0x0000	; 2C006  [  1] note   1
@@ -17300,6 +18634,40 @@ DrumKit_109_HouseKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C174  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C184  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C194  |.....X..|
+; Note map of tone 0x109 'House Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'HiHatAccent 4', 15
+; 'HiHat HfOpen4', 16 'HiHatClosed 9', 17 'ReverseCymbl4', 18 'Dance Tom 3', 19
+; 'Dance Tom 2', 20 'Dance Tom 1', 21 'ReverseSnare1', 22 'House Snare 2', 23
+; 'Dance Snare 1', 28 'Slap 2', 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Soul BassDrm2', 36
+; 'House BassDrm', 37 'Soul Rim', 38 'House Snare 1', 39 'Syn.HandClaps', 40 'Analog Snare',
+; 41 'HouseBassTomL', 42 'HiHatClosed 3', 43 'HouseBassTomH', 44 'HiHat Pedal 4', 45
+; 'House Tom 3', 46 'HiHat Open 3', 47 'House Tom 2', 48 'House Tom 1', 49 'CrashCymbal 4',
+; 50 'HouseTom High', 51 'Ride Cymbal13', 52 'ChinaCymbal 5', 53 'Ride Bell 6', 54
+; 'TambourinAcc2', 55 'SplashCymbal5', 56 'SynthCowbell2', 57 'CrashCymbal 5', 58
+; 'Syn.Vibraslap', 59 'Ride Cymbal 6', 60 'ModelBongo H', 61 'ModelBongo L', 62
+; 'Syn.CongaCrsh', 63 'SynthConga Lo', 64 'SynthConga Hi', 65 'SynTimbOpenRm', 66
+; 'SynTimbOpenLo', 67 'SynthAgogo Hi', 68 'SynthAgogo Lo', 69 'Cabasa 2', 70
+; 'Syn.MaracasOn', 71 'SynSmbWhShort', 72 'SynSmbWh Long', 73 'Guiro Short 2', 74
+; 'Guiro Long 2', 75 'Synth Claves', 76 'MdlWdblock Hi', 77 'MdlWdBlockLow', 78
+; 'Mdl.Cuica Hi', 79 'Mdl.Cuica Low', 80 'SynTriangle M', 81 'SynTriangle O', 82
+; 'Syn.Shaker On', 83 'Mdl.SleighBel', 84 'Syn.WindChime', 85 'ModelCastanet', 86
+; 'Surdo Mute', 87 'Surdo Open', 88 'SynthBassDrm3', 89 'SynOrchSnare', 90 'SynOrchCymbal',
+; 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap', 95
+; 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SynSambaWhi H', 104
+; 'SynSambaWhi L', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'SynthCowbell1', 110
+; 'SynthCowbell3', 111 'SynthCowbell4', 112 'SynTimbOpenHi', 113 'Syn.TimbPaila', 114
+; 'TambourineBt2', 115 'Syn.ShakerOff', 116 'SynMaracasOff', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Syn.HandClaps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'MdlWdBlockHi2'.
 DrumKit_109_HouseKit_NoteMap:
 	.short 0x0000	; 2C19C  [  0] note   0
 	.short 0x0000	; 2C19E  [  1] note   1
@@ -17456,6 +18824,38 @@ DrumKit_10A_SoulKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C30C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C31C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C32C  |.....X..|
+; Note map of tone 0x10A 'Soul Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'DanceHHClose1', 15
+; 'Dance HH.Open', 16 'DanceHHClose2', 17 'ReverseCymbl4', 18 'Soul Tom 3', 19 'Soul Tom 2',
+; 20 'Soul Tom 1', 21 'ReverseSnare1', 22 'Soul Snare 2', 23 'House Snare 1', 28 'Slap 1',
+; 29 'Scratch 3', 30 'Scratch 1', 31 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34
+; 'MetronomeBell', 35 'Soul BassDrm2', 36 'Soul BassDrm1', 37 'Soul Rim', 38 'Analog Snare',
+; 39 'Hand Claps', 40 'Soul Snare 1', 41 'SoulBassTom L', 42 'DanceHHClose1', 43
+; 'SoulBassTom H', 44 'DanceHHClose1', 45 'Soul Tom 3', 46 'Dance HH.Open', 47 'Soul Tom 2',
+; 48 'Soul Tom 1', 49 'CrashCymbal 4', 50 'Soul Tom High', 51 'Ride Cymbal13', 52
+; 'ChinaCymbal 5', 53 'Ride Bell 6', 54 'TambourinAcc1', 55 'SplashCymbal5', 56 'Cowbell 2',
+; 57 'CrashCymbal 5', 58 'Vibraslap', 59 'Ride Cymbal 6', 60 'Bongo High', 61 'Bongo Low',
+; 62 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66
+; 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71
+; 'SambaWhiShort', 72 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves',
+; 76 'WoodBlockHigh', 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80
+; 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85
+; 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1', 89 'Orch.Snare 1', 90
+; 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap',
+; 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104
+; 'SambaWhistleL', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110
+; 'Cowbell 3', 111 'Cowbell 4', 112 'TimbalesOpenH', 113 'TimbalesPaila', 114
+; 'TambourineBt1', 115 'Shaker Off', 116 'Maracas Off', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Hand Claps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_10A_SoulKit_NoteMap:
 	.short 0x0000	; 2C334  [  0] note   0
 	.short 0x0000	; 2C336  [  1] note   1
@@ -17612,6 +19012,39 @@ DrumKit_10B_ElectricKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C4A4  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C4B4  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C4C4  |.....X..|
+; Note map of tone 0x10B 'Electric Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 9 notes to PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4
+; 'ElectroUnizon', 5 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9
+; 'Voice Ah', 10 'Voice Yeh', 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14
+; 'HiHatAccent 5', 15 'HiHat HfOpen5', 16 'HiHatClosed11', 17 'ReverseCymbl1', 18
+; 'ElectricTom 3', 19 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22
+; 'Elect.Snare 2', 23 'House Snare 1', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31
+; 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'Soul BassDrm2',
+; 36 'ElectBassDrm1', 37 'Rock Rim', 38 'Elect.Snare 1', 39 'ReverseCymbl1', 40
+; 'Soul Snare 1', 41 'ElectBassTomL', 42 'HiHatClosed 5', 43 'ElectBassTomH', 44
+; 'HiHat Pedal 1', 45 'ElectricTom 3', 46 'HiHat Open 5', 47 'ElectricTom 2', 48
+; 'ElectricTom 1', 49 'CrashCymbal 1', 50 'ElectTom High', 51 'Ride Cymbal 1', 52
+; 'ChinaCymbal 1', 53 'Ride Bell 1', 54 'TambourinAcc1', 55 'SplashCymbal2', 56 'Cowbell 2',
+; 57 'CrashCymbal 6', 58 'Vibraslap', 59 'Ride Cymbal 8', 60 'Bongo High', 61 'Bongo Low',
+; 62 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66
+; 'TimbalesOpenL', 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71
+; 'SambaWhiShort', 72 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves',
+; 76 'WoodBlockHigh', 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80
+; 'Triangle Mute', 81 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85
+; 'Castanets', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1', 89 'Orch.Snare 1', 90
+; 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94 'BataDrum Slap',
+; 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap', 99 'Darbuka Open',
+; 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103 'SambaWhistleH', 104
+; 'SambaWhistleL', 105 'SmallConga Hi', 106 'SmallConga Lo', 109 'Cowbell 1', 110
+; 'Cowbell 3', 111 'Cowbell 4', 112 'TimbalesOpenH', 113 'TimbalesPaila', 114
+; 'TambourineBt1', 115 'Shaker Off', 116 'Maracas Off', 117 'SurdoLeftHand', 118
+; 'Shekele Off', 119 'Hand Claps', 120 'Conga Mute On', 121 'Conga MuteOff', 122
+; 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125 'Bongo Mute 1', 126
+; 'OrchTambourin', 127 'WoodBlock Hi2'.
 DrumKit_10B_ElectricKit_NoteMap:
 	.short 0x0000	; 2C4CC  [  0] note   0
 	.short 0x0000	; 2C4CE  [  1] note   1
@@ -17768,6 +19201,32 @@ DrumKit_10E_OrchestraKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C63C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C64C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C65C  |.....X..|
+; Note map of tone 0x10E 'Orchestra Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 40 notes to PercInst record 0 'Silent' and the rest to: 12 'Timpani C', 13
+; 'Timpani C#', 14 'Timpani D', 20 'Brush Long', 21 'Brush Short', 22 'HiHat Pedal 1', 23
+; 'HiHat HfOpen1', 24 'HiHatClosed 1', 25 'HiHatAccent 1', 26 'HiHat Open 1', 27
+; 'JazzBassTomHi', 28 'Jazz Tom 3', 29 'Jazz Tom 2', 30 'Jazz Tom 1', 31 'Jazz Tom High', 32
+; 'Ride Bell 1', 33 'Ride Cymbal 1', 34 'Orch.Snare 3', 35 'Orch.BassDrm3', 36
+; 'Orch.BassDrm1', 37 'Rock Rim', 38 'Orch.Snare 1', 39 'Castanets', 40 'Orch.Snare 2', 41
+; 'Orch.Cymbal 1', 42 'Triangle Open', 43 'Orch.Cymbal 2', 44 'OrchTambourin', 45
+; 'CymSoftMallet', 46 'Rattle', 47 'Ride Cymbal 8', 48 'WoodBlock Low', 49 'WoodBlockHigh',
+; 50 'WoodBlock Hi2', 51 'Timpani D#', 52 'Timpani E', 53 'Timpani F', 54 'Timpani F#', 55
+; 'Timpani G', 56 'Timpani G#', 57 'Timpani A', 58 'Timpani A#', 59 'Timpani B', 60
+; 'Timpani c', 61 'Timpani c#', 62 'Timpani d', 63 'Timpani d#', 64 'Timpani e', 65
+; 'Timpani f', 66 'Timpani f#', 67 'Timpani g', 68 'Timpani g#', 69 'Timpani a', 70
+; 'Timpani a#', 71 'Timpani b', 72 'TublarBell C', 73 'TublarBell C#', 74 'TublarBell D', 75
+; 'TublarBell D#', 76 'TublarBell E', 77 'TublarBell F', 78 'TublarBell F#', 79
+; 'TublarBell G', 80 'TublarBell G#', 81 'TublarBell A', 82 'TublarBell A#', 83
+; 'TublarBell B', 84 'TublarBell c', 85 'TublarBell c#', 86 'TublarBell d', 87
+; 'TublarBell d#', 88 'TublarBell e', 89 'TublarBell f', 90 'TublarBell f#', 91
+; 'TublarBell g', 92 'TublarBell g#', 93 'TublarBell a', 94 'TublarBell a#', 95
+; 'TublarBell b', 96 'Tam-Tam', 97 'TambourinAcc1', 98 'TambourineBt1', 99 'Sleigh Bell',
+; 100 'Cowbell 2', 101 'Triangle Mute', 102 'Triangle Open', 103 'ChinaCymbal 1', 104
+; 'Vibraslap'.
 DrumKit_10E_OrchestraKit_NoteMap:
 	.short 0x0000	; 2C664  [  0] note   0
 	.short 0x0000	; 2C666  [  1] note   1
@@ -17924,6 +19383,23 @@ DrumKit_10F_SoundEffectKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C7D4  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C7E4  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C7F4  |.....X..|
+; Note map of tone 0x10F 'Sound Effect Kit': entry n is the drum-instrument SELECTOR for
+; MIDI note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 71 notes to PercInst record 0 'Silent' and the rest to: 36 'Fret Noise', 37
+; 'Pick Noise 1', 38 'Pick Noise 2', 39 'Pick Noise 3', 40 'Pick Noise 4', 41 'Sax Breath',
+; 42 'Flute Breath', 43 'Slap Shot', 44 'MetronomeClik', 45 'MetronomeBell', 46 'Scratch 3',
+; 47 'Scratch 1', 48 'Zap 1', 49 'ElectroUnizon', 50 'Electro Shot1', 51 'Electro Shot2', 52
+; 'Zap 2', 53 'Square Click', 54 'Slap 1', 55 'AmbientHammer', 56 'Orch.Hit High', 57
+; 'Orch.Hit Low', 58 'Metal Hit Hi', 59 'Metal Hit Low', 60 'Crikets', 61 'Nutshell Tree',
+; 62 'Rain Stick', 63 'Temple Block', 64 'Small Bell', 65 'Finger Cym.H', 66 'Finger Cym.L',
+; 67 'Sleigh Bell', 68 'Wind Chime', 69 'Tam-Tam', 70 'Voice Uh', 71 'Voice Ah', 72
+; 'Voice Yeh', 73 'Heart Beat', 74 'Hand Claps', 75 'Applause 1', 76 'Applause 2', 77
+; 'Gun Shot', 78 'Explosion', 79 'Helicopter', 80 'Train', 81 'Steam Whistle', 82
+; 'Telephone', 83 'Wave 1', 84 'Wave 2', 85 'Wind', 86 'Bird 1', 87 'Bird 2', 88 'Bullfrog',
+; 89 'Little Dog', 125 'Click 1', 126 'Click 2', 127 'Click 1'.
 DrumKit_10F_SoundEffectKit_NoteMap:
 	.short 0x0000	; 2C7FC  [  0] note   0
 	.short 0x0000	; 2C7FE  [  1] note   1
@@ -18080,6 +19556,40 @@ DrumKit_10D_ModelingKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C96C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2C97C  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2C98C  |.....X..|
+; Note map of tone 0x10D 'Modeling Kit': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 9 notes to PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4
+; 'ElectroUnizon', 5 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9
+; 'Voice Ah', 10 'Voice Yeh', 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14
+; 'ModelHHAccent', 15 'ModelHH.HfOpn', 16 'ModelHHClose2', 17 'ReverseCymbl1', 18
+; 'ElectricTom 3', 19 'ElectricTom 2', 20 'ElectricTom 1', 21 'ReverseSnare1', 22
+; 'Model.Snare 2', 23 'Model.Snare 3', 28 'Slap 1', 29 'Scratch 3', 30 'Scratch 1', 31
+; 'Rock Rim', 32 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'ModelBassDrm2',
+; 36 'ModelBassDrm1', 37 'Modeling Rim', 38 'Model.Snare 1', 39 'Mdl.HandClaps', 40
+; 'Model.Snare 4', 41 'ModelBassTomL', 42 'ModelHHClose1', 43 'ModelBassTomH', 44
+; 'ModelHH.Pedal', 45 'Modeling Tom3', 46 'Model.HH.Open', 47 'Modeling Tom2', 48
+; 'Modeling Tom1', 49 'Mdl.CrashCym1', 50 'ModelingTomHi', 51 'ModelRideCym1', 52
+; 'ModelChinaCym', 53 'ModelRideBell', 54 'MdlTamburnAcc', 55 'Mdl.SplashCym', 56
+; 'ModelCowbell2', 57 'Mdl.CrashCym2', 58 'Mdl.Vibraslap', 59 'ModelRideCym2', 60
+; 'ModelBongo H', 61 'ModelBongo L', 62 'MdlCngMtCrash', 63 'ModelConga Hi', 64
+; 'ModelConga Lo', 65 'MdlTimbOpenRm', 66 'ModelTimbOpnL', 67 'ModelAgogo Hi', 68
+; 'ModelAgogo Lo', 69 'Model.Cabasa', 70 'Mdl.MaracasOn', 71 'MdlSmbWhShort', 72
+; 'MdlSmbWh Long', 73 'MdlGuiroShort', 74 'Mdl.GuiroLong', 75 'Model.Claves', 76
+; 'MdlWdblock Hi', 77 'MdlWdBlockLow', 78 'Mdl.Cuica Hi', 79 'Mdl.Cuica Low', 80
+; 'MdlTriangle M', 81 'MdlTriangle O', 82 'Mdl.Shaker On', 83 'Mdl.SleighBel', 84
+; 'Mdl.WindChime', 85 'ModelCastanet', 86 'Surdo Mute', 87 'Surdo Open', 88 'Orch.BassDrm1',
+; 89 'Orch.Snare 1', 90 'Orch.Cymbal 1', 91 'Nutshell Tree', 92 'Rain Stick', 93
+; 'Shekele On', 94 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98
+; 'Darbuka Slap', 99 'Darbuka Open', 100 'Finger Cymbal', 101 'Samba Drum On', 102
+; 'SambaDrum Off', 103 'MdlSambaWhi H', 104 'MdlSambaWhi L', 105 'MdlsmallCngHi', 106
+; 'MdlsmallCngLo', 109 'ModelCowbell1', 110 'ModelCowbell3', 111 'ModelCowbell4', 112
+; 'ModelTimbOpnH', 113 'TimbalesPaila', 114 'TambourineBt1', 115 'Mdl.ShakerOff', 116
+; 'MdlMaracasOff', 117 'SurdoLeftHand', 118 'Shekele Off', 119 'Hand Claps', 120
+; 'Conga Mute On', 121 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124
+; 'Bongo Mute 2', 125 'Bongo Mute 1', 126 'OrchTambourin', 127 'MdlWdBlockHi2'.
 DrumKit_10D_ModelingKit_NoteMap:
 	.short 0x0000	; 2C994  [  0] note   0
 	.short 0x0000	; 2C996  [  1] note   1
@@ -18236,6 +19746,40 @@ DrumKit_10C_SynthKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CB04  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CB14  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2CB24  |.....X..|
+; Note map of tone 0x10C 'Synth Kit': entry n is the drum-instrument SELECTOR for MIDI note
+; n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads separately
+; -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c 0xFB891C /
+; 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes DrumKit_NoteMapA
+; with bank*128 + program and scales the result by 150 into PercInst.  Resolved, 9 notes to
+; PercInst record 0 'Silent' and the rest to: 3 'Zap 1', 4 'ElectroUnizon', 5
+; 'Electro Shot1', 6 'Electro Shot2', 7 'Zap 2', 8 'Voice Uh', 9 'Voice Ah', 10 'Voice Yeh',
+; 11 'AmbientHammer', 12 'Brush Long', 13 'Brush Short', 14 'Syn.HH.Accent', 15
+; 'Syn.HH.HfOpen', 16 'Syn.HH.Close2', 17 'ReverseCymbl5', 18 'Dance Tom 3', 19
+; 'Dance Tom 2', 20 'Dance Tom 1', 21 'Syn.Rev.Snare', 22 'Synth Snare 2', 23
+; 'Synth Snare 3', 28 'Slap 2', 29 'Scratch 4', 30 'Scratch 2', 31 'Rock Rim', 32
+; 'Square Click', 33 'MetronomeClik', 34 'MetronomeBell', 35 'SynthBassDrm2', 36
+; 'SynthBassDrm1', 37 'Synth Rim', 38 'Synth Snare 1', 39 'ReverseCymbl5', 40
+; 'Analog Snare', 41 'SynthBassTomL', 42 'Syn.HH.Close1', 43 'SynthBassTomH', 44
+; 'Syn.HH.Pedal', 45 'Synth Tom 3', 46 'Synth HH.Open', 47 'Synth Tom 2', 48 'Synth Tom 1',
+; 49 'CrashCymbal11', 50 'SynthTom High', 51 'Ride Cymbal14', 52 'Syn.ChinaCym.', 53
+; 'Ride Bell 7', 54 'TambourinAcc2', 55 'SplashCymbal5', 56 'SynthCowbell2', 57
+; 'CrashCymbal10', 58 'Syn.Vibraslap', 59 'Ride Cymbal 7', 60 'ModelBongo H', 61
+; 'ModelBongo L', 62 'Syn.CongaCrsh', 63 'SynthConga Lo', 64 'SynthConga Hi', 65
+; 'SynTimbOpenRm', 66 'SynTimbOpenLo', 67 'SynthAgogo Hi', 68 'SynthAgogo Lo', 69
+; 'Cabasa 2', 70 'Syn.MaracasOn', 71 'SynSmbWhShort', 72 'SynSmbWh Long', 73
+; 'Guiro Short 2', 74 'Guiro Long 2', 75 'Synth Claves', 76 'MdlWdblock Hi', 77
+; 'MdlWdBlockLow', 78 'Mdl.Cuica Hi', 79 'Mdl.Cuica Low', 80 'SynTriangle M', 81
+; 'SynTriangle O', 82 'Syn.Shaker On', 83 'Mdl.SleighBel', 84 'Syn.WindChime', 85
+; 'ModelCastanet', 86 'Surdo Mute', 87 'Surdo Open', 88 'SynthBassDrm3', 89 'SynOrchSnare',
+; 90 'SynOrchCymbal', 91 'Nutshell Tree', 92 'Rain Stick', 93 'Shekele On', 94
+; 'BataDrum Slap', 95 'BataDrum Open', 96 'Caxixi On', 97 'Caxixi Off', 98 'Darbuka Slap',
+; 99 'Darbuka Open', 100 'Finger Cymbal', 101 'Samba Drum On', 102 'SambaDrum Off', 103
+; 'SynSambaWhi H', 104 'SynSambaWhi L', 105 'SmallConga Hi', 106 'SmallConga Lo', 109
+; 'SynthCowbell1', 110 'SynthCowbell3', 111 'SynthCowbell4', 112 'SynTimbOpenHi', 113
+; 'Syn.TimbPaila', 114 'TambourineBt2', 115 'Syn.ShakerOff', 116 'SynMaracasOff', 117
+; 'SurdoLeftHand', 118 'Shekele Off', 119 'Syn.HandClaps', 120 'Conga Mute On', 121
+; 'Conga MuteOff', 122 'Conga Crash', 123 'Bongo Mute 3', 124 'Bongo Mute 2', 125
+; 'Bongo Mute 1', 126 'OrchTambourin', 127 'MdlWdBlockHi2'.
 DrumKit_10C_SynthKit_NoteMap:
 	.short 0x0000	; 2CB2C  [  0] note   0
 	.short 0x0000	; 2CB2E  [  1] note   1
@@ -18387,6 +19931,12 @@ DrumKit_110_SpecialSound:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CC9C  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CCAC  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2CCBC  |.....X..|
+; Note map of tone 0x110 'Special sound': entry n is the drum-instrument SELECTOR for MIDI
+; note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 127 notes to PercInst record 0 'Silent' and the rest to: 64 'Organ Click'.
 DrumKit_110_SpecialSound_NoteMap:
 	.short 0x0000	; 2CCC4  [  0] note   0
 	.short 0x0000	; 2CCC6  [  1] note   1
@@ -18538,6 +20088,25 @@ DrumKit_111_GMOrchestraKit:
 	.byte 0x05, 0x46, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CE34  |.FT.............|
 	.byte 0x3C, 0x01, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 2CE44  |<..#..2F........|
 	.byte 0x00, 0x00, 0x00, 0xDE, 0x02, 0x58, 0x04, 0x00	; 2CE54  |.....X..|
+; Note map of tone 0x111 'GM Orchestra Kit': entry n is the drum-instrument SELECTOR for
+; MIDI note n, a byte pair (program at +0x98+2n, bank at +0x99+2n) that the firmware reads
+; separately -- the .short below is only its LE16 view.  ToneStage_SwitchToPart (prom_c
+; 0xFB891C / 0xFB892A) reads it, DrumKit_ResolveInstrumentRecord (0xFB48F7) indexes
+; DrumKit_NoteMapA with bank*128 + program and scales the result by 150 into PercInst.
+; Resolved, 66 notes to PercInst record 0 'Silent' and the rest to: 27 'HiHatClosed 1', 28
+; 'HiHat Pedal 1', 29 'HiHat Open 1', 30 'Ride Cymbal 8', 31 'Rock Rim', 32 'Square Click',
+; 33 'MetronomeClik', 34 'MetronomeBell', 35 'Orch.BassDrm3', 36 'Orch.BassDrm1', 37
+; 'Rock Rim', 38 'Orch.Snare 1', 39 'Castanets', 40 'Orch.Snare 1', 41 'Timpani F', 42
+; 'Timpani F#', 43 'Timpani G', 44 'Timpani G#', 45 'Timpani A', 46 'Timpani A#', 47
+; 'Timpani B', 48 'Timpani c', 49 'Timpani c#', 50 'Timpani d', 51 'Timpani d#', 52
+; 'Timpani e', 53 'Timpani f', 54 'OrchTambourin', 55 'SplashCymbal2', 56 'Cowbell 2', 57
+; 'Orch.Cymbal 1', 58 'Vibraslap', 59 'Orch.Cymbal 2', 60 'Bongo High', 61 'Bongo Low', 62
+; 'CongaMutCrash', 63 'Conga High', 64 'Conga Low', 65 'TimblsOpenRim', 66 'TimbalesOpenL',
+; 67 'Agogo High', 68 'Agogo Low', 69 'Cabasa 1', 70 'Maracas On', 71 'SambaWhiShort', 72
+; 'SambaWhi Long', 73 'Guiro Short 1', 74 'Guiro Long 1', 75 'Claves', 76 'WoodBlockHigh',
+; 77 'WoodBlock Low', 78 'Cuica High', 79 'Cuica Low', 80 'Triangle Mute', 81
+; 'Triangle Open', 82 'Shaker On', 83 'Sleigh Bell', 84 'Wind Chime', 85 'Castanets', 86
+; 'Surdo Mute', 87 'Surdo Open', 88 'Applause 1'.
 DrumKit_111_GMOrchestraKit_NoteMap:
 	.short 0x0000	; 2CE5C  [  0] note   0
 	.short 0x0000	; 2CE5E  [  1] note   1
@@ -18962,9 +20531,8 @@ DrumKit_NoteMapA:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 207, 208 distinct.
 ; KN5000 label at the same directory slot: ToneDB_PercSourceIndexMapA.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x2DF5C, which is directory slot +0x14's value, and ends at 0x2E75C,
@@ -18973,14 +20541,23 @@ DrumKit_NoteMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x14 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x14: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x40.
+; Value: a record number in ToneDB_PercMixerDefaultTable (+0x20, 208 x 43).
+; Reader: ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3): 0xFB8398 `ld XWA,(XBC+0x14)`,
+; then +0x20 at 0xFB839E and the stride word +0xF0 (43) at 0xFB83A9.
+; Measured over all 1024 entries: max 207 < 208, 208 distinct.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_PercSourceIndexMapA:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x000B	; 2DF5C  [0]
@@ -19119,9 +20696,8 @@ ToneDB_PercSourceIndexMapA:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 160, 161 distinct.
 ; KN5000 label at the same directory slot: ToneDB_DrumToneIndexMap.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x2E75C, which is directory slot +0x2C's value, and ends at 0x2EF5C,
@@ -19130,14 +20706,25 @@ ToneDB_PercSourceIndexMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x2C is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x2C: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
 ; ★ BUT A READER EXISTS OUTSIDE IT: `ld XWA,(XBC+0x2C)` at 0xFB468C,
 ; through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616.
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x40.
+; Value: a descriptor number in ToneDB_EnvDescTable_Perc (+0x38, 161 x 14).
+; Reader: ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0): 0xFB468C `ld XWA,(XBC+0x2c)`,
+; then +0x38 at 0xFB4692 and the stride word +0xF2 (14) at 0xFB469D.
+; Measured over all 1024 entries: max 160 < 161, 161 distinct.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_DrumToneIndexMap:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 2E75C  [0]
@@ -19276,7 +20863,11 @@ ToneDB_DrumToneIndexMap:
 ; DRUM-INSTRUMENT RECORD, stride 150 = the directory's own word at +0xEE.
 ; 
 ;     +0x00  13 B   name, ASCII, space-padded  ('Rock Bass Drm', 'Slap Shot')
-;     +0x0D 137 B   parameters, unidentified
+;     +0x0D  51 B   head, no field named
+;     +0x40  43 B   wave-select record 0 \ prom_c copies 0x40 bytes of head
+;     +0x6B  43 B   wave-select record 1 / (0xFB85F4), then 43*j, j < 2
+;                   (0xFB868F, 0xFB897D); 64 + 2*43 = 150.  Corrected
+;                   2026-09-25, lane promcd: this gave 137 undivided bytes.
 ; 
 ; Same directory slot and same shape as the KN5000's PercInst_000_Silent
 ; block (stride 58 there).  Every one of the 504 records in this image starts
@@ -19325,7 +20916,7 @@ ToneDB_DrumToneIndexMap:
 ; ==========================================================================
 
 ; ---- drum instrument   0 'Silent       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1545 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1034
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19343,7 +20934,7 @@ PercInst_000_Silent:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2EFE9  |.........|
 
 ; ---- drum instrument   1 'Square Click ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19361,7 +20952,7 @@ PercInst_001_SquareClick:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F07F  |.........|
 
 ; ---- drum instrument   2 'Rock Bass Drm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19379,7 +20970,7 @@ PercInst_002_RockBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F115  |.........|
 
 ; ---- drum instrument   3 'Room BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19397,7 +20988,7 @@ PercInst_003_RoomBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F1AB  |.........|
 
 ; ---- drum instrument   4 'Room BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19415,7 +21006,7 @@ PercInst_004_RoomBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F241  |.........|
 
 ; ---- drum instrument   5 'Jazz BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19433,7 +21024,7 @@ PercInst_005_JazzBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F2D7  |.........|
 
 ; ---- drum instrument   6 'Jazz BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19451,7 +21042,7 @@ PercInst_006_JazzBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F36D  |.........|
 
 ; ---- drum instrument   7 'Trad BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19469,7 +21060,7 @@ PercInst_007_TradBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F403  |.........|
 
 ; ---- drum instrument   8 'Trad BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19487,7 +21078,7 @@ PercInst_008_TradBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F499  |.........|
 
 ; ---- drum instrument   9 'LtRockBassDrm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19505,7 +21096,7 @@ PercInst_009_LtRockBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F52F  |.........|
 
 ; ---- drum instrument  10 'PowerBassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19523,7 +21114,7 @@ PercInst_010_PowerBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F5C5  |.........|
 
 ; ---- drum instrument  11 'PowerBassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19541,7 +21132,7 @@ PercInst_011_PowerBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F65B  |.........|
 
 ; ---- drum instrument  12 'ModelBassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19559,7 +21150,7 @@ PercInst_012_ModelBassDrm1:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xD8, 0x05	; 2F6F1  |.........|
 
 ; ---- drum instrument  13 'House BassDrm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19577,7 +21168,7 @@ PercInst_013_HouseBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F787  |.........|
 
 ; ---- drum instrument  14 'Soul BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19595,7 +21186,7 @@ PercInst_014_SoulBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F81D  |.........|
 
 ; ---- drum instrument  15 'Dance BassDrm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19613,7 +21204,7 @@ PercInst_015_DanceBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F8B3  |.........|
 
 ; ---- drum instrument  16 'ElectBassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19631,7 +21222,7 @@ PercInst_016_ElectBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F949  |.........|
 
 ; ---- drum instrument  17 'ElectBassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19649,7 +21240,7 @@ PercInst_017_ElectBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2F9DF  |.........|
 
 ; ---- drum instrument  18 'ModelBassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19667,7 +21258,7 @@ PercInst_018_ModelBassDrm2:
 	.byte 0xEC, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xDC, 0xA6	; 2FA75  |.........|
 
 ; ---- drum instrument  19 'Funk Bass Drm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19685,7 +21276,7 @@ PercInst_019_FunkBassDrm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FB0B  |.........|
 
 ; ---- drum instrument  20 'Orch.BassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19703,7 +21294,7 @@ PercInst_020_OrchBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FBA1  |.........|
 
 ; ---- drum instrument  21 'Orch.BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19721,7 +21312,7 @@ PercInst_021_OrchBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FC37  |.........|
 
 ; ---- drum instrument  22 'Orch.BassDrm3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19739,7 +21330,7 @@ PercInst_022_OrchBassDrm3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FCCD  |.........|
 
 ; ---- drum instrument  23 'Rock Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19757,7 +21348,7 @@ PercInst_023_RockSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FD63  |.........|
 
 ; ---- drum instrument  24 'Rock Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19775,7 +21366,7 @@ PercInst_024_RockSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FDF9  |.........|
 
 ; ---- drum instrument  25 'Room Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19793,7 +21384,7 @@ PercInst_025_RoomSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FE8F  |.........|
 
 ; ---- drum instrument  26 'Room Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19811,7 +21402,7 @@ PercInst_026_RoomSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 2FF25  |.........|
 
 ; ---- drum instrument  27 'Model.Snare 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19829,7 +21420,7 @@ PercInst_027_ModelSnare4:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0xFF, 0xDE, 0x00, 0xE9, 0x03	; 2FFBB  |.........|
 
 ; ---- drum instrument  28 'Jazz Snare   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19847,7 +21438,7 @@ PercInst_028_JazzSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30051  |.........|
 
 ; ---- drum instrument  29 'Trad Snare   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19865,7 +21456,7 @@ PercInst_029_TradSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 300E7  |.........|
 
 ; ---- drum instrument  30 'LtRockSnare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19883,7 +21474,7 @@ PercInst_030_LtRockSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3017D  |.........|
 
 ; ---- drum instrument  31 'LtRockSnare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19901,7 +21492,7 @@ PercInst_031_LtRockSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30213  |.........|
 
 ; ---- drum instrument  32 'Power Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19919,7 +21510,7 @@ PercInst_032_PowerSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 302A9  |.........|
 
 ; ---- drum instrument  33 'Power Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19937,7 +21528,7 @@ PercInst_033_PowerSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3033F  |.........|
 
 ; ---- drum instrument  34 'Model.Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19955,7 +21546,7 @@ PercInst_034_ModelSnare1:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB	; 303D5  |.........|
 
 ; ---- drum instrument  35 'Model.Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19973,7 +21564,7 @@ PercInst_035_ModelSnare2:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xCB	; 3046B  |.........|
 
 ; ---- drum instrument  36 'House Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -19991,7 +21582,7 @@ PercInst_036_HouseSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30501  |.........|
 
 ; ---- drum instrument  37 'House Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20009,7 +21600,7 @@ PercInst_037_HouseSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30597  |.........|
 
 ; ---- drum instrument  38 'Soul Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20027,7 +21618,7 @@ PercInst_038_SoulSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3062D  |.........|
 
 ; ---- drum instrument  39 'Soul Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20045,7 +21636,7 @@ PercInst_039_SoulSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 306C3  |.........|
 
 ; ---- drum instrument  40 'Dance Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20063,7 +21654,7 @@ PercInst_040_DanceSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30759  |.........|
 
 ; ---- drum instrument  41 'Dance Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20081,7 +21672,7 @@ PercInst_041_DanceSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 307EF  |.........|
 
 ; ---- drum instrument  42 'Elect.Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20099,7 +21690,7 @@ PercInst_042_ElectSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30885  |.........|
 
 ; ---- drum instrument  43 'Elect.Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20117,7 +21708,7 @@ PercInst_043_ElectSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3091B  |.........|
 
 ; ---- drum instrument  44 'Model.Snare 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20135,7 +21726,7 @@ PercInst_044_ModelSnare3:
 	.byte 0xE2, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEA, 0xC8	; 309B1  |.........|
 
 ; ---- drum instrument  45 'Funk Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20153,7 +21744,7 @@ PercInst_045_FunkSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30A47  |.........|
 
 ; ---- drum instrument  46 'Funk Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20171,7 +21762,7 @@ PercInst_046_FunkSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30ADD  |.........|
 
 ; ---- drum instrument  47 'Synth Rim    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20189,7 +21780,7 @@ PercInst_047_SynthRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30B73  |.........|
 
 ; ---- drum instrument  48 'Analog Snare ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20207,7 +21798,7 @@ PercInst_048_AnalogSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30C09  |.........|
 
 ; ---- drum instrument  49 'Piccolo Snare' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20225,7 +21816,7 @@ PercInst_049_PiccoloSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30C9F  |.........|
 
 ; ---- drum instrument  50 'Orch.Snare 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20243,7 +21834,7 @@ PercInst_050_OrchSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30D35  |.........|
 
 ; ---- drum instrument  51 'Orch.Snare 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20261,7 +21852,7 @@ PercInst_051_OrchSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30DCB  |.........|
 
 ; ---- drum instrument  52 'Orch.Snare 3 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20279,7 +21870,7 @@ PercInst_052_OrchSnare3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30E61  |.........|
 
 ; ---- drum instrument  53 'ReverseSnare1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20297,7 +21888,7 @@ PercInst_053_ReverseSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30EF7  |.........|
 
 ; ---- drum instrument  54 'ReverseSnare2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20315,7 +21906,7 @@ PercInst_054_ReverseSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 30F8D  |.........|
 
 ; ---- drum instrument  55 'ReverseSnare3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20333,7 +21924,7 @@ PercInst_055_ReverseSnare3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31023  |.........|
 
 ; ---- drum instrument  56 'Syn.Rev.Snare' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20351,7 +21942,7 @@ PercInst_056_SynRevSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 310B9  |.........|
 
 ; ---- drum instrument  57 'Synth Snare 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20369,7 +21960,7 @@ PercInst_057_SynthSnare3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3114F  |.........|
 
 ; ---- drum instrument  58 'Brush Long   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20387,7 +21978,7 @@ PercInst_058_BrushLong:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 311E5  |.........|
 
 ; ---- drum instrument  59 'Brush Hit    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20405,7 +21996,7 @@ PercInst_059_BrushHit:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3127B  |.........|
 
 ; ---- drum instrument  60 'Brush Short  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20423,7 +22014,7 @@ PercInst_060_BrushShort:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31311  |.........|
 
 ; ---- drum instrument  61 'Rock Rim     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20441,7 +22032,7 @@ PercInst_061_RockRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 313A7  |.........|
 
 ; ---- drum instrument  62 'MetronomeClik' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20459,7 +22050,7 @@ PercInst_062_MetronomeClik:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3143D  |.........|
 
 ; ---- drum instrument  63 'MetronomeBell' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20477,7 +22068,7 @@ PercInst_063_MetronomeBell:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 314D3  |.........|
 
 ; ---- drum instrument  64 'Modeling Rim ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20495,7 +22086,7 @@ PercInst_064_ModelingRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31569  |.........|
 
 ; ---- drum instrument  65 'Soul Rim     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20513,7 +22104,7 @@ PercInst_065_SoulRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 315FF  |.........|
 
 ; ---- drum instrument  66 'Dance Rim    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20531,7 +22122,7 @@ PercInst_066_DanceRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31695  |.........|
 
 ; ---- drum instrument  67 'Rock Tom 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20549,7 +22140,7 @@ PercInst_067_RockTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3172B  |.........|
 
 ; ---- drum instrument  68 'Rock Tom 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20567,7 +22158,7 @@ PercInst_068_RockTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 317C1  |.........|
 
 ; ---- drum instrument  69 'Rock Tom 3   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20585,7 +22176,7 @@ PercInst_069_RockTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31857  |.........|
 
 ; ---- drum instrument  70 'Rock Tom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20603,7 +22194,7 @@ PercInst_070_RockTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 318ED  |.........|
 
 ; ---- drum instrument  71 'Jazz Tom 4   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20621,7 +22212,7 @@ PercInst_071_JazzTom4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31983  |.........|
 
 ; ---- drum instrument  72 'Jazz Tom 5   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20639,7 +22230,7 @@ PercInst_072_JazzTom5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31A19  |.........|
 
 ; ---- drum instrument  73 'Jazz Tom 6   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20657,7 +22248,7 @@ PercInst_073_JazzTom6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31AAF  |.........|
 
 ; ---- drum instrument  74 'Brush Tom 4  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20675,7 +22266,7 @@ PercInst_074_BrushTom4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31B45  |.........|
 
 ; ---- drum instrument  75 'Brush Tom 5  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20693,7 +22284,7 @@ PercInst_075_BrushTom5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31BDB  |.........|
 
 ; ---- drum instrument  76 'Brush Tom 6  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20711,7 +22302,7 @@ PercInst_076_BrushTom6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31C71  |.........|
 
 ; ---- drum instrument  77 'Jazz Tom 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20729,7 +22320,7 @@ PercInst_077_JazzTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31D07  |.........|
 
 ; ---- drum instrument  78 'Jazz Tom 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20747,7 +22338,7 @@ PercInst_078_JazzTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31D9D  |.........|
 
 ; ---- drum instrument  79 'Jazz Tom 3   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20765,7 +22356,7 @@ PercInst_079_JazzTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31E33  |.........|
 
 ; ---- drum instrument  80 'Jazz Tom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20783,7 +22374,7 @@ PercInst_080_JazzTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31EC9  |.........|
 
 ; ---- drum instrument  81 'Brush Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20801,7 +22392,7 @@ PercInst_081_BrushTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31F5F  |.........|
 
 ; ---- drum instrument  82 'Brush Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20819,7 +22410,7 @@ PercInst_082_BrushTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 31FF5  |.........|
 
 ; ---- drum instrument  83 'Brush Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20837,7 +22428,7 @@ PercInst_083_BrushTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3208B  |.........|
 
 ; ---- drum instrument  84 'BrushTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20855,7 +22446,7 @@ PercInst_084_BrushTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32121  |.........|
 
 ; ---- drum instrument  85 'RockBassTomHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20873,7 +22464,7 @@ PercInst_085_RockBassTomHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 321B7  |.........|
 
 ; ---- drum instrument  86 'RockBassTomLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20891,7 +22482,7 @@ PercInst_086_RockBassTomLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3224D  |.........|
 
 ; ---- drum instrument  87 'JazzBassTomHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20909,7 +22500,7 @@ PercInst_087_JazzBassTomHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 322E3  |.........|
 
 ; ---- drum instrument  88 'JazzBassTomLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20927,7 +22518,7 @@ PercInst_088_JazzBassTomLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32379  |.........|
 
 ; ---- drum instrument  89 'BrushBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20945,7 +22536,7 @@ PercInst_089_BrushBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3240F  |.........|
 
 ; ---- drum instrument  90 'BrushBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20963,7 +22554,7 @@ PercInst_090_BrushBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 324A5  |.........|
 
 ; ---- drum instrument  91 'Power Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20981,7 +22572,7 @@ PercInst_091_PowerTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3253B  |.........|
 
 ; ---- drum instrument  92 'Power Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -20999,7 +22590,7 @@ PercInst_092_PowerTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 325D1  |.........|
 
 ; ---- drum instrument  93 'Power Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21017,7 +22608,7 @@ PercInst_093_PowerTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32667  |.........|
 
 ; ---- drum instrument  94 'Power Tom 4  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21035,7 +22626,7 @@ PercInst_094_PowerTom4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 326FD  |.........|
 
 ; ---- drum instrument  95 'Power Tom 5  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21053,7 +22644,7 @@ PercInst_095_PowerTom5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32793  |.........|
 
 ; ---- drum instrument  96 'Power Tom 6  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21071,7 +22662,7 @@ PercInst_096_PowerTom6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32829  |.........|
 
 ; ---- drum instrument  97 'PowerTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21089,7 +22680,7 @@ PercInst_097_PowerTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 328BF  |.........|
 
 ; ---- drum instrument  98 'Room Tom 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21107,7 +22698,7 @@ PercInst_098_RoomTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32955  |.........|
 
 ; ---- drum instrument  99 'Room Tom 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21125,7 +22716,7 @@ PercInst_099_RoomTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 329EB  |.........|
 
 ; ---- drum instrument 100 'Room Tom 3   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21143,7 +22734,7 @@ PercInst_100_RoomTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32A81  |.........|
 
 ; ---- drum instrument 101 'Room Tom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21161,7 +22752,7 @@ PercInst_101_RoomTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32B17  |.........|
 
 ; ---- drum instrument 102 'Modeling Tom1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21179,7 +22770,7 @@ PercInst_102_ModelingTom1:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 32BAD  |.........|
 
 ; ---- drum instrument 103 'Modeling Tom2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21197,7 +22788,7 @@ PercInst_103_ModelingTom2:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 32C43  |.........|
 
 ; ---- drum instrument 104 'Modeling Tom3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21215,7 +22806,7 @@ PercInst_104_ModelingTom3:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 32CD9  |.........|
 
 ; ---- drum instrument 105 'ModelingTomHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21233,7 +22824,7 @@ PercInst_105_ModelingTomHi:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE0, 0x0D	; 32D6F  |.........|
 
 ; ---- drum instrument 106 'PowerBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21251,7 +22842,7 @@ PercInst_106_PowerBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32E05  |.........|
 
 ; ---- drum instrument 107 'PowerBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21269,7 +22860,7 @@ PercInst_107_PowerBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 32E9B  |.........|
 
 ; ---- drum instrument 108 'ModelBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21287,7 +22878,7 @@ PercInst_108_ModelBassTomH:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5	; 32F31  |.........|
 
 ; ---- drum instrument 109 'ModelBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21305,7 +22896,7 @@ PercInst_109_ModelBassTomL:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x04, 0xCD, 0x00, 0xD9, 0xD5	; 32FC7  |.........|
 
 ; ---- drum instrument 110 'RoomBassTomHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21323,7 +22914,7 @@ PercInst_110_RoomBassTomHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3305D  |.........|
 
 ; ---- drum instrument 111 'RoomBassTomLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21341,7 +22932,7 @@ PercInst_111_RoomBassTomLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 330F3  |.........|
 
 ; ---- drum instrument 112 'ElectricTom 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21359,7 +22950,7 @@ PercInst_112_ElectricTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33189  |.........|
 
 ; ---- drum instrument 113 'ElectricTom 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21377,7 +22968,7 @@ PercInst_113_ElectricTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3321F  |.........|
 
 ; ---- drum instrument 114 'ElectricTom 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21395,7 +22986,7 @@ PercInst_114_ElectricTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 332B5  |.........|
 
 ; ---- drum instrument 115 'ElectricTom 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21413,7 +23004,7 @@ PercInst_115_ElectricTom4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3334B  |.........|
 
 ; ---- drum instrument 116 'ElectricTom 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21431,7 +23022,7 @@ PercInst_116_ElectricTom5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 333E1  |.........|
 
 ; ---- drum instrument 117 'ElectricTom 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21449,7 +23040,7 @@ PercInst_117_ElectricTom6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33477  |.........|
 
 ; ---- drum instrument 118 'ElectTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21467,7 +23058,7 @@ PercInst_118_ElectTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3350D  |.........|
 
 ; ---- drum instrument 119 'Synth Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21485,7 +23076,7 @@ PercInst_119_SynthTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 335A3  |.........|
 
 ; ---- drum instrument 120 'Synth Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21503,7 +23094,7 @@ PercInst_120_SynthTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33639  |.........|
 
 ; ---- drum instrument 121 'Synth Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21521,7 +23112,7 @@ PercInst_121_SynthTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 336CF  |.........|
 
 ; ---- drum instrument 122 'SynthTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21539,7 +23130,7 @@ PercInst_122_SynthTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33765  |.........|
 
 ; ---- drum instrument 123 'SynthBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21557,7 +23148,7 @@ PercInst_123_SynthBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 337FB  |.........|
 
 ; ---- drum instrument 124 'SynthBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21575,7 +23166,7 @@ PercInst_124_SynthBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33891  |.........|
 
 ; ---- drum instrument 125 'ElectBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21593,7 +23184,7 @@ PercInst_125_ElectBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33927  |.........|
 
 ; ---- drum instrument 126 'ElectBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21611,7 +23202,7 @@ PercInst_126_ElectBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 339BD  |.........|
 
 ; ---- drum instrument 127 'SynOrchSnare ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21629,7 +23220,7 @@ PercInst_127_SynOrchSnare:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33A53  |.........|
 
 ; ---- drum instrument 128 'Soul Tom 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21647,7 +23238,7 @@ PercInst_128_SoulTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33AE9  |.........|
 
 ; ---- drum instrument 129 'Soul Tom 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21665,7 +23256,7 @@ PercInst_129_SoulTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33B7F  |.........|
 
 ; ---- drum instrument 130 'Soul Tom 3   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21683,7 +23274,7 @@ PercInst_130_SoulTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33C15  |.........|
 
 ; ---- drum instrument 131 'Soul Tom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21701,7 +23292,7 @@ PercInst_131_SoulTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33CAB  |.........|
 
 ; ---- drum instrument 132 'House Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21719,7 +23310,7 @@ PercInst_132_HouseTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33D41  |.........|
 
 ; ---- drum instrument 133 'House Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21737,7 +23328,7 @@ PercInst_133_HouseTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33DD7  |.........|
 
 ; ---- drum instrument 134 'House Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21755,7 +23346,7 @@ PercInst_134_HouseTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33E6D  |.........|
 
 ; ---- drum instrument 135 'HouseTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21773,7 +23364,7 @@ PercInst_135_HouseTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33F03  |.........|
 
 ; ---- drum instrument 136 'SynthConga Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21791,7 +23382,7 @@ PercInst_136_SynthCongaLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 33F99  |.........|
 
 ; ---- drum instrument 137 'SynthConga Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21809,7 +23400,7 @@ PercInst_137_SynthCongaHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3402F  |.........|
 
 ; ---- drum instrument 138 'Syn.CongaCrsh' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21827,7 +23418,7 @@ PercInst_138_SynCongaCrsh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 340C5  |.........|
 
 ; ---- drum instrument 139 'SoulBassTom H' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21845,7 +23436,7 @@ PercInst_139_SoulBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3415B  |.........|
 
 ; ---- drum instrument 140 'SoulBassTom L' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21863,7 +23454,7 @@ PercInst_140_SoulBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 341F1  |.........|
 
 ; ---- drum instrument 141 'HouseBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21881,7 +23472,7 @@ PercInst_141_HouseBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34287  |.........|
 
 ; ---- drum instrument 142 'HouseBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21899,7 +23490,7 @@ PercInst_142_HouseBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3431D  |.........|
 
 ; ---- drum instrument 143 'Soul BassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21917,7 +23508,7 @@ PercInst_143_SoulBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 343B3  |.........|
 
 ; ---- drum instrument 144 'SynthBassDrm1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21935,7 +23526,7 @@ PercInst_144_SynthBassDrm1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34449  |.........|
 
 ; ---- drum instrument 145 'SynthBassDrm2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21953,7 +23544,7 @@ PercInst_145_SynthBassDrm2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 344DF  |.........|
 
 ; ---- drum instrument 146 'Dance Tom 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21971,7 +23562,7 @@ PercInst_146_DanceTom1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34575  |.........|
 
 ; ---- drum instrument 147 'Dance Tom 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -21989,7 +23580,7 @@ PercInst_147_DanceTom2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3460B  |.........|
 
 ; ---- drum instrument 148 'Dance Tom 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22007,7 +23598,7 @@ PercInst_148_DanceTom3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 346A1  |.........|
 
 ; ---- drum instrument 149 'DanceTom High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22025,7 +23616,7 @@ PercInst_149_DanceTomHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34737  |.........|
 
 ; ---- drum instrument 150 'DanceBassTomH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22043,7 +23634,7 @@ PercInst_150_DanceBassTomH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 347CD  |.........|
 
 ; ---- drum instrument 151 'DanceBassTomL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22061,7 +23652,7 @@ PercInst_151_DanceBassTomL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34863  |.........|
 
 ; ---- drum instrument 152 'HiHatClosed 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22079,7 +23670,7 @@ PercInst_152_HiHatClosed1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 348F9  |.........|
 
 ; ---- drum instrument 153 'HiHatClosed 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22097,7 +23688,7 @@ PercInst_153_HiHatClosed2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3498F  |.........|
 
 ; ---- drum instrument 154 'HiHatClosed 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22115,7 +23706,7 @@ PercInst_154_HiHatClosed3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34A25  |.........|
 
 ; ---- drum instrument 155 'HiHatClosed 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22133,7 +23724,7 @@ PercInst_155_HiHatClosed4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34ABB  |.........|
 
 ; ---- drum instrument 156 'HiHatClosed 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22151,7 +23742,7 @@ PercInst_156_HiHatClosed5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34B51  |.........|
 
 ; ---- drum instrument 157 'HiHatClosed 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22169,7 +23760,7 @@ PercInst_157_HiHatClosed6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34BE7  |.........|
 
 ; ---- drum instrument 158 'HiHatClosed 7' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22187,7 +23778,7 @@ PercInst_158_HiHatClosed7:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34C7D  |.........|
 
 ; ---- drum instrument 159 'HiHatClosed 8' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22205,7 +23796,7 @@ PercInst_159_HiHatClosed8:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34D13  |.........|
 
 ; ---- drum instrument 160 'HiHatClosed 9' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22223,7 +23814,7 @@ PercInst_160_HiHatClosed9:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34DA9  |.........|
 
 ; ---- drum instrument 161 'HiHatClosed10' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22241,7 +23832,7 @@ PercInst_161_HiHatClosed10:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34E3F  |.........|
 
 ; ---- drum instrument 162 'HiHatClosed11' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22259,7 +23850,7 @@ PercInst_162_HiHatClosed11:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34ED5  |.........|
 
 ; ---- drum instrument 163 'HiHatClosed12' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22277,7 +23868,7 @@ PercInst_163_HiHatClosed12:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 34F6B  |.........|
 
 ; ---- drum instrument 164 'ModelHHClose1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22295,7 +23886,7 @@ PercInst_164_ModelHHClose1:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 35001  |.........|
 
 ; ---- drum instrument 165 'ModelHHClose2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22313,7 +23904,7 @@ PercInst_165_ModelHHClose2:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 35097  |.........|
 
 ; ---- drum instrument 166 'DanceHHClose1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22331,7 +23922,7 @@ PercInst_166_DanceHHClose1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3512D  |.........|
 
 ; ---- drum instrument 167 'DanceHHClose2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22349,7 +23940,7 @@ PercInst_167_DanceHHClose2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 351C3  |.........|
 
 ; ---- drum instrument 168 'Syn.HH.Close1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22367,7 +23958,7 @@ PercInst_168_SynHHClose1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35259  |.........|
 
 ; ---- drum instrument 169 'Syn.HH.Close2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22385,7 +23976,7 @@ PercInst_169_SynHHClose2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 352EF  |.........|
 
 ; ---- drum instrument 170 'Syn.HH.Accent' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22403,7 +23994,7 @@ PercInst_170_SynHHAccent:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35385  |.........|
 
 ; ---- drum instrument 171 'Syn.HH.Pedal ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22421,7 +24012,7 @@ PercInst_171_SynHHPedal:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3541B  |.........|
 
 ; ---- drum instrument 172 'HiHat Open 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22439,7 +24030,7 @@ PercInst_172_HiHatOpen1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 354B1  |.........|
 
 ; ---- drum instrument 173 'HiHat Open 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22457,7 +24048,7 @@ PercInst_173_HiHatOpen2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35547  |.........|
 
 ; ---- drum instrument 174 'HiHat Open 3 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22475,7 +24066,7 @@ PercInst_174_HiHatOpen3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 355DD  |.........|
 
 ; ---- drum instrument 175 'HiHat Open 4 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22493,7 +24084,7 @@ PercInst_175_HiHatOpen4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35673  |.........|
 
 ; ---- drum instrument 176 'HiHat Open 5 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22511,7 +24102,7 @@ PercInst_176_HiHatOpen5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35709  |.........|
 
 ; ---- drum instrument 177 'HiHat Open 6 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22529,7 +24120,7 @@ PercInst_177_HiHatOpen6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3579F  |.........|
 
 ; ---- drum instrument 178 'HiHat HfOpen1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22547,7 +24138,7 @@ PercInst_178_HiHatHfOpen1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35835  |.........|
 
 ; ---- drum instrument 179 'HiHat HfOpen2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22565,7 +24156,7 @@ PercInst_179_HiHatHfOpen2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 358CB  |.........|
 
 ; ---- drum instrument 180 'HiHat HfOpen3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22583,7 +24174,7 @@ PercInst_180_HiHatHfOpen3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35961  |.........|
 
 ; ---- drum instrument 181 'HiHat HfOpen4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22601,7 +24192,7 @@ PercInst_181_HiHatHfOpen4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 359F7  |.........|
 
 ; ---- drum instrument 182 'HiHat HfOpen5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22619,7 +24210,7 @@ PercInst_182_HiHatHfOpen5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35A8D  |.........|
 
 ; ---- drum instrument 183 'HiHat HfOpen6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22637,7 +24228,7 @@ PercInst_183_HiHatHfOpen6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35B23  |.........|
 
 ; ---- drum instrument 184 'Model.HH.Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22655,7 +24246,7 @@ PercInst_184_ModelHHOpen:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 35BB9  |.........|
 
 ; ---- drum instrument 185 'ModelHH.HfOpn' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22673,7 +24264,7 @@ PercInst_185_ModelHHHfOpn:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 35C4F  |.........|
 
 ; ---- drum instrument 186 'Dance HH.Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22691,7 +24282,7 @@ PercInst_186_DanceHHOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35CE5  |.........|
 
 ; ---- drum instrument 187 'Synth HH.Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22709,7 +24300,7 @@ PercInst_187_SynthHHOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35D7B  |.........|
 
 ; ---- drum instrument 188 'Syn.HH.HfOpen' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22727,7 +24318,7 @@ PercInst_188_SynHHHfOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35E11  |.........|
 
 ; ---- drum instrument 189 'HiHat Pedal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22745,7 +24336,7 @@ PercInst_189_HiHatPedal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35EA7  |.........|
 
 ; ---- drum instrument 190 'HiHat Pedal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22763,7 +24354,7 @@ PercInst_190_HiHatPedal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35F3D  |.........|
 
 ; ---- drum instrument 191 'HiHat Pedal 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22781,7 +24372,7 @@ PercInst_191_HiHatPedal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 35FD3  |.........|
 
 ; ---- drum instrument 192 'HiHat Pedal 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22799,7 +24390,7 @@ PercInst_192_HiHatPedal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36069  |.........|
 
 ; ---- drum instrument 193 'ModelHH.Pedal' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22817,7 +24408,7 @@ PercInst_193_ModelHHPedal:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 360FF  |.........|
 
 ; ---- drum instrument 194 'HiHatAccent 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22835,7 +24426,7 @@ PercInst_194_HiHatAccent1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36195  |.........|
 
 ; ---- drum instrument 195 'HiHatAccent 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22853,7 +24444,7 @@ PercInst_195_HiHatAccent2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3622B  |.........|
 
 ; ---- drum instrument 196 'HiHatAccent 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22871,7 +24462,7 @@ PercInst_196_HiHatAccent3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 362C1  |.........|
 
 ; ---- drum instrument 197 'HiHatAccent 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22889,7 +24480,7 @@ PercInst_197_HiHatAccent4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36357  |.........|
 
 ; ---- drum instrument 198 'HiHatAccent 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22907,7 +24498,7 @@ PercInst_198_HiHatAccent5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 363ED  |.........|
 
 ; ---- drum instrument 199 'HiHatAccent 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22925,7 +24516,7 @@ PercInst_199_HiHatAccent6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36483  |.........|
 
 ; ---- drum instrument 200 'ModelHHAccent' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22943,7 +24534,7 @@ PercInst_200_ModelHHAccent:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0xFF, 0x15, 0x00, 0x05, 0x00	; 36519  |.........|
 
 ; ---- drum instrument 201 'CrashCymbal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22961,7 +24552,7 @@ PercInst_201_CrashCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 365AF  |.........|
 
 ; ---- drum instrument 202 'CrashCymbal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22979,7 +24570,7 @@ PercInst_202_CrashCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36645  |.........|
 
 ; ---- drum instrument 203 'CrashCymbal 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -22997,7 +24588,7 @@ PercInst_203_CrashCymbal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 366DB  |.........|
 
 ; ---- drum instrument 204 'CrashCymbal 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23015,7 +24606,7 @@ PercInst_204_CrashCymbal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36771  |.........|
 
 ; ---- drum instrument 205 'CrashCymbal11' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23033,7 +24624,7 @@ PercInst_205_CrashCymbal11:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36807  |.........|
 
 ; ---- drum instrument 206 'Syn.ChinaCym.' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23051,7 +24642,7 @@ PercInst_206_SynChinaCym:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3689D  |.........|
 
 ; ---- drum instrument 207 'CymSoftMallet' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23069,7 +24660,7 @@ PercInst_207_CymSoftMallet:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36933  |.........|
 
 ; ---- drum instrument 208 'Tam-Tam      ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23087,7 +24678,7 @@ PercInst_208_TamTam:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 369C9  |.........|
 
 ; ---- drum instrument 209 'Mdl.CrashCym1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23105,7 +24696,7 @@ PercInst_209_MdlCrashCym1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36A5F  |.........|
 
 ; ---- drum instrument 210 'CrashCymbal 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23123,7 +24714,7 @@ PercInst_210_CrashCymbal5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36AF5  |.........|
 
 ; ---- drum instrument 211 'CrashCymbal 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23141,7 +24732,7 @@ PercInst_211_CrashCymbal6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36B8B  |.........|
 
 ; ---- drum instrument 212 'CrashCymbal 7' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23159,7 +24750,7 @@ PercInst_212_CrashCymbal7:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36C21  |.........|
 
 ; ---- drum instrument 213 'CrashCymbal 8' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23177,7 +24768,7 @@ PercInst_213_CrashCymbal8:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36CB7  |.........|
 
 ; ---- drum instrument 214 'CrashCymbal 9' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23195,7 +24786,7 @@ PercInst_214_CrashCymbal9:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36D4D  |.........|
 
 ; ---- drum instrument 215 'CrashCymbal10' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23213,7 +24804,7 @@ PercInst_215_CrashCymbal10:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36DE3  |.........|
 
 ; ---- drum instrument 216 'Mdl.CrashCym2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23231,7 +24822,7 @@ PercInst_216_MdlCrashCym2:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x01, 0xB4, 0x00, 0x3A, 0x1B	; 36E79  |.......:.|
 
 ; ---- drum instrument 217 'SplashCymbal1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23249,7 +24840,7 @@ PercInst_217_SplashCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36F0F  |.........|
 
 ; ---- drum instrument 218 'SplashCymbal2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23267,7 +24858,7 @@ PercInst_218_SplashCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 36FA5  |.........|
 
 ; ---- drum instrument 219 'SplashCymbal3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23285,7 +24876,7 @@ PercInst_219_SplashCymbal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3703B  |.........|
 
 ; ---- drum instrument 220 'SplashCymbal4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23303,7 +24894,7 @@ PercInst_220_SplashCymbal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 370D1  |.........|
 
 ; ---- drum instrument 221 'SplashCymbal5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23321,7 +24912,7 @@ PercInst_221_SplashCymbal5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37167  |.........|
 
 ; ---- drum instrument 222 'Mdl.SplashCym' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23339,7 +24930,7 @@ PercInst_222_MdlSplashCym:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x04, 0xCD, 0x00, 0x10, 0x6F	; 371FD  |........o|
 
 ; ---- drum instrument 223 'ChinaCymbal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23357,7 +24948,7 @@ PercInst_223_ChinaCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37293  |.........|
 
 ; ---- drum instrument 224 'ChinaCymbal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23375,7 +24966,7 @@ PercInst_224_ChinaCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37329  |.........|
 
 ; ---- drum instrument 225 'ChinaCymbal 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23393,7 +24984,7 @@ PercInst_225_ChinaCymbal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 373BF  |.........|
 
 ; ---- drum instrument 226 'ChinaCymbal 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23411,7 +25002,7 @@ PercInst_226_ChinaCymbal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37455  |.........|
 
 ; ---- drum instrument 227 'ChinaCymbal 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23429,7 +25020,7 @@ PercInst_227_ChinaCymbal5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 374EB  |.........|
 
 ; ---- drum instrument 228 'ModelChinaCym' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23447,7 +25038,7 @@ PercInst_228_ModelChinaCym:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x0A, 0x6F	; 37581  |........o|
 
 ; ---- drum instrument 229 'Orch.Cymbal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23465,7 +25056,7 @@ PercInst_229_OrchCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37617  |.........|
 
 ; ---- drum instrument 230 'Orch.Cymbal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23483,7 +25074,7 @@ PercInst_230_OrchCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 376AD  |.........|
 
 ; ---- drum instrument 231 'SynOrchCymbal' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23501,7 +25092,7 @@ PercInst_231_SynOrchCymbal:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37743  |.........|
 
 ; ---- drum instrument 232 'Ride Cymbal 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23519,7 +25110,7 @@ PercInst_232_RideCymbal1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 377D9  |.........|
 
 ; ---- drum instrument 233 'Ride Cymbal 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23537,7 +25128,7 @@ PercInst_233_RideCymbal2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3786F  |.........|
 
 ; ---- drum instrument 234 'Ride Cymbal 3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23555,7 +25146,7 @@ PercInst_234_RideCymbal3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37905  |.........|
 
 ; ---- drum instrument 235 'Ride Cymbal 4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23573,7 +25164,7 @@ PercInst_235_RideCymbal4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3799B  |.........|
 
 ; ---- drum instrument 236 'Ride Cymbal 5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23591,7 +25182,7 @@ PercInst_236_RideCymbal5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37A31  |.........|
 
 ; ---- drum instrument 237 'Ride Cymbal 6' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23609,7 +25200,7 @@ PercInst_237_RideCymbal6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37AC7  |.........|
 
 ; ---- drum instrument 238 'Ride Cymbal 7' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23627,7 +25218,7 @@ PercInst_238_RideCymbal7:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37B5D  |.........|
 
 ; ---- drum instrument 239 'Synth Snare 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23645,7 +25236,7 @@ PercInst_239_SynthSnare1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37BF3  |.........|
 
 ; ---- drum instrument 240 'Synth Snare 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23663,7 +25254,7 @@ PercInst_240_SynthSnare2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37C89  |.........|
 
 ; ---- drum instrument 241 'TimbalesPaila' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23681,7 +25272,7 @@ PercInst_241_TimbalesPaila:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37D1F  |.........|
 
 ; ---- drum instrument 242 'ModelRideCym2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23699,7 +25290,7 @@ PercInst_242_ModelRideCym2:
 	.byte 0xE1, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCC	; 37DB5  |.........|
 
 ; ---- drum instrument 243 'Ride Cymbal 8' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23717,7 +25308,7 @@ PercInst_243_RideCymbal8:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37E4B  |.........|
 
 ; ---- drum instrument 244 'Ride Cymbal 9' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23735,7 +25326,7 @@ PercInst_244_RideCymbal9:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37EE1  |.........|
 
 ; ---- drum instrument 245 'Ride Cymbal10' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23753,7 +25344,7 @@ PercInst_245_RideCymbal10:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 37F77  |.........|
 
 ; ---- drum instrument 246 'Ride Cymbal11' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23771,7 +25362,7 @@ PercInst_246_RideCymbal11:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3800D  |.........|
 
 ; ---- drum instrument 247 'Ride Cymbal12' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23789,7 +25380,7 @@ PercInst_247_RideCymbal12:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 380A3  |.........|
 
 ; ---- drum instrument 248 'Ride Cymbal13' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23807,7 +25398,7 @@ PercInst_248_RideCymbal13:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38139  |.........|
 
 ; ---- drum instrument 249 'Ride Cymbal14' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23825,7 +25416,7 @@ PercInst_249_RideCymbal14:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 381CF  |.........|
 
 ; ---- drum instrument 250 'ModelRideCym1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23843,7 +25434,7 @@ PercInst_250_ModelRideCym1:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF6, 0xEB	; 38265  |.........|
 
 ; ---- drum instrument 251 'Ride Bell 1  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23861,7 +25452,7 @@ PercInst_251_RideBell1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 382FB  |.........|
 
 ; ---- drum instrument 252 'Ride Bell 2  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23879,7 +25470,7 @@ PercInst_252_RideBell2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38391  |.........|
 
 ; ---- drum instrument 253 'Ride Bell 3  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23897,7 +25488,7 @@ PercInst_253_RideBell3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38427  |.........|
 
 ; ---- drum instrument 254 'Ride Bell 4  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23915,7 +25506,7 @@ PercInst_254_RideBell4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 384BD  |.........|
 
 ; ---- drum instrument 255 'Ride Bell 5  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23933,7 +25524,7 @@ PercInst_255_RideBell5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38553  |.........|
 
 ; ---- drum instrument 256 'Ride Bell 6  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23951,7 +25542,7 @@ PercInst_256_RideBell6:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 385E9  |.........|
 
 ; ---- drum instrument 257 'Ride Bell 7  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23969,7 +25560,7 @@ PercInst_257_RideBell7:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3867F  |.........|
 
 ; ---- drum instrument 258 'SynthCowbell1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -23987,7 +25578,7 @@ PercInst_258_SynthCowbell1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38715  |.........|
 
 ; ---- drum instrument 259 'SynthCowbell2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24005,7 +25596,7 @@ PercInst_259_SynthCowbell2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 387AB  |.........|
 
 ; ---- drum instrument 260 'SynthCowbell3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24023,7 +25614,7 @@ PercInst_260_SynthCowbell3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38841  |.........|
 
 ; ---- drum instrument 261 'SynthCowbell4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24041,7 +25632,7 @@ PercInst_261_SynthCowbell4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 388D7  |.........|
 
 ; ---- drum instrument 262 'ModelRideBell' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24059,7 +25650,7 @@ PercInst_262_ModelRideBell:
 	.byte 0xEE, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF5, 0xF4	; 3896D  |.........|
 
 ; ---- drum instrument 263 'ReverseCymbl1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24077,7 +25668,7 @@ PercInst_263_ReverseCymbl1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38A03  |.........|
 
 ; ---- drum instrument 264 'ReverseCymbl2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24095,7 +25686,7 @@ PercInst_264_ReverseCymbl2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38A99  |.........|
 
 ; ---- drum instrument 265 'ReverseCymbl3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24113,7 +25704,7 @@ PercInst_265_ReverseCymbl3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38B2F  |.........|
 
 ; ---- drum instrument 266 'ReverseCymbl4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24131,7 +25722,7 @@ PercInst_266_ReverseCymbl4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38BC5  |.........|
 
 ; ---- drum instrument 267 'ReverseCymbl5' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24149,7 +25740,7 @@ PercInst_267_ReverseCymbl5:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38C5B  |.........|
 
 ; ---- drum instrument 268 'Agogo Low    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24167,7 +25758,7 @@ PercInst_268_AgogoLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38CF1  |.........|
 
 ; ---- drum instrument 269 'Agogo High   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24185,7 +25776,7 @@ PercInst_269_AgogoHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38D87  |.........|
 
 ; ---- drum instrument 270 'SynthAgogo Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24203,7 +25794,7 @@ PercInst_270_SynthAgogoLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38E1D  |.........|
 
 ; ---- drum instrument 271 'SynthAgogo Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24221,7 +25812,7 @@ PercInst_271_SynthAgogoHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 38EB3  |.........|
 
 ; ---- drum instrument 272 'ModelAgogo Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24239,7 +25830,7 @@ PercInst_272_ModelAgogoLo:
 	.byte 0x1E, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14	; 38F49  |.........|
 
 ; ---- drum instrument 273 'ModelAgogo Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24257,7 +25848,7 @@ PercInst_273_ModelAgogoHi:
 	.byte 0x1E, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x02, 0x14	; 38FDF  |.........|
 
 ; ---- drum instrument 274 'Sleigh Bell  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24275,7 +25866,7 @@ PercInst_274_SleighBell:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39075  |.........|
 
 ; ---- drum instrument 275 'Mdl.SleighBel' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24293,7 +25884,7 @@ PercInst_275_MdlSleighBel:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x13, 0xE7	; 3910B  |.........|
 
 ; ---- drum instrument 276 'Cowbell 1    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24311,7 +25902,7 @@ PercInst_276_Cowbell1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 391A1  |.........|
 
 ; ---- drum instrument 277 'Cowbell 2    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24329,7 +25920,7 @@ PercInst_277_Cowbell2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39237  |.........|
 
 ; ---- drum instrument 278 'Cowbell 3    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24347,7 +25938,7 @@ PercInst_278_Cowbell3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 392CD  |.........|
 
 ; ---- drum instrument 279 'Cowbell 4    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24365,7 +25956,7 @@ PercInst_279_Cowbell4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39363  |.........|
 
 ; ---- drum instrument 280 'ModelCowbell1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24383,7 +25974,7 @@ PercInst_280_ModelCowbell1:
 	.byte 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 393F9  |.........|
 
 ; ---- drum instrument 281 'ModelCowbell2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24401,7 +25992,7 @@ PercInst_281_ModelCowbell2:
 	.byte 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 3948F  |.........|
 
 ; ---- drum instrument 282 'ModelCowbell3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24419,7 +26010,7 @@ PercInst_282_ModelCowbell3:
 	.byte 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 39525  |.........|
 
 ; ---- drum instrument 283 'ModelCowbell4' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24437,7 +26028,7 @@ PercInst_283_ModelCowbell4:
 	.byte 0xFB, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xEB	; 395BB  |.........|
 
 ; ---- drum instrument 284 'Wind Chime   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24455,7 +26046,7 @@ PercInst_284_WindChime:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39651  |.........|
 
 ; ---- drum instrument 285 'Syn.WindChime' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24473,7 +26064,7 @@ PercInst_285_SynWindChime:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 396E7  |.........|
 
 ; ---- drum instrument 286 'Mdl.WindChime' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24491,7 +26082,7 @@ PercInst_286_MdlWindChime:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x0F, 0xE7	; 3977D  |.........|
 
 ; ---- drum instrument 287 'Triangle Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24509,7 +26100,7 @@ PercInst_287_TriangleOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39813  |.........|
 
 ; ---- drum instrument 288 'SynTriangle O' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24527,7 +26118,7 @@ PercInst_288_SynTriangleO:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 398A9  |.........|
 
 ; ---- drum instrument 289 'Metal Hit Low' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24545,7 +26136,7 @@ PercInst_289_MetalHitLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3993F  |.........|
 
 ; ---- drum instrument 290 'Metal Hit Hi ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24563,7 +26154,7 @@ PercInst_290_MetalHitHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 399D5  |.........|
 
 ; ---- drum instrument 291 'MdlTriangle O' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24581,7 +26172,7 @@ PercInst_291_MdlTriangleO:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0xED	; 39A6B  |.........|
 
 ; ---- drum instrument 292 'Triangle Mute' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24599,7 +26190,7 @@ PercInst_292_TriangleMute:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39B01  |.........|
 
 ; ---- drum instrument 293 'SynTriangle M' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24617,7 +26208,7 @@ PercInst_293_SynTriangleM:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39B97  |.........|
 
 ; ---- drum instrument 294 'Syn.TimbPaila' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24635,7 +26226,7 @@ PercInst_294_SynTimbPaila:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39C2D  |.........|
 
 ; ---- drum instrument 295 'MdlTriangle M' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24653,7 +26244,7 @@ PercInst_295_MdlTriangleM:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0xED	; 39CC3  |.........|
 
 ; ---- drum instrument 296 'Small Bell   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24671,7 +26262,7 @@ PercInst_296_SmallBell:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39D59  |.........|
 
 ; ---- drum instrument 297 'Finger Cymbal' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24689,7 +26280,7 @@ PercInst_297_FingerCymbal:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39DEF  |.........|
 
 ; ---- drum instrument 298 'Finger Cym.H ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24707,7 +26298,7 @@ PercInst_298_FingerCymH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39E85  |.........|
 
 ; ---- drum instrument 299 'Finger Cym.L ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24725,7 +26316,7 @@ PercInst_299_FingerCymL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 39F1B  |.........|
 
 ; ---- drum instrument 300 'TublarBell C ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24743,7 +26334,7 @@ PercInst_300_TublarBellC:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 39FB1  |.........|
 
 ; ---- drum instrument 301 'TublarBell C#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24761,7 +26352,7 @@ PercInst_301_TublarBellC:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A047  |.........|
 
 ; ---- drum instrument 302 'TublarBell D ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24779,7 +26370,7 @@ PercInst_302_TublarBellD:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A0DD  |.........|
 
 ; ---- drum instrument 303 'TublarBell D#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24797,7 +26388,7 @@ PercInst_303_TublarBellD:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A173  |.........|
 
 ; ---- drum instrument 304 'TublarBell E ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24815,7 +26406,7 @@ PercInst_304_TublarBellE:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A209  |.........|
 
 ; ---- drum instrument 305 'TublarBell F ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24833,7 +26424,7 @@ PercInst_305_TublarBellF:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A29F  |.........|
 
 ; ---- drum instrument 306 'TublarBell F#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24851,7 +26442,7 @@ PercInst_306_TublarBellF:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A335  |.........|
 
 ; ---- drum instrument 307 'TublarBell G ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24869,7 +26460,7 @@ PercInst_307_TublarBellG:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A3CB  |.........|
 
 ; ---- drum instrument 308 'TublarBell G#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24887,7 +26478,7 @@ PercInst_308_TublarBellG:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A461  |.........|
 
 ; ---- drum instrument 309 'TublarBell A ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24905,7 +26496,7 @@ PercInst_309_TublarBellA:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A4F7  |.........|
 
 ; ---- drum instrument 310 'TublarBell A#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24923,7 +26514,7 @@ PercInst_310_TublarBellA:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A58D  |.........|
 
 ; ---- drum instrument 311 'TublarBell B ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24941,7 +26532,7 @@ PercInst_311_TublarBellB:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A623  |.........|
 
 ; ---- drum instrument 312 'TublarBell c ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24959,7 +26550,7 @@ PercInst_312_TublarBellC:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A6B9  |.........|
 
 ; ---- drum instrument 313 'TublarBell c#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24977,7 +26568,7 @@ PercInst_313_TublarBellC:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A74F  |.........|
 
 ; ---- drum instrument 314 'TublarBell d ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -24995,7 +26586,7 @@ PercInst_314_TublarBellD:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A7E5  |.........|
 
 ; ---- drum instrument 315 'TublarBell d#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25013,7 +26604,7 @@ PercInst_315_TublarBellD:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A87B  |.........|
 
 ; ---- drum instrument 316 'TublarBell e ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25031,7 +26622,7 @@ PercInst_316_TublarBellE:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A911  |.........|
 
 ; ---- drum instrument 317 'TublarBell f ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25049,7 +26640,7 @@ PercInst_317_TublarBellF:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3A9A7  |.........|
 
 ; ---- drum instrument 318 'TublarBell f#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25067,7 +26658,7 @@ PercInst_318_TublarBellF:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AA3D  |.........|
 
 ; ---- drum instrument 319 'TublarBell g ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25085,7 +26676,7 @@ PercInst_319_TublarBellG:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AAD3  |.........|
 
 ; ---- drum instrument 320 'TublarBell g#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25103,7 +26694,7 @@ PercInst_320_TublarBellG:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AB69  |.........|
 
 ; ---- drum instrument 321 'TublarBell a ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25121,7 +26712,7 @@ PercInst_321_TublarBellA:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3ABFF  |.........|
 
 ; ---- drum instrument 322 'TublarBell a#' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25139,7 +26730,7 @@ PercInst_322_TublarBellA:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AC95  |.........|
 
 ; ---- drum instrument 323 'TublarBell b ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25157,7 +26748,7 @@ PercInst_323_TublarBellB:
 	.byte 0xD8, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3AD2B  |.........|
 
 ; ---- drum instrument 324 'Bongo Mute 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25175,7 +26766,7 @@ PercInst_324_BongoMute1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3ADC1  |.........|
 
 ; ---- drum instrument 325 'SynSmalCongaL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25193,7 +26784,7 @@ PercInst_325_SynSmalCongaL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3AE57  |.........|
 
 ; ---- drum instrument 326 'SynSmalCongaH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25211,7 +26802,7 @@ PercInst_326_SynSmalCongaH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3AEED  |.........|
 
 ; ---- drum instrument 327 'Bongo Mute 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25229,7 +26820,7 @@ PercInst_327_BongoMute2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3AF83  |.........|
 
 ; ---- drum instrument 328 'Bongo Mute 3 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25247,7 +26838,7 @@ PercInst_328_BongoMute3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B019  |.........|
 
 ; ---- drum instrument 329 'Bongo High   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25265,7 +26856,7 @@ PercInst_329_BongoHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B0AF  |.........|
 
 ; ---- drum instrument 330 'ModelBongo H ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25283,7 +26874,7 @@ PercInst_330_ModelBongoH:
 	.byte 0xF2, 0xE8, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0x04	; 3B145  |.........|
 
 ; ---- drum instrument 331 'ModelBongo L ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25301,7 +26892,7 @@ PercInst_331_ModelBongoL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3B1DB  |.........|
 
 ; ---- drum instrument 332 'Bongo Low    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25319,7 +26910,7 @@ PercInst_332_BongoLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B271  |.........|
 
 ; ---- drum instrument 333 'Conga Mute On' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25337,7 +26928,7 @@ PercInst_333_CongaMuteOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B307  |.........|
 
 ; ---- drum instrument 334 'Conga MuteOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25355,7 +26946,7 @@ PercInst_334_CongaMuteOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B39D  |.........|
 
 ; ---- drum instrument 335 'CongaMutCrash' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25373,7 +26964,7 @@ PercInst_335_CongaMutCrash:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B433  |.........|
 
 ; ---- drum instrument 336 'MdlCngMtCrash' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25391,7 +26982,7 @@ PercInst_336_MdlCngMtCrash:
 	.byte 0xF2, 0xE1, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3B4C9  |.........|
 
 ; ---- drum instrument 337 'Conga High   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25409,7 +27000,7 @@ PercInst_337_CongaHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B55F  |.........|
 
 ; ---- drum instrument 338 'SmallConga Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25427,7 +27018,7 @@ PercInst_338_SmallCongaHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B5F5  |.........|
 
 ; ---- drum instrument 339 'Click 1      ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25445,7 +27036,7 @@ PercInst_339_Click1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B68B  |.........|
 
 ; ---- drum instrument 340 'Click 2      ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25463,7 +27054,7 @@ PercInst_340_Click2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B721  |.........|
 
 ; ---- drum instrument 341 'Conga Low    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25481,7 +27072,7 @@ PercInst_341_CongaLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B7B7  |.........|
 
 ; ---- drum instrument 342 'SmallConga Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25499,7 +27090,7 @@ PercInst_342_SmallCongaLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B84D  |.........|
 
 ; ---- drum instrument 343 'SynthBassDrm3' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25517,7 +27108,7 @@ PercInst_343_SynthBassDrm3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B8E3  |.........|
 
 ; ---- drum instrument 344 'Steam Whistle' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25535,7 +27126,7 @@ PercInst_344_SteamWhistle:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3B979  |.........|
 
 ; ---- drum instrument 345 'ModelConga Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25553,7 +27144,7 @@ PercInst_345_ModelCongaHi:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 3BA0F  |.........|
 
 ; ---- drum instrument 346 'ModelConga Lo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25571,7 +27162,7 @@ PercInst_346_ModelCongaLo:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 3BAA5  |.........|
 
 ; ---- drum instrument 347 'MdlsmallCngHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25589,7 +27180,7 @@ PercInst_347_MdlsmallCngHi:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 3BB3B  |.........|
 
 ; ---- drum instrument 348 'MdlsmallCngLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25607,7 +27198,7 @@ PercInst_348_MdlsmallCngLo:
 	.byte 0xE7, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEB, 0xE6	; 3BBD1  |.........|
 
 ; ---- drum instrument 349 'Conga Crash  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25625,7 +27216,7 @@ PercInst_349_CongaCrash:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3BC67  |.........|
 
 ; ---- drum instrument 350 'TimbalesOpenL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25643,7 +27234,7 @@ PercInst_350_TimbalesOpenL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3BCFD  |.........|
 
 ; ---- drum instrument 351 'TimbalesOpenH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25661,7 +27252,7 @@ PercInst_351_TimbalesOpenH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3BD93  |.........|
 
 ; ---- drum instrument 352 'ModelTimbOpnL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25679,7 +27270,7 @@ PercInst_352_ModelTimbOpnL:
 	.byte 0xE2, 0xCE, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8	; 3BE29  |.........|
 
 ; ---- drum instrument 353 'ModelTimbOpnH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25697,7 +27288,7 @@ PercInst_353_ModelTimbOpnH:
 	.byte 0xE2, 0xCE, 0x00, 0x80, 0x00, 0x00, 0x00, 0xE1, 0xD8	; 3BEBF  |.........|
 
 ; ---- drum instrument 354 'TimblsOpenRim' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25715,7 +27306,7 @@ PercInst_354_TimblsOpenRim:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3BF55  |.........|
 
 ; ---- drum instrument 355 'MdlTimbOpenRm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25733,7 +27324,7 @@ PercInst_355_MdlTimbOpenRm:
 	.byte 0xE6, 0xD2, 0x00, 0x80, 0x00, 0x00, 0x00, 0xEE, 0x28	; 3BFEB  |........(|
 
 ; ---- drum instrument 356 'SynTimbOpenLo' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25751,7 +27342,7 @@ PercInst_356_SynTimbOpenLo:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C081  |.........|
 
 ; ---- drum instrument 357 'SynTimbOpenRm' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25769,7 +27360,7 @@ PercInst_357_SynTimbOpenRm:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C117  |.........|
 
 ; ---- drum instrument 358 'SynTimbOpenHi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25787,7 +27378,7 @@ PercInst_358_SynTimbOpenHi:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C1AD  |.........|
 
 ; ---- drum instrument 359 'BataDrum Slap' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25805,7 +27396,7 @@ PercInst_359_BataDrumSlap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C243  |.........|
 
 ; ---- drum instrument 360 'BataDrum Open' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25823,7 +27414,7 @@ PercInst_360_BataDrumOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3C2D9  |.........|
 
 ; ---- drum instrument 361 'Timpani C    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25841,7 +27432,7 @@ PercInst_361_TimpaniC:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C36F  |.........|
 
 ; ---- drum instrument 362 'Timpani C#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25859,7 +27450,7 @@ PercInst_362_TimpaniC:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C405  |.........|
 
 ; ---- drum instrument 363 'Timpani D    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25877,7 +27468,7 @@ PercInst_363_TimpaniD:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C49B  |.........|
 
 ; ---- drum instrument 364 'Timpani D#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25895,7 +27486,7 @@ PercInst_364_TimpaniD:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C531  |.........|
 
 ; ---- drum instrument 365 'Timpani E    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25913,7 +27504,7 @@ PercInst_365_TimpaniE:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C5C7  |.........|
 
 ; ---- drum instrument 366 'Timpani F    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25931,7 +27522,7 @@ PercInst_366_TimpaniF:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C65D  |.........|
 
 ; ---- drum instrument 367 'Timpani F#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25949,7 +27540,7 @@ PercInst_367_TimpaniF:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C6F3  |.........|
 
 ; ---- drum instrument 368 'Timpani G    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25967,7 +27558,7 @@ PercInst_368_TimpaniG:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C789  |.........|
 
 ; ---- drum instrument 369 'Timpani G#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -25985,7 +27576,7 @@ PercInst_369_TimpaniG:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C81F  |.........|
 
 ; ---- drum instrument 370 'Timpani A    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26003,7 +27594,7 @@ PercInst_370_TimpaniA:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C8B5  |.........|
 
 ; ---- drum instrument 371 'Timpani A#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26021,7 +27612,7 @@ PercInst_371_TimpaniA:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C94B  |.........|
 
 ; ---- drum instrument 372 'Timpani B    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26039,7 +27630,7 @@ PercInst_372_TimpaniB:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3C9E1  |.........|
 
 ; ---- drum instrument 373 'Timpani c    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26057,7 +27648,7 @@ PercInst_373_TimpaniC:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CA77  |.........|
 
 ; ---- drum instrument 374 'Timpani c#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26075,7 +27666,7 @@ PercInst_374_TimpaniC:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CB0D  |.........|
 
 ; ---- drum instrument 375 'Timpani d    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26093,7 +27684,7 @@ PercInst_375_TimpaniD:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CBA3  |.........|
 
 ; ---- drum instrument 376 'Timpani d#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26111,7 +27702,7 @@ PercInst_376_TimpaniD:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CC39  |.........|
 
 ; ---- drum instrument 377 'Timpani e    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26129,7 +27720,7 @@ PercInst_377_TimpaniE:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CCCF  |.........|
 
 ; ---- drum instrument 378 'Timpani f    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26147,7 +27738,7 @@ PercInst_378_TimpaniF:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CD65  |.........|
 
 ; ---- drum instrument 379 'Timpani f#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26165,7 +27756,7 @@ PercInst_379_TimpaniF:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CDFB  |.........|
 
 ; ---- drum instrument 380 'Timpani g    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26183,7 +27774,7 @@ PercInst_380_TimpaniG:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CE91  |.........|
 
 ; ---- drum instrument 381 'Timpani g#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26201,7 +27792,7 @@ PercInst_381_TimpaniG:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CF27  |.........|
 
 ; ---- drum instrument 382 'Timpani a    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26219,7 +27810,7 @@ PercInst_382_TimpaniA:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3CFBD  |.........|
 
 ; ---- drum instrument 383 'Timpani a#   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26237,7 +27828,7 @@ PercInst_383_TimpaniA:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3D053  |.........|
 
 ; ---- drum instrument 384 'Timpani b    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26255,7 +27846,7 @@ PercInst_384_TimpaniB:
 	.byte 0xEC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xDE	; 3D0E9  |.........|
 
 ; ---- drum instrument 385 'Cuica High   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26273,7 +27864,7 @@ PercInst_385_CuicaHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D17F  |.........|
 
 ; ---- drum instrument 386 'Little Dog   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26291,7 +27882,7 @@ PercInst_386_LittleDog:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D215  |.........|
 
 ; ---- drum instrument 387 'Mdl.Cuica Hi ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26309,7 +27900,7 @@ PercInst_387_MdlCuicaHi:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x4C	; 3D2AB  |........L|
 
 ; ---- drum instrument 388 'Cuica Low    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26327,7 +27918,7 @@ PercInst_388_CuicaLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D341  |.........|
 
 ; ---- drum instrument 389 'Bullfrog     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26345,7 +27936,7 @@ PercInst_389_Bullfrog:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D3D7  |.........|
 
 ; ---- drum instrument 390 'Mdl.Cuica Low' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26363,7 +27954,7 @@ PercInst_390_MdlCuicaLow:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0xCB	; 3D46D  |.........|
 
 ; ---- drum instrument 391 'Guiro Long 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26381,7 +27972,7 @@ PercInst_391_GuiroLong1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D503  |.........|
 
 ; ---- drum instrument 392 'Guiro Long 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26399,7 +27990,7 @@ PercInst_392_GuiroLong2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D599  |.........|
 
 ; ---- drum instrument 393 'Heart Beat   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26417,7 +28008,7 @@ PercInst_393_HeartBeat:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D62F  |.........|
 
 ; ---- drum instrument 394 'Mdl.GuiroLong' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26435,7 +28026,7 @@ PercInst_394_MdlGuiroLong:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x04, 0x00	; 3D6C5  |.........|
 
 ; ---- drum instrument 395 'Guiro Short 1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26453,7 +28044,7 @@ PercInst_395_GuiroShort1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D75B  |.........|
 
 ; ---- drum instrument 396 'Guiro Short 2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26471,7 +28062,7 @@ PercInst_396_GuiroShort2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D7F1  |.........|
 
 ; ---- drum instrument 397 'MdlGuiroShort' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26489,7 +28080,7 @@ PercInst_397_MdlGuiroShort:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x08, 0x00	; 3D887  |.........|
 
 ; ---- drum instrument 398 'Hand Claps   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26507,7 +28098,7 @@ PercInst_398_HandClaps:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3D91D  |.........|
 
 ; ---- drum instrument 399 'Mdl.HandClaps' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26525,7 +28116,7 @@ PercInst_399_MdlHandClaps:
 	.byte 0xD8, 0xE2, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3D9B3  |.........|
 
 ; ---- drum instrument 400 'Shaker On    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26543,7 +28134,7 @@ PercInst_400_ShakerOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DA49  |.........|
 
 ; ---- drum instrument 401 'Shaker Off   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26561,7 +28152,7 @@ PercInst_401_ShakerOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DADF  |.........|
 
 ; ---- drum instrument 402 'Syn.Shaker On' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26579,7 +28170,7 @@ PercInst_402_SynShakerOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DB75  |.........|
 
 ; ---- drum instrument 403 'Syn.ShakerOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26597,7 +28188,7 @@ PercInst_403_SynShakerOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DC0B  |.........|
 
 ; ---- drum instrument 404 'Mdl.Shaker On' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26615,7 +28206,7 @@ PercInst_404_MdlShakerOn:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 3DCA1  |.........|
 
 ; ---- drum instrument 405 'Mdl.ShakerOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26633,7 +28224,7 @@ PercInst_405_MdlShakerOff:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 3DD37  |.........|
 
 ; ---- drum instrument 406 'Shekele On   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26651,7 +28242,7 @@ PercInst_406_ShekeleOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DDCD  |.........|
 
 ; ---- drum instrument 407 'Shekele Off  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26669,7 +28260,7 @@ PercInst_407_ShekeleOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DE63  |.........|
 
 ; ---- drum instrument 408 'Cabasa 1     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26687,7 +28278,7 @@ PercInst_408_Cabasa1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DEF9  |.........|
 
 ; ---- drum instrument 409 'Cabasa 2     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26705,7 +28296,7 @@ PercInst_409_Cabasa2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3DF8F  |.........|
 
 ; ---- drum instrument 410 'Model.Cabasa ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26723,7 +28314,7 @@ PercInst_410_ModelCabasa:
 	.byte 0xEC, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xF3, 0xE0	; 3E025  |.........|
 
 ; ---- drum instrument 411 'Maracas On   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26741,7 +28332,7 @@ PercInst_411_MaracasOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E0BB  |.........|
 
 ; ---- drum instrument 412 'Maracas Off  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26759,7 +28350,7 @@ PercInst_412_MaracasOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E151  |.........|
 
 ; ---- drum instrument 413 'Syn.MaracasOn' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26777,7 +28368,7 @@ PercInst_413_SynMaracasOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E1E7  |.........|
 
 ; ---- drum instrument 414 'SynMaracasOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26795,7 +28386,7 @@ PercInst_414_SynMaracasOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E27D  |.........|
 
 ; ---- drum instrument 415 'Mdl.MaracasOn' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26813,7 +28404,7 @@ PercInst_415_MdlMaracasOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3E313  |.........|
 
 ; ---- drum instrument 416 'MdlMaracasOff' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26831,7 +28422,7 @@ PercInst_416_MdlMaracasOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 3E3A9  |.........|
 
 ; ---- drum instrument 417 'Caxixi On    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26849,7 +28440,7 @@ PercInst_417_CaxixiOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E43F  |.........|
 
 ; ---- drum instrument 418 'Caxixi Off   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26867,7 +28458,7 @@ PercInst_418_CaxixiOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E4D5  |.........|
 
 ; ---- drum instrument 419 'SambaWhistleL' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26885,7 +28476,7 @@ PercInst_419_SambaWhistleL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E56B  |.........|
 
 ; ---- drum instrument 420 'SambaWhistleH' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26903,7 +28494,7 @@ PercInst_420_SambaWhistleH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E601  |.........|
 
 ; ---- drum instrument 421 'SambaWhiShort' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26921,7 +28512,7 @@ PercInst_421_SambaWhiShort:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E697  |.........|
 
 ; ---- drum instrument 422 'SambaWhi Long' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26939,7 +28530,7 @@ PercInst_422_SambaWhiLong:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3E72D  |.........|
 
 ; ---- drum instrument 423 'MdlSambaWhi L' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26957,7 +28548,7 @@ PercInst_423_MdlSambaWhiL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3E7C3  |.........|
 
 ; ---- drum instrument 424 'MdlSambaWhi H' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26975,7 +28566,7 @@ PercInst_424_MdlSambaWhiH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3E859  |.........|
 
 ; ---- drum instrument 425 'MdlSmbWhShort' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -26993,7 +28584,7 @@ PercInst_425_MdlSmbWhShort:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3E8EF  |.........|
 
 ; ---- drum instrument 426 'MdlSmbWh Long' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27011,7 +28602,7 @@ PercInst_426_MdlSmbWhLong:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFF, 0x05	; 3E985  |.........|
 
 ; ---- drum instrument 427 'SynSambaWhi L' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27029,7 +28620,7 @@ PercInst_427_SynSambaWhiL:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EA1B  |.........|
 
 ; ---- drum instrument 428 'SynSambaWhi H' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27047,7 +28638,7 @@ PercInst_428_SynSambaWhiH:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EAB1  |.........|
 
 ; ---- drum instrument 429 'SynSmbWhShort' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27065,7 +28656,7 @@ PercInst_429_SynSmbWhShort:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EB47  |.........|
 
 ; ---- drum instrument 430 'SynSmbWh Long' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27083,7 +28674,7 @@ PercInst_430_SynSmbWhLong:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EBDD  |.........|
 
 ; ---- drum instrument 431 'Samba Drum On' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27101,7 +28692,7 @@ PercInst_431_SambaDrumOn:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EC73  |.........|
 
 ; ---- drum instrument 432 'SambaDrum Off' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27119,7 +28710,7 @@ PercInst_432_SambaDrumOff:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3ED09  |.........|
 
 ; ---- drum instrument 433 'Darbuka Slap ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27137,7 +28728,7 @@ PercInst_433_DarbukaSlap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3ED9F  |.........|
 
 ; ---- drum instrument 434 'Darbuka Open ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27155,7 +28746,7 @@ PercInst_434_DarbukaOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EE35  |.........|
 
 ; ---- drum instrument 435 'Surdo Open   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27173,7 +28764,7 @@ PercInst_435_SurdoOpen:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EECB  |.........|
 
 ; ---- drum instrument 436 'Surdo Mute   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27191,7 +28782,7 @@ PercInst_436_SurdoMute:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EF61  |.........|
 
 ; ---- drum instrument 437 'SurdoLeftHand' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27209,7 +28800,7 @@ PercInst_437_SurdoLeftHand:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3EFF7  |.........|
 
 ; ---- drum instrument 438 'TambourinAcc1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27227,7 +28818,7 @@ PercInst_438_TambourinAcc1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F08D  |.........|
 
 ; ---- drum instrument 439 'TambourinAcc2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27245,7 +28836,7 @@ PercInst_439_TambourinAcc2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F123  |.........|
 
 ; ---- drum instrument 440 'MdlTamburnAcc' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27263,7 +28854,7 @@ PercInst_440_MdlTamburnAcc:
 	.byte 0xE2, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0x6F	; 3F1B9  |........o|
 
 ; ---- drum instrument 441 'TambourineBt1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27281,7 +28872,7 @@ PercInst_441_TambourineBt1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F24F  |.........|
 
 ; ---- drum instrument 442 'TambourineBt2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27299,7 +28890,7 @@ PercInst_442_TambourineBt2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F2E5  |.........|
 
 ; ---- drum instrument 443 'Mdl.TamburnBt' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27317,7 +28908,7 @@ PercInst_443_MdlTamburnBt:
 	.byte 0xE2, 0xEC, 0x00, 0x80, 0x00, 0x00, 0x00, 0x10, 0x6F	; 3F37B  |........o|
 
 ; ---- drum instrument 444 'OrchTambourin' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27335,7 +28926,7 @@ PercInst_444_OrchTambourin:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F411  |.........|
 
 ; ---- drum instrument 445 'Nutshell Tree' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27353,7 +28944,7 @@ PercInst_445_NutshellTree:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F4A7  |.........|
 
 ; ---- drum instrument 446 'Crikets      ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27371,7 +28962,7 @@ PercInst_446_Crikets:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F53D  |.........|
 
 ; ---- drum instrument 447 'Rain Stick   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27389,7 +28980,7 @@ PercInst_447_RainStick:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F5D3  |.........|
 
 ; ---- drum instrument 448 'Vibraslap    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27407,7 +28998,7 @@ PercInst_448_Vibraslap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F669  |.........|
 
 ; ---- drum instrument 449 'Syn.Vibraslap' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27425,7 +29016,7 @@ PercInst_449_SynVibraslap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F6FF  |.........|
 
 ; ---- drum instrument 450 'Rattle       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27443,7 +29034,7 @@ PercInst_450_Rattle:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F795  |.........|
 
 ; ---- drum instrument 451 'Mdl.Vibraslap' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27461,7 +29052,7 @@ PercInst_451_MdlVibraslap:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x03, 0x00	; 3F82B  |.........|
 
 ; ---- drum instrument 452 'WoodBlockHigh' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27479,7 +29070,7 @@ PercInst_452_WoodBlockHigh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F8C1  |.........|
 
 ; ---- drum instrument 453 'WoodBlock Low' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27497,7 +29088,7 @@ PercInst_453_WoodBlockLow:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F957  |.........|
 
 ; ---- drum instrument 454 'WoodBlock Hi2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27515,7 +29106,7 @@ PercInst_454_WoodBlockHi2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3F9ED  |.........|
 
 ; ---- drum instrument 455 'Temple Block ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27533,7 +29124,7 @@ PercInst_455_TempleBlock:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FA83  |.........|
 
 ; ---- drum instrument 456 'MdlWdblock Hi' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27551,7 +29142,7 @@ PercInst_456_MdlWdblockHi:
 	.byte 0x14, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14	; 3FB19  |.........|
 
 ; ---- drum instrument 457 'MdlWdBlockLow' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27569,7 +29160,7 @@ PercInst_457_MdlWdBlockLow:
 	.byte 0x14, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14	; 3FBAF  |.........|
 
 ; ---- drum instrument 458 'MdlWdBlockHi2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27587,7 +29178,7 @@ PercInst_458_MdlWdBlockHi2:
 	.byte 0x14, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0xFC, 0x14	; 3FC45  |.........|
 
 ; ---- drum instrument 459 'Castanets    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27605,7 +29196,7 @@ PercInst_459_Castanets:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FCDB  |.........|
 
 ; ---- drum instrument 460 'ModelCastanet' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27623,7 +29214,7 @@ PercInst_460_ModelCastanet:
 	.byte 0xD6, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x11, 0x89	; 3FD71  |.........|
 
 ; ---- drum instrument 461 'Claves       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27641,7 +29232,7 @@ PercInst_461_Claves:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FE07  |.........|
 
 ; ---- drum instrument 462 'Synth Claves ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27659,7 +29250,7 @@ PercInst_462_SynthClaves:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FE9D  |.........|
 
 ; ---- drum instrument 463 'Model.Claves ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27677,7 +29268,7 @@ PercInst_463_ModelClaves:
 	.byte 0x14, 0x0D, 0x00, 0x80, 0x00, 0x00, 0x00, 0x06, 0x42	; 3FF33  |........B|
 
 ; ---- drum instrument 464 'Slap 1       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27695,7 +29286,7 @@ PercInst_464_Slap1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 3FFC9  |.........|
 
 ; ---- drum instrument 465 'Slap 2       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27713,7 +29304,7 @@ PercInst_465_Slap2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4005F  |.........|
 
 ; ---- drum instrument 466 'Slap 3       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27731,7 +29322,7 @@ PercInst_466_Slap3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 400F5  |.........|
 
 ; ---- drum instrument 467 'Scratch 1    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27749,7 +29340,7 @@ PercInst_467_Scratch1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4018B  |.........|
 
 ; ---- drum instrument 468 'Scratch 2    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27767,7 +29358,7 @@ PercInst_468_Scratch2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40221  |.........|
 
 ; ---- drum instrument 469 'Scratch 3    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27785,7 +29376,7 @@ PercInst_469_Scratch3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 402B7  |.........|
 
 ; ---- drum instrument 470 'Scratch 4    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27803,7 +29394,7 @@ PercInst_470_Scratch4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4034D  |.........|
 
 ; ---- drum instrument 471 'Zap 1        ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27821,7 +29412,7 @@ PercInst_471_Zap1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 403E3  |.........|
 
 ; ---- drum instrument 472 'ElectroUnizon' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27839,7 +29430,7 @@ PercInst_472_ElectroUnizon:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40479  |.........|
 
 ; ---- drum instrument 473 'Electro Shot1' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27857,7 +29448,7 @@ PercInst_473_ElectroShot1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4050F  |.........|
 
 ; ---- drum instrument 474 'Electro Shot2' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27875,7 +29466,7 @@ PercInst_474_ElectroShot2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 405A5  |.........|
 
 ; ---- drum instrument 475 'Zap 2        ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27893,7 +29484,7 @@ PercInst_475_Zap2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4063B  |.........|
 
 ; ---- drum instrument 476 'AmbientHammer' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27911,7 +29502,7 @@ PercInst_476_AmbientHammer:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 406D1  |.........|
 
 ; ---- drum instrument 477 'Wave 1       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27929,7 +29520,7 @@ PercInst_477_Wave1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40767  |.........|
 
 ; ---- drum instrument 478 'Wave 2       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27947,7 +29538,7 @@ PercInst_478_Wave2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 407FD  |.........|
 
 ; ---- drum instrument 479 'Applause 1   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27965,7 +29556,7 @@ PercInst_479_Applause1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40893  |.........|
 
 ; ---- drum instrument 480 'Applause 2   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -27983,7 +29574,7 @@ PercInst_480_Applause2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40929  |.........|
 
 ; ---- drum instrument 481 'Voice Ah     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28001,7 +29592,7 @@ PercInst_481_VoiceAh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 409BF  |.........|
 
 ; ---- drum instrument 482 'Voice Yeh    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28019,7 +29610,7 @@ PercInst_482_VoiceYeh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40A55  |.........|
 
 ; ---- drum instrument 483 'Voice Uh     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28037,7 +29628,7 @@ PercInst_483_VoiceUh:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40AEB  |.........|
 
 ; ---- drum instrument 484 'Helicopter   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28055,7 +29646,7 @@ PercInst_484_Helicopter:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40B81  |.........|
 
 ; ---- drum instrument 485 'Train        ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28073,7 +29664,7 @@ PercInst_485_Train:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40C17  |.........|
 
 ; ---- drum instrument 486 'Telephone    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28091,7 +29682,7 @@ PercInst_486_Telephone:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40CAD  |.........|
 
 ; ---- drum instrument 487 'Gun Shot     ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28109,7 +29700,7 @@ PercInst_487_GunShot:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40D43  |.........|
 
 ; ---- drum instrument 488 'Syn.HandClaps' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28127,7 +29718,7 @@ PercInst_488_SynHandClaps:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40DD9  |.........|
 
 ; ---- drum instrument 489 'Explosion    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28145,7 +29736,7 @@ PercInst_489_Explosion:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 40E6F  |.........|
 
 ; ---- drum instrument 490 'Orch.Hit High' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28163,7 +29754,7 @@ PercInst_490_OrchHitHigh:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 40F05  |.........|
 
 ; ---- drum instrument 491 'Orch.Hit Low ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28181,7 +29772,7 @@ PercInst_491_OrchHitLow:
 	.byte 0xE2, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00	; 40F9B  |.........|
 
 ; ---- drum instrument 492 'Wind         ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28199,7 +29790,7 @@ PercInst_492_Wind:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41031  |.........|
 
 ; ---- drum instrument 493 'Bird 1       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28217,7 +29808,7 @@ PercInst_493_Bird1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 410C7  |.........|
 
 ; ---- drum instrument 494 'Bird 2       ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28235,7 +29826,7 @@ PercInst_494_Bird2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4115D  |.........|
 
 ; ---- drum instrument 495 'Sax Breath   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28253,7 +29844,7 @@ PercInst_495_SaxBreath:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 411F3  |.........|
 
 ; ---- drum instrument 496 'Flute Breath ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28271,7 +29862,7 @@ PercInst_496_FluteBreath:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41289  |.........|
 
 ; ---- drum instrument 497 'Pick Noise 4 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28289,7 +29880,7 @@ PercInst_497_PickNoise4:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4131F  |.........|
 
 ; ---- drum instrument 498 'Pick Noise 2 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28307,7 +29898,7 @@ PercInst_498_PickNoise2:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 413B5  |.........|
 
 ; ---- drum instrument 499 'Pick Noise 1 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28325,7 +29916,7 @@ PercInst_499_PickNoise1:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4144B  |.........|
 
 ; ---- drum instrument 500 'Pick Noise 3 ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28343,7 +29934,7 @@ PercInst_500_PickNoise3:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 414E1  |.........|
 
 ; ---- drum instrument 501 'Fret Noise   ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28361,7 +29952,7 @@ PercInst_501_FretNoise:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 41577  |.........|
 
 ; ---- drum instrument 502 'Organ Click  ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 1
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28379,7 +29970,7 @@ PercInst_502_OrganClick:
 	.byte 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x18, 0x00	; 4160D  |.........|
 
 ; ---- drum instrument 503 'Slap Shot    ' ----
-; 150 B: 13-byte name then 137 bytes of parameters, none identified.
+; 150 B: 13-byte name, 51 unnamed bytes, two 43-byte wave-select records at +0x40/+0x6B.
 ; Named by 1 of the 2,048 DrumKit_NoteMapA entries (slot +0x74) and 0
 ; of DrumKit_NoteMapB's (slot +0x7C).  Evidence: map A's values run
 ; 0..503 over exactly these 504 records and name every one of them;
@@ -28419,18 +30010,16 @@ PercInst_503_SlapShot:
 ; count 208 is fixed at BOTH ends and is not a stride guess.  43 is the
 ; directory's own word at +0xF0, and prom_c reads that word at 8 sites.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x20 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
-; 
-; ⚠ NO reader was found for THIS array.  What follows is about the
-; array at slot +0x3C, which has the same record shape, and is quoted
-; as corroboration for the 43 -- not as evidence about this block.
+; ★ READER (corrected 2026-09-25, lane promcd -- this paragraph said there
+; was none, that nothing confirmed the name, and that it lacked a reader).
+; ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3) reads this slot with `ld XIY,(XBC+0x20)` at 0xFB839E, stride +0xF0 at
+; 0xFB83A9,
+; multiplies the index-map value by the stride word and adds the base: this
+; array's record n is the wave-select record a wave selector resolves to (see
+; ToneDB_ToneIndexMapA's banner).  Round 3's base-load census missed it
+; because that routine parks the base in a frame slot first.
+; What follows is about the array at slot +0x3C, which has the same record
+; shape, and is quoted as further corroboration for the 43.
 ; One prom_c routine
 ; reaches a record by multiplying the directory's stride word, and then
 ; uses the SAME word as the loop bound of a byte copy out of it:
@@ -32775,8 +34364,9 @@ ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 ; WAVE 14: +0x0C is the base pitch (above), and at slot +0x70 every field of
 ; an element is placed as well.  What is still unidentified is +0x09/+0x0A,
 ; and every byte of an element at slots +0x30 and +0x38.
-; ⚠ And no prom_c instruction that reads THIS block has been found; the Evidence
-; note below states what that leaves standing and what it does not.
+; ★ CORRECTED 2026-09-25 (lane promcd): this block IS read -- by
+; ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0), see the reader paragraph at
+; the end of this banner; each descriptor below names the waves that reach it.
 ; 
 ; All 161 descriptors here point their part A at ONE shared 132-byte object,
 ; which itself names the steepest curve; their part-B offsets are an arithmetic
@@ -32881,345 +34471,823 @@ ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 ; last.  Re-derived on every run by notes/prom_d_structures_round2.py, which
 ; this emitter refuses to run without.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x38 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x38: it does not
+; follow a base parked in a frame slot, which is what the reader does.
 ; ★ BUT A READER EXISTS OUTSIDE IT: `ld XIY,(XBC+0x38)` at 0xFB4692,
 ; through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616, with the
 ; stride taken from +0xF2 by `ld WA,(XBC+0x00F2)` at 0xFB469D.
 ; 
-; ⚠ No reader was found for THIS block.  What round 3 adds is indirect and
-; is stated as such: the stride word this block uses (directory +0xF2 = 14)
-; IS read by prom_c -- at 0xFB469D -- and at 0xFC299A the SAME stride word is
-; multiplied by a record index to walk the descriptor array at slot +0x70,
-; which is the same record class.  That corroborates the 14-byte array; it
-; does NOT show anything reading this block, and the label stays a KN5000
-; transplant on that basis.
+; Round 3's indirect evidence stands: the stride word this block uses
+; (directory +0xF2 = 14) is read by prom_c at 0xFB469D, and at
+; 0xFC299A the same stride word walks the descriptor array at slot +0x70.
+; The DIRECT reader is the one above (corrected 2026-09-25, lane promcd:
+; this paragraph said none had been found and kept the name a transplant).
 ; ==========================================================================
 ToneDB_EnvDescTable_Perc:
+; descriptor 0 = base + dir[+0x38] + 14*0, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Silent',
+; 'ModelBasDrm1L', 'ModelBasDrm1R', 'ModelBassDrm2' and 49 more (864 map entries hold it).
 ToneDB_EnvDescTable_Perc_Desc000:		; tag 0x40  A=0x4426A  B=0x442EE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xEE, 0x42, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x00, 0x00	; 4399C  |@jB...B....B..|
+; descriptor 1 = base + dir[+0x38] + 14*1, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Square
+; Wave' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc001:		; tag 0x40  A=0x4426A  B=0x442F4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF4, 0x42, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x48	; 439AA  |@jB...B....B.H|
+; descriptor 2 = base + dir[+0x38] + 14*2, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc002:		; tag 0x40  A=0x4426A  B=0x442FA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xFA, 0x42, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439B8  |@jB...B....BDM|
+; descriptor 3 = base + dir[+0x38] + 14*3, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Room Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc003:		; tag 0x40  A=0x4426A  B=0x44300
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x00, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439C6  |@jB...C....BDM|
+; descriptor 4 = base + dir[+0x38] + 14*4, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc004:		; tag 0x40  A=0x4426A  B=0x44306
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x06, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439D4  |@jB...C....BDM|
+; descriptor 5 = base + dir[+0x38] + 14*5, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Trad Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc005:		; tag 0x40  A=0x4426A  B=0x4430C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x0C, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439E2  |@jB...C....BDM|
+; descriptor 6 = base + dir[+0x38] + 14*6, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'LtRockBassDrm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc006:		; tag 0x40  A=0x4426A  B=0x44312
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x12, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439F0  |@jB...C....BDM|
+; descriptor 7 = base + dir[+0x38] + 14*7, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'PowerBassDrmL' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc007:		; tag 0x40  A=0x4426A  B=0x44318
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x18, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439FE  |@jB...C....BDM|
+; descriptor 8 = base + dir[+0x38] + 14*8, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'PowerBassDrmR' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc008:		; tag 0x40  A=0x4426A  B=0x4431E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x1E, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A0C  |@jB...C....BDM|
+; descriptor 9 = base + dir[+0x38] + 14*9, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'House
+; BassDrm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc009:		; tag 0x40  A=0x4426A  B=0x44324
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x24, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A1A  |@jB..$C....BDM|
+; descriptor 10 = base + dir[+0x38] + 14*10, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc010:		; tag 0x40  A=0x4426A  B=0x4432A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x2A, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A28  |@jB..*C....BDM|
+; descriptor 11 = base + dir[+0x38] + 14*11, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; BassDrm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc011:		; tag 0x40  A=0x4426A  B=0x44330
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x30, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A36  |@jB..0C....BDM|
+; descriptor 12 = base + dir[+0x38] + 14*12, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Elect.BassDrm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc012:		; tag 0x40  A=0x4426A  B=0x44336
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x36, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A44  |@jB..6C....BDM|
+; descriptor 13 = base + dir[+0x38] + 14*13, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Funk Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc013:		; tag 0x40  A=0x4426A  B=0x4433C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x3C, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A52  |@jB..<C....BDM|
+; descriptor 14 = base + dir[+0x38] + 14*14, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Orch.Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc014:		; tag 0x40  A=0x4426A  B=0x44342
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x42, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43A60  |@jB..BC....B.N|
+; descriptor 15 = base + dir[+0x38] + 14*15, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock
+; Snare :p', 'Rock Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc015:		; tag 0x40  A=0x4426A  B=0x44348
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x48, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A6E  |@jB..HC....BDM|
+; descriptor 16 = base + dir[+0x38] + 14*16, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock
+; Snare :f' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc016:		; tag 0x40  A=0x4426A  B=0x4434E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x4E, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A7C  |@jB..NC....BDM|
+; descriptor 17 = base + dir[+0x38] + 14*17, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Room
+; Snare :p', 'Room Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc017:		; tag 0x40  A=0x4426A  B=0x44354
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x54, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A8A  |@jB..TC....BDM|
+; descriptor 18 = base + dir[+0x38] + 14*18, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Room
+; Snare :f' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc018:		; tag 0x40  A=0x4426A  B=0x4435A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x5A, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A98  |@jB..ZC....BDM|
+; descriptor 19 = base + dir[+0x38] + 14*19, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Room
+; Snare:ff' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc019:		; tag 0x40  A=0x4426A  B=0x44360
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x60, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AA6  |@jB..`C....BDM|
+; descriptor 20 = base + dir[+0x38] + 14*20, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz
+; Snare :p', 'Jazz Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc020:		; tag 0x40  A=0x4426A  B=0x44366
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x66, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AB4  |@jB..fC....BDM|
+; descriptor 21 = base + dir[+0x38] + 14*21, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz
+; Snare :f' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc021:		; tag 0x40  A=0x4426A  B=0x4436C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x6C, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AC2  |@jB..lC....BDM|
+; descriptor 22 = base + dir[+0x38] + 14*22, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Trad
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc022:		; tag 0x40  A=0x4426A  B=0x44372
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x72, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AD0  |@jB..rC....BDM|
+; descriptor 23 = base + dir[+0x38] + 14*23, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'LtRockSnare', 'LtRock Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc023:		; tag 0x40  A=0x4426A  B=0x44378
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x78, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43ADE  |@jB..xC....BDM|
+; descriptor 24 = base + dir[+0x38] + 14*24, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power
+; Snare L' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc024:		; tag 0x40  A=0x4426A  B=0x4437E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x7E, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AEC  |@jB..~C....BDM|
+; descriptor 25 = base + dir[+0x38] + 14*25, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power
+; Snare R' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc025:		; tag 0x40  A=0x4426A  B=0x44384
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x84, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AFA  |@jB...C....BDM|
+; descriptor 26 = base + dir[+0x38] + 14*26, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'House
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc026:		; tag 0x40  A=0x4426A  B=0x4438A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x8A, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B08  |@jB...C....BDM|
+; descriptor 27 = base + dir[+0x38] + 14*27, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc027:		; tag 0x40  A=0x4426A  B=0x44390
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x90, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B16  |@jB...C....BDM|
+; descriptor 28 = base + dir[+0x38] + 14*28, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc028:		; tag 0x40  A=0x4426A  B=0x44396
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x96, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B24  |@jB...C....BDM|
+; descriptor 29 = base + dir[+0x38] + 14*29, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Elect.Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc029:		; tag 0x40  A=0x4426A  B=0x4439C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x9C, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B32  |@jB...C....BDM|
+; descriptor 30 = base + dir[+0x38] + 14*30, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Funk
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc030:		; tag 0x40  A=0x4426A  B=0x443A2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA2, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B40  |@jB...C....BDM|
+; descriptor 31 = base + dir[+0x38] + 14*31, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Analog
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc031:		; tag 0x40  A=0x4426A  B=0x443A8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA8, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B4E  |@jB...C....BDM|
+; descriptor 32 = base + dir[+0x38] + 14*32, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Piccolo
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc032:		; tag 0x40  A=0x4426A  B=0x443AE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xAE, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B5C  |@jB...C....BDM|
+; descriptor 33 = base + dir[+0x38] + 14*33, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Orch.Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc033:		; tag 0x40  A=0x4426A  B=0x443B4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB4, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43B6A  |@jB...C....B.N|
+; descriptor 34 = base + dir[+0x38] + 14*34, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Reverse
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc034:		; tag 0x40  A=0x4426A  B=0x443BA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xBA, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B78  |@jB...C....BDM|
+; descriptor 35 = base + dir[+0x38] + 14*35, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Syn.Rev.Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc035:		; tag 0x40  A=0x4426A  B=0x443C0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC0, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B86  |@jB...C....BDM|
+; descriptor 36 = base + dir[+0x38] + 14*36, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Brush
+; Long' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc036:		; tag 0x40  A=0x4426A  B=0x443C6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC6, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4A, 0x4D	; 43B94  |@jB...C....BJM|
+; descriptor 37 = base + dir[+0x38] + 14*37, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Brush
+; Hit' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc037:		; tag 0x40  A=0x4426A  B=0x443CC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xCC, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4A, 0x4D	; 43BA2  |@jB...C....BJM|
+; descriptor 38 = base + dir[+0x38] + 14*38, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Brush
+; Short' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc038:		; tag 0x40  A=0x4426A  B=0x443D2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD2, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4A, 0x4D	; 43BB0  |@jB...C....BJM|
+; descriptor 39 = base + dir[+0x38] + 14*39, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock Rim'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc039:		; tag 0x40  A=0x4426A  B=0x443D8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD8, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43BBE  |@jB...C....BMS|
+; descriptor 40 = base + dir[+0x38] + 14*40, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul Rim'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc040:		; tag 0x40  A=0x4426A  B=0x443DE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xDE, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43BCC  |@jB...C....BMS|
+; descriptor 41 = base + dir[+0x38] + 14*41, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; Rim' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc041:		; tag 0x40  A=0x4426A  B=0x443E4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE4, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43BDA  |@jB...C....BDM|
+; descriptor 42 = base + dir[+0x38] + 14*42, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock Tom'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc042:		; tag 0x40  A=0x4426A  B=0x443EA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xEA, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43BE8  |@jB...C....BMS|
+; descriptor 43 = base + dir[+0x38] + 14*43, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz Tom'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc043:		; tag 0x40  A=0x4426A  B=0x443F0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF0, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x1E, 0x50	; 43BF6  |@jB...C....B.P|
+; descriptor 44 = base + dir[+0x38] + 14*44, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock Bass
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc044:		; tag 0x40  A=0x4426A  B=0x443F6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF6, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x56, 0x51	; 43C04  |@jB...C....BVQ|
+; descriptor 45 = base + dir[+0x38] + 14*45, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz Bass
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc045:		; tag 0x40  A=0x4426A  B=0x443FC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xFC, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x56, 0x51	; 43C12  |@jB...C....BVQ|
+; descriptor 46 = base + dir[+0x38] + 14*46, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power Tom
+; L' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc046:		; tag 0x40  A=0x4426A  B=0x44402
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x02, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C20  |@jB...D....BMS|
+; descriptor 47 = base + dir[+0x38] + 14*47, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power Tom
+; R' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc047:		; tag 0x40  A=0x4426A  B=0x44408
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x08, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C2E  |@jB...D....BMS|
+; descriptor 48 = base + dir[+0x38] + 14*48, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power
+; BassTom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc048:		; tag 0x40  A=0x4426A  B=0x4440E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x0E, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x56, 0x51	; 43C3C  |@jB...D....BVQ|
+; descriptor 49 = base + dir[+0x38] + 14*49, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Electric
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc049:		; tag 0x40  A=0x4426A  B=0x44414
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x14, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C4A  |@jB...D....BMS|
+; descriptor 50 = base + dir[+0x38] + 14*50, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Elect.BassTom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc050:		; tag 0x40  A=0x4426A  B=0x4441A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x1A, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43C58  |@jB...D....BDM|
+; descriptor 51 = base + dir[+0x38] + 14*51, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul Tom'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc051:		; tag 0x40  A=0x4426A  B=0x44420
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x20, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43C66  |@jB.. D....BDM|
+; descriptor 52 = base + dir[+0x38] + 14*52, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul Bass
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc052:		; tag 0x40  A=0x4426A  B=0x44426
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x26, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x87, 0x1F	; 43C74  |@jB..&D....B..|
+; descriptor 53 = base + dir[+0x38] + 14*53, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc053:		; tag 0x40  A=0x4426A  B=0x4442C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x2C, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43C82  |@jB..,D....BDM|
+; descriptor 54 = base + dir[+0x38] + 14*54, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'HiHatClosed:p', 'HiHat Closed' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc054:		; tag 0x40  A=0x4426A  B=0x44432
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x32, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C90  |@jB..2D....BMS|
+; descriptor 55 = base + dir[+0x38] + 14*55, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'HiHatClosed:f' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc055:		; tag 0x40  A=0x4426A  B=0x44438
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x38, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C9E  |@jB..8D....BMS|
+; descriptor 56 = base + dir[+0x38] + 14*56, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'DanceHHClosed' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc056:		; tag 0x40  A=0x4426A  B=0x4443E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x3E, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43CAC  |@jB..>D....BHM|
+; descriptor 57 = base + dir[+0x38] + 14*57, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Syn.HH.Closed' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc057:		; tag 0x40  A=0x4426A  B=0x44444
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x44, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43CBA  |@jB..DD....BDM|
+; descriptor 58 = base + dir[+0x38] + 14*58, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'HiHat
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc058:		; tag 0x40  A=0x4426A  B=0x4444A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x4A, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43CC8  |@jB..JD....BMS|
+; descriptor 59 = base + dir[+0x38] + 14*59, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; HH.Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc059:		; tag 0x40  A=0x4426A  B=0x44450
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x50, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43CD6  |@jB..PD....BHM|
+; descriptor 60 = base + dir[+0x38] + 14*60, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Synth
+; HH.Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc060:		; tag 0x40  A=0x4426A  B=0x44456
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x56, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43CE4  |@jB..VD....BDM|
+; descriptor 61 = base + dir[+0x38] + 14*61, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'HiHat
+; Pedal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc061:		; tag 0x40  A=0x4426A  B=0x4445C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x5C, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43CF2  |@jB..\D....BMS|
+; descriptor 62 = base + dir[+0x38] + 14*62, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'HiHat
+; Accent' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc062:		; tag 0x40  A=0x4426A  B=0x44462
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x62, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D00  |@jB..bD....BMS|
+; descriptor 63 = base + dir[+0x38] + 14*63, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'CrashCymbal 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc063:		; tag 0x40  A=0x4426A  B=0x44468
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x68, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D0E  |@jB..hD....BMS|
+; descriptor 64 = base + dir[+0x38] + 14*64, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'CrashCymbal 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc064:		; tag 0x40  A=0x4426A  B=0x4446E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x6E, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D1C  |@jB..nD....BMS|
+; descriptor 65 = base + dir[+0x38] + 14*65, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Splash
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc065:		; tag 0x40  A=0x4426A  B=0x44474
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x74, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D2A  |@jB..tD....BMS|
+; descriptor 66 = base + dir[+0x38] + 14*66, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'China
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc066:		; tag 0x40  A=0x4426A  B=0x4447A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x7A, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D38  |@jB..zD....BMS|
+; descriptor 67 = base + dir[+0x38] + 14*67, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Orch.Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc067:		; tag 0x40  A=0x4426A  B=0x44480
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x80, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43D46  |@jB...D....BDM|
+; descriptor 68 = base + dir[+0x38] + 14*68, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SynOrchCymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc068:		; tag 0x40  A=0x4426A  B=0x44486
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x86, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43D54  |@jB...D....BHM|
+; descriptor 69 = base + dir[+0x38] + 14*69, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Ride
+; Cymbal 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc069:		; tag 0x40  A=0x4426A  B=0x4448C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x8C, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 43D62  |@jB...D....B.I|
+; descriptor 70 = base + dir[+0x38] + 14*70, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Ride
+; Cymbal 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc070:		; tag 0x40  A=0x4426A  B=0x44492
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x92, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43D70  |@jB...D....BHM|
+; descriptor 71 = base + dir[+0x38] + 14*71, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Ride
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc071:		; tag 0x40  A=0x4426A  B=0x44498
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x98, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43D7E  |@jB...D....BHM|
+; descriptor 72 = base + dir[+0x38] + 14*72, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'ReverseCymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc072:		; tag 0x40  A=0x4426A  B=0x4449E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x9E, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43D8C  |@jB...D....BHM|
+; descriptor 73 = base + dir[+0x38] + 14*73, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Agogo'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc073:		; tag 0x40  A=0x4426A  B=0x444A4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA4, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43D9A  |@jB...D....BDM|
+; descriptor 74 = base + dir[+0x38] + 14*74, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Sleigh
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc074:		; tag 0x40  A=0x4426A  B=0x444AA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xAA, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43DA8  |@jB...D....BDM|
+; descriptor 75 = base + dir[+0x38] + 14*75, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Cowbell'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc075:		; tag 0x40  A=0x4426A  B=0x444B0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB0, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43DB6  |@jB...D....BDM|
+; descriptor 76 = base + dir[+0x38] + 14*76, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Wind
+; Chime' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc076:		; tag 0x40  A=0x4426A  B=0x444B6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB6, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43DC4  |@jB...D....BDM|
+; descriptor 77 = base + dir[+0x38] + 14*77, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Triangle
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc077:		; tag 0x40  A=0x4426A  B=0x444BC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xBC, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x3B, 0x4D	; 43DD2  |@jB...D....B;M|
+; descriptor 78 = base + dir[+0x38] + 14*78, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Triangle
+; Mute' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc078:		; tag 0x40  A=0x4426A  B=0x444C2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC2, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43DE0  |@jB...D....BDM|
+; descriptor 79 = base + dir[+0x38] + 14*79, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Small
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc079:		; tag 0x40  A=0x4426A  B=0x444C8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC8, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x4E	; 43DEE  |@jB...D....B.N|
+; descriptor 80 = base + dir[+0x38] + 14*80, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Gamelan'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc080:		; tag 0x40  A=0x4426A  B=0x444CE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xCE, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x5A	; 43DFC  |@jB...D....B.Z|
+; descriptor 81 = base + dir[+0x38] + 14*81, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Finger
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc081:		; tag 0x40  A=0x4426A  B=0x444D4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD4, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x60	; 43E0A  |@jB...D....B.`|
+; descriptor 82 = base + dir[+0x38] + 14*82, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Tublar
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc082:		; tag 0x40  A=0x4426A  B=0x444DA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xDA, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x32	; 43E18  |@jB...D....B.2|
+; descriptor 83 = base + dir[+0x38] + 14*83, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; Mute 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc083:		; tag 0x40  A=0x4426A  B=0x444E0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE0, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E26  |@jB...D....B.N|
+; descriptor 84 = base + dir[+0x38] + 14*84, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; Mute 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc084:		; tag 0x40  A=0x4426A  B=0x444E6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE6, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E34  |@jB...D....B.N|
+; descriptor 85 = base + dir[+0x38] + 14*85, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; Mute 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc085:		; tag 0x40  A=0x4426A  B=0x444EC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xEC, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x7C, 0x4E	; 43E42  |@jB...D....B|N|
+; descriptor 86 = base + dir[+0x38] + 14*86, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; High' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc086:		; tag 0x40  A=0x4426A  B=0x444F2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF2, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E50  |@jB...D....B.N|
+; descriptor 87 = base + dir[+0x38] + 14*87, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; Low' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc087:		; tag 0x40  A=0x4426A  B=0x444F8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF8, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E5E  |@jB...D....B.N|
+; descriptor 88 = base + dir[+0x38] + 14*88, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; Mute On' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc088:		; tag 0x40  A=0x4426A  B=0x444FE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xFE, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E6C  |@jB...D....B.N|
+; descriptor 89 = base + dir[+0x38] + 14*89, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; MuteOff' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc089:		; tag 0x40  A=0x4426A  B=0x44504
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x04, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E7A  |@jB...E....B.N|
+; descriptor 90 = base + dir[+0x38] + 14*90, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'CongaMutCrash' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc090:		; tag 0x40  A=0x4426A  B=0x4450A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x0A, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E88  |@jB...E....B.N|
+; descriptor 91 = base + dir[+0x38] + 14*91, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; High' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc091:		; tag 0x40  A=0x4426A  B=0x44510
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x10, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E96  |@jB...E....B.N|
+; descriptor 92 = base + dir[+0x38] + 14*92, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; Low' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc092:		; tag 0x40  A=0x4426A  B=0x44516
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x16, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43EA4  |@jB...E....B.N|
+; descriptor 93 = base + dir[+0x38] + 14*93, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; Crash' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc093:		; tag 0x40  A=0x4426A  B=0x4451C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x1C, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43EB2  |@jB...E....B.N|
+; descriptor 94 = base + dir[+0x38] + 14*94, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Timbales
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc094:		; tag 0x40  A=0x4426A  B=0x44522
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x22, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43EC0  |@jB.."E....B.N|
+; descriptor 95 = base + dir[+0x38] + 14*95, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'TimblsOpenRim' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc095:		; tag 0x40  A=0x4426A  B=0x44528
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x28, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43ECE  |@jB..(E....B.N|
+; descriptor 96 = base + dir[+0x38] + 14*96, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SynthTimbales' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc096:		; tag 0x40  A=0x4426A  B=0x4452E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x2E, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43EDC  |@jB...E....BDM|
+; descriptor 97 = base + dir[+0x38] + 14*97, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'BataDrum
+; Slap' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc097:		; tag 0x40  A=0x4426A  B=0x44534
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x34, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43EEA  |@jB..4E....BDM|
+; descriptor 98 = base + dir[+0x38] + 14*98, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'BataDrum
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc098:		; tag 0x40  A=0x4426A  B=0x4453A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x3A, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43EF8  |@jB..:E....BDM|
+; descriptor 99 = base + dir[+0x38] + 14*99, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Timpani'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc099:		; tag 0x40  A=0x4426A  B=0x44540
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x40, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC4, 0x1F	; 43F06  |@jB..@E....B..|
+; descriptor 100 = base + dir[+0x38] + 14*100, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Cuica High' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc100:		; tag 0x40  A=0x4426A  B=0x44546
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x46, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43F14  |@jB..FE....B.N|
+; descriptor 101 = base + dir[+0x38] + 14*101, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Cuica Low' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc101:		; tag 0x40  A=0x4426A  B=0x4454C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x4C, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43F22  |@jB..LE....B.N|
+; descriptor 102 = base + dir[+0x38] + 14*102, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Guiro Long' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc102:		; tag 0x40  A=0x4426A  B=0x44552
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x52, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43F30  |@jB..RE....B.N|
+; descriptor 103 = base + dir[+0x38] + 14*103, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Guiro Short' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc103:		; tag 0x40  A=0x4426A  B=0x44558
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x58, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43F3E  |@jB..XE....B.N|
+; descriptor 104 = base + dir[+0x38] + 14*104, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Hand Claps' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc104:		; tag 0x40  A=0x4426A  B=0x4455E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x5E, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F4C  |@jB..^E....BDM|
+; descriptor 105 = base + dir[+0x38] + 14*105, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Shaker' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc105:		; tag 0x40  A=0x4426A  B=0x44564
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x64, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F5A  |@jB..dE....BDM|
+; descriptor 106 = base + dir[+0x38] + 14*106, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Shekele On' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc106:		; tag 0x40  A=0x4426A  B=0x4456A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x6A, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F68  |@jB..jE....BDM|
+; descriptor 107 = base + dir[+0x38] + 14*107, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Shekele Off' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc107:		; tag 0x40  A=0x4426A  B=0x44570
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x70, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F76  |@jB..pE....BDM|
+; descriptor 108 = base + dir[+0x38] + 14*108, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Cabasa' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc108:		; tag 0x40  A=0x4426A  B=0x44576
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x76, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F84  |@jB..vE....BDM|
+; descriptor 109 = base + dir[+0x38] + 14*109, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Maracas' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc109:		; tag 0x40  A=0x4426A  B=0x4457C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x7C, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F92  |@jB..|E....BDM|
+; descriptor 110 = base + dir[+0x38] + 14*110, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Caxixi On' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc110:		; tag 0x40  A=0x4426A  B=0x44582
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x82, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43FA0  |@jB...E....BDM|
+; descriptor 111 = base + dir[+0x38] + 14*111, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Caxixi Off' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc111:		; tag 0x40  A=0x4426A  B=0x44588
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x88, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43FAE  |@jB...E....BDM|
+; descriptor 112 = base + dir[+0x38] + 14*112, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Samba Whistle' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc112:		; tag 0x40  A=0x4426A  B=0x4458E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x8E, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43FBC  |@jB...E....B.N|
+; descriptor 113 = base + dir[+0x38] + 14*113, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SynSmbWhistle' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc113:		; tag 0x40  A=0x4426A  B=0x44594
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x94, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43FCA  |@jB...E....BDM|
+; descriptor 114 = base + dir[+0x38] + 14*114, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Samba Drum On' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc114:		; tag 0x40  A=0x4426A  B=0x4459A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x9A, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43FD8  |@jB...E....B.N|
+; descriptor 115 = base + dir[+0x38] + 14*115, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SambaDrum Off' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc115:		; tag 0x40  A=0x4426A  B=0x445A0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA0, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43FE6  |@jB...E....B.N|
+; descriptor 116 = base + dir[+0x38] + 14*116, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Darbuka Slap' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc116:		; tag 0x40  A=0x4426A  B=0x445A6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA6, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43FF4  |@jB...E....BDM|
+; descriptor 117 = base + dir[+0x38] + 14*117, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Darbuka Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc117:		; tag 0x40  A=0x4426A  B=0x445AC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xAC, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44002  |@jB...E....BDM|
+; descriptor 118 = base + dir[+0x38] + 14*118, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Surdo Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc118:		; tag 0x40  A=0x4426A  B=0x445B2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB2, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44010  |@jB...E....BDM|
+; descriptor 119 = base + dir[+0x38] + 14*119, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Surdo Mute' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc119:		; tag 0x40  A=0x4426A  B=0x445B8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB8, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4401E  |@jB...E....BDM|
+; descriptor 120 = base + dir[+0x38] + 14*120, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SurdoLeftHand' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc120:		; tag 0x40  A=0x4426A  B=0x445BE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xBE, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4402C  |@jB...E....BDM|
+; descriptor 121 = base + dir[+0x38] + 14*121, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'TambourineAcc' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc121:		; tag 0x40  A=0x4426A  B=0x445C4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC4, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4403A  |@jB...E....BDM|
+; descriptor 122 = base + dir[+0x38] + 14*122, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Tambourine Bt' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc122:		; tag 0x40  A=0x4426A  B=0x445CA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xCA, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44048  |@jB...E....BDM|
+; descriptor 123 = base + dir[+0x38] + 14*123, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'OrchTambourin' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc123:		; tag 0x40  A=0x4426A  B=0x445D0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD0, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44056  |@jB...E....BDM|
+; descriptor 124 = base + dir[+0x38] + 14*124, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Nutshell Tree' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc124:		; tag 0x40  A=0x4426A  B=0x445D6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD6, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44064  |@jB...E....BDM|
+; descriptor 125 = base + dir[+0x38] + 14*125, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Crickets' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc125:		; tag 0x40  A=0x4426A  B=0x445DC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xDC, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 44072  |@jB...E....B.N|
+; descriptor 126 = base + dir[+0x38] + 14*126, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Rain Stick' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc126:		; tag 0x40  A=0x4426A  B=0x445E2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE2, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44080  |@jB...E....BDM|
+; descriptor 127 = base + dir[+0x38] + 14*127, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Vibraslap' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc127:		; tag 0x40  A=0x4426A  B=0x445E8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE8, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 4408E  |@jB...E....B.N|
+; descriptor 128 = base + dir[+0x38] + 14*128, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Wood Block' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc128:		; tag 0x40  A=0x4426A  B=0x445EE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xEE, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 4409C  |@jB...E....B.N|
+; descriptor 129 = base + dir[+0x38] + 14*129, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Castanets' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc129:		; tag 0x40  A=0x4426A  B=0x445F4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF4, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 440AA  |@jB...E....B.N|
+; descriptor 130 = base + dir[+0x38] + 14*130, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Claves' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc130:		; tag 0x40  A=0x4426A  B=0x445FA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xFA, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 440B8  |@jB...E....B.N|
+; descriptor 131 = base + dir[+0x38] + 14*131, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Slap' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc131:		; tag 0x40  A=0x4426A  B=0x44600
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x00, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 440C6  |@jB...F....BDM|
+; descriptor 132 = base + dir[+0x38] + 14*132, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Scratch 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc132:		; tag 0x40  A=0x4426A  B=0x44606
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x06, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 440D4  |@jB...F....BDM|
+; descriptor 133 = base + dir[+0x38] + 14*133, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Scratch 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc133:		; tag 0x40  A=0x4426A  B=0x4460C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x0C, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 440E2  |@jB...F....BDM|
+; descriptor 134 = base + dir[+0x38] + 14*134, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Zap 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc134:		; tag 0x40  A=0x4426A  B=0x44612
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x12, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 440F0  |@jB...F....B.I|
+; descriptor 135 = base + dir[+0x38] + 14*135, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'ElectroUnizon', 'ElectroUnison' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc135:		; tag 0x40  A=0x4426A  B=0x44618
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x18, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 440FE  |@jB...F....B.I|
+; descriptor 136 = base + dir[+0x38] + 14*136, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Electro Shot1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc136:		; tag 0x40  A=0x4426A  B=0x4461E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x1E, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 4410C  |@jB...F....B.I|
+; descriptor 137 = base + dir[+0x38] + 14*137, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Electro Shot2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc137:		; tag 0x40  A=0x4426A  B=0x44624
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x24, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 4411A  |@jB..$F....B.I|
+; descriptor 138 = base + dir[+0x38] + 14*138, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Zap 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc138:		; tag 0x40  A=0x4426A  B=0x4462A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x2A, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 44128  |@jB..*F....B.I|
+; descriptor 139 = base + dir[+0x38] + 14*139, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'AmbientHammer' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc139:		; tag 0x40  A=0x4426A  B=0x44630
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x30, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44136  |@jB..0F....BDM|
+; descriptor 140 = base + dir[+0x38] + 14*140, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Wave 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc140:		; tag 0x40  A=0x4426A  B=0x44636
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x36, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44144  |@jB..6F....BDM|
+; descriptor 141 = base + dir[+0x38] + 14*141, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Wave 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc141:		; tag 0x40  A=0x4426A  B=0x4463C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x3C, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44152  |@jB..<F....BDM|
+; descriptor 142 = base + dir[+0x38] + 14*142, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Applause' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc142:		; tag 0x40  A=0x4426A  B=0x44642
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x42, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44160  |@jB..BF....BDM|
+; descriptor 143 = base + dir[+0x38] + 14*143, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Voice Ah' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc143:		; tag 0x40  A=0x4426A  B=0x44648
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x48, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4416E  |@jB..HF....BDM|
+; descriptor 144 = base + dir[+0x38] + 14*144, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Voice Yeh' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc144:		; tag 0x40  A=0x4426A  B=0x4464E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x4E, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4417C  |@jB..NF....BDM|
+; descriptor 145 = base + dir[+0x38] + 14*145, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Voice Uh' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc145:		; tag 0x40  A=0x4426A  B=0x44654
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x54, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4418A  |@jB..TF....BDM|
+; descriptor 146 = base + dir[+0x38] + 14*146, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Helicopter' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc146:		; tag 0x40  A=0x4426A  B=0x4465A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x5A, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44198  |@jB..ZF....BDM|
+; descriptor 147 = base + dir[+0x38] + 14*147, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Telephone' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc147:		; tag 0x40  A=0x4426A  B=0x44660
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x60, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 441A6  |@jB..`F....BDM|
+; descriptor 148 = base + dir[+0x38] + 14*148, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Gun Shot' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc148:		; tag 0x40  A=0x4426A  B=0x44666
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x66, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 441B4  |@jB..fF....BDM|
+; descriptor 149 = base + dir[+0x38] + 14*149, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Orchestra.Hit' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc149:		; tag 0x40  A=0x4426A  B=0x4466C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x6C, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x41	; 441C2  |@jB..lF....B.A|
+; descriptor 150 = base + dir[+0x38] + 14*150, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Wind' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc150:		; tag 0x40  A=0x4426A  B=0x44672
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x72, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x48	; 441D0  |@jB..rF....B.H|
+; descriptor 151 = base + dir[+0x38] + 14*151, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Bird 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc151:		; tag 0x40  A=0x4426A  B=0x44678
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x78, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 441DE  |@jB..xF....BDM|
+; descriptor 152 = base + dir[+0x38] + 14*152, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Bird 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc152:		; tag 0x40  A=0x4426A  B=0x4467E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x7E, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 441EC  |@jB..~F....BDM|
+; descriptor 153 = base + dir[+0x38] + 14*153, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Sax Breath' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc153:		; tag 0x40  A=0x4426A  B=0x44684
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x84, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x2E	; 441FA  |@jB...F....B..|
+; descriptor 154 = base + dir[+0x38] + 14*154, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Flute Breath' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc154:		; tag 0x40  A=0x4426A  B=0x4468A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x8A, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x4C	; 44208  |@jB...F....B.L|
+; descriptor 155 = base + dir[+0x38] + 14*155, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Pick Noise 4' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc155:		; tag 0x40  A=0x4426A  B=0x44690
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x90, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 44216  |@jB...F....B.N|
+; descriptor 156 = base + dir[+0x38] + 14*156, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Pick Noise 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc156:		; tag 0x40  A=0x4426A  B=0x44696
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x96, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 44224  |@jB...F....B.N|
+; descriptor 157 = base + dir[+0x38] + 14*157, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Pick Noise 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc157:		; tag 0x40  A=0x4426A  B=0x4469C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x9C, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 44232  |@jB...F....B.N|
+; descriptor 158 = base + dir[+0x38] + 14*158, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Pick Noise 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc158:		; tag 0x40  A=0x4426A  B=0x446A2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA2, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44240  |@jB...F....BDM|
+; descriptor 159 = base + dir[+0x38] + 14*159, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Fret Noise' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc159:		; tag 0x40  A=0x4426A  B=0x446A8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA8, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x67, 0x51	; 4424E  |@jB...F....BgQ|
+; descriptor 160 = base + dir[+0x38] + 14*160, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Slap Shot' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc160:		; tag 0x40  A=0x4426A  B=0x446AE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xAE, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x28	; 4425C  |@jB...F....B.(|
 
@@ -35047,8 +37115,15 @@ ToneDB_EnvDescTable_Perc_160_ElemArray:
 ; 541 is exactly directory slot +0x70, so BOTH ends are pinned by something
 ; other than the stride.  The 81-byte element cut inside them is the same
 ; one prom_c uses at 0xFB436D (`ld C,0x51`) for every other tone record.
-; ⚠ Nothing has been found that reads these two records specifically, and
-; nothing explains why they carry no wave-select array.
+; ★ CORRECTED 2026-09-25 (lane promcd).  This said nothing read these two
+; records specifically and nothing explained the missing wave-select array.
+; Part_LoadToneRecordAndPointers (prom_c 0xFB47C4) tests +0x10 bits 7:6
+; (0xFB47F3/0xFB47F6) and takes its DRAWBAR arm for 0x40 (0xFB4805) -- both
+; records carry 0x71, no other tone does -- and there, per element, calls
+; PartElement_SetWaveSelectPointer_ToRomDefault (0xFB48CF), which points the
+; element's wave-select pointer at prom_c's own 43-byte Table_FE14A0, then
+; DrawbarPreset_GetDescriptor (0xFB48DC).  A drawbar tone's wave-select
+; record lives in prom_c, so the tone stores none.
 ; ==========================================================================
 
 ; ---- tone 0x058 '<<< Drawbar 1>>>' ----
@@ -35081,6 +37156,11 @@ ToneRec_058_Drawbar1:
 	.byte 0x4F, 0x54, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x63, 0x0E, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46	; 44764  |OT......c..#..2F|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xDE, 0x00, 0x58, 0x04, 0x00	; 44774  |.............X..|
 	.byte 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 44784  |.........|
+; Element block 0 of this DRAWBAR tone: record + 0xD9 + 81*0, fetched by
+; Part_LoadToneRecordAndPointers' drawbar arm (prom_c 0xFB4805, kind +0x10 = 0x71).
+; +0x02/+0x03 = 0x58/0xC5: sub_FC28B5 packs them to the live drawbar setting 0x558
+; (0xFC28F3, 0xFC28FA, `and DE,0x0FFF` 0xFC2906), and DrawbarPreset_GetDescriptor takes bits
+; 5:4 of +0x03 (0xFC2983/0xFC2986/0xFC2989) = 0, i.e. DrawbarPreset_EnvDescTable_Desc000.
 ToneRec_058_Drawbar1_Elem0:		; 81-byte element block
 	.byte 0x00, 0x40, 0x58, 0xC5, 0xF4, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 4478D  |.@X.............|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x33, 0x00, 0x60, 0x42, 0x3C, 0x60, 0x00, 0x00, 0x00	; 4479D  |...B...3.`B<`...|
@@ -35088,6 +37168,11 @@ ToneRec_058_Drawbar1_Elem0:		; 81-byte element block
 	.byte 0x42, 0x18, 0x7F, 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x42, 0x30, 0x60, 0x18, 0x00, 0x00, 0x00	; 447BD  |B.....a..B0`....|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x46, 0x01, 0x19	; 447CD  |.........B...F..|
 	.byte 0x0A	; 447DD  |.|
+; Element block 1 of this DRAWBAR tone: record + 0xD9 + 81*1, fetched by
+; Part_LoadToneRecordAndPointers' drawbar arm (prom_c 0xFB4805, kind +0x10 = 0x71).
+; +0x02/+0x03 = 0x44/0xD8: sub_FC28B5 packs them to the live drawbar setting 0x844
+; (0xFC28F3, 0xFC28FA, `and DE,0x0FFF` 0xFC2906), and DrawbarPreset_GetDescriptor takes bits
+; 5:4 of +0x03 (0xFC2983/0xFC2986/0xFC2989) = 1, i.e. DrawbarPreset_EnvDescTable_Desc001.
 ToneRec_058_Drawbar1_Elem1:		; 81-byte element block
 	.byte 0x00, 0x40, 0x44, 0xD8, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 447DE  |.@D.............|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x28, 0x00, 0x60, 0x42, 0x18, 0x60, 0xFB, 0x00, 0x00	; 447EE  |...B...(.`B.`...|
@@ -35095,6 +37180,11 @@ ToneRec_058_Drawbar1_Elem1:		; 81-byte element block
 	.byte 0x42, 0x18, 0x60, 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x42, 0x18, 0x60, 0x1A, 0x00, 0x00, 0x00	; 4480E  |B.`...a..B.`....|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x42, 0x01, 0x19	; 4481E  |.........B...B..|
 	.byte 0x0A	; 4482E  |.|
+; Element block 2 of this DRAWBAR tone: record + 0xD9 + 81*2, fetched by
+; Part_LoadToneRecordAndPointers' drawbar arm (prom_c 0xFB4805, kind +0x10 = 0x71).
+; +0x02/+0x03 = 0x37/0xE6: sub_FC28B5 packs them to the live drawbar setting 0x637
+; (0xFC28F3, 0xFC28FA, `and DE,0x0FFF` 0xFC2906), and DrawbarPreset_GetDescriptor takes bits
+; 5:4 of +0x03 (0xFC2983/0xFC2986/0xFC2989) = 2, i.e. DrawbarPreset_EnvDescTable_Desc002.
 ToneRec_058_Drawbar1_Elem2:		; 81-byte element block
 	.byte 0x00, 0x40, 0x37, 0xE6, 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 4482F  |.@7.............|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x2A, 0x00, 0x60, 0x42, 0x18, 0x60, 0xFB, 0x00, 0x00	; 4483F  |...B...*.`B.`...|
@@ -35102,6 +37192,11 @@ ToneRec_058_Drawbar1_Elem2:		; 81-byte element block
 	.byte 0x42, 0x18, 0x60, 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x42, 0x18, 0x44, 0x20, 0x00, 0x00, 0x00	; 4485F  |B.`...a..B.D ...|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x44, 0x01, 0x19	; 4486F  |.........B...D..|
 	.byte 0x0A	; 4487F  |.|
+; Element block 3 of this DRAWBAR tone: record + 0xD9 + 81*3, fetched by
+; Part_LoadToneRecordAndPointers' drawbar arm (prom_c 0xFB4805, kind +0x10 = 0x71).
+; +0x02/+0x03 = 0x00/0xF0: sub_FC28B5 packs them to the live drawbar setting 0x000
+; (0xFC28F3, 0xFC28FA, `and DE,0x0FFF` 0xFC2906), and DrawbarPreset_GetDescriptor takes bits
+; 5:4 of +0x03 (0xFC2983/0xFC2986/0xFC2989) = 3, i.e. DrawbarPreset_EnvDescTable_Desc003.
 ToneRec_058_Drawbar1_Elem3:		; 81-byte element block
 	.byte 0x00, 0x40, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 44880  |.@..............|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x3C, 0x00, 0x60, 0x42, 0x18, 0x60, 0xF6, 0x00, 0x00	; 44890  |...B...<.`B.`...|
@@ -35140,6 +37235,11 @@ ToneRec_059_Drawbar2:
 	.byte 0x4F, 0x54, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x63, 0x0E, 0x14, 0x23, 0x0B, 0x14, 0x32, 0x46	; 44981  |OT......c..#..2F|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xDE, 0x00, 0x58, 0x04, 0x00	; 44991  |.............X..|
 	.byte 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 449A1  |.........|
+; Element block 0 of this DRAWBAR tone: record + 0xD9 + 81*0, fetched by
+; Part_LoadToneRecordAndPointers' drawbar arm (prom_c 0xFB4805, kind +0x10 = 0x71).
+; +0x02/+0x03 = 0x77/0xC7: sub_FC28B5 packs them to the live drawbar setting 0x777
+; (0xFC28F3, 0xFC28FA, `and DE,0x0FFF` 0xFC2906), and DrawbarPreset_GetDescriptor takes bits
+; 5:4 of +0x03 (0xFC2983/0xFC2986/0xFC2989) = 0, i.e. DrawbarPreset_EnvDescTable_Desc000.
 ToneRec_059_Drawbar2_Elem0:		; 81-byte element block
 	.byte 0x00, 0x40, 0x77, 0xC7, 0xF4, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 449AA  |.@w.............|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x33, 0x00, 0x60, 0x42, 0x3C, 0x60, 0x00, 0x00, 0x00	; 449BA  |...B...3.`B<`...|
@@ -35147,6 +37247,11 @@ ToneRec_059_Drawbar2_Elem0:		; 81-byte element block
 	.byte 0x42, 0x18, 0x7F, 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x42, 0x30, 0x60, 0x18, 0x00, 0x00, 0x00	; 449DA  |B.....a..B0`....|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x46, 0x01, 0x19	; 449EA  |.........B...F..|
 	.byte 0x0A	; 449FA  |.|
+; Element block 1 of this DRAWBAR tone: record + 0xD9 + 81*1, fetched by
+; Part_LoadToneRecordAndPointers' drawbar arm (prom_c 0xFB4805, kind +0x10 = 0x71).
+; +0x02/+0x03 = 0x00/0xD7: sub_FC28B5 packs them to the live drawbar setting 0x700
+; (0xFC28F3, 0xFC28FA, `and DE,0x0FFF` 0xFC2906), and DrawbarPreset_GetDescriptor takes bits
+; 5:4 of +0x03 (0xFC2983/0xFC2986/0xFC2989) = 1, i.e. DrawbarPreset_EnvDescTable_Desc001.
 ToneRec_059_Drawbar2_Elem1:		; 81-byte element block
 	.byte 0x00, 0x40, 0x00, 0xD7, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 449FB  |.@..............|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x28, 0x00, 0x60, 0x42, 0x18, 0x60, 0xFB, 0x00, 0x00	; 44A0B  |...B...(.`B.`...|
@@ -35154,6 +37259,11 @@ ToneRec_059_Drawbar2_Elem1:		; 81-byte element block
 	.byte 0x42, 0x18, 0x60, 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x42, 0x18, 0x60, 0x1A, 0x00, 0x00, 0x00	; 44A2B  |B.`...a..B.`....|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x42, 0x01, 0x19	; 44A3B  |.........B...B..|
 	.byte 0x0A	; 44A4B  |.|
+; Element block 2 of this DRAWBAR tone: record + 0xD9 + 81*2, fetched by
+; Part_LoadToneRecordAndPointers' drawbar arm (prom_c 0xFB4805, kind +0x10 = 0x71).
+; +0x02/+0x03 = 0x07/0xE7: sub_FC28B5 packs them to the live drawbar setting 0x707
+; (0xFC28F3, 0xFC28FA, `and DE,0x0FFF` 0xFC2906), and DrawbarPreset_GetDescriptor takes bits
+; 5:4 of +0x03 (0xFC2983/0xFC2986/0xFC2989) = 2, i.e. DrawbarPreset_EnvDescTable_Desc002.
 ToneRec_059_Drawbar2_Elem2:		; 81-byte element block
 	.byte 0x00, 0x40, 0x07, 0xE7, 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 44A4C  |.@..............|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x2A, 0x00, 0x60, 0x42, 0x18, 0x60, 0xFB, 0x00, 0x00	; 44A5C  |...B...*.`B.`...|
@@ -35161,6 +37271,11 @@ ToneRec_059_Drawbar2_Elem2:		; 81-byte element block
 	.byte 0x42, 0x18, 0x60, 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x42, 0x18, 0x44, 0x20, 0x00, 0x00, 0x00	; 44A7C  |B.`...a..B.D ...|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x44, 0x01, 0x19	; 44A8C  |.........B...D..|
 	.byte 0x0A	; 44A9C  |.|
+; Element block 3 of this DRAWBAR tone: record + 0xD9 + 81*3, fetched by
+; Part_LoadToneRecordAndPointers' drawbar arm (prom_c 0xFB4805, kind +0x10 = 0x71).
+; +0x02/+0x03 = 0x00/0xF0: sub_FC28B5 packs them to the live drawbar setting 0x000
+; (0xFC28F3, 0xFC28FA, `and DE,0x0FFF` 0xFC2906), and DrawbarPreset_GetDescriptor takes bits
+; 5:4 of +0x03 (0xFC2983/0xFC2986/0xFC2989) = 3, i.e. DrawbarPreset_EnvDescTable_Desc003.
 ToneRec_059_Drawbar2_Elem3:		; 81-byte element block
 	.byte 0x00, 0x40, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 44A9D  |.@..............|
 	.byte 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x3C, 0x00, 0x60, 0x42, 0x18, 0x60, 0xF6, 0x00, 0x00	; 44AAD  |...B...<.`B.`...|
@@ -35335,12 +37450,20 @@ ToneRec_059_Drawbar2_Elem3:		; 81-byte element block
 ; notes/prom_d_documentation_round3.py Q4e.
 ; ==========================================================================
 DrawbarPreset_EnvDescTable:
+; Descriptor 0 = dir[+0x70] + 14*0, returned by DrawbarPreset_GetDescriptor (prom_c
+; 0xFC295B); element 0 of both drawbar tones selects it (+0x03 bits 5:4 = 0).
 DrawbarPreset_EnvDescTable_Desc000:		; tag 0x92  A=none  B=0x44B26
 	.byte 0x92, 0x00, 0x00, 0x00, 0x00, 0x26, 0x4B, 0x04, 0x00, 0x00, 0x54, 0x40, 0x7F, 0x27	; 44AEE  |.....&K...T@.'|
+; Descriptor 1 = dir[+0x70] + 14*1, returned by DrawbarPreset_GetDescriptor (prom_c
+; 0xFC295B); element 1 of both drawbar tones selects it (+0x03 bits 5:4 = 1).
 DrawbarPreset_EnvDescTable_Desc001:		; tag 0x92  A=none  B=0x45C3C
 	.byte 0x92, 0x00, 0x00, 0x00, 0x00, 0x3C, 0x5C, 0x04, 0x00, 0x00, 0x6C, 0x40, 0x7F, 0x27	; 44AFC  |.....<\...l@.'|
+; Descriptor 2 = dir[+0x70] + 14*2, returned by DrawbarPreset_GetDescriptor (prom_c
+; 0xFC295B); element 2 of both drawbar tones selects it (+0x03 bits 5:4 = 2).
 DrawbarPreset_EnvDescTable_Desc002:		; tag 0x92  A=none  B=0x45C3C
 	.byte 0x92, 0x00, 0x00, 0x00, 0x00, 0x3C, 0x5C, 0x04, 0x00, 0x00, 0x68, 0x40, 0x7F, 0x27	; 44B0A  |.....<\...h@.'|
+; Descriptor 3 = dir[+0x70] + 14*3, returned by DrawbarPreset_GetDescriptor (prom_c
+; 0xFC295B); element 3 of both drawbar tones selects it (+0x03 bits 5:4 = 3).
 DrawbarPreset_EnvDescTable_Desc003:		; tag 0x92  A=none  B=0x46D52
 	.byte 0x92, 0x00, 0x00, 0x00, 0x00, 0x52, 0x6D, 0x04, 0x00, 0x00, 0x60, 0x40, 0x7F, 0x27	; 44B18  |.....Rm...`@.'|
 
@@ -36639,9 +38762,8 @@ ToneDB_SourceNameList1:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 181, 182 distinct.
 ; KN5000 label at the same directory slot: ToneDB_SourceIndexMapA.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4809A, which is directory slot +0x44's value, and ends at 0x4889A,
@@ -36659,10 +38781,27 @@ ToneDB_SourceNameList1:
 ; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
 ; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
 ; 
-; The chain this reader belongs to has NOT been decoded end to end.
-; For the one that has -- slot +0x4C -- see its banner: the map value
-; turns out to be a ROW NUMBER in a catalogue.  Whether that reading
-; carries over to this map is NOT asserted here.
+; The chain is now decoded end to end and the +0x4C reading DOES carry
+; over: see WHAT THE INDEX SELECTS below (corrected 2026-09-25, lane
+; promcd).
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x00 and 0xC0.
+; Value: a ROW of ToneDB_SourceNameList1 (+0x50, 307 x 16).
+; Reader: ToneQuery_ReplySourceName1_ViaIndexMap (prom_c 0xFC035E): 0xFC03FD and
+; 0xFC0450 `ld XWA,(XBC+0x44)`, the list +0x50 at 0xFC049C, row stride
+; `ld BC,0x0010` at 0xFC04C1; ToneQuery_ReplySourceName1_ByRow (0xFC067A)
+; takes entry 127 (0xFC06DE, `add XWA,0x000000fe` 0xFC06E4) as its fallback.
+; Measured over all 1024 entries: max 181 < 307, 182 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 182 rows of
+; +0x50 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 182 of 182.  Control: all 307 rows
+; through each of the other name maps return themselves at most 7 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_SourceIndexMapA:
 	.short 0x0002, 0x0004, 0x0002, 0x0005, 0x0008, 0x0006, 0x0009, 0x0033	; 4809A  [0]
@@ -36801,9 +38940,8 @@ ToneDB_SourceIndexMapA:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 306, 126 distinct.
 ; KN5000 label at the same directory slot: ToneDB_SourceIndexMapB.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4889A, which is directory slot +0x48's value, and ends at 0x4909A,
@@ -36812,14 +38950,27 @@ ToneDB_SourceIndexMapA:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x48 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x48: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x80.
+; Value: a ROW of ToneDB_SourceNameList1 (+0x50, 307 x 16).
+; Reader: ToneQuery_ReplySourceName1_ViaIndexMap (prom_c 0xFC035E): 0xFC0435
+; `ld XWA,(XBC+0x48)`, the list +0x50 at 0xFC049C.
+; Measured over all 1024 entries: max 306 < 307, 126 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 125 rows of
+; +0x50 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 125 of 125.  Control: all 307 rows
+; through each of the other name maps return themselves at most 7 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_SourceIndexMapB:
 	.short 0x00B6, 0x00B6, 0x00B7, 0x00B7, 0x00B7, 0x00BB, 0x00BD, 0x00B8	; 4889A  [0]
@@ -37648,9 +39799,8 @@ ToneDB_SourceNameList2:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 188, 189 distinct.
 ; KN5000 label at the same directory slot: ToneDB_SourceIndexMapC.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4A44C, which is directory slot +0x58's value, and ends at 0x4AC4C,
@@ -37668,10 +39818,25 @@ ToneDB_SourceNameList2:
 ; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
 ; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
 ; 
-; The chain this reader belongs to has NOT been decoded end to end.
-; For the one that has -- slot +0x4C -- see its banner: the map value
-; turns out to be a ROW NUMBER in a catalogue.  Whether that reading
-; carries over to this map is NOT asserted here.
+; The chain is now decoded end to end and the +0x4C reading DOES carry
+; over: see WHAT THE INDEX SELECTS below (corrected 2026-09-25, lane
+; promcd).
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x00 and 0xC0.
+; Value: a ROW of ToneDB_SourceNameList2 (+0x64, 314 x 16).
+; Reader: ToneQuery_ReplySourceName2_ViaIndexMap (prom_c 0xFC04EC): 0xFC058B and
+; 0xFC05DE `ld XWA,(XBC+0x58)`, the list +0x64 at 0xFC062A.
+; Measured over all 1024 entries: max 188 < 314, 189 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 189 rows of
+; +0x64 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 189 of 189.  Control: all 314 rows
+; through each of the other name maps return themselves at most 7 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_SourceIndexMapC:
 	.short 0x0002, 0x0004, 0x0002, 0x0005, 0x000C, 0x0008, 0x0010, 0x003D	; 4A44C  [0]
@@ -37810,9 +39975,8 @@ ToneDB_SourceIndexMapC:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 313, 126 distinct.
 ; KN5000 label at the same directory slot: ToneDB_SourceIndexMapD.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4AC4C, which is directory slot +0x5C's value, and ends at 0x4B44C,
@@ -37821,14 +39985,27 @@ ToneDB_SourceIndexMapC:
 ; guess -- the failure mode this tree has paid for.
 ; The value range above is measured over all 1024 entries, first to last.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x5C is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
-; So this region's NAME is still the KN5000 transplant and NOTHING in
-; the WSA1 firmware confirms it.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x5C: it does not
+; follow a base parked in a frame slot, and the readers below park it
+; there first.  (Corrected 2026-09-25, lane promcd: this paragraph used
+; to present that census as the absence of a reader.)
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x80.
+; Value: a ROW of ToneDB_SourceNameList2 (+0x64, 314 x 16).
+; Reader: ToneQuery_ReplySourceName2_ViaIndexMap (prom_c 0xFC04EC): 0xFC05C3
+; `ld XWA,(XBC+0x5c)`, the list +0x64 at 0xFC062A.
+; Measured over all 1024 entries: max 313 < 314, 126 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 125 rows of
+; +0x64 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 125 of 125.  Control: all 314 rows
+; through each of the other name maps return themselves at most 7 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_SourceIndexMapD:
 	.short 0x00BD, 0x00BD, 0x00BE, 0x00BE, 0x00BE, 0x00C2, 0x00C4, 0x00BF	; 4AC4C  [0]
@@ -39795,9 +41972,8 @@ ToneDB_PercSourceNameList1:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 207, 208 distinct.
 ; KN5000 label at the same directory slot: ToneDB_PercSourceIndexMapB.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x4F0DC, which is directory slot +0x4C's value, and ends at 0x4F8DC,
@@ -39832,6 +42008,23 @@ ToneDB_PercSourceNameList1:
 ; So: (row, column) -> a row of ToneDB_PercSourceNameList1, 0xFFFF = none.
 ; notes/prom_d_documentation_round3.py Q4g decodes all sixteen instructions
 ; from the ROM bytes and checks 16 x 208 against that catalogue's own footer.
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x40.
+; Value: a ROW of ToneDB_PercSourceNameList1 (+0x8C, 208 x 16), or 0xFFFF.
+; Reader: ToneDB_PercSourceIndexMapB_Lookup (prom_c 0xFC1555), decoded above; also
+; ToneQuery_ReplySourceName1_ViaIndexMap (0xFC035E) at 0xFC0419 -- which
+; names the row from +0x50, not +0x8C, on this arm too (0xFC049C is shared).
+; Measured over all 1024 entries: max 207 < 208, 209 distinct, 128 x 0xFFFF (the NO-ENTRY value, 16 in each bank).
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 208 rows of
+; +0x8C whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 208 of 208.  Control: all 208 rows
+; through each of the other name maps return themselves at most 16 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_PercSourceIndexMapB:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 4F0DC  [0]
@@ -40354,9 +42547,8 @@ ToneDB_PercSourceNameList2:
 ; 1024 LE16 entries.
 ; The first 1024 form the index map proper: max value 160, 161 distinct.
 ; KN5000 label at the same directory slot: ToneDB_PercSourceIndexMapC.
-; ⚠ What the index SELECTS is not established here; the value ranges are
-; recorded because they pin which catalogue or record array each map can
-; possibly address (see notes/FINDINGS-prom-d-tone-database.md).
+; ★ What the index SELECTS: see WHAT THE INDEX SELECTS at the end of this
+; banner (corrected 2026-09-25, lane promcd; this line used to leave it open).
 ; 
 ; Evidence: (image-internal, NOT from code) this region begins at
 ; 0x502FA, which is directory slot +0x60's value, and ends at 0x50AFA,
@@ -40374,10 +42566,26 @@ ToneDB_PercSourceNameList2:
 ; instructions in prom_c that write 0x00D7ED / 0x00D7F1 are 0xFB0523 and
 ; 0xFB0528, both storing the 0x00F00000 loaded at 0xFB051E.
 ; 
-; The chain this reader belongs to has NOT been decoded end to end.
-; For the one that has -- slot +0x4C -- see its banner: the map value
-; turns out to be a ROW NUMBER in a catalogue.  Whether that reading
-; carries over to this map is NOT asserted here.
+; The chain is now decoded end to end and the +0x4C reading DOES carry
+; over: see WHAT THE INDEX SELECTS below (corrected 2026-09-25, lane
+; promcd).
+;
+; ★ WHAT THE INDEX SELECTS (lane promcd, 2026-09-25).
+; The index is a WAVE SELECTOR PAIR (sel_program, sel_bank_family) --
+; bytes +14/+15 of a wave-catalogue row, +0x02/+0x03 of a tone record's
+; element block -- as i = (sel_bank_family & 0x0F)*128 + (sel_program &
+; 0x7F): 8 banks x 128 = these 1024 LE16 entries.  This map is the one
+; the readers take when sel_bank_family bits 7:6 are 0x40.
+; Value: a ROW of ToneDB_PercSourceNameList2 (+0x94, 161 x 16).
+; Reader: ToneQuery_ReplyPercSourceName2AndIndex (prom_c 0xFC1845): 0xFC1904 and
+; 0xFC1977 `ld XWA,(XBC+0x60)`, the list +0x94 at 0xFC1924/0xFC199C;
+; ToneQuery_ReplySourceName2_ViaIndexMap (0xFC04EC) at 0xFC05A7.
+; Measured over all 1024 entries: max 160 < 161, 161 distinct.
+; ★ THE MAP IS THE CATALOGUE'S INVERSE: for each of the 161 rows of
+; +0x94 whose byte +15 carries this family, looking up that row's own
+; +14/+15 here returns the row itself -- 161 of 161.  Control: all 161 rows
+; through each of the other name maps return themselves at most 16 times.
+; Proof: python3 notes/lanes/promcd-2026-09-25/prom_d_index_maps.py
 ; ==========================================================================
 ToneDB_PercSourceIndexMapC:
 	.short 0x0000, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0009	; 502FA  [0]

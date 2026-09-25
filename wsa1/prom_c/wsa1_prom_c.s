@@ -909,7 +909,7 @@ sub_FAC2AE:
 	ld	(xix+28), bc                            ; FAC31F  ld (XIX+0x1c),BC
 	ld	bc, (0x1521:16)                       ; FAC322  ld BC,(0x1521)
 	muls	bc, 2                                 ; FAC326  muls BC,0x0002
-	add	xbc, 0xFDDE2B                          ; FAC32A  add XBC,0x00fdde2b
+	add	xbc, Voice_OutputLevel_Table                          ; FAC32A  add XBC,0x00fdde2b
 	ld	bc, (xbc)                               ; FAC330  ld BC,(XBC)
 	add	bc, bc                                 ; FAC332  add BC,BC
 	ld	(xix+4), bc                             ; FAC334  ld (XIX+0x04),BC
@@ -1098,7 +1098,7 @@ sub_FAC42C__FAC49B:
 	ld	bc, (xiz+10)                            ; FAC4AC  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FAC4AF  extz BC
 	extz	xbc                                   ; FAC4B1  extz XBC
-	add	xbc, 0xFDE495                          ; FAC4B3  add XBC,0x00fde495
+	add	xbc, Voice_PitchDepth_Scale                          ; FAC4B3  add XBC,0x00fde495
 	ld	b, (xbc)                                ; FAC4B9  ld B,(XBC)
 	extpfx3 0xC7, 0xF4, 0x9A                   ; FAC4BB  ld IYL,B
 	extz	iy                                    ; FAC4BE  extz IY
@@ -1273,7 +1273,7 @@ sub_FAC58F__FAC5FE:
 	ld	bc, (xiz+10)                            ; FAC60F  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FAC612  extz BC
 	extz	xbc                                   ; FAC614  extz XBC
-	add	xbc, 0xFDE595                          ; FAC616  add XBC,0x00fde595
+	add	xbc, Voice_FilterDepth_Scale                          ; FAC616  add XBC,0x00fde595
 	ld	b, (xbc)                                ; FAC61C  ld B,(XBC)
 	extpfx3 0xC7, 0xF4, 0x9A                   ; FAC61E  ld IYL,B
 	extz	iy                                    ; FAC621  extz IY
@@ -1564,7 +1564,7 @@ sub_FAC7EF__FAC813:
 	ld	c, (xde+0x72)                           ; FAC820  ld C,(XDE+0x72)
 	extz	bc                                    ; FAC823  extz BC
 	extz	xbc                                   ; FAC825  extz XBC
-	add	xbc, 0xFDE42B                          ; FAC827  add XBC,0x00fde42b
+	add	xbc, Voice_ToneRampPitch_Curve                          ; FAC827  add XBC,0x00fde42b
 	ld	a, (xbc)                                ; FAC82D  ld A,(XBC)
 	pushw	wa                                   ; FAC82F  push WA
 	pushw	hl                                   ; FAC830  push HL
@@ -1593,12 +1593,12 @@ sub_FAC7EF__FAC84A:
 	extz	bc                                    ; FAC85F  extz BC
 	extz	xbc                                   ; FAC861  extz XBC
 	ld	xix, xbc                                ; FAC863  ld XIX,XBC
-	add	xbc, 0xFDE47B                          ; FAC865  add XBC,0x00fde47b
+	add	xbc, Voice_ToneRampFilter_Curve                          ; FAC865  add XBC,0x00fde47b
 	ld	a, (xbc)                                ; FAC86B  ld A,(XBC)
 	pushw	wa                                   ; FAC86D  push WA
 	pushw	hl                                   ; FAC86E  push HL
 	calr sub_FAC58F                 ; FAC86F  calr 0xfac58f
-	lda	xbc, (0xFDE47B:24)                     ; FAC872  lda XBC,0xfde47b
+	lda	xbc, (Voice_ToneRampFilter_Curve:24)                     ; FAC872  lda XBC,0xfde47b
 	add	xbc, xix                               ; FAC877  add XBC,XIX
 	ld	a, (xbc)                                ; FAC879  ld A,(XBC)
 	pushw	wa                                   ; FAC87B  push WA
@@ -1634,7 +1634,7 @@ sub_FAC888:
 	pushw	hl                                   ; FAC88C  push HL
 	push	xde                                   ; FAC88D  push XDE
 	push	xix                                   ; FAC88E  push XIX
-	lda	xix, (0xFDE47B:24)                     ; FAC88F  lda XIX,0xfde47b
+	lda	xix, (Voice_ToneRampFilter_Curve:24)                     ; FAC88F  lda XIX,0xfde47b
 	ld	de, (xiz+10)                            ; FAC894  ld DE,(XIZ+0x0a)
 	ld	l, (xiz+8)                              ; FAC897  ld L,(XIZ+0x08)
 	extz	xde                                   ; FAC89A  extz XDE
@@ -1724,14 +1724,14 @@ sub_FAC90E:
 	ld	c, (xix+0x72)                           ; FAC921  ld C,(XIX+0x72)
 	extz	bc                                    ; FAC924  extz BC
 	extz	xbc                                   ; FAC926  extz XBC
-	add	xbc, 0xFDE42B                          ; FAC928  add XBC,0x00fde42b
+	add	xbc, Voice_ToneRampPitch_Curve                          ; FAC928  add XBC,0x00fde42b
 	ld	l, (xbc)                                ; FAC92E  ld L,(XBC)
 	ld	h, 25:opc                                  ; FAC930  ld H,0x19
 sub_FAC90E__FAC932:
 	ld	c, h                                    ; FAC932  ld C,H
 	extz	bc                                    ; FAC934  extz BC
 	extz	xbc                                   ; FAC936  extz XBC
-	add	xbc, 0xFDE47B                          ; FAC938  add XBC,0x00fde47b
+	add	xbc, Voice_ToneRampFilter_Curve                          ; FAC938  add XBC,0x00fde47b
 	ld	a, (xbc)                                ; FAC93E  ld A,(XBC)
 	cp	l, a                                    ; FAC940  cp L,A
 	jr nc, sub_FAC90E__FAC948                  ; FAC942  jr NC,0xfac948
@@ -1743,7 +1743,7 @@ sub_FAC90E__FAC948:
 	ld	c, l                                    ; FAC94D  ld C,L
 	extz	bc                                    ; FAC94F  extz BC
 	extz	xbc                                   ; FAC951  extz XBC
-	add	xbc, 0xFDE42B                          ; FAC953  add XBC,0x00fde42b
+	add	xbc, Voice_ToneRampPitch_Curve                          ; FAC953  add XBC,0x00fde42b
 	ld	a, (xbc)                                ; FAC959  ld A,(XBC)
 	pushw	wa                                   ; FAC95B  push WA
 	push	0                                     ; FAC95C  push 0x00
@@ -1759,13 +1759,13 @@ sub_FAC90E__FAC948:
 	extz	bc                                    ; FAC975  extz BC
 	extz	xbc                                   ; FAC977  extz XBC
 	ld	xix, xbc                                ; FAC979  ld XIX,XBC
-	add	xbc, 0xFDE47B                          ; FAC97B  add XBC,0x00fde47b
+	add	xbc, Voice_ToneRampFilter_Curve                          ; FAC97B  add XBC,0x00fde47b
 	ld	a, (xbc)                                ; FAC981  ld A,(XBC)
 	pushw	wa                                   ; FAC983  push WA
 	push	0                                     ; FAC984  push 0x00
 	push	d                                     ; FAC986  push D
 	calr sub_FAC58F                 ; FAC988  calr 0xfac58f
-	lda	xbc, (0xFDE47B:24)                     ; FAC98B  lda XBC,0xfde47b
+	lda	xbc, (Voice_ToneRampFilter_Curve:24)                     ; FAC98B  lda XBC,0xfde47b
 	add	xbc, xix                               ; FAC990  add XBC,XIX
 	ld	a, (xbc)                                ; FAC992  ld A,(XBC)
 	pushw	wa                                   ; FAC994  push WA
@@ -1810,7 +1810,7 @@ sub_FAC9A6:
 	srl	c, 1                                   ; FAC9BC  srl 0x01,C
 	extz	bc                                    ; FAC9BF  extz BC
 	extz	xbc                                   ; FAC9C1  extz XBC
-	add	xbc, 0xFDE47B                          ; FAC9C3  add XBC,0x00fde47b
+	add	xbc, Voice_ToneRampFilter_Curve                          ; FAC9C3  add XBC,0x00fde47b
 	ld	h, (xbc)                                ; FAC9C9  ld H,(XBC)
 	ld	l, 0:opc                                   ; FAC9CB  ld L,0x00
 sub_FAC9A6__FAC9CD:
@@ -1818,7 +1818,7 @@ sub_FAC9A6__FAC9CD:
 	extz	bc                                    ; FAC9CF  extz BC
 	extz	xbc                                   ; FAC9D1  extz XBC
 	ld	(xiz-4), xbc                            ; FAC9D3  ld (XIZ+0xfc),XBC
-	add	xbc, 0xFDE42B                          ; FAC9D6  add XBC,0x00fde42b
+	add	xbc, Voice_ToneRampPitch_Curve                          ; FAC9D6  add XBC,0x00fde42b
 	ld	a, (xbc)                                ; FAC9DC  ld A,(XBC)
 	cp	h, a                                    ; FAC9DE  cp H,A
 	jr ule, sub_FAC9A6__FAC9E6                 ; FAC9E0  jr ULE,0xfac9e6
@@ -1827,7 +1827,7 @@ sub_FAC9A6__FAC9CD:
 sub_FAC9A6__FAC9E6:
 	extz	xix                                   ; FAC9E6  extz XIX
 	ld	(xix+0x72), l                           ; FAC9E8  ld (XIX+0x72),L
-	lda	xbc, (0xFDE47B:24)                     ; FAC9EB  lda XBC,0xfde47b
+	lda	xbc, (Voice_ToneRampFilter_Curve:24)                     ; FAC9EB  lda XBC,0xfde47b
 	extpfx3 0xAE, 0xFC, 0x81                   ; FAC9F0  add XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; FAC9F3  ld A,(XBC)
 	pushw	wa                                   ; FAC9F5  push WA
@@ -1844,13 +1844,13 @@ sub_FAC9A6__FAC9E6:
 	extz	bc                                    ; FACA0F  extz BC
 	extz	xbc                                   ; FACA11  extz XBC
 	ld	xix, xbc                                ; FACA13  ld XIX,XBC
-	add	xbc, 0xFDE47B                          ; FACA15  add XBC,0x00fde47b
+	add	xbc, Voice_ToneRampFilter_Curve                          ; FACA15  add XBC,0x00fde47b
 	ld	a, (xbc)                                ; FACA1B  ld A,(XBC)
 	pushw	wa                                   ; FACA1D  push WA
 	push	0                                     ; FACA1E  push 0x00
 	push	d                                     ; FACA20  push D
 	calr sub_FAC58F                 ; FACA22  calr 0xfac58f
-	lda	xbc, (0xFDE47B:24)                     ; FACA25  lda XBC,0xfde47b
+	lda	xbc, (Voice_ToneRampFilter_Curve:24)                     ; FACA25  lda XBC,0xfde47b
 	add	xbc, xix                               ; FACA2A  add XBC,XIX
 	ld	a, (xbc)                                ; FACA2C  ld A,(XBC)
 	pushw	wa                                   ; FACA2E  push WA

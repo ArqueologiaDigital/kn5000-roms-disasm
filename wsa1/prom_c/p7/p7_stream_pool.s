@@ -151,6 +151,8 @@
 ;       int16_t  max;               /* +2                                          */
 ;       uint8_t  block_offset;      /* +4 into the unit block, live byte = +1+off  */
 ;       uint8_t  flag;              /* +5                                          */
+;       /* +5 is a VALUE-TYPE letter -- 'b' u8, 'B' s8, 'w' u16, ' ' not sent --  */
+;       /* read by P7Unit_SendModulatedField's switch at 0xFA28F3              */
 ;       uint8_t  field_index;       /* +6                                          */
 ;   };
 ;
@@ -734,6 +736,7 @@ P7Stream_FCDA77:
 
 ; ---- 0xFCDBBC-0xFCDBD9  30 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0D3
+;      effect 'AUTO PAN' (program 48): PoolDir_Records[10] block A (+0, walked by P7Block_Run)
 P7Stream_FCDBBC:
 	.byte	0x00, 0x07   ; 0xFCDBBC  op  0  len 7  payload 5
 	.byte	0x66, 0x00, 0x01, 0x08, 0x09   ; 0xFCDBBE
@@ -749,6 +752,7 @@ P7Stream_FCDBBC:
 
 ; ---- 0xFCDBDA-0xFCDC61  136 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0D7
+;      effect 'AUTO PAN' (program 48): PoolDir_Records[10] stream A (+4, played by P7Stream_Run)
 P7Stream_FCDBDA:
 	.byte	0x00, 0x2d   ; 0xFCDBDA  op  0  len 45  payload 43
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x11, 0x20, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x20, 0x00   ; 0xFCDBDC
@@ -773,6 +777,7 @@ P7Stream_FCDBDA:
 
 ; ---- 0xFCDC62-0xFCDCAA  73 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0DB
+;      effect 'AUTO PAN' (program 48): PoolDir_Records[10] block B (+8, walked by P7Block_Run)
 P7Stream_FCDC62:
 	.byte	0x00, 0x13   ; 0xFCDC62  op  0  len 19  payload 17
 	.byte	0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x03, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFCDC64
@@ -792,6 +797,7 @@ P7Stream_FCDC62:
 
 ; ---- 0xFCDCAB-0xFCDDBF  277 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0DF
+;      effect 'AUTO PAN' (program 48): PoolDir_Records[10] stream B (+12, played by P7Stream_Run)
 P7Stream_FCDCAB:
 	.byte	0x31, 0x13   ; 0xFCDCAB  op  3  len 275  payload 273
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0x21, 0xcd, 0x00, 0x00, 0x20   ; 0xFCDCAD
@@ -816,6 +822,7 @@ P7Stream_FCDCAB:
 
 ; ---- 0xFCDDC0-0xFCDDDF  32 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC11E
+;      effect 'AUTO WAH' (program 52): PoolDir_Records[13] block A (+0, walked by P7Block_Run)
 P7Stream_FCDDC0:
 	.byte	0x00, 0x05   ; 0xFCDDC0  op  0  len 5  payload 3
 	.byte	0x66, 0x01, 0x0f   ; 0xFCDDC2
@@ -833,6 +840,7 @@ P7Stream_FCDDC0:
 
 ; ---- 0xFCDDE0-0xFCDEC5  230 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC122
+;      effect 'AUTO WAH' (program 52): PoolDir_Records[13] stream A (+4, played by P7Stream_Run)
 P7Stream_FCDDE0:
 	.byte	0x00, 0x73   ; 0xFCDDE0  op  0  len 115  payload 113
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFCDDE2
@@ -864,6 +872,7 @@ P7Stream_FCDDE0:
 
 ; ---- 0xFCDEC6-0xFCDF39  116 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC126
+;      effect 'AUTO WAH' (program 52): PoolDir_Records[13] block B (+8, walked by P7Block_Run)
 P7Stream_FCDEC6:
 	.byte	0x00, 0x13   ; 0xFCDEC6  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFCDEC8
@@ -884,6 +893,7 @@ P7Stream_FCDEC6:
 
 ; ---- 0xFCDF3A-0xFCE0B7  382 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC12A
+;      effect 'AUTO WAH' (program 52): PoolDir_Records[13] stream B (+12, played by P7Stream_Run)
 P7Stream_FCDF3A:
 	.byte	0x31, 0x7c   ; 0xFCDF3A  op  3  len 380  payload 378
 	.byte	0x01, 0x00, 0x6e, 0x00, 0x00, 0x20, 0xe0, 0x00, 0x08, 0x80, 0x13, 0x04, 0x07, 0x00, 0x00, 0x2f   ; 0xFCDF3C
@@ -914,6 +924,7 @@ P7Stream_FCDF3A:
 
 ; ---- 0xFCE0B8-0xFCE0DE  39 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC40C
+;      effect 'AUTO WAH+S.DELAY' (program 70): PoolDir_Records[43] block A (+0, walked by P7Block_Run)
 P7Stream_FCE0B8:
 	.byte	0x00, 0x07   ; 0xFCE0B8  op  0  len 7  payload 5
 	.byte	0x66, 0x01, 0x05, 0x13, 0x17   ; 0xFCE0BA
@@ -931,6 +942,7 @@ P7Stream_FCE0B8:
 
 ; ---- 0xFCE0DF-0xFCE207  297 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC410
+;      effect 'AUTO WAH+S.DELAY' (program 70): PoolDir_Records[43] stream A (+4, played by P7Stream_Run)
 P7Stream_FCE0DF:
 	.byte	0x00, 0x82   ; 0xFCE0DF  op  0  len 130  payload 128
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFCE0E1
@@ -965,6 +977,7 @@ P7Stream_FCE0DF:
 
 ; ---- 0xFCE208-0xFCE2B4  173 bytes, 11 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC414
+;      effect 'AUTO WAH+S.DELAY' (program 70): PoolDir_Records[43] block B (+8, walked by P7Block_Run)
 P7Stream_FCE208:
 	.byte	0x00, 0x13   ; 0xFCE208  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x02, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFCE20A
@@ -996,6 +1009,7 @@ P7Stream_FCE208:
 
 ; ---- 0xFCE2B5-0xFCE4BE  522 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC418
+;      effect 'AUTO WAH+S.DELAY' (program 70): PoolDir_Records[43] stream B (+12, played by P7Stream_Run)
 P7Stream_FCE2B5:
 	.byte	0x32, 0x08   ; 0xFCE2B5  op  3  len 520  payload 518
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0xd0, 0x0b, 0x00, 0x00, 0x2f   ; 0xFCE2B7
@@ -1034,6 +1048,13 @@ P7Stream_FCE2B5:
 	.byte	0xf0, 0x00   ; 0xFCE4BD  op 15  END
 
 ; ---- 0xFCE4BF-0xFCE4ED  47 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 0 of 4 of an orphan quartet at 0xFCE4BF (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FCE4BF:
 	.byte	0x00, 0x0f   ; 0xFCE4BF  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFCE4C1
@@ -1050,6 +1071,13 @@ P7Stream_FCE4BF:
 	.byte	0xf0, 0x00   ; 0xFCE4EC  op 15  END
 
 ; ---- 0xFCE4EE-0xFCE6D7  490 bytes, 13 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 1 of 4 of an orphan quartet at 0xFCE4BF (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FCE4EE:
 	.byte	0x00, 0x37   ; 0xFCE4EE  op  0  len 55  payload 53
 	; ⚠ pointed at from code, INSIDE this record's payload: 0xFCE4F9
@@ -1108,6 +1136,13 @@ P7Stream_Inner_FCE4F9:
 	.byte	0xf0, 0x00   ; 0xFCE6D6  op 15  END
 
 ; ---- 0xFCE6D8-0xFCE71E  71 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 2 of 4 of an orphan quartet at 0xFCE4BF (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FCE6D8:
 	.byte	0x00, 0x13   ; 0xFCE6D8  op  0  len 19  payload 17
 	.byte	0x66, 0x05, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x0b, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFCE6DA
@@ -1162,6 +1197,7 @@ P7Stream_FCE71F:
 
 ; ---- 0xFCE8FC-0xFCE92D  50 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC32B
+;      effect 'BRIGHT REVERB 1' (program 24): PoolDir_Records[34] block A (+0, walked by P7Block_Run)
 P7Stream_FCE8FC:
 	.byte	0x00, 0x0f   ; 0xFCE8FC  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFCE8FE
@@ -1179,6 +1215,7 @@ P7Stream_FCE8FC:
 
 ; ---- 0xFCE92E-0xFCEB35  520 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC32F
+;      effect 'BRIGHT REVERB 1' (program 24): PoolDir_Records[34] stream A (+4, played by P7Stream_Run)
 P7Stream_FCE92E:
 	.byte	0x00, 0x55   ; 0xFCE92E  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFCE930
@@ -1235,6 +1272,7 @@ P7Stream_FCE92E:
 
 ; ---- 0xFCEB36-0xFCEB6A  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC333
+;      effect 'BRIGHT REVERB 1' (program 24): PoolDir_Records[34] block B (+8, walked by P7Block_Run)
 P7Stream_FCEB36:
 	.byte	0x00, 0x08   ; 0xFCEB36  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x1a, 0x71, 0xde, 0x7a   ; 0xFCEB38
@@ -1251,6 +1289,7 @@ P7Stream_FCEB36:
 
 ; ---- 0xFCEB6B-0xFCED38  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC337
+;      effect 'BRIGHT REVERB 1' (program 24): PoolDir_Records[34] stream B (+12, played by P7Stream_Run)
 P7Stream_FCEB6B:
 	.byte	0x31, 0xcc   ; 0xFCEB6B  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFCEB6D
@@ -1286,6 +1325,7 @@ P7Stream_FCEB6B:
 
 ; ---- 0xFCED39-0xFCED6A  50 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC344
+;      effect 'BRIGHT REVERB 2' (program 25): PoolDir_Records[35] block A (+0, walked by P7Block_Run)
 P7Stream_FCED39:
 	.byte	0x00, 0x0f   ; 0xFCED39  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFCED3B
@@ -1303,6 +1343,7 @@ P7Stream_FCED39:
 
 ; ---- 0xFCED6B-0xFCEF72  520 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC348
+;      effect 'BRIGHT REVERB 2' (program 25): PoolDir_Records[35] stream A (+4, played by P7Stream_Run)
 P7Stream_FCED6B:
 	.byte	0x00, 0x55   ; 0xFCED6B  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFCED6D
@@ -1359,6 +1400,7 @@ P7Stream_FCED6B:
 
 ; ---- 0xFCEF73-0xFCEFA7  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC34C
+;      effect 'BRIGHT REVERB 2' (program 25): PoolDir_Records[35] block B (+8, walked by P7Block_Run)
 P7Stream_FCEF73:
 	.byte	0x00, 0x08   ; 0xFCEF73  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x1f, 0xbb, 0x2f, 0x7a   ; 0xFCEF75
@@ -1375,6 +1417,7 @@ P7Stream_FCEF73:
 
 ; ---- 0xFCEFA8-0xFCF175  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC350
+;      effect 'BRIGHT REVERB 2' (program 25): PoolDir_Records[35] stream B (+12, played by P7Stream_Run)
 P7Stream_FCEFA8:
 	.byte	0x31, 0xcc   ; 0xFCEFA8  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFCEFAA
@@ -1410,6 +1453,7 @@ P7Stream_FCEFA8:
 
 ; ---- 0xFCF176-0xFCF18D  24 bytes, 5 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC056
+;      effect 'CHORUS' (program 1): PoolDir_Records[5] block A (+0, walked by P7Block_Run)
 P7Stream_FCF176:
 	.byte	0x00, 0x07   ; 0xFCF176  op  0  len 7  payload 5
 	.byte	0x66, 0x08, 0x0a, 0x0b, 0x14   ; 0xFCF178
@@ -1423,6 +1467,7 @@ P7Stream_FCF176:
 
 ; ---- 0xFCF18E-0xFCF35C  463 bytes, 10 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC05A
+;      effect 'CHORUS' (program 1): PoolDir_Records[5] stream A (+4, played by P7Stream_Run)
 P7Stream_FCF18E:
 	.byte	0x00, 0xa0   ; 0xFCF18E  op  0  len 160  payload 158
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x70, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x15   ; 0xFCF190
@@ -1470,6 +1515,7 @@ P7Stream_FCF18E:
 
 ; ---- 0xFCF35D-0xFCF395  57 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC05E
+;      effect 'CHORUS' (program 1): PoolDir_Records[5] block B (+8, walked by P7Block_Run)
 P7Stream_FCF35D:
 	.byte	0x00, 0x13   ; 0xFCF35D  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x03, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFCF35F
@@ -1487,6 +1533,7 @@ P7Stream_FCF35D:
 
 ; ---- 0xFCF396-0xFCF50E  377 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC062
+;      effect 'CHORUS' (program 1): PoolDir_Records[5] stream B (+12, played by P7Stream_Run)
 P7Stream_FCF396:
 	.byte	0x31, 0x77   ; 0xFCF396  op  3  len 375  payload 373
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0xe1, 0xcd, 0x00, 0x00, 0x2e   ; 0xFCF398
@@ -1517,6 +1564,7 @@ P7Stream_FCF396:
 
 ; ---- 0xFCF50F-0xFCF528  26 bytes, 5 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC06F
+;      effect 'MODULATED CHORUS' (program 2): PoolDir_Records[6] block A (+0, walked by P7Block_Run)
 P7Stream_FCF50F:
 	.byte	0x00, 0x08   ; 0xFCF50F  op  0  len 8  payload 6
 	.byte	0x66, 0x0a, 0x0c, 0x0e, 0x10, 0x19   ; 0xFCF511
@@ -1530,6 +1578,7 @@ P7Stream_FCF50F:
 
 ; ---- 0xFCF529-0xFCF645  285 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC073
+;      effect 'MODULATED CHORUS' (program 2): PoolDir_Records[6] stream A (+4, played by P7Stream_Run)
 P7Stream_FCF529:
 	.byte	0x00, 0x5f   ; 0xFCF529  op  0  len 95  payload 93
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFCF52B
@@ -1563,6 +1612,7 @@ P7Stream_FCF529:
 
 ; ---- 0xFCF646-0xFCF68F  74 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC077
+;      effect 'MODULATED CHORUS' (program 2): PoolDir_Records[6] block B (+8, walked by P7Block_Run)
 P7Stream_FCF646:
 	.byte	0x00, 0x13   ; 0xFCF646  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFCF648
@@ -1584,6 +1634,7 @@ P7Stream_FCF646:
 
 ; ---- 0xFCF690-0xFCF885  502 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC07B
+;      effect 'MODULATED CHORUS' (program 2): PoolDir_Records[6] stream B (+12, played by P7Stream_Run)
 P7Stream_FCF690:
 	.byte	0x31, 0xf4   ; 0xFCF690  op  3  len 500  payload 498
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0xe1, 0xcd, 0x00, 0x00, 0x2e   ; 0xFCF692
@@ -1622,6 +1673,7 @@ P7Stream_FCF690:
 
 ; ---- 0xFCF886-0xFCF89A  21 bytes, 5 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1E6
+;      effect 'COMPRESSOR' (program 36): PoolDir_Records[21] block A (+0, walked by P7Block_Run)
 P7Stream_FCF886:
 	.byte	0x00, 0x05   ; 0xFCF886  op  0  len 5  payload 3
 	.byte	0x66, 0x05, 0x11   ; 0xFCF888
@@ -1635,6 +1687,7 @@ P7Stream_FCF886:
 
 ; ---- 0xFCF89B-0xFCF933  153 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1EA
+;      effect 'COMPRESSOR' (program 36): PoolDir_Records[21] stream A (+4, played by P7Stream_Run)
 P7Stream_FCF89B:
 	.byte	0x00, 0x1e   ; 0xFCF89B  op  0  len 30  payload 28
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x10   ; 0xFCF89D
@@ -1660,6 +1713,7 @@ P7Stream_FCF89B:
 
 ; ---- 0xFCF934-0xFCF95F  44 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1EE
+;      effect 'COMPRESSOR' (program 36): PoolDir_Records[21] block B (+8, walked by P7Block_Run)
 P7Stream_FCF934:
 	.byte	0x00, 0x13   ; 0xFCF934  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFCF936
@@ -1676,6 +1730,7 @@ P7Stream_FCF934:
 
 ; ---- 0xFCF960-0xFCFA29  202 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1F2
+;      effect 'COMPRESSOR' (program 36): PoolDir_Records[21] stream B (+12, played by P7Stream_Run)
 P7Stream_FCF960:
 	.byte	0x30, 0xc8   ; 0xFCF960  op  3  len 200  payload 198
 	; ⚠ pointed at from code, INSIDE this record's payload: 0xFCF9F8
@@ -1699,6 +1754,13 @@ P7Stream_Inner_FCF9F8:
 	.byte	0xf0, 0x00   ; 0xFCFA28  op 15  END
 
 ; ---- 0xFCFA2A-0xFCFA57  46 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 0 of 4 of an orphan quartet at 0xFCFA2A (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FCFA2A:
 	.byte	0x00, 0x0f   ; 0xFCFA2A  op  0  len 15  payload 13
 	.byte	0x66, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x2a   ; 0xFCFA2C
@@ -1715,6 +1777,13 @@ P7Stream_FCFA2A:
 	.byte	0xf0, 0x00   ; 0xFCFA56  op 15  END
 
 ; ---- 0xFCFA58-0xFCFC59  514 bytes, 13 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 1 of 4 of an orphan quartet at 0xFCFA2A (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FCFA58:
 	.byte	0x00, 0x4b   ; 0xFCFA58  op  0  len 75  payload 73
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFCFA5A
@@ -1769,6 +1838,13 @@ P7Stream_FCFA58:
 	.byte	0xf0, 0x00   ; 0xFCFC58  op 15  END
 
 ; ---- 0xFCFC5A-0xFCFCA0  71 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 2 of 4 of an orphan quartet at 0xFCFA2A (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FCFC5A:
 	.byte	0x00, 0x13   ; 0xFCFC5A  op  0  len 19  payload 17
 	.byte	0x66, 0x05, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x0b, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFCFC5C
@@ -1787,6 +1863,13 @@ P7Stream_FCFC5A:
 	.byte	0xf0, 0x00   ; 0xFCFC9F  op 15  END
 
 ; ---- 0xFCFCA1-0xFCFE78  472 bytes, 2 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 3 of 4 of an orphan quartet at 0xFCFA2A (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FCFCA1:
 	.byte	0x31, 0xd6   ; 0xFCFCA1  op  3  len 470  payload 468
 	.byte	0x01, 0x00, 0x6a, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFCFCA3
@@ -1823,6 +1906,7 @@ P7Stream_FCFCA1:
 
 ; ---- 0xFCFE79-0xFCFEA9  49 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2C7
+;      effect 'CONCERT REVERB 1' (program 20): PoolDir_Records[30] block A (+0, walked by P7Block_Run)
 P7Stream_FCFE79:
 	.byte	0x00, 0x0f   ; 0xFCFE79  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFCFE7B
@@ -1840,6 +1924,7 @@ P7Stream_FCFE79:
 
 ; ---- 0xFCFEAA-0xFD00B1  520 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2CB
+;      effect 'CONCERT REVERB 1' (program 20): PoolDir_Records[30] stream A (+4, played by P7Stream_Run)
 P7Stream_FCFEAA:
 	.byte	0x00, 0x55   ; 0xFCFEAA  op  0  len 85  payload 83
 	; ⚠ pointed at from code, INSIDE this record's payload: 0xFCFEFE
@@ -1902,6 +1987,7 @@ P7Stream_Inner_FCFEFE:
 
 ; ---- 0xFD00B2-0xFD00E6  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2CF
+;      effect 'CONCERT REVERB 1' (program 20): PoolDir_Records[30] block B (+8, walked by P7Block_Run)
 P7Stream_FD00B2:
 	.byte	0x00, 0x08   ; 0xFD00B2  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x15, 0x28, 0x8c, 0x7a   ; 0xFD00B4
@@ -1918,6 +2004,7 @@ P7Stream_FD00B2:
 
 ; ---- 0xFD00E7-0xFD02B4  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2D3
+;      effect 'CONCERT REVERB 1' (program 20): PoolDir_Records[30] stream B (+12, played by P7Stream_Run)
 P7Stream_FD00E7:
 	.byte	0x31, 0xcc   ; 0xFD00E7  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD00E9
@@ -1953,6 +2040,7 @@ P7Stream_FD00E7:
 
 ; ---- 0xFD02B5-0xFD02E5  49 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2E0
+;      effect 'CONCERT REVERB 2' (program 21): PoolDir_Records[31] block A (+0, walked by P7Block_Run)
 P7Stream_FD02B5:
 	.byte	0x00, 0x0f   ; 0xFD02B5  op  0  len 15  payload 13
 	.byte	0x66, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x2a   ; 0xFD02B7
@@ -1970,6 +2058,7 @@ P7Stream_FD02B5:
 
 ; ---- 0xFD02E6-0xFD04F1  524 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2E4
+;      effect 'CONCERT REVERB 2' (program 21): PoolDir_Records[31] stream A (+4, played by P7Stream_Run)
 P7Stream_FD02E6:
 	.byte	0x00, 0x55   ; 0xFD02E6  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD02E8
@@ -2026,6 +2115,7 @@ P7Stream_FD02E6:
 
 ; ---- 0xFD04F2-0xFD0526  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2E8
+;      effect 'CONCERT REVERB 2' (program 21): PoolDir_Records[31] block B (+8, walked by P7Block_Run)
 P7Stream_FD04F2:
 	.byte	0x00, 0x08   ; 0xFD04F2  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x25, 0x04, 0x81, 0x7a   ; 0xFD04F4
@@ -2042,6 +2132,7 @@ P7Stream_FD04F2:
 
 ; ---- 0xFD0527-0xFD06F9  467 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2EC
+;      effect 'CONCERT REVERB 2' (program 21): PoolDir_Records[31] stream B (+12, played by P7Stream_Run)
 P7Stream_FD0527:
 	.byte	0x31, 0xd1   ; 0xFD0527  op  3  len 465  payload 463
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD0529
@@ -2081,8 +2172,15 @@ P7Stream_FD0527:
 ;      [INFERENCE, stated as such] a count byte 0x20 = 32 followed by 24-bit
 ;      big-endian values that rise in equal steps of 0x059999 to 0x400000, hold
 ;      there for eight entries and fall back symmetrically -- a trapezoid.  The
-;      step and the symmetry are in the bytes; the ELEMENT SIZE is not proved by
-;      any instruction, so this is an observation, not a decode.
+;      step and the symmetry are in the bytes.  (Corrected 2026-09-25, lane promcd:
+;      this said the ELEMENT SIZE was not proved by any instruction.  It is three
+;      bytes, the width P7Unit_SendValueTable reads with Stream_ReadU24BE at
+;      0xF9F84F -- see the Layout line below.)
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FD06FA:
 	.byte	0x20, 0x00, 0x00, 0x00, 0x05, 0x99, 0x99, 0x0b, 0x33, 0x33, 0x10, 0xcc, 0xcc, 0x16, 0x66, 0x66   ; 0xFD06FA
 	.byte	0x1c, 0x00, 0x00, 0x21, 0x99, 0x99, 0x27, 0x33, 0x33, 0x2c, 0xcc, 0xcc, 0x32, 0x66, 0x66, 0x38   ; 0xFD070A
@@ -2094,6 +2192,7 @@ P7Stream_Data_FD06FA:
 
 ; ---- 0xFD075E-0xFD0783  38 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC38F
+;      effect 'S.DELAY+CHORUS' (program 64): PoolDir_Records[38] block A (+0, walked by P7Block_Run)
 P7Stream_FD075E:
 	.byte	0x00, 0x09   ; 0xFD075E  op  0  len 9  payload 7
 	.byte	0x66, 0x05, 0x0c, 0x0e, 0x0f, 0x13, 0x1a   ; 0xFD0760
@@ -2111,6 +2210,7 @@ P7Stream_FD075E:
 
 ; ---- 0xFD0784-0xFD08CC  329 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC393
+;      effect 'S.DELAY+CHORUS' (program 64): PoolDir_Records[38] stream A (+4, played by P7Stream_Run)
 P7Stream_FD0784:
 	.byte	0x00, 0x6e   ; 0xFD0784  op  0  len 110  payload 108
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x15   ; 0xFD0786
@@ -2147,6 +2247,7 @@ P7Stream_FD0784:
 
 ; ---- 0xFD08CD-0xFD093E  114 bytes, 11 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC397
+;      effect 'S.DELAY+CHORUS' (program 64): PoolDir_Records[38] block B (+8, walked by P7Block_Run)
 P7Stream_FD08CD:
 	.byte	0x00, 0x13   ; 0xFD08CD  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD08CF
@@ -2175,6 +2276,7 @@ P7Stream_FD08CD:
 
 ; ---- 0xFD093F-0xFD0B57  537 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC39B
+;      effect 'S.DELAY+CHORUS' (program 64): PoolDir_Records[38] stream B (+12, played by P7Stream_Run)
 P7Stream_FD093F:
 	.byte	0x32, 0x17   ; 0xFD093F  op  3  len 535  payload 533
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x92, 0xa0, 0x32, 0x00, 0x00, 0x82, 0x20   ; 0xFD0941
@@ -2215,6 +2317,7 @@ P7Stream_FD093F:
 
 ; ---- 0xFD0B58-0xFD0B7D  38 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3A8
+;      effect 'S.DELAY+S.DELAY' (program 65): PoolDir_Records[39] block A (+0, walked by P7Block_Run)
 P7Stream_FD0B58:
 	.byte	0x00, 0x07   ; 0xFD0B58  op  0  len 7  payload 5
 	.byte	0x66, 0x03, 0x07, 0x0b, 0x0f   ; 0xFD0B5A
@@ -2230,6 +2333,7 @@ P7Stream_FD0B58:
 
 ; ---- 0xFD0B7E-0xFD0C4A  205 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3AC
+;      effect 'S.DELAY+S.DELAY' (program 65): PoolDir_Records[39] stream A (+4, played by P7Stream_Run)
 P7Stream_FD0B7E:
 	.byte	0x00, 0x32   ; 0xFD0B7E  op  0  len 50  payload 48
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD0B80
@@ -2258,6 +2362,7 @@ P7Stream_FD0B7E:
 
 ; ---- 0xFD0C4B-0xFD0CC4  122 bytes, 12 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3B0
+;      effect 'S.DELAY+S.DELAY' (program 65): PoolDir_Records[39] block B (+8, walked by P7Block_Run)
 P7Stream_FD0C4B:
 	.byte	0x00, 0x13   ; 0xFD0C4B  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x02, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD0C4D
@@ -2287,6 +2392,7 @@ P7Stream_FD0C4B:
 
 ; ---- 0xFD0CC5-0xFD0E33  367 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3B4
+;      effect 'S.DELAY+S.DELAY' (program 65): PoolDir_Records[39] stream B (+12, played by P7Stream_Run)
 P7Stream_FD0CC5:
 	.byte	0x31, 0x6d   ; 0xFD0CC5  op  3  len 365  payload 363
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20, 0xd1, 0xcd, 0x00, 0x00, 0x20   ; 0xFD0CC7
@@ -2316,6 +2422,7 @@ P7Stream_FD0CC5:
 
 ; ---- 0xFD0E34-0xFD0E68  53 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3C1
+;      effect 'S.DELAY+FLANGER' (program 66): PoolDir_Records[40] block A (+0, walked by P7Block_Run)
 P7Stream_FD0E34:
 	.byte	0x00, 0x09   ; 0xFD0E34  op  0  len 9  payload 7
 	.byte	0x66, 0x07, 0x0d, 0x0f, 0x11, 0x15, 0x1b   ; 0xFD0E36
@@ -2337,6 +2444,7 @@ P7Stream_FD0E34:
 
 ; ---- 0xFD0E69-0xFD0F97  303 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3C5
+;      effect 'S.DELAY+FLANGER' (program 66): PoolDir_Records[40] stream A (+4, played by P7Stream_Run)
 P7Stream_FD0E69:
 	.byte	0x00, 0x64   ; 0xFD0E69  op  0  len 100  payload 98
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x15, 0x55   ; 0xFD0E6B
@@ -2372,6 +2480,7 @@ P7Stream_FD0E69:
 
 ; ---- 0xFD0F98-0xFD103F  168 bytes, 14 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3C9
+;      effect 'S.DELAY+FLANGER' (program 66): PoolDir_Records[40] block B (+8, walked by P7Block_Run)
 P7Stream_FD0F98:
 	.byte	0x00, 0x13   ; 0xFD0F98  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD0F9A
@@ -2408,6 +2517,7 @@ P7Stream_FD0F98:
 
 ; ---- 0xFD1040-0xFD1226  487 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3CD
+;      effect 'S.DELAY+FLANGER' (program 66): PoolDir_Records[40] stream B (+12, played by P7Stream_Run)
 P7Stream_FD1040:
 	.byte	0x31, 0xe5   ; 0xFD1040  op  3  len 485  payload 483
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0x30, 0x0b, 0x00, 0x92, 0xa0   ; 0xFD1042
@@ -2445,6 +2555,7 @@ P7Stream_FD1040:
 
 ; ---- 0xFD1227-0xFD1258  50 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3F3
+;      effect 'S.DELAY+PHASER' (program 68): PoolDir_Records[42] block A (+0, walked by P7Block_Run)
 P7Stream_FD1227:
 	.byte	0x00, 0x0b   ; 0xFD1227  op  0  len 11  payload 9
 	.byte	0x66, 0x03, 0x09, 0x0b, 0x0c, 0x0e, 0x0f, 0x13, 0x19   ; 0xFD1229
@@ -2464,6 +2575,7 @@ P7Stream_FD1227:
 
 ; ---- 0xFD1259-0xFD1398  320 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3F7
+;      effect 'S.DELAY+PHASER' (program 68): PoolDir_Records[42] stream A (+4, played by P7Stream_Run)
 P7Stream_FD1259:
 	.byte	0x00, 0x91   ; 0xFD1259  op  0  len 145  payload 143
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x11, 0x30, 0x00, 0x0a, 0x15, 0x54, 0xc9, 0x95, 0x00, 0x00, 0x15   ; 0xFD125B
@@ -2499,6 +2611,7 @@ P7Stream_FD1259:
 
 ; ---- 0xFD1399-0xFD1440  168 bytes, 14 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3FB
+;      effect 'S.DELAY+PHASER' (program 68): PoolDir_Records[42] block B (+8, walked by P7Block_Run)
 P7Stream_FD1399:
 	.byte	0x00, 0x13   ; 0xFD1399  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x06, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD139B
@@ -2535,6 +2648,7 @@ P7Stream_FD1399:
 
 ; ---- 0xFD1441-0xFD168B  587 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3FF
+;      effect 'S.DELAY+PHASER' (program 68): PoolDir_Records[42] stream B (+12, played by P7Stream_Run)
 P7Stream_FD1441:
 	.byte	0x32, 0x49   ; 0xFD1441  op  3  len 585  payload 583
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0x00, 0x0b, 0x00, 0x22, 0x20   ; 0xFD1443
@@ -2578,6 +2692,7 @@ P7Stream_FD1441:
 
 ; ---- 0xFD168C-0xFD16B7  44 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3DA
+;      effect 'S.DELAY+VIBRATO' (program 67): PoolDir_Records[41] block A (+0, walked by P7Block_Run)
 P7Stream_FD168C:
 	.byte	0x00, 0x09   ; 0xFD168C  op  0  len 9  payload 7
 	.byte	0x66, 0x07, 0x0a, 0x0c, 0x0e, 0x12, 0x15   ; 0xFD168E
@@ -2597,6 +2712,7 @@ P7Stream_FD168C:
 
 ; ---- 0xFD16B8-0xFD17BF  264 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3DE
+;      effect 'S.DELAY+VIBRATO' (program 67): PoolDir_Records[41] stream A (+4, played by P7Stream_Run)
 P7Stream_FD16B8:
 	.byte	0x00, 0x55   ; 0xFD16B8  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x15, 0x55   ; 0xFD16BA
@@ -2629,6 +2745,7 @@ P7Stream_FD16B8:
 
 ; ---- 0xFD17C0-0xFD1841  130 bytes, 12 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3E2
+;      effect 'S.DELAY+VIBRATO' (program 67): PoolDir_Records[41] block B (+8, walked by P7Block_Run)
 P7Stream_FD17C0:
 	.byte	0x00, 0x13   ; 0xFD17C0  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD17C2
@@ -2659,6 +2776,7 @@ P7Stream_FD17C0:
 
 ; ---- 0xFD1842-0xFD1A00  447 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC3E6
+;      effect 'S.DELAY+VIBRATO' (program 67): PoolDir_Records[41] stream B (+12, played by P7Stream_Run)
 P7Stream_FD1842:
 	.byte	0x31, 0xbd   ; 0xFD1842  op  3  len 445  payload 443
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0x00, 0x0b, 0x00, 0x22, 0x20   ; 0xFD1844
@@ -2692,6 +2810,13 @@ P7Stream_FD1842:
 	.byte	0xf0, 0x00   ; 0xFD19FF  op 15  END
 
 ; ---- 0xFD1A01-0xFD1A2F  47 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 0 of 4 of an orphan quartet at 0xFD1A01 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD1A01:
 	.byte	0x00, 0x0f   ; 0xFD1A01  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFD1A03
@@ -2708,6 +2833,13 @@ P7Stream_FD1A01:
 	.byte	0xf0, 0x00   ; 0xFD1A2E  op 15  END
 
 ; ---- 0xFD1A30-0xFD1C19  490 bytes, 13 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 1 of 4 of an orphan quartet at 0xFD1A01 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD1A30:
 	.byte	0x00, 0x37   ; 0xFD1A30  op  0  len 55  payload 53
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD1A32
@@ -2761,6 +2893,13 @@ P7Stream_FD1A30:
 	.byte	0xf0, 0x00   ; 0xFD1C18  op 15  END
 
 ; ---- 0xFD1C1A-0xFD1C60  71 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 2 of 4 of an orphan quartet at 0xFD1A01 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD1C1A:
 	.byte	0x00, 0x13   ; 0xFD1C1A  op  0  len 19  payload 17
 	.byte	0x66, 0x05, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x0b, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD1C1C
@@ -2779,6 +2918,13 @@ P7Stream_FD1C1A:
 	.byte	0xf0, 0x00   ; 0xFD1C5F  op 15  END
 
 ; ---- 0xFD1C61-0xFD1E3D  477 bytes, 2 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 3 of 4 of an orphan quartet at 0xFD1A01 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD1C61:
 	.byte	0x31, 0xdb   ; 0xFD1C61  op  3  len 475  payload 473
 	.byte	0x01, 0x00, 0x6a, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD1C63
@@ -2815,6 +2961,7 @@ P7Stream_FD1C61:
 
 ; ---- 0xFD1E3E-0xFD1E6F  50 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2F9
+;      effect 'DARK REVERB 1' (program 22): PoolDir_Records[32] block A (+0, walked by P7Block_Run)
 P7Stream_FD1E3E:
 	.byte	0x00, 0x0f   ; 0xFD1E3E  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFD1E40
@@ -2832,6 +2979,7 @@ P7Stream_FD1E3E:
 
 ; ---- 0xFD1E70-0xFD2077  520 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2FD
+;      effect 'DARK REVERB 1' (program 22): PoolDir_Records[32] stream A (+4, played by P7Stream_Run)
 P7Stream_FD1E70:
 	.byte	0x00, 0x55   ; 0xFD1E70  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD1E72
@@ -2888,6 +3036,7 @@ P7Stream_FD1E70:
 
 ; ---- 0xFD2078-0xFD20AC  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC301
+;      effect 'DARK REVERB 1' (program 22): PoolDir_Records[32] block B (+8, walked by P7Block_Run)
 P7Stream_FD2078:
 	.byte	0x00, 0x08   ; 0xFD2078  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x1a, 0x71, 0xde, 0x7a   ; 0xFD207A
@@ -2904,6 +3053,7 @@ P7Stream_FD2078:
 
 ; ---- 0xFD20AD-0xFD227A  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC305
+;      effect 'DARK REVERB 1' (program 22): PoolDir_Records[32] stream B (+12, played by P7Stream_Run)
 P7Stream_FD20AD:
 	.byte	0x31, 0xcc   ; 0xFD20AD  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD20AF
@@ -2939,6 +3089,7 @@ P7Stream_FD20AD:
 
 ; ---- 0xFD227B-0xFD22AC  50 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC312
+;      effect 'DARK REVERB 2' (program 23): PoolDir_Records[33] block A (+0, walked by P7Block_Run)
 P7Stream_FD227B:
 	.byte	0x00, 0x0f   ; 0xFD227B  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFD227D
@@ -2956,6 +3107,7 @@ P7Stream_FD227B:
 
 ; ---- 0xFD22AD-0xFD24B4  520 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC316
+;      effect 'DARK REVERB 2' (program 23): PoolDir_Records[33] stream A (+4, played by P7Stream_Run)
 P7Stream_FD22AD:
 	.byte	0x00, 0x55   ; 0xFD22AD  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD22AF
@@ -3018,6 +3170,7 @@ P7Stream_Inner_FD2373:
 
 ; ---- 0xFD24B5-0xFD24E9  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC31A
+;      effect 'DARK REVERB 2' (program 23): PoolDir_Records[33] block B (+8, walked by P7Block_Run)
 P7Stream_FD24B5:
 	.byte	0x00, 0x08   ; 0xFD24B5  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x1f, 0xbb, 0x2f, 0x7a   ; 0xFD24B7
@@ -3034,6 +3187,7 @@ P7Stream_FD24B5:
 
 ; ---- 0xFD24EA-0xFD26B7  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC31E
+;      effect 'DARK REVERB 2' (program 23): PoolDir_Records[33] stream B (+12, played by P7Stream_Run)
 P7Stream_FD24EA:
 	.byte	0x31, 0xcc   ; 0xFD24EA  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD24EC
@@ -3135,6 +3289,7 @@ P7Stream_FD270F:
 
 ; ---- 0xFD2724-0xFD273F  28 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDBFD9
+;      effect 'DISTORTION' (program 32): PoolDir_Records[0] block A (+0, walked by P7Block_Run)
 P7Stream_FD2724:
 	.byte	0x00, 0x05   ; 0xFD2724  op  0  len 5  payload 3
 	.byte	0x61, 0x00, 0x04   ; 0xFD2726
@@ -3150,6 +3305,7 @@ P7Stream_FD2724:
 
 ; ---- 0xFD2740-0xFD27A6  103 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDBFDD
+;      effect 'DISTORTION' (program 32): PoolDir_Records[0] stream A (+4, played by P7Stream_Run)
 P7Stream_FD2740:
 	.byte	0x00, 0x14   ; 0xFD2740  op  0  len 20  payload 18
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD2742
@@ -3173,6 +3329,7 @@ P7Stream_FD2740:
 
 ; ---- 0xFD27A7-0xFD27D4  46 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDBFE1
+;      effect 'DISTORTION' (program 32): PoolDir_Records[0] block B (+8, walked by P7Block_Run)
 P7Stream_FD27A7:
 	.byte	0x00, 0x13   ; 0xFD27A7  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD27A9
@@ -3189,6 +3346,7 @@ P7Stream_FD27A7:
 
 ; ---- 0xFD27D5-0xFD28C6  242 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDBFE5
+;      effect 'DISTORTION' (program 32): PoolDir_Records[0] stream B (+12, played by P7Stream_Run)
 P7Stream_FD27D5:
 	.byte	0x30, 0xf0   ; 0xFD27D5  op  3  len 240  payload 238
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb0, 0x00, 0x00, 0x26, 0x20   ; 0xFD27D7
@@ -3211,7 +3369,11 @@ P7Stream_FD27D5:
 ; ---- 0xFD28C7-0xFD292A  100 bytes -- DATA, not a token stream ----
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA4828, LDA instruction at 0xFA485E
-;      Its internal layout is NOT established.
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FD28C7:
 	.byte	0x1d, 0xc0, 0xa3, 0xd7, 0xc1, 0x25, 0x99, 0xc1, 0x66, 0x7b, 0xc1, 0xca, 0xc0, 0xc2, 0x29, 0x1f   ; 0xFD28C7
 	.byte	0xc3, 0x2c, 0xa5, 0xc3, 0xce, 0xd9, 0xc4, 0xb1, 0xee, 0xc6, 0x57, 0xa7, 0xc7, 0x9c, 0x0e, 0xc9   ; 0xFD28D7
@@ -3303,6 +3465,7 @@ P7Stream_UnitPreamble:
 
 ; ---- 0xFD2C3F-0xFD2C68  42 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC088
+;      effect 'ENHANCER' (program 3): PoolDir_Records[7] block A (+0, walked by P7Block_Run)
 P7Stream_FD2C3F:
 	.byte	0x00, 0x07   ; 0xFD2C3F  op  0  len 7  payload 5
 	.byte	0x62, 0x08, 0x09, 0x16, 0x17   ; 0xFD2C41
@@ -3322,6 +3485,7 @@ P7Stream_FD2C3F:
 
 ; ---- 0xFD2C69-0xFD2DDB  371 bytes, 10 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC08C
+;      effect 'ENHANCER' (program 3): PoolDir_Records[7] stream A (+4, played by P7Stream_Run)
 P7Stream_FD2C69:
 	.byte	0x00, 0xa0   ; 0xFD2C69  op  0  len 160  payload 158
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD2C6B
@@ -3364,6 +3528,7 @@ P7Stream_FD2C69:
 
 ; ---- 0xFD2DDC-0xFD2E27  76 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC090
+;      effect 'ENHANCER' (program 3): PoolDir_Records[7] block B (+8, walked by P7Block_Run)
 P7Stream_FD2DDC:
 	.byte	0x00, 0x13   ; 0xFD2DDC  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD2DDE
@@ -3385,6 +3550,7 @@ P7Stream_FD2DDC:
 
 ; ---- 0xFD2E28-0xFD302C  517 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC094
+;      effect 'ENHANCER' (program 3): PoolDir_Records[7] stream B (+12, played by P7Stream_Run)
 P7Stream_FD2E28:
 	.byte	0x32, 0x03   ; 0xFD2E28  op  3  len 515  payload 513
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00, 0x00, 0x20   ; 0xFD2E2A
@@ -3424,6 +3590,7 @@ P7Stream_FD2E28:
 
 ; ---- 0xFD302D-0xFD304D  33 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1CD
+;      effect 'ENSEMBLE' (program 6): PoolDir_Records[20] block A (+0, walked by P7Block_Run)
 P7Stream_FD302D:
 	.byte	0x00, 0x05   ; 0xFD302D  op  0  len 5  payload 3
 	.byte	0x66, 0x0a, 0x14   ; 0xFD302F
@@ -3439,6 +3606,7 @@ P7Stream_FD302D:
 
 ; ---- 0xFD304E-0xFD316F  290 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1D1
+;      effect 'ENSEMBLE' (program 6): PoolDir_Records[20] stream A (+4, played by P7Stream_Run)
 P7Stream_FD304E:
 	.byte	0x00, 0x73   ; 0xFD304E  op  0  len 115  payload 113
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0xa0, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x15   ; 0xFD3050
@@ -3473,6 +3641,7 @@ P7Stream_FD304E:
 
 ; ---- 0xFD3170-0xFD31DB  108 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1D5
+;      effect 'ENSEMBLE' (program 6): PoolDir_Records[20] block B (+8, walked by P7Block_Run)
 P7Stream_FD3170:
 	.byte	0x00, 0x13   ; 0xFD3170  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD3172
@@ -3493,6 +3662,7 @@ P7Stream_FD3170:
 
 ; ---- 0xFD31DC-0xFD343A  607 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1D9
+;      effect 'ENSEMBLE' (program 6): PoolDir_Records[20] stream B (+12, played by P7Stream_Run)
 P7Stream_FD31DC:
 	.byte	0x32, 0x5d   ; 0xFD31DC  op  3  len 605  payload 603
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x16, 0x00, 0x0b, 0x00, 0x50, 0x00, 0x08, 0xbc, 0x00, 0x92, 0xa0   ; 0xFD31DE
@@ -3537,6 +3707,7 @@ P7Stream_FD31DC:
 
 ; ---- 0xFD343B-0xFD345D  35 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC024
+;      effect 'EXCITER' (program 35): PoolDir_Records[3] block A (+0, walked by P7Block_Run)
 P7Stream_FD343B:
 	.byte	0x00, 0x05   ; 0xFD343B  op  0  len 5  payload 3
 	.byte	0x61, 0x00, 0x0c   ; 0xFD343D
@@ -3554,6 +3725,7 @@ P7Stream_FD343B:
 
 ; ---- 0xFD345E-0xFD3531  212 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC028
+;      effect 'EXCITER' (program 35): PoolDir_Records[3] stream A (+4, played by P7Stream_Run)
 P7Stream_FD345E:
 	.byte	0x00, 0x41   ; 0xFD345E  op  0  len 65  payload 63
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD3460
@@ -3583,6 +3755,7 @@ P7Stream_FD345E:
 
 ; ---- 0xFD3532-0xFD357C  75 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC02C
+;      effect 'EXCITER' (program 35): PoolDir_Records[3] block B (+8, walked by P7Block_Run)
 P7Stream_FD3532:
 	.byte	0x00, 0x13   ; 0xFD3532  op  0  len 19  payload 17
 	.byte	0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x03, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD3534
@@ -3604,6 +3777,7 @@ P7Stream_FD3532:
 
 ; ---- 0xFD357D-0xFD36DC  352 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC030
+;      effect 'EXCITER' (program 35): PoolDir_Records[3] stream B (+12, played by P7Stream_Run)
 P7Stream_FD357D:
 	.byte	0x31, 0x5e   ; 0xFD357D  op  3  len 350  payload 348
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0xc1, 0xcd, 0x00, 0x00, 0x20   ; 0xFD357F
@@ -3632,6 +3806,7 @@ P7Stream_FD357D:
 
 ; ---- 0xFD36DD-0xFD3706  42 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0A1
+;      effect 'FLANGER' (program 4): PoolDir_Records[8] block A (+0, walked by P7Block_Run)
 P7Stream_FD36DD:
 	.byte	0x00, 0x07   ; 0xFD36DD  op  0  len 7  payload 5
 	.byte	0x66, 0x05, 0x09, 0x0d, 0x13   ; 0xFD36DF
@@ -3651,6 +3826,7 @@ P7Stream_FD36DD:
 
 ; ---- 0xFD3707-0xFD37F2  236 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0A5
+;      effect 'FLANGER' (program 4): PoolDir_Records[8] stream A (+4, played by P7Stream_Run)
 P7Stream_FD3707:
 	.byte	0x00, 0x5a   ; 0xFD3707  op  0  len 90  payload 88
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0b, 0x00, 0x32, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD3709
@@ -3682,6 +3858,7 @@ P7Stream_FD3707:
 
 ; ---- 0xFD37F3-0xFD3861  111 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0A9
+;      effect 'FLANGER' (program 4): PoolDir_Records[8] block B (+8, walked by P7Block_Run)
 P7Stream_FD37F3:
 	.byte	0x00, 0x13   ; 0xFD37F3  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x03, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD37F5
@@ -3707,6 +3884,7 @@ P7Stream_FD37F3:
 
 ; ---- 0xFD3862-0xFD39D0  367 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0AD
+;      effect 'FLANGER' (program 4): PoolDir_Records[8] stream B (+12, played by P7Stream_Run)
 P7Stream_FD3862:
 	.byte	0x31, 0x6d   ; 0xFD3862  op  3  len 365  payload 363
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x40, 0x00, 0x08, 0xbc, 0x00, 0x00, 0x20   ; 0xFD3864
@@ -3736,6 +3914,7 @@ P7Stream_FD3862:
 
 ; ---- 0xFD39D1-0xFD39EC  28 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC00B
+;      effect 'FUZZ' (program 34): PoolDir_Records[2] block A (+0, walked by P7Block_Run)
 P7Stream_FD39D1:
 	.byte	0x00, 0x05   ; 0xFD39D1  op  0  len 5  payload 3
 	.byte	0x61, 0x00, 0x04   ; 0xFD39D3
@@ -3751,6 +3930,7 @@ P7Stream_FD39D1:
 
 ; ---- 0xFD39ED-0xFD3A53  103 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC00F
+;      effect 'FUZZ' (program 34): PoolDir_Records[2] stream A (+4, played by P7Stream_Run)
 P7Stream_FD39ED:
 	.byte	0x00, 0x14   ; 0xFD39ED  op  0  len 20  payload 18
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD39EF
@@ -3774,6 +3954,7 @@ P7Stream_FD39ED:
 
 ; ---- 0xFD3A54-0xFD3A81  46 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC013
+;      effect 'FUZZ' (program 34): PoolDir_Records[2] block B (+8, walked by P7Block_Run)
 P7Stream_FD3A54:
 	.byte	0x00, 0x13   ; 0xFD3A54  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD3A56
@@ -3790,6 +3971,7 @@ P7Stream_FD3A54:
 
 ; ---- 0xFD3A82-0xFD3B5F  222 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC017
+;      effect 'FUZZ' (program 34): PoolDir_Records[2] stream B (+12, played by P7Stream_Run)
 P7Stream_FD3A82:
 	.byte	0x30, 0xdc   ; 0xFD3A82  op  3  len 220  payload 218
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb0, 0x00, 0x00, 0x26, 0x20   ; 0xFD3A84
@@ -3811,7 +3993,11 @@ P7Stream_FD3A82:
 ; ---- 0xFD3B60-0xFD3BC3  100 bytes -- DATA, not a token stream ----
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA483C
-;      Its internal layout is NOT established.
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FD3B60:
 	.byte	0x1d, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7   ; 0xFD3B60
 	.byte	0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0   ; 0xFD3B70
@@ -3823,6 +4009,7 @@ P7Stream_Data_FD3B60:
 
 ; ---- 0xFD3BC4-0xFD3BE6  35 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC19B
+;      effect 'GATED REVERB' (program 8): PoolDir_Records[18] block A (+0, walked by P7Block_Run)
 P7Stream_FD3BC4:
 	.byte	0x00, 0x06   ; 0xFD3BC4  op  0  len 6  payload 4
 	.byte	0x66, 0x18, 0x1b, 0x1c   ; 0xFD3BC6
@@ -3842,6 +4029,7 @@ P7Stream_FD3BC4:
 
 ; ---- 0xFD3BE7-0xFD3D4B  357 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC19F
+;      effect 'GATED REVERB' (program 8): PoolDir_Records[18] stream A (+4, played by P7Stream_Run)
 P7Stream_FD3BE7:
 	.byte	0x00, 0x69   ; 0xFD3BE7  op  0  len 105  payload 103
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD3BE9
@@ -3880,6 +4068,7 @@ P7Stream_FD3BE7:
 
 ; ---- 0xFD3D4C-0xFD3D85  58 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1A3
+;      effect 'GATED REVERB' (program 8): PoolDir_Records[18] block B (+8, walked by P7Block_Run)
 P7Stream_FD3D4C:
 	.byte	0x00, 0x13   ; 0xFD3D4C  op  0  len 19  payload 17
 	.byte	0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x02, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD3D4E
@@ -3898,6 +4087,7 @@ P7Stream_FD3D4C:
 
 ; ---- 0xFD3D86-0xFD3EEF  362 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1A7
+;      effect 'GATED REVERB' (program 8): PoolDir_Records[18] stream B (+12, played by P7Stream_Run)
 P7Stream_FD3D86:
 	.byte	0x31, 0x68   ; 0xFD3D86  op  3  len 360  payload 358
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20, 0xa0, 0x00, 0x00, 0x02, 0x2f   ; 0xFD3D88
@@ -3927,6 +4117,7 @@ P7Stream_FD3D86:
 
 ; ---- 0xFD3EF0-0xFD3F04  21 bytes, 5 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1B4
+;      effect 'HAAS EFFECT' (program 55): PoolDir_Records[19] block A (+0, walked by P7Block_Run)
 P7Stream_FD3EF0:
 	.byte	0x00, 0x05   ; 0xFD3EF0  op  0  len 5  payload 3
 	.byte	0x66, 0x03, 0x07   ; 0xFD3EF2
@@ -3940,6 +4131,7 @@ P7Stream_FD3EF0:
 
 ; ---- 0xFD3F05-0xFD3FA7  163 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1B8
+;      effect 'HAAS EFFECT' (program 55): PoolDir_Records[19] stream A (+4, played by P7Stream_Run)
 P7Stream_FD3F05:
 	.byte	0x00, 0x41   ; 0xFD3F05  op  0  len 65  payload 63
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x01, 0x15, 0x0a, 0x00, 0x00   ; 0xFD3F07
@@ -3966,6 +4158,7 @@ P7Stream_FD3F05:
 
 ; ---- 0xFD3FA8-0xFD3FDC  53 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1BC
+;      effect 'HAAS EFFECT' (program 55): PoolDir_Records[19] block B (+8, walked by P7Block_Run)
 P7Stream_FD3FA8:
 	.byte	0x00, 0x13   ; 0xFD3FA8  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD3FAA
@@ -3984,6 +4177,7 @@ P7Stream_FD3FA8:
 
 ; ---- 0xFD3FDD-0xFD4092  182 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1C0
+;      effect 'HAAS EFFECT' (program 55): PoolDir_Records[19] stream B (+12, played by P7Stream_Run)
 P7Stream_FD3FDD:
 	.byte	0x30, 0xb4   ; 0xFD3FDD  op  3  len 180  payload 178
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00, 0x00, 0x20   ; 0xFD3FDF
@@ -4025,6 +4219,7 @@ P7Stream_FD4093:
 
 ; ---- 0xFD418A-0xFD41AF  38 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC231
+;      effect 'MULTI TAP DELAY' (program 10): PoolDir_Records[24] block A (+0, walked by P7Block_Run)
 P7Stream_FD418A:
 	.byte	0x00, 0x09   ; 0xFD418A  op  0  len 9  payload 7
 	.byte	0x66, 0x03, 0x04, 0x05, 0x06, 0x10, 0x11   ; 0xFD418C
@@ -4042,6 +4237,7 @@ P7Stream_FD418A:
 
 ; ---- 0xFD41B0-0xFD4298  233 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC235
+;      effect 'MULTI TAP DELAY' (program 10): PoolDir_Records[24] stream A (+4, played by P7Stream_Run)
 P7Stream_FD41B0:
 	.byte	0x00, 0x5a   ; 0xFD41B0  op  0  len 90  payload 88
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD41B2
@@ -4072,6 +4268,7 @@ P7Stream_FD41B0:
 
 ; ---- 0xFD4299-0xFD4313  123 bytes, 13 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC239
+;      effect 'MULTI TAP DELAY' (program 10): PoolDir_Records[24] block B (+8, walked by P7Block_Run)
 P7Stream_FD4299:
 	.byte	0x00, 0x13   ; 0xFD4299  op  0  len 19  payload 17
 	.byte	0x66, 0x04, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x05, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD429B
@@ -4102,6 +4299,7 @@ P7Stream_FD4299:
 
 ; ---- 0xFD4314-0xFD448C  377 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC23D
+;      effect 'MULTI TAP DELAY' (program 10): PoolDir_Records[24] stream B (+12, played by P7Stream_Run)
 P7Stream_FD4314:
 	.byte	0x31, 0x77   ; 0xFD4314  op  3  len 375  payload 373
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20, 0xf0, 0x00, 0x00, 0x00, 0x2f   ; 0xFD4316
@@ -4132,6 +4330,7 @@ P7Stream_FD4314:
 
 ; ---- 0xFD448D-0xFD44AC  32 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC1FF
+;      effect 'MIX UP' (program 56): PoolDir_Records[22] block A (+0, walked by P7Block_Run)
 P7Stream_FD448D:
 	.byte	0x00, 0x07   ; 0xFD448D  op  0  len 7  payload 5
 	.byte	0x66, 0x08, 0x0b, 0x0d, 0x10   ; 0xFD448F
@@ -4147,6 +4346,7 @@ P7Stream_FD448D:
 
 ; ---- 0xFD44AD-0xFD457D  209 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC203
+;      effect 'MIX UP' (program 56): PoolDir_Records[22] stream A (+4, played by P7Stream_Run)
 P7Stream_FD44AD:
 	.byte	0x00, 0x4b   ; 0xFD44AD  op  0  len 75  payload 73
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x70, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD44AF
@@ -4176,6 +4376,7 @@ P7Stream_FD44AD:
 
 ; ---- 0xFD457E-0xFD45CF  82 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC207
+;      effect 'MIX UP' (program 56): PoolDir_Records[22] block B (+8, walked by P7Block_Run)
 P7Stream_FD457E:
 	.byte	0x00, 0x13   ; 0xFD457E  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x03, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD4580
@@ -4199,6 +4400,7 @@ P7Stream_FD457E:
 
 ; ---- 0xFD45D0-0xFD4739  362 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC20B
+;      effect 'MIX UP' (program 56): PoolDir_Records[22] stream B (+12, played by P7Stream_Run)
 P7Stream_FD45D0:
 	.byte	0x31, 0x68   ; 0xFD45D0  op  3  len 360  payload 358
 	.byte	0x01, 0x00, 0x6e, 0x00, 0x40, 0x00, 0x08, 0xbc, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20   ; 0xFD45D2
@@ -4228,6 +4430,7 @@ P7Stream_FD45D0:
 
 ; ---- 0xFD473A-0xFD4762  41 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC24A
+;      effect 'MANUAL DELAY' (program 11): PoolDir_Records[25] block A (+0, walked by P7Block_Run)
 P7Stream_FD473A:
 	.byte	0x00, 0x05   ; 0xFD473A  op  0  len 5  payload 3
 	.byte	0x66, 0x0c, 0x19   ; 0xFD473C
@@ -4247,6 +4450,7 @@ P7Stream_FD473A:
 
 ; ---- 0xFD4763-0xFD487A  280 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC24E
+;      effect 'MANUAL DELAY' (program 11): PoolDir_Records[25] stream A (+4, played by P7Stream_Run)
 P7Stream_FD4763:
 	.byte	0x00, 0x6e   ; 0xFD4763  op  0  len 110  payload 108
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x01, 0x15, 0x0a, 0x00, 0x00   ; 0xFD4765
@@ -4280,6 +4484,7 @@ P7Stream_FD4763:
 
 ; ---- 0xFD487B-0xFD48CD  83 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC252
+;      effect 'MANUAL DELAY' (program 11): PoolDir_Records[25] block B (+8, walked by P7Block_Run)
 P7Stream_FD487B:
 	.byte	0x00, 0x13   ; 0xFD487B  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD487D
@@ -4302,6 +4507,7 @@ P7Stream_FD487B:
 
 ; ---- 0xFD48CE-0xFD4A0F  322 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC256
+;      effect 'MANUAL DELAY' (program 11): PoolDir_Records[25] stream B (+12, played by P7Stream_Run)
 P7Stream_FD48CE:
 	.byte	0x31, 0x40   ; 0xFD48CE  op  3  len 320  payload 318
 	.byte	0x01, 0x00, 0x6e, 0x00, 0x40, 0x00, 0x08, 0xbc, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20   ; 0xFD48D0
@@ -4328,6 +4534,7 @@ P7Stream_FD48CE:
 
 ; ---- 0xFD4A10-0xFD4A15  6 bytes, 2 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC169
+;      effect 'NOISE GENERATOR' (program 38): PoolDir_Records[16] block A (+0, walked by P7Block_Run)
 P7Stream_FD4A10:
 	.byte	0x00, 0x04   ; 0xFD4A10  op  0  len 4  payload 2
 	.byte	0x63, 0x06   ; 0xFD4A12
@@ -4335,6 +4542,7 @@ P7Stream_FD4A10:
 
 ; ---- 0xFD4A16-0xFD4A7E  105 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC16D
+;      effect 'NOISE GENERATOR' (program 38): PoolDir_Records[16] stream A (+4, played by P7Stream_Run)
 P7Stream_FD4A16:
 	.byte	0x00, 0x1e   ; 0xFD4A16  op  0  len 30  payload 28
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x01, 0x80, 0x00, 0x15, 0x00, 0x00, 0x10   ; 0xFD4A18
@@ -4357,6 +4565,7 @@ P7Stream_FD4A16:
 
 ; ---- 0xFD4A7F-0xFD4A86  8 bytes, 2 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC171
+;      effect 'NOISE GENERATOR' (program 38): PoolDir_Records[16] block B (+8, walked by P7Block_Run)
 P7Stream_FD4A7F:
 	.byte	0x00, 0x06   ; 0xFD4A7F  op  0  len 6  payload 4
 	.byte	0x63, 0x00, 0x00, 0x7a   ; 0xFD4A81
@@ -4364,6 +4573,7 @@ P7Stream_FD4A7F:
 
 ; ---- 0xFD4A87-0xFD4AF6  112 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC175
+;      effect 'NOISE GENERATOR' (program 38): PoolDir_Records[16] stream B (+12, played by P7Stream_Run)
 P7Stream_FD4A87:
 	.byte	0x30, 0x6e   ; 0xFD4A87  op  3  len 110  payload 108
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x00, 0x00, 0x00, 0x24, 0xb0, 0x00, 0x00, 0x92, 0xa0   ; 0xFD4A89
@@ -4377,6 +4587,7 @@ P7Stream_FD4A87:
 
 ; ---- 0xFD4AF7-0xFD4AFC  6 bytes, 2 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC506
+;      effect 'NO OPERATION' (program 0): PoolDir_Records[53] block A (+0, walked by P7Block_Run)
 P7Stream_FD4AF7:
 	.byte	0x00, 0x04   ; 0xFD4AF7  op  0  len 4  payload 2
 	.byte	0x63, 0x06   ; 0xFD4AF9
@@ -4385,6 +4596,7 @@ P7Stream_FD4AF7:
 ; ---- 0xFD4AFD-0xFD4B43  71 bytes, 8 records  [interpreter-clean] ----
 ;      RUN BY P7Stream_Run -- `call` at 0xFA3298 (arg setup 0xFA3289, record table 0xFD4B85 index 1), 0xFA32DD (arg setup 0xFA32CE, record table 0xFD4B85 index 2), 0xFA3339 (arg setup 0xFA332A, record table 0xFD4B85 index 3) and 3 more
 ;      pointed at by: LDA instruction at 0xFA3292, LDA instruction at 0xFA32D7, LDA instruction at 0xFA3333, LDA instruction at 0xFA350E, LDA instruction at 0xFA3553, LDA instruction at 0xFA35AF (+1 more)
+;      effect 'NO OPERATION' (program 0): PoolDir_Records[53] stream A (+4, played by P7Stream_Run)
 P7Stream_FD4AFD:
 	.byte	0x00, 0x14   ; 0xFD4AFD  op  0  len 20  payload 18
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD4AFF
@@ -4406,6 +4618,7 @@ P7Stream_FD4AFD:
 
 ; ---- 0xFD4B44-0xFD4B4B  8 bytes, 2 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC50E
+;      effect 'NO OPERATION' (program 0): PoolDir_Records[53] block B (+8, walked by P7Block_Run)
 P7Stream_FD4B44:
 	.byte	0x00, 0x06   ; 0xFD4B44  op  0  len 6  payload 4
 	.byte	0x63, 0x00, 0x00, 0x7a   ; 0xFD4B46
@@ -4414,6 +4627,7 @@ P7Stream_FD4B44:
 ; ---- 0xFD4B4C-0xFD4B84  57 bytes, 2 records  [interpreter-clean] ----
 ;      RUN BY P7Stream_Run -- `call` at 0xFA3281 (arg setup 0xFA3272, record table 0xFD4B85 index 1), 0xFA32C6 (arg setup 0xFA32B7, record table 0xFD4B85 index 2), 0xFA3322 (arg setup 0xFA3313, record table 0xFD4B85 index 3) and 3 more
 ;      pointed at by: LDA instruction at 0xFA327B, LDA instruction at 0xFA32C0, LDA instruction at 0xFA331C, LDA instruction at 0xFA34F7, LDA instruction at 0xFA353C, LDA instruction at 0xFA3598 (+1 more)
+;      effect 'NO OPERATION' (program 0): PoolDir_Records[53] stream B (+12, played by P7Stream_Run)
 P7Stream_FD4B4C:
 	.byte	0x30, 0x37   ; 0xFD4B4C  op  3  len 55  payload 53
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x00, 0x00, 0x00, 0x20, 0x91, 0xcd, 0x00, 0x00, 0x20   ; 0xFD4B4E
@@ -4446,6 +4660,7 @@ P7Stream_Data_FD4B97:
 
 ; ---- 0xFD4BAF-0xFD4BCA  28 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDBFF2
+;      effect 'OVERDRIVE' (program 33): PoolDir_Records[1] block A (+0, walked by P7Block_Run)
 P7Stream_FD4BAF:
 	.byte	0x00, 0x05   ; 0xFD4BAF  op  0  len 5  payload 3
 	.byte	0x61, 0x00, 0x0a   ; 0xFD4BB1
@@ -4461,6 +4676,7 @@ P7Stream_FD4BAF:
 
 ; ---- 0xFD4BCB-0xFD4C8E  196 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDBFF6
+;      effect 'OVERDRIVE' (program 33): PoolDir_Records[1] stream A (+4, played by P7Stream_Run)
 P7Stream_FD4BCB:
 	.byte	0x00, 0x41   ; 0xFD4BCB  op  0  len 65  payload 63
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD4BCD
@@ -4489,6 +4705,7 @@ P7Stream_FD4BCB:
 
 ; ---- 0xFD4C8F-0xFD4CBC  46 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDBFFA
+;      effect 'OVERDRIVE' (program 33): PoolDir_Records[1] block B (+8, walked by P7Block_Run)
 P7Stream_FD4C8F:
 	.byte	0x00, 0x13   ; 0xFD4C8F  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD4C91
@@ -4505,6 +4722,7 @@ P7Stream_FD4C8F:
 
 ; ---- 0xFD4CBD-0xFD4E12  342 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDBFFE
+;      effect 'OVERDRIVE' (program 33): PoolDir_Records[1] stream B (+12, played by P7Stream_Run)
 P7Stream_FD4CBD:
 	.byte	0x31, 0x54   ; 0xFD4CBD  op  3  len 340  payload 338
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb0, 0x00, 0x00, 0x26, 0x24   ; 0xFD4CBF
@@ -4534,7 +4752,11 @@ P7Stream_FD4CBD:
 ; ---- 0xFD4E13-0xFD4E76  100 bytes -- DATA, not a token stream ----
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA4832
-;      Its internal layout is NOT established.
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FD4E13:
 	.byte	0x1d, 0xc0, 0xa3, 0xd7, 0xc4, 0x99, 0x99, 0xc8, 0x8f, 0x5c, 0xcc, 0x85, 0x1e, 0xd0, 0x7a, 0xe1   ; 0xFD4E13
 	.byte	0xd4, 0x70, 0xa3, 0xd8, 0x66, 0x66, 0xdc, 0x5c, 0x28, 0xe0, 0x51, 0xeb, 0xe4, 0x47, 0xae, 0xe8   ; 0xFD4E23
@@ -4546,6 +4768,7 @@ P7Stream_Data_FD4E13:
 
 ; ---- 0xFD4E77-0xFD4E95  31 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC425
+;      effect 'PEQ+CHORUS' (program 71): PoolDir_Records[44] block A (+0, walked by P7Block_Run)
 P7Stream_FD4E77:
 	.byte	0x00, 0x07   ; 0xFD4E77  op  0  len 7  payload 5
 	.byte	0x66, 0x14, 0x16, 0x17, 0x2a   ; 0xFD4E79
@@ -4561,6 +4784,7 @@ P7Stream_FD4E77:
 
 ; ---- 0xFD4E96-0xFD5065  464 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC429
+;      effect 'PEQ+CHORUS' (program 71): PoolDir_Records[44] stream A (+4, played by P7Stream_Run)
 P7Stream_FD4E96:
 	.byte	0x00, 0xa0   ; 0xFD4E96  op  0  len 160  payload 158
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x15   ; 0xFD4E98
@@ -4613,6 +4837,7 @@ P7Stream_FD4E96:
 
 ; ---- 0xFD5066-0xFD50B2  77 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC42D
+;      effect 'PEQ+CHORUS' (program 71): PoolDir_Records[44] block B (+8, walked by P7Block_Run)
 P7Stream_FD5066:
 	.byte	0x00, 0x0a   ; 0xFD5066  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x02, 0x00, 0x7a   ; 0xFD5068
@@ -4634,6 +4859,7 @@ P7Stream_FD5066:
 
 ; ---- 0xFD50B3-0xFD52DA  552 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC431
+;      effect 'PEQ+CHORUS' (program 71): PoolDir_Records[44] stream B (+12, played by P7Stream_Run)
 P7Stream_FD50B3:
 	.byte	0x32, 0x26   ; 0xFD50B3  op  3  len 550  payload 548
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0x31, 0xcd, 0x00, 0x00, 0x2f   ; 0xFD50B5
@@ -4675,6 +4901,7 @@ P7Stream_FD50B3:
 
 ; ---- 0xFD52DB-0xFD52F8  30 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC489
+;      effect 'PEQ+COMPRESSOR' (program 75): PoolDir_Records[48] block A (+0, walked by P7Block_Run)
 P7Stream_FD52DB:
 	.byte	0x00, 0x07   ; 0xFD52DB  op  0  len 7  payload 5
 	.byte	0x70, 0x00, 0x06, 0x11, 0x17   ; 0xFD52DD
@@ -4690,6 +4917,7 @@ P7Stream_FD52DB:
 
 ; ---- 0xFD52F9-0xFD5450  344 bytes, 11 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC48D
+;      effect 'PEQ+COMPRESSOR' (program 75): PoolDir_Records[48] stream A (+4, played by P7Stream_Run)
 P7Stream_FD52F9:
 	.byte	0x00, 0x73   ; 0xFD52F9  op  0  len 115  payload 113
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD52FB
@@ -4732,6 +4960,7 @@ P7Stream_FD52F9:
 
 ; ---- 0xFD5451-0xFD547D  45 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC491
+;      effect 'PEQ+COMPRESSOR' (program 75): PoolDir_Records[48] block B (+8, walked by P7Block_Run)
 P7Stream_FD5451:
 	.byte	0x00, 0x0a   ; 0xFD5451  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x02, 0x00, 0x7a   ; 0xFD5453
@@ -4749,6 +4978,7 @@ P7Stream_FD5451:
 
 ; ---- 0xFD547E-0xFD55F1  372 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC495
+;      effect 'PEQ+COMPRESSOR' (program 75): PoolDir_Records[48] stream B (+12, played by P7Stream_Run)
 P7Stream_FD547E:
 	.byte	0x31, 0x72   ; 0xFD547E  op  3  len 370  payload 368
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x24, 0xb0, 0x00, 0x00, 0x00, 0xa0   ; 0xFD5480
@@ -4778,6 +5008,7 @@ P7Stream_FD547E:
 
 ; ---- 0xFD55F2-0xFD5619  40 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4A2
+;      effect 'PEQ+COMPR+DIST' (program 96): PoolDir_Records[49] block A (+0, walked by P7Block_Run)
 P7Stream_FD55F2:
 	.byte	0x00, 0x07   ; 0xFD55F2  op  0  len 7  payload 5
 	.byte	0x70, 0x00, 0x06, 0x14, 0x1a   ; 0xFD55F4
@@ -4797,6 +5028,7 @@ P7Stream_FD55F2:
 
 ; ---- 0xFD561A-0xFD5789  368 bytes, 11 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4A6
+;      effect 'PEQ+COMPR+DIST' (program 96): PoolDir_Records[49] stream A (+4, played by P7Stream_Run)
 P7Stream_FD561A:
 	.byte	0x00, 0x73   ; 0xFD561A  op  0  len 115  payload 113
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD561C
@@ -4841,6 +5073,7 @@ P7Stream_FD561A:
 
 ; ---- 0xFD578A-0xFD57C9  64 bytes, 10 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4AA
+;      effect 'PEQ+COMPR+DIST' (program 96): PoolDir_Records[49] block B (+8, walked by P7Block_Run)
 P7Stream_FD578A:
 	.byte	0x00, 0x0a   ; 0xFD578A  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x02, 0x00, 0x7a   ; 0xFD578C
@@ -4864,6 +5097,7 @@ P7Stream_FD578A:
 
 ; ---- 0xFD57CA-0xFD59D8  527 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4AE
+;      effect 'PEQ+COMPR+DIST' (program 96): PoolDir_Records[49] stream B (+12, played by P7Stream_Run)
 P7Stream_FD57CA:
 	.byte	0x32, 0x0d   ; 0xFD57CA  op  3  len 525  payload 523
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x24, 0xb0, 0x00, 0x00, 0x00, 0xa0   ; 0xFD57CC
@@ -4903,6 +5137,7 @@ P7Stream_FD57CA:
 
 ; ---- 0xFD59D9-0xFD59FE  38 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4BB
+;      effect 'PEQ+COMPR+OVERDR' (program 97): PoolDir_Records[50] block A (+0, walked by P7Block_Run)
 P7Stream_FD59D9:
 	.byte	0x00, 0x05   ; 0xFD59D9  op  0  len 5  payload 3
 	.byte	0x70, 0x00, 0x14   ; 0xFD59DB
@@ -4922,6 +5157,7 @@ P7Stream_FD59D9:
 
 ; ---- 0xFD59FF-0xFD5B73  373 bytes, 11 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4BF
+;      effect 'PEQ+COMPR+OVERDR' (program 97): PoolDir_Records[50] stream A (+4, played by P7Stream_Run)
 P7Stream_FD59FF:
 	.byte	0x00, 0x78   ; 0xFD59FF  op  0  len 120  payload 118
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD5A01
@@ -4966,6 +5202,7 @@ P7Stream_FD59FF:
 
 ; ---- 0xFD5B74-0xFD5BA9  54 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4C3
+;      effect 'PEQ+COMPR+OVERDR' (program 97): PoolDir_Records[50] block B (+8, walked by P7Block_Run)
 P7Stream_FD5B74:
 	.byte	0x00, 0x0a   ; 0xFD5B74  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x01, 0x00, 0x7a   ; 0xFD5B76
@@ -4987,6 +5224,7 @@ P7Stream_FD5B74:
 
 ; ---- 0xFD5BAA-0xFD5DA9  512 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4C7
+;      effect 'PEQ+COMPR+OVERDR' (program 97): PoolDir_Records[50] stream B (+12, played by P7Stream_Run)
 P7Stream_FD5BAA:
 	.byte	0x31, 0xfe   ; 0xFD5BAA  op  3  len 510  payload 508
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x24, 0xb0, 0x00, 0x00, 0x00, 0xa0   ; 0xFD5BAC
@@ -5025,6 +5263,7 @@ P7Stream_FD5BAA:
 
 ; ---- 0xFD5DAA-0xFD5DCE  37 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC43E
+;      effect 'PEQ+S.DELAY' (program 72): PoolDir_Records[45] block A (+0, walked by P7Block_Run)
 P7Stream_FD5DAA:
 	.byte	0x00, 0x05   ; 0xFD5DAA  op  0  len 5  payload 3
 	.byte	0x66, 0x0f, 0x1f   ; 0xFD5DAC
@@ -5042,6 +5281,7 @@ P7Stream_FD5DAA:
 
 ; ---- 0xFD5DCF-0xFD5F1A  332 bytes, 11 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC442
+;      effect 'PEQ+S.DELAY' (program 72): PoolDir_Records[45] stream A (+4, played by P7Stream_Run)
 P7Stream_FD5DCF:
 	.byte	0x00, 0x78   ; 0xFD5DCF  op  0  len 120  payload 118
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD5DD1
@@ -5083,6 +5323,7 @@ P7Stream_FD5DCF:
 
 ; ---- 0xFD5F1B-0xFD5F6F  85 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC446
+;      effect 'PEQ+S.DELAY' (program 72): PoolDir_Records[45] block B (+8, walked by P7Block_Run)
 P7Stream_FD5F1B:
 	.byte	0x00, 0x0a   ; 0xFD5F1B  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x02, 0x00, 0x7a   ; 0xFD5F1D
@@ -5105,6 +5346,7 @@ P7Stream_FD5F1B:
 
 ; ---- 0xFD5F70-0xFD60DE  367 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC44A
+;      effect 'PEQ+S.DELAY' (program 72): PoolDir_Records[45] stream B (+12, played by P7Stream_Run)
 P7Stream_FD5F70:
 	.byte	0x31, 0x6d   ; 0xFD5F70  op  3  len 365  payload 363
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x24, 0xb1, 0xcd, 0x00, 0x00, 0x20   ; 0xFD5F72
@@ -5134,6 +5376,7 @@ P7Stream_FD5F70:
 
 ; ---- 0xFD60DF-0xFD610F  49 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4D4
+;      effect 'PEQ+DIST+DELAY' (program 98): PoolDir_Records[51] block A (+0, walked by P7Block_Run)
 P7Stream_FD60DF:
 	.byte	0x00, 0x07   ; 0xFD60DF  op  0  len 7  payload 5
 	.byte	0x70, 0x00, 0x06, 0x14, 0x1a   ; 0xFD60E1
@@ -5155,6 +5398,7 @@ P7Stream_FD60DF:
 
 ; ---- 0xFD6110-0xFD627B  364 bytes, 11 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4D8
+;      effect 'PEQ+DIST+DELAY' (program 98): PoolDir_Records[51] stream A (+4, played by P7Stream_Run)
 P7Stream_FD6110:
 	.byte	0x00, 0x78   ; 0xFD6110  op  0  len 120  payload 118
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD6112
@@ -5198,6 +5442,7 @@ P7Stream_FD6110:
 
 ; ---- 0xFD627C-0xFD62E3  104 bytes, 12 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4DC
+;      effect 'PEQ+DIST+DELAY' (program 98): PoolDir_Records[51] block B (+8, walked by P7Block_Run)
 P7Stream_FD627C:
 	.byte	0x00, 0x0a   ; 0xFD627C  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x02, 0x00, 0x7a   ; 0xFD627E
@@ -5226,6 +5471,7 @@ P7Stream_FD627C:
 
 ; ---- 0xFD62E4-0xFD6501  542 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4E0
+;      effect 'PEQ+DIST+DELAY' (program 98): PoolDir_Records[51] stream B (+12, played by P7Stream_Run)
 P7Stream_FD62E4:
 	.byte	0x32, 0x1c   ; 0xFD62E4  op  3  len 540  payload 538
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x24, 0xb0, 0x0b, 0x00, 0x00, 0xa0   ; 0xFD62E6
@@ -5266,6 +5512,7 @@ P7Stream_FD62E4:
 
 ; ---- 0xFD6502-0xFD6532  49 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC457
+;      effect 'PEQ+FLANGER' (program 73): PoolDir_Records[46] block A (+0, walked by P7Block_Run)
 P7Stream_FD6502:
 	.byte	0x00, 0x07   ; 0xFD6502  op  0  len 7  payload 5
 	.byte	0x66, 0x15, 0x17, 0x19, 0x2b   ; 0xFD6504
@@ -5287,6 +5534,7 @@ P7Stream_FD6502:
 
 ; ---- 0xFD6533-0xFD66E8  438 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC45B
+;      effect 'PEQ+FLANGER' (program 73): PoolDir_Records[46] stream A (+4, played by P7Stream_Run)
 P7Stream_FD6533:
 	.byte	0x00, 0xa0   ; 0xFD6533  op  0  len 160  payload 158
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x15, 0x55   ; 0xFD6535
@@ -5337,6 +5585,7 @@ P7Stream_FD6533:
 
 ; ---- 0xFD66E9-0xFD676B  131 bytes, 11 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC45F
+;      effect 'PEQ+FLANGER' (program 73): PoolDir_Records[46] block B (+8, walked by P7Block_Run)
 P7Stream_FD66E9:
 	.byte	0x00, 0x0a   ; 0xFD66E9  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x02, 0x00, 0x7a   ; 0xFD66EB
@@ -5366,6 +5615,7 @@ P7Stream_FD66E9:
 
 ; ---- 0xFD676C-0xFD6975  522 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC463
+;      effect 'PEQ+FLANGER' (program 73): PoolDir_Records[46] stream B (+12, played by P7Stream_Run)
 P7Stream_FD676C:
 	.byte	0x32, 0x08   ; 0xFD676C  op  3  len 520  payload 518
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0x31, 0xcd, 0x00, 0x00, 0x2f   ; 0xFD676E
@@ -5405,6 +5655,7 @@ P7Stream_FD676C:
 
 ; ---- 0xFD6976-0xFD69A2  45 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4ED
+;      effect 'PEQ+OVERDR+DELAY' (program 99): PoolDir_Records[52] block A (+0, walked by P7Block_Run)
 P7Stream_FD6976:
 	.byte	0x00, 0x07   ; 0xFD6976  op  0  len 7  payload 5
 	.byte	0x70, 0x00, 0x06, 0x18, 0x1e   ; 0xFD6978
@@ -5426,6 +5677,7 @@ P7Stream_FD6976:
 
 ; ---- 0xFD69A3-0xFD6B68  454 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4F1
+;      effect 'PEQ+OVERDR+DELAY' (program 99): PoolDir_Records[52] stream A (+4, played by P7Stream_Run)
 P7Stream_FD69A3:
 	.byte	0x00, 0xa0   ; 0xFD69A3  op  0  len 160  payload 158
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD69A5
@@ -5477,6 +5729,7 @@ P7Stream_FD69A3:
 
 ; ---- 0xFD6B69-0xFD6BD0  104 bytes, 12 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4F5
+;      effect 'PEQ+OVERDR+DELAY' (program 99): PoolDir_Records[52] block B (+8, walked by P7Block_Run)
 P7Stream_FD6B69:
 	.byte	0x00, 0x0a   ; 0xFD6B69  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x02, 0x00, 0x7a   ; 0xFD6B6B
@@ -5505,6 +5758,7 @@ P7Stream_FD6B69:
 
 ; ---- 0xFD6BD1-0xFD6E20  592 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC4F9
+;      effect 'PEQ+OVERDR+DELAY' (program 99): PoolDir_Records[52] stream B (+12, played by P7Stream_Run)
 P7Stream_FD6BD1:
 	.byte	0x32, 0x4e   ; 0xFD6BD1  op  3  len 590  payload 588
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x24, 0xb0, 0x0b, 0x00, 0x00, 0xa0   ; 0xFD6BD3
@@ -5548,6 +5802,7 @@ P7Stream_FD6BD1:
 
 ; ---- 0xFD6E21-0xFD6E45  37 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC470
+;      effect 'PEQ+VIBRATO' (program 74): PoolDir_Records[47] block A (+0, walked by P7Block_Run)
 P7Stream_FD6E21:
 	.byte	0x00, 0x07   ; 0xFD6E21  op  0  len 7  payload 5
 	.byte	0x66, 0x12, 0x14, 0x16, 0x25   ; 0xFD6E23
@@ -5565,6 +5820,7 @@ P7Stream_FD6E21:
 
 ; ---- 0xFD6E46-0xFD6FC7  386 bytes, 11 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC474
+;      effect 'PEQ+VIBRATO' (program 74): PoolDir_Records[47] stream A (+4, played by P7Stream_Run)
 P7Stream_FD6E46:
 	.byte	0x00, 0x96   ; 0xFD6E46  op  0  len 150  payload 148
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x15, 0x55   ; 0xFD6E48
@@ -5610,6 +5866,7 @@ P7Stream_FD6E46:
 
 ; ---- 0xFD6FC8-0xFD7024  93 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC478
+;      effect 'PEQ+VIBRATO' (program 74): PoolDir_Records[47] block B (+8, walked by P7Block_Run)
 P7Stream_FD6FC8:
 	.byte	0x00, 0x0a   ; 0xFD6FC8  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x02, 0x00, 0x7a   ; 0xFD6FCA
@@ -5633,6 +5890,7 @@ P7Stream_FD6FC8:
 
 ; ---- 0xFD7025-0xFD71F2  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC47C
+;      effect 'PEQ+VIBRATO' (program 74): PoolDir_Records[47] stream B (+12, played by P7Stream_Run)
 P7Stream_FD7025:
 	.byte	0x31, 0xcc   ; 0xFD7025  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x92, 0xa0, 0x32, 0x00, 0x00, 0x82, 0x20   ; 0xFD7027
@@ -5668,6 +5926,7 @@ P7Stream_FD7025:
 
 ; ---- 0xFD71F3-0xFD7207  21 bytes, 3 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC03D
+;      effect 'PARAMETRIC EQ' (program 39): PoolDir_Records[4] block A (+0, walked by P7Block_Run)
 P7Stream_FD71F3:
 	.byte	0x00, 0x0f   ; 0xFD71F3  op  0  len 15  payload 13
 	.byte	0x70, 0x00, 0x06, 0x0c, 0x12, 0x18, 0x1e, 0x24, 0x2a, 0x30, 0x36, 0x3c, 0x42   ; 0xFD71F5
@@ -5677,6 +5936,7 @@ P7Stream_FD71F3:
 
 ; ---- 0xFD7208-0xFD7499  658 bytes, 16 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC041
+;      effect 'PARAMETRIC EQ' (program 39): PoolDir_Records[4] stream A (+4, played by P7Stream_Run)
 P7Stream_FD7208:
 	.byte	0x00, 0xa0   ; 0xFD7208  op  0  len 160  payload 158
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD720A
@@ -5746,6 +6006,7 @@ P7Stream_FD7208:
 
 ; ---- 0xFD749A-0xFD74DD  68 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC045
+;      effect 'PARAMETRIC EQ' (program 39): PoolDir_Records[4] block B (+8, walked by P7Block_Run)
 P7Stream_FD749A:
 	.byte	0x00, 0x0a   ; 0xFD749A  op  0  len 10  payload 8
 	.byte	0x70, 0x00, 0x00, 0x7a, 0x70, 0x06, 0x00, 0x7a   ; 0xFD749C
@@ -5765,6 +6026,7 @@ P7Stream_FD749A:
 
 ; ---- 0xFD74DE-0xFD773C  607 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC049
+;      effect 'PARAMETRIC EQ' (program 39): PoolDir_Records[4] stream B (+12, played by P7Stream_Run)
 P7Stream_FD74DE:
 	.byte	0x32, 0x5d   ; 0xFD74DE  op  3  len 605  payload 603
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x24, 0xb0, 0x00, 0x00, 0x00, 0xa0   ; 0xFD74E0
@@ -5809,6 +6071,7 @@ P7Stream_FD74DE:
 
 ; ---- 0xFD773D-0xFD7763  39 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0BA
+;      effect 'PHASER' (program 5): PoolDir_Records[9] block A (+0, walked by P7Block_Run)
 P7Stream_FD773D:
 	.byte	0x00, 0x09   ; 0xFD773D  op  0  len 9  payload 7
 	.byte	0x66, 0x05, 0x07, 0x08, 0x0a, 0x0b, 0x11   ; 0xFD773F
@@ -5826,6 +6089,7 @@ P7Stream_FD773D:
 
 ; ---- 0xFD7764-0xFD789F  316 bytes, 10 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0BE
+;      effect 'PHASER' (program 5): PoolDir_Records[9] stream A (+4, played by P7Stream_Run)
 P7Stream_FD7764:
 	.byte	0x00, 0xa0   ; 0xFD7764  op  0  len 160  payload 158
 	; ⚠ pointed at from code, INSIDE this record's payload: 0xFD7800
@@ -5875,6 +6139,7 @@ P7Stream_Inner_FD7880:
 
 ; ---- 0xFD78A0-0xFD790E  111 bytes, 9 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0C2
+;      effect 'PHASER' (program 5): PoolDir_Records[9] block B (+8, walked by P7Block_Run)
 P7Stream_FD78A0:
 	.byte	0x00, 0x13   ; 0xFD78A0  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x05, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD78A2
@@ -5900,6 +6165,7 @@ P7Stream_FD78A0:
 
 ; ---- 0xFD790F-0xFD7B54  582 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0C6
+;      effect 'PHASER' (program 5): PoolDir_Records[9] stream B (+12, played by P7Stream_Run)
 P7Stream_FD790F:
 	.byte	0x32, 0x44   ; 0xFD790F  op  3  len 580  payload 578
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x92, 0xa0, 0xe2, 0x00, 0x00, 0x82, 0x20   ; 0xFD7911
@@ -5942,6 +6208,13 @@ P7Stream_FD790F:
 	.byte	0xf0, 0x00   ; 0xFD7B53  op 15  END
 
 ; ---- 0xFD7B55-0xFD7B82  46 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 0 of 4 of an orphan quartet at 0xFD7B55 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD7B55:
 	.byte	0x00, 0x0f   ; 0xFD7B55  op  0  len 15  payload 13
 	.byte	0x66, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x2a   ; 0xFD7B57
@@ -5958,6 +6231,13 @@ P7Stream_FD7B55:
 	.byte	0xf0, 0x00   ; 0xFD7B81  op 15  END
 
 ; ---- 0xFD7B83-0xFD7D7A  504 bytes, 13 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 1 of 4 of an orphan quartet at 0xFD7B55 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD7B83:
 	.byte	0x00, 0x41   ; 0xFD7B83  op  0  len 65  payload 63
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD7B85
@@ -6011,6 +6291,13 @@ P7Stream_FD7B83:
 	.byte	0xf0, 0x00   ; 0xFD7D79  op 15  END
 
 ; ---- 0xFD7D7B-0xFD7DC1  71 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 2 of 4 of an orphan quartet at 0xFD7B55 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD7D7B:
 	.byte	0x00, 0x13   ; 0xFD7D7B  op  0  len 19  payload 17
 	.byte	0x66, 0x05, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x0b, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD7D7D
@@ -6029,6 +6316,13 @@ P7Stream_FD7D7B:
 	.byte	0xf0, 0x00   ; 0xFD7DC0  op 15  END
 
 ; ---- 0xFD7DC2-0xFD7F8F  462 bytes, 2 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 3 of 4 of an orphan quartet at 0xFD7B55 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD7DC2:
 	.byte	0x31, 0xcc   ; 0xFD7DC2  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6a, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD7DC4
@@ -6064,6 +6358,7 @@ P7Stream_FD7DC2:
 
 ; ---- 0xFD7F90-0xFD7FC0  49 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC295
+;      effect 'PLATE REVERB 1' (program 18): PoolDir_Records[28] block A (+0, walked by P7Block_Run)
 P7Stream_FD7F90:
 	.byte	0x00, 0x0f   ; 0xFD7F90  op  0  len 15  payload 13
 	.byte	0x66, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x2a   ; 0xFD7F92
@@ -6081,6 +6376,7 @@ P7Stream_FD7F90:
 
 ; ---- 0xFD7FC1-0xFD81C7  519 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC299
+;      effect 'PLATE REVERB 1' (program 18): PoolDir_Records[28] stream A (+4, played by P7Stream_Run)
 P7Stream_FD7FC1:
 	.byte	0x00, 0x50   ; 0xFD7FC1  op  0  len 80  payload 78
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD7FC3
@@ -6136,6 +6432,7 @@ P7Stream_FD7FC1:
 
 ; ---- 0xFD81C8-0xFD81FC  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC29D
+;      effect 'PLATE REVERB 1' (program 18): PoolDir_Records[28] block B (+8, walked by P7Block_Run)
 P7Stream_FD81C8:
 	.byte	0x00, 0x08   ; 0xFD81C8  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x21, 0xca, 0xc0, 0x7a   ; 0xFD81CA
@@ -6152,6 +6449,7 @@ P7Stream_FD81C8:
 
 ; ---- 0xFD81FD-0xFD83CA  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2A1
+;      effect 'PLATE REVERB 1' (program 18): PoolDir_Records[28] stream B (+12, played by P7Stream_Run)
 P7Stream_FD81FD:
 	.byte	0x31, 0xcc   ; 0xFD81FD  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD81FF
@@ -6187,6 +6485,7 @@ P7Stream_FD81FD:
 
 ; ---- 0xFD83CB-0xFD83FB  49 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2AE
+;      effect 'PLATE REVERB 2' (program 19): PoolDir_Records[29] block A (+0, walked by P7Block_Run)
 P7Stream_FD83CB:
 	.byte	0x00, 0x0f   ; 0xFD83CB  op  0  len 15  payload 13
 	.byte	0x66, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x2a   ; 0xFD83CD
@@ -6204,6 +6503,7 @@ P7Stream_FD83CB:
 
 ; ---- 0xFD83FC-0xFD8602  519 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2B2
+;      effect 'PLATE REVERB 2' (program 19): PoolDir_Records[29] stream A (+4, played by P7Stream_Run)
 P7Stream_FD83FC:
 	.byte	0x00, 0x50   ; 0xFD83FC  op  0  len 80  payload 78
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD83FE
@@ -6259,6 +6559,7 @@ P7Stream_FD83FC:
 
 ; ---- 0xFD8603-0xFD8637  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2B6
+;      effect 'PLATE REVERB 2' (program 19): PoolDir_Records[29] block B (+8, walked by P7Block_Run)
 P7Stream_FD8603:
 	.byte	0x00, 0x08   ; 0xFD8603  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x21, 0xca, 0xc0, 0x7a   ; 0xFD8605
@@ -6275,6 +6576,7 @@ P7Stream_FD8603:
 
 ; ---- 0xFD8638-0xFD8805  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC2BA
+;      effect 'PLATE REVERB 2' (program 19): PoolDir_Records[29] stream B (+12, played by P7Stream_Run)
 P7Stream_FD8638:
 	.byte	0x31, 0xcc   ; 0xFD8638  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD863A
@@ -6310,6 +6612,7 @@ P7Stream_FD8638:
 
 ; ---- 0xFD8806-0xFD8826  33 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC51F
+;      effect 'PITCH SHIFTER' (program 49): PoolDir_Records[54] block A (+0, walked by P7Block_Run)
 P7Stream_FD8806:
 	.byte	0x00, 0x04   ; 0xFD8806  op  0  len 4  payload 2
 	.byte	0x63, 0x06   ; 0xFD8808
@@ -6327,6 +6630,7 @@ P7Stream_FD8806:
 
 ; ---- 0xFD8827-0xFD8A3F  537 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC523
+;      effect 'PITCH SHIFTER' (program 49): PoolDir_Records[54] stream A (+4, played by P7Stream_Run)
 P7Stream_FD8827:
 	.byte	0x00, 0xa0   ; 0xFD8827  op  0  len 160  payload 158
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x11, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x15   ; 0xFD8829
@@ -6384,6 +6688,7 @@ P7Stream_FD8827:
 
 ; ---- 0xFD8A40-0xFD8A89  74 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC527
+;      effect 'PITCH SHIFTER' (program 49): PoolDir_Records[54] block B (+8, walked by P7Block_Run)
 P7Stream_FD8A40:
 	.byte	0x00, 0x13   ; 0xFD8A40  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD8A42
@@ -6405,6 +6710,7 @@ P7Stream_FD8A40:
 
 ; ---- 0xFD8A8A-0xFD8CAC  547 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC52B
+;      effect 'PITCH SHIFTER' (program 49): PoolDir_Records[54] stream B (+12, played by P7Stream_Run)
 P7Stream_FD8A8A:
 	.byte	0x32, 0x21   ; 0xFD8A8A  op  3  len 545  payload 543
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0x21, 0xcd, 0x00, 0x00, 0x21   ; 0xFD8A8C
@@ -6444,6 +6750,11 @@ P7Stream_FD8A8A:
 	.byte	0xf0, 0x00   ; 0xFD8CAB  op 15  END
 
 ; ---- 0xFD8CAD-0xFD8D81  213 bytes, 5 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is not part of such a quartet.
 P7Stream_FD8CAD:
 	.byte	0x00, 0xa0   ; 0xFD8CAD  op  0  len 160  payload 158
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x11, 0xd0, 0x00, 0x0a, 0x06, 0x11, 0xe3, 0x15, 0x0a, 0x15, 0x85   ; 0xFD8CAF
@@ -6468,6 +6779,7 @@ P7Stream_FD8CAD:
 
 ; ---- 0xFD8D82-0xFD8DA6  37 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC150
+;      effect 'RING MODULATOR' (program 54): PoolDir_Records[15] block A (+0, walked by P7Block_Run)
 P7Stream_FD8D82:
 	.byte	0x00, 0x05   ; 0xFD8D82  op  0  len 5  payload 3
 	.byte	0x66, 0x00, 0x0d   ; 0xFD8D84
@@ -6485,6 +6797,7 @@ P7Stream_FD8D82:
 
 ; ---- 0xFD8DA7-0xFD8E3E  152 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC154
+;      effect 'RING MODULATOR' (program 54): PoolDir_Records[15] stream A (+4, played by P7Stream_Run)
 P7Stream_FD8DA7:
 	.byte	0x00, 0x2d   ; 0xFD8DA7  op  0  len 45  payload 43
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x11, 0x20, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x20, 0x00   ; 0xFD8DA9
@@ -6510,6 +6823,7 @@ P7Stream_FD8DA7:
 
 ; ---- 0xFD8E3F-0xFD8E74  54 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC158
+;      effect 'RING MODULATOR' (program 54): PoolDir_Records[15] block B (+8, walked by P7Block_Run)
 P7Stream_FD8E3F:
 	.byte	0x00, 0x13   ; 0xFD8E3F  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD8E41
@@ -6526,6 +6840,7 @@ P7Stream_FD8E3F:
 
 ; ---- 0xFD8E75-0xFD8F89  277 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC15C
+;      effect 'RING MODULATOR' (program 54): PoolDir_Records[15] stream B (+12, played by P7Stream_Run)
 P7Stream_FD8E75:
 	.byte	0x31, 0x13   ; 0xFD8E75  op  3  len 275  payload 273
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0xf1, 0xcd, 0x00, 0x00, 0x20   ; 0xFD8E77
@@ -6549,6 +6864,13 @@ P7Stream_FD8E75:
 	.byte	0xf0, 0x00   ; 0xFD8F88  op 15  END
 
 ; ---- 0xFD8F8A-0xFD8FB8  47 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 0 of 4 of an orphan quartet at 0xFD8F8A (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD8F8A:
 	.byte	0x00, 0x0f   ; 0xFD8F8A  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFD8F8C
@@ -6565,6 +6887,13 @@ P7Stream_FD8F8A:
 	.byte	0xf0, 0x00   ; 0xFD8FB7  op 15  END
 
 ; ---- 0xFD8FB9-0xFD91A2  490 bytes, 13 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 1 of 4 of an orphan quartet at 0xFD8F8A (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD8FB9:
 	.byte	0x00, 0x37   ; 0xFD8FB9  op  0  len 55  payload 53
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD8FBB
@@ -6618,6 +6947,13 @@ P7Stream_FD8FB9:
 	.byte	0xf0, 0x00   ; 0xFD91A1  op 15  END
 
 ; ---- 0xFD91A3-0xFD91E9  71 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 2 of 4 of an orphan quartet at 0xFD8F8A (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD91A3:
 	.byte	0x00, 0x13   ; 0xFD91A3  op  0  len 19  payload 17
 	.byte	0x66, 0x05, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x0b, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD91A5
@@ -6636,6 +6972,13 @@ P7Stream_FD91A3:
 	.byte	0xf0, 0x00   ; 0xFD91E8  op 15  END
 
 ; ---- 0xFD91EA-0xFD93B2  457 bytes, 2 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 3 of 4 of an orphan quartet at 0xFD8F8A (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FD91EA:
 	.byte	0x31, 0xc7   ; 0xFD91EA  op  3  len 455  payload 453
 	.byte	0x01, 0x00, 0x6a, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD91EC
@@ -6671,6 +7014,7 @@ P7Stream_FD91EA:
 
 ; ---- 0xFD93B3-0xFD93E4  50 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC263
+;      effect 'ROOM REVERB 1' (program 16): PoolDir_Records[26] block A (+0, walked by P7Block_Run)
 P7Stream_FD93B3:
 	.byte	0x00, 0x0f   ; 0xFD93B3  op  0  len 15  payload 13
 	.byte	0x66, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x2a   ; 0xFD93B5
@@ -6688,6 +7032,7 @@ P7Stream_FD93B3:
 
 ; ---- 0xFD93E5-0xFD95F0  524 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC267
+;      effect 'ROOM REVERB 1' (program 16): PoolDir_Records[26] stream A (+4, played by P7Stream_Run)
 P7Stream_FD93E5:
 	.byte	0x00, 0x55   ; 0xFD93E5  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD93E7
@@ -6744,6 +7089,7 @@ P7Stream_FD93E5:
 
 ; ---- 0xFD95F1-0xFD9625  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC26B
+;      effect 'ROOM REVERB 1' (program 16): PoolDir_Records[26] block B (+8, walked by P7Block_Run)
 P7Stream_FD95F1:
 	.byte	0x00, 0x08   ; 0xFD95F1  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x0c, 0xb0, 0xf2, 0x7a   ; 0xFD95F3
@@ -6760,6 +7106,7 @@ P7Stream_FD95F1:
 
 ; ---- 0xFD9626-0xFD97F8  467 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC26F
+;      effect 'ROOM REVERB 1' (program 16): PoolDir_Records[26] stream B (+12, played by P7Stream_Run)
 P7Stream_FD9626:
 	.byte	0x31, 0xd1   ; 0xFD9626  op  3  len 465  payload 463
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD9628
@@ -6795,6 +7142,7 @@ P7Stream_FD9626:
 
 ; ---- 0xFD97F9-0xFD982A  50 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC27C
+;      effect 'ROOM REVERB 2' (program 17): PoolDir_Records[27] block A (+0, walked by P7Block_Run)
 P7Stream_FD97F9:
 	.byte	0x00, 0x0f   ; 0xFD97F9  op  0  len 15  payload 13
 	.byte	0x66, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x2a   ; 0xFD97FB
@@ -6812,6 +7160,7 @@ P7Stream_FD97F9:
 
 ; ---- 0xFD982B-0xFD9A36  524 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC280
+;      effect 'ROOM REVERB 2' (program 17): PoolDir_Records[27] stream A (+4, played by P7Stream_Run)
 P7Stream_FD982B:
 	.byte	0x00, 0x55   ; 0xFD982B  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD982D
@@ -6868,6 +7217,7 @@ P7Stream_FD982B:
 
 ; ---- 0xFD9A37-0xFD9A6B  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC284
+;      effect 'ROOM REVERB 2' (program 17): PoolDir_Records[27] block B (+8, walked by P7Block_Run)
 P7Stream_FD9A37:
 	.byte	0x00, 0x08   ; 0xFD9A37  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x0c, 0xb0, 0xf2, 0x7a   ; 0xFD9A39
@@ -6884,6 +7234,7 @@ P7Stream_FD9A37:
 
 ; ---- 0xFD9A6C-0xFD9C3E  467 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC288
+;      effect 'ROOM REVERB 2' (program 17): PoolDir_Records[27] stream B (+12, played by P7Stream_Run)
 P7Stream_FD9A6C:
 	.byte	0x31, 0xd1   ; 0xFD9A6C  op  3  len 465  payload 463
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFD9A6E
@@ -6919,6 +7270,7 @@ P7Stream_FD9A6C:
 
 ; ---- 0xFD9C3F-0xFD9C67  41 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC137
+;      effect 'ROTARY SPEAKER' (program 53): PoolDir_Records[14] block A (+0, walked by P7Block_Run)
 P7Stream_FD9C3F:
 	.byte	0x00, 0x07   ; 0xFD9C3F  op  0  len 7  payload 5
 	.byte	0x66, 0x0f, 0x13, 0x20, 0x27   ; 0xFD9C41
@@ -6938,6 +7290,7 @@ P7Stream_FD9C3F:
 
 ; ---- 0xFD9C68-0xFD9E30  457 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC13B
+;      effect 'ROTARY SPEAKER' (program 53): PoolDir_Records[14] stream A (+4, played by P7Stream_Run)
 P7Stream_FD9C68:
 	.byte	0x00, 0xa0   ; 0xFD9C68  op  0  len 160  payload 158
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFD9C6A
@@ -6989,6 +7342,7 @@ P7Stream_FD9C68:
 
 ; ---- 0xFD9E31-0xFD9E86  86 bytes, 12 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC13F
+;      effect 'ROTARY SPEAKER' (program 53): PoolDir_Records[14] block B (+8, walked by P7Block_Run)
 P7Stream_FD9E31:
 	.byte	0x00, 0x13   ; 0xFD9E31  op  0  len 19  payload 17
 	.byte	0x66, 0x02, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x03, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFD9E33
@@ -7017,6 +7371,7 @@ P7Stream_FD9E31:
 
 ; ---- 0xFD9E87-0xFDA077  497 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC143
+;      effect 'ROTARY SPEAKER' (program 53): PoolDir_Records[14] stream B (+12, played by P7Stream_Run)
 P7Stream_FD9E87:
 	.byte	0x31, 0xef   ; 0xFD9E87  op  3  len 495  payload 493
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xa4   ; 0xFD9E89
@@ -7054,6 +7409,7 @@ P7Stream_FD9E87:
 
 ; ---- 0xFDA078-0xFDA08D  22 bytes, 5 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC182
+;      effect 'SLOW ATTACKER' (program 37): PoolDir_Records[17] block A (+0, walked by P7Block_Run)
 P7Stream_FDA078:
 	.byte	0x00, 0x06   ; 0xFDA078  op  0  len 6  payload 4
 	.byte	0x66, 0x04, 0x09, 0x0b   ; 0xFDA07A
@@ -7067,6 +7423,7 @@ P7Stream_FDA078:
 
 ; ---- 0xFDA08E-0xFDA127  154 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC186
+;      effect 'SLOW ATTACKER' (program 37): PoolDir_Records[17] stream A (+4, played by P7Stream_Run)
 P7Stream_FDA08E:
 	.byte	0x00, 0x28   ; 0xFDA08E  op  0  len 40  payload 38
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x11, 0x40, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x15   ; 0xFDA090
@@ -7093,6 +7450,7 @@ P7Stream_FDA08E:
 
 ; ---- 0xFDA128-0xFDA163  60 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC18A
+;      effect 'SLOW ATTACKER' (program 37): PoolDir_Records[17] block B (+8, walked by P7Block_Run)
 P7Stream_FDA128:
 	.byte	0x00, 0x13   ; 0xFDA128  op  0  len 19  payload 17
 	.byte	0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x02, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFDA12A
@@ -7109,6 +7467,7 @@ P7Stream_FDA128:
 
 ; ---- 0xFDA164-0xFDA264  257 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC18E
+;      effect 'SLOW ATTACKER' (program 37): PoolDir_Records[17] stream B (+12, played by P7Stream_Run)
 P7Stream_FDA164:
 	.byte	0x30, 0xff   ; 0xFDA164  op  3  len 255  payload 253
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20, 0x40, 0x00, 0x00, 0x00, 0x2f   ; 0xFDA166
@@ -7131,6 +7490,7 @@ P7Stream_FDA164:
 
 ; ---- 0xFDA265-0xFDA289  37 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC218
+;      effect 'SINGLE DELAY' (program 9): PoolDir_Records[23] block A (+0, walked by P7Block_Run)
 P7Stream_FDA265:
 	.byte	0x00, 0x05   ; 0xFDA265  op  0  len 5  payload 3
 	.byte	0x66, 0x0b, 0x17   ; 0xFDA267
@@ -7148,6 +7508,7 @@ P7Stream_FDA265:
 
 ; ---- 0xFDA28A-0xFDA376  237 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC21C
+;      effect 'SINGLE DELAY' (program 9): PoolDir_Records[23] stream A (+4, played by P7Stream_Run)
 P7Stream_FDA28A:
 	.byte	0x00, 0x4b   ; 0xFDA28A  op  0  len 75  payload 73
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFDA28C
@@ -7179,6 +7540,7 @@ P7Stream_FDA28A:
 
 ; ---- 0xFDA377-0xFDA3C7  81 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC220
+;      effect 'SINGLE DELAY' (program 9): PoolDir_Records[23] block B (+8, walked by P7Block_Run)
 P7Stream_FDA377:
 	.byte	0x00, 0x13   ; 0xFDA377  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFDA379
@@ -7199,6 +7561,7 @@ P7Stream_FDA377:
 
 ; ---- 0xFDA3C8-0xFDA4E6  287 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC224
+;      effect 'SINGLE DELAY' (program 9): PoolDir_Records[23] stream B (+12, played by P7Stream_Run)
 P7Stream_FDA3C8:
 	.byte	0x31, 0x1d   ; 0xFDA3C8  op  3  len 285  payload 283
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20, 0xf0, 0x00, 0x00, 0x00, 0x2f   ; 0xFDA3CA
@@ -7225,7 +7588,11 @@ P7Stream_FDA3C8:
 ;      The token walk does not reach an END record from here, so this is not a
 ;      stream.  Pointed at by: LDA instruction at 0xFA48C5
 ;      Also pointed at inside it: 0xFDA554, 0xFDA5C1
-;      Its internal layout is NOT established.
+;      Layout (corrected 2026-09-25, lane promcd -- this line used to leave it
+;      open): a P7 VALUE TABLE.  Byte 0 is a base device index and the rest
+;      24-bit big-endian values; P7Unit_SendValueTable (0xF9F765) sends them four
+;      per pass (`divs WA,0x000c` 0xF9F7F9, Stream_ReadU24BE 0xF9F84F), the first of
+;      each four to index base + 4*pass.  See P7ValueTable in the banner at the top.
 P7Stream_Data_FDA4E7:
 	.byte	0x1d, 0x0c, 0x23, 0xc6, 0x2b, 0x0a, 0x8f, 0x47, 0x02, 0x73, 0x5e, 0x23, 0x82, 0x6e, 0xda, 0x3a   ; 0xFDA4E7
 	.byte	0x78, 0x03, 0x04, 0x78, 0xfe, 0x14, 0x71, 0xba, 0x50, 0x62, 0xb6, 0x74, 0x4c, 0xf8, 0x74, 0x31   ; 0xFDA4F7
@@ -7235,7 +7602,11 @@ P7Stream_Data_FDA4E7:
 	.byte	0x02, 0x73, 0x5e, 0x23, 0x82, 0x6e, 0xda, 0x3a, 0x78, 0x03, 0x04, 0x78, 0xfe, 0x14, 0x71, 0xba   ; 0xFDA537
 	.byte	0x50, 0x62, 0xb6, 0x74, 0x4c, 0xf8, 0x74, 0x31, 0xfb, 0xa1, 0x13, 0x96, 0xcd   ; 0xFDA547
 	; Evidence: pointed at in its own right -- LDA instruction at 0xFA48D9.
-	;           A second entry point into this object; its own extent is not established.
+	;           A second entry point into this object.  Its extent is 109 bytes, 1 + the
+	;           0x6C length P7Unit_SelectStreamsForRecord installs beside the pointer --
+	;           the three 109-byte tables tile the 327-byte object exactly (banner at the
+	;           top, P7ValueTable).  Corrected 2026-09-25, lane promcd: this line used to
+	;           leave the extent open.
 P7Stream_Data_FDA554:
 	.byte	0x1d, 0x14, 0x72, 0x25, 0x48, 0x7d, 0x93, 0x77, 0x98, 0x57, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff   ; 0xFDA554
 	.byte	0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x54   ; 0xFDA564
@@ -7245,7 +7616,11 @@ P7Stream_Data_FDA554:
 	.byte	0x98, 0x57, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff   ; 0xFDA5A4
 	.byte	0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x54, 0x2e, 0x88, 0x20, 0xfd, 0xfb   ; 0xFDA5B4
 	; Evidence: pointed at in its own right -- LDA instruction at 0xFA48CF.
-	;           A second entry point into this object; its own extent is not established.
+	;           A second entry point into this object.  Its extent is 109 bytes, 1 + the
+	;           0x6C length P7Unit_SelectStreamsForRecord installs beside the pointer --
+	;           the three 109-byte tables tile the 327-byte object exactly (banner at the
+	;           top, P7ValueTable).  Corrected 2026-09-25, lane promcd: this line used to
+	;           leave the extent open.
 P7Stream_Data_FDA5C1:
 	.byte	0x1d, 0x00, 0x00, 0x00, 0x15, 0x55, 0x55, 0x2a, 0xaa, 0xaa, 0x40, 0x00, 0x00, 0x55, 0x55, 0x55   ; 0xFDA5C1
 	.byte	0x6a, 0xaa, 0xaa, 0x7f, 0xff, 0xff, 0x6a, 0xaa, 0xaa, 0x55, 0x55, 0x55, 0x40, 0x00, 0x00, 0x2a   ; 0xFDA5D1
@@ -7257,6 +7632,7 @@ P7Stream_Data_FDA5C1:
 
 ; ---- 0xFDA62E-0xFDA64B  30 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0EC
+;      effect 'VIBRATO' (program 50): PoolDir_Records[11] block A (+0, walked by P7Block_Run)
 P7Stream_FDA62E:
 	.byte	0x00, 0x07   ; 0xFDA62E  op  0  len 7  payload 5
 	.byte	0x66, 0x02, 0x06, 0x0a, 0x0d   ; 0xFDA630
@@ -7272,6 +7648,7 @@ P7Stream_FDA62E:
 
 ; ---- 0xFDA64C-0xFDA710  197 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0F0
+;      effect 'VIBRATO' (program 50): PoolDir_Records[11] stream A (+4, played by P7Stream_Run)
 P7Stream_FDA64C:
 	.byte	0x00, 0x4b   ; 0xFDA64C  op  0  len 75  payload 73
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0b, 0x00, 0x00, 0xc8, 0x15, 0x0a, 0x00, 0x00   ; 0xFDA64E
@@ -7300,6 +7677,7 @@ P7Stream_FDA64C:
 
 ; ---- 0xFDA711-0xFDA759  73 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0F4
+;      effect 'VIBRATO' (program 50): PoolDir_Records[11] block B (+8, walked by P7Block_Run)
 P7Stream_FDA711:
 	.byte	0x00, 0x13   ; 0xFDA711  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x03, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFDA713
@@ -7319,6 +7697,7 @@ P7Stream_FDA711:
 
 ; ---- 0xFDA75A-0xFDA88C  307 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC0F8
+;      effect 'VIBRATO' (program 50): PoolDir_Records[11] stream B (+12, played by P7Stream_Run)
 P7Stream_FDA75A:
 	.byte	0x31, 0x31   ; 0xFDA75A  op  3  len 305  payload 303
 	.byte	0x01, 0x00, 0x6e, 0x00, 0x40, 0x00, 0x08, 0xbc, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0x20   ; 0xFDA75C
@@ -7344,6 +7723,7 @@ P7Stream_FDA75A:
 
 ; ---- 0xFDA88D-0xFDA8AC  32 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC105
+;      effect 'PEDAL WAH' (program 51): PoolDir_Records[12] block A (+0, walked by P7Block_Run)
 P7Stream_FDA88D:
 	.byte	0x00, 0x05   ; 0xFDA88D  op  0  len 5  payload 3
 	.byte	0x66, 0x01, 0x0f   ; 0xFDA88F
@@ -7361,6 +7741,7 @@ P7Stream_FDA88D:
 
 ; ---- 0xFDA8AD-0xFDA992  230 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC109
+;      effect 'PEDAL WAH' (program 51): PoolDir_Records[12] stream A (+4, played by P7Stream_Run)
 P7Stream_FDA8AD:
 	.byte	0x00, 0x73   ; 0xFDA8AD  op  0  len 115  payload 113
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFDA8AF
@@ -7392,6 +7773,7 @@ P7Stream_FDA8AD:
 
 ; ---- 0xFDA993-0xFDAA11  127 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC10D
+;      effect 'PEDAL WAH' (program 51): PoolDir_Records[12] block B (+8, walked by P7Block_Run)
 P7Stream_FDA993:
 	.byte	0x00, 0x13   ; 0xFDA993  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFDA995
@@ -7414,6 +7796,7 @@ P7Stream_FDA993:
 
 ; ---- 0xFDAA12-0xFDAB8F  382 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC111
+;      effect 'PEDAL WAH' (program 51): PoolDir_Records[12] stream B (+12, played by P7Stream_Run)
 P7Stream_FDAA12:
 	.byte	0x31, 0x7c   ; 0xFDAA12  op  3  len 380  payload 378
 	.byte	0x01, 0x00, 0x6e, 0x00, 0x00, 0x20, 0xe0, 0x00, 0x08, 0x80, 0x13, 0x04, 0x07, 0x00, 0x00, 0x2f   ; 0xFDAA14
@@ -7444,6 +7827,7 @@ P7Stream_FDAA12:
 
 ; ---- 0xFDAB90-0xFDABBA  43 bytes, 8 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC538
+;      effect 'PEDAL WAH+DELAY' (program 69): PoolDir_Records[55] block A (+0, walked by P7Block_Run)
 P7Stream_FDAB90:
 	.byte	0x00, 0x07   ; 0xFDAB90  op  0  len 7  payload 5
 	.byte	0x66, 0x01, 0x05, 0x13, 0x17   ; 0xFDAB92
@@ -7463,6 +7847,7 @@ P7Stream_FDAB90:
 
 ; ---- 0xFDABBB-0xFDACE3  297 bytes, 8 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC53C
+;      effect 'PEDAL WAH+DELAY' (program 69): PoolDir_Records[55] stream A (+4, played by P7Stream_Run)
 P7Stream_FDABBB:
 	.byte	0x00, 0x82   ; 0xFDABBB  op  0  len 130  payload 128
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFDABBD
@@ -7497,6 +7882,7 @@ P7Stream_FDABBB:
 
 ; ---- 0xFDACE4-0xFDAD9B  184 bytes, 12 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC540
+;      effect 'PEDAL WAH+DELAY' (program 69): PoolDir_Records[55] block B (+8, walked by P7Block_Run)
 P7Stream_FDACE4:
 	.byte	0x00, 0x13   ; 0xFDACE4  op  0  len 19  payload 17
 	.byte	0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x02, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFDACE6
@@ -7530,6 +7916,7 @@ P7Stream_FDACE4:
 
 ; ---- 0xFDAD9C-0xFDAFA5  522 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC544
+;      effect 'PEDAL WAH+DELAY' (program 69): PoolDir_Records[55] stream B (+12, played by P7Stream_Run)
 P7Stream_FDAD9C:
 	.byte	0x32, 0x08   ; 0xFDAD9C  op  3  len 520  payload 518
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x08, 0xbc, 0x00, 0x00, 0x20, 0xd0, 0x0b, 0x00, 0x00, 0x2f   ; 0xFDAD9E
@@ -7568,6 +7955,13 @@ P7Stream_FDAD9C:
 	.byte	0xf0, 0x00   ; 0xFDAFA4  op 15  END
 
 ; ---- 0xFDAFA6-0xFDAFD3  46 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 0 of 4 of an orphan quartet at 0xFDAFA6 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FDAFA6:
 	.byte	0x00, 0x0f   ; 0xFDAFA6  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFDAFA8
@@ -7584,6 +7978,13 @@ P7Stream_FDAFA6:
 	.byte	0xf0, 0x00   ; 0xFDAFD2  op 15  END
 
 ; ---- 0xFDAFD4-0xFDB1D1  510 bytes, 13 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 1 of 4 of an orphan quartet at 0xFDAFA6 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FDAFD4:
 	.byte	0x00, 0x4b   ; 0xFDAFD4  op  0  len 75  payload 73
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFDAFD6
@@ -7638,6 +8039,13 @@ P7Stream_FDAFD4:
 	.byte	0xf0, 0x00   ; 0xFDB1D0  op 15  END
 
 ; ---- 0xFDB1D2-0xFDB218  71 bytes, 7 records  [NOT interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 2 of 4 of an orphan quartet at 0xFDAFA6 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FDB1D2:
 	.byte	0x00, 0x13   ; 0xFDB1D2  op  0  len 19  payload 17
 	.byte	0x66, 0x05, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x0b, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00   ; 0xFDB1D4
@@ -7656,6 +8064,13 @@ P7Stream_FDB1D2:
 	.byte	0xf0, 0x00   ; 0xFDB217  op 15  END
 
 ; ---- 0xFDB219-0xFDB3E1  457 bytes, 2 records  [interpreter-clean] ----
+;      ⚠ UNREFERENCED (lane promcd, 2026-09-25): no reader of this stream has been
+;      found.  No PoolDir record points at it, no `.long` or instruction operand in
+;      prom_c names it, and its address occurs as no LE24/LE32 word in prom_c, no LE32
+;      word in prom_a or prom_b, and no pool-relative LE16 (notes/lanes/promcd-2026-09-25/
+;      p7_effect_names.py).  It is member 3 of 4 of an orphan quartet at 0xFDAFA6 (block,
+;      stream, block, stream -- NOT/clean/NOT/clean, the shape of every PoolDir_Records
+;      set), so it reads as an effect's stream set with no directory record.
 P7Stream_FDB219:
 	.byte	0x31, 0xc7   ; 0xFDB219  op  3  len 455  payload 453
 	.byte	0x01, 0x00, 0x6a, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFDB21B
@@ -7691,6 +8106,7 @@ P7Stream_FDB219:
 
 ; ---- 0xFDB3E2-0xFDB412  49 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC35D
+;      effect 'WAVE REVERB 1' (program 26): PoolDir_Records[36] block A (+0, walked by P7Block_Run)
 P7Stream_FDB3E2:
 	.byte	0x00, 0x0f   ; 0xFDB3E2  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFDB3E4
@@ -7708,6 +8124,7 @@ P7Stream_FDB3E2:
 
 ; ---- 0xFDB413-0xFDB61A  520 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC361
+;      effect 'WAVE REVERB 1' (program 26): PoolDir_Records[36] stream A (+4, played by P7Stream_Run)
 P7Stream_FDB413:
 	.byte	0x00, 0x55   ; 0xFDB413  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFDB415
@@ -7764,6 +8181,7 @@ P7Stream_FDB413:
 
 ; ---- 0xFDB61B-0xFDB64F  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC365
+;      effect 'WAVE REVERB 1' (program 26): PoolDir_Records[36] block B (+8, walked by P7Block_Run)
 P7Stream_FDB61B:
 	.byte	0x00, 0x08   ; 0xFDB61B  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x1a, 0x71, 0xde, 0x7a   ; 0xFDB61D
@@ -7780,6 +8198,7 @@ P7Stream_FDB61B:
 
 ; ---- 0xFDB650-0xFDB81D  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC369
+;      effect 'WAVE REVERB 1' (program 26): PoolDir_Records[36] stream B (+12, played by P7Stream_Run)
 P7Stream_FDB650:
 	.byte	0x31, 0xcc   ; 0xFDB650  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFDB652
@@ -7815,6 +8234,7 @@ P7Stream_FDB650:
 
 ; ---- 0xFDB81E-0xFDB84E  49 bytes, 7 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC376
+;      effect 'WAVE REVERB 2' (program 27): PoolDir_Records[37] block A (+0, walked by P7Block_Run)
 P7Stream_FDB81E:
 	.byte	0x00, 0x0f   ; 0xFDB81E  op  0  len 15  payload 13
 	.byte	0x66, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x29   ; 0xFDB820
@@ -7832,6 +8252,7 @@ P7Stream_FDB81E:
 
 ; ---- 0xFDB84F-0xFDBA56  520 bytes, 13 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC37A
+;      effect 'WAVE REVERB 2' (program 27): PoolDir_Records[37] stream A (+4, played by P7Stream_Run)
 P7Stream_FDB84F:
 	.byte	0x00, 0x55   ; 0xFDB84F  op  0  len 85  payload 83
 	.byte	0x01, 0x01, 0x60, 0x00, 0x00, 0x15, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00   ; 0xFDB851
@@ -7888,6 +8309,7 @@ P7Stream_FDB84F:
 
 ; ---- 0xFDBA57-0xFDBA8B  53 bytes, 6 records  [NOT interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC37E
+;      effect 'WAVE REVERB 2' (program 27): PoolDir_Records[37] block B (+8, walked by P7Block_Run)
 P7Stream_FDBA57:
 	.byte	0x00, 0x08   ; 0xFDBA57  op  0  len 8  payload 6
 	.byte	0x75, 0x00, 0x2a, 0x4d, 0xd2, 0x7a   ; 0xFDBA59
@@ -7904,6 +8326,7 @@ P7Stream_FDBA57:
 
 ; ---- 0xFDBA8C-0xFDBC59  462 bytes, 2 records  [interpreter-clean] ----
 ;      pointed at by: PTR32 word at 0xFDC382
+;      effect 'WAVE REVERB 2' (program 27): PoolDir_Records[37] stream B (+12, played by P7Stream_Run)
 P7Stream_FDBA8C:
 	.byte	0x31, 0xcc   ; 0xFDBA8C  op  3  len 460  payload 458
 	.byte	0x01, 0x00, 0x6e, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02, 0x12, 0xaf   ; 0xFDBA8E
@@ -8071,228 +8494,284 @@ P7Stream_FDBE94:
 ; ------------------------------------------------------------------------------
 PoolDir_Records:
 	; record  0  0xFDBFD9
-	.long	0x00fd2724, 0x00fd2740, 0x00fd27a7, 0x00fd27d5   ; four stream pointers
-	.long	0x00fccf71, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'DISTORTION' (program 32) -- PoolDir_RecordForUnitProgram[32] = 0, name from prom_b EffectNames_F147AC[32]
+	.long	P7Stream_FD2724, P7Stream_FD2740, P7Stream_FD27A7, P7Stream_FD27D5   ; four stream pointers
+	.long	DescriptorStrings, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x03
 	; record  1  0xFDBFF2
-	.long	0x00fd4baf, 0x00fd4bcb, 0x00fd4c8f, 0x00fd4cbd   ; four stream pointers
-	.long	0x00fccf71, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'OVERDRIVE' (program 33) -- PoolDir_RecordForUnitProgram[33] = 1, name from prom_b EffectNames_F147AC[33]
+	.long	P7Stream_FD4BAF, P7Stream_FD4BCB, P7Stream_FD4C8F, P7Stream_FD4CBD   ; four stream pointers
+	.long	DescriptorStrings, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x03
 	; record  2  0xFDC00B
-	.long	0x00fd39d1, 0x00fd39ed, 0x00fd3a54, 0x00fd3a82   ; four stream pointers
-	.long	0x00fccf71, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'FUZZ' (program 34) -- PoolDir_RecordForUnitProgram[34] = 2, name from prom_b EffectNames_F147AC[34]
+	.long	P7Stream_FD39D1, P7Stream_FD39ED, P7Stream_FD3A54, P7Stream_FD3A82   ; four stream pointers
+	.long	DescriptorStrings, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x03
 	; record  3  0xFDC024
-	.long	0x00fd343b, 0x00fd345e, 0x00fd3532, 0x00fd357d   ; four stream pointers
-	.long	0x00fccf7d, 0x00fccf85   ; DescriptorStrings pair
+	;   effect 'EXCITER' (program 35) -- PoolDir_RecordForUnitProgram[35] = 3, name from prom_b EffectNames_F147AC[35]
+	.long	P7Stream_FD343B, P7Stream_FD345E, P7Stream_FD3532, P7Stream_FD357D   ; four stream pointers
+	.long	DescStr_bbbwbvb, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x06
 	; record  4  0xFDC03D
-	.long	0x00fd71f3, 0x00fd7208, 0x00fd749a, 0x00fd74de   ; four stream pointers
-	.long	0x00fccf8d, 0x00fccf85   ; DescriptorStrings pair
+	;   effect 'PARAMETRIC EQ' (program 39) -- PoolDir_RecordForUnitProgram[39] = 4, name from prom_b EffectNames_F147AC[39]
+	.long	P7Stream_FD71F3, P7Stream_FD7208, P7Stream_FD749A, P7Stream_FD74DE   ; four stream pointers
+	.long	DescStr_wwwwwwv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x0c
 	; record  5  0xFDC056
-	.long	0x00fcf176, 0x00fcf18e, 0x00fcf35d, 0x00fcf396   ; four stream pointers
-	.long	0x00fccf95, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'CHORUS' (program 1) -- PoolDir_RecordForUnitProgram[1] = 5, name from prom_b EffectNames_F147AC[1]
+	.long	P7Stream_FCF176, P7Stream_FCF18E, P7Stream_FCF35D, P7Stream_FCF396   ; four stream pointers
+	.long	DescStr_bbbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record  6  0xFDC06F
-	.long	0x00fcf50f, 0x00fcf529, 0x00fcf646, 0x00fcf690   ; four stream pointers
-	.long	0x00fccf9b, 0x00fccf85   ; DescriptorStrings pair
+	;   effect 'MODULATED CHORUS' (program 2) -- PoolDir_RecordForUnitProgram[2] = 6, name from prom_b EffectNames_F147AC[2]
+	.long	P7Stream_FCF50F, P7Stream_FCF529, P7Stream_FCF646, P7Stream_FCF690   ; four stream pointers
+	.long	DescStr_bbbbbbv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x06
 	; record  7  0xFDC088
-	.long	0x00fd2c3f, 0x00fd2c69, 0x00fd2ddc, 0x00fd2e28   ; four stream pointers
-	.long	0x00fccfa3, 0x00fccf85   ; DescriptorStrings pair
+	;   effect 'ENHANCER' (program 3) -- PoolDir_RecordForUnitProgram[3] = 7, name from prom_b EffectNames_F147AC[3]
+	.long	P7Stream_FD2C3F, P7Stream_FD2C69, P7Stream_FD2DDC, P7Stream_FD2E28   ; four stream pointers
+	.long	DescStr_bbbbwwv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x08
 	; record  8  0xFDC0A1
-	.long	0x00fd36dd, 0x00fd3707, 0x00fd37f3, 0x00fd3862   ; four stream pointers
-	.long	0x00fccfab, 0x00fccfb4   ; DescriptorStrings pair
+	;   effect 'FLANGER' (program 4) -- PoolDir_RecordForUnitProgram[4] = 8, name from prom_b EffectNames_F147AC[4]
+	.long	P7Stream_FD36DD, P7Stream_FD3707, P7Stream_FD37F3, P7Stream_FD3862   ; four stream pointers
+	.long	DescStr_bbbbbbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x07
 	; record  9  0xFDC0BA
-	.long	0x00fd773d, 0x00fd7764, 0x00fd78a0, 0x00fd790f   ; four stream pointers
-	.long	0x00fccfab, 0x00fccfb4   ; DescriptorStrings pair
+	;   effect 'PHASER' (program 5) -- PoolDir_RecordForUnitProgram[5] = 9, name from prom_b EffectNames_F147AC[5]
+	.long	P7Stream_FD773D, P7Stream_FD7764, P7Stream_FD78A0, P7Stream_FD790F   ; four stream pointers
+	.long	DescStr_bbbbbbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x07
 	; record 10  0xFDC0D3
-	.long	0x00fcdbbc, 0x00fcdbda, 0x00fcdc62, 0x00fcdcab   ; four stream pointers
-	.long	0x00fccfbd, 0x00fccfc4   ; DescriptorStrings pair
+	;   effect 'AUTO PAN' (program 48) -- PoolDir_RecordForUnitProgram[48] = 10, name from prom_b EffectNames_F147AC[48]
+	.long	P7Stream_FCDBBC, P7Stream_FCDBDA, P7Stream_FCDC62, P7Stream_FCDCAB   ; four stream pointers
+	.long	DescStr_bbbbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x05
 	; record 11  0xFDC0EC
-	.long	0x00fda62e, 0x00fda64c, 0x00fda711, 0x00fda75a   ; four stream pointers
-	.long	0x00fccfbd, 0x00fccfc4   ; DescriptorStrings pair
+	;   effect 'VIBRATO' (program 50) -- PoolDir_RecordForUnitProgram[50] = 11, name from prom_b EffectNames_F147AC[50]
+	.long	P7Stream_FDA62E, P7Stream_FDA64C, P7Stream_FDA711, P7Stream_FDA75A   ; four stream pointers
+	.long	DescStr_bbbbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x05
 	; record 12  0xFDC105
-	.long	0x00fda88d, 0x00fda8ad, 0x00fda993, 0x00fdaa12   ; four stream pointers
-	.long	0x00fccfcb, 0x00fccfc4   ; DescriptorStrings pair
+	;   effect 'PEDAL WAH' (program 51) -- PoolDir_RecordForUnitProgram[51] = 12, name from prom_b EffectNames_F147AC[51]
+	.long	P7Stream_FDA88D, P7Stream_FDA8AD, P7Stream_FDA993, P7Stream_FDAA12   ; four stream pointers
+	.long	DescStr_bsssbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x05
 	; record 13  0xFDC11E
-	.long	0x00fcddc0, 0x00fcdde0, 0x00fcdec6, 0x00fcdf3a   ; four stream pointers
-	.long	0x00fccfd2, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'AUTO WAH' (program 52) -- PoolDir_RecordForUnitProgram[52] = 13, name from prom_b EffectNames_F147AC[52]
+	.long	P7Stream_FCDDC0, P7Stream_FCDDE0, P7Stream_FCDEC6, P7Stream_FCDF3A   ; four stream pointers
+	.long	DescStr_bsssv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 14  0xFDC137
-	.long	0x00fd9c3f, 0x00fd9c68, 0x00fd9e31, 0x00fd9e87   ; four stream pointers
-	.long	0x00fccfd8, 0x00fccfe4   ; DescriptorStrings pair
+	;   effect 'ROTARY SPEAKER' (program 53) -- PoolDir_RecordForUnitProgram[53] = 14, name from prom_b EffectNames_F147AC[53]
+	.long	P7Stream_FD9C3F, P7Stream_FD9C68, P7Stream_FD9E31, P7Stream_FD9E87   ; four stream pointers
+	.long	DescStr_bbbbbbbbbvb, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0d
 	; record 15  0xFDC150
-	.long	0x00fd8d82, 0x00fd8da7, 0x00fd8e3f, 0x00fd8e75   ; four stream pointers
-	.long	0x00fccf95, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'RING MODULATOR' (program 54) -- PoolDir_RecordForUnitProgram[54] = 15, name from prom_b EffectNames_F147AC[54]
+	.long	P7Stream_FD8D82, P7Stream_FD8DA7, P7Stream_FD8E3F, P7Stream_FD8E75   ; four stream pointers
+	.long	DescStr_bbbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 16  0xFDC169
-	.long	0x00fd4a10, 0x00fd4a16, 0x00fd4a7f, 0x00fd4a87   ; four stream pointers
-	.long	0x00fccff0, 0x00fccff2   ; DescriptorStrings pair
+	;   effect 'NOISE GENERATOR' (program 38) -- PoolDir_RecordForUnitProgram[38] = 16, name from prom_b EffectNames_F147AC[38]
+	.long	P7Stream_FD4A10, P7Stream_FD4A16, P7Stream_FD4A7F, P7Stream_FD4A87   ; four stream pointers
+	.long	DescStr_v, DescStr_0   ; DescriptorStrings pair
 	.byte	0x00
 	; record 17  0xFDC182
-	.long	0x00fda078, 0x00fda08e, 0x00fda128, 0x00fda164   ; four stream pointers
-	.long	0x00fccf95, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'SLOW ATTACKER' (program 37) -- PoolDir_RecordForUnitProgram[37] = 17, name from prom_b EffectNames_F147AC[37]
+	.long	P7Stream_FDA078, P7Stream_FDA08E, P7Stream_FDA128, P7Stream_FDA164   ; four stream pointers
+	.long	DescStr_bbbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 18  0xFDC19B
-	.long	0x00fd3bc4, 0x00fd3be7, 0x00fd3d4c, 0x00fd3d86   ; four stream pointers
-	.long	0x00fccff4, 0x00fccfc4   ; DescriptorStrings pair
+	;   effect 'GATED REVERB' (program 8) -- PoolDir_RecordForUnitProgram[8] = 18, name from prom_b EffectNames_F147AC[8]
+	.long	P7Stream_FD3BC4, P7Stream_FD3BE7, P7Stream_FD3D4C, P7Stream_FD3D86   ; four stream pointers
+	.long	DescStr_bbhbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x05
 	; record 19  0xFDC1B4
-	.long	0x00fd3ef0, 0x00fd3f05, 0x00fd3fa8, 0x00fd3fdd   ; four stream pointers
-	.long	0x00fccffb, 0x00fccfc4   ; DescriptorStrings pair
+	;   effect 'HAAS EFFECT' (program 55) -- PoolDir_RecordForUnitProgram[55] = 19, name from prom_b EffectNames_F147AC[55]
+	.long	P7Stream_FD3EF0, P7Stream_FD3F05, P7Stream_FD3FA8, P7Stream_FD3FDD   ; four stream pointers
+	.long	DescStr_bwwbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x07
 	; record 20  0xFDC1CD
-	.long	0x00fd302d, 0x00fd304e, 0x00fd3170, 0x00fd31dc   ; four stream pointers
-	.long	0x00fccf95, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'ENSEMBLE' (program 6) -- PoolDir_RecordForUnitProgram[6] = 20, name from prom_b EffectNames_F147AC[6]
+	.long	P7Stream_FD302D, P7Stream_FD304E, P7Stream_FD3170, P7Stream_FD31DC   ; four stream pointers
+	.long	DescStr_bbbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 21  0xFDC1E6
-	.long	0x00fcf886, 0x00fcf89b, 0x00fcf934, 0x00fcf960   ; four stream pointers
-	.long	0x00fcd002, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'COMPRESSOR' (program 36) -- PoolDir_RecordForUnitProgram[36] = 21, name from prom_b EffectNames_F147AC[36]
+	.long	P7Stream_FCF886, P7Stream_FCF89B, P7Stream_FCF934, P7Stream_FCF960   ; four stream pointers
+	.long	DescStr_bcbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x05
 	; record 22  0xFDC1FF
-	.long	0x00fd448d, 0x00fd44ad, 0x00fd457e, 0x00fd45d0   ; four stream pointers
-	.long	0x00fccfab, 0x00fccfb4   ; DescriptorStrings pair
+	;   effect 'MIX UP' (program 56) -- PoolDir_RecordForUnitProgram[56] = 22, name from prom_b EffectNames_F147AC[56]
+	.long	P7Stream_FD448D, P7Stream_FD44AD, P7Stream_FD457E, P7Stream_FD45D0   ; four stream pointers
+	.long	DescStr_bbbbbbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x07
 	; record 23  0xFDC218
-	.long	0x00fda265, 0x00fda28a, 0x00fda377, 0x00fda3c8   ; four stream pointers
-	.long	0x00fcd008, 0x00fccf85   ; DescriptorStrings pair
+	;   effect 'SINGLE DELAY' (program 9) -- PoolDir_RecordForUnitProgram[9] = 23, name from prom_b EffectNames_F147AC[9]
+	.long	P7Stream_FDA265, P7Stream_FDA28A, P7Stream_FDA377, P7Stream_FDA3C8   ; four stream pointers
+	.long	DescStr_bwwbbbv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x08
 	; record 24  0xFDC231
-	.long	0x00fd418a, 0x00fd41b0, 0x00fd4299, 0x00fd4314   ; four stream pointers
-	.long	0x00fcd010, 0x00fcd01d   ; DescriptorStrings pair
+	;   effect 'MULTI TAP DELAY' (program 10) -- PoolDir_RecordForUnitProgram[10] = 24, name from prom_b EffectNames_F147AC[10]
+	.long	P7Stream_FD418A, P7Stream_FD41B0, P7Stream_FD4299, P7Stream_FD4314   ; four stream pointers
+	.long	DescStr_bwwwwbbbbbbv, DescStr_0123456789ab   ; DescriptorStrings pair
 	.byte	0x0f
 	; record 25  0xFDC24A
-	.long	0x00fd473a, 0x00fd4763, 0x00fd487b, 0x00fd48ce   ; four stream pointers
-	.long	0x00fcd02a, 0x00fccfb4   ; DescriptorStrings pair
+	;   effect 'MANUAL DELAY' (program 11) -- PoolDir_RecordForUnitProgram[11] = 25, name from prom_b EffectNames_F147AC[11]
+	.long	P7Stream_FD473A, P7Stream_FD4763, P7Stream_FD487B, P7Stream_FD48CE   ; four stream pointers
+	.long	DescStr_bbwwBBbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x09
 	; record 26  0xFDC263
-	.long	0x00fd93b3, 0x00fd93e5, 0x00fd95f1, 0x00fd9626   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'ROOM REVERB 1' (program 16) -- PoolDir_RecordForUnitProgram[16] = 26, name from prom_b EffectNames_F147AC[16]
+	.long	P7Stream_FD93B3, P7Stream_FD93E5, P7Stream_FD95F1, P7Stream_FD9626   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 27  0xFDC27C
-	.long	0x00fd97f9, 0x00fd982b, 0x00fd9a37, 0x00fd9a6c   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'ROOM REVERB 2' (program 17) -- PoolDir_RecordForUnitProgram[17] = 27, name from prom_b EffectNames_F147AC[17]
+	.long	P7Stream_FD97F9, P7Stream_FD982B, P7Stream_FD9A37, P7Stream_FD9A6C   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 28  0xFDC295
-	.long	0x00fd7f90, 0x00fd7fc1, 0x00fd81c8, 0x00fd81fd   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'PLATE REVERB 1' (program 18) -- PoolDir_RecordForUnitProgram[18] = 28, name from prom_b EffectNames_F147AC[18]
+	.long	P7Stream_FD7F90, P7Stream_FD7FC1, P7Stream_FD81C8, P7Stream_FD81FD   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 29  0xFDC2AE
-	.long	0x00fd83cb, 0x00fd83fc, 0x00fd8603, 0x00fd8638   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'PLATE REVERB 2' (program 19) -- PoolDir_RecordForUnitProgram[19] = 29, name from prom_b EffectNames_F147AC[19]
+	.long	P7Stream_FD83CB, P7Stream_FD83FC, P7Stream_FD8603, P7Stream_FD8638   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 30  0xFDC2C7
-	.long	0x00fcfe79, 0x00fcfeaa, 0x00fd00b2, 0x00fd00e7   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'CONCERT REVERB 1' (program 20) -- PoolDir_RecordForUnitProgram[20] = 30, name from prom_b EffectNames_F147AC[20]
+	.long	P7Stream_FCFE79, P7Stream_FCFEAA, P7Stream_FD00B2, P7Stream_FD00E7   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 31  0xFDC2E0
-	.long	0x00fd02b5, 0x00fd02e6, 0x00fd04f2, 0x00fd0527   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'CONCERT REVERB 2' (program 21) -- PoolDir_RecordForUnitProgram[21] = 31, name from prom_b EffectNames_F147AC[21]
+	.long	P7Stream_FD02B5, P7Stream_FD02E6, P7Stream_FD04F2, P7Stream_FD0527   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 32  0xFDC2F9
-	.long	0x00fd1e3e, 0x00fd1e70, 0x00fd2078, 0x00fd20ad   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'DARK REVERB 1' (program 22) -- PoolDir_RecordForUnitProgram[22] = 32, name from prom_b EffectNames_F147AC[22]
+	.long	P7Stream_FD1E3E, P7Stream_FD1E70, P7Stream_FD2078, P7Stream_FD20AD   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 33  0xFDC312
-	.long	0x00fd227b, 0x00fd22ad, 0x00fd24b5, 0x00fd24ea   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'DARK REVERB 2' (program 23) -- PoolDir_RecordForUnitProgram[23] = 33, name from prom_b EffectNames_F147AC[23]
+	.long	P7Stream_FD227B, P7Stream_FD22AD, P7Stream_FD24B5, P7Stream_FD24EA   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 34  0xFDC32B
-	.long	0x00fce8fc, 0x00fce92e, 0x00fceb36, 0x00fceb6b   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'BRIGHT REVERB 1' (program 24) -- PoolDir_RecordForUnitProgram[24] = 34, name from prom_b EffectNames_F147AC[24]
+	.long	P7Stream_FCE8FC, P7Stream_FCE92E, P7Stream_FCEB36, P7Stream_FCEB6B   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 35  0xFDC344
-	.long	0x00fced39, 0x00fced6b, 0x00fcef73, 0x00fcefa8   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'BRIGHT REVERB 2' (program 25) -- PoolDir_RecordForUnitProgram[25] = 35, name from prom_b EffectNames_F147AC[25]
+	.long	P7Stream_FCED39, P7Stream_FCED6B, P7Stream_FCEF73, P7Stream_FCEFA8   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 36  0xFDC35D
-	.long	0x00fdb3e2, 0x00fdb413, 0x00fdb61b, 0x00fdb650   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'WAVE REVERB 1' (program 26) -- PoolDir_RecordForUnitProgram[26] = 36, name from prom_b EffectNames_F147AC[26]
+	.long	P7Stream_FDB3E2, P7Stream_FDB413, P7Stream_FDB61B, P7Stream_FDB650   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 37  0xFDC376
-	.long	0x00fdb81e, 0x00fdb84f, 0x00fdba57, 0x00fdba8c   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	;   effect 'WAVE REVERB 2' (program 27) -- PoolDir_RecordForUnitProgram[27] = 37, name from prom_b EffectNames_F147AC[27]
+	.long	P7Stream_FDB81E, P7Stream_FDB84F, P7Stream_FDBA57, P7Stream_FDBA8C   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 38  0xFDC38F
-	.long	0x00fd075e, 0x00fd0784, 0x00fd08cd, 0x00fd093f   ; four stream pointers
-	.long	0x00fcd039, 0x00fcd044   ; DescriptorStrings pair
+	;   effect 'S.DELAY+CHORUS' (program 64) -- PoolDir_RecordForUnitProgram[64] = 38, name from prom_b EffectNames_F147AC[64]
+	.long	P7Stream_FD075E, P7Stream_FD0784, P7Stream_FD08CD, P7Stream_FD093F   ; four stream pointers
+	.long	DescStr_bwwbbbbbbv, DescStr_0123456789   ; DescriptorStrings pair
 	.byte	0x0b
 	; record 39  0xFDC3A8
-	.long	0x00fd0b58, 0x00fd0b7e, 0x00fd0c4b, 0x00fd0cc5   ; four stream pointers
-	.long	0x00fcd04f, 0x00fccfe4   ; DescriptorStrings pair
+	;   effect 'S.DELAY+S.DELAY' (program 65) -- PoolDir_RecordForUnitProgram[65] = 39, name from prom_b EffectNames_F147AC[65]
+	.long	P7Stream_FD0B58, P7Stream_FD0B7E, P7Stream_FD0C4B, P7Stream_FD0CC5   ; four stream pointers
+	.long	DescStr_bwwbbbwwbbv, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0e
 	; record 40  0xFDC3C1
-	.long	0x00fd0e34, 0x00fd0e69, 0x00fd0f98, 0x00fd1040   ; four stream pointers
-	.long	0x00fcd05b, 0x00fcd069   ; DescriptorStrings pair
+	;   effect 'S.DELAY+FLANGER' (program 66) -- PoolDir_RecordForUnitProgram[66] = 40, name from prom_b EffectNames_F147AC[66]
+	.long	P7Stream_FD0E34, P7Stream_FD0E69, P7Stream_FD0F98, P7Stream_FD1040   ; four stream pointers
+	.long	DescStr_bwwbbbbbbbbbv, DescStr_0123456789abc   ; DescriptorStrings pair
 	.byte	0x0e
 	; record 41  0xFDC3DA
-	.long	0x00fd168c, 0x00fd16b8, 0x00fd17c0, 0x00fd1842   ; four stream pointers
-	.long	0x00fcd077, 0x00fccfe4   ; DescriptorStrings pair
+	;   effect 'S.DELAY+VIBRATO' (program 67) -- PoolDir_RecordForUnitProgram[67] = 41, name from prom_b EffectNames_F147AC[67]
+	.long	P7Stream_FD168C, P7Stream_FD16B8, P7Stream_FD17C0, P7Stream_FD1842   ; four stream pointers
+	.long	DescStr_bwwbbbbbbbv, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0c
 	; record 42  0xFDC3F3
-	.long	0x00fd1227, 0x00fd1259, 0x00fd1399, 0x00fd1441   ; four stream pointers
-	.long	0x00fcd05b, 0x00fcd069   ; DescriptorStrings pair
+	;   effect 'S.DELAY+PHASER' (program 68) -- PoolDir_RecordForUnitProgram[68] = 42, name from prom_b EffectNames_F147AC[68]
+	.long	P7Stream_FD1227, P7Stream_FD1259, P7Stream_FD1399, P7Stream_FD1441   ; four stream pointers
+	.long	DescStr_bwwbbbbbbbbbv, DescStr_0123456789abc   ; DescriptorStrings pair
 	.byte	0x0e
 	; record 43  0xFDC40C
-	.long	0x00fce0b8, 0x00fce0df, 0x00fce208, 0x00fce2b5   ; four stream pointers
-	.long	0x00fcd083, 0x00fcd044   ; DescriptorStrings pair
+	;   effect 'AUTO WAH+S.DELAY' (program 70) -- PoolDir_RecordForUnitProgram[70] = 43, name from prom_b EffectNames_F147AC[70]
+	.long	P7Stream_FCE0B8, P7Stream_FCE0DF, P7Stream_FCE208, P7Stream_FCE2B5   ; four stream pointers
+	.long	DescStr_bbbbbwwbbv, DescStr_0123456789   ; DescriptorStrings pair
 	.byte	0x0b
 	; record 44  0xFDC425
-	.long	0x00fd4e77, 0x00fd4e96, 0x00fd5066, 0x00fd50b3   ; four stream pointers
-	.long	0x00fcd08e, 0x00fccf85   ; DescriptorStrings pair
+	;   effect 'PEQ+CHORUS' (program 71) -- PoolDir_RecordForUnitProgram[71] = 44, name from prom_b EffectNames_F147AC[71]
+	.long	P7Stream_FD4E77, P7Stream_FD4E96, P7Stream_FD5066, P7Stream_FD50B3   ; four stream pointers
+	.long	DescStr_wwbbbbv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x08
 	; record 45  0xFDC43E
-	.long	0x00fd5daa, 0x00fd5dcf, 0x00fd5f1b, 0x00fd5f70   ; four stream pointers
-	.long	0x00fcd096, 0x00fccfb4   ; DescriptorStrings pair
+	;   effect 'PEQ+S.DELAY' (program 72) -- PoolDir_RecordForUnitProgram[72] = 45, name from prom_b EffectNames_F147AC[72]
+	.long	P7Stream_FD5DAA, P7Stream_FD5DCF, P7Stream_FD5F1B, P7Stream_FD5F70   ; four stream pointers
+	.long	DescStr_wwbwwbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x0b
 	; record 46  0xFDC457
-	.long	0x00fd6502, 0x00fd6533, 0x00fd66e9, 0x00fd676c   ; four stream pointers
-	.long	0x00fcd09f, 0x00fcd044   ; DescriptorStrings pair
+	;   effect 'PEQ+FLANGER' (program 73) -- PoolDir_RecordForUnitProgram[73] = 46, name from prom_b EffectNames_F147AC[73]
+	.long	P7Stream_FD6502, P7Stream_FD6533, P7Stream_FD66E9, P7Stream_FD676C   ; four stream pointers
+	.long	DescStr_wwbbbbbbbv, DescStr_0123456789   ; DescriptorStrings pair
 	.byte	0x0b
 	; record 47  0xFDC470
-	.long	0x00fd6e21, 0x00fd6e46, 0x00fd6fc8, 0x00fd7025   ; four stream pointers
-	.long	0x00fcd0aa, 0x00fccfb4   ; DescriptorStrings pair
+	;   effect 'PEQ+VIBRATO' (program 74) -- PoolDir_RecordForUnitProgram[74] = 47, name from prom_b EffectNames_F147AC[74]
+	.long	P7Stream_FD6E21, P7Stream_FD6E46, P7Stream_FD6FC8, P7Stream_FD7025   ; four stream pointers
+	.long	DescStr_wwbbbbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x09
 	; record 48  0xFDC489
-	.long	0x00fd52db, 0x00fd52f9, 0x00fd5451, 0x00fd547e   ; four stream pointers
-	.long	0x00fcd0b3, 0x00fccfc4   ; DescriptorStrings pair
+	;   effect 'PEQ+COMPRESSOR' (program 75) -- PoolDir_RecordForUnitProgram[75] = 48, name from prom_b EffectNames_F147AC[75]
+	.long	P7Stream_FD52DB, P7Stream_FD52F9, P7Stream_FD5451, P7Stream_FD547E   ; four stream pointers
+	.long	DescStr_wwcbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x08
 	; record 49  0xFDC4A2
-	.long	0x00fd55f2, 0x00fd561a, 0x00fd578a, 0x00fd57ca   ; four stream pointers
-	.long	0x00fcd0ba, 0x00fcd0c4   ; DescriptorStrings pair
+	;   effect 'PEQ+COMPR+DIST' (program 96) -- PoolDir_RecordForUnitProgram[96] = 49, name from prom_b EffectNames_F147AC[96]
+	.long	P7Stream_FD55F2, P7Stream_FD561A, P7Stream_FD578A, P7Stream_FD57CA   ; four stream pointers
+	.long	DescStr_wwcbbbbbv, DescStr_012345678   ; DescriptorStrings pair
 	.byte	0x0a
 	; record 50  0xFDC4BB
-	.long	0x00fd59d9, 0x00fd59ff, 0x00fd5b74, 0x00fd5baa   ; four stream pointers
-	.long	0x00fcd0ce, 0x00fccfb4   ; DescriptorStrings pair
+	;   effect 'PEQ+COMPR+OVERDR' (program 97) -- PoolDir_RecordForUnitProgram[97] = 50, name from prom_b EffectNames_F147AC[97]
+	.long	P7Stream_FD59D9, P7Stream_FD59FF, P7Stream_FD5B74, P7Stream_FD5BAA   ; four stream pointers
+	.long	DescStr_wcbbbbvb, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x08
 	; record 51  0xFDC4D4
-	.long	0x00fd60df, 0x00fd6110, 0x00fd627c, 0x00fd62e4   ; four stream pointers
-	.long	0x00fcd0d7, 0x00fccfe4   ; DescriptorStrings pair
+	;   effect 'PEQ+DIST+DELAY' (program 98) -- PoolDir_RecordForUnitProgram[98] = 51, name from prom_b EffectNames_F147AC[98]
+	.long	P7Stream_FD60DF, P7Stream_FD6110, P7Stream_FD627C, P7Stream_FD62E4   ; four stream pointers
+	.long	DescStr_wwbbbwwbbvb, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0d
 	; record 52  0xFDC4ED
-	.long	0x00fd6976, 0x00fd69a3, 0x00fd6b69, 0x00fd6bd1   ; four stream pointers
-	.long	0x00fcd0d7, 0x00fccfe4   ; DescriptorStrings pair
+	;   effect 'PEQ+OVERDR+DELAY' (program 99) -- PoolDir_RecordForUnitProgram[99] = 52, name from prom_b EffectNames_F147AC[99]
+	.long	P7Stream_FD6976, P7Stream_FD69A3, P7Stream_FD6B69, P7Stream_FD6BD1   ; four stream pointers
+	.long	DescStr_wwbbbwwbbvb, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0d
 	; record 53  0xFDC506
-	.long	0x00fd4af7, 0x00fd4afd, 0x00fd4b44, 0x00fd4b4c   ; four stream pointers
-	.long	0x00fccff0, 0x00fccff2   ; DescriptorStrings pair
+	;   effect 'NO OPERATION' (program 0) -- PoolDir_RecordForUnitProgram[0] = 53, name from prom_b EffectNames_F147AC[0]; also the catch-all of 72 unnamed programs
+	.long	P7Stream_FD4AF7, P7Stream_FD4AFD, P7Stream_FD4B44, P7Stream_FD4B4C   ; four stream pointers
+	.long	DescStr_v, DescStr_0   ; DescriptorStrings pair
 	.byte	0x00
 	; record 54  0xFDC51F
-	.long	0x00fd8806, 0x00fd8827, 0x00fd8a40, 0x00fd8a8a   ; four stream pointers
-	.long	0x00fcd0e3, 0x00fccf85   ; DescriptorStrings pair
+	;   effect 'PITCH SHIFTER' (program 49) -- PoolDir_RecordForUnitProgram[49] = 54, name from prom_b EffectNames_F147AC[49]
+	.long	P7Stream_FD8806, P7Stream_FD8827, P7Stream_FD8A40, P7Stream_FD8A8A   ; four stream pointers
+	.long	DescStr_bBBbBvb, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x05
 	; record 55  0xFDC538
-	.long	0x00fdab90, 0x00fdabbb, 0x00fdace4, 0x00fdad9c   ; four stream pointers
-	.long	0x00fcd0eb, 0x00fccfe4   ; DescriptorStrings pair
+	;   effect 'PEDAL WAH+DELAY' (program 69) -- PoolDir_RecordForUnitProgram[69] = 55, name from prom_b EffectNames_F147AC[69]
+	.long	P7Stream_FDAB90, P7Stream_FDABBB, P7Stream_FDACE4, P7Stream_FDAD9C   ; four stream pointers
+	.long	DescStr_bbbbbbwwbbv, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0c
 
 ; ------------------------------------------------------------------------------
@@ -8313,8 +8792,13 @@ PoolDir_Records:
 ; then `mul A,0x19 / add XWA,0x00FDBFD9` (PoolDir_Records) at 0xFA2B44, 0xFA2C78, 0xFA2D2B
 ; and 0xFA4986, and `mul C,0x04 / add XBC,0x00FDD1CB` (PoolDir_FieldRec_PtrTable) at
 ; 0xFA2BBE.  Reproduced by notes/prom_c_understanding_round5.py --program.
-; ⚠ "Program" is defined by that mechanism and by nothing else: it is the 0..127 selector
-; that chooses which streams a unit is sent.  What any program SOUNDS like is not known.
+; ★ CORRECTED 2026-09-25 (lane promcd).  This paragraph said "Program" was defined by
+; that mechanism and by nothing else, and that what a program sounds like was unknown.
+; A program is a DSP EFFECT NUMBER: prom_b's EffectNames_F147AC[k] names program k
+; (1 CHORUS, 5 PHASER, 20 ENSEMBLE ...), its 56 real names falling onto the 56 records
+; one to one (notes/prom_c_p7_program_is_effect.py, and this file's extraction header);
+; each PoolDir_Records entry above now carries its effect's name.  What an effect's
+; stream bytes mean, field by field, remains undecoded.
 ; Evidence: the three clamp/lookup/store triples listed above -- 0xFA5572-0xFA558A,
 ;          0xFA5597-0xFA55AF and 0xFA55BC-0xFA55D4 -- all instruction operands.
 ; ------------------------------------------------------------------------------
@@ -8339,9 +8823,15 @@ PoolDir_RecordForUnitProgram:
 ;                     438/438 are < 26, and the widest seen is 15.  The mapping is
 ;                     offset f -> block byte +1+f: P7Unit_FlushDirtyParams does
 ;                     `inc 1,XIX` (0xFA49B0) then `lda XWA,0x00856e` (0xFA49B2).
-;       +5      u8    a flag.  ⚠ NOT DECODED.  It takes only four values in the whole
-;                     table -- 0x62 x204, 0x20 x196, 0x42 x34, 0x77 x4 -- and nothing
-;                     here reads them.
+;       +5      u8    VALUE TYPE, an ASCII letter: 0x62 'b' x204, 0x20 ' ' x196,
+;                     0x42 'B' x34, 0x77 'w' x4.  P7Unit_SendModulatedField reads it
+;                     (`inc 5,XWA` 0xFA28B4) and switches on it (0xFA28F3): 'b' one
+;                     byte zero-extended, 'B' one byte sign-extended, 'w' (and 'W',
+;                     which no descriptor holds) a 16-bit load, ' ' sends nothing.
+;                     Every 'B' has a negative minimum (34/34), every 'w' a maximum
+;                     above 255 (4/4), every 'b' a maximum of at most 255 (204/204).
+;                     (Corrected 2026-09-25, lane promcd, p7_descriptor_letters.py:
+;                     these lines called it an undecoded flag that nothing read.)
 ;       +6      u8    FIELD INDEX, non-decreasing from 0 in all 56 arrays.  A parameter
 ;                     wider than one byte owns several consecutive records with the same
 ;                     index (record 4's six two-byte fields have three records each).
@@ -8358,13 +8848,20 @@ PoolDir_RecordForUnitProgram:
 ; ★ AND EVERY ONE OF THE 56 LENGTHS IS A MULTIPLE OF SEVEN (7 to 133), so the records are
 ; arrays of a 7-byte entry.  That is a property of the data, checked over all 56, not a
 ; stride chosen to make the arithmetic work.
-; ⚠ What a 7-byte entry MEANS is not established.
+; ★ WHAT A 7-BYTE ENTRY IS (2026-09-25, lane promcd): the descriptor of one field -- or of
+; one byte of a two-byte field -- of an effect's parameter block: its range (+0/+2, the
+; bounds P7Field_ModulateClamped clamps to), its place (+4), its value type (+5) and its
+; index (+6, the position of its letter in the record's type string).  In the 51 records
+; P7Unit_EmitChangedParams' generic walker handles, every +4 lies inside the byte span the
+; type-string letters give that index (390/390; p7_descriptor_letters.py).
+; (Corrected: this line said what an entry means was open.)
 ; Evidence: the 438-record sweep in notes/prom_c_understanding_round5.py --fields, plus
 ;          `inc 1,XIX` at 0xFA49B0 and `lda XWA,0x00856e` at 0xFA49B2.
 ; ------------------------------------------------------------------------------
 PoolDir_FieldRecords:
 
 ; 0xFDC5D1  28 bytes = 4 x 7   (table slot(s) [0])
+; field descriptors of effect record 0 'DISTORTION' (program 32): PoolDir_FieldRec_PtrTable[0] (0xFDD1CB + 4*0), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC5D1:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC5D1
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC5D8
@@ -8372,6 +8869,7 @@ PoolDir_FieldRec_FDC5D1:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x03, 0x62, 0x03   ; 0xFDC5E6
 
 ; 0xFDC5ED  28 bytes = 4 x 7   (table slot(s) [1])
+; field descriptors of effect record 1 'OVERDRIVE' (program 33): PoolDir_FieldRec_PtrTable[1] (0xFDD1CB + 4*1), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC5ED:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC5ED
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC5F4
@@ -8379,6 +8877,7 @@ PoolDir_FieldRec_FDC5ED:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x03, 0x62, 0x03   ; 0xFDC602
 
 ; 0xFDC609  28 bytes = 4 x 7   (table slot(s) [2])
+; field descriptors of effect record 2 'FUZZ' (program 34): PoolDir_FieldRec_PtrTable[2] (0xFDD1CB + 4*2), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC609:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC609
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC610
@@ -8386,6 +8885,7 @@ PoolDir_FieldRec_FDC609:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x03, 0x62, 0x03   ; 0xFDC61E
 
 ; 0xFDC625  42 bytes = 6 x 7   (table slot(s) [3])
+; field descriptors of effect record 3 'EXCITER' (program 35): PoolDir_FieldRec_PtrTable[3] (0xFDD1CB + 4*3), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC625:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC625
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC62C
@@ -8395,6 +8895,7 @@ PoolDir_FieldRec_FDC625:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x06, 0x62, 0x05   ; 0xFDC648
 
 ; 0xFDC64F  133 bytes = 19 x 7   (table slot(s) [4])
+; field descriptors of effect record 4 'PARAMETRIC EQ' (program 39): PoolDir_FieldRec_PtrTable[4] (0xFDD1CB + 4*4), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC64F:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDC64F
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDC656
@@ -8417,6 +8918,7 @@ PoolDir_FieldRec_FDC64F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0c, 0x62, 0x06   ; 0xFDC6CD
 
 ; 0xFDC6D4  35 bytes = 5 x 7   (table slot(s) [5])
+; field descriptors of effect record 5 'CHORUS' (program 1): PoolDir_FieldRec_PtrTable[5] (0xFDD1CB + 4*5), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC6D4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC6D4
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC6DB
@@ -8425,6 +8927,7 @@ PoolDir_FieldRec_FDC6D4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC6F0
 
 ; 0xFDC6F7  49 bytes = 7 x 7   (table slot(s) [6])
+; field descriptors of effect record 6 'MODULATED CHORUS' (program 2): PoolDir_FieldRec_PtrTable[6] (0xFDD1CB + 4*6), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC6F7:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC6F7
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC6FE
@@ -8435,6 +8938,7 @@ PoolDir_FieldRec_FDC6F7:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x06, 0x62, 0x06   ; 0xFDC721
 
 ; 0xFDC728  49 bytes = 7 x 7   (table slot(s) [7])
+; field descriptors of effect record 7 'ENHANCER' (program 3): PoolDir_FieldRec_PtrTable[7] (0xFDD1CB + 4*7), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC728:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC728
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC72F
@@ -8445,6 +8949,7 @@ PoolDir_FieldRec_FDC728:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x06   ; 0xFDC752
 
 ; 0xFDC759  56 bytes = 8 x 7   (table slot(s) [8])
+; field descriptors of effect record 8 'FLANGER' (program 4): PoolDir_FieldRec_PtrTable[8] (0xFDD1CB + 4*8), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC759:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC759
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC760
@@ -8456,6 +8961,7 @@ PoolDir_FieldRec_FDC759:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x07, 0x62, 0x07   ; 0xFDC78A
 
 ; 0xFDC791  56 bytes = 8 x 7   (table slot(s) [9])
+; field descriptors of effect record 9 'PHASER' (program 5): PoolDir_FieldRec_PtrTable[9] (0xFDD1CB + 4*9), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC791:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC791
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC798
@@ -8467,6 +8973,7 @@ PoolDir_FieldRec_FDC791:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x07, 0x62, 0x07   ; 0xFDC7C2
 
 ; 0xFDC7C9  42 bytes = 6 x 7   (table slot(s) [10])
+; field descriptors of effect record 10 'AUTO PAN' (program 48): PoolDir_FieldRec_PtrTable[10] (0xFDD1CB + 4*10), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC7C9:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC7C9
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC7D0
@@ -8476,6 +8983,7 @@ PoolDir_FieldRec_FDC7C9:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x05   ; 0xFDC7EC
 
 ; 0xFDC7F3  49 bytes = 7 x 7   (table slot(s) [54])
+; field descriptors of effect record 54 'PITCH SHIFTER' (program 49): PoolDir_FieldRec_PtrTable[54] (0xFDD1CB + 4*54), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC7F3:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC7F3
 	.byte	0xdc, 0xff, 0x24, 0x00, 0x01, 0x42, 0x01   ; 0xFDC7FA
@@ -8486,6 +8994,7 @@ PoolDir_FieldRec_FDC7F3:
 	.byte	0x02, 0x00, 0x02, 0x00, 0x06, 0x20, 0x06   ; 0xFDC81D
 
 ; 0xFDC824  42 bytes = 6 x 7   (table slot(s) [11])
+; field descriptors of effect record 11 'VIBRATO' (program 50): PoolDir_FieldRec_PtrTable[11] (0xFDD1CB + 4*11), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC824:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC824
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC82B
@@ -8495,10 +9004,12 @@ PoolDir_FieldRec_FDC824:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x05   ; 0xFDC847
 
 ; 0xFDC84E  7 bytes = 1 x 7   (table slot(s) [53])
+; field descriptors of effect record 53 'NO OPERATION' (program 0): PoolDir_FieldRec_PtrTable[53] (0xFDD1CB + 4*53), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC84E:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDC84E
 
 ; 0xFDC855  42 bytes = 6 x 7   (table slot(s) [12])
+; field descriptors of effect record 12 'PEDAL WAH' (program 51): PoolDir_FieldRec_PtrTable[12] (0xFDD1CB + 4*12), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC855:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC855
 	.byte	0x00, 0x00, 0x02, 0x00, 0x01, 0x20, 0x01   ; 0xFDC85C
@@ -8508,6 +9019,7 @@ PoolDir_FieldRec_FDC855:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x05   ; 0xFDC878
 
 ; 0xFDC87F  35 bytes = 5 x 7   (table slot(s) [13])
+; field descriptors of effect record 13 'AUTO WAH' (program 52): PoolDir_FieldRec_PtrTable[13] (0xFDD1CB + 4*13), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC87F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC87F
 	.byte	0x00, 0x00, 0x02, 0x00, 0x01, 0x20, 0x01   ; 0xFDC886
@@ -8516,6 +9028,7 @@ PoolDir_FieldRec_FDC87F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC89B
 
 ; 0xFDC8A2  112 bytes = 16 x 7   (table slot(s) [14])
+; field descriptors of effect record 14 'ROTARY SPEAKER' (program 53): PoolDir_FieldRec_PtrTable[14] (0xFDD1CB + 4*14), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC8A2:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC8A2
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC8A9
@@ -8535,6 +9048,7 @@ PoolDir_FieldRec_FDC8A2:
 	.byte	0x01, 0x00, 0x01, 0x00, 0x0f, 0x20, 0x0b   ; 0xFDC90B
 
 ; 0xFDC912  35 bytes = 5 x 7   (table slot(s) [15])
+; field descriptors of effect record 15 'RING MODULATOR' (program 54): PoolDir_FieldRec_PtrTable[15] (0xFDD1CB + 4*15), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC912:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC912
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC919
@@ -8543,10 +9057,12 @@ PoolDir_FieldRec_FDC912:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC92E
 
 ; 0xFDC935  7 bytes = 1 x 7   (table slot(s) [16])
+; field descriptors of effect record 16 'NOISE GENERATOR' (program 38): PoolDir_FieldRec_PtrTable[16] (0xFDD1CB + 4*16), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC935:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC935
 
 ; 0xFDC93C  35 bytes = 5 x 7   (table slot(s) [17])
+; field descriptors of effect record 17 'SLOW ATTACKER' (program 37): PoolDir_FieldRec_PtrTable[17] (0xFDD1CB + 4*17), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC93C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC93C
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC943
@@ -8555,6 +9071,7 @@ PoolDir_FieldRec_FDC93C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC958
 
 ; 0xFDC95F  42 bytes = 6 x 7   (table slot(s) [18])
+; field descriptors of effect record 18 'GATED REVERB' (program 8): PoolDir_FieldRec_PtrTable[18] (0xFDD1CB + 4*18), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC95F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC95F
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDC966
@@ -8564,6 +9081,7 @@ PoolDir_FieldRec_FDC95F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x05   ; 0xFDC982
 
 ; 0xFDC989  42 bytes = 6 x 7   (table slot(s) [19])
+; field descriptors of effect record 19 'HAAS EFFECT' (program 55): PoolDir_FieldRec_PtrTable[19] (0xFDD1CB + 4*19), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC989:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC989
 	.byte	0x00, 0x00, 0x5e, 0x01, 0x01, 0x77, 0x01   ; 0xFDC990
@@ -8573,6 +9091,7 @@ PoolDir_FieldRec_FDC989:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x07, 0x62, 0x05   ; 0xFDC9AC
 
 ; 0xFDC9B3  35 bytes = 5 x 7   (table slot(s) [20])
+; field descriptors of effect record 20 'ENSEMBLE' (program 6): PoolDir_FieldRec_PtrTable[20] (0xFDD1CB + 4*20), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC9B3:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC9B3
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x20, 0x01   ; 0xFDC9BA
@@ -8581,6 +9100,7 @@ PoolDir_FieldRec_FDC9B3:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDC9CF
 
 ; 0xFDC9D6  42 bytes = 6 x 7   (table slot(s) [21])
+; field descriptors of effect record 21 'COMPRESSOR' (program 36): PoolDir_FieldRec_PtrTable[21] (0xFDD1CB + 4*21), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDC9D6:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDC9D6
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x20, 0x01   ; 0xFDC9DD
@@ -8590,6 +9110,7 @@ PoolDir_FieldRec_FDC9D6:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x05, 0x62, 0x04   ; 0xFDC9F9
 
 ; 0xFDCA00  56 bytes = 8 x 7   (table slot(s) [22])
+; field descriptors of effect record 22 'MIX UP' (program 56): PoolDir_FieldRec_PtrTable[22] (0xFDD1CB + 4*22), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCA00:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCA00
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDCA07
@@ -8601,6 +9122,7 @@ PoolDir_FieldRec_FDCA00:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x07, 0x62, 0x07   ; 0xFDCA31
 
 ; 0xFDCA38  49 bytes = 7 x 7   (table slot(s) [23])
+; field descriptors of effect record 23 'SINGLE DELAY' (program 9): PoolDir_FieldRec_PtrTable[23] (0xFDD1CB + 4*23), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCA38:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCA38
 	.byte	0x00, 0x00, 0x5e, 0x01, 0x01, 0x20, 0x01   ; 0xFDCA3F
@@ -8611,6 +9133,7 @@ PoolDir_FieldRec_FDCA38:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x06   ; 0xFDCA62
 
 ; 0xFDCA69  84 bytes = 12 x 7   (table slot(s) [24])
+; field descriptors of effect record 24 'MULTI TAP DELAY' (program 10): PoolDir_FieldRec_PtrTable[24] (0xFDD1CB + 4*24), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCA69:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCA69
 	.byte	0x00, 0x00, 0xbc, 0x02, 0x01, 0x20, 0x01   ; 0xFDCA70
@@ -8626,6 +9149,7 @@ PoolDir_FieldRec_FDCA69:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0f, 0x62, 0x0b   ; 0xFDCAB6
 
 ; 0xFDCABD  56 bytes = 8 x 7   (table slot(s) [25])
+; field descriptors of effect record 25 'MANUAL DELAY' (program 11): PoolDir_FieldRec_PtrTable[25] (0xFDD1CB + 4*25), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCABD:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCABD
 	.byte	0x00, 0x00, 0x63, 0x00, 0x01, 0x62, 0x01   ; 0xFDCAC4
@@ -8637,6 +9161,7 @@ PoolDir_FieldRec_FDCABD:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x09, 0x62, 0x07   ; 0xFDCAEE
 
 ; 0xFDCAF5  35 bytes = 5 x 7   (table slot(s) [26])
+; field descriptors of effect record 26 'ROOM REVERB 1' (program 16): PoolDir_FieldRec_PtrTable[26] (0xFDD1CB + 4*26), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCAF5:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCAF5
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCAFC
@@ -8645,6 +9170,7 @@ PoolDir_FieldRec_FDCAF5:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB11
 
 ; 0xFDCB18  35 bytes = 5 x 7   (table slot(s) [27])
+; field descriptors of effect record 27 'ROOM REVERB 2' (program 17): PoolDir_FieldRec_PtrTable[27] (0xFDD1CB + 4*27), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCB18:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCB18
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCB1F
@@ -8653,6 +9179,7 @@ PoolDir_FieldRec_FDCB18:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB34
 
 ; 0xFDCB3B  35 bytes = 5 x 7   (table slot(s) [28])
+; field descriptors of effect record 28 'PLATE REVERB 1' (program 18): PoolDir_FieldRec_PtrTable[28] (0xFDD1CB + 4*28), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCB3B:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCB3B
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCB42
@@ -8661,6 +9188,7 @@ PoolDir_FieldRec_FDCB3B:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB57
 
 ; 0xFDCB5E  35 bytes = 5 x 7   (table slot(s) [29])
+; field descriptors of effect record 29 'PLATE REVERB 2' (program 19): PoolDir_FieldRec_PtrTable[29] (0xFDD1CB + 4*29), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCB5E:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCB5E
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCB65
@@ -8669,6 +9197,7 @@ PoolDir_FieldRec_FDCB5E:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB7A
 
 ; 0xFDCB81  35 bytes = 5 x 7   (table slot(s) [30])
+; field descriptors of effect record 30 'CONCERT REVERB 1' (program 20): PoolDir_FieldRec_PtrTable[30] (0xFDD1CB + 4*30), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCB81:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCB81
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCB88
@@ -8677,6 +9206,7 @@ PoolDir_FieldRec_FDCB81:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCB9D
 
 ; 0xFDCBA4  35 bytes = 5 x 7   (table slot(s) [31])
+; field descriptors of effect record 31 'CONCERT REVERB 2' (program 21): PoolDir_FieldRec_PtrTable[31] (0xFDD1CB + 4*31), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCBA4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCBA4
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCBAB
@@ -8685,6 +9215,7 @@ PoolDir_FieldRec_FDCBA4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCBC0
 
 ; 0xFDCBC7  35 bytes = 5 x 7   (table slot(s) [32])
+; field descriptors of effect record 32 'DARK REVERB 1' (program 22): PoolDir_FieldRec_PtrTable[32] (0xFDD1CB + 4*32), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCBC7:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCBC7
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCBCE
@@ -8693,6 +9224,7 @@ PoolDir_FieldRec_FDCBC7:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCBE3
 
 ; 0xFDCBEA  35 bytes = 5 x 7   (table slot(s) [33])
+; field descriptors of effect record 33 'DARK REVERB 2' (program 23): PoolDir_FieldRec_PtrTable[33] (0xFDD1CB + 4*33), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCBEA:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCBEA
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCBF1
@@ -8701,6 +9233,7 @@ PoolDir_FieldRec_FDCBEA:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC06
 
 ; 0xFDCC0D  35 bytes = 5 x 7   (table slot(s) [34])
+; field descriptors of effect record 34 'BRIGHT REVERB 1' (program 24): PoolDir_FieldRec_PtrTable[34] (0xFDD1CB + 4*34), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC0D:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC0D
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCC14
@@ -8709,6 +9242,7 @@ PoolDir_FieldRec_FDCC0D:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC29
 
 ; 0xFDCC30  35 bytes = 5 x 7   (table slot(s) [35])
+; field descriptors of effect record 35 'BRIGHT REVERB 2' (program 25): PoolDir_FieldRec_PtrTable[35] (0xFDD1CB + 4*35), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC30:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC30
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCC37
@@ -8717,6 +9251,7 @@ PoolDir_FieldRec_FDCC30:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC4C
 
 ; 0xFDCC53  35 bytes = 5 x 7   (table slot(s) [36])
+; field descriptors of effect record 36 'WAVE REVERB 1' (program 26): PoolDir_FieldRec_PtrTable[36] (0xFDD1CB + 4*36), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC53:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC53
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCC5A
@@ -8725,6 +9260,7 @@ PoolDir_FieldRec_FDCC53:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC6F
 
 ; 0xFDCC76  35 bytes = 5 x 7   (table slot(s) [37])
+; field descriptors of effect record 37 'WAVE REVERB 2' (program 27): PoolDir_FieldRec_PtrTable[37] (0xFDD1CB + 4*37), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC76:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC76
 	.byte	0x00, 0x00, 0xc8, 0x00, 0x01, 0x20, 0x01   ; 0xFDCC7D
@@ -8733,6 +9269,7 @@ PoolDir_FieldRec_FDCC76:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x04, 0x62, 0x04   ; 0xFDCC92
 
 ; 0xFDCC99  70 bytes = 10 x 7   (table slot(s) [38])
+; field descriptors of effect record 38 'S.DELAY+CHORUS' (program 64): PoolDir_FieldRec_PtrTable[38] (0xFDD1CB + 4*38), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCC99:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCC99
 	.byte	0x00, 0x00, 0x2c, 0x01, 0x01, 0x20, 0x01   ; 0xFDCCA0
@@ -8746,6 +9283,7 @@ PoolDir_FieldRec_FDCC99:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0b, 0x62, 0x09   ; 0xFDCCD8
 
 ; 0xFDCCDF  77 bytes = 11 x 7   (table slot(s) [39])
+; field descriptors of effect record 39 'S.DELAY+S.DELAY' (program 65): PoolDir_FieldRec_PtrTable[39] (0xFDD1CB + 4*39), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCCDF:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCCDF
 	.byte	0x00, 0x00, 0xb4, 0x00, 0x01, 0x20, 0x01   ; 0xFDCCE6
@@ -8760,6 +9298,7 @@ PoolDir_FieldRec_FDCCDF:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0e, 0x62, 0x0a   ; 0xFDCD25
 
 ; 0xFDCD2C  91 bytes = 13 x 7   (table slot(s) [40])
+; field descriptors of effect record 40 'S.DELAY+FLANGER' (program 66): PoolDir_FieldRec_PtrTable[40] (0xFDD1CB + 4*40), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCD2C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCD2C
 	.byte	0x00, 0x00, 0x2c, 0x01, 0x01, 0x20, 0x01   ; 0xFDCD33
@@ -8776,6 +9315,7 @@ PoolDir_FieldRec_FDCD2C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0e, 0x62, 0x0c   ; 0xFDCD80
 
 ; 0xFDCD87  77 bytes = 11 x 7   (table slot(s) [41])
+; field descriptors of effect record 41 'S.DELAY+VIBRATO' (program 67): PoolDir_FieldRec_PtrTable[41] (0xFDD1CB + 4*41), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCD87:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCD87
 	.byte	0x00, 0x00, 0x2c, 0x01, 0x01, 0x20, 0x01   ; 0xFDCD8E
@@ -8790,6 +9330,7 @@ PoolDir_FieldRec_FDCD87:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0c, 0x62, 0x0a   ; 0xFDCDCD
 
 ; 0xFDCDD4  91 bytes = 13 x 7   (table slot(s) [42])
+; field descriptors of effect record 42 'S.DELAY+PHASER' (program 68): PoolDir_FieldRec_PtrTable[42] (0xFDD1CB + 4*42), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCDD4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCDD4
 	.byte	0x00, 0x00, 0x2c, 0x01, 0x01, 0x20, 0x01   ; 0xFDCDDB
@@ -8806,6 +9347,7 @@ PoolDir_FieldRec_FDCDD4:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0e, 0x62, 0x0c   ; 0xFDCE28
 
 ; 0xFDCE2F  77 bytes = 11 x 7   (table slot(s) [55])
+; field descriptors of effect record 55 'PEDAL WAH+DELAY' (program 69): PoolDir_FieldRec_PtrTable[55] (0xFDD1CB + 4*55), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCE2F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCE2F
 	.byte	0x00, 0x00, 0x02, 0x00, 0x01, 0x20, 0x01   ; 0xFDCE36
@@ -8820,6 +9362,7 @@ PoolDir_FieldRec_FDCE2F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0c, 0x62, 0x0a   ; 0xFDCE75
 
 ; 0xFDCE7C  70 bytes = 10 x 7   (table slot(s) [43])
+; field descriptors of effect record 43 'AUTO WAH+S.DELAY' (program 70): PoolDir_FieldRec_PtrTable[43] (0xFDD1CB + 4*43), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCE7C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x00, 0x62, 0x00   ; 0xFDCE7C
 	.byte	0x00, 0x00, 0x02, 0x00, 0x01, 0x20, 0x01   ; 0xFDCE83
@@ -8833,6 +9376,7 @@ PoolDir_FieldRec_FDCE7C:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0b, 0x62, 0x09   ; 0xFDCEBB
 
 ; 0xFDCEC2  77 bytes = 11 x 7   (table slot(s) [44])
+; field descriptors of effect record 44 'PEQ+CHORUS' (program 71): PoolDir_FieldRec_PtrTable[44] (0xFDD1CB + 4*44), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCEC2:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCEC2
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCEC9
@@ -8847,6 +9391,7 @@ PoolDir_FieldRec_FDCEC2:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x06   ; 0xFDCF08
 
 ; 0xFDCF0F  84 bytes = 12 x 7   (table slot(s) [45])
+; field descriptors of effect record 45 'PEQ+S.DELAY' (program 72): PoolDir_FieldRec_PtrTable[45] (0xFDD1CB + 4*45), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCF0F:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCF0F
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCF16
@@ -8862,6 +9407,7 @@ PoolDir_FieldRec_FDCF0F:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0b, 0x62, 0x07   ; 0xFDCF5C
 
 ; 0xFDCF63  98 bytes = 14 x 7   (table slot(s) [46])
+; field descriptors of effect record 46 'PEQ+FLANGER' (program 73): PoolDir_FieldRec_PtrTable[46] (0xFDD1CB + 4*46), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCF63:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCF63
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCF6A
@@ -8879,6 +9425,7 @@ PoolDir_FieldRec_FDCF63:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0b, 0x62, 0x09   ; 0xFDCFBE
 
 ; 0xFDCFC5  84 bytes = 12 x 7   (table slot(s) [47])
+; field descriptors of effect record 47 'PEQ+VIBRATO' (program 74): PoolDir_FieldRec_PtrTable[47] (0xFDD1CB + 4*47), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDCFC5:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCFC5
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDCFCC
@@ -8894,6 +9441,7 @@ PoolDir_FieldRec_FDCFC5:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x09, 0x62, 0x07   ; 0xFDD012
 
 ; 0xFDD019  77 bytes = 11 x 7   (table slot(s) [48])
+; field descriptors of effect record 48 'PEQ+COMPRESSOR' (program 75): PoolDir_FieldRec_PtrTable[48] (0xFDD1CB + 4*48), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD019:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD019
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD020
@@ -8908,6 +9456,7 @@ PoolDir_FieldRec_FDD019:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x05   ; 0xFDD05F
 
 ; 0xFDD066  91 bytes = 13 x 7   (table slot(s) [49])
+; field descriptors of effect record 49 'PEQ+COMPR+DIST' (program 96): PoolDir_FieldRec_PtrTable[49] (0xFDD1CB + 4*49), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD066:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD066
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD06D
@@ -8924,6 +9473,7 @@ PoolDir_FieldRec_FDD066:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0a, 0x62, 0x07   ; 0xFDD0BA
 
 ; 0xFDD0C1  70 bytes = 10 x 7   (table slot(s) [50])
+; field descriptors of effect record 50 'PEQ+COMPR+OVERDR' (program 97): PoolDir_FieldRec_PtrTable[50] (0xFDD1CB + 4*50), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD0C1:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD0C1
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD0C8
@@ -8937,6 +9487,7 @@ PoolDir_FieldRec_FDD0C1:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x08, 0x62, 0x06   ; 0xFDD100
 
 ; 0xFDD107  98 bytes = 14 x 7   (table slot(s) [51])
+; field descriptors of effect record 51 'PEQ+DIST+DELAY' (program 98): PoolDir_FieldRec_PtrTable[51] (0xFDD1CB + 4*51), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD107:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD107
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD10E
@@ -8954,6 +9505,7 @@ PoolDir_FieldRec_FDD107:
 	.byte	0x00, 0x00, 0x63, 0x00, 0x0d, 0x62, 0x09   ; 0xFDD162
 
 ; 0xFDD169  98 bytes = 14 x 7   (table slot(s) [52])
+; field descriptors of effect record 52 'PEQ+OVERDR+DELAY' (program 99): PoolDir_FieldRec_PtrTable[52] (0xFDD1CB + 4*52), read by P7Unit_EmitChangedParams, P7Unit_SendFieldParamZero, P7Unit_SendModulatedField
 PoolDir_FieldRec_FDD169:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD169
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00   ; 0xFDD170
@@ -8978,59 +9530,59 @@ PoolDir_FieldRec_FDD169:
 ; PoolDir_Records[k].
 ; ------------------------------------------------------------------------------
 PoolDir_FieldRec_PtrTable:
-	.long	0x00fdc5d1   ; slot  0
-	.long	0x00fdc5ed   ; slot  1
-	.long	0x00fdc609   ; slot  2
-	.long	0x00fdc625   ; slot  3
-	.long	0x00fdc64f   ; slot  4
-	.long	0x00fdc6d4   ; slot  5
-	.long	0x00fdc6f7   ; slot  6
-	.long	0x00fdc728   ; slot  7
-	.long	0x00fdc759   ; slot  8
-	.long	0x00fdc791   ; slot  9
-	.long	0x00fdc7c9   ; slot 10
-	.long	0x00fdc824   ; slot 11
-	.long	0x00fdc855   ; slot 12
-	.long	0x00fdc87f   ; slot 13
-	.long	0x00fdc8a2   ; slot 14
-	.long	0x00fdc912   ; slot 15
-	.long	0x00fdc935   ; slot 16
-	.long	0x00fdc93c   ; slot 17
-	.long	0x00fdc95f   ; slot 18
-	.long	0x00fdc989   ; slot 19
-	.long	0x00fdc9b3   ; slot 20
-	.long	0x00fdc9d6   ; slot 21
-	.long	0x00fdca00   ; slot 22
-	.long	0x00fdca38   ; slot 23
-	.long	0x00fdca69   ; slot 24
-	.long	0x00fdcabd   ; slot 25
-	.long	0x00fdcaf5   ; slot 26
-	.long	0x00fdcb18   ; slot 27
-	.long	0x00fdcb3b   ; slot 28
-	.long	0x00fdcb5e   ; slot 29
-	.long	0x00fdcb81   ; slot 30
-	.long	0x00fdcba4   ; slot 31
-	.long	0x00fdcbc7   ; slot 32
-	.long	0x00fdcbea   ; slot 33
-	.long	0x00fdcc0d   ; slot 34
-	.long	0x00fdcc30   ; slot 35
-	.long	0x00fdcc53   ; slot 36
-	.long	0x00fdcc76   ; slot 37
-	.long	0x00fdcc99   ; slot 38
-	.long	0x00fdccdf   ; slot 39
-	.long	0x00fdcd2c   ; slot 40
-	.long	0x00fdcd87   ; slot 41
-	.long	0x00fdcdd4   ; slot 42
-	.long	0x00fdce7c   ; slot 43
-	.long	0x00fdcec2   ; slot 44
-	.long	0x00fdcf0f   ; slot 45
-	.long	0x00fdcf63   ; slot 46
-	.long	0x00fdcfc5   ; slot 47
-	.long	0x00fdd019   ; slot 48
-	.long	0x00fdd066   ; slot 49
-	.long	0x00fdd0c1   ; slot 50
-	.long	0x00fdd107   ; slot 51
-	.long	0x00fdd169   ; slot 52
-	.long	0x00fdc84e   ; slot 53
-	.long	0x00fdc7f3   ; slot 54
-	.long	0x00fdce2f   ; slot 55
+	.long	PoolDir_FieldRecords   ; slot  0
+	.long	PoolDir_FieldRec_FDC5ED   ; slot  1
+	.long	PoolDir_FieldRec_FDC609   ; slot  2
+	.long	PoolDir_FieldRec_FDC625   ; slot  3
+	.long	PoolDir_FieldRec_FDC64F   ; slot  4
+	.long	PoolDir_FieldRec_FDC6D4   ; slot  5
+	.long	PoolDir_FieldRec_FDC6F7   ; slot  6
+	.long	PoolDir_FieldRec_FDC728   ; slot  7
+	.long	PoolDir_FieldRec_FDC759   ; slot  8
+	.long	PoolDir_FieldRec_FDC791   ; slot  9
+	.long	PoolDir_FieldRec_FDC7C9   ; slot 10
+	.long	PoolDir_FieldRec_FDC824   ; slot 11
+	.long	PoolDir_FieldRec_FDC855   ; slot 12
+	.long	PoolDir_FieldRec_FDC87F   ; slot 13
+	.long	PoolDir_FieldRec_FDC8A2   ; slot 14
+	.long	PoolDir_FieldRec_FDC912   ; slot 15
+	.long	PoolDir_FieldRec_FDC935   ; slot 16
+	.long	PoolDir_FieldRec_FDC93C   ; slot 17
+	.long	PoolDir_FieldRec_FDC95F   ; slot 18
+	.long	PoolDir_FieldRec_FDC989   ; slot 19
+	.long	PoolDir_FieldRec_FDC9B3   ; slot 20
+	.long	PoolDir_FieldRec_FDC9D6   ; slot 21
+	.long	PoolDir_FieldRec_FDCA00   ; slot 22
+	.long	PoolDir_FieldRec_FDCA38   ; slot 23
+	.long	PoolDir_FieldRec_FDCA69   ; slot 24
+	.long	PoolDir_FieldRec_FDCABD   ; slot 25
+	.long	PoolDir_FieldRec_FDCAF5   ; slot 26
+	.long	PoolDir_FieldRec_FDCB18   ; slot 27
+	.long	PoolDir_FieldRec_FDCB3B   ; slot 28
+	.long	PoolDir_FieldRec_FDCB5E   ; slot 29
+	.long	PoolDir_FieldRec_FDCB81   ; slot 30
+	.long	PoolDir_FieldRec_FDCBA4   ; slot 31
+	.long	PoolDir_FieldRec_FDCBC7   ; slot 32
+	.long	PoolDir_FieldRec_FDCBEA   ; slot 33
+	.long	PoolDir_FieldRec_FDCC0D   ; slot 34
+	.long	PoolDir_FieldRec_FDCC30   ; slot 35
+	.long	PoolDir_FieldRec_FDCC53   ; slot 36
+	.long	PoolDir_FieldRec_FDCC76   ; slot 37
+	.long	PoolDir_FieldRec_FDCC99   ; slot 38
+	.long	PoolDir_FieldRec_FDCCDF   ; slot 39
+	.long	PoolDir_FieldRec_FDCD2C   ; slot 40
+	.long	PoolDir_FieldRec_FDCD87   ; slot 41
+	.long	PoolDir_FieldRec_FDCDD4   ; slot 42
+	.long	PoolDir_FieldRec_FDCE7C   ; slot 43
+	.long	PoolDir_FieldRec_FDCEC2   ; slot 44
+	.long	PoolDir_FieldRec_FDCF0F   ; slot 45
+	.long	PoolDir_FieldRec_FDCF63   ; slot 46
+	.long	PoolDir_FieldRec_FDCFC5   ; slot 47
+	.long	PoolDir_FieldRec_FDD019   ; slot 48
+	.long	PoolDir_FieldRec_FDD066   ; slot 49
+	.long	PoolDir_FieldRec_FDD0C1   ; slot 50
+	.long	PoolDir_FieldRec_FDD107   ; slot 51
+	.long	PoolDir_FieldRec_FDD169   ; slot 52
+	.long	PoolDir_FieldRec_FDC84E   ; slot 53
+	.long	PoolDir_FieldRec_FDC7F3   ; slot 54
+	.long	PoolDir_FieldRec_FDCE2F   ; slot 55

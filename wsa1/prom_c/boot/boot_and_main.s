@@ -112,9 +112,9 @@
 ; 0xFA3365 is inside P7Units_BootLoadAndStartTask.
 ; ----------------------------------------------------------------------------
 EntryPoint_Records:
-	.long	0x00F98B7D, 0x0000FFF0, 0x00028800	; MAIN
-	.long	0x00FA54DB, 0x0000F980, 0x00028800	; P7Units_ServiceTask__FA54DB
-	.long	0x00F98118, 0x0000F480, 0x00018800	; DSP_ChannelRefresh_Loop
+	.long	MAIN, 0x0000FFF0, 0x00028800	; MAIN
+	.long	P7Units_ServiceTask__FA54DB, 0x0000F980, 0x00028800	; P7Units_ServiceTask__FA54DB
+	.long	DSP_ChannelRefresh_Loop, 0x0000F480, 0x00018800	; DSP_ChannelRefresh_Loop
 
 ; ==============================================================================
 ; 0xF9810E-0xF98111 -- the SEMAPHORE COUNT image
@@ -167,7 +167,7 @@ EntryPoint_Records:
 ; --------------------------------------------------------------------------
 SoftTimer_RotateLevel2:
 	ld	a, 2:opc
-	calr	(0xF983DC - 0xF98117)
+	calr	Kernel_YieldRotate
 	ret
 
 
@@ -244,29 +244,29 @@ DSP_ChannelRefresh_Loop:
 	link32	0xEE, 0x0C, 0xFC, 0xFF
 DSP_ChannelRefresh_Loop__top:
 	pushw	0x0003
-	call	0xF985F8
+	call	Kernel_SemaWait_StackArg
 	inc	2, xsp
 	ldw	iy, 0x6612
 	extz	xiy
 	push	xiy
 	pushw	0x0000
-	call	0xF9804A
+	call	DSP_ChannelRegs_Write8
 	inc	6, xsp
 	ld	xiy, 0x00000100
 	push	xiy
 	pushw	0x0001
-	call	0xF9804A
+	call	DSP_ChannelRegs_Write8
 	inc	6, xsp
 	ldw	iy, 0x6612
 	extz	xiy
 	push	xiy
 	pushw	0x0002
-	call	0xF9804A
+	call	DSP_ChannelRegs_Write8
 	inc	6, xsp
 	ld	xiy, 0x00000108
 	push	xiy
 	pushw	0x0003
-	call	0xF9804A
+	call	DSP_ChannelRegs_Write8
 	inc	6, xsp
 	jr	DSP_ChannelRefresh_Loop__top
 
@@ -306,7 +306,7 @@ DSP_ChannelRefresh_Loop__top:
 ; --------------------------------------------------------------------------
 INTT3_KernelTick:
 	extpfx3	0xC0, 0x90, 0x61
-	jrl	(0xF9831C - 0xF9816B)
+	jrl	IRQ_Epilogue
 
 ; ==============================================================================
 ; 0xF9816B-0xF989EE -- ★★ THE MULTITASKING KERNEL, SHARED WITH CPU 1
@@ -373,7 +373,7 @@ INTT3_KernelTick:
 ;          leaves it open.
 ; --------------------------------------------------------------------------
 RamImage_Copy:
-	lda	xiy, (0x00FCB4EA:24)
+	lda	xiy, (BootRamImage_Head:24)
 	lda	xix, (0x00E2DF:24)
 	ld	xbc, 0x000010D8
 	extpfx2	0x85, 0x11
@@ -823,10 +823,10 @@ MAIN:
 	call	EEPROM_PortInit
 	call	Link_Init
 	call	Serial0_Init
-	call	0xF98000
+	call	DSP_ChannelRegs_Init
 	call	NoteTrim_BuildFromCalibration
 	calr	ADC_Init
-	ld	bc, (0x00FFFFEF:24)
+	ld	bc, (CLOCK_CONFIG_MHZ:24)
 	extz	bc
 	pushw	bc
 	calr	Timer1_SetPeriodAndStart
@@ -895,7 +895,7 @@ MAIN__timer_expired:
 	ld	(0x007ECC:24), 0x00
 	ldw	(0x00F2F1:24), 0x000A
 	pushw	0x0002
-	call	0xF98510
+	call	Kernel_SemaSignal_StackArg
 	popw	bc
 MAIN__reenable:
 	ei	0

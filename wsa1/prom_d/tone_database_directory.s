@@ -85,10 +85,15 @@
 ; record's entry out of the table at slot +0x08 and at 0xFB429F it ADDS THE
 ; BASE AGAIN.  A stored absolute address would not need that second add.
 ; 
-; ⚠ WHAT IS STILL NOT ESTABLISHED: 13 of the 39 filled primary slots have no
-; reader at all -- they are named on each banner, and every one of them
-; keeps its transplanted name on that basis.  And no FIELD inside any
-; record these slots point at is identified by anything.
+; ★ CORRECTED 2026-09-25 (lane promcd).  This paragraph said 13 of the 39
+; filled primary slots lacked any reader and that no field of any record
+; had been read.  All 13 have one now: +0x0C/+0x10/+0x14 and +0x18/+0x1C/+0x20
+; ToneDB_ResolveWaveSelectRecord (prom_c 0xFB82C3), +0x24/+0x28/+0x2C and
+; +0x30/+0x34/+0x38 ToneDB_ResolveEnvDescriptor (0xFB45C0), +0x48 at 0xFC0435
+; and +0x5C at 0xFC05C3 (ToneQuery_ReplySourceName1/2_ViaIndexMap) -- each
+; banner cites its own.  Fields read by the firmware are listed, with the
+; instruction for each, in prom_d/wsa1_prom_d.s's wave-17 block; most other
+; bytes still carry no name.
 ; ==========================================================================
 ToneDB_Base:
 ToneDB_Directory:
@@ -2238,6 +2243,11 @@ ToneDB_OctaveShiftByProgram:
 
 ; --- bank 0: the octave shift for each of the 128 programs of ToneNumBank_Melodic_0 ---
 ; 11 nonzero cells: prog 14 -12 'Tubular Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+; Read by Voice_GetOctaveShift (prom_c 0xFA72E9): dir[+0xA8] at 0xFA7332, + 128*bank (`sll
+; 0x07` 0xFA7351, the bank row from ToneDB_BankMap) + the in-row index (the program, as the
+; banner above reads it), + base at 0xFA7358; the byte lands in the high half of WA (`sll
+; 0x08` 0xFA735F), the encoding of the +-12-step octave table at prom_c 0xFDF22A.  This is
+; bank 0's row.
 ToneDB_OctaveShiftByProgram_Bank0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 00FC8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 00FD8  |................|
@@ -2250,6 +2260,11 @@ ToneDB_OctaveShiftByProgram_Bank0:
 
 ; --- bank 1: the octave shift for each of the 128 programs of ToneNumBank_Melodic_1 ---
 ; 10 nonzero cells: prog 14 -12 'Tubular Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 126 -12 'Timpani'
+; Read by Voice_GetOctaveShift (prom_c 0xFA72E9): dir[+0xA8] at 0xFA7332, + 128*bank (`sll
+; 0x07` 0xFA7351, the bank row from ToneDB_BankMap) + the in-row index (the program, as the
+; banner above reads it), + base at 0xFA7358; the byte lands in the high half of WA (`sll
+; 0x08` 0xFA735F), the encoding of the +-12-step octave table at prom_c 0xFDF22A.  This is
+; bank 1's row.
 ToneDB_OctaveShiftByProgram_Bank1:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01048  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01058  |................|
@@ -2262,6 +2277,11 @@ ToneDB_OctaveShiftByProgram_Bank1:
 
 ; --- bank 2: the octave shift for each of the 128 programs of ToneNumBank_Melodic_2 ---
 ; 9 nonzero cells: prog 88 -12 'Jazz Organ'; prog 89 -12 'Pop Organ'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 126 -12 'Timpani'
+; Read by Voice_GetOctaveShift (prom_c 0xFA72E9): dir[+0xA8] at 0xFA7332, + 128*bank (`sll
+; 0x07` 0xFA7351, the bank row from ToneDB_BankMap) + the in-row index (the program, as the
+; banner above reads it), + base at 0xFA7358; the byte lands in the high half of WA (`sll
+; 0x08` 0xFA735F), the encoding of the +-12-step octave table at prom_c 0xFDF22A.  This is
+; bank 2's row.
 ToneDB_OctaveShiftByProgram_Bank2:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 010C8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 010D8  |................|
@@ -2274,6 +2294,11 @@ ToneDB_OctaveShiftByProgram_Bank2:
 
 ; --- bank 3: the octave shift for each of the 128 programs of ToneNumBank_Melodic_3 ---
 ; 10 nonzero cells: prog 14 -12 'Gamelan 1'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 126 -12 'Timpani'
+; Read by Voice_GetOctaveShift (prom_c 0xFA72E9): dir[+0xA8] at 0xFA7332, + 128*bank (`sll
+; 0x07` 0xFA7351, the bank row from ToneDB_BankMap) + the in-row index (the program, as the
+; banner above reads it), + base at 0xFA7358; the byte lands in the high half of WA (`sll
+; 0x08` 0xFA735F), the encoding of the +-12-step octave table at prom_c 0xFDF22A.  This is
+; bank 3's row.
 ToneDB_OctaveShiftByProgram_Bank3:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01148  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01158  |................|
@@ -2286,6 +2311,11 @@ ToneDB_OctaveShiftByProgram_Bank3:
 
 ; --- bank 4: the octave shift for each of the 128 programs of ToneNumBank_Melodic_4 ---
 ; 11 nonzero cells: prog 14 -12 'Tubular Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+; Read by Voice_GetOctaveShift (prom_c 0xFA72E9): dir[+0xA8] at 0xFA7332, + 128*bank (`sll
+; 0x07` 0xFA7351, the bank row from ToneDB_BankMap) + the in-row index (the program, as the
+; banner above reads it), + base at 0xFA7358; the byte lands in the high half of WA (`sll
+; 0x08` 0xFA735F), the encoding of the +-12-step octave table at prom_c 0xFDF22A.  This is
+; bank 4's row.
 ToneDB_OctaveShiftByProgram_Bank4:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 011C8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 011D8  |................|
@@ -2298,6 +2328,11 @@ ToneDB_OctaveShiftByProgram_Bank4:
 
 ; --- bank 5: the octave shift for each of the 128 programs of ToneNumBank_Melodic_5 ---
 ; 11 nonzero cells: prog 14 -12 'Tubular Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 'Jazz Drawbars'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+; Read by Voice_GetOctaveShift (prom_c 0xFA72E9): dir[+0xA8] at 0xFA7332, + 128*bank (`sll
+; 0x07` 0xFA7351, the bank row from ToneDB_BankMap) + the in-row index (the program, as the
+; banner above reads it), + base at 0xFA7358; the byte lands in the high half of WA (`sll
+; 0x08` 0xFA735F), the encoding of the +-12-step octave table at prom_c 0xFDF22A.  This is
+; bank 5's row.
 ToneDB_OctaveShiftByProgram_Bank5:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01248  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01258  |................|
@@ -2310,6 +2345,11 @@ ToneDB_OctaveShiftByProgram_Bank5:
 
 ; --- bank 6: the octave shift for each of the 128 programs of ToneNumBank_Melodic_6 ---
 ; 11 nonzero cells: prog 14 -12 'Digi Bells'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 '<<< Drawbar 2>>>'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+; Read by Voice_GetOctaveShift (prom_c 0xFA72E9): dir[+0xA8] at 0xFA7332, + 128*bank (`sll
+; 0x07` 0xFA7351, the bank row from ToneDB_BankMap) + the in-row index (the program, as the
+; banner above reads it), + base at 0xFA7358; the byte lands in the high half of WA (`sll
+; 0x08` 0xFA735F), the encoding of the +-12-step octave table at prom_c 0xFDF22A.  This is
+; bank 6's row.
 ToneDB_OctaveShiftByProgram_Bank6:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 012C8  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 012D8  |................|
@@ -2322,6 +2362,11 @@ ToneDB_OctaveShiftByProgram_Bank6:
 
 ; --- bank 7: the octave shift for each of the 128 programs of ToneNumBank_Melodic_7 ---
 ; 11 nonzero cells: prog 14 -12 'Gamelan 2'; prog 88 -12 'Jazz Organ'; prog 89 -12 'Full Drawbars'; prog 90 -12 'Pop Organ'; prog 91 -12 "16' & 1'"; prog 92 -12 'Rock Organ'; prog 93 -12 '<<< Drawbar 1>>>'; prog 94 -12 'Sine Lead'; prog 95 -12 'Rock Organ'; prog 122 +12 'Agogo'; prog 126 -12 'Timpani'
+; Read by Voice_GetOctaveShift (prom_c 0xFA72E9): dir[+0xA8] at 0xFA7332, + 128*bank (`sll
+; 0x07` 0xFA7351, the bank row from ToneDB_BankMap) + the in-row index (the program, as the
+; banner above reads it), + base at 0xFA7358; the byte lands in the high half of WA (`sll
+; 0x08` 0xFA735F), the encoding of the +-12-step octave table at prom_c 0xFDF22A.  This is
+; bank 7's row.
 ToneDB_OctaveShiftByProgram_Bank7:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF4, 0x00	; 01348  |................|
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 01358  |................|

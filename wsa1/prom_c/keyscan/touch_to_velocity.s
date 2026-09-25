@@ -239,7 +239,7 @@ ToneGen_VelocityFromTouch:
 	ld	bc, (xiz+8)
 	extz	bc
 	extz	xbc
-	add	xbc, 0x00FCC61A
+	add	xbc, ToneGen_Velocity_Input_Curve
 	ld	a, (xbc)
 	ld	(xiz-1), a
 	ld	xbc, (xiz+12)
@@ -252,7 +252,7 @@ ToneGen_VelocityFromTouch:
 	extpfx5	0xC2, 0x2A, 0xF3, 0x00, 0x41
 	extz	xwa
 	ld	xix, xwa
-	add	xwa, 0x00FCC5FC
+	add	xwa, ToneGen_VelCurve_ModeParams
 	ld	c, (xwa)
 	extz	bc
 	ld	hl, bc
@@ -276,7 +276,7 @@ ToneGen_VelocityFromTouch:
 	ld	(xiz-14), xbc
 	ld	xwa, xix
 	inc	1, xwa
-	add	xwa, 0x00FCC5FC
+	add	xwa, ToneGen_VelCurve_ModeParams
 	ld	w, (xwa)
 	ldb_erp	w, 0xF4
 	extz	iy
@@ -292,7 +292,7 @@ ToneGen_VelocityFromTouch__black_key:
 	extpfx5	0xC2, 0x2A, 0xF3, 0x00, 0x43
 	extz	xbc
 	inc	2, xbc
-	add	xbc, 0x00FCC5FC
+	add	xbc, ToneGen_VelCurve_ModeParams
 	ld	a, (xbc)
 	extz	wa
 	extz	xwa
@@ -307,7 +307,7 @@ ToneGen_VelocityFromTouch__pitchclass:
 	cp	bc, 0x0009
 	jr	ugt, ToneGen_VelocityFromTouch__white_key
 	sll	bc, 2
-	add	xbc, 0x00F996C3
+	add	xbc, ToneGen_BlackKeyTrim_Table
 	ld	xbc, (xbc)
 	jp	(xbc)
 ; ----------------------------------------------------------------------------
@@ -324,16 +324,16 @@ ToneGen_VelocityFromTouch__pitchclass:
 ;     0xF996A7  fall through, no trim            (entries 1,3,4,6,8)
 ; ----------------------------------------------------------------------------
 ToneGen_BlackKeyTrim_Table:
-	.long	0x00F9968B
-	.long	0x00F996A7
-	.long	0x00F9968B
-	.long	0x00F996A7
-	.long	0x00F996A7
-	.long	0x00F9968B
-	.long	0x00F996A7
-	.long	0x00F9968B
-	.long	0x00F996A7
-	.long	0x00F9968B
+	.long	ToneGen_VelocityFromTouch__black_key
+	.long	ToneGen_VelocityFromTouch__white_key
+	.long	ToneGen_VelocityFromTouch__black_key
+	.long	ToneGen_VelocityFromTouch__white_key
+	.long	ToneGen_VelocityFromTouch__white_key
+	.long	ToneGen_VelocityFromTouch__black_key
+	.long	ToneGen_VelocityFromTouch__white_key
+	.long	ToneGen_VelocityFromTouch__black_key
+	.long	ToneGen_VelocityFromTouch__white_key
+	.long	ToneGen_VelocityFromTouch__black_key
 ToneGen_VelocityFromTouch__offset:
 	ld	bc, (0x00F32B:24)
 	extz	bc
@@ -352,7 +352,7 @@ ToneGen_VelocityFromTouch__no_clip_hi:
 	sub	xwa, xwa
 	ld	(xiz-6), xwa
 ToneGen_VelocityFromTouch__no_clip_lo:
-	lda	xbc, (0x00FCC71A:24)
+	lda	xbc, (ToneGen_Velocity_Output_Curve:24)
 	extpfx3	0xAE, 0xFA, 0x81
 	ld	a, (xbc)
 	ld	xbc, (xiz+16)

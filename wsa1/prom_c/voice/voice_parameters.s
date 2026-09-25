@@ -583,7 +583,7 @@ Voice_ComputePitch__FA8016:
 	ld	bc, de                                  ; FA8016  ld BC,DE
 	sra	bc, 8                                  ; FA8018  sra 0x08,BC
 	exts	xbc                                   ; FA801B  exts XBC
-	add	xbc, 0xFDD3AB                          ; FA801D  add XBC,0x00fdd3ab
+	add	xbc, Voice_KeyBend_Curve_0                          ; FA801D  add XBC,0x00fdd3ab
 	ld	a, (xbc)                                ; FA8023  ld A,(XBC)
 	exts	wa                                    ; FA8025  exts WA
 	add	de, wa                                 ; FA8027  add DE,WA
@@ -593,7 +593,7 @@ Voice_ComputePitch__FA802B:
 	sra	bc, 8                                  ; FA802D  sra 0x08,BC
 	exts	xbc                                   ; FA8030  exts XBC
 	add	xbc, 0x80                              ; FA8032  add XBC,0x00000080
-	add	xbc, 0xFDD3AB                          ; FA8038  add XBC,0x00fdd3ab
+	add	xbc, Voice_KeyBend_Curve_0                          ; FA8038  add XBC,0x00fdd3ab
 	ld	a, (xbc)                                ; FA803E  ld A,(XBC)
 	exts	wa                                    ; FA8040  exts WA
 	add	de, wa                                 ; FA8042  add DE,WA
@@ -612,7 +612,7 @@ Voice_ComputePitch__FA8046:
 	mul8rr	c, h                                ; FA805E  mul BC,H
 	extz	xbc                                   ; FA8060  extz XBC
 	add	xbc, xwa                               ; FA8062  add XBC,XWA
-	add	xbc, 0xFDF2C3                          ; FA8064  add XBC,0x00fdf2c3
+	add	xbc, Voice_ChromaticBend_Table                          ; FA8064  add XBC,0x00fdf2c3
 	ld	a, (xbc)                                ; FA806A  ld A,(XBC)
 	exts	wa                                    ; FA806C  exts WA
 	add	wa, wa                                 ; FA806E  add WA,WA
@@ -1370,7 +1370,7 @@ Voice_StageRegs_0900_0940_0980_AB__FA84A3:
 	extpfx3 0xC7, 0xF4, 0x9E                   ; FA84CA  ld IYL,H
 	extz	iy                                    ; FA84CD  extz IY
 	extz	xiy                                   ; FA84CF  extz XIY
-	add	xiy, 0xFDEFD9                          ; FA84D1  add XIY,0x00fdefd9
+	add	xiy, Voice_EnvelopeLevel_Curve                          ; FA84D1  add XIY,0x00fdefd9
 	ld	c, (xiy)                                ; FA84D7  ld C,(XIY)
 	extz	bc                                    ; FA84D9  extz BC
 	ld	de, bc                                  ; FA84DB  ld DE,BC
@@ -1385,7 +1385,7 @@ Voice_StageRegs_0900_0940_0980_AB__FA84E7:
 	ld	(xiz-18), a                             ; FA84ED  ld (XIZ+0xee),A
 	extz	wa                                    ; FA84F0  extz WA
 	extz	xwa                                   ; FA84F2  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA84F4  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA84F4  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA84FA  ld W,(XWA)
 	ld	l, w                                    ; FA84FC  ld L,W
 	extz	hl                                    ; FA84FE  extz HL
@@ -1401,7 +1401,7 @@ Voice_StageRegs_0900_0940_0980_AB__FA850B:
 	jr z, Voice_StageRegs_0900_0940_0980_AB__FA8559                   ; FA8516  jr Z,0xfa8559
 	extz	wa                                    ; FA8518  extz WA
 	extz	xwa                                   ; FA851A  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA851C  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA851C  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA8522  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FA8524  ld IXL,W
 	extz	ix                                    ; FA8527  extz IX
@@ -1413,14 +1413,14 @@ Voice_StageRegs_0900_0940_0980_AB__FA8530:
 	ld	a, (xbc+9)                              ; FA8533  ld A,(XBC+0x09)
 	extz	wa                                    ; FA8536  extz WA
 	extz	xwa                                   ; FA8538  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA853A  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA853A  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA8540  ld W,(XWA)
 	ld	e, w                                    ; FA8542  ld E,W
 	extz	de                                    ; FA8544  extz DE
 	ld	a, (xbc+11)                             ; FA8546  ld A,(XBC+0x0b)
 	extz	wa                                    ; FA8549  extz WA
 	extz	xwa                                   ; FA854B  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA854D  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA854D  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA8553  ld W,(XWA)
 	ld	l, w                                    ; FA8555  ld L,W
 	extz	hl                                    ; FA8557  extz HL
@@ -1429,7 +1429,7 @@ Voice_StageRegs_0900_0940_0980_AB__FA8559:
 	ld	a, (xbc+13)                             ; FA855C  ld A,(XBC+0x0d)
 	extz	wa                                    ; FA855F  extz WA
 	extz	xwa                                   ; FA8561  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA8563  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA8563  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA8569  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FA856B  ld IXL,W
 	extz	ix                                    ; FA856E  extz IX
@@ -2316,7 +2316,7 @@ VoiceParam_DispatchOn_17_36:
 	cp	wa, 5:i3                                  ; FA8BF4  cp WA,5
 	jr ugt, VoiceParam_DispatchOn_17_36__FA8C1D ; FA8BF6  jr UGT,0xfa8c1d
 	sll	wa, 2                                  ; FA8BF8  sll 0x02,WA
-	add	xwa, 0xFA8C05                          ; FA8BFB  add XWA,0x00fa8c05
+	add	xwa, VoiceParam_DispatchOn_17_36_JumpTable_FA8C05                          ; FA8BFB  add XWA,0x00fa8c05
 	ld	xwa, (xwa)                              ; FA8C01  ld XWA,(XWA)
 	jp	(xwa)                                   ; FA8C03  jp T,XWA
 ; 6 x u32 computed-goto table, 0xFA8C05-0xFA8C1C, 24 bytes.
@@ -2327,12 +2327,13 @@ VoiceParam_DispatchOn_17_36:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFA7E2C 0xFABE30;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FA8C1D	; 0xFA8C05  entry 0 -> 0xFA8C1D   (also the out-of-range arm)
-	.long 0x00FA8C23	; 0xFA8C09  entry 1 -> 0xFA8C23
-	.long 0x00FA8C29	; 0xFA8C0D  entry 2 -> 0xFA8C29
-	.long 0x00FA8C2F	; 0xFA8C11  entry 3 -> 0xFA8C2F
-	.long 0x00FA8C35	; 0xFA8C15  entry 4 -> 0xFA8C35
-	.long 0x00FA8C3B	; 0xFA8C19  entry 5 -> 0xFA8C3B
+VoiceParam_DispatchOn_17_36_JumpTable_FA8C05:
+	.long VoiceParam_DispatchOn_17_36__FA8C1D	; 0xFA8C05  entry 0 -> 0xFA8C1D   (also the out-of-range arm)
+	.long VoiceParam_DispatchOn_17_36__FA8C23	; 0xFA8C09  entry 1 -> 0xFA8C23
+	.long VoiceParam_DispatchOn_17_36__FA8C29	; 0xFA8C0D  entry 2 -> 0xFA8C29
+	.long VoiceParam_DispatchOn_17_36__FA8C2F	; 0xFA8C11  entry 3 -> 0xFA8C2F
+	.long VoiceParam_DispatchOn_17_36__FA8C35	; 0xFA8C15  entry 4 -> 0xFA8C35
+	.long VoiceParam_DispatchOn_17_36__FA8C3B	; 0xFA8C19  entry 5 -> 0xFA8C3B
 VoiceParam_DispatchOn_17_36__FA8C1D:
 	pushw	hl                                   ; FA8C1D  push HL
 	calr Rec_StoreConsts_003F_0041                 ; FA8C1E  calr 0xfa78ab
@@ -2943,7 +2944,7 @@ VoiceParam_DispatchOn_17_11:
 	cp	wa, 5:i3                                  ; FA9021  cp WA,5
 	jr ugt, VoiceParam_DispatchOn_17_11__FA904A ; FA9023  jr UGT,0xfa904a
 	sll	wa, 2                                  ; FA9025  sll 0x02,WA
-	add	xwa, 0xFA9032                          ; FA9028  add XWA,0x00fa9032
+	add	xwa, VoiceParam_DispatchOn_17_11_JumpTable_FA9032                          ; FA9028  add XWA,0x00fa9032
 	ld	xwa, (xwa)                              ; FA902E  ld XWA,(XWA)
 	jp	(xwa)                                   ; FA9030  jp T,XWA
 ; 6 x u32 computed-goto table, 0xFA9032-0xFA9049, 24 bytes.
@@ -2954,12 +2955,13 @@ VoiceParam_DispatchOn_17_11:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFA7E2C 0xFABE30;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FA904A	; 0xFA9032  entry 0 -> 0xFA904A   (also the out-of-range arm)
-	.long 0x00FA9060	; 0xFA9036  entry 1 -> 0xFA9060
-	.long 0x00FA9066	; 0xFA903A  entry 2 -> 0xFA9066
-	.long 0x00FA906C	; 0xFA903E  entry 3 -> 0xFA906C
-	.long 0x00FA9072	; 0xFA9042  entry 4 -> 0xFA9072
-	.long 0x00FA9078	; 0xFA9046  entry 5 -> 0xFA9078
+VoiceParam_DispatchOn_17_11_JumpTable_FA9032:
+	.long VoiceParam_DispatchOn_17_11__FA904A	; 0xFA9032  entry 0 -> 0xFA904A   (also the out-of-range arm)
+	.long VoiceParam_DispatchOn_17_11__FA9060	; 0xFA9036  entry 1 -> 0xFA9060
+	.long VoiceParam_DispatchOn_17_11__FA9066	; 0xFA903A  entry 2 -> 0xFA9066
+	.long VoiceParam_DispatchOn_17_11__FA906C	; 0xFA903E  entry 3 -> 0xFA906C
+	.long VoiceParam_DispatchOn_17_11__FA9072	; 0xFA9042  entry 4 -> 0xFA9072
+	.long VoiceParam_DispatchOn_17_11__FA9078	; 0xFA9046  entry 5 -> 0xFA9078
 VoiceParam_DispatchOn_17_11__FA904A:
 	pushw	hl                                   ; FA904A  push HL
 	calr Rec_StoreConsts_003F_0041                 ; FA904B  calr 0xfa78ab
@@ -3258,7 +3260,7 @@ Voice_StagePair_Reg0100_0140_AB:
 	cp	wa, 5:i3                                  ; FA91B4  cp WA,5
 	jrl ugt, Voice_StagePair_Reg0100_0140_AB__FA928D                ; FA91B6  jrl UGT,0xfa928d
 	sll	wa, 2                                  ; FA91B9  sll 0x02,WA
-	add	xwa, 0xFA91C6                          ; FA91BC  add XWA,0x00fa91c6
+	add	xwa, Voice_StagePair_Reg0100_0140_AB_JumpTable_FA91C6                          ; FA91BC  add XWA,0x00fa91c6
 	ld	xwa, (xwa)                              ; FA91C2  ld XWA,(XWA)
 	jp	(xwa)                                   ; FA91C4  jp T,XWA
 ; 6 x u32 computed-goto table, 0xFA91C6-0xFA91DD, 24 bytes.
@@ -3269,12 +3271,13 @@ Voice_StagePair_Reg0100_0140_AB:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFA7E2C 0xFABE30;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FA928D	; 0xFA91C6  entry 0 -> 0xFA928D   (also the out-of-range arm)
-	.long 0x00FA91EE	; 0xFA91CA  entry 1 -> 0xFA91EE
-	.long 0x00FA91EE	; 0xFA91CE  entry 2 -> 0xFA91EE
-	.long 0x00FA91DE	; 0xFA91D2  entry 3 -> 0xFA91DE
-	.long 0x00FA91F4	; 0xFA91D6  entry 4 -> 0xFA91F4
-	.long 0x00FA91FC	; 0xFA91DA  entry 5 -> 0xFA91FC
+Voice_StagePair_Reg0100_0140_AB_JumpTable_FA91C6:
+	.long Voice_StagePair_Reg0100_0140_AB__FA928D	; 0xFA91C6  entry 0 -> 0xFA928D   (also the out-of-range arm)
+	.long Voice_StagePair_Reg0100_0140_AB__FA91EE	; 0xFA91CA  entry 1 -> 0xFA91EE
+	.long Voice_StagePair_Reg0100_0140_AB__FA91EE	; 0xFA91CE  entry 2 -> 0xFA91EE
+	.long Voice_StagePair_Reg0100_0140_AB__FA91DE	; 0xFA91D2  entry 3 -> 0xFA91DE
+	.long Voice_StagePair_Reg0100_0140_AB__FA91F4	; 0xFA91D6  entry 4 -> 0xFA91F4
+	.long Voice_StagePair_Reg0100_0140_AB__FA91FC	; 0xFA91DA  entry 5 -> 0xFA91FC
 Voice_StagePair_Reg0100_0140_AB__FA91DE:
 	extz	xix                                   ; FA91DE  extz XIX
 	ld	bc, (xix+35)                            ; FA91E0  ld BC,(XIX+0x23)
@@ -3410,7 +3413,7 @@ Voice_StagePair_Reg0100_0140_CD:
 	cp	wa, 5:i3                                  ; FA92BE  cp WA,5
 	jrl ugt, Voice_StagePair_Reg0100_0140_CD__FA9397                ; FA92C0  jrl UGT,0xfa9397
 	sll	wa, 2                                  ; FA92C3  sll 0x02,WA
-	add	xwa, 0xFA92D0                          ; FA92C6  add XWA,0x00fa92d0
+	add	xwa, Voice_StagePair_Reg0100_0140_CD_JumpTable_FA92D0                          ; FA92C6  add XWA,0x00fa92d0
 	ld	xwa, (xwa)                              ; FA92CC  ld XWA,(XWA)
 	jp	(xwa)                                   ; FA92CE  jp T,XWA
 ; 6 x u32 computed-goto table, 0xFA92D0-0xFA92E7, 24 bytes.
@@ -3421,12 +3424,13 @@ Voice_StagePair_Reg0100_0140_CD:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFA7E2C 0xFABE30;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FA9397	; 0xFA92D0  entry 0 -> 0xFA9397   (also the out-of-range arm)
-	.long 0x00FA92F8	; 0xFA92D4  entry 1 -> 0xFA92F8
-	.long 0x00FA92F8	; 0xFA92D8  entry 2 -> 0xFA92F8
-	.long 0x00FA92E8	; 0xFA92DC  entry 3 -> 0xFA92E8
-	.long 0x00FA92FE	; 0xFA92E0  entry 4 -> 0xFA92FE
-	.long 0x00FA9306	; 0xFA92E4  entry 5 -> 0xFA9306
+Voice_StagePair_Reg0100_0140_CD_JumpTable_FA92D0:
+	.long Voice_StagePair_Reg0100_0140_CD__FA9397	; 0xFA92D0  entry 0 -> 0xFA9397   (also the out-of-range arm)
+	.long Voice_StagePair_Reg0100_0140_CD__FA92F8	; 0xFA92D4  entry 1 -> 0xFA92F8
+	.long Voice_StagePair_Reg0100_0140_CD__FA92F8	; 0xFA92D8  entry 2 -> 0xFA92F8
+	.long Voice_StagePair_Reg0100_0140_CD__FA92E8	; 0xFA92DC  entry 3 -> 0xFA92E8
+	.long Voice_StagePair_Reg0100_0140_CD__FA92FE	; 0xFA92E0  entry 4 -> 0xFA92FE
+	.long Voice_StagePair_Reg0100_0140_CD__FA9306	; 0xFA92E4  entry 5 -> 0xFA9306
 Voice_StagePair_Reg0100_0140_CD__FA92E8:
 	extz	xix                                   ; FA92E8  extz XIX
 	ld	bc, (xix+35)                            ; FA92EA  ld BC,(XIX+0x23)
@@ -3579,7 +3583,7 @@ Voice_StageRegs_09C0_0A00_0A40_AB:
 	extpfx3 0xC7, 0xF4, 0x9E                   ; FA93E0  ld IYL,H
 	extz	iy                                    ; FA93E3  extz IY
 	extz	xiy                                   ; FA93E5  extz XIY
-	add	xiy, 0xFDEFD9                          ; FA93E7  add XIY,0x00fdefd9
+	add	xiy, Voice_EnvelopeLevel_Curve                          ; FA93E7  add XIY,0x00fdefd9
 	ld	c, (xiy)                                ; FA93ED  ld C,(XIY)
 	extz	bc                                    ; FA93EF  extz BC
 	ld	de, bc                                  ; FA93F1  ld DE,BC
@@ -3594,7 +3598,7 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA93FD:
 	ld	(xiz-12), a                             ; FA9403  ld (XIZ+0xf4),A
 	extz	wa                                    ; FA9406  extz WA
 	extz	xwa                                   ; FA9408  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA940A  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA940A  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA9410  ld W,(XWA)
 	ld	l, w                                    ; FA9412  ld L,W
 	extz	hl                                    ; FA9414  extz HL
@@ -3610,7 +3614,7 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA9421:
 	jr z, Voice_StageRegs_09C0_0A00_0A40_AB__FA946F                   ; FA942C  jr Z,0xfa946f
 	extz	wa                                    ; FA942E  extz WA
 	extz	xwa                                   ; FA9430  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA9432  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA9432  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA9438  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FA943A  ld IXL,W
 	extz	ix                                    ; FA943D  extz IX
@@ -3622,14 +3626,14 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA9446:
 	ld	a, (xbc+63)                             ; FA9449  ld A,(XBC+0x3f)
 	extz	wa                                    ; FA944C  extz WA
 	extz	xwa                                   ; FA944E  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA9450  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA9450  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA9456  ld W,(XWA)
 	ld	e, w                                    ; FA9458  ld E,W
 	extz	de                                    ; FA945A  extz DE
 	ld	a, (xbc+65)                             ; FA945C  ld A,(XBC+0x41)
 	extz	wa                                    ; FA945F  extz WA
 	extz	xwa                                   ; FA9461  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA9463  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA9463  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA9469  ld W,(XWA)
 	ld	l, w                                    ; FA946B  ld L,W
 	extz	hl                                    ; FA946D  extz HL
@@ -3638,7 +3642,7 @@ Voice_StageRegs_09C0_0A00_0A40_AB__FA946F:
 	ld	a, (xbc+67)                             ; FA9472  ld A,(XBC+0x43)
 	extz	wa                                    ; FA9475  extz WA
 	extz	xwa                                   ; FA9477  extz XWA
-	add	xwa, 0xFDEFD9                          ; FA9479  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FA9479  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FA947F  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FA9481  ld IXL,W
 	extz	ix                                    ; FA9484  extz IX
@@ -5925,7 +5929,7 @@ Voice_StageRegs_0800_A__FAA565:
 	ld	c, l                                    ; FAA565  ld C,L
 	extz	bc                                    ; FAA567  extz BC
 	extz	xbc                                   ; FAA569  extz XBC
-	add	xbc, 0xFDEF74                          ; FAA56B  add XBC,0x00fdef74
+	add	xbc, Voice_LevelPair_AttackCurve                          ; FAA56B  add XBC,0x00fdef74
 	ld	a, (xbc)                                ; FAA571  ld A,(XBC)
 	extz	wa                                    ; FAA573  extz WA
 	ld	hl, wa                                  ; FAA575  ld HL,WA
@@ -6013,7 +6017,7 @@ Voice_StageRegs_0800_A__FAA624:
 	ld	a, (xbc+40)                             ; FAA627  ld A,(XBC+0x28)
 	extz	wa                                    ; FAA62A  extz WA
 	extz	xwa                                   ; FAA62C  extz XWA
-	add	xwa, 0xFDF03E                          ; FAA62E  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAA62E  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAA634  ld W,(XWA)
 	ld	a, w                                    ; FAA636  ld A,W
 	extz	wa                                    ; FAA638  extz WA
@@ -6106,7 +6110,7 @@ Voice_StageRegs_0800_A__FAA706:
 	ld	c, l                                    ; FAA706  ld C,L
 	extz	bc                                    ; FAA708  extz BC
 	extz	xbc                                   ; FAA70A  extz XBC
-	add	xbc, 0xFDEFD9                          ; FAA70C  add XBC,0x00fdefd9
+	add	xbc, Voice_EnvelopeLevel_Curve                          ; FAA70C  add XBC,0x00fdefd9
 	ld	a, (xbc)                                ; FAA712  ld A,(XBC)
 	extz	wa                                    ; FAA714  extz WA
 	ld	hl, wa                                  ; FAA716  ld HL,WA
@@ -6114,7 +6118,7 @@ Voice_StageRegs_0800_A__FAA706:
 	extpfx3 0xC7, 0xF4, 0x9A                   ; FAA71A  ld IYL,B
 	extz	iy                                    ; FAA71D  extz IY
 	extz	xiy                                   ; FAA71F  extz XIY
-	add	xiy, 0xFDEFD9                          ; FAA721  add XIY,0x00fdefd9
+	add	xiy, Voice_EnvelopeLevel_Curve                          ; FAA721  add XIY,0x00fdefd9
 	ld	c, (xiy)                                ; FAA727  ld C,(XIY)
 	extz	bc                                    ; FAA729  extz BC
 	ld	de, bc                                  ; FAA72B  ld DE,BC
@@ -6224,7 +6228,7 @@ Voice_StageRegs_0800_A__FAA813:
 	ld	a, (xbc+42)                             ; FAA816  ld A,(XBC+0x2a)
 	extz	wa                                    ; FAA819  extz WA
 	extz	xwa                                   ; FAA81B  extz XWA
-	add	xwa, 0xFDF03E                          ; FAA81D  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAA81D  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAA823  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FAA825  ld IXL,W
 	extz	ix                                    ; FAA828  extz IX
@@ -6236,7 +6240,7 @@ Voice_StageRegs_0800_A__FAA831:
 	ld	a, (xbc+44)                             ; FAA834  ld A,(XBC+0x2c)
 	extz	wa                                    ; FAA837  extz WA
 	extz	xwa                                   ; FAA839  extz XWA
-	add	xwa, 0xFDF03E                          ; FAA83B  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAA83B  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAA841  ld W,(XWA)
 	ld	a, w                                    ; FAA843  ld A,W
 	extz	wa                                    ; FAA845  extz WA
@@ -6491,7 +6495,7 @@ Voice_StageRegs_0800_CD__FAA9E3:
 	ld	c, l                                    ; FAA9E3  ld C,L
 	extz	bc                                    ; FAA9E5  extz BC
 	extz	xbc                                   ; FAA9E7  extz XBC
-	add	xbc, 0xFDEF74                          ; FAA9E9  add XBC,0x00fdef74
+	add	xbc, Voice_LevelPair_AttackCurve                          ; FAA9E9  add XBC,0x00fdef74
 	ld	a, (xbc)                                ; FAA9EF  ld A,(XBC)
 	extz	wa                                    ; FAA9F1  extz WA
 	ld	hl, wa                                  ; FAA9F3  ld HL,WA
@@ -6604,7 +6608,7 @@ Voice_StageRegs_0800_CD__FAAAEE:
 	ld	c, l                                    ; FAAAEE  ld C,L
 	extz	bc                                    ; FAAAF0  extz BC
 	extz	xbc                                   ; FAAAF2  extz XBC
-	add	xbc, 0xFDEFD9                          ; FAAAF4  add XBC,0x00fdefd9
+	add	xbc, Voice_EnvelopeLevel_Curve                          ; FAAAF4  add XBC,0x00fdefd9
 	ld	a, (xbc)                                ; FAAAFA  ld A,(XBC)
 	extz	wa                                    ; FAAAFC  extz WA
 	ld	hl, wa                                  ; FAAAFE  ld HL,WA
@@ -6612,7 +6616,7 @@ Voice_StageRegs_0800_CD__FAAAEE:
 	extpfx3 0xC7, 0xF4, 0x9A                   ; FAAB02  ld IYL,B
 	extz	iy                                    ; FAAB05  extz IY
 	extz	xiy                                   ; FAAB07  extz XIY
-	add	xiy, 0xFDEFD9                          ; FAAB09  add XIY,0x00fdefd9
+	add	xiy, Voice_EnvelopeLevel_Curve                          ; FAAB09  add XIY,0x00fdefd9
 	ld	c, (xiy)                                ; FAAB0F  ld C,(XIY)
 	extz	bc                                    ; FAAB11  extz BC
 	ld	de, bc                                  ; FAAB13  ld DE,BC
@@ -6649,7 +6653,7 @@ Voice_StageRegs_0800_CD__FAAB5C:
 	ld	a, (xbc+11)                             ; FAAB5F  ld A,(XBC+0x0b)
 	extz	wa                                    ; FAAB62  extz WA
 	extz	xwa                                   ; FAAB64  extz XWA
-	add	xwa, 0xFDF03E                          ; FAAB66  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAAB66  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAAB6C  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FAAB6E  ld IXL,W
 	extz	ix                                    ; FAAB71  extz IX
@@ -6674,7 +6678,7 @@ Voice_StageRegs_0800_CD__FAAB7A:
 	ld	c, (xwa+13)                             ; FAABA0  ld C,(XWA+0x0d)
 	extz	bc                                    ; FAABA3  extz BC
 	extz	xbc                                   ; FAABA5  extz XBC
-	add	xbc, 0xFDF03E                          ; FAABA7  add XBC,0x00fdf03e
+	add	xbc, Voice_EnvelopeRate_Table                          ; FAABA7  add XBC,0x00fdf03e
 	ld	b, (xbc)                                ; FAABAD  ld B,(XBC)
 	ld	c, b                                    ; FAABAF  ld C,B
 	extz	bc                                    ; FAABB1  extz BC
@@ -6690,7 +6694,7 @@ Voice_StageRegs_0800_CD__FAAB7A:
 	ld	a, (xbc+14)                             ; FAABCB  ld A,(XBC+0x0e)
 	extz	wa                                    ; FAABCE  extz WA
 	exts	xwa                                   ; FAABD0  exts XWA
-	add	xwa, 0xFDEFD9                          ; FAABD2  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FAABD2  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FAABD8  ld W,(XWA)
 	ld	bc, (xiz+8)                             ; FAABDA  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FAABDD  extz XBC
@@ -6912,7 +6916,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAD21:
 	ld	wa, (xbc+1)                             ; FAAD26  ld WA,(XBC+0x01)
 	and	wa, 0x800                              ; FAAD29  and WA,0x0800
 	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAD3B                   ; FAAD2D  jr Z,0xfaad3b
-	ld	a, (0xFDEF8E:24)                       ; FAAD2F  ld A,(0xfdef8e)
+	ld	a, (Voice_LevelPair_AttackCurve+26:24)                       ; FAAD2F  ld A,(0xfdef8e)
 	extz	wa                                    ; FAAD34  extz WA
 	ld	hl, wa                                  ; FAAD36  ld HL,WA
 	jrl Voice_StageRegs_0800_B_ModeLt3__FAAE4C                     ; FAAD38  jrl T,0xfaae4c
@@ -6963,7 +6967,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAD9A:
 	ld	hl, wa                                  ; FAAD9D  ld HL,WA
 	extz	wa                                    ; FAAD9F  extz WA
 	extz	xwa                                   ; FAADA1  extz XWA
-	add	xwa, 0xFDEF74                          ; FAADA3  add XWA,0x00fdef74
+	add	xwa, Voice_LevelPair_AttackCurve                          ; FAADA3  add XWA,0x00fdef74
 	ld	c, (xwa)                                ; FAADA9  ld C,(XWA)
 	extz	bc                                    ; FAADAB  extz BC
 	ld	hl, bc                                  ; FAADAD  ld HL,BC
@@ -7054,7 +7058,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAE63:
 	ld	a, (xbc+40)                             ; FAAE66  ld A,(XBC+0x28)
 	extz	wa                                    ; FAAE69  extz WA
 	extz	xwa                                   ; FAAE6B  extz XWA
-	add	xwa, 0xFDF03E                          ; FAAE6D  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAAE6D  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAAE73  ld W,(XWA)
 	ld	a, w                                    ; FAAE75  ld A,W
 	extz	wa                                    ; FAAE77  extz WA
@@ -7147,7 +7151,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAF45:
 	ld	c, l                                    ; FAAF45  ld C,L
 	extz	bc                                    ; FAAF47  extz BC
 	extz	xbc                                   ; FAAF49  extz XBC
-	add	xbc, 0xFDEFD9                          ; FAAF4B  add XBC,0x00fdefd9
+	add	xbc, Voice_EnvelopeLevel_Curve                          ; FAAF4B  add XBC,0x00fdefd9
 	ld	a, (xbc)                                ; FAAF51  ld A,(XBC)
 	extz	wa                                    ; FAAF53  extz WA
 	ld	hl, wa                                  ; FAAF55  ld HL,WA
@@ -7155,7 +7159,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAF45:
 	extpfx3 0xC7, 0xF4, 0x9A                   ; FAAF59  ld IYL,B
 	extz	iy                                    ; FAAF5C  extz IY
 	extz	xiy                                   ; FAAF5E  extz XIY
-	add	xiy, 0xFDEFD9                          ; FAAF60  add XIY,0x00fdefd9
+	add	xiy, Voice_EnvelopeLevel_Curve                          ; FAAF60  add XIY,0x00fdefd9
 	ld	c, (xiy)                                ; FAAF66  ld C,(XIY)
 	extz	bc                                    ; FAAF68  extz BC
 	ld	de, bc                                  ; FAAF6A  ld DE,BC
@@ -7265,7 +7269,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAB052:
 	ld	a, (xbc+42)                             ; FAB055  ld A,(XBC+0x2a)
 	extz	wa                                    ; FAB058  extz WA
 	extz	xwa                                   ; FAB05A  extz XWA
-	add	xwa, 0xFDF03E                          ; FAB05C  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAB05C  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAB062  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FAB064  ld IXL,W
 	extz	ix                                    ; FAB067  extz IX
@@ -7277,7 +7281,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAB070:
 	ld	a, (xbc+44)                             ; FAB073  ld A,(XBC+0x2c)
 	extz	wa                                    ; FAB076  extz WA
 	extz	xwa                                   ; FAB078  extz XWA
-	add	xwa, 0xFDF03E                          ; FAB07A  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAB07A  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAB080  ld W,(XWA)
 	ld	a, w                                    ; FAB082  ld A,W
 	extz	wa                                    ; FAB084  extz WA
@@ -7412,7 +7416,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB14A:
 	ld	c, l                                    ; FAB14A  ld C,L
 	extz	bc                                    ; FAB14C  extz BC
 	extz	xbc                                   ; FAB14E  extz XBC
-	add	xbc, 0xFDEF74                          ; FAB150  add XBC,0x00fdef74
+	add	xbc, Voice_LevelPair_AttackCurve                          ; FAB150  add XBC,0x00fdef74
 	ld	a, (xbc)                                ; FAB156  ld A,(XBC)
 	extz	wa                                    ; FAB158  extz WA
 	ld	hl, wa                                  ; FAB15A  ld HL,WA
@@ -7502,7 +7506,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB20E:
 	ld	a, (xbc+40)                             ; FAB211  ld A,(XBC+0x28)
 	extz	wa                                    ; FAB214  extz WA
 	extz	xwa                                   ; FAB216  extz XWA
-	add	xwa, 0xFDF03E                          ; FAB218  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAB218  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAB21E  ld W,(XWA)
 	ld	a, w                                    ; FAB220  ld A,W
 	extz	wa                                    ; FAB222  extz WA
@@ -7605,7 +7609,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB312:
 	ld	c, l                                    ; FAB312  ld C,L
 	extz	bc                                    ; FAB314  extz BC
 	extz	xbc                                   ; FAB316  extz XBC
-	add	xbc, 0xFDEFD9                          ; FAB318  add XBC,0x00fdefd9
+	add	xbc, Voice_EnvelopeLevel_Curve                          ; FAB318  add XBC,0x00fdefd9
 	ld	a, (xbc)                                ; FAB31E  ld A,(XBC)
 	extz	wa                                    ; FAB320  extz WA
 	ld	hl, wa                                  ; FAB322  ld HL,WA
@@ -7613,7 +7617,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB312:
 	extpfx3 0xC7, 0xF4, 0x9A                   ; FAB326  ld IYL,B
 	extz	iy                                    ; FAB329  extz IY
 	extz	xiy                                   ; FAB32B  extz XIY
-	add	xiy, 0xFDEFD9                          ; FAB32D  add XIY,0x00fdefd9
+	add	xiy, Voice_EnvelopeLevel_Curve                          ; FAB32D  add XIY,0x00fdefd9
 	ld	c, (xiy)                                ; FAB333  ld C,(XIY)
 	extz	bc                                    ; FAB335  extz BC
 	ld	de, bc                                  ; FAB337  ld DE,BC
@@ -7723,7 +7727,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB41F:
 	ld	a, (xbc+42)                             ; FAB422  ld A,(XBC+0x2a)
 	extz	wa                                    ; FAB425  extz WA
 	extz	xwa                                   ; FAB427  extz XWA
-	add	xwa, 0xFDF03E                          ; FAB429  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAB429  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAB42F  ld W,(XWA)
 	extpfx3 0xC7, 0xF0, 0x98                   ; FAB431  ld IXL,W
 	extz	ix                                    ; FAB434  extz IX
@@ -7735,7 +7739,7 @@ Voice_StageRegs_0800_B_ModeGe3__FAB43D:
 	ld	a, (xbc+44)                             ; FAB440  ld A,(XBC+0x2c)
 	extz	wa                                    ; FAB443  extz WA
 	extz	xwa                                   ; FAB445  extz XWA
-	add	xwa, 0xFDF03E                          ; FAB447  add XWA,0x00fdf03e
+	add	xwa, Voice_EnvelopeRate_Table                          ; FAB447  add XWA,0x00fdf03e
 	ld	w, (xwa)                                ; FAB44D  ld W,(XWA)
 	ld	a, w                                    ; FAB44F  ld A,W
 	extz	wa                                    ; FAB451  extz WA
@@ -7996,7 +8000,7 @@ sub_FAB5A5__FAB5CA:
 	jr ge, sub_FAB5A5__FAB607                  ; FAB5D3  jr GE,0xfab607
 	ld	bc, hl                                  ; FAB5D5  ld BC,HL
 	extz	xbc                                   ; FAB5D7  extz XBC
-	add	xbc, 0xFDD5AB                          ; FAB5D9  add XBC,0x00fdd5ab
+	add	xbc, Voice_DepthMirror_Table                          ; FAB5D9  add XBC,0x00fdd5ab
 	ld	a, (xbc)                                ; FAB5DF  ld A,(XBC)
 	extz	wa                                    ; FAB5E1  extz WA
 	ld	(xiz-2), wa                             ; FAB5E3  ld (XIZ+0xfe),WA
@@ -8048,7 +8052,7 @@ sub_FAB5A5__FAB61F:
 	ld	bc, (xde+39)                            ; FAB64B  ld BC,(XDE+0x27)
 	and	bc, 0x7F                               ; FAB64E  and BC,0x007f
 	extz	xbc                                   ; FAB652  extz XBC
-	add	xbc, 0xFDF1AA                          ; FAB654  add XBC,0x00fdf1aa
+	add	xbc, Voice_FineTune_Curve                          ; FAB654  add XBC,0x00fdf1aa
 	ld	b, (xbc)                                ; FAB65A  ld B,(XBC)
 	ld	c, b                                    ; FAB65C  ld C,B
 	exts	bc                                    ; FAB65E  exts BC
@@ -8139,7 +8143,7 @@ Voice_ComputeLevelBase_CD:
 	jr ge, sub_FAB6D5__FAB72A                  ; FAB6F5  jr GE,0xfab72a
 	ld	wa, hl                                  ; FAB6F7  ld WA,HL
 	extz	xwa                                   ; FAB6F9  extz XWA
-	add	xwa, 0xFDD5AB                          ; FAB6FB  add XWA,0x00fdd5ab
+	add	xwa, Voice_DepthMirror_Table                          ; FAB6FB  add XWA,0x00fdd5ab
 	ld	w, (xwa)                                ; FAB701  ld W,(XWA)
 	ld	a, w                                    ; FAB703  ld A,W
 	extz	wa                                    ; FAB705  extz WA
@@ -8178,7 +8182,7 @@ sub_FAB6D5__FAB742:
 	ld	bc, (xde+39)                            ; FAB750  ld BC,(XDE+0x27)
 	and	bc, 0x7F                               ; FAB753  and BC,0x007f
 	extz	xbc                                   ; FAB757  extz XBC
-	add	xbc, 0xFDF1AA                          ; FAB759  add XBC,0x00fdf1aa
+	add	xbc, Voice_FineTune_Curve                          ; FAB759  add XBC,0x00fdf1aa
 	ld	a, (xbc)                                ; FAB75F  ld A,(XBC)
 	exts	wa                                    ; FAB761  exts WA
 	ld	ix, wa                                  ; FAB763  ld IX,WA
@@ -8381,13 +8385,13 @@ Dev10C_StageRegs_0800_0840_ForNoteOn:
 	extz	bc                                    ; FAB83E  extz BC
 	extz	xbc                                   ; FAB840  extz XBC
 	ld	(xiz-4), xbc                            ; FAB842  ld (XIZ+0xfc),XBC
-	add	xbc, 0xFDF243                          ; FAB845  add XBC,0x00fdf243
+	add	xbc, Voice_VibratoDepth_Table                          ; FAB845  add XBC,0x00fdf243
 	ld	a, (xbc)                                ; FAB84B  ld A,(XBC)
 	extz	wa                                    ; FAB84D  extz WA
 	sll	wa, 8                                  ; FAB84F  sll 0x08,WA
 	set	7, wa                                  ; FAB852  set 0x07,WA
 	ld	(0xD78A:24), wa                        ; FAB855  ld (0x00d78a),WA
-	lda	xbc, (0xFDF243:24)                     ; FAB85A  lda XBC,0xfdf243
+	lda	xbc, (Voice_VibratoDepth_Table:24)                     ; FAB85A  lda XBC,0xfdf243
 	extpfx3 0xAE, 0xFC, 0x81                   ; FAB85F  add XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; FAB862  ld A,(XBC)
 	extz	wa                                    ; FAB864  extz WA
@@ -8525,7 +8529,7 @@ Dev10C_StageRegs_0800_0840_FAB8CC__FAB92E:
 	ld	c, l                                    ; FAB92E  ld C,L
 	extz	bc                                    ; FAB930  extz BC
 	exts	xbc                                   ; FAB932  exts XBC
-	add	xbc, 0xFDEFD9                          ; FAB934  add XBC,0x00fdefd9
+	add	xbc, Voice_EnvelopeLevel_Curve                          ; FAB934  add XBC,0x00fdefd9
 	ld	a, (xbc)                                ; FAB93A  ld A,(XBC)
 	extz	wa                                    ; FAB93C  extz WA
 	ld	hl, wa                                  ; FAB93E  ld HL,WA
@@ -8545,11 +8549,11 @@ Dev10C_StageRegs_0800_0840_FAB8CC__FAB92E:
 	ld	a, (xbc+22)                             ; FAB962  ld A,(XBC+0x16)
 	extz	wa                                    ; FAB965  extz WA
 	extz	xwa                                   ; FAB967  extz XWA
-	add	xwa, 0xFDF23A                          ; FAB969  add XWA,0x00fdf23a
+	add	xwa, Voice_EnvLevel_IndexMap                          ; FAB969  add XWA,0x00fdf23a
 	ld	c, (xwa)                                ; FAB96F  ld C,(XWA)
 	extz	bc                                    ; FAB971  extz BC
 	exts	xbc                                   ; FAB973  exts XBC
-	add	xbc, 0xFDEFD9                          ; FAB975  add XBC,0x00fdefd9
+	add	xbc, Voice_EnvelopeLevel_Curve                          ; FAB975  add XBC,0x00fdefd9
 	ld	b, (xbc)                                ; FAB97B  ld B,(XBC)
 	ld	e, b                                    ; FAB97D  ld E,B
 	extz	de                                    ; FAB97F  extz DE
@@ -8690,7 +8694,7 @@ Dev10C_StageRegs_0800_0840_FAB9D8__FABA42:
 	ld	de, wa                                  ; FABA45  ld DE,WA
 	extz	wa                                    ; FABA47  extz WA
 	exts	xwa                                   ; FABA49  exts XWA
-	add	xwa, 0xFDEFD9                          ; FABA4B  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FABA4B  add XWA,0x00fdefd9
 	ld	c, (xwa)                                ; FABA51  ld C,(XWA)
 	extz	bc                                    ; FABA53  extz BC
 	ld	de, bc                                  ; FABA55  ld DE,BC
@@ -8705,12 +8709,12 @@ Dev10C_StageRegs_0800_0840_FAB9D8__FABA42:
 	ld	a, (xhl+22)                             ; FABA6B  ld A,(XHL+0x16)
 	extz	wa                                    ; FABA6E  extz WA
 	extz	xwa                                   ; FABA70  extz XWA
-	add	xwa, 0xFDF23A                          ; FABA72  add XWA,0x00fdf23a
+	add	xwa, Voice_EnvLevel_IndexMap                          ; FABA72  add XWA,0x00fdf23a
 	ld	w, (xwa)                                ; FABA78  ld W,(XWA)
 	ld	a, w                                    ; FABA7A  ld A,W
 	extz	wa                                    ; FABA7C  extz WA
 	exts	xwa                                   ; FABA7E  exts XWA
-	add	xwa, 0xFDEFD9                          ; FABA80  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FABA80  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FABA86  ld W,(XWA)
 	ld	l, w                                    ; FABA88  ld L,W
 	extz	hl                                    ; FABA8A  extz HL
@@ -8819,7 +8823,7 @@ Dev10C_StageRegs_0900_0940__FABB08:
 	ld	c, (xwa+15)                             ; FABB12  ld C,(XWA+0x0f)
 	extz	bc                                    ; FABB15  extz BC
 	exts	xbc                                   ; FABB17  exts XBC
-	add	xbc, 0xFDEFD9                          ; FABB19  add XBC,0x00fdefd9
+	add	xbc, Voice_EnvelopeLevel_Curve                          ; FABB19  add XBC,0x00fdefd9
 	ld	b, (xbc)                                ; FABB1F  ld B,(XBC)
 	ld	e, b                                    ; FABB21  ld E,B
 	extz	de                                    ; FABB23  extz DE
@@ -8834,12 +8838,12 @@ Dev10C_StageRegs_0900_0940__FABB08:
 	ld	c, (xhl+22)                             ; FABB3A  ld C,(XHL+0x16)
 	extz	bc                                    ; FABB3D  extz BC
 	extz	xbc                                   ; FABB3F  extz XBC
-	add	xbc, 0xFDF23A                          ; FABB41  add XBC,0x00fdf23a
+	add	xbc, Voice_EnvLevel_IndexMap                          ; FABB41  add XBC,0x00fdf23a
 	ld	b, (xbc)                                ; FABB47  ld B,(XBC)
 	ld	c, b                                    ; FABB49  ld C,B
 	extz	bc                                    ; FABB4B  extz BC
 	exts	xbc                                   ; FABB4D  exts XBC
-	add	xbc, 0xFDEFD9                          ; FABB4F  add XBC,0x00fdefd9
+	add	xbc, Voice_EnvelopeLevel_Curve                          ; FABB4F  add XBC,0x00fdefd9
 	ld	b, (xbc)                                ; FABB55  ld B,(XBC)
 	ld	l, b                                    ; FABB57  ld L,B
 	extz	hl                                    ; FABB59  extz HL
@@ -8973,7 +8977,7 @@ Dev10C_StageRegs_09C0_0A00:
 	ld	a, (xbc+69)                             ; FABC0D  ld A,(XBC+0x45)
 	extz	wa                                    ; FABC10  extz WA
 	exts	xwa                                   ; FABC12  exts XWA
-	add	xwa, 0xFDEFD9                          ; FABC14  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FABC14  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FABC1A  ld W,(XWA)
 	ld	e, w                                    ; FABC1C  ld E,W
 	extz	de                                    ; FABC1E  extz DE
@@ -8986,12 +8990,12 @@ Dev10C_StageRegs_09C0_0A00:
 	ld	a, (xhl+22)                             ; FABC30  ld A,(XHL+0x16)
 	extz	wa                                    ; FABC33  extz WA
 	extz	xwa                                   ; FABC35  extz XWA
-	add	xwa, 0xFDF23A                          ; FABC37  add XWA,0x00fdf23a
+	add	xwa, Voice_EnvLevel_IndexMap                          ; FABC37  add XWA,0x00fdf23a
 	ld	w, (xwa)                                ; FABC3D  ld W,(XWA)
 	ld	a, w                                    ; FABC3F  ld A,W
 	extz	wa                                    ; FABC41  extz WA
 	exts	xwa                                   ; FABC43  exts XWA
-	add	xwa, 0xFDEFD9                          ; FABC45  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FABC45  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FABC4B  ld W,(XWA)
 	ld	l, w                                    ; FABC4D  ld L,W
 	extz	hl                                    ; FABC4F  extz HL
@@ -9171,7 +9175,7 @@ Dev10C_StageRegs_0800_0840_FABD50:
 	ld	a, (xbc+14)                             ; FABD77  ld A,(XBC+0x0e)
 	extz	wa                                    ; FABD7A  extz WA
 	exts	xwa                                   ; FABD7C  exts XWA
-	add	xwa, 0xFDEFD9                          ; FABD7E  add XWA,0x00fdefd9
+	add	xwa, Voice_EnvelopeLevel_Curve                          ; FABD7E  add XWA,0x00fdefd9
 	ld	w, (xwa)                                ; FABD84  ld W,(XWA)
 	ld	a, w                                    ; FABD86  ld A,W
 	extz	wa                                    ; FABD88  extz WA

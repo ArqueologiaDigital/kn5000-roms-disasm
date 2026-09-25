@@ -88,7 +88,7 @@
 ;     python3 notes/prom_c_verify_fragment.py c 0xFC8BB2 /tmp/b.final.s
 ; ==============================================================================
 ; --------------------------------------------------------------------------
-; sub_FC8BB2 -- 0xFC8BB2..0xFC8C44 (147 bytes)
+; Double_Cos -- 0xFC8BB2..0xFC8C44 (147 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xF9EE4A in sub_F9ECF1__F9ED7A, 0xF9EFD3 in sub_F9ECF1__F9EFA0
@@ -96,7 +96,7 @@
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0xFCB27E, 0xFCB282, 0xFCB286, 0xFCB28A, 0xFCB28E, 0xFCB292
-; Calls:   0xFC8C45 = sub_FC8C45, 0xFCA121 = Double_Compare
+; Calls:   0xFC8C45 = Double_Sin, 0xFCA121 = Double_Compare
 ;          0xFCA1B6 = Double_Negate, 0xFCA1E5 = Double_Classify
 ;          0xFCA41F = Double_Add
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC8BB2-0xFC8C44
@@ -106,8 +106,10 @@
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): Double_Cos -- cos(x) = Double_Sin(|x| + pi/2), 1.0 for a zero argument (0xFC8BC0-0xFC8C2D).
+;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
-sub_FC8BB2:
+Double_Cos:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FC8BB2  link XIZ,0xfff0
 	push	xix                                   ; FC8BB6  push XIX
 	push	xiy                                   ; FC8BB7  push XIY
@@ -117,17 +119,17 @@ sub_FC8BB2:
 	push	xbc                                   ; FC8BBF  push XBC
 	call	Double_Classify                              ; FC8BC0  call 0xfca1e5
 	cp	wa, 0:i3                                  ; FC8BC4  cp WA,0
-	jr nz, sub_FC8BB2__FC8BDC                  ; FC8BC6  jr NZ,0xfc8bdc
+	jr nz, Double_Cos__FC8BDC                  ; FC8BC6  jr NZ,0xfc8bdc
 	ld	xiy, (xsp)                              ; FC8BC8  ld XIY,(XSP)
-	ld	xix, (0xFCB286:24)                     ; FC8BCA  ld XIX,(0xfcb286)
+	ld	xix, (F64_1p0:24)                     ; FC8BCA  ld XIX,(0xfcb286)
 	stl_dpi	xix, 0xF6                          ; FC8BCF  ld (XIY+),XIX
-	ld	xix, (0xFCB28A:24)                     ; FC8BD2  ld XIX,(0xfcb28a)
+	ld	xix, (F64_1p0+4:24)                     ; FC8BD2  ld XIX,(0xfcb28a)
 	ld	(xiy), xix                              ; FC8BD7  ld (XIY),XIX
-	jrl sub_FC8BB2__FC8C40                     ; FC8BD9  jrl T,0xfc8c40
-sub_FC8BB2__FC8BDC:
-	ld	xbc, (0xFCB292:24)                     ; FC8BDC  ld XBC,(0xfcb292)
+	jrl Double_Cos__FC8C40                     ; FC8BD9  jrl T,0xfc8c40
+Double_Cos__FC8BDC:
+	ld	xbc, (F64_0p0+4:24)                     ; FC8BDC  ld XBC,(0xfcb292)
 	push	xbc                                   ; FC8BE1  push XBC
-	ld	xbc, (0xFCB28E:24)                     ; FC8BE2  ld XBC,(0xfcb28e)
+	ld	xbc, (F64_0p0:24)                     ; FC8BE2  ld XBC,(0xfcb28e)
 	push	xbc                                   ; FC8BE7  push XBC
 	ld	xbc, (xiz+12)                           ; FC8BE8  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8BEB  push XBC
@@ -135,17 +137,17 @@ sub_FC8BB2__FC8BDC:
 	push	xbc                                   ; FC8BEF  push XBC
 	call	Double_Compare                              ; FC8BF0  call 0xfca121
 	cp	wa, 2:i3                                  ; FC8BF4  cp WA,2
-	jr nz, sub_FC8BB2__FC8C07                  ; FC8BF6  jr NZ,0xfc8c07
+	jr nz, Double_Cos__FC8C07                  ; FC8BF6  jr NZ,0xfc8c07
 	ld	xbc, (xiz+12)                           ; FC8BF8  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8BFB  push XBC
 	ld	xbc, (xiz+8)                            ; FC8BFC  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC8BFF  push XBC
 	lda	xiy, (xiz+8)                           ; FC8C00  lda XIY,XIZ+0x08
 	call	Double_Negate                              ; FC8C03  call 0xfca1b6
-sub_FC8BB2__FC8C07:
-	ld	xbc, (0xFCB282:24)                     ; FC8C07  ld XBC,(0xfcb282)
+Double_Cos__FC8C07:
+	ld	xbc, (Float64_ConstantPool+4:24)                     ; FC8C07  ld XBC,(0xfcb282)
 	push	xbc                                   ; FC8C0C  push XBC
-	ld	xbc, (0xFCB27E:24)                     ; FC8C0D  ld XBC,(0xfcb27e)
+	ld	xbc, (Float64_ConstantPool:24)                     ; FC8C0D  ld XBC,(0xfcb27e)
 	push	xbc                                   ; FC8C12  push XBC
 	ld	xbc, (xiz+12)                           ; FC8C13  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8C16  push XBC
@@ -158,20 +160,20 @@ sub_FC8BB2__FC8C07:
 	ld	xbc, (xiz-8)                            ; FC8C26  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FC8C29  push XBC
 	lda	xiy, (xiz-16)                          ; FC8C2A  lda XIY,XIZ+0xf0
-	call	sub_FC8C45                              ; FC8C2D  call 0xfc8c45
+	call	Double_Sin                              ; FC8C2D  call 0xfc8c45
 	inc	8, xsp                                 ; FC8C31  inc 0,XSP
 	ld	xiy, (xsp)                              ; FC8C33  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FC8C35  ld XIX,(XIZ+0xf0)
 	stl_dpi	xix, 0xF6                          ; FC8C38  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FC8C3B  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FC8C3E  ld (XIY),XIX
-sub_FC8BB2__FC8C40:
+Double_Cos__FC8C40:
 	pop	xiy                                    ; FC8C40  pop XIY
 	pop	xix                                    ; FC8C41  pop XIX
 	unlk32 xiz                                 ; FC8C42  unlk XIZ
 	ret                                        ; FC8C44  ret
 ; --------------------------------------------------------------------------
-; sub_FC8C45 -- 0xFC8C45..0xFC8EE4 (672 bytes)
+; Double_Sin -- 0xFC8C45..0xFC8EE4 (672 bytes)
 ;
 ; Called from: 4 site(s) outside this module:
 ;          0xF9EE83 in sub_F9ECF1__F9ED7A, 0xF9F00C in sub_F9ECF1__F9EFA0
@@ -192,16 +194,18 @@ sub_FC8BB2__FC8C40:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): Double_Sin -- sin(x): Cody-Waite, the r1..r8 set at 0xFCB2CE-0xFCB306, reduction by 1/pi (F64_0p3183098861837907) and pi.
+;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
-sub_FC8C45:
+Double_Sin:
 	link32 0xEE, 0x0C, 0xD0, 0xFF              ; FC8C45  link XIZ,0xffd0
 	pushw	hl                                   ; FC8C49  push HL
 	push	xix                                   ; FC8C4A  push XIX
 	push	xiy                                   ; FC8C4B  push XIY
 	ld	h, 0:opc                                   ; FC8C4C  ld H,0x00
-	ld	xbc, (0xFCB2CA:24)                     ; FC8C4E  ld XBC,(0xfcb2ca)
+	ld	xbc, (F64_0p0_2+4:24)                     ; FC8C4E  ld XBC,(0xfcb2ca)
 	push	xbc                                   ; FC8C53  push XBC
-	ld	xbc, (0xFCB2C6:24)                     ; FC8C54  ld XBC,(0xfcb2c6)
+	ld	xbc, (F64_0p0_2:24)                     ; FC8C54  ld XBC,(0xfcb2c6)
 	push	xbc                                   ; FC8C59  push XBC
 	ld	xbc, (xiz+12)                           ; FC8C5A  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8C5D  push XBC
@@ -209,22 +213,22 @@ sub_FC8C45:
 	push	xbc                                   ; FC8C61  push XBC
 	call	Double_Compare                              ; FC8C62  call 0xfca121
 	cp	wa, 2:i3                                  ; FC8C66  cp WA,2
-	jr nz, sub_FC8C45__FC8C6C                  ; FC8C68  jr NZ,0xfc8c6c
+	jr nz, Double_Sin__FC8C6C                  ; FC8C68  jr NZ,0xfc8c6c
 	ld	h, 1:opc                                   ; FC8C6A  ld H,0x01
-sub_FC8C45__FC8C6C:
+Double_Sin__FC8C6C:
 	ld	l, h                                    ; FC8C6C  ld L,H
 	cp	h, 0:i3                                   ; FC8C6E  cp H,0
-	jr z, sub_FC8C45__FC8C81                   ; FC8C70  jr Z,0xfc8c81
+	jr z, Double_Sin__FC8C81                   ; FC8C70  jr Z,0xfc8c81
 	ld	xbc, (xiz+12)                           ; FC8C72  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8C75  push XBC
 	ld	xbc, (xiz+8)                            ; FC8C76  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC8C79  push XBC
 	lda	xiy, (xiz+8)                           ; FC8C7A  lda XIY,XIZ+0x08
 	call	Double_Negate                              ; FC8C7D  call 0xfca1b6
-sub_FC8C45__FC8C81:
-	ld	xbc, (0xFCB2C2:24)                     ; FC8C81  ld XBC,(0xfcb2c2)
+Double_Sin__FC8C81:
+	ld	xbc, (F64_1p414847550405688e16+4:24)                     ; FC8C81  ld XBC,(0xfcb2c2)
 	push	xbc                                   ; FC8C86  push XBC
-	ld	xbc, (0xFCB2BE:24)                     ; FC8C87  ld XBC,(0xfcb2be)
+	ld	xbc, (F64_1p414847550405688e16:24)                     ; FC8C87  ld XBC,(0xfcb2be)
 	push	xbc                                   ; FC8C8C  push XBC
 	ld	xbc, (xiz+12)                           ; FC8C8D  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8C90  push XBC
@@ -232,18 +236,18 @@ sub_FC8C45__FC8C81:
 	push	xbc                                   ; FC8C94  push XBC
 	call	Double_Compare                              ; FC8C95  call 0xfca121
 	cp	wa, 1:i3                                  ; FC8C99  cp WA,1
-	jr nz, sub_FC8C45__FC8CB8                  ; FC8C9B  jr NZ,0xfc8cb8
+	jr nz, Double_Sin__FC8CB8                  ; FC8C9B  jr NZ,0xfc8cb8
 	ldw	(0xF362:24), 34                       ; FC8C9D  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC8CA4  ld XIY,(XSP)
-	ld	xix, (0xFCB2C6:24)                     ; FC8CA6  ld XIX,(0xfcb2c6)
+	ld	xix, (F64_0p0_2:24)                     ; FC8CA6  ld XIX,(0xfcb2c6)
 	stl_dpi	xix, 0xF6                          ; FC8CAB  ld (XIY+),XIX
-	ld	xix, (0xFCB2CA:24)                     ; FC8CAE  ld XIX,(0xfcb2ca)
+	ld	xix, (F64_0p0_2+4:24)                     ; FC8CAE  ld XIX,(0xfcb2ca)
 	ld	(xiy), xix                              ; FC8CB3  ld (XIY),XIX
-	jrl sub_FC8C45__FC8EDF                     ; FC8CB5  jrl T,0xfc8edf
-sub_FC8C45__FC8CB8:
-	ld	xbc, (0xFCB2BA:24)                     ; FC8CB8  ld XBC,(0xfcb2ba)
+	jrl Double_Sin__FC8EDF                     ; FC8CB5  jrl T,0xfc8edf
+Double_Sin__FC8CB8:
+	ld	xbc, (F64_298156826p0+4:24)                     ; FC8CB8  ld XBC,(0xfcb2ba)
 	push	xbc                                   ; FC8CBD  push XBC
-	ld	xbc, (0xFCB2B6:24)                     ; FC8CBE  ld XBC,(0xfcb2b6)
+	ld	xbc, (F64_298156826p0:24)                     ; FC8CBE  ld XBC,(0xfcb2b6)
 	push	xbc                                   ; FC8CC3  push XBC
 	ld	xbc, (xiz+12)                           ; FC8CC4  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8CC7  push XBC
@@ -251,24 +255,24 @@ sub_FC8C45__FC8CB8:
 	push	xbc                                   ; FC8CCB  push XBC
 	call	Double_Compare                              ; FC8CCC  call 0xfca121
 	cp	wa, 1:i3                                  ; FC8CD0  cp WA,1
-	jr nz, sub_FC8C45__FC8CDB                  ; FC8CD2  jr NZ,0xfc8cdb
+	jr nz, Double_Sin__FC8CDB                  ; FC8CD2  jr NZ,0xfc8cdb
 	ldw	(0xF362:24), 34                       ; FC8CD4  ld (0x00f362),0x0022
-sub_FC8C45__FC8CDB:
+Double_Sin__FC8CDB:
 	lda	xbc, (xiz-8)                           ; FC8CDB  lda XBC,XIZ+0xf8
 	push	xbc                                   ; FC8CDE  push XBC
 	ld	xwa, (xiz+12)                           ; FC8CDF  ld XWA,(XIZ+0x0c)
 	push	xwa                                   ; FC8CE2  push XWA
 	ld	xwa, (xiz+8)                            ; FC8CE3  ld XWA,(XIZ+0x08)
 	push	xwa                                   ; FC8CE6  push XWA
-	ld	xwa, (0xFCB2B2:24)                     ; FC8CE7  ld XWA,(0xfcb2b2)
+	ld	xwa, (F64_0p3183098861837907+4:24)                     ; FC8CE7  ld XWA,(0xfcb2b2)
 	push	xwa                                   ; FC8CEC  push XWA
-	ld	xwa, (0xFCB2AE:24)                     ; FC8CED  ld XWA,(0xfcb2ae)
+	ld	xwa, (F64_0p3183098861837907:24)                     ; FC8CED  ld XWA,(0xfcb2ae)
 	push	xwa                                   ; FC8CF2  push XWA
 	lda	xiy, (xiz-24)                          ; FC8CF3  lda XIY,XIZ+0xe8
 	call	Double_Multiply                              ; FC8CF6  call 0xfca252
-	ld	xbc, (0xFCB2AA:24)                     ; FC8CFA  ld XBC,(0xfcb2aa)
+	ld	xbc, (F64_0p5_2+4:24)                     ; FC8CFA  ld XBC,(0xfcb2aa)
 	push	xbc                                   ; FC8CFF  push XBC
-	ld	xbc, (0xFCB2A6:24)                     ; FC8D00  ld XBC,(0xfcb2a6)
+	ld	xbc, (F64_0p5_2:24)                     ; FC8D00  ld XBC,(0xfcb2a6)
 	push	xbc                                   ; FC8D05  push XBC
 	ld	xbc, (xiz-20)                           ; FC8D06  ld XBC,(XIZ+0xec)
 	push	xbc                                   ; FC8D09  push XBC
@@ -289,9 +293,9 @@ sub_FC8C45__FC8CDB:
 	extpfx3 0xD4, 0xE5, 0x04                   ; FC8D31  pushw (-XBC)
 	extpfx3 0xD4, 0xE5, 0x04                   ; FC8D34  pushw (-XBC)
 	extpfx2 0x91, 0x04                         ; FC8D37  pushw (XBC)
-	ld	xwa, (0xFCB2AA:24)                     ; FC8D39  ld XWA,(0xfcb2aa)
+	ld	xwa, (F64_0p5_2+4:24)                     ; FC8D39  ld XWA,(0xfcb2aa)
 	push	xwa                                   ; FC8D3E  push XWA
-	ld	xwa, (0xFCB2A6:24)                     ; FC8D3F  ld XWA,(0xfcb2a6)
+	ld	xwa, (F64_0p5_2:24)                     ; FC8D3F  ld XWA,(0xfcb2a6)
 	push	xwa                                   ; FC8D44  push XWA
 	lda	xiy, (xiz-40)                          ; FC8D45  lda XIY,XIZ+0xd8
 	call	Double_Multiply                              ; FC8D48  call 0xfca252
@@ -308,17 +312,17 @@ sub_FC8C45__FC8CDB:
 	push	xbc                                   ; FC8D68  push XBC
 	call	Double_Classify                              ; FC8D69  call 0xfca1e5
 	cp	wa, 0:i3                                  ; FC8D6D  cp WA,0
-	jr z, sub_FC8C45__FC8D75                   ; FC8D6F  jr Z,0xfc8d75
+	jr z, Double_Sin__FC8D75                   ; FC8D6F  jr Z,0xfc8d75
 	ld	h, 1:opc                                   ; FC8D71  ld H,0x01
-	jr sub_FC8C45__FC8D77                      ; FC8D73  jr T,0xfc8d77
-sub_FC8C45__FC8D75:
+	jr Double_Sin__FC8D77                      ; FC8D73  jr T,0xfc8d77
+Double_Sin__FC8D75:
 	ld	h, 0:opc                                   ; FC8D75  ld H,0x00
-sub_FC8C45__FC8D77:
+Double_Sin__FC8D77:
 	ld	c, h                                    ; FC8D77  ld C,H
 	xor	l, c                                   ; FC8D79  xor L,C
-	ld	xbc, (0xFCB2AA:24)                     ; FC8D7B  ld XBC,(0xfcb2aa)
+	ld	xbc, (F64_0p5_2+4:24)                     ; FC8D7B  ld XBC,(0xfcb2aa)
 	push	xbc                                   ; FC8D80  push XBC
-	ld	xbc, (0xFCB2A6:24)                     ; FC8D81  ld XBC,(0xfcb2a6)
+	ld	xbc, (F64_0p5_2:24)                     ; FC8D81  ld XBC,(0xfcb2a6)
 	push	xbc                                   ; FC8D86  push XBC
 	ld	xbc, (xiz+12)                           ; FC8D87  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8D8A  push XBC
@@ -330,15 +334,15 @@ sub_FC8C45__FC8D77:
 	push	xbc                                   ; FC8D99  push XBC
 	ld	xbc, (xiz-24)                           ; FC8D9A  ld XBC,(XIZ+0xe8)
 	push	xbc                                   ; FC8D9D  push XBC
-	ld	xbc, (0xFCB2A2:24)                     ; FC8D9E  ld XBC,(0xfcb2a2)
+	ld	xbc, (F64_3p141592653589793+4:24)                     ; FC8D9E  ld XBC,(0xfcb2a2)
 	push	xbc                                   ; FC8DA3  push XBC
-	ld	xbc, (0xFCB29E:24)                     ; FC8DA4  ld XBC,(0xfcb29e)
+	ld	xbc, (F64_3p141592653589793:24)                     ; FC8DA4  ld XBC,(0xfcb29e)
 	push	xbc                                   ; FC8DA9  push XBC
 	lda	xiy, (xiz+8)                           ; FC8DAA  lda XIY,XIZ+0x08
 	call	Double_Multiply                              ; FC8DAD  call 0xfca252
-	ld	xbc, (0xFCB2CA:24)                     ; FC8DB1  ld XBC,(0xfcb2ca)
+	ld	xbc, (F64_0p0_2+4:24)                     ; FC8DB1  ld XBC,(0xfcb2ca)
 	push	xbc                                   ; FC8DB6  push XBC
-	ld	xbc, (0xFCB2C6:24)                     ; FC8DB7  ld XBC,(0xfcb2c6)
+	ld	xbc, (F64_0p0_2:24)                     ; FC8DB7  ld XBC,(0xfcb2c6)
 	push	xbc                                   ; FC8DBC  push XBC
 	ld	xbc, (xiz+12)                           ; FC8DBD  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8DC0  push XBC
@@ -346,7 +350,7 @@ sub_FC8C45__FC8D77:
 	push	xbc                                   ; FC8DC4  push XBC
 	call	Double_Compare                              ; FC8DC5  call 0xfca121
 	cp	wa, 2:i3                                  ; FC8DC9  cp WA,2
-	jr nz, sub_FC8C45__FC8DDF                  ; FC8DCB  jr NZ,0xfc8ddf
+	jr nz, Double_Sin__FC8DDF                  ; FC8DCB  jr NZ,0xfc8ddf
 	xor	l, 1                                   ; FC8DCD  xor L,0x01
 	ld	xbc, (xiz+12)                           ; FC8DD0  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8DD3  push XBC
@@ -354,10 +358,10 @@ sub_FC8C45__FC8D77:
 	push	xbc                                   ; FC8DD7  push XBC
 	lda	xiy, (xiz+8)                           ; FC8DD8  lda XIY,XIZ+0x08
 	call	Double_Negate                              ; FC8DDB  call 0xfca1b6
-sub_FC8C45__FC8DDF:
-	ld	xbc, (0xFCB29A:24)                     ; FC8DDF  ld XBC,(0xfcb29a)
+Double_Sin__FC8DDF:
+	ld	xbc, (F64_1p0536712127723509em08+4:24)                     ; FC8DDF  ld XBC,(0xfcb29a)
 	push	xbc                                   ; FC8DE4  push XBC
-	ld	xbc, (0xFCB296:24)                     ; FC8DE5  ld XBC,(0xfcb296)
+	ld	xbc, (F64_1p0536712127723509em08:24)                     ; FC8DE5  ld XBC,(0xfcb296)
 	push	xbc                                   ; FC8DEA  push XBC
 	ld	xbc, (xiz+12)                           ; FC8DEB  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8DEE  push XBC
@@ -365,7 +369,7 @@ sub_FC8C45__FC8DDF:
 	push	xbc                                   ; FC8DF2  push XBC
 	call	Double_Compare                              ; FC8DF3  call 0xfca121
 	cp	wa, 1:i3                                  ; FC8DF7  cp WA,1
-	jrl nz, sub_FC8C45__FC8EB0                 ; FC8DF9  jrl NZ,0xfc8eb0
+	jrl nz, Double_Sin__FC8EB0                 ; FC8DF9  jrl NZ,0xfc8eb0
 	ld	xbc, (xiz+12)                           ; FC8DFC  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8DFF  push XBC
 	ld	xbc, (xiz+8)                            ; FC8E00  ld XBC,(XIZ+0x08)
@@ -377,13 +381,13 @@ sub_FC8C45__FC8DDF:
 	lda	xiy, (xiz-8)                           ; FC8E0C  lda XIY,XIZ+0xf8
 	call	Double_Multiply                              ; FC8E0F  call 0xfca252
 	lda	xix, (xiz-16)                          ; FC8E13  lda XIX,XIZ+0xf0
-	lda	xiy, (0xFCB2CE:24)                     ; FC8E16  lda XIY,0xfcb2ce
+	lda	xiy, (F64_2p7204790957888847em15:24)                     ; FC8E16  lda XIY,0xfcb2ce
 	ldw	bc, 4                                  ; FC8E1B  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC8E1E  ldirw
-	lda	xix, (0xFCB2CE:24)                     ; FC8E20  lda XIX,0xfcb2ce
+	lda	xix, (F64_2p7204790957888847em15:24)                     ; FC8E20  lda XIX,0xfcb2ce
 	inc	8, xix                                 ; FC8E25  inc 0,XIX
 	ld	h, 7:opc                                   ; FC8E27  ld H,0x07
-sub_FC8C45__FC8E29:
+Double_Sin__FC8E29:
 	ld	xbc, (xiz-12)                           ; FC8E29  ld XBC,(XIZ+0xf4)
 	push	xbc                                   ; FC8E2C  push XBC
 	ld	xbc, (xiz-16)                           ; FC8E2D  ld XBC,(XIZ+0xf0)
@@ -413,7 +417,7 @@ sub_FC8C45__FC8E29:
 	inc	8, xix                                 ; FC8E63  inc 0,XIX
 	dec	1, h                                   ; FC8E65  dec 1,H
 	cp	h, 0:i3                                   ; FC8E67  cp H,0
-	jr nz, sub_FC8C45__FC8E29                  ; FC8E69  jr NZ,0xfc8e29
+	jr nz, Double_Sin__FC8E29                  ; FC8E69  jr NZ,0xfc8e29
 	ld	xbc, (xiz+12)                           ; FC8E6B  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8E6E  push XBC
 	ld	xbc, (xiz+8)                            ; FC8E6F  ld XBC,(XIZ+0x08)
@@ -444,9 +448,9 @@ sub_FC8C45__FC8E29:
 	push	xbc                                   ; FC8EA8  push XBC
 	lda	xiy, (xiz+8)                           ; FC8EA9  lda XIY,XIZ+0x08
 	call	Double_Add                              ; FC8EAC  call 0xfca41f
-sub_FC8C45__FC8EB0:
+Double_Sin__FC8EB0:
 	cp	l, 0:i3                                   ; FC8EB0  cp L,0
-	jr z, sub_FC8C45__FC8ED2                   ; FC8EB2  jr Z,0xfc8ed2
+	jr z, Double_Sin__FC8ED2                   ; FC8EB2  jr Z,0xfc8ed2
 	ld	xbc, (xiz+12)                           ; FC8EB4  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC8EB7  push XBC
 	ld	xbc, (xiz+8)                            ; FC8EB8  ld XBC,(XIZ+0x08)
@@ -458,14 +462,14 @@ sub_FC8C45__FC8EB0:
 	stl_dpi	xix, 0xF6                          ; FC8EC8  ld (XIY+),XIX
 	ld	xix, (xiz-20)                           ; FC8ECB  ld XIX,(XIZ+0xec)
 	ld	(xiy), xix                              ; FC8ECE  ld (XIY),XIX
-	jr sub_FC8C45__FC8EDF                      ; FC8ED0  jr T,0xfc8edf
-sub_FC8C45__FC8ED2:
+	jr Double_Sin__FC8EDF                      ; FC8ED0  jr T,0xfc8edf
+Double_Sin__FC8ED2:
 	ld	xiy, (xsp)                              ; FC8ED2  ld XIY,(XSP)
 	ld	xix, (xiz+8)                            ; FC8ED4  ld XIX,(XIZ+0x08)
 	stl_dpi	xix, 0xF6                          ; FC8ED7  ld (XIY+),XIX
 	ld	xix, (xiz+12)                           ; FC8EDA  ld XIX,(XIZ+0x0c)
 	ld	(xiy), xix                              ; FC8EDD  ld (XIY),XIX
-sub_FC8C45__FC8EDF:
+Double_Sin__FC8EDF:
 	pop	xiy                                    ; FC8EDF  pop XIY
 	pop	xix                                    ; FC8EE0  pop XIX
 	popw	hl                                    ; FC8EE1  pop HL
@@ -554,7 +558,7 @@ sub_FC8EE5__FC8F0F:
 	cp	iy, 0x3FF                               ; FC8F7B  cp IY,0x03ff
 	jr nc, sub_FC8EE5__FC8F91                  ; FC8F7F  jr NC,0xfc8f91
 	ld	xix, (xiz+16)                           ; FC8F81  ld XIX,(XIZ+0x10)
-	lda	xiy, (0xFCB30E:24)                     ; FC8F84  lda XIY,0xfcb30e
+	lda	xiy, (F64_0p0_3:24)                     ; FC8F84  lda XIY,0xfcb30e
 	ldw	bc, 4                                  ; FC8F89  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC8F8C  ldirw
 	jrl sub_FC8EE5__FC9121                     ; FC8F8E  jrl T,0xfc9121
@@ -636,9 +640,9 @@ sub_FC8EE5__FC8FF5:
 	jr nz, sub_FC8EE5__FC9068                  ; FC9052  jr NZ,0xfc9068
 sub_FC8EE5__FC9054:
 	ld	xiy, (xsp)                              ; FC9054  ld XIY,(XSP)
-	ld	xix, (0xFCB30E:24)                     ; FC9056  ld XIX,(0xfcb30e)
+	ld	xix, (F64_0p0_3:24)                     ; FC9056  ld XIX,(0xfcb30e)
 	stl_dpi	xix, 0xF6                          ; FC905B  ld (XIY+),XIX
-	ld	xix, (0xFCB312:24)                     ; FC905E  ld XIX,(0xfcb312)
+	ld	xix, (F64_0p0_3+4:24)                     ; FC905E  ld XIX,(0xfcb312)
 	ld	(xiy), xix                              ; FC9063  ld (XIY),XIX
 	jrl sub_FC8EE5__FC9139                     ; FC9065  jrl T,0xfc9139
 sub_FC8EE5__FC9068:
@@ -728,7 +732,7 @@ sub_FC8EE5__FC9139:
 	unlk32 xiz                                 ; FC913D  unlk XIZ
 	ret                                        ; FC913F  ret
 ; --------------------------------------------------------------------------
-; sub_FC9140 -- 0xFC9140..0xFC9575 (1078 bytes)
+; Double_Tan -- 0xFC9140..0xFC9575 (1078 bytes)
 ;
 ; Called from: 2 site(s) outside this module:
 ;          0xF9E2E3 in sub_F9E1ED__F9E222, 0xF9EA0A in sub_F9E1ED__F9E995
@@ -747,17 +751,19 @@ sub_FC8EE5__FC9139:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): Double_Tan -- tan(x): Cody-Waite, the p/q sets at 0xFCB376-0xFCB3AE, 2/pi and the two-word pi/2.
+;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
-sub_FC9140:
+Double_Tan:
 	link32 0xEE, 0x0C, 0xAE, 0xFF              ; FC9140  link XIZ,0xffae
 	pushw	hl                                   ; FC9144  push HL
 	pushw	de                                   ; FC9145  push DE
 	push	xix                                   ; FC9146  push XIX
 	push	xiy                                   ; FC9147  push XIY
 	ldw	hl, 0                                  ; FC9148  ld HL,0x0000
-	ld	xbc, (0xFCB372:24)                     ; FC914B  ld XBC,(0xfcb372)
+	ld	xbc, (F64_0p0_4+4:24)                     ; FC914B  ld XBC,(0xfcb372)
 	push	xbc                                   ; FC9150  push XBC
-	ld	xbc, (0xFCB36E:24)                     ; FC9151  ld XBC,(0xfcb36e)
+	ld	xbc, (F64_0p0_4:24)                     ; FC9151  ld XBC,(0xfcb36e)
 	push	xbc                                   ; FC9156  push XBC
 	ld	xbc, (xiz+12)                           ; FC9157  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC915A  push XBC
@@ -765,22 +771,22 @@ sub_FC9140:
 	push	xbc                                   ; FC915E  push XBC
 	call	Double_Compare                              ; FC915F  call 0xfca121
 	cp	wa, 2:i3                                  ; FC9163  cp WA,2
-	jr nz, sub_FC9140__FC916A                  ; FC9165  jr NZ,0xfc916a
+	jr nz, Double_Tan__FC916A                  ; FC9165  jr NZ,0xfc916a
 	ldw	hl, 1                                  ; FC9167  ld HL,0x0001
-sub_FC9140__FC916A:
+Double_Tan__FC916A:
 	ld	(xiz-2), hl                             ; FC916A  ld (XIZ+0xfe),HL
 	cp	hl, 0:i3                                  ; FC916D  cp HL,0
-	jr z, sub_FC9140__FC9180                   ; FC916F  jr Z,0xfc9180
+	jr z, Double_Tan__FC9180                   ; FC916F  jr Z,0xfc9180
 	ld	xbc, (xiz+12)                           ; FC9171  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9174  push XBC
 	ld	xbc, (xiz+8)                            ; FC9175  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9178  push XBC
 	lda	xiy, (xiz+8)                           ; FC9179  lda XIY,XIZ+0x08
 	call	Double_Negate                              ; FC917C  call 0xfca1b6
-sub_FC9140__FC9180:
-	ld	xbc, (0xFCB36A:24)                     ; FC9180  ld XBC,(0xfcb36a)
+Double_Tan__FC9180:
+	ld	xbc, (F64_7074237752028440p0+4:24)                     ; FC9180  ld XBC,(0xfcb36a)
 	push	xbc                                   ; FC9185  push XBC
-	ld	xbc, (0xFCB366:24)                     ; FC9186  ld XBC,(0xfcb366)
+	ld	xbc, (F64_7074237752028440p0:24)                     ; FC9186  ld XBC,(0xfcb366)
 	push	xbc                                   ; FC918B  push XBC
 	ld	xbc, (xiz+12)                           ; FC918C  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC918F  push XBC
@@ -788,18 +794,18 @@ sub_FC9140__FC9180:
 	push	xbc                                   ; FC9193  push XBC
 	call	Double_Compare                              ; FC9194  call 0xfca121
 	cp	wa, 1:i3                                  ; FC9198  cp WA,1
-	jr nz, sub_FC9140__FC91B7                  ; FC919A  jr NZ,0xfc91b7
+	jr nz, Double_Tan__FC91B7                  ; FC919A  jr NZ,0xfc91b7
 	ldw	(0xF362:24), 34                       ; FC919C  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC91A3  ld XIY,(XSP)
-	ld	xix, (0xFCB36E:24)                     ; FC91A5  ld XIX,(0xfcb36e)
+	ld	xix, (F64_0p0_4:24)                     ; FC91A5  ld XIX,(0xfcb36e)
 	stl_dpi	xix, 0xF6                          ; FC91AA  ld (XIY+),XIX
-	ld	xix, (0xFCB372:24)                     ; FC91AD  ld XIX,(0xfcb372)
+	ld	xix, (F64_0p0_4+4:24)                     ; FC91AD  ld XIX,(0xfcb372)
 	ld	(xiy), xix                              ; FC91B2  ld (XIY),XIX
-	jrl sub_FC9140__FC956F                     ; FC91B4  jrl T,0xfc956f
-sub_FC9140__FC91B7:
-	ld	xbc, (0xFCB362:24)                     ; FC91B7  ld XBC,(0xfcb362)
+	jrl Double_Tan__FC956F                     ; FC91B4  jrl T,0xfc956f
+Double_Tan__FC91B7:
+	ld	xbc, (F64_149078413p0+4:24)                     ; FC91B7  ld XBC,(0xfcb362)
 	push	xbc                                   ; FC91BC  push XBC
-	ld	xbc, (0xFCB35E:24)                     ; FC91BD  ld XBC,(0xfcb35e)
+	ld	xbc, (F64_149078413p0:24)                     ; FC91BD  ld XBC,(0xfcb35e)
 	push	xbc                                   ; FC91C2  push XBC
 	ld	xbc, (xiz+12)                           ; FC91C3  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC91C6  push XBC
@@ -807,22 +813,22 @@ sub_FC9140__FC91B7:
 	push	xbc                                   ; FC91CA  push XBC
 	call	Double_Compare                              ; FC91CB  call 0xfca121
 	cp	wa, 1:i3                                  ; FC91CF  cp WA,1
-	jr nz, sub_FC9140__FC91DA                  ; FC91D1  jr NZ,0xfc91da
+	jr nz, Double_Tan__FC91DA                  ; FC91D1  jr NZ,0xfc91da
 	ldw	(0xF362:24), 34                       ; FC91D3  ld (0x00f362),0x0022
-sub_FC9140__FC91DA:
+Double_Tan__FC91DA:
 	ld	xbc, (xiz+12)                           ; FC91DA  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC91DD  push XBC
 	ld	xbc, (xiz+8)                            ; FC91DE  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC91E1  push XBC
-	ld	xbc, (0xFCB35A:24)                     ; FC91E2  ld XBC,(0xfcb35a)
+	ld	xbc, (F64_0p6366197723675814+4:24)                     ; FC91E2  ld XBC,(0xfcb35a)
 	push	xbc                                   ; FC91E7  push XBC
-	ld	xbc, (0xFCB356:24)                     ; FC91E8  ld XBC,(0xfcb356)
+	ld	xbc, (F64_0p6366197723675814:24)                     ; FC91E8  ld XBC,(0xfcb356)
 	push	xbc                                   ; FC91ED  push XBC
 	lda	xiy, (xiz-34)                          ; FC91EE  lda XIY,XIZ+0xde
 	call	Double_Multiply                              ; FC91F1  call 0xfca252
-	ld	xbc, (0xFCB352:24)                     ; FC91F5  ld XBC,(0xfcb352)
+	ld	xbc, (F64_0p5_3+4:24)                     ; FC91F5  ld XBC,(0xfcb352)
 	push	xbc                                   ; FC91FA  push XBC
-	ld	xbc, (0xFCB34E:24)                     ; FC91FB  ld XBC,(0xfcb34e)
+	ld	xbc, (F64_0p5_3:24)                     ; FC91FB  ld XBC,(0xfcb34e)
 	push	xbc                                   ; FC9200  push XBC
 	ld	xbc, (xiz-30)                           ; FC9201  ld XBC,(XIZ+0xe2)
 	push	xbc                                   ; FC9204  push XBC
@@ -830,9 +836,9 @@ sub_FC9140__FC91DA:
 	push	xbc                                   ; FC9208  push XBC
 	lda	xiy, (xiz-10)                          ; FC9209  lda XIY,XIZ+0xf6
 	call	Double_Add                              ; FC920C  call 0xfca41f
-	ld	xbc, (0xFCB31A:24)                     ; FC9210  ld XBC,(0xfcb31a)
+	ld	xbc, (F64_2147483647p0+4:24)                     ; FC9210  ld XBC,(0xfcb31a)
 	push	xbc                                   ; FC9215  push XBC
-	ld	xbc, (0xFCB316:24)                     ; FC9216  ld XBC,(0xfcb316)
+	ld	xbc, (F64_2147483647p0:24)                     ; FC9216  ld XBC,(0xfcb316)
 	push	xbc                                   ; FC921B  push XBC
 	ld	xbc, (xiz+12)                           ; FC921C  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC921F  push XBC
@@ -840,7 +846,7 @@ sub_FC9140__FC91DA:
 	push	xbc                                   ; FC9223  push XBC
 	call	Double_Compare                              ; FC9224  call 0xfca121
 	cp	wa, 1:i3                                  ; FC9228  cp WA,1
-	jrl z, sub_FC9140__FC92FB                  ; FC922A  jrl Z,0xfc92fb
+	jrl z, Double_Tan__FC92FB                  ; FC922A  jrl Z,0xfc92fb
 	ld	xbc, (xiz-6)                            ; FC922D  ld XBC,(XIZ+0xfa)
 	push	xbc                                   ; FC9230  push XBC
 	ld	xbc, (xiz-10)                           ; FC9231  ld XBC,(XIZ+0xf6)
@@ -872,9 +878,9 @@ sub_FC9140__FC91DA:
 	push	xbc                                   ; FC9271  push XBC
 	ld	xbc, (xiz-34)                           ; FC9272  ld XBC,(XIZ+0xde)
 	push	xbc                                   ; FC9275  push XBC
-	ld	xbc, (0xFCB34A:24)                     ; FC9276  ld XBC,(0xfcb34a)
+	ld	xbc, (F64_1p57080078125+4:24)                     ; FC9276  ld XBC,(0xfcb34a)
 	push	xbc                                   ; FC927B  push XBC
-	ld	xbc, (0xFCB346:24)                     ; FC927C  ld XBC,(0xfcb346)
+	ld	xbc, (F64_1p57080078125:24)                     ; FC927C  ld XBC,(0xfcb346)
 	push	xbc                                   ; FC9281  push XBC
 	lda	xiy, (xiz-58)                          ; FC9282  lda XIY,XIZ+0xc6
 	call	Double_Multiply                              ; FC9285  call 0xfca252
@@ -902,9 +908,9 @@ sub_FC9140__FC91DA:
 	push	xbc                                   ; FC92BA  push XBC
 	ld	xbc, (xiz-34)                           ; FC92BB  ld XBC,(XIZ+0xde)
 	push	xbc                                   ; FC92BE  push XBC
-	ld	xbc, (0xFCB342:24)                     ; FC92BF  ld XBC,(0xfcb342)
+	ld	xbc, (F64_neg4p454455103380769em06+4:24)                     ; FC92BF  ld XBC,(0xfcb342)
 	push	xbc                                   ; FC92C4  push XBC
-	ld	xbc, (0xFCB33E:24)                     ; FC92C5  ld XBC,(0xfcb33e)
+	ld	xbc, (F64_neg4p454455103380769em06:24)                     ; FC92C5  ld XBC,(0xfcb33e)
 	push	xbc                                   ; FC92CA  push XBC
 	lda	xiy, (xiz-82)                          ; FC92CB  lda XIY,XIZ+0xae
 	call	Double_Multiply                              ; FC92CE  call 0xfca252
@@ -924,8 +930,8 @@ sub_FC9140__FC91DA:
 	divs	bc, 2                                 ; FC92EF  divs BC,0x0002
 	extpfx3 0xD7, 0xE6, 0xB9                   ; FC92F3  ex BC,QBC
 	ld	de, bc                                  ; FC92F6  ld DE,BC
-	jrl sub_FC9140__FC9399                     ; FC92F8  jrl T,0xfc9399
-sub_FC9140__FC92FB:
+	jrl Double_Tan__FC9399                     ; FC92F8  jrl T,0xfc9399
+Double_Tan__FC92FB:
 	lda	xbc, (xiz-18)                          ; FC92FB  lda XBC,XIZ+0xee
 	push	xbc                                   ; FC92FE  push XBC
 	ld	xwa, (xiz-6)                            ; FC92FF  ld XWA,(XIZ+0xfa)
@@ -934,9 +940,9 @@ sub_FC9140__FC92FB:
 	push	xwa                                   ; FC9306  push XWA
 	lda	xiy, (xiz-34)                          ; FC9307  lda XIY,XIZ+0xde
 	call	sub_FC8EE5                              ; FC930A  call 0xfc8ee5
-	ld	xbc, (0xFCB352:24)                     ; FC930E  ld XBC,(0xfcb352)
+	ld	xbc, (F64_0p5_3+4:24)                     ; FC930E  ld XBC,(0xfcb352)
 	push	xbc                                   ; FC9313  push XBC
-	ld	xbc, (0xFCB34E:24)                     ; FC9314  ld XBC,(0xfcb34e)
+	ld	xbc, (F64_0p5_3:24)                     ; FC9314  ld XBC,(0xfcb34e)
 	push	xbc                                   ; FC9319  push XBC
 	ld	xbc, (xiz-30)                           ; FC931A  ld XBC,(XIZ+0xe2)
 	push	xbc                                   ; FC931D  push XBC
@@ -948,9 +954,9 @@ sub_FC9140__FC92FB:
 	push	xbc                                   ; FC932C  push XBC
 	ld	xbc, (xiz-42)                           ; FC932D  ld XBC,(XIZ+0xd6)
 	push	xbc                                   ; FC9330  push XBC
-	ld	xbc, (0xFCB33A:24)                     ; FC9331  ld XBC,(0xfcb33a)
+	ld	xbc, (F64_1p5707963267948966+4:24)                     ; FC9331  ld XBC,(0xfcb33a)
 	push	xbc                                   ; FC9336  push XBC
-	ld	xbc, (0xFCB336:24)                     ; FC9337  ld XBC,(0xfcb336)
+	ld	xbc, (F64_1p5707963267948966:24)                     ; FC9337  ld XBC,(0xfcb336)
 	push	xbc                                   ; FC933C  push XBC
 	lda	xiy, (xiz+8)                           ; FC933D  lda XIY,XIZ+0x08
 	call	Double_Multiply                              ; FC9340  call 0xfca252
@@ -961,9 +967,9 @@ sub_FC9140__FC92FB:
 	extpfx3 0xD4, 0xE5, 0x04                   ; FC9351  pushw (-XBC)
 	extpfx3 0xD4, 0xE5, 0x04                   ; FC9354  pushw (-XBC)
 	extpfx2 0x91, 0x04                         ; FC9357  pushw (XBC)
-	ld	xwa, (0xFCB352:24)                     ; FC9359  ld XWA,(0xfcb352)
+	ld	xwa, (F64_0p5_3+4:24)                     ; FC9359  ld XWA,(0xfcb352)
 	push	xwa                                   ; FC935E  push XWA
-	ld	xwa, (0xFCB34E:24)                     ; FC935F  ld XWA,(0xfcb34e)
+	ld	xwa, (F64_0p5_3:24)                     ; FC935F  ld XWA,(0xfcb34e)
 	push	xwa                                   ; FC9364  push XWA
 	lda	xiy, (xiz-50)                          ; FC9365  lda XIY,XIZ+0xce
 	call	Double_Multiply                              ; FC9368  call 0xfca252
@@ -980,15 +986,15 @@ sub_FC9140__FC92FB:
 	push	xbc                                   ; FC9388  push XBC
 	call	Double_Classify                              ; FC9389  call 0xfca1e5
 	cp	wa, 0:i3                                  ; FC938D  cp WA,0
-	jr z, sub_FC9140__FC9396                   ; FC938F  jr Z,0xfc9396
+	jr z, Double_Tan__FC9396                   ; FC938F  jr Z,0xfc9396
 	ldw	de, 1                                  ; FC9391  ld DE,0x0001
-	jr sub_FC9140__FC9399                      ; FC9394  jr T,0xfc9399
-sub_FC9140__FC9396:
+	jr Double_Tan__FC9399                      ; FC9394  jr T,0xfc9399
+Double_Tan__FC9396:
 	ldw	de, 0                                  ; FC9396  ld DE,0x0000
-sub_FC9140__FC9399:
-	ld	xbc, (0xFCB332:24)                     ; FC9399  ld XBC,(0xfcb332)
+Double_Tan__FC9399:
+	ld	xbc, (F64_neg1p0536712127723509em08+4:24)                     ; FC9399  ld XBC,(0xfcb332)
 	push	xbc                                   ; FC939E  push XBC
-	ld	xbc, (0xFCB32E:24)                     ; FC939F  ld XBC,(0xfcb32e)
+	ld	xbc, (F64_neg1p0536712127723509em08:24)                     ; FC939F  ld XBC,(0xfcb32e)
 	push	xbc                                   ; FC93A4  push XBC
 	ld	xbc, (xiz+12)                           ; FC93A5  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC93A8  push XBC
@@ -996,10 +1002,10 @@ sub_FC9140__FC9399:
 	push	xbc                                   ; FC93AC  push XBC
 	call	Double_Compare                              ; FC93AD  call 0xfca121
 	cp	wa, 1:i3                                  ; FC93B1  cp WA,1
-	jr nz, sub_FC9140__FC93E4                  ; FC93B3  jr NZ,0xfc93e4
-	ld	xbc, (0xFCB32A:24)                     ; FC93B5  ld XBC,(0xfcb32a)
+	jr nz, Double_Tan__FC93E4                  ; FC93B3  jr NZ,0xfc93e4
+	ld	xbc, (F64_1p0536712127723509em08_2+4:24)                     ; FC93B5  ld XBC,(0xfcb32a)
 	push	xbc                                   ; FC93BA  push XBC
-	ld	xbc, (0xFCB326:24)                     ; FC93BB  ld XBC,(0xfcb326)
+	ld	xbc, (F64_1p0536712127723509em08_2:24)                     ; FC93BB  ld XBC,(0xfcb326)
 	push	xbc                                   ; FC93C0  push XBC
 	ld	xbc, (xiz+12)                           ; FC93C1  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC93C4  push XBC
@@ -1007,13 +1013,13 @@ sub_FC9140__FC9399:
 	push	xbc                                   ; FC93C8  push XBC
 	call	Double_Compare                              ; FC93C9  call 0xfca121
 	cp	wa, 2:i3                                  ; FC93CD  cp WA,2
-	jr nz, sub_FC9140__FC93E4                  ; FC93CF  jr NZ,0xfc93e4
-	ld	xbc, (0xFCB31E:24)                     ; FC93D1  ld XBC,(0xfcb31e)
+	jr nz, Double_Tan__FC93E4                  ; FC93CF  jr NZ,0xfc93e4
+	ld	xbc, (F64_1p0_2:24)                     ; FC93D1  ld XBC,(0xfcb31e)
 	ld	(xiz-10), xbc                           ; FC93D6  ld (XIZ+0xf6),XBC
-	ld	xbc, (0xFCB322:24)                     ; FC93D9  ld XBC,(0xfcb322)
+	ld	xbc, (F64_1p0_2+4:24)                     ; FC93D9  ld XBC,(0xfcb322)
 	ld	(xiz-6), xbc                            ; FC93DE  ld (XIZ+0xfa),XBC
-	jrl sub_FC9140__FC94FC                     ; FC93E1  jrl T,0xfc94fc
-sub_FC9140__FC93E4:
+	jrl Double_Tan__FC94FC                     ; FC93E1  jrl T,0xfc94fc
+Double_Tan__FC93E4:
 	ld	xbc, (xiz+12)                           ; FC93E4  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC93E7  push XBC
 	ld	xbc, (xiz+8)                            ; FC93E8  ld XBC,(XIZ+0x08)
@@ -1025,13 +1031,13 @@ sub_FC9140__FC93E4:
 	lda	xiy, (xiz-10)                          ; FC93F4  lda XIY,XIZ+0xf6
 	call	Double_Multiply                              ; FC93F7  call 0xfca252
 	lda	xix, (xiz-26)                          ; FC93FB  lda XIX,XIZ+0xe6
-	lda	xiy, (0xFCB376:24)                     ; FC93FE  lda XIY,0xfcb376
+	lda	xiy, (F64_neg1p7861707342254424em05:24)                     ; FC93FE  lda XIY,0xfcb376
 	ldw	bc, 4                                  ; FC9403  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9406  ldirw
-	lda	xix, (0xFCB376:24)                     ; FC9408  lda XIX,0xfcb376
+	lda	xix, (F64_neg1p7861707342254424em05:24)                     ; FC9408  lda XIX,0xfcb376
 	inc	8, xix                                 ; FC940D  inc 0,XIX
 	ld	h, 2:opc                                   ; FC940F  ld H,0x02
-sub_FC9140__FC9411:
+Double_Tan__FC9411:
 	ld	xbc, (xiz-22)                           ; FC9411  ld XBC,(XIZ+0xea)
 	push	xbc                                   ; FC9414  push XBC
 	ld	xbc, (xiz-26)                           ; FC9415  ld XBC,(XIZ+0xe6)
@@ -1061,7 +1067,7 @@ sub_FC9140__FC9411:
 	inc	8, xix                                 ; FC944B  inc 0,XIX
 	dec	1, h                                   ; FC944D  dec 1,H
 	cp	h, 0:i3                                   ; FC944F  cp H,0
-	jr nz, sub_FC9140__FC9411                  ; FC9451  jr NZ,0xfc9411
+	jr nz, Double_Tan__FC9411                  ; FC9451  jr NZ,0xfc9411
 	ld	xbc, (xiz+12)                           ; FC9453  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9456  push XBC
 	ld	xbc, (xiz+8)                            ; FC9457  ld XBC,(XIZ+0x08)
@@ -1093,13 +1099,13 @@ sub_FC9140__FC9411:
 	lda	xiy, (xiz+8)                           ; FC9491  lda XIY,XIZ+0x08
 	call	Double_Add                              ; FC9494  call 0xfca41f
 	lda	xix, (xiz-26)                          ; FC9498  lda XIX,XIZ+0xe6
-	lda	xiy, (0xFCB38E:24)                     ; FC949B  lda XIY,0xfcb38e
+	lda	xiy, (F64_4p981943399378651em07:24)                     ; FC949B  lda XIY,0xfcb38e
 	ldw	bc, 4                                  ; FC94A0  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC94A3  ldirw
-	lda	xix, (0xFCB38E:24)                     ; FC94A5  lda XIX,0xfcb38e
+	lda	xix, (F64_4p981943399378651em07:24)                     ; FC94A5  lda XIX,0xfcb38e
 	inc	8, xix                                 ; FC94AA  inc 0,XIX
 	ld	h, 4:opc                                   ; FC94AC  ld H,0x04
-sub_FC9140__FC94AE:
+Double_Tan__FC94AE:
 	ld	xbc, (xiz-22)                           ; FC94AE  ld XBC,(XIZ+0xea)
 	push	xbc                                   ; FC94B1  push XBC
 	ld	xbc, (xiz-26)                           ; FC94B2  ld XBC,(XIZ+0xe6)
@@ -1129,23 +1135,23 @@ sub_FC9140__FC94AE:
 	inc	8, xix                                 ; FC94E8  inc 0,XIX
 	dec	1, h                                   ; FC94EA  dec 1,H
 	cp	h, 0:i3                                   ; FC94EC  cp H,0
-	jr nz, sub_FC9140__FC94AE                  ; FC94EE  jr NZ,0xfc94ae
+	jr nz, Double_Tan__FC94AE                  ; FC94EE  jr NZ,0xfc94ae
 	ld	xbc, (xiz-26)                           ; FC94F0  ld XBC,(XIZ+0xe6)
 	ld	(xiz-10), xbc                           ; FC94F3  ld (XIZ+0xf6),XBC
 	ld	xbc, (xiz-22)                           ; FC94F6  ld XBC,(XIZ+0xea)
 	ld	(xiz-6), xbc                            ; FC94F9  ld (XIZ+0xfa),XBC
-sub_FC9140__FC94FC:
+Double_Tan__FC94FC:
 	cpw (xiz-2), 0x0000                        ; FC94FC  cp (XIZ+0xfe),0x0000
-	jr z, sub_FC9140__FC9512                   ; FC9501  jr Z,0xfc9512
+	jr z, Double_Tan__FC9512                   ; FC9501  jr Z,0xfc9512
 	ld	xbc, (xiz+12)                           ; FC9503  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9506  push XBC
 	ld	xbc, (xiz+8)                            ; FC9507  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC950A  push XBC
 	lda	xiy, (xiz+8)                           ; FC950B  lda XIY,XIZ+0x08
 	call	Double_Negate                              ; FC950E  call 0xfca1b6
-sub_FC9140__FC9512:
+Double_Tan__FC9512:
 	cp	de, 0:i3                                  ; FC9512  cp DE,0
-	jr z, sub_FC9140__FC954B                   ; FC9514  jr Z,0xfc954b
+	jr z, Double_Tan__FC954B                   ; FC9514  jr Z,0xfc954b
 	ld	xbc, (xiz-6)                            ; FC9516  ld XBC,(XIZ+0xfa)
 	push	xbc                                   ; FC9519  push XBC
 	ld	xbc, (xiz-10)                           ; FC951A  ld XBC,(XIZ+0xf6)
@@ -1167,8 +1173,8 @@ sub_FC9140__FC9512:
 	stl_dpi	xix, 0xF6                          ; FC9541  ld (XIY+),XIX
 	ld	xix, (xiz-38)                           ; FC9544  ld XIX,(XIZ+0xda)
 	ld	(xiy), xix                              ; FC9547  ld (XIY),XIX
-	jr sub_FC9140__FC956F                      ; FC9549  jr T,0xfc956f
-sub_FC9140__FC954B:
+	jr Double_Tan__FC956F                      ; FC9549  jr T,0xfc956f
+Double_Tan__FC954B:
 	ld	xbc, (xiz-6)                            ; FC954B  ld XBC,(XIZ+0xfa)
 	push	xbc                                   ; FC954E  push XBC
 	ld	xbc, (xiz-10)                           ; FC954F  ld XBC,(XIZ+0xf6)
@@ -1184,7 +1190,7 @@ sub_FC9140__FC954B:
 	stl_dpi	xix, 0xF6                          ; FC9567  ld (XIY+),XIX
 	ld	xix, (xiz-30)                           ; FC956A  ld XIX,(XIZ+0xe2)
 	ld	(xiy), xix                              ; FC956D  ld (XIY),XIX
-sub_FC9140__FC956F:
+Double_Tan__FC956F:
 	pop	xiy                                    ; FC956F  pop XIY
 	pop	xix                                    ; FC9570  pop XIX
 	popw	de                                    ; FC9571  pop DE
@@ -1192,7 +1198,7 @@ sub_FC9140__FC956F:
 	unlk32 xiz                                 ; FC9573  unlk XIZ
 	ret                                        ; FC9575  ret
 ; --------------------------------------------------------------------------
-; sub_FC9576 -- 0xFC9576..0xFC9843 (718 bytes)
+; Double_Pow -- 0xFC9576..0xFC9843 (718 bytes)
 ;
 ; Called from: 44 site(s) outside this module:
 ;          0xF9B613 in sub_F9B5A5, 0xF9B6DC in sub_F9B5A5__F9B65B
@@ -1220,9 +1226,9 @@ sub_FC9140__FC956F:
 ; Inputs:  frame `link XIZ,-24`; argument slots read: (XIZ+0x08), (XIZ+0x0C), (XIZ+0x10), (XIZ+0x14)
 ; Outputs: writes 0x00F362
 ;          reads 0xFCB3B6, 0xFCB3BA, 0xFCB3BE, 0xFCB3C2, 0xFCB3C6, 0xFCB3CA, 0xFCB3CE, 0xFCB3D2, 0xFCB3D6, 0xFCB3DA, 0xFCB3DE, 0xFCB3E2
-; Calls:   0xFC8EE5 = sub_FC8EE5, 0xFC9844 = sub_FC9844
-;          0xFC9CCD = sub_FC9CCD, 0xFC9D12 = sub_FC9D12
-;          0xFCA085 = sub_FCA085, 0xFCA121 = Double_Compare
+; Calls:   0xFC8EE5 = sub_FC8EE5, 0xFC9844 = Double_Exp
+;          0xFC9CCD = Double_MakeInfinity, 0xFC9D12 = Double_Log
+;          0xFCA085 = Double_Abs, 0xFCA121 = Double_Compare
 ;          0xFCA1B6 = Double_Negate, 0xFCA1E5 = Double_Classify
 ;          0xFCA252 = Double_Multiply, 0xFCA661 = Double_ToInt32
 ;          0xFCA6FD = Int32_ToDouble, 0xFCA7A5 = Double_Divide
@@ -1233,14 +1239,16 @@ sub_FC9140__FC956F:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): Double_Pow -- pow(x, y): Double_Log at 0xFC96E4, Double_Exp at 0xFC97B9, integer test of y at 0xFC9620/0xFC962A.
+;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
-sub_FC9576:
+Double_Pow:
 	link32 0xEE, 0x0C, 0xE8, 0xFF              ; FC9576  link XIZ,0xffe8
 	push	xix                                   ; FC957A  push XIX
 	push	xiy                                   ; FC957B  push XIY
-	ld	xbc, (0xFCB3E2:24)                     ; FC957C  ld XBC,(0xfcb3e2)
+	ld	xbc, (F64_1p0_4+4:24)                     ; FC957C  ld XBC,(0xfcb3e2)
 	push	xbc                                   ; FC9581  push XBC
-	ld	xbc, (0xFCB3DE:24)                     ; FC9582  ld XBC,(0xfcb3de)
+	ld	xbc, (F64_1p0_4:24)                     ; FC9582  ld XBC,(0xfcb3de)
 	push	xbc                                   ; FC9587  push XBC
 	ld	xbc, (xiz+20)                           ; FC9588  ld XBC,(XIZ+0x14)
 	push	xbc                                   ; FC958B  push XBC
@@ -1248,17 +1256,17 @@ sub_FC9576:
 	push	xbc                                   ; FC958F  push XBC
 	call	Double_Compare                              ; FC9590  call 0xfca121
 	cp	wa, 0:i3                                  ; FC9594  cp WA,0
-	jrl z, sub_FC9576__FC9832                  ; FC9596  jrl Z,0xfc9832
+	jrl z, Double_Pow__FC9832                  ; FC9596  jrl Z,0xfc9832
 	ld	xbc, (xiz+12)                           ; FC9599  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC959C  push XBC
 	ld	xbc, (xiz+8)                            ; FC959D  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC95A0  push XBC
 	call	Double_Classify                              ; FC95A1  call 0xfca1e5
 	cp	wa, 0:i3                                  ; FC95A5  cp WA,0
-	jr nz, sub_FC9576__FC95C9                  ; FC95A7  jr NZ,0xfc95c9
-	ld	xbc, (0xFCB3DA:24)                     ; FC95A9  ld XBC,(0xfcb3da)
+	jr nz, Double_Pow__FC95C9                  ; FC95A7  jr NZ,0xfc95c9
+	ld	xbc, (F64_0p0_5+4:24)                     ; FC95A9  ld XBC,(0xfcb3da)
 	push	xbc                                   ; FC95AE  push XBC
-	ld	xbc, (0xFCB3D6:24)                     ; FC95AF  ld XBC,(0xfcb3d6)
+	ld	xbc, (F64_0p0_5:24)                     ; FC95AF  ld XBC,(0xfcb3d6)
 	push	xbc                                   ; FC95B4  push XBC
 	ld	xbc, (xiz+20)                           ; FC95B5  ld XBC,(XIZ+0x14)
 	push	xbc                                   ; FC95B8  push XBC
@@ -1266,13 +1274,13 @@ sub_FC9576:
 	push	xbc                                   ; FC95BC  push XBC
 	call	Double_Compare                              ; FC95BD  call 0xfca121
 	cp	wa, 1:i3                                  ; FC95C1  cp WA,1
-	jrl nz, sub_FC9576__FC969C                 ; FC95C3  jrl NZ,0xfc969c
-	jrl sub_FC9576__FC9832                     ; FC95C6  jrl T,0xfc9832
-sub_FC9576__FC95C9:
+	jrl nz, Double_Pow__FC969C                 ; FC95C3  jrl NZ,0xfc969c
+	jrl Double_Pow__FC9832                     ; FC95C6  jrl T,0xfc9832
+Double_Pow__FC95C9:
 	ld	xix, 0                                  ; FC95C9  ld XIX,0x00000000
-	ld	xbc, (0xFCB3DA:24)                     ; FC95CE  ld XBC,(0xfcb3da)
+	ld	xbc, (F64_0p0_5+4:24)                     ; FC95CE  ld XBC,(0xfcb3da)
 	push	xbc                                   ; FC95D3  push XBC
-	ld	xbc, (0xFCB3D6:24)                     ; FC95D4  ld XBC,(0xfcb3d6)
+	ld	xbc, (F64_0p0_5:24)                     ; FC95D4  ld XBC,(0xfcb3d6)
 	push	xbc                                   ; FC95D9  push XBC
 	ld	xbc, (xiz+12)                           ; FC95DA  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC95DD  push XBC
@@ -1280,17 +1288,17 @@ sub_FC9576__FC95C9:
 	push	xbc                                   ; FC95E1  push XBC
 	call	Double_Compare                              ; FC95E2  call 0xfca121
 	cp	wa, 2:i3                                  ; FC95E6  cp WA,2
-	jrl nz, sub_FC9576__FC96BC                 ; FC95E8  jrl NZ,0xfc96bc
+	jrl nz, Double_Pow__FC96BC                 ; FC95E8  jrl NZ,0xfc96bc
 	ld	xbc, (xiz+20)                           ; FC95EB  ld XBC,(XIZ+0x14)
 	push	xbc                                   ; FC95EE  push XBC
 	ld	xbc, (xiz+16)                           ; FC95EF  ld XBC,(XIZ+0x10)
 	push	xbc                                   ; FC95F2  push XBC
 	lda	xiy, (xiz-16)                          ; FC95F3  lda XIY,XIZ+0xf0
-	call	sub_FCA085                              ; FC95F6  call 0xfca085
+	call	Double_Abs                              ; FC95F6  call 0xfca085
 	inc	8, xsp                                 ; FC95FA  inc 0,XSP
-	ld	xbc, (0xFCB3D2:24)                     ; FC95FC  ld XBC,(0xfcb3d2)
+	ld	xbc, (F64_2147483647p0_2+4:24)                     ; FC95FC  ld XBC,(0xfcb3d2)
 	push	xbc                                   ; FC9601  push XBC
-	ld	xbc, (0xFCB3CE:24)                     ; FC9602  ld XBC,(0xfcb3ce)
+	ld	xbc, (F64_2147483647p0_2:24)                     ; FC9602  ld XBC,(0xfcb3ce)
 	push	xbc                                   ; FC9607  push XBC
 	ld	xbc, (xiz-12)                           ; FC9608  ld XBC,(XIZ+0xf4)
 	push	xbc                                   ; FC960B  push XBC
@@ -1298,7 +1306,7 @@ sub_FC9576__FC95C9:
 	push	xbc                                   ; FC960F  push XBC
 	call	Double_Compare                              ; FC9610  call 0xfca121
 	cp	wa, 1:i3                                  ; FC9614  cp WA,1
-	jr z, sub_FC9576__FC964E                   ; FC9616  jr Z,0xfc964e
+	jr z, Double_Pow__FC964E                   ; FC9616  jr Z,0xfc964e
 	ld	xbc, (xiz+20)                           ; FC9618  ld XBC,(XIZ+0x14)
 	push	xbc                                   ; FC961B  push XBC
 	ld	xbc, (xiz+16)                           ; FC961C  ld XBC,(XIZ+0x10)
@@ -1318,21 +1326,21 @@ sub_FC9576__FC95C9:
 	push	xbc                                   ; FC963D  push XBC
 	call	Double_Compare                              ; FC963E  call 0xfca121
 	cp	wa, 0:i3                                  ; FC9642  cp WA,0
-	jr nz, sub_FC9576__FC969C                  ; FC9644  jr NZ,0xfc969c
+	jr nz, Double_Pow__FC969C                  ; FC9644  jr NZ,0xfc969c
 	sub	xbc, xbc                               ; FC9646  sub XBC,XBC
 	inc	1, xbc                                 ; FC9648  inc 1,XBC
 	and	xix, xbc                               ; FC964A  and XIX,XBC
-	jr sub_FC9576__FC96AB                      ; FC964C  jr T,0xfc96ab
-sub_FC9576__FC964E:
+	jr Double_Pow__FC96AB                      ; FC964C  jr T,0xfc96ab
+Double_Pow__FC964E:
 	lda	xbc, (xiz-8)                           ; FC964E  lda XBC,XIZ+0xf8
 	push	xbc                                   ; FC9651  push XBC
 	ld	xwa, (xiz+20)                           ; FC9652  ld XWA,(XIZ+0x14)
 	push	xwa                                   ; FC9655  push XWA
 	ld	xwa, (xiz+16)                           ; FC9656  ld XWA,(XIZ+0x10)
 	push	xwa                                   ; FC9659  push XWA
-	ld	xwa, (0xFCB3CA:24)                     ; FC965A  ld XWA,(0xfcb3ca)
+	ld	xwa, (F64_0p5_4+4:24)                     ; FC965A  ld XWA,(0xfcb3ca)
 	push	xwa                                   ; FC965F  push XWA
-	ld	xwa, (0xFCB3C6:24)                     ; FC9660  ld XWA,(0xfcb3c6)
+	ld	xwa, (F64_0p5_4:24)                     ; FC9660  ld XWA,(0xfcb3c6)
 	push	xwa                                   ; FC9665  push XWA
 	lda	xiy, (xiz-16)                          ; FC9666  lda XIY,XIZ+0xf0
 	call	Double_Multiply                              ; FC9669  call 0xfca252
@@ -1344,9 +1352,9 @@ sub_FC9576__FC964E:
 	call	sub_FC8EE5                              ; FC9678  call 0xfc8ee5
 	inc	8, xsp                                 ; FC967C  inc 0,XSP
 	inc	4, xsp                                 ; FC967E  inc 4,XSP
-	ld	xbc, (0xFCB3CA:24)                     ; FC9680  ld XBC,(0xfcb3ca)
+	ld	xbc, (F64_0p5_4+4:24)                     ; FC9680  ld XBC,(0xfcb3ca)
 	push	xbc                                   ; FC9685  push XBC
-	ld	xbc, (0xFCB3C6:24)                     ; FC9686  ld XBC,(0xfcb3c6)
+	ld	xbc, (F64_0p5_4:24)                     ; FC9686  ld XBC,(0xfcb3c6)
 	push	xbc                                   ; FC968B  push XBC
 	ld	xbc, (xiz-20)                           ; FC968C  ld XBC,(XIZ+0xec)
 	push	xbc                                   ; FC968F  push XBC
@@ -1354,24 +1362,24 @@ sub_FC9576__FC964E:
 	push	xbc                                   ; FC9693  push XBC
 	call	Double_Compare                              ; FC9694  call 0xfca121
 	cp	wa, 0:i3                                  ; FC9698  cp WA,0
-	jr z, sub_FC9576__FC96A6                   ; FC969A  jr Z,0xfc96a6
-sub_FC9576__FC969C:
+	jr z, Double_Pow__FC96A6                   ; FC969A  jr Z,0xfc96a6
+Double_Pow__FC969C:
 	ldw	(0xF362:24), 33                       ; FC969C  ld (0x00f362),0x0021
-	jrl sub_FC9576__FC97CF                     ; FC96A3  jrl T,0xfc97cf
-sub_FC9576__FC96A6:
+	jrl Double_Pow__FC97CF                     ; FC96A3  jrl T,0xfc97cf
+Double_Pow__FC96A6:
 	ld	xix, 1                                  ; FC96A6  ld XIX,0x00000001
-sub_FC9576__FC96AB:
+Double_Pow__FC96AB:
 	ld	xbc, (xiz+12)                           ; FC96AB  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC96AE  push XBC
 	ld	xbc, (xiz+8)                            ; FC96AF  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC96B2  push XBC
 	lda	xiy, (xiz+8)                           ; FC96B3  lda XIY,XIZ+0x08
-	call	sub_FCA085                              ; FC96B6  call 0xfca085
+	call	Double_Abs                              ; FC96B6  call 0xfca085
 	inc	8, xsp                                 ; FC96BA  inc 0,XSP
-sub_FC9576__FC96BC:
-	ld	xbc, (0xFCB3E2:24)                     ; FC96BC  ld XBC,(0xfcb3e2)
+Double_Pow__FC96BC:
+	ld	xbc, (F64_1p0_4+4:24)                     ; FC96BC  ld XBC,(0xfcb3e2)
 	push	xbc                                   ; FC96C1  push XBC
-	ld	xbc, (0xFCB3DE:24)                     ; FC96C2  ld XBC,(0xfcb3de)
+	ld	xbc, (F64_1p0_4:24)                     ; FC96C2  ld XBC,(0xfcb3de)
 	push	xbc                                   ; FC96C7  push XBC
 	ld	xbc, (xiz+12)                           ; FC96C8  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC96CB  push XBC
@@ -1379,21 +1387,21 @@ sub_FC9576__FC96BC:
 	push	xbc                                   ; FC96CF  push XBC
 	call	Double_Compare                              ; FC96D0  call 0xfca121
 	cp	wa, 0:i3                                  ; FC96D4  cp WA,0
-	jrl z, sub_FC9576__FC980E                  ; FC96D6  jrl Z,0xfc980e
+	jrl z, Double_Pow__FC980E                  ; FC96D6  jrl Z,0xfc980e
 	ld	xbc, (xiz+12)                           ; FC96D9  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC96DC  push XBC
 	ld	xbc, (xiz+8)                            ; FC96DD  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC96E0  push XBC
 	lda	xiy, (xiz-16)                          ; FC96E1  lda XIY,XIZ+0xf0
-	call	sub_FC9D12                              ; FC96E4  call 0xfc9d12
+	call	Double_Log                              ; FC96E4  call 0xfc9d12
 	ld	xbc, (xiz-16)                           ; FC96E8  ld XBC,(XIZ+0xf0)
 	ld	(xiz+8), xbc                            ; FC96EB  ld (XIZ+0x08),XBC
 	ld	xbc, (xiz-12)                           ; FC96EE  ld XBC,(XIZ+0xf4)
 	ld	(xiz+12), xbc                           ; FC96F1  ld (XIZ+0x0c),XBC
 	inc	8, xsp                                 ; FC96F4  inc 0,XSP
-	ld	xbc, (0xFCB3DA:24)                     ; FC96F6  ld XBC,(0xfcb3da)
+	ld	xbc, (F64_0p0_5+4:24)                     ; FC96F6  ld XBC,(0xfcb3da)
 	push	xbc                                   ; FC96FB  push XBC
-	ld	xbc, (0xFCB3D6:24)                     ; FC96FC  ld XBC,(0xfcb3d6)
+	ld	xbc, (F64_0p0_5:24)                     ; FC96FC  ld XBC,(0xfcb3d6)
 	push	xbc                                   ; FC9701  push XBC
 	ld	xbc, (xiz-12)                           ; FC9702  ld XBC,(XIZ+0xf4)
 	push	xbc                                   ; FC9705  push XBC
@@ -1401,7 +1409,7 @@ sub_FC9576__FC96BC:
 	push	xbc                                   ; FC9709  push XBC
 	call	Double_Compare                              ; FC970A  call 0xfca121
 	cp	wa, 2:i3                                  ; FC970E  cp WA,2
-	jr nz, sub_FC9576__FC9730                  ; FC9710  jr NZ,0xfc9730
+	jr nz, Double_Pow__FC9730                  ; FC9710  jr NZ,0xfc9730
 	ld	xbc, (xiz+12)                           ; FC9712  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9715  push XBC
 	ld	xbc, (xiz+8)                            ; FC9716  ld XBC,(XIZ+0x08)
@@ -1414,14 +1422,14 @@ sub_FC9576__FC96BC:
 	push	xbc                                   ; FC9728  push XBC
 	lda	xiy, (xiz+16)                          ; FC9729  lda XIY,XIZ+0x10
 	call	Double_Negate                              ; FC972C  call 0xfca1b6
-sub_FC9576__FC9730:
+Double_Pow__FC9730:
 	ld	xbc, (xiz+12)                           ; FC9730  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9733  push XBC
 	ld	xbc, (xiz+8)                            ; FC9734  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9737  push XBC
-	ld	xbc, (0xFCB3C2:24)                     ; FC9738  ld XBC,(0xfcb3c2)
+	ld	xbc, (F64_709p782712893384+4:24)                     ; FC9738  ld XBC,(0xfcb3c2)
 	push	xbc                                   ; FC973D  push XBC
-	ld	xbc, (0xFCB3BE:24)                     ; FC973E  ld XBC,(0xfcb3be)
+	ld	xbc, (F64_709p782712893384:24)                     ; FC973E  ld XBC,(0xfcb3be)
 	push	xbc                                   ; FC9743  push XBC
 	lda	xiy, (xiz-16)                          ; FC9744  lda XIY,XIZ+0xf0
 	call	Double_Divide                              ; FC9747  call 0xfca7a5
@@ -1435,14 +1443,14 @@ sub_FC9576__FC9730:
 	push	xbc                                   ; FC975A  push XBC
 	call	Double_Compare                              ; FC975B  call 0xfca121
 	cp	wa, 1:i3                                  ; FC975F  cp WA,1
-	jrl z, sub_FC9576__FC97E2                  ; FC9761  jrl Z,0xfc97e2
+	jrl z, Double_Pow__FC97E2                  ; FC9761  jrl Z,0xfc97e2
 	ld	xbc, (xiz+12)                           ; FC9764  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9767  push XBC
 	ld	xbc, (xiz+8)                            ; FC9768  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC976B  push XBC
-	ld	xbc, (0xFCB3BA:24)                     ; FC976C  ld XBC,(0xfcb3ba)
+	ld	xbc, (F64_neg709p7827+4:24)                     ; FC976C  ld XBC,(0xfcb3ba)
 	push	xbc                                   ; FC9771  push XBC
-	ld	xbc, (0xFCB3B6:24)                     ; FC9772  ld XBC,(0xfcb3b6)
+	ld	xbc, (F64_neg709p7827:24)                     ; FC9772  ld XBC,(0xfcb3b6)
 	push	xbc                                   ; FC9777  push XBC
 	lda	xiy, (xiz-16)                          ; FC9778  lda XIY,XIZ+0xf0
 	call	Double_Divide                              ; FC977B  call 0xfca7a5
@@ -1456,7 +1464,7 @@ sub_FC9576__FC9730:
 	push	xbc                                   ; FC978E  push XBC
 	call	Double_Compare                              ; FC978F  call 0xfca121
 	cp	wa, 2:i3                                  ; FC9793  cp WA,2
-	jr z, sub_FC9576__FC97C8                   ; FC9795  jr Z,0xfc97c8
+	jr z, Double_Pow__FC97C8                   ; FC9795  jr Z,0xfc97c8
 	ld	xbc, (xiz+12)                           ; FC9797  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC979A  push XBC
 	ld	xbc, (xiz+8)                            ; FC979B  ld XBC,(XIZ+0x08)
@@ -1472,45 +1480,45 @@ sub_FC9576__FC9730:
 	ld	xbc, (xiz-16)                           ; FC97B2  ld XBC,(XIZ+0xf0)
 	push	xbc                                   ; FC97B5  push XBC
 	lda	xiy, (xiz+8)                           ; FC97B6  lda XIY,XIZ+0x08
-	call	sub_FC9844                              ; FC97B9  call 0xfc9844
+	call	Double_Exp                              ; FC97B9  call 0xfc9844
 	inc	8, xsp                                 ; FC97BD  inc 0,XSP
 	ld	xbc, xix                                ; FC97BF  ld XBC,XIX
 	or	xbc, xbc                                ; FC97C1  or XBC,XBC
-	jrl z, sub_FC9576__FC9832                  ; FC97C3  jrl Z,0xfc9832
-	jr sub_FC9576__FC9814                      ; FC97C6  jr T,0xfc9814
-sub_FC9576__FC97C8:
+	jrl z, Double_Pow__FC9832                  ; FC97C3  jrl Z,0xfc9832
+	jr Double_Pow__FC9814                      ; FC97C6  jr T,0xfc9814
+Double_Pow__FC97C8:
 	ldw	(0xF362:24), 34                       ; FC97C8  ld (0x00f362),0x0022
-sub_FC9576__FC97CF:
+Double_Pow__FC97CF:
 	ld	xiy, (xsp)                              ; FC97CF  ld XIY,(XSP)
-	ld	xix, (0xFCB3D6:24)                     ; FC97D1  ld XIX,(0xfcb3d6)
+	ld	xix, (F64_0p0_5:24)                     ; FC97D1  ld XIX,(0xfcb3d6)
 	stl_dpi	xix, 0xF6                          ; FC97D6  ld (XIY+),XIX
-	ld	xix, (0xFCB3DA:24)                     ; FC97D9  ld XIX,(0xfcb3da)
+	ld	xix, (F64_0p0_5+4:24)                     ; FC97D9  ld XIX,(0xfcb3da)
 	ld	(xiy), xix                              ; FC97DE  ld (XIY),XIX
-	jr sub_FC9576__FC983F                      ; FC97E0  jr T,0xfc983f
-sub_FC9576__FC97E2:
+	jr Double_Pow__FC983F                      ; FC97E0  jr T,0xfc983f
+Double_Pow__FC97E2:
 	ldw	(0xF362:24), 34                       ; FC97E2  ld (0x00f362),0x0022
 	ld	xbc, xix                                ; FC97E9  ld XBC,XIX
 	or	xbc, xbc                                ; FC97EB  or XBC,XBC
-	jr z, sub_FC9576__FC97F4                   ; FC97ED  jr Z,0xfc97f4
+	jr z, Double_Pow__FC97F4                   ; FC97ED  jr Z,0xfc97f4
 	pushw	1                                    ; FC97EF  push 0x0001
-	jr sub_FC9576__FC97F7                      ; FC97F2  jr T,0xfc97f7
-sub_FC9576__FC97F4:
+	jr Double_Pow__FC97F7                      ; FC97F2  jr T,0xfc97f7
+Double_Pow__FC97F4:
 	pushw	0                                    ; FC97F4  push 0x0000
-sub_FC9576__FC97F7:
+Double_Pow__FC97F7:
 	lda	xiy, (xiz-16)                          ; FC97F7  lda XIY,XIZ+0xf0
-	call	sub_FC9CCD                              ; FC97FA  call 0xfc9ccd
+	call	Double_MakeInfinity                              ; FC97FA  call 0xfc9ccd
 	popw	bc                                    ; FC97FE  pop BC
 	ld	xiy, (xsp)                              ; FC97FF  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FC9801  ld XIX,(XIZ+0xf0)
 	stl_dpi	xix, 0xF6                          ; FC9804  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FC9807  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FC980A  ld (XIY),XIX
-	jr sub_FC9576__FC983F                      ; FC980C  jr T,0xfc983f
-sub_FC9576__FC980E:
+	jr Double_Pow__FC983F                      ; FC980C  jr T,0xfc983f
+Double_Pow__FC980E:
 	ld	xbc, xix                                ; FC980E  ld XBC,XIX
 	or	xbc, xbc                                ; FC9810  or XBC,XBC
-	jr z, sub_FC9576__FC9832                   ; FC9812  jr Z,0xfc9832
-sub_FC9576__FC9814:
+	jr z, Double_Pow__FC9832                   ; FC9812  jr Z,0xfc9832
+Double_Pow__FC9814:
 	ld	xbc, (xiz+12)                           ; FC9814  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9817  push XBC
 	ld	xbc, (xiz+8)                            ; FC9818  ld XBC,(XIZ+0x08)
@@ -1522,20 +1530,20 @@ sub_FC9576__FC9814:
 	stl_dpi	xix, 0xF6                          ; FC9828  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FC982B  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FC982E  ld (XIY),XIX
-	jr sub_FC9576__FC983F                      ; FC9830  jr T,0xfc983f
-sub_FC9576__FC9832:
+	jr Double_Pow__FC983F                      ; FC9830  jr T,0xfc983f
+Double_Pow__FC9832:
 	ld	xiy, (xsp)                              ; FC9832  ld XIY,(XSP)
 	ld	xix, (xiz+8)                            ; FC9834  ld XIX,(XIZ+0x08)
 	stl_dpi	xix, 0xF6                          ; FC9837  ld (XIY+),XIX
 	ld	xix, (xiz+12)                           ; FC983A  ld XIX,(XIZ+0x0c)
 	ld	(xiy), xix                              ; FC983D  ld (XIY),XIX
-sub_FC9576__FC983F:
+Double_Pow__FC983F:
 	pop	xiy                                    ; FC983F  pop XIY
 	pop	xix                                    ; FC9840  pop XIX
 	unlk32 xiz                                 ; FC9841  unlk XIZ
 	ret                                        ; FC9843  ret
 ; --------------------------------------------------------------------------
-; sub_FC9844 -- 0xFC9844..0xFC9ACA (647 bytes)
+; Double_Exp -- 0xFC9844..0xFC9ACA (647 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -1543,7 +1551,7 @@ sub_FC9576__FC983F:
 ; Inputs:  frame `link XIZ,-50`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: writes 0x00F362
 ;          reads 0xFCB3E6, 0xFCB3EA, 0xFCB3EE, 0xFCB3F2, 0xFCB3F6, 0xFCB3FA, 0xFCB3FE, 0xFCB402, 0xFCB406, 0xFCB40A, 0xFCB40E, 0xFCB412, 0xFCB416, 0xFCB41A, 0xFCB41E, 0xFCB422, 0xFCB426, 0xFCB42A, 0xFCB42E, 0xFCB432
-; Calls:   0xFC9CCD = sub_FC9CCD, 0xFCA121 = Double_Compare
+; Calls:   0xFC9CCD = Double_MakeInfinity, 0xFCA121 = Double_Compare
 ;          0xFCA1B6 = Double_Negate, 0xFCA252 = Double_Multiply
 ;          0xFCA41F = Double_Add, 0xFCA626 = Double_Subtract
 ;          0xFCA903 = Double_ToInt16, 0xFCA997 = Int16_ToDouble
@@ -1554,16 +1562,18 @@ sub_FC9576__FC983F:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): Double_Exp -- exp(x): Cody-Waite p set at 0xFCB436, ln 2 / 1/ln 2, bounds +-709.78 = +-ln DBL_MAX.
+;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
-sub_FC9844:
+Double_Exp:
 	link32 0xEE, 0x0C, 0xCE, 0xFF              ; FC9844  link XIZ,0xffce
 	pushw	hl                                   ; FC9848  push HL
 	pushw	de                                   ; FC9849  push DE
 	push	xix                                   ; FC984A  push XIX
 	push	xiy                                   ; FC984B  push XIY
-	ld	xbc, (0xFCB432:24)                     ; FC984C  ld XBC,(0xfcb432)
+	ld	xbc, (F64_neg709p7827_2+4:24)                     ; FC984C  ld XBC,(0xfcb432)
 	push	xbc                                   ; FC9851  push XBC
-	ld	xbc, (0xFCB42E:24)                     ; FC9852  ld XBC,(0xfcb42e)
+	ld	xbc, (F64_neg709p7827_2:24)                     ; FC9852  ld XBC,(0xfcb42e)
 	push	xbc                                   ; FC9857  push XBC
 	ld	xbc, (xiz+12)                           ; FC9858  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC985B  push XBC
@@ -1571,10 +1581,10 @@ sub_FC9844:
 	push	xbc                                   ; FC985F  push XBC
 	call	Double_Compare                              ; FC9860  call 0xfca121
 	cp	wa, 1:i3                                  ; FC9864  cp WA,1
-	jr z, sub_FC9844__FC98B3                   ; FC9866  jr Z,0xfc98b3
-	ld	xbc, (0xFCB432:24)                     ; FC9868  ld XBC,(0xfcb432)
+	jr z, Double_Exp__FC98B3                   ; FC9866  jr Z,0xfc98b3
+	ld	xbc, (F64_neg709p7827_2+4:24)                     ; FC9868  ld XBC,(0xfcb432)
 	push	xbc                                   ; FC986D  push XBC
-	ld	xbc, (0xFCB42E:24)                     ; FC986E  ld XBC,(0xfcb42e)
+	ld	xbc, (F64_neg709p7827_2:24)                     ; FC986E  ld XBC,(0xfcb42e)
 	push	xbc                                   ; FC9873  push XBC
 	ld	xbc, (xiz+12)                           ; FC9874  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9877  push XBC
@@ -1582,25 +1592,25 @@ sub_FC9844:
 	push	xbc                                   ; FC987B  push XBC
 	call	Double_Compare                              ; FC987C  call 0xfca121
 	cp	wa, 0:i3                                  ; FC9880  cp WA,0
-	jr nz, sub_FC9844__FC9898                  ; FC9882  jr NZ,0xfc9898
+	jr nz, Double_Exp__FC9898                  ; FC9882  jr NZ,0xfc9898
 	ld	xiy, (xsp)                              ; FC9884  ld XIY,(XSP)
-	ld	xix, (0xFCB426:24)                     ; FC9886  ld XIX,(0xfcb426)
+	ld	xix, (F64_2p2250738585072014em308:24)                     ; FC9886  ld XIX,(0xfcb426)
 	stl_dpi	xix, 0xF6                          ; FC988B  ld (XIY+),XIX
-	ld	xix, (0xFCB42A:24)                     ; FC988E  ld XIX,(0xfcb42a)
+	ld	xix, (F64_2p2250738585072014em308+4:24)                     ; FC988E  ld XIX,(0xfcb42a)
 	ld	(xiy), xix                              ; FC9893  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC9895  jrl T,0xfc9bb5
-sub_FC9844__FC9898:
+Double_Exp__FC9898:
 	ldw	(0xF362:24), 34                       ; FC9898  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC989F  ld XIY,(XSP)
-	ld	xix, (0xFCB41E:24)                     ; FC98A1  ld XIX,(0xfcb41e)
+	ld	xix, (F64_0p0_6:24)                     ; FC98A1  ld XIX,(0xfcb41e)
 	stl_dpi	xix, 0xF6                          ; FC98A6  ld (XIY+),XIX
-	ld	xix, (0xFCB422:24)                     ; FC98A9  ld XIX,(0xfcb422)
+	ld	xix, (F64_0p0_6+4:24)                     ; FC98A9  ld XIX,(0xfcb422)
 	ld	(xiy), xix                              ; FC98AE  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC98B0  jrl T,0xfc9bb5
-sub_FC9844__FC98B3:
-	ld	xbc, (0xFCB41A:24)                     ; FC98B3  ld XBC,(0xfcb41a)
+Double_Exp__FC98B3:
+	ld	xbc, (F64_709p782712893384_2+4:24)                     ; FC98B3  ld XBC,(0xfcb41a)
 	push	xbc                                   ; FC98B8  push XBC
-	ld	xbc, (0xFCB416:24)                     ; FC98B9  ld XBC,(0xfcb416)
+	ld	xbc, (F64_709p782712893384_2:24)                     ; FC98B9  ld XBC,(0xfcb416)
 	push	xbc                                   ; FC98BE  push XBC
 	ld	xbc, (xiz+12)                           ; FC98BF  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC98C2  push XBC
@@ -1608,10 +1618,10 @@ sub_FC9844__FC98B3:
 	push	xbc                                   ; FC98C6  push XBC
 	call	Double_Compare                              ; FC98C7  call 0xfca121
 	cp	wa, 2:i3                                  ; FC98CB  cp WA,2
-	jr z, sub_FC9844__FC9921                   ; FC98CD  jr Z,0xfc9921
-	ld	xbc, (0xFCB41A:24)                     ; FC98CF  ld XBC,(0xfcb41a)
+	jr z, Double_Exp__FC9921                   ; FC98CD  jr Z,0xfc9921
+	ld	xbc, (F64_709p782712893384_2+4:24)                     ; FC98CF  ld XBC,(0xfcb41a)
 	push	xbc                                   ; FC98D4  push XBC
-	ld	xbc, (0xFCB416:24)                     ; FC98D5  ld XBC,(0xfcb416)
+	ld	xbc, (F64_709p782712893384_2:24)                     ; FC98D5  ld XBC,(0xfcb416)
 	push	xbc                                   ; FC98DA  push XBC
 	ld	xbc, (xiz+12)                           ; FC98DB  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC98DE  push XBC
@@ -1619,18 +1629,18 @@ sub_FC9844__FC98B3:
 	push	xbc                                   ; FC98E2  push XBC
 	call	Double_Compare                              ; FC98E3  call 0xfca121
 	cp	wa, 0:i3                                  ; FC98E7  cp WA,0
-	jr nz, sub_FC9844__FC98FF                  ; FC98E9  jr NZ,0xfc98ff
+	jr nz, Double_Exp__FC98FF                  ; FC98E9  jr NZ,0xfc98ff
 	ld	xiy, (xsp)                              ; FC98EB  ld XIY,(XSP)
-	ld	xix, (0xFCB40E:24)                     ; FC98ED  ld XIX,(0xfcb40e)
+	ld	xix, (F64_8p988465674311579e307:24)                     ; FC98ED  ld XIX,(0xfcb40e)
 	stl_dpi	xix, 0xF6                          ; FC98F2  ld (XIY+),XIX
-	ld	xix, (0xFCB412:24)                     ; FC98F5  ld XIX,(0xfcb412)
+	ld	xix, (F64_8p988465674311579e307+4:24)                     ; FC98F5  ld XIX,(0xfcb412)
 	ld	(xiy), xix                              ; FC98FA  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC98FC  jrl T,0xfc9bb5
-sub_FC9844__FC98FF:
+Double_Exp__FC98FF:
 	ldw	(0xF362:24), 34                       ; FC98FF  ld (0x00f362),0x0022
 	pushw	0                                    ; FC9906  push 0x0000
 	lda	xiy, (xiz-26)                          ; FC9909  lda XIY,XIZ+0xe6
-	call	sub_FC9CCD                              ; FC990C  call 0xfc9ccd
+	call	Double_MakeInfinity                              ; FC990C  call 0xfc9ccd
 	popw	bc                                    ; FC9910  pop BC
 	ld	xiy, (xsp)                              ; FC9911  ld XIY,(XSP)
 	ld	xix, (xiz-26)                           ; FC9913  ld XIX,(XIZ+0xe6)
@@ -1638,11 +1648,11 @@ sub_FC9844__FC98FF:
 	ld	xix, (xiz-22)                           ; FC9919  ld XIX,(XIZ+0xea)
 	ld	(xiy), xix                              ; FC991C  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC991E  jrl T,0xfc9bb5
-sub_FC9844__FC9921:
+Double_Exp__FC9921:
 	ldw	hl, 0                                  ; FC9921  ld HL,0x0000
-	ld	xbc, (0xFCB422:24)                     ; FC9924  ld XBC,(0xfcb422)
+	ld	xbc, (F64_0p0_6+4:24)                     ; FC9924  ld XBC,(0xfcb422)
 	push	xbc                                   ; FC9929  push XBC
-	ld	xbc, (0xFCB41E:24)                     ; FC992A  ld XBC,(0xfcb41e)
+	ld	xbc, (F64_0p0_6:24)                     ; FC992A  ld XBC,(0xfcb41e)
 	push	xbc                                   ; FC992F  push XBC
 	ld	xbc, (xiz+12)                           ; FC9930  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9933  push XBC
@@ -1650,22 +1660,22 @@ sub_FC9844__FC9921:
 	push	xbc                                   ; FC9937  push XBC
 	call	Double_Compare                              ; FC9938  call 0xfca121
 	cp	wa, 2:i3                                  ; FC993C  cp WA,2
-	jr nz, sub_FC9844__FC9943                  ; FC993E  jr NZ,0xfc9943
+	jr nz, Double_Exp__FC9943                  ; FC993E  jr NZ,0xfc9943
 	ldw	hl, 1                                  ; FC9940  ld HL,0x0001
-sub_FC9844__FC9943:
+Double_Exp__FC9943:
 	ld	de, hl                                  ; FC9943  ld DE,HL
 	cp	hl, 0:i3                                  ; FC9945  cp HL,0
-	jr z, sub_FC9844__FC9958                   ; FC9947  jr Z,0xfc9958
+	jr z, Double_Exp__FC9958                   ; FC9947  jr Z,0xfc9958
 	ld	xbc, (xiz+12)                           ; FC9949  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC994C  push XBC
 	ld	xbc, (xiz+8)                            ; FC994D  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC9950  push XBC
 	lda	xiy, (xiz+8)                           ; FC9951  lda XIY,XIZ+0x08
 	call	Double_Negate                              ; FC9954  call 0xfca1b6
-sub_FC9844__FC9958:
-	ld	xbc, (0xFCB40A:24)                     ; FC9958  ld XBC,(0xfcb40a)
+Double_Exp__FC9958:
+	ld	xbc, (F64_1p0536712127723509em08_3+4:24)                     ; FC9958  ld XBC,(0xfcb40a)
 	push	xbc                                   ; FC995D  push XBC
-	ld	xbc, (0xFCB406:24)                     ; FC995E  ld XBC,(0xfcb406)
+	ld	xbc, (F64_1p0536712127723509em08_3:24)                     ; FC995E  ld XBC,(0xfcb406)
 	push	xbc                                   ; FC9963  push XBC
 	ld	xbc, (xiz+12)                           ; FC9964  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9967  push XBC
@@ -1673,16 +1683,16 @@ sub_FC9844__FC9958:
 	push	xbc                                   ; FC996B  push XBC
 	call	Double_Compare                              ; FC996C  call 0xfca121
 	cp	wa, 2:i3                                  ; FC9970  cp WA,2
-	jr nz, sub_FC9844__FC99CE                  ; FC9972  jr NZ,0xfc99ce
+	jr nz, Double_Exp__FC99CE                  ; FC9972  jr NZ,0xfc99ce
 	cp	de, 0:i3                                  ; FC9974  cp DE,0
-	jr z, sub_FC9844__FC99A3                   ; FC9976  jr Z,0xfc99a3
+	jr z, Double_Exp__FC99A3                   ; FC9976  jr Z,0xfc99a3
 	ld	xbc, (xiz+12)                           ; FC9978  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC997B  push XBC
 	ld	xbc, (xiz+8)                            ; FC997C  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC997F  push XBC
-	ld	xbc, (0xFCB402:24)                     ; FC9980  ld XBC,(0xfcb402)
+	ld	xbc, (F64_1p0_5+4:24)                     ; FC9980  ld XBC,(0xfcb402)
 	push	xbc                                   ; FC9985  push XBC
-	ld	xbc, (0xFCB3FE:24)                     ; FC9986  ld XBC,(0xfcb3fe)
+	ld	xbc, (F64_1p0_5:24)                     ; FC9986  ld XBC,(0xfcb3fe)
 	push	xbc                                   ; FC998B  push XBC
 	lda	xiy, (xiz-26)                          ; FC998C  lda XIY,XIZ+0xe6
 	call	Double_Subtract                              ; FC998F  call 0xfca626
@@ -1692,10 +1702,10 @@ sub_FC9844__FC9958:
 	ld	xix, (xiz-22)                           ; FC999B  ld XIX,(XIZ+0xea)
 	ld	(xiy), xix                              ; FC999E  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC99A0  jrl T,0xfc9bb5
-sub_FC9844__FC99A3:
-	ld	xbc, (0xFCB402:24)                     ; FC99A3  ld XBC,(0xfcb402)
+Double_Exp__FC99A3:
+	ld	xbc, (F64_1p0_5+4:24)                     ; FC99A3  ld XBC,(0xfcb402)
 	push	xbc                                   ; FC99A8  push XBC
-	ld	xbc, (0xFCB3FE:24)                     ; FC99A9  ld XBC,(0xfcb3fe)
+	ld	xbc, (F64_1p0_5:24)                     ; FC99A9  ld XBC,(0xfcb3fe)
 	push	xbc                                   ; FC99AE  push XBC
 	ld	xbc, (xiz+12)                           ; FC99AF  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC99B2  push XBC
@@ -1709,20 +1719,20 @@ sub_FC9844__FC99A3:
 	ld	xix, (xiz-22)                           ; FC99C6  ld XIX,(XIZ+0xea)
 	ld	(xiy), xix                              ; FC99C9  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC99CB  jrl T,0xfc9bb5
-sub_FC9844__FC99CE:
+Double_Exp__FC99CE:
 	ld	xbc, (xiz+12)                           ; FC99CE  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC99D1  push XBC
 	ld	xbc, (xiz+8)                            ; FC99D2  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FC99D5  push XBC
-	ld	xbc, (0xFCB3FA:24)                     ; FC99D6  ld XBC,(0xfcb3fa)
+	ld	xbc, (F64_1p4426950408889634+4:24)                     ; FC99D6  ld XBC,(0xfcb3fa)
 	push	xbc                                   ; FC99DB  push XBC
-	ld	xbc, (0xFCB3F6:24)                     ; FC99DC  ld XBC,(0xfcb3f6)
+	ld	xbc, (F64_1p4426950408889634:24)                     ; FC99DC  ld XBC,(0xfcb3f6)
 	push	xbc                                   ; FC99E1  push XBC
 	lda	xiy, (xiz-26)                          ; FC99E2  lda XIY,XIZ+0xe6
 	call	Double_Multiply                              ; FC99E5  call 0xfca252
-	ld	xbc, (0xFCB3F2:24)                     ; FC99E9  ld XBC,(0xfcb3f2)
+	ld	xbc, (F64_0p5_5+4:24)                     ; FC99E9  ld XBC,(0xfcb3f2)
 	push	xbc                                   ; FC99EE  push XBC
-	ld	xbc, (0xFCB3EE:24)                     ; FC99EF  ld XBC,(0xfcb3ee)
+	ld	xbc, (F64_0p5_5:24)                     ; FC99EF  ld XBC,(0xfcb3ee)
 	push	xbc                                   ; FC99F4  push XBC
 	ld	xbc, (xiz-22)                           ; FC99F5  ld XBC,(XIZ+0xea)
 	push	xbc                                   ; FC99F8  push XBC
@@ -1743,9 +1753,9 @@ sub_FC9844__FC99CE:
 	push	xbc                                   ; FC9A1E  push XBC
 	ld	xbc, (xiz-42)                           ; FC9A1F  ld XBC,(XIZ+0xd6)
 	push	xbc                                   ; FC9A22  push XBC
-	ld	xbc, (0xFCB3EA:24)                     ; FC9A23  ld XBC,(0xfcb3ea)
+	ld	xbc, (F64_0p6931471805599453+4:24)                     ; FC9A23  ld XBC,(0xfcb3ea)
 	push	xbc                                   ; FC9A28  push XBC
-	ld	xbc, (0xFCB3E6:24)                     ; FC9A29  ld XBC,(0xfcb3e6)
+	ld	xbc, (F64_0p6931471805599453:24)                     ; FC9A29  ld XBC,(0xfcb3e6)
 	push	xbc                                   ; FC9A2E  push XBC
 	lda	xiy, (xiz-50)                          ; FC9A2F  lda XIY,XIZ+0xce
 	call	Double_Multiply                              ; FC9A32  call 0xfca252
@@ -1760,7 +1770,7 @@ sub_FC9844__FC99CE:
 	lda	xiy, (xiz+8)                           ; FC9A46  lda XIY,XIZ+0x08
 	call	Double_Subtract                              ; FC9A49  call 0xfca626
 	cp	de, 0:i3                                  ; FC9A4D  cp DE,0
-	jr z, sub_FC9844__FC9A68                   ; FC9A4F  jr Z,0xfc9a68
+	jr z, Double_Exp__FC9A68                   ; FC9A4F  jr Z,0xfc9a68
 	ld	xbc, (xiz+12)                           ; FC9A51  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9A54  push XBC
 	ld	xbc, (xiz+8)                            ; FC9A55  ld XBC,(XIZ+0x08)
@@ -1770,7 +1780,7 @@ sub_FC9844__FC99CE:
 	ld	bc, (xiz-2)                             ; FC9A60  ld BC,(XIZ+0xfe)
 	neg	bc                                     ; FC9A63  neg BC
 	ld	(xiz-2), bc                             ; FC9A65  ld (XIZ+0xfe),BC
-sub_FC9844__FC9A68:
+Double_Exp__FC9A68:
 	ld	xbc, (xiz+12)                           ; FC9A68  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9A6B  push XBC
 	ld	xbc, (xiz+8)                            ; FC9A6C  ld XBC,(XIZ+0x08)
@@ -1782,13 +1792,13 @@ sub_FC9844__FC9A68:
 	lda	xiy, (xiz-10)                          ; FC9A78  lda XIY,XIZ+0xf6
 	call	Double_Multiply                              ; FC9A7B  call 0xfca252
 	lda	xix, (xiz-18)                          ; FC9A7F  lda XIX,XIZ+0xee
-	lda	xiy, (0xFCB436:24)                     ; FC9A82  lda XIY,0xfcb436
+	lda	xiy, (F64_3p1555192765684645em05:24)                     ; FC9A82  lda XIY,0xfcb436
 	ldw	bc, 4                                  ; FC9A87  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9A8A  ldirw
-	lda	xix, (0xFCB436:24)                     ; FC9A8C  lda XIX,0xfcb436
+	lda	xix, (F64_3p1555192765684645em05:24)                     ; FC9A8C  lda XIX,0xfcb436
 	inc	8, xix                                 ; FC9A91  inc 0,XIX
 	ld	h, 2:opc                                   ; FC9A93  ld H,0x02
-sub_FC9844__FC9A95:
+Double_Exp__FC9A95:
 	ld	xbc, (xiz-14)                           ; FC9A95  ld XBC,(XIZ+0xf2)
 	push	xbc                                   ; FC9A98  push XBC
 	ld	xbc, (xiz-18)                           ; FC9A99  ld XBC,(XIZ+0xee)
@@ -1840,7 +1850,7 @@ sub_FC9ACB:
 	inc	8, xix                                 ; FC9ACF  inc 0,XIX
 	dec	1, h                                   ; FC9AD1  dec 1,H
 	cp	h, 0:i3                                   ; FC9AD3  cp H,0
-	jr nz, sub_FC9844__FC9A95                  ; FC9AD5  jr NZ,0xfc9a95
+	jr nz, Double_Exp__FC9A95                  ; FC9AD5  jr NZ,0xfc9a95
 	ld	xbc, (xiz+12)                           ; FC9AD7  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9ADA  push XBC
 	ld	xbc, (xiz+8)                            ; FC9ADB  ld XBC,(XIZ+0x08)
@@ -1852,10 +1862,10 @@ sub_FC9ACB:
 	lda	xiy, (xiz+8)                           ; FC9AE7  lda XIY,XIZ+0x08
 	call	Double_Multiply                              ; FC9AEA  call 0xfca252
 	lda	xix, (xiz-18)                          ; FC9AEE  lda XIX,XIZ+0xee
-	lda	xiy, (0xFCB44E:24)                     ; FC9AF1  lda XIY,0xfcb44e
+	lda	xiy, (F64_7p510402839987004em07:24)                     ; FC9AF1  lda XIY,0xfcb44e
 	ldw	bc, 4                                  ; FC9AF6  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9AF9  ldirw
-	lda	xix, (0xFCB44E:24)                     ; FC9AFB  lda XIX,0xfcb44e
+	lda	xix, (F64_7p510402839987004em07:24)                     ; FC9AFB  lda XIX,0xfcb44e
 	inc	8, xix                                 ; FC9B00  inc 0,XIX
 	ld	h, 3:opc                                   ; FC9B02  ld H,0x03
 sub_FC9ACB__FC9B04:
@@ -1912,9 +1922,9 @@ sub_FC9ACB__FC9B04:
 	push	xbc                                   ; FC9B72  push XBC
 	lda	xiy, (xiz-34)                          ; FC9B73  lda XIY,XIZ+0xde
 	call	Double_Divide                              ; FC9B76  call 0xfca7a5
-	ld	xbc, (0xFCB3F2:24)                     ; FC9B7A  ld XBC,(0xfcb3f2)
+	ld	xbc, (F64_0p5_5+4:24)                     ; FC9B7A  ld XBC,(0xfcb3f2)
 	push	xbc                                   ; FC9B7F  push XBC
-	ld	xbc, (0xFCB3EE:24)                     ; FC9B80  ld XBC,(0xfcb3ee)
+	ld	xbc, (F64_0p5_5:24)                     ; FC9B80  ld XBC,(0xfcb3ee)
 	push	xbc                                   ; FC9B85  push XBC
 	ld	xbc, (xiz-30)                           ; FC9B86  ld XBC,(XIZ+0xe2)
 	push	xbc                                   ; FC9B89  push XBC
@@ -1966,9 +1976,9 @@ sub_FC9BBC:
 	pushw	de                                   ; FC9BC1  push DE
 	push	xix                                   ; FC9BC2  push XIX
 	push	xiy                                   ; FC9BC3  push XIY
-	ld	xbc, (0xFCB472:24)                     ; FC9BC4  ld XBC,(0xfcb472)
+	ld	xbc, (F64_0p0_7+4:24)                     ; FC9BC4  ld XBC,(0xfcb472)
 	push	xbc                                   ; FC9BC9  push XBC
-	ld	xbc, (0xFCB46E:24)                     ; FC9BCA  ld XBC,(0xfcb46e)
+	ld	xbc, (F64_0p0_7:24)                     ; FC9BCA  ld XBC,(0xfcb46e)
 	push	xbc                                   ; FC9BCF  push XBC
 	ld	xbc, (xiz+12)                           ; FC9BD0  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9BD3  push XBC
@@ -2011,9 +2021,9 @@ sub_FC9BBC__FC9BEC:
 	ldw	(0xF362:24), 34                       ; FC9C2D  ld (0x00f362),0x0022
 sub_FC9BBC__FC9C34:
 	ld	xiy, (xsp)                              ; FC9C34  ld XIY,(XSP)
-	ld	xix, (0xFCB46E:24)                     ; FC9C36  ld XIX,(0xfcb46e)
+	ld	xix, (F64_0p0_7:24)                     ; FC9C36  ld XIX,(0xfcb46e)
 	stl_dpi	xix, 0xF6                          ; FC9C3B  ld (XIY+),XIX
-	ld	xix, (0xFCB472:24)                     ; FC9C3E  ld XIX,(0xfcb472)
+	ld	xix, (F64_0p0_7+4:24)                     ; FC9C3E  ld XIX,(0xfcb472)
 	ld	(xiy), xix                              ; FC9C43  ld (XIY),XIX
 	jrl sub_FC9BBC__FC9CC6                     ; FC9C45  jrl T,0xfc9cc6
 sub_FC9BBC__FC9C48:
@@ -2073,7 +2083,7 @@ sub_FC9BBC__FC9CC6:
 	unlk32 xiz                                 ; FC9CCA  unlk XIZ
 	ret                                        ; FC9CCC  ret
 ; --------------------------------------------------------------------------
-; sub_FC9CCD -- 0xFC9CCD..0xFC9D11 (69 bytes)
+; Double_MakeInfinity -- 0xFC9CCD..0xFC9D11 (69 bytes)
 ;
 ; Called from: no site outside this module.
 ;          3 site(s) inside this module:
@@ -2087,8 +2097,10 @@ sub_FC9BBC__FC9CC6:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): Double_MakeInfinity -- +Inf (7F F0 00..) or, for a non-zero argument, -Inf (FF F0 00..), 0xFC9CDF-0xFC9CF0.
+;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
-sub_FC9CCD:
+Double_MakeInfinity:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FC9CCD  link XIZ,0xfff0
 	push	xix                                   ; FC9CD1  push XIX
 	push	xiy                                   ; FC9CD2  push XIY
@@ -2099,12 +2111,12 @@ sub_FC9CCD:
 	ld	(xix+4), xbc                            ; FC9CDC  ld (XIX+0x04),XBC
 	ld	(xix+6), 0xF0                           ; FC9CDF  ld (XIX+0x06),0xf0
 	cpw (xiz+8), 0x0000                        ; FC9CE3  cp (XIZ+0x08),0x0000
-	jr z, sub_FC9CCD__FC9CF0                   ; FC9CE8  jr Z,0xfc9cf0
+	jr z, Double_MakeInfinity__FC9CF0                   ; FC9CE8  jr Z,0xfc9cf0
 	ld	(xix+7), 0xFF                           ; FC9CEA  ld (XIX+0x07),0xff
-	jr sub_FC9CCD__FC9CF4                      ; FC9CEE  jr T,0xfc9cf4
-sub_FC9CCD__FC9CF0:
+	jr Double_MakeInfinity__FC9CF4                      ; FC9CEE  jr T,0xfc9cf4
+Double_MakeInfinity__FC9CF0:
 	ld	(xix+7), 0x7F                           ; FC9CF0  ld (XIX+0x07),0x7f
-sub_FC9CCD__FC9CF4:
+Double_MakeInfinity__FC9CF4:
 	push	xix                                   ; FC9CF4  push XIX
 	lda	xix, (xiz-16)                          ; FC9CF5  lda XIX,XIZ+0xf0
 	ld	xiy, (xsp)                              ; FC9CF8  ld XIY,(XSP)
@@ -2121,7 +2133,7 @@ sub_FC9CCD__FC9CF4:
 	unlk32 xiz                                 ; FC9D0F  unlk XIZ
 	ret                                        ; FC9D11  ret
 ; --------------------------------------------------------------------------
-; sub_FC9D12 -- 0xFC9D12..0xFC9FA2 (657 bytes)
+; Double_Log -- 0xFC9D12..0xFC9FA2 (657 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -2129,7 +2141,7 @@ sub_FC9CCD__FC9CF4:
 ; Inputs:  frame `link XIZ,-82`; argument slots read: (XIZ+0x08), (XIZ+0x0C)
 ; Outputs: writes 0x00F362
 ;          reads 0xFCB476, 0xFCB47A, 0xFCB47E, 0xFCB482, 0xFCB486, 0xFCB48A, 0xFCB48E, 0xFCB492, 0xFCB496, 0xFCB49A, 0xFCB49E, 0xFCB4A2
-; Calls:   0xFC9CCD = sub_FC9CCD, 0xFC9FA3 = sub_FC9FA3
+; Calls:   0xFC9CCD = Double_MakeInfinity, 0xFC9FA3 = sub_FC9FA3
 ;          0xFCA121 = Double_Compare, 0xFCA252 = Double_Multiply
 ;          0xFCA41F = Double_Add, 0xFCA626 = Double_Subtract
 ;          0xFCA7A5 = Double_Divide, 0xFCA997 = Int16_ToDouble
@@ -2140,15 +2152,17 @@ sub_FC9CCD__FC9CF4:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): Double_Log -- log(x): Cody-Waite a/b sets at 0xFCB4A6-0xFCB4D6, sqrt(1/2) and ln 2.
+;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
-sub_FC9D12:
+Double_Log:
 	link32 0xEE, 0x0C, 0xAE, 0xFF              ; FC9D12  link XIZ,0xffae
 	pushw	hl                                   ; FC9D16  push HL
 	push	xix                                   ; FC9D17  push XIX
 	push	xiy                                   ; FC9D18  push XIY
-	ld	xbc, (0xFCB4A2:24)                     ; FC9D19  ld XBC,(0xfcb4a2)
+	ld	xbc, (F64_8p988465674311579e307_2+4:24)                     ; FC9D19  ld XBC,(0xfcb4a2)
 	push	xbc                                   ; FC9D1E  push XBC
-	ld	xbc, (0xFCB49E:24)                     ; FC9D1F  ld XBC,(0xfcb49e)
+	ld	xbc, (F64_8p988465674311579e307_2:24)                     ; FC9D1F  ld XBC,(0xfcb49e)
 	push	xbc                                   ; FC9D24  push XBC
 	ld	xbc, (xiz+12)                           ; FC9D25  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9D28  push XBC
@@ -2156,14 +2170,14 @@ sub_FC9D12:
 	push	xbc                                   ; FC9D2C  push XBC
 	call	Double_Compare                              ; FC9D2D  call 0xfca121
 	cp	wa, 2:i3                                  ; FC9D31  cp WA,2
-	jr z, sub_FC9D12__FC9D41                   ; FC9D33  jr Z,0xfc9d41
+	jr z, Double_Log__FC9D41                   ; FC9D33  jr Z,0xfc9d41
 	ldw	(0xF362:24), 33                       ; FC9D35  ld (0x00f362),0x0021
 	pushw	0                                    ; FC9D3C  push 0x0000
-	jr sub_FC9D12__FC9D67                      ; FC9D3F  jr T,0xfc9d67
-sub_FC9D12__FC9D41:
-	ld	xbc, (0xFCB49A:24)                     ; FC9D41  ld XBC,(0xfcb49a)
+	jr Double_Log__FC9D67                      ; FC9D3F  jr T,0xfc9d67
+Double_Log__FC9D41:
+	ld	xbc, (F64_0p0_8+4:24)                     ; FC9D41  ld XBC,(0xfcb49a)
 	push	xbc                                   ; FC9D46  push XBC
-	ld	xbc, (0xFCB496:24)                     ; FC9D47  ld XBC,(0xfcb496)
+	ld	xbc, (F64_0p0_8:24)                     ; FC9D47  ld XBC,(0xfcb496)
 	push	xbc                                   ; FC9D4C  push XBC
 	ld	xbc, (xiz+12)                           ; FC9D4D  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9D50  push XBC
@@ -2171,23 +2185,23 @@ sub_FC9D12__FC9D41:
 	push	xbc                                   ; FC9D54  push XBC
 	call	Double_Compare                              ; FC9D55  call 0xfca121
 	cp	wa, 1:i3                                  ; FC9D59  cp WA,1
-	jr z, sub_FC9D12__FC9D7F                   ; FC9D5B  jr Z,0xfc9d7f
+	jr z, Double_Log__FC9D7F                   ; FC9D5B  jr Z,0xfc9d7f
 	ldw	(0xF362:24), 33                       ; FC9D5D  ld (0x00f362),0x0021
 	pushw	1                                    ; FC9D64  push 0x0001
-sub_FC9D12__FC9D67:
+Double_Log__FC9D67:
 	lda	xiy, (xiz-34)                          ; FC9D67  lda XIY,XIZ+0xde
-	call	sub_FC9CCD                              ; FC9D6A  call 0xfc9ccd
+	call	Double_MakeInfinity                              ; FC9D6A  call 0xfc9ccd
 	popw	bc                                    ; FC9D6E  pop BC
 	ld	xiy, (xsp)                              ; FC9D6F  ld XIY,(XSP)
 	ld	xix, (xiz-34)                           ; FC9D71  ld XIX,(XIZ+0xde)
 	stl_dpi	xix, 0xF6                          ; FC9D74  ld (XIY+),XIX
 	ld	xix, (xiz-30)                           ; FC9D77  ld XIX,(XIZ+0xe2)
 	ld	(xiy), xix                              ; FC9D7A  ld (XIY),XIX
-	jrl sub_FC9D12__FC9F9D                     ; FC9D7C  jrl T,0xfc9f9d
-sub_FC9D12__FC9D7F:
-	ld	xbc, (0xFCB48E:24)                     ; FC9D7F  ld XBC,(0xfcb48e)
+	jrl Double_Log__FC9F9D                     ; FC9D7C  jrl T,0xfc9f9d
+Double_Log__FC9D7F:
+	ld	xbc, (F64_1p0_6:24)                     ; FC9D7F  ld XBC,(0xfcb48e)
 	ld	(xiz-8), xbc                            ; FC9D84  ld (XIZ+0xf8),XBC
-	ld	xbc, (0xFCB492:24)                     ; FC9D87  ld XBC,(0xfcb492)
+	ld	xbc, (F64_1p0_6+4:24)                     ; FC9D87  ld XBC,(0xfcb492)
 	ld	(xiz-4), xbc                            ; FC9D8C  ld (XIZ+0xfc),XBC
 	lda	xbc, (xiz-10)                          ; FC9D8F  lda XBC,XIZ+0xf6
 	push	xbc                                   ; FC9D92  push XBC
@@ -2199,9 +2213,9 @@ sub_FC9D12__FC9D7F:
 	call	sub_FC9FA3                              ; FC9D9E  call 0xfc9fa3
 	inc	8, xsp                                 ; FC9DA2  inc 0,XSP
 	inc	4, xsp                                 ; FC9DA4  inc 4,XSP
-	ld	xbc, (0xFCB48A:24)                     ; FC9DA6  ld XBC,(0xfcb48a)
+	ld	xbc, (F64_0p7071067811865476+4:24)                     ; FC9DA6  ld XBC,(0xfcb48a)
 	push	xbc                                   ; FC9DAB  push XBC
-	ld	xbc, (0xFCB486:24)                     ; FC9DAC  ld XBC,(0xfcb486)
+	ld	xbc, (F64_0p7071067811865476:24)                     ; FC9DAC  ld XBC,(0xfcb486)
 	push	xbc                                   ; FC9DB1  push XBC
 	ld	xbc, (xiz+12)                           ; FC9DB2  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9DB5  push XBC
@@ -2209,13 +2223,13 @@ sub_FC9D12__FC9D7F:
 	push	xbc                                   ; FC9DB9  push XBC
 	call	Double_Compare                              ; FC9DBA  call 0xfca121
 	cp	wa, 2:i3                                  ; FC9DBE  cp WA,2
-	jr nz, sub_FC9D12__FC9DD5                  ; FC9DC0  jr NZ,0xfc9dd5
+	jr nz, Double_Log__FC9DD5                  ; FC9DC0  jr NZ,0xfc9dd5
 	decm	1, (xiz-10)                           ; FC9DC2  decw 1,(XIZ+0xf6)
-	ld	xbc, (0xFCB47E:24)                     ; FC9DC5  ld XBC,(0xfcb47e)
+	ld	xbc, (F64_0p5_7:24)                     ; FC9DC5  ld XBC,(0xfcb47e)
 	ld	(xiz-8), xbc                            ; FC9DCA  ld (XIZ+0xf8),XBC
-	ld	xbc, (0xFCB482:24)                     ; FC9DCD  ld XBC,(0xfcb482)
+	ld	xbc, (F64_0p5_7+4:24)                     ; FC9DCD  ld XBC,(0xfcb482)
 	ld	(xiz-4), xbc                            ; FC9DD2  ld (XIZ+0xfc),XBC
-sub_FC9D12__FC9DD5:
+Double_Log__FC9DD5:
 	ld	xbc, (xiz-4)                            ; FC9DD5  ld XBC,(XIZ+0xfc)
 	push	xbc                                   ; FC9DD8  push XBC
 	ld	xbc, (xiz-8)                            ; FC9DD9  ld XBC,(XIZ+0xf8)
@@ -2267,13 +2281,13 @@ sub_FC9D12__FC9DD5:
 	lda	xiy, (xiz-8)                           ; FC9E41  lda XIY,XIZ+0xf8
 	call	Double_Multiply                              ; FC9E44  call 0xfca252
 	lda	xix, (xiz-18)                          ; FC9E48  lda XIX,XIZ+0xee
-	lda	xiy, (0xFCB4A6:24)                     ; FC9E4B  lda XIY,0xfcb4a6
+	lda	xiy, (F64_neg0p7895611288749126:24)                     ; FC9E4B  lda XIY,0xfcb4a6
 	ldw	bc, 4                                  ; FC9E50  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9E53  ldirw
-	lda	xix, (0xFCB4A6:24)                     ; FC9E55  lda XIX,0xfcb4a6
+	lda	xix, (F64_neg0p7895611288749126:24)                     ; FC9E55  lda XIX,0xfcb4a6
 	inc	8, xix                                 ; FC9E5A  inc 0,XIX
 	ld	h, 2:opc                                   ; FC9E5C  ld H,0x02
-sub_FC9D12__FC9E5E:
+Double_Log__FC9E5E:
 	ld	xbc, (xiz-14)                           ; FC9E5E  ld XBC,(XIZ+0xf2)
 	push	xbc                                   ; FC9E61  push XBC
 	ld	xbc, (xiz-18)                           ; FC9E62  ld XBC,(XIZ+0xee)
@@ -2303,15 +2317,15 @@ sub_FC9D12__FC9E5E:
 	inc	8, xix                                 ; FC9E98  inc 0,XIX
 	dec	1, h                                   ; FC9E9A  dec 1,H
 	cp	h, 0:i3                                   ; FC9E9C  cp H,0
-	jr nz, sub_FC9D12__FC9E5E                  ; FC9E9E  jr NZ,0xfc9e5e
+	jr nz, Double_Log__FC9E5E                  ; FC9E9E  jr NZ,0xfc9e5e
 	lda	xix, (xiz-26)                          ; FC9EA0  lda XIX,XIZ+0xe6
-	lda	xiy, (0xFCB4BE:24)                     ; FC9EA3  lda XIY,0xfcb4be
+	lda	xiy, (F64_1p0_7:24)                     ; FC9EA3  lda XIY,0xfcb4be
 	ldw	bc, 4                                  ; FC9EA8  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9EAB  ldirw
-	lda	xix, (0xFCB4BE:24)                     ; FC9EAD  lda XIX,0xfcb4be
+	lda	xix, (F64_1p0_7:24)                     ; FC9EAD  lda XIX,0xfcb4be
 	inc	8, xix                                 ; FC9EB2  inc 0,XIX
 	ld	h, 3:opc                                   ; FC9EB4  ld H,0x03
-sub_FC9D12__FC9EB6:
+Double_Log__FC9EB6:
 	ld	xbc, (xiz-22)                           ; FC9EB6  ld XBC,(XIZ+0xea)
 	push	xbc                                   ; FC9EB9  push XBC
 	ld	xbc, (xiz-26)                           ; FC9EBA  ld XBC,(XIZ+0xe6)
@@ -2341,7 +2355,7 @@ sub_FC9D12__FC9EB6:
 	inc	8, xix                                 ; FC9EF0  inc 0,XIX
 	dec	1, h                                   ; FC9EF2  dec 1,H
 	cp	h, 0:i3                                   ; FC9EF4  cp H,0
-	jr nz, sub_FC9D12__FC9EB6                  ; FC9EF6  jr NZ,0xfc9eb6
+	jr nz, Double_Log__FC9EB6                  ; FC9EF6  jr NZ,0xfc9eb6
 	ld	xbc, (xiz+12)                           ; FC9EF8  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9EFB  push XBC
 	ld	xbc, (xiz+8)                            ; FC9EFC  ld XBC,(XIZ+0x08)
@@ -2389,9 +2403,9 @@ sub_FC9D12__FC9EB6:
 	push	xbc                                   ; FC9F61  push XBC
 	ld	xbc, (xiz-66)                           ; FC9F62  ld XBC,(XIZ+0xbe)
 	push	xbc                                   ; FC9F65  push XBC
-	ld	xbc, (0xFCB47A:24)                     ; FC9F66  ld XBC,(0xfcb47a)
+	ld	xbc, (F64_0p6931471805599453_2+4:24)                     ; FC9F66  ld XBC,(0xfcb47a)
 	push	xbc                                   ; FC9F6B  push XBC
-	ld	xbc, (0xFCB476:24)                     ; FC9F6C  ld XBC,(0xfcb476)
+	ld	xbc, (F64_0p6931471805599453_2:24)                     ; FC9F6C  ld XBC,(0xfcb476)
 	push	xbc                                   ; FC9F71  push XBC
 	lda	xiy, (xiz-74)                          ; FC9F72  lda XIY,XIZ+0xb6
 	call	Double_Multiply                              ; FC9F75  call 0xfca252
@@ -2410,7 +2424,7 @@ sub_FC9D12__FC9EB6:
 	stl_dpi	xix, 0xF6                          ; FC9F95  ld (XIY+),XIX
 	ld	xix, (xiz-78)                           ; FC9F98  ld XIX,(XIZ+0xb2)
 	ld	(xiy), xix                              ; FC9F9B  ld (XIY),XIX
-sub_FC9D12__FC9F9D:
+Double_Log__FC9F9D:
 	pop	xiy                                    ; FC9F9D  pop XIY
 	pop	xix                                    ; FC9F9E  pop XIX
 	popw	hl                                    ; FC9F9F  pop HL
@@ -2440,9 +2454,9 @@ sub_FC9FA3:
 	pushw	de                                   ; FC9FA8  push DE
 	push	xix                                   ; FC9FA9  push XIX
 	push	xiy                                   ; FC9FAA  push XIY
-	ld	xbc, (0xFCB4E2:24)                     ; FC9FAB  ld XBC,(0xfcb4e2)
+	ld	xbc, (F64_0p0_9+4:24)                     ; FC9FAB  ld XBC,(0xfcb4e2)
 	push	xbc                                   ; FC9FB0  push XBC
-	ld	xbc, (0xFCB4DE:24)                     ; FC9FB1  ld XBC,(0xfcb4de)
+	ld	xbc, (F64_0p0_9:24)                     ; FC9FB1  ld XBC,(0xfcb4de)
 	push	xbc                                   ; FC9FB6  push XBC
 	ld	xbc, (xiz+12)                           ; FC9FB7  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC9FBA  push XBC
@@ -2480,9 +2494,9 @@ sub_FC9FA3__FC9FCF:
 	ld	xwa, (xiz+16)                           ; FC9FFF  ld XWA,(XIZ+0x10)
 	extpfx4 0xB0, 0x02, 0x00, 0x00             ; FCA002  ld (XWA),0x0000
 	ld	xiy, (xsp)                              ; FCA006  ld XIY,(XSP)
-	ld	xix, (0xFCB4DE:24)                     ; FCA008  ld XIX,(0xfcb4de)
+	ld	xix, (F64_0p0_9:24)                     ; FCA008  ld XIX,(0xfcb4de)
 	stl_dpi	xix, 0xF6                          ; FCA00D  ld (XIY+),XIX
-	ld	xix, (0xFCB4E2:24)                     ; FCA010  ld XIX,(0xfcb4e2)
+	ld	xix, (F64_0p0_9+4:24)                     ; FCA010  ld XIX,(0xfcb4e2)
 	ld	(xiy), xix                              ; FCA015  ld (XIY),XIX
 	jrl sub_FC9FA3__FCA07E                     ; FCA017  jrl T,0xfca07e
 sub_FC9FA3__FCA01A:
@@ -2534,7 +2548,7 @@ sub_FC9FA3__FCA07E:
 	unlk32 xiz                                 ; FCA082  unlk XIZ
 	ret                                        ; FCA084  ret
 ; --------------------------------------------------------------------------
-; sub_FCA085 -- 0xFCA085..0xFCA0B9 (53 bytes)
+; Double_Abs -- 0xFCA085..0xFCA0B9 (53 bytes)
 ;
 ; Called from: no site outside this module.
 ;          2 site(s) inside this module:
@@ -2548,8 +2562,10 @@ sub_FC9FA3__FCA07E:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; ★ NAMED 2026-09-25 (lane promcd): Double_Abs -- fabs(x): clears the sign bit, `and (XIX+0x07),0x7f` at 0xFCA098.
+;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
-sub_FCA085:
+Double_Abs:
 	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FCA085  link XIZ,0xfff0
 	push	xix                                   ; FCA089  push XIX
 	push	xiy                                   ; FCA08A  push XIY
@@ -4837,7 +4853,7 @@ UInt16_ToFloat32__FCAFFE:
 ; --------------------------------------------------------------------------
 Float32_Multiply:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FCB005  link XIZ,0xfffc
-	ld	xbc, (0xFCB4E6:24)                     ; FCB009  ld XBC,(0xfcb4e6)
+	ld	xbc, (Float32_One:24)                     ; FCB009  ld XBC,(0xfcb4e6)
 	ld	(xiz-4), xbc                            ; FCB00E  ld (XIZ+0xfc),XBC
 	ld	xbc, (xiz+12)                           ; FCB011  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FCB014  push XBC
@@ -5312,8 +5328,11 @@ Shift8_Left__FCB279:
 ; unexplained: every one of them sits immediately after a loaded entry, in seven
 ; runs, which is the shape of a COEFFICIENT ARRAY walked with a pointer from its
 ; first element.  The runs, with the routine that loads the head:
-; ⚠ WHAT THOSE ARRAYS ARE is NOT established here, and no routine is renamed on
-; the strength of it.  What is MEASURED, and only that:
+; ★ CORRECTED 2026-09-25 (lane promcd).  This said what the arrays are was not
+; settled and that no routine would be renamed on the strength of it.  They are the
+; Cody & Waite coefficient sets for sin, tan, exp and log, all 29 within 1 ulp of the
+; printed values, and their loaders are now Double_Sin, Double_Tan, Double_Exp and
+; Double_Log (notes/lanes/promcd-2026-09-25/mathlib_names.py).  Measured before that:
 ;   * the eight entries at 0xFCB2CE alternate in sign and, read from the HIGH
 ;     address downwards, are 1/3!, 1/5!, 1/7! ... 1/17! -- bit-exact at 1/3! and
 ;     drifting to 3.2e-2 relative at the 1/17! end, i.e. a FITTED odd polynomial
@@ -5333,159 +5352,403 @@ Shift8_Left__FCB279:
 ; ----------------------------------------------------------------------------
 Float64_ConstantPool:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0xf9, 0x3f   ; [ 0] 0xFCB27E = 1.5707963267948966  (pi/2)
-	;      no loading site located
+	;      loaded by Double_Cos at 0xFC8C07/0xFC8C0D -- the + pi/2 of cos x = sin(|x| + pi/2)
+	;      (corrected 2026-09-25, lane promcd: this line said no loading site was located)
+; Pool element at 0xFCB286: f64 1.0. Read at 2 sites: Double_Cos 0xFC8BCA, 0xFC8BD2.
+F64_1p0:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [ 1] 0xFCB286 = 1.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB28E: f64 0.0. Read at 2 sites: Double_Cos 0xFC8BDC, 0xFC8BE2.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC8BF0; under the other
+; operand).
+F64_0p0:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [ 2] 0xFCB28E = 0.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB296: f64 1.0536712127723509e-08. Read at 2 sites: Double_Sin
+; 0xFC8DDF, 0xFC8DE5.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC8DF3; under the other
+; operand).
+F64_1p0536712127723509em08:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0x46, 0x3e   ; [ 3] 0xFCB296 = 1.0536712127723509e-08
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB29E: f64 3.141592653589793  (pi). Read at 2 sites: Double_Sin
+; 0xFC8D9E, 0xFC8DA4.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC8DAD; on top).
+F64_3p141592653589793:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0x09, 0x40   ; [ 4] 0xFCB29E = 3.141592653589793  (pi)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB2A6: f64 0.5. Read at 6 sites: Double_Sin 0xFC8CFA, 0xFC8D00,
+; 0xFC8D39, 0xFC8D3F +2 more.
+; Each load is pushed as an argument of: Double_Add (call at 0xFC8D11; under the other
+; operand); Double_Multiply (call at 0xFC8D48; on top); Double_Subtract (call at 0xFC8D92;
+; under the other operand).
+F64_0p5_2:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [ 5] 0xFCB2A6 = 0.5
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB2AE: f64 0.3183098861837907  (1/pi). Read at 2 sites: Double_Sin
+; 0xFC8CE7, 0xFC8CED.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC8CF6; on top).
+F64_0p3183098861837907:
 	.byte	0x83, 0xc8, 0xc9, 0x6d, 0x30, 0x5f, 0xd4, 0x3f   ; [ 6] 0xFCB2AE = 0.3183098861837907  (1/pi)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB2B6: f64 298156826.0. Read at 2 sites: Double_Sin 0xFC8CB8, 0xFC8CBE.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC8CCC; under the other
+; operand).
+F64_298156826p0:
 	.byte	0x00, 0x00, 0x00, 0x1a, 0x83, 0xc5, 0xb1, 0x41   ; [ 7] 0xFCB2B6 = 298156826.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB2BE: f64 1.414847550405688e+16. Read at 2 sites: Double_Sin 0xFC8C81,
+; 0xFC8C87.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC8C95; under the other
+; operand).
+F64_1p414847550405688e16:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0x49, 0x43   ; [ 8] 0xFCB2BE = 1.414847550405688e+16
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB2C6: f64 0.0. Read at 6 sites: Double_Sin 0xFC8C4E, 0xFC8C54,
+; 0xFC8CA6, 0xFC8CAE +2 more.
+; Each load is pushed as an argument of: Double_Compare x2 (calls at 0xFC8C62, 0xFC8DC5;
+; under the other operand). 2 of its 6 loads are not a push-and-call and are not described
+; here.
+F64_0p0_2:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [ 9] 0xFCB2C6 = 0.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB2CE: f64 2.7204790957888847e-15. Read at 2 sites: Double_Sin
+; 0xFC8E16, 0xFC8E20.
+F64_2p7204790957888847em15:
 	.byte	0x95, 0xdf, 0x93, 0x69, 0xff, 0x80, 0xe8, 0x3c   ; [10] 0xFCB2CE = 2.7204790957888847e-15
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+F64_neg7p642917806891047em13:
 	.byte	0x9c, 0x49, 0x08, 0xdc, 0x20, 0xe4, 0x6a, 0xbd   ; [11] 0xFCB2D6 = -7.642917806891047e-13
 	;      no loading site located
+F64_1p605893649037159em10:
 	.byte	0x30, 0xd4, 0x6a, 0x68, 0x3c, 0x12, 0xe6, 0x3d   ; [12] 0xFCB2DE = 1.605893649037159e-10
 	;      no loading site located
+F64_neg2p5052106798274583em08:
 	.byte	0xab, 0xc0, 0x5d, 0x4b, 0x45, 0xe6, 0x5a, 0xbe   ; [13] 0xFCB2E6 = -2.5052106798274583e-08
 	;      no loading site located
+F64_2p7557319210152756em06:
 	.byte	0x63, 0xf0, 0x24, 0xa5, 0xe3, 0x1d, 0xc7, 0x3e   ; [14] 0xFCB2EE = 2.7557319210152756e-06  (~ +1/9!  (5.0e-10 rel.))
 	;      no loading site located
+F64_neg0p0001984126984120184:
 	.byte	0x1a, 0x3e, 0x01, 0x1a, 0xa0, 0x01, 0x2a, 0xbf   ; [15] 0xFCB2F6 = -0.0001984126984120184  (~ -1/7!  (3.5e-13 rel.))
 	;      no loading site located
+F64_0p008333333333333165:
 	.byte	0xb0, 0x10, 0x11, 0x11, 0x11, 0x11, 0x81, 0x3f   ; [16] 0xFCB2FE = 0.008333333333333165  (~ +1/5!  (1.7e-14 rel.))
 	;      no loading site located
+F64_neg0p16666666666666666:
 	.byte	0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0xc5, 0xbf   ; [17] 0xFCB306 = -0.16666666666666666  (= -1/3!  exactly)
 	;      no loading site located
+; Pool element at 0xFCB30E: f64 0.0. Read at 3 sites: sub_FC8EE5 0xFC8F84, 0xFC9056,
+; 0xFC905E.
+F64_0p0_3:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [18] 0xFCB30E = 0.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB316: f64 2147483647.0  (INT32_MAX). Read at 2 sites: Double_Tan
+; 0xFC9210, 0xFC9216.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC9224; under the other
+; operand).
+F64_2147483647p0:
 	.byte	0x00, 0x00, 0xc0, 0xff, 0xff, 0xff, 0xdf, 0x41   ; [19] 0xFCB316 = 2147483647.0  (INT32_MAX)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB31E: f64 1.0. Read at 2 sites: Double_Tan 0xFC93D1, 0xFC93D9.
+F64_1p0_2:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [20] 0xFCB31E = 1.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB326: f64 1.0536712127723509e-08. Read at 2 sites: Double_Tan
+; 0xFC93B5, 0xFC93BB.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC93C9; under the other
+; operand).
+F64_1p0536712127723509em08_2:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0x46, 0x3e   ; [21] 0xFCB326 = 1.0536712127723509e-08
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB32E: f64 -1.0536712127723509e-08. Read at 2 sites: Double_Tan
+; 0xFC9399, 0xFC939F.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC93AD; under the other
+; operand).
+F64_neg1p0536712127723509em08:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0x46, 0xbe   ; [22] 0xFCB32E = -1.0536712127723509e-08
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB336: f64 1.5707963267948966  (pi/2). Read at 2 sites: Double_Tan
+; 0xFC9331, 0xFC9337.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC9340; on top).
+F64_1p5707963267948966:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0xf9, 0x3f   ; [23] 0xFCB336 = 1.5707963267948966  (pi/2)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB33E: f64 -4.454455103380769e-06. Read at 2 sites: Double_Tan
+; 0xFC92BF, 0xFC92C5.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC92CE; on top).
+F64_neg4p454455103380769em06:
 	.byte	0x9e, 0xe5, 0x9e, 0x4b, 0xef, 0xae, 0xd2, 0xbe   ; [24] 0xFCB33E = -4.454455103380769e-06
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB346: f64 1.57080078125. Read at 2 sites: Double_Tan 0xFC9276,
+; 0xFC927C.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC9285; on top).
+F64_1p57080078125:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x22, 0xf9, 0x3f   ; [25] 0xFCB346 = 1.57080078125
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB34E: f64 0.5. Read at 6 sites: Double_Tan 0xFC91F5, 0xFC91FB,
+; 0xFC930E, 0xFC9314 +2 more.
+; Each load is pushed as an argument of: Double_Add (call at 0xFC920C; under the other
+; operand); Double_Subtract (call at 0xFC9325; under the other operand); Double_Multiply
+; (call at 0xFC9368; on top).
+F64_0p5_3:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [26] 0xFCB34E = 0.5
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB356: f64 0.6366197723675814  (2/pi). Read at 2 sites: Double_Tan
+; 0xFC91E2, 0xFC91E8.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC91F1; on top).
+F64_0p6366197723675814:
 	.byte	0x83, 0xc8, 0xc9, 0x6d, 0x30, 0x5f, 0xe4, 0x3f   ; [27] 0xFCB356 = 0.6366197723675814  (2/pi)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB35E: f64 149078413.0. Read at 2 sites: Double_Tan 0xFC91B7, 0xFC91BD.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC91CB; under the other
+; operand).
+F64_149078413p0:
 	.byte	0x00, 0x00, 0x00, 0x1a, 0x83, 0xc5, 0xa1, 0x41   ; [28] 0xFCB35E = 149078413.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB366: f64 7074237752028440.0. Read at 2 sites: Double_Tan 0xFC9180,
+; 0xFC9186.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC9194; under the other
+; operand).
+F64_7074237752028440p0:
 	.byte	0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0x39, 0x43   ; [29] 0xFCB366 = 7074237752028440.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB36E: f64 0.0. Read at 4 sites: Double_Tan 0xFC914B, 0xFC9151,
+; 0xFC91A5, 0xFC91AD.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC915F; under the other
+; operand). 2 of its 4 loads are not a push-and-call and are not described here.
+F64_0p0_4:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [30] 0xFCB36E = 0.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB376: f64 -1.7861707342254424e-05. Read at 2 sites: Double_Tan
+; 0xFC93FE, 0xFC9408.
+F64_neg1p7861707342254424em05:
 	.byte	0x23, 0xc7, 0xa2, 0x2e, 0xb7, 0xba, 0xf2, 0xbe   ; [31] 0xFCB376 = -1.7861707342254424e-05
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+F64_0p003424887823589059:
 	.byte	0xdf, 0xaa, 0x3b, 0xa6, 0x82, 0x0e, 0x6c, 0x3f   ; [32] 0xFCB37E = 0.003424887823589059
 	;      no loading site located
+F64_neg0p1333835000642196:
 	.byte	0xff, 0x08, 0x4d, 0xe5, 0xb5, 0x12, 0xc1, 0xbf   ; [33] 0xFCB386 = -0.1333835000642196
 	;      no loading site located
+; Pool element at 0xFCB38E: f64 4.981943399378651e-07. Read at 2 sites: Double_Tan 0xFC949B,
+; 0xFC94A5.
+F64_4p981943399378651em07:
 	.byte	0xe9, 0x78, 0x76, 0xf0, 0x74, 0xb7, 0xa0, 0x3e   ; [34] 0xFCB38E = 4.981943399378651e-07
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+F64_neg0p00031181531907010027:
 	.byte	0x41, 0x48, 0x09, 0x99, 0x64, 0x6f, 0x34, 0xbf   ; [35] 0xFCB396 = -0.00031181531907010027
 	;      no loading site located
+F64_0p025663832289440112:
 	.byte	0x59, 0x21, 0x7e, 0xa1, 0x9e, 0x47, 0x9a, 0x3f   ; [36] 0xFCB39E = 0.025663832289440112
 	;      no loading site located
+F64_neg0p46671683339755293:
 	.byte	0xd5, 0xd9, 0xfb, 0x47, 0xb0, 0xde, 0xdd, 0xbf   ; [37] 0xFCB3A6 = -0.46671683339755293
 	;      no loading site located
+F64_1p0_3:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [38] 0xFCB3AE = 1.0
 	;      no loading site located
+; Pool element at 0xFCB3B6: f64 -709.7827. Read at 2 sites: Double_Pow 0xFC976C, 0xFC9772.
+; Each load is pushed as an argument of: Double_Divide (call at 0xFC977B; on top).
+F64_neg709p7827:
 	.byte	0xa2, 0xb4, 0x37, 0xf8, 0x42, 0x2e, 0x86, 0xc0   ; [39] 0xFCB3B6 = -709.7827
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3BE: f64 709.782712893384  (ln(DBL_MAX), the exp overflow bound).
+; Read at 2 sites: Double_Pow 0xFC9738, 0xFC973E.
+; Each load is pushed as an argument of: Double_Divide (call at 0xFC9747; on top).
+F64_709p782712893384:
 	.byte	0xef, 0x39, 0xfa, 0xfe, 0x42, 0x2e, 0x86, 0x40   ; [40] 0xFCB3BE = 709.782712893384  (ln(DBL_MAX), the exp overflow bound)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3C6: f64 0.5. Read at 4 sites: Double_Pow 0xFC965A, 0xFC9660,
+; 0xFC9680, 0xFC9686.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC9669; on top);
+; Double_Compare (call at 0xFC9694; under the other operand).
+F64_0p5_4:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [41] 0xFCB3C6 = 0.5
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3CE: f64 2147483647.0  (INT32_MAX). Read at 2 sites: Double_Pow
+; 0xFC95FC, 0xFC9602.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC9610; under the other
+; operand).
+F64_2147483647p0_2:
 	.byte	0x00, 0x00, 0xc0, 0xff, 0xff, 0xff, 0xdf, 0x41   ; [42] 0xFCB3CE = 2147483647.0  (INT32_MAX)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3D6: f64 0.0. Read at 8 sites: Double_Pow 0xFC95A9, 0xFC95AF,
+; 0xFC95CE, 0xFC95D4 +4 more.
+; Each load is pushed as an argument of: Double_Compare x3 (calls at 0xFC95BD, 0xFC95E2,
+; 0xFC970A; under the other operand). 2 of its 8 loads are not a push-and-call and are not
+; described here.
+F64_0p0_5:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [43] 0xFCB3D6 = 0.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3DE: f64 1.0. Read at 4 sites: Double_Pow 0xFC957C, 0xFC9582,
+; 0xFC96BC, 0xFC96C2.
+; Each load is pushed as an argument of: Double_Compare x2 (calls at 0xFC9590, 0xFC96D0;
+; under the other operand).
+F64_1p0_4:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [44] 0xFCB3DE = 1.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3E6: f64 0.6931471805599453  (ln 2). Read at 2 sites: Double_Exp
+; 0xFC9A23, 0xFC9A29.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC9A32; on top).
+F64_0p6931471805599453:
 	.byte	0xef, 0x39, 0xfa, 0xfe, 0x42, 0x2e, 0xe6, 0x3f   ; [45] 0xFCB3E6 = 0.6931471805599453  (ln 2)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3EE: f64 0.5. Read at 4 sites: Double_Exp 0xFC99E9, 0xFC99EF;
+; sub_FC9ACB 0xFC9B7A, 0xFC9B80.
+; Each load is pushed as an argument of: Double_Add x2 (calls at 0xFC9A00, 0xFC9B91; under
+; the other operand).
+F64_0p5_5:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [46] 0xFCB3EE = 0.5
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3F6: f64 1.4426950408889634  (1/ln 2 = log2(e)). Read at 2 sites:
+; Double_Exp 0xFC99D6, 0xFC99DC.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC99E5; on top).
+F64_1p4426950408889634:
 	.byte	0xfe, 0x82, 0x2b, 0x65, 0x47, 0x15, 0xf7, 0x3f   ; [47] 0xFCB3F6 = 1.4426950408889634  (1/ln 2 = log2(e))
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB3FE: f64 1.0. Read at 4 sites: Double_Exp 0xFC9980, 0xFC9986,
+; 0xFC99A3, 0xFC99A9.
+; Each load is pushed as an argument of: Double_Subtract (call at 0xFC998F; on top);
+; Double_Add (call at 0xFC99BA; under the other operand).
+F64_1p0_5:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [48] 0xFCB3FE = 1.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB406: f64 1.0536712127723509e-08. Read at 2 sites: Double_Exp
+; 0xFC9958, 0xFC995E.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC996C; under the other
+; operand).
+F64_1p0536712127723509em08_3:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0x46, 0x3e   ; [49] 0xFCB406 = 1.0536712127723509e-08
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB40E: f64 8.988465674311579e+307  (DBL_MAX/2). Read at 2 sites:
+; Double_Exp 0xFC98ED, 0xFC98F5.
+F64_8p988465674311579e307:
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xdf, 0x7f   ; [50] 0xFCB40E = 8.988465674311579e+307  (DBL_MAX/2)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB416: f64 709.782712893384  (ln(DBL_MAX), the exp overflow bound).
+; Read at 4 sites: Double_Exp 0xFC98B3, 0xFC98B9, 0xFC98CF, 0xFC98D5.
+; Each load is pushed as an argument of: Double_Compare x2 (calls at 0xFC98C7, 0xFC98E3;
+; under the other operand).
+F64_709p782712893384_2:
 	.byte	0xef, 0x39, 0xfa, 0xfe, 0x42, 0x2e, 0x86, 0x40   ; [51] 0xFCB416 = 709.782712893384  (ln(DBL_MAX), the exp overflow bound)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB41E: f64 0.0. Read at 4 sites: Double_Exp 0xFC98A1, 0xFC98A9,
+; 0xFC9924, 0xFC992A.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC9938; under the other
+; operand). 2 of its 4 loads are not a push-and-call and are not described here.
+F64_0p0_6:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [52] 0xFCB41E = 0.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB426: f64 2.2250738585072014e-308  (DBL_MIN). Read at 2 sites:
+; Double_Exp 0xFC9886, 0xFC988E.
+F64_2p2250738585072014em308:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00   ; [53] 0xFCB426 = 2.2250738585072014e-308  (DBL_MIN)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB42E: f64 -709.7827. Read at 4 sites: Double_Exp 0xFC984C, 0xFC9852,
+; 0xFC9868, 0xFC986E.
+; Each load is pushed as an argument of: Double_Compare x2 (calls at 0xFC9860, 0xFC987C;
+; under the other operand).
+F64_neg709p7827_2:
 	.byte	0xa2, 0xb4, 0x37, 0xf8, 0x42, 0x2e, 0x86, 0xc0   ; [54] 0xFCB42E = -709.7827
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB436: f64 3.1555192765684645e-05. Read at 2 sites: Double_Exp
+; 0xFC9A82, 0xFC9A8C.
+F64_3p1555192765684645em05:
 	.byte	0x1e, 0x92, 0xe6, 0x2a, 0x44, 0x8b, 0x00, 0x3f   ; [55] 0xFCB436 = 3.1555192765684645e-05
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+F64_0p007575318015942277:
 	.byte	0xa5, 0x12, 0x2a, 0xf2, 0x4b, 0x07, 0x7f, 0x3f   ; [56] 0xFCB43E = 0.007575318015942277
 	;      no loading site located
+F64_0p25:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xd0, 0x3f   ; [57] 0xFCB446 = 0.25
 	;      no loading site located
+; Pool element at 0xFCB44E: f64 7.510402839987004e-07. Read at 2 sites: sub_FC9ACB 0xFC9AF1,
+; 0xFC9AFB.
+F64_7p510402839987004em07:
 	.byte	0x55, 0x04, 0xe5, 0x0c, 0x63, 0x33, 0xa9, 0x3e   ; [58] 0xFCB44E = 7.510402839987004e-07
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+F64_0p000631218943743985:
 	.byte	0xdf, 0xd4, 0x28, 0x5c, 0x0c, 0xaf, 0x44, 0x3f   ; [59] 0xFCB456 = 0.000631218943743985
 	;      no loading site located
+F64_0p056817302698551224:
 	.byte	0xff, 0xd9, 0xdf, 0x51, 0x28, 0x17, 0xad, 0x3f   ; [60] 0xFCB45E = 0.056817302698551224
 	;      no loading site located
+F64_0p5_6:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [61] 0xFCB466 = 0.5
 	;      no loading site located
+; Pool element at 0xFCB46E: f64 0.0. Read at 4 sites: sub_FC9BBC 0xFC9BC4, 0xFC9BCA,
+; 0xFC9C36, 0xFC9C3E.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC9BD8; under the other
+; operand). 2 of its 4 loads are not a push-and-call and are not described here.
+F64_0p0_7:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [62] 0xFCB46E = 0.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB476: f64 0.6931471805599453  (ln 2). Read at 2 sites: Double_Log
+; 0xFC9F66, 0xFC9F6C.
+; Each load is pushed as an argument of: Double_Multiply (call at 0xFC9F75; on top).
+F64_0p6931471805599453_2:
 	.byte	0xef, 0x39, 0xfa, 0xfe, 0x42, 0x2e, 0xe6, 0x3f   ; [63] 0xFCB476 = 0.6931471805599453  (ln 2)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB47E: f64 0.5. Read at 2 sites: Double_Log 0xFC9DC5, 0xFC9DCD.
+F64_0p5_7:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f   ; [64] 0xFCB47E = 0.5
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB486: f64 0.7071067811865476  (1/sqrt 2). Read at 2 sites: Double_Log
+; 0xFC9DA6, 0xFC9DAC.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC9DBA; under the other
+; operand).
+F64_0p7071067811865476:
 	.byte	0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0xe6, 0x3f   ; [65] 0xFCB486 = 0.7071067811865476  (1/sqrt 2)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB48E: f64 1.0. Read at 2 sites: Double_Log 0xFC9D7F, 0xFC9D87.
+F64_1p0_6:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [66] 0xFCB48E = 1.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB496: f64 0.0. Read at 2 sites: Double_Log 0xFC9D41, 0xFC9D47.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC9D55; under the other
+; operand).
+F64_0p0_8:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [67] 0xFCB496 = 0.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB49E: f64 8.988465674311579e+307  (DBL_MAX/2). Read at 2 sites:
+; Double_Log 0xFC9D19, 0xFC9D1F.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC9D2D; under the other
+; operand).
+F64_8p988465674311579e307_2:
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xdf, 0x7f   ; [68] 0xFCB49E = 8.988465674311579e+307  (DBL_MAX/2)
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+; Pool element at 0xFCB4A6: f64 -0.7895611288749126. Read at 2 sites: Double_Log 0xFC9E4B,
+; 0xFC9E55.
+F64_neg0p7895611288749126:
 	.byte	0x29, 0xbd, 0x56, 0xb3, 0x15, 0x44, 0xe9, 0xbf   ; [69] 0xFCB4A6 = -0.7895611288749126
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+F64_16p383943563021536:
 	.byte	0xed, 0xaf, 0x16, 0x20, 0x4a, 0x62, 0x30, 0x40   ; [70] 0xFCB4AE = 16.383943563021536
 	;      no loading site located
+F64_neg64p12494342374558:
 	.byte	0x9a, 0xb5, 0xb3, 0x12, 0xff, 0x07, 0x50, 0xc0   ; [71] 0xFCB4B6 = -64.12494342374558
 	;      no loading site located
+; Pool element at 0xFCB4BE: f64 1.0. Read at 2 sites: Double_Log 0xFC9EA3, 0xFC9EAD.
+F64_1p0_7:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f   ; [72] 0xFCB4BE = 1.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
+F64_neg35p66797773903465:
 	.byte	0x0f, 0xce, 0x67, 0x4b, 0x80, 0xd5, 0x41, 0xc0   ; [73] 0xFCB4C6 = -35.66797773903465
 	;      no loading site located
+F64_312p03222091924533:
 	.byte	0x7e, 0x26, 0x15, 0xfa, 0x83, 0x80, 0x73, 0x40   ; [74] 0xFCB4CE = 312.03222091924533
 	;      no loading site located
+F64_neg769p4993210849487:
 	.byte	0x77, 0x90, 0x0d, 0x9c, 0xfe, 0x0b, 0x88, 0xc0   ; [75] 0xFCB4D6 = -769.4993210849487
 	;      no loading site located
+; Pool element at 0xFCB4DE: f64 0.0. Read at 4 sites: sub_FC9FA3 0xFC9FAB, 0xFC9FB1,
+; 0xFCA008, 0xFCA010.
+; Each load is pushed as an argument of: Double_Compare (call at 0xFC9FBF; under the other
+; operand). 2 of its 4 loads are not a push-and-call and are not described here.
+F64_0p0_9:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; [76] 0xFCB4DE = 0.0
-	;      no loading site located
+;      loading site(s) located -- see the header above (corrected 2026-09-25, lane promcd)
 
 ; ----------------------------------------------------------------------------
 ; Float32_One -- 0xFCB4E6..0xFCB4E9  (4 bytes)

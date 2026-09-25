@@ -377,12 +377,15 @@ Link_Ch1_WriteParamBlock__F98E2D:
 	extz	bc                                ; F98E30  extz BC
 	ld	(xiz-12), bc                        ; F98E32  ld (XIZ+0xf4),BC
 	jrl Link_Ch1_WriteParamBlock__F98F75                          ; F98E35  jrl T,0xf98f75
+Link_Ch1_WriteParamBlock__F98E38:
 	set 0, (0x007ECC:24)                   ; F98E38  set 0,(0x007ecc)   [llvm-mc cannot encode this]
 	ld	xbc, (xiz+10)                       ; F98E3D  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc)                            ; F98E40  ld A,(XBC)
 	ld	(0xF361:24), a                     ; F98E42  ld (0x00f361),A
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98E47  jrl T,0xf98fd1
+Link_Ch1_WriteParamBlock__F98E4A:
 	ld	(0x7E97:24), 1                    ; F98E4A  ld (0x007e97),0x01
+Link_Ch1_WriteParamBlock__F98E50:
 	set 1, (0x007ECC:24)                   ; F98E50  set 1,(0x007ecc)   [llvm-mc cannot encode this]
 	ld	bc, (xiz-2)                         ; F98E55  ld BC,(XIZ+0xfe)
 	extz	bc                                ; F98E58  extz BC
@@ -412,7 +415,9 @@ Link_Ch1_WriteParamBlock__F98E7B:
 	jr Link_Ch1_WriteParamBlock__F98E76                           ; F98E91  jr T,0xf98e76
 Link_Ch1_WriteParamBlock__F98E93:
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98E93  jrl T,0xf98fd1
+Link_Ch1_WriteParamBlock__F98E96:
 	ld	(0x7EB1:24), 1                    ; F98E96  ld (0x007eb1),0x01
+Link_Ch1_WriteParamBlock__F98E9C:
 	set 2, (0x007ECC:24)                   ; F98E9C  set 2,(0x007ecc)   [llvm-mc cannot encode this]
 	lda	xix, (0x7E98:24)                   ; F98EA1  lda XIX,0x007e98
 	ld	bc, (xiz-2)                         ; F98EA6  ld BC,(XIZ+0xfe)
@@ -443,7 +448,9 @@ Link_Ch1_WriteParamBlock__F98EC8:
 	jr Link_Ch1_WriteParamBlock__F98EC3                           ; F98EDE  jr T,0xf98ec3
 Link_Ch1_WriteParamBlock__F98EE0:
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98EE0  jrl T,0xf98fd1
+Link_Ch1_WriteParamBlock__F98EE3:
 	ld	(0x7ECB:24), 1                    ; F98EE3  ld (0x007ecb),0x01
+Link_Ch1_WriteParamBlock__F98EE9:
 	set 3, (0x007ECC:24)                   ; F98EE9  set 3,(0x007ecc)   [llvm-mc cannot encode this]
 	lda	xix, (0x7EB2:24)                   ; F98EEE  lda XIX,0x007eb2
 	ld	bc, (xiz-2)                         ; F98EF3  ld BC,(XIZ+0xfe)
@@ -474,6 +481,7 @@ Link_Ch1_WriteParamBlock__F98F15:
 	jr Link_Ch1_WriteParamBlock__F98F10                           ; F98F2B  jr T,0xf98f10
 Link_Ch1_WriteParamBlock__F98F2D:
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98F2D  jrl T,0xf98fd1
+Link_Ch1_WriteParamBlock__F98F30:
 	set 4, (0x007ECC:24)                   ; F98F30  set 4,(0x007ecc)   [llvm-mc cannot encode this]
 	ld	bc, (xiz-2)                         ; F98F35  ld BC,(XIZ+0xfe)
 	extz	bc                                ; F98F38  extz BC
@@ -510,7 +518,7 @@ Link_Ch1_WriteParamBlock__F98F75:
 	cp	bc, 15                              ; F98F7E  cp BC,0x000f
 	jr ugt, Link_Ch1_WriteParamBlock__F98FD1                      ; F98F82  jr UGT,0xf98fd1
 	sll	bc, 2                              ; F98F84  sll 0x02,BC
-	add	xbc, 0xF98F91                      ; F98F87  add XBC,0x00f98f91
+	add	xbc, Link_Ch1_CommandTable                      ; F98F87  add XBC,0x00f98f91
 	ld	xbc, (xbc)                          ; F98F8D  ld XBC,(XBC)
 	jp	(xbc)                               ; F98F8F  jp T,XBC
 
@@ -524,22 +532,22 @@ Link_Ch1_WriteParamBlock__F98F75:
 ; to hold all the way across.
 ; ----------------------------------------------------------------------------
 Link_Ch1_CommandTable:
-	.long	0x00F98E38			; 0xF98F91  command 0x80
-	.long	0x00F98E4A			; 0xF98F95  command 0x81
-	.long	0x00F98E96			; 0xF98F99  command 0x82
-	.long	0x00F98EE3			; 0xF98F9D  command 0x83
-	.long	0x00F98FD1			; 0xF98FA1  command 0x84
-	.long	0x00F98FD1			; 0xF98FA5  command 0x85
-	.long	0x00F98FD1			; 0xF98FA9  command 0x86
-	.long	0x00F98F30			; 0xF98FAD  command 0x87
-	.long	0x00F98E38			; 0xF98FB1  command 0x88
-	.long	0x00F98E50			; 0xF98FB5  command 0x89
-	.long	0x00F98E9C			; 0xF98FB9  command 0x8A
-	.long	0x00F98EE9			; 0xF98FBD  command 0x8B
-	.long	0x00F98FD1			; 0xF98FC1  command 0x8C
-	.long	0x00F98FD1			; 0xF98FC5  command 0x8D
-	.long	0x00F98FD1			; 0xF98FC9  command 0x8E
-	.long	0x00F98F30			; 0xF98FCD  command 0x8F
+	.long	Link_Ch1_WriteParamBlock__F98E38			; 0xF98F91  command 0x80
+	.long	Link_Ch1_WriteParamBlock__F98E4A			; 0xF98F95  command 0x81
+	.long	Link_Ch1_WriteParamBlock__F98E96			; 0xF98F99  command 0x82
+	.long	Link_Ch1_WriteParamBlock__F98EE3			; 0xF98F9D  command 0x83
+	.long	Link_Ch1_WriteParamBlock__F98FD1			; 0xF98FA1  command 0x84
+	.long	Link_Ch1_WriteParamBlock__F98FD1			; 0xF98FA5  command 0x85
+	.long	Link_Ch1_WriteParamBlock__F98FD1			; 0xF98FA9  command 0x86
+	.long	Link_Ch1_WriteParamBlock__F98F30			; 0xF98FAD  command 0x87
+	.long	Link_Ch1_WriteParamBlock__F98E38			; 0xF98FB1  command 0x88
+	.long	Link_Ch1_WriteParamBlock__F98E50			; 0xF98FB5  command 0x89
+	.long	Link_Ch1_WriteParamBlock__F98E9C			; 0xF98FB9  command 0x8A
+	.long	Link_Ch1_WriteParamBlock__F98EE9			; 0xF98FBD  command 0x8B
+	.long	Link_Ch1_WriteParamBlock__F98FD1			; 0xF98FC1  command 0x8C
+	.long	Link_Ch1_WriteParamBlock__F98FD1			; 0xF98FC5  command 0x8D
+	.long	Link_Ch1_WriteParamBlock__F98FD1			; 0xF98FC9  command 0x8E
+	.long	Link_Ch1_WriteParamBlock__F98F30			; 0xF98FCD  command 0x8F
 Link_Ch1_WriteParamBlock__F98FD1:
 	pop	xix                                ; F98FD1  pop XIX
 	popw	hl                                ; F98FD2  pop HL

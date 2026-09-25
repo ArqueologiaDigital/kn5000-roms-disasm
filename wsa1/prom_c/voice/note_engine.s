@@ -222,7 +222,7 @@ ExtBoard_ProbeAndInstallBases__FB056C:
 	ld	bc, hl                                  ; FB056C  ld BC,HL
 	extz	xbc                                   ; FB056E  extz XBC
 	ld	(xiz-4), xbc                            ; FB0570  ld (XIZ+0xfc),XBC
-	add	xbc, 0xFE129E                          ; FB0573  add XBC,0x00fe129e
+	add	xbc, ExtBoard_Signature                          ; FB0573  add XBC,0x00fe129e
 	ld	d, (xbc)                                ; FB0579  ld D,(XBC)
 	ld	xbc, xix                                ; FB057B  ld XBC,XIX
 	extpfx3 0xAE, 0xFC, 0x81                   ; FB057D  add XBC,(XIZ+0xfc)
@@ -1057,11 +1057,11 @@ sub_FB0B95:
 	extz	wa                                    ; FB0BB4  extz WA
 	extz	xwa                                   ; FB0BB6  extz XWA
 	ld	(xiz-4), xwa                            ; FB0BB8  ld (XIZ+0xfc),XWA
-	add	xwa, 0xFE12AD                          ; FB0BBB  add XWA,0x00fe12ad
+	add	xwa, Field2Bit_Masks                          ; FB0BBB  add XWA,0x00fe12ad
 	ld	w, (xwa)                                ; FB0BC1  ld W,(XWA)
 	and	w, l                                   ; FB0BC3  and W,L
 	ld	(xiz-6), w                              ; FB0BC5  ld (XIZ+0xfa),W
-	lda	xiy, (0xFE12B1:24)                     ; FB0BC8  lda XIY,0xfe12b1
+	lda	xiy, (Field2Bit_Shifts:24)                     ; FB0BC8  lda XIY,0xfe12b1
 	extpfx3 0xAE, 0xFC, 0x85                   ; FB0BCD  add XIY,(XIZ+0xfc)
 	ld	a, (xiy)                                ; FB0BD0  ld A,(XIY)
 	pushw	wa                                   ; FB0BD2  push WA
@@ -1076,7 +1076,7 @@ sub_FB0B95:
 	ld	c, 2:opc                                   ; FB0BE8  ld C,0x02
 	extpfx3 0x8E, 0x0E, 0x43                   ; FB0BEA  mul BC,(XIZ+0x0e)
 	extz	xbc                                   ; FB0BED  extz XBC
-	add	xbc, 0xFDE695                          ; FB0BEF  add XBC,0x00fde695
+	add	xbc, BitMask_Table_FDE695                          ; FB0BEF  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FB0BF5  ld BC,(XBC)
 	and	bc, de                                 ; FB0BF7  and BC,DE
 	jrl z, sub_FB0B95__FB0E2E                  ; FB0BF9  jrl Z,0xfb0e2e
@@ -1195,7 +1195,7 @@ sub_FB0B95__FB0C19:
 	ld	c, (xwa+0xD1)                           ; FB0D37  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB0D3C  extz BC
 	extz	xbc                                   ; FB0D3E  extz XBC
-	add	xbc, 0xFDF6C5                          ; FB0D40  add XBC,0x00fdf6c5
+	add	xbc, Voice_SecondaryParam_Curve                          ; FB0D40  add XBC,0x00fdf6c5
 	ld	a, (xbc)                                ; FB0D46  ld A,(XBC)
 	ld	(xhl+49), a                             ; FB0D48  ld (XHL+0x31),A
 	ld	bc, (xiz-36)                            ; FB0D4B  ld BC,(XIZ+0xdc)
@@ -1203,7 +1203,7 @@ sub_FB0B95__FB0C19:
 	ld	c, (xwa+0xD2)                           ; FB0D53  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB0D58  mul C,0x02
 	extz	xbc                                   ; FB0D5B  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB0D5D  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB0D5D  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB0D63  ld BC,(XBC)
 	ld	(xhl+50), bc                            ; FB0D65  ld (XHL+0x32),BC
 	ld	bc, (xiz-36)                            ; FB0D68  ld BC,(XIZ+0xdc)
@@ -1211,7 +1211,7 @@ sub_FB0B95__FB0C19:
 	ld	c, (xwa+0xD3)                           ; FB0D70  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB0D75  mul C,0x02
 	extz	xbc                                   ; FB0D78  extz XBC
-	add	xbc, 0xFDF722                          ; FB0D7A  add XBC,0x00fdf722
+	add	xbc, Voice_SecondaryParam_WordCurveB                          ; FB0D7A  add XBC,0x00fdf722
 	ld	bc, (xbc)                               ; FB0D80  ld BC,(XBC)
 	ld	(xhl+54), bc                            ; FB0D82  ld (XHL+0x36),BC
 	ld	bc, (xiz-36)                            ; FB0D85  ld BC,(XIZ+0xdc)
@@ -1219,14 +1219,14 @@ sub_FB0B95__FB0C19:
 	ld	c, (xwa+0xD4)                           ; FB0D8D  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB0D92  mul C,0x02
 	extz	xbc                                   ; FB0D95  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB0D97  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB0D97  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB0D9D  ld BC,(XBC)
 	ld	(xhl+52), bc                            ; FB0D9F  ld (XHL+0x34),BC
 	ld	bc, (xiz-24)                            ; FB0DA2  ld BC,(XIZ+0xe8)
 	extz	bc                                    ; FB0DA5  extz BC
 	extz	xbc                                   ; FB0DA7  extz XBC
 	ld	(xiz-40), xbc                           ; FB0DA9  ld (XIZ+0xd8),XBC
-	add	xbc, 0xFE12A9                          ; FB0DAC  add XBC,0x00fe12a9
+	add	xbc, Table_FE12A9                          ; FB0DAC  add XBC,0x00fe12a9
 	ld	a, (xbc)                                ; FB0DB2  ld A,(XBC)
 	set	7, a                                   ; FB0DB4  set 0x07,A
 	ld	(xiz-42), a                             ; FB0DB7  ld (XIZ+0xd6),A
@@ -1352,16 +1352,16 @@ VoiceParams_Compute_A:
 	extz	xhl                                   ; FB0E8B  extz XHL
 	ld	xbc, (xhl+0x1523)                       ; FB0E8D  ld XBC,(XHL+0x1523)
 	ld	e, (xbc+18)                             ; FB0E92  ld E,(XBC+0x12)
-	ld	c, (0xFE12AD:24)                       ; FB0E95  ld C,(0xfe12ad)
+	ld	c, (Field2Bit_Masks:24)                       ; FB0E95  ld C,(0xfe12ad)
 	and	c, e                                   ; FB0E9A  and C,E
 	ld	(xiz-8), c                              ; FB0E9C  ld (XIZ+0xf8),C
-	ld	a, (0xFE12B1:24)                       ; FB0E9F  ld A,(0xfe12b1)
+	ld	a, (Field2Bit_Shifts:24)                       ; FB0E9F  ld A,(0xfe12b1)
 	pushw	wa                                   ; FB0EA4  push WA
 	pushw	bc                                   ; FB0EA5  push BC
 	call	Shift8_LogicalRight                              ; FB0EA6  call 0xfcb23c
 	ld	d, a                                    ; FB0EAA  ld D,A
 	ld	hl, ix                                  ; FB0EAC  ld HL,IX
-	ld	bc, (0xFDE695:24)                      ; FB0EAE  ld BC,(0xfde695)
+	ld	bc, (BitMask_Table_FDE695:24)                      ; FB0EAE  ld BC,(0xfde695)
 	and	bc, hl                                 ; FB0EB3  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB1099       ; FB0EB5  jrl Z,0xfb1099
 	cp	a, 2:i3                                   ; FB0EB8  cp A,2
@@ -1467,31 +1467,31 @@ VoiceParams_Compute_A__FB0ED5:
 	ld	a, (xbc+0xD1)                           ; FB0FCD  ld A,(XBC+0x00d1)
 	extz	wa                                    ; FB0FD2  extz WA
 	extz	xwa                                   ; FB0FD4  extz XWA
-	add	xwa, 0xFDF6C5                          ; FB0FD6  add XWA,0x00fdf6c5
+	add	xwa, Voice_SecondaryParam_Curve                          ; FB0FD6  add XWA,0x00fdf6c5
 	ld	c, (xwa)                                ; FB0FDC  ld C,(XWA)
 	ld	(xhl+49), c                             ; FB0FDE  ld (XHL+0x31),C
 	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB0FE1  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD2)                           ; FB0FE6  ld A,(XBC+0x00d2)
 	mul	a, 2                                   ; FB0FEB  mul A,0x02
 	extz	xwa                                   ; FB0FEE  extz XWA
-	add	xwa, 0xFDF6E4                          ; FB0FF0  add XWA,0x00fdf6e4
+	add	xwa, Voice_SecondaryParam_WordCurveA                          ; FB0FF0  add XWA,0x00fdf6e4
 	ld	bc, (xwa)                               ; FB0FF6  ld BC,(XWA)
 	ld	(xhl+50), bc                            ; FB0FF8  ld (XHL+0x32),BC
 	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB0FFB  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD3)                           ; FB1000  ld A,(XBC+0x00d3)
 	mul	a, 2                                   ; FB1005  mul A,0x02
 	extz	xwa                                   ; FB1008  extz XWA
-	add	xwa, 0xFDF722                          ; FB100A  add XWA,0x00fdf722
+	add	xwa, Voice_SecondaryParam_WordCurveB                          ; FB100A  add XWA,0x00fdf722
 	ld	bc, (xwa)                               ; FB1010  ld BC,(XWA)
 	ld	(xhl+54), bc                            ; FB1012  ld (XHL+0x36),BC
 	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB1015  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD4)                           ; FB101A  ld A,(XBC+0x00d4)
 	mul	a, 2                                   ; FB101F  mul A,0x02
 	extz	xwa                                   ; FB1022  extz XWA
-	add	xwa, 0xFDF6E4                          ; FB1024  add XWA,0x00fdf6e4
+	add	xwa, Voice_SecondaryParam_WordCurveA                          ; FB1024  add XWA,0x00fdf6e4
 	ld	bc, (xwa)                               ; FB102A  ld BC,(XWA)
 	ld	(xhl+52), bc                            ; FB102C  ld (XHL+0x34),BC
-	ld	c, (0xFE12A9:24)                       ; FB102F  ld C,(0xfe12a9)
+	ld	c, (Table_FE12A9:24)                       ; FB102F  ld C,(0xfe12a9)
 	set	7, c                                   ; FB1034  set 0x07,C
 	ld	(xiz-34), c                             ; FB1037  ld (XIZ+0xde),C
 	ld	xbc, (xiz+8)                            ; FB103A  ld XBC,(XIZ+0x08)
@@ -1542,16 +1542,16 @@ VoiceParams_Compute_A__FB10AA:
 	extz	xhl                                   ; FB10AA  extz XHL
 	ld	xbc, (xhl+0x1523)                       ; FB10AC  ld XBC,(XHL+0x1523)
 	ld	e, (xbc+18)                             ; FB10B1  ld E,(XBC+0x12)
-	ld	c, (0xFE12AD:24)                       ; FB10B4  ld C,(0xfe12ad)
+	ld	c, (Field2Bit_Masks:24)                       ; FB10B4  ld C,(0xfe12ad)
 	and	c, e                                   ; FB10B9  and C,E
 	ld	(xiz-8), c                              ; FB10BB  ld (XIZ+0xf8),C
-	ld	a, (0xFE12B1:24)                       ; FB10BE  ld A,(0xfe12b1)
+	ld	a, (Field2Bit_Shifts:24)                       ; FB10BE  ld A,(0xfe12b1)
 	pushw	wa                                   ; FB10C3  push WA
 	pushw	bc                                   ; FB10C4  push BC
 	call	Shift8_LogicalRight                              ; FB10C5  call 0xfcb23c
 	ld	d, a                                    ; FB10C9  ld D,A
 	ld	hl, ix                                  ; FB10CB  ld HL,IX
-	ld	bc, (0xFDE695:24)                      ; FB10CD  ld BC,(0xfde695)
+	ld	bc, (BitMask_Table_FDE695:24)                      ; FB10CD  ld BC,(0xfde695)
 	and	bc, hl                                 ; FB10D2  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB12A8       ; FB10D4  jrl Z,0xfb12a8
 	cp	a, 2:i3                                   ; FB10D7  cp A,2
@@ -1652,31 +1652,31 @@ VoiceParams_Compute_A__FB10F4:
 	ld	a, (xbc+0xD1)                           ; FB11DC  ld A,(XBC+0x00d1)
 	extz	wa                                    ; FB11E1  extz WA
 	extz	xwa                                   ; FB11E3  extz XWA
-	add	xwa, 0xFDF6C5                          ; FB11E5  add XWA,0x00fdf6c5
+	add	xwa, Voice_SecondaryParam_Curve                          ; FB11E5  add XWA,0x00fdf6c5
 	ld	c, (xwa)                                ; FB11EB  ld C,(XWA)
 	ld	(xhl+49), c                             ; FB11ED  ld (XHL+0x31),C
 	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB11F0  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD2)                           ; FB11F5  ld A,(XBC+0x00d2)
 	mul	a, 2                                   ; FB11FA  mul A,0x02
 	extz	xwa                                   ; FB11FD  extz XWA
-	add	xwa, 0xFDF6E4                          ; FB11FF  add XWA,0x00fdf6e4
+	add	xwa, Voice_SecondaryParam_WordCurveA                          ; FB11FF  add XWA,0x00fdf6e4
 	ld	bc, (xwa)                               ; FB1205  ld BC,(XWA)
 	ld	(xhl+50), bc                            ; FB1207  ld (XHL+0x32),BC
 	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB120A  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD3)                           ; FB120F  ld A,(XBC+0x00d3)
 	mul	a, 2                                   ; FB1214  mul A,0x02
 	extz	xwa                                   ; FB1217  extz XWA
-	add	xwa, 0xFDF722                          ; FB1219  add XWA,0x00fdf722
+	add	xwa, Voice_SecondaryParam_WordCurveB                          ; FB1219  add XWA,0x00fdf722
 	ld	bc, (xwa)                               ; FB121F  ld BC,(XWA)
 	ld	(xhl+54), bc                            ; FB1221  ld (XHL+0x36),BC
 	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB1224  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD4)                           ; FB1229  ld A,(XBC+0x00d4)
 	mul	a, 2                                   ; FB122E  mul A,0x02
 	extz	xwa                                   ; FB1231  extz XWA
-	add	xwa, 0xFDF6E4                          ; FB1233  add XWA,0x00fdf6e4
+	add	xwa, Voice_SecondaryParam_WordCurveA                          ; FB1233  add XWA,0x00fdf6e4
 	ld	bc, (xwa)                               ; FB1239  ld BC,(XWA)
 	ld	(xhl+52), bc                            ; FB123B  ld (XHL+0x34),BC
-	ld	c, (0xFE12A9:24)                       ; FB123E  ld C,(0xfe12a9)
+	ld	c, (Table_FE12A9:24)                       ; FB123E  ld C,(0xfe12a9)
 	set	7, c                                   ; FB1243  set 0x07,C
 	ld	(xiz-32), c                             ; FB1246  ld (XIZ+0xe0),C
 	ld	xbc, (xiz+8)                            ; FB1249  ld XBC,(XIZ+0x08)
@@ -1735,16 +1735,16 @@ VoiceParams_Compute_A__FB12B6:
 	extz	xhl                                   ; FB12D3  extz XHL
 	ld	xbc, (xhl+0x1523)                       ; FB12D5  ld XBC,(XHL+0x1523)
 	ld	e, (xbc+18)                             ; FB12DA  ld E,(XBC+0x12)
-	ld	c, (0xFE12AE:24)                       ; FB12DD  ld C,(0xfe12ae)
+	ld	c, (Field2Bit_Masks+1:24)                       ; FB12DD  ld C,(0xfe12ae)
 	and	c, e                                   ; FB12E2  and C,E
 	ld	(xiz-8), c                              ; FB12E4  ld (XIZ+0xf8),C
-	ld	a, (0xFE12B2:24)                       ; FB12E7  ld A,(0xfe12b2)
+	ld	a, (Field2Bit_Shifts+1:24)                       ; FB12E7  ld A,(0xfe12b2)
 	pushw	wa                                   ; FB12EC  push WA
 	pushw	bc                                   ; FB12ED  push BC
 	call	Shift8_LogicalRight                              ; FB12EE  call 0xfcb23c
 	ld	d, a                                    ; FB12F2  ld D,A
 	ld	hl, ix                                  ; FB12F4  ld HL,IX
-	ld	bc, (0xFDE697:24)                      ; FB12F6  ld BC,(0xfde697)
+	ld	bc, (BitMask_Table_FDE695+2:24)                      ; FB12F6  ld BC,(0xfde697)
 	and	bc, hl                                 ; FB12FB  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB1555       ; FB12FD  jrl Z,0xfb1555
 	cp	a, 2:i3                                   ; FB1300  cp A,2
@@ -1879,7 +1879,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	c, (xwa+0xD1)                           ; FB1461  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB1466  extz BC
 	extz	xbc                                   ; FB1468  extz XBC
-	add	xbc, 0xFDF6C5                          ; FB146A  add XBC,0x00fdf6c5
+	add	xbc, Voice_SecondaryParam_Curve                          ; FB146A  add XBC,0x00fdf6c5
 	ld	a, (xbc)                                ; FB1470  ld A,(XBC)
 	ld	bc, (xiz-28)                            ; FB1472  ld BC,(XIZ+0xe4)
 	extz	xbc                                   ; FB1475  extz XBC
@@ -1890,7 +1890,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	c, (xwa+0xD2)                           ; FB1484  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB1489  mul C,0x02
 	extz	xbc                                   ; FB148C  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB148E  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB148E  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB1494  ld BC,(XBC)
 	ld	wa, (xiz-28)                            ; FB1496  ld WA,(XIZ+0xe4)
 	extz	xwa                                   ; FB1499  extz XWA
@@ -1901,7 +1901,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	c, (xwa+0xD3)                           ; FB14A8  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB14AD  mul C,0x02
 	extz	xbc                                   ; FB14B0  extz XBC
-	add	xbc, 0xFDF722                          ; FB14B2  add XBC,0x00fdf722
+	add	xbc, Voice_SecondaryParam_WordCurveB                          ; FB14B2  add XBC,0x00fdf722
 	ld	bc, (xbc)                               ; FB14B8  ld BC,(XBC)
 	ld	wa, (xiz-28)                            ; FB14BA  ld WA,(XIZ+0xe4)
 	extz	xwa                                   ; FB14BD  extz XWA
@@ -1912,12 +1912,12 @@ VoiceParams_Compute_A__FB131D:
 	ld	c, (xwa+0xD4)                           ; FB14CC  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB14D1  mul C,0x02
 	extz	xbc                                   ; FB14D4  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB14D6  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB14D6  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB14DC  ld BC,(XBC)
 	ld	wa, (xiz-28)                            ; FB14DE  ld WA,(XIZ+0xe4)
 	extz	xwa                                   ; FB14E1  extz XWA
 	ld	(xwa+0x78), bc                          ; FB14E3  ld (XWA+0x78),BC
-	ld	c, (0xFE12AA:24)                       ; FB14E6  ld C,(0xfe12aa)
+	ld	c, (Table_FE12A9+1:24)                       ; FB14E6  ld C,(0xfe12aa)
 	set	7, c                                   ; FB14EB  set 0x07,C
 	ld	(xiz-38), c                             ; FB14EE  ld (XIZ+0xda),C
 	ld	xbc, (xiz+8)                            ; FB14F1  ld XBC,(XIZ+0x08)
@@ -1970,16 +1970,16 @@ VoiceParams_Compute_A__FB1566:
 	extz	xhl                                   ; FB1566  extz XHL
 	ld	xbc, (xhl+0x1523)                       ; FB1568  ld XBC,(XHL+0x1523)
 	ld	e, (xbc+18)                             ; FB156D  ld E,(XBC+0x12)
-	ld	c, (0xFE12AE:24)                       ; FB1570  ld C,(0xfe12ae)
+	ld	c, (Field2Bit_Masks+1:24)                       ; FB1570  ld C,(0xfe12ae)
 	and	c, e                                   ; FB1575  and C,E
 	ld	(xiz-8), c                              ; FB1577  ld (XIZ+0xf8),C
-	ld	a, (0xFE12B2:24)                       ; FB157A  ld A,(0xfe12b2)
+	ld	a, (Field2Bit_Shifts+1:24)                       ; FB157A  ld A,(0xfe12b2)
 	pushw	wa                                   ; FB157F  push WA
 	pushw	bc                                   ; FB1580  push BC
 	call	Shift8_LogicalRight                              ; FB1581  call 0xfcb23c
 	ld	d, a                                    ; FB1585  ld D,A
 	ld	hl, ix                                  ; FB1587  ld HL,IX
-	ld	bc, (0xFDE697:24)                      ; FB1589  ld BC,(0xfde697)
+	ld	bc, (BitMask_Table_FDE695+2:24)                      ; FB1589  ld BC,(0xfde697)
 	and	bc, hl                                 ; FB158E  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB17EF       ; FB1590  jrl Z,0xfb17ef
 	cp	a, 2:i3                                   ; FB1593  cp A,2
@@ -2116,7 +2116,7 @@ VoiceParams_Compute_A__FB15B0:
 	ld	c, (xwa+0xD1)                           ; FB16FB  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB1700  extz BC
 	extz	xbc                                   ; FB1702  extz XBC
-	add	xbc, 0xFDF6C5                          ; FB1704  add XBC,0x00fdf6c5
+	add	xbc, Voice_SecondaryParam_Curve                          ; FB1704  add XBC,0x00fdf6c5
 	ld	a, (xbc)                                ; FB170A  ld A,(XBC)
 	ld	bc, (xiz-30)                            ; FB170C  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB170F  extz XBC
@@ -2127,7 +2127,7 @@ VoiceParams_Compute_A__FB15B0:
 	ld	c, (xwa+0xD2)                           ; FB171E  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB1723  mul C,0x02
 	extz	xbc                                   ; FB1726  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB1728  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB1728  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB172E  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB1730  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1733  extz XWA
@@ -2138,7 +2138,7 @@ VoiceParams_Compute_A__FB15B0:
 	ld	c, (xwa+0xD3)                           ; FB1742  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB1747  mul C,0x02
 	extz	xbc                                   ; FB174A  extz XBC
-	add	xbc, 0xFDF722                          ; FB174C  add XBC,0x00fdf722
+	add	xbc, Voice_SecondaryParam_WordCurveB                          ; FB174C  add XBC,0x00fdf722
 	ld	bc, (xbc)                               ; FB1752  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB1754  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1757  extz XWA
@@ -2149,12 +2149,12 @@ VoiceParams_Compute_A__FB15B0:
 	ld	c, (xwa+0xD4)                           ; FB1766  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB176B  mul C,0x02
 	extz	xbc                                   ; FB176E  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB1770  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB1770  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB1776  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB1778  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB177B  extz XWA
 	ld	(xwa+0x78), bc                          ; FB177D  ld (XWA+0x78),BC
-	ld	c, (0xFE12AA:24)                       ; FB1780  ld C,(0xfe12aa)
+	ld	c, (Table_FE12A9+1:24)                       ; FB1780  ld C,(0xfe12aa)
 	set	7, c                                   ; FB1785  set 0x07,C
 	ld	(xiz-40), c                             ; FB1788  ld (XIZ+0xd8),C
 	ld	xbc, (xiz+8)                            ; FB178B  ld XBC,(XIZ+0x08)
@@ -2209,10 +2209,10 @@ VoiceParams_Compute_A__FB17FD:
 	extz	xbc                                   ; FB1808  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB180A  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB180F  ld E,(XWA+0x12)
-	ld	a, (0xFE12AF:24)                       ; FB1812  ld A,(0xfe12af)
+	ld	a, (Field2Bit_Masks+2:24)                       ; FB1812  ld A,(0xfe12af)
 	and	a, e                                   ; FB1817  and A,E
 	ld	(xiz-8), a                              ; FB1819  ld (XIZ+0xf8),A
-	ld	w, (0xFE12B3:24)                       ; FB181C  ld W,(0xfe12b3)
+	ld	w, (Field2Bit_Shifts+2:24)                       ; FB181C  ld W,(0xfe12b3)
 	push	0                                     ; FB1821  push 0x00
 	push	w                                     ; FB1823  push W
 	pushw	wa                                   ; FB1825  push WA
@@ -2222,7 +2222,7 @@ VoiceParams_Compute_A__FB17FD:
 	inc	6, bc                                  ; FB182E  inc 6,BC
 	extz	xbc                                   ; FB1830  extz XBC
 	ld	hl, (xbc+0x1523)                        ; FB1832  ld HL,(XBC+0x1523)
-	ld	bc, (0xFDE699:24)                      ; FB1837  ld BC,(0xfde699)
+	ld	bc, (BitMask_Table_FDE695+4:24)                      ; FB1837  ld BC,(0xfde699)
 	and	bc, hl                                 ; FB183C  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB1AC1       ; FB183E  jrl Z,0xfb1ac1
 	cp	a, 2:i3                                   ; FB1841  cp A,2
@@ -2359,7 +2359,7 @@ VoiceParams_Compute_A__FB185E:
 	ld	c, (xwa+0xD1)                           ; FB19C1  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB19C6  extz BC
 	extz	xbc                                   ; FB19C8  extz XBC
-	add	xbc, 0xFDF6C5                          ; FB19CA  add XBC,0x00fdf6c5
+	add	xbc, Voice_SecondaryParam_Curve                          ; FB19CA  add XBC,0x00fdf6c5
 	ld	a, (xbc)                                ; FB19D0  ld A,(XBC)
 	ld	bc, (xiz-30)                            ; FB19D2  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB19D5  extz XBC
@@ -2370,7 +2370,7 @@ VoiceParams_Compute_A__FB185E:
 	ld	c, (xwa+0xD2)                           ; FB19E6  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB19EB  mul C,0x02
 	extz	xbc                                   ; FB19EE  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB19F0  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB19F0  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB19F6  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB19F8  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB19FB  extz XWA
@@ -2381,7 +2381,7 @@ VoiceParams_Compute_A__FB185E:
 	ld	c, (xwa+0xD3)                           ; FB1A0C  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB1A11  mul C,0x02
 	extz	xbc                                   ; FB1A14  extz XBC
-	add	xbc, 0xFDF722                          ; FB1A16  add XBC,0x00fdf722
+	add	xbc, Voice_SecondaryParam_WordCurveB                          ; FB1A16  add XBC,0x00fdf722
 	ld	bc, (xbc)                               ; FB1A1C  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB1A1E  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1A21  extz XWA
@@ -2392,12 +2392,12 @@ VoiceParams_Compute_A__FB185E:
 	ld	c, (xwa+0xD4)                           ; FB1A32  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB1A37  mul C,0x02
 	extz	xbc                                   ; FB1A3A  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB1A3C  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB1A3C  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB1A42  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB1A44  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1A47  extz XWA
 	ld	(xwa+0xBC), bc                          ; FB1A49  ld (XWA+0x00bc),BC
-	ld	c, (0xFE12AB:24)                       ; FB1A4E  ld C,(0xfe12ab)
+	ld	c, (Table_FE12A9+2:24)                       ; FB1A4E  ld C,(0xfe12ab)
 	set	7, c                                   ; FB1A53  set 0x07,C
 	ld	(xiz-40), c                             ; FB1A56  ld (XIZ+0xd8),C
 	ld	xbc, (xiz+8)                            ; FB1A59  ld XBC,(XIZ+0x08)
@@ -2452,10 +2452,10 @@ VoiceParams_Compute_A__FB1ACF:
 	extz	xbc                                   ; FB1ADA  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB1ADC  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB1AE1  ld E,(XWA+0x12)
-	ld	a, (0xFE12B0:24)                       ; FB1AE4  ld A,(0xfe12b0)
+	ld	a, (Field2Bit_Masks+3:24)                       ; FB1AE4  ld A,(0xfe12b0)
 	and	a, e                                   ; FB1AE9  and A,E
 	ld	(xiz-8), a                              ; FB1AEB  ld (XIZ+0xf8),A
-	ld	w, (0xFE12B4:24)                       ; FB1AEE  ld W,(0xfe12b4)
+	ld	w, (Field2Bit_Shifts+3:24)                       ; FB1AEE  ld W,(0xfe12b4)
 	push	0                                     ; FB1AF3  push 0x00
 	push	w                                     ; FB1AF5  push W
 	pushw	wa                                   ; FB1AF7  push WA
@@ -2465,7 +2465,7 @@ VoiceParams_Compute_A__FB1ACF:
 	inc	6, bc                                  ; FB1B00  inc 6,BC
 	extz	xbc                                   ; FB1B02  extz XBC
 	ld	hl, (xbc+0x1523)                        ; FB1B04  ld HL,(XBC+0x1523)
-	ld	bc, (0xFDE69B:24)                      ; FB1B09  ld BC,(0xfde69b)
+	ld	bc, (BitMask_Table_FDE695+6:24)                      ; FB1B09  ld BC,(0xfde69b)
 	and	bc, hl                                 ; FB1B0E  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB1D93       ; FB1B10  jrl Z,0xfb1d93
 	cp	a, 2:i3                                   ; FB1B13  cp A,2
@@ -2602,7 +2602,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	c, (xwa+0xD1)                           ; FB1C93  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB1C98  extz BC
 	extz	xbc                                   ; FB1C9A  extz XBC
-	add	xbc, 0xFDF6C5                          ; FB1C9C  add XBC,0x00fdf6c5
+	add	xbc, Voice_SecondaryParam_Curve                          ; FB1C9C  add XBC,0x00fdf6c5
 	ld	a, (xbc)                                ; FB1CA2  ld A,(XBC)
 	ld	bc, (xiz-30)                            ; FB1CA4  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1CA7  extz XBC
@@ -2613,7 +2613,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	c, (xwa+0xD2)                           ; FB1CB8  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB1CBD  mul C,0x02
 	extz	xbc                                   ; FB1CC0  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB1CC2  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB1CC2  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB1CC8  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB1CCA  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1CCD  extz XWA
@@ -2624,7 +2624,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	c, (xwa+0xD3)                           ; FB1CDE  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB1CE3  mul C,0x02
 	extz	xbc                                   ; FB1CE6  extz XBC
-	add	xbc, 0xFDF722                          ; FB1CE8  add XBC,0x00fdf722
+	add	xbc, Voice_SecondaryParam_WordCurveB                          ; FB1CE8  add XBC,0x00fdf722
 	ld	bc, (xbc)                               ; FB1CEE  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB1CF0  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1CF3  extz XWA
@@ -2635,12 +2635,12 @@ VoiceParams_Compute_A__FB1B30:
 	ld	c, (xwa+0xD4)                           ; FB1D04  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB1D09  mul C,0x02
 	extz	xbc                                   ; FB1D0C  extz XBC
-	add	xbc, 0xFDF6E4                          ; FB1D0E  add XBC,0x00fdf6e4
+	add	xbc, Voice_SecondaryParam_WordCurveA                          ; FB1D0E  add XBC,0x00fdf6e4
 	ld	bc, (xbc)                               ; FB1D14  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB1D16  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1D19  extz XWA
 	extpfx5 0xF3, 0xE1, 0x00, 0x01, 0x51       ; FB1D1B  ld (XWA+0x0100),BC
-	ld	c, (0xFE12AC:24)                       ; FB1D20  ld C,(0xfe12ac)
+	ld	c, (Table_FE12A9+3:24)                       ; FB1D20  ld C,(0xfe12ac)
 	set	7, c                                   ; FB1D25  set 0x07,C
 	ld	(xiz-40), c                             ; FB1D28  ld (XIZ+0xd8),C
 	ld	xbc, (xiz+8)                            ; FB1D2B  ld XBC,(XIZ+0x08)
@@ -2948,11 +2948,11 @@ sub_FB1FB1:
 	extz	wa                                    ; FB1FD0  extz WA
 	extz	xwa                                   ; FB1FD2  extz XWA
 	ld	(xiz-12), xwa                           ; FB1FD4  ld (XIZ+0xf4),XWA
-	add	xwa, 0xFE12AD                          ; FB1FD7  add XWA,0x00fe12ad
+	add	xwa, Field2Bit_Masks                          ; FB1FD7  add XWA,0x00fe12ad
 	ld	w, (xwa)                                ; FB1FDD  ld W,(XWA)
 	and	w, e                                   ; FB1FDF  and W,E
 	ld	(xiz-14), w                             ; FB1FE1  ld (XIZ+0xf2),W
-	lda	xiy, (0xFE12B1:24)                     ; FB1FE4  lda XIY,0xfe12b1
+	lda	xiy, (Field2Bit_Shifts:24)                     ; FB1FE4  lda XIY,0xfe12b1
 	extpfx3 0xAE, 0xF4, 0x85                   ; FB1FE9  add XIY,(XIZ+0xf4)
 	ld	a, (xiy)                                ; FB1FEC  ld A,(XIY)
 	pushw	wa                                   ; FB1FEE  push WA
@@ -3138,10 +3138,10 @@ VoiceParams_Compute_B:
 	extz	xbc                                   ; FB21A5  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB21A7  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB21AC  ld E,(XWA+0x12)
-	ld	a, (0xFE12AD:24)                       ; FB21AF  ld A,(0xfe12ad)
+	ld	a, (Field2Bit_Masks:24)                       ; FB21AF  ld A,(0xfe12ad)
 	and	a, e                                   ; FB21B4  and A,E
 	ld	(xiz-12), a                             ; FB21B6  ld (XIZ+0xf4),A
-	ld	w, (0xFE12B1:24)                       ; FB21B9  ld W,(0xfe12b1)
+	ld	w, (Field2Bit_Shifts:24)                       ; FB21B9  ld W,(0xfe12b1)
 	push	0                                     ; FB21BE  push 0x00
 	push	w                                     ; FB21C0  push W
 	pushw	wa                                   ; FB21C2  push WA
@@ -3262,10 +3262,10 @@ VoiceParams_Compute_B__FB22FE:
 	extz	xbc                                   ; FB2309  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB230B  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB2310  ld E,(XWA+0x12)
-	ld	a, (0xFE12AE:24)                       ; FB2313  ld A,(0xfe12ae)
+	ld	a, (Field2Bit_Masks+1:24)                       ; FB2313  ld A,(0xfe12ae)
 	and	a, e                                   ; FB2318  and A,E
 	ld	(xiz-10), a                             ; FB231A  ld (XIZ+0xf6),A
-	ld	w, (0xFE12B2:24)                       ; FB231D  ld W,(0xfe12b2)
+	ld	w, (Field2Bit_Shifts+1:24)                       ; FB231D  ld W,(0xfe12b2)
 	push	0                                     ; FB2322  push 0x00
 	push	w                                     ; FB2324  push W
 	pushw	wa                                   ; FB2326  push WA
@@ -3391,10 +3391,10 @@ VoiceParams_Compute_B__FB2475:
 	extz	xbc                                   ; FB2480  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB2482  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB2487  ld E,(XWA+0x12)
-	ld	a, (0xFE12AF:24)                       ; FB248A  ld A,(0xfe12af)
+	ld	a, (Field2Bit_Masks+2:24)                       ; FB248A  ld A,(0xfe12af)
 	and	a, e                                   ; FB248F  and A,E
 	ld	(xiz-10), a                             ; FB2491  ld (XIZ+0xf6),A
-	ld	w, (0xFE12B3:24)                       ; FB2494  ld W,(0xfe12b3)
+	ld	w, (Field2Bit_Shifts+2:24)                       ; FB2494  ld W,(0xfe12b3)
 	push	0                                     ; FB2499  push 0x00
 	push	w                                     ; FB249B  push W
 	pushw	wa                                   ; FB249D  push WA
@@ -3529,10 +3529,10 @@ VoiceParams_Compute_B__FB2607:
 	extz	xbc                                   ; FB2612  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB2614  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB2619  ld E,(XWA+0x12)
-	ld	a, (0xFE12B0:24)                       ; FB261C  ld A,(0xfe12b0)
+	ld	a, (Field2Bit_Masks+3:24)                       ; FB261C  ld A,(0xfe12b0)
 	and	a, e                                   ; FB2621  and A,E
 	ld	(xiz-10), a                             ; FB2623  ld (XIZ+0xf6),A
-	ld	w, (0xFE12B4:24)                       ; FB2626  ld W,(0xfe12b4)
+	ld	w, (Field2Bit_Shifts+3:24)                       ; FB2626  ld W,(0xfe12b4)
 	push	0                                     ; FB262B  push 0x00
 	push	w                                     ; FB262D  push W
 	pushw	wa                                   ; FB262F  push WA
@@ -5504,7 +5504,7 @@ MidiNote_OnByPartMode__FB38DD:
 	push	0                                     ; FB3917  push 0x00
 	push	h                                     ; FB3919  push H
 	pushw	hl                                   ; FB391B  push HL
-	call	0xFC4C85                              ; FB391C  call 0xfc4c85
+	call	Pack104_SetInputs_SubRecordPair                              ; FB391C  call 0xfc4c85
 	lda	xbc, (0xD7A2:24)                       ; FB3920  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3925  push XBC
 	pushw	de                                   ; FB3926  push DE
@@ -5644,7 +5644,7 @@ MidiNote_OnByPartMode__FB3A28:
 	push	0                                     ; FB3A62  push 0x00
 	push	h                                     ; FB3A64  push H
 	pushw	hl                                   ; FB3A66  push HL
-	call	0xFC4C85                              ; FB3A67  call 0xfc4c85
+	call	Pack104_SetInputs_SubRecordPair                              ; FB3A67  call 0xfc4c85
 	lda	xbc, (0xD7A2:24)                       ; FB3A6B  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3A70  push XBC
 	pushw	de                                   ; FB3A71  push DE
@@ -5736,7 +5736,7 @@ MidiNote_OnByPartMode__FB3B29:
 	push	h                                     ; FB3B3D  push H
 	push	0                                     ; FB3B3F  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB3B41  push (XIZ+0x08)
-	call	0xFAB818                              ; FB3B44  call 0xfab818
+	call	Dev10C_StageRegs_0800_0840_ForNoteOn                              ; FB3B44  call 0xfab818
 	ld	(xiz-9), 1                              ; FB3B48  ld (XIZ+0xf7),0x01
 	pop	xiy                                    ; FB3B4C  pop XIY
 MidiNote_OnByPartMode__FB3B4D:
@@ -5764,7 +5764,7 @@ MidiNote_OnByPartMode__FB3B4D:
 	push	0                                     ; FB3B80  push 0x00
 	push	h                                     ; FB3B82  push H
 	pushw	hl                                   ; FB3B84  push HL
-	call	0xFC4C85                              ; FB3B85  call 0xfc4c85
+	call	Pack104_SetInputs_SubRecordPair                              ; FB3B85  call 0xfc4c85
 	lda	xbc, (0xD7A2:24)                       ; FB3B89  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3B8E  push XBC
 	pushw	de                                   ; FB3B8F  push DE
@@ -7332,7 +7332,7 @@ sub_FB405F__FB4077:
 	ld	bc, (xiz+10)                            ; FB4077  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FB407A  extz BC
 	extz	xbc                                   ; FB407C  extz XBC
-	add	xbc, 0xFDE69D                          ; FB407E  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FB407E  add XBC,0x00fde69d
 	ld	a, (xbc)                                ; FB4084  ld A,(XBC)
 	extpfx3 0x8E, 0x0C, 0xC1                   ; FB4086  and A,(XIZ+0x0c)
 	jr z, sub_FB405F__FB40BB                   ; FB4089  jr Z,0xfb40bb
@@ -7349,7 +7349,7 @@ sub_FB405F__FB4096:
 	ld	c, h                                    ; FB409E  ld C,H
 	extz	bc                                    ; FB40A0  extz BC
 	extz	xbc                                   ; FB40A2  extz XBC
-	add	xbc, 0xFDE69D                          ; FB40A4  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FB40A4  add XBC,0x00fde69d
 	ld	a, (xbc)                                ; FB40AA  ld A,(XBC)
 	extpfx3 0x8E, 0x0C, 0xC1                   ; FB40AC  and A,(XIZ+0x0c)
 	jr z, sub_FB405F__FB40B3                   ; FB40AF  jr Z,0xfb40b3
@@ -7407,7 +7407,7 @@ sub_FB40C7__FB40DC:
 	ld	c, h                                    ; FB40DC  ld C,H
 	extz	bc                                    ; FB40DE  extz BC
 	extz	xbc                                   ; FB40E0  extz XBC
-	add	xbc, 0xFDE69D                          ; FB40E2  add XBC,0x00fde69d
+	add	xbc, BitMask_Table_FDE695+8                          ; FB40E2  add XBC,0x00fde69d
 	ld	a, (xbc)                                ; FB40E8  ld A,(XBC)
 	extpfx3 0x8E, 0x0A, 0xC1                   ; FB40EA  and A,(XIZ+0x0a)
 	jr z, sub_FB40C7__FB40F1                   ; FB40ED  jr Z,0xfb40f1
@@ -9055,7 +9055,7 @@ sub_FB4A9F__FB4ADD:
 	cp	wa, 8                                   ; FB4B0D  cp WA,0x0008
 	jr ugt, sub_FB4A9F__FB4B49                 ; FB4B11  jr UGT,0xfb4b49
 	sll	wa, 2                                  ; FB4B13  sll 0x02,WA
-	add	xwa, 0xFB4B20                          ; FB4B16  add XWA,0x00fb4b20
+	add	xwa, PartRec_RecomputeWord0006_FromToneRec_JumpTable_FB4B20                          ; FB4B16  add XWA,0x00fb4b20
 	ld	xwa, (xwa)                              ; FB4B1C  ld XWA,(XWA)
 	jp	(xwa)                                   ; FB4B1E  jp T,XWA
 ; 9 x u32 computed-goto table, 0xFB4B20-0xFB4B43, 36 bytes.
@@ -9066,15 +9066,16 @@ sub_FB4A9F__FB4ADD:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB405F 0xFB6E0A;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FB4B44	; 0xFB4B20  entry 0 -> 0xFB4B44   (also the out-of-range arm)
-	.long 0x00FB4B44	; 0xFB4B24  entry 1 -> 0xFB4B44
-	.long 0x00FB4B44	; 0xFB4B28  entry 2 -> 0xFB4B44
-	.long 0x00FB4B44	; 0xFB4B2C  entry 3 -> 0xFB4B44
-	.long 0x00FB4B44	; 0xFB4B30  entry 4 -> 0xFB4B44
-	.long 0x00FB4B44	; 0xFB4B34  entry 5 -> 0xFB4B44
-	.long 0x00FB4B44	; 0xFB4B38  entry 6 -> 0xFB4B44
-	.long 0x00FB4B44	; 0xFB4B3C  entry 7 -> 0xFB4B44
-	.long 0x00FB4B44	; 0xFB4B40  entry 8 -> 0xFB4B44
+PartRec_RecomputeWord0006_FromToneRec_JumpTable_FB4B20:
+	.long sub_FB4A9F__FB4B44	; 0xFB4B20  entry 0 -> 0xFB4B44   (also the out-of-range arm)
+	.long sub_FB4A9F__FB4B44	; 0xFB4B24  entry 1 -> 0xFB4B44
+	.long sub_FB4A9F__FB4B44	; 0xFB4B28  entry 2 -> 0xFB4B44
+	.long sub_FB4A9F__FB4B44	; 0xFB4B2C  entry 3 -> 0xFB4B44
+	.long sub_FB4A9F__FB4B44	; 0xFB4B30  entry 4 -> 0xFB4B44
+	.long sub_FB4A9F__FB4B44	; 0xFB4B34  entry 5 -> 0xFB4B44
+	.long sub_FB4A9F__FB4B44	; 0xFB4B38  entry 6 -> 0xFB4B44
+	.long sub_FB4A9F__FB4B44	; 0xFB4B3C  entry 7 -> 0xFB4B44
+	.long sub_FB4A9F__FB4B44	; 0xFB4B40  entry 8 -> 0xFB4B44
 sub_FB4A9F__FB4B44:
 	extpfx5 0x9E, 0xFE, 0x3E, 0x01, 0x40       ; FB4B44  or (XIZ+0xfe),0x4001
 sub_FB4A9F__FB4B49:
@@ -9132,7 +9133,7 @@ sub_FB4A9F__FB4BA7:
 	cp	wa, 8                                   ; FB4BD7  cp WA,0x0008
 	jr ugt, sub_FB4A9F__FB4C13                 ; FB4BDB  jr UGT,0xfb4c13
 	sll	wa, 2                                  ; FB4BDD  sll 0x02,WA
-	add	xwa, 0xFB4BEA                          ; FB4BE0  add XWA,0x00fb4bea
+	add	xwa, PartRec_RecomputeWord0006_FromToneRec_JumpTable_FB4BEA                          ; FB4BE0  add XWA,0x00fb4bea
 	ld	xwa, (xwa)                              ; FB4BE6  ld XWA,(XWA)
 	jp	(xwa)                                   ; FB4BE8  jp T,XWA
 ; 9 x u32 computed-goto table, 0xFB4BEA-0xFB4C0D, 36 bytes.
@@ -9143,15 +9144,16 @@ sub_FB4A9F__FB4BA7:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB405F 0xFB6E0A;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FB4C0E	; 0xFB4BEA  entry 0 -> 0xFB4C0E   (also the out-of-range arm)
-	.long 0x00FB4C0E	; 0xFB4BEE  entry 1 -> 0xFB4C0E
-	.long 0x00FB4C0E	; 0xFB4BF2  entry 2 -> 0xFB4C0E
-	.long 0x00FB4C0E	; 0xFB4BF6  entry 3 -> 0xFB4C0E
-	.long 0x00FB4C0E	; 0xFB4BFA  entry 4 -> 0xFB4C0E
-	.long 0x00FB4C0E	; 0xFB4BFE  entry 5 -> 0xFB4C0E
-	.long 0x00FB4C0E	; 0xFB4C02  entry 6 -> 0xFB4C0E
-	.long 0x00FB4C0E	; 0xFB4C06  entry 7 -> 0xFB4C0E
-	.long 0x00FB4C0E	; 0xFB4C0A  entry 8 -> 0xFB4C0E
+PartRec_RecomputeWord0006_FromToneRec_JumpTable_FB4BEA:
+	.long sub_FB4A9F__FB4C0E	; 0xFB4BEA  entry 0 -> 0xFB4C0E   (also the out-of-range arm)
+	.long sub_FB4A9F__FB4C0E	; 0xFB4BEE  entry 1 -> 0xFB4C0E
+	.long sub_FB4A9F__FB4C0E	; 0xFB4BF2  entry 2 -> 0xFB4C0E
+	.long sub_FB4A9F__FB4C0E	; 0xFB4BF6  entry 3 -> 0xFB4C0E
+	.long sub_FB4A9F__FB4C0E	; 0xFB4BFA  entry 4 -> 0xFB4C0E
+	.long sub_FB4A9F__FB4C0E	; 0xFB4BFE  entry 5 -> 0xFB4C0E
+	.long sub_FB4A9F__FB4C0E	; 0xFB4C02  entry 6 -> 0xFB4C0E
+	.long sub_FB4A9F__FB4C0E	; 0xFB4C06  entry 7 -> 0xFB4C0E
+	.long sub_FB4A9F__FB4C0E	; 0xFB4C0A  entry 8 -> 0xFB4C0E
 sub_FB4A9F__FB4C0E:
 	extpfx5 0x9E, 0xFE, 0x3E, 0x02, 0x80       ; FB4C0E  or (XIZ+0xfe),0x8002
 sub_FB4A9F__FB4C13:
@@ -9875,7 +9877,7 @@ sub_FB519C:
 	extz	bc                                    ; FB51AF  extz BC
 	extz	xbc                                   ; FB51B1  extz XBC
 	ld	(xiz-4), xbc                            ; FB51B3  ld (XIZ+0xfc),XBC
-	add	xbc, 0xFDE6A1                          ; FB51B6  add XBC,0x00fde6a1
+	add	xbc, BitMask_Table_FDE695+12                          ; FB51B6  add XBC,0x00fde6a1
 	ld	e, (xbc)                                ; FB51BC  ld E,(XBC)
 	ld	bc, (xiz+10)                            ; FB51BE  ld BC,(XIZ+0x0a)
 	extz	xbc                                   ; FB51C1  extz XBC
@@ -9883,7 +9885,7 @@ sub_FB519C:
 	ld	a, e                                    ; FB51C6  ld A,E
 	and	a, h                                   ; FB51C8  and A,H
 	jrl z, sub_FB519C__FB529F                  ; FB51CA  jrl Z,0xfb529f
-	lda	xwa, (0xFDE6A5:24)                     ; FB51CD  lda XWA,0xfde6a5
+	lda	xwa, (BitMask_Table_FDE695+16:24)                     ; FB51CD  lda XWA,0xfde6a5
 	extpfx3 0xAE, 0xFC, 0x80                   ; FB51D2  add XWA,(XIZ+0xfc)
 	ld	c, (xwa)                                ; FB51D5  ld C,(XWA)
 	and	c, h                                   ; FB51D7  and C,H
@@ -10275,12 +10277,12 @@ sub_FB53C5__FB5421:
 	extz	bc                                    ; FB544C  extz BC
 	extz	xbc                                   ; FB544E  extz XBC
 	ld	(xiz-6), xbc                            ; FB5450  ld (XIZ+0xfa),XBC
-	add	xbc, 0xFDE6A1                          ; FB5453  add XBC,0x00fde6a1
+	add	xbc, BitMask_Table_FDE695+12                          ; FB5453  add XBC,0x00fde6a1
 	ld	l, (xbc)                                ; FB5459  ld L,(XBC)
 	ld	a, (xix+1)                              ; FB545B  ld A,(XIX+0x01)
 	and	a, l                                   ; FB545E  and A,L
 	jrl z, sub_FB53C5__FB550E                  ; FB5460  jrl Z,0xfb550e
-	lda	xbc, (0xFDE6A5:24)                     ; FB5463  lda XBC,0xfde6a5
+	lda	xbc, (BitMask_Table_FDE695+16:24)                     ; FB5463  lda XBC,0xfde6a5
 	extpfx3 0xAE, 0xFA, 0x81                   ; FB5468  add XBC,(XIZ+0xfa)
 	ld	l, (xbc)                                ; FB546B  ld L,(XBC)
 	ld	bc, (xiz-2)                             ; FB546D  ld BC,(XIZ+0xfe)
@@ -10760,7 +10762,7 @@ PartRec_StageChanFreqWord_0065:
 	cp	bc, 11                                  ; FB5857  cp BC,0x000b
 	jrl ugt, sub_FB582A__FB59AF                ; FB585B  jrl UGT,0xfb59af
 	sll	bc, 2                                  ; FB585E  sll 0x02,BC
-	add	xbc, 0xFB586B                          ; FB5861  add XBC,0x00fb586b
+	add	xbc, PartRec_StageChanFreqWord_0065_JumpTable_FB586B                          ; FB5861  add XBC,0x00fb586b
 	ld	xbc, (xbc)                              ; FB5867  ld XBC,(XBC)
 	jp	(xbc)                                   ; FB5869  jp T,XBC
 ; 12 x u32 computed-goto table, 0xFB586B-0xFB589A, 48 bytes.
@@ -10771,18 +10773,19 @@ PartRec_StageChanFreqWord_0065:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB405F 0xFB6E0A;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FB589B	; 0xFB586B  entry 0 -> 0xFB589B   (also the out-of-range arm)
-	.long 0x00FB589B	; 0xFB586F  entry 1 -> 0xFB589B
-	.long 0x00FB589B	; 0xFB5873  entry 2 -> 0xFB589B
-	.long 0x00FB589B	; 0xFB5877  entry 3 -> 0xFB589B
-	.long 0x00FB58B5	; 0xFB587B  entry 4 -> 0xFB58B5
-	.long 0x00FB58B5	; 0xFB587F  entry 5 -> 0xFB58B5
-	.long 0x00FB59AF	; 0xFB5883  entry 6 -> 0xFB59AF
-	.long 0x00FB58B5	; 0xFB5887  entry 7 -> 0xFB58B5
-	.long 0x00FB59AF	; 0xFB588B  entry 8 -> 0xFB59AF
-	.long 0x00FB59AF	; 0xFB588F  entry 9 -> 0xFB59AF
-	.long 0x00FB5935	; 0xFB5893  entry 10 -> 0xFB5935
-	.long 0x00FB5935	; 0xFB5897  entry 11 -> 0xFB5935
+PartRec_StageChanFreqWord_0065_JumpTable_FB586B:
+	.long sub_FB582A__FB589B	; 0xFB586B  entry 0 -> 0xFB589B   (also the out-of-range arm)
+	.long sub_FB582A__FB589B	; 0xFB586F  entry 1 -> 0xFB589B
+	.long sub_FB582A__FB589B	; 0xFB5873  entry 2 -> 0xFB589B
+	.long sub_FB582A__FB589B	; 0xFB5877  entry 3 -> 0xFB589B
+	.long sub_FB582A__FB58B5	; 0xFB587B  entry 4 -> 0xFB58B5
+	.long sub_FB582A__FB58B5	; 0xFB587F  entry 5 -> 0xFB58B5
+	.long sub_FB582A__FB59AF	; 0xFB5883  entry 6 -> 0xFB59AF
+	.long sub_FB582A__FB58B5	; 0xFB5887  entry 7 -> 0xFB58B5
+	.long sub_FB582A__FB59AF	; 0xFB588B  entry 8 -> 0xFB59AF
+	.long sub_FB582A__FB59AF	; 0xFB588F  entry 9 -> 0xFB59AF
+	.long sub_FB582A__FB5935	; 0xFB5893  entry 10 -> 0xFB5935
+	.long sub_FB582A__FB5935	; 0xFB5897  entry 11 -> 0xFB5935
 sub_FB582A__FB589B:
 	ld	c, 2:opc                                   ; FB589B  ld C,0x02
 	mul8rr	c, d                                ; FB589D  mul BC,D
@@ -10792,7 +10795,7 @@ sub_FB582A__FB589B:
 	mul8rr	a, l                                ; FB58A5  mul WA,L
 	extz	xwa                                   ; FB58A7  extz XWA
 	add	xwa, xbc                               ; FB58A9  add XWA,XBC
-	add	xwa, 0xFDE6A9                          ; FB58AB  add XWA,0x00fde6a9
+	add	xwa, DSP_AlgoChannel_SelectorRecords                          ; FB58AB  add XWA,0x00fde6a9
 	ld	h, (xwa)                                ; FB58B1  ld H,(XWA)
 	jr sub_FB582A__FB58D2                      ; FB58B3  jr T,0xfb58d2
 sub_FB582A__FB58B5:
@@ -10804,7 +10807,7 @@ sub_FB582A__FB58B5:
 	mul8rr	a, l                                ; FB58C0  mul WA,L
 	extz	xwa                                   ; FB58C2  extz XWA
 	add	xwa, xbc                               ; FB58C4  add XWA,XBC
-	add	xwa, 0xFDE6A9                          ; FB58C6  add XWA,0x00fde6a9
+	add	xwa, DSP_AlgoChannel_SelectorRecords                          ; FB58C6  add XWA,0x00fde6a9
 	ld	h, (xwa)                                ; FB58CC  ld H,(XWA)
 	cp	d, 0:i3                                   ; FB58CE  cp D,0
 	jr nz, sub_FB582A__FB5901                  ; FB58D0  jr NZ,0xfb5901
@@ -10822,7 +10825,7 @@ sub_FB582A__FB58D2:
 	mul8rr	a, h                                ; FB58F0  mul WA,H
 	extz	xwa                                   ; FB58F2  extz XWA
 	add	xwa, xbc                               ; FB58F4  add XWA,XBC
-	add	xwa, 0xFDEA21                          ; FB58F6  add XWA,0x00fdea21
+	add	xwa, DSP_ChanFreq_CurvePool+816                          ; FB58F6  add XWA,0x00fdea21
 	ld	ix, (xwa)                               ; FB58FC  ld IX,(XWA)
 	jrl sub_FB582A__FB59AF                     ; FB58FE  jrl T,0xfb59af
 sub_FB582A__FB5901:
@@ -10841,7 +10844,7 @@ sub_FB582A__FB5901:
 	mul8rr	a, h                                ; FB5924  mul WA,H
 	extz	xwa                                   ; FB5926  extz XWA
 	add	xwa, xbc                               ; FB5928  add XWA,XBC
-	add	xwa, 0xFDEA21                          ; FB592A  add XWA,0x00fdea21
+	add	xwa, DSP_ChanFreq_CurvePool+816                          ; FB592A  add XWA,0x00fdea21
 	ld	ix, (xwa)                               ; FB5930  ld IX,(XWA)
 	jrl sub_FB582A__FB59AF                     ; FB5932  jrl T,0xfb59af
 sub_FB582A__FB5935:
@@ -10853,7 +10856,7 @@ sub_FB582A__FB5935:
 	mul8rr	a, l                                ; FB5940  mul WA,L
 	extz	xwa                                   ; FB5942  extz XWA
 	add	xwa, xbc                               ; FB5944  add XWA,XBC
-	add	xwa, 0xFDE6A9                          ; FB5946  add XWA,0x00fde6a9
+	add	xwa, DSP_AlgoChannel_SelectorRecords                          ; FB5946  add XWA,0x00fde6a9
 	ld	h, (xwa)                                ; FB594C  ld H,(XWA)
 	cp	h, 0xFF                                 ; FB594E  cp H,0xff
 	jr z, sub_FB582A__FB597F                   ; FB5951  jr Z,0xfb597f
@@ -10870,7 +10873,7 @@ sub_FB582A__FB5935:
 	mul8rr	a, h                                ; FB5971  mul WA,H
 	extz	xwa                                   ; FB5973  extz XWA
 	add	xwa, xbc                               ; FB5975  add XWA,XBC
-	add	xwa, 0xFDEA21                          ; FB5977  add XWA,0x00fdea21
+	add	xwa, DSP_ChanFreq_CurvePool+816                          ; FB5977  add XWA,0x00fdea21
 	ld	ix, (xwa)                               ; FB597D  ld IX,(XWA)
 sub_FB582A__FB597F:
 	ld	c, 3:opc                                   ; FB597F  ld C,0x03
@@ -10882,13 +10885,13 @@ sub_FB582A__FB597F:
 	extz	xwa                                   ; FB598C  extz XWA
 	add	xwa, xbc                               ; FB598E  add XWA,XBC
 	inc	2, xwa                                 ; FB5990  inc 2,XWA
-	add	xwa, 0xFDF4F1                          ; FB5992  add XWA,0x00fdf4f1
+	add	xwa, DSP_AlgoDescriptor_Records                          ; FB5992  add XWA,0x00fdf4f1
 	ld	c, (xwa)                                ; FB5998  ld C,(XWA)
 	and	c, 0xC0                                ; FB599A  and C,0xc0
 	srl	c, 6                                   ; FB599D  srl 0x06,C
 	mul	c, 2                                   ; FB59A0  mul C,0x02
 	extz	xbc                                   ; FB59A3  extz XBC
-	add	xbc, 0xFDEBEC                          ; FB59A5  add XBC,0x00fdebec
+	add	xbc, EGEnv_ModeBits_Table                          ; FB59A5  add XBC,0x00fdebec
 	ld	bc, (xbc)                               ; FB59AB  ld BC,(XBC)
 	or	ix, bc                                  ; FB59AD  or IX,BC
 sub_FB582A__FB59AF:
@@ -10960,7 +10963,7 @@ PartRec_StageChanFreqWord_0067:
 	cp	bc, 11                                  ; FB59FF  cp BC,0x000b
 	jrl ugt, sub_FB59D2__FB5B33                ; FB5A03  jrl UGT,0xfb5b33
 	sll	bc, 2                                  ; FB5A06  sll 0x02,BC
-	add	xbc, 0xFB5A13                          ; FB5A09  add XBC,0x00fb5a13
+	add	xbc, PartRec_StageChanFreqWord_0067_JumpTable_FB5A13                          ; FB5A09  add XBC,0x00fb5a13
 	ld	xbc, (xbc)                              ; FB5A0F  ld XBC,(XBC)
 	jp	(xbc)                                   ; FB5A11  jp T,XBC
 ; 12 x u32 computed-goto table, 0xFB5A13-0xFB5A42, 48 bytes.
@@ -10971,18 +10974,19 @@ PartRec_StageChanFreqWord_0067:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB405F 0xFB6E0A;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FB5A43	; 0xFB5A13  entry 0 -> 0xFB5A43   (also the out-of-range arm)
-	.long 0x00FB5A43	; 0xFB5A17  entry 1 -> 0xFB5A43
-	.long 0x00FB5A43	; 0xFB5A1B  entry 2 -> 0xFB5A43
-	.long 0x00FB5A43	; 0xFB5A1F  entry 3 -> 0xFB5A43
-	.long 0x00FB5A5F	; 0xFB5A23  entry 4 -> 0xFB5A5F
-	.long 0x00FB5A5F	; 0xFB5A27  entry 5 -> 0xFB5A5F
-	.long 0x00FB5B33	; 0xFB5A2B  entry 6 -> 0xFB5B33
-	.long 0x00FB5A5F	; 0xFB5A2F  entry 7 -> 0xFB5A5F
-	.long 0x00FB5B33	; 0xFB5A33  entry 8 -> 0xFB5B33
-	.long 0x00FB5B33	; 0xFB5A37  entry 9 -> 0xFB5B33
-	.long 0x00FB5AE0	; 0xFB5A3B  entry 10 -> 0xFB5AE0
-	.long 0x00FB5AE0	; 0xFB5A3F  entry 11 -> 0xFB5AE0
+PartRec_StageChanFreqWord_0067_JumpTable_FB5A13:
+	.long sub_FB59D2__FB5A43	; 0xFB5A13  entry 0 -> 0xFB5A43   (also the out-of-range arm)
+	.long sub_FB59D2__FB5A43	; 0xFB5A17  entry 1 -> 0xFB5A43
+	.long sub_FB59D2__FB5A43	; 0xFB5A1B  entry 2 -> 0xFB5A43
+	.long sub_FB59D2__FB5A43	; 0xFB5A1F  entry 3 -> 0xFB5A43
+	.long sub_FB59D2__FB5A5F	; 0xFB5A23  entry 4 -> 0xFB5A5F
+	.long sub_FB59D2__FB5A5F	; 0xFB5A27  entry 5 -> 0xFB5A5F
+	.long sub_FB59D2__FB5B33	; 0xFB5A2B  entry 6 -> 0xFB5B33
+	.long sub_FB59D2__FB5A5F	; 0xFB5A2F  entry 7 -> 0xFB5A5F
+	.long sub_FB59D2__FB5B33	; 0xFB5A33  entry 8 -> 0xFB5B33
+	.long sub_FB59D2__FB5B33	; 0xFB5A37  entry 9 -> 0xFB5B33
+	.long sub_FB59D2__FB5AE0	; 0xFB5A3B  entry 10 -> 0xFB5AE0
+	.long sub_FB59D2__FB5AE0	; 0xFB5A3F  entry 11 -> 0xFB5AE0
 sub_FB59D2__FB5A43:
 	ld	c, 2:opc                                   ; FB5A43  ld C,0x02
 	mul8rr	c, d                                ; FB5A45  mul BC,D
@@ -10993,7 +10997,7 @@ sub_FB59D2__FB5A43:
 	extz	xwa                                   ; FB5A4F  extz XWA
 	add	xwa, xbc                               ; FB5A51  add XWA,XBC
 	inc	1, xwa                                 ; FB5A53  inc 1,XWA
-	add	xwa, 0xFDE6A9                          ; FB5A55  add XWA,0x00fde6a9
+	add	xwa, DSP_AlgoChannel_SelectorRecords                          ; FB5A55  add XWA,0x00fde6a9
 	ld	h, (xwa)                                ; FB5A5B  ld H,(XWA)
 	jr sub_FB59D2__FB5A7E                      ; FB5A5D  jr T,0xfb5a7e
 sub_FB59D2__FB5A5F:
@@ -11006,7 +11010,7 @@ sub_FB59D2__FB5A5F:
 	extz	xwa                                   ; FB5A6C  extz XWA
 	add	xwa, xbc                               ; FB5A6E  add XWA,XBC
 	inc	1, xwa                                 ; FB5A70  inc 1,XWA
-	add	xwa, 0xFDE6A9                          ; FB5A72  add XWA,0x00fde6a9
+	add	xwa, DSP_AlgoChannel_SelectorRecords                          ; FB5A72  add XWA,0x00fde6a9
 	ld	h, (xwa)                                ; FB5A78  ld H,(XWA)
 	cp	d, 0:i3                                   ; FB5A7A  cp D,0
 	jr nz, sub_FB59D2__FB5AAD                  ; FB5A7C  jr NZ,0xfb5aad
@@ -11024,7 +11028,7 @@ sub_FB59D2__FB5A7E:
 	mul8rr	a, h                                ; FB5A9C  mul WA,H
 	extz	xwa                                   ; FB5A9E  extz XWA
 	add	xwa, xbc                               ; FB5AA0  add XWA,XBC
-	add	xwa, 0xFDE6F1                          ; FB5AA2  add XWA,0x00fde6f1
+	add	xwa, DSP_ChanFreq_CurvePool                          ; FB5AA2  add XWA,0x00fde6f1
 	ld	ix, (xwa)                               ; FB5AA8  ld IX,(XWA)
 	jrl sub_FB59D2__FB5B33                     ; FB5AAA  jrl T,0xfb5b33
 sub_FB59D2__FB5AAD:
@@ -11043,7 +11047,7 @@ sub_FB59D2__FB5AAD:
 	mul8rr	a, h                                ; FB5AD0  mul WA,H
 	extz	xwa                                   ; FB5AD2  extz XWA
 	add	xwa, xbc                               ; FB5AD4  add XWA,XBC
-	add	xwa, 0xFDE6F1                          ; FB5AD6  add XWA,0x00fde6f1
+	add	xwa, DSP_ChanFreq_CurvePool                          ; FB5AD6  add XWA,0x00fde6f1
 	ld	ix, (xwa)                               ; FB5ADC  ld IX,(XWA)
 	jr sub_FB59D2__FB5B33                      ; FB5ADE  jr T,0xfb5b33
 sub_FB59D2__FB5AE0:
@@ -11056,7 +11060,7 @@ sub_FB59D2__FB5AE0:
 	extz	xwa                                   ; FB5AED  extz XWA
 	add	xwa, xbc                               ; FB5AEF  add XWA,XBC
 	inc	1, xwa                                 ; FB5AF1  inc 1,XWA
-	add	xwa, 0xFDE6A9                          ; FB5AF3  add XWA,0x00fde6a9
+	add	xwa, DSP_AlgoChannel_SelectorRecords                          ; FB5AF3  add XWA,0x00fde6a9
 	ld	h, (xwa)                                ; FB5AF9  ld H,(XWA)
 	cp	h, 0xFF                                 ; FB5AFB  cp H,0xff
 	jr z, sub_FB59D2__FB5B33                   ; FB5AFE  jr Z,0xfb5b33
@@ -11069,7 +11073,7 @@ sub_FB59D2__FB5AE0:
 	extz	xwa                                   ; FB5B0D  extz XWA
 	add	xwa, xbc                               ; FB5B0F  add XWA,XBC
 	inc	1, xwa                                 ; FB5B11  inc 1,XWA
-	add	xwa, 0xFDF4F1                          ; FB5B13  add XWA,0x00fdf4f1
+	add	xwa, DSP_AlgoDescriptor_Records                          ; FB5B13  add XWA,0x00fdf4f1
 	ld	c, (xwa)                                ; FB5B19  ld C,(XWA)
 	mul	c, 2                                   ; FB5B1B  mul C,0x02
 	extz	xbc                                   ; FB5B1E  extz XBC
@@ -11078,7 +11082,7 @@ sub_FB59D2__FB5AE0:
 	mul8rr	a, h                                ; FB5B25  mul WA,H
 	extz	xwa                                   ; FB5B27  extz XWA
 	add	xwa, xbc                               ; FB5B29  add XWA,XBC
-	add	xwa, 0xFDE6F1                          ; FB5B2B  add XWA,0x00fde6f1
+	add	xwa, DSP_ChanFreq_CurvePool                          ; FB5B2B  add XWA,0x00fde6f1
 	ld	ix, (xwa)                               ; FB5B31  ld IX,(XWA)
 sub_FB59D2__FB5B33:
 	ld	c, 4:opc                                   ; FB5B33  ld C,0x04
@@ -11205,7 +11209,7 @@ sub_FB5BAA__FB5BDA:
 	mul8rr	c, h                                ; FB5BDC  mul BC,H
 	extz	xbc                                   ; FB5BDE  extz XBC
 	inc	4, xbc                                 ; FB5BE0  inc 4,XBC
-	add	xbc, 0xFDE6A9                          ; FB5BE2  add XBC,0x00fde6a9
+	add	xbc, DSP_AlgoChannel_SelectorRecords                          ; FB5BE2  add XBC,0x00fde6a9
 	ld	d, (xbc)                                ; FB5BE8  ld D,(XBC)
 	ld	a, (xix+0xD1)                           ; FB5BEA  ld A,(XIX+0x00d1)
 	mul	a, 2                                   ; FB5BEF  mul A,0x02
@@ -11215,12 +11219,12 @@ sub_FB5BAA__FB5BDA:
 	mul8rr	c, d                                ; FB5BF9  mul BC,D
 	extz	xbc                                   ; FB5BFB  extz XBC
 	add	xbc, xwa                               ; FB5BFD  add XBC,XWA
-	add	xbc, 0xFDEB53                          ; FB5BFF  add XBC,0x00fdeb53
+	add	xbc, DSP_ChanFreq_CurvePool+1122                          ; FB5BFF  add XBC,0x00fdeb53
 	ld	de, (xbc)                               ; FB5C05  ld DE,(XBC)
 	ld	a, (xix+0xD3)                           ; FB5C07  ld A,(XIX+0x00d3)
 	mul	a, 2                                   ; FB5C0C  mul A,0x02
 	extz	xwa                                   ; FB5C0F  extz XWA
-	add	xwa, 0xFDEBEC                          ; FB5C11  add XWA,0x00fdebec
+	add	xwa, EGEnv_ModeBits_Table                          ; FB5C11  add XWA,0x00fdebec
 	ld	bc, (xwa)                               ; FB5C17  ld BC,(XWA)
 	ld	hl, bc                                  ; FB5C19  ld HL,BC
 	or	hl, de                                  ; FB5C1B  or HL,DE
@@ -11230,13 +11234,13 @@ sub_FB5BAA__FB5C1F:
 	mul8rr	c, h                                ; FB5C21  mul BC,H
 	extz	xbc                                   ; FB5C23  extz XBC
 	inc	4, xbc                                 ; FB5C25  inc 4,XBC
-	add	xbc, 0xFDE6A9                          ; FB5C27  add XBC,0x00fde6a9
+	add	xbc, DSP_AlgoChannel_SelectorRecords                          ; FB5C27  add XBC,0x00fde6a9
 	ld	d, (xbc)                                ; FB5C2D  ld D,(XBC)
 	ld	c, 39:opc                                  ; FB5C2F  ld C,0x27
 	mul8rr	c, h                                ; FB5C31  mul BC,H
 	extz	xbc                                   ; FB5C33  extz XBC
 	inc	6, xbc                                 ; FB5C35  inc 6,XBC
-	add	xbc, 0xFDF4F1                          ; FB5C37  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FB5C37  add XBC,0x00fdf4f1
 	ld	a, (xbc)                                ; FB5C3D  ld A,(XBC)
 	mul	a, 2                                   ; FB5C3F  mul A,0x02
 	extz	xwa                                   ; FB5C42  extz XWA
@@ -11245,7 +11249,7 @@ sub_FB5BAA__FB5C1F:
 	mul8rr	c, d                                ; FB5C48  mul BC,D
 	extz	xbc                                   ; FB5C4A  extz XBC
 	add	xbc, xwa                               ; FB5C4C  add XBC,XWA
-	add	xbc, 0xFDEB53                          ; FB5C4E  add XBC,0x00fdeb53
+	add	xbc, DSP_ChanFreq_CurvePool+1122                          ; FB5C4E  add XBC,0x00fdeb53
 	ld	hl, (xbc)                               ; FB5C54  ld HL,(XBC)
 	jr sub_FB5BAA__FB5C5B                      ; FB5C56  jr T,0xfb5c5b
 sub_FB5BAA__FB5C58:
@@ -11313,7 +11317,7 @@ sub_FB5C77__FB5CAA:
 	mul8rr	c, h                                ; FB5CAC  mul BC,H
 	extz	xbc                                   ; FB5CAE  extz XBC
 	inc	5, xbc                                 ; FB5CB0  inc 5,XBC
-	add	xbc, 0xFDE6A9                          ; FB5CB2  add XBC,0x00fde6a9
+	add	xbc, DSP_AlgoChannel_SelectorRecords                          ; FB5CB2  add XBC,0x00fde6a9
 	ld	e, (xbc)                                ; FB5CB8  ld E,(XBC)
 	ld	c, d                                    ; FB5CBA  ld C,D
 	extz	bc                                    ; FB5CBC  extz BC
@@ -11328,7 +11332,7 @@ sub_FB5C77__FB5CAA:
 	mul8rr	a, e                                ; FB5CD8  mul WA,E
 	extz	xwa                                   ; FB5CDA  extz XWA
 	add	xwa, xbc                               ; FB5CDC  add XWA,XBC
-	add	xwa, 0xFDE6F1                          ; FB5CDE  add XWA,0x00fde6f1
+	add	xwa, DSP_ChanFreq_CurvePool                          ; FB5CDE  add XWA,0x00fde6f1
 	ld	hl, (xwa)                               ; FB5CE4  ld HL,(XWA)
 	jr sub_FB5C77__FB5CEB                      ; FB5CE6  jr T,0xfb5ceb
 sub_FB5C77__FB5CE8:
@@ -11398,7 +11402,7 @@ Part_GetSecondaryParam_AlgoType9:
 	ld	a, (xbc+0xD1)                           ; FB5D3E  ld A,(XBC+0x00d1)
 	extz	wa                                    ; FB5D43  extz WA
 	extz	xwa                                   ; FB5D45  extz XWA
-	add	xwa, 0xFDF6C5                          ; FB5D47  add XWA,0x00fdf6c5
+	add	xwa, Voice_SecondaryParam_Curve                          ; FB5D47  add XWA,0x00fdf6c5
 	ld	d, (xwa)                                ; FB5D4D  ld D,(XWA)
 	ld	bc, hl                                  ; FB5D4F  ld BC,HL
 	add	bc, 9                                  ; FB5D51  add BC,0x0009
@@ -11472,13 +11476,13 @@ sub_FB5D6C__FB5DB2:
 	extz	xbc                                   ; FB5DB6  extz XBC
 	ld	xix, xbc                                ; FB5DB8  ld XIX,XBC
 	add	xbc, 13                                ; FB5DBA  add XBC,0x0000000d
-	add	xbc, 0xFDF4F1                          ; FB5DC0  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FB5DC0  add XBC,0x00fdf4f1
 	ld	a, (xbc)                                ; FB5DC6  ld A,(XBC)
 	and	a, 0x80                                ; FB5DC8  and A,0x80
 	jr z, sub_FB5D6C__FB5DDF                   ; FB5DCB  jr Z,0xfb5ddf
 	ld	xbc, xix                                ; FB5DCD  ld XBC,XIX
 	add	xbc, 14                                ; FB5DCF  add XBC,0x0000000e
-	add	xbc, 0xFDF4F1                          ; FB5DD5  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FB5DD5  add XBC,0x00fdf4f1
 	ld	a, (xbc)                                ; FB5DDB  ld A,(XBC)
 	jr sub_FB5D6C__FB5DFA                      ; FB5DDD  jr T,0xfb5dfa
 sub_FB5D6C__FB5DDF:
@@ -11607,7 +11611,7 @@ Dev10C_ChanSelHighBits:
 	cp	bc, 11                                  ; FB5E66  cp BC,0x000b
 	jrl ugt, Dev10C_ChanSelHighBits__FB5F89                ; FB5E6A  jrl UGT,0xfb5f89
 	sll	bc, 2                                  ; FB5E6D  sll 0x02,BC
-	add	xbc, 0xFB5E7A                          ; FB5E70  add XBC,0x00fb5e7a
+	add	xbc, Dev10C_ChanSelHighBits_JumpTable_FB5E7A                          ; FB5E70  add XBC,0x00fb5e7a
 	ld	xbc, (xbc)                              ; FB5E76  ld XBC,(XBC)
 	jp	(xbc)                                   ; FB5E78  jp T,XBC
 ; 12 x u32 computed-goto table, 0xFB5E7A-0xFB5EA9, 48 bytes.
@@ -11618,18 +11622,19 @@ Dev10C_ChanSelHighBits:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB405F 0xFB6E0A;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FB5EAA	; 0xFB5E7A  entry 0 -> 0xFB5EAA   (also the out-of-range arm)
-	.long 0x00FB5EAA	; 0xFB5E7E  entry 1 -> 0xFB5EAA
-	.long 0x00FB5EAA	; 0xFB5E82  entry 2 -> 0xFB5EAA
-	.long 0x00FB5EAA	; 0xFB5E86  entry 3 -> 0xFB5EAA
-	.long 0x00FB5EAA	; 0xFB5E8A  entry 4 -> 0xFB5EAA
-	.long 0x00FB5EAA	; 0xFB5E8E  entry 5 -> 0xFB5EAA
-	.long 0x00FB5F89	; 0xFB5E92  entry 6 -> 0xFB5F89
-	.long 0x00FB5EAA	; 0xFB5E96  entry 7 -> 0xFB5EAA
-	.long 0x00FB5F89	; 0xFB5E9A  entry 8 -> 0xFB5F89
-	.long 0x00FB5F89	; 0xFB5E9E  entry 9 -> 0xFB5F89
-	.long 0x00FB5F44	; 0xFB5EA2  entry 10 -> 0xFB5F44
-	.long 0x00FB5F44	; 0xFB5EA6  entry 11 -> 0xFB5F44
+Dev10C_ChanSelHighBits_JumpTable_FB5E7A:
+	.long Dev10C_ChanSelHighBits__FB5EAA	; 0xFB5E7A  entry 0 -> 0xFB5EAA   (also the out-of-range arm)
+	.long Dev10C_ChanSelHighBits__FB5EAA	; 0xFB5E7E  entry 1 -> 0xFB5EAA
+	.long Dev10C_ChanSelHighBits__FB5EAA	; 0xFB5E82  entry 2 -> 0xFB5EAA
+	.long Dev10C_ChanSelHighBits__FB5EAA	; 0xFB5E86  entry 3 -> 0xFB5EAA
+	.long Dev10C_ChanSelHighBits__FB5EAA	; 0xFB5E8A  entry 4 -> 0xFB5EAA
+	.long Dev10C_ChanSelHighBits__FB5EAA	; 0xFB5E8E  entry 5 -> 0xFB5EAA
+	.long Dev10C_ChanSelHighBits__FB5F89	; 0xFB5E92  entry 6 -> 0xFB5F89
+	.long Dev10C_ChanSelHighBits__FB5EAA	; 0xFB5E96  entry 7 -> 0xFB5EAA
+	.long Dev10C_ChanSelHighBits__FB5F89	; 0xFB5E9A  entry 8 -> 0xFB5F89
+	.long Dev10C_ChanSelHighBits__FB5F89	; 0xFB5E9E  entry 9 -> 0xFB5F89
+	.long Dev10C_ChanSelHighBits__FB5F44	; 0xFB5EA2  entry 10 -> 0xFB5F44
+	.long Dev10C_ChanSelHighBits__FB5F44	; 0xFB5EA6  entry 11 -> 0xFB5F44
 Dev10C_ChanSelHighBits__FB5EAA:
 	cp (xiz+12), 0x00                          ; FB5EAA  cp (XIZ+0x0c),0x00
 	jr nz, Dev10C_ChanSelHighBits__FB5EFC                  ; FB5EAE  jr NZ,0xfb5efc
@@ -11642,7 +11647,7 @@ Dev10C_ChanSelHighBits__FB5EAA:
 	extz	xwa                                   ; FB5EBD  extz XWA
 	add	xwa, xbc                               ; FB5EBF  add XWA,XBC
 	add	xwa, 19                                ; FB5EC1  add XWA,0x00000013
-	add	xwa, 0xFDF4F1                          ; FB5EC7  add XWA,0x00fdf4f1
+	add	xwa, DSP_AlgoDescriptor_Records                          ; FB5EC7  add XWA,0x00fdf4f1
 	ld	h, (xwa)                                ; FB5ECD  ld H,(XWA)
 	ld	c, h                                    ; FB5ECF  ld C,H
 	and	c, 0x80                                ; FB5ED1  and C,0x80
@@ -11669,7 +11674,7 @@ Dev10C_ChanSelHighBits__FB5EFC:
 	extz	xwa                                   ; FB5F09  extz XWA
 	add	xwa, xbc                               ; FB5F0B  add XWA,XBC
 	add	xwa, 19                                ; FB5F0D  add XWA,0x00000013
-	add	xwa, 0xFDF4F1                          ; FB5F13  add XWA,0x00fdf4f1
+	add	xwa, DSP_AlgoDescriptor_Records                          ; FB5F13  add XWA,0x00fdf4f1
 	ld	h, (xwa)                                ; FB5F19  ld H,(XWA)
 	ld	c, h                                    ; FB5F1B  ld C,H
 	and	c, 64                                  ; FB5F1D  and C,0x40
@@ -11704,7 +11709,7 @@ Dev10C_ChanSelHighBits__FB5F44:
 	extz	xwa                                   ; FB5F68  extz XWA
 	add	xwa, xbc                               ; FB5F6A  add XWA,XBC
 	add	xwa, 19                                ; FB5F6C  add XWA,0x00000013
-	add	xwa, 0xFDF4F1                          ; FB5F72  add XWA,0x00fdf4f1
+	add	xwa, DSP_AlgoDescriptor_Records                          ; FB5F72  add XWA,0x00fdf4f1
 	ld	c, (xwa)                                ; FB5F78  ld C,(XWA)
 	and	c, 8                                   ; FB5F7A  and C,0x08
 	jr z, Dev10C_ChanSelHighBits__FB5F84                   ; FB5F7D  jr Z,0xfb5f84
@@ -11783,7 +11788,7 @@ sub_FB5F91__FB5FC1:
 	extz	xwa                                   ; FB5FCE  extz XWA
 	add	xwa, xbc                               ; FB5FD0  add XWA,XBC
 	add	xwa, 19                                ; FB5FD2  add XWA,0x00000013
-	add	xwa, 0xFDF4F1                          ; FB5FD8  add XWA,0x00fdf4f1
+	add	xwa, DSP_AlgoDescriptor_Records                          ; FB5FD8  add XWA,0x00fdf4f1
 	ld	h, (xwa)                                ; FB5FDE  ld H,(XWA)
 	ld	c, h                                    ; FB5FE0  ld C,H
 	and	c, 32                                  ; FB5FE2  and C,0x20
@@ -11857,7 +11862,7 @@ Part_GetAlgoDescByte14:
 	extz	xbc                                   ; FB604A  extz XBC
 	extpfx3 0xAE, 0xFC, 0x81                   ; FB604C  add XBC,(XIZ+0xfc)
 	add	xbc, 20                                ; FB604F  add XBC,0x00000014
-	add	xbc, 0xFDF4F1                          ; FB6055  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FB6055  add XBC,0x00fdf4f1
 	ld	h, (xbc)                                ; FB605B  ld H,(XBC)
 	ld	c, l                                    ; FB605D  ld C,L
 	extz	bc                                    ; FB605F  extz BC
@@ -11926,7 +11931,7 @@ Part_GetAlgoDescByte15:
 	extz	xbc                                   ; FB60B4  extz XBC
 	extpfx3 0xAE, 0xFC, 0x81                   ; FB60B6  add XBC,(XIZ+0xfc)
 	add	xbc, 21                                ; FB60B9  add XBC,0x00000015
-	add	xbc, 0xFDF4F1                          ; FB60BF  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FB60BF  add XBC,0x00fdf4f1
 	ld	h, (xbc)                                ; FB60C5  ld H,(XBC)
 	ld	c, e                                    ; FB60C7  ld C,E
 	extz	bc                                    ; FB60C9  extz BC
@@ -11934,7 +11939,7 @@ Part_GetAlgoDescByte15:
 	cp	bc, 8                                   ; FB60CD  cp BC,0x0008
 	jrl ugt, sub_FB607F__FB6150                ; FB60D1  jrl UGT,0xfb6150
 	sll	bc, 2                                  ; FB60D4  sll 0x02,BC
-	add	xbc, 0xFB60E1                          ; FB60D7  add XBC,0x00fb60e1
+	add	xbc, Part_GetAlgoDescByte15_JumpTable_FB60E1                          ; FB60D7  add XBC,0x00fb60e1
 	ld	xbc, (xbc)                              ; FB60DD  ld XBC,(XBC)
 	jp	(xbc)                                   ; FB60DF  jp T,XBC
 ; 9 x u32 computed-goto table, 0xFB60E1-0xFB6104, 36 bytes.
@@ -11945,15 +11950,16 @@ Part_GetAlgoDescByte15:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB405F 0xFB6E0A;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FB6105	; 0xFB60E1  entry 0 -> 0xFB6105   (also the out-of-range arm)
-	.long 0x00FB6105	; 0xFB60E5  entry 1 -> 0xFB6105
-	.long 0x00FB6105	; 0xFB60E9  entry 2 -> 0xFB6105
-	.long 0x00FB6105	; 0xFB60ED  entry 3 -> 0xFB6105
-	.long 0x00FB6123	; 0xFB60F1  entry 4 -> 0xFB6123
-	.long 0x00FB6123	; 0xFB60F5  entry 5 -> 0xFB6123
-	.long 0x00FB6150	; 0xFB60F9  entry 6 -> 0xFB6150
-	.long 0x00FB6150	; 0xFB60FD  entry 7 -> 0xFB6150
-	.long 0x00FB6141	; 0xFB6101  entry 8 -> 0xFB6141
+Part_GetAlgoDescByte15_JumpTable_FB60E1:
+	.long sub_FB607F__FB6105	; 0xFB60E1  entry 0 -> 0xFB6105   (also the out-of-range arm)
+	.long sub_FB607F__FB6105	; 0xFB60E5  entry 1 -> 0xFB6105
+	.long sub_FB607F__FB6105	; 0xFB60E9  entry 2 -> 0xFB6105
+	.long sub_FB607F__FB6105	; 0xFB60ED  entry 3 -> 0xFB6105
+	.long sub_FB607F__FB6123	; 0xFB60F1  entry 4 -> 0xFB6123
+	.long sub_FB607F__FB6123	; 0xFB60F5  entry 5 -> 0xFB6123
+	.long sub_FB607F__FB6150	; 0xFB60F9  entry 6 -> 0xFB6150
+	.long sub_FB607F__FB6150	; 0xFB60FD  entry 7 -> 0xFB6150
+	.long sub_FB607F__FB6141	; 0xFB6101  entry 8 -> 0xFB6141
 sub_FB607F__FB6105:
 	cp	l, 1:i3                                   ; FB6105  cp L,1
 	jr nz, sub_FB607F__FB6150                  ; FB6107  jr NZ,0xfb6150
@@ -12098,7 +12104,7 @@ Part_GetAlgoDescByte16:
 	extz	xwa                                   ; FB61C7  extz XWA
 	add	xwa, xbc                               ; FB61C9  add XWA,XBC
 	add	xwa, 22                                ; FB61CB  add XWA,0x00000016
-	add	xwa, 0xFDF4F1                          ; FB61D1  add XWA,0x00fdf4f1
+	add	xwa, DSP_AlgoDescriptor_Records                          ; FB61D1  add XWA,0x00fdf4f1
 	ld	h, (xwa)                                ; FB61D7  ld H,(XWA)
 	ld	c, e                                    ; FB61D9  ld C,E
 	extz	bc                                    ; FB61DB  extz BC
@@ -12106,7 +12112,7 @@ Part_GetAlgoDescByte16:
 	cp	bc, 8                                   ; FB61DF  cp BC,0x0008
 	jrl ugt, sub_FB6190__FB626A                ; FB61E3  jrl UGT,0xfb626a
 	sll	bc, 2                                  ; FB61E6  sll 0x02,BC
-	add	xbc, 0xFB61F3                          ; FB61E9  add XBC,0x00fb61f3
+	add	xbc, Part_GetAlgoDescByte16_JumpTable_FB61F3                          ; FB61E9  add XBC,0x00fb61f3
 	ld	xbc, (xbc)                              ; FB61EF  ld XBC,(XBC)
 	jp	(xbc)                                   ; FB61F1  jp T,XBC
 ; 9 x u32 computed-goto table, 0xFB61F3-0xFB6216, 36 bytes.
@@ -12117,15 +12123,16 @@ Part_GetAlgoDescByte16:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB405F 0xFB6E0A;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FB6217	; 0xFB61F3  entry 0 -> 0xFB6217   (also the out-of-range arm)
-	.long 0x00FB6217	; 0xFB61F7  entry 1 -> 0xFB6217
-	.long 0x00FB6217	; 0xFB61FB  entry 2 -> 0xFB6217
-	.long 0x00FB6217	; 0xFB61FF  entry 3 -> 0xFB6217
-	.long 0x00FB6240	; 0xFB6203  entry 4 -> 0xFB6240
-	.long 0x00FB6240	; 0xFB6207  entry 5 -> 0xFB6240
-	.long 0x00FB624B	; 0xFB620B  entry 6 -> 0xFB624B
-	.long 0x00FB626A	; 0xFB620F  entry 7 -> 0xFB626A
-	.long 0x00FB624B	; 0xFB6213  entry 8 -> 0xFB624B
+Part_GetAlgoDescByte16_JumpTable_FB61F3:
+	.long sub_FB6190__FB6217	; 0xFB61F3  entry 0 -> 0xFB6217   (also the out-of-range arm)
+	.long sub_FB6190__FB6217	; 0xFB61F7  entry 1 -> 0xFB6217
+	.long sub_FB6190__FB6217	; 0xFB61FB  entry 2 -> 0xFB6217
+	.long sub_FB6190__FB6217	; 0xFB61FF  entry 3 -> 0xFB6217
+	.long sub_FB6190__FB6240	; 0xFB6203  entry 4 -> 0xFB6240
+	.long sub_FB6190__FB6240	; 0xFB6207  entry 5 -> 0xFB6240
+	.long sub_FB6190__FB624B	; 0xFB620B  entry 6 -> 0xFB624B
+	.long sub_FB6190__FB626A	; 0xFB620F  entry 7 -> 0xFB626A
+	.long sub_FB6190__FB624B	; 0xFB6213  entry 8 -> 0xFB624B
 sub_FB6190__FB6217:
 	cp	l, 1:i3                                   ; FB6217  cp L,1
 	jr nz, sub_FB6190__FB6233                  ; FB6219  jr NZ,0xfb6233
@@ -12232,7 +12239,7 @@ Part_GetAlgoDescByte17:
 	extz	xbc                                   ; FB62C2  extz XBC
 	add	xbc, xwa                               ; FB62C4  add XBC,XWA
 	add	xbc, 23                                ; FB62C6  add XBC,0x00000017
-	add	xbc, 0xFDF4F1                          ; FB62CC  add XBC,0x00fdf4f1
+	add	xbc, DSP_AlgoDescriptor_Records                          ; FB62CC  add XBC,0x00fdf4f1
 	ld	h, (xbc)                                ; FB62D2  ld H,(XBC)
 	ld	bc, (xiz-6)                             ; FB62D4  ld BC,(XIZ+0xfa)
 	extz	bc                                    ; FB62D7  extz BC
@@ -12240,7 +12247,7 @@ Part_GetAlgoDescByte17:
 	cp	bc, 8                                   ; FB62DB  cp BC,0x0008
 	jrl ugt, sub_FB6272__FB6392                ; FB62DF  jrl UGT,0xfb6392
 	sll	bc, 2                                  ; FB62E2  sll 0x02,BC
-	add	xbc, 0xFB62EF                          ; FB62E5  add XBC,0x00fb62ef
+	add	xbc, Part_GetAlgoDescByte17_JumpTable_FB62EF                          ; FB62E5  add XBC,0x00fb62ef
 	ld	xbc, (xbc)                              ; FB62EB  ld XBC,(XBC)
 	jp	(xbc)                                   ; FB62ED  jp T,XBC
 ; 9 x u32 computed-goto table, 0xFB62EF-0xFB6312, 36 bytes.
@@ -12251,15 +12258,16 @@ Part_GetAlgoDescByte17:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFB405F 0xFB6E0A;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FB6313	; 0xFB62EF  entry 0 -> 0xFB6313   (also the out-of-range arm)
-	.long 0x00FB6313	; 0xFB62F3  entry 1 -> 0xFB6313
-	.long 0x00FB6313	; 0xFB62F7  entry 2 -> 0xFB6313
-	.long 0x00FB6313	; 0xFB62FB  entry 3 -> 0xFB6313
-	.long 0x00FB633A	; 0xFB62FF  entry 4 -> 0xFB633A
-	.long 0x00FB633A	; 0xFB6303  entry 5 -> 0xFB633A
-	.long 0x00FB6392	; 0xFB6307  entry 6 -> 0xFB6392
-	.long 0x00FB6392	; 0xFB630B  entry 7 -> 0xFB6392
-	.long 0x00FB6360	; 0xFB630F  entry 8 -> 0xFB6360
+Part_GetAlgoDescByte17_JumpTable_FB62EF:
+	.long sub_FB6272__FB6313	; 0xFB62EF  entry 0 -> 0xFB6313   (also the out-of-range arm)
+	.long sub_FB6272__FB6313	; 0xFB62F3  entry 1 -> 0xFB6313
+	.long sub_FB6272__FB6313	; 0xFB62F7  entry 2 -> 0xFB6313
+	.long sub_FB6272__FB6313	; 0xFB62FB  entry 3 -> 0xFB6313
+	.long sub_FB6272__FB633A	; 0xFB62FF  entry 4 -> 0xFB633A
+	.long sub_FB6272__FB633A	; 0xFB6303  entry 5 -> 0xFB633A
+	.long sub_FB6272__FB6392	; 0xFB6307  entry 6 -> 0xFB6392
+	.long sub_FB6272__FB6392	; 0xFB630B  entry 7 -> 0xFB6392
+	.long sub_FB6272__FB6360	; 0xFB630F  entry 8 -> 0xFB6360
 sub_FB6272__FB6313:
 	cp	d, 1:i3                                   ; FB6313  cp D,1
 	jrl nz, sub_FB6272__FB6392                 ; FB6315  jrl NZ,0xfb6392
@@ -12271,7 +12279,7 @@ sub_FB6272__FB6313:
 	ld	c, (xwa+0xD4)                           ; FB6327  ld C,(XWA+0x00d4)
 	extz	bc                                    ; FB632C  extz BC
 	extz	xbc                                   ; FB632E  extz XBC
-	add	xbc, 0xFDEBB9                          ; FB6330  add XBC,0x00fdebb9
+	add	xbc, DSP_ChanFreq_IndexMap                          ; FB6330  add XBC,0x00fdebb9
 	ld	h, (xbc)                                ; FB6336  ld H,(XBC)
 	jr sub_FB6272__FB6378                      ; FB6338  jr T,0xfb6378
 sub_FB6272__FB633A:
@@ -12285,7 +12293,7 @@ sub_FB6272__FB633A:
 	ld	c, (xwa+0xD6)                           ; FB634D  ld C,(XWA+0x00d6)
 	extz	bc                                    ; FB6352  extz BC
 	extz	xbc                                   ; FB6354  extz XBC
-	add	xbc, 0xFDEBB9                          ; FB6356  add XBC,0x00fdebb9
+	add	xbc, DSP_ChanFreq_IndexMap                          ; FB6356  add XBC,0x00fdebb9
 	ld	h, (xbc)                                ; FB635C  ld H,(XBC)
 	jr sub_FB6272__FB6378                      ; FB635E  jr T,0xfb6378
 sub_FB6272__FB6360:
@@ -12295,7 +12303,7 @@ sub_FB6272__FB6360:
 	ld	a, (xbc+0xD1)                           ; FB6367  ld A,(XBC+0x00d1)
 	extz	wa                                    ; FB636C  extz WA
 	extz	xwa                                   ; FB636E  extz XWA
-	add	xwa, 0xFDEBB9                          ; FB6370  add XWA,0x00fdebb9
+	add	xwa, DSP_ChanFreq_IndexMap                          ; FB6370  add XWA,0x00fdebb9
 	ld	h, (xwa)                                ; FB6376  ld H,(XWA)
 sub_FB6272__FB6378:
 	ld	c, e                                    ; FB6378  ld C,E
@@ -12951,7 +12959,7 @@ sub_FB6681__FB686F:
 	extz	xbc                                   ; FB6872  extz XBC
 	ld	wa, (xbc+0x1523)                        ; FB6874  ld WA,(XBC+0x1523)
 	ld	(xiz-16), wa                            ; FB6879  ld (XIZ+0xf0),WA
-	lda	xiy, (0xFDE695:24)                     ; FB687C  lda XIY,0xfde695
+	lda	xiy, (BitMask_Table_FDE695:24)                     ; FB687C  lda XIY,0xfde695
 	add	xiy, xix                               ; FB6881  add XIY,XIX
 	ld	bc, (xiy)                               ; FB6883  ld BC,(XIY)
 	and	wa, bc                                 ; FB6885  and WA,BC
@@ -13240,7 +13248,7 @@ sub_FB68DD__FB6AEA:
 	ld	(xiz-23), wa                            ; FB6AF4  ld (XIZ+0xe9),WA
 	ld	iy, de                                  ; FB6AF7  ld IY,DE
 	extz	xiy                                   ; FB6AF9  extz XIY
-	add	xiy, 0xFDE695                          ; FB6AFB  add XIY,0x00fde695
+	add	xiy, BitMask_Table_FDE695                          ; FB6AFB  add XIY,0x00fde695
 	ld	iy, (xiy)                               ; FB6B01  ld IY,(XIY)
 	and	wa, iy                                 ; FB6B03  and WA,IY
 	jr z, sub_FB68DD__FB6B0C                   ; FB6B05  jr Z,0xfb6b0c
