@@ -317,14 +317,53 @@ def emit_perc(label, old, D, sym):
     return hdr, rows
 
 
+def _records_tool():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "tonedb_records_typed_rows", ROOT / "scripts" / "tools" / "tonedb_records_typed_rows.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def emit_drawbar_tone(label, D, sym):
+    """DrawbarPreset_Jazz/_Rock: 426-byte tone records, part mode 0x40, all four
+    partial blocks bound unpacked (bank selector 0x70 >= 0x10)."""
+    R = _records_tool()
+    a = sym[label]
+    tone = {"DrawbarPreset_Jazz": 336, "DrawbarPreset_Rock": 337}[label]
+    hdr = ["; Tone record %d \"%s\" (bank selector 0x70; program 1 -> 337, the other programs -> 336):"
+           % (tone, blob(a, 16).decode().strip()),
+           "; part mode 0x40, partial mask 0x%02x; 426 bytes = 21 + 5*81, partials 0-3 in blocks 1-4 (header above)."
+           % u8(a + 0x11)]
+    rows = ['\t.ascii\t"%s"' % blob(a, 16).decode()]
+    rows.append(pad("\t.byte\t0x%02x" % u8(a + 0x10), "+0x10 part-mode byte: mode 0x40 (bits 7:6), bits 5:4 = %d"
+                    % (u8(a + 0x10) >> 4 & 3), col=112))
+    rows.append(pad("\t.byte\t0x%02x" % u8(a + 0x11), "+0x11 partial mask (selector 0x70: only partial 0 is tested)",
+                    col=112))
+    rows.append(pad("\t.byte\t" + ", ".join("0x%02x" % b for b in blob(a + 0x12, 3)), "+0x12..+0x14", col=112))
+    rows.append("\t; common block")
+    for lo, hi, txt in R.COMMON_GROUPS:
+        rows.append(pad("\t.byte\t" + ", ".join("0x%02x" % b for b in blob(a + lo, hi - lo + 1)),
+                        "+0x%02x %s" % (lo, txt), col=112))
+    for blk in range(4):
+        base = a + 0x66 + 0x51 * blk
+        rows.append("\t; partial %d block (unpacked binding: partial p -> block p)" % blk)
+        for lo, hi, txt in R.GROUPS:
+            rows.append(pad("\t.byte\t" + ", ".join("0x%02x" % b for b in blob(base + lo, hi - lo + 1)),
+                            "+0x%02x blk+0x%02x %s" % (base - a + lo, lo, txt), col=112))
+    return hdr, rows
+
+
 LABEL = re.compile(r'^(ToneEnv_Rec(\d{3})_([AB])|DrumKit_\d\d_\w+|PercInst_\d{3}_\w+|'
-                   r'DrawbarPreset_EnvData_\d):\s*$')
+                   r'DrawbarPreset_EnvData_\d|DrawbarPreset_Jazz|DrawbarPreset_Rock):\s*$')
 MY_HEADERS = [re.compile(x) for x in (
     r'^; SET \d{3} (key map|zone records)', r'^; \d+ bands -> zone index',
     r'^; emitted by WaveSel_Emit_ZoneRecord', r'^; Drawbar SET zone records for',
     r'^; row = d2\*81', r'^; indexed by WaveSel_StageB_Build_Reg040_Footage',
     r'^; Drum kit \d\d "', r'^; Part mode 0x80 \(Voice_SetVelocity\)',
-    r'^; PercInst \d{3} "', r'^; played by ')]
+    r'^; PercInst \d{3} "', r'^; played by ', r'^; Tone record 33[67] "',
+    r'^; part mode 0x40, partial mask')]
 
 
 def is_my_header(ln):
@@ -377,7 +416,9 @@ def main():
             continue
         label = m.group(1)
         j = i + 1
-        while j < len(lines) and lines[j].strip() and not lines[j].lstrip().startswith(";") \
+        # an object runs until a blank line, a column-0 comment or the next
+        # label; indented comments ("\t; common block") belong to it
+        while j < len(lines) and lines[j].strip() and not lines[j].startswith(";") \
                 and not re.match(r'^[A-Za-z_][\w.]*:', lines[j]):
             j += 1
         old = lines[i + 1:j]
@@ -387,6 +428,9 @@ def main():
             assert addr == (d["A"] if m.group(3) == "A" else d["B"]), label
             hdr, rows = (emit_A if m.group(3) == "A" else emit_B)(d, D, sym)
             kind = "ToneEnv"
+        elif label in ("DrawbarPreset_Jazz", "DrawbarPreset_Rock"):
+            hdr, rows = emit_drawbar_tone(label, D, sym)
+            kind = "DrawbarTone"
         elif label.startswith("DrawbarPreset"):
             hdr, rows = emit_drawbar(label, D, sym)
             kind = "Drawbar"
