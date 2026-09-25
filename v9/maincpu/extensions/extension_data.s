@@ -2267,6 +2267,27 @@ Protocol_values_for_LED_rows:
 	.byte 0x00, 0x00, 0x63, 0x00, 0x4f, 0x02, 0x53, 0x02, 0x83, 0x05, 0x18, 0x05, 0xd8, 0x54, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x63, 0x00
+; ---------------------------------------------------------------------------
+; SoundProgram_DispatchTable -- 256 handler pointers, one per value of a
+; command byte
+; ---------------------------------------------------------------------------
+; Reader: FileIO_OperationDispatch (audio/audio_control_engine.s, 0xFC84EA)
+; walks a byte stream whose base pointer is at RAM 0xC039 and whose cursor
+; word is at 0x9133, until the byte at the cursor is 0xFF.  For each 3-byte
+; record SndParam_FetchSequencerParams (0xFC95CE) moves byte 0 to RAM 0x9127
+; (the command), byte 1 to 0x9128/0x912F and byte 2 to 0x9130; the
+; dispatcher then does `ld a, (0x9127)` / `sla wa, 2` / `lda xbc,
+; (SoundProgram_DispatchTable)` / `ld_sril3` / `call (xhl)`.
+; Entries: 0x00-0x19 ExtData_ToneParam_DispatchHandler; 0x43-0x48, 0x60,
+; 0x68, 0x70, 0x72, 0x7A, 0x90, 0x98, 0xA8 and 0xB0 their own handlers;
+; 0xB1-0xBD the MidiCh_Iterate* volume / expression / pan loops; every other
+; entry is a bare `ret` -- ToshiCmd_DefaultHandler_Ret (0xFC95CD), or for
+; 0x20-0x3F FileIO_AllocBuffer (0xFC873C), which is also a one-byte `ret`
+; (0x0E) whatever its name says.  The table and handler names are
+; historical; what the command stream encodes beyond this is not traced
+; here.  The three tables after it (+0x400, +0x800, +0x880) are indexed by
+; the same command byte, or by channel -- see their headers.
+; ---------------------------------------------------------------------------
 SoundProgram_DispatchTable:
 	.long ExtData_ToneParam_DispatchHandler
 	.long ExtData_ToneParam_DispatchHandler
@@ -2524,151 +2545,64 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.byte 0xb6, 0xf9, 0x00, 0x00
-	.byte 0xd0, 0xf9, 0x00, 0x00, 0xea, 0xf9, 0x00, 0x00
-	.byte 0x04, 0xfa, 0x00, 0x00, 0x1e, 0xfa, 0x00, 0x00
-	.byte 0x38, 0xfa, 0x00, 0x00, 0x52, 0xfa, 0x00, 0x00
-	.byte 0x6c, 0xfa, 0x00, 0x00, 0x86, 0xfa, 0x00, 0x00
-	.byte 0xa0, 0xfa, 0x00, 0x00, 0xba, 0xfa, 0x00, 0x00
-	.byte 0xd4, 0xfa, 0x00, 0x00, 0xee, 0xfa, 0x00, 0x00
-	.byte 0x08, 0xfb, 0x00, 0x00, 0x22, 0xfb, 0x00, 0x00
-	.byte 0x3c, 0xfb, 0x00, 0x00, 0x56, 0xfb, 0x00, 0x00
-	.byte 0x70, 0xfb, 0x00, 0x00, 0x8a, 0xfb, 0x00, 0x00
-	.byte 0xa4, 0xfb, 0x00, 0x00, 0xbe, 0xfb, 0x00, 0x00
-	.byte 0xd8, 0xfb, 0x00, 0x00, 0xf2, 0xfb, 0x00, 0x00
-	.byte 0x62, 0xfd, 0x00, 0x00, 0x7c, 0xfd, 0x00, 0x00
-	.byte 0x0c, 0xfc, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0x54, 0xfc, 0x00, 0x00, 0x26, 0xfc, 0x00, 0x00
-	.byte 0x32, 0xfc, 0x00, 0x00, 0x3e, 0xfc, 0x00, 0x00
-	.byte 0x4a, 0xfc, 0x00, 0x00, 0x5a, 0xfc, 0x00, 0x00
-	.byte 0x92, 0xff, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x6e, 0xfc, 0x00, 0x00
-	.byte 0x74, 0xfc, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.byte 0x8e, 0xfc, 0x00, 0x00, 0xa8, 0xfc, 0x00, 0x00
-	.byte 0xc2, 0xfc, 0x00, 0x00, 0xdc, 0xfc, 0x00, 0x00
-	.byte 0xff, 0xff, 0xff, 0xff, 0xf6, 0xfc, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x02, 0xfd, 0x00, 0x00
-	.byte 0x2c, 0xfd, 0x00, 0x00, 0x0c, 0xfd, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xa2, 0xf9, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x50, 0xfd, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x66, 0xfc, 0x00, 0x00
-	.byte 0xaa, 0xfd, 0x00, 0x00, 0x1c, 0xfd, 0x00, 0x00
-	.byte 0xb6, 0xfd, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x96, 0xfd, 0x00, 0x00
-	.byte 0x30, 0xfd, 0x00, 0x00, 0xa4, 0xff, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xda, 0xfd, 0x00, 0x00
-	.byte 0xee, 0xfd, 0x00, 0x00, 0x02, 0xfe, 0x00, 0x00
-	.byte 0x16, 0xfe, 0x00, 0x00, 0x2a, 0xfe, 0x00, 0x00
-	.byte 0x3e, 0xfe, 0x00, 0x00, 0x52, 0xfe, 0x00, 0x00
-	.byte 0x66, 0xfe, 0x00, 0x00, 0x7a, 0xfe, 0x00, 0x00
-	.byte 0x8e, 0xfe, 0x00, 0x00, 0xa2, 0xfe, 0x00, 0x00
-	.byte 0xb6, 0xfe, 0x00, 0x00, 0xca, 0xfe, 0x00, 0x00
-	.byte 0xde, 0xfe, 0x00, 0x00, 0xf2, 0xfe, 0x00, 0x00
-	.byte 0x06, 0xff, 0x00, 0x00, 0x1a, 0xff, 0x00, 0x00
-	.byte 0x2e, 0xff, 0x00, 0x00, 0x42, 0xff, 0x00, 0x00
-	.byte 0x56, 0xff, 0x00, 0x00, 0x6a, 0xff, 0x00, 0x00
-	.byte 0x1a, 0xff, 0x00, 0x00, 0x56, 0xff, 0x00, 0x00
-	.byte 0x7e, 0xff, 0x00, 0x00, 0x7e, 0xff, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xda, 0xfd, 0x00, 0x00
-	.byte 0xee, 0xfd, 0x00, 0x00, 0x02, 0xfe, 0x00, 0x00
-	.byte 0x16, 0xfe, 0x00, 0x00, 0x2a, 0xfe, 0x00, 0x00
-	.byte 0x3e, 0xfe, 0x00, 0x00, 0x52, 0xfe, 0x00, 0x00
-	.byte 0x66, 0xfe, 0x00, 0x00, 0x7a, 0xfe, 0x00, 0x00
-	.byte 0x8e, 0xfe, 0x00, 0x00, 0xa2, 0xfe, 0x00, 0x00
-	.byte 0xb6, 0xfe, 0x00, 0x00, 0xca, 0xfe, 0x00, 0x00
-	.byte 0xde, 0xfe, 0x00, 0x00, 0xf2, 0xfe, 0x00, 0x00
-	.byte 0x06, 0xff, 0x00, 0x00, 0x1a, 0xff, 0x00, 0x00
-	.byte 0x2e, 0xff, 0x00, 0x00, 0x42, 0xff, 0x00, 0x00
-	.byte 0x56, 0xff, 0x00, 0x00, 0x6a, 0xff, 0x00, 0x00
-	.byte 0x1a, 0xff, 0x00, 0x00, 0x56, 0xff, 0x00, 0x00
-	.byte 0x7e, 0xff, 0x00, 0x00, 0x7e, 0xff, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0x49, 0x7c, 0xfc, 0x00
+; SoundProgram_DispatchTable + 0x400 (SoundProgram_DispatchTable_0x400 in
+; shared/positional_labels.s): 256 RAM addresses, indexed by the SAME command
+; byte.  VoiceData_LookupPtrByIndex (audio/audio_control_engine.s, 0xFC9DF4)
+; does `sla wa, 2` / `lda xbc, (+0x400)` / `ld_sril3`, and
+; SndParam_FetchSequencerParams stores the result at RAM 0x912B next to the
+; command byte it fetched; Audio_InitAllDefaults (0xFC7C49) stores this
+; table's address at RAM 0x90F2.
+; 0xFFFFFFFF = no RAM block for that command.  The live entries are 26 bytes
+; apart (0xF9B6, 0xF9D0, ...) -- the same spacing as the RAM-bank table
+; sndparam_types.h describes.
+	.long 0x0000f9b6, 0x0000f9d0, 0x0000f9ea, 0x0000fa04, 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa6c	; [0x00]
+	.long 0x0000fa86, 0x0000faa0, 0x0000faba, 0x0000fad4, 0x0000faee, 0x0000fb08, 0x0000fb22, 0x0000fb3c	; [0x08]
+	.long 0x0000fb56, 0x0000fb70, 0x0000fb8a, 0x0000fba4, 0x0000fbbe, 0x0000fbd8, 0x0000fbf2, 0x0000fd62	; [0x10]
+	.long 0x0000fd7c, 0x0000fc0c, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x18]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x20]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x28]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x30]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x38]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0x0000fc54, 0x0000fc26, 0x0000fc32, 0x0000fc3e, 0x0000fc4a	; [0x40]
+	.long 0x0000fc5a, 0x0000ff92, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x48]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x50]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x58]
+	.long 0x0000fc6e, 0x0000fc74, 0xffffffff, 0x0000fc8e, 0x0000fca8, 0x0000fcc2, 0x0000fcdc, 0xffffffff	; [0x60]
+	.long 0x0000fcf6, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x68]
+	.long 0x0000fd02, 0x0000fd2c, 0x0000fd0c, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x70]
+	.long 0x0000f9a2, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x78]
+	.long 0x0000fd50, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x80]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x88]
+	.long 0x0000fc66, 0x0000fdaa, 0x0000fd1c, 0x0000fdb6, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x90]
+	.long 0x0000fd96, 0x0000fd30, 0x0000ffa4, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x98]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xa0]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xa8]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xb0]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xb8]
+	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16, 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66	; [0xc0]
+	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6, 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06	; [0xc8]
+	.long 0x0000ff1a, 0x0000ff2e, 0x0000ff42, 0x0000ff56, 0x0000ff6a, 0x0000ff1a, 0x0000ff56, 0x0000ff7e	; [0xd0]
+	.long 0x0000ff7e, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xd8]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xe0]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xe8]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xf0]
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xf8]
+; SoundProgram_DispatchTable + 0x800 (..._0x800): 32 RAM addresses, one per
+; channel 0-31: VoiceData_LookupPtrByChannel (0xFC9E04) does `cp a, 0x1f` /
+; `jr ugt` / `sla wa, 2` / `lda xbc, (+0x800)` / `ld_sril3`;
+; Audio_InitAllDefaults stores the table's address at RAM 0x9182.
+	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16, 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66	; [0x00]
+	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6, 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06	; [0x08]
+	.long 0x0000ff1a, 0x0000ff2e, 0x0000ff42, 0x0000ff56, 0x0000ff6a, 0x0000ff1a, 0x0000ff56, 0x0000ff7e	; [0x10]
+	.long 0x0000ff7e, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x18]
+; SoundProgram_DispatchTable + 0x880: four audio (re)initialisation routines.
+; midi/midi_dispatch_handlers.s calls the third through it (`ld xhl,
+; (SoundProgram_DispatchTable_0x888:24)` / `call (xhl)`), and entry 6 of
+; SystemConfig_PointerTable (ui_widgets/widget_dispatch.s) points at the
+; table's head under the `.set` name SoundProgram_ParamPtrTable
+; (kn5000_v10_program.s).  Searched for other readers: the positional names
+; SoundProgram_DispatchTable_0x880..0x88C and the literals 0xEDB2E4-0xEDB2F3.
+	.long Audio_InitAllDefaults
 	.long Audio_ReinitToneGenAndOutput
 	.long Audio_ResetAfterPayloadError
 	.long Audio_FullReinitWithPreset
@@ -2895,30 +2829,53 @@ Naka_ToshiParam_Table:
 .endm
 ;  22 x 18-byte sound-parameter descriptors, 0xEDBAC0-0xEDBC4C, one
 ;  `sndparam_descriptor` per record (fields: the macro above).  v10
-;  compiles the same records from audio/sndparam_records/run_edbac0.c.
+;  compiles the same records from audio/sndparam_records/run_edbac0.c;
+;  the record labels follow the run as `.set` equates, as in v10.
 SndParamRun_EDBAC0:
-VoiceCtrlR1_Entry_001:	sndparam_descriptor 0x000003, 112, 2, 0xff, 0, 11, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
-VoiceCtrlR1_Entry_002:	sndparam_descriptor 0x000004, 72, 8, 0xff, 40, 255, 0, 0x00, 0x00, 6, 8, 6, 2, 0, 0xff
-VoiceCtrlR1_Entry_003:	sndparam_descriptor 0x000005, 72, 9, 0x01, 0, 1, 0, 0x00, 0x00, 6, 8, 6, 2, 0, 0xff
-VoiceCtrlR1_Entry_004:	sndparam_descriptor 0x0000c0, 145, 3, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_005:	sndparam_descriptor 0x0000c1, 145, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_006:	sndparam_descriptor 0x000100, 147, 0, 0x0f, 0, 9, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_007:	sndparam_descriptor 0x000102, 147, 5, 0xff, 1, 10, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_008:	sndparam_descriptor 0x000103, 147, 6, 0x7f, 1, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_009:	sndparam_descriptor 0x000104, 147, 6, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_010:	sndparam_descriptor 0x000300, 152, 1, 0x7f, 0, 80, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_011:	sndparam_descriptor 0x000301, 152, 1, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_012:	sndparam_descriptor 0x000302, 152, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_013:	sndparam_descriptor 0x000400, 152, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_014:	sndparam_descriptor 0x000401, 152, 3, 0x70, 1, 3, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_015:	sndparam_descriptor 0x002100, 128, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_016:	sndparam_descriptor 0x002101, 128, 3, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_017:	sndparam_descriptor 0x002181, 128, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_018:	sndparam_descriptor 0x002182, 128, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_019:	sndparam_descriptor 0x002183, 128, 3, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_020:	sndparam_descriptor 0x002184, 128, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_021:	sndparam_descriptor 0x002200, 128, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_022:	sndparam_descriptor 0x002201, 128, 0, 0x03, 0, 3, 0, 0x00, 0x01, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x000003, 112, 2, 0xff, 0, 11, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x000004, 72, 8, 0xff, 40, 255, 0, 0x00, 0x00, 6, 8, 6, 2, 0, 0xff
+	sndparam_descriptor 0x000005, 72, 9, 0x01, 0, 1, 0, 0x00, 0x00, 6, 8, 6, 2, 0, 0xff
+	sndparam_descriptor 0x0000c0, 145, 3, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0000c1, 145, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000100, 147, 0, 0x0f, 0, 9, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000102, 147, 5, 0xff, 1, 10, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000103, 147, 6, 0x7f, 1, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000104, 147, 6, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000300, 152, 1, 0x7f, 0, 80, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000301, 152, 1, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000302, 152, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000400, 152, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x000401, 152, 3, 0x70, 1, 3, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002100, 128, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002101, 128, 3, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002181, 128, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002182, 128, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002183, 128, 3, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002184, 128, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002200, 128, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002201, 128, 0, 0x03, 0, 3, 0, 0x00, 0x01, 1, 7, 5, 0, 0, 0xff
+.set VoiceCtrlR1_Entry_001, SndParamRun_EDBAC0 + 0
+.set VoiceCtrlR1_Entry_002, SndParamRun_EDBAC0 + 18
+.set VoiceCtrlR1_Entry_003, SndParamRun_EDBAC0 + 36
+.set VoiceCtrlR1_Entry_004, SndParamRun_EDBAC0 + 54
+.set VoiceCtrlR1_Entry_005, SndParamRun_EDBAC0 + 72
+.set VoiceCtrlR1_Entry_006, SndParamRun_EDBAC0 + 90
+.set VoiceCtrlR1_Entry_007, SndParamRun_EDBAC0 + 108
+.set VoiceCtrlR1_Entry_008, SndParamRun_EDBAC0 + 126
+.set VoiceCtrlR1_Entry_009, SndParamRun_EDBAC0 + 144
+.set VoiceCtrlR1_Entry_010, SndParamRun_EDBAC0 + 162
+.set VoiceCtrlR1_Entry_011, SndParamRun_EDBAC0 + 180
+.set VoiceCtrlR1_Entry_012, SndParamRun_EDBAC0 + 198
+.set VoiceCtrlR1_Entry_013, SndParamRun_EDBAC0 + 216
+.set VoiceCtrlR1_Entry_014, SndParamRun_EDBAC0 + 234
+.set VoiceCtrlR1_Entry_015, SndParamRun_EDBAC0 + 252
+.set VoiceCtrlR1_Entry_016, SndParamRun_EDBAC0 + 270
+.set VoiceCtrlR1_Entry_017, SndParamRun_EDBAC0 + 288
+.set VoiceCtrlR1_Entry_018, SndParamRun_EDBAC0 + 306
+.set VoiceCtrlR1_Entry_019, SndParamRun_EDBAC0 + 324
+.set VoiceCtrlR1_Entry_020, SndParamRun_EDBAC0 + 342
+.set VoiceCtrlR1_Entry_021, SndParamRun_EDBAC0 + 360
+.set VoiceCtrlR1_Entry_022, SndParamRun_EDBAC0 + 378
 VoiceCtrlR1_Entry_023:
 	.byte 0x00, 0x01, 0x03, 0xff
 WidgetParam_MidiCC_Program:
@@ -2937,86 +2894,165 @@ WidgetParam_MidiCC_BankSelect:
 	.byte 0x90, 0xbc, 0xed, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0xff
 ;  78 x 18-byte sound-parameter descriptors, 0xEDBC9E-0xEDC21A, one
 ;  `sndparam_descriptor` per record (fields: the macro above).  v10
-;  compiles the same records from audio/sndparam_records/run_edbc9e.c.
+;  compiles the same records from audio/sndparam_records/run_edbc9e.c;
+;  the record labels follow the run as `.set` equates, as in v10.
 SndParamRun_EDBC9E:
-VoiceCtrlR1_Entry_027:	sndparam_descriptor 0x002280, 128, 1, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_028:	sndparam_descriptor 0x002281, 128, 2, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_029:	sndparam_descriptor 0x002282, 128, 6, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_030:	sndparam_descriptor 0x00228a, 128, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_031:	sndparam_descriptor 0x00228b, 128, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_032:	sndparam_descriptor 0x00228c, 128, 7, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_033:	sndparam_descriptor 0x00228d, 128, 8, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_034:	sndparam_descriptor 0x00228e, 128, 8, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_035:	sndparam_descriptor 0x00228f, 128, 8, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_036:	sndparam_descriptor 0x002290, 128, 8, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_037:	sndparam_descriptor 0x002291, 128, 8, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_038:	sndparam_descriptor 0x002294, 128, 8, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_039:	sndparam_descriptor 0x002295, 128, 8, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_040:	sndparam_descriptor 0x002296, 128, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_041:	sndparam_descriptor 0x002298, 128, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_042:	sndparam_descriptor 0x002299, 128, 9, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_043:	sndparam_descriptor 0x00229a, 128, 1, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_044:	sndparam_descriptor 0x002880, 153, 2, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_045:	sndparam_descriptor 0x002882, 153, 1, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_046:	sndparam_descriptor 0x002881, 153, 3, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_047:	sndparam_descriptor 0x002886, 153, 4, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_048:	sndparam_descriptor 0x002887, 153, 0, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_049:	sndparam_descriptor 0x002888, 153, 5, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_050:	sndparam_descriptor 0x002889, 153, 0, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_051:	sndparam_descriptor 0x00288a, 153, 6, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_052:	sndparam_descriptor 0x00288b, 153, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_053:	sndparam_descriptor 0x00288c, 153, 7, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_054:	sndparam_descriptor 0x00288d, 153, 0, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_055:	sndparam_descriptor 0x00288e, 153, 8, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_056:	sndparam_descriptor 0x00288f, 153, 0, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_057:	sndparam_descriptor 0x002890, 153, 9, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_058:	sndparam_descriptor 0x002891, 153, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_059:	sndparam_descriptor 0x002892, 153, 10, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_060:	sndparam_descriptor 0x002893, 153, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_061:	sndparam_descriptor 0x002894, 153, 11, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_062:	sndparam_descriptor 0x002895, 153, 0, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_063:	sndparam_descriptor 0x002896, 153, 12, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_064:	sndparam_descriptor 0x002897, 153, 1, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_065:	sndparam_descriptor 0x002898, 153, 13, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_066:	sndparam_descriptor 0x002899, 153, 1, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_067:	sndparam_descriptor 0x00289a, 153, 14, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_068:	sndparam_descriptor 0x00289b, 153, 1, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_069:	sndparam_descriptor 0x00289c, 153, 15, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_070:	sndparam_descriptor 0x00289d, 153, 1, 0x08, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_071:	sndparam_descriptor 0x002900, 152, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_072:	sndparam_descriptor 0x002901, 152, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_073:	sndparam_descriptor 0x002902, 152, 7, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_074:	sndparam_descriptor 0x002903, 152, 7, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceCtrlR1_Entry_075:	sndparam_descriptor 0x002904, 152, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_001:	sndparam_descriptor 0x002905, 152, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_002:	sndparam_descriptor 0x002906, 152, 7, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_003:	sndparam_descriptor 0x002907, 152, 7, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_004:	sndparam_descriptor 0x002908, 152, 8, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_005:	sndparam_descriptor 0x002909, 152, 8, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_006:	sndparam_descriptor 0x00290a, 152, 8, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_007:	sndparam_descriptor 0x00290b, 152, 8, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_008:	sndparam_descriptor 0x00290c, 152, 8, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_009:	sndparam_descriptor 0x00290d, 152, 8, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_010:	sndparam_descriptor 0x00290e, 152, 8, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_011:	sndparam_descriptor 0x00290f, 152, 8, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_012:	sndparam_descriptor 0x002910, 152, 9, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_013:	sndparam_descriptor 0x002911, 152, 9, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_014:	sndparam_descriptor 0x002a00, 112, 5, 0xff, 1, 16, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_015:	sndparam_descriptor 0x002a01, 112, 6, 0xff, 1, 16, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_016:	sndparam_descriptor 0x002a10, 112, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_017:	sndparam_descriptor 0x002a11, 112, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_018:	sndparam_descriptor 0x002a12, 112, 7, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_019:	sndparam_descriptor 0x002c00, 152, 14, 0x03, 0, 2, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_020:	sndparam_descriptor 0x002d00, 71, 1, 0x1f, 0, 17, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_021:	sndparam_descriptor 0x002d01, 71, 0, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_022:	sndparam_descriptor 0x002d02, 71, 2, 0x7f, 0, 99, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_023:	sndparam_descriptor 0x002d03, 71, 0, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_024:	sndparam_descriptor 0x002d04, 71, 3, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_025:	sndparam_descriptor 0x002d05, 71, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_026:	sndparam_descriptor 0x002d06, 71, 3, 0xf0, 0, 11, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_027:	sndparam_descriptor 0x002d07, 71, 0, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_028:	sndparam_descriptor 0x002d08, 71, 4, 0xc0, 0, 3, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_029:	sndparam_descriptor 0x002d09, 71, 0, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002280, 128, 1, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002281, 128, 2, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002282, 128, 6, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228a, 128, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228b, 128, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228c, 128, 7, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228d, 128, 8, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228e, 128, 8, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00228f, 128, 8, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002290, 128, 8, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002291, 128, 8, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002294, 128, 8, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002295, 128, 8, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002296, 128, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002298, 128, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002299, 128, 9, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00229a, 128, 1, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002880, 153, 2, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002882, 153, 1, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002881, 153, 3, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002886, 153, 4, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002887, 153, 0, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002888, 153, 5, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002889, 153, 0, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288a, 153, 6, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288b, 153, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288c, 153, 7, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288d, 153, 0, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288e, 153, 8, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00288f, 153, 0, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002890, 153, 9, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002891, 153, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002892, 153, 10, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002893, 153, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002894, 153, 11, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002895, 153, 0, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002896, 153, 12, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002897, 153, 1, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002898, 153, 13, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002899, 153, 1, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00289a, 153, 14, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00289b, 153, 1, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00289c, 153, 15, 0xff, 0, 199, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00289d, 153, 1, 0x08, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002900, 152, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002901, 152, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002902, 152, 7, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002903, 152, 7, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002904, 152, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002905, 152, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002906, 152, 7, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002907, 152, 7, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002908, 152, 8, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002909, 152, 8, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290a, 152, 8, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290b, 152, 8, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290c, 152, 8, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290d, 152, 8, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290e, 152, 8, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00290f, 152, 8, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002910, 152, 9, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002911, 152, 9, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a00, 112, 5, 0xff, 1, 16, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a01, 112, 6, 0xff, 1, 16, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a10, 112, 7, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a11, 112, 7, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002a12, 112, 7, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002c00, 152, 14, 0x03, 0, 2, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d00, 71, 1, 0x1f, 0, 17, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d01, 71, 0, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d02, 71, 2, 0x7f, 0, 99, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d03, 71, 0, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d04, 71, 3, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d05, 71, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d06, 71, 3, 0xf0, 0, 11, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d07, 71, 0, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d08, 71, 4, 0xc0, 0, 3, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d09, 71, 0, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+.set VoiceCtrlR1_Entry_027, SndParamRun_EDBC9E + 0
+.set VoiceCtrlR1_Entry_028, SndParamRun_EDBC9E + 18
+.set VoiceCtrlR1_Entry_029, SndParamRun_EDBC9E + 36
+.set VoiceCtrlR1_Entry_030, SndParamRun_EDBC9E + 54
+.set VoiceCtrlR1_Entry_031, SndParamRun_EDBC9E + 72
+.set VoiceCtrlR1_Entry_032, SndParamRun_EDBC9E + 90
+.set VoiceCtrlR1_Entry_033, SndParamRun_EDBC9E + 108
+.set VoiceCtrlR1_Entry_034, SndParamRun_EDBC9E + 126
+.set VoiceCtrlR1_Entry_035, SndParamRun_EDBC9E + 144
+.set VoiceCtrlR1_Entry_036, SndParamRun_EDBC9E + 162
+.set VoiceCtrlR1_Entry_037, SndParamRun_EDBC9E + 180
+.set VoiceCtrlR1_Entry_038, SndParamRun_EDBC9E + 198
+.set VoiceCtrlR1_Entry_039, SndParamRun_EDBC9E + 216
+.set VoiceCtrlR1_Entry_040, SndParamRun_EDBC9E + 234
+.set VoiceCtrlR1_Entry_041, SndParamRun_EDBC9E + 252
+.set VoiceCtrlR1_Entry_042, SndParamRun_EDBC9E + 270
+.set VoiceCtrlR1_Entry_043, SndParamRun_EDBC9E + 288
+.set VoiceCtrlR1_Entry_044, SndParamRun_EDBC9E + 306
+.set VoiceCtrlR1_Entry_045, SndParamRun_EDBC9E + 324
+.set VoiceCtrlR1_Entry_046, SndParamRun_EDBC9E + 342
+.set VoiceCtrlR1_Entry_047, SndParamRun_EDBC9E + 360
+.set VoiceCtrlR1_Entry_048, SndParamRun_EDBC9E + 378
+.set VoiceCtrlR1_Entry_049, SndParamRun_EDBC9E + 396
+.set VoiceCtrlR1_Entry_050, SndParamRun_EDBC9E + 414
+.set VoiceCtrlR1_Entry_051, SndParamRun_EDBC9E + 432
+.set VoiceCtrlR1_Entry_052, SndParamRun_EDBC9E + 450
+.set VoiceCtrlR1_Entry_053, SndParamRun_EDBC9E + 468
+.set VoiceCtrlR1_Entry_054, SndParamRun_EDBC9E + 486
+.set VoiceCtrlR1_Entry_055, SndParamRun_EDBC9E + 504
+.set VoiceCtrlR1_Entry_056, SndParamRun_EDBC9E + 522
+.set VoiceCtrlR1_Entry_057, SndParamRun_EDBC9E + 540
+.set VoiceCtrlR1_Entry_058, SndParamRun_EDBC9E + 558
+.set VoiceCtrlR1_Entry_059, SndParamRun_EDBC9E + 576
+.set VoiceCtrlR1_Entry_060, SndParamRun_EDBC9E + 594
+.set VoiceCtrlR1_Entry_061, SndParamRun_EDBC9E + 612
+.set VoiceCtrlR1_Entry_062, SndParamRun_EDBC9E + 630
+.set VoiceCtrlR1_Entry_063, SndParamRun_EDBC9E + 648
+.set VoiceCtrlR1_Entry_064, SndParamRun_EDBC9E + 666
+.set VoiceCtrlR1_Entry_065, SndParamRun_EDBC9E + 684
+.set VoiceCtrlR1_Entry_066, SndParamRun_EDBC9E + 702
+.set VoiceCtrlR1_Entry_067, SndParamRun_EDBC9E + 720
+.set VoiceCtrlR1_Entry_068, SndParamRun_EDBC9E + 738
+.set VoiceCtrlR1_Entry_069, SndParamRun_EDBC9E + 756
+.set VoiceCtrlR1_Entry_070, SndParamRun_EDBC9E + 774
+.set VoiceCtrlR1_Entry_071, SndParamRun_EDBC9E + 792
+.set VoiceCtrlR1_Entry_072, SndParamRun_EDBC9E + 810
+.set VoiceCtrlR1_Entry_073, SndParamRun_EDBC9E + 828
+.set VoiceCtrlR1_Entry_074, SndParamRun_EDBC9E + 846
+.set VoiceCtrlR1_Entry_075, SndParamRun_EDBC9E + 864
+.set MidiChParam_Entry_001, SndParamRun_EDBC9E + 882
+.set MidiChParam_Entry_002, SndParamRun_EDBC9E + 900
+.set MidiChParam_Entry_003, SndParamRun_EDBC9E + 918
+.set MidiChParam_Entry_004, SndParamRun_EDBC9E + 936
+.set MidiChParam_Entry_005, SndParamRun_EDBC9E + 954
+.set MidiChParam_Entry_006, SndParamRun_EDBC9E + 972
+.set MidiChParam_Entry_007, SndParamRun_EDBC9E + 990
+.set MidiChParam_Entry_008, SndParamRun_EDBC9E + 1008
+.set MidiChParam_Entry_009, SndParamRun_EDBC9E + 1026
+.set MidiChParam_Entry_010, SndParamRun_EDBC9E + 1044
+.set MidiChParam_Entry_011, SndParamRun_EDBC9E + 1062
+.set MidiChParam_Entry_012, SndParamRun_EDBC9E + 1080
+.set MidiChParam_Entry_013, SndParamRun_EDBC9E + 1098
+.set MidiChParam_Entry_014, SndParamRun_EDBC9E + 1116
+.set MidiChParam_Entry_015, SndParamRun_EDBC9E + 1134
+.set MidiChParam_Entry_016, SndParamRun_EDBC9E + 1152
+.set MidiChParam_Entry_017, SndParamRun_EDBC9E + 1170
+.set MidiChParam_Entry_018, SndParamRun_EDBC9E + 1188
+.set MidiChParam_Entry_019, SndParamRun_EDBC9E + 1206
+.set MidiChParam_Entry_020, SndParamRun_EDBC9E + 1224
+.set MidiChParam_Entry_021, SndParamRun_EDBC9E + 1242
+.set MidiChParam_Entry_022, SndParamRun_EDBC9E + 1260
+.set MidiChParam_Entry_023, SndParamRun_EDBC9E + 1278
+.set MidiChParam_Entry_024, SndParamRun_EDBC9E + 1296
+.set MidiChParam_Entry_025, SndParamRun_EDBC9E + 1314
+.set MidiChParam_Entry_026, SndParamRun_EDBC9E + 1332
+.set MidiChParam_Entry_027, SndParamRun_EDBC9E + 1350
+.set MidiChParam_Entry_028, SndParamRun_EDBC9E + 1368
+.set MidiChParam_Entry_029, SndParamRun_EDBC9E + 1386
 MidiChParam_Entry_030:
 	.byte 0x0a, 0x2d, 0x00, 0x00, 0x47, 0x05, 0x7f, 0x00, 0x79, 0x00, 0x00, 0x0a, 0x01, 0x07, 0x05, 0x00
 	.byte 0x00, 0xff, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d
@@ -3026,30 +3062,53 @@ WidgetParam_MidiCC_NameEdit:
 	.byte 0x2c, 0xc2, 0xed, 0x00, 0x6d, 0x00, 0x00, 0x00, 0x00, 0xff
 ;  22 x 18-byte sound-parameter descriptors, 0xEDC2A4-0xEDC430, one
 ;  `sndparam_descriptor` per record (fields: the macro above).  v10
-;  compiles the same records from audio/sndparam_records/run_edc2a4.c.
+;  compiles the same records from audio/sndparam_records/run_edc2a4.c;
+;  the record labels follow the run as `.set` equates, as in v10.
 SndParamRun_EDC2A4:
-MidiChParam_Entry_031:	sndparam_descriptor 0x002d0b, 71, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_032:	sndparam_descriptor 0x002d0c, 71, 6, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_033:	sndparam_descriptor 0x002d0d, 71, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_034:	sndparam_descriptor 0x002d0e, 71, 6, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_035:	sndparam_descriptor 0x002d0f, 71, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_036:	sndparam_descriptor 0x002d10, 71, 7, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_037:	sndparam_descriptor 0x002d11, 71, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_038:	sndparam_descriptor 0x002d12, 71, 7, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_039:	sndparam_descriptor 0x002d13, 71, 0, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_040:	sndparam_descriptor 0x004000, 176, 0, 0x7f, 0, 127, 0, 0x00, 0x01, 2, 3, 0, 0, 0, 0xff
-MidiChParam_Entry_041:	sndparam_descriptor 0x004001, 176, 1, 0x7f, 0, 127, 0, 0x00, 0x00, 2, 3, 0, 0, 0, 0xff
-MidiChParam_Entry_042:	sndparam_descriptor 0x004002, 96, 1, 0x80, 0, 127, 7, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-MidiChParam_Entry_043:	sndparam_descriptor 0x004003, 112, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_044:	sndparam_descriptor 0x004004, 96, 1, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_045:	sndparam_descriptor 0x004005, 176, 3, 0x7f, 0, 127, 0, 0x00, 0x00, 2, 3, 0, 0, 0, 0xff
-MidiChParam_Entry_046:	sndparam_descriptor 0x004006, 96, 1, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_047:	sndparam_descriptor 0x004080, 152, 2, 0x80, 0, 1, 7, 0x00, 0xff, 1, 2, 2, 0, 0, 0xff
-MidiChParam_Entry_048:	sndparam_descriptor 0x004081, 152, 2, 0x40, 0, 1, 6, 0x00, 0xff, 1, 2, 2, 0, 0, 0xff
-MidiChParam_Entry_049:	sndparam_descriptor 0x0040c0, 152, 11, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_050:	sndparam_descriptor 0x0040c1, 152, 11, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_051:	sndparam_descriptor 0x0040e0, 144, 4, 0xff, 40, 88, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
-MidiChParam_Entry_052:	sndparam_descriptor 0x004100, 144, 0, 0x1f, 0, 5, 0, 0x00, 0x00, 4, 5, 4, 0, 0, 0xff
+	sndparam_descriptor 0x002d0b, 71, 0, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d0c, 71, 6, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d0d, 71, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d0e, 71, 6, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d0f, 71, 0, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d10, 71, 7, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d11, 71, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d12, 71, 7, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x002d13, 71, 0, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004000, 176, 0, 0x7f, 0, 127, 0, 0x00, 0x01, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x004001, 176, 1, 0x7f, 0, 127, 0, 0x00, 0x00, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x004002, 96, 1, 0x80, 0, 127, 7, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x004003, 112, 0, 0x04, 0, 1, 2, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004004, 96, 1, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004005, 176, 3, 0x7f, 0, 127, 0, 0x00, 0x00, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x004006, 96, 1, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004080, 152, 2, 0x80, 0, 1, 7, 0x00, 0xff, 1, 2, 2, 0, 0, 0xff
+	sndparam_descriptor 0x004081, 152, 2, 0x40, 0, 1, 6, 0x00, 0xff, 1, 2, 2, 0, 0, 0xff
+	sndparam_descriptor 0x0040c0, 152, 11, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0040c1, 152, 11, 0x40, 0, 1, 6, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0040e0, 144, 4, 0xff, 40, 88, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x004100, 144, 0, 0x1f, 0, 5, 0, 0x00, 0x00, 4, 5, 4, 0, 0, 0xff
+.set MidiChParam_Entry_031, SndParamRun_EDC2A4 + 0
+.set MidiChParam_Entry_032, SndParamRun_EDC2A4 + 18
+.set MidiChParam_Entry_033, SndParamRun_EDC2A4 + 36
+.set MidiChParam_Entry_034, SndParamRun_EDC2A4 + 54
+.set MidiChParam_Entry_035, SndParamRun_EDC2A4 + 72
+.set MidiChParam_Entry_036, SndParamRun_EDC2A4 + 90
+.set MidiChParam_Entry_037, SndParamRun_EDC2A4 + 108
+.set MidiChParam_Entry_038, SndParamRun_EDC2A4 + 126
+.set MidiChParam_Entry_039, SndParamRun_EDC2A4 + 144
+.set MidiChParam_Entry_040, SndParamRun_EDC2A4 + 162
+.set MidiChParam_Entry_041, SndParamRun_EDC2A4 + 180
+.set MidiChParam_Entry_042, SndParamRun_EDC2A4 + 198
+.set MidiChParam_Entry_043, SndParamRun_EDC2A4 + 216
+.set MidiChParam_Entry_044, SndParamRun_EDC2A4 + 234
+.set MidiChParam_Entry_045, SndParamRun_EDC2A4 + 252
+.set MidiChParam_Entry_046, SndParamRun_EDC2A4 + 270
+.set MidiChParam_Entry_047, SndParamRun_EDC2A4 + 288
+.set MidiChParam_Entry_048, SndParamRun_EDC2A4 + 306
+.set MidiChParam_Entry_049, SndParamRun_EDC2A4 + 324
+.set MidiChParam_Entry_050, SndParamRun_EDC2A4 + 342
+.set MidiChParam_Entry_051, SndParamRun_EDC2A4 + 360
+.set MidiChParam_Entry_052, SndParamRun_EDC2A4 + 378
 WidgetParam_MidiCC_SysExcl:
 	.byte 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x03, 0x02, 0x01, 0x02, 0x02, 0x02
 MidiChParam_Entry_053:
@@ -3107,27 +3166,47 @@ WidgetParam_MidiCC_Sustain:
 	.byte 0x60, 0xc5, 0xed, 0x00, 0xc9, 0x00, 0x80, 0x64, 0x00, 0xff
 ;  19 x 18-byte sound-parameter descriptors, 0xEDC634-0xEDC78A, one
 ;  `sndparam_descriptor` per record (fields: the macro above).  v10
-;  compiles the same records from audio/sndparam_records/run_edc634.c.
+;  compiles the same records from audio/sndparam_records/run_edc634.c;
+;  the record labels follow the run as `.set` equates, as in v10.
 SndParamRun_EDC634:
-MidiChParam_Entry_065:	sndparam_descriptor 0x004284, 146, 3, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_066:	sndparam_descriptor 0x004285, 146, 4, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_067:	sndparam_descriptor 0x004286, 146, 5, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_068:	sndparam_descriptor 0x004287, 146, 6, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_069:	sndparam_descriptor 0x004288, 146, 7, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_070:	sndparam_descriptor 0x004289, 146, 8, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_071:	sndparam_descriptor 0x00428a, 146, 9, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_072:	sndparam_descriptor 0x00428b, 146, 10, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_073:	sndparam_descriptor 0x00428c, 146, 11, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_074:	sndparam_descriptor 0x00428d, 146, 12, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_075:	sndparam_descriptor 0x00428e, 146, 13, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_076:	sndparam_descriptor 0x004900, 97, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_077:	sndparam_descriptor 0x004a00, 98, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_078:	sndparam_descriptor 0x004b00, 99, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_079:	sndparam_descriptor 0x004c00, 100, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_080:	sndparam_descriptor 0x004d00, 101, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_081:	sndparam_descriptor 0x004e00, 102, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_082:	sndparam_descriptor 0x005000, 128, 10, 0x03, 0, 2, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_083:	sndparam_descriptor 0x005001, 128, 11, 0xff, 0, 255, 0, 0x00, 0x07, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004284, 146, 3, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004285, 146, 4, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004286, 146, 5, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004287, 146, 6, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004288, 146, 7, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004289, 146, 8, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428a, 146, 9, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428b, 146, 10, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428c, 146, 11, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428d, 146, 12, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x00428e, 146, 13, 0xff, 0, 255, 0, 0x00, 0x05, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x004900, 97, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004a00, 98, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004b00, 99, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004c00, 100, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004d00, 101, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x004e00, 102, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x005000, 128, 10, 0x03, 0, 2, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x005001, 128, 11, 0xff, 0, 255, 0, 0x00, 0x07, 1, 7, 5, 0, 0, 0xff
+.set MidiChParam_Entry_065, SndParamRun_EDC634 + 0
+.set MidiChParam_Entry_066, SndParamRun_EDC634 + 18
+.set MidiChParam_Entry_067, SndParamRun_EDC634 + 36
+.set MidiChParam_Entry_068, SndParamRun_EDC634 + 54
+.set MidiChParam_Entry_069, SndParamRun_EDC634 + 72
+.set MidiChParam_Entry_070, SndParamRun_EDC634 + 90
+.set MidiChParam_Entry_071, SndParamRun_EDC634 + 108
+.set MidiChParam_Entry_072, SndParamRun_EDC634 + 126
+.set MidiChParam_Entry_073, SndParamRun_EDC634 + 144
+.set MidiChParam_Entry_074, SndParamRun_EDC634 + 162
+.set MidiChParam_Entry_075, SndParamRun_EDC634 + 180
+.set MidiChParam_Entry_076, SndParamRun_EDC634 + 198
+.set MidiChParam_Entry_077, SndParamRun_EDC634 + 216
+.set MidiChParam_Entry_078, SndParamRun_EDC634 + 234
+.set MidiChParam_Entry_079, SndParamRun_EDC634 + 252
+.set MidiChParam_Entry_080, SndParamRun_EDC634 + 270
+.set MidiChParam_Entry_081, SndParamRun_EDC634 + 288
+.set MidiChParam_Entry_082, SndParamRun_EDC634 + 306
+.set MidiChParam_Entry_083, SndParamRun_EDC634 + 324
 MidiChParam_Entry_084:
 	.byte 0xce, 0xcf, 0xd0, 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7, 0xd8, 0xd9, 0xda, 0xdb, 0xdc, 0xdd
 	.byte 0xde, 0xdf, 0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed
@@ -3141,33 +3220,54 @@ WidgetParam_MidiCC_Reverb:
 	.byte 0x65, 0x00, 0x00, 0x00, 0x00, 0xff
 ;  9 x 18-byte sound-parameter descriptors, 0xEDC7FA-0xEDC89C, one
 ;  `sndparam_descriptor` per record (fields: the macro above).  v10
-;  compiles the same records from audio/sndparam_records/run_edc7fa.c.
+;  compiles the same records from audio/sndparam_records/run_edc7fa.c;
+;  the record labels follow the run as `.set` equates, as in v10.
 SndParamRun_EDC7FA:
-MidiChParam_Entry_085:	sndparam_descriptor 0x005002, 128, 12, 0xff, 1, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_086:	sndparam_descriptor 0x008000, 0, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_087:	sndparam_descriptor 0x008001, 178, 0, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-MidiChParam_Entry_088:	sndparam_descriptor 0x008007, 0, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_089:	sndparam_descriptor 0x008008, 0, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_090:	sndparam_descriptor 0x00800a, 0, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_091:	sndparam_descriptor 0x00800b, 179, 0, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-MidiChParam_Entry_092:	sndparam_descriptor 0x008020, 0, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_093:	sndparam_descriptor 0x008040, 0, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x005002, 128, 12, 0xff, 1, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008000, 0, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008001, 178, 0, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008007, 0, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008008, 0, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00800a, 0, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00800b, 179, 0, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008020, 0, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008040, 0, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+.set MidiChParam_Entry_085, SndParamRun_EDC7FA + 0
+.set MidiChParam_Entry_086, SndParamRun_EDC7FA + 18
+.set MidiChParam_Entry_087, SndParamRun_EDC7FA + 36
+.set MidiChParam_Entry_088, SndParamRun_EDC7FA + 54
+.set MidiChParam_Entry_089, SndParamRun_EDC7FA + 72
+.set MidiChParam_Entry_090, SndParamRun_EDC7FA + 90
+.set MidiChParam_Entry_091, SndParamRun_EDC7FA + 108
+.set MidiChParam_Entry_092, SndParamRun_EDC7FA + 126
+.set MidiChParam_Entry_093, SndParamRun_EDC7FA + 144
 WidgetParam_MidiCC_Chorus:
 	.byte 0x40, 0x00, 0x01, 0x00, 0x7f, 0x00, 0x01, 0xff
 ;  10 x 18-byte sound-parameter descriptors, 0xEDC8A4-0xEDC958, one
 ;  `sndparam_descriptor` per record (fields: the macro above).  v10
-;  compiles the same records from audio/sndparam_records/run_edc8a4.c.
+;  compiles the same records from audio/sndparam_records/run_edc8a4.c;
+;  the record labels follow the run as `.set` equates, as in v10.
 SndParamRun_EDC8A4:
-MidiChParam_Entry_094:	sndparam_descriptor 0x00805b, 0, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_095:	sndparam_descriptor 0x00805d, 0, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_096:	sndparam_descriptor 0x00805e, 0, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-MidiChParam_Entry_097:	sndparam_descriptor 0x008078, 174, 0, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-MidiChParam_Entry_098:	sndparam_descriptor 0x008080, 0, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_099:	sndparam_descriptor 0x008081, 0, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_100:	sndparam_descriptor 0x008082, 0, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_101:	sndparam_descriptor 0x0081b0, 177, 0, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-MidiChParam_Entry_102:	sndparam_descriptor 0x0081b2, 180, 0, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-MidiChParam_Entry_103:	sndparam_descriptor 0x008221, 68, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00805b, 0, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00805d, 0, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00805e, 0, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008078, 174, 0, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008080, 0, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008081, 0, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008082, 0, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0081b0, 177, 0, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0081b2, 180, 0, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008221, 68, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+.set MidiChParam_Entry_094, SndParamRun_EDC8A4 + 0
+.set MidiChParam_Entry_095, SndParamRun_EDC8A4 + 18
+.set MidiChParam_Entry_096, SndParamRun_EDC8A4 + 36
+.set MidiChParam_Entry_097, SndParamRun_EDC8A4 + 54
+.set MidiChParam_Entry_098, SndParamRun_EDC8A4 + 72
+.set MidiChParam_Entry_099, SndParamRun_EDC8A4 + 90
+.set MidiChParam_Entry_100, SndParamRun_EDC8A4 + 108
+.set MidiChParam_Entry_101, SndParamRun_EDC8A4 + 126
+.set MidiChParam_Entry_102, SndParamRun_EDC8A4 + 144
+.set MidiChParam_Entry_103, SndParamRun_EDC8A4 + 162
 MidiChParam_Entry_104:
 	.byte 0xcc, 0x82, 0x00, 0x00, 0x44, 0x01, 0x0f, 0x00, 0x0f, 0x00, 0x00, 0x09, 0x01, 0x07, 0x05, 0x00
 	.byte 0x00, 0xff, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0xff
@@ -3175,468 +3275,929 @@ WidgetParam_MidiCC_DspEffect:
 	.byte 0x6a, 0xc9, 0xed, 0x00, 0x0b, 0x00, 0x00, 0x05, 0x00, 0xff
 ;  460 x 18-byte sound-parameter descriptors, 0xEDC980-0xEDE9D8, one
 ;  `sndparam_descriptor` per record (fields: the macro above).  v10
-;  compiles the same records from audio/sndparam_records/run_edc980.c.
+;  compiles the same records from audio/sndparam_records/run_edc980.c;
+;  the record labels follow the run as `.set` equates, as in v10.
 SndParamRun_EDC980:
-MidiChParam_Entry_105:	sndparam_descriptor 0x0082cb, 68, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_106:	sndparam_descriptor 0x008293, 68, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_107:	sndparam_descriptor 0x008294, 68, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-MidiChParam_Entry_108:	sndparam_descriptor 0x008280, 68, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_109:	sndparam_descriptor 0x008281, 68, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_110:	sndparam_descriptor 0x008282, 68, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_111:	sndparam_descriptor 0x008283, 68, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-MidiChParam_Entry_112:	sndparam_descriptor 0x008284, 68, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_001:	sndparam_descriptor 0x008285, 68, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_002:	sndparam_descriptor 0x008286, 68, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_003:	sndparam_descriptor 0x008287, 68, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_004:	sndparam_descriptor 0x008288, 68, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_005:	sndparam_descriptor 0x0082c0, 68, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_006:	sndparam_descriptor 0x0082c1, 68, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_007:	sndparam_descriptor 0x008400, 1, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_008:	sndparam_descriptor 0x008401, 178, 1, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_009:	sndparam_descriptor 0x008407, 1, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_010:	sndparam_descriptor 0x008408, 1, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_011:	sndparam_descriptor 0x00840a, 1, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_012:	sndparam_descriptor 0x00840b, 179, 1, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_013:	sndparam_descriptor 0x008420, 1, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_014:	sndparam_descriptor 0x008440, 1, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-VoiceParamEx_Entry_015:	sndparam_descriptor 0x00845b, 1, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_016:	sndparam_descriptor 0x00845d, 1, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_017:	sndparam_descriptor 0x00845e, 1, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-VoiceParamEx_Entry_018:	sndparam_descriptor 0x008478, 174, 1, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_019:	sndparam_descriptor 0x008480, 1, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_020:	sndparam_descriptor 0x008481, 1, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_021:	sndparam_descriptor 0x008482, 1, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_022:	sndparam_descriptor 0x0085b0, 177, 1, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_023:	sndparam_descriptor 0x0085b2, 180, 1, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_024:	sndparam_descriptor 0x008621, 69, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_025:	sndparam_descriptor 0x0086cc, 69, 1, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-VoiceParamEx_Entry_026:	sndparam_descriptor 0x0086cb, 69, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-VoiceParamEx_Entry_027:	sndparam_descriptor 0x008693, 69, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-VoiceParamEx_Entry_028:	sndparam_descriptor 0x008694, 69, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-VoiceParamEx_Entry_029:	sndparam_descriptor 0x008680, 69, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_030:	sndparam_descriptor 0x008681, 69, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_031:	sndparam_descriptor 0x008682, 69, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_032:	sndparam_descriptor 0x008683, 69, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_033:	sndparam_descriptor 0x008684, 69, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_034:	sndparam_descriptor 0x008685, 69, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_035:	sndparam_descriptor 0x008686, 69, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_036:	sndparam_descriptor 0x008687, 69, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_037:	sndparam_descriptor 0x008688, 69, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_038:	sndparam_descriptor 0x0086c0, 69, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_039:	sndparam_descriptor 0x0086c1, 69, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_040:	sndparam_descriptor 0x008800, 2, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_041:	sndparam_descriptor 0x008801, 178, 2, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_042:	sndparam_descriptor 0x008807, 2, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_043:	sndparam_descriptor 0x008808, 2, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_044:	sndparam_descriptor 0x00880a, 2, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_045:	sndparam_descriptor 0x00880b, 179, 2, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_046:	sndparam_descriptor 0x008820, 2, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_047:	sndparam_descriptor 0x008840, 2, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-VoiceParamEx_Entry_048:	sndparam_descriptor 0x00885b, 2, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_049:	sndparam_descriptor 0x00885d, 2, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_050:	sndparam_descriptor 0x00885e, 2, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-VoiceParamEx_Entry_051:	sndparam_descriptor 0x008878, 174, 2, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_052:	sndparam_descriptor 0x008880, 2, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_053:	sndparam_descriptor 0x008881, 2, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_054:	sndparam_descriptor 0x008882, 2, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_055:	sndparam_descriptor 0x0089b0, 177, 2, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_056:	sndparam_descriptor 0x0089b2, 180, 2, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_057:	sndparam_descriptor 0x008a21, 70, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_058:	sndparam_descriptor 0x008acc, 70, 1, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-VoiceParamEx_Entry_059:	sndparam_descriptor 0x008acb, 70, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-VoiceParamEx_Entry_060:	sndparam_descriptor 0x008a93, 70, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-VoiceParamEx_Entry_061:	sndparam_descriptor 0x008a94, 70, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
-VoiceParamEx_Entry_062:	sndparam_descriptor 0x008a80, 70, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_063:	sndparam_descriptor 0x008a81, 70, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_064:	sndparam_descriptor 0x008a82, 70, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_065:	sndparam_descriptor 0x008a83, 70, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_066:	sndparam_descriptor 0x008a84, 70, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_067:	sndparam_descriptor 0x008a85, 70, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_068:	sndparam_descriptor 0x008a86, 70, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_069:	sndparam_descriptor 0x008a87, 70, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_070:	sndparam_descriptor 0x008a88, 70, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_071:	sndparam_descriptor 0x008ac0, 70, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_072:	sndparam_descriptor 0x008ac1, 70, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_073:	sndparam_descriptor 0x008c00, 3, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_074:	sndparam_descriptor 0x008c01, 178, 3, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_075:	sndparam_descriptor 0x008c07, 3, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_076:	sndparam_descriptor 0x008c08, 3, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_077:	sndparam_descriptor 0x008c0a, 3, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_078:	sndparam_descriptor 0x008c0b, 179, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_079:	sndparam_descriptor 0x008c20, 3, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_080:	sndparam_descriptor 0x008c40, 3, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-VoiceParamEx_Entry_081:	sndparam_descriptor 0x008c5b, 3, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_082:	sndparam_descriptor 0x008c5d, 3, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-VoiceParamEx_Entry_083:	sndparam_descriptor 0x008c5e, 3, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-VoiceParamEx_Entry_084:	sndparam_descriptor 0x008c78, 174, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-VoiceParamEx_Entry_085:	sndparam_descriptor 0x008c80, 3, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_001:	sndparam_descriptor 0x008c81, 3, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_002:	sndparam_descriptor 0x008c82, 3, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_003:	sndparam_descriptor 0x008db0, 177, 3, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_004:	sndparam_descriptor 0x008db2, 180, 3, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_005:	sndparam_descriptor 0x009000, 4, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_006:	sndparam_descriptor 0x009001, 178, 4, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_007:	sndparam_descriptor 0x009007, 4, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_008:	sndparam_descriptor 0x009008, 4, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_009:	sndparam_descriptor 0x00900a, 4, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_010:	sndparam_descriptor 0x00900b, 179, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_011:	sndparam_descriptor 0x009020, 4, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_012:	sndparam_descriptor 0x009040, 4, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_013:	sndparam_descriptor 0x00905b, 4, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_014:	sndparam_descriptor 0x00905d, 4, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_015:	sndparam_descriptor 0x00905e, 4, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_016:	sndparam_descriptor 0x009078, 174, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_017:	sndparam_descriptor 0x009080, 4, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_018:	sndparam_descriptor 0x009081, 4, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_019:	sndparam_descriptor 0x009082, 4, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_020:	sndparam_descriptor 0x0091b0, 177, 4, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_021:	sndparam_descriptor 0x0091b2, 180, 4, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_022:	sndparam_descriptor 0x009400, 5, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_023:	sndparam_descriptor 0x009401, 178, 5, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_024:	sndparam_descriptor 0x009407, 5, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_025:	sndparam_descriptor 0x009408, 5, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_026:	sndparam_descriptor 0x00940a, 5, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_027:	sndparam_descriptor 0x00940b, 179, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_028:	sndparam_descriptor 0x009420, 5, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_029:	sndparam_descriptor 0x009440, 5, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_030:	sndparam_descriptor 0x00945b, 5, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_031:	sndparam_descriptor 0x00945d, 5, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_032:	sndparam_descriptor 0x00945e, 5, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_033:	sndparam_descriptor 0x009478, 174, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_034:	sndparam_descriptor 0x009480, 5, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_035:	sndparam_descriptor 0x009481, 5, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_036:	sndparam_descriptor 0x009482, 5, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_037:	sndparam_descriptor 0x0095b0, 177, 5, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_038:	sndparam_descriptor 0x0095b2, 180, 5, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_039:	sndparam_descriptor 0x009800, 6, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_040:	sndparam_descriptor 0x009801, 178, 6, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_041:	sndparam_descriptor 0x009807, 6, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_042:	sndparam_descriptor 0x009808, 6, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_043:	sndparam_descriptor 0x00980a, 6, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_044:	sndparam_descriptor 0x00980b, 179, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_045:	sndparam_descriptor 0x009820, 6, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_046:	sndparam_descriptor 0x009840, 6, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_047:	sndparam_descriptor 0x00985b, 6, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_048:	sndparam_descriptor 0x00985d, 6, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_049:	sndparam_descriptor 0x00985e, 6, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_050:	sndparam_descriptor 0x009878, 174, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_051:	sndparam_descriptor 0x009880, 6, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_052:	sndparam_descriptor 0x009881, 6, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_053:	sndparam_descriptor 0x009882, 6, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_054:	sndparam_descriptor 0x0099b0, 177, 6, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_055:	sndparam_descriptor 0x0099b2, 180, 6, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_056:	sndparam_descriptor 0x009c00, 7, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_057:	sndparam_descriptor 0x009c01, 178, 7, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_058:	sndparam_descriptor 0x009c07, 7, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_059:	sndparam_descriptor 0x009c08, 7, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_060:	sndparam_descriptor 0x009c0a, 7, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_061:	sndparam_descriptor 0x009c0b, 179, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_062:	sndparam_descriptor 0x009c20, 7, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_063:	sndparam_descriptor 0x009c40, 7, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_064:	sndparam_descriptor 0x009c5b, 7, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_065:	sndparam_descriptor 0x009c5d, 7, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_066:	sndparam_descriptor 0x009c5e, 7, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_067:	sndparam_descriptor 0x009c78, 174, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_068:	sndparam_descriptor 0x009c80, 7, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_069:	sndparam_descriptor 0x009c81, 7, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_070:	sndparam_descriptor 0x009c82, 7, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_071:	sndparam_descriptor 0x009db0, 177, 7, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_072:	sndparam_descriptor 0x009db2, 180, 7, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_073:	sndparam_descriptor 0x00a000, 8, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_074:	sndparam_descriptor 0x00a001, 178, 8, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_075:	sndparam_descriptor 0x00a007, 8, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_076:	sndparam_descriptor 0x00a008, 8, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_077:	sndparam_descriptor 0x00a00a, 8, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_078:	sndparam_descriptor 0x00a00b, 179, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_079:	sndparam_descriptor 0x00a020, 8, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_080:	sndparam_descriptor 0x00a040, 8, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_081:	sndparam_descriptor 0x00a05b, 8, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_082:	sndparam_descriptor 0x00a05d, 8, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_083:	sndparam_descriptor 0x00a05e, 8, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_084:	sndparam_descriptor 0x00a078, 174, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_085:	sndparam_descriptor 0x00a080, 8, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_086:	sndparam_descriptor 0x00a081, 8, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_087:	sndparam_descriptor 0x00a082, 8, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_088:	sndparam_descriptor 0x00a1b0, 177, 8, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_089:	sndparam_descriptor 0x00a1b2, 180, 8, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_090:	sndparam_descriptor 0x00a400, 9, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_091:	sndparam_descriptor 0x00a401, 178, 9, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_092:	sndparam_descriptor 0x00a407, 9, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_093:	sndparam_descriptor 0x00a408, 9, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_094:	sndparam_descriptor 0x00a40a, 9, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_095:	sndparam_descriptor 0x00a40b, 179, 9, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_096:	sndparam_descriptor 0x00a420, 9, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_097:	sndparam_descriptor 0x00a440, 9, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_098:	sndparam_descriptor 0x00a45b, 9, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_099:	sndparam_descriptor 0x00a45d, 9, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_100:	sndparam_descriptor 0x00a45e, 9, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_101:	sndparam_descriptor 0x00a478, 174, 9, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_102:	sndparam_descriptor 0x00a480, 9, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_103:	sndparam_descriptor 0x00a481, 9, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_104:	sndparam_descriptor 0x00a482, 9, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_105:	sndparam_descriptor 0x00a5b0, 177, 9, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_106:	sndparam_descriptor 0x00a5b2, 180, 9, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_107:	sndparam_descriptor 0x00a800, 10, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_108:	sndparam_descriptor 0x00a801, 178, 10, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_109:	sndparam_descriptor 0x00a807, 10, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_110:	sndparam_descriptor 0x00a808, 10, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_111:	sndparam_descriptor 0x00a80a, 10, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_112:	sndparam_descriptor 0x00a80b, 179, 10, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_113:	sndparam_descriptor 0x00a820, 10, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_114:	sndparam_descriptor 0x00a840, 10, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_115:	sndparam_descriptor 0x00a85b, 10, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_116:	sndparam_descriptor 0x00a85d, 10, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_117:	sndparam_descriptor 0x00a85e, 10, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_118:	sndparam_descriptor 0x00a878, 174, 10, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_119:	sndparam_descriptor 0x00a880, 10, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_120:	sndparam_descriptor 0x00a881, 10, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_121:	sndparam_descriptor 0x00a882, 10, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_122:	sndparam_descriptor 0x00a9b0, 177, 10, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_123:	sndparam_descriptor 0x00a9b2, 180, 10, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_124:	sndparam_descriptor 0x00ac00, 11, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_125:	sndparam_descriptor 0x00ac01, 178, 11, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_126:	sndparam_descriptor 0x00ac07, 11, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_127:	sndparam_descriptor 0x00ac08, 11, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_128:	sndparam_descriptor 0x00ac0a, 11, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_129:	sndparam_descriptor 0x00ac0b, 179, 11, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_130:	sndparam_descriptor 0x00ac20, 11, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_131:	sndparam_descriptor 0x00ac40, 11, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_132:	sndparam_descriptor 0x00ac5b, 11, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_133:	sndparam_descriptor 0x00ac5d, 11, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_134:	sndparam_descriptor 0x00ac5e, 11, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_135:	sndparam_descriptor 0x00ac78, 174, 11, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_136:	sndparam_descriptor 0x00ac80, 11, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_137:	sndparam_descriptor 0x00ac81, 11, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_138:	sndparam_descriptor 0x00ac82, 11, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_139:	sndparam_descriptor 0x00adb0, 177, 11, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_140:	sndparam_descriptor 0x00adb2, 180, 11, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_141:	sndparam_descriptor 0x00b000, 12, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_142:	sndparam_descriptor 0x00b001, 178, 12, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_143:	sndparam_descriptor 0x00b007, 12, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_144:	sndparam_descriptor 0x00b008, 12, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_145:	sndparam_descriptor 0x00b00a, 12, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_146:	sndparam_descriptor 0x00b00b, 179, 12, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_147:	sndparam_descriptor 0x00b020, 12, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_148:	sndparam_descriptor 0x00b040, 12, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_149:	sndparam_descriptor 0x00b05b, 12, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_150:	sndparam_descriptor 0x00b05d, 12, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_151:	sndparam_descriptor 0x00b05e, 12, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_152:	sndparam_descriptor 0x00b078, 174, 12, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_153:	sndparam_descriptor 0x00b080, 12, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_154:	sndparam_descriptor 0x00b081, 12, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_155:	sndparam_descriptor 0x00b082, 12, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_156:	sndparam_descriptor 0x00b1b0, 177, 12, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_157:	sndparam_descriptor 0x00b1b2, 180, 12, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_158:	sndparam_descriptor 0x00b400, 13, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_159:	sndparam_descriptor 0x00b401, 178, 13, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_160:	sndparam_descriptor 0x00b407, 13, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_161:	sndparam_descriptor 0x00b408, 13, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_162:	sndparam_descriptor 0x00b40a, 13, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_163:	sndparam_descriptor 0x00b40b, 179, 13, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_164:	sndparam_descriptor 0x00b420, 13, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_165:	sndparam_descriptor 0x00b440, 13, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_166:	sndparam_descriptor 0x00b45b, 13, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_167:	sndparam_descriptor 0x00b45d, 13, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_168:	sndparam_descriptor 0x00b45e, 13, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_169:	sndparam_descriptor 0x00b478, 174, 13, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_170:	sndparam_descriptor 0x00b480, 13, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_171:	sndparam_descriptor 0x00b481, 13, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_172:	sndparam_descriptor 0x00b482, 13, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_173:	sndparam_descriptor 0x00b5b0, 177, 13, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_174:	sndparam_descriptor 0x00b5b2, 180, 13, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_175:	sndparam_descriptor 0x00b800, 14, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_176:	sndparam_descriptor 0x00b801, 178, 14, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_177:	sndparam_descriptor 0x00b807, 14, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_178:	sndparam_descriptor 0x00b808, 14, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_179:	sndparam_descriptor 0x00b80a, 14, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_180:	sndparam_descriptor 0x00b80b, 179, 14, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_181:	sndparam_descriptor 0x00b820, 14, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_182:	sndparam_descriptor 0x00b840, 14, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_183:	sndparam_descriptor 0x00b85b, 14, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_184:	sndparam_descriptor 0x00b85d, 14, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_185:	sndparam_descriptor 0x00b85e, 14, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_186:	sndparam_descriptor 0x00b878, 174, 14, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_187:	sndparam_descriptor 0x00b880, 14, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_188:	sndparam_descriptor 0x00b881, 14, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_189:	sndparam_descriptor 0x00b882, 14, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_190:	sndparam_descriptor 0x00b9b0, 177, 14, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_191:	sndparam_descriptor 0x00b9b2, 180, 14, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_192:	sndparam_descriptor 0x00bc00, 15, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_193:	sndparam_descriptor 0x00bc01, 178, 15, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_194:	sndparam_descriptor 0x00bc07, 15, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_195:	sndparam_descriptor 0x00bc08, 15, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_196:	sndparam_descriptor 0x00bc0a, 15, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_197:	sndparam_descriptor 0x00bc0b, 179, 15, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_198:	sndparam_descriptor 0x00bc20, 15, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_199:	sndparam_descriptor 0x00bc40, 15, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_200:	sndparam_descriptor 0x00bc5b, 15, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_201:	sndparam_descriptor 0x00bc5d, 15, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_202:	sndparam_descriptor 0x00bc5e, 15, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-PartParam_Entry_203:	sndparam_descriptor 0x00bc78, 174, 15, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_204:	sndparam_descriptor 0x00bc80, 15, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_205:	sndparam_descriptor 0x00bc81, 15, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_206:	sndparam_descriptor 0x00bc82, 15, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_207:	sndparam_descriptor 0x00bdb0, 177, 15, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_208:	sndparam_descriptor 0x00bdb2, 180, 15, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_209:	sndparam_descriptor 0x00c000, 16, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
-PartParam_Entry_210:	sndparam_descriptor 0x00c001, 178, 16, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
-PartParam_Entry_211:	sndparam_descriptor 0x00c007, 16, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_212:	sndparam_descriptor 0x00c008, 16, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_213:	sndparam_descriptor 0x00c00a, 16, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-PartParam_Entry_214:	sndparam_descriptor 0x00c00b, 179, 16, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-PartParam_Entry_215:	sndparam_descriptor 0x00c020, 16, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
-PartParam_Entry_216:	sndparam_descriptor 0x00c040, 16, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-PartParam_Entry_217:	sndparam_descriptor 0x00c05b, 16, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_218:	sndparam_descriptor 0x00c05d, 16, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_219:	sndparam_descriptor 0x00c05e, 16, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-PartParam_Entry_220:	sndparam_descriptor 0x00c078, 174, 16, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-PartParam_Entry_221:	sndparam_descriptor 0x00c080, 16, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_222:	sndparam_descriptor 0x00c081, 16, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_223:	sndparam_descriptor 0x00c082, 16, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-PartParam_Entry_224:	sndparam_descriptor 0x00c1b0, 177, 16, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
-PartParam_Entry_225:	sndparam_descriptor 0x00c1b2, 180, 16, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-PartParam_Entry_226:	sndparam_descriptor 0x00c400, 17, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
-PartParam_Entry_227:	sndparam_descriptor 0x00c401, 178, 17, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
-ExtPartParam_Entry_228:	sndparam_descriptor 0x00c407, 17, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_229:	sndparam_descriptor 0x00c408, 17, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_230:	sndparam_descriptor 0x00c40a, 17, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_231:	sndparam_descriptor 0x00c40b, 179, 17, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_232:	sndparam_descriptor 0x00c420, 17, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
-ExtPartParam_Entry_233:	sndparam_descriptor 0x00c440, 17, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_234:	sndparam_descriptor 0x00c45b, 17, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_235:	sndparam_descriptor 0x00c45d, 17, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_236:	sndparam_descriptor 0x00c45e, 17, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_237:	sndparam_descriptor 0x00c478, 174, 17, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_238:	sndparam_descriptor 0x00c480, 17, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_239:	sndparam_descriptor 0x00c481, 17, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_240:	sndparam_descriptor 0x00c482, 17, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_241:	sndparam_descriptor 0x00c5b0, 177, 17, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
-ExtPartParam_Entry_242:	sndparam_descriptor 0x00c5b2, 180, 17, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_243:	sndparam_descriptor 0x00c800, 18, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
-ExtPartParam_Entry_244:	sndparam_descriptor 0x00c801, 178, 18, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
-ExtPartParam_Entry_245:	sndparam_descriptor 0x00c807, 18, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_246:	sndparam_descriptor 0x00c808, 18, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_247:	sndparam_descriptor 0x00c80a, 18, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_248:	sndparam_descriptor 0x00c80b, 179, 18, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_249:	sndparam_descriptor 0x00c820, 18, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
-ExtPartParam_Entry_250:	sndparam_descriptor 0x00c840, 18, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_251:	sndparam_descriptor 0x00c85b, 18, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_252:	sndparam_descriptor 0x00c85d, 18, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_253:	sndparam_descriptor 0x00c85e, 18, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_254:	sndparam_descriptor 0x00c878, 174, 18, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_255:	sndparam_descriptor 0x00c880, 18, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_256:	sndparam_descriptor 0x00c881, 18, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_257:	sndparam_descriptor 0x00c882, 18, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_258:	sndparam_descriptor 0x00c9b0, 177, 18, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
-ExtPartParam_Entry_259:	sndparam_descriptor 0x00c9b2, 180, 18, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_260:	sndparam_descriptor 0x00cc00, 19, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
-ExtPartParam_Entry_261:	sndparam_descriptor 0x00cc01, 178, 19, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
-ExtPartParam_Entry_262:	sndparam_descriptor 0x00cc07, 19, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_263:	sndparam_descriptor 0x00cc08, 19, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_264:	sndparam_descriptor 0x00cc0a, 19, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_265:	sndparam_descriptor 0x00cc0b, 179, 19, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_266:	sndparam_descriptor 0x00cc20, 19, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
-ExtPartParam_Entry_267:	sndparam_descriptor 0x00cc40, 19, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_268:	sndparam_descriptor 0x00cc5b, 19, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_269:	sndparam_descriptor 0x00cc5d, 19, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_270:	sndparam_descriptor 0x00cc5e, 19, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_271:	sndparam_descriptor 0x00cc78, 174, 19, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_272:	sndparam_descriptor 0x00cc80, 19, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_273:	sndparam_descriptor 0x00cc81, 19, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_274:	sndparam_descriptor 0x00cc82, 19, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_275:	sndparam_descriptor 0x00cdb0, 177, 19, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
-ExtPartParam_Entry_276:	sndparam_descriptor 0x00cdb2, 180, 19, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_277:	sndparam_descriptor 0x00d000, 20, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_278:	sndparam_descriptor 0x00d001, 178, 20, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
-ExtPartParam_Entry_279:	sndparam_descriptor 0x00d007, 20, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_280:	sndparam_descriptor 0x00d008, 20, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_281:	sndparam_descriptor 0x00d00a, 20, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_282:	sndparam_descriptor 0x00d00b, 179, 20, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_283:	sndparam_descriptor 0x00d020, 20, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_284:	sndparam_descriptor 0x00d040, 20, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_285:	sndparam_descriptor 0x00d05b, 20, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_286:	sndparam_descriptor 0x00d05d, 20, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_287:	sndparam_descriptor 0x00d05e, 20, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_288:	sndparam_descriptor 0x00d078, 174, 20, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_289:	sndparam_descriptor 0x00d080, 20, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_290:	sndparam_descriptor 0x00d081, 20, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_291:	sndparam_descriptor 0x00d082, 20, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_292:	sndparam_descriptor 0x00d1b0, 177, 20, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
-ExtPartParam_Entry_293:	sndparam_descriptor 0x00d1b2, 180, 20, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_294:	sndparam_descriptor 0x00d400, 21, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_295:	sndparam_descriptor 0x00d401, 178, 21, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_296:	sndparam_descriptor 0x00d407, 21, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_297:	sndparam_descriptor 0x00d408, 21, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_298:	sndparam_descriptor 0x00d40a, 21, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_299:	sndparam_descriptor 0x00d40b, 179, 21, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_300:	sndparam_descriptor 0x00d420, 21, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_301:	sndparam_descriptor 0x00d440, 21, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-ExtPartParam_Entry_302:	sndparam_descriptor 0x00d45b, 21, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_303:	sndparam_descriptor 0x00d45d, 21, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_304:	sndparam_descriptor 0x00d45e, 21, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-ExtPartParam_Entry_305:	sndparam_descriptor 0x00d478, 174, 21, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_306:	sndparam_descriptor 0x00d480, 21, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_307:	sndparam_descriptor 0x00d481, 21, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_308:	sndparam_descriptor 0x00d482, 21, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_309:	sndparam_descriptor 0x00d5b0, 177, 21, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_310:	sndparam_descriptor 0x00d5b2, 180, 21, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_311:	sndparam_descriptor 0x00d800, 22, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_312:	sndparam_descriptor 0x00d801, 178, 22, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_313:	sndparam_descriptor 0x00d807, 22, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_314:	sndparam_descriptor 0x00d808, 22, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_315:	sndparam_descriptor 0x00d80a, 22, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_316:	sndparam_descriptor 0x00d80b, 179, 22, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_317:	sndparam_descriptor 0x00d820, 22, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_318:	sndparam_descriptor 0x00d840, 22, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-ExtPartParam_Entry_319:	sndparam_descriptor 0x00d85b, 22, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_320:	sndparam_descriptor 0x00d85d, 22, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_321:	sndparam_descriptor 0x00d85e, 22, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
-ExtPartParam_Entry_322:	sndparam_descriptor 0x00d878, 174, 22, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_323:	sndparam_descriptor 0x00d880, 22, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_324:	sndparam_descriptor 0x00d881, 22, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_325:	sndparam_descriptor 0x00d882, 22, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_326:	sndparam_descriptor 0x00d9b0, 177, 22, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_327:	sndparam_descriptor 0x00d9b2, 180, 22, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_328:	sndparam_descriptor 0x00dc00, 23, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
-ExtPartParam_Entry_329:	sndparam_descriptor 0x00dc01, 178, 23, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
-ExtPartParam_Entry_330:	sndparam_descriptor 0x00dc07, 23, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_331:	sndparam_descriptor 0x00dc08, 23, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_332:	sndparam_descriptor 0x00dc0a, 23, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_333:	sndparam_descriptor 0x00dc0b, 179, 23, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_334:	sndparam_descriptor 0x00dc20, 23, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
-ExtPartParam_Entry_335:	sndparam_descriptor 0x00dc40, 23, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_336:	sndparam_descriptor 0x00dc5b, 23, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_337:	sndparam_descriptor 0x00dc5d, 23, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_338:	sndparam_descriptor 0x00dc5e, 23, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_339:	sndparam_descriptor 0x00dc78, 174, 23, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_340:	sndparam_descriptor 0x00dc80, 23, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_341:	sndparam_descriptor 0x00dc81, 23, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_342:	sndparam_descriptor 0x00dc82, 23, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_343:	sndparam_descriptor 0x00ddb0, 177, 23, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
-ExtPartParam_Entry_344:	sndparam_descriptor 0x00ddb2, 180, 23, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_345:	sndparam_descriptor 0x00e000, 24, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
-ExtPartParam_Entry_346:	sndparam_descriptor 0x00e001, 178, 24, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
-ExtPartParam_Entry_347:	sndparam_descriptor 0x00e007, 24, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_348:	sndparam_descriptor 0x00e008, 24, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_349:	sndparam_descriptor 0x00e00a, 24, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_350:	sndparam_descriptor 0x00e00b, 179, 24, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
-ExtPartParam_Entry_351:	sndparam_descriptor 0x00e020, 24, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
-ExtPartParam_Entry_352:	sndparam_descriptor 0x00e040, 24, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_353:	sndparam_descriptor 0x00e05b, 24, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_354:	sndparam_descriptor 0x00e05d, 24, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_355:	sndparam_descriptor 0x00e05e, 24, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
-ExtPartParam_Entry_356:	sndparam_descriptor 0x00e078, 174, 24, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_357:	sndparam_descriptor 0x00e080, 24, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_358:	sndparam_descriptor 0x00e081, 24, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_359:	sndparam_descriptor 0x00e082, 24, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_360:	sndparam_descriptor 0x00e1b0, 177, 24, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
-ExtPartParam_Entry_361:	sndparam_descriptor 0x00e1b2, 180, 24, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
-ExtPartParam_Entry_362:	sndparam_descriptor 0x00e807, 152, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_363:	sndparam_descriptor 0x00e808, 152, 4, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_364:	sndparam_descriptor 0x018000, 0, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_365:	sndparam_descriptor 0x018001, 0, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_366:	sndparam_descriptor 0x018002, 0, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_367:	sndparam_descriptor 0x018003, 0, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0082cb, 68, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008293, 68, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008294, 68, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008280, 68, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008281, 68, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008282, 68, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008283, 68, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008284, 68, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008285, 68, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008286, 68, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008287, 68, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008288, 68, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0082c0, 68, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0082c1, 68, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008400, 1, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008401, 178, 1, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008407, 1, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008408, 1, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00840a, 1, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00840b, 179, 1, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008420, 1, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008440, 1, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00845b, 1, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00845d, 1, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00845e, 1, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008478, 174, 1, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008480, 1, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008481, 1, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008482, 1, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0085b0, 177, 1, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0085b2, 180, 1, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008621, 69, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0086cc, 69, 1, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x0086cb, 69, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008693, 69, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008694, 69, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008680, 69, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008681, 69, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008682, 69, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008683, 69, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008684, 69, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008685, 69, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008686, 69, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008687, 69, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008688, 69, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0086c0, 69, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0086c1, 69, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008800, 2, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008801, 178, 2, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008807, 2, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008808, 2, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00880a, 2, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00880b, 179, 2, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008820, 2, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008840, 2, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00885b, 2, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00885d, 2, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00885e, 2, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008878, 174, 2, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008880, 2, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008881, 2, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008882, 2, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0089b0, 177, 2, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0089b2, 180, 2, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008a21, 70, 8, 0x0f, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008acc, 70, 1, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008acb, 70, 1, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008a93, 70, 2, 0x0f, 0, 15, 0, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008a94, 70, 2, 0xf0, 0, 15, 4, 0x00, 0x09, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x008a80, 70, 3, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a81, 70, 3, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a82, 70, 4, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a83, 70, 4, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a84, 70, 5, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a85, 70, 5, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a86, 70, 6, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a87, 70, 6, 0xf0, 0, 8, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008a88, 70, 7, 0x0f, 0, 8, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008ac0, 70, 7, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008ac1, 70, 7, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c00, 3, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c01, 178, 3, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008c07, 3, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c08, 3, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c0a, 3, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c0b, 179, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008c20, 3, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c40, 3, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008c5b, 3, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c5d, 3, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c5e, 3, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x008c78, 174, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008c80, 3, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c81, 3, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008c82, 3, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x008db0, 177, 3, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x008db2, 180, 3, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009000, 4, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009001, 178, 4, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009007, 4, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009008, 4, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00900a, 4, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00900b, 179, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009020, 4, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009040, 4, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00905b, 4, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00905d, 4, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00905e, 4, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009078, 174, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009080, 4, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009081, 4, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009082, 4, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0091b0, 177, 4, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0091b2, 180, 4, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009400, 5, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009401, 178, 5, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009407, 5, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009408, 5, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00940a, 5, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00940b, 179, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009420, 5, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009440, 5, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00945b, 5, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00945d, 5, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00945e, 5, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009478, 174, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009480, 5, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009481, 5, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009482, 5, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0095b0, 177, 5, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0095b2, 180, 5, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009800, 6, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009801, 178, 6, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009807, 6, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009808, 6, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00980a, 6, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00980b, 179, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009820, 6, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009840, 6, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00985b, 6, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00985d, 6, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00985e, 6, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009878, 174, 6, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009880, 6, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009881, 6, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009882, 6, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x0099b0, 177, 6, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x0099b2, 180, 6, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009c00, 7, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c01, 178, 7, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009c07, 7, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c08, 7, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c0a, 7, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c0b, 179, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009c20, 7, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c40, 7, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009c5b, 7, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c5d, 7, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c5e, 7, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x009c78, 174, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009c80, 7, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c81, 7, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009c82, 7, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x009db0, 177, 7, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x009db2, 180, 7, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a000, 8, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a001, 178, 8, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a007, 8, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a008, 8, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a00a, 8, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a00b, 179, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a020, 8, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a040, 8, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a05b, 8, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a05d, 8, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a05e, 8, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a078, 174, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a080, 8, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a081, 8, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a082, 8, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a1b0, 177, 8, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a1b2, 180, 8, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a400, 9, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a401, 178, 9, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a407, 9, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a408, 9, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a40a, 9, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a40b, 179, 9, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a420, 9, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a440, 9, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a45b, 9, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a45d, 9, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a45e, 9, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a478, 174, 9, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a480, 9, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a481, 9, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a482, 9, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a5b0, 177, 9, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a5b2, 180, 9, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a800, 10, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a801, 178, 10, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a807, 10, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a808, 10, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a80a, 10, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a80b, 179, 10, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a820, 10, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a840, 10, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a85b, 10, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a85d, 10, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a85e, 10, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00a878, 174, 10, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a880, 10, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a881, 10, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a882, 10, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00a9b0, 177, 10, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00a9b2, 180, 10, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00ac00, 11, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac01, 178, 11, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00ac07, 11, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac08, 11, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac0a, 11, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac0b, 179, 11, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00ac20, 11, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac40, 11, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00ac5b, 11, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac5d, 11, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac5e, 11, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00ac78, 174, 11, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00ac80, 11, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac81, 11, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ac82, 11, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00adb0, 177, 11, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00adb2, 180, 11, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b000, 12, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b001, 178, 12, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b007, 12, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b008, 12, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b00a, 12, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b00b, 179, 12, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b020, 12, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b040, 12, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b05b, 12, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b05d, 12, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b05e, 12, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b078, 174, 12, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b080, 12, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b081, 12, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b082, 12, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b1b0, 177, 12, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b1b2, 180, 12, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b400, 13, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b401, 178, 13, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b407, 13, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b408, 13, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b40a, 13, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b40b, 179, 13, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b420, 13, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b440, 13, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b45b, 13, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b45d, 13, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b45e, 13, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b478, 174, 13, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b480, 13, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b481, 13, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b482, 13, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b5b0, 177, 13, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b5b2, 180, 13, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b800, 14, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b801, 178, 14, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b807, 14, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b808, 14, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b80a, 14, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b80b, 179, 14, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b820, 14, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b840, 14, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b85b, 14, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b85d, 14, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b85e, 14, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00b878, 174, 14, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b880, 14, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b881, 14, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b882, 14, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00b9b0, 177, 14, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00b9b2, 180, 14, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bc00, 15, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc01, 178, 15, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bc07, 15, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc08, 15, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc0a, 15, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc0b, 179, 15, 0x7f, 0, 127, 0, 0x00, 0xff, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bc20, 15, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc40, 15, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00bc5b, 15, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc5d, 15, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc5e, 15, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00bc78, 174, 15, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bc80, 15, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc81, 15, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bc82, 15, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00bdb0, 177, 15, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00bdb2, 180, 15, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c000, 16, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00c001, 178, 16, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00c007, 16, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c008, 16, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c00a, 16, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c00b, 179, 16, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c020, 16, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00c040, 16, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c05b, 16, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c05d, 16, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c05e, 16, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c078, 174, 16, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c080, 16, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c081, 16, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c082, 16, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c1b0, 177, 16, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00c1b2, 180, 16, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c400, 17, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00c401, 178, 17, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00c407, 17, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c408, 17, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c40a, 17, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c40b, 179, 17, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c420, 17, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00c440, 17, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c45b, 17, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c45d, 17, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c45e, 17, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c478, 174, 17, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c480, 17, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c481, 17, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c482, 17, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c5b0, 177, 17, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00c5b2, 180, 17, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c800, 18, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00c801, 178, 18, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00c807, 18, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c808, 18, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c80a, 18, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c80b, 179, 18, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00c820, 18, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00c840, 18, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c85b, 18, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c85d, 18, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c85e, 18, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00c878, 174, 18, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00c880, 18, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c881, 18, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c882, 18, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00c9b0, 177, 18, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00c9b2, 180, 18, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00cc00, 19, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00cc01, 178, 19, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00cc07, 19, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc08, 19, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc0a, 19, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00cc0b, 179, 19, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00cc20, 19, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00cc40, 19, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00cc5b, 19, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc5d, 19, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc5e, 19, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00cc78, 174, 19, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00cc80, 19, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc81, 19, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cc82, 19, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00cdb0, 177, 19, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00cdb2, 180, 19, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d000, 20, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d001, 178, 20, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00d007, 20, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d008, 20, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d00a, 20, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00d00b, 179, 20, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00d020, 20, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d040, 20, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00d05b, 20, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d05d, 20, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d05e, 20, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00d078, 174, 20, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d080, 20, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d081, 20, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d082, 20, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d1b0, 177, 20, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00d1b2, 180, 20, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d400, 21, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d401, 178, 21, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d407, 21, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d408, 21, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d40a, 21, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00d40b, 179, 21, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d420, 21, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d440, 21, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00d45b, 21, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d45d, 21, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d45e, 21, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00d478, 174, 21, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d480, 21, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d481, 21, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d482, 21, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d5b0, 177, 21, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d5b2, 180, 21, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d800, 22, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d801, 178, 22, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d807, 22, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d808, 22, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d80a, 22, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00d80b, 179, 22, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d820, 22, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d840, 22, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00d85b, 22, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d85d, 22, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d85e, 22, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 0, 0xff
+	sndparam_descriptor 0x00d878, 174, 22, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d880, 22, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d881, 22, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d882, 22, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00d9b0, 177, 22, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00d9b2, 180, 22, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00dc00, 23, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00dc01, 178, 23, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00dc07, 23, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc08, 23, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc0a, 23, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00dc0b, 179, 23, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00dc20, 23, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00dc40, 23, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00dc5b, 23, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc5d, 23, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc5e, 23, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00dc78, 174, 23, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00dc80, 23, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc81, 23, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00dc82, 23, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00ddb0, 177, 23, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00ddb2, 180, 23, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00e000, 24, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 5, 0xff
+	sndparam_descriptor 0x00e001, 178, 24, 0x7f, 0, 127, 0, 0x00, 0x03, 2, 3, 0, 0, 1, 0xff
+	sndparam_descriptor 0x00e007, 24, 3, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e008, 24, 3, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e00a, 24, 8, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00e00b, 179, 24, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 1, 0xff
+	sndparam_descriptor 0x00e020, 24, 1, 0x7f, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 4, 0xff
+	sndparam_descriptor 0x00e040, 24, 4, 0x08, 0, 127, 3, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00e05b, 24, 7, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e05d, 24, 5, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e05e, 24, 4, 0x40, 0, 127, 6, 0x00, 0x00, 3, 4, 3, 1, 2, 0xff
+	sndparam_descriptor 0x00e078, 174, 24, 0x7f, 0, 127, 0, 0x00, 0xff, 0, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00e080, 24, 11, 0x7f, 0, 12, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e081, 24, 10, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e082, 24, 9, 0x7f, 52, 76, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e1b0, 177, 24, 0x7f, 0, 127, 0, 0x00, 0x02, 2, 3, 0, 0, 3, 0xff
+	sndparam_descriptor 0x00e1b2, 180, 24, 0x7f, 0, 127, 0, 0x00, 0x04, 2, 3, 0, 0, 0, 0xff
+	sndparam_descriptor 0x00e807, 152, 4, 0x7f, 0, 127, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x00e808, 152, 4, 0x80, 0, 1, 7, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018000, 0, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018001, 0, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018002, 0, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018003, 0, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+.set MidiChParam_Entry_105, SndParamRun_EDC980 + 0
+.set MidiChParam_Entry_106, SndParamRun_EDC980 + 18
+.set MidiChParam_Entry_107, SndParamRun_EDC980 + 36
+.set MidiChParam_Entry_108, SndParamRun_EDC980 + 54
+.set MidiChParam_Entry_109, SndParamRun_EDC980 + 72
+.set MidiChParam_Entry_110, SndParamRun_EDC980 + 90
+.set MidiChParam_Entry_111, SndParamRun_EDC980 + 108
+.set MidiChParam_Entry_112, SndParamRun_EDC980 + 126
+.set VoiceParamEx_Entry_001, SndParamRun_EDC980 + 144
+.set VoiceParamEx_Entry_002, SndParamRun_EDC980 + 162
+.set VoiceParamEx_Entry_003, SndParamRun_EDC980 + 180
+.set VoiceParamEx_Entry_004, SndParamRun_EDC980 + 198
+.set VoiceParamEx_Entry_005, SndParamRun_EDC980 + 216
+.set VoiceParamEx_Entry_006, SndParamRun_EDC980 + 234
+.set VoiceParamEx_Entry_007, SndParamRun_EDC980 + 252
+.set VoiceParamEx_Entry_008, SndParamRun_EDC980 + 270
+.set VoiceParamEx_Entry_009, SndParamRun_EDC980 + 288
+.set VoiceParamEx_Entry_010, SndParamRun_EDC980 + 306
+.set VoiceParamEx_Entry_011, SndParamRun_EDC980 + 324
+.set VoiceParamEx_Entry_012, SndParamRun_EDC980 + 342
+.set VoiceParamEx_Entry_013, SndParamRun_EDC980 + 360
+.set VoiceParamEx_Entry_014, SndParamRun_EDC980 + 378
+.set VoiceParamEx_Entry_015, SndParamRun_EDC980 + 396
+.set VoiceParamEx_Entry_016, SndParamRun_EDC980 + 414
+.set VoiceParamEx_Entry_017, SndParamRun_EDC980 + 432
+.set VoiceParamEx_Entry_018, SndParamRun_EDC980 + 450
+.set VoiceParamEx_Entry_019, SndParamRun_EDC980 + 468
+.set VoiceParamEx_Entry_020, SndParamRun_EDC980 + 486
+.set VoiceParamEx_Entry_021, SndParamRun_EDC980 + 504
+.set VoiceParamEx_Entry_022, SndParamRun_EDC980 + 522
+.set VoiceParamEx_Entry_023, SndParamRun_EDC980 + 540
+.set VoiceParamEx_Entry_024, SndParamRun_EDC980 + 558
+.set VoiceParamEx_Entry_025, SndParamRun_EDC980 + 576
+.set VoiceParamEx_Entry_026, SndParamRun_EDC980 + 594
+.set VoiceParamEx_Entry_027, SndParamRun_EDC980 + 612
+.set VoiceParamEx_Entry_028, SndParamRun_EDC980 + 630
+.set VoiceParamEx_Entry_029, SndParamRun_EDC980 + 648
+.set VoiceParamEx_Entry_030, SndParamRun_EDC980 + 666
+.set VoiceParamEx_Entry_031, SndParamRun_EDC980 + 684
+.set VoiceParamEx_Entry_032, SndParamRun_EDC980 + 702
+.set VoiceParamEx_Entry_033, SndParamRun_EDC980 + 720
+.set VoiceParamEx_Entry_034, SndParamRun_EDC980 + 738
+.set VoiceParamEx_Entry_035, SndParamRun_EDC980 + 756
+.set VoiceParamEx_Entry_036, SndParamRun_EDC980 + 774
+.set VoiceParamEx_Entry_037, SndParamRun_EDC980 + 792
+.set VoiceParamEx_Entry_038, SndParamRun_EDC980 + 810
+.set VoiceParamEx_Entry_039, SndParamRun_EDC980 + 828
+.set VoiceParamEx_Entry_040, SndParamRun_EDC980 + 846
+.set VoiceParamEx_Entry_041, SndParamRun_EDC980 + 864
+.set VoiceParamEx_Entry_042, SndParamRun_EDC980 + 882
+.set VoiceParamEx_Entry_043, SndParamRun_EDC980 + 900
+.set VoiceParamEx_Entry_044, SndParamRun_EDC980 + 918
+.set VoiceParamEx_Entry_045, SndParamRun_EDC980 + 936
+.set VoiceParamEx_Entry_046, SndParamRun_EDC980 + 954
+.set VoiceParamEx_Entry_047, SndParamRun_EDC980 + 972
+.set VoiceParamEx_Entry_048, SndParamRun_EDC980 + 990
+.set VoiceParamEx_Entry_049, SndParamRun_EDC980 + 1008
+.set VoiceParamEx_Entry_050, SndParamRun_EDC980 + 1026
+.set VoiceParamEx_Entry_051, SndParamRun_EDC980 + 1044
+.set VoiceParamEx_Entry_052, SndParamRun_EDC980 + 1062
+.set VoiceParamEx_Entry_053, SndParamRun_EDC980 + 1080
+.set VoiceParamEx_Entry_054, SndParamRun_EDC980 + 1098
+.set VoiceParamEx_Entry_055, SndParamRun_EDC980 + 1116
+.set VoiceParamEx_Entry_056, SndParamRun_EDC980 + 1134
+.set VoiceParamEx_Entry_057, SndParamRun_EDC980 + 1152
+.set VoiceParamEx_Entry_058, SndParamRun_EDC980 + 1170
+.set VoiceParamEx_Entry_059, SndParamRun_EDC980 + 1188
+.set VoiceParamEx_Entry_060, SndParamRun_EDC980 + 1206
+.set VoiceParamEx_Entry_061, SndParamRun_EDC980 + 1224
+.set VoiceParamEx_Entry_062, SndParamRun_EDC980 + 1242
+.set VoiceParamEx_Entry_063, SndParamRun_EDC980 + 1260
+.set VoiceParamEx_Entry_064, SndParamRun_EDC980 + 1278
+.set VoiceParamEx_Entry_065, SndParamRun_EDC980 + 1296
+.set VoiceParamEx_Entry_066, SndParamRun_EDC980 + 1314
+.set VoiceParamEx_Entry_067, SndParamRun_EDC980 + 1332
+.set VoiceParamEx_Entry_068, SndParamRun_EDC980 + 1350
+.set VoiceParamEx_Entry_069, SndParamRun_EDC980 + 1368
+.set VoiceParamEx_Entry_070, SndParamRun_EDC980 + 1386
+.set VoiceParamEx_Entry_071, SndParamRun_EDC980 + 1404
+.set VoiceParamEx_Entry_072, SndParamRun_EDC980 + 1422
+.set VoiceParamEx_Entry_073, SndParamRun_EDC980 + 1440
+.set VoiceParamEx_Entry_074, SndParamRun_EDC980 + 1458
+.set VoiceParamEx_Entry_075, SndParamRun_EDC980 + 1476
+.set VoiceParamEx_Entry_076, SndParamRun_EDC980 + 1494
+.set VoiceParamEx_Entry_077, SndParamRun_EDC980 + 1512
+.set VoiceParamEx_Entry_078, SndParamRun_EDC980 + 1530
+.set VoiceParamEx_Entry_079, SndParamRun_EDC980 + 1548
+.set VoiceParamEx_Entry_080, SndParamRun_EDC980 + 1566
+.set VoiceParamEx_Entry_081, SndParamRun_EDC980 + 1584
+.set VoiceParamEx_Entry_082, SndParamRun_EDC980 + 1602
+.set VoiceParamEx_Entry_083, SndParamRun_EDC980 + 1620
+.set VoiceParamEx_Entry_084, SndParamRun_EDC980 + 1638
+.set VoiceParamEx_Entry_085, SndParamRun_EDC980 + 1656
+.set PartParam_Entry_001, SndParamRun_EDC980 + 1674
+.set PartParam_Entry_002, SndParamRun_EDC980 + 1692
+.set PartParam_Entry_003, SndParamRun_EDC980 + 1710
+.set PartParam_Entry_004, SndParamRun_EDC980 + 1728
+.set PartParam_Entry_005, SndParamRun_EDC980 + 1746
+.set PartParam_Entry_006, SndParamRun_EDC980 + 1764
+.set PartParam_Entry_007, SndParamRun_EDC980 + 1782
+.set PartParam_Entry_008, SndParamRun_EDC980 + 1800
+.set PartParam_Entry_009, SndParamRun_EDC980 + 1818
+.set PartParam_Entry_010, SndParamRun_EDC980 + 1836
+.set PartParam_Entry_011, SndParamRun_EDC980 + 1854
+.set PartParam_Entry_012, SndParamRun_EDC980 + 1872
+.set PartParam_Entry_013, SndParamRun_EDC980 + 1890
+.set PartParam_Entry_014, SndParamRun_EDC980 + 1908
+.set PartParam_Entry_015, SndParamRun_EDC980 + 1926
+.set PartParam_Entry_016, SndParamRun_EDC980 + 1944
+.set PartParam_Entry_017, SndParamRun_EDC980 + 1962
+.set PartParam_Entry_018, SndParamRun_EDC980 + 1980
+.set PartParam_Entry_019, SndParamRun_EDC980 + 1998
+.set PartParam_Entry_020, SndParamRun_EDC980 + 2016
+.set PartParam_Entry_021, SndParamRun_EDC980 + 2034
+.set PartParam_Entry_022, SndParamRun_EDC980 + 2052
+.set PartParam_Entry_023, SndParamRun_EDC980 + 2070
+.set PartParam_Entry_024, SndParamRun_EDC980 + 2088
+.set PartParam_Entry_025, SndParamRun_EDC980 + 2106
+.set PartParam_Entry_026, SndParamRun_EDC980 + 2124
+.set PartParam_Entry_027, SndParamRun_EDC980 + 2142
+.set PartParam_Entry_028, SndParamRun_EDC980 + 2160
+.set PartParam_Entry_029, SndParamRun_EDC980 + 2178
+.set PartParam_Entry_030, SndParamRun_EDC980 + 2196
+.set PartParam_Entry_031, SndParamRun_EDC980 + 2214
+.set PartParam_Entry_032, SndParamRun_EDC980 + 2232
+.set PartParam_Entry_033, SndParamRun_EDC980 + 2250
+.set PartParam_Entry_034, SndParamRun_EDC980 + 2268
+.set PartParam_Entry_035, SndParamRun_EDC980 + 2286
+.set PartParam_Entry_036, SndParamRun_EDC980 + 2304
+.set PartParam_Entry_037, SndParamRun_EDC980 + 2322
+.set PartParam_Entry_038, SndParamRun_EDC980 + 2340
+.set PartParam_Entry_039, SndParamRun_EDC980 + 2358
+.set PartParam_Entry_040, SndParamRun_EDC980 + 2376
+.set PartParam_Entry_041, SndParamRun_EDC980 + 2394
+.set PartParam_Entry_042, SndParamRun_EDC980 + 2412
+.set PartParam_Entry_043, SndParamRun_EDC980 + 2430
+.set PartParam_Entry_044, SndParamRun_EDC980 + 2448
+.set PartParam_Entry_045, SndParamRun_EDC980 + 2466
+.set PartParam_Entry_046, SndParamRun_EDC980 + 2484
+.set PartParam_Entry_047, SndParamRun_EDC980 + 2502
+.set PartParam_Entry_048, SndParamRun_EDC980 + 2520
+.set PartParam_Entry_049, SndParamRun_EDC980 + 2538
+.set PartParam_Entry_050, SndParamRun_EDC980 + 2556
+.set PartParam_Entry_051, SndParamRun_EDC980 + 2574
+.set PartParam_Entry_052, SndParamRun_EDC980 + 2592
+.set PartParam_Entry_053, SndParamRun_EDC980 + 2610
+.set PartParam_Entry_054, SndParamRun_EDC980 + 2628
+.set PartParam_Entry_055, SndParamRun_EDC980 + 2646
+.set PartParam_Entry_056, SndParamRun_EDC980 + 2664
+.set PartParam_Entry_057, SndParamRun_EDC980 + 2682
+.set PartParam_Entry_058, SndParamRun_EDC980 + 2700
+.set PartParam_Entry_059, SndParamRun_EDC980 + 2718
+.set PartParam_Entry_060, SndParamRun_EDC980 + 2736
+.set PartParam_Entry_061, SndParamRun_EDC980 + 2754
+.set PartParam_Entry_062, SndParamRun_EDC980 + 2772
+.set PartParam_Entry_063, SndParamRun_EDC980 + 2790
+.set PartParam_Entry_064, SndParamRun_EDC980 + 2808
+.set PartParam_Entry_065, SndParamRun_EDC980 + 2826
+.set PartParam_Entry_066, SndParamRun_EDC980 + 2844
+.set PartParam_Entry_067, SndParamRun_EDC980 + 2862
+.set PartParam_Entry_068, SndParamRun_EDC980 + 2880
+.set PartParam_Entry_069, SndParamRun_EDC980 + 2898
+.set PartParam_Entry_070, SndParamRun_EDC980 + 2916
+.set PartParam_Entry_071, SndParamRun_EDC980 + 2934
+.set PartParam_Entry_072, SndParamRun_EDC980 + 2952
+.set PartParam_Entry_073, SndParamRun_EDC980 + 2970
+.set PartParam_Entry_074, SndParamRun_EDC980 + 2988
+.set PartParam_Entry_075, SndParamRun_EDC980 + 3006
+.set PartParam_Entry_076, SndParamRun_EDC980 + 3024
+.set PartParam_Entry_077, SndParamRun_EDC980 + 3042
+.set PartParam_Entry_078, SndParamRun_EDC980 + 3060
+.set PartParam_Entry_079, SndParamRun_EDC980 + 3078
+.set PartParam_Entry_080, SndParamRun_EDC980 + 3096
+.set PartParam_Entry_081, SndParamRun_EDC980 + 3114
+.set PartParam_Entry_082, SndParamRun_EDC980 + 3132
+.set PartParam_Entry_083, SndParamRun_EDC980 + 3150
+.set PartParam_Entry_084, SndParamRun_EDC980 + 3168
+.set PartParam_Entry_085, SndParamRun_EDC980 + 3186
+.set PartParam_Entry_086, SndParamRun_EDC980 + 3204
+.set PartParam_Entry_087, SndParamRun_EDC980 + 3222
+.set PartParam_Entry_088, SndParamRun_EDC980 + 3240
+.set PartParam_Entry_089, SndParamRun_EDC980 + 3258
+.set PartParam_Entry_090, SndParamRun_EDC980 + 3276
+.set PartParam_Entry_091, SndParamRun_EDC980 + 3294
+.set PartParam_Entry_092, SndParamRun_EDC980 + 3312
+.set PartParam_Entry_093, SndParamRun_EDC980 + 3330
+.set PartParam_Entry_094, SndParamRun_EDC980 + 3348
+.set PartParam_Entry_095, SndParamRun_EDC980 + 3366
+.set PartParam_Entry_096, SndParamRun_EDC980 + 3384
+.set PartParam_Entry_097, SndParamRun_EDC980 + 3402
+.set PartParam_Entry_098, SndParamRun_EDC980 + 3420
+.set PartParam_Entry_099, SndParamRun_EDC980 + 3438
+.set PartParam_Entry_100, SndParamRun_EDC980 + 3456
+.set PartParam_Entry_101, SndParamRun_EDC980 + 3474
+.set PartParam_Entry_102, SndParamRun_EDC980 + 3492
+.set PartParam_Entry_103, SndParamRun_EDC980 + 3510
+.set PartParam_Entry_104, SndParamRun_EDC980 + 3528
+.set PartParam_Entry_105, SndParamRun_EDC980 + 3546
+.set PartParam_Entry_106, SndParamRun_EDC980 + 3564
+.set PartParam_Entry_107, SndParamRun_EDC980 + 3582
+.set PartParam_Entry_108, SndParamRun_EDC980 + 3600
+.set PartParam_Entry_109, SndParamRun_EDC980 + 3618
+.set PartParam_Entry_110, SndParamRun_EDC980 + 3636
+.set PartParam_Entry_111, SndParamRun_EDC980 + 3654
+.set PartParam_Entry_112, SndParamRun_EDC980 + 3672
+.set PartParam_Entry_113, SndParamRun_EDC980 + 3690
+.set PartParam_Entry_114, SndParamRun_EDC980 + 3708
+.set PartParam_Entry_115, SndParamRun_EDC980 + 3726
+.set PartParam_Entry_116, SndParamRun_EDC980 + 3744
+.set PartParam_Entry_117, SndParamRun_EDC980 + 3762
+.set PartParam_Entry_118, SndParamRun_EDC980 + 3780
+.set PartParam_Entry_119, SndParamRun_EDC980 + 3798
+.set PartParam_Entry_120, SndParamRun_EDC980 + 3816
+.set PartParam_Entry_121, SndParamRun_EDC980 + 3834
+.set PartParam_Entry_122, SndParamRun_EDC980 + 3852
+.set PartParam_Entry_123, SndParamRun_EDC980 + 3870
+.set PartParam_Entry_124, SndParamRun_EDC980 + 3888
+.set PartParam_Entry_125, SndParamRun_EDC980 + 3906
+.set PartParam_Entry_126, SndParamRun_EDC980 + 3924
+.set PartParam_Entry_127, SndParamRun_EDC980 + 3942
+.set PartParam_Entry_128, SndParamRun_EDC980 + 3960
+.set PartParam_Entry_129, SndParamRun_EDC980 + 3978
+.set PartParam_Entry_130, SndParamRun_EDC980 + 3996
+.set PartParam_Entry_131, SndParamRun_EDC980 + 4014
+.set PartParam_Entry_132, SndParamRun_EDC980 + 4032
+.set PartParam_Entry_133, SndParamRun_EDC980 + 4050
+.set PartParam_Entry_134, SndParamRun_EDC980 + 4068
+.set PartParam_Entry_135, SndParamRun_EDC980 + 4086
+.set PartParam_Entry_136, SndParamRun_EDC980 + 4104
+.set PartParam_Entry_137, SndParamRun_EDC980 + 4122
+.set PartParam_Entry_138, SndParamRun_EDC980 + 4140
+.set PartParam_Entry_139, SndParamRun_EDC980 + 4158
+.set PartParam_Entry_140, SndParamRun_EDC980 + 4176
+.set PartParam_Entry_141, SndParamRun_EDC980 + 4194
+.set PartParam_Entry_142, SndParamRun_EDC980 + 4212
+.set PartParam_Entry_143, SndParamRun_EDC980 + 4230
+.set PartParam_Entry_144, SndParamRun_EDC980 + 4248
+.set PartParam_Entry_145, SndParamRun_EDC980 + 4266
+.set PartParam_Entry_146, SndParamRun_EDC980 + 4284
+.set PartParam_Entry_147, SndParamRun_EDC980 + 4302
+.set PartParam_Entry_148, SndParamRun_EDC980 + 4320
+.set PartParam_Entry_149, SndParamRun_EDC980 + 4338
+.set PartParam_Entry_150, SndParamRun_EDC980 + 4356
+.set PartParam_Entry_151, SndParamRun_EDC980 + 4374
+.set PartParam_Entry_152, SndParamRun_EDC980 + 4392
+.set PartParam_Entry_153, SndParamRun_EDC980 + 4410
+.set PartParam_Entry_154, SndParamRun_EDC980 + 4428
+.set PartParam_Entry_155, SndParamRun_EDC980 + 4446
+.set PartParam_Entry_156, SndParamRun_EDC980 + 4464
+.set PartParam_Entry_157, SndParamRun_EDC980 + 4482
+.set PartParam_Entry_158, SndParamRun_EDC980 + 4500
+.set PartParam_Entry_159, SndParamRun_EDC980 + 4518
+.set PartParam_Entry_160, SndParamRun_EDC980 + 4536
+.set PartParam_Entry_161, SndParamRun_EDC980 + 4554
+.set PartParam_Entry_162, SndParamRun_EDC980 + 4572
+.set PartParam_Entry_163, SndParamRun_EDC980 + 4590
+.set PartParam_Entry_164, SndParamRun_EDC980 + 4608
+.set PartParam_Entry_165, SndParamRun_EDC980 + 4626
+.set PartParam_Entry_166, SndParamRun_EDC980 + 4644
+.set PartParam_Entry_167, SndParamRun_EDC980 + 4662
+.set PartParam_Entry_168, SndParamRun_EDC980 + 4680
+.set PartParam_Entry_169, SndParamRun_EDC980 + 4698
+.set PartParam_Entry_170, SndParamRun_EDC980 + 4716
+.set PartParam_Entry_171, SndParamRun_EDC980 + 4734
+.set PartParam_Entry_172, SndParamRun_EDC980 + 4752
+.set PartParam_Entry_173, SndParamRun_EDC980 + 4770
+.set PartParam_Entry_174, SndParamRun_EDC980 + 4788
+.set PartParam_Entry_175, SndParamRun_EDC980 + 4806
+.set PartParam_Entry_176, SndParamRun_EDC980 + 4824
+.set PartParam_Entry_177, SndParamRun_EDC980 + 4842
+.set PartParam_Entry_178, SndParamRun_EDC980 + 4860
+.set PartParam_Entry_179, SndParamRun_EDC980 + 4878
+.set PartParam_Entry_180, SndParamRun_EDC980 + 4896
+.set PartParam_Entry_181, SndParamRun_EDC980 + 4914
+.set PartParam_Entry_182, SndParamRun_EDC980 + 4932
+.set PartParam_Entry_183, SndParamRun_EDC980 + 4950
+.set PartParam_Entry_184, SndParamRun_EDC980 + 4968
+.set PartParam_Entry_185, SndParamRun_EDC980 + 4986
+.set PartParam_Entry_186, SndParamRun_EDC980 + 5004
+.set PartParam_Entry_187, SndParamRun_EDC980 + 5022
+.set PartParam_Entry_188, SndParamRun_EDC980 + 5040
+.set PartParam_Entry_189, SndParamRun_EDC980 + 5058
+.set PartParam_Entry_190, SndParamRun_EDC980 + 5076
+.set PartParam_Entry_191, SndParamRun_EDC980 + 5094
+.set PartParam_Entry_192, SndParamRun_EDC980 + 5112
+.set PartParam_Entry_193, SndParamRun_EDC980 + 5130
+.set PartParam_Entry_194, SndParamRun_EDC980 + 5148
+.set PartParam_Entry_195, SndParamRun_EDC980 + 5166
+.set PartParam_Entry_196, SndParamRun_EDC980 + 5184
+.set PartParam_Entry_197, SndParamRun_EDC980 + 5202
+.set PartParam_Entry_198, SndParamRun_EDC980 + 5220
+.set PartParam_Entry_199, SndParamRun_EDC980 + 5238
+.set PartParam_Entry_200, SndParamRun_EDC980 + 5256
+.set PartParam_Entry_201, SndParamRun_EDC980 + 5274
+.set PartParam_Entry_202, SndParamRun_EDC980 + 5292
+.set PartParam_Entry_203, SndParamRun_EDC980 + 5310
+.set PartParam_Entry_204, SndParamRun_EDC980 + 5328
+.set PartParam_Entry_205, SndParamRun_EDC980 + 5346
+.set PartParam_Entry_206, SndParamRun_EDC980 + 5364
+.set PartParam_Entry_207, SndParamRun_EDC980 + 5382
+.set PartParam_Entry_208, SndParamRun_EDC980 + 5400
+.set PartParam_Entry_209, SndParamRun_EDC980 + 5418
+.set PartParam_Entry_210, SndParamRun_EDC980 + 5436
+.set PartParam_Entry_211, SndParamRun_EDC980 + 5454
+.set PartParam_Entry_212, SndParamRun_EDC980 + 5472
+.set PartParam_Entry_213, SndParamRun_EDC980 + 5490
+.set PartParam_Entry_214, SndParamRun_EDC980 + 5508
+.set PartParam_Entry_215, SndParamRun_EDC980 + 5526
+.set PartParam_Entry_216, SndParamRun_EDC980 + 5544
+.set PartParam_Entry_217, SndParamRun_EDC980 + 5562
+.set PartParam_Entry_218, SndParamRun_EDC980 + 5580
+.set PartParam_Entry_219, SndParamRun_EDC980 + 5598
+.set PartParam_Entry_220, SndParamRun_EDC980 + 5616
+.set PartParam_Entry_221, SndParamRun_EDC980 + 5634
+.set PartParam_Entry_222, SndParamRun_EDC980 + 5652
+.set PartParam_Entry_223, SndParamRun_EDC980 + 5670
+.set PartParam_Entry_224, SndParamRun_EDC980 + 5688
+.set PartParam_Entry_225, SndParamRun_EDC980 + 5706
+.set PartParam_Entry_226, SndParamRun_EDC980 + 5724
+.set PartParam_Entry_227, SndParamRun_EDC980 + 5742
+.set ExtPartParam_Entry_228, SndParamRun_EDC980 + 5760
+.set ExtPartParam_Entry_229, SndParamRun_EDC980 + 5778
+.set ExtPartParam_Entry_230, SndParamRun_EDC980 + 5796
+.set ExtPartParam_Entry_231, SndParamRun_EDC980 + 5814
+.set ExtPartParam_Entry_232, SndParamRun_EDC980 + 5832
+.set ExtPartParam_Entry_233, SndParamRun_EDC980 + 5850
+.set ExtPartParam_Entry_234, SndParamRun_EDC980 + 5868
+.set ExtPartParam_Entry_235, SndParamRun_EDC980 + 5886
+.set ExtPartParam_Entry_236, SndParamRun_EDC980 + 5904
+.set ExtPartParam_Entry_237, SndParamRun_EDC980 + 5922
+.set ExtPartParam_Entry_238, SndParamRun_EDC980 + 5940
+.set ExtPartParam_Entry_239, SndParamRun_EDC980 + 5958
+.set ExtPartParam_Entry_240, SndParamRun_EDC980 + 5976
+.set ExtPartParam_Entry_241, SndParamRun_EDC980 + 5994
+.set ExtPartParam_Entry_242, SndParamRun_EDC980 + 6012
+.set ExtPartParam_Entry_243, SndParamRun_EDC980 + 6030
+.set ExtPartParam_Entry_244, SndParamRun_EDC980 + 6048
+.set ExtPartParam_Entry_245, SndParamRun_EDC980 + 6066
+.set ExtPartParam_Entry_246, SndParamRun_EDC980 + 6084
+.set ExtPartParam_Entry_247, SndParamRun_EDC980 + 6102
+.set ExtPartParam_Entry_248, SndParamRun_EDC980 + 6120
+.set ExtPartParam_Entry_249, SndParamRun_EDC980 + 6138
+.set ExtPartParam_Entry_250, SndParamRun_EDC980 + 6156
+.set ExtPartParam_Entry_251, SndParamRun_EDC980 + 6174
+.set ExtPartParam_Entry_252, SndParamRun_EDC980 + 6192
+.set ExtPartParam_Entry_253, SndParamRun_EDC980 + 6210
+.set ExtPartParam_Entry_254, SndParamRun_EDC980 + 6228
+.set ExtPartParam_Entry_255, SndParamRun_EDC980 + 6246
+.set ExtPartParam_Entry_256, SndParamRun_EDC980 + 6264
+.set ExtPartParam_Entry_257, SndParamRun_EDC980 + 6282
+.set ExtPartParam_Entry_258, SndParamRun_EDC980 + 6300
+.set ExtPartParam_Entry_259, SndParamRun_EDC980 + 6318
+.set ExtPartParam_Entry_260, SndParamRun_EDC980 + 6336
+.set ExtPartParam_Entry_261, SndParamRun_EDC980 + 6354
+.set ExtPartParam_Entry_262, SndParamRun_EDC980 + 6372
+.set ExtPartParam_Entry_263, SndParamRun_EDC980 + 6390
+.set ExtPartParam_Entry_264, SndParamRun_EDC980 + 6408
+.set ExtPartParam_Entry_265, SndParamRun_EDC980 + 6426
+.set ExtPartParam_Entry_266, SndParamRun_EDC980 + 6444
+.set ExtPartParam_Entry_267, SndParamRun_EDC980 + 6462
+.set ExtPartParam_Entry_268, SndParamRun_EDC980 + 6480
+.set ExtPartParam_Entry_269, SndParamRun_EDC980 + 6498
+.set ExtPartParam_Entry_270, SndParamRun_EDC980 + 6516
+.set ExtPartParam_Entry_271, SndParamRun_EDC980 + 6534
+.set ExtPartParam_Entry_272, SndParamRun_EDC980 + 6552
+.set ExtPartParam_Entry_273, SndParamRun_EDC980 + 6570
+.set ExtPartParam_Entry_274, SndParamRun_EDC980 + 6588
+.set ExtPartParam_Entry_275, SndParamRun_EDC980 + 6606
+.set ExtPartParam_Entry_276, SndParamRun_EDC980 + 6624
+.set ExtPartParam_Entry_277, SndParamRun_EDC980 + 6642
+.set ExtPartParam_Entry_278, SndParamRun_EDC980 + 6660
+.set ExtPartParam_Entry_279, SndParamRun_EDC980 + 6678
+.set ExtPartParam_Entry_280, SndParamRun_EDC980 + 6696
+.set ExtPartParam_Entry_281, SndParamRun_EDC980 + 6714
+.set ExtPartParam_Entry_282, SndParamRun_EDC980 + 6732
+.set ExtPartParam_Entry_283, SndParamRun_EDC980 + 6750
+.set ExtPartParam_Entry_284, SndParamRun_EDC980 + 6768
+.set ExtPartParam_Entry_285, SndParamRun_EDC980 + 6786
+.set ExtPartParam_Entry_286, SndParamRun_EDC980 + 6804
+.set ExtPartParam_Entry_287, SndParamRun_EDC980 + 6822
+.set ExtPartParam_Entry_288, SndParamRun_EDC980 + 6840
+.set ExtPartParam_Entry_289, SndParamRun_EDC980 + 6858
+.set ExtPartParam_Entry_290, SndParamRun_EDC980 + 6876
+.set ExtPartParam_Entry_291, SndParamRun_EDC980 + 6894
+.set ExtPartParam_Entry_292, SndParamRun_EDC980 + 6912
+.set ExtPartParam_Entry_293, SndParamRun_EDC980 + 6930
+.set ExtPartParam_Entry_294, SndParamRun_EDC980 + 6948
+.set ExtPartParam_Entry_295, SndParamRun_EDC980 + 6966
+.set ExtPartParam_Entry_296, SndParamRun_EDC980 + 6984
+.set ExtPartParam_Entry_297, SndParamRun_EDC980 + 7002
+.set ExtPartParam_Entry_298, SndParamRun_EDC980 + 7020
+.set ExtPartParam_Entry_299, SndParamRun_EDC980 + 7038
+.set ExtPartParam_Entry_300, SndParamRun_EDC980 + 7056
+.set ExtPartParam_Entry_301, SndParamRun_EDC980 + 7074
+.set ExtPartParam_Entry_302, SndParamRun_EDC980 + 7092
+.set ExtPartParam_Entry_303, SndParamRun_EDC980 + 7110
+.set ExtPartParam_Entry_304, SndParamRun_EDC980 + 7128
+.set ExtPartParam_Entry_305, SndParamRun_EDC980 + 7146
+.set ExtPartParam_Entry_306, SndParamRun_EDC980 + 7164
+.set ExtPartParam_Entry_307, SndParamRun_EDC980 + 7182
+.set ExtPartParam_Entry_308, SndParamRun_EDC980 + 7200
+.set ExtPartParam_Entry_309, SndParamRun_EDC980 + 7218
+.set ExtPartParam_Entry_310, SndParamRun_EDC980 + 7236
+.set ExtPartParam_Entry_311, SndParamRun_EDC980 + 7254
+.set ExtPartParam_Entry_312, SndParamRun_EDC980 + 7272
+.set ExtPartParam_Entry_313, SndParamRun_EDC980 + 7290
+.set ExtPartParam_Entry_314, SndParamRun_EDC980 + 7308
+.set ExtPartParam_Entry_315, SndParamRun_EDC980 + 7326
+.set ExtPartParam_Entry_316, SndParamRun_EDC980 + 7344
+.set ExtPartParam_Entry_317, SndParamRun_EDC980 + 7362
+.set ExtPartParam_Entry_318, SndParamRun_EDC980 + 7380
+.set ExtPartParam_Entry_319, SndParamRun_EDC980 + 7398
+.set ExtPartParam_Entry_320, SndParamRun_EDC980 + 7416
+.set ExtPartParam_Entry_321, SndParamRun_EDC980 + 7434
+.set ExtPartParam_Entry_322, SndParamRun_EDC980 + 7452
+.set ExtPartParam_Entry_323, SndParamRun_EDC980 + 7470
+.set ExtPartParam_Entry_324, SndParamRun_EDC980 + 7488
+.set ExtPartParam_Entry_325, SndParamRun_EDC980 + 7506
+.set ExtPartParam_Entry_326, SndParamRun_EDC980 + 7524
+.set ExtPartParam_Entry_327, SndParamRun_EDC980 + 7542
+.set ExtPartParam_Entry_328, SndParamRun_EDC980 + 7560
+.set ExtPartParam_Entry_329, SndParamRun_EDC980 + 7578
+.set ExtPartParam_Entry_330, SndParamRun_EDC980 + 7596
+.set ExtPartParam_Entry_331, SndParamRun_EDC980 + 7614
+.set ExtPartParam_Entry_332, SndParamRun_EDC980 + 7632
+.set ExtPartParam_Entry_333, SndParamRun_EDC980 + 7650
+.set ExtPartParam_Entry_334, SndParamRun_EDC980 + 7668
+.set ExtPartParam_Entry_335, SndParamRun_EDC980 + 7686
+.set ExtPartParam_Entry_336, SndParamRun_EDC980 + 7704
+.set ExtPartParam_Entry_337, SndParamRun_EDC980 + 7722
+.set ExtPartParam_Entry_338, SndParamRun_EDC980 + 7740
+.set ExtPartParam_Entry_339, SndParamRun_EDC980 + 7758
+.set ExtPartParam_Entry_340, SndParamRun_EDC980 + 7776
+.set ExtPartParam_Entry_341, SndParamRun_EDC980 + 7794
+.set ExtPartParam_Entry_342, SndParamRun_EDC980 + 7812
+.set ExtPartParam_Entry_343, SndParamRun_EDC980 + 7830
+.set ExtPartParam_Entry_344, SndParamRun_EDC980 + 7848
+.set ExtPartParam_Entry_345, SndParamRun_EDC980 + 7866
+.set ExtPartParam_Entry_346, SndParamRun_EDC980 + 7884
+.set ExtPartParam_Entry_347, SndParamRun_EDC980 + 7902
+.set ExtPartParam_Entry_348, SndParamRun_EDC980 + 7920
+.set ExtPartParam_Entry_349, SndParamRun_EDC980 + 7938
+.set ExtPartParam_Entry_350, SndParamRun_EDC980 + 7956
+.set ExtPartParam_Entry_351, SndParamRun_EDC980 + 7974
+.set ExtPartParam_Entry_352, SndParamRun_EDC980 + 7992
+.set ExtPartParam_Entry_353, SndParamRun_EDC980 + 8010
+.set ExtPartParam_Entry_354, SndParamRun_EDC980 + 8028
+.set ExtPartParam_Entry_355, SndParamRun_EDC980 + 8046
+.set ExtPartParam_Entry_356, SndParamRun_EDC980 + 8064
+.set ExtPartParam_Entry_357, SndParamRun_EDC980 + 8082
+.set ExtPartParam_Entry_358, SndParamRun_EDC980 + 8100
+.set ExtPartParam_Entry_359, SndParamRun_EDC980 + 8118
+.set ExtPartParam_Entry_360, SndParamRun_EDC980 + 8136
+.set ExtPartParam_Entry_361, SndParamRun_EDC980 + 8154
+.set ExtPartParam_Entry_362, SndParamRun_EDC980 + 8172
+.set ExtPartParam_Entry_363, SndParamRun_EDC980 + 8190
+.set ExtPartParam_Entry_364, SndParamRun_EDC980 + 8208
+.set ExtPartParam_Entry_365, SndParamRun_EDC980 + 8226
+.set ExtPartParam_Entry_366, SndParamRun_EDC980 + 8244
+.set ExtPartParam_Entry_367, SndParamRun_EDC980 + 8262
 ExtPartParam_Entry_368:
 	.byte 0x04, 0x80, 0x01, 0x00, 0x00, 0x0c, 0x07, 0x00, 0x7f, 0x00, 0x00, 0x02, 0x01, 0x07, 0x05, 0x00
 	.byte 0x00, 0xff, 0x05, 0x06, 0x07, 0x00, 0x01, 0x02, 0x03, 0xff
@@ -3644,319 +4205,634 @@ WidgetParam_MidiCC_PitchBend:
 	.byte 0xea, 0xe9, 0xed, 0x00, 0x07, 0x00, 0x00, 0x03, 0x00, 0xff
 ;  314 x 18-byte sound-parameter descriptors, 0xEDE9FC-0xEE0010, one
 ;  `sndparam_descriptor` per record (fields: the macro above).  v10
-;  compiles the same records from audio/sndparam_records/run_ede9fc.c.
+;  compiles the same records from audio/sndparam_records/run_ede9fc.c;
+;  the record labels follow the run as `.set` equates, as in v10.
 SndParamRun_EDE9FC:
-ExtPartParam_Entry_369:	sndparam_descriptor 0x018200, 0, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
-ExtPartParam_Entry_370:	sndparam_descriptor 0x018201, 0, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_371:	sndparam_descriptor 0x018202, 0, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_372:	sndparam_descriptor 0x018203, 0, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_373:	sndparam_descriptor 0x018204, 0, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_374:	sndparam_descriptor 0x018205, 0, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_375:	sndparam_descriptor 0x018206, 0, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_376:	sndparam_descriptor 0x018400, 1, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_377:	sndparam_descriptor 0x018401, 1, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_378:	sndparam_descriptor 0x018402, 1, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_379:	sndparam_descriptor 0x018403, 1, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_380:	sndparam_descriptor 0x018404, 1, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-ExtPartParam_Entry_381:	sndparam_descriptor 0x018600, 1, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_382:	sndparam_descriptor 0x018601, 1, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_383:	sndparam_descriptor 0x018602, 1, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_384:	sndparam_descriptor 0x018603, 1, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_385:	sndparam_descriptor 0x018604, 1, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_386:	sndparam_descriptor 0x018605, 1, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_387:	sndparam_descriptor 0x018606, 1, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_388:	sndparam_descriptor 0x018800, 2, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_389:	sndparam_descriptor 0x018801, 2, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_390:	sndparam_descriptor 0x018802, 2, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_391:	sndparam_descriptor 0x018803, 2, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_392:	sndparam_descriptor 0x018804, 2, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-ExtPartParam_Entry_393:	sndparam_descriptor 0x018a00, 2, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_394:	sndparam_descriptor 0x018a01, 2, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_395:	sndparam_descriptor 0x018a02, 2, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_396:	sndparam_descriptor 0x018a03, 2, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_397:	sndparam_descriptor 0x018a04, 2, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_398:	sndparam_descriptor 0x018a05, 2, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_399:	sndparam_descriptor 0x018a06, 2, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_400:	sndparam_descriptor 0x018c00, 3, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_401:	sndparam_descriptor 0x018c01, 3, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_402:	sndparam_descriptor 0x018c02, 3, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_403:	sndparam_descriptor 0x018c03, 3, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_404:	sndparam_descriptor 0x018c04, 3, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-ExtPartParam_Entry_405:	sndparam_descriptor 0x018e00, 3, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_406:	sndparam_descriptor 0x018e01, 3, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_407:	sndparam_descriptor 0x018e02, 3, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_408:	sndparam_descriptor 0x018e03, 3, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_409:	sndparam_descriptor 0x018e04, 3, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_410:	sndparam_descriptor 0x018e05, 3, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_411:	sndparam_descriptor 0x018e06, 3, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_412:	sndparam_descriptor 0x019000, 4, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_413:	sndparam_descriptor 0x019001, 4, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_414:	sndparam_descriptor 0x019002, 4, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_415:	sndparam_descriptor 0x019003, 4, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_416:	sndparam_descriptor 0x019004, 4, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-ExtPartParam_Entry_417:	sndparam_descriptor 0x019200, 4, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_418:	sndparam_descriptor 0x019201, 4, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_419:	sndparam_descriptor 0x019202, 4, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_420:	sndparam_descriptor 0x019203, 4, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_421:	sndparam_descriptor 0x019204, 4, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_422:	sndparam_descriptor 0x019205, 4, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_423:	sndparam_descriptor 0x019206, 4, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_424:	sndparam_descriptor 0x019400, 5, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_425:	sndparam_descriptor 0x019401, 5, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_426:	sndparam_descriptor 0x019402, 5, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_427:	sndparam_descriptor 0x019403, 5, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_428:	sndparam_descriptor 0x019404, 5, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-ExtPartParam_Entry_429:	sndparam_descriptor 0x019600, 5, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_430:	sndparam_descriptor 0x019601, 5, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_431:	sndparam_descriptor 0x019602, 5, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_432:	sndparam_descriptor 0x019603, 5, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_433:	sndparam_descriptor 0x019604, 5, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_434:	sndparam_descriptor 0x019605, 5, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_435:	sndparam_descriptor 0x019606, 5, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_436:	sndparam_descriptor 0x019800, 6, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_437:	sndparam_descriptor 0x019801, 6, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_438:	sndparam_descriptor 0x019802, 6, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_439:	sndparam_descriptor 0x019803, 6, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_440:	sndparam_descriptor 0x019804, 6, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-ExtPartParam_Entry_441:	sndparam_descriptor 0x019a00, 6, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_442:	sndparam_descriptor 0x019a01, 6, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_443:	sndparam_descriptor 0x019a02, 6, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_444:	sndparam_descriptor 0x019a03, 6, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_445:	sndparam_descriptor 0x019a04, 6, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_446:	sndparam_descriptor 0x019a05, 6, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_447:	sndparam_descriptor 0x019a06, 6, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_448:	sndparam_descriptor 0x019c00, 7, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_449:	sndparam_descriptor 0x019c01, 7, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_450:	sndparam_descriptor 0x019c02, 7, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_451:	sndparam_descriptor 0x019c03, 7, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_452:	sndparam_descriptor 0x019c04, 7, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-ExtPartParam_Entry_453:	sndparam_descriptor 0x019e00, 7, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-ExtPartParam_Entry_454:	sndparam_descriptor 0x019e01, 7, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_001:	sndparam_descriptor 0x019e02, 7, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_002:	sndparam_descriptor 0x019e03, 7, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_003:	sndparam_descriptor 0x019e04, 7, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_004:	sndparam_descriptor 0x019e05, 7, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_005:	sndparam_descriptor 0x019e06, 7, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_006:	sndparam_descriptor 0x01a000, 8, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_007:	sndparam_descriptor 0x01a001, 8, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_008:	sndparam_descriptor 0x01a002, 8, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_009:	sndparam_descriptor 0x01a003, 8, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_010:	sndparam_descriptor 0x01a004, 8, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_011:	sndparam_descriptor 0x01a200, 8, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_012:	sndparam_descriptor 0x01a201, 8, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_013:	sndparam_descriptor 0x01a202, 8, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_014:	sndparam_descriptor 0x01a203, 8, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_015:	sndparam_descriptor 0x01a204, 8, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_016:	sndparam_descriptor 0x01a205, 8, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_017:	sndparam_descriptor 0x01a206, 8, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_018:	sndparam_descriptor 0x01a400, 9, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_019:	sndparam_descriptor 0x01a401, 9, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_020:	sndparam_descriptor 0x01a402, 9, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_021:	sndparam_descriptor 0x01a403, 9, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_022:	sndparam_descriptor 0x01a404, 9, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_023:	sndparam_descriptor 0x01a600, 9, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_024:	sndparam_descriptor 0x01a601, 9, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_025:	sndparam_descriptor 0x01a602, 9, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_026:	sndparam_descriptor 0x01a603, 9, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_027:	sndparam_descriptor 0x01a604, 9, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_028:	sndparam_descriptor 0x01a605, 9, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_029:	sndparam_descriptor 0x01a606, 9, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_030:	sndparam_descriptor 0x01a800, 10, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_031:	sndparam_descriptor 0x01a801, 10, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_032:	sndparam_descriptor 0x01a802, 10, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_033:	sndparam_descriptor 0x01a803, 10, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_034:	sndparam_descriptor 0x01a804, 10, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_035:	sndparam_descriptor 0x01aa00, 10, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_036:	sndparam_descriptor 0x01aa01, 10, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_037:	sndparam_descriptor 0x01aa02, 10, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_038:	sndparam_descriptor 0x01aa03, 10, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_039:	sndparam_descriptor 0x01aa04, 10, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_040:	sndparam_descriptor 0x01aa05, 10, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_041:	sndparam_descriptor 0x01aa06, 10, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_042:	sndparam_descriptor 0x01ac00, 11, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_043:	sndparam_descriptor 0x01ac01, 11, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_044:	sndparam_descriptor 0x01ac02, 11, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_045:	sndparam_descriptor 0x01ac03, 11, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_046:	sndparam_descriptor 0x01ac04, 11, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_047:	sndparam_descriptor 0x01ae00, 11, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_048:	sndparam_descriptor 0x01ae01, 11, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_049:	sndparam_descriptor 0x01ae02, 11, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_050:	sndparam_descriptor 0x01ae03, 11, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_051:	sndparam_descriptor 0x01ae04, 11, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_052:	sndparam_descriptor 0x01ae05, 11, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_053:	sndparam_descriptor 0x01ae06, 11, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_054:	sndparam_descriptor 0x01b000, 12, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_055:	sndparam_descriptor 0x01b001, 12, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_056:	sndparam_descriptor 0x01b002, 12, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_057:	sndparam_descriptor 0x01b003, 12, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_058:	sndparam_descriptor 0x01b004, 12, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_059:	sndparam_descriptor 0x01b200, 12, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_060:	sndparam_descriptor 0x01b201, 12, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_061:	sndparam_descriptor 0x01b202, 12, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_062:	sndparam_descriptor 0x01b203, 12, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_063:	sndparam_descriptor 0x01b204, 12, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_064:	sndparam_descriptor 0x01b205, 12, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_065:	sndparam_descriptor 0x01b206, 12, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_066:	sndparam_descriptor 0x01b400, 13, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_067:	sndparam_descriptor 0x01b401, 13, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_068:	sndparam_descriptor 0x01b402, 13, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_069:	sndparam_descriptor 0x01b403, 13, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_070:	sndparam_descriptor 0x01b404, 13, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_071:	sndparam_descriptor 0x01b600, 13, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_072:	sndparam_descriptor 0x01b601, 13, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_073:	sndparam_descriptor 0x01b602, 13, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_074:	sndparam_descriptor 0x01b603, 13, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_075:	sndparam_descriptor 0x01b604, 13, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_076:	sndparam_descriptor 0x01b605, 13, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_077:	sndparam_descriptor 0x01b606, 13, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_078:	sndparam_descriptor 0x01b800, 14, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_079:	sndparam_descriptor 0x01b801, 14, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_080:	sndparam_descriptor 0x01b802, 14, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_081:	sndparam_descriptor 0x01b803, 14, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_082:	sndparam_descriptor 0x01b804, 14, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_083:	sndparam_descriptor 0x01ba00, 14, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_084:	sndparam_descriptor 0x01ba01, 14, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_085:	sndparam_descriptor 0x01ba02, 14, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_086:	sndparam_descriptor 0x01ba03, 14, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_087:	sndparam_descriptor 0x01ba04, 14, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_088:	sndparam_descriptor 0x01ba05, 14, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_089:	sndparam_descriptor 0x01ba06, 14, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_090:	sndparam_descriptor 0x01bc00, 15, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_091:	sndparam_descriptor 0x01bc01, 15, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_092:	sndparam_descriptor 0x01bc02, 15, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_093:	sndparam_descriptor 0x01bc03, 15, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_094:	sndparam_descriptor 0x01bc04, 15, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_095:	sndparam_descriptor 0x01be00, 15, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
-SeqMixParam_Entry_096:	sndparam_descriptor 0x01be01, 15, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_097:	sndparam_descriptor 0x01be02, 15, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_098:	sndparam_descriptor 0x01be03, 15, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_099:	sndparam_descriptor 0x01be04, 15, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_100:	sndparam_descriptor 0x01be05, 15, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_101:	sndparam_descriptor 0x01be06, 15, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_102:	sndparam_descriptor 0x01c000, 16, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_103:	sndparam_descriptor 0x01c001, 16, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_104:	sndparam_descriptor 0x01c002, 16, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_105:	sndparam_descriptor 0x01c003, 16, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_106:	sndparam_descriptor 0x01c004, 16, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_107:	sndparam_descriptor 0x01c200, 16, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
-SeqMixParam_Entry_108:	sndparam_descriptor 0x01c201, 16, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_109:	sndparam_descriptor 0x01c202, 16, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_110:	sndparam_descriptor 0x01c203, 16, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_111:	sndparam_descriptor 0x01c204, 16, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_112:	sndparam_descriptor 0x01c205, 16, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_113:	sndparam_descriptor 0x01c206, 16, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_114:	sndparam_descriptor 0x01c400, 17, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_115:	sndparam_descriptor 0x01c401, 17, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_116:	sndparam_descriptor 0x01c402, 17, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_117:	sndparam_descriptor 0x01c403, 17, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_118:	sndparam_descriptor 0x01c404, 17, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_119:	sndparam_descriptor 0x01c600, 17, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_120:	sndparam_descriptor 0x01c601, 17, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_121:	sndparam_descriptor 0x01c602, 17, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_122:	sndparam_descriptor 0x01c603, 17, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_123:	sndparam_descriptor 0x01c604, 17, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_124:	sndparam_descriptor 0x01c605, 17, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_125:	sndparam_descriptor 0x01c606, 17, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_126:	sndparam_descriptor 0x01c800, 18, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_127:	sndparam_descriptor 0x01c801, 18, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_128:	sndparam_descriptor 0x01c802, 18, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_129:	sndparam_descriptor 0x01c803, 18, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_130:	sndparam_descriptor 0x01c804, 18, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_131:	sndparam_descriptor 0x01ca00, 18, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_132:	sndparam_descriptor 0x01ca01, 18, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_133:	sndparam_descriptor 0x01ca02, 18, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_134:	sndparam_descriptor 0x01ca03, 18, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_135:	sndparam_descriptor 0x01ca04, 18, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_136:	sndparam_descriptor 0x01ca05, 18, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_137:	sndparam_descriptor 0x01ca06, 18, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_138:	sndparam_descriptor 0x01cc00, 19, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_139:	sndparam_descriptor 0x01cc01, 19, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_140:	sndparam_descriptor 0x01cc02, 19, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_141:	sndparam_descriptor 0x01cc03, 19, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_142:	sndparam_descriptor 0x01cc04, 19, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_143:	sndparam_descriptor 0x01ce00, 19, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_144:	sndparam_descriptor 0x01ce01, 19, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_145:	sndparam_descriptor 0x01ce02, 19, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_146:	sndparam_descriptor 0x01ce03, 19, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_147:	sndparam_descriptor 0x01ce04, 19, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_148:	sndparam_descriptor 0x01ce05, 19, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_149:	sndparam_descriptor 0x01ce06, 19, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_150:	sndparam_descriptor 0x01d000, 20, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_151:	sndparam_descriptor 0x01d001, 20, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_152:	sndparam_descriptor 0x01d002, 20, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_153:	sndparam_descriptor 0x01d003, 20, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_154:	sndparam_descriptor 0x01d004, 20, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_155:	sndparam_descriptor 0x01d200, 20, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_156:	sndparam_descriptor 0x01d201, 20, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_157:	sndparam_descriptor 0x01d202, 20, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_158:	sndparam_descriptor 0x01d203, 20, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_159:	sndparam_descriptor 0x01d204, 20, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_160:	sndparam_descriptor 0x01d205, 20, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_161:	sndparam_descriptor 0x01d206, 20, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_162:	sndparam_descriptor 0x01d400, 21, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_163:	sndparam_descriptor 0x01d401, 21, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_164:	sndparam_descriptor 0x01d402, 21, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_165:	sndparam_descriptor 0x01d403, 21, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_166:	sndparam_descriptor 0x01d404, 21, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_167:	sndparam_descriptor 0x01d600, 21, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_168:	sndparam_descriptor 0x01d601, 21, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_169:	sndparam_descriptor 0x01d602, 21, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_170:	sndparam_descriptor 0x01d603, 21, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_171:	sndparam_descriptor 0x01d604, 21, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_172:	sndparam_descriptor 0x01d605, 21, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_173:	sndparam_descriptor 0x01d606, 21, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_174:	sndparam_descriptor 0x01d800, 22, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_175:	sndparam_descriptor 0x01d801, 22, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_176:	sndparam_descriptor 0x01d802, 22, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_177:	sndparam_descriptor 0x01d803, 22, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_178:	sndparam_descriptor 0x01d804, 22, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_179:	sndparam_descriptor 0x01da00, 22, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_180:	sndparam_descriptor 0x01da01, 22, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_181:	sndparam_descriptor 0x01da02, 22, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_182:	sndparam_descriptor 0x01da03, 22, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_183:	sndparam_descriptor 0x01da04, 22, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_184:	sndparam_descriptor 0x01da05, 22, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_185:	sndparam_descriptor 0x01da06, 22, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_186:	sndparam_descriptor 0x01dc00, 23, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_187:	sndparam_descriptor 0x01dc01, 23, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_188:	sndparam_descriptor 0x01dc02, 23, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_189:	sndparam_descriptor 0x01dc03, 23, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_190:	sndparam_descriptor 0x01dc04, 23, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_191:	sndparam_descriptor 0x01de00, 23, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_192:	sndparam_descriptor 0x01de01, 23, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_193:	sndparam_descriptor 0x01de02, 23, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_194:	sndparam_descriptor 0x01de03, 23, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_195:	sndparam_descriptor 0x01de04, 23, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_196:	sndparam_descriptor 0x01de05, 23, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_197:	sndparam_descriptor 0x01de06, 23, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_198:	sndparam_descriptor 0x01e000, 24, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_199:	sndparam_descriptor 0x01e001, 24, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_200:	sndparam_descriptor 0x01e002, 24, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_201:	sndparam_descriptor 0x01e003, 24, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_202:	sndparam_descriptor 0x01e004, 24, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_203:	sndparam_descriptor 0x01e200, 24, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_204:	sndparam_descriptor 0x01e201, 24, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_205:	sndparam_descriptor 0x01e202, 24, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_206:	sndparam_descriptor 0x01e203, 24, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_207:	sndparam_descriptor 0x01e204, 24, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_208:	sndparam_descriptor 0x01e205, 24, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_209:	sndparam_descriptor 0x01e206, 24, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_210:	sndparam_descriptor 0x01e400, 25, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_211:	sndparam_descriptor 0x01e401, 25, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_212:	sndparam_descriptor 0x01e402, 25, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_213:	sndparam_descriptor 0x01e403, 25, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_214:	sndparam_descriptor 0x01e404, 25, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
-SeqMixParam_Entry_215:	sndparam_descriptor 0x01e600, 25, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_216:	sndparam_descriptor 0x01e601, 25, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_217:	sndparam_descriptor 0x01e602, 25, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_218:	sndparam_descriptor 0x01e603, 25, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_219:	sndparam_descriptor 0x01e604, 25, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_220:	sndparam_descriptor 0x01e605, 25, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_221:	sndparam_descriptor 0x01e606, 25, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_222:	sndparam_descriptor 0x028000, 72, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_223:	sndparam_descriptor 0x028001, 72, 1, 0x7f, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_224:	sndparam_descriptor 0x028002, 72, 7, 0x30, 0, 3, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_225:	sndparam_descriptor 0x028080, 72, 3, 0x07, 0, 3, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_226:	sndparam_descriptor 0x028081, 72, 3, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_227:	sndparam_descriptor 0x028082, 144, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
-SeqMixParam_Entry_228:	sndparam_descriptor 0x028083, 144, 3, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018200, 0, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x018201, 0, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018202, 0, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018203, 0, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018204, 0, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018205, 0, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018206, 0, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018400, 1, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018401, 1, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018402, 1, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018403, 1, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018404, 1, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x018600, 1, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018601, 1, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018602, 1, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018603, 1, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018604, 1, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018605, 1, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018606, 1, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018800, 2, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018801, 2, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018802, 2, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018803, 2, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018804, 2, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x018a00, 2, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a01, 2, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a02, 2, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a03, 2, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a04, 2, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a05, 2, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018a06, 2, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c00, 3, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c01, 3, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c02, 3, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c03, 3, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018c04, 3, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x018e00, 3, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e01, 3, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e02, 3, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e03, 3, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e04, 3, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e05, 3, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x018e06, 3, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019000, 4, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019001, 4, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019002, 4, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019003, 4, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019004, 4, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x019200, 4, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019201, 4, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019202, 4, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019203, 4, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019204, 4, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019205, 4, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019206, 4, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019400, 5, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019401, 5, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019402, 5, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019403, 5, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019404, 5, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x019600, 5, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019601, 5, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019602, 5, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019603, 5, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019604, 5, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019605, 5, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019606, 5, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019800, 6, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019801, 6, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019802, 6, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019803, 6, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019804, 6, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x019a00, 6, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a01, 6, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a02, 6, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a03, 6, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a04, 6, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a05, 6, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019a06, 6, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c00, 7, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c01, 7, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c02, 7, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c03, 7, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019c04, 7, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x019e00, 7, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e01, 7, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e02, 7, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e03, 7, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e04, 7, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e05, 7, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x019e06, 7, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a000, 8, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a001, 8, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a002, 8, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a003, 8, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a004, 8, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01a200, 8, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a201, 8, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a202, 8, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a203, 8, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a204, 8, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a205, 8, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a206, 8, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a400, 9, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a401, 9, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a402, 9, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a403, 9, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a404, 9, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01a600, 9, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a601, 9, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a602, 9, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a603, 9, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a604, 9, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a605, 9, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a606, 9, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a800, 10, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a801, 10, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a802, 10, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a803, 10, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01a804, 10, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01aa00, 10, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa01, 10, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa02, 10, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa03, 10, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa04, 10, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa05, 10, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01aa06, 10, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac00, 11, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac01, 11, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac02, 11, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac03, 11, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ac04, 11, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01ae00, 11, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae01, 11, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae02, 11, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae03, 11, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae04, 11, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae05, 11, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ae06, 11, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b000, 12, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b001, 12, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b002, 12, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b003, 12, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b004, 12, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01b200, 12, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b201, 12, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b202, 12, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b203, 12, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b204, 12, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b205, 12, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b206, 12, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b400, 13, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b401, 13, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b402, 13, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b403, 13, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b404, 13, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01b600, 13, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b601, 13, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b602, 13, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b603, 13, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b604, 13, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b605, 13, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b606, 13, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b800, 14, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b801, 14, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b802, 14, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b803, 14, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01b804, 14, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01ba00, 14, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba01, 14, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba02, 14, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba03, 14, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba04, 14, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba05, 14, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ba06, 14, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc00, 15, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc01, 15, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc02, 15, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc03, 15, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01bc04, 15, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01be00, 15, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x01be01, 15, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be02, 15, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be03, 15, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be04, 15, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be05, 15, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01be06, 15, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c000, 16, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c001, 16, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c002, 16, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c003, 16, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c004, 16, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01c200, 16, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 7, 0, 0, 0xff
+	sndparam_descriptor 0x01c201, 16, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c202, 16, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c203, 16, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c204, 16, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c205, 16, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c206, 16, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c400, 17, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c401, 17, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c402, 17, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c403, 17, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c404, 17, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01c600, 17, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c601, 17, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c602, 17, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c603, 17, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c604, 17, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c605, 17, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c606, 17, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c800, 18, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c801, 18, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c802, 18, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c803, 18, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01c804, 18, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01ca00, 18, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca01, 18, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca02, 18, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca03, 18, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca04, 18, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca05, 18, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ca06, 18, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc00, 19, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc01, 19, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc02, 19, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc03, 19, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01cc04, 19, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01ce00, 19, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce01, 19, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce02, 19, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce03, 19, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce04, 19, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce05, 19, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01ce06, 19, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d000, 20, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d001, 20, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d002, 20, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d003, 20, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d004, 20, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01d200, 20, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d201, 20, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d202, 20, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d203, 20, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d204, 20, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d205, 20, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d206, 20, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d400, 21, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d401, 21, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d402, 21, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d403, 21, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d404, 21, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01d600, 21, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d601, 21, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d602, 21, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d603, 21, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d604, 21, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d605, 21, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d606, 21, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d800, 22, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d801, 22, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d802, 22, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d803, 22, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01d804, 22, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01da00, 22, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da01, 22, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da02, 22, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da03, 22, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da04, 22, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da05, 22, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01da06, 22, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc00, 23, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc01, 23, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc02, 23, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc03, 23, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01dc04, 23, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01de00, 23, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de01, 23, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de02, 23, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de03, 23, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de04, 23, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de05, 23, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01de06, 23, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e000, 24, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e001, 24, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e002, 24, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e003, 24, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e004, 24, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01e200, 24, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e201, 24, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e202, 24, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e203, 24, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e204, 24, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e205, 24, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e206, 24, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e400, 25, 13, 0x20, 0, 1, 5, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e401, 25, 13, 0x0f, 0, 15, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e402, 25, 13, 0x40, 0, 1, 6, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e403, 25, 13, 0x80, 0, 1, 7, 0xff, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e404, 25, 12, 0x07, 0, 127, 0, 0x00, 0x02, 1, 7, 5, 0, 0, 0xff
+	sndparam_descriptor 0x01e600, 25, 4, 0x07, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e601, 25, 4, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e602, 25, 12, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e603, 25, 12, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e604, 25, 4, 0x20, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e605, 25, 22, 0x01, 0, 1, 5, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x01e606, 25, 12, 0x10, 0, 1, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028000, 72, 0, 0xff, 0, 255, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028001, 72, 1, 0x7f, 0, 7, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028002, 72, 7, 0x30, 0, 3, 4, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028080, 72, 3, 0x07, 0, 3, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028081, 72, 3, 0x08, 0, 1, 3, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028082, 144, 3, 0x01, 0, 1, 0, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+	sndparam_descriptor 0x028083, 144, 3, 0x02, 0, 1, 1, 0x00, 0xff, 1, 1, 1, 0, 0, 0xff
+.set ExtPartParam_Entry_369, SndParamRun_EDE9FC + 0
+.set ExtPartParam_Entry_370, SndParamRun_EDE9FC + 18
+.set ExtPartParam_Entry_371, SndParamRun_EDE9FC + 36
+.set ExtPartParam_Entry_372, SndParamRun_EDE9FC + 54
+.set ExtPartParam_Entry_373, SndParamRun_EDE9FC + 72
+.set ExtPartParam_Entry_374, SndParamRun_EDE9FC + 90
+.set ExtPartParam_Entry_375, SndParamRun_EDE9FC + 108
+.set ExtPartParam_Entry_376, SndParamRun_EDE9FC + 126
+.set ExtPartParam_Entry_377, SndParamRun_EDE9FC + 144
+.set ExtPartParam_Entry_378, SndParamRun_EDE9FC + 162
+.set ExtPartParam_Entry_379, SndParamRun_EDE9FC + 180
+.set ExtPartParam_Entry_380, SndParamRun_EDE9FC + 198
+.set ExtPartParam_Entry_381, SndParamRun_EDE9FC + 216
+.set ExtPartParam_Entry_382, SndParamRun_EDE9FC + 234
+.set ExtPartParam_Entry_383, SndParamRun_EDE9FC + 252
+.set ExtPartParam_Entry_384, SndParamRun_EDE9FC + 270
+.set ExtPartParam_Entry_385, SndParamRun_EDE9FC + 288
+.set ExtPartParam_Entry_386, SndParamRun_EDE9FC + 306
+.set ExtPartParam_Entry_387, SndParamRun_EDE9FC + 324
+.set ExtPartParam_Entry_388, SndParamRun_EDE9FC + 342
+.set ExtPartParam_Entry_389, SndParamRun_EDE9FC + 360
+.set ExtPartParam_Entry_390, SndParamRun_EDE9FC + 378
+.set ExtPartParam_Entry_391, SndParamRun_EDE9FC + 396
+.set ExtPartParam_Entry_392, SndParamRun_EDE9FC + 414
+.set ExtPartParam_Entry_393, SndParamRun_EDE9FC + 432
+.set ExtPartParam_Entry_394, SndParamRun_EDE9FC + 450
+.set ExtPartParam_Entry_395, SndParamRun_EDE9FC + 468
+.set ExtPartParam_Entry_396, SndParamRun_EDE9FC + 486
+.set ExtPartParam_Entry_397, SndParamRun_EDE9FC + 504
+.set ExtPartParam_Entry_398, SndParamRun_EDE9FC + 522
+.set ExtPartParam_Entry_399, SndParamRun_EDE9FC + 540
+.set ExtPartParam_Entry_400, SndParamRun_EDE9FC + 558
+.set ExtPartParam_Entry_401, SndParamRun_EDE9FC + 576
+.set ExtPartParam_Entry_402, SndParamRun_EDE9FC + 594
+.set ExtPartParam_Entry_403, SndParamRun_EDE9FC + 612
+.set ExtPartParam_Entry_404, SndParamRun_EDE9FC + 630
+.set ExtPartParam_Entry_405, SndParamRun_EDE9FC + 648
+.set ExtPartParam_Entry_406, SndParamRun_EDE9FC + 666
+.set ExtPartParam_Entry_407, SndParamRun_EDE9FC + 684
+.set ExtPartParam_Entry_408, SndParamRun_EDE9FC + 702
+.set ExtPartParam_Entry_409, SndParamRun_EDE9FC + 720
+.set ExtPartParam_Entry_410, SndParamRun_EDE9FC + 738
+.set ExtPartParam_Entry_411, SndParamRun_EDE9FC + 756
+.set ExtPartParam_Entry_412, SndParamRun_EDE9FC + 774
+.set ExtPartParam_Entry_413, SndParamRun_EDE9FC + 792
+.set ExtPartParam_Entry_414, SndParamRun_EDE9FC + 810
+.set ExtPartParam_Entry_415, SndParamRun_EDE9FC + 828
+.set ExtPartParam_Entry_416, SndParamRun_EDE9FC + 846
+.set ExtPartParam_Entry_417, SndParamRun_EDE9FC + 864
+.set ExtPartParam_Entry_418, SndParamRun_EDE9FC + 882
+.set ExtPartParam_Entry_419, SndParamRun_EDE9FC + 900
+.set ExtPartParam_Entry_420, SndParamRun_EDE9FC + 918
+.set ExtPartParam_Entry_421, SndParamRun_EDE9FC + 936
+.set ExtPartParam_Entry_422, SndParamRun_EDE9FC + 954
+.set ExtPartParam_Entry_423, SndParamRun_EDE9FC + 972
+.set ExtPartParam_Entry_424, SndParamRun_EDE9FC + 990
+.set ExtPartParam_Entry_425, SndParamRun_EDE9FC + 1008
+.set ExtPartParam_Entry_426, SndParamRun_EDE9FC + 1026
+.set ExtPartParam_Entry_427, SndParamRun_EDE9FC + 1044
+.set ExtPartParam_Entry_428, SndParamRun_EDE9FC + 1062
+.set ExtPartParam_Entry_429, SndParamRun_EDE9FC + 1080
+.set ExtPartParam_Entry_430, SndParamRun_EDE9FC + 1098
+.set ExtPartParam_Entry_431, SndParamRun_EDE9FC + 1116
+.set ExtPartParam_Entry_432, SndParamRun_EDE9FC + 1134
+.set ExtPartParam_Entry_433, SndParamRun_EDE9FC + 1152
+.set ExtPartParam_Entry_434, SndParamRun_EDE9FC + 1170
+.set ExtPartParam_Entry_435, SndParamRun_EDE9FC + 1188
+.set ExtPartParam_Entry_436, SndParamRun_EDE9FC + 1206
+.set ExtPartParam_Entry_437, SndParamRun_EDE9FC + 1224
+.set ExtPartParam_Entry_438, SndParamRun_EDE9FC + 1242
+.set ExtPartParam_Entry_439, SndParamRun_EDE9FC + 1260
+.set ExtPartParam_Entry_440, SndParamRun_EDE9FC + 1278
+.set ExtPartParam_Entry_441, SndParamRun_EDE9FC + 1296
+.set ExtPartParam_Entry_442, SndParamRun_EDE9FC + 1314
+.set ExtPartParam_Entry_443, SndParamRun_EDE9FC + 1332
+.set ExtPartParam_Entry_444, SndParamRun_EDE9FC + 1350
+.set ExtPartParam_Entry_445, SndParamRun_EDE9FC + 1368
+.set ExtPartParam_Entry_446, SndParamRun_EDE9FC + 1386
+.set ExtPartParam_Entry_447, SndParamRun_EDE9FC + 1404
+.set ExtPartParam_Entry_448, SndParamRun_EDE9FC + 1422
+.set ExtPartParam_Entry_449, SndParamRun_EDE9FC + 1440
+.set ExtPartParam_Entry_450, SndParamRun_EDE9FC + 1458
+.set ExtPartParam_Entry_451, SndParamRun_EDE9FC + 1476
+.set ExtPartParam_Entry_452, SndParamRun_EDE9FC + 1494
+.set ExtPartParam_Entry_453, SndParamRun_EDE9FC + 1512
+.set ExtPartParam_Entry_454, SndParamRun_EDE9FC + 1530
+.set SeqMixParam_Entry_001, SndParamRun_EDE9FC + 1548
+.set SeqMixParam_Entry_002, SndParamRun_EDE9FC + 1566
+.set SeqMixParam_Entry_003, SndParamRun_EDE9FC + 1584
+.set SeqMixParam_Entry_004, SndParamRun_EDE9FC + 1602
+.set SeqMixParam_Entry_005, SndParamRun_EDE9FC + 1620
+.set SeqMixParam_Entry_006, SndParamRun_EDE9FC + 1638
+.set SeqMixParam_Entry_007, SndParamRun_EDE9FC + 1656
+.set SeqMixParam_Entry_008, SndParamRun_EDE9FC + 1674
+.set SeqMixParam_Entry_009, SndParamRun_EDE9FC + 1692
+.set SeqMixParam_Entry_010, SndParamRun_EDE9FC + 1710
+.set SeqMixParam_Entry_011, SndParamRun_EDE9FC + 1728
+.set SeqMixParam_Entry_012, SndParamRun_EDE9FC + 1746
+.set SeqMixParam_Entry_013, SndParamRun_EDE9FC + 1764
+.set SeqMixParam_Entry_014, SndParamRun_EDE9FC + 1782
+.set SeqMixParam_Entry_015, SndParamRun_EDE9FC + 1800
+.set SeqMixParam_Entry_016, SndParamRun_EDE9FC + 1818
+.set SeqMixParam_Entry_017, SndParamRun_EDE9FC + 1836
+.set SeqMixParam_Entry_018, SndParamRun_EDE9FC + 1854
+.set SeqMixParam_Entry_019, SndParamRun_EDE9FC + 1872
+.set SeqMixParam_Entry_020, SndParamRun_EDE9FC + 1890
+.set SeqMixParam_Entry_021, SndParamRun_EDE9FC + 1908
+.set SeqMixParam_Entry_022, SndParamRun_EDE9FC + 1926
+.set SeqMixParam_Entry_023, SndParamRun_EDE9FC + 1944
+.set SeqMixParam_Entry_024, SndParamRun_EDE9FC + 1962
+.set SeqMixParam_Entry_025, SndParamRun_EDE9FC + 1980
+.set SeqMixParam_Entry_026, SndParamRun_EDE9FC + 1998
+.set SeqMixParam_Entry_027, SndParamRun_EDE9FC + 2016
+.set SeqMixParam_Entry_028, SndParamRun_EDE9FC + 2034
+.set SeqMixParam_Entry_029, SndParamRun_EDE9FC + 2052
+.set SeqMixParam_Entry_030, SndParamRun_EDE9FC + 2070
+.set SeqMixParam_Entry_031, SndParamRun_EDE9FC + 2088
+.set SeqMixParam_Entry_032, SndParamRun_EDE9FC + 2106
+.set SeqMixParam_Entry_033, SndParamRun_EDE9FC + 2124
+.set SeqMixParam_Entry_034, SndParamRun_EDE9FC + 2142
+.set SeqMixParam_Entry_035, SndParamRun_EDE9FC + 2160
+.set SeqMixParam_Entry_036, SndParamRun_EDE9FC + 2178
+.set SeqMixParam_Entry_037, SndParamRun_EDE9FC + 2196
+.set SeqMixParam_Entry_038, SndParamRun_EDE9FC + 2214
+.set SeqMixParam_Entry_039, SndParamRun_EDE9FC + 2232
+.set SeqMixParam_Entry_040, SndParamRun_EDE9FC + 2250
+.set SeqMixParam_Entry_041, SndParamRun_EDE9FC + 2268
+.set SeqMixParam_Entry_042, SndParamRun_EDE9FC + 2286
+.set SeqMixParam_Entry_043, SndParamRun_EDE9FC + 2304
+.set SeqMixParam_Entry_044, SndParamRun_EDE9FC + 2322
+.set SeqMixParam_Entry_045, SndParamRun_EDE9FC + 2340
+.set SeqMixParam_Entry_046, SndParamRun_EDE9FC + 2358
+.set SeqMixParam_Entry_047, SndParamRun_EDE9FC + 2376
+.set SeqMixParam_Entry_048, SndParamRun_EDE9FC + 2394
+.set SeqMixParam_Entry_049, SndParamRun_EDE9FC + 2412
+.set SeqMixParam_Entry_050, SndParamRun_EDE9FC + 2430
+.set SeqMixParam_Entry_051, SndParamRun_EDE9FC + 2448
+.set SeqMixParam_Entry_052, SndParamRun_EDE9FC + 2466
+.set SeqMixParam_Entry_053, SndParamRun_EDE9FC + 2484
+.set SeqMixParam_Entry_054, SndParamRun_EDE9FC + 2502
+.set SeqMixParam_Entry_055, SndParamRun_EDE9FC + 2520
+.set SeqMixParam_Entry_056, SndParamRun_EDE9FC + 2538
+.set SeqMixParam_Entry_057, SndParamRun_EDE9FC + 2556
+.set SeqMixParam_Entry_058, SndParamRun_EDE9FC + 2574
+.set SeqMixParam_Entry_059, SndParamRun_EDE9FC + 2592
+.set SeqMixParam_Entry_060, SndParamRun_EDE9FC + 2610
+.set SeqMixParam_Entry_061, SndParamRun_EDE9FC + 2628
+.set SeqMixParam_Entry_062, SndParamRun_EDE9FC + 2646
+.set SeqMixParam_Entry_063, SndParamRun_EDE9FC + 2664
+.set SeqMixParam_Entry_064, SndParamRun_EDE9FC + 2682
+.set SeqMixParam_Entry_065, SndParamRun_EDE9FC + 2700
+.set SeqMixParam_Entry_066, SndParamRun_EDE9FC + 2718
+.set SeqMixParam_Entry_067, SndParamRun_EDE9FC + 2736
+.set SeqMixParam_Entry_068, SndParamRun_EDE9FC + 2754
+.set SeqMixParam_Entry_069, SndParamRun_EDE9FC + 2772
+.set SeqMixParam_Entry_070, SndParamRun_EDE9FC + 2790
+.set SeqMixParam_Entry_071, SndParamRun_EDE9FC + 2808
+.set SeqMixParam_Entry_072, SndParamRun_EDE9FC + 2826
+.set SeqMixParam_Entry_073, SndParamRun_EDE9FC + 2844
+.set SeqMixParam_Entry_074, SndParamRun_EDE9FC + 2862
+.set SeqMixParam_Entry_075, SndParamRun_EDE9FC + 2880
+.set SeqMixParam_Entry_076, SndParamRun_EDE9FC + 2898
+.set SeqMixParam_Entry_077, SndParamRun_EDE9FC + 2916
+.set SeqMixParam_Entry_078, SndParamRun_EDE9FC + 2934
+.set SeqMixParam_Entry_079, SndParamRun_EDE9FC + 2952
+.set SeqMixParam_Entry_080, SndParamRun_EDE9FC + 2970
+.set SeqMixParam_Entry_081, SndParamRun_EDE9FC + 2988
+.set SeqMixParam_Entry_082, SndParamRun_EDE9FC + 3006
+.set SeqMixParam_Entry_083, SndParamRun_EDE9FC + 3024
+.set SeqMixParam_Entry_084, SndParamRun_EDE9FC + 3042
+.set SeqMixParam_Entry_085, SndParamRun_EDE9FC + 3060
+.set SeqMixParam_Entry_086, SndParamRun_EDE9FC + 3078
+.set SeqMixParam_Entry_087, SndParamRun_EDE9FC + 3096
+.set SeqMixParam_Entry_088, SndParamRun_EDE9FC + 3114
+.set SeqMixParam_Entry_089, SndParamRun_EDE9FC + 3132
+.set SeqMixParam_Entry_090, SndParamRun_EDE9FC + 3150
+.set SeqMixParam_Entry_091, SndParamRun_EDE9FC + 3168
+.set SeqMixParam_Entry_092, SndParamRun_EDE9FC + 3186
+.set SeqMixParam_Entry_093, SndParamRun_EDE9FC + 3204
+.set SeqMixParam_Entry_094, SndParamRun_EDE9FC + 3222
+.set SeqMixParam_Entry_095, SndParamRun_EDE9FC + 3240
+.set SeqMixParam_Entry_096, SndParamRun_EDE9FC + 3258
+.set SeqMixParam_Entry_097, SndParamRun_EDE9FC + 3276
+.set SeqMixParam_Entry_098, SndParamRun_EDE9FC + 3294
+.set SeqMixParam_Entry_099, SndParamRun_EDE9FC + 3312
+.set SeqMixParam_Entry_100, SndParamRun_EDE9FC + 3330
+.set SeqMixParam_Entry_101, SndParamRun_EDE9FC + 3348
+.set SeqMixParam_Entry_102, SndParamRun_EDE9FC + 3366
+.set SeqMixParam_Entry_103, SndParamRun_EDE9FC + 3384
+.set SeqMixParam_Entry_104, SndParamRun_EDE9FC + 3402
+.set SeqMixParam_Entry_105, SndParamRun_EDE9FC + 3420
+.set SeqMixParam_Entry_106, SndParamRun_EDE9FC + 3438
+.set SeqMixParam_Entry_107, SndParamRun_EDE9FC + 3456
+.set SeqMixParam_Entry_108, SndParamRun_EDE9FC + 3474
+.set SeqMixParam_Entry_109, SndParamRun_EDE9FC + 3492
+.set SeqMixParam_Entry_110, SndParamRun_EDE9FC + 3510
+.set SeqMixParam_Entry_111, SndParamRun_EDE9FC + 3528
+.set SeqMixParam_Entry_112, SndParamRun_EDE9FC + 3546
+.set SeqMixParam_Entry_113, SndParamRun_EDE9FC + 3564
+.set SeqMixParam_Entry_114, SndParamRun_EDE9FC + 3582
+.set SeqMixParam_Entry_115, SndParamRun_EDE9FC + 3600
+.set SeqMixParam_Entry_116, SndParamRun_EDE9FC + 3618
+.set SeqMixParam_Entry_117, SndParamRun_EDE9FC + 3636
+.set SeqMixParam_Entry_118, SndParamRun_EDE9FC + 3654
+.set SeqMixParam_Entry_119, SndParamRun_EDE9FC + 3672
+.set SeqMixParam_Entry_120, SndParamRun_EDE9FC + 3690
+.set SeqMixParam_Entry_121, SndParamRun_EDE9FC + 3708
+.set SeqMixParam_Entry_122, SndParamRun_EDE9FC + 3726
+.set SeqMixParam_Entry_123, SndParamRun_EDE9FC + 3744
+.set SeqMixParam_Entry_124, SndParamRun_EDE9FC + 3762
+.set SeqMixParam_Entry_125, SndParamRun_EDE9FC + 3780
+.set SeqMixParam_Entry_126, SndParamRun_EDE9FC + 3798
+.set SeqMixParam_Entry_127, SndParamRun_EDE9FC + 3816
+.set SeqMixParam_Entry_128, SndParamRun_EDE9FC + 3834
+.set SeqMixParam_Entry_129, SndParamRun_EDE9FC + 3852
+.set SeqMixParam_Entry_130, SndParamRun_EDE9FC + 3870
+.set SeqMixParam_Entry_131, SndParamRun_EDE9FC + 3888
+.set SeqMixParam_Entry_132, SndParamRun_EDE9FC + 3906
+.set SeqMixParam_Entry_133, SndParamRun_EDE9FC + 3924
+.set SeqMixParam_Entry_134, SndParamRun_EDE9FC + 3942
+.set SeqMixParam_Entry_135, SndParamRun_EDE9FC + 3960
+.set SeqMixParam_Entry_136, SndParamRun_EDE9FC + 3978
+.set SeqMixParam_Entry_137, SndParamRun_EDE9FC + 3996
+.set SeqMixParam_Entry_138, SndParamRun_EDE9FC + 4014
+.set SeqMixParam_Entry_139, SndParamRun_EDE9FC + 4032
+.set SeqMixParam_Entry_140, SndParamRun_EDE9FC + 4050
+.set SeqMixParam_Entry_141, SndParamRun_EDE9FC + 4068
+.set SeqMixParam_Entry_142, SndParamRun_EDE9FC + 4086
+.set SeqMixParam_Entry_143, SndParamRun_EDE9FC + 4104
+.set SeqMixParam_Entry_144, SndParamRun_EDE9FC + 4122
+.set SeqMixParam_Entry_145, SndParamRun_EDE9FC + 4140
+.set SeqMixParam_Entry_146, SndParamRun_EDE9FC + 4158
+.set SeqMixParam_Entry_147, SndParamRun_EDE9FC + 4176
+.set SeqMixParam_Entry_148, SndParamRun_EDE9FC + 4194
+.set SeqMixParam_Entry_149, SndParamRun_EDE9FC + 4212
+.set SeqMixParam_Entry_150, SndParamRun_EDE9FC + 4230
+.set SeqMixParam_Entry_151, SndParamRun_EDE9FC + 4248
+.set SeqMixParam_Entry_152, SndParamRun_EDE9FC + 4266
+.set SeqMixParam_Entry_153, SndParamRun_EDE9FC + 4284
+.set SeqMixParam_Entry_154, SndParamRun_EDE9FC + 4302
+.set SeqMixParam_Entry_155, SndParamRun_EDE9FC + 4320
+.set SeqMixParam_Entry_156, SndParamRun_EDE9FC + 4338
+.set SeqMixParam_Entry_157, SndParamRun_EDE9FC + 4356
+.set SeqMixParam_Entry_158, SndParamRun_EDE9FC + 4374
+.set SeqMixParam_Entry_159, SndParamRun_EDE9FC + 4392
+.set SeqMixParam_Entry_160, SndParamRun_EDE9FC + 4410
+.set SeqMixParam_Entry_161, SndParamRun_EDE9FC + 4428
+.set SeqMixParam_Entry_162, SndParamRun_EDE9FC + 4446
+.set SeqMixParam_Entry_163, SndParamRun_EDE9FC + 4464
+.set SeqMixParam_Entry_164, SndParamRun_EDE9FC + 4482
+.set SeqMixParam_Entry_165, SndParamRun_EDE9FC + 4500
+.set SeqMixParam_Entry_166, SndParamRun_EDE9FC + 4518
+.set SeqMixParam_Entry_167, SndParamRun_EDE9FC + 4536
+.set SeqMixParam_Entry_168, SndParamRun_EDE9FC + 4554
+.set SeqMixParam_Entry_169, SndParamRun_EDE9FC + 4572
+.set SeqMixParam_Entry_170, SndParamRun_EDE9FC + 4590
+.set SeqMixParam_Entry_171, SndParamRun_EDE9FC + 4608
+.set SeqMixParam_Entry_172, SndParamRun_EDE9FC + 4626
+.set SeqMixParam_Entry_173, SndParamRun_EDE9FC + 4644
+.set SeqMixParam_Entry_174, SndParamRun_EDE9FC + 4662
+.set SeqMixParam_Entry_175, SndParamRun_EDE9FC + 4680
+.set SeqMixParam_Entry_176, SndParamRun_EDE9FC + 4698
+.set SeqMixParam_Entry_177, SndParamRun_EDE9FC + 4716
+.set SeqMixParam_Entry_178, SndParamRun_EDE9FC + 4734
+.set SeqMixParam_Entry_179, SndParamRun_EDE9FC + 4752
+.set SeqMixParam_Entry_180, SndParamRun_EDE9FC + 4770
+.set SeqMixParam_Entry_181, SndParamRun_EDE9FC + 4788
+.set SeqMixParam_Entry_182, SndParamRun_EDE9FC + 4806
+.set SeqMixParam_Entry_183, SndParamRun_EDE9FC + 4824
+.set SeqMixParam_Entry_184, SndParamRun_EDE9FC + 4842
+.set SeqMixParam_Entry_185, SndParamRun_EDE9FC + 4860
+.set SeqMixParam_Entry_186, SndParamRun_EDE9FC + 4878
+.set SeqMixParam_Entry_187, SndParamRun_EDE9FC + 4896
+.set SeqMixParam_Entry_188, SndParamRun_EDE9FC + 4914
+.set SeqMixParam_Entry_189, SndParamRun_EDE9FC + 4932
+.set SeqMixParam_Entry_190, SndParamRun_EDE9FC + 4950
+.set SeqMixParam_Entry_191, SndParamRun_EDE9FC + 4968
+.set SeqMixParam_Entry_192, SndParamRun_EDE9FC + 4986
+.set SeqMixParam_Entry_193, SndParamRun_EDE9FC + 5004
+.set SeqMixParam_Entry_194, SndParamRun_EDE9FC + 5022
+.set SeqMixParam_Entry_195, SndParamRun_EDE9FC + 5040
+.set SeqMixParam_Entry_196, SndParamRun_EDE9FC + 5058
+.set SeqMixParam_Entry_197, SndParamRun_EDE9FC + 5076
+.set SeqMixParam_Entry_198, SndParamRun_EDE9FC + 5094
+.set SeqMixParam_Entry_199, SndParamRun_EDE9FC + 5112
+.set SeqMixParam_Entry_200, SndParamRun_EDE9FC + 5130
+.set SeqMixParam_Entry_201, SndParamRun_EDE9FC + 5148
+.set SeqMixParam_Entry_202, SndParamRun_EDE9FC + 5166
+.set SeqMixParam_Entry_203, SndParamRun_EDE9FC + 5184
+.set SeqMixParam_Entry_204, SndParamRun_EDE9FC + 5202
+.set SeqMixParam_Entry_205, SndParamRun_EDE9FC + 5220
+.set SeqMixParam_Entry_206, SndParamRun_EDE9FC + 5238
+.set SeqMixParam_Entry_207, SndParamRun_EDE9FC + 5256
+.set SeqMixParam_Entry_208, SndParamRun_EDE9FC + 5274
+.set SeqMixParam_Entry_209, SndParamRun_EDE9FC + 5292
+.set SeqMixParam_Entry_210, SndParamRun_EDE9FC + 5310
+.set SeqMixParam_Entry_211, SndParamRun_EDE9FC + 5328
+.set SeqMixParam_Entry_212, SndParamRun_EDE9FC + 5346
+.set SeqMixParam_Entry_213, SndParamRun_EDE9FC + 5364
+.set SeqMixParam_Entry_214, SndParamRun_EDE9FC + 5382
+.set SeqMixParam_Entry_215, SndParamRun_EDE9FC + 5400
+.set SeqMixParam_Entry_216, SndParamRun_EDE9FC + 5418
+.set SeqMixParam_Entry_217, SndParamRun_EDE9FC + 5436
+.set SeqMixParam_Entry_218, SndParamRun_EDE9FC + 5454
+.set SeqMixParam_Entry_219, SndParamRun_EDE9FC + 5472
+.set SeqMixParam_Entry_220, SndParamRun_EDE9FC + 5490
+.set SeqMixParam_Entry_221, SndParamRun_EDE9FC + 5508
+.set SeqMixParam_Entry_222, SndParamRun_EDE9FC + 5526
+.set SeqMixParam_Entry_223, SndParamRun_EDE9FC + 5544
+.set SeqMixParam_Entry_224, SndParamRun_EDE9FC + 5562
+.set SeqMixParam_Entry_225, SndParamRun_EDE9FC + 5580
+.set SeqMixParam_Entry_226, SndParamRun_EDE9FC + 5598
+.set SeqMixParam_Entry_227, SndParamRun_EDE9FC + 5616
+.set SeqMixParam_Entry_228, SndParamRun_EDE9FC + 5634

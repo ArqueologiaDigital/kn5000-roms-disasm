@@ -28,8 +28,9 @@ failure, reported with its address, rather than guessed at.
 
 The eight `.incbin "includes/generated/sndparam_run_*.bin"` blocks are v10-only
 (the Makefile compiles `v10/maincpu/audio/sndparam_records/*.c` for v10 alone),
-so in the target each becomes one `sndparam_descriptor` macro line per 18-byte
-record, decoded from the TARGET dump, carrying the record's label.
+so in the target the `.incbin` becomes one `sndparam_descriptor` macro line
+per 18-byte record, decoded from the TARGET dump; the run label and v10's
+`.set <record>, <run> + <offset>` lines are kept as they are.
 
 The byte gate (`make gate`) is the certification; this script is how the text
 was produced.
@@ -59,7 +60,7 @@ LO, HI = 0xED0008, 0xEE0010
 RUN_COMMENT_RE = re.compile(r'^;  (\d+) x 18-byte sound-parameter descriptors, (0x[0-9A-F]+)-(0x[0-9A-F]+)\.')
 RUN_LABEL_RE = re.compile(r'^(SndParamRun_[0-9A-F]+):\s*$')
 INCBIN_RE = re.compile(r'^\s*\.incbin\s+"includes/generated/sndparam_(run_[0-9a-f]+)\.bin"\s*$')
-EQU_RE = re.compile(r'^([A-Za-z_]\w*) = (SndParamRun_[0-9A-F]+) \+ (\d+)\s*$')
+EQU_RE = re.compile(r'^\.set ([A-Za-z_]\w*), (SndParamRun_[0-9A-F]+) \+ (\d+)\s*$')
 
 MACRO_DEF = r"""; ---------------------------------------------------------------------------
 ; sndparam_descriptor -- ONE 18-byte sound-parameter descriptor
@@ -204,12 +205,15 @@ def main():
                 macro_emitted = True
             out.append(";  %s x 18-byte sound-parameter descriptors, %s-%s, one" % (cnt, lo_s, hi_s))
             out.append(";  `sndparam_descriptor` per record (fields: the macro above).  v10")
-            out.append(";  compiles the same records from audio/sndparam_records/%s.c." %
+            out.append(";  compiles the same records from audio/sndparam_records/%s.c;" %
                        src[j + 1].split("sndparam_")[-1].split(".bin")[0])
+            out.append(";  the record labels follow the run as `.set` equates, as in v10.")
             i = j
             continue
         ml = RUN_LABEL_RE.match(ln)
         if ml and i + 1 < n and INCBIN_RE.match(src[i + 1]):
+            # keep v10's shape: the run label, one macro line per record where
+            # v10 has the .incbin, then v10's own `.set Name, Run + off` lines
             runlab = ml.group(1)
             base, size = at[lno + 1]
             names = {}
@@ -225,12 +229,11 @@ def main():
                 size = 18 * len(names)
                 assert base + size == HI, (runlab, hex(base + size))
             assert size % 18 == 0 and len(names) == size // 18, (runlab, size, len(names))
-            out.append(runlab + ":")
-            rows = []
+            out.append(ln)
             for k in range(size // 18):
                 ad = base + 18 * k
-                rows.append(record_line(names[18 * k], rt[ad - BASE:ad - BASE + 18]))
-            out.extend(aligned(rows))
+                out.append("\t" + record_line(names[18 * k], rt[ad - BASE:ad - BASE + 18])[1])
+            out.extend(src[i + 2:j])
             i = j
             continue
         if lno in at:
