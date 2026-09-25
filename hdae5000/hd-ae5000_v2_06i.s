@@ -511,7 +511,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld XHL, (xwa + 0x0270)             ; Special dispatch function
 	ld xwa, 0x7F	; Graphics handler ID
 	ld xbc, 0x14A0000	; Parallel data handler ref
-	ld xde, 0x7F01EE	; Combined handler ID + flags
+	ld xde, HDAE5000_OBJ_IV_HDDMENU	; Combined handler ID + flags
 	call (xhl)
 
 	; Deallocate parameter block + final call stack (14 bytes)
@@ -2124,19 +2124,19 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
-	ld	xwa, 0x007f01bb
+	ld	xwa, HDAE5000_OBJ_HddNamingABC
 	ld	bc, 0:i3
 	call	(xhl)
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
-	ld	xwa, 0x007f01bc
+	ld	xwa, HDAE5000_OBJ_HddNamingabc
 	ld	bc, 0:i3
 	call	(xhl)
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
-	ld	xwa, 0x007f01bd
+	ld	xwa, HDAE5000_OBJ_HddNamingSymbol
 	ld	bc, 0:i3
 	call	(xhl)
 	jr t, .LRF_1600                        ; [68 48] jr T,0x281600
@@ -2144,19 +2144,19 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
-	ld	xwa, 0x007f01bb
+	ld	xwa, HDAE5000_OBJ_HddNamingABC
 	ld	bc, 1:i3
 	call	(xhl)
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
-	ld	xwa, 0x007f01bc
+	ld	xwa, HDAE5000_OBJ_HddNamingabc
 	ld	bc, 1:i3
 	call	(xhl)
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
-	ld	xwa, 0x007f01bd
+	ld	xwa, HDAE5000_OBJ_HddNamingSymbol
 	ld	bc, 1:i3
 	call	(xhl)
 .LRF_1600:
@@ -2553,7 +2553,7 @@ HDAE5000_AcHddNamingWindowProc_Case3:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld	de, (0x22A02E:24)
@@ -2616,7 +2616,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld	de, (0x22A02E:24)
@@ -2729,7 +2729,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld	de, (0x22A02E:24)
@@ -2805,7 +2805,7 @@ HDAE5000_AcHddNamingWindowProc_Case5:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld	de, (0x22A02E:24)
@@ -2857,7 +2857,7 @@ HDAE5000_AcHddNamingWindowProc_Case6:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld	de, (0x22A028:24)
@@ -2902,7 +2902,7 @@ HDAE5000_AcHddNamingWindowProc_Case7:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld	de, (0x22A028:24)
@@ -3036,7 +3036,7 @@ HDAE5000_AcHddNamingWindowProc_Case8:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld	de, (0x22A028:24)
@@ -3067,7 +3067,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01e00080
 	ld	xde, 0:i3
 	call	(xhl)
@@ -3076,7 +3076,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
@@ -3151,7 +3151,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01c1
+	ld	xwa, HDAE5000_OBJ_HddNamingLabel
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld	xhl, 0:i3
@@ -3164,7 +3164,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01e00080
 	call	(xhl)
 	lda xwa, (0x22a000:24)
@@ -3172,7 +3172,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ba
+	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld	wa, (0x22A028:24)
@@ -3512,14 +3512,14 @@ HDAE5000_IvHddNamingProc:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ae
+	ld	xwa, HDAE5000_OBJ_HddNamingWindow
 	ld	xbc, 0x01e0007b
 	call	(xhl)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ae
+	ld	xwa, HDAE5000_OBJ_HddNamingWindow
 	ld	xde, 0:i3
 	call	(xhl)
 	ld	xhl, 0:i3
@@ -3529,7 +3529,7 @@ HDAE5000_IvHddNamingProc:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ae
+	ld	xwa, HDAE5000_OBJ_HddNamingWindow
 	ld	xde, 0:i3
 	call	(xhl)
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
@@ -3562,7 +3562,7 @@ HDAE5000_HDTitleMenuProc:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f01ed
+	ld	xwa, HDAE5000_OBJ_HD_MENU_BMP
 	ld	xbc, 0x01c0000d
 	ld	xde, 0:i3
 	call	(xhl)
@@ -3637,7 +3637,7 @@ HDAE5000_HardTestPage:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23 — callback ptr
-	ld xwa, 0x007f004b				; 40 4b 00 7f 00
+	ld xwa, HDAE5000_OBJ_PPORT_SW				; 40 4b 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 1:i3					; ea a9
 	call (xhl)					; b3 e8 — register event
@@ -3652,14 +3652,14 @@ HDAE5000_HardTestPage:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
-	ld xwa, 0x007f004b				; 40 4b 00 7f 00
+	ld xwa, HDAE5000_OBJ_PPORT_SW				; 40 4b 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 0:i3					; ea a8
 	call (xhl)					; b3 e8 — unregister event
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xix, (xwa + 0x0100)             ; e3 e1 00 01 24 — xix = callback
-	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
 	ld xbc, 0x01e0006b				; 41 6b 00 e0 01
 	ld xde, 0:i3					; ea a8
 	call (xix)					; b4 e8
@@ -3683,7 +3683,7 @@ HDAE5000_HardTestPage:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
-	ld xwa, 0x007f004d				; 40 4d 00 7f 00
+	ld xwa, HDAE5000_OBJ_HDD_SW				; 40 4d 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 1:i3					; ea a9
 	call (xhl)					; b3 e8
@@ -3698,14 +3698,14 @@ HDAE5000_HardTestPage:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
-	ld xwa, 0x007f004d				; 40 4d 00 7f 00
+	ld xwa, HDAE5000_OBJ_HDD_SW				; 40 4d 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 0:i3					; ea a8
 	call (xhl)					; b3 e8
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xix, (xwa + 0x0100)             ; e3 e1 00 01 24
-	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
 	ld xbc, 0x01e0006b				; 41 6b 00 e0 01
 	ld xde, 0:i3					; ea a8
 	call (xix)					; b4 e8
@@ -3728,7 +3728,7 @@ HDAE5000_HardTestPage:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
-	ld xwa, 0x007f004c				; 40 4c 00 7f 00
+	ld xwa, HDAE5000_OBJ_FD_SW				; 40 4c 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 1:i3					; ea a9
 	call (xhl)					; b3 e8
@@ -3769,14 +3769,14 @@ HDAE5000_HardTestPage:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
-	ld xwa, 0x007f004c				; 40 4c 00 7f 00
+	ld xwa, HDAE5000_OBJ_FD_SW				; 40 4c 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 0:i3					; ea a8
 	call (xhl)					; b3 e8
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xix, (xwa + 0x0100)             ; e3 e1 00 01 24
-	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
 	ld xbc, 0x01e0006b				; 41 6b 00 e0 01
 	ld xde, 0:i3					; ea a8
 	call (xix)					; b4 e8
@@ -3799,7 +3799,7 @@ HDAE5000_HardTestPage:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xix, (xwa + 0x0100)             ; e3 e1 00 01 24
-	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
 	ld xbc, 0x01e0006b				; 41 6b 00 e0 01
 	ld xde, 0:i3					; ea a8
 	call (xix)					; b4 e8
@@ -3809,7 +3809,7 @@ HDAE5000_HardTestPage:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
-	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
 	ld xbc, 0x01e0003b				; 41 3b 00 e0 01
 	ld xde, 0:i3					; ea a8
 	call (xhl)					; b3 e8
@@ -3821,7 +3821,7 @@ HDAE5000_HardTestPage:
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
-	ld xwa, 0x007f0049				; 40 49 00 7f 00
+	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
 	ld xbc, 0x01e0003b				; 41 3b 00 e0 01
 	ld xde, 1:i3					; ea a9
 	call (xhl)					; b3 e8
@@ -4050,14 +4050,14 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	ld xwa, (0x23a1a2:24); workspace ptr (0x23A1A2)
 	ld xwa, (xwa + 0x0e0a)             ; (XWA + 0x0E0A)
 	ld xhl, (xwa + 0x0124)             ; (XWA + 0x0124)
-	ld xwa, 0x007F00DE
+	ld xwa, HDAE5000_OBJ_CP_FD_VOLLABEL
 	ld xbc, 0x01EA000A
 	call (xhl)
 	; Register second handler (0xDE, different params)
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
-	ld xwa, 0x007F00DE
+	ld xwa, HDAE5000_OBJ_CP_FD_VOLLABEL
 	ld xbc, 0x01C0000F
 	ld xde, 0xFFFFFFFF
 	call (xhl)
@@ -4075,14 +4075,14 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
-	ld xwa, 0x007F00D7
+	ld xwa, HDAE5000_OBJ_CP_FD_LIST
 	ld xbc, 0x01EA000A
 	call (xhl)
 	; Second handler (0xD7, different params)
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
-	ld xwa, 0x007F00D7
+	ld xwa, HDAE5000_OBJ_CP_FD_LIST
 	ld xbc, 0x01C0000F
 	ld xde, 0xFFFFFFFF
 	call (xhl)
@@ -4090,7 +4090,7 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
-	ld xwa, 0x007F00D9
+	ld xwa, HDAE5000_OBJ_CP_FD_LINE1
 	ld xbc, 0x01C0000D
 	ld xde, 0:i3
 	call (xhl)
@@ -4098,7 +4098,7 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
-	ld xwa, 0x007F00D8
+	ld xwa, HDAE5000_OBJ_CP_FD_LINE2
 	ld xbc, 0x01C0000D
 	ld xde, 0:i3
 	call (xhl)

@@ -109,7 +109,7 @@ HDAE5000_Menu_Handler:	; 0x28AD48 (248 bytes)
 	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2) — workspace ptr
 	ld xwa, (xwa + 0x0e0a)             ; ld XWA, (XWA + 0x0E0A)
 	ld_sril xhl, (xwa + 0x0100)             ; ld XHL, (XWA + 0x0100)
-	ld xwa, 0x007F02C1		; handler ID
+	ld xwa, HDAE5000_OBJ_HD_PLEASE		; handler ID
 	ld xbc, 0x01C00001		; param
 	ld xde, 3:i3			; mode = 3
 	call (xhl)
@@ -136,12 +136,12 @@ HDAE5000_Menu_Handler:	; 0x28AD48 (248 bytes)
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld_sril xhl, (xwa + 0x0100)             ; ld XHL, (XWA + 0x0100)
-	ld xwa, 0x007F0297		; alternate handler ID
+	ld xwa, HDAE5000_OBJ_ERR_SAVE		; alternate handler ID
 	ld xbc, 0x01C00001
 	ld xde, 0:i3
 	call (xhl)
 	ld xbc, (xsp + 20)		; XBC = context
-	ld xwa, 0x007F0298		; event ID
+	ld xwa, HDAE5000_OBJ_ERR_SAVE_EXIT		; event ID
 	calr HDAE5000_UiObj_SetCaption
 	; --- Register display handlers ---
 	ld xwa, 0x01CA0002		; display param
@@ -152,7 +152,7 @@ HDAE5000_Menu_Handler:	; 0x28AD48 (248 bytes)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0418)             ; ld XHL, (XWA + 0x0418)
 	ld xwa, 0x0000014D		; display handler ID
-	ld xbc, 0x007F0299		; event ID
+	ld xbc, HDAE5000_OBJ_ERR_SAVE_CATCH		; event ID
 	ld xde, 0xFFFFFFFF		; param
 	call (xhl)
 	ld xwa, 0x01CA0002		; display param
@@ -163,7 +163,7 @@ HDAE5000_Menu_Handler:	; 0x28AD48 (248 bytes)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0410)             ; ld XHL, (XWA + 0x0410)
 	ld xwa, 0x0000014D
-	ld xbc, 0x007F0299
+	ld xbc, HDAE5000_OBJ_ERR_SAVE_CATCH
 	ld xde, 0xFFFFFFFF
 	call (xhl)
 .Lmh_finish:
@@ -192,7 +192,7 @@ HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
 	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2)
 	ld xwa, (xwa + 0x0e0a)             ; ld XWA, (XWA + 0x0E0A)
 	ld_sril xhl, (xwa + 0x0100)             ; ld XHL, (XWA + 0x0100)
-	ld xwa, 0x007F02C1
+	ld xwa, HDAE5000_OBJ_HD_PLEASE
 	ld xbc, 0x01C00001
 	ld xde, 3:i3
 	call (xhl)
@@ -219,12 +219,12 @@ HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld_sril xhl, (xwa + 0x0100)
-	ld xwa, 0x007F0297
+	ld xwa, HDAE5000_OBJ_ERR_SAVE
 	ld xbc, 0x01C00001
 	ld xde, 0:i3
 	call (xhl)
 	ld xbc, (xsp + 20)
-	ld xwa, 0x007F0298
+	ld xwa, HDAE5000_OBJ_ERR_SAVE_EXIT
 	calr HDAE5000_UiObj_SetCaption
 	; --- Register display handlers ---
 	ld xwa, 0x01CA0002
@@ -235,7 +235,7 @@ HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0418)             ; ld XHL, (XWA + 0x0418)
 	ld xwa, 0x0000014D
-	ld xbc, 0x007F0299
+	ld xbc, HDAE5000_OBJ_ERR_SAVE_CATCH
 	ld xde, 0xFFFFFFFF
 	call (xhl)
 	ld xwa, 0x01CA0002
@@ -246,7 +246,7 @@ HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0410)             ; ld XHL, (XWA + 0x0410)
 	ld xwa, 0x0000014D
-	ld xbc, 0x007F0299
+	ld xbc, HDAE5000_OBJ_ERR_SAVE_CATCH
 	ld xde, 0xFFFFFFFF
 	call (xhl)
 .Lmc_finish:
@@ -281,7 +281,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23 — ld xhl, (xwa+0x0100)
-	ld xwa, 0x007f02c1			; 40 c1 02 7f 00
+	ld xwa, HDAE5000_OBJ_HD_PLEASE			; 40 c1 02 7f 00
 	ld xbc, 0x01c00001			; 41 01 00 c0 01
 	ld xde, 5:i3				; ea ad
 	call (xhl)				; b3 e8
@@ -293,7 +293,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
 	ld xhl, (xwa + 0x0124)             ; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
-	ld xwa, 0x007f02c1			; 40 c1 02 7f 00
+	ld xwa, HDAE5000_OBJ_HD_PLEASE			; 40 c1 02 7f 00
 	ld xbc, 0x01c00001			; 41 01 00 c0 01
 	ld xde, 5:i3				; ea ad
 	call (xhl)				; b3 e8
@@ -372,7 +372,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23 — ld xhl, (xwa+0x0100)
-	ld xwa, 0x007f029d			; 40 9d 02 7f 00
+	ld xwa, HDAE5000_OBJ_ERR_LOAD			; 40 9d 02 7f 00
 	ld xbc, 0x01c00001			; 41 01 00 c0 01
 	ld xde, 0:i3				; ea a8
 	call (xhl)				; b3 e8
@@ -383,7 +383,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
 	ld xhl, (xwa + 0x0124)             ; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
-	ld xwa, 0x007f029d			; 40 9d 02 7f 00
+	ld xwa, HDAE5000_OBJ_ERR_LOAD			; 40 9d 02 7f 00
 	ld xbc, 0x01c00001			; 41 01 00 c0 01
 	ld xde, 0:i3				; ea a8
 	call (xhl)				; b3 e8
@@ -391,7 +391,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 .Ldm_fail_common:				; 0x28B089
 	; Register error display handlers
 	ld xbc, (xsp + 0x0e)			; af 0e 21
-	ld xwa, 0x007f029e			; 40 9e 02 7f 00
+	ld xwa, HDAE5000_OBJ_ERR_LOAD_EXIT			; 40 9e 02 7f 00
 	calr HDAE5000_UiObj_SetCaption		; 1e xx xx
 	; Register via +0x0418 vtable (timer handler)
 	ld xwa, 0x01ca0002			; 40 02 00 ca 01
@@ -402,7 +402,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
 	ld xhl, (xwa + 0x0418)             ; e3 e1 18 04 23 — ld xhl, (xwa+0x0418)
 	ld xwa, 0x0000014d			; 40 4d 01 00 00
-	ld xbc, 0x007f029f			; 41 9f 02 7f 00
+	ld xbc, HDAE5000_OBJ_ERR_LOAD_CATCH			; 41 9f 02 7f 00
 	ld xde, 0xffffffff			; 42 ff ff ff ff
 	call (xhl)				; b3 e8
 	; Register via +0x0410 vtable (second timer handler)
@@ -414,7 +414,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
 	ld xhl, (xwa + 0x0410)             ; e3 e1 10 04 23 — ld xhl, (xwa+0x0410)
 	ld xwa, 0x0000014d			; 40 4d 01 00 00
-	ld xbc, 0x007f029f			; 41 9f 02 7f 00
+	ld xbc, HDAE5000_OBJ_ERR_LOAD_CATCH			; 41 9f 02 7f 00
 	ld xde, 0xffffffff			; 42 ff ff ff ff
 	call (xhl)				; b3 e8
 
@@ -440,7 +440,7 @@ HDAE5000_SaveSongWithUi:	; 0x28B0F1 (271 bytes)
 	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2)
 	ld xwa, (xwa + 0x0e0a)             ; ld XWA, (XWA + 0x0E0A)
 	ld_sril xhl, (xwa + 0x0100)             ; ld XHL, (XWA + 0x0100)
-	ld xwa, 0x007F02C1
+	ld xwa, HDAE5000_OBJ_HD_PLEASE
 	ld xbc, 0x01C00001
 	ld xde, 0:i3
 	call (xhl)
@@ -481,12 +481,12 @@ HDAE5000_SaveSongWithUi:	; 0x28B0F1 (271 bytes)
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld_sril xhl, (xwa + 0x0100)
-	ld xwa, 0x007F0297
+	ld xwa, HDAE5000_OBJ_ERR_SAVE
 	ld xbc, 0x01C00001
 	ld xde, 0:i3
 	call (xhl)
 	ld xbc, (xsp + 40)		; XBC = context (XSP+0x28)
-	ld xwa, 0x007F0298
+	ld xwa, HDAE5000_OBJ_ERR_SAVE_EXIT
 	calr HDAE5000_UiObj_SetCaption
 	; --- Register display handlers ---
 	ld xwa, 0x01CA0002
@@ -497,7 +497,7 @@ HDAE5000_SaveSongWithUi:	; 0x28B0F1 (271 bytes)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0418)             ; +0x0418
 	ld xwa, 0x0000014D
-	ld xbc, 0x007F0299
+	ld xbc, HDAE5000_OBJ_ERR_SAVE_CATCH
 	ld xde, 0xFFFFFFFF
 	call (xhl)
 	ld xwa, 0x01CA0002
@@ -508,7 +508,7 @@ HDAE5000_SaveSongWithUi:	; 0x28B0F1 (271 bytes)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0410)             ; +0x0410
 	ld xwa, 0x0000014D
-	ld xbc, 0x007F0299
+	ld xbc, HDAE5000_OBJ_ERR_SAVE_CATCH
 	ld xde, 0xFFFFFFFF
 	call (xhl)
 .Lds_finish:
@@ -580,55 +580,55 @@ HDAE5000_Set_Menu_Visibility:	; 0x28B258 (229 bytes)
 	ld xwa, (0x23a1a2:24); ld XWA, (0x23A1A2)
 	ld xwa, (xwa + 0x0e0a)             ; ld XWA, (XWA + 0x0E0A)
 	ld xhl, (xwa + 0x0294)             ; ld XHL, (XWA + 0x0294)
-	ld xwa, 0x007F002C		; menu item 1
+	ld xwa, HDAE5000_OBJ_SELECT_DIR_SW_EDIT		; menu item 1
 	call (xhl)
 	ld bc, iz
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0294)
-	ld xwa, 0x007F0100		; menu item 2
+	ld xwa, HDAE5000_OBJ_HD_FILE_LOAD_SW_SAVE		; menu item 2
 	call (xhl)
 	ld bc, iz
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0294)
-	ld xwa, 0x007F010A		; menu item 3
+	ld xwa, HDAE5000_OBJ_HD_FILE_LOAD_SW_DEL		; menu item 3
 	call (xhl)
 	ld bc, iz
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0294)
-	ld xwa, 0x007F00F9		; menu item 4
+	ld xwa, HDAE5000_OBJ_FLS_SELECT_SW_EDIT		; menu item 4
 	call (xhl)
 	ld bc, iz
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0294)
-	ld xwa, 0x007F013E		; menu item 5
+	ld xwa, HDAE5000_OBJ_FLS_FILE_LOAD_SW_EDIT		; menu item 5
 	call (xhl)
 	ld bc, iz
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0294)
-	ld xwa, 0x007F010D		; menu item 6
+	ld xwa, HDAE5000_OBJ_HD_FILE_LOAD_SW_DELFILE		; menu item 6
 	call (xhl)
 	ld bc, iz
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0294)
-	ld xwa, 0x007F00DA		; menu item 7
+	ld xwa, HDAE5000_OBJ_CP_FD_HDSWTO		; menu item 7
 	call (xhl)
 	ld bc, iz
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0294)
-	ld xwa, 0x007F00DC		; menu item 8
+	ld xwa, HDAE5000_OBJ_CP_FD_HDSWSEL		; menu item 8
 	call (xhl)
 	ld bc, iz
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0294)
-	ld xwa, 0x007F0080		; menu item 9
+	ld xwa, HDAE5000_OBJ_SW_HD_FORMAT		; menu item 9
 	call (xhl)
 	popw iz
 	ret
@@ -3293,7 +3293,7 @@ HDAE5000_LyricBoxProc_Ev01CA0003:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x02d4)
-	ld	xwa, 0x007f0301
+	ld	xwa, HDAE5000_OBJ_MeasureinLyric
 	call	(xhl)
 	ld	wa, (0x22A0A0:24)
 	add	wa, 0x0014
@@ -3306,7 +3306,7 @@ HDAE5000_LyricBoxProc_Ev01CA0003:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x02d4)
-	ld	xwa, 0x007f0302
+	ld	xwa, HDAE5000_OBJ_TimeSigInLyric
 	call	(xhl)
 	ld	wa, (0x22A0AC:24)
 	add	wa, 0x0014
@@ -3563,7 +3563,7 @@ HDAE5000_LyricBoxProc_Ev01CA0008:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f02f5
+	ld	xwa, HDAE5000_OBJ_Conductor
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	lda xwa, (0x230768:24)
@@ -3571,7 +3571,7 @@ HDAE5000_LyricBoxProc_Ev01CA0008:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f02f3
+	ld	xwa, HDAE5000_OBJ_SongTitle
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
@@ -3586,7 +3586,7 @@ HDAE5000_LyricBoxProc_Ev01CA0008:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f02f6
+	ld	xwa, HDAE5000_OBJ_bottom01
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	lda xwa, (0x2e5bb0:24)
@@ -3594,7 +3594,7 @@ HDAE5000_LyricBoxProc_Ev01CA0008:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
-	ld	xwa, 0x007f02fd
+	ld	xwa, HDAE5000_OBJ_bottom08
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 .LUIH_d2a5:
@@ -3836,7 +3836,7 @@ HDAE5000_LyricBoxProc_Case7_2:
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0124)
-	ld	xwa, 0x007f0304
+	ld	xwa, HDAE5000_OBJ_LoadLyricFD
 	ld	xbc, 0x01c00001
 	ld	xde, 0:i3
 	call	(xhl)
@@ -6350,7 +6350,7 @@ HDAE5000_FDFileSelectProc:
 	ld xwa, (0x23a1a2:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XHL, (xwa + 0x0124)             ; method 0x0124
-	ld xwa, 0x007f02f0
+	ld xwa, HDAE5000_OBJ_Tech_lyrics
 	ld xbc, 0x01c00001
 	ld xde, 0:i3
 	call (xhl)
@@ -7427,7 +7427,7 @@ HDAE5000_Frame_Handler_Status__init_display:
 	ld xwa, (0x23a1a2:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XHL, (xwa + 0x0124)             ; Init callback 1
-	ld xwa, 0x7F013E	; Display params
+	ld xwa, HDAE5000_OBJ_FLS_FILE_LOAD_SW_EDIT	; Display params
 	ld xbc, 0x1C00001	; Display initialization flags
 	ld xde, 0:i3
 	call (xhl)
@@ -7435,14 +7435,14 @@ HDAE5000_Frame_Handler_Status__init_display:
 	ld xwa, (0x23a1a2:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XHL, (xwa + 0x0534)             ; Init callback 2
-	ld xwa, 0x7F013E
+	ld xwa, HDAE5000_OBJ_FLS_FILE_LOAD_SW_EDIT
 	ld xbc, 0x1CA0000
 	call (xhl)
 	;
 	ld xwa, (0x23a1a2:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XHL, (xwa + 0x0124)             ; Init callback 3
-	ld xwa, 0x7F013E
+	ld xwa, HDAE5000_OBJ_FLS_FILE_LOAD_SW_EDIT
 	ld xbc, 0x1CA0000
 	ld xde, 0:i3
 	call (xhl)
