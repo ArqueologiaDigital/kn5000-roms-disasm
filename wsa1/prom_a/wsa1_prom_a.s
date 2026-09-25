@@ -918,9 +918,20 @@
 	.set DL_LoadingFromDiskPleaseWait,            0x00F2D857
 	.set DL_Error00TheDataOnTheDiskThatYouAre,    0x00F2D87D
 	.set DL_Error01AnErrorHasOccuredWhileTheDisk, 0x00F2D8D4
+	.set DL_Error02ThereIsNoDiskInTheDiskDrive,   0x00F2D92D
+	.set DL_Error03TheFileThatYouTriedToLoad,     0x00F2D961
+	.set DL_Error05AnErrorHasOccuredWhileTheDisk, 0x00F2D99E
+	.set DL_Error06TheDiskThatYouAreUsingIsWrite, 0x00F2D9F6
+	.set DL_Error07TheDiskThatYouAreUsingIsFull,  0x00F2DA71
+	.set DL_Error08AnErrorHasOccuredWhileTheDisk, 0x00F2DAC2
+	.set DL_Error10TheDataIsAlreadyCopyProtected, 0x00F2DB63
 	.set DL_PasswordOk,                           0x00F2DB97
 	.set DL_ReminderTheInternalMemoryIsRetainedFor, 0x00F2DBA6
 	.set DL_Error11ThePasswordThatYouEnteredIs,   0x00F2DC3A
+	.set DL_CopyProtectedTheDataOnTheDiskIsCopy,  0x00F2DC79
+	.set DL_Error20AProblemHasOccuredWithYour,    0x00F2DCD7
+	.set DL_Error21MemoryFull,                    0x00F2DD4F
+	.set DL_Error22ItIsNecessaryToPressPunchOut,  0x00F2DD6B
 	.set DL_Error23ItIsImpossibleToChangeThe,     0x00F2DDBD
 	.set DL_Error24ItIsImpossibleToAssignTwo,     0x00F2DE3C
 	.set DL_F2DE6B,                               0x00F2DE6B
@@ -928,9 +939,42 @@
 	.set DL_Error25ItIsOnlyPossibleToChange,      0x00F2DF1C
 	.set DL_Error26ItIsOnlyPossibleToMerge,       0x00F2DF6D
 	.set DL_Error27ItIsImpossibleToCopyFromOr,    0x00F2DFEC
+	.set DL_Error46ItIsImpossibleToInsertFromOr,  0x00F2E040
+	.set DL_Error28ThisSongIsTooLongToBeSaved,    0x00F2E096
+	.set DL_Error29TheMidiFileThatYouHaveTried,   0x00F2E0DB
+	.set DL_Error30ItIsNotPossibleToChangeThe,    0x00F2E185
+	.set DL_Error31TheTimeSignatureOfThePattern,  0x00F2E261
+	.set DL_Error32MemoryFull,                    0x00F2E36D
+	.set DL_CopyCompletedTheIntroFillInsAndEndingOfY, 0x00F2E389
+	.set DL_CopyCompletedYourChosenPatternHasBeenCop, 0x00F2E40C
+	.set DL_Error40TheIdentificationIdCodeOfThe,  0x00F2E46A
+	.set DL_Error41AnErrorHasOccuredDuringSystem, 0x00F2E4E4
+	.set DL_Error42AnErrorHasOccuredDuringSystem, 0x00F2E587
+	.set DL_Completed,                            0x00F2E615
+	.set DL_Error43TheFileThatYouAreTryingToLoad, 0x00F2E623
+	.set DL_WriteCompletedYourEditedSoundHasBeenStor, 0x00F2E6BA
 	.set DL_Error44ItIsImpossibleToEditADrumKit,  0x00F2E716
+	.set DL_AttentionTheChosenParametersDoNot,    0x00F2E79C
+	.set DL_NoSequencerData,                      0x00F2E831
+	.set DL_FileConvertError,                     0x00F2E847
+	.set DL_ThisIsNotAStandardMidiFile,           0x00F2E85E
+	.set DL_TheTimebasePpqResolution,             0x00F2E883
+	.set DL_PMemSetHasBeenPushFor10Seconds,       0x00F2E8E2
+	.set DL_Error,                                0x00F2E910
+	.set DL_F2E91A,                               0x00F2E91A
+	.set DL_ErrorItIsNotPossibleToUse,            0x00F2E9E3
+	.set DL_ErrorItIsNotPossibleToRecord,         0x00F2EA8F
 	.set DL_PleaseSelectOneOfTheUser,             0x00F2EAEB
+	.set DL_Err0rTheTypeOfInsertedDisk,           0x00F2EB40
 	.set DL_UsedOnlyTypeInThisMode,               0x00F2EB9C
+	.set DL_Err0rTheQuantityOfThisSong,           0x00F2EBD4
+	.set DL_ErrorSpecialTracksSuchAs,             0x00F2ECBC
+	.set DL_ErrorAut0PunchRecordingHas,           0x00F2EDD4
+	.set DL_ErrorTheComposerPatternYou,           0x00F2EE9F
+	.set DL_ErrorTheSongThatYouHaveTried,         0x00F2F03F
+	.set DL_AttentionItIsImpossibleTo,            0x00F2F1AD
+	.set DL_ErrorThisIsAFormat1MidiFileDisk,      0x00F2F261
+	.set MsgTail_F2F2AF,                          0x00F2F2AF
 	.set DL_Error22UmDiesenVorgangAbzuschlie,     0x00F2F722
 	.set DL_Error23EsIstJetztNichtMehrM,          0x00F2F77B
 	.set DL_Error24EsIstNichtMGlichZweiSpuren,    0x00F2F7ED
@@ -44364,7 +44408,7 @@ sub_F9904D:
 	push H                                               ; F99068  ce 04
 	ldw bc, 0x04                                         ; F9906A  31 04 00
 	m_mul MWD+r6, 0x08, 1                                ; F9906D  9e 08 41
-	add XBC,PtrTable_F99121+0x218                        ; F99070  e9 c8 39 93 f9 00
+	add XBC,MessageScreen_ArgHandlers                        ; F99070  e9 c8 39 93 f9 00
 	ld XBC,(XBC)                                         ; F99076  a1 21
 	lda xiy, (.LF99080:24)                               ; F99078  f2 80 90 f9 35
 	push XIY                                             ; F9907D  3d
@@ -44375,6 +44419,7 @@ sub_F9904D:
 	popw hl                                              ; F99081  4b
 	unlk XIZ                                             ; F99082  ee 0d
 	ret                                                  ; F99084  0e
+sub_F99085:   ; entry: MessageScreen_ArgHandlers[15]
 	link XIZ,0x0000                                      ; F99085  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F99089  8e 08 3f 00
 	jr nz, .LF99094                                      ; F9908D  6e 05
@@ -44399,7 +44444,7 @@ sub_F99098:
 	ld a, 0x04:opc                                          ; F990B7  21 04
 	m_mul MB16, 0x7fc1, 1                                ; F990B9  c1 c1 7f 41
 	extz XWA                                             ; F990BD  e8 12
-	add XWA,PtrTable_F99121+0x298                        ; F990BF  e8 c8 b9 93 f9 00
+	add XWA,MessageScreen_PairTableByLanguage                        ; F990BF  e8 c8 b9 93 f9 00
 	ld XWA,(XWA)                                         ; F990C5  a0 20
 	ld (xiz-8), xwa                                      ; F990C7  be f8 60
 	add XWA,XBC                                          ; F990CA  e9 80
@@ -44421,12 +44466,12 @@ sub_F99098:
 	m_mul MB16, 0x7fc1, 3                                ; F990F1  c1 c1 7f 43
 	extz XBC                                             ; F990F5  e9 12
 	ld XIX,XBC                                           ; F990F7  e9 8c
-	add XBC,PtrTable_F99121+0x200                        ; F990F9  e9 c8 21 93 f9 00
+	add XBC,MessageScreen_ListPairsB                        ; F990F9  e9 c8 21 93 f9 00
 	ld XBC,(XBC)                                         ; F990FF  a1 21
 	ld (xiz-4), xbc                                      ; F99101  be fc 61
 	ld XWA,XIX                                           ; F99104  ec 88
 	inc 4,XWA                                            ; F99106  e8 64
-	add XWA,PtrTable_F99121+0x200                        ; F99108  e8 c8 21 93 f9 00
+	add XWA,MessageScreen_ListPairsB                        ; F99108  e8 c8 21 93 f9 00
 	ld XWA,(XWA)                                         ; F9910E  a0 20
 	push XWA                                             ; F99110  38
 	push XBC                                             ; F99111  39
@@ -44438,74 +44483,242 @@ sub_F99098:
 	pop XIX                                              ; F9911C  5c
 	unlk XIZ                                             ; F9911D  ee 0d
 	ret                                                  ; F9911F  0e
+MessageScreen_ArgIgnore:   ; entry: MessageScreen_ArgHandlers (31 slots)
 	ret                                                  ; F99120  0e
 ; ---------------------------------------------------------------------
-; PtrTable_F99121 -- 169 LE32 pointers, 676 bytes
-;
-; Read by: ONE located reader, and it does NOT index from the base.  0xF990F9
-;          is `add XBC,0x00F99321 / ld XBC,(XBC)` and 0xF99108 is
-;          `inc 4,XWA / add XWA,0x00F99321 / ld XWA,(XWA)`, so it reads a
-;          CONSECUTIVE PAIR from 0xF99321 -- entry 128 of this run -- and hands
-;          (start, end) to T_DisplayListB_Run_Stack (T_F42E04), the display-list interpreter.  What indexes
-;          entries 0..127 is NOT ESTABLISHED.
+; MessageScreen_ListPairs -- 64 (start, end) LE32 pairs, one display list per
+;          message id; this span was PtrTable_F99121, whose header (kept
+;          below) found only the +0x200 reader.
+; Read by: sub_F99098 (0xF99098, posted by sub_F99021 through
+;          T_CallbackQueue_Post): id = (0x2880), `cp C,0x40 / jrl nc` -- ids
+;          0x40 and up draw nothing, hence COUNT 64 -- then `ld A,4 / mul
+;          WA,(0x7FC1) / add XWA,MessageScreen_PairTableByLanguage / ld XWA,
+;          (XWA)` for THIS table, `mul C,8`, start = (table + id*8), end =
+;          (table + id*8 + 4), and T_DisplayList_Run_Stack(start, end).
+; Values: every start and end is a prom_b display list in the message
+;          module whose header quotes this reader (prom_b 0xF2BE35-, the
+;          `DL_` lists); start < end for all 64 (check Q4).
+; (notes/proma-2026-09-25/gen_message_pairs.py, checks Q1-Q4)
 ; Extent:  0xF99121-0xF993C4.  Both ends are pinned by something other than the
 ;          run: 0xF99120 is a `ret` that ends the routine above, and the four
 ;          bytes at 0xF993C5 are 0x0E0E0E0E, the start of a 58-byte RET pad.
-; ENTRY COUNT 169, from notes/prom_a_ptr_tables.py (MIN=6, null 0.85% over
-;          24 KiB of known code) -- NOT from a reader's bound, because no reader
-;          bound was found.  ★ SELF-CONSISTENCY: the run's last three entries,
-;          at 0xF993B9/0xF993BD/0xF993C1, all hold 0x00F99121 -- the run's own
-;          base.  A table whose tail points at its own head is not a chance
-;          alignment of code bytes.
-; Evidence: the shape run plus its null; the one reader; the two pinned ends;
-;          the self-reference.  Asserted in notes/prom_a_uiblock_checks.py.
-; Unknown:  what the entries mean.  They are addresses in prom_b's display-list
-;          region 0xF01800-0xF3E15B and in prom_a.
+;          (The `ret` at 0xF99120 is now labelled MessageScreen_ArgIgnore.)
+; ★ CORRECTED 2026-09-25 (lane proma).  This span was PtrTable_F99121: 169
+;          LE32 pointers with one located reader (+0x200) and none for
+;          entries 0..127, a count taken from the shape detector
+;          (notes/prom_a_ptr_tables.py) for want of a reader bound, and the
+;          entries' meaning open.  Three readers at +0x000 (via +0x298),
+;          +0x200 and +0x218 split it into the four tables below, each with
+;          its own count; the detector's 169 = 128 + 6 + 32 + 3, and the old
+;          "self-reference" (three entries = the base, asserted by
+;          wsa1/notes/prom_a_uiblock_checks.py 1f) is
+;          MessageScreen_PairTableByLanguage.
 ; ---------------------------------------------------------------------
-PtrTable_F99121:
-	.byte 0x7d, 0xd8, 0xf2, 0x00, 0xd4, 0xd8, 0xf2, 0x00, 0xd4, 0xd8, 0xf2, 0x00, 0x2d, 0xd9, 0xf2, 0x00  ; F99121
-	.byte 0x2d, 0xd9, 0xf2, 0x00, 0x61, 0xd9, 0xf2, 0x00, 0x61, 0xd9, 0xf2, 0x00, 0x9e, 0xd9, 0xf2, 0x00  ; F99131
-	.byte 0x10, 0xe9, 0xf2, 0x00, 0x1a, 0xe9, 0xf2, 0x00, 0x9e, 0xd9, 0xf2, 0x00, 0xf6, 0xd9, 0xf2, 0x00  ; F99141
-	.byte 0xf6, 0xd9, 0xf2, 0x00, 0x71, 0xda, 0xf2, 0x00, 0x71, 0xda, 0xf2, 0x00, 0xc2, 0xda, 0xf2, 0x00  ; F99151
-	.byte 0xc2, 0xda, 0xf2, 0x00, 0x63, 0xdb, 0xf2, 0x00, 0x79, 0xdc, 0xf2, 0x00, 0xd7, 0xdc, 0xf2, 0x00  ; F99161
-	.byte 0x63, 0xdb, 0xf2, 0x00, 0x97, 0xdb, 0xf2, 0x00, 0x3a, 0xdc, 0xf2, 0x00, 0x79, 0xdc, 0xf2, 0x00  ; F99171
-	.byte 0x10, 0xe9, 0xf2, 0x00, 0x1a, 0xe9, 0xf2, 0x00, 0x10, 0xe9, 0xf2, 0x00, 0x1a, 0xe9, 0xf2, 0x00  ; F99181
-	.byte 0xd7, 0xdc, 0xf2, 0x00, 0x4f, 0xdd, 0xf2, 0x00, 0x4f, 0xdd, 0xf2, 0x00, 0x6b, 0xdd, 0xf2, 0x00  ; F99191
-	.byte 0x10, 0xe9, 0xf2, 0x00, 0x1a, 0xe9, 0xf2, 0x00, 0x10, 0xe9, 0xf2, 0x00, 0x1a, 0xe9, 0xf2, 0x00  ; F991A1
-	.byte 0x10, 0xe9, 0xf2, 0x00, 0x1a, 0xe9, 0xf2, 0x00, 0x85, 0xe1, 0xf2, 0x00, 0x61, 0xe2, 0xf2, 0x00  ; F991B1
-	.byte 0x0c, 0xe4, 0xf2, 0x00, 0x6a, 0xe4, 0xf2, 0x00, 0x89, 0xe3, 0xf2, 0x00, 0x0c, 0xe4, 0xf2, 0x00  ; F991C1
-	.byte 0x61, 0xe2, 0xf2, 0x00, 0x6d, 0xe3, 0xf2, 0x00, 0x6d, 0xe3, 0xf2, 0x00, 0x89, 0xe3, 0xf2, 0x00  ; F991D1
-	.byte 0x6b, 0xdd, 0xf2, 0x00, 0xbd, 0xdd, 0xf2, 0x00, 0xbd, 0xdd, 0xf2, 0x00, 0x3c, 0xde, 0xf2, 0x00  ; F991E1
-	.byte 0x3c, 0xde, 0xf2, 0x00, 0x6b, 0xde, 0xf2, 0x00, 0x1c, 0xdf, 0xf2, 0x00, 0x6d, 0xdf, 0xf2, 0x00  ; F991F1
-	.byte 0x6d, 0xdf, 0xf2, 0x00, 0xec, 0xdf, 0xf2, 0x00, 0xec, 0xdf, 0xf2, 0x00, 0x40, 0xe0, 0xf2, 0x00  ; F99201
-	.byte 0x96, 0xe0, 0xf2, 0x00, 0xdb, 0xe0, 0xf2, 0x00, 0xdb, 0xe0, 0xf2, 0x00, 0x85, 0xe1, 0xf2, 0x00  ; F99211
-	.byte 0x87, 0xe5, 0xf2, 0x00, 0x15, 0xe6, 0xf2, 0x00, 0xe4, 0xe4, 0xf2, 0x00, 0x87, 0xe5, 0xf2, 0x00  ; F99221
-	.byte 0x6a, 0xe4, 0xf2, 0x00, 0xe4, 0xe4, 0xf2, 0x00, 0x15, 0xe6, 0xf2, 0x00, 0x23, 0xe6, 0xf2, 0x00  ; F99231
-	.byte 0xa6, 0xdb, 0xf2, 0x00, 0x3a, 0xdc, 0xf2, 0x00, 0x00, 0xd8, 0xf2, 0x00, 0x10, 0xd8, 0xf2, 0x00  ; F99241
-	.byte 0x57, 0xd8, 0xf2, 0x00, 0x7d, 0xd8, 0xf2, 0x00, 0x34, 0xd8, 0xf2, 0x00, 0x57, 0xd8, 0xf2, 0x00  ; F99251
-	.byte 0x10, 0xd8, 0xf2, 0x00, 0x34, 0xd8, 0xf2, 0x00, 0x97, 0xdb, 0xf2, 0x00, 0xa6, 0xdb, 0xf2, 0x00  ; F99261
-	.byte 0xe2, 0xe8, 0xf2, 0x00, 0x10, 0xe9, 0xf2, 0x00, 0x7d, 0xd8, 0xf2, 0x00, 0xd4, 0xd8, 0xf2, 0x00  ; F99271
-	.byte 0xba, 0xe6, 0xf2, 0x00, 0x16, 0xe7, 0xf2, 0x00, 0x16, 0xe7, 0xf2, 0x00, 0x9c, 0xe7, 0xf2, 0x00  ; F99281
-	.byte 0x9c, 0xe7, 0xf2, 0x00, 0x31, 0xe8, 0xf2, 0x00, 0x31, 0xe8, 0xf2, 0x00, 0x47, 0xe8, 0xf2, 0x00  ; F99291
-	.byte 0x47, 0xe8, 0xf2, 0x00, 0x5e, 0xe8, 0xf2, 0x00, 0x5e, 0xe8, 0xf2, 0x00, 0x83, 0xe8, 0xf2, 0x00  ; F992A1
-	.byte 0x83, 0xe8, 0xf2, 0x00, 0xe2, 0xe8, 0xf2, 0x00, 0x10, 0xe9, 0xf2, 0x00, 0x1a, 0xe9, 0xf2, 0x00  ; F992B1
-	.byte 0x10, 0xe9, 0xf2, 0x00, 0x1a, 0xe9, 0xf2, 0x00, 0x40, 0xe0, 0xf2, 0x00, 0x96, 0xe0, 0xf2, 0x00  ; F992C1
-	.byte 0xe3, 0xe9, 0xf2, 0x00, 0x8f, 0xea, 0xf2, 0x00, 0x40, 0xeb, 0xf2, 0x00, 0xd4, 0xeb, 0xf2, 0x00  ; F992D1
-	.byte 0xd4, 0xeb, 0xf2, 0x00, 0xbc, 0xec, 0xf2, 0x00, 0x8f, 0xea, 0xf2, 0x00, 0x40, 0xeb, 0xf2, 0x00  ; F992E1
-	.byte 0xbc, 0xec, 0xf2, 0x00, 0xd4, 0xed, 0xf2, 0x00, 0xd4, 0xed, 0xf2, 0x00, 0x9f, 0xee, 0xf2, 0x00  ; F992F1
-	.byte 0x9f, 0xee, 0xf2, 0x00, 0x3f, 0xf0, 0xf2, 0x00, 0x3f, 0xf0, 0xf2, 0x00, 0xad, 0xf1, 0xf2, 0x00  ; F99301
-	.byte 0xad, 0xf1, 0xf2, 0x00, 0x61, 0xf2, 0xf2, 0x00, 0x61, 0xf2, 0xf2, 0x00, 0xaf, 0xf2, 0xf2, 0x00  ; F99311
-	.byte 0x6b, 0xde, 0xf2, 0x00, 0x89, 0xde, 0xf2, 0x00, 0x6b, 0xde, 0xf2, 0x00, 0x89, 0xde, 0xf2, 0x00  ; F99321
-	.byte 0x6b, 0xde, 0xf2, 0x00, 0x89, 0xde, 0xf2, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00  ; F99331
-	.byte 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00  ; F99341
-	.byte 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00  ; F99351
-	.byte 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00  ; F99361
-	.byte 0x20, 0x91, 0xf9, 0x00, 0x85, 0x90, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00  ; F99371
-	.byte 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00  ; F99381
-	.byte 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00  ; F99391
-	.byte 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00  ; F993A1
-	.byte 0x20, 0x91, 0xf9, 0x00, 0x20, 0x91, 0xf9, 0x00, 0x21, 0x91, 0xf9, 0x00, 0x21, 0x91, 0xf9, 0x00  ; F993B1
-	.byte 0x21, 0x91, 0xf9, 0x00                                              ; F993C1
+MessageScreen_ListPairs:
+	.long DL_Error00TheDataOnTheDiskThatYouAre       ; F99121  [id 0x00] start
+	.long DL_Error01AnErrorHasOccuredWhileTheDisk    ; F99125          end
+	.long DL_Error01AnErrorHasOccuredWhileTheDisk    ; F99129  [id 0x01] start
+	.long DL_Error02ThereIsNoDiskInTheDiskDrive      ; F9912D          end
+	.long DL_Error02ThereIsNoDiskInTheDiskDrive      ; F99131  [id 0x02] start
+	.long DL_Error03TheFileThatYouTriedToLoad        ; F99135          end
+	.long DL_Error03TheFileThatYouTriedToLoad        ; F99139  [id 0x03] start
+	.long DL_Error05AnErrorHasOccuredWhileTheDisk    ; F9913D          end
+	.long DL_Error                                   ; F99141  [id 0x04] start
+	.long DL_F2E91A                                  ; F99145          end
+	.long DL_Error05AnErrorHasOccuredWhileTheDisk    ; F99149  [id 0x05] start
+	.long DL_Error06TheDiskThatYouAreUsingIsWrite    ; F9914D          end
+	.long DL_Error06TheDiskThatYouAreUsingIsWrite    ; F99151  [id 0x06] start
+	.long DL_Error07TheDiskThatYouAreUsingIsFull     ; F99155          end
+	.long DL_Error07TheDiskThatYouAreUsingIsFull     ; F99159  [id 0x07] start
+	.long DL_Error08AnErrorHasOccuredWhileTheDisk    ; F9915D          end
+	.long DL_Error08AnErrorHasOccuredWhileTheDisk    ; F99161  [id 0x08] start
+	.long DL_Error10TheDataIsAlreadyCopyProtected    ; F99165          end
+	.long DL_CopyProtectedTheDataOnTheDiskIsCopy     ; F99169  [id 0x09] start
+	.long DL_Error20AProblemHasOccuredWithYour       ; F9916D          end
+	.long DL_Error10TheDataIsAlreadyCopyProtected    ; F99171  [id 0x0A] start
+	.long DL_PasswordOk                              ; F99175          end
+	.long DL_Error11ThePasswordThatYouEnteredIs      ; F99179  [id 0x0B] start
+	.long DL_CopyProtectedTheDataOnTheDiskIsCopy     ; F9917D          end
+	.long DL_Error                                   ; F99181  [id 0x0C] start
+	.long DL_F2E91A                                  ; F99185          end
+	.long DL_Error                                   ; F99189  [id 0x0D] start
+	.long DL_F2E91A                                  ; F9918D          end
+	.long DL_Error20AProblemHasOccuredWithYour       ; F99191  [id 0x0E] start
+	.long DL_Error21MemoryFull                       ; F99195          end
+	.long DL_Error21MemoryFull                       ; F99199  [id 0x0F] start
+	.long DL_Error22ItIsNecessaryToPressPunchOut     ; F9919D          end
+	.long DL_Error                                   ; F991A1  [id 0x10] start
+	.long DL_F2E91A                                  ; F991A5          end
+	.long DL_Error                                   ; F991A9  [id 0x11] start
+	.long DL_F2E91A                                  ; F991AD          end
+	.long DL_Error                                   ; F991B1  [id 0x12] start
+	.long DL_F2E91A                                  ; F991B5          end
+	.long DL_Error30ItIsNotPossibleToChangeThe       ; F991B9  [id 0x13] start
+	.long DL_Error31TheTimeSignatureOfThePattern     ; F991BD          end
+	.long DL_CopyCompletedYourChosenPatternHasBeenCop ; F991C1  [id 0x14] start
+	.long DL_Error40TheIdentificationIdCodeOfThe     ; F991C5          end
+	.long DL_CopyCompletedTheIntroFillInsAndEndingOfY ; F991C9  [id 0x15] start
+	.long DL_CopyCompletedYourChosenPatternHasBeenCop ; F991CD          end
+	.long DL_Error31TheTimeSignatureOfThePattern     ; F991D1  [id 0x16] start
+	.long DL_Error32MemoryFull                       ; F991D5          end
+	.long DL_Error32MemoryFull                       ; F991D9  [id 0x17] start
+	.long DL_CopyCompletedTheIntroFillInsAndEndingOfY ; F991DD          end
+	.long DL_Error22ItIsNecessaryToPressPunchOut     ; F991E1  [id 0x18] start
+	.long DL_Error23ItIsImpossibleToChangeThe        ; F991E5          end
+	.long DL_Error23ItIsImpossibleToChangeThe        ; F991E9  [id 0x19] start
+	.long DL_Error24ItIsImpossibleToAssignTwo        ; F991ED          end
+	.long DL_Error24ItIsImpossibleToAssignTwo        ; F991F1  [id 0x1A] start
+	.long DL_F2DE6B                                  ; F991F5          end
+	.long DL_Error25ItIsOnlyPossibleToChange         ; F991F9  [id 0x1B] start
+	.long DL_Error26ItIsOnlyPossibleToMerge          ; F991FD          end
+	.long DL_Error26ItIsOnlyPossibleToMerge          ; F99201  [id 0x1C] start
+	.long DL_Error27ItIsImpossibleToCopyFromOr       ; F99205          end
+	.long DL_Error27ItIsImpossibleToCopyFromOr       ; F99209  [id 0x1D] start
+	.long DL_Error46ItIsImpossibleToInsertFromOr     ; F9920D          end
+	.long DL_Error28ThisSongIsTooLongToBeSaved       ; F99211  [id 0x1E] start
+	.long DL_Error29TheMidiFileThatYouHaveTried      ; F99215          end
+	.long DL_Error29TheMidiFileThatYouHaveTried      ; F99219  [id 0x1F] start
+	.long DL_Error30ItIsNotPossibleToChangeThe       ; F9921D          end
+	.long DL_Error42AnErrorHasOccuredDuringSystem    ; F99221  [id 0x20] start
+	.long DL_Completed                               ; F99225          end
+	.long DL_Error41AnErrorHasOccuredDuringSystem    ; F99229  [id 0x21] start
+	.long DL_Error42AnErrorHasOccuredDuringSystem    ; F9922D          end
+	.long DL_Error40TheIdentificationIdCodeOfThe     ; F99231  [id 0x22] start
+	.long DL_Error41AnErrorHasOccuredDuringSystem    ; F99235          end
+	.long DL_Completed                               ; F99239  [id 0x23] start
+	.long DL_Error43TheFileThatYouAreTryingToLoad    ; F9923D          end
+	.long DL_ReminderTheInternalMemoryIsRetainedFor  ; F99241  [id 0x24] start
+	.long DL_Error11ThePasswordThatYouEnteredIs      ; F99245          end
+	.long DL_PleaseWait                              ; F99249  [id 0x25] start
+	.long DL_DiskFormattingPleaseWait                ; F9924D          end
+	.long DL_LoadingFromDiskPleaseWait               ; F99251  [id 0x26] start
+	.long DL_Error00TheDataOnTheDiskThatYouAre       ; F99255          end
+	.long DL_SavingToDiskPleaseWait                  ; F99259  [id 0x27] start
+	.long DL_LoadingFromDiskPleaseWait               ; F9925D          end
+	.long DL_DiskFormattingPleaseWait                ; F99261  [id 0x28] start
+	.long DL_SavingToDiskPleaseWait                  ; F99265          end
+	.long DL_PasswordOk                              ; F99269  [id 0x29] start
+	.long DL_ReminderTheInternalMemoryIsRetainedFor  ; F9926D          end
+	.long DL_PMemSetHasBeenPushFor10Seconds          ; F99271  [id 0x2A] start
+	.long DL_Error                                   ; F99275          end
+	.long DL_Error00TheDataOnTheDiskThatYouAre       ; F99279  [id 0x2B] start
+	.long DL_Error01AnErrorHasOccuredWhileTheDisk    ; F9927D          end
+	.long DL_WriteCompletedYourEditedSoundHasBeenStor ; F99281  [id 0x2C] start
+	.long DL_Error44ItIsImpossibleToEditADrumKit     ; F99285          end
+	.long DL_Error44ItIsImpossibleToEditADrumKit     ; F99289  [id 0x2D] start
+	.long DL_AttentionTheChosenParametersDoNot       ; F9928D          end
+	.long DL_AttentionTheChosenParametersDoNot       ; F99291  [id 0x2E] start
+	.long DL_NoSequencerData                         ; F99295          end
+	.long DL_NoSequencerData                         ; F99299  [id 0x2F] start
+	.long DL_FileConvertError                        ; F9929D          end
+	.long DL_FileConvertError                        ; F992A1  [id 0x30] start
+	.long DL_ThisIsNotAStandardMidiFile              ; F992A5          end
+	.long DL_ThisIsNotAStandardMidiFile              ; F992A9  [id 0x31] start
+	.long DL_TheTimebasePpqResolution                ; F992AD          end
+	.long DL_TheTimebasePpqResolution                ; F992B1  [id 0x32] start
+	.long DL_PMemSetHasBeenPushFor10Seconds          ; F992B5          end
+	.long DL_Error                                   ; F992B9  [id 0x33] start
+	.long DL_F2E91A                                  ; F992BD          end
+	.long DL_Error                                   ; F992C1  [id 0x34] start
+	.long DL_F2E91A                                  ; F992C5          end
+	.long DL_Error46ItIsImpossibleToInsertFromOr     ; F992C9  [id 0x35] start
+	.long DL_Error28ThisSongIsTooLongToBeSaved       ; F992CD          end
+	.long DL_ErrorItIsNotPossibleToUse               ; F992D1  [id 0x36] start
+	.long DL_ErrorItIsNotPossibleToRecord            ; F992D5          end
+	.long DL_Err0rTheTypeOfInsertedDisk              ; F992D9  [id 0x37] start
+	.long DL_Err0rTheQuantityOfThisSong              ; F992DD          end
+	.long DL_Err0rTheQuantityOfThisSong              ; F992E1  [id 0x38] start
+	.long DL_ErrorSpecialTracksSuchAs                ; F992E5          end
+	.long DL_ErrorItIsNotPossibleToRecord            ; F992E9  [id 0x39] start
+	.long DL_Err0rTheTypeOfInsertedDisk              ; F992ED          end
+	.long DL_ErrorSpecialTracksSuchAs                ; F992F1  [id 0x3A] start
+	.long DL_ErrorAut0PunchRecordingHas              ; F992F5          end
+	.long DL_ErrorAut0PunchRecordingHas              ; F992F9  [id 0x3B] start
+	.long DL_ErrorTheComposerPatternYou              ; F992FD          end
+	.long DL_ErrorTheComposerPatternYou              ; F99301  [id 0x3C] start
+	.long DL_ErrorTheSongThatYouHaveTried            ; F99305          end
+	.long DL_ErrorTheSongThatYouHaveTried            ; F99309  [id 0x3D] start
+	.long DL_AttentionItIsImpossibleTo               ; F9930D          end
+	.long DL_AttentionItIsImpossibleTo               ; F99311  [id 0x3E] start
+	.long DL_ErrorThisIsAFormat1MidiFileDisk         ; F99315          end
+	.long DL_ErrorThisIsAFormat1MidiFileDisk         ; F99319  [id 0x3F] start
+	.long MsgTail_F2F2AF                             ; F9931D          end
+
+; ---------------------------------------------------------------------
+; MessageScreen_ListPairsB -- 3 (start, end) LE32 pairs, interpreter B.
+; Read by: sub_F99098 when the message id is 0x1A: (0x2881) = (0x0C12),
+;          then `ld C,8 / mul BC,(0x7FC1)`, start = (this + 8*v), `inc 4` /
+;          end = (this + 8*v + 4), T_DisplayListB_Run_Stack(start, end).
+; COUNT 3: the abutment -- MessageScreen_ArgHandlers starts at +0x18 --
+;          and the 3 entries of MessageScreen_PairTableByLanguage, the other
+;          table indexed by the same (0x7FC1).  (checks Q2, Q4)
+; ---------------------------------------------------------------------
+MessageScreen_ListPairsB:
+	.long DL_F2DE6B                                  ; F99321  [(0x7FC1) = 0] start
+	.long DLTable_ARhythmTrackAlreadyExists          ; F99325          end
+	.long DL_F2DE6B                                  ; F99329  [(0x7FC1) = 1] start
+	.long DLTable_ARhythmTrackAlreadyExists          ; F9932D          end
+	.long DL_F2DE6B                                  ; F99331  [(0x7FC1) = 2] start
+	.long DLTable_ARhythmTrackAlreadyExists          ; F99335          end
+
+; ---------------------------------------------------------------------
+; MessageScreen_ArgHandlers -- 32 LE32 handler addresses.
+; Read by: sub_F9904D (0xF9904D, prom_b directory slot T_F4160C):
+;          `cp (XIZ+8),0x001F / jr ugt` -- COUNT 32 -- then `ldw BC,4 /
+;          mul BC,(XIZ+8) / add XBC,<this> / ld XBC,(XBC)` and a call with
+;          H = bit 7 of the second argument (XIZ+0x0A) pushed.
+;          31 slots are MessageScreen_ArgIgnore (one `ret`); slot 15 is
+;          sub_F99085, which sets (0x209A) = 1 when H is 0.  (checks Q3, Q4)
+; ⚠ What the argument numbers (who calls T_F4160C, with what) is not
+;          established here.
+; ---------------------------------------------------------------------
+MessageScreen_ArgHandlers:
+	.long MessageScreen_ArgIgnore                  ; F99339  [ 0]
+	.long MessageScreen_ArgIgnore                  ; F9933D  [ 1]
+	.long MessageScreen_ArgIgnore                  ; F99341  [ 2]
+	.long MessageScreen_ArgIgnore                  ; F99345  [ 3]
+	.long MessageScreen_ArgIgnore                  ; F99349  [ 4]
+	.long MessageScreen_ArgIgnore                  ; F9934D  [ 5]
+	.long MessageScreen_ArgIgnore                  ; F99351  [ 6]
+	.long MessageScreen_ArgIgnore                  ; F99355  [ 7]
+	.long MessageScreen_ArgIgnore                  ; F99359  [ 8]
+	.long MessageScreen_ArgIgnore                  ; F9935D  [ 9]
+	.long MessageScreen_ArgIgnore                  ; F99361  [10]
+	.long MessageScreen_ArgIgnore                  ; F99365  [11]
+	.long MessageScreen_ArgIgnore                  ; F99369  [12]
+	.long MessageScreen_ArgIgnore                  ; F9936D  [13]
+	.long MessageScreen_ArgIgnore                  ; F99371  [14]
+	.long sub_F99085                               ; F99375  [15]
+	.long MessageScreen_ArgIgnore                  ; F99379  [16]
+	.long MessageScreen_ArgIgnore                  ; F9937D  [17]
+	.long MessageScreen_ArgIgnore                  ; F99381  [18]
+	.long MessageScreen_ArgIgnore                  ; F99385  [19]
+	.long MessageScreen_ArgIgnore                  ; F99389  [20]
+	.long MessageScreen_ArgIgnore                  ; F9938D  [21]
+	.long MessageScreen_ArgIgnore                  ; F99391  [22]
+	.long MessageScreen_ArgIgnore                  ; F99395  [23]
+	.long MessageScreen_ArgIgnore                  ; F99399  [24]
+	.long MessageScreen_ArgIgnore                  ; F9939D  [25]
+	.long MessageScreen_ArgIgnore                  ; F993A1  [26]
+	.long MessageScreen_ArgIgnore                  ; F993A5  [27]
+	.long MessageScreen_ArgIgnore                  ; F993A9  [28]
+	.long MessageScreen_ArgIgnore                  ; F993AD  [29]
+	.long MessageScreen_ArgIgnore                  ; F993B1  [30]
+	.long MessageScreen_ArgIgnore                  ; F993B5  [31]
+
+; ---------------------------------------------------------------------
+; MessageScreen_PairTableByLanguage -- 3 LE32 pointers, each to a
+;          64-pair table; all three are MessageScreen_ListPairs, so every
+;          value of (0x7FC1) draws the same lists in this ROM.
+; Read by: sub_F99098, `ld A,4 / mul WA,(0x7FC1) / add XWA,<this> /
+;          ld XWA,(XWA)` at 0xF990B7-0xF990C5.  COUNT 3: the abutment with
+;          the 0x0E pad at 0xF993C5 (check Q4); prom_b's message-module
+;          header reads (0x7FC1) as the language.
+; ---------------------------------------------------------------------
+MessageScreen_PairTableByLanguage:
+	.long MessageScreen_ListPairs                    ; F993B9  [0]
+	.long MessageScreen_ListPairs                    ; F993BD  [1]
+	.long MessageScreen_ListPairs                    ; F993C1  [2]
 	ret                                                  ; F993C5  0e
 
 ; 0xF993C6-0xF993FF -- 58 bytes of 0x0E (RET), module padding.
