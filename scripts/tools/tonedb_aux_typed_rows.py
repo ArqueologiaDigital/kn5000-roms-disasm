@@ -355,8 +355,20 @@ def emit_drawbar_tone(label, D, sym):
     return hdr, rows
 
 
+def emit_default_block(label, D, sym):
+    """ToneDB_DefaultLayerParams (dir +0xAC): the partial block bound to an absent
+    partial -- same seven field groups as a tone record's partial blocks."""
+    R = _records_tool()
+    a = sym[label]
+    rows = []
+    for lo, hi, txt in R.GROUPS:
+        rows.append(pad("\t.byte\t" + ", ".join("0x%02x" % b for b in blob(a + lo, hi - lo + 1)),
+                        "blk+0x%02x %s" % (lo, txt), col=112))
+    return [], rows
+
+
 LABEL = re.compile(r'^(ToneEnv_Rec(\d{3})_([AB])|DrumKit_\d\d_\w+|PercInst_\d{3}_\w+|'
-                   r'DrawbarPreset_EnvData_\d|DrawbarPreset_Jazz|DrawbarPreset_Rock):\s*$')
+                   r'DrawbarPreset_EnvData_\d|DrawbarPreset_Jazz|DrawbarPreset_Rock|ToneDB_DefaultLayerParams):\s*$')
 MY_HEADERS = [re.compile(x) for x in (
     r'^; SET \d{3} (key map|zone records)', r'^; \d+ bands -> zone index',
     r'^; emitted by WaveSel_Emit_ZoneRecord', r'^; Drawbar SET zone records for',
@@ -428,6 +440,9 @@ def main():
             assert addr == (d["A"] if m.group(3) == "A" else d["B"]), label
             hdr, rows = (emit_A if m.group(3) == "A" else emit_B)(d, D, sym)
             kind = "ToneEnv"
+        elif label == "ToneDB_DefaultLayerParams":
+            hdr, rows = emit_default_block(label, D, sym)
+            kind = "DefaultBlock"
         elif label in ("DrawbarPreset_Jazz", "DrawbarPreset_Rock"):
             hdr, rows = emit_drawbar_tone(label, D, sym)
             kind = "DrawbarTone"

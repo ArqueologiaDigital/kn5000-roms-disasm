@@ -52,6 +52,10 @@
 ;   ToneDB_SourceIndexMapA/B  max value 332/331 < 333 = SourceNameList1 count
 ;   ToneDB_SourceIndexMapC/D  max value 338/337 < 339 = SourceNameList2 count
 ;   ToneDB_PercSourceIndexMapA/B max 141/140 <= 141 = PercSourceNameList1 count
+;     (2026-09-25: for MapA the reader's bound is the 142 velocity-split records
+;     of ToneDB_PercMixerDefaultTable -- WaveSel_StageA1_SelectTables pairs
+;     dir +0x14 with dir +0x20 -- so this line is a count match, not the
+;     indexing; likewise ToneDB_ToneIndexMapA/B index ToneDB_MixerDefaultTable)
 ;   ToneDB_PercSourceIndexMapC max 143 < 144 = PercSourceNameList2 count
 ;   DrumKit_NoteMapA/B  entries all < 610 = PercInst record count
 ;   PercName_Pack has 610 entries = PercInst record count; entries 0-423 are
@@ -95,16 +99,28 @@
 ; 102+81k bytes), so this is most likely the default/template layer parameter
 ; set.  Values follow MIDI conventions: 0x40 = center, 0x7f = max, 100/60/40 =
 ; typical level defaults.
+; ESTABLISHED 2026-09-25: EFFSlotScan_LoopBody (subcpu 0x032243) binds every
+; ABSENT partial of a tone record to RelBase + dir[+0xAC] = this block, so it is
+; the partial block a voice reads when its record has none for that partial --
+; the 81-byte layout of tone_database_records.s's partial blocks (rows below cut
+; into the same seven reader-defined groups).
 ToneDB_DefaultLayerParams:
-	.byte	0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x32, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x1e
-	.byte	0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x5a, 0x14, 0x60, 0x42, 0x18, 0x66, 0x00, 0x00, 0x00
-	.byte	0x7f, 0x7f, 0x00, 0x00, 0x7f, 0x7f, 0x00, 0x00, 0x64, 0x3c, 0x64, 0x50, 0x64, 0x28, 0x0a, 0x00
-	.byte	0x42, 0x18, 0x7f, 0x00, 0x00, 0x00, 0x61, 0x14, 0x00, 0x42, 0x00, 0x7f, 0x00, 0x00, 0x00, 0x1e
-	.byte	0x00, 0x1e, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00, 0x60, 0x02, 0x40
-	.byte	0x87
+	.byte	0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00							; blk+0x00 head: +0x02/+0x03 wave-select pair
+	.byte	0x32, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00	; blk+0x07 envelope 2 (Voice_Level_ComputeTriplet)
+	.byte	0x5a, 0x14, 0x60, 0x42, 0x18, 0x66, 0x00, 0x00, 0x00, 0x7f, 0x7f, 0x00, 0x00, 0x7f, 0x7f, 0x00	; blk+0x17 pitch +0x17..+0x1C (Voice_ApplyPortamento, Voice_ComputePitch)
+	.byte	0x00, 0x64, 0x3c, 0x64, 0x50, 0x64, 0x28, 0x0a, 0x00, 0x42, 0x18, 0x7f, 0x00, 0x00, 0x00	; blk+0x27 envelope 1, amplitude (Voice_Calc_LevelPair_PatchAtk)
+	.byte	0x61, 0x14, 0x00, 0x42, 0x00, 0x7f, 0x00							; blk+0x36 filter control (TVF_Build_Dispatch, TVF_Calc_Cutoff)
+	.byte	0x00, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x42, 0x00, 0x00, 0x00	; blk+0x3d envelope 3 (Voice_StereoLevel_Compute)
+	.byte	0x60, 0x02, 0x40, 0x87										; blk+0x4d filter registers: cutoff, slope, pair (TVF_Build_Full)
 
 ; -----------------------------------------------------------------------------
 ; 1024 LE16 tone indices (dir +0x0C).  Values 1-336: entries of the 629-entry tone-record offset table at 0x831B00.
+; CORRECTED 2026-09-25 (proven by the reader): the values index
+; ToneDB_MixerDefaultTable's 337 velocity-split records, NOT the tone-record
+; offset table.  WaveSel_StageA1_SelectTables (subcpu 0x0323E5) takes this map
+; for SET family 0x00/0xC0 together with dir +0x18 and stride +0xEA, and
+; WaveSel_StageA1_IndexLookup (0x032469) returns record = dir[+0x18] + 11 *
+; u16[map + 2*((sub << 7) | wave)].  Max value 336 = 337 - 1.
 ToneDB_ToneIndexMapA:
 	.short	    1,     5,     1,     9,    10,    11,    16,    19	; 0-7
 	.short	   22,    23,    24,    25,    26,    29,    30,    33	; 8-15
@@ -237,6 +253,9 @@ ToneDB_ToneIndexMapA:
 
 ; -----------------------------------------------------------------------------
 ; 1024 LE16 tone indices (dir +0x10).  Values 2-334; companion of ToneDB_ToneIndexMapA (alternate tone selection).
+; CORRECTED 2026-09-25: the family-0x80 index map of WaveSel_StageA1_SelectTables
+; (0x0323E5), paired with dir +0x1C (= the same ToneDB_MixerDefaultTable) and
+; stride +0xEA; values index that table's velocity-split records.
 ToneDB_ToneIndexMapB:
 	.short	    2,     2,     8,     2,     8,    12,    20,    20	; 0-7
 	.short	   20,    20,    20,    27,    27,    27,    27,    34	; 8-15
@@ -371,6 +390,21 @@ ToneDB_ToneIndexMapB:
 ; 337 records x 11 bytes (dir +0x18/+0x1C).  Record: 3 level bytes (0x7f = max)
 ; followed by 4 LE16 controller values (0x0040 = centered).  Per-tone mixer /
 ; controller power-on defaults.  
+; CORRECTED 2026-09-25 (proven by the readers): these are VELOCITY-SPLIT
+; records, not mixer or controller defaults, and the tail is four byte pairs,
+; not four LE16 values.  The chain, all in the v1.42 subcpu:
+;   WaveSel_StageA1_IndexLookup (0x032469) picks the record through
+;     ToneDB_ToneIndexMapA/B (families 0x00/0xC0 and 0x80, stride word +0xEA)
+;     from the partial block's wave byte (+0x02) and family/sub-bank byte (+0x03);
+;   Velocity_Select_Split_Zone (0x022824, _Alt 0x022844) compares the note
+;     velocity with the three ascending thresholds at +0..+2 -> zone 0..3;
+;   WaveSel_StageA2_FromVelZone (0x0328B5) takes zone z's pair -- wave byte
+;     +3+2z, family/sub-bank byte +4+2z -- and WaveSel_StageA2_FindSetDesc
+;     (0x032750) turns it into a SET descriptor (ToneDB_EnvDescTable).
+; So 7f 7f 7f is a single zone (every velocity <= 0x7f) and e.g. record 10,
+; 59 6d 7f, has three.  Every family byte here is 0x00 or 0x80 (912 and 436 of
+; the 1348 pairs), the melodic families.  The label name is kept for
+; continuity (WSA1 notes cite it); "velocity-split table" is what it is.
 ToneDB_MixerDefaultTable:
 	.byte	0x7f, 0x7f, 0x7f, 0x7f, 0x00, 0x7f, 0x00, 0x7f, 0x00, 0x7f, 0x00	; 0
 	.byte	0x7f, 0x7f, 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; 1
@@ -9563,6 +9597,10 @@ DrumKit_25_SoundEffectKit:
 ;          Voice_Allocate_Type2: rec + 0x10 + 0x15*layer).
 ; LAYER fields with a reader (paramA+N; code re-read 2026-09-25):
 ;   +0x01, +0x02  wave-select pair -> WaveSel_StageA1_FromToneSlot (0x032682)
+;          (+0x01 = wave byte, +0x02 = family/sub-bank byte: 0x40..0x4F, the
+;          percussion family, in 609 of 610; the pair picks a velocity-split
+;          record of ToneDB_PercMixerDefaultTable through
+;          ToneDB_PercSourceIndexMapA, and that record's zone pair the SET)
 ;   +0x05  channel detune: +(value - 0x64), or a fixed -0x200 when 0
 ;          (Voice_ApplyPortamento2, 0x026684)
 ;   +0x06  signed detune, +0x07 pitch-curve selector, 0xE0 = the direct note
@@ -14412,6 +14450,10 @@ DrumKit_NoteMapA:
 ; 142 records x 11 bytes (dir +0x20).  Record: 3 level bytes (0x7f = max)
 ; followed by 4 LE16 controller values (0x0040 = centered).  Per-tone mixer /
 ; controller power-on defaults.  Percussion counterpart of ToneDB_MixerDefaultTable.
+; CORRECTED 2026-09-25: velocity-split records, as ToneDB_MixerDefaultTable
+; (see its header) -- three thresholds, then four {wave, family} byte pairs.
+; Reached for SET family 0x40 through ToneDB_PercSourceIndexMapA (dir +0x14,
+; stride word +0xF0); all 568 family bytes here are 0x40, the percussion family.
 ToneDB_PercMixerDefaultTable:
 	.byte	0x7f, 0x7f, 0x7f, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40	; 0
 	.byte	0x7f, 0x7f, 0x7f, 0x00, 0x41, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40	; 1
@@ -14558,6 +14600,10 @@ ToneDB_PercMixerDefaultTable:
 
 ; -----------------------------------------------------------------------------
 ; 1024 LE16 tone indices (dir +0x14).  Values 0-141: indices into the 141-entry ToneDB_PercSourceNameList1.
+; CORRECTED 2026-09-25: WaveSel_StageA1_SelectTables (0x0323E5) uses this map for
+; SET family 0x40 with dir +0x20 = ToneDB_PercMixerDefaultTable and stride
+; +0xF0, so the values index its 142 velocity-split records (max 141 = 142 - 1);
+; the 141 of PercSourceNameList1 is a near-coincidence, not the reader's bound.
 ToneDB_PercSourceIndexMapA:
 	.short	    0,     3,     4,     5,     6,     7,     8,     9	; 0-7
 	.short	   10,    11,    12,    13,    14,    15,    16,    17	; 8-15

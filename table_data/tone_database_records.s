@@ -123,6 +123,10 @@
 ;                      +0x00 is read by Voice_Build_GateCommand (0x025589) and
 ;                      Voice_ComputePitch, +0x05 by Pitch_Apply_Partial_Detune
 ;                      (0x023A05)
+;                      +0x02 = wave byte, +0x03 = family/sub-bank byte: family
+;                      0x00 in 916 and 0x80 in 142 of the 1058 blocks; the pair
+;                      picks a velocity-split record of ToneDB_MixerDefaultTable
+;                      (tone_database_aux.s) whose zone pair picks the SET
 ;     blk+0x07..+0x16  ENVELOPE 2: Voice_Level_ComputeTriplet (0x023AD0, TG
 ;                      r0x24..0x26) reads +0x07 (a sign flag), +0x09/+0x0B/+0x0D
 ;                      segment targets with +0x0A/+0x0C/+0x0E, +0x11 key scale,
