@@ -96,14 +96,14 @@
 ;   0x2952F8  HDAE5000_PPORT_Execute - Execute PPORT command
 ;   0x2953E2  HDAE5000_PPORT_Cmd_Table - Jump table for PPORT commands
 ;   0x295412  HDAE5000_PPORT_Strings - Command menu strings
-;   0x2958D6  HDAE5000_Cmd01_SendInfo - Handler: Send HD info
-;   0x295914  HDAE5000_Cmd02_Exit - Handler: Exit PPORT
-;   0x2959F6  HDAE5000_Cmd03_ReadFSB - Handler: Read FSB from HD
-;   0x295D3C  HDAE5000_Cmd04_SendFSB - Handler: Send FSB to PC
-;   0x29605A  HDAE5000_Cmd05_RcvFSB - Handler: Receive FSB from PC
-;   0x296294  HDAE5000_Cmd06_WriteFSB - Handler: Write FSB to HD
-;   0x2967B4  HDAE5000_Render_Display_Region - Display utility
-;   0x2967E4  HDAE5000_Render_Display_Region2 - Display utility 2
+;   0x2958D6  HDAE5000_PPORT_Cmd06_WriteFsbToHd - Handler: Send HD info
+;   0x295914  HDAE5000_PPORT_Cmd07_LoadHdToMemory - Handler: Exit PPORT
+;   0x2959F6  HDAE5000_PPORT_Cmd08_SendDataToPc - Handler: Read FSB from HD
+;   0x295D3C  HDAE5000_PPORT_Cmd09_SendFilesToPc - Handler: Send FSB to PC
+;   0x29605A  HDAE5000_PPORT_Cmd10_RcvDataFromPc - Handler: Receive FSB from PC
+;   0x296294  HDAE5000_PPORT_Cmd11_SaveMemoryToHd - Handler: Write FSB to HD
+;   0x2967B4  HDAE5000_PPORT_LatchPacketArgs - Display utility
+;   0x2967E4  HDAE5000_PPORT_RequestSongInfo - Display utility 2
 ;   0x29AE9F  HDAE5000_MemCopy - Memory copy utility
 ;   0x29AFF0  HDAE5000_StrNCpy - Memory copy variant
 ;   0x29AFBE  HDAE5000_StrNCmp - Memory compare

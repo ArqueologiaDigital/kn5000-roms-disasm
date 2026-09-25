@@ -7172,18 +7172,18 @@ HDAE5000_Get_Init_Flag:	; 28F570h
 	; (EQU→inline label) HDAE5000_PPORT_ServicePending = 0x29501C
 
 ; PPORT command handler addresses (in code_295642_2fffff.bin)
-	; (EQU→inline label) HDAE5000_Cmd01_SendInfo = 0x2958D6
-	; (EQU→inline label) HDAE5000_Cmd02_Exit = 0x295914
-	; (EQU→inline label) HDAE5000_Cmd03_ReadFSB = 0x2959F6
-	; (EQU→inline label) HDAE5000_Cmd04_SendFSB = 0x295D3C
-	; (EQU→inline label) HDAE5000_Cmd05_RcvFSB = 0x29605A
-	; (EQU→inline label) HDAE5000_Cmd06_WriteFSB = 0x296294
-	; (EQU→inline label) HDAE5000_PPORT_Cmd_LoadHDtoMemory = 0x29632A
-	; (EQU→inline label) HDAE5000_PPORT_Cmd_SendDataBlock = 0x29633C
-	; (EQU→inline label) HDAE5000_PPORT_Cmd_SendFileList = 0x2964A6
-	; (EQU→inline label) HDAE5000_PPORT_Cmd_ReceiveDataBlock = 0x296588
-	; (EQU→inline label) HDAE5000_PPORT_Cmd_WriteMemoryToHD = 0x29659A
-	; (EQU→inline label) HDAE5000_PPORT_Cmd_Reserved = 0x296680
+	; (EQU→inline label) HDAE5000_PPORT_Cmd06_WriteFsbToHd = 0x2958D6
+	; (EQU→inline label) HDAE5000_PPORT_Cmd07_LoadHdToMemory = 0x295914
+	; (EQU→inline label) HDAE5000_PPORT_Cmd08_SendDataToPc = 0x2959F6
+	; (EQU→inline label) HDAE5000_PPORT_Cmd09_SendFilesToPc = 0x295D3C
+	; (EQU→inline label) HDAE5000_PPORT_Cmd10_RcvDataFromPc = 0x29605A
+	; (EQU→inline label) HDAE5000_PPORT_Cmd11_SaveMemoryToHd = 0x296294
+	; (EQU→inline label) HDAE5000_PPORT_Cmd12_Nothing = 0x29632A
+	; (EQU→inline label) HDAE5000_PPORT_Cmd13_RcvDataFromPc = 0x29633C
+	; (EQU→inline label) HDAE5000_PPORT_Cmd14_SendInfosToPc = 0x2964A6
+	; (EQU→inline label) HDAE5000_PPORT_Cmd15_Nothing = 0x296588
+	; (EQU→inline label) HDAE5000_PPORT_Cmd16_DeleteFiles = 0x29659A
+	; (EQU→inline label) HDAE5000_PPORT_Cmd17_FormatHd = 0x296680
 
 HDAE5000_Boot_Init:	; 28F576h
 	push xiz
@@ -16408,15 +16408,18 @@ HDAE5000_PPORT_LinkMain:	; 0x2952D6
 
 HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 	; Execute PPORT command — dispatch on A register (command ID 0-7)
+	; ^ A = 0 or 1 enters the command loop (HDAE5000_PPORT_CommandLoop); every
+	;   other value returns at once.  The link commands 1..20 are dispatched
+	;   by the loop through HDAE5000_PPORT_CommandTable, not here.
 	and a, 0x7F			; mask high bit
 	nop
 	cp a, 0:i3
 	jr nz, .Lppe_cmd1
-	jp .Lppe_read_exec		; cmd 0 → read/execute
+	jp HDAE5000_PPORT_CommandLoop		; cmd 0 → read/execute
 .Lppe_cmd1:
 	cp a, 1:i3
 	jr nz, .Lppe_cmd2
-	jp .Lppe_read_exec		; cmd 1 → read/execute
+	jp HDAE5000_PPORT_CommandLoop		; cmd 1 → read/execute
 .Lppe_cmd2:
 	cp a, 2:i3
 	jr nz, .Lppe_cmd3
@@ -16463,7 +16466,7 @@ HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 	nop
 	nop
 	nop
-.Lppe_write_setup:
+HDAE5000_PPORT_InitPort:
 	; Write I/O registers and clear flag
 	ld a, 0x89:opc
 	ld (0x160006:24), a; (0x160006) = 0x89
@@ -16474,13 +16477,13 @@ HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 	ld (0x2390d4:24), 0x00; (0x2390D4) = 0
 	ret
 	nop
-.Lppe_read_exec:
+HDAE5000_PPORT_CommandLoop:
 	; Read/execute with polling loop
 	ei 0x07				; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	ld a, 0x89:opc
 	ld (0x160006:24), a; (0x160006) = 0x89
 	nop
-.Lppe_poll:
+HDAE5000_PPORT_CommandLoop_Poll:
 	ld wa, 0:i3			; WA = 0
 	call HDAE5000_PPORT_CallService	; 0x2950F8
 	ld a, (0x160004:24); read (0x160004)
@@ -16488,12 +16491,12 @@ HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 	and a, 0x04			; test bit 2
 	nop
 	cp a, 4:i3			; bit 2 set?
-	jr nz, .Lppe_poll		; keep polling if not
+	jr nz, HDAE5000_PPORT_CommandLoop_Poll		; keep polling if not
 	ld a, 0x18:opc
 	ld (0x160002:24), a; (0x160002) = 0x18
 	nop
 	ld (0x2390d4:24), 0x00; (0x2390D4) = 0
-	call .Lrdr2_main
+	call HDAE5000_PPORT_RecvPacket
 	cp (0x2390d4:24), 0x01; (0x2390D4) == 1?
 	jp z, (2708340:24)		; if Z, go back to polling (0x295374)
 	nop
@@ -16507,22 +16510,35 @@ HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 	dec 1, xwa			; XWA = index - 1
 	sll xwa, 2			; XWA *= 4 (table entry size)
 	nop
-	lda xix, (0x2953ce:24); XIX = jump table base (0x2953CE)
+	lda xix, (HDAE5000_PPORT_CommandTable:24); XIX = jump table base (0x2953CE)
 	nop
 	add xix, xwa			; XIX += offset
 	ld xiy, (xix)			; XIY = handler address
 	jp (xiy)			; jump to handler
-.Lppe_jump_table:
+; ----------------------------------------------------------------------------
+; HDAE5000_PPORT_CommandTable (0x2953CE, 20 x .long): the PC-link command
+; handlers.  Reader: HDAE5000_PPORT_CommandLoop, which takes the command byte n
+; (packet 0x239168 byte 0, rejected above 20), and jumps through entry n-1:
+; `dec 1,xwa / sll xwa,2 / lda xix,(HDAE5000_PPORT_CommandTable) / add xix,xwa
+; / ld xiy,(xix) / jp (xiy)`.  The table runs on through the labels
+; HDAE5000_PPORT_Cmd_Table (entries 6-17) and HDAE5000_PPORT_Ptrs (18-20); the
+; handler names come from the "NN>..." status record each one shows first.
+; ----------------------------------------------------------------------------
+HDAE5000_PPORT_CommandTable:
 	; 5-entry jump table (4 bytes each)
-	.long 0x00295642		; entry 0
-	.long 0x002956CC		; entry 1
-	.long 0x002956F2		; entry 2
-	.long 0x0029572E		; entry 3
-	.long 0x00295802		; entry 4
+	; ^ entries 1-5 of the 20: see the header above
+	.long HDAE5000_PPORT_Cmd01_SendInfosAboutHd		; entry 0
+	.long HDAE5000_PPORT_Cmd02_ExitPport		; entry 1
+	.long HDAE5000_PPORT_Cmd03_ReadFsbFromHd		; entry 2
+	.long HDAE5000_PPORT_Cmd04_SendFsbToPc		; entry 3
+	.long HDAE5000_PPORT_Cmd05_RcvFsbFromPc		; entry 4
 
 ; ============================================================================
 ; PPORT COMMAND HANDLER JUMP TABLE (0x2953E2 - 0x295411)
 ; 12 entries × 4 bytes = 48 bytes
+; ^ CORRECTION: these are entries 6-17 of HDAE5000_PPORT_CommandTable
+;   (0x2953CE), i.e. commands 6..17; the index list below numbered them 1..12
+;   ("Cmd01_SendInfo" is the handler of command 06, "Writing FSB to HD").
 ; Each entry is a 32-bit pointer to a command handler routine
 ;
 ; Index  Address   Description
@@ -16541,18 +16557,18 @@ HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 ; ============================================================================
 
 HDAE5000_PPORT_Cmd_Table:	; 2953E2h
-	.long HDAE5000_Cmd01_SendInfo
-	.long HDAE5000_Cmd02_Exit
-	.long HDAE5000_Cmd03_ReadFSB
-	.long HDAE5000_Cmd04_SendFSB
-	.long HDAE5000_Cmd05_RcvFSB
-	.long HDAE5000_Cmd06_WriteFSB
-	.long HDAE5000_PPORT_Cmd_LoadHDtoMemory
-	.long HDAE5000_PPORT_Cmd_SendDataBlock
-	.long HDAE5000_PPORT_Cmd_SendFileList
-	.long HDAE5000_PPORT_Cmd_ReceiveDataBlock
-	.long HDAE5000_PPORT_Cmd_WriteMemoryToHD
-	.long HDAE5000_PPORT_Cmd_Reserved
+	.long HDAE5000_PPORT_Cmd06_WriteFsbToHd
+	.long HDAE5000_PPORT_Cmd07_LoadHdToMemory
+	.long HDAE5000_PPORT_Cmd08_SendDataToPc
+	.long HDAE5000_PPORT_Cmd09_SendFilesToPc
+	.long HDAE5000_PPORT_Cmd10_RcvDataFromPc
+	.long HDAE5000_PPORT_Cmd11_SaveMemoryToHd
+	.long HDAE5000_PPORT_Cmd12_Nothing
+	.long HDAE5000_PPORT_Cmd13_RcvDataFromPc
+	.long HDAE5000_PPORT_Cmd14_SendInfosToPc
+	.long HDAE5000_PPORT_Cmd15_Nothing
+	.long HDAE5000_PPORT_Cmd16_DeleteFiles
+	.long HDAE5000_PPORT_Cmd17_FormatHd
 
 ; ============================================================================
 ; PPORT COMMAND MENU STRINGS (0x295412 - 0x295641)
@@ -16587,9 +16603,10 @@ HDAE5000_PPORT_Cmd_Table:	; 2953E2h
 
 HDAE5000_PPORT_Ptrs:	; 295412h
 	; 3 pointers to PPORT utility routines (in code_295642_2971a2.bin)
-	.long PPORT_Utility_1
-	.long PPORT_Utility_2
-	.long PPORT_Utility_3
+	; ^ = entries 18-20 of HDAE5000_PPORT_CommandTable (commands 18, 19, 20)
+	.long HDAE5000_PPORT_Cmd18_SwitchHdMotorOff
+	.long HDAE5000_PPORT_Cmd19_Nothing
+	.long HDAE5000_PPORT_Cmd20_SendXapFileFlash
 
 ; -----------------------------------------------------------------------------
 ; PPORT status/menu string table -- FIXED 24-BYTE RECORD STRIDE, PROVEN BY THE
@@ -16603,7 +16620,7 @@ HDAE5000_PPORT_Ptrs:	; 295412h
 ; different filler bytes), then a final 24-byte "Error : Wrong Dll Ver"
 ; record back on the regular pad.
 ;
-; EVIDENCE: HDAE5000_Code_2_PartB's PPORT command handlers load a status
+; EVIDENCE: HDAE5000_PPORT_Cmd01_SendInfosAboutHd's PPORT command handlers load a status
 ; string via `lda_24 xbc, (0x2954xx/0x2955xx)` before every
 ; HDAE5000_PPORT_CallService call. There are 23 such literals in this file, one
 ; per record, and ALL 23 land exactly on a record start computed
@@ -16677,7 +16694,10 @@ HDAE5000_PPORT_Strings:	; 29541Eh
 ;   - Zero padding at end (~65KB)
 ; ============================================================================
 
-HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
+HDAE5000_PPORT_Cmd01_SendInfosAboutHd:	; 0x295642 (660 bytes)
+	; PC-link command 01: HDAE5000_PPORT_CommandTable entry 0; first shows the
+	; status record "01>Send Infos About HD" (HDAE5000_PPORT_Strings + 0, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; PPORT command handler: initialize HD — display status, read flag bytes,
 	; check compatibility, call utility with params, sum buffer
 	ldw wa, 0x001A				; display command
@@ -16695,7 +16715,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	ld (0x2390f6:24), a; st (0x2390F6), A
 	nop
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ld wa, 3:i3				; display command
 	ei	0
 	call HDAE5000_PPORT_CallService
@@ -16717,22 +16737,25 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	call HDAE5000_PPORT_CallService
 .Lc2b_do_cleanup:			; 0x2956A4
-	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_FlagPacketError
 	jp .Lc2b_sum_and_done
 .Lc2b_compat_ok:			; 0x2956AC
 	ldw bc, 0x0097				; BC param
 	nop
 	ldw hl, 0x00CA				; HL param
 	nop
-	call .Lppc_utility				; call 0x296AC4 — utility
+	call HDAE5000_PPORT_CopyInfoToPacket				; call 0x296AC4 — utility
 .Lc2b_sum_and_done:			; 0x2956B8
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2708340:24)			; jp Z, abort
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-.Lc2b_cmd_format:			; 0x2956CC — Format HD command handler
+HDAE5000_PPORT_Cmd02_ExitPport:			; 0x2956CC — command 02 "Exit PPORT" (was: Format HD command handler)
+	; PC-link command 02: HDAE5000_PPORT_CommandTable entry 1; first shows the
+	; status record "02>Exit PPORT" (HDAE5000_PPORT_Strings + 24, service 26).
+	; The description lines below predate this name and are not re-verified.
 	ei	0
 	ldw wa, 0x001A
 	nop
@@ -16750,13 +16773,16 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	ret
 	nop
 
-.Lc2b_cmd_read_status:			; 0x2956F2 — Read status command handler
+HDAE5000_PPORT_Cmd03_ReadFsbFromHd:			; 0x2956F2 — command 03 "Read FSB from HD" (was: Read status command handler)
+	; PC-link command 03: HDAE5000_PPORT_CommandTable entry 2; first shows the
+	; status record "03>Read FSB from HD" (HDAE5000_PPORT_Strings + 48, service 26).
+	; The description lines below predate this name and are not re-verified.
 	ldw wa, 0x001A
 	nop
 	lda xbc, (0x29544e:24); lda XBC, 0x29544E — status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ld wa, 7:i3				; display command
 	ei	0
 	call HDAE5000_PPORT_CallService
@@ -16764,22 +16790,25 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	cp wa, 0:i3
 	jp z, (2709274:24)			; jp Z, 0x29571A — skip cleanup
 	nop
-	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_FlagPacketError
 .Lc2b_rs_sum:				; 0x29571A
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-.Lc2b_cmd_read_hd:			; 0x29572E — Read HD sectors command handler
+HDAE5000_PPORT_Cmd04_SendFsbToPc:			; 0x29572E — command 04 "Sending FSB to PC" (was: Read HD sectors command handler)
+	; PC-link command 04: HDAE5000_PPORT_CommandTable entry 3; first shows the
+	; status record "04>Sending FSB to PC" (HDAE5000_PPORT_Strings + 72, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Display status, read 3 CHS parameter sets, call read function for each
 	ldw wa, 0x001A
 	nop
 	lda xbc, (0x295466:24); lda XBC, 0x295466 — status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ld wa, 4:i3				; display progress step 1
 	ei	0
 	call HDAE5000_PPORT_CallService
@@ -16788,7 +16817,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	ldw hl, 0x0034
 	nop
-	call .Lppc_utility				; call 0x296AC4
+	call HDAE5000_PPORT_CopyInfoToPacket				; call 0x296AC4
 	ld wa, 5:i3				; step 2
 	ei	0
 	call HDAE5000_PPORT_CallService
@@ -16797,7 +16826,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	ldw hl, 0x003C
 	nop
-	call .Lppc_utility
+	call HDAE5000_PPORT_CopyInfoToPacket
 	ld wa, 6:i3				; step 3
 	ei	0
 	call HDAE5000_PPORT_CallService
@@ -16806,8 +16835,8 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	ldw hl, 0x0046
 	nop
-	call .Lppc_utility
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_CopyInfoToPacket
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -16821,7 +16850,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	mul xde, xbc				; XDE = DE × BC (total sectors)
 	ld xiy, (xix + 0x2C)			; region start
 	nop
-	call .Lppc_send_bytes				; call 0x296AF8 — read region
+	call HDAE5000_PPORT_SendBlock				; call 0x296AF8 — read region
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -16834,7 +16863,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	mul xde, xbc
 	ld xiy, (xix + 0x34)
 	nop
-	call .Lppc_send_bytes
+	call HDAE5000_PPORT_SendBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -16847,20 +16876,23 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	mul xde, xbc
 	ld xiy, (xix + 0x3C)
 	nop
-	call .Lppc_send_bytes
+	call HDAE5000_PPORT_SendBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-.Lc2b_cmd_write_hd:			; 0x295802 — Write HD sectors command handler
+HDAE5000_PPORT_Cmd05_RcvFsbFromPc:			; 0x295802 — command 05 "Rcv FSB from PC" (was: Write HD sectors command handler)
+	; PC-link command 05: HDAE5000_PPORT_CommandTable entry 4; first shows the
+	; status record "05>Rcv FSB from PC" (HDAE5000_PPORT_Strings + 96, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Same as read but calls write function (0x296B7E) instead
 	ldw wa, 0x001A
 	nop
 	lda xbc, (0x29547e:24); lda XBC, 0x29547E — status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ld wa, 4:i3
 	ei	0
 	call HDAE5000_PPORT_CallService
@@ -16869,7 +16901,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	ldw hl, 0x0034
 	nop
-	call .Lppc_utility
+	call HDAE5000_PPORT_CopyInfoToPacket
 	ld wa, 5:i3
 	ei	0
 	call HDAE5000_PPORT_CallService
@@ -16878,7 +16910,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	ldw hl, 0x003C
 	nop
-	call .Lppc_utility
+	call HDAE5000_PPORT_CopyInfoToPacket
 	ld wa, 6:i3
 	ei	0
 	call HDAE5000_PPORT_CallService
@@ -16887,8 +16919,8 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	ldw hl, 0x0046
 	nop
-	call .Lppc_utility
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_CopyInfoToPacket
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -16902,7 +16934,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	mul xde, xbc
 	ld xiy, (xix + 0x2C)
 	nop
-	call .Lppc_recv_write_bytes				; call 0x296B7E — write region
+	call HDAE5000_PPORT_RecvBlock				; call 0x296B7E — write region
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -16915,7 +16947,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	mul xde, xbc
 	ld xiy, (xix + 0x34)
 	nop
-	call .Lppc_recv_write_bytes
+	call HDAE5000_PPORT_RecvBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -16928,20 +16960,23 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	mul xde, xbc
 	ld xiy, (xix + 0x3C)
 	nop
-	call .Lppc_recv_write_bytes
+	call HDAE5000_PPORT_RecvBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_Cmd01_SendInfo:	; 0x2958D6 (62 bytes)
+HDAE5000_PPORT_Cmd06_WriteFsbToHd:	; 0x2958D6 (62 bytes)
+	; PC-link command 06: HDAE5000_PPORT_CommandTable entry 5; first shows the
+	; status record "06>Writing FSB to HD" (HDAE5000_PPORT_Strings + 120, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Handler: Send HD info - display status, clear buffer, check result
 	ldw wa, 0x001A			; display row/column
 	nop
 	lda xbc, (0x295496:24); lda XBC, (0x295496) - status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ldw wa, 0x000A			; display row/column
 	nop
 	ei 0x00				; enable interrupts
@@ -16950,14 +16985,17 @@ HDAE5000_Cmd01_SendInfo:	; 0x2958D6 (62 bytes)
 	cp wa, 0:i3			; check result
 	jp z, (0x295900:24)		; jp Z - skip cleanup if zero
 	nop
-	call HDAE5000_PPORT_Cleanup
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_FlagPacketError
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1
 	jp z, (0x295374:24)		; jp Z - exit to PPORT finish
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
+HDAE5000_PPORT_Cmd07_LoadHdToMemory:	; 0x295914 (226 bytes)
+	; PC-link command 07: HDAE5000_PPORT_CommandTable entry 6; first shows the
+	; status record "07>Load HD to Memory" (HDAE5000_PPORT_Strings + 144, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Handler: Exit PPORT — display status, render, read sector/head masks,
 	; AND with data bytes, write back, sum buffer, check results
 	ldw wa, 0x001A				; display command
@@ -16965,14 +17003,14 @@ HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
 	lda xbc, (0x2954ae:24); lda XBC, 0x2954AE — status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_Render_Display_Region
-	call HDAE5000_Render_Display_Region2
-	call .Lrdr2_register				; call 0x296802 — register XIX
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_LatchPacketArgs
+	call HDAE5000_PPORT_RequestSongInfo
+	call HDAE5000_PPORT_GetInfoBlock				; call 0x296802 — register XIX
+	call HDAE5000_PPORT_ClearPacket
 	ld bc, 0:i3				; BC = 0
 	ldw hl, 0x00C8				; HL = 200
 	nop
-	call .Lppc_utility				; call 0x296AC4 — utility
+	call HDAE5000_PPORT_CopyInfoToPacket				; call 0x296AC4 — utility
 	lda xix, (0x239168:24); lda XIX, 0x239168
 	nop
 	ld a, (xix)				; read byte 0 from PPORT data
@@ -16993,7 +17031,7 @@ HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
 	ld (0x2390e4:24), w; st (0x2390E4), W — masked head
 	nop
 	ld (xix), w				; write masked head to PPORT[0]
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1 — error?
 	jp z, (2708340:24)			; jp Z, 0x295374 — abort
 	nop
@@ -17006,7 +17044,7 @@ HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
 	jp z, (2710002:24)			; jp Z, 0x2959F2 — skip to end
 	nop
 .Lce_continue:				; 0x29599E
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ld xix, (0x239100:24); ld XIX, (0x239100) — data source ptr
 	nop
 	ld a, (0x2390e2:24); ld A, (0x2390E2) — masked sector
@@ -17030,15 +17068,18 @@ HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
 	cp wa, 0:i3				; check result
 	jp z, (2709986:24)			; jp Z, 0x2959E2 — skip cleanup
 	nop
-	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_FlagPacketError
 .Lce_final_sum:				; 0x2959E2
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1 — error?
 	jp z, (2708340:24)			; jp Z, 0x295374 — abort
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
+HDAE5000_PPORT_Cmd08_SendDataToPc:	; 0x2959F6 (838 bytes)
+	; PC-link command 08: HDAE5000_PPORT_CommandTable entry 7; first shows the
+	; status record "08>Send data to PC" (HDAE5000_PPORT_Strings + 168, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Handler: Read FSB from HD — display status, render, read sector/head masks,
 	; copy 18 region descriptors from PPORT buffer, then read each flagged region
 	ldw wa, 0x001A				; display command
@@ -17046,14 +17087,14 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	lda xbc, (0x2954c6:24); lda XBC, 0x2954C6 — status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_Render_Display_Region
-	call HDAE5000_Render_Display_Region2
-	call .Lrdr2_register				; call 0x296802 — register XIX
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_LatchPacketArgs
+	call HDAE5000_PPORT_RequestSongInfo
+	call HDAE5000_PPORT_GetInfoBlock				; call 0x296802 — register XIX
+	call HDAE5000_PPORT_ClearPacket
 	ld bc, 0:i3
 	ldw hl, 0x002C
 	nop
-	call .Lppc_utility				; call 0x296AC4
+	call HDAE5000_PPORT_CopyInfoToPacket				; call 0x296AC4
 	lda xix, (0x239168:24); lda XIX, 0x239168
 	nop
 	ld a, (xix)				; sector mask byte
@@ -17077,7 +17118,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	ld (xix + 1), w			; write back
 	nop
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2708340:24)			; jp Z, abort
 	nop
@@ -17091,7 +17132,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 .Lrfsb_continue:			; 0x295A86
 	ld (0x2390e6:24), 0x00; st (0x2390E6), 0 — clear error flag
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ld xix, (0x239100:24); ld XIX, (0x239100) — data ptr
 	nop
 	ld a, (0x2390e2:24); ld A, (0x2390E2)
@@ -17116,7 +17157,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	jr z, .Lrfsb_no_error_flag
 	ld (0x2390e6:24), 0x01; set error flag
 .Lrfsb_no_error_flag:			; 0x295ACE
-	call HDAE5000_Render_Display_Region2
+	call HDAE5000_PPORT_RequestSongInfo
 	ld xix, (0x239100:24); ld XIX, (0x239100)
 	nop
 	; Copy 18 region descriptors from PPORT buffer to memory
@@ -17195,16 +17236,16 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	ld (0x239150:24), xwa; st (0x239150)
 	nop
 	; Setup for final sum/check
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ld bc, 0:i3
 	ldw hl, 0x00C8
 	nop
-	call .Lppc_utility				; call 0x296AC4
+	call HDAE5000_PPORT_CopyInfoToPacket				; call 0x296AC4
 	cp (0x2390e6:24), 0x00; error flag clear?
 	jr z, .Lrfsb_sum
-	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_FlagPacketError
 .Lrfsb_sum:				; 0x295BB0
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)			; jp Z, abort
 	nop
@@ -17220,7 +17261,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	cp a, 1:i3
 	jp nz, (2710510:24)			; jp NZ, skip
 	nop
-	call .Lppc_send_regions				; call 0x296CA0 — read custom region
+	call HDAE5000_PPORT_SendTwoRegions				; call 0x296CA0 — read custom region
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17236,7 +17277,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	ld xde, (0x23911c:24); ld XDE, (0x23911C)
 	nop
-	call .Lppc_send_bytes				; call 0x296AF8 — read region
+	call HDAE5000_PPORT_SendBlock				; call 0x296AF8 — read region
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17252,7 +17293,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	ld xde, (0x239124:24); ld XDE, (0x239124)
 	nop
-	call .Lppc_send_bytes
+	call HDAE5000_PPORT_SendBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17269,7 +17310,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	ld xde, (0x23912c:24); ld XDE, (0x23912C)
 	nop
-	call .Lppc_send_bytes
+	call HDAE5000_PPORT_SendBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17286,7 +17327,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	ld xde, (0x239134:24); ld XDE, (0x239134)
 	nop
-	call .Lppc_send_bytes
+	call HDAE5000_PPORT_SendBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17303,7 +17344,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	ld xde, (0x23913c:24); ld XDE, (0x23913C)
 	nop
-	call .Lppc_send_bytes
+	call HDAE5000_PPORT_SendBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17320,7 +17361,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	ld xde, (0x239148:24); ld XDE, (0x239148)
 	nop
-	call .Lppc_send_bytes
+	call HDAE5000_PPORT_SendBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17336,14 +17377,17 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	ld xde, (0x239150:24); ld XDE, (0x239150)
 	nop
-	call .Lppc_send_bytes
+	call HDAE5000_PPORT_SendBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
 .Lrfsb_exit:				; 0x295D38
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
+HDAE5000_PPORT_Cmd09_SendFilesToPc:	; 0x295D3C (798 bytes)
+	; PC-link command 09: HDAE5000_PPORT_CommandTable entry 8; first shows the
+	; status record "09>Sending files to PC" (HDAE5000_PPORT_Strings + 192, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Handler: Send FSB to PC — display status, read sector/head masks,
 	; build transfer buffer (masked bytes + 9 region descriptors),
 	; send to PC via PPORT, then conditionally send each region
@@ -17353,9 +17397,9 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	lda xbc, (0x2954de:24); lda XBC, 0x2954DE — status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_Render_Display_Region
-	call HDAE5000_Render_Display_Region2
-	call .Lrdr2_register				; call 0x296802 — register XIX
+	call HDAE5000_PPORT_LatchPacketArgs
+	call HDAE5000_PPORT_RequestSongInfo
+	call HDAE5000_PPORT_GetInfoBlock				; call 0x296802 — register XIX
 	ld xix, (0x239100:24); ld XIX, (0x239100) — data source ptr
 	nop
 	ld a, (xix)				; read byte 0 from data source
@@ -17375,17 +17419,17 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	and w, a				; W = mask AND data
 	ld (0x2390e4:24), w; st (0x2390E4), W — masked head
 	nop
-	call .Lppc_init_region_descriptors				; call 0x296E08
-	call HDAE5000_Render_Display_Region2
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_InitRegionDescriptors				; call 0x296E08
+	call HDAE5000_PPORT_RequestSongInfo
+	call HDAE5000_PPORT_ClearPacket
 	ld bc, 0:i3				; BC = 0 (offset)
 	ldw hl, 0x002C				; HL = 44 (length)
 	nop
-	call .Lppc_utility				; call 0x296AC4 — utility
+	call HDAE5000_PPORT_CopyInfoToPacket				; call 0x296AC4 — utility
 	cp (0x2390e6:24), 0x00; cp (0x2390E6), 0 — cleanup needed?
 	jp z, (2710960:24)			; jp Z, .Lsfsb_build_buffer — skip cleanup
 	nop
-	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_FlagPacketError
 .Lsfsb_build_buffer:			; 0x295DB0 — Build transfer buffer
 	lda xix, (0x239168:24); lda XIX, 0x239168
 	nop
@@ -17434,7 +17478,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (xix), xwa
 	; Send buffer via PPORT
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1 — error?
 	jp z, (2708340:24)			; jp Z, 0x295374 — abort
 	nop
@@ -17456,7 +17500,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (0x2390f0:24), 0x01; st (0x2390F0), 0x01
 	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
-	call .Lppc_send_region_to_pc				; call 0x297054 — send region
+	call HDAE5000_PPORT_SendRegionToPc				; call 0x297054 — send region
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2708340:24)			; jp Z, abort
 	nop
@@ -17474,7 +17518,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (0x2390f0:24), 0x02; st (0x2390F0), 0x02
 	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
-	call .Lppc_send_region_to_pc
+	call HDAE5000_PPORT_SendRegionToPc
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17492,7 +17536,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (0x2390f0:24), 0x04; st (0x2390F0), 0x04
 	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
-	call .Lppc_send_region_to_pc
+	call HDAE5000_PPORT_SendRegionToPc
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17511,7 +17555,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (0x2390f0:24), 0x08; st (0x2390F0), 0x08
 	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
-	call .Lppc_send_region_to_pc
+	call HDAE5000_PPORT_SendRegionToPc
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17530,7 +17574,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (0x2390f0:24), 0x10; st (0x2390F0), 0x10
 	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
-	call .Lppc_send_region_to_pc
+	call HDAE5000_PPORT_SendRegionToPc
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17549,7 +17593,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (0x2390f0:24), 0x20; st (0x2390F0), 0x20
 	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
-	call .Lppc_send_region_to_pc
+	call HDAE5000_PPORT_SendRegionToPc
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17568,7 +17612,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (0x2390f0:24), 0x40; st (0x2390F0), 0x40
 	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
-	call .Lppc_send_region_to_pc
+	call HDAE5000_PPORT_SendRegionToPc
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17587,7 +17631,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (0x2390f0:24), 0x80; st (0x2390F0), 0x80
 	ld (0x2390f2:24), 0x00; st (0x2390F2), 0x00
-	call .Lppc_send_region_to_pc
+	call HDAE5000_PPORT_SendRegionToPc
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17605,14 +17649,17 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	ld (0x2390f0:24), 0x00; st (0x2390F0), 0x00 — byte 1 = 0
 	ld (0x2390f2:24), 0x01; st (0x2390F2), 0x01 — byte 2 = 1
-	call .Lppc_send_region_to_pc
+	call HDAE5000_PPORT_SendRegionToPc
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
 .Lsfsb_exit:				; 0x296056
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
+HDAE5000_PPORT_Cmd10_RcvDataFromPc:	; 0x29605A (570 bytes)
+	; PC-link command 10: HDAE5000_PPORT_CommandTable entry 9; first shows the
+	; status record "10>Rcv data from PC" (HDAE5000_PPORT_Strings + 216, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Handler: Receive FSB from PC — reads command params (flag bytes +
 	; 8 × 32-bit region descriptors), then conditionally writes each
 	; region to HD based on flag bits
@@ -17692,7 +17739,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	cp a, 1:i3
 	jp nz, (2711842:24)			; jp NZ, skip bit 0
 	nop
-	call .Lppc_recv_custom_data				; call 0x296D54 — write custom region
+	call HDAE5000_PPORT_RecvCustomData				; call 0x296D54 — write custom region
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2708340:24)			; jp Z, abort
 	nop
@@ -17708,7 +17755,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ld xde, (0x23911c:24); ld XDE, (0x23911C) — sector count
 	nop
-	call .Lppc_recv_write_bytes				; call 0x296B7E — write region
+	call HDAE5000_PPORT_RecvBlock				; call 0x296B7E — write region
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17724,7 +17771,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ld xde, (0x239124:24); ld XDE, (0x239124)
 	nop
-	call .Lppc_recv_write_bytes
+	call HDAE5000_PPORT_RecvBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17741,7 +17788,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ld xde, (0x23912c:24); ld XDE, (0x23912C)
 	nop
-	call .Lppc_recv_write_bytes
+	call HDAE5000_PPORT_RecvBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17758,7 +17805,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ld xde, (0x239134:24); ld XDE, (0x239134)
 	nop
-	call .Lppc_recv_write_bytes
+	call HDAE5000_PPORT_RecvBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17775,7 +17822,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ld xde, (0x23913c:24); ld XDE, (0x23913C)
 	nop
-	call .Lppc_recv_write_bytes
+	call HDAE5000_PPORT_RecvBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17792,7 +17839,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ld xde, (0x239148:24); ld XDE, (0x239148)
 	nop
-	call .Lppc_recv_write_bytes
+	call HDAE5000_PPORT_RecvBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17808,7 +17855,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ld xde, (0x239150:24); ld XDE, (0x239150)
 	nop
-	call .Lppc_recv_write_bytes
+	call HDAE5000_PPORT_RecvBlock
 	cp (0x2390d4:24), 0x01
 	jp z, (2708340:24)
 	nop
@@ -17828,9 +17875,12 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	ei	0
 	call HDAE5000_PPORT_CallService
 	ei 7
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_Cmd06_WriteFSB:	; 0x296294 (150 bytes)
+HDAE5000_PPORT_Cmd11_SaveMemoryToHd:	; 0x296294 (150 bytes)
+	; PC-link command 11: HDAE5000_PPORT_CommandTable entry 10; first shows the
+	; status record "11>Save memory to HD" (HDAE5000_PPORT_Strings + 240, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Handler: Write FSB (File System Block) to HD
 	; Displays "Write FSB" status, calls render, copies PPORT data to XIX buffer,
 	; loads sector/head params, calls Display_String with result, sums and cleans up.
@@ -17839,7 +17889,7 @@ HDAE5000_Cmd06_WriteFSB:	; 0x296294 (150 bytes)
 	lda xbc, (0x29550e:24); 0x29550E - "Write FSB" string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_Render_Display_Region
+	call HDAE5000_PPORT_LatchPacketArgs
 	ld wa, 1:i3			; WA = 1
 	ei 0x00				; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
 	call HDAE5000_PPORT_CallService
@@ -17881,24 +17931,30 @@ HDAE5000_Cmd06_WriteFSB:	; 0x296294 (150 bytes)
 	cp wa, 0:i3			; result == 0?
 	jp z, (2712342:24)		; jp Z, skip error handling (0x296316)
 	nop
-	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_FlagPacketError
 .Lwfsb_after_error:			; 0x296316
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; [0x2390D4] == 1? (status check)
 	jp z, (2708340:24)		; jp Z, exit to PPORT finish (0x295374)
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_PPORT_Cmd_LoadHDtoMemory:	; 0x29632A
+HDAE5000_PPORT_Cmd12_Nothing:	; 0x29632A
+	; PC-link command 12: HDAE5000_PPORT_CommandTable entry 11; first shows the
+	; status record "12>nothing" (HDAE5000_PPORT_Strings + 264, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Load HD to memory - display status and finish
 	ldw wa, 0x001A			; display row/column
 	nop
 	lda xbc, (0x295526:24); 0x295526 - "Load HD" string
 	nop
 	call HDAE5000_PPORT_CallService
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
+HDAE5000_PPORT_Cmd13_RcvDataFromPc:	; 0x29633C (362 bytes)
+	; PC-link command 13: HDAE5000_PPORT_CommandTable entry 12; first shows the
+	; status record "13>Rcv data from PC" (HDAE5000_PPORT_Strings + 288, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Send data block to PC — display status, render, build transfer buffer
 	; from PPORT data, then loop sending 512-byte sectors until count exhausted
 	ldw wa, 0x001A				; display command
@@ -17906,7 +17962,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	lda xbc, (0x29553e:24); lda XBC, 0x29553E — status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_Render_Display_Region
+	call HDAE5000_PPORT_LatchPacketArgs
 	lda xix, (0x239168:24); lda XIX, 0x239168
 	nop
 	add xix, 0x00000005			; advance to data offset +5
@@ -17959,7 +18015,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	nop
 	ld (0x2390e6:24), 0x01; st (0x2390E6), 1 — set error flag
 .Lsdb_send_header:			; 0x2963DE
-	call .Lpsb_write_byte			; send header byte via PPORT
+	call HDAE5000_PPORT_SendByte			; send header byte via PPORT
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2708340:24)			; jp Z, abort
 	nop
@@ -17972,7 +18028,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	cp xwa, 0x00000000			; all done?
 	jp z, (2712698:24)			; jp Z, 0x29647A — send final status
 	nop
-	call .Lppc_recv_sector_data				; call 0x296C2A — read sector from HD
+	call HDAE5000_PPORT_RecvSector				; call 0x296C2A — read sector from HD
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2708340:24)			; jp Z, abort
 	nop
@@ -17993,7 +18049,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	nop
 	ld (0x2390e6:24), 0x01; set error flag
 .Lsdb_send_sector:			; 0x29644C
-	call .Lpsb_write_byte			; send byte
+	call HDAE5000_PPORT_SendByte			; send byte
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2708340:24)			; jp Z, abort
 	nop
@@ -18018,13 +18074,16 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	ldw wa, 0xFF00				; error indicator
 	nop
 .Lsdb_send_final2:			; 0x296492
-	call .Lpsb_write_byte			; send final byte
+	call HDAE5000_PPORT_SendByte			; send final byte
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2708340:24)			; jp Z, abort
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6 (226 bytes)
+HDAE5000_PPORT_Cmd14_SendInfosToPc:	; 0x2964A6 (226 bytes)
+	; PC-link command 14: HDAE5000_PPORT_CommandTable entry 13; first shows the
+	; status record "14>Sending infos to PC" (HDAE5000_PPORT_Strings + 312, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Send file list to PC - displays status, builds transfer buffer
 	; with disk info from 0x23910C-0x239150, then sends via PPORT.
 	ldw wa, 0x001A			; display row/column
@@ -18032,9 +18091,9 @@ HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6 (226 bytes)
 	lda xbc, (0x295556:24); 0x295556 - "Send File List" string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_Render_Display_Region
-	call HDAE5000_Render_Display_Region2
-	call .Lrdr2_register			; call 0x296802 (prepare file list)
+	call HDAE5000_PPORT_LatchPacketArgs
+	call HDAE5000_PPORT_RequestSongInfo
+	call HDAE5000_PPORT_GetInfoBlock			; call 0x296802 (prepare file list)
 	ld xix, (0x239100:24); XIX = [0x239100] (data source ptr)
 	nop
 	ld a, (xix)			; A = first byte
@@ -18044,17 +18103,17 @@ HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6 (226 bytes)
 	nop
 	ld (0x2390e4:24), a; [0x2390E4] = second byte
 	nop
-	call .Lppc_init_region_descriptors			; call 0x296E08 (process file list)
-	call HDAE5000_Render_Display_Region2
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_InitRegionDescriptors			; call 0x296E08 (process file list)
+	call HDAE5000_PPORT_RequestSongInfo
+	call HDAE5000_PPORT_ClearPacket
 	ld bc, 0:i3			; BC = 0 (offset)
 	ldw hl, 0x002C			; HL = 44 (block size)
 	nop
-	call .Lppc_utility			; call 0x296AC4 (transfer setup)
+	call HDAE5000_PPORT_CopyInfoToPacket			; call 0x296AC4 (transfer setup)
 	cp (0x2390e6:24), 0x00; [0x2390E6] == 0? (error check)
 	jp z, (2712830:24)		; jp Z, skip cleanup (0x2964FE)
 	nop
-	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_FlagPacketError
 .Lsfl_build_buffer:			; 0x2964FE
 	lda xix, (0x239168:24); XIX = 0x239168 (PPORT cmd area)
 	nop
@@ -18102,36 +18161,42 @@ HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6 (226 bytes)
 	ld xwa, (0x239150:24); [0x239150]
 	nop
 	ld (xix), xwa
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; [0x2390D4] == 1? (status check)
 	jp z, (2708340:24)		; jp Z, exit to PPORT finish (0x295374)
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_PPORT_Cmd_ReceiveDataBlock:	; 0x296588
+HDAE5000_PPORT_Cmd15_Nothing:	; 0x296588
+	; PC-link command 15: HDAE5000_PPORT_CommandTable entry 14; first shows the
+	; status record "15>nothing" (HDAE5000_PPORT_Strings + 336, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Receive data from PC - display status and finish
 	ldw wa, 0x001A			; display row/column
 	nop
 	lda xbc, (0x29556e:24); 0x29556E - "Receive Data" string
 	nop
 	call HDAE5000_PPORT_CallService
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
+HDAE5000_PPORT_Cmd16_DeleteFiles:	; 0x29659A (230 bytes)
+	; PC-link command 16: HDAE5000_PPORT_CommandTable entry 15; first shows the
+	; status record "16>Delete files" (HDAE5000_PPORT_Strings + 360, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Save memory to HD with sector/head masking and multi-step transfer.
 	ldw wa, 0x001A			; display row/column
 	nop
 	lda xbc, (0x295586:24); 0x295586 - "Write Memory" string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_Render_Display_Region
-	call HDAE5000_Render_Display_Region2
-	call .Lrdr2_register			; call 0x296802 (prepare data)
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_LatchPacketArgs
+	call HDAE5000_PPORT_RequestSongInfo
+	call HDAE5000_PPORT_GetInfoBlock			; call 0x296802 (prepare data)
+	call HDAE5000_PPORT_ClearPacket
 	ld bc, 0:i3			; BC = 0
 	ldw hl, 0x00C8			; HL = 200 (block size)
 	nop
-	call .Lppc_utility			; call 0x296AC4 (transfer setup)
+	call HDAE5000_PPORT_CopyInfoToPacket			; call 0x296AC4 (transfer setup)
 	lda xix, (0x239168:24); XIX = 0x239168 (PPORT cmd area)
 	nop
 	ld a, (xix)			; A = cmd[0]
@@ -18154,7 +18219,7 @@ HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
 	nop
 	ld (xix + 1), w			; update cmd[1] with masked value
 	nop
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; [0x2390D4] == 1? (status check)
 	jp z, (2708340:24)		; jp Z → exit to PPORT finish (0x295374)
 	nop
@@ -18167,7 +18232,7 @@ HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
 	jp z, (2713212:24)		; jp Z → done (0x29667C)
 	nop
 .Lwmhd_do_write:			; 0x296628
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ld xix, (0x239100:24); XIX = [0x239100] (data source ptr)
 	nop
 	ld a, (0x2390e2:24); A = masked sector
@@ -18191,23 +18256,26 @@ HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
 	cp wa, 0:i3			; result == 0?
 	jp z, (2713196:24)		; jp Z → skip error (0x29666C)
 	nop
-	call HDAE5000_PPORT_Cleanup
+	call HDAE5000_PPORT_FlagPacketError
 .Lwmhd_after_write:			; 0x29666C
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; [0x2390D4] == 1?
 	jp z, (2708340:24)		; jp Z → exit (0x295374)
 	nop
 .Lwmhd_done:				; 0x29667C
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_PPORT_Cmd_Reserved:	; 0x296680 (62 bytes)
+HDAE5000_PPORT_Cmd17_FormatHd:	; 0x296680 (62 bytes)
+	; PC-link command 17: HDAE5000_PPORT_CommandTable entry 16; first shows the
+	; status record "17>Formating HD" (HDAE5000_PPORT_Strings + 384, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; Reserved PPORT command - display status, clear buffer, check result
 	ldw wa, 0x001A			; display row/column
 	nop
 	lda xbc, (0x29559e:24); lda XBC, (0x29559E) - status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ldw wa, 0x0011			; display row/column
 	nop
 	ei 0x00				; enable interrupts
@@ -18216,21 +18284,24 @@ HDAE5000_PPORT_Cmd_Reserved:	; 0x296680 (62 bytes)
 	cp wa, 0:i3			; check result
 	jp z, (0x2966AA:24)		; jp Z - skip cleanup if zero
 	nop
-	call HDAE5000_PPORT_Cleanup
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_FlagPacketError
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1
 	jp z, (0x295374:24)		; jp Z - exit to PPORT finish
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-PPORT_Utility_1:	; 0x2966BE (60 bytes)
+HDAE5000_PPORT_Cmd18_SwitchHdMotorOff:	; 0x2966BE (60 bytes)
+	; PC-link command 18: HDAE5000_PPORT_CommandTable entry 17; first shows the
+	; status record "18>Switch HD-motor off" (HDAE5000_PPORT_Strings + 408, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; PPORT utility - display status, clear buffer, check result
 	ldw wa, 0x001A			; display row/column
 	nop
 	lda xbc, (0x2955b6:24); lda XBC, (0x2955B6) - status string
 	nop
 	call HDAE5000_PPORT_CallService
-	call HDAE5000_PPORT_Ready_Check
+	call HDAE5000_PPORT_ClearPacket
 	ld wa, 2:i3			; WA = 2
 	ei 0x00				; enable interrupts
 	call HDAE5000_PPORT_CallService
@@ -18238,23 +18309,29 @@ PPORT_Utility_1:	; 0x2966BE (60 bytes)
 	cp wa, 0:i3			; check result
 	jp z, (0x2966E6:24)		; jp Z - skip cleanup if zero
 	nop
-	call HDAE5000_PPORT_Cleanup
-	call HDAE5000_PPORT_Sum_Buffer
+	call HDAE5000_PPORT_FlagPacketError
+	call HDAE5000_PPORT_SendPacket
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1
 	jp z, (0x295374:24)		; jp Z - exit to PPORT finish
 	nop
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-PPORT_Utility_2:	; 0x2966FA
+HDAE5000_PPORT_Cmd19_Nothing:	; 0x2966FA
+	; PC-link command 19: HDAE5000_PPORT_CommandTable entry 18; first shows the
+	; status record "19>nothing" (HDAE5000_PPORT_Strings + 432, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; PPORT utility routine 2 - display status and finish
 	ldw wa, 0x001A			; display row/column
 	nop
 	lda xbc, (0x2955ce:24); 0x2955CE - status string
 	nop
 	call HDAE5000_PPORT_CallService
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-PPORT_Utility_3:	; 0x29670C (164 bytes)
+HDAE5000_PPORT_Cmd20_SendXapFileFlash:	; 0x29670C (164 bytes)
+	; PC-link command 20: HDAE5000_PPORT_CommandTable entry 19; first shows the
+	; status record "20>Send XapFile flash" (HDAE5000_PPORT_Strings + 456, service 26).
+	; The description lines below predate this name and are not re-verified.
 	; PPORT utility routine 3 — display string, read PPORT data, execute,
 	; check status, display result string (success or error)
 	ldw wa, 0x001A				; display command
@@ -18278,7 +18355,7 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	nop
 	ld xde, (0x239104:24); ld XDE, (0x239104)
 	nop
-	call .Lppc_recv_write_bytes				; call 0x296B7E — execute operation
+	call HDAE5000_PPORT_RecvBlock				; call 0x296B7E — execute operation
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1 — check status flag
 	jp z, (2708340:24)			; jp Z, 0x295374 — abort if status=1
 	nop
@@ -18308,7 +18385,7 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	lda xbc, (0x295614:24); lda XBC, 0x295614 — error string
 	nop
 	call HDAE5000_PPORT_CallService
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 .Lpu3_success:
 	; Success path
 	ldw wa, 0x001A				; display command
@@ -18316,14 +18393,16 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	lda xbc, (0x2955fe:24); lda XBC, 0x2955FE — success string
 	nop
 	call HDAE5000_PPORT_CallService
-	jp HDAE5000_PPORT_Cmd_Done
+	jp HDAE5000_PPORT_CommandDone
 
-HDAE5000_PPORT_Cmd_Done:	; 0x2967B0 (4 bytes)
+HDAE5000_PPORT_CommandDone:	; 0x2967B0 (4 bytes)
 	; PPORT command completion - jump to finish handler
-	jp .Lppe_poll
+	jp HDAE5000_PPORT_CommandLoop_Poll
 
-HDAE5000_Render_Display_Region:	; 0x2967B4 (48 bytes)
+HDAE5000_PPORT_LatchPacketArgs:	; 0x2967B4 (48 bytes)
 	; Copy 4 display region parameters from (XIX+1..4) to direct memory
+	; ^ i.e. latch bytes 1..4 of the link packet 0x239168 (the command's
+	;   arguments) into 0x2390D6/D8/DA/DC; nothing is displayed.
 	lda xix, (0x239168:24); lda XIX, (0x239168)
 	nop
 	ld a, (xix + 1)
@@ -18345,8 +18424,11 @@ HDAE5000_Render_Display_Region:	; 0x2967B4 (48 bytes)
 	ret
 	nop
 
-HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
+HDAE5000_PPORT_RequestSongInfo:	; 0x2967E4 (166 bytes)
 	; Display region rendering 2 — load display params and call Display_String
+	; ^ corrected: PC-link service 13 (SendInfosAboutSong) with C = 0x2390D6
+	;   and E = 0x2390D8, the first two latched packet arguments;
+	;   "Display_String" was the old name of HDAE5000_PPORT_CallService.
 	xor xbc, xbc				; clear XBC
 	xor xde, xde				; clear XDE
 	ld c, (0x2390d6:24); ld C, (0x2390D6) — column
@@ -18360,7 +18442,7 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	ei 7					; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	ret
 	nop
-.Lrdr2_register:			; 0x296802
+HDAE5000_PPORT_GetInfoBlock:			; 0x296802
 	; Set WA=1, call Display_String, store XIX to data source ptr
 	ld wa, 1:i3
 	ei	0
@@ -18370,7 +18452,7 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	nop
 	ret
 	nop
-.Lrdr2_main:				; 0x296814
+HDAE5000_PPORT_RecvPacket:				; 0x296814
 	; Buffer read loop: read 256 bytes via I/O, accumulate 32-bit checksum,
 	; then send 4 checksum bytes, finalize
 	xor xwa, xwa
@@ -18383,7 +18465,7 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	cp bc, 0x0100				; 256 iterations?
 	jp z, (2713682:24)			; jp Z, 0x296852 — exit loop
 	nop
-	call .Lpsb_read_byte				; call 0x296900 — read one byte → W
+	call HDAE5000_PPORT_RecvByte				; call 0x296900 — read one byte → W
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1 — error check
 	jp z, (2713736:24)			; jp Z, 0x296888 — exit on error
 	nop
@@ -18406,22 +18488,22 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC) — load checksum byte
 	nop
-	call .Lpsb_write_byte				; call 0x2969A0 — send one byte
+	call HDAE5000_PPORT_SendByte				; call 0x2969A0 — send one byte
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1 — error check
 	jp z, (2713736:24)			; jp Z, 0x296888 — exit on error
 	nop
 	inc 1, bc				; BC++
 	jr t, .Lrdr2_loop2			; loop
 .Lrdr2_finalize:			; 0x29687C
-	call .Lpsb_finish				; call 0x296A30 — finalize transfer
+	call HDAE5000_PPORT_EndBlock				; call 0x296A30 — finalize transfer
 	cp w, 0:i3				; check result
 	jr z, .Lrdr2_exit			; exit if done
-	jp .Lrdr2_main				; retry main loop
+	jp HDAE5000_PPORT_RecvPacket				; retry main loop
 .Lrdr2_exit:				; 0x296888
 	ret
 	nop
 
-HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
+HDAE5000_PPORT_SendPacket:	; 0x29688A (530 bytes)
 	; Sum 256 bytes from buffer, send checksum, then send buffer bytes;
 	; retry on success, return on error. Uses PPORT I/O read/write sub-routines.
 	xor xwa, xwa
@@ -18440,7 +18522,7 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld l, w					; L = W (zero-extend to 32-bit)
 	add (0x2390fc:24), xhl                ; add (0x2390FC), XHL — accumulate
 	nop
-	call .Lpsb_write_byte			; send byte via PPORT
+	call HDAE5000_PPORT_SendByte			; send byte via PPORT
 	cp (0x2390d4:24), 0x01; cp (0x2390D4), 1 — error?
 	jp z, (2713854:24)			; jp Z, 0x2968FE — exit on error
 	nop
@@ -18456,21 +18538,21 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC) — checksum byte
 	nop
-	call .Lpsb_write_byte			; send byte
+	call HDAE5000_PPORT_SendByte			; send byte
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2713854:24)			; jp Z, 0x2968FE — exit on error
 	nop
 	inc 1, bc
 	jr t, .Lpsb_loop2
 .Lpsb_finalize:				; 0x2968F2
-	call .Lpsb_finish			; finalize transfer
+	call HDAE5000_PPORT_EndBlock			; finalize transfer
 	cp w, 0:i3				; check result
 	jr z, .Lpsb_exit
-	jp HDAE5000_PPORT_Sum_Buffer		; retry
+	jp HDAE5000_PPORT_SendPacket		; retry
 .Lpsb_exit:				; 0x2968FE
 	ret
 	nop
-.Lpsb_read_byte:			; 0x296900 — Read one byte from parallel port → W
+HDAE5000_PPORT_RecvByte:			; 0x296900 — Read one byte from parallel port → W
 	; Handshake: wait for BUSY=1 (bit2=1), then DATA_READY (bit0=1),
 	; read data, acknowledge, wait for completion
 	ld a, (0x160004:24); ld A, (0x160004) — read status
@@ -18540,7 +18622,7 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld (0x2390d4:24), 0x01; st (0x2390D4), 1 — set error flag
 	ret
 	nop
-.Lpsb_write_byte:			; 0x2969A0 — Write byte W to parallel port
+HDAE5000_PPORT_SendByte:			; 0x2969A0 — Write byte W to parallel port
 	; Handshake: wait for BUSY=1 (bit2=1), then READY (bit0=0),
 	; write data, signal, wait for ack
 	ld a, (0x160004:24); ld A, (0x160004) — status
@@ -18604,7 +18686,7 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ld (0x2390d4:24), 0x01; st (0x2390D4), 1 — set error flag
 	ret
 	nop
-.Lpsb_finish:				; 0x296A30 — Finalize parallel port transfer
+HDAE5000_PPORT_EndBlock:				; 0x296A30 — Finalize parallel port transfer
 	; Deassert, wait for completion, read final status bit
 	ld a, (0x160002:24); ld A, (0x160002)
 	nop
@@ -18655,7 +18737,7 @@ HDAE5000_PPORT_Sum_Buffer:	; 0x29688A (530 bytes)
 	ret
 	nop
 
-HDAE5000_PPORT_Ready_Check:	; 0x296A9C (26 bytes)
+HDAE5000_PPORT_ClearPacket:	; 0x296A9C (26 bytes)
 	; Clear 256 bytes of memory at (XIX + 0..255) using register-indexed store
 	lda xix, (0x239168:24); lda XIX, (0x239168)
 	nop
@@ -18670,15 +18752,18 @@ HDAE5000_PPORT_Ready_Check:	; 0x296A9C (26 bytes)
 	ret
 	nop
 
-HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
+HDAE5000_PPORT_FlagPacketError:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	; PPORT cleanup — mark end of buffer with 0xFF sentinel
+	; ^ byte 255 of the reply packet 0x239168 = 0xFF: the handlers call it
+	;   when a step fails (e.g. the version check of command 01), before
+	;   HDAE5000_PPORT_SendPacket.
 	lda xix, (0x239168:24); lda XIX, 0x239168
 	nop
 	stib_ind 0xF1, 0xFF, 0x00, 0xFF	; ld (XIX+0x00FF), 0xFF
 	ret
 	nop
 
-.Lppc_utility:				; 0x296AC4 — Display + save XIX + copy buffer
+HDAE5000_PPORT_CopyInfoToPacket:				; 0x296AC4 — Display + save XIX + copy buffer
 	; Push BC/HL, display command 1, save XIX to data ptr, copy BC..HL bytes
 	pushw bc
 	nop
@@ -18709,7 +18794,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ret
 	nop
 
-.Lppc_send_bytes:			; 0x296AF8 — Send XIY bytes to PPORT with checksum
+HDAE5000_PPORT_SendBlock:			; 0x296AF8 — Send XIY bytes to PPORT with checksum
 	; Send XDE bytes starting at XIY, accumulate checksum in (0x2390FC)
 	; Then send 4 checksum bytes, finalize, retry on failure
 	ld (0x239158:24), xiy; st (0x239158), XIY — save start
@@ -18730,7 +18815,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld l, w					; XHL = byte value
 	add (2330876), xhl			; add to checksum at (0x2390FC)
 	nop
-	call .Lpsb_write_byte			; send byte via PPORT
+	call HDAE5000_PPORT_SendByte			; send byte via PPORT
 	cp (0x2390d4:24), 0x01; error check
 	jp z, (2714492:24)			; jp Z, .Lsb_ret
 	nop
@@ -18747,14 +18832,14 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC)
 	nop
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2714492:24)			; jp Z, .Lsb_ret
 	nop
 	inc 1, bc
 	jr t, .Lsb_cksum_loop
 .Lsb_finalize:				; 0x296B64
-	call .Lpsb_finish
+	call HDAE5000_PPORT_EndBlock
 	cp w, 0:i3
 	jr z, .Lsb_ret
 	ld xiy, (0x239158:24); reload XIY from (0x239158)
@@ -18766,7 +18851,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ret
 	nop
 
-.Lppc_recv_write_bytes:		; 0x296B7E — Receive XDE bytes into XIY with checksum
+HDAE5000_PPORT_RecvBlock:		; 0x296B7E — Receive XDE bytes into XIY with checksum
 	; Receive XDE bytes from PPORT into XIY buffer, accumulate checksum
 	; Check status port, receive 4 checksum bytes, finalize, retry on failure
 	ld (0x239158:24), xiy; st (0x239158), XIY — save start
@@ -18782,7 +18867,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	cp xde, xbc
 	jp z, (2714560:24)			; jp Z, .Lrb_status_check
 	nop
-	call .Lpsb_read_byte			; receive byte from PPORT
+	call HDAE5000_PPORT_RecvByte			; receive byte from PPORT
 	cp (0x2390d4:24), 0x01
 	jp z, (2714664:24)			; jp Z, .Lrb_ret
 	nop
@@ -18817,14 +18902,14 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC)
 	nop
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2714664:24)			; jp Z, .Lrb_ret
 	nop
 	inc 1, bc
 	jr t, .Lrb_cksum_loop
 .Lrb_finalize:				; 0x296C06
-	call .Lpsb_finish
+	call HDAE5000_PPORT_EndBlock
 	cp w, 0:i3
 	jp z, (2714664:24)			; jp Z, .Lrb_ret
 	nop
@@ -18839,7 +18924,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ret
 	nop
 
-.Lppc_recv_sector_data:		; 0x296C2A — Receive 512-byte sector block
+HDAE5000_PPORT_RecvSector:		; 0x296C2A — Receive 512-byte sector block
 	; Receive 512 bytes into sector buffer (0x239268), checksum, verify
 	xor xwa, xwa
 	ld (0x2390fc:24), xwa; clear checksum
@@ -18851,7 +18936,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	cp bc, 0x0200
 	jp z, (2714728:24)			; jp Z, .Lrs_checksum
 	nop
-	call .Lpsb_read_byte
+	call HDAE5000_PPORT_RecvByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2714782:24)			; jp Z, .Lrs_ret
 	nop
@@ -18873,22 +18958,22 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4		; ld W, (XIX+BC)
 	nop
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2714782:24)			; jp Z, .Lrs_ret
 	nop
 	inc 1, bc
 	jr t, .Lrs_cksum_loop
 .Lrs_finalize:				; 0x296C92
-	call .Lpsb_finish
+	call HDAE5000_PPORT_EndBlock
 	cp w, 0:i3
 	jr z, .Lrs_ret
-	jp .Lppc_recv_sector_data		; retry
+	jp HDAE5000_PPORT_RecvSector		; retry
 .Lrs_ret:				; 0x296C9E
 	ret
 	nop
 
-.Lppc_send_regions:			; 0x296CA0 — Send two descriptor regions + checksum
+HDAE5000_PPORT_SendTwoRegions:			; 0x296CA0 — Send two descriptor regions + checksum
 	; Send from (0x239108)/XDE then (0x239110)/XDE, verify checksum
 	ld xiy, (0x239108:24); ld XIY, (0x239108)
 	nop
@@ -18907,7 +18992,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld l, w
 	add (2330876), xhl
 	nop
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2714962:24)			; jp Z, .Lsr_ret
 	nop
@@ -18929,7 +19014,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld l, w
 	add (2330876), xhl
 	nop
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2714962:24)			; jp Z, .Lsr_ret
 	nop
@@ -18946,22 +19031,22 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4
 	nop
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2714962:24)			; jp Z, .Lsr_ret
 	nop
 	inc 1, bc
 	jr t, .Lsr_cksum_loop
 .Lsr_finalize:				; 0x296D46
-	call .Lpsb_finish
+	call HDAE5000_PPORT_EndBlock
 	cp w, 0:i3
 	jr z, .Lsr_ret
-	jp .Lppc_send_regions			; retry
+	jp HDAE5000_PPORT_SendTwoRegions			; retry
 .Lsr_ret:				; 0x296D52
 	ret
 	nop
 
-.Lppc_recv_custom_data:		; 0x296D54 — Receive custom ROM data
+HDAE5000_PPORT_RecvCustomData:		; 0x296D54 — Receive custom ROM data
 	; Phase 1: receive 0x640 bytes into 0xF980
 	; Phase 2: receive 0x800 bytes into 0x1E7800
 	; Then send checksum, finalize, retry on failure
@@ -18977,7 +19062,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	cp xde, xbc
 	jp z, (2715030:24)			; jp Z, .Lrc_phase2
 	nop
-	call .Lpsb_read_byte
+	call HDAE5000_PPORT_RecvByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2715142:24)			; jp Z, .Lrc_ret
 	nop
@@ -18999,7 +19084,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	cp xde, xbc
 	jp z, (2715088:24)			; jp Z, .Lrc_checksum
 	nop
-	call .Lpsb_read_byte
+	call HDAE5000_PPORT_RecvByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2715142:24)			; jp Z, .Lrc_ret
 	nop
@@ -19021,22 +19106,22 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4
 	nop
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2715142:24)			; jp Z, .Lrc_ret
 	nop
 	inc 1, bc
 	jr t, .Lrc_cksum_loop
 .Lrc_finalize:				; 0x296DFA
-	call .Lpsb_finish
+	call HDAE5000_PPORT_EndBlock
 	cp w, 0:i3
 	jr z, .Lrc_ret
-	jp .Lppc_recv_custom_data		; retry
+	jp HDAE5000_PPORT_RecvCustomData		; retry
 .Lrc_ret:				; 0x296E06
 	ret
 	nop
 
-.Lppc_init_region_descriptors:	; 0x296E08 — Initialize region descriptors
+HDAE5000_PPORT_InitRegionDescriptors:	; 0x296E08 — Initialize region descriptors
 	; Clear all 10 region descriptor slots to 0, then test each flag bit
 	; and load the corresponding region size constant
 	ld xwa, 0:i3				; XWA = 0
@@ -19095,7 +19180,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld e, 0x04:opc				; E = flag bit value
 	ld (0x2390ee:24), 0x10; st (0x2390EE), 0x10 — sectors per track
 	ld (0x2390ec:24), 0x4E; st (0x2390EC), 0x4E — sector offset
-	call .Lppc_compute_sector
+	call HDAE5000_PPORT_InitRegionDescriptors_Lookup
 	cp (0x2390e6:24), 0x01; cp (0x2390E6), 1
 	jp z, (2715588:24)			; jp Z, .Lir_ret
 	nop
@@ -19114,7 +19199,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld e, 0x08:opc
 	ld (0x2390ee:24), 0x10; sectors per track
 	ld (0x2390ec:24), 0x2E; sector offset
-	call .Lppc_compute_sector
+	call HDAE5000_PPORT_InitRegionDescriptors_Lookup
 	cp (0x2390e6:24), 0x01
 	jp z, (2715588:24)			; jp Z, .Lir_ret
 	nop
@@ -19145,7 +19230,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld e, 0x20:opc
 	ld (0x2390ee:24), 0x10; sectors per track
 	ld (0x2390ec:24), 0x1E; sector offset
-	call .Lppc_compute_sector
+	call HDAE5000_PPORT_InitRegionDescriptors_Lookup
 	cp (0x2390e6:24), 0x01
 	jp z, (2715588:24)			; jp Z, .Lir_ret
 	nop
@@ -19163,7 +19248,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld e, 0x40:opc
 	ld (0x2390ee:24), 0x20; sectors per track
 	ld (0x2390ec:24), 0x1C; sector offset
-	call .Lppc_compute_sector
+	call HDAE5000_PPORT_InitRegionDescriptors_Lookup
 	cp (0x2390e6:24), 0x01
 	jp z, (2715588:24)			; jp Z, .Lir_ret
 	nop
@@ -19198,7 +19283,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ret
 	nop
 
-.Lppc_compute_sector:		; 0x296FC6 — Compute sector descriptor
+HDAE5000_PPORT_InitRegionDescriptors_Lookup:		; 0x296FC6 — Compute sector descriptor
 	; Read HD sector using display commands, compute XIY from sector data
 	ld xix, (0x239100:24); ld XIX, (0x239100)
 	nop
@@ -19257,7 +19342,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ret
 	nop
 
-.Lppc_send_region_to_pc:		; 0x297054 — Send region data to PC
+HDAE5000_PPORT_SendRegionToPc:		; 0x297054 — Send region data to PC
 	; Main send routine: reads region descriptor, sets up PPORT buffer,
 	; sends sectors in 512-byte blocks with checksum verification
 	ld xwa, (0x239164:24); ld XWA, (0x239164) — region descriptor
@@ -19268,7 +19353,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld (0x2390fc:24), xwa; clear checksum
 	nop
 	ld (0x2390e6:24), 0x00; clear error flag
-	call .Lrdr2_register				; call 0x296802 — register XIX
+	call HDAE5000_PPORT_GetInfoBlock				; call 0x296802 — register XIX
 	ld xix, (0x239100:24); ld XIX, (0x239100)
 	nop
 	xor wa, wa
@@ -19297,7 +19382,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ld (0x2390e6:24), 0x01; set error flag
 .Lsrpc_send_init:			; 0x2970BA — Send WA byte + start transfer
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2716066:24)			; jp Z, .Lsrpc_ret
 	nop
@@ -19342,7 +19427,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ld l, w
 	add (2330876), xhl			; add to checksum
 	nop
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2716066:24)			; jp Z, .Lsrpc_ret
 	nop
@@ -19364,21 +19449,21 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ldb_sri w, 0x07, 0xF0, 0xE4
 	nop
-	call .Lpsb_write_byte
+	call HDAE5000_PPORT_SendByte
 	cp (0x2390d4:24), 0x01
 	jp z, (2716066:24)			; jp Z, .Lsrpc_ret
 	nop
 	inc 1, bc
 	jr t, .Lsrpc_cksum_loop
 .Lsrpc_finalize:			; 0x29718A
-	call .Lpsb_finish
+	call HDAE5000_PPORT_EndBlock
 	cp w, 0:i3
 	jr z, .Lsrpc_ret
 	ld xwa, (0x239158:24); reload saved region descriptor
 	nop
 	ld (0x239164:24), xwa; st (0x239164), XWA
 	nop
-	jp .Lppc_send_region_to_pc		; retry
+	jp HDAE5000_PPORT_SendRegionToPc		; retry
 .Lsrpc_ret:				; 0x2971A2
 	ret
 
@@ -19454,7 +19539,7 @@ HDAE5000_HD_Init_SramClearLoop:
 	inc 2, xiy                              ; inc 2,XIY
 	jp HDAE5000_HD_Init_SramClearLoop                             ; jp 0x2971fc
 	call HDAE5000_HD_ClearStatusBytes
-	call .Lppe_write_setup
+	call HDAE5000_PPORT_InitPort
 	lda xwa, (HDAE5000_HD_CheckVersionKey:24)
 	ld	(0x229d6c), xwa
 	ld	(0x229D90:24), 0
