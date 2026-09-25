@@ -7018,8 +7018,9 @@ ToneDB_DescCurve_Step1:
 ; WAVE 14: +0x0C is the base pitch (above), and at slot +0x70 every field of
 ; an element is placed as well.  What is still unidentified is +0x09/+0x0A,
 ; and every byte of an element at slots +0x30 and +0x38.
-; ⚠ And no prom_c instruction that reads THIS block has been found; the Evidence
-; note below states what that leaves standing and what it does not.
+; ★ CORRECTED 2026-09-25 (lane promcd): this block IS read -- by
+; ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0), see the reader paragraph at
+; the end of this banner; each descriptor below names the waves that reach it.
 ; 
 ; This is the LARGEST of the three, and the only one whose descriptors each own
 ; a PRIVATE part A.  Its 318 (part A, part B) pairs partition the pool exactly:
@@ -7126,12 +7127,9 @@ ToneDB_DescCurve_Step1:
 ; last.  Re-derived on every run by notes/prom_d_structures_round2.py, which
 ; this emitter refuses to run without.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x30 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x30: it does not
+; follow a base parked in a frame slot, which is what the reader does.
 ; ★ BUT A READER EXISTS OUTSIDE IT, and it is this block's: prom_c
 ; reads the slot with `ld XIY,(XBC+0x30)` at 0xFB466E through the base
 ; parked by `ld (XIZ+0xF6),XWA` at 0xFB4616, multiplies an index-map
@@ -7141,649 +7139,1601 @@ ToneDB_DescCurve_Step1:
 ; with `ld H,(XBC)` at 0xFA81F6.  So this block IS read, and the
 ; KN5000 name is corroborated rather than merely transplanted.
 ; 
-; ⚠ No reader was found for THIS block.  What round 3 adds is indirect and
-; is stated as such: the stride word this block uses (directory +0xEC = 14)
-; IS read by prom_c -- at 0xFB4679, 0xFB46C4, 0xFC299A -- and at 0xFC299A the SAME stride word is
-; multiplied by a record index to walk the descriptor array at slot +0x70,
-; which is the same record class.  That corroborates the 14-byte array; it
-; does NOT show anything reading this block, and the label stays a KN5000
-; transplant on that basis.
+; Round 3's indirect evidence stands: the stride word this block uses
+; (directory +0xEC = 14) is read by prom_c at 0xFB4679, 0xFB46C4, 0xFC299A, and at
+; 0xFC299A the same stride word walks the descriptor array at slot +0x70.
+; The DIRECT reader is the one above (corrected 2026-09-25, lane promcd:
+; this paragraph said none had been found and kept the name a transplant).
 ; ==========================================================================
 ToneDB_EnvDescTable:
+; descriptor 0 = base + dir[+0x30] + 14*0, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). No entry of ToneDB_ToneIndexMapC or D holds 0, so no selector reaches it
+; through them.
 ToneDB_EnvDescTable_Desc000:		; tag 0x40  A=0x23E9F  B=0x23EAE
 	.byte 0x40, 0x9F, 0x3E, 0x02, 0x00, 0xAE, 0x3E, 0x02, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x42	; 22D3B  |@.>...>....B.B|
+; descriptor 1 = base + dir[+0x30] + 14*1, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sine Wave' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc001:		; tag 0x40  A=0x23EB4  B=0x23EC3
 	.byte 0x40, 0xB4, 0x3E, 0x02, 0x00, 0xC3, 0x3E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D49  |@.>...>...xB.B|
+; descriptor 2 = base + dir[+0x30] + 14*2, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Silent' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc002:		; tag 0x40  A=0x23EC9  B=0x23ED8
 	.byte 0x40, 0xC9, 0x3E, 0x02, 0x00, 0xD8, 0x3E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D57  |@.>...>...xB.B|
+; descriptor 3 = base + dir[+0x30] + 14*3, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Piano L' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc003:		; tag 0xC0  A=0x23EDE  B=0x23F4E
 	.byte 0xC0, 0xDE, 0x3E, 0x02, 0x00, 0x4E, 0x3F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D65  |..>..N?...xB.B|
+; descriptor 4 = base + dir[+0x30] + 14*4, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'BrightPiano L'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc004:		; tag 0xC0  A=0x23FD6  B=0x24046
 	.byte 0xC0, 0xD6, 0x3F, 0x02, 0x00, 0x46, 0x40, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D73  |..?..F@...xB.B|
+; descriptor 5 = base + dir[+0x30] + 14*5, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mono Piano' (22
+; map entries hold it).
 ToneDB_EnvDescTable_Desc005:		; tag 0xC0  A=0x240D6  B=0x24146
 	.byte 0xC0, 0xD6, 0x40, 0x02, 0x00, 0x46, 0x41, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D81  |..@..FA...xB.B|
+; descriptor 6 = base + dir[+0x30] + 14*6, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Piccolo' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc006:		; tag 0xC0  A=0x241CE  B=0x2423E
 	.byte 0xC0, 0xCE, 0x41, 0x02, 0x00, 0x3E, 0x42, 0x02, 0x00, 0x19, 0x78, 0x42, 0x80, 0x42	; 22D8F  |..A..>B...xB.B|
+; descriptor 7 = base + dir[+0x30] + 14*7, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz Flute' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc007:		; tag 0xC0  A=0x2425E  B=0x242CE
 	.byte 0xC0, 0x5E, 0x42, 0x02, 0x00, 0xCE, 0x42, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22D9D  |.^B...B...xB.B|
+; descriptor 8 = base + dir[+0x30] + 14*8, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Classic Flute'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc008:		; tag 0xC0  A=0x242F6  B=0x24366
 	.byte 0xC0, 0xF6, 0x42, 0x02, 0x00, 0x66, 0x43, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DAB  |..B..fC...xB.B|
+; descriptor 9 = base + dir[+0x30] + 14*9, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Alto Flute'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc009:		; tag 0xC0  A=0x24396  B=0x24406
 	.byte 0xC0, 0x96, 0x43, 0x02, 0x00, 0x06, 0x44, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DB9  |..C...D...xB.B|
+; descriptor 10 = base + dir[+0x30] + 14*10, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pan Flute' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc010:		; tag 0xC0  A=0x2443E  B=0x244AE
 	.byte 0xC0, 0x3E, 0x44, 0x02, 0x00, 0xAE, 0x44, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DC7  |.>D...D...xB.B|
+; descriptor 11 = base + dir[+0x30] + 14*11, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Recorder' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc011:		; tag 0xC0  A=0x244C6  B=0x24536
 	.byte 0xC0, 0xC6, 0x44, 0x02, 0x00, 0x36, 0x45, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22DD5  |..D..6E...xB.B|
+; descriptor 12 = base + dir[+0x30] + 14*12, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ocarina' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc012:		; tag 0xC0  A=0x24556  B=0x24565
 	.byte 0xC0, 0x56, 0x45, 0x02, 0x00, 0x65, 0x45, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22DE3  |.VE..eE...xB.B|
+; descriptor 13 = base + dir[+0x30] + 14*13, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Whistle' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc013:		; tag 0x40  A=0x2456D  B=0x2457C
 	.byte 0x40, 0x6D, 0x45, 0x02, 0x00, 0x7C, 0x45, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DF1  |@mE..|E...xB.B|
+; descriptor 14 = base + dir[+0x30] + 14*14, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Shakuhachi' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc014:		; tag 0xC0  A=0x2458E  B=0x245FE
 	.byte 0xC0, 0x8E, 0x45, 0x02, 0x00, 0xFE, 0x45, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22DFF  |..E...E...xB.B|
+; descriptor 15 = base + dir[+0x30] + 14*15, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ney' (the only
+; map entry holding it).
 ToneDB_EnvDescTable_Desc015:		; tag 0xC0  A=0x2462E  B=0x2469E
 	.byte 0xC0, 0x2E, 0x46, 0x02, 0x00, 0x9E, 0x46, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22E0D  |..F...F...xB.B|
+; descriptor 16 = base + dir[+0x30] + 14*16, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Analog Bass' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc016:		; tag 0x40  A=0x246B6  B=0x246CF
 	.byte 0x40, 0xB6, 0x46, 0x02, 0x00, 0xCF, 0x46, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E1B  |@.F...F...xB.B|
+; descriptor 17 = base + dir[+0x30] + 14*17, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Dance Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc017:		; tag 0x40  A=0x246DB  B=0x2474B
 	.byte 0x40, 0xDB, 0x46, 0x02, 0x00, 0x4B, 0x47, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E29  |@.F..KG...xB.B|
+; descriptor 18 = base + dir[+0x30] + 14*18, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'House Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc018:		; tag 0x40  A=0x2478D  B=0x2479C
 	.byte 0x40, 0x8D, 0x47, 0x02, 0x00, 0x9C, 0x47, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E37  |@.G...G...xB.B|
+; descriptor 19 = base + dir[+0x30] + 14*19, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Organ Click' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc019:		; tag 0xC0  A=0x247D2  B=0x247F9
 	.byte 0xC0, 0xD2, 0x47, 0x02, 0x00, 0xF9, 0x47, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E45  |..G...G...xB.B|
+; descriptor 20 = base + dir[+0x30] + 14*20, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave '16' & 8'' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc020:		; tag 0x40  A=0x24869  B=0x248D9
 	.byte 0x40, 0x69, 0x48, 0x02, 0x00, 0xD9, 0x48, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E53  |@iH...H...xB.B|
+; descriptor 21 = base + dir[+0x30] + 14*21, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave '16'' (the only
+; map entry holding it).
 ToneDB_EnvDescTable_Desc021:		; tag 0x40  A=0x248EB  B=0x2495B
 	.byte 0x40, 0xEB, 0x48, 0x02, 0x00, 0x5B, 0x49, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E61  |@.H..[I...xB.B|
+; descriptor 22 = base + dir[+0x30] + 14*22, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Piano R' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc022:		; tag 0xC0  A=0x24967  B=0x249D7
 	.byte 0xC0, 0x67, 0x49, 0x02, 0x00, 0xD7, 0x49, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E6F  |.gI...I...xB.B|
+; descriptor 23 = base + dir[+0x30] + 14*23, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'BrightPiano R'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc023:		; tag 0xC0  A=0x24A5F  B=0x24ACF
 	.byte 0xC0, 0x5F, 0x4A, 0x02, 0x00, 0xCF, 0x4A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E7D  |._J...J...xB.B|
+; descriptor 24 = base + dir[+0x30] + 14*24, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 24; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc024:		; tag 0x40  A=0x24B5F  B=0x24BCF
 	.byte 0x40, 0x5F, 0x4B, 0x02, 0x00, 0xCF, 0x4B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E8B  |@_K...K...xB.B|
+; descriptor 25 = base + dir[+0x30] + 14*25, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'E.Piano 2' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc025:		; tag 0x40  A=0x24C35  B=0x24CA5
 	.byte 0x40, 0x35, 0x4C, 0x02, 0x00, 0xA5, 0x4C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22E99  |@5L...L...xB.B|
+; descriptor 26 = base + dir[+0x30] + 14*26, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Modern E.P.2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc026:		; tag 0x40  A=0x24D0B  B=0x24D32
 	.byte 0x40, 0x0B, 0x4D, 0x02, 0x00, 0x32, 0x4D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EA7  |@.M..2M...xB.B|
+; descriptor 27 = base + dir[+0x30] + 14*27, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bell Piano'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc027:		; tag 0xC0  A=0x24D62  B=0x24D89
 	.byte 0xC0, 0x62, 0x4D, 0x02, 0x00, 0x89, 0x4D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EB5  |.bM...M...xB.B|
+; descriptor 28 = base + dir[+0x30] + 14*28, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bell Pad' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc028:		; tag 0xC1  A=0x24DC1  B=0x24DE8
 	.byte 0xC1, 0xC1, 0x4D, 0x02, 0x00, 0xE8, 0x4D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EC3  |..M...M...xB.B|
+; descriptor 29 = base + dir[+0x30] + 14*29, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Banjo' (16 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc029:		; tag 0x40  A=0x24E28  B=0x24E98
 	.byte 0x40, 0x28, 0x4E, 0x02, 0x00, 0x98, 0x4E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22ED1  |@(N...N...xB.B|
+; descriptor 30 = base + dir[+0x30] + 14*30, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mandolin' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc030:		; tag 0x40  A=0x24ED4  B=0x24F44
 	.byte 0x40, 0xD4, 0x4E, 0x02, 0x00, 0x44, 0x4F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EDF  |@.N..DO...xB.B|
+; descriptor 31 = base + dir[+0x30] + 14*31, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Harp' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc031:		; tag 0x40  A=0x24F80  B=0x24FF0
 	.byte 0x40, 0x80, 0x4F, 0x02, 0x00, 0xF0, 0x4F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22EED  |@.O...O...xB.B|
+; descriptor 32 = base + dir[+0x30] + 14*32, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Orchestra Hit'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc032:		; tag 0x40  A=0x25044  B=0x25053
 	.byte 0x40, 0x44, 0x50, 0x02, 0x00, 0x53, 0x50, 0x02, 0x00, 0x0C, 0x69, 0x42, 0x80, 0x42	; 22EFB  |@DP..SP...iB.B|
+; descriptor 33 = base + dir[+0x30] + 14*33, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Timpani' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc033:		; tag 0xC0  A=0x25059  B=0x25068
 	.byte 0xC0, 0x59, 0x50, 0x02, 0x00, 0x68, 0x50, 0x02, 0x00, 0x0C, 0x5B, 0x42, 0x80, 0x42	; 22F09  |.YP..hP...[B.B|
+; descriptor 34 = base + dir[+0x30] + 14*34, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Music Box' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc034:		; tag 0x40  A=0x25070  B=0x25089
 	.byte 0x40, 0x70, 0x50, 0x02, 0x00, 0x89, 0x50, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22F17  |@pP...P...xB.B|
+; descriptor 35 = base + dir[+0x30] + 14*35, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Koto' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc035:		; tag 0x40  A=0x250AD  B=0x2511D
 	.byte 0x40, 0xAD, 0x50, 0x02, 0x00, 0x1D, 0x51, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F25  |@.P...Q...xB.B|
+; descriptor 36 = base + dir[+0x30] + 14*36, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Shamisen' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc036:		; tag 0x40  A=0x2515F  B=0x251CF
 	.byte 0x40, 0x5F, 0x51, 0x02, 0x00, 0xCF, 0x51, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F33  |@_Q...Q...xB.B|
+; descriptor 37 = base + dir[+0x30] + 14*37, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Kalimba' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc037:		; tag 0x40  A=0x25205  B=0x25214
 	.byte 0x40, 0x05, 0x52, 0x02, 0x00, 0x14, 0x52, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 22F41  |@.R...R...xB.B|
+; descriptor 38 = base + dir[+0x30] + 14*38, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sitar' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc038:		; tag 0x40  A=0x25232  B=0x252A2
 	.byte 0x40, 0x32, 0x52, 0x02, 0x00, 0xA2, 0x52, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F4F  |@2R...R...xB.B|
+; descriptor 39 = base + dir[+0x30] + 14*39, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Dulcimer' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc039:		; tag 0x40  A=0x252E4  B=0x25354
 	.byte 0x40, 0xE4, 0x52, 0x02, 0x00, 0x54, 0x53, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F5D  |@.R..TS...xB.B|
+; descriptor 40 = base + dir[+0x30] + 14*40, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Gamelan 1' (5
+; map entries hold it).
 ToneDB_EnvDescTable_Desc040:		; tag 0x40  A=0x2539C  B=0x253B5
 	.byte 0x40, 0x9C, 0x53, 0x02, 0x00, 0xB5, 0x53, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F6B  |@.S...S...xB.B|
+; descriptor 41 = base + dir[+0x30] + 14*41, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Gamelan 2' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc041:		; tag 0x40  A=0x253C1  B=0x253D0
 	.byte 0x40, 0xC1, 0x53, 0x02, 0x00, 0xD0, 0x53, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F79  |@.S...S...xB.B|
+; descriptor 42 = base + dir[+0x30] + 14*42, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Gamelan 3' (2
+; map entries hold it).
 ToneDB_EnvDescTable_Desc042:		; tag 0x40  A=0x253DC  B=0x2544C
 	.byte 0x40, 0xDC, 0x53, 0x02, 0x00, 0x4C, 0x54, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F87  |@.S..LT...xB.B|
+; descriptor 43 = base + dir[+0x30] + 14*43, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Crystal Wave'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc043:		; tag 0x40  A=0x25476  B=0x254E6
 	.byte 0x40, 0x76, 0x54, 0x02, 0x00, 0xE6, 0x54, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22F95  |@vT...T...xB.B|
+; descriptor 44 = base + dir[+0x30] + 14*44, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Funky E.Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc044:		; tag 0x40  A=0x254F8  B=0x25507
 	.byte 0x40, 0xF8, 0x54, 0x02, 0x00, 0x07, 0x55, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FA3  |@.T...U...xB.B|
+; descriptor 45 = base + dir[+0x30] + 14*45, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'FretlessBass1'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc045:		; tag 0x40  A=0x2553D  B=0x255AD
 	.byte 0x40, 0x3D, 0x55, 0x02, 0x00, 0xAD, 0x55, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FB1  |@=U...U...xB.B|
+; descriptor 46 = base + dir[+0x30] + 14*46, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'FretlessBass2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc046:		; tag 0x40  A=0x255D1  B=0x255F8
 	.byte 0x40, 0xD1, 0x55, 0x02, 0x00, 0xF8, 0x55, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FBF  |@.U...U...xB.B|
+; descriptor 47 = base + dir[+0x30] + 14*47, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rock Snare' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc047:		; tag 0xC0  A=0x25616  B=0x25625
 	.byte 0xC0, 0x16, 0x56, 0x02, 0x00, 0x25, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FCD  |..V..%V...xB.B|
+; descriptor 48 = base + dir[+0x30] + 14*48, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Reverse Snare'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc048:		; tag 0xC0  A=0x2562D  B=0x2563C
 	.byte 0xC0, 0x2D, 0x56, 0x02, 0x00, 0x3C, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FDB  |.-V..<V...xB.B|
+; descriptor 49 = base + dir[+0x30] + 14*49, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'House Snare'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc049:		; tag 0xC0  A=0x25644  B=0x25653
 	.byte 0xC0, 0x44, 0x56, 0x02, 0x00, 0x53, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FE9  |.DV..SV...xB.B|
+; descriptor 50 = base + dir[+0x30] + 14*50, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Soul Snare' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc050:		; tag 0xC0  A=0x2565B  B=0x2566A
 	.byte 0xC0, 0x5B, 0x56, 0x02, 0x00, 0x6A, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 22FF7  |.[V..jV...xB.B|
+; descriptor 51 = base + dir[+0x30] + 14*51, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Analog Snare'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc051:		; tag 0xC0  A=0x25672  B=0x25681
 	.byte 0xC0, 0x72, 0x56, 0x02, 0x00, 0x81, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23005  |.rV...V...xB.B|
+; descriptor 52 = base + dir[+0x30] + 14*52, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Piccolo Snare'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc052:		; tag 0xC0  A=0x25689  B=0x25698
 	.byte 0xC0, 0x89, 0x56, 0x02, 0x00, 0x98, 0x56, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23013  |..V...V...xB.B|
+; descriptor 53 = base + dir[+0x30] + 14*53, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Harpsichord 2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc053:		; tag 0x40  A=0x256A0  B=0x25710
 	.byte 0x40, 0xA0, 0x56, 0x02, 0x00, 0x10, 0x57, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23021  |@.V...W...xB.B|
+; descriptor 54 = base + dir[+0x30] + 14*54, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Harpsichord 1'
+; (23 map entries hold it).
 ToneDB_EnvDescTable_Desc054:		; tag 0x40  A=0x2576A  B=0x257DA
 	.byte 0x40, 0x6A, 0x57, 0x02, 0x00, 0xDA, 0x57, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2302F  |@jW...W...xB.B|
+; descriptor 55 = base + dir[+0x30] + 14*55, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clavi' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc055:		; tag 0x40  A=0x2583A  B=0x258AA
 	.byte 0x40, 0x3A, 0x58, 0x02, 0x00, 0xAA, 0x58, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2303D  |@:X...X...xB.B|
+; descriptor 56 = base + dir[+0x30] + 14*56, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Synth Clavi' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc056:		; tag 0x40  A=0x258FE  B=0x25925
 	.byte 0x40, 0xFE, 0x58, 0x02, 0x00, 0x25, 0x59, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2304B  |@.X..%Y...xB.B|
+; descriptor 57 = base + dir[+0x30] + 14*57, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vibraphone' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc057:		; tag 0x40  A=0x25955  B=0x259C5
 	.byte 0x40, 0x55, 0x59, 0x02, 0x00, 0xC5, 0x59, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23059  |@UY...Y...xB.B|
+; descriptor 58 = base + dir[+0x30] + 14*58, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Marimba' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc058:		; tag 0x40  A=0x259FB  B=0x25A14
 	.byte 0x40, 0xFB, 0x59, 0x02, 0x00, 0x14, 0x5A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23067  |@.Y...Z...xB.B|
+; descriptor 59 = base + dir[+0x30] + 14*59, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Xylophone' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc059:		; tag 0x40  A=0x25A44  B=0x25A5D
 	.byte 0x40, 0x44, 0x5A, 0x02, 0x00, 0x5D, 0x5A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23075  |@DZ..]Z...xB.B|
+; descriptor 60 = base + dir[+0x30] + 14*60, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Celesta' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc060:		; tag 0x40  A=0x25A8D  B=0x25AFD
 	.byte 0x40, 0x8D, 0x5A, 0x02, 0x00, 0xFD, 0x5A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23083  |@.Z...Z...xB.B|
+; descriptor 61 = base + dir[+0x30] + 14*61, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Solid Bars'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc061:		; tag 0x40  A=0x25B4B  B=0x25BBB
 	.byte 0x40, 0x4B, 0x5B, 0x02, 0x00, 0xBB, 0x5B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23091  |@K[...[...xB.B|
+; descriptor 62 = base + dir[+0x30] + 14*62, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'BottleMarimba'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc062:		; tag 0x40  A=0x25BDF  B=0x25C4F
 	.byte 0x40, 0xDF, 0x5B, 0x02, 0x00, 0x4F, 0x5C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2309F  |@.[..O\...xB.B|
+; descriptor 63 = base + dir[+0x30] + 14*63, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'AfricanMallet',
+; 'Pulse Wave 1', 'Pulse Wave 2', 'Pulse Wave 3' and 1 more (40 map entries hold it).
 ToneDB_EnvDescTable_Desc063:		; tag 0x40  A=0x25C7F  B=0x25CEF
 	.byte 0x40, 0x7F, 0x5C, 0x02, 0x00, 0xEF, 0x5C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 230AD  |@.\...\...xB.B|
+; descriptor 64 = base + dir[+0x30] + 14*64, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Classical Gtr'
+; (6 map entries hold it).
 ToneDB_EnvDescTable_Desc064:		; tag 0x40  A=0x25D0D  B=0x25D7D
 	.byte 0x40, 0x0D, 0x5D, 0x02, 0x00, 0x7D, 0x5D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 230BB  |@.]..}]...xB.B|
+; descriptor 65 = base + dir[+0x30] + 14*65, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clas.Strings1'
+; (29 map entries hold it).
 ToneDB_EnvDescTable_Desc065:		; tag 0xC0  A=0x25DA7  B=0x25E17
 	.byte 0xC0, 0xA7, 0x5D, 0x02, 0x00, 0x17, 0x5E, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 230C9  |..]...^...nB.B|
+; descriptor 66 = base + dir[+0x30] + 14*66, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clas.Strings2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc066:		; tag 0xC1  A=0x25E67  B=0x25ED7
 	.byte 0xC1, 0x67, 0x5E, 0x02, 0x00, 0xD7, 0x5E, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 230D7  |.g^...^...nB.B|
+; descriptor 67 = base + dir[+0x30] + 14*67, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mellow Ens.'
+; (17 map entries hold it).
 ToneDB_EnvDescTable_Desc067:		; tag 0xC1  A=0x25F27  B=0x25F40
 	.byte 0xC1, 0x27, 0x5F, 0x02, 0x00, 0x40, 0x5F, 0x02, 0x00, 0x15, 0x6E, 0x42, 0x80, 0x42	; 230E5  |.'_..@_...nB.B|
+; descriptor 68 = base + dir[+0x30] + 14*68, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Marcato Str.1'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc068:		; tag 0xC0  A=0x25F50  B=0x25FC0
 	.byte 0xC0, 0x50, 0x5F, 0x02, 0x00, 0xC0, 0x5F, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 230F3  |.P_..._...nB.B|
+; descriptor 69 = base + dir[+0x30] + 14*69, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Marcato Str.2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc069:		; tag 0xC1  A=0x26010  B=0x26080
 	.byte 0xC1, 0x10, 0x60, 0x02, 0x00, 0x80, 0x60, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23101  |..`...`...nB.B|
+; descriptor 70 = base + dir[+0x30] + 14*70, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pizzicato' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc070:		; tag 0x40  A=0x260D0  B=0x26140
 	.byte 0x40, 0xD0, 0x60, 0x02, 0x00, 0x40, 0x61, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2310F  |@.`..@a...xB.B|
+; descriptor 71 = base + dir[+0x30] + 14*71, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Violin' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc071:		; tag 0x40  A=0x2619A  B=0x2620A
 	.byte 0x40, 0x9A, 0x61, 0x02, 0x00, 0x0A, 0x62, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2311D  |@.a...b...xB.B|
+; descriptor 72 = base + dir[+0x30] + 14*72, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz Violin'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc072:		; tag 0x40  A=0x26234  B=0x262A4
 	.byte 0x40, 0x34, 0x62, 0x02, 0x00, 0xA4, 0x62, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2312B  |@4b...b...xB.B|
+; descriptor 73 = base + dir[+0x30] + 14*73, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Viola' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc073:		; tag 0x40  A=0x262CE  B=0x2633E
 	.byte 0x40, 0xCE, 0x62, 0x02, 0x00, 0x3E, 0x63, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23139  |@.b..>c...xB.B|
+; descriptor 74 = base + dir[+0x30] + 14*74, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cello' (7 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc074:		; tag 0x40  A=0x26368  B=0x263D8
 	.byte 0x40, 0x68, 0x63, 0x02, 0x00, 0xD8, 0x63, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23147  |@hc...c...xB.B|
+; descriptor 75 = base + dir[+0x30] + 14*75, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bowed Bass' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc075:		; tag 0x40  A=0x2640E  B=0x2647E
 	.byte 0x40, 0x0E, 0x64, 0x02, 0x00, 0x7E, 0x64, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23155  |@.d..~d...xB.B|
+; descriptor 76 = base + dir[+0x30] + 14*76, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal Ah 1'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc076:		; tag 0xC1  A=0x264A8  B=0x264C1
 	.byte 0xC1, 0xA8, 0x64, 0x02, 0x00, 0xC1, 0x64, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23163  |..d...d...nB.B|
+; descriptor 77 = base + dir[+0x30] + 14*77, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal Ah 2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc077:		; tag 0xC0  A=0x264F9  B=0x26569
 	.byte 0xC0, 0xF9, 0x64, 0x02, 0x00, 0x69, 0x65, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23171  |..d..ie...nB.B|
+; descriptor 78 = base + dir[+0x30] + 14*78, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal Doo' (7
+; map entries hold it).
 ToneDB_EnvDescTable_Desc078:		; tag 0x40  A=0x265C9  B=0x26639
 	.byte 0x40, 0xC9, 0x65, 0x02, 0x00, 0x39, 0x66, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2317F  |@.e..9f...xB.B|
+; descriptor 79 = base + dir[+0x30] + 14*79, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Fog Vox' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc079:		; tag 0xC0  A=0x26657  B=0x26666
 	.byte 0xC0, 0x57, 0x66, 0x02, 0x00, 0x66, 0x66, 0x02, 0x00, 0x0C, 0x73, 0x42, 0x80, 0x42	; 2318D  |.Wf..ff...sB.B|
+; descriptor 80 = base + dir[+0x30] + 14*80, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Acoustic Bass'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc080:		; tag 0x40  A=0x2666E  B=0x266DE
 	.byte 0x40, 0x6E, 0x66, 0x02, 0x00, 0xDE, 0x66, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2319B  |@nf...f...xB.B|
+; descriptor 81 = base + dir[+0x30] + 14*81, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bright E.Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc081:		; tag 0x40  A=0x2671A  B=0x2678A
 	.byte 0x40, 0x1A, 0x67, 0x02, 0x00, 0x8A, 0x67, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231A9  |@.g...g...xB.B|
+; descriptor 82 = base + dir[+0x30] + 14*82, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Picked E.Bass'
+; (5 map entries hold it).
 ToneDB_EnvDescTable_Desc082:		; tag 0x40  A=0x267C0  B=0x267D9
 	.byte 0x40, 0xC0, 0x67, 0x02, 0x00, 0xD9, 0x67, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231B7  |@.g...g...xB.B|
+; descriptor 83 = base + dir[+0x30] + 14*83, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute Bass' (4
+; map entries hold it).
 ToneDB_EnvDescTable_Desc083:		; tag 0x40  A=0x2680F  B=0x26828
 	.byte 0x40, 0x0F, 0x68, 0x02, 0x00, 0x28, 0x68, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231C5  |@.h..(h...xB.B|
+; descriptor 84 = base + dir[+0x30] + 14*84, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Click Bass' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc084:		; tag 0x40  A=0x2685E  B=0x26885
 	.byte 0x40, 0x5E, 0x68, 0x02, 0x00, 0x85, 0x68, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231D3  |@^h...h...xB.B|
+; descriptor 85 = base + dir[+0x30] + 14*85, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Plastic Bass'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc085:		; tag 0x40  A=0x268A9  B=0x268D0
 	.byte 0x40, 0xA9, 0x68, 0x02, 0x00, 0xD0, 0x68, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 231E1  |@.h...h...xB.B|
+; descriptor 86 = base + dir[+0x30] + 14*86, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'White Noise'
+; (24 map entries hold it).
 ToneDB_EnvDescTable_Desc086:		; tag 0xC0  A=0x268E8  B=0x268F7
 	.byte 0xC0, 0xE8, 0x68, 0x02, 0x00, 0xF7, 0x68, 0x02, 0x00, 0x0E, 0x65, 0x42, 0x80, 0x42	; 231EF  |..h...h...eB.B|
+; descriptor 87 = base + dir[+0x30] + 14*87, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'HiPass Noise'
+; (16 map entries hold it).
 ToneDB_EnvDescTable_Desc087:		; tag 0xC0  A=0x268FF  B=0x2690E
 	.byte 0xC0, 0xFF, 0x68, 0x02, 0x00, 0x0E, 0x69, 0x02, 0x00, 0x24, 0x57, 0x42, 0x80, 0x42	; 231FD  |..h...i..$WB.B|
+; descriptor 88 = base + dir[+0x30] + 14*88, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Harpsi.KeyOff'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc088:		; tag 0x40  A=0x26916  B=0x26925
 	.byte 0x40, 0x16, 0x69, 0x02, 0x00, 0x25, 0x69, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2320B  |@.i..%i...xB.B|
+; descriptor 89 = base + dir[+0x30] + 14*89, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clavi KeyOff'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc089:		; tag 0x40  A=0x2692B  B=0x2693A
 	.byte 0x40, 0x2B, 0x69, 0x02, 0x00, 0x3A, 0x69, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 23219  |@+i..:i...xB.B|
+; descriptor 90 = base + dir[+0x30] + 14*90, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap Shot' (232
+; map entries hold it).
 ToneDB_EnvDescTable_Desc090:		; tag 0x40  A=0x26940  B=0x2694F
 	.byte 0x40, 0x40, 0x69, 0x02, 0x00, 0x4F, 0x69, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23227  |@@i..Oi...xB.B|
+; descriptor 91 = base + dir[+0x30] + 14*91, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Scratch 1' (5
+; map entries hold it).
 ToneDB_EnvDescTable_Desc091:		; tag 0xC0  A=0x26955  B=0x26964
 	.byte 0xC0, 0x55, 0x69, 0x02, 0x00, 0x64, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23235  |.Ui..di...xB.B|
+; descriptor 92 = base + dir[+0x30] + 14*92, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Scratch 2' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc092:		; tag 0xC0  A=0x2696C  B=0x2697B
 	.byte 0xC0, 0x6C, 0x69, 0x02, 0x00, 0x7B, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23243  |.li..{i...xB.B|
+; descriptor 93 = base + dir[+0x30] + 14*93, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Voice Ah' (6
+; map entries hold it).
 ToneDB_EnvDescTable_Desc093:		; tag 0xC0  A=0x26983  B=0x26992
 	.byte 0xC0, 0x83, 0x69, 0x02, 0x00, 0x92, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23251  |..i...i...xB.B|
+; descriptor 94 = base + dir[+0x30] + 14*94, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Voice Yeh' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc094:		; tag 0xC0  A=0x2699A  B=0x269A9
 	.byte 0xC0, 0x9A, 0x69, 0x02, 0x00, 0xA9, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2325F  |..i...i...xB.B|
+; descriptor 95 = base + dir[+0x30] + 14*95, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Voice Uh' (the
+; only map entry holding it).
 ToneDB_EnvDescTable_Desc095:		; tag 0xC0  A=0x269B1  B=0x269C0
 	.byte 0xC0, 0xB1, 0x69, 0x02, 0x00, 0xC0, 0x69, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2326D  |..i...i...xB.B|
+; descriptor 96 = base + dir[+0x30] + 14*96, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bird 1' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc096:		; tag 0xC0  A=0x269C8  B=0x269D7
 	.byte 0xC0, 0xC8, 0x69, 0x02, 0x00, 0xD7, 0x69, 0x02, 0x00, 0x11, 0x67, 0x42, 0x80, 0x42	; 2327B  |..i...i...gB.B|
+; descriptor 97 = base + dir[+0x30] + 14*97, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bird 2' (8 map
+; entries hold it).
 ToneDB_EnvDescTable_Desc097:		; tag 0xC0  A=0x269DF  B=0x269EE
 	.byte 0xC0, 0xDF, 0x69, 0x02, 0x00, 0xEE, 0x69, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23289  |..i...i...eB.B|
+; descriptor 98 = base + dir[+0x30] + 14*98, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Seashore' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc098:		; tag 0xC0  A=0x269F6  B=0x26A05
 	.byte 0xC0, 0xF6, 0x69, 0x02, 0x00, 0x05, 0x6A, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23297  |..i...j...eB.B|
+; descriptor 99 = base + dir[+0x30] + 14*99, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Telephone' (8
+; map entries hold it).
 ToneDB_EnvDescTable_Desc099:		; tag 0xC0  A=0x26A0D  B=0x26A1C
 	.byte 0xC0, 0x0D, 0x6A, 0x02, 0x00, 0x1C, 0x6A, 0x02, 0x00, 0x0C, 0x58, 0x42, 0x80, 0x42	; 232A5  |..j...j...XB.B|
+; descriptor 100 = base + dir[+0x30] + 14*100, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Helicopter' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc100:		; tag 0xC0  A=0x26A24  B=0x26A33
 	.byte 0xC0, 0x24, 0x6A, 0x02, 0x00, 0x33, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232B3  |.$j..3j...xB.B|
+; descriptor 101 = base + dir[+0x30] + 14*101, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Gun
+; Shot' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc101:		; tag 0xC0  A=0x26A3B  B=0x26A4A
 	.byte 0xC0, 0x3B, 0x6A, 0x02, 0x00, 0x4A, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232C1  |.;j..Jj...xB.B|
+; descriptor 102 = base + dir[+0x30] + 14*102, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Applause' (24 map entries hold it).
 ToneDB_EnvDescTable_Desc102:		; tag 0xC0  A=0x26A52  B=0x26A61
 	.byte 0xC0, 0x52, 0x6A, 0x02, 0x00, 0x61, 0x6A, 0x02, 0x00, 0x11, 0x52, 0x42, 0x80, 0x42	; 232CF  |.Rj..aj...RB.B|
+; descriptor 103 = base + dir[+0x30] + 14*103, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rock
+; Bass Dr.' (21 map entries hold it).
 ToneDB_EnvDescTable_Desc103:		; tag 0xC0  A=0x26A69  B=0x26A78
 	.byte 0xC0, 0x69, 0x6A, 0x02, 0x00, 0x78, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232DD  |.ij..xj...xB.B|
+; descriptor 104 = base + dir[+0x30] + 14*104, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'House
+; BassDr.' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc104:		; tag 0xC0  A=0x26A80  B=0x26A8F
 	.byte 0xC0, 0x80, 0x6A, 0x02, 0x00, 0x8F, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232EB  |..j...j...xB.B|
+; descriptor 105 = base + dir[+0x30] + 14*105, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Soul
+; Bass Dr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc105:		; tag 0xC0  A=0x26A97  B=0x26AA6
 	.byte 0xC0, 0x97, 0x6A, 0x02, 0x00, 0xA6, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 232F9  |..j...j...xB.B|
+; descriptor 106 = base + dir[+0x30] + 14*106, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Dance
+; BassDr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc106:		; tag 0xC0  A=0x26AAE  B=0x26ABD
 	.byte 0xC0, 0xAE, 0x6A, 0x02, 0x00, 0xBD, 0x6A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23307  |..j...j...xB.B|
+; descriptor 107 = base + dir[+0x30] + 14*107, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Elect.BassDr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc107:		; tag 0xC0  A=0x26AC5  B=0x26AD4
 	.byte 0xC0, 0xC5, 0x6A, 0x02, 0x00, 0xD4, 0x6A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23315  |..j...j...xB.B|
+; descriptor 108 = base + dir[+0x30] + 14*108, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Click
+; Sine' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc108:		; tag 0x40  A=0x26ADC  B=0x26B03
 	.byte 0x40, 0xDC, 0x6A, 0x02, 0x00, 0x03, 0x6B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23323  |@.j...k...xB.B|
+; descriptor 109 = base + dir[+0x30] + 14*109, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Organ' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc109:		; tag 0x40  A=0x26B0F  B=0x26B7F
 	.byte 0x40, 0x0F, 0x6B, 0x02, 0x00, 0x7F, 0x6B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23331  |@.k...k...xB.B|
+; descriptor 110 = base + dir[+0x30] + 14*110, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Full
+; Drawbars' (32 map entries hold it).
 ToneDB_EnvDescTable_Desc110:		; tag 0x40  A=0x26B9D  B=0x26C0D
 	.byte 0x40, 0x9D, 0x6B, 0x02, 0x00, 0x0D, 0x6C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2333F  |@.k...l...xB.B|
+; descriptor 111 = base + dir[+0x30] + 14*111, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Drawbars' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc111:		; tag 0x40  A=0x26C43  B=0x26CB3
 	.byte 0x40, 0x43, 0x6C, 0x02, 0x00, 0xB3, 0x6C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2334D  |@Cl...l...xB.B|
+; descriptor 112 = base + dir[+0x30] + 14*112, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave '16' &
+; 1'' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc112:		; tag 0x40  A=0x26CDD  B=0x26D4D
 	.byte 0x40, 0xDD, 0x6C, 0x02, 0x00, 0x4D, 0x6D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2335B  |@.l..Mm...xB.B|
+; descriptor 113 = base + dir[+0x30] + 14*113, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pipe
+; Organ 1' (24 map entries hold it).
 ToneDB_EnvDescTable_Desc113:		; tag 0xC0  A=0x26D65  B=0x26DD5
 	.byte 0xC0, 0x65, 0x6D, 0x02, 0x00, 0xD5, 0x6D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23369  |.em...m...xB.B|
+; descriptor 114 = base + dir[+0x30] + 14*114, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pipe
+; Organ 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc114:		; tag 0xC0  A=0x26E55  B=0x26EC5
 	.byte 0xC0, 0x55, 0x6E, 0x02, 0x00, 0xC5, 0x6E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23377  |.Un...n...xB.B|
+; descriptor 115 = base + dir[+0x30] + 14*115, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Mel.Accordion' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc115:		; tag 0x40  A=0x26F1D  B=0x26F8D
 	.byte 0x40, 0x1D, 0x6F, 0x02, 0x00, 0x8D, 0x6F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23385  |@.o...o...xB.B|
+; descriptor 116 = base + dir[+0x30] + 14*116, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Brt.Accordion' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc116:		; tag 0x40  A=0x26FC9  B=0x27039
 	.byte 0x40, 0xC9, 0x6F, 0x02, 0x00, 0x39, 0x70, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23393  |@.o..9p...xB.B|
+; descriptor 117 = base + dir[+0x30] + 14*117, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Musette' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc117:		; tag 0x40  A=0x2705D  B=0x270CD
 	.byte 0x40, 0x5D, 0x70, 0x02, 0x00, 0xCD, 0x70, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233A1  |@]p...p...xB.B|
+; descriptor 118 = base + dir[+0x30] + 14*118, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Triangle Wave' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc118:		; tag 0x40  A=0x27103  B=0x27173
 	.byte 0x40, 0x03, 0x71, 0x02, 0x00, 0x73, 0x71, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233AF  |@.q..sq...xB.B|
+; descriptor 119 = base + dir[+0x30] + 14*119, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Sawtooth Wave' (2 map entries hold it).
 ToneDB_EnvDescTable_Desc119:		; tag 0x40  A=0x271A3  B=0x271BC
 	.byte 0x40, 0xA3, 0x71, 0x02, 0x00, 0xBC, 0x71, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233BD  |@.q...q...xB.B|
+; descriptor 120 = base + dir[+0x30] + 14*120, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Square
+; Wave' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc120:		; tag 0x40  A=0x271FE  B=0x27217
 	.byte 0x40, 0xFE, 0x71, 0x02, 0x00, 0x17, 0x72, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233CB  |@.q...r...xB.B|
+; descriptor 121 = base + dir[+0x30] + 14*121, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Lead' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc121:		; tag 0x40  A=0x2724D  B=0x272BD
 	.byte 0x40, 0x4D, 0x72, 0x02, 0x00, 0xBD, 0x72, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233D9  |@Mr...r...xB.B|
+; descriptor 122 = base + dir[+0x30] + 14*122, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Wire' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc122:		; tag 0x40  A=0x272ED  B=0x2735D
 	.byte 0x40, 0xED, 0x72, 0x02, 0x00, 0x5D, 0x73, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233E7  |@.r..]s...xB.B|
+; descriptor 123 = base + dir[+0x30] + 14*123, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Wave 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc123:		; tag 0x40  A=0x2738D  B=0x273A6
 	.byte 0x40, 0x8D, 0x73, 0x02, 0x00, 0xA6, 0x73, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 233F5  |@.s...s...xB.B|
+; descriptor 124 = base + dir[+0x30] + 14*124, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Wave 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc124:		; tag 0x40  A=0x273C4  B=0x273EB
 	.byte 0x40, 0xC4, 0x73, 0x02, 0x00, 0xEB, 0x73, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23403  |@.s...s...xB.B|
+; descriptor 125 = base + dir[+0x30] + 14*125, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Wave 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc125:		; tag 0x40  A=0x27415  B=0x27435
 	.byte 0x40, 0x15, 0x74, 0x02, 0x00, 0x35, 0x74, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23411  |@.t..5t...xB.B|
+; descriptor 126 = base + dir[+0x30] + 14*126, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Organ
+; Bell' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc126:		; tag 0x41  A=0x27459  B=0x27480
 	.byte 0x41, 0x59, 0x74, 0x02, 0x00, 0x80, 0x74, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2341F  |AYt...t...xB.B|
+; descriptor 127 = base + dir[+0x30] + 14*127, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bright
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc127:		; tag 0x40  A=0x27492  B=0x27502
 	.byte 0x40, 0x92, 0x74, 0x02, 0x00, 0x02, 0x75, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2342D  |@.t...u...xB.B|
+; descriptor 128 = base + dir[+0x30] + 14*128, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Digi
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc128:		; tag 0x40  A=0x27526  B=0x27596
 	.byte 0x40, 0x26, 0x75, 0x02, 0x00, 0x96, 0x75, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2343B  |@&u...u...xB.B|
+; descriptor 129 = base + dir[+0x30] + 14*129, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pulse
+; Mod.1' (15 map entries hold it).
 ToneDB_EnvDescTable_Desc129:		; tag 0xC0  A=0x275BA  B=0x2762A
 	.byte 0xC0, 0xBA, 0x75, 0x02, 0x00, 0x2A, 0x76, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23449  |..u..*v...xB.B|
+; descriptor 130 = base + dir[+0x30] + 14*130, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pulse
+; Mod.2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc130:		; tag 0xC1  A=0x27662  B=0x276D2
 	.byte 0xC1, 0x62, 0x76, 0x02, 0x00, 0xD2, 0x76, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23457  |.bv...v...xB.B|
+; descriptor 131 = base + dir[+0x30] + 14*131, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Fusion
+; E.Bass' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc131:		; tag 0x40  A=0x2770A  B=0x2772A
 	.byte 0x40, 0x0A, 0x77, 0x02, 0x00, 0x2A, 0x77, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23465  |@.w..*w...xB.B|
+; descriptor 132 = base + dir[+0x30] + 14*132, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Melodic
+; Tom' (16 map entries hold it).
 ToneDB_EnvDescTable_Desc132:		; tag 0xC0  A=0x27760  B=0x2776F
 	.byte 0xC0, 0x60, 0x77, 0x02, 0x00, 0x6F, 0x77, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23473  |.`w..ow...xB.B|
+; descriptor 133 = base + dir[+0x30] + 14*133, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Tom' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc133:		; tag 0xC0  A=0x27777  B=0x27786
 	.byte 0xC0, 0x77, 0x77, 0x02, 0x00, 0x86, 0x77, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23481  |.ww...w...xB.B|
+; descriptor 134 = base + dir[+0x30] + 14*134, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Electric Tom' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc134:		; tag 0xC0  A=0x2778E  B=0x2779D
 	.byte 0xC0, 0x8E, 0x77, 0x02, 0x00, 0x9D, 0x77, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2348F  |..w...w...xB.B|
+; descriptor 135 = base + dir[+0x30] + 14*135, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Analog
+; Tom' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc135:		; tag 0xC0  A=0x277A5  B=0x277B4
 	.byte 0xC0, 0xA5, 0x77, 0x02, 0x00, 0xB4, 0x77, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2349D  |..w...w...xB.B|
+; descriptor 136 = base + dir[+0x30] + 14*136, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ElectBassTom' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc136:		; tag 0xC0  A=0x277BC  B=0x277CB
 	.byte 0xC0, 0xBC, 0x77, 0x02, 0x00, 0xCB, 0x77, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 234AB  |..w...w...xB.B|
+; descriptor 137 = base + dir[+0x30] + 14*137, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rim 1'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc137:		; tag 0xC0  A=0x277D3  B=0x277E2
 	.byte 0xC0, 0xD3, 0x77, 0x02, 0x00, 0xE2, 0x77, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 234B9  |..w...w...xB.B|
+; descriptor 138 = base + dir[+0x30] + 14*138, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rim 2'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc138:		; tag 0xC0  A=0x277EA  B=0x277F9
 	.byte 0xC0, 0xEA, 0x77, 0x02, 0x00, 0xF9, 0x77, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 234C7  |..w...w...xB.B|
+; descriptor 139 = base + dir[+0x30] + 14*139, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rim 3'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc139:		; tag 0xC0  A=0x27801  B=0x27810
 	.byte 0xC0, 0x01, 0x78, 0x02, 0x00, 0x10, 0x78, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 234D5  |..x...x...xB.B|
+; descriptor 140 = base + dir[+0x30] + 14*140, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Brush
+; Long' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc140:		; tag 0xC0  A=0x27818  B=0x27827
 	.byte 0xC0, 0x18, 0x78, 0x02, 0x00, 0x27, 0x78, 0x02, 0x00, 0x0C, 0x5B, 0x42, 0x80, 0x42	; 234E3  |..x..'x...[B.B|
+; descriptor 141 = base + dir[+0x30] + 14*141, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Brush
+; Short' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc141:		; tag 0xC0  A=0x2782F  B=0x2783E
 	.byte 0xC0, 0x2F, 0x78, 0x02, 0x00, 0x3E, 0x78, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 234F1  |./x..>x...xB.B|
+; descriptor 142 = base + dir[+0x30] + 14*142, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'HiHatClosed 1' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc142:		; tag 0xC0  A=0x27846  B=0x27855
 	.byte 0xC0, 0x46, 0x78, 0x02, 0x00, 0x55, 0x78, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 234FF  |.Fx..Ux...xB.B|
+; descriptor 143 = base + dir[+0x30] + 14*143, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'HiHatClosed 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc143:		; tag 0xC0  A=0x2785D  B=0x2786C
 	.byte 0xC0, 0x5D, 0x78, 0x02, 0x00, 0x6C, 0x78, 0x02, 0x00, 0x0C, 0x5D, 0x42, 0x80, 0x42	; 2350D  |.]x..lx...]B.B|
+; descriptor 144 = base + dir[+0x30] + 14*144, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'HiHat
+; Open 1' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc144:		; tag 0xC0  A=0x27874  B=0x27883
 	.byte 0xC0, 0x74, 0x78, 0x02, 0x00, 0x83, 0x78, 0x02, 0x00, 0x11, 0x5A, 0x42, 0x80, 0x42	; 2351B  |.tx...x...ZB.B|
+; descriptor 145 = base + dir[+0x30] + 14*145, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'HiHat
+; Open 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc145:		; tag 0x40  A=0x2788B  B=0x2789A
 	.byte 0x40, 0x8B, 0x78, 0x02, 0x00, 0x9A, 0x78, 0x02, 0x00, 0x11, 0x4E, 0x42, 0x80, 0x42	; 23529  |@.x...x...NB.B|
+; descriptor 146 = base + dir[+0x30] + 14*146, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ride
+; Cymbal 1' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc146:		; tag 0x40  A=0x278A0  B=0x278AF
 	.byte 0x40, 0xA0, 0x78, 0x02, 0x00, 0xAF, 0x78, 0x02, 0x00, 0x11, 0x62, 0x42, 0x80, 0x42	; 23537  |@.x...x...bB.B|
+; descriptor 147 = base + dir[+0x30] + 14*147, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ride
+; Cymbal 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc147:		; tag 0x40  A=0x278B5  B=0x278C4
 	.byte 0x40, 0xB5, 0x78, 0x02, 0x00, 0xC4, 0x78, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23545  |@.x...x...eB.B|
+; descriptor 148 = base + dir[+0x30] + 14*148, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Ride
+; Bell' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc148:		; tag 0x40  A=0x278CA  B=0x278D9
 	.byte 0x40, 0xCA, 0x78, 0x02, 0x00, 0xD9, 0x78, 0x02, 0x00, 0x11, 0x64, 0x42, 0x80, 0x42	; 23553  |@.x...x...dB.B|
+; descriptor 149 = base + dir[+0x30] + 14*149, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ReverseCymbl1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc149:		; tag 0x40  A=0x278DF  B=0x278EE
 	.byte 0x40, 0xDF, 0x78, 0x02, 0x00, 0xEE, 0x78, 0x02, 0x00, 0x11, 0x64, 0x42, 0x80, 0x42	; 23561  |@.x...x...dB.B|
+; descriptor 150 = base + dir[+0x30] + 14*150, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ReverseCymbl2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc150:		; tag 0x40  A=0x278F4  B=0x27903
 	.byte 0x40, 0xF4, 0x78, 0x02, 0x00, 0x03, 0x79, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 2356F  |@.x...y...eB.B|
+; descriptor 151 = base + dir[+0x30] + 14*151, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Crash
+; Cymbal1' (5 map entries hold it).
 ToneDB_EnvDescTable_Desc151:		; tag 0x40  A=0x27909  B=0x27918
 	.byte 0x40, 0x09, 0x79, 0x02, 0x00, 0x18, 0x79, 0x02, 0x00, 0x1C, 0x65, 0x42, 0x80, 0x42	; 2357D  |@.y...y...eB.B|
+; descriptor 152 = base + dir[+0x30] + 14*152, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Crash
+; Cymbal2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc152:		; tag 0x40  A=0x2791E  B=0x2792D
 	.byte 0x40, 0x1E, 0x79, 0x02, 0x00, 0x2D, 0x79, 0x02, 0x00, 0x1C, 0x5D, 0x42, 0x80, 0x42	; 2358B  |@.y..-y...]B.B|
+; descriptor 153 = base + dir[+0x30] + 14*153, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Splash
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc153:		; tag 0x40  A=0x27933  B=0x27942
 	.byte 0x40, 0x33, 0x79, 0x02, 0x00, 0x42, 0x79, 0x02, 0x00, 0x1C, 0x67, 0x42, 0x80, 0x42	; 23599  |@3y..By...gB.B|
+; descriptor 154 = base + dir[+0x30] + 14*154, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'China
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc154:		; tag 0x40  A=0x27948  B=0x27957
 	.byte 0x40, 0x48, 0x79, 0x02, 0x00, 0x57, 0x79, 0x02, 0x00, 0x1C, 0x67, 0x42, 0x80, 0x42	; 235A7  |@Hy..Wy...gB.B|
+; descriptor 155 = base + dir[+0x30] + 14*155, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Agogo'
+; (6 map entries hold it).
 ToneDB_EnvDescTable_Desc155:		; tag 0xC0  A=0x2795D  B=0x2796C
 	.byte 0xC0, 0x5D, 0x79, 0x02, 0x00, 0x6C, 0x79, 0x02, 0x00, 0x13, 0x63, 0x42, 0x80, 0x42	; 235B5  |.]y..ly...cB.B|
+; descriptor 156 = base + dir[+0x30] + 14*156, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sleigh
+; Bell' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc156:		; tag 0xC0  A=0x27974  B=0x27983
 	.byte 0xC0, 0x74, 0x79, 0x02, 0x00, 0x83, 0x79, 0x02, 0x00, 0x0C, 0x45, 0x42, 0x80, 0x42	; 235C3  |.ty...y...EB.B|
+; descriptor 157 = base + dir[+0x30] + 14*157, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Cowbell' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc157:		; tag 0xC0  A=0x2798B  B=0x2799A
 	.byte 0xC0, 0x8B, 0x79, 0x02, 0x00, 0x9A, 0x79, 0x02, 0x00, 0x15, 0x6C, 0x42, 0x80, 0x42	; 235D1  |..y...y...lB.B|
+; descriptor 158 = base + dir[+0x30] + 14*158, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Wind
+; Chime 1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc158:		; tag 0xC0  A=0x279A2  B=0x279B1
 	.byte 0xC0, 0xA2, 0x79, 0x02, 0x00, 0xB1, 0x79, 0x02, 0x00, 0x1D, 0x50, 0x42, 0x80, 0x42	; 235DF  |..y...y...PB.B|
+; descriptor 159 = base + dir[+0x30] + 14*159, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Wind
+; Chime 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc159:		; tag 0xC0  A=0x279B9  B=0x279C8
 	.byte 0xC0, 0xB9, 0x79, 0x02, 0x00, 0xC8, 0x79, 0x02, 0x00, 0x1D, 0x50, 0x42, 0x80, 0x42	; 235ED  |..y...y...PB.B|
+; descriptor 160 = base + dir[+0x30] + 14*160, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bongo'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc160:		; tag 0xC0  A=0x279D0  B=0x279DF
 	.byte 0xC0, 0xD0, 0x79, 0x02, 0x00, 0xDF, 0x79, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 235FB  |..y...y...xB.B|
+; descriptor 161 = base + dir[+0x30] + 14*161, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Conga
+; 1' (16 map entries hold it).
 ToneDB_EnvDescTable_Desc161:		; tag 0xC0  A=0x279E7  B=0x279F6
 	.byte 0xC0, 0xE7, 0x79, 0x02, 0x00, 0xF6, 0x79, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23609  |..y...y...xB.B|
+; descriptor 162 = base + dir[+0x30] + 14*162, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Conga
+; 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc162:		; tag 0xC0  A=0x279FE  B=0x27A0D
 	.byte 0xC0, 0xFE, 0x79, 0x02, 0x00, 0x0D, 0x7A, 0x02, 0x00, 0x1A, 0x78, 0x42, 0x80, 0x42	; 23617  |..y...z...xB.B|
+; descriptor 163 = base + dir[+0x30] + 14*163, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cuica
+; 1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc163:		; tag 0xC0  A=0x27A15  B=0x27A24
 	.byte 0xC0, 0x15, 0x7A, 0x02, 0x00, 0x24, 0x7A, 0x02, 0x00, 0x21, 0x78, 0x42, 0x80, 0x42	; 23625  |..z..$z..!xB.B|
+; descriptor 164 = base + dir[+0x30] + 14*164, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cuica
+; 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc164:		; tag 0xC0  A=0x27A2C  B=0x27A3B
 	.byte 0xC0, 0x2C, 0x7A, 0x02, 0x00, 0x3B, 0x7A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23633  |.,z..;z...xB.B|
+; descriptor 165 = base + dir[+0x30] + 14*165, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Guiro
+; long' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc165:		; tag 0xC0  A=0x27A43  B=0x27A52
 	.byte 0xC0, 0x43, 0x7A, 0x02, 0x00, 0x52, 0x7A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23641  |.Cz..Rz...xB.B|
+; descriptor 166 = base + dir[+0x30] + 14*166, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Guiro
+; Short' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc166:		; tag 0xC0  A=0x27A5A  B=0x27A69
 	.byte 0xC0, 0x5A, 0x7A, 0x02, 0x00, 0x69, 0x7A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2364F  |.Zz..iz...xB.B|
+; descriptor 167 = base + dir[+0x30] + 14*167, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Hand
+; Claps' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc167:		; tag 0xC0  A=0x27A71  B=0x27A80
 	.byte 0xC0, 0x71, 0x7A, 0x02, 0x00, 0x80, 0x7A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 2365D  |.qz...z...xB.B|
+; descriptor 168 = base + dir[+0x30] + 14*168, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Bass Dr.' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc168:		; tag 0xC0  A=0x27A88  B=0x27A97
 	.byte 0xC0, 0x88, 0x7A, 0x02, 0x00, 0x97, 0x7A, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 2366B  |..z...z...xB.B|
+; descriptor 169 = base + dir[+0x30] + 14*169, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Snare' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc169:		; tag 0xC0  A=0x27A9F  B=0x27AAE
 	.byte 0xC0, 0x9F, 0x7A, 0x02, 0x00, 0xAE, 0x7A, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23679  |..z...z...eB.B|
+; descriptor 170 = base + dir[+0x30] + 14*170, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Cymbal' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc170:		; tag 0xC0  A=0x27AB6  B=0x27AC5
 	.byte 0xC0, 0xB6, 0x7A, 0x02, 0x00, 0xC5, 0x7A, 0x02, 0x00, 0x0C, 0x62, 0x42, 0x80, 0x42	; 23687  |..z...z...bB.B|
+; descriptor 171 = base + dir[+0x30] + 14*171, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Tamb.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc171:		; tag 0xC0  A=0x27ACD  B=0x27ADC
 	.byte 0xC0, 0xCD, 0x7A, 0x02, 0x00, 0xDC, 0x7A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23695  |..z...z...xB.B|
+; descriptor 172 = base + dir[+0x30] + 14*172, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Shaker'
+; (7 map entries hold it).
 ToneDB_EnvDescTable_Desc172:		; tag 0xC0  A=0x27AE4  B=0x27AF3
 	.byte 0xC0, 0xE4, 0x7A, 0x02, 0x00, 0xF3, 0x7A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 236A3  |..z...z...xB.B|
+; descriptor 173 = base + dir[+0x30] + 14*173, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cabasa'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc173:		; tag 0xC0  A=0x27AFB  B=0x27B0A
 	.byte 0xC0, 0xFB, 0x7A, 0x02, 0x00, 0x0A, 0x7B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 236B1  |..z...{...xB.B|
+; descriptor 174 = base + dir[+0x30] + 14*174, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Maracas' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc174:		; tag 0xC0  A=0x27B12  B=0x27B21
 	.byte 0xC0, 0x12, 0x7B, 0x02, 0x00, 0x21, 0x7B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 236BF  |..{..!{...xB.B|
+; descriptor 175 = base + dir[+0x30] + 14*175, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Samba
+; Whistle' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc175:		; tag 0xC0  A=0x27B29  B=0x27B38
 	.byte 0xC0, 0x29, 0x7B, 0x02, 0x00, 0x38, 0x7B, 0x02, 0x00, 0x22, 0x5C, 0x42, 0x80, 0x42	; 236CD  |.){..8{.."\B.B|
+; descriptor 176 = base + dir[+0x30] + 14*176, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc176:		; tag 0xC0  A=0x27B40  B=0x27B4F
 	.byte 0xC0, 0x40, 0x7B, 0x02, 0x00, 0x4F, 0x7B, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 236DB  |.@{..O{...xB.B|
+; descriptor 177 = base + dir[+0x30] + 14*177, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Timbales 1' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc177:		; tag 0xC0  A=0x27B57  B=0x27B66
 	.byte 0xC0, 0x57, 0x7B, 0x02, 0x00, 0x66, 0x7B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 236E9  |.W{..f{...xB.B|
+; descriptor 178 = base + dir[+0x30] + 14*178, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Timbales 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc178:		; tag 0xC0  A=0x27B6E  B=0x27B7D
 	.byte 0xC0, 0x6E, 0x7B, 0x02, 0x00, 0x7D, 0x7B, 0x02, 0x00, 0x0C, 0x65, 0x42, 0x80, 0x42	; 236F7  |.n{..}{...eB.B|
+; descriptor 179 = base + dir[+0x30] + 14*179, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Samba
+; Drum' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc179:		; tag 0xC0  A=0x27B85  B=0x27B94
 	.byte 0xC0, 0x85, 0x7B, 0x02, 0x00, 0x94, 0x7B, 0x02, 0x00, 0x15, 0x78, 0x42, 0x80, 0x42	; 23705  |..{...{...xB.B|
+; descriptor 180 = base + dir[+0x30] + 14*180, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'SambaDrumMute' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc180:		; tag 0xC0  A=0x27B9C  B=0x27BAB
 	.byte 0xC0, 0x9C, 0x7B, 0x02, 0x00, 0xAB, 0x7B, 0x02, 0x00, 0x15, 0x78, 0x42, 0x80, 0x42	; 23713  |..{...{...xB.B|
+; descriptor 181 = base + dir[+0x30] + 14*181, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Tambourine 1' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc181:		; tag 0x40  A=0x27BB3  B=0x27BC2
 	.byte 0x40, 0xB3, 0x7B, 0x02, 0x00, 0xC2, 0x7B, 0x02, 0x00, 0x11, 0x47, 0x42, 0x80, 0x42	; 23721  |@.{...{...GB.B|
+; descriptor 182 = base + dir[+0x30] + 14*182, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Tambourine 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc182:		; tag 0x40  A=0x27BC8  B=0x27BD7
 	.byte 0x40, 0xC8, 0x7B, 0x02, 0x00, 0xD7, 0x7B, 0x02, 0x00, 0x11, 0x60, 0x42, 0x80, 0x42	; 2372F  |@.{...{...`B.B|
+; descriptor 183 = base + dir[+0x30] + 14*183, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Triangle Open' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc183:		; tag 0xC0  A=0x27BDD  B=0x27BEC
 	.byte 0xC0, 0xDD, 0x7B, 0x02, 0x00, 0xEC, 0x7B, 0x02, 0x00, 0x11, 0x52, 0x42, 0x80, 0x42	; 2373D  |..{...{...RB.B|
+; descriptor 184 = base + dir[+0x30] + 14*184, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Triangle Mute' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc184:		; tag 0x40  A=0x27BF4  B=0x27C03
 	.byte 0x40, 0xF4, 0x7B, 0x02, 0x00, 0x03, 0x7C, 0x02, 0x00, 0x10, 0x5B, 0x42, 0x80, 0x42	; 2374B  |@.{...|...[B.B|
+; descriptor 185 = base + dir[+0x30] + 14*185, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Vibraslap' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc185:		; tag 0x40  A=0x27C09  B=0x27C18
 	.byte 0x40, 0x09, 0x7C, 0x02, 0x00, 0x18, 0x7C, 0x02, 0x00, 0x1C, 0x5C, 0x42, 0x80, 0x42	; 23759  |@.|...|...\B.B|
+; descriptor 186 = base + dir[+0x30] + 14*186, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Wood
+; Block' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc186:		; tag 0xC0  A=0x27C1E  B=0x27C2D
 	.byte 0xC0, 0x1E, 0x7C, 0x02, 0x00, 0x2D, 0x7C, 0x02, 0x00, 0x0C, 0x75, 0x42, 0x80, 0x42	; 23767  |..|..-|...uB.B|
+; descriptor 187 = base + dir[+0x30] + 14*187, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Castanets' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc187:		; tag 0xC0  A=0x27C35  B=0x27C44
 	.byte 0xC0, 0x35, 0x7C, 0x02, 0x00, 0x44, 0x7C, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 23775  |.5|..D|...xB.B|
+; descriptor 188 = base + dir[+0x30] + 14*188, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Claves'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc188:		; tag 0xC0  A=0x27C4C  B=0x27C5B
 	.byte 0xC0, 0x4C, 0x7C, 0x02, 0x00, 0x5B, 0x7C, 0x02, 0x00, 0x21, 0x77, 0x42, 0x80, 0x42	; 23783  |.L|..[|..!wB.B|
+; descriptor 189 = base + dir[+0x30] + 14*189, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Crickets' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc189:		; tag 0xC0  A=0x27C63  B=0x27C72
 	.byte 0xC0, 0x63, 0x7C, 0x02, 0x00, 0x72, 0x7C, 0x02, 0x00, 0x1F, 0x78, 0x42, 0x80, 0x42	; 23791  |.c|..r|...xB.B|
+; descriptor 190 = base + dir[+0x30] + 14*190, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Nutshell Tree' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc190:		; tag 0x40  A=0x27C7A  B=0x27C89
 	.byte 0x40, 0x7A, 0x7C, 0x02, 0x00, 0x89, 0x7C, 0x02, 0x00, 0x29, 0x60, 0x42, 0x80, 0x42	; 2379F  |@z|...|..)`B.B|
+; descriptor 191 = base + dir[+0x30] + 14*191, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Talking
+; Drum1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc191:		; tag 0xC0  A=0x27C8F  B=0x27C9E
 	.byte 0xC0, 0x8F, 0x7C, 0x02, 0x00, 0x9E, 0x7C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 237AD  |..|...|...xB.B|
+; descriptor 192 = base + dir[+0x30] + 14*192, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Talking
+; Drum2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc192:		; tag 0xC0  A=0x27CA6  B=0x27CB5
 	.byte 0xC0, 0xA6, 0x7C, 0x02, 0x00, 0xB5, 0x7C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 237BB  |..|...|...xB.B|
+; descriptor 193 = base + dir[+0x30] + 14*193, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'BataDrum Open' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc193:		; tag 0xC0  A=0x27CBD  B=0x27CCC
 	.byte 0xC0, 0xBD, 0x7C, 0x02, 0x00, 0xCC, 0x7C, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 237C9  |..|...|...xB.B|
+; descriptor 194 = base + dir[+0x30] + 14*194, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'BataDrum Slap' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc194:		; tag 0xC0  A=0x27CD4  B=0x27CE3
 	.byte 0xC0, 0xD4, 0x7C, 0x02, 0x00, 0xE3, 0x7C, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 237D7  |..|...|...xB.B|
+; descriptor 195 = base + dir[+0x30] + 14*195, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Darbuka' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc195:		; tag 0xC0  A=0x27CEB  B=0x27CFA
 	.byte 0xC0, 0xEB, 0x7C, 0x02, 0x00, 0xFA, 0x7C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 237E5  |..|...|...xB.B|
+; descriptor 196 = base + dir[+0x30] + 14*196, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Caxixi'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc196:		; tag 0x40  A=0x27D02  B=0x27D11
 	.byte 0x40, 0x02, 0x7D, 0x02, 0x00, 0x11, 0x7D, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 237F3  |@.}...}...xB.B|
+; descriptor 197 = base + dir[+0x30] + 14*197, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Shekele' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc197:		; tag 0x40  A=0x27D17  B=0x27D26
 	.byte 0x40, 0x17, 0x7D, 0x02, 0x00, 0x26, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23801  |@.}..&}...xB.B|
+; descriptor 198 = base + dir[+0x30] + 14*198, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Surdo
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc198:		; tag 0xC0  A=0x27D2C  B=0x27D3B
 	.byte 0xC0, 0x2C, 0x7D, 0x02, 0x00, 0x3B, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2380F  |.,}..;}...xB.B|
+; descriptor 199 = base + dir[+0x30] + 14*199, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Zap 1'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc199:		; tag 0xC0  A=0x27D43  B=0x27D52
 	.byte 0xC0, 0x43, 0x7D, 0x02, 0x00, 0x52, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2381D  |.C}..R}...xB.B|
+; descriptor 200 = base + dir[+0x30] + 14*200, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Zap 2'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Desc200:		; tag 0xC0  A=0x27D5A  B=0x27D69
 	.byte 0xC0, 0x5A, 0x7D, 0x02, 0x00, 0x69, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2382B  |.Z}..i}...xB.B|
+; descriptor 201 = base + dir[+0x30] + 14*201, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ElectroUnison' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc201:		; tag 0xC0  A=0x27D71  B=0x27D80
 	.byte 0xC0, 0x71, 0x7D, 0x02, 0x00, 0x80, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23839  |.q}...}...xB.B|
+; descriptor 202 = base + dir[+0x30] + 14*202, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Electro
+; Shot1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc202:		; tag 0xC0  A=0x27D88  B=0x27D97
 	.byte 0xC0, 0x88, 0x7D, 0x02, 0x00, 0x97, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23847  |..}...}...xB.B|
+; descriptor 203 = base + dir[+0x30] + 14*203, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Electro
+; Shot2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc203:		; tag 0xC0  A=0x27D9F  B=0x27DAE
 	.byte 0xC0, 0x9F, 0x7D, 0x02, 0x00, 0xAE, 0x7D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23855  |..}...}...xB.B|
+; descriptor 204 = base + dir[+0x30] + 14*204, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'FingerCymbal1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc204:		; tag 0x40  A=0x27DB6  B=0x27DC5
 	.byte 0x40, 0xB6, 0x7D, 0x02, 0x00, 0xC5, 0x7D, 0x02, 0x00, 0x11, 0x6C, 0x42, 0x80, 0x42	; 23863  |@.}...}...lB.B|
+; descriptor 205 = base + dir[+0x30] + 14*205, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'FingerCymbal2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc205:		; tag 0x40  A=0x27DCB  B=0x27DDA
 	.byte 0x40, 0xCB, 0x7D, 0x02, 0x00, 0xDA, 0x7D, 0x02, 0x00, 0x11, 0x6C, 0x42, 0x80, 0x42	; 23871  |@.}...}...lB.B|
+; descriptor 206 = base + dir[+0x30] + 14*206, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Berimbau 1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc206:		; tag 0x40  A=0x27DE0  B=0x27DEF
 	.byte 0x40, 0xE0, 0x7D, 0x02, 0x00, 0xEF, 0x7D, 0x02, 0x00, 0x0C, 0x56, 0x42, 0x80, 0x42	; 2387F  |@.}...}...VB.B|
+; descriptor 207 = base + dir[+0x30] + 14*207, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Berimbau 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc207:		; tag 0x40  A=0x27DF5  B=0x27E04
 	.byte 0x40, 0xF5, 0x7D, 0x02, 0x00, 0x04, 0x7E, 0x02, 0x00, 0x0C, 0x4D, 0x42, 0x80, 0x42	; 2388D  |@.}...~...MB.B|
+; descriptor 208 = base + dir[+0x30] + 14*208, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'E.Grand' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc208:		; tag 0xC0  A=0x27E0A  B=0x27E7A
 	.byte 0xC0, 0x0A, 0x7E, 0x02, 0x00, 0x7A, 0x7E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2389B  |..~..z~...xB.B|
+; descriptor 209 = base + dir[+0x30] + 14*209, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 209; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc209:		; tag 0x40  A=0x27ECA  B=0x27EE3
 	.byte 0x40, 0xCA, 0x7E, 0x02, 0x00, 0xE3, 0x7E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238A9  |@.~...~...xB.B|
+; descriptor 210 = base + dir[+0x30] + 14*210, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 210; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc210:		; tag 0x40  A=0x27F1F  B=0x27F38
 	.byte 0x40, 0x1F, 0x7F, 0x02, 0x00, 0x38, 0x7F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238B7  |@....8....xB.B|
+; descriptor 211 = base + dir[+0x30] + 14*211, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'E.Piano
+; 1' (3 map entries hold it).
 ToneDB_EnvDescTable_Desc211:		; tag 0x40  A=0x27F74  B=0x27F8D
 	.byte 0x40, 0x74, 0x7F, 0x02, 0x00, 0x8D, 0x7F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238C5  |@t........xB.B|
+; descriptor 212 = base + dir[+0x30] + 14*212, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 212; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc212:		; tag 0x40  A=0x27FC9  B=0x27FE2
 	.byte 0x40, 0xC9, 0x7F, 0x02, 0x00, 0xE2, 0x7F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238D3  |@.........xB.B|
+; descriptor 213 = base + dir[+0x30] + 14*213, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Suitcase E.P.' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc213:		; tag 0x40  A=0x2801E  B=0x2808E
 	.byte 0x40, 0x1E, 0x80, 0x02, 0x00, 0x8E, 0x80, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238E1  |@.........xB.B|
+; descriptor 214 = base + dir[+0x30] + 14*214, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 214; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc214:		; tag 0x40  A=0x280E8  B=0x28158
 	.byte 0x40, 0xE8, 0x80, 0x02, 0x00, 0x58, 0x81, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238EF  |@....X....xB.B|
+; descriptor 215 = base + dir[+0x30] + 14*215, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 215; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc215:		; tag 0x40  A=0x281B2  B=0x281D2
 	.byte 0x40, 0xB2, 0x81, 0x02, 0x00, 0xD2, 0x81, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 238FD  |@.........xB.B|
+; descriptor 216 = base + dir[+0x30] + 14*216, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 216; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc216:		; tag 0x40  A=0x28202  B=0x28222
 	.byte 0x40, 0x02, 0x82, 0x02, 0x00, 0x22, 0x82, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2390B  |@...."....xB.B|
+; descriptor 217 = base + dir[+0x30] + 14*217, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Modern
+; E.P.1' (2 map entries hold it).
 ToneDB_EnvDescTable_Desc217:		; tag 0x40  A=0x28252  B=0x28272
 	.byte 0x40, 0x52, 0x82, 0x02, 0x00, 0x72, 0x82, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23919  |@R...r....xB.B|
+; descriptor 218 = base + dir[+0x30] + 14*218, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 218; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc218:		; tag 0x40  A=0x282A2  B=0x282C2
 	.byte 0x40, 0xA2, 0x82, 0x02, 0x00, 0xC2, 0x82, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23927  |@.........xB.B|
+; descriptor 219 = base + dir[+0x30] + 14*219, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 219; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc219:		; tag 0x40  A=0x282F2  B=0x28362
 	.byte 0x40, 0xF2, 0x82, 0x02, 0x00, 0x62, 0x83, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23935  |@....b....xB.B|
+; descriptor 220 = base + dir[+0x30] + 14*220, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Glockenspiel' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc220:		; tag 0x40  A=0x283AA  B=0x283D1
 	.byte 0x40, 0xAA, 0x83, 0x02, 0x00, 0xD1, 0x83, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23943  |@.........xB.B|
+; descriptor 221 = base + dir[+0x30] + 14*221, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Steel
+; Drum' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc221:		; tag 0x40  A=0x28407  B=0x28420
 	.byte 0x40, 0x07, 0x84, 0x02, 0x00, 0x20, 0x84, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23951  |@.... ....xB.B|
+; descriptor 222 = base + dir[+0x30] + 14*222, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tubular
+; Bells' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc222:		; tag 0x41  A=0x28450  B=0x28470
 	.byte 0x41, 0x50, 0x84, 0x02, 0x00, 0x70, 0x84, 0x02, 0x00, 0x0C, 0x68, 0x42, 0x80, 0x42	; 2395F  |AP...p....hB.B|
+; descriptor 223 = base + dir[+0x30] + 14*223, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Spanish
+; Gtr' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc223:		; tag 0x40  A=0x2847C  B=0x284EC
 	.byte 0x40, 0x7C, 0x84, 0x02, 0x00, 0xEC, 0x84, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2396D  |@|........xB.B|
+; descriptor 224 = base + dir[+0x30] + 14*224, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 224; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc224:		; tag 0x40  A=0x28534  B=0x285A4
 	.byte 0x40, 0x34, 0x85, 0x02, 0x00, 0xA4, 0x85, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 2397B  |@4........xB.B|
+; descriptor 225 = base + dir[+0x30] + 14*225, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Ac.Gtr.' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc225:		; tag 0x40  A=0x285E6  B=0x28656
 	.byte 0x40, 0xE6, 0x85, 0x02, 0x00, 0x56, 0x86, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23989  |@....V....xB.B|
+; descriptor 226 = base + dir[+0x30] + 14*226, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Gtr.Harmonics' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc226:		; tag 0x40  A=0x2869E  B=0x2870E
 	.byte 0x40, 0x9E, 0x86, 0x02, 0x00, 0x0E, 0x87, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23997  |@.........xB.B|
+; descriptor 227 = base + dir[+0x30] + 14*227, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'GtrResonance1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc227:		; tag 0x40  A=0x2874A  B=0x28759
 	.byte 0x40, 0x4A, 0x87, 0x02, 0x00, 0x59, 0x87, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 239A5  |@J...Y....xB.B|
+; descriptor 228 = base + dir[+0x30] + 14*228, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'GtrResonance3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc228:		; tag 0x40  A=0x2875F  B=0x2876E
 	.byte 0x40, 0x5F, 0x87, 0x02, 0x00, 0x6E, 0x87, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 239B3  |@_...n....xB.B|
+; descriptor 229 = base + dir[+0x30] + 14*229, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'GtrResonance2' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc229:		; tag 0x40  A=0x28774  B=0x28783
 	.byte 0x40, 0x74, 0x87, 0x02, 0x00, 0x83, 0x87, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 239C1  |@t........xB.B|
+; descriptor 230 = base + dir[+0x30] + 14*230, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'GtrResonance4' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc230:		; tag 0x40  A=0x28789  B=0x28798
 	.byte 0x40, 0x89, 0x87, 0x02, 0x00, 0x98, 0x87, 0x02, 0x00, 0x1C, 0x78, 0x42, 0x80, 0x42	; 239CF  |@.........xB.B|
+; descriptor 231 = base + dir[+0x30] + 14*231, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Folk
+; Guitar' (16 map entries hold it).
 ToneDB_EnvDescTable_Desc231:		; tag 0x42  A=0x2879E  B=0x2880E
 	.byte 0x42, 0x9E, 0x87, 0x02, 0x00, 0x0E, 0x88, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 239DD  |B.........xB.B|
+; descriptor 232 = base + dir[+0x30] + 14*232, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pick
+; Noise 1' (16 map entries hold it).
 ToneDB_EnvDescTable_Desc232:		; tag 0xC0  A=0x28850  B=0x2885F
 	.byte 0xC0, 0x50, 0x88, 0x02, 0x00, 0x5F, 0x88, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 239EB  |.P..._....xB.B|
+; descriptor 233 = base + dir[+0x30] + 14*233, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ElectroAc.Gtr' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc233:		; tag 0x40  A=0x28867  B=0x288D7
 	.byte 0x40, 0x67, 0x88, 0x02, 0x00, 0xD7, 0x88, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 239F9  |@g........xB.B|
+; descriptor 234 = base + dir[+0x30] + 14*234, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Jazz
+; Guitar' (15 map entries hold it).
 ToneDB_EnvDescTable_Desc234:		; tag 0x42  A=0x28925  B=0x2893E
 	.byte 0x42, 0x25, 0x89, 0x02, 0x00, 0x3E, 0x89, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A07  |B%...>....xB.B|
+; descriptor 235 = base + dir[+0x30] + 14*235, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bright
+; Solid' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc235:		; tag 0x42  A=0x2896E  B=0x289DE
 	.byte 0x42, 0x6E, 0x89, 0x02, 0x00, 0xDE, 0x89, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A15  |Bn........xB.B|
+; descriptor 236 = base + dir[+0x30] + 14*236, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Fret
+; Noise' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc236:		; tag 0xC0  A=0x28A32  B=0x28A41
 	.byte 0xC0, 0x32, 0x8A, 0x02, 0x00, 0x41, 0x8A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23A23  |.2...A....xB.B|
+; descriptor 237 = base + dir[+0x30] + 14*237, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'PickNoise2Acc' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc237:		; tag 0xC0  A=0x28A49  B=0x28A58
 	.byte 0xC0, 0x49, 0x8A, 0x02, 0x00, 0x58, 0x8A, 0x02, 0x00, 0x11, 0x78, 0x42, 0x80, 0x42	; 23A31  |.I...X....xB.B|
+; descriptor 238 = base + dir[+0x30] + 14*238, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pick
+; Noise 2' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc238:		; tag 0xBF  A=0x28A60  B=0x28A6F
 	.byte 0xBF, 0x60, 0x8A, 0x02, 0x00, 0x6F, 0x8A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A3F  |.`...o....xB.B|
+; descriptor 239 = base + dir[+0x30] + 14*239, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mellow
+; Solid' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc239:		; tag 0x42  A=0x28A77  B=0x28A90
 	.byte 0x42, 0x77, 0x8A, 0x02, 0x00, 0x90, 0x8A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A4D  |Bw........xB.B|
+; descriptor 240 = base + dir[+0x30] + 14*240, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Clean
+; Solid' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc240:		; tag 0x42  A=0x28AD2  B=0x28B42
 	.byte 0x42, 0xD2, 0x8A, 0x02, 0x00, 0x42, 0x8B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A5B  |B....B....xB.B|
+; descriptor 241 = base + dir[+0x30] + 14*241, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Fusion
+; Solid' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc241:		; tag 0x42  A=0x28B8A  B=0x28BFA
 	.byte 0x42, 0x8A, 0x8B, 0x02, 0x00, 0xFA, 0x8B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A69  |B.........xB.B|
+; descriptor 242 = base + dir[+0x30] + 14*242, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute
+; Guitar' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc242:		; tag 0x40  A=0x28C48  B=0x28C6F
 	.byte 0x40, 0x48, 0x8C, 0x02, 0x00, 0x6F, 0x8C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A77  |@H...o....xB.B|
+; descriptor 243 = base + dir[+0x30] + 14*243, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pick
+; Noise 3' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc243:		; tag 0x40  A=0x28CB7  B=0x28CC6
 	.byte 0x40, 0xB7, 0x8C, 0x02, 0x00, 0xC6, 0x8C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A85  |@.........xB.B|
+; descriptor 244 = base + dir[+0x30] + 14*244, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Funk
+; Mute Gtr' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc244:		; tag 0x40  A=0x28CCC  B=0x28D3C
 	.byte 0x40, 0xCC, 0x8C, 0x02, 0x00, 0x3C, 0x8D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23A93  |@....<....xB.B|
+; descriptor 245 = base + dir[+0x30] + 14*245, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'DistortionGtr' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc245:		; tag 0x40  A=0x28D90  B=0x28DA9
 	.byte 0x40, 0x90, 0x8D, 0x02, 0x00, 0xA9, 0x8D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AA1  |@.........xB.B|
+; descriptor 246 = base + dir[+0x30] + 14*246, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Hard
+; Dist.Gtr' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc246:		; tag 0x40  A=0x28DF1  B=0x28E61
 	.byte 0x40, 0xF1, 0x8D, 0x02, 0x00, 0x61, 0x8E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AAF  |@....a....xB.B|
+; descriptor 247 = base + dir[+0x30] + 14*247, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'OverdriveGtr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc247:		; tag 0x40  A=0x28EAF  B=0x28F1F
 	.byte 0x40, 0xAF, 0x8E, 0x02, 0x00, 0x1F, 0x8F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23ABD  |@.........xB.B|
+; descriptor 248 = base + dir[+0x30] + 14*248, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'RockHarmonics' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc248:		; tag 0x40  A=0x28F73  B=0x28FE3
 	.byte 0x40, 0x73, 0x8F, 0x02, 0x00, 0xE3, 0x8F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23ACB  |@s........xB.B|
+; descriptor 249 = base + dir[+0x30] + 14*249, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Country
+; Gtr.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc249:		; tag 0x42  A=0x29001  B=0x2901A
 	.byte 0x42, 0x01, 0x90, 0x02, 0x00, 0x1A, 0x90, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AD9  |B.........xB.B|
+; descriptor 250 = base + dir[+0x30] + 14*250, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'HawaiianGtr.1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc250:		; tag 0x40  A=0x2904A  B=0x290BA
 	.byte 0x40, 0x4A, 0x90, 0x02, 0x00, 0xBA, 0x90, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AE7  |@J........xB.B|
+; descriptor 251 = base + dir[+0x30] + 14*251, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'HawaiianGtr.2' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc251:		; tag 0x40  A=0x29102  B=0x2911B
 	.byte 0x40, 0x02, 0x91, 0x02, 0x00, 0x1B, 0x91, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23AF5  |@.........xB.B|
+; descriptor 252 = base + dir[+0x30] + 14*252, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sax
+; Breath 1' (22 map entries hold it).
 ToneDB_EnvDescTable_Desc252:		; tag 0x40  A=0x29133  B=0x29142
 	.byte 0x40, 0x33, 0x91, 0x02, 0x00, 0x42, 0x91, 0x02, 0x00, 0x0C, 0x4E, 0x42, 0x80, 0x42	; 23B03  |@3...B....NB.B|
+; descriptor 253 = base + dir[+0x30] + 14*253, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sax
+; Breath 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc253:		; tag 0x40  A=0x29148  B=0x29157
 	.byte 0x40, 0x48, 0x91, 0x02, 0x00, 0x57, 0x91, 0x02, 0x00, 0x0C, 0x4E, 0x42, 0x80, 0x42	; 23B11  |@H...W....NB.B|
+; descriptor 254 = base + dir[+0x30] + 14*254, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Sax
+; Breath 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc254:		; tag 0x40  A=0x2915D  B=0x2916C
 	.byte 0x40, 0x5D, 0x91, 0x02, 0x00, 0x6C, 0x91, 0x02, 0x00, 0x0C, 0x4E, 0x42, 0x80, 0x42	; 23B1F  |@]...l....NB.B|
+; descriptor 255 = base + dir[+0x30] + 14*255, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Flute
+; Breath1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc255:		; tag 0x40  A=0x29172  B=0x29181
 	.byte 0x40, 0x72, 0x91, 0x02, 0x00, 0x81, 0x91, 0x02, 0x00, 0x11, 0x55, 0x42, 0x80, 0x42	; 23B2D  |@r........UB.B|
+; descriptor 256 = base + dir[+0x30] + 14*256, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Flute
+; Breath2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc256:		; tag 0x41  A=0x29187  B=0x29196
 	.byte 0x41, 0x87, 0x91, 0x02, 0x00, 0x96, 0x91, 0x02, 0x00, 0x11, 0x55, 0x42, 0x80, 0x42	; 23B3B  |A.........UB.B|
+; descriptor 257 = base + dir[+0x30] + 14*257, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pan
+; Breath 1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc257:		; tag 0x40  A=0x2919C  B=0x291AB
 	.byte 0x40, 0x9C, 0x91, 0x02, 0x00, 0xAB, 0x91, 0x02, 0x00, 0x0C, 0x55, 0x42, 0x80, 0x42	; 23B49  |@.........UB.B|
+; descriptor 258 = base + dir[+0x30] + 14*258, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pan
+; Breath 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc258:		; tag 0x41  A=0x291B1  B=0x291C0
 	.byte 0x41, 0xB1, 0x91, 0x02, 0x00, 0xC0, 0x91, 0x02, 0x00, 0x0C, 0x55, 0x42, 0x80, 0x42	; 23B57  |A.........UB.B|
+; descriptor 259 = base + dir[+0x30] + 14*259, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'AmbientHammer' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc259:		; tag 0xC0  A=0x291C6  B=0x291D5
 	.byte 0xC0, 0xC6, 0x91, 0x02, 0x00, 0xD5, 0x91, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23B65  |..........eB.B|
+; descriptor 260 = base + dir[+0x30] + 14*260, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Hammer'
+; (31 map entries hold it).
 ToneDB_EnvDescTable_Desc260:		; tag 0xC0  A=0x291DD  B=0x291EC
 	.byte 0xC0, 0xDD, 0x91, 0x02, 0x00, 0xEC, 0x91, 0x02, 0x00, 0x11, 0x65, 0x42, 0x80, 0x42	; 23B73  |..........eB.B|
+; descriptor 261 = base + dir[+0x30] + 14*261, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Rain
+; Stick' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc261:		; tag 0xC0  A=0x291F4  B=0x29203
 	.byte 0xC0, 0xF4, 0x91, 0x02, 0x00, 0x03, 0x92, 0x02, 0x00, 0x17, 0x56, 0x42, 0x80, 0x42	; 23B81  |..........VB.B|
+; descriptor 262 = base + dir[+0x30] + 14*262, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal
+; Ooh 1' (12 map entries hold it).
 ToneDB_EnvDescTable_Desc262:		; tag 0xC1  A=0x2920B  B=0x2927B
 	.byte 0xC1, 0x0B, 0x92, 0x02, 0x00, 0x7B, 0x92, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23B8F  |.....{....nB.B|
+; descriptor 263 = base + dir[+0x30] + 14*263, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal
+; Ooh 2' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc263:		; tag 0xC1  A=0x292AB  B=0x2931B
 	.byte 0xC1, 0xAB, 0x92, 0x02, 0x00, 0x1B, 0x93, 0x02, 0x00, 0x0C, 0x6E, 0x42, 0x80, 0x42	; 23B9D  |..........nB.B|
+; descriptor 264 = base + dir[+0x30] + 14*264, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal
+; Mmm' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc264:		; tag 0xC0  A=0x29353  B=0x293C3
 	.byte 0xC0, 0x53, 0x93, 0x02, 0x00, 0xC3, 0x93, 0x02, 0x00, 0x0C, 0x74, 0x42, 0x80, 0x42	; 23BAB  |.S........tB.B|
+; descriptor 265 = base + dir[+0x30] + 14*265, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Vocal
+; Daa' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc265:		; tag 0xC0  A=0x293EB  B=0x2945B
 	.byte 0xC0, 0xEB, 0x93, 0x02, 0x00, 0x5B, 0x94, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BB9  |.....[....xB.B|
+; descriptor 266 = base + dir[+0x30] + 14*266, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Brass
+; 1' (31 map entries hold it).
 ToneDB_EnvDescTable_Desc266:		; tag 0xC0  A=0x2948B  B=0x294FB
 	.byte 0xC0, 0x8B, 0x94, 0x02, 0x00, 0xFB, 0x94, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BC7  |..........xB.B|
+; descriptor 267 = base + dir[+0x30] + 14*267, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Trumpet
+; 1' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc267:		; tag 0xC0  A=0x29553  B=0x295C3
 	.byte 0xC0, 0x53, 0x95, 0x02, 0x00, 0xC3, 0x95, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BD5  |.S........xB.B|
+; descriptor 268 = base + dir[+0x30] + 14*268, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Trumpet
+; 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc268:		; tag 0xC0  A=0x2960B  B=0x2967B
 	.byte 0xC0, 0x0B, 0x96, 0x02, 0x00, 0x7B, 0x96, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BE3  |.....{....xB.B|
+; descriptor 269 = base + dir[+0x30] + 14*269, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Orch.Trumpet' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc269:		; tag 0x40  A=0x296C3  B=0x29733
 	.byte 0x40, 0xC3, 0x96, 0x02, 0x00, 0x33, 0x97, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BF1  |@....3....xB.B|
+; descriptor 270 = base + dir[+0x30] + 14*270, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute
+; Trumpet1' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc270:		; tag 0x40  A=0x29763  B=0x297D3
 	.byte 0x40, 0x63, 0x97, 0x02, 0x00, 0xD3, 0x97, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23BFF  |@c........xB.B|
+; descriptor 271 = base + dir[+0x30] + 14*271, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute
+; Trumpet2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc271:		; tag 0x40  A=0x29803  B=0x29873
 	.byte 0x40, 0x03, 0x98, 0x02, 0x00, 0x73, 0x98, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C0D  |@....s....xB.B|
+; descriptor 272 = base + dir[+0x30] + 14*272, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Flugel
+; Horn' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc272:		; tag 0x40  A=0x2989D  B=0x2990D
 	.byte 0x40, 0x9D, 0x98, 0x02, 0x00, 0x0D, 0x99, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C1B  |@.........xB.B|
+; descriptor 273 = base + dir[+0x30] + 14*273, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Cornet'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc273:		; tag 0x40  A=0x29937  B=0x299A7
 	.byte 0x40, 0x37, 0x99, 0x02, 0x00, 0xA7, 0x99, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C29  |@7........xB.B|
+; descriptor 274 = base + dir[+0x30] + 14*274, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Brt.Trombone' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc274:		; tag 0xC0  A=0x299D7  B=0x29A47
 	.byte 0xC0, 0xD7, 0x99, 0x02, 0x00, 0x47, 0x9A, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C37  |.....G....xB.B|
+; descriptor 275 = base + dir[+0x30] + 14*275, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Brass
+; 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc275:		; tag 0xC0  A=0x29A97  B=0x29B07
 	.byte 0xC0, 0x97, 0x9A, 0x02, 0x00, 0x07, 0x9B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C45  |..........xB.B|
+; descriptor 276 = base + dir[+0x30] + 14*276, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Mel.Trombone' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc276:		; tag 0x40  A=0x29B67  B=0x29B80
 	.byte 0x40, 0x67, 0x9B, 0x02, 0x00, 0x80, 0x9B, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C53  |@g........xB.B|
+; descriptor 277 = base + dir[+0x30] + 14*277, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Mute
+; Trombone' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc277:		; tag 0xC0  A=0x29BB0  B=0x29C20
 	.byte 0xC0, 0xB0, 0x9B, 0x02, 0x00, 0x20, 0x9C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C61  |..... ....xB.B|
+; descriptor 278 = base + dir[+0x30] + 14*278, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'ClosedFr.Horn' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc278:		; tag 0x40  A=0x29C60  B=0x29CD0
 	.byte 0x40, 0x60, 0x9C, 0x02, 0x00, 0xD0, 0x9C, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C6F  |@`........xB.B|
+; descriptor 279 = base + dir[+0x30] + 14*279, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Open
+; Fr.Horn' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc279:		; tag 0x40  A=0x29CF4  B=0x29D1B
 	.byte 0x40, 0xF4, 0x9C, 0x02, 0x00, 0x1B, 0x9D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C7D  |@.........xB.B|
+; descriptor 280 = base + dir[+0x30] + 14*280, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tuba'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc280:		; tag 0xC0  A=0x29D4B  B=0x29DBB
 	.byte 0xC0, 0x4B, 0x9D, 0x02, 0x00, 0xBB, 0x9D, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C8B  |.K........xB.B|
+; descriptor 281 = base + dir[+0x30] + 14*281, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Analog
+; Brass' (24 map entries hold it).
 ToneDB_EnvDescTable_Desc281:		; tag 0xC0  A=0x29E0B  B=0x29E7B
 	.byte 0xC0, 0x0B, 0x9E, 0x02, 0x00, 0x7B, 0x9E, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23C99  |.....{....xB.B|
+; descriptor 282 = base + dir[+0x30] + 14*282, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Saw
+; Brass' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc282:		; tag 0x40  A=0x29EBB  B=0x29F2B
 	.byte 0x40, 0xBB, 0x9E, 0x02, 0x00, 0x2B, 0x9F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CA7  |@....+....xB.B|
+; descriptor 283 = base + dir[+0x30] + 14*283, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Soprano
+; Sax' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc283:		; tag 0x40  A=0x29F5B  B=0x29FCB
 	.byte 0x40, 0x5B, 0x9F, 0x02, 0x00, 0xCB, 0x9F, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CB5  |@[........xB.B|
+; descriptor 284 = base + dir[+0x30] + 14*284, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Mel.Alto Sax' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc284:		; tag 0x40  A=0x29FFB  B=0x2A06B
 	.byte 0x40, 0xFB, 0x9F, 0x02, 0x00, 0x6B, 0xA0, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CC3  |@....k....xB.B|
+; descriptor 285 = base + dir[+0x30] + 14*285, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 6 entries of ToneDB_ToneIndexMapC/D hold 285; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc285:		; tag 0x40  A=0x2A0A1  B=0x2A111
 	.byte 0x40, 0xA1, 0xA0, 0x02, 0x00, 0x11, 0xA1, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CD1  |@.........xB.B|
+; descriptor 286 = base + dir[+0x30] + 14*286, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Alto
+; Sax' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc286:		; tag 0x40  A=0x2A141  B=0x2A1B1
 	.byte 0x40, 0x41, 0xA1, 0x02, 0x00, 0xB1, 0xA1, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CDF  |@A........xB.B|
+; descriptor 287 = base + dir[+0x30] + 14*287, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tenor
+; Sax 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc287:		; tag 0x40  A=0x2A1E7  B=0x2A257
 	.byte 0x40, 0xE7, 0xA1, 0x02, 0x00, 0x57, 0xA2, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CED  |@....W....xB.B|
+; descriptor 288 = base + dir[+0x30] + 14*288, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tenor
+; Sax 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc288:		; tag 0x40  A=0x2A287  B=0x2A2F7
 	.byte 0x40, 0x87, 0xA2, 0x02, 0x00, 0xF7, 0xA2, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23CFB  |@.........xB.B|
+; descriptor 289 = base + dir[+0x30] + 14*289, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tenor
+; Sax 2' (6 map entries hold it).
 ToneDB_EnvDescTable_Desc289:		; tag 0xC0  A=0x2A33F  B=0x2A3AF
 	.byte 0xC0, 0x3F, 0xA3, 0x02, 0x00, 0xAF, 0xA3, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D09  |.?........xB.B|
+; descriptor 290 = base + dir[+0x30] + 14*290, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'RockTenorSax' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc290:		; tag 0x40  A=0x2A3EF  B=0x2A45F
 	.byte 0x40, 0xEF, 0xA3, 0x02, 0x00, 0x5F, 0xA4, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D17  |@...._....xB.B|
+; descriptor 291 = base + dir[+0x30] + 14*291, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Baritone Sax' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc291:		; tag 0x40  A=0x2A48F  B=0x2A4FF
 	.byte 0x40, 0x8F, 0xA4, 0x02, 0x00, 0xFF, 0xA4, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D25  |@.........xB.B|
+; descriptor 292 = base + dir[+0x30] + 14*292, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'JazzClarinet1' (14 map entries hold it).
 ToneDB_EnvDescTable_Desc292:		; tag 0x40  A=0x2A52F  B=0x2A59F
 	.byte 0x40, 0x2F, 0xA5, 0x02, 0x00, 0x9F, 0xA5, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D33  |@/........xB.B|
+; descriptor 293 = base + dir[+0x30] + 14*293, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Mel.Clarinet' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc293:		; tag 0x40  A=0x2A5C9  B=0x2A639
 	.byte 0x40, 0xC9, 0xA5, 0x02, 0x00, 0x39, 0xA6, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D41  |@....9....xB.B|
+; descriptor 294 = base + dir[+0x30] + 14*294, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'JazzClarinet2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc294:		; tag 0x40  A=0x2A669  B=0x2A6D9
 	.byte 0x40, 0x69, 0xA6, 0x02, 0x00, 0xD9, 0xA6, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D4F  |@i........xB.B|
+; descriptor 295 = base + dir[+0x30] + 14*295, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Clas.Clarinet' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc295:		; tag 0x40  A=0x2A703  B=0x2A773
 	.byte 0x40, 0x03, 0xA7, 0x02, 0x00, 0x73, 0xA7, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D5D  |@....s....xB.B|
+; descriptor 296 = base + dir[+0x30] + 14*296, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Bass
+; Clarinet' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc296:		; tag 0x40  A=0x2A7AF  B=0x2A81F
 	.byte 0x40, 0xAF, 0xA7, 0x02, 0x00, 0x1F, 0xA8, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D6B  |@.........xB.B|
+; descriptor 297 = base + dir[+0x30] + 14*297, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Oboe'
+; (8 map entries hold it).
 ToneDB_EnvDescTable_Desc297:		; tag 0x40  A=0x2A861  B=0x2A8D1
 	.byte 0x40, 0x61, 0xA8, 0x02, 0x00, 0xD1, 0xA8, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D79  |@a........xB.B|
+; descriptor 298 = base + dir[+0x30] + 14*298, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'English
+; Horn' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc298:		; tag 0x40  A=0x2A8FB  B=0x2A96B
 	.byte 0x40, 0xFB, 0xA8, 0x02, 0x00, 0x6B, 0xA9, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D87  |@....k....xB.B|
+; descriptor 299 = base + dir[+0x30] + 14*299, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Bassoon' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc299:		; tag 0x40  A=0x2A995  B=0x2AA05
 	.byte 0x40, 0x95, 0xA9, 0x02, 0x00, 0x05, 0xAA, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23D95  |@.........xB.B|
+; descriptor 300 = base + dir[+0x30] + 14*300, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Harmonica' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc300:		; tag 0x40  A=0x2AA3B  B=0x2AAAB
 	.byte 0x40, 0x3B, 0xAA, 0x02, 0x00, 0xAB, 0xAA, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DA3  |@;........xB.B|
+; descriptor 301 = base + dir[+0x30] + 14*301, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Blues
+; Harm.' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc301:		; tag 0x40  A=0x2AACF  B=0x2AB3F
 	.byte 0x40, 0xCF, 0xAA, 0x02, 0x00, 0x3F, 0xAB, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DB1  |@....?....xB.B|
+; descriptor 302 = base + dir[+0x30] + 14*302, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Bagpipe' (7 map entries hold it).
 ToneDB_EnvDescTable_Desc302:		; tag 0x40  A=0x2AB5D  B=0x2ABCD
 	.byte 0x40, 0x5D, 0xAB, 0x02, 0x00, 0xCD, 0xAB, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DBF  |@]........xB.B|
+; descriptor 303 = base + dir[+0x30] + 14*303, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'MellowAc.Bass' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc303:		; tag 0x40  A=0x2ABEB  B=0x2AC5B
 	.byte 0x40, 0xEB, 0xAB, 0x02, 0x00, 0x5B, 0xAC, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DCD  |@....[....xB.B|
+; descriptor 304 = base + dir[+0x30] + 14*304, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Electric Bass' (3 map entries hold it).
 ToneDB_EnvDescTable_Desc304:		; tag 0x40  A=0x2AC85  B=0x2ACF5
 	.byte 0x40, 0x85, 0xAC, 0x02, 0x00, 0xF5, 0xAC, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DDB  |@.........xB.B|
+; descriptor 305 = base + dir[+0x30] + 14*305, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap
+; Bass 1' (3 map entries hold it).
 ToneDB_EnvDescTable_Desc305:		; tag 0x40  A=0x2AD31  B=0x2AD4A
 	.byte 0x40, 0x31, 0xAD, 0x02, 0x00, 0x4A, 0xAD, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DE9  |@1...J....xB.B|
+; descriptor 306 = base + dir[+0x30] + 14*306, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pull
+; Bass 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc306:		; tag 0x40  A=0x2AD86  B=0x2AD9F
 	.byte 0x40, 0x86, 0xAD, 0x02, 0x00, 0x9F, 0xAD, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23DF7  |@.........xB.B|
+; descriptor 307 = base + dir[+0x30] + 14*307, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 307; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc307:		; tag 0x40  A=0x2ADD5  B=0x2ADEE
 	.byte 0x40, 0xD5, 0xAD, 0x02, 0x00, 0xEE, 0xAD, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E05  |@.........xB.B|
+; descriptor 308 = base + dir[+0x30] + 14*308, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap
+; Bass 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc308:		; tag 0x40  A=0x2AE30  B=0x2AEA0
 	.byte 0x40, 0x30, 0xAE, 0x02, 0x00, 0xA0, 0xAE, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E13  |@0........xB.B|
+; descriptor 309 = base + dir[+0x30] + 14*309, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pull
+; Bass 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc309:		; tag 0x40  A=0x2AEE2  B=0x2AEFB
 	.byte 0x40, 0xE2, 0xAE, 0x02, 0x00, 0xFB, 0xAE, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E21  |@.........xB.B|
+; descriptor 310 = base + dir[+0x30] + 14*310, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 310; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc310:		; tag 0x40  A=0x2AF31  B=0x2AFA1
 	.byte 0x40, 0x31, 0xAF, 0x02, 0x00, 0xA1, 0xAF, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E2F  |@1........xB.B|
+; descriptor 311 = base + dir[+0x30] + 14*311, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Slap
+; Bass 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc311:		; tag 0x40  A=0x2AFE9  B=0x2B010
 	.byte 0x40, 0xE9, 0xAF, 0x02, 0x00, 0x10, 0xB0, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E3D  |@.........xB.B|
+; descriptor 312 = base + dir[+0x30] + 14*312, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Pull
+; Bass 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc312:		; tag 0x40  A=0x2B046  B=0x2B06D
 	.byte 0x40, 0x46, 0xB0, 0x02, 0x00, 0x6D, 0xB0, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E4B  |@F...m....xB.B|
+; descriptor 313 = base + dir[+0x30] + 14*313, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). 1 entries of ToneDB_ToneIndexMapC/D hold 313; none is the selector of a
+; ToneDB_SourceNameList1 wave.
 ToneDB_EnvDescTable_Desc313:		; tag 0x40  A=0x2B09D  B=0x2B0C4
 	.byte 0x40, 0x9D, 0xB0, 0x02, 0x00, 0xC4, 0xB0, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E59  |@.........xB.B|
+; descriptor 314 = base + dir[+0x30] + 14*314, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Soul
+; Bass' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc314:		; tag 0x40  A=0x2B106  B=0x2B12D
 	.byte 0x40, 0x06, 0xB1, 0x02, 0x00, 0x2D, 0xB1, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E67  |@....-....xB.B|
+; descriptor 315 = base + dir[+0x30] + 14*315, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Synth
+; Chopper' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc315:		; tag 0x40  A=0x2B163  B=0x2B1D3
 	.byte 0x40, 0x63, 0xB1, 0x02, 0x00, 0xD3, 0xB1, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E75  |@c........xB.B|
+; descriptor 316 = base + dir[+0x30] + 14*316, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave
+; 'Metallic Bass' (the only map entry holding it).
 ToneDB_EnvDescTable_Desc316:		; tag 0x40  A=0x2B1E5  B=0x2B255
 	.byte 0x40, 0xE5, 0xB1, 0x02, 0x00, 0x55, 0xB2, 0x02, 0x00, 0x0C, 0x78, 0x42, 0x80, 0x42	; 23E83  |@....U....xB.B|
+; descriptor 317 = base + dir[+0x30] + 14*317, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_ToneIndexMapC/D by the selector of wave 'Tabla
+; Hit' (8 map entries hold it).
 ToneDB_EnvDescTable_Desc317:		; tag 0x40  A=0x2B297  B=0x2B2A6
 	.byte 0x40, 0x97, 0xB2, 0x02, 0x00, 0xA6, 0xB2, 0x02, 0x00, 0x0C, 0x67, 0x42, 0x80, 0x42	; 23E91  |@.........gB.B|
 
@@ -32839,8 +33789,9 @@ ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 ; WAVE 14: +0x0C is the base pitch (above), and at slot +0x70 every field of
 ; an element is placed as well.  What is still unidentified is +0x09/+0x0A,
 ; and every byte of an element at slots +0x30 and +0x38.
-; ⚠ And no prom_c instruction that reads THIS block has been found; the Evidence
-; note below states what that leaves standing and what it does not.
+; ★ CORRECTED 2026-09-25 (lane promcd): this block IS read -- by
+; ToneDB_ResolveEnvDescriptor (prom_c 0xFB45C0), see the reader paragraph at
+; the end of this banner; each descriptor below names the waves that reach it.
 ; 
 ; All 161 descriptors here point their part A at ONE shared 132-byte object,
 ; which itself names the steepest curve; their part-B offsets are an arithmetic
@@ -32945,345 +33896,823 @@ ToneDB_PercMixerDefaultTable_207_SameAs_SlapShot:
 ; last.  Re-derived on every run by notes/prom_d_structures_round2.py, which
 ; this emitter refuses to run without.
 ; 
-; ⚠ Readers: NONE IN THE CENSUS.  notes/prom_d_documentation_round3.py
-; walks every load of prom_d's base (0x00F00000, RAM 0x00D7ED /
-; 0x00D7F1) in prom_c and every directory slot read through it -- 99
-; reads over 33 slots -- and directory slot +0x38 is not among them.
-; The census is a LOWER BOUND: by its own rule it does not follow a
-; base parked in a frame slot.
+; Round 3's base-load census (notes/prom_d_documentation_round3.py, 99
+; reads over 33 slots) did not list directory slot +0x38: it does not
+; follow a base parked in a frame slot, which is what the reader does.
 ; ★ BUT A READER EXISTS OUTSIDE IT: `ld XIY,(XBC+0x38)` at 0xFB4692,
 ; through the base parked by `ld (XIZ+0xF6),XWA` at 0xFB4616, with the
 ; stride taken from +0xF2 by `ld WA,(XBC+0x00F2)` at 0xFB469D.
 ; 
-; ⚠ No reader was found for THIS block.  What round 3 adds is indirect and
-; is stated as such: the stride word this block uses (directory +0xF2 = 14)
-; IS read by prom_c -- at 0xFB469D -- and at 0xFC299A the SAME stride word is
-; multiplied by a record index to walk the descriptor array at slot +0x70,
-; which is the same record class.  That corroborates the 14-byte array; it
-; does NOT show anything reading this block, and the label stays a KN5000
-; transplant on that basis.
+; Round 3's indirect evidence stands: the stride word this block uses
+; (directory +0xF2 = 14) is read by prom_c at 0xFB469D, and at
+; 0xFC299A the same stride word walks the descriptor array at slot +0x70.
+; The DIRECT reader is the one above (corrected 2026-09-25, lane promcd:
+; this paragraph said none had been found and kept the name a transplant).
 ; ==========================================================================
 ToneDB_EnvDescTable_Perc:
+; descriptor 0 = base + dir[+0x38] + 14*0, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Silent',
+; 'ModelBasDrm1L', 'ModelBasDrm1R', 'ModelBassDrm2' and 49 more (864 map entries hold it).
 ToneDB_EnvDescTable_Perc_Desc000:		; tag 0x40  A=0x4426A  B=0x442EE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xEE, 0x42, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x00, 0x00	; 4399C  |@jB...B....B..|
+; descriptor 1 = base + dir[+0x38] + 14*1, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Square
+; Wave' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc001:		; tag 0x40  A=0x4426A  B=0x442F4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF4, 0x42, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x48	; 439AA  |@jB...B....B.H|
+; descriptor 2 = base + dir[+0x38] + 14*2, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc002:		; tag 0x40  A=0x4426A  B=0x442FA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xFA, 0x42, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439B8  |@jB...B....BDM|
+; descriptor 3 = base + dir[+0x38] + 14*3, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Room Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc003:		; tag 0x40  A=0x4426A  B=0x44300
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x00, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439C6  |@jB...C....BDM|
+; descriptor 4 = base + dir[+0x38] + 14*4, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc004:		; tag 0x40  A=0x4426A  B=0x44306
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x06, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439D4  |@jB...C....BDM|
+; descriptor 5 = base + dir[+0x38] + 14*5, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Trad Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc005:		; tag 0x40  A=0x4426A  B=0x4430C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x0C, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439E2  |@jB...C....BDM|
+; descriptor 6 = base + dir[+0x38] + 14*6, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'LtRockBassDrm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc006:		; tag 0x40  A=0x4426A  B=0x44312
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x12, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439F0  |@jB...C....BDM|
+; descriptor 7 = base + dir[+0x38] + 14*7, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'PowerBassDrmL' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc007:		; tag 0x40  A=0x4426A  B=0x44318
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x18, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 439FE  |@jB...C....BDM|
+; descriptor 8 = base + dir[+0x38] + 14*8, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'PowerBassDrmR' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc008:		; tag 0x40  A=0x4426A  B=0x4431E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x1E, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A0C  |@jB...C....BDM|
+; descriptor 9 = base + dir[+0x38] + 14*9, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'House
+; BassDrm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc009:		; tag 0x40  A=0x4426A  B=0x44324
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x24, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A1A  |@jB..$C....BDM|
+; descriptor 10 = base + dir[+0x38] + 14*10, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc010:		; tag 0x40  A=0x4426A  B=0x4432A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x2A, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A28  |@jB..*C....BDM|
+; descriptor 11 = base + dir[+0x38] + 14*11, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; BassDrm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc011:		; tag 0x40  A=0x4426A  B=0x44330
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x30, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A36  |@jB..0C....BDM|
+; descriptor 12 = base + dir[+0x38] + 14*12, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Elect.BassDrm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc012:		; tag 0x40  A=0x4426A  B=0x44336
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x36, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A44  |@jB..6C....BDM|
+; descriptor 13 = base + dir[+0x38] + 14*13, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Funk Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc013:		; tag 0x40  A=0x4426A  B=0x4433C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x3C, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A52  |@jB..<C....BDM|
+; descriptor 14 = base + dir[+0x38] + 14*14, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Orch.Bass
+; Drm' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc014:		; tag 0x40  A=0x4426A  B=0x44342
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x42, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43A60  |@jB..BC....B.N|
+; descriptor 15 = base + dir[+0x38] + 14*15, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock
+; Snare :p', 'Rock Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc015:		; tag 0x40  A=0x4426A  B=0x44348
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x48, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A6E  |@jB..HC....BDM|
+; descriptor 16 = base + dir[+0x38] + 14*16, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock
+; Snare :f' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc016:		; tag 0x40  A=0x4426A  B=0x4434E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x4E, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A7C  |@jB..NC....BDM|
+; descriptor 17 = base + dir[+0x38] + 14*17, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Room
+; Snare :p', 'Room Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc017:		; tag 0x40  A=0x4426A  B=0x44354
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x54, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A8A  |@jB..TC....BDM|
+; descriptor 18 = base + dir[+0x38] + 14*18, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Room
+; Snare :f' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc018:		; tag 0x40  A=0x4426A  B=0x4435A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x5A, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43A98  |@jB..ZC....BDM|
+; descriptor 19 = base + dir[+0x38] + 14*19, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Room
+; Snare:ff' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc019:		; tag 0x40  A=0x4426A  B=0x44360
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x60, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AA6  |@jB..`C....BDM|
+; descriptor 20 = base + dir[+0x38] + 14*20, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz
+; Snare :p', 'Jazz Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc020:		; tag 0x40  A=0x4426A  B=0x44366
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x66, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AB4  |@jB..fC....BDM|
+; descriptor 21 = base + dir[+0x38] + 14*21, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz
+; Snare :f' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc021:		; tag 0x40  A=0x4426A  B=0x4436C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x6C, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AC2  |@jB..lC....BDM|
+; descriptor 22 = base + dir[+0x38] + 14*22, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Trad
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc022:		; tag 0x40  A=0x4426A  B=0x44372
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x72, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AD0  |@jB..rC....BDM|
+; descriptor 23 = base + dir[+0x38] + 14*23, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'LtRockSnare', 'LtRock Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc023:		; tag 0x40  A=0x4426A  B=0x44378
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x78, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43ADE  |@jB..xC....BDM|
+; descriptor 24 = base + dir[+0x38] + 14*24, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power
+; Snare L' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc024:		; tag 0x40  A=0x4426A  B=0x4437E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x7E, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AEC  |@jB..~C....BDM|
+; descriptor 25 = base + dir[+0x38] + 14*25, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power
+; Snare R' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc025:		; tag 0x40  A=0x4426A  B=0x44384
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x84, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43AFA  |@jB...C....BDM|
+; descriptor 26 = base + dir[+0x38] + 14*26, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'House
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc026:		; tag 0x40  A=0x4426A  B=0x4438A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x8A, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B08  |@jB...C....BDM|
+; descriptor 27 = base + dir[+0x38] + 14*27, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc027:		; tag 0x40  A=0x4426A  B=0x44390
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x90, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B16  |@jB...C....BDM|
+; descriptor 28 = base + dir[+0x38] + 14*28, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc028:		; tag 0x40  A=0x4426A  B=0x44396
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x96, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B24  |@jB...C....BDM|
+; descriptor 29 = base + dir[+0x38] + 14*29, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Elect.Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc029:		; tag 0x40  A=0x4426A  B=0x4439C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x9C, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B32  |@jB...C....BDM|
+; descriptor 30 = base + dir[+0x38] + 14*30, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Funk
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc030:		; tag 0x40  A=0x4426A  B=0x443A2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA2, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B40  |@jB...C....BDM|
+; descriptor 31 = base + dir[+0x38] + 14*31, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Analog
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc031:		; tag 0x40  A=0x4426A  B=0x443A8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA8, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B4E  |@jB...C....BDM|
+; descriptor 32 = base + dir[+0x38] + 14*32, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Piccolo
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc032:		; tag 0x40  A=0x4426A  B=0x443AE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xAE, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B5C  |@jB...C....BDM|
+; descriptor 33 = base + dir[+0x38] + 14*33, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Orch.Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc033:		; tag 0x40  A=0x4426A  B=0x443B4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB4, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43B6A  |@jB...C....B.N|
+; descriptor 34 = base + dir[+0x38] + 14*34, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Reverse
+; Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc034:		; tag 0x40  A=0x4426A  B=0x443BA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xBA, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B78  |@jB...C....BDM|
+; descriptor 35 = base + dir[+0x38] + 14*35, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Syn.Rev.Snare' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc035:		; tag 0x40  A=0x4426A  B=0x443C0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC0, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43B86  |@jB...C....BDM|
+; descriptor 36 = base + dir[+0x38] + 14*36, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Brush
+; Long' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc036:		; tag 0x40  A=0x4426A  B=0x443C6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC6, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4A, 0x4D	; 43B94  |@jB...C....BJM|
+; descriptor 37 = base + dir[+0x38] + 14*37, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Brush
+; Hit' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc037:		; tag 0x40  A=0x4426A  B=0x443CC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xCC, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4A, 0x4D	; 43BA2  |@jB...C....BJM|
+; descriptor 38 = base + dir[+0x38] + 14*38, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Brush
+; Short' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc038:		; tag 0x40  A=0x4426A  B=0x443D2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD2, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4A, 0x4D	; 43BB0  |@jB...C....BJM|
+; descriptor 39 = base + dir[+0x38] + 14*39, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock Rim'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc039:		; tag 0x40  A=0x4426A  B=0x443D8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD8, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43BBE  |@jB...C....BMS|
+; descriptor 40 = base + dir[+0x38] + 14*40, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul Rim'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc040:		; tag 0x40  A=0x4426A  B=0x443DE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xDE, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43BCC  |@jB...C....BMS|
+; descriptor 41 = base + dir[+0x38] + 14*41, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; Rim' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc041:		; tag 0x40  A=0x4426A  B=0x443E4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE4, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43BDA  |@jB...C....BDM|
+; descriptor 42 = base + dir[+0x38] + 14*42, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock Tom'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc042:		; tag 0x40  A=0x4426A  B=0x443EA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xEA, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43BE8  |@jB...C....BMS|
+; descriptor 43 = base + dir[+0x38] + 14*43, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz Tom'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc043:		; tag 0x40  A=0x4426A  B=0x443F0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF0, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x1E, 0x50	; 43BF6  |@jB...C....B.P|
+; descriptor 44 = base + dir[+0x38] + 14*44, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Rock Bass
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc044:		; tag 0x40  A=0x4426A  B=0x443F6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF6, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x56, 0x51	; 43C04  |@jB...C....BVQ|
+; descriptor 45 = base + dir[+0x38] + 14*45, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Jazz Bass
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc045:		; tag 0x40  A=0x4426A  B=0x443FC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xFC, 0x43, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x56, 0x51	; 43C12  |@jB...C....BVQ|
+; descriptor 46 = base + dir[+0x38] + 14*46, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power Tom
+; L' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc046:		; tag 0x40  A=0x4426A  B=0x44402
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x02, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C20  |@jB...D....BMS|
+; descriptor 47 = base + dir[+0x38] + 14*47, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power Tom
+; R' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc047:		; tag 0x40  A=0x4426A  B=0x44408
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x08, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C2E  |@jB...D....BMS|
+; descriptor 48 = base + dir[+0x38] + 14*48, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Power
+; BassTom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc048:		; tag 0x40  A=0x4426A  B=0x4440E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x0E, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x56, 0x51	; 43C3C  |@jB...D....BVQ|
+; descriptor 49 = base + dir[+0x38] + 14*49, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Electric
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc049:		; tag 0x40  A=0x4426A  B=0x44414
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x14, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C4A  |@jB...D....BMS|
+; descriptor 50 = base + dir[+0x38] + 14*50, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Elect.BassTom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc050:		; tag 0x40  A=0x4426A  B=0x4441A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x1A, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43C58  |@jB...D....BDM|
+; descriptor 51 = base + dir[+0x38] + 14*51, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul Tom'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc051:		; tag 0x40  A=0x4426A  B=0x44420
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x20, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43C66  |@jB.. D....BDM|
+; descriptor 52 = base + dir[+0x38] + 14*52, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Soul Bass
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc052:		; tag 0x40  A=0x4426A  B=0x44426
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x26, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x87, 0x1F	; 43C74  |@jB..&D....B..|
+; descriptor 53 = base + dir[+0x38] + 14*53, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; Tom' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc053:		; tag 0x40  A=0x4426A  B=0x4442C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x2C, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43C82  |@jB..,D....BDM|
+; descriptor 54 = base + dir[+0x38] + 14*54, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'HiHatClosed:p', 'HiHat Closed' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc054:		; tag 0x40  A=0x4426A  B=0x44432
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x32, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C90  |@jB..2D....BMS|
+; descriptor 55 = base + dir[+0x38] + 14*55, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'HiHatClosed:f' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc055:		; tag 0x40  A=0x4426A  B=0x44438
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x38, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43C9E  |@jB..8D....BMS|
+; descriptor 56 = base + dir[+0x38] + 14*56, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'DanceHHClosed' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc056:		; tag 0x40  A=0x4426A  B=0x4443E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x3E, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43CAC  |@jB..>D....BHM|
+; descriptor 57 = base + dir[+0x38] + 14*57, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Syn.HH.Closed' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc057:		; tag 0x40  A=0x4426A  B=0x44444
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x44, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43CBA  |@jB..DD....BDM|
+; descriptor 58 = base + dir[+0x38] + 14*58, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'HiHat
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc058:		; tag 0x40  A=0x4426A  B=0x4444A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x4A, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43CC8  |@jB..JD....BMS|
+; descriptor 59 = base + dir[+0x38] + 14*59, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Dance
+; HH.Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc059:		; tag 0x40  A=0x4426A  B=0x44450
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x50, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43CD6  |@jB..PD....BHM|
+; descriptor 60 = base + dir[+0x38] + 14*60, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Synth
+; HH.Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc060:		; tag 0x40  A=0x4426A  B=0x44456
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x56, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43CE4  |@jB..VD....BDM|
+; descriptor 61 = base + dir[+0x38] + 14*61, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'HiHat
+; Pedal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc061:		; tag 0x40  A=0x4426A  B=0x4445C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x5C, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43CF2  |@jB..\D....BMS|
+; descriptor 62 = base + dir[+0x38] + 14*62, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'HiHat
+; Accent' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc062:		; tag 0x40  A=0x4426A  B=0x44462
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x62, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D00  |@jB..bD....BMS|
+; descriptor 63 = base + dir[+0x38] + 14*63, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'CrashCymbal 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc063:		; tag 0x40  A=0x4426A  B=0x44468
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x68, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D0E  |@jB..hD....BMS|
+; descriptor 64 = base + dir[+0x38] + 14*64, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'CrashCymbal 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc064:		; tag 0x40  A=0x4426A  B=0x4446E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x6E, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D1C  |@jB..nD....BMS|
+; descriptor 65 = base + dir[+0x38] + 14*65, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Splash
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc065:		; tag 0x40  A=0x4426A  B=0x44474
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x74, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D2A  |@jB..tD....BMS|
+; descriptor 66 = base + dir[+0x38] + 14*66, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'China
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc066:		; tag 0x40  A=0x4426A  B=0x4447A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x7A, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x4D, 0x53	; 43D38  |@jB..zD....BMS|
+; descriptor 67 = base + dir[+0x38] + 14*67, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Orch.Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc067:		; tag 0x40  A=0x4426A  B=0x44480
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x80, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43D46  |@jB...D....BDM|
+; descriptor 68 = base + dir[+0x38] + 14*68, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SynOrchCymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc068:		; tag 0x40  A=0x4426A  B=0x44486
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x86, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43D54  |@jB...D....BHM|
+; descriptor 69 = base + dir[+0x38] + 14*69, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Ride
+; Cymbal 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc069:		; tag 0x40  A=0x4426A  B=0x4448C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x8C, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 43D62  |@jB...D....B.I|
+; descriptor 70 = base + dir[+0x38] + 14*70, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Ride
+; Cymbal 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc070:		; tag 0x40  A=0x4426A  B=0x44492
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x92, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43D70  |@jB...D....BHM|
+; descriptor 71 = base + dir[+0x38] + 14*71, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Ride
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc071:		; tag 0x40  A=0x4426A  B=0x44498
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x98, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43D7E  |@jB...D....BHM|
+; descriptor 72 = base + dir[+0x38] + 14*72, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'ReverseCymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc072:		; tag 0x40  A=0x4426A  B=0x4449E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x9E, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x48, 0x4D	; 43D8C  |@jB...D....BHM|
+; descriptor 73 = base + dir[+0x38] + 14*73, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Agogo'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc073:		; tag 0x40  A=0x4426A  B=0x444A4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA4, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43D9A  |@jB...D....BDM|
+; descriptor 74 = base + dir[+0x38] + 14*74, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Sleigh
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc074:		; tag 0x40  A=0x4426A  B=0x444AA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xAA, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43DA8  |@jB...D....BDM|
+; descriptor 75 = base + dir[+0x38] + 14*75, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Cowbell'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc075:		; tag 0x40  A=0x4426A  B=0x444B0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB0, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43DB6  |@jB...D....BDM|
+; descriptor 76 = base + dir[+0x38] + 14*76, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Wind
+; Chime' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc076:		; tag 0x40  A=0x4426A  B=0x444B6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB6, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43DC4  |@jB...D....BDM|
+; descriptor 77 = base + dir[+0x38] + 14*77, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Triangle
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc077:		; tag 0x40  A=0x4426A  B=0x444BC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xBC, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x3B, 0x4D	; 43DD2  |@jB...D....B;M|
+; descriptor 78 = base + dir[+0x38] + 14*78, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Triangle
+; Mute' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc078:		; tag 0x40  A=0x4426A  B=0x444C2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC2, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43DE0  |@jB...D....BDM|
+; descriptor 79 = base + dir[+0x38] + 14*79, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Small
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc079:		; tag 0x40  A=0x4426A  B=0x444C8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC8, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x4E	; 43DEE  |@jB...D....B.N|
+; descriptor 80 = base + dir[+0x38] + 14*80, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Gamelan'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc080:		; tag 0x40  A=0x4426A  B=0x444CE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xCE, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x5A	; 43DFC  |@jB...D....B.Z|
+; descriptor 81 = base + dir[+0x38] + 14*81, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Finger
+; Cymbal' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc081:		; tag 0x40  A=0x4426A  B=0x444D4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD4, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x60	; 43E0A  |@jB...D....B.`|
+; descriptor 82 = base + dir[+0x38] + 14*82, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Tublar
+; Bell' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc082:		; tag 0x40  A=0x4426A  B=0x444DA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xDA, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x32	; 43E18  |@jB...D....B.2|
+; descriptor 83 = base + dir[+0x38] + 14*83, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; Mute 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc083:		; tag 0x40  A=0x4426A  B=0x444E0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE0, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E26  |@jB...D....B.N|
+; descriptor 84 = base + dir[+0x38] + 14*84, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; Mute 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc084:		; tag 0x40  A=0x4426A  B=0x444E6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE6, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E34  |@jB...D....B.N|
+; descriptor 85 = base + dir[+0x38] + 14*85, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; Mute 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc085:		; tag 0x40  A=0x4426A  B=0x444EC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xEC, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x7C, 0x4E	; 43E42  |@jB...D....B|N|
+; descriptor 86 = base + dir[+0x38] + 14*86, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; High' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc086:		; tag 0x40  A=0x4426A  B=0x444F2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF2, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E50  |@jB...D....B.N|
+; descriptor 87 = base + dir[+0x38] + 14*87, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Bongo
+; Low' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc087:		; tag 0x40  A=0x4426A  B=0x444F8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF8, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E5E  |@jB...D....B.N|
+; descriptor 88 = base + dir[+0x38] + 14*88, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; Mute On' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc088:		; tag 0x40  A=0x4426A  B=0x444FE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xFE, 0x44, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E6C  |@jB...D....B.N|
+; descriptor 89 = base + dir[+0x38] + 14*89, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; MuteOff' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc089:		; tag 0x40  A=0x4426A  B=0x44504
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x04, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E7A  |@jB...E....B.N|
+; descriptor 90 = base + dir[+0x38] + 14*90, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'CongaMutCrash' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc090:		; tag 0x40  A=0x4426A  B=0x4450A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x0A, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E88  |@jB...E....B.N|
+; descriptor 91 = base + dir[+0x38] + 14*91, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; High' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc091:		; tag 0x40  A=0x4426A  B=0x44510
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x10, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43E96  |@jB...E....B.N|
+; descriptor 92 = base + dir[+0x38] + 14*92, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; Low' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc092:		; tag 0x40  A=0x4426A  B=0x44516
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x16, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43EA4  |@jB...E....B.N|
+; descriptor 93 = base + dir[+0x38] + 14*93, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Conga
+; Crash' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc093:		; tag 0x40  A=0x4426A  B=0x4451C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x1C, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43EB2  |@jB...E....B.N|
+; descriptor 94 = base + dir[+0x38] + 14*94, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Timbales
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc094:		; tag 0x40  A=0x4426A  B=0x44522
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x22, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43EC0  |@jB.."E....B.N|
+; descriptor 95 = base + dir[+0x38] + 14*95, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'TimblsOpenRim' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc095:		; tag 0x40  A=0x4426A  B=0x44528
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x28, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43ECE  |@jB..(E....B.N|
+; descriptor 96 = base + dir[+0x38] + 14*96, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SynthTimbales' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc096:		; tag 0x40  A=0x4426A  B=0x4452E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x2E, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43EDC  |@jB...E....BDM|
+; descriptor 97 = base + dir[+0x38] + 14*97, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'BataDrum
+; Slap' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc097:		; tag 0x40  A=0x4426A  B=0x44534
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x34, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43EEA  |@jB..4E....BDM|
+; descriptor 98 = base + dir[+0x38] + 14*98, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'BataDrum
+; Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc098:		; tag 0x40  A=0x4426A  B=0x4453A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x3A, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43EF8  |@jB..:E....BDM|
+; descriptor 99 = base + dir[+0x38] + 14*99, returned by ToneDB_ResolveEnvDescriptor (prom_c
+; 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave 'Timpani'
+; (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc099:		; tag 0x40  A=0x4426A  B=0x44540
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x40, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC4, 0x1F	; 43F06  |@jB..@E....B..|
+; descriptor 100 = base + dir[+0x38] + 14*100, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Cuica High' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc100:		; tag 0x40  A=0x4426A  B=0x44546
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x46, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43F14  |@jB..FE....B.N|
+; descriptor 101 = base + dir[+0x38] + 14*101, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Cuica Low' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc101:		; tag 0x40  A=0x4426A  B=0x4454C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x4C, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43F22  |@jB..LE....B.N|
+; descriptor 102 = base + dir[+0x38] + 14*102, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Guiro Long' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc102:		; tag 0x40  A=0x4426A  B=0x44552
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x52, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43F30  |@jB..RE....B.N|
+; descriptor 103 = base + dir[+0x38] + 14*103, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Guiro Short' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc103:		; tag 0x40  A=0x4426A  B=0x44558
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x58, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43F3E  |@jB..XE....B.N|
+; descriptor 104 = base + dir[+0x38] + 14*104, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Hand Claps' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc104:		; tag 0x40  A=0x4426A  B=0x4455E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x5E, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F4C  |@jB..^E....BDM|
+; descriptor 105 = base + dir[+0x38] + 14*105, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Shaker' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc105:		; tag 0x40  A=0x4426A  B=0x44564
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x64, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F5A  |@jB..dE....BDM|
+; descriptor 106 = base + dir[+0x38] + 14*106, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Shekele On' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc106:		; tag 0x40  A=0x4426A  B=0x4456A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x6A, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F68  |@jB..jE....BDM|
+; descriptor 107 = base + dir[+0x38] + 14*107, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Shekele Off' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc107:		; tag 0x40  A=0x4426A  B=0x44570
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x70, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F76  |@jB..pE....BDM|
+; descriptor 108 = base + dir[+0x38] + 14*108, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Cabasa' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc108:		; tag 0x40  A=0x4426A  B=0x44576
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x76, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F84  |@jB..vE....BDM|
+; descriptor 109 = base + dir[+0x38] + 14*109, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Maracas' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc109:		; tag 0x40  A=0x4426A  B=0x4457C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x7C, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43F92  |@jB..|E....BDM|
+; descriptor 110 = base + dir[+0x38] + 14*110, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Caxixi On' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc110:		; tag 0x40  A=0x4426A  B=0x44582
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x82, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43FA0  |@jB...E....BDM|
+; descriptor 111 = base + dir[+0x38] + 14*111, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Caxixi Off' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc111:		; tag 0x40  A=0x4426A  B=0x44588
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x88, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43FAE  |@jB...E....BDM|
+; descriptor 112 = base + dir[+0x38] + 14*112, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Samba Whistle' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc112:		; tag 0x40  A=0x4426A  B=0x4458E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x8E, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43FBC  |@jB...E....B.N|
+; descriptor 113 = base + dir[+0x38] + 14*113, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SynSmbWhistle' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc113:		; tag 0x40  A=0x4426A  B=0x44594
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x94, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43FCA  |@jB...E....BDM|
+; descriptor 114 = base + dir[+0x38] + 14*114, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Samba Drum On' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc114:		; tag 0x40  A=0x4426A  B=0x4459A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x9A, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43FD8  |@jB...E....B.N|
+; descriptor 115 = base + dir[+0x38] + 14*115, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SambaDrum Off' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc115:		; tag 0x40  A=0x4426A  B=0x445A0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA0, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 43FE6  |@jB...E....B.N|
+; descriptor 116 = base + dir[+0x38] + 14*116, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Darbuka Slap' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc116:		; tag 0x40  A=0x4426A  B=0x445A6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA6, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 43FF4  |@jB...E....BDM|
+; descriptor 117 = base + dir[+0x38] + 14*117, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Darbuka Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc117:		; tag 0x40  A=0x4426A  B=0x445AC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xAC, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44002  |@jB...E....BDM|
+; descriptor 118 = base + dir[+0x38] + 14*118, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Surdo Open' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc118:		; tag 0x40  A=0x4426A  B=0x445B2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB2, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44010  |@jB...E....BDM|
+; descriptor 119 = base + dir[+0x38] + 14*119, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Surdo Mute' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc119:		; tag 0x40  A=0x4426A  B=0x445B8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xB8, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4401E  |@jB...E....BDM|
+; descriptor 120 = base + dir[+0x38] + 14*120, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'SurdoLeftHand' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc120:		; tag 0x40  A=0x4426A  B=0x445BE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xBE, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4402C  |@jB...E....BDM|
+; descriptor 121 = base + dir[+0x38] + 14*121, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'TambourineAcc' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc121:		; tag 0x40  A=0x4426A  B=0x445C4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xC4, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4403A  |@jB...E....BDM|
+; descriptor 122 = base + dir[+0x38] + 14*122, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Tambourine Bt' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc122:		; tag 0x40  A=0x4426A  B=0x445CA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xCA, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44048  |@jB...E....BDM|
+; descriptor 123 = base + dir[+0x38] + 14*123, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'OrchTambourin' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc123:		; tag 0x40  A=0x4426A  B=0x445D0
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD0, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44056  |@jB...E....BDM|
+; descriptor 124 = base + dir[+0x38] + 14*124, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Nutshell Tree' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc124:		; tag 0x40  A=0x4426A  B=0x445D6
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xD6, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44064  |@jB...E....BDM|
+; descriptor 125 = base + dir[+0x38] + 14*125, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Crickets' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc125:		; tag 0x40  A=0x4426A  B=0x445DC
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xDC, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 44072  |@jB...E....B.N|
+; descriptor 126 = base + dir[+0x38] + 14*126, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Rain Stick' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc126:		; tag 0x40  A=0x4426A  B=0x445E2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE2, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44080  |@jB...E....BDM|
+; descriptor 127 = base + dir[+0x38] + 14*127, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Vibraslap' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc127:		; tag 0x40  A=0x4426A  B=0x445E8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xE8, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 4408E  |@jB...E....B.N|
+; descriptor 128 = base + dir[+0x38] + 14*128, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Wood Block' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc128:		; tag 0x40  A=0x4426A  B=0x445EE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xEE, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 4409C  |@jB...E....B.N|
+; descriptor 129 = base + dir[+0x38] + 14*129, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Castanets' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc129:		; tag 0x40  A=0x4426A  B=0x445F4
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xF4, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 440AA  |@jB...E....B.N|
+; descriptor 130 = base + dir[+0x38] + 14*130, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Claves' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc130:		; tag 0x40  A=0x4426A  B=0x445FA
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xFA, 0x45, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 440B8  |@jB...E....B.N|
+; descriptor 131 = base + dir[+0x38] + 14*131, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Slap' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc131:		; tag 0x40  A=0x4426A  B=0x44600
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x00, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 440C6  |@jB...F....BDM|
+; descriptor 132 = base + dir[+0x38] + 14*132, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Scratch 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc132:		; tag 0x40  A=0x4426A  B=0x44606
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x06, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 440D4  |@jB...F....BDM|
+; descriptor 133 = base + dir[+0x38] + 14*133, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Scratch 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc133:		; tag 0x40  A=0x4426A  B=0x4460C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x0C, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 440E2  |@jB...F....BDM|
+; descriptor 134 = base + dir[+0x38] + 14*134, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Zap 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc134:		; tag 0x40  A=0x4426A  B=0x44612
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x12, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 440F0  |@jB...F....B.I|
+; descriptor 135 = base + dir[+0x38] + 14*135, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'ElectroUnizon', 'ElectroUnison' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc135:		; tag 0x40  A=0x4426A  B=0x44618
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x18, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 440FE  |@jB...F....B.I|
+; descriptor 136 = base + dir[+0x38] + 14*136, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Electro Shot1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc136:		; tag 0x40  A=0x4426A  B=0x4461E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x1E, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 4410C  |@jB...F....B.I|
+; descriptor 137 = base + dir[+0x38] + 14*137, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Electro Shot2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc137:		; tag 0x40  A=0x4426A  B=0x44624
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x24, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 4411A  |@jB..$F....B.I|
+; descriptor 138 = base + dir[+0x38] + 14*138, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Zap 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc138:		; tag 0x40  A=0x4426A  B=0x4462A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x2A, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xC1, 0x49	; 44128  |@jB..*F....B.I|
+; descriptor 139 = base + dir[+0x38] + 14*139, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'AmbientHammer' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc139:		; tag 0x40  A=0x4426A  B=0x44630
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x30, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44136  |@jB..0F....BDM|
+; descriptor 140 = base + dir[+0x38] + 14*140, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Wave 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc140:		; tag 0x40  A=0x4426A  B=0x44636
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x36, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44144  |@jB..6F....BDM|
+; descriptor 141 = base + dir[+0x38] + 14*141, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Wave 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc141:		; tag 0x40  A=0x4426A  B=0x4463C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x3C, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44152  |@jB..<F....BDM|
+; descriptor 142 = base + dir[+0x38] + 14*142, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Applause' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc142:		; tag 0x40  A=0x4426A  B=0x44642
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x42, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44160  |@jB..BF....BDM|
+; descriptor 143 = base + dir[+0x38] + 14*143, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Voice Ah' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc143:		; tag 0x40  A=0x4426A  B=0x44648
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x48, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4416E  |@jB..HF....BDM|
+; descriptor 144 = base + dir[+0x38] + 14*144, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Voice Yeh' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc144:		; tag 0x40  A=0x4426A  B=0x4464E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x4E, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4417C  |@jB..NF....BDM|
+; descriptor 145 = base + dir[+0x38] + 14*145, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Voice Uh' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc145:		; tag 0x40  A=0x4426A  B=0x44654
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x54, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 4418A  |@jB..TF....BDM|
+; descriptor 146 = base + dir[+0x38] + 14*146, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Helicopter' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc146:		; tag 0x40  A=0x4426A  B=0x4465A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x5A, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44198  |@jB..ZF....BDM|
+; descriptor 147 = base + dir[+0x38] + 14*147, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Telephone' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc147:		; tag 0x40  A=0x4426A  B=0x44660
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x60, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 441A6  |@jB..`F....BDM|
+; descriptor 148 = base + dir[+0x38] + 14*148, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Gun Shot' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc148:		; tag 0x40  A=0x4426A  B=0x44666
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x66, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 441B4  |@jB..fF....BDM|
+; descriptor 149 = base + dir[+0x38] + 14*149, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Orchestra.Hit' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc149:		; tag 0x40  A=0x4426A  B=0x4466C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x6C, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x41	; 441C2  |@jB..lF....B.A|
+; descriptor 150 = base + dir[+0x38] + 14*150, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Wind' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc150:		; tag 0x40  A=0x4426A  B=0x44672
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x72, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x48	; 441D0  |@jB..rF....B.H|
+; descriptor 151 = base + dir[+0x38] + 14*151, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Bird 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc151:		; tag 0x40  A=0x4426A  B=0x44678
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x78, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 441DE  |@jB..xF....BDM|
+; descriptor 152 = base + dir[+0x38] + 14*152, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Bird 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc152:		; tag 0x40  A=0x4426A  B=0x4467E
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x7E, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 441EC  |@jB..~F....BDM|
+; descriptor 153 = base + dir[+0x38] + 14*153, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Sax Breath' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc153:		; tag 0x40  A=0x4426A  B=0x44684
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x84, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x2E	; 441FA  |@jB...F....B..|
+; descriptor 154 = base + dir[+0x38] + 14*154, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Flute Breath' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc154:		; tag 0x40  A=0x4426A  B=0x4468A
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x8A, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x4C	; 44208  |@jB...F....B.L|
+; descriptor 155 = base + dir[+0x38] + 14*155, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Pick Noise 4' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc155:		; tag 0x40  A=0x4426A  B=0x44690
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x90, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 44216  |@jB...F....B.N|
+; descriptor 156 = base + dir[+0x38] + 14*156, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Pick Noise 2' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc156:		; tag 0x40  A=0x4426A  B=0x44696
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x96, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 44224  |@jB...F....B.N|
+; descriptor 157 = base + dir[+0x38] + 14*157, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Pick Noise 1' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc157:		; tag 0x40  A=0x4426A  B=0x4469C
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0x9C, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0xBC, 0x4E	; 44232  |@jB...F....B.N|
+; descriptor 158 = base + dir[+0x38] + 14*158, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Pick Noise 3' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc158:		; tag 0x40  A=0x4426A  B=0x446A2
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA2, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x44, 0x4D	; 44240  |@jB...F....BDM|
+; descriptor 159 = base + dir[+0x38] + 14*159, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Fret Noise' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc159:		; tag 0x40  A=0x4426A  B=0x446A8
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xA8, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x67, 0x51	; 4424E  |@jB...F....BgQ|
+; descriptor 160 = base + dir[+0x38] + 14*160, returned by ToneDB_ResolveEnvDescriptor
+; (prom_c 0xFB45C0). Reached through ToneDB_DrumToneIndexMap by the selector of drum wave
+; 'Slap Shot' (the only map entry holding it).
 ToneDB_EnvDescTable_Perc_Desc160:		; tag 0x40  A=0x4426A  B=0x446AE
 	.byte 0x40, 0x6A, 0x42, 0x04, 0x00, 0xAE, 0x46, 0x04, 0x00, 0x00, 0x7F, 0x42, 0x80, 0x28	; 4425C  |@jB...F....B.(|
 
