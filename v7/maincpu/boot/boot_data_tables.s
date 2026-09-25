@@ -65,8 +65,14 @@ FILETYPE_SIG_HDAE_PRG:		aligned_string "Technics KN5000 HD-AEPRG DATA FILE    "
 
 HANDLE_UPDATE_OFFSETS:
 	; Precomputed relative offsets (identical in v7 and v9)
-	.byte 0x00, 0x00, 0xa6, 0x00, 0x20, 0x00, 0xa6, 0x00
-	.byte 0x43, 0x00, 0x5b, 0x00, 0x76, 0x00, 0x9a, 0x00
+	.short	0xef4784 - 0xef4784	; [v10] "Technics KN5000 Program DATA FILE 1/2"
+	.short	0xef482a - 0xef4784	; [v10] "Technics KN5000 Program DATA FILE 2/2"
+	.short	0xef47a4 - 0xef4784	; [v10] "Technics KN5000 Table DATA FILE 1/2"
+	.short	0xef482a - 0xef4784	; [v10] "Technics KN5000 Table DATA FILE 2/2"
+	.short	0xef47c7 - 0xef4784	; [v10] "Technics KN5000 CMPCUSTOMDATA FILE"
+	.short	0xef47df - 0xef4784	; [v10] "Technics KN5000 HD-AEPRG DATA FILE"
+	.short	0xef47fa - 0xef4784	; [v10] "Technics KN5000 Program DATA FILE PCK"
+	.short	0xef481e - 0xef4784	; [v10] "Technics KN5000 Table DATA FILE PCK"
 
 SLIDE_STRING_2:
 	aligned_string "SLIDE"

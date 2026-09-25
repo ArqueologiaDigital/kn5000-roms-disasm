@@ -7,7 +7,120 @@
 ; =============================================================================
 
 FDemo_DisplayResourceData:
-	.incbin "includes/romslices/v7_transplant_FDemo_DisplayResourceData_head_head.bin"
+; (was .incbin "includes/romslices/v7_transplant_FDemo_DisplayResourceData_head_head.bin")
+; [v10] =============================================================================
+; [v10] File Demo Procedures
+; [v10] =============================================================================
+; [v10] 
+; [v10] File demo procedures and title handlers. Manages demo file
+; [v10] playback, title display, and demo mode UI integration.
+; [v10] =============================================================================
+	lda	xsp, (xsp-292)
+	push	xiz
+	ld	xiz, xwa
+	ldw	(xsp+6), 0
+	lda	xbc, (xsp+0x108)
+	ld	xwa, xbc
+	lda	xbc, (xbc+32)
+FDemo_DisplayResourceData_Loop:
+	stib_dsp	224, 32
+	cp	xwa, xbc
+	jr	c, FDemo_DisplayResourceData_Loop
+	push	xiz
+	call	LyricsTrack_ReadAndParse_Helper2
+	pushw	hl
+	push	xiz
+	lda	xwa, (xsp+0x112)
+	push	xwa
+	call	0xff0516
+	lda	xwa, (xsp+0x116)
+	ld	(xwa+0x8), 0
+	pushw	234
+	pushw	112
+	push	xwa
+	call	FileIO_CheckPathAndVolumeLabel_Helper
+	lda	xsp, (xsp+22)
+	lda	xwa, (xsp+0x108)
+	ld	xbc, Presentation_TagStrTable_0x6E
+	call	FileIO_OpenWithMode
+	ld	(xsp+4), hl
+	cpw	(xsp+0x4), 0
+	jrl	lt, FDemo_DisplayResourceData_Skip6
+	calr	FDemo_DisplayResourceData_Helper
+	lda	xwa, (xsp+8)
+	ld	xbc, 256
+	call	FileIO_ReadBlock
+	or	xhl, xhl
+	jr	z, FDemo_DisplayResourceData_Skip4
+	ld	xwa, 256
+	calr	Seq_LoadNamedResource_Helper
+	lda	xbc, (xsp+8)
+	ld	a, (xbc+4)
+	extz	wa
+	ld	(xsp+6), wa
+	pushw	256
+	push	xbc
+	push	xhl
+	call	0xff05bc
+	lda	xsp, (xsp+10)
+FDemo_DisplayResourceData_Skip4:
+	ld	iz, 1:i3
+FDemo_DisplayResourceData_Loop2:
+	lda	xwa, (xsp+8)
+	ld	xbc, 256
+	call	FileIO_ReadBlock
+	or	xhl, xhl
+	jr	z, FDemo_DisplayResourceData_Skip
+	ld	xwa, 256
+	calr	Seq_LoadNamedResource_Helper
+	pushw	256
+	lda	xwa, (xsp+10)
+	push	xwa
+	push	xhl
+	call	0xff05bc
+	lda	xsp, (xsp+10)
+FDemo_DisplayResourceData_Skip:
+	inc	1, iz
+	cp	iz, 8
+	jr	lt, FDemo_DisplayResourceData_Loop2
+	cpw	(xsp+0x6), 1
+	jr	nz, FDemo_DisplayResourceData_Skip5
+	ld	iz, 0:i3
+FDemo_DisplayResourceData_Loop3:
+	lda	xwa, (xsp+8)
+	ld	xbc, 256
+	call	FileIO_ReadBlock
+	inc	1, iz
+	cp	iz, 72
+	jr	lt, FDemo_DisplayResourceData_Loop3
+FDemo_DisplayResourceData_Skip5:
+	lda	xwa, (xsp+8)
+	ld	xbc, 256
+	call	FileIO_ReadBlock
+	or	xhl, xhl
+	jr	z, FDemo_DisplayResourceData_Skip2
+FDemo_DisplayResourceData_Loop4:
+	ld	xwa, 256
+	calr	Seq_LoadNamedResource_Helper
+	pushw	256
+	lda	xwa, (xsp+10)
+	push	xwa
+	push	xhl
+	call	0xff05bc
+	lda	xsp, (xsp+10)
+	lda	xwa, (xsp+8)
+	ld	xbc, 256
+	call	FileIO_ReadBlock
+	or	xhl, xhl
+	jr	nz, FDemo_DisplayResourceData_Loop4
+FDemo_DisplayResourceData_Skip2:
+	call	FileIO_CloseHandle
+FDemo_DisplayResourceData_Skip6:
+	ld	hl, (xsp+4)
+	pop	xiz
+	lda	xsp, (xsp+0x124)
+	ret
+FDemo_DisplayResourceData_Helper:
 	lda xwa, (0x0ab000:24)
 	ld (0x025b7e:24), xwa
 	ret
@@ -219,10 +332,17 @@ ApPreControl_Exit:
 	ret
 
 FDemo_MultiGuardCheck:
-	.byte 0xc1, 0x9c, 0x8c, 0x3f, 0xe4, 0x6e, 0x18, 0xd1
-	.byte 0xb4, 0x28, 0x3f, 0x00, 0x00, 0x6e, 0x10, 0xc1
-	.byte 0x2f, 0x0d, 0x3f, 0x00, 0x6e, 0x09, 0xf1, 0xad
-	.byte 0x28, 0xcb, 0x6e, 0x03, 0xdb, 0xa9, 0x0e
+; [v10] --- Routine 1: multi-guard check, return HL=1 or 0 (30 bytes) ---
+	cp	(0x8c9c:16), 228
+	jr	nz, Banner_ReturnZero
+	cpw	(0x28b4:16), 0
+	jr	nz, Banner_ReturnZero
+	cp	(3375:16), 0
+	jr	nz, Banner_ReturnZero
+	bit	3, (0x28ad:16)
+	jr	nz, Banner_ReturnZero
+	ld	hl, 1:i3
+	ret
 Banner_ReturnZero:
 	ld	hl, 0:i3
 	ret
@@ -439,23 +559,35 @@ FDemo_IndicatorSetup:
 	ld	(36530:16), 4
 	ret
 DemoMode_Initialize:
-	.byte 0x1e, 0x95, 0x04, 0xf1, 0x66, 0x29, 0x00, 0x00
-	.byte 0xf1, 0x33, 0x0d, 0x00, 0x00, 0xf1, 0x2f, 0x0d
-	.byte 0x00, 0x00, 0xf1, 0xae, 0x28, 0xb7, 0x1d, 0x03
-	.byte 0x86, 0xfc, 0x1e, 0x5e, 0x03, 0x1d, 0x95, 0xe2
-	.byte 0xf4, 0x1e, 0xe9, 0x04, 0xf1, 0xad, 0x28, 0xb3
-	.byte 0x1d, 0xc7, 0x29, 0xf2, 0x1d, 0xce, 0x4b, 0xfc
-	.byte 0x1d, 0x4d, 0x9b, 0xfc, 0x1d, 0xa6, 0x06, 0xfe
-	.byte 0x1d, 0xcb, 0x42, 0xf8, 0x1d, 0xdb, 0x24, 0xef
-	.byte 0x1d, 0x2d, 0x24, 0xef, 0x30, 0x22, 0x00, 0x1d
-	.byte 0xfc, 0x71, 0xfc, 0xf1, 0xa5, 0x28, 0xc8, 0x66
-	.byte 0x07, 0xd2, 0xec, 0xff, 0x00, 0x19, 0x9e, 0xf1
+	calr	Demo_PreSetup
+	ld	(0x2966:16), 0
+	ld	(3379:16), 0
+	ld	(3375:16), 0
+	res	7, (0x28ae:16)
+	call	MidiChannel_ResetAndConfigure
+	calr	Audio_WaitForReady
+	call	SeqStep_PlaybackStateMachine
+	calr	Voice_SavePreset
+	res	3, (0x28ad:16)
+	call	SeqInit_PostEventSequence
+	call	ToneGen_FileIO_RestoreFromBackup
+	call	SeqTimer_UpdateTempoReg
+	call	DemoMode_Main_Operation_Helper
+	call	Seq_StartMainControlAlt
+	call	TempoRingBuf_Init
+	call	SeqBuf_Init
+	ldw	wa, 0x22
+	call	CtrlPanel_SetIndicatorLED
+	bit	0, (0x28a5:16)
+	jr	z, FDemo_PostBannerCheck
+	ldmm_sd24w	0xec, 0xff, 0x00, 0x9e, 0xf1
+; calr Banner_Loop_Check (v7 displacement)
 FDemo_PostBannerCheck:
-	.byte 0x1e, 0xd9, 0x03	; calr Banner_Loop_Check (v7 displacement)
-
-	.byte 0x1d, 0x9e, 0xd6, 0xfd	; call Audio_CheckSubsystemReady (v7 addr)
-
-	.byte 0xf1, 0x46, 0xb7, 0xb6	; resda 6, 0xb7e2 (v7 patched)
+	calr	Banner_Loop_Check
+; call Audio_CheckSubsystemReady (v7 addr)
+	call	0xfdd69e
+; resda 6, 0xb7e2 (v7 patched)
+	res	6, (0xb746:16)
 
 	ret
 
@@ -521,7 +653,7 @@ Demo_SelectEntry_ExitDispatch:
 	ldmm_sd24b 0xe3, 0xff, 0x00, 0x4a, 0xf2
 	ret
 Demo_SelectEntry_ByteTable:
-	.byte 0xf1, 0x66, 0x29, 0xcf
+	bit	7, (0x2966:16)
 	ret	nz
 	ld	a, (1057:16)
 	and	a, 3
@@ -535,27 +667,27 @@ Demo_SelectEntry_ByteTable:
 	ret	nz
 	cp	(35992:16), 19
 	ret	nz
-	.byte 0xf1, 0xe2, 0xbf, 0xc8
+	bit	0, (0xbfe2:16)
 	ret	z
 	cpw	(10420:16), 0
 	jr	nz, Demo_SelectEntry_ByteTable_Code_Entry
-	.byte 0xf1, 0xe7, 0x31, 0xc8
+	bit	0, (0x31e7:16)
 	jr	z, Demo_SelectEntry_ByteTable_Code_Entry2
 Demo_SelectEntry_ByteTable_Code_Entry:
-	.byte 0xf1, 0xad, 0x28, 0xb3
+	res	3, (0x28ad:16)
 	cp	(35996:16), 228
-	.byte 0xf2, 0xc7, 0x29, 0xf2, 0xee
+	call_24	nz, (0xf229c7)
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
 	ldw	(154500:24), 1
 	ld	(36530:16), 4
 	cp	(35996:16), 228
-	.byte 0xf2, 0x23, 0x2a, 0xf2, 0xee
+	call_24	nz, (0xf22a23)
 	ld	a, (10404:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
 Demo_SelectEntry_ByteTable_Code_Entry2:
-	.byte 0xf1, 0xad, 0x28, 0xbb
+	set	3, (0x28ad:16)
 	cp	(35996:16), 228
 	jr	z, Demo_SelectEntry_ByteTable_Code_Skip
 	call	CDlikeSwTtl_SetRecordAndNotify
@@ -573,22 +705,32 @@ Demo_SelectEntry_ProcessSongList:
 	ld a, (0x28a4:16)
 	cp a, (0x1157:16)
 	ret NZ
-	.byte 0x1e, 0xdf, 0x02, 0x1e, 0x94, 0x03, 0x1e, 0x7a
-	.byte 0x02, 0xc1, 0x9c, 0x8c, 0x3f, 0xe4, 0xf2, 0x23
-	.byte 0x2a, 0xf2, 0xee, 0x78, 0xb5, 0x00
+	calr	Demo_PreSetupAndScan
+	calr	Demo_WaitForDisplayBit
+	calr	Banner_Loop_Check
+	cp	(0x8c9c:16), 228
+	call	nz, (SeqInit_FinalEvent:24)
+	jrl	Demo_SelectEntry_AfterSongLoad
 Demo_SelectEntry_ManualSelect:
-	.byte 0x1e, 0xc9, 0x02, 0x1e, 0x7e, 0x03, 0x1e, 0x64
-	.byte 0x02, 0xc1, 0xa4, 0x28, 0x21, 0xc1, 0x57, 0x11
-	.byte 0xf1, 0x66, 0x0d, 0xc1, 0x9c, 0x8c, 0x3f, 0xe4
-	.byte 0xf2, 0x23, 0x2a, 0xf2, 0xee
+	calr	Demo_PreSetupAndScan
+	calr	Demo_WaitForDisplayBit
+	calr	Banner_Loop_Check
+	ld	a, (0x28a4:16)
+	cp	a, (4439:16)
+	jr	z, Demo_SelectEntry_StartAutoPlay
+	cp	(0x8c9c:16), 228
+	call	nz, (SeqInit_FinalEvent:24)
 Demo_SelectEntry_ToCountdown:
 	jrl Demo_ResetCountdownTimer
 
 Demo_SelectEntry_StartAutoPlay:
-	.byte 0xf1, 0xb2, 0x8e, 0x00, 0x04, 0xc1, 0x9c, 0x8c
-	.byte 0x3f, 0xe4, 0xf2, 0x23, 0x2a, 0xf2, 0xee, 0xc1
-	.byte 0xa4, 0x28, 0x21, 0xd8, 0x12, 0x1d, 0xa9, 0x42
-	.byte 0xf8, 0x0e
+	ld	(0x8eb2:16), 4
+	cp	(0x8c9c:16), 228
+	call	nz, (SeqInit_FinalEvent:24)
+	ld	a, (0x28a4:16)
+	extz	wa
+	call	Seq_DispatchEventType6
+	ret
 Demo_SelectEntry_TimerTick:
 	calr Demo_SelectEntry_CheckCPanel
 	cpw (0x25b84:24), 0
@@ -629,9 +771,10 @@ Demo_SelectEntry_Debounce:
 	ld	(3379:16), a
 	cp	a, 0:i3
 	ret	nz
-	.byte 0xf1, 0xad, 0x28, 0xbb
+	set	3, (0x28ad:16)
 	cp	(35996:16), 228
-	.byte 0xf2, 0x91, 0x29, 0xf2, 0xee, 0x0b, 0x01, 0x00
+	call	nz, (CDlikeSwTtl_SetRecordAndNotify:24)
+	pushw	0x1
 	ldw	wa, 168
 	ld	bc, 1:i3
 	ld	de, 1:i3
@@ -639,12 +782,12 @@ Demo_SelectEntry_Debounce:
 	ret
 Demo_SelectEntry_AfterSongLoad:
 	cp	(35996:16), 228
-	.byte 0xf2, 0x23, 0x2a, 0xf2, 0xee
+	call	nz, (SeqInit_FinalEvent:24)
 	ld	a, (10404:16)
 	extz	wa
 	call	Seq_DispatchEventType6
 	ld	(36530:16), 4
-	.byte 0xf1, 0xad, 0x28, 0xcb
+	bit	3, (0x28ad:16)
 	ret	z
 	cp	(35996:16), 228
 	jr	z, Demo_SelectEntry_CheckSongCount
@@ -687,7 +830,8 @@ Demo_SelectEntry_DrawSecondary:
 
 	ret z
 
-	.byte 0xc1, 0x9c, 0x8c, 0x3f, 0xe4	; cpdi8 (0x8d38), 228 (v7 patched)
+; cpdi8 (0x8d38), 228 (v7 patched)
+	cp	(0x8c9c:16), 228
 
 	ret z
 
@@ -697,7 +841,8 @@ Demo_SelectEntry_DrawSecondary:
 
 	add wa, wa
 
-	.byte 0xf2, 0xad, 0x00, 0xea, 0x31	; lda_24 xbc, (Presentation_TagStrTable_0xA5) (v7 patched)
+; lda_24 xbc, (Presentation_TagStrTable_0xA5) (v7 patched)
+	lda	xbc, (Presentation_TagStrTable_0xA5:24)
 
 	ldb_sri A, 0x07, 0xe4, 0xe0
 
@@ -3427,7 +3572,7 @@ FileIO_ByteBlock_DemoProc1_Skip21:
 	ldw	hl, 65434
 	jrl	FileIO_ByteBlock_DemoProc1_Epilogue6
 FileIO_ByteBlock_DemoProc1_Entry:
-	.byte 0x9f, 0x26, 0x3f, 0x02, 0x00
+	cpw	(xsp+38), 2
 	jr	nc, FileIO_ByteBlock_DemoProc1_Skip22
 	ldw	(xsp+8), 9400
 	ld	wa, (xsp+38)
@@ -3964,14 +4109,22 @@ FileIO_OpenWithMode:
 	push XWA
 	call FileOpen
 	inc 0,XSP
-	.byte 0xf1, 0xa8, 0x7e, 0x63, 0xeb, 0xe3, 0x6e, 0x3f
-	.byte 0x86, 0x3f, 0x72, 0x6e, 0x0b, 0xf1, 0xac, 0x7e
-	.byte 0x02, 0xfe, 0xff, 0x33, 0xfe, 0xff, 0x68, 0x39
+	ld	(0x7ea8:16), xhl
+	or	xhl, xhl
+	jr	nz, FileIO_OpenMode_Success
+	cp	(xiz), 0x72
+	jr	nz, FileIO_OpenMode_CheckWrite
+	ldw	(0x7eac:16), 0xfffe
+	ldw	hl, 0xfffe
+	jr	FileIO_OpenMode_Return
 FileIO_OpenMode_CheckWrite:
-	.byte 0x86, 0x3f, 0x77, 0x6e, 0x1f, 0xd2, 0x3c, 0xe5
-	.byte 0x01, 0x3f, 0x1f, 0x00, 0x6e, 0x0b, 0xf1, 0xac
-	.byte 0x7e, 0x02, 0xf5, 0xff, 0x33, 0xf5, 0xff, 0x68
-	.byte 0x20
+	cp	(xiz), 0x77
+	jr	nz, FileIO_OpenMode_UnknownMode
+	cpw	(0x1e53c:24), 31
+	jr	nz, FileIO_OpenMode_WriteMaxFiles
+	ldw	(0x7eac:16), 0xfff5
+	ldw	hl, 0xfff5
+	jr	FileIO_OpenMode_Return
 FileIO_OpenMode_WriteMaxFiles:
 	ldw	(32428:16), 65533
 	ldw	hl, 65533
@@ -6219,46 +6372,93 @@ ProcessFileRecord:
 	jrl	lt, ProcessRecord_ErrorReturn
 	ld	iz, 0:i3
 ProcessRecord_MatchLoop1:
-	.byte 0x1d, 0xef, 0x88, 0xf8, 0xde, 0x88, 0xe8, 0x12
-	.byte 0x41, 0xac, 0x04, 0xea, 0x00, 0xe8, 0x81, 0x81
-	.byte 0x21, 0xd8, 0x13, 0xdb, 0xf0, 0x66, 0x25, 0x9f
-	.byte 0x0a, 0x20, 0xe8, 0x12, 0x41, 0x52, 0x00, 0x00
-	.byte 0x00, 0x1d, 0x7f, 0x02, 0xff, 0x40, 0xb2, 0x5e
-	.byte 0x02, 0x00, 0xeb, 0x80, 0xb8, 0x50, 0xbd, 0xb8
-	.byte 0x0e, 0x30, 0x41, 0xb8, 0x04, 0xea, 0x00, 0x1e
-	.byte 0x27, 0xf2, 0x68, 0x06
+	call	FileIO_ReadByte
+	ld	wa, iz
+	extz	xwa
+	ld	xbc, Filename_TemplateArea_0x64
+	add	xbc, xwa
+	ld	a, (xbc)
+	exts	wa
+	cp	wa, hl
+	jr	z, ProcessRecord_Match1Next
+	ld	wa, (xsp + 10)
+	extz	xwa
+	ld	xbc, 0x52
+	call	InitializeKubo_Helper
+	ld	xwa, 0x25eb2
+	add	xwa, xhl
+	setm	5, (xwa + 80)
+	lda	xwa, (xwa + 14)
+	ld	xbc, Filename_TemplateArea_0x70
+	calr	FileIO_CopyString
+	jr	ProcessRecord_CheckBit5
 ProcessRecord_Match1Next:
 	inc 1, iz
 	cp iz, 4:i3
 	jr c, ProcessRecord_MatchLoop1
 
 ProcessRecord_CheckBit5:
-	.byte 0x9f, 0x0a, 0x20, 0xe8, 0x12, 0x41, 0x52, 0x00
-	.byte 0x00, 0x00, 0x1d, 0x7f, 0x02, 0xff, 0xf2, 0x02
-	.byte 0x5f, 0x02, 0x30, 0xeb, 0x80, 0xb0, 0xcd, 0x66
-	.byte 0x66, 0x40, 0x80, 0x00, 0x00, 0x00, 0xd9, 0xa8
-	.byte 0x1d, 0xd3, 0x8a, 0xf8, 0xde, 0xa8
+	ld	wa, (xsp + 10)
+	extz	xwa
+	ld	xbc, 0x52
+	call	InitializeKubo_Helper
+	lda	xwa, (0x025f02:24)
+	add	xwa, xhl
+	bitm	5, (xwa)
+	jr	z, ProcessRecord_ReadTimeSig
+	ld	xwa, 0x80
+	ld	bc, 0:i3
+	call	FileIO_SeekAndReadBlock
+	ld	iz, 0:i3
 ProcessRecord_MatchLoop2:
-	.byte 0x1d, 0xef, 0x88, 0xf8, 0xde, 0x88, 0xe8, 0x12
-	.byte 0x41, 0xac, 0x04, 0xea, 0x00, 0xe8, 0x81, 0x81
-	.byte 0x21, 0xd8, 0x13, 0xdb, 0xf0, 0x66, 0x23, 0x9f
-	.byte 0x0a, 0x20, 0xe8, 0x12, 0x41, 0x52, 0x00, 0x00
-	.byte 0x00, 0x1d, 0x7f, 0x02, 0xff, 0x40, 0xb2, 0x5e
-	.byte 0x02, 0x00, 0xeb, 0x80, 0xb8, 0x50, 0xbd, 0xb8
-	.byte 0x0e, 0x30, 0x41, 0xb8, 0x04, 0xea, 0x00, 0x78
-	.byte 0xcf, 0x00
+	call	FileIO_ReadByte
+	ld	wa, iz
+	extz	xwa
+	ld	xbc, Filename_TemplateArea_0x64
+	add	xbc, xwa
+	ld	a, (xbc)
+	exts	wa
+	cp	wa, hl
+	jr	z, ProcessRecord_Match2Next
+	ld	wa, (xsp + 10)
+	extz	xwa
+	ld	xbc, 0x52
+	call	InitializeKubo_Helper
+	ld	xwa, 0x25eb2
+	add	xwa, xhl
+	setm	5, (xwa + 80)
+	lda	xwa, (xwa + 14)
+	ld	xbc, Filename_TemplateArea_0x70
+	jrl	ProcessRecord_CopyPath
 ProcessRecord_Match2Next:
-	.byte 0xde, 0x61, 0xde, 0xdd, 0x67, 0xc0, 0x9f, 0x0a
-	.byte 0x20, 0xe8, 0x12, 0x41, 0x52, 0x00, 0x00, 0x00
-	.byte 0x1d, 0x7f, 0x02, 0xff, 0xf2, 0x02, 0x5f, 0x02
-	.byte 0x30, 0xeb, 0x80, 0xb0, 0xb5, 0xb0, 0xbe
+	inc	1, iz
+	cp	iz, 5:i3
+	jr	c, ProcessRecord_MatchLoop2
+	ld	wa, (xsp + 10)
+	extz	xwa
+	ld	xbc, 0x52
+	call	InitializeKubo_Helper
+	lda	xwa, (0x025f02:24)
+	add	xwa, xhl
+	resm	5, (xwa)
+	setm	6, (xwa)
 ProcessRecord_ReadTimeSig:
-	.byte 0xe8, 0xac, 0xd9, 0xa9, 0x1d, 0xd3, 0x8a, 0xf8
-	.byte 0x1d, 0xef, 0x88, 0xf8, 0xdb, 0x8e, 0xde, 0xee
-	.byte 0x08, 0x1d, 0xef, 0x88, 0xf8, 0xdb, 0xe6, 0x6e
-	.byte 0x5a, 0x9f, 0x0a, 0x20, 0xe8, 0x12, 0x41, 0x52
-	.byte 0x00, 0x00, 0x00, 0x1d, 0x7f, 0x02, 0xff, 0xf2
-	.byte 0x02, 0x5f, 0x02, 0x30, 0xeb, 0x80, 0xb0, 0xb7
+	ld	xwa, 4:i3
+	ld	bc, 1:i3
+	call	FileIO_SeekAndReadBlock
+	call	FileIO_ReadByte
+	ld	iz, hl
+	sll	iz, 8
+	call	FileIO_ReadByte
+	or	iz, hl
+	jr	nz, ProcessRecord_CheckTempo
+	ld	wa, (xsp + 10)
+	extz	xwa
+	ld	xbc, 0x52
+	call	InitializeKubo_Helper
+	lda	xwa, (0x025f02:24)
+	add	xwa, xhl
+	resm	7, (xwa)
 ProcessRecord_ReadAfterTimeSig:
 	ld xwa, 4:i3
 	ld bc, 1:i3
@@ -6341,13 +6541,22 @@ ProcessRecord_NoTrackName:
 	ld	xbc, 15336632
 	jr	ProcessRecord_CopyAndClose
 ProcessRecord_SearchTrackName:
-	.byte 0xf2, 0xf6, 0x03, 0xea, 0x31, 0xaf, 0x04, 0x20
-	.byte 0x1e, 0xf1, 0xf0, 0xbf, 0x08, 0x53, 0x9f, 0x0a
-	.byte 0x20, 0xe8, 0x12, 0xf2, 0xb2, 0x5e, 0x02, 0x36
-	.byte 0x41, 0x52, 0x00, 0x00, 0x00, 0x1d, 0x7f, 0x02
-	.byte 0xff, 0xee, 0x88, 0xeb, 0x80, 0xb8, 0x0e, 0x30
-	.byte 0x9f, 0x08, 0x3f, 0x00, 0x00, 0x6e, 0x07, 0x41
-	.byte 0xb8, 0x04, 0xea, 0x00, 0x68, 0x03
+	lda	xbc, (SeqFileTypeCode_Lsw_0x6A:24)
+	ld	xwa, (xsp + 4)
+	calr	FileIO_SearchFile
+	ld	(xsp + 8), hl
+	ld	wa, (xsp + 10)
+	extz	xwa
+	lda	xiz, (0x025eb2:24)
+	ld	xbc, 0x52
+	call	InitializeKubo_Helper
+	ld	xwa, xiz
+	add	xwa, xhl
+	lda	xwa, (xwa + 14)
+	cpw	(xsp + 8), 0x0
+	jr	nz, ProcessRecord_UseTrackName
+	ld	xbc, Filename_TemplateArea_0x70
+	jr	ProcessRecord_CopyAndClose
 ProcessRecord_UseTrackName:
 	ld xbc, (xsp + 4)
 
@@ -7523,7 +7732,8 @@ GetEntryRefresh_ComputeOffset:
 	lda	xwa, (155328:24)
 	add	xwa, xhl
 	cp	(xwa), 0
-	.byte 0xf2, 0xf6, 0xa5, 0xf8, 0xe6	; differs from v10 here and llvm-objdump cannot read it
+; differs from v10 here and llvm-objdump cannot read it
+	call	z, (FileIO_RefreshFileNames:24)
 	ld	wa, (160238:24)
 	ld	bc, iz
 	sub	bc, wa
@@ -8204,8 +8414,9 @@ CancelOperationCleanup:
 	ld (0x28a7:16), a
 
 CancelOp_ClearSeq:
-	.byte 0xf1, 0xa7, 0x28, 0xb3, 0x1d, 0xd2, 0x93, 0xf3
-	.byte 0x1b, 0x5c, 0xb3, 0xfd
+	res	3, (0x28a7:16)
+	call	SeqAcc_InitPlaybackState
+	jp	0xfdb35c
 SignalProgressUpdate:
 	call CPanel_InitButtonState_SaveRegs
 	jp RefreshSwEvent
@@ -8501,7 +8712,7 @@ FileIO_ErrorCodeByteBlock:
 	ret	z
 	cp	(49121:16), 65
 	ret	nz
-	.byte 0xf1, 0xe3, 0xbf, 0xc8
+	bitda	0, (0xbfe3)
 	ret	z
 	ld	c, (35994:16)
 	cp	c, 16
@@ -8509,7 +8720,7 @@ FileIO_ErrorCodeByteBlock:
 	cp	c, 22
 	ret	ule
 FileIO_ErrorCodeByteBlock_Entry:
-	.byte 0xf1, 0xe2, 0xbf, 0xc8
+	bitda	0, (0xbfe2)
 	jr	z, FileIO_ErrorCodeByteBlock_Skip5
 	cp	(35992:16), 6
 	jr	nz, FileIO_ErrorCodeByteBlock_Skip
@@ -8547,9 +8758,9 @@ FileIO_ErrorCodeByteBlock_Skip5:
 	ld	a, (213234:24)
 	cp	(35992:16), 1
 	jr	nz, FileIO_ErrorCodeByteBlock_Skip7
-	.byte 0xf1, 0x20, 0x04, 0xca
+	bitda	2, (0x420)
 	ret	nz
-	.byte 0xf1, 0x1f, 0x04, 0xca
+	bitda	2, (0x41f)
 	ret	nz
 	ld	c, a
 	cp	a, 0:i3

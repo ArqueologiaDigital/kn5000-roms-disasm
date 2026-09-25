@@ -549,6 +549,10 @@ class Porter:
                 out.append("%s:" % lab)
             it = byitem.get(a)
             if it is not None:
+                # dst notes of bytes INSIDE this item (their lines were
+                # mid-instruction) are kept, just before it
+                for x in range(a + 1, a + it[1]):
+                    out.extend(notes.pop(x, []))
                 tag = "; [%s] " % self.src
                 for c in it[6]:
                     out.append(tag + c.lstrip(";").strip())
