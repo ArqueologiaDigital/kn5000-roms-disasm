@@ -64,8 +64,18 @@ MACROS = """\
 	.byte	\\fld, \\trim
 	.short	\\coarse
 .endm
+; One SET descriptor (ToneDB_EnvDescTable, 15 bytes): flags, key-map and
+; zone-record chunk labels, key range lo..hi, root key, LE16 base pitch, +0x0E.
+.macro ToneSetDesc flags, keymap, zones, lo, hi, root, pitch, e
+	.byte	\\flags
+	.long	\\keymap - ToneDB_Base, \\zones - ToneDB_Base
+	.byte	\\lo, \\hi, \\root
+	.short	\\pitch
+	.byte	\\e
+.endm
 """
 MACRO_MARK = ".macro ToneEnvZone4 sel, fld, trim"
+DESC_MARK = ".macro ToneSetDesc flags, keymap, zones"
 
 
 def pad(code, comment, col=COL):
@@ -112,12 +122,19 @@ def spell(lines, sym):
             for v in re.findall(NUM, args):
                 out += (int(v, 0) & 0xFFFF).to_bytes(2, "little")
         elif op == ".long":
-            m = re.fullmatch(r'(\w+) - ToneDB_Base', args)
-            if m:
-                out += (sym[m.group(1)] - DB).to_bytes(4, "little")
-            else:
-                for v in re.findall(NUM, args):
-                    out += (int(v, 0) & 0xFFFFFFFF).to_bytes(4, "little")
+            for part in args.split(","):
+                part = part.strip()
+                m = re.fullmatch(r'(\w+) - ToneDB_Base', part)
+                if m:
+                    out += (sym[m.group(1)] - DB).to_bytes(4, "little")
+                else:
+                    out += (int(part, 0) & 0xFFFFFFFF).to_bytes(4, "little")
+        elif op == "ToneSetDesc":
+            a = [x.strip() for x in args.split(",")]
+            out.append(int(a[0], 0))
+            out += (sym[a[1]] - DB).to_bytes(4, "little") + (sym[a[2]] - DB).to_bytes(4, "little")
+            out += bytes([int(a[3], 0), int(a[4], 0), int(a[5], 0)])
+            out += int(a[6], 0).to_bytes(2, "little") + bytes([int(a[7], 0)])
         elif op in ("ToneEnvZone4", "ToneEnvZone6"):
             v = [int(x, 0) for x in re.findall(NUM, args)]
             out += (v[0] & 0xFFFF).to_bytes(2, "little") + bytes([v[1] & 0xFF, v[2] & 0xFF])
@@ -326,6 +343,33 @@ def main():
     changed = 0
     while i < len(lines):
         ln = lines[i]
+        if ln.startswith("ToneDB_EnvDescTable:"):
+            out.append(ln)
+            i += 1
+            base = sym["ToneDB_EnvDescTable"]
+            for k in range(487):
+                d = D["desc"][k]
+                if lines[i].lstrip().startswith("ToneSetDesc"):
+                    old = [lines[i]]
+                    i += 1
+                else:
+                    old = lines[i:i + 3]
+                    i += 3
+                want = spell(old, sym)
+                if want != blob(base + 15 * k, 15):
+                    raise SystemExit("EnvDescTable record %d: old rows do not spell the ROM" % k)
+                cmt = old[0].split(";", 1)[1].strip() if ";" in old[0] else str(k)
+                code = "\tToneSetDesc\t0x%02x, ToneEnv_Rec%03d_A, ToneEnv_Rec%03d_B, %d, %d, 0x%02x, 0x%04x, %d" % (
+                    d["f"], k, k, d["lo"], d["hi"], d["root"], d["bp"], d["e"])
+                assert sym["ToneEnv_Rec%03d_A" % k] == d["A"] and sym["ToneEnv_Rec%03d_B" % k] == d["B"]
+                row = code + "\t; " + cmt
+                if spell([row], sym) != want:
+                    raise SystemExit("EnvDescTable record %d: new row spells different bytes" % k)
+                if [row] != old:
+                    changed += 1
+                out.append(row)
+            n_obj["EnvDesc"] += 487
+            continue
         m = LABEL.match(ln)
         if not m:
             out.append(ln)
@@ -368,6 +412,10 @@ def main():
         n_obj[kind] += 1
         i = j
     text = "\n".join(out)
+    if MACRO_MARK in text and DESC_MARK not in text:
+        zend = text.index(".endm\n", text.index(".macro ToneEnvZone6")) + len(".endm\n")
+        dm = MACROS[MACROS.index("; One SET descriptor"):]
+        text = text[:zend] + dm + text[zend:]
     if MACRO_MARK not in text:
         anchor = "\t.org 0x855A48 - 0x800000, 0xff\n"
         assert text.count(anchor) == 1

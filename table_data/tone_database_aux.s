@@ -75,6 +75,15 @@
 	.byte	\fld, \trim
 	.short	\coarse
 .endm
+; One SET descriptor (ToneDB_EnvDescTable, 15 bytes): flags, key-map and
+; zone-record chunk labels, key range lo..hi, root key, LE16 base pitch, +0x0E.
+.macro ToneSetDesc flags, keymap, zones, lo, hi, root, pitch, e
+	.byte	\flags
+	.long	\keymap - ToneDB_Base, \zones - ToneDB_Base
+	.byte	\lo, \hi, \root
+	.short	\pitch
+	.byte	\e
+.endm
 
 ; Offsets stored inside the tone database are relative to its load base
 ; ToneDB_Base (ROM 0x830000 = SubCPU RAM 0x50000), defined as a label in
@@ -802,1468 +811,504 @@ ToneDB_MixerDefaultTable:
 ;
 ; The 2x487 offsets are all distinct and exactly tile the ToneEnv data region
 ; 0x85B09D-0x863078 (974 chunks); the chunk header below has their layout.
+; ROWS (2026-09-25): one ToneSetDesc row per record -- the macro at the top of
+; this file spells flags, key-map chunk, zone chunk, key range lo..hi, root key,
+; LE16 base pitch and +0x0E, in record order; the trailing number is the record.
+; SEARCHED 2026-09-25 for a reader of +0x0E and of flags bit 3 in the v1.42
+; subcpu source: every displacement-14 access ((xR + 14) and the 0x000e forms),
+; every word read at +0x0D and long read at +0x0B..+0x0E, and every `bit 3` /
+; `bitm 3` / `and ..., 0x08`.  Each hit traces to another base (voice slot,
+; tone-generator staging block, operator slot, the 0x041343 mode words); the
+; descriptor pointer itself lives at voice slot +0x1F and part +0x76.  Both
+; "UNIDENTIFIED" admissions above therefore stand, with that search stated.
 ToneDB_EnvDescTable:
-	.byte	0x80	; 0
-	.long	ToneEnv_Rec000_A - ToneDB_Base, ToneEnv_Rec000_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 1
-	.long	ToneEnv_Rec001_A - ToneDB_Base, ToneEnv_Rec001_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 2
-	.long	ToneEnv_Rec002_A - ToneDB_Base, ToneEnv_Rec002_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 3
-	.long	ToneEnv_Rec003_A - ToneDB_Base, ToneEnv_Rec003_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 4
-	.long	ToneEnv_Rec004_A - ToneDB_Base, ToneEnv_Rec004_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 5
-	.long	ToneEnv_Rec005_A - ToneDB_Base, ToneEnv_Rec005_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 6
-	.long	ToneEnv_Rec006_A - ToneDB_Base, ToneEnv_Rec006_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 7
-	.long	ToneEnv_Rec007_A - ToneDB_Base, ToneEnv_Rec007_B - ToneDB_Base
-	.byte	0x18, 0x56, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 8
-	.long	ToneEnv_Rec008_A - ToneDB_Base, ToneEnv_Rec008_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 9
-	.long	ToneEnv_Rec009_A - ToneDB_Base, ToneEnv_Rec009_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 10
-	.long	ToneEnv_Rec010_A - ToneDB_Base, ToneEnv_Rec010_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 11
-	.long	ToneEnv_Rec011_A - ToneDB_Base, ToneEnv_Rec011_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 12
-	.long	ToneEnv_Rec012_A - ToneDB_Base, ToneEnv_Rec012_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 13
-	.long	ToneEnv_Rec013_A - ToneDB_Base, ToneEnv_Rec013_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 14
-	.long	ToneEnv_Rec014_A - ToneDB_Base, ToneEnv_Rec014_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 15
-	.long	ToneEnv_Rec015_A - ToneDB_Base, ToneEnv_Rec015_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 16
-	.long	ToneEnv_Rec016_A - ToneDB_Base, ToneEnv_Rec016_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 17
-	.long	ToneEnv_Rec017_A - ToneDB_Base, ToneEnv_Rec017_B - ToneDB_Base
-	.byte	0x0e, 0x5c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x01	; 18
-	.long	ToneEnv_Rec018_A - ToneDB_Base, ToneEnv_Rec018_B - ToneDB_Base
-	.byte	0x0e, 0x5c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 19
-	.long	ToneEnv_Rec019_A - ToneDB_Base, ToneEnv_Rec019_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 20
-	.long	ToneEnv_Rec020_A - ToneDB_Base, ToneEnv_Rec020_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 21
-	.long	ToneEnv_Rec021_A - ToneDB_Base, ToneEnv_Rec021_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 22
-	.long	ToneEnv_Rec022_A - ToneDB_Base, ToneEnv_Rec022_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 23
-	.long	ToneEnv_Rec023_A - ToneDB_Base, ToneEnv_Rec023_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 24
-	.long	ToneEnv_Rec024_A - ToneDB_Base, ToneEnv_Rec024_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 25
-	.long	ToneEnv_Rec025_A - ToneDB_Base, ToneEnv_Rec025_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 26
-	.long	ToneEnv_Rec026_A - ToneDB_Base, ToneEnv_Rec026_B - ToneDB_Base
-	.byte	0x0c, 0x4e, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 27
-	.long	ToneEnv_Rec027_A - ToneDB_Base, ToneEnv_Rec027_B - ToneDB_Base
-	.byte	0x0c, 0x4e, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 28
-	.long	ToneEnv_Rec028_A - ToneDB_Base, ToneEnv_Rec028_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 29
-	.long	ToneEnv_Rec029_A - ToneDB_Base, ToneEnv_Rec029_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 30
-	.long	ToneEnv_Rec030_A - ToneDB_Base, ToneEnv_Rec030_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 31
-	.long	ToneEnv_Rec031_A - ToneDB_Base, ToneEnv_Rec031_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 32
-	.long	ToneEnv_Rec032_A - ToneDB_Base, ToneEnv_Rec032_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 33
-	.long	ToneEnv_Rec033_A - ToneDB_Base, ToneEnv_Rec033_B - ToneDB_Base
-	.byte	0x0c, 0x64, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 34
-	.long	ToneEnv_Rec034_A - ToneDB_Base, ToneEnv_Rec034_B - ToneDB_Base
-	.byte	0x0c, 0x64, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 35
-	.long	ToneEnv_Rec035_A - ToneDB_Base, ToneEnv_Rec035_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x01	; 36
-	.long	ToneEnv_Rec036_A - ToneDB_Base, ToneEnv_Rec036_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 37
-	.long	ToneEnv_Rec037_A - ToneDB_Base, ToneEnv_Rec037_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 38
-	.long	ToneEnv_Rec038_A - ToneDB_Base, ToneEnv_Rec038_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 39
-	.long	ToneEnv_Rec039_A - ToneDB_Base, ToneEnv_Rec039_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 40
-	.long	ToneEnv_Rec040_A - ToneDB_Base, ToneEnv_Rec040_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 41
-	.long	ToneEnv_Rec041_A - ToneDB_Base, ToneEnv_Rec041_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 42
-	.long	ToneEnv_Rec042_A - ToneDB_Base, ToneEnv_Rec042_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 43
-	.long	ToneEnv_Rec043_A - ToneDB_Base, ToneEnv_Rec043_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 44
-	.long	ToneEnv_Rec044_A - ToneDB_Base, ToneEnv_Rec044_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 45
-	.long	ToneEnv_Rec045_A - ToneDB_Base, ToneEnv_Rec045_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 46
-	.long	ToneEnv_Rec046_A - ToneDB_Base, ToneEnv_Rec046_B - ToneDB_Base
-	.byte	0x11, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 47
-	.long	ToneEnv_Rec047_A - ToneDB_Base, ToneEnv_Rec047_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 48
-	.long	ToneEnv_Rec048_A - ToneDB_Base, ToneEnv_Rec048_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x02	; 49
-	.long	ToneEnv_Rec049_A - ToneDB_Base, ToneEnv_Rec049_B - ToneDB_Base
-	.byte	0x0c, 0x71, 0x08, 0x7f, 0x41, 0x00
-	.byte	0x02	; 50
-	.long	ToneEnv_Rec050_A - ToneDB_Base, ToneEnv_Rec050_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x08, 0x7f, 0x41, 0x00
-	.byte	0x00	; 51
-	.long	ToneEnv_Rec051_A - ToneDB_Base, ToneEnv_Rec051_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x02	; 52
-	.long	ToneEnv_Rec052_A - ToneDB_Base, ToneEnv_Rec052_B - ToneDB_Base
-	.byte	0x0c, 0x71, 0x08, 0x7f, 0x41, 0x00
-	.byte	0x80	; 53
-	.long	ToneEnv_Rec053_A - ToneDB_Base, ToneEnv_Rec053_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 54
-	.long	ToneEnv_Rec054_A - ToneDB_Base, ToneEnv_Rec054_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 55
-	.long	ToneEnv_Rec055_A - ToneDB_Base, ToneEnv_Rec055_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 56
-	.long	ToneEnv_Rec056_A - ToneDB_Base, ToneEnv_Rec056_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 57
-	.long	ToneEnv_Rec057_A - ToneDB_Base, ToneEnv_Rec057_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 58
-	.long	ToneEnv_Rec058_A - ToneDB_Base, ToneEnv_Rec058_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 59
-	.long	ToneEnv_Rec059_A - ToneDB_Base, ToneEnv_Rec059_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 60
-	.long	ToneEnv_Rec060_A - ToneDB_Base, ToneEnv_Rec060_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x02	; 61
-	.long	ToneEnv_Rec061_A - ToneDB_Base, ToneEnv_Rec061_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x10, 0x7f, 0x41, 0x00
-	.byte	0x80	; 62
-	.long	ToneEnv_Rec062_A - ToneDB_Base, ToneEnv_Rec062_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x02	; 63
-	.long	ToneEnv_Rec063_A - ToneDB_Base, ToneEnv_Rec063_B - ToneDB_Base
-	.byte	0x0c, 0x71, 0x10, 0x7f, 0x41, 0x00
-	.byte	0x02	; 64
-	.long	ToneEnv_Rec064_A - ToneDB_Base, ToneEnv_Rec064_B - ToneDB_Base
-	.byte	0x0c, 0x71, 0x10, 0x7f, 0x41, 0x00
-	.byte	0x00	; 65
-	.long	ToneEnv_Rec065_A - ToneDB_Base, ToneEnv_Rec065_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x02	; 66
-	.long	ToneEnv_Rec066_A - ToneDB_Base, ToneEnv_Rec066_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x00, 0x7f, 0x41, 0x00
-	.byte	0x02	; 67
-	.long	ToneEnv_Rec067_A - ToneDB_Base, ToneEnv_Rec067_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x00, 0x7f, 0x41, 0x00
-	.byte	0x02	; 68
-	.long	ToneEnv_Rec068_A - ToneDB_Base, ToneEnv_Rec068_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x00, 0x7f, 0x41, 0x00
-	.byte	0x00	; 69
-	.long	ToneEnv_Rec069_A - ToneDB_Base, ToneEnv_Rec069_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 70
-	.long	ToneEnv_Rec070_A - ToneDB_Base, ToneEnv_Rec070_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 71
-	.long	ToneEnv_Rec071_A - ToneDB_Base, ToneEnv_Rec071_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 72
-	.long	ToneEnv_Rec072_A - ToneDB_Base, ToneEnv_Rec072_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x02	; 73
-	.long	ToneEnv_Rec073_A - ToneDB_Base, ToneEnv_Rec073_B - ToneDB_Base
-	.byte	0x0c, 0x71, 0x00, 0x7f, 0x41, 0x00
-	.byte	0x02	; 74
-	.long	ToneEnv_Rec074_A - ToneDB_Base, ToneEnv_Rec074_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x10, 0x7f, 0x41, 0x00
-	.byte	0x02	; 75
-	.long	ToneEnv_Rec075_A - ToneDB_Base, ToneEnv_Rec075_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x10, 0x7f, 0x41, 0x00
-	.byte	0x00	; 76
-	.long	ToneEnv_Rec076_A - ToneDB_Base, ToneEnv_Rec076_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 77
-	.long	ToneEnv_Rec077_A - ToneDB_Base, ToneEnv_Rec077_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x02	; 78
-	.long	ToneEnv_Rec078_A - ToneDB_Base, ToneEnv_Rec078_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x00, 0x7f, 0x41, 0x00
-	.byte	0x00	; 79
-	.long	ToneEnv_Rec079_A - ToneDB_Base, ToneEnv_Rec079_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 80
-	.long	ToneEnv_Rec080_A - ToneDB_Base, ToneEnv_Rec080_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 81
-	.long	ToneEnv_Rec081_A - ToneDB_Base, ToneEnv_Rec081_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 82
-	.long	ToneEnv_Rec082_A - ToneDB_Base, ToneEnv_Rec082_B - ToneDB_Base
-	.byte	0x10, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 83
-	.long	ToneEnv_Rec083_A - ToneDB_Base, ToneEnv_Rec083_B - ToneDB_Base
-	.byte	0x0c, 0x6d, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 84
-	.long	ToneEnv_Rec084_A - ToneDB_Base, ToneEnv_Rec084_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 85
-	.long	ToneEnv_Rec085_A - ToneDB_Base, ToneEnv_Rec085_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 86
-	.long	ToneEnv_Rec086_A - ToneDB_Base, ToneEnv_Rec086_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 87
-	.long	ToneEnv_Rec087_A - ToneDB_Base, ToneEnv_Rec087_B - ToneDB_Base
-	.byte	0x11, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 88
-	.long	ToneEnv_Rec088_A - ToneDB_Base, ToneEnv_Rec088_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 89
-	.long	ToneEnv_Rec089_A - ToneDB_Base, ToneEnv_Rec089_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 90
-	.long	ToneEnv_Rec090_A - ToneDB_Base, ToneEnv_Rec090_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 91
-	.long	ToneEnv_Rec091_A - ToneDB_Base, ToneEnv_Rec091_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 92
-	.long	ToneEnv_Rec092_A - ToneDB_Base, ToneEnv_Rec092_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 93
-	.long	ToneEnv_Rec093_A - ToneDB_Base, ToneEnv_Rec093_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 94
-	.long	ToneEnv_Rec094_A - ToneDB_Base, ToneEnv_Rec094_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 95
-	.long	ToneEnv_Rec095_A - ToneDB_Base, ToneEnv_Rec095_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 96
-	.long	ToneEnv_Rec096_A - ToneDB_Base, ToneEnv_Rec096_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 97
-	.long	ToneEnv_Rec097_A - ToneDB_Base, ToneEnv_Rec097_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 98
-	.long	ToneEnv_Rec098_A - ToneDB_Base, ToneEnv_Rec098_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 99
-	.long	ToneEnv_Rec099_A - ToneDB_Base, ToneEnv_Rec099_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 100
-	.long	ToneEnv_Rec100_A - ToneDB_Base, ToneEnv_Rec100_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 101
-	.long	ToneEnv_Rec101_A - ToneDB_Base, ToneEnv_Rec101_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 102
-	.long	ToneEnv_Rec102_A - ToneDB_Base, ToneEnv_Rec102_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 103
-	.long	ToneEnv_Rec103_A - ToneDB_Base, ToneEnv_Rec103_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 104
-	.long	ToneEnv_Rec104_A - ToneDB_Base, ToneEnv_Rec104_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 105
-	.long	ToneEnv_Rec105_A - ToneDB_Base, ToneEnv_Rec105_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 106
-	.long	ToneEnv_Rec106_A - ToneDB_Base, ToneEnv_Rec106_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 107
-	.long	ToneEnv_Rec107_A - ToneDB_Base, ToneEnv_Rec107_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 108
-	.long	ToneEnv_Rec108_A - ToneDB_Base, ToneEnv_Rec108_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 109
-	.long	ToneEnv_Rec109_A - ToneDB_Base, ToneEnv_Rec109_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 110
-	.long	ToneEnv_Rec110_A - ToneDB_Base, ToneEnv_Rec110_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 111
-	.long	ToneEnv_Rec111_A - ToneDB_Base, ToneEnv_Rec111_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 112
-	.long	ToneEnv_Rec112_A - ToneDB_Base, ToneEnv_Rec112_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 113
-	.long	ToneEnv_Rec113_A - ToneDB_Base, ToneEnv_Rec113_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 114
-	.long	ToneEnv_Rec114_A - ToneDB_Base, ToneEnv_Rec114_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 115
-	.long	ToneEnv_Rec115_A - ToneDB_Base, ToneEnv_Rec115_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 116
-	.long	ToneEnv_Rec116_A - ToneDB_Base, ToneEnv_Rec116_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 117
-	.long	ToneEnv_Rec117_A - ToneDB_Base, ToneEnv_Rec117_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 118
-	.long	ToneEnv_Rec118_A - ToneDB_Base, ToneEnv_Rec118_B - ToneDB_Base
-	.byte	0x0c, 0x68, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 119
-	.long	ToneEnv_Rec119_A - ToneDB_Base, ToneEnv_Rec119_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 120
-	.long	ToneEnv_Rec120_A - ToneDB_Base, ToneEnv_Rec120_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 121
-	.long	ToneEnv_Rec121_A - ToneDB_Base, ToneEnv_Rec121_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 122
-	.long	ToneEnv_Rec122_A - ToneDB_Base, ToneEnv_Rec122_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 123
-	.long	ToneEnv_Rec123_A - ToneDB_Base, ToneEnv_Rec123_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 124
-	.long	ToneEnv_Rec124_A - ToneDB_Base, ToneEnv_Rec124_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 125
-	.long	ToneEnv_Rec125_A - ToneDB_Base, ToneEnv_Rec125_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 126
-	.long	ToneEnv_Rec126_A - ToneDB_Base, ToneEnv_Rec126_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 127
-	.long	ToneEnv_Rec127_A - ToneDB_Base, ToneEnv_Rec127_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 128
-	.long	ToneEnv_Rec128_A - ToneDB_Base, ToneEnv_Rec128_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 129
-	.long	ToneEnv_Rec129_A - ToneDB_Base, ToneEnv_Rec129_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 130
-	.long	ToneEnv_Rec130_A - ToneDB_Base, ToneEnv_Rec130_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 131
-	.long	ToneEnv_Rec131_A - ToneDB_Base, ToneEnv_Rec131_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 132
-	.long	ToneEnv_Rec132_A - ToneDB_Base, ToneEnv_Rec132_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 133
-	.long	ToneEnv_Rec133_A - ToneDB_Base, ToneEnv_Rec133_B - ToneDB_Base
-	.byte	0x0c, 0x68, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 134
-	.long	ToneEnv_Rec134_A - ToneDB_Base, ToneEnv_Rec134_B - ToneDB_Base
-	.byte	0x0c, 0x70, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 135
-	.long	ToneEnv_Rec135_A - ToneDB_Base, ToneEnv_Rec135_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 136
-	.long	ToneEnv_Rec136_A - ToneDB_Base, ToneEnv_Rec136_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 137
-	.long	ToneEnv_Rec137_A - ToneDB_Base, ToneEnv_Rec137_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 138
-	.long	ToneEnv_Rec138_A - ToneDB_Base, ToneEnv_Rec138_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 139
-	.long	ToneEnv_Rec139_A - ToneDB_Base, ToneEnv_Rec139_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 140
-	.long	ToneEnv_Rec140_A - ToneDB_Base, ToneEnv_Rec140_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 141
-	.long	ToneEnv_Rec141_A - ToneDB_Base, ToneEnv_Rec141_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 142
-	.long	ToneEnv_Rec142_A - ToneDB_Base, ToneEnv_Rec142_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 143
-	.long	ToneEnv_Rec143_A - ToneDB_Base, ToneEnv_Rec143_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 144
-	.long	ToneEnv_Rec144_A - ToneDB_Base, ToneEnv_Rec144_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 145
-	.long	ToneEnv_Rec145_A - ToneDB_Base, ToneEnv_Rec145_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 146
-	.long	ToneEnv_Rec146_A - ToneDB_Base, ToneEnv_Rec146_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 147
-	.long	ToneEnv_Rec147_A - ToneDB_Base, ToneEnv_Rec147_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 148
-	.long	ToneEnv_Rec148_A - ToneDB_Base, ToneEnv_Rec148_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 149
-	.long	ToneEnv_Rec149_A - ToneDB_Base, ToneEnv_Rec149_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 150
-	.long	ToneEnv_Rec150_A - ToneDB_Base, ToneEnv_Rec150_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 151
-	.long	ToneEnv_Rec151_A - ToneDB_Base, ToneEnv_Rec151_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 152
-	.long	ToneEnv_Rec152_A - ToneDB_Base, ToneEnv_Rec152_B - ToneDB_Base
-	.byte	0x0c, 0x71, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 153
-	.long	ToneEnv_Rec153_A - ToneDB_Base, ToneEnv_Rec153_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 154
-	.long	ToneEnv_Rec154_A - ToneDB_Base, ToneEnv_Rec154_B - ToneDB_Base
-	.byte	0x0c, 0x54, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 155
-	.long	ToneEnv_Rec155_A - ToneDB_Base, ToneEnv_Rec155_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 156
-	.long	ToneEnv_Rec156_A - ToneDB_Base, ToneEnv_Rec156_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 157
-	.long	ToneEnv_Rec157_A - ToneDB_Base, ToneEnv_Rec157_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 158
-	.long	ToneEnv_Rec158_A - ToneDB_Base, ToneEnv_Rec158_B - ToneDB_Base
-	.byte	0x0c, 0x4d, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 159
-	.long	ToneEnv_Rec159_A - ToneDB_Base, ToneEnv_Rec159_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 160
-	.long	ToneEnv_Rec160_A - ToneDB_Base, ToneEnv_Rec160_B - ToneDB_Base
-	.byte	0x0c, 0x4d, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 161
-	.long	ToneEnv_Rec161_A - ToneDB_Base, ToneEnv_Rec161_B - ToneDB_Base
-	.byte	0x0c, 0x54, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 162
-	.long	ToneEnv_Rec162_A - ToneDB_Base, ToneEnv_Rec162_B - ToneDB_Base
-	.byte	0x10, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 163
-	.long	ToneEnv_Rec163_A - ToneDB_Base, ToneEnv_Rec163_B - ToneDB_Base
-	.byte	0x10, 0x5d, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 164
-	.long	ToneEnv_Rec164_A - ToneDB_Base, ToneEnv_Rec164_B - ToneDB_Base
-	.byte	0x10, 0x5c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 165
-	.long	ToneEnv_Rec165_A - ToneDB_Base, ToneEnv_Rec165_B - ToneDB_Base
-	.byte	0x10, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 166
-	.long	ToneEnv_Rec166_A - ToneDB_Base, ToneEnv_Rec166_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 167
-	.long	ToneEnv_Rec167_A - ToneDB_Base, ToneEnv_Rec167_B - ToneDB_Base
-	.byte	0x0c, 0x63, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 168
-	.long	ToneEnv_Rec168_A - ToneDB_Base, ToneEnv_Rec168_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 169
-	.long	ToneEnv_Rec169_A - ToneDB_Base, ToneEnv_Rec169_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 170
-	.long	ToneEnv_Rec170_A - ToneDB_Base, ToneEnv_Rec170_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 171
-	.long	ToneEnv_Rec171_A - ToneDB_Base, ToneEnv_Rec171_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 172
-	.long	ToneEnv_Rec172_A - ToneDB_Base, ToneEnv_Rec172_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 173
-	.long	ToneEnv_Rec173_A - ToneDB_Base, ToneEnv_Rec173_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 174
-	.long	ToneEnv_Rec174_A - ToneDB_Base, ToneEnv_Rec174_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 175
-	.long	ToneEnv_Rec175_A - ToneDB_Base, ToneEnv_Rec175_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 176
-	.long	ToneEnv_Rec176_A - ToneDB_Base, ToneEnv_Rec176_B - ToneDB_Base
-	.byte	0x0e, 0x6f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 177
-	.long	ToneEnv_Rec177_A - ToneDB_Base, ToneEnv_Rec177_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 178
-	.long	ToneEnv_Rec178_A - ToneDB_Base, ToneEnv_Rec178_B - ToneDB_Base
-	.byte	0x09, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 179
-	.long	ToneEnv_Rec179_A - ToneDB_Base, ToneEnv_Rec179_B - ToneDB_Base
-	.byte	0x09, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 180
-	.long	ToneEnv_Rec180_A - ToneDB_Base, ToneEnv_Rec180_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 181
-	.long	ToneEnv_Rec181_A - ToneDB_Base, ToneEnv_Rec181_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 182
-	.long	ToneEnv_Rec182_A - ToneDB_Base, ToneEnv_Rec182_B - ToneDB_Base
-	.byte	0x10, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 183
-	.long	ToneEnv_Rec183_A - ToneDB_Base, ToneEnv_Rec183_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 184
-	.long	ToneEnv_Rec184_A - ToneDB_Base, ToneEnv_Rec184_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 185
-	.long	ToneEnv_Rec185_A - ToneDB_Base, ToneEnv_Rec185_B - ToneDB_Base
-	.byte	0x10, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 186
-	.long	ToneEnv_Rec186_A - ToneDB_Base, ToneEnv_Rec186_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 187
-	.long	ToneEnv_Rec187_A - ToneDB_Base, ToneEnv_Rec187_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 188
-	.long	ToneEnv_Rec188_A - ToneDB_Base, ToneEnv_Rec188_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 189
-	.long	ToneEnv_Rec189_A - ToneDB_Base, ToneEnv_Rec189_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 190
-	.long	ToneEnv_Rec190_A - ToneDB_Base, ToneEnv_Rec190_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 191
-	.long	ToneEnv_Rec191_A - ToneDB_Base, ToneEnv_Rec191_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 192
-	.long	ToneEnv_Rec192_A - ToneDB_Base, ToneEnv_Rec192_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 193
-	.long	ToneEnv_Rec193_A - ToneDB_Base, ToneEnv_Rec193_B - ToneDB_Base
-	.byte	0x0c, 0x68, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 194
-	.long	ToneEnv_Rec194_A - ToneDB_Base, ToneEnv_Rec194_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 195
-	.long	ToneEnv_Rec195_A - ToneDB_Base, ToneEnv_Rec195_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 196
-	.long	ToneEnv_Rec196_A - ToneDB_Base, ToneEnv_Rec196_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 197
-	.long	ToneEnv_Rec197_A - ToneDB_Base, ToneEnv_Rec197_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 198
-	.long	ToneEnv_Rec198_A - ToneDB_Base, ToneEnv_Rec198_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 199
-	.long	ToneEnv_Rec199_A - ToneDB_Base, ToneEnv_Rec199_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 200
-	.long	ToneEnv_Rec200_A - ToneDB_Base, ToneEnv_Rec200_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 201
-	.long	ToneEnv_Rec201_A - ToneDB_Base, ToneEnv_Rec201_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 202
-	.long	ToneEnv_Rec202_A - ToneDB_Base, ToneEnv_Rec202_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 203
-	.long	ToneEnv_Rec203_A - ToneDB_Base, ToneEnv_Rec203_B - ToneDB_Base
-	.byte	0x00, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 204
-	.long	ToneEnv_Rec204_A - ToneDB_Base, ToneEnv_Rec204_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 205
-	.long	ToneEnv_Rec205_A - ToneDB_Base, ToneEnv_Rec205_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 206
-	.long	ToneEnv_Rec206_A - ToneDB_Base, ToneEnv_Rec206_B - ToneDB_Base
-	.byte	0x15, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 207
-	.long	ToneEnv_Rec207_A - ToneDB_Base, ToneEnv_Rec207_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 208
-	.long	ToneEnv_Rec208_A - ToneDB_Base, ToneEnv_Rec208_B - ToneDB_Base
-	.byte	0x11, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 209
-	.long	ToneEnv_Rec209_A - ToneDB_Base, ToneEnv_Rec209_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 210
-	.long	ToneEnv_Rec210_A - ToneDB_Base, ToneEnv_Rec210_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 211
-	.long	ToneEnv_Rec211_A - ToneDB_Base, ToneEnv_Rec211_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 212
-	.long	ToneEnv_Rec212_A - ToneDB_Base, ToneEnv_Rec212_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 213
-	.long	ToneEnv_Rec213_A - ToneDB_Base, ToneEnv_Rec213_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 214
-	.long	ToneEnv_Rec214_A - ToneDB_Base, ToneEnv_Rec214_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 215
-	.long	ToneEnv_Rec215_A - ToneDB_Base, ToneEnv_Rec215_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 216
-	.long	ToneEnv_Rec216_A - ToneDB_Base, ToneEnv_Rec216_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 217
-	.long	ToneEnv_Rec217_A - ToneDB_Base, ToneEnv_Rec217_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 218
-	.long	ToneEnv_Rec218_A - ToneDB_Base, ToneEnv_Rec218_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 219
-	.long	ToneEnv_Rec219_A - ToneDB_Base, ToneEnv_Rec219_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 220
-	.long	ToneEnv_Rec220_A - ToneDB_Base, ToneEnv_Rec220_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 221
-	.long	ToneEnv_Rec221_A - ToneDB_Base, ToneEnv_Rec221_B - ToneDB_Base
-	.byte	0x0c, 0x54, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 222
-	.long	ToneEnv_Rec222_A - ToneDB_Base, ToneEnv_Rec222_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 223
-	.long	ToneEnv_Rec223_A - ToneDB_Base, ToneEnv_Rec223_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 224
-	.long	ToneEnv_Rec224_A - ToneDB_Base, ToneEnv_Rec224_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 225
-	.long	ToneEnv_Rec225_A - ToneDB_Base, ToneEnv_Rec225_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 226
-	.long	ToneEnv_Rec226_A - ToneDB_Base, ToneEnv_Rec226_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 227
-	.long	ToneEnv_Rec227_A - ToneDB_Base, ToneEnv_Rec227_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 228
-	.long	ToneEnv_Rec228_A - ToneDB_Base, ToneEnv_Rec228_B - ToneDB_Base
-	.byte	0x0c, 0x54, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 229
-	.long	ToneEnv_Rec229_A - ToneDB_Base, ToneEnv_Rec229_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 230
-	.long	ToneEnv_Rec230_A - ToneDB_Base, ToneEnv_Rec230_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 231
-	.long	ToneEnv_Rec231_A - ToneDB_Base, ToneEnv_Rec231_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 232
-	.long	ToneEnv_Rec232_A - ToneDB_Base, ToneEnv_Rec232_B - ToneDB_Base
-	.byte	0x0c, 0x54, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 233
-	.long	ToneEnv_Rec233_A - ToneDB_Base, ToneEnv_Rec233_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 234
-	.long	ToneEnv_Rec234_A - ToneDB_Base, ToneEnv_Rec234_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 235
-	.long	ToneEnv_Rec235_A - ToneDB_Base, ToneEnv_Rec235_B - ToneDB_Base
-	.byte	0x0c, 0x41, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 236
-	.long	ToneEnv_Rec236_A - ToneDB_Base, ToneEnv_Rec236_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 237
-	.long	ToneEnv_Rec237_A - ToneDB_Base, ToneEnv_Rec237_B - ToneDB_Base
-	.byte	0x0c, 0x59, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 238
-	.long	ToneEnv_Rec238_A - ToneDB_Base, ToneEnv_Rec238_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 239
-	.long	ToneEnv_Rec239_A - ToneDB_Base, ToneEnv_Rec239_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 240
-	.long	ToneEnv_Rec240_A - ToneDB_Base, ToneEnv_Rec240_B - ToneDB_Base
-	.byte	0x0c, 0x59, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 241
-	.long	ToneEnv_Rec241_A - ToneDB_Base, ToneEnv_Rec241_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 242
-	.long	ToneEnv_Rec242_A - ToneDB_Base, ToneEnv_Rec242_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 243
-	.long	ToneEnv_Rec243_A - ToneDB_Base, ToneEnv_Rec243_B - ToneDB_Base
-	.byte	0x15, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 244
-	.long	ToneEnv_Rec244_A - ToneDB_Base, ToneEnv_Rec244_B - ToneDB_Base
-	.byte	0x0c, 0x67, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 245
-	.long	ToneEnv_Rec245_A - ToneDB_Base, ToneEnv_Rec245_B - ToneDB_Base
-	.byte	0x0c, 0x4f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 246
-	.long	ToneEnv_Rec246_A - ToneDB_Base, ToneEnv_Rec246_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 247
-	.long	ToneEnv_Rec247_A - ToneDB_Base, ToneEnv_Rec247_B - ToneDB_Base
-	.byte	0x1c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 248
-	.long	ToneEnv_Rec248_A - ToneDB_Base, ToneEnv_Rec248_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 249
-	.long	ToneEnv_Rec249_A - ToneDB_Base, ToneEnv_Rec249_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 250
-	.long	ToneEnv_Rec250_A - ToneDB_Base, ToneEnv_Rec250_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 251
-	.long	ToneEnv_Rec251_A - ToneDB_Base, ToneEnv_Rec251_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 252
-	.long	ToneEnv_Rec252_A - ToneDB_Base, ToneEnv_Rec252_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 253
-	.long	ToneEnv_Rec253_A - ToneDB_Base, ToneEnv_Rec253_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 254
-	.long	ToneEnv_Rec254_A - ToneDB_Base, ToneEnv_Rec254_B - ToneDB_Base
-	.byte	0x0c, 0x4f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 255
-	.long	ToneEnv_Rec255_A - ToneDB_Base, ToneEnv_Rec255_B - ToneDB_Base
-	.byte	0x0c, 0x5f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 256
-	.long	ToneEnv_Rec256_A - ToneDB_Base, ToneEnv_Rec256_B - ToneDB_Base
-	.byte	0x0c, 0x4f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 257
-	.long	ToneEnv_Rec257_A - ToneDB_Base, ToneEnv_Rec257_B - ToneDB_Base
-	.byte	0x13, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 258
-	.long	ToneEnv_Rec258_A - ToneDB_Base, ToneEnv_Rec258_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 259
-	.long	ToneEnv_Rec259_A - ToneDB_Base, ToneEnv_Rec259_B - ToneDB_Base
-	.byte	0x10, 0x5a, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 260
-	.long	ToneEnv_Rec260_A - ToneDB_Base, ToneEnv_Rec260_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 261
-	.long	ToneEnv_Rec261_A - ToneDB_Base, ToneEnv_Rec261_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 262
-	.long	ToneEnv_Rec262_A - ToneDB_Base, ToneEnv_Rec262_B - ToneDB_Base
-	.byte	0x18, 0x5b, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 263
-	.long	ToneEnv_Rec263_A - ToneDB_Base, ToneEnv_Rec263_B - ToneDB_Base
-	.byte	0x13, 0x5b, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 264
-	.long	ToneEnv_Rec264_A - ToneDB_Base, ToneEnv_Rec264_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 265
-	.long	ToneEnv_Rec265_A - ToneDB_Base, ToneEnv_Rec265_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 266
-	.long	ToneEnv_Rec266_A - ToneDB_Base, ToneEnv_Rec266_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 267
-	.long	ToneEnv_Rec267_A - ToneDB_Base, ToneEnv_Rec267_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 268
-	.long	ToneEnv_Rec268_A - ToneDB_Base, ToneEnv_Rec268_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 269
-	.long	ToneEnv_Rec269_A - ToneDB_Base, ToneEnv_Rec269_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 270
-	.long	ToneEnv_Rec270_A - ToneDB_Base, ToneEnv_Rec270_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 271
-	.long	ToneEnv_Rec271_A - ToneDB_Base, ToneEnv_Rec271_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 272
-	.long	ToneEnv_Rec272_A - ToneDB_Base, ToneEnv_Rec272_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 273
-	.long	ToneEnv_Rec273_A - ToneDB_Base, ToneEnv_Rec273_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x81	; 274
-	.long	ToneEnv_Rec274_A - ToneDB_Base, ToneEnv_Rec274_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 275
-	.long	ToneEnv_Rec275_A - ToneDB_Base, ToneEnv_Rec275_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x81	; 276
-	.long	ToneEnv_Rec276_A - ToneDB_Base, ToneEnv_Rec276_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 277
-	.long	ToneEnv_Rec277_A - ToneDB_Base, ToneEnv_Rec277_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 278
-	.long	ToneEnv_Rec278_A - ToneDB_Base, ToneEnv_Rec278_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 279
-	.long	ToneEnv_Rec279_A - ToneDB_Base, ToneEnv_Rec279_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 280
-	.long	ToneEnv_Rec280_A - ToneDB_Base, ToneEnv_Rec280_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 281
-	.long	ToneEnv_Rec281_A - ToneDB_Base, ToneEnv_Rec281_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 282
-	.long	ToneEnv_Rec282_A - ToneDB_Base, ToneEnv_Rec282_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 283
-	.long	ToneEnv_Rec283_A - ToneDB_Base, ToneEnv_Rec283_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x81	; 284
-	.long	ToneEnv_Rec284_A - ToneDB_Base, ToneEnv_Rec284_B - ToneDB_Base
-	.byte	0x0c, 0x68, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 285
-	.long	ToneEnv_Rec285_A - ToneDB_Base, ToneEnv_Rec285_B - ToneDB_Base
-	.byte	0x0c, 0x65, 0x42, 0x80, 0x42, 0x00
-	.byte	0x81	; 286
-	.long	ToneEnv_Rec286_A - ToneDB_Base, ToneEnv_Rec286_B - ToneDB_Base
-	.byte	0x0c, 0x65, 0x42, 0x80, 0x42, 0x00
-	.byte	0x81	; 287
-	.long	ToneEnv_Rec287_A - ToneDB_Base, ToneEnv_Rec287_B - ToneDB_Base
-	.byte	0x0c, 0x65, 0x42, 0x80, 0x42, 0x00
-	.byte	0x81	; 288
-	.long	ToneEnv_Rec288_A - ToneDB_Base, ToneEnv_Rec288_B - ToneDB_Base
-	.byte	0x0c, 0x68, 0x42, 0x80, 0x42, 0x00
-	.byte	0x81	; 289
-	.long	ToneEnv_Rec289_A - ToneDB_Base, ToneEnv_Rec289_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 290
-	.long	ToneEnv_Rec290_A - ToneDB_Base, ToneEnv_Rec290_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 291
-	.long	ToneEnv_Rec291_A - ToneDB_Base, ToneEnv_Rec291_B - ToneDB_Base
-	.byte	0x13, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 292
-	.long	ToneEnv_Rec292_A - ToneDB_Base, ToneEnv_Rec292_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 293
-	.long	ToneEnv_Rec293_A - ToneDB_Base, ToneEnv_Rec293_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 294
-	.long	ToneEnv_Rec294_A - ToneDB_Base, ToneEnv_Rec294_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 295
-	.long	ToneEnv_Rec295_A - ToneDB_Base, ToneEnv_Rec295_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 296
-	.long	ToneEnv_Rec296_A - ToneDB_Base, ToneEnv_Rec296_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 297
-	.long	ToneEnv_Rec297_A - ToneDB_Base, ToneEnv_Rec297_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 298
-	.long	ToneEnv_Rec298_A - ToneDB_Base, ToneEnv_Rec298_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 299
-	.long	ToneEnv_Rec299_A - ToneDB_Base, ToneEnv_Rec299_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 300
-	.long	ToneEnv_Rec300_A - ToneDB_Base, ToneEnv_Rec300_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 301
-	.long	ToneEnv_Rec301_A - ToneDB_Base, ToneEnv_Rec301_B - ToneDB_Base
-	.byte	0x0c, 0x6f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 302
-	.long	ToneEnv_Rec302_A - ToneDB_Base, ToneEnv_Rec302_B - ToneDB_Base
-	.byte	0x0c, 0x51, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 303
-	.long	ToneEnv_Rec303_A - ToneDB_Base, ToneEnv_Rec303_B - ToneDB_Base
-	.byte	0x0c, 0x72, 0x42, 0x80, 0x42, 0x00
-	.byte	0x81	; 304
-	.long	ToneEnv_Rec304_A - ToneDB_Base, ToneEnv_Rec304_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 305
-	.long	ToneEnv_Rec305_A - ToneDB_Base, ToneEnv_Rec305_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 306
-	.long	ToneEnv_Rec306_A - ToneDB_Base, ToneEnv_Rec306_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 307
-	.long	ToneEnv_Rec307_A - ToneDB_Base, ToneEnv_Rec307_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x81	; 308
-	.long	ToneEnv_Rec308_A - ToneDB_Base, ToneEnv_Rec308_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 309
-	.long	ToneEnv_Rec309_A - ToneDB_Base, ToneEnv_Rec309_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 310
-	.long	ToneEnv_Rec310_A - ToneDB_Base, ToneEnv_Rec310_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 311
-	.long	ToneEnv_Rec311_A - ToneDB_Base, ToneEnv_Rec311_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 312
-	.long	ToneEnv_Rec312_A - ToneDB_Base, ToneEnv_Rec312_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 313
-	.long	ToneEnv_Rec313_A - ToneDB_Base, ToneEnv_Rec313_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 314
-	.long	ToneEnv_Rec314_A - ToneDB_Base, ToneEnv_Rec314_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 315
-	.long	ToneEnv_Rec315_A - ToneDB_Base, ToneEnv_Rec315_B - ToneDB_Base
-	.byte	0x0c, 0x66, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 316
-	.long	ToneEnv_Rec316_A - ToneDB_Base, ToneEnv_Rec316_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 317
-	.long	ToneEnv_Rec317_A - ToneDB_Base, ToneEnv_Rec317_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 318
-	.long	ToneEnv_Rec318_A - ToneDB_Base, ToneEnv_Rec318_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 319
-	.long	ToneEnv_Rec319_A - ToneDB_Base, ToneEnv_Rec319_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 320
-	.long	ToneEnv_Rec320_A - ToneDB_Base, ToneEnv_Rec320_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 321
-	.long	ToneEnv_Rec321_A - ToneDB_Base, ToneEnv_Rec321_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 322
-	.long	ToneEnv_Rec322_A - ToneDB_Base, ToneEnv_Rec322_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 323
-	.long	ToneEnv_Rec323_A - ToneDB_Base, ToneEnv_Rec323_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 324
-	.long	ToneEnv_Rec324_A - ToneDB_Base, ToneEnv_Rec324_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 325
-	.long	ToneEnv_Rec325_A - ToneDB_Base, ToneEnv_Rec325_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 326
-	.long	ToneEnv_Rec326_A - ToneDB_Base, ToneEnv_Rec326_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 327
-	.long	ToneEnv_Rec327_A - ToneDB_Base, ToneEnv_Rec327_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 328
-	.long	ToneEnv_Rec328_A - ToneDB_Base, ToneEnv_Rec328_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x01	; 329
-	.long	ToneEnv_Rec329_A - ToneDB_Base, ToneEnv_Rec329_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 330
-	.long	ToneEnv_Rec330_A - ToneDB_Base, ToneEnv_Rec330_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 331
-	.long	ToneEnv_Rec331_A - ToneDB_Base, ToneEnv_Rec331_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 332
-	.long	ToneEnv_Rec332_A - ToneDB_Base, ToneEnv_Rec332_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 333
-	.long	ToneEnv_Rec333_A - ToneDB_Base, ToneEnv_Rec333_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 334
-	.long	ToneEnv_Rec334_A - ToneDB_Base, ToneEnv_Rec334_B - ToneDB_Base
-	.byte	0x0c, 0x60, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 335
-	.long	ToneEnv_Rec335_A - ToneDB_Base, ToneEnv_Rec335_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 336
-	.long	ToneEnv_Rec336_A - ToneDB_Base, ToneEnv_Rec336_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 337
-	.long	ToneEnv_Rec337_A - ToneDB_Base, ToneEnv_Rec337_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x80	; 338
-	.long	ToneEnv_Rec338_A - ToneDB_Base, ToneEnv_Rec338_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 339
-	.long	ToneEnv_Rec339_A - ToneDB_Base, ToneEnv_Rec339_B - ToneDB_Base
-	.byte	0x0c, 0x4f, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 340
-	.long	ToneEnv_Rec340_A - ToneDB_Base, ToneEnv_Rec340_B - ToneDB_Base
-	.byte	0x0c, 0x6c, 0x42, 0x80, 0x42, 0x00
-	.byte	0x00	; 341
-	.long	ToneEnv_Rec341_A - ToneDB_Base, ToneEnv_Rec341_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 342
-	.long	ToneEnv_Rec342_A - ToneDB_Base, ToneEnv_Rec342_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x48, 0x00
-	.byte	0x00	; 343
-	.long	ToneEnv_Rec343_A - ToneDB_Base, ToneEnv_Rec343_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 344
-	.long	ToneEnv_Rec344_A - ToneDB_Base, ToneEnv_Rec344_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 345
-	.long	ToneEnv_Rec345_A - ToneDB_Base, ToneEnv_Rec345_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 346
-	.long	ToneEnv_Rec346_A - ToneDB_Base, ToneEnv_Rec346_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 347
-	.long	ToneEnv_Rec347_A - ToneDB_Base, ToneEnv_Rec347_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 348
-	.long	ToneEnv_Rec348_A - ToneDB_Base, ToneEnv_Rec348_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 349
-	.long	ToneEnv_Rec349_A - ToneDB_Base, ToneEnv_Rec349_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 350
-	.long	ToneEnv_Rec350_A - ToneDB_Base, ToneEnv_Rec350_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 351
-	.long	ToneEnv_Rec351_A - ToneDB_Base, ToneEnv_Rec351_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 352
-	.long	ToneEnv_Rec352_A - ToneDB_Base, ToneEnv_Rec352_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 353
-	.long	ToneEnv_Rec353_A - ToneDB_Base, ToneEnv_Rec353_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 354
-	.long	ToneEnv_Rec354_A - ToneDB_Base, ToneEnv_Rec354_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 355
-	.long	ToneEnv_Rec355_A - ToneDB_Base, ToneEnv_Rec355_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 356
-	.long	ToneEnv_Rec356_A - ToneDB_Base, ToneEnv_Rec356_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 357
-	.long	ToneEnv_Rec357_A - ToneDB_Base, ToneEnv_Rec357_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 358
-	.long	ToneEnv_Rec358_A - ToneDB_Base, ToneEnv_Rec358_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 359
-	.long	ToneEnv_Rec359_A - ToneDB_Base, ToneEnv_Rec359_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 360
-	.long	ToneEnv_Rec360_A - ToneDB_Base, ToneEnv_Rec360_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 361
-	.long	ToneEnv_Rec361_A - ToneDB_Base, ToneEnv_Rec361_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 362
-	.long	ToneEnv_Rec362_A - ToneDB_Base, ToneEnv_Rec362_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 363
-	.long	ToneEnv_Rec363_A - ToneDB_Base, ToneEnv_Rec363_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 364
-	.long	ToneEnv_Rec364_A - ToneDB_Base, ToneEnv_Rec364_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 365
-	.long	ToneEnv_Rec365_A - ToneDB_Base, ToneEnv_Rec365_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 366
-	.long	ToneEnv_Rec366_A - ToneDB_Base, ToneEnv_Rec366_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 367
-	.long	ToneEnv_Rec367_A - ToneDB_Base, ToneEnv_Rec367_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 368
-	.long	ToneEnv_Rec368_A - ToneDB_Base, ToneEnv_Rec368_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 369
-	.long	ToneEnv_Rec369_A - ToneDB_Base, ToneEnv_Rec369_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 370
-	.long	ToneEnv_Rec370_A - ToneDB_Base, ToneEnv_Rec370_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 371
-	.long	ToneEnv_Rec371_A - ToneDB_Base, ToneEnv_Rec371_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 372
-	.long	ToneEnv_Rec372_A - ToneDB_Base, ToneEnv_Rec372_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 373
-	.long	ToneEnv_Rec373_A - ToneDB_Base, ToneEnv_Rec373_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x61, 0x45, 0x00
-	.byte	0x08	; 374
-	.long	ToneEnv_Rec374_A - ToneDB_Base, ToneEnv_Rec374_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x04
-	.byte	0x00	; 375
-	.long	ToneEnv_Rec375_A - ToneDB_Base, ToneEnv_Rec375_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 376
-	.long	ToneEnv_Rec376_A - ToneDB_Base, ToneEnv_Rec376_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x4d, 0x53, 0x00
-	.byte	0x00	; 377
-	.long	ToneEnv_Rec377_A - ToneDB_Base, ToneEnv_Rec377_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 378
-	.long	ToneEnv_Rec378_A - ToneDB_Base, ToneEnv_Rec378_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 379
-	.long	ToneEnv_Rec379_A - ToneDB_Base, ToneEnv_Rec379_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x4d, 0x53, 0x00
-	.byte	0x00	; 380
-	.long	ToneEnv_Rec380_A - ToneDB_Base, ToneEnv_Rec380_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x1e, 0x50, 0x00
-	.byte	0x00	; 381
-	.long	ToneEnv_Rec381_A - ToneDB_Base, ToneEnv_Rec381_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x67, 0x51, 0x00
-	.byte	0x00	; 382
-	.long	ToneEnv_Rec382_A - ToneDB_Base, ToneEnv_Rec382_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x67, 0x51, 0x00
-	.byte	0x00	; 383
-	.long	ToneEnv_Rec383_A - ToneDB_Base, ToneEnv_Rec383_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x4d, 0x53, 0x00
-	.byte	0x00	; 384
-	.long	ToneEnv_Rec384_A - ToneDB_Base, ToneEnv_Rec384_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x67, 0x51, 0x00
-	.byte	0x00	; 385
-	.long	ToneEnv_Rec385_A - ToneDB_Base, ToneEnv_Rec385_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x4d, 0x53, 0x00
-	.byte	0x00	; 386
-	.long	ToneEnv_Rec386_A - ToneDB_Base, ToneEnv_Rec386_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 387
-	.long	ToneEnv_Rec387_A - ToneDB_Base, ToneEnv_Rec387_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 388
-	.long	ToneEnv_Rec388_A - ToneDB_Base, ToneEnv_Rec388_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x87, 0x1f, 0x00
-	.byte	0x00	; 389
-	.long	ToneEnv_Rec389_A - ToneDB_Base, ToneEnv_Rec389_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x08	; 390
-	.long	ToneEnv_Rec390_A - ToneDB_Base, ToneEnv_Rec390_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x01
-	.byte	0x00	; 391
-	.long	ToneEnv_Rec391_A - ToneDB_Base, ToneEnv_Rec391_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x08	; 392
-	.long	ToneEnv_Rec392_A - ToneDB_Base, ToneEnv_Rec392_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x01
-	.byte	0x08	; 393
-	.long	ToneEnv_Rec393_A - ToneDB_Base, ToneEnv_Rec393_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x01
-	.byte	0x08	; 394
-	.long	ToneEnv_Rec394_A - ToneDB_Base, ToneEnv_Rec394_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x61, 0x45, 0x01
-	.byte	0x00	; 395
-	.long	ToneEnv_Rec395_A - ToneDB_Base, ToneEnv_Rec395_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x01
-	.byte	0x00	; 396
-	.long	ToneEnv_Rec396_A - ToneDB_Base, ToneEnv_Rec396_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x01
-	.byte	0x00	; 397
-	.long	ToneEnv_Rec397_A - ToneDB_Base, ToneEnv_Rec397_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x61, 0x45, 0x01
-	.byte	0x08	; 398
-	.long	ToneEnv_Rec398_A - ToneDB_Base, ToneEnv_Rec398_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x01
-	.byte	0x00	; 399
-	.long	ToneEnv_Rec399_A - ToneDB_Base, ToneEnv_Rec399_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x4d, 0x53, 0x00
-	.byte	0x00	; 400
-	.long	ToneEnv_Rec400_A - ToneDB_Base, ToneEnv_Rec400_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x4d, 0x53, 0x00
-	.byte	0x00	; 401
-	.long	ToneEnv_Rec401_A - ToneDB_Base, ToneEnv_Rec401_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x4d, 0x53, 0x00
-	.byte	0x00	; 402
-	.long	ToneEnv_Rec402_A - ToneDB_Base, ToneEnv_Rec402_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x4d, 0x53, 0x00
-	.byte	0x00	; 403
-	.long	ToneEnv_Rec403_A - ToneDB_Base, ToneEnv_Rec403_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 404
-	.long	ToneEnv_Rec404_A - ToneDB_Base, ToneEnv_Rec404_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xc1, 0x49, 0x00
-	.byte	0x00	; 405
-	.long	ToneEnv_Rec405_A - ToneDB_Base, ToneEnv_Rec405_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 406
-	.long	ToneEnv_Rec406_A - ToneDB_Base, ToneEnv_Rec406_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 407
-	.long	ToneEnv_Rec407_A - ToneDB_Base, ToneEnv_Rec407_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 408
-	.long	ToneEnv_Rec408_A - ToneDB_Base, ToneEnv_Rec408_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 409
-	.long	ToneEnv_Rec409_A - ToneDB_Base, ToneEnv_Rec409_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 410
-	.long	ToneEnv_Rec410_A - ToneDB_Base, ToneEnv_Rec410_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 411
-	.long	ToneEnv_Rec411_A - ToneDB_Base, ToneEnv_Rec411_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 412
-	.long	ToneEnv_Rec412_A - ToneDB_Base, ToneEnv_Rec412_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x02
-	.byte	0x08	; 413
-	.long	ToneEnv_Rec413_A - ToneDB_Base, ToneEnv_Rec413_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x02
-	.byte	0x00	; 414
-	.long	ToneEnv_Rec414_A - ToneDB_Base, ToneEnv_Rec414_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x4e, 0x00
-	.byte	0x00	; 415
-	.long	ToneEnv_Rec415_A - ToneDB_Base, ToneEnv_Rec415_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x32, 0x00
-	.byte	0x00	; 416
-	.long	ToneEnv_Rec416_A - ToneDB_Base, ToneEnv_Rec416_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xd5, 0x34, 0x00
-	.byte	0x00	; 417
-	.long	ToneEnv_Rec417_A - ToneDB_Base, ToneEnv_Rec417_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 418
-	.long	ToneEnv_Rec418_A - ToneDB_Base, ToneEnv_Rec418_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 419
-	.long	ToneEnv_Rec419_A - ToneDB_Base, ToneEnv_Rec419_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 420
-	.long	ToneEnv_Rec420_A - ToneDB_Base, ToneEnv_Rec420_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 421
-	.long	ToneEnv_Rec421_A - ToneDB_Base, ToneEnv_Rec421_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 422
-	.long	ToneEnv_Rec422_A - ToneDB_Base, ToneEnv_Rec422_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 423
-	.long	ToneEnv_Rec423_A - ToneDB_Base, ToneEnv_Rec423_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 424
-	.long	ToneEnv_Rec424_A - ToneDB_Base, ToneEnv_Rec424_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4f, 0x00
-	.byte	0x08	; 425
-	.long	ToneEnv_Rec425_A - ToneDB_Base, ToneEnv_Rec425_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x05
-	.byte	0x00	; 426
-	.long	ToneEnv_Rec426_A - ToneDB_Base, ToneEnv_Rec426_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 427
-	.long	ToneEnv_Rec427_A - ToneDB_Base, ToneEnv_Rec427_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 428
-	.long	ToneEnv_Rec428_A - ToneDB_Base, ToneEnv_Rec428_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 429
-	.long	ToneEnv_Rec429_A - ToneDB_Base, ToneEnv_Rec429_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 430
-	.long	ToneEnv_Rec430_A - ToneDB_Base, ToneEnv_Rec430_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 431
-	.long	ToneEnv_Rec431_A - ToneDB_Base, ToneEnv_Rec431_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 432
-	.long	ToneEnv_Rec432_A - ToneDB_Base, ToneEnv_Rec432_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 433
-	.long	ToneEnv_Rec433_A - ToneDB_Base, ToneEnv_Rec433_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xc4, 0x1f, 0x00
-	.byte	0x00	; 434
-	.long	ToneEnv_Rec434_A - ToneDB_Base, ToneEnv_Rec434_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 435
-	.long	ToneEnv_Rec435_A - ToneDB_Base, ToneEnv_Rec435_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 436
-	.long	ToneEnv_Rec436_A - ToneDB_Base, ToneEnv_Rec436_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 437
-	.long	ToneEnv_Rec437_A - ToneDB_Base, ToneEnv_Rec437_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 438
-	.long	ToneEnv_Rec438_A - ToneDB_Base, ToneEnv_Rec438_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 439
-	.long	ToneEnv_Rec439_A - ToneDB_Base, ToneEnv_Rec439_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 440
-	.long	ToneEnv_Rec440_A - ToneDB_Base, ToneEnv_Rec440_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 441
-	.long	ToneEnv_Rec441_A - ToneDB_Base, ToneEnv_Rec441_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x08	; 442
-	.long	ToneEnv_Rec442_A - ToneDB_Base, ToneEnv_Rec442_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x03
-	.byte	0x08	; 443
-	.long	ToneEnv_Rec443_A - ToneDB_Base, ToneEnv_Rec443_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x03
-	.byte	0x00	; 444
-	.long	ToneEnv_Rec444_A - ToneDB_Base, ToneEnv_Rec444_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 445
-	.long	ToneEnv_Rec445_A - ToneDB_Base, ToneEnv_Rec445_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 446
-	.long	ToneEnv_Rec446_A - ToneDB_Base, ToneEnv_Rec446_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 447
-	.long	ToneEnv_Rec447_A - ToneDB_Base, ToneEnv_Rec447_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 448
-	.long	ToneEnv_Rec448_A - ToneDB_Base, ToneEnv_Rec448_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 449
-	.long	ToneEnv_Rec449_A - ToneDB_Base, ToneEnv_Rec449_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 450
-	.long	ToneEnv_Rec450_A - ToneDB_Base, ToneEnv_Rec450_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 451
-	.long	ToneEnv_Rec451_A - ToneDB_Base, ToneEnv_Rec451_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 452
-	.long	ToneEnv_Rec452_A - ToneDB_Base, ToneEnv_Rec452_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 453
-	.long	ToneEnv_Rec453_A - ToneDB_Base, ToneEnv_Rec453_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 454
-	.long	ToneEnv_Rec454_A - ToneDB_Base, ToneEnv_Rec454_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 455
-	.long	ToneEnv_Rec455_A - ToneDB_Base, ToneEnv_Rec455_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 456
-	.long	ToneEnv_Rec456_A - ToneDB_Base, ToneEnv_Rec456_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 457
-	.long	ToneEnv_Rec457_A - ToneDB_Base, ToneEnv_Rec457_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 458
-	.long	ToneEnv_Rec458_A - ToneDB_Base, ToneEnv_Rec458_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 459
-	.long	ToneEnv_Rec459_A - ToneDB_Base, ToneEnv_Rec459_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 460
-	.long	ToneEnv_Rec460_A - ToneDB_Base, ToneEnv_Rec460_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 461
-	.long	ToneEnv_Rec461_A - ToneDB_Base, ToneEnv_Rec461_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 462
-	.long	ToneEnv_Rec462_A - ToneDB_Base, ToneEnv_Rec462_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 463
-	.long	ToneEnv_Rec463_A - ToneDB_Base, ToneEnv_Rec463_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 464
-	.long	ToneEnv_Rec464_A - ToneDB_Base, ToneEnv_Rec464_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 465
-	.long	ToneEnv_Rec465_A - ToneDB_Base, ToneEnv_Rec465_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 466
-	.long	ToneEnv_Rec466_A - ToneDB_Base, ToneEnv_Rec466_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 467
-	.long	ToneEnv_Rec467_A - ToneDB_Base, ToneEnv_Rec467_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 468
-	.long	ToneEnv_Rec468_A - ToneDB_Base, ToneEnv_Rec468_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 469
-	.long	ToneEnv_Rec469_A - ToneDB_Base, ToneEnv_Rec469_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x41, 0x00
-	.byte	0x00	; 470
-	.long	ToneEnv_Rec470_A - ToneDB_Base, ToneEnv_Rec470_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x48, 0x00
-	.byte	0x00	; 471
-	.long	ToneEnv_Rec471_A - ToneDB_Base, ToneEnv_Rec471_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 472
-	.long	ToneEnv_Rec472_A - ToneDB_Base, ToneEnv_Rec472_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 473
-	.long	ToneEnv_Rec473_A - ToneDB_Base, ToneEnv_Rec473_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x2e, 0x00
-	.byte	0x00	; 474
-	.long	ToneEnv_Rec474_A - ToneDB_Base, ToneEnv_Rec474_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x27, 0x45, 0x00
-	.byte	0x00	; 475
-	.long	ToneEnv_Rec475_A - ToneDB_Base, ToneEnv_Rec475_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 476
-	.long	ToneEnv_Rec476_A - ToneDB_Base, ToneEnv_Rec476_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 477
-	.long	ToneEnv_Rec477_A - ToneDB_Base, ToneEnv_Rec477_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xbc, 0x4e, 0x00
-	.byte	0x00	; 478
-	.long	ToneEnv_Rec478_A - ToneDB_Base, ToneEnv_Rec478_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 479
-	.long	ToneEnv_Rec479_A - ToneDB_Base, ToneEnv_Rec479_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x67, 0x51, 0x00
-	.byte	0x00	; 480
-	.long	ToneEnv_Rec480_A - ToneDB_Base, ToneEnv_Rec480_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x80, 0x58, 0x00
-	.byte	0x00	; 481
-	.long	ToneEnv_Rec481_A - ToneDB_Base, ToneEnv_Rec481_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0xc1, 0x49, 0x00
-	.byte	0x00	; 482
-	.long	ToneEnv_Rec482_A - ToneDB_Base, ToneEnv_Rec482_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 483
-	.long	ToneEnv_Rec483_A - ToneDB_Base, ToneEnv_Rec483_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 484
-	.long	ToneEnv_Rec484_A - ToneDB_Base, ToneEnv_Rec484_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 485
-	.long	ToneEnv_Rec485_A - ToneDB_Base, ToneEnv_Rec485_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
-	.byte	0x00	; 486
-	.long	ToneEnv_Rec486_A - ToneDB_Base, ToneEnv_Rec486_B - ToneDB_Base
-	.byte	0x0c, 0x78, 0x42, 0x44, 0x4d, 0x00
+	ToneSetDesc	0x80, ToneEnv_Rec000_A, ToneEnv_Rec000_B, 12, 120, 0x42, 0x4280, 0	; 0
+	ToneSetDesc	0x80, ToneEnv_Rec001_A, ToneEnv_Rec001_B, 12, 120, 0x42, 0x4280, 0	; 1
+	ToneSetDesc	0x80, ToneEnv_Rec002_A, ToneEnv_Rec002_B, 12, 120, 0x42, 0x4280, 0	; 2
+	ToneSetDesc	0x80, ToneEnv_Rec003_A, ToneEnv_Rec003_B, 12, 96, 0x42, 0x4280, 0	; 3
+	ToneSetDesc	0x80, ToneEnv_Rec004_A, ToneEnv_Rec004_B, 12, 120, 0x42, 0x4280, 0	; 4
+	ToneSetDesc	0x80, ToneEnv_Rec005_A, ToneEnv_Rec005_B, 12, 120, 0x42, 0x4280, 0	; 5
+	ToneSetDesc	0x80, ToneEnv_Rec006_A, ToneEnv_Rec006_B, 12, 120, 0x42, 0x4280, 0	; 6
+	ToneSetDesc	0x80, ToneEnv_Rec007_A, ToneEnv_Rec007_B, 24, 86, 0x42, 0x4280, 0	; 7
+	ToneSetDesc	0x80, ToneEnv_Rec008_A, ToneEnv_Rec008_B, 12, 108, 0x42, 0x4280, 0	; 8
+	ToneSetDesc	0x00, ToneEnv_Rec009_A, ToneEnv_Rec009_B, 12, 114, 0x42, 0x4280, 0	; 9
+	ToneSetDesc	0x00, ToneEnv_Rec010_A, ToneEnv_Rec010_B, 12, 114, 0x42, 0x4280, 0	; 10
+	ToneSetDesc	0x00, ToneEnv_Rec011_A, ToneEnv_Rec011_B, 12, 114, 0x42, 0x4280, 0	; 11
+	ToneSetDesc	0x00, ToneEnv_Rec012_A, ToneEnv_Rec012_B, 12, 111, 0x42, 0x4280, 0	; 12
+	ToneSetDesc	0x00, ToneEnv_Rec013_A, ToneEnv_Rec013_B, 12, 114, 0x42, 0x4280, 0	; 13
+	ToneSetDesc	0x00, ToneEnv_Rec014_A, ToneEnv_Rec014_B, 12, 111, 0x42, 0x4280, 0	; 14
+	ToneSetDesc	0x00, ToneEnv_Rec015_A, ToneEnv_Rec015_B, 12, 114, 0x42, 0x4280, 0	; 15
+	ToneSetDesc	0x00, ToneEnv_Rec016_A, ToneEnv_Rec016_B, 12, 114, 0x42, 0x4280, 0	; 16
+	ToneSetDesc	0x00, ToneEnv_Rec017_A, ToneEnv_Rec017_B, 14, 92, 0x42, 0x4280, 0	; 17
+	ToneSetDesc	0x01, ToneEnv_Rec018_A, ToneEnv_Rec018_B, 14, 92, 0x42, 0x4280, 0	; 18
+	ToneSetDesc	0x00, ToneEnv_Rec019_A, ToneEnv_Rec019_B, 12, 120, 0x42, 0x4280, 0	; 19
+	ToneSetDesc	0x00, ToneEnv_Rec020_A, ToneEnv_Rec020_B, 12, 120, 0x42, 0x4280, 0	; 20
+	ToneSetDesc	0x80, ToneEnv_Rec021_A, ToneEnv_Rec021_B, 12, 108, 0x42, 0x4280, 0	; 21
+	ToneSetDesc	0x00, ToneEnv_Rec022_A, ToneEnv_Rec022_B, 12, 120, 0x42, 0x4280, 0	; 22
+	ToneSetDesc	0x00, ToneEnv_Rec023_A, ToneEnv_Rec023_B, 12, 120, 0x42, 0x4280, 0	; 23
+	ToneSetDesc	0x00, ToneEnv_Rec024_A, ToneEnv_Rec024_B, 12, 120, 0x42, 0x4280, 0	; 24
+	ToneSetDesc	0x00, ToneEnv_Rec025_A, ToneEnv_Rec025_B, 12, 120, 0x42, 0x4280, 0	; 25
+	ToneSetDesc	0x00, ToneEnv_Rec026_A, ToneEnv_Rec026_B, 12, 78, 0x42, 0x4280, 0	; 26
+	ToneSetDesc	0x00, ToneEnv_Rec027_A, ToneEnv_Rec027_B, 12, 78, 0x42, 0x4280, 0	; 27
+	ToneSetDesc	0x00, ToneEnv_Rec028_A, ToneEnv_Rec028_B, 12, 108, 0x42, 0x4280, 0	; 28
+	ToneSetDesc	0x00, ToneEnv_Rec029_A, ToneEnv_Rec029_B, 12, 120, 0x42, 0x4280, 0	; 29
+	ToneSetDesc	0x00, ToneEnv_Rec030_A, ToneEnv_Rec030_B, 12, 111, 0x42, 0x4280, 0	; 30
+	ToneSetDesc	0x00, ToneEnv_Rec031_A, ToneEnv_Rec031_B, 12, 114, 0x42, 0x4280, 0	; 31
+	ToneSetDesc	0x00, ToneEnv_Rec032_A, ToneEnv_Rec032_B, 12, 120, 0x42, 0x4280, 0	; 32
+	ToneSetDesc	0x80, ToneEnv_Rec033_A, ToneEnv_Rec033_B, 12, 100, 0x42, 0x4280, 0	; 33
+	ToneSetDesc	0x80, ToneEnv_Rec034_A, ToneEnv_Rec034_B, 12, 100, 0x42, 0x4280, 0	; 34
+	ToneSetDesc	0x00, ToneEnv_Rec035_A, ToneEnv_Rec035_B, 12, 120, 0x42, 0x4280, 0	; 35
+	ToneSetDesc	0x01, ToneEnv_Rec036_A, ToneEnv_Rec036_B, 12, 102, 0x42, 0x4280, 0	; 36
+	ToneSetDesc	0x00, ToneEnv_Rec037_A, ToneEnv_Rec037_B, 12, 120, 0x42, 0x4280, 0	; 37
+	ToneSetDesc	0x80, ToneEnv_Rec038_A, ToneEnv_Rec038_B, 12, 120, 0x42, 0x4280, 0	; 38
+	ToneSetDesc	0x00, ToneEnv_Rec039_A, ToneEnv_Rec039_B, 12, 102, 0x42, 0x4280, 0	; 39
+	ToneSetDesc	0x80, ToneEnv_Rec040_A, ToneEnv_Rec040_B, 12, 114, 0x42, 0x4280, 0	; 40
+	ToneSetDesc	0x00, ToneEnv_Rec041_A, ToneEnv_Rec041_B, 12, 114, 0x42, 0x4280, 0	; 41
+	ToneSetDesc	0x00, ToneEnv_Rec042_A, ToneEnv_Rec042_B, 12, 114, 0x42, 0x4280, 0	; 42
+	ToneSetDesc	0x80, ToneEnv_Rec043_A, ToneEnv_Rec043_B, 12, 114, 0x42, 0x4280, 0	; 43
+	ToneSetDesc	0x80, ToneEnv_Rec044_A, ToneEnv_Rec044_B, 12, 114, 0x42, 0x4280, 0	; 44
+	ToneSetDesc	0x00, ToneEnv_Rec045_A, ToneEnv_Rec045_B, 12, 114, 0x42, 0x4280, 0	; 45
+	ToneSetDesc	0x00, ToneEnv_Rec046_A, ToneEnv_Rec046_B, 17, 120, 0x42, 0x4280, 0	; 46
+	ToneSetDesc	0x00, ToneEnv_Rec047_A, ToneEnv_Rec047_B, 12, 120, 0x42, 0x4280, 0	; 47
+	ToneSetDesc	0x00, ToneEnv_Rec048_A, ToneEnv_Rec048_B, 12, 120, 0x42, 0x4280, 0	; 48
+	ToneSetDesc	0x02, ToneEnv_Rec049_A, ToneEnv_Rec049_B, 12, 113, 0x08, 0x417f, 0	; 49
+	ToneSetDesc	0x02, ToneEnv_Rec050_A, ToneEnv_Rec050_B, 12, 102, 0x08, 0x417f, 0	; 50
+	ToneSetDesc	0x00, ToneEnv_Rec051_A, ToneEnv_Rec051_B, 12, 102, 0x42, 0x4280, 0	; 51
+	ToneSetDesc	0x02, ToneEnv_Rec052_A, ToneEnv_Rec052_B, 12, 113, 0x08, 0x417f, 0	; 52
+	ToneSetDesc	0x80, ToneEnv_Rec053_A, ToneEnv_Rec053_B, 12, 114, 0x42, 0x4280, 0	; 53
+	ToneSetDesc	0x00, ToneEnv_Rec054_A, ToneEnv_Rec054_B, 12, 114, 0x42, 0x4280, 0	; 54
+	ToneSetDesc	0x80, ToneEnv_Rec055_A, ToneEnv_Rec055_B, 12, 114, 0x42, 0x4280, 0	; 55
+	ToneSetDesc	0x80, ToneEnv_Rec056_A, ToneEnv_Rec056_B, 12, 114, 0x42, 0x4280, 0	; 56
+	ToneSetDesc	0x80, ToneEnv_Rec057_A, ToneEnv_Rec057_B, 12, 108, 0x42, 0x4280, 0	; 57
+	ToneSetDesc	0x80, ToneEnv_Rec058_A, ToneEnv_Rec058_B, 12, 108, 0x42, 0x4280, 0	; 58
+	ToneSetDesc	0x80, ToneEnv_Rec059_A, ToneEnv_Rec059_B, 12, 108, 0x42, 0x4280, 0	; 59
+	ToneSetDesc	0x80, ToneEnv_Rec060_A, ToneEnv_Rec060_B, 12, 108, 0x42, 0x4280, 0	; 60
+	ToneSetDesc	0x02, ToneEnv_Rec061_A, ToneEnv_Rec061_B, 12, 111, 0x10, 0x417f, 0	; 61
+	ToneSetDesc	0x80, ToneEnv_Rec062_A, ToneEnv_Rec062_B, 12, 120, 0x42, 0x4280, 0	; 62
+	ToneSetDesc	0x02, ToneEnv_Rec063_A, ToneEnv_Rec063_B, 12, 113, 0x10, 0x417f, 0	; 63
+	ToneSetDesc	0x02, ToneEnv_Rec064_A, ToneEnv_Rec064_B, 12, 113, 0x10, 0x417f, 0	; 64
+	ToneSetDesc	0x00, ToneEnv_Rec065_A, ToneEnv_Rec065_B, 12, 120, 0x42, 0x4280, 0	; 65
+	ToneSetDesc	0x02, ToneEnv_Rec066_A, ToneEnv_Rec066_B, 12, 114, 0x00, 0x417f, 0	; 66
+	ToneSetDesc	0x02, ToneEnv_Rec067_A, ToneEnv_Rec067_B, 12, 114, 0x00, 0x417f, 0	; 67
+	ToneSetDesc	0x02, ToneEnv_Rec068_A, ToneEnv_Rec068_B, 12, 114, 0x00, 0x417f, 0	; 68
+	ToneSetDesc	0x00, ToneEnv_Rec069_A, ToneEnv_Rec069_B, 12, 120, 0x42, 0x4280, 0	; 69
+	ToneSetDesc	0x00, ToneEnv_Rec070_A, ToneEnv_Rec070_B, 12, 111, 0x42, 0x4280, 0	; 70
+	ToneSetDesc	0x00, ToneEnv_Rec071_A, ToneEnv_Rec071_B, 12, 114, 0x42, 0x4280, 0	; 71
+	ToneSetDesc	0x00, ToneEnv_Rec072_A, ToneEnv_Rec072_B, 12, 120, 0x42, 0x4280, 0	; 72
+	ToneSetDesc	0x02, ToneEnv_Rec073_A, ToneEnv_Rec073_B, 12, 113, 0x00, 0x417f, 0	; 73
+	ToneSetDesc	0x02, ToneEnv_Rec074_A, ToneEnv_Rec074_B, 12, 114, 0x10, 0x417f, 0	; 74
+	ToneSetDesc	0x02, ToneEnv_Rec075_A, ToneEnv_Rec075_B, 12, 114, 0x10, 0x417f, 0	; 75
+	ToneSetDesc	0x00, ToneEnv_Rec076_A, ToneEnv_Rec076_B, 12, 111, 0x42, 0x4280, 0	; 76
+	ToneSetDesc	0x00, ToneEnv_Rec077_A, ToneEnv_Rec077_B, 12, 111, 0x42, 0x4280, 0	; 77
+	ToneSetDesc	0x02, ToneEnv_Rec078_A, ToneEnv_Rec078_B, 12, 111, 0x00, 0x417f, 0	; 78
+	ToneSetDesc	0x00, ToneEnv_Rec079_A, ToneEnv_Rec079_B, 12, 111, 0x42, 0x4280, 0	; 79
+	ToneSetDesc	0x00, ToneEnv_Rec080_A, ToneEnv_Rec080_B, 12, 114, 0x42, 0x4280, 0	; 80
+	ToneSetDesc	0x00, ToneEnv_Rec081_A, ToneEnv_Rec081_B, 12, 120, 0x42, 0x4280, 0	; 81
+	ToneSetDesc	0x00, ToneEnv_Rec082_A, ToneEnv_Rec082_B, 16, 120, 0x42, 0x4280, 0	; 82
+	ToneSetDesc	0x00, ToneEnv_Rec083_A, ToneEnv_Rec083_B, 12, 109, 0x42, 0x4280, 0	; 83
+	ToneSetDesc	0x80, ToneEnv_Rec084_A, ToneEnv_Rec084_B, 12, 108, 0x42, 0x4280, 0	; 84
+	ToneSetDesc	0x80, ToneEnv_Rec085_A, ToneEnv_Rec085_B, 12, 108, 0x42, 0x4280, 0	; 85
+	ToneSetDesc	0x00, ToneEnv_Rec086_A, ToneEnv_Rec086_B, 12, 114, 0x42, 0x4280, 0	; 86
+	ToneSetDesc	0x80, ToneEnv_Rec087_A, ToneEnv_Rec087_B, 17, 114, 0x42, 0x4280, 0	; 87
+	ToneSetDesc	0x80, ToneEnv_Rec088_A, ToneEnv_Rec088_B, 12, 108, 0x42, 0x4280, 0	; 88
+	ToneSetDesc	0x80, ToneEnv_Rec089_A, ToneEnv_Rec089_B, 12, 108, 0x42, 0x4280, 0	; 89
+	ToneSetDesc	0x00, ToneEnv_Rec090_A, ToneEnv_Rec090_B, 12, 114, 0x42, 0x4280, 0	; 90
+	ToneSetDesc	0x00, ToneEnv_Rec091_A, ToneEnv_Rec091_B, 12, 114, 0x42, 0x4280, 0	; 91
+	ToneSetDesc	0x80, ToneEnv_Rec092_A, ToneEnv_Rec092_B, 12, 108, 0x42, 0x4280, 0	; 92
+	ToneSetDesc	0x00, ToneEnv_Rec093_A, ToneEnv_Rec093_B, 12, 114, 0x42, 0x4280, 0	; 93
+	ToneSetDesc	0x00, ToneEnv_Rec094_A, ToneEnv_Rec094_B, 12, 114, 0x42, 0x4280, 0	; 94
+	ToneSetDesc	0x80, ToneEnv_Rec095_A, ToneEnv_Rec095_B, 12, 120, 0x42, 0x4280, 0	; 95
+	ToneSetDesc	0x00, ToneEnv_Rec096_A, ToneEnv_Rec096_B, 12, 114, 0x42, 0x4280, 0	; 96
+	ToneSetDesc	0x00, ToneEnv_Rec097_A, ToneEnv_Rec097_B, 12, 114, 0x42, 0x4280, 0	; 97
+	ToneSetDesc	0x80, ToneEnv_Rec098_A, ToneEnv_Rec098_B, 12, 108, 0x42, 0x4280, 0	; 98
+	ToneSetDesc	0x00, ToneEnv_Rec099_A, ToneEnv_Rec099_B, 12, 108, 0x42, 0x4280, 0	; 99
+	ToneSetDesc	0x80, ToneEnv_Rec100_A, ToneEnv_Rec100_B, 12, 120, 0x42, 0x4280, 0	; 100
+	ToneSetDesc	0x80, ToneEnv_Rec101_A, ToneEnv_Rec101_B, 12, 120, 0x42, 0x4280, 0	; 101
+	ToneSetDesc	0x00, ToneEnv_Rec102_A, ToneEnv_Rec102_B, 12, 108, 0x42, 0x4280, 0	; 102
+	ToneSetDesc	0x00, ToneEnv_Rec103_A, ToneEnv_Rec103_B, 12, 102, 0x42, 0x4280, 0	; 103
+	ToneSetDesc	0x00, ToneEnv_Rec104_A, ToneEnv_Rec104_B, 12, 102, 0x42, 0x4280, 0	; 104
+	ToneSetDesc	0x00, ToneEnv_Rec105_A, ToneEnv_Rec105_B, 12, 102, 0x42, 0x4280, 0	; 105
+	ToneSetDesc	0x00, ToneEnv_Rec106_A, ToneEnv_Rec106_B, 12, 102, 0x42, 0x4280, 0	; 106
+	ToneSetDesc	0x00, ToneEnv_Rec107_A, ToneEnv_Rec107_B, 12, 102, 0x42, 0x4280, 0	; 107
+	ToneSetDesc	0x80, ToneEnv_Rec108_A, ToneEnv_Rec108_B, 12, 108, 0x42, 0x4280, 0	; 108
+	ToneSetDesc	0x80, ToneEnv_Rec109_A, ToneEnv_Rec109_B, 12, 120, 0x42, 0x4280, 0	; 109
+	ToneSetDesc	0x00, ToneEnv_Rec110_A, ToneEnv_Rec110_B, 12, 102, 0x42, 0x4280, 0	; 110
+	ToneSetDesc	0x00, ToneEnv_Rec111_A, ToneEnv_Rec111_B, 12, 102, 0x42, 0x4280, 0	; 111
+	ToneSetDesc	0x00, ToneEnv_Rec112_A, ToneEnv_Rec112_B, 12, 102, 0x42, 0x4280, 0	; 112
+	ToneSetDesc	0x00, ToneEnv_Rec113_A, ToneEnv_Rec113_B, 12, 102, 0x42, 0x4280, 0	; 113
+	ToneSetDesc	0x80, ToneEnv_Rec114_A, ToneEnv_Rec114_B, 12, 120, 0x42, 0x4280, 0	; 114
+	ToneSetDesc	0x00, ToneEnv_Rec115_A, ToneEnv_Rec115_B, 12, 102, 0x42, 0x4280, 0	; 115
+	ToneSetDesc	0x00, ToneEnv_Rec116_A, ToneEnv_Rec116_B, 12, 102, 0x42, 0x4280, 0	; 116
+	ToneSetDesc	0x00, ToneEnv_Rec117_A, ToneEnv_Rec117_B, 12, 102, 0x42, 0x4280, 0	; 117
+	ToneSetDesc	0x80, ToneEnv_Rec118_A, ToneEnv_Rec118_B, 12, 104, 0x42, 0x4280, 0	; 118
+	ToneSetDesc	0x00, ToneEnv_Rec119_A, ToneEnv_Rec119_B, 12, 102, 0x42, 0x4280, 0	; 119
+	ToneSetDesc	0x00, ToneEnv_Rec120_A, ToneEnv_Rec120_B, 12, 102, 0x42, 0x4280, 0	; 120
+	ToneSetDesc	0x00, ToneEnv_Rec121_A, ToneEnv_Rec121_B, 12, 102, 0x42, 0x4280, 0	; 121
+	ToneSetDesc	0x80, ToneEnv_Rec122_A, ToneEnv_Rec122_B, 12, 114, 0x42, 0x4280, 0	; 122
+	ToneSetDesc	0x80, ToneEnv_Rec123_A, ToneEnv_Rec123_B, 12, 108, 0x42, 0x4280, 0	; 123
+	ToneSetDesc	0x00, ToneEnv_Rec124_A, ToneEnv_Rec124_B, 12, 102, 0x42, 0x4280, 0	; 124
+	ToneSetDesc	0x00, ToneEnv_Rec125_A, ToneEnv_Rec125_B, 12, 102, 0x42, 0x4280, 0	; 125
+	ToneSetDesc	0x00, ToneEnv_Rec126_A, ToneEnv_Rec126_B, 12, 102, 0x42, 0x4280, 0	; 126
+	ToneSetDesc	0x00, ToneEnv_Rec127_A, ToneEnv_Rec127_B, 12, 102, 0x42, 0x4280, 0	; 127
+	ToneSetDesc	0x00, ToneEnv_Rec128_A, ToneEnv_Rec128_B, 12, 102, 0x42, 0x4280, 0	; 128
+	ToneSetDesc	0x80, ToneEnv_Rec129_A, ToneEnv_Rec129_B, 12, 114, 0x42, 0x4280, 0	; 129
+	ToneSetDesc	0x00, ToneEnv_Rec130_A, ToneEnv_Rec130_B, 12, 102, 0x42, 0x4280, 0	; 130
+	ToneSetDesc	0x00, ToneEnv_Rec131_A, ToneEnv_Rec131_B, 12, 102, 0x42, 0x4280, 0	; 131
+	ToneSetDesc	0x00, ToneEnv_Rec132_A, ToneEnv_Rec132_B, 12, 102, 0x42, 0x4280, 0	; 132
+	ToneSetDesc	0x80, ToneEnv_Rec133_A, ToneEnv_Rec133_B, 12, 104, 0x42, 0x4280, 0	; 133
+	ToneSetDesc	0x00, ToneEnv_Rec134_A, ToneEnv_Rec134_B, 12, 112, 0x42, 0x4280, 0	; 134
+	ToneSetDesc	0x00, ToneEnv_Rec135_A, ToneEnv_Rec135_B, 12, 108, 0x42, 0x4280, 0	; 135
+	ToneSetDesc	0x00, ToneEnv_Rec136_A, ToneEnv_Rec136_B, 12, 114, 0x42, 0x4280, 0	; 136
+	ToneSetDesc	0x00, ToneEnv_Rec137_A, ToneEnv_Rec137_B, 12, 102, 0x42, 0x4280, 0	; 137
+	ToneSetDesc	0x80, ToneEnv_Rec138_A, ToneEnv_Rec138_B, 12, 96, 0x42, 0x4280, 0	; 138
+	ToneSetDesc	0x00, ToneEnv_Rec139_A, ToneEnv_Rec139_B, 12, 102, 0x42, 0x4280, 0	; 139
+	ToneSetDesc	0x00, ToneEnv_Rec140_A, ToneEnv_Rec140_B, 12, 102, 0x42, 0x4280, 0	; 140
+	ToneSetDesc	0x00, ToneEnv_Rec141_A, ToneEnv_Rec141_B, 12, 102, 0x42, 0x4280, 0	; 141
+	ToneSetDesc	0x80, ToneEnv_Rec142_A, ToneEnv_Rec142_B, 12, 96, 0x42, 0x4280, 0	; 142
+	ToneSetDesc	0x00, ToneEnv_Rec143_A, ToneEnv_Rec143_B, 12, 102, 0x42, 0x4280, 0	; 143
+	ToneSetDesc	0x00, ToneEnv_Rec144_A, ToneEnv_Rec144_B, 12, 102, 0x42, 0x4280, 0	; 144
+	ToneSetDesc	0x00, ToneEnv_Rec145_A, ToneEnv_Rec145_B, 12, 102, 0x42, 0x4280, 0	; 145
+	ToneSetDesc	0x80, ToneEnv_Rec146_A, ToneEnv_Rec146_B, 12, 108, 0x42, 0x4280, 0	; 146
+	ToneSetDesc	0x00, ToneEnv_Rec147_A, ToneEnv_Rec147_B, 12, 102, 0x42, 0x4280, 0	; 147
+	ToneSetDesc	0x80, ToneEnv_Rec148_A, ToneEnv_Rec148_B, 12, 102, 0x42, 0x4280, 0	; 148
+	ToneSetDesc	0x80, ToneEnv_Rec149_A, ToneEnv_Rec149_B, 12, 108, 0x42, 0x4280, 0	; 149
+	ToneSetDesc	0x00, ToneEnv_Rec150_A, ToneEnv_Rec150_B, 12, 102, 0x42, 0x4280, 0	; 150
+	ToneSetDesc	0x80, ToneEnv_Rec151_A, ToneEnv_Rec151_B, 12, 108, 0x42, 0x4280, 0	; 151
+	ToneSetDesc	0x00, ToneEnv_Rec152_A, ToneEnv_Rec152_B, 12, 113, 0x42, 0x4280, 0	; 152
+	ToneSetDesc	0x00, ToneEnv_Rec153_A, ToneEnv_Rec153_B, 12, 102, 0x42, 0x4280, 0	; 153
+	ToneSetDesc	0x80, ToneEnv_Rec154_A, ToneEnv_Rec154_B, 12, 84, 0x42, 0x4280, 0	; 154
+	ToneSetDesc	0x00, ToneEnv_Rec155_A, ToneEnv_Rec155_B, 12, 102, 0x42, 0x4280, 0	; 155
+	ToneSetDesc	0x80, ToneEnv_Rec156_A, ToneEnv_Rec156_B, 12, 96, 0x42, 0x4280, 0	; 156
+	ToneSetDesc	0x80, ToneEnv_Rec157_A, ToneEnv_Rec157_B, 12, 96, 0x42, 0x4280, 0	; 157
+	ToneSetDesc	0x80, ToneEnv_Rec158_A, ToneEnv_Rec158_B, 12, 77, 0x42, 0x4280, 0	; 158
+	ToneSetDesc	0x80, ToneEnv_Rec159_A, ToneEnv_Rec159_B, 12, 96, 0x42, 0x4280, 0	; 159
+	ToneSetDesc	0x80, ToneEnv_Rec160_A, ToneEnv_Rec160_B, 12, 77, 0x42, 0x4280, 0	; 160
+	ToneSetDesc	0x80, ToneEnv_Rec161_A, ToneEnv_Rec161_B, 12, 84, 0x42, 0x4280, 0	; 161
+	ToneSetDesc	0x00, ToneEnv_Rec162_A, ToneEnv_Rec162_B, 16, 96, 0x42, 0x4280, 0	; 162
+	ToneSetDesc	0x00, ToneEnv_Rec163_A, ToneEnv_Rec163_B, 16, 93, 0x42, 0x4280, 0	; 163
+	ToneSetDesc	0x00, ToneEnv_Rec164_A, ToneEnv_Rec164_B, 16, 92, 0x42, 0x4280, 0	; 164
+	ToneSetDesc	0x00, ToneEnv_Rec165_A, ToneEnv_Rec165_B, 16, 96, 0x42, 0x4280, 0	; 165
+	ToneSetDesc	0x80, ToneEnv_Rec166_A, ToneEnv_Rec166_B, 12, 96, 0x42, 0x4280, 0	; 166
+	ToneSetDesc	0x80, ToneEnv_Rec167_A, ToneEnv_Rec167_B, 12, 99, 0x42, 0x4280, 0	; 167
+	ToneSetDesc	0x80, ToneEnv_Rec168_A, ToneEnv_Rec168_B, 12, 96, 0x42, 0x4280, 0	; 168
+	ToneSetDesc	0x00, ToneEnv_Rec169_A, ToneEnv_Rec169_B, 12, 102, 0x42, 0x4280, 0	; 169
+	ToneSetDesc	0x00, ToneEnv_Rec170_A, ToneEnv_Rec170_B, 12, 96, 0x42, 0x4280, 0	; 170
+	ToneSetDesc	0x00, ToneEnv_Rec171_A, ToneEnv_Rec171_B, 12, 102, 0x42, 0x4280, 0	; 171
+	ToneSetDesc	0x00, ToneEnv_Rec172_A, ToneEnv_Rec172_B, 12, 96, 0x42, 0x4280, 0	; 172
+	ToneSetDesc	0x00, ToneEnv_Rec173_A, ToneEnv_Rec173_B, 12, 96, 0x42, 0x4280, 0	; 173
+	ToneSetDesc	0x00, ToneEnv_Rec174_A, ToneEnv_Rec174_B, 12, 96, 0x42, 0x4280, 0	; 174
+	ToneSetDesc	0x00, ToneEnv_Rec175_A, ToneEnv_Rec175_B, 12, 96, 0x42, 0x4280, 0	; 175
+	ToneSetDesc	0x80, ToneEnv_Rec176_A, ToneEnv_Rec176_B, 14, 111, 0x42, 0x4280, 0	; 176
+	ToneSetDesc	0x80, ToneEnv_Rec177_A, ToneEnv_Rec177_B, 12, 108, 0x42, 0x4280, 0	; 177
+	ToneSetDesc	0x80, ToneEnv_Rec178_A, ToneEnv_Rec178_B, 9, 120, 0x42, 0x4280, 0	; 178
+	ToneSetDesc	0x80, ToneEnv_Rec179_A, ToneEnv_Rec179_B, 9, 120, 0x42, 0x4280, 0	; 179
+	ToneSetDesc	0x80, ToneEnv_Rec180_A, ToneEnv_Rec180_B, 12, 108, 0x42, 0x4280, 0	; 180
+	ToneSetDesc	0x80, ToneEnv_Rec181_A, ToneEnv_Rec181_B, 12, 108, 0x42, 0x4280, 0	; 181
+	ToneSetDesc	0x80, ToneEnv_Rec182_A, ToneEnv_Rec182_B, 16, 120, 0x42, 0x4280, 0	; 182
+	ToneSetDesc	0x00, ToneEnv_Rec183_A, ToneEnv_Rec183_B, 12, 102, 0x42, 0x4280, 0	; 183
+	ToneSetDesc	0x00, ToneEnv_Rec184_A, ToneEnv_Rec184_B, 12, 102, 0x42, 0x4280, 0	; 184
+	ToneSetDesc	0x80, ToneEnv_Rec185_A, ToneEnv_Rec185_B, 16, 108, 0x42, 0x4280, 0	; 185
+	ToneSetDesc	0x00, ToneEnv_Rec186_A, ToneEnv_Rec186_B, 12, 102, 0x42, 0x4280, 0	; 186
+	ToneSetDesc	0x00, ToneEnv_Rec187_A, ToneEnv_Rec187_B, 12, 102, 0x42, 0x4280, 0	; 187
+	ToneSetDesc	0x00, ToneEnv_Rec188_A, ToneEnv_Rec188_B, 12, 102, 0x42, 0x4280, 0	; 188
+	ToneSetDesc	0x00, ToneEnv_Rec189_A, ToneEnv_Rec189_B, 12, 102, 0x42, 0x4280, 0	; 189
+	ToneSetDesc	0x00, ToneEnv_Rec190_A, ToneEnv_Rec190_B, 12, 102, 0x42, 0x4280, 0	; 190
+	ToneSetDesc	0x80, ToneEnv_Rec191_A, ToneEnv_Rec191_B, 12, 108, 0x42, 0x4280, 0	; 191
+	ToneSetDesc	0x00, ToneEnv_Rec192_A, ToneEnv_Rec192_B, 12, 102, 0x42, 0x4280, 0	; 192
+	ToneSetDesc	0x80, ToneEnv_Rec193_A, ToneEnv_Rec193_B, 12, 104, 0x42, 0x4280, 0	; 193
+	ToneSetDesc	0x80, ToneEnv_Rec194_A, ToneEnv_Rec194_B, 12, 108, 0x42, 0x4280, 0	; 194
+	ToneSetDesc	0x80, ToneEnv_Rec195_A, ToneEnv_Rec195_B, 12, 108, 0x42, 0x4280, 0	; 195
+	ToneSetDesc	0x80, ToneEnv_Rec196_A, ToneEnv_Rec196_B, 12, 108, 0x42, 0x4280, 0	; 196
+	ToneSetDesc	0x00, ToneEnv_Rec197_A, ToneEnv_Rec197_B, 12, 102, 0x42, 0x4280, 0	; 197
+	ToneSetDesc	0x00, ToneEnv_Rec198_A, ToneEnv_Rec198_B, 12, 108, 0x42, 0x4280, 0	; 198
+	ToneSetDesc	0x80, ToneEnv_Rec199_A, ToneEnv_Rec199_B, 12, 108, 0x42, 0x4280, 0	; 199
+	ToneSetDesc	0x80, ToneEnv_Rec200_A, ToneEnv_Rec200_B, 12, 108, 0x42, 0x4280, 0	; 200
+	ToneSetDesc	0x80, ToneEnv_Rec201_A, ToneEnv_Rec201_B, 12, 108, 0x42, 0x4280, 0	; 201
+	ToneSetDesc	0x80, ToneEnv_Rec202_A, ToneEnv_Rec202_B, 12, 108, 0x42, 0x4280, 0	; 202
+	ToneSetDesc	0x80, ToneEnv_Rec203_A, ToneEnv_Rec203_B, 0, 108, 0x42, 0x4280, 0	; 203
+	ToneSetDesc	0x00, ToneEnv_Rec204_A, ToneEnv_Rec204_B, 12, 102, 0x42, 0x4280, 0	; 204
+	ToneSetDesc	0x00, ToneEnv_Rec205_A, ToneEnv_Rec205_B, 12, 102, 0x42, 0x4280, 0	; 205
+	ToneSetDesc	0x80, ToneEnv_Rec206_A, ToneEnv_Rec206_B, 21, 108, 0x42, 0x4280, 0	; 206
+	ToneSetDesc	0x80, ToneEnv_Rec207_A, ToneEnv_Rec207_B, 12, 102, 0x42, 0x4280, 0	; 207
+	ToneSetDesc	0x80, ToneEnv_Rec208_A, ToneEnv_Rec208_B, 17, 96, 0x42, 0x4280, 0	; 208
+	ToneSetDesc	0x80, ToneEnv_Rec209_A, ToneEnv_Rec209_B, 12, 96, 0x42, 0x4280, 0	; 209
+	ToneSetDesc	0x00, ToneEnv_Rec210_A, ToneEnv_Rec210_B, 12, 102, 0x42, 0x4280, 0	; 210
+	ToneSetDesc	0x80, ToneEnv_Rec211_A, ToneEnv_Rec211_B, 12, 102, 0x42, 0x4280, 0	; 211
+	ToneSetDesc	0x80, ToneEnv_Rec212_A, ToneEnv_Rec212_B, 12, 96, 0x42, 0x4280, 0	; 212
+	ToneSetDesc	0x00, ToneEnv_Rec213_A, ToneEnv_Rec213_B, 12, 102, 0x42, 0x4280, 0	; 213
+	ToneSetDesc	0x00, ToneEnv_Rec214_A, ToneEnv_Rec214_B, 12, 102, 0x42, 0x4280, 0	; 214
+	ToneSetDesc	0x80, ToneEnv_Rec215_A, ToneEnv_Rec215_B, 12, 108, 0x42, 0x4280, 0	; 215
+	ToneSetDesc	0x00, ToneEnv_Rec216_A, ToneEnv_Rec216_B, 12, 108, 0x42, 0x4280, 0	; 216
+	ToneSetDesc	0x00, ToneEnv_Rec217_A, ToneEnv_Rec217_B, 12, 108, 0x42, 0x4280, 0	; 217
+	ToneSetDesc	0x00, ToneEnv_Rec218_A, ToneEnv_Rec218_B, 12, 108, 0x42, 0x4280, 0	; 218
+	ToneSetDesc	0x00, ToneEnv_Rec219_A, ToneEnv_Rec219_B, 12, 108, 0x42, 0x4280, 0	; 219
+	ToneSetDesc	0x00, ToneEnv_Rec220_A, ToneEnv_Rec220_B, 12, 108, 0x42, 0x4280, 0	; 220
+	ToneSetDesc	0x80, ToneEnv_Rec221_A, ToneEnv_Rec221_B, 12, 84, 0x42, 0x4280, 0	; 221
+	ToneSetDesc	0x00, ToneEnv_Rec222_A, ToneEnv_Rec222_B, 12, 108, 0x42, 0x4280, 0	; 222
+	ToneSetDesc	0x00, ToneEnv_Rec223_A, ToneEnv_Rec223_B, 12, 108, 0x42, 0x4280, 0	; 223
+	ToneSetDesc	0x00, ToneEnv_Rec224_A, ToneEnv_Rec224_B, 12, 108, 0x42, 0x4280, 0	; 224
+	ToneSetDesc	0x00, ToneEnv_Rec225_A, ToneEnv_Rec225_B, 12, 108, 0x42, 0x4280, 0	; 225
+	ToneSetDesc	0x00, ToneEnv_Rec226_A, ToneEnv_Rec226_B, 12, 108, 0x42, 0x4280, 0	; 226
+	ToneSetDesc	0x00, ToneEnv_Rec227_A, ToneEnv_Rec227_B, 12, 108, 0x42, 0x4280, 0	; 227
+	ToneSetDesc	0x80, ToneEnv_Rec228_A, ToneEnv_Rec228_B, 12, 84, 0x42, 0x4280, 0	; 228
+	ToneSetDesc	0x80, ToneEnv_Rec229_A, ToneEnv_Rec229_B, 12, 96, 0x42, 0x4280, 0	; 229
+	ToneSetDesc	0x80, ToneEnv_Rec230_A, ToneEnv_Rec230_B, 12, 96, 0x42, 0x4280, 0	; 230
+	ToneSetDesc	0x00, ToneEnv_Rec231_A, ToneEnv_Rec231_B, 12, 108, 0x42, 0x4280, 0	; 231
+	ToneSetDesc	0x80, ToneEnv_Rec232_A, ToneEnv_Rec232_B, 12, 84, 0x42, 0x4280, 0	; 232
+	ToneSetDesc	0x00, ToneEnv_Rec233_A, ToneEnv_Rec233_B, 12, 102, 0x42, 0x4280, 0	; 233
+	ToneSetDesc	0x00, ToneEnv_Rec234_A, ToneEnv_Rec234_B, 12, 102, 0x42, 0x4280, 0	; 234
+	ToneSetDesc	0x80, ToneEnv_Rec235_A, ToneEnv_Rec235_B, 12, 65, 0x42, 0x4280, 0	; 235
+	ToneSetDesc	0x80, ToneEnv_Rec236_A, ToneEnv_Rec236_B, 12, 96, 0x42, 0x4280, 0	; 236
+	ToneSetDesc	0x80, ToneEnv_Rec237_A, ToneEnv_Rec237_B, 12, 89, 0x42, 0x4280, 0	; 237
+	ToneSetDesc	0x00, ToneEnv_Rec238_A, ToneEnv_Rec238_B, 12, 108, 0x42, 0x4280, 0	; 238
+	ToneSetDesc	0x00, ToneEnv_Rec239_A, ToneEnv_Rec239_B, 12, 108, 0x42, 0x4280, 0	; 239
+	ToneSetDesc	0x80, ToneEnv_Rec240_A, ToneEnv_Rec240_B, 12, 89, 0x42, 0x4280, 0	; 240
+	ToneSetDesc	0x80, ToneEnv_Rec241_A, ToneEnv_Rec241_B, 12, 96, 0x42, 0x4280, 0	; 241
+	ToneSetDesc	0x80, ToneEnv_Rec242_A, ToneEnv_Rec242_B, 12, 96, 0x42, 0x4280, 0	; 242
+	ToneSetDesc	0x80, ToneEnv_Rec243_A, ToneEnv_Rec243_B, 21, 108, 0x42, 0x4280, 0	; 243
+	ToneSetDesc	0x80, ToneEnv_Rec244_A, ToneEnv_Rec244_B, 12, 103, 0x42, 0x4280, 0	; 244
+	ToneSetDesc	0x00, ToneEnv_Rec245_A, ToneEnv_Rec245_B, 12, 79, 0x42, 0x4280, 0	; 245
+	ToneSetDesc	0x00, ToneEnv_Rec246_A, ToneEnv_Rec246_B, 12, 120, 0x42, 0x4280, 0	; 246
+	ToneSetDesc	0x80, ToneEnv_Rec247_A, ToneEnv_Rec247_B, 28, 96, 0x42, 0x4280, 0	; 247
+	ToneSetDesc	0x00, ToneEnv_Rec248_A, ToneEnv_Rec248_B, 12, 120, 0x42, 0x4280, 0	; 248
+	ToneSetDesc	0x80, ToneEnv_Rec249_A, ToneEnv_Rec249_B, 12, 120, 0x42, 0x4280, 0	; 249
+	ToneSetDesc	0x80, ToneEnv_Rec250_A, ToneEnv_Rec250_B, 12, 96, 0x42, 0x4280, 0	; 250
+	ToneSetDesc	0x00, ToneEnv_Rec251_A, ToneEnv_Rec251_B, 12, 120, 0x42, 0x4280, 0	; 251
+	ToneSetDesc	0x00, ToneEnv_Rec252_A, ToneEnv_Rec252_B, 12, 120, 0x42, 0x4280, 0	; 252
+	ToneSetDesc	0x00, ToneEnv_Rec253_A, ToneEnv_Rec253_B, 12, 120, 0x42, 0x4280, 0	; 253
+	ToneSetDesc	0x00, ToneEnv_Rec254_A, ToneEnv_Rec254_B, 12, 79, 0x42, 0x4280, 0	; 254
+	ToneSetDesc	0x80, ToneEnv_Rec255_A, ToneEnv_Rec255_B, 12, 95, 0x42, 0x4280, 0	; 255
+	ToneSetDesc	0x00, ToneEnv_Rec256_A, ToneEnv_Rec256_B, 12, 79, 0x42, 0x4280, 0	; 256
+	ToneSetDesc	0x80, ToneEnv_Rec257_A, ToneEnv_Rec257_B, 19, 108, 0x42, 0x4280, 0	; 257
+	ToneSetDesc	0x00, ToneEnv_Rec258_A, ToneEnv_Rec258_B, 12, 120, 0x42, 0x4280, 0	; 258
+	ToneSetDesc	0x00, ToneEnv_Rec259_A, ToneEnv_Rec259_B, 16, 90, 0x42, 0x4280, 0	; 259
+	ToneSetDesc	0x00, ToneEnv_Rec260_A, ToneEnv_Rec260_B, 12, 120, 0x42, 0x4280, 0	; 260
+	ToneSetDesc	0x00, ToneEnv_Rec261_A, ToneEnv_Rec261_B, 12, 108, 0x42, 0x4280, 0	; 261
+	ToneSetDesc	0x80, ToneEnv_Rec262_A, ToneEnv_Rec262_B, 24, 91, 0x42, 0x4280, 0	; 262
+	ToneSetDesc	0x80, ToneEnv_Rec263_A, ToneEnv_Rec263_B, 19, 91, 0x42, 0x4280, 0	; 263
+	ToneSetDesc	0x80, ToneEnv_Rec264_A, ToneEnv_Rec264_B, 12, 102, 0x42, 0x4280, 0	; 264
+	ToneSetDesc	0x00, ToneEnv_Rec265_A, ToneEnv_Rec265_B, 12, 96, 0x42, 0x4280, 0	; 265
+	ToneSetDesc	0x00, ToneEnv_Rec266_A, ToneEnv_Rec266_B, 12, 96, 0x42, 0x4280, 0	; 266
+	ToneSetDesc	0x00, ToneEnv_Rec267_A, ToneEnv_Rec267_B, 12, 96, 0x42, 0x4280, 0	; 267
+	ToneSetDesc	0x00, ToneEnv_Rec268_A, ToneEnv_Rec268_B, 12, 96, 0x42, 0x4280, 0	; 268
+	ToneSetDesc	0x80, ToneEnv_Rec269_A, ToneEnv_Rec269_B, 12, 102, 0x42, 0x4280, 0	; 269
+	ToneSetDesc	0x00, ToneEnv_Rec270_A, ToneEnv_Rec270_B, 12, 96, 0x42, 0x4280, 0	; 270
+	ToneSetDesc	0x80, ToneEnv_Rec271_A, ToneEnv_Rec271_B, 12, 102, 0x42, 0x4280, 0	; 271
+	ToneSetDesc	0x00, ToneEnv_Rec272_A, ToneEnv_Rec272_B, 12, 114, 0x42, 0x4280, 0	; 272
+	ToneSetDesc	0x80, ToneEnv_Rec273_A, ToneEnv_Rec273_B, 12, 108, 0x42, 0x4280, 0	; 273
+	ToneSetDesc	0x81, ToneEnv_Rec274_A, ToneEnv_Rec274_B, 12, 108, 0x42, 0x4280, 0	; 274
+	ToneSetDesc	0x80, ToneEnv_Rec275_A, ToneEnv_Rec275_B, 12, 108, 0x42, 0x4280, 0	; 275
+	ToneSetDesc	0x81, ToneEnv_Rec276_A, ToneEnv_Rec276_B, 12, 108, 0x42, 0x4280, 0	; 276
+	ToneSetDesc	0x80, ToneEnv_Rec277_A, ToneEnv_Rec277_B, 12, 108, 0x42, 0x4280, 0	; 277
+	ToneSetDesc	0x80, ToneEnv_Rec278_A, ToneEnv_Rec278_B, 12, 108, 0x42, 0x4280, 0	; 278
+	ToneSetDesc	0x80, ToneEnv_Rec279_A, ToneEnv_Rec279_B, 12, 108, 0x42, 0x4280, 0	; 279
+	ToneSetDesc	0x80, ToneEnv_Rec280_A, ToneEnv_Rec280_B, 12, 108, 0x42, 0x4280, 0	; 280
+	ToneSetDesc	0x80, ToneEnv_Rec281_A, ToneEnv_Rec281_B, 12, 108, 0x42, 0x4280, 0	; 281
+	ToneSetDesc	0x80, ToneEnv_Rec282_A, ToneEnv_Rec282_B, 12, 108, 0x42, 0x4280, 0	; 282
+	ToneSetDesc	0x80, ToneEnv_Rec283_A, ToneEnv_Rec283_B, 12, 96, 0x42, 0x4280, 0	; 283
+	ToneSetDesc	0x81, ToneEnv_Rec284_A, ToneEnv_Rec284_B, 12, 104, 0x42, 0x4280, 0	; 284
+	ToneSetDesc	0x80, ToneEnv_Rec285_A, ToneEnv_Rec285_B, 12, 101, 0x42, 0x4280, 0	; 285
+	ToneSetDesc	0x81, ToneEnv_Rec286_A, ToneEnv_Rec286_B, 12, 101, 0x42, 0x4280, 0	; 286
+	ToneSetDesc	0x81, ToneEnv_Rec287_A, ToneEnv_Rec287_B, 12, 101, 0x42, 0x4280, 0	; 287
+	ToneSetDesc	0x81, ToneEnv_Rec288_A, ToneEnv_Rec288_B, 12, 104, 0x42, 0x4280, 0	; 288
+	ToneSetDesc	0x81, ToneEnv_Rec289_A, ToneEnv_Rec289_B, 12, 108, 0x42, 0x4280, 0	; 289
+	ToneSetDesc	0x00, ToneEnv_Rec290_A, ToneEnv_Rec290_B, 12, 108, 0x42, 0x4280, 0	; 290
+	ToneSetDesc	0x00, ToneEnv_Rec291_A, ToneEnv_Rec291_B, 19, 120, 0x42, 0x4280, 0	; 291
+	ToneSetDesc	0x00, ToneEnv_Rec292_A, ToneEnv_Rec292_B, 12, 102, 0x42, 0x4280, 0	; 292
+	ToneSetDesc	0x80, ToneEnv_Rec293_A, ToneEnv_Rec293_B, 12, 102, 0x42, 0x4280, 0	; 293
+	ToneSetDesc	0x00, ToneEnv_Rec294_A, ToneEnv_Rec294_B, 12, 120, 0x42, 0x4280, 0	; 294
+	ToneSetDesc	0x00, ToneEnv_Rec295_A, ToneEnv_Rec295_B, 12, 120, 0x42, 0x4280, 0	; 295
+	ToneSetDesc	0x00, ToneEnv_Rec296_A, ToneEnv_Rec296_B, 12, 120, 0x42, 0x4280, 0	; 296
+	ToneSetDesc	0x00, ToneEnv_Rec297_A, ToneEnv_Rec297_B, 12, 120, 0x42, 0x4280, 0	; 297
+	ToneSetDesc	0x00, ToneEnv_Rec298_A, ToneEnv_Rec298_B, 12, 120, 0x42, 0x4280, 0	; 298
+	ToneSetDesc	0x00, ToneEnv_Rec299_A, ToneEnv_Rec299_B, 12, 120, 0x42, 0x4280, 0	; 299
+	ToneSetDesc	0x80, ToneEnv_Rec300_A, ToneEnv_Rec300_B, 12, 108, 0x42, 0x4280, 0	; 300
+	ToneSetDesc	0x00, ToneEnv_Rec301_A, ToneEnv_Rec301_B, 12, 111, 0x42, 0x4280, 0	; 301
+	ToneSetDesc	0x80, ToneEnv_Rec302_A, ToneEnv_Rec302_B, 12, 81, 0x42, 0x4280, 0	; 302
+	ToneSetDesc	0x00, ToneEnv_Rec303_A, ToneEnv_Rec303_B, 12, 114, 0x42, 0x4280, 0	; 303
+	ToneSetDesc	0x81, ToneEnv_Rec304_A, ToneEnv_Rec304_B, 12, 108, 0x42, 0x4280, 0	; 304
+	ToneSetDesc	0x80, ToneEnv_Rec305_A, ToneEnv_Rec305_B, 12, 102, 0x42, 0x4280, 0	; 305
+	ToneSetDesc	0x80, ToneEnv_Rec306_A, ToneEnv_Rec306_B, 12, 96, 0x42, 0x4280, 0	; 306
+	ToneSetDesc	0x80, ToneEnv_Rec307_A, ToneEnv_Rec307_B, 12, 96, 0x42, 0x4280, 0	; 307
+	ToneSetDesc	0x81, ToneEnv_Rec308_A, ToneEnv_Rec308_B, 12, 96, 0x42, 0x4280, 0	; 308
+	ToneSetDesc	0x80, ToneEnv_Rec309_A, ToneEnv_Rec309_B, 12, 108, 0x42, 0x4280, 0	; 309
+	ToneSetDesc	0x80, ToneEnv_Rec310_A, ToneEnv_Rec310_B, 12, 108, 0x42, 0x4280, 0	; 310
+	ToneSetDesc	0x80, ToneEnv_Rec311_A, ToneEnv_Rec311_B, 12, 108, 0x42, 0x4280, 0	; 311
+	ToneSetDesc	0x80, ToneEnv_Rec312_A, ToneEnv_Rec312_B, 12, 108, 0x42, 0x4280, 0	; 312
+	ToneSetDesc	0x80, ToneEnv_Rec313_A, ToneEnv_Rec313_B, 12, 108, 0x42, 0x4280, 0	; 313
+	ToneSetDesc	0x80, ToneEnv_Rec314_A, ToneEnv_Rec314_B, 12, 108, 0x42, 0x4280, 0	; 314
+	ToneSetDesc	0x80, ToneEnv_Rec315_A, ToneEnv_Rec315_B, 12, 102, 0x42, 0x4280, 0	; 315
+	ToneSetDesc	0x80, ToneEnv_Rec316_A, ToneEnv_Rec316_B, 12, 96, 0x42, 0x4280, 0	; 316
+	ToneSetDesc	0x00, ToneEnv_Rec317_A, ToneEnv_Rec317_B, 12, 120, 0x42, 0x4280, 0	; 317
+	ToneSetDesc	0x00, ToneEnv_Rec318_A, ToneEnv_Rec318_B, 12, 120, 0x42, 0x4280, 0	; 318
+	ToneSetDesc	0x00, ToneEnv_Rec319_A, ToneEnv_Rec319_B, 12, 120, 0x42, 0x4280, 0	; 319
+	ToneSetDesc	0x00, ToneEnv_Rec320_A, ToneEnv_Rec320_B, 12, 120, 0x42, 0x4280, 0	; 320
+	ToneSetDesc	0x00, ToneEnv_Rec321_A, ToneEnv_Rec321_B, 12, 120, 0x42, 0x4280, 0	; 321
+	ToneSetDesc	0x00, ToneEnv_Rec322_A, ToneEnv_Rec322_B, 12, 120, 0x42, 0x4280, 0	; 322
+	ToneSetDesc	0x00, ToneEnv_Rec323_A, ToneEnv_Rec323_B, 12, 120, 0x42, 0x4280, 0	; 323
+	ToneSetDesc	0x00, ToneEnv_Rec324_A, ToneEnv_Rec324_B, 12, 120, 0x42, 0x4280, 0	; 324
+	ToneSetDesc	0x00, ToneEnv_Rec325_A, ToneEnv_Rec325_B, 12, 120, 0x42, 0x4280, 0	; 325
+	ToneSetDesc	0x00, ToneEnv_Rec326_A, ToneEnv_Rec326_B, 12, 120, 0x42, 0x4280, 0	; 326
+	ToneSetDesc	0x00, ToneEnv_Rec327_A, ToneEnv_Rec327_B, 12, 120, 0x42, 0x4280, 0	; 327
+	ToneSetDesc	0x00, ToneEnv_Rec328_A, ToneEnv_Rec328_B, 12, 120, 0x42, 0x4280, 0	; 328
+	ToneSetDesc	0x01, ToneEnv_Rec329_A, ToneEnv_Rec329_B, 12, 120, 0x42, 0x4280, 0	; 329
+	ToneSetDesc	0x00, ToneEnv_Rec330_A, ToneEnv_Rec330_B, 12, 120, 0x42, 0x4280, 0	; 330
+	ToneSetDesc	0x00, ToneEnv_Rec331_A, ToneEnv_Rec331_B, 12, 120, 0x42, 0x4280, 0	; 331
+	ToneSetDesc	0x00, ToneEnv_Rec332_A, ToneEnv_Rec332_B, 12, 120, 0x42, 0x4280, 0	; 332
+	ToneSetDesc	0x80, ToneEnv_Rec333_A, ToneEnv_Rec333_B, 12, 96, 0x42, 0x4280, 0	; 333
+	ToneSetDesc	0x80, ToneEnv_Rec334_A, ToneEnv_Rec334_B, 12, 96, 0x42, 0x4280, 0	; 334
+	ToneSetDesc	0x00, ToneEnv_Rec335_A, ToneEnv_Rec335_B, 12, 120, 0x42, 0x4280, 0	; 335
+	ToneSetDesc	0x00, ToneEnv_Rec336_A, ToneEnv_Rec336_B, 12, 108, 0x42, 0x4280, 0	; 336
+	ToneSetDesc	0x80, ToneEnv_Rec337_A, ToneEnv_Rec337_B, 12, 108, 0x42, 0x4280, 0	; 337
+	ToneSetDesc	0x80, ToneEnv_Rec338_A, ToneEnv_Rec338_B, 12, 108, 0x42, 0x4280, 0	; 338
+	ToneSetDesc	0x00, ToneEnv_Rec339_A, ToneEnv_Rec339_B, 12, 79, 0x42, 0x4280, 0	; 339
+	ToneSetDesc	0x00, ToneEnv_Rec340_A, ToneEnv_Rec340_B, 12, 108, 0x42, 0x4280, 0	; 340
+	ToneSetDesc	0x00, ToneEnv_Rec341_A, ToneEnv_Rec341_B, 12, 120, 0x42, 0x4d44, 0	; 341
+	ToneSetDesc	0x00, ToneEnv_Rec342_A, ToneEnv_Rec342_B, 12, 120, 0x42, 0x4880, 0	; 342
+	ToneSetDesc	0x00, ToneEnv_Rec343_A, ToneEnv_Rec343_B, 12, 120, 0x42, 0x4d44, 0	; 343
+	ToneSetDesc	0x00, ToneEnv_Rec344_A, ToneEnv_Rec344_B, 12, 120, 0x42, 0x4d44, 0	; 344
+	ToneSetDesc	0x00, ToneEnv_Rec345_A, ToneEnv_Rec345_B, 12, 120, 0x42, 0x4d44, 0	; 345
+	ToneSetDesc	0x00, ToneEnv_Rec346_A, ToneEnv_Rec346_B, 12, 120, 0x42, 0x4d44, 0	; 346
+	ToneSetDesc	0x00, ToneEnv_Rec347_A, ToneEnv_Rec347_B, 12, 120, 0x42, 0x4d44, 0	; 347
+	ToneSetDesc	0x00, ToneEnv_Rec348_A, ToneEnv_Rec348_B, 12, 120, 0x42, 0x4d44, 0	; 348
+	ToneSetDesc	0x00, ToneEnv_Rec349_A, ToneEnv_Rec349_B, 12, 120, 0x42, 0x4d44, 0	; 349
+	ToneSetDesc	0x00, ToneEnv_Rec350_A, ToneEnv_Rec350_B, 12, 120, 0x42, 0x4d44, 0	; 350
+	ToneSetDesc	0x00, ToneEnv_Rec351_A, ToneEnv_Rec351_B, 12, 120, 0x42, 0x4d44, 0	; 351
+	ToneSetDesc	0x00, ToneEnv_Rec352_A, ToneEnv_Rec352_B, 12, 120, 0x42, 0x4d44, 0	; 352
+	ToneSetDesc	0x00, ToneEnv_Rec353_A, ToneEnv_Rec353_B, 12, 120, 0x42, 0x4d44, 0	; 353
+	ToneSetDesc	0x00, ToneEnv_Rec354_A, ToneEnv_Rec354_B, 12, 120, 0x42, 0x4ebc, 0	; 354
+	ToneSetDesc	0x00, ToneEnv_Rec355_A, ToneEnv_Rec355_B, 12, 120, 0x42, 0x4d44, 0	; 355
+	ToneSetDesc	0x00, ToneEnv_Rec356_A, ToneEnv_Rec356_B, 12, 120, 0x42, 0x4d44, 0	; 356
+	ToneSetDesc	0x00, ToneEnv_Rec357_A, ToneEnv_Rec357_B, 12, 120, 0x42, 0x4d44, 0	; 357
+	ToneSetDesc	0x00, ToneEnv_Rec358_A, ToneEnv_Rec358_B, 12, 120, 0x42, 0x4d44, 0	; 358
+	ToneSetDesc	0x00, ToneEnv_Rec359_A, ToneEnv_Rec359_B, 12, 120, 0x42, 0x4d44, 0	; 359
+	ToneSetDesc	0x00, ToneEnv_Rec360_A, ToneEnv_Rec360_B, 12, 120, 0x42, 0x4d44, 0	; 360
+	ToneSetDesc	0x00, ToneEnv_Rec361_A, ToneEnv_Rec361_B, 12, 120, 0x42, 0x4d44, 0	; 361
+	ToneSetDesc	0x00, ToneEnv_Rec362_A, ToneEnv_Rec362_B, 12, 120, 0x42, 0x4d44, 0	; 362
+	ToneSetDesc	0x00, ToneEnv_Rec363_A, ToneEnv_Rec363_B, 12, 120, 0x42, 0x4d44, 0	; 363
+	ToneSetDesc	0x00, ToneEnv_Rec364_A, ToneEnv_Rec364_B, 12, 120, 0x42, 0x4d44, 0	; 364
+	ToneSetDesc	0x00, ToneEnv_Rec365_A, ToneEnv_Rec365_B, 12, 120, 0x42, 0x4d44, 0	; 365
+	ToneSetDesc	0x00, ToneEnv_Rec366_A, ToneEnv_Rec366_B, 12, 120, 0x42, 0x4d44, 0	; 366
+	ToneSetDesc	0x00, ToneEnv_Rec367_A, ToneEnv_Rec367_B, 12, 120, 0x42, 0x4d44, 0	; 367
+	ToneSetDesc	0x00, ToneEnv_Rec368_A, ToneEnv_Rec368_B, 12, 120, 0x42, 0x4d44, 0	; 368
+	ToneSetDesc	0x00, ToneEnv_Rec369_A, ToneEnv_Rec369_B, 12, 120, 0x42, 0x4d44, 0	; 369
+	ToneSetDesc	0x00, ToneEnv_Rec370_A, ToneEnv_Rec370_B, 12, 120, 0x42, 0x4d44, 0	; 370
+	ToneSetDesc	0x00, ToneEnv_Rec371_A, ToneEnv_Rec371_B, 12, 120, 0x42, 0x4ebc, 0	; 371
+	ToneSetDesc	0x00, ToneEnv_Rec372_A, ToneEnv_Rec372_B, 12, 120, 0x42, 0x4d44, 0	; 372
+	ToneSetDesc	0x00, ToneEnv_Rec373_A, ToneEnv_Rec373_B, 12, 120, 0x42, 0x4561, 0	; 373
+	ToneSetDesc	0x08, ToneEnv_Rec374_A, ToneEnv_Rec374_B, 12, 120, 0x42, 0x4d44, 4	; 374
+	ToneSetDesc	0x00, ToneEnv_Rec375_A, ToneEnv_Rec375_B, 12, 120, 0x42, 0x4d44, 0	; 375
+	ToneSetDesc	0x00, ToneEnv_Rec376_A, ToneEnv_Rec376_B, 12, 120, 0x42, 0x534d, 0	; 376
+	ToneSetDesc	0x00, ToneEnv_Rec377_A, ToneEnv_Rec377_B, 12, 120, 0x42, 0x4d44, 0	; 377
+	ToneSetDesc	0x00, ToneEnv_Rec378_A, ToneEnv_Rec378_B, 12, 120, 0x42, 0x4d44, 0	; 378
+	ToneSetDesc	0x00, ToneEnv_Rec379_A, ToneEnv_Rec379_B, 12, 120, 0x42, 0x534d, 0	; 379
+	ToneSetDesc	0x00, ToneEnv_Rec380_A, ToneEnv_Rec380_B, 12, 120, 0x42, 0x501e, 0	; 380
+	ToneSetDesc	0x00, ToneEnv_Rec381_A, ToneEnv_Rec381_B, 12, 120, 0x42, 0x5167, 0	; 381
+	ToneSetDesc	0x00, ToneEnv_Rec382_A, ToneEnv_Rec382_B, 12, 120, 0x42, 0x5167, 0	; 382
+	ToneSetDesc	0x00, ToneEnv_Rec383_A, ToneEnv_Rec383_B, 12, 120, 0x42, 0x534d, 0	; 383
+	ToneSetDesc	0x00, ToneEnv_Rec384_A, ToneEnv_Rec384_B, 12, 120, 0x42, 0x5167, 0	; 384
+	ToneSetDesc	0x00, ToneEnv_Rec385_A, ToneEnv_Rec385_B, 12, 120, 0x42, 0x534d, 0	; 385
+	ToneSetDesc	0x00, ToneEnv_Rec386_A, ToneEnv_Rec386_B, 12, 120, 0x42, 0x4d44, 0	; 386
+	ToneSetDesc	0x00, ToneEnv_Rec387_A, ToneEnv_Rec387_B, 12, 120, 0x42, 0x4d44, 0	; 387
+	ToneSetDesc	0x00, ToneEnv_Rec388_A, ToneEnv_Rec388_B, 12, 120, 0x42, 0x1f87, 0	; 388
+	ToneSetDesc	0x00, ToneEnv_Rec389_A, ToneEnv_Rec389_B, 12, 120, 0x42, 0x4d44, 0	; 389
+	ToneSetDesc	0x08, ToneEnv_Rec390_A, ToneEnv_Rec390_B, 12, 120, 0x42, 0x4d44, 1	; 390
+	ToneSetDesc	0x00, ToneEnv_Rec391_A, ToneEnv_Rec391_B, 12, 120, 0x42, 0x4d44, 0	; 391
+	ToneSetDesc	0x08, ToneEnv_Rec392_A, ToneEnv_Rec392_B, 12, 120, 0x42, 0x4d44, 1	; 392
+	ToneSetDesc	0x08, ToneEnv_Rec393_A, ToneEnv_Rec393_B, 12, 120, 0x42, 0x4d44, 1	; 393
+	ToneSetDesc	0x08, ToneEnv_Rec394_A, ToneEnv_Rec394_B, 12, 120, 0x42, 0x4561, 1	; 394
+	ToneSetDesc	0x00, ToneEnv_Rec395_A, ToneEnv_Rec395_B, 12, 120, 0x42, 0x4d44, 1	; 395
+	ToneSetDesc	0x00, ToneEnv_Rec396_A, ToneEnv_Rec396_B, 12, 120, 0x42, 0x4d44, 1	; 396
+	ToneSetDesc	0x00, ToneEnv_Rec397_A, ToneEnv_Rec397_B, 12, 120, 0x42, 0x4561, 1	; 397
+	ToneSetDesc	0x08, ToneEnv_Rec398_A, ToneEnv_Rec398_B, 12, 120, 0x42, 0x4d44, 1	; 398
+	ToneSetDesc	0x00, ToneEnv_Rec399_A, ToneEnv_Rec399_B, 12, 120, 0x42, 0x534d, 0	; 399
+	ToneSetDesc	0x00, ToneEnv_Rec400_A, ToneEnv_Rec400_B, 12, 120, 0x42, 0x534d, 0	; 400
+	ToneSetDesc	0x00, ToneEnv_Rec401_A, ToneEnv_Rec401_B, 12, 120, 0x42, 0x534d, 0	; 401
+	ToneSetDesc	0x00, ToneEnv_Rec402_A, ToneEnv_Rec402_B, 12, 120, 0x42, 0x534d, 0	; 402
+	ToneSetDesc	0x00, ToneEnv_Rec403_A, ToneEnv_Rec403_B, 12, 120, 0x42, 0x4d44, 0	; 403
+	ToneSetDesc	0x00, ToneEnv_Rec404_A, ToneEnv_Rec404_B, 12, 120, 0x42, 0x49c1, 0	; 404
+	ToneSetDesc	0x00, ToneEnv_Rec405_A, ToneEnv_Rec405_B, 12, 120, 0x42, 0x4d44, 0	; 405
+	ToneSetDesc	0x00, ToneEnv_Rec406_A, ToneEnv_Rec406_B, 12, 120, 0x42, 0x4d44, 0	; 406
+	ToneSetDesc	0x00, ToneEnv_Rec407_A, ToneEnv_Rec407_B, 12, 120, 0x42, 0x4d44, 0	; 407
+	ToneSetDesc	0x00, ToneEnv_Rec408_A, ToneEnv_Rec408_B, 12, 120, 0x42, 0x4d44, 0	; 408
+	ToneSetDesc	0x00, ToneEnv_Rec409_A, ToneEnv_Rec409_B, 12, 120, 0x42, 0x4d44, 0	; 409
+	ToneSetDesc	0x00, ToneEnv_Rec410_A, ToneEnv_Rec410_B, 12, 120, 0x42, 0x4d44, 0	; 410
+	ToneSetDesc	0x00, ToneEnv_Rec411_A, ToneEnv_Rec411_B, 12, 120, 0x42, 0x4d44, 0	; 411
+	ToneSetDesc	0x00, ToneEnv_Rec412_A, ToneEnv_Rec412_B, 12, 120, 0x42, 0x4d44, 2	; 412
+	ToneSetDesc	0x08, ToneEnv_Rec413_A, ToneEnv_Rec413_B, 12, 120, 0x42, 0x4d44, 2	; 413
+	ToneSetDesc	0x00, ToneEnv_Rec414_A, ToneEnv_Rec414_B, 12, 120, 0x42, 0x4e80, 0	; 414
+	ToneSetDesc	0x00, ToneEnv_Rec415_A, ToneEnv_Rec415_B, 12, 120, 0x42, 0x3280, 0	; 415
+	ToneSetDesc	0x00, ToneEnv_Rec416_A, ToneEnv_Rec416_B, 12, 120, 0x42, 0x34d5, 0	; 416
+	ToneSetDesc	0x00, ToneEnv_Rec417_A, ToneEnv_Rec417_B, 12, 120, 0x42, 0x4ebc, 0	; 417
+	ToneSetDesc	0x00, ToneEnv_Rec418_A, ToneEnv_Rec418_B, 12, 120, 0x42, 0x4ebc, 0	; 418
+	ToneSetDesc	0x00, ToneEnv_Rec419_A, ToneEnv_Rec419_B, 12, 120, 0x42, 0x4ebc, 0	; 419
+	ToneSetDesc	0x00, ToneEnv_Rec420_A, ToneEnv_Rec420_B, 12, 120, 0x42, 0x4ebc, 0	; 420
+	ToneSetDesc	0x00, ToneEnv_Rec421_A, ToneEnv_Rec421_B, 12, 120, 0x42, 0x4d44, 0	; 421
+	ToneSetDesc	0x00, ToneEnv_Rec422_A, ToneEnv_Rec422_B, 12, 120, 0x42, 0x4d44, 0	; 422
+	ToneSetDesc	0x00, ToneEnv_Rec423_A, ToneEnv_Rec423_B, 12, 120, 0x42, 0x4d44, 0	; 423
+	ToneSetDesc	0x00, ToneEnv_Rec424_A, ToneEnv_Rec424_B, 12, 120, 0x42, 0x4f44, 0	; 424
+	ToneSetDesc	0x08, ToneEnv_Rec425_A, ToneEnv_Rec425_B, 12, 120, 0x42, 0x4d44, 5	; 425
+	ToneSetDesc	0x00, ToneEnv_Rec426_A, ToneEnv_Rec426_B, 12, 120, 0x42, 0x4d44, 0	; 426
+	ToneSetDesc	0x00, ToneEnv_Rec427_A, ToneEnv_Rec427_B, 12, 120, 0x42, 0x4ebc, 0	; 427
+	ToneSetDesc	0x00, ToneEnv_Rec428_A, ToneEnv_Rec428_B, 12, 120, 0x42, 0x4ebc, 0	; 428
+	ToneSetDesc	0x00, ToneEnv_Rec429_A, ToneEnv_Rec429_B, 12, 120, 0x42, 0x4d44, 0	; 429
+	ToneSetDesc	0x00, ToneEnv_Rec430_A, ToneEnv_Rec430_B, 12, 120, 0x42, 0x4d44, 0	; 430
+	ToneSetDesc	0x00, ToneEnv_Rec431_A, ToneEnv_Rec431_B, 12, 120, 0x42, 0x4d44, 0	; 431
+	ToneSetDesc	0x00, ToneEnv_Rec432_A, ToneEnv_Rec432_B, 12, 120, 0x42, 0x4d44, 0	; 432
+	ToneSetDesc	0x00, ToneEnv_Rec433_A, ToneEnv_Rec433_B, 12, 120, 0x42, 0x1fc4, 0	; 433
+	ToneSetDesc	0x00, ToneEnv_Rec434_A, ToneEnv_Rec434_B, 12, 120, 0x42, 0x4ebc, 0	; 434
+	ToneSetDesc	0x00, ToneEnv_Rec435_A, ToneEnv_Rec435_B, 12, 120, 0x42, 0x4ebc, 0	; 435
+	ToneSetDesc	0x00, ToneEnv_Rec436_A, ToneEnv_Rec436_B, 12, 120, 0x42, 0x4ebc, 0	; 436
+	ToneSetDesc	0x00, ToneEnv_Rec437_A, ToneEnv_Rec437_B, 12, 120, 0x42, 0x4ebc, 0	; 437
+	ToneSetDesc	0x00, ToneEnv_Rec438_A, ToneEnv_Rec438_B, 12, 120, 0x42, 0x4d44, 0	; 438
+	ToneSetDesc	0x00, ToneEnv_Rec439_A, ToneEnv_Rec439_B, 12, 120, 0x42, 0x4d44, 0	; 439
+	ToneSetDesc	0x00, ToneEnv_Rec440_A, ToneEnv_Rec440_B, 12, 120, 0x42, 0x4d44, 0	; 440
+	ToneSetDesc	0x00, ToneEnv_Rec441_A, ToneEnv_Rec441_B, 12, 120, 0x42, 0x4d44, 0	; 441
+	ToneSetDesc	0x08, ToneEnv_Rec442_A, ToneEnv_Rec442_B, 12, 120, 0x42, 0x4ebc, 3	; 442
+	ToneSetDesc	0x08, ToneEnv_Rec443_A, ToneEnv_Rec443_B, 12, 120, 0x42, 0x4d44, 3	; 443
+	ToneSetDesc	0x00, ToneEnv_Rec444_A, ToneEnv_Rec444_B, 12, 120, 0x42, 0x4ebc, 0	; 444
+	ToneSetDesc	0x00, ToneEnv_Rec445_A, ToneEnv_Rec445_B, 12, 120, 0x42, 0x4ebc, 0	; 445
+	ToneSetDesc	0x00, ToneEnv_Rec446_A, ToneEnv_Rec446_B, 12, 120, 0x42, 0x4d44, 0	; 446
+	ToneSetDesc	0x00, ToneEnv_Rec447_A, ToneEnv_Rec447_B, 12, 120, 0x42, 0x4d44, 0	; 447
+	ToneSetDesc	0x00, ToneEnv_Rec448_A, ToneEnv_Rec448_B, 12, 120, 0x42, 0x4d44, 0	; 448
+	ToneSetDesc	0x00, ToneEnv_Rec449_A, ToneEnv_Rec449_B, 12, 120, 0x42, 0x4ebc, 0	; 449
+	ToneSetDesc	0x00, ToneEnv_Rec450_A, ToneEnv_Rec450_B, 12, 120, 0x42, 0x4ebc, 0	; 450
+	ToneSetDesc	0x00, ToneEnv_Rec451_A, ToneEnv_Rec451_B, 12, 120, 0x42, 0x4ebc, 0	; 451
+	ToneSetDesc	0x00, ToneEnv_Rec452_A, ToneEnv_Rec452_B, 12, 120, 0x42, 0x4ebc, 0	; 452
+	ToneSetDesc	0x00, ToneEnv_Rec453_A, ToneEnv_Rec453_B, 12, 120, 0x42, 0x4d44, 0	; 453
+	ToneSetDesc	0x00, ToneEnv_Rec454_A, ToneEnv_Rec454_B, 12, 120, 0x42, 0x4d44, 0	; 454
+	ToneSetDesc	0x00, ToneEnv_Rec455_A, ToneEnv_Rec455_B, 12, 120, 0x42, 0x4d44, 0	; 455
+	ToneSetDesc	0x00, ToneEnv_Rec456_A, ToneEnv_Rec456_B, 12, 120, 0x42, 0x4d44, 0	; 456
+	ToneSetDesc	0x00, ToneEnv_Rec457_A, ToneEnv_Rec457_B, 12, 120, 0x42, 0x4d44, 0	; 457
+	ToneSetDesc	0x00, ToneEnv_Rec458_A, ToneEnv_Rec458_B, 12, 120, 0x42, 0x4d44, 0	; 458
+	ToneSetDesc	0x00, ToneEnv_Rec459_A, ToneEnv_Rec459_B, 12, 120, 0x42, 0x4d44, 0	; 459
+	ToneSetDesc	0x00, ToneEnv_Rec460_A, ToneEnv_Rec460_B, 12, 120, 0x42, 0x4d44, 0	; 460
+	ToneSetDesc	0x00, ToneEnv_Rec461_A, ToneEnv_Rec461_B, 12, 120, 0x42, 0x4d44, 0	; 461
+	ToneSetDesc	0x00, ToneEnv_Rec462_A, ToneEnv_Rec462_B, 12, 120, 0x42, 0x4d44, 0	; 462
+	ToneSetDesc	0x00, ToneEnv_Rec463_A, ToneEnv_Rec463_B, 12, 120, 0x42, 0x4d44, 0	; 463
+	ToneSetDesc	0x00, ToneEnv_Rec464_A, ToneEnv_Rec464_B, 12, 120, 0x42, 0x4d44, 0	; 464
+	ToneSetDesc	0x00, ToneEnv_Rec465_A, ToneEnv_Rec465_B, 12, 120, 0x42, 0x4d44, 0	; 465
+	ToneSetDesc	0x00, ToneEnv_Rec466_A, ToneEnv_Rec466_B, 12, 120, 0x42, 0x4d44, 0	; 466
+	ToneSetDesc	0x00, ToneEnv_Rec467_A, ToneEnv_Rec467_B, 12, 120, 0x42, 0x4d44, 0	; 467
+	ToneSetDesc	0x00, ToneEnv_Rec468_A, ToneEnv_Rec468_B, 12, 120, 0x42, 0x4d44, 0	; 468
+	ToneSetDesc	0x00, ToneEnv_Rec469_A, ToneEnv_Rec469_B, 12, 120, 0x42, 0x4180, 0	; 469
+	ToneSetDesc	0x00, ToneEnv_Rec470_A, ToneEnv_Rec470_B, 12, 120, 0x42, 0x4880, 0	; 470
+	ToneSetDesc	0x00, ToneEnv_Rec471_A, ToneEnv_Rec471_B, 12, 120, 0x42, 0x4d44, 0	; 471
+	ToneSetDesc	0x00, ToneEnv_Rec472_A, ToneEnv_Rec472_B, 12, 120, 0x42, 0x4d44, 0	; 472
+	ToneSetDesc	0x00, ToneEnv_Rec473_A, ToneEnv_Rec473_B, 12, 120, 0x42, 0x2e80, 0	; 473
+	ToneSetDesc	0x00, ToneEnv_Rec474_A, ToneEnv_Rec474_B, 12, 120, 0x42, 0x4527, 0	; 474
+	ToneSetDesc	0x00, ToneEnv_Rec475_A, ToneEnv_Rec475_B, 12, 120, 0x42, 0x4ebc, 0	; 475
+	ToneSetDesc	0x00, ToneEnv_Rec476_A, ToneEnv_Rec476_B, 12, 120, 0x42, 0x4ebc, 0	; 476
+	ToneSetDesc	0x00, ToneEnv_Rec477_A, ToneEnv_Rec477_B, 12, 120, 0x42, 0x4ebc, 0	; 477
+	ToneSetDesc	0x00, ToneEnv_Rec478_A, ToneEnv_Rec478_B, 12, 120, 0x42, 0x4d44, 0	; 478
+	ToneSetDesc	0x00, ToneEnv_Rec479_A, ToneEnv_Rec479_B, 12, 120, 0x42, 0x5167, 0	; 479
+	ToneSetDesc	0x00, ToneEnv_Rec480_A, ToneEnv_Rec480_B, 12, 120, 0x42, 0x5880, 0	; 480
+	ToneSetDesc	0x00, ToneEnv_Rec481_A, ToneEnv_Rec481_B, 12, 120, 0x42, 0x49c1, 0	; 481
+	ToneSetDesc	0x00, ToneEnv_Rec482_A, ToneEnv_Rec482_B, 12, 120, 0x42, 0x4d44, 0	; 482
+	ToneSetDesc	0x00, ToneEnv_Rec483_A, ToneEnv_Rec483_B, 12, 120, 0x42, 0x4d44, 0	; 483
+	ToneSetDesc	0x00, ToneEnv_Rec484_A, ToneEnv_Rec484_B, 12, 120, 0x42, 0x4d44, 0	; 484
+	ToneSetDesc	0x00, ToneEnv_Rec485_A, ToneEnv_Rec485_B, 12, 120, 0x42, 0x4d44, 0	; 485
+	ToneSetDesc	0x00, ToneEnv_Rec486_A, ToneEnv_Rec486_B, 12, 120, 0x42, 0x4d44, 0	; 486
 
 ; -----------------------------------------------------------------------------
 ; 1024 LE16 tone indices (dir +0x24/+0x9C).  Values 0-338; mostly ToneDB_ToneIndexMapA shifted down by 1.
