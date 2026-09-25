@@ -12362,7 +12362,7 @@ Voice_Apply_GateRouting_Done:
 ;                  ToneGen_WriteVoiceParams_Ext (0x02D6CA), _Ext2 (0x02D777).
 ;   FREE           literal 0x7E00. Four sites: ToneGen_SilenceChannel (0x02B4D4),
 ;                  ToneGen_Config_Init (0x02E085), Voice_Reset_Engine phase B (0x021F94),
-;                  and the dormant probe ToneGen_ConfigInit_AltData (0x02E17D).
+;                  and the dormant probe ToneGen_SelfTest_ProbeVoice0 (0x02E17D).
 ;   HAND-OFF       the word built here, bit 15 SET. Five sites: ToneGen_WriteSingleReg
 ;                  (0x02D41B), ToneGen_WriteVoice_Direct (0x027FBB), and the tails of
 ;                  ToneGen_WriteVoiceParams_Ext (0x02D731) / _Ext2 (0x02D7B9).
@@ -17240,7 +17240,7 @@ Voice_ClearLFO_ActiveFlag:
 ; Notes: Calls DSP_AlgoType_Dispatch1 for algorithm type lookup
 ;        Stores result to DSP state at 0x04520E
 ;        Iterates voice output list via Voice_BuildOutputList
-;        Configures tone generator params via ToneGen_ExtParams56b_DataTable
+;        Configures tone generator params via ToneGen_WriteReg0640
 ;        Two-pass: first updates 0x04520E, then 0x04520C
 ; ----------------------------------------------------------------------------
 ; Emitted as `.byte` in the LLVM source but is ordinary code.  A = voice, C = channel.
@@ -17284,7 +17284,7 @@ LABEL_027D31:
 	ld	wa, (xwa)
 	ld	w, 0:opc
 	lda	xbc, (283084:24)
-	call	ToneGen_ExtParams56b_DataTable
+	call	ToneGen_WriteReg0640
 	incw	1, (xsp+4)
 LABEL_027D4A:
 	ld	wa, (xsp+4)
@@ -19892,7 +19892,7 @@ AudioChannel_Handler_Cmd02:
 	jr	nz, LABEL_0291E4
 	ld	a, (xsp+8)
 	extz	wa
-	call	VoiceAllocate_DataTable_02CD14
+	call	Voice_Query_PartVoices_Mask7F
 	ld	(xsp+4), xhl
 	jr	LABEL_0291E4
 LABEL_0291D8:
@@ -23161,10 +23161,11 @@ Voice_InitFromSlot:
 ; This one replaces the LOW BYTE (bits 0..7) of articulation word 0, i.e.
 ; part+0x102 = (part+0x102 & 0xFF00) | C. Then calls Voice_UpdateFlagsFromSlot and
 ; Voice_Selector_ComputeMixWeights so the derived words are refreshed.
-; Called from VoiceAlloc_CheckAndInit_ExtData+0x102 (0x02EDE7) with A taken from the command
+; Called from VoiceAlloc_CheckAndInit_FromRecord+0x102 (0x02EDE7) with A taken from the command
 ; record byte +0x01 (part) and C from byte +0x04 (value) -- i.e. it is the handler for one
 ; parameter number of the external/SysEx parameter-change dispatcher.
-VoiceSlot_DataTable_02AE22:
+; ★ Renamed 2026-09-25 from VoiceSlot_DataTable_02AE22: header: replaces the low byte of articulation word 0, part+0x102 = (.. & 0xFF00) | C.
+Voice_SetArticWord0_LowByte:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
@@ -26687,7 +26688,8 @@ Voice_AllocateForSustain:
 ; The caller at 0x02919E selects between this routine and VOICE_QUERY_REQ_MODE00_MASKFF
 ; (0x02CD36) on the part mode: mode 0x00 -> here, mode 0x80 -> 0x02CD36, modes 0x40/0xC0 ->
 ; neither (the query is skipped entirely).
-VoiceAllocate_DataTable_02CD14:
+; ★ Renamed 2026-09-25 from VoiceAllocate_DataTable_02CD14: header: the mode-0x00 query-packet builder (mask 0x007F) beside Voice_Query_PartVoices.
+Voice_Query_PartVoices_Mask7F:
 	push	xiz
 	lda	xiz, (10846:16)
 	ld	(xiz), 0
@@ -27187,7 +27189,8 @@ ToneGen_WriteVoicePitch_NopCont:
 ; is that write's ADDRESS-latch store `ld (0x100000),WA`, and 0x02D3F2 is the
 ; `res 7,(0x18)` that opens the final write.)
 ; Unreferenced in v142 (no call and no pointer to it anywhere in the ROM).
-ToneGen_PanTable_02D0DC:
+; ★ Renamed 2026-09-25 from ToneGen_PanTable_02D0DC: header: writes TG 0x0080+ch from shadow+0x04 with bit15 (the load strobe) cleared.
+ToneGen_WriteReg0080_StrobeClear:
 	push	xiz
 	ld	xiz, xbc
 	res_dd8	7, 24
@@ -27241,7 +27244,7 @@ LABEL_02D0FC:
 ; spots, both of which occur in this file. (a) Register-indirect access:
 ; ToneGen_ReadPitch_AndScale loads the constant 0x00100002 into XWA and stores through it 36
 ; bytes later, across a call, so a text scan sees the port constant but not the bus cycle;
-; (b) The dead routines ToneGen_NoteTable_02D55E and ToneGen_Write_Regs0100_0140 spell
+; (b) The dead routines ToneGen_WriteReg0840_Shadow2E and ToneGen_Write_Regs0100_0140 spell
 ; the ports in decimal (1048576 / 1048578) and carry their P6.7 toggles as raw `.byte`.
 ; [INFERENCE] the chip needs the select valid before /CS, so the firmware presents it one
 ; instruction early and holds it across the cycle.
@@ -27790,7 +27793,7 @@ ToneGen_WriteVoiceParams_Exit:
 ;   Voice_TickNoteDecay (0x027363), Voice_SetPitch (0x02C6CD), Voice_NoteOff (0x02C7D7),
 ;   Voice_SetVelocity_Type0/_Type40/_Type80 Loop2Body, Voice_Reload_Levels branches A and C
 ;   (0x02CD71), ToneGen_Config_Init (0x02DFCF), and the dormant probe
-;   ToneGen_ConfigInit_AltData (call at 0x02E0FF).
+;   ToneGen_SelfTest_ProbeVoice0 (call at 0x02E0FF).
 ; Eight of the ten pass BC = the word at 0x0430BB + slot*0x47 (live slot record +0x2D) --
 ; the HAND-OFF word, bit 15 SET, built by Voice_Build_GateCommand (0x025589) or its twin
 ; _NoPartial (0x0255F3), where the whole command set is documented. ToneGen_Config_Init
@@ -27979,7 +27982,8 @@ ToneGen_WriteLevelPair_NopCont2:
 
 ; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_NoteTable_02D55E .byte). ** Single-register writer:
 ; WA = channel, XBC = shadow; 0x0840 + ch <- shadow +0x2E. Unreferenced in v142.
-ToneGen_NoteTable_02D55E:
+; ★ Renamed 2026-09-25 from ToneGen_NoteTable_02D55E: header: single-register writer, TG 0x0840+ch <- shadow+0x2E.
+ToneGen_WriteReg0840_Shadow2E:
 	push xiz
 	ld	xiz, xbc
 	res_dd8	7, 24
@@ -28500,7 +28504,8 @@ ToneGen_WriteGlobalConfig_NopCont13:
 ; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_GlobalConfigTable_02D93E .byte). It is not a table;
 ; it is the first of five single/double register writers packed into that blob. **
 ; WA = channel, XBC = shadow; writes 0x0440+ch <- +0x10 and 0x0480+ch <- +0x12. Unreferenced.
-ToneGen_GlobalConfigTable_02D93E:
+; ★ Renamed 2026-09-25 from ToneGen_GlobalConfigTable_02D93E: header: writes TG 0x0440+ch <- +0x10 and 0x0480+ch <- +0x12.
+ToneGen_WriteReg0440_0480:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xbc
@@ -28840,7 +28845,8 @@ ToneGen_WriteExtParams_56b_NopCont3:
 ; ** MISIDENTIFIED AS DATA (LLVM: ToneGen_ExtParams56b_DataTable .byte) BUT IT IS LIVE: it is
 ; CALLed from 0x027D43 and that call is the only reference to it in the ROM. **
 ; WA = channel, XBC = shadow; writes 0x0640 + ch <- shadow +0x42.
-ToneGen_ExtParams56b_DataTable:
+; ★ Renamed 2026-09-25 from ToneGen_ExtParams56b_DataTable: header: writes TG 0x0640+ch <- shadow+0x42.
+ToneGen_WriteReg0640:
 	push	xiz
 	ld	xiz, xbc
 	res_dd8	7, 24
@@ -29076,7 +29082,8 @@ ToneGen_WriteExtParam_540_Mute_NopCont:
 ;   ch >= 0x40 -> strobe 0x0580+ch from +0x3E, companion 0x0600+ch <- +0x42
 ; This is the clearest statement in the firmware that the TG has TWO channel banks split at
 ; channel 0x40 and that the second bank uses a different register-base set.
-ToneGen_ExtParams15_DataTable:
+; ★ Renamed 2026-09-25 from ToneGen_ExtParams15_DataTable: header: channel-banked version of ToneGen_WriteExtParams_15 (bank split at ch 0x40).
+ToneGen_WriteExtParams_15_Banked:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xbc
@@ -29511,7 +29518,8 @@ ToneGen_ConfigInit_Return:
 ; ToneGen_Read_Register (0x021023) is the ONLY place the TG active-voice bitmap re-enters
 ; sub-CPU software. This routine is the firmware's own "is the tone generator alive?" probe
 ; and is worth re-enabling in a debug build. See findings.
-ToneGen_ConfigInit_AltData:
+; ★ Renamed 2026-09-25 from ToneGen_ConfigInit_AltData: header: the dormant 'is the tone generator alive?' probe that polls voice 0.
+ToneGen_SelfTest_ProbeVoice0:
 	push	xiz
 	ldw	iz, 65535
 	res_dd8	7, 24
@@ -29802,7 +29810,8 @@ VoiceStruct_BulkInit_Return:
 ; A = catalogue index, C = a second index, E = custom-tone slot (saved on the stack). Calls
 ; ToneDB_Resolve_NamedToneRecord (0x032A08) to obtain XHL = the source record, then copies
 ; (0x045314)[0xEE] bytes into (0x04531C) + slot*0x50 + 0x4AA7 using MEMCPY_BYTES_XWA_TO_XBC.
-VoiceStruct_BulkInit_AltData:
+; ★ Renamed 2026-09-25 from VoiceStruct_BulkInit_AltData: header: copies a resolved tone record (0xEE bytes) into a custom-tone slot.
+CustomTone_CopyToneRecord:
 	dec	2, xsp
 	ld	(xsp), e
 	ld	l, a
@@ -29862,7 +29871,8 @@ VoiceSubSlot_Init:
 ; returns with retd 2. Calls WaveSel_StageA1_FindVelSplit (0x03248B) for XHL = the source record and
 ; copies (0x045314)[0xF0] bytes into
 ; (0x04531C) + slot*0x50 + unit*0x0B + 0x4AE1.
-VoiceSubSlot_Init_AltData:
+; ★ Renamed 2026-09-25 from VoiceSubSlot_Init_AltData: header: copies a sub-unit record (0xF0 bytes) into a custom-tone slot's sub-unit.
+CustomTone_CopySubUnitRecord:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
@@ -30085,7 +30095,8 @@ VoiceParam_FullSetup_Return:
 ; Finally dispatches on the part mode (tone-header +0x10 & 0xC0):
 ;   0x80 -> nothing;  0x40 -> VoiceSlot_AltInit (0x034968);  0x00 and 0xC0 ->
 ;   VoiceSlot_FullInit (0x034890).
-VoiceParam_FullSetup_ExtData:
+; ★ Renamed 2026-09-25 from VoiceParam_FullSetup_ExtData: header: sets the part status bits from C, then re-initialises the part by its mode.
+Voice_Part_SetStateAndReinit:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
@@ -30094,9 +30105,9 @@ VoiceParam_FullSetup_ExtData:
 	lda	xde, (267112:24)
 	ld_rrw	wa, xde, wa
 	and	wa, 3
-	jrl	z, VoiceParam_FullSetup_ExtData_Epilogue
+	jrl	z, Voice_Part_SetStateAndReinit_Epilogue
 	cp	c, 0:i3
-	jr	nz, VoiceParam_FullSetup_ExtData_Skip
+	jr	nz, Voice_Part_SetStateAndReinit_Skip
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -30107,8 +30118,8 @@ VoiceParam_FullSetup_ExtData:
 	muls	wa, 287
 	lda	xbc, (267112:24)
 	or_rrw_im	xbc, wa, 2, 0
-	jr	VoiceParam_FullSetup_ExtData_Join
-VoiceParam_FullSetup_ExtData_Skip:
+	jr	Voice_Part_SetStateAndReinit_Join
+Voice_Part_SetStateAndReinit_Skip:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -30119,7 +30130,7 @@ VoiceParam_FullSetup_ExtData_Skip:
 	muls	wa, 287
 	lda	xbc, (267112:24)
 	or_rrw_im	xbc, wa, 1, 0
-VoiceParam_FullSetup_ExtData_Join:
+Voice_Part_SetStateAndReinit_Join:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -30157,20 +30168,20 @@ VoiceParam_FullSetup_ExtData_Join:
 	lda	xbc, (267118:24)
 	ld_rrl	xwa, xbc, wa
 	bitm	7, (xwa+93)
-	jr	z, VoiceParam_FullSetup_ExtData_Skip2
+	jr	z, Voice_Part_SetStateAndReinit_Skip2
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267122:24)
 	or_rrw_im	xbc, wa, 0, 64
-	jr	VoiceParam_FullSetup_ExtData_Join2
-VoiceParam_FullSetup_ExtData_Skip2:
+	jr	Voice_Part_SetStateAndReinit_Join2
+Voice_Part_SetStateAndReinit_Skip2:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267122:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xff, 0xbf	; and (XBC+WA),0xbfff  (unidasm; no llvm-mc spelling)
-VoiceParam_FullSetup_ExtData_Join2:
+Voice_Part_SetStateAndReinit_Join2:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -30179,23 +30190,23 @@ VoiceParam_FullSetup_ExtData_Join2:
 	ld	a, (xwa+16)
 	and	a, 192
 	cp	a, 128
-	jr	z, VoiceParam_FullSetup_ExtData_Epilogue
+	jr	z, Voice_Part_SetStateAndReinit_Epilogue
 	cp	a, 64
-	jr	z, VoiceParam_FullSetup_ExtData_Skip4
+	jr	z, Voice_Part_SetStateAndReinit_Skip4
 	cp	a, 192
-	jr	z, VoiceParam_FullSetup_ExtData_Skip3
+	jr	z, Voice_Part_SetStateAndReinit_Skip3
 	cp	a, 0:i3
-	jr	nz, VoiceParam_FullSetup_ExtData_Epilogue
-VoiceParam_FullSetup_ExtData_Skip3:
+	jr	nz, Voice_Part_SetStateAndReinit_Epilogue
+Voice_Part_SetStateAndReinit_Skip3:
 	ld	a, (xsp)
 	extz	wa
 	call	VoiceSlot_FullInit
-	jr	t, VoiceParam_FullSetup_ExtData_Epilogue
-VoiceParam_FullSetup_ExtData_Skip4:
+	jr	t, Voice_Part_SetStateAndReinit_Epilogue
+Voice_Part_SetStateAndReinit_Skip4:
 	ld	a, (xsp)
 	extz	wa
 	call	VoiceSlot_AltInit
-VoiceParam_FullSetup_ExtData_Epilogue:
+Voice_Part_SetStateAndReinit_Epilogue:
 	inc	2, xsp
 	ret
 ; ** Inside the same misidentified blob; unnamed in both sources. ** Called from 0x02EE97.
@@ -30400,7 +30411,7 @@ VoiceParam_Set_Tone_Option_Case0:
 	jr	t, VoiceParam_Set_Tone_Option_Epilogue
 	ld	a, (xsp+2)
 	extz	wa
-	call	Voice_ProgChange_TableData
+	call	Voice_Part_ResetSlotRouting
 	cp	(xsp), 245
 	jr	z, VoiceParam_Set_Tone_Option_Skip
 	ld	a, (xsp+2)
@@ -30410,7 +30421,7 @@ VoiceParam_Set_Tone_Option_Skip:
 	ld	a, (xsp+2)
 	extz	wa
 	ld	bc, 0:i3
-	calr	VoiceAlloc_WithRoutingFlag_ExtData
+	calr	VoiceAlloc_Apply_Algo_Group0
 	jr	VoiceParam_Set_Tone_Option_Epilogue
 	ld	a, (xsp+2)
 	extz	wa
@@ -30418,7 +30429,7 @@ VoiceParam_Set_Tone_Option_Skip:
 	ld	a, (xsp+2)
 	extz	wa
 	ld	bc, 0:i3
-	calr	VoiceAlloc_WithRoutingFlag_ExtData
+	calr	VoiceAlloc_Apply_Algo_Group0
 	jr	VoiceParam_Set_Tone_Option_Epilogue
 	ld	a, (xsp+2)
 	extz	wa
@@ -30426,7 +30437,7 @@ VoiceParam_Set_Tone_Option_Skip:
 	ld	a, (xsp+2)
 	extz	wa
 	ld	bc, 0:i3
-	calr	VoiceAlloc_WithRoutingFlag_ExtData
+	calr	VoiceAlloc_Apply_Algo_Group0
 	jr	VoiceParam_Set_Tone_Option_Epilogue
 	ld	a, (xsp+2)
 	extz	wa
@@ -30552,7 +30563,7 @@ VoiceParam_CustomTone_Apply_Catalog80:
 	ld	e, a
 	extz	de
 	ld	wa, hl
-	calr	VoiceStruct_BulkInit_AltData
+	calr	CustomTone_CopyToneRecord
 	ld	(xsp+14), 0
 	cp	(xsp+14), 2
 	jr	nc, VoiceParam_CustomTone_Apply_Catalog80_Skip
@@ -30577,7 +30588,7 @@ VoiceParam_CustomTone_Apply_Catalog80_Loop:
 	extz	wa
 	pushw wa
 	ld	wa, hl
-	calr	VoiceSubSlot_Init_AltData
+	calr	CustomTone_CopySubUnitRecord
 	andmi8	(xiz+2), 15
 	ormi8	(xiz+2), 80
 	incm8	1, (xsp+14)
@@ -30668,7 +30679,7 @@ VoiceParam_CustomTone_Apply_Catalog8C:
 	ld	wa, bc
 	ld	bc, ix
 	ld	de, hl
-	calr	VoiceSubSlot_Init_AltData
+	calr	CustomTone_CopySubUnitRecord
 	ld	wa, (xsp+8)
 	extz	xwa
 	sll	xwa, 4
@@ -30832,10 +30843,11 @@ VoiceAlloc_CheckAndInit_Return:
 ; Unlike VoiceAlloc_CheckAndInit it does NOT consult the current-edit-part byte 0x0451A4 --
 ; it goes straight to the (PART+0x00 & 3) == 3 test for parts > 2.
 ; After marking the part it reads PART+0x1A; if that byte is in [0x40,0x50) it calls
-; DSP_FlushAllSlots_Data (0x0351B3) with the part index, otherwise it just returns.
+; DSP_FlushAllSlots_ForPart (0x0351B3) with the part index, otherwise it just returns.
 ; Single caller: tone-edit opcode 0x13 at 0x02EF71.  Despite the "_ExtData" suffix this is
 ; ordinary code, not a data table.
-VoiceAlloc_CheckAndInit_ExtData:
+; ★ Renamed 2026-09-25 from VoiceAlloc_CheckAndInit_ExtData: header: register-argument twin of VoiceAlloc_CheckAndInit, part from the record.
+VoiceAlloc_CheckAndInit_FromRecord:
 	ld	e, (xwa+1)
 	cp	e, 2:i3
 	jr	ule, VoiceAlloc_Cmd_MarkPresent
@@ -30864,7 +30876,7 @@ VoiceAlloc_Cmd_MarkPresent:
 	or_rrw_im	xbc, wa, 1, 0
 	ret
 ; Part was not yet allocated: set PART+0x00 bit 0, then range-check PART+0x1A against
-; [0x40,0x50) before calling DSP_FlushAllSlots_Data.
+; [0x40,0x50) before calling DSP_FlushAllSlots_ForPart.
 VoiceAlloc_Cmd_FirstAlloc:
 	ld	a, e
 	extz	wa
@@ -30882,7 +30894,7 @@ VoiceAlloc_Cmd_FirstAlloc:
 	ret	nc
 	ld	a, e
 	extz	wa
-	call	DSP_FlushAllSlots_Data
+	call	DSP_FlushAllSlots_ForPart
 	ret
 ; Ships one whole tone-edit buffer from sub to main.  Input: A = edit-buffer index.
 ;   src = (ToneDB_RamBankA) + 0x4AA7 + index*0x50
@@ -30942,7 +30954,7 @@ Audio_Cmd_ToneEdit_TableJump:
 	ld_rrw	wa, xix, wa
 	lda	xix, (Audio_Cmd_ToneEdit_Op00:24)
 	jp_rr	8, xix, wa
-; Opcode 0x00: VoiceParam_FullSetup_ExtData(WA = part from rec+1, BC = value from rec+4).
+; Opcode 0x00: Voice_Part_SetStateAndReinit(WA = part from rec+1, BC = value from rec+4).
 Audio_Cmd_ToneEdit_Op00:
 	ld	a, (xiz+1)
 	ld	e, a
@@ -30951,9 +30963,9 @@ Audio_Cmd_ToneEdit_Op00:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	calr	VoiceParam_FullSetup_ExtData
+	calr	Voice_Part_SetStateAndReinit
 	jrl	Audio_Cmd_ToneEdit_Return
-; Opcode 0x04: VoiceAlloc_CheckAndInit(part) then 0x02AE22 (VoiceSlot_DataTable_02AE22)
+; Opcode 0x04: VoiceAlloc_CheckAndInit(part) then 0x02AE22 (Voice_SetArticWord0_LowByte)
 ; with WA = part, BC = rec+4.
 Audio_Cmd_ToneEdit_Op04:
 	ld	a, (xiz+1)
@@ -30966,7 +30978,7 @@ Audio_Cmd_ToneEdit_Op04:
 	ld	c, a
 	extz	bc
 	ld	wa, de
-	call	VoiceSlot_DataTable_02AE22
+	call	Voice_SetArticWord0_LowByte
 	jrl	t, Audio_Cmd_ToneEdit_Return
 ; Opcode 0x05: VoiceAlloc_CheckAndInit(part) then 0x02AE58 with WA = part, BC = rec+4.
 Audio_Cmd_ToneEdit_Op05:
@@ -31140,11 +31152,11 @@ Audio_Cmd_ToneEdit_Op0C:
 	ld	wa, de
 	call	Voice_Artic_SetDepthPair_B
 	jrl	t, Audio_Cmd_ToneEdit_Return
-; Opcode 0x13: VoiceAlloc_CheckAndInit_ExtData(XWA = record) followed by 0x02E91B with
+; Opcode 0x13: VoiceAlloc_CheckAndInit_FromRecord(XWA = record) followed by 0x02E91B with
 ; WA = rec+4.
 Audio_Cmd_ToneEdit_Op13:
 	ld	xwa, xiz
-	calr	VoiceAlloc_CheckAndInit_ExtData
+	calr	VoiceAlloc_CheckAndInit_FromRecord
 	ld	a, (xiz+4)
 	extz	wa
 	calr	VoiceParam_CustomTone_Select
@@ -31806,7 +31818,8 @@ VoiceAlloc_WithRoutingFlag_Return:
 ; This is the only place group 0 parameters reach the tone generator after an edit.
 ; Callers verified by disassembly: 0x02E8C4 and 0x02E8D9 (both with BC = 0), and the four
 ; opcode-group cases at 0x02FB65, 0x02FB75, 0x02FB85, 0x02FB95 (slots 0..3).
-VoiceAlloc_WithRoutingFlag_ExtData:
+; ★ Renamed 2026-09-25 from VoiceAlloc_WithRoutingFlag_ExtData: header: ALGORITHM GROUP 0 APPLY; siblings are VoiceAlloc_Apply_Algo_Group1/2.
+VoiceAlloc_Apply_Algo_Group0:
 	lda	xsp, (xsp-10)
 	push xiz
 	ld	(xsp+10), c
@@ -32032,7 +32045,7 @@ VoiceAlloc_Apply_Grp1_VoiceLoop_Test:
 	ret
 ; ALGORITHM GROUP 2 APPLY.  Group = 2 throughout; Voice_BuildOutputList selector = slot | 8
 ; (`set 3,WA`); per voice it calls Voice_OpSlot_WriteParams(group 2), Voice_Freq_WriteLeft
-; (0x023043), Voice_Freq_WriteRight (0x02315F) and ToneGen_ExtParams15_DataTable (0x02DD6D).
+; (0x023043), Voice_Freq_WriteRight (0x02315F) and ToneGen_WriteExtParams_15_Banked (0x02DD6D).
 ; Loop terminator (word & 0xFF) >= 0x80.  Callers: opcodes 0x33..0x36 (0x02FBE5..0x02FC15).
 VoiceAlloc_Apply_Algo_Group2:
 	dec	0, xsp
@@ -32125,7 +32138,7 @@ VoiceAlloc_Apply_Grp2_VoiceLoop:
 	call	Voice_Freq_WriteRight
 	ld	wa, iz
 	lda	xbc, (283084:24)
-	call	ToneGen_ExtParams15_DataTable
+	call	ToneGen_WriteExtParams_15_Banked
 	inc	1, qiz
 ; Loop condition: continue while (list word & 0xFF) < 0x80.
 VoiceAlloc_Apply_Grp2_VoiceLoop_Test:
@@ -32457,7 +32470,7 @@ Audio_Cmd_EffParam_Op26:
 	ld	bc, 0:i3
 	call	AudioChannel_Dispatch
 	jrl	t, Audio_Cmd_EffParam_Return
-; Opcodes 0x2B..0x2E: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 0) -- group 0 apply.
+; Opcodes 0x2B..0x2E: VoiceAlloc_Apply_Algo_Group0(part, slot 0) -- group 0 apply.
 ; Note all four opcodes of the run share this case and therefore share slot 0; the per-slot
 ; distinction is carried by the next three cases, not by the opcode's low bits.
 Audio_Cmd_EffParam_Grp0_Slot0:
@@ -32465,31 +32478,31 @@ Audio_Cmd_EffParam_Grp0_Slot0:
 	ld	a, (xwa+1)
 	extz	wa
 	ld	bc, 0:i3
-	calr	VoiceAlloc_WithRoutingFlag_ExtData
+	calr	VoiceAlloc_Apply_Algo_Group0
 	jrl	Audio_Cmd_EffParam_Return
-; Opcodes 0x2F..0x32: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 1).
+; Opcodes 0x2F..0x32: VoiceAlloc_Apply_Algo_Group0(part, slot 1).
 Audio_Cmd_EffParam_Grp0_Slot1:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	ld	bc, 1:i3
-	calr	VoiceAlloc_WithRoutingFlag_ExtData
+	calr	VoiceAlloc_Apply_Algo_Group0
 	jrl	Audio_Cmd_EffParam_Return
-; Opcodes 0x33..0x36: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 2).
+; Opcodes 0x33..0x36: VoiceAlloc_Apply_Algo_Group0(part, slot 2).
 Audio_Cmd_EffParam_Grp0_Slot2:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	ld	bc, 2:i3
-	calr	VoiceAlloc_WithRoutingFlag_ExtData
+	calr	VoiceAlloc_Apply_Algo_Group0
 	jrl	Audio_Cmd_EffParam_Return
-; Opcodes 0x37..0x3A: VoiceAlloc_WithRoutingFlag_ExtData(part, slot 3).
+; Opcodes 0x37..0x3A: VoiceAlloc_Apply_Algo_Group0(part, slot 3).
 Audio_Cmd_EffParam_Grp0_Slot3:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	ld	bc, 3:i3
-	calr	VoiceAlloc_WithRoutingFlag_ExtData
+	calr	VoiceAlloc_Apply_Algo_Group0
 	jrl	Audio_Cmd_EffParam_Return
 ; Opcodes 0x3B..0x3E: VoiceAlloc_Apply_Algo_Group1(part, slot 0).
 Audio_Cmd_EffParam_Grp1_Slot0:
@@ -36895,7 +36908,7 @@ VoiceBuf_TypeSelector_MatchEpilogue:
 	cpib_sri 0x07, 0xEC, 0xE8, 0x10
 	jr c, VoiceChanScan_LoopBody
 	cp c, 0:i3
-	jr nz, VoiceChanScan_Data
+	jr nz, VoiceChanScan_ReturnPUnchanged
 
 ; Test mask[p] against tonerec+0x11; jump to the absent path if clear.
 VoiceChanScan_LoopBody:
@@ -36949,14 +36962,15 @@ VoiceChanScan_NoMatch:
 ; C = W (the accumulated rank).
 VoiceChanScan_LoopNext:
 	ld c, w
-	jr VoiceChanScan_Data
+	jr VoiceChanScan_ReturnPUnchanged
 
 ; C = 0xFF -- partial not present in this tone record.
 VoiceChanScan_Epilogue:
 	ld c, 0xFF:opc
 
 ; L = C; ret.
-VoiceChanScan_Data:
+; ★ Renamed 2026-09-25 from VoiceChanScan_Data: the `L = C; ret` arm: partial index p returned unpacked (RAM tones / kits).
+VoiceChanScan_ReturnPUnchanged:
 	ld l, c
 	ret
 
@@ -37676,13 +37690,14 @@ VoiceTablePtr_Common:
 VoiceTablePtr_Epilogue:
 	ld wa, (0x041343:24)
 	bit 2, wa
-	jr z, VoiceTablePtr_Data
+	jr z, VoiceTablePtr_StdIndex28
 	ld xwa, (0x045314:24)
 	ld_sril XIX, (xwa + 0x00a0)
 	jr VoiceTablePtr_Select2
 
 ; Standard index table Root->+0x28.
-VoiceTablePtr_Data:
+; ★ Renamed 2026-09-25 from VoiceTablePtr_Data: arm selecting the standard index table Root->+0x28.
+VoiceTablePtr_StdIndex28:
 	ld xwa, (0x045314:24)
 	ld xix, (xwa + 40)
 
@@ -38269,13 +38284,14 @@ SignedClamp_InRange:
 ; p == 1: Part_PresentWord bit 15 set -> read partial 0's block, else 1's.
 ; p == 2 / 3: read 0x041420 / 0x041445 directly.
 ; Sole caller: Part_Apply_KeyTranspose 0x032E6E.
-AlgoType_TableLookup:
+; ★ Renamed 2026-09-25 from AlgoType_TableLookup: header: fetch the base key number of one partial (HL = block[+1]).
+Partial_GetBaseKey:
 	cp c, 3:i3
-	jrl z, AlgoType_TableCommon
+	jrl z, Partial_GetBaseKey_P3
 	cp c, 2:i3
-	jrl z, AlgoType_Table3
+	jrl z, Partial_GetBaseKey_P2
 	cp c, 1:i3
-	jr z, AlgoType_Table1
+	jr z, Partial_GetBaseKey_P1
 	cp c, 0:i3
 	ret nz
 	ld c, a
@@ -38284,7 +38300,7 @@ AlgoType_TableLookup:
 	lda xde, (0x04136a:24)
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	bit 14, bc
-	jr z, AlgoType_Table0
+	jr z, Partial_GetBaseKey_P0Own
 	extz wa
 	muls wa, 0x11F
 	lda xbc, (0x0413fb:24)
@@ -38294,7 +38310,8 @@ AlgoType_TableLookup:
 	ret
 
 ; Non-unison p = 0: read Part_Slot_Sub_Base[0] (0x0413D6).
-AlgoType_Table0:
+; ★ Renamed 2026-09-25 from AlgoType_Table0: arm: p = 0, non-unison, partial 0's block.
+Partial_GetBaseKey_P0Own:
 	extz wa
 	muls wa, 0x11F
 	lda xbc, (0x0413d6:24)
@@ -38304,7 +38321,8 @@ AlgoType_Table0:
 	ret
 
 ; p = 1 entry; test Part_PresentWord bit 15.
-AlgoType_Table1:
+; ★ Renamed 2026-09-25 from AlgoType_Table1: arm: p = 1 entry, tests Part_PresentWord bit 15.
+Partial_GetBaseKey_P1:
 	ld c, a
 	extz bc
 	muls bc, 0x11F
@@ -38312,7 +38330,7 @@ AlgoType_Table1:
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	extz xbc
 	bit 15, bc
-	jr z, AlgoType_Table2
+	jr z, Partial_GetBaseKey_P1Own
 	extz wa
 	muls wa, 0x11F
 	lda xbc, (0x0413d6:24)
@@ -38322,7 +38340,8 @@ AlgoType_Table1:
 	ret
 
 ; Non-unison p = 1: read Part_Slot_Sub_Base[1] (0x0413FB).
-AlgoType_Table2:
+; ★ Renamed 2026-09-25 from AlgoType_Table2: arm: p = 1, non-unison, partial 1's block.
+Partial_GetBaseKey_P1Own:
 	extz wa
 	muls wa, 0x11F
 	lda xbc, (0x0413fb:24)
@@ -38332,7 +38351,8 @@ AlgoType_Table2:
 	ret
 
 ; p = 2: read Part_Slot_Sub_Base[2] (0x041420).
-AlgoType_Table3:
+; ★ Renamed 2026-09-25 from AlgoType_Table3: arm: p = 2, block at 0x041420.
+Partial_GetBaseKey_P2:
 	extz wa
 	muls wa, 0x11F
 	lda xbc, (0x041420:24)
@@ -38342,7 +38362,8 @@ AlgoType_Table3:
 	ret
 
 ; p = 3: read Part_Slot_Sub_Base[3] (0x041445).
-AlgoType_TableCommon:
+; ★ Renamed 2026-09-25 from AlgoType_TableCommon: arm: p = 3, block at 0x041445.
+Partial_GetBaseKey_P3:
 	extz wa
 	muls wa, 0x11F
 	lda xbc, (0x041445:24)
@@ -38369,7 +38390,7 @@ AlgoType_TableCommon:
 ;                                     partial 1 gets +0x23 = hi;
 ;   otherwise nothing is written.
 ; Callers: Voice_Portamento_OnHandler_C0Mode 0x02A15A, Voice_CC_Pan 0x02A358,
-; VoiceAlloc_WithRoutingFlag_ExtData (x4), VoiceSlot_FullInit 0x0348DD,
+; VoiceAlloc_Apply_Algo_Group0 (x4), VoiceSlot_FullInit 0x0348DD,
 ; VoiceSlot_AltInit 0x0349B8.
 ; The LLVM source calls this EnvTranspose_UpdateLoop; nothing here touches an
 ; envelope generator (see [UNCERTAIN]).
@@ -38405,7 +38426,7 @@ EnvTranspose_ApplyPath:
 	ld c, a
 	extz bc
 	ld wa, de
-	calr AlgoType_TableLookup
+	calr Partial_GetBaseKey
 	stb_erp A, 0xFB
 	extz wa
 	add wa, wa
@@ -38554,8 +38575,8 @@ EnvTranspose_Epilogue:
 ; MEASURED but not interpreted: what the three group offsets select is not
 ; established; b bits 6-7 are clearly a 2-bit destination code and bit 5 an
 ; enable.  The XHL load of Part_PatchRecord_Ptr at 0x033007..0x033014 is dead.
-; Callers: VoiceCC_DataTable_028F75 (6 sites), VoiceAlloc_WithRoutingFlag_ExtData
-; (6 sites), Voice_ProgChange_TableData (2), VoiceSlot_FullInit/AltInit (2).
+; Callers: VoiceCC_DataTable_028F75 (6 sites), VoiceAlloc_Apply_Algo_Group0
+; (6 sites), Voice_Part_ResetSlotRouting (2), VoiceSlot_FullInit/AltInit (2).
 AlgoFlag_Write:
 	pushw iz
 	ld l, e
@@ -39062,7 +39083,7 @@ SlotRouting_Epilogue:
 ;         E==1 -> SlotRouting_Chan1        with slot-record byte +0x26
 ;         E==2 -> SlotRouting_Chan3        with slot-record byte +0x38
 ;     - else nothing.
-; Callers: Voice_ProgChange_TableData (0x0345F9), VoiceSlot_FullInit_Loop2Next (0x034949)
+; Callers: Voice_Part_ResetSlotRouting (0x0345F9), VoiceSlot_FullInit_Loop2Next (0x034949)
 ; and VoiceSlot_AltInit_Loop2Next (0x034A28) -- always inside a 4x3 (slot x word) double loop,
 ; so a full rebuild of a part costs 12 calls.
 EFF_RoutingInit:
@@ -39492,12 +39513,13 @@ DSP_AlgoType_Dispatch1:
 	add de, de
 	lda xix, (AlgoJumpTable1:24)
 	ldw_sri DE, 0x07, 0xF0, 0xE8
-	lda xix, (DSP_AlgoType_Dispatch1_TableData:24)
+	lda xix, (DSP_AlgoType_Dispatch1_Arms:24)
 	jp_ind 8, 0x07, 0xF0, 0xE8
 
 ; NOT DATA -- this is the arm block of the computed jump above, entered at +0x00, +0x52,
 ; +0xE1 or +0x16C.  Arm at +0x00 serves algorithm types 0..3.
-DSP_AlgoType_Dispatch1_TableData:
+; ★ Renamed 2026-09-25 from DSP_AlgoType_Dispatch1_TableData: header: NOT DATA -- the arm block of the computed jump above.
+DSP_AlgoType_Dispatch1_Arms:
 	; Converted from a 364-byte `.byte` run. Framing: unidasm; every
 	; instruction re-encoded and the whole run compared byte for byte.
 	; 124 instructions, of which 1 needed a spelling search because
@@ -39678,11 +39700,12 @@ DSP_AlgoType_Dispatch2:
 	add de, de
 	lda xix, (AlgoJumpTable2:24)
 	ldw_sri DE, 0x07, 0xF0, 0xE8
-	lda xix, (DSP_AlgoType_Dispatch2_TableData:24)
+	lda xix, (DSP_AlgoType_Dispatch2_Arms:24)
 	jp_ind 8, 0x07, 0xF0, 0xE8
 
 ; NOT DATA -- arm block of the computed jump; +0x00 serves algorithm types 0..3.
-DSP_AlgoType_Dispatch2_TableData:
+; ★ Renamed 2026-09-25 from DSP_AlgoType_Dispatch2_TableData: header: NOT DATA -- the arm block of the computed jump above.
+DSP_AlgoType_Dispatch2_Arms:
 	; Converted from a 331-byte `.byte` run, round-trip exact: these exact
 	; mnemonics re-assemble to the original bytes. Entered by the computed
 	; jump above; every interior arm label below falls on an instruction
@@ -40915,7 +40938,8 @@ Voice_ActiveFlag_InactivePath:
 ; authoritative source).  It is either dead code from an earlier firmware revision or reached
 ; from the boot ROM; I could not resolve which.  Confidence is therefore medium on the ROLE,
 ; high on the BEHAVIOUR.
-Voice_ProgChange_TableData:
+; ★ Renamed 2026-09-25 from Voice_ProgChange_TableData: header: masks the four output slots' flag bytes, AlgoFlag writes, EFF_RoutingInit x4.
+Voice_Part_ResetSlotRouting:
 	dec	2, xsp
 	pushw	iz
 	ld	(xsp+2), a
@@ -41907,7 +41931,8 @@ RingBuf_ReadByte_Return:
 ; A two-instruction convenience wrapper: `lda XWA,0x2B0D` then fall into RINGBUF_READBYTE,
 ; i.e. "read one byte from THE MIDI ring".  It has no caller in the authoritative source.
 ; The ELF name RingBuf_ReadByte_Data implies data; it is code.
-RingBuf_ReadByte_Data:
+; ★ Renamed 2026-09-25 from RingBuf_ReadByte_Data: header: `lda XWA,0x2B0D` then RINGBUF_READBYTE -- read one byte from the MIDI ring.
+RingBuf_ReadByte_MidiRing:
 	lda	xwa, (11021:16)
 	jr	RingBuf_ReadByte
 
@@ -41952,7 +41977,8 @@ RingBuf_SkipToEnd_Epilogue:
 ; No caller anywhere in the authoritative source; Audio_CmdHandler_00_1F open-codes the same
 ; sequence against the fixed 0x2B0D ring instead.  Proposed rename because the existing name
 ; asserts "const data"; see [UNCERTAIN] if you would rather keep it.
-Audio_CmdHandler_ConstData:
+; ★ Renamed 2026-09-25 from Audio_CmdHandler_ConstData: header: stores C at payload[write index & 0x0FFF] of a 4 KB ring (its own banner's name).
+RingBuf_Write4K:
 	ld	xde, xwa
 	ld	hl, (xde)
 	incw	1, (xde)
@@ -42525,7 +42551,8 @@ DSP_FlushAllSlots_Loop3Next:
 ; two program-change bytes stored by Voice_ProgChange -- and tail-jumps into DSP_FlushAllSlots.
 ; So this is "flush the DSP using the program currently assigned to this part".
 ; It has no caller in the authoritative source; either dead or reached from the boot ROM.
-DSP_FlushAllSlots_Data:
+; ★ Renamed 2026-09-25 from DSP_FlushAllSlots_Data: header: flush the DSP with the program-change bytes of part A.
+DSP_FlushAllSlots_ForPart:
 	ld	c, a
 	extz	bc
 	muls	bc, 287
@@ -42606,7 +42633,7 @@ DSP_WriteAlgoBuffer:
 ; Rejection path: L = 2, straight to the exit (no DMA, no image change).
 DSP_WriteAlgoBuffer_PathA:
 	ld l, 0x2:opc
-	jrl DSP_WriteAlgoBuffer_Data
+	jrl DSP_WriteAlgoBuffer_Return
 
 ; Accepted: the 0xD5-word descriptor copy into the slot's algorithm block.
 DSP_WriteAlgoBuffer_PathB:
@@ -42695,7 +42722,8 @@ DSP_WriteAlgoBuffer_Epilogue:
 	ld l, 0x0:opc
 
 ; Not data: the shared `pop XIZ / ret` exit, reached from the rejection path by `jrl`.
-DSP_WriteAlgoBuffer_Data:
+; ★ Renamed 2026-09-25 from DSP_WriteAlgoBuffer_Data: header: the shared `pop XIZ / ret` exit of DSP_WriteAlgoBuffer.
+DSP_WriteAlgoBuffer_Return:
 	pop xiz
 	ret
 
@@ -44255,7 +44283,7 @@ CmdHandler2C_TableData:
 CmdHandler2C_Global_MixParamA:
 	ld	a, (17264:16)
 	extz	wa
-	call	DSP_StateTable_DefaultData
+	call	DSP_Set_MixParam_45B2
 	jrl	DSP_Process_ReadNext
 ; ★ NEW NAME. Table entry 2: calls DSP_Set_MixParam_45B4 (0x03621C).
 CmdHandler2C_Global_MixParamB:
@@ -44834,7 +44862,8 @@ EFF_GetSlotBuffer_Epilogue:
 ; 0x0362A2, 0x0362B6, 0x0362CA, 0x0362DD, 0x0362F1. Reached only from the thirteen stubs
 ; above. Includes four unreachable 5-byte tails at 0x036217, 0x036232, 0x03624D and
 ; 0x036275.
-DSP_StateTable_DefaultData:
+; ★ Renamed 2026-09-25 from DSP_StateTable_DefaultData: header: (0x45B2) = WA then DSP_MixerCoeff_Compute; siblings DSP_Set_MixParam_45B4/_45B6.
+DSP_Set_MixParam_45B2:
 	extz	wa
 	ld	(17842:16), wa
 	ld	bc, (17844:16)
@@ -47718,7 +47747,8 @@ DSP_Config_ClampNext:
 ; --- 0x036DEA-0x036DF4  DSP_Config_ClampData -- eleven bytes d2 66 55 04 23 d2 44 54 04 83 0e
 ; Disassembles exactly as `ld HL,(0x045566) / add HL,(0x045444) / ret`, i.e. another
 ; unreachable routine tail, not a data table.
-DSP_Config_ClampData:
+; ★ Renamed 2026-09-25 from DSP_Config_ClampData: header: an unreachable tail `ld HL,(0x045566) / add HL,(0x045444) / ret`.
+DSP_Config_DeadTail_SumWords:
 	ld	hl, (284006:24)
 	add	hl, (283716:24)
 	ret
@@ -51841,7 +51871,8 @@ DSP_State_LoadAndApplyAll:
 ;   XHL = *(uint32*)(0x0129A3 + 4*XBC)
 ; XBC is the 0..99 parameter value; the table has 100 entries.  This is the decoder for
 ; byte-code opcode 0x61 (arm 0x03CB8E), whose result goes straight to DSP_WriteOscParam.
-DSP_State_LoadAndApply_InlineData:
+; ★ Renamed 2026-09-25 from DSP_State_LoadAndApply_InlineData: header: table fetch XHL = *(0x0129A3 + 4*XBC), the decoder of byte-code opcode 0x61.
+DSP_ParamFetch_Op61Table:
 	sll	xbc, 2
 	ld	xwa, 76195
 	add	xwa, xbc
@@ -57698,7 +57729,7 @@ DSP_Translator_ReadOpcode:
 	lda xix, (DSP_Op_0x61_LinearEval:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0
 ; ⚠ THE ELF NAME IS MISLEADING -- see [UNCERTAIN].  These 26 bytes are the OPCODE 0x61 ARM,
-; not a jump table: DSP_State_LoadAndApply_InlineData (0x038E9F) then DSP_WriteOscParam
+; not a jump table: DSP_ParamFetch_Op61Table (0x038E9F) then DSP_WriteOscParam
 ; (0x0387E6), then `jrl DSP_Translator_PostDispatch`.  The real table is at 0x014745.
 ; Proposing the existing name unchanged so integration stays mechanical.
 ; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
@@ -57709,7 +57740,7 @@ DSP_Translator_ReadOpcode:
 DSP_Op_0x61_LinearEval:
 	lda	xwa, (xsp+42)
 	ld	xbc, xde
-	call	DSP_State_LoadAndApply_InlineData
+	call	DSP_ParamFetch_Op61Table
 	pushm	(xsp+4)
 	ld	wa, iz
 	ld	xbc, xhl

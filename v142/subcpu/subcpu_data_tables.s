@@ -2776,7 +2776,7 @@ DSP_FreqParamCurve_Algo2:
 	.long 0x0055d2ef, 0x005751a8, 0x0058d70a, 0x005a6336
 
 ; --- 0x0129a3  100 x u32 Q23 ladder for bytecode opcode 0x61
-; (DSP_State_LoadAndApply_InlineData -> DSP_WriteOscParam).  Perfectly uniform:
+; (DSP_ParamFetch_Op61Table -> DSP_WriteOscParam).  Perfectly uniform:
 ; 0.25 dB per step over all 99 steps, top 0x7fb260 = 2^23 * 0.998.
 DSP_OscParamCurve:
 	.long 0x000763fe, 0x00079b3d, 0x0007d41a, 0x00080e9f
