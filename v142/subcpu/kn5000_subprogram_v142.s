@@ -43424,8 +43424,15 @@ DSP2_Init:
 ; Two `ret` opcodes stranded between Voice_Poly_NoteOn's epilogue and DSP_RingBuf_Read.
 ; Almost certainly alignment padding produced by the original toolchain (0x0E is `ret`), not
 ; a table. Not referenced by anything.
-Voice_Poly_NoteOn_Data:
-	.byte 0x0e, 0x0e
+; ★ CORRECTED 2026-09-25: the first byte IS referenced -- entries 1, 2 and 3 of
+; DSP2_InitTask_PtrTable (subcpu_data_tables.s) are `.long` pointers to it, beside entry 0 =
+; DSP2_Init.  So it is a do-nothing task body, a lone `ret`, and is written as one; the
+; second 0x0E is the unreferenced one.  Renamed from Voice_Poly_NoteOn_Data.  (The pointer
+; table itself has no reader in the payload -- see its header -- so this stub is reached, if at
+; all, only through a computed address.)
+DSP2_InitTask_NullStub:
+	ret
+	ret				; not referenced (padding)
 
 ; ALREADY NAMED -- doc header only.
 ; Pops one byte from a 2 KB ring. Entry XWA = control block. Exit HL = byte (0..0xFF), or
@@ -44723,8 +44730,12 @@ DSP_Reset:
 	popw iz
 	ret
 
-DSP_ApplyAlgoForVoiceType_Data:
-	.byte 0x0e
+; A lone `ret`: the do-nothing task body that entries 1, 2 and 3 of DSP_ResetTask_PtrTable
+; (subcpu_data_tables.s) point to, beside entry 0 = DSP_Reset -- the same shape as
+; DSP2_InitTask_NullStub.  ★ Renamed 2026-09-25 from DSP_ApplyAlgoForVoiceType_Data and written as
+; the instruction it is (it was `.byte 0x0e`).
+DSP_ResetTask_NullStub:
+	ret
 
 ; Entry: none. Calls DSP_SlotMuteState_ReadAndClear(0) and, on the returned value 3 / 2 / 1,
 ; injects the same canned pseudo-MIDI packet as DSP_WriteAlgoInitPreset (ROM 0x0121F3 /

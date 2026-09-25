@@ -2683,9 +2683,9 @@ ToneGen_Octave_Pitch_Table:
 ; pointers); the consumer either computes the address or the table is dead.
 DSP2_InitTask_PtrTable:
 	.long DSP2_Init
-	.long Voice_Poly_NoteOn_Data
-	.long Voice_Poly_NoteOn_Data
-	.long Voice_Poly_NoteOn_Data
+	.long DSP2_InitTask_NullStub
+	.long DSP2_InitTask_NullStub
+	.long DSP2_InitTask_NullStub
 
 ; --- 0x0121bd  15 x u16 dispatch offsets for sub-commands 0x17-0x25 of command 0x2C.
 ; CmdHandler2C_JumpDispatch computes `jp (CmdHandler2C_TableData + offs[subcmd - 0x17])`.
@@ -2736,9 +2736,9 @@ DSP_AlgoInit_NoteOnMsg_Algo2:
 ; Like its sibling, no literal reference to the table base exists in the payload image.
 DSP_ResetTask_PtrTable:
 	.long DSP_Reset
-	.long DSP_ApplyAlgoForVoiceType_Data
-	.long DSP_ApplyAlgoForVoiceType_Data
-	.long DSP_ApplyAlgoForVoiceType_Data
+	.long DSP_ResetTask_NullStub
+	.long DSP_ResetTask_NullStub
+	.long DSP_ResetTask_NullStub
 
 ; --- 0x012207-0x012225  DSP serial-trace string fragments.  Consumers (one each, in
 ; order): DSP_Send_Cmd_Cleanup prints "\n[" ... "]\n" around a command byte,
