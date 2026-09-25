@@ -98,11 +98,14 @@ SPECS.append((0xFCF803, "b", 9, "BitMask_Bit0to7", [("a", 0xFD07E5)]))
 for b, r in sorted(OP_READERS2.items()):
     SPECS.append((b, "op", 18, opname(b), r))
 SPECS += [
-    (0xFCFCD4, "b", 19, "IndexMap_FCFCD4", [("b", 0xF0C2AF)]),
+    (0xFCFCD4, "b", 4, "IndexMap_FCFCD4", [("b", 0xF0C2AF)]),
+    (0xFCFCD8, "vl", 7, "StepValues_FCFCD8", [("b", 0xF0C4A7)]),
+    (0xFCFCDF, "vl", 2, "StepValues_FCFCDF", [("b", 0xF0C4B6)]),
+    (0xFCFCE1, "vl", 6, "StepValues_FCFCE1", [("b", 0xF0C4BF)]),
     (0xFCFCE7, "ptr", 32, "ScreenCode80_Handlers", [("a", 0xFD2186), ("a", 0xFD22E4), ("a", 0xFD24B3)]),
     (0xFCFD67, "ptr", 16, "ScreenCodeC0_Handlers", [("a", 0xFD21B4), ("a", 0xFD2315), ("a", 0xFD24E1)]),
 ]
-SIZE = {"zero": 4, "b": 1, "pad": 1, "w": 2, "op": 4, "ptr": 4}
+SIZE = {"zero": 4, "b": 1, "pad": 1, "w": 2, "op": 4, "ptr": 4, "vl": 1}
 NEWNAMES = {0xFD6C93: "PanelOp_Nop", 0xFD2013: "ScreenCode_Nop"}
 
 
@@ -140,7 +143,7 @@ def check_reader(m, pb_lines, pb_line_at, img, site, kind):
         assert i is not None, "no source line for prom_b reader 0x%06X" % site
         L = pb_lines
     here = L[i].split(";")[0].lower()
-    assert "add" in here, (hex(site), L[i])
+    assert ("lda" in here) if kind == "vl" else ("add" in here), (hex(site), L[i])
     if kind in ("op",):
         back = " ".join(x.split(";")[0].lower() for x in L[i - 3:i])
         assert "m_mul mbd+r6, 0xfc, 3" in back and "0x04:opc" in back.replace("4:opc", "0x04:opc"), \
@@ -255,8 +258,8 @@ def emit(m, pbs, readers_txt, newlabels):
 ;
 ; This span was `ModuleTables_FCF044`, whose header said nothing in prom_a or
 ; prom_b adds a base inside it.  %d instructions do: %d `add XBC/XIY,0x00FCFxxx`
-; in this module's own code and %d `add XBC,0x00FCFxxx` in prom_b (spelled as
-; decimal immediates there).  Every table below is named by at least one of
+; in this module's own code and %d `add XBC` / `lda XIX` of 0x00FCFxxx in prom_b
+; (spelled as decimal immediates there).  Every table below is named by at least one of
 ; them, its element size and count come from that reader, and together they
 ; tile the span with no gap -- which is the independent check on every count.
 ; Regenerate / re-check: notes/proma-2026-09-25/gen_fcf044_tables.py (repo root).
@@ -320,6 +323,20 @@ def emit(m, pbs, readers_txt, newlabels):
                 rd(base) + ": " + fn + ".",
                 ";          COUNT %d is the extent to the next reader-named base; the reader" % n,
                 ";          has no bound.  What the index and the values denote: not established."]
+        elif kind == "vl":
+            L_ = {0xFCFCD8: 6, 0xFCFCDF: 1, 0xFCFCE1: 5}[base]
+            if base == 0xFCFCD8:
+                O += ["; StepValues_FCFCD8 / _FCFCDF / _FCFCE1 -- three ordered VALUE LISTS that",
+                      "; sub_F0C47B (prom_b 0xF0C47B) steps a parameter through: it picks one list",
+                      "; and its last index L (`ld L,6 / lda XIX,0x00FCFCD8`, `ld L,1 / lda XIX,",
+                      "; 0x00FCFCDF` or `ld L,5 / lda XIX,0x00FCFCE1`, by the two values it fetches",
+                      "; through 0xFD6C7B), finds the current value with `cp H,L / jr ule` -- so L+1",
+                      "; entries -- then moves H one step up or down (D = direction) and sends",
+                      "; this[H] through 0xFD6C65 and T_Dispatch_Code80(0x9D).  COUNTS 7, 2, 6 are",
+                      "; those L+1, and the three lists tile to the next reader-named base."]
+            O += ["; %s -- %d values; read by sub_F0C47B (prom_b) at 0x%06X, L = %d." % (
+                name, n, {0xFCFCD8: 0xF0C4A7, 0xFCFCDF: 0xF0C4B6, 0xFCFCE1: 0xF0C4BF}[base], L_),
+                ";          What parameter the values are is not established."]
         elif name == "BitMask_Bit0to7":
             O += ["; BitMask_Bit0to7 -- 9 bytes: 1<<0 .. 1<<7, then 0x00.",
                   rd(base) + ": `ld C,H / add XBC,0x00FCF803 / ld A,(XBC)` with",
@@ -346,7 +363,7 @@ def emit(m, pbs, readers_txt, newlabels):
                   ";          says Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k."]
         O.append("%s:" % name)
         # body
-        if kind in ("b", "pad"):
+        if kind in ("b", "pad", "vl"):
             data = rom[base - B: base - B + n]
             if name == "NameChar_IndexToAscii":
                 for r in range(0, n, 16):
@@ -405,7 +422,19 @@ def main():
     O = [u8(x) for x in emit(m, pbs, readers_txt, newlabels)]
     L = m.lines
     # 1. the block: from the header rule above `; ModuleTables_FCF044 --` to the line before sub_FCFDA7
-    h = next(i for i, l in enumerate(L) if l.startswith("; ModuleTables_FCF044 -- 3,427 bytes"))
+    first = [i for i, l in enumerate(L) if l.startswith("; ModuleTables_FCF044 -- 3,427 bytes")]
+    if not first:
+        # RE-RUN on a tree this script already rewrote: replace only the block it emitted
+        h = next(i for i, l in enumerate(L)
+                 if l.startswith("; 0xFCF044-0xFCFDA6 -- THE MODULE'S TABLES, FRAMED BY THEIR READERS"))
+        assert L[h - 1].startswith("; -----")
+        e = next(i for i in range(h, len(L)) if L[i].startswith("sub_FCFDA7:"))
+        assert not newlabels, "re-run found unlabelled handlers: %s" % sorted(newlabels)
+        text = L[:h - 1] + O + [""] + L[e:]
+        open(srcmap.SRC, "w", encoding="latin-1").write("\n".join(text))
+        print("re-applied: block %d -> %d lines" % (e - h + 1, len(O)))
+        return
+    h = first[0]
     assert L[h - 1].startswith("; -----")
     e = next(i for i in range(h, len(L)) if L[i].startswith("sub_FCFDA7:"))
     # 2. DispatchTable_FCF000 entries (above the block) and its zero slot

@@ -117523,9 +117523,9 @@ DispatchTable_FCF000:
 ; 0xFCF044-0xFCFDA6 -- THE MODULE'S TABLES, FRAMED BY THEIR READERS (3,427 B)
 ;
 ; This span was `ModuleTables_FCF044`, whose header said nothing in prom_a or
-; prom_b adds a base inside it.  56 instructions do: 45 `add XBC/XIY,0x00FCFxxx`
-; in this module's own code and 11 `add XBC,0x00FCFxxx` in prom_b (spelled as
-; decimal immediates there).  Every table below is named by at least one of
+; prom_b adds a base inside it.  59 instructions do: 45 `add XBC/XIY,0x00FCFxxx`
+; in this module's own code and 14 `add XBC` / `lda XIX` of 0x00FCFxxx in prom_b
+; (spelled as decimal immediates there).  Every table below is named by at least one of
 ; them, its element size and count come from that reader, and together they
 ; tile the span with no gap -- which is the independent check on every count.
 ; Regenerate / re-check: notes/proma-2026-09-25/gen_fcf044_tables.py (repo root).
@@ -118151,7 +118151,7 @@ PanelOpTable_FCF7BB:
 	.long 0x00000000                              ; FCF7FF  [17] zero
 
 ; BitMask_Bit0to7 -- 9 bytes: 1<<0 .. 1<<7, then 0x00.
-; Read by: sub_FD058E at 0xFD07E5: `ld C,H / add XBC,0x00FCF803 / ld A,(XBC)` with
+; Read by: sub_FD0767 at 0xFD07E5: `ld C,H / add XBC,0x00FCF803 / ld A,(XBC)` with
 ;          H forced into 0..5 just before (`cp H,6 / jr c` else H = 0), so
 ;          this reader uses entries 0-5 only.  Entries 6-8 (0x40, 0x80, 0x00)
 ;          complete the 8-bit ladder and a zero; no other reader is known.
@@ -118549,13 +118549,35 @@ PanelOpTable_FCFC8C:
 	.long PanelOp_Nop                             ; FCFCCC  [16]
 	.long 0x00000000                              ; FCFCD0  [17] zero
 
-; IndexMap_FCFCD4 -- 19 bytes, a byte-to-byte map (values 0x00..0x09).
+; IndexMap_FCFCD4 -- 4 bytes, a byte-to-byte map (values 0x00..0x09).
 ; Read by: sub_F0C291 (prom_b) at 0xF0C2AF: sub_F0C291 (prom_b): A = this[v], v from call 0xFD6C7B(3, &v).
-;          COUNT 19 is the extent to the next reader-named base; the reader
+;          COUNT 4 is the extent to the next reader-named base; the reader
 ;          has no bound.  What the index and the values denote: not established.
 IndexMap_FCFCD4:
-	.byte 0x00, 0x01, 0x08, 0x09, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x06, 0x00, 0x01, 0x02  ; FCFCD4  [  0]
-	.byte 0x03, 0x04, 0x06  ; FCFCE4  [ 16]
+	.byte 0x00, 0x01, 0x08, 0x09  ; FCFCD4  [  0]
+
+; StepValues_FCFCD8 / _FCFCDF / _FCFCE1 -- three ordered VALUE LISTS that
+; sub_F0C47B (prom_b 0xF0C47B) steps a parameter through: it picks one list
+; and its last index L (`ld L,6 / lda XIX,0x00FCFCD8`, `ld L,1 / lda XIX,
+; 0x00FCFCDF` or `ld L,5 / lda XIX,0x00FCFCE1`, by the two values it fetches
+; through 0xFD6C7B), finds the current value with `cp H,L / jr ule` -- so L+1
+; entries -- then moves H one step up or down (D = direction) and sends
+; this[H] through 0xFD6C65 and T_Dispatch_Code80(0x9D).  COUNTS 7, 2, 6 are
+; those L+1, and the three lists tile to the next reader-named base.
+; StepValues_FCFCD8 -- 7 values; read by sub_F0C47B (prom_b) at 0xF0C4A7, L = 6.
+;          What parameter the values are is not established.
+StepValues_FCFCD8:
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06  ; FCFCD8  [  0]
+
+; StepValues_FCFCDF -- 2 values; read by sub_F0C47B (prom_b) at 0xF0C4B6, L = 1.
+;          What parameter the values are is not established.
+StepValues_FCFCDF:
+	.byte 0x00, 0x06  ; FCFCDF  [  0]
+
+; StepValues_FCFCE1 -- 6 values; read by sub_F0C47B (prom_b) at 0xF0C4BF, L = 5.
+;          What parameter the values are is not established.
+StepValues_FCFCE1:
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x06  ; FCFCE1  [  0]
 
 ; ScreenCode80_Handlers -- 32 handler addresses for screen codes 0x80-0x9F.
 ; Read by: sub_FD2014 at 0xFD2186; sub_FD21E9 at 0xFD22E4; sub_FD21E9 at 0xFD24B3: `cp (0x207C),0x80 / jr c` + `cp (0x207C),
