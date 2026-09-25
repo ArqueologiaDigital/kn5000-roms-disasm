@@ -2307,95 +2307,95 @@ Data_F003CC:
 ; and there is no second build of this firmware to test it against.
 ; --------------------------------------------------------------------------
 PtrTable_F003F9:
-	.long 0x00F7828A	; F003F9  [  0]  r0c0
-	.long 0x00F78346	; F003FD  [  1]  r0c1
-	.long 0x00F78402	; F00401  [  2]  r0c2
-	.long 0x00F784B2	; F00405  [  3]  r0c3
+	.long DLGlyph_008_F78268 + 0x22	; F003F9  [  0]  r0c0
+	.long DLGlyph_011_F78340 + 0x6	; F003FD  [  1]  r0c1
+	.long DLGlyph_013_F783D0 + 0x32	; F00401  [  2]  r0c2
+	.long DLGlyph_016_F784A8 + 0xA	; F00405  [  3]  r0c3
 	.long 0x00FDB10E	; F00409  [  4]  absent (sentinel)  r0c4
-	.long 0x00F78562	; F0040D  [  5]  r0c5
-	.long 0x00F785FC	; F00411  [  6]  r0c6
-	.long 0x00F78697	; F00415  [  7]  r0c7
-	.long 0x00F78732	; F00419  [  8]  r0c8
-	.long 0x00F7875F	; F0041D  [  9]  r0c9
-	.long 0x00F78783	; F00421  [ 10]  r0c10
-	.long 0x00F787BE	; F00425  [ 11]  r0c11
-	.long 0x00F78818	; F00429  [ 12]  r0c12
+	.long DLGlyph_018_F78538 + 0x2A	; F0040D  [  5]  r0c5
+	.long DLGlyph_020_F785C8 + 0x34	; F00411  [  6]  r0c6
+	.long DLGlyph_022_F78658 + 0x3F	; F00415  [  7]  r0c7
+	.long DLGlyph_025_F78730 + 0x2	; F00419  [  8]  r0c8
+	.long DLGlyph_025_F78730 + 0x2F	; F0041D  [  9]  r0c9
+	.long DLGlyph_026_F78778 + 0xB	; F00421  [ 10]  r0c10
+	.long DLGlyph_026_F78778 + 0x46	; F00425  [ 11]  r0c11
+	.long DLGlyph_028_F78808 + 0x10	; F00429  [ 12]  r0c12
 	.long 0x00FDB10E	; F0042D  [ 13]  absent (sentinel)  r0c13
 	.long 0x00FDB10E	; F00431  [ 14]  absent (sentinel)  r0c14
-	.long 0x00F78872	; F00435  [ 15]  r0c15
-	.long 0x00F7884B	; F00439  [ 16]  r0c16
+	.long DLGlyph_029_F78850 + 0x22	; F00435  [ 15]  r0c15
+	.long DLGlyph_028_F78808 + 0x43	; F00439  [ 16]  r0c16
 	.long 0x00000000	; F0043D  [ 17]  empty  r0c17
-	.long 0x00F788A6	; F00441  [ 18]  r1c0
-	.long 0x00F788CA	; F00445  [ 19]  r1c1
-	.long 0x00F788EE	; F00449  [ 20]  r1c2
-	.long 0x00F78906	; F0044D  [ 21]  r1c3
+	.long DLGlyph_030_F78898 + 0xE	; F00441  [ 18]  r1c0
+	.long DLGlyph_030_F78898 + 0x32	; F00445  [ 19]  r1c1
+	.long DLGlyph_031_F788E0 + 0xE	; F00449  [ 20]  r1c2
+	.long DLGlyph_031_F788E0 + 0x26	; F0044D  [ 21]  r1c3
 	.long 0x00FDB10E	; F00451  [ 22]  absent (sentinel)  r1c4
-	.long 0x00F7891E	; F00455  [ 23]  r1c5
-	.long 0x00F7892F	; F00459  [ 24]  r1c6
-	.long 0x00F78940	; F0045D  [ 25]  r1c7
-	.long 0x00F78951	; F00461  [ 26]  r1c8
-	.long 0x00F78962	; F00465  [ 27]  r1c9
-	.long 0x00F78973	; F00469  [ 28]  r1c10
-	.long 0x00F78984	; F0046D  [ 29]  r1c11
-	.long 0x00F789DE	; F00471  [ 30]  r1c12
+	.long DLGlyph_031_F788E0 + 0x3E	; F00455  [ 23]  r1c5
+	.long DLGlyph_032_F78928 + 0x7	; F00459  [ 24]  r1c6
+	.long DLGlyph_032_F78928 + 0x18	; F0045D  [ 25]  r1c7
+	.long DLGlyph_032_F78928 + 0x29	; F00461  [ 26]  r1c8
+	.long DLGlyph_032_F78928 + 0x3A	; F00465  [ 27]  r1c9
+	.long DLGlyph_033_F78970 + 0x3	; F00469  [ 28]  r1c10
+	.long DLGlyph_033_F78970 + 0x14	; F0046D  [ 29]  r1c11
+	.long DLGlyph_034_F789B8 + 0x26	; F00471  [ 30]  r1c12
 	.long 0x00FDB10E	; F00475  [ 31]  absent (sentinel)  r1c13
 	.long 0x00FDB10E	; F00479  [ 32]  absent (sentinel)  r1c14
-	.long 0x00F78A16	; F0047D  [ 33]  r1c15
-	.long 0x00F789EF	; F00481  [ 34]  r1c16
+	.long DLGlyph_035_F78A00 + 0x16	; F0047D  [ 33]  r1c15
+	.long DLGlyph_034_F789B8 + 0x37	; F00481  [ 34]  r1c16
 	.long 0x00000000	; F00485  [ 35]  empty  r1c17
 	.long 0x00FDB10E	; F00489  [ 36]  absent (sentinel)  r2c0
 	.long 0x00FDB10E	; F0048D  [ 37]  absent (sentinel)  r2c1
-	.long 0x00F78A4A	; F00491  [ 38]  r2c2
-	.long 0x00F78A6E	; F00495  [ 39]  r2c3
-	.long 0x00F78A92	; F00499  [ 40]  r2c4
-	.long 0x00F78AAA	; F0049D  [ 41]  r2c5
+	.long DLGlyph_036_F78A48 + 0x2	; F00491  [ 38]  r2c2
+	.long DLGlyph_036_F78A48 + 0x26	; F00495  [ 39]  r2c3
+	.long DLGlyph_037_F78A90 + 0x2	; F00499  [ 40]  r2c4
+	.long DLGlyph_037_F78A90 + 0x1A	; F0049D  [ 41]  r2c5
 	.long 0x00FDB10E	; F004A1  [ 42]  absent (sentinel)  r2c6
 	.long 0x00FDB10E	; F004A5  [ 43]  absent (sentinel)  r2c7
-	.long 0x00F78AC2	; F004A9  [ 44]  r2c8
-	.long 0x00F78AEF	; F004AD  [ 45]  r2c9
-	.long 0x00F78B13	; F004B1  [ 46]  r2c10
-	.long 0x00F78B4E	; F004B5  [ 47]  r2c11
-	.long 0x00F78BA8	; F004B9  [ 48]  r2c12
+	.long DLGlyph_037_F78A90 + 0x32	; F004A9  [ 44]  r2c8
+	.long DLGlyph_038_F78AD8 + 0x17	; F004AD  [ 45]  r2c9
+	.long DLGlyph_038_F78AD8 + 0x3B	; F004B1  [ 46]  r2c10
+	.long DLGlyph_039_F78B20 + 0x2E	; F004B5  [ 47]  r2c11
+	.long DLGlyph_040_F78B68 + 0x40	; F004B9  [ 48]  r2c12
 	.long 0x00FDB10E	; F004BD  [ 49]  absent (sentinel)  r2c13
 	.long 0x00FDB10E	; F004C1  [ 50]  absent (sentinel)  r2c14
-	.long 0x00F78C02	; F004C5  [ 51]  r2c15
-	.long 0x00F78BDB	; F004C9  [ 52]  r2c16
+	.long DLGlyph_042_F78BF8 + 0xA	; F004C5  [ 51]  r2c15
+	.long DLGlyph_041_F78BB0 + 0x2B	; F004C9  [ 52]  r2c16
 	.long 0x00000000	; F004CD  [ 53]  empty  r2c17
 	.long 0x00FDB10E	; F004D1  [ 54]  absent (sentinel)  r3c0
 	.long 0x00FDB10E	; F004D5  [ 55]  absent (sentinel)  r3c1
-	.long 0x00F78C36	; F004D9  [ 56]  r3c2
-	.long 0x00F78C5A	; F004DD  [ 57]  r3c3
-	.long 0x00F78C7E	; F004E1  [ 58]  r3c4
-	.long 0x00F78C96	; F004E5  [ 59]  r3c5
+	.long DLGlyph_042_F78BF8 + 0x3E	; F004D9  [ 56]  r3c2
+	.long DLGlyph_043_F78C40 + 0x1A	; F004DD  [ 57]  r3c3
+	.long DLGlyph_043_F78C40 + 0x3E	; F004E1  [ 58]  r3c4
+	.long DLGlyph_044_F78C88 + 0xE	; F004E5  [ 59]  r3c5
 	.long 0x00FDB10E	; F004E9  [ 60]  absent (sentinel)  r3c6
 	.long 0x00FDB10E	; F004ED  [ 61]  absent (sentinel)  r3c7
-	.long 0x00F78CAE	; F004F1  [ 62]  r3c8
-	.long 0x00F78CBF	; F004F5  [ 63]  r3c9
+	.long DLGlyph_044_F78C88 + 0x26	; F004F1  [ 62]  r3c8
+	.long DLGlyph_044_F78C88 + 0x37	; F004F5  [ 63]  r3c9
 	.long DLGlyph_045_F78CD0	; F004F9  [ 64]  r3c10
-	.long 0x00F78CE1	; F004FD  [ 65]  r3c11
-	.long 0x00F78D3B	; F00501  [ 66]  r3c12
+	.long DLGlyph_045_F78CD0 + 0x11	; F004FD  [ 65]  r3c11
+	.long DLGlyph_046_F78D18 + 0x23	; F00501  [ 66]  r3c12
 	.long 0x00FDB10E	; F00505  [ 67]  absent (sentinel)  r3c13
 	.long 0x00FDB10E	; F00509  [ 68]  absent (sentinel)  r3c14
-	.long 0x00F78D73	; F0050D  [ 69]  r3c15
-	.long 0x00F78D4C	; F00511  [ 70]  r3c16
+	.long DLGlyph_047_F78D60 + 0x13	; F0050D  [ 69]  r3c15
+	.long DLGlyph_046_F78D18 + 0x34	; F00511  [ 70]  r3c16
 	.long 0x00000000	; F00515  [ 71]  empty  r3c17
 	.long 0x00FDB10E	; F00519  [ 72]  absent (sentinel)  r4c0
-	.long 0x00F78DA7	; F0051D  [ 73]  r4c1
-	.long 0x00F78E4C	; F00521  [ 74]  r4c2
-	.long 0x00F78E68	; F00525  [ 75]  r4c3
-	.long 0x00F78F09	; F00529  [ 76]  r4c4
-	.long 0x00F78F9B	; F0052D  [ 77]  r4c5
-	.long 0x00F78FB3	; F00531  [ 78]  r4c6
+	.long DLGlyph_047_F78D60 + 0x47	; F0051D  [ 73]  r4c1
+	.long DLGlyph_050_F78E38 + 0x14	; F00521  [ 74]  r4c2
+	.long DLGlyph_050_F78E38 + 0x30	; F00525  [ 75]  r4c3
+	.long DLGlyph_052_F78EC8 + 0x41	; F00529  [ 76]  r4c4
+	.long DLGlyph_054_F78F58 + 0x43	; F0052D  [ 77]  r4c5
+	.long DLGlyph_055_F78FA0 + 0x13	; F00531  [ 78]  r4c6
 	.long 0x00FDB10E	; F00535  [ 79]  absent (sentinel)  r4c7
-	.long 0x00F78FCB	; F00539  [ 80]  r4c8
-	.long 0x00F78FF8	; F0053D  [ 81]  r4c9
-	.long 0x00F7901C	; F00541  [ 82]  r4c10
-	.long 0x00F79057	; F00545  [ 83]  r4c11
-	.long 0x00F790A7	; F00549  [ 84]  r4c12
+	.long DLGlyph_055_F78FA0 + 0x2B	; F00539  [ 80]  r4c8
+	.long DLGlyph_056_F78FE8 + 0x10	; F0053D  [ 81]  r4c9
+	.long DLGlyph_056_F78FE8 + 0x34	; F00541  [ 82]  r4c10
+	.long DLGlyph_057_F79030 + 0x27	; F00545  [ 83]  r4c11
+	.long DLGlyph_058_F79078 + 0x2F	; F00549  [ 84]  r4c12
 	.long 0x00FDB10E	; F0054D  [ 85]  absent (sentinel)  r4c13
 	.long 0x00FDB10E	; F00551  [ 86]  absent (sentinel)  r4c14
-	.long 0x00F79101	; F00555  [ 87]  r4c15
-	.long 0x00F790DA	; F00559  [ 88]  r4c16
+	.long DLGlyph_059_F790C0 + 0x41	; F00555  [ 87]  r4c15
+	.long DLGlyph_059_F790C0 + 0x1A	; F00559  [ 88]  r4c16
 	.long 0x00000000	; F0055D  [ 89]  empty  r4c17
 	.long 0x00FDB10E	; F00561  [ 90]  absent (sentinel)  r5c0
 	.long 0x00FDB10E	; F00565  [ 91]  absent (sentinel)  r5c1
@@ -2405,86 +2405,86 @@ PtrTable_F003F9:
 	.long 0x00FDB10E	; F00575  [ 95]  absent (sentinel)  r5c5
 	.long 0x00FDB10E	; F00579  [ 96]  absent (sentinel)  r5c6
 	.long 0x00FDB10E	; F0057D  [ 97]  absent (sentinel)  r5c7
-	.long 0x00F79135	; F00581  [ 98]  r5c8
-	.long 0x00F79162	; F00585  [ 99]  r5c9
-	.long 0x00F79186	; F00589  [100]  r5c10
-	.long 0x00F791C1	; F0058D  [101]  r5c11
-	.long 0x00F7921B	; F00591  [102]  r5c12
+	.long DLGlyph_060_F79108 + 0x2D	; F00581  [ 98]  r5c8
+	.long DLGlyph_061_F79150 + 0x12	; F00585  [ 99]  r5c9
+	.long DLGlyph_061_F79150 + 0x36	; F00589  [100]  r5c10
+	.long DLGlyph_062_F79198 + 0x29	; F0058D  [101]  r5c11
+	.long DLGlyph_063_F791E0 + 0x3B	; F00591  [102]  r5c12
 	.long 0x00FDB10E	; F00595  [103]  absent (sentinel)  r5c13
 	.long 0x00FDB10E	; F00599  [104]  absent (sentinel)  r5c14
-	.long 0x00F79275	; F0059D  [105]  r5c15
-	.long 0x00F7924E	; F005A1  [106]  r5c16
+	.long DLGlyph_065_F79270 + 0x5	; F0059D  [105]  r5c15
+	.long DLGlyph_064_F79228 + 0x26	; F005A1  [106]  r5c16
 	.long 0x00000000	; F005A5  [107]  empty  r5c17
 	.long 0x00FDB10E	; F005A9  [108]  absent (sentinel)  r6c0
 	.long 0x00FDB10E	; F005AD  [109]  absent (sentinel)  r6c1
-	.long 0x00F792A9	; F005B1  [110]  r6c2
-	.long 0x00F79334	; F005B5  [111]  r6c3
-	.long 0x00F793AF	; F005B9  [112]  r6c4
-	.long 0x00F7944F	; F005BD  [113]  r6c5
+	.long DLGlyph_065_F79270 + 0x39	; F005B1  [110]  r6c2
+	.long DLGlyph_067_F79300 + 0x34	; F005B5  [111]  r6c3
+	.long DLGlyph_069_F79390 + 0x1F	; F005B9  [112]  r6c4
+	.long DLGlyph_071_F79420 + 0x2F	; F005BD  [113]  r6c5
 	.long 0x00FDB10E	; F005C1  [114]  absent (sentinel)  r6c6
 	.long 0x00FDB10E	; F005C5  [115]  absent (sentinel)  r6c7
-	.long 0x00F794CA	; F005C9  [116]  r6c8
-	.long 0x00F794E8	; F005CD  [117]  r6c9
-	.long 0x00F7950C	; F005D1  [118]  r6c10
-	.long 0x00F79538	; F005D5  [119]  r6c11
-	.long 0x00F7955C	; F005D9  [120]  r6c12
+	.long DLGlyph_073_F794B0 + 0x1A	; F005C9  [116]  r6c8
+	.long DLGlyph_073_F794B0 + 0x38	; F005CD  [117]  r6c9
+	.long DLGlyph_074_F794F8 + 0x14	; F005D1  [118]  r6c10
+	.long DLGlyph_074_F794F8 + 0x40	; F005D5  [119]  r6c11
+	.long DLGlyph_075_F79540 + 0x1C	; F005D9  [120]  r6c12
 	.long 0x00FDB10E	; F005DD  [121]  absent (sentinel)  r6c13
 	.long 0x00FDB10E	; F005E1  [122]  absent (sentinel)  r6c14
-	.long 0x00F79598	; F005E5  [123]  r6c15
-	.long 0x00F79580	; F005E9  [124]  r6c16
+	.long DLGlyph_076_F79588 + 0x10	; F005E5  [123]  r6c15
+	.long DLGlyph_075_F79540 + 0x40	; F005E9  [124]  r6c16
 	.long 0x00000000	; F005ED  [125]  empty  r6c17
-	.long 0x00F795B8	; F005F1  [126]  r7c0
-	.long 0x00F795D1	; F005F5  [127]  r7c1
-	.long 0x00F795EA	; F005F9  [128]  r7c2
-	.long 0x00F79603	; F005FD  [129]  r7c3
-	.long 0x00F7961C	; F00601  [130]  r7c4
-	.long 0x00F79635	; F00605  [131]  r7c5
-	.long 0x00F7964E	; F00609  [132]  r7c6
+	.long DLGlyph_076_F79588 + 0x30	; F005F1  [126]  r7c0
+	.long DLGlyph_077_F795D0 + 0x1	; F005F5  [127]  r7c1
+	.long DLGlyph_077_F795D0 + 0x1A	; F005F9  [128]  r7c2
+	.long DLGlyph_077_F795D0 + 0x33	; F005FD  [129]  r7c3
+	.long DLGlyph_078_F79618 + 0x4	; F00601  [130]  r7c4
+	.long DLGlyph_078_F79618 + 0x1D	; F00605  [131]  r7c5
+	.long DLGlyph_078_F79618 + 0x36	; F00609  [132]  r7c6
 	.long 0x00FDB10E	; F0060D  [133]  absent (sentinel)  r7c7
-	.long 0x00F79667	; F00611  [134]  r7c8
-	.long 0x00F79678	; F00615  [135]  r7c9
-	.long 0x00F796A4	; F00619  [136]  r7c10
-	.long 0x00F796D0	; F0061D  [137]  r7c11
-	.long 0x00F796FE	; F00621  [138]  r7c12
+	.long DLGlyph_079_F79660 + 0x7	; F00611  [134]  r7c8
+	.long DLGlyph_079_F79660 + 0x18	; F00615  [135]  r7c9
+	.long DLGlyph_079_F79660 + 0x44	; F00619  [136]  r7c10
+	.long DLGlyph_080_F796A8 + 0x28	; F0061D  [137]  r7c11
+	.long DLGlyph_081_F796F0 + 0xE	; F00621  [138]  r7c12
 	.long 0x00FDB10E	; F00625  [139]  absent (sentinel)  r7c13
 	.long 0x00FDB10E	; F00629  [140]  absent (sentinel)  r7c14
-	.long 0x00F79744	; F0062D  [141]  r7c15
-	.long 0x00F7972C	; F00631  [142]  r7c16
+	.long DLGlyph_082_F79738 + 0xC	; F0062D  [141]  r7c15
+	.long DLGlyph_081_F796F0 + 0x3C	; F00631  [142]  r7c16
 	.long 0x00000000	; F00635  [143]  empty  r7c17
 	.long 0x00FDB10E	; F00639  [144]  absent (sentinel)  r8c0
-	.long 0x00F79764	; F0063D  [145]  r8c1
-	.long 0x00F79779	; F00641  [146]  r8c2
-	.long 0x00F7978E	; F00645  [147]  r8c3
-	.long 0x00F797A3	; F00649  [148]  r8c4
+	.long DLGlyph_082_F79738 + 0x2C	; F0063D  [145]  r8c1
+	.long DLGlyph_082_F79738 + 0x41	; F00641  [146]  r8c2
+	.long DLGlyph_083_F79780 + 0xE	; F00645  [147]  r8c3
+	.long DLGlyph_083_F79780 + 0x23	; F00649  [148]  r8c4
 	.long 0x00FDB10E	; F0064D  [149]  absent (sentinel)  r8c5
-	.long 0x00F797B8	; F00651  [150]  r8c6
-	.long 0x00F797CD	; F00655  [151]  r8c7
-	.long 0x00F797E2	; F00659  [152]  r8c8
-	.long 0x00F797F3	; F0065D  [153]  r8c9
-	.long 0x00F7981F	; F00661  [154]  r8c10
-	.long 0x00F7984B	; F00665  [155]  r8c11
-	.long 0x00F7986F	; F00669  [156]  r8c12
+	.long DLGlyph_083_F79780 + 0x38	; F00651  [150]  r8c6
+	.long DLGlyph_084_F797C8 + 0x5	; F00655  [151]  r8c7
+	.long DLGlyph_084_F797C8 + 0x1A	; F00659  [152]  r8c8
+	.long DLGlyph_084_F797C8 + 0x2B	; F0065D  [153]  r8c9
+	.long DLGlyph_085_F79810 + 0xF	; F00661  [154]  r8c10
+	.long DLGlyph_085_F79810 + 0x3B	; F00665  [155]  r8c11
+	.long DLGlyph_086_F79858 + 0x17	; F00669  [156]  r8c12
 	.long 0x00FDB10E	; F0066D  [157]  absent (sentinel)  r8c13
 	.long 0x00FDB10E	; F00671  [158]  absent (sentinel)  r8c14
-	.long 0x00F798AB	; F00675  [159]  r8c15
-	.long 0x00F79893	; F00679  [160]  r8c16
+	.long DLGlyph_087_F798A0 + 0xB	; F00675  [159]  r8c15
+	.long DLGlyph_086_F79858 + 0x3B	; F00679  [160]  r8c16
 	.long 0x00000000	; F0067D  [161]  empty  r8c17
 	.long 0x00FDB10E	; F00681  [162]  absent (sentinel)  r9c0
-	.long 0x00F798CB	; F00685  [163]  r9c1
-	.long 0x00F798E0	; F00689  [164]  r9c2
-	.long 0x00F798F5	; F0068D  [165]  r9c3
-	.long 0x00F7990A	; F00691  [166]  r9c4
-	.long 0x00F7991F	; F00695  [167]  r9c5
-	.long 0x00F79934	; F00699  [168]  r9c6
-	.long 0x00F79949	; F0069D  [169]  r9c7
-	.long 0x00F7995E	; F006A1  [170]  r9c8
-	.long 0x00F7997C	; F006A5  [171]  r9c9
-	.long 0x00F799A0	; F006A9  [172]  r9c10
-	.long 0x00F799B8	; F006AD  [173]  r9c11
-	.long 0x00F799D0	; F006B1  [174]  r9c12
+	.long DLGlyph_087_F798A0 + 0x2B	; F00685  [163]  r9c1
+	.long DLGlyph_087_F798A0 + 0x40	; F00689  [164]  r9c2
+	.long DLGlyph_088_F798E8 + 0xD	; F0068D  [165]  r9c3
+	.long DLGlyph_088_F798E8 + 0x22	; F00691  [166]  r9c4
+	.long DLGlyph_088_F798E8 + 0x37	; F00695  [167]  r9c5
+	.long DLGlyph_089_F79930 + 0x4	; F00699  [168]  r9c6
+	.long DLGlyph_089_F79930 + 0x19	; F0069D  [169]  r9c7
+	.long DLGlyph_089_F79930 + 0x2E	; F006A1  [170]  r9c8
+	.long DLGlyph_090_F79978 + 0x4	; F006A5  [171]  r9c9
+	.long DLGlyph_090_F79978 + 0x28	; F006A9  [172]  r9c10
+	.long DLGlyph_090_F79978 + 0x40	; F006AD  [173]  r9c11
+	.long DLGlyph_091_F799C0 + 0x10	; F006B1  [174]  r9c12
 	.long 0x00FDB10E	; F006B5  [175]  absent (sentinel)  r9c13
 	.long 0x00FDB10E	; F006B9  [176]  absent (sentinel)  r9c14
-	.long 0x00F799E8	; F006BD  [177]  r9c15
+	.long DLGlyph_091_F799C0 + 0x28	; F006BD  [177]  r9c15
 	.long 0x00FDB10E	; F006C1  [178]  absent (sentinel)  r9c16
 	.long 0x00000000	; F006C5  [179]  empty  r9c17
 	.long 0x00FDB10E	; F006C9  [180]  absent (sentinel)  r10c0
@@ -3085,9 +3085,10 @@ sub_F00CA2:
 	extz	xbc	; F00CCD  extz XBC
 	add	xbc, 15729324	; F00CCF  add XBC,0x00f002ac
 	ld	xbc, (xbc)	; F00CD5  ld XBC,(XBC)
-	lda	xiy, (15731935:24)	; F00CD7  lda XIY,0xf00cdf
+	lda	xiy, (sub_F00CDF:24)	; F00CD7  lda XIY,0xf00cdf
 	push	xiy	; F00CDC  push XIY
 	jp	(xbc)	; F00CDD  jp T,XBC
+sub_F00CDF:
 	popw	bc	; F00CDF  pop BC
 sub_F00CA2_Skip:
 	unlk XIZ	; F00CE0  unlk XIZ
@@ -3113,9 +3114,10 @@ sub_F00CE3:
 	extz	xbc	; F00D0E  extz XBC
 	add	xbc, sub_F002F4	; F00D10  add XBC,0x00f002f4
 	ld	xbc, (xbc)	; F00D16  ld XBC,(XBC)
-	lda	xiy, (15732000:24)	; F00D18  lda XIY,0xf00d20
+	lda	xiy, (sub_F00D20:24)	; F00D18  lda XIY,0xf00d20
 	push	xiy	; F00D1D  push XIY
 	jp	(xbc)	; F00D1E  jp T,XBC
+sub_F00D20:
 	popw	bc	; F00D20  pop BC
 sub_F00CE3_Skip:
 	unlk XIZ	; F00D21  unlk XIZ
@@ -3141,9 +3143,10 @@ sub_F00D24:
 	extz	xbc	; F00D4F  extz XBC
 	add	xbc, 15729468	; F00D51  add XBC,0x00f0033c
 	ld	xbc, (xbc)	; F00D57  ld XBC,(XBC)
-	lda	xiy, (15732065:24)	; F00D59  lda XIY,0xf00d61
+	lda	xiy, (sub_F00D61:24)	; F00D59  lda XIY,0xf00d61
 	push	xiy	; F00D5E  push XIY
 	jp	(xbc)	; F00D5F  jp T,XBC
+sub_F00D61:
 	popw	bc	; F00D61  pop BC
 sub_F00D24_Skip:
 	unlk XIZ	; F00D62  unlk XIZ
@@ -3169,9 +3172,10 @@ sub_F00D65:
 	extz	xbc	; F00D90  extz XBC
 	add	xbc, 15729540	; F00D92  add XBC,0x00f00384
 	ld	xbc, (xbc)	; F00D98  ld XBC,(XBC)
-	lda	xiy, (15732130:24)	; F00D9A  lda XIY,0xf00da2
+	lda	xiy, (sub_F00DA2:24)	; F00D9A  lda XIY,0xf00da2
 	push	xiy	; F00D9F  push XIY
 	jp	(xbc)	; F00DA0  jp T,XBC
+sub_F00DA2:
 	popw	bc	; F00DA2  pop BC
 sub_F00D65_Skip:
 	unlk XIZ	; F00DA3  unlk XIZ
@@ -7039,17 +7043,17 @@ Data_F02F52:
 	.short 0x0003
 	.short 0x000A
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01938
+	.long Data_F0191A + 0x1E
 	.short 0x1159
 	.short 0x0003
 	.short 0x000A
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01956
+	.long Data_F0191A + 0x3C
 	.short 0x1749
 	.short 0x0003
 	.short 0x000A
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01974
+	.long Data_F0191A + 0x5A
 	.short 0x1D11
 	.short 0x0003
 	.short 0x000A
@@ -7783,7 +7787,7 @@ DL_F034AD:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F034D2	; +0x07 -> XIY: string table
+	.long Data_F034C6 + 0xC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x15CD	; +0x0D -> IX
 
@@ -7841,7 +7845,7 @@ DL_F034E8:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x187A	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -7881,7 +7885,7 @@ DL_F03522:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D52	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -8089,10 +8093,10 @@ Data_F03617:
 ;     7-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x35, 0xF0, 0x00	; F03620  top 3 bytes of the entry at F0361F = 0x00F035D5
-	.long	0x00F035E0	; F03623  entry 3
-	.long	0x00F035EB	; F03627  entry 4
-	.long	0x00F035F6	; F0362B  entry 5
-	.long	0x00F03601	; F0362F  entry 6
+	.long	DL_F035CA + 0x16	; F03623  entry 3
+	.long	DL_F035CA + 0x21	; F03627  entry 4
+	.long	DL_F035CA + 0x2C	; F0362B  entry 5
+	.long	DL_F035CA + 0x37	; F0362F  entry 6
 
 ; === END COVER-R1 0xF03617-0xF03633 ===
 
@@ -8115,7 +8119,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1870	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -8123,7 +8127,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1875	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -8131,7 +8135,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x187A	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -8147,7 +8151,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D48	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -8155,7 +8159,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D4D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -8163,7 +8167,7 @@ DL_F03633:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D52	; +0x0D -> IX
 DL_F036A3:
@@ -8726,10 +8730,10 @@ Data_F039ED:
 ; selector table of block 0 -- 0xF03A09-0xF03A20, 6 LE32 entries
 	.long	Data_F039ED	; F03A09  [0] padding: never indexed (djnz runs C down to 1)
 	.long	Data_F039ED	; F03A0D  [1] start of list 1
-	.long	0x00F039F4	; F03A11  [2] end of list 1 / start of list 2
-	.long	0x00F039FB	; F03A15  [3] end of list 2 / start of list 3
-	.long	0x00F03A02	; F03A19  [4] end of list 3 / start of list 4
-	.long	0x00F03A09	; F03A1D  [5] end of list 4 == this table's own address
+	.long	Data_F039ED + 0x7	; F03A11  [2] end of list 1 / start of list 2
+	.long	Data_F039ED + 0xE	; F03A15  [3] end of list 2 / start of list 3
+	.long	Data_F039ED + 0x15	; F03A19  [4] end of list 3 / start of list 4
+	.long	Data_F039ED + 0x1C	; F03A1D  [5] end of list 4 == this table's own address
 
 ; ------------------------------------------------------------------
 ; SELECTOR BLOCK 1 -- 0xF03A21-0xF03A68, 72 bytes: 4 display lists
@@ -8761,19 +8765,19 @@ Data_F039ED:
 ; ------------------------------------------------------------------
 ; list 2 of block 1 -- 0xF03A2D-0xF03A38, 1 record, 12 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01938
+	.long Data_F0191A + 0x1E
 	.short 0x115A
 	.short 0x0003
 	.short 0x000A
 ; list 3 of block 1 -- 0xF03A39-0xF03A44, 1 record, 12 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01956
+	.long Data_F0191A + 0x3C
 	.short 0x165A
 	.short 0x0003
 	.short 0x000A
 ; list 4 of block 1 -- 0xF03A45-0xF03A50, 1 record, 12 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01974
+	.long Data_F0191A + 0x5A
 	.short 0x1B5A
 	.short 0x0003
 	.short 0x000A
@@ -8799,11 +8803,11 @@ Data_F039ED:
 ; --------------------------------------------------------------------------
 ; selector table of block 1 -- 0xF03A51-0xF03A68, 6 LE32 entries
 Data_F03A51:
-	.long	0x00F03A21	; F03A51  [0] padding: never indexed (djnz runs C down to 1)
-	.long	0x00F03A21	; F03A55  [1] start of list 1
-	.long	0x00F03A2D	; F03A59  [2] end of list 1 / start of list 2
-	.long	0x00F03A39	; F03A5D  [3] end of list 2 / start of list 3
-	.long	0x00F03A45	; F03A61  [4] end of list 3 / start of list 4
+	.long	Data_F039ED + 0x34	; F03A51  [0] padding: never indexed (djnz runs C down to 1)
+	.long	Data_F039ED + 0x34	; F03A55  [1] start of list 1
+	.long	Data_F039ED + 0x40	; F03A59  [2] end of list 1 / start of list 2
+	.long	Data_F039ED + 0x4C	; F03A5D  [3] end of list 2 / start of list 3
+	.long	Data_F039ED + 0x58	; F03A61  [4] end of list 3 / start of list 4
 	.long	Data_F03A51	; F03A65  [5] end of list 4 == this table's own address
 
 ; ------------------------------------------------------------------
@@ -8813,7 +8817,7 @@ Data_F03A51:
 ; ------------------------------------------------------------------
 ; list 1 of block 2 -- 0xF03A69-0xF03A7B, 2 records, 19 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x0CD2
 	.short 0x0002
 	.short 0x000C
@@ -8822,7 +8826,7 @@ Data_F03A51:
 	.ascii "1st"
 ; list 2 of block 2 -- 0xF03A7C-0xF03A8E, 2 records, 19 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x11D2
 	.short 0x0002
 	.short 0x000C
@@ -8831,7 +8835,7 @@ Data_F03A51:
 	.ascii "2nd"
 ; list 3 of block 2 -- 0xF03A8F-0xF03AA1, 2 records, 19 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x16D2
 	.short 0x0002
 	.short 0x000C
@@ -8840,7 +8844,7 @@ Data_F03A51:
 	.ascii "3rd"
 ; list 4 of block 2 -- 0xF03AA2-0xF03AB4, 2 records, 19 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x1BD2
 	.short 0x0002
 	.short 0x000C
@@ -8849,12 +8853,12 @@ Data_F03A51:
 	.ascii "4th"
 
 ; selector table of block 2 -- 0xF03AB5-0xF03ACC, 6 LE32 entries
-	.long	0x00F03A69	; F03AB5  [0] padding: never indexed (djnz runs C down to 1)
-	.long	0x00F03A69	; F03AB9  [1] start of list 1
-	.long	0x00F03A7C	; F03ABD  [2] end of list 1 / start of list 2
-	.long	0x00F03A8F	; F03AC1  [3] end of list 2 / start of list 3
-	.long	0x00F03AA2	; F03AC5  [4] end of list 3 / start of list 4
-	.long	0x00F03AB5	; F03AC9  [5] end of list 4 == this table's own address
+	.long	Data_F03A51 + 0x18	; F03AB5  [0] padding: never indexed (djnz runs C down to 1)
+	.long	Data_F03A51 + 0x18	; F03AB9  [1] start of list 1
+	.long	Data_F03A51 + 0x2B	; F03ABD  [2] end of list 1 / start of list 2
+	.long	Data_F03A51 + 0x3E	; F03AC1  [3] end of list 2 / start of list 3
+	.long	Data_F03A51 + 0x51	; F03AC5  [4] end of list 3 / start of list 4
+	.long	Data_F03A51 + 0x64	; F03AC9  [5] end of list 4 == this table's own address
 
 ; ------------------------------------------------------------------
 ; SELECTOR BLOCK 3 -- 0xF03ACD-0xF03B44, 120 bytes: 4 display lists
@@ -8900,7 +8904,7 @@ Data_F03A51:
 ; | ; --------------------------------------------------------------------------
 ; --------------------------------------------------------------------------
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01938
+	.long Data_F0191A + 0x1E
 	.short 0x11D4
 	.short 0x0003
 	.short 0x000A
@@ -8911,7 +8915,7 @@ Data_F03A51:
 	.short 0x0002
 	.short 0x000C
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01956
+	.long Data_F0191A + 0x3C
 	.short 0x16D4
 	.short 0x0003
 	.short 0x000A
@@ -8922,18 +8926,18 @@ Data_F03A51:
 	.short 0x0002
 	.short 0x000C
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01974
+	.long Data_F0191A + 0x5A
 	.short 0x1BD4
 	.short 0x0003
 	.short 0x000A
 
 ; selector table of block 3 -- 0xF03B2D-0xF03B44, 6 LE32 entries
-	.long	0x00F03ACD	; F03B2D  [0] padding: never indexed (djnz runs C down to 1)
-	.long	0x00F03ACD	; F03B31  [1] start of list 1
-	.long	0x00F03AE5	; F03B35  [2] end of list 1 / start of list 2
-	.long	0x00F03AFD	; F03B39  [3] end of list 2 / start of list 3
-	.long	0x00F03B15	; F03B3D  [4] end of list 3 / start of list 4
-	.long	0x00F03B2D	; F03B41  [5] end of list 4 == this table's own address
+	.long	Data_F03A51 + 0x7C	; F03B2D  [0] padding: never indexed (djnz runs C down to 1)
+	.long	Data_F03A51 + 0x7C	; F03B31  [1] start of list 1
+	.long	Data_F03A51 + 0x94	; F03B35  [2] end of list 1 / start of list 2
+	.long	Data_F03A51 + 0xAC	; F03B39  [3] end of list 2 / start of list 3
+	.long	Data_F03A51 + 0xC4	; F03B3D  [4] end of list 3 / start of list 4
+	.long	Data_F03A51 + 0xDC	; F03B41  [5] end of list 4 == this table's own address
 
 ; ------------------------------------------------------------------
 ; SELECTOR BLOCK 4 -- 0xF03B45-0xF03B7E, 58 bytes: 2 display lists
@@ -8959,7 +8963,7 @@ Data_F03A51:
 ; ------------------------------------------------------------------
 ; list 1 of block 4 -- 0xF03B45-0xF03B59, 2 records, 21 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x129A
 	.short 0x0002
 	.short 0x000C
@@ -8969,7 +8973,7 @@ Data_F03A51:
 	.ascii "1st"
 ; list 2 of block 4 -- 0xF03B5A-0xF03B6E, 2 records, 21 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x174A
 	.short 0x0002
 	.short 0x000C
@@ -8997,9 +9001,9 @@ Data_F03A51:
 ; --------------------------------------------------------------------------
 ; selector table of block 4 -- 0xF03B6F-0xF03B7E, 4 LE32 entries
 Data_F03B6F:
-	.long	0x00F03B45	; F03B6F  [0] padding: never indexed (djnz runs C down to 1)
-	.long	0x00F03B45	; F03B73  [1] start of list 1
-	.long	0x00F03B5A	; F03B77  [2] end of list 1 / start of list 2
+	.long	Data_F03A51 + 0xF4	; F03B6F  [0] padding: never indexed (djnz runs C down to 1)
+	.long	Data_F03A51 + 0xF4	; F03B73  [1] start of list 1
+	.long	Data_F03A51 + 0x109	; F03B77  [2] end of list 1 / start of list 2
 	.long	Data_F03B6F	; F03B7B  [3] end of list 2 == this table's own address
 
 ; ------------------------------------------------------------------
@@ -9029,10 +9033,10 @@ Data_F03B6F:
 	.ascii "2nd"
 
 ; selector table of block 5 -- 0xF03BA9-0xF03BB8, 4 LE32 entries
-	.long	0x00F03B7F	; F03BA9  [0] padding: never indexed (djnz runs C down to 1)
-	.long	0x00F03B7F	; F03BAD  [1] start of list 1
-	.long	0x00F03B94	; F03BB1  [2] end of list 1 / start of list 2
-	.long	0x00F03BA9	; F03BB5  [3] end of list 2 == this table's own address
+	.long	Data_F03B6F + 0x10	; F03BA9  [0] padding: never indexed (djnz runs C down to 1)
+	.long	Data_F03B6F + 0x10	; F03BAD  [1] start of list 1
+	.long	Data_F03B6F + 0x25	; F03BB1  [2] end of list 1 / start of list 2
+	.long	Data_F03B6F + 0x3A	; F03BB5  [3] end of list 2 == this table's own address
 
 ; ------------------------------------------------------------------
 ; SELECTOR BLOCK 6 -- 0xF03BB9-0xF03C1C, 100 bytes: 4 display lists
@@ -9041,7 +9045,7 @@ Data_F03B6F:
 ; ------------------------------------------------------------------
 ; list 1 of block 6 -- 0xF03BB9-0xF03BCB, 2 records, 19 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x0B68
 	.short 0x0002
 	.short 0x000C
@@ -9050,7 +9054,7 @@ Data_F03B6F:
 	.ascii "1st"
 ; list 2 of block 6 -- 0xF03BCC-0xF03BDE, 2 records, 19 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x1130
 	.short 0x0002
 	.short 0x000C
@@ -9059,7 +9063,7 @@ Data_F03B6F:
 	.ascii "2nd"
 ; list 3 of block 6 -- 0xF03BDF-0xF03BF1, 2 records, 19 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x16F8
 	.short 0x0002
 	.short 0x000C
@@ -9085,7 +9089,7 @@ Data_F03B6F:
 	.ascii "3rd"
 ; list 4 of block 6 -- 0xF03BF2-0xF03C04, 2 records, 19 bytes
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01992
+	.long Data_F0191A + 0x78
 	.short 0x1CC0
 	.short 0x0002
 	.short 0x000C
@@ -9113,9 +9117,9 @@ Data_F03B6F:
 ; --------------------------------------------------------------------------
 ; selector table of block 6 -- 0xF03C05-0xF03C1C, 6 LE32 entries
 Data_F03C05:
-	.long	0x00F03BB9	; F03C05  [0] padding: never indexed (djnz runs C down to 1)
-	.long	0x00F03BB9	; F03C09  [1] start of list 1
-	.long	0x00F03BCC	; F03C0D  [2] end of list 1 / start of list 2
+	.long	Data_F03B6F + 0x4A	; F03C05  [0] padding: never indexed (djnz runs C down to 1)
+	.long	Data_F03B6F + 0x4A	; F03C09  [1] start of list 1
+	.long	Data_F03B6F + 0x5D	; F03C0D  [2] end of list 1 / start of list 2
 ; | ; --- 0xF03C12-0xF03C1C: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
 ; | ; --- 0xF03C12-0xF03C1C, 11 B, converted by lane promB6 (PTRTAB4).
 ; | ;     6-entry pointer array
@@ -9129,8 +9133,8 @@ Data_F03C05:
 ;   loose leading bytes really were the top of entry 3.  The two halves are
 ;   one table again, above; the note is kept because it named the object
 ;   correctly from a fragment.
-	.long	0x00F03BDF	; F03C11  [3] end of list 2 / start of list 3
-	.long	0x00F03BF2	; F03C15  [4] end of list 3 / start of list 4
+	.long	Data_F03B6F + 0x70	; F03C11  [3] end of list 2 / start of list 3
+	.long	Data_F03B6F + 0x83	; F03C15  [4] end of list 3 / start of list 4
 	.long	Data_F03C05	; F03C19  [5] end of list 4 == this table's own address
 
 ; ------------------------------------------------------------------
@@ -9173,7 +9177,7 @@ Data_F03C05:
 	.short 0x0002
 	.short 0x000C
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01938
+	.long Data_F0191A + 0x1E
 	.short 0x115A
 	.short 0x0003
 	.short 0x000A
@@ -9184,7 +9188,7 @@ Data_F03C05:
 	.short 0x0002
 	.short 0x000C
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01956
+	.long Data_F0191A + 0x3C
 	.short 0x1722
 	.short 0x0003
 	.short 0x000A
@@ -9195,7 +9199,7 @@ Data_F03C05:
 	.short 0x0002
 	.short 0x000C
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01974
+	.long Data_F0191A + 0x5A
 	.short 0x1CEA
 	.short 0x0003
 	.short 0x000A
@@ -9218,11 +9222,11 @@ Data_F03C05:
 ; --------------------------------------------------------------------------
 ; selector table of block 7 -- 0xF03C7D-0xF03C94, 6 LE32 entries
 Data_F03C7D:
-	.long	0x00F03C1D	; F03C7D  [0] padding: never indexed (djnz runs C down to 1)
-	.long	0x00F03C1D	; F03C81  [1] start of list 1
-	.long	0x00F03C35	; F03C85  [2] end of list 1 / start of list 2
-	.long	0x00F03C4D	; F03C89  [3] end of list 2 / start of list 3
-	.long	0x00F03C65	; F03C8D  [4] end of list 3 / start of list 4
+	.long	Data_F03C05 + 0x18	; F03C7D  [0] padding: never indexed (djnz runs C down to 1)
+	.long	Data_F03C05 + 0x18	; F03C81  [1] start of list 1
+	.long	Data_F03C05 + 0x30	; F03C85  [2] end of list 1 / start of list 2
+	.long	Data_F03C05 + 0x48	; F03C89  [3] end of list 2 / start of list 3
+	.long	Data_F03C05 + 0x60	; F03C8D  [4] end of list 3 / start of list 4
 	.long	Data_F03C7D	; F03C91  [5] end of list 4 == this table's own address
 
 ; === END COVER-R1 0xF039ED-0xF03C95 ===
@@ -11484,7 +11488,7 @@ DL_F04D43:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F04DB7	; +0x07 -> XIY: string table
+	.long Data_F04DA3 + 0x14	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x228F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -11517,7 +11521,7 @@ DL_LowHigh:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F04DD5	; +0x07 -> XIY: string table
+	.long Data_F04DA3 + 0x32	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22AA	; +0x0D -> IX
 
@@ -11587,7 +11591,7 @@ DL_F04DFF:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F04DC3	; +0x07 -> XIY: string table
+	.long Data_F04DA3 + 0x20	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 
@@ -11620,9 +11624,9 @@ Data_F04E32:
 ;     4-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x4D, 0xF0, 0x00	; F04E33  top 3 bytes of the entry at F04E32 = 0x00F04DFF
-	.long	0x00F04E0A	; F04E36  entry 1
-	.long	0x00F04E14	; F04E3A  entry 2
-	.long	0x00F04E23	; F04E3E  entry 3
+	.long	DL_F04DFF + 0xB	; F04E36  entry 1
+	.long	DL_F04DFF + 0x15	; F04E3A  entry 2
+	.long	DL_F04DFF + 0x24	; F04E3E  entry 3
 
 ; === END COVER-R1 0xF04E32-0xF04E42 ===
 
@@ -11660,7 +11664,7 @@ DL_F04E42:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F04DB7	; +0x07 -> XIY: string table
+	.long Data_F04DA3 + 0x14	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -11676,7 +11680,7 @@ DL_F04E42:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F04DB7	; +0x07 -> XIY: string table
+	.long Data_F04DA3 + 0x14	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x229E	; +0x0D -> IX
 
@@ -11794,7 +11798,7 @@ DL_F04EAB:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F04F22	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F04F20 + 0x2	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF04F20-0xF04F32 ===
 ; 0xF04F20-0xF04F31, coverage round 1: 18 of this span's 18 bytes are
@@ -11868,12 +11872,12 @@ Data_F04F46:
 ;     11-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x4E, 0xF0, 0x00	; F04F57  top 3 bytes of the entry at F04F56 = 0x00F04ED6
-	.long	0x00F04EE1	; F04F5A  entry 5
-	.long	0x00F04EEB	; F04F5E  entry 6
-	.long	0x00F04EF6	; F04F62  entry 7
-	.long	0x00F04F00	; F04F66  entry 8
-	.long	0x00F04F0B	; F04F6A  entry 9
-	.long	0x00F04EB6	; F04F6E  entry 10
+	.long	DL_F04EAB + 0x36	; F04F5A  entry 5
+	.long	DL_F04EAB + 0x40	; F04F5E  entry 6
+	.long	DL_F04EAB + 0x4B	; F04F62  entry 7
+	.long	DL_F04EAB + 0x55	; F04F66  entry 8
+	.long	DL_F04EAB + 0x60	; F04F6A  entry 9
+	.long	DL_F04EAB + 0xB	; F04F6E  entry 10
 
 ; === END COVER-R1 0xF04F46-0xF04F72 ===
 
@@ -12012,8 +12016,8 @@ Data_F04FFD:
 ;     13-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x4F, 0xF0, 0x00	; F05026  top 3 bytes of the entry at F05025 = 0x00F04FD1
-	.long	0x00F04FDC	; F05029  entry 11
-	.long	0x00F04FE7	; F0502D  entry 12
+	.long	DL_F04F72 + 0x6A	; F05029  entry 11
+	.long	DL_F04F72 + 0x75	; F0502D  entry 12
 
 ; --------------------------------------------------------------------------
 ; Data_F05031 -- 4 bytes, EMITTED AS DATA (not promoted to code).
@@ -12072,7 +12076,7 @@ DL_F05063:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -12080,7 +12084,7 @@ DL_F05063:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -12088,7 +12092,7 @@ DL_F05063:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A2	; +0x0D -> IX
 
@@ -12203,8 +12207,8 @@ Data_F050F1:
 ;     7-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x50, 0xF0, 0x00	; F05102  top 3 bytes of the entry at F05101 = 0x00F050D3
-	.long	0x00F050DD	; F05105  entry 5
-	.long	0x00F050E7	; F05109  entry 6
+	.long	DL_F050AB + 0x32	; F05105  entry 5
+	.long	DL_F050AB + 0x3C	; F05109  entry 6
 
 ; === END COVER-R1 0xF050F1-0xF0510D ===
 
@@ -12235,7 +12239,7 @@ DL_F0510D:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -12243,7 +12247,7 @@ DL_F0510D:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2297	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -12251,7 +12255,7 @@ DL_F0510D:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A1	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -12344,7 +12348,7 @@ DL_F051C2:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F052FE	; +0x07 -> XIY: string table
+	.long Data_F05286 + 0x78	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x0D58	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -12368,7 +12372,7 @@ DL_F051C2:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F052FE	; +0x07 -> XIY: string table
+	.long Data_F05286 + 0x78	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1258	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -12392,7 +12396,7 @@ DL_F051C2:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F052FE	; +0x07 -> XIY: string table
+	.long Data_F05286 + 0x78	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1758	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -12416,7 +12420,7 @@ DL_F051C2:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F052FE	; +0x07 -> XIY: string table
+	.long Data_F05286 + 0x78	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1C58	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -12440,13 +12444,13 @@ DL_F051C2:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F0531E	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F05286 + 0x98	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x27B3	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F05346	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F05286 + 0xC0	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF05286-0xF0535E ===
 ; 0xF05286-0xF0535D, coverage round 1: 197 of this span's 216 bytes are
@@ -12540,19 +12544,19 @@ Data_F05372:
 ;     17-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x51, 0xF0, 0x00	; F0537F  top 3 bytes of the entry at F0537E = 0x00F051D8
-	.long	0x00F051E7	; F05382  entry 4
-	.long	0x00F051F2	; F05386  entry 5
-	.long	0x00F051FD	; F0538A  entry 6
-	.long	0x00F0520C	; F0538E  entry 7
-	.long	0x00F05217	; F05392  entry 8
-	.long	0x00F05222	; F05396  entry 9
-	.long	0x00F05231	; F0539A  entry 10
-	.long	0x00F0523C	; F0539E  entry 11
-	.long	0x00F05247	; F053A2  entry 12
-	.long	0x00F0527B	; F053A6  entry 13
-	.long	0x00F05256	; F053AA  entry 14
-	.long	0x00F05265	; F053AE  entry 15
-	.long	0x00F05256	; F053B2  entry 16
+	.long	DL_F051C2 + 0x25	; F05382  entry 4
+	.long	DL_F051C2 + 0x30	; F05386  entry 5
+	.long	DL_F051C2 + 0x3B	; F0538A  entry 6
+	.long	DL_F051C2 + 0x4A	; F0538E  entry 7
+	.long	DL_F051C2 + 0x55	; F05392  entry 8
+	.long	DL_F051C2 + 0x60	; F05396  entry 9
+	.long	DL_F051C2 + 0x6F	; F0539A  entry 10
+	.long	DL_F051C2 + 0x7A	; F0539E  entry 11
+	.long	DL_F051C2 + 0x85	; F053A2  entry 12
+	.long	DL_F051C2 + 0xB9	; F053A6  entry 13
+	.long	DL_F051C2 + 0x94	; F053AA  entry 14
+	.long	DL_F051C2 + 0xA3	; F053AE  entry 15
+	.long	DL_F051C2 + 0x94	; F053B2  entry 16
 
 ; === END COVER-R1 0xF05372-0xF053B6 ===
 
@@ -12604,7 +12608,7 @@ DL_F053E3:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F034D2	; +0x07 -> XIY: string table
+	.long Data_F034C6 + 0xC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22AB	; +0x0D -> IX
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
@@ -12612,7 +12616,7 @@ DL_F053E3:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F05475	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F05469 + 0xC	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF05407-0xF0549D ===
 ; 0xF05407-0xF0549C, coverage round 1: 58 of this span's 150 bytes are
@@ -12707,8 +12711,8 @@ Data_F05445:
 ;     5-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x53, 0xF0, 0x00	; F05446  top 3 bytes of the entry at F05445 = 0x00F053FC
-	.long	0x00F053D9	; F05449  entry 1
-	.long	0x00F053CF	; F0544D  entry 2
+	.long	DL_F053B6 + 0x23	; F05449  entry 1
+	.long	DL_F053B6 + 0x19	; F0544D  entry 2
 	.long	DL_F053E3	; F05451  entry 3
 	.long	DL_F053B6	; F05455  entry 4
 
@@ -14394,7 +14398,7 @@ DL_F064F9:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 DL_F06517:
@@ -14419,7 +14423,7 @@ DL_F06517:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 DL_F06544:
@@ -15538,133 +15542,133 @@ SoundCodeByGroupMember_ByteGroup:
 ; --------------------------------------------------------------------------
 PtrTable_F08134:
 	.long	RecordArray_F08334	; F08134  [0] -> record 0
-	.long	0x00F0833D	; F08138  [1] -> record 3
-	.long	0x00F08340	; F0813C  [2] -> record 4
-	.long	0x00F08343	; F08140  [3] -> record 5
-	.long	0x00F08346	; F08144  [4] -> record 6
-	.long	0x00F0834F	; F08148  [5] -> record 9
-	.long	0x00F08358	; F0814C  [6] -> record 12
-	.long	0x00F08361	; F08150  [7] -> record 15
-	.long	0x00F08364	; F08154  [8] -> record 16
-	.long	0x00F08367	; F08158  [9] -> record 17
-	.long	0x00F0836A	; F0815C  [10] -> record 18
-	.long	0x00F0836D	; F08160  [11] -> record 19
-	.long	0x00F08370	; F08164  [12] -> record 20
-	.long	0x00F08379	; F08168  [13] -> record 23
-	.long	0x00F0837C	; F0816C  [14] -> record 24
-	.long	0x00F0837F	; F08170  [15] -> record 25
-	.long	0x00F08382	; F08174  [16] -> record 26
-	.long	0x00F08385	; F08178  [17] -> record 27
-	.long	0x00F08388	; F0817C  [18] -> record 28
-	.long	0x00F0838B	; F08180  [19] -> record 29
-	.long	0x00F0838E	; F08184  [20] -> record 30
-	.long	0x00F08391	; F08188  [21] -> record 31
-	.long	0x00F0839A	; F0818C  [22] -> record 34
-	.long	0x00F0839D	; F08190  [23] -> record 35
-	.long	0x00F083A0	; F08194  [24] -> record 36
-	.long	0x00F083A9	; F08198  [25] -> record 39
-	.long	0x00F083B5	; F0819C  [26] -> record 43
-	.long	0x00F083C1	; F081A0  [27] -> record 47
-	.long	0x00F083C4	; F081A4  [28] -> record 48
-	.long	0x00F083C7	; F081A8  [29] -> record 49
-	.long	0x00F083CA	; F081AC  [30] -> record 50
-	.long	0x00F083CD	; F081B0  [31] -> record 51
-	.long	0x00F083D0	; F081B4  [32] -> record 52
-	.long	0x00F083D3	; F081B8  [33] -> record 53
-	.long	0x00F083D6	; F081BC  [34] -> record 54
-	.long	0x00F083DF	; F081C0  [35] -> record 57
-	.long	0x00F083E2	; F081C4  [36] -> record 58
-	.long	0x00F083E5	; F081C8  [37] -> record 59
-	.long	0x00F083E8	; F081CC  [38] -> record 60
-	.long	0x00F083EB	; F081D0  [39] -> record 61
-	.long	0x00F083EE	; F081D4  [40] -> record 62
-	.long	0x00F083F1	; F081D8  [41] -> record 63
-	.long	0x00F083F4	; F081DC  [42] -> record 64
-	.long	0x00F083F7	; F081E0  [43] -> record 65
-	.long	0x00F083FA	; F081E4  [44] -> record 66
-	.long	0x00F083FD	; F081E8  [45] -> record 67
-	.long	0x00F08400	; F081EC  [46] -> record 68
-	.long	0x00F08403	; F081F0  [47] -> record 69
-	.long	0x00F08406	; F081F4  [48] -> record 70
-	.long	0x00F0840F	; F081F8  [49] -> record 73
-	.long	0x00F08412	; F081FC  [50] -> record 74
-	.long	0x00F08415	; F08200  [51] -> record 75
-	.long	0x00F08418	; F08204  [52] -> record 76
-	.long	0x00F0841B	; F08208  [53] -> record 77
-	.long	0x00F0841E	; F0820C  [54] -> record 78
-	.long	0x00F08421	; F08210  [55] -> record 79
-	.long	0x00F08424	; F08214  [56] -> record 80
-	.long	0x00F0842D	; F08218  [57] -> record 83
-	.long	0x00F08430	; F0821C  [58] -> record 84
-	.long	0x00F08433	; F08220  [59] -> record 85
-	.long	0x00F08436	; F08224  [60] -> record 86
-	.long	0x00F0843F	; F08228  [61] -> record 89
-	.long	0x00F08442	; F0822C  [62] -> record 90
-	.long	0x00F08445	; F08230  [63] -> record 91
-	.long	0x00F08448	; F08234  [64] -> record 92
-	.long	0x00F0844B	; F08238  [65] -> record 93
-	.long	0x00F0844E	; F0823C  [66] -> record 94
-	.long	0x00F08457	; F08240  [67] -> record 97
-	.long	0x00F0845A	; F08244  [68] -> record 98
-	.long	0x00F0845D	; F08248  [69] -> record 99
-	.long	0x00F08460	; F0824C  [70] -> record 100
-	.long	0x00F08463	; F08250  [71] -> record 101
-	.long	0x00F0846C	; F08254  [72] -> record 104
-	.long	0x00F0846F	; F08258  [73] -> record 105
-	.long	0x00F08472	; F0825C  [74] -> record 106
-	.long	0x00F08475	; F08260  [75] -> record 107
-	.long	0x00F08478	; F08264  [76] -> record 108
-	.long	0x00F0847B	; F08268  [77] -> record 109
-	.long	0x00F0847E	; F0826C  [78] -> record 110
-	.long	0x00F08481	; F08270  [79] -> record 111
-	.long	0x00F08484	; F08274  [80] -> record 112
-	.long	0x00F08487	; F08278  [81] -> record 113
-	.long	0x00F0848A	; F0827C  [82] -> record 114
-	.long	0x00F0848D	; F08280  [83] -> record 115
-	.long	0x00F08490	; F08284  [84] -> record 116
-	.long	0x00F08493	; F08288  [85] -> record 117
-	.long	0x00F08496	; F0828C  [86] -> record 118
-	.long	0x00F08499	; F08290  [87] -> record 119
-	.long	0x00F0849C	; F08294  [88] -> record 120
-	.long	0x00F0849F	; F08298  [89] -> record 121
-	.long	0x00F084A2	; F0829C  [90] -> record 122
-	.long	0x00F084A5	; F082A0  [91] -> record 123
-	.long	0x00F084A8	; F082A4  [92] -> record 124
-	.long	0x00F084AB	; F082A8  [93] -> record 125
-	.long	0x00F084AE	; F082AC  [94] -> record 126
-	.long	0x00F084B1	; F082B0  [95] -> record 127
-	.long	0x00F084B4	; F082B4  [96] -> record 128
-	.long	0x00F084B7	; F082B8  [97] -> record 129
-	.long	0x00F084BA	; F082BC  [98] -> record 130
-	.long	0x00F084BD	; F082C0  [99] -> record 131
-	.long	0x00F084C0	; F082C4  [100] -> record 132
-	.long	0x00F084C3	; F082C8  [101] -> record 133
-	.long	0x00F084C6	; F082CC  [102] -> record 134
-	.long	0x00F084C9	; F082D0  [103] -> record 135
-	.long	0x00F084CC	; F082D4  [104] -> record 136
-	.long	0x00F084CF	; F082D8  [105] -> record 137
-	.long	0x00F084D2	; F082DC  [106] -> record 138
-	.long	0x00F084D5	; F082E0  [107] -> record 139
-	.long	0x00F084D8	; F082E4  [108] -> record 140
-	.long	0x00F084DB	; F082E8  [109] -> record 141
-	.long	0x00F084DE	; F082EC  [110] -> record 142
-	.long	0x00F084E1	; F082F0  [111] -> record 143
-	.long	0x00F084E4	; F082F4  [112] -> record 144
-	.long	0x00F084E7	; F082F8  [113] -> record 145
-	.long	0x00F084EA	; F082FC  [114] -> record 146
-	.long	0x00F084ED	; F08300  [115] -> record 147
-	.long	0x00F084F0	; F08304  [116] -> record 148
-	.long	0x00F084F3	; F08308  [117] -> record 149
-	.long	0x00F084F6	; F0830C  [118] -> record 150
-	.long	0x00F084F9	; F08310  [119] -> record 151
-	.long	0x00F084FC	; F08314  [120] -> record 152
-	.long	0x00F084FF	; F08318  [121] -> record 153
-	.long	0x00F08502	; F0831C  [122] -> record 154
-	.long	0x00F08505	; F08320  [123] -> record 155
-	.long	0x00F08508	; F08324  [124] -> record 156
-	.long	0x00F0850B	; F08328  [125] -> record 157
-	.long	0x00F0850E	; F0832C  [126] -> record 158
-	.long	0x00F08511	; F08330  [127] -> record 159
+	.long	RecordArray_F08334 + 0x9	; F08138  [1] -> record 3
+	.long	RecordArray_F08334 + 0xC	; F0813C  [2] -> record 4
+	.long	RecordArray_F08334 + 0xF	; F08140  [3] -> record 5
+	.long	RecordArray_F08334 + 0x12	; F08144  [4] -> record 6
+	.long	RecordArray_F08334 + 0x1B	; F08148  [5] -> record 9
+	.long	RecordArray_F08334 + 0x24	; F0814C  [6] -> record 12
+	.long	RecordArray_F08334 + 0x2D	; F08150  [7] -> record 15
+	.long	RecordArray_F08334 + 0x30	; F08154  [8] -> record 16
+	.long	RecordArray_F08334 + 0x33	; F08158  [9] -> record 17
+	.long	RecordArray_F08334 + 0x36	; F0815C  [10] -> record 18
+	.long	RecordArray_F08334 + 0x39	; F08160  [11] -> record 19
+	.long	RecordArray_F08334 + 0x3C	; F08164  [12] -> record 20
+	.long	RecordArray_F08334 + 0x45	; F08168  [13] -> record 23
+	.long	RecordArray_F08334 + 0x48	; F0816C  [14] -> record 24
+	.long	RecordArray_F08334 + 0x4B	; F08170  [15] -> record 25
+	.long	RecordArray_F08334 + 0x4E	; F08174  [16] -> record 26
+	.long	RecordArray_F08334 + 0x51	; F08178  [17] -> record 27
+	.long	RecordArray_F08334 + 0x54	; F0817C  [18] -> record 28
+	.long	RecordArray_F08334 + 0x57	; F08180  [19] -> record 29
+	.long	RecordArray_F08334 + 0x5A	; F08184  [20] -> record 30
+	.long	RecordArray_F08334 + 0x5D	; F08188  [21] -> record 31
+	.long	RecordArray_F08334 + 0x66	; F0818C  [22] -> record 34
+	.long	RecordArray_F08334 + 0x69	; F08190  [23] -> record 35
+	.long	RecordArray_F08334 + 0x6C	; F08194  [24] -> record 36
+	.long	RecordArray_F08334 + 0x75	; F08198  [25] -> record 39
+	.long	RecordArray_F08334 + 0x81	; F0819C  [26] -> record 43
+	.long	RecordArray_F08334 + 0x8D	; F081A0  [27] -> record 47
+	.long	RecordArray_F08334 + 0x90	; F081A4  [28] -> record 48
+	.long	RecordArray_F08334 + 0x93	; F081A8  [29] -> record 49
+	.long	RecordArray_F08334 + 0x96	; F081AC  [30] -> record 50
+	.long	RecordArray_F08334 + 0x99	; F081B0  [31] -> record 51
+	.long	RecordArray_F08334 + 0x9C	; F081B4  [32] -> record 52
+	.long	RecordArray_F08334 + 0x9F	; F081B8  [33] -> record 53
+	.long	RecordArray_F08334 + 0xA2	; F081BC  [34] -> record 54
+	.long	RecordArray_F08334 + 0xAB	; F081C0  [35] -> record 57
+	.long	RecordArray_F08334 + 0xAE	; F081C4  [36] -> record 58
+	.long	RecordArray_F08334 + 0xB1	; F081C8  [37] -> record 59
+	.long	RecordArray_F08334 + 0xB4	; F081CC  [38] -> record 60
+	.long	RecordArray_F08334 + 0xB7	; F081D0  [39] -> record 61
+	.long	RecordArray_F08334 + 0xBA	; F081D4  [40] -> record 62
+	.long	RecordArray_F08334 + 0xBD	; F081D8  [41] -> record 63
+	.long	RecordArray_F08334 + 0xC0	; F081DC  [42] -> record 64
+	.long	RecordArray_F08334 + 0xC3	; F081E0  [43] -> record 65
+	.long	RecordArray_F08334 + 0xC6	; F081E4  [44] -> record 66
+	.long	RecordArray_F08334 + 0xC9	; F081E8  [45] -> record 67
+	.long	RecordArray_F08334 + 0xCC	; F081EC  [46] -> record 68
+	.long	RecordArray_F08334 + 0xCF	; F081F0  [47] -> record 69
+	.long	RecordArray_F08334 + 0xD2	; F081F4  [48] -> record 70
+	.long	RecordArray_F08334 + 0xDB	; F081F8  [49] -> record 73
+	.long	RecordArray_F08334 + 0xDE	; F081FC  [50] -> record 74
+	.long	RecordArray_F08334 + 0xE1	; F08200  [51] -> record 75
+	.long	RecordArray_F08334 + 0xE4	; F08204  [52] -> record 76
+	.long	RecordArray_F08334 + 0xE7	; F08208  [53] -> record 77
+	.long	RecordArray_F08334 + 0xEA	; F0820C  [54] -> record 78
+	.long	RecordArray_F08334 + 0xED	; F08210  [55] -> record 79
+	.long	RecordArray_F08334 + 0xF0	; F08214  [56] -> record 80
+	.long	RecordArray_F08334 + 0xF9	; F08218  [57] -> record 83
+	.long	RecordArray_F08334 + 0xFC	; F0821C  [58] -> record 84
+	.long	RecordArray_F08334 + 0xFF	; F08220  [59] -> record 85
+	.long	RecordArray_F08334 + 0x102	; F08224  [60] -> record 86
+	.long	RecordArray_F08334 + 0x10B	; F08228  [61] -> record 89
+	.long	RecordArray_F08334 + 0x10E	; F0822C  [62] -> record 90
+	.long	RecordArray_F08334 + 0x111	; F08230  [63] -> record 91
+	.long	RecordArray_F08334 + 0x114	; F08234  [64] -> record 92
+	.long	RecordArray_F08334 + 0x117	; F08238  [65] -> record 93
+	.long	RecordArray_F08334 + 0x11A	; F0823C  [66] -> record 94
+	.long	RecordArray_F08334 + 0x123	; F08240  [67] -> record 97
+	.long	RecordArray_F08334 + 0x126	; F08244  [68] -> record 98
+	.long	RecordArray_F08334 + 0x129	; F08248  [69] -> record 99
+	.long	RecordArray_F08334 + 0x12C	; F0824C  [70] -> record 100
+	.long	RecordArray_F08334 + 0x12F	; F08250  [71] -> record 101
+	.long	RecordArray_F08334 + 0x138	; F08254  [72] -> record 104
+	.long	RecordArray_F08334 + 0x13B	; F08258  [73] -> record 105
+	.long	RecordArray_F08334 + 0x13E	; F0825C  [74] -> record 106
+	.long	RecordArray_F08334 + 0x141	; F08260  [75] -> record 107
+	.long	RecordArray_F08334 + 0x144	; F08264  [76] -> record 108
+	.long	RecordArray_F08334 + 0x147	; F08268  [77] -> record 109
+	.long	RecordArray_F08334 + 0x14A	; F0826C  [78] -> record 110
+	.long	RecordArray_F08334 + 0x14D	; F08270  [79] -> record 111
+	.long	RecordArray_F08334 + 0x150	; F08274  [80] -> record 112
+	.long	RecordArray_F08334 + 0x153	; F08278  [81] -> record 113
+	.long	RecordArray_F08334 + 0x156	; F0827C  [82] -> record 114
+	.long	RecordArray_F08334 + 0x159	; F08280  [83] -> record 115
+	.long	RecordArray_F08334 + 0x15C	; F08284  [84] -> record 116
+	.long	RecordArray_F08334 + 0x15F	; F08288  [85] -> record 117
+	.long	RecordArray_F08334 + 0x162	; F0828C  [86] -> record 118
+	.long	RecordArray_F08334 + 0x165	; F08290  [87] -> record 119
+	.long	RecordArray_F08334 + 0x168	; F08294  [88] -> record 120
+	.long	RecordArray_F08334 + 0x16B	; F08298  [89] -> record 121
+	.long	RecordArray_F08334 + 0x16E	; F0829C  [90] -> record 122
+	.long	RecordArray_F08334 + 0x171	; F082A0  [91] -> record 123
+	.long	RecordArray_F08334 + 0x174	; F082A4  [92] -> record 124
+	.long	RecordArray_F08334 + 0x177	; F082A8  [93] -> record 125
+	.long	RecordArray_F08334 + 0x17A	; F082AC  [94] -> record 126
+	.long	RecordArray_F08334 + 0x17D	; F082B0  [95] -> record 127
+	.long	RecordArray_F08334 + 0x180	; F082B4  [96] -> record 128
+	.long	RecordArray_F08334 + 0x183	; F082B8  [97] -> record 129
+	.long	RecordArray_F08334 + 0x186	; F082BC  [98] -> record 130
+	.long	RecordArray_F08334 + 0x189	; F082C0  [99] -> record 131
+	.long	RecordArray_F08334 + 0x18C	; F082C4  [100] -> record 132
+	.long	RecordArray_F08334 + 0x18F	; F082C8  [101] -> record 133
+	.long	RecordArray_F08334 + 0x192	; F082CC  [102] -> record 134
+	.long	RecordArray_F08334 + 0x195	; F082D0  [103] -> record 135
+	.long	RecordArray_F08334 + 0x198	; F082D4  [104] -> record 136
+	.long	RecordArray_F08334 + 0x19B	; F082D8  [105] -> record 137
+	.long	RecordArray_F08334 + 0x19E	; F082DC  [106] -> record 138
+	.long	RecordArray_F08334 + 0x1A1	; F082E0  [107] -> record 139
+	.long	RecordArray_F08334 + 0x1A4	; F082E4  [108] -> record 140
+	.long	RecordArray_F08334 + 0x1A7	; F082E8  [109] -> record 141
+	.long	RecordArray_F08334 + 0x1AA	; F082EC  [110] -> record 142
+	.long	RecordArray_F08334 + 0x1AD	; F082F0  [111] -> record 143
+	.long	RecordArray_F08334 + 0x1B0	; F082F4  [112] -> record 144
+	.long	RecordArray_F08334 + 0x1B3	; F082F8  [113] -> record 145
+	.long	RecordArray_F08334 + 0x1B6	; F082FC  [114] -> record 146
+	.long	RecordArray_F08334 + 0x1B9	; F08300  [115] -> record 147
+	.long	RecordArray_F08334 + 0x1BC	; F08304  [116] -> record 148
+	.long	RecordArray_F08334 + 0x1BF	; F08308  [117] -> record 149
+	.long	RecordArray_F08334 + 0x1C2	; F0830C  [118] -> record 150
+	.long	RecordArray_F08334 + 0x1C5	; F08310  [119] -> record 151
+	.long	RecordArray_F08334 + 0x1C8	; F08314  [120] -> record 152
+	.long	RecordArray_F08334 + 0x1CB	; F08318  [121] -> record 153
+	.long	RecordArray_F08334 + 0x1CE	; F0831C  [122] -> record 154
+	.long	RecordArray_F08334 + 0x1D1	; F08320  [123] -> record 155
+	.long	RecordArray_F08334 + 0x1D4	; F08324  [124] -> record 156
+	.long	RecordArray_F08334 + 0x1D7	; F08328  [125] -> record 157
+	.long	RecordArray_F08334 + 0x1DA	; F0832C  [126] -> record 158
+	.long	RecordArray_F08334 + 0x1DD	; F08330  [127] -> record 159
 
 
 ; --------------------------------------------------------------------------
@@ -16110,7 +16114,7 @@ SoundEditController_PaintHeader:
 SoundEditController_PaintHeader_Skip:
 	ld	(9536:16), 0	; F098D4  ld (0x2540),0x00
 	ld	xiy, DL_C0ntr0llerSoundEditDepth	; F098D9  ld XIY,0x00f32c2a
-	ld	xix, 15936712	; F098DE  ld XIX,0x00f32cc8
+	ld	xix, DL_C0ntr0llerSoundEditDepth + 0x9E	; F098DE  ld XIX,0x00f32cc8
 	call	T_DisplayList_Run	; F098E3  call 0xf417f0
 	ld	(9536:16), 0	; F098E7  ld (0x2540),0x00
 	ld	xiy, DL_1st2nd	; F098EC  ld XIY,0x00f32d03
@@ -16688,7 +16692,7 @@ sub_F09D91:
 	push	c	; F09DA7  push C
 	xor	b, b	; F09DA9  xor B,B
 	sla	bc, 2	; F09DAB  sla 0x02,BC
-	ld	xiz, 15743913	; F09DAE  ld XIZ,0x00f03ba9
+	ld	xiz, Data_F03B6F + 0x3A	; F09DAE  ld XIZ,0x00f03ba9
 	mx_ld_rm MXL, ra_IZ, ra_BC, 5	; F09DB3  ld XIY,(XIZ+BC)
 	add	bc, 4	; F09DB8  add BC,0x0004
 	mx_ld_rm MXL, ra_IZ, ra_BC, 4	; F09DBC  ld XIX,(XIZ+BC)
@@ -16900,9 +16904,10 @@ sub_F0A000:		; <- T_F42004
 	extz	xbc	; F0A02B  extz XBC
 	add	xbc, 16577411	; F0A02D  add XBC,0x00fcf383
 	ld	xbc, (xbc)	; F0A033  ld XBC,(XBC)
-	lda	xiy, (15769661:24)	; F0A035  lda XIY,0xf0a03d
+	lda	xiy, (sub_F0A03D:24)	; F0A035  lda XIY,0xf0a03d
 	push	xiy	; F0A03A  push XIY
 	jp	(xbc)	; F0A03B  jp T,XBC
+sub_F0A03D:
 	call	PanelScreen_RequestPending	; F0A03D  call 0xfd60b9
 	popw	bc	; F0A041  pop BC
 	cp	a, 0:i3	; F0A042  cp A,0
@@ -16948,9 +16953,10 @@ sub_F0A051:		; <- T_F42014
 	extz	xbc	; F0A083  extz XBC
 	add	xbc, 16577483	; F0A085  add XBC,0x00fcf3cb
 	ld	xbc, (xbc)	; F0A08B  ld XBC,(XBC)
-	lda	xiy, (15769749:24)	; F0A08D  lda XIY,0xf0a095
+	lda	xiy, (sub_F0A095:24)	; F0A08D  lda XIY,0xf0a095
 	push	xiy	; F0A092  push XIY
 	jp	(xbc)	; F0A093  jp T,XBC
+sub_F0A095:
 	pushw	0	; F0A095  push 0x0000
 	call	sub_FDAC5B	; F0A098  call 0xfdac5b
 	call	PanelScreen_RequestPending	; F0A09C  call 0xfd60b9
@@ -16998,9 +17004,10 @@ sub_F0A0B1:		; <- T_F42024
 	extz	xbc	; F0A0E3  extz XBC
 	add	xbc, 16577555	; F0A0E5  add XBC,0x00fcf413
 	ld	xbc, (xbc)	; F0A0EB  ld XBC,(XBC)
-	lda	xiy, (15769845:24)	; F0A0ED  lda XIY,0xf0a0f5
+	lda	xiy, (sub_F0A0F5:24)	; F0A0ED  lda XIY,0xf0a0f5
 	push	xiy	; F0A0F2  push XIY
 	jp	(xbc)	; F0A0F3  jp T,XBC
+sub_F0A0F5:
 	pushw	0	; F0A0F5  push 0x0000
 	call	sub_FDAC5B	; F0A0F8  call 0xfdac5b
 	call	PanelScreen_RequestPending	; F0A0FC  call 0xfd60b9
@@ -17046,9 +17053,10 @@ sub_F0A111:		; <- T_F42034
 	extz	xbc	; F0A13C  extz XBC
 	add	xbc, 16577627	; F0A13E  add XBC,0x00fcf45b
 	ld	xbc, (xbc)	; F0A144  ld XBC,(XBC)
-	lda	xiy, (15769934:24)	; F0A146  lda XIY,0xf0a14e
+	lda	xiy, (sub_F0A14E:24)	; F0A146  lda XIY,0xf0a14e
 	push	xiy	; F0A14B  push XIY
 	jp	(xbc)	; F0A14C  jp T,XBC
+sub_F0A14E:
 	call	PanelScreen_RequestPending	; F0A14E  call 0xfd60b9
 	popw	bc	; F0A152  pop BC
 	cp	a, 0:i3	; F0A153  cp A,0
@@ -18506,9 +18514,10 @@ sub_F0A90E:		; <- T_F42358
 	extz	xbc	; F0A939  extz XBC
 	add	xbc, 16579652	; F0A93B  add XBC,0x00fcfc44
 	ld	xbc, (xbc)	; F0A941  ld XBC,(XBC)
-	lda	xiy, (15771979:24)	; F0A943  lda XIY,0xf0a94b
+	lda	xiy, (sub_F0A94B:24)	; F0A943  lda XIY,0xf0a94b
 	push	xiy	; F0A948  push XIY
 	jp	(xbc)	; F0A949  jp T,XBC
+sub_F0A94B:
 	call	PanelScreen_RequestPending	; F0A94B  call 0xfd60b9
 	popw	bc	; F0A94F  pop BC
 	cp	a, 0:i3	; F0A950  cp A,0
@@ -18554,9 +18563,10 @@ sub_F0A95F:		; <- T_F42368
 	extz	xbc	; F0A991  extz XBC
 	add	xbc, 16579436	; F0A993  add XBC,0x00fcfb6c
 	ld	xbc, (xbc)	; F0A999  ld XBC,(XBC)
-	lda	xiy, (15772067:24)	; F0A99B  lda XIY,0xf0a9a3
+	lda	xiy, (sub_F0A9A3:24)	; F0A99B  lda XIY,0xf0a9a3
 	push	xiy	; F0A9A0  push XIY
 	jp	(xbc)	; F0A9A1  jp T,XBC
+sub_F0A9A3:
 	pushw	0	; F0A9A3  push 0x0000
 	call	sub_FDAC5B	; F0A9A6  call 0xfdac5b
 	call	PanelScreen_RequestPending	; F0A9AA  call 0xfd60b9
@@ -18602,9 +18612,10 @@ sub_F0A9BF:		; <- T_F42378
 	extz	xbc	; F0A9EA  extz XBC
 	add	xbc, 16579508	; F0A9EC  add XBC,0x00fcfbb4
 	ld	xbc, (xbc)	; F0A9F2  ld XBC,(XBC)
-	lda	xiy, (15772156:24)	; F0A9F4  lda XIY,0xf0a9fc
+	lda	xiy, (sub_F0A9FC:24)	; F0A9F4  lda XIY,0xf0a9fc
 	push	xiy	; F0A9F9  push XIY
 	jp	(xbc)	; F0A9FA  jp T,XBC
+sub_F0A9FC:
 	call	PanelScreen_RequestPending	; F0A9FC  call 0xfd60b9
 	popw	bc	; F0AA00  pop BC
 	cp	a, 0:i3	; F0AA01  cp A,0
@@ -18648,9 +18659,10 @@ sub_F0AA10:		; <- T_F433D8
 	extz	xbc	; F0AA3B  extz XBC
 	add	xbc, 16579580	; F0AA3D  add XBC,0x00fcfbfc
 	ld	xbc, (xbc)	; F0AA43  ld XBC,(XBC)
-	lda	xiy, (15772237:24)	; F0AA45  lda XIY,0xf0aa4d
+	lda	xiy, (sub_F0AA4D:24)	; F0AA45  lda XIY,0xf0aa4d
 	push	xiy	; F0AA4A  push XIY
 	jp	(xbc)	; F0AA4B  jp T,XBC
+sub_F0AA4D:
 	call	PanelScreen_RequestPending	; F0AA4D  call 0xfd60b9
 	popw	bc	; F0AA51  pop BC
 	cp	a, 0:i3	; F0AA52  cp A,0
@@ -18694,9 +18706,10 @@ sub_F0AA61:		; <- T_F420B4
 	extz	xbc	; F0AA8C  extz XBC
 	add	xbc, 16579580	; F0AA8E  add XBC,0x00fcfbfc
 	ld	xbc, (xbc)	; F0AA94  ld XBC,(XBC)
-	lda	xiy, (15772318:24)	; F0AA96  lda XIY,0xf0aa9e
+	lda	xiy, (sub_F0AA9E:24)	; F0AA96  lda XIY,0xf0aa9e
 	push	xiy	; F0AA9B  push XIY
 	jp	(xbc)	; F0AA9C  jp T,XBC
+sub_F0AA9E:
 	call	PanelScreen_RequestPending	; F0AA9E  call 0xfd60b9
 	popw	bc	; F0AAA2  pop BC
 	cp	a, 0:i3	; F0AAA3  cp A,0
@@ -18793,9 +18806,10 @@ sub_F0AAF9:		; <- T_F42338
 	extz	xbc	; F0AB24  extz XBC
 	add	xbc, 16579724	; F0AB26  add XBC,0x00fcfc8c
 	ld	xbc, (xbc)	; F0AB2C  ld XBC,(XBC)
-	lda	xiy, (15772470:24)	; F0AB2E  lda XIY,0xf0ab36
+	lda	xiy, (sub_F0AB36:24)	; F0AB2E  lda XIY,0xf0ab36
 	push	xiy	; F0AB33  push XIY
 	jp	(xbc)	; F0AB34  jp T,XBC
+sub_F0AB36:
 	call	PanelScreen_RequestPending	; F0AB36  call 0xfd60b9
 	popw	bc	; F0AB3A  pop BC
 	cp	a, 0:i3	; F0AB3B  cp A,0
@@ -21032,9 +21046,10 @@ sub_F0B91C_Skip:
 	extz	bc	; F0B93A  extz BC
 	pushw	bc	; F0B93C  push BC
 	pushw	2	; F0B93D  push 0x0002
-	lda	xiy, (15776072:24)	; F0B940  lda XIY,0xf0b948
+	lda	xiy, (sub_F0B948:24)	; F0B940  lda XIY,0xf0b948
 	push	xiy	; F0B945  push XIY
 	jp	(xix)	; F0B946  jp T,XIX
+sub_F0B948:
 	lda	xbc, (xiz-2)	; F0B948  lda XBC,XIZ+0xfe
 	push	xbc	; F0B94B  push XBC
 	pushw	0	; F0B94C  push 0x0000
@@ -21049,14 +21064,16 @@ sub_F0B91C_Skip:
 	extz	bc	; F0B964  extz BC
 	pushw	bc	; F0B966  push BC
 	pushw	1	; F0B967  push 0x0001
-	lda	xiy, (15776114:24)	; F0B96A  lda XIY,0xf0b972
+	lda	xiy, (sub_F0B972:24)	; F0B96A  lda XIY,0xf0b972
 	push	xiy	; F0B96F  push XIY
 	jp	(xix)	; F0B970  jp T,XIX
+sub_F0B972:
 	pushw	0	; F0B972  push 0x0000
 	pushw	0	; F0B975  push 0x0000
-	lda	xiy, (15776128:24)	; F0B978  lda XIY,0xf0b980
+	lda	xiy, (sub_F0B980:24)	; F0B978  lda XIY,0xf0b980
 	push	xiy	; F0B97D  push XIY
 	jp	(xix)	; F0B97E  jp T,XIX
+sub_F0B980:
 	pushw	159	; F0B980  push 0x009f
 	call	T_Dispatch_Code80_Bracketed	; F0B983  call 0xf41ed0
 	pushw	1	; F0B987  push 0x0001
@@ -21995,17 +22012,19 @@ sub_F0BF04_Join7:
 	extz	bc	; F0C107  extz BC
 	pushw	bc	; F0C109  push BC
 	pushw	3	; F0C10A  push 0x0003
-	lda	xiy, (15778069:24)	; F0C10D  lda XIY,0xf0c115
+	lda	xiy, (sub_F0C115:24)	; F0C10D  lda XIY,0xf0c115
 	push	xiy	; F0C112  push XIY
 	jp	(xix)	; F0C113  jp T,XIX
+sub_F0C115:
 	pushw	3	; F0C115  push 0x0003
 	pushw	157	; F0C118  push 0x009d
 	call	T_Dispatch_Code80	; F0C11B  call 0xf41ed4
 	pushw	0	; F0C11F  push 0x0000
 	pushw	4	; F0C122  push 0x0004
-	lda	xiy, (15778093:24)	; F0C125  lda XIY,0xf0c12d
+	lda	xiy, (sub_F0C12D:24)	; F0C125  lda XIY,0xf0c12d
 	push	xiy	; F0C12A  push XIY
 	jp	(xix)	; F0C12B  jp T,XIX
+sub_F0C12D:
 	inc	8, xsp	; F0C12D  inc 0,XSP
 	inc	4, xsp	; F0C12F  inc 4,XSP
 sub_F0BF04_Join8:
@@ -22029,9 +22048,10 @@ sub_F0BF04_Join8:
 	extz	bc	; F0C162  extz BC
 	pushw	bc	; F0C164  push BC
 	pushw	4	; F0C165  push 0x0004
-	lda	xiy, (15778160:24)	; F0C168  lda XIY,0xf0c170
+	lda	xiy, (sub_F0C170:24)	; F0C168  lda XIY,0xf0c170
 	push	xiy	; F0C16D  push XIY
 	jp	(xix)	; F0C16E  jp T,XIX
+sub_F0C170:
 	pop	xiy	; F0C170  pop XIY
 	jr	sub_F0BF04_Join8	; F0C171  jr T,0xf0c131
 sub_F0BF04_Skip6:
@@ -22055,14 +22075,16 @@ sub_F0BF04_Join9:
 	extz	bc	; F0C19D  extz BC
 	pushw	bc	; F0C19F  push BC
 	pushw	4	; F0C1A0  push 0x0004
-	lda	xiy, (15778219:24)	; F0C1A3  lda XIY,0xf0c1ab
+	lda	xiy, (sub_F0C1AB:24)	; F0C1A3  lda XIY,0xf0c1ab
 	push	xiy	; F0C1A8  push XIY
 	jp	(xix)	; F0C1A9  jp T,XIX
+sub_F0C1AB:
 	pushw	36	; F0C1AB  push 0x0024
 	pushw	5	; F0C1AE  push 0x0005
-	lda	xiy, (15778233:24)	; F0C1B1  lda XIY,0xf0c1b9
+	lda	xiy, (sub_F0C1B9:24)	; F0C1B1  lda XIY,0xf0c1b9
 	push	xiy	; F0C1B6  push XIY
 	jp	(xix)	; F0C1B7  jp T,XIX
+sub_F0C1B9:
 	inc	8, xsp	; F0C1B9  inc 0,XSP
 	m_cp_mi8 MBD+r6, 0xf6, 0x30	; F0C1BB  cp (XIZ+0xf6),0x30
 	jr	nc, sub_F0BF04_Skip8	; F0C1BF  jr NC,0xf0c1df
@@ -22099,9 +22121,10 @@ sub_F0BF04_Join10:
 	extz	bc	; F0C203  extz BC
 	pushw	bc	; F0C205  push BC
 	pushw	3	; F0C206  push 0x0003
-	lda	xiy, (15778321:24)	; F0C209  lda XIY,0xf0c211
+	lda	xiy, (sub_F0C211:24)	; F0C209  lda XIY,0xf0c211
 	push	xiy	; F0C20E  push XIY
 	jp	(xix)	; F0C20F  jp T,XIX
+sub_F0C211:
 	ld	c, l	; F0C211  ld C,L
 	extz	bc	; F0C213  extz BC
 	pushw	bc	; F0C215  push BC
@@ -22122,16 +22145,18 @@ sub_F0BF04_Join10:
 	extz	bc	; F0C237  extz BC
 	pushw	bc	; F0C239  push BC
 	pushw	10	; F0C23A  push 0x000a
-	lda	xiy, (15778373:24)	; F0C23D  lda XIY,0xf0c245
+	lda	xiy, (sub_F0C245:24)	; F0C23D  lda XIY,0xf0c245
 	push	xiy	; F0C242  push XIY
 	jp	(xix)	; F0C243  jp T,XIX
+sub_F0C245:
 	ld	bc, (xiz-14)	; F0C245  ld BC,(XIZ+0xf2)
 	extz	bc	; F0C248  extz BC
 	pushw	bc	; F0C24A  push BC
 	pushw	11	; F0C24B  push 0x000b
-	lda	xiy, (15778390:24)	; F0C24E  lda XIY,0xf0c256
+	lda	xiy, (sub_F0C256:24)	; F0C24E  lda XIY,0xf0c256
 	push	xiy	; F0C253  push XIY
 	jp	(xix)	; F0C254  jp T,XIX
+sub_F0C256:
 	pushw	4	; F0C256  push 0x0004
 	pushw	157	; F0C259  push 0x009d
 	call	T_Dispatch_Code80	; F0C25C  call 0xf41ed4
@@ -22196,25 +22221,28 @@ sub_F0C291:
 	extz	bc	; F0C2D4  extz BC
 	pushw	bc	; F0C2D6  push BC
 	pushw	7	; F0C2D7  push 0x0007
-	lda	xiy, (15778530:24)	; F0C2DA  lda XIY,0xf0c2e2
+	lda	xiy, (sub_F0C2E2:24)	; F0C2DA  lda XIY,0xf0c2e2
 	push	xiy	; F0C2DF  push XIY
 	jp	(xix)	; F0C2E0  jp T,XIX
+sub_F0C2E2:
 	ld	c, h	; F0C2E2  ld C,H
 	extz	bc	; F0C2E4  extz BC
 	ld	de, bc	; F0C2E6  ld DE,BC
 	pushw	bc	; F0C2E8  push BC
 	pushw	8	; F0C2E9  push 0x0008
-	lda	xiy, (15778548:24)	; F0C2EC  lda XIY,0xf0c2f4
+	lda	xiy, (sub_F0C2F4:24)	; F0C2EC  lda XIY,0xf0c2f4
 	push	xiy	; F0C2F1  push XIY
 	jp	(xix)	; F0C2F2  jp T,XIX
+sub_F0C2F4:
 	ld	c, l	; F0C2F4  ld C,L
 	extz	bc	; F0C2F6  extz BC
 	ld	(xiz-10), bc	; F0C2F8  ld (XIZ+0xf6),BC
 	pushw	bc	; F0C2FB  push BC
 	pushw	9	; F0C2FC  push 0x0009
-	lda	xiy, (15778567:24)	; F0C2FF  lda XIY,0xf0c307
+	lda	xiy, (sub_F0C307:24)	; F0C2FF  lda XIY,0xf0c307
 	push	xiy	; F0C304  push XIY
 	jp	(xix)	; F0C305  jp T,XIX
+sub_F0C307:
 	m_push MWD+r6, 0xf6	; F0C307  pushw (XIZ+0xf6)
 	pushw	de	; F0C30A  push DE
 	ld	bc, (xiz-2)	; F0C30B  ld BC,(XIZ+0xfe)
@@ -22231,16 +22259,18 @@ sub_F0C291:
 	extz	bc	; F0C328  extz BC
 	pushw	bc	; F0C32A  push BC
 	pushw	10	; F0C32B  push 0x000a
-	lda	xiy, (15778614:24)	; F0C32E  lda XIY,0xf0c336
+	lda	xiy, (sub_F0C336:24)	; F0C32E  lda XIY,0xf0c336
 	push	xiy	; F0C333  push XIY
 	jp	(xix)	; F0C334  jp T,XIX
+sub_F0C336:
 	ld	bc, (xiz-8)	; F0C336  ld BC,(XIZ+0xf8)
 	extz	bc	; F0C339  extz BC
 	pushw	bc	; F0C33B  push BC
 	pushw	11	; F0C33C  push 0x000b
-	lda	xiy, (15778631:24)	; F0C33F  lda XIY,0xf0c347
+	lda	xiy, (sub_F0C347:24)	; F0C33F  lda XIY,0xf0c347
 	push	xiy	; F0C344  push XIY
 	jp	(xix)	; F0C345  jp T,XIX
+sub_F0C347:
 	pushw	4	; F0C347  push 0x0004
 	pushw	157	; F0C34A  push 0x009d
 	call	T_Dispatch_Code80	; F0C34D  call 0xf41ed4
@@ -22546,9 +22576,10 @@ sub_F0C291_Join8:
 	extz	bc	; F0C57E  extz BC
 	pushw	bc	; F0C580  push BC
 	pushw	2	; F0C581  push 0x0002
-	lda	xiy, (15779212:24)	; F0C584  lda XIY,0xf0c58c
+	lda	xiy, (sub_F0C58C:24)	; F0C584  lda XIY,0xf0c58c
 	push	xiy	; F0C589  push XIY
 	jp	(xix)	; F0C58A  jp T,XIX
+sub_F0C58C:
 	pushw	2	; F0C58C  push 0x0002
 	pushw	157	; F0C58F  push 0x009d
 	call	T_Dispatch_Code80	; F0C592  call 0xf41ed4
@@ -22558,9 +22589,10 @@ sub_F0C291_Join8:
 	jr	nz, sub_F0C291_Skip18	; F0C59E  jr NZ,0xf0c5d6
 	pushw	0	; F0C5A0  push 0x0000
 	pushw	0	; F0C5A3  push 0x0000
-	lda	xiy, (15779246:24)	; F0C5A6  lda XIY,0xf0c5ae
+	lda	xiy, (sub_F0C5AE:24)	; F0C5A6  lda XIY,0xf0c5ae
 	push	xiy	; F0C5AB  push XIY
 	jp	(xix)	; F0C5AC  jp T,XIX
+sub_F0C5AE:
 	pop	xbc	; F0C5AE  pop XBC
 	m_cp_mi8 MBD+r6, 0xfe, 0x00	; F0C5AF  cp (XIZ+0xfe),0x00
 	jr	nz, sub_F0C291_Skip17	; F0C5B3  jr NZ,0xf0c5ba
@@ -22570,9 +22602,10 @@ sub_F0C291_Skip17:
 	pushw	2	; F0C5BA  push 0x0002
 sub_F0C291_Join9:
 	pushw	1	; F0C5BD  push 0x0001
-	lda	xiy, (15779272:24)	; F0C5C0  lda XIY,0xf0c5c8
+	lda	xiy, (sub_F0C5C8:24)	; F0C5C0  lda XIY,0xf0c5c8
 	push	xiy	; F0C5C5  push XIY
 	jp	(xix)	; F0C5C6  jp T,XIX
+sub_F0C5C8:
 	pushw	0	; F0C5C8  push 0x0000
 	pushw	157	; F0C5CB  push 0x009d
 	call	T_Dispatch_Code80	; F0C5CE  call 0xf41ed4
@@ -22595,9 +22628,10 @@ sub_F0C291_Skip19:
 sub_F0C291_Skip20:
 	pushw	0	; F0C5F7  push 0x0000
 	pushw	1	; F0C5FA  push 0x0001
-	lda	xiy, (15779333:24)	; F0C5FD  lda XIY,0xf0c605
+	lda	xiy, (sub_F0C605:24)	; F0C5FD  lda XIY,0xf0c605
 	push	xiy	; F0C602  push XIY
 	jp	(xix)	; F0C603  jp T,XIX
+sub_F0C605:
 	pop	xiy	; F0C605  pop XIY
 sub_F0C291_Join10:
 	pushw	1	; F0C606  push 0x0001
@@ -22634,33 +22668,38 @@ sub_F0C616:
 	lda	xbc, (xiz-4)	; F0C630  lda XBC,XIZ+0xfc
 	push	xbc	; F0C633  push XBC
 	pushw	10	; F0C634  push 0x000a
-	lda	xiy, (15779391:24)	; F0C637  lda XIY,0xf0c63f
+	lda	xiy, (sub_F0C63F:24)	; F0C637  lda XIY,0xf0c63f
 	push	xiy	; F0C63C  push XIY
 	jp	(xix)	; F0C63D  jp T,XIX
+sub_F0C63F:
 	lda	xbc, (xiz-6)	; F0C63F  lda XBC,XIZ+0xfa
 	push	xbc	; F0C642  push XBC
 	pushw	11	; F0C643  push 0x000b
-	lda	xiy, (15779406:24)	; F0C646  lda XIY,0xf0c64e
+	lda	xiy, (sub_F0C64E:24)	; F0C646  lda XIY,0xf0c64e
 	push	xiy	; F0C64B  push XIY
 	jp	(xix)	; F0C64C  jp T,XIX
+sub_F0C64E:
 	lda	xbc, (xiz-8)	; F0C64E  lda XBC,XIZ+0xf8
 	push	xbc	; F0C651  push XBC
 	pushw	0	; F0C652  push 0x0000
-	lda	xiy, (15779421:24)	; F0C655  lda XIY,0xf0c65d
+	lda	xiy, (sub_F0C65D:24)	; F0C655  lda XIY,0xf0c65d
 	push	xiy	; F0C65A  push XIY
 	jp	(xix)	; F0C65B  jp T,XIX
+sub_F0C65D:
 	lda	xbc, (xiz-10)	; F0C65D  lda XBC,XIZ+0xf6
 	push	xbc	; F0C660  push XBC
 	pushw	1	; F0C661  push 0x0001
-	lda	xiy, (15779436:24)	; F0C664  lda XIY,0xf0c66c
+	lda	xiy, (sub_F0C66C:24)	; F0C664  lda XIY,0xf0c66c
 	push	xiy	; F0C669  push XIY
 	jp	(xix)	; F0C66A  jp T,XIX
+sub_F0C66C:
 	lda	xbc, (xiz-12)	; F0C66C  lda XBC,XIZ+0xf4
 	push	xbc	; F0C66F  push XBC
 	pushw	2	; F0C670  push 0x0002
-	lda	xiy, (15779451:24)	; F0C673  lda XIY,0xf0c67b
+	lda	xiy, (sub_F0C67B:24)	; F0C673  lda XIY,0xf0c67b
 	push	xiy	; F0C678  push XIY
 	jp	(xix)	; F0C679  jp T,XIX
+sub_F0C67B:
 	add	xsp, 34	; F0C67B  add XSP,0x00000022
 	m_cp_mi8 MBD+r6, 0xfe, 0x00	; F0C681  cp (XIZ+0xfe),0x00
 	jr	nz, sub_F0C291_Skip21	; F0C685  jr NZ,0xf0c693
@@ -22677,9 +22716,10 @@ sub_F0C291_Skip22:
 	lda	xbc, (xiz-14)	; F0C6A1  lda XBC,XIZ+0xf2
 	push	xbc	; F0C6A4  push XBC
 	pushw	5	; F0C6A5  push 0x0005
-	lda	xiy, (15779504:24)	; F0C6A8  lda XIY,0xf0c6b0
+	lda	xiy, (sub_F0C6B0:24)	; F0C6A8  lda XIY,0xf0c6b0
 	push	xiy	; F0C6AD  push XIY
 	jp	(xix)	; F0C6AE  jp T,XIX
+sub_F0C6B0:
 	inc	6, xsp	; F0C6B0  inc 6,XSP
 sub_F0C291_Join12:
 	ld	h, (xiz-10)	; F0C6B2  ld H,(XIZ+0xf6)
@@ -26510,18 +26550,18 @@ PtrTable_F0ED50:
 	.long	Blink_CmdArm_SetState_DashTest	; F0ED6C  [7] -> 0xF0EA75
 	.long	0x00F0EAEB	; F0ED70  [8] -> 0xF0EAEB
 	.long	Blink_CmdArm_SetState_DashTest	; F0ED74  [9] -> 0xF0EA75
-	.long	0x00F0EA3A	; F0ED78  [10] -> 0xF0EA3A
+	.long	Blink_Command_Table + 0x26	; F0ED78  [10] -> 0xF0EA3A
 	.long	Blink_CmdArm_SetState_Then_F0EC4A_Skip	; F0ED7C  [11] -> 0xF0EA52
-	.long	0x00F0EA3A	; F0ED80  [12] -> 0xF0EA3A
-	.long	0x00F0EA3A	; F0ED84  [13] -> 0xF0EA3A
-	.long	0x00F0EA3A	; F0ED88  [14] -> 0xF0EA3A
+	.long	Blink_Command_Table + 0x26	; F0ED80  [12] -> 0xF0EA3A
+	.long	Blink_Command_Table + 0x26	; F0ED84  [13] -> 0xF0EA3A
+	.long	Blink_Command_Table + 0x26	; F0ED88  [14] -> 0xF0EA3A
 	.long	Blink_CmdArm_SetState_DashTest	; F0ED8C  [15] -> 0xF0EA75
 	.long	Blink_CmdArm_SetState_Then_F0EC4A_Skip	; F0ED90  [16] -> 0xF0EA52
-	.long	0x00F0EA3A	; F0ED94  [17] -> 0xF0EA3A
-	.long	0x00F0EA3A	; F0ED98  [18] -> 0xF0EA3A
-	.long	0x00F0EA3A	; F0ED9C  [19] -> 0xF0EA3A
-	.long	0x00F0EA3A	; F0EDA0  [20] -> 0xF0EA3A
-	.long	0x00F0EA3A	; F0EDA4  [21] -> 0xF0EA3A
+	.long	Blink_Command_Table + 0x26	; F0ED94  [17] -> 0xF0EA3A
+	.long	Blink_Command_Table + 0x26	; F0ED98  [18] -> 0xF0EA3A
+	.long	Blink_Command_Table + 0x26	; F0ED9C  [19] -> 0xF0EA3A
+	.long	Blink_Command_Table + 0x26	; F0EDA0  [20] -> 0xF0EA3A
+	.long	Blink_Command_Table + 0x26	; F0EDA4  [21] -> 0xF0EA3A
 	.long	Blink_CmdArm_SetState_DashTest	; F0EDA8  [22] -> 0xF0EA75
 	.long	0x00F0EACE	; F0EDAC  [23] -> 0xF0EACE
 	.long	0x00F0EBA1	; F0EDB0  [24] -> 0xF0EBA1
@@ -26593,17 +26633,17 @@ Data_F0EDEC:
 ; --------------------------------------------------------------------------
 ArrayDescriptor_F0EE6C:
 	.long	Data_F0EEE0	; F0EE6C  [0] -> Data_F0EEE0
-	.long	0x00F0EF28	; F0EE70  [1] -> 0xF0EF28
-	.long	0x00F0EF70	; F0EE74  [2] -> 0xF0EF70
-	.long	0x00F0EFB8	; F0EE78  [3] -> 0xF0EFB8
-	.long	0x00F0F000	; F0EE7C  [4] -> 0xF0F000
+	.long	Data_F0EEE0 + 0x48	; F0EE70  [1] -> 0xF0EF28
+	.long	Data_F0EEE0 + 0x90	; F0EE74  [2] -> 0xF0EF70
+	.long	Data_F0EEE0 + 0xD8	; F0EE78  [3] -> 0xF0EFB8
+	.long	RamPtrTable_F0EFFF + 0x1	; F0EE7C  [4] -> 0xF0F000
 	.long	0x00F0F048	; F0EE80  [5] -> 0xF0F048
 	.long	0x00F0F090	; F0EE84  [6] -> 0xF0F090
-	.long	0x00F0F0D8	; F0EE88  [7] -> 0xF0F0D8
+	.long	DispatchTable_F0F0CE + 0xA	; F0EE88  [7] -> 0xF0F0D8
 	.long	sub_F0F105_Arm	; F0EE8C  [8] -> 0xF0F120
-	.long	0x00F0F168	; F0EE90  [9] -> 0xF0F168
+	.long	DispatchTable_F0F152 + 0x16	; F0EE90  [9] -> 0xF0F168
 	.long	0x00F0F1B0	; F0EE94  [10] -> 0xF0F1B0
-	.long	0x00F0F1F8	; F0EE98  [11] -> 0xF0F1F8
+	.long	DispatchTable_F0F1E8 + 0x10	; F0EE98  [11] -> 0xF0F1F8
 	.long	0x00F0F240	; F0EE9C  [12] -> 0xF0F240
 	.long	0x00F0F288	; F0EEA0  [13] -> 0xF0F288
 	.long	0x00F0F2D0	; F0EEA4  [14] -> 0xF0F2D0
@@ -26613,7 +26653,7 @@ ArrayDescriptor_F0EE6C:
 	.long	0x00F0F3F0	; F0EEB4  [18] -> 0xF0F3F0
 	.long	0x00F0F438	; F0EEB8  [19] -> 0xF0F438
 	.long	0x00F0F480	; F0EEBC  [20] -> 0xF0F480
-	.long	0x00F0F4C8	; F0EEC0  [21] -> 0xF0F4C8
+	.long	DispatchTable_F0F4C4 + 0x4	; F0EEC0  [21] -> 0xF0F4C8
 	.long	0x00F0F510	; F0EEC4  [22] -> 0xF0F510
 	.long	DispatchTable_F0F558	; F0EEC8  [23] -> DispatchTable_F0F558
 	.long	sub_F0F59F_Arm	; F0EECC  [24] -> 0xF0F5A0
@@ -27086,9 +27126,10 @@ sub_F0F17C:		; <- T_F42F50
 	extz	xwa	; F0F192  extz XWA
 	add	xwa, DispatchTable_F135FD	; F0F194  add XWA,0x00f135fd
 	ld	xbc, (xwa)	; F0F19A  ld XBC,(XWA)
-	lda	xiy, (15790500:24)	; F0F19C  lda XIY,0xf0f1a4
+	lda	xiy, (sub_F0F1A4:24)	; F0F19C  lda XIY,0xf0f1a4
 	push	xiy	; F0F1A1  push XIY
 	jp	(xbc)	; F0F1A2  jp T,XBC
+sub_F0F1A4:
 	pop	xbc	; F0F1A4  pop XBC
 	m_cp_mi8 MB16, 0x2076, 0x17	; F0F1A5  cp (0x2076),0x17
 	jr	nz, sub_F0F17C_Skip	; F0F1AA  jr NZ,0xf0f1b7
@@ -29084,7 +29125,7 @@ sub_F0F788_Skip:
 	and	c, 1	; F0F7BF  and C,0x01
 	jr	nz, sub_F0F788_Skip2	; F0F7C2  jr NZ,0xf0f7da
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F7C4  or (XIX),0x01
-	lda	xbc, (15792160:24)	; F0F7C7  lda XBC,0xf0f820
+	lda	xbc, (sub_F0F820:24)	; F0F7C7  lda XBC,0xf0f820
 	push	xbc	; F0F7CC  push XBC
 	call	T_CallbackQueue_Post	; F0F7CD  call 0xf42e84
 	pushw	1	; F0F7D1  push 0x0001
@@ -29096,7 +29137,7 @@ sub_F0F788_Skip2:
 	jr	nz, sub_F0F788_Skip3	; F0F7DF  jr NZ,0xf0f7fa
 	m_or_mi8 MBI+r4, 0, 0x02	; F0F7E1  or (XIX),0x02
 	m_and_mi8 MBI+r4, 0, 0xfb	; F0F7E4  and (XIX),0xfb
-	lda	xbc, (15792412:24)	; F0F7E7  lda XBC,0xf0f91c
+	lda	xbc, (sub_F0F91C:24)	; F0F7E7  lda XBC,0xf0f91c
 	push	xbc	; F0F7EC  push XBC
 	call	T_CallbackQueue_Post	; F0F7ED  call 0xf42e84
 	pushw	1	; F0F7F1  push 0x0001
@@ -29107,7 +29148,7 @@ sub_F0F788_Skip3:
 	and	c, 4	; F0F7FC  and C,0x04
 	jr	nz, sub_F0F788_Skip4	; F0F7FF  jr NZ,0xf0f817
 	m_or_mi8 MBI+r4, 0, 0x04	; F0F801  or (XIX),0x04
-	lda	xbc, (15792625:24)	; F0F804  lda XBC,0xf0f9f1
+	lda	xbc, (sub_F0F9F1:24)	; F0F804  lda XBC,0xf0f9f1
 	push	xbc	; F0F809  push XBC
 	call	T_CallbackQueue_Post	; F0F80A  call 0xf42e84
 	pushw	1	; F0F80E  push 0x0001
@@ -29119,6 +29160,7 @@ sub_F0F788_Skip4:
 	popw	bc	; F0F81D  pop BC
 	pop	xix	; F0F81E  pop XIX
 	ret	; F0F81F  ret
+sub_F0F820:
 	push	xix	; F0F820  push XIX
 	lda	xix, (T_DisplayList_Run_Stack:24)	; F0F821  lda XIX,0xf42e00
 	m_res 0, MD16, 0x2799	; F0F826  res 0,(0x2799)
@@ -29138,47 +29180,49 @@ sub_F0F788_Skip4:
 	jr	z, sub_F0F788_Skip5	; F0F853  jr Z,0xf0f857
 	jr	sub_F0F788_Join2	; F0F855  jr T,0xf0f8a5
 sub_F0F788_Skip5:
-	lda	xbc, (15809935:24)	; F0F857  lda XBC,0xf13d8f
+	lda	xbc, (Data_F13D48 + 0x47:24)	; F0F857  lda XBC,0xf13d8f
 	push	xbc	; F0F85C  push XBC
-	lda	xwa, (15809888:24)	; F0F85D  lda XWA,0xf13d60
+	lda	xwa, (Data_F13D48 + 0x18:24)	; F0F85D  lda XWA,0xf13d60
 	push	xwa	; F0F862  push XWA
 	jr	sub_F0F788_Join	; F0F863  jr T,0xf0f89b
 sub_F0F788_Skip6:
-	lda	xbc, (15809978:24)	; F0F865  lda XBC,0xf13dba
+	lda	xbc, (Data_F13D48 + 0x72:24)	; F0F865  lda XBC,0xf13dba
 	push	xbc	; F0F86A  push XBC
-	lda	xwa, (15809935:24)	; F0F86B  lda XWA,0xf13d8f
+	lda	xwa, (Data_F13D48 + 0x47:24)	; F0F86B  lda XWA,0xf13d8f
 	push	xwa	; F0F870  push XWA
 	jr	sub_F0F788_Join	; F0F871  jr T,0xf0f89b
 sub_F0F788_Skip7:
-	lda	xbc, (15810025:24)	; F0F873  lda XBC,0xf13de9
+	lda	xbc, (Data_F13D48 + 0xA1:24)	; F0F873  lda XBC,0xf13de9
 	push	xbc	; F0F878  push XBC
-	lda	xwa, (15809978:24)	; F0F879  lda XWA,0xf13dba
+	lda	xwa, (Data_F13D48 + 0x72:24)	; F0F879  lda XWA,0xf13dba
 	push	xwa	; F0F87E  push XWA
 	jr	sub_F0F788_Join	; F0F87F  jr T,0xf0f89b
 sub_F0F788_Skip8:
-	lda	xbc, (15810072:24)	; F0F881  lda XBC,0xf13e18
+	lda	xbc, (Data_F13D48 + 0xD0:24)	; F0F881  lda XBC,0xf13e18
 	push	xbc	; F0F886  push XBC
-	lda	xwa, (15810025:24)	; F0F887  lda XWA,0xf13de9
+	lda	xwa, (Data_F13D48 + 0xA1:24)	; F0F887  lda XWA,0xf13de9
 	push	xwa	; F0F88C  push XWA
 	jr	sub_F0F788_Join	; F0F88D  jr T,0xf0f89b
 sub_F0F788_Skip9:
-	lda	xbc, (15810113:24)	; F0F88F  lda XBC,0xf13e41
+	lda	xbc, (Data_F13D48 + 0xF9:24)	; F0F88F  lda XBC,0xf13e41
 	push	xbc	; F0F894  push XBC
-	lda	xwa, (15810072:24)	; F0F895  lda XWA,0xf13e18
+	lda	xwa, (Data_F13D48 + 0xD0:24)	; F0F895  lda XWA,0xf13e18
 	push	xwa	; F0F89A  push XWA
 sub_F0F788_Join:
-	lda	xiy, (15792291:24)	; F0F89B  lda XIY,0xf0f8a3
+	lda	xiy, (sub_F0F8A3:24)	; F0F89B  lda XIY,0xf0f8a3
 	push	xiy	; F0F8A0  push XIY
 	jp	(xix)	; F0F8A1  jp T,XIX
+sub_F0F8A3:
 	inc	8, xsp	; F0F8A3  inc 0,XSP
 sub_F0F788_Join2:
 	lda	xbc, (DL_F1408A:24)	; F0F8A5  lda XBC,0xf1408a
 	push	xbc	; F0F8AA  push XBC
 	lda	xwa, (DL_F13F3C:24)	; F0F8AB  lda XWA,0xf13f3c
 	push	xwa	; F0F8B0  push XWA
-	lda	xiy, (15792313:24)	; F0F8B1  lda XIY,0xf0f8b9
+	lda	xiy, (sub_F0F8B9:24)	; F0F8B1  lda XIY,0xf0f8b9
 	push	xiy	; F0F8B6  push XIY
 	jp	(xix)	; F0F8B7  jp T,XIX
+sub_F0F8B9:
 	inc	8, xsp	; F0F8B9  inc 0,XSP
 	m_cp_mi8 MB16, 0x2076, 0x17	; F0F8BB  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip10	; F0F8C0  jr NZ,0xf0f8d8
@@ -29196,26 +29240,30 @@ sub_F0F788_Skip10:
 	lda	xwa, (DL_F142A1:24)	; F0F8DE  lda XWA,0xf142a1
 	push	xwa	; F0F8E3  push XWA
 sub_F0F788_Join3:
-	lda	xiy, (15792364:24)	; F0F8E4  lda XIY,0xf0f8ec
+	lda	xiy, (sub_F0F8EC:24)	; F0F8E4  lda XIY,0xf0f8ec
 	push	xiy	; F0F8E9  push XIY
 	jp	(xix)	; F0F8EA  jp T,XIX
-	lda	xbc, (15810211:24)	; F0F8EC  lda XBC,0xf13ea3
+sub_F0F8EC:
+	lda	xbc, (Data_F13D48 + 0x15B:24)	; F0F8EC  lda XBC,0xf13ea3
 	push	xbc	; F0F8F1  push XBC
-	lda	xwa, (15810113:24)	; F0F8F2  lda XWA,0xf13e41
+	lda	xwa, (Data_F13D48 + 0xF9:24)	; F0F8F2  lda XWA,0xf13e41
 	push	xwa	; F0F8F7  push XWA
-	lda	xiy, (15792384:24)	; F0F8F8  lda XIY,0xf0f900
+	lda	xiy, (sub_F0F900:24)	; F0F8F8  lda XIY,0xf0f900
 	push	xiy	; F0F8FD  push XIY
 	jp	(xix)	; F0F8FE  jp T,XIX
+sub_F0F900:
 	lda	xbc, (DL_F13F1E:24)	; F0F900  lda XBC,0xf13f1e
 	push	xbc	; F0F905  push XBC
-	lda	xwa, (15810305:24)	; F0F906  lda XWA,0xf13f01
+	lda	xwa, (Data_F13D48 + 0x1B9:24)	; F0F906  lda XWA,0xf13f01
 	push	xwa	; F0F90B  push XWA
-	lda	xiy, (15792404:24)	; F0F90C  lda XIY,0xf0f914
+	lda	xiy, (sub_F0F914:24)	; F0F90C  lda XIY,0xf0f914
 	push	xiy	; F0F911  push XIY
 	jp	(xix)	; F0F912  jp T,XIX
+sub_F0F914:
 	add	xsp, 24	; F0F914  add XSP,0x00000018
 	pop	xix	; F0F91A  pop XIX
 	ret	; F0F91B  ret
+sub_F0F91C:
 	push	xix	; F0F91C  push XIX
 	lda	xix, (9536:16)	; F0F91D  lda XIX,0x2540
 	m_res 1, MD16, 0x2799	; F0F921  res 1,(0x2799)
@@ -29292,13 +29340,14 @@ sub_F0F788_Join5:
 	pop	xbc	; F0F9EE  pop XBC
 	pop	xix	; F0F9EF  pop XIX
 	ret	; F0F9F0  ret
+sub_F0F9F1:
 	pushw	hl	; F0F9F1  push HL
 	push	xix	; F0F9F2  push XIX
 	lda	xix, (9792:16)	; F0F9F3  lda XIX,0x2640
 	m_res 2, MD16, 0x2799	; F0F9F7  res 2,(0x2799)
 	calr	sub_F0FD2F	; F0F9FB  calr 0xf0fd2f
 	ld	(9536:16), 0	; F0F9FE  ld (0x2540),0x00
-	lda	xbc, (15811709:24)	; F0FA03  lda XBC,0xf1447d
+	lda	xbc, (DL_F14432 + 0x4B:24)	; F0FA03  lda XBC,0xf1447d
 	push	xbc	; F0FA08  push XBC
 	lda	xwa, (DL_F14432:24)	; F0FA09  lda XWA,0xf14432
 	push	xwa	; F0FA0E  push XWA
@@ -29477,7 +29526,7 @@ sub_F0F788_Skip24:
 	call	T_IndexedTable_GetByte	; F0FBD0  call 0xf42c90
 	extz	xix	; F0FBD4  extz XIX
 	ld	(xix+1), a	; F0FBD6  ld (XIX+0x01),A
-	lda	xbc, (15812051:24)	; F0FBD9  lda XBC,0xf145d3
+	lda	xbc, (DL_F145B5 + 0x1E:24)	; F0FBD9  lda XBC,0xf145d3
 	push	xbc	; F0FBDE  push XBC
 	lda	xwa, (DL_F145B5:24)	; F0FBDF  lda XWA,0xf145b5
 	push	xwa	; F0FBE4  push XWA
@@ -29529,7 +29578,7 @@ sub_F0F788_Skip25:
 sub_F0F788_Join10:
 	extz	xix	; F0FC69  extz XIX
 	ld	(xix+7), 1	; F0FC6B  ld (XIX+0x07),0x01
-	lda	xbc, (15811869:24)	; F0FC6F  lda XBC,0xf1451d
+	lda	xbc, (DL_F1449F + 0x7E:24)	; F0FC6F  lda XBC,0xf1451d
 	push	xbc	; F0FC74  push XBC
 	lda	xwa, (DL_F1449F:24)	; F0FC75  lda XWA,0xf1449f
 	push	xwa	; F0FC7A  push XWA
@@ -29546,11 +29595,11 @@ sub_F0F788_Join10:
 	pop	xiy	; F0FC9C  pop XIY
 	cp	a, 0:i3	; F0FC9D  cp A,0
 	jr	nz, sub_F0F788_Skip26	; F0FC9F  jr NZ,0xf0fca9
-	lda	xbc, (15811926:24)	; F0FCA1  lda XBC,0xf14556
+	lda	xbc, (DL_F1449F + 0xB7:24)	; F0FCA1  lda XBC,0xf14556
 	push	xbc	; F0FCA6  push XBC
 	jr	sub_F0F788_Join11	; F0FCA7  jr T,0xf0fcaf
 sub_F0F788_Skip26:
-	lda	xbc, (15811914:24)	; F0FCA9  lda XBC,0xf1454a
+	lda	xbc, (DL_F1449F + 0xAB:24)	; F0FCA9  lda XBC,0xf1454a
 	push	xbc	; F0FCAE  push XBC
 sub_F0F788_Join11:
 	call	T_DisplayList_RunOne_Stack	; F0FCAF  call 0xf42e08
@@ -29624,7 +29673,7 @@ sub_F0FD2F:
 	pop	xiy	; F0FD46  pop XIY
 	cp	a, 0:i3	; F0FD47  cp A,0
 	jr	nz, sub_F0FD2F_Skip	; F0FD49  jr NZ,0xf0fd53
-	lda	xbc, (15811530:24)	; F0FD4B  lda XBC,0xf143ca
+	lda	xbc, (DL_F143C0 + 0xA:24)	; F0FD4B  lda XBC,0xf143ca
 	push	xbc	; F0FD50  push XBC
 	jr	sub_F0FD2F_Join	; F0FD51  jr T,0xf0fd59
 sub_F0FD2F_Skip:
@@ -29669,7 +29718,7 @@ sub_F0FD5F_Skip:
 	and	c, 8	; F0FD8D  and C,0x08
 	jr	nz, sub_F0FD5F_Skip2	; F0FD90  jr NZ,0xf0fda8
 	m_or_mi8 MBI+r4, 0, 0x08	; F0FD92  or (XIX),0x08
-	lda	xbc, (15793614:24)	; F0FD95  lda XBC,0xf0fdce
+	lda	xbc, (sub_F0FDCE:24)	; F0FD95  lda XBC,0xf0fdce
 	push	xbc	; F0FD9A  push XBC
 	call	T_CallbackQueue_Post	; F0FD9B  call 0xf42e84
 	pushw	1	; F0FD9F  push 0x0001
@@ -29680,7 +29729,7 @@ sub_F0FD5F_Skip2:
 	and	c, 16	; F0FDAA  and C,0x10
 	jr	nz, sub_F0FD5F_Skip3	; F0FDAD  jr NZ,0xf0fdc5
 	m_or_mi8 MBI+r4, 0, 0x10	; F0FDAF  or (XIX),0x10
-	lda	xbc, (15793878:24)	; F0FDB2  lda XBC,0xf0fed6
+	lda	xbc, (sub_F0FED6:24)	; F0FDB2  lda XBC,0xf0fed6
 	push	xbc	; F0FDB7  push XBC
 	call	T_CallbackQueue_Post	; F0FDB8  call 0xf42e84
 	pushw	1	; F0FDBC  push 0x0001
@@ -29692,6 +29741,7 @@ sub_F0FD5F_Skip3:
 	popw	bc	; F0FDCB  pop BC
 	pop	xix	; F0FDCC  pop XIX
 	ret	; F0FDCD  ret
+sub_F0FDCE:
 	push	xix	; F0FDCE  push XIX
 	lda	xix, (T_DisplayList_Run_Stack:24)	; F0FDCF  lda XIX,0xf42e00
 	m_res 3, MD16, 0x2799	; F0FDD4  res 3,(0x2799)
@@ -29711,68 +29761,73 @@ sub_F0FD5F_Skip3:
 	jr	z, sub_F0FD5F_Skip4	; F0FE01  jr Z,0xf0fe05
 	jr	sub_F0FD5F_Join2	; F0FE03  jr T,0xf0fe53
 sub_F0FD5F_Skip4:
-	lda	xbc, (15809935:24)	; F0FE05  lda XBC,0xf13d8f
+	lda	xbc, (Data_F13D48 + 0x47:24)	; F0FE05  lda XBC,0xf13d8f
 	push	xbc	; F0FE0A  push XBC
-	lda	xwa, (15809888:24)	; F0FE0B  lda XWA,0xf13d60
+	lda	xwa, (Data_F13D48 + 0x18:24)	; F0FE0B  lda XWA,0xf13d60
 	push	xwa	; F0FE10  push XWA
 	jr	sub_F0FD5F_Join	; F0FE11  jr T,0xf0fe49
 sub_F0FD5F_Skip5:
-	lda	xbc, (15809978:24)	; F0FE13  lda XBC,0xf13dba
+	lda	xbc, (Data_F13D48 + 0x72:24)	; F0FE13  lda XBC,0xf13dba
 	push	xbc	; F0FE18  push XBC
-	lda	xwa, (15809935:24)	; F0FE19  lda XWA,0xf13d8f
+	lda	xwa, (Data_F13D48 + 0x47:24)	; F0FE19  lda XWA,0xf13d8f
 	push	xwa	; F0FE1E  push XWA
 	jr	sub_F0FD5F_Join	; F0FE1F  jr T,0xf0fe49
 sub_F0FD5F_Skip6:
-	lda	xbc, (15810025:24)	; F0FE21  lda XBC,0xf13de9
+	lda	xbc, (Data_F13D48 + 0xA1:24)	; F0FE21  lda XBC,0xf13de9
 	push	xbc	; F0FE26  push XBC
-	lda	xwa, (15809978:24)	; F0FE27  lda XWA,0xf13dba
+	lda	xwa, (Data_F13D48 + 0x72:24)	; F0FE27  lda XWA,0xf13dba
 	push	xwa	; F0FE2C  push XWA
 	jr	sub_F0FD5F_Join	; F0FE2D  jr T,0xf0fe49
 sub_F0FD5F_Skip7:
-	lda	xbc, (15810072:24)	; F0FE2F  lda XBC,0xf13e18
+	lda	xbc, (Data_F13D48 + 0xD0:24)	; F0FE2F  lda XBC,0xf13e18
 	push	xbc	; F0FE34  push XBC
-	lda	xwa, (15810025:24)	; F0FE35  lda XWA,0xf13de9
+	lda	xwa, (Data_F13D48 + 0xA1:24)	; F0FE35  lda XWA,0xf13de9
 	push	xwa	; F0FE3A  push XWA
 	jr	sub_F0FD5F_Join	; F0FE3B  jr T,0xf0fe49
 sub_F0FD5F_Skip8:
-	lda	xbc, (15810113:24)	; F0FE3D  lda XBC,0xf13e41
+	lda	xbc, (Data_F13D48 + 0xF9:24)	; F0FE3D  lda XBC,0xf13e41
 	push	xbc	; F0FE42  push XBC
-	lda	xwa, (15810072:24)	; F0FE43  lda XWA,0xf13e18
+	lda	xwa, (Data_F13D48 + 0xD0:24)	; F0FE43  lda XWA,0xf13e18
 	push	xwa	; F0FE48  push XWA
 sub_F0FD5F_Join:
-	lda	xiy, (15793745:24)	; F0FE49  lda XIY,0xf0fe51
+	lda	xiy, (sub_F0FE51:24)	; F0FE49  lda XIY,0xf0fe51
 	push	xiy	; F0FE4E  push XIY
 	jp	(xix)	; F0FE4F  jp T,XIX
+sub_F0FE51:
 	inc	8, xsp	; F0FE51  inc 0,XSP
 sub_F0FD5F_Join2:
-	lda	xbc, (15810221:24)	; F0FE53  lda XBC,0xf13ead
+	lda	xbc, (Data_F13D48 + 0x165:24)	; F0FE53  lda XBC,0xf13ead
 	push	xbc	; F0FE58  push XBC
-	lda	xwa, (15810113:24)	; F0FE59  lda XWA,0xf13e41
+	lda	xwa, (Data_F13D48 + 0xF9:24)	; F0FE59  lda XWA,0xf13e41
 	push	xwa	; F0FE5E  push XWA
-	lda	xiy, (15793767:24)	; F0FE5F  lda XIY,0xf0fe67
+	lda	xiy, (sub_F0FE67:24)	; F0FE5F  lda XIY,0xf0fe67
 	push	xiy	; F0FE64  push XIY
 	jp	(xix)	; F0FE65  jp T,XIX
+sub_F0FE67:
 	lda	xbc, (DL_F1428D:24)	; F0FE67  lda XBC,0xf1428d
 	push	xbc	; F0FE6C  push XBC
 	lda	xwa, (DL_F141D3:24)	; F0FE6D  lda XWA,0xf141d3
 	push	xwa	; F0FE72  push XWA
-	lda	xiy, (15793787:24)	; F0FE73  lda XIY,0xf0fe7b
+	lda	xiy, (sub_F0FE7B:24)	; F0FE73  lda XIY,0xf0fe7b
 	push	xiy	; F0FE78  push XIY
 	jp	(xix)	; F0FE79  jp T,XIX
-	lda	xbc, (15810262:24)	; F0FE7B  lda XBC,0xf13ed6
+sub_F0FE7B:
+	lda	xbc, (Data_F13D48 + 0x18E:24)	; F0FE7B  lda XBC,0xf13ed6
 	push	xbc	; F0FE80  push XBC
-	lda	xwa, (15810221:24)	; F0FE81  lda XWA,0xf13ead
+	lda	xwa, (Data_F13D48 + 0x165:24)	; F0FE81  lda XWA,0xf13ead
 	push	xwa	; F0FE86  push XWA
-	lda	xiy, (15793807:24)	; F0FE87  lda XIY,0xf0fe8f
+	lda	xiy, (sub_F0FE8F:24)	; F0FE87  lda XIY,0xf0fe8f
 	push	xiy	; F0FE8C  push XIY
 	jp	(xix)	; F0FE8D  jp T,XIX
+sub_F0FE8F:
 	lda	xbc, (DL_F13F1E:24)	; F0FE8F  lda XBC,0xf13f1e
 	push	xbc	; F0FE94  push XBC
-	lda	xwa, (15810305:24)	; F0FE95  lda XWA,0xf13f01
+	lda	xwa, (Data_F13D48 + 0x1B9:24)	; F0FE95  lda XWA,0xf13f01
 	push	xwa	; F0FE9A  push XWA
-	lda	xiy, (15793827:24)	; F0FE9B  lda XIY,0xf0fea3
+	lda	xiy, (sub_F0FEA3:24)	; F0FE9B  lda XIY,0xf0fea3
 	push	xiy	; F0FEA0  push XIY
 	jp	(xix)	; F0FEA1  jp T,XIX
+sub_F0FEA3:
 	m_ld_m16m MB16, 0x2797, 0x2640	; F0FEA3  ld (0x2640),(0x2797)
 	lda	xbc, (DL_F143AF:24)	; F0FEA9  lda XBC,0xf143af
 	push	xbc	; F0FEAE  push XBC
@@ -29787,6 +29842,7 @@ sub_F0FD5F_Join2:
 	add	xsp, 44	; F0FECE  add XSP,0x0000002c
 	pop	xix	; F0FED4  pop XIX
 	ret	; F0FED5  ret
+sub_F0FED6:
 	link XIZ,0xfffc	; F0FED6  link XIZ,0xfffc
 	push	xix	; F0FEDA  push XIX
 	lda	xix, (9792:16)	; F0FEDB  lda XIX,0x2640
@@ -30038,7 +30094,7 @@ sub_F1008E_Skip3:
 	jr	nz, sub_F1008E_Skip4	; F10133  jr NZ,0xf1014e
 	m_or_mi8 MBI+r4, 0, 0x40	; F10135  or (XIX),0x40
 	m_and_mi8 MBI+r4, 0, 0x7f	; F10138  and (XIX),0x7f
-	lda	xbc, (15797944:24)	; F1013B  lda XBC,0xf10eb8
+	lda	xbc, (Data_F10E0F + 0xA9:24)	; F1013B  lda XBC,0xf10eb8
 	push	xbc	; F10140  push XBC
 	call	T_CallbackQueue_Post	; F10141  call 0xf42e84
 	pushw	1	; F10145  push 0x0001
@@ -30049,7 +30105,7 @@ sub_F1008E_Skip4:
 	and	c, 128	; F10150  and C,0x80
 	jr	nz, sub_F1008E_Skip5	; F10153  jr NZ,0xf1016b
 	m_or_mi8 MBI+r4, 0, 0x80	; F10155  or (XIX),0x80
-	lda	xbc, (15797978:24)	; F10158  lda XBC,0xf10eda
+	lda	xbc, (Data_F10E0F + 0xCB:24)	; F10158  lda XBC,0xf10eda
 	push	xbc	; F1015D  push XBC
 	call	T_CallbackQueue_Post	; F1015E  call 0xf42e84
 	pushw	1	; F10162  push 0x0001
@@ -30175,7 +30231,7 @@ sub_F101E7:
 	jr	z, sub_F101E7_Return	; F101F7  jr Z,0xf10221
 	jr	sub_F101E7_Return	; F101F9  jr T,0xf10221
 sub_F101E7_Skip:
-	lda	xbc, (15808098:24)	; F101FB  lda XBC,0xf13662
+	lda	xbc, (Data_F13659 + 0x9:24)	; F101FB  lda XBC,0xf13662
 	push	xbc	; F10200  push XBC
 	jr	sub_F101E7_Join	; F10201  jr T,0xf10218
 sub_F101E7_Skip2:
@@ -30185,7 +30241,7 @@ sub_F101E7_Skip2:
 	pop	xiy	; F1020D  pop XIY
 	cp	a, 0:i3	; F1020E  cp A,0
 	jr	nz, sub_F101E7_Return	; F10210  jr NZ,0xf10221
-	lda	xbc, (15808107:24)	; F10212  lda XBC,0xf1366b
+	lda	xbc, (Data_F13659 + 0x12:24)	; F10212  lda XBC,0xf1366b
 	push	xbc	; F10217  push XBC
 sub_F101E7_Join:
 	pushw	121	; F10218  push 0x0079
@@ -30833,9 +30889,10 @@ sub_F1069A:
 	extz	xbc	; F106FE  extz XBC
 	add	xbc, ScreenTable_F131E4	; F10700  add XBC,0x00f131e4
 	ld	xbc, (xbc)	; F10706  ld XBC,(XBC)
-	lda	xiy, (15795984:24)	; F10708  lda XIY,0xf10710
+	lda	xiy, (sub_F10710:24)	; F10708  lda XIY,0xf10710
 	push	xiy	; F1070D  push XIY
 	jp	(xbc)	; F1070E  jp T,XBC
+sub_F10710:
 	pop	xiy	; F10710  pop XIY
 	jr	sub_F1069A_Join	; F10711  jr T,0xf10716
 sub_F1069A_Skip:
@@ -31700,7 +31757,7 @@ Data_F10D62:
 	.byte	0x38, 0xF2, 0xFB, 0x0D, 0xF1, 0x35, 0x3D, 0xB4, 0xD8, 0xF2, 0xA3, 0x3E, 0xF1, 0x31	; F10DF2  [144..157]
 
 	push	xbc	; F10E00  push XBC
-	lda	xwa, (15810113:24)	; F10E01  lda XWA,0xf13e41
+	lda	xwa, (Data_F13D48 + 0xF9:24)	; F10E01  lda XWA,0xf13e41
 	push	xwa	; F10E06  push XWA
 	lda	xiy, (Data_F10E0F:24)	; F10E07  lda XIY,0xf10e0f
 	push	xiy	; F10E0C  push XIY
@@ -31762,7 +31819,7 @@ Data_F10E0F:
 	extz	xix	; F10F30  extz XIX
 	m_ld_mm16 MDD+r4, 0x01, 0x2795	; F10F32  ld (XIX+0x01),(0x2795)
 	ld	(10133:16), d	; F10F37  ld (0x2795),D
-	lda	xbc, (15812392:24)	; F10F3B  lda XBC,0xf14728
+	lda	xbc, (DL_F14712 + 0x16:24)	; F10F3B  lda XBC,0xf14728
 	push	xbc	; F10F40  push XBC
 	lda	xwa, (DL_F14712:24)	; F10F41  lda XWA,0xf14712
 	push	xwa	; F10F46  push XWA
@@ -32000,9 +32057,10 @@ DspEffect_PaintParamEditor_Loop:
 	ld	(xiz-23), xbc	; F110E7  ld (XIZ+0xe9),XBC
 	add	xbc, ScreenTable_F13264	; F110EA  add XBC,0x00f13264
 	ld	xbc, (xbc)	; F110F0  ld XBC,(XBC)
-	lda	xiy, (15798522:24)	; F110F2  lda XIY,0xf110fa
+	lda	xiy, (sub_F110FA:24)	; F110F2  lda XIY,0xf110fa
 	push	xiy	; F110F7  push XIY
 	jp	(xbc)	; F110F8  jp T,XBC
+sub_F110FA:
 	lda	xbc, (ScreenDisplayLists_F132E4:24)	; F110FA  lda XBC,0xf132e4
 	m_add_rm MLD+r6, 0xe9, 1	; F110FF  add XBC,(XIZ+0xe9)
 	ld	xwa, (xbc)	; F11102  ld XWA,(XBC)
@@ -34409,7 +34467,7 @@ sub_F1195A_Skip40:
 	and	a, 8	; F122FA  and A,0x08
 	jr	nz, sub_F1195A_Skip41	; F122FD  jr NZ,0xf12315
 	m_or_mi8 MBI+r4, 0, 0x08	; F122FF  or (XIX),0x08
-	lda	xbc, (15803330:24)	; F12302  lda XBC,0xf123c2
+	lda	xbc, (sub_F123C2:24)	; F12302  lda XBC,0xf123c2
 	push	xbc	; F12307  push XBC
 	call	T_CallbackQueue_Post	; F12308  call 0xf42e84
 	pushw	1	; F1230C  push 0x0001
@@ -34420,7 +34478,7 @@ sub_F1195A_Skip41:
 	and	c, 16	; F12317  and C,0x10
 	jr	nz, sub_F1195A_Epilogue	; F1231A  jr NZ,0xf12332
 	m_or_mi8 MBI+r4, 0, 0x10	; F1231C  or (XIX),0x10
-	lda	xbc, (15803380:24)	; F1231F  lda XBC,0xf123f4
+	lda	xbc, (sub_F123F4:24)	; F1231F  lda XBC,0xf123f4
 	push	xbc	; F12324  push XBC
 	call	T_CallbackQueue_Post	; F12325  call 0xf42e84
 	pushw	1	; F12329  push 0x0001
@@ -34452,9 +34510,10 @@ sub_F12334:		; <- T_F42F6C
 	extz	xwa	; F12345  extz XWA
 	add	xwa, DispatchTable_F1394F	; F12347  add XWA,0x00f1394f
 	ld	xbc, (xwa)	; F1234D  ld XBC,(XWA)
-	lda	xiy, (15803223:24)	; F1234F  lda XIY,0xf12357
+	lda	xiy, (sub_F12357:24)	; F1234F  lda XIY,0xf12357
 	push	xiy	; F12354  push XIY
 	jp	(xbc)	; F12355  jp T,XBC
+sub_F12357:
 	pop	xbc	; F12357  pop XBC
 	unlk XIZ	; F12358  unlk XIZ
 	ret	; F1235A  ret
@@ -34583,6 +34642,7 @@ sub_F123AD:
 	ld	(8348:16), 5	; F123BB  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F123C0  pop XBC
 	ret	; F123C1  ret
+sub_F123C2:
 	m_res 3, MD16, 0x2799	; F123C2  res 3,(0x2799)
 	call	T_F42E10	; F123C6  call 0xf42e10
 	ld	(9536:16), 0	; F123CA  ld (0x2540),0x00
@@ -34599,6 +34659,7 @@ sub_F123AD:
 	inc	8, xsp	; F123EF  inc 0,XSP
 	inc	8, xsp	; F123F1  inc 0,XSP
 	ret	; F123F3  ret
+sub_F123F4:
 	link XIZ,0xfffc	; F123F4  link XIZ,0xfffc
 	push	xix	; F123F8  push XIX
 	lda	xix, (9792:16)	; F123F9  lda XIX,0x2640
@@ -35208,134 +35269,134 @@ Data_F1284A:
 ;    0xF10FF1 reads.  Bytes 1-3 are NOT interpreted.
 ; --------------------------------------------------------------------------
 EffectParamDescriptors_F12F24:
-	.long	0x00F12748	; F12F24  [0] -> 0xF12748
-	.long	0x00F12608	; F12F28  [1] -> 0xF12608
-	.long	0x00F12630	; F12F2C  [2] -> 0xF12630
-	.long	0x00F12658	; F12F30  [3] -> 0xF12658
-	.long	0x00F12680	; F12F34  [4] -> 0xF12680
-	.long	0x00F126A8	; F12F38  [5] -> 0xF126A8
-	.long	0x00F128CC	; F12F3C  [6] -> 0xF128CC
-	.long	0x00F124EC	; F12F40  [7] -> 0xF124EC
-	.long	0x00F1287C	; F12F44  [8] -> 0xF1287C
-	.long	0x00F12944	; F12F48  [9] -> 0xF12944
-	.long	0x00F1296C	; F12F4C  [10] -> 0xF1296C
-	.long	0x00F129A4	; F12F50  [11] -> 0xF129A4
-	.long	0x00F124EC	; F12F54  [12] -> 0xF124EC
-	.long	0x00F124EC	; F12F58  [13] -> 0xF124EC
-	.long	0x00F124EC	; F12F5C  [14] -> 0xF124EC
-	.long	0x00F124EC	; F12F60  [15] -> 0xF124EC
-	.long	0x00F129CC	; F12F64  [16] -> 0xF129CC
-	.long	0x00F129F4	; F12F68  [17] -> 0xF129F4
-	.long	0x00F12A1C	; F12F6C  [18] -> 0xF12A1C
-	.long	0x00F12A44	; F12F70  [19] -> 0xF12A44
-	.long	0x00F12A6C	; F12F74  [20] -> 0xF12A6C
-	.long	0x00F12A94	; F12F78  [21] -> 0xF12A94
-	.long	0x00F12ABC	; F12F7C  [22] -> 0xF12ABC
-	.long	0x00F12AE4	; F12F80  [23] -> 0xF12AE4
-	.long	0x00F12B0C	; F12F84  [24] -> 0xF12B0C
-	.long	0x00F12B34	; F12F88  [25] -> 0xF12B34
-	.long	0x00F12B5C	; F12F8C  [26] -> 0xF12B5C
-	.long	0x00F12B84	; F12F90  [27] -> 0xF12B84
-	.long	0x00F124EC	; F12F94  [28] -> 0xF124EC
-	.long	0x00F124EC	; F12F98  [29] -> 0xF124EC
-	.long	0x00F124EC	; F12F9C  [30] -> 0xF124EC
-	.long	0x00F124EC	; F12FA0  [31] -> 0xF124EC
-	.long	0x00F12514	; F12FA4  [32] -> 0xF12514
-	.long	0x00F1253C	; F12FA8  [33] -> 0xF1253C
-	.long	0x00F12564	; F12FAC  [34] -> 0xF12564
-	.long	0x00F1258C	; F12FB0  [35] -> 0xF1258C
-	.long	0x00F128F4	; F12FB4  [36] -> 0xF128F4
-	.long	0x00F12854	; F12FB8  [37] -> 0xF12854
-	.long	0x00F1282C	; F12FBC  [38] -> 0xF1282C
-	.long	0x00F125B4	; F12FC0  [39] -> 0xF125B4
-	.long	0x00F124EC	; F12FC4  [40] -> 0xF124EC
-	.long	0x00F124EC	; F12FC8  [41] -> 0xF124EC
-	.long	0x00F124EC	; F12FCC  [42] -> 0xF124EC
-	.long	0x00F124EC	; F12FD0  [43] -> 0xF124EC
-	.long	0x00F124EC	; F12FD4  [44] -> 0xF124EC
-	.long	0x00F124EC	; F12FD8  [45] -> 0xF124EC
-	.long	0x00F124EC	; F12FDC  [46] -> 0xF124EC
-	.long	0x00F124EC	; F12FE0  [47] -> 0xF124EC
-	.long	0x00F126D0	; F12FE4  [48] -> 0xF126D0
-	.long	0x00F126F8	; F12FE8  [49] -> 0xF126F8
-	.long	0x00F12720	; F12FEC  [50] -> 0xF12720
-	.long	0x00F12770	; F12FF0  [51] -> 0xF12770
-	.long	0x00F12798	; F12FF4  [52] -> 0xF12798
-	.long	0x00F127C0	; F12FF8  [53] -> 0xF127C0
-	.long	0x00F12804	; F12FFC  [54] -> 0xF12804
-	.long	0x00F128A4	; F13000  [55] -> 0xF128A4
-	.long	0x00F1291C	; F13004  [56] -> 0xF1291C
-	.long	0x00F124EC	; F13008  [57] -> 0xF124EC
-	.long	0x00F124EC	; F1300C  [58] -> 0xF124EC
-	.long	0x00F124EC	; F13010  [59] -> 0xF124EC
-	.long	0x00F124EC	; F13014  [60] -> 0xF124EC
-	.long	0x00F124EC	; F13018  [61] -> 0xF124EC
-	.long	0x00F124EC	; F1301C  [62] -> 0xF124EC
-	.long	0x00F124EC	; F13020  [63] -> 0xF124EC
-	.long	0x00F12BAC	; F13024  [64] -> 0xF12BAC
-	.long	0x00F12BDC	; F13028  [65] -> 0xF12BDC
-	.long	0x00F12C10	; F1302C  [66] -> 0xF12C10
-	.long	0x00F12C4C	; F13030  [67] -> 0xF12C4C
-	.long	0x00F12C80	; F13034  [68] -> 0xF12C80
-	.long	0x00F12CBC	; F13038  [69] -> 0xF12CBC
-	.long	0x00F12CF0	; F1303C  [70] -> 0xF12CF0
-	.long	0x00F12D20	; F13040  [71] -> 0xF12D20
-	.long	0x00F12D54	; F13044  [72] -> 0xF12D54
-	.long	0x00F12D8C	; F13048  [73] -> 0xF12D8C
-	.long	0x00F12DCC	; F1304C  [74] -> 0xF12DCC
-	.long	0x00F12E04	; F13050  [75] -> 0xF12E04
-	.long	0x00F124EC	; F13054  [76] -> 0xF124EC
-	.long	0x00F124EC	; F13058  [77] -> 0xF124EC
-	.long	0x00F124EC	; F1305C  [78] -> 0xF124EC
-	.long	0x00F124EC	; F13060  [79] -> 0xF124EC
-	.long	0x00F124EC	; F13064  [80] -> 0xF124EC
-	.long	0x00F124EC	; F13068  [81] -> 0xF124EC
-	.long	0x00F124EC	; F1306C  [82] -> 0xF124EC
-	.long	0x00F124EC	; F13070  [83] -> 0xF124EC
-	.long	0x00F124EC	; F13074  [84] -> 0xF124EC
-	.long	0x00F124EC	; F13078  [85] -> 0xF124EC
-	.long	0x00F124EC	; F1307C  [86] -> 0xF124EC
-	.long	0x00F124EC	; F13080  [87] -> 0xF124EC
-	.long	0x00F124EC	; F13084  [88] -> 0xF124EC
-	.long	0x00F124EC	; F13088  [89] -> 0xF124EC
-	.long	0x00F124EC	; F1308C  [90] -> 0xF124EC
-	.long	0x00F124EC	; F13090  [91] -> 0xF124EC
-	.long	0x00F124EC	; F13094  [92] -> 0xF124EC
-	.long	0x00F124EC	; F13098  [93] -> 0xF124EC
-	.long	0x00F124EC	; F1309C  [94] -> 0xF124EC
-	.long	0x00F124EC	; F130A0  [95] -> 0xF124EC
-	.long	0x00F12E38	; F130A4  [96] -> 0xF12E38
-	.long	0x00F12E74	; F130A8  [97] -> 0xF12E74
-	.long	0x00F12EA4	; F130AC  [98] -> 0xF12EA4
-	.long	0x00F12EE4	; F130B0  [99] -> 0xF12EE4
-	.long	0x00F124EC	; F130B4  [100] -> 0xF124EC
-	.long	0x00F124EC	; F130B8  [101] -> 0xF124EC
-	.long	0x00F124EC	; F130BC  [102] -> 0xF124EC
-	.long	0x00F124EC	; F130C0  [103] -> 0xF124EC
-	.long	0x00F124EC	; F130C4  [104] -> 0xF124EC
-	.long	0x00F124EC	; F130C8  [105] -> 0xF124EC
-	.long	0x00F124EC	; F130CC  [106] -> 0xF124EC
-	.long	0x00F124EC	; F130D0  [107] -> 0xF124EC
-	.long	0x00F124EC	; F130D4  [108] -> 0xF124EC
-	.long	0x00F124EC	; F130D8  [109] -> 0xF124EC
-	.long	0x00F124EC	; F130DC  [110] -> 0xF124EC
-	.long	0x00F124EC	; F130E0  [111] -> 0xF124EC
-	.long	0x00F124EC	; F130E4  [112] -> 0xF124EC
-	.long	0x00F124EC	; F130E8  [113] -> 0xF124EC
-	.long	0x00F124EC	; F130EC  [114] -> 0xF124EC
-	.long	0x00F124EC	; F130F0  [115] -> 0xF124EC
-	.long	0x00F124EC	; F130F4  [116] -> 0xF124EC
-	.long	0x00F124EC	; F130F8  [117] -> 0xF124EC
-	.long	0x00F124EC	; F130FC  [118] -> 0xF124EC
-	.long	0x00F124EC	; F13100  [119] -> 0xF124EC
-	.long	0x00F124EC	; F13104  [120] -> 0xF124EC
-	.long	0x00F124EC	; F13108  [121] -> 0xF124EC
-	.long	0x00F124EC	; F1310C  [122] -> 0xF124EC
-	.long	0x00F124EC	; F13110  [123] -> 0xF124EC
-	.long	0x00F124EC	; F13114  [124] -> 0xF124EC
-	.long	0x00F124EC	; F13118  [125] -> 0xF124EC
-	.long	0x00F124EC	; F1311C  [126] -> 0xF124EC
-	.long	0x00F124EC	; F13120  [127] -> 0xF124EC
+	.long	RamPtrTable_F12746 + 0x2	; F12F24  [0] -> 0xF12748
+	.long	Data_F12582 + 0x86	; F12F28  [1] -> 0xF12608
+	.long	Data_F12582 + 0xAE	; F12F2C  [2] -> 0xF12630
+	.long	Data_F12582 + 0xD6	; F12F30  [3] -> 0xF12658
+	.long	Data_F12582 + 0xFE	; F12F34  [4] -> 0xF12680
+	.long	Data_F12582 + 0x126	; F12F38  [5] -> 0xF126A8
+	.long	Data_F1284A + 0x82	; F12F3C  [6] -> 0xF128CC
+	.long	Data_F124A6 + 0x46	; F12F40  [7] -> 0xF124EC
+	.long	Data_F1284A + 0x32	; F12F44  [8] -> 0xF1287C
+	.long	Data_F1284A + 0xFA	; F12F48  [9] -> 0xF12944
+	.long	Data_F1284A + 0x122	; F12F4C  [10] -> 0xF1296C
+	.long	Data_F1284A + 0x15A	; F12F50  [11] -> 0xF129A4
+	.long	Data_F124A6 + 0x46	; F12F54  [12] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12F58  [13] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12F5C  [14] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12F60  [15] -> 0xF124EC
+	.long	Data_F1284A + 0x182	; F12F64  [16] -> 0xF129CC
+	.long	Data_F1284A + 0x1AA	; F12F68  [17] -> 0xF129F4
+	.long	Data_F1284A + 0x1D2	; F12F6C  [18] -> 0xF12A1C
+	.long	Data_F1284A + 0x1FA	; F12F70  [19] -> 0xF12A44
+	.long	Data_F1284A + 0x222	; F12F74  [20] -> 0xF12A6C
+	.long	Data_F1284A + 0x24A	; F12F78  [21] -> 0xF12A94
+	.long	Data_F1284A + 0x272	; F12F7C  [22] -> 0xF12ABC
+	.long	Data_F1284A + 0x29A	; F12F80  [23] -> 0xF12AE4
+	.long	Data_F1284A + 0x2C2	; F12F84  [24] -> 0xF12B0C
+	.long	Data_F1284A + 0x2EA	; F12F88  [25] -> 0xF12B34
+	.long	Data_F1284A + 0x312	; F12F8C  [26] -> 0xF12B5C
+	.long	Data_F1284A + 0x33A	; F12F90  [27] -> 0xF12B84
+	.long	Data_F124A6 + 0x46	; F12F94  [28] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12F98  [29] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12F9C  [30] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12FA0  [31] -> 0xF124EC
+	.long	Data_F1250A + 0xA	; F12FA4  [32] -> 0xF12514
+	.long	Data_F12532 + 0xA	; F12FA8  [33] -> 0xF1253C
+	.long	Data_F1255A + 0xA	; F12FAC  [34] -> 0xF12564
+	.long	Data_F12582 + 0xA	; F12FB0  [35] -> 0xF1258C
+	.long	Data_F1284A + 0xAA	; F12FB4  [36] -> 0xF128F4
+	.long	Data_F1284A + 0xA	; F12FB8  [37] -> 0xF12854
+	.long	Data_F12766 + 0xC6	; F12FBC  [38] -> 0xF1282C
+	.long	Data_F12582 + 0x32	; F12FC0  [39] -> 0xF125B4
+	.long	Data_F124A6 + 0x46	; F12FC4  [40] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12FC8  [41] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12FCC  [42] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12FD0  [43] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12FD4  [44] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12FD8  [45] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12FDC  [46] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F12FE0  [47] -> 0xF124EC
+	.long	Data_F12582 + 0x14E	; F12FE4  [48] -> 0xF126D0
+	.long	Data_F12582 + 0x176	; F12FE8  [49] -> 0xF126F8
+	.long	Data_F12582 + 0x19E	; F12FEC  [50] -> 0xF12720
+	.long	Data_F12766 + 0xA	; F12FF0  [51] -> 0xF12770
+	.long	Data_F12766 + 0x32	; F12FF4  [52] -> 0xF12798
+	.long	Data_F12766 + 0x5A	; F12FF8  [53] -> 0xF127C0
+	.long	Data_F12766 + 0x9E	; F12FFC  [54] -> 0xF12804
+	.long	Data_F1284A + 0x5A	; F13000  [55] -> 0xF128A4
+	.long	Data_F1284A + 0xD2	; F13004  [56] -> 0xF1291C
+	.long	Data_F124A6 + 0x46	; F13008  [57] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F1300C  [58] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13010  [59] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13014  [60] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13018  [61] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F1301C  [62] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13020  [63] -> 0xF124EC
+	.long	Data_F1284A + 0x362	; F13024  [64] -> 0xF12BAC
+	.long	Data_F1284A + 0x392	; F13028  [65] -> 0xF12BDC
+	.long	Data_F1284A + 0x3C6	; F1302C  [66] -> 0xF12C10
+	.long	Data_F1284A + 0x402	; F13030  [67] -> 0xF12C4C
+	.long	Data_F1284A + 0x436	; F13034  [68] -> 0xF12C80
+	.long	Data_F1284A + 0x472	; F13038  [69] -> 0xF12CBC
+	.long	Data_F1284A + 0x4A6	; F1303C  [70] -> 0xF12CF0
+	.long	Data_F1284A + 0x4D6	; F13040  [71] -> 0xF12D20
+	.long	Data_F1284A + 0x50A	; F13044  [72] -> 0xF12D54
+	.long	Data_F1284A + 0x542	; F13048  [73] -> 0xF12D8C
+	.long	Data_F1284A + 0x582	; F1304C  [74] -> 0xF12DCC
+	.long	Data_F1284A + 0x5BA	; F13050  [75] -> 0xF12E04
+	.long	Data_F124A6 + 0x46	; F13054  [76] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13058  [77] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F1305C  [78] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13060  [79] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13064  [80] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13068  [81] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F1306C  [82] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13070  [83] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13074  [84] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13078  [85] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F1307C  [86] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13080  [87] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13084  [88] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13088  [89] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F1308C  [90] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13090  [91] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13094  [92] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13098  [93] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F1309C  [94] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130A0  [95] -> 0xF124EC
+	.long	Data_F1284A + 0x5EE	; F130A4  [96] -> 0xF12E38
+	.long	Data_F1284A + 0x62A	; F130A8  [97] -> 0xF12E74
+	.long	Data_F1284A + 0x65A	; F130AC  [98] -> 0xF12EA4
+	.long	Data_F1284A + 0x69A	; F130B0  [99] -> 0xF12EE4
+	.long	Data_F124A6 + 0x46	; F130B4  [100] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130B8  [101] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130BC  [102] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130C0  [103] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130C4  [104] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130C8  [105] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130CC  [106] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130D0  [107] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130D4  [108] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130D8  [109] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130DC  [110] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130E0  [111] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130E4  [112] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130E8  [113] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130EC  [114] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130F0  [115] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130F4  [116] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130F8  [117] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F130FC  [118] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13100  [119] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13104  [120] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13108  [121] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F1310C  [122] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13110  [123] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13114  [124] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13118  [125] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F1311C  [126] -> 0xF124EC
+	.long	Data_F124A6 + 0x46	; F13120  [127] -> 0xF124EC
 
 
 ; --------------------------------------------------------------------------
@@ -35484,8 +35545,8 @@ ScreenTable_F13264:
 ScreenDisplayLists_F132E4:
 	.long	DLB_Records_F157A8	; F132E4  [64] -> 0xF157A8
 	.long	DLB_Records_F1589C	; F132E8  [65] -> 0xF1589C
-	.long	0x00F15A04	; F132EC  [66] -> 0xF15A04
-	.long	0x00F15A04	; F132F0  [67] -> 0xF15A04
+	.long	DLB_Records_F1589C + 0x168	; F132EC  [66] -> 0xF15A04
+	.long	DLB_Records_F1589C + 0x168	; F132F0  [67] -> 0xF15A04
 	.long	DLB_Records_F15B03	; F132F4  [68] -> 0xF15B03
 	.long	DLB_Records_F15C1B	; F132F8  [69] -> 0xF15C1B
 	.long	DLB_Records_F15E7D	; F132FC  [70] -> 0xF15E7D
@@ -35499,18 +35560,18 @@ ScreenDisplayLists_F132E4:
 	.long	DLB_Records_F16C91	; F1331C  [78] -> 0xF16C91
 	.long	DLB_Records_F16EFD	; F13320  [79] -> 0xF16EFD
 	.long	DLB_Records_F17169	; F13324  [80] -> 0xF17169
-	.long	0x00F15914	; F13328  [81] -> 0xF15914
+	.long	DLB_Records_F1589C + 0x78	; F13328  [81] -> 0xF15914
 	.long	DLB_Records_F17457	; F1332C  [82] -> 0xF17457
 	.long	DLB_Records_F1589C	; F13330  [83] -> 0xF1589C
-	.long	0x00F1598C	; F13334  [84] -> 0xF1598C
-	.long	0x00F1598C	; F13338  [85] -> 0xF1598C
-	.long	0x00F1598C	; F1333C  [86] -> 0xF1598C
+	.long	DLB_Records_F1589C + 0xF0	; F13334  [84] -> 0xF1598C
+	.long	DLB_Records_F1589C + 0xF0	; F13338  [85] -> 0xF1598C
+	.long	DLB_Records_F1589C + 0xF0	; F1333C  [86] -> 0xF1598C
 	.long	DLB_Records_F1589C	; F13340  [87] -> 0xF1589C
-	.long	0x00F1598C	; F13344  [88] -> 0xF1598C
+	.long	DLB_Records_F1589C + 0xF0	; F13344  [88] -> 0xF1598C
 	.long	DLB_Records_F15D88	; F13348  [89] -> 0xF15D88
-	.long	0x00F1598C	; F1334C  [90] -> 0xF1598C
-	.long	0x00F1598C	; F13350  [91] -> 0xF1598C
-	.long	0x00F1598C	; F13354  [92] -> 0xF1598C
+	.long	DLB_Records_F1589C + 0xF0	; F1334C  [90] -> 0xF1598C
+	.long	DLB_Records_F1589C + 0xF0	; F13350  [91] -> 0xF1598C
+	.long	DLB_Records_F1589C + 0xF0	; F13354  [92] -> 0xF1598C
 	.long	DLB_Records_F174E1	; F13358  [93] -> 0xF174E1
 	.long	DLB_Records_F174E1	; F1335C  [94] -> 0xF174E1
 	.long	DLB_Records_F157A8	; F13360  [95] -> 0xF157A8
@@ -35986,46 +36047,46 @@ Data_F13659:
 ; Unknown: what indexes it, and what the entries mean.
 ; --------------------------------------------------------------------------
 DataPtrTable_F13674:
-	.long	0x00F13A65	; F13674  [0] -> 0xF13A65
-	.long	0x00F139F5	; F13678  [1] -> 0xF139F5
-	.long	0x00F13A01	; F1367C  [2] -> 0xF13A01
-	.long	0x00F13A0F	; F13680  [3] -> 0xF13A0F
-	.long	0x00F13A1F	; F13684  [4] -> 0xF13A1F
-	.long	0x00F13A2E	; F13688  [5] -> 0xF13A2E
-	.long	0x00F13AD9	; F1368C  [6] -> 0xF13AD9
+	.long	Data_F139AB + 0xBA	; F13674  [0] -> 0xF13A65
+	.long	Data_F139AB + 0x4A	; F13678  [1] -> 0xF139F5
+	.long	Data_F139AB + 0x56	; F1367C  [2] -> 0xF13A01
+	.long	Data_F139AB + 0x64	; F13680  [3] -> 0xF13A0F
+	.long	Data_F139AB + 0x74	; F13684  [4] -> 0xF13A1F
+	.long	Data_F139AB + 0x83	; F13688  [5] -> 0xF13A2E
+	.long	Data_F139AB + 0x12E	; F1368C  [6] -> 0xF13AD9
 	.long	Data_F139AB	; F13690  [7] -> Data_F139AB
-	.long	0x00F13ABD	; F13694  [8] -> 0xF13ABD
-	.long	0x00F13B01	; F13698  [9] -> 0xF13B01
-	.long	0x00F13B11	; F1369C  [10] -> 0xF13B11
-	.long	0x00F13B28	; F136A0  [11] -> 0xF13B28
+	.long	Data_F139AB + 0x112	; F13694  [8] -> 0xF13ABD
+	.long	Data_F139AB + 0x156	; F13698  [9] -> 0xF13B01
+	.long	Data_F139AB + 0x166	; F1369C  [10] -> 0xF13B11
+	.long	Data_F139AB + 0x17D	; F136A0  [11] -> 0xF13B28
 	.long	Data_F139AB	; F136A4  [12] -> Data_F139AB
 	.long	Data_F139AB	; F136A8  [13] -> Data_F139AB
 	.long	Data_F139AB	; F136AC  [14] -> Data_F139AB
 	.long	Data_F139AB	; F136B0  [15] -> Data_F139AB
-	.long	0x00F13B39	; F136B4  [16] -> 0xF13B39
-	.long	0x00F13B45	; F136B8  [17] -> 0xF13B45
-	.long	0x00F13B51	; F136BC  [18] -> 0xF13B51
-	.long	0x00F13B5D	; F136C0  [19] -> 0xF13B5D
-	.long	0x00F13B69	; F136C4  [20] -> 0xF13B69
-	.long	0x00F13B75	; F136C8  [21] -> 0xF13B75
-	.long	0x00F13B81	; F136CC  [22] -> 0xF13B81
-	.long	0x00F13B8D	; F136D0  [23] -> 0xF13B8D
-	.long	0x00F13B99	; F136D4  [24] -> 0xF13B99
-	.long	0x00F13BA5	; F136D8  [25] -> 0xF13BA5
-	.long	0x00F13BB1	; F136DC  [26] -> 0xF13BB1
-	.long	0x00F13BBD	; F136E0  [27] -> 0xF13BBD
+	.long	Data_F139AB + 0x18E	; F136B4  [16] -> 0xF13B39
+	.long	Data_F139AB + 0x19A	; F136B8  [17] -> 0xF13B45
+	.long	Data_F139AB + 0x1A6	; F136BC  [18] -> 0xF13B51
+	.long	Data_F139AB + 0x1B2	; F136C0  [19] -> 0xF13B5D
+	.long	Data_F139AB + 0x1BE	; F136C4  [20] -> 0xF13B69
+	.long	Data_F139AB + 0x1CA	; F136C8  [21] -> 0xF13B75
+	.long	Data_F139AB + 0x1D6	; F136CC  [22] -> 0xF13B81
+	.long	Data_F139AB + 0x1E2	; F136D0  [23] -> 0xF13B8D
+	.long	Data_F139AB + 0x1EE	; F136D4  [24] -> 0xF13B99
+	.long	Data_F139AB + 0x1FA	; F136D8  [25] -> 0xF13BA5
+	.long	Data_F139AB + 0x206	; F136DC  [26] -> 0xF13BB1
+	.long	Data_F139AB + 0x212	; F136E0  [27] -> 0xF13BBD
 	.long	Data_F139AB	; F136E4  [28] -> Data_F139AB
 	.long	Data_F139AB	; F136E8  [29] -> Data_F139AB
 	.long	Data_F139AB	; F136EC  [30] -> Data_F139AB
 	.long	Data_F139AB	; F136F0  [31] -> Data_F139AB
-	.long	0x00F139AE	; F136F4  [32] -> 0xF139AE
-	.long	0x00F139BA	; F136F8  [33] -> 0xF139BA
-	.long	0x00F139C6	; F136FC  [34] -> 0xF139C6
-	.long	0x00F139D2	; F13700  [35] -> 0xF139D2
-	.long	0x00F13AE5	; F13704  [36] -> 0xF13AE5
-	.long	0x00F13AB1	; F13708  [37] -> 0xF13AB1
-	.long	0x00F13AA9	; F1370C  [38] -> 0xF13AA9
-	.long	0x00F139E1	; F13710  [39] -> 0xF139E1
+	.long	Data_F139AB + 0x3	; F136F4  [32] -> 0xF139AE
+	.long	Data_F139AB + 0xF	; F136F8  [33] -> 0xF139BA
+	.long	Data_F139AB + 0x1B	; F136FC  [34] -> 0xF139C6
+	.long	Data_F139AB + 0x27	; F13700  [35] -> 0xF139D2
+	.long	Data_F139AB + 0x13A	; F13704  [36] -> 0xF13AE5
+	.long	Data_F139AB + 0x106	; F13708  [37] -> 0xF13AB1
+	.long	Data_F139AB + 0xFE	; F1370C  [38] -> 0xF13AA9
+	.long	Data_F139AB + 0x36	; F13710  [39] -> 0xF139E1
 	.long	Data_F139AB	; F13714  [40] -> Data_F139AB
 	.long	Data_F139AB	; F13718  [41] -> Data_F139AB
 	.long	Data_F139AB	; F1371C  [42] -> Data_F139AB
@@ -36034,15 +36095,15 @@ DataPtrTable_F13674:
 	.long	Data_F139AB	; F13728  [45] -> Data_F139AB
 	.long	Data_F139AB	; F1372C  [46] -> Data_F139AB
 	.long	Data_F139AB	; F13730  [47] -> Data_F139AB
-	.long	0x00F13A3D	; F13734  [48] -> 0xF13A3D
-	.long	0x00F13A4A	; F13738  [49] -> 0xF13A4A
-	.long	0x00F13A58	; F1373C  [50] -> 0xF13A58
-	.long	0x00F13A6D	; F13740  [51] -> 0xF13A6D
-	.long	0x00F13A7A	; F13744  [52] -> 0xF13A7A
-	.long	0x00F13A86	; F13748  [53] -> 0xF13A86
-	.long	0x00F13A9D	; F1374C  [54] -> 0xF13A9D
-	.long	0x00F13ACA	; F13750  [55] -> 0xF13ACA
-	.long	0x00F13AF2	; F13754  [56] -> 0xF13AF2
+	.long	Data_F139AB + 0x92	; F13734  [48] -> 0xF13A3D
+	.long	Data_F139AB + 0x9F	; F13738  [49] -> 0xF13A4A
+	.long	Data_F139AB + 0xAD	; F1373C  [50] -> 0xF13A58
+	.long	Data_F139AB + 0xC2	; F13740  [51] -> 0xF13A6D
+	.long	Data_F139AB + 0xCF	; F13744  [52] -> 0xF13A7A
+	.long	Data_F139AB + 0xDB	; F13748  [53] -> 0xF13A86
+	.long	Data_F139AB + 0xF2	; F1374C  [54] -> 0xF13A9D
+	.long	Data_F139AB + 0x11F	; F13750  [55] -> 0xF13ACA
+	.long	Data_F139AB + 0x147	; F13754  [56] -> 0xF13AF2
 	.long	Data_F139AB	; F13758  [57] -> Data_F139AB
 	.long	Data_F139AB	; F1375C  [58] -> Data_F139AB
 	.long	Data_F139AB	; F13760  [59] -> Data_F139AB
@@ -36050,18 +36111,18 @@ DataPtrTable_F13674:
 	.long	Data_F139AB	; F13768  [61] -> Data_F139AB
 	.long	Data_F139AB	; F1376C  [62] -> Data_F139AB
 	.long	Data_F139AB	; F13770  [63] -> Data_F139AB
-	.long	0x00F13BC9	; F13774  [64] -> 0xF13BC9
-	.long	0x00F13BDC	; F13778  [65] -> 0xF13BDC
-	.long	0x00F13BF2	; F1377C  [66] -> 0xF13BF2
-	.long	0x00F13C08	; F13780  [67] -> 0xF13C08
-	.long	0x00F13C1C	; F13784  [68] -> 0xF13C1C
-	.long	0x00F13C32	; F13788  [69] -> 0xF13C32
-	.long	0x00F13C46	; F1378C  [70] -> 0xF13C46
-	.long	0x00F13C59	; F13790  [71] -> 0xF13C59
-	.long	0x00F13C69	; F13794  [72] -> 0xF13C69
-	.long	0x00F13C7C	; F13798  [73] -> 0xF13C7C
-	.long	0x00F13C8F	; F1379C  [74] -> 0xF13C8F
-	.long	0x00F13CA0	; F137A0  [75] -> 0xF13CA0
+	.long	Data_F139AB + 0x21E	; F13774  [64] -> 0xF13BC9
+	.long	Data_F139AB + 0x231	; F13778  [65] -> 0xF13BDC
+	.long	Data_F139AB + 0x247	; F1377C  [66] -> 0xF13BF2
+	.long	Data_F139AB + 0x25D	; F13780  [67] -> 0xF13C08
+	.long	Data_F139AB + 0x271	; F13784  [68] -> 0xF13C1C
+	.long	Data_F139AB + 0x287	; F13788  [69] -> 0xF13C32
+	.long	Data_F139AB + 0x29B	; F1378C  [70] -> 0xF13C46
+	.long	Data_F139AB + 0x2AE	; F13790  [71] -> 0xF13C59
+	.long	Data_F139AB + 0x2BE	; F13794  [72] -> 0xF13C69
+	.long	Data_F139AB + 0x2D1	; F13798  [73] -> 0xF13C7C
+	.long	Data_F139AB + 0x2E4	; F1379C  [74] -> 0xF13C8F
+	.long	Data_F139AB + 0x2F5	; F137A0  [75] -> 0xF13CA0
 	.long	Data_F139AB	; F137A4  [76] -> Data_F139AB
 	.long	Data_F139AB	; F137A8  [77] -> Data_F139AB
 	.long	Data_F139AB	; F137AC  [78] -> Data_F139AB
@@ -36082,10 +36143,10 @@ DataPtrTable_F13674:
 	.long	Data_F139AB	; F137E8  [93] -> Data_F139AB
 	.long	Data_F139AB	; F137EC  [94] -> Data_F139AB
 	.long	Data_F139AB	; F137F0  [95] -> Data_F139AB
-	.long	0x00F13CB0	; F137F4  [96] -> 0xF13CB0
-	.long	0x00F13CC3	; F137F8  [97] -> 0xF13CC3
-	.long	0x00F13CD4	; F137FC  [98] -> 0xF13CD4
-	.long	0x00F13CEA	; F13800  [99] -> 0xF13CEA
+	.long	Data_F139AB + 0x305	; F137F4  [96] -> 0xF13CB0
+	.long	Data_F139AB + 0x318	; F137F8  [97] -> 0xF13CC3
+	.long	Data_F139AB + 0x329	; F137FC  [98] -> 0xF13CD4
+	.long	Data_F139AB + 0x33F	; F13800  [99] -> 0xF13CEA
 	.long	Data_F139AB	; F13804  [100] -> Data_F139AB
 	.long	Data_F139AB	; F13808  [101] -> Data_F139AB
 	.long	Data_F139AB	; F1380C  [102] -> Data_F139AB
@@ -36690,13 +36751,13 @@ DL_F13F41:
 	.ascii "ALGORITHM :"
 DL_F13F50:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F13D00
+	.long Data_F139AB + 0x355
 	.short 0x0E4B
 	.short 0x0002
 	.short 0x000C
 DL_F13F5C:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F13D00
+	.long Data_F139AB + 0x355
 	.short 0x1439
 	.short 0x0002
 	.short 0x000C
@@ -37262,13 +37323,13 @@ DL_F14307:
 	.short 0x00BC
 DL_F14311:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F13D18
+	.long Data_F139AB + 0x36D
 	.short 0x0B6C
 	.short 0x0002
 	.short 0x000C
 DL_F1431D:
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F13D18
+	.long Data_F139AB + 0x36D
 	.short 0x1774
 	.short 0x0002
 	.short 0x000C
@@ -37355,7 +37416,7 @@ DL_F143AF:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long 0x00F143D4	; +0x07 -> XIY: string table
+	.long DL_F143C0 + 0x14	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x0112	; +0x0D -> (0x2530)
 	.short 0x0021	; +0x0F -> (0x2532)
@@ -37396,7 +37457,7 @@ DL_F143E0:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F1451D	; +0x07 -> XIY: string table
+	.long DL_F1449F + 0x7E	; +0x07 -> XIY: string table
 	.short 0x0008	; +0x0B -> BC: bytes per entry
 	.short 0x050E	; +0x0D -> IX
 DL_F143EF:
@@ -37405,7 +37466,7 @@ DL_F143EF:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F1452F	; +0x07 -> XIY: string table
+	.long DL_F1449F + 0x90	; +0x07 -> XIY: string table
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x0B40	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -37413,7 +37474,7 @@ DL_F143EF:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F1452E	; +0x07 -> XIY: string table
+	.long DL_F1449F + 0x8F	; +0x07 -> XIY: string table
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x1180	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -37421,7 +37482,7 @@ DL_F143EF:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F1452D	; +0x07 -> XIY: string table
+	.long DL_F1449F + 0x8E	; +0x07 -> XIY: string table
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x17C0	; +0x0D -> IX
 DL_F1441C:
@@ -37430,21 +37491,21 @@ DL_F1441C:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F14532	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DL_F1449F + 0x93	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F14427:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x2640	; +0x02 source variable, 16-bit address
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long 0x00F14532	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DL_F1449F + 0x93	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F14432:
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x7659	; +0x02 source variable, 16-bit address
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F1447D	; +0x07 -> XIY: string table
+	.long DL_F14432 + 0x4B	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x0B73	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -37452,7 +37513,7 @@ DL_F14432:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F14485	; +0x07 -> XIY: string table
+	.long DL_F14432 + 0x53	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x1138	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -37460,7 +37521,7 @@ DL_F14432:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F1448D	; +0x07 -> XIY: string table
+	.long DL_F14432 + 0x5B	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x17B1	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -37468,7 +37529,7 @@ DL_F14432:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F14493	; +0x07 -> XIY: string table
+	.long DL_F14432 + 0x61	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0B78	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -37476,7 +37537,7 @@ DL_F14432:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F14499	; +0x07 -> XIY: string table
+	.long DL_F14432 + 0x67	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x17AD	; +0x0D -> IX
 
@@ -37564,7 +37625,7 @@ DL_F1449F:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x004B	; +0x0F -> (0x2532)
@@ -37573,7 +37634,7 @@ DL_F1449F:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x0070	; +0x0F -> (0x2532)
@@ -37582,7 +37643,7 @@ DL_F1449F:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00EC	; +0x0D -> (0x2530)
 	.short 0x0091	; +0x0F -> (0x2532)
@@ -37648,7 +37709,7 @@ DL_F14562:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x00AC	; +0x0F -> (0x2532)
@@ -37657,7 +37718,7 @@ DL_F14562:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x00E6	; +0x0D -> (0x2530)
 	.short 0x00B8	; +0x0F -> (0x2532)
@@ -37675,7 +37736,7 @@ DL_F145A6:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F145D3	; +0x07 -> XIY: string table
+	.long DL_F145B5 + 0x1E	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x228A	; +0x0D -> IX
 DL_F145B5:
@@ -37684,7 +37745,7 @@ DL_F145B5:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F145D3	; +0x07 -> XIY: string table
+	.long DL_F145B5 + 0x1E	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2293	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -37692,7 +37753,7 @@ DL_F145B5:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 
@@ -37717,7 +37778,7 @@ DL_F145D9:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long 0x00F14621	; +0x07 -> XIY: string table
+	.long DL_F14617 + 0xA	; +0x07 -> XIY: string table
 	.short 0x0008	; +0x0B -> BC: bytes per entry
 	.short 0x004E	; +0x0D -> (0x2530)
 	.short 0x00D1	; +0x0F -> (0x2532)
@@ -37736,7 +37797,7 @@ DL_F145F9:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.long DL_F14617 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x22A8	; +0x0D -> IX
 DL_F14608:
@@ -37745,7 +37806,7 @@ DL_F14608:
 	.byte 0x00	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F14639	; +0x07 -> XIY: string table
+	.long DL_F14617 + 0x22	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A2	; +0x0D -> IX
 DL_F14617:
@@ -37828,7 +37889,7 @@ DL_F1469B:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F146B1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DL_F146A6 + 0xB	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF146A6-0xF146E0: not converted ---
 ; 0xF146A6-0xF146B0: one self-framing interpreter-B record (op 0x08,
@@ -37842,7 +37903,7 @@ DL_F146A6:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long 0x00F146B1	; +0x07 -> XIX: array, indexed by the value
+	.long DL_F146A6 + 0xB	; +0x07 -> XIX: array, indexed by the value
 ; 0xF146B1-0xF146E0: 8-byte-stride table, 6 entries -- the string/array
 ; table a nearby already-spliced record names in its own +0x07 (and,
 ; for the string-table ops, +0x0B `BC`) field.
@@ -37876,7 +37937,7 @@ DL_F146F0:
 	.byte 0x01	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long 0x00F14728	; +0x07 -> XIY: string table
+	.long DL_F14712 + 0x16	; +0x07 -> XIY: string table
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x003A	; +0x0D -> (0x2530)
 	.short 0x004A	; +0x0F -> (0x2532)
@@ -37885,7 +37946,7 @@ DL_F146F0:
 	.byte 0x02	; +0x04 AND mask
 	.byte 0x01	; +0x05 right shift, low 3 bits
 	.byte 0x17	; +0x06 swi 7 function
-	.long 0x00F1472A	; +0x07 -> XIY: string table
+	.long DL_F14712 + 0x18	; +0x07 -> XIY: string table
 	.short 0x0001	; +0x0B -> BC: bytes per entry
 	.short 0x003A	; +0x0D -> (0x2530)
 	.short 0x00BD	; +0x0F -> (0x2532)
@@ -37895,13 +37956,13 @@ DL_F14712:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long 0x00F1472C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DL_F14712 + 0x1A	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x2640	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F1472C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DL_F14712 + 0x1A	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF14728-0xF147AB: not converted ---
 ; 0xF14728-0xF14728: 1-byte-stride table, 1 entries -- the string/array
@@ -41875,34 +41936,34 @@ BitTable_F17A5F:
 ; --------------------------------------------------------------------------
 PtrTable_F17A6C:
 	.long Bitmap_F17AE0                       ; F17A6C  [0]   -> Bitmap_F17AE0
-	.long 0x00F17B28                       ; F17A70  [1]   -> 0xF17B28 (inside this span)
-	.long 0x00F17B70                       ; F17A74  [2]   -> 0xF17B70 (inside this span)
-	.long 0x00F17BB8                       ; F17A78  [3]   -> 0xF17BB8 (inside this span)
+	.long Bitmap_F17AE0 + 0x48                       ; F17A70  [1]   -> 0xF17B28 (inside this span)
+	.long Bitmap_F17AE0 + 0x90                       ; F17A74  [2]   -> 0xF17B70 (inside this span)
+	.long Bitmap_F17AE0 + 0xD8                       ; F17A78  [3]   -> 0xF17BB8 (inside this span)
 	.long DL_F17C00                       ; F17A7C  [4]   -> DL_F17C00
-	.long 0x00F17C48                       ; F17A80  [5]   -> 0xF17C48 (inside this span)
-	.long 0x00F17C90                       ; F17A84  [6]   -> 0xF17C90 (inside this span)
-	.long 0x00F17CD8                       ; F17A88  [7]   -> 0xF17CD8 (inside this span)
-	.long 0x00F17D20                       ; F17A8C  [8]   -> 0xF17D20 (inside this span)
-	.long 0x00F17D68                       ; F17A90  [9]   -> 0xF17D68 (inside this span)
-	.long 0x00F17DB0                       ; F17A94  [10]   -> 0xF17DB0 (inside this span)
-	.long 0x00F17DF8                       ; F17A98  [11]   -> 0xF17DF8 (inside this span)
-	.long 0x00F17E40                       ; F17A9C  [12]   -> 0xF17E40 (inside this span)
-	.long 0x00F17E88                       ; F17AA0  [13]   -> 0xF17E88 (inside this span)
-	.long 0x00F17ED0                       ; F17AA4  [14]   -> 0xF17ED0 (inside this span)
-	.long 0x00F17F18                       ; F17AA8  [15]   -> 0xF17F18 (inside this span)
-	.long 0x00F17F60                       ; F17AAC  [16]   -> 0xF17F60 (inside this span)
-	.long 0x00F17FA8                       ; F17AB0  [17]   -> 0xF17FA8 (inside this span)
-	.long 0x00F17FF0                       ; F17AB4  [18]   -> 0xF17FF0 (inside this span)
-	.long 0x00F18038                       ; F17AB8  [19]   -> 0xF18038 (inside this span)
-	.long 0x00F18080                       ; F17ABC  [20]   -> 0xF18080 (inside this span)
-	.long 0x00F180C8                       ; F17AC0  [21]   -> 0xF180C8 (inside this span)
-	.long 0x00F18110                       ; F17AC4  [22]   -> 0xF18110 (inside this span)
-	.long 0x00F18158                       ; F17AC8  [23]   -> 0xF18158 (inside this span)
-	.long 0x00F181A0                       ; F17ACC  [24]   -> 0xF181A0 (inside this span)
-	.long 0x00F181E8                       ; F17AD0  [25]   -> 0xF181E8 (inside this span)
-	.long 0x00F18230                       ; F17AD4  [26]   -> 0xF18230 (inside this span)
-	.long 0x00F18278                       ; F17AD8  [27]   -> 0xF18278 (inside this span)
-	.long 0x00F182C0                       ; F17ADC  [28]   -> 0xF182C0 (inside this span)
+	.long DL_F17C45 + 0x3                       ; F17A80  [5]   -> 0xF17C48 (inside this span)
+	.long DL_Mixer + 0x4                       ; F17A84  [6]   -> 0xF17C90 (inside this span)
+	.long DL_Mixer + 0x4C                       ; F17A88  [7]   -> 0xF17CD8 (inside this span)
+	.long DL_Mixer + 0x94                       ; F17A8C  [8]   -> 0xF17D20 (inside this span)
+	.long DL_Mixer + 0xDC                       ; F17A90  [9]   -> 0xF17D68 (inside this span)
+	.long DL_Mixer + 0x124                       ; F17A94  [10]   -> 0xF17DB0 (inside this span)
+	.long DL_Mixer + 0x16C                       ; F17A98  [11]   -> 0xF17DF8 (inside this span)
+	.long DL_F17E2E + 0x12                       ; F17A9C  [12]   -> 0xF17E40 (inside this span)
+	.long DL_Sound + 0x46                       ; F17AA0  [13]   -> 0xF17E88 (inside this span)
+	.long DL_F17E9D + 0x33                       ; F17AA4  [14]   -> 0xF17ED0 (inside this span)
+	.long DL_KeyShift + 0x11                       ; F17AA8  [15]   -> 0xF17F18 (inside this span)
+	.long DL_KeyShift + 0x59                       ; F17AAC  [16]   -> 0xF17F60 (inside this span)
+	.long DL_Midiout + 0x4                       ; F17AB0  [17]   -> 0xF17FA8 (inside this span)
+	.long DL_Midiout + 0x4C                       ; F17AB4  [18]   -> 0xF17FF0 (inside this span)
+	.long DL_F1802A + 0xE                       ; F17AB8  [19]   -> 0xF18038 (inside this span)
+	.long RecordArray_F18066 + 0x1A                       ; F17ABC  [20]   -> 0xF18080 (inside this span)
+	.long RecordArray_F18066 + 0x62                       ; F17AC0  [21]   -> 0xF180C8 (inside this span)
+	.long RecordArray_F180EE + 0x22                       ; F17AC4  [22]   -> 0xF18110 (inside this span)
+	.long DL_Pt1Pt9Pt2Pt3Pt4Pt5Pt6Pt7 + 0xA                       ; F17AC8  [23]   -> 0xF18158 (inside this span)
+	.long DL_Pt1Pt9Pt2Pt3Pt4Pt5Pt6Pt7 + 0x52                       ; F17ACC  [24]   -> 0xF181A0 (inside this span)
+	.long DL_Part1Part9Part17Part25Part2 + 0x12                       ; F17AD0  [25]   -> 0xF181E8 (inside this span)
+	.long DL_Part1Part9Part17Part25Part2 + 0x5A                       ; F17AD4  [26]   -> 0xF18230 (inside this span)
+	.long DL_F18274 + 0x4                       ; F17AD8  [27]   -> 0xF18278 (inside this span)
+	.long StringTable_F1828A + 0x36                       ; F17ADC  [28]   -> 0xF182C0 (inside this span)
 
 ; --------------------------------------------------------------------------
 ; Bitmap_F17AE0 -- bitmap, 0xF17AE0-0xF17BFF (288 bytes)
@@ -45668,37 +45729,37 @@ DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8:
 	.byte 0x02, 0x0f	; F1A0CE  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
-	.long 0x00F1A231	; +7  -> 0xF1A231
+	.long StringTable_Pt1Pt2Pt3Pt4Pt5Pt6Pt7 + 0x4	; +7  -> 0xF1A231
 	.byte 0x04, 0x00, 0x21, 0x0d	; +11  '..!.'
 	.byte 0x02, 0x0f	; F1A0DD  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
-	.long 0x00F1A235	; +7  -> 0xF1A235
+	.long StringTable_Pt1Pt2Pt3Pt4Pt5Pt6Pt7 + 0x8	; +7  -> 0xF1A235
 	.byte 0x04, 0x00, 0xa1, 0x0f	; +11  '....'
 	.byte 0x02, 0x0f	; F1A0EC  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
-	.long 0x00F1A239	; +7  -> 0xF1A239
+	.long StringTable_Pt1Pt2Pt3Pt4Pt5Pt6Pt7 + 0xC	; +7  -> 0xF1A239
 	.byte 0x04, 0x00, 0x21, 0x12	; +11  '..!.'
 	.byte 0x02, 0x0f	; F1A0FB  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
-	.long 0x00F1A23D	; +7  -> 0xF1A23D
+	.long StringTable_Pt1Pt2Pt3Pt4Pt5Pt6Pt7 + 0x10	; +7  -> 0xF1A23D
 	.byte 0x04, 0x00, 0xa1, 0x14	; +11  '....'
 	.byte 0x02, 0x0f	; F1A10A  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
-	.long 0x00F1A241	; +7  -> 0xF1A241
+	.long StringTable_Pt1Pt2Pt3Pt4Pt5Pt6Pt7 + 0x14	; +7  -> 0xF1A241
 	.byte 0x04, 0x00, 0x21, 0x17	; +11  '..!.'
 	.byte 0x02, 0x0f	; F1A119  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
-	.long 0x00F1A245	; +7  -> 0xF1A245
+	.long StringTable_Pt1Pt2Pt3Pt4Pt5Pt6Pt7 + 0x18	; +7  -> 0xF1A245
 	.byte 0x04, 0x00, 0xa1, 0x19	; +11  '....'
 	.byte 0x02, 0x0f	; F1A128  op 02, 15 bytes -> handler 0xF31B21
 	.short 0x2640		; +2  RAM variable
 	.byte 0x1f, 0x00, 0x20	; +4  mask, shift, swi 7 function
-	.long 0x00F1A249	; +7  -> 0xF1A249
+	.long StringTable_Pt1Pt2Pt3Pt4Pt5Pt6Pt7 + 0x1C	; +7  -> 0xF1A249
 	.byte 0x04, 0x00, 0x21, 0x1c	; +11  '..!.'
 
 ; --------------------------------------------------------------------------
@@ -47611,13 +47672,13 @@ PtrTable_F1B03F:
 ; --------------------------------------------------------------------------
 PtrTable_F1B04B:
 	.long RecordArray_F185FD                       ; F1B04B  [0]   -> RecordArray_F185FD
-	.long 0x00F1860E                       ; F1B04F  [1]   -> 0xF1860E (inside this span)
-	.long 0x00F1861F                       ; F1B053  [2]   -> 0xF1861F (inside this span)
-	.long 0x00F18630                       ; F1B057  [3]   -> 0xF18630 (inside this span)
-	.long 0x00F18641                       ; F1B05B  [4]   -> 0xF18641 (inside this span)
-	.long 0x00F18652                       ; F1B05F  [5]   -> 0xF18652 (inside this span)
-	.long 0x00F18663                       ; F1B063  [6]   -> 0xF18663 (inside this span)
-	.long 0x00F18674                       ; F1B067  [7]   -> 0xF18674 (inside this span)
+	.long RecordArray_F185FD + 0x11                       ; F1B04F  [1]   -> 0xF1860E (inside this span)
+	.long RecordArray_F185FD + 0x22                       ; F1B053  [2]   -> 0xF1861F (inside this span)
+	.long RecordArray_F185FD + 0x33                       ; F1B057  [3]   -> 0xF18630 (inside this span)
+	.long RecordArray_F185FD + 0x44                       ; F1B05B  [4]   -> 0xF18641 (inside this span)
+	.long RecordArray_F185FD + 0x55                       ; F1B05F  [5]   -> 0xF18652 (inside this span)
+	.long RecordArray_F185FD + 0x66                       ; F1B063  [6]   -> 0xF18663 (inside this span)
+	.long RecordArray_F185FD + 0x77                       ; F1B067  [7]   -> 0xF18674 (inside this span)
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1B06B -- pointer table, 0xF1B06B-0xF1B08A (32 bytes)
@@ -47627,13 +47688,13 @@ PtrTable_F1B04B:
 ; --------------------------------------------------------------------------
 PtrTable_F1B06B:
 	.long RecordArray_F18066                       ; F1B06B  [0]   -> RecordArray_F18066
-	.long 0x00F18077                       ; F1B06F  [1]   -> 0xF18077 (inside this span)
-	.long 0x00F18088                       ; F1B073  [2]   -> 0xF18088 (inside this span)
-	.long 0x00F18099                       ; F1B077  [3]   -> 0xF18099 (inside this span)
-	.long 0x00F180AA                       ; F1B07B  [4]   -> 0xF180AA (inside this span)
-	.long 0x00F180BB                       ; F1B07F  [5]   -> 0xF180BB (inside this span)
-	.long 0x00F180CC                       ; F1B083  [6]   -> 0xF180CC (inside this span)
-	.long 0x00F180DD                       ; F1B087  [7]   -> 0xF180DD (inside this span)
+	.long RecordArray_F18066 + 0x11                       ; F1B06F  [1]   -> 0xF18077 (inside this span)
+	.long RecordArray_F18066 + 0x22                       ; F1B073  [2]   -> 0xF18088 (inside this span)
+	.long RecordArray_F18066 + 0x33                       ; F1B077  [3]   -> 0xF18099 (inside this span)
+	.long RecordArray_F18066 + 0x44                       ; F1B07B  [4]   -> 0xF180AA (inside this span)
+	.long RecordArray_F18066 + 0x55                       ; F1B07F  [5]   -> 0xF180BB (inside this span)
+	.long RecordArray_F18066 + 0x66                       ; F1B083  [6]   -> 0xF180CC (inside this span)
+	.long RecordArray_F18066 + 0x77                       ; F1B087  [7]   -> 0xF180DD (inside this span)
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1B08B -- pointer table, 0xF1B08B-0xF1B0AA (32 bytes)
@@ -47643,13 +47704,13 @@ PtrTable_F1B06B:
 ; --------------------------------------------------------------------------
 PtrTable_F1B08B:
 	.long RecordArray_F180EE                       ; F1B08B  [0]   -> RecordArray_F180EE
-	.long 0x00F180FA                       ; F1B08F  [1]   -> 0xF180FA (inside this span)
-	.long 0x00F18106                       ; F1B093  [2]   -> 0xF18106 (inside this span)
-	.long 0x00F18112                       ; F1B097  [3]   -> 0xF18112 (inside this span)
-	.long 0x00F1811E                       ; F1B09B  [4]   -> 0xF1811E (inside this span)
-	.long 0x00F1812A                       ; F1B09F  [5]   -> 0xF1812A (inside this span)
-	.long 0x00F18136                       ; F1B0A3  [6]   -> 0xF18136 (inside this span)
-	.long 0x00F18142                       ; F1B0A7  [7]   -> 0xF18142 (inside this span)
+	.long RecordArray_F180EE + 0xC                       ; F1B08F  [1]   -> 0xF180FA (inside this span)
+	.long RecordArray_F180EE + 0x18                       ; F1B093  [2]   -> 0xF18106 (inside this span)
+	.long RecordArray_F180EE + 0x24                       ; F1B097  [3]   -> 0xF18112 (inside this span)
+	.long RecordArray_F180EE + 0x30                       ; F1B09B  [4]   -> 0xF1811E (inside this span)
+	.long RecordArray_F180EE + 0x3C                       ; F1B09F  [5]   -> 0xF1812A (inside this span)
+	.long RecordArray_F180EE + 0x48                       ; F1B0A3  [6]   -> 0xF18136 (inside this span)
+	.long RecordArray_F180EE + 0x54                       ; F1B0A7  [7]   -> 0xF18142 (inside this span)
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1B0AB -- pointer table, 0xF1B0AB-0xF1B0CA (32 bytes)
@@ -47659,13 +47720,13 @@ PtrTable_F1B08B:
 ; --------------------------------------------------------------------------
 PtrTable_F1B0AB:
 	.long RecordArray_F1870D                       ; F1B0AB  [0]   -> RecordArray_F1870D
-	.long 0x00F1871E                       ; F1B0AF  [1]   -> 0xF1871E (inside this span)
-	.long 0x00F1872F                       ; F1B0B3  [2]   -> 0xF1872F (inside this span)
-	.long 0x00F18740                       ; F1B0B7  [3]   -> 0xF18740 (inside this span)
-	.long 0x00F18751                       ; F1B0BB  [4]   -> 0xF18751 (inside this span)
-	.long 0x00F18762                       ; F1B0BF  [5]   -> 0xF18762 (inside this span)
-	.long 0x00F18773                       ; F1B0C3  [6]   -> 0xF18773 (inside this span)
-	.long 0x00F18784                       ; F1B0C7  [7]   -> 0xF18784 (inside this span)
+	.long RecordArray_F1870D + 0x11                       ; F1B0AF  [1]   -> 0xF1871E (inside this span)
+	.long RecordArray_F1870D + 0x22                       ; F1B0B3  [2]   -> 0xF1872F (inside this span)
+	.long RecordArray_F1870D + 0x33                       ; F1B0B7  [3]   -> 0xF18740 (inside this span)
+	.long RecordArray_F1870D + 0x44                       ; F1B0BB  [4]   -> 0xF18751 (inside this span)
+	.long RecordArray_F1870D + 0x55                       ; F1B0BF  [5]   -> 0xF18762 (inside this span)
+	.long RecordArray_F1870D + 0x66                       ; F1B0C3  [6]   -> 0xF18773 (inside this span)
+	.long RecordArray_F1870D + 0x77                       ; F1B0C7  [7]   -> 0xF18784 (inside this span)
 
 ; --------------------------------------------------------------------------
 ; IndexMap_F1B0CB -- index map, 0xF1B0CB-0xF1B0DA (16 bytes)
@@ -47735,13 +47796,13 @@ IndexMap_F1B0FB:
 ; --------------------------------------------------------------------------
 PtrTable_F1B10B:
 	.long RecordArray_F18685                       ; F1B10B  [0]   -> RecordArray_F18685
-	.long 0x00F18696                       ; F1B10F  [1]   -> 0xF18696 (inside this span)
-	.long 0x00F186A7                       ; F1B113  [2]   -> 0xF186A7 (inside this span)
-	.long 0x00F186B8                       ; F1B117  [3]   -> 0xF186B8 (inside this span)
-	.long 0x00F186C9                       ; F1B11B  [4]   -> 0xF186C9 (inside this span)
-	.long 0x00F186DA                       ; F1B11F  [5]   -> 0xF186DA (inside this span)
-	.long 0x00F186EB                       ; F1B123  [6]   -> 0xF186EB (inside this span)
-	.long 0x00F186FC                       ; F1B127  [7]   -> 0xF186FC (inside this span)
+	.long RecordArray_F18685 + 0x11                       ; F1B10F  [1]   -> 0xF18696 (inside this span)
+	.long RecordArray_F18685 + 0x22                       ; F1B113  [2]   -> 0xF186A7 (inside this span)
+	.long RecordArray_F18685 + 0x33                       ; F1B117  [3]   -> 0xF186B8 (inside this span)
+	.long RecordArray_F18685 + 0x44                       ; F1B11B  [4]   -> 0xF186C9 (inside this span)
+	.long RecordArray_F18685 + 0x55                       ; F1B11F  [5]   -> 0xF186DA (inside this span)
+	.long RecordArray_F18685 + 0x66                       ; F1B123  [6]   -> 0xF186EB (inside this span)
+	.long RecordArray_F18685 + 0x77                       ; F1B127  [7]   -> 0xF186FC (inside this span)
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1B12B -- pointer table, 0xF1B12B-0xF1B14A (32 bytes)
@@ -47751,13 +47812,13 @@ PtrTable_F1B10B:
 ; --------------------------------------------------------------------------
 PtrTable_F1B12B:
 	.long RecordArray_F18795                       ; F1B12B  [0]   -> RecordArray_F18795
-	.long 0x00F187A6                       ; F1B12F  [1]   -> 0xF187A6 (inside this span)
-	.long 0x00F187B7                       ; F1B133  [2]   -> 0xF187B7 (inside this span)
-	.long 0x00F187C8                       ; F1B137  [3]   -> 0xF187C8 (inside this span)
-	.long 0x00F187D9                       ; F1B13B  [4]   -> 0xF187D9 (inside this span)
-	.long 0x00F187EA                       ; F1B13F  [5]   -> 0xF187EA (inside this span)
-	.long 0x00F187FB                       ; F1B143  [6]   -> 0xF187FB (inside this span)
-	.long 0x00F1880C                       ; F1B147  [7]   -> 0xF1880C (inside this span)
+	.long RecordArray_F18795 + 0x11                       ; F1B12F  [1]   -> 0xF187A6 (inside this span)
+	.long RecordArray_F18795 + 0x22                       ; F1B133  [2]   -> 0xF187B7 (inside this span)
+	.long RecordArray_F18795 + 0x33                       ; F1B137  [3]   -> 0xF187C8 (inside this span)
+	.long RecordArray_F18795 + 0x44                       ; F1B13B  [4]   -> 0xF187D9 (inside this span)
+	.long RecordArray_F18795 + 0x55                       ; F1B13F  [5]   -> 0xF187EA (inside this span)
+	.long RecordArray_F18795 + 0x66                       ; F1B143  [6]   -> 0xF187FB (inside this span)
+	.long RecordArray_F18795 + 0x77                       ; F1B147  [7]   -> 0xF1880C (inside this span)
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1B14B -- pointer table, 0xF1B14B-0xF1B1A6 (92 bytes)
@@ -57057,7 +57118,7 @@ DL_GroupCombiDisplayHoldGr0up:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F2B908	; +0x07 -> XIY: string table
+	.long DL_GroupCombiDisplayHoldGr0up + 0x1D2	; +0x07 -> XIY: string table
 	.short 0x0004	; +0x0B -> BC: bytes per entry
 	.short 0x0124	; +0x0D -> IX
 ; 65 x 4-byte entries, +0x00 of the string table above
@@ -63611,34 +63672,34 @@ ValueGlyph_Quantiser:
 ;     0xF31E6D + 29*4 = 0xF31EE1 = the first bitmap, so the count is not a guess.
 ValueGlyph_Table:
 	.long ValueGlyph_Bitmaps	; step  0
-	.long 0x00F31F29	; step  1
-	.long 0x00F31F71	; step  2
-	.long 0x00F31FB9	; step  3
-	.long 0x00F32001	; step  4
-	.long 0x00F32049	; step  5
-	.long 0x00F32091	; step  6
-	.long 0x00F320D9	; step  7
-	.long 0x00F32121	; step  8
-	.long 0x00F32169	; step  9
-	.long 0x00F321B1	; step 10
-	.long 0x00F321F9	; step 11
-	.long 0x00F32241	; step 12
-	.long 0x00F32289	; step 13
-	.long 0x00F322D1	; step 14
-	.long 0x00F32319	; step 15
-	.long 0x00F32361	; step 16
-	.long 0x00F323A9	; step 17
-	.long 0x00F323F1	; step 18
-	.long 0x00F32439	; step 19
-	.long 0x00F32481	; step 20
-	.long 0x00F324C9	; step 21
-	.long 0x00F32511	; step 22
-	.long 0x00F32559	; step 23
-	.long 0x00F325A1	; step 24
-	.long 0x00F325E9	; step 25
-	.long 0x00F32631	; step 26
-	.long 0x00F32679	; step 27
-	.long 0x00F326C1	; step 28
+	.long ValueGlyph_Bitmaps + 0x48	; step  1
+	.long ValueGlyph_Bitmaps + 0x90	; step  2
+	.long ValueGlyph_Bitmaps + 0xD8	; step  3
+	.long ValueGlyph_Bitmaps + 0x120	; step  4
+	.long ValueGlyph_Bitmaps + 0x168	; step  5
+	.long ValueGlyph_Bitmaps + 0x1B0	; step  6
+	.long ValueGlyph_Bitmaps + 0x1F8	; step  7
+	.long ValueGlyph_Bitmaps + 0x240	; step  8
+	.long ValueGlyph_Bitmaps + 0x288	; step  9
+	.long ValueGlyph_Bitmaps + 0x2D0	; step 10
+	.long ValueGlyph_Bitmaps + 0x318	; step 11
+	.long ValueGlyph_Bitmaps + 0x360	; step 12
+	.long ValueGlyph_Bitmaps + 0x3A8	; step 13
+	.long ValueGlyph_Bitmaps + 0x3F0	; step 14
+	.long ValueGlyph_Bitmaps + 0x438	; step 15
+	.long ValueGlyph_Bitmaps + 0x480	; step 16
+	.long ValueGlyph_Bitmaps + 0x4C8	; step 17
+	.long ValueGlyph_Bitmaps + 0x510	; step 18
+	.long ValueGlyph_Bitmaps + 0x558	; step 19
+	.long ValueGlyph_Bitmaps + 0x5A0	; step 20
+	.long ValueGlyph_Bitmaps + 0x5E8	; step 21
+	.long ValueGlyph_Bitmaps + 0x630	; step 22
+	.long ValueGlyph_Bitmaps + 0x678	; step 23
+	.long ValueGlyph_Bitmaps + 0x6C0	; step 24
+	.long ValueGlyph_Bitmaps + 0x708	; step 25
+	.long ValueGlyph_Bitmaps + 0x750	; step 26
+	.long ValueGlyph_Bitmaps + 0x798	; step 27
+	.long ValueGlyph_Bitmaps + 0x7E0	; step 28
 
 ; --- 0xF31EE1: the 29 bitmaps themselves, 3 bytes x 24 rows = 72 bytes each.
 ;     29 * 72 = 2088, and 0xF31EE1 + 2088 = 0xF32709 -- the end of this block.
@@ -63922,17 +63983,17 @@ Data_F3281C:
 	.short 0x0003
 	.short 0x000A
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01938
+	.long Data_F0191A + 0x1E
 	.short 0x0EDE
 	.short 0x0003
 	.short 0x000A
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01956
+	.long Data_F0191A + 0x3C
 	.short 0x13B6
 	.short 0x0003
 	.short 0x000A
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
-	.long 0x00F01974
+	.long Data_F0191A + 0x5A
 	.short 0x18B6
 	.short 0x0003
 	.short 0x000A
@@ -63972,7 +64033,7 @@ DL_F328DC:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F32A5A	; +0x07 -> XIY: string table
+	.long Data_F32A4E + 0xC	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x0D4F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -63980,7 +64041,7 @@ DL_F328DC:
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x02	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F32A5A	; +0x07 -> XIY: string table
+	.long Data_F32A4E + 0xC	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1277	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -63988,7 +64049,7 @@ DL_F328DC:
 	.byte 0x30	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F32A5A	; +0x07 -> XIY: string table
+	.long Data_F32A4E + 0xC	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x174F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -63996,7 +64057,7 @@ DL_F328DC:
 	.byte 0xC0	; +0x04 AND mask
 	.byte 0x06	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F32A5A	; +0x07 -> XIY: string table
+	.long Data_F32A4E + 0xC	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1C4F	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -64072,7 +64133,7 @@ DL_F32987:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F32AAF	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F32A87 + 0x28	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF32992-0xF32A7D ===
 ; 0xF32992-0xF32A7C, coverage round 1: 158 of this span's 235 bytes are
@@ -64130,7 +64191,7 @@ DL_F329FA:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F32A6F	; +0x07 -> XIY: string table
+	.long Data_F32A4E + 0x21	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x0D4F	; +0x0D -> IX
 
@@ -64151,7 +64212,7 @@ DL_F329FA:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F32A6F	; +0x07 -> XIY: string table
+	.long Data_F32A4E + 0x21	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1277	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -64159,7 +64220,7 @@ DL_F329FA:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F32A6F	; +0x07 -> XIY: string table
+	.long Data_F32A4E + 0x21	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x174F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -64167,7 +64228,7 @@ DL_F329FA:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F32A6F	; +0x07 -> XIY: string table
+	.long Data_F32A4E + 0x21	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1C4F	; +0x0D -> IX
 
@@ -64193,9 +64254,9 @@ Data_F32A36:
 	.byte	0x29, 0xF3, 0x00	; F32A37  top 3 bytes of the entry at F32A36 = 0x00F329FA
 	.long	DL_F329FA	; F32A3A  entry 1
 	.long	DL_F329FA	; F32A3E  entry 2
-	.long	0x00F32A09	; F32A42  entry 3
-	.long	0x00F32A18	; F32A46  entry 4
-	.long	0x00F32A27	; F32A4A  entry 5
+	.long	DL_F329FA + 0xF	; F32A42  entry 3
+	.long	DL_F329FA + 0x1E	; F32A46  entry 4
+	.long	DL_F329FA + 0x2D	; F32A4A  entry 5
 
 ; --------------------------------------------------------------------------
 ; Data_F32A4E -- 47 bytes, EMITTED AS DATA (not promoted to code).
@@ -64268,7 +64329,7 @@ DL_F32AD7:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2292	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -64276,7 +64337,7 @@ DL_F32AD7:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x2298	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -64284,7 +64345,7 @@ DL_F32AD7:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -64292,7 +64353,7 @@ DL_F32AD7:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A2	; +0x0D -> IX
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
@@ -64330,8 +64391,8 @@ Data_F32B1E:
 ;     5-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x2A, 0xF3, 0x00	; F32B27  top 3 bytes of the entry at F32B26 = 0x00F32AD7
-	.long	0x00F32AF5	; F32B2A  entry 3
-	.long	0x00F32B04	; F32B2E  entry 4
+	.long	DL_F32AD7 + 0x1E	; F32B2A  entry 3
+	.long	DL_F32AD7 + 0x2D	; F32B2E  entry 4
 
 ; === END COVER-R1 0xF32B1E-0xF32B32 ===
 
@@ -64477,7 +64538,7 @@ DL_F32BAB:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229D	; +0x0D -> IX
 	.byte 0x05, 0x0B	; B op 05, 11 bytes -> handler 0xF31BD7 -- decimal readout, signed (0xF8BCC9 via T_F41AF8), buffer 0x2660
@@ -64544,10 +64605,10 @@ Data_F32C02:
 ;     bytes of that entry inside the span stay `.byte`
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x2B, 0xF3, 0x00	; F32C0F  top 3 bytes of the entry at F32C0E = 0x00F32BD0
-	.long	0x00F32BDB	; F32C12  entry 4
-	.long	0x00F32BE6	; F32C16  entry 5
-	.long	0x00F32BF1	; F32C1A  entry 6
-	.long	0x00F32BF1	; F32C1E  entry 7
+	.long	DL_F32BAB + 0x30	; F32C12  entry 4
+	.long	DL_F32BAB + 0x3B	; F32C16  entry 5
+	.long	DL_F32BAB + 0x46	; F32C1A  entry 6
+	.long	DL_F32BAB + 0x46	; F32C1E  entry 7
 	.byte	0xF1, 0x2B, 0xF3	; F32C22  past the array: 0xF1 trailing bytes
 
 ; --------------------------------------------------------------------------
@@ -64984,7 +65045,7 @@ DL_F32F43:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0BBA	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -64992,7 +65053,7 @@ DL_F32F43:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x115A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65000,7 +65061,7 @@ DL_F32F43:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0BD1	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65008,7 +65069,7 @@ DL_F32F43:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1171	; +0x0D -> IX
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
@@ -65022,13 +65083,13 @@ DL_F32F43:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F333BC	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F33394 + 0x28	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x27B5	; +0x02 source variable, 16-bit address
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F333EC	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F33394 + 0x58	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F32FA0:
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
 	.short 0x27B1	; +0x02 source variable, 16-bit address
@@ -65042,7 +65103,7 @@ DL_F32FA0:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33016	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x30	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x229F	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65050,7 +65111,7 @@ DL_F32FA0:
 	.byte 0x0C	; +0x04 AND mask
 	.byte 0x02	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33016	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x30	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A3	; +0x0D -> IX
 DL_F32FC8:
@@ -65059,7 +65120,7 @@ DL_F32FC8:
 	.byte 0x30	; +0x04 AND mask
 	.byte 0x04	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33016	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x30	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22A7	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65067,7 +65128,7 @@ DL_F32FC8:
 	.byte 0xC0	; +0x04 AND mask
 	.byte 0x06	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33016	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x30	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22AB	; +0x0D -> IX
 
@@ -65237,7 +65298,7 @@ DL_F3341C:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x064A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65245,7 +65306,7 @@ DL_F3341C:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0B4A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65253,7 +65314,7 @@ DL_F3341C:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x0B58	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65261,7 +65322,7 @@ DL_F3341C:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x109A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65269,7 +65330,7 @@ DL_F3341C:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x10A8	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65277,7 +65338,7 @@ DL_F3341C:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1B12	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65285,7 +65346,7 @@ DL_F3341C:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x1B20	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65293,7 +65354,7 @@ DL_F3341C:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x159A	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -65301,7 +65362,7 @@ DL_F3341C:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F33022	; +0x07 -> XIY: string table
+	.long Data_F32FE6 + 0x3C	; +0x07 -> XIY: string table
 	.short 0x000D	; +0x0B -> BC: bytes per entry
 	.short 0x15A8	; +0x0D -> IX
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
@@ -65391,7 +65452,7 @@ DL_F33538:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1C	; +0x06 swi 7 function
-	.long 0x00F05B60	; +0x07 -> XIY: string table
+	.long Data_F05AB4 + 0xAC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0020	; +0x0D -> (0x2530)
 	.short 0x00D6	; +0x0F -> (0x2532)
@@ -65707,7 +65768,7 @@ DL_F33796:
 	.byte 0x80	; +0x04 AND mask
 	.byte 0x07	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F034D8	; +0x07 -> XIY: string table
+	.long Data_F034C6 + 0x12	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x227F	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -65861,7 +65922,7 @@ DL_F33858:
 	.byte 0x20	; +0x04 AND mask
 	.byte 0x05	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F034D2	; +0x07 -> XIY: string table
+	.long Data_F034C6 + 0xC	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1D70	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -65938,8 +65999,8 @@ Data_F338A5:
 ;     9-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x38, 0xF3, 0x00	; F338BE  top 3 bytes of the entry at F338BD = 0x00F338D3
-	.long	0x00F3388F	; F338C1  entry 7
-	.long	0x00F3389A	; F338C5  entry 8
+	.long	DL_F33858 + 0x37	; F338C1  entry 7
+	.long	DL_F33858 + 0x42	; F338C5  entry 8
 
 ; === END COVER-R1 0xF338A5-0xF338C9 ===
 
@@ -66431,13 +66492,13 @@ Data_F33B8C:
 ;     19-entry pointer array
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x3A, 0xF3, 0x00	; F33BB5  top 3 bytes of the entry at F33BB4 = 0x00F33AD6
-	.long	0x00F33AE3	; F33BB8  entry 11
-	.long	0x00F33AEF	; F33BBC  entry 12
-	.long	0x00F33AFC	; F33BC0  entry 13
+	.long	DL_F33A71 + 0x72	; F33BB8  entry 11
+	.long	DL_F33A71 + 0x7E	; F33BBC  entry 12
+	.long	DL_F33A71 + 0x8B	; F33BC0  entry 13
 	.long	DL_F33B09	; F33BC4  entry 14
-	.long	0x00F33B27	; F33BC8  entry 15
-	.long	0x00F33B45	; F33BCC  entry 16
-	.long	0x00F33B63	; F33BD0  entry 17
+	.long	DL_F33B09 + 0x1E	; F33BC8  entry 15
+	.long	DL_F33B09 + 0x3C	; F33BCC  entry 16
+	.long	DL_F33B09 + 0x5A	; F33BD0  entry 17
 	.long	DL_F33B81	; F33BD4  entry 18
 
 ; === END COVER-R1 0xF33B8C-0xF33BD8 ===
@@ -67379,7 +67440,7 @@ DL_MasterSongMeasure:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F349C1	; +0x07 -> XIY: string table
+	.long Data_F349BB + 0x6	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0B2C	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -68241,7 +68302,7 @@ DL_CycleMasterS0ngMeasureTimeSig:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x20	; +0x06 swi 7 function
-	.long 0x00F349C1	; +0x07 -> XIY: string table
+	.long Data_F349BB + 0x6	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x11A3	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -69108,13 +69169,13 @@ DL_F34FF2:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F35035 + 0x6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x12F6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F35035 + 0x6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF35035-0xF3505B ===
 ; 0xF35035-0xF3505A, coverage round 1: 7 of this span's 38 bytes are reachable
@@ -69358,13 +69419,13 @@ DL_F351A7:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F35035 + 0x6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x12F6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F35035 + 0x6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF351F9-0xF35208 ===
 ; 0xF351F9-0xF35207, coverage round 1: 4 of this span's 15 bytes are reachable
@@ -69533,13 +69594,13 @@ DL_F352F9:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F35035 + 0x6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x12F6	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long 0x00F3503B	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F35035 + 0x6	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3533C-0xF35342 ===
 ; 0xF3533C-0xF35341, coverage round 1: 6 of this span's 6 bytes are reachable
@@ -72673,7 +72734,7 @@ sub_F38843:		; <- T_F42664
 	pushw	hl	; F38847  push HL
 	pushw	de	; F38848  push DE
 	push	xix	; F38849  push XIX
-	lda	xix, (15960585:24)	; F3884A  lda XIX,0xf38a09
+	lda	xix, (sub_F38A09:24)	; F3884A  lda XIX,0xf38a09
 	m_set 4, MD16, 0x21e7	; F3884F  set 4,(0x21e7)
 	push	xde	; F38853  push XDE
 	push	xhl	; F38854  push XHL
@@ -72695,9 +72756,10 @@ sub_F38843:		; <- T_F42664
 	sub	bc, 30208	; F3887C  sub BC,0x7600
 	pushw	bc	; F38880  push BC
 	pushw	0	; F38881  push 0x0000
-	lda	xiy, (15960204:24)	; F38884  lda XIY,0xf3888c
+	lda	xiy, (sub_F3888C:24)	; F38884  lda XIY,0xf3888c
 	push	xiy	; F38889  push XIY
 	jp	(xix)	; F3888A  jp T,XIX
+sub_F3888C:
 	ldw	bc, 30880	; F3888C  ld BC,0x78a0
 	sub	bc, 30208	; F3888F  sub BC,0x7600
 	ld	hl, bc	; F38893  ld HL,BC
@@ -72705,14 +72767,16 @@ sub_F38843:		; <- T_F42664
 	sub	wa, 30208	; F38898  sub WA,0x7600
 	pushw	wa	; F3889C  push WA
 	pushw	bc	; F3889D  push BC
-	lda	xiy, (15960230:24)	; F3889E  lda XIY,0xf388a6
+	lda	xiy, (sub_F388A6:24)	; F3889E  lda XIY,0xf388a6
 	push	xiy	; F388A3  push XIY
 	jp	(xix)	; F388A4  jp T,XIX
+sub_F388A6:
 	pushw	2	; F388A6  push 0x0002
 	pushw	2276	; F388A9  push 0x08e4
-	lda	xiy, (15960244:24)	; F388AC  lda XIY,0xf388b4
+	lda	xiy, (sub_F388B4:24)	; F388AC  lda XIY,0xf388b4
 	push	xiy	; F388B1  push XIY
 	jp	(xix)	; F388B2  jp T,XIX
+sub_F388B4:
 	ld	d, 0:opc	; F388B4  ld D,0x00
 	inc	8, xsp	; F388B6  inc 0,XSP
 	inc	4, xsp	; F388B8  inc 4,XSP
@@ -72745,9 +72809,10 @@ Divide32_Unsigned_Remainder_Skip3:
 Divide32_Unsigned_Remainder_Join2:
 	pushw	64	; F388F7  push 0x0040
 	pushw	hl	; F388FA  push HL
-	lda	xiy, (15960323:24)	; F388FB  lda XIY,0xf38903
+	lda	xiy, (sub_F38903:24)	; F388FB  lda XIY,0xf38903
 	push	xiy	; F38900  push XIY
 	jp	(xix)	; F38901  jp T,XIX
+sub_F38903:
 	pop	xiy	; F38903  pop XIY
 Divide32_Unsigned_Remainder_Skip4:
 	inc	1, d	; F38904  inc 1,D
@@ -72896,6 +72961,7 @@ sub_F389A2_Skip:
 	popw	hl	; F38A05  pop HL
 	unlk XIZ	; F38A06  unlk XIZ
 	ret	; F38A08  ret
+sub_F38A09:
 	link XIZ,0xfffc	; F38A09  link XIZ,0xfffc
 	pushw	hl	; F38A0D  push HL
 	push	xix	; F38A0E  push XIX
@@ -72957,7 +73023,7 @@ sub_F38A79:
 	pushw	hl	; F38A7D  push HL
 	pushw	de	; F38A7E  push DE
 	push	xix	; F38A7F  push XIX
-	lda	xix, (15960890:24)	; F38A80  lda XIX,0xf38b3a
+	lda	xix, (sub_F38B3A:24)	; F38A80  lda XIX,0xf38b3a
 	ldw	(6328580:24), 0	; F38A85  ld (0x609104),0x0000
 	ldw	hl, 30383	; F38A8C  ld HL,0x76af
 	ldw	de, 30417	; F38A8F  ld DE,0x76d1
@@ -72966,15 +73032,17 @@ sub_F38A79_Loop:
 	pushw	9	; F38A96  push 0x0009
 	ld	(xiz-3), hl	; F38A99  ld (XIZ+0xfd),HL
 	m_push MWD+r6, 0xfd	; F38A9C  pushw (XIZ+0xfd)
-	lda	xiy, (15960743:24)	; F38A9F  lda XIY,0xf38aa7
+	lda	xiy, (sub_F38AA7:24)	; F38A9F  lda XIY,0xf38aa7
 	push	xiy	; F38AA4  push XIY
 	jp	(xix)	; F38AA5  jp T,XIX
+sub_F38AA7:
 	pushw	9	; F38AA7  push 0x0009
 	ld	(xiz-5), de	; F38AAA  ld (XIZ+0xfb),DE
 	m_push MWD+r6, 0xfb	; F38AAD  pushw (XIZ+0xfb)
-	lda	xiy, (15960760:24)	; F38AB0  lda XIY,0xf38ab8
+	lda	xiy, (sub_F38AB8:24)	; F38AB0  lda XIY,0xf38ab8
 	push	xiy	; F38AB5  push XIY
 	jp	(xix)	; F38AB6  jp T,XIX
+sub_F38AB8:
 	ld	hl, (xiz-3)	; F38AB8  ld HL,(XIZ+0xfd)
 	add	hl, 64	; F38ABB  add HL,0x0040
 	ld	de, (xiz-5)	; F38ABF  ld DE,(XIZ+0xfb)
@@ -72990,15 +73058,17 @@ sub_F38A79_Loop2:
 	pushw	9	; F38ADB  push 0x0009
 	ld	(xiz-3), hl	; F38ADE  ld (XIZ+0xfd),HL
 	m_push MWD+r6, 0xfd	; F38AE1  pushw (XIZ+0xfd)
-	lda	xiy, (15960812:24)	; F38AE4  lda XIY,0xf38aec
+	lda	xiy, (sub_F38AEC:24)	; F38AE4  lda XIY,0xf38aec
 	push	xiy	; F38AE9  push XIY
 	jp	(xix)	; F38AEA  jp T,XIX
+sub_F38AEC:
 	pushw	9	; F38AEC  push 0x0009
 	ld	(xiz-5), de	; F38AEF  ld (XIZ+0xfb),DE
 	m_push MWD+r6, 0xfb	; F38AF2  pushw (XIZ+0xfb)
-	lda	xiy, (15960829:24)	; F38AF5  lda XIY,0xf38afd
+	lda	xiy, (sub_F38AFD:24)	; F38AF5  lda XIY,0xf38afd
 	push	xiy	; F38AFA  push XIY
 	jp	(xix)	; F38AFB  jp T,XIX
+sub_F38AFD:
 	ld	hl, (xiz-3)	; F38AFD  ld HL,(XIZ+0xfd)
 	add	hl, 64	; F38B00  add HL,0x0040
 	ld	de, (xiz-5)	; F38B04  ld DE,(XIZ+0xfb)
@@ -73009,20 +73079,23 @@ sub_F38A79_Loop2:
 	jr	nz, sub_F38A79_Loop2	; F38B14  jr NZ,0xf38adb
 	pushw	11	; F38B16  push 0x000b
 	pushw	32562	; F38B19  push 0x7f32
-	lda	xiy, (15960868:24)	; F38B1C  lda XIY,0xf38b24
+	lda	xiy, (sub_F38B24:24)	; F38B1C  lda XIY,0xf38b24
 	push	xiy	; F38B21  push XIY
 	jp	(xix)	; F38B22  jp T,XIX
+sub_F38B24:
 	pushw	1	; F38B24  push 0x0001
 	pushw	32589	; F38B27  push 0x7f4d
-	lda	xiy, (15960882:24)	; F38B2A  lda XIY,0xf38b32
+	lda	xiy, (sub_F38B32:24)	; F38B2A  lda XIY,0xf38b32
 	push	xiy	; F38B2F  push XIY
 	jp	(xix)	; F38B30  jp T,XIX
+sub_F38B32:
 	inc	8, xsp	; F38B32  inc 0,XSP
 	pop	xix	; F38B34  pop XIX
 	popw	de	; F38B35  pop DE
 	popw	hl	; F38B36  pop HL
 	unlk XIZ	; F38B37  unlk XIZ
 	ret	; F38B39  ret
+sub_F38B3A:
 	link XIZ,0xfff4	; F38B3A  link XIZ,0xfff4
 	pushw	hl	; F38B3E  push HL
 	push	xix	; F38B3F  push XIX
@@ -73082,15 +73155,17 @@ sub_F38B8E_Loop:
 	pushw	9	; F38BAB  push 0x0009
 	ld	(xiz-3), hl	; F38BAE  ld (XIZ+0xfd),HL
 	m_push MWD+r6, 0xfd	; F38BB1  pushw (XIZ+0xfd)
-	lda	xiy, (15961020:24)	; F38BB4  lda XIY,0xf38bbc
+	lda	xiy, (sub_F38BBC:24)	; F38BB4  lda XIY,0xf38bbc
 	push	xiy	; F38BB9  push XIY
 	jp	(xix)	; F38BBA  jp T,XIX
+sub_F38BBC:
 	pushw	9	; F38BBC  push 0x0009
 	ld	(xiz-5), de	; F38BBF  ld (XIZ+0xfb),DE
 	m_push MWD+r6, 0xfb	; F38BC2  pushw (XIZ+0xfb)
-	lda	xiy, (15961037:24)	; F38BC5  lda XIY,0xf38bcd
+	lda	xiy, (sub_F38BCD:24)	; F38BC5  lda XIY,0xf38bcd
 	push	xiy	; F38BCA  push XIY
 	jp	(xix)	; F38BCB  jp T,XIX
+sub_F38BCD:
 	ld	hl, (xiz-3)	; F38BCD  ld HL,(XIZ+0xfd)
 	add	hl, 64	; F38BD0  add HL,0x0040
 	ld	de, (xiz-5)	; F38BD4  ld DE,(XIZ+0xfb)
@@ -73106,15 +73181,17 @@ sub_F38B8E_Loop2:
 	pushw	9	; F38BF0  push 0x0009
 	ld	(xiz-3), hl	; F38BF3  ld (XIZ+0xfd),HL
 	m_push MWD+r6, 0xfd	; F38BF6  pushw (XIZ+0xfd)
-	lda	xiy, (15961089:24)	; F38BF9  lda XIY,0xf38c01
+	lda	xiy, (sub_F38C01:24)	; F38BF9  lda XIY,0xf38c01
 	push	xiy	; F38BFE  push XIY
 	jp	(xix)	; F38BFF  jp T,XIX
+sub_F38C01:
 	pushw	9	; F38C01  push 0x0009
 	ld	(xiz-5), de	; F38C04  ld (XIZ+0xfb),DE
 	m_push MWD+r6, 0xfb	; F38C07  pushw (XIZ+0xfb)
-	lda	xiy, (15961106:24)	; F38C0A  lda XIY,0xf38c12
+	lda	xiy, (sub_F38C12:24)	; F38C0A  lda XIY,0xf38c12
 	push	xiy	; F38C0F  push XIY
 	jp	(xix)	; F38C10  jp T,XIX
+sub_F38C12:
 	ld	hl, (xiz-3)	; F38C12  ld HL,(XIZ+0xfd)
 	add	hl, 64	; F38C15  add HL,0x0040
 	ld	de, (xiz-5)	; F38C19  ld DE,(XIZ+0xfb)
@@ -73125,14 +73202,16 @@ sub_F38B8E_Loop2:
 	jr	nz, sub_F38B8E_Loop2	; F38C29  jr NZ,0xf38bf0
 	pushw	11	; F38C2B  push 0x000b
 	pushw	32562	; F38C2E  push 0x7f32
-	lda	xiy, (15961145:24)	; F38C31  lda XIY,0xf38c39
+	lda	xiy, (sub_F38C39:24)	; F38C31  lda XIY,0xf38c39
 	push	xiy	; F38C36  push XIY
 	jp	(xix)	; F38C37  jp T,XIX
+sub_F38C39:
 	pushw	1	; F38C39  push 0x0001
 	pushw	32589	; F38C3C  push 0x7f4d
-	lda	xiy, (15961159:24)	; F38C3F  lda XIY,0xf38c47
+	lda	xiy, (sub_F38C47:24)	; F38C3F  lda XIY,0xf38c47
 	push	xiy	; F38C44  push XIY
 	jp	(xix)	; F38C45  jp T,XIX
+sub_F38C47:
 	inc	8, xsp	; F38C47  inc 0,XSP
 	pop	xix	; F38C49  pop XIX
 	popw	de	; F38C4A  pop DE
@@ -75044,7 +75123,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B59	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75052,7 +75131,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B5E	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75060,7 +75139,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B63	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75068,7 +75147,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B68	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75076,7 +75155,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B6D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75084,7 +75163,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B72	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75092,7 +75171,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B77	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75100,7 +75179,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1B7C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75108,7 +75187,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22B1	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75116,7 +75195,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22B6	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75124,7 +75203,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22BB	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75132,7 +75211,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22C0	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75140,7 +75219,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22C5	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75148,7 +75227,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22CA	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75156,7 +75235,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22CF	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -75164,7 +75243,7 @@ DL_F3A1CF:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
-	.long 0x00F395A2	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0x49	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x22D4	; +0x0D -> IX
 ; DL_TrackAssignPresetsTechnicsSetUp1116 -- the display list at 0xF3A2BF.  Its
@@ -75747,7 +75826,7 @@ DL_LastMeasure:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C1C	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -76062,7 +76141,7 @@ DL_F3A9DA:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x067C	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -76070,7 +76149,7 @@ DL_F3A9DA:
 	.byte 0x03	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3AA3F	; +0x07 -> XIY: string table
+	.long Data_F3AA17 + 0x28	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x17AC	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -76228,7 +76307,7 @@ DL_F3AB3B:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x06A4	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -76476,7 +76555,7 @@ DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0651	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -76484,7 +76563,7 @@ DL_TrackValueFirstMeasureLastMeasureStrengthWindow:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3AD7A	; +0x07 -> XIY: string table
+	.long Data_F3AD42 + 0x38	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x1751	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -76781,7 +76860,7 @@ DL_F3AFE7:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x0B79	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -76789,7 +76868,7 @@ DL_F3AFE7:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3B095	; +0x07 -> XIY: string table
+	.long Data_F3B065 + 0x30	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x0C9B	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -76797,7 +76876,7 @@ DL_F3AFE7:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3B0AD	; +0x07 -> XIY: string table
+	.long Data_F3B065 + 0x48	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x0C9D	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -76805,7 +76884,7 @@ DL_F3AFE7:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3B095	; +0x07 -> XIY: string table
+	.long Data_F3B065 + 0x30	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x12DB	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -76813,7 +76892,7 @@ DL_F3AFE7:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3B0AD	; +0x07 -> XIY: string table
+	.long Data_F3B065 + 0x48	; +0x07 -> XIY: string table
 	.short 0x0002	; +0x0B -> BC: bytes per entry
 	.short 0x12DD	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -77018,7 +77097,7 @@ DL_F3B1E3:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x06A4	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -77209,7 +77288,7 @@ DL_F3B379:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A6F9	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x20	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x06A4	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -77850,7 +77929,7 @@ Data_F3B7CD:
 ; notes/gen_prom_b_f3b7d4_module.py --splice
 ; ------------------------------------------------------------------
 Table_F3B7D4:
-	.long	0x00F3B7D8	; +0x00 purpose not established
+	.long	Table_F3B7D4 + 0x4	; +0x00 purpose not established
 	.short	0x000C	; +0x04 purpose not established
 	.short	0x006F	; +0x06 purpose not established
 	.short	0x002B	; +0x08 purpose not established
@@ -78029,7 +78108,7 @@ DL_F3BA91:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F39602	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0xA9	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x1256	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78037,7 +78116,7 @@ DL_F3BA91:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F39602	; +0x07 -> XIY: string table
+	.long Data_F39559 + 0xA9	; +0x07 -> XIY: string table
 	.short 0x0007	; +0x0B -> BC: bytes per entry
 	.short 0x125E	; +0x0D -> IX
 	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -78349,7 +78428,7 @@ DL_F3BD07:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C89	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78357,7 +78436,7 @@ DL_F3BD07:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C9E	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -78602,7 +78681,7 @@ DL_F3BEF7:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C89	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78610,7 +78689,7 @@ DL_F3BEF7:
 	.byte 0x1F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A72F	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0x56	; +0x07 -> XIY: string table
 	.short 0x0006	; +0x0B -> BC: bytes per entry
 	.short 0x0C9E	; +0x0D -> IX
 	.byte 0x06, 0x0A	; B op 06, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
@@ -78927,7 +79006,7 @@ DL_F3C17B:
 	.byte 0x7F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A7A1	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0xC8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1344	; +0x0D -> IX
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
@@ -78935,7 +79014,7 @@ DL_F3C17B:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x07	; +0x06 swi 7 function
-	.long 0x00F3A7A1	; +0x07 -> XIY: string table
+	.long Data_F3A6D9 + 0xC8	; +0x07 -> XIY: string table
 	.short 0x0003	; +0x0B -> BC: bytes per entry
 	.short 0x1355	; +0x0D -> IX
 
@@ -79714,13 +79793,13 @@ DL_FirstS0ngLastS0ng:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F3C7FB	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F3C7E3 + 0x18	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x1304	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F3C813	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long Data_F3C7E3 + 0x30	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF3C7AD-0xF3C7C2: not converted ---
 
@@ -80858,7 +80937,7 @@ StepSelectAddrTable_F3D089:
 	.long DL_F3DF6A	; [20] cond0 end[ 1]
 	.long DL_F3CCF1	; [21] cond0 end[ 2]
 	.long DL_F3CE47	; [22] cond0 end[ 3]
-	.long 0x00F3E363	; [23] cond0 end[ 4]
+	.long DL_F3E2EB + 0x78	; [23] cond0 end[ 4]
 	.long DL_F3E2EB	; [24] cond0 end[ 5]
 	.long DL_F3CD88	; [25] cond0 end[ 6]
 	.long DL_F3CC3A	; [26] cond0 end[ 7]
@@ -80893,10 +80972,10 @@ StepSelectAddrTable_F3D089:
 	.long DL_F3CE47	; [55] cond2 start[17]
 	.long DL_F3CFC6	; [56] cond2 start[18]
 	.long DL_F3CA8C	; [57] cond2 end[ 0]
-	.long 0x00F3E363	; [58] cond2 end[ 1]
+	.long DL_F3E2EB + 0x78	; [58] cond2 end[ 1]
 	.long DL_F3CCF1	; [59] cond2 end[ 2]
 	.long DL_F3CE47	; [60] cond2 end[ 3]
-	.long 0x00F3E363	; [61] cond2 end[ 4]
+	.long DL_F3E2EB + 0x78	; [61] cond2 end[ 4]
 	.long DL_F3E2EB	; [62] cond2 end[ 5]
 	.long DL_F3CD88	; [63] cond2 end[ 6]
 	.long DL_F3CC3A	; [64] cond2 end[ 7]
@@ -82123,13 +82202,13 @@ DL_F3DC00:
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x0E	; +0x06 swi 7 function
-	.long 0x00F3DC3F	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
+	.long Data_F3DC21 + 0x1E	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
 	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
 	.short 0x2642	; +0x02 source variable, 16-bit address
 	.byte 0xFF	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x0E	; +0x06 swi 7 function
-	.long 0x00F3DC5D	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
+	.long Data_F3DC21 + 0x3C	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3DC21-0xF3DE26 ===
 ; ⚠ CLOSED 2026-09-02 (lane promB4).  The verdict below -- "everything
@@ -86763,7 +86842,7 @@ sub_F44042:		; <- T_F44000
 	xor	hl, hl	; F4404B  xor HL,HL
 	jr	z, sub_F4403C_Skip	; F4404D  jr Z,0xf44070
 	jr	sub_F4403C_Join	; F4404F  jr T,0xf4408d
-	ld	xix, 16015498	; F44051  ld XIX,0x00f4608a
+	ld	xix, WorkspaceDefaults + 0x16	; F44051  ld XIX,0x00f4608a
 	mx_ld_rm MXL, ra_IX, ra_HL, 0	; F44056  ld XWA,(XIX+HL)
 	mx_st_mr32 MXD, ra_IY, ra_HL, 0	; F4405B  ld (XIY+HL),XWA
 	add	hl, 4	; F44060  add HL,0x0004
@@ -86771,7 +86850,7 @@ sub_F44042:		; <- T_F44000
 	mx_st_mr16 MXD, ra_IY, ra_HL, 0	; F44069  ld (XIY+HL),WA
 	jr	sub_F4403C_Join	; F4406E  jr T,0xf4408d
 sub_F4403C_Skip:
-	ld	xix, 16015492	; F44070  ld XIX,0x00f46084
+	ld	xix, WorkspaceDefaults + 0x10	; F44070  ld XIX,0x00f46084
 	mx_ld_rm MXL, ra_IX, ra_HL, 0	; F44075  ld XWA,(XIX+HL)
 	mx_st_mr32 MXD, ra_IY, ra_HL, 0	; F4407A  ld (XIY+HL),XWA
 	add	hl, 4	; F4407F  add HL,0x0004
@@ -87103,7 +87182,7 @@ sub_F442C4:
 	pushw	bc	; F442C6  push BC
 	ldw	bc, 3	; F442C7  ld BC,0x0003
 	ld	xix, 6304970	; F442CA  ld XIX,0x006034ca
-	ld	xiy, 16015589	; F442CF  ld XIY,0x00f460e5
+	ld	xiy, WorkspaceDefaults + 0x71	; F442CF  ld XIY,0x00f460e5
 	ldirw	; F442D4  ldirw
 	popw	bc	; F442D6  pop BC
 	pop	xiy	; F442D7  pop XIY
@@ -87128,11 +87207,11 @@ sub_F442DA_Loop:
 	ld	a, (6304967:24)	; F442E2  ld A,(0x6034c7)
 	and	a, 2	; F442E7  and A,0x02
 	jr	nz, sub_F442DA_Skip	; F442EA  jr NZ,0xf442f8
-	ld	xix, 16015538	; F442EC  ld XIX,0x00f460b2
+	ld	xix, WorkspaceDefaults + 0x3E	; F442EC  ld XIX,0x00f460b2
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F442F1  ld A,(XIX+IY)
 	jr	sub_F442DA_Join	; F442F6  jr T,0xf44302
 sub_F442DA_Skip:
-	ld	xix, 16015555	; F442F8  ld XIX,0x00f460c3
+	ld	xix, WorkspaceDefaults + 0x4F	; F442F8  ld XIX,0x00f460c3
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F442FD  ld A,(XIX+IY)
 sub_F442DA_Join:
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F44302  ld (XHL+IY),A
@@ -87156,7 +87235,7 @@ sub_F442DA_Loop2:
 	ld	xhl, 6304788	; F44335  ld XHL,0x00603414
 	xor	iy, iy	; F4433A  xor IY,IY
 sub_F442DA_Loop3:
-	ld	xix, 16015484	; F4433C  ld XIX,0x00f4607c
+	ld	xix, WorkspaceDefaults + 0x8	; F4433C  ld XIX,0x00f4607c
 	mx_ld_rm MXW, ra_IX, ra_IY, 0	; F44341  ld WA,(XIX+IY)
 	mx_st_mr16 MXD, ra_HL, ra_IY, 0	; F44346  ld (XHL+IY),WA
 	add	iy, 2	; F4434B  add IY,0x0002
@@ -87197,7 +87276,7 @@ sub_F44367_Loop:
 	ld	xhl, 6304788	; F4438B  ld XHL,0x00603414
 	xor	iy, iy	; F44390  xor IY,IY
 sub_F44367_Loop2:
-	ld	xix, 16015484	; F44392  ld XIX,0x00f4607c
+	ld	xix, WorkspaceDefaults + 0x8	; F44392  ld XIX,0x00f4607c
 	mx_ld_rm MXW, ra_IX, ra_IY, 0	; F44397  ld WA,(XIX+IY)
 	mx_st_mr16 MXD, ra_HL, ra_IY, 0	; F4439C  ld (XHL+IY),WA
 	add	iy, 2	; F443A1  add IY,0x0002
@@ -87294,7 +87373,7 @@ sub_F444E4:
 	push	xix	; F444E4  push XIX
 	ld	xhl, 6304802	; F444E5  ld XHL,0x00603422
 	xor	iy, iy	; F444EA  xor IY,IY
-	ld	xix, 16015504	; F444EC  ld XIX,0x00f46090
+	ld	xix, WorkspaceDefaults + 0x1C	; F444EC  ld XIX,0x00f46090
 sub_F444E4_Loop:
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F444F1  ld A,(XIX+IY)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F444F6  ld (XHL+IY),A
@@ -87531,7 +87610,7 @@ sub_F4466D_Skip:
 	ld	(3157:16), wa	; F446A6  ld (0x0c55),WA
 	xor	b, b	; F446AA  xor B,B
 	ld	iy, bc	; F446AC  ld IY,BC
-	ld	xix, 16015595	; F446AE  ld XIX,0x00f460eb
+	ld	xix, WorkspaceDefaults + 0x77	; F446AE  ld XIX,0x00f460eb
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F446B3  ld A,(XIX+IY)
 	st_dd8b	a, 147	; F446B8  ld (0x93),A
 	m_cp_mi16 MW8, 0x91, 0x0000	; F446BB  cp (0x91),0x0000
@@ -90593,7 +90672,7 @@ sub_F45D19:		; <- T_F40A2C
 	ld	xhl, 6304802	; F45D26  ld XHL,0x00603422
 	xor	iy, iy	; F45D2B  xor IY,IY
 sub_F45D19_Loop:
-	ld	xix, 16015521	; F45D2D  ld XIX,0x00f460a1
+	ld	xix, WorkspaceDefaults + 0x2D	; F45D2D  ld XIX,0x00f460a1
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F45D32  ld A,(XIX+IY)
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F45D37  ld (XHL+IY),A
 	inc	1, iy	; F45D3C  inc 1,IY
@@ -90605,11 +90684,11 @@ sub_F45D19_Loop2:
 	ld	a, (6304967:24)	; F45D4B  ld A,(0x6034c7)
 	and	a, 2	; F45D50  and A,0x02
 	jr	nz, sub_F45D19_Skip	; F45D53  jr NZ,0xf45d61
-	ld	xix, 16015538	; F45D55  ld XIX,0x00f460b2
+	ld	xix, WorkspaceDefaults + 0x3E	; F45D55  ld XIX,0x00f460b2
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F45D5A  ld A,(XIX+IY)
 	jr	sub_F45D19_Join	; F45D5F  jr T,0xf45d6b
 sub_F45D19_Skip:
-	ld	xix, 16015572	; F45D61  ld XIX,0x00f460d4
+	ld	xix, WorkspaceDefaults + 0x60	; F45D61  ld XIX,0x00f460d4
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F45D66  ld A,(XIX+IY)
 sub_F45D19_Join:
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F45D6B  ld (XHL+IY),A
@@ -90751,11 +90830,11 @@ sub_F45E14_Loop:
 	ld	a, (6304967:24)	; F45E1B  ld A,(0x6034c7)
 	and	a, 2	; F45E20  and A,0x02
 	jr	nz, sub_F45E14_Skip	; F45E23  jr NZ,0xf45e31
-	ld	xix, 16015538	; F45E25  ld XIX,0x00f460b2
+	ld	xix, WorkspaceDefaults + 0x3E	; F45E25  ld XIX,0x00f460b2
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F45E2A  ld A,(XIX+IY)
 	jr	sub_F45E14_Join	; F45E2F  jr T,0xf45e3b
 sub_F45E14_Skip:
-	ld	xix, 16015572	; F45E31  ld XIX,0x00f460d4
+	ld	xix, WorkspaceDefaults + 0x60	; F45E31  ld XIX,0x00f460d4
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F45E36  ld A,(XIX+IY)
 sub_F45E14_Join:
 	mx_st_mr8 MXD, ra_HL, ra_IY, 1	; F45E3B  ld (XHL+IY),A
@@ -94015,7 +94094,7 @@ sub_F48F75:
 	pop	xix	; F48F89  pop XIX
 	popw	hl	; F48F8A  pop HL
 	ret	; F48F8B  ret
-	lda	xbc, (16026644:24)	; F48F8C  lda XBC,0xf48c14
+	lda	xbc, (Table_WsaSoundRamS0Wsa1 + 0x14:24)	; F48F8C  lda XBC,0xf48c14
 	push	xbc	; F48F91  push XBC
 	pushw	6	; F48F92  push 0x0006
 	pushw	0	; F48F95  push 0x0000
@@ -98993,7 +99072,7 @@ sub_F4C46A_Skip:
 	and	c, 16	; F4C47D  and C,0x10
 	jr	nz, sub_F4C46A_Skip2	; F4C480  jr NZ,0xf4c499
 	call	T_CallbackQueue_ResetAndRestartTask2	; F4C482  call 0xf42e80
-	lda	xbc, (16041417:24)	; F4C486  lda XBC,0xf4c5c9
+	lda	xbc, (sub_F4C5C9:24)	; F4C486  lda XBC,0xf4c5c9
 	push	xbc	; F4C48B  push XBC
 	call	T_CallbackQueue_Post	; F4C48C  call 0xf42e84
 	pushw	1	; F4C490  push 0x0001
@@ -99001,7 +99080,7 @@ sub_F4C46A_Skip:
 	inc	6, xsp	; F4C497  inc 6,XSP
 sub_F4C46A_Skip2:
 	calr	sub_F4C684	; F4C499  calr 0xf4c684
-	lda	xbc, (16041484:24)	; F4C49C  lda XBC,0xf4c60c
+	lda	xbc, (sub_F4C60C:24)	; F4C49C  lda XBC,0xf4c60c
 	push	xbc	; F4C4A1  push XBC
 	call	T_CallbackQueue_Post	; F4C4A2  call 0xf42e84
 	pushw	1	; F4C4A6  push 0x0001
@@ -99045,9 +99124,10 @@ sub_F4C4B5:		; <- T_F434E8
 	extz	xwa	; F4C4C6  extz XWA
 	add	xwa, DispatchTable_F4C38D	; F4C4C8  add XWA,0x00f4c38d
 	ld	xbc, (xwa)	; F4C4CE  ld XBC,(XWA)
-	lda	xiy, (16041176:24)	; F4C4D0  lda XIY,0xf4c4d8
+	lda	xiy, (sub_F4C4D8:24)	; F4C4D0  lda XIY,0xf4c4d8
 	push	xiy	; F4C4D5  push XIY
 	jp	(xbc)	; F4C4D6  jp T,XBC
+sub_F4C4D8:
 	pop	xbc	; F4C4D8  pop XBC
 	unlk XIZ	; F4C4D9  unlk XIZ
 	ret	; F4C4DB  ret
@@ -99070,7 +99150,7 @@ sub_F4C4DC:		; <- T_F434EC
 sub_F4C4DD:
 	pushw	hl	; F4C4DD  push HL
 	push	xix	; F4C4DE  push XIX
-	lda	xix, (16041663:24)	; F4C4DF  lda XIX,0xf4c6bf
+	lda	xix, (sub_F4C6BF:24)	; F4C4DF  lda XIX,0xf4c6bf
 	ld	h, (8784:16)	; F4C4E4  ld H,(0x2250)
 	set	5, h	; F4C4E8  set 0x05,H
 	push	0	; F4C4EB  push 0x00
@@ -99087,9 +99167,10 @@ sub_F4C4DD:
 sub_F4C4DD_Skip:
 	push	0	; F4C505  push 0x00
 	m_push MB16, 0x28b1	; F4C507  push (0x28b1)
-	lda	xiy, (16041235:24)	; F4C50B  lda XIY,0xf4c513
+	lda	xiy, (sub_F4C513:24)	; F4C50B  lda XIY,0xf4c513
 	push	xiy	; F4C510  push XIY
 	jp	(xix)	; F4C511  jp T,XIX
+sub_F4C513:
 	ld	l, a	; F4C513  ld L,A
 	pushw	26	; F4C515  push 0x001a
 	push	0	; F4C518  push 0x00
@@ -99102,9 +99183,10 @@ sub_F4C4DD_Skip:
 	pushw	63	; F4C529  push 0x003f
 	push	0	; F4C52C  push 0x00
 	m_push MB16, 0x28b1	; F4C52E  push (0x28b1)
-	lda	xiy, (16041274:24)	; F4C532  lda XIY,0xf4c53a
+	lda	xiy, (sub_F4C53A:24)	; F4C532  lda XIY,0xf4c53a
 	push	xiy	; F4C537  push XIY
 	jp	(xix)	; F4C538  jp T,XIX
+sub_F4C53A:
 	popw	bc	; F4C53A  pop BC
 	pushw	wa	; F4C53B  push WA
 	pushw	26	; F4C53C  push 0x001a
@@ -99112,9 +99194,10 @@ sub_F4C4DD_Skip:
 sub_F4C4DD_Skip2:
 	push	0	; F4C541  push 0x00
 	m_push MB16, 0x28b1	; F4C543  push (0x28b1)
-	lda	xiy, (16041295:24)	; F4C547  lda XIY,0xf4c54f
+	lda	xiy, (sub_F4C54F:24)	; F4C547  lda XIY,0xf4c54f
 	push	xiy	; F4C54C  push XIY
 	jp	(xix)	; F4C54D  jp T,XIX
+sub_F4C54F:
 	ld	l, a	; F4C54F  ld L,A
 	pushw	25	; F4C551  push 0x0019
 	push	0	; F4C554  push 0x00
@@ -99127,9 +99210,10 @@ sub_F4C4DD_Skip2:
 	pushw	63	; F4C565  push 0x003f
 	push	0	; F4C568  push 0x00
 	m_push MB16, 0x28b1	; F4C56A  push (0x28b1)
-	lda	xiy, (16041334:24)	; F4C56E  lda XIY,0xf4c576
+	lda	xiy, (sub_F4C576:24)	; F4C56E  lda XIY,0xf4c576
 	push	xiy	; F4C573  push XIY
 	jp	(xix)	; F4C574  jp T,XIX
+sub_F4C576:
 	popw	bc	; F4C576  pop BC
 	pushw	wa	; F4C577  push WA
 	pushw	25	; F4C578  push 0x0019
@@ -99167,36 +99251,38 @@ sub_F4C5A2_Skip:
 	ld	(8304:16), 1	; F4C5C3  ld (0x2070),0x01
 sub_F4C5A2_Return:
 	ret	; F4C5C8  ret
+sub_F4C5C9:
 	call	T_F42E10	; F4C5C9  call 0xf42e10
 	ld	(9536:16), 0	; F4C5CD  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x2870, 0x00	; F4C5D2  cp (0x2870),0x00
 	jr	nz, sub_F4C5A2_Skip2	; F4C5D7  jr NZ,0xf4c5e7
-	lda	xbc, (16040005:24)	; F4C5D9  lda XBC,0xf4c045
+	lda	xbc, (DL_F4C000 + 0x45:24)	; F4C5D9  lda XBC,0xf4c045
 	push	xbc	; F4C5DE  push XBC
 	lda	xwa, (DL_F4C000:24)	; F4C5DF  lda XWA,0xf4c000
 	push	xwa	; F4C5E4  push XWA
 	jr	sub_F4C5A2_Join	; F4C5E5  jr T,0xf4c5f3
 sub_F4C5A2_Skip2:
-	lda	xbc, (16040049:24)	; F4C5E7  lda XBC,0xf4c071
+	lda	xbc, (DL_F4C000 + 0x71:24)	; F4C5E7  lda XBC,0xf4c071
 	push	xbc	; F4C5EC  push XBC
-	lda	xwa, (16040005:24)	; F4C5ED  lda XWA,0xf4c045
+	lda	xwa, (DL_F4C000 + 0x45:24)	; F4C5ED  lda XWA,0xf4c045
 	push	xwa	; F4C5F2  push XWA
 sub_F4C5A2_Join:
 	call	T_DisplayList_Run_Stack	; F4C5F3  call 0xf42e00
-	lda	xbc, (16040631:24)	; F4C5F7  lda XBC,0xf4c2b7
+	lda	xbc, (DL_F4C000 + 0x2B7:24)	; F4C5F7  lda XBC,0xf4c2b7
 	push	xbc	; F4C5FC  push XBC
-	lda	xwa, (16040049:24)	; F4C5FD  lda XWA,0xf4c071
+	lda	xwa, (DL_F4C000 + 0x71:24)	; F4C5FD  lda XWA,0xf4c071
 	push	xwa	; F4C602  push XWA
 	call	T_DisplayList_Run_Stack	; F4C603  call 0xf42e00
 	inc	8, xsp	; F4C607  inc 0,XSP
 	inc	8, xsp	; F4C609  inc 0,XSP
 	ret	; F4C60B  ret
+sub_F4C60C:
 	pushw	hl	; F4C60C  push HL
 	push	xix	; F4C60D  push XIX
 	ld	(9536:16), 0	; F4C60E  ld (0x2540),0x00
 	lda	xbc, (DispatchTable_F4C38D:24)	; F4C613  lda XBC,0xf4c38d
 	push	xbc	; F4C618  push XBC
-	lda	xwa, (16040815:24)	; F4C619  lda XWA,0xf4c36f
+	lda	xwa, (DL_F4C000 + 0x36F:24)	; F4C619  lda XWA,0xf4c36f
 	push	xwa	; F4C61E  push XWA
 	call	T_DisplayListB_Run_Stack	; F4C61F  call 0xf42e04
 	lda	xix, (9792:16)	; F4C623  lda XIX,0x2640
@@ -99232,9 +99318,9 @@ sub_F4C5A2_Skip4:
 	jr	c, sub_F4C5A2_Loop	; F4C664  jr C,0xf4c64e
 sub_F4C5A2_Join3:
 	ld	(9536:16), 1	; F4C666  ld (0x2540),0x01
-	lda	xbc, (16040675:24)	; F4C66B  lda XBC,0xf4c2e3
+	lda	xbc, (DL_F4C000 + 0x2E3:24)	; F4C66B  lda XBC,0xf4c2e3
 	push	xbc	; F4C670  push XBC
-	lda	xwa, (16040631:24)	; F4C671  lda XWA,0xf4c2b7
+	lda	xwa, (DL_F4C000 + 0x2B7:24)	; F4C671  lda XWA,0xf4c2b7
 	push	xwa	; F4C676  push XWA
 	call	T_DisplayListB_Run_Stack	; F4C677  call 0xf42e04
 	call	T_F42E14	; F4C67B  call 0xf42e14
@@ -99286,6 +99372,7 @@ sub_F4C684_Join:
 sub_F4C684_Epilogue:
 	pop	xix	; F4C6BD  pop XIX
 	ret	; F4C6BE  ret
+sub_F4C6BF:
 	link XIZ,0x0000	; F4C6BF  link XIZ,0x0000
 	pushw	hl	; F4C6C3  push HL
 	ld	h, (xiz+8)	; F4C6C4  ld H,(XIZ+0x08)
@@ -103003,7 +103090,7 @@ sub_F4F02E_Join:
 	pop	w	; F4F107  pop W
 	cp	de, hl	; F4F109  cp DE,HL
 	jrl	nz, sub_F4F02E_Skip8	; F4F10B  jrl NZ,0xf4f1da
-	ld	xix, 16052851	; F4F10E  ld XIX,0x00f4f273
+	ld	xix, sub_F4F02E + 0x245	; F4F10E  ld XIX,0x00f4f273
 	ld	l, (10081:24)	; F4F113  ld L,(0x002761)
 	xor	de, de	; F4F118  xor DE,DE
 sub_F4F02E_Join2:
@@ -103027,7 +103114,7 @@ sub_F4F02E_Loop:
 	cp	e, 4:i3	; F4F142  cp E,4
 	jr	z, sub_F4F02E_Loop	; F4F144  jr Z,0xf4f125
 sub_F4F02E_Skip3:
-	ld	xix, 16052851	; F4F146  ld XIX,0x00f4f273
+	ld	xix, sub_F4F02E + 0x245	; F4F146  ld XIX,0x00f4f273
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F4F14B  ld A,(XIX+DE)
 	ld	(10081:24), a	; F4F150  ld (0x002761),A
 	bit	7, w	; F4F155  bit 0x07,W
@@ -103137,7 +103224,7 @@ sub_F4F27E:
 	and	w, 128	; F4F283  and W,0x80
 	srl	w, 4	; F4F286  srl 0x04,W
 	or	w, l	; F4F289  or W,L
-	ld	xhl, 16052914	; F4F28B  ld XHL,0x00f4f2b2
+	ld	xhl, sub_F4F27E + 0x34	; F4F28B  ld XHL,0x00f4f2b2
 	mx8_ld_rm MXB, ra_HL, rb_W, 7	; F4F290  ld L,(XHL+W)
 	exts	hl	; F4F295  exts HL
 	add	de, hl	; F4F297  add DE,HL
@@ -103194,7 +103281,7 @@ sub_F4F2DE:
 	ld	xbc, 0	; F4F2DE  ld XBC,0x00000000
 	and	xbc, xbc	; F4F2E3  and XBC,XBC
 	jr	z, 12	; F4F2E5  jr Z,0xf4f2f3
-	lda	xiy, (16053005:24)	; F4F2E7  lda XIY,0xf4f30d
+	lda	xiy, (sub_F4F2DE + 0x2F:24)	; F4F2E7  lda XIY,0xf4f30d
 	lda	xix, (0:24)	; F4F2EC  lda XIX,0x000000
 	ldir85	; F4F2F1  ldir
 	ld	xbc, 32	; F4F2F3  ld XBC,0x00000020
@@ -104864,7 +104951,7 @@ RecordArray_F511DD:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51E20:
-	.long 0x00F511F9                       ; F51E20  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x1C                       ; F51E20  [0]   -> 0xF511F9
 
 ; --------------------------------------------------------------------------
 ; Pointer_F51E24 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
@@ -104878,7 +104965,7 @@ Pointer_F51E20:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51E24:
-	.long 0x00F511F9                       ; F51E24  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x1C                       ; F51E24  [0]   -> 0xF511F9
 
 ; --------------------------------------------------------------------------
 ; Pointer_F51E28 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
@@ -104892,7 +104979,7 @@ Pointer_F51E24:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51E28:
-	.long 0x00F511F9                       ; F51E28  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x1C                       ; F51E28  [0]   -> 0xF511F9
 
 ; --- 0xF51E2C-0xF51E6B  data (64 bytes) ---
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf9, 0x11, 0xf5, 0x00, 0x38, 0x7f, 0x00, 0x00, 0x08, 0x08, 0x38, 0x7f   ; F51E2C  ........8.....8.
@@ -104918,7 +105005,7 @@ Pointer_F51E28:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51E6C:
-	.long 0x00F5199C                       ; F51E6C  [0]   -> 0xF5199C
+	.long RecordArray_F511DD + 0x7BF                       ; F51E6C  [0]   -> 0xF5199C
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51E70 -- 5 32-bit pointers, 0 into prom_a and 5 into prom_b
@@ -104933,11 +105020,11 @@ Pointer_F51E6C:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51E70:
-	.long 0x00F51C24                       ; F51E70  [0]   -> 0xF51C24
-	.long 0x00F51C60                       ; F51E74  [1]   -> 0xF51C60
-	.long 0x00F51C80                       ; F51E78  [2]   -> 0xF51C80
-	.long 0x00F51CA0                       ; F51E7C  [3]   -> 0xF51CA0
-	.long 0x00F51CC0                       ; F51E80  [4]   -> 0xF51CC0
+	.long RecordArray_F511DD + 0xA47                       ; F51E70  [0]   -> 0xF51C24
+	.long RecordArray_F511DD + 0xA83                       ; F51E74  [1]   -> 0xF51C60
+	.long RecordArray_F511DD + 0xAA3                       ; F51E78  [2]   -> 0xF51C80
+	.long RecordArray_F511DD + 0xAC3                       ; F51E7C  [3]   -> 0xF51CA0
+	.long RecordArray_F511DD + 0xAE3                       ; F51E80  [4]   -> 0xF51CC0
 
 ; --------------------------------------------------------------------------
 ; Pointer_F51E84 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
@@ -104952,7 +105039,7 @@ PtrTable_F51E70:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51E84:
-	.long 0x00F51812                       ; F51E84  [0]   -> 0xF51812
+	.long RecordArray_F511DD + 0x635                       ; F51E84  [0]   -> 0xF51812
 
 ; --- 0xF51E88-0xF51E89  data (2 bytes) ---
 
@@ -104981,7 +105068,7 @@ RecordIndex_Count:
 ; Unknown: where each sub-array starts and how long it is.
 ; --------------------------------------------------------------------------
 RecordIndex_F51E8A:
-	.long 0x00F514B9                       ; F51E8A  [0]   -> 0xF514B9
+	.long RecordArray_F511DD + 0x2DC                       ; F51E8A  [0]   -> 0xF514B9
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51E8E -- 23 32-bit pointers, 0 into prom_a and 23 into prom_b
@@ -104996,29 +105083,29 @@ RecordIndex_F51E8A:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51E8E:
-	.long 0x00F511F9                       ; F51E8E  [0]   -> 0xF511F9
-	.long 0x00F51215                       ; F51E92  [1]   -> 0xF51215
-	.long 0x00F51231                       ; F51E96  [2]   -> 0xF51231
-	.long 0x00F5124D                       ; F51E9A  [3]   -> 0xF5124D
-	.long 0x00F51269                       ; F51E9E  [4]   -> 0xF51269
-	.long 0x00F51285                       ; F51EA2  [5]   -> 0xF51285
-	.long 0x00F512A1                       ; F51EA6  [6]   -> 0xF512A1
-	.long 0x00F512BD                       ; F51EAA  [7]   -> 0xF512BD
-	.long 0x00F512D9                       ; F51EAE  [8]   -> 0xF512D9
-	.long 0x00F512F9                       ; F51EB2  [9]   -> 0xF512F9
-	.long 0x00F51315                       ; F51EB6  [10]   -> 0xF51315
-	.long 0x00F51331                       ; F51EBA  [11]   -> 0xF51331
-	.long 0x00F5134D                       ; F51EBE  [12]   -> 0xF5134D
-	.long 0x00F51369                       ; F51EC2  [13]   -> 0xF51369
-	.long 0x00F51385                       ; F51EC6  [14]   -> 0xF51385
-	.long 0x00F513A1                       ; F51ECA  [15]   -> 0xF513A1
-	.long 0x00F513BD                       ; F51ECE  [16]   -> 0xF513BD
-	.long 0x00F513D9                       ; F51ED2  [17]   -> 0xF513D9
-	.long 0x00F513F5                       ; F51ED6  [18]   -> 0xF513F5
-	.long 0x00F51411                       ; F51EDA  [19]   -> 0xF51411
-	.long 0x00F5142D                       ; F51EDE  [20]   -> 0xF5142D
-	.long 0x00F51449                       ; F51EE2  [21]   -> 0xF51449
-	.long 0x00F51465                       ; F51EE6  [22]   -> 0xF51465
+	.long RecordArray_F511DD + 0x1C                       ; F51E8E  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x38                       ; F51E92  [1]   -> 0xF51215
+	.long RecordArray_F511DD + 0x54                       ; F51E96  [2]   -> 0xF51231
+	.long RecordArray_F511DD + 0x70                       ; F51E9A  [3]   -> 0xF5124D
+	.long RecordArray_F511DD + 0x8C                       ; F51E9E  [4]   -> 0xF51269
+	.long RecordArray_F511DD + 0xA8                       ; F51EA2  [5]   -> 0xF51285
+	.long RecordArray_F511DD + 0xC4                       ; F51EA6  [6]   -> 0xF512A1
+	.long RecordArray_F511DD + 0xE0                       ; F51EAA  [7]   -> 0xF512BD
+	.long RecordArray_F511DD + 0xFC                       ; F51EAE  [8]   -> 0xF512D9
+	.long RecordArray_F511DD + 0x11C                       ; F51EB2  [9]   -> 0xF512F9
+	.long RecordArray_F511DD + 0x138                       ; F51EB6  [10]   -> 0xF51315
+	.long RecordArray_F511DD + 0x154                       ; F51EBA  [11]   -> 0xF51331
+	.long RecordArray_F511DD + 0x170                       ; F51EBE  [12]   -> 0xF5134D
+	.long RecordArray_F511DD + 0x18C                       ; F51EC2  [13]   -> 0xF51369
+	.long RecordArray_F511DD + 0x1A8                       ; F51EC6  [14]   -> 0xF51385
+	.long RecordArray_F511DD + 0x1C4                       ; F51ECA  [15]   -> 0xF513A1
+	.long RecordArray_F511DD + 0x1E0                       ; F51ECE  [16]   -> 0xF513BD
+	.long RecordArray_F511DD + 0x1FC                       ; F51ED2  [17]   -> 0xF513D9
+	.long RecordArray_F511DD + 0x218                       ; F51ED6  [18]   -> 0xF513F5
+	.long RecordArray_F511DD + 0x234                       ; F51EDA  [19]   -> 0xF51411
+	.long RecordArray_F511DD + 0x250                       ; F51EDE  [20]   -> 0xF5142D
+	.long RecordArray_F511DD + 0x26C                       ; F51EE2  [21]   -> 0xF51449
+	.long RecordArray_F511DD + 0x288                       ; F51EE6  [22]   -> 0xF51465
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51EEA -- 23 32-bit pointers, 0 into prom_a and 23 into prom_b
@@ -105033,29 +105120,29 @@ PtrTable_F51E8E:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51EEA:
-	.long 0x00F511F9                       ; F51EEA  [0]   -> 0xF511F9
-	.long 0x00F51215                       ; F51EEE  [1]   -> 0xF51215
-	.long 0x00F51231                       ; F51EF2  [2]   -> 0xF51231
-	.long 0x00F5124D                       ; F51EF6  [3]   -> 0xF5124D
-	.long 0x00F51269                       ; F51EFA  [4]   -> 0xF51269
-	.long 0x00F51285                       ; F51EFE  [5]   -> 0xF51285
-	.long 0x00F512A1                       ; F51F02  [6]   -> 0xF512A1
-	.long 0x00F512BD                       ; F51F06  [7]   -> 0xF512BD
-	.long 0x00F512D9                       ; F51F0A  [8]   -> 0xF512D9
-	.long 0x00F512F9                       ; F51F0E  [9]   -> 0xF512F9
-	.long 0x00F51315                       ; F51F12  [10]   -> 0xF51315
-	.long 0x00F51331                       ; F51F16  [11]   -> 0xF51331
-	.long 0x00F5134D                       ; F51F1A  [12]   -> 0xF5134D
-	.long 0x00F51369                       ; F51F1E  [13]   -> 0xF51369
-	.long 0x00F51385                       ; F51F22  [14]   -> 0xF51385
-	.long 0x00F513A1                       ; F51F26  [15]   -> 0xF513A1
-	.long 0x00F513BD                       ; F51F2A  [16]   -> 0xF513BD
-	.long 0x00F513D9                       ; F51F2E  [17]   -> 0xF513D9
-	.long 0x00F513F5                       ; F51F32  [18]   -> 0xF513F5
-	.long 0x00F51411                       ; F51F36  [19]   -> 0xF51411
-	.long 0x00F5142D                       ; F51F3A  [20]   -> 0xF5142D
-	.long 0x00F51449                       ; F51F3E  [21]   -> 0xF51449
-	.long 0x00F51465                       ; F51F42  [22]   -> 0xF51465
+	.long RecordArray_F511DD + 0x1C                       ; F51EEA  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x38                       ; F51EEE  [1]   -> 0xF51215
+	.long RecordArray_F511DD + 0x54                       ; F51EF2  [2]   -> 0xF51231
+	.long RecordArray_F511DD + 0x70                       ; F51EF6  [3]   -> 0xF5124D
+	.long RecordArray_F511DD + 0x8C                       ; F51EFA  [4]   -> 0xF51269
+	.long RecordArray_F511DD + 0xA8                       ; F51EFE  [5]   -> 0xF51285
+	.long RecordArray_F511DD + 0xC4                       ; F51F02  [6]   -> 0xF512A1
+	.long RecordArray_F511DD + 0xE0                       ; F51F06  [7]   -> 0xF512BD
+	.long RecordArray_F511DD + 0xFC                       ; F51F0A  [8]   -> 0xF512D9
+	.long RecordArray_F511DD + 0x11C                       ; F51F0E  [9]   -> 0xF512F9
+	.long RecordArray_F511DD + 0x138                       ; F51F12  [10]   -> 0xF51315
+	.long RecordArray_F511DD + 0x154                       ; F51F16  [11]   -> 0xF51331
+	.long RecordArray_F511DD + 0x170                       ; F51F1A  [12]   -> 0xF5134D
+	.long RecordArray_F511DD + 0x18C                       ; F51F1E  [13]   -> 0xF51369
+	.long RecordArray_F511DD + 0x1A8                       ; F51F22  [14]   -> 0xF51385
+	.long RecordArray_F511DD + 0x1C4                       ; F51F26  [15]   -> 0xF513A1
+	.long RecordArray_F511DD + 0x1E0                       ; F51F2A  [16]   -> 0xF513BD
+	.long RecordArray_F511DD + 0x1FC                       ; F51F2E  [17]   -> 0xF513D9
+	.long RecordArray_F511DD + 0x218                       ; F51F32  [18]   -> 0xF513F5
+	.long RecordArray_F511DD + 0x234                       ; F51F36  [19]   -> 0xF51411
+	.long RecordArray_F511DD + 0x250                       ; F51F3A  [20]   -> 0xF5142D
+	.long RecordArray_F511DD + 0x26C                       ; F51F3E  [21]   -> 0xF51449
+	.long RecordArray_F511DD + 0x288                       ; F51F42  [22]   -> 0xF51465
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51F46 -- 5 32-bit pointers, 0 into prom_a and 5 into prom_b
@@ -105070,11 +105157,11 @@ PtrTable_F51EEA:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51F46:
-	.long 0x00F511F9                       ; F51F46  [0]   -> 0xF511F9
-	.long 0x00F51481                       ; F51F4A  [1]   -> 0xF51481
-	.long 0x00F5149D                       ; F51F4E  [2]   -> 0xF5149D
-	.long 0x00F514BB                       ; F51F52  [3]   -> 0xF514BB
-	.long 0x00F514D7                       ; F51F56  [4]   -> 0xF514D7
+	.long RecordArray_F511DD + 0x1C                       ; F51F46  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x2A4                       ; F51F4A  [1]   -> 0xF51481
+	.long RecordArray_F511DD + 0x2C0                       ; F51F4E  [2]   -> 0xF5149D
+	.long RecordArray_F511DD + 0x2DE                       ; F51F52  [3]   -> 0xF514BB
+	.long RecordArray_F511DD + 0x2FA                       ; F51F56  [4]   -> 0xF514D7
 
 ; --------------------------------------------------------------------------
 ; Pointer_F51F5A -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
@@ -105089,7 +105176,7 @@ PtrTable_F51F46:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51F5A:
-	.long 0x00F511F9                       ; F51F5A  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x1C                       ; F51F5A  [0]   -> 0xF511F9
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51F5E -- 25 32-bit pointers, 0 into prom_a and 25 into prom_b
@@ -105104,31 +105191,31 @@ Pointer_F51F5A:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51F5E:
-	.long 0x00F511F9                       ; F51F5E  [0]   -> 0xF511F9
-	.long 0x00F514F3                       ; F51F62  [1]   -> 0xF514F3
-	.long 0x00F5150F                       ; F51F66  [2]   -> 0xF5150F
-	.long 0x00F5152B                       ; F51F6A  [3]   -> 0xF5152B
-	.long 0x00F51556                       ; F51F6E  [4]   -> 0xF51556
-	.long 0x00F51572                       ; F51F72  [5]   -> 0xF51572
-	.long 0x00F5158E                       ; F51F76  [6]   -> 0xF5158E
-	.long 0x00F515AA                       ; F51F7A  [7]   -> 0xF515AA
-	.long 0x00F515C6                       ; F51F7E  [8]   -> 0xF515C6
-	.long 0x00F515E2                       ; F51F82  [9]   -> 0xF515E2
-	.long 0x00F515FE                       ; F51F86  [10]   -> 0xF515FE
-	.long 0x00F5161A                       ; F51F8A  [11]   -> 0xF5161A
-	.long 0x00F51636                       ; F51F8E  [12]   -> 0xF51636
-	.long 0x00F51652                       ; F51F92  [13]   -> 0xF51652
-	.long 0x00F5166E                       ; F51F96  [14]   -> 0xF5166E
-	.long 0x00F5168A                       ; F51F9A  [15]   -> 0xF5168A
-	.long 0x00F516A6                       ; F51F9E  [16]   -> 0xF516A6
-	.long 0x00F516C2                       ; F51FA2  [17]   -> 0xF516C2
-	.long 0x00F516DE                       ; F51FA6  [18]   -> 0xF516DE
-	.long 0x00F516FA                       ; F51FAA  [19]   -> 0xF516FA
-	.long 0x00F51716                       ; F51FAE  [20]   -> 0xF51716
-	.long 0x00F51732                       ; F51FB2  [21]   -> 0xF51732
-	.long 0x00F5174E                       ; F51FB6  [22]   -> 0xF5174E
-	.long 0x00F5176A                       ; F51FBA  [23]   -> 0xF5176A
-	.long 0x00F51786                       ; F51FBE  [24]   -> 0xF51786
+	.long RecordArray_F511DD + 0x1C                       ; F51F5E  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x316                       ; F51F62  [1]   -> 0xF514F3
+	.long RecordArray_F511DD + 0x332                       ; F51F66  [2]   -> 0xF5150F
+	.long RecordArray_F511DD + 0x34E                       ; F51F6A  [3]   -> 0xF5152B
+	.long RecordArray_F511DD + 0x379                       ; F51F6E  [4]   -> 0xF51556
+	.long RecordArray_F511DD + 0x395                       ; F51F72  [5]   -> 0xF51572
+	.long RecordArray_F511DD + 0x3B1                       ; F51F76  [6]   -> 0xF5158E
+	.long RecordArray_F511DD + 0x3CD                       ; F51F7A  [7]   -> 0xF515AA
+	.long RecordArray_F511DD + 0x3E9                       ; F51F7E  [8]   -> 0xF515C6
+	.long RecordArray_F511DD + 0x405                       ; F51F82  [9]   -> 0xF515E2
+	.long RecordArray_F511DD + 0x421                       ; F51F86  [10]   -> 0xF515FE
+	.long RecordArray_F511DD + 0x43D                       ; F51F8A  [11]   -> 0xF5161A
+	.long RecordArray_F511DD + 0x459                       ; F51F8E  [12]   -> 0xF51636
+	.long RecordArray_F511DD + 0x475                       ; F51F92  [13]   -> 0xF51652
+	.long RecordArray_F511DD + 0x491                       ; F51F96  [14]   -> 0xF5166E
+	.long RecordArray_F511DD + 0x4AD                       ; F51F9A  [15]   -> 0xF5168A
+	.long RecordArray_F511DD + 0x4C9                       ; F51F9E  [16]   -> 0xF516A6
+	.long RecordArray_F511DD + 0x4E5                       ; F51FA2  [17]   -> 0xF516C2
+	.long RecordArray_F511DD + 0x501                       ; F51FA6  [18]   -> 0xF516DE
+	.long RecordArray_F511DD + 0x51D                       ; F51FAA  [19]   -> 0xF516FA
+	.long RecordArray_F511DD + 0x539                       ; F51FAE  [20]   -> 0xF51716
+	.long RecordArray_F511DD + 0x555                       ; F51FB2  [21]   -> 0xF51732
+	.long RecordArray_F511DD + 0x571                       ; F51FB6  [22]   -> 0xF5174E
+	.long RecordArray_F511DD + 0x58D                       ; F51FBA  [23]   -> 0xF5176A
+	.long RecordArray_F511DD + 0x5A9                       ; F51FBE  [24]   -> 0xF51786
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51FC2 -- 25 32-bit pointers, 0 into prom_a and 25 into prom_b
@@ -105143,31 +105230,31 @@ PtrTable_F51F5E:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51FC2:
-	.long 0x00F511F9                       ; F51FC2  [0]   -> 0xF511F9
-	.long 0x00F514F3                       ; F51FC6  [1]   -> 0xF514F3
-	.long 0x00F5150F                       ; F51FCA  [2]   -> 0xF5150F
-	.long 0x00F5152B                       ; F51FCE  [3]   -> 0xF5152B
-	.long 0x00F51556                       ; F51FD2  [4]   -> 0xF51556
-	.long 0x00F51572                       ; F51FD6  [5]   -> 0xF51572
-	.long 0x00F5158E                       ; F51FDA  [6]   -> 0xF5158E
-	.long 0x00F515AA                       ; F51FDE  [7]   -> 0xF515AA
-	.long 0x00F515C6                       ; F51FE2  [8]   -> 0xF515C6
-	.long 0x00F515E2                       ; F51FE6  [9]   -> 0xF515E2
-	.long 0x00F515FE                       ; F51FEA  [10]   -> 0xF515FE
-	.long 0x00F5161A                       ; F51FEE  [11]   -> 0xF5161A
-	.long 0x00F51636                       ; F51FF2  [12]   -> 0xF51636
-	.long 0x00F51652                       ; F51FF6  [13]   -> 0xF51652
-	.long 0x00F5166E                       ; F51FFA  [14]   -> 0xF5166E
-	.long 0x00F5168A                       ; F51FFE  [15]   -> 0xF5168A
-	.long 0x00F516A6                       ; F52002  [16]   -> 0xF516A6
-	.long 0x00F516C2                       ; F52006  [17]   -> 0xF516C2
-	.long 0x00F516DE                       ; F5200A  [18]   -> 0xF516DE
-	.long 0x00F516FA                       ; F5200E  [19]   -> 0xF516FA
-	.long 0x00F51716                       ; F52012  [20]   -> 0xF51716
-	.long 0x00F51732                       ; F52016  [21]   -> 0xF51732
-	.long 0x00F5174E                       ; F5201A  [22]   -> 0xF5174E
-	.long 0x00F5176A                       ; F5201E  [23]   -> 0xF5176A
-	.long 0x00F51786                       ; F52022  [24]   -> 0xF51786
+	.long RecordArray_F511DD + 0x1C                       ; F51FC2  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x316                       ; F51FC6  [1]   -> 0xF514F3
+	.long RecordArray_F511DD + 0x332                       ; F51FCA  [2]   -> 0xF5150F
+	.long RecordArray_F511DD + 0x34E                       ; F51FCE  [3]   -> 0xF5152B
+	.long RecordArray_F511DD + 0x379                       ; F51FD2  [4]   -> 0xF51556
+	.long RecordArray_F511DD + 0x395                       ; F51FD6  [5]   -> 0xF51572
+	.long RecordArray_F511DD + 0x3B1                       ; F51FDA  [6]   -> 0xF5158E
+	.long RecordArray_F511DD + 0x3CD                       ; F51FDE  [7]   -> 0xF515AA
+	.long RecordArray_F511DD + 0x3E9                       ; F51FE2  [8]   -> 0xF515C6
+	.long RecordArray_F511DD + 0x405                       ; F51FE6  [9]   -> 0xF515E2
+	.long RecordArray_F511DD + 0x421                       ; F51FEA  [10]   -> 0xF515FE
+	.long RecordArray_F511DD + 0x43D                       ; F51FEE  [11]   -> 0xF5161A
+	.long RecordArray_F511DD + 0x459                       ; F51FF2  [12]   -> 0xF51636
+	.long RecordArray_F511DD + 0x475                       ; F51FF6  [13]   -> 0xF51652
+	.long RecordArray_F511DD + 0x491                       ; F51FFA  [14]   -> 0xF5166E
+	.long RecordArray_F511DD + 0x4AD                       ; F51FFE  [15]   -> 0xF5168A
+	.long RecordArray_F511DD + 0x4C9                       ; F52002  [16]   -> 0xF516A6
+	.long RecordArray_F511DD + 0x4E5                       ; F52006  [17]   -> 0xF516C2
+	.long RecordArray_F511DD + 0x501                       ; F5200A  [18]   -> 0xF516DE
+	.long RecordArray_F511DD + 0x51D                       ; F5200E  [19]   -> 0xF516FA
+	.long RecordArray_F511DD + 0x539                       ; F52012  [20]   -> 0xF51716
+	.long RecordArray_F511DD + 0x555                       ; F52016  [21]   -> 0xF51732
+	.long RecordArray_F511DD + 0x571                       ; F5201A  [22]   -> 0xF5174E
+	.long RecordArray_F511DD + 0x58D                       ; F5201E  [23]   -> 0xF5176A
+	.long RecordArray_F511DD + 0x5A9                       ; F52022  [24]   -> 0xF51786
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F52026 -- 19 32-bit pointers, 0 into prom_a and 19 into prom_b
@@ -105182,25 +105269,25 @@ PtrTable_F51FC2:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F52026:
-	.long 0x00F511F9                       ; F52026  [0]   -> 0xF511F9
-	.long 0x00F517A2                       ; F5202A  [1]   -> 0xF517A2
-	.long 0x00F517BE                       ; F5202E  [2]   -> 0xF517BE
-	.long 0x00F517DA                       ; F52032  [3]   -> 0xF517DA
-	.long 0x00F517F6                       ; F52036  [4]   -> 0xF517F6
-	.long 0x00F51814                       ; F5203A  [5]   -> 0xF51814
-	.long 0x00F51830                       ; F5203E  [6]   -> 0xF51830
-	.long 0x00F5184C                       ; F52042  [7]   -> 0xF5184C
-	.long 0x00F51868                       ; F52046  [8]   -> 0xF51868
-	.long 0x00F51884                       ; F5204A  [9]   -> 0xF51884
-	.long 0x00F518A0                       ; F5204E  [10]   -> 0xF518A0
-	.long 0x00F518BC                       ; F52052  [11]   -> 0xF518BC
-	.long 0x00F518D8                       ; F52056  [12]   -> 0xF518D8
-	.long 0x00F518F4                       ; F5205A  [13]   -> 0xF518F4
-	.long 0x00F51910                       ; F5205E  [14]   -> 0xF51910
-	.long 0x00F5192C                       ; F52062  [15]   -> 0xF5192C
-	.long 0x00F51948                       ; F52066  [16]   -> 0xF51948
-	.long 0x00F51964                       ; F5206A  [17]   -> 0xF51964
-	.long 0x00F51980                       ; F5206E  [18]   -> 0xF51980
+	.long RecordArray_F511DD + 0x1C                       ; F52026  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x5C5                       ; F5202A  [1]   -> 0xF517A2
+	.long RecordArray_F511DD + 0x5E1                       ; F5202E  [2]   -> 0xF517BE
+	.long RecordArray_F511DD + 0x5FD                       ; F52032  [3]   -> 0xF517DA
+	.long RecordArray_F511DD + 0x619                       ; F52036  [4]   -> 0xF517F6
+	.long RecordArray_F511DD + 0x637                       ; F5203A  [5]   -> 0xF51814
+	.long RecordArray_F511DD + 0x653                       ; F5203E  [6]   -> 0xF51830
+	.long RecordArray_F511DD + 0x66F                       ; F52042  [7]   -> 0xF5184C
+	.long RecordArray_F511DD + 0x68B                       ; F52046  [8]   -> 0xF51868
+	.long RecordArray_F511DD + 0x6A7                       ; F5204A  [9]   -> 0xF51884
+	.long RecordArray_F511DD + 0x6C3                       ; F5204E  [10]   -> 0xF518A0
+	.long RecordArray_F511DD + 0x6DF                       ; F52052  [11]   -> 0xF518BC
+	.long RecordArray_F511DD + 0x6FB                       ; F52056  [12]   -> 0xF518D8
+	.long RecordArray_F511DD + 0x717                       ; F5205A  [13]   -> 0xF518F4
+	.long RecordArray_F511DD + 0x733                       ; F5205E  [14]   -> 0xF51910
+	.long RecordArray_F511DD + 0x74F                       ; F52062  [15]   -> 0xF5192C
+	.long RecordArray_F511DD + 0x76B                       ; F52066  [16]   -> 0xF51948
+	.long RecordArray_F511DD + 0x787                       ; F5206A  [17]   -> 0xF51964
+	.long RecordArray_F511DD + 0x7A3                       ; F5206E  [18]   -> 0xF51980
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F52072 -- 19 32-bit pointers, 0 into prom_a and 19 into prom_b
@@ -105215,25 +105302,25 @@ PtrTable_F52026:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F52072:
-	.long 0x00F511F9                       ; F52072  [0]   -> 0xF511F9
-	.long 0x00F517A2                       ; F52076  [1]   -> 0xF517A2
-	.long 0x00F517BE                       ; F5207A  [2]   -> 0xF517BE
-	.long 0x00F517DA                       ; F5207E  [3]   -> 0xF517DA
-	.long 0x00F517F6                       ; F52082  [4]   -> 0xF517F6
-	.long 0x00F51814                       ; F52086  [5]   -> 0xF51814
-	.long 0x00F51830                       ; F5208A  [6]   -> 0xF51830
-	.long 0x00F5184C                       ; F5208E  [7]   -> 0xF5184C
-	.long 0x00F51868                       ; F52092  [8]   -> 0xF51868
-	.long 0x00F51884                       ; F52096  [9]   -> 0xF51884
-	.long 0x00F518A0                       ; F5209A  [10]   -> 0xF518A0
-	.long 0x00F518BC                       ; F5209E  [11]   -> 0xF518BC
-	.long 0x00F518D8                       ; F520A2  [12]   -> 0xF518D8
-	.long 0x00F518F4                       ; F520A6  [13]   -> 0xF518F4
-	.long 0x00F51910                       ; F520AA  [14]   -> 0xF51910
-	.long 0x00F5192C                       ; F520AE  [15]   -> 0xF5192C
-	.long 0x00F51948                       ; F520B2  [16]   -> 0xF51948
-	.long 0x00F51964                       ; F520B6  [17]   -> 0xF51964
-	.long 0x00F51980                       ; F520BA  [18]   -> 0xF51980
+	.long RecordArray_F511DD + 0x1C                       ; F52072  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x5C5                       ; F52076  [1]   -> 0xF517A2
+	.long RecordArray_F511DD + 0x5E1                       ; F5207A  [2]   -> 0xF517BE
+	.long RecordArray_F511DD + 0x5FD                       ; F5207E  [3]   -> 0xF517DA
+	.long RecordArray_F511DD + 0x619                       ; F52082  [4]   -> 0xF517F6
+	.long RecordArray_F511DD + 0x637                       ; F52086  [5]   -> 0xF51814
+	.long RecordArray_F511DD + 0x653                       ; F5208A  [6]   -> 0xF51830
+	.long RecordArray_F511DD + 0x66F                       ; F5208E  [7]   -> 0xF5184C
+	.long RecordArray_F511DD + 0x68B                       ; F52092  [8]   -> 0xF51868
+	.long RecordArray_F511DD + 0x6A7                       ; F52096  [9]   -> 0xF51884
+	.long RecordArray_F511DD + 0x6C3                       ; F5209A  [10]   -> 0xF518A0
+	.long RecordArray_F511DD + 0x6DF                       ; F5209E  [11]   -> 0xF518BC
+	.long RecordArray_F511DD + 0x6FB                       ; F520A2  [12]   -> 0xF518D8
+	.long RecordArray_F511DD + 0x717                       ; F520A6  [13]   -> 0xF518F4
+	.long RecordArray_F511DD + 0x733                       ; F520AA  [14]   -> 0xF51910
+	.long RecordArray_F511DD + 0x74F                       ; F520AE  [15]   -> 0xF5192C
+	.long RecordArray_F511DD + 0x76B                       ; F520B2  [16]   -> 0xF51948
+	.long RecordArray_F511DD + 0x787                       ; F520B6  [17]   -> 0xF51964
+	.long RecordArray_F511DD + 0x7A3                       ; F520BA  [18]   -> 0xF51980
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F520BE -- 40 32-bit pointers, 0 into prom_a and 40 into prom_b
@@ -105248,46 +105335,46 @@ PtrTable_F52072:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F520BE:
-	.long 0x00F511F9                       ; F520BE  [0]   -> 0xF511F9
-	.long 0x00F519A0                       ; F520C2  [1]   -> 0xF519A0
-	.long 0x00F519BC                       ; F520C6  [2]   -> 0xF519BC
-	.long 0x00F519D8                       ; F520CA  [3]   -> 0xF519D8
-	.long 0x00F519F4                       ; F520CE  [4]   -> 0xF519F4
-	.long 0x00F51A10                       ; F520D2  [5]   -> 0xF51A10
-	.long 0x00F51A2C                       ; F520D6  [6]   -> 0xF51A2C
-	.long 0x00F51A48                       ; F520DA  [7]   -> 0xF51A48
-	.long 0x00F51A64                       ; F520DE  [8]   -> 0xF51A64
-	.long 0x00F51A80                       ; F520E2  [9]   -> 0xF51A80
-	.long 0x00F51A9C                       ; F520E6  [10]   -> 0xF51A9C
-	.long 0x00F51AB8                       ; F520EA  [11]   -> 0xF51AB8
-	.long 0x00F51AD4                       ; F520EE  [12]   -> 0xF51AD4
-	.long 0x00F51AF0                       ; F520F2  [13]   -> 0xF51AF0
-	.long 0x00F51B0C                       ; F520F6  [14]   -> 0xF51B0C
-	.long 0x00F51B28                       ; F520FA  [15]   -> 0xF51B28
-	.long 0x00F51B44                       ; F520FE  [16]   -> 0xF51B44
-	.long 0x00F51B60                       ; F52102  [17]   -> 0xF51B60
-	.long 0x00F51B7C                       ; F52106  [18]   -> 0xF51B7C
-	.long 0x00F51B98                       ; F5210A  [19]   -> 0xF51B98
-	.long 0x00F51BB4                       ; F5210E  [20]   -> 0xF51BB4
-	.long 0x00F51BD0                       ; F52112  [21]   -> 0xF51BD0
-	.long 0x00F51BEC                       ; F52116  [22]   -> 0xF51BEC
-	.long 0x00F51C08                       ; F5211A  [23]   -> 0xF51C08
-	.long 0x00F51C28                       ; F5211E  [24]   -> 0xF51C28
-	.long 0x00F51C44                       ; F52122  [25]   -> 0xF51C44
-	.long 0x00F51C64                       ; F52126  [26]   -> 0xF51C64
-	.long 0x00F51C84                       ; F5212A  [27]   -> 0xF51C84
-	.long 0x00F51CA4                       ; F5212E  [28]   -> 0xF51CA4
-	.long 0x00F51CC4                       ; F52132  [29]   -> 0xF51CC4
-	.long 0x00F51CE0                       ; F52136  [30]   -> 0xF51CE0
-	.long 0x00F51CFC                       ; F5213A  [31]   -> 0xF51CFC
-	.long 0x00F51D18                       ; F5213E  [32]   -> 0xF51D18
-	.long 0x00F51D34                       ; F52142  [33]   -> 0xF51D34
-	.long 0x00F51D50                       ; F52146  [34]   -> 0xF51D50
-	.long 0x00F51D6C                       ; F5214A  [35]   -> 0xF51D6C
-	.long 0x00F51D88                       ; F5214E  [36]   -> 0xF51D88
-	.long 0x00F51DA4                       ; F52152  [37]   -> 0xF51DA4
-	.long 0x00F51DC0                       ; F52156  [38]   -> 0xF51DC0
-	.long 0x00F51DDC                       ; F5215A  [39]   -> 0xF51DDC
+	.long RecordArray_F511DD + 0x1C                       ; F520BE  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x7C3                       ; F520C2  [1]   -> 0xF519A0
+	.long RecordArray_F511DD + 0x7DF                       ; F520C6  [2]   -> 0xF519BC
+	.long RecordArray_F511DD + 0x7FB                       ; F520CA  [3]   -> 0xF519D8
+	.long RecordArray_F511DD + 0x817                       ; F520CE  [4]   -> 0xF519F4
+	.long RecordArray_F511DD + 0x833                       ; F520D2  [5]   -> 0xF51A10
+	.long RecordArray_F511DD + 0x84F                       ; F520D6  [6]   -> 0xF51A2C
+	.long RecordArray_F511DD + 0x86B                       ; F520DA  [7]   -> 0xF51A48
+	.long RecordArray_F511DD + 0x887                       ; F520DE  [8]   -> 0xF51A64
+	.long RecordArray_F511DD + 0x8A3                       ; F520E2  [9]   -> 0xF51A80
+	.long RecordArray_F511DD + 0x8BF                       ; F520E6  [10]   -> 0xF51A9C
+	.long RecordArray_F511DD + 0x8DB                       ; F520EA  [11]   -> 0xF51AB8
+	.long RecordArray_F511DD + 0x8F7                       ; F520EE  [12]   -> 0xF51AD4
+	.long RecordArray_F511DD + 0x913                       ; F520F2  [13]   -> 0xF51AF0
+	.long RecordArray_F511DD + 0x92F                       ; F520F6  [14]   -> 0xF51B0C
+	.long RecordArray_F511DD + 0x94B                       ; F520FA  [15]   -> 0xF51B28
+	.long RecordArray_F511DD + 0x967                       ; F520FE  [16]   -> 0xF51B44
+	.long RecordArray_F511DD + 0x983                       ; F52102  [17]   -> 0xF51B60
+	.long RecordArray_F511DD + 0x99F                       ; F52106  [18]   -> 0xF51B7C
+	.long RecordArray_F511DD + 0x9BB                       ; F5210A  [19]   -> 0xF51B98
+	.long RecordArray_F511DD + 0x9D7                       ; F5210E  [20]   -> 0xF51BB4
+	.long RecordArray_F511DD + 0x9F3                       ; F52112  [21]   -> 0xF51BD0
+	.long RecordArray_F511DD + 0xA0F                       ; F52116  [22]   -> 0xF51BEC
+	.long RecordArray_F511DD + 0xA2B                       ; F5211A  [23]   -> 0xF51C08
+	.long RecordArray_F511DD + 0xA4B                       ; F5211E  [24]   -> 0xF51C28
+	.long RecordArray_F511DD + 0xA67                       ; F52122  [25]   -> 0xF51C44
+	.long RecordArray_F511DD + 0xA87                       ; F52126  [26]   -> 0xF51C64
+	.long RecordArray_F511DD + 0xAA7                       ; F5212A  [27]   -> 0xF51C84
+	.long RecordArray_F511DD + 0xAC7                       ; F5212E  [28]   -> 0xF51CA4
+	.long RecordArray_F511DD + 0xAE7                       ; F52132  [29]   -> 0xF51CC4
+	.long RecordArray_F511DD + 0xB03                       ; F52136  [30]   -> 0xF51CE0
+	.long RecordArray_F511DD + 0xB1F                       ; F5213A  [31]   -> 0xF51CFC
+	.long RecordArray_F511DD + 0xB3B                       ; F5213E  [32]   -> 0xF51D18
+	.long RecordArray_F511DD + 0xB57                       ; F52142  [33]   -> 0xF51D34
+	.long RecordArray_F511DD + 0xB73                       ; F52146  [34]   -> 0xF51D50
+	.long RecordArray_F511DD + 0xB8F                       ; F5214A  [35]   -> 0xF51D6C
+	.long RecordArray_F511DD + 0xBAB                       ; F5214E  [36]   -> 0xF51D88
+	.long RecordArray_F511DD + 0xBC7                       ; F52152  [37]   -> 0xF51DA4
+	.long RecordArray_F511DD + 0xBE3                       ; F52156  [38]   -> 0xF51DC0
+	.long RecordArray_F511DD + 0xBFF                       ; F5215A  [39]   -> 0xF51DDC
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F5215E -- 40 32-bit pointers, 0 into prom_a and 40 into prom_b
@@ -105302,46 +105389,46 @@ PtrTable_F520BE:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F5215E:
-	.long 0x00F511F9                       ; F5215E  [0]   -> 0xF511F9
-	.long 0x00F519A0                       ; F52162  [1]   -> 0xF519A0
-	.long 0x00F519BC                       ; F52166  [2]   -> 0xF519BC
-	.long 0x00F519D8                       ; F5216A  [3]   -> 0xF519D8
-	.long 0x00F519F4                       ; F5216E  [4]   -> 0xF519F4
-	.long 0x00F51A10                       ; F52172  [5]   -> 0xF51A10
-	.long 0x00F51A2C                       ; F52176  [6]   -> 0xF51A2C
-	.long 0x00F51A48                       ; F5217A  [7]   -> 0xF51A48
-	.long 0x00F51A64                       ; F5217E  [8]   -> 0xF51A64
-	.long 0x00F51A80                       ; F52182  [9]   -> 0xF51A80
-	.long 0x00F51A9C                       ; F52186  [10]   -> 0xF51A9C
-	.long 0x00F51AB8                       ; F5218A  [11]   -> 0xF51AB8
-	.long 0x00F51AD4                       ; F5218E  [12]   -> 0xF51AD4
-	.long 0x00F51AF0                       ; F52192  [13]   -> 0xF51AF0
-	.long 0x00F51B0C                       ; F52196  [14]   -> 0xF51B0C
-	.long 0x00F51B28                       ; F5219A  [15]   -> 0xF51B28
-	.long 0x00F51B44                       ; F5219E  [16]   -> 0xF51B44
-	.long 0x00F51B60                       ; F521A2  [17]   -> 0xF51B60
-	.long 0x00F51B7C                       ; F521A6  [18]   -> 0xF51B7C
-	.long 0x00F51B98                       ; F521AA  [19]   -> 0xF51B98
-	.long 0x00F51BB4                       ; F521AE  [20]   -> 0xF51BB4
-	.long 0x00F51BD0                       ; F521B2  [21]   -> 0xF51BD0
-	.long 0x00F51BEC                       ; F521B6  [22]   -> 0xF51BEC
-	.long 0x00F51C08                       ; F521BA  [23]   -> 0xF51C08
-	.long 0x00F51C28                       ; F521BE  [24]   -> 0xF51C28
-	.long 0x00F51C44                       ; F521C2  [25]   -> 0xF51C44
-	.long 0x00F51C64                       ; F521C6  [26]   -> 0xF51C64
-	.long 0x00F51C84                       ; F521CA  [27]   -> 0xF51C84
-	.long 0x00F51CA4                       ; F521CE  [28]   -> 0xF51CA4
-	.long 0x00F51CC4                       ; F521D2  [29]   -> 0xF51CC4
-	.long 0x00F51CE0                       ; F521D6  [30]   -> 0xF51CE0
-	.long 0x00F51CFC                       ; F521DA  [31]   -> 0xF51CFC
-	.long 0x00F51D18                       ; F521DE  [32]   -> 0xF51D18
-	.long 0x00F51D34                       ; F521E2  [33]   -> 0xF51D34
-	.long 0x00F51D50                       ; F521E6  [34]   -> 0xF51D50
-	.long 0x00F51D6C                       ; F521EA  [35]   -> 0xF51D6C
-	.long 0x00F51D88                       ; F521EE  [36]   -> 0xF51D88
-	.long 0x00F51DA4                       ; F521F2  [37]   -> 0xF51DA4
-	.long 0x00F51DC0                       ; F521F6  [38]   -> 0xF51DC0
-	.long 0x00F51DDC                       ; F521FA  [39]   -> 0xF51DDC
+	.long RecordArray_F511DD + 0x1C                       ; F5215E  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0x7C3                       ; F52162  [1]   -> 0xF519A0
+	.long RecordArray_F511DD + 0x7DF                       ; F52166  [2]   -> 0xF519BC
+	.long RecordArray_F511DD + 0x7FB                       ; F5216A  [3]   -> 0xF519D8
+	.long RecordArray_F511DD + 0x817                       ; F5216E  [4]   -> 0xF519F4
+	.long RecordArray_F511DD + 0x833                       ; F52172  [5]   -> 0xF51A10
+	.long RecordArray_F511DD + 0x84F                       ; F52176  [6]   -> 0xF51A2C
+	.long RecordArray_F511DD + 0x86B                       ; F5217A  [7]   -> 0xF51A48
+	.long RecordArray_F511DD + 0x887                       ; F5217E  [8]   -> 0xF51A64
+	.long RecordArray_F511DD + 0x8A3                       ; F52182  [9]   -> 0xF51A80
+	.long RecordArray_F511DD + 0x8BF                       ; F52186  [10]   -> 0xF51A9C
+	.long RecordArray_F511DD + 0x8DB                       ; F5218A  [11]   -> 0xF51AB8
+	.long RecordArray_F511DD + 0x8F7                       ; F5218E  [12]   -> 0xF51AD4
+	.long RecordArray_F511DD + 0x913                       ; F52192  [13]   -> 0xF51AF0
+	.long RecordArray_F511DD + 0x92F                       ; F52196  [14]   -> 0xF51B0C
+	.long RecordArray_F511DD + 0x94B                       ; F5219A  [15]   -> 0xF51B28
+	.long RecordArray_F511DD + 0x967                       ; F5219E  [16]   -> 0xF51B44
+	.long RecordArray_F511DD + 0x983                       ; F521A2  [17]   -> 0xF51B60
+	.long RecordArray_F511DD + 0x99F                       ; F521A6  [18]   -> 0xF51B7C
+	.long RecordArray_F511DD + 0x9BB                       ; F521AA  [19]   -> 0xF51B98
+	.long RecordArray_F511DD + 0x9D7                       ; F521AE  [20]   -> 0xF51BB4
+	.long RecordArray_F511DD + 0x9F3                       ; F521B2  [21]   -> 0xF51BD0
+	.long RecordArray_F511DD + 0xA0F                       ; F521B6  [22]   -> 0xF51BEC
+	.long RecordArray_F511DD + 0xA2B                       ; F521BA  [23]   -> 0xF51C08
+	.long RecordArray_F511DD + 0xA4B                       ; F521BE  [24]   -> 0xF51C28
+	.long RecordArray_F511DD + 0xA67                       ; F521C2  [25]   -> 0xF51C44
+	.long RecordArray_F511DD + 0xA87                       ; F521C6  [26]   -> 0xF51C64
+	.long RecordArray_F511DD + 0xAA7                       ; F521CA  [27]   -> 0xF51C84
+	.long RecordArray_F511DD + 0xAC7                       ; F521CE  [28]   -> 0xF51CA4
+	.long RecordArray_F511DD + 0xAE7                       ; F521D2  [29]   -> 0xF51CC4
+	.long RecordArray_F511DD + 0xB03                       ; F521D6  [30]   -> 0xF51CE0
+	.long RecordArray_F511DD + 0xB1F                       ; F521DA  [31]   -> 0xF51CFC
+	.long RecordArray_F511DD + 0xB3B                       ; F521DE  [32]   -> 0xF51D18
+	.long RecordArray_F511DD + 0xB57                       ; F521E2  [33]   -> 0xF51D34
+	.long RecordArray_F511DD + 0xB73                       ; F521E6  [34]   -> 0xF51D50
+	.long RecordArray_F511DD + 0xB8F                       ; F521EA  [35]   -> 0xF51D6C
+	.long RecordArray_F511DD + 0xBAB                       ; F521EE  [36]   -> 0xF51D88
+	.long RecordArray_F511DD + 0xBC7                       ; F521F2  [37]   -> 0xF51DA4
+	.long RecordArray_F511DD + 0xBE3                       ; F521F6  [38]   -> 0xF51DC0
+	.long RecordArray_F511DD + 0xBFF                       ; F521FA  [39]   -> 0xF51DDC
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F521FE -- 2 32-bit pointers, 0 into prom_a and 2 into prom_b
@@ -105356,8 +105443,8 @@ PtrTable_F5215E:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F521FE:
-	.long 0x00F511F9                       ; F521FE  [0]   -> 0xF511F9
-	.long 0x00F51DF8                       ; F52202  [1]   -> 0xF51DF8
+	.long RecordArray_F511DD + 0x1C                       ; F521FE  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0xC1B                       ; F52202  [1]   -> 0xF51DF8
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F52206 -- 2 32-bit pointers, 0 into prom_a and 2 into prom_b
@@ -105372,8 +105459,8 @@ PtrTable_F521FE:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F52206:
-	.long 0x00F511F9                       ; F52206  [0]   -> 0xF511F9
-	.long 0x00F51DF8                       ; F5220A  [1]   -> 0xF51DF8
+	.long RecordArray_F511DD + 0x1C                       ; F52206  [0]   -> 0xF511F9
+	.long RecordArray_F511DD + 0xC1B                       ; F5220A  [1]   -> 0xF51DF8
 
 ; --- 0xF5220E-0xF52FFF  fill (3570 bytes) ---
 	.fill	3570, 1, 0x0E	; asserted a single value
@@ -105466,9 +105553,10 @@ DrawbarScreen_Dispatch:		; <- T_DrawbarScreen_Dispatch
 	extz	xwa	; F5303B  extz XWA
 	add	xwa, PanelButtonTable_DrawbarScreen	; F5303D  add XWA,0x00f54248
 	ld	xbc, (xwa)	; F53043  ld XBC,(XWA)
-	lda	xiy, (16068685:24)	; F53045  lda XIY,0xf5304d
+	lda	xiy, (sub_F5304D:24)	; F53045  lda XIY,0xf5304d
 	push	xiy	; F5304A  push XIY
 	jp	(xbc)	; F5304B  jp T,XBC
+sub_F5304D:
 	pop	xbc	; F5304D  pop XBC
 	unlk XIZ	; F5304E  unlk XIZ
 	ret	; F53050  ret
@@ -105551,21 +105639,21 @@ sub_F53052_Join2:
 	m_cp_rm MB16, 0x207d, 3	; F530F1  cp C,(0x207d)
 	jr	z, sub_F53052_Skip6	; F530F5  jr Z,0xf5310e
 	call	T_CallbackQueue_ResetAndRestartTask2	; F530F7  call 0xf42e80
-	lda	xbc, (16070332:24)	; F530FB  lda XBC,0xf536bc
+	lda	xbc, (ExitKey_DrawbarScreen + 0x39:24)	; F530FB  lda XBC,0xf536bc
 	push	xbc	; F53100  push XBC
 	call	T_CallbackQueue_Post	; F53101  call 0xf42e84
 	pushw	1	; F53105  push 0x0001
 	call	T_Kernel_SemaSignal_StackArg	; F53108  call 0xf42dc0
 	inc	6, xsp	; F5310C  inc 6,XSP
 sub_F53052_Skip6:
-	lda	xbc, (16070434:24)	; F5310E  lda XBC,0xf53722
+	lda	xbc, (PaintAllDrawbars + 0x23:24)	; F5310E  lda XBC,0xf53722
 	push	xbc	; F53113  push XBC
 	call	T_CallbackQueue_Post	; F53114  call 0xf42e84
 	pushw	1	; F53118  push 0x0001
 	call	T_Kernel_SemaSignal_StackArg	; F5311B  call 0xf42dc0
 	inc	6, xsp	; F5311F  inc 6,XSP
 sub_F53052_Skip7:
-	lda	xbc, (16070691:24)	; F53121  lda XBC,0xf53823
+	lda	xbc, (sub_F53823:24)	; F53121  lda XBC,0xf53823
 	push	xbc	; F53126  push XBC
 	call	T_CallbackQueue_Post	; F53127  call 0xf42e84
 	pushw	1	; F5312B  push 0x0001
@@ -105850,9 +105938,10 @@ sub_F531DC:
 	extz	xbc	; F531E2  extz XBC
 	add	xbc, DispatchTable_F542D1	; F531E4  add XBC,0x00f542d1
 	ld	xbc, (xbc)	; F531EA  ld XBC,(XBC)
-	lda	xiy, (16069108:24)	; F531EC  lda XIY,0xf531f4
+	lda	xiy, (sub_F531F4:24)	; F531EC  lda XIY,0xf531f4
 	push	xiy	; F531F1  push XIY
 	jp	(xbc)	; F531F2  jp T,XBC
+sub_F531F4:
 	ret	; F531F4  ret
 
 ; --------------------------------------------------------------------------
@@ -106949,7 +107038,7 @@ sub_F533DC_Epilogue10:
 	jr	z, sub_F533DC_Skip5	; F536DC  jr Z,0xf536ec
 	lda	xbc, (DL_SoundEditBar:24)	; F536DE  lda XBC,0xf544ad
 	push	xbc	; F536E3  push XBC
-	lda	xwa, (16073875:24)	; F536E4  lda XWA,0xf54493
+	lda	xwa, (DL_PercussiveToneHeader + 0x7D:24)	; F536E4  lda XWA,0xf54493
 	push	xwa	; F536E9  push XWA
 	jr	sub_F533DC_Join2	; F536EA  jr T,0xf536f8
 sub_F533DC_Skip5:
@@ -107024,7 +107113,7 @@ PaintAllDrawbars_Return:
 	call	T_DisplayList_Run_Stack	; F5379D  call 0xf42e00
 	calr	PaintAllDrawbars	; F537A1  calr 0xf536ff
 	add	xsp, 24	; F537A4  add XSP,0x00000018
-	lda	xbc, (16073875:24)	; F537AA  lda XBC,0xf54493
+	lda	xbc, (DL_PercussiveToneHeader + 0x7D:24)	; F537AA  lda XBC,0xf54493
 	push	xbc	; F537AF  push XBC
 	lda	xwa, (DL_PercussiveToneHeader:24)	; F537B0  lda XWA,0xf54416
 	push	xwa	; F537B5  push XWA
@@ -107068,6 +107157,7 @@ PaintAllDrawbars_Join2:
 	pop	xix	; F53820  pop XIX
 	popw	hl	; F53821  pop HL
 	ret	; F53822  ret
+sub_F53823:
 	pushw	hl	; F53823  push HL
 	m_cp_mi8 MB16, 0x289e, 0x00	; F53824  cp (0x289e),0x00
 	jr	nz, PaintAllDrawbars_Entry	; F53829  jr NZ,0xf53884
@@ -111824,6 +111914,7 @@ sub_F55C44_Join:
 	call	T_DLB_Handler_StringTable	; F55C5C  call 0xf417f8
 sub_F55C44_Return:
 	ret	; F55C60  ret
+sub_F55C61:
 	calr	sub_F55C2F	; F55C61  calr 0xf55c2f
 	ld	xiy, DL_SequencerPlayS0ngCycleMeasure	; F55C64  ld XIY,0x00f349c7
 	ld	xix, Data_F34C6E	; F55C69  ld XIX,0x00f34c6e
@@ -111835,6 +111926,7 @@ sub_F55C44_Return:
 	calr	sub_F55D67	; F55C85  calr 0xf55d67
 	calr	sub_F55D90	; F55C88  calr 0xf55d90
 	ret	; F55C8B  ret
+sub_F55C8C:
 	calr	SeqPlayScreen_StageValues	; F55C8C  calr 0xf57453
 	ld	(9536:16), 2	; F55C8F  ld (0x2540),0x02
 	ld	xiy, DL_CycleMasterS0ngMeasureTimeSig	; F55C94  ld XIY,0x00f34970
@@ -111846,22 +111938,25 @@ sub_F55C44_Return:
 	call	T_F415BC	; F55CAE  call 0xf415bc
 	calr	sub_F55C3D	; F55CB2  calr 0xf55c3d
 	ret	; F55CB5  ret
+sub_F55CB6:
 	calr	sub_F55C2F	; F55CB6  calr 0xf55c2f
 	ld	xiy, DL_MetronomeBalance	; F55CB9  ld XIY,0x00f35342
 	ld	xix, DL_F3539F	; F55CBE  ld XIX,0x00f3539f
 	call	T_DisplayList_Run	; F55CC3  call 0xf417f0
 	ret	; F55CC7  ret
+sub_F55CC8:
 	ld	a, (14163:16)	; F55CC8  ld A,(0x3753)
 	ld	(9810:16), a	; F55CCC  ld (0x2652),A
 	ld	(9536:16), 0	; F55CD0  ld (0x2540),0x00
 	ld	xiy, DL_F3539F	; F55CD5  ld XIY,0x00f3539f
-	ld	xix, 15946667	; F55CDA  ld XIX,0x00f353ab
+	ld	xix, DL_F3539F + 0xC	; F55CDA  ld XIX,0x00f353ab
 	call	T_DisplayListB_Run	; F55CDF  call 0xf417f4
 	calr	sub_F55C3D	; F55CE3  calr 0xf55c3d
 	ret	; F55CE6  ret
+sub_F55CE7:
 	calr	sub_F55C2F	; F55CE7  calr 0xf55c2f
 	ld	xiy, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear	; F55CEA  ld XIY,0x00f34681
-	ld	xix, 15944040	; F55CEF  ld XIX,0x00f34968
+	ld	xix, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear + 0x2E7	; F55CEF  ld XIX,0x00f34968
 	call	T_DisplayList_Run	; F55CF4  call 0xf417f0
 	ld	xiy, DL_F341B6	; F55CF8  ld XIY,0x00f341b6
 	ld	xix, DL_F34256	; F55CFD  ld XIX,0x00f34256
@@ -111870,6 +111965,7 @@ sub_F55C44_Return:
 	calr	sub_F55D67	; F55D0B  calr 0xf55d67
 	calr	sub_F55D90	; F55D0E  calr 0xf55d90
 	ret	; F55D11  ret
+sub_F55D12:
 	calr	sub_F55C2F	; F55D12  calr 0xf55c2f
 	ld	xiy, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterCycle	; F55D15  ld XIY,0x00f343bc
 	ld	xix, DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear	; F55D1A  ld XIX,0x00f34681
@@ -111881,6 +111977,7 @@ sub_F55C44_Return:
 	calr	sub_F55D67	; F55D36  calr 0xf55d67
 	calr	sub_F55D90	; F55D39  calr 0xf55d90
 	ret	; F55D3C  ret
+sub_F55D3D:
 	calr	RealtimeRecordScreen_StageValues	; F55D3D  calr 0xf57498
 	ld	(9536:16), 2	; F55D40  ld (0x2540),0x02
 	ld	xiy, DL_F34361	; F55D45  ld XIY,0x00f34361
@@ -111944,7 +112041,7 @@ sub_F55D90:		; <- T_F40E10
 sub_F55D90_Skip:
 	ld	wa, (6304798:24)	; F55DA2  ld WA,(0x60341e)
 	ld	(14144:16), wa	; F55DA7  ld (0x3740),WA
-	ld	xwa, 16080318	; F55DAB  ld XWA,0x00f55dbe
+	ld	xwa, sub_F55DBE	; F55DAB  ld XWA,0x00f55dbe
 	push	xwa	; F55DB0  push XWA
 	call	T_CallbackQueue_Post	; F55DB1  call 0xf42e84
 	inc	4, xsp	; F55DB5  inc 4,XSP
@@ -111952,6 +112049,7 @@ sub_F55D90_Skip:
 	call	T_Kernel_SemaSignal	; F55DB9  call 0xf42d88
 sub_F55D90_Return:
 	ret	; F55DBD  ret
+sub_F55DBE:
 	ldw	wa, 1	; F55DBE  ld WA,0x0001
 	xor	bc, bc	; F55DC1  xor BC,BC
 sub_F55D90_Loop:
@@ -111975,7 +112073,7 @@ sub_F55D90_Skip3:
 sub_F55D90_Join:
 	pushw	wa	; F55DEB  push WA
 	calr	Nop_Ret_F55C2E	; F55DEC  calr 0xf55c2e
-	ld	xiy, 15944826	; F55DEF  ld XIY,0x00f34c7a
+	ld	xiy, Data_F34C6E + 0xC	; F55DEF  ld XIY,0x00f34c7a
 	add	iy, bc	; F55DF4  add IY,BC
 	ld	ix, (xiy)	; F55DF6  ld IX,(XIY)
 	ld	xiy, Data_F34C6E	; F55DF8  ld XIY,0x00f34c6e
@@ -112010,8 +112108,8 @@ sub_F55D90_Join:
 sub_F55E20:
 	ld	(9536:16), 1	; F55E20  ld (0x2540),0x01
 	m_or_mi8 MB8, 0xc6, 0x01	; F55E25  or (0xc6),0x01
-	ld	xiy, 15944858	; F55E29  ld XIY,0x00f34c9a
-	ld	xix, 15944866	; F55E2E  ld XIX,0x00f34ca2
+	ld	xiy, Data_F34C6E + 0x2C	; F55E29  ld XIY,0x00f34c9a
+	ld	xix, Data_F34C6E + 0x34	; F55E2E  ld XIX,0x00f34ca2
 	pushw	hl	; F55E33  push HL
 	call	T_DisplayList_Run	; F55E34  call 0xf417f0
 	popw	hl	; F55E38  pop HL
@@ -112033,11 +112131,11 @@ sub_F55E20_Loop:
 	and	hl, wa	; F55E53  and HL,WA
 	m_rd_ld_rrx RWX, 0x3C, r3	; F55E55  ld HL,RHL3
 	jr	z, sub_F55E20_Skip2	; F55E58  jr Z,0xf55e65
-	ld	xiy, 15944866	; F55E5A  ld XIY,0x00f34ca2
+	ld	xiy, Data_F34C6E + 0x34	; F55E5A  ld XIY,0x00f34ca2
 	call	T_F4181C	; F55E5F  call 0xf4181c
 	jr	sub_F55E20_Join	; F55E63  jr T,0xf55e6e
 sub_F55E20_Skip2:
-	ld	xiy, 15944877	; F55E65  ld XIY,0x00f34cad
+	ld	xiy, Data_F34C6E + 0x3F	; F55E65  ld XIY,0x00f34cad
 	call	T_DLB_Handler_Array6	; F55E6A  call 0xf41824
 sub_F55E20_Join:
 	popw	bc	; F55E6E  pop BC
@@ -112049,11 +112147,13 @@ sub_F55E20_Join:
 sub_F55E20_Join2:
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55E78  and (0xc6),0xfe
 	ret	; F55E7C  ret
+sub_F55E7D:
 	calr	sub_F55C2F	; F55E7D  calr 0xf55c2f
 	ld	xiy, DL_CyclePlayCurrentMeasureEdit	; F55E80  ld XIY,0x00f35208
 	ld	xix, DL_F352F9	; F55E85  ld XIX,0x00f352f9
 	call	T_DisplayList_Run	; F55E8A  call 0xf417f0
 	ret	; F55E8E  ret
+sub_F55E8F:
 	calr	CyclePlayEditScreen_StageValues	; F55E8F  calr 0xf5750c
 	ld	(9536:16), 0	; F55E92  ld (0x2540),0x00
 	m_or_mi8 MB8, 0xc6, 0x01	; F55E97  or (0xc6),0x01
@@ -112063,20 +112163,22 @@ sub_F55E20_Join2:
 	ld	(9536:16), 1	; F55EA9  ld (0x2540),0x01
 	ld	a, (14166:16)	; F55EAE  ld A,(0x3756)
 	ld	(4854:16), a	; F55EB2  ld (0x12f6),A
-	ld	xiy, 15945770	; F55EB6  ld XIY,0x00f3502a
+	ld	xiy, DL_F34FF2 + 0x38	; F55EB6  ld XIY,0x00f3502a
 	call	T_F41820	; F55EBB  call 0xf41820
 	ld	a, (13863:16)	; F55EBF  ld A,(0x3627)
 	ld	(4854:16), a	; F55EC3  ld (0x12f6),A
-	ld	xiy, 15945759	; F55EC7  ld XIY,0x00f3501f
+	ld	xiy, DL_F34FF2 + 0x2D	; F55EC7  ld XIY,0x00f3501f
 	call	T_F4181C	; F55ECC  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55ED0  and (0xc6),0xfe
 	calr	sub_F55C3D	; F55ED4  calr 0xf55c3d
 	ret	; F55ED7  ret
+sub_F55ED8:
 	calr	sub_F55C2F	; F55ED8  calr 0xf55c2f
 	ld	xiy, DL_CyclePlayCurrentMeasureCycle	; F55EDB  ld XIY,0x00f34ee8
 	ld	xix, DL_F34FF2	; F55EE0  ld XIX,0x00f34ff2
 	call	T_DisplayList_Run	; F55EE5  call 0xf417f0
 	ret	; F55EE9  ret
+sub_F55EEA:
 	calr	CyclePlayScreen_StageValues	; F55EEA  calr 0xf574de
 	ld	(9536:16), 0	; F55EED  ld (0x2540),0x00
 	m_or_mi8 MB8, 0xc6, 0x01	; F55EF2  or (0xc6),0x01
@@ -112086,20 +112188,22 @@ sub_F55E20_Join2:
 	ld	(9536:16), 1	; F55F04  ld (0x2540),0x01
 	ld	a, (14166:16)	; F55F09  ld A,(0x3756)
 	ld	(4854:16), a	; F55F0D  ld (0x12f6),A
-	ld	xiy, 15945770	; F55F11  ld XIY,0x00f3502a
+	ld	xiy, DL_F34FF2 + 0x38	; F55F11  ld XIY,0x00f3502a
 	call	T_F41820	; F55F16  call 0xf41820
 	ld	a, (13863:16)	; F55F1A  ld A,(0x3627)
 	ld	(4854:16), a	; F55F1E  ld (0x12f6),A
-	ld	xiy, 15945759	; F55F22  ld XIY,0x00f3501f
+	ld	xiy, DL_F34FF2 + 0x2D	; F55F22  ld XIY,0x00f3501f
 	call	T_F4181C	; F55F27  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55F2B  and (0xc6),0xfe
 	calr	sub_F55C3D	; F55F2F  calr 0xf55c3d
 	ret	; F55F32  ret
+sub_F55F33:
 	calr	sub_F55C2F	; F55F33  calr 0xf55c2f
 	ld	xiy, DL_CycleRecordCurrentMeasure	; F55F36  ld XIY,0x00f3505b
 	ld	xix, DL_F351A7	; F55F3B  ld XIX,0x00f351a7
 	call	T_DisplayList_Run	; F55F40  call 0xf417f0
 	ret	; F55F44  ret
+sub_F55F45:
 	calr	CycleRecordScreen_StageValues	; F55F45  calr 0xf57537
 	ld	(9536:16), 0	; F55F48  ld (0x2540),0x00
 	m_or_mi8 MB8, 0xc6, 0x01	; F55F4D  or (0xc6),0x01
@@ -112113,53 +112217,59 @@ sub_F55E20_Join2:
 	ld	(9536:16), 1	; F55F70  ld (0x2540),0x01
 	ld	a, (14165:16)	; F55F75  ld A,(0x3755)
 	ld	(4854:16), a	; F55F79  ld (0x12f6),A
-	ld	xiy, 15945770	; F55F7D  ld XIY,0x00f3502a
+	ld	xiy, DL_F34FF2 + 0x38	; F55F7D  ld XIY,0x00f3502a
 	call	T_F41820	; F55F82  call 0xf41820
 	ld	a, (14030:16)	; F55F86  ld A,(0x36ce)
 	ld	(4854:16), a	; F55F8A  ld (0x12f6),A
-	ld	xiy, 15945759	; F55F8E  ld XIY,0x00f3501f
+	ld	xiy, DL_F34FF2 + 0x2D	; F55F8E  ld XIY,0x00f3501f
 	call	T_F4181C	; F55F93  call 0xf4181c
 	m_and_mi8 MB8, 0xc6, 0xfe	; F55F97  and (0xc6),0xfe
 	calr	sub_F55C3D	; F55F9B  calr 0xf55c3d
 	ret	; F55F9E  ret
+sub_F55F9F:
 	ld	(9536:16), 0	; F55F9F  ld (0x2540),0x00
 	ld	xiy, DL_F34FF2	; F55FA4  ld XIY,0x00f34ff2
-	ld	xix, 15945729	; F55FA9  ld XIX,0x00f35001
+	ld	xix, DL_F34FF2 + 0xF	; F55FA9  ld XIX,0x00f35001
 	call	T_DisplayListB_Run	; F55FAE  call 0xf417f4
 	ret	; F55FB2  ret
+sub_F55FB3:
 	ld	(9536:16), 0	; F55FB3  ld (0x2540),0x00
-	ld	xiy, 15946191	; F55FB8  ld XIY,0x00f351cf
+	ld	xiy, DL_F351A7 + 0x28	; F55FB8  ld XIY,0x00f351cf
 	push	xiy	; F55FBD  push XIY
 	call	T_Blink_Command	; F55FBE  call 0xf42e20
 	inc	4, xsp	; F55FC2  inc 4,XSP
-	ld	xiy, 15946201	; F55FC4  ld XIY,0x00f351d9
+	ld	xiy, DL_F351A7 + 0x32	; F55FC4  ld XIY,0x00f351d9
 	push	xiy	; F55FC9  push XIY
 	call	T_Blink_Command	; F55FCA  call 0xf42e20
 	inc	4, xsp	; F55FCE  inc 4,XSP
 	ret	; F55FD0  ret
+sub_F55FD1:
 	ld	(9536:16), 0	; F55FD1  ld (0x2540),0x00
-	ld	xiy, 15945739	; F55FD6  ld XIY,0x00f3500b
+	ld	xiy, DL_F34FF2 + 0x19	; F55FD6  ld XIY,0x00f3500b
 	push	xiy	; F55FDB  push XIY
 	call	T_Blink_Command	; F55FDC  call 0xf42e20
 	inc	4, xsp	; F55FE0  inc 4,XSP
-	ld	xiy, 15945749	; F55FE2  ld XIY,0x00f35015
+	ld	xiy, DL_F34FF2 + 0x23	; F55FE2  ld XIY,0x00f35015
 	push	xiy	; F55FE7  push XIY
 	call	T_Blink_Command	; F55FE8  call 0xf42e20
 	inc	4, xsp	; F55FEC  inc 4,XSP
 	ret	; F55FEE  ret
+sub_F55FEF:
 	ld	(9536:16), 0	; F55FEF  ld (0x2540),0x00
 	ld	xiy, DL_F352F9	; F55FF4  ld XIY,0x00f352f9
-	ld	xix, 15946504	; F55FF9  ld XIX,0x00f35308
+	ld	xix, DL_F352F9 + 0xF	; F55FF9  ld XIX,0x00f35308
 	call	T_DisplayListB_Run	; F55FFE  call 0xf417f4
 	ret	; F56002  ret
+sub_F56003:
 	ld	(9536:16), 2	; F56003  ld (0x2540),0x02
 	ld	xiy, DL_TimeSig	; F56008  ld XIY,0x00f343a2
-	ld	xix, 15942572	; F5600D  ld XIX,0x00f343ac
+	ld	xix, DL_TimeSig + 0xA	; F5600D  ld XIX,0x00f343ac
 	call	T_DisplayListB_Run	; F56012  call 0xf417f4
 	ret	; F56016  ret
+sub_F56017:
 	ld	(9536:16), 2	; F56017  ld (0x2540),0x02
 	ld	xiy, DL_MasterSongMeasure	; F5601C  ld XIY,0x00f3437f
-	ld	xix, 15942542	; F56021  ld XIX,0x00f3438e
+	ld	xix, DL_MasterSongMeasure + 0xF	; F56021  ld XIX,0x00f3438e
 	call	T_DisplayListB_Run	; F56026  call 0xf417f4
 	ret	; F5602A  ret
 	ret	; F5602B  ret
@@ -112262,7 +112372,7 @@ sub_F56058_Skip5:
 sub_F56058_Skip6:
 	m_bit 1, MD16, 0x360b	; F560E6  bit 1,(0x360b)
 	jr	nz, sub_F56058_Skip7	; F560EA  jr NZ,0xf56100
-	ld	xwa, 16080146	; F560EC  ld XWA,0x00f55d12
+	ld	xwa, sub_F55D12	; F560EC  ld XWA,0x00f55d12
 	push	xwa	; F560F1  push XWA
 	call	T_CallbackQueue_Post	; F560F2  call 0xf42e84
 	inc	4, xsp	; F560F6  inc 4,XSP
@@ -112270,7 +112380,7 @@ sub_F56058_Skip6:
 	call	T_Kernel_SemaSignal	; F560FA  call 0xf42d88
 	jr	sub_F56058_Join	; F560FE  jr T,0xf56112
 sub_F56058_Skip7:
-	ld	xwa, 16080103	; F56100  ld XWA,0x00f55ce7
+	ld	xwa, sub_F55CE7	; F56100  ld XWA,0x00f55ce7
 	push	xwa	; F56105  push XWA
 	call	T_CallbackQueue_Post	; F56106  call 0xf42e84
 	inc	4, xsp	; F5610A  inc 4,XSP
@@ -112278,7 +112388,7 @@ sub_F56058_Skip7:
 	call	T_Kernel_SemaSignal	; F5610E  call 0xf42d88
 sub_F56058_Join:
 	call	T_F42704	; F56112  call 0xf42704
-	ld	xwa, 16080189	; F56116  ld XWA,0x00f55d3d
+	ld	xwa, sub_F55D3D	; F56116  ld XWA,0x00f55d3d
 	push	xwa	; F5611B  push XWA
 	call	T_CallbackQueue_Post	; F5611C  call 0xf42e84
 	inc	4, xsp	; F56120  inc 4,XSP
@@ -112847,7 +112957,7 @@ sub_F56129_Skip18:
 	jr	sub_F56129_Return2	; F56366  jr T,0xf563dc
 sub_F56129_Skip19:
 	call	T_F42704	; F56368  call 0xf42704
-	ld	xwa, 16080189	; F5636C  ld XWA,0x00f55d3d
+	ld	xwa, sub_F55D3D	; F5636C  ld XWA,0x00f55d3d
 	push	xwa	; F56371  push XWA
 	call	T_CallbackQueue_Post	; F56372  call 0xf42e84
 	inc	4, xsp	; F56376  inc 4,XSP
@@ -112924,13 +113034,13 @@ sub_F56129_Skip22:
 	xor	xwa, xwa	; F56428  xor XWA,XWA
 	ld	(12296:16), xwa	; F5642A  ld (0x3008),XWA
 	ld	(12300:16), xwa	; F5642E  ld (0x300c),XWA
-	ld	xwa, 16080146	; F56432  ld XWA,0x00f55d12
+	ld	xwa, sub_F55D12	; F56432  ld XWA,0x00f55d12
 	push	xwa	; F56437  push XWA
 	call	T_CallbackQueue_Post	; F56438  call 0xf42e84
 	inc	4, xsp	; F5643C  inc 4,XSP
 	ld	a, 1:opc	; F5643E  ld A,0x01
 	call	T_Kernel_SemaSignal	; F56440  call 0xf42d88
-	ld	xwa, 16080189	; F56444  ld XWA,0x00f55d3d
+	ld	xwa, sub_F55D3D	; F56444  ld XWA,0x00f55d3d
 	push	xwa	; F56449  push XWA
 	call	T_CallbackQueue_Post	; F5644A  call 0xf42e84
 	inc	4, xsp	; F5644E  inc 4,XSP
@@ -112997,7 +113107,7 @@ sub_F56492:
 	calr	sub_F56DA8	; F564A4  calr 0xf56da8
 	ld	a, (14162:16)	; F564A7  ld A,(0x3752)
 	ld	(4873:16), a	; F564AB  ld (0x1309),A
-	ld	xwa, 16080919	; F564AF  ld XWA,0x00f56017
+	ld	xwa, sub_F56017	; F564AF  ld XWA,0x00f56017
 	push	xwa	; F564B4  push XWA
 	call	T_CallbackQueue_Post	; F564B5  call 0xf42e84
 	inc	4, xsp	; F564B9  inc 4,XSP
@@ -113024,7 +113134,7 @@ sub_F56492_Skip3:
 	popw	wa	; F564F4  pop WA
 	ld	(3555:16), a	; F564F5  ld (0x0de3),A
 	ld	(9798:16), a	; F564F9  ld (0x2646),A
-	ld	xwa, 16080899	; F564FD  ld XWA,0x00f56003
+	ld	xwa, sub_F56003	; F564FD  ld XWA,0x00f56003
 	push	xwa	; F56502  push XWA
 	call	T_CallbackQueue_Post	; F56503  call 0xf42e84
 	inc	4, xsp	; F56507  inc 4,XSP
@@ -113165,13 +113275,13 @@ sub_F5658C:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F5658C  call 0xf42e80
 	ld	a, (32517:16)	; F56590  ld A,(0x7f05)
 	ld	(14163:16), a	; F56594  ld (0x3753),A
-	ld	xwa, 16080054	; F56598  ld XWA,0x00f55cb6
+	ld	xwa, sub_F55CB6	; F56598  ld XWA,0x00f55cb6
 	push	xwa	; F5659D  push XWA
 	call	T_CallbackQueue_Post	; F5659E  call 0xf42e84
 	inc	4, xsp	; F565A2  inc 4,XSP
 	ld	a, 1:opc	; F565A4  ld A,0x01
 	call	T_Kernel_SemaSignal	; F565A6  call 0xf42d88
-	ld	xwa, 16080072	; F565AA  ld XWA,0x00f55cc8
+	ld	xwa, sub_F55CC8	; F565AA  ld XWA,0x00f55cc8
 	push	xwa	; F565AF  push XWA
 	call	T_CallbackQueue_Post	; F565B0  call 0xf42e84
 	inc	4, xsp	; F565B4  inc 4,XSP
@@ -113195,7 +113305,7 @@ sub_F565BD:
 	jr	nz, sub_F5658C_Return	; F565C0  jr NZ,0xf565de
 	m_or_mi8 MB16, 0x2075, 0x08	; F565C2  or (0x2075),0x08
 	calr	sub_F565DF	; F565C7  calr 0xf565df
-	ld	xwa, 16080072	; F565CA  ld XWA,0x00f55cc8
+	ld	xwa, sub_F55CC8	; F565CA  ld XWA,0x00f55cc8
 	push	xwa	; F565CF  push XWA
 	call	T_CallbackQueue_Post	; F565D0  call 0xf42e84
 	inc	4, xsp	; F565D4  inc 4,XSP
@@ -113245,7 +113355,7 @@ sub_F565FD:
 	jr	nz, sub_F565DF_Return2	; F56600  jr NZ,0xf5661e
 	m_or_mi8 MB16, 0x2075, 0x08	; F56602  or (0x2075),0x08
 	calr	sub_F5661F	; F56607  calr 0xf5661f
-	ld	xwa, 16080072	; F5660A  ld XWA,0x00f55cc8
+	ld	xwa, sub_F55CC8	; F5660A  ld XWA,0x00f55cc8
 	push	xwa	; F5660F  push XWA
 	call	T_CallbackQueue_Post	; F56610  call 0xf42e84
 	inc	4, xsp	; F56614  inc 4,XSP
@@ -113364,14 +113474,14 @@ sub_F5664A_Skip4:
 	jr	z, sub_F5664A_Skip5	; F566AD  jr Z,0xf566b4
 	m_and_mi8 MB16, 0x34d9, 0xfe	; F566AF  and (0x34d9),0xfe
 sub_F5664A_Skip5:
-	ld	xwa, 16080691	; F566B4  ld XWA,0x00f55f33
+	ld	xwa, sub_F55F33	; F566B4  ld XWA,0x00f55f33
 	push	xwa	; F566B9  push XWA
 	call	T_CallbackQueue_Post	; F566BA  call 0xf42e84
 	inc	4, xsp	; F566BE  inc 4,XSP
 	ld	a, 1:opc	; F566C0  ld A,0x01
 	call	T_Kernel_SemaSignal	; F566C2  call 0xf42d88
 sub_F5664A_Skip6:
-	ld	xwa, 16080709	; F566C6  ld XWA,0x00f55f45
+	ld	xwa, sub_F55F45	; F566C6  ld XWA,0x00f55f45
 	push	xwa	; F566CB  push XWA
 	call	T_CallbackQueue_Post	; F566CC  call 0xf42e84
 	inc	4, xsp	; F566D0  inc 4,XSP
@@ -113693,15 +113803,16 @@ sub_F5670C_Return7:
 sub_F56850:
 	ld	wa, (13858:16)	; F56850  ld WA,(0x3622)
 	ld	(9814:16), wa	; F56854  ld (0x2656),WA
-	ld	xwa, 16083051	; F56858  ld XWA,0x00f5686b
+	ld	xwa, sub_F5686B	; F56858  ld XWA,0x00f5686b
 	push	xwa	; F5685D  push XWA
 	call	T_CallbackQueue_Post	; F5685E  call 0xf42e84
 	inc	4, xsp	; F56862  inc 4,XSP
 	ld	a, 1:opc	; F56864  ld A,0x01
 	call	T_Kernel_SemaSignal	; F56866  call 0xf42d88
 	ret	; F5686A  ret
+sub_F5686B:
 	ld	(9536:16), 0	; F5686B  ld (0x2540),0x00
-	ld	xiy, 15946191	; F56870  ld XIY,0x00f351cf
+	ld	xiy, DL_F351A7 + 0x28	; F56870  ld XIY,0x00f351cf
 	push	xiy	; F56875  push XIY
 	call	T_Blink_Command	; F56876  call 0xf42e20
 	inc	4, xsp	; F5687A  inc 4,XSP
@@ -113720,15 +113831,16 @@ sub_F56850:
 sub_F5687D:
 	ld	wa, (13860:16)	; F5687D  ld WA,(0x3624)
 	ld	(9816:16), wa	; F56881  ld (0x2658),WA
-	ld	xwa, 16083096	; F56885  ld XWA,0x00f56898
+	ld	xwa, sub_F56898	; F56885  ld XWA,0x00f56898
 	push	xwa	; F5688A  push XWA
 	call	T_CallbackQueue_Post	; F5688B  call 0xf42e84
 	inc	4, xsp	; F5688F  inc 4,XSP
 	ld	a, 1:opc	; F56891  ld A,0x01
 	call	T_Kernel_SemaSignal	; F56893  call 0xf42d88
 	ret	; F56897  ret
+sub_F56898:
 	ld	(9536:16), 0	; F56898  ld (0x2540),0x00
-	ld	xiy, 15946201	; F5689D  ld XIY,0x00f351d9
+	ld	xiy, DL_F351A7 + 0x32	; F5689D  ld XIY,0x00f351d9
 	push	xiy	; F568A2  push XIY
 	call	T_Blink_Command	; F568A3  call 0xf42e20
 	inc	4, xsp	; F568A7  inc 4,XSP
@@ -113780,11 +113892,11 @@ Select36CE_F568AB:
 Select36CE_F568AB_Return:
 	ret	; F568C8  ret
 	ld	(9536:16), 1	; F568C9  ld (0x2540),0x01
-	ld	xiy, 15945770	; F568CE  ld XIY,0x00f3502a
+	ld	xiy, DL_F34FF2 + 0x38	; F568CE  ld XIY,0x00f3502a
 	call	T_F41820	; F568D3  call 0xf41820
 	ld	a, (14030:16)	; F568D7  ld A,(0x36ce)
 	ld	(4854:16), a	; F568DB  ld (0x12f6),A
-	ld	xiy, 15945759	; F568DF  ld XIY,0x00f3501f
+	ld	xiy, DL_F34FF2 + 0x2D	; F568DF  ld XIY,0x00f3501f
 	call	T_F4181C	; F568E4  call 0xf4181c
 	ret	; F568E8  ret
 
@@ -113932,7 +114044,7 @@ sub_F5696D:
 	and	a, 2	; F56971  and A,0x02
 	srl	a, 1	; F56974  srl 0x01,A
 	ld	(9799:16), a	; F56977  ld (0x2647),A
-	ld	xwa, 16080799	; F5697B  ld XWA,0x00f55f9f
+	ld	xwa, sub_F55F9F	; F5697B  ld XWA,0x00f55f9f
 	push	xwa	; F56980  push XWA
 	call	T_CallbackQueue_Post	; F56981  call 0xf42e84
 	inc	4, xsp	; F56985  inc 4,XSP
@@ -114017,7 +114129,7 @@ sub_F569FA:
 	ld	(9814:16), wa	; F569FE  ld (0x2656),WA
 	ld	wa, (13860:16)	; F56A02  ld WA,(0x3624)
 	ld	(9816:16), wa	; F56A06  ld (0x2658),WA
-	ld	xwa, 16080819	; F56A0A  ld XWA,0x00f55fb3
+	ld	xwa, sub_F55FB3	; F56A0A  ld XWA,0x00f55fb3
 	push	xwa	; F56A0F  push XWA
 	call	T_CallbackQueue_Post	; F56A10  call 0xf42e84
 	inc	4, xsp	; F56A14  inc 4,XSP
@@ -114330,7 +114442,7 @@ sub_F56B95_Skip3:
 	call	T_Queue2E00_AppendRegs	; F56C04  call 0xf40f3c
 	call	T_F411BC	; F56C08  call 0xf411bc
 sub_F56B95_Skip4:
-	ld	xwa, 16079969	; F56C0C  ld XWA,0x00f55c61
+	ld	xwa, sub_F55C61	; F56C0C  ld XWA,0x00f55c61
 	push	xwa	; F56C11  push XWA
 	call	T_CallbackQueue_Post	; F56C12  call 0xf42e84
 	inc	4, xsp	; F56C16  inc 4,XSP
@@ -114338,7 +114450,7 @@ sub_F56B95_Skip4:
 	call	T_Kernel_SemaSignal	; F56C1A  call 0xf42d88
 sub_F56B95_Skip5:
 	call	T_F42704	; F56C1E  call 0xf42704
-	ld	xwa, 16080012	; F56C22  ld XWA,0x00f55c8c
+	ld	xwa, sub_F55C8C	; F56C22  ld XWA,0x00f55c8c
 	push	xwa	; F56C27  push XWA
 	call	T_CallbackQueue_Post	; F56C28  call 0xf42e84
 	inc	4, xsp	; F56C2C  inc 4,XSP
@@ -114406,7 +114518,7 @@ sub_F56C35_Skip3:
 	ld	a, (13835:16)	; F56C91  ld A,(0x360b)
 	and	a, 1	; F56C95  and A,0x01
 	ld	(9799:16), a	; F56C98  ld (0x2647),A
-	ld	xwa, 16080012	; F56C9C  ld XWA,0x00f55c8c
+	ld	xwa, sub_F55C8C	; F56C9C  ld XWA,0x00f55c8c
 	push	xwa	; F56CA1  push XWA
 	call	T_CallbackQueue_Post	; F56CA2  call 0xf42e84
 	inc	4, xsp	; F56CA6  inc 4,XSP
@@ -114418,7 +114530,7 @@ sub_F56C35_Skip4:
 	ldw	(8347:16), 34953	; F56CB5  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	T_F40D0C	; F56CBB  call 0xf40d0c
 	call	T_F42704	; F56CBF  call 0xf42704
-	ld	xwa, 16080012	; F56CC3  ld XWA,0x00f55c8c
+	ld	xwa, sub_F55C8C	; F56CC3  ld XWA,0x00f55c8c
 	push	xwa	; F56CC8  push XWA
 	call	T_CallbackQueue_Post	; F56CC9  call 0xf42e84
 	inc	4, xsp	; F56CCD  inc 4,XSP
@@ -114454,7 +114566,7 @@ sub_F56C35_Skip5:
 	ldw	(8347:16), 34953	; F56CFC  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	T_F40D10	; F56D02  call 0xf40d10
 	call	T_F42704	; F56D06  call 0xf42704
-	ld	xwa, 16080012	; F56D0A  ld XWA,0x00f55c8c
+	ld	xwa, sub_F55C8C	; F56D0A  ld XWA,0x00f55c8c
 	push	xwa	; F56D0F  push XWA
 	call	T_CallbackQueue_Post	; F56D10  call 0xf42e84
 	inc	4, xsp	; F56D14  inc 4,XSP
@@ -114511,7 +114623,7 @@ sub_F56D46:
 sub_F56D46_Skip:
 	calr	sub_F56DA8	; F56D52  calr 0xf56da8
 sub_F56D46_Join:
-	ld	xwa, 16080012	; F56D55  ld XWA,0x00f55c8c
+	ld	xwa, sub_F55C8C	; F56D55  ld XWA,0x00f55c8c
 	push	xwa	; F56D5A  push XWA
 	call	T_CallbackQueue_Post	; F56D5B  call 0xf42e84
 	inc	4, xsp	; F56D5F  inc 4,XSP
@@ -114679,14 +114791,14 @@ sub_F56DF1_Skip3:
 	call	T_F40B5C	; F56E36  call 0xf40b5c
 	call	T_F40AC4	; F56E3A  call 0xf40ac4
 sub_F56DF1_Skip4:
-	ld	xwa, 16080600	; F56E3E  ld XWA,0x00f55ed8
+	ld	xwa, sub_F55ED8	; F56E3E  ld XWA,0x00f55ed8
 	push	xwa	; F56E43  push XWA
 	call	T_CallbackQueue_Post	; F56E44  call 0xf42e84
 	inc	4, xsp	; F56E48  inc 4,XSP
 	ld	a, 1:opc	; F56E4A  ld A,0x01
 	call	T_Kernel_SemaSignal	; F56E4C  call 0xf42d88
 sub_F56DF1_Skip5:
-	ld	xwa, 16080618	; F56E50  ld XWA,0x00f55eea
+	ld	xwa, sub_F55EEA	; F56E50  ld XWA,0x00f55eea
 	push	xwa	; F56E55  push XWA
 	call	T_CallbackQueue_Post	; F56E56  call 0xf42e84
 	inc	4, xsp	; F56E5A  inc 4,XSP
@@ -114958,15 +115070,16 @@ sub_F56F09_Return:
 sub_F56F7B:
 	ld	wa, (13854:16)	; F56F7B  ld WA,(0x361e)
 	ld	(9810:16), wa	; F56F7F  ld (0x2652),WA
-	ld	xwa, 16084886	; F56F83  ld XWA,0x00f56f96
+	ld	xwa, sub_F56F96	; F56F83  ld XWA,0x00f56f96
 	push	xwa	; F56F88  push XWA
 	call	T_CallbackQueue_Post	; F56F89  call 0xf42e84
 	inc	4, xsp	; F56F8D  inc 4,XSP
 	ld	a, 1:opc	; F56F8F  ld A,0x01
 	call	T_Kernel_SemaSignal	; F56F91  call 0xf42d88
 	ret	; F56F95  ret
+sub_F56F96:
 	ld	(9536:16), 0	; F56F96  ld (0x2540),0x00
-	ld	xiy, 15945739	; F56F9B  ld XIY,0x00f3500b
+	ld	xiy, DL_F34FF2 + 0x19	; F56F9B  ld XIY,0x00f3500b
 	push	xiy	; F56FA0  push XIY
 	call	T_Blink_Command	; F56FA1  call 0xf42e20
 	inc	4, xsp	; F56FA5  inc 4,XSP
@@ -114985,15 +115098,16 @@ sub_F56F7B:
 sub_F56FA8:
 	ld	wa, (13856:16)	; F56FA8  ld WA,(0x3620)
 	ld	(9812:16), wa	; F56FAC  ld (0x2654),WA
-	ld	xwa, 16084931	; F56FB0  ld XWA,0x00f56fc3
+	ld	xwa, sub_F56FC3	; F56FB0  ld XWA,0x00f56fc3
 	push	xwa	; F56FB5  push XWA
 	call	T_CallbackQueue_Post	; F56FB6  call 0xf42e84
 	inc	4, xsp	; F56FBA  inc 4,XSP
 	ld	a, 1:opc	; F56FBC  ld A,0x01
 	call	T_Kernel_SemaSignal	; F56FBE  call 0xf42d88
 	ret	; F56FC2  ret
+sub_F56FC3:
 	ld	(9536:16), 0	; F56FC3  ld (0x2540),0x00
-	ld	xiy, 15945749	; F56FC8  ld XIY,0x00f35015
+	ld	xiy, DL_F34FF2 + 0x23	; F56FC8  ld XIY,0x00f35015
 	push	xiy	; F56FCD  push XIY
 	call	T_Blink_Command	; F56FCE  call 0xf42e20
 	inc	4, xsp	; F56FD2  inc 4,XSP
@@ -115040,11 +115154,11 @@ sub_F56FD6:
 sub_F56FD6_Return:
 	ret	; F56FF3  ret
 	ld	(9536:16), 1	; F56FF4  ld (0x2540),0x01
-	ld	xiy, 15945770	; F56FF9  ld XIY,0x00f3502a
+	ld	xiy, DL_F34FF2 + 0x38	; F56FF9  ld XIY,0x00f3502a
 	call	T_F41820	; F56FFE  call 0xf41820
 	ld	a, (13863:16)	; F57002  ld A,(0x3627)
 	ld	(4854:16), a	; F57006  ld (0x12f6),A
-	ld	xiy, 15945759	; F5700A  ld XIY,0x00f3501f
+	ld	xiy, DL_F34FF2 + 0x2D	; F5700A  ld XIY,0x00f3501f
 	call	T_F4181C	; F5700F  call 0xf4181c
 	ret	; F57013  ret
 
@@ -115183,7 +115297,7 @@ sub_F5709D:
 	ld	a, (13835:16)	; F5709D  ld A,(0x360b)
 	and	a, 1	; F570A1  and A,0x01
 	ld	(9799:16), a	; F570A4  ld (0x2647),A
-	ld	xwa, 16080799	; F570A8  ld XWA,0x00f55f9f
+	ld	xwa, sub_F55F9F	; F570A8  ld XWA,0x00f55f9f
 	push	xwa	; F570AD  push XWA
 	call	T_CallbackQueue_Post	; F570AE  call 0xf42e84
 	inc	4, xsp	; F570B2  inc 4,XSP
@@ -115268,7 +115382,7 @@ sub_F57127:
 	ld	(9810:16), wa	; F5712B  ld (0x2652),WA
 	ld	wa, (13856:16)	; F5712F  ld WA,(0x3620)
 	ld	(9812:16), wa	; F57133  ld (0x2654),WA
-	ld	xwa, 16080849	; F57137  ld XWA,0x00f55fd1
+	ld	xwa, sub_F55FD1	; F57137  ld XWA,0x00f55fd1
 	push	xwa	; F5713C  push XWA
 	call	T_CallbackQueue_Post	; F5713D  call 0xf42e84
 	inc	4, xsp	; F57141  inc 4,XSP
@@ -115532,14 +115646,14 @@ sub_F57286_Skip4:
 	call	T_F40B5C	; F572E1  call 0xf40b5c
 	call	T_F40AC4	; F572E5  call 0xf40ac4
 sub_F57286_Skip5:
-	ld	xwa, 16080509	; F572E9  ld XWA,0x00f55e7d
+	ld	xwa, sub_F55E7D	; F572E9  ld XWA,0x00f55e7d
 	push	xwa	; F572EE  push XWA
 	call	T_CallbackQueue_Post	; F572EF  call 0xf42e84
 	inc	4, xsp	; F572F3  inc 4,XSP
 	ld	a, 1:opc	; F572F5  ld A,0x01
 	call	T_Kernel_SemaSignal	; F572F7  call 0xf42d88
 sub_F57286_Skip6:
-	ld	xwa, 16080527	; F572FB  ld XWA,0x00f55e8f
+	ld	xwa, sub_F55E8F	; F572FB  ld XWA,0x00f55e8f
 	push	xwa	; F57300  push XWA
 	call	T_CallbackQueue_Post	; F57301  call 0xf42e84
 	inc	4, xsp	; F57305  inc 4,XSP
@@ -115830,7 +115944,7 @@ sub_F5739C_Return2:
 sub_F573D8:
 	ld	a, (13862:16)	; F573D8  ld A,(0x3626)
 	ld	(4872:16), a	; F573DC  ld (0x1308),A
-	ld	xwa, 16080879	; F573E0  ld XWA,0x00f55fef
+	ld	xwa, sub_F55FEF	; F573E0  ld XWA,0x00f55fef
 	push	xwa	; F573E5  push XWA
 	call	T_CallbackQueue_Post	; F573E6  call 0xf42e84
 	inc	4, xsp	; F573EA  inc 4,XSP
@@ -117291,7 +117405,7 @@ DL_F583F0:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F5846D	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLTab_F58455 + 0x18	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
 	.short 0x2725	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
@@ -117359,7 +117473,7 @@ DL_F5844A:
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long 0x00F5846D	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLTab_F58455 + 0x18	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --------------------------------------------------------------------------
 ; DLTab_F58455 -- 0xF58455-0xF585AC, 43 rows x 8 bytes
@@ -119101,7 +119215,7 @@ DL_F59409:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long 0x00F5942C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLTab_F59414 + 0x18	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --------------------------------------------------------------------------
 ; DLTab_F59414 -- 0xF59414-0xF5944B, 7 rows x 8 bytes
@@ -119319,14 +119433,14 @@ DL_F59567:
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F597D5	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLTab_F5975D + 0x78	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F59572:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x272D	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
-	.long 0x00F597D5	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLTab_F5975D + 0x78	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --------------------------------------------------------------------------
 ; DLTab_F5957D -- 0xF5957D-0xF595CC, 10 rows x 8 bytes
@@ -119613,7 +119727,7 @@ DL_F59915:
 	.byte 0x07	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
-	.long 0x00F5942C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.long DLTab_F59414 + 0x18	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --------------------------------------------------------------------------
 ; 0xF5993E-0xF59951 -- 2 display-list record(s), 20 bytes -- interpreter B
@@ -122004,7 +122118,7 @@ UiText_CopyLabel13_To_22F0:		; <- T_F43330
 	extz	wa	; F5B802  extz WA
 	and	a, 63	; F5B804  and A,0x3f
 	mul	a, 13	; F5B807  mul A,0x0d
-	ld	xiy, 15937570	; F5B80A  ld XIY,0x00f33022
+	ld	xiy, Data_F32FE6 + 0x3C	; F5B80A  ld XIY,0x00f33022
 	add	xiy, xwa	; F5B80F  add XIY,XWA
 	ld	xix, 8944	; F5B811  ld XIX,0x000022f0
 	ldw	bc, 13	; F5B816  ld BC,0x000d
@@ -122243,7 +122357,7 @@ Dispatch_Code80_Bracketed:
 	cp	hl, 192	; F5B8C2  cp HL,0x00c0
 	jr	c, SC1_Entry_F40F24_Body_Ret_Skip	; F5B8C6  jr C,0xf5b8d3
 	sub	hl, 192	; F5B8C8  sub HL,0x00c0
-	ld	xiy, 16103800	; F5B8CC  ld XIY,0x00f5b978
+	ld	xiy, DispatchTable_F5B8F8 + 0x80	; F5B8CC  ld XIY,0x00f5b978
 	jr	SC1_Entry_F40F24_Body_Ret_Join	; F5B8D1  jr T,0xf5b8dc
 SC1_Entry_F40F24_Body_Ret_Skip:
 	sub	hl, 128	; F5B8D3  sub HL,0x0080
@@ -122269,7 +122383,7 @@ SC1_Entry_F40F24_Body_Ret_Join:
 ;     next routine's first byte.  Entries for 0xC0.. re-use 0xA0.. ------------
 DispatchTable_F5B8F8:
 	.long sub_F5BF27	; [0x80]
-	.long 0x00F5BF17	; [0x81]   (default `ret`)
+	.long sub_F5BE5A + 0xBD	; [0x81]   (default `ret`)
 	.long sub_F5C2A8	; [0x82]
 	.long sub_F5D40E	; [0x83]
 	.long sub_F5D4C3	; [0x84]
@@ -122296,7 +122410,7 @@ DispatchTable_F5B8F8:
 	.long sub_F5D619	; [0x99]
 	.long SoundEditDigitalEffect_Paint	; [0x9A]
 	.long SoundEditController_PaintPage2	; [0x9B]
-	.long 0x00F5BF17	; [0x9C]   (default `ret`)
+	.long sub_F5BE5A + 0xBD	; [0x9C]   (default `ret`)
 	.long SoundEditCopy_Paint	; [0x9D]
 	.long sub_F5D14E	; [0x9E]
 	.long sub_F5D1E8	; [0x9F]
@@ -122309,13 +122423,13 @@ DispatchTable_F5B8F8:
 	.long sub_F5C172	; [0xA6]  <- also selector 0xC6
 	.long sub_F5C1AC	; [0xA7]  <- also selector 0xC7
 	.long sub_F5C210	; [0xA8]  <- also selector 0xC8
-	.long 0x00F5BF17	; [0xA9]   (default `ret`)  <- also selector 0xC9
+	.long sub_F5BE5A + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
 	.long sub_F5D29A	; [0xAA]  <- also selector 0xCA
 	.long sub_F5D29B	; [0xAB]  <- also selector 0xCB
-	.long 0x00F5BF17	; [0xAC]   (default `ret`)  <- also selector 0xCC
+	.long sub_F5BE5A + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_PaintPage1	; [0xAD]  <- also selector 0xCD
-	.long 0x00F5BF17	; [0xAE]   (default `ret`)  <- also selector 0xCE
-	.long 0x00F5BF17	; [0xAF]   (default `ret`)  <- also selector 0xCF
+	.long sub_F5BE5A + 0xBD	; [0xAE]   (default `ret`)  <- also selector 0xCE
+	.long sub_F5BE5A + 0xBD	; [0xAF]   (default `ret`)  <- also selector 0xCF
 
 ; ---------------------------------------------------------------------
 ; Dispatch_Code80 -- the same selector table mechanism, no display bracket
@@ -122344,7 +122458,7 @@ Dispatch_Code80:
 	cp	hl, 192	; F5B9C7  cp HL,0x00c0
 	jr	c, Dispatch_Code80_Skip	; F5B9CB  jr C,0xf5b9d8
 	sub	hl, 192	; F5B9CD  sub HL,0x00c0
-	ld	xiy, 16104056	; F5B9D1  ld XIY,0x00f5ba78
+	ld	xiy, DispatchTable_F5B9F8 + 0x80	; F5B9D1  ld XIY,0x00f5ba78
 	jr	Dispatch_Code80_Join	; F5B9D6  jr T,0xf5b9e1
 Dispatch_Code80_Skip:
 	sub	hl, 128	; F5B9D8  sub HL,0x0080
@@ -122366,7 +122480,7 @@ Dispatch_Code80_Join:
 ; --- 0xF5B9F8: 48 entries, one per selector 0x80..0xAF ---------------------
 DispatchTable_F5B9F8:
 	.long sub_F09CA9	; [0x80]
-	.long 0x00F5BF17	; [0x81]   (default `ret`)
+	.long sub_F5BE5A + 0xBD	; [0x81]   (default `ret`)
 	.long sub_F5CE65	; [0x82]
 	.long sub_F5D62B	; [0x83]
 	.long sub_F5D6AC	; [0x84]
@@ -122386,14 +122500,14 @@ DispatchTable_F5B9F8:
 	.long sub_F5D0F9	; [0x92]
 	.long sub_F5D108	; [0x93]
 	.long sub_F5D117	; [0x94]
-	.long 0x00F5BF17	; [0x95]   (default `ret`)
+	.long sub_F5BE5A + 0xBD	; [0x95]   (default `ret`)
 	.long sub_F5D05B	; [0x96]
 	.long sub_F5D126	; [0x97]
 	.long sub_F5D6FC	; [0x98]
 	.long sub_F5CEF6	; [0x99]
 	.long SoundEditDigitalEffect_RepaintField	; [0x9A]
 	.long SoundEditController_RepaintFieldPage2	; [0x9B]
-	.long 0x00F5BF17	; [0x9C]   (default `ret`)
+	.long sub_F5BE5A + 0xBD	; [0x9C]   (default `ret`)
 	.long SoundEditCopy_RepaintField	; [0x9D]
 	.long sub_F5D2E9	; [0x9E]
 	.long sub_F5D313	; [0x9F]
@@ -122406,13 +122520,13 @@ DispatchTable_F5B9F8:
 	.long sub_F5CDA8	; [0xA6]  <- also selector 0xC6
 	.long sub_F5CDD4	; [0xA7]  <- also selector 0xC7
 	.long sub_F5CE00	; [0xA8]  <- also selector 0xC8
-	.long 0x00F5BF17	; [0xA9]   (default `ret`)  <- also selector 0xC9
+	.long sub_F5BE5A + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
 	.long sub_F5D40D	; [0xAA]  <- also selector 0xCA
 	.long sub_F5D2D5	; [0xAB]  <- also selector 0xCB
-	.long 0x00F5BF17	; [0xAC]   (default `ret`)  <- also selector 0xCC
+	.long sub_F5BE5A + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_RepaintFieldPage1	; [0xAD]  <- also selector 0xCD
-	.long 0x00F5BF17	; [0xAE]   (default `ret`)  <- also selector 0xCE
-	.long 0x00F5BF17	; [0xAF]   (default `ret`)  <- also selector 0xCF
+	.long sub_F5BE5A + 0xBD	; [0xAE]   (default `ret`)  <- also selector 0xCE
+	.long sub_F5BE5A + 0xBD	; [0xAF]   (default `ret`)  <- also selector 0xCF
 
 ; --- 0xF5BAB8-0xF62BFF: not converted ---
 
@@ -122586,7 +122700,7 @@ UiPaint_Ordinals:		; <- T_UiPaint_Ordinals
 	jr	nz, UiPaint_Ordinals_Skip	; F5BB0C  jr NZ,0xf5bb25
 	ld	(9536:16), 0	; F5BB0E  ld (0x2540),0x00
 	ld	xiy, DL_F02F22	; F5BB13  ld XIY,0x00f02f22
-	ld	xix, 15740716	; F5BB18  ld XIX,0x00f02f2c
+	ld	xix, DL_F02F22 + 0xA	; F5BB18  ld XIX,0x00f02f2c
 	call	T_DisplayList_Run	; F5BB1D  call 0xf417f0
 	ld	c, 2:opc	; F5BB21  ld C,0x02
 	jr	UiPaint_Ordinals_Join	; F5BB23  jr T,0xf5bb3a
@@ -122878,7 +122992,7 @@ sub_F5BCE8:
 	popw	iy	; F5BD2C  pop IY
 	popw	ix	; F5BD2D  pop IX
 	ld	c, 5:opc	; F5BD2E  ld C,0x05
-	ld	xiz, 16104871	; F5BD30  ld XIZ,0x00f5bda7
+	ld	xiz, sub_F5BDA7	; F5BD30  ld XIZ,0x00f5bda7
 sub_F5BCE8_Loop:
 	ld	hl, (xiz)	; F5BD35  ld HL,(XIZ)
 	ld	de, (xiz+2)	; F5BD37  ld DE,(XIZ+0x02)
@@ -122922,6 +123036,7 @@ sub_F5BCE8_Loop:
 	dec	1, c	; F5BDA2  dec 1,C
 	jr	nz, -47	; F5BDA4  jr NZ,0xf5bd77
 	ret	; F5BDA6  ret
+sub_F5BDA7:
 	pop	sr	; F5BDA7  pop SR
 	nop	; F5BDA8  nop
 	halt	; F5BDA9  halt
@@ -122969,10 +123084,10 @@ sub_F5BDBB_Join:
 	sla	wa, 2	; F5BDF0  sla 0x02,WA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BDF3  cp (0x27f5),0x01
 	jr	nz, sub_F5BDBB_Skip	; F5BDF8  jr NZ,0xf5be01
-	ld	xiz, 15745394	; F5BDFA  ld XIZ,0x00f04172
+	ld	xiz, Data_F04042 + 0x130	; F5BDFA  ld XIZ,0x00f04172
 	jr	sub_F5BDBB_Join2	; F5BDFF  jr T,0xf5be06
 sub_F5BDBB_Skip:
-	ld	xiz, 15745374	; F5BE01  ld XIZ,0x00f0415e
+	ld	xiz, Data_F04042 + 0x11C	; F5BE01  ld XIZ,0x00f0415e
 sub_F5BDBB_Join2:
 	push	xwa	; F5BE06  push XWA
 	add	xiz, xwa	; F5BE07  add XIZ,XWA
@@ -122994,10 +123109,10 @@ sub_F5BDBB_Join3:
 	pop	xwa	; F5BE35  pop XWA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BE36  cp (0x27f5),0x01
 	jr	nz, sub_F5BDBB_Skip3	; F5BE3B  jr NZ,0xf5be44
-	ld	xiz, 15745362	; F5BE3D  ld XIZ,0x00f04152
+	ld	xiz, Data_F04042 + 0x110	; F5BE3D  ld XIZ,0x00f04152
 	jr	sub_F5BDBB_Join4	; F5BE42  jr T,0xf5be49
 sub_F5BDBB_Skip3:
-	ld	xiz, 15745342	; F5BE44  ld XIZ,0x00f0413e
+	ld	xiz, Data_F04042 + 0xFC	; F5BE44  ld XIZ,0x00f0413e
 sub_F5BDBB_Join4:
 	add	xiz, xwa	; F5BE49  add XIZ,XWA
 	ld	xiy, (xiz)	; F5BE4B  ld XIY,(XIZ)
@@ -123051,7 +123166,7 @@ sub_F5BE5A:
 	swi	7	; F5BECB  swi 7
 	jr	sub_F5BE5A_Return	; F5BECC  jr T,0xf5befa
 sub_F5BE5A_Skip:
-	ld	xiz, 16105211	; F5BECE  ld XIZ,0x00f5befb
+	ld	xiz, sub_F5BEFB	; F5BECE  ld XIZ,0x00f5befb
 	xor	w, w	; F5BED3  xor W,W
 	sll	wa, 2	; F5BED5  sll 0x02,WA
 	mx_ld_rm MXL, ra_IZ, ra_WA, 5	; F5BED8  ld XIY,(XIZ+WA)
@@ -123068,6 +123183,7 @@ sub_F5BE5A_Skip:
 	swi	7	; F5BEF9  swi 7
 sub_F5BE5A_Return:
 	ret	; F5BEFA  ret
+sub_F5BEFB:
 	m_cp_rm MLD+r2, 0x1d, 0	; F5BEFB  cp XWA,(XDE+0x1d)
 	nop	; F5BEFE  nop
 	.byte 0xE2, 0x1C, 0xF0, 0x00, 0x1A	; F5BEFF  db   [llvm-mc cannot encode this]
@@ -123102,7 +123218,7 @@ sub_F5BF27:
 sub_F5BE5A_Skip2:
 	ld	(9536:16), 0	; F5BF51  ld (0x2540),0x00
 	ld	xiy, DL_UserKitSoundEditSoundToneSelect	; F5BF56  ld XIY,0x00f33bd8
-	ld	xix, 15941377	; F5BF5B  ld XIX,0x00f33f01
+	ld	xix, DL_UserKitSoundEditSoundToneSelect + 0x329	; F5BF5B  ld XIX,0x00f33f01
 	call	T_DisplayList_Run	; F5BF60  call 0xf417f0
 	ld	(9536:16), 0	; F5BF64  ld (0x2540),0x00
 	call	sub_F09D91	; F5BF69  call 0xf09d91
@@ -123157,7 +123273,7 @@ sub_F5BF9F:
 	ld	d, (xbc)	; F5BFA8  ld D,(XBC)
 	cp	d, 0:i3	; F5BFAA  cp D,0
 	jr	z, sub_F5BF9F_Return	; F5BFAC  jr Z,0xf5bfbc
-	ld	xiy, 15754668	; F5BFAE  ld XIY,0x00f065ac
+	ld	xiy, Data_F06598 + 0x14	; F5BFAE  ld XIY,0x00f065ac
 	ld	(9536:16), 0	; F5BFB3  ld (0x2540),0x00
 	call	RunDisplayListBFromPointerArray	; F5BFB8  call 0xf09ae1
 sub_F5BF9F_Return:
@@ -123211,10 +123327,10 @@ sub_F5BFBD_Skip:
 sub_F5BFBD_Skip2:
 	ld	(9536:16), 0	; F5C01F  ld (0x2540),0x00
 	ld	xiy, DL_OriginalStringCylinderCone	; F5C024  ld XIY,0x00f0302a
-	ld	xix, 15741004	; F5C029  ld XIX,0x00f0304c
+	ld	xix, DL_OriginalStringCylinderCone + 0x22	; F5C029  ld XIX,0x00f0304c
 	call	T_DisplayListB_Run	; F5C02E  call 0xf417f4
 	ld	xiy, DL_F0306E	; F5C032  ld XIY,0x00f0306e
-	ld	xix, 15741098	; F5C037  ld XIX,0x00f030aa
+	ld	xix, DL_F0306E + 0x3C	; F5C037  ld XIX,0x00f030aa
 	call	T_DisplayListB_Run	; F5C03C  call 0xf417f4
 	ld	xiy, DL_F030E6	; F5C040  ld XIY,0x00f030e6
 	ld	xix, DL_F03107	; F5C045  ld XIX,0x00f03107
@@ -123366,7 +123482,7 @@ sub_F5C210:
 	ld	xix, DL_Parallel	; F5C21E  ld XIX,0x00f064c6
 	call	T_DisplayList_Run	; F5C223  call 0xf417f0
 	ld	xiy, DL_F06576	; F5C227  ld XIY,0x00f06576
-	ld	xix, 15754631	; F5C22C  ld XIX,0x00f06587
+	ld	xix, DL_F06576 + 0x11	; F5C22C  ld XIX,0x00f06587
 	call	T_DisplayListB_Run	; F5C231  call 0xf417f4
 	jr	sub_F5C144_Join2	; F5C235  jr T,0xf5c253
 sub_F5C144_Skip2:
@@ -123441,10 +123557,10 @@ sub_F5C27D_Skip2:
 sub_F5C27D_Skip3:
 	ld	(9536:16), 0	; F5C308  ld (0x2540),0x00
 	ld	xiy, DL_F33A71	; F5C30D  ld XIY,0x00f33a71
-	ld	xix, 15940285	; F5C312  ld XIX,0x00f33abd
+	ld	xix, DL_F33A71 + 0x4C	; F5C312  ld XIX,0x00f33abd
 	call	T_DisplayListB_Run	; F5C317  call 0xf417f4
 	ld	xiy, DL_F33B09	; F5C31B  ld XIY,0x00f33b09
-	ld	xix, 15940421	; F5C320  ld XIX,0x00f33b45
+	ld	xix, DL_F33B09 + 0x3C	; F5C320  ld XIX,0x00f33b45
 	call	T_DisplayListB_Run	; F5C325  call 0xf417f4
 	ld	xiy, DL_F33B81	; F5C329  ld XIY,0x00f33b81
 	ld	xix, Data_F33B8C	; F5C32E  ld XIX,0x00f33b8c
@@ -123483,7 +123599,7 @@ sub_F5C338:
 sub_F5C34C:
 	ld	(9536:16), 0	; F5C34C  ld (0x2540),0x00
 	ld	xiy, DL_M0delingSoundEditToneDriver	; F5C351  ld XIY,0x00f01f96
-	ld	xix, 15736894	; F5C356  ld XIX,0x00f0203e
+	ld	xix, DL_M0delingSoundEditToneDriver + 0xA8	; F5C356  ld XIX,0x00f0203e
 	call	T_DisplayList_Run	; F5C35B  call 0xf417f0
 	ret	; F5C35F  ret
 
@@ -123558,7 +123674,7 @@ sub_F5C39C:
 	jr	nz, sub_F5C39C_Skip	; F5C3A1  jr NZ,0xf5c3ba
 	ld	(9536:16), 0	; F5C3A3  ld (0x2540),0x00
 	ld	xiy, DL_F039D9	; F5C3A8  ld XIY,0x00f039d9
-	ld	xix, 15743459	; F5C3AD  ld XIX,0x00f039e3
+	ld	xix, DL_F039D9 + 0xA	; F5C3AD  ld XIX,0x00f039e3
 	call	T_DisplayList_Run	; F5C3B2  call 0xf417f0
 	ld	c, 2:opc	; F5C3B6  ld C,0x02
 	jr	sub_F5C39C_Join	; F5C3B8  jr T,0xf5c3cf
@@ -123589,7 +123705,7 @@ sub_F5C39C_Skip2:
 	push	c	; F5C400  push C
 	xor	b, b	; F5C402  xor B,B
 	sla	bc, 2	; F5C404  sla 0x02,BC
-	ld	xiz, 15743497	; F5C407  ld XIZ,0x00f03a09
+	ld	xiz, Data_F039ED + 0x1C	; F5C407  ld XIZ,0x00f03a09
 	mx_ld_rm MXL, ra_IZ, ra_BC, 5	; F5C40C  ld XIY,(XIZ+BC)
 	add	bc, 4	; F5C411  add BC,0x0004
 	mx_ld_rm MXL, ra_IZ, ra_BC, 4	; F5C415  ld XIX,(XIZ+BC)
@@ -123669,7 +123785,7 @@ sub_F5C424_Join2:
 sub_F5C49F:
 	ld	(9536:16), 0	; F5C49F  ld (0x2540),0x00
 	ld	xiy, DL_T0neLayerSoundEditTrigGer	; F5C4A4  ld XIY,0x00f03892
-	ld	xix, 15743299	; F5C4A9  ld XIX,0x00f03943
+	ld	xix, DL_T0neLayerSoundEditTrigGer + 0xB1	; F5C4A9  ld XIX,0x00f03943
 	call	T_DisplayList_Run	; F5C4AE  call 0xf417f0
 	ld	(9536:16), 0	; F5C4B2  ld (0x2540),0x00
 	ret	; F5C4B7  ret
@@ -123739,7 +123855,7 @@ sub_F5C513:
 ; --------------------------------------------------------------------------
 sub_F5C517:
 	ld	xiy, DL_Lf01Lf02Lf03Lf04Lf0WaveDelay	; F5C517  ld XIY,0x00f06601
-	ld	xix, 15755174	; F5C51C  ld XIX,0x00f067a6
+	ld	xix, DL_Lf01Lf02Lf03Lf04Lf0WaveDelay + 0x1A5	; F5C51C  ld XIX,0x00f067a6
 	call	T_DisplayList_Run	; F5C521  call 0xf417f0
 	call	sub_F5C549	; F5C525  call 0xf5c549
 	call	UiPaint_Solo	; F5C529  call 0xf5bab8
@@ -123867,7 +123983,7 @@ sub_F5C5A5_Loop:
 	srl	a, 6	; F5C654  srl 0x06,A
 	xor	w, w	; F5C657  xor W,W
 	mul	a, 10	; F5C659  mul A,0x0a
-	ld	xiz, 15750671	; F5C65C  ld XIZ,0x00f0560f
+	ld	xiz, Data_F0550B + 0x104	; F5C65C  ld XIZ,0x00f0560f
 	mx_ld_rm MXL, ra_IZ, ra_DE, 5	; F5C661  ld XIY,(XIZ+DE)
 	extz	xwa	; F5C666  extz XWA
 	add	xiy, xwa	; F5C668  add XIY,XWA
@@ -123890,7 +124006,7 @@ sub_F5C5A5_Loop:
 	ld	(9536:16), 2	; F5C691  ld (0x2540),0x02
 	push	c	; F5C696  push C
 	push	xiy	; F5C698  push XIY
-	ld	xiz, 15935612	; F5C699  ld XIZ,0x00f3287c
+	ld	xiz, Data_F32864 + 0x18	; F5C699  ld XIZ,0x00f3287c
 	mx_ld_rm MXL, ra_IZ, ra_DE, 5	; F5C69E  ld XIY,(XIZ+DE)
 	ld	xix, xiy	; F5C6A3  ld XIX,XIY
 	add	xix, 20	; F5C6A5  add XIX,0x00000014
@@ -124003,12 +124119,12 @@ sub_F5C79E:
 	call	sub_F5C916	; F5C7B7  call 0xf5c916
 	ld	(9536:16), 2	; F5C7BB  ld (0x2540),0x02
 	ld	xiy, DL_Keyoff	; F5C7C0  ld XIY,0x00f049dd
-	ld	xix, 15747559	; F5C7C5  ld XIX,0x00f049e7
+	ld	xix, DL_Keyoff + 0xA	; F5C7C5  ld XIX,0x00f049e7
 	call	T_DisplayList_Run	; F5C7CA  call 0xf417f0
 	jr	sub_F5C772_Join	; F5C7CE  jr T,0xf5c7ec
 sub_F5C772_Skip:
 	ld	xiy, DL_EnvelopeKeyoffAtkPeakDecay1	; F5C7D0  ld XIY,0x00f04358
-	ld	xix, 15745904	; F5C7D5  ld XIX,0x00f04370
+	ld	xix, DL_EnvelopeKeyoffAtkPeakDecay1 + 0x18	; F5C7D5  ld XIX,0x00f04370
 	call	T_DisplayList_Run	; F5C7DA  call 0xf417f0
 	ld	xiy, DL_KeyOffModeTouchAtkDecay1Sust1Decay2Sust2	; F5C7DE  ld XIY,0x00f336ce
 	ld	xix, DL_F33796	; F5C7E3  ld XIX,0x00f33796
@@ -124299,7 +124415,7 @@ sub_F5CADD:
 	call	sub_F5BFBD	; F5CAEB  call 0xf5bfbd
 	ld	(9536:16), 2	; F5CAEF  ld (0x2540),0x02
 	ld	xiy, DL_F049D3	; F5CAF4  ld XIY,0x00f049d3
-	ld	xix, 15747559	; F5CAF9  ld XIX,0x00f049e7
+	ld	xix, DL_Keyoff + 0xA	; F5CAF9  ld XIX,0x00f049e7
 	call	T_DisplayList_Run	; F5CAFE  call 0xf417f0
 	call	UiPaint_Solo	; F5CB02  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5CB06  call 0xf5bb00
@@ -124475,7 +124591,7 @@ sub_F5CC64_Loop:
 	push	xbc	; F5CCAC  push XBC
 	call	T_DisplayListB_Run	; F5CCAD  call 0xf417f4
 	pop	xbc	; F5CCB1  pop XBC
-	ld	xiy, 15940147	; F5CCB2  ld XIY,0x00f33a33
+	ld	xiy, Data_F33A1B + 0x18	; F5CCB2  ld XIY,0x00f33a33
 	add	xiy, xbc	; F5CCB7  add XIY,XBC
 	ld	xiy, (xiy)	; F5CCB9  ld XIY,(XIY)
 	ld	xix, xiy	; F5CCBB  ld XIX,XIY
@@ -124483,7 +124599,7 @@ sub_F5CC64_Loop:
 	call	T_DisplayList_Run	; F5CCC3  call 0xf417f0
 	jr	sub_F5CC64_Join	; F5CCC7  jr T,0xf5cce5
 sub_F5CC64_Skip:
-	ld	xiy, 15940135	; F5CCC9  ld XIY,0x00f33a27
+	ld	xiy, Data_F33A1B + 0xC	; F5CCC9  ld XIY,0x00f33a27
 	extz	xbc	; F5CCCE  extz XBC
 	xor	b, b	; F5CCD0  xor B,B
 	sla	bc, 2	; F5CCD2  sla 0x02,BC
@@ -124505,12 +124621,12 @@ sub_F5CCF6:
 	jr	nz, sub_F5CC64_Skip2	; F5CCF8  jr NZ,0xf5cd0f
 	ld	(9536:16), 0	; F5CCFA  ld (0x2540),0x00
 	ld	xiy, DL_F03455	; F5CCFF  ld XIY,0x00f03455
-	ld	xix, 15742062	; F5CD04  ld XIX,0x00f0346e
+	ld	xix, DL_F03455 + 0x19	; F5CD04  ld XIX,0x00f0346e
 	call	T_DisplayListB_Run	; F5CD09  call 0xf417f4
 	jr	sub_F5CC64_Return	; F5CD0D  jr T,0xf5cd1d
 sub_F5CC64_Skip2:
 	ld	(9536:16), 0	; F5CD0F  ld (0x2540),0x00
-	ld	xiy, 15742080	; F5CD14  ld XIY,0x00f03480
+	ld	xiy, Data_F03478 + 0x8	; F5CD14  ld XIY,0x00f03480
 	call	RunDisplayListBFromPointerArray	; F5CD19  call 0xf09ae1
 sub_F5CC64_Return:
 	ret	; F5CD1D  ret
@@ -124547,13 +124663,13 @@ sub_F5CC64_Skip4:
 sub_F5CC64_Skip5:
 	ld	(9536:16), 0	; F5CD6F  ld (0x2540),0x00
 	ld	xiy, DL_F034E8	; F5CD74  ld XIY,0x00f034e8
-	ld	xix, 15742210	; F5CD79  ld XIX,0x00f03502
+	ld	xix, DL_F034E8 + 0x1A	; F5CD79  ld XIX,0x00f03502
 	call	T_DisplayListB_Run	; F5CD7E  call 0xf417f4
 	jr	sub_F5CC64_Return3	; F5CD82  jr T,0xf5cda7
 sub_F5CC64_Skip6:
 	ld	(9536:16), 0	; F5CD84  ld (0x2540),0x00
 	ld	xiy, DL_F03522	; F5CD89  ld XIY,0x00f03522
-	ld	xix, 15742268	; F5CD8E  ld XIX,0x00f0353c
+	ld	xix, DL_F03522 + 0x1A	; F5CD8E  ld XIX,0x00f0353c
 	call	T_DisplayListB_Run	; F5CD93  call 0xf417f4
 	jr	sub_F5CC64_Return3	; F5CD97  jr T,0xf5cda7
 sub_F5CC64_Join2:
@@ -124607,7 +124723,7 @@ sub_F5CC64_Skip9:
 sub_F5CC64_Skip10:
 	ld	(9536:16), 0	; F5CE24  ld (0x2540),0x00
 	ld	xiy, DL_F06517	; F5CE29  ld XIY,0x00f06517
-	ld	xix, 15754549	; F5CE2E  ld XIX,0x00f06535
+	ld	xix, DL_F06517 + 0x1E	; F5CE2E  ld XIX,0x00f06535
 	call	T_DisplayListB_Run	; F5CE33  call 0xf417f4
 	jr	sub_F5CC64_Return4	; F5CE37  jr T,0xf5ce64
 sub_F5CC64_Join3:
@@ -124619,7 +124735,7 @@ sub_F5CC64_Join3:
 	jr	sub_F5CC64_Return4	; F5CE50  jr T,0xf5ce64
 sub_F5CC64_Skip11:
 	ld	(9536:16), 0	; F5CE52  ld (0x2540),0x00
-	ld	xiy, 15754668	; F5CE57  ld XIY,0x00f065ac
+	ld	xiy, Data_F06598 + 0x14	; F5CE57  ld XIY,0x00f065ac
 	call	RunDisplayListBFromPointerArray	; F5CE5C  call 0xf09ae1
 	call	sub_F5C27D	; F5CE60  call 0xf5c27d
 sub_F5CC64_Return4:
@@ -124696,13 +124812,13 @@ sub_F5CC64_Skip15:
 sub_F5CC64_Skip16:
 	ld	(9536:16), 0	; F5CF28  ld (0x2540),0x00
 	ld	xiy, DL_F053E3	; F5CF2D  ld XIY,0x00f053e3
-	ld	xix, 15750140	; F5CF32  ld XIX,0x00f053fc
+	ld	xix, DL_F053E3 + 0x19	; F5CF32  ld XIX,0x00f053fc
 	call	T_DisplayListB_Run	; F5CF37  call 0xf417f4
 	jr	sub_F5CC64_Return6	; F5CF3B  jr T,0xf5cfa3
 sub_F5CC64_Skip17:
 	ld	(9536:16), 0	; F5CF3D  ld (0x2540),0x00
 	ld	xiy, DL_F053B6	; F5CF42  ld XIY,0x00f053b6
-	ld	xix, 15750095	; F5CF47  ld XIX,0x00f053cf
+	ld	xix, DL_F053B6 + 0x19	; F5CF47  ld XIX,0x00f053cf
 	call	T_DisplayListB_Run	; F5CF4C  call 0xf417f4
 	jr	sub_F5CC64_Return6	; F5CF50  jr T,0xf5cfa3
 sub_F5CC64_Skip18:
@@ -124750,7 +124866,7 @@ sub_F5CFA4:
 	ld	c, (10150:16)	; F5CFB7  ld C,(0x27a6)
 	xor	b, b	; F5CFBB  xor B,B
 	sla	bc, 2	; F5CFBD  sla 0x02,BC
-	ld	xiz, 15750491	; F5CFC0  ld XIZ,0x00f0555b
+	ld	xiz, Data_F0550B + 0x50	; F5CFC0  ld XIZ,0x00f0555b
 	mx_ld_rm MXL, ra_IZ, ra_BC, 5	; F5CFC5  ld XIY,(XIZ+BC)
 	ld	xix, xiy	; F5CFCA  ld XIX,XIY
 	add	xix, 20	; F5CFCC  add XIX,0x00000014
@@ -124799,7 +124915,7 @@ sub_F5CFA4_Skip4:
 	cp	a, 1:i3	; F5D03D  cp A,1
 	jr	nz, sub_F5CFA4_Skip5	; F5D03F  jr NZ,0xf5d051
 	ld	xiy, DL_F33796	; F5D041  ld XIY,0x00f33796
-	ld	xix, 15939567	; F5D046  ld XIX,0x00f337ef
+	ld	xix, DL_F33796 + 0x59	; F5D046  ld XIX,0x00f337ef
 	call	T_DisplayListB_Run	; F5D04B  call 0xf417f4
 	jr	sub_F5CFA4_Return	; F5D04F  jr T,0xf5d05a
 sub_F5CFA4_Skip5:
@@ -124835,7 +124951,7 @@ sub_F5CFA4_Return2:
 	ret	; F5D09E  ret
 sub_F5D09F:
 	ld	(9536:16), 0	; F5D09F  ld (0x2540),0x00
-	ld	xiy, 15749530	; F5D0A4  ld XIY,0x00f0519a
+	ld	xiy, Data_F05182 + 0x18	; F5D0A4  ld XIY,0x00f0519a
 	call	RunDisplayListBFromPointerArray	; F5D0A9  call 0xf09ae1
 	ret	; F5D0AD  ret
 sub_F5D0AE:
@@ -124906,7 +125022,7 @@ sub_F5D14E:
 	jr	sub_F5CFA4_Join6	; F5D176  jr T,0xf5d194
 sub_F5CFA4_Skip11:
 	ld	xiy, DL_Mem0ryWriteSoundEditName	; F5D178  ld XIY,0x00f0564b
-	ld	xix, 15750976	; F5D17D  ld XIX,0x00f05740
+	ld	xix, DL_Mem0ryWriteSoundEditName + 0xF5	; F5D17D  ld XIX,0x00f05740
 	call	T_DisplayList_Run	; F5D182  call 0xf417f0
 	ld	xiy, DL_MemoryBank	; F5D186  ld XIY,0x00f057e3
 	ld	xix, Data_F05801	; F5D18B  ld XIX,0x00f05801
@@ -125081,7 +125197,7 @@ sub_F5D199_Skip11:
 	ld	xiy, DL_F05AA0	; F5D367  ld XIY,0x00f05aa0
 	ld	xix, Data_F05AB4	; F5D36C  ld XIX,0x00f05ab4
 	call	T_DisplayList_Run	; F5D371  call 0xf417f0
-	ld	xiy, 15751773	; F5D375  ld XIY,0x00f05a5d
+	ld	xiy, DL_F05A4C + 0x11	; F5D375  ld XIY,0x00f05a5d
 	call	T_DisplayListB_RunOne	; F5D37A  call 0xf41830
 	call	sub_F5D3C6	; F5D37E  call 0xf5d3c6
 	jr	sub_F5D199_Return2	; F5D382  jr T,0xf5d3c5
@@ -125124,7 +125240,7 @@ sub_F5D3C6:
 	xor	wa, wa	; F5D3C6  xor WA,WA
 	ld	a, (10151:16)	; F5D3C8  ld A,(0x27a7)
 	div	a, 16	; F5D3CC  div A,0x10
-	ld	xiz, 15751988	; F5D3CF  ld XIZ,0x00f05b34
+	ld	xiz, Data_F05AB4 + 0x80	; F5D3CF  ld XIZ,0x00f05b34
 	xor	hl, hl	; F5D3D4  xor HL,HL
 	ld	l, w	; F5D3D6  ld L,W
 	sla	hl, 1	; F5D3D8  sla 0x01,HL
@@ -125132,7 +125248,7 @@ sub_F5D3C6:
 	ld	(9520:16), ix	; F5D3E0  ld (0x2530),IX
 	add	ix, 8	; F5D3E4  add IX,0x0008
 	ld	(9524:16), ix	; F5D3E8  ld (0x2534),IX
-	ld	xiz, 15752020	; F5D3EC  ld XIZ,0x00f05b54
+	ld	xiz, Data_F05AB4 + 0xA0	; F5D3EC  ld XIZ,0x00f05b54
 	xor	hl, hl	; F5D3F1  xor HL,HL
 	ld	l, a	; F5D3F3  ld L,A
 	sla	hl, 1	; F5D3F5  sla 0x01,HL
@@ -125262,7 +125378,7 @@ sub_F5D4A7:
 	ld	d, (xbc)	; F5D4AE  ld D,(XBC)
 	cp	d, 0:i3	; F5D4B0  cp D,0
 	jr	z, sub_F5D4A7_Return	; F5D4B2  jr Z,0xf5d4c2
-	ld	xiy, 15935930	; F5D4B4  ld XIY,0x00f329ba
+	ld	xiy, Data_F32992 + 0x28	; F5D4B4  ld XIY,0x00f329ba
 	ld	(9536:16), 0	; F5D4B9  ld (0x2540),0x00
 	call	RunDisplayListBFromPointerArray	; F5D4BE  call 0xf09ae1
 sub_F5D4A7_Return:
@@ -125319,7 +125435,7 @@ sub_F5D57A:
 sub_F5D583:
 	call	sub_F5C929	; F5D583  call 0xf5c929
 	ld	xiy, DL_Page22KeyFollowSlopeRange	; F5D587  ld XIY,0x00f0426b
-	ld	xix, 15745827	; F5D58C  ld XIX,0x00f04323
+	ld	xix, DL_Page22KeyFollowSlopeRange + 0xB8	; F5D58C  ld XIX,0x00f04323
 	call	T_DisplayList_Run	; F5D591  call 0xf417f0
 	ld	(9536:16), 2	; F5D595  ld (0x2540),0x02
 	ld	xiy, DL_F04344	; F5D59A  ld XIY,0x00f04344
@@ -125392,7 +125508,7 @@ sub_F5D62B:
 sub_F5D5C8_Skip:
 	ld	(9536:16), 0	; F5D651  ld (0x2540),0x00
 	ld	xiy, DL_F328DC	; F5D656  ld XIY,0x00f328dc
-	ld	xix, 15935768	; F5D65B  ld XIX,0x00f32918
+	ld	xix, DL_F328DC + 0x3C	; F5D65B  ld XIX,0x00f32918
 	call	T_DisplayListB_Run	; F5D660  call 0xf417f4
 	call	sub_F5D46B	; F5D664  call 0xf5d46b
 	jr	sub_F5D5C8_Return	; F5D668  jr T,0xf5d6ab
@@ -125412,7 +125528,7 @@ sub_F5D5C8_Skip2:
 	call	T_DisplayListB_Run	; F5D697  call 0xf417f4
 	jr	sub_F5D5C8_Return	; F5D69B  jr T,0xf5d6ab
 sub_F5D5C8_Skip3:
-	ld	xiy, 15935930	; F5D69D  ld XIY,0x00f329ba
+	ld	xiy, Data_F32992 + 0x28	; F5D69D  ld XIY,0x00f329ba
 	ld	(9536:16), 0	; F5D6A2  ld (0x2540),0x00
 	call	RunDisplayListBFromPointerArray	; F5D6A7  call 0xf09ae1
 sub_F5D5C8_Return:
@@ -125500,7 +125616,7 @@ sub_F5D77F:
 sub_F5D77F_Skip:
 	ld	(9536:16), 0	; F5D79B  ld (0x2540),0x00
 	ld	xiy, DL_C0ntr0llerSoundEditDepth	; F5D7A0  ld XIY,0x00f32c2a
-	ld	xix, 15936712	; F5D7A5  ld XIX,0x00f32cc8
+	ld	xix, DL_C0ntr0llerSoundEditDepth + 0x9E	; F5D7A5  ld XIX,0x00f32cc8
 	call	T_DisplayList_Run	; F5D7AA  call 0xf417f0
 	ld	(9536:16), 0	; F5D7AE  ld (0x2540),0x00
 	ld	xiy, DL_1st2nd	; F5D7B3  ld XIY,0x00f32d03
@@ -126178,10 +126294,10 @@ sub_F5DDB2_Skip2:
 	jr	lt, sub_F5DDB2_Skip3	; F5DDF8  jr LT,0xf5ddfc
 	xor	de, de	; F5DDFA  xor DE,DE
 sub_F5DDB2_Skip3:
-	ld	xix, 16130490	; F5DDFC  ld XIX,0x00f621ba
+	ld	xix, RoundMap_Bounds_A + 0x1	; F5DDFC  ld XIX,0x00f621ba
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE01  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DE06  ld (0x0e29),A
-	ld	xix, 16130526	; F5DE0A  ld XIX,0x00f621de
+	ld	xix, RoundMap_Bounds_B + 0x1	; F5DE0A  ld XIX,0x00f621de
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE0F  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DE14  ld (0x0e2a),A
 	jrl	sub_F5DDB2_Join2	; F5DE18  jrl T,0xf5dfb5
@@ -126201,10 +126317,10 @@ sub_F5DDB2_Skip4:
 	jr	lt, sub_F5DDB2_Skip5	; F5DE39  jr LT,0xf5de3d
 	xor	de, de	; F5DE3B  xor DE,DE
 sub_F5DDB2_Skip5:
-	ld	xix, 16130492	; F5DE3D  ld XIX,0x00f621bc
+	ld	xix, RoundMap_Bounds_A + 0x3	; F5DE3D  ld XIX,0x00f621bc
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE42  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DE47  ld (0x0e29),A
-	ld	xix, 16130528	; F5DE4B  ld XIX,0x00f621e0
+	ld	xix, RoundMap_Bounds_B + 0x3	; F5DE4B  ld XIX,0x00f621e0
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE50  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DE55  ld (0x0e2a),A
 	jrl	sub_F5DDB2_Join2	; F5DE59  jrl T,0xf5dfb5
@@ -126236,10 +126352,10 @@ sub_F5DDB2_Skip6:
 	jr	lt, sub_F5DDB2_Skip7	; F5DE95  jr LT,0xf5de99
 	xor	de, de	; F5DE97  xor DE,DE
 sub_F5DDB2_Skip7:
-	ld	xix, 16130496	; F5DE99  ld XIX,0x00f621c0
+	ld	xix, RoundMap_Bounds_A + 0x7	; F5DE99  ld XIX,0x00f621c0
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DE9E  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DEA3  ld (0x0e29),A
-	ld	xix, 16130532	; F5DEA7  ld XIX,0x00f621e4
+	ld	xix, RoundMap_Bounds_B + 0x7	; F5DEA7  ld XIX,0x00f621e4
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DEAC  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DEB1  ld (0x0e2a),A
 	jrl	sub_F5DDB2_Join2	; F5DEB5  jrl T,0xf5dfb5
@@ -126256,10 +126372,10 @@ sub_F5DDB2_Skip8:
 	jr	lt, sub_F5DDB2_Skip9	; F5DECF  jr LT,0xf5ded3
 	xor	de, de	; F5DED1  xor DE,DE
 sub_F5DDB2_Skip9:
-	ld	xix, 16130504	; F5DED3  ld XIX,0x00f621c8
+	ld	xix, RoundMap_Bounds_A + 0xF	; F5DED3  ld XIX,0x00f621c8
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DED8  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DEDD  ld (0x0e29),A
-	ld	xix, 16130540	; F5DEE1  ld XIX,0x00f621ec
+	ld	xix, RoundMap_Bounds_B + 0xF	; F5DEE1  ld XIX,0x00f621ec
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DEE6  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DEEB  ld (0x0e2a),A
 	jrl	sub_F5DDB2_Join2	; F5DEEF  jrl T,0xf5dfb5
@@ -126285,10 +126401,10 @@ sub_F5DDB2_Skip10:
 	jr	lt, sub_F5DDB2_Skip11	; F5DF1E  jr LT,0xf5df22
 	xor	de, de	; F5DF20  xor DE,DE
 sub_F5DDB2_Skip11:
-	ld	xix, 16130507	; F5DF22  ld XIX,0x00f621cb
+	ld	xix, RoundMap_Bounds_A + 0x12	; F5DF22  ld XIX,0x00f621cb
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DF27  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DF2C  ld (0x0e29),A
-	ld	xix, 16130543	; F5DF30  ld XIX,0x00f621ef
+	ld	xix, RoundMap_Bounds_B + 0x12	; F5DF30  ld XIX,0x00f621ef
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DF35  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DF3A  ld (0x0e2a),A
 	jr	sub_F5DDB2_Join2	; F5DF3E  jr T,0xf5dfb5
@@ -126332,10 +126448,10 @@ sub_F5DDB2_Join:
 	jr	lt, sub_F5DDB2_Skip12	; F5DF95  jr LT,0xf5df99
 	xor	de, de	; F5DF97  xor DE,DE
 sub_F5DDB2_Skip12:
-	ld	xix, 16130513	; F5DF99  ld XIX,0x00f621d1
+	ld	xix, RoundMap_Bounds_A + 0x18	; F5DF99  ld XIX,0x00f621d1
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DF9E  ld A,(XIX+DE)
 	ld	(3625:16), a	; F5DFA3  ld (0x0e29),A
-	ld	xix, 16130549	; F5DFA7  ld XIX,0x00f621f5
+	ld	xix, RoundMap_Bounds_B + 0x18	; F5DFA7  ld XIX,0x00f621f5
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F5DFAC  ld A,(XIX+DE)
 	ld	(3626:16), a	; F5DFB1  ld (0x0e2a),A
 sub_F5DDB2_Join2:
@@ -134307,23 +134423,23 @@ sub_F633F5:		; <- T_F42788
 	mx_ld_rm MXB, ra_HL, ra_IX, 1	; F633F9  ld A,(XHL+IX)
 	ret	; F633FE  ret
 sub_F633FF:		; <- T_F42810
-	ld	xiy, 16135245	; F633FF  ld XIY,0x00f6344d
+	ld	xiy, BStore_ErrorStatusTable + 0xC	; F633FF  ld XIY,0x00f6344d
 	calr	BStore_ErrorToStatusByte_Sub	; F63404  calr 0xf63431
 	ret	; F63407  ret
 sub_F63408:		; <- T_F42814
-	ld	xiy, 16135257	; F63408  ld XIY,0x00f63459
+	ld	xiy, BStore_ErrorStatusTable + 0x18	; F63408  ld XIY,0x00f63459
 	calr	BStore_ErrorToStatusByte_Sub	; F6340D  calr 0xf63431
 	ret	; F63410  ret
 sub_F63411:		; <- T_F42818
-	ld	xiy, 16135269	; F63411  ld XIY,0x00f63465
+	ld	xiy, BStore_ErrorStatusTable + 0x24	; F63411  ld XIY,0x00f63465
 	calr	BStore_ErrorToStatusByte_Sub	; F63416  calr 0xf63431
 	ret	; F63419  ret
 sub_F6341A:		; <- T_F4281C
-	ld	xiy, 16135281	; F6341A  ld XIY,0x00f63471
+	ld	xiy, BStore_ErrorStatusTable + 0x30	; F6341A  ld XIY,0x00f63471
 	calr	BStore_ErrorToStatusByte_Sub	; F6341F  calr 0xf63431
 	ret	; F63422  ret
 sub_F63423:		; <- T_F42820
-	ld	xiy, 16135293	; F63423  ld XIY,0x00f6347d
+	ld	xiy, BStore_ErrorStatusTable + 0x3C	; F63423  ld XIY,0x00f6347d
 	calr	BStore_ErrorToStatusByte_Sub	; F63428  calr 0xf63431
 	ret	; F6342B  ret
 
@@ -137654,10 +137770,11 @@ sub_F65761_Skip:
 sub_F65792:
 	xor	hl, hl	; F65792  xor HL,HL
 	ld	l, (3402:16)	; F65794  ld L,(0x0d4a)
-	ld	xde, 16144295	; F65798  ld XDE,0x00f657a7
+	ld	xde, sub_F657A7	; F65798  ld XDE,0x00f657a7
 	mx_ld_rm MXB, ra_DE, ra_HL, 7	; F6579D  ld L,(XDE+HL)
 	ld	(3402:16), l	; F657A2  ld (0x0d4a),L
 	ret	; F657A6  ret
+sub_F657A7:
 	nop	; F657A7  nop
 	nop	; F657A8  nop
 	push	sr	; F657A9  push SR
@@ -137910,14 +138027,14 @@ sub_F65D26_Skip:
 	xor	w, w	; F65D45  xor W,W
 	ld	iy, wa	; F65D47  ld IY,WA
 	push	xde	; F65D49  push XDE
-	ld	xde, 16146268	; F65D4A  ld XDE,0x00f65f5c
+	ld	xde, sub_F65F5C	; F65D4A  ld XDE,0x00f65f5c
 	mx_ld_rm MXB, ra_DE, ra_IY, 3	; F65D4F  ld C,(XDE+IY)
 	ld	a, (3075:16)	; F65D54  ld A,(0x0c03)
 	ld	iy, wa	; F65D58  ld IY,WA
 	ld	xde, 6304802	; F65D5A  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65D5F  ld A,(XDE+IY)
 	ld	iy, wa	; F65D64  ld IY,WA
-	ld	xde, 16146268	; F65D66  ld XDE,0x00f65f5c
+	ld	xde, sub_F65F5C	; F65D66  ld XDE,0x00f65f5c
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65D6B  ld A,(XDE+IY)
 	pop	xde	; F65D70  pop XDE
 	and	a, c	; F65D71  and A,C
@@ -138069,7 +138186,7 @@ sub_F65DF8_Skip:
 	ld	l, a	; F65E10  ld L,A
 	xor	h, h	; F65E12  xor H,H
 	push	xde	; F65E14  push XDE
-	ld	xde, 16146004	; F65E15  ld XDE,0x00f65e54
+	ld	xde, sub_F65E54	; F65E15  ld XDE,0x00f65e54
 	mx_ld_rm MXB, ra_DE, ra_HL, 1	; F65E1A  ld A,(XDE+HL)
 	pop	xde	; F65E1F  pop XDE
 	ld	(3078:16), a	; F65E20  ld (0x0c06),A
@@ -138080,7 +138197,7 @@ sub_F65DF8_Skip2:
 	ld	l, a	; F65E2B  ld L,A
 	xor	h, h	; F65E2D  xor H,H
 	push	xde	; F65E2F  push XDE
-	ld	xde, 16146036	; F65E30  ld XDE,0x00f65e74
+	ld	xde, IndexMap_F65E55 + 0x1F	; F65E30  ld XDE,0x00f65e74
 	mx_ld_rm MXB, ra_DE, ra_HL, 1	; F65E35  ld A,(XDE+HL)
 	pop	xde	; F65E3A  pop XDE
 	ld	(3078:16), a	; F65E3B  ld (0x0c06),A
@@ -138093,6 +138210,7 @@ sub_F65DF8_Join:
 	jr	sub_F65DF8_Return	; F65E51  jr T,0xf65e53
 sub_F65DF8_Return:
 	ret	; F65E53  ret
+sub_F65E54:
 	nop	; F65E54  nop
 
 ; --------------------------------------------------------------------------
@@ -138185,7 +138303,7 @@ sub_F65E98_Return:
 	xor	w, w	; F65ECA  xor W,W
 	ld	iy, wa	; F65ECC  ld IY,WA
 	push	xde	; F65ECE  push XDE
-	ld	xde, 16146268	; F65ECF  ld XDE,0x00f65f5c
+	ld	xde, sub_F65F5C	; F65ECF  ld XDE,0x00f65f5c
 	mx_ld_rm MXB, ra_DE, ra_IY, 3	; F65ED4  ld C,(XDE+IY)
 	ld	a, (3075:16)	; F65ED9  ld A,(0x0c03)
 	ld	iy, wa	; F65EDD  ld IY,WA
@@ -138193,7 +138311,7 @@ sub_F65E98_Return:
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65EE4  ld A,(XDE+IY)
 	ld	(3085:16), a	; F65EE9  ld (0x0c0d),A
 	ld	iy, wa	; F65EED  ld IY,WA
-	ld	xde, 16146268	; F65EEF  ld XDE,0x00f65f5c
+	ld	xde, sub_F65F5C	; F65EEF  ld XDE,0x00f65f5c
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65EF4  ld A,(XDE+IY)
 	pop	xde	; F65EF9  pop XDE
 	and	a, c	; F65EFA  and A,C
@@ -138227,6 +138345,7 @@ sub_F65E98_Join:
 	call	T_F411B8	; F65F52  call 0xf411b8
 	ld	(8318:16), 0	; F65F56  ld (0x207e),0x00
 	ret	; F65F5B  ret
+sub_F65F5C:
 	swi	7	; F65F5C  swi 7
 	swi	7	; F65F5D  swi 7
 	swi	7	; F65F5E  swi 7
@@ -139574,7 +139693,7 @@ sub_F66668_Skip2:
 sub_F66668_Skip3:
 	ld	(6304966:24), a	; F66737  ld (0x6034c6),A
 sub_F66668_Skip4:
-	ld	xde, 16148476	; F6673C  ld XDE,0x00f667fc
+	ld	xde, IndexMap_F667CC + 0x30	; F6673C  ld XDE,0x00f667fc
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F66741  lda XIY,XDE+HL
 	ld	xix, 6356992	; F66746  ld XIX,0x00610000
 	xor	xwa, xwa	; F6674B  xor XWA,XWA
@@ -139722,7 +139841,7 @@ sub_F6682C_Skip2:
 	.byte 0xC7, 0x34, 0x61	; F668C5  inc 1,RC3   [llvm-mc cannot encode this]
 	.byte 0xC7, 0x34, 0xCF, 0x0A	; F668C8  cp RC3,0x0a   [llvm-mc cannot encode this]
 	jr	c, sub_F6682C_Loop	; F668CC  jr C,0xf66869
-	ld	xde, 16148476	; F668CE  ld XDE,0x00f667fc
+	ld	xde, IndexMap_F667CC + 0x30	; F668CE  ld XDE,0x00f667fc
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F668D3  lda XIY,XDE+HL
 	ld	xix, 6304819	; F668D8  ld XIX,0x00603433
 	ldw	bc, 16	; F668DD  ld BC,0x0010
@@ -141549,7 +141668,7 @@ MsgLine_Volume:
 	ldw	bc, 27	; F67D93  ld BC,0x001b
 	lda_dpi	xbc, 240	; F67D96  ld (XIX+),A
 	djnz16	bc, -6	; F67D99  djnz BC,0xf67d96
-	ld	xiy, 16154054	; F67D9C  ld XIY,0x00f67dc6
+	ld	xiy, MsgLine_Volume + 0x3A	; F67D9C  ld XIY,0x00f67dc6
 	ld	xix, 4079	; F67DA1  ld XIX,0x00000fef
 	ldw	bc, 9	; F67DA6  ld BC,0x0009
 	ldir85	; F67DA9  ldir
@@ -142990,7 +143109,7 @@ sub_F687ED_Skip3:
 	xor	w, w	; F68890  xor W,W
 	ld	iy, wa	; F68892  ld IY,WA
 	push	xde	; F68894  push XDE
-	ld	xde, 16156896	; F68895  ld XDE,0x00f688e0
+	ld	xde, sub_F688E0	; F68895  ld XDE,0x00f688e0
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F6889A  ld A,(XDE+IY)
 	pop	xde	; F6889F  pop XDE
 	and	a, 3	; F688A0  and A,0x03
@@ -143037,6 +143156,7 @@ DispatchTable_F688D0:
 	.long	sub_F675CB	; F688D8  [2] -> ret stub
 	.long	sub_F6A2FF	; F688DC  [3] -> sub_F6A2FF
 
+sub_F688E0:
 	nop	; F688E0  nop
 	pop	sr	; F688E1  pop SR
 	pop	sr	; F688E2  pop SR
@@ -148017,11 +148137,11 @@ sub_F6AB8E:		; <- T_F42EF0
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F6AB92:
-	.long	0x00F6ABA6	; F6AB92  [0] -> 0xF6ABA6
-	.long	0x00F6ABA7	; F6AB96  [1] -> 0xF6ABA7
-	.long	0x00F6ABA8	; F6AB9A  [2] -> 0xF6ABA8
-	.long	0x00F6ABA9	; F6AB9E  [3] -> 0xF6ABA9
-	.long	0x00F6ABAA	; F6ABA2  [4] -> 0xF6ABAA
+	.long	DispatchTable_F6AB92 + 0x14	; F6AB92  [0] -> 0xF6ABA6
+	.long	DispatchTable_F6AB92 + 0x15	; F6AB96  [1] -> 0xF6ABA7
+	.long	DispatchTable_F6AB92 + 0x16	; F6AB9A  [2] -> 0xF6ABA8
+	.long	DispatchTable_F6AB92 + 0x17	; F6AB9E  [3] -> 0xF6ABA9
+	.long	DispatchTable_F6AB92 + 0x18	; F6ABA2  [4] -> 0xF6ABAA
 
 	.fill	16, 1, 0x0E	; F6ABA6-F6ABB5  `ret` padding (asserted pure 0x0E)
 
@@ -148184,10 +148304,11 @@ sub_F6AC7E:
 	ld	xix, 6304802	; F6AC8D  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_IZ, 1	; F6AC92  ld A,(XIX+IZ)
 	pop	xix	; F6AC97  pop XIX
-	ld	xhl, 16166055	; F6AC98  ld XHL,0x00f6aca7
+	ld	xhl, sub_F6ACA7	; F6AC98  ld XHL,0x00f6aca7
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6AC9D  ld A,(XHL+A)
 	ld	(3683:16), a	; F6ACA2  ld (0x0e63),A
 	ret	; F6ACA6  ret
+sub_F6ACA7:
 	normal	; F6ACA7  normal
 	normal	; F6ACA8  normal
 	normal	; F6ACA9  normal
@@ -148337,12 +148458,13 @@ sub_F6AD30:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6AD40:
-	ld	xhl, 16166230	; F6AD40  ld XHL,0x00f6ad56
+	ld	xhl, sub_F6AD56	; F6AD40  ld XHL,0x00f6ad56
 	ld	a, (3683:16)	; F6AD45  ld A,(0x0e63)
 	and	a, 3	; F6AD49  and A,0x03
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6AD4C  ld A,(XHL+A)
 	ld	(3829:16), a	; F6AD51  ld (0x0ef5),A
 	ret	; F6AD55  ret
+sub_F6AD56:
 	nop	; F6AD56  nop
 	nop	; F6AD57  nop
 	ld	(12:8), 14:io	; F6AD58  ld (0x0c),0x0e
@@ -148366,7 +148488,7 @@ sub_F6AD5F:
 	m_cp_mi8 MB16, 0x0e63, 0x02	; F6AD5F  cp (0x0e63),0x02
 	jr	nz, 88	; F6AD64  jr NZ,0xf6adbe
 	ldw	bc, 3	; F6AD66  ld BC,0x0003
-	ld	xiy, 16166335	; F6AD69  ld XIY,0x00f6adbf
+	ld	xiy, sub_F6AD5F + 0x60	; F6AD69  ld XIY,0x00f6adbf
 	ld	xix, 3726	; F6AD6E  ld XIX,0x00000e8e
 	push	xix	; F6AD73  push XIX
 	ldir85	; F6AD74  ldir
@@ -151138,7 +151260,7 @@ sub_F6C230:
 ; --------------------------------------------------------------------------
 sub_F6C237:
 	ld	a, (3683:16)	; F6C237  ld A,(0x0e63)
-	ld	xhl, 16171650	; F6C23B  ld XHL,0x00f6c282
+	ld	xhl, sub_F6C282	; F6C23B  ld XHL,0x00f6c282
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6C240  ld A,(XHL+A)
 	ld	(3829:16), a	; F6C245  ld (0x0ef5),A
 	call	T_F431B0	; F6C249  call 0xf431b0
@@ -151183,6 +151305,7 @@ DispatchTable_F6C272:
 	.long	MsgLine_Rhythm	; F6C27A  [2] -> 0xF6D4E4
 	.long	sub_F6C269	; F6C27E  [3] -> 0xF6C269
 
+sub_F6C282:
 	nop	; F6C282  nop
 	halt	; F6C283  halt
 	halt	; F6C284  halt
@@ -152242,7 +152365,7 @@ sub_F6C935_Skip2:
 	ld	(xix+2), a	; F6C96B  ld (XIX+0x02),A
 	ld	l, (4844:16)	; F6C96E  ld L,(0x12ec)
 	exts	hl	; F6C972  exts HL
-	ld	xiy, 16173795	; F6C974  ld XIY,0x00f6cae3
+	ld	xiy, sub_F6CAE3	; F6C974  ld XIY,0x00f6cae3
 	mx_ld_rm MXB, ra_IY, ra_HL, 1	; F6C979  ld A,(XIY+HL)
 	ld	(xix+3), a	; F6C97E  ld (XIX+0x03),A
 	pop	xiy	; F6C981  pop XIY
@@ -152273,7 +152396,7 @@ sub_F6C984:
 	jr	z, sub_F6C984_Epilogue	; F6C9AA  jr Z,0xf6c9c5
 	xor	wa, wa	; F6C9AC  xor WA,WA
 	ld	a, (4844:16)	; F6C9AE  ld A,(0x12ec)
-	ld	xix, 16173795	; F6C9B2  ld XIX,0x00f6cae3
+	ld	xix, sub_F6CAE3	; F6C9B2  ld XIX,0x00f6cae3
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6C9B7  ld A,(XIX+WA)
 	mx_ld_rm MXB, ra_HL, ra_WA, 1	; F6C9BC  ld A,(XHL+WA)
 	ld	(4845:16), a	; F6C9C1  ld (0x12ed),A
@@ -152428,6 +152551,7 @@ RamPtrTable_F6CA63:
 	.long	0x00007E62	; F6CADB  [30] -> RAM 0x7E62
 	.long	0x00007EA2	; F6CADF  [31] -> RAM 0x7EA2
 
+sub_F6CAE3:
 	ld	(9:8), 10:io	; F6CAE3  ld (0x09),0x0a
 	pushw	55247	; F6CAE6  push 0xd7cf
 	bit	7, w	; F6CAE9  bit 0x07,W
@@ -154853,7 +154977,7 @@ sub_F6D710:
 ; --------------------------------------------------------------------------
 sub_F6D72F:
 	ld	xix, 4078	; F6D72F  ld XIX,0x00000fee
-	ld	xiy, 16177127	; F6D734  ld XIY,0x00f6d7e7
+	ld	xiy, ByteMap_F6D7C7 + 0x20	; F6D734  ld XIY,0x00f6d7e7
 	ld	a, (4789:16)	; F6D739  ld A,(0x12b5)
 	ld	(6332418:24), a	; F6D73D  ld (0x60a002),A
 	ld	xhl, ByteMap_F6D7C7	; F6D742  ld XHL,0x00f6d7c7
@@ -155064,7 +155188,7 @@ sub_F6D890_Skip:
 	and	a, 127	; F6D8E0  and A,0x7f
 	cp	a, 0:i3	; F6D8E3  cp A,0
 	jr	z, Data_F6D8EE_Code_Join	; F6D8E5  jr Z,0xf6d8f3
-	ld	xiy, 16177501	; F6D8E7  ld XIY,0x00f6d95d
+	ld	xiy, Text_PBendMod1ExpPMemAftOnoff + 0x48	; F6D8E7  ld XIY,0x00f6d95d
 	jr	Data_F6D8EE_Code_Join	; F6D8EC  jr T,0xf6d8f3
 
 ; --------------------------------------------------------------------------
@@ -155476,7 +155600,7 @@ Format_ChordName:
 	muls8rr	a, l	; F6DACB  muls WA,L
 	ld	hl, wa	; F6DACD  ld HL,WA
 	extz	xhl	; F6DACF  extz XHL
-	ld	xiy, 16177977	; F6DAD1  ld XIY,0x00f6db39
+	ld	xiy, Text_B7Maj7AugMinMin7DimM7 + 0x8	; F6DAD1  ld XIY,0x00f6db39
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DAD6  lda XIY,XIY+HL
 	ld	wa, (xiy)	; F6DADB  ld WA,(XIY)
 	ld	(xix+2), wa	; F6DADD  ld (XIX+0x02),WA
@@ -155506,7 +155630,7 @@ sub_F6DAED:
 	ld	xix, 4087	; F6DAF8  ld XIX,0x00000ff7
 	ld	l, (3677:16)	; F6DAFD  ld L,(0x0e5d)
 	sla	hl, 2	; F6DB01  sla 0x02,HL
-	ld	xiy, 16178137	; F6DB04  ld XIY,0x00f6dbd9
+	ld	xiy, Data_F6DB7C + 0x5D	; F6DB04  ld XIY,0x00f6dbd9
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DB09  lda XIY,XIY+HL
 	ld	wa, (xiy)	; F6DB0E  ld WA,(XIY)
 	ld	(xix), wa	; F6DB10  ld (XIX),WA
@@ -155675,7 +155799,7 @@ sub_F6DBF9:
 	ld	a, 5:opc	; F6DC2D  ld A,0x05
 	muls8rr	a, l	; F6DC2F  muls WA,L
 	ld	hl, wa	; F6DC31  ld HL,WA
-	ld	xiy, 16178359	; F6DC33  ld XIY,0x00f6dcb7
+	ld	xiy, Data_F6DC77 + 0x40	; F6DC33  ld XIY,0x00f6dcb7
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DC38  lda XIY,XIY+HL
 	m_ld_rm MWD+r5, 0x00, 0	; F6DC3D  ld WA,(XIY+0x00)
 	m_st_mr16 MDD+r4, 0x00, 0	; F6DC40  ld (XIX+0x00),WA
@@ -155688,7 +155812,7 @@ sub_F6DBF9:
 	ld	l, (4782:16)	; F6DC56  ld L,(0x12ae)
 	and	l, 3	; F6DC5A  and L,0x03
 	sla	hl, 2	; F6DC5D  sla 0x02,HL
-	ld	xiy, 16178439	; F6DC60  ld XIY,0x00f6dd07
+	ld	xiy, Text_4Tenunormstaccutt + 0xB	; F6DC60  ld XIY,0x00f6dd07
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DC65  lda XIY,XIY+HL
 	m_ld_rm MWD+r5, 0x00, 0	; F6DC6A  ld WA,(XIY+0x00)
 	m_st_mr16 MDD+r4, 0x00, 0	; F6DC6D  ld (XIX+0x00),WA
@@ -155909,7 +156033,7 @@ MsgLine_PartVolume:
 	ld	l, (4696:16)	; F6DDCA  ld L,(0x1258)
 	xor	h, h	; F6DDCE  xor H,H
 	sla	hl, 2	; F6DDD0  sla 0x02,HL
-	ld	xiy, 16178711	; F6DDD3  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6DDD3  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DDD8  lda XIY,XIY+HL
 	ld	xix, 4075	; F6DDDD  ld XIX,0x00000feb
 	ldw	bc, 4	; F6DDE2  ld BC,0x0004
@@ -156014,7 +156138,7 @@ MsgLine_PartPanpot:
 	ld	l, (4696:16)	; F6DF0A  ld L,(0x1258)
 	xor	h, h	; F6DF0E  xor H,H
 	sla	hl, 2	; F6DF10  sla 0x02,HL
-	ld	xiy, 16178711	; F6DF13  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6DF13  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DF18  lda XIY,XIY+HL
 	ld	xix, 4075	; F6DF1D  ld XIX,0x00000feb
 	ldw	bc, 4	; F6DF22  ld BC,0x0004
@@ -156097,7 +156221,7 @@ MsgLine_PartKeyShift_Skip:
 	ld	l, (4696:16)	; F6DF6A  ld L,(0x1258)
 	xor	h, h	; F6DF6E  xor H,H
 	sla	hl, 2	; F6DF70  sla 0x02,HL
-	ld	xiy, 16178711	; F6DF73  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6DF73  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DF78  lda XIY,XIY+HL
 	ld	xix, 4073	; F6DF7D  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6DF82  ld BC,0x0004
@@ -156182,7 +156306,7 @@ MsgLine_PartTuning:
 	ld	l, (4696:16)	; F6DFD7  ld L,(0x1258)
 	xor	h, h	; F6DFDB  xor H,H
 	sla	hl, 2	; F6DFDD  sla 0x02,HL
-	ld	xiy, 16178711	; F6DFE0  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6DFE0  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6DFE5  lda XIY,XIY+HL
 	ld	xix, 4073	; F6DFEA  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6DFEF  ld BC,0x0004
@@ -156267,7 +156391,7 @@ MsgLine_PartBendSens:
 	ld	l, (4696:16)	; F6E041  ld L,(0x1258)
 	xor	h, h	; F6E045  xor H,H
 	sla	hl, 2	; F6E047  sla 0x02,HL
-	ld	xiy, 16178711	; F6E04A  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E04A  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E04F  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E054  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E059  ld BC,0x0004
@@ -156350,7 +156474,7 @@ MsgLine_PartSustain_Skip:
 	ld	l, (4696:16)	; F6E0A4  ld L,(0x1258)
 	xor	h, h	; F6E0A8  xor H,H
 	sla	hl, 2	; F6E0AA  sla 0x02,HL
-	ld	xiy, 16178711	; F6E0AD  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E0AD  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E0B2  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E0B7  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E0BC  ld BC,0x0004
@@ -156364,7 +156488,7 @@ MsgLine_PartSustain_Skip:
 	jr	nz, MsgLine_PartSustain_Skip2	; F6E0D3  jr NZ,0xf6e0d7
 	ld	l, 4:opc	; F6E0D5  ld L,0x04
 MsgLine_PartSustain_Skip2:
-	ld	xiy, 16179443	; F6E0D7  ld XIY,0x00f6e0f3
+	ld	xiy, Data_F6E0EB + 0x8	; F6E0D7  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E0DC  lda XIY,XIY+HL
 	ldw	bc, 4	; F6E0E1  ld BC,0x0004
 	ldir85	; F6E0E4  ldir
@@ -156442,7 +156566,7 @@ MsgLine_PartDspEffect_Skip:
 	ld	l, (4696:16)	; F6E165  ld L,(0x1258)
 	xor	h, h	; F6E169  xor H,H
 	sla	hl, 2	; F6E16B  sla 0x02,HL
-	ld	xiy, 16178711	; F6E16E  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E16E  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E173  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E178  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E17D  ld BC,0x0004
@@ -156453,7 +156577,7 @@ MsgLine_PartDspEffect_Skip:
 	ldir85	; F6E18C  ldir
 	xor	hl, hl	; F6E18E  xor HL,HL
 	ld	l, 4:opc	; F6E190  ld L,0x04
-	ld	xiy, 16179443	; F6E192  ld XIY,0x00f6e0f3
+	ld	xiy, Data_F6E0EB + 0x8	; F6E192  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E197  lda XIY,XIY+HL
 	ldw	bc, 4	; F6E19C  ld BC,0x0004
 	ldir85	; F6E19F  ldir
@@ -156522,7 +156646,7 @@ MsgLine_PartEffect_Skip:
 	ld	l, (4696:16)	; F6E1C4  ld L,(0x1258)
 	xor	h, h	; F6E1C8  xor H,H
 	sla	hl, 2	; F6E1CA  sla 0x02,HL
-	ld	xiy, 16178711	; F6E1CD  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E1CD  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E1D2  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E1D7  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E1DC  ld BC,0x0004
@@ -156536,7 +156660,7 @@ MsgLine_PartEffect_Skip:
 	jr	nz, MsgLine_PartEffect_Skip2	; F6E1F3  jr NZ,0xf6e1f7
 	ld	l, 4:opc	; F6E1F5  ld L,0x04
 MsgLine_PartEffect_Skip2:
-	ld	xiy, 16179443	; F6E1F7  ld XIY,0x00f6e0f3
+	ld	xiy, Data_F6E0EB + 0x8	; F6E1F7  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E1FC  lda XIY,XIY+HL
 	ldw	bc, 4	; F6E201  ld BC,0x0004
 	ldir85	; F6E204  ldir
@@ -156601,7 +156725,7 @@ MsgLine_PartEffect1:
 	ld	l, (4696:16)	; F6E215  ld L,(0x1258)
 	xor	h, h	; F6E219  xor H,H
 	sla	hl, 2	; F6E21B  sla 0x02,HL
-	ld	xiy, 16178711	; F6E21E  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E21E  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E223  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E228  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E22D  ld BC,0x0004
@@ -156678,7 +156802,7 @@ MsgLine_PartEffect2:
 	ld	l, (4696:16)	; F6E264  ld L,(0x1258)
 	xor	h, h	; F6E268  xor H,H
 	sla	hl, 2	; F6E26A  sla 0x02,HL
-	ld	xiy, 16178711	; F6E26D  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E26D  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E272  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E277  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E27C  ld BC,0x0004
@@ -156688,11 +156812,11 @@ MsgLine_PartEffect2:
 	ldw	bc, 8	; F6E288  ld BC,0x0008
 	ldir85	; F6E28B  ldir
 	xor	w, w	; F6E28D  xor W,W
-	ld	xiy, 16179892	; F6E28F  ld XIY,0x00f6e2b4
+	ld	xiy, Data_F6E2AC + 0x8	; F6E28F  ld XIY,0x00f6e2b4
 	ld	a, (4698:16)	; F6E294  ld A,(0x125a)
 	cp	a, 64	; F6E298  cp A,0x40
 	jr	nc, MsgLine_PartEffect2_Skip	; F6E29B  jr NC,0xf6e2a2
-	ld	xiy, 16179895	; F6E29D  ld XIY,0x00f6e2b7
+	ld	xiy, Data_F6E2AC + 0xB	; F6E29D  ld XIY,0x00f6e2b7
 MsgLine_PartEffect2_Skip:
 	ldw	bc, 3	; F6E2A2  ld BC,0x0003
 	ldir85	; F6E2A5  ldir
@@ -156757,7 +156881,7 @@ MsgLine_PartReverb:
 	ld	l, (4696:16)	; F6E2BD  ld L,(0x1258)
 	xor	h, h	; F6E2C1  xor H,H
 	sla	hl, 2	; F6E2C3  sla 0x02,HL
-	ld	xiy, 16178711	; F6E2C6  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E2C6  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E2CB  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E2D0  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E2D5  ld BC,0x0004
@@ -157227,7 +157351,7 @@ MsgLine_PartTremolo_Skip:
 	ld	l, (4696:16)	; F6E5B8  ld L,(0x1258)
 	xor	h, h	; F6E5BC  xor H,H
 	sla	hl, 2	; F6E5BE  sla 0x02,HL
-	ld	xiy, 16178711	; F6E5C1  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E5C1  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E5C6  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E5CB  ld XIX,0x00000fe9
 	ldw	bc, 4	; F6E5D0  ld BC,0x0004
@@ -157241,7 +157365,7 @@ MsgLine_PartTremolo_Skip:
 	jr	nz, MsgLine_PartTremolo_Skip2	; F6E5E7  jr NZ,0xf6e5eb
 	ld	l, 4:opc	; F6E5E9  ld L,0x04
 MsgLine_PartTremolo_Skip2:
-	ld	xiy, 16179443	; F6E5EB  ld XIY,0x00f6e0f3
+	ld	xiy, Data_F6E0EB + 0x8	; F6E5EB  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E5F0  lda XIY,XIY+HL
 	ldw	bc, 3	; F6E5F5  ld BC,0x0003
 	ldir85	; F6E5F8  ldir
@@ -157432,7 +157556,7 @@ MsgLine_TotalReverb_Skip:
 	jr	nz, MsgLine_TotalReverb_Skip2	; F6E652  jr NZ,0xf6e656
 	ld	l, 4:opc	; F6E654  ld L,0x04
 MsgLine_TotalReverb_Skip2:
-	ld	xiy, 16179443	; F6E656  ld XIY,0x00f6e0f3
+	ld	xiy, Data_F6E0EB + 0x8	; F6E656  ld XIY,0x00f6e0f3
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E65B  lda XIY,XIY+HL
 	ldw	bc, 4	; F6E660  ld BC,0x0004
 	ldir85	; F6E663  ldir
@@ -157501,7 +157625,7 @@ MsgLine_PartMellowNormalBright_Skip:
 	ld	l, (4696:16)	; F6E68B  ld L,(0x1258)
 	xor	h, h	; F6E68F  xor H,H
 	sla	hl, 2	; F6E691  sla 0x02,HL
-	ld	xiy, 16178711	; F6E694  ld XIY,0x00f6de17
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x7	; F6E694  ld XIY,0x00f6de17
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E699  lda XIY,XIY+HL
 	ld	xix, 4075	; F6E69E  ld XIX,0x00000feb
 	ldw	bc, 4	; F6E6A3  ld BC,0x0004
@@ -157690,7 +157814,7 @@ MsgLine_PartModulation2:
 	sla	l, 1	; F6E749  sla 0x01,L
 	add	l, h	; F6E74C  add L,H
 	xor	h, h	; F6E74E  xor H,H
-	ld	xiy, 16178839	; F6E750  ld XIY,0x00f6de97
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E750  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E755  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E75A  ld XIX,0x00000fe9
 	ldw	bc, 3	; F6E75F  ld BC,0x0003
@@ -157772,7 +157896,7 @@ MsgLine_PartCtrlPedal:
 	sla	l, 1	; F6E7A6  sla 0x01,L
 	add	l, h	; F6E7A9  add L,H
 	xor	h, h	; F6E7AB  xor H,H
-	ld	xiy, 16178839	; F6E7AD  ld XIY,0x00f6de97
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E7AD  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E7B2  lda XIY,XIY+HL
 	ld	xix, 4073	; F6E7B7  ld XIX,0x00000fe9
 	ldw	bc, 3	; F6E7BC  ld BC,0x0003
@@ -157853,7 +157977,7 @@ MsgLine_PartHold:
 	sla	l, 1	; F6E802  sla 0x01,L
 	add	l, h	; F6E805  add L,H
 	xor	h, h	; F6E807  xor H,H
-	ld	xiy, 16178839	; F6E809  ld XIY,0x00f6de97
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E809  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E80E  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E813  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E818  ld BC,0x0003
@@ -157936,7 +158060,7 @@ MsgLine_PartRtCreateX:
 	sla	l, 1	; F6E858  sla 0x01,L
 	add	l, h	; F6E85B  add L,H
 	xor	h, h	; F6E85D  xor H,H
-	ld	xiy, 16178839	; F6E85F  ld XIY,0x00f6de97
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E85F  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E864  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E869  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E86E  ld BC,0x0003
@@ -158018,7 +158142,7 @@ MsgLine_PartRtCreateY:
 	sla	l, 1	; F6E8B5  sla 0x01,L
 	add	l, h	; F6E8B8  add L,H
 	xor	h, h	; F6E8BA  xor H,H
-	ld	xiy, 16178839	; F6E8BC  ld XIY,0x00f6de97
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E8BC  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E8C1  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E8C6  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E8CB  ld BC,0x0003
@@ -158101,7 +158225,7 @@ MsgLine_PartRtCtrlX:
 	sla	l, 1	; F6E912  sla 0x01,L
 	add	l, h	; F6E915  add L,H
 	xor	h, h	; F6E917  xor H,H
-	ld	xiy, 16178839	; F6E919  ld XIY,0x00f6de97
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E919  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E91E  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E923  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E928  ld BC,0x0003
@@ -158184,7 +158308,7 @@ MsgLine_PartRtCtrlY:
 	sla	l, 1	; F6E96E  sla 0x01,L
 	add	l, h	; F6E971  add L,H
 	xor	h, h	; F6E973  xor H,H
-	ld	xiy, 16178839	; F6E975  ld XIY,0x00f6de97
+	ld	xiy, Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15 + 0x87	; F6E975  ld XIY,0x00f6de97
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F6E97A  lda XIY,XIY+HL
 	ld	xix, 4072	; F6E97F  ld XIX,0x00000fe8
 	ldw	bc, 3	; F6E984  ld BC,0x0003
@@ -159129,7 +159253,7 @@ Smf_ReadFile_Skip3:
 	jrl	Smf_ReadFile_Join3	; F6F652  jrl T,0xf6f7ad
 Smf_ReadFile_Skip4:
 	ldw	bc, 4	; F6F655  ld BC,0x0004
-	ld	xiy, 16184620	; F6F658  ld XIY,0x00f6f52c
+	ld	xiy, SmfChunkTags + 0x4	; F6F658  ld XIY,0x00f6f52c
 	pushw	bc	; F6F65D  push BC
 	push	xiy	; F6F65E  push XIY
 	calr	InputStream_GetByte	; F6F65F  calr 0xf7138f
@@ -160543,7 +160667,7 @@ sub_F70008_Skip3:
 	ld	(6352913:24), l	; F70061  ld (0x60f011),L
 	ld	l, (4305:16)	; F70066  ld L,(0x10d1)
 	ld	(6352914:24), l	; F7006A  ld (0x60f012),L
-	ld	xix, 16188072	; F7006F  ld XIX,0x00f702a8
+	ld	xix, ByteMap_F70298 + 0x10	; F7006F  ld XIX,0x00f702a8
 	mx_ld_rm MXB, ra_IX, ra_IY, 7	; F70074  ld L,(XIX+IY)
 	ld	(6352915:24), l	; F70079  ld (0x60f013),L
 	pop	xix	; F7007E  pop XIX
@@ -160586,7 +160710,7 @@ sub_F70008_Skip3:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700D3  cp (0x1238),0x00
 	jrl	nz, Data_F701E8_Code_Return	; F700D8  jrl NZ,0xf701f0
 	push	xix	; F700DB  push XIX
-	ld	xix, 16188072	; F700DC  ld XIX,0x00f702a8
+	ld	xix, ByteMap_F70298 + 0x10	; F700DC  ld XIX,0x00f702a8
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F700E1  ld A,(XIX+IY)
 	pop	xix	; F700E6  pop XIX
 	push	xhl	; F700E7  push XHL
@@ -160738,7 +160862,7 @@ sub_F701F1:
 	ld	(6352913:24), l	; F70220  ld (0x60f011),L
 	ld	l, (4305:16)	; F70225  ld L,(0x10d1)
 	ld	(6352914:24), l	; F70229  ld (0x60f012),L
-	ld	xix, 16188072	; F7022E  ld XIX,0x00f702a8
+	ld	xix, ByteMap_F70298 + 0x10	; F7022E  ld XIX,0x00f702a8
 	mx_ld_rm MXB, ra_IX, ra_DE, 7	; F70233  ld L,(XIX+DE)
 	ld	(6352915:24), l	; F70238  ld (0x60f013),L
 	pop	xde	; F7023D  pop XDE
@@ -161199,7 +161323,7 @@ sub_F7053F:
 	xor	b, b	; F7056F  xor B,B
 	ld	ix, bc	; F70571  ld IX,BC
 	push	xiy	; F70573  push XIY
-	ld	xiy, 16190179	; F70574  ld XIY,0x00f70ae3
+	ld	xiy, Data_F70AD7 + 0xC	; F70574  ld XIY,0x00f70ae3
 	mx_ld_rm MXB, ra_IY, ra_IX, 5	; F70579  ld E,(XIY+IX)
 	pop	xiy	; F7057E  pop XIY
 	cp	a, e	; F7057F  cp A,E
@@ -161254,7 +161378,7 @@ sub_F70599:
 	ld	ix, bc	; F705CD  ld IX,BC
 	extz	xix	; F705CF  extz XIX
 	push	xiy	; F705D1  push XIY
-	ld	xiy, 16190179	; F705D2  ld XIY,0x00f70ae3
+	ld	xiy, Data_F70AD7 + 0xC	; F705D2  ld XIY,0x00f70ae3
 	mx_ld_rm MXB, ra_IY, ra_IX, 5	; F705D7  ld E,(XIY+IX)
 	pop	xiy	; F705DC  pop XIY
 	cp	a, e	; F705DD  cp A,E
@@ -161431,7 +161555,7 @@ sub_F7067F_Skip2:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F706F9  ld A,(XIX+HL)
 	m_cp_mi8 MB16, 0x1239, 0x00	; F706FE  cp (0x1239),0x00
 	jr	z, sub_F7067F_Skip3	; F70703  jr Z,0xf7070f
-	ld	xix, 16188072	; F70705  ld XIX,0x00f702a8
+	ld	xix, ByteMap_F70298 + 0x10	; F70705  ld XIX,0x00f702a8
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F7070A  ld A,(XIX+HL)
 sub_F7067F_Skip3:
 	pop	xix	; F7070F  pop XIX
@@ -161583,7 +161707,7 @@ sub_F707E6_Skip2:
 	ld	xiy, ByteMap_F7091E	; F7080E  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F70813  cp (0x1239),0xff
 	jr	z, sub_F707E6_Skip3	; F70818  jr Z,0xf7081f
-	ld	xiy, 16189758	; F7081A  ld XIY,0x00f7093e
+	ld	xiy, ByteMap_F7091E + 0x20	; F7081A  ld XIY,0x00f7093e
 sub_F707E6_Skip3:
 	mx_ld_rm MXB, ra_IY, ra_HL, 7	; F7081F  ld L,(XIY+HL)
 	ld	(4526:16), l	; F70824  ld (0x11ae),L
@@ -161974,7 +162098,7 @@ sub_F70A43:
 	xor	b, b	; F70A78  xor B,B
 	ld	ix, bc	; F70A7A  ld IX,BC
 	push	xiy	; F70A7C  push XIY
-	ld	xiy, 16190179	; F70A7D  ld XIY,0x00f70ae3
+	ld	xiy, Data_F70AD7 + 0xC	; F70A7D  ld XIY,0x00f70ae3
 	mx_ld_rm MXB, ra_IY, ra_IX, 5	; F70A82  ld E,(XIY+IX)
 	pop	xiy	; F70A87  pop XIY
 	cp	a, e	; F70A88  cp A,E
@@ -162152,7 +162276,7 @@ sub_F70B22_Skip2:
 	ld	a, l	; F70BA5  ld A,L
 	jr	sub_F70B22_Join	; F70BA7  jr T,0xf70bbf
 sub_F70B22_Skip3:
-	ld	xix, 16188072	; F70BA9  ld XIX,0x00f702a8
+	ld	xix, ByteMap_F70298 + 0x10	; F70BA9  ld XIX,0x00f702a8
 	m_cp_mi8 MB16, 0x1239, 0xff	; F70BAE  cp (0x1239),0xff
 	jr	z, sub_F70B22_Skip4	; F70BB3  jr Z,0xf70bba
 	ld	xix, ByteMap_F70298	; F70BB5  ld XIX,0x00f70298
@@ -162535,7 +162659,7 @@ sub_F70E1D_Skip:
 	ld	xix, ByteMap_F70298	; F70E70  ld XIX,0x00f70298
 	m_cp_mi8 MB16, 0x1239, 0x00	; F70E75  cp (0x1239),0x00
 	jr	z, sub_F70E1D_Skip2	; F70E7A  jr Z,0xf70e81
-	ld	xix, 16188072	; F70E7C  ld XIX,0x00f702a8
+	ld	xix, ByteMap_F70298 + 0x10	; F70E7C  ld XIX,0x00f702a8
 sub_F70E1D_Skip2:
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F70E81  ld A,(XIX+IY)
 	pop	xix	; F70E86  pop XIX
@@ -163953,7 +164077,7 @@ sub_F7193F:
 	ld	xiy, ByteMap_F7091E	; F71948  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F7194D  cp (0x1239),0xff
 	jr	z, sub_F7193F_Skip	; F71952  jr Z,0xf71959
-	ld	xiy, 16189758	; F71954  ld XIY,0x00f7093e
+	ld	xiy, ByteMap_F7091E + 0x20	; F71954  ld XIY,0x00f7093e
 sub_F7193F_Skip:
 	mx_ld_rm MXB, ra_IY, ra_HL, 7	; F71959  ld L,(XIY+HL)
 	ld	(4526:16), l	; F7195E  ld (0x11ae),L
@@ -163984,7 +164108,7 @@ sub_F71978:
 	ld	xiy, ByteMap_F7091E	; F71981  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F71986  cp (0x1239),0xff
 	jr	z, sub_F71978_Skip	; F7198B  jr Z,0xf71992
-	ld	xiy, 16189758	; F7198D  ld XIY,0x00f7093e
+	ld	xiy, ByteMap_F7091E + 0x20	; F7198D  ld XIY,0x00f7093e
 sub_F71978_Skip:
 	mx_ld_rm MXB, ra_IY, ra_HL, 7	; F71992  ld L,(XIY+HL)
 	ld	(4526:16), l	; F71997  ld (0x11ae),L
@@ -164015,7 +164139,7 @@ sub_F719B1:
 	ld	xiy, ByteMap_F7091E	; F719BA  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F719BF  cp (0x1239),0xff
 	jr	z, sub_F719B1_Skip	; F719C4  jr Z,0xf719cb
-	ld	xiy, 16189758	; F719C6  ld XIY,0x00f7093e
+	ld	xiy, ByteMap_F7091E + 0x20	; F719C6  ld XIY,0x00f7093e
 sub_F719B1_Skip:
 	mx_ld_rm MXB, ra_IY, ra_HL, 7	; F719CB  ld L,(XIY+HL)
 	ld	(4526:16), l	; F719D0  ld (0x11ae),L
@@ -164046,7 +164170,7 @@ sub_F719EA:
 	ld	xiy, ByteMap_F7091E	; F719F3  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F719F8  cp (0x1239),0xff
 	jr	z, sub_F719EA_Skip	; F719FD  jr Z,0xf71a04
-	ld	xiy, 16189758	; F719FF  ld XIY,0x00f7093e
+	ld	xiy, ByteMap_F7091E + 0x20	; F719FF  ld XIY,0x00f7093e
 sub_F719EA_Skip:
 	mx_ld_rm MXB, ra_IY, ra_HL, 7	; F71A04  ld L,(XIY+HL)
 	ld	(4526:16), l	; F71A09  ld (0x11ae),L
@@ -164080,7 +164204,7 @@ sub_F71A23:
 	ld	xiy, ByteMap_F7091E	; F71A2C  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F71A31  cp (0x1239),0xff
 	jr	z, sub_F719EA_Skip2	; F71A36  jr Z,0xf71a3d
-	ld	xiy, 16189758	; F71A38  ld XIY,0x00f7093e
+	ld	xiy, ByteMap_F7091E + 0x20	; F71A38  ld XIY,0x00f7093e
 sub_F719EA_Skip2:
 	mx_ld_rm MXB, ra_IY, ra_HL, 7	; F71A3D  ld L,(XIY+HL)
 	ld	(4526:16), l	; F71A42  ld (0x11ae),L
@@ -164114,7 +164238,7 @@ sub_F71A5C:
 	ld	xiy, ByteMap_F7091E	; F71A65  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F71A6A  cp (0x1239),0xff
 	jr	z, sub_F719EA_Skip3	; F71A6F  jr Z,0xf71a76
-	ld	xiy, 16189758	; F71A71  ld XIY,0x00f7093e
+	ld	xiy, ByteMap_F7091E + 0x20	; F71A71  ld XIY,0x00f7093e
 sub_F719EA_Skip3:
 	mx_ld_rm MXB, ra_IY, ra_HL, 7	; F71A76  ld L,(XIY+HL)
 	ld	(4526:16), l	; F71A7B  ld (0x11ae),L
@@ -165230,7 +165354,7 @@ DispatchTable_F72323:
 	.long	sub_F72363	; F72343  [8] -> sub_F72363
 	.long	sub_F72363	; F72347  [9] -> sub_F72363
 	.long	sub_F724CB	; F7234B  [10] -> sub_F724CB
-	.long	0x00F72575	; F7234F  [11] -> 0xF72575
+	.long	ByteMap_F72555 + 0x20	; F7234F  [11] -> 0xF72575
 	.long	sub_F72363	; F72353  [12] -> sub_F72363
 	.long	sub_F72363	; F72357  [13] -> sub_F72363
 	.long	sub_F72363	; F7235B  [14] -> sub_F72363
@@ -165372,7 +165496,7 @@ sub_F723E1:
 	xor	b, b	; F72411  xor B,B
 	ld	ix, bc	; F72413  ld IX,BC
 	push	xiy	; F72415  push XIY
-	ld	xiy, 16196769	; F72416  ld XIY,0x00f724a1
+	ld	xiy, Data_F72495 + 0xC	; F72416  ld XIY,0x00f724a1
 	mx_ld_rm MXB, ra_IY, ra_IX, 5	; F7241B  ld E,(XIY+IX)
 	pop	xiy	; F72420  pop XIY
 	cp	a, e	; F72421  cp A,E
@@ -165425,7 +165549,7 @@ sub_F7243B:
 	xor	b, b	; F7246B  xor B,B
 	ld	ix, bc	; F7246D  ld IX,BC
 	push	xiy	; F7246F  push XIY
-	ld	xiy, 16196769	; F72470  ld XIY,0x00f724a1
+	ld	xiy, Data_F72495 + 0xC	; F72470  ld XIY,0x00f724a1
 	mx_ld_rm MXB, ra_IY, ra_IX, 5	; F72475  ld E,(XIY+IX)
 	pop	xiy	; F7247A  pop XIY
 	cp	a, e	; F7247B  cp A,E
@@ -166954,10 +167078,11 @@ sub_F72F20:
 sub_F72F2D:
 	xor	h, h	; F72F2D  xor H,H
 	push	xix	; F72F2F  push XIX
-	ld	xix, 16199484	; F72F30  ld XIX,0x00f72f3c
+	ld	xix, sub_F72F3C	; F72F30  ld XIX,0x00f72f3c
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F72F35  ld L,(XIX+HL)
 	pop	xix	; F72F3A  pop XIX
 	ret	; F72F3B  ret
+sub_F72F3C:
 	swi	7	; F72F3C  swi 7
 	ld	c, 35:opc	; F72F3D  ld C,0x23
 	ld	c, 3:opc	; F72F3F  ld C,0x03
@@ -167133,7 +167258,7 @@ sub_F72F5C_Skip7:
 	ld	xix, ByteMap_F731AB	; F730BA  ld XIX,0x00f731ab
 	m_cp_mi8 MB16, 0x1239, 0x00	; F730BF  cp (0x1239),0x00
 	jr	z, sub_F72F5C_Skip8	; F730C4  jr Z,0xf730cb
-	ld	xix, 16200123	; F730C6  ld XIX,0x00f731bb
+	ld	xix, ByteMap_F731AB + 0x10	; F730C6  ld XIX,0x00f731bb
 sub_F72F5C_Skip8:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F730CB  ld A,(XIX+HL)
 	pop	xix	; F730D0  pop XIX
@@ -167144,7 +167269,7 @@ sub_F72F5C_Join:
 	ld	xix, ByteMap_F731DB	; F730D6  ld XIX,0x00f731db
 	m_cp_mi8 MB16, 0x1239, 0x00	; F730DB  cp (0x1239),0x00
 	jr	z, sub_F72F5C_Skip9	; F730E0  jr Z,0xf730e7
-	ld	xix, 16200171	; F730E2  ld XIX,0x00f731eb
+	ld	xix, ByteMap_F731DB + 0x10	; F730E2  ld XIX,0x00f731eb
 sub_F72F5C_Skip9:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F730E7  ld A,(XIX+HL)
 	pop	xix	; F730EC  pop XIX
@@ -167166,7 +167291,7 @@ sub_F72F5C_Skip10:
 	ld	xix, ByteMap_F731DB	; F7310E  ld XIX,0x00f731db
 	m_cp_mi8 MB16, 0x1239, 0x00	; F73113  cp (0x1239),0x00
 	jr	z, sub_F72F5C_Skip11	; F73118  jr Z,0xf7311f
-	ld	xix, 16200171	; F7311A  ld XIX,0x00f731eb
+	ld	xix, ByteMap_F731DB + 0x10	; F7311A  ld XIX,0x00f731eb
 sub_F72F5C_Skip11:
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F7311F  ld A,(XIX+HL)
 	pop	xix	; F73124  pop XIX
@@ -168393,7 +168518,7 @@ Smf_WriteFile_Join:
 	pop	xbc	; F73917  pop XBC
 	pop	xiy	; F73918  pop XIY
 	pop	xix	; F73919  pop XIX
-	ld	xiy, 16201812	; F7391A  ld XIY,0x00f73854
+	ld	xiy, Data_F73844 + 0x10	; F7391A  ld XIY,0x00f73854
 	ld	xix, 8648	; F7391F  ld XIX,0x000021c8
 	ldw	bc, 11	; F73924  ld BC,0x000b
 	ldir85	; F73927  ldir
@@ -168477,7 +168602,7 @@ Smf_WriteFile_Skip8:
 	ld	xix, 6334208	; F73A28  ld XIX,0x0060a700
 	ldw	bc, 7	; F73A2D  ld BC,0x0007
 	ldirw	; F73A30  ldirw
-	ld	xiy, 16206157	; F73A32  ld XIY,0x00f7494d
+	ld	xiy, SmfFileTemplate_F7493F + 0xE	; F73A32  ld XIY,0x00f7494d
 	ldw	bc, 4	; F73A37  ld BC,0x0004
 	ldir85	; F73A3A  ldir
 	ld	wa, (4292:16)	; F73A3C  ld WA,(0x10c4)
@@ -168486,7 +168611,7 @@ Smf_WriteFile_Skip8:
 	stw_dpi	wa, 241	; F73A47  ld (XIX+),WA
 	ld	(4232:16), xix	; F73A4A  ld (0x1088),XIX
 	ld	xix, (4232:16)	; F73A4E  ld XIX,(0x1088)
-	ld	xiy, 16206165	; F73A52  ld XIY,0x00f74955
+	ld	xiy, SmfFileTemplate_F7493F + 0x16	; F73A52  ld XIY,0x00f74955
 	ldw	bc, 11	; F73A57  ld BC,0x000b
 	ldir85	; F73A5A  ldir
 	ld	xiy, 8648	; F73A5C  ld XIY,0x000021c8
@@ -168527,7 +168652,7 @@ Smf_WriteFile_Loop3:
 	ld	xiy, Data_F73844	; F73AC9  ld XIY,0x00f73844
 	m_cp_mi8 MB16, 0x1239, 0x00	; F73ACE  cp (0x1239),0x00
 	jr	nz, Smf_WriteFile_Skip9	; F73AD3  jr NZ,0xf73ada
-	ld	xiy, 16201804	; F73AD5  ld XIY,0x00f7384c
+	ld	xiy, Data_F73844 + 0x8	; F73AD5  ld XIY,0x00f7384c
 Smf_WriteFile_Skip9:
 	ld	xix, (4232:16)	; F73ADA  ld XIX,(0x1088)
 	ldw	bc, 8	; F73ADE  ld BC,0x0008
@@ -169723,7 +169848,7 @@ Smf_WriteFile_Join8:
 Smf_WriteFile_Join9:
 	m_cp_mi8 MB16, 0x2880, 0x02	; F74790  cp (0x2880),0x02
 	jr	z, Smf_WriteFile_Skip57	; F74795  jr Z,0xf747c3
-	ld	xiy, 16201812	; F74797  ld XIY,0x00f73854
+	ld	xiy, Data_F73844 + 0x10	; F74797  ld XIY,0x00f73854
 	ld	xix, 8648	; F7479C  ld XIX,0x000021c8
 	ldw	bc, 8	; F747A1  ld BC,0x0008
 	ldir85	; F747A4  ldir
@@ -169960,7 +170085,7 @@ sub_F748AD_Epilogue:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F748F0:
-	ld	xiy, 16201812	; F748F0  ld XIY,0x00f73854
+	ld	xiy, Data_F73844 + 0x10	; F748F0  ld XIY,0x00f73854
 	ld	xix, 8648	; F748F5  ld XIX,0x000021c8
 	ldw	bc, 11	; F748FA  ld BC,0x000b
 	ldir85	; F748FD  ldir
@@ -171278,12 +171403,12 @@ sub_F75685_Skip:
 	ld	xix, 6334208	; F756CB  ld XIX,0x0060a700
 	ldw	bc, 7	; F756D0  ld BC,0x0007
 	ldirw	; F756D3  ldirw
-	ld	xiy, 16212173	; F756D5  ld XIY,0x00f760cd
+	ld	xiy, SmfFileTemplate_F760BF + 0xE	; F756D5  ld XIY,0x00f760cd
 	ldw	bc, 4	; F756DA  ld BC,0x0004
 	ldirw	; F756DD  ldirw
 	ld	(4232:16), xix	; F756DF  ld (0x1088),XIX
 	ld	xix, (4232:16)	; F756E3  ld XIX,(0x1088)
-	ld	xiy, 16212181	; F756E7  ld XIY,0x00f760d5
+	ld	xiy, SmfFileTemplate_F760BF + 0x16	; F756E7  ld XIY,0x00f760d5
 	ldw	bc, 11	; F756EC  ld BC,0x000b
 	ldir85	; F756EF  ldir
 	ld	xiy, 8648	; F756F1  ld XIY,0x000021c8
@@ -171323,7 +171448,7 @@ sub_F75685_Loop:
 	ld	xiy, Data_F75675	; F7575B  ld XIY,0x00f75675
 	m_bit 2, MD16, 0x7f4d	; F75760  bit 2,(0x7f4d)
 	jr	nz, sub_F75685_Skip2	; F75764  jr NZ,0xf75770
-	ld	xiy, 16209533	; F75766  ld XIY,0x00f7567d
+	ld	xiy, Data_F75675 + 0x8	; F75766  ld XIY,0x00f7567d
 	ld	(4665:16), 0	; F7576B  ld (0x1239),0x00
 sub_F75685_Skip2:
 	ld	xix, (4232:16)	; F75770  ld XIX,(0x1088)
@@ -174243,12 +174368,12 @@ sub_F76E74_Skip:
 	ld	xix, 6334208	; F76EBA  ld XIX,0x0060a700
 	ldw	bc, 7	; F76EBF  ld BC,0x0007
 	.byte 0x95, 0x11	; F76EC2  ldirw   [llvm-mc cannot encode this]
-	ld	xiy, 16218180	; F76EC4  ld XIY,0x00f77844
+	ld	xiy, SmfFileTemplate_F77836 + 0xE	; F76EC4  ld XIY,0x00f77844
 	ldw	bc, 4	; F76EC9  ld BC,0x0004
 	.byte 0x95, 0x11	; F76ECC  ldirw   [llvm-mc cannot encode this]
 	ld	(4232:16), xix	; F76ECE  ld (0x1088),XIX
 	ld	xix, (4232:16)	; F76ED2  ld XIX,(0x1088)
-	ld	xiy, 16218188	; F76ED6  ld XIY,0x00f7784c
+	ld	xiy, SmfFileTemplate_F77836 + 0x16	; F76ED6  ld XIY,0x00f7784c
 	ldw	bc, 11	; F76EDB  ld BC,0x000b
 	.byte 0x85, 0x11	; F76EDE  ldir   [llvm-mc cannot encode this]
 	ld	xiy, 8648	; F76EE0  ld XIY,0x000021c8
@@ -174288,7 +174413,7 @@ sub_F76E74_Loop:
 	ld	xiy, GmSystemSysEx_F76E64	; F76F4A  ld XIY,0x00f76e64
 	.byte 0xF1, 0x4D, 0x7F, 0xCA	; F76F4F  bit 2,(0x7f4d)   [llvm-mc cannot encode this]
 	jr	nz, sub_F76E74_Skip2	; F76F53  jr NZ,0xf76f5f
-	ld	xiy, 16215660	; F76F55  ld XIY,0x00f76e6c
+	ld	xiy, GmSystemSysEx_F76E64 + 0x8	; F76F55  ld XIY,0x00f76e6c
 	ld	(4665:16), 0	; F76F5A  ld (0x1239),0x00
 sub_F76E74_Skip2:
 	ld	xix, (4232:16)	; F76F5F  ld XIX,(0x1088)
@@ -190720,7 +190845,7 @@ ScreenLeaveBody_TrackMerge_Join:
 	ld	(9536:16), 0	; F7EEB3  ld (0x2540),0x00
 	calr	sub_F7E2D8	; F7EEB8  calr 0xf7e2d8
 	ld	xiy, DL_F3A561	; F7EEBB  ld XIY,0x00f3a561
-	ld	xix, 15967615	; F7EEC0  ld XIX,0x00f3a57f
+	ld	xix, DL_F3A561 + 0x1E	; F7EEC0  ld XIX,0x00f3a57f
 	call	T_DisplayListB_Run	; F7EEC5  call 0xf417f4
 	ret	; F7EEC9  ret
 sub_F7EECA:
@@ -190786,7 +190911,7 @@ ScreenLeaveBody_TrackMerge_Return:
 sub_F7EEEF:
 	ld	(9536:16), 1	; F7EEEF  ld (0x2540),0x01
 	call	sub_F7E2ED	; F7EEF4  call 0xf7e2ed
-	ld	xiy, 15967615	; F7EEF8  ld XIY,0x00f3a57f
+	ld	xiy, DL_F3A561 + 0x1E	; F7EEF8  ld XIY,0x00f3a57f
 	call	T_F4181C	; F7EEFD  call 0xf4181c
 	ret	; F7EF01  ret
 
@@ -191120,7 +191245,7 @@ sub_F7EFFA:
 	ld	xiy, DL_F39551	; F7F002  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F007  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F00C  call 0xf417f0
-	ld	xiy, 15967950	; F7F010  ld XIY,0x00f3a6ce
+	ld	xiy, DL_LastMeasure + 0x23	; F7F010  ld XIY,0x00f3a6ce
 	call	T_F4181C	; F7F015  call 0xf4181c
 	ret	; F7F019  ret
 
@@ -191130,7 +191255,7 @@ sub_F7F01A:
 	calr	sub_F7E2D8	; F7F01A  calr 0xf7e2d8
 	ld	(9536:16), 0	; F7F01D  ld (0x2540),0x00
 	ld	xiy, DL_LastMeasure	; F7F022  ld XIY,0x00f3a6ab
-	ld	xix, 15967950	; F7F027  ld XIX,0x00f3a6ce
+	ld	xix, DL_LastMeasure + 0x23	; F7F027  ld XIX,0x00f3a6ce
 	call	T_DisplayListB_Run	; F7F02C  call 0xf417f4
 	ret	; F7F030  ret
 
@@ -191594,8 +191719,8 @@ sub_F7F1C8_Return:
 BlinkArgPtrs_F7F1F5:
 	.long 0x00000000	; F7F1F5  [0]  NULL
 	.long 0x00000000	; F7F1F9  [1]  NULL
-	.long 0x00F3A6BA	; F7F1FD  [2]
-	.long 0x00F3A6C4	; F7F201  [3]
+	.long DL_LastMeasure + 0xF	; F7F1FD  [2]
+	.long DL_LastMeasure + 0x19	; F7F201  [3]
 
 sub_F7F205:
 	ret	; F7F205  ret   <- button table 0xF7D858 entry 0 (MEASURE DELETE)
@@ -191953,7 +192078,7 @@ sub_F7F32A:
 	ld	xiy, DL_F39551	; F7F332  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F337  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F33C  call 0xf417f0
-	ld	xiy, 15968780	; F7F340  ld XIY,0x00f3aa0c
+	ld	xiy, DL_F3A9DA + 0x32	; F7F340  ld XIY,0x00f3aa0c
 	call	T_F4181C	; F7F345  call 0xf4181c
 	ret	; F7F349  ret
 
@@ -192067,7 +192192,7 @@ sub_F7F397:
 	ld	(9536:16), 0	; F7F397  ld (0x2540),0x00
 	calr	sub_F7E2D8	; F7F39C  calr 0xf7e2d8
 	ld	xiy, DL_F3A9DA	; F7F39F  ld XIY,0x00f3a9da
-	ld	xix, 15968780	; F7F3A4  ld XIX,0x00f3aa0c
+	ld	xix, DL_F3A9DA + 0x32	; F7F3A4  ld XIX,0x00f3aa0c
 	call	T_DisplayListB_Run	; F7F3A9  call 0xf417f4
 	ret	; F7F3AD  ret
 
@@ -192480,8 +192605,8 @@ sub_F7F4F4_Return:
 BlinkArgPtrs_F7F521:
 	.long 0x00000000	; F7F521  [0]  NULL
 	.long 0x00000000	; F7F525  [1]  NULL
-	.long 0x00F3A9F8	; F7F529  [2]
-	.long 0x00F3AA02	; F7F52D  [3]
+	.long DL_F3A9DA + 0x1E	; F7F529  [2]
+	.long DL_F3A9DA + 0x28	; F7F52D  [3]
 	.long 0x00000000	; F7F531  [4]  NULL
 
 	.fill	1, 1, 0x0E	; F7F535-F7F535  `ret` padding below the table above
@@ -192755,7 +192880,7 @@ sub_F7F668:
 	ld	xiy, DL_F39551	; F7F670  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F675  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F67A  call 0xf417f0
-	ld	xiy, 15969591	; F7F67E  ld XIY,0x00f3ad37
+	ld	xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow + 0x47	; F7F67E  ld XIY,0x00f3ad37
 	call	T_F4181C	; F7F683  call 0xf4181c
 	ret	; F7F687  ret
 
@@ -192876,7 +193001,7 @@ sub_F7F6E5:
 	ld	(9536:16), 0	; F7F6E5  ld (0x2540),0x00
 	calr	sub_F7E2D8	; F7F6EA  calr 0xf7e2d8
 	ld	xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6ED  ld XIY,0x00f3acf0
-	ld	xix, 15969591	; F7F6F2  ld XIX,0x00f3ad37
+	ld	xix, DL_TrackValueFirstMeasureLastMeasureStrengthWindow + 0x47	; F7F6F2  ld XIX,0x00f3ad37
 	call	T_DisplayListB_Run	; F7F6F7  call 0xf417f4
 	ret	; F7F6FB  ret
 
@@ -193297,8 +193422,8 @@ sub_F7F860_Return:
 BlinkArgPtrs_F7F88D:
 	.long 0x00000000	; F7F88D  [0]  NULL
 	.long 0x00000000	; F7F891  [1]  NULL
-	.long 0x00F3AD0E	; F7F895  [2]
-	.long 0x00F3AD18	; F7F899  [3]
+	.long DL_TrackValueFirstMeasureLastMeasureStrengthWindow + 0x1E	; F7F895  [2]
+	.long DL_TrackValueFirstMeasureLastMeasureStrengthWindow + 0x28	; F7F899  [3]
 	.long 0x00000000	; F7F89D  [4]  NULL
 	.long 0x00000000	; F7F8A1  [5]  NULL
 	.long 0x00000000	; F7F8A5  [6]  NULL
@@ -193338,7 +193463,7 @@ Paint_Vel0cityChange_Skip:
 	jr	Paint_Vel0cityChange_Join	; F7F8EC  jr T,0xf7f918
 Paint_Vel0cityChange_Skip2:
 	ld	xiy, DL_Vel0cityChangeTrackFirstMeasure	; F7F8EE  ld XIY,0x00f3aa54
-	ld	xix, 15969022	; F7F8F3  ld XIX,0x00f3aafe
+	ld	xix, DL_Vel0cityChangeTrackFirstMeasure + 0xAA	; F7F8F3  ld XIX,0x00f3aafe
 	call	T_DisplayList_Run	; F7F8F8  call 0xf417f0
 	ld	xiy, DL_F3AB9C	; F7F8FC  ld XIY,0x00f3ab9c
 	ld	xix, DL_QuantizeTrackStrengthFirstMeasure	; F7F901  ld XIX,0x00f3abdb
@@ -193513,7 +193638,7 @@ sub_F7F99C:
 	ld	xiy, DL_F39551	; F7F9A4  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F9A9  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F9AE  call 0xf417f0
-	ld	xiy, 15969129	; F7F9B2  ld XIY,0x00f3ab69
+	ld	xiy, DL_F3AB3B + 0x2E	; F7F9B2  ld XIY,0x00f3ab69
 	call	T_F4181C	; F7F9B7  call 0xf4181c
 	ret	; F7F9BB  ret
 
@@ -193625,7 +193750,7 @@ sub_F7F9FB:
 	calr	sub_F7E2D8	; F7FA00  calr 0xf7e2d8
 	calr	sub_F7F935	; F7FA03  calr 0xf7f935
 	ld	xiy, DL_F3AB3B	; F7FA06  ld XIY,0x00f3ab3b
-	ld	xix, 15969129	; F7FA0B  ld XIX,0x00f3ab69
+	ld	xix, DL_F3AB3B + 0x2E	; F7FA0B  ld XIX,0x00f3ab69
 	call	T_DisplayListB_Run	; F7FA10  call 0xf417f4
 	ret	; F7FA14  ret
 
@@ -194073,9 +194198,9 @@ sub_F7FBB7_Return:
 BlinkArgPtrs_F7FBE4:
 	.long 0x00000000	; F7FBE4  [0]  NULL
 	.long 0x00000000	; F7FBE8  [1]  NULL
-	.long 0x00F3AB4A	; F7FBEC  [2]
-	.long 0x00F3AB54	; F7FBF0  [3]
-	.long 0x00F3AB5E	; F7FBF4  [4]
+	.long DL_F3AB3B + 0xF	; F7FBEC  [2]
+	.long DL_F3AB3B + 0x19	; F7FBF0  [3]
+	.long DL_F3AB3B + 0x23	; F7FBF4  [4]
 
 
 ; ---------------------------------------------------------------------
@@ -194123,7 +194248,7 @@ Paint_Transp0se_Join:
 	jr	Paint_Transp0se_Join2	; F7FC53  jr T,0xf7fc7f
 Paint_Transp0se_Skip2:
 	ld	xiy, DL_Transp0seTrackFirstMeasure	; F7FC55  ld XIY,0x00f3b102
-	ld	xix, 15970726	; F7FC5A  ld XIX,0x00f3b1a6
+	ld	xix, DL_Transp0seTrackFirstMeasure + 0xA4	; F7FC5A  ld XIX,0x00f3b1a6
 	call	T_DisplayList_Run	; F7FC5F  call 0xf417f0
 	ld	xiy, DL_F3AB9C	; F7FC63  ld XIY,0x00f3ab9c
 	ld	xix, DL_QuantizeTrackStrengthFirstMeasure	; F7FC68  ld XIX,0x00f3abdb
@@ -194284,7 +194409,7 @@ sub_F7FCE6:
 	ld	xiy, DL_F39551	; F7FCEE  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7FCF3  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7FCF8  call 0xf417f0
-	ld	xiy, 15970833	; F7FCFC  ld XIY,0x00f3b211
+	ld	xiy, DL_F3B1E3 + 0x2E	; F7FCFC  ld XIY,0x00f3b211
 	call	T_F4181C	; F7FD01  call 0xf4181c
 	ret	; F7FD05  ret
 
@@ -194395,7 +194520,7 @@ sub_F7FD45:
 	ld	(9536:16), 0	; F7FD45  ld (0x2540),0x00
 	calr	sub_F7E2D8	; F7FD4A  calr 0xf7e2d8
 	ld	xiy, DL_F3B1E3	; F7FD4D  ld XIY,0x00f3b1e3
-	ld	xix, 15970833	; F7FD52  ld XIX,0x00f3b211
+	ld	xix, DL_F3B1E3 + 0x2E	; F7FD52  ld XIX,0x00f3b211
 	call	T_DisplayListB_Run	; F7FD57  call 0xf417f4
 	ret	; F7FD5B  ret
 
@@ -194837,9 +194962,9 @@ sub_F7FEE6_Return:
 BlinkArgPtrs_F7FF13:
 	.long 0x00000000	; F7FF13  [0]  NULL
 	.long 0x00000000	; F7FF17  [1]  NULL
-	.long 0x00F3B1F2	; F7FF1B  [2]
-	.long 0x00F3B1FC	; F7FF1F  [3]
-	.long 0x00F3B206	; F7FF23  [4]
+	.long DL_F3B1E3 + 0xF	; F7FF1B  [2]
+	.long DL_F3B1E3 + 0x19	; F7FF1F  [3]
+	.long DL_F3B1E3 + 0x23	; F7FF23  [4]
 
 
 ; ---------------------------------------------------------------------

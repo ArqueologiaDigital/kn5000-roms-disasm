@@ -43,6 +43,16 @@ WHICH SITES, AND THE GUARD ON CODE
   whose ROM byte is 0x1B is accepted without the second decoder -- that table
   is a directory of `jp imm24` slots (notes/FINDINGS-prom_b-thunk-table.md) and
   unidasm's linear sweep desynchronises after the `.long` slots mixed into it.
+  --offsets: for `.long` / `ld xRR,` / `lda xRR,` values in prom_b with no
+  label: a value inside DATA (or at the start of a `.fill`) is spelled
+  `<Label> + 0xN`, Label being the nearest NON-structural label at or below it
+  and N <= OFFSET_MAX -- the object plus its offset (a display-list record,
+  the end of a list, an interior table entry); a value that is an INSTRUCTION
+  START taken by `ld`/`lda` (a return point pushed by hand, a callback) gets a
+  label the way --arms makes one.  `add xRR, N` is never touched (the
+  `TABLE - 4*k` dispatch idiom would be misspelled as `<other> + N`), nor are
+  jp/call targets inside an instruction (that is misframe evidence), nor
+  `.long` values inside an instruction.
   Macro operands (`m_jp_cc MD24, N, cc`) are left alone: the macros split the
   address into `.byte` fields and a relocatable symbol cannot be masked that way.
   A value that is NOT a label address (e.g. `add XBC, TABLE - 4*k`, the dispatch
@@ -95,6 +105,7 @@ FORMS = [
 CODE_KINDS = {"jp", "call", "ld", "add", "lda"}
 TERM = re.compile(r'^(ret|reti|retd|jp\s+[^,]+$|jr\s+[^,]+$|jrl\s+[^,]+$|jp\s+t\s*,|jr\s+t\s*,|jrl\s+t\s*,)')
 THUNK_LO, THUNK_HI = 0xF40000, 0xF44018      # the routine directory's extent
+OFFSET_MAX = 0x1000     # --offsets: a Label + offset spelling never reaches further than this
 
 
 def sh(cmd, **kw):
@@ -159,7 +170,7 @@ def split_code(text):
     return lead + ws, rest[len(ws):], tail
 
 
-def analyse(arms=False):
+def analyse(arms=False, offsets=False):
     img = snb.image_by_key("prom_b")
     sh(["make", "-C", WSA1, "rebuilt_ROMs/wsa1_prom_a.llvm.elf", "rebuilt_ROMs/wsa1_prom_b.llvm.elf"])
     b_lab, b_names = elf_labels(os.path.join(WSA1, "rebuilt_ROMs/wsa1_prom_b.llvm.elf"))
@@ -193,10 +204,26 @@ def analyse(arms=False):
             if m:
                 eq_now[m.group(1)] = int(m.group(2), 16)
     own_names = b_names - set(eq_now)
+    # for --offsets: every prom_b label address, best (non-structural) name per address
+    lab_addrs, lab_best = [], []
+    for a_ in sorted(b_lab):
+        good = [n for n in b_lab[a_] if not STRUCT.search(n)]
+        if good:
+            lab_addrs.append(a_)
+            lab_best.append(sorted(good, key=lambda n: rank(n, order))[0])
     stats = collections.Counter()
     starts = [sp[0] for sp in spans]
     arm_new = {}                 # addr -> (li, name)
     taken = set(b_names) | set(order)
+
+    def target_kind(v):
+        k = bisect.bisect_right(starts, v) - 1
+        if k < 0 or spans[k][2] != REL:
+            return None
+        bk, _ = drc.classify_line(lines[spans[k][3]], macros)
+        if bk == "code":
+            return "code-boundary" if spans[k][0] == v else "code-mid"
+        return bk
 
     def plan_arm(v):
         """A `.long` in a pointer table names an UNLABELLED instruction start: give it a
@@ -297,6 +324,21 @@ def analyse(arms=False):
                 if nm:
                     cands = [nm]
                     stats["new arm label " + key] += 1
+            if not cands and offsets and side == "b" and kind in ("long", "ld", "lda"):
+                tk = target_kind(v)
+                if tk in ("data", "fill"):
+                    # a pointer INTO a data object: the object plus its offset
+                    k = bisect.bisect_right(lab_addrs, v) - 1
+                    if k >= 0 and 0 < v - lab_addrs[k] <= OFFSET_MAX:
+                        cands = ["%s + 0x%X" % (lab_best[k], v - lab_addrs[k])]
+                        stats["label+offset " + key] += 1
+                elif tk == "code-boundary" and kind in ("ld", "lda"):
+                    # a CODE address taken as a value (pushed as a return point,
+                    # stored as a callback): label it like a table arm
+                    nm = plan_arm(v)
+                    if nm:
+                        cands = [nm]
+                        stats["new code-address label " + key] += 1
             if not cands:
                 stats["no-label " + key] += 1
                 rows.append(dict(line=li + 1, kind=key, value="0x%06X" % v, why="no label at that address"))
@@ -387,12 +429,14 @@ def main():
     ap.add_argument("--verify", action="store_true")
     ap.add_argument("--report")
     ap.add_argument("--check-equates", action="store_true")
+    ap.add_argument("--offsets", action="store_true",
+                    help="spell a prom_b value with no label as `<nearest non-structural label above> + 0xN`")
     ap.add_argument("--arms", action="store_true",
                     help="also LABEL unlabelled instruction starts that a `.long` names")
     a = ap.parse_args()
     if a.check_equates:
         sys.exit(check_equates())
-    res = analyse(a.arms)
+    res = analyse(a.arms, a.offsets)
     for k in sorted(res["stats"]):
         print("  %-28s %6d" % (k, res["stats"][k]))
     print("  %-28s %6d" % ("EDITS", len(res["edits"])))
