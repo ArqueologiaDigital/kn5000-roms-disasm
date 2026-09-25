@@ -19746,6 +19746,12 @@ IndexToBitMask16__F8A954:
 	pop XIX                                       ; F8A959  5c
 	ret                                           ; F8A95A  0e
 
+; ---------------------------------------------------------------------
+; BitMask16ByIndex -- 17 x u16: 0, then 1<<0 .. 1<<15 (entry k = 1 << (k-1)).
+; Read by: IndexToBitMask16 (0xF8A944): `cp E,0x10 / jr ule / xor E,E /
+;          sla 1,E / ld XIX,<this> / ld DE,(XIX+E)`.  COUNT 17 = that
+;          bound + 1.  (notes/proma-2026-09-25/gen_small_headers.py, H1)
+; ---------------------------------------------------------------------
 BitMask16ByIndex:
 	.short 0x0000, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040 ; F8A95B  [ 0.. 7]  index -> 1 << (index-1), 0 for 0
 	.short 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000 ; F8A96B  [ 8..15]
@@ -19770,6 +19776,13 @@ IndexToBitMask32:
 	pop XIX                                       ; F8A992  5c
 	ret                                           ; F8A993  0e
 
+; ---------------------------------------------------------------------
+; BitMask32ByIndex -- 33 x u32: 0, then 1<<0 .. 1<<31 (entry k = 1 << (k-1)).
+; Read by: IndexToBitMask32 (0xF8A97D): `cp E,0x20 / jr ule / xor E,E /
+;          sla 2,E / ld XIX,<this> / ld XDE,(XIX+E)`.  COUNT 33 = that
+;          bound + 1.  Also copied at BitMask32ByIndex_Copy and
+;          BitMask32ByIndex_DeadCopy.  (gen_small_headers.py, H1)
+; ---------------------------------------------------------------------
 BitMask32ByIndex:
 	.long 0x00000000, 0x00000001, 0x00000002, 0x00000004       ; F8A994  [ 0.. 3]  index -> 1 << (index-1), 0 for 0
 	.long 0x00000008, 0x00000010, 0x00000020, 0x00000040       ; F8A9A4  [ 4.. 7]
@@ -40616,6 +40629,17 @@ sub_F96023:   ; entry: prom_b routine directory
 	ld (XIX+0x2c00),0xff                                 ; F96145  f3 f1 00 2c 00 ff
 	ld (0x60f000:24), ix                                ; F9614B  f2 00 f0 60 54
 	ret                                                  ; F96150  0e
+; ---------------------------------------------------------------------
+; IndexTable_F96151 -- the byte list 0x00..0x1F, then an 0xFF terminator.
+; Read by: the loop at 0xF960FE: `ld XHL,<this>`, then `ld W,(XHL) / inc XHL
+;          / cp W,D / jr z` -> sub_F96172, else `cp W,0xFF / jr nz` -- a
+;          membership test of D.  A D not in the list is stored with E and
+;          A straight into the 0x2C00 queue (0xF96117-0xF96121), so the list
+;          names the 32 values that get sub_F96172 instead -- the part
+;          numbers, when D is a parameter number as in that queue.
+;          COUNT 33 = 32 values + the terminator the loop stops on.
+;          (notes/proma-2026-09-25/gen_small_headers.py, H4)
+; ---------------------------------------------------------------------
 IndexTable_F96151:   ; 32 sequential bytes + 0xFF terminator, read by sub_F96062's helper (0xF960FE) via a linear scan against D
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0xff   ; F96151
 sub_F96172:   ; entry: reachable-run entry
@@ -65857,6 +65881,16 @@ MidiIn_SystemMessage:   ; entry: MidiIn_StatusClassTable[7]
 	ret                                           ; FA6163  0e
 
 ; --- 0xFA6164-0xFA61A3  pointer table (64 bytes) ---
+; ---------------------------------------------------------------------
+; MidiIn_SystemSubTable -- 16 LE32 handlers, one per MIDI SYSTEM status
+;          0xF0-0xFF.
+; Read by: MidiIn_SystemMessage (0xFA614B, MidiIn_StatusClassTable[7]):
+;          `ld L,(0x1940) / and L,0x0F / sla 2,L / ld XIZ,<this> /
+;          ld XIZ,(XIZ+HL) / call (XIZ)` -- the status byte's low nibble,
+;          hence COUNT 16.  [2] 0xF2 Song Position and [3] 0xF3 Song Select
+;          are handled; the rest are MidiIn_SystemIgnore.
+;          (notes/proma-2026-09-25/gen_small_headers.py, H2)
+; ---------------------------------------------------------------------
 MidiIn_SystemSubTable:
 	.long MidiIn_SystemIgnore                   ; FA6164  [0]   -> MidiIn_SystemIgnore
 	.long MidiIn_SystemIgnore                   ; FA6168  [1]   -> MidiIn_SystemIgnore
@@ -65978,6 +66012,16 @@ MidiIn_RouteChannelMessage:   ; entry: MidiIn_StatusClassTable[0-6]
 	ret                                           ; FA6241  0e
 
 ; --- 0xFA6242-0xFA6261  pointer table (32 bytes) ---
+; ---------------------------------------------------------------------
+; MidiIn_ChannelStatusTable -- 8 LE32 handlers, one per CHANNEL message kind
+;          0x80-0xF0 (status bits 4-6).
+; Read by: 0xFA6225 `ld L,(0x1940) / and L,0x70 / srl 2,HL / ld XIX,<this> /
+;          ld XIX,(XIX+HL) / call (XIX)` -- (status & 0x70) / 4, hence
+;          COUNT 8.  [3] 0xB0 Control Change, [4] 0xC0 Program Change,
+;          [5] 0xD0 Channel Pressure, [6] 0xE0 Pitch Bend; note on/off,
+;          polyphonic aftertouch and [7] are MidiIn_ChannelIgnore.
+;          (notes/proma-2026-09-25/gen_small_headers.py, H3)
+; ---------------------------------------------------------------------
 MidiIn_ChannelStatusTable:
 	.long MidiIn_ChannelIgnore                  ; FA6242  [0]   -> MidiIn_ChannelIgnore
 	.long MidiIn_ChannelIgnore                  ; FA6246  [1]   -> MidiIn_ChannelIgnore
