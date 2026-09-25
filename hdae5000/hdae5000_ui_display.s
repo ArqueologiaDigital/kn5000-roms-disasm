@@ -7075,7 +7075,7 @@ HDAE5000_Get_Init_Flag:	; 28F570h
 ; All routine addresses are now exposed as labels in split binary sections
 
 ; PPORT state machine handler (in code_28f90c_2953e1.bin)
-	; (EQU→inline label) HDAE5000_PPORT_Handler = 0x29501C
+	; (EQU→inline label) HDAE5000_PPORT_ServicePending = 0x29501C
 
 ; PPORT command handler addresses (in code_295642_2fffff.bin)
 	; (EQU→inline label) HDAE5000_Cmd01_SendInfo = 0x2958D6
@@ -7337,7 +7337,7 @@ HDAE5000_Frame_Handler_Status__init_display:
 
 HDAE5000_Frame_Handler_Exit:	; 28F781h
 	; Exit frame handler by jumping to PPORT handler
-	jp HDAE5000_PPORT_Handler
+	jp HDAE5000_PPORT_ServicePending
 
 ; ----------------------------------------------------------------------------
 ; Utility routines (0x28F785 - 0x2953E1)
@@ -14387,18 +14387,34 @@ HDAE5000_Display_Sub_294301:	; 0x294301 (275 bytes)
 	lda xsp, (xsp + 14)
 	ret
 
-HDAE5000_Display_Sub_294414:	; 0x294414 (3061 bytes)
-	; Large display management routine
+HDAE5000_DebugTrace:	; 0x294414 (3061 bytes)
+	; debug trace output, COMPILED OUT: the whole routine is this one `ret`.
+	; 60 call sites load XWA with a string and call it -- either a banner
+	; "---[ <FunctionName> ]---" (ROM 0x2F8F5E..0x2F9361, in the block under
+	; HDAE5000_Display_Params) or a line just formatted into a stack buffer
+	; with HDAE5000_SPrintf ("FGB wid : %d" ...).  The banners are the only
+	; surviving developer names of the PC-link services below, which is how
+	; HDAE5000_PPORT_Svc01..Svc25 are named.
+	; (The old header "Large display management routine" described nothing
+	; here: 0x294414 is a lone 0x0E.)
 ; LDS: 0x294414 (3061 bytes)
+	; ^ region size: the stub plus the 26 PC-link service routines that
+	;   follow, up to HDAE5000_PPORT_Svc27 at 0x295009.
 
 	ret
 
+	; a second one-byte `ret` (0x294415); nothing in this ROM calls or
+	; points at it (searched: symbolic references and the literal 0x294415).
 	ret
 
-HDAE5000_PPORT_Setup_Helper2:
+HDAE5000_PPORT_Svc01_GetInfoBlockPointer:
+	; PC-link service 1: HDAE5000_PPORT_ServiceTable[1], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F8F5E):
+	; "GetInfoBlockPointer".
 	lda	xsp, (xsp-32)
 	lda xwa, (0x2f8f5e:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x238f2e:24)
 	push xwa
 	pushw 0x002f
@@ -14408,14 +14424,18 @@ HDAE5000_PPORT_Setup_Helper2:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f8f8c:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xhl, (0x238f2e:24)
 	lda	xsp, (xsp+32)
 	ret
 
-HDAE5000_PPORT_Setup_Helper3:
+HDAE5000_PPORT_Svc02_TurnHdMotorOff:
+	; PC-link service 2: HDAE5000_PPORT_ServiceTable[2], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F8F8E):
+	; "TurnHdMotorOff".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	call HDAE5000_Display_Callback_Helper
@@ -14424,14 +14444,18 @@ HDAE5000_PPORT_Setup_Helper3:
 	ld	iz, 1:i3
 .LDS_445d:
 	lda xwa, (0x2f8f8e:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f8fa8:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper4:
+HDAE5000_PPORT_Svc03_SendInfosAboutHd:
+	; PC-link service 3: HDAE5000_PPORT_ServiceTable[3], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F8FAA):
+	; "SendInfosAboutHd".
 	lda	xsp, (xsp-116)
 	lda	xwa, (xsp+64)
 	call HDAE5000_PPI_Write_Sector_Helper2
@@ -14455,7 +14479,7 @@ HDAE5000_PPORT_Setup_Helper4:
 	ld	a, (0x23A04C:24)
 	ld	(0x238FF7:24), a
 	lda xwa, (0x2f8faa:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw 0x002f
 	pushw 0x8fc6
 	lda	xwa, (xsp+4)
@@ -14469,7 +14493,7 @@ HDAE5000_PPORT_Setup_Helper4:
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+18)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	xwa, (0x238fe3)
 	push xwa
 	pushw 0x002f
@@ -14479,7 +14503,7 @@ HDAE5000_PPORT_Setup_Helper4:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238FE7:24)
 	pushw 0x002f
 	pushw 0x8fe0
@@ -14488,7 +14512,7 @@ HDAE5000_PPORT_Setup_Helper4:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238FE9:24)
 	pushw 0x002f
 	pushw 0x8fee
@@ -14497,7 +14521,7 @@ HDAE5000_PPORT_Setup_Helper4:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238FEB:24)
 	pushw 0x002f
 	pushw 0x8ffc
@@ -14506,14 +14530,18 @@ HDAE5000_PPORT_Setup_Helper4:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f900a:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, 0:i3
 	lda	xsp, (xsp+116)
 	ret
 
-HDAE5000_PPORT_Setup_Helper5:
+HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock:
+	; PC-link service 4: HDAE5000_PPORT_ServiceTable[4], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F900C):
+	; "SendInfosAboutDirBlock".
 	lda	xsp, (xsp-74)
 	lda	xwa, (xsp+64)
 	ld	xbc, xwa
@@ -14526,7 +14554,7 @@ HDAE5000_PPORT_Setup_Helper5:
 	ld	wa, (xsp+70)
 	ld	(0x238f60), wa
 	lda xwa, (0x2f900c:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	xwa, (0x238f5a)
 	push xwa
 	pushw 0x002f
@@ -14536,7 +14564,7 @@ HDAE5000_PPORT_Setup_Helper5:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238F5E:24)
 	pushw 0x002f
 	pushw 0x903c
@@ -14545,7 +14573,7 @@ HDAE5000_PPORT_Setup_Helper5:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238F60:24)
 	pushw 0x002f
 	pushw 0x904a
@@ -14554,13 +14582,17 @@ HDAE5000_PPORT_Setup_Helper5:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f9058:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda	xsp, (xsp+74)
 	ret
 
-HDAE5000_PPORT_Setup_Helper6:
+HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock:
+	; PC-link service 5: HDAE5000_PPORT_ServiceTable[5], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F905A):
+	; "SendInfosAboutFileSystemBlock".
 	lda	xsp, (xsp-74)
 	lda	xwa, (xsp+64)
 	ld	xbc, xwa
@@ -14573,7 +14605,7 @@ HDAE5000_PPORT_Setup_Helper6:
 	ld	wa, (xsp+70)
 	ld	(0x238f68), wa
 	lda xwa, (0x2f905a:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	xwa, (0x238f62)
 	push xwa
 	pushw 0x002f
@@ -14583,7 +14615,7 @@ HDAE5000_PPORT_Setup_Helper6:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238F66:24)
 	pushw 0x002f
 	pushw 0x9090
@@ -14592,7 +14624,7 @@ HDAE5000_PPORT_Setup_Helper6:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238F68:24)
 	pushw 0x002f
 	pushw 0x909e
@@ -14601,13 +14633,17 @@ HDAE5000_PPORT_Setup_Helper6:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f90ac:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda	xsp, (xsp+74)
 	ret
 
-HDAE5000_PPORT_Setup_Helper7:
+HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock:
+	; PC-link service 6: HDAE5000_PPORT_ServiceTable[6], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F90AE):
+	; "SendInfosAboutFlsBlock".
 	lda	xsp, (xsp-74)
 	lda	xwa, (xsp+64)
 	ld	xbc, xwa
@@ -14622,7 +14658,7 @@ HDAE5000_PPORT_Setup_Helper7:
 	ld	wa, (xsp+72)
 	ld	(0x238f72), wa
 	lda xwa, (0x2f90ae:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	xwa, (0x238f6a)
 	push xwa
 	pushw 0x002f
@@ -14632,7 +14668,7 @@ HDAE5000_PPORT_Setup_Helper7:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238F6E:24)
 	pushw 0x002f
 	pushw 0x90de
@@ -14641,7 +14677,7 @@ HDAE5000_PPORT_Setup_Helper7:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238F70:24)
 	pushw 0x002f
 	pushw 0x90ec
@@ -14650,7 +14686,7 @@ HDAE5000_PPORT_Setup_Helper7:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	pushw	(0x238F72:24)
 	pushw 0x002f
 	pushw 0x90fa
@@ -14659,13 +14695,17 @@ HDAE5000_PPORT_Setup_Helper7:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f9108:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda	xsp, (xsp+74)
 	ret
 
-HDAE5000_PPORT_Setup_Helper8:
+HDAE5000_PPORT_Svc07_ReadDirBlockFromHd:
+	; PC-link service 7: HDAE5000_PPORT_ServiceTable[7], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F910A):
+	; "ReadDirBlockFromHd".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
@@ -14675,14 +14715,18 @@ HDAE5000_PPORT_Setup_Helper8:
 	ld	iz, 1:i3
 .LDS_4746:
 	lda xwa, (0x2f910a:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f9128:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper9:
+HDAE5000_PPORT_Svc08_ReadFileBlockFromHd:
+	; PC-link service 8: HDAE5000_PPORT_ServiceTable[8], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F912A):
+	; "ReadFileBlockFromHd".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
@@ -14692,14 +14736,18 @@ HDAE5000_PPORT_Setup_Helper9:
 	ld	iz, 1:i3
 .LDS_476b:
 	lda xwa, (0x2f912a:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f9148:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper10:
+HDAE5000_PPORT_Svc09_ReadFlsBlockFromHd:
+	; PC-link service 9: HDAE5000_PPORT_ServiceTable[9], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F914A):
+	; "ReadFlsBlockFromHd".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
@@ -14709,14 +14757,18 @@ HDAE5000_PPORT_Setup_Helper10:
 	ld	iz, 1:i3
 .LDS_4790:
 	lda xwa, (0x2f914a:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f9168:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper11:
+HDAE5000_PPORT_Svc10_WriteDirBlockToHd:
+	; PC-link service 10: HDAE5000_PPORT_ServiceTable[10], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F916A):
+	; "WriteDirBlockToHd".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
@@ -14726,14 +14778,18 @@ HDAE5000_PPORT_Setup_Helper11:
 	ld	iz, 1:i3
 .LDS_47b5:
 	lda xwa, (0x2f916a:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f9186:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper12:
+HDAE5000_PPORT_Svc11_WriteFileSystemBlockToHd:
+	; PC-link service 11: HDAE5000_PPORT_ServiceTable[11], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F9188):
+	; "WriteFileSystemBlockToHd".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
@@ -14743,14 +14799,18 @@ HDAE5000_PPORT_Setup_Helper12:
 	ld	iz, 1:i3
 .LDS_47da:
 	lda xwa, (0x2f9188:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f91ac:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper13:
+HDAE5000_PPORT_Svc12_WriteFlsBlockToHd:
+	; PC-link service 12: HDAE5000_PPORT_ServiceTable[12], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F91AE):
+	; "WriteFlsBlockToHd".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
@@ -14760,14 +14820,18 @@ HDAE5000_PPORT_Setup_Helper13:
 	ld	iz, 1:i3
 .LDS_47ff:
 	lda xwa, (0x2f91ae:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f91ca:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper14:
+HDAE5000_PPORT_Svc13_SendInfosAboutSong:
+	; PC-link service 13: HDAE5000_PPORT_ServiceTable[13], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F91CC):
+	; "SendInfosAboutSong".
 	lda	xsp, (xsp-128)
 	push xiz
 	stw_dri bc, 0xFD, 0x82, 0x00	; ld (XSP+0x0082),BC
@@ -14956,7 +15020,7 @@ HDAE5000_PPORT_Setup_Helper14:
 	ld	qiz, 0
 .LDS_4acd:
 	lda xwa, (0x2f91cc:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x238f4a:24)
 	push xwa
 	pushw 0x002f
@@ -14966,7 +15030,7 @@ HDAE5000_PPORT_Setup_Helper14:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+4)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x238f30:24)
 	push xwa
 	pushw 0x002f
@@ -14976,15 +15040,19 @@ HDAE5000_PPORT_Setup_Helper14:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+4)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f9206:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, qiz
 	pop xiz                                 ; pop XIZ
 	lda_dri xsp, 0xFD, 0x80, 0x00	; lda XSP,XSP+0x0080
 	ret
 
-HDAE5000_PPORT_Setup_Helper15:
+HDAE5000_PPORT_Svc14_LoadSongFromHdToMemory:
+	; PC-link service 14: HDAE5000_PPORT_ServiceTable[14], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F9208):
+	; "LoadSongFromHdToMemory".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	pushw 0x0000
@@ -14996,14 +15064,18 @@ HDAE5000_PPORT_Setup_Helper15:
 	ld	iz, 1:i3
 .LDS_4b3b:
 	lda xwa, (0x2f9208:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f922a:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper16:
+HDAE5000_PPORT_Svc15_SaveSongInMemoryToHd:
+	; PC-link service 15: HDAE5000_PPORT_ServiceTable[15], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F922C):
+	; "SaveSongInMemoryToHd".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	lda xde, (0x238f30:24)
@@ -15016,14 +15088,18 @@ HDAE5000_PPORT_Setup_Helper16:
 	ld	iz, 1:i3
 .LDS_4b6e:
 	lda xwa, (0x2f922c:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f924c:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper17:
+HDAE5000_PPORT_Svc16_InitWholeSongInMemory:
+	; PC-link service 16: HDAE5000_PPORT_ServiceTable[16], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F924E):
+	; "InitWholeSongInMemory".
 	ld	wa, (0x238F2E:24)
 	bit	0x00, wa
 	jr z, .LDS_4b9d                        ; [66 11] jr Z,0x294b9d
@@ -15095,10 +15171,14 @@ HDAE5000_PPORT_Setup_Helper17:
 	call	(xhl)
 .LDS_4c5a:
 	lda xwa, (0x2f924e:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f926e:24)
-	jrl	t, HDAE5000_Display_Sub_294414
-HDAE5000_PPORT_Setup_Helper18:
+	jrl	t, HDAE5000_DebugTrace
+HDAE5000_PPORT_Svc17_FormatHd:
+	; PC-link service 17: HDAE5000_PPORT_ServiceTable[17], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F9270):
+	; "FormatHd".
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 0:i3
@@ -15108,14 +15188,19 @@ HDAE5000_PPORT_Setup_Helper18:
 	ld	iz, 1:i3
 .LDS_4c79:
 	lda xwa, (0x2f9270:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f9284:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper19:
+HDAE5000_PPORT_Svc18:
+	; PC-link service 18: HDAE5000_PPORT_ServiceTable[18].  Tail-calls the
+	; host function at workspace[0x0E0A]+0x0124 with XWA = 0xFFFFFFFF,
+	; XBC = 0x01C00014, XDE = 0x01800001.  Its purpose is not established:
+	; it prints no trace banner, and the meaning of that host entry is
+	; disputed between the documentation pages.
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0124)
@@ -15123,10 +15208,14 @@ HDAE5000_PPORT_Setup_Helper19:
 	ld	xbc, 0x01c00014
 	ld	xde, 0x01800001
 	jp	(xhl)
-HDAE5000_PPORT_Setup_Helper20:
+HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace:
+	; PC-link service 19: HDAE5000_PPORT_ServiceTable[19], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F9286):
+	; "SendPointerToFreeBufferSpace".
 	lda	xsp, (xsp-64)
 	lda xwa, (0x2f9286:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	xwa, 0:i3
 	ld	a, (0x238FF8:24)
 	push xwa
@@ -15137,12 +15226,16 @@ HDAE5000_PPORT_Setup_Helper20:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	lda xwa, (0x2f92be:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xhl, (0x238ff8:24)
 	lda	xsp, (xsp+64)
 	ret
 
-HDAE5000_PPORT_Setup_Helper21:
+HDAE5000_PPORT_Svc20_PreWholeSongInMemory:
+	; PC-link service 20: HDAE5000_PPORT_ServiceTable[20], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F92C0):
+	; "PreWholeSongInMemory".
 	ld	wa, (0x238F2E:24)
 	bit	0x00, wa
 	jr z, .LDS_4cfb                        ; [66 0f] jr Z,0x294cfb
@@ -15200,17 +15293,21 @@ HDAE5000_PPORT_Setup_Helper21:
 	call	(xhl)
 .LDS_4d91:
 	lda xwa, (0x2f92c0:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	lda xwa, (0x2f92e0:24)
-	jrl	t, HDAE5000_Display_Sub_294414
-HDAE5000_PPORT_Setup_Helper22:
+	jrl	t, HDAE5000_DebugTrace
+HDAE5000_PPORT_Svc21_WriteOpenHD:
+	; PC-link service 21: HDAE5000_PPORT_ServiceTable[21], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F92E2):
+	; "WriteOpenHD".
 	lda	xsp, (xsp-28)
 	push xiz
 	ld (xsp + 0x1c), bc
 	ld (xsp + 0x1e), wa                     ; ld (XSP+0x1e),WA
 	ldw (xsp + 0x04), 1
 	lda xwa, (0x2f92e2:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	wa, (0x238F2E:24)
 	ld	(xsp+6), 0x00
 	cp	(xsp+6), 0x09
@@ -15288,7 +15385,7 @@ HDAE5000_PPORT_Setup_Helper22:
 	call HDAE5000_SPrintf
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+8)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	jr t, .LDS_4ec0                        ; [68 0d] jr T,0x294ec0
 .LDS_4eb3:
 	srl	wa, 0x01
@@ -15301,7 +15398,11 @@ HDAE5000_PPORT_Setup_Helper22:
 	lda	xsp, (xsp+28)
 	ret
 
-HDAE5000_PPORT_Setup_Helper23:
+HDAE5000_PPORT_Svc22_WriteCloseHD:
+	; PC-link service 22: HDAE5000_PPORT_ServiceTable[22], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F9306):
+	; "WriteCloseHD".
 	pushw iz                                ; push IZ
 	ld	iz, 1:i3
 	call HDAE5000_Display_Sub_29429E
@@ -15314,12 +15415,16 @@ HDAE5000_PPORT_Setup_Helper23:
 	ld	iz, 0:i3
 .LDS_4ee3:
 	lda xwa, (0x2f9306:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper24:
+HDAE5000_PPORT_Svc23_WriteFileHD:
+	; PC-link service 23: HDAE5000_PPORT_ServiceTable[23], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F931E):
+	; "WriteFileHD".
 	pushw iz                                ; push IZ
 	ld	iz, 1:i3
 	call HDAE5000_Display_Sub_294301
@@ -15328,19 +15433,23 @@ HDAE5000_PPORT_Setup_Helper24:
 	ld	iz, 0:i3
 .LDS_4efe:
 	lda xwa, (0x2f931e:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	hl, iz
 	popw iz                                 ; pop IZ
 	ret
 
-HDAE5000_PPORT_Setup_Helper25:
+HDAE5000_PPORT_Svc24_ReadOpenHD:
+	; PC-link service 24: HDAE5000_PPORT_ServiceTable[24], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F9336):
+	; "ReadOpenHD".
 	dec 0, xsp                              ; dec 0,XSP
 	push	qiz
 	ld (xsp + 0x06), bc
 	ld (xsp + 0x08), wa                     ; ld (XSP+0x08),WA
 	ldw (xsp + 0x04), 1
 	lda xwa, (0x2f9336:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	ld	wa, (0x238F2E:24)
 	ldib_erp 0xfb, 0		; ld QIZH,0
 	cp_erpb 0xfb, 0x09		; cp QIZH,0x09
@@ -15382,14 +15491,18 @@ HDAE5000_PPORT_Setup_Helper25:
 	inc 0, xsp                              ; inc 0,XSP
 	ret
 
-HDAE5000_PPORT_Setup_Helper26:
+HDAE5000_PPORT_Svc25_ReadFileHD:
+	; PC-link service 25: HDAE5000_PPORT_ServiceTable[25], run on the main
+	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
+	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F934C):
+	; "ReadFileHD".
 	dec	6, xsp
 	push xiz
 	ld (xsp + 0x06), xbc                    ; ld (XSP+0x06),XBC
 	ld	xiz, xwa
 	ldw (xsp + 0x04), 1
 	lda xwa, (0x2f934c:24)
-	calr	HDAE5000_Display_Sub_294414
+	calr	HDAE5000_DebugTrace
 	cp	(0x23A1A6:24), 1
 	jr nz, .LDS_4fd9                       ; [6e 21] jr NZ,0x294fd9
 	ld	(0x23A1A6:24), 2
@@ -15421,7 +15534,11 @@ HDAE5000_PPORT_Setup_Helper26:
 	ret
 
 
-HDAE5000_PPORT_Util:	; 0x295009
+HDAE5000_PPORT_Svc27:	; 0x295009
+	; PC-link service 27: HDAE5000_PPORT_ServiceTable[27].  Calls
+	; HDAE5000_Workspace_Sub_29336B with DE = RAM (0x238F2E) and two word
+	; arguments 1, 0; returns HL = 0.  What that callee does for the link is
+	; not established.
 	; PPORT utility - push params and call workspace handler
 	pushw 0x0000			; arg 1
 	pushw 0x0001			; arg 2
@@ -15431,7 +15548,27 @@ HDAE5000_PPORT_Util:	; 0x295009
 	ret
 	nop
 
-HDAE5000_PPORT_Handler:	; 0x29501C
+; ============================================================================
+; PC-LINK (PPORT) COROUTINE
+; The parallel-port link to HD-TechManager runs as a second execution context
+; with its own stack, switched by swapping XSP through two RAM slots:
+;   0x239002  the link context's saved XSP   0x239006  the main context's
+;   0x239000  1 = link active                0x239014  1 = service requested
+;   0x23900A  service number (WA); -1 once the link has ended
+;   0x23900C  argument XBC                   0x239010  argument XDE
+; HDAE5000_PPORT_StartLink builds the link stack at 0x23FFFC with
+; HDAE5000_PPORT_LinkEntry as its return address and switches to it.  The
+; link never touches the HD itself: HDAE5000_PPORT_CallService posts a
+; service number in the mailbox and yields; HDAE5000_PPORT_ServicePending
+; (entered from the end of HDAE5000_Frame_Handler, via its _Exit jp) runs it on the
+; main context and switches back.  Service 0 is an empty `ret`, so
+; CallService(0) is a plain "yield until next frame" (the link's polling
+; loops use it).
+; ============================================================================
+HDAE5000_PPORT_ServicePending:	; 0x29501C
+	; main context, once per frame-handler pass: if a link is active, run the service it
+	; posted (HDAE5000_PPORT_ServiceDispatch) and resume it
+	; (HDAE5000_PPORT_ReturnToLink).
 	; PPORT state machine entry - check active, load params, dispatch
 	cp (0x239000:24), 0x01; check if PPORT active (0x239000)
 	jr nz, .Lpph_done
@@ -15441,16 +15578,23 @@ HDAE5000_PPORT_Handler:	; 0x29501C
 	nop
 	ld xde, (0x239010:24); XDE = size (0x239010)
 	nop
-	call HDAE5000_PPORT_Setup
-	call HDAE5000_PPORT_Dispatch
+	call HDAE5000_PPORT_ServiceDispatch
+	call HDAE5000_PPORT_ReturnToLink
 .Lpph_done:
 	ret
 	nop
 	; --- Secondary entry: menu init ---
-	call HDAE5000_PPORT_Menu
-	jr t, HDAE5000_PPORT_Init
+HDAE5000_PPORT_LinkEntry:
+	; first code the link context runs (HDAE5000_PPORT_StartLink plants this
+	; address at the top of the link stack); when the link program returns,
+	; it yields for good with the request flag clear, which
+	; HDAE5000_PPORT_ReturnToLink / _StartLink read as "link finished".
+	call HDAE5000_PPORT_LinkMain
+	jr t, HDAE5000_PPORT_YieldToMain
 
-HDAE5000_PPORT_Status:	; 0x295046
+HDAE5000_PPORT_SwitchToLink:	; 0x295046
+	; main -> link: saves XSP in 0x239006, loads the link's from 0x239002,
+	; and the `ret` resumes the link wherever it last yielded.
 	; Switch to PPORT stack context for status check
 	ei 0x06				; disable interrupts (level 6)
 	ld (0x239006:24), xsp; save current SP (0x239006)
@@ -15461,17 +15605,20 @@ HDAE5000_PPORT_Status:	; 0x295046
 	ret
 	nop
 
-HDAE5000_PPORT_Init:	; 0x295058 (116 bytes, 3 entry points)
+HDAE5000_PPORT_YieldToMain:	; 0x295058 (116 bytes, 3 entry points)
+	; link -> main: the mirror image of HDAE5000_PPORT_SwitchToLink.
 	; Entry 1: Stack context switch (save/restore SP for PPORT workspace)
 	ei 0x06				; disable interrupts
 	ld (0x239002:24), xsp; save current SP to (0x239002)
 	nop
-	ld xsp, (0x239006:24); load PPORT SP from (0x239006)
+	ld xsp, (0x239006:24); load the MAIN context's SP from (0x239006)
 	nop
 	ei 0x00				; re-enable interrupts
 	ret
 	nop
-HDAE5000_PPORT_Init_Main:	; 0x29506A
+HDAE5000_PPORT_StartLink:	; 0x29506A
+	; create and enter the link context (A = mode for
+	; HDAE5000_PPORT_Execute); returns when the link first yields.
 	; Entry 2: Initialize PPORT state machine
 	push xhl
 	nop
@@ -15485,11 +15632,11 @@ HDAE5000_PPORT_Init_Main:	; 0x29506A
 	nop
 	ld (0x239002:24), xhl; store as PPORT SP (0x239002)
 	nop
-	ld xwa, 0x00295040	; PPORT entry callback address
+	ld xwa, HDAE5000_PPORT_LinkEntry	; PPORT entry callback address
 	nop
 	ld (xhl), xwa		; store callback at stack top
 	ld a, 0x00:opc		; param = 0
-	call HDAE5000_PPORT_Status	; switch to PPORT stack and call
+	call HDAE5000_PPORT_SwitchToLink	; switch to PPORT stack and call
 	cp (0x239014:24), 0x00; check abort flag (0x239014)
 	jr nz, .Lpi_exit	; if aborted, exit
 	ldw hl, 0xFFFF		; HL = -1 (error/timeout)
@@ -15514,11 +15661,14 @@ HDAE5000_PPORT_Reset:		; 0x2950BA
 	ret
 	nop
 
-HDAE5000_PPORT_Dispatch:	; 0x2950CC
+HDAE5000_PPORT_ReturnToLink:	; 0x2950CC
+	; resume the link after a service; when it yields back WITHOUT a new
+	; request (0x239014 = 0) the link program has ended: result := -1 and
+	; the active flag is cleared.
 	; Command dispatcher - switch to PPORT context, check for command
 	push xhl
 	nop
-	call HDAE5000_PPORT_Status	; switch stacks
+	call HDAE5000_PPORT_SwitchToLink	; switch stacks
 	cp (0x239014:24), 0x00; check command flag (0x239014)
 	jr nz, .Lppd_done
 	ldw hl, 0xFFFF			; no command: mark result = -1
@@ -15532,13 +15682,23 @@ HDAE5000_PPORT_Dispatch:	; 0x2950CC
 	ret
 	nop
 	; --- Secondary entry: get result ---
+HDAE5000_PPORT_GetResult:
+	; no caller in this ROM (searched: symbolic references and the literal
+	; 0x2950EE).
 	ld hl, (0x23900a:24); HL = command result (0x23900A)
 	nop
 	exts xhl			; sign-extend to 32-bit
 	ret
 	nop
 
-HDAE5000_Display_String:	; 0x2950F8
+HDAE5000_PPORT_CallService:	; 0x2950F8
+	; link context: ask the main context to run service WA (0..30, see
+	; HDAE5000_PPORT_ServiceTable) with arguments XBC, XDE; returns when the
+	; service has run, with its result in WA or XIX (only XSP is swapped by
+	; the context switch, so the service stub's registers come back).  Named
+	; Display_String before: it displays nothing -- its 59 call sites pass
+	; service numbers (0 = yield, 1 = GetInfoBlockPointer, 0x1A = the
+	; PP_STATUS text of HDAE5000_PPORT_Svc26_ShowStatus, ...).
 	; Display string on screen via PPORT protocol
 	; Input: WA = position, XBC = string ptr, XDE = format params
 	ld (0x23900a:24), wa; store position (0x23900A)
@@ -15548,12 +15708,15 @@ HDAE5000_Display_String:	; 0x2950F8
 	ld (0x239010:24), xde; store format (0x239010)
 	nop
 	ld (0x239014:24), 0x01; set command flag (0x239014)
-	call HDAE5000_PPORT_Init	; initialize PPORT transfer
+	call HDAE5000_PPORT_YieldToMain	; initialize PPORT transfer
 	ld (0x239014:24), 0x00; clear command flag
 	ret
 	nop
 
-HDAE5000_PPORT_Setup:	; 0x29511C (442 bytes)
+HDAE5000_PPORT_ServiceDispatch:	; 0x29511C (442 bytes)
+	; main context: run service WA through HDAE5000_PPORT_ServiceTable
+	; (1..30; <= 0 or > 30 returns WA = 1).  Each table entry is a short stub
+	; below that shuffles XBC/XDE into the service's argument registers.
 	; PPORT command dispatcher — WA = command ID (1-30)
 	cp wa, 0:i3
 	jr le, .Lpps_error		; WA <= 0 → error
@@ -15565,7 +15728,7 @@ HDAE5000_PPORT_Setup:	; 0x29511C (442 bytes)
 	sla xhl, 2			; XHL *= 4 (table offset)
 	nop
 	extz xhl			; zero-extend
-	ld xix, 0x00295146		; table base
+	ld xix, HDAE5000_PPORT_ServiceTable	; table base
 	nop
 	ld_sril3 xhl, 0x07, 0xF0, 0xEC	; XHL = (XIX + HL) — load handler addr
 	nop
@@ -15578,186 +15741,186 @@ HDAE5000_PPORT_Setup:	; 0x29511C (442 bytes)
 	ld wa, 1:i3			; return 1 (error)
 	ret
 	nop
-.Lpps_jump_table:
+HDAE5000_PPORT_ServiceTable:
 	; 31-entry jump table (entry 0 unused, entries 1-30 = commands)
-	.long 0x002951C2		; entry 0 (unused)
-	.long 0x002951C4		; entry 1
-	.long 0x002951CC		; entry 2
-	.long 0x002951D4		; entry 3
-	.long 0x002951DC		; entry 4
-	.long 0x002951E2		; entry 5
-	.long 0x002951E8		; entry 6
-	.long 0x002951EE		; entry 7
-	.long 0x002951F6		; entry 8
-	.long 0x002951FE		; entry 9
-	.long 0x00295206		; entry 10
-	.long 0x0029520E		; entry 11
-	.long 0x00295216		; entry 12
-	.long 0x0029521E		; entry 13
-	.long 0x0029522A		; entry 14
-	.long 0x00295236		; entry 15
-	.long 0x00295242		; entry 16
-	.long 0x00295248		; entry 17
-	.long 0x00295250		; entry 18
-	.long 0x00295256		; entry 19
-	.long 0x0029525E		; entry 20
-	.long 0x00295264		; entry 21
-	.long 0x00295270		; entry 22
-	.long 0x00295278		; entry 23
-	.long 0x00295284		; entry 24
-	.long 0x00295290		; entry 25
-	.long 0x0029529C		; entry 26
-	.long 0x002952A6		; entry 27
-	.long 0x002952B2		; entry 28
-	.long 0x002952BE		; entry 29
-	.long 0x002952CA		; entry 30
+	.long .Lpps_handler_0	; entry 0 (unused)
+	.long .Lpps_handler_1	; entry 1
+	.long .Lpps_handler_2	; entry 2
+	.long .Lpps_handler_3	; entry 3
+	.long .Lpps_handler_4	; entry 4
+	.long .Lpps_handler_5	; entry 5
+	.long .Lpps_handler_6	; entry 6
+	.long .Lpps_handler_7	; entry 7
+	.long .Lpps_handler_8	; entry 8
+	.long .Lpps_handler_9	; entry 9
+	.long .Lpps_handler_10	; entry 10
+	.long .Lpps_handler_11	; entry 11
+	.long .Lpps_handler_12	; entry 12
+	.long .Lpps_handler_13	; entry 13
+	.long .Lpps_handler_14	; entry 14
+	.long .Lpps_handler_15	; entry 15
+	.long .Lpps_handler_16	; entry 16
+	.long .Lpps_handler_17	; entry 17
+	.long .Lpps_handler_18	; entry 18
+	.long .Lpps_handler_19	; entry 19
+	.long .Lpps_handler_20	; entry 20
+	.long .Lpps_handler_21	; entry 21
+	.long .Lpps_handler_22	; entry 22
+	.long .Lpps_handler_23	; entry 23
+	.long .Lpps_handler_24	; entry 24
+	.long .Lpps_handler_25	; entry 25
+	.long .Lpps_handler_26	; entry 26
+	.long .Lpps_handler_27	; entry 27
+	.long .Lpps_handler_28	; entry 28
+	.long .Lpps_handler_29	; entry 29
+	.long .Lpps_handler_30	; entry 30
 	; --- Handler stubs (commands 0-30) ---
 .Lpps_handler_0:			; 0x2951C2
 	ret
 	nop
 .Lpps_handler_1:			; 0x2951C4
-	call HDAE5000_PPORT_Setup_Helper2
+	call HDAE5000_PPORT_Svc01_GetInfoBlockPointer
 	ld xix, xhl
 	ret
 	nop
 .Lpps_handler_2:			; 0x2951CC
-	call HDAE5000_PPORT_Setup_Helper3
+	call HDAE5000_PPORT_Svc02_TurnHdMotorOff
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_3:			; 0x2951D4
-	call HDAE5000_PPORT_Setup_Helper4
+	call HDAE5000_PPORT_Svc03_SendInfosAboutHd
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_4:			; 0x2951DC
-	call HDAE5000_PPORT_Setup_Helper5
+	call HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock
 	ret
 	nop
 .Lpps_handler_5:			; 0x2951E2
-	call HDAE5000_PPORT_Setup_Helper6
+	call HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock
 	ret
 	nop
 .Lpps_handler_6:			; 0x2951E8
-	call HDAE5000_PPORT_Setup_Helper7
+	call HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock
 	ret
 	nop
 .Lpps_handler_7:			; 0x2951EE
-	call HDAE5000_PPORT_Setup_Helper8
+	call HDAE5000_PPORT_Svc07_ReadDirBlockFromHd
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_8:			; 0x2951F6
-	call HDAE5000_PPORT_Setup_Helper9
+	call HDAE5000_PPORT_Svc08_ReadFileBlockFromHd
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_9:			; 0x2951FE
-	call HDAE5000_PPORT_Setup_Helper10
+	call HDAE5000_PPORT_Svc09_ReadFlsBlockFromHd
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_10:			; 0x295206
-	call HDAE5000_PPORT_Setup_Helper11
+	call HDAE5000_PPORT_Svc10_WriteDirBlockToHd
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_11:			; 0x29520E
-	call HDAE5000_PPORT_Setup_Helper12
+	call HDAE5000_PPORT_Svc11_WriteFileSystemBlockToHd
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_12:			; 0x295216
-	call HDAE5000_PPORT_Setup_Helper13
+	call HDAE5000_PPORT_Svc12_WriteFlsBlockToHd
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_13:			; 0x29521E
 	ld wa, bc			; shuffle args
 	ld bc, de
-	call HDAE5000_PPORT_Setup_Helper14
+	call HDAE5000_PPORT_Svc13_SendInfosAboutSong
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_14:			; 0x29522A
 	ld wa, bc
 	ld bc, de
-	call HDAE5000_PPORT_Setup_Helper15
+	call HDAE5000_PPORT_Svc14_LoadSongFromHdToMemory
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_15:			; 0x295236
 	ld wa, bc
 	ld bc, de
-	call HDAE5000_PPORT_Setup_Helper16
+	call HDAE5000_PPORT_Svc15_SaveSongInMemoryToHd
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_16:			; 0x295242
-	call HDAE5000_PPORT_Setup_Helper17
+	call HDAE5000_PPORT_Svc16_InitWholeSongInMemory
 	ret
 	nop
 .Lpps_handler_17:			; 0x295248
-	call HDAE5000_PPORT_Setup_Helper18
+	call HDAE5000_PPORT_Svc17_FormatHd
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_18:			; 0x295250
-	call HDAE5000_PPORT_Setup_Helper19
+	call HDAE5000_PPORT_Svc18
 	ret
 	nop
 .Lpps_handler_19:			; 0x295256
-	call HDAE5000_PPORT_Setup_Helper20
+	call HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace
 	ld xix, xhl
 	ret
 	nop
 .Lpps_handler_20:			; 0x29525E
-	call HDAE5000_PPORT_Setup_Helper21
+	call HDAE5000_PPORT_Svc20_PreWholeSongInMemory
 	ret
 	nop
 .Lpps_handler_21:			; 0x295264
 	ld wa, bc
 	ld bc, de
-	call HDAE5000_PPORT_Setup_Helper22
+	call HDAE5000_PPORT_Svc21_WriteOpenHD
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_22:			; 0x295270
-	call HDAE5000_PPORT_Setup_Helper23
+	call HDAE5000_PPORT_Svc22_WriteCloseHD
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_23:			; 0x295278
 	ld xwa, xbc			; 32-bit arg shuffle
 	ld xbc, xde
-	call HDAE5000_PPORT_Setup_Helper24
+	call HDAE5000_PPORT_Svc23_WriteFileHD
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_24:			; 0x295284
 	ld wa, bc
 	ld bc, de
-	call HDAE5000_PPORT_Setup_Helper25
+	call HDAE5000_PPORT_Svc24_ReadOpenHD
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_25:			; 0x295290
 	ld xwa, xbc
 	ld xbc, xde
-	call HDAE5000_PPORT_Setup_Helper26
+	call HDAE5000_PPORT_Svc25_ReadFileHD
 	ld wa, hl
 	ret
 	nop
 .Lpps_handler_26:			; 0x29529C
 	ld xwa, xbc
-	call HDAE5000_PPORT_Setup_Helper
+	call HDAE5000_PPORT_Svc26_ShowStatus
 	ld wa, 0:i3
 	ret
 	nop
 .Lpps_handler_27:			; 0x2952A6
 	ld wa, bc
 	ld bc, de
-	call HDAE5000_PPORT_Util
+	call HDAE5000_PPORT_Svc27
 	ld wa, hl
 	ret
 	nop
@@ -15783,7 +15946,7 @@ HDAE5000_PPORT_Setup:	; 0x29511C (442 bytes)
 	ret
 	nop
 
-HDAE5000_PPORT_Menu:	; 0x2952D6
+HDAE5000_PPORT_LinkMain:	; 0x2952D6
 	; PPORT menu handler - save all registers, execute, restore
 	push xwa
 	nop
@@ -15893,7 +16056,7 @@ HDAE5000_PPORT_Execute:	; 0x2952F8 (234 bytes)
 	nop
 .Lppe_poll:
 	ld wa, 0:i3			; WA = 0
-	call HDAE5000_Display_String	; 0x2950F8
+	call HDAE5000_PPORT_CallService	; 0x2950F8
 	ld a, (0x160004:24); read (0x160004)
 	nop
 	and a, 0x04			; test bit 2
@@ -16016,7 +16179,7 @@ HDAE5000_PPORT_Ptrs:	; 295412h
 ;
 ; EVIDENCE: HDAE5000_Code_2_PartB's PPORT command handlers load a status
 ; string via `lda_24 xbc, (0x2954xx/0x2955xx)` before every
-; HDAE5000_Display_String call. There are 23 such literals in this file, one
+; HDAE5000_PPORT_CallService call. There are 23 such literals in this file, one
 ; per record, and ALL 23 land exactly on a record start computed
 ; independently from these lines' own linked addresses (get_lprobe_addrs.py) --
 ; including both irregular 22-byte records and the trailing "Error" one.
@@ -16095,7 +16258,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	lda xbc, (0x29541e:24); lda XBC, 0x29541E — status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	lda xix, (0x239168:24); lda XIX, 0x239168
 	nop
 	ld a, (xix + 1)			; read flag byte 1
@@ -16109,7 +16272,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	call HDAE5000_PPORT_Ready_Check
 	ld wa, 3:i3				; display command
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3				; check result
 	jp z, (2709124:24)			; jp Z, 0x295684 — success path
@@ -16126,7 +16289,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	lda xbc, (0x29562a:24); lda XBC, 0x29562A — error string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 .Lc2b_do_cleanup:			; 0x2956A4
 	call HDAE5000_PPORT_Cleanup
 	jp .Lc2b_sum_and_done
@@ -16149,15 +16312,15 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	lda xbc, (0x295436:24); lda XBC, 0x295436 — format string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ld wa, 1:i3				; display command
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	xor wa, wa				; WA = 0
 	ld a, 0xFF:opc				; A = 0xFF, so WA = 0x00FF
 	ld (xix), wa				; store to PPORT data
 	ldw wa, 0x0012				; display command
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ret
 	nop
 
@@ -16166,11 +16329,11 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	lda xbc, (0x29544e:24); lda XBC, 0x29544E — status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_PPORT_Ready_Check
 	ld wa, 7:i3				; display command
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3
 	jp z, (2709274:24)			; jp Z, 0x29571A — skip cleanup
@@ -16189,11 +16352,11 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	lda xbc, (0x295466:24); lda XBC, 0x295466 — status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_PPORT_Ready_Check
 	ld wa, 4:i3				; display progress step 1
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	ldw bc, 0x002C
 	nop
@@ -16202,7 +16365,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	call .Lppc_utility				; call 0x296AC4
 	ld wa, 5:i3				; step 2
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	ldw bc, 0x0034
 	nop
@@ -16211,7 +16374,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	call .Lppc_utility
 	ld wa, 6:i3				; step 3
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	ldw bc, 0x003C
 	nop
@@ -16270,11 +16433,11 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	nop
 	lda xbc, (0x29547e:24); lda XBC, 0x29547E — status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_PPORT_Ready_Check
 	ld wa, 4:i3
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	ldw bc, 0x002C
 	nop
@@ -16283,7 +16446,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	call .Lppc_utility
 	ld wa, 5:i3
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	ldw bc, 0x0034
 	nop
@@ -16292,7 +16455,7 @@ HDAE5000_Code_2_PartB:	; 0x295642 (660 bytes)
 	call .Lppc_utility
 	ld wa, 6:i3
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	ldw bc, 0x003C
 	nop
@@ -16351,12 +16514,12 @@ HDAE5000_Cmd01_SendInfo:	; 0x2958D6 (62 bytes)
 	nop
 	lda xbc, (0x295496:24); lda XBC, (0x295496) - status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_PPORT_Ready_Check
 	ldw wa, 0x000A			; display row/column
 	nop
 	ei 0x00				; enable interrupts
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 0x07				; disable interrupts
 	cp wa, 0:i3			; check result
 	jp z, (0x295900:24)		; jp Z - skip cleanup if zero
@@ -16375,7 +16538,7 @@ HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
 	nop
 	lda xbc, (0x2954ae:24); lda XBC, 0x2954AE — status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_Render_Display_Region
 	call HDAE5000_Render_Display_Region2
 	call .Lrdr2_register				; call 0x296802 — register XIX
@@ -16436,7 +16599,7 @@ HDAE5000_Cmd02_Exit:	; 0x295914 (226 bytes)
 	ldw wa, 0x000E				; display command
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3				; check result
 	jp z, (2709986:24)			; jp Z, 0x2959E2 — skip cleanup
@@ -16456,7 +16619,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	nop
 	lda xbc, (0x2954c6:24); lda XBC, 0x2954C6 — status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_Render_Display_Region
 	call HDAE5000_Render_Display_Region2
 	call .Lrdr2_register				; call 0x296802 — register XIX
@@ -16521,7 +16684,7 @@ HDAE5000_Cmd03_ReadFSB:	; 0x2959F6 (838 bytes)
 	ldw wa, 0x000E				; display command
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3
 	jr z, .Lrfsb_no_error_flag
@@ -16763,7 +16926,7 @@ HDAE5000_Cmd04_SendFSB:	; 0x295D3C (798 bytes)
 	nop
 	lda xbc, (0x2954de:24); lda XBC, 0x2954DE — status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_Render_Display_Region
 	call HDAE5000_Render_Display_Region2
 	call .Lrdr2_register				; call 0x296802 — register XIX
@@ -17031,7 +17194,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	lda xbc, (0x2954f6:24); lda XBC, 0x2954F6 — status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	lda xix, (0x239168:24); lda XIX, 0x239168
 	nop
 	ld a, (xix + 1)			; flag byte 1
@@ -17077,7 +17240,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	nop
 	ld wa, 1:i3				; display command
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	ld (0x239100:24), xix; st (0x239100), XIX — save data ptr
 	nop
@@ -17092,7 +17255,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	ldw wa, 0x0014				; display progress command
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	; Test flag byte 1 bit by bit, write corresponding region to HD
 	; Bit 0: custom region
@@ -17237,7 +17400,7 @@ HDAE5000_Cmd05_RcvFSB:	; 0x29605A (570 bytes)
 	ldw wa, 0x0010				; display final command
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	jp HDAE5000_PPORT_Cmd_Done
 
@@ -17249,11 +17412,11 @@ HDAE5000_Cmd06_WriteFSB:	; 0x296294 (150 bytes)
 	nop
 	lda xbc, (0x29550e:24); 0x29550E - "Write FSB" string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_Render_Display_Region
 	ld wa, 1:i3			; WA = 1
 	ei 0x00				; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 0x07				; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	xor wa, wa			; WA = 0
 	ld a, (0x2390da:24); A = [0x2390DA] (FSB byte 0)
@@ -17287,7 +17450,7 @@ HDAE5000_Cmd06_WriteFSB:	; 0x296294 (150 bytes)
 	ldw wa, 0x000F			; WA = 0x0F (command code)
 	nop
 	ei 0x00				; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 0x07				; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	cp wa, 0:i3			; result == 0?
 	jp z, (2712342:24)		; jp Z, skip error handling (0x296316)
@@ -17306,7 +17469,7 @@ HDAE5000_PPORT_Cmd_LoadHDtoMemory:	; 0x29632A
 	nop
 	lda xbc, (0x295526:24); 0x295526 - "Load HD" string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
@@ -17316,7 +17479,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	nop
 	lda xbc, (0x29553e:24); lda XBC, 0x29553E — status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_Render_Display_Region
 	lda xix, (0x239168:24); lda XIX, 0x239168
 	nop
@@ -17326,7 +17489,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	nop
 	ld wa, 1:i3				; WA = 1 (display command)
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	xor wa, wa				; clear WA
 	ld a, (0x2390da:24); ld A, (0x2390DA) — sector mask
@@ -17361,7 +17524,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	ldw wa, 0x0015				; display command
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3				; check display result
 	jp z, (2712542:24)			; jp Z, 0x2963DE — skip error setup
@@ -17395,7 +17558,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	ldw wa, 0x0017				; display command (send data)
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3				; check result
 	jp z, (2712652:24)			; jp Z, 0x29644C — skip error
@@ -17421,7 +17584,7 @@ HDAE5000_PPORT_Cmd_SendDataBlock:	; 0x29633C (362 bytes)
 	ldw wa, 0x0016				; display command (final)
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3
 	jp z, (2712722:24)			; jp Z, 0x296492 — skip error
@@ -17442,7 +17605,7 @@ HDAE5000_PPORT_Cmd_SendFileList:	; 0x2964A6 (226 bytes)
 	nop
 	lda xbc, (0x295556:24); 0x295556 - "Send File List" string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_Render_Display_Region
 	call HDAE5000_Render_Display_Region2
 	call .Lrdr2_register			; call 0x296802 (prepare file list)
@@ -17525,7 +17688,7 @@ HDAE5000_PPORT_Cmd_ReceiveDataBlock:	; 0x296588
 	nop
 	lda xbc, (0x29556e:24); 0x29556E - "Receive Data" string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
@@ -17534,7 +17697,7 @@ HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
 	nop
 	lda xbc, (0x295586:24); 0x295586 - "Write Memory" string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_Render_Display_Region
 	call HDAE5000_Render_Display_Region2
 	call .Lrdr2_register			; call 0x296802 (prepare data)
@@ -17597,7 +17760,7 @@ HDAE5000_PPORT_Cmd_WriteMemoryToHD:	; 0x29659A (230 bytes)
 	ldw wa, 0x001B			; WA = 0x1B (write command)
 	nop
 	ei 0x00				; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 0x07				; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	cp wa, 0:i3			; result == 0?
 	jp z, (2713196:24)		; jp Z → skip error (0x29666C)
@@ -17617,12 +17780,12 @@ HDAE5000_PPORT_Cmd_Reserved:	; 0x296680 (62 bytes)
 	nop
 	lda xbc, (0x29559e:24); lda XBC, (0x29559E) - status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_PPORT_Ready_Check
 	ldw wa, 0x0011			; display row/column
 	nop
 	ei 0x00				; enable interrupts
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 0x07				; disable interrupts
 	cp wa, 0:i3			; check result
 	jp z, (0x2966AA:24)		; jp Z - skip cleanup if zero
@@ -17640,11 +17803,11 @@ PPORT_Utility_1:	; 0x2966BE (60 bytes)
 	nop
 	lda xbc, (0x2955b6:24); lda XBC, (0x2955B6) - status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	call HDAE5000_PPORT_Ready_Check
 	ld wa, 2:i3			; WA = 2
 	ei 0x00				; enable interrupts
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 0x07				; disable interrupts
 	cp wa, 0:i3			; check result
 	jp z, (0x2966E6:24)		; jp Z - skip cleanup if zero
@@ -17662,7 +17825,7 @@ PPORT_Utility_2:	; 0x2966FA
 	nop
 	lda xbc, (0x2955ce:24); 0x2955CE - status string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	jp HDAE5000_PPORT_Cmd_Done
 
 PPORT_Utility_3:	; 0x29670C (164 bytes)
@@ -17672,12 +17835,12 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	nop
 	lda xbc, (0x2955e6:24); lda XBC, 0x2955E6 — string pointer
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ld xbc, 0:i3
 	ld xde, 0:i3
 	ldw wa, 0x001D				; display command
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7					; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	lda xix, (0x239168:24); lda XIX, 0x239168 — PPORT command area
 	nop
@@ -17699,7 +17862,7 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	nop
 	ldw wa, 0x001C				; display command
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ld (0x2390fa:24), wa; st (0x2390FA), WA — save result
 	nop
 	ei	0					; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
@@ -17707,7 +17870,7 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	ld xde, 0:i3
 	ldw wa, 0x001E				; display command
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ld wa, (0x2390fa:24); ld WA, (0x2390FA) — reload result
 	nop
 	cp wa, 0x0058				; check result value
@@ -17718,7 +17881,7 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	nop
 	lda xbc, (0x295614:24); lda XBC, 0x295614 — error string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	jp HDAE5000_PPORT_Cmd_Done
 .Lpu3_success:
 	; Success path
@@ -17726,7 +17889,7 @@ PPORT_Utility_3:	; 0x29670C (164 bytes)
 	nop
 	lda xbc, (0x2955fe:24); lda XBC, 0x2955FE — success string
 	nop
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	jp HDAE5000_PPORT_Cmd_Done
 
 HDAE5000_PPORT_Cmd_Done:	; 0x2967B0 (4 bytes)
@@ -17767,7 +17930,7 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	ldw wa, 0x000D				; display command
 	nop
 	ei	0					; IFF=0: accepts every interrupt level (06 00; was mis-spelled `di`)
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7					; IFF=7: masks every maskable level -- this IS the real DI (06 07)
 	ret
 	nop
@@ -17775,7 +17938,7 @@ HDAE5000_Render_Display_Region2:	; 0x2967E4 (166 bytes)
 	; Set WA=1, call Display_String, store XIX to data source ptr
 	ld wa, 1:i3
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	ld (0x239100:24), xix; st (0x239100), XIX — data source ptr
 	nop
@@ -18097,7 +18260,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	nop
 	ld wa, 1:i3				; display command
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	ld (0x239100:24), xix; st (0x239100), XIX
 	nop
@@ -18626,7 +18789,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ldw wa, 0x0018				; display command — HD read
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3				; check result
 	jp z, (2715652:24)			; jp Z, .Lcs_read_sector
@@ -18641,7 +18804,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ldw wa, 0x0019				; display command — sector read
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3
 	jp z, (2715692:24)			; jp Z, .Lcs_process
@@ -18699,7 +18862,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ldw wa, 0x0018				; display command — HD read
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	cp wa, 0:i3
 	jp z, (2715834:24)			; jp Z, .Lsrpc_send_init
@@ -18738,7 +18901,7 @@ HDAE5000_PPORT_Cleanup:	; 0x296AB6 (1773 bytes — 10 sub-routines)
 	ldw wa, 0x0019				; display command — sector read
 	nop
 	ei	0
-	call HDAE5000_Display_String
+	call HDAE5000_PPORT_CallService
 	ei 7
 	pop xix
 	nop

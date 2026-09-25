@@ -2785,7 +2785,14 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xsp, (xsp+112)
 	ret
 
-HDAE5000_PPORT_Setup_Helper:
+HDAE5000_PPORT_Svc26_ShowStatus:
+	; PC-link service 26: HDAE5000_PPORT_ServiceTable[26] (argument XBC =
+	; string).  Copies at most 25 characters (HDAE5000_StrLen, clamp 0x19,
+	; HDAE5000_StrNCpy) to RAM 0x22ABCB and makes two host calls through
+	; workspace[0x0E0A]+0x0124 addressed to 0x007F0068 = object set 0x7F
+	; (this ROM's UI objects), object 0x68 = 104, whose resource name in
+	; HDAE5000_UiObjectName_PtrTable is "PP_STATUS".  The PC-link loop uses
+	; it for its status and error strings (service 0x1A = 26).
 	push xiz
 	ld	xiz, xwa
 	ld	xwa, xiz
@@ -2921,7 +2928,7 @@ HDAE5000_PC_DATA_LINK_PAGE:
 .Lhd_err7_minor:
 	lda xwa, (0x2e270e:24); 0x2E270E — error string
 	calr HDAE5000_HD_Error_Check	; recursive: display error
-	call HDAE5000_PPORT_Init_Main
+	call HDAE5000_PPORT_StartLink
 	jr .Lhd_cleanup
 .Lhd_err7_display:
 	call HDAE5000_PPORT_Reset

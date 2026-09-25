@@ -85,14 +85,14 @@
 ;   0x28FAE9  HDAE5000_Validate_Cell_Coords - Check table entry validity
 ;   0x28FB26  HDAE5000_Resolve_Cell_Address - Get entry address with validation
 ;   0x28FBB1  HDAE5000_Cell_In_Bounds - Validate entry at coordinates
-;   0x29501C  HDAE5000_PPORT_Handler - PPORT state machine entry
-;   0x295009  HDAE5000_PPORT_Util - PPORT utility function
-;   0x295046  HDAE5000_PPORT_Status - PPORT status check
-;   0x295058  HDAE5000_PPORT_Init - PPORT initialization
-;   0x2950CC  HDAE5000_PPORT_Dispatch - Command dispatcher
-;   0x2950F8  HDAE5000_Display_String - Display string routine (heavily used)
-;   0x29511C  HDAE5000_PPORT_Setup - PPORT setup routine
-;   0x2952D6  HDAE5000_PPORT_Menu - PPORT menu handler
+;   0x29501C  HDAE5000_PPORT_ServicePending - PPORT state machine entry
+;   0x295009  HDAE5000_PPORT_Svc27 - PPORT utility function
+;   0x295046  HDAE5000_PPORT_SwitchToLink - context switch main -> PC link
+;   0x295058  HDAE5000_PPORT_YieldToMain - context switch PC link -> main
+;   0x2950CC  HDAE5000_PPORT_ReturnToLink - resume the link, detect its end
+;   0x2950F8  HDAE5000_PPORT_CallService - link asks main to run service WA (heavily used)
+;   0x29511C  HDAE5000_PPORT_ServiceDispatch - PPORT setup routine
+;   0x2952D6  HDAE5000_PPORT_LinkMain - PPORT menu handler
 ;   0x2952F8  HDAE5000_PPORT_Execute - Execute PPORT command
 ;   0x2953E2  HDAE5000_PPORT_Cmd_Table - Jump table for PPORT commands
 ;   0x295412  HDAE5000_PPORT_Strings - Command menu strings
