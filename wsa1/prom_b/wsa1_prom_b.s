@@ -50735,8 +50735,9 @@ Font_Svc17_8x8:
 ; Evidence: prom_a `LCD_Svc_1C_DrawText16x16Packed` loads 0x00F1EAB0 at
 ;   0xF902B2 and 0xF90352; `TextShift_LoadGlyph16`'s `and W,0xe0` keeps 3
 ;   bits of the second byte, 8+3 = 11.
-; Unknown: nothing calls service 0x1C with a literal service number
-;   (notes/swi7_call_sites.py).
+; Callers: nothing calls service 0x1C with a literal service number
+;   (notes/swi7_call_sites.py) -- until 2026-09-25 this was filed as the
+;   face's open question; display lists are what call it (next note).
 ; Entry count: 200 = (0xF203B0 - 0xF1EAB0) / 32, exact.
 ; ⚠ ANSWERED 2026-09-25 (lane promb): the service IS used, through display
 ;   lists rather than a literal `ld A,0x1C / swi 7`.  An interpreter-A record
