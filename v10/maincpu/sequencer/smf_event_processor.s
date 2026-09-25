@@ -3390,23 +3390,20 @@ SeqStep_ByteBlockEF56:
 	ld	xbc, (xsp+14)
 	ld	xiz, (xsp+8)
 	or	xbc, xbc
-	jr	z, 6
-	.byte 0x89, 0x04
-	push	xsp
-	nop
-	jr	nz, 11
+	jr	z, SeqStep_FileReadReturn_Skip
+	cp	(xbc+4), 0
+	jr	nz, SeqStep_FileReadReturn_Skip2
+SeqStep_FileReadReturn_Skip:
 	ldw	(0x1e53c:24), 17
 	ld	xhl, 0:i3
-	jr	53
-	.byte 0xb9, 0x04
-	dec	6, w
-	pushw	0x3cf2
-	.byte 0xe5, 0x01
-	push	sr
-	decf
-	nop
+	jr	SeqStep_FileReadReturn_Epilogue
+SeqStep_FileReadReturn_Skip2:
+	bitm	0, (xbc+4)
+	jr	nz, SeqStep_FileReadReturn_Skip3
+	stiw_da	(124220), 13
 	ld	xhl, 0:i3
-	jr	37
+	jr	SeqStep_FileReadReturn_Epilogue
+SeqStep_FileReadReturn_Skip3:
 	ld	wa, (xsp+12)
 	dec	1, wa
 	pushw	wa
@@ -3417,17 +3414,14 @@ SeqStep_ByteBlockEF56:
 	ld	xwa, (xwa+8)
 	call	(xwa)
 	lda	xsp, (xsp+10)
-	.byte 0xf3
-	reti
-	swi	0
-	.byte 0xec
-	nop
-	nop
+	.byte 0xf3, 0x07, 0xf8, 0xec, 0x00, 0x00	; ld (xiz+hl),0x00
 	cp	hl, 0:i3
-	jr	z, 4
+	jr	z, SeqStep_FileReadReturn_Skip4
 	ld	xhl, xiz
-	jr	2
+	jr	SeqStep_FileReadReturn_Epilogue
+SeqStep_FileReadReturn_Skip4:
 	ld	xhl, 0:i3
+SeqStep_FileReadReturn_Epilogue:
 	pop	xiz
 	ret
 
@@ -3479,30 +3473,29 @@ SeqStep_FileWriteReturn:
 SeqStep_ByteBlockF002:
 	ld	xbc, (xsp+8)
 	or	xbc, xbc
-	jr	z, 6
-	.byte 0x89, 0x04
-	push	xsp
-	nop
-	jr	nz, 11
+	jr	z, SeqStep_FileWriteSetup_Skip
+	cp	(xbc+4), 0
+	jr	nz, SeqStep_FileWriteSetup_Skip2
+SeqStep_FileWriteSetup_Skip:
 	ldw	(0x1e53c:24), 17
 	ldw	hl, 0xffff
 	ret
-	.byte 0xb9, 0x04
-	dec	6, a
-	pushw	0x3cf2
-	.byte 0xe5, 0x01
-	push	sr
-	decf
-	nop
+SeqStep_FileWriteSetup_Skip2:
+	bitm	1, (xbc+4)
+	jr	nz, SeqStep_FileWriteSetup_Skip3
+	stiw_da	(124220), 13
 	ldw	hl, 0xffff
 	ret
+SeqStep_FileWriteSetup_Skip3:
 	ld	hl, 0:i3
 	ld	xwa, (xsp+4)
 	cp_spib_im 224, 0
-	jr	z, 8
+	jr	z, SeqStep_FileWriteSetup_Skip4
+SeqStep_FileWriteSetup_Loop:
 	inc	1, hl
 	cp_spib_im 224, 0
-	jr	nz, -8
+	jr	nz, SeqStep_FileWriteSetup_Loop
+SeqStep_FileWriteSetup_Skip4:
 	pushw	hl
 	ld	xwa, (xsp+6)
 	push	xwa
@@ -3613,9 +3606,7 @@ SeqStep_FileCloseExit:
 	ld	iz, 0:i3
 	or	xbc, xbc
 	jr	z, SeqStep_FileCloseInner_Skip2
-	.byte 0x89, 0x04
-	push	xsp
-	nop
+	cp	(xbc+4), 0
 	jr	z, SeqStep_FileCloseInner_Skip
 	ld	xwa, (xsp+4)
 	push	xwa
@@ -3677,16 +3668,15 @@ SeqStep_FileCloseInner_Epilogue2:
 	ret
 	ld	xbc, (xsp+4)
 	or	xbc, xbc
-	jr	nz, 11
+	jr	nz, SeqStep_FileCloseInner_Skip4
 	ldw	(0x1e53c:24), 17
 	ldw	hl, 0xffff
 	ret
+SeqStep_FileCloseInner_Skip4:
 	lda	xwa, (xsp+8)
 	inc	2, xwa
 	push	xwa
-	.byte 0x9f
-	incf
-	.byte 0x04
+	pushm	(xsp+12)
 	ld	xwa, xbc
 	push	xwa
 	ld	xwa, (xbc+14)
@@ -3754,22 +3744,19 @@ SeqStep_ByteBlockF245:
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, 19
+	jr	z, FileOpenDefault_Skip3
 	push	xiz
 	call	FileClose
 	inc	4, xsp
 	ldw	(0x1e53c:24), 21
 	ldw	hl, 0xffff
-	jr	75
-	.byte 0xd2
-	push	xix
-	.byte 0xe5, 0x01
-	push	xsp
-	halt
-	nop
-	jr	z, 5
+	jr	FileOpenDefault_Epilogue
+FileOpenDefault_Skip3:
+	cpw_da	(124220), 5
+	jr	z, FileOpenDefault_Skip4
 	ldw	hl, 0xffff
-	jr	61
+	jr	FileOpenDefault_Epilogue
+FileOpenDefault_Skip4:
 	ld	wa, (xsp+4)
 	exts	wa
 	ld	(0x1e53c:24), wa
@@ -3801,34 +3788,32 @@ FileOpenDefault_Epilogue:
 	ret
 	ld	xde, (xsp+4)
 	or	xde, xde
-	jr	z, 6
-	.byte 0x8a, 0x04
-	push	xsp
-	nop
-	jr	nz, 11
+	jr	z, FileOpenDefault_Skip5
+	cp	(xde+4), 0
+	jr	nz, FileOpenDefault_Skip6
+FileOpenDefault_Skip5:
 	ldw	(0x1e53c:24), 17
 	ldw	hl, 17
 	ret
+FileOpenDefault_Skip6:
 	ld	xwa, (xde+18)
-	.byte 0x80
-	push	xsp
-	normal
-	jr	nz, 11
+	cp	(xwa), 1
+	jr	nz, FileOpenDefault_Skip7
 	ld	xbc, (xsp+8)
 	ld	xwa, (xde+22)
 	ld	(xbc), xwa
 	ld	hl, 0:i3
 	ret
+FileOpenDefault_Skip7:
 	ldw	(0x1e53c:24), 18
 	ldw	hl, 18
 	ret
 	ld	xbc, (xsp+4)
 	or	xbc, xbc
-	jr	z, 6
-	.byte 0x89, 0x04
-	push	xsp
-	nop
+	jr	z, FileOpenDefault_Skip8
+	cp	(xbc+4), 0
 	jr	nz, FileOpenDefault_Skip2
+FileOpenDefault_Skip8:
 	ldw	(0x1e53c:24), 17
 	ldw	hl, 17
 	ret
@@ -4118,8 +4103,7 @@ SeqStep_FileSeekCleanup_Skip2:
 	cp	hl, 1:i3
 	jr	nz, SeqStep_FileSeekCleanup_Skip4
 SeqStep_FileSeekCleanup_Entry:
-	.byte 0x8f
-	ld	(63:8), 0:io
+	cp	(xsp+8), 0
 	jr	z, SeqStep_FileSeekCleanup_Skip4
 	cp	(xsp+8), 229
 	jr	z, SeqStep_FileSeekCleanup_Skip3
@@ -4520,22 +4504,19 @@ SeqStep_FileBufferExit:
 SeqStep_FileBufferFinal:
 	dec	4, xsp
 	push	xiz
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	lda	xwa, (0x2121a:24)
 	ld	xiz, xwa
 	ldw (xsp+6), 0
-	.byte 0x9f, 0x06
-	push	xsp
-	ldw	(0:8), 0x3a69:io
+	cpw	(xsp+6), 10
+	jr	ge, SeqStep_FileBufferFinal_Skip3
+SeqStep_FileBufferFinal_Loop:
 	ld	a, (xiz+22)
 	and	a, 3
 	cp	a, 3:i3
-	jr	nz, 13
+	jr	nz, SeqStep_FileBufferFinal_Skip
 	push	xiz
-	calr	65271
+	calr	SeqStep_FileBufferSetup
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	z, SeqStep_FileBufferFinal_Skip
@@ -4545,19 +4526,15 @@ SeqStep_FileBufferFinal_Skip:
 	ld	a, (xwa+5)
 	.byte 0x8e, 0x17, 0xf1
 	jr	nz, SeqStep_FileBufferFinal_Skip2
-	.byte 0xbe
-	ex_ff
-	dec	6, b
-	.byte 0x04, 0x8e
-	ex_ff
-	push	xix
-	.byte 0x80
+	bitm	2, (xiz+22)
+	jr	nz, SeqStep_FileBufferFinal_Skip2
+	andmi8	(xiz+22), 128
 SeqStep_FileBufferFinal_Skip2:
 	incw	1, (xsp+6)
 	lda	xiz, (xiz+538)
-	.byte 0x9f, 0x06
-	push	xsp
-	ldw	(0:8), 0xc661:io
+	cpw	(xsp+6), 10
+	jr	lt, SeqStep_FileBufferFinal_Loop
+SeqStep_FileBufferFinal_Skip3:
 	ld	hl, (xsp+4)
 	pop	xiz
 	inc	4, xsp
@@ -4730,84 +4707,59 @@ SeqStep_FileSectorReturn:
 	ld	xwa, 22
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0
-	ldw	bc, 1215
-	jr	f, -98
-	decf
-	ld	w, 32:opc
-	nop
+	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	ld	(xsp+4), xwa
+	ld	wa, (xiz+13)
+	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0
-	ldw	bc, 1215
-	jr	f, -98
-	decf
-	ld	w, 216:opc
-	.byte 0xef
-	ld	(177:8), 65:io
-	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0
-	ldw	bc, 1215
-	jr	f, -98
-	retd	8224
-	nop
+	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	ld	(xsp+4), xwa
+	ld	wa, (xiz+13)
+	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0
-	ldw	bc, 1215
-	jr	f, -98
-	retd	0xd820
-	.byte 0xef
-	ld	(177:8), 65:io
-	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0
-	ldw	bc, 1215
-	jr	f, -98
-	scf
-	ld	w, 32:opc
-	nop
+	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	ld	(xsp+4), xwa
+	ld	wa, (xiz+15)
+	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0
-	ldw	bc, 1215
-	jr	f, -98
-	scf
-	ld	w, 216:opc
-	.byte 0xef
-	ld	(177:8), 65:io
-	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0
-	ldw	bc, 1215
-	jr	f, -82
-	zcf
-	ld	w, 232:opc
-	.byte 0xcc
-	swi	7
-	nop
-	nop
-	nop
+	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	ld	(xsp+4), xwa
+	ld	wa, (xiz+15)
+	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0
-	ldw	bc, 1215
-	jr	f, -82
-	zcf
-	ld	w, 232:opc
-	.byte 0xef
-	ld	(232:8), 204:io
-	swi	7
-	nop
-	nop
-	nop
+	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	ld	(xsp+4), xwa
+	ld	wa, (xiz+17)
+	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	.byte 0xf5, 0xe0
-	ldw	bc, 1215
-	jr	f, -82
-	zcf
-	ld	w, 232:opc
-	.byte 0xef
-	nop
+	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	ld	(xsp+4), xwa
+	ld	wa, (xiz+17)
+	srl	wa, 8
+	ld	(xbc), a
+	ld	xwa, (xsp+4)
+	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	ld	(xsp+4), xwa
+	ld	xwa, (xiz+19)
+	and	xwa, 255
+	ld	(xbc), a
+	ld	xwa, (xsp+4)
+	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	ld	(xsp+4), xwa
+	ld	xwa, (xiz+19)
+	srl	xwa, 8
+	and	xwa, 255
+	ld	(xbc), a
+	ld	xwa, (xsp+4)
+	.byte 0xf5, 0xe0, 0x31	; lda xbc,xwa+
+	ld	(xsp+4), xwa
+	ld	xwa, (xiz+19)
+	srl	xwa, 0
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xiz+19)
@@ -4943,11 +4895,8 @@ SeqStep_FileSectorPopReturn:
 	push	xiz
 	ld	xwa, (xsp+10)
 	ld	xde, (xwa+30)
-	.byte 0x9a
-	ld	d, 63:opc
-	swi	7
-	retd	0x597e
-	normal
+	cpw	(xde+36), 4095
+	jrl	nz, SeqStep_FileSectorPopReturn_Skip14
 	ld	wa, (xsp+14)
 	mul	wa, 3
 	srl	wa, 1
@@ -4993,11 +4942,8 @@ SeqStep_FileSectorPopReturn:
 	add	xwa, 26
 	add	xwa, xhl
 	ld	(xwa), c
-	.byte 0x9f, 0x04
-	push	xsp
-	swi	7
-	normal
-	jr	nz, 41
+	cpw	(xsp+4), 511
+	jr	nz, SeqStep_FileSectorPopReturn_Skip12
 	pushw	6
 	ld	xwa, 0:i3
 	push	xwa
@@ -5006,7 +4952,7 @@ SeqStep_FileSectorPopReturn:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	63656
+	calr	SeqStep_FileIoCheck
 	add	xsp, 14
 	or	xhl, xhl
 	jrl	z, SeqStep_FileSectorPopReturn_Epilogue
@@ -5014,6 +4960,7 @@ SeqStep_FileSectorPopReturn:
 	srl	wa, 4
 	ld	(xhl+26), a
 	jrl	SeqStep_FileSectorPopReturn_Epilogue
+SeqStep_FileSectorPopReturn_Skip12:
 	ld	wa, (xsp+4)
 	inc	1, wa
 	extz	xwa
@@ -5023,7 +4970,7 @@ SeqStep_FileSectorPopReturn:
 	ld	wa, (xsp+16)
 	srl	wa, 4
 	ld	(xbc), a
-	jrl	251
+	jrl	SeqStep_FileSectorPopReturn_Epilogue
 SeqStep_FileSectorPopReturn_Skip:
 	ld	wa, (xsp+4)
 	extz	xwa
@@ -5033,11 +4980,8 @@ SeqStep_FileSectorPopReturn_Skip:
 	ld	wa, (xsp+16)
 	ld	w, 0:opc
 	ld	(xbc), a
-	.byte 0x9f, 0x04
-	push	xsp
-	swi	7
-	normal
-	jr	nz, 57
+	cpw	(xsp+4), 511
+	jr	nz, SeqStep_FileSectorPopReturn_Skip13
 	pushw	6
 	ld	xwa, 0:i3
 	push	xwa
@@ -5046,7 +4990,7 @@ SeqStep_FileSectorPopReturn_Skip:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	63558
+	calr	SeqStep_FileIoCheck
 	add	xsp, 14
 	or	xhl, xhl
 	jrl	z, SeqStep_FileSectorPopReturn_Epilogue
@@ -5060,6 +5004,7 @@ SeqStep_FileSectorPopReturn_Skip:
 	or	wa, bc
 	ld	(xhl+26), a
 	jrl	SeqStep_FileSectorPopReturn_Epilogue
+SeqStep_FileSectorPopReturn_Skip13:
 	ld	wa, (xsp+16)
 	srl	wa, 8
 	ld	bc, wa
@@ -5081,6 +5026,7 @@ SeqStep_FileSectorPopReturn_Skip:
 	add	xwa, xhl
 	ld	(xwa), c
 	jr	SeqStep_FileSectorPopReturn_Epilogue
+SeqStep_FileSectorPopReturn_Skip14:
 	ld	wa, (xsp+14)
 	extz	xwa
 	ld	xbc, xwa
@@ -5090,9 +5036,7 @@ SeqStep_FileSectorPopReturn_Skip:
 	ld	(xsp+4), wa
 	ld	xiz, xbc
 	srl	xiz, 9
-	.byte 0xaa
-	push_f
-	.byte 0x86
+	add	xiz, (xde+24)
 	pushw	6
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+38)
@@ -5138,26 +5082,21 @@ SeqByteBlock_PathNormalize_Helper:
 	ld	(xsp+6), wa
 	ld	wa, (xiz+42)
 	ld	(xsp+4), wa
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jr	nz, 9
+	cpw	(xsp+4), 0
+	jr	nz, SeqByteBlock_PathNormalize_Helper_Skip
 	ldw (xiz+44), 0
 	ld	hl, 0:i3
-	jr	39
-	.byte 0xbe
-	pushw	ix
-	push	sr
-	.byte 0x01
-	nop
-	jr	13
+	jr	SeqByteBlock_PathNormalize_Helper_Epilogue
+SeqByteBlock_PathNormalize_Helper_Skip:
+	ldw	(xiz+44), 1
+	jr	SeqByteBlock_PathNormalize_Helper_Entry
 SeqStep_FileSectorPopReturn_Loop:
 	incw	1, (xsp+4)
 	ld	wa, (xsp+4)
 	cp	wa, hl
-	jr	nz, 19
+	jr	nz, SeqByteBlock_PathNormalize_Helper_Skip2
 	incw	1, (xiz+44)
+SeqByteBlock_PathNormalize_Helper_Entry:
 	.byte 0x9f, 0x04, 0x04
 	push	xiz
 	calr	SeqStep_FileSectorError
@@ -5165,7 +5104,9 @@ SeqStep_FileSectorPopReturn_Loop:
 	ld	wa, hl
 	.byte 0x9f, 0x06, 0xf0
 	jr	ule, SeqStep_FileSectorPopReturn_Loop
+SeqByteBlock_PathNormalize_Helper_Skip2:
 	ld	hl, (xiz+44)
+SeqByteBlock_PathNormalize_Helper_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -5189,6 +5130,7 @@ SeqByteBlock_PathNormalize_Helper2:
 	decm	1, (xsp+26)
 	cp	wa, 0:i3
 	jrl	z, SeqStep_FileSectorPopReturn_Entry2
+SeqByteBlock_PathNormalize_Helper2_Loop:
 	ld	bc, 2:i3
 	ld	wa, (xsp+6)
 	inc	1, wa
@@ -5239,28 +5181,26 @@ SeqStep_FileSectorPopReturn_Skip4:
 SeqStep_FileSectorPopReturn_Skip5:
 	ld	xwa, (xsp+20)
 	ld	xwa, (xwa+30)
-	.byte 0x98
-	ld	d, 4:opc
+	pushm	(xwa+36)
 	pushw	iz
 	ld	xwa, (xsp+24)
 	push	xwa
 	calr	SeqStep_FileSectorPopReturn
 	inc	8, xsp
 	ld	xwa, (xsp+20)
-	.byte 0x98
-	ld	xiy, 0x6e00003f
-	ld	(175:8), 20:io
-	ld	w, 184:opc
-	ld	xiy, 0x2e1a6856
-	.byte 0x9f
-	ld	(4:8), 175:io
-	push_f
-	ld	w, 56:opc
+	cpw	(xwa+69), 0
+	jr	nz, SeqByteBlock_PathNormalize_Helper2_Skip
+	ld	xwa, (xsp+20)
+	ld	(xwa+69), iz
+	jr	SeqStep_FileSectorPopReturn_Skip6
+SeqByteBlock_PathNormalize_Helper2_Skip:
+	pushw	iz
+	pushm	(xsp+8)
+	ld	xwa, (xsp+24)
+	push	xwa
 	calr	SeqStep_FileSectorPopReturn
 	inc	8, xsp
-	.byte 0x9f
-	ld	(63:8), 0:io
-	nop
+	cpw	(xsp+8), 0
 	jr	nz, SeqStep_FileSectorPopReturn_Skip6
 	ld	xwa, (xsp+20)
 	incw	1, (xwa+46)
@@ -5276,32 +5216,22 @@ SeqStep_FileSectorPopReturn_Skip6:
 SeqStep_FileSectorPopReturn_Skip7:
 	ldw (xsp+10), 0
 SeqStep_FileSectorPopReturn_Entry:
-	.byte 0x9f
-	ld	(63:8), 0:io
-	nop
+	cpw	(xsp+8), 0
 	jr	nz, SeqStep_FileSectorPopReturn_Skip8
 	ld	xwa, (xsp+20)
 	ld	(xwa+42), iz
 	ld	(xsp+8), iz
 	ld	(xsp+10), iz
 	ld	xwa, (xsp+20)
-	.byte 0xb8
-	pushw	ix
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xwa+44), 1
 SeqStep_FileSectorPopReturn_Skip8:
 	ld	wa, (xsp+26)
 	decm	1, (xsp+26)
 	cp	wa, 0:i3
-	jrl	nz, -221
+	jrl	nz, SeqByteBlock_PathNormalize_Helper2_Loop
 SeqStep_FileSectorPopReturn_Entry2:
-	.byte 0x9f
-	push_f
-	push	xsp
-	nop
-	nop
-	jr	z, 105
+	cpw	(xsp+24), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper2_Skip4
 	ld	xwa, (xsp+12)
 	lda	xbc, (xwa+32)
 	ld	wa, iz
@@ -5322,20 +5252,18 @@ SeqStep_FileSectorPopReturn_Loop4:
 	push	xiz
 	ld	xwa, (xsp+30)
 	push	xwa
-	calr	62935
+	calr	SeqStep_FileIoCheck
 	add	xsp, 14
 	or	xhl, xhl
-	jr	nz, 5
+	jr	nz, SeqByteBlock_PathNormalize_Helper2_Skip2
 	ldw	hl, 10
-	jr	45
-	.byte 0x9b
-	push_a
-	push	xsp
-	nop
-	nop
-	jr	z, 5
+	jr	SeqStep_FileSectorPopReturn_Epilogue2
+SeqByteBlock_PathNormalize_Helper2_Skip2:
+	cpw	(xhl+20), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper2_Skip3
 	ld	hl, (xhl+20)
-	jr	33
+	jr	SeqStep_FileSectorPopReturn_Epilogue2
+SeqByteBlock_PathNormalize_Helper2_Skip3:
 	pushw	512
 	pushw	0
 	lda	xwa, (xhl+26)
@@ -5346,10 +5274,10 @@ SeqStep_FileSectorPopReturn_Loop4:
 SeqStep_FileSectorPopReturn_Join:
 	ld	xbc, (xsp+8)
 	ld	xwa, (xsp+12)
-	.byte 0xa8
-	ld	w, 129:opc
+	add	xbc, (xwa+32)
 	cp	xiz, xbc
 	jr	c, SeqStep_FileSectorPopReturn_Loop4
+SeqByteBlock_PathNormalize_Helper2_Skip4:
 	ld	hl, 0:i3
 SeqStep_FileSectorPopReturn_Epilogue2:
 	pop	xiz
@@ -5367,23 +5295,17 @@ SeqByteBlock_PathNormalize_Helper3:
 	ld	xwa, (xsp+8)
 	ld	(xwa+11), 0
 	ld	hl, 0:i3
-	.byte 0xa6
-SeqByteBlock_MedleyPlayback:
-	ld	w, 128:opc
-	push	xsp
-	pushw	sp
+	ld	xwa, (xiz)
+	cp	(xwa), 47
 	jr	z, SeqStep_FileSectorPopReturn_Entry3
 SeqByteBlock_EffectsSeqData:
 	ld	xwa, (xiz)
-	.byte 0x80
-	push	xsp
-SeqByteBlock_EffectsSeqEntry:
-	pop	xix
-	jr	nz, 4
+	cp	(xwa), 92
+	jr	nz, SeqByteBlock_PathNormalize_Helper3_Skip
 SeqStep_FileSectorPopReturn_Entry3:
-	.byte 0xe8
-SeqByteBlock_MedleyPlaybackB:
-	add	(xbc-90), xwa
+	ld	xwa, 1:i3
+	add	(xiz), xwa
+SeqByteBlock_PathNormalize_Helper3_Skip:
 	ld	de, 0:i3
 	cp	de, 11
 	jr	ge, SeqByteBlock_PathNormalize_Join
@@ -5426,9 +5348,7 @@ SeqByteBlock_PathNormalize:
 	.byte 0xe0, 0xe8
 	ld	xhl, 0x88a6a9e8
 	inc	1, de
-	.byte 0xda
-SeqByteBlock_TechnichordCfgB:
-	divs	l, 0
+	cp	de, 11
 SeqByteBlock_StyleBitmapRef:
 	jr	lt, -80
 SeqByteBlock_PathNormalize_Join:
@@ -5441,9 +5361,7 @@ SeqByteBlock_PathNormalize_Join:
 	ld	hl, 1:i3
 	jr	10
 	ld	xwa, (xiz)
-	.byte 0x80
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jr	z, SeqByteBlock_PathNormalize_Skip
 	ldw	hl, 0xffff
 SeqByteBlock_PathNormalize_Skip:
@@ -5454,6 +5372,7 @@ SeqByteBlock_PathNormalize_Skip:
 	.byte 0x88, 0x01
 	.ascii "? vOÿ^"
 	ret
+SeqByteBlock_PathNormalize_Helper6_Helper:
 	lda	xsp, (xsp-32)
 	pushw	iz
 	ld	xwa, (xsp+38)
@@ -5486,10 +5405,7 @@ SeqByteBlock_PathNormalize_Loop:
 	jrl	SeqByteBlock_PathNormalize_Epilogue
 SeqByteBlock_PathNormalize_Skip2:
 	ld	xwa, (xsp+16)
-	.byte 0x88
-	ex_ff
-	push	xix
-	.byte 0xf6
+	andmi8	(xwa+22), 246
 SeqByteBlock_PathNormalize_Skip3:
 	inc	1, iz
 	ld	xwa, 538
@@ -5499,9 +5415,7 @@ SeqByteBlock_PathNormalize_Skip3:
 SeqByteBlock_PathNormalize_Skip4:
 	ld	xwa, (xsp+38)
 	ld	xwa, (xwa+18)
-	.byte 0xb8
-	push	sr
-	.byte 0xb9
+	setm	1, (xwa+2)
 SeqByteBlock_PathNormalize_Skip5:
 	ld	xwa, (xsp+38)
 	ld	xwa, (xwa+18)
@@ -5511,28 +5425,20 @@ SeqByteBlock_PathNormalize_Skip5:
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	65223
+	calr	SeqByteBlock_PathNormalize_Helper3
 	inc	8, xsp
 	ld	(xsp+20), hl
-	.byte 0x9f
-	push_a
-	push	xsp
-	swi	7
-	swi	7
-	jr	nz, 6
+	cpw	(xsp+20), 65535
+	jr	nz, SeqByteBlock_PathNormalize_Skip34
 	ldw	hl, 11
-	jrl	859
-	.byte 0x8f
-	ex_ff
-	push	xsp
-	ld	w, 126:opc
-	ldw	de, 0xaf01
-	ld	h, 32:opc
-	.byte 0xb8
-	pop	sr
-	scc8	z, h
-	pushw	bc
-	.byte 0x01
+	jrl	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip34:
+	cp	(xsp+22), 32
+	jrl	nz, SeqByteBlock_PathNormalize_Skip39
+	ld	xwa, (xsp+38)
+	bitm	6, (xwa+3)
+	jrl	z, SeqByteBlock_PathNormalize_Skip39
+SeqByteBlock_PathNormalize_Join13:
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa+44)
 	sll	bc, 5
@@ -5540,35 +5446,28 @@ SeqByteBlock_PathNormalize_Skip5:
 	ld	xwa, (xsp+38)
 	ld	(xwa+71), xbc
 	ld	xwa, (xsp+38)
-	.byte 0xb8
-	pop	sr
-	.byte 0xb1
+	resm	1, (xwa+3)
 	ld	xwa, (xsp+38)
 	ld	xbc, 0:i3
 	ld	(xwa+26), xbc
 	ld	hl, 0:i3
-	jrl	807
+	jrl	SeqByteBlock_PathNormalize_Epilogue
 SeqByteBlock_PathNormalize_Loop2:
 	ld	xwa, (xsp+16)
-	.byte 0x98
-	push_a
-	push	xsp
-	nop
-	nop
-	jr	z, 9
+	cpw	(xwa+20), 0
+	jr	z, SeqByteBlock_PathNormalize_Skip35
 	ld	xwa, (xsp+16)
 	ld	hl, (xwa+20)
-	jrl	788
+	jrl	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip35:
 	ld	xwa, (xsp+16)
 	lda	xwa, (xwa+26)
 	ld	(xsp+8), xwa
 	ld	iz, 0:i3
-	jrl	160
+	jrl	SeqByteBlock_PathNormalize_Join14
 SeqByteBlock_PathNormalize_Loop3:
 	ld	xwa, (xsp+8)
-	.byte 0x80
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jrl	z, SeqByteBlock_PathNormalize_Entry2
 	pushw	11
 	ld	xwa, (xsp+10)
@@ -5604,80 +5503,56 @@ SeqByteBlock_PathNormalize_Loop3:
 	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
 	ld	xwa, (xsp+16)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb3, 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
-	jrl	z, 546
+	resm	3, (xwa+22)
+	cpw	(xsp+20), 0
+	jrl	z, SeqByteBlock_PathNormalize_Skip48
+SeqByteBlock_PathNormalize_Loop13:
 	ld	xwa, (xsp+38)
-	.byte 0xb8
-	ld	xwa, 0x20776cc
+	bitm	4, (xwa+64)
+	jrl	z, SeqByteBlock_PathNormalize_Skip45
 	lda	xwa, (xsp+42)
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	64988
+	calr	SeqByteBlock_PathNormalize_Helper3
 	inc	8, xsp
 	ld	(xsp+20), hl
-	.byte 0x9f
-	push_a
-	push	xsp
-	swi	7
-	swi	7
-	jr	nz, 71
+	cpw	(xsp+20), 65535
+	jr	nz, SeqByteBlock_PathNormalize_Skip38
 	ldw	hl, 11
-	jrl	624
+	jrl	SeqByteBlock_PathNormalize_Epilogue
 SeqByteBlock_PathNormalize_Skip6:
 	inc	1, iz
 	ld	xwa, 32
 	add	(xsp+8), xwa
+SeqByteBlock_PathNormalize_Join14:
 	ldw	wa, 16
-	.byte 0x9f
-	push	sr
-	push	xsp
-	rcf
-	nop
-	jr	gt, 3
+	cpw	(xsp+2), 16
+	jr	gt, SeqByteBlock_PathNormalize_Skip36
 	ld	wa, (xsp+2)
+SeqByteBlock_PathNormalize_Skip36:
 	cp	iz, wa
 	jrl	lt, SeqByteBlock_PathNormalize_Loop3
 	ld	xwa, (xsp+16)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb3
+	resm	3, (xwa+22)
 	ld	xwa, (xsp+12)
 	ld	xbc, 1:i3
 	add	(xwa), xbc
-	.byte 0x9f
-	push	sr
-	push	xde
-	rcf
-	nop
-	jr	gt, 74
-	.byte 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
-	jr	z, 5
+	submi16	(xsp+2), 16
+	jr	gt, SeqByteBlock_PathNormalize_Skip40
+SeqByteBlock_PathNormalize_Loop14:
+	cpw	(xsp+20), 0
+	jr	z, SeqByteBlock_PathNormalize_Skip37
 	ld	hl, 7:i3
-	jrl	564
+	jrl	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip37:
 	ld	hl, 5:i3
-	jrl	559
-	.byte 0xbf
-	incf
-	push	sr
-	.byte 0x01
-	nop
-	.byte 0x9f
-	ret
-	push	xsp
-	nop
-	nop
-	jrl	nz, 359
+	jrl	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip38:
+	ldw	(xsp+12), 1
+	cpw	(xsp+14), 0
+	jrl	nz, SeqByteBlock_PathNormalize_Skip44
+SeqByteBlock_PathNormalize_Skip39:
 	ld	xwa, (xsp+38)
 	ldw (xwa+48), 0
 	ld	xwa, (xsp+38)
@@ -5690,12 +5565,9 @@ SeqByteBlock_PathNormalize_Skip6:
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa+44)
 	ld	(xsp+2), wa
-	.byte 0x9f
-	push	sr
-	push	xsp
-	nop
-	nop
-	jr	le, -74
+	cpw	(xsp+2), 0
+	jr	le, SeqByteBlock_PathNormalize_Loop14
+SeqByteBlock_PathNormalize_Skip40:
 	pushw	8
 	ld	xwa, 0:i3
 	push	xwa
@@ -5704,7 +5576,7 @@ SeqByteBlock_PathNormalize_Skip6:
 	push	xwa
 	ld	xwa, (xsp+48)
 	push	xwa
-	calr	62163
+	calr	SeqStep_FileIoCheck
 	lda	xsp, (xsp+14)
 	ld	(xsp+16), xhl
 	ld	xwa, (xsp+16)
@@ -5727,33 +5599,29 @@ SeqByteBlock_PathNormalize_Loop4:
 	ld	(xsp+16), xhl
 	ld	xwa, (xsp+16)
 	or	xwa, xwa
-	jr	nz, 9
+	jr	nz, SeqByteBlock_PathNormalize_Skip41
 	ld	xwa, (xsp+38)
 	ld	hl, (xwa+6)
-	jrl	418
+	jrl	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip41:
 	ld	xwa, (xsp+16)
-	.byte 0x98
-	push_a
-	push	xsp
-	nop
-	nop
-	jr	z, 9
+	cpw	(xwa+20), 0
+	jr	z, SeqByteBlock_PathNormalize_Skip42
 	ld	xwa, (xsp+16)
 	ld	hl, (xwa+20)
-	jrl	399
+	jrl	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip42:
 	ld	xwa, (xsp+16)
 	lda	xwa, (xwa+26)
 	ld	(xsp+8), xwa
 	ld	xwa, (xsp+38)
 	ld	(xwa+51), 0
 	ld	xwa, (xsp+38)
-	.byte 0x88
-	ldw	hl, 4159
-	jrl	nc, 142
+	cp	(xwa+51), 16
+	jrl	nc, SeqByteBlock_PathNormalize_Skip43
+SeqByteBlock_PathNormalize_Loop15:
 	ld	xwa, (xsp+8)
-	.byte 0x80
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jr	z, SeqByteBlock_PathNormalize_Entry2
 	pushw	11
 	ld	xwa, (xsp+10)
@@ -5780,60 +5648,48 @@ SeqByteBlock_PathNormalize_Loop4:
 	ld	(xwa+48), bc
 	ld	xwa, (xsp+46)
 	push	xwa
-	calr	64159
+	calr	SeqByteBlock_PathNormalize_Helper
 	lda	xsp, (xsp+12)
 	ld	xwa, (xsp+16)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb3
+	resm	3, (xwa+22)
 	ld	xwa, (xsp+38)
 	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
 SeqByteBlock_PathNormalize_Entry:
-	.byte 0x9f
-	incf
-	push	xsp
-	nop
-	nop
-	jrl	z, 144
+	cpw	(xsp+12), 0
+	jrl	z, SeqByteBlock_PathNormalize_Skip47
 SeqByteBlock_PathNormalize_Entry2:
-	.byte 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
-	jrl	z, 132
+	cpw	(xsp+20), 0
+	jrl	z, SeqByteBlock_PathNormalize_Skip46
 	ld	hl, 7:i3
-	jrl	255
+	jrl	SeqByteBlock_PathNormalize_Epilogue
 SeqByteBlock_PathNormalize_Skip7:
 	ld	xwa, (xsp+38)
 	incm8	1, (xwa+51)
 	ld	xwa, 32
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+38)
-	.byte 0x88
-	ldw	hl, 4159
-	jrl	c, -142
+	cp	(xwa+51), 16
+	jrl	c, SeqByteBlock_PathNormalize_Loop15
+SeqByteBlock_PathNormalize_Skip43:
 	ld	xwa, (xsp+16)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb3
+	resm	3, (xwa+22)
 	ld	xwa, (xsp+38)
 	ld	xbc, 1:i3
 	add	(xwa+26), xbc
 	incw	1, (xsp+2)
+SeqByteBlock_PathNormalize_Join15:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+32)
 	cp	(xsp+2), wa
 	jrl	lt, SeqByteBlock_PathNormalize_Loop4
-	.byte 0x9f
-	ret
-	.byte 0x04
+	pushm	(xsp+14)
 	ld	xwa, (xsp+40)
 	push	xwa
 	calr	SeqStep_FileSectorError
 	inc	6, xsp
 	ld	(xsp+14), hl
+SeqByteBlock_PathNormalize_Skip44:
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa+36)
 	dec	8, wa
@@ -5852,70 +5708,66 @@ SeqByteBlock_PathNormalize_Skip7:
 	ld	xwa, (xsp+38)
 	ld	(xwa+26), xbc
 	ldw (xsp+2), 0
-	jr	-80
+	jr	SeqByteBlock_PathNormalize_Join15
+SeqByteBlock_PathNormalize_Skip45:
 	ldw	hl, 12
-	jrl	128
+	jrl	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip46:
 	ld	hl, 5:i3
-	jr	124
-	.byte 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
-	jrl	nz, -546
+	jr	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip47:
+	cpw	(xsp+20), 0
+	jrl	nz, SeqByteBlock_PathNormalize_Loop13
+SeqByteBlock_PathNormalize_Skip48:
 	ld	xwa, (xsp+38)
-	.byte 0xb8
-	pop	sr
-	inc	6, h
-	ld	xiy, 0xb82026af
-	ld	xwa, 0x33056ecc
-	decf
-	nop
-	jr	95
-	.byte 0x9f
-	ret
-	push	xsp
-	nop
-	nop
-	jr	nz, 32
-	jrl	-758
+	bitm	6, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Skip51
+	ld	xwa, (xsp+38)
+	bitm	4, (xwa+64)
+	jr	nz, SeqByteBlock_PathNormalize_Skip49
+	ldw	hl, 13
+	jr	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip49:
+	cpw	(xsp+14), 0
+	jr	nz, SeqByteBlock_PathNormalize_Skip50
+	jrl	SeqByteBlock_PathNormalize_Join13
 SeqByteBlock_PathNormalize_Loop5:
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa+40)
 	extz	xbc
 	ld	xwa, (xsp+38)
 	add	(xwa+71), xbc
-	.byte 0x9f
-	ret
-	.byte 0x04
+	pushm	(xsp+14)
 	ld	xwa, (xsp+40)
 	push	xwa
-	calr	63189
+	calr	SeqStep_FileSectorError
 	inc	6, xsp
 	ld	(xsp+14), hl
+SeqByteBlock_PathNormalize_Skip50:
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa+36)
 	dec	8, wa
 	cp	(xsp+14), wa
 	jr	ule, SeqByteBlock_PathNormalize_Loop5
 	ld	hl, 0:i3
-	jr	39
+	jr	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip51:
 	ld	xwa, (xsp+38)
 	ld	a, (xwa+64)
 	and	a, 24
-	jr	z, 5
+	jr	z, SeqByteBlock_PathNormalize_Skip52
 	ldw	hl, 13
-	jr	23
+	jr	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip52:
 	ld	xwa, (xsp+38)
-	.byte 0xb8
-	ld	xwa, 0xaf0d66c8
-	ld	h, 32:opc
-	.byte 0xb8
-	pop	sr
-	inc	6, a
-	halt
+	bitm	0, (xwa+64)
+	jr	z, SeqByteBlock_PathNormalize_Skip53
+	ld	xwa, (xsp+38)
+	bitm	1, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Skip53
 	ldw	hl, 14
-	jr	2
+	jr	SeqByteBlock_PathNormalize_Epilogue
+SeqByteBlock_PathNormalize_Skip53:
 	ld	hl, 0:i3
 SeqByteBlock_PathNormalize_Epilogue:
 	popw	iz
@@ -5935,7 +5787,7 @@ SeqByteBlock_PathNormalize_Helper4:
 	calr	SeqByteBlock_PathNormalize_Helper3
 	inc	8, xsp
 	cp	hl, 0:i3
-	jrl	nz, 278
+	jrl	nz, SeqByteBlock_PathNormalize_Helper4_Skip5
 	lda	xwa, (xiz+26)
 	ld	(xsp+14), xwa
 	ld	xwa, (xsp+6)
@@ -5945,11 +5797,9 @@ SeqByteBlock_PathNormalize_Helper4:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa+44)
 	ld	(xsp+4), wa
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jrl	lt, 238
+	cpw	(xsp+4), 0
+	jrl	lt, SeqByteBlock_PathNormalize_Helper4_Skip4
+SeqByteBlock_PathNormalize_Helper4_Loop:
 	pushw	24
 	ld	xwa, 0:i3
 	push	xwa
@@ -5957,40 +5807,35 @@ SeqByteBlock_PathNormalize_Helper4:
 	ld	xwa, (xwa)
 	push	xwa
 	push	xiz
-	calr	61591
+	calr	SeqStep_FileIoCheck
 	lda	xsp, (xsp+14)
 	ld	(xsp+18), xhl
 	ld	xwa, (xsp+18)
 	or	xwa, xwa
-	jr	nz, 6
+	jr	nz, SeqByteBlock_PathNormalize_Helper4_Skip
 	ld	hl, (xiz+6)
-	jrl	484
+	jrl	SeqByteBlock_PathNormalize_Epilogue2
+SeqByteBlock_PathNormalize_Helper4_Skip:
 	ld	xwa, (xsp+18)
-	.byte 0x98
-	push_a
-	push	xsp
-	nop
-	nop
-	jr	z, 9
+	cpw	(xwa+20), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper4_Skip2
 	ld	xwa, (xsp+18)
 	ld	hl, (xwa+20)
-	jrl	465
+	jrl	SeqByteBlock_PathNormalize_Epilogue2
+SeqByteBlock_PathNormalize_Helper4_Skip2:
 	ld	xwa, (xsp+18)
 	lda	xwa, (xwa+26)
 	ld	(xsp+10), xwa
 	ld	hl, 0:i3
-	jr	126
+	jr	SeqByteBlock_PathNormalize_Helper4_Join
 SeqByteBlock_PathNormalize_Loop6:
 	ld	xwa, (xsp+10)
-	.byte 0x80
-	push	xsp
-	.byte 0xe5
-	jr	z, 8
+	cp	(xwa), 229
+	jr	z, SeqByteBlock_PathNormalize_Helper4_Skip3
 	ld	xwa, (xsp+10)
-	.byte 0x80
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jr	nz, SeqByteBlock_PathNormalize_Skip8
+SeqByteBlock_PathNormalize_Helper4_Skip3:
 	ld	(xiz+51), l
 	ldw (xiz+42), 0
 	ldw (xiz+46), 0
@@ -6018,14 +5863,9 @@ SeqByteBlock_PathNormalize_Loop6:
 	push	xwa
 	calr	SeqStep_FileSectorReturn
 	ld	xwa, (xsp+40)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb9
+	setm	1, (xwa+22)
 	ld	xwa, (xsp+40)
-	.byte 0x88
-	ex_ff
-	push	xix
-	.byte 0xe7
+	andmi8	(xwa+22), 231
 	ld	xwa, (xsp+40)
 	push	xwa
 	calr	SeqStep_FileBufferSetup
@@ -6035,41 +5875,33 @@ SeqByteBlock_PathNormalize_Skip8:
 	inc	1, hl
 	ld	xwa, 32
 	add	(xsp+10), xwa
+SeqByteBlock_PathNormalize_Helper4_Join:
 	ldw	wa, 16
-	.byte 0x9f, 0x04
-	push	xsp
-	rcf
-	nop
+	cpw	(xsp+4), 16
 	jr	gt, SeqByteBlock_PathNormalize_Skip9
 	ld	wa, (xsp+4)
 SeqByteBlock_PathNormalize_Skip9:
 	cp	hl, wa
 	jrl	lt, SeqByteBlock_PathNormalize_Loop6
 	ld	xwa, (xsp+18)
-	.byte 0x88
-	ex_ff
-	push	xix
-	push_lerp	159
-	push	xde
-	rcf
-	nop
+	andmi8	(xwa+22), 231
+	submi16	(xsp+4), 16
 	ld	xwa, (xsp+14)
 	ld	xbc, 1:i3
 	add	(xwa), xbc
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jrl	ge, -238
+	cpw	(xsp+4), 0
+	jrl	ge, SeqByteBlock_PathNormalize_Helper4_Loop
+SeqByteBlock_PathNormalize_Helper4_Skip4:
 	ldw	hl, 16
-	jrl	275
+	jrl	SeqByteBlock_PathNormalize_Epilogue2
+SeqByteBlock_PathNormalize_Helper4_Skip5:
 	ld	wa, (xiz+69)
 	ld	(xiz+48), wa
 	lda	xwa, (xsp+42)
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	calr	64012
+	calr	SeqByteBlock_PathNormalize_Helper3
 	inc	8, xsp
 	cp	hl, 0:i3
 	jrl	z, SeqByteBlock_PathNormalize_Join2
@@ -6095,11 +5927,8 @@ SeqByteBlock_PathNormalize_Loop8:
 	ld	xwa, (xwa+20)
 	add	xwa, xhl
 	ld	(xiz+26), xwa
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
-	jr	121
+	ldw	(xsp+4), 0
+	jr	SeqByteBlock_PathNormalize_Helper4_Join2
 SeqByteBlock_PathNormalize_Loop9:
 	pushw	24
 	ld	xwa, 0:i3
@@ -6107,66 +5936,54 @@ SeqByteBlock_PathNormalize_Loop9:
 	ld	xwa, (xiz+26)
 	push	xwa
 	push	xiz
-	calr	61268
+	calr	SeqStep_FileIoCheck
 	lda	xsp, (xsp+14)
 	ld	(xsp+18), xhl
 	ld	xwa, (xsp+18)
 	or	xwa, xwa
-	jr	nz, 6
+	jr	nz, SeqByteBlock_PathNormalize_Helper4_Skip6
 	ld	hl, (xiz+6)
-	jrl	161
+	jrl	SeqByteBlock_PathNormalize_Epilogue2
+SeqByteBlock_PathNormalize_Helper4_Skip6:
 	ld	xwa, (xsp+18)
-	.byte 0x98
-	push_a
-	push	xsp
-	nop
-	nop
-	jr	z, 9
+	cpw	(xwa+20), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper4_Skip7
 	ld	xwa, (xsp+18)
 	ld	hl, (xwa+20)
-	jrl	142
+	jrl	SeqByteBlock_PathNormalize_Epilogue2
+SeqByteBlock_PathNormalize_Helper4_Skip7:
 	ld	xwa, (xsp+18)
 	lda	xwa, (xwa+26)
 	ld	(xsp+10), xwa
 	ld	(xiz+51), 0
-	.byte 0x8e
-	ldw	hl, 4159
+	cp	(xiz+51), 16
 	jr	nc, 35
 	ld	xwa, (xsp+10)
-	.byte 0x80
-	push	xsp
-	and_spil xbc, 118
-	swi 6
+	cp	(xwa), 229
+	jrl	z, -319
 	ld	xwa, (xsp+10)
-	.byte 0x80
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jrl	z, -328
 	.byte 0x8e
 	.asciz "3a@ "
 	nop
 	nop
 	add	(xsp+10), xwa
-	.byte 0x8e
-	ldw	hl, 4159
+	cp	(xiz+51), 16
 	jr	c, -35
 	ld	xwa, (xsp+18)
-	.byte 0x88
-	ex_ff
-	push	xix
-	.byte 0xe7
+	andmi8	(xwa+22), 231
 	ld	xwa, 1:i3
 	add	(xiz+26), xwa
 	incw	1, (xsp+4)
+SeqByteBlock_PathNormalize_Helper4_Join2:
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+32)
 	cp	(xsp+4), wa
 	jrl	lt, SeqByteBlock_PathNormalize_Loop9
 	ld	wa, (xiz+42)
 	ld	(xsp+20), wa
-	.byte 0x9e
-	pushw	de
-	.byte 0x04
+	pushm	(xiz+42)
 	push	xiz
 	calr	SeqStep_FileSectorError
 	inc	6, xsp
@@ -6229,10 +6046,7 @@ SeqByteBlock_PathNormalize_Skip10:
 	calr	SeqStep_FileSectorReturn
 	inc	8, xsp
 	ld	xwa, (xsp+4)
-	.byte 0x88
-	ex_ff
-	push	xix
-	.byte 0xe7
+	andmi8	(xwa+22), 231
 	ld	hl, 0:i3
 SeqByteBlock_PathNormalize_Epilogue3:
 	pop	xiz
@@ -6270,10 +6084,8 @@ SeqByteBlock_PathNormalize_Join3:
 	jr	ule, SeqByteBlock_PathNormalize_Loop10
 SeqByteBlock_PathNormalize_Skip11:
 	ld	xwa, (xsp+8)
-	.byte 0xb8
-	pop	sr
-	dec	6, e
-	push_f
+	bitm	5, (xwa+3)
+	jr	nz, SeqByteBlock_PathNormalize_Helper5_Epilogue
 	ld	xwa, (xsp+8)
 	ldw (xwa+69), 0
 	ld bc, 0:i3
@@ -6282,6 +6094,7 @@ SeqByteBlock_PathNormalize_Skip11:
 	ld	xwa, (xsp+8)
 	ld	xbc, 0:i3
 	ld	(xwa+71), xbc
+SeqByteBlock_PathNormalize_Helper5_Epilogue:
 	pop	xiz
 	ret
 SeqByteBlock_PathNormalize_Helper6:
@@ -6289,36 +6102,26 @@ SeqByteBlock_PathNormalize_Helper6:
 	push	xiz
 	ldw (xsp+18), 0
 	ldw (xsp+20), 0
-	.byte 0xbf
-	ex_ff
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xsp+22), 1
 	ld	xwa, 0:i3
 	ld	(xsp+24), xwa
 	ld	xhl, 0:i3
-	.byte 0xbf
-	ld	w, 2:opc
-	swi	7
-	retd	0x2aaf
-	ld	w, 168:opc
-	.byte 0x1a
-	ld	w, 191:opc
-	.byte 0x04
-	jr	f, -81
-	pushw	de
-	ld	w, 184:opc
-	push	sr
-	.byte 0xb0
+	ldw	(xsp+32), 4095
+	ld	xwa, (xsp+42)
+	ld	xwa, (xwa+26)
+	ld	(xsp+4), xwa
+	ld	xwa, (xsp+42)
+	resm	0, (xwa+2)
 	pushw	538
 	call	SeqStep_MemAllocWrapper
 	inc	2, xsp
 	ld	(xsp+8), xhl
 	ld	xwa, xhl
 	or	xwa, xwa
-	jr	nz, 5
+	jr	nz, SeqByteBlock_PathNormalize_Helper6_Skip
 	ld	hl, 3:i3
-	jrl	1047
+	jrl	SeqByteBlock_PathNormalize_Epilogue4
+SeqByteBlock_PathNormalize_Helper6_Skip:
 	ld	xwa, (xsp+8)
 	ld	xbc, (xsp+42)
 	ld	(xwa), xbc
@@ -6330,14 +6133,11 @@ SeqByteBlock_PathNormalize_Helper6:
 	ld	xwa, (xsp+4)
 	ldw (xwa+52), 8
 	ld	xwa, (xsp+42)
-	.byte 0xb8, 0x04
-	scc8	z, l
-	.byte 0x1f, 0x01, 0xbf
-	rcf
-	push	sr
-	nop
-	nop
-	jrl	251
+	bitm	7, (xwa+4)
+	jrl	z, SeqByteBlock_PathNormalize_Helper6_Skip3
+	ldw	(xsp+16), 0
+	jrl	SeqByteBlock_PathNormalize_Helper6_Join
+SeqByteBlock_PathNormalize_Helper6_Loop:
 	ld	xwa, (xsp+8)
 	push	xwa
 	ld	xwa, (xsp+28)
@@ -6354,11 +6154,7 @@ SeqByteBlock_PathNormalize_Helper6:
 	cp	(xwa+536), 85
 	jr	nz, SeqByteBlock_PathNormalize_Skip12
 	ld	xwa, (xsp+8)
-	.byte 0xc3, 0xe1
-	pop_f
-	push	sr
-	push	xsp
-	.byte 0xaa
+	cp	(xwa+537), 170
 	jr	z, SeqByteBlock_PathNormalize_Skip13
 SeqByteBlock_PathNormalize_Skip12:
 	ldw	iz, 22
@@ -6401,22 +6197,21 @@ SeqByteBlock_PathNormalize_Skip13:
 	ld	a, (xwa+5)
 	extz	wa
 	cp	(xsp+16), wa
-	jr	ge, 38
+	jr	ge, SeqByteBlock_PathNormalize_Helper6_Skip2
 	add	(xsp+24), xhl
 	lda	xwa, (xsp+34)
 	push	xwa
-	calr	61531
+	calr	SeqStep_FileSectorProcess
 	inc	4, xsp
 	add	(xsp+24), xhl
 	ld	xwa, 16
 	add	(xsp+12), xwa
 	ld	xwa, (xsp+12)
-	.byte 0x88, 0x04
-	push	xsp
-	halt
-	jr	z, 6
+	cp	(xwa+4), 5
+	jr	z, SeqByteBlock_PathNormalize_Helper6_Skip2
 	ldw	iz, 23
-	jrl	-139
+	jrl	SeqByteBlock_PathNormalize_Loop11
+SeqByteBlock_PathNormalize_Helper6_Skip2:
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+2)
 	and	a, 63
@@ -6439,21 +6234,20 @@ SeqByteBlock_PathNormalize_Skip13:
 	add	wa, bc
 	ld	(xsp+18), wa
 	incw	1, (xsp+16)
+SeqByteBlock_PathNormalize_Helper6_Join:
 	ld	xwa, (xsp+42)
 	ld	a, (xwa+5)
 	extz	wa
 	cp	(xsp+16), wa
-	jrl	le, -265
+	jrl	le, SeqByteBlock_PathNormalize_Helper6_Loop
 	ld	xwa, (xsp+12)
-	.byte 0x88, 0x04
-	push	xsp
-	max
-	jr	c, 5
+	cp	(xwa+4), 4
+	jr	c, SeqByteBlock_PathNormalize_Helper6_Skip3
 	ldw (xsp+32), 65535
+SeqByteBlock_PathNormalize_Helper6_Skip3:
 	ld	xwa, (xsp+42)
-	.byte 0xb8, 0x04
-	inc	6, l
-	pop_f
+	bitm	7, (xwa+4)
+	jr	z, SeqByteBlock_PathNormalize_Helper6_Skip4
 	ld	xwa, (xsp+8)
 	push	xwa
 	ld	xwa, (xsp+32)
@@ -6465,6 +6259,7 @@ SeqByteBlock_PathNormalize_Skip13:
 	inc	8, xsp
 	ld	iz, hl
 	jr	SeqByteBlock_PathNormalize_Join4
+SeqByteBlock_PathNormalize_Helper6_Skip4:
 	ld	xwa, (xsp+8)
 	lda	xwa, (xwa+26)
 	push	xwa
@@ -6519,9 +6314,8 @@ SeqByteBlock_PathNormalize_Skip15:
 	cp	iz, 6:i3
 	jr	nz, SeqByteBlock_PathNormalize_Join5
 	ld	xwa, (xsp+42)
-	.byte 0xb8, 0x04
-	inc	6, l
-	pop_f
+	bitm	7, (xwa+4)
+	jr	z, SeqByteBlock_PathNormalize_Helper6_Skip5
 	ld	xwa, (xsp+8)
 	push	xwa
 	ld	xwa, (xsp+32)
@@ -6533,6 +6327,7 @@ SeqByteBlock_PathNormalize_Skip15:
 	inc	8, xsp
 	ld	iz, hl
 	jr	SeqByteBlock_PathNormalize_Join5
+SeqByteBlock_PathNormalize_Helper6_Skip5:
 	ld	xwa, (xsp+8)
 	lda	xwa, (xwa+26)
 	push	xwa
@@ -6568,20 +6363,19 @@ SeqByteBlock_PathNormalize_Join5:
 	ld	xwa, (xsp+4)
 	ld	(xwa+32), xbc
 	ld	xwa, (xsp+4)
-	.byte 0x98
-	ld	h, 63:opc
-	nop
-	nop
-	jr	z, 10
+	cpw	(xwa+38), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper6_Skip6
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+32)
 	or	xwa, xwa
-	jr	nz, 6
+	jr	nz, SeqByteBlock_PathNormalize_Helper6_Skip7
+SeqByteBlock_PathNormalize_Helper6_Skip6:
 	ldw	iz, 40
-	jrl	-541
+	jrl	SeqByteBlock_PathNormalize_Loop11
+SeqByteBlock_PathNormalize_Helper6_Skip7:
 	lda	xwa, (xsp+34)
 	push	xwa
-	calr	61062
+	calr	SeqStep_FileSectorRead
 	ld	xwa, (xsp+8)
 	ld	(xwa+42), hl
 	ld	xbc, (xsp+38)
@@ -6641,35 +6435,23 @@ SeqByteBlock_PathNormalize_Join5:
 	extz	xwa
 	ld	xbc, xwa
 	ld	xwa, (xsp+4)
-	.byte 0xa8
-	rcf
-	sub	(xbc), l
-	push_f
-	sub	(xbc), l
-	max
-	ld	w, 184:opc
-	push_f
-	jr	lt, -81
-	max
-	ld	w, 136:opc
-	push	xde
-	ld	a, 216:opc
-	ccf
+	add	xbc, (xwa+16)
+	add	xbc, (xsp+24)
+	ld	xwa, (xsp+4)
+	ld	(xwa+24), xbc
+	ld	xwa, (xsp+4)
+	ld	a, (xwa+58)
+	extz	wa
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	.byte 0x98
-	ldw	wa, 0xaf41
-	max
-	ld	w, 168:opc
-	push_f
-	ld	b, 233:opc
-	sub	(xde), l
-	max
-	ld	w, 184:opc
-	call16 44898
-	max
-	ld	w, 152:opc
-	ld	h, 33:opc
+	mul	bc, (xwa+48)
+	ld	xwa, (xsp+4)
+	ld	xde, (xwa+24)
+	add	xde, xbc
+	ld	xwa, (xsp+4)
+	ld	(xwa+28), xde
+	ld	xwa, (xsp+4)
+	ld	bc, (xwa+38)
 	srl	bc, 5
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa+44)
@@ -6692,15 +6474,11 @@ SeqByteBlock_PathNormalize_Join5:
 	extz	xwa
 	ld	xbc, xwa
 	ld	xwa, (xsp+4)
-	.byte 0xa8, 0x1c
-	sub	(xbc), l
-	max
-	ld	w, 184:opc
-	push_a
-	jr	lt, -81
-	max
-	ld	w, 152:opc
-	ld	h, 32:opc
+	add	xbc, (xwa+28)
+	ld	xwa, (xsp+4)
+	ld	(xwa+20), xbc
+	ld	xwa, (xsp+4)
+	ld	wa, (xwa+38)
 	dec	1, wa
 	ld	bc, wa
 	extz	xbc
@@ -6711,9 +6489,8 @@ SeqByteBlock_PathNormalize_Join5:
 	extz	wa
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	.byte 0x98
-	ldw	wa, 0xe941
-	.byte 0x8b
+	mul	bc, (xwa+48)
+	ld	xhl, xbc
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa+46)
 	extz	xbc
@@ -6733,17 +6510,15 @@ SeqByteBlock_PathNormalize_Join5:
 	ld	xwa, (xsp+4)
 	ld	(xwa+54), hl
 	ld	xwa, (xsp+4)
-	.byte 0x98
-	ldw	iz, 0xf73f
-	retd	1379
+	cpw	(xwa+54), 4087
+	jr	ule, SeqByteBlock_PathNormalize_Helper6_Skip8
 	ldw (xsp+32), 65535
+SeqByteBlock_PathNormalize_Helper6_Skip8:
 	ld	xwa, (xsp+4)
 	ld	bc, (xsp+32)
 	ld	(xwa+36), bc
 	ld	xwa, (xsp+42)
-	.byte 0xb8
-	push	sr
-	.byte 0xb8
+	setm	0, (xwa+2)
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	SeqStep_FreeMemory
@@ -6762,12 +6537,10 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xwa+26)
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+2)
-	.byte 0xb8
-	push	sr
-	dec	6, c
-	ld	w, 175:opc
-	push	sr
-	ld	w, 56:opc
+	bitm	3, (xwa+2)
+	jr	nz, SeqByteBlock_PathNormalize_Helper6_Skip9
+	ld	xwa, (xsp+2)
+	push	xwa
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+14)
 	ld	xwa, (xwa)
@@ -6779,12 +6552,11 @@ SeqByteBlock_ChannelContainer:
 	jrl	SeqByteBlock_PathNormalize_Epilogue5
 SeqByteBlock_PathNormalize_Skip16:
 	ld	xwa, (xsp+2)
-	.byte 0xb8
-	push	sr
-	ldw (xhl-81), 47136
-	push	sr
-	dec	6, w
-	push_a
+	setm	3, (xwa+2)
+SeqByteBlock_PathNormalize_Helper6_Skip9:
+	ld	xwa, (xsp+2)
+	bitm	0, (xwa+2)
+	jr	nz, SeqByteBlock_PathNormalize_Skip17
 	ld	xwa, (xsp+2)
 	push	xwa
 	calr	SeqByteBlock_PathNormalize_Helper6
@@ -6796,35 +6568,32 @@ SeqByteBlock_PathNormalize_Skip16:
 	jrl	SeqByteBlock_PathNormalize_Epilogue5
 SeqByteBlock_PathNormalize_Skip17:
 	ld	xwa, (xsp+6)
-	.byte 0x98
-	ld	h, 63:opc
-	nop
-	push	sr
-	jr	z, 5
+	cpw	(xwa+38), 512
+	jr	z, SeqByteBlock_PathNormalize_Helper6_Skip10
 	ld	hl, 1:i3
-	jrl	141
+	jrl	SeqByteBlock_PathNormalize_Epilogue5
+SeqByteBlock_PathNormalize_Helper6_Skip10:
 	ld	xwa, (xsp+14)
 	ld	xbc, (xsp+6)
 	ld	(xwa+30), xbc
 	ld	xwa, (xsp+14)
-	.byte 0xb8
-	pop	sr
-	inc	6, b
-	reti
+	bitm	2, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Helper6_Skip11
 	ld	xwa, (xsp+14)
 	ld	(xwa+2), 10
+SeqByteBlock_PathNormalize_Helper6_Skip11:
 	ld	xwa, (xsp+18)
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	62483
+	calr	SeqByteBlock_PathNormalize_Helper6_Helper
 	inc	8, xsp
 	ld	iz, hl
 	ld	xwa, (xsp+14)
-	.byte 0xb8
-	pop	sr
-	inc	6, l
-	ld	xhl, 0x1566d8de
+	bitm	7, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Join6
+	cp	iz, 0:i3
+	jr	z, SeqByteBlock_PathNormalize_Helper6_Skip12
 	cp	iz, 5:i3
 	jr	nz, SeqByteBlock_PathNormalize_Join6
 	ld	xwa, (xsp+18)
@@ -6835,27 +6604,24 @@ SeqByteBlock_PathNormalize_Skip17:
 	inc	8, xsp
 	ld	iz, hl
 	jr	SeqByteBlock_PathNormalize_Join6
+SeqByteBlock_PathNormalize_Helper6_Skip12:
 	ld	xwa, (xsp+14)
-	.byte 0xb8
-	pop	sr
-	inc	6, c
-	pushw	3759
-	ld	w, 232:opc
-	.byte 0x89
+	bitm	3, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Helper6_Skip13
+	ld	xwa, (xsp+14)
+	ld	xbc, xwa
 	ld	xwa, (xwa+71)
 	ld	(xbc+22), xwa
+SeqByteBlock_PathNormalize_Helper6_Skip13:
 	ld	xwa, (xsp+14)
-	.byte 0xb8
-	pop	sr
-	inc	6, d
-	retd	3759
-	ld	w, 56:opc
+	bitm	4, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Join6
+	ld	xwa, (xsp+14)
+	push	xwa
 	calr	SeqByteBlock_PathNormalize_Helper5
 	inc	4, xsp
 	ld	xwa, (xsp+14)
-	.byte 0xb8
-	pop	sr
-	.byte 0xbf
+	setm	7, (xwa+3)
 SeqByteBlock_PathNormalize_Join6:
 	cp	iz, 0:i3
 	jr	z, SeqByteBlock_PathNormalize_Skip18
@@ -6897,12 +6663,10 @@ SeqByteBlock_PathNormalize_Helper7:
 	ld	xwa, (xsp+22)
 	ld	xbc, (xwa)
 	ld	xwa, (xsp+8)
-	.byte 0xa8, 0x1c
-	sub	(xbc), xsp
-	ld	(32:8), 152:io
-	pushw	iz
-	ld	w, 232:opc
-	ccf
+	sub	xbc, (xwa+28)
+	ld	xwa, (xsp+8)
+	ld	wa, (xwa+46)
+	extz	xwa
 	sub	xwa, xbc
 	ld	xbc, (xsp+26)
 	ld	(xbc), wa
@@ -6912,9 +6676,7 @@ SeqByteBlock_PathNormalize_Skip19:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xwa+22)
 	ld	xwa, (xsp+8)
-	.byte 0x98
-	pushw	wa
-	.byte 0x51
+	div	bc, (xwa+40)
 	ld	(xsp+4), bc
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+40)
@@ -6933,53 +6695,44 @@ SeqByteBlock_PathNormalize_Skip19:
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
 	.byte 0x9f, 0x04, 0xf0
-	jr	nz, 66
+	jr	nz, SeqByteBlock_PathNormalize_Helper7_Skip2
 	ld	xwa, (xsp+16)
-	.byte 0x98
-	pushw	de
-	push	xsp
-	nop
-	nop
-	jr	nz, 33
+	cpw	(xwa+42), 0
+	jr	nz, SeqByteBlock_PathNormalize_Helper7_Skip
 	ld	xwa, (xsp+16)
-	.byte 0xb8
-	pop	sr
-	inc	6, a
-	pop_f
-	.byte 0x9f
-	push_a
-	.byte 0x04
+	bitm	1, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Helper7_Skip
+	pushm	(xsp+20)
 	pushw	0
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	61612
+	calr	SeqByteBlock_PathNormalize_Helper2
 	inc	8, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
-	jrl	z, 181
-	jrl	255
+	jrl	z, SeqByteBlock_PathNormalize_Helper7_Join
+	jrl	SeqByteBlock_PathNormalize_Epilogue6
+SeqByteBlock_PathNormalize_Helper7_Skip:
 	ld	xwa, (xsp+16)
-	.byte 0x98
-	pushw	ix
-	push	xsp
-	nop
-	nop
-	jrl	nz, 167
+	cpw	(xwa+44), 0
+	jrl	nz, SeqByteBlock_PathNormalize_Helper7_Join
 	ld	xwa, (xsp+16)
 	push	xwa
-	calr	61500
+	calr	SeqByteBlock_PathNormalize_Helper
 	inc	4, xsp
-	jrl	155
+	jrl	SeqByteBlock_PathNormalize_Helper7_Join
+SeqByteBlock_PathNormalize_Helper7_Skip2:
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
 	.byte 0x9f, 0x04, 0xf0
-	jr	ule, 19
+	jr	ule, SeqByteBlock_PathNormalize_Helper7_Skip3
 	ld	xwa, (xsp+16)
 	ld	xbc, xwa
 	ld	wa, (xwa+69)
 	ld	(xbc+42), wa
 	ld	xwa, (xsp+16)
 	ldw (xwa+46), 0
+SeqByteBlock_PathNormalize_Helper7_Skip3:
 	ld	xwa, (xsp+16)
 	ld	hl, (xwa+42)
 	ld	xwa, (xsp+16)
@@ -6996,32 +6749,32 @@ SeqByteBlock_PathNormalize_Loop12:
 	ld	wa, (xwa+36)
 	dec	8, wa
 	cp	wa, hl
-	jr	nz, 6
+	jr	nz, SeqByteBlock_PathNormalize_Helper7_Skip4
 	ldw	hl, 39
-	jrl	157
+	jrl	SeqByteBlock_PathNormalize_Epilogue6
+SeqByteBlock_PathNormalize_Helper7_Skip4:
 	ld	xwa, (xsp+8)
 	ld	wa, (xwa+36)
 	dec	8, wa
 	cp	hl, wa
-	jr	ule, 36
+	jr	ule, SeqByteBlock_PathNormalize_Helper7_Skip6
 	ld	xwa, (xsp+16)
-	.byte 0xb8
-	pop	sr
-	inc	6, a
-	ldf	0x9f
-	push_a
-	.byte 0x04
+	bitm	1, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Helper7_Skip5
+	pushm	(xsp+20)
 	pushw	0
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	61469
+	calr	SeqByteBlock_PathNormalize_Helper2
 	inc	8, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	z, 39
-	jr	114
+	jr	z, SeqByteBlock_PathNormalize_Helper7_Join
+	jr	SeqByteBlock_PathNormalize_Epilogue6
+SeqByteBlock_PathNormalize_Helper7_Skip5:
 	ldw	hl, 8
-	jr	109
+	jr	SeqByteBlock_PathNormalize_Epilogue6
+SeqByteBlock_PathNormalize_Helper7_Skip6:
 	ld	xwa, (xsp+16)
 	ld	(xwa+42), hl
 	ld	xwa, (xsp+16)
@@ -7035,18 +6788,16 @@ SeqByteBlock_PathNormalize_Skip20:
 	push	xwa
 	calr	SeqByteBlock_PathNormalize_Helper
 	inc	4, xsp
+SeqByteBlock_PathNormalize_Helper7_Join:
 	ld	xwa, 0:i3
 	ld	a, (xsp+6)
 	ld	xbc, xwa
 	ld	xwa, (xsp+8)
-	.byte 0xa8
-	push_a
-	sub	(xbc), l
-	ex_ff
-	ld	w, 176:opc
-	jr	lt, -81
-	ld	(32:8), 184:io
-	ld	w, 49:opc
+	add	xbc, (xwa+20)
+	ld	xwa, (xsp+22)
+	ld	(xwa), xbc
+	ld	xwa, (xsp+8)
+	lda	xbc, (xwa+32)
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+42)
 	dec	2, wa
@@ -7101,7 +6852,7 @@ SeqByteBlock_PathNormalize_Helper8:
 	or	xwa, xwa
 	jr	nz, SeqByteBlock_PathNormalize_Skip21
 	ldw	hl, 10
-	jr	6
+	jr	SeqByteBlock_PathNormalize_Epilogue7
 SeqByteBlock_PathNormalize_Skip21:
 	ld	xwa, (xiz+34)
 	ld	hl, (xwa+20)
@@ -7109,35 +6860,28 @@ SeqByteBlock_PathNormalize_Epilogue7:
 	pop	xiz
 	inc	6, xsp
 	ret
+SeqByteBlock_PathNormalize_Helper9_Helper:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, (xsp+20)
-	.byte 0x9f, 0x1c
-	push	xsp
-	nop
-	nop
-	jr	nz, 5
+	cpw	(xsp+28), 0
+	jr	nz, SeqByteBlock_PathNormalize_Helper8_Skip
 	ld	hl, 0:i3
-	jrl	372
+	jrl	SeqByteBlock_PathNormalize_Epilogue8
+SeqByteBlock_PathNormalize_Helper8_Skip:
 	ld	xwa, (xiz+30)
 	ld	(xsp+6), xwa
 	ld	xbc, (xiz+22)
 	ld	xwa, (xsp+6)
-	.byte 0x98
-	pushw	wa
-	.byte 0x51
+	div	bc, (xwa+40)
 	ld	(xsp+4), bc
 	ld	wa, (xsp+28)
 	exts	xwa
 	ld	xbc, xwa
-	.byte 0xae
-	ex_ff
-	sub	(xbc), l
-	.byte 0x06
-	ld	w, 152:opc
-	pushw	wa
-	ld	w, 232:opc
-	ccf
+	add	xbc, (xiz+22)
+	ld	xwa, (xsp+6)
+	ld	wa, (xwa+40)
+	extz	xwa
 	add	xwa, xbc
 	ld	xde, xwa
 	dec	1, xde
@@ -7175,9 +6919,7 @@ SeqByteBlock_PathNormalize_Skip22:
 	cp	a, 3:i3
 	jr	nz, SeqByteBlock_PathNormalize_Skip24
 	ld	xwa, (xiz+34)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb3
+	resm	3, (xwa+22)
 SeqByteBlock_PathNormalize_Skip23:
 	pushw	40
 	ld	xwa, 0:i3
@@ -7190,12 +6932,9 @@ SeqByteBlock_PathNormalize_Skip23:
 	ld	(xiz+34), xhl
 	or	xhl, xhl
 	jr	nz, SeqByteBlock_PathNormalize_Skip24
-	.byte 0xbe
-	ei	2
-	ldw	(0:8), 0x3cf2:io
-	.byte 0xe5, 0x01
-	push	sr
-	ldw	(0:8), 0xa8db:io
+	ldw	(xiz+6), 10
+	stiw_da	(124220), 10
+	ld	hl, 0:i3
 	jrl	SeqByteBlock_PathNormalize_Epilogue8
 SeqByteBlock_PathNormalize_Skip24:
 	ld	xbc, (xiz+34)
@@ -7206,25 +6945,23 @@ SeqByteBlock_PathNormalize_Skip24:
 	ld	bc, (xsp+4)
 	extz	xbc
 	ld	xwa, (xsp+6)
-	.byte 0x98
-	ld	h, 81:opc
+	div	bc, (xwa+38)
 	ld	(xsp+4), bc
 	ld	xbc, (xiz+34)
 	lda	xbc, (xbc+16)
 	ld	wa, (xsp+4)
-	.byte 0x9f
-	ldw	(240:8), 1391:io
+	cp	wa, (xsp+10)
+	jr	nc, SeqByteBlock_PathNormalize_Helper8_Skip2
 	ld	wa, (xsp+4)
 	jr	SeqByteBlock_PathNormalize_Join7
+SeqByteBlock_PathNormalize_Helper8_Skip2:
 	ld	wa, (xsp+10)
 SeqByteBlock_PathNormalize_Join7:
 	ld	(xbc), wa
 	ld	xwa, (xiz+34)
 	ld	wa, (xwa+16)
 	ld	(xsp+4), wa
-	.byte 0x9f
-	calr	63
-	nop
+	cpw	(xsp+30), 0
 	jr	z, SeqByteBlock_PathNormalize_Skip25
 	ld	xwa, (xiz+34)
 	push	xwa
@@ -7252,40 +6989,30 @@ SeqByteBlock_PathNormalize_Skip25:
 	ld	(xiz+6), hl
 SeqByteBlock_PathNormalize_Join8:
 	ld	xwa, (xiz+34)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb3
+	resm	3, (xwa+22)
 	ld	xbc, (xiz+34)
 	ld	xwa, 0:i3
 	ld	(xbc+12), xwa
 	ld	xwa, (xiz+34)
-	.byte 0x98
-	push_a
-	push	xsp
-	nop
-	nop
-	jr	z, 4
+	cpw	(xwa+20), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper8_Skip3
 	ld	hl, 0:i3
-	jr	11
+	jr	SeqByteBlock_PathNormalize_Helper8_Join
+SeqByteBlock_PathNormalize_Helper8_Skip3:
 	ld	bc, (xsp+4)
 	ld	xwa, (xsp+6)
-	.byte 0x98
-	ld	h, 65:opc
+	mul	bc, (xwa+38)
 	ld	hl, bc
+SeqByteBlock_PathNormalize_Helper8_Join:
 	ld	bc, hl
 	extz	xbc
 	ld	xwa, (xsp+6)
-	.byte 0x98
-	pushw	wa
-	.byte 0x51
+	div	bc, (xwa+40)
 	sub	(xiz+44), bc
 	ld	xwa, (xiz+34)
 	ld	(xwa+22), 0
 	ld	xwa, (xiz+34)
-	.byte 0x98
-	push_a
-	push	xsp
-	ld	c, 0:opc
+	cpw	(xwa+20), 35
 	jr	nz, SeqByteBlock_PathNormalize_Epilogue8
 	ld	xwa, (xiz+34)
 	ldw (xwa+20), 0
@@ -7302,76 +7029,60 @@ SeqByteBlock_PathNormalize_Helper9:
 	ld	xwa, (xsp+10)
 	ld	xbc, (xwa+71)
 	ld	xwa, (xsp+10)
-	.byte 0xa8
-	ex_ff
-	.byte 0xf1
-	jr	nz, 13
+	cp	xbc, (xwa+22)
+	jr	nz, SeqByteBlock_PathNormalize_Helper9_Skip
 	ld	xwa, (xsp+10)
-	.byte 0x98, 0x06
-	push	xiz
-	nop
-	xor	(xwa), c
-	cp	(xwa+120), xhl
-	normal
+	ormi16	(xwa+6), 32768
+	ld	hl, 0:i3
+	jrl	SeqByteBlock_PathNormalize_Epilogue9
+SeqByteBlock_PathNormalize_Helper9_Skip:
 	ld	xwa, (xsp+10)
 	ld	xbc, (xwa+71)
 	ld	xwa, (xsp+10)
-	.byte 0xa8
-	ex_ff
-	.byte 0xa1
+	sub	xbc, (xwa+22)
 	ld	wa, (xsp+18)
 	extz	xwa
 	cp	xwa, xbc
-	jr	nc, 9
+	jr	nc, SeqByteBlock_PathNormalize_Helper9_Skip2
 	ld	wa, (xsp+18)
 	extz	xwa
 	ld	xbc, xwa
-	jr	12
+	jr	SeqByteBlock_PathNormalize_Helper9_Join
+SeqByteBlock_PathNormalize_Helper9_Skip2:
 	ld	xwa, (xsp+10)
 	ld	xbc, (xwa+71)
 	ld	xwa, (xsp+10)
-	.byte 0xa8
-	ex_ff
-	.byte 0xa1
+	sub	xbc, (xwa+22)
+SeqByteBlock_PathNormalize_Helper9_Join:
 	ld	(xsp+18), bc
-	.byte 0x9f
-	ccf
-	push	xsp
-	nop
-	nop
-	jrl	z, 435
+	cpw	(xsp+18), 0
+	jrl	z, SeqByteBlock_PathNormalize_Helper9_Skip12
+SeqByteBlock_PathNormalize_Helper9_Loop:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+10)
-	.byte 0xa8
-	ex_ff
-	sub	(0x286e:16), l
-	ldw	(32:8), 1688:io
-	push	xsp
-	ld	c, 0:opc
-	jr	z, 30
+	and	xbc, (xwa+22)
+	jr	nz, SeqByteBlock_PathNormalize_Helper9_Skip3
 	ld	xwa, (xsp+10)
-	.byte 0xb8
-	pop	sr
-	dec	6, b
-	ex_ff
-	.byte 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
-	jr	nz, 15
+	cpw	(xwa+6), 35
+	jr	z, SeqByteBlock_PathNormalize_Helper9_Skip3
+	ld	xwa, (xsp+10)
+	bitm	2, (xwa+3)
+	jr	nz, SeqByteBlock_PathNormalize_Helper9_Skip3
+	cpw	(xsp+20), 0
+	jr	nz, SeqByteBlock_PathNormalize_Helper9_Skip3
 	ld	xwa, (xsp+10)
 	ld	xbc, (xwa+30)
 	ld	wa, (xsp+18)
-	.byte 0x99
-	ld	h, 240:opc
-	jrl	nc, 168
+	cp	wa, (xbc+38)
+	jrl	nc, SeqByteBlock_PathNormalize_Helper9_Skip6
+SeqByteBlock_PathNormalize_Helper9_Skip3:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+34)
 	or	xwa, xwa
-	jr	nz, 33
+	jr	nz, SeqByteBlock_PathNormalize_Helper9_Skip4
+SeqByteBlock_PathNormalize_Helper9_Loop2:
 	pushw	64
 	ld	xwa, (xsp+12)
 	push	xwa
@@ -7385,20 +7096,18 @@ SeqByteBlock_PathNormalize_Helper9:
 	ld	(0x1e53c:24), wa
 	ld	hl, (xsp+2)
 	jrl	SeqByteBlock_PathNormalize_Epilogue9
+SeqByteBlock_PathNormalize_Helper9_Skip4:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+34)
-	.byte 0xb8
-	ex_ff
-	inc	6, w
-	.byte 0xd4
+	bitm	0, (xwa+22)
+	jr	z, SeqByteBlock_PathNormalize_Helper9_Loop2
 SeqByteBlock_PathNormalize_Skip26:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+10)
-	.byte 0xa8
-	ex_ff
-	ld	w, (2735:16)
+	and	xbc, (xwa+22)
+	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+30)
 	ld	de, (xwa+38)
 	sub	de, bc
@@ -7406,25 +7115,19 @@ SeqByteBlock_PathNormalize_Skip26:
 	extz	xwa
 	lda	xbc, (xwa+26)
 	ld	xwa, (xsp+10)
-	.byte 0xa8
-	ld	b, 129:opc
+	add	xbc, (xwa+34)
 	ld	xwa, (xsp+10)
-	.byte 0xb8
-	pop	sr
-	scc8	nz, b
-	.byte 0x94
-	nop
-	.byte 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
-	jrl	nz, 140
+	bitm	2, (xwa+3)
+	jrl	nz, SeqByteBlock_PathNormalize_Helper9_Skip8
+	cpw	(xsp+20), 0
+	jrl	nz, SeqByteBlock_PathNormalize_Helper9_Skip8
 	cp	(xsp+18), de
-	jr	nc, 5
+	jr	nc, SeqByteBlock_PathNormalize_Helper9_Skip5
 	ld	wa, (xsp+18)
-	jr	2
+	jr	SeqByteBlock_PathNormalize_Helper9_Join2
+SeqByteBlock_PathNormalize_Helper9_Skip5:
 	ld	wa, de
+SeqByteBlock_PathNormalize_Helper9_Join2:
 	ld	iz, wa
 	pushw	wa
 	push	xbc
@@ -7441,12 +7144,9 @@ SeqByteBlock_PathNormalize_Skip26:
 	extz	xbc
 	ld	xwa, (xsp+10)
 	add	(xwa+22), xbc
-	.byte 0x9f
-	ccf
-	push	xsp
-	nop
-	nop
-	jrl	z, 168
+	cpw	(xsp+18), 0
+	jrl	z, SeqByteBlock_PathNormalize_Join9
+SeqByteBlock_PathNormalize_Helper9_Skip6:
 	pushw	1
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
@@ -7461,17 +7161,15 @@ SeqByteBlock_PathNormalize_Skip26:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	64785
+	calr	SeqByteBlock_PathNormalize_Helper9_Helper
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+10)
-	.byte 0x98, 0x06
-	push	xsp
-	nop
-	nop
-	jr	z, 6
+	cpw	(xwa+6), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper9_Skip7
 	ld	hl, (xsp+2)
-	jrl	172
+	jrl	SeqByteBlock_PathNormalize_Epilogue9
+SeqByteBlock_PathNormalize_Helper9_Skip7:
 	sub	(xsp+18), iz
 	ld	wa, iz
 	extz	xwa
@@ -7482,24 +7180,25 @@ SeqByteBlock_PathNormalize_Skip26:
 	ld	xwa, (xsp+10)
 	add	(xwa+22), xbc
 	jr	SeqByteBlock_PathNormalize_Join9
+SeqByteBlock_PathNormalize_Helper9_Skip8:
 	cp	(xsp+18), de
-	jr	nc, 5
+	jr	nc, SeqByteBlock_PathNormalize_Helper9_Skip9
 	ld	wa, (xsp+18)
-	jr	2
+	jr	SeqByteBlock_PathNormalize_Helper9_Join3
+SeqByteBlock_PathNormalize_Helper9_Skip9:
 	ld	wa, de
+SeqByteBlock_PathNormalize_Helper9_Join3:
 	ld	iz, wa
 	cp	iz, 0:i3
-	jr	z, 68
+	jr	z, SeqByteBlock_PathNormalize_Join9
 	ld	xwa, (xsp+10)
-	.byte 0xb8
-	pop	sr
-	inc	6, b
-	push	129
-	push	xsp
-	decf
-	jr	nz, 4
+	bitm	2, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Helper9_Skip10
+	cp	(xbc), 13
+	jr	nz, SeqByteBlock_PathNormalize_Helper9_Skip10
 	inc	1, xbc
-	jr	40
+	jr	SeqByteBlock_PathNormalize_Helper9_Join4
+SeqByteBlock_PathNormalize_Helper9_Skip10:
 	decm	1, (xsp+18)
 	incw	1, (xsp+2)
 	ldb_spi e, 228
@@ -7508,15 +7207,12 @@ SeqByteBlock_PathNormalize_Skip26:
 	ld (xsp+14), xwa
 	ld xwa, (xsp+10)
 	cp (xwa+2), e
-	jr	nz, 14
-	.byte 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
-	jr	z, 7
+	jr	nz, SeqByteBlock_PathNormalize_Helper9_Join4
+	cpw	(xsp+20), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper9_Join4
 	ldw (xsp+18), 0
 	ld	iz, 1:i3
+SeqByteBlock_PathNormalize_Helper9_Join4:
 	ld	xwa, (xsp+10)
 	ld	xde, 1:i3
 	add	(xwa+22), xde
@@ -7526,30 +7222,24 @@ SeqByteBlock_PathNormalize_Join9:
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+10)
-	.byte 0xa8
-	ex_ff
-	sub	(4462:16), l
-	ldw	(32:8), 8872:io
-	ld	w, 184:opc
-	ex_ff
-	.byte 0xb3
+	and	xbc, (xwa+22)
+	jr	nz, SeqByteBlock_PathNormalize_Helper9_Skip11
+	ld	xwa, (xsp+10)
+	ld	xwa, (xwa+34)
+	resm	3, (xwa+22)
 	ld	xwa, (xsp+10)
 	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
-	.byte 0x9f
-	ccf
-	push	xsp
-	nop
-	nop
-	jrl	nz, -435
+SeqByteBlock_PathNormalize_Helper9_Skip11:
+	cpw	(xsp+18), 0
+	jrl	nz, SeqByteBlock_PathNormalize_Helper9_Loop
+SeqByteBlock_PathNormalize_Helper9_Skip12:
 	ld	wa, (xsp+2)
 	.byte 0x9f, 0x04, 0xf0
-	jr	nc, 8
+	jr	nc, SeqByteBlock_PathNormalize_Helper9_Skip13
 	ld	xwa, (xsp+10)
-	.byte 0x98, 0x06
-	push	xiz
-	nop
-	.byte 0x80
+	ormi16	(xwa+6), 32768
+SeqByteBlock_PathNormalize_Helper9_Skip13:
 	ld	hl, (xsp+2)
 SeqByteBlock_PathNormalize_Epilogue9:
 	popw	iz
@@ -7583,17 +7273,15 @@ SeqByteBlock_PathNormalize_Helper10:
 	ldw	(xsp+2), 0
 	ldw (xsp+6), 0
 	cpw	(xsp+20), 0
-	jr	z, 12
+	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip
 	ld	xwa, (xsp+12)
-	.byte 0xb8
-	pop	sr
-	.byte 0xbf
+	setm	7, (xwa+3)
 	ld	xwa, (xsp+12)
-	.byte 0xb8
-	ld	xwa, 0x3f149fbd
-	nop
-	nop
-	jrl	z, 584
+	setm	5, (xwa+64)
+SeqByteBlock_PathNormalize_Helper10_Skip:
+	cpw	(xsp+20), 0
+	jrl	z, SeqByteBlock_PathNormalize_Helper10_Skip14
+SeqByteBlock_PathNormalize_Helper10_Loop:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
@@ -7604,43 +7292,39 @@ SeqByteBlock_PathNormalize_Helper10:
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+12)
-	.byte 0xa8
-	ex_ff
-	sub	(0x286e:16), l
-	incf
-	ld	w, 152:opc
-	ei	63
-	ld	c, 0:opc
-	jr	z, 30
+	and	xbc, (xwa+22)
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip2
 	ld	xwa, (xsp+12)
-	.byte 0xb8
-	pop	sr
-	dec	6, b
-	ex_ff
+	cpw	(xwa+6), 35
+	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip2
+	ld	xwa, (xsp+12)
+	bitm	2, (xwa+3)
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip2
 	cpw	(xsp+22), 0
-	jr	nz, 15
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip2
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
 	ld	wa, (xwa+38)
 	cp	(xsp+20), wa
-	jrl	ge, 192
+	jrl	ge, SeqByteBlock_PathNormalize_Helper10_Skip6
+SeqByteBlock_PathNormalize_Helper10_Skip2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
 	or	xwa, xwa
-	jr	nz, 60
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jr	nz, 14
+	jr	nz, SeqByteBlock_PathNormalize_Skip27
+	cpw	(xsp+4), 0
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip3
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
 	ld	wa, (xwa+38)
 	cp	(xsp+20), wa
-	jr	ge, 5
+	jr	ge, SeqByteBlock_PathNormalize_Helper10_Skip4
+SeqByteBlock_PathNormalize_Helper10_Skip3:
 	ldw	wa, 64
-	jr	3
+	jr	SeqByteBlock_PathNormalize_Helper10_Join
+SeqByteBlock_PathNormalize_Helper10_Skip4:
 	ldw	wa, 96
+SeqByteBlock_PathNormalize_Helper10_Join:
 	pushw	wa
 	ld	xwa, (xsp+14)
 	push	xwa
@@ -7657,9 +7341,7 @@ SeqByteBlock_PathNormalize_Helper10:
 SeqByteBlock_PathNormalize_Skip27:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb9
+	setm	1, (xwa+22)
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
 	ld	bc, (xsp+4)
@@ -7670,26 +7352,19 @@ SeqByteBlock_PathNormalize_Skip27:
 	add	bc, 26
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	de, 3247
-	ld	w, 184:opc
-	pop	sr
-	scc8	nz, b
-	.byte 0x9d
-	nop
-	.byte 0x9f
-	ex_ff
-	push	xsp
-	nop
-	nop
-	jrl	nz, 149
+	lda_rr	xde, xwa, bc
+	ld	xwa, (xsp+12)
+	bitm	2, (xwa+3)
+	jrl	nz, SeqByteBlock_PathNormalize_Helper10_Skip8
+	cpw	(xsp+22), 0
+	jrl	nz, SeqByteBlock_PathNormalize_Helper10_Skip8
 	cp	(xsp+20), hl
-	jr	ge, 5
+	jr	ge, SeqByteBlock_PathNormalize_Helper10_Skip5
 	ld	wa, (xsp+20)
-	jr	2
+	jr	SeqByteBlock_PathNormalize_Helper10_Join2
+SeqByteBlock_PathNormalize_Helper10_Skip5:
 	ld	wa, hl
+SeqByteBlock_PathNormalize_Helper10_Join2:
 	ld	iz, wa
 	pushw	wa
 	ld	xwa, (xsp+18)
@@ -7706,12 +7381,9 @@ SeqByteBlock_PathNormalize_Skip27:
 	exts	xbc
 	ld	xwa, (xsp+12)
 	add	(xwa+22), xbc
-	.byte 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
-	jrl	z, 250
+	cpw	(xsp+20), 0
+	jrl	z, SeqByteBlock_PathNormalize_Join10
+SeqByteBlock_PathNormalize_Helper10_Skip6:
 	pushw	0
 	ld	xwa, (xsp+14)
 	ld	xwa, (xwa+30)
@@ -7726,17 +7398,15 @@ SeqByteBlock_PathNormalize_Skip27:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	64201
+	calr	SeqByteBlock_PathNormalize_Helper9_Helper
 	lda	xsp, (xsp+12)
 	ld	iz, hl
 	ld	xwa, (xsp+12)
-	.byte 0x98, 0x06
-	push	xsp
-	nop
-	nop
-	jr	z, 6
+	cpw	(xwa+6), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip7
 	ld	hl, (xsp+2)
-	jrl	263
+	jrl	SeqByteBlock_PathNormalize_Epilogue10
+SeqByteBlock_PathNormalize_Helper10_Skip7:
 	sub	(xsp+20), iz
 	ld	xwa, (xsp+16)
 	lda_rr xwa, xwa, iz
@@ -7747,37 +7417,32 @@ SeqByteBlock_PathNormalize_Skip27:
 	ld	xwa, (xsp+12)
 	add	(xwa+22), xbc
 	jrl	SeqByteBlock_PathNormalize_Join10
+SeqByteBlock_PathNormalize_Helper10_Skip8:
 	cp	(xsp+20), hl
 	jr	ge, SeqByteBlock_PathNormalize_Skip28
 	ld	wa, (xsp+20)
-	jr	2
+	jr	SeqByteBlock_PathNormalize_Helper10_Join3
 SeqByteBlock_PathNormalize_Skip28:
 	ld	wa, hl
+SeqByteBlock_PathNormalize_Helper10_Join3:
 	ld	iz, wa
 	cp	iz, 0:i3
-	jrl	z, 144
+	jrl	z, SeqByteBlock_PathNormalize_Join10
+SeqByteBlock_PathNormalize_Helper10_Loop2:
 	ld	xwa, (xsp+12)
-	.byte 0xb8
-	pop	sr
-	inc	6, b
-	popw	sp
-	.byte 0x9f, 0x06
-	push	xsp
-	nop
-	nop
-	jr	z, 28
+	bitm	2, (xwa+3)
+	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip10
+	cpw	(xsp+6), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip9
 	stib_dsp 232, 10
 	ldw (xsp+6), 0
 	decm	1, (xsp+20)
-	.byte 0x9f
-	ex_ff
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+22), 0
 	jr	z, 95
 	ldw (xsp+20), 0
 	ld	iz, 1:i3
 	jr	86
+SeqByteBlock_PathNormalize_Helper10_Skip9:
 	ld	xwa, (xsp+16)
 	.byte 0x80
 	push	xsp
@@ -7787,10 +7452,7 @@ SeqByteBlock_PathNormalize_Skip28:
 	decf
 	ld	xwa, 1:i3
 	add	(xsp+16), xwa
-	.byte 0xbf
-	ei	2
-	.byte 0x01
-	nop
+	ldw	(xsp+6), 1
 	jr	15
 	ld	xwa, (xsp+16)
 	ldb_spi c, 224
@@ -7799,6 +7461,7 @@ SeqByteBlock_PathNormalize_Skip28:
 	decm 1, (xsp+20)
 	incw 1, (xsp+2)
 	jr 42
+SeqByteBlock_PathNormalize_Helper10_Skip10:
 	ld	xwa, (xsp+16)
 	ldb_spi c, 224
 	ld (xde), c
@@ -7808,53 +7471,44 @@ SeqByteBlock_PathNormalize_Skip28:
 	ld xwa, (xsp+12)
 	ld a, (xwa+2)
 	cp_spib a, 232
-	jr	nz, 14
-	.byte 0x9f
-	ex_ff
-	push	xsp
-	nop
-	nop
-	jr	z, 7
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip11
+	cpw	(xsp+22), 0
+	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip11
 	ldw (xsp+20), 0
 	ld	iz, 1:i3
+SeqByteBlock_PathNormalize_Helper10_Skip11:
 	ld	xwa, (xsp+12)
 	ld	xbc, 1:i3
 	add	(xwa+22), xbc
 	sub	iz, 1
-	jrl	nz, -144
+	jrl	nz, SeqByteBlock_PathNormalize_Helper10_Loop2
 SeqByteBlock_PathNormalize_Join10:
 	ld	xwa, (xsp+12)
 	ld	xbc, (xwa+22)
 	ld	xwa, (xsp+12)
-	.byte 0xa8
-	ld	xsp, 0xaf0b63f1
-	incf
-	ld	w, 232:opc
-	.byte 0x89
+	cp	xbc, (xwa+71)
+	jr	ule, SeqByteBlock_PathNormalize_Helper10_Skip12
+	ld	xwa, (xsp+12)
+	ld	xbc, xwa
 	ld	xwa, (xwa+22)
 	ld	(xbc+71), xwa
+SeqByteBlock_PathNormalize_Helper10_Skip12:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+12)
-	.byte 0xa8
-	ex_ff
-	sub	(4462:16), l
-	incf
-	ld	w, 168:opc
-	ld	b, 32:opc
-	.byte 0xb8
-	ex_ff
-	.byte 0xb3
+	and	xbc, (xwa+22)
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip13
+	ld	xwa, (xsp+12)
+	ld	xwa, (xwa+34)
+	resm	3, (xwa+22)
 	ld	xwa, (xsp+12)
 	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
-	.byte 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
-	jrl	nz, -584
+SeqByteBlock_PathNormalize_Helper10_Skip13:
+	cpw	(xsp+20), 0
+	jrl	nz, SeqByteBlock_PathNormalize_Helper10_Loop
+SeqByteBlock_PathNormalize_Helper10_Skip14:
 	ld	hl, (xsp+2)
 SeqByteBlock_PathNormalize_Epilogue10:
 	popw	iz
@@ -7862,21 +7516,17 @@ SeqByteBlock_PathNormalize_Epilogue10:
 	ret
 SeqChan_ProcessEventArg0:
 	pushw	0
-	.byte 0x9f
-	ret
-	.byte 0x04
+	pushm	(xsp+14)
 	ld	xwa, (xsp+12)
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	64888
+	calr	SeqByteBlock_PathNormalize_Helper10
 	lda	xsp, (xsp+12)
 	ret
 SeqChan_ProcessEventArg1:
 	pushw	1
-	.byte 0x9f
-	ret
-	.byte 0x04
+	pushm	(xsp+14)
 	ld	xwa, (xsp+12)
 	push	xwa
 	ld	xwa, (xsp+12)
@@ -7889,26 +7539,23 @@ SeqChan_ValidateAndDispatch:
 	ld	xiz, (xsp+8)
 	ld	xwa, (xiz+34)
 	or	xwa, xwa
-	jr	z, 6
+	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip15
 	ld	xwa, (xiz+34)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb3, 0xc2, 0xe2, 0xe2
-	pop	sr
-	push	xsp
-	nop
+	resm	3, (xwa+22)
+SeqByteBlock_PathNormalize_Helper10_Skip15:
+	cpib_da	(254690), 0
 	jr	nz, SeqByteBlock_PathNormalize_Entry3
 	ld	hl, 0:i3
 	jr	SeqByteBlock_PathNormalize_Epilogue11
 SeqByteBlock_PathNormalize_Entry3:
-	.byte 0xbe
-	pop	sr
-	inc	6, l
-	ldw	(62:8), 0x331e:io
-	.byte 0xf1
+	bitm	7, (xiz+3)
+	jr	z, SeqByteBlock_PathNormalize_Helper10_Skip16
+	push	xiz
+	calr	SeqStep_FileSectorPopReturn_Helper
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	nz, SeqByteBlock_PathNormalize_Epilogue11
+SeqByteBlock_PathNormalize_Helper10_Skip16:
 	ld	xwa, (xiz+18)
 	decm8	1, (xwa+3)
 	ld	(xiz+4), 0
@@ -7927,14 +7574,11 @@ SeqChan_TraverseAndProcess:
 	cp	xwa, (xsp+16)
 	jr	nc, SeqByteBlock_PathNormalize_Skip29
 	ld	xwa, (xsp+12)
-	.byte 0xb8
-	pop	sr
-	dec	6, a
-	ld	(191:8), 6:io
-	push	sr
-	push_a
-	nop
+	bitm	1, (xwa+3)
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip17
+	ldw	(xsp+6), 20
 	jrl	SeqByteBlock_PathNormalize_Join11
+SeqByteBlock_PathNormalize_Helper10_Skip17:
 	ld	xwa, (xsp+12)
 	ld	xbc, xwa
 	ld	xwa, (xwa+71)
@@ -7972,9 +7616,7 @@ SeqChan_TraverseAndProcess:
 	ld	xbc, (xsp+16)
 	ld	(xwa+71), xbc
 	ld	xwa, (xsp+12)
-	.byte 0xb8
-	pop	sr
-	.byte 0xbf
+	setm	7, (xwa+3)
 SeqByteBlock_PathNormalize_Skip29:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
@@ -7982,10 +7624,7 @@ SeqByteBlock_PathNormalize_Skip29:
 	jr	z, SeqByteBlock_PathNormalize_Skip30
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
-	.byte 0x88
-	ex_ff
-	push	xix
-	.byte 0xe7
+	andmi8	(xwa+22), 231
 	ld	xwa, (xsp+12)
 	ld	xbc, 0:i3
 	ld	(xwa+34), xbc
@@ -7995,37 +7634,28 @@ SeqByteBlock_PathNormalize_Skip30:
 	ld	(xwa+22), xbc
 	lda	xwa, (0x2121a:24)
 	ld	xiz, xwa
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
-	.byte 0x9f, 0x04
-	push	xsp
-	ldw	(0:8), 0x3169:io
+	ldw	(xsp+4), 0
+	cpw	(xsp+4), 10
+	jr	ge, SeqByteBlock_PathNormalize_Join11
+SeqByteBlock_PathNormalize_Helper10_Loop3:
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+5)
 	.byte 0x8e, 0x17, 0xf1
-	jr	nz, 23
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip18
 	ld	a, (xiz+22)
 	and	a, 3
 	cp	a, 3:i3
-	jr	nz, 13
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip18
 	push	xiz
-	calr	57627
+	calr	SeqStep_FileBufferSetup
 	inc	4, xsp
 	or	(xsp+6), hl
-	.byte 0x8e
-	ex_ff
-	push	xix
-	.byte 0xe5
+	andmi8	(xiz+22), 229
+SeqByteBlock_PathNormalize_Helper10_Skip18:
 	incw	1, (xsp+4)
-	.byte 0xf3
-	swi	1
-	.byte 0x1a
-	push	sr
-	ldw	iz, 1183
-	push	xsp
-	ldw	(0:8), 0xcf61:io
+	lda	xiz, (xiz+538)
+	cpw	(xsp+4), 10
+	jr	lt, SeqByteBlock_PathNormalize_Helper10_Loop3
 SeqByteBlock_PathNormalize_Join11:
 	ld	hl, (xsp+6)
 	pop	xiz
@@ -8038,24 +7668,18 @@ SeqChan_ReadNextFromLoop:
 	pushw	1
 	pushw	1
 	push	xiz
-	calr	59274
+	calr	SeqByteBlock_PathNormalize_Helper2
 	inc	8, xsp
 	ld	(xsp+4), hl
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jrl	nz, 136
+	cpw	(xsp+4), 0
+	jrl	nz, SeqByteBlock_PathNormalize_Helper10_Skip19
 	pushw	0
 	push	xiz
-	calr	63449
+	calr	SeqByteBlock_PathNormalize_Helper8
 	inc	6, xsp
 	ld	(xsp+4), hl
-	.byte 0x9f, 0x04
-	push	xsp
-	nop
-	nop
-	jr	nz, 117
+	cpw	(xsp+4), 0
+	jr	nz, SeqByteBlock_PathNormalize_Helper10_Skip19
 	ld	xwa, (xiz+34)
 	lda	xwa, (xwa+26)
 	ld	(xsp+6), xwa
@@ -8091,19 +7715,14 @@ SeqChan_ReadNextFromLoop:
 	calr	SeqStep_FileSectorReturn
 	lda	xsp, (xsp+28)
 	ld	xwa, (xiz+34)
-	.byte 0xb8
-	ex_ff
-	.byte 0xb9
+	setm	1, (xwa+22)
 	ld	xwa, (xiz+34)
-	.byte 0xb8
-	ex_ff
-	call	(xhl)
-	.byte 0xa8
+	resm	3, (xwa+22)
+	ld	xwa, 0:i3
 	ld	(xiz+71), xwa
 	ld	(xiz+64), 16
-	.byte 0xbe
-	pop	sr
-	.byte 0xbf
+	setm	7, (xiz+3)
+SeqByteBlock_PathNormalize_Helper10_Skip19:
 	ld	hl, (xsp+4)
 	pop	xiz
 	lda	xsp, (xsp+30)
@@ -8167,11 +7786,8 @@ SeqByteBlock_PathNormalize_Skip31:
 	ld	xwa, (xiz+71)
 	ld	(xbc+71), xwa
 	ld	(xiz+52), 229
-	.byte 0xbe
-	pop	sr
-	.byte 0xbf, 0xb9
-	pop	sr
-	.byte 0xbf
+	setm	7, (xiz+3)
+	setm	7, (xbc+3)
 SeqByteBlock_PathNormalize_Join12:
 	ld	hl, 0:i3
 	jr	SeqByteBlock_PathNormalize_Epilogue12
@@ -8180,9 +7796,7 @@ SeqByteBlock_PathNormalize_Skip32:
 	calr	SeqByteBlock_PathNormalize_Helper5
 	inc	4, xsp
 	ld	(xiz+52), 229
-	.byte 0xbe
-	pop	sr
-	.byte 0xbf
+	setm	7, (xiz+3)
 	jr	SeqByteBlock_PathNormalize_Join12
 SeqByteBlock_PathNormalize_Skip33:
 	ldw	(0x1e53c:24), 18
@@ -8249,10 +7863,8 @@ SeqStep_CalcTotalSectors:
 
 SeqStep_SectorCompareBlock:
 	ld	xde, (xsp+4)
-	.byte 0x9f
-	ld	(63:8), 0:io
-	nop
-	jr	z, 40
+	cpw	(xsp+8), 0
+	jr	z, SeqStep_SectorCompareBlock_Skip4
 	ld	bc, (xsp+10)
 	and	bc, 24
 	ld	a, (xde+64)
@@ -8266,11 +7878,10 @@ SeqStep_SectorCompareBlock:
 SeqStep_SectorCompareBlock_Skip:
 	ld	wa, (xsp+10)
 	ld	(xde+64), a
-	.byte 0xba
-	pop	sr
-	ld	(xsp-118), w
-	ld	l, 219:opc
-	ccf
+	setm	7, (xde+3)
+SeqStep_SectorCompareBlock_Skip4:
+	ld	l, (xde+64)
+	extz	hl
 	ret
 	dec	2, xsp
 	push	xiz
@@ -8286,9 +7897,7 @@ SeqStep_SectorCompareBlock_Skip:
 	ldw	hl, 0xffff
 	jr	SeqStep_SectorCompareBlock_Epilogue
 SeqStep_SectorCompareBlock_Entry:
-	.byte 0x9f
-	ret
-	.byte 0x04
+	pushm	(xsp+14)
 	pushw	1
 	push	xiz
 	calr	SeqStep_SectorCompareBlock
@@ -8413,15 +8022,10 @@ SeqChan_ByteBlockC_Skip2:
 	jr	SeqChan_ByteBlockC_Epilogue
 SeqChan_ByteBlockC_Skip3:
 	push	xiz
-	.byte 0x9f
-	ex_ff
-	.byte 0x04, 0x9f
-	ex_ff
-	.byte 0x04, 0x9f
-	push_a
-	.byte 0x04, 0x9f
-	push_f
-	.byte 0x04
+	pushm	(xsp+22)
+	pushm	(xsp+22)
+	pushm	(xsp+20)
+	pushm	(xsp+24)
 	ld	xwa, (xsp+20)
 	ld	a, (xwa+4)
 	extz	wa
@@ -8435,21 +8039,16 @@ SeqChan_ByteBlockC_Epilogue:
 SeqChan_ByteBlockD:
 	ld	xwa, (xsp+16)
 	push	xwa
-	.byte 0x9f
-	ccf
-	.byte 0x04, 0x9f
-	ccf
-	.byte 0x04, 0x9f
-	rcf
-	.byte 0x04, 0x9f
-	push_a
-	.byte 0x04
+	pushm	(xsp+18)
+	pushm	(xsp+18)
+	pushm	(xsp+16)
+	pushm	(xsp+20)
 	ld	xwa, (xsp+16)
 	ld	a, (xwa+4)
 	extz	wa
 	pushw	wa
 	pushw	4
-	calr	65254
+	calr	SeqStep_ParseVariableHeader
 	lda	xsp, (xsp+16)
 	ret
 SeqChan_ByteBlockD_Helper:
@@ -8457,22 +8056,20 @@ SeqChan_ByteBlockD_Helper:
 	push	xiz
 	ld	xiz, (xsp+14)
 	ld	xbc, (xsp+10)
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	cpw	(xbc), 0
-	jr	nz, 5
+	jr	nz, SeqChan_ByteBlockD_Helper_Skip
 	ld	hl, 0:i3
-	jrl	220
+	jrl	SeqChan_ByteBlockD_Epilogue
+SeqChan_ByteBlockD_Helper_Skip:
 	incw	1, (0x2271e:24)
 	ld	wa, (xbc)
 	cp	wa, 49
-	jr	z, 116
+	jr	z, SeqChan_ByteBlockD_Helper_Skip3
 	cp	wa, 48
-	jr	z, 110
+	jr	z, SeqChan_ByteBlockD_Helper_Skip3
 	cp	wa, 6:i3
-	jr	z, 67
+	jr	z, SeqChan_ByteBlockD_Helper_Skip2
 	cp	wa, 51
 	jr	z, SeqChan_ByteBlockD_Skip
 	cp	wa, 53
@@ -8484,11 +8081,8 @@ SeqChan_ByteBlockD_Helper:
 	jrl	SeqChan_ByteBlockD_Epilogue
 SeqChan_ByteBlockD_Skip:
 	ld	xwa, (xiz)
-	.byte 0xb8
-	push	sr
-	.byte 0xb3, 0xb1
-	push	sr
-	ld	a, 0:opc
+	resm	3, (xwa+2)
+	ldw	(xbc), 33
 	ld	xwa, (xiz)
 	push	xwa
 	calr	SeqChan_ByteBlockA
@@ -8501,17 +8095,12 @@ SeqChan_ByteBlockD_Skip:
 	ld	(xiz+20), hl
 	jr	SeqChan_ByteBlockD_Entry3
 SeqChan_ByteBlockD_Entry:
-	.byte 0xbf, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xsp+4), 1
 	jr	SeqChan_ByteBlockD_Entry3
+SeqChan_ByteBlockD_Helper_Skip2:
 	ld	xwa, (xiz)
-	.byte 0xb8
-	push	sr
-	.byte 0xb3, 0xb1
-	push	sr
-	ei	0
+	resm	3, (xwa+2)
+	ldw	(xbc), 6
 	ld	xwa, (xiz)
 	ld	xwa, (xwa+26)
 	ld	xwa, (xiz)
@@ -8523,17 +8112,12 @@ SeqChan_ByteBlockD_Entry:
 	ld	(xiz+20), hl
 	jr	SeqChan_ByteBlockD_Entry3
 SeqChan_ByteBlockD_Entry2:
-	.byte 0xbf, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xsp+4), 1
 	jr	SeqChan_ByteBlockD_Entry3
+SeqChan_ByteBlockD_Helper_Skip3:
 	ld	xwa, (xiz)
-	.byte 0xb8
-	push	sr
-	.byte 0xb3, 0xb1
-	push	sr
-	ld	w, 0:opc
+	resm	3, (xwa+2)
+	ldw	(xbc), 32
 	ld	xwa, (xiz)
 	push	xwa
 	calr	SeqChan_ByteBlockA
@@ -8550,11 +8134,8 @@ SeqChan_ByteBlockD_Skip2:
 	jr	SeqChan_ByteBlockD_Epilogue
 SeqChan_ByteBlockD_Skip3:
 	ld	xwa, (xiz)
-	.byte 0xb8
-	push	sr
-	.byte 0xb3, 0xb1
-	push	sr
-	ld	d, 0:opc
+	resm	3, (xwa+2)
+	ldw	(xbc), 36
 	ld	xwa, (xiz)
 	push	xwa
 	calr	SeqChan_ByteBlockA
@@ -8563,22 +8144,17 @@ SeqChan_ByteBlockD_Skip3:
 	call	SeqByteBlock_StyleBitmapRef_0x736
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	z, 5
+	jr	z, SeqChan_ByteBlockD_Helper_Skip4
 	ld	(xiz+20), hl
-	jr	5
-	.byte 0xbf, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	jr	SeqChan_ByteBlockD_Entry3
+SeqChan_ByteBlockD_Helper_Skip4:
+	ldw	(xsp+4), 1
 SeqChan_ByteBlockD_Entry3:
-	.byte 0xd2
-	calr	551
-	push	xsp
-	normal
-	nop
-	jr	lt, 4
+	cpw_da	(141086), 1
+	jr	lt, SeqChan_ByteBlockD_Helper_Skip5
 	ld	hl, 0:i3
-	jr	3
+	jr	SeqChan_ByteBlockD_Epilogue
+SeqChan_ByteBlockD_Helper_Skip5:
 	ld	hl, (xsp+4)
 SeqChan_ByteBlockD_Epilogue:
 	pop	xiz
@@ -8595,9 +8171,8 @@ SeqChan_ByteBlockE:
 	ld	xhl, (xsp+18)
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
-	.byte 0x98
-	ldw	de, 0xd751
-	.byte 0xe6, 0x88
+	div	bc, (xwa+50)
+	ld	wa, qbc
 	ld	(xsp+10), wa
 	ld	xwa, (xsp+2)
 	ld	bc, (xwa+50)
@@ -8606,30 +8181,27 @@ SeqChan_ByteBlockE:
 	call	Math_DivideU32
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
-	.byte 0x98
-	ldw	ix, 0xd751
-	.byte 0xe6, 0x88
+	div	bc, (xwa+52)
+	ld	wa, qbc
 	ld	(xsp+6), wa
 	ld	xwa, (xsp+2)
-	.byte 0x98
-	ldw	ix, 0xbf53
-	ld	(83:8), 175:io
-	ex_ff
-	ld	w, 168:opc
-	incf
-	ld	w, 232:opc
-	.byte 0xe0
-	jrl	z, 148
+	div	hl, (xwa+52)
+	ld	(xsp+8), hl
+SeqChan_ByteBlockD_Helper_Loop:
+	ld	xwa, (xsp+22)
+	ld	xwa, (xwa+12)
+	or	xwa, xwa
+	jrl	z, SeqChan_ByteBlockD_Helper_Skip7
+SeqChan_ByteBlockD_Helper_Loop2:
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa+50)
-	.byte 0x9f
-	ldw	(166:8), 5807:io
-	ld	w, 152:opc
-	rcf
-	swi	6
-	jr	nc, 6
+	sub	iz, (xsp+10)
+	ld	xwa, (xsp+22)
+	cp	(xwa+16), iz
+	jr	nc, SeqChan_ByteBlockD_Helper_Skip6
 	ld	xwa, (xsp+22)
 	ld	iz, (xwa+16)
+SeqChan_ByteBlockD_Helper_Skip6:
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa+12)
 	push	xwa
@@ -8645,47 +8217,39 @@ SeqChan_ByteBlockE:
 	ld	xwa, (xsp+34)
 	ld	xwa, (xwa)
 	push	xwa
-	calr	64950
+	calr	SeqChan_ByteBlockC
 	lda	xsp, (xsp+16)
 	ld	(xsp+12), hl
 	ld	wa, (xsp+12)
 	cp	wa, 0:i3
-	jr	nz, 118
+	jr	nz, SeqChan_ByteBlockD_Helper_Skip8
 	ld	xwa, (xsp+22)
 	sub	(xwa+16), iz
 	ld	xwa, (xsp+22)
-	.byte 0x98
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 102
+	cpw	(xwa+16), 0
+	jr	z, SeqChan_ByteBlockD_Helper_Skip8
 	ld	xwa, (xsp+22)
 	lda	xde, (xwa+12)
 	ld	bc, iz
 	ld	xwa, (xsp+2)
-	.byte 0x98
-	ld	h, 65:opc
+	mul	bc, (xwa+38)
 	.byte 0xa2, 0x81
 	ld	(xde), xbc
 	add	(xsp+10), iz
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+10)
-	.byte 0x98
-	ldw	de, 0x67f1
-	.byte 0x8b, 0xbf
-	ldw	(2:8), 0:io
+	cp	bc, (xwa+50)
+	jr	c, SeqChan_ByteBlockD_Helper_Loop2
+	ldw	(xsp+10), 0
 	incw	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)
-	.byte 0x98
-	ldw	ix, 0x7ef1
-	jrl	c, -16385
-	ei	2
-	nop
-	nop
+	cp	bc, (xwa+52)
+	jrl	nz, SeqChan_ByteBlockD_Helper_Loop2
+	ldw	(xsp+6), 0
 	incw	1, (xsp+8)
-	jrl	-148
+	jrl	SeqChan_ByteBlockD_Helper_Loop2
+SeqChan_ByteBlockD_Helper_Skip7:
 	ld	xwa, (xsp+22)
 	lda	xwa, (xwa+26)
 	push	xwa
@@ -8703,6 +8267,7 @@ SeqChan_ByteBlockE:
 	calr	SeqChan_ByteBlockC
 	lda	xsp, (xsp+16)
 	ld	(xsp+12), hl
+SeqChan_ByteBlockD_Helper_Skip8:
 	ld	xwa, (xsp+22)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -8710,7 +8275,7 @@ SeqChan_ByteBlockE:
 	calr	SeqChan_ByteBlockD_Helper
 	inc	8, xsp
 	cp	hl, 0:i3
-	jrl	nz, -216
+	jrl	nz, SeqChan_ByteBlockD_Helper_Loop
 	ld	hl, (xsp+12)
 	popw	iz
 	lda	xsp, (xsp+12)
@@ -8726,9 +8291,8 @@ SeqChan_ByteBlockF:
 	ld	xhl, (xsp+18)
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
-	.byte 0x98
-	ldw	de, 0xd751
-	.byte 0xe6, 0x88
+	div	bc, (xwa+50)
+	ld	wa, qbc
 	ld	(xsp+10), wa
 	ld	xwa, (xsp+2)
 	ld	bc, (xwa+50)
@@ -8737,30 +8301,27 @@ SeqChan_ByteBlockF:
 	call	Math_DivideU32
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
-	.byte 0x98
-	ldw	ix, 0xd751
-	.byte 0xe6, 0x88
+	div	bc, (xwa+52)
+	ld	wa, qbc
 	ld	(xsp+6), wa
 	ld	xwa, (xsp+2)
-	.byte 0x98
-	ldw	ix, 0xbf53
-	ld	(83:8), 175:io
-	ex_ff
-	ld	w, 168:opc
-	incf
-	ld	w, 232:opc
-	.byte 0xe0
-	jrl	z, 148
+	div	hl, (xwa+52)
+	ld	(xsp+8), hl
+SeqChan_ByteBlockD_Helper_Loop3:
+	ld	xwa, (xsp+22)
+	ld	xwa, (xwa+12)
+	or	xwa, xwa
+	jrl	z, SeqChan_ByteBlockD_Helper_Skip10
+SeqChan_ByteBlockD_Helper_Loop4:
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa+50)
-	.byte 0x9f
-	ldw	(166:8), 5807:io
-	ld	w, 152:opc
-	rcf
-	swi	6
-	jr	nc, 6
+	sub	iz, (xsp+10)
+	ld	xwa, (xsp+22)
+	cp	(xwa+16), iz
+	jr	nc, SeqChan_ByteBlockD_Helper_Skip9
 	ld	xwa, (xsp+22)
 	ld	iz, (xwa+16)
+SeqChan_ByteBlockD_Helper_Skip9:
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa+12)
 	push	xwa
@@ -8776,47 +8337,39 @@ SeqChan_ByteBlockF:
 	ld	xwa, (xsp+34)
 	ld	xwa, (xwa)
 	push	xwa
-	calr	64809
+	calr	SeqChan_ByteBlockD
 	lda	xsp, (xsp+16)
 	ld	(xsp+12), hl
 	ld	wa, (xsp+12)
 	cp	wa, 0:i3
-	jr	nz, 118
+	jr	nz, SeqChan_ByteBlockD_Helper_Skip11
 	ld	xwa, (xsp+22)
 	sub	(xwa+16), iz
 	ld	xwa, (xsp+22)
-	.byte 0x98
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 102
+	cpw	(xwa+16), 0
+	jr	z, SeqChan_ByteBlockD_Helper_Skip11
 	ld	xwa, (xsp+22)
 	lda	xde, (xwa+12)
 	ld	bc, iz
 	ld	xwa, (xsp+2)
-	.byte 0x98
-	ld	h, 65:opc
+	mul	bc, (xwa+38)
 	.byte 0xa2, 0x81
 	ld	(xde), xbc
 	add	(xsp+10), iz
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+10)
-	.byte 0x98
-	ldw	de, 0x67f1
-	.byte 0x8b, 0xbf
-	ldw	(2:8), 0:io
+	cp	bc, (xwa+50)
+	jr	c, SeqChan_ByteBlockD_Helper_Loop4
+	ldw	(xsp+10), 0
 	incw	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)
-	.byte 0x98
-	ldw	ix, 0x7ef1
-	jrl	c, -16385
-	ei	2
-	nop
-	nop
+	cp	bc, (xwa+52)
+	jrl	nz, SeqChan_ByteBlockD_Helper_Loop4
+	ldw	(xsp+6), 0
 	incw	1, (xsp+8)
-	jrl	-148
+	jrl	SeqChan_ByteBlockD_Helper_Loop4
+SeqChan_ByteBlockD_Helper_Skip10:
 	ld	xwa, (xsp+22)
 	lda	xwa, (xwa+26)
 	push	xwa
@@ -8834,6 +8387,7 @@ SeqChan_ByteBlockF:
 	calr	SeqChan_ByteBlockD
 	lda	xsp, (xsp+16)
 	ld	(xsp+12), hl
+SeqChan_ByteBlockD_Helper_Skip11:
 	ld	xwa, (xsp+22)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -8841,7 +8395,7 @@ SeqChan_ByteBlockF:
 	calr	SeqChan_ByteBlockD_Helper
 	inc	8, xsp
 	cp	hl, 0:i3
-	jrl	nz, -216
+	jrl	nz, SeqChan_ByteBlockD_Helper_Loop3
 	ld	hl, (xsp+12)
 	popw	iz
 	lda	xsp, (xsp+12)
@@ -9814,8 +9368,8 @@ GetDiskFreeSpace_JumpTable:
 	ld	xwa, 0x163e00
 	ld	(xiz), xwa
 	jr	FileIO_ReadFreeSpaceViaFAT
-	.byte 0x40, 0x00
-	ld	xwa, 0x60b6000b
+	ld	xwa, 737280
+	ld	(xiz), xwa
 
 FileIO_ReadFreeSpaceViaFAT:
 	pushw 0xe4
@@ -10517,11 +10071,7 @@ FileIO_ReadDirEntry_Return:
 	ret
 
 SndTable_ByteBlock_ReadOps:
-	.byte 0xc2
-	or	xhl, xix
-	pop	sr
-	push	xsp
-	nop
+	cpib_da	(254956), 0
 	jr	nz, SndTable_ByteBlock_ReadOps_Code_Entry
 	ld	xbc, (0x2357a:24)
 	push	xbc
@@ -10538,21 +10088,19 @@ SndTable_ByteBlock_ReadOps_Code_Skip:
 	ld	xwa, (0x2357a:24)
 	ld	wa, (xwa+6)
 	and	wa, 0x7fff
-	jr	nz, 3
+	jr	nz, SndTable_ByteBlock_ReadOps_Skip
 	ld	hl, 0:i3
 	ret
+SndTable_ByteBlock_ReadOps_Skip:
 	ldw	hl, 0xffff
 	ret
 SndTable_ByteBlock_ReadOps_Code_Entry:
-	.byte 0xc2
-	or	xhl, xix
-	pop	sr
-	push	xsp
-	normal
-	jr	nz, 6
-	calr	759
+	cpib_da	(254956), 1
+	jr	nz, SndTable_ByteBlock_ReadOps_Skip2
+	calr	FDC_SectorCmd_ByteBlock
 	extz	hl
 	ret
+SndTable_ByteBlock_ReadOps_Skip2:
 	ldw	hl, 0xffff
 	ret
 	dec	2, xsp
@@ -10563,11 +10111,7 @@ SndTable_ByteBlock_ReadOps_Code_Entry:
 	ld	xwa, (0x3e3ee:24)
 	ldw	(xwa+2), 0
 	ld	xwa, (0x3e3ee:24)
-	.byte 0xf3, 0xe1
-	ei	4
-	push	sr
-	nop
-	nop
+	ldw	(xwa+1030), 0
 	ld	xbc, (0x3e3ee:24)
 	ld	wa, 2:i3
 	call	TaskMsg_Send
@@ -10576,33 +10120,28 @@ SndTable_ByteBlock_ReadOps_Code_Entry:
 	ld	xbc, xwa
 	ld	wa, 2:i3
 	call	TaskMsg_Send
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	ld	wa, (xsp+4)
 	extz	xwa
 	cp xwa, (141102:24)
-	jrl	ugt, 134
+	jrl	ugt, SndTable_ByteBlock_ReadOps_Code_Join
+SndTable_ByteBlock_ReadOps_Loop:
 	ld	wa, 2:i3
 	call	TaskMsg_Receive
 	ld	xiz, xhl
-	.byte 0x9e
-	push	sr
-	push	xsp
-	nop
-	nop
-	jr	z, 17
+	cpw	(xiz+2), 0
+	jr	z, SndTable_ByteBlock_ReadOps_Skip3
 	ldw (xiz+2), 65534
 	ld	xwa, xiz
 	ld	xbc, xwa
 	ld	wa, 3:i3
 	call	TaskMsg_Send
-	jr	102
+	jr	SndTable_ByteBlock_ReadOps_Code_Join
+SndTable_ByteBlock_ReadOps_Skip3:
 	lda	xwa, (xiz+4)
-	calr	65336
+	calr	SndTable_ByteBlock_ReadOps
 	cp	hl, 0:i3
-	jr	z, 21
+	jr	z, SndTable_ByteBlock_ReadOps_Skip4
 	ldw (xiz), 0
 	ldw (xiz+2), 65534
 	ld	xwa, xiz
@@ -10610,10 +10149,8 @@ SndTable_ByteBlock_ReadOps_Code_Entry:
 	ld	wa, 3:i3
 	call	TaskMsg_Send
 	jr	SndTable_ByteBlock_ReadOps_Code_Join
-	.byte 0xb6
-	push	sr
-	nop
-	.byte 0x04
+SndTable_ByteBlock_ReadOps_Skip4:
+	ldw	(xiz), 1024
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, (0x2272e:24)
@@ -10631,14 +10168,11 @@ SndTable_ByteBlock_ReadOps_Code_Skip2:
 	ld	xbc, xwa
 	ld	wa, 3:i3
 	call	TaskMsg_Send
-	.byte 0x9f, 0x04
-	push	xwa
-	nop
-	max
+	addiw_da	(xsp+4), 1024
 	ld	wa, (xsp+4)
 	extz	xwa
 	cp xwa, (141102:24)
-	jrl	ule, -134
+	jrl	ule, SndTable_ByteBlock_ReadOps_Loop
 SndTable_ByteBlock_ReadOps_Code_Join:
 	ld	(0x2357e:24), 0
 	call	Show_ScreenGroup_Entry_0x7A
