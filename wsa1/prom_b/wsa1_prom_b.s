@@ -139869,32 +139869,21 @@ sub_F65D26_Skip2:
 	ld	a, (3078:16)	; F65DC4  ld A,(0x0c06)
 sub_F65D26_Join2:
 	ld	a, 170:opc	; F65DC8  ld A,0xaa
-	jr	Data_F65DCC_Code_Return	; F65DCA  jr T,0xf65dd2
+	jr	sub_F65DAE_Return	; F65DCA  jr T,0xf65dd2
 
 ; --------------------------------------------------------------------------
-; Data_F65DCC -- 6 bytes this block could not split.  It is neither a
-;                pointer table, a RAM-pointer table, a bit-weight table, an
-;                index map nor a 20-byte string, and the code walk never
-;                reached it, so it is emitted as bytes rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, and round 4 of this lane
-;   emitted them as instructions for that reason.  The decode does not end
-;   in a `ret`/`reti`/unconditional transfer, and the rule that ignores that
-;   -- round 4's selfconsistent() -- accepts 13.9% of record-aligned chunks
-;   of PROVEN display-list data as code (`python3
-;   notes/prom_b_f0ea9f_layout.py --null-accept`).  Adding the tail
-;   requirement takes that to 1 of 1,884.  So this run is data until
-;   something reaches it.
-; Contains: printable text |!U... |
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched) and is stated as such.
-; Unknown: everything about it except its bytes.
+; UNREACHED CODE, not data (was `Data_F65DCC`), part of sub_F65DAE:
+;   `ld A,0x55 / ld W,(0x0C03)` beside the arm that sets A = 0xAA; (0x0C03) is the cell the
+;   routine compares A with at its entry (0xF65DAE); the decode ends on the `ret` the jr above
+;   targets.
+;   Nothing in prom_b branches to, calls or spells 0xF65DCC (code_islands.py searches every
+;   jr/jrl/calr displacement and jp/call/24-bit operand); it is recorded as code because it
+;   decodes as such and fits the code beside it, not because it runs.
 ; --------------------------------------------------------------------------
-Data_F65DCC:
-	.byte	0x21, 0x55, 0xC1, 0x03, 0x0C, 0x20	; F65DCC  [0..5]
+	ld	a, 85:opc	; F65DCC  ld A,0x55
+	ld	w, (3075:16)	; F65DCE  ld W,(0x0c03)
 
-Data_F65DCC_Code_Return:
+sub_F65DAE_Return:
 	ret	; F65DD2  ret
 
 ; --------------------------------------------------------------------------
@@ -139920,32 +139909,19 @@ sub_F65DD3_Skip:
 	ld	a, (3078:16)	; F65DE9  ld A,(0x0c06)
 sub_F65DD3_Join:
 	ld	a, 170:opc	; F65DED  ld A,0xaa
-	jr	Data_F65DF1_Code_Return	; F65DEF  jr T,0xf65df7
+	jr	sub_F65DD3_Return	; F65DEF  jr T,0xf65df7
 
 ; --------------------------------------------------------------------------
-; Data_F65DF1 -- 6 bytes this block could not split.  It is neither a
-;                pointer table, a RAM-pointer table, a bit-weight table, an
-;                index map nor a 20-byte string, and the code walk never
-;                reached it, so it is emitted as bytes rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, and round 4 of this lane
-;   emitted them as instructions for that reason.  The decode does not end
-;   in a `ret`/`reti`/unconditional transfer, and the rule that ignores that
-;   -- round 4's selfconsistent() -- accepts 13.9% of record-aligned chunks
-;   of PROVEN display-list data as code (`python3
-;   notes/prom_b_f0ea9f_layout.py --null-accept`).  Adding the tail
-;   requirement takes that to 1 of 1,884.  So this run is data until
-;   something reaches it.
-; Contains: printable text |!U... |
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched) and is stated as such.
-; Unknown: everything about it except its bytes.
+; UNREACHED CODE, not data (was `Data_F65DF1`), part of sub_F65DD3:
+;   the same six bytes as 0xF65DCC, in the next routine.
+;   Nothing in prom_b branches to, calls or spells 0xF65DF1 (code_islands.py searches every
+;   jr/jrl/calr displacement and jp/call/24-bit operand); it is recorded as code because it
+;   decodes as such and fits the code beside it, not because it runs.
 ; --------------------------------------------------------------------------
-Data_F65DF1:
-	.byte	0x21, 0x55, 0xC1, 0x03, 0x0C, 0x20	; F65DF1  [0..5]
+	ld	a, 85:opc	; F65DF1  ld A,0x55
+	ld	w, (3075:16)	; F65DF3  ld W,(0x0c03)
 
-Data_F65DF1_Code_Return:
+sub_F65DD3_Return:
 	ret	; F65DF7  ret
 
 ; --------------------------------------------------------------------------
@@ -156955,52 +156931,39 @@ sub_F6D890:
 	ld	w, (xiy+6)	; F6D8BB  ld W,(XIY+0x06)
 	ld	(xix+6), w	; F6D8BE  ld (XIX+0x06),W
 	cp	l, 0:i3	; F6D8C1  cp L,0
-	jr	z, Data_F6D8EE_Code_Return	; F6D8C3  jr Z,0xf6d914
+	jr	z, sub_F6D890_Return	; F6D8C3  jr Z,0xf6d914
 	m_cp_mi8 MB16, 0x12b8, 0x01	; F6D8C5  cp (0x12b8),0x01
 	jr	nz, sub_F6D890_Skip	; F6D8CA  jr NZ,0xf6d8d2
 	call	sub_F6D963	; F6D8CC  call 0xf6d963
-	jr	Data_F6D8EE_Code_Return	; F6D8D0  jr T,0xf6d914
+	jr	sub_F6D890_Return	; F6D8D0  jr T,0xf6d914
 sub_F6D890_Skip:
 	ld	xix, 4089	; F6D8D2  ld XIX,0x00000ff9
 	ld	a, (4793:16)	; F6D8D7  ld A,(0x12b9)
 	bit	7, a	; F6D8DB  bit 0x07,A
-	jr	z, Data_F6D8EE_Code_Skip	; F6D8DE  jr Z,0xf6d8ff
+	jr	z, sub_F6D890_Skip2	; F6D8DE  jr Z,0xf6d8ff
 	and	a, 127	; F6D8E0  and A,0x7f
 	cp	a, 0:i3	; F6D8E3  cp A,0
-	jr	z, Data_F6D8EE_Code_Join	; F6D8E5  jr Z,0xf6d8f3
+	jr	z, sub_F6D890_Join	; F6D8E5  jr Z,0xf6d8f3
 	ld	xiy, Text_PBendMod1ExpPMemAftOnoff + 0x48	; F6D8E7  ld XIY,0x00f6d95d
-	jr	Data_F6D8EE_Code_Join	; F6D8EC  jr T,0xf6d8f3
+	jr	sub_F6D890_Join	; F6D8EC  jr T,0xf6d8f3
 
 ; --------------------------------------------------------------------------
-; Data_F6D8EE -- 5 bytes this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f6d002_layout.py --null-accept`).
-; Contains: printable bytes |E`...|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; UNREACHED CODE, not data (was `Data_F6D8EE`), part of sub_F6D890:
+;   `ld XIY,0x00F6D960` -- Text_PBendMod1ExpPMemAftOnoff + 0x4B, three bytes past the + 0x48 the
+;   parallel arm loads at 0xF6D8E7, and the decode ends on the join both arms reach.
+;   Nothing in prom_b branches to, calls or spells 0xF6D8EE (code_islands.py searches every
+;   jr/jrl/calr displacement and jp/call/24-bit operand); it is recorded as code because it
+;   decodes as such and fits the code beside it, not because it runs.
 ; --------------------------------------------------------------------------
-Data_F6D8EE:
-	.byte	0x45, 0x60, 0xD9, 0xF6, 0x00	; F6D8EE  [0..4]
+	ld	xiy, Text_PBendMod1ExpPMemAftOnoff + 0x4B	; F6D8EE  ld XIY,0x00f6d960
 
-Data_F6D8EE_Code_Join:
+sub_F6D890_Join:
 	ld	wa, (xiy)	; F6D8F3  ld WA,(XIY)
 	ld	(xix), wa	; F6D8F5  ld (XIX),WA
 	ld	a, (xiy+2)	; F6D8F7  ld A,(XIY+0x02)
 	ld	(xix+2), a	; F6D8FA  ld (XIX+0x02),A
-	jr	Data_F6D8EE_Code_Return	; F6D8FD  jr T,0xf6d914
-Data_F6D8EE_Code_Skip:
+	jr	sub_F6D890_Return	; F6D8FD  jr T,0xf6d914
+sub_F6D890_Skip2:
 	xor	w, w	; F6D8FF  xor W,W
 	call	T_F41AF0	; F6D901  call 0xf41af0
 	ld	xiy, 9825	; F6D905  ld XIY,0x00002661
@@ -157008,7 +156971,7 @@ Data_F6D8EE_Code_Skip:
 	ld	(xix), wa	; F6D90C  ld (XIX),WA
 	ld	a, (xiy+2)	; F6D90E  ld A,(XIY+0x02)
 	ld	(xix+2), a	; F6D911  ld (XIX+0x02),A
-Data_F6D8EE_Code_Return:
+sub_F6D890_Return:
 	ret	; F6D914  ret
 
 ; --------------------------------------------------------------------------
@@ -162432,6 +162395,7 @@ sub_F70008_Skip2:
 	ld	iy, (4304:16)	; F70027  ld IY,(0x10d0)
 	and	iy, 15	; F7002B  and IY,0x000f
 	extz	xiy	; F7002F  extz XIY
+sub_F70008_Loop:
 	m_bit 0, MD16, 0x11b1	; F70031  bit 0,(0x11b1)
 	jr	nz, sub_F70008_Skip3	; F70035  jr NZ,0xf7003f
 	calr	sub_F701F1	; F70037  calr 0xf701f1
@@ -162471,7 +162435,7 @@ sub_F70008_Skip3:
 	pop	xhl	; F700A9  pop XHL
 	pop	xiy	; F700AA  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700AB  cp (0x1238),0x00
-	jrl	nz, Data_F701E8_Code_Return	; F700B0  jrl NZ,0xf701f0
+	jrl	nz, sub_F70008_Return	; F700B0  jrl NZ,0xf701f0
 	sla	xiy, 1	; F700B3  sla 0x01,XIY
 	push	xix	; F700B6  push XIX
 	ld	xix, 4307	; F700B7  ld XIX,0x000010d3
@@ -162489,7 +162453,7 @@ sub_F70008_Skip3:
 	pop	xiy	; F700D1  pop XIY
 	pop	xhl	; F700D2  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700D3  cp (0x1238),0x00
-	jrl	nz, Data_F701E8_Code_Return	; F700D8  jrl NZ,0xf701f0
+	jrl	nz, sub_F70008_Return	; F700D8  jrl NZ,0xf701f0
 	push	xix	; F700DB  push XIX
 	ld	xix, ByteMap_F70298 + 0x10	; F700DC  ld XIX,0x00f702a8
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F700E1  ld A,(XIX+IY)
@@ -162500,7 +162464,7 @@ sub_F70008_Skip3:
 	pop	xiy	; F700EC  pop XIY
 	pop	xhl	; F700ED  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700EE  cp (0x1238),0x00
-	jrl	nz, Data_F701E8_Code_Return	; F700F3  jrl NZ,0xf701f0
+	jrl	nz, sub_F70008_Return	; F700F3  jrl NZ,0xf701f0
 	xor	a, a	; F700F6  xor A,A
 	push	xhl	; F700F8  push XHL
 	push	xiy	; F700F9  push XIY
@@ -162508,25 +162472,25 @@ sub_F70008_Skip3:
 	pop	xiy	; F700FD  pop XIY
 	pop	xhl	; F700FE  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700FF  cp (0x1238),0x00
-	jrl	nz, Data_F701E8_Code_Return	; F70104  jrl NZ,0xf701f0
+	jrl	nz, sub_F70008_Return	; F70104  jrl NZ,0xf701f0
 	ld	a, (6352916:24)	; F70107  ld A,(0x60f014)
 	and	a, 127	; F7010C  and A,0x7f
 	push	xiy	; F7010F  push XIY
 	calr	sub_F70FDA	; F70110  calr 0xf70fda
 	pop	xiy	; F70113  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70114  cp (0x1238),0x00
-	jrl	nz, Data_F701E8_Code_Return	; F70119  jrl NZ,0xf701f0
+	jrl	nz, sub_F70008_Return	; F70119  jrl NZ,0xf701f0
 	ld	a, (6352917:24)	; F7011C  ld A,(0x60f015)
 	and	a, 127	; F70121  and A,0x7f
 	push	xiy	; F70124  push XIY
 	calr	sub_F70FDA	; F70125  calr 0xf70fda
 	pop	xiy	; F70128  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70129  cp (0x1238),0x00
-	jrl	nz, Data_F701E8_Code_Return	; F7012E  jrl NZ,0xf701f0
+	jrl	nz, sub_F70008_Return	; F7012E  jrl NZ,0xf701f0
 	calr	sub_F7129A	; F70131  calr 0xf7129a
 	calr	sub_F71275	; F70134  calr 0xf71275
 	ld	(4664:16), 0	; F70137  ld (0x1238),0x00
-	jrl	Data_F701E8_Code_Return	; F7013C  jrl T,0xf701f0
+	jrl	sub_F70008_Return	; F7013C  jrl T,0xf701f0
 sub_F70008_Skip4:
 	push	xiy	; F7013F  push XIY
 	calr	sub_F7124E	; F70140  calr 0xf7124e
@@ -162536,7 +162500,7 @@ sub_F70008_Skip4:
 	calr	sub_F70FDA	; F70147  calr 0xf70fda
 	pop	xiy	; F7014A  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7014B  cp (0x1238),0x00
-	jrl	nz, Data_F701E8_Code_Return	; F70150  jrl NZ,0xf701f0
+	jrl	nz, sub_F70008_Return	; F70150  jrl NZ,0xf701f0
 	sla	xiy, 1	; F70153  sla 0x01,XIY
 	push	xix	; F70156  push XIX
 	ld	xix, 4307	; F70157  ld XIX,0x000010d3
@@ -162550,7 +162514,7 @@ sub_F70008_Skip4:
 	calr	sub_F70FDA	; F7016B  calr 0xf70fda
 	pop	xiy	; F7016E  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7016F  cp (0x1238),0x00
-	jr	nz, Data_F701E8_Code_Return	; F70174  jr NZ,0xf701f0
+	jr	nz, sub_F70008_Return	; F70174  jr NZ,0xf701f0
 	push	xix	; F70176  push XIX
 	ld	xix, ByteMap_F70298	; F70177  ld XIX,0x00f70298
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F7017C  ld A,(XIX+IY)
@@ -162559,19 +162523,19 @@ sub_F70008_Skip4:
 	calr	sub_F70FDA	; F70183  calr 0xf70fda
 	pop	xiy	; F70186  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70187  cp (0x1238),0x00
-	jr	nz, Data_F701E8_Code_Return	; F7018C  jr NZ,0xf701f0
+	jr	nz, sub_F70008_Return	; F7018C  jr NZ,0xf701f0
 	ld	a, 0:opc	; F7018E  ld A,0x00
 	push	xiy	; F70190  push XIY
 	calr	sub_F70FDA	; F70191  calr 0xf70fda
 	pop	xiy	; F70194  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70195  cp (0x1238),0x00
-	jr	nz, Data_F701E8_Code_Return	; F7019A  jr NZ,0xf701f0
+	jr	nz, sub_F70008_Return	; F7019A  jr NZ,0xf701f0
 	ld	a, (4305:16)	; F7019C  ld A,(0x10d1)
 	push	xiy	; F701A0  push XIY
 	calr	sub_F70FDA	; F701A1  calr 0xf70fda
 	pop	xiy	; F701A4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F701A5  cp (0x1238),0x00
-	jr	nz, Data_F701E8_Code_Return	; F701AA  jr NZ,0xf701f0
+	jr	nz, sub_F70008_Return	; F701AA  jr NZ,0xf701f0
 	push	xix	; F701AC  push XIX
 	ld	xix, 4260	; F701AD  ld XIX,0x000010a4
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F701B2  ld A,(XIX+IY)
@@ -162585,31 +162549,24 @@ sub_F70008_Skip4:
 	or	a, w	; F701CE  or A,W
 	call	sub_F70FDA	; F701D0  call 0xf70fda
 	m_cp_mi8 MB16, 0x1238, 0x00	; F701D4  cp (0x1238),0x00
-	jr	nz, Data_F701E8_Code_Return	; F701D9  jr NZ,0xf701f0
+	jr	nz, sub_F70008_Return	; F701D9  jr NZ,0xf701f0
 	calr	sub_F7129A	; F701DB  calr 0xf7129a
 	calr	sub_F71275	; F701DE  calr 0xf71275
 	ld	(4664:16), 0	; F701E1  ld (0x1238),0x00
-	jr	Data_F701E8_Code_Return	; F701E6  jr T,0xf701f0
+	jr	sub_F70008_Return	; F701E6  jr T,0xf701f0
 
 ; --------------------------------------------------------------------------
-; Data_F701E8 -- 8 bytes this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; Contains: printable bytes |.9.?.vA.|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; UNREACHED CODE, not data (was `Data_F701E8`), part of sub_F70008:
+;   `cp (0x1239),0xFF / jrl Z,0xF70031` -- the same shape as 0xF72074; 0xF70031 is an
+;   instruction start of this source.
+;   Nothing in prom_b branches to, calls or spells 0xF701E8 (code_islands.py searches every
+;   jr/jrl/calr displacement and jp/call/24-bit operand); it is recorded as code because it
+;   decodes as such and fits the code beside it, not because it runs.
 ; --------------------------------------------------------------------------
-Data_F701E8:
-	.byte	0xC1, 0x39, 0x12, 0x3F, 0xFF, 0x76, 0x41, 0xFE	; F701E8  [0..7]
+	m_cp_mi8 MB16, 0x1239, 0xff	; F701E8  cp (0x1239),0xff
+	jrl	z, sub_F70008_Loop	; F701ED  jrl Z,0xf70031
 
-Data_F701E8_Code_Return:
+sub_F70008_Return:
 	ret	; F701F0  ret
 
 ; --------------------------------------------------------------------------
@@ -164828,7 +164785,7 @@ sub_F710E7:
 	ld	e, (4506:16)	; F71103  ld E,(0x119a)
 	xor	d, d	; F71107  xor D,D
 	cp	de, 0:i3	; F71109  cp DE,0
-	jrl	z, Data_F71126_Code_Skip4	; F7110B  jrl Z,0xf711a1
+	jrl	z, sub_F710E7_Skip4	; F7110B  jrl Z,0xf711a1
 	pushw	wa	; F7110E  push WA
 	xor	wa, wa	; F7110F  xor WA,WA
 	ld	hl, (4220:16)	; F71111  ld HL,(0x107c)
@@ -164838,35 +164795,27 @@ sub_F710E7:
 	m_add_mr MW16, 0x1086, 0	; F7111D  add (0x1086),WA
 	popw	wa	; F71121  pop WA
 	add	de, bc	; F71122  add DE,BC
-	jr	nov, Data_F71126_Code_Skip	; F71124  jr PO/NOV,0xf7113d
+	jr	nov, sub_F710E7_Skip	; F71124  jr PO/NOV,0xf7113d
 
 ; --------------------------------------------------------------------------
-; Data_F71126 -- 23 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f6d002_layout.py --null-accept`).
-; Contains: printable bytes |(..2...|.#....P.......H|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; REACHED CODE, not data (was `Data_F71126`), part of sub_F710E7:
+;   the overflow arm of `jr nov` at 0xF71124: `push WA / ld WA,DE / ld DE,1 / ld HL,(0x107C) /
+;   ld QWA,DE / div XWA,HL / ld DE,QWA / add (0x1086),WA / pop WA` -- the same
+;   divide-and-accumulate the routine runs just above it.
 ; --------------------------------------------------------------------------
-Data_F71126:
-	.byte	0x28, 0xDA, 0x88, 0x32, 0x01, 0x00, 0xD1, 0x7C, 0x10, 0x23, 0xD7, 0xE2, 0x9A, 0xDB, 0x50, 0xD7	; F71126  [0..15]
-	.byte	0xE2, 0x8A, 0xD1, 0x86, 0x10, 0x88, 0x48	; F71136  [16..22]
+	pushw	wa	; F71126  push WA
+	ld	wa, de	; F71127  ld WA,DE
+	ldw	de, 1	; F71129  ld DE,0x0001
+	ld	hl, (4220:16)	; F7112C  ld HL,(0x107c)
+	ld	qwa, de	; F71130  ld QWA,DE
+	div	xwa, xhl	; F71133  div XWA,HL
+	ld	de, qwa	; F71135  ld DE,QWA
+	adddm16	(4230), xwa	; F71138  add (0x1086),WA
+	popw	wa	; F7113C  pop WA
 
-Data_F71126_Code_Skip:
+sub_F710E7_Skip:
 	add	wa, de	; F7113D  add WA,DE
-	jr	nov, Data_F71126_Code_Skip2	; F7113F  jr PO/NOV,0xf7116e
+	jr	nov, sub_F710E7_Skip2	; F7113F  jr PO/NOV,0xf7116e
 	ldw	de, 1	; F71141  ld DE,0x0001
 	ld	qwa, de	; F71144  ld QWA,DE
 	div	xwa, xhl	; F71147  div XWA,HL
@@ -164885,17 +164834,17 @@ Data_F71126_Code_Skip:
 	mx_st_mr16 MXD, ra_IX, ra_IY, 2	; F71162  ld (XIX+IY),DE
 	pop	xix	; F71167  pop XIX
 	srl	xiy, 1	; F71168  srl 0x01,XIY
-	jrl	Data_F71126_Code_Return	; F7116B  jrl T,0xf71202
-Data_F71126_Code_Skip2:
+	jrl	sub_F710E7_Return	; F7116B  jrl T,0xf71202
+sub_F710E7_Skip2:
 	m_cp_rm MW16, 0x107c, 0	; F7116E  cp WA,(0x107c)
-	jr	c, Data_F71126_Code_Skip3	; F71172  jr C,0xf71184
+	jr	c, sub_F710E7_Skip3	; F71172  jr C,0xf71184
 	xor	de, de	; F71174  xor DE,DE
 	ld	qwa, de	; F71176  ld QWA,DE
 	div	xwa, xhl	; F71179  div XWA,HL
 	ld	de, qwa	; F7117B  ld DE,QWA
 	m_add_mr MW16, 0x1086, 0	; F7117E  add (0x1086),WA
 	ld	wa, de	; F71182  ld WA,DE
-Data_F71126_Code_Skip3:
+sub_F710E7_Skip3:
 	pushw	wa	; F71184  push WA
 	pushw	de	; F71185  push DE
 	push	xiy	; F71186  push XIY
@@ -164909,10 +164858,10 @@ Data_F71126_Code_Skip3:
 	mx_st_mr16 MXD, ra_IX, ra_IY, 0	; F71196  ld (XIX+IY),WA
 	pop	xix	; F7119B  pop XIX
 	srl	xiy, 1	; F7119C  srl 0x01,XIY
-	jr	Data_F71126_Code_Return	; F7119F  jr T,0xf71202
-Data_F71126_Code_Skip4:
+	jr	sub_F710E7_Return	; F7119F  jr T,0xf71202
+sub_F710E7_Skip4:
 	add	wa, bc	; F711A1  add WA,BC
-	jr	nov, Data_F71126_Code_Skip5	; F711A3  jr PO/NOV,0xf711cf
+	jr	nov, sub_F710E7_Skip5	; F711A3  jr PO/NOV,0xf711cf
 	ldw	de, 1	; F711A5  ld DE,0x0001
 	ld	hl, (4220:16)	; F711A8  ld HL,(0x107c)
 	ld	qwa, de	; F711AC  ld QWA,DE
@@ -164930,11 +164879,11 @@ Data_F71126_Code_Skip4:
 	ld	xix, 4307	; F711C2  ld XIX,0x000010d3
 	mx_st_mr16 MXD, ra_IX, ra_IY, 2	; F711C7  ld (XIX+IY),DE
 	pop	xix	; F711CC  pop XIX
-	jr	Data_F71126_Code_Return	; F711CD  jr T,0xf71202
-Data_F71126_Code_Skip5:
+	jr	sub_F710E7_Return	; F711CD  jr T,0xf71202
+sub_F710E7_Skip5:
 	ld	hl, (4220:16)	; F711CF  ld HL,(0x107c)
 	cp	wa, hl	; F711D3  cp WA,HL
-	jr	c, Data_F71126_Code_Skip6	; F711D5  jr C,0xf711f0
+	jr	c, sub_F710E7_Skip6	; F711D5  jr C,0xf711f0
 	xor	de, de	; F711D7  xor DE,DE
 	ld	qwa, de	; F711D9  ld QWA,DE
 	div	xwa, xhl	; F711DC  div XWA,HL
@@ -164948,14 +164897,14 @@ Data_F71126_Code_Skip5:
 	popw	de	; F711EC  pop DE
 	popw	wa	; F711ED  pop WA
 	ld	wa, de	; F711EE  ld WA,DE
-Data_F71126_Code_Skip6:
+sub_F710E7_Skip6:
 	sla	iy, 1	; F711F0  sla 0x01,IY
 	push	xix	; F711F3  push XIX
 	ld	xix, 4307	; F711F4  ld XIX,0x000010d3
 	mx_st_mr16 MXD, ra_IX, ra_IY, 0	; F711F9  ld (XIX+IY),WA
 	pop	xix	; F711FE  pop XIX
 	srl	iy, 1	; F711FF  srl 0x01,IY
-Data_F71126_Code_Return:
+sub_F710E7_Return:
 	ret	; F71202  ret
 
 ; --------------------------------------------------------------------------
@@ -165123,41 +165072,31 @@ sub_F712B6_Loop:
 	ld	xix, 12378	; F712B9  ld XIX,0x0000305a
 	mx_bit 7, MXD, ra_IX, ra_IY	; F712BE  bit 7,(XIX+IY)
 	pop	xix	; F712C3  pop XIX
-	jr	z, Data_F712D7_Code_Skip2	; F712C4  jr Z,0xf712ec
+	jr	z, sub_F712B6_Skip2	; F712C4  jr Z,0xf712ec
 	calr	sub_F712FB	; F712C6  calr 0xf712fb
 	push	xix	; F712C9  push XIX
 	ld	xix, 12378	; F712CA  ld XIX,0x0000305a
 	add	xix, xiy	; F712CF  add XIX,XIY
 	m_add_rm MWD+r4, 0x05, 0	; F712D1  add WA,(XIX+0x05)
 	pop	xix	; F712D4  pop XIX
-	jr	ov, Data_F712D7_Code_Skip	; F712D5  jr PE/OV,0xf712dd
+	jr	ov, sub_F712B6_Skip	; F712D5  jr PE/OV,0xf712dd
 
 ; --------------------------------------------------------------------------
-; Data_F712D7 -- 6 bytes this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; Contains: printable bytes |.../g.|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; REACHED CODE, not data (was `Data_F712D7`), part of sub_F712B6:
+;   the no-overflow arm of `jr ov` at 0xF712D5: `cp WA,0x2FFF / jr ...`.
 ; --------------------------------------------------------------------------
-Data_F712D7:
-	.byte	0xD8, 0xCF, 0xFF, 0x2F, 0x67, 0x03	; F712D7  [0..5]
+	cp	wa, 12287	; F712D7  cp WA,0x2fff
+	jr	c, sub_F712B6_Skip3	; F712DB  jr C,0xf712e0
 
-Data_F712D7_Code_Skip:
+sub_F712B6_Skip:
 	ldw	wa, 12287	; F712DD  ld WA,0x2fff
+sub_F712B6_Skip3:
 	push	xix	; F712E0  push XIX
 	ld	xix, 12378	; F712E1  ld XIX,0x0000305a
 	add	xix, xiy	; F712E6  add XIX,XIY
 	ld	(xix+5), wa	; F712E8  ld (XIX+0x05),WA
 	pop	xix	; F712EB  pop XIX
-Data_F712D7_Code_Skip2:
+sub_F712B6_Skip2:
 	add	xiy, 7	; F712EC  add XIY,0x00000007
 	cp	xiy, 224	; F712F2  cp XIY,0x000000e0
 	jr	ule, sub_F712B6_Loop	; F712F8  jr ULE,0xf712b8
@@ -166610,6 +166549,7 @@ sub_F71E89_Skip:
 sub_F71E89_Skip2:
 	ld	iy, (4304:16)	; F71EA9  ld IY,(0x10d0)
 	and	iy, 15	; F71EAD  and IY,0x000f
+sub_F71E89_Loop:
 	ld	iy, (4530:16)	; F71EB1  ld IY,(0x11b2)
 	calr	sub_F728FE	; F71EB5  calr 0xf728fe
 	and	iy, 15	; F71EB8  and IY,0x000f
@@ -166656,7 +166596,7 @@ sub_F71E89_Skip3:
 	pop	xhl	; F71F3E  pop XHL
 	pop	xiy	; F71F3F  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F40  cp (0x1238),0x00
-	jrl	nz, Data_F72074_Code_Return	; F71F45  jrl NZ,0xf7207c
+	jrl	nz, sub_F71E89_Return	; F71F45  jrl NZ,0xf7207c
 	sla	iy, 1	; F71F48  sla 0x01,IY
 	push	xix	; F71F4B  push XIX
 	ld	xix, 4307	; F71F4C  ld XIX,0x000010d3
@@ -166674,7 +166614,7 @@ sub_F71E89_Skip3:
 	pop	xiy	; F71F66  pop XIY
 	pop	xhl	; F71F67  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F68  cp (0x1238),0x00
-	jrl	nz, Data_F72074_Code_Return	; F71F6D  jrl NZ,0xf7207c
+	jrl	nz, sub_F71E89_Return	; F71F6D  jrl NZ,0xf7207c
 	ld	a, (4304:16)	; F71F70  ld A,(0x10d0)
 	and	a, 15	; F71F74  and A,0x0f
 	push	xhl	; F71F77  push XHL
@@ -166683,7 +166623,7 @@ sub_F71E89_Skip3:
 	pop	xiy	; F71F7C  pop XIY
 	pop	xhl	; F71F7D  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F7E  cp (0x1238),0x00
-	jrl	nz, Data_F72074_Code_Return	; F71F83  jrl NZ,0xf7207c
+	jrl	nz, sub_F71E89_Return	; F71F83  jrl NZ,0xf7207c
 	xor	a, a	; F71F86  xor A,A
 	push	xhl	; F71F88  push XHL
 	push	xiy	; F71F89  push XIY
@@ -166691,25 +166631,25 @@ sub_F71E89_Skip3:
 	pop	xiy	; F71F8D  pop XIY
 	pop	xhl	; F71F8E  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F8F  cp (0x1238),0x00
-	jrl	nz, Data_F72074_Code_Return	; F71F94  jrl NZ,0xf7207c
+	jrl	nz, sub_F71E89_Return	; F71F94  jrl NZ,0xf7207c
 	ld	a, (6352916:24)	; F71F97  ld A,(0x60f014)
 	and	a, 127	; F71F9C  and A,0x7f
 	push	xiy	; F71F9F  push XIY
 	calr	sub_F70FDA	; F71FA0  calr 0xf70fda
 	pop	xiy	; F71FA3  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FA4  cp (0x1238),0x00
-	jrl	nz, Data_F72074_Code_Return	; F71FA9  jrl NZ,0xf7207c
+	jrl	nz, sub_F71E89_Return	; F71FA9  jrl NZ,0xf7207c
 	ld	a, (6352917:24)	; F71FAC  ld A,(0x60f015)
 	and	a, 127	; F71FB1  and A,0x7f
 	push	xiy	; F71FB4  push XIY
 	call	sub_F70FDA	; F71FB5  call 0xf70fda
 	pop	xiy	; F71FB9  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FBA  cp (0x1238),0x00
-	jrl	nz, Data_F72074_Code_Return	; F71FBF  jrl NZ,0xf7207c
+	jrl	nz, sub_F71E89_Return	; F71FBF  jrl NZ,0xf7207c
 	calr	sub_F7129A	; F71FC2  calr 0xf7129a
 	calr	sub_F727F6	; F71FC5  calr 0xf727f6
 	ld	(4664:16), 0	; F71FC8  ld (0x1238),0x00
-	jrl	Data_F72074_Code_Return	; F71FCD  jrl T,0xf7207c
+	jrl	sub_F71E89_Return	; F71FCD  jrl T,0xf7207c
 sub_F71E89_Skip4:
 	push	xiy	; F71FD0  push XIY
 	calr	sub_F727C8	; F71FD1  calr 0xf727c8
@@ -166719,7 +166659,7 @@ sub_F71E89_Skip4:
 	calr	sub_F70FDA	; F71FD8  calr 0xf70fda
 	pop	xiy	; F71FDB  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FDC  cp (0x1238),0x00
-	jrl	nz, Data_F72074_Code_Return	; F71FE1  jrl NZ,0xf7207c
+	jrl	nz, sub_F71E89_Return	; F71FE1  jrl NZ,0xf7207c
 	sla	iy, 1	; F71FE4  sla 0x01,IY
 	push	xix	; F71FE7  push XIX
 	ld	xix, 4307	; F71FE8  ld XIX,0x000010d3
@@ -166733,26 +166673,26 @@ sub_F71E89_Skip4:
 	calr	sub_F70FDA	; F71FFC  calr 0xf70fda
 	pop	xiy	; F71FFF  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72000  cp (0x1238),0x00
-	jr	nz, Data_F72074_Code_Return	; F72005  jr NZ,0xf7207c
+	jr	nz, sub_F71E89_Return	; F72005  jr NZ,0xf7207c
 	ld	a, (4304:16)	; F72007  ld A,(0x10d0)
 	and	a, 15	; F7200B  and A,0x0f
 	push	xiy	; F7200E  push XIY
 	calr	sub_F70FDA	; F7200F  calr 0xf70fda
 	pop	xiy	; F72012  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72013  cp (0x1238),0x00
-	jr	nz, Data_F72074_Code_Return	; F72018  jr NZ,0xf7207c
+	jr	nz, sub_F71E89_Return	; F72018  jr NZ,0xf7207c
 	ld	a, 0:opc	; F7201A  ld A,0x00
 	push	xiy	; F7201C  push XIY
 	calr	sub_F70FDA	; F7201D  calr 0xf70fda
 	pop	xiy	; F72020  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72021  cp (0x1238),0x00
-	jr	nz, Data_F72074_Code_Return	; F72026  jr NZ,0xf7207c
+	jr	nz, sub_F71E89_Return	; F72026  jr NZ,0xf7207c
 	ld	a, (4305:16)	; F72028  ld A,(0x10d1)
 	push	xiy	; F7202C  push XIY
 	calr	sub_F70FDA	; F7202D  calr 0xf70fda
 	pop	xiy	; F72030  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72031  cp (0x1238),0x00
-	jr	nz, Data_F72074_Code_Return	; F72036  jr NZ,0xf7207c
+	jr	nz, sub_F71E89_Return	; F72036  jr NZ,0xf7207c
 	push	xix	; F72038  push XIX
 	ld	xix, 4260	; F72039  ld XIX,0x000010a4
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F7203E  ld A,(XIX+IY)
@@ -166766,31 +166706,24 @@ sub_F71E89_Skip4:
 	or	a, w	; F7205A  or A,W
 	call	sub_F70FDA	; F7205C  call 0xf70fda
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72060  cp (0x1238),0x00
-	jr	nz, Data_F72074_Code_Return	; F72065  jr NZ,0xf7207c
+	jr	nz, sub_F71E89_Return	; F72065  jr NZ,0xf7207c
 	calr	sub_F7129A	; F72067  calr 0xf7129a
 	calr	sub_F727F6	; F7206A  calr 0xf727f6
 	ld	(4664:16), 0	; F7206D  ld (0x1238),0x00
-	jr	Data_F72074_Code_Return	; F72072  jr T,0xf7207c
+	jr	sub_F71E89_Return	; F72072  jr T,0xf7207c
 
 ; --------------------------------------------------------------------------
-; Data_F72074 -- 8 bytes this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; Contains: printable bytes |.9.?.v5.|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; UNREACHED CODE, not data (was `Data_F72074`), part of sub_F71E89:
+;   `cp (0x1239),0xFF / jrl Z,0xF71EB1` -- the jrl lands on an instruction start of this source
+;   (0xF71EB1), and the decode ends on the `ret` the jr above targets.
+;   Nothing in prom_b branches to, calls or spells 0xF72074 (code_islands.py searches every
+;   jr/jrl/calr displacement and jp/call/24-bit operand); it is recorded as code because it
+;   decodes as such and fits the code beside it, not because it runs.
 ; --------------------------------------------------------------------------
-Data_F72074:
-	.byte	0xC1, 0x39, 0x12, 0x3F, 0xFF, 0x76, 0x35, 0xFE	; F72074  [0..7]
+	m_cp_mi8 MB16, 0x1239, 0xff	; F72074  cp (0x1239),0xff
+	jrl	z, sub_F71E89_Loop	; F72079  jrl Z,0xf71eb1
 
-Data_F72074_Code_Return:
+sub_F71E89_Return:
 	ret	; F7207C  ret
 
 ; --------------------------------------------------------------------------
@@ -166815,30 +166748,31 @@ Data_F72074_Code_Return:
 ByteMap_F7207D:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F7207D  [0..15]
 sub_F7208D:
-	.byte	0x45, 0x5A	; F7208D  [16..17]
-
-	ldw	wa, 0	; F7208F  ld WA,0x0000
-ByteMap_F7207D_Code_Loop:
+; `calr sub_F7208D` at 0xF71E09 lands on `ld XIY,0x0000305A` (45 5A 30 00 00); the source had
+;   `.byte 0x45, 0x5A` and a `ld WA,0` framed from 0xF7208F, inside it.  The loop below walks
+;   XIY from 0x305A in 7-byte steps to 0x313A.
+	ld	xiy, 12378	; F7208D  ld XIY,0x0000305a
+sub_F7208D_Loop:
 	m_bit 7, MDI+r5, 0	; F72092  bit 7,(XIY)
-	jr	nz, ByteMap_F7207D_Code_Skip	; F72094  jr NZ,0xf7209a
+	jr	nz, sub_F7208D_Skip	; F72094  jr NZ,0xf7209a
 	ld	xix, xiy	; F72096  ld XIX,XIY
-	jr	ByteMap_F7207D_Code_Join	; F72098  jr T,0xf720ab
-ByteMap_F7207D_Code_Skip:
+	jr	sub_F7208D_Join	; F72098  jr T,0xf720ab
+sub_F7208D_Skip:
 	add	xiy, 7	; F7209A  add XIY,0x00000007
 	cp	xiy, 12602	; F720A0  cp XIY,0x0000313a
-	jr	ule, ByteMap_F7207D_Code_Loop	; F720A6  jr ULE,0xf72092
-	jrl	ByteMap_F7207D_Code_Return	; F720A8  jrl T,0xf721a2
-ByteMap_F7207D_Code_Join:
+	jr	ule, sub_F7208D_Loop	; F720A6  jr ULE,0xf72092
+	jrl	sub_F7208D_Return	; F720A8  jrl T,0xf721a2
+sub_F7208D_Join:
 	m_bit 0, MD16, 0x124b	; F720AB  bit 0,(0x124b)
-	jr	nz, ByteMap_F7207D_Code_Skip3	; F720AF  jr NZ,0xf720cb
+	jr	nz, sub_F7208D_Skip3	; F720AF  jr NZ,0xf720cb
 	ld	(4665:16), 255	; F720B1  ld (0x1239),0xff
 	m_cp_mi8 MB16, 0x2732, 0x00	; F720B6  cp (0x2732),0x00
-	jr	nz, ByteMap_F7207D_Code_Skip2	; F720BB  jr NZ,0xf720c2
+	jr	nz, sub_F7208D_Skip2	; F720BB  jr NZ,0xf720c2
 	ld	(4665:16), 0	; F720BD  ld (0x1239),0x00
-ByteMap_F7207D_Code_Skip2:
+sub_F7208D_Skip2:
 	ld	(4683:16), 1	; F720C2  ld (0x124b),0x01
 	call	sub_F71417	; F720C7  call 0xf71417
-ByteMap_F7207D_Code_Skip3:
+sub_F7208D_Skip3:
 	m_or_mi8 MB16, 0x11b1, 0x01	; F720CB  or (0x11b1),0x01
 	ld	iy, (4530:16)	; F720D0  ld IY,(0x11b2)
 	extz	xiy	; F720D4  extz XIY
@@ -166857,7 +166791,7 @@ ByteMap_F7207D_Code_Skip3:
 	pop	xix	; F720F2  pop XIX
 	pop	xiy	; F720F3  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F720F4  cp (0x1238),0x00
-	jrl	nz, ByteMap_F7207D_Code_Return	; F720F9  jrl NZ,0xf721a2
+	jrl	nz, sub_F7208D_Return	; F720F9  jrl NZ,0xf721a2
 	sla	xiy, 1	; F720FC  sla 0x01,XIY
 	push	xix	; F720FF  push XIX
 	ld	xix, 4307	; F72100  ld XIX,0x000010d3
@@ -166875,7 +166809,7 @@ ByteMap_F7207D_Code_Skip3:
 	pop	xix	; F7211A  pop XIX
 	pop	xiy	; F7211B  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7211C  cp (0x1238),0x00
-	jrl	nz, ByteMap_F7207D_Code_Return	; F72121  jrl NZ,0xf721a2
+	jrl	nz, sub_F7208D_Return	; F72121  jrl NZ,0xf721a2
 	ld	a, (4305:16)	; F72124  ld A,(0x10d1)
 	push	xiy	; F72128  push XIY
 	push	xix	; F72129  push XIX
@@ -166883,19 +166817,19 @@ ByteMap_F7207D_Code_Skip3:
 	pop	xix	; F7212D  pop XIX
 	pop	xiy	; F7212E  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7212F  cp (0x1238),0x00
-	jr	nz, ByteMap_F7207D_Code_Return	; F72134  jr NZ,0xf721a2
+	jr	nz, sub_F7208D_Return	; F72134  jr NZ,0xf721a2
 	ld	a, (4306:16)	; F72136  ld A,(0x10d2)
 	cp	a, 127	; F7213A  cp A,0x7f
-	jr	ule, ByteMap_F7207D_Code_Skip4	; F7213D  jr ULE,0xf72141
+	jr	ule, sub_F7208D_Skip4	; F7213D  jr ULE,0xf72141
 	ld	a, 127:opc	; F7213F  ld A,0x7f
-ByteMap_F7207D_Code_Skip4:
+sub_F7208D_Skip4:
 	push	xiy	; F72141  push XIY
 	push	xix	; F72142  push XIX
 	calr	sub_F70FDA	; F72143  calr 0xf70fda
 	pop	xix	; F72146  pop XIX
 	pop	xiy	; F72147  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72148  cp (0x1238),0x00
-	jr	nz, ByteMap_F7207D_Code_Return	; F7214D  jr NZ,0xf721a2
+	jr	nz, sub_F7208D_Return	; F7214D  jr NZ,0xf721a2
 	ld	a, (13406:16)	; F7214F  ld A,(0x345e)
 	ld	(xix+2), a	; F72153  ld (XIX+0x02),A
 	ld	wa, (13404:16)	; F72156  ld WA,(0x345c)
@@ -166909,14 +166843,14 @@ ByteMap_F7207D_Code_Skip4:
 	pop	xix	; F72166  pop XIX
 	pop	xiy	; F72167  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72168  cp (0x1238),0x00
-	jr	nz, ByteMap_F7207D_Code_Return	; F7216D  jr NZ,0xf721a2
+	jr	nz, sub_F7208D_Return	; F7216D  jr NZ,0xf721a2
 	push	xiy	; F7216F  push XIY
 	push	xix	; F72170  push XIX
 	calr	sub_F70FDA	; F72171  calr 0xf70fda
 	pop	xix	; F72174  pop XIX
 	pop	xiy	; F72175  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72176  cp (0x1238),0x00
-	jr	nz, ByteMap_F7207D_Code_Return	; F7217B  jr NZ,0xf721a2
+	jr	nz, sub_F7208D_Return	; F7217B  jr NZ,0xf721a2
 	calr	sub_F7129A	; F7217D  calr 0xf7129a
 	push	xix	; F72180  push XIX
 	calr	sub_F727F6	; F72181  calr 0xf727f6
@@ -166930,7 +166864,7 @@ ByteMap_F7207D_Code_Skip4:
 	xor	wa, wa	; F72198  xor WA,WA
 	ld	(xix+5), wa	; F7219A  ld (XIX+0x05),WA
 	ld	(4664:16), 0	; F7219D  ld (0x1238),0x00
-ByteMap_F7207D_Code_Return:
+sub_F7208D_Return:
 	ret	; F721A2  ret
 
 ; --------------------------------------------------------------------------
@@ -169248,32 +169182,33 @@ ByteMap_F731DB:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F731DB  [0..15]
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F731EB  [16..31]
 sub_F731FB:
-	.byte	0xCB, 0xD3	; F731FB  [32..33]
+; `calr sub_F731FB` at 0xF73004 lands on `xor C,C` (CB D3), which the source carried as `.byte`.
+	xor	c, c	; F731FB  xor C,C
 
-ByteMap_F731DB_Code_Entry:
+sub_F731FB_Entry:
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F731FD  ld RL3,A
 	m_rd_ld_rr2x RWX, 0x3E, r2	; F73200  ld QHL3,DE
 	ld	de, (13836:16)	; F73203  ld DE,(0x360c)
 	ld	a, c	; F73207  ld A,C
 	cp	a, 16	; F73209  cp A,0x10
-	jr	lt, ByteMap_F731DB_Code_Skip	; F7320C  jr LT,0xf73215
+	jr	lt, sub_F731FB_Skip	; F7320C  jr LT,0xf73215
 	ld	de, (13838:16)	; F7320E  ld DE,(0x360e)
 	sub	a, 16	; F73212  sub A,0x10
-ByteMap_F731DB_Code_Skip:
+sub_F731FB_Skip:
 	scf	; F73215  scf
 	m_rd_xorcf_a RW+r2	; F73216  xorcf A,DE
 	m_rd_ld_rrx RWX, 0x3E, r2	; F73218  ld DE,QHL3
 	m_rd_ld_rrx RBX, 0x3C, r1	; F7321B  ld A,RL3
-	jr	nc, ByteMap_F731DB_Code_Skip2	; F7321E  jr NC,0xf7322e
+	jr	nc, sub_F731FB_Skip2	; F7321E  jr NC,0xf7322e
 	ld	(3184:16), c	; F73220  ld (0x0c70),C
 	inc	1, (3184:16)	; F73224  inc 1,(0x0c70)
 	pushw	bc	; F73228  push BC
 	call	T_F40A04	; F73229  call 0xf40a04
 	popw	bc	; F7322D  pop BC
-ByteMap_F731DB_Code_Skip2:
+sub_F731FB_Skip2:
 	inc	1, c	; F7322E  inc 1,C
 	cp	c, 16	; F73230  cp C,0x10
-	jr	ule, ByteMap_F731DB_Code_Entry	; F73233  jr ULE,0xf731fd
+	jr	ule, sub_F731FB_Entry	; F73233  jr ULE,0xf731fd
 	ret	; F73235  ret
 
 ; --------------------------------------------------------------------------
@@ -175022,32 +174957,15 @@ sub_F765E6:
 	ld	w, (4294:16)	; F765EC  ld W,(0x10c6)
 	ld	a, (4295:16)	; F765F0  ld A,(0x10c7)
 	add	wa, 22	; F765F4  add WA,0x0016
-	jr	nov, Data_F765FA_Code_Skip	; F765F8  jr PO/NOV,0xf765fc
+	jr	nov, sub_F765E6_Skip	; F765F8  jr PO/NOV,0xf765fc
 
 ; --------------------------------------------------------------------------
-; Data_F765FA -- 2 bytes this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f6d002_layout.py --null-accept`).
-; Contains: printable bytes |.a|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; REACHED CODE, not data (was `Data_F765FA`), part of sub_F765E6:
+;   the overflow arm of `jr nov` at 0xF765F8.
 ; --------------------------------------------------------------------------
-Data_F765FA:
-	.byte	0xCC, 0x61	; F765FA  [0..1]
+	inc	1, d	; F765FA  inc 1,D
 
-Data_F765FA_Code_Skip:
+sub_F765E6_Skip:
 	srl	wa, 4	; F765FC  srl 0x04,WA
 	sla	de, 4	; F765FF  sla 0x04,DE
 	and	de, 61440	; F76602  and DE,0xf000
@@ -175058,7 +174976,7 @@ Data_F765FA_Code_Skip:
 	call	T_F425E8	; F76612  call 0xf425e8
 	ld	w, (8771:16)	; F76616  ld W,(0x2243)
 	cp	w, 0:i3	; F7661A  cp W,0
-	jr	nz, Data_F765FA_Code_Return	; F7661C  jr NZ,0xf7664d
+	jr	nz, sub_F765E6_Return	; F7661C  jr NZ,0xf7664d
 	ld	(8656:16), 77	; F7661E  ld (0x21d0),0x4d
 	ld	(8657:16), 73	; F76623  ld (0x21d1),0x49
 	ld	(8658:16), 68	; F76628  ld (0x21d2),0x44
@@ -175069,7 +174987,7 @@ Data_F765FA_Code_Skip:
 	ld	(8658:16), 68	; F76640  ld (0x21d2),0x44
 	call	sub_F7668A	; F76645  call 0xf7668a
 	call	sub_F7664E	; F76649  call 0xf7664e
-Data_F765FA_Code_Return:
+sub_F765E6_Return:
 	ret	; F7664D  ret
 
 ; --------------------------------------------------------------------------
@@ -177825,32 +177743,15 @@ sub_F77D4B:
 	ld	w, (4294:16)	; F77D51  ld W,(0x10c6)
 	ld	a, (4295:16)	; F77D55  ld A,(0x10c7)
 	add	wa, 22	; F77D59  add WA,0x0016
-	jr	nov, Data_F77D5F_Code_Skip	; F77D5D  jr PO/NOV,0xf77d61
+	jr	nov, sub_F77D4B_Skip	; F77D5D  jr PO/NOV,0xf77d61
 
 ; --------------------------------------------------------------------------
-; Data_F77D5F -- 2 bytes this block could not split.  No content rule framed
-;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
-;                -- and the code walk never reached it from a thunk slot, a
-;                proven call site, an opcode-anchored call or an entry of a
-;                table the firmware transfers to.  So it is emitted as bytes
-;                rather than guessed.
-; ⚠ these bytes DO decode cleanly as instructions, but the decode does not
-;   end in a `ret`/`reti`/unconditional transfer.  That is not evidence:
-;   round 4's rule, which accepted a run on a clean decode alone, accepts
-;   13.9% of record-aligned chunks of PROVEN display-list data as code
-;   (`python3 notes/prom_b_f6d002_layout.py --null-accept`).
-; Contains: printable bytes |.a|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; REACHED CODE, not data (was `Data_F77D5F`), part of sub_F77D4B:
+;   the overflow arm of `jr nov` at 0xF77D5D; the same two bytes as 0xF765FA.
 ; --------------------------------------------------------------------------
-Data_F77D5F:
-	.byte	0xCC, 0x61	; F77D5F  [0..1]
+	inc	1, d	; F77D5F  inc 1,D
 
-Data_F77D5F_Code_Skip:
+sub_F77D4B_Skip:
 	srl	wa, 4	; F77D61  srl 0x04,WA
 	sla	de, 4	; F77D64  sla 0x04,DE
 	and	de, 61440	; F77D67  and DE,0xf000
@@ -177861,7 +177762,7 @@ Data_F77D5F_Code_Skip:
 	call	T_F425E8	; F77D77  call 0xf425e8
 	ld	w, (8771:16)	; F77D7B  ld W,(0x2243)
 	cp	w, 0:i3	; F77D7F  cp W,0
-	jr	nz, Data_F77D5F_Code_Return	; F77D81  jr NZ,0xf77db2
+	jr	nz, sub_F77D4B_Return	; F77D81  jr NZ,0xf77db2
 	ld	(8656:16), 77	; F77D83  ld (0x21d0),0x4d
 	ld	(8657:16), 73	; F77D88  ld (0x21d1),0x49
 	ld	(8658:16), 68	; F77D8D  ld (0x21d2),0x44
@@ -177872,7 +177773,7 @@ Data_F77D5F_Code_Skip:
 	ld	(8658:16), 68	; F77DA5  ld (0x21d2),0x44
 	call	sub_F77DEF	; F77DAA  call 0xf77def
 	call	sub_F77DB3	; F77DAE  call 0xf77db3
-Data_F77D5F_Code_Return:
+sub_F77D4B_Return:
 	ret	; F77DB2  ret
 
 ; --------------------------------------------------------------------------
