@@ -56867,26 +56867,26 @@ DSP_BytecodeInterpreter_Loop:
 ;  due to unsupported addressing modes.
 ; ★ CORRECTED 2026-09-25: "Cannot be converted to LLVM native instructions" no longer holds -- all
 ; six handlers below are instructions now (converted and byte-gated by an earlier pass of this lane).
-//
-// Handler 0 (offset 0x000, 570 bytes): Command + 2 preamble + groups-of-5
-//   3-way branch per group: 0x00=static addr, 0x0A=raw, else=param-modified
-//   Mixes 32-bit runtime parameter into template coefficients (Branch C)
-//
-// Handler 1 (offset 0x23A, 249 bytes): Command + 2 preamble + groups-of-5
-//   12-bit address computation (4-bit shift), accumulator at stack[0x08]
-//
-// Handler 2 (offset 0x333, 167 bytes): Command + 2 preamble + groups-of-3
-//   Pure raw data writes, no address computation
-//
-// Handler 3 (offset 0x3DA, 153 bytes): Command + 16-bit address + raw tail
-//   16-bit address (8-bit shift), accumulator at stack[0x0E]
-//
-// Handler 4 (offset 0x473, 26 bytes): Single command byte only
-//   Simplest handler - no data, no loop
-//
-// Handler 5 (offset 0x48D, 448 bytes): Command + 2 preamble + groups-of-5
-//   2-way branch: 0x08=addr (with IZH mask), else=param-modified
-//   Variant of Handler 0 with different branching and accumulator at stack[0x0C]
+;
+; Handler 0 (offset 0x000, 570 bytes): Command + 2 preamble + groups-of-5
+;   3-way branch per group: 0x00=static addr, 0x0A=raw, else=param-modified
+;   Mixes 32-bit runtime parameter into template coefficients (Branch C)
+;
+; Handler 1 (offset 0x23A, 249 bytes): Command + 2 preamble + groups-of-5
+;   12-bit address computation (4-bit shift), accumulator at stack[0x08]
+;
+; Handler 2 (offset 0x333, 167 bytes): Command + 2 preamble + groups-of-3
+;   Pure raw data writes, no address computation
+;
+; Handler 3 (offset 0x3DA, 153 bytes): Command + 16-bit address + raw tail
+;   16-bit address (8-bit shift), accumulator at stack[0x0E]
+;
+; Handler 4 (offset 0x473, 26 bytes): Single command byte only
+;   Simplest handler - no data, no loop
+;
+; Handler 5 (offset 0x48D, 448 bytes): Command + 2 preamble + groups-of-5
+;   2-way branch: 0x08=addr (with IZH mask), else=param-modified
+;   Variant of Handler 0 with different branching and accumulator at stack[0x0C]
 ; Already named; the name covers the whole 1613-byte `.byte` run 0x03C32E..0x03C97A, which is
 ; CODE, not data -- six opcode handlers.  This address is also handler 0's entry.
 ; Handler 0 (570 B): command byte + 2 preamble bytes + groups of 5; three-way branch per group
