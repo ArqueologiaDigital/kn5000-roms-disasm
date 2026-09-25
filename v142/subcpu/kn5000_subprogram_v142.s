@@ -36197,15 +36197,27 @@ VoiceParamFinalize_SecondaryBody:
 ; Query case 1: copy packet[+3] bytes from Part_PatchRecord_Ptr[part]+packet[+2]
 ; into the payload.  Special case for offset 0x5D: bit 7 of the returned byte is
 ; cleared and then re-set from bit 14 of Part_Flags0A[part].
+; 2026-09-25: the first 53 bytes were a .byte/.ascii run; now instructions (convert_v142_byte_block.py:
+; llvm-mc + unidasm agree on every boundary, each instruction re-assembles to its own bytes).
 VoiceParam_Query_Case1_PatchRec:
-	.byte 0x8e, 0x01, 0x21, 0xd8, 0x12, 0xd8, 0x09, 0x1f
-	.byte 0x01, 0xf2, 0x6e, 0x13, 0x04, 0x31, 0xe3, 0x07
-	.byte 0xe4, 0xe0, 0x21, 0x8e, 0x02, 0x21, 0xd8, 0x12
-	.byte 0xe8, 0x12, 0xe8, 0x81, 0x8e, 0x03, 0x21, 0xc9
-	.byte 0x8f, 0xdb, 0x12, 0xf2, 0x16, 0x52, 0x04, 0x30
-	.byte 0xe8, 0x8a, 0xdb, 0x88, 0x1e, 0xc5, 0xfe, 0x8e
-	.byte 0x02
-	.ascii "?]n("
+	ld	a, (xiz+1)
+	extz	wa
+	muls	wa, 0x11f
+	lda	xbc, (0x04136e:24)
+	ld_rrl	xbc, xbc, wa
+	ld	a, (xiz+2)
+	extz	wa
+	extz	xwa
+	add	xbc, xwa
+	ld	a, (xiz+3)
+	ld	l, a
+	extz	hl
+	lda	xwa, (0x045216:24)
+	ld	xde, xwa
+	ld	wa, hl
+	calr	DSP_ParamWrite_BlockCopy
+	cp	(xiz+2), 93
+	jr	nz, VoiceParam_Query_Case1_PatchRec_Done
 	res	7, (283158:24)
 	lda	xhl, (283158:24)
 	ld	e, 0:opc
@@ -36219,6 +36231,7 @@ VoiceParam_Query_Case1_PatchRec:
 	ld	e, 128:opc
 VoiceParam_Query_Case1_PatchRec_Code_Skip:
 	or	(xhl), e
+VoiceParam_Query_Case1_PatchRec_Done:
 	ld	l, (xiz+3)
 	extz	hl
 	jrl	t, VoiceParamFinalize_CopyToWorkArea
@@ -43283,14 +43296,17 @@ DSP_RingBuf_Read_Empty:
 DSP_RingBuf_Read_Return:
 	ret
 
-; --- 0x035859-0x03585E  DSP_RingBuf_Read_Data -- six bytes f1 60 3b 30 68 d1
+; --- 0x035859-0x03585E  DSP_RingBuf3B60_Read -- six bytes f1 60 3b 30 68 d1
 ; Also not a table. `f1 60 3b 30` is `lda XWA,0x3B60` and `68 xx` is a `jr` -- this is the
 ; tail of a routine the linker placed here, or padding that happens to disassemble. Left
 ; alone; nothing references it.
-DSP_RingBuf_Read_Data:
-	.byte 0xf1
-	.ascii "`;0h"
-	.byte 0xd1
+; CORRECTED 2026-09-25: not padding.  The two instructions are a complete wrapper: XWA = 0x3B60,
+; the control block of a ring whose indices (0x3B60/0x3B62) the routine ending at 0x03582D zeroes,
+; then `jr` lands EXACTLY on the entry of DSP_RingBuf_Read (0x035830) -- a tail call.  Renamed
+; from DSP_RingBuf_Read_Data.  Still no caller found (no symbolic or 24-bit reference).
+DSP_RingBuf3B60_Read:
+	lda	xwa, (0x3b60:16)
+	jr	DSP_RingBuf_Read
 
 ; ALREADY NAMED -- doc header only.
 ; Drains the ring until DSP_RingBuf_Read returns 0xFFFF, then FORCES the read index to equal

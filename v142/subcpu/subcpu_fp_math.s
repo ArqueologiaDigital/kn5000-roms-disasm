@@ -1672,7 +1672,8 @@ FP_SP_Decode_Zero:
 	ld xix, 0:i3
 	ldib_erp 0xEE, 1
 	jr FP_SP_Decode_Store
-	swi 7
+	.byte 0xff	; fill byte after the unconditional jr -- never executed (it was written as `swi 7`,
+			; the way 0xFF decodes; the other 0xFF fill bytes in this file are FP_*_Pad data)
 
 ; Signed int32 -> unpacked DOUBLE-precision record. Sign extraction plus
 ; FP_SP_NormCore, then the sign byte at record+3.
