@@ -39697,7 +39697,7 @@ ScreenButton_SineWaveCheckMode:
 	push H                                               ; F958AC  ce 04
 	ldw bc, 0x04                                         ; F958AE  31 04 00
 	m_mul MWD+r6, 0x08, 1                                ; F958B1  9e 08 41
-	add XBC,PtrTables_F95C95                             ; F958B4  e9 c8 95 5c f9 00
+	add XBC,ScreenButtonHandlers_SineWaveCheckMode                             ; F958B4  e9 c8 95 5c f9 00
 	ld XBC,(XBC)                                         ; F958BA  a1 21
 	lda xiy, (.LF958C4:24)                               ; F958BC  f2 c4 58 f9 35
 	push XIY                                             ; F958C1  3d
@@ -39708,6 +39708,7 @@ ScreenButton_SineWaveCheckMode:
 	popw hl                                              ; F958C5  4b
 	unlk XIZ                                             ; F958C6  ee 0d
 	ret                                                  ; F958C8  0e
+sub_F958C9:   ; entry: screen button-handler table
 	link XIZ,0x0000                                      ; F958C9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F958CD  8e 08 3f 00
 	jr nz, .LF958E4                                          ; F958D1  6e 11
@@ -39731,6 +39732,7 @@ ScreenButton_SineWaveCheckMode:
 .LF958FE:
 	unlk XIZ                                             ; F958FE  ee 0d
 	ret                                                  ; F95900  0e
+sub_F95901:   ; entry: screen button-handler table
 	link XIZ,0x0000                                      ; F95901  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F95905  8e 08 3f 00
 	jr nz, .LF9591C                                          ; F95909  6e 11
@@ -39754,6 +39756,7 @@ ScreenButton_SineWaveCheckMode:
 .LF95936:
 	unlk XIZ                                             ; F95936  ee 0d
 	ret                                                  ; F95938  0e
+sub_F95939:   ; entry: screen button-handler table
 	link XIZ,0x0000                                      ; F95939  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F9593D  8e 08 3f 00
 	jr nz, .LF95954                                          ; F95941  6e 11
@@ -39777,6 +39780,7 @@ ScreenButton_SineWaveCheckMode:
 .LF9596E:
 	unlk XIZ                                             ; F9596E  ee 0d
 	ret                                                  ; F95970  0e
+sub_F95971:   ; entry: screen button-handler table
 	pushw hl                                             ; F95971  2b
 	ld h, (0x2267:16)                                   ; F95972  c1 67 22 26
 	and H,0x0f                                           ; F95976  ce cc 0f
@@ -39931,7 +39935,7 @@ sub_F959E2:
 	push H                                               ; F959FD  ce 04
 	ldw bc, 0x04                                         ; F959FF  31 04 00
 	m_mul MWD+r6, 0x08, 1                                ; F95A02  9e 08 41
-	add XBC,PtrTables_F95C95+0x80                        ; F95A05  e9 c8 15 5d f9 00
+	add XBC,ScreenObjF40130_ButtonHandlers                        ; F95A05  e9 c8 15 5d f9 00
 	ld XBC,(XBC)                                         ; F95A0B  a1 21
 	lda xiy, (.LF95A15:24)                               ; F95A0D  f2 15 5a f9 35
 	push XIY                                             ; F95A12  3d
@@ -39942,6 +39946,7 @@ sub_F959E2:
 	popw hl                                              ; F95A16  4b
 	unlk XIZ                                             ; F95A17  ee 0d
 	ret                                                  ; F95A19  0e
+sub_F95A1A:   ; entry: screen button-handler table
 	link XIZ,0xfff8                                      ; F95A1A  ee 0c f8 ff
 	pushw hl                                             ; F95A1E  2b
 	push XIX                                             ; F95A1F  3c
@@ -39976,6 +39981,7 @@ sub_F959E2:
 	popw hl                                              ; F95A76  4b
 	unlk XIZ                                             ; F95A77  ee 0d
 	ret                                                  ; F95A79  0e
+sub_F95A7A:   ; entry: screen button-handler table
 	link XIZ,0xfff8                                      ; F95A7A  ee 0c f8 ff
 	pushw hl                                             ; F95A7E  2b
 	push XIX                                             ; F95A7F  3c
@@ -40008,6 +40014,7 @@ sub_F959E2:
 	popw hl                                              ; F95ACD  4b
 	unlk XIZ                                             ; F95ACE  ee 0d
 	ret                                                  ; F95AD0  0e
+sub_F95AD1:   ; entry: screen button-handler table
 	link XIZ,0xfffc                                      ; F95AD1  ee 0c fc ff
 	pushw hl                                             ; F95AD5  2b
 	push XIX                                             ; F95AD6  3c
@@ -40038,6 +40045,7 @@ sub_F959E2:
 	popw hl                                              ; F95B20  4b
 	unlk XIZ                                             ; F95B21  ee 0d
 	ret                                                  ; F95B23  0e
+sub_F95B24:   ; entry: screen button-handler table
 	link XIZ,0xfffc                                      ; F95B24  ee 0c fc ff
 	pushw hl                                             ; F95B28  2b
 	push XIX                                             ; F95B29  3c
@@ -40068,6 +40076,7 @@ sub_F959E2:
 	popw hl                                              ; F95B73  4b
 	unlk XIZ                                             ; F95B74  ee 0d
 	ret                                                  ; F95B76  0e
+sub_F95B77:   ; entry: screen button-handler table
 	link XIZ,0xfffc                                      ; F95B77  ee 0c fc ff
 	pushw hl                                             ; F95B7B  2b
 	push XIX                                             ; F95B7C  3c
@@ -40098,6 +40107,7 @@ sub_F959E2:
 	popw hl                                              ; F95BC6  4b
 	unlk XIZ                                             ; F95BC7  ee 0d
 	ret                                                  ; F95BC9  0e
+sub_F95BCA:   ; entry: screen button-handler table
 	link XIZ,0xfffc                                      ; F95BCA  ee 0c fc ff
 	pushw hl                                             ; F95BCE  2b
 	push XIX                                             ; F95BCF  3c
@@ -40128,6 +40138,7 @@ sub_F959E2:
 	ret                                                  ; F95C13  0e
 sub_F95C14:
 	ret                                                  ; F95C14  0e
+sub_F95C15:   ; entry: screen button-handler table
 	link XIZ,0x0000                                      ; F95C15  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F95C19  8e 08 3f 00
 	jr nz, .LF95C29                                          ; F95C1D  6e 0a
@@ -40136,6 +40147,7 @@ sub_F95C14:
 .LF95C29:
 	unlk XIZ                                             ; F95C29  ee 0d
 	ret                                                  ; F95C2B  0e
+sub_F95C2C:   ; entry: screen button-handler table
 	ret                                                  ; F95C2C  0e
 sub_F95C2D:
 	push XIX                                             ; F95C2D  3c
@@ -40198,6 +40210,116 @@ sub_F95C2D:
 	nop                                                  ; F95C93  00
 	push SR                                              ; F95C94  02
 ; ---------------------------------------------------------------------
+; ScreenButtonHandlers_SineWaveCheckMode -- 32 LE32 handlers, one per panel
+;          event code, for the screen object at prom_b 0xF400F0
+;          (Paint_SineWaveCheckMode / ScreenLeave_ / ScreenButton_).
+; Read by: ScreenButton_SineWaveCheckMode (0xF95891, the object's +8
+;          BUTTON slot T_F400F8): `cp (XIZ+8),0x001F / jr ugt` -- COUNT 32 --
+;          then `ldw BC,4 / mul BC,(XIZ+8) / add XBC,<this> / ld XBC,(XBC)`
+;          and a call with H = bit 7 of (XIZ+0x0A).  Codes as
+;          PanelButton_Route produces them (see Dispatch_FF3D39's legend).
+;          24 slots are the default 0xF95C2C, a lone `ret`.
+; (notes/proma-2026-09-25/gen_button_tables.py, checks K1-K5)
+; ★ 2026-09-25 (lane proma): this span was PtrTables_F95C95; its header,
+;          kept verbatim above ScreenButtonHandlers_StaleCopy, left the third
+;          table and the stray byte open.  Both are answered there.
+; ---------------------------------------------------------------------
+ScreenButtonHandlers_SineWaveCheckMode:
+	.long sub_F95C2C                               ; F95C95  [code 0x00]
+	.long sub_F95C2C                               ; F95C99  [code 0x01]
+	.long sub_F95C2C                               ; F95C9D  [code 0x02]
+	.long sub_F958C9                               ; F95CA1  [code 0x03]
+	.long sub_F95901                               ; F95CA5  [code 0x04]
+	.long sub_F95939                               ; F95CA9  [code 0x05]
+	.long sub_F95C2C                               ; F95CAD  [code 0x06]
+	.long sub_F95C2C                               ; F95CB1  [code 0x07]
+	.long sub_F95C2C                               ; F95CB5  [code 0x08]
+	.long sub_F95C2C                               ; F95CB9  [code 0x09]
+	.long sub_F95C2C                               ; F95CBD  [code 0x0A]
+	.long sub_F95C2C                               ; F95CC1  [code 0x0B]
+	.long sub_F95C2C                               ; F95CC5  [code 0x0C]
+	.long sub_F95C2C                               ; F95CC9  [code 0x0D]
+	.long sub_F95C2C                               ; F95CCD  [code 0x0E]
+	.long sub_F95C15                               ; F95CD1  [code 0x0F]
+	.long sub_F95C2C                               ; F95CD5  [code 0x10]
+	.long sub_F95C2C                               ; F95CD9  [code 0x11]
+	.long sub_F95C2C                               ; F95CDD  [code 0x12]
+	.long sub_F95C2C                               ; F95CE1  [code 0x13]
+	.long sub_F958C9                               ; F95CE5  [code 0x14]
+	.long sub_F95901                               ; F95CE9  [code 0x15]
+	.long sub_F95939                               ; F95CED  [code 0x16]
+	.long sub_F95C2C                               ; F95CF1  [code 0x17]
+	.long sub_F95C2C                               ; F95CF5  [code 0x18]
+	.long sub_F95C2C                               ; F95CF9  [code 0x19]
+	.long sub_F95C2C                               ; F95CFD  [code 0x1A]
+	.long sub_F95971                               ; F95D01  [code 0x1B]
+	.long sub_F95C2C                               ; F95D05  [code 0x1C]
+	.long sub_F95C2C                               ; F95D09  [code 0x1D]
+	.long sub_F95C2C                               ; F95D0D  [code 0x1E]
+	.long sub_F95C2C                               ; F95D11  [code 0x1F]
+
+; ---------------------------------------------------------------------
+; ScreenObjF40130_ButtonHandlers -- 32 LE32 handlers, one per panel event
+;          code, for the screen object at prom_b 0xF40130 (+0 sub_F959C8,
+;          +4 sub_F959E1, +8 sub_F959E2).
+; Read by: sub_F959E2 (0xF959E2, slot T_F40138), the same five instructions
+;          as ScreenButton_SineWaveCheckMode with this base at 0xF95A05.
+;          19 slots are the default 0xF95C2C.
+; (checks K1, K2)
+; ---------------------------------------------------------------------
+ScreenObjF40130_ButtonHandlers:
+	.long sub_F95A1A                               ; F95D15  [code 0x00]
+	.long sub_F95A7A                               ; F95D19  [code 0x01]
+	.long sub_F95AD1                               ; F95D1D  [code 0x02]
+	.long sub_F95B24                               ; F95D21  [code 0x03]
+	.long sub_F95B77                               ; F95D25  [code 0x04]
+	.long sub_F95BCA                               ; F95D29  [code 0x05]
+	.long sub_F95C2C                               ; F95D2D  [code 0x06]
+	.long sub_F95C2C                               ; F95D31  [code 0x07]
+	.long sub_F95C2C                               ; F95D35  [code 0x08]
+	.long sub_F95C2C                               ; F95D39  [code 0x09]
+	.long sub_F95C2C                               ; F95D3D  [code 0x0A]
+	.long sub_F95C2C                               ; F95D41  [code 0x0B]
+	.long sub_F95C2C                               ; F95D45  [code 0x0C]
+	.long sub_F95C2C                               ; F95D49  [code 0x0D]
+	.long sub_F95C2C                               ; F95D4D  [code 0x0E]
+	.long sub_F95C15                               ; F95D51  [code 0x0F]
+	.long sub_F95C2C                               ; F95D55  [code 0x10]
+	.long sub_F95A1A                               ; F95D59  [code 0x11]
+	.long sub_F95A7A                               ; F95D5D  [code 0x12]
+	.long sub_F95AD1                               ; F95D61  [code 0x13]
+	.long sub_F95B24                               ; F95D65  [code 0x14]
+	.long sub_F95B77                               ; F95D69  [code 0x15]
+	.long sub_F95BCA                               ; F95D6D  [code 0x16]
+	.long sub_F95C2C                               ; F95D71  [code 0x17]
+	.long sub_F95C2C                               ; F95D75  [code 0x18]
+	.long sub_F95C2C                               ; F95D79  [code 0x19]
+	.long sub_F95C2C                               ; F95D7D  [code 0x1A]
+	.long sub_F95C2C                               ; F95D81  [code 0x1B]
+	.long sub_F95C2C                               ; F95D85  [code 0x1C]
+	.long sub_F95C2C                               ; F95D89  [code 0x1D]
+	.long sub_F95C2C                               ; F95D8D  [code 0x1E]
+	.long sub_F95C2C                               ; F95D91  [code 0x1F]
+
+; ---------------------------------------------------------------------
+; ScreenButtonHandlers_StaleCopy -- 1 byte + 59 LE32: a copy of BOTH tables
+;          above from another build, unreachable here.
+;   +0      0x00, the top byte of the copy's word 4 (every pointer here has
+;           a 0x00 top byte); its first 19 bytes lie under the live table.
+;   words 0..26   = the first table's words 5..31: default exactly where it
+;           is default, handlers at the same codes -- except code 27, whose
+;           handler (0xF95971) only the live table has (check K4).
+;   words 27..58  = the second table, every value + 0xED (check K3).
+; Its default, 0xF95D19, lies INSIDE ScreenObjF40130_ButtonHandlers -- data
+;          in this image -- and no address in this span is named in either
+;          CPU-1 image (check K5): nothing reads it.  Values stay numeric on
+;          purpose: they are the other build's addresses.
+; ★ This answers the old header's closing question about the third table
+;          and the stray byte; that line is replaced, the rest of the old
+;          header follows verbatim.
+; (checks K3-K5)
+; ---------------------------------------------------------------------
+; The former span's header (PtrTables_F95C95), verbatim:
 ; PtrTables_F95C95 -- 493 bytes holding THREE pointer tables and one stray byte
 ;
 ; Emitted as `.byte`, not `.long`, and that is the claim: the region is NOT a
@@ -40226,40 +40348,68 @@ sub_F95C2D:
 ; ★ LAST-ENTRY TEST for the region as a whole: the word at 0xF95E82 is
 ;          0x0E0E0E0E, the start of a RET pad, so the run cannot be extended.
 ; Evidence: the two readers, the two bounds, the shape run and its null control.
-; Unknown:  what the third table is for, and what the stray byte is.
 ; ---------------------------------------------------------------------
-PtrTables_F95C95:
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0xc9, 0x58, 0xf9, 0x00  ; F95C95
-	.byte 0x01, 0x59, 0xf9, 0x00, 0x39, 0x59, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95CA5
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95CB5
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x15, 0x5c, 0xf9, 0x00  ; F95CC5
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95CD5
-	.byte 0xc9, 0x58, 0xf9, 0x00, 0x01, 0x59, 0xf9, 0x00, 0x39, 0x59, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95CE5
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x71, 0x59, 0xf9, 0x00  ; F95CF5
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95D05
-	.byte 0x1a, 0x5a, 0xf9, 0x00, 0x7a, 0x5a, 0xf9, 0x00, 0xd1, 0x5a, 0xf9, 0x00, 0x24, 0x5b, 0xf9, 0x00  ; F95D15
-	.byte 0x77, 0x5b, 0xf9, 0x00, 0xca, 0x5b, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95D25
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95D35
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x15, 0x5c, 0xf9, 0x00  ; F95D45
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x1a, 0x5a, 0xf9, 0x00, 0x7a, 0x5a, 0xf9, 0x00, 0xd1, 0x5a, 0xf9, 0x00  ; F95D55
-	.byte 0x24, 0x5b, 0xf9, 0x00, 0x77, 0x5b, 0xf9, 0x00, 0xca, 0x5b, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95D65
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95D75
-	.byte 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00, 0x2c, 0x5c, 0xf9, 0x00  ; F95D85
-	.byte 0x00, 0x43, 0x5a, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95D95
-	.byte 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95DA5
-	.byte 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x02, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95DB5
-	.byte 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0xd1, 0x59, 0xf9  ; F95DC5
-	.byte 0x00, 0x0a, 0x5a, 0xf9, 0x00, 0x43, 0x5a, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95DD5
-	.byte 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95DE5
-	.byte 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x07, 0x5b, 0xf9  ; F95DF5
-	.byte 0x00, 0x67, 0x5b, 0xf9, 0x00, 0xbe, 0x5b, 0xf9, 0x00, 0x11, 0x5c, 0xf9, 0x00, 0x64, 0x5c, 0xf9  ; F95E05
-	.byte 0x00, 0xb7, 0x5c, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95E15
-	.byte 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95E25
-	.byte 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x02, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95E35
-	.byte 0x00, 0x07, 0x5b, 0xf9, 0x00, 0x67, 0x5b, 0xf9, 0x00, 0xbe, 0x5b, 0xf9, 0x00, 0x11, 0x5c, 0xf9  ; F95E45
-	.byte 0x00, 0x64, 0x5c, 0xf9, 0x00, 0xb7, 0x5c, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95E55
-	.byte 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9  ; F95E65
-	.byte 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00, 0x19, 0x5d, 0xf9, 0x00  ; F95E75
+ScreenButtonHandlers_StaleCopy:
+	.byte 0x00                                       ; F95D95  top byte of copy word 4
+	.long 0x00f95a43                                 ; F95D96  [ 0]
+	.long 0x00f95d19                                 ; F95D9A  [ 1]
+	.long 0x00f95d19                                 ; F95D9E  [ 2]
+	.long 0x00f95d19                                 ; F95DA2  [ 3]
+	.long 0x00f95d19                                 ; F95DA6  [ 4]
+	.long 0x00f95d19                                 ; F95DAA  [ 5]
+	.long 0x00f95d19                                 ; F95DAE  [ 6]
+	.long 0x00f95d19                                 ; F95DB2  [ 7]
+	.long 0x00f95d19                                 ; F95DB6  [ 8]
+	.long 0x00f95d19                                 ; F95DBA  [ 9]
+	.long 0x00f95d02                                 ; F95DBE  [10]
+	.long 0x00f95d19                                 ; F95DC2  [11]
+	.long 0x00f95d19                                 ; F95DC6  [12]
+	.long 0x00f95d19                                 ; F95DCA  [13]
+	.long 0x00f95d19                                 ; F95DCE  [14]
+	.long 0x00f959d1                                 ; F95DD2  [15]
+	.long 0x00f95a0a                                 ; F95DD6  [16]
+	.long 0x00f95a43                                 ; F95DDA  [17]
+	.long 0x00f95d19                                 ; F95DDE  [18]
+	.long 0x00f95d19                                 ; F95DE2  [19]
+	.long 0x00f95d19                                 ; F95DE6  [20]
+	.long 0x00f95d19                                 ; F95DEA  [21]
+	.long 0x00f95d19                                 ; F95DEE  [22]
+	.long 0x00f95d19                                 ; F95DF2  [23]
+	.long 0x00f95d19                                 ; F95DF6  [24]
+	.long 0x00f95d19                                 ; F95DFA  [25]
+	.long 0x00f95d19                                 ; F95DFE  [26]
+	.long 0x00f95b07                                 ; F95E02  [27]
+	.long 0x00f95b67                                 ; F95E06  [28]
+	.long 0x00f95bbe                                 ; F95E0A  [29]
+	.long 0x00f95c11                                 ; F95E0E  [30]
+	.long 0x00f95c64                                 ; F95E12  [31]
+	.long 0x00f95cb7                                 ; F95E16  [32]
+	.long 0x00f95d19                                 ; F95E1A  [33]
+	.long 0x00f95d19                                 ; F95E1E  [34]
+	.long 0x00f95d19                                 ; F95E22  [35]
+	.long 0x00f95d19                                 ; F95E26  [36]
+	.long 0x00f95d19                                 ; F95E2A  [37]
+	.long 0x00f95d19                                 ; F95E2E  [38]
+	.long 0x00f95d19                                 ; F95E32  [39]
+	.long 0x00f95d19                                 ; F95E36  [40]
+	.long 0x00f95d19                                 ; F95E3A  [41]
+	.long 0x00f95d02                                 ; F95E3E  [42]
+	.long 0x00f95d19                                 ; F95E42  [43]
+	.long 0x00f95b07                                 ; F95E46  [44]
+	.long 0x00f95b67                                 ; F95E4A  [45]
+	.long 0x00f95bbe                                 ; F95E4E  [46]
+	.long 0x00f95c11                                 ; F95E52  [47]
+	.long 0x00f95c64                                 ; F95E56  [48]
+	.long 0x00f95cb7                                 ; F95E5A  [49]
+	.long 0x00f95d19                                 ; F95E5E  [50]
+	.long 0x00f95d19                                 ; F95E62  [51]
+	.long 0x00f95d19                                 ; F95E66  [52]
+	.long 0x00f95d19                                 ; F95E6A  [53]
+	.long 0x00f95d19                                 ; F95E6E  [54]
+	.long 0x00f95d19                                 ; F95E72  [55]
+	.long 0x00f95d19                                 ; F95E76  [56]
+	.long 0x00f95d19                                 ; F95E7A  [57]
+	.long 0x00f95d19                                 ; F95E7E  [58]
 	ret                                                  ; F95E82  0e
 
 ; 0xF95E83-0xF96000 -- 382 bytes of 0x0E (RET), module padding.
