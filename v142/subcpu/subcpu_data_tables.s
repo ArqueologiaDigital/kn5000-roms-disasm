@@ -50,6 +50,9 @@ SubCPU_Payload_Loaded_Flag:
 ;             sits inside it.
 ;   0x00F00A-0x00F01D  20 bytes, UNDESCRIBED: FF FF FF FF FF FF FF FF 00 00 00 FF 00 FF 00 FF
 ;             00 00 00 00. Listed only so the range tiles; no consumer identified.
+;             ★ CORRECTED 2026-09-25: 0x00F012-0x00F01D are six RAM variables that DO have
+;             readers (AudioLoop_ReinitCounter .. InterCPU_DmaLast_Count, carved below);
+;             only 0x00F00A-0x00F011 and three 0xFF high bytes are unreferenced.
 ;   0x00F01E-0x00F13F  DEFAULT DSP EFFECT-CONFIGURATION IMAGE, 0x122 = 290 bytes. DSP_Reset
 ;             (0x0360A7) copies it with `ld xiy,0xF01E / ld xix,0x448E / ldw bc,0x91 / ldirw`
 ;             (0x91 words = 290 B) into the live effect-config buffer at DRAM 0x448E, then
@@ -90,7 +93,7 @@ SubCPU_Payload_Loaded_Flag:
 ;               0x00F396 1/pi = 0x3FD45F306DC9C883 [795]   0x00F3A6 2.3283e-10 [907]
 ;               0x00F3AE FLT_EPSILON  0x00F3B2 FLT_MAX  0x00F3B6 FLT_MIN  (single precision)
 ;               0x00F3BA pi   0x00F3C2 2*pi   0x00F3CA pi/2 (0x3FF921FB54442D18, read by
-;                    VoiceFloat_DispatchMulAdd in kn5000_subprogram_v142.s)
+;                    FP_cos in kn5000_subprogram_v142.s)
 ;               0x00F3D2 ln 2 = 0x3FE62E42FEFA39EF [2851]   0x00F3DA log10 2   0x00F3E2 ln 10
 ;               0x00F3EA DBL_EPSILON  0x00F3F2 DBL_MAX  0x00F3FA DBL_MIN  0x00F402 -0.0
 ;                    (EPSILON/MAX/MIN appear in the same order in both precisions)
@@ -101,7 +104,7 @@ SubCPU_Payload_Loaded_Flag:
 ;             ../../symbols/proposals/subcpu-region-01.txt.
 ;   ★ See the next entry: this block is not read-only config.
 IRAM_FirmwareConfig:
-	.byte 0x8e, 0x00
+	.short 142		; payload version 1.42 (0x008E); see the banner
 ; 8 bytes (0x00F002-0x00F009) = a 64-bit "this voice is sounding" bitmap, one bit per hardware
 ; voice, byte index = voice>>3. It sits inside the block currently labelled IRAM_FirmwareConfig.
 ; Reached ONLY indirectly: ToneGen_Voice_Bitmap_Ptr (0x01F41C) holds the 32-bit pointer 0x0000F002
@@ -113,142 +116,157 @@ IRAM_FirmwareConfig:
 ; ★ In the shipped image these 8 bytes are 0xFF FF FF FF FF FF FF FF -- i.e. all 64 voices are
 ;   marked BUSY until something clears them. See FINDINGS.
 ToneGen_Voice_Active_Bitmap:
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff
-	.byte 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00
-	.byte 0x00, 0x00, 0x1e, 0x00, 0x06, 0x00, 0x00, 0x00
-	.byte 0x54, 0x00, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
-	.byte 0x01, 0x00, 0x05, 0x00, 0x01, 0x00, 0x63, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x14, 0x00
-	.byte 0x00, 0x00, 0x23, 0x00, 0x0b, 0x00, 0x14, 0x00
-	.byte 0x32, 0x00, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
-	.byte 0x01, 0x00, 0x05, 0x00, 0x01, 0x00, 0x63, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x39, 0x00
-	.byte 0x00, 0x00, 0x32, 0x00, 0x54, 0x00, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.zero 8
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; --- 0x00F00A-0x00F011  8 bytes 0xFF after the voice bitmap.
+; No reader found: no absolute operand (hex or decimal, :16 or :24) and no 3-byte LE
+; value in the image names an address in this range.  Purpose not established.
+IRAM_Unreferenced_F00A:
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; --- 0x00F012-0x00F01D  six RAM variables (initial values as shipped).  The banner above
+; lists 0x00F00A-0x00F01D as "UNDESCRIBED ... no consumer identified"; these twelve bytes
+; do have consumers, all through the 16-bit absolute form `(addr:16)`:
+; u16, read and written by AudioLoop_CheckPeriodicReinit (0x01FAFF): incremented on every
+; periodic re-init, reset to 0 once it passes 0x0A.
+AudioLoop_ReinitCounter:	.short 0
+; u8, Timer_AudioTick_Handler (0x01FB41) reads it, increments it and dispatches on the old
+; value 0..5 through AudioTick_CaseOffsets; AudioTick_Variant_6 (0x01FB97) resets it to 0.
+AudioTick_Phase:	.byte 0
+	.byte 0xff		; not referenced (high byte of a word slot)
+; u8, counted 0..7 by AudioTick_Variant_6 (0x01FB97); at 8 it sets bit 5 of (0x103E) and
+; restarts from 0.
+AudioTick_Phase6Count:	.byte 0
+	.byte 0xff		; not referenced
+; u8, `inc 1,(this)` by the DMA-stuck recovery in Cmd_Check_DMA_Timeout (0x020FD9): the
+; number of inter-CPU DMA transfers it has aborted.
+InterCPU_DmaAbort_Count:	.byte 0
+	.byte 0xff		; not referenced
+; u16, Cmd_Check_DMA_Timeout (0x020FD9): incremented while the DMA byte count (control
+; register 0x40) has not moved since the last check, reset when it moves or DMA is idle;
+; above 0x0A the transfer is aborted.
+InterCPU_DmaStuck_Count:	.short 0
+; u16, Cmd_Check_DMA_Timeout: the DMA byte count seen at the previous check.
+InterCPU_DmaLast_Count:	.short 0
+; --- 0x00F01E-0x00F13F  DEFAULT DSP EFFECT-CONFIGURATION IMAGE, 290 bytes (see the banner).
+; DSP_Reset (0x0360A7) copies it `ld xiy,this / ld xix,0x448E / ldw bc,0x91 / ldirw` (0x91
+; words) into the live effect-config buffer at DRAM 0x448E, then reads the word at +8 of
+; THIS image `ld iz,(this+8:16)` and passes it to DSP_WriteAlgoInitPreset and
+; DSP_ApplyAlgoForVoiceType.
+DSP_DefaultEffectConfig_Image:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
-	.byte 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x63, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x58, 0x00
-	.byte 0x00, 0x00, 0x23, 0x00, 0x0e, 0x00, 0x24, 0x00
-	.byte 0x54, 0x00, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
-	.byte 0x01, 0x00, 0x05, 0x00, 0x01, 0x00, 0x63, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x4f, 0x00
-	.byte 0x00, 0x00, 0x07, 0x00, 0x18, 0x00, 0x0e, 0x00
-	.byte 0x18, 0x00, 0x14, 0x00, 0x18, 0x00, 0x17, 0x00
-	.byte 0x18, 0x00, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00
-	.byte 0x01, 0x00, 0x09, 0x00, 0x01, 0x00, 0x63, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
-	.byte 0xc1, 0x88, 0x00, 0x00, 0x44, 0xb2, 0x10, 0x00
-	.byte 0x91, 0x76, 0x1a, 0x00, 0x76, 0xf1, 0x29, 0x00
-	.byte 0x83, 0x7a, 0x42, 0x00, 0xc3, 0x5d, 0x69, 0x00
-	.byte 0x73, 0xfa, 0x78, 0x00, 0x53, 0xe7, 0x8a, 0x00
-	.byte 0x21, 0x7c, 0x9f, 0x00, 0x9c, 0x1d, 0xb7, 0x00
-	.byte 0x70, 0x3f, 0xd2, 0x00, 0x6d, 0x66, 0xf1, 0x00
-	.byte 0x10, 0x2b, 0x15, 0x01, 0x6e, 0x3c, 0x3e, 0x01
-	.byte 0x90, 0x63, 0x6d, 0x01, 0x44, 0x87, 0xa3, 0x01
-	.byte 0x8e, 0xb0, 0xe1, 0x01, 0x8c, 0x78, 0x1c, 0x02
-	.byte 0xdc, 0x6c, 0x5e, 0x02, 0x98, 0x6d, 0xa8, 0x02
-	.byte 0x30, 0x76, 0xfb, 0x02, 0xc0, 0xa0, 0x58, 0x03
-	.byte 0xd4, 0x29, 0xc1, 0x03, 0x98, 0x74, 0x36, 0x04
-	.byte 0x90, 0x0f, 0xba, 0x04, 0xe0, 0xb9, 0x4d, 0x05
-	.byte 0x40, 0x69, 0xf3, 0x05, 0xa8, 0x50, 0xad, 0x06
-	.byte 0xb0, 0xe7, 0x7d, 0x07, 0x10, 0xf3, 0x67, 0x08
-	.byte 0x00, 0x8e, 0x6e, 0x09, 0xc0, 0x34, 0x95, 0x0a
-	.byte 0x60, 0xd0, 0xdf, 0x0b, 0x70, 0xd1, 0x5c, 0x0c
-	.byte 0x70, 0xf6, 0xde, 0x0c, 0x80, 0x75, 0x66, 0x0d
-	.byte 0x00, 0x87, 0xf3, 0x0d, 0x90, 0x65, 0x86, 0x0e
-	.byte 0x40, 0x4e, 0x1f, 0x0f, 0xb0, 0x80, 0xbe, 0x0f
-	.byte 0x00, 0x3f, 0x64, 0x10, 0x20, 0xce, 0x10, 0x11
-	.byte 0xe0, 0x75, 0xc4, 0x11, 0xe0, 0x80, 0x7f, 0x12
-	.byte 0x00, 0x3d, 0x42, 0x13, 0x20, 0xfb, 0x0c, 0x14
-	.byte 0xa0, 0x0f, 0xe0, 0x14, 0x20, 0xd2, 0xbb, 0x15
-	.byte 0x20, 0x9e, 0xa0, 0x16, 0xc0, 0xd2, 0x8e, 0x17
-	.byte 0x20, 0xd3, 0x86, 0x18, 0x40, 0x06, 0x89, 0x19
-	.byte 0x80, 0xd7, 0x95, 0x1a, 0xa0, 0xb6, 0xad, 0x1b
-	.byte 0x20, 0x18, 0xd1, 0x1c, 0x00, 0x75, 0x00, 0x1e
-	.byte 0x80, 0x4b, 0x3c, 0x1f, 0x00, 0x1f, 0x85, 0x20
-	.byte 0x00, 0x78, 0xdb, 0x21, 0x00, 0xe5, 0x3f, 0x23
-	.byte 0x40, 0xfa, 0xb2, 0x24, 0x00, 0x52, 0x35, 0x26
-	.byte 0x00, 0x8d, 0xc7
-	.asciz "'@Rj)"
-	.byte 0x50, 0x1e, 0x2b, 0xc0, 0x9c, 0xde, 0x2b
-	.byte 0x00, 0x43, 0xa2, 0x2c, 0x00, 0x52, 0x69, 0x2d
-	.byte 0xc0, 0xd8, 0x33, 0x2e, 0xc0, 0xe6, 0x01, 0x2f
-	.byte 0x80, 0x8b, 0xd3, 0x2f, 0x40, 0xd7, 0xa8, 0x30
-	.byte 0x40, 0xda, 0x81, 0x31, 0x40, 0xa5, 0x5e, 0x32
-	.byte 0xc0
-	.byte 0x48, 0x3f, 0x33, 0x40
-	.byte 0xd6, 0x23, 0x34
-	.byte 0x00, 0x5f, 0x0c, 0x35, 0xc0, 0xf4, 0xf8, 0x35
-	.byte 0xc0, 0xa9, 0xe9, 0x36, 0x40, 0x90, 0xde, 0x37
-	.byte 0x00, 0xbb, 0xd7, 0x38, 0x00, 0x3d, 0xd5, 0x39
-	.byte 0x80, 0x29, 0xd7, 0x3a, 0x40, 0x94, 0xdd, 0x3b
-	.byte 0x40, 0x91, 0xe8, 0x3c, 0x00, 0x35, 0xf8, 0x3d
-	.byte 0x40, 0x94, 0x0c, 0x3f, 0x00, 0xc4, 0x25, 0x40
-	.byte 0x00, 0xda, 0x43, 0x41, 0x00, 0xec, 0x66, 0x42
-	.byte 0x00, 0x10, 0x8f, 0x43, 0x80, 0x5c, 0xbc, 0x44
-	.byte 0x00, 0xe9, 0xee, 0x45, 0x80, 0xcc, 0x26, 0x47
-	.byte 0x00, 0x1f, 0x64, 0x48, 0x80, 0xf8, 0xa6, 0x49
-	.byte 0x00, 0x72, 0xef, 0x4a, 0x80, 0xa4, 0x3d, 0x4c
-	.byte 0x80, 0xa9, 0x91, 0x4d, 0x00, 0x9b, 0xeb, 0x4e
-	.byte 0x00, 0x93, 0x4b, 0x50, 0x00, 0xad, 0xb1, 0x51
-	.byte 0x00, 0x04, 0x1e, 0x53, 0x00, 0xb4, 0x90, 0x54
-	.byte 0x00, 0xd9, 0x09, 0x56, 0x00, 0x90, 0x89, 0x57
-	.byte 0x80, 0xf6, 0x0f, 0x59, 0x00, 0x2a, 0x9d, 0x5a
-	.byte 0x00, 0x49, 0x31, 0x5c, 0x00, 0x72, 0xcc, 0x5d
-	.byte 0x00, 0xc5, 0x6e, 0x5f, 0x80, 0x61, 0x18, 0x61
-	.byte 0x00, 0x68, 0xc9, 0x62, 0x00, 0xfa, 0x81, 0x64
-	.byte 0x80, 0x38, 0x42, 0x66, 0x80, 0x46, 0x0a, 0x68
-	.byte 0x00, 0x46, 0xda, 0x69, 0x00, 0x5b, 0xb2, 0x6b
-	.byte 0x80, 0xa9, 0x92, 0x6d, 0x00, 0x56, 0x7b, 0x6f
-	.byte 0x00, 0x86, 0x6c, 0x71, 0x80, 0x5f, 0x66, 0x73
-	.byte 0x00, 0x09, 0x69, 0x75, 0x80, 0xa9, 0x74, 0x77
-	.byte 0x80, 0x69, 0x89, 0x79, 0x80, 0x71, 0xa7, 0x7b
-	.byte 0x80, 0xea, 0xce, 0x7d, 0x00, 0xff, 0xff, 0x7f
+	.byte 0x01, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x06, 0x00
+	.byte 0x00, 0x00, 0x54, 0x00, 0x4b, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00
+	.byte 0x00, 0x00, 0x01, 0x00, 0x05, 0x00, 0x01, 0x00
+	.byte 0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
+	.byte 0x14, 0x00, 0x00, 0x00, 0x23, 0x00, 0x0b, 0x00
+	.byte 0x14, 0x00, 0x32, 0x00, 0x46, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00
+	.byte 0x00, 0x00, 0x01, 0x00, 0x05, 0x00, 0x01, 0x00
+	.byte 0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
+	.byte 0x39, 0x00, 0x00, 0x00, 0x32, 0x00, 0x54, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
+	.byte 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00
+	.byte 0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
+	.byte 0x58, 0x00, 0x00, 0x00, 0x23, 0x00, 0x0e, 0x00
+	.byte 0x24, 0x00, 0x54, 0x00, 0x32, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00
+	.byte 0x00, 0x00, 0x01, 0x00, 0x05, 0x00, 0x01, 0x00
+	.byte 0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
+	.byte 0x4f, 0x00, 0x00, 0x00, 0x07, 0x00, 0x18, 0x00
+	.byte 0x0e, 0x00, 0x18, 0x00, 0x14, 0x00, 0x18, 0x00
+	.byte 0x17, 0x00, 0x18, 0x00, 0x54, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00
+	.byte 0x00, 0x00, 0x01, 0x00, 0x09, 0x00, 0x01, 0x00
+	.byte 0x63, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
+	.byte 0x00, 0x00
+; --- 0x00F140-0x00F33F  128 x u32 increasing gain curve ending at 0x7FFFFF00 (see the banner):
+; read by DSP_MixerCoeff_Compute (0x03C067) at three sites, `lda_d16 xbc,(this:16)`,
+; indexed 4*WA and 4*DE, the lookups multiplied against DSP_MixerGain_Curve[4*BC] and
+; written to DSP2 (MN19413) registers 0xD0 / 0xD3.
+DSP2_MixerGain_Curve:
+	.long 0x000088c1, 0x0010b244, 0x001a7691, 0x0029f176
+	.long 0x00427a83, 0x00695dc3, 0x0078fa73, 0x008ae753
+	.long 0x009f7c21, 0x00b71d9c, 0x00d23f70, 0x00f1666d
+	.long 0x01152b10, 0x013e3c6e, 0x016d6390, 0x01a38744
+	.long 0x01e1b08e, 0x021c788c, 0x025e6cdc, 0x02a86d98
+	.long 0x02fb7630, 0x0358a0c0, 0x03c129d4, 0x04367498
+	.long 0x04ba0f90, 0x054db9e0, 0x05f36940, 0x06ad50a8
+	.long 0x077de7b0, 0x0867f310, 0x096e8e00, 0x0a9534c0
+	.long 0x0bdfd060, 0x0c5cd170, 0x0cdef670, 0x0d667580
+	.long 0x0df38700, 0x0e866590, 0x0f1f4e40, 0x0fbe80b0
+	.long 0x10643f00, 0x1110ce20, 0x11c475e0, 0x127f80e0
+	.long 0x13423d00, 0x140cfb20, 0x14e00fa0, 0x15bbd220
+	.long 0x16a09e20, 0x178ed2c0, 0x1886d320, 0x19890640
+	.long 0x1a95d780, 0x1badb6a0, 0x1cd11820, 0x1e007500
+	.long 0x1f3c4b80, 0x20851f00, 0x21db7800, 0x233fe500
+	.long 0x24b2fa40, 0x26355200, 0x27c78d00, 0x296a5240
+	.long 0x2b1e5000, 0x2bde9cc0, 0x2ca24300, 0x2d695200
+	.long 0x2e33d8c0, 0x2f01e6c0, 0x2fd38b80, 0x30a8d740
+	.long 0x3181da40, 0x325ea540, 0x333f48c0, 0x3423d640
+	.long 0x350c5f00, 0x35f8f4c0, 0x36e9a9c0, 0x37de9040
+	.long 0x38d7bb00, 0x39d53d00, 0x3ad72980, 0x3bdd9440
+	.long 0x3ce89140, 0x3df83500, 0x3f0c9440, 0x4025c400
+	.long 0x4143da00, 0x4266ec00, 0x438f1000, 0x44bc5c80
+	.long 0x45eee900, 0x4726cc80, 0x48641f00, 0x49a6f880
+	.long 0x4aef7200, 0x4c3da480, 0x4d91a980, 0x4eeb9b00
+	.long 0x504b9300, 0x51b1ad00, 0x531e0400, 0x5490b400
+	.long 0x5609d900, 0x57899000, 0x590ff680, 0x5a9d2a00
+	.long 0x5c314900, 0x5dcc7200, 0x5f6ec500, 0x61186180
+	.long 0x62c96800, 0x6481fa00, 0x66423880, 0x680a4680
+	.long 0x69da4600, 0x6bb25b00, 0x6d92a980, 0x6f7b5600
+	.long 0x716c8600, 0x73665f80, 0x75690900, 0x7774a980
+	.long 0x79896980, 0x7ba77180, 0x7dceea80, 0x7fffff00
+; --- 0x00F340-0x00F34D  14 bytes between the curve and the pool (0xEE9AFF00, 0x10000003, zeros).
+; No reader found: no absolute operand (hex or decimal, :16 or :24) and no 3-byte LE
+; value in the image names an address in this range.  Purpose not established.
+IRAM_Unreferenced_F340:
 	.byte 0x00, 0xff, 0x9a, 0xee, 0x03, 0x00, 0x00, 0x10
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x55, 0x55
-	.byte 0x55, 0x55, 0x55, 0x55
-	.byte 0xc5, 0x3f, 0xb0, 0x10
-	.byte 0x11, 0x11, 0x11, 0x11, 0x81, 0x3f, 0x1a, 0x3e
-	.byte 0x01, 0x1a, 0xa0, 0x01, 0x2a, 0x3f, 0x63, 0xf0
-	.byte 0x24, 0xa5, 0xe3, 0x1d, 0xc7, 0x3e, 0xab, 0xc0
-	.byte 0x5d, 0x4b, 0x45, 0xe6, 0x5a, 0x3e, 0x30, 0xd4
-	.byte 0x6a, 0x68, 0x3c, 0x12, 0xe6, 0x3d, 0x9c, 0x49
-	.byte 0x08, 0xdc, 0x20, 0xe4, 0x6a, 0x3d, 0x95, 0xdf
-	.byte 0x93, 0x69, 0xff, 0x80, 0xe8, 0x3c, 0xa0, 0xe5
-	.byte 0x9e, 0x4b, 0xef, 0xae, 0xe2, 0x3e, 0x83, 0xc8
-	.byte 0xc9, 0x6d, 0x30, 0x5f, 0xd4, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x22, 0x09, 0x40, 0x44, 0xd1
-	.byte 0xd5, 0x33, 0xfa, 0xff, 0xef, 0x3d, 0x00, 0x00
-	.byte 0x00, 0x34, 0xff, 0xff, 0x7f, 0x7f, 0x00, 0x00
-	.byte 0x80, 0x00, 0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21
-	.byte 0x09, 0x40, 0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21
-	.byte 0x19, 0x40, 0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21
-	.byte 0xf9, 0x3f, 0xef, 0x39, 0xfa, 0xfe, 0x42, 0x2e
-	.byte 0xe6, 0x3f, 0xff, 0x79, 0x9f, 0x50, 0x13, 0x44
-	.byte 0xd3, 0x3f, 0x16, 0x55, 0xb5, 0xbb, 0xb1, 0x6b
-	.byte 0x02, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0xb0, 0x3c, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xef, 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x80, 0xc0, 0x3f, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f, 0xf7, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+; --- 0x00F34E-0x00F409  the head of the libm double pool (the banner above decodes it; the
+; tail is FPConst_MaxNorm / FPConst_Zero / FPConst_Sqrt2 at 0x00F420+).  One label per
+; constant; "read by" names the routine whose `lda (label:24)` loads it.
+FPConst_InvFact3:	.double 0.16666666666666666	; 1/3!, read by FP_SinCos_Kernel_Phase4 (fp_math, twice)
+FPConst_InvFact5:	.double 0.008333333333333165	; 1/5! (minimax-trimmed in the last bits), read by FP_SinCos_Kernel_Phase4
+FPConst_InvFact7:	.double 0.0001984126984120184	; 1/7!, read by FP_SinCos_Kernel_Phase4
+FPConst_InvFact9:	.double 2.7557319210152756e-06	; 1/9!, read by FP_SinCos_Kernel_Phase4
+FPConst_InvFact11:	.double 2.5052106798274583e-08	; 1/11!, read by FP_SinCos_Kernel_Phase4
+FPConst_InvFact13:	.double 1.605893649037159e-10	; 1/13!, read by FP_SinCos_Kernel_Phase4
+FPConst_InvFact15:	.double 7.642917806891047e-13	; 1/15!, no reader found in the payload (library constant)
+FPConst_InvFact17:	.double 2.7204790957888847e-15	; 1/17!, no reader found in the payload (library constant)
+FPConst_PiLo_CodyWaite:	.double 8.908910206761541e-06	; low part of a Cody-Waite pi (PiHi - this == pi), read by FP_SinCos_Kernel_Phase4
+FPConst_InvPi:	.double 0.3183098861837907	; 1/pi, read by FP_SinCos_Kernel_InRange
+FPConst_PiHi_CodyWaite:	.double 3.1416015625	; high part of a Cody-Waite pi, read by FP_SinCos_Kernel_Phase4
+FPConst_SinCos_Epsilon:	.double 2.3283e-10	; 2.3283e-10, the small-argument cut-off, read by FP_SinCos_Kernel_Phase4
+FPConst_FltEpsilon:	.float 1.1920928955078125e-07	; FLT_EPSILON, no reader found in the payload (library constant)
+FPConst_FltMax:	.float 3.4028234663852886e+38	; FLT_MAX, no reader found in the payload (library constant)
+FPConst_FltMin:	.float 1.1754943508222875e-38	; FLT_MIN, no reader found in the payload (library constant)
+FPConst_Pi:	.double 3.141592653589793	; pi, no reader found in the payload (library constant)
+FPConst_TwoPi:	.double 6.283185307179586	; 2*pi, no reader found in the payload (library constant)
+FPConst_HalfPi:	.double 1.5707963267948966	; pi/2, read by FP_cos (kn5000_subprogram_v142.s)
+FPConst_Ln2:	.double 0.6931471805599453	; ln 2, read by FP_log_IterLoop
+FPConst_Log10_2:	.double 0.3010299956639812	; log10 2, no reader found in the payload (library constant)
+FPConst_Ln10:	.double 2.302585092994046	; ln 10, no reader found in the payload (library constant)
+FPConst_DblEpsilon:	.double 2.220446049250313e-16	; DBL_EPSILON, no reader found in the payload (library constant)
+FPConst_DblMax:	.double 1.7976931348623157e+308	; DBL_MAX (the same value as FPConst_MaxNorm below), no reader found in the payload (library constant)
+FPConst_DblMin:	.double 2.2250738585072014e-308	; DBL_MIN, no reader found in the payload (library constant)
+FPConst_NegZero:	.double -0.0	; -0.0, no reader found in the payload (library constant)
+; --- 0x00F40A-0x00F41F  22 bytes that do not decode as clean doubles at this alignment.
+; No reader found: no absolute operand (hex or decimal, :16 or :24) and no 3-byte LE
+; value in the image names an address in this range.  Purpose not established.
+IRAM_Unreferenced_F40A:
+	.byte 0xc0, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xfe, 0x7f, 0xf7, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0x7f, 0x00, 0x00
 
 ; --- 0x00F420-0x00F42B  FPConst_MaxNorm (8 B) + FPConst_Zero (4 B)
 ; 0x00F420 = ff ff ff ff ff ff ef 7f = 0x7FEFFFFFFFFFFFFF = DBL_MAX (1.7976931348623157e308).
@@ -267,7 +285,9 @@ FPConst_Zero:
 ; (= 0.6931471805599453 = 0x3FE62E42FEFA39EF). Single consumer: subcpu_fp_math.s line 2299
 ; (`lda_24 xde, 0x00f42c`), the mantissa range-reduction step of the sqrt/exp path.
 ; Left alone per the no-rename rule; flagged in UNCERTAIN.
-FPConst_Ln2:
+; ★ Renamed 2026-09-25 from FPConst_Ln2 (the note above proves the value is sqrt(2)); the
+; name FPConst_Ln2 now labels the real ln 2 at 0x00F3D2.
+FPConst_Sqrt2:
 	.byte 0xcd, 0x3b, 0x7f, 0x66, 0x9e, 0xa0, 0xf6, 0x3f
 
 ; --- 0x00F434-0x00F449  Serial1_TxBuf_Struct -- ROM template for the serial-1 TX ring descriptor
@@ -301,20 +321,20 @@ Serial1_RxBuf_Struct:	; Struct do buffer de recepção da serial #1
 	.short 0x1FF	; 14
 
 
-; --- 0x00F460-0x00F46B  OFFSETS_F460 -- 6 x u16 jump offsets for the audio tick round-robin
+; --- 0x00F460-0x00F46B  AudioTick_CaseOffsets -- 6 x u16 jump offsets for the audio tick round-robin
 ; Read by Timer_AudioTick_Handler (0x01FB41, hardware vector 21 = INTT1): it keeps a byte counter
 ; at DRAM 0xF014 (61460), gates it to 0..5, doubles it, indexes this table and jumps to
 ; base 0x01FB76 + offset (`lda_24 xix,0x00f460 / ldw_sri BC / lda_24 xix,0x01fb76 / jp_ind`).
 ; Contents 0x0000, 0x0008, 0x000C, 0x0010, 0x0018, 0x0021 -- all six resolve exactly onto existing
 ; symbols: AUDIO_PLAYNOTE_VARIANT_1 (0x01FB76), _VARIANT_2 (0x01FB7E), _VARIANT_3 (0x01FB82),
 ; LABEL_01FB86, LABEL_01FB8E, LABEL_01FB97. That six-way landing is what proves the decoding.
-OFFSETS_F460:
-	.short 0x0	; Audio_PlayNote_Variant_1
-	.short 0x8	; Audio_PlayNote_Variant_2
-	.short 0xC	; Audio_PlayNote_Variant_3
-	.short 0x10	; AudioTick_Variant_4
-	.short 0x18	; AudioTick_Variant_5
-	.short 0x21	; AudioTick_Variant_6
+AudioTick_CaseOffsets:
+	.short Audio_PlayNote_Variant_1 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_1
+	.short Audio_PlayNote_Variant_2 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_2
+	.short Audio_PlayNote_Variant_3 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_3
+	.short AudioTick_Variant_4 - Audio_PlayNote_Variant_1	; AudioTick_Variant_4
+	.short AudioTick_Variant_5 - Audio_PlayNote_Variant_1	; AudioTick_Variant_5
+	.short AudioTick_Variant_6 - Audio_PlayNote_Variant_1	; AudioTick_Variant_6
 
 
 ; ----------------------------------------------------------------------------
@@ -380,20 +400,23 @@ Voice_CommandIndexTable:
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x10, 0x20
 	.ascii "!\"#$%&'()*+"
 
-// Voice_Pool_Quota_ModeA - per-pool polyphony quota, allocation mode A
-// 18 bytes, one per voice pool (0x112D + g*0x1E); copied into pool.quota by
-// Voice_Reset_Engine (0x021ECB) when called with A = 0.
-// 32+16+4+12 = 64 = the machine's full polyphony -> these are ALLOCATION
-// QUOTAS, not the envelope stage widths the old name claimed.
+;  Voice_Pool_Quota_ModeA - per-pool polyphony quota, allocation mode A
+;  18 bytes, one per voice pool (0x112D + g*0x1E); copied into pool.quota by
+;  Voice_Reset_Engine (0x021ECB) when called with A = 0.
+;  32+16+4+12 = 64 = the machine's full polyphony -> these are ALLOCATION
+;  QUOTAS, not the envelope stage widths the old name claimed.
+; Read by CmdTable_InitEntry_Loop (0x021FB4, inside Voice_Reset_Engine) when the caller flag at
+; (xsp+6) is 0: `lda xbc,(this:24) / ldb_sri` byte i -> offset 0 of the 30-byte pool record at
+; 0x112D + 30*i, for i = 0..0x11 (18 entries, the loop's `cp (xsp+4),0x12`).
 Voice_Pool_Quota_ModeA:
-	.byte 0x20, 0x10, 0x04, 0x0c, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x40, 0x40
+	.byte 32, 16, 4, 12, 0, 0, 0, 0		; pools 0-7
+	.byte 0, 0, 0, 0, 0, 0, 0, 0		; pools 8-15
+	.byte 64, 64				; pools 16-17
 
-// Voice_Pool_Quota_ModeB - per-pool polyphony quota, allocation mode B
-// Same meaning; used when Voice_Reset_Engine is called with A != 0.
-// 12+6+6+4+4+4+4+4+2*7+6 = 64 voices exactly across pools 0..15.
-// The real parameter->envelope-rate table is at 0x011963.
+;  Voice_Pool_Quota_ModeB - per-pool polyphony quota, allocation mode B
+;  Same meaning; used when Voice_Reset_Engine is called with A != 0.
+;  12+6+6+4+4+4+4+4+2*7+6 = 64 voices exactly across pools 0..15.
+;  The real parameter->envelope-rate table is at 0x011963.
 ; --- 0x00F519-0x00F52A  Voice_Pool_Quota_ModeB -- 18 bytes, per-section polyphony quota, mode B
 ; Both read by CmdTable_InitEntry_Loop (0x021FB4) / _AltPtr (0x021FDF): it walks i = 0..0x11 (18),
 ; computes i*0x1E and stores table[i] into offset 0 of the 30-byte section record at
@@ -404,42 +427,46 @@ Voice_Pool_Quota_ModeA:
 ;   64-voice pool. Entries 16 and 17 are 64 = "the whole pool" (unpartitioned/SFX section).
 ;   Mode A concentrates the pool in 4 sections; mode B spreads it over 16 (see 0x00F597).
 Voice_Pool_Quota_ModeB:
-	.byte 0x0c, 0x06, 0x06, 0x04, 0x04, 0x04, 0x04, 0x04
-	.byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x06
-	.byte 0x40, 0x40
+	.byte 12, 6, 6, 4, 4, 4, 4, 4		; pools 0-7
+	.byte 2, 2, 2, 2, 2, 2, 2, 6		; pools 8-15
+	.byte 64, 64				; pools 16-17
 
-// Voice_Part_PoolPtr_ModeA - part -> voice-pool binding, allocation mode A
-// 27 little-endian 32-bit pointers, one per part-allocation descriptor
-// (0x1349 + p*0x0C).  Every value is 0x112D + g*0x1E, the address of one of
-// the 18 voice pools.  Mode-B counterpart is the table at 0x00F597.
+;  Voice_Part_PoolPtr_ModeA - part -> voice-pool binding, allocation mode A
+;  27 little-endian 32-bit pointers, one per part-allocation descriptor
+;  (0x1349 + p*0x0C).  Every value is 0x112D + g*0x1E, the address of one of
+;  the 18 voice pools.  Mode-B counterpart is the table at 0x00F597.
+; Read by ChanStruct_Init_Entry (0x02205A) when the caller flag at (xsp+6) is 0: entry p
+; (`sla wa,2 / lda xbc,(this:24) / ld_sril3`) is stored at offset 0 of the 12-byte part record
+; at 0x1349 + 12*p, for p = 0..0x1A (27 entries, the loop's `cp (xsp+4),0x1B`).  Written below
+; as pool-record addresses 0x112D + 30*g, g = pool index.
 Voice_Part_PoolPtr_ModeA:
-	.byte 0x2d, 0x11, 0x00, 0x00
-	.byte 0x2d, 0x11, 0x00, 0x00
-	.byte 0x2d, 0x11, 0x00, 0x00
-	.byte 0x2d, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x69, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x4b, 0x11, 0x00, 0x00
-	.byte 0x69, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x87, 0x11, 0x00, 0x00
-	.byte 0x2b, 0x13, 0x00, 0x00
+	.long 0x112d + 30*0		; part 0 -> pool 0
+	.long 0x112d + 30*0		; part 1 -> pool 0
+	.long 0x112d + 30*0		; part 2 -> pool 0
+	.long 0x112d + 30*0		; part 3 -> pool 0
+	.long 0x112d + 30*1		; part 4 -> pool 1
+	.long 0x112d + 30*1		; part 5 -> pool 1
+	.long 0x112d + 30*1		; part 6 -> pool 1
+	.long 0x112d + 30*1		; part 7 -> pool 1
+	.long 0x112d + 30*1		; part 8 -> pool 1
+	.long 0x112d + 30*1		; part 9 -> pool 1
+	.long 0x112d + 30*1		; part 10 -> pool 1
+	.long 0x112d + 30*1		; part 11 -> pool 1
+	.long 0x112d + 30*1		; part 12 -> pool 1
+	.long 0x112d + 30*1		; part 13 -> pool 1
+	.long 0x112d + 30*1		; part 14 -> pool 1
+	.long 0x112d + 30*3		; part 15 -> pool 3
+	.long 0x112d + 30*1		; part 16 -> pool 1
+	.long 0x112d + 30*1		; part 17 -> pool 1
+	.long 0x112d + 30*1		; part 18 -> pool 1
+	.long 0x112d + 30*2		; part 19 -> pool 2
+	.long 0x112d + 30*3		; part 20 -> pool 3
+	.long 0x112d + 30*1		; part 21 -> pool 1
+	.long 0x112d + 30*2		; part 22 -> pool 2
+	.long 0x112d + 30*3		; part 23 -> pool 3
+	.long 0x112d + 30*3		; part 24 -> pool 3
+	.long 0x112d + 30*3		; part 25 -> pool 3
+	.long 0x112d + 30*17		; part 26 -> pool 17
 
 ; --- 0x00F597-0x00F602  (Voice_Pitch_Table_High) -- 27 x u32 pointers, channel -> section record, mode B
 ; ★ 0x00F597 is NOT a pitch table. Both tables have identical shape and are read by the same
@@ -507,15 +534,18 @@ Voice_Pitch_Table_High:
 Voice_KeyTable_Remapping:
 	.byte 0x06, 0x05, 0x02, 0x04, 0x03, 0x01, 0x00, 0xff
 ; 0xFF-terminated search order, 14 entries, referenced from record 0 of the table at 0x00F633.
+; (Voice_SFX_ModulationTable record +0 pointer); walked by Voice_Find_Candidate (0x02229A) until 0xFF.
 Voice_Search_Order_List_1:
 	.byte 0x86, 0x85, 0x06, 0x05, 0x84, 0x83, 0x82, 0x04
 	.byte 0x03, 0x02, 0x81, 0x80, 0x01, 0x00, 0xff
 ; 0xFF-terminated search order, 13 entries, referenced from record 1 of the table at 0x00F633.
+; (Voice_SFX_ModulationTable record +0 pointer); walked by Voice_Find_Candidate (0x02229A) until 0xFF.
 Voice_Search_Order_List_2:
 	.byte 0x86
 	.byte 0x85, 0x06, 0x05, 0x84, 0x83, 0x82, 0x04, 0x03
 	.byte 0x02, 0x81, 0x80, 0x01, 0xff
 ; 0xFF-terminated search order, 10 entries, referenced from records 2..15 of the table at 0x00F633.
+; (Voice_SFX_ModulationTable record +0 pointer); walked by Voice_Find_Candidate (0x02229A) until 0xFF.
 Voice_Search_Order_List_3:
 	.byte 0x86, 0x85, 0x06
 	.byte 0x05, 0x84, 0x83, 0x82, 0x04, 0x03, 0x02, 0xff
@@ -528,7 +558,9 @@ Voice_Search_Order_List_3:
 ;         +4 u8  = a small class code (0x00, 0x01, 0x02)
 ;         +5 u8  = copied verbatim into the allocated voice node at node+38
 ; Contents: {F60B,0,3}, {F61A,1,3}, {F628,2,4}, then 13 x {F628,2,5}.
-; 0x00F693-0x00F69A is 8 bytes of 0x00 filler between this table and the next.
+; ★ CORRECTED 2026-09-25: this line said "0x00F693-0x00F69A is 8 bytes of 0x00 filler between
+; this table and the next".  They are entries 0..3 of Pitch_OctaveShift_CaseOffsets, the
+; 10-entry table Pitch_Get_Patch_Octave_Shift reads from 0x00F693 (carve below).
 ; --- 0x00F633-0x00F692  Note-on layer descriptor table, 16 entries of 6 bytes
 ; Indexed by the low nibble of a note-event slot byte in Voice_Allocate_Nodes (0x0223BE).
 ; Entry layout: { u32 candidate_list_ptr; u8 priority_key; u8 node_param }.
@@ -551,60 +583,190 @@ Voice_SFX_ModulationTable:
 	.byte 0x28, 0xf6, 0x00, 0x00, 0x02, 0x05, 0x28, 0xf6
 	.byte 0x00, 0x00, 0x02, 0x05, 0x28, 0xf6, 0x00, 0x00
 	.byte 0x02, 0x05, 0x28, 0xf6, 0x00, 0x00, 0x02, 0x05
-	.zero 8
 
-PitchBend_DispatchTable:
-	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00
-	.byte 0x06, 0x00, 0x09, 0x00
-
-Voice_GroupOffsets_A:
-	.byte 0x0c, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x17, 0x00
-	.byte 0x1e, 0x00, 0x25, 0x00
-
-Voice_GroupOffsets_B:
-	.byte 0x2c, 0x00, 0x33, 0x00, 0x00, 0x00, 0x13, 0x00
-	.byte 0x13, 0x00, 0x1b, 0x00
-
-Voice_GroupOffsets_C:
-	.byte 0x36, 0x00, 0x3e, 0x00, 0x00, 0x00, 0x13, 0x00
-	.byte 0x13, 0x00, 0x1b, 0x00
-
-Voice_BitMask_ChannelType:
-	.byte 0x36, 0x00, 0x3e, 0x00, 0x01, 0x04, 0x10, 0x40
-	.byte 0x02, 0x08, 0x20, 0x80, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x80, 0x60, 0x80, 0x62, 0x80, 0x64, 0x80, 0x65
-
-MIDI_NoteFreqTable:
-	.byte 0x80, 0x67, 0x80, 0x69, 0x80, 0x6b, 0x80, 0x6c
-	.byte 0x00, 0x00, 0x05, 0x00, 0x0a, 0x00, 0x0f, 0x00
-
-Voice_EnvelopeRateTable:
-	.byte 0x1a, 0x00, 0x25, 0x00, 0x30, 0x00, 0x3b, 0x00
-	.byte 0x46, 0x00, 0x51, 0x00, 0x5c, 0x00, 0x67, 0x00
-	.byte 0x72, 0x00, 0x7d, 0x00, 0x88, 0x00, 0x93, 0x00
-	.byte 0x9e, 0x00, 0xa9, 0x00, 0xb4, 0x00, 0xbf, 0x00
-	.byte 0xca, 0x00, 0xd5, 0x00, 0xe0, 0x00, 0xeb, 0x00
-	.byte 0xf6, 0x00, 0x01, 0x01, 0x0c, 0x01, 0xe5, 0x00
-	.byte 0xf0, 0x00, 0xe2, 0x01, 0xfc, 0x00
-
-Voice_PolyphonyConfig:
-	.byte 0xe2, 0x01, 0xe2, 0x01, 0xe2, 0x01, 0xe2, 0x01
-	.byte 0x17, 0x01, 0x2d, 0x01, 0x51, 0x01, 0x08, 0x00
-	.byte 0x10, 0x00, 0x18, 0x00, 0x1e, 0x00
-
-Voice_ParamScaleTable:
-	.byte 0xf6, 0x00, 0x24, 0x00, 0x2c, 0x00, 0x34, 0x00
-	.byte 0x4f, 0x00, 0x52, 0x00, 0x5e, 0x00, 0x6a, 0x00
-	.byte 0x76, 0x00, 0x82, 0x00, 0x8e, 0x00, 0x9a, 0x00
-	.byte 0xa6, 0x00, 0xb2, 0x00, 0xbf, 0x00, 0xcc, 0x00
-	.byte 0xd9, 0x00, 0xe6, 0x00, 0xee, 0x00, 0x00, 0x01
-	.byte 0x06, 0x03, 0x05, 0x08, 0x02, 0x04
-
-Const_ChannelMax:
-	.byte 0x07
+; --- 0x00F693-0x00F6A6  10 x u16 case offsets from Pitch_Get_Patch_Octave_Shift_JumpTable (0x022982).
+; Read by Pitch_Get_Patch_Octave_Shift (0x02294E): WA = selector - 0x10, range-checked 0..9
+; (so 10 entries), doubled, `lda xix,(table:24) / ldw_sri / lda xix,(base:24) / jp_ind`.
+; Only selector 0x14 (entry 4) reaches the fallback; the other nine return 0.
+Pitch_OctaveShift_CaseOffsets:
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x10
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x11
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x12
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x13
+	.short Pitch_Get_Patch_Octave_Shift_Fallback - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x14
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x15
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x16
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x17
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x18
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x19
+; --- 0x00F6A7-0x00F6B2  6 x u16 case offsets from TVF_Build_Dispatch_Table (0x02412B).
+; Read by TVF_Build_Dispatch (0x024102): index = (tonerec+54) & 7, range-checked 0..5
+; (6 entries), doubled, then the same ldw_sri / jp_ind computed goto.
+TVF_Build_CaseOffsets:
+	.short TVF_Build_Dispatch_Table - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 0
+	.short TVF_Build_Dispatch_Case1 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 1
+	.short TVF_Build_Dispatch_Case2 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 2
+	.short TVF_Build_Dispatch_Case3 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 3
+	.short TVF_Build_Dispatch_Case4 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 4
+	.short TVF_Build_Dispatch_Case5 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 5
+; --- 0x00F6B3-0x00F6BE  6 x u16 case offsets from TVF_BuildEmit_Short_Dispatch_Table (0x02432C).
+; Read by TVF_BuildEmit_Short_Dispatch (0x024300): index = (tonerec+0x0F) & 7,
+; range-checked 0..5 (6 entries), doubled, ldw_sri / jp_ind.
+TVF_BuildEmit_Short_CaseOffsets:
+	.short TVF_BuildEmit_Short_Dispatch_Table - TVF_BuildEmit_Short_Dispatch_Table			; (tonerec+0x0F)&7 = 0
+	.short TVF_BuildEmit_Short_Case1 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 1
+	.short TVF_BuildEmit_Short_Case2 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 2
+	.short TVF_BuildEmit_Short_Case3 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 3
+	.short TVF_BuildEmit_Short_Case4 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 4
+	.short TVF_BuildEmit_Short_Case5 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 5
+; --- 0x00F6BF-0x00F6CA  6 x u16 case offsets from TVF_Emit_Registers_Table (0x024472).
+; Read by TVF_Emit_Registers (0x024444): index = (tonerec+54) & 7, range-checked 0..5
+; (6 entries), doubled, ldw_sri / jp_ind.  Cases 1 and 2 share one body.
+TVF_Emit_Registers_CaseOffsets:
+	.short TVF_Emit_Registers_Table - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 0
+	.short TVF_Emit_Registers_Case1 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 1
+	.short TVF_Emit_Registers_Case1 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 2
+	.short TVF_Emit_Registers_Case3 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 3
+	.short TVF_Emit_Registers_Case4 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 4
+	.short TVF_Emit_Registers_Case5 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 5
+; --- 0x00F6CB-0x00F6D6  6 x u16 case offsets from Voice_PanReg_WriteDispatchB_Table (0x024582); the same six
+; values as TVF_Emit_Registers_CaseOffsets, for the twin landing pad.
+; Read by Voice_PanReg_WriteDispatchB (0x024554): index = (tonerec+0x0F) & 7, range-checked
+; 0..5 (6 entries), doubled, ldw_sri / jp_ind.  Cases 1 and 2 share one body.
+Voice_PanReg_WriteDispatchB_CaseOffsets:
+	.short Voice_PanReg_WriteDispatchB_Table - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 0
+	.short Voice_PanReg_WriteDispatchB_Case1 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 1
+	.short Voice_PanReg_WriteDispatchB_Case1 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 2
+	.short Voice_PanReg_WriteDispatchB_Case3 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 3
+	.short Voice_PanReg_WriteDispatchB_Case4 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 4
+	.short Voice_PanReg_WriteDispatchB_Case5 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 5
+; --- 0x00F6D7-0x00F6DE  two 4-byte bit tables, one byte per output bus w = 0..3
+; Read by AudioMod_Apply_BusRouting (0x02833C): per bus w it loads byte [table + w]
+; from each (`lda xiy,(table:24) / ld L,(XIY+HL)`, HL = w, loop bound w < 4) and ANDs it
+; with the caller's C: EnableBits[w] = 1 << 2w, OrIXBits[w] = 1 << (2w+1).  With the
+; enable bit clear the routine clears DE|IX in slot word w (+0x18 of output-slot record w
+; of the part); with it set, the second bit chooses OR DE|IX (set) or clear IX then OR DE.
+AudioMod_BusRouting_EnableBits:
+	.byte 0x01, 0x04, 0x10, 0x40		; buses 0..3: bits 0, 2, 4, 6 of C
+AudioMod_BusRouting_OrIXBits:
+	.byte 0x02, 0x08, 0x20, 0x80		; buses 0..3: bits 1, 3, 5, 7 of C
+; --- 0x00F6DF-0x00F6F2  10 x u16 case offsets from AudioMod_Porta_Curve_JumpBase (0x028500).
+; Read by AudioMod_Apply_Porta_Curve (0x0284AC): index = A - 0x10, range-checked 0..9
+; (10 entries), doubled, ldw_sri / jp_ind.  Only A = 0x14 (entry 4) reaches
+; AudioMod_Apply_Porta_Curve_Skip; the other nine take the shared base body.
+AudioMod_PortaCurve_CaseOffsets:
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x10
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x11
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x12
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x13
+	.short AudioMod_Apply_Porta_Curve_Skip - AudioMod_Porta_Curve_JumpBase				; A = 0x14
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x15
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x16
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x17
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x18
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x19
+; --- 0x00F6F3-0x00F702  8 x u16, rhythm-mode word stored at 0x041360
+; Read by Voice_SetRhythmMode (0x028B9C): index = bits 7..4 of the packed SysEx byte A
+; (`and c,0xF0 / srl c,4 / add bc,bc / lda xde,(table:24) / ldw_sri`), result -> 0x041360.
+; Count 8 is pinned by the next table (AudioChannel_CaseOffsets, 0x00F703): the reader
+; does NOT bound the index, so a nibble of 8..15 would read that table instead.
+; High bytes 0x60 0x62 0x64 0x65 0x67 0x69 0x6B 0x6C step 2,2,1,2,2,2,1 -- a major scale --
+; and the low byte is 0x80 in all eight.  Reading them as 8.8 semitone pitches (the unit
+; Pitch_Get_Patch_Octave_Shift uses) is an inference from that pattern; the consumer of
+; 0x041360 was not traced.
+Voice_RhythmMode_ScalePitch_Table:
+	.short 0x6080, 0x6280, 0x6480, 0x6580, 0x6780, 0x6980, 0x6b80, 0x6c80
+; --- 0x00F703-0x00F738  27 x u16 case offsets from AudioChannel_DispatchTable (0x029E5B): the stub for
+; destination command id k+1 (entries 0..2 are 5-byte stubs, the rest 11-byte ones).
+; Read by AudioChannel_Dispatch (0x029E31): index = ((XDE+1) & 0x3F) - 1, range-checked
+; 0..0x1A (27 entries), doubled, ldw_sri / jp_ind.
+AudioChannel_CaseOffsets:
+	.short AudioChannel_DispatchTable - AudioChannel_DispatchTable					; command id 0x01
+	.short AudioChannel_Stub_Cmd02 - AudioChannel_DispatchTable					; command id 0x02
+	.short AudioChannel_Stub_Cmd03 - AudioChannel_DispatchTable					; command id 0x03
+	.short AudioChannel_Stub_Cmd04 - AudioChannel_DispatchTable					; command id 0x04
+	.short AudioChannel_Stub_Cmd05 - AudioChannel_DispatchTable					; command id 0x05
+	.short AudioChannel_Stub_Cmd06 - AudioChannel_DispatchTable					; command id 0x06
+	.short AudioChannel_Stub_Cmd07 - AudioChannel_DispatchTable					; command id 0x07
+	.short AudioChannel_Stub_Cmd08 - AudioChannel_DispatchTable					; command id 0x08
+	.short AudioChannel_Stub_Cmd09 - AudioChannel_DispatchTable					; command id 0x09
+	.short AudioChannel_Stub_Cmd0A - AudioChannel_DispatchTable					; command id 0x0A
+	.short AudioChannel_Stub_Cmd0B - AudioChannel_DispatchTable					; command id 0x0B
+	.short AudioChannel_Stub_Cmd0C - AudioChannel_DispatchTable					; command id 0x0C
+	.short AudioChannel_Stub_Cmd0D - AudioChannel_DispatchTable					; command id 0x0D
+	.short AudioChannel_Stub_Cmd0E - AudioChannel_DispatchTable					; command id 0x0E
+	.short AudioChannel_Stub_Cmd0F - AudioChannel_DispatchTable					; command id 0x0F
+	.short AudioChannel_Stub_Cmd10 - AudioChannel_DispatchTable					; command id 0x10
+	.short AudioChannel_Stub_Cmd11 - AudioChannel_DispatchTable					; command id 0x11
+	.short AudioChannel_Stub_Cmd12 - AudioChannel_DispatchTable					; command id 0x12
+	.short AudioChannel_Stub_Cmd13 - AudioChannel_DispatchTable					; command id 0x13
+	.short AudioChannel_Stub_Cmd14 - AudioChannel_DispatchTable					; command id 0x14
+	.short AudioChannel_Stub_Cmd15 - AudioChannel_DispatchTable					; command id 0x15
+	.short AudioChannel_Stub_Cmd16 - AudioChannel_DispatchTable					; command id 0x16
+	.short AudioChannel_Stub_Cmd17 - AudioChannel_DispatchTable					; command id 0x17
+	.short AudioChannel_Stub_Cmd18 - AudioChannel_DispatchTable					; command id 0x18
+	.short AudioChannel_Stub_Cmd19 - AudioChannel_DispatchTable					; command id 0x19
+	.short AudioChannel_Stub_Cmd1A - AudioChannel_DispatchTable					; command id 0x1A
+	.short AudioChannel_Stub_Cmd1B - AudioChannel_DispatchTable					; command id 0x1B
+; --- 0x00F739-0x00F74E  11 x u16 case offsets for controller numbers 120..130, relative to Voice_CC_ModWheel
+; (0x02A306, which is only the base of the arithmetic here, not a case).
+; Read by Voice_CtrlChange (0x02A282) after its explicit compares for the other CCs:
+; WA = CC - 0x78, range-checked 0..0x0A (11 entries), doubled, ldw_sri / jp_ind.
+; 122 and 124..127 go straight to Voice_CC_Exit.  (MIDI 1.0 names 120/121/123 All
+; Sound Off / Reset All Controllers / All Notes Off; 128..130 are not MIDI controller
+; numbers, so they arrive from inside the firmware.  Each target's body is its callee
+; list, written next to its entry.)
+Voice_CC_Mode_CaseOffsets:
+	.short Voice_CC_Num120 - Voice_CC_ModWheel							; CC 120 -> Voice_PortamentoSlots_WriteHW(part)
+	.short Voice_CC_Num121 - Voice_CC_ModWheel							; CC 121 -> Voice_NoteState_Clear(part)
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 122 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Num123 - Voice_CC_ModWheel							; CC 123 -> Voice_SetLFO_ActiveFlag, Voice_AllocateForRelease, Voice_ParamInit
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 124 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 125 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 126 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 127 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Num128 - Voice_CC_ModWheel							; CC 128 -> Voice_CC_SetPortamentoRate(part, value)
+	.short Voice_CC_Num129 - Voice_CC_ModWheel							; CC 129 -> Voice_CC_SetPortamentoDepth, then Pitch_Refresh_Sounding_Voices
+	.short Voice_CC_Num130 - Voice_CC_ModWheel							; CC 130 -> Voice_CC_SetPortamentoTime(part, value)
+; --- 0x00F74F-0x00F77C  23 x u16 case offsets from Voice_SystemMsg_DispatchTable (0x02A7FC).
+; Read by Voice_SystemMsg (0x02A7AF, the jump at Voice_SystemMsg_DispatchJump):
+; sub-command C - 0x80 in 0..7 is used directly; otherwise C - 0x80 - 0x1B must be
+; 8..0x16, so entries 8..22 serve sub-commands 0xA3..0xB1 (23 entries in all).
+; Doubled, ldw_sri / jp_ind.  Sub-command 0x84 lands on a bare `ret`.
+Voice_SystemMsg_CaseOffsets:
+	.short Voice_SystemMsg_Sub80 - Voice_SystemMsg_DispatchTable					; sub-command 0x80
+	.short Voice_SystemMsg_Sub81 - Voice_SystemMsg_DispatchTable					; sub-command 0x81
+	.short Voice_SystemMsg_Sub82 - Voice_SystemMsg_DispatchTable					; sub-command 0x82
+	.short Voice_SystemMsg_Sub83 - Voice_SystemMsg_DispatchTable					; sub-command 0x83
+	.short Voice_SystemMsg_Sub84 - Voice_SystemMsg_DispatchTable					; sub-command 0x84
+	.short Voice_SystemMsg_Sub85 - Voice_SystemMsg_DispatchTable					; sub-command 0x85
+	.short Voice_SystemMsg_Sub86 - Voice_SystemMsg_DispatchTable					; sub-command 0x86
+	.short Voice_SystemMsg_Sub87 - Voice_SystemMsg_DispatchTable					; sub-command 0x87
+	.short Voice_SystemMsg_SubA3 - Voice_SystemMsg_DispatchTable					; sub-command 0xA3
+	.short Voice_SystemMsg_SubA4 - Voice_SystemMsg_DispatchTable					; sub-command 0xA4
+	.short Voice_SystemMsg_SubA5 - Voice_SystemMsg_DispatchTable					; sub-command 0xA5
+	.short Voice_SystemMsg_SubA6 - Voice_SystemMsg_DispatchTable					; sub-command 0xA6
+	.short Voice_SystemMsg_SubA7 - Voice_SystemMsg_DispatchTable					; sub-command 0xA7
+	.short Voice_SystemMsg_SubA8 - Voice_SystemMsg_DispatchTable					; sub-command 0xA8
+	.short Voice_SystemMsg_SubA9 - Voice_SystemMsg_DispatchTable					; sub-command 0xA9
+	.short Voice_SystemMsg_SubAA - Voice_SystemMsg_DispatchTable					; sub-command 0xAA
+	.short Voice_SystemMsg_SubAB - Voice_SystemMsg_DispatchTable					; sub-command 0xAB
+	.short Voice_SystemMsg_SubAC - Voice_SystemMsg_DispatchTable					; sub-command 0xAC
+	.short Voice_SystemMsg_SubAD - Voice_SystemMsg_DispatchTable					; sub-command 0xAD
+	.short Voice_SystemMsg_SubAE - Voice_SystemMsg_DispatchTable					; sub-command 0xAE
+	.short Voice_SystemMsg_SubAF - Voice_SystemMsg_DispatchTable					; sub-command 0xAF
+	.short Voice_SystemMsg_SubB0 - Voice_SystemMsg_DispatchTable					; sub-command 0xB0
+	.short Voice_SystemMsg_SubB1 - Voice_SystemMsg_DispatchTable					; sub-command 0xB1
+; --- 0x00F77D-0x00F785  3 records x 3 bytes: scratch-array slot of each 4-bit field
+; Read by Voice_Selector_Unpack3Groups (0x02ABEE): for group E = 0..2 it reads bytes
+; [table + 3E + 0], [+1], [+2] (three `lda (table+k:24)` bases, index E*3 via `muls 3`) and
+; stores the k-th low nibble of BC at that index of the caller's 9-byte stack array.
+; The nine destinations are a permutation of 0..8.  Count 3 = the three calls E = 0..2 made
+; by Voice_Selector_FindBestSlot.  (The last byte, 0x07, was labelled Const_ChannelMax.)
+Voice_Selector_FieldSlot_Table:
+	.byte 0, 1, 6		; group 0: fields 0,1,2 -> slots 0, 1, 6
+	.byte 3, 5, 8		; group 1: fields 0,1,2 -> slots 3, 5, 8
+	.byte 2, 4, 7		; group 2: fields 0,1,2 -> slots 2, 4, 7
 
 ; --- 0x00F786-0x00F799  10 x s16, part transpose/trim table A -> DRAM 0x041476
 ; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / stw_dri` in Voice_Selector_ComputeMixWeights
@@ -619,7 +781,7 @@ Const_ChannelMax:
 ;  "region" it was outside of was that proposal's code region, not this file.)
 ; FIVE adjacent u16 tables consumed by Voice_Selector_ComputeMixWeights (0x02AD03).  They
 ; tile the span exactly and end where Voice_Portamento_Rate_Table begins at 0x00F7E6:
-;   0x00F786  Const_Zero_Byte (+PitchDetune_OffsetTable)  10 entries, COUNT -> part+0x10E
+;   0x00F786  Voice_Part_Trim_Table_A (was Const_Zero_Byte + PitchDetune_OffsetTable)  10 entries, COUNT -> part+0x10E
 ;   0x00F79A  Voice_Part_Trim_Table_B                      9 entries, INDEX -> part+0x112
 ;   0x00F7AC  Voice_Part_Trim_Addend_1                     9 entries, INDEX  ]
 ;   0x00F7BE  Voice_Part_Trim_Addend_2                    10 entries, VALUE  }- summed into
@@ -630,8 +792,13 @@ Const_ChannelMax:
 ; code does not make: COUNT is bounded to 0..9 by the producer loop, but INDEX can come back
 ; as 0xFF and VALUE is an unclamped nibble.  The consumer's header in
 ; kn5000_subprogram_v142.s spells out all three cases.
-Const_Zero_Byte:
-	.byte 0x00
+; ★ 2026-09-25: the 20-byte table is now one object.  It used to be `Const_Zero_Byte: .byte 0x00`
+; here plus 19 bytes under a second label, PitchDetune_OffsetTable, at 0x00F787 -- the middle of
+; entry 0, referenced by nothing.  Relabelled Voice_Part_Trim_Table_A after its siblings
+; (Voice_Part_Trim_Table_B ...), typed as the 10 x s16 its reader loads (`ldw_sri`), and the
+; mid-entry label dropped.
+Voice_Part_Trim_Table_A:
+	.short 0, 0, -1, -2, -3, -4, -5, -6, -7, -8
 
 ; --- 0x00F787-0x012158  formerly one 10 KiB blob under PitchDetune_OffsetTable -- NOW SPLIT
 ; The name used to cover everything between two named symbols while the code indexes 60+
@@ -652,10 +819,6 @@ Const_Zero_Byte:
 ;   0x0118FE           Voice_EnvelopeLevel_Curve (38 references, hottest object confirmed)
 ;   0x011963/0x0119C8/0x011ACF/0x011ADF/0x011D16/0x011E16  named per-part tables below
 ;   0x012115-0x012158  the tone-generator voice template (own entry below)
-PitchDetune_OffsetTable:
-	.byte 0x00, 0x00, 0x00, 0xff, 0xff, 0xfe, 0xff, 0xfd, 0xff
-	.byte 0xfc, 0xff, 0xfb, 0xff, 0xfa, 0xff, 0xf9, 0xff
-	.byte 0xf8, 0xff
 ; 9 x s16 -> DRAM 0x04147A + part*0x11F (in Voice_Selector_ComputeMixWeights, 0x02AD03),
 ; same idiom as 0x00F786.
 ; Values -3072, 0, 1792, 3072, 4864, 6144, 7168, 7936, 9216 = 256 * (-12, 0, +7, +12, +19, +24,
@@ -754,37 +917,91 @@ DSP_VOICEPARAM_DEFAULT_TABLE:
 ; --- 0x00F965-0x00F972  VOICEPARAM_TONE_OPTION_JUMPTABLE -- 7 u16 jump offsets, base 0x02E89B
 ; Computed jump in VoiceParam_Set_Tone_Option (option index 0..6): `jp T, 0x02E89B + table[index*2]`.
 VOICEPARAM_TONE_OPTION_JUMPTABLE:
-	.short 0x0000, 0x000b, 0x002e, 0x0043, 0x007d, 0x0058, 0x0063
+	.short VoiceParam_Set_Tone_Option_Case0 - VoiceParam_Set_Tone_Option_Case0	; index 0
+	.short VoiceParam_Set_Tone_Option_Case1 - VoiceParam_Set_Tone_Option_Case0	; index 1
+	.short VoiceParam_Set_Tone_Option_Case2 - VoiceParam_Set_Tone_Option_Case0	; index 2
+	.short VoiceParam_Set_Tone_Option_Case3 - VoiceParam_Set_Tone_Option_Case0	; index 3
+	.short VoiceParam_Set_Tone_Option_Epilogue - VoiceParam_Set_Tone_Option_Case0	; index 4
+	.short VoiceParam_Set_Tone_Option_Case5 - VoiceParam_Set_Tone_Option_Case0	; index 5
+	.short VoiceParam_Set_Tone_Option_Case6 - VoiceParam_Set_Tone_Option_Case0	; index 6
 
 ; --- 0x00F973-0x00F99A  AUDIO_CMD_TONEEDIT_JUMPTABLE -- 20 u16 jump offsets, base 0x02EDB9
 ; Computed jump in Audio_Cmd_ToneEdit_TableJump (opcodes 0x00..0x13): `jp T, 0x02EDB9 + table[index*2]`.
 AUDIO_CMD_TONEEDIT_JUMPTABLE:
-	.short 0x0000, 0x0255, 0x0255, 0x0255, 0x0016, 0x0035, 0x0054, 0x0073
-	.short 0x0092, 0x00b1, 0x00e4, 0x0117, 0x0182, 0x016d, 0x01b8, 0x01c8
-	.short 0x01f1, 0x0221, 0x0251, 0x0255
+	.short Audio_Cmd_ToneEdit_Op00 - Audio_Cmd_ToneEdit_Op00	; index 0
+	.short Audio_Cmd_ToneEdit_Return - Audio_Cmd_ToneEdit_Op00	; index 1
+	.short Audio_Cmd_ToneEdit_Return - Audio_Cmd_ToneEdit_Op00	; index 2
+	.short Audio_Cmd_ToneEdit_Return - Audio_Cmd_ToneEdit_Op00	; index 3
+	.short Audio_Cmd_ToneEdit_Op04 - Audio_Cmd_ToneEdit_Op00	; index 4
+	.short Audio_Cmd_ToneEdit_Op05 - Audio_Cmd_ToneEdit_Op00	; index 5
+	.short Audio_Cmd_ToneEdit_Op06 - Audio_Cmd_ToneEdit_Op00	; index 6
+	.short Audio_Cmd_ToneEdit_Op07 - Audio_Cmd_ToneEdit_Op00	; index 7
+	.short Audio_Cmd_ToneEdit_Op08 - Audio_Cmd_ToneEdit_Op00	; index 8
+	.short Audio_Cmd_ToneEdit_Op09 - Audio_Cmd_ToneEdit_Op00	; index 9
+	.short Audio_Cmd_ToneEdit_Op0A - Audio_Cmd_ToneEdit_Op00	; index 10
+	.short Audio_Cmd_ToneEdit_Op0B - Audio_Cmd_ToneEdit_Op00	; index 11
+	.short Audio_Cmd_ToneEdit_Op0C - Audio_Cmd_ToneEdit_Op00	; index 12
+	.short Audio_Cmd_ToneEdit_Op0D_SelectPart - Audio_Cmd_ToneEdit_Op00	; index 13
+	.short Audio_Cmd_ToneEdit_Op13 - Audio_Cmd_ToneEdit_Op00	; index 14
+	.short Audio_Cmd_ToneEdit_Op14 - Audio_Cmd_ToneEdit_Op00	; index 15
+	.short Audio_Cmd_ToneEdit_Op15 - Audio_Cmd_ToneEdit_Op00	; index 16
+	.short Audio_Cmd_ToneEdit_Op16 - Audio_Cmd_ToneEdit_Op00	; index 17
+	.short Audio_Cmd_ToneEdit_Op17 - Audio_Cmd_ToneEdit_Op00	; index 18
+	.short Audio_Cmd_ToneEdit_Return - Audio_Cmd_ToneEdit_Op00	; index 19
 
 ; --- 0x00F99B-0x00F9B2  DSP_EFFPARAM_APPLY_JUMPTABLE -- 12 u16 jump offsets, base 0x02F2D9
 ; Computed jump in DSP_EffParam_Apply_By_AlgoType (algorithm type 0..11): `jp T, 0x02F2D9 + table[index*2]`.
 DSP_EFFPARAM_APPLY_JUMPTABLE:
-	.short 0x0000, 0x0007, 0x000e, 0x0015, 0x001c, 0x0023, 0x002a, 0x0031
-	.short 0x0038, 0x0040, 0x0048, 0x0050
+	.short DSP_EffParam_Apply_T0 - DSP_EffParam_Apply_T0	; index 0
+	.short DSP_EffParam_Apply_T1 - DSP_EffParam_Apply_T0	; index 1
+	.short DSP_EffParam_Apply_T2 - DSP_EffParam_Apply_T0	; index 2
+	.short DSP_EffParam_Apply_T3 - DSP_EffParam_Apply_T0	; index 3
+	.short DSP_EffParam_Apply_T4 - DSP_EffParam_Apply_T0	; index 4
+	.short DSP_EffParam_Apply_T5 - DSP_EffParam_Apply_T0	; index 5
+	.short DSP_EffParam_Apply_T6 - DSP_EffParam_Apply_T0	; index 6
+	.short DSP_EffParam_Apply_T7 - DSP_EffParam_Apply_T0	; index 7
+	.short DSP_EffParam_Apply_T8 - DSP_EffParam_Apply_T0	; index 8
+	.short DSP_EffParam_Apply_T9 - DSP_EffParam_Apply_T0	; index 9
+	.short DSP_EffParam_Apply_TA - DSP_EffParam_Apply_T0	; index 10
+	.short DSP_EffParam_Apply_TB - DSP_EffParam_Apply_T0	; index 11
 
 ; --- 0x00F9B3-0x00F9C2  VOICE_DSPOUT_A_JUMPTABLE -- 8 u16 jump offsets, base 0x02F36E
 ; Computed jump in Voice_DSPOut_Apply_A ((patch+0x5D) & 0x0F, types 0..7): `jp T, 0x02F36E + table[index*2]`.
 ; Byte-identical to VOICE_DSPOUT_B_JUMPTABLE below (twin dispatchers, different
 ; arm bases).
 VOICE_DSPOUT_A_JUMPTABLE:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0016, 0x0016, 0x0022, 0x002c
+	.short Voice_DSPOut_A_Type0To3 - Voice_DSPOut_A_Type0To3	; index 0
+	.short Voice_DSPOut_A_Type0To3 - Voice_DSPOut_A_Type0To3	; index 1
+	.short Voice_DSPOut_A_Type0To3 - Voice_DSPOut_A_Type0To3	; index 2
+	.short Voice_DSPOut_A_Type0To3 - Voice_DSPOut_A_Type0To3	; index 3
+	.short Voice_DSPOut_A_Type4To5 - Voice_DSPOut_A_Type0To3	; index 4
+	.short Voice_DSPOut_A_Type4To5 - Voice_DSPOut_A_Type0To3	; index 5
+	.short Voice_DSPOut_A_Type6 - Voice_DSPOut_A_Type0To3	; index 6
+	.short Voice_DSPOut_A_Type7 - Voice_DSPOut_A_Type0To3	; index 7
 
 ; --- 0x00F9C3-0x00F9D2  VOICE_DSPOUT_B_JUMPTABLE -- 8 u16 jump offsets, base 0x02F3FA
 ; Computed jump in Voice_DSPOut_Apply_B (types 0..7): `jp T, 0x02F3FA + table[index*2]`.
 VOICE_DSPOUT_B_JUMPTABLE:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0016, 0x0016, 0x0022, 0x002c
+	.short Voice_DSPOut_B_Type0To3 - Voice_DSPOut_B_Type0To3	; index 0
+	.short Voice_DSPOut_B_Type0To3 - Voice_DSPOut_B_Type0To3	; index 1
+	.short Voice_DSPOut_B_Type0To3 - Voice_DSPOut_B_Type0To3	; index 2
+	.short Voice_DSPOut_B_Type0To3 - Voice_DSPOut_B_Type0To3	; index 3
+	.short Voice_DSPOut_B_Type4To5 - Voice_DSPOut_B_Type0To3	; index 4
+	.short Voice_DSPOut_B_Type4To5 - Voice_DSPOut_B_Type0To3	; index 5
+	.short Voice_DSPOut_B_Type6 - Voice_DSPOut_B_Type0To3	; index 6
+	.short Voice_DSPOut_B_Type7 - Voice_DSPOut_B_Type0To3	; index 7
 
 ; --- 0x00F9D3-0x00F9E2  VOICE_DSPOUT_SECOND_A_JUMPTABLE -- 8 u16 jump offsets, base 0x02F48C
 ; Computed jump in Voice_DSPOut_Second_A (algorithm types 4..0x0B mapped to index 0..7): `jp T, 0x02F48C + table[index*2]`.
 VOICE_DSPOUT_SECOND_A_JUMPTABLE:
-	.short 0x0000, 0x0000, 0x0008, 0x000e, 0x0035, 0x0035, 0x002d, 0x002d
+	.short Voice_DSPOut_Second_A_Slot1 - Voice_DSPOut_Second_A_Slot1	; index 0
+	.short Voice_DSPOut_Second_A_Slot1 - Voice_DSPOut_Second_A_Slot1	; index 1
+	.short Voice_DSPOut_Second_A_Simple - Voice_DSPOut_Second_A_Slot1	; index 2
+	.short Voice_DSPOut_Second_A_Gated - Voice_DSPOut_Second_A_Slot1	; index 3
+	.short Voice_DSPOut_Second_A_None - Voice_DSPOut_Second_A_Slot1	; index 4
+	.short Voice_DSPOut_Second_A_None - Voice_DSPOut_Second_A_Slot1	; index 5
+	.short Voice_DSPOut_Second_A_Slot0 - Voice_DSPOut_Second_A_Slot1	; index 6
+	.short Voice_DSPOut_Second_A_Slot0 - Voice_DSPOut_Second_A_Slot1	; index 7
 
 ; --- 0x00F9E3-0x00FA37  AUDIO_CMD_EFFPARAM_CASEMAP -- 85 bytes, opcode -> case
 ; Audio_Cmd_EffParam_TableJump maps opcode-0x11 (0..84) through this byte table
@@ -806,17 +1023,60 @@ AUDIO_CMD_EFFPARAM_CASEMAP:
 ; --- 0x00FA38-0x00FA75  AUDIO_CMD_EFFPARAM_JUMPTABLE -- 31 u16 jump offsets, base 0x02F9FA
 ; Computed jump in Audio_Cmd_EffParam_TableJump (case number 0x00..0x1E from the casemap above): `jp T, 0x02F9FA + table[index*2]`.
 AUDIO_CMD_EFFPARAM_JUMPTABLE:
-	.short 0x0003, 0x001e, 0x0385, 0x002d, 0x0059, 0x0085, 0x00b1, 0x00dd
-	.short 0x0109, 0x0135, 0x0161, 0x0171, 0x0181, 0x0191, 0x01a1, 0x01b1
-	.short 0x01c1, 0x01d1, 0x01e1, 0x01f1, 0x0201, 0x0211, 0x0221, 0x02e0
-	.short 0x02ee, 0x0307, 0x0320, 0x0339, 0x0347, 0x0355, 0x0363
+	.short Audio_Cmd_EffParam_Op11 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 0
+	.short Audio_Cmd_EffParam_Op12 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 1
+	.short Audio_Cmd_EffParam_Return - Audio_Cmd_EffParam_TableJump_CaseBase	; index 2
+	.short Audio_Cmd_EffParam_Op14 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 3
+	.short Audio_Cmd_EffParam_Op17 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 4
+	.short Audio_Cmd_EffParam_Op1A - Audio_Cmd_EffParam_TableJump_CaseBase	; index 5
+	.short Audio_Cmd_EffParam_Op1D - Audio_Cmd_EffParam_TableJump_CaseBase	; index 6
+	.short Audio_Cmd_EffParam_Op20 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 7
+	.short Audio_Cmd_EffParam_Op23 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 8
+	.short Audio_Cmd_EffParam_Op26 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 9
+	.short Audio_Cmd_EffParam_Grp0_Slot0 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 10
+	.short Audio_Cmd_EffParam_Grp0_Slot1 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 11
+	.short Audio_Cmd_EffParam_Grp0_Slot2 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 12
+	.short Audio_Cmd_EffParam_Grp0_Slot3 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 13
+	.short Audio_Cmd_EffParam_Grp1_Slot0 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 14
+	.short Audio_Cmd_EffParam_Grp1_Slot1 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 15
+	.short Audio_Cmd_EffParam_Grp1_Slot2 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 16
+	.short Audio_Cmd_EffParam_Grp1_Slot3 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 17
+	.short Audio_Cmd_EffParam_Grp2_Slot0 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 18
+	.short Audio_Cmd_EffParam_Grp2_Slot1 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 19
+	.short Audio_Cmd_EffParam_Grp2_Slot2 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 20
+	.short Audio_Cmd_EffParam_Grp2_Slot3 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 21
+	.short Audio_Cmd_EffParam_Op5D_FullRebuild - Audio_Cmd_EffParam_TableJump_CaseBase	; index 22
+	.short Audio_Cmd_EffParam_Op5E - Audio_Cmd_EffParam_TableJump_CaseBase	; index 23
+	.short Audio_Cmd_EffParam_Op5F - Audio_Cmd_EffParam_TableJump_CaseBase	; index 24
+	.short Audio_Cmd_EffParam_Op60 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 25
+	.short Audio_Cmd_EffParam_Op61 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 26
+	.short Audio_Cmd_EffParam_Op62 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 27
+	.short Audio_Cmd_EffParam_Op63 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 28
+	.short Audio_Cmd_EffParam_Op64 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 29
+	.short Audio_Cmd_EffParam_Op65 - Audio_Cmd_EffParam_TableJump_CaseBase	; index 30
 
 ; --- 0x00FA76-0x00FA9B  AUDIO_CMD_EFFECTPARAM_JUMPTABLE -- 19 u16 jump offsets, base 0x02F86F
 ; Computed jump in Audio_Cmd_EffectParam_Dispatch (opcodes 0x15..0x27 mapped to index 0..18): `jp T, 0x02F86F + table[index*2]`.
 AUDIO_CMD_EFFECTPARAM_JUMPTABLE:
-	.short 0x0000, 0x012a, 0x012a, 0x0028, 0x012a, 0x012a, 0x0054, 0x012a
-	.short 0x012a, 0x0080, 0x012a, 0x012a, 0x00ab, 0x012a, 0x012a, 0x00d6
-	.short 0x012a, 0x012a, 0x0101
+	.short Audio_Cmd_EffParam_Grp0 - Audio_Cmd_EffParam_Grp0	; index 0
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 1
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 2
+	.short Audio_Cmd_EffParam_Grp1 - Audio_Cmd_EffParam_Grp0	; index 3
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 4
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 5
+	.short Audio_Cmd_EffParam_Grp2 - Audio_Cmd_EffParam_Grp0	; index 6
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 7
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 8
+	.short Audio_Cmd_EffParam_Grp3 - Audio_Cmd_EffParam_Grp0	; index 9
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 10
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 11
+	.short Audio_Cmd_EffParam_Grp4 - Audio_Cmd_EffParam_Grp0	; index 12
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 13
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 14
+	.short Audio_Cmd_EffParam_Grp5 - Audio_Cmd_EffParam_Grp0	; index 15
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 16
+	.short Audio_Cmd_EffParam_Cache_And_Dispatch2 - Audio_Cmd_EffParam_Grp0	; index 17
+	.short Audio_Cmd_EffParam_Grp6 - Audio_Cmd_EffParam_Grp0	; index 18
 
 ; --- 0x00FA9C-0x00FAB5  AUDIO_CMD_DSPUNIT_CASEMAP -- 26 bytes, opcode -> case
 ; Audio_Cmd_DSPUnit_TableJump maps opcode-0x1F (only 7..25 reachable) through
@@ -831,8 +1091,15 @@ AUDIO_CMD_DSPUNIT_CASEMAP:
 ; --- 0x00FAB6-0x00FAC7  AUDIO_CMD_DSPUNIT_JUMPTABLE -- 9 u16 jump offsets, base 0x02FFF9
 ; Computed jump in Audio_Cmd_DSPUnit_TableJump (case number 0..8 from the casemap above): `jp T, 0x02FFF9 + table[index*2]`.
 AUDIO_CMD_DSPUNIT_JUMPTABLE:
-	.short 0x00dc, 0x01e6, 0x013a, 0x0151, 0x0173, 0x0000, 0x000f, 0x0054
-	.short 0x0069
+	.short Audio_Cmd_DSPUnit_Op26 - Audio_Cmd_DSPUnit_Op01	; index 0
+	.short Audio_Cmd_DSPUnit_Return - Audio_Cmd_DSPUnit_Op01	; index 1
+	.short Audio_Cmd_DSPUnit_Op2D - Audio_Cmd_DSPUnit_Op01	; index 2
+	.short Audio_Cmd_DSPUnit_Op36 - Audio_Cmd_DSPUnit_Op01	; index 3
+	.short Audio_Cmd_DSPUnit_Op38 - Audio_Cmd_DSPUnit_Op01	; index 4
+	.short Audio_Cmd_DSPUnit_Op01 - Audio_Cmd_DSPUnit_Op01	; index 5
+	.short Audio_Cmd_DSPUnit_Op02 - Audio_Cmd_DSPUnit_Op01	; index 6
+	.short Audio_Cmd_DSPUnit_Op05 - Audio_Cmd_DSPUnit_Op01	; index 7
+	.short Audio_Cmd_DSPUnit_Op06 - Audio_Cmd_DSPUnit_Op01	; index 8
 
 ; --- 0x00FAC8-0x00FADF  AUDIO_CMD_TONEEDIT_REPLY_CASEMAP -- 24 bytes, opcode -> case
 ; Audio_Cmd_ToneEdit_Reply_TableJump folds opcodes 0x19..0x24 and 0x2B..0x36 into
@@ -846,25 +1113,66 @@ AUDIO_CMD_TONEEDIT_REPLY_CASEMAP:
 ; --- 0x00FAE0-0x00FAED  AUDIO_CMD_TONEEDIT_REPLY_JUMPTABLE -- 7 u16 jump offsets, base 0x0304B6
 ; Computed jump in Audio_Cmd_ToneEdit_Reply_TableJump (case number 0..6 from the casemap above): `jp T, 0x0304B6 + table[index*2]`.
 AUDIO_CMD_TONEEDIT_REPLY_JUMPTABLE:
-	.short 0x0000, 0x0052, 0x0011, 0x0031, 0x0048, 0x0024, 0x003e
+	.short Audio_Cmd_ToneEdit_Reply_Case_Pan - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 0
+	.short Audio_Cmd_ToneEdit_Reply_Send - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 1
+	.short Audio_Cmd_ToneEdit_Reply_Case_Sustain - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 2
+	.short Audio_Cmd_ToneEdit_Reply_Case_Slot1 - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 3
+	.short Audio_Cmd_ToneEdit_Reply_Case_ReadBack1 - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 4
+	.short Audio_Cmd_ToneEdit_Reply_Case_Slot0 - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 5
+	.short Audio_Cmd_ToneEdit_Reply_Case_ReadBack - Audio_Cmd_ToneEdit_Reply_Case_Pan	; index 6
 
 ; --- 0x00FAEE-0x00FB1D  DSP_SETCOEFF_MASTERCONFIG_JUMPTABLE -- 24 u16 jump offsets, base 0x0317CF
 ; Computed jump in DSP_SetCoeff_MasterConfig (selector 0..23): `jp T, 0x0317CF + table[index*2]`.
 ; Offset 0x0282 (entries 2, 3, 20, 21, 22) is the shared "no-op/return" arm.
 DSP_SETCOEFF_MASTERCONFIG_JUMPTABLE:
-	.short 0x0000, 0x001b, 0x0282, 0x0282, 0x005b, 0x0080, 0x009e, 0x00bc
-	.short 0x00db, 0x00fa, 0x0118, 0x0136, 0x0146, 0x017a, 0x019f, 0x01c4
-	.short 0x01e3, 0x0201, 0x021f, 0x024a, 0x0282, 0x0282, 0x0282, 0x0275
+	.short DSP_SetCoeff_MasterConfig_CaseBase - DSP_SetCoeff_MasterConfig_CaseBase	; index 0
+	.short DSP_SetCoeff_MasterConfig_Case1 - DSP_SetCoeff_MasterConfig_CaseBase	; index 1
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 2
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 3
+	.short DSP_SetCoeff_MasterConfig_Case4 - DSP_SetCoeff_MasterConfig_CaseBase	; index 4
+	.short DSP_SetCoeff_MasterConfig_Case5 - DSP_SetCoeff_MasterConfig_CaseBase	; index 5
+	.short DSP_SetCoeff_MasterConfig_Case6 - DSP_SetCoeff_MasterConfig_CaseBase	; index 6
+	.short DSP_SetCoeff_MasterConfig_Case7 - DSP_SetCoeff_MasterConfig_CaseBase	; index 7
+	.short DSP_SetCoeff_MasterConfig_Case8 - DSP_SetCoeff_MasterConfig_CaseBase	; index 8
+	.short DSP_SetCoeff_MasterConfig_Case9 - DSP_SetCoeff_MasterConfig_CaseBase	; index 9
+	.short DSP_SetCoeff_MasterConfig_Case10 - DSP_SetCoeff_MasterConfig_CaseBase	; index 10
+	.short DSP_SetCoeff_MasterConfig_Case11 - DSP_SetCoeff_MasterConfig_CaseBase	; index 11
+	.short DSP_SetCoeff_MasterConfig_Case12 - DSP_SetCoeff_MasterConfig_CaseBase	; index 12
+	.short DSP_SetCoeff_MasterConfig_Case13 - DSP_SetCoeff_MasterConfig_CaseBase	; index 13
+	.short DSP_SetCoeff_MasterConfig_Case14 - DSP_SetCoeff_MasterConfig_CaseBase	; index 14
+	.short DSP_SetCoeff_MasterConfig_Case15 - DSP_SetCoeff_MasterConfig_CaseBase	; index 15
+	.short DSP_SetCoeff_MasterConfig_Case16 - DSP_SetCoeff_MasterConfig_CaseBase	; index 16
+	.short DSP_SetCoeff_MasterConfig_Case17 - DSP_SetCoeff_MasterConfig_CaseBase	; index 17
+	.short DSP_SetCoeff_MasterConfig_Case18 - DSP_SetCoeff_MasterConfig_CaseBase	; index 18
+	.short DSP_SetCoeff_MasterConfig_Case19 - DSP_SetCoeff_MasterConfig_CaseBase	; index 19
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 20
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 21
+	.short DSP_SetCoeff_MasterConfig_Epilogue - DSP_SetCoeff_MasterConfig_CaseBase	; index 22
+	.short DSP_SetCoeff_MasterConfig_Case23 - DSP_SetCoeff_MasterConfig_CaseBase	; index 23
 
 ; --- 0x00FB1E-0x00FB2D  VOICEPARAM_FINALIZE_QUERY_JUMPTABLE -- 8 u16 jump offsets, base 0x031B5B
 ; Computed jump in VoiceParamFinalize_SecondaryDispatch (status bit 3 CLEAR -> "queries"): `jp T, 0x031B5B + table[index*2]`.
 VOICEPARAM_FINALIZE_QUERY_JUMPTABLE:
-	.short 0x0000, 0x0008, 0x006d, 0x00cb, 0x0129, 0x01bb, 0x01f2, 0x0246
+	.short VoiceParamFinalize_SecondaryBody - VoiceParamFinalize_SecondaryBody	; index 0
+	.short VoiceParam_Query_Case1_PatchRec - VoiceParamFinalize_SecondaryBody	; index 1
+	.short VoiceParam_Query_Case2_Partial01 - VoiceParamFinalize_SecondaryBody	; index 2
+	.short VoiceParam_Query_Case3_Partial23 - VoiceParamFinalize_SecondaryBody	; index 3
+	.short VoiceParam_Query_Case4_PartialAny - VoiceParamFinalize_SecondaryBody	; index 4
+	.short VoiceParam_Query_Case5_PatchRec2 - VoiceParamFinalize_SecondaryBody	; index 5
+	.short VoiceParam_Query_Case6_SubTone - VoiceParamFinalize_SecondaryBody	; index 6
+	.short VoiceParam_Query_Case7_PartialSlot - VoiceParamFinalize_SecondaryBody	; index 7
 
 ; --- 0x00FB2E-0x00FB3D  VOICEPARAM_FINALIZE_ACTION_JUMPTABLE -- 8 u16 jump offsets, base 0x031AA1
 ; Computed jump in Voice_ParamFinalize (status bit 3 SET -> "actions"): `jp T, 0x031AA1 + table[index*2]`.
 VOICEPARAM_FINALIZE_ACTION_JUMPTABLE:
-	.short 0x0000, 0x0008, 0x0018, 0x0044, 0x0070, 0x0080, 0x0088, 0x0090
+	.short ToneCmd_DispatchTable_Body - ToneCmd_DispatchTable_Body	; index 0
+	.short VoiceParam_Action_Case1 - ToneCmd_DispatchTable_Body	; index 1
+	.short VoiceParam_Action_Case2 - ToneCmd_DispatchTable_Body	; index 2
+	.short VoiceParam_Action_Case3 - ToneCmd_DispatchTable_Body	; index 3
+	.short VoiceParam_Action_Case4 - ToneCmd_DispatchTable_Body	; index 4
+	.short VoiceParam_Action_Case5 - ToneCmd_DispatchTable_Body	; index 5
+	.short VoiceParam_Action_Case6 - ToneCmd_DispatchTable_Body	; index 6
+	.short VoiceParam_Action_Case7 - ToneCmd_DispatchTable_Body	; index 7
 
 ; --- 0x00FB3E-0x00FB4D  VoiceParamFinalize_HandlerParams -- 16 bytes, UNREFERENCED
 ; No direct code reference located. Sits between the two VoiceParamFinalize
@@ -892,41 +1200,92 @@ SlotEnableMaskA:
 SlotEnableMaskB:
 	.short 0x0002, 0x0008, 0x0020, 0x0080
 
-; --- 0x00FB66-0x00FB7D  AlgoJumpTable1 -- 12 u16 jump offsets, base 0x033812
+; --- 0x00FB66-0x00FB7D  DSP_AlgoType_Dispatch1_CaseOffsets -- 12 u16 jump offsets, base 0x033812
 ; Computed jump in DSP_AlgoType_Dispatch1 (algorithm type 0..0x0B): `jp T, 0x033812 + table[index*2]`.
-AlgoJumpTable1:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0052, 0x0052, 0x016c, 0x0052
-	.short 0x016c, 0x016c, 0x00e1, 0x00e1
+DSP_AlgoType_Dispatch1_CaseOffsets:
+	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 0
+	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 1
+	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 2
+	.short DSP_AlgoType_Dispatch1_Arms - DSP_AlgoType_Dispatch1_Arms	; index 3
+	.short DSP_AlgoType_D1_Arm_Type457 - DSP_AlgoType_Dispatch1_Arms	; index 4
+	.short DSP_AlgoType_D1_Arm_Type457 - DSP_AlgoType_Dispatch1_Arms	; index 5
+	.short DSP_AlgoType_Dispatch1_Store - DSP_AlgoType_Dispatch1_Arms	; index 6
+	.short DSP_AlgoType_D1_Arm_Type457 - DSP_AlgoType_Dispatch1_Arms	; index 7
+	.short DSP_AlgoType_Dispatch1_Store - DSP_AlgoType_Dispatch1_Arms	; index 8
+	.short DSP_AlgoType_Dispatch1_Store - DSP_AlgoType_Dispatch1_Arms	; index 9
+	.short DSP_AlgoType_D1_Arm_TypeAB - DSP_AlgoType_Dispatch1_Arms	; index 10
+	.short DSP_AlgoType_D1_Arm_TypeAB - DSP_AlgoType_Dispatch1_Arms	; index 11
 
-; --- 0x00FB7E-0x00FB95  AlgoJumpTable2 -- 12 u16 jump offsets, base 0x0339DE
+; --- 0x00FB7E-0x00FB95  DSP_AlgoType_Dispatch2_CaseOffsets -- 12 u16 jump offsets, base 0x0339DE
 ; Computed jump in DSP_AlgoType_Dispatch2 (algorithm type 0..0x0B): `jp T, 0x0339DE + table[index*2]`.
-AlgoJumpTable2:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0055, 0x0055, 0x014b, 0x0055
-	.short 0x014b, 0x014b, 0x00e6, 0x00e6
+DSP_AlgoType_Dispatch2_CaseOffsets:
+	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 0
+	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 1
+	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 2
+	.short DSP_AlgoType_Dispatch2_Arms - DSP_AlgoType_Dispatch2_Arms	; index 3
+	.short DSP_AlgoType_D2_Arm_Type457 - DSP_AlgoType_Dispatch2_Arms	; index 4
+	.short DSP_AlgoType_D2_Arm_Type457 - DSP_AlgoType_Dispatch2_Arms	; index 5
+	.short DSP_AlgoType_Dispatch2_Store - DSP_AlgoType_Dispatch2_Arms	; index 6
+	.short DSP_AlgoType_D2_Arm_Type457 - DSP_AlgoType_Dispatch2_Arms	; index 7
+	.short DSP_AlgoType_Dispatch2_Store - DSP_AlgoType_Dispatch2_Arms	; index 8
+	.short DSP_AlgoType_Dispatch2_Store - DSP_AlgoType_Dispatch2_Arms	; index 9
+	.short DSP_AlgoType_D2_Arm_TypeAB - DSP_AlgoType_Dispatch2_Arms	; index 10
+	.short DSP_AlgoType_D2_Arm_TypeAB - DSP_AlgoType_Dispatch2_Arms	; index 11
 
-; --- 0x00FB96-0x00FBAD  AlgoJumpTable3 -- 12 u16 jump offsets, base 0x033E44
+; --- 0x00FB96-0x00FBAD  DSP_AlgoType_Dispatch3_CaseOffsets -- 12 u16 jump offsets, base 0x033E44
 ; Computed jump in DSP_AlgoType_Dispatch3 (algorithm type 0..0x0B; types 6, 8, 9 land on the bare ret): `jp T, 0x033E44 + table[index*2]`.
-AlgoJumpTable3:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x012f, 0x0000
-	.short 0x012f, 0x012f, 0x00e7, 0x00e7
+DSP_AlgoType_Dispatch3_CaseOffsets:
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 0
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 1
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 2
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 3
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 4
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 5
+	.short DSP_AlgoType_D3_Return - DSP_AlgoType_D3_Arm_Types0to5_7	; index 6
+	.short DSP_AlgoType_D3_Arm_Types0to5_7 - DSP_AlgoType_D3_Arm_Types0to5_7	; index 7
+	.short DSP_AlgoType_D3_Return - DSP_AlgoType_D3_Arm_Types0to5_7	; index 8
+	.short DSP_AlgoType_D3_Return - DSP_AlgoType_D3_Arm_Types0to5_7	; index 9
+	.short DSP_AlgoType_D3_Arm_TypeAB - DSP_AlgoType_D3_Arm_Types0to5_7	; index 10
+	.short DSP_AlgoType_D3_Arm_TypeAB - DSP_AlgoType_D3_Arm_Types0to5_7	; index 11
 
-; --- 0x00FBAE-0x00FBBF  AlgoJumpTable4 -- 9 u16 jump offsets, base 0x0340CC
+; --- 0x00FBAE-0x00FBBF  Algo_SubTable_DispatchB_CaseOffsets -- 9 u16 jump offsets, base 0x0340CC
 ; Computed jump in Algo_SubTable_DispatchB (algorithm type 0..8): `jp T, 0x0340CC + table[index*2]`.
-AlgoJumpTable4:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x001d, 0x001d, 0x0055, 0x0055
-	.short 0x003a
+Algo_SubTable_DispatchB_CaseOffsets:
+	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 0
+	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 1
+	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 2
+	.short Algo_SubTable_JumpTable1 - Algo_SubTable_JumpTable1	; index 3
+	.short Algo_SubTable_DispatchB_Arm_Type45 - Algo_SubTable_JumpTable1	; index 4
+	.short Algo_SubTable_DispatchB_Arm_Type45 - Algo_SubTable_JumpTable1	; index 5
+	.short Algo_SubTable_DispatchB_Return - Algo_SubTable_JumpTable1	; index 6
+	.short Algo_SubTable_DispatchB_Return - Algo_SubTable_JumpTable1	; index 7
+	.short Algo_SubTable_DispatchB_Arm_Type8 - Algo_SubTable_JumpTable1	; index 8
 
-; --- 0x00FBC0-0x00FBD1  AlgoJumpTable5 -- 9 u16 jump offsets, base 0x0341BE
+; --- 0x00FBC0-0x00FBD1  Algo_SubTable_DispatchC_CaseOffsets -- 9 u16 jump offsets, base 0x0341BE
 ; Computed jump in Algo_SubTable_DispatchC (algorithm type 0..8): `jp T, 0x0341BE + table[index*2]`.
-AlgoJumpTable5:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0030, 0x0030, 0x003c, 0x0059
-	.short 0x003c
+Algo_SubTable_DispatchC_CaseOffsets:
+	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 0
+	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 1
+	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 2
+	.short Algo_SubTable_JumpTable2 - Algo_SubTable_JumpTable2	; index 3
+	.short Algo_SubTable_DispatchC_Arm_Type45 - Algo_SubTable_JumpTable2	; index 4
+	.short Algo_SubTable_DispatchC_Arm_Type45 - Algo_SubTable_JumpTable2	; index 5
+	.short Algo_SubTable_DispatchC_Arm_Type68 - Algo_SubTable_JumpTable2	; index 6
+	.short Algo_SubTable_Epilogue - Algo_SubTable_JumpTable2	; index 7
+	.short Algo_SubTable_DispatchC_Arm_Type68 - Algo_SubTable_JumpTable2	; index 8
 
-; --- 0x00FBD2-0x00FBE3  AlgoJumpTable6 -- 9 u16 jump offsets, base 0x03429D
+; --- 0x00FBD2-0x00FBE3  Algo_SubTable_Bit15Dispatch_CaseOffsets -- 9 u16 jump offsets, base 0x03429D
 ; Computed jump in Algo_SubTable_Bit15Dispatch (algorithm type 0..8): `jp T, 0x03429D + table[index*2]`.
-AlgoJumpTable6:
-	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x0025, 0x0025, 0x0071, 0x0071
-	.short 0x004a
+Algo_SubTable_Bit15Dispatch_CaseOffsets:
+	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 0
+	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 1
+	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 2
+	.short Algo_SubTable_JumpTable3 - Algo_SubTable_JumpTable3	; index 3
+	.short Algo_SubTable_Bit15_Arm_Type45 - Algo_SubTable_JumpTable3	; index 4
+	.short Algo_SubTable_Bit15_Arm_Type45 - Algo_SubTable_JumpTable3	; index 5
+	.short Algo_SubTable_Bit15Dispatch_Return - Algo_SubTable_JumpTable3	; index 6
+	.short Algo_SubTable_Bit15Dispatch_Return - Algo_SubTable_JumpTable3	; index 7
+	.short Algo_SubTable_Bit15_Arm_Type8 - Algo_SubTable_JumpTable3	; index 8
 
 ; --- 0x00FBE4-0x00FCE3  Voice_Reg080_NoteField_Table -- 128 u16 words
 ; RENAMED 2026-08-21 (was Voice_PanPosition_Table). It has nothing to do with pan: pan is
@@ -2262,7 +2621,7 @@ DSP_FlushHandler_Pointers:
 ; OR/overwrite the pitch (0x3B2A), volume (0x3B20), effect routing (0x3B22) and level (0x3B1E)
 ; fields before pushing it out through ToneGen_WriteVoiceParams / ToneGen_WriteSingleReg.
 ; First words: 0xF000, 0x0000, 0x8000, 0x0000, 0x017C, 0x7F7C, 0x0040, 0x0080 ...
-; Extent 0x012115-0x012158, immediately followed by CALL_TABLE_12159.
+; Extent 0x012115-0x012158, immediately followed by Voice_PolyNoteOn_Setup_PtrTable.
 ToneGen_Voice_Param_Template:
 	.byte 0x00, 0xf0, 0x00
 	.byte 0x00, 0x00, 0x80, 0x00, 0x00, 0x7c, 0x01, 0x7c
@@ -2275,12 +2634,14 @@ ToneGen_Voice_Param_Template:
 	.zero 8
 	.byte 0x00
 
-; --- 0x012159-0x012170  CALL_TABLE_12159 -- 6 x u32 note-on handler pointers
+; --- 0x012159-0x012170  Voice_PolyNoteOn_Setup_PtrTable -- 6 x u32 note-on handler pointers
 ; `sla hl,2 / lda_24 xix,0x012159 / add xhl,xix / ld xhl,(xhl) / call (xhl)` in the poly note-on
 ; path (Voice_Poly_NoteOn_SlotFound, 0x035749). Entries: 0x0355AD, 0x035656, then 0x0355AD
 ; four more times.
 ; So only two distinct handlers; index 1 is the special case.
-CALL_TABLE_12159:
+; The index is the byte at DRAM 0x3B13, loaded just before the call.  Renamed 2026-09-25 from
+; CALL_TABLE_12159 (its address).
+Voice_PolyNoteOn_Setup_PtrTable:
 	.long ToneGen_SetupPolyVoice
 	.long ToneGen_SetupPercussionVoice
 	.long ToneGen_SetupPolyVoice
@@ -2323,14 +2684,14 @@ ToneGen_Octave_Pitch_Table:
 	.short 0x0c00, 0x0e00, 0x0e00, 0x0e00, 0x0e00, 0x0e00
 
 ; --- 0x0121ad  4 x u32 code pointers, entry 0 special -- same one-special-entry shape as
-; CALL_TABLE_12159 above and DSP_ResetTask_PtrTable below.  No literal reference to this
+; Voice_PolyNoteOn_Setup_PtrTable above and DSP_ResetTask_PtrTable below.  No literal reference to this
 ; table exists anywhere in the payload image (checked for both 3- and 4-byte little-endian
 ; pointers); the consumer either computes the address or the table is dead.
 DSP2_InitTask_PtrTable:
 	.long DSP2_Init
-	.long Voice_Poly_NoteOn_Data
-	.long Voice_Poly_NoteOn_Data
-	.long Voice_Poly_NoteOn_Data
+	.long DSP2_InitTask_NullStub
+	.long DSP2_InitTask_NullStub
+	.long DSP2_InitTask_NullStub
 
 ; --- 0x0121bd  15 x u16 dispatch offsets for sub-commands 0x17-0x25 of command 0x2C.
 ; CmdHandler2C_JumpDispatch computes `jp (CmdHandler2C_TableData + offs[subcmd - 0x17])`.
@@ -2381,9 +2742,9 @@ DSP_AlgoInit_NoteOnMsg_Algo2:
 ; Like its sibling, no literal reference to the table base exists in the payload image.
 DSP_ResetTask_PtrTable:
 	.long DSP_Reset
-	.long DSP_ApplyAlgoForVoiceType_Data
-	.long DSP_ApplyAlgoForVoiceType_Data
-	.long DSP_ApplyAlgoForVoiceType_Data
+	.long DSP_ResetTask_NullStub
+	.long DSP_ResetTask_NullStub
+	.long DSP_ResetTask_NullStub
 
 ; --- 0x012207-0x012225  DSP serial-trace string fragments.  Consumers (one each, in
 ; order): DSP_Send_Cmd_Cleanup prints "\n[" ... "]\n" around a command byte,
@@ -2447,54 +2808,65 @@ Str_DspReset_Prefix:
 Str_DspReset_Suffix:
 	.asciz " reset."
 ; DSP_AntiReset_WithDebug: "\nDSP <n> anti reset."
+; DSP_AntiReset_WithDebug (0x037E93) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_DspAntiReset_Prefix:
 	.asciz "\nDSP "
 Str_DspAntiReset_Suffix:
 	.asciz " anti reset."
 ; EFF_Mute_WithDebug: "\nEFF <n> mute."
+; EFF_Mute_WithDebug (0x037EB4) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffMute_Prefix:
 	.asciz "\nEFF "
 Str_EffMute_Suffix:
 	.asciz " mute."
 ; DSP_Mute_WithDebug: "\nDSP <n> mute."
+; DSP_Mute_WithDebug (0x037EE9) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_DspMute_Prefix:
 	.asciz "\nDSP "
 Str_DspMute_Suffix:
 	.asciz " mute."
 ; DSP_Unmute_WithDebug: "\nDSP <n> antimute."
+; DSP_Unmute_WithDebug (0x037F1C) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_DspUnmute_Prefix:
 	.asciz "\nDSP "
 Str_DspUnmute_Suffix:
 	.asciz " antimute."
 ; EFF_Disconnect: "\nEFF <n> disconnect."
+; EFF_Disconnect (0x037F4F) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffDisconnect_Prefix:
 	.asciz "\nEFF "
 Str_EffDisconnect_Suffix:
 	.asciz " disconnect."
 ; EFF_Link: "\nEFF <n> link."
+; EFF_Link (0x037FAE) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffLink_Prefix:
 	.asciz "\nEFF "
 Str_EffLink_Suffix:
 	.asciz " link."
 ; DSP_AlgorithmChange (sic -- probably meant "algo change")
+; DSP_AlgorithmChange (0x03800D) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_DspAlgoChange_Msg:
 	.asciz "\nargo change "
 ; EFF_WriteHeader: "\nEFF <n> headder" (sic)
+; EFF_WriteHeader (0x0380AB) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffHeader_Prefix:
 	.asciz "\nEFF "
 Str_EffHeader_Suffix:
 	.asciz " headder"
 ; EFF_Change_WithDebug: "\nEFF <n> change "
+; EFF_Change_WithDebug (0x0380EC) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffChange_Prefix:
 	.asciz "\nEFF "
 Str_EffChange_Suffix:
 	.asciz " change "
 ; EFF_DataChange_WithDebug: "\nEFF <n> data change "
+; EFF_DataChange_WithDebug (0x0381BC) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffDataChange_Prefix:
 	.asciz "\nEFF "
 Str_EffDataChange_Suffix:
 	.asciz " data change "
 ; EFF_ParamEdit_WithDebug: "\nEFF <n> para<m> edit "
+; EFF_ParamEdit_WithDebug (0x038200) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffParamEdit_Prefix:
 	.asciz "\nEFF "
 Str_EffParamEdit_Mid:
@@ -2502,6 +2874,7 @@ Str_EffParamEdit_Mid:
 Str_EffParamEdit_Suffix:
 	.asciz " edit "
 ; EFF_VolumeUpdate_WithDebug: "\nEFF <n> vol "
+; EFF_VolumeUpdate_WithDebug (0x03826E) loads each with `lda xwa,(label:24)` and prints it with Debug_Print_String.
 Str_EffVolume_Prefix:
 	.asciz "\nEFF "
 Str_EffVolume_Suffix:
@@ -2625,7 +2998,7 @@ DSP_FreqParamCurve_Algo2:
 	.long 0x0055d2ef, 0x005751a8, 0x0058d70a, 0x005a6336
 
 ; --- 0x0129a3  100 x u32 Q23 ladder for bytecode opcode 0x61
-; (DSP_State_LoadAndApply_InlineData -> DSP_WriteOscParam).  Perfectly uniform:
+; (DSP_ParamFetch_Op61Table -> DSP_WriteOscParam).  Perfectly uniform:
 ; 0.25 dB per step over all 99 steps, top 0x7fb260 = 2^23 * 0.998.
 DSP_OscParamCurve:
 	.long 0x000763fe, 0x00079b3d, 0x0007d41a, 0x00080e9f
@@ -2684,7 +3057,7 @@ DSP_CoeffCurve_Op62:
 	.long 0x0028619b, 0x002d4efb, 0x0032d646, 0x00390a41
 	.long 0x00400000, 0x0047cf26, 0x0050923c, 0x005a6704
 
-; --- 0x012cc3  two IEEE double constants 0.552, the FP_DP_Add_Outer operands of the
+; --- 0x012cc3  two IEEE double constants 0.552, the FP_dmul operands of the
 ; two arms of DSP_AlgoParam_Decode (bytecode opcode 0x79): _Sub for the negated
 ; (type != 1) path, _Add for the type == 1 path.
 FP_Const_0p552_Sub:
@@ -2698,230 +3071,236 @@ FP_Const_0p552_Add:
 ; dominates: 44100/88200 Hz, 2*pi/44100 (1.4247585730e-4), 2*pi/88200 (7.123792865e-5),
 ; 2^23 Q23 scale, EQ gain steps.  Sizes follow the consumer calls exactly (FP_SP_* = f32,
 ; FP_DP_* = f64); the reference stride tiles the pool with no gap.
-DSP_FP_ConstPool:
-	.float 3e+01
-	.float 4.41e+04
-	.float 3.3075e+06
-	.float 75
-	.float 1.8e+03
-	.double 2.0
-	.float 3e+01
-	.float 4.41e+04
-	.float 6.50916e+07
-	.float 24
-	.float 576
-	.double 2.0
-	.float 8388608	; 2^23
-	.float 1
-	.double 441.0
-	.double 10.0
-	.double 0.4270422
-	.double 1.0
-	.float 4.41e+04
-	.float 3.9249e+06
-	.float 1e+01
-	.double 0.4270422
-	.double 1.0
-	.float 8388608	; 2^23
-	.float 32768
-	.float 65536
-	.float 99
-	.float 4.41e+04
-	.float 99
-	.float 2376
-	.double 2.0
-	.float 8388608	; 2^23
-	.float 2
-	.float 2e+01
-	.float 1.8e+02
-	.float 1e+02
-	.float 1.7e+03
-	.float 2e+02
-	.float 4.8e+03
-	.float 2.4e+03
-	.double 2.0
-	.double 1.0
-	.double 2400.0
-	.float 8388608	; 2^23
-	.double -0.0697
-	.double 10.0
-	.double 0.9999
-	.double -0.0697
-	.double 10.0
-	.double 0.9999
-	.float 2
-	.float 2
-	.float 1
-	.float 3
-	.float 2097152
-	.float 8388608	; 2^23
-	.float 4194304
-	.float 2097152
-	.float 2097152
-	.float 32768
-	.float 65536
-	.double 0.02
-	.double 0.1
-	.double 1.0
-	.double -4.816
-	.double -7.0
-	.double 10.0
-	.double 2.0
-	.float 7
-	.double 10.0
-	.double 1.0000000000000002e-07
-	.double 2.0
-	.float 16
-	.double 0.05
-	.double 0.45
-	.double -4.816
-	.double 10.0
-	.double 2.0
-	.float 24
-	.double 0.1
-	.double 0.9
-	.double -4.816
-	.double 10.0
-	.double 2.0
-	.float 56
-	.double 0.2
-	.double 4.2
-	.double -4.816
-	.double 10.0
-	.double 2.0
-	.float 67
-	.double -4.816
-	.double 10.0
-	.double 2.0
-	.float 8388608	; 2^23
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.double 7.123792865e-05
-	.float 1
-	.float 1
-	.float -2
-	.float 1
-	.float 2e+01
-	.double 10.0
-	.double 1.0
-	.float 2e+01
-	.double 10.0
-	.double 1.0
-	.float 1
-	.float 1
-	.float 2
-	.float 2
-	.float 2
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 8388608	; 2^23
-	.double 7.123792865e-05
-	.float 1
-	.float 1
-	.float -2
-	.float 1
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 8388608	; 2^23
-	.double 7.123792865e-05
-	.double 7.123792865e-05
-	.double 7.123792865e-05
-	.double 7.123792865e-05
-	.double 7.123792865e-05
-	.float 1
-	.float 1
-	.float -2
-	.float 1
-	.float 2e+01
-	.double 10.0
-	.double 1.0
-	.float 2e+01
-	.double 10.0
-	.double 1.0
-	.float 4194304
-	.float 4194304
-	.float 8388608	; 2^23
-	.float 4194304
-	.float 4194304
-	.double 0.5
-	.double -12.0
-	.double 0.5
-	.double -12.0
-	.float 2e+01
-	.double 10.0
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 4194304
-	.float 4194304
-	.float 4194304
-	.float 2e+01
-	.double 10.0
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 2097152
-	.float 4194304
-	.float 2097152
-	.float 2e+01
-	.double 10.0
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.double 0.0001424758573
-	.double 0.0001424758573
-	.double 1.0
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 1
-	.float 4194304
-	.float 4194304
-	.float 4194304
+; ★ CORRECTED 2026-09-25: the code CAN reference them symbolically -- `lda r,(Label:24)`
+; assembles to the same bytes -- so
+; each constant now carries its own label, FPConst_<reading routine>_<value>, and its
+; reader reads it by name (scripts/converters/label_v142_dsp_fp_constpool.py).  The pool
+; label DSP_FP_ConstPool is gone: an address carries one name, and the first constant has
+; its own.  Measured by that script: 127 x f32 + 96 x f64 = 1,276 bytes tile
+; 0x012CD3-0x0131CE exactly, read by 223 sites, one per constant (so "98 x f64" above is 2 high).
+FPConst_DSP_VolumeCurve_FP_30:	.float 3e+01	; f32 3e+01, read by DSP_VolumeCurve_FP (operand at 0x039311)
+FPConst_DSP_VolumeCurve_FP_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_VolumeCurve_FP (operand at 0x039320)
+FPConst_DSP_VolumeCurve_FP_3307500:	.float 3.3075e+06	; f32 3.3075e+06, read by DSP_VolumeCurve_FP (operand at 0x03932F)
+FPConst_DSP_VolumeCurve_FP_75:	.float 75	; f32 75, read by DSP_VolumeCurve_FP (operand at 0x03933B)
+FPConst_DSP_VolumeCurve_FP_1800:	.float 1.8e+03	; f32 1.8e+03, read by DSP_VolumeCurve_FP (operand at 0x03934A)
+FPConst_DSP_VolumeCurve_FP_2:	.double 2.0	; f64 2.0, read by DSP_VolumeCurve_FP (operand at 0x03936D)
+FPConst_DSP_VolumeCurve_FP_HighRange_30:	.float 3e+01	; f32 3e+01, read by DSP_VolumeCurve_FP_HighRange (operand at 0x03939E)
+FPConst_DSP_VolumeCurve_FP_HighRange_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393AD)
+FPConst_DSP_VolumeCurve_FP_HighRange_65091600:	.float 6.50916e+07	; f32 6.50916e+07, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393BC)
+FPConst_DSP_VolumeCurve_FP_HighRange_24:	.float 24	; f32 24, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393C8)
+FPConst_DSP_VolumeCurve_FP_HighRange_576:	.float 576	; f32 576, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393D7)
+FPConst_DSP_VolumeCurve_FP_HighRange_2:	.double 2.0	; f64 2.0, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393FA)
+FPConst_DSP_VolumeCurve_FP_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_VolumeCurve_FP_Finalize (operand at 0x03941E)
+FPConst_DSP_ReverbCurve_FP_1:	.float 1	; f32 1, read by DSP_ReverbCurve_FP (operand at 0x0395B7)
+FPConst_DSP_ReverbCurve_FP_441:	.double 441.0	; f64 441.0, read by DSP_ReverbCurve_FP (operand at 0x0395D0)
+FPConst_DSP_ReverbCurve_FP_10:	.double 10.0	; f64 10.0, read by DSP_ReverbCurve_FP (operand at 0x0395DC)
+FPConst_DSP_ReverbCurve_FP_0p4270422:	.double 0.4270422	; f64 0.4270422, read by DSP_ReverbCurve_FP (operand at 0x0395F5)
+FPConst_DSP_ReverbCurve_FP_1_2:	.double 1.0	; f64 1.0, read by DSP_ReverbCurve_FP (operand at 0x03960C)
+FPConst_DSP_ReverbCurve_FP_HighRange_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039634)
+FPConst_DSP_ReverbCurve_FP_HighRange_3924900:	.float 3.9249e+06	; f32 3.9249e+06, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039643)
+FPConst_DSP_ReverbCurve_FP_HighRange_10:	.float 1e+01	; f32 1e+01, read by DSP_ReverbCurve_FP_HighRange (operand at 0x03964F)
+FPConst_DSP_ReverbCurve_FP_HighRange_0p4270422:	.double 0.4270422	; f64 0.4270422, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039672)
+FPConst_DSP_ReverbCurve_FP_HighRange_1:	.double 1.0	; f64 1.0, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039689)
+FPConst_DSP_ReverbCurve_FP_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_ReverbCurve_FP_Finalize (operand at 0x0396A5)
+FPConst_DSP_ParamInterp_FPComplex_32768:	.float 32768	; f32 32768, read by DSP_ParamInterp_FPComplex (operand at 0x0396EB)
+FPConst_DSP_ParamInterp_FPComplex_65536:	.float 65536	; f32 65536, read by DSP_ParamInterp_FPComplex (operand at 0x0396FA)
+FPConst_DSP_ParamInterp_FPComplex_99:	.float 99	; f32 99, read by DSP_ParamInterp_FPComplex (operand at 0x039752)
+FPConst_DSP_ParamInterp_FPComplex_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_ParamInterp_FPComplex (operand at 0x03976E)
+FPConst_DSP_ParamInterp_FPComplex_99_2:	.float 99	; f32 99, read by DSP_ParamInterp_FPComplex (operand at 0x03977A)
+FPConst_DSP_ParamInterp_FPComplex_2376:	.float 2376	; f32 2376, read by DSP_ParamInterp_FPComplex (operand at 0x039789)
+FPConst_DSP_ParamInterp_FPComplex_2:	.double 2.0	; f64 2.0, read by DSP_ParamInterp_FPComplex (operand at 0x0397AC)
+FPConst_DSP_ParamInterp_FPComplex_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_ParamInterp_FPComplex (operand at 0x0397D5)
+FPConst_DSP_DetuneCurve_Range1_Compute_2:	.float 2	; f32 2, read by DSP_DetuneCurve_Range1_Compute (operand at 0x039917)
+FPConst_DSP_DetuneCurve_Range2_Compute_20:	.float 2e+01	; f32 2e+01, read by DSP_DetuneCurve_Range2_Compute (operand at 0x039969)
+FPConst_DSP_DetuneCurve_Range2_Compute_180:	.float 1.8e+02	; f32 1.8e+02, read by DSP_DetuneCurve_Range2_Compute (operand at 0x039978)
+FPConst_DSP_DetuneCurve_Range3_Compute_100:	.float 1e+02	; f32 1e+02, read by DSP_DetuneCurve_Range3_Compute (operand at 0x0399CA)
+FPConst_DSP_DetuneCurve_Range3_Compute_1700:	.float 1.7e+03	; f32 1.7e+03, read by DSP_DetuneCurve_Range3_Compute (operand at 0x0399D9)
+FPConst_DSP_DetuneCurve_Range4_Compute_200:	.float 2e+02	; f32 2e+02, read by DSP_DetuneCurve_Range4_Compute (operand at 0x039A0D)
+FPConst_DSP_DetuneCurve_Range4_Compute_4800:	.float 4.8e+03	; f32 4.8e+03, read by DSP_DetuneCurve_Range4_Compute (operand at 0x039A1C)
+FPConst_DSP_DetuneCurve_Finalize_2400:	.float 2.4e+03	; f32 2.4e+03, read by DSP_DetuneCurve_Finalize (operand at 0x039A3D)
+FPConst_DSP_DetuneCurve_Finalize_2:	.double 2.0	; f64 2.0, read by DSP_DetuneCurve_Finalize (operand at 0x039A5D)
+FPConst_DSP_DetuneCurve_Finalize_1:	.double 1.0	; f64 1.0, read by DSP_DetuneCurve_Finalize (operand at 0x039A74)
+FPConst_DSP_DetuneCurve_Finalize_2400_2:	.double 2400.0	; f64 2400.0, read by DSP_DetuneCurve_Finalize (operand at 0x039A86)
+FPConst_DSP_DetuneCurve_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_DetuneCurve_Finalize (operand at 0x039A9F)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_Neg0p0697:	.double -0.0697	; f64 -0.0697, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B31)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_10:	.double 10.0	; f64 10.0, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B47)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_0p9999:	.double 0.9999	; f64 0.9999, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B61)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_Neg0p0697_2:	.double -0.0697	; f64 -0.0697, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B8E)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_10_2:	.double 10.0	; f64 10.0, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039BA4)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_0p9999_2:	.double 0.9999	; f64 0.9999, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039BBE)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2:	.float 2	; f32 2, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039BDF)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2_2:	.float 2	; f32 2, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039BEE)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_1:	.float 1	; f32 1, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C0A)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_3:	.float 3	; f32 3, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C33)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C4F)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C78)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CA8)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_2:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CCE)
+FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_3:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CF4)
+FPConst_DSP_ParamEQ_Curve_FP_32768:	.float 32768	; f32 32768, read by DSP_ParamEQ_Curve_FP (operand at 0x039DC1)
+FPConst_DSP_ParamEQ_Curve_FP_65536:	.float 65536	; f32 65536, read by DSP_ParamEQ_Curve_FP (operand at 0x039DD0)
+FPConst_DSP_ParamEQ_Curve_FP_0p02:	.double 0.02	; f64 0.02, read by DSP_ParamEQ_Curve_FP (operand at 0x039DFF)
+FPConst_DSP_ParamEQ_Curve_FP_0p1:	.double 0.1	; f64 0.1, read by DSP_ParamEQ_Curve_FP (operand at 0x039E0E)
+FPConst_DSP_ParamEQ_Curve_FP_1:	.double 1.0	; f64 1.0, read by DSP_ParamEQ_Curve_FP (operand at 0x039E1A)
+FPConst_DSP_ParamEQ_Curve_FP_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Curve_FP (operand at 0x039E57)
+FPConst_DSP_ParamEQ_Curve_FP_Neg7:	.double -7.0	; f64 -7.0, read by DSP_ParamEQ_Curve_FP (operand at 0x039E7A)
+FPConst_DSP_ParamEQ_Curve_FP_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Curve_FP (operand at 0x039E9D)
+FPConst_DSP_ParamEQ_Curve_FP_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Curve_FP (operand at 0x039EC1)
+FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_7:	.float 7	; f32 7, read by DSP_ParamEQ_Range1_NonzeroCoeff (operand at 0x039EDD)
+FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range1_NonzeroCoeff (operand at 0x039EFD)
+FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_1em7:	.double 1.0000000000000002e-07	; f64 1.0000000000000002e-07, read by DSP_ParamEQ_Range1_NonzeroCoeff (operand at 0x039F21)
+FPConst_DSP_ParamEQ_Range1_NonzeroCoeff_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range1_NonzeroCoeff (operand at 0x039F30)
+FPConst_DSP_ParamEQ_Range2_16:	.float 16	; f32 16, read by DSP_ParamEQ_Range2 (operand at 0x039F62)
+FPConst_DSP_ParamEQ_Range2_0p05:	.double 0.05	; f64 0.05, read by DSP_ParamEQ_Range2 (operand at 0x039F7B)
+FPConst_DSP_ParamEQ_Range2_0p45:	.double 0.45	; f64 0.45, read by DSP_ParamEQ_Range2 (operand at 0x039F8A)
+FPConst_DSP_ParamEQ_Range2_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Range2 (operand at 0x039FA3)
+FPConst_DSP_ParamEQ_Range2_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range2 (operand at 0x039FC6)
+FPConst_DSP_ParamEQ_Range2_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range2 (operand at 0x039FEA)
+FPConst_DSP_ParamEQ_Range3_24:	.float 24	; f32 24, read by DSP_ParamEQ_Range3 (operand at 0x03A01C)
+FPConst_DSP_ParamEQ_Range3_0p1:	.double 0.1	; f64 0.1, read by DSP_ParamEQ_Range3 (operand at 0x03A035)
+FPConst_DSP_ParamEQ_Range3_0p9:	.double 0.9	; f64 0.9, read by DSP_ParamEQ_Range3 (operand at 0x03A044)
+FPConst_DSP_ParamEQ_Range3_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Range3 (operand at 0x03A05D)
+FPConst_DSP_ParamEQ_Range3_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range3 (operand at 0x03A080)
+FPConst_DSP_ParamEQ_Range3_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range3 (operand at 0x03A0A4)
+FPConst_DSP_ParamEQ_Range4_56:	.float 56	; f32 56, read by DSP_ParamEQ_Range4 (operand at 0x03A0D6)
+FPConst_DSP_ParamEQ_Range4_0p2:	.double 0.2	; f64 0.2, read by DSP_ParamEQ_Range4 (operand at 0x03A0EF)
+FPConst_DSP_ParamEQ_Range4_4p2:	.double 4.2	; f64 4.2, read by DSP_ParamEQ_Range4 (operand at 0x03A0FE)
+FPConst_DSP_ParamEQ_Range4_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Range4 (operand at 0x03A117)
+FPConst_DSP_ParamEQ_Range4_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range4 (operand at 0x03A13A)
+FPConst_DSP_ParamEQ_Range4_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range4 (operand at 0x03A15E)
+FPConst_DSP_ParamEQ_Range5_67:	.float 67	; f32 67, read by DSP_ParamEQ_Range5 (operand at 0x03A184)
+FPConst_DSP_ParamEQ_Range5_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Range5 (operand at 0x03A1A7)
+FPConst_DSP_ParamEQ_Range5_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range5 (operand at 0x03A1CA)
+FPConst_DSP_ParamEQ_Range5_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range5 (operand at 0x03A1EE)
+FPConst_DSP_ParamEQ_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_ParamEQ_Finalize (operand at 0x03A20C)
+FPConst_DSP_FilterLUT_Fetch_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_Fetch (operand at 0x03A6CD)
+FPConst_DSP_FilterLUT_Fetch_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_Fetch (operand at 0x03A6DC)
+FPConst_DSP_FilterLUT_Mode0x10_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_Mode0x10 (operand at 0x03A754)
+FPConst_DSP_FilterLUT_Mode0x10_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_Mode0x10 (operand at 0x03A763)
+FPConst_DSP_FilterLUT_Mode0x20_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_Mode0x20 (operand at 0x03A7DB)
+FPConst_DSP_FilterLUT_Mode0x20_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_Mode0x20 (operand at 0x03A7EA)
+FPConst_DSP_FilterLUT_ModeType2_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_ModeType2 (operand at 0x03A87F)
+FPConst_DSP_FilterLUT_ModeType2_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_ModeType2 (operand at 0x03A88E)
+FPConst_DSP_FilterLUT_ModeType2_SubMode_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_ModeType2_SubMode (operand at 0x03A8E4)
+FPConst_DSP_FilterLUT_ModeType2_SubMode_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_ModeType2_SubMode (operand at 0x03A8F3)
+FPConst_DSP_BiquadCoeff_Compute_7p1237929em5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Compute (operand at 0x03A98D)
+FPConst_DSP_BiquadCoeff_Compute_1:	.float 1	; f32 1, read by DSP_BiquadCoeff_Compute (operand at 0x03A9F8)
+FPConst_DSP_BiquadCoeff_Compute_1_2:	.float 1	; f32 1, read by DSP_BiquadCoeff_Compute (operand at 0x03AA06)
+FPConst_DSP_BiquadCoeff_Compute_Neg2:	.float -2	; f32 -2, read by DSP_BiquadCoeff_Compute (operand at 0x03AA1A)
+FPConst_DSP_BiquadCoeff_Compute_1_3:	.float 1	; f32 1, read by DSP_BiquadCoeff_Compute (operand at 0x03AA3C)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign_20:	.float 2e+01	; f32 2e+01, read by DSP_BiquadCoeff_Algo0_AfterSign (operand at 0x03AA78)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign_10:	.double 10.0	; f64 10.0, read by DSP_BiquadCoeff_Algo0_AfterSign (operand at 0x03AA98)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign_1:	.double 1.0	; f64 1.0, read by DSP_BiquadCoeff_Algo0_AfterSign (operand at 0x03AACF)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_20:	.float 2e+01	; f32 2e+01, read by DSP_BiquadCoeff_Algo0_AfterSign2 (operand at 0x03AB32)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_10:	.double 10.0	; f64 10.0, read by DSP_BiquadCoeff_Algo0_AfterSign2 (operand at 0x03AB52)
+FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_1:	.double 1.0	; f64 1.0, read by DSP_BiquadCoeff_Algo0_AfterSign2 (operand at 0x03AB86)
+FPConst_DSP_BiquadCoeff_Algo0_Assembly_1:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo0_Assembly (operand at 0x03ACD1)
+FPConst_DSP_BiquadCoeff_Algo0_Assembly_1_2:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo0_Assembly (operand at 0x03AD05)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_2:	.float 2	; f32 2, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD32)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_2_2:	.float 2	; f32 2, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD54)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_2_3:	.float 2	; f32 2, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD76)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD89)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADBC)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADEA)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE18)
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE46)
+FPConst_DSP_BiquadCoeff_Algo1_7p1237929em5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AE81)
+FPConst_DSP_BiquadCoeff_Algo1_1:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AEE8)
+FPConst_DSP_BiquadCoeff_Algo1_1_2:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AEF6)
+FPConst_DSP_BiquadCoeff_Algo1_Neg2:	.float -2	; f32 -2, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AF0A)
+FPConst_DSP_BiquadCoeff_Algo1_1_3:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AF2C)
+FPConst_DSP_BiquadCoeff_Algo1_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFA1)
+FPConst_DSP_BiquadCoeff_Algo1_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFD4)
+FPConst_DSP_BiquadCoeff_Algo1_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B002)
+FPConst_DSP_BiquadCoeff_Algo1_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B030)
+FPConst_DSP_BiquadCoeff_Algo1_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B05E)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B099)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_2:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B0BD)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_3:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B0F3)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_4:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B11A)
+FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B142)
+FPConst_DSP_BiquadCoeff_Algo2_1:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B16E)
+FPConst_DSP_BiquadCoeff_Algo2_1_2:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B17C)
+FPConst_DSP_BiquadCoeff_Algo2_Neg2:	.float -2	; f32 -2, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B190)
+FPConst_DSP_BiquadCoeff_Algo2_1_3:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B1B2)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_20:	.float 2e+01	; f32 2e+01, read by DSP_BiquadCoeff_Algo2_AfterSign1 (operand at 0x03B1E8)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_10:	.double 10.0	; f64 10.0, read by DSP_BiquadCoeff_Algo2_AfterSign1 (operand at 0x03B208)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_1:	.double 1.0	; f64 1.0, read by DSP_BiquadCoeff_Algo2_AfterSign1 (operand at 0x03B23B)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_20:	.float 2e+01	; f32 2e+01, read by DSP_BiquadCoeff_Algo2_AfterSign2 (operand at 0x03B29E)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_10:	.double 10.0	; f64 10.0, read by DSP_BiquadCoeff_Algo2_AfterSign2 (operand at 0x03B2BE)
+FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_1:	.double 1.0	; f64 1.0, read by DSP_BiquadCoeff_Algo2_AfterSign2 (operand at 0x03B2EE)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B41E)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B451)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B47A)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4A3)
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4CC)
+FPConst_DSP_SOS_LUT_Fetch_0p5:	.double 0.5	; f64 0.5, read by DSP_SOS_LUT_Fetch (operand at 0x03B56F)
+FPConst_DSP_SOS_LUT_Fetch_Neg12:	.double -12.0	; f64 -12.0, read by DSP_SOS_LUT_Fetch (operand at 0x03B57E)
+FPConst_DSP_SOS_LUT_Mode0x10_0p5:	.double 0.5	; f64 0.5, read by DSP_SOS_LUT_Mode0x10 (operand at 0x03B5D4)
+FPConst_DSP_SOS_LUT_Mode0x10_Neg12:	.double -12.0	; f64 -12.0, read by DSP_SOS_LUT_Mode0x10 (operand at 0x03B5E3)
+FPConst_DSP_SOS_Coeff_Compute_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Coeff_Compute (operand at 0x03B68D)
+FPConst_DSP_SOS_Coeff_Compute_10:	.double 10.0	; f64 10.0, read by DSP_SOS_Coeff_Compute (operand at 0x03B6AD)
+FPConst_DSP_SOS_Coeff_Compute_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Coeff_Compute (operand at 0x03B6F3)
+FPConst_DSP_SOS_Coeff_Compute_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Coeff_Compute (operand at 0x03B722)
+FPConst_DSP_SOS_Coeff_Compute_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Coeff_Compute (operand at 0x03B74A)
+FPConst_DSP_SOS_Coeff_Compute_1_2:	.float 1	; f32 1, read by DSP_SOS_Coeff_Compute (operand at 0x03B771)
+FPConst_DSP_SOS_Coeff_Compute_1_3:	.float 1	; f32 1, read by DSP_SOS_Coeff_Compute (operand at 0x03B787)
+FPConst_DSP_SOS_Coeff_Compute_1_4:	.float 1	; f32 1, read by DSP_SOS_Coeff_Compute (operand at 0x03B7B3)
+FPConst_DSP_SOS_Coeff_Compute_1_5:	.float 1	; f32 1, read by DSP_SOS_Coeff_Compute (operand at 0x03B7D6)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B803)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B832)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B85A)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B886)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B892)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B8C6)
+FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B8E6)
+FPConst_DSP_SOS_Algo0_FinalChain_1:	.float 1	; f32 1, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B901)
+FPConst_DSP_SOS_Algo0_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B912)
+FPConst_DSP_SOS_Algo0_FinalChain_4194304:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B958)
+FPConst_DSP_SOS_Algo0_FinalChain_4194304_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B98D)
+FPConst_DSP_SOS_Algo0_FinalChain_4194304_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B9B8)
+FPConst_DSP_SOS_Algo1_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Algo1 (operand at 0x03B9E2)
+FPConst_DSP_SOS_Algo1_10:	.double 10.0	; f64 10.0, read by DSP_SOS_Algo1 (operand at 0x03BA02)
+FPConst_DSP_SOS_Algo1_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo1 (operand at 0x03BA46)
+FPConst_DSP_SOS_Algo1_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo1 (operand at 0x03BA73)
+FPConst_DSP_SOS_Algo1_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo1 (operand at 0x03BA97)
+FPConst_DSP_SOS_Algo1_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo1 (operand at 0x03BAC1)
+FPConst_DSP_SOS_Algo1_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo1 (operand at 0x03BACD)
+FPConst_DSP_SOS_Algo1_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo1 (operand at 0x03BB01)
+FPConst_DSP_SOS_Algo1_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo1 (operand at 0x03BB21)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BB4E)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BB7B)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BB9F)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BBC4)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BBDA)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BC06)
+FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BC29)
+FPConst_DSP_SOS_Algo1_FinalChain_1:	.float 1	; f32 1, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC49)
+FPConst_DSP_SOS_Algo1_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC5A)
+FPConst_DSP_SOS_Algo1_FinalChain_2097152:	.float 2097152	; f32 2097152, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC9B)
+FPConst_DSP_SOS_Algo1_FinalChain_4194304:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCCC)
+FPConst_DSP_SOS_Algo1_FinalChain_2097152_2:	.float 2097152	; f32 2097152, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCF3)
+FPConst_DSP_SOS_Algo2_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Algo2 (operand at 0x03BD1D)
+FPConst_DSP_SOS_Algo2_10:	.double 10.0	; f64 10.0, read by DSP_SOS_Algo2 (operand at 0x03BD3D)
+FPConst_DSP_SOS_Algo2_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo2 (operand at 0x03BD7F)
+FPConst_DSP_SOS_Algo2_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo2 (operand at 0x03BDAC)
+FPConst_DSP_SOS_Algo2_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo2 (operand at 0x03BDD0)
+FPConst_DSP_SOS_Algo2_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo2 (operand at 0x03BDFA)
+FPConst_DSP_SOS_Algo2_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo2 (operand at 0x03BE06)
+FPConst_DSP_SOS_Algo2_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo2 (operand at 0x03BE3A)
+FPConst_DSP_SOS_Algo2_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo2 (operand at 0x03BE5A)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_0p00014247586:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BE87)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_0p00014247586_2:	.double 0.0001424758573	; f64 0.0001424758573, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BEB4)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1:	.double 1.0	; f64 1.0, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BED8)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BEFD)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_3:	.float 1	; f32 1, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BF13)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BF3F)
+FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BF62)
+FPConst_DSP_SOS_Algo2_FinalChain_1:	.float 1	; f32 1, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BF82)
+FPConst_DSP_SOS_Algo2_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BF93)
+FPConst_DSP_SOS_Algo2_FinalChain_4194304:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFCB)
+FPConst_DSP_SOS_Algo2_FinalChain_4194304_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFFC)
+FPConst_DSP_SOS_Algo2_FinalChain_4194304_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03C028)
 
 ; --- 0x0131cf-0x0133ce  128 x u32 monotonic gain curve, read by DSP_MixerCoeff_Compute:
 ; g = curve[index] >> 15 enters the Q15/Q16 two-stage mixer-gain product that lands in
@@ -2975,9 +3354,12 @@ DSP_MixerGain_Curve:
 ;   0x0133cf  61 parameter-RANGE arrays of 6-byte records {s16 BE min, s16 BE max,
 ;             u16 BE parameter selector} -- note BIG-endian fields, matching the
 ;             hi-byte-first order of the DSP register writes.
-;   0x013e49  60 parameter-DEFAULTS records, 23 bytes each: up to 22 per-parameter
-;             default values (one byte per range record, same order) + final byte 99
-;             (constant in all 60 records).
+;   0x013e49  60 parameter-DEFAULTS records, 23 bytes each: byte 0 = the effect number
+;             (59 of 59 dedicated records; the shared EffDefault record has 0), then the
+;             parameter values packed from byte 1 in the fields the main-CPU reader decodes
+;             (see ESTABLISHED below), final byte 99 (constant in all 60 records).
+;             ★ CORRECTED 2026-09-25: this line used to say byte 0.. were "up to 22 per-parameter
+;             default values (one byte per range record, same order)"; byte 0 is the effect number.
 ;   0x0143ad  100 parameter counts, one per effect number.
 ;   0x014411  100 x u32 -> range array per effect number 0-99.
 ;   0x0145a1  100 x u32 -> defaults record per effect number 0-99.
@@ -2990,14 +3372,64 @@ DSP_MixerGain_Curve:
 ; are unidentified two-parameter entries.  No literal reference to the three table
 ; bases exists in the payload image -- the consumer computes the addresses (or lives
 ; in code still held as raw bytes elsewhere in the payload).
+; RE-CHECKED 2026-09-25, forms searched: every 24-bit little-endian value in 0x012400-0x0147FF
+; anywhere in the payload ROM (covers lda :24, ld imm32, .long, d24 operands, and any
+; table-base-minus-index constant within that window); every 3- and 4-byte LE and 3-byte BE
+; occurrence of 0x0133CF / 0x013E49 / 0x0143AD / 0x014411 / 0x0145A1 in the main-CPU v10,
+; table-data, custom-data and HD-AE5000 dumps.  The only hits are the two pointer tables'
+; own entries plus byte patterns inside unrelated instructions (0x01F9D0-0x01FA90 init code).
+; And the "code still held as raw bytes" escape hatch is now closed: the payload's code files
+; hold no undecoded runs except 20 single instructions llvm-mc cannot spell (minc1, ldc to
+; control registers, and/bit on (reg+reg); each annotated with its unidasm reading), none of
+; which carries such an address, plus documented 0xFF / 0x0E fill bytes.  So no reader of these
+; three tables exists in any dumped image in any of those forms.
+; IDENTIFIED 2026-09-25: effects 57-60 ("unidentified two-parameter entries" above) are the
+; IC310 reverbs STANDARD / PERCUSSIVE / SYMPHONIC / DEEP SPACE, and 79 / 88-91 are GEQ / ROOM /
+; KARAOKE / BATH ROOM / STAGE (main-CPU v10 name table, 18-byte records at 0x033568 - 18*n); and
+; the 15/53 rotary labels were swapped: 15 is ROCK ROTARY, 53 ROTARY SPEAKER.  Labels renamed by
+; scripts/renaming/rename_v142_effect_param_meta.sed.
+; ESTABLISHED 2026-09-25 -- WHAT THIS BLOCK IS: a copy of the MAIN CPU's effect-parameter
+; metadata, which the main CPU reads and this payload does not.  All of 0x0133CF-0x014738 is
+; identical to main-CPU program ROM 0xEE4FC6-0xEE636B (same address in v7, v9 and v10; the
+; block is also unchanged, at the same address, in sub-CPU payloads v1.40 and v1.41), except
+; that (a) the main copy's defaults records are 24 bytes (these 23 + one 0xFF) and (b) the
+; pointer tables hold main-CPU addresses -- relocation-identical, entry for entry.
+; Main-CPU readers of that copy (v10 names; each holds the twin's address as an operand):
+;   range pointer table  0xEE6044  DSPCfg_LookupAndExtract 0xFDC41D; DSPCfg_ClampAndExtract
+;                                  0xFDC803, which clamps a value to [min,max] (returns 0xFFFE
+;                                  below min, 0xFFFD above max)
+;   range record decode            DSPCfg_ExtractPairFromStruct 0xFDC3C9: +0 and +2 as s16 BE
+;                                  (so the BIG-endian reading above is the consumer's), +4 as
+;                                  a byte, +5 sign-extended
+;   count table          0xEE5FE0  DSPCfg_GetSlotCount 0xFDC456 (bounds the parameter index
+;                                  in DSPCfg_ClampAndExtract and DSPCfg_WriteAllSlots_Direct)
+;   defaults ptr table   0xEE61D4  DSPCfg_ResolveWithFallback 0xFDC710, DSPCfg_WriteAllSlots_Direct
+;                                  0xFDCB40 / _Clamped 0xFDCBFE (index = byte 0 of the live record)
+;   defaults record                DSPCfg_ReadViaTableLookup 0xFDC364: byte 0 indexes the
+;                                  per-effect descriptor pointer table at main 0xEE75F6, and
+;                                  DSPCfg_ReadMultiField 0xFDC2E8 / DSPCfg_ReadField 0xFDC171
+;                                  read the values from byte 1 (1- or 2-byte fields, some as
+;                                  5-/6-bit sub-fields, chosen by the descriptor's type byte)
+;   0x014731 twins       0xEE6364 / 0xEE6368  DSPCfg_Data_001 0xFDC448 / DSPCfg_Data_002 0xFDC464
+; So the layouts written here are pinned by a reader, even though it runs on the other CPU.
+; Proof: scripts/analysis/v142_param_meta_maincpu_twin.py (byte and relocation identity in
+; v7/v9/v10, byte 0 = effect number, and the operand bytes of every reader listed above).
+; Cross-ref: v10/maincpu/ui_widgets/widget_dispatch.s + tonekit_param_blocks.c, where the twin
+; is labelled ToneKit_NullParams .. ToneKit_VoiceDispatch_Table (that last label sits at
+; 0xEE6048, 4 bytes past the pointer table's first entry at 0xEE6044, which no code uses).
+; Why the sub-CPU carries a copy it never reads is not established.
 ; ===========================================================================
 
 ; Shared placeholder range array (2 records) used by all effect numbers without a
 ; dedicated one: 0, 7, 11, 12, 13, 14, 28, 29, 30, 31, 38, 40, 41, 42, 43, 44, 45, 46, 47, 49, 51, 55, 61, 62, 63, 69, 76, 77, 78, 80, 81, 82, 83, 84, 85, 86, 87, 92, 93, 94, 95.
+; Pointed to by EFF_ParamRanges_PtrTable (effects 0 7 11-14 28-31 38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE4FC6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 EffDefault_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 32): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE4FD2 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff32_Distortion_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3005,6 +3437,8 @@ Eff32_Distortion_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 33): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE4FF0 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff33_Overdrive_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3012,6 +3446,8 @@ Eff33_Overdrive_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 34): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE500E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff34_Fuzz_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3019,6 +3455,8 @@ Eff34_Fuzz_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 35): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
+; Main-CPU twin at 0xEE502C (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff35_Exciter_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x05	; param 5: 0..99
@@ -3028,6 +3466,8 @@ Eff35_Exciter_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 39): 17 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 17.
+; Main-CPU twin at 0xEE5056 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff39_ParametricEq_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3047,6 +3487,8 @@ Eff39_ParametricEq_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 1): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE50BC (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff01_Chorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3054,6 +3496,8 @@ Eff01_Chorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 2): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
+; Main-CPU twin at 0xEE50DA (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff02_ModulatedChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x09	; param 9: 0..99
@@ -3063,6 +3507,8 @@ Eff02_ModulatedChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 3): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
+; Main-CPU twin at 0xEE5104 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff03_Enhancer_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x0c	; param 12: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x36	; param 54: 0..99
@@ -3072,6 +3518,8 @@ Eff03_Enhancer_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 4): 8 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 8.
+; Main-CPU twin at 0xEE512E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff04_Flanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3082,6 +3530,8 @@ Eff04_Flanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 5): 8 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 8.
+; Main-CPU twin at 0xEE515E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff05_Phaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3092,7 +3542,9 @@ Eff05_Phaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
-Eff15_RotarySpeaker_ParamRanges:
+; Pointed to by EFF_ParamRanges_PtrTable (effect 15): 16 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 16.
+; Main-CPU twin at 0xEE518E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff15_RockRotary_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x14	; param 20: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x48	; param 72: 0..99
@@ -3110,6 +3562,8 @@ Eff15_RotarySpeaker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 48): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
+; Main-CPU twin at 0xEE51EE (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff48_AutoPan_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3118,6 +3572,8 @@ Eff48_AutoPan_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 50): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
+; Main-CPU twin at 0xEE5212 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff50_Vibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3126,6 +3582,8 @@ Eff50_Vibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 52): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5236 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff52_AutoWah_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x02, 0x00, 0x0b	; param 11: 0..2
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x0c	; param 12: 0..99
@@ -3133,7 +3591,9 @@ Eff52_AutoWah_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
-Eff53_RockRotary_ParamRanges:
+; Pointed to by EFF_ParamRanges_PtrTable (effect 53): 16 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 16.
+; Main-CPU twin at 0xEE5254 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff53_RotarySpeaker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x04	; param 4: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x14	; param 20: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x48	; param 72: 0..99
@@ -3151,6 +3611,8 @@ Eff53_RockRotary_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 54): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE52B4 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff54_RingModulator_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x15	; param 21: 0..99
 	.byte 0x00, 0x00, 0x00, 0xb4, 0x00, 0x38	; param 56: 0..180
@@ -3158,6 +3620,8 @@ Eff54_RingModulator_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 37): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE52D2 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff37_SlowAttacker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x28	; param 40: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x2c	; param 44: 0..99
@@ -3165,6 +3629,8 @@ Eff37_SlowAttacker_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 8): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
+; Main-CPU twin at 0xEE52F0 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff08_GatedReverb_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x2e	; param 46: 0..99
 	.byte 0x00, 0x00, 0x00, 0x18, 0x00, 0x24	; param 36: 0..24
@@ -3173,6 +3639,8 @@ Eff08_GatedReverb_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 6): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5314 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff06_Ensemble_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x08	; param 8: 0..99
@@ -3180,6 +3648,8 @@ Eff06_Ensemble_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 36): 6 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 6.
+; Main-CPU twin at 0xEE5332 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff36_Compressor_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x28	; param 40: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x29	; param 41: 0..99
@@ -3188,6 +3658,8 @@ Eff36_Compressor_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 56): 8 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 8.
+; Main-CPU twin at 0xEE5356 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff56_MixUp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x07	; param 7: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x09	; param 9: 0..99
@@ -3198,6 +3670,8 @@ Eff56_MixUp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 9): 7 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 7.
+; Main-CPU twin at 0xEE5386 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff09_SingleDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x01, 0x5e, 0x00, 0x16	; param 22: 0..350
 	.byte 0x00, 0x00, 0x01, 0x5e, 0x00, 0x17	; param 23: 0..350
@@ -3207,6 +3681,8 @@ Eff09_SingleDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 10): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE53B0 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff10_MultiTapDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x02, 0xbc, 0x00, 0x4b	; param 75: 0..700
 	.byte 0x00, 0x00, 0x02, 0xbc, 0x00, 0x4c	; param 76: 0..700
@@ -3221,6 +3697,8 @@ Eff10_MultiTapDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 64): 11 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 11.
+; Main-CPU twin at 0xEE53F8 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff64_SDelayChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3234,6 +3712,8 @@ Eff64_SDelayChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 65): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE543A (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff65_SDelaySDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x43	; param 67: 0..99
 	.byte 0x00, 0x00, 0x00, 0xb4, 0x00, 0x16	; param 22: 0..180
@@ -3248,6 +3728,8 @@ Eff65_SDelaySDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 66): 14 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 14.
+; Main-CPU twin at 0xEE5482 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff66_SDelayFlanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3264,6 +3746,8 @@ Eff66_SDelayFlanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 67): 11 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 11.
+; Main-CPU twin at 0xEE54D6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff67_SDelayVibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3277,6 +3761,8 @@ Eff67_SDelayVibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 68): 14 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 14.
+; Main-CPU twin at 0xEE5518 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff68_SDelayPhaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x1a	; param 26: 0..99
 	.byte 0x00, 0x00, 0x01, 0x2c, 0x00, 0x16	; param 22: 0..300
@@ -3293,6 +3779,8 @@ Eff68_SDelayPhaser_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 70): 10 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 10.
+; Main-CPU twin at 0xEE556C (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff70_AutoWahSDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x02, 0x00, 0x0b	; param 11: 0..2
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x0c	; param 12: 0..99
@@ -3305,6 +3793,8 @@ Eff70_AutoWahSDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 16): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE55A8 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff16_RoomReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3312,6 +3802,8 @@ Eff16_RoomReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 17): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE55C6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff17_RoomReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3319,6 +3811,8 @@ Eff17_RoomReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 18): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE55E4 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff18_PlateReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3326,6 +3820,8 @@ Eff18_PlateReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 19): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5602 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff19_PlateReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x4d, 0x00, 0x22	; param 34: 0..77
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3333,6 +3829,8 @@ Eff19_PlateReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 20): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5620 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff20_ConcertReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3340,6 +3838,8 @@ Eff20_ConcertReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 21): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE563E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff21_ConcertReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3347,6 +3847,8 @@ Eff21_ConcertReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 22): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE565C (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff22_DarkReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3354,6 +3856,8 @@ Eff22_DarkReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 23): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE567A (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff23_DarkReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3361,6 +3865,8 @@ Eff23_DarkReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 24): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5698 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff24_BrightReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3368,6 +3874,8 @@ Eff24_BrightReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 25): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE56B6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff25_BrightReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3375,6 +3883,8 @@ Eff25_BrightReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 26): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE56D4 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff26_WaveReverb1_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3382,6 +3892,8 @@ Eff26_WaveReverb1_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 27): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE56F2 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff27_WaveReverb2_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x00, 0x00, 0xc8, 0x00, 0x23	; param 35: 0..200
@@ -3389,6 +3901,8 @@ Eff27_WaveReverb2_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x25	; param 37: 0..99
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x02	; param 2: 0..127
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 71): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
+; Main-CPU twin at 0xEE5710 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff71_PeqChorus_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3400,6 +3914,8 @@ Eff71_PeqChorus_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 72): 10 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 10.
+; Main-CPU twin at 0xEE5746 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff72_PeqSDelay_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3412,6 +3928,8 @@ Eff72_PeqSDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 73): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE5782 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff73_PeqFlanger_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3426,6 +3944,8 @@ Eff73_PeqFlanger_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 74): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
+; Main-CPU twin at 0xEE57CA (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff74_PeqVibrato_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3437,6 +3957,8 @@ Eff74_PeqVibrato_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 75): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
+; Main-CPU twin at 0xEE5800 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff75_PeqCompressor_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3448,6 +3970,8 @@ Eff75_PeqCompressor_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x01	; param 1: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 96): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE5836 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff96_PeqComprDist_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3462,6 +3986,8 @@ Eff96_PeqComprDist_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 97): 12 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 12.
+; Main-CPU twin at 0xEE587E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff97_PeqComprOverdr_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3476,6 +4002,8 @@ Eff97_PeqComprOverdr_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 98): 13 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 13.
+; Main-CPU twin at 0xEE58C6 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff98_PeqDistDelay_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3491,6 +4019,8 @@ Eff98_PeqDistDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
+; Pointed to by EFF_ParamRanges_PtrTable (effect 99): 13 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 13.
+; Main-CPU twin at 0xEE5914 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
 Eff99_PeqOverdrDelay_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x1a, 0x00, 0x33	; param 51: 1..26
 	.byte 0x00, 0x00, 0x00, 0x1f, 0x00, 0x34	; param 52: 0..31
@@ -3506,28 +4036,48 @@ Eff99_PeqOverdrDelay_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x03	; param 3: 0..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
-; effect 57: unidentified
-Eff57_ParamRanges:
+; effect 57: STANDARD (an open question here until the IDENTIFIED note below)
+; IDENTIFIED 2026-09-25: effect 57 is "STANDARD", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*57; also the DSP zone's DSP2_Eff57_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 57): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+; Main-CPU twin at 0xEE5962 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff57_Standard_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
-; effect 58: unidentified
-Eff58_ParamRanges:
+; effect 58: PERCUSSIVE (an open question here until the IDENTIFIED note below)
+; IDENTIFIED 2026-09-25: effect 58 is "PERCUSSIVE", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*58; also the DSP zone's DSP2_Eff58_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 58): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+; Main-CPU twin at 0xEE596E (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff58_Percussive_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
-; effect 59: unidentified
-Eff59_ParamRanges:
+; effect 59: SYMPHONIC (an open question here until the IDENTIFIED note below)
+; IDENTIFIED 2026-09-25: effect 59 is "SYMPHONIC", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*59; also the DSP zone's DSP2_Eff59_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 59): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+; Main-CPU twin at 0xEE597A (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff59_Symphonic_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
-; effect 60: unidentified
-Eff60_ParamRanges:
+; effect 60: DEEP SPACE (an open question here until the IDENTIFIED note below)
+; IDENTIFIED 2026-09-25: effect 60 is "DEEP SPACE", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*60; also the DSP zone's DSP2_Eff60_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 60): 2 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 2.
+; Main-CPU twin at 0xEE5986 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff60_DeepSpace_ParamRanges:
 	.byte 0x00, 0x01, 0x00, 0x63, 0x00, 0x53	; param 83: 1..99
 	.byte 0x00, 0x00, 0x00, 0x63, 0x00, 0x55	; param 85: 0..99
 
 ; effect 88: second-DSP (MN19413) parameter stream, name unknown
-Eff88_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 88 is "ROOM", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*88; also the DSP zone's DSP2_Eff88_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 88): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE5992 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff88_Room_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
 	.byte 0x00, 0x0c, 0x00, 0x24, 0x00, 0x06	; param 6: 12..36
@@ -3535,7 +4085,11 @@ Eff88_SecondDsp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x55	; param 85: 0..127
 
 ; effect 89: second-DSP (MN19413) parameter stream, name unknown
-Eff89_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 89 is "KARAOKE", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*89; also the DSP zone's DSP2_Eff89_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 89): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE59B0 (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff89_Karaoke_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
 	.byte 0x00, 0x0c, 0x00, 0x24, 0x00, 0x06	; param 6: 12..36
@@ -3543,7 +4097,11 @@ Eff89_SecondDsp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x55	; param 85: 0..127
 
 ; effect 90: second-DSP (MN19413) parameter stream, name unknown
-Eff90_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 90 is "BATH ROOM", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*90; also the DSP zone's DSP2_Eff90_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 90): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE59CE (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff90_BathRoom_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
 	.byte 0x00, 0x0c, 0x00, 0x24, 0x00, 0x06	; param 6: 12..36
@@ -3551,7 +4109,11 @@ Eff90_SecondDsp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x55	; param 85: 0..127
 
 ; effect 91: second-DSP (MN19413) parameter stream, name unknown
-Eff91_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 91 is "STAGE", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*91; also the DSP zone's DSP2_Eff91_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 91): 5 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 5.
+; Main-CPU twin at 0xEE59EC (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff91_Stage_ParamRanges:
 	.byte 0x00, 0x0f, 0x00, 0x61, 0x00, 0x22	; param 34: 15..97
 	.byte 0x00, 0x04, 0x00, 0x17, 0x00, 0x20	; param 32: 4..23
 	.byte 0x00, 0x0c, 0x00, 0x24, 0x00, 0x06	; param 6: 12..36
@@ -3559,7 +4121,11 @@ Eff91_SecondDsp_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x00, 0x55	; param 85: 0..127
 
 ; effect 79: second-DSP (MN19413) parameter stream, name unknown
-Eff79_SecondDsp_ParamRanges:
+; IDENTIFIED 2026-09-25: effect 79 is "GEQ", an IC310 (MN19413) effect -- main-CPU v10 name
+; table record 0x033568 - 18*79; also the DSP zone's DSP2_Eff79_* banner.
+; Pointed to by EFF_ParamRanges_PtrTable (effect 79): 9 range records {s16 BE min, s16 BE max, u16 BE selector}; EFF_ParamCount_Table says 9.
+; Main-CPU twin at 0xEE5A0A (byte-identical, same offset in the block); its records are decoded there by DSPCfg_ExtractPairFromStruct (0xFDC3C9), called from DSPCfg_LookupAndExtract (0xFDC41D) and DSPCfg_ClampAndExtract (0xFDC803): record n at +6n; +0 and +2 read as s16 BE, +4 as a byte, +5 sign-extended.
+Eff79_Geq_ParamRanges:
 	.byte 0x00, 0x00, 0x00, 0x16, 0x00, 0x1e	; param 30: 0..22
 	.byte 0x00, 0x00, 0x00, 0x30, 0x00, 0x1f	; param 31: 0..48
 	.byte 0x00, 0x04, 0x00, 0x1a, 0x00, 0x33	; param 51: 4..26
@@ -3572,249 +4138,374 @@ Eff79_SecondDsp_ParamRanges:
 
 ; Shared placeholder defaults record for the same effect numbers as
 ; EffDefault_ParamRanges.
+; Pointed to by EFF_ParamDefaults_PtrTable (effects 0 7 11-14 28-31 38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): 23-byte defaults record #0: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5A40 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 EffDefault_ParamDefaults:
 	.byte 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 32): 23-byte defaults record #1: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5A58 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff32_Distortion_ParamDefaults:
 	.byte 32, 80, 70, 84, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 33): 23-byte defaults record #2: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5A70 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff33_Overdrive_ParamDefaults:
 	.byte 33, 90, 68, 84, 75, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 34): 23-byte defaults record #3: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5A88 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff34_Fuzz_ParamDefaults:
 	.byte 34, 90, 66, 84, 75, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 35): 23-byte defaults record #4: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5AA0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff35_Exciter_ParamDefaults:
 	.byte 35, 30, 86, 5, 0, 70, 84, 75, 1, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 39): 23-byte defaults record #5: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5AB8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff39_ParametricEq_ParamDefaults:
 	.byte 39, 89, 88, 90, 24, 90, 216, 91, 152, 92, 88, 84, 75, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 1): 23-byte defaults record #6: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5AD0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff01_Chorus_ParamDefaults:
 	.byte 1, 30, 6, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 2): 23-byte defaults record #7: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5AE8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff02_ModulatedChorus_ParamDefaults:
 	.byte 2, 30, 6, 60, 15, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 3): 23-byte defaults record #8: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B00 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff03_Enhancer_ParamDefaults:
 	.byte 3, 50, 99, 99, 0, 25, 0, 0, 84, 75, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 4): 23-byte defaults record #9: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B18 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff04_Flanger_ParamDefaults:
 	.byte 4, 80, 2, 60, 0, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 5): 23-byte defaults record #10: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B30 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff05_Phaser_ParamDefaults:
 	.byte 5, 80, 4, 60, 50, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff15_RotarySpeaker_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 15): 23-byte defaults record #11: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B48 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff15_RockRotary_ParamDefaults:
 	.byte 15, 90, 58, 70, 45, 7, 10, 10, 60, 40, 6, 72, 79, 84, 1, 70
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 48): 23-byte defaults record #12: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B60 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff48_AutoPan_ParamDefaults:
 	.byte 48, 80, 8, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 50): 23-byte defaults record #13: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B78 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff50_Vibrato_ParamDefaults:
 	.byte 50, 20, 40, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 52): 23-byte defaults record #14: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5B90 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff52_AutoWah_ParamDefaults:
 	.byte 52, 2, 0, 99, 99, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff53_RockRotary_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 53): 23-byte defaults record #15: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5BA8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff53_RotarySpeaker_ParamDefaults:
 	.byte 53, 0, 75, 64, 45, 7, 10, 10, 60, 40, 6, 72, 79, 84, 1, 70
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 54): 23-byte defaults record #16: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5BC0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff54_RingModulator_ParamDefaults:
 	.byte 54, 64, 90, 0, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 37): 23-byte defaults record #17: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5BD8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff37_SlowAttacker_ParamDefaults:
 	.byte 37, 12, 49, 1, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 8): 23-byte defaults record #18: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5BF0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff08_GatedReverb_ParamDefaults:
 	.byte 8, 20, 12, 40, 5, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 6): 23-byte defaults record #19: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C08 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff06_Ensemble_ParamDefaults:
 	.byte 6, 30, 4, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 36): 23-byte defaults record #20: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C20 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff36_Compressor_ParamDefaults:
 	.byte 36, 14, 28, 9, 9, 84, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 56): 23-byte defaults record #21: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C38 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff56_MixUp_ParamDefaults:
 	.byte 56, 50, 30, 84, 81, 90, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 9): 23-byte defaults record #22: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C50 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff09_SingleDelay_ParamDefaults:
 	.byte 9, 1, 94, 1, 94, 196, 196, 18, 84, 70, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 10): 23-byte defaults record #23: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C68 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff10_MultiTapDelay_ParamDefaults:
 	.byte 10, 0, 136, 1, 16, 1, 152, 2, 32, 0, 30, 60, 99, 196, 18, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 64): 23-byte defaults record #24: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C80 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff64_SDelayChorus_ParamDefaults:
 	.byte 64, 20, 1, 44, 1, 44, 216, 216, 50, 40, 6, 0, 84, 70, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 65): 23-byte defaults record #25: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5C98 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff65_SDelaySDelay_ParamDefaults:
 	.byte 65, 30, 0, 180, 0, 180, 196, 196, 30, 0, 100, 0, 100, 176, 176, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 66): 23-byte defaults record #26: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5CB0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff66_SDelayFlanger_ParamDefaults:
 	.byte 66, 20, 1, 44, 1, 44, 216, 216, 80, 80, 2, 60, 50, 90, 0, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 67): 23-byte defaults record #27: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5CC8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff67_SDelayVibrato_ParamDefaults:
 	.byte 67, 20, 1, 44, 1, 44, 216, 216, 40, 6, 90, 0, 84, 70, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 68): 23-byte defaults record #28: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5CE0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff68_SDelayPhaser_ParamDefaults:
 	.byte 68, 20, 1, 44, 1, 44, 216, 216, 80, 80, 4, 60, 50, 90, 0, 84
 	.byte 70, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 70): 23-byte defaults record #29: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5CF8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff70_AutoWahSDelay_ParamDefaults:
 	.byte 70, 2, 0, 99, 20, 1, 44, 1, 44, 216, 216, 99, 70, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 16): 23-byte defaults record #30: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D10 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff16_RoomReverb1_ParamDefaults:
 	.byte 16, 19, 0, 12, 18, 50, 94, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 17): 23-byte defaults record #31: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D28 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff17_RoomReverb2_ParamDefaults:
 	.byte 17, 25, 0, 12, 20, 50, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 18): 23-byte defaults record #32: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D40 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff18_PlateReverb1_ParamDefaults:
 	.byte 18, 35, 0, 45, 12, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 19): 23-byte defaults record #33: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D58 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff19_PlateReverb2_ParamDefaults:
 	.byte 19, 41, 0, 45, 16, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 20): 23-byte defaults record #34: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D70 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff20_ConcertReverb1_ParamDefaults:
 	.byte 20, 35, 0, 11, 20, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 21): 23-byte defaults record #35: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5D88 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff21_ConcertReverb2_ParamDefaults:
 	.byte 21, 39, 0, 60, 18, 80, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 22): 23-byte defaults record #36: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5DA0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff22_DarkReverb1_ParamDefaults:
 	.byte 22, 45, 0, 45, 12, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 23): 23-byte defaults record #37: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5DB8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff23_DarkReverb2_ParamDefaults:
 	.byte 23, 55, 0, 90, 12, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 24): 23-byte defaults record #38: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5DD0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff24_BrightReverb1_ParamDefaults:
 	.byte 24, 41, 0, 25, 20, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 25): 23-byte defaults record #39: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5DE8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff25_BrightReverb2_ParamDefaults:
 	.byte 25, 45, 0, 30, 6, 50, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 26): 23-byte defaults record #40: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E00 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff26_WaveReverb1_ParamDefaults:
 	.byte 26, 45, 0, 45, 18, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 27): 23-byte defaults record #41: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E18 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff27_WaveReverb2_ParamDefaults:
 	.byte 27, 55, 0, 45, 18, 50, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 71): 23-byte defaults record #42: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E30 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff71_PeqChorus_ParamDefaults:
 	.byte 71, 92, 100, 50, 30, 6, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 72): 23-byte defaults record #43: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E48 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff72_PeqSDelay_ParamDefaults:
 	.byte 72, 92, 100, 20, 1, 44, 1, 44, 216, 216, 84, 75, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 73): 23-byte defaults record #44: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E60 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff73_PeqFlanger_ParamDefaults:
 	.byte 73, 92, 100, 80, 80, 2, 60, 50, 90, 0, 84, 75, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 74): 23-byte defaults record #45: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E78 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff74_PeqVibrato_ParamDefaults:
 	.byte 74, 92, 100, 40, 6, 90, 0, 84, 75, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 75): 23-byte defaults record #46: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5E90 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff75_PeqCompressor_ParamDefaults:
 	.byte 75, 92, 100, 14, 28, 9, 9, 84, 75, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 96): 23-byte defaults record #47: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5EA8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff96_PeqComprDist_ParamDefaults:
 	.byte 96, 92, 100, 14, 28, 9, 9, 65, 66, 84, 75, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 97): 23-byte defaults record #48: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5EC0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff97_PeqComprOverdr_ParamDefaults:
 	.byte 97, 92, 100, 14, 28, 9, 9, 80, 80, 84, 75, 1, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 98): 23-byte defaults record #49: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5ED8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff98_PeqDistDelay_ParamDefaults:
 	.byte 98, 92, 100, 80, 68, 20, 1, 44, 1, 44, 216, 216, 84, 75, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 99): 23-byte defaults record #50: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5EF0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
 Eff99_PeqOverdrDelay_ParamDefaults:
 	.byte 99, 92, 100, 80, 80, 20, 1, 44, 1, 44, 216, 216, 84, 75, 1, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff57_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 57): 23-byte defaults record #51: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F08 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff57_Standard_ParamDefaults:
 	.byte 57, 50, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff58_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 58): 23-byte defaults record #52: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F20 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff58_Percussive_ParamDefaults:
 	.byte 58, 50, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff59_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 59): 23-byte defaults record #53: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F38 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff59_Symphonic_ParamDefaults:
 	.byte 59, 50, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff60_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 60): 23-byte defaults record #54: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F50 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff60_DeepSpace_ParamDefaults:
 	.byte 60, 99, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff88_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 88): 23-byte defaults record #55: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F68 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff88_Room_ParamDefaults:
 	.byte 88, 35, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff89_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 89): 23-byte defaults record #56: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F80 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff89_Karaoke_ParamDefaults:
 	.byte 89, 35, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff90_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 90): 23-byte defaults record #57: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5F98 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff90_BathRoom_ParamDefaults:
 	.byte 90, 45, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff91_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 91): 23-byte defaults record #58: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5FB0 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff91_Stage_ParamDefaults:
 	.byte 91, 35, 3, 156, 84, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
-Eff79_SecondDsp_ParamDefaults:
+; Pointed to by EFF_ParamDefaults_PtrTable (effect 79): 23-byte defaults record #59: byte 0 = effect number, packed parameter values from byte 1, final byte 99.
+; Main-CPU twin at 0xEE5FC8 (same 23 bytes + one 0xFF pad; 24-byte stride there): DSPCfg_WriteAllSlots_Direct (0xFDCB40) walks parameters 0..count-1 of it through DSPCfg_ReadViaTableLookup (0xFDC364).
+Eff79_Geq_ParamDefaults:
 	.byte 79, 1, 216, 3, 152, 5, 24, 5, 216, 84, 0, 0, 0, 0, 0, 0
 	.byte 0, 0, 0, 0, 0, 0, 99
 
 ; --- 0x0143ad  editable-parameter count per effect number 0-99 (10 per row, so row = tens
 ; digit).  For effects with a dedicated range array the count equals the number of range
 ; records; effects on the shared EffDefault_ParamRanges still carry their nominal count 5.
+; Reader: none in this payload, and this address is used by no code in any dump (forms searched: the
+; RE-CHECKED note of the block header, 0x0133CF).  The byte-identical main-CPU twin at 0xEE5FE0 is
+; read by DSPCfg_GetSlotCount (0xFDC456): count = byte [table + effect number] (ESTABLISHED note).
+; Contents are consistent with the range arrays (the count
+; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamCount_Table:
 	.byte 5, 5, 7, 7, 8, 8, 5, 5, 6, 7
 	.byte 12, 5, 5, 5, 5, 16, 5, 5, 5, 5
@@ -3828,6 +4519,12 @@ EFF_ParamCount_Table:
 	.byte 5, 5, 5, 5, 5, 5, 12, 12, 13, 13
 
 ; --- 0x014411  100 x u32, effect number -> parameter-ranges record.
+; Reader: none in this payload, and this address is used by no code in any dump (forms searched: the
+; RE-CHECKED note of the block header, 0x0133CF).  Its main-CPU twin at 0xEE6044 (same entries
+; relocated by 0xEE4FC6 - 0x0133CF) is read by DSPCfg_LookupAndExtract (0xFDC41D) and
+; DSPCfg_ClampAndExtract (0xFDC803): entry = [table + 4 * effect number] (ESTABLISHED note).
+; Contents are consistent with the range arrays (the count
+; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamRanges_PtrTable:
 	.long EffDefault_ParamRanges	; effect 0
 	.long Eff01_Chorus_ParamRanges	; effect 1
@@ -3844,7 +4541,7 @@ EFF_ParamRanges_PtrTable:
 	.long EffDefault_ParamRanges	; effect 12
 	.long EffDefault_ParamRanges	; effect 13
 	.long EffDefault_ParamRanges	; effect 14
-	.long Eff15_RotarySpeaker_ParamRanges	; effect 15
+	.long Eff15_RockRotary_ParamRanges	; effect 15
 	.long Eff16_RoomReverb1_ParamRanges	; effect 16
 	.long Eff17_RoomReverb2_ParamRanges	; effect 17
 	.long Eff18_PlateReverb1_ParamRanges	; effect 18
@@ -3882,14 +4579,14 @@ EFF_ParamRanges_PtrTable:
 	.long Eff50_Vibrato_ParamRanges	; effect 50
 	.long EffDefault_ParamRanges	; effect 51
 	.long Eff52_AutoWah_ParamRanges	; effect 52
-	.long Eff53_RockRotary_ParamRanges	; effect 53
+	.long Eff53_RotarySpeaker_ParamRanges	; effect 53
 	.long Eff54_RingModulator_ParamRanges	; effect 54
 	.long EffDefault_ParamRanges	; effect 55
 	.long Eff56_MixUp_ParamRanges	; effect 56
-	.long Eff57_ParamRanges	; effect 57
-	.long Eff58_ParamRanges	; effect 58
-	.long Eff59_ParamRanges	; effect 59
-	.long Eff60_ParamRanges	; effect 60
+	.long Eff57_Standard_ParamRanges	; effect 57
+	.long Eff58_Percussive_ParamRanges	; effect 58
+	.long Eff59_Symphonic_ParamRanges	; effect 59
+	.long Eff60_DeepSpace_ParamRanges	; effect 60
 	.long EffDefault_ParamRanges	; effect 61
 	.long EffDefault_ParamRanges	; effect 62
 	.long EffDefault_ParamRanges	; effect 63
@@ -3908,7 +4605,7 @@ EFF_ParamRanges_PtrTable:
 	.long EffDefault_ParamRanges	; effect 76
 	.long EffDefault_ParamRanges	; effect 77
 	.long EffDefault_ParamRanges	; effect 78
-	.long Eff79_SecondDsp_ParamRanges	; effect 79
+	.long Eff79_Geq_ParamRanges	; effect 79
 	.long EffDefault_ParamRanges	; effect 80
 	.long EffDefault_ParamRanges	; effect 81
 	.long EffDefault_ParamRanges	; effect 82
@@ -3917,10 +4614,10 @@ EFF_ParamRanges_PtrTable:
 	.long EffDefault_ParamRanges	; effect 85
 	.long EffDefault_ParamRanges	; effect 86
 	.long EffDefault_ParamRanges	; effect 87
-	.long Eff88_SecondDsp_ParamRanges	; effect 88
-	.long Eff89_SecondDsp_ParamRanges	; effect 89
-	.long Eff90_SecondDsp_ParamRanges	; effect 90
-	.long Eff91_SecondDsp_ParamRanges	; effect 91
+	.long Eff88_Room_ParamRanges	; effect 88
+	.long Eff89_Karaoke_ParamRanges	; effect 89
+	.long Eff90_BathRoom_ParamRanges	; effect 90
+	.long Eff91_Stage_ParamRanges	; effect 91
 	.long EffDefault_ParamRanges	; effect 92
 	.long EffDefault_ParamRanges	; effect 93
 	.long EffDefault_ParamRanges	; effect 94
@@ -3931,6 +4628,12 @@ EFF_ParamRanges_PtrTable:
 	.long Eff99_PeqOverdrDelay_ParamRanges	; effect 99
 
 ; --- 0x0145a1  100 x u32, effect number -> parameter-defaults record.
+; Reader: none in this payload, and this address is used by no code in any dump (forms searched: the
+; RE-CHECKED note of the block header, 0x0133CF).  Its main-CPU twin at 0xEE61D4 (same record
+; index in every entry; records there are 24 bytes) is read by DSPCfg_ResolveWithFallback
+; (0xFDC710) and DSPCfg_WriteAllSlots_Direct (0xFDCB40): entry = [table + 4 * effect number].
+; Contents are consistent with the range arrays (the count
+; check is done by scripts/tools/annotate_v142_param_meta_refs.py: 0 mismatches).
 EFF_ParamDefaults_PtrTable:
 	.long EffDefault_ParamDefaults	; effect 0
 	.long Eff01_Chorus_ParamDefaults	; effect 1
@@ -3947,7 +4650,7 @@ EFF_ParamDefaults_PtrTable:
 	.long EffDefault_ParamDefaults	; effect 12
 	.long EffDefault_ParamDefaults	; effect 13
 	.long EffDefault_ParamDefaults	; effect 14
-	.long Eff15_RotarySpeaker_ParamDefaults	; effect 15
+	.long Eff15_RockRotary_ParamDefaults	; effect 15
 	.long Eff16_RoomReverb1_ParamDefaults	; effect 16
 	.long Eff17_RoomReverb2_ParamDefaults	; effect 17
 	.long Eff18_PlateReverb1_ParamDefaults	; effect 18
@@ -3985,14 +4688,14 @@ EFF_ParamDefaults_PtrTable:
 	.long Eff50_Vibrato_ParamDefaults	; effect 50
 	.long EffDefault_ParamDefaults	; effect 51
 	.long Eff52_AutoWah_ParamDefaults	; effect 52
-	.long Eff53_RockRotary_ParamDefaults	; effect 53
+	.long Eff53_RotarySpeaker_ParamDefaults	; effect 53
 	.long Eff54_RingModulator_ParamDefaults	; effect 54
 	.long EffDefault_ParamDefaults	; effect 55
 	.long Eff56_MixUp_ParamDefaults	; effect 56
-	.long Eff57_ParamDefaults	; effect 57
-	.long Eff58_ParamDefaults	; effect 58
-	.long Eff59_ParamDefaults	; effect 59
-	.long Eff60_ParamDefaults	; effect 60
+	.long Eff57_Standard_ParamDefaults	; effect 57
+	.long Eff58_Percussive_ParamDefaults	; effect 58
+	.long Eff59_Symphonic_ParamDefaults	; effect 59
+	.long Eff60_DeepSpace_ParamDefaults	; effect 60
 	.long EffDefault_ParamDefaults	; effect 61
 	.long EffDefault_ParamDefaults	; effect 62
 	.long EffDefault_ParamDefaults	; effect 63
@@ -4011,7 +4714,7 @@ EFF_ParamDefaults_PtrTable:
 	.long EffDefault_ParamDefaults	; effect 76
 	.long EffDefault_ParamDefaults	; effect 77
 	.long EffDefault_ParamDefaults	; effect 78
-	.long Eff79_SecondDsp_ParamDefaults	; effect 79
+	.long Eff79_Geq_ParamDefaults	; effect 79
 	.long EffDefault_ParamDefaults	; effect 80
 	.long EffDefault_ParamDefaults	; effect 81
 	.long EffDefault_ParamDefaults	; effect 82
@@ -4020,10 +4723,10 @@ EFF_ParamDefaults_PtrTable:
 	.long EffDefault_ParamDefaults	; effect 85
 	.long EffDefault_ParamDefaults	; effect 86
 	.long EffDefault_ParamDefaults	; effect 87
-	.long Eff88_SecondDsp_ParamDefaults	; effect 88
-	.long Eff89_SecondDsp_ParamDefaults	; effect 89
-	.long Eff90_SecondDsp_ParamDefaults	; effect 90
-	.long Eff91_SecondDsp_ParamDefaults	; effect 91
+	.long Eff88_Room_ParamDefaults	; effect 88
+	.long Eff89_Karaoke_ParamDefaults	; effect 89
+	.long Eff90_BathRoom_ParamDefaults	; effect 90
+	.long Eff91_Stage_ParamDefaults	; effect 91
 	.long EffDefault_ParamDefaults	; effect 92
 	.long EffDefault_ParamDefaults	; effect 93
 	.long EffDefault_ParamDefaults	; effect 94
@@ -4033,10 +4736,23 @@ EFF_ParamDefaults_PtrTable:
 	.long Eff98_PeqDistDelay_ParamDefaults	; effect 98
 	.long Eff99_PeqOverdrDelay_ParamDefaults	; effect 99
 
-; --- 0x014731  null terminator of the pointer-table pair + four constant 0x01 bytes
-; (purpose unknown; no reference found).
-EFF_ParamPtrTable_Terminator:
-	.long 0
+; --- 0x014731  two 4-entry byte tables that end the block: twins of main-CPU 0xEE6364 and
+; 0xEE6368 (scripts/analysis/v142_param_meta_maincpu_twin.py).  Neither is read in this payload.
+; In the main CPU, DSPCfg_Data_001 (0xFDC448) returns byte [0xEE6364 + index] and
+; DSPCfg_Data_002 (0xFDC464) byte [0xEE6368 + index]; the 4-byte extents are pinned by the
+; next main-CPU table, at 0xEE6368 and 0xEE636C respectively (the latter read by
+; DSPCfg_WriteAllSlots_Direct 0xFDCB40).  No caller of either routine was found in v10
+; (searched: the routine address as a 3-byte LE value anywhere in the ROM, and every calr
+; displacement landing on it), so what the index and the values (0 x4, 1 x4) mean is not
+; established.
+; ★ CORRECTED 2026-09-25: this was labelled EFF_ParamPtrTable_Terminator and described as a
+; "null terminator of the pointer-table pair + four constant 0x01 bytes (purpose unknown;
+; no reference found)".  The main-CPU twin of the first four bytes is read as a byte table
+; (by DSPCfg_Data_001), not as a terminator; label renamed and split, `.long 0` retyped as
+; the four bytes it is.
+EFF_ParamMeta_ByteTableA:
+	.byte 0, 0, 0, 0
+EFF_ParamMeta_ByteTableB:
 	.byte 1, 1, 1, 1
 
 ; --- 0x014739-0x014744  OFFSETS_14739 -- 6 x u16 jump offsets, base 0x03C32E
@@ -4046,6 +4762,8 @@ EFF_ParamPtrTable_Terminator:
 ; ldw_sri WA / lda_24 xix,0x03c32e / jp_ind`. The source already documents the target: 1613
 ; bytes of hand TLCS-900 code implementing handlers 0..5, kept as raw bytes because of
 ; unsupported addressing.
+; ★ 2026-09-25: no longer raw bytes -- the six handlers are instructions, and every entry
+; below is `.short Handler - Base`; handler 0's label is DSP_Bytecode_Op00_Groups5_ParamMix.
 ; ★ CORRECTED: this used to attribute the dispatch to DSP_BytecodeInterpreter_Init
 ; (0x03C259). _Init performs no dispatch at all -- it copies the descriptor's four words and
 ; one long into the stack frame and then `jrl DSP_BytecodeInterpreter_CheckEnd`. The quoted
@@ -4058,12 +4776,12 @@ EFF_ParamPtrTable_Terminator:
 ; op3 +0x3DA -> 0x03C708, op4 +0x473 -> 0x03C7A1, op5 +0x48D -> 0x03C7BB.
 ; Consumed by the computed `jp (XIX+DE)` at the tail of DSP_BytecodeInterpreter_Loop.
 OFFSETS_14739:
-	.short 0x0
-	.short 0x23A
-	.short 0x333
-	.short 0x3DA
-	.short 0x473
-	.short 0x48D
+	.short DSP_Bytecode_Op00_Groups5_ParamMix - DSP_Bytecode_Op00_Groups5_ParamMix	; index 0
+	.short DSP_Bytecode_Op01_Groups5_Addr12 - DSP_Bytecode_Op00_Groups5_ParamMix	; index 1
+	.short DSP_Bytecode_Op02_Groups3_Raw - DSP_Bytecode_Op00_Groups5_ParamMix	; index 2
+	.short DSP_Bytecode_Op03_Addr16_RawTail - DSP_Bytecode_Op00_Groups5_ParamMix	; index 3
+	.short DSP_Bytecode_Op04_CommandOnly - DSP_Bytecode_Op00_Groups5_ParamMix	; index 4
+	.short DSP_Bytecode_Op05_Groups5_Masked - DSP_Bytecode_Op00_Groups5_ParamMix	; index 5
 
 ; --- 0x014745-0x014776  OFFSETS_14745 -- 25 x u16 jump offsets, base 0x03CB8E
 ; The DSP bytecode interpreter's SECONDARY dispatch, for opcodes 0x61..0x79: `sub wa,0x61 /
@@ -4083,31 +4801,31 @@ OFFSETS_14739:
 ; Consumed by the computed `jp (XIX+DE)` at 0x03CB89.  Opcodes 0x21, 0x24 and 0x40 are
 ; special-cased BEFORE this table; anything else aborts via DSP_Op_Unknown_Error.
 OFFSETS_14745:
-	.short 0x0
-	.short 0x50
-	.short 0x6C
-	.short 0xA5
-	.short 0xC2
-	.short 0xDF
-	.short 0xFC
-	.short 0x11D
-	.short 0x13A
-	.short 0x157
-	.short 0x174
-	.short 0x191
-	.short 0x1B1
-	.short 0x1CE
-	.short 0x1EB
-	.short 0x208
-	.short 0x22B
-	.short 0x248
-	.short 0x265
-	.short 0x282
-	.short 0x297
-	.short 0x2B4
-	.short 0x2D7
-	.short 0x2F4
-	.short 0x88
+	.short DSP_Op_0x61_LinearEval - DSP_Op_0x61_LinearEval	; index 0
+	.short DSP_Op_0x62_ParamFetchSingle - DSP_Op_0x61_LinearEval	; index 1
+	.short DSP_Op_0x63_ParamFetchAlgoType - DSP_Op_0x61_LinearEval	; index 2
+	.short DSP_Op_0x64_PitchParamScale - DSP_Op_0x61_LinearEval	; index 3
+	.short DSP_Op_0x65_VolumeParamScale - DSP_Op_0x61_LinearEval	; index 4
+	.short DSP_Op_0x66_Interp2Point - DSP_Op_0x61_LinearEval	; index 5
+	.short DSP_Op_0x67_InterpFPScale - DSP_Op_0x61_LinearEval	; index 6
+	.short DSP_Op_0x68_InterpDiv0xB4 - DSP_Op_0x61_LinearEval	; index 7
+	.short DSP_Op_0x69_VolumeCurve - DSP_Op_0x61_LinearEval	; index 8
+	.short DSP_Op_0x6A_FreqCurve - DSP_Op_0x61_LinearEval	; index 9
+	.short DSP_Op_0x6B_FreqInterp2Point - DSP_Op_0x61_LinearEval	; index 10
+	.short DSP_Op_0x6C_Interp3Point - DSP_Op_0x61_LinearEval	; index 11
+	.short DSP_Op_0x6D_ReverbCurve - DSP_Op_0x61_LinearEval	; index 12
+	.short DSP_Op_0x6E_InterpFPComplex - DSP_Op_0x61_LinearEval	; index 13
+	.short DSP_Op_0x6F_PanCurve - DSP_Op_0x61_LinearEval	; index 14
+	.short DSP_Op_0x70_BiquadCoeff - DSP_Op_0x61_LinearEval	; index 15
+	.short DSP_Op_0x71_DetuneCurve - DSP_Op_0x61_LinearEval	; index 16
+	.short DSP_Op_0x72_BiquadWarp - DSP_Op_0x61_LinearEval	; index 17
+	.short DSP_Op_0x73_InterpDiv0xC6 - DSP_Op_0x61_LinearEval	; index 18
+	.short DSP_Op_0x74_LUTParamSet - DSP_Op_0x61_LinearEval	; index 19
+	.short DSP_Op_0x75_ParamEQCurve - DSP_Op_0x61_LinearEval	; index 20
+	.short DSP_Op_0x76_SOSCoeff - DSP_Op_0x61_LinearEval	; index 21
+	.short DSP_Op_0x77_Interp2PointB - DSP_Op_0x61_LinearEval	; index 22
+	.short DSP_Op_0x78_VolScaleB - DSP_Op_0x61_LinearEval	; index 23
+	.short DSP_Op_0x79_AlgoParamDecode - DSP_Op_0x61_LinearEval	; index 24
 
 ; NOTE: this address ALREADY carries the ELF name ToneGen_WorkArea -- no rename proposed, this
 ; entry documents it. It is DSP program+parameter data, not a tone-generator work area.
@@ -4142,8 +4860,9 @@ ToneGen_WorkArea:
 ; kn5000_subprogram_v142.s and cross-checked two independent ways (see CARVE VERIFICATION).
 ;
 ; INDEXING. Four parallel 100-entry u32 pointer arrays, indexed by effect number 0..99, drive
-; everything (they live further down this file, currently inside the DSP_EffA_Param_Values byte
-; run):
+; everything.  They live further down this file as typed `.long` arrays -- EFF_AlgoProgram_PtrTable,
+; EFF_CoefProgram_PtrTable, DSP_Param_Block_Ptrs_A, DSP_Param_Block_Ptrs_B; until 2026-09-25 they
+; were buried inside the DSP_EffA_Param_Values byte run (scripts/converters/carve_v142_dsp_zone_tail.py):
 ;   0x01ED7C  algorithm bytecode streams   (read by EFF_Change_WithDebug)
 ;   0x01EF0C  coefficient bytecode streams (read by EFF_Change_WithDebug)
 ;   0x01F09C  parameter VALUE record tables      (DSP_Param_Block_Ptrs_A,
@@ -4241,6 +4960,7 @@ DSP_Bytecode_Global_Config:
 ; UI params, 4 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(215); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[32] (effect 32): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff32_Algo_Bytecode:
 	.byte 0x30, 0xd7, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x00, 0x2e, 0x20, 0x00, 0x00, 0x00
@@ -4271,6 +4991,7 @@ DSP_Eff32_Algo_Bytecode:
 	.byte 0x00, 0x00, 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(30) op4(3) op5(20) op4(3) op1(10) op2(26) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[32] (effect 32): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff32_Coef_Bytecode:
 	.byte 0x00, 0x1e, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4290,6 +5011,7 @@ DSP_Eff32_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[32] (effect 32): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff32_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x07, 0x62, 0x00, 0x62, 0x01, 0x7a
@@ -4299,6 +5021,7 @@ DSP_Eff32_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[32] (effect 32): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff32_Param_Descriptors:
 	.byte 0x00, 0x05, 0x61, 0x00, 0x03	; op61 -> cells 00 03
 	.byte 0x00, 0x05, 0x62, 0x02, 0x05	; op62 -> cells 02 05: dB cells (CURVE_D, 1.00 dB/step)
@@ -4312,6 +5035,7 @@ DSP_Eff32_Param_Descriptors:
 ; UI params, 4 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(320); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[33] (effect 33): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff33_Algo_Bytecode:
 	.byte 0x31, 0x40, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb0, 0x00, 0x00
@@ -4355,6 +5079,7 @@ DSP_Eff33_Algo_Bytecode:
 	.byte 0x13, 0x00, 0x00, 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(75) op4(3) op5(20) op4(3) op1(10) op2(62) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[33] (effect 33): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff33_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4384,6 +5109,7 @@ DSP_Eff33_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[33] (effect 33): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff33_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x07, 0x62, 0x00, 0x62, 0x01, 0x7a
@@ -4393,6 +5119,7 @@ DSP_Eff33_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[33] (effect 33): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff33_Param_Descriptors:
 	.byte 0x00, 0x05, 0x61, 0x00, 0x09	; op61 -> cells 00 09
 	.byte 0x00, 0x05, 0x62, 0x08, 0x11	; op62 -> cells 08 11: dB cells (CURVE_D, 1.00 dB/step)
@@ -4406,6 +5133,7 @@ DSP_Eff33_Param_Descriptors:
 ; UI params, 4 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(215); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[34] (effect 34): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff34_Algo_Bytecode:
 	.byte 0x30, 0xd7, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x00, 0x2e, 0x20, 0x00, 0x00, 0x00
@@ -4436,6 +5164,7 @@ DSP_Eff34_Algo_Bytecode:
 	.byte 0x00, 0x00, 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(30) op4(3) op5(20) op4(3) op1(10) op2(26) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[34] (effect 34): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff34_Coef_Bytecode:
 	.byte 0x00, 0x1e, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4455,6 +5184,7 @@ DSP_Eff34_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[34] (effect 34): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff34_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x07, 0x62, 0x00, 0x62, 0x01, 0x7a
@@ -4464,6 +5194,7 @@ DSP_Eff34_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[34] (effect 34): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff34_Param_Descriptors:
 	.byte 0x00, 0x05, 0x61, 0x00, 0x03	; op61 -> cells 00 03
 	.byte 0x00, 0x05, 0x62, 0x02, 0x05	; op62 -> cells 02 05: dB cells (CURVE_D, 1.00 dB/step)
@@ -4477,6 +5208,7 @@ DSP_Eff34_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DRIVE, ADJUST, HIGH EMPHASIS FC (Hz), EMPHASIS GAIN, VOLUME, REV SEND.
 ; 1 instruction: op3(350); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[35] (effect 35): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff35_Algo_Bytecode:
 	.byte 0x31, 0x5e, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00
@@ -4524,6 +5256,7 @@ DSP_Eff35_Algo_Bytecode:
 	.byte 0x00, 0x04, 0x28, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(75) op4(3) op5(20) op4(3) op1(10) op2(74) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[35] (effect 35): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff35_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4555,6 +5288,7 @@ DSP_Eff35_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 7 records, ids: 61 62 70 66 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[35] (effect 35): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff35_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x07, 0x62, 0x00, 0x62, 0x01, 0x7a
@@ -4569,6 +5303,7 @@ DSP_Eff35_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 61 62 63 70 66 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[35] (effect 35): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff35_Param_Descriptors:
 	.byte 0x00, 0x05, 0x61, 0x00, 0x0b	; op61 -> cells 00 0B
 	.byte 0x00, 0x05, 0x62, 0x02, 0x0d	; op62 -> cells 02 0D: dB cells (CURVE_D, 1.00 dB/step)
@@ -4585,6 +5320,7 @@ DSP_Eff35_Param_Descriptors:
 ; UI params, 17 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, VOLUME, REV SEND.
 ; 1 instruction: op3(530); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[39] (effect 39): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff39_Algo_Bytecode:
 	.byte 0x32, 0x12, 0x01, 0x00, 0x54, 0x00, 0x00, 0x20
 	.byte 0xb1, 0xcd, 0x00, 0x00, 0x20, 0x04, 0x0e, 0x02
@@ -4656,6 +5392,7 @@ DSP_Eff39_Algo_Bytecode:
 	.byte 0xf0
 ; 12 instructions: op0(160) op4(3) op0(90) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[39] (effect 39): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff39_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4716,6 +5453,7 @@ DSP_Eff39_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 17 records, ids: 70 70 70 70 70 70 70 70 70 70 70 70 70 70 70 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[39] (effect 39): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff39_Param_Values:
 	.byte 0x00, 0x06, 0x70, 0x00, 0x00, 0x7a
 	.byte 0x00, 0x06, 0x70, 0x00, 0x10, 0x7a
@@ -4737,6 +5475,7 @@ DSP_Eff39_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 3 records, ids: 70 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[39] (effect 39): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff39_Param_Descriptors:
 	.byte 0x00, 0x0d, 0x70, 0x00, 0x06, 0x0c, 0x12, 0x18	; op70 -> cells 00 06 0C 12 18 64 68 6C 70 74: 5-band biquad: coeff-cursor cells + state-pointer cells (stride +4)
 	.byte 0x64, 0x68, 0x6c, 0x70, 0x74
@@ -4749,6 +5488,7 @@ DSP_Eff39_Param_Descriptors:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(355); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[1] (effect 1): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff01_Algo_Bytecode:
 	.byte 0x31, 0x63, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xe1, 0xcd, 0x00
@@ -4797,6 +5537,7 @@ DSP_Eff01_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(100) op4(3) op5(60) op4(3) op1(10) op2(65) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[1] (effect 1): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff01_Coef_Bytecode:
 	.byte 0x00, 0x64, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x70, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -4835,6 +5576,7 @@ DSP_Eff01_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 66 65 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[1] (effect 1): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff01_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x40
@@ -4846,6 +5588,7 @@ DSP_Eff01_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 66 65 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[1] (effect 1): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff01_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x09, 0x0a	; op66 -> cells 09 0A
 	.byte 0x00, 0x04, 0x65, 0x00	; op65 -> cell 00
@@ -4859,6 +5602,7 @@ DSP_Eff01_Param_Descriptors:
 ; UI params, 7 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, SLOW LFO SPEED (Hz), FAST LFO SPEED (Hz), FAST LFO BALANCE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(430); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[2] (effect 2): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff02_Algo_Bytecode:
 	.byte 0x31, 0xae, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xe1, 0xcd, 0x00
@@ -4916,6 +5660,7 @@ DSP_Eff02_Algo_Bytecode:
 	.byte 0x00, 0x06, 0x02, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(105) op4(3) op5(60) op4(3) op1(10) op2(83) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[2] (effect 2): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff02_Coef_Bytecode:
 	.byte 0x00, 0x69, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4957,6 +5702,7 @@ DSP_Eff02_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 7 records, ids: 66 65 65 66 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[2] (effect 2): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff02_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x02, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x04, 0x00, 0x00, 0x00, 0x40
@@ -4972,6 +5718,7 @@ DSP_Eff02_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 66 65 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[2] (effect 2): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff02_Param_Descriptors:
 	.byte 0x00, 0x08, 0x66, 0x0b, 0x0c, 0x0d, 0x0f, 0x10	; op66 -> cells 0B 0C 0D 0F 10
 	.byte 0x00, 0x05, 0x65, 0x00, 0x02	; op65 -> cells 00 02
@@ -4985,6 +5732,7 @@ DSP_Eff02_Param_Descriptors:
 ; UI params, 7 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   MANUAL, LOW MIX, HIGH MIX, DELAY L (ms), DELAY R (ms), VOLUME, REV SEND.
 ; 1 instruction: op3(500); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[3] (effect 3): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff03_Algo_Bytecode:
 	.byte 0x31, 0xf4, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00
@@ -5052,6 +5800,7 @@ DSP_Eff03_Algo_Bytecode:
 	.byte 0xf0
 ; 9 instructions: op0(160) op4(3) op0(30) op4(3) op5(50) op4(3) op1(10) op2(86) op4(3); 0xf0
 ; end.
+; Reached via EFF_CoefProgram_PtrTable[3] (effect 3): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff03_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5103,6 +5852,7 @@ DSP_Eff03_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 7 records, ids: 6b 62 62 64 64 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[3] (effect 3): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff03_Param_Values:
 	.byte 0x00, 0x13, 0x6b, 0x00, 0x4c, 0xcc, 0xcc, 0x6f
 	.byte 0x5c, 0x28, 0x6b, 0x01, 0x4c, 0xcc, 0xcc, 0x6f
@@ -5116,6 +5866,7 @@ DSP_Eff03_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 62 64 76 6b 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[3] (effect 3): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff03_Param_Descriptors:
 	.byte 0x00, 0x07, 0x62, 0x08, 0x09, 0x15, 0x16	; op62 -> cells 08 09 15 16: dB cells (CURVE_D, 1.00 dB/step)
 	.byte 0x00, 0x05, 0x64, 0x0b, 0x0c	; op64 -> cells 0B 0C
@@ -5131,6 +5882,7 @@ DSP_Eff03_Param_Descriptors:
 ; UI params, 8 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(330); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[4] (effect 4): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff04_Algo_Bytecode:
 	.byte 0x31, 0x4a, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x40, 0x00, 0x08, 0xbc, 0x00
@@ -5176,6 +5928,7 @@ DSP_Eff04_Algo_Bytecode:
 	.byte 0xe4, 0x07
 	.byte 0xf0
 ; 7 instructions: op0(100) op4(3) op5(40) op4(3) op1(10) op2(62) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[4] (effect 4): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff04_Coef_Bytecode:
 	.byte 0x00, 0x64, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0b, 0x00, 0x32, 0x00, 0x15, 0x0a
@@ -5210,6 +5963,7 @@ DSP_Eff04_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 8 records, ids: 66 65 73 6c 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[4] (effect 4): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff04_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x40
@@ -5230,6 +5984,7 @@ DSP_Eff04_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 65 6c 68 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[4] (effect 4): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff04_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x08, 0x0c	; op66 -> cells 08 0C
 	.byte 0x00, 0x05, 0x65, 0x05, 0x09	; op65 -> cells 05 09
@@ -5246,6 +6001,7 @@ DSP_Eff04_Param_Descriptors:
 ; UI params, 8 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(535); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[5] (effect 5): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff05_Algo_Bytecode:
 	.byte 0x32, 0x17, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x92, 0xa0, 0xe2, 0x00, 0x00
@@ -5317,6 +6073,7 @@ DSP_Eff05_Algo_Bytecode:
 	.byte 0xf0
 ; 9 instructions: op0(160) op4(3) op0(40) op4(3) op5(20) op4(3) op1(10) op2(50) op4(3); 0xf0
 ; end.
+; Reached via EFF_CoefProgram_PtrTable[5] (effect 5): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff05_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x30, 0x00, 0x0a, 0x20, 0x00, 0x00, 0x15, 0x00
@@ -5361,6 +6118,7 @@ DSP_Eff05_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 8 records, ids: 66 65 73 66 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[5] (effect 5): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff05_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x06
 	.byte 0x66, 0x66, 0x66, 0x02, 0x00, 0x00, 0x00, 0x06
@@ -5381,6 +6139,7 @@ DSP_Eff05_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 65 68 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[5] (effect 5): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff05_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x05, 0x06, 0x08, 0x09	; op66 -> cells 05 06 08 09
 	.byte 0x00, 0x05, 0x65, 0x00, 0x0c	; op65 -> cells 00 0C
@@ -5396,6 +6155,7 @@ DSP_Eff05_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(255); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[48] (effect 48): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff48_Algo_Bytecode:
 	.byte 0x30, 0xff, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00
@@ -5431,6 +6191,7 @@ DSP_Eff48_Algo_Bytecode:
 	.byte 0x00, 0x00, 0x04, 0x24, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(55) op4(3) op5(20) op4(3) op1(10) op2(32) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[48] (effect 48): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff48_Coef_Bytecode:
 	.byte 0x00, 0x37, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x20, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5453,6 +6214,7 @@ DSP_Eff48_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[48] (effect 48): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff48_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x20
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x20
@@ -5467,6 +6229,7 @@ DSP_Eff48_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[48] (effect 48): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff48_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x00, 0x07	; op66 -> cells 00 07
 	.byte 0x00, 0x05, 0x65, 0x01, 0x04	; op65 -> cells 01 04
@@ -5481,6 +6244,7 @@ DSP_Eff48_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(270); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[50] (effect 50): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff50_Algo_Bytecode:
 	.byte 0x31, 0x0e, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00
@@ -5518,6 +6282,7 @@ DSP_Eff50_Algo_Bytecode:
 	.byte 0x00, 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(85) op4(3) op5(40) op4(3) op1(10) op2(44) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[50] (effect 50): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff50_Coef_Bytecode:
 	.byte 0x00, 0x55, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0b, 0x00, 0x00, 0xc8, 0x15, 0x0a
@@ -5548,6 +6313,7 @@ DSP_Eff50_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[50] (effect 50): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff50_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x40
@@ -5562,6 +6328,7 @@ DSP_Eff50_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[50] (effect 50): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff50_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x05, 0x09	; op66 -> cells 05 09
 	.byte 0x00, 0x05, 0x65, 0x02, 0x06	; op65 -> cells 02 06
@@ -5576,6 +6343,7 @@ DSP_Eff50_Param_Descriptors:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   RESONANCE, MANUAL, SWEEP RANGE, VOLUME, REV SEND.
 ; 1 instruction: op3(365); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[52] (effect 52): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff52_Algo_Bytecode:
 	.byte 0x31, 0x6d, 0x01, 0x00, 0x54, 0x00, 0x00, 0x20
 	.byte 0xb1, 0xcd, 0x00, 0x00, 0x20, 0x34, 0x0e, 0x02
@@ -5625,6 +6393,7 @@ DSP_Eff52_Algo_Bytecode:
 	.byte 0x04, 0x24, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(125) op4(3) op5(20) op4(3) op1(10) op2(50) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[52] (effect 52): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff52_Coef_Bytecode:
 	.byte 0x00, 0x7d, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5659,6 +6428,7 @@ DSP_Eff52_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 24 24 24 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[52] (effect 52): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff52_Param_Values:
 	.byte 0x00, 0x57, 0x24, 0x00, 0x20, 0x01, 0xeb, 0x85
 	.byte 0x08, 0xf5, 0xc2, 0x01, 0x16, 0x87, 0x06, 0x66
@@ -5682,6 +6452,7 @@ DSP_Eff52_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 6b 6d 24 78 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[52] (effect 52): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff52_Param_Descriptors:
 	.byte 0x00, 0x04, 0x6b, 0x0c	; op6B -> cell 0C
 	.byte 0x00, 0x05, 0x6d, 0x05, 0x06	; op6D -> cells 05 06
@@ -5694,6 +6465,7 @@ DSP_Eff52_Param_Descriptors:
 ; ----- effects 15 ROCK ROTARY / 53 ROTARY SPEAKER (shared microprogram) -----
 ; rock rotary / rotary speaker (shared with algo 53)
 ; 1 instruction: op3(435); 0xf0 end. Shared by effects 15, 53.
+; Reached via EFF_AlgoProgram_PtrTable[..] (2 effects: 15 53): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff15_Algo_Bytecode:
 	.byte 0x31, 0xb3, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02
@@ -5757,6 +6529,7 @@ DSP_Eff15_Algo_Bytecode:
 ;   DRIVE, VOLUME ADJUST, TREBLE DEPTH, FAST (Hz), SLOW (Hz), WIND UP (s), WIND DOWN (s), BASS DEPTH, BASS   FAST (Hz), BASS   SLOW (Hz), WIND UP (s), WIND DOWN (s), VOLUME, SLOW/FAST, REV SEND.
 ; 12 instructions: op0(160) op4(3) op0(35) op4(3) op5(50) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[53] (effect 53): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff53_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5817,6 +6590,7 @@ DSP_Eff53_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 16 records, ids: 61 62 66 6a 6a 69 69 66 6a 6a 69 69 63 66 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[53] (effect 53): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff53_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x05, 0x62, 0x00, 0x7a
@@ -5840,6 +6614,7 @@ DSP_Eff53_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 61 62 69 6a 63 21 74; 0xf0 sentinel. Shared by effects 15, 53.
+; Reached via DSP_Param_Block_Ptrs_B[..] (2 effects: 15 53): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff15_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x10, 0x14	; op66 -> cells 10 14
 	.byte 0x00, 0x05, 0x61, 0x00, 0x01	; op61 -> cells 00 01
@@ -5856,6 +6631,7 @@ DSP_Eff15_Param_Descriptors:
 ;   DRIVE, VOLUME ADJUST, TREBLE DEPTH, FAST (Hz), SLOW (Hz), WIND UP (s), WIND DOWN (s), BASS DEPTH, BASS   FAST (Hz), BASS   SLOW (Hz), WIND UP (s), WIND DOWN (s), VOLUME, SLOW/FAST, REV SEND.
 ; 12 instructions: op0(160) op4(3) op0(35) op4(3) op5(50) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[15] (effect 15): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff15_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5916,6 +6692,7 @@ DSP_Eff15_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 16 records, ids: 61 62 66 6a 6a 69 69 66 6a 6a 69 69 63 66 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[15] (effect 15): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff15_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x05, 0x62, 0x00, 0x7a
@@ -5944,6 +6721,7 @@ DSP_Eff15_Param_Values:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   OSC SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(235); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[54] (effect 54): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff54_Algo_Bytecode:
 	.byte 0x30, 0xeb, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00
@@ -5977,6 +6755,7 @@ DSP_Eff54_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(55) op4(3) op5(25) op4(3) op1(10) op2(26) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[54] (effect 54): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff54_Coef_Bytecode:
 	.byte 0x00, 0x37, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x20, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6000,6 +6779,7 @@ DSP_Eff54_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[54] (effect 54): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff54_Param_Values:
 	.byte 0x00, 0x09, 0x65, 0x00, 0x01, 0x65, 0x01, 0x01
 	.byte 0x7a
@@ -6011,6 +6791,7 @@ DSP_Eff54_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[54] (effect 54): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff54_Param_Descriptors:
 	.byte 0x00, 0x05, 0x65, 0x00, 0x03	; op65 -> cells 00 03
 	.byte 0x00, 0x05, 0x68, 0x12, 0x13	; op68 -> cells 12 13: ms -> DRAM words x44100/1000 (delay-time cells)
@@ -6030,6 +6811,7 @@ DSP_Eff54_Param_Descriptors:
 ; above resolve to THIS single record trio (pointer identity), and no other stream in the
 ; zone is byte-identical to the NO OPERATION program (duplicate scan clean).
 ; 1 instruction: op3(250); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[..] (42 effects: 0 7 11-14 28-31 37-38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff00_Algo_Bytecode:
 	.byte 0x30, 0xfa, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0x40, 0x00, 0x00
@@ -6065,6 +6847,7 @@ DSP_Eff00_Algo_Bytecode:
 	.byte 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(50) op4(3) op5(40) op4(3) op1(10) op2(38) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[..] (42 effects: 0 7 11-14 28-31 37-38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff00_Coef_Bytecode:
 	.byte 0x00, 0x32, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x40, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -6096,6 +6879,7 @@ DSP_Eff00_Coef_Bytecode:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   THRESHOLD, ATTACK RATE (s), RELEASE RATE (s), VOLUME, REV SEND.
 ; 5 records, ids: 66 6e 6e 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[37] (effect 37): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff37_Param_Values:
 	.byte 0x00, 0x0b, 0x66, 0x00, 0x00, 0x00, 0x00, 0x19
 	.byte 0x99, 0x99, 0x7a
@@ -6108,6 +6892,7 @@ DSP_Eff37_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 66 67 6e 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[..] (42 effects: 0 7 11-14 28-31 37-38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff00_Param_Descriptors:
 	.byte 0x00, 0x04, 0x66, 0x04	; op66 -> cell 04
 	.byte 0x00, 0x04, 0x67, 0x26	; op67 -> cell 26
@@ -6121,6 +6906,7 @@ DSP_Eff00_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   GATE TIME (ms), HIGH DAMP GAIN, THRESHOLD, MASK TIME (ms), VOLUME, REV SEND.
 ; 1 instruction: op3(515); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[8] (effect 8): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff08_Algo_Bytecode:
 	.byte 0x32, 0x03, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02
@@ -6189,6 +6975,7 @@ DSP_Eff08_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(85) op4(3) op5(110) op4(3) op1(10) op2(86) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[8] (effect 8): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff08_Coef_Bytecode:
 	.byte 0x00, 0x55, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6233,6 +7020,7 @@ DSP_Eff08_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 6 records, ids: 6f 76 66 6f 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[8] (effect 8): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff08_Param_Values:
 	.byte 0x00, 0x05, 0x6f, 0x01, 0x7a
 	.byte 0x00, 0x0c, 0x76, 0x00, 0x12, 0x14, 0x7a, 0x76
@@ -6245,6 +7033,7 @@ DSP_Eff08_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 75 76 6f 6d 67 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[8] (effect 8): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff08_Param_Descriptors:
 	.byte 0x00, 0x04, 0x66, 0x16	; op66 -> cell 16
 	.byte 0x00, 0x04, 0x75, 0x03	; op75 -> cell 03
@@ -6261,6 +7050,7 @@ DSP_Eff08_Param_Descriptors:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(485); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[6] (effect 6): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff06_Algo_Bytecode:
 	.byte 0x31, 0xe5, 0x01, 0x00, 0x54, 0x08, 0x80, 0x16
 	.byte 0x00, 0x0b, 0x00, 0x50, 0x00, 0x08, 0xbc, 0x00
@@ -6325,6 +7115,7 @@ DSP_Eff06_Algo_Bytecode:
 	.byte 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(105) op4(3) op5(55) op4(3) op1(10) op2(53) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[6] (effect 6): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff06_Coef_Bytecode:
 	.byte 0x00, 0x69, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0xa0, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -6361,6 +7152,7 @@ DSP_Eff06_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 77 65 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[6] (effect 6): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff06_Param_Values:
 	.byte 0x00, 0x33, 0x77, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0xc8, 0x77, 0x01, 0x00, 0x00, 0x00, 0x00
@@ -6376,6 +7168,7 @@ DSP_Eff06_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 65 77 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[6] (effect 6): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff06_Param_Descriptors:
 	.byte 0x00, 0x04, 0x65, 0x00	; op65 -> cell 00
 	.byte 0x00, 0x09, 0x77, 0x02, 0x04, 0x06, 0x09, 0x0b	; op77 -> cells 02 04 06 09 0B 0D
@@ -6392,6 +7185,7 @@ DSP_Eff06_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   THRESHOLD, RATIO, ATTACK SENS. (s), RELEASE SENS. (s), VOLUME, REV SEND.
 ; 1 instruction: op3(205); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[36] (effect 36): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff36_Algo_Bytecode:
 	.byte 0x30, 0xcd, 0x01, 0x00, 0x54, 0x00, 0x2a, 0x20
 	.byte 0xf0, 0x00, 0x08, 0x80, 0x13, 0x04, 0x07, 0x00
@@ -6421,6 +7215,7 @@ DSP_Eff36_Algo_Bytecode:
 	.byte 0x04, 0x28, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(45) op4(3) op5(20) op4(3) op1(10) op2(62) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[36] (effect 36): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff36_Coef_Bytecode:
 	.byte 0x00, 0x2d, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x70, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6446,6 +7241,7 @@ DSP_Eff36_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 6 records, ids: 72 72 6d 6d 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[36] (effect 36): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff36_Param_Values:
 	.byte 0x00, 0x09, 0x72, 0x00, 0x00, 0x72, 0x01, 0x00
 	.byte 0x7a
@@ -6458,6 +7254,7 @@ DSP_Eff36_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 4 records, ids: 72 6d 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[36] (effect 36): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff36_Param_Descriptors:
 	.byte 0x00, 0x05, 0x72, 0x04, 0x0d	; op72 -> cells 04 0D: THRESHOLD -> cell 04, RATIO -> cell 0D
 	.byte 0x00, 0x07, 0x6d, 0x02, 0x03, 0x0b, 0x0c	; op6D -> cells 02 03 0B 0C: ATTACK/RELEASE SENS. -> detector smoother-coefficient cells
@@ -6470,6 +7267,7 @@ DSP_Eff36_Param_Descriptors:
 ; UI params, 8 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, SLOW LFO SPEED (Hz), FAST LFO SPEED L (Hz), FAST LFO SPEED R (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(325); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[56] (effect 56): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff56_Algo_Bytecode:
 	.byte 0x31, 0x45, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0x21, 0xcd, 0x00
@@ -6514,6 +7312,7 @@ DSP_Eff56_Algo_Bytecode:
 	.byte 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(85) op4(3) op5(40) op4(3) op1(10) op2(53) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[56] (effect 56): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff56_Coef_Bytecode:
 	.byte 0x00, 0x55, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x70, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6545,6 +7344,7 @@ DSP_Eff56_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 8 records, ids: 66 65 65 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[56] (effect 56): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff56_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x40
@@ -6560,6 +7360,7 @@ DSP_Eff56_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[56] (effect 56): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff56_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x0a, 0x0c	; op66 -> cells 0A 0C
 	.byte 0x00, 0x06, 0x65, 0x00, 0x02, 0x04	; op65 -> cells 00 02 04
@@ -6576,6 +7377,7 @@ DSP_Eff56_Param_Descriptors:
 ; On the DIGITAL REVERB page the same effect reappears with 6 slots (no REV SEND:
 ;   a reverb IS the send bus).
 ; 1 instruction: op3(245); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[9] (effect 9): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff09_Algo_Bytecode:
 	.byte 0x30, 0xf5, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0x21, 0xcd, 0x00
@@ -6610,6 +7412,7 @@ DSP_Eff09_Algo_Bytecode:
 	.byte 0x06, 0x12, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(65) op4(3) op5(40) op4(3) op1(10) op2(62) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[9] (effect 9): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff09_Coef_Bytecode:
 	.byte 0x00, 0x41, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6640,6 +7443,7 @@ DSP_Eff09_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 7 records, ids: 67 67 73 73 76 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[9] (effect 9): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff09_Param_Values:
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x00, 0x02, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x01, 0x00, 0x3f, 0xe0, 0x7a
@@ -6655,6 +7459,7 @@ DSP_Eff09_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 67 76 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[9] (effect 9): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff09_Param_Descriptors:
 	.byte 0x00, 0x05, 0x67, 0x26, 0x28	; op67 -> cells 26 28
 	.byte 0x00, 0x07, 0x76, 0x03, 0x06, 0x0c, 0x0f	; op76 -> cells 03 06 0C 0F
@@ -6671,6 +7476,7 @@ DSP_Eff09_Param_Descriptors:
 ; On the DIGITAL REVERB page the same effect reappears with 11 slots (no REV SEND:
 ;   a reverb IS the send bus).
 ; 1 instruction: op3(345); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[10] (effect 10): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff10_Algo_Bytecode:
 	.byte 0x31, 0x59, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0xf0, 0x00, 0x00
@@ -6718,6 +7524,7 @@ DSP_Eff10_Algo_Bytecode:
 	.byte 0x00
 	.byte 0xf0
 ; 7 instructions: op0(75) op4(3) op5(45) op4(3) op1(10) op2(50) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[10] (effect 10): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff10_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6749,6 +7556,7 @@ DSP_Eff10_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 67 67 67 67 66 66 66 66 73 76 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[10] (effect 10): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff10_Param_Values:
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x00, 0x02, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x01, 0x00, 0x00, 0x02, 0x7a
@@ -6771,6 +7579,7 @@ DSP_Eff10_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 67 76 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[10] (effect 10): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff10_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x03, 0x04, 0x05, 0x06	; op66 -> cells 03 04 05 06
 	.byte 0x00, 0x07, 0x67, 0x26, 0x28, 0x29, 0x2a	; op67 -> cells 26 28 29 2A
@@ -6790,6 +7599,7 @@ DSP_Eff10_Param_Descriptors:
 ; UI: ACOUSTIC ILLUSION page TYPE selector (fixed 4-slot layout, TYPE STANDARD/PERCUSSIVE/
 ;   SYMPHONIC/DEEP SPACE + ILLUSION LEVEL -- not the 85-name array; kn5000-dsp-paramlist.md section 2).
 ; 2 instructions: cmd(713) yield; 0xf0 end. Shared by effects 57, 58, 59, 60.
+; Reached via EFF_AlgoProgram_PtrTable[..] (4 effects: 57-60): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP2_Eff57_Algo_Bytecode:
 	.byte 0xe2, 0xc9, 0x30, 0x05, 0x38, 0xe7, 0x74, 0x05
 	.byte 0x56, 0x80, 0x02, 0x03, 0x00, 0x80, 0x02, 0x03
@@ -6884,6 +7694,7 @@ DSP2_Eff57_Algo_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 8 instructions: cmd(65) yield cmd(65) yield cmd(65) yield cmd(55) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[57] (effect 57): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff57_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0x00, 0x00, 0x01, 0x05
 	.byte 0xde, 0x40, 0x00, 0x00, 0x28, 0x00, 0x14, 0x88
@@ -6925,6 +7736,7 @@ DSP2_Eff57_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[57] (effect 57): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff57_Param_Values:
 	.byte 0x00, 0x3b, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x05, 0xdd, 0x6c, 0x01, 0x00, 0x05, 0xdd, 0x00
@@ -6937,6 +7749,7 @@ DSP2_Eff57_Param_Values:
 	.byte 0x00, 0x06, 0x63, 0x00, 0x00, 0x7a
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel. Shared by effects 57, 58, 59, 60.
+; Reached via DSP_Param_Block_Ptrs_B[..] (4 effects: 57-60): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP2_Eff57_Param_Descriptors:
 	.byte 0x00, 0x0a, 0x6c, 0x08, 0x16, 0x24, 0x32, 0x49	; op6C -> cells 08 16 24 32 49 57 65: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
 	.byte 0x57, 0x65
@@ -6950,6 +7763,7 @@ DSP2_Eff57_Param_Descriptors:
 ; UI: ACOUSTIC ILLUSION page TYPE selector (fixed 4-slot layout, TYPE STANDARD/PERCUSSIVE/
 ;   SYMPHONIC/DEEP SPACE + ILLUSION LEVEL -- not the 85-name array; kn5000-dsp-paramlist.md section 2).
 ; 8 instructions: cmd(65) yield cmd(65) yield cmd(65) yield cmd(55) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[58] (effect 58): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff58_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0x00, 0x00, 0x01, 0x01
 	.byte 0xf6, 0x40, 0x00, 0x00, 0x28, 0x00, 0x14, 0x88
@@ -6991,6 +7805,7 @@ DSP2_Eff58_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[58] (effect 58): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff58_Param_Values:
 	.byte 0x00, 0x3b, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0xf5, 0x6c, 0x01, 0x00, 0x01, 0xf5, 0x00
@@ -7010,6 +7825,7 @@ DSP2_Eff58_Param_Values:
 ; UI: ACOUSTIC ILLUSION page TYPE selector (fixed 4-slot layout, TYPE STANDARD/PERCUSSIVE/
 ;   SYMPHONIC/DEEP SPACE + ILLUSION LEVEL -- not the 85-name array; kn5000-dsp-paramlist.md section 2).
 ; 8 instructions: cmd(65) yield cmd(65) yield cmd(65) yield cmd(55) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[59] (effect 59): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff59_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0x00, 0x00, 0x01, 0x06
 	.byte 0x42, 0x40, 0x00, 0x00, 0x00, 0xf8, 0x64, 0x9e
@@ -7051,6 +7867,7 @@ DSP2_Eff59_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[59] (effect 59): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff59_Param_Values:
 	.byte 0x00, 0x3b, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x06, 0x41, 0x6c, 0x01, 0x00, 0x06, 0x41, 0x00
@@ -7070,6 +7887,7 @@ DSP2_Eff59_Param_Values:
 ; UI: ACOUSTIC ILLUSION page TYPE selector (fixed 4-slot layout, TYPE STANDARD/PERCUSSIVE/
 ;   SYMPHONIC/DEEP SPACE + ILLUSION LEVEL -- not the 85-name array; kn5000-dsp-paramlist.md section 2).
 ; 8 instructions: cmd(65) yield cmd(65) yield cmd(65) yield cmd(55) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[60] (effect 60): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff60_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0x00, 0x00, 0x01, 0x05
 	.byte 0x7a, 0x40, 0x00, 0x00, 0x28, 0x00, 0x14, 0x88
@@ -7111,6 +7929,7 @@ DSP2_Eff60_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[60] (effect 60): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff60_Param_Values:
 	.byte 0x00, 0x3b, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x05, 0x79, 0x6c, 0x01, 0x00, 0x05, 0x79, 0x00
@@ -7126,6 +7945,7 @@ DSP2_Eff60_Param_Values:
 ; ----- effect 79: GEQ  [IC310 MN19413] -----
 ; IC310 program: records ride command 0x30 (second-dsp-and-ready.md B1).
 ; 2 instructions: op3(245) yield; 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[79] (effect 79): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP2_Eff79_Algo_Bytecode:
 	.byte 0x30, 0xf5, 0x30, 0x05, 0xf0, 0x80, 0x02, 0x03
 	.byte 0x00, 0x80, 0x02, 0x03, 0x02, 0xa1, 0x02, 0x03
@@ -7161,6 +7981,7 @@ DSP2_Eff79_Algo_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 instructions: cmd(57) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[79] (effect 79): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff79_Coef_Bytecode:
 	.byte 0xe0, 0x39, 0x30, 0x00, 0x80, 0x40, 0x00, 0xc1
 	.byte 0xcc, 0x3e, 0x33, 0x40, 0x00, 0x85, 0xa3, 0x3b
@@ -7173,6 +7994,7 @@ DSP2_Eff79_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 9 records, ids: 76 76 70 70 70 70 76 76 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[79] (effect 79): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff79_Param_Values:
 	.byte 0x00, 0x06, 0x76, 0x00, 0x00, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x10, 0x7a
@@ -7185,6 +8007,7 @@ DSP2_Eff79_Param_Values:
 	.byte 0x00, 0x06, 0x63, 0x00, 0x00, 0x7a
 	.byte 0xf0
 ; 3 records, ids: 70 76 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[79] (effect 79): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP2_Eff79_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x84, 0x89	; op70 -> cells 84 89: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
 	.byte 0x00, 0x05, 0x76, 0x81, 0x8e	; op76 -> cells 81 8E: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
@@ -7198,6 +8021,7 @@ DSP2_Eff79_Param_Descriptors:
 ; bytecode or uPD6383 cell numbers (dsp/analysis/second-dsp-and-ready.md B1). Labels carry the
 ; DSP2_ prefix (codebase convention for the second DSP).
 ; 2 instructions: op3(665) yield; 0xf0 end. Shared by effects 88, 89, 90, 91.
+; Reached via EFF_AlgoProgram_PtrTable[..] (4 effects: 88-91): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP2_Eff88_Algo_Bytecode:
 	.byte 0x32, 0x99, 0x30, 0x0d, 0x30, 0x80, 0x01, 0x45
 	.byte 0x6c, 0x80, 0x01, 0x47, 0x4a, 0x80, 0x02, 0x7f
@@ -7286,6 +8110,7 @@ DSP2_Eff88_Algo_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 4 instructions: cmd(65) yield cmd(39) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[88] (effect 88): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff88_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0xa0, 0x2a, 0x81, 0x00
 	.byte 0x00, 0x00, 0x00, 0x18, 0x51, 0x2b, 0x29, 0x5c
@@ -7305,6 +8130,7 @@ DSP2_Eff88_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 5 records, ids: 75 76 76 63 79; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[88] (effect 88): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff88_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1b, 0xe7, 0x6c, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x01, 0x7a
@@ -7314,6 +8140,7 @@ DSP2_Eff88_Param_Values:
 	.byte 0x79, 0x02, 0x00, 0x7a
 	.byte 0xf0
 ; 4 records, ids: 75 76 63 79; 0xf0 sentinel. Shared by effects 88, 89, 90, 91.
+; Reached via DSP_Param_Block_Ptrs_B[..] (4 effects: 88-91): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP2_Eff88_Param_Descriptors:
 	.byte 0x00, 0x04, 0x75, 0xa3	; op75 -> cell A3: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
 	.byte 0x00, 0x04, 0x76, 0xb8	; op76 -> cell B8: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
@@ -7326,6 +8153,7 @@ DSP2_Eff88_Param_Descriptors:
 ; bytecode or uPD6383 cell numbers (dsp/analysis/second-dsp-and-ready.md B1). Labels carry the
 ; DSP2_ prefix (codebase convention for the second DSP).
 ; 4 instructions: cmd(65) yield cmd(39) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[89] (effect 89): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff89_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0xa0, 0x2a, 0x81, 0x00
 	.byte 0x00, 0x00, 0x00, 0x15, 0x1e, 0x2a, 0x83, 0x66
@@ -7345,6 +8173,7 @@ DSP2_Eff89_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 5 records, ids: 75 76 76 63 79; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[89] (effect 89): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff89_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x10, 0xc4, 0x9b, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x01, 0x7a
@@ -7359,6 +8188,7 @@ DSP2_Eff89_Param_Values:
 ; bytecode or uPD6383 cell numbers (dsp/analysis/second-dsp-and-ready.md B1). Labels carry the
 ; DSP2_ prefix (codebase convention for the second DSP).
 ; 4 instructions: cmd(65) yield cmd(39) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[90] (effect 90): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff90_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0xa0, 0x2a, 0x81, 0x00
 	.byte 0x00, 0x00, 0x00, 0x18, 0x51, 0x2b, 0x29, 0x5c
@@ -7378,6 +8208,7 @@ DSP2_Eff90_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 5 records, ids: 75 76 76 63 79; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[90] (effect 90): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff90_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1d, 0x0e, 0x56, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x01, 0x7a
@@ -7392,6 +8223,7 @@ DSP2_Eff90_Param_Values:
 ; bytecode or uPD6383 cell numbers (dsp/analysis/second-dsp-and-ready.md B1). Labels carry the
 ; DSP2_ prefix (codebase convention for the second DSP).
 ; 4 instructions: cmd(65) yield cmd(39) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[91] (effect 91): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff91_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0xa0, 0x2a, 0x81, 0x00
 	.byte 0x00, 0x00, 0x00, 0x18, 0x51, 0x2b, 0x29, 0x5c
@@ -7411,6 +8243,7 @@ DSP2_Eff91_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 5 records, ids: 75 76 76 63 79; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[91] (effect 91): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff91_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1d, 0x0e, 0x56, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x01, 0x7a
@@ -7425,6 +8258,7 @@ DSP2_Eff91_Param_Values:
 ; UI params, 11 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, CHORUS DRY/WET, DEPTH, LFO SPEED (Hz), LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(480); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[64] (effect 64): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff64_Algo_Bytecode:
 	.byte 0x31, 0xe0, 0x01, 0x00, 0x54, 0x00, 0x92, 0xa0
 	.byte 0x32, 0x00, 0x00, 0x82, 0x20, 0x01, 0xc0, 0x00
@@ -7488,6 +8322,7 @@ DSP_Eff64_Algo_Bytecode:
 	.byte 0x16, 0x00, 0x00, 0x06, 0x04, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(120) op4(3) op5(85) op4(3) op1(10) op2(77) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[64] (effect 64): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff64_Coef_Bytecode:
 	.byte 0x00, 0x78, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -7532,6 +8367,7 @@ DSP_Eff64_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 11 records, ids: 66 67 67 73 73 66 66 65 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[64] (effect 64): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff64_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00
@@ -7555,6 +8391,7 @@ DSP_Eff64_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 67 65 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[64] (effect 64): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff64_Param_Descriptors:
 	.byte 0x00, 0x09, 0x66, 0x04, 0x0a, 0x0c, 0x0d, 0x10	; op66 -> cells 04 0A 0C 0D 10 16
 	.byte 0x16
@@ -7571,6 +8408,7 @@ DSP_Eff64_Param_Descriptors:
 ; UI params, 12 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY1 DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, DELAY2 DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(345); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[65] (effect 65): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff65_Algo_Bytecode:
 	.byte 0x31, 0x59, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0xd1, 0xcd, 0x00
@@ -7618,6 +8456,7 @@ DSP_Eff65_Algo_Bytecode:
 	.byte 0x00
 	.byte 0xf0
 ; 7 instructions: op0(60) op4(3) op5(65) op4(3) op1(10) op2(56) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[65] (effect 65): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff65_Coef_Bytecode:
 	.byte 0x00, 0x3c, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -7650,6 +8489,7 @@ DSP_Eff65_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 66 67 67 73 73 66 67 67 73 73 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[65] (effect 65): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff65_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x02, 0x40, 0x00, 0x00, 0x00
@@ -7674,6 +8514,7 @@ DSP_Eff65_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 67 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[65] (effect 65): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff65_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x03, 0x07, 0x0b, 0x0f	; op66 -> cells 03 07 0B 0F
 	.byte 0x00, 0x07, 0x67, 0x26, 0x28, 0x2a, 0x2c	; op67 -> cells 26 28 2A 2C
@@ -7689,6 +8530,7 @@ DSP_Eff65_Param_Descriptors:
 ; UI params, 14 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, FLANGER DRY/WET, DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(505); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[66] (effect 66): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff66_Algo_Bytecode:
 	.byte 0x31, 0xf9, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0x31, 0xcd, 0x00
@@ -7756,6 +8598,7 @@ DSP_Eff66_Algo_Bytecode:
 	.byte 0x00
 	.byte 0xf0
 ; 7 instructions: op0(110) op4(3) op5(65) op4(3) op1(10) op2(92) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[66] (effect 66): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff66_Coef_Bytecode:
 	.byte 0x00, 0x6e, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -7799,6 +8642,7 @@ DSP_Eff66_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 14 records, ids: 66 67 67 73 73 66 66 65 73 6c 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[66] (effect 66): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff66_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00
@@ -7831,6 +8675,7 @@ DSP_Eff66_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 9 records, ids: 66 67 65 73 6c 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[66] (effect 66): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff66_Param_Descriptors:
 	.byte 0x00, 0x09, 0x66, 0x07, 0x0d, 0x0f, 0x11, 0x15	; op66 -> cells 07 0D 0F 11 15 1B
 	.byte 0x1b
@@ -7850,6 +8695,7 @@ DSP_Eff66_Param_Descriptors:
 ; UI params, 11 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, DEPTH, LFO SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(435); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[67] (effect 67): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff67_Algo_Bytecode:
 	.byte 0x31, 0xb3, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xd1, 0xcd, 0x00
@@ -7908,6 +8754,7 @@ DSP_Eff67_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(95) op4(3) op5(65) op4(3) op1(10) op2(74) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[67] (effect 67): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff67_Coef_Bytecode:
 	.byte 0x00, 0x5f, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -7947,6 +8794,7 @@ DSP_Eff67_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 11 records, ids: 66 67 67 73 73 66 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[67] (effect 67): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff67_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00
@@ -7970,6 +8818,7 @@ DSP_Eff67_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 67 65 73 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[67] (effect 67): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff67_Param_Descriptors:
 	.byte 0x00, 0x09, 0x66, 0x07, 0x0a, 0x0c, 0x0e, 0x12	; op66 -> cells 07 0A 0C 0E 12 15
 	.byte 0x15
@@ -7987,6 +8836,7 @@ DSP_Eff67_Param_Descriptors:
 ; UI params, 14 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, PHASER DRY/WET, DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(555); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[68] (effect 68): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff68_Algo_Bytecode:
 	.byte 0x32, 0x2b, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xd1, 0xcd, 0x00
@@ -8060,6 +8910,7 @@ DSP_Eff68_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 9 instructions: op0(155) op4(3) op0(5) op4(3) op5(45) op4(3) op1(10) op2(74) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[68] (effect 68): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff68_Coef_Bytecode:
 	.byte 0x00, 0x9b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x30, 0x00, 0x0a, 0x15, 0x54, 0xc9, 0x95, 0x00
@@ -8106,6 +8957,7 @@ DSP_Eff68_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 14 records, ids: 66 67 67 73 73 66 66 65 73 66 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[68] (effect 68): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff68_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x06, 0x40, 0x00, 0x00, 0x00
@@ -8138,6 +8990,7 @@ DSP_Eff68_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 67 65 73 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[68] (effect 68): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff68_Param_Descriptors:
 	.byte 0x00, 0x0b, 0x66, 0x02, 0x07, 0x09, 0x0a, 0x0c	; op66 -> cells 02 07 09 0A 0C 0D 10 15
 	.byte 0x0d, 0x10, 0x15
@@ -8155,6 +9008,7 @@ DSP_Eff68_Param_Descriptors:
 ; UI params, 10 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   RESONANCE, MANUAL, SWEEP RANGE, DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(530); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[70] (effect 70): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff70_Algo_Bytecode:
 	.byte 0x32, 0x12, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xd1, 0xcd, 0x00
@@ -8225,6 +9079,7 @@ DSP_Eff70_Algo_Bytecode:
 	.byte 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(140) op4(3) op5(45) op4(3) op1(10) op2(74) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[70] (effect 70): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff70_Coef_Bytecode:
 	.byte 0x00, 0x8c, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8267,6 +9122,7 @@ DSP_Eff70_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 10 records, ids: 24 24 24 66 67 67 73 73 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[70] (effect 70): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff70_Param_Values:
 	.byte 0x00, 0x57, 0x24, 0x00, 0x20, 0x01, 0xeb, 0x85
 	.byte 0x08, 0xf5, 0xc2, 0x01, 0x16, 0x87, 0x06, 0x66
@@ -8299,6 +9155,7 @@ DSP_Eff70_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 67 24 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[70] (effect 70): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff70_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x01, 0x05, 0x11, 0x15	; op66 -> cells 01 05 11 15
 	.byte 0x00, 0x05, 0x67, 0x26, 0x29	; op67 -> cells 26 29
@@ -8314,6 +9171,7 @@ DSP_Eff70_Param_Descriptors:
 ; UI params, 9 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, CHORUS DRY/WET, DEPTH, LFO SPEED (Hz), LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(470); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[71] (effect 71): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff71_Algo_Bytecode:
 	.byte 0x31, 0xd6, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0x31, 0xcd, 0x00
@@ -8377,6 +9235,7 @@ DSP_Eff71_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(145) op4(3) op5(60) op4(3) op1(10) op2(95) op4(3) op1(10) op2(11) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[71] (effect 71): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff71_Coef_Bytecode:
 	.byte 0x00, 0x91, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -8429,6 +9288,7 @@ DSP_Eff71_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 9 records, ids: 70 70 70 66 66 65 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[71] (effect 71): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff71_Param_Values:
 	.byte 0x00, 0x0a, 0x70, 0x00, 0x00, 0x7a, 0x70, 0x01
 	.byte 0x00, 0x7a
@@ -8449,6 +9309,7 @@ DSP_Eff71_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 70 65 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[71] (effect 71): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff71_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x0e, 0x10, 0x11, 0x1e	; op66 -> cells 0E 10 11 1E
 	.byte 0x00, 0x05, 0x70, 0x02, 0x12	; op70 -> cells 02 12
@@ -8463,6 +9324,7 @@ DSP_Eff71_Param_Descriptors:
 ; UI params, 10 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(275); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[72] (effect 72): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff72_Algo_Bytecode:
 	.byte 0x31, 0x13, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x24, 0xb1, 0xcd, 0x00
@@ -8501,6 +9363,7 @@ DSP_Eff72_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(90) op4(3) op5(40) op4(3) op1(10) op2(68) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[72] (effect 72): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff72_Coef_Bytecode:
 	.byte 0x00, 0x5a, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8535,6 +9398,7 @@ DSP_Eff72_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 10 records, ids: 70 70 70 66 67 67 73 73 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[72] (effect 72): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff72_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -8556,6 +9420,7 @@ DSP_Eff72_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 70 67 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[72] (effect 72): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff72_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x09, 0x13	; op66 -> cells 09 13
 	.byte 0x00, 0x05, 0x70, 0x00, 0x0a	; op70 -> cells 00 0A
@@ -8571,6 +9436,7 @@ DSP_Eff72_Param_Descriptors:
 ; UI params, 12 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, FLANGER DRY/WET, DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(460); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[73] (effect 73): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff73_Algo_Bytecode:
 	.byte 0x31, 0xcc, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0x31, 0xcd, 0x00
@@ -8633,6 +9499,7 @@ DSP_Eff73_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(135) op4(3) op5(40) op4(3) op1(10) op2(95) op4(3) op1(10) op2(14) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[73] (effect 73): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff73_Coef_Bytecode:
 	.byte 0x00, 0x87, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8680,6 +9547,7 @@ DSP_Eff73_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 70 70 70 66 66 65 73 6c 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[73] (effect 73): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff73_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -8709,6 +9577,7 @@ DSP_Eff73_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 9 records, ids: 66 65 70 73 6c 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[73] (effect 73): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff73_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x0f, 0x11, 0x13, 0x1f	; op66 -> cells 0F 11 13 1F
 	.byte 0x00, 0x05, 0x65, 0x00, 0x02	; op65 -> cells 00 02
@@ -8726,6 +9595,7 @@ DSP_Eff73_Param_Descriptors:
 ; UI params, 9 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, DEPTH, LFO SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(390); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[74] (effect 74): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff74_Algo_Bytecode:
 	.byte 0x31, 0x86, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x92, 0xa0, 0x32, 0x00, 0x00
@@ -8778,6 +9648,7 @@ DSP_Eff74_Algo_Bytecode:
 	.byte 0x00, 0x04, 0x28, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(120) op4(3) op5(40) op4(3) op1(10) op2(86) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[74] (effect 74): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff74_Coef_Bytecode:
 	.byte 0x00, 0x78, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8817,6 +9688,7 @@ DSP_Eff74_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 9 records, ids: 70 70 70 66 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[74] (effect 74): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff74_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -8837,6 +9709,7 @@ DSP_Eff74_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 70 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[74] (effect 74): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff74_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x0c, 0x0e, 0x10, 0x19	; op66 -> cells 0C 0E 10 19
 	.byte 0x00, 0x05, 0x70, 0x04, 0x11	; op70 -> cells 04 11
@@ -8852,6 +9725,7 @@ DSP_Eff74_Param_Descriptors:
 ; UI params, 9 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, THRESHOLD, RATIO, ATTACK SENS. (s), RELEASE SENS. (s), VOLUME, REV SEND.
 ; 1 instruction: op3(300); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[75] (effect 75): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff75_Algo_Bytecode:
 	.byte 0x31, 0x2c, 0x01, 0x00, 0x54, 0x00, 0x2a, 0x24
 	.byte 0xb0, 0x0b, 0x08, 0x80, 0x13, 0x00, 0x00, 0x00
@@ -8894,6 +9768,7 @@ DSP_Eff75_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(100) op4(3) op5(25) op4(3) op1(10) op2(95) op4(3) op1(10) op2(8) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[75] (effect 75): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff75_Coef_Bytecode:
 	.byte 0x00, 0x64, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8935,6 +9810,7 @@ DSP_Eff75_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 9 records, ids: 70 70 70 72 72 6d 6d 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[75] (effect 75): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff75_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -8953,6 +9829,7 @@ DSP_Eff75_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 70 72 6d 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[75] (effect 75): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff75_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x0f	; op70 -> cells 00 0F
 	.byte 0x00, 0x05, 0x72, 0x0a, 0x19	; op72 -> cells 0A 19
@@ -8967,6 +9844,7 @@ DSP_Eff75_Param_Descriptors:
 ; UI params, 11 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, THRESHOLD, RATIO, ATTACK SENS. (s), RELEASE SENS. (s), DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(455); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[96] (effect 96): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff96_Algo_Bytecode:
 	.byte 0x31, 0xc7, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x2a, 0x24, 0xb0, 0x00, 0x00
@@ -9028,6 +9906,7 @@ DSP_Eff96_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(100) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10) op2(32) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[96] (effect 96): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff96_Coef_Bytecode:
 	.byte 0x00, 0x64, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9071,6 +9950,7 @@ DSP_Eff96_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 70 70 70 72 72 6d 6d 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[96] (effect 96): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff96_Param_Values:
 	.byte 0x00, 0x0a, 0x70, 0x00, 0x00, 0x7a, 0x70, 0x01
 	.byte 0x00, 0x7a
@@ -9092,6 +9972,7 @@ DSP_Eff96_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 70 72 6d 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[96] (effect 96): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff96_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x13	; op70 -> cells 00 13
 	.byte 0x00, 0x05, 0x72, 0x0a, 0x1d	; op72 -> cells 0A 1D
@@ -9108,6 +9989,7 @@ DSP_Eff96_Param_Descriptors:
 ; UI params, 11 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, THRESHOLD, RATIO, ATTACK SENS. (s), RELEASE SENS. (s), DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(490); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[97] (effect 97): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff97_Algo_Bytecode:
 	.byte 0x31, 0xea, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x24, 0xb0, 0x00, 0x00
@@ -9174,6 +10056,7 @@ DSP_Eff97_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(125) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10) op2(50) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[97] (effect 97): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff97_Coef_Bytecode:
 	.byte 0x00, 0x7d, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9223,6 +10106,7 @@ DSP_Eff97_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 70 70 70 72 72 6d 6d 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[97] (effect 97): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff97_Param_Values:
 	.byte 0x00, 0x0a, 0x70, 0x00, 0x00, 0x7a, 0x70, 0x01
 	.byte 0x00, 0x7a
@@ -9244,6 +10128,7 @@ DSP_Eff97_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 70 72 6d 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[97] (effect 97): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff97_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x16	; op70 -> cells 00 16
 	.byte 0x00, 0x05, 0x72, 0x0a, 0x20	; op72 -> cells 0A 20
@@ -9260,6 +10145,7 @@ DSP_Eff97_Param_Descriptors:
 ; UI params, 12 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, DRIVE, ADJUST, DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(465); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[98] (effect 98): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff98_Algo_Bytecode:
 	.byte 0x31, 0xd1, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x2a, 0x24, 0xb0, 0x0b, 0x00
@@ -9322,6 +10208,7 @@ DSP_Eff98_Algo_Bytecode:
 	.byte 0x00
 	.byte 0xf0
 ; 7 instructions: op0(90) op4(3) op5(40) op4(3) op1(10) op2(92) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[98] (effect 98): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff98_Coef_Bytecode:
 	.byte 0x00, 0x5a, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9359,6 +10246,7 @@ DSP_Eff98_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 13 records, ids: 70 70 70 61 62 66 67 67 73 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[98] (effect 98): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff98_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -9383,6 +10271,7 @@ DSP_Eff98_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 9 records, ids: 70 66 67 61 62 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[98] (effect 98): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff98_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x0e	; op70 -> cells 00 0E
 	.byte 0x00, 0x07, 0x66, 0x09, 0x0d, 0x17, 0x1b	; op66 -> cells 09 0D 17 1B
@@ -9400,6 +10289,7 @@ DSP_Eff98_Param_Descriptors:
 ; UI params, 12 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, DRIVE, ADJUST, DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(525); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[99] (effect 99): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff99_Algo_Bytecode:
 	.byte 0x32, 0x0d, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x2a, 0x24, 0xb0, 0x0b, 0x00
@@ -9470,6 +10360,7 @@ DSP_Eff99_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(130) op4(3) op5(40) op4(3) op1(10) op2(95) op4(3) op1(10) op2(38) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[99] (effect 99): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff99_Coef_Bytecode:
 	.byte 0x00, 0x82, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9520,6 +10411,7 @@ DSP_Eff99_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 13 records, ids: 70 70 70 61 62 66 67 67 73 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[99] (effect 99): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff99_Param_Values:
 	.byte 0x00, 0x0a, 0x70, 0x00, 0x00, 0x7a, 0x70, 0x01
 	.byte 0x00, 0x7a
@@ -9544,6 +10436,7 @@ DSP_Eff99_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 9 records, ids: 70 66 67 61 62 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[99] (effect 99): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff99_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x14	; op70 -> cells 00 14
 	.byte 0x00, 0x07, 0x66, 0x0f, 0x13, 0x23, 0x27	; op66 -> cells 0F 13 23 27
@@ -9564,6 +10457,7 @@ DSP_Eff99_Param_Descriptors:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 1 instruction: op3(670); 0xf0 end. Shared by effects 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
 ; 26, 27.
+; Reached via EFF_AlgoProgram_PtrTable[..] (12 effects: 16-27): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff16_Algo_Bytecode:
 	.byte 0x32, 0x9e, 0x01, 0x00, 0xc8, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x28, 0x94, 0x15, 0x02
@@ -9652,6 +10546,7 @@ DSP_Eff16_Algo_Bytecode:
 	.byte 0xf0
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[16] (effect 16): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff16_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9713,6 +10608,7 @@ DSP_Eff16_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[16] (effect 16): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff16_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x07, 0x65, 0xfd, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -9725,6 +10621,7 @@ DSP_Eff16_Param_Values:
 	.byte 0xf0
 ; 6 records, ids: 66 67 76 75 63 74; 0xf0 sentinel. Shared by effects 16, 17, 18, 19, 20, 21,
 ; 22, 23, 24, 25, 26, 27.
+; Reached via DSP_Param_Block_Ptrs_B[..] (12 effects: 16-27): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff16_Param_Descriptors:
 	.byte 0x00, 0x0b, 0x66, 0xa9, 0xaa, 0xab, 0xac, 0xaf	; op66 -> cells A9 AA AB AC AF B0 B1 B2
 	.byte 0xb0, 0xb1, 0xb2
@@ -9741,6 +10638,7 @@ DSP_Eff16_Param_Descriptors:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[17] (effect 17): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff17_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9802,6 +10700,7 @@ DSP_Eff17_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[17] (effect 17): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff17_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x12, 0x8f, 0x5c, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -9818,6 +10717,7 @@ DSP_Eff17_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[18] (effect 18): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff18_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9879,6 +10779,7 @@ DSP_Eff18_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[18] (effect 18): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff18_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x2e, 0x76, 0xc8, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -9895,6 +10796,7 @@ DSP_Eff18_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[19] (effect 19): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff19_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9956,6 +10858,7 @@ DSP_Eff19_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[19] (effect 19): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff19_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x34, 0x7a, 0xe1, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -9972,6 +10875,7 @@ DSP_Eff19_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[20] (effect 20): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff20_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10033,6 +10937,7 @@ DSP_Eff20_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[20] (effect 20): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff20_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x17, 0x97, 0x24, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10049,6 +10954,7 @@ DSP_Eff20_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[21] (effect 21): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff21_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10110,6 +11016,7 @@ DSP_Eff21_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[21] (effect 21): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff21_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1a, 0x4d, 0xd2, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10126,6 +11033,7 @@ DSP_Eff21_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[22] (effect 22): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff22_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10187,6 +11095,7 @@ DSP_Eff22_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[22] (effect 22): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff22_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1f, 0xbe, 0x76, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10203,6 +11112,7 @@ DSP_Eff22_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[23] (effect 23): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff23_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10264,6 +11174,7 @@ DSP_Eff23_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[23] (effect 23): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff23_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1f, 0xbe, 0x76, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10280,6 +11191,7 @@ DSP_Eff23_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[24] (effect 24): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff24_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10341,6 +11253,7 @@ DSP_Eff24_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[24] (effect 24): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff24_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1f, 0xbe, 0x76, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10357,6 +11270,7 @@ DSP_Eff24_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[25] (effect 25): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff25_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10418,6 +11332,7 @@ DSP_Eff25_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[25] (effect 25): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff25_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1c, 0x8b, 0x43, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10434,6 +11349,7 @@ DSP_Eff25_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[26] (effect 26): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff26_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10495,6 +11411,7 @@ DSP_Eff26_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[26] (effect 26): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff26_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x2a, 0x5e, 0x35, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10511,6 +11428,7 @@ DSP_Eff26_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[27] (effect 27): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff27_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10572,6 +11490,7 @@ DSP_Eff27_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[27] (effect 27): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff27_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x2a, 0x5e, 0x35, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10625,6 +11544,9 @@ DSP_Eff09_Slot1_Algo_Bytecode:
 	.byte 0x0e, 0x08, 0x80, 0x16, 0x00, 0x00, 0x06, 0x12
 	.byte 0x10, 0xf0, 0x00
 	.byte 0xf0
+; Coefficient stream uploaded SECOND by EFF_Change_WithDebug for slot 1 / effect 9
+; (`lda xbc,(DSP_Eff09_Slot1_Coef_Bytecode:24)` then DSP_WriteEFFConfig), in place of
+; EFF_CoefProgram_PtrTable[9]; the first upload is DSP_Eff09_Slot1_Algo_Bytecode.
 ; 7 instructions: op0(70) op4(3) op5(40) op4(3) op1(10) op2(68) op4(3); 0xf0 end.
 DSP_Eff09_Slot1_Coef_Bytecode:
 	.byte 0x00, 0x46, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
@@ -10656,204 +11578,308 @@ DSP_Eff09_Slot1_Coef_Bytecode:
 	.byte 0x12, 0xe5, 0x76, 0x2c
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
+; Parameter DESCRIPTOR table used INSTEAD of DSP_Param_Block_Ptrs_B[9] when DSP_WriteParameter
+; is called with WA = 1, BC = 9: DSP_WriteParam_EFFCase loads it with `lda xhl,(..:24)` and
+; hands it to DSP_ParameterWriteEngine as XDE.  Record grammar: DSP_TableWalk_Search (zone header).
+; 5 records, ids: 67 76 73 63 74; 0xf0 sentinel.
 DSP_Eff9_Param_Descriptors:
-	.byte 0x00
-	.byte 0x05, 0x67, 0x00, 0x02, 0x00, 0x07, 0x76, 0x96
-	.byte 0x99, 0x9f, 0xa2, 0x00, 0x07, 0x73, 0x93, 0x94
-	.byte 0x9c, 0x9d, 0x00, 0x04, 0x63, 0x86, 0x00, 0x07
-	.byte 0x74, 0x1d, 0x00, 0x00, 0x00, 0xf0
+	.byte 0x00, 0x05, 0x67, 0x00, 0x02
+	.byte 0x00, 0x07, 0x76, 0x96, 0x99, 0x9f, 0xa2
+	.byte 0x00, 0x07, 0x73, 0x93, 0x94, 0x9c, 0x9d
+	.byte 0x00, 0x04, 0x63, 0x86
+	.byte 0x00, 0x07, 0x74, 0x1d, 0x00, 0x00, 0x00
+	.byte 0xf0
 ; The pair pushed by DSP_WriteParam_EFFCase when the effect selector bc == 9: XHL = 0x01E17F
 ; (the descriptor stream handed to DSP_ParameterWriteEngine as XDE) and 0x01E19E pushed as the
 ; second argument. 0x1E19E - 0x1E17F = 31 bytes of descriptors.
+; Parameter VALUE table (the pushed argument): ends at its 0xf0 sentinel, 64 bytes.
+; 6 records, ids: 67 67 73 73 76 63; 0xf0 sentinel.
 DSP_Eff9_Param_Values:
-	.byte 0x00, 0x08
-	.byte 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a, 0x00, 0x08
-	.byte 0x67, 0x01, 0x00, 0xbe, 0x41, 0x7a, 0x00, 0x0b
-	.byte 0x73, 0x00, 0xc2, 0x8f, 0x5c, 0x3d, 0x70, 0xa3
-	.byte 0x7a, 0x00, 0x0b, 0x73, 0x02, 0xc2, 0x8f, 0x5c
-	.byte 0x3d, 0x70, 0xa3, 0x7a, 0x00, 0x13, 0x76, 0x00
-	.byte 0x12, 0x14, 0x76, 0x01, 0x12, 0x14, 0x76, 0x02
-	.byte 0x12, 0x14, 0x76, 0x03, 0x12, 0x14, 0x7a, 0x00
-	.byte 0x06, 0x63, 0x00, 0x01, 0x7a, 0xf0, 0x31, 0x63
-	.byte 0x01, 0x00, 0xc8, 0x08, 0x80, 0x13, 0x00, 0x0b
-	.byte 0x00, 0x00, 0x28, 0x94, 0x15, 0x02, 0x12, 0xa8
-	.byte 0x11, 0xd5, 0x02, 0x02, 0xaf, 0xd1, 0xd5, 0x02
-	.byte 0x02, 0xaf, 0x91, 0xd5, 0x02, 0x02, 0x20, 0xf1
-	.byte 0xcd, 0x00, 0x00, 0x20, 0x04, 0x0e, 0x02, 0x12
-	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x2f, 0x64, 0x07
-	.byte 0x00, 0x00, 0xa0, 0x61, 0xd5, 0x08, 0x80, 0x16
-	.byte 0x00, 0x00, 0x02, 0x02, 0x2f, 0xa0, 0x00, 0x00
-	.byte 0x00, 0x20, 0x60, 0x00, 0x00, 0x00, 0x20, 0x00
-	.byte 0x00, 0x08, 0x80, 0x12, 0x02, 0xc7, 0x00, 0x00
-	.byte 0x20, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
-	.byte 0x00, 0x00, 0x20, 0x00, 0x00, 0x08, 0x80, 0x12
-	.byte 0x02, 0xc7, 0x00, 0x00, 0x20, 0x10, 0x00, 0x00
-	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00
-	.byte 0x00, 0x08, 0x80, 0x12, 0x02, 0xc7, 0x00, 0x00
-	.byte 0x2f, 0x50, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
-	.byte 0x00, 0x00, 0x20, 0x00, 0x00, 0x08, 0x80, 0x12
-	.byte 0x02, 0xc7, 0x00, 0x00, 0x20, 0x94, 0x0b, 0x00
-	.byte 0x40, 0x00, 0x08, 0x64, 0x00, 0x10, 0xa0, 0x11
-	.byte 0xd5, 0x02, 0x02, 0xa0, 0x11, 0xd5, 0x02, 0x02
-	.byte 0xaf, 0x51, 0xd5, 0x02, 0x02, 0xa0, 0xc1, 0xd5
-	.byte 0x02, 0x02, 0x20, 0x00, 0x00, 0x00, 0x00, 0x2f
-	.byte 0xd4, 0x07, 0x00, 0x50, 0x00, 0x09, 0x21, 0x00
-	.byte 0x02, 0xa0, 0x31, 0xd5, 0x02, 0x04, 0x2f, 0xe0
-	.byte 0x00, 0x00, 0x02, 0xaf, 0xf1, 0xd5, 0x02, 0x04
-	.byte 0x20, 0x20, 0x00, 0x00, 0x02, 0xaf, 0xf1, 0xd5
-	.byte 0x02, 0x04, 0x2f, 0x60, 0x00, 0x00, 0x02, 0xa0
-	.byte 0xb1, 0xd5, 0x02, 0x04, 0x2f, 0xa0, 0x00, 0x00
-	.byte 0x00, 0x20, 0x44, 0x07, 0x00, 0x10, 0x20, 0x11
-	.byte 0xd5, 0x02, 0x02, 0x20, 0x11, 0xd5, 0x02, 0x02
-	.byte 0x2f, 0x51, 0xd5, 0x02, 0x02, 0xa4, 0x91, 0xd5
-	.byte 0x02, 0x02, 0xa0, 0x01, 0xd5, 0x02, 0x12, 0xa0
-	.byte 0x04, 0x15, 0x02, 0x02, 0xa0, 0x01, 0xd5, 0x02
-	.byte 0x02, 0x20, 0x04, 0x07, 0x00, 0x00, 0x20, 0x10
-	.byte 0x00, 0x00, 0x00, 0xa0, 0x01, 0xd5, 0x02, 0x12
-	.byte 0xa0, 0x04, 0x15, 0x02, 0x02, 0xa0, 0x01, 0xd5
-	.byte 0x02, 0x02, 0x20, 0x04, 0x07, 0x00, 0x00, 0x2b
-	.byte 0x90, 0x00, 0x00, 0x00, 0x20, 0x94, 0x07, 0x00
-	.byte 0x12, 0x2f, 0x21, 0xc0, 0x00, 0x00, 0x20, 0x81
-	.byte 0xcd, 0x00, 0x00, 0x20, 0x04, 0x0e, 0x02, 0x12
-	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x2f, 0xf4, 0x07
-	.byte 0x00, 0x12, 0x2f, 0x91, 0xc0, 0x00, 0x00, 0x27
-	.byte 0xb1, 0xcd, 0x00, 0x00, 0x20, 0x04, 0x0e, 0x08
-	.byte 0x80, 0x16, 0x00, 0x00, 0x06, 0x12, 0x10, 0xf0
-	.byte 0x00, 0xf0, 0x00, 0x55, 0x01, 0x01, 0x60, 0x00
-	.byte 0x00, 0x1d, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00
-	.byte 0x15, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00
-	.byte 0x18, 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15
-	.byte 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x19
+	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
+	.byte 0x00, 0x08, 0x67, 0x01, 0x00, 0xbe, 0x41, 0x7a
+	.byte 0x00, 0x0b, 0x73, 0x00, 0xc2, 0x8f, 0x5c, 0x3d, 0x70, 0xa3, 0x7a
+	.byte 0x00, 0x0b, 0x73, 0x02, 0xc2, 0x8f, 0x5c, 0x3d, 0x70, 0xa3, 0x7a
+	.byte 0x00, 0x13, 0x76, 0x00, 0x12, 0x14, 0x76, 0x01, 0x12, 0x14, 0x76, 0x02
+	.byte 0x12, 0x14, 0x76, 0x03, 0x12, 0x14, 0x7a
+	.byte 0x00, 0x06, 0x63, 0x00, 0x01, 0x7a
+	.byte 0xf0
+; ----- effect 10 MULTI TAP DELAY -- slot-1 override microprograms -----
+; Algorithm stream uploaded by EFF_Change_Case0xA (inside EFF_Change_WithDebug) INSTEAD of
+; EFF_AlgoProgram_PtrTable[10] when the target slot is 1: `lda xbc,(DSP_Eff10_Slot1_Algo_Bytecode:24)`
+; then DSP_WriteEFFConfig(slot 1, stream).  Stream grammar: DSP_BytecodeInterpreter_Loop.
+; 1 instruction: op3(355); 0xf0 end.
+DSP_Eff10_Slot1_Algo_Bytecode:
+	.byte 0x31, 0x63, 0x01, 0x00, 0xc8, 0x08, 0x80, 0x13
+	.byte 0x00, 0x0b, 0x00, 0x00, 0x28, 0x94, 0x15, 0x02
+	.byte 0x12, 0xa8, 0x11, 0xd5, 0x02, 0x02, 0xaf, 0xd1
+	.byte 0xd5, 0x02, 0x02, 0xaf, 0x91, 0xd5, 0x02, 0x02
+	.byte 0x20, 0xf1, 0xcd, 0x00, 0x00, 0x20, 0x04, 0x0e
+	.byte 0x02, 0x12, 0x20, 0x00, 0x00, 0x00, 0x00, 0x2f
+	.byte 0x64, 0x07, 0x00, 0x00, 0xa0, 0x61, 0xd5, 0x08
+	.byte 0x80, 0x16, 0x00, 0x00, 0x02, 0x02, 0x2f, 0xa0
+	.byte 0x00, 0x00, 0x00, 0x20, 0x60, 0x00, 0x00, 0x00
+	.byte 0x20, 0x00, 0x00, 0x08, 0x80, 0x12, 0x02, 0xc7
+	.byte 0x00, 0x00, 0x20, 0x10, 0x00, 0x00, 0x00, 0x20
+	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x08
+	.byte 0x80, 0x12, 0x02, 0xc7, 0x00, 0x00, 0x20, 0x10
+	.byte 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00
+	.byte 0x20, 0x00, 0x00, 0x08, 0x80, 0x12, 0x02, 0xc7
+	.byte 0x00, 0x00, 0x2f, 0x50, 0x00, 0x00, 0x00, 0x20
+	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x08
+	.byte 0x80, 0x12, 0x02, 0xc7, 0x00, 0x00, 0x20, 0x94
+	.byte 0x0b, 0x00, 0x40, 0x00, 0x08, 0x64, 0x00, 0x10
+	.byte 0xa0, 0x11, 0xd5, 0x02, 0x02, 0xa0, 0x11, 0xd5
+	.byte 0x02, 0x02, 0xaf, 0x51, 0xd5, 0x02, 0x02, 0xa0
+	.byte 0xc1, 0xd5, 0x02, 0x02, 0x20, 0x00, 0x00, 0x00
+	.byte 0x00, 0x2f, 0xd4, 0x07, 0x00, 0x50, 0x00, 0x09
+	.byte 0x21, 0x00, 0x02, 0xa0, 0x31, 0xd5, 0x02, 0x04
+	.byte 0x2f, 0xe0, 0x00, 0x00, 0x02, 0xaf, 0xf1, 0xd5
+	.byte 0x02, 0x04, 0x20, 0x20, 0x00, 0x00, 0x02, 0xaf
+	.byte 0xf1, 0xd5, 0x02, 0x04, 0x2f, 0x60, 0x00, 0x00
+	.byte 0x02, 0xa0, 0xb1, 0xd5, 0x02, 0x04, 0x2f, 0xa0
+	.byte 0x00, 0x00, 0x00, 0x20, 0x44, 0x07, 0x00, 0x10
+	.byte 0x20, 0x11, 0xd5, 0x02, 0x02, 0x20, 0x11, 0xd5
+	.byte 0x02, 0x02, 0x2f, 0x51, 0xd5, 0x02, 0x02, 0xa4
+	.byte 0x91, 0xd5, 0x02, 0x02, 0xa0, 0x01, 0xd5, 0x02
+	.byte 0x12, 0xa0, 0x04, 0x15, 0x02, 0x02, 0xa0, 0x01
+	.byte 0xd5, 0x02, 0x02, 0x20, 0x04, 0x07, 0x00, 0x00
+	.byte 0x20, 0x10, 0x00, 0x00, 0x00, 0xa0, 0x01, 0xd5
+	.byte 0x02, 0x12, 0xa0, 0x04, 0x15, 0x02, 0x02, 0xa0
+	.byte 0x01, 0xd5, 0x02, 0x02, 0x20, 0x04, 0x07, 0x00
+	.byte 0x00, 0x2b, 0x90, 0x00, 0x00, 0x00, 0x20, 0x94
+	.byte 0x07, 0x00, 0x12, 0x2f, 0x21, 0xc0, 0x00, 0x00
+	.byte 0x20, 0x81, 0xcd, 0x00, 0x00, 0x20, 0x04, 0x0e
+	.byte 0x02, 0x12, 0x20, 0x00, 0x00, 0x00, 0x00, 0x2f
+	.byte 0xf4, 0x07, 0x00, 0x12, 0x2f, 0x91, 0xc0, 0x00
+	.byte 0x00, 0x27, 0xb1, 0xcd, 0x00, 0x00, 0x20, 0x04
+	.byte 0x0e, 0x08, 0x80, 0x16, 0x00, 0x00, 0x06, 0x12
+	.byte 0x10, 0xf0, 0x00
+	.byte 0xf0
+; Coefficient stream uploaded second by EFF_Change_Case0xA, in place of
+; EFF_CoefProgram_PtrTable[10], same DSP_WriteEFFConfig path.
+; 7 instructions: op0(85) op4(3) op5(45) op4(3) op1(10) op2(50) op4(3); 0xf0 end.
+DSP_Eff10_Slot1_Coef_Bytecode:
+	.byte 0x00, 0x55, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
-	.byte 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00, 0x00
-	.byte 0x15, 0x00, 0x00, 0x18, 0x70, 0x00, 0x0a, 0x00
-	.byte 0x00, 0x00, 0x15, 0x00, 0x00, 0x18, 0xa0, 0x00
-	.byte 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x18
-	.byte 0xd0, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x40
-	.byte 0x03, 0x03, 0x50, 0x2d, 0x01, 0x01, 0x60, 0x08
-	.byte 0x01, 0x00, 0x08, 0x25, 0x0a, 0x00, 0x4b, 0xb8
-	.byte 0x4c, 0x0a, 0x00, 0x00, 0x00, 0x4c, 0x0a, 0x00
-	.byte 0x57, 0x70, 0x4c, 0x0a, 0x00, 0x63, 0x28, 0x4c
-	.byte 0x0a, 0x00, 0x6e, 0xe0, 0x4c, 0x0a, 0x00, 0x3f
-	.byte 0xff, 0xcc, 0x0a, 0x00, 0x40, 0x00, 0x4c, 0x40
-	.byte 0x03, 0x03, 0x10, 0x0a, 0x01, 0x01, 0x60, 0x08
-	.byte 0x01, 0x09, 0x08, 0x21, 0x20, 0x32, 0x02, 0x01
-	.byte 0x61, 0x20, 0x00, 0x00, 0x20, 0x00, 0x00, 0x20
-	.byte 0x00, 0x00, 0x40, 0x00, 0x00, 0x40, 0x00, 0x00
-	.byte 0x2c, 0xcc, 0xcc, 0x13, 0x33, 0x33, 0x00, 0x00
-	.byte 0x00, 0x03, 0x33, 0x33, 0x23, 0x00, 0x1e, 0x27
-	.byte 0x4f, 0x03, 0xef, 0x37, 0x1e, 0x23, 0x00, 0x1e
-	.byte 0x27, 0x4f, 0x03, 0xef, 0x37, 0x1e, 0x40, 0x03
-	.byte 0x03, 0xf0
+	.byte 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x18, 0x50
+	.byte 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00
+	.byte 0x00, 0x00, 0x15, 0x00, 0x00, 0x19, 0x00, 0x00
+	.byte 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a, 0x00, 0x00
+	.byte 0x00, 0x15, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
+	.byte 0x00, 0x18, 0x70, 0x00, 0x0a, 0x00, 0x00, 0x00
+	.byte 0x15, 0x00, 0x00, 0x18, 0xa0, 0x00, 0x0a, 0x00
+	.byte 0x00, 0x00, 0x15, 0x00, 0x00, 0x18, 0xd0, 0x00
+	.byte 0x0a, 0x00, 0x00, 0x00, 0x15
+	.byte 0x40, 0x03, 0x03
+	.byte 0x50, 0x2d, 0x01, 0x01, 0x60, 0x08, 0x01, 0x00
+	.byte 0x08, 0x25, 0x0a, 0x00, 0x4b, 0xb8, 0x4c, 0x0a
+	.byte 0x00, 0x00, 0x00, 0x4c, 0x0a, 0x00, 0x57, 0x70
+	.byte 0x4c, 0x0a, 0x00, 0x63, 0x28, 0x4c, 0x0a, 0x00
+	.byte 0x6e, 0xe0, 0x4c, 0x0a, 0x00, 0x3f, 0xff, 0xcc
+	.byte 0x0a, 0x00, 0x40, 0x00, 0x4c
+	.byte 0x40, 0x03, 0x03
+	.byte 0x10, 0x0a, 0x01, 0x01, 0x60, 0x08, 0x01, 0x09
+	.byte 0x08, 0x21
+	.byte 0x20, 0x32, 0x02, 0x01, 0x61, 0x20, 0x00, 0x00
+	.byte 0x20, 0x00, 0x00, 0x20, 0x00, 0x00, 0x40, 0x00
+	.byte 0x00, 0x40, 0x00, 0x00, 0x2c, 0xcc, 0xcc, 0x13
+	.byte 0x33, 0x33, 0x00, 0x00, 0x00, 0x03, 0x33, 0x33
+	.byte 0x23, 0x00, 0x1e, 0x27, 0x4f, 0x03, 0xef, 0x37
+	.byte 0x1e, 0x23, 0x00, 0x1e, 0x27, 0x4f, 0x03, 0xef
+	.byte 0x37, 0x1e
+	.byte 0x40, 0x03, 0x03
+	.byte 0xf0
+; DESCRIPTOR table used instead of DSP_Param_Block_Ptrs_B[10] by DSP_WriteParam_EFFCase0xA
+; (DSP_WriteParameter with WA = 1, BC = 0x0A), passed to DSP_ParameterWriteEngine as XDE.
+; 6 records, ids: 66 67 76 73 63 74; 0xf0 sentinel.
 DSP_EffA_Param_Descriptors:
-	.byte 0x00, 0x07, 0x66, 0x94, 0x95, 0x96
-	.byte 0x97, 0x00, 0x07, 0x67, 0x00, 0x02, 0x03, 0x04
-	.byte 0x00, 0x05, 0x76, 0x99, 0x9c, 0x00, 0x04, 0x73
-	.byte 0x98, 0x00, 0x04, 0x63, 0x86, 0x00, 0x07, 0x74
-	.byte 0x1d, 0x00, 0x00, 0x00, 0xf0
+	.byte 0x00, 0x07, 0x66, 0x94, 0x95, 0x96, 0x97
+	.byte 0x00, 0x07, 0x67, 0x00, 0x02, 0x03, 0x04
+	.byte 0x00, 0x05, 0x76, 0x99, 0x9c
+	.byte 0x00, 0x04, 0x73, 0x98
+	.byte 0x00, 0x04, 0x63, 0x86
+	.byte 0x00, 0x07, 0x74, 0x1d, 0x00, 0x00, 0x00
+	.byte 0xf0
 ; Same pair for effect selector bc == 0x0A (DSP_WriteParam_EFFCase0xA). 0x1E42D - 0x1E40A = 35.
+; VALUE table (the pushed argument), 105 bytes to its 0xf0 sentinel.  Until 2026-09-25 this label
+; ran on as ONE 3,183-byte .byte run over everything down to DSP_Param_Block_Ptrs_A: the
+; programs, LUTs, slot tables and two pointer arrays that follow are carved out of it by
+; scripts/converters/carve_v142_dsp_zone_tail.py, each from its own reader.
+; 11 records, ids: 67 67 67 67 66 66 66 66 73 76 63; 0xf0 sentinel.
 DSP_EffA_Param_Values:
-	.byte 0x00, 0x08, 0x67
-	.byte 0x00, 0x00, 0x80, 0x02, 0x7a, 0x00, 0x08, 0x67
-	.byte 0x01, 0x00, 0x80, 0x02, 0x7a, 0x00, 0x08, 0x67
-	.byte 0x02, 0x00, 0x80, 0x02, 0x7a, 0x00, 0x08, 0x67
-	.byte 0x03, 0x00, 0x80, 0x02, 0x7a, 0x00, 0x0b, 0x66
-	.byte 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7a
-	.byte 0x00, 0x0b, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x7a, 0x00, 0x0b, 0x66, 0x02, 0x40
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x7a, 0x00, 0x0b
-	.byte 0x66, 0x03, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x7a, 0x00, 0x0b, 0x73, 0x00, 0xf0, 0xa3, 0xd7
-	.byte 0x0f, 0x5c, 0x28, 0x7a, 0x00, 0x0b, 0x76, 0x00
-	.byte 0x12, 0x14, 0x76, 0x01, 0x12, 0x14, 0x7a, 0x00
-	.byte 0x06, 0x63, 0x00, 0x01, 0x7a, 0xf0, 0x31, 0x31
-	.byte 0x01, 0x00, 0x00, 0x00, 0x92, 0x20, 0x12, 0x0d
-	.byte 0x0c, 0x0a, 0x0e, 0x00, 0x00, 0x00, 0x84, 0x20
-	.byte 0x26, 0x80, 0x00, 0x12, 0x2f, 0xf1, 0xce, 0x02
-	.byte 0x04, 0x20, 0x21, 0xce, 0x02, 0x02, 0xa0, 0x04
-	.byte 0x48, 0x04, 0x00, 0xa0, 0x04, 0x19, 0x00, 0x90
-	.byte 0xa0, 0x11, 0xc8, 0x00, 0x84, 0x20, 0x11, 0xc0
-	.byte 0x00, 0x12, 0x2f, 0xf1, 0xd5, 0x02, 0x82, 0xa0
-	.byte 0x14, 0x17, 0x04, 0x00, 0x20, 0x14, 0x47, 0x08
-	.byte 0x80, 0x12, 0x02, 0xd5, 0x02, 0x82, 0x20, 0x00
-	.byte 0x00, 0x04, 0x00, 0xa0, 0x00, 0x00, 0x0c, 0x0a
-	.byte 0x29, 0x28, 0x20, 0x01, 0x92, 0xa0, 0x04, 0x55
-	.byte 0x02, 0x92, 0xa0, 0x04, 0x55, 0x01, 0x82, 0xa0
-	.byte 0x04, 0x15, 0x05, 0x12, 0x20, 0x04, 0x4d, 0x00
-	.byte 0x00, 0xa0, 0x06, 0x4d, 0x04, 0x10, 0xa0, 0x04
-	.byte 0x0e, 0x0c, 0x04, 0x31, 0x28, 0x20, 0x06, 0x92
-	.byte 0xa0, 0x04, 0x15, 0x06, 0x92, 0x20, 0x04, 0x15
-	.byte 0x00, 0x00, 0x20, 0x02, 0xd9, 0x08, 0x80, 0x12
-	.byte 0x04, 0x0b, 0x00, 0x12, 0x20, 0x16, 0x55, 0x05
-	.byte 0x04, 0x20, 0x01, 0xd5, 0x0c, 0x42, 0x45, 0x78
-	.byte 0x20, 0x00, 0x9a, 0xa0, 0x02, 0x00, 0x0c, 0x0a
-	.byte 0x4b, 0x18, 0x20, 0x00, 0x00, 0xaf, 0xf2, 0x07
-	.byte 0x04, 0x12, 0xa0, 0x02, 0x00, 0x00, 0x00, 0xaf
-	.byte 0xf4, 0x07, 0x00, 0x12, 0xa0, 0x01, 0xc0, 0x04
-	.byte 0x00, 0xa0, 0x00, 0x00, 0x00, 0x92, 0xa0, 0x11
-	.byte 0xc0, 0x08, 0x09, 0x00, 0x08, 0x39, 0x04, 0x10
-	.byte 0xaf, 0xf6, 0x47, 0x0c, 0x4a, 0x1c, 0x08, 0x20
-	.byte 0x04, 0x00, 0xa0, 0x02, 0x1a, 0x08, 0x01, 0x07
-	.byte 0x08, 0x21, 0x08, 0x01, 0x06, 0xc8, 0x27, 0x08
-	.byte 0x01, 0x02, 0x58, 0x25, 0x00, 0x10, 0xa0, 0x02
-	.byte 0x0c, 0x08, 0x00, 0x16, 0x00, 0x0b, 0x08, 0x00
-	.byte 0x80, 0xc0, 0x00, 0x0c, 0x64, 0x5a, 0x20, 0x00
-	.byte 0x04, 0x00, 0x10, 0xe0, 0x00, 0x08, 0x01, 0x05
-	.byte 0x08, 0x21, 0x08, 0x01, 0x06, 0x48, 0x27, 0x08
-	.byte 0x01, 0x02, 0x58, 0x25, 0x00, 0x10, 0x9d, 0x02
-	.byte 0x0c, 0x08, 0x00, 0x16, 0x00, 0x0b, 0x00, 0x00
-	.byte 0x20, 0x10, 0x07, 0x0c, 0x64, 0x6a, 0x20, 0x07
-	.byte 0x00, 0x00, 0x20, 0x10, 0x00, 0x00, 0x00, 0x18
-	.byte 0xa0, 0x07, 0x04, 0x00, 0x10, 0xf0, 0x07, 0xf0
+	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
+	.byte 0x00, 0x08, 0x67, 0x01, 0x00, 0x80, 0x02, 0x7a
+	.byte 0x00, 0x08, 0x67, 0x02, 0x00, 0x80, 0x02, 0x7a
+	.byte 0x00, 0x08, 0x67, 0x03, 0x00, 0x80, 0x02, 0x7a
+	.byte 0x00, 0x0b, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7a
+	.byte 0x00, 0x0b, 0x66, 0x01, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7a
+	.byte 0x00, 0x0b, 0x66, 0x02, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7a
+	.byte 0x00, 0x0b, 0x66, 0x03, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7a
+	.byte 0x00, 0x0b, 0x73, 0x00, 0xf0, 0xa3, 0xd7, 0x0f, 0x5c, 0x28, 0x7a
+	.byte 0x00, 0x0b, 0x76, 0x00, 0x12, 0x14, 0x76, 0x01, 0x12, 0x14, 0x7a
+	.byte 0x00, 0x06, 0x63, 0x00, 0x01, 0x7a
+	.byte 0xf0
+; ----- fixed programs uploaded by the effect-slot layer (all streams: DSP_BytecodeInterpreter_Loop grammar) -----
+; EFF_WriteHeader(slot) uploads this with DSP_WriteGlobalConfig(0, ..) -- ONLY when
+; EFF_SlotToChip_Table[slot] == 0 (slots 0/1, IC311).
+; 1 instruction: op3(305); 0xf0 end.
+EFF_Header_Program:
+	.byte 0x31, 0x31, 0x01, 0x00, 0x00, 0x00, 0x92, 0x20
+	.byte 0x12, 0x0d, 0x0c, 0x0a, 0x0e, 0x00, 0x00, 0x00
+	.byte 0x84, 0x20, 0x26, 0x80, 0x00, 0x12, 0x2f, 0xf1
+	.byte 0xce, 0x02, 0x04, 0x20, 0x21, 0xce, 0x02, 0x02
+	.byte 0xa0, 0x04, 0x48, 0x04, 0x00, 0xa0, 0x04, 0x19
+	.byte 0x00, 0x90, 0xa0, 0x11, 0xc8, 0x00, 0x84, 0x20
+	.byte 0x11, 0xc0, 0x00, 0x12, 0x2f, 0xf1, 0xd5, 0x02
+	.byte 0x82, 0xa0, 0x14, 0x17, 0x04, 0x00, 0x20, 0x14
+	.byte 0x47, 0x08, 0x80, 0x12, 0x02, 0xd5, 0x02, 0x82
+	.byte 0x20, 0x00, 0x00, 0x04, 0x00, 0xa0, 0x00, 0x00
+	.byte 0x0c, 0x0a, 0x29, 0x28, 0x20, 0x01, 0x92, 0xa0
+	.byte 0x04, 0x55, 0x02, 0x92, 0xa0, 0x04, 0x55, 0x01
+	.byte 0x82, 0xa0, 0x04, 0x15, 0x05, 0x12, 0x20, 0x04
+	.byte 0x4d, 0x00, 0x00, 0xa0, 0x06, 0x4d, 0x04, 0x10
+	.byte 0xa0, 0x04, 0x0e, 0x0c, 0x04, 0x31, 0x28, 0x20
+	.byte 0x06, 0x92, 0xa0, 0x04, 0x15, 0x06, 0x92, 0x20
+	.byte 0x04, 0x15, 0x00, 0x00, 0x20, 0x02, 0xd9, 0x08
+	.byte 0x80, 0x12, 0x04, 0x0b, 0x00, 0x12, 0x20, 0x16
+	.byte 0x55, 0x05, 0x04, 0x20, 0x01, 0xd5, 0x0c, 0x42
+	.byte 0x45, 0x78, 0x20, 0x00, 0x9a, 0xa0, 0x02, 0x00
+	.byte 0x0c, 0x0a, 0x4b, 0x18, 0x20, 0x00, 0x00, 0xaf
+	.byte 0xf2, 0x07, 0x04, 0x12, 0xa0, 0x02, 0x00, 0x00
+	.byte 0x00, 0xaf, 0xf4, 0x07, 0x00, 0x12, 0xa0, 0x01
+	.byte 0xc0, 0x04, 0x00, 0xa0, 0x00, 0x00, 0x00, 0x92
+	.byte 0xa0, 0x11, 0xc0, 0x08, 0x09, 0x00, 0x08, 0x39
+	.byte 0x04, 0x10, 0xaf, 0xf6, 0x47, 0x0c, 0x4a, 0x1c
+	.byte 0x08, 0x20, 0x04, 0x00, 0xa0, 0x02, 0x1a, 0x08
+	.byte 0x01, 0x07, 0x08, 0x21, 0x08, 0x01, 0x06, 0xc8
+	.byte 0x27, 0x08, 0x01, 0x02, 0x58, 0x25, 0x00, 0x10
+	.byte 0xa0, 0x02, 0x0c, 0x08, 0x00, 0x16, 0x00, 0x0b
+	.byte 0x08, 0x00, 0x80, 0xc0, 0x00, 0x0c, 0x64, 0x5a
+	.byte 0x20, 0x00, 0x04, 0x00, 0x10, 0xe0, 0x00, 0x08
+	.byte 0x01, 0x05, 0x08, 0x21, 0x08, 0x01, 0x06, 0x48
+	.byte 0x27, 0x08, 0x01, 0x02, 0x58, 0x25, 0x00, 0x10
+	.byte 0x9d, 0x02, 0x0c, 0x08, 0x00, 0x16, 0x00, 0x0b
+	.byte 0x00, 0x00, 0x20, 0x10, 0x07, 0x0c, 0x64, 0x6a
+	.byte 0x20, 0x07, 0x00, 0x00, 0x20, 0x10, 0x00, 0x00
+	.byte 0x00, 0x18, 0xa0, 0x07, 0x04, 0x00, 0x10, 0xf0
+	.byte 0x07
+	.byte 0xf0
+; EFF_Disconnect(slot, mode) uploads EFF_Disconnect_Program_PtrTable[..] to chip
+; EFF_SlotToChip_Table[slot] with DSP_WriteGlobalConfig.  Five programs, one per slot.
+; Read by EFF_Disconnect as EFF_Disconnect_Program_PtrTable entry 0 (slot 0, mode 0).
+; 1 instruction: ope(10); 0xf0 end.
+EFF_Disconnect_Program_Slot0:
 	.byte 0xe0, 0x0a, 0x01, 0x00, 0x40, 0x0c, 0x40, 0x54
-	.byte 0x04, 0x45, 0xf0, 0xe0, 0x0a, 0x01, 0x00, 0x47
-	.byte 0x0c, 0x40, 0x64, 0x04, 0x46, 0xf0, 0xe0, 0x09
-	.byte 0x30, 0x05, 0x1b, 0xd0, 0x03, 0xb1, 0x6a, 0xd0
-	.byte 0x02, 0xf0, 0xe0, 0x09, 0x30, 0x05, 0x1f, 0xd0
-	.byte 0x03, 0xcd, 0x42, 0xd0, 0x02, 0xf0, 0xe0, 0x09
-	.byte 0x30, 0x05, 0x1d, 0xd0, 0x03, 0xf1, 0x56, 0xd0
-	.byte 0x02, 0xf0, 0xe0, 0x0a, 0x01, 0x00, 0x40, 0x0c
-	.byte 0x40, 0xa8, 0x04, 0x45, 0xf0, 0xe0, 0x0a, 0x01
-	.byte 0x00, 0x47, 0x0c, 0x41, 0x90, 0x04, 0x46, 0xf0
+	.byte 0x04, 0x45
+	.byte 0xf0
+; Read by EFF_Disconnect as EFF_Disconnect_Program_PtrTable entry 1 (slot 1, mode 0).
+; 1 instruction: ope(10); 0xf0 end.
+EFF_Disconnect_Program_Slot1:
+	.byte 0xe0, 0x0a, 0x01, 0x00, 0x47, 0x0c, 0x40, 0x64
+	.byte 0x04, 0x46
+	.byte 0xf0
+; Read by EFF_Disconnect as EFF_Disconnect_Program_PtrTable entry 2 (slot 2, mode 0).
+; 2 instructions: ope(9) opd(2); 0xf0 end.
+EFF_Disconnect_Program_Slot2:
+	.byte 0xe0, 0x09, 0x30, 0x05, 0x1b, 0xd0, 0x03, 0xb1
+	.byte 0x6a
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Read by EFF_Disconnect as EFF_Disconnect_Program_PtrTable entry 3 (slot 3, mode 0).
+; 2 instructions: ope(9) opd(2); 0xf0 end.
+EFF_Disconnect_Program_Slot3:
+	.byte 0xe0, 0x09, 0x30, 0x05, 0x1f, 0xd0, 0x03, 0xcd
+	.byte 0x42
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Read by EFF_Disconnect as EFF_Disconnect_Program_PtrTable entry 4 (slot 4, mode 0).
+; 2 instructions: ope(9) opd(2); 0xf0 end.
+EFF_Disconnect_Program_Slot4:
+	.byte 0xe0, 0x09, 0x30, 0x05, 0x1d, 0xd0, 0x03, 0xf1
+	.byte 0x56
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; EFF_Link(slot, mode): same shape as EFF_Disconnect through EFF_Link_Program_PtrTable.
+; Read by EFF_Link as EFF_Link_Program_PtrTable entry 0 (slot 0, mode 0).
+; 1 instruction: ope(10); 0xf0 end.
+EFF_Link_Program_Slot0:
+	.byte 0xe0, 0x0a, 0x01, 0x00, 0x40, 0x0c, 0x40, 0xa8
+	.byte 0x04, 0x45
+	.byte 0xf0
+; Read by EFF_Link as EFF_Link_Program_PtrTable entry 1 (slot 1, mode 0).
+; 1 instruction: ope(10); 0xf0 end.
+EFF_Link_Program_Slot1:
+	.byte 0xe0, 0x0a, 0x01, 0x00, 0x47, 0x0c, 0x41, 0x90
+	.byte 0x04, 0x46
+	.byte 0xf0
+; Read by EFF_Link as EFF_Link_Program_PtrTable entry 2 (slot 2, mode 0).
+; 2 instructions: ope(9) opd(2); 0xf0 end.
+EFF_Link_Program_Slot2:
 	.byte 0xe0, 0x09, 0x30, 0x05, 0x1b, 0xd0, 0x00, 0x71
-	.byte 0x6a, 0xd0, 0x02, 0xf0, 0xe0, 0x09, 0x30, 0x05
-	.byte 0x1f, 0xd0, 0x02, 0x61, 0x42, 0xd0, 0x02, 0xf0
+	.byte 0x6a
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Read by EFF_Link as EFF_Link_Program_PtrTable entry 3 (slot 3, mode 0).
+; 2 instructions: ope(9) opd(2); 0xf0 end.
+EFF_Link_Program_Slot3:
+	.byte 0xe0, 0x09, 0x30, 0x05, 0x1f, 0xd0, 0x02, 0x61
+	.byte 0x42
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Read by EFF_Link as EFF_Link_Program_PtrTable entry 4 (slot 4, mode 0).
+; 2 instructions: ope(9) opd(2); 0xf0 end.
+EFF_Link_Program_Slot4:
 	.byte 0xe0, 0x09, 0x30, 0x05, 0x1d, 0xd0, 0x01, 0xe1
-	.byte 0x56, 0xd0, 0x02, 0xf0, 0x30, 0x78, 0x01, 0x00
-	.byte 0x3c, 0x00, 0x92, 0x18, 0xd1, 0x5b, 0x00, 0x12
-	.byte 0x18, 0xd0, 0x5b, 0x08, 0x01, 0x02, 0x68, 0x25
-	.byte 0x02, 0xa7, 0x90, 0x51, 0xc3, 0x00, 0x11, 0x90
-	.byte 0xe4, 0x45, 0x02, 0x00, 0x18, 0xf1, 0xc1, 0x00
-	.byte 0x00, 0x18, 0xc1, 0x07, 0x09, 0x80, 0x52, 0x04
-	.byte 0x02, 0x00, 0x92, 0x18, 0xc1, 0x9b, 0x08, 0x01
-	.byte 0x09, 0x08, 0x21, 0x02, 0xa6, 0x18, 0x50, 0xc7
-	.byte 0x00, 0x11, 0x90, 0xf4, 0x46, 0x00, 0x00, 0x10
-	.byte 0x60, 0x87, 0x0e, 0x30, 0xc0, 0x04, 0x04, 0x0c
-	.byte 0x16, 0x9a, 0xb0, 0x00, 0x08, 0x2e, 0x80, 0xf0
-	.byte 0x00, 0x0c, 0x00, 0x98, 0x40, 0x00, 0x08, 0x59
-	.byte 0x08, 0x68, 0x22, 0x0a, 0x3c, 0xd9, 0xf2, 0x87
-	.byte 0x00, 0x12, 0x2f, 0xf1, 0xce, 0x01, 0x04, 0x20
-	.byte 0x01, 0xce, 0x01, 0x02, 0x20, 0x00, 0x00, 0x0c
-	.byte 0x00, 0xa4, 0x74, 0x07, 0x40, 0x03, 0x10, 0x40
-	.byte 0x03, 0x10, 0x40, 0x03, 0x0f, 0xf0, 0x00, 0x19
-	.byte 0x01, 0x01, 0x60, 0x00, 0x00, 0x10, 0x60, 0x00
-	.byte 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x18
-	.byte 0x60, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x40
-	.byte 0x03, 0x03, 0x10, 0x0a, 0x01, 0x01, 0x60, 0x08
-	.byte 0x01, 0x05, 0x08, 0x21, 0x20, 0x5f, 0x02, 0x01
-	.byte 0x61, 0x00, 0x80, 0x00, 0x00, 0x84, 0x00, 0x00
-	.byte 0x88, 0x00, 0x00, 0x8c, 0x00, 0x00, 0x90, 0x00
-	.byte 0x00, 0x94, 0x00, 0x00, 0x98, 0x00, 0x00, 0x9c
-	.byte 0x00, 0x00, 0xa0, 0x00, 0x00, 0xa4, 0x00, 0x00
-	.byte 0xa8, 0x00, 0x00, 0xac, 0x00, 0x00, 0xb0, 0x00
-	.byte 0x00, 0xb4, 0x00, 0x00, 0xb8, 0x00, 0x00, 0xbc
-	.byte 0x00, 0x00, 0xc0, 0x00, 0x00, 0xc4, 0x00, 0x00
-	.byte 0xc8, 0x00, 0x00, 0xcc, 0x00, 0x00, 0xd0, 0x00
-	.byte 0x00, 0xd4, 0x00, 0x00, 0xd8, 0x00, 0x00, 0xdc
-	.byte 0x00, 0x00, 0xe0, 0x00, 0x00, 0xe4, 0x00, 0x00
-	.byte 0xe8, 0x00, 0x00, 0xec, 0x00, 0x00, 0xf0, 0x00
-	.byte 0x00, 0xf4, 0x00, 0x40, 0x03, 0x03, 0x10, 0x0a
-	.byte 0x01, 0x01, 0x60, 0x08, 0x01, 0x06, 0xe8, 0x21
+	.byte 0x56
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; DSP_AlgorithmChange uploads this first, to chip 0 (IZ = 0), before EFF_LoadConfigs_ForChannel.
+; 4 instructions: op3(120) op4(3) op4(3) op4(3); 0xf0 end.
+DSP_AlgoChange_Program:
+	.byte 0x30, 0x78, 0x01, 0x00, 0x3c, 0x00, 0x92, 0x18
+	.byte 0xd1, 0x5b, 0x00, 0x12, 0x18, 0xd0, 0x5b, 0x08
+	.byte 0x01, 0x02, 0x68, 0x25, 0x02, 0xa7, 0x90, 0x51
+	.byte 0xc3, 0x00, 0x11, 0x90, 0xe4, 0x45, 0x02, 0x00
+	.byte 0x18, 0xf1, 0xc1, 0x00, 0x00, 0x18, 0xc1, 0x07
+	.byte 0x09, 0x80, 0x52, 0x04, 0x02, 0x00, 0x92, 0x18
+	.byte 0xc1, 0x9b, 0x08, 0x01, 0x09, 0x08, 0x21, 0x02
+	.byte 0xa6, 0x18, 0x50, 0xc7, 0x00, 0x11, 0x90, 0xf4
+	.byte 0x46, 0x00, 0x00, 0x10, 0x60, 0x87, 0x0e, 0x30
+	.byte 0xc0, 0x04, 0x04, 0x0c, 0x16, 0x9a, 0xb0, 0x00
+	.byte 0x08, 0x2e, 0x80, 0xf0, 0x00, 0x0c, 0x00, 0x98
+	.byte 0x40, 0x00, 0x08, 0x59, 0x08, 0x68, 0x22, 0x0a
+	.byte 0x3c, 0xd9, 0xf2, 0x87, 0x00, 0x12, 0x2f, 0xf1
+	.byte 0xce, 0x01, 0x04, 0x20, 0x01, 0xce, 0x01, 0x02
+	.byte 0x20, 0x00, 0x00, 0x0c, 0x00, 0xa4, 0x74, 0x07
+	.byte 0x40, 0x03, 0x10
+	.byte 0x40, 0x03, 0x10
+	.byte 0x40, 0x03, 0x0f
+	.byte 0xf0
+; Resident microcode, EFF_LoadConfigs_ForChannel upload #1: chip 0 (IC311).
+; 11 instructions: op0(25) op4(3) op1(10) op2(95) op4(3) op1(10) op2(95) op4(3) op1(10) op2(5) op4(3); 0xf0 end.
+DSP1_BootProgram:
+	.byte 0x00, 0x19, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
+	.byte 0x60, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
+	.byte 0x00, 0x18, 0x60, 0x00, 0x0a, 0x00, 0x00, 0x00
+	.byte 0x15
+	.byte 0x40, 0x03, 0x03
+	.byte 0x10, 0x0a, 0x01, 0x01, 0x60, 0x08, 0x01, 0x05
+	.byte 0x08, 0x21
+	.byte 0x20, 0x5f, 0x02, 0x01, 0x61, 0x00, 0x80, 0x00
+	.byte 0x00, 0x84, 0x00, 0x00, 0x88, 0x00, 0x00, 0x8c
+	.byte 0x00, 0x00, 0x90, 0x00, 0x00, 0x94, 0x00, 0x00
+	.byte 0x98, 0x00, 0x00, 0x9c, 0x00, 0x00, 0xa0, 0x00
+	.byte 0x00, 0xa4, 0x00, 0x00, 0xa8, 0x00, 0x00, 0xac
+	.byte 0x00, 0x00, 0xb0, 0x00, 0x00, 0xb4, 0x00, 0x00
+	.byte 0xb8, 0x00, 0x00, 0xbc, 0x00, 0x00, 0xc0, 0x00
+	.byte 0x00, 0xc4, 0x00, 0x00, 0xc8, 0x00, 0x00, 0xcc
+	.byte 0x00, 0x00, 0xd0, 0x00, 0x00, 0xd4, 0x00, 0x00
+	.byte 0xd8, 0x00, 0x00, 0xdc, 0x00, 0x00, 0xe0, 0x00
+	.byte 0x00, 0xe4, 0x00, 0x00, 0xe8, 0x00, 0x00, 0xec
+	.byte 0x00, 0x00, 0xf0, 0x00, 0x00, 0xf4, 0x00
+	.byte 0x40, 0x03, 0x03
+	.byte 0x10, 0x0a, 0x01, 0x01, 0x60, 0x08, 0x01, 0x06
+	.byte 0xe8, 0x21
 	.byte 0x20, 0x5f, 0x02, 0x01, 0x61, 0x00, 0xf8, 0x00
 	.byte 0x00, 0xfc, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04
 	.byte 0xbe, 0x00, 0x09, 0x7c, 0x00, 0x0e, 0x3a, 0x00
@@ -10865,422 +11891,816 @@ DSP_EffA_Param_Values:
 	.byte 0x9e, 0x00, 0x55, 0x5c, 0x00, 0x5a, 0x1a, 0x00
 	.byte 0x5e, 0xd8, 0x00, 0x63, 0x96, 0x00, 0x68, 0x54
 	.byte 0x00, 0x6d, 0x12, 0x00, 0x71, 0xd0, 0x00, 0x76
-	.byte 0x8e, 0x00, 0x7b, 0x4c, 0x00, 0x7f, 0xff, 0x40
-	.byte 0x03, 0x03, 0x10, 0x0a, 0x01, 0x01, 0x60, 0x08
-	.byte 0x01, 0x08, 0xc8, 0x21, 0x20, 0x05, 0x02, 0x01
-	.byte 0x61, 0x40, 0x03, 0x03, 0xf0, 0xe0, 0x06, 0x30
-	.byte 0x03, 0x22, 0x99, 0xd0, 0x02, 0xe0, 0xc1, 0x30
-	.byte 0x05, 0x00, 0xe5, 0xe0, 0x00, 0x00, 0xcd, 0xe0
-	.byte 0x0b, 0x80, 0x80, 0x00, 0x01, 0x40, 0xc0, 0x00
-	.byte 0x03, 0x00, 0x00, 0x03, 0x0e, 0x00, 0xe7, 0x75
-	.byte 0xa5, 0x50, 0x80, 0x02, 0x7f, 0x40, 0x80, 0x02
-	.byte 0x7f, 0x7e, 0x80, 0x01, 0xa7, 0x7c, 0x8c, 0x02
-	.byte 0x03, 0x42, 0xa8, 0x01, 0xa3, 0x00, 0xe0, 0x07
-	.byte 0x09, 0x44, 0x80, 0x02, 0x03, 0x40, 0xe0, 0x07
-	.byte 0x0b, 0x40, 0xa8, 0x01, 0xa9, 0x00, 0xe0, 0x07
-	.byte 0x09, 0x76, 0x80, 0x01, 0xa3, 0x40, 0x80, 0x01
-	.byte 0xa9, 0x7c, 0x80, 0x02, 0x7d, 0x40, 0xa3, 0x31
-	.byte 0xa9, 0x44, 0xa9, 0x01, 0xab, 0x7c, 0x80, 0x82
-	.byte 0x03, 0x80, 0x80, 0x42, 0x03, 0x80, 0xa1, 0x02
-	.byte 0x01, 0x00, 0xe4, 0x48, 0x00, 0x05, 0xa3, 0x02
-	.byte 0x01, 0x44, 0x80, 0xb0, 0x03, 0x40, 0xd0, 0x03
-	.byte 0xb1, 0x6a, 0xe4, 0xe0, 0x00, 0x02, 0xd0, 0x03
-	.byte 0xf1, 0x56, 0x80, 0xe1, 0x01, 0x80, 0xd0, 0x03
-	.byte 0xcd, 0x42, 0x80, 0x01, 0xa3, 0x40, 0x80, 0x01
-	.byte 0xa9, 0x7c, 0x80, 0x02, 0x7d, 0x44, 0xa3, 0x01
-	.byte 0xa3, 0x40, 0xa9, 0x01, 0xab, 0x20, 0x80, 0x82
-	.byte 0x03, 0x80, 0x80, 0x42, 0x03, 0x80, 0xa1, 0x02
-	.byte 0x01, 0x00, 0x00, 0x4b, 0x0f, 0xbe, 0xe4, 0xe0
-	.byte 0x00, 0x05, 0xa3, 0x02, 0x01, 0x40, 0x00, 0xb3
-	.byte 0x0f, 0x40, 0xe4, 0xe0, 0x00, 0x02, 0xc0, 0x00
-	.byte 0x01, 0x78, 0x00, 0xe3, 0x0f, 0xc1, 0xd0, 0x02
-	.byte 0xf0, 0xe0, 0x13, 0x30, 0x00, 0xd0, 0x40, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x10, 0x00
-	.byte 0x01, 0x00, 0x40, 0x00, 0xd0, 0x02, 0xf0, 0xe0
-	.byte 0x95, 0x30, 0x0d, 0xd8, 0x80, 0x02, 0x81, 0x50
-	.byte 0xe2, 0xe0, 0x00, 0x0f, 0x80, 0x01, 0xb1, 0x52
-	.byte 0xe6, 0x3e, 0x03, 0x00, 0x80, 0x02, 0x02, 0x70
-	.byte 0x80, 0x02, 0x03, 0x40, 0x80, 0x02, 0x03, 0x40
-	.byte 0x80, 0x02, 0x03, 0x40, 0x80, 0x02, 0x03, 0x40
-	.byte 0x80, 0x02, 0x03, 0x40, 0x80, 0x02, 0x03, 0x40
-	.byte 0x90, 0x02, 0x83, 0x40, 0x80, 0x02, 0x01, 0x60
-	.byte 0x90, 0x00, 0x03, 0x7e, 0x80, 0x01, 0x9f, 0x7a
-	.byte 0x80, 0x01, 0xa3, 0x40, 0x80, 0x02, 0x01, 0x50
-	.byte 0xa1, 0x03, 0x0f, 0x70, 0x80, 0x92, 0x81, 0x42
-	.byte 0xe2, 0xe0, 0x00, 0x0f, 0xa0, 0x91, 0xd1, 0x00
-	.byte 0xe6, 0xfe, 0x41, 0x02, 0x80, 0x92, 0x5e, 0xa4
-	.byte 0x80, 0x92, 0x02, 0xa6, 0x80, 0x92, 0x02, 0xaa
-	.byte 0x80, 0x92, 0x3e, 0xa8, 0x80, 0x92, 0x27, 0x7a
-	.byte 0x80, 0x92, 0x01, 0x7c, 0x80, 0x92, 0x01, 0x4a
-	.byte 0x90, 0x02, 0x83, 0x00, 0x80, 0x02, 0x01, 0x04
-	.byte 0x90, 0x01, 0xa3, 0x44, 0xe2, 0xe0, 0x00, 0x1e
-	.byte 0x80, 0x02, 0x03, 0x00, 0x90, 0x02, 0x02, 0xa0
-	.byte 0x90, 0x01, 0x01, 0x40, 0xd0, 0x02, 0xe0, 0x06
-	.byte 0x30, 0x03, 0x22, 0x9a, 0xd0, 0x02, 0xf0, 0xe0
-	.byte 0x41, 0x30, 0x00, 0xd8, 0x00, 0x00, 0x02, 0xa8
-	.byte 0x05, 0x50, 0x07, 0xf8, 0x0a, 0xa0, 0x0d, 0x48
-	.byte 0x0f, 0xf0, 0x12, 0x98, 0x15, 0x40, 0x17, 0xe8
-	.byte 0x1a, 0x90, 0x1d, 0x38, 0x1f, 0xe0, 0x22, 0x88
-	.byte 0x25, 0x30, 0x27, 0xd8, 0x2a, 0x80, 0x2d, 0x28
-	.byte 0x2f, 0xd0
-	.ascii "2x5 7"
-	.byte 0xc8
-	.byte 0x3a, 0x70, 0x3d, 0x18, 0x3f, 0xc0, 0x42, 0x68
-	.byte 0x45, 0x10, 0x47, 0xb8, 0x4a, 0x60, 0x4d, 0x08
-	.byte 0xd0, 0x02, 0xe0, 0x09, 0x30, 0x00, 0xf6, 0x4f
-	.byte 0xb0, 0x52, 0x58, 0xd0, 0x02, 0xf0, 0xe0, 0x06
-	.byte 0x30, 0x03, 0x22, 0x99, 0xd0, 0x02, 0xe0, 0x69
-	.byte 0x30, 0x05, 0x00, 0xe5, 0xe0, 0x00, 0x00, 0xcd
-	.byte 0xe0, 0x0b, 0x80, 0x00, 0xe3, 0x0f, 0x80, 0xc0
-	.byte 0x00, 0x03, 0x40, 0x00, 0xe3, 0x0f, 0x80, 0xe4
-	.byte 0xe0, 0x00, 0x02, 0xe8, 0xe0, 0x00, 0x00, 0xef
-	.byte 0xe0, 0x0e, 0x80, 0x80, 0x00, 0x00, 0xb7, 0xef
-	.byte 0xe0, 0x0e, 0x00, 0x80, 0x00, 0x00, 0xc1, 0x80
-	.byte 0xe2, 0x03, 0x80, 0x80, 0xe2, 0x03, 0x80, 0xa1
-	.byte 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f, 0x02, 0xa1
-	.byte 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f, 0x02, 0xa1
-	.byte 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f, 0x02, 0xa1
-	.byte 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f, 0x02, 0xa1
-	.byte 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f, 0x00, 0xc0
-	.byte 0xe0, 0x01, 0x80, 0xa0, 0x00, 0x01, 0x40, 0xd0
-	.byte 0x02, 0xe0, 0x06, 0x30, 0x03, 0x22, 0x90, 0xd0
-	.byte 0x02, 0xf0, 0xe0, 0x0f, 0x30, 0x00, 0x00, 0x00
-	.byte 0xc0, 0x7f, 0x40, 0x00, 0x18, 0x7f, 0xe8, 0x00
-	.byte 0x00, 0xd0, 0x02, 0xf0, 0xe0, 0x08, 0x04, 0xfb
-	.byte 0xda, 0x3f, 0xa0, 0x1a, 0xe0, 0x05, 0x09, 0x00
-	.byte 0x3c, 0xe0, 0x06, 0x0c, 0x00, 0x55, 0x55, 0xf0
-	.byte 0x00, 0xe0, 0x08, 0x04, 0xfb, 0xda, 0x3f, 0xa0
-	.byte 0x1a, 0xe0, 0x05, 0x09, 0x00, 0x3c, 0xe0, 0x06
-	.byte 0x0c, 0x00, 0x55, 0x55, 0xf0, 0x00, 0xe0, 0x08
-	.byte 0x04, 0xfb, 0xda, 0x3f, 0xa0, 0x1a, 0xe0, 0x05
-	.byte 0x09, 0x00, 0x3c, 0xe0, 0x06, 0x0c, 0x00, 0x55
-	.byte 0x55, 0xf0, 0x00, 0xe0, 0x08, 0x04, 0xfb, 0xda
-	.byte 0x3f, 0xa0, 0x1a, 0xe0, 0x05, 0x09, 0x00, 0x3c
-	.byte 0xe0, 0x06, 0x0c, 0x00, 0x55, 0x55, 0xf0, 0x00
+	.byte 0x8e, 0x00, 0x7b, 0x4c, 0x00, 0x7f, 0xff
+	.byte 0x40, 0x03, 0x03
+	.byte 0x10, 0x0a, 0x01, 0x01, 0x60, 0x08, 0x01, 0x08
+	.byte 0xc8, 0x21
+	.byte 0x20, 0x05, 0x02, 0x01, 0x61
+	.byte 0x40, 0x03, 0x03
+	.byte 0xf0
+; EFF_LoadConfigs_ForChannel uploads the six chip-1 programs in the order
+; 0x01E996, 0x01EA12, DSP_WaitForDelay(1), 0x01E7C5, 0x01E8A7, 0x01E891, 0x01E947 --
+; not memory order; the StepN suffix is the upload position.
+; Resident microcode for chip 1 (IC310), EFF_LoadConfigs_ForChannel chip-1 upload #3 (after DSP_WaitForDelay(1)).
+; 4 instructions: ope(6) opd(2) ope(193) opd(2); 0xf0 end.
+DSP2_BootProgram_Step3:
+	.byte 0xe0, 0x06, 0x30, 0x03, 0x22, 0x99
+	.byte 0xd0, 0x02
+	.byte 0xe0, 0xc1, 0x30, 0x05, 0x00, 0xe5, 0xe0, 0x00
+	.byte 0x00, 0xcd, 0xe0, 0x0b, 0x80, 0x80, 0x00, 0x01
+	.byte 0x40, 0xc0, 0x00, 0x03, 0x00, 0x00, 0x03, 0x0e
+	.byte 0x00, 0xe7, 0x75, 0xa5, 0x50, 0x80, 0x02, 0x7f
+	.byte 0x40, 0x80, 0x02, 0x7f, 0x7e, 0x80, 0x01, 0xa7
+	.byte 0x7c, 0x8c, 0x02, 0x03, 0x42, 0xa8, 0x01, 0xa3
+	.byte 0x00, 0xe0, 0x07, 0x09, 0x44, 0x80, 0x02, 0x03
+	.byte 0x40, 0xe0, 0x07, 0x0b, 0x40, 0xa8, 0x01, 0xa9
+	.byte 0x00, 0xe0, 0x07, 0x09, 0x76, 0x80, 0x01, 0xa3
+	.byte 0x40, 0x80, 0x01, 0xa9, 0x7c, 0x80, 0x02, 0x7d
+	.byte 0x40, 0xa3, 0x31, 0xa9, 0x44, 0xa9, 0x01, 0xab
+	.byte 0x7c, 0x80, 0x82, 0x03, 0x80, 0x80, 0x42, 0x03
+	.byte 0x80, 0xa1, 0x02, 0x01, 0x00, 0xe4, 0x48, 0x00
+	.byte 0x05, 0xa3, 0x02, 0x01, 0x44, 0x80, 0xb0, 0x03
+	.byte 0x40, 0xd0, 0x03, 0xb1, 0x6a, 0xe4, 0xe0, 0x00
+	.byte 0x02, 0xd0, 0x03, 0xf1, 0x56, 0x80, 0xe1, 0x01
+	.byte 0x80, 0xd0, 0x03, 0xcd, 0x42, 0x80, 0x01, 0xa3
+	.byte 0x40, 0x80, 0x01, 0xa9, 0x7c, 0x80, 0x02, 0x7d
+	.byte 0x44, 0xa3, 0x01, 0xa3, 0x40, 0xa9, 0x01, 0xab
+	.byte 0x20, 0x80, 0x82, 0x03, 0x80, 0x80, 0x42, 0x03
+	.byte 0x80, 0xa1, 0x02, 0x01, 0x00, 0x00, 0x4b, 0x0f
+	.byte 0xbe, 0xe4, 0xe0, 0x00, 0x05, 0xa3, 0x02, 0x01
+	.byte 0x40, 0x00, 0xb3, 0x0f, 0x40, 0xe4, 0xe0, 0x00
+	.byte 0x02, 0xc0, 0x00, 0x01, 0x78, 0x00, 0xe3, 0x0f
+	.byte 0xc1
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Resident microcode for chip 1 (IC310), EFF_LoadConfigs_ForChannel chip-1 upload #5.
+; 2 instructions: ope(19) opd(2); 0xf0 end.
+DSP2_BootProgram_Step5:
+	.byte 0xe0, 0x13, 0x30, 0x00, 0xd0, 0x40, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x40, 0x00, 0x10, 0x00, 0x01
+	.byte 0x00, 0x40, 0x00
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Resident microcode for chip 1 (IC310), EFF_LoadConfigs_ForChannel chip-1 upload #4.
+; 4 instructions: ope(149) opd(2) ope(6) opd(2); 0xf0 end.
+DSP2_BootProgram_Step4:
+	.byte 0xe0, 0x95, 0x30, 0x0d, 0xd8, 0x80, 0x02, 0x81
+	.byte 0x50, 0xe2, 0xe0, 0x00, 0x0f, 0x80, 0x01, 0xb1
+	.byte 0x52, 0xe6, 0x3e, 0x03, 0x00, 0x80, 0x02, 0x02
+	.byte 0x70, 0x80, 0x02, 0x03, 0x40, 0x80, 0x02, 0x03
+	.byte 0x40, 0x80, 0x02, 0x03, 0x40, 0x80, 0x02, 0x03
+	.byte 0x40, 0x80, 0x02, 0x03, 0x40, 0x80, 0x02, 0x03
+	.byte 0x40, 0x90, 0x02, 0x83, 0x40, 0x80, 0x02, 0x01
+	.byte 0x60, 0x90, 0x00, 0x03, 0x7e, 0x80, 0x01, 0x9f
+	.byte 0x7a, 0x80, 0x01, 0xa3, 0x40, 0x80, 0x02, 0x01
+	.byte 0x50, 0xa1, 0x03, 0x0f, 0x70, 0x80, 0x92, 0x81
+	.byte 0x42, 0xe2, 0xe0, 0x00, 0x0f, 0xa0, 0x91, 0xd1
+	.byte 0x00, 0xe6, 0xfe, 0x41, 0x02, 0x80, 0x92, 0x5e
+	.byte 0xa4, 0x80, 0x92, 0x02, 0xa6, 0x80, 0x92, 0x02
+	.byte 0xaa, 0x80, 0x92, 0x3e, 0xa8, 0x80, 0x92, 0x27
+	.byte 0x7a, 0x80, 0x92, 0x01, 0x7c, 0x80, 0x92, 0x01
+	.byte 0x4a, 0x90, 0x02, 0x83, 0x00, 0x80, 0x02, 0x01
+	.byte 0x04, 0x90, 0x01, 0xa3, 0x44, 0xe2, 0xe0, 0x00
+	.byte 0x1e, 0x80, 0x02, 0x03, 0x00, 0x90, 0x02, 0x02
+	.byte 0xa0, 0x90, 0x01, 0x01, 0x40
+	.byte 0xd0, 0x02
+	.byte 0xe0, 0x06, 0x30, 0x03, 0x22, 0x9a
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Resident microcode for chip 1 (IC310), EFF_LoadConfigs_ForChannel chip-1 upload #6.
+; 4 instructions: ope(65) opd(2) ope(9) opd(2); 0xf0 end.
+DSP2_BootProgram_Step6:
+	.byte 0xe0, 0x41, 0x30, 0x00, 0xd8, 0x00, 0x00, 0x02
+	.byte 0xa8, 0x05, 0x50, 0x07, 0xf8, 0x0a, 0xa0, 0x0d
+	.byte 0x48, 0x0f, 0xf0, 0x12, 0x98, 0x15, 0x40, 0x17
+	.byte 0xe8, 0x1a, 0x90, 0x1d, 0x38, 0x1f, 0xe0, 0x22
+	.byte 0x88, 0x25, 0x30, 0x27, 0xd8, 0x2a, 0x80, 0x2d
+	.byte 0x28, 0x2f, 0xd0, 0x32, 0x78, 0x35, 0x20, 0x37
+	.byte 0xc8, 0x3a, 0x70, 0x3d, 0x18, 0x3f, 0xc0, 0x42
+	.byte 0x68, 0x45, 0x10, 0x47, 0xb8, 0x4a, 0x60, 0x4d
+	.byte 0x08
+	.byte 0xd0, 0x02
+	.byte 0xe0, 0x09, 0x30, 0x00, 0xf6, 0x4f, 0xb0, 0x52
+	.byte 0x58
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Resident microcode for chip 1 (IC310), EFF_LoadConfigs_ForChannel chip-1 upload #1.
+; 6 instructions: ope(6) opd(2) ope(105) opd(2) ope(6) opd(2); 0xf0 end.
+DSP2_BootProgram_Step1:
+	.byte 0xe0, 0x06, 0x30, 0x03, 0x22, 0x99
+	.byte 0xd0, 0x02
+	.byte 0xe0, 0x69, 0x30, 0x05, 0x00, 0xe5, 0xe0, 0x00
+	.byte 0x00, 0xcd, 0xe0, 0x0b, 0x80, 0x00, 0xe3, 0x0f
+	.byte 0x80, 0xc0, 0x00, 0x03, 0x40, 0x00, 0xe3, 0x0f
+	.byte 0x80, 0xe4, 0xe0, 0x00, 0x02, 0xe8, 0xe0, 0x00
+	.byte 0x00, 0xef, 0xe0, 0x0e, 0x80, 0x80, 0x00, 0x00
+	.byte 0xb7, 0xef, 0xe0, 0x0e, 0x00, 0x80, 0x00, 0x00
+	.byte 0xc1, 0x80, 0xe2, 0x03, 0x80, 0x80, 0xe2, 0x03
+	.byte 0x80, 0xa1, 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f
+	.byte 0x02, 0xa1, 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f
+	.byte 0x02, 0xa1, 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f
+	.byte 0x02, 0xa1, 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f
+	.byte 0x02, 0xa1, 0xe2, 0x03, 0x80, 0x00, 0x93, 0x0f
+	.byte 0x00, 0xc0, 0xe0, 0x01, 0x80, 0xa0, 0x00, 0x01
+	.byte 0x40
+	.byte 0xd0, 0x02
+	.byte 0xe0, 0x06, 0x30, 0x03, 0x22, 0x90
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Resident microcode for chip 1 (IC310), EFF_LoadConfigs_ForChannel chip-1 upload #2.
+; 2 instructions: ope(15) opd(2); 0xf0 end.
+DSP2_BootProgram_Step2:
+	.byte 0xe0, 0x0f, 0x30, 0x00, 0x00, 0x00, 0xc0, 0x7f
+	.byte 0x40, 0x00, 0x18, 0x7f, 0xe8, 0x00, 0x00
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; DSP_Mute_WithDebug(chip) uploads DSP_Mute_Program_PtrTable[chip] with DSP_WriteGlobalConfig.
+; Four entries although only chips 0 and 1 exist.  Each program is followed by ONE 0x00 byte
+; that the interpreter never reads (it stops on the peeked 0xf0).
+; Read by DSP_Mute_WithDebug as DSP_Mute_Program_PtrTable entry 0 (chip 0).
+; 3 instructions: ope(8) ope(5) ope(6); 0xf0 end.
+DSP_Mute_Program_Chip0:
+	.byte 0xe0, 0x08, 0x04, 0xfb, 0xda, 0x3f, 0xa0, 0x1a
+	.byte 0xe0, 0x05, 0x09, 0x00, 0x3c
+	.byte 0xe0, 0x06, 0x0c, 0x00, 0x55, 0x55
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; Read by DSP_Mute_WithDebug as DSP_Mute_Program_PtrTable entry 1 (chip 1).
+; 3 instructions: ope(8) ope(5) ope(6); 0xf0 end.
+DSP_Mute_Program_Chip1:
+	.byte 0xe0, 0x08, 0x04, 0xfb, 0xda, 0x3f, 0xa0, 0x1a
+	.byte 0xe0, 0x05, 0x09, 0x00, 0x3c
+	.byte 0xe0, 0x06, 0x0c, 0x00, 0x55, 0x55
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; Read by DSP_Mute_WithDebug as DSP_Mute_Program_PtrTable entry 2 (chip 2).
+; 3 instructions: ope(8) ope(5) ope(6); 0xf0 end.
+DSP_Mute_Program_Chip2:
+	.byte 0xe0, 0x08, 0x04, 0xfb, 0xda, 0x3f, 0xa0, 0x1a
+	.byte 0xe0, 0x05, 0x09, 0x00, 0x3c
+	.byte 0xe0, 0x06, 0x0c, 0x00, 0x55, 0x55
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; Read by DSP_Mute_WithDebug as DSP_Mute_Program_PtrTable entry 3 (chip 3).
+; 3 instructions: ope(8) ope(5) ope(6); 0xf0 end.
+DSP_Mute_Program_Chip3:
+	.byte 0xe0, 0x08, 0x04, 0xfb, 0xda, 0x3f, 0xa0, 0x1a
+	.byte 0xe0, 0x05, 0x09, 0x00, 0x3c
+	.byte 0xe0, 0x06, 0x0c, 0x00, 0x55, 0x55
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; DSP_Unmute_WithDebug(chip) -> DSP_Unmute_Program_PtrTable[chip]; same one-byte unread tail.
+; Read by DSP_Unmute_WithDebug as DSP_Unmute_Program_PtrTable entry 0 (chip 0).
+; 2 instructions: ope(8) ope(5); 0xf0 end.
+DSP_Unmute_Program_Chip0:
 	.byte 0xe0, 0x08, 0x04, 0xfb, 0xda, 0x00, 0xa0, 0x1a
-	.byte 0xe0, 0x05, 0x09, 0x00, 0x3c, 0xf0, 0x00, 0xe0
-	.byte 0x08, 0x04, 0xfb, 0xda, 0x00, 0xa0, 0x1a, 0xe0
-	.byte 0x05, 0x09, 0x00, 0x3c, 0xf0, 0x00, 0xe0, 0x08
-	.byte 0x04, 0xfb, 0xda, 0x00, 0xa0, 0x1a, 0xe0, 0x05
-	.byte 0x09, 0x00, 0x3c, 0xf0, 0x00, 0xe0, 0x08, 0x04
-	.byte 0xfb, 0xda, 0x00, 0xa0, 0x1a, 0xe0, 0x05, 0x09
-	.byte 0x00, 0x3c, 0xf0, 0x00, 0x00, 0x0f, 0x01, 0x01
-	.byte 0x60, 0x00, 0x00, 0x10, 0x60, 0x00, 0x0a, 0x00
-	.byte 0x00, 0x00, 0x15, 0x40, 0x03, 0x03, 0xf0, 0x00
+	.byte 0xe0, 0x05, 0x09, 0x00, 0x3c
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; Read by DSP_Unmute_WithDebug as DSP_Unmute_Program_PtrTable entry 1 (chip 1).
+; 2 instructions: ope(8) ope(5); 0xf0 end.
+DSP_Unmute_Program_Chip1:
+	.byte 0xe0, 0x08, 0x04, 0xfb, 0xda, 0x00, 0xa0, 0x1a
+	.byte 0xe0, 0x05, 0x09, 0x00, 0x3c
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; Read by DSP_Unmute_WithDebug as DSP_Unmute_Program_PtrTable entry 2 (chip 2).
+; 2 instructions: ope(8) ope(5); 0xf0 end.
+DSP_Unmute_Program_Chip2:
+	.byte 0xe0, 0x08, 0x04, 0xfb, 0xda, 0x00, 0xa0, 0x1a
+	.byte 0xe0, 0x05, 0x09, 0x00, 0x3c
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; Read by DSP_Unmute_WithDebug as DSP_Unmute_Program_PtrTable entry 3 (chip 3).
+; 2 instructions: ope(8) ope(5); 0xf0 end.
+DSP_Unmute_Program_Chip3:
+	.byte 0xe0, 0x08, 0x04, 0xfb, 0xda, 0x00, 0xa0, 0x1a
+	.byte 0xe0, 0x05, 0x09, 0x00, 0x3c
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; EFF_Mute_WithDebug(slot) uploads EFF_Mute_Program_PtrTable[slot] with DSP_WriteEFFConfig.
+; Slots 0/1 (IC311) carry the one-byte unread 0x00 tail; slots 2-4 (IC310) do not.
+; Read by EFF_Mute_WithDebug as EFF_Mute_Program_PtrTable entry 0 (slot 0).
+; 2 instructions: op0(15) op4(3); 0xf0 end.
+EFF_Mute_Program_Slot0:
+	.byte 0x00, 0x0f, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
+	.byte 0x60, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15
+	.byte 0x40, 0x03, 0x03
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; Read by EFF_Mute_WithDebug as EFF_Mute_Program_PtrTable entry 1 (slot 1).
+; 2 instructions: op0(15) op4(3); 0xf0 end.
+EFF_Mute_Program_Slot1:
 	.byte 0x00, 0x0f, 0x01, 0x01, 0x60, 0x00, 0x00, 0x18
-	.byte 0x60, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x40
-	.byte 0x03, 0x03, 0xf0, 0x00, 0xe0, 0x07, 0x30, 0x00
-	.byte 0x3a, 0x00, 0x00, 0xd0, 0x02, 0xf0, 0xe0, 0x07
-	.byte 0x30, 0x00, 0xa1, 0x00, 0x00, 0xd0, 0x02, 0xf0
-	.byte 0xe0, 0x07, 0x30, 0x00, 0x91, 0x00, 0x00, 0xd0
-	.byte 0x02, 0xf0, 0x1d, 0x0c, 0x23, 0xc6, 0x2b, 0x0a
-	.byte 0x8f, 0x47, 0x02, 0x73, 0x5e, 0x23, 0x82, 0x6e
-	.byte 0xda, 0x3a, 0x78, 0x03, 0x04, 0x78, 0xfe, 0x14
-	.byte 0x71, 0xba, 0x50, 0x62, 0xb6, 0x74, 0x4c, 0xf8
-	.byte 0x74, 0x31, 0xfb, 0xa1, 0x13, 0x96, 0xcd, 0xf3
-	.byte 0xdc, 0x39, 0xd4, 0xf5, 0x70, 0xb8, 0xfd, 0x8c
-	.byte 0xa1, 0xdc, 0x7d, 0x91, 0x25, 0xc5, 0x87, 0xfc
-	.byte 0xfb, 0x87, 0x01, 0xeb, 0x8e, 0x45, 0xaf, 0x9d
-	.byte 0x49, 0x8b, 0xb3, 0x07, 0x8b, 0xce, 0x04, 0x5e
-	.byte 0xec, 0x69, 0x32, 0x0c, 0x23, 0xc6, 0x2b, 0x0a
-	.byte 0x8f, 0x47, 0x02, 0x73, 0x5e, 0x23, 0x82, 0x6e
-	.byte 0xda, 0x3a, 0x78, 0x03, 0x04, 0x78, 0xfe, 0x14
-	.byte 0x71, 0xba, 0x50, 0x62, 0xb6, 0x74, 0x4c, 0xf8
-	.byte 0x74, 0x31, 0xfb, 0xa1, 0x13, 0x96, 0xcd, 0x1d
-	.byte 0x00, 0x00, 0x00, 0x15, 0x55, 0x55, 0x2a, 0xaa
-	.byte 0xaa, 0x40, 0x00, 0x00
-	.ascii "UUUj"
-	.byte 0xaa, 0xaa, 0x7f, 0xff, 0xff, 0x6a, 0xaa, 0xaa
-	.asciz "UUU@"
-	.byte 0x00, 0x2a, 0xaa
-	.byte 0xaa, 0x15, 0x55, 0x55, 0x00, 0x00, 0x00, 0xea
-	.byte 0xaa, 0xaa, 0xd5, 0x55, 0x55, 0xc0, 0x00, 0x00
-	.byte 0xaa, 0xaa, 0xaa, 0x95, 0x55, 0x55, 0x80, 0x00
-	.byte 0x00, 0x95, 0x55, 0x55, 0xaa, 0xaa, 0xaa, 0xc0
-	.byte 0x00, 0x00, 0xd5, 0x55, 0x55, 0xea, 0xaa, 0xaa
-	.byte 0x00, 0x00, 0x00, 0x15, 0x55, 0x55, 0x2a, 0xaa
-	.byte 0xaa, 0x40, 0x00, 0x00
-	.ascii "UUUj"
-	.byte 0xaa, 0xaa, 0x7f, 0xff, 0xff, 0x6a, 0xaa, 0xaa
-	.asciz "UUU@"
-	.byte 0x00, 0x2a, 0xaa
-	.byte 0xaa, 0x15, 0x55, 0x55, 0x1d, 0x14, 0x72, 0x25
-	.byte 0x48, 0x7d, 0x93, 0x77, 0x98, 0x57, 0x7f, 0xff
-	.byte 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f
-	.byte 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff
-	.byte 0x7f, 0xff, 0xff, 0x54, 0x2e, 0x88, 0x20, 0xfd
-	.byte 0xfb, 0xeb, 0x8d, 0xda, 0xb7, 0x82, 0x6c, 0x88
-	.byte 0x67, 0xa8, 0x80, 0x00, 0x00, 0x80, 0x00, 0x00
-	.byte 0x80, 0x00, 0x00, 0x80, 0x00, 0x00, 0x80, 0x00
-	.byte 0x00, 0x80, 0x00, 0x00, 0x80, 0x00, 0x00, 0xab
-	.byte 0xd1, 0x77, 0xdf, 0x02, 0x04, 0x14, 0x72, 0x25
-	.byte 0x48, 0x7d, 0x93, 0x77, 0x98, 0x57, 0x7f, 0xff
-	.byte 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f
-	.byte 0xff, 0xff, 0x7f, 0xff, 0xff, 0x7f, 0xff, 0xff
-	.byte 0x7f, 0xff, 0xff, 0x54, 0x2e, 0x88, 0x20, 0xfd
-	.byte 0xfb, 0x1d, 0xc0, 0xa3, 0xd7, 0xc1, 0x25, 0x99
-	.byte 0xc1, 0x66, 0x7b, 0xc1, 0xca, 0xc0, 0xc2, 0x29
-	.byte 0x1f, 0xc3, 0x2c, 0xa5, 0xc3, 0xce, 0xd9, 0xc4
-	.byte 0xb1, 0xee, 0xc6, 0x57, 0xa7, 0xc7, 0x9c, 0x0e
-	.byte 0xc9, 0x82, 0xa9, 0xcb, 0x69, 0x44, 0xce, 0x94
-	.byte 0x46, 0xd2, 0x61, 0x7c, 0xd7, 0x73, 0x18, 0xe2
-	.byte 0x56, 0x04, 0x00, 0x00, 0x00, 0x1d, 0xa9, 0xfb
-	.byte 0x28, 0x8c, 0xe7, 0x2d, 0x9e, 0x83, 0x31, 0x6b
-	.byte 0xb9, 0x34, 0x96, 0xbb
-	.byte 0x36, 0x7d, 0x56, 0x38
-	.byte 0x63, 0xf1, 0x39, 0xa8, 0x58, 0x3b, 0x4e, 0x11
-	.byte 0x3c, 0x31, 0x26, 0x3c
-	.byte 0xd3, 0x5a, 0x3d, 0xd6
-	.byte 0xe0, 0x3e, 0x17, 0xc1, 0x3e, 0x99, 0x84, 0x3e
-	.byte 0xda
-	.ascii "f?\\("
-	.byte 0x1d, 0xc0, 0xa3
-	.byte 0xd7, 0xc4, 0x99, 0x99, 0xc8, 0x8f, 0x5c, 0xcc
-	.byte 0x85, 0x1e, 0xd0, 0x7a, 0xe1, 0xd4, 0x70, 0xa3
-	.byte 0xd8, 0x66, 0x66, 0xdc, 0x5c, 0x28, 0xe0, 0x51
-	.byte 0xeb, 0xe4, 0x47, 0xae, 0xe8, 0x3d, 0x70, 0xec
-	.byte 0x33, 0x33, 0xf0, 0x28, 0xf5, 0xf4, 0x1e, 0xb8
-	.byte 0xf8, 0x14, 0x7a, 0xfc, 0x0a, 0x3d, 0x00, 0x00
-	.byte 0x00, 0x04, 0x00, 0x00, 0x08, 0xaa, 0x64, 0x1c
-	.byte 0x00, 0x00, 0x26, 0xab, 0x36, 0x2d, 0x54, 0xc9
-	.byte 0x32, 0xab, 0x36, 0x35, 0xff, 0x2e, 0x36, 0x7d
-	.byte 0x56, 0x38, 0x63, 0xf1, 0x3a, 0x4a, 0x8c, 0x3b
-	.byte 0x8e, 0xf3, 0x3c, 0xd3, 0x5a, 0x3d, 0x75, 0x8e
-	.byte 0x3e, 0x58, 0xa3, 0x3e, 0xb9, 0xf5, 0x3f, 0x5c
-	.byte 0x28, 0x1d, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7
-	.byte 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3
-	.byte 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0
-	.byte 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7
-	.byte 0xc0, 0xa3, 0xd7, 0xc0, 0xa3, 0xd7, 0xc0, 0xa3
-	.byte 0xd7, 0xc8, 0x3e, 0x42, 0xdb, 0xe2, 0x82, 0xef
-	.byte 0x86, 0xc2, 0x00, 0x00, 0x00, 0x10, 0x79, 0x3d
-	.byte 0x24, 0x1d, 0x7d, 0x37, 0xc1, 0xbd, 0x3f, 0x5c
-	.asciz "(?\\(?\\(?\\(?\\(?\\(?\\(?\\(?\\(?\\(?\\(?\\(?\\("
-	.byte 0x00, 0x01
-	.byte 0x01, 0x01, 0x1c, 0x18, 0x2e, 0x14, 0x14, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0xc1, 0x53, 0x01, 0x00, 0x64, 0x56, 0x01, 0x00
-	.byte 0x86, 0x59, 0x01, 0x00, 0x43, 0x5d, 0x01, 0x00
-	.byte 0xfe, 0x5f, 0x01, 0x00, 0xc3, 0x77, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x3b, 0x74, 0x01, 0x00
-	.byte 0x1f, 0x7f, 0x01, 0x00, 0x41, 0x81, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0xcf, 0x6a, 0x01, 0x00, 0x01, 0xc7, 0x01, 0x00
-	.byte 0x01, 0xc7, 0x01, 0x00, 0x01, 0xc7, 0x01, 0x00
-	.byte 0x01, 0xc7, 0x01, 0x00, 0x01, 0xc7, 0x01, 0x00
-	.byte 0x01, 0xc7, 0x01, 0x00, 0x01, 0xc7, 0x01, 0x00
-	.byte 0x01, 0xc7, 0x01, 0x00, 0x01, 0xc7, 0x01, 0x00
-	.byte 0x01, 0xc7, 0x01, 0x00, 0x01, 0xc7, 0x01, 0x00
-	.byte 0x01, 0xc7, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0xef, 0x47, 0x01, 0x00
-	.byte 0x67, 0x49, 0x01, 0x00, 0x99, 0x4b, 0x01, 0x00
-	.byte 0x11, 0x4d, 0x01, 0x00, 0x00, 0x7b, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x93, 0x4f, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0xc8, 0x63, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0xa7, 0x65, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0xd3, 0x67, 0x01, 0x00
-	.byte 0xcf, 0x6a, 0x01, 0x00, 0xb1, 0x70, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0xa8, 0x7c, 0x01, 0x00
-	.byte 0xf5, 0x83, 0x01, 0x00, 0xf5, 0x83, 0x01, 0x00
-	.byte 0xf5, 0x83, 0x01, 0x00, 0xf5, 0x83, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x5d, 0x92, 0x01, 0x00
-	.byte 0x10, 0x96, 0x01, 0x00, 0xe0, 0x98, 0x01, 0x00
-	.byte 0xe4, 0x9c, 0x01, 0x00, 0x3f, 0xa0, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x7d, 0xa4, 0x01, 0x00
-	.byte 0xa3, 0xa8, 0x01, 0x00, 0x54, 0xac, 0x01, 0x00
-	.byte 0xce, 0xae, 0x01, 0x00, 0x9f, 0xb2, 0x01, 0x00
-	.byte 0xb2, 0xb5, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0xe4, 0x8b, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x5e, 0x8d, 0x01, 0x00
-	.byte 0x5e, 0x8d, 0x01, 0x00, 0x5e, 0x8d, 0x01, 0x00
-	.byte 0x5e, 0x8d, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x63, 0x72, 0x01, 0x00
-	.byte 0x63, 0x72, 0x01, 0x00, 0x52, 0xb8, 0x01, 0x00
-	.byte 0xc5, 0xbb, 0x01, 0x00, 0x84, 0xbf, 0x01, 0x00
-	.byte 0xf4, 0xc2, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x25, 0x55, 0x01, 0x00, 0x13, 0x58, 0x01, 0x00
-	.byte 0x7b, 0x5b, 0x01, 0x00, 0x8e, 0x5e, 0x01, 0x00
-	.byte 0x16, 0x62, 0x01, 0x00, 0xa9, 0x79, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x3f, 0x76, 0x01, 0x00
-	.byte 0x15, 0x80, 0x01, 0x00, 0x9b, 0x82, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0xaf, 0x6e, 0x01, 0x00, 0xa0, 0xc9, 0x01, 0x00
-	.byte 0x9c, 0xcb, 0x01, 0x00, 0x6e, 0xcd, 0x01, 0x00
-	.byte 0x40, 0xcf, 0x01, 0x00, 0x12, 0xd1, 0x01, 0x00
-	.byte 0xe4, 0xd2, 0x01, 0x00, 0xb6, 0xd4, 0x01, 0x00
-	.byte 0x88, 0xd6, 0x01, 0x00, 0x5a, 0xd8, 0x01, 0x00
-	.byte 0x2c, 0xda, 0x01, 0x00, 0x01, 0xdc, 0x01, 0x00
-	.byte 0xd3, 0xdd, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0xc7, 0x48, 0x01, 0x00
-	.byte 0xa8, 0x4a, 0x01, 0x00, 0x71, 0x4c, 0x01, 0x00
-	.byte 0x70, 0x4e, 0x01, 0x00, 0xce, 0x7b, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0xa6, 0x51, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0xc8, 0x64, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0xb6, 0x66, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x41, 0x69, 0x01, 0x00
-	.byte 0x83, 0x6c, 0x01, 0x00, 0x9d, 0x71, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0xee, 0x7d, 0x01, 0x00
-	.byte 0xc1, 0x86, 0x01, 0x00, 0x15, 0x88, 0x01, 0x00
-	.byte 0x5a, 0x89, 0x01, 0x00, 0x9f, 0x8a, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x3e, 0x94, 0x01, 0x00
-	.byte 0x6a, 0x97, 0x01, 0x00, 0xda, 0x9a, 0x01, 0x00
-	.byte 0x98, 0x9e, 0x01, 0x00, 0x6b, 0xa2, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x90, 0xa6, 0x01, 0x00
-	.byte 0x7a, 0xaa, 0x01, 0x00, 0x68, 0xad, 0x01, 0x00
-	.byte 0x9b, 0xb0, 0x01, 0x00, 0x26, 0xb4, 0x01, 0x00
-	.byte 0xdf, 0xb6, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0xdc, 0x8c, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0xfa, 0x8f, 0x01, 0x00
-	.byte 0xa1, 0x90, 0x01, 0x00, 0x35, 0x91, 0x01, 0x00
-	.byte 0xc9, 0x91, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x5e, 0x73, 0x01, 0x00
-	.byte 0x5e, 0x73, 0x01, 0x00, 0x1a, 0xba, 0x01, 0x00
-	.byte 0xb0, 0xbd, 0x01, 0x00, 0x56, 0xc1, 0x01, 0x00
-	.byte 0x02, 0xc5, 0x01, 0x00
+	.byte 0x60, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15
+	.byte 0x40, 0x03, 0x03
+	.byte 0xf0
+	.byte 0x00	; not read (1 byte after the object's last read byte)
+; Read by EFF_Mute_WithDebug as EFF_Mute_Program_PtrTable entry 2 (slot 2).
+; 2 instructions: ope(7) opd(2); 0xf0 end.
+EFF_Mute_Program_Slot2:
+	.byte 0xe0, 0x07, 0x30, 0x00, 0x3a, 0x00, 0x00
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Read by EFF_Mute_WithDebug as EFF_Mute_Program_PtrTable entry 3 (slot 3).
+; 2 instructions: ope(7) opd(2); 0xf0 end.
+EFF_Mute_Program_Slot3:
+	.byte 0xe0, 0x07, 0x30, 0x00, 0xa1, 0x00, 0x00
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; Read by EFF_Mute_WithDebug as EFF_Mute_Program_PtrTable entry 4 (slot 4).
+; 2 instructions: ope(7) opd(2); 0xf0 end.
+EFF_Mute_Program_Slot4:
+	.byte 0xe0, 0x07, 0x30, 0x00, 0x91, 0x00, 0x00
+	.byte 0xd0, 0x02
+	.byte 0xf0
+; ----- the six coefficient tables of DSP_WriteLUTParamSet (0x03869B), the writer of translator
+; opcode 0x74 (DSP_Op_0x74_LUTParamSet) -----
+; Selection, from the reader: C = the NEXT BYTE OF THE CALLER'S VALUE STREAM (`ld c,(xwa+)` at
+; 0x0386AD), i.e. the operand of the op74 value record `00 06 74 00 <C> 7a`; C == 1 picks the
+; 8-row family (size word 0x20), anything else the 9-row family (0x24); XDE = variant 0/1/2
+; picks one of three.  Measured over all 100 DSP_Param_Block_Ptrs_A value tables: 26 effects
+; carry an op74 record; C == 1 for effects 15 32 33 34 35 53 96 97 98 99 (the distortion group,
+; both rotaries, the four PEQ+COMPR/DIST/OVERDR combos) and C == 0 for the other 16.
+; Layout, from the reader: +0 = base index byte (0x1D, the register number every op74
+; DESCRIPTOR record carries); then ROWS of four 3-byte coefficients, each decoded by
+; DSP_UnpackParam3B as big-endian 24-bit (b0 << 16 | b1 << 8 | b2 -- its `sla xbc,0` is a
+; shift by 16).  Per row: DSP_WriteFreqParam(base + 4*row, coef0), three
+; DSP_WriteCoeffData_5B(coef1..3), separated by COMMAND 0x01 / DATA 0x01 / DATA 0x60 and
+; closed by COMMAND 0x03.  9 rows = 109 bytes; 8 rows = 97 bytes, and each 8-row table
+; carries 3 MORE bytes (a 33rd coefficient) that the loop never reads.
+; 9-row table, variant 0: read by DSP_WriteLUTParamSet when C != 1 and XDE == 0.
+; Address loaded on the fall-through path in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 109 bytes =
+; base index 0x1D + 9 rows x 4 coefficients x 3 bytes (layout: the note above).
+DSP_Op74_LUT_Rows9_Var0:
+	.byte 0x1d								; base index
+	.byte 0x0c, 0x23, 0xc6,  0x2b, 0x0a, 0x8f,  0x47, 0x02, 0x73,  0x5e, 0x23, 0x82	; row 0
+	.byte 0x6e, 0xda, 0x3a,  0x78, 0x03, 0x04,  0x78, 0xfe, 0x14,  0x71, 0xba, 0x50	; row 1
+	.byte 0x62, 0xb6, 0x74,  0x4c, 0xf8, 0x74,  0x31, 0xfb, 0xa1,  0x13, 0x96, 0xcd	; row 2
+	.byte 0xf3, 0xdc, 0x39,  0xd4, 0xf5, 0x70,  0xb8, 0xfd, 0x8c,  0xa1, 0xdc, 0x7d	; row 3
+	.byte 0x91, 0x25, 0xc5,  0x87, 0xfc, 0xfb,  0x87, 0x01, 0xeb,  0x8e, 0x45, 0xaf	; row 4
+	.byte 0x9d, 0x49, 0x8b,  0xb3, 0x07, 0x8b,  0xce, 0x04, 0x5e,  0xec, 0x69, 0x32	; row 5
+	.byte 0x0c, 0x23, 0xc6,  0x2b, 0x0a, 0x8f,  0x47, 0x02, 0x73,  0x5e, 0x23, 0x82	; row 6
+	.byte 0x6e, 0xda, 0x3a,  0x78, 0x03, 0x04,  0x78, 0xfe, 0x14,  0x71, 0xba, 0x50	; row 7
+	.byte 0x62, 0xb6, 0x74,  0x4c, 0xf8, 0x74,  0x31, 0xfb, 0xa1,  0x13, 0x96, 0xcd	; row 8
+; 9-row table, variant 1: read by DSP_WriteLUTParamSet when C != 1 and XDE == 1.
+; Address loaded at DSP_WriteLUT_AlgoC0_TypeDE1 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 109 bytes =
+; base index 0x1D + 9 rows x 4 coefficients x 3 bytes (layout: the note above).
+DSP_Op74_LUT_Rows9_Var1:
+	.byte 0x1d								; base index
+	.byte 0x00, 0x00, 0x00,  0x15, 0x55, 0x55,  0x2a, 0xaa, 0xaa,  0x40, 0x00, 0x00	; row 0
+	.byte 0x55, 0x55, 0x55,  0x6a, 0xaa, 0xaa,  0x7f, 0xff, 0xff,  0x6a, 0xaa, 0xaa	; row 1
+	.byte 0x55, 0x55, 0x55,  0x40, 0x00, 0x00,  0x2a, 0xaa, 0xaa,  0x15, 0x55, 0x55	; row 2
+	.byte 0x00, 0x00, 0x00,  0xea, 0xaa, 0xaa,  0xd5, 0x55, 0x55,  0xc0, 0x00, 0x00	; row 3
+	.byte 0xaa, 0xaa, 0xaa,  0x95, 0x55, 0x55,  0x80, 0x00, 0x00,  0x95, 0x55, 0x55	; row 4
+	.byte 0xaa, 0xaa, 0xaa,  0xc0, 0x00, 0x00,  0xd5, 0x55, 0x55,  0xea, 0xaa, 0xaa	; row 5
+	.byte 0x00, 0x00, 0x00,  0x15, 0x55, 0x55,  0x2a, 0xaa, 0xaa,  0x40, 0x00, 0x00	; row 6
+	.byte 0x55, 0x55, 0x55,  0x6a, 0xaa, 0xaa,  0x7f, 0xff, 0xff,  0x6a, 0xaa, 0xaa	; row 7
+	.byte 0x55, 0x55, 0x55,  0x40, 0x00, 0x00,  0x2a, 0xaa, 0xaa,  0x15, 0x55, 0x55	; row 8
+; 9-row table, variant 2: read by DSP_WriteLUTParamSet when C != 1 and XDE == 2.
+; Address loaded at DSP_WriteLUT_AlgoC0_TypeDE2 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 109 bytes =
+; base index 0x1D + 9 rows x 4 coefficients x 3 bytes (layout: the note above).
+DSP_Op74_LUT_Rows9_Var2:
+	.byte 0x1d								; base index
+	.byte 0x14, 0x72, 0x25,  0x48, 0x7d, 0x93,  0x77, 0x98, 0x57,  0x7f, 0xff, 0xff	; row 0
+	.byte 0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff	; row 1
+	.byte 0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff,  0x54, 0x2e, 0x88,  0x20, 0xfd, 0xfb	; row 2
+	.byte 0xeb, 0x8d, 0xda,  0xb7, 0x82, 0x6c,  0x88, 0x67, 0xa8,  0x80, 0x00, 0x00	; row 3
+	.byte 0x80, 0x00, 0x00,  0x80, 0x00, 0x00,  0x80, 0x00, 0x00,  0x80, 0x00, 0x00	; row 4
+	.byte 0x80, 0x00, 0x00,  0x80, 0x00, 0x00,  0xab, 0xd1, 0x77,  0xdf, 0x02, 0x04	; row 5
+	.byte 0x14, 0x72, 0x25,  0x48, 0x7d, 0x93,  0x77, 0x98, 0x57,  0x7f, 0xff, 0xff	; row 6
+	.byte 0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff	; row 7
+	.byte 0x7f, 0xff, 0xff,  0x7f, 0xff, 0xff,  0x54, 0x2e, 0x88,  0x20, 0xfd, 0xfb	; row 8
+; 8-row table, variant 0: read by DSP_WriteLUTParamSet when C == 1 and XDE == 0.
+; Address loaded at DSP_WriteLUT_AlgoC1 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 100 bytes =
+; base index 0x1D + 8 rows x 4 coefficients x 3 bytes + 3 unread (layout: the note above).
+DSP_Op74_LUT_Rows8_Var0:
+	.byte 0x1d								; base index
+	.byte 0xc0, 0xa3, 0xd7,  0xc1, 0x25, 0x99,  0xc1, 0x66, 0x7b,  0xc1, 0xca, 0xc0	; row 0
+	.byte 0xc2, 0x29, 0x1f,  0xc3, 0x2c, 0xa5,  0xc3, 0xce, 0xd9,  0xc4, 0xb1, 0xee	; row 1
+	.byte 0xc6, 0x57, 0xa7,  0xc7, 0x9c, 0x0e,  0xc9, 0x82, 0xa9,  0xcb, 0x69, 0x44	; row 2
+	.byte 0xce, 0x94, 0x46,  0xd2, 0x61, 0x7c,  0xd7, 0x73, 0x18,  0xe2, 0x56, 0x04	; row 3
+	.byte 0x00, 0x00, 0x00,  0x1d, 0xa9, 0xfb,  0x28, 0x8c, 0xe7,  0x2d, 0x9e, 0x83	; row 4
+	.byte 0x31, 0x6b, 0xb9,  0x34, 0x96, 0xbb,  0x36, 0x7d, 0x56,  0x38, 0x63, 0xf1	; row 5
+	.byte 0x39, 0xa8, 0x58,  0x3b, 0x4e, 0x11,  0x3c, 0x31, 0x26,  0x3c, 0xd3, 0x5a	; row 6
+	.byte 0x3d, 0xd6, 0xe0,  0x3e, 0x17, 0xc1,  0x3e, 0x99, 0x84,  0x3e, 0xda, 0x66	; row 7
+	.byte 0x3f, 0x5c, 0x28	; not read (3 bytes after the object's last read byte)
+; 8-row table, variant 1: read by DSP_WriteLUTParamSet when C == 1 and XDE == 1.
+; Address loaded at DSP_WriteLUT_AlgoC1_TypeDE1 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 100 bytes =
+; base index 0x1D + 8 rows x 4 coefficients x 3 bytes + 3 unread (layout: the note above).
+DSP_Op74_LUT_Rows8_Var1:
+	.byte 0x1d								; base index
+	.byte 0xc0, 0xa3, 0xd7,  0xc4, 0x99, 0x99,  0xc8, 0x8f, 0x5c,  0xcc, 0x85, 0x1e	; row 0
+	.byte 0xd0, 0x7a, 0xe1,  0xd4, 0x70, 0xa3,  0xd8, 0x66, 0x66,  0xdc, 0x5c, 0x28	; row 1
+	.byte 0xe0, 0x51, 0xeb,  0xe4, 0x47, 0xae,  0xe8, 0x3d, 0x70,  0xec, 0x33, 0x33	; row 2
+	.byte 0xf0, 0x28, 0xf5,  0xf4, 0x1e, 0xb8,  0xf8, 0x14, 0x7a,  0xfc, 0x0a, 0x3d	; row 3
+	.byte 0x00, 0x00, 0x00,  0x04, 0x00, 0x00,  0x08, 0xaa, 0x64,  0x1c, 0x00, 0x00	; row 4
+	.byte 0x26, 0xab, 0x36,  0x2d, 0x54, 0xc9,  0x32, 0xab, 0x36,  0x35, 0xff, 0x2e	; row 5
+	.byte 0x36, 0x7d, 0x56,  0x38, 0x63, 0xf1,  0x3a, 0x4a, 0x8c,  0x3b, 0x8e, 0xf3	; row 6
+	.byte 0x3c, 0xd3, 0x5a,  0x3d, 0x75, 0x8e,  0x3e, 0x58, 0xa3,  0x3e, 0xb9, 0xf5	; row 7
+	.byte 0x3f, 0x5c, 0x28	; not read (3 bytes after the object's last read byte)
+; 8-row table, variant 2: read by DSP_WriteLUTParamSet when C == 1 and XDE == 2.
+; Address loaded at DSP_WriteLUT_AlgoC1_TypeDE2 in DSP_WriteLUTParamSet (0x03869B) by `lda xwa,(this:24)`; 100 bytes =
+; base index 0x1D + 8 rows x 4 coefficients x 3 bytes + 3 unread (layout: the note above).
+DSP_Op74_LUT_Rows8_Var2:
+	.byte 0x1d								; base index
+	.byte 0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7	; row 0
+	.byte 0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7	; row 1
+	.byte 0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7,  0xc0, 0xa3, 0xd7	; row 2
+	.byte 0xc0, 0xa3, 0xd7,  0xc8, 0x3e, 0x42,  0xdb, 0xe2, 0x82,  0xef, 0x86, 0xc2	; row 3
+	.byte 0x00, 0x00, 0x00,  0x10, 0x79, 0x3d,  0x24, 0x1d, 0x7d,  0x37, 0xc1, 0xbd	; row 4
+	.byte 0x3f, 0x5c, 0x28,  0x3f, 0x5c, 0x28,  0x3f, 0x5c, 0x28,  0x3f, 0x5c, 0x28	; row 5
+	.byte 0x3f, 0x5c, 0x28,  0x3f, 0x5c, 0x28,  0x3f, 0x5c, 0x28,  0x3f, 0x5c, 0x28	; row 6
+	.byte 0x3f, 0x5c, 0x28,  0x3f, 0x5c, 0x28,  0x3f, 0x5c, 0x28,  0x3f, 0x5c, 0x28	; row 7
+	.byte 0x3f, 0x5c, 0x28	; not read (3 bytes after the object's last read byte)
+; ----- per-effect-slot byte tables, indexed by slot 0..4 -----
+; Chip id of each effect slot: 0 = IC311 (uPD6383), 1 = IC310 (MN19413).  Read `ld xNN,table /
+; add xNN,slot / ld r,(xNN)` by DSP_WriteEFFConfig, DSP_ParameterWriteEngine, EFF_WriteHeader,
+; EFF_Disconnect and EFF_Link (five sites, all displacement 0).
+EFF_SlotToChip_Table:
+	.byte 0, 0, 1, 1, 1	; slots 0-1 -> chip 0, slots 2-4 -> chip 1
+; Per-slot settle time, folded into a running maximum through Unsigned_Max_Select by
+; EFF_HeaderChangeLoop_ActiveSlot and EFF_SecLinkPath_Pass2MaxVol (`lda xwa,(table:24)` then
+; `ld a,(xwa+iz)`, IZ = slot).
+EFF_SlotSettleTime_Table:
+	.byte 28, 24, 46, 20, 20
+; Five more per-slot-shaped bytes (00 01 00 01 00).  Purpose not established: no reader found.
+; Searched: every 24-bit little-endian occurrence of 0x01ED77..0x01ED7B anywhere in the ROM (covers
+; lda :24, ld imm32, .long and d24 operands) -- none; the five 0x01ED6D and two 0x01ED72 loads all
+; index with displacement 0 and slot 0..4, so they cannot reach here.
+EFF_SlotByteTable_Unreferenced:
+	.byte 0, 1, 0, 1, 0
+; ----- the effect pointer arrays: u32, indexed by EFFECT NUMBER 0..99 -----
+; ALGORITHM bytecode stream per effect.  Read by EFF_Change_GenericLookup and
+; EFF_Change_ChannelNot1 (`sll xwa,2 / ld xbc,EFF_AlgoProgram_PtrTable / add xbc,xwa /
+; ld xbc,(xbc)`), uploaded with DSP_WriteEFFConfig.  Entry count 100: the zone header's
+; carve verification found all 400 entries of the four arrays on block starts, and the
+; arrays abut (0x190 = 400 bytes apart).
+EFF_AlgoProgram_PtrTable:
+	.long	DSP_Eff00_Algo_Bytecode		; effect 0 NO OPERATION
+	.long	DSP_Eff01_Algo_Bytecode		; effect 1 CHORUS
+	.long	DSP_Eff02_Algo_Bytecode		; effect 2 MODULATED CHORUS
+	.long	DSP_Eff03_Algo_Bytecode		; effect 3 ENHANCER
+	.long	DSP_Eff04_Algo_Bytecode		; effect 4 FLANGER
+	.long	DSP_Eff05_Algo_Bytecode		; effect 5 PHASER
+	.long	DSP_Eff06_Algo_Bytecode		; effect 6 ENSEMBLE
+	.long	DSP_Eff00_Algo_Bytecode		; effect 7
+	.long	DSP_Eff08_Algo_Bytecode		; effect 8 GATED REVERB
+	.long	DSP_Eff09_Algo_Bytecode		; effect 9 SINGLE DELAY
+	.long	DSP_Eff10_Algo_Bytecode		; effect 10 MULTI TAP DELAY
+	.long	DSP_Eff00_Algo_Bytecode		; effect 11
+	.long	DSP_Eff00_Algo_Bytecode		; effect 12
+	.long	DSP_Eff00_Algo_Bytecode		; effect 13
+	.long	DSP_Eff00_Algo_Bytecode		; effect 14
+	.long	DSP_Eff15_Algo_Bytecode		; effect 15 ROCK ROTARY
+	.long	DSP_Eff16_Algo_Bytecode		; effect 16 ROOM REVERB 1
+	.long	DSP_Eff16_Algo_Bytecode		; effect 17 ROOM REVERB 2
+	.long	DSP_Eff16_Algo_Bytecode		; effect 18 PLATE REVERB 1
+	.long	DSP_Eff16_Algo_Bytecode		; effect 19 PLATE REVERB 2
+	.long	DSP_Eff16_Algo_Bytecode		; effect 20 CONCERT REVERB 1
+	.long	DSP_Eff16_Algo_Bytecode		; effect 21 CONCERT REVERB 2
+	.long	DSP_Eff16_Algo_Bytecode		; effect 22 DARK REVERB 1
+	.long	DSP_Eff16_Algo_Bytecode		; effect 23 DARK REVERB 2
+	.long	DSP_Eff16_Algo_Bytecode		; effect 24 BRIGHT REVERB 1
+	.long	DSP_Eff16_Algo_Bytecode		; effect 25 BRIGHT REVERB 2
+	.long	DSP_Eff16_Algo_Bytecode		; effect 26 WAVE REVERB 1
+	.long	DSP_Eff16_Algo_Bytecode		; effect 27 WAVE REVERB 2
+	.long	DSP_Eff00_Algo_Bytecode		; effect 28
+	.long	DSP_Eff00_Algo_Bytecode		; effect 29
+	.long	DSP_Eff00_Algo_Bytecode		; effect 30
+	.long	DSP_Eff00_Algo_Bytecode		; effect 31
+	.long	DSP_Eff32_Algo_Bytecode		; effect 32 DISTORTION
+	.long	DSP_Eff33_Algo_Bytecode		; effect 33 OVERDRIVE
+	.long	DSP_Eff34_Algo_Bytecode		; effect 34 FUZZ
+	.long	DSP_Eff35_Algo_Bytecode		; effect 35 EXCITER
+	.long	DSP_Eff36_Algo_Bytecode		; effect 36 COMPRESSOR
+	.long	DSP_Eff00_Algo_Bytecode		; effect 37
+	.long	DSP_Eff00_Algo_Bytecode		; effect 38
+	.long	DSP_Eff39_Algo_Bytecode		; effect 39 PARAMETRIC EQ
+	.long	DSP_Eff00_Algo_Bytecode		; effect 40
+	.long	DSP_Eff00_Algo_Bytecode		; effect 41
+	.long	DSP_Eff00_Algo_Bytecode		; effect 42
+	.long	DSP_Eff00_Algo_Bytecode		; effect 43
+	.long	DSP_Eff00_Algo_Bytecode		; effect 44
+	.long	DSP_Eff00_Algo_Bytecode		; effect 45
+	.long	DSP_Eff00_Algo_Bytecode		; effect 46
+	.long	DSP_Eff00_Algo_Bytecode		; effect 47
+	.long	DSP_Eff48_Algo_Bytecode		; effect 48 AUTO PAN
+	.long	DSP_Eff00_Algo_Bytecode		; effect 49
+	.long	DSP_Eff50_Algo_Bytecode		; effect 50 VIBRATO
+	.long	DSP_Eff00_Algo_Bytecode		; effect 51
+	.long	DSP_Eff52_Algo_Bytecode		; effect 52 AUTO WAH
+	.long	DSP_Eff15_Algo_Bytecode		; effect 53 ROTARY SPEAKER
+	.long	DSP_Eff54_Algo_Bytecode		; effect 54 RING MODULATOR
+	.long	DSP_Eff00_Algo_Bytecode		; effect 55
+	.long	DSP_Eff56_Algo_Bytecode		; effect 56 MIX UP
+	.long	DSP2_Eff57_Algo_Bytecode	; effect 57 STANDARD  [IC310 MN19413]
+	.long	DSP2_Eff57_Algo_Bytecode	; effect 58 PERCUSSIVE  [IC310 MN19413]
+	.long	DSP2_Eff57_Algo_Bytecode	; effect 59 SYMPHONIC  [IC310 MN19413]
+	.long	DSP2_Eff57_Algo_Bytecode	; effect 60 DEEP SPACE  [IC310 MN19413]
+	.long	DSP_Eff00_Algo_Bytecode		; effect 61
+	.long	DSP_Eff00_Algo_Bytecode		; effect 62
+	.long	DSP_Eff00_Algo_Bytecode		; effect 63
+	.long	DSP_Eff64_Algo_Bytecode		; effect 64 S.DELAY+CHORUS
+	.long	DSP_Eff65_Algo_Bytecode		; effect 65 S.DELAY+S.DELAY
+	.long	DSP_Eff66_Algo_Bytecode		; effect 66 S.DELAY+FLANGER
+	.long	DSP_Eff67_Algo_Bytecode		; effect 67 S.DELAY+VIBRATO
+	.long	DSP_Eff68_Algo_Bytecode		; effect 68 S.DELAY+PHASER
+	.long	DSP_Eff00_Algo_Bytecode		; effect 69
+	.long	DSP_Eff70_Algo_Bytecode		; effect 70 AUTO WAH+S.DELAY
+	.long	DSP_Eff71_Algo_Bytecode		; effect 71 PEQ+CHORUS
+	.long	DSP_Eff72_Algo_Bytecode		; effect 72 PEQ+S.DELAY
+	.long	DSP_Eff73_Algo_Bytecode		; effect 73 PEQ+FLANGER
+	.long	DSP_Eff74_Algo_Bytecode		; effect 74 PEQ+VIBRATO
+	.long	DSP_Eff75_Algo_Bytecode		; effect 75 PEQ+COMPRESSOR
+	.long	DSP_Eff00_Algo_Bytecode		; effect 76
+	.long	DSP_Eff00_Algo_Bytecode		; effect 77
+	.long	DSP_Eff00_Algo_Bytecode		; effect 78
+	.long	DSP2_Eff79_Algo_Bytecode	; effect 79 GEQ  [IC310 MN19413]
+	.long	DSP_Eff00_Algo_Bytecode		; effect 80
+	.long	DSP_Eff00_Algo_Bytecode		; effect 81
+	.long	DSP_Eff00_Algo_Bytecode		; effect 82
+	.long	DSP_Eff00_Algo_Bytecode		; effect 83
+	.long	DSP_Eff00_Algo_Bytecode		; effect 84
+	.long	DSP_Eff00_Algo_Bytecode		; effect 85
+	.long	DSP_Eff00_Algo_Bytecode		; effect 86
+	.long	DSP_Eff00_Algo_Bytecode		; effect 87
+	.long	DSP2_Eff88_Algo_Bytecode	; effect 88 ROOM  [IC310 MN19413]
+	.long	DSP2_Eff88_Algo_Bytecode	; effect 89 KARAOKE  [IC310 MN19413]
+	.long	DSP2_Eff88_Algo_Bytecode	; effect 90 BATH ROOM  [IC310 MN19413]
+	.long	DSP2_Eff88_Algo_Bytecode	; effect 91 STAGE  [IC310 MN19413]
+	.long	DSP_Eff00_Algo_Bytecode		; effect 92
+	.long	DSP_Eff00_Algo_Bytecode		; effect 93
+	.long	DSP_Eff00_Algo_Bytecode		; effect 94
+	.long	DSP_Eff00_Algo_Bytecode		; effect 95
+	.long	DSP_Eff96_Algo_Bytecode		; effect 96 PEQ+COMPR+DIST
+	.long	DSP_Eff97_Algo_Bytecode		; effect 97 PEQ+COMPR+OVERDR
+	.long	DSP_Eff98_Algo_Bytecode		; effect 98 PEQ+DIST+DELAY
+	.long	DSP_Eff99_Algo_Bytecode		; effect 99 PEQ+OVERDR+DELAY
+; COEFFICIENT bytecode stream per effect.  Read by EFF_Change_GenericLookup,
+; EFF_Change_ChannelNot1 and EFF_DataChange_WithDebug (same idiom), then DSP_WriteEFFConfig.
+EFF_CoefProgram_PtrTable:
+	.long	DSP_Eff00_Coef_Bytecode		; effect 0 NO OPERATION
+	.long	DSP_Eff01_Coef_Bytecode		; effect 1 CHORUS
+	.long	DSP_Eff02_Coef_Bytecode		; effect 2 MODULATED CHORUS
+	.long	DSP_Eff03_Coef_Bytecode		; effect 3 ENHANCER
+	.long	DSP_Eff04_Coef_Bytecode		; effect 4 FLANGER
+	.long	DSP_Eff05_Coef_Bytecode		; effect 5 PHASER
+	.long	DSP_Eff06_Coef_Bytecode		; effect 6 ENSEMBLE
+	.long	DSP_Eff00_Coef_Bytecode		; effect 7
+	.long	DSP_Eff08_Coef_Bytecode		; effect 8 GATED REVERB
+	.long	DSP_Eff09_Coef_Bytecode		; effect 9 SINGLE DELAY
+	.long	DSP_Eff10_Coef_Bytecode		; effect 10 MULTI TAP DELAY
+	.long	DSP_Eff00_Coef_Bytecode		; effect 11
+	.long	DSP_Eff00_Coef_Bytecode		; effect 12
+	.long	DSP_Eff00_Coef_Bytecode		; effect 13
+	.long	DSP_Eff00_Coef_Bytecode		; effect 14
+	.long	DSP_Eff15_Coef_Bytecode		; effect 15 ROCK ROTARY
+	.long	DSP_Eff16_Coef_Bytecode		; effect 16 ROOM REVERB 1
+	.long	DSP_Eff17_Coef_Bytecode		; effect 17 ROOM REVERB 2
+	.long	DSP_Eff18_Coef_Bytecode		; effect 18 PLATE REVERB 1
+	.long	DSP_Eff19_Coef_Bytecode		; effect 19 PLATE REVERB 2
+	.long	DSP_Eff20_Coef_Bytecode		; effect 20 CONCERT REVERB 1
+	.long	DSP_Eff21_Coef_Bytecode		; effect 21 CONCERT REVERB 2
+	.long	DSP_Eff22_Coef_Bytecode		; effect 22 DARK REVERB 1
+	.long	DSP_Eff23_Coef_Bytecode		; effect 23 DARK REVERB 2
+	.long	DSP_Eff24_Coef_Bytecode		; effect 24 BRIGHT REVERB 1
+	.long	DSP_Eff25_Coef_Bytecode		; effect 25 BRIGHT REVERB 2
+	.long	DSP_Eff26_Coef_Bytecode		; effect 26 WAVE REVERB 1
+	.long	DSP_Eff27_Coef_Bytecode		; effect 27 WAVE REVERB 2
+	.long	DSP_Eff00_Coef_Bytecode		; effect 28
+	.long	DSP_Eff00_Coef_Bytecode		; effect 29
+	.long	DSP_Eff00_Coef_Bytecode		; effect 30
+	.long	DSP_Eff00_Coef_Bytecode		; effect 31
+	.long	DSP_Eff32_Coef_Bytecode		; effect 32 DISTORTION
+	.long	DSP_Eff33_Coef_Bytecode		; effect 33 OVERDRIVE
+	.long	DSP_Eff34_Coef_Bytecode		; effect 34 FUZZ
+	.long	DSP_Eff35_Coef_Bytecode		; effect 35 EXCITER
+	.long	DSP_Eff36_Coef_Bytecode		; effect 36 COMPRESSOR
+	.long	DSP_Eff00_Coef_Bytecode		; effect 37
+	.long	DSP_Eff00_Coef_Bytecode		; effect 38
+	.long	DSP_Eff39_Coef_Bytecode		; effect 39 PARAMETRIC EQ
+	.long	DSP_Eff00_Coef_Bytecode		; effect 40
+	.long	DSP_Eff00_Coef_Bytecode		; effect 41
+	.long	DSP_Eff00_Coef_Bytecode		; effect 42
+	.long	DSP_Eff00_Coef_Bytecode		; effect 43
+	.long	DSP_Eff00_Coef_Bytecode		; effect 44
+	.long	DSP_Eff00_Coef_Bytecode		; effect 45
+	.long	DSP_Eff00_Coef_Bytecode		; effect 46
+	.long	DSP_Eff00_Coef_Bytecode		; effect 47
+	.long	DSP_Eff48_Coef_Bytecode		; effect 48 AUTO PAN
+	.long	DSP_Eff00_Coef_Bytecode		; effect 49
+	.long	DSP_Eff50_Coef_Bytecode		; effect 50 VIBRATO
+	.long	DSP_Eff00_Coef_Bytecode		; effect 51
+	.long	DSP_Eff52_Coef_Bytecode		; effect 52 AUTO WAH
+	.long	DSP_Eff53_Coef_Bytecode		; effect 53 ROTARY SPEAKER
+	.long	DSP_Eff54_Coef_Bytecode		; effect 54 RING MODULATOR
+	.long	DSP_Eff00_Coef_Bytecode		; effect 55
+	.long	DSP_Eff56_Coef_Bytecode		; effect 56 MIX UP
+	.long	DSP2_Eff57_Coef_Bytecode	; effect 57 STANDARD  [IC310 MN19413]
+	.long	DSP2_Eff58_Coef_Bytecode	; effect 58 PERCUSSIVE  [IC310 MN19413]
+	.long	DSP2_Eff59_Coef_Bytecode	; effect 59 SYMPHONIC  [IC310 MN19413]
+	.long	DSP2_Eff60_Coef_Bytecode	; effect 60 DEEP SPACE  [IC310 MN19413]
+	.long	DSP_Eff00_Coef_Bytecode		; effect 61
+	.long	DSP_Eff00_Coef_Bytecode		; effect 62
+	.long	DSP_Eff00_Coef_Bytecode		; effect 63
+	.long	DSP_Eff64_Coef_Bytecode		; effect 64 S.DELAY+CHORUS
+	.long	DSP_Eff65_Coef_Bytecode		; effect 65 S.DELAY+S.DELAY
+	.long	DSP_Eff66_Coef_Bytecode		; effect 66 S.DELAY+FLANGER
+	.long	DSP_Eff67_Coef_Bytecode		; effect 67 S.DELAY+VIBRATO
+	.long	DSP_Eff68_Coef_Bytecode		; effect 68 S.DELAY+PHASER
+	.long	DSP_Eff00_Coef_Bytecode		; effect 69
+	.long	DSP_Eff70_Coef_Bytecode		; effect 70 AUTO WAH+S.DELAY
+	.long	DSP_Eff71_Coef_Bytecode		; effect 71 PEQ+CHORUS
+	.long	DSP_Eff72_Coef_Bytecode		; effect 72 PEQ+S.DELAY
+	.long	DSP_Eff73_Coef_Bytecode		; effect 73 PEQ+FLANGER
+	.long	DSP_Eff74_Coef_Bytecode		; effect 74 PEQ+VIBRATO
+	.long	DSP_Eff75_Coef_Bytecode		; effect 75 PEQ+COMPRESSOR
+	.long	DSP_Eff00_Coef_Bytecode		; effect 76
+	.long	DSP_Eff00_Coef_Bytecode		; effect 77
+	.long	DSP_Eff00_Coef_Bytecode		; effect 78
+	.long	DSP2_Eff79_Coef_Bytecode	; effect 79 GEQ  [IC310 MN19413]
+	.long	DSP_Eff00_Coef_Bytecode		; effect 80
+	.long	DSP_Eff00_Coef_Bytecode		; effect 81
+	.long	DSP_Eff00_Coef_Bytecode		; effect 82
+	.long	DSP_Eff00_Coef_Bytecode		; effect 83
+	.long	DSP_Eff00_Coef_Bytecode		; effect 84
+	.long	DSP_Eff00_Coef_Bytecode		; effect 85
+	.long	DSP_Eff00_Coef_Bytecode		; effect 86
+	.long	DSP_Eff00_Coef_Bytecode		; effect 87
+	.long	DSP2_Eff88_Coef_Bytecode	; effect 88 ROOM  [IC310 MN19413]
+	.long	DSP2_Eff89_Coef_Bytecode	; effect 89 KARAOKE  [IC310 MN19413]
+	.long	DSP2_Eff90_Coef_Bytecode	; effect 90 BATH ROOM  [IC310 MN19413]
+	.long	DSP2_Eff91_Coef_Bytecode	; effect 91 STAGE  [IC310 MN19413]
+	.long	DSP_Eff00_Coef_Bytecode		; effect 92
+	.long	DSP_Eff00_Coef_Bytecode		; effect 93
+	.long	DSP_Eff00_Coef_Bytecode		; effect 94
+	.long	DSP_Eff00_Coef_Bytecode		; effect 95
+	.long	DSP_Eff96_Coef_Bytecode		; effect 96 PEQ+COMPR+DIST
+	.long	DSP_Eff97_Coef_Bytecode		; effect 97 PEQ+COMPR+OVERDR
+	.long	DSP_Eff98_Coef_Bytecode		; effect 98 PEQ+DIST+DELAY
+	.long	DSP_Eff99_Coef_Bytecode		; effect 99 PEQ+OVERDR+DELAY
 ; u32 pointer array indexed by the effect id (`sll xbc,2 / ld xiy,0x1F09C / add xiy,xbc /
 ; ld xbc,(xiy)`) in DSP_WriteParam_Generic. Entries seen: 0, 0x01561A, 0x01591F, 0x015CD8,
 ; 0x015F6C, 0x01633B, 0x017A92, 0, 0x01776C, 0x0180D0, 0x018359, 0 -- all pointing back into the
 ; 0x014777.. blob, with 0 meaning "no parameter block".
+; These are the parameter VALUE record tables (the argument DSP_WriteParam_Generic pushes for
+; DSP_ParameterWriteEngine).  100 entries, abutting DSP_Param_Block_Ptrs_B.
 DSP_Param_Block_Ptrs_A:
-	.byte 0x00, 0x00, 0x00, 0x00
-	.byte 0x1a, 0x56, 0x01, 0x00, 0x1f, 0x59, 0x01, 0x00
-	.byte 0xd8, 0x5c, 0x01, 0x00, 0x6c, 0x5f, 0x01, 0x00
-	.byte 0x3b, 0x63, 0x01, 0x00, 0x92, 0x7a, 0x01, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x6c, 0x77, 0x01, 0x00
-	.byte 0xd0, 0x80, 0x01, 0x00, 0x59, 0x83, 0x01, 0x00
-	.zero 8
-	.zero 8
-	.byte 0x44, 0x70, 0x01, 0x00, 0x3c, 0xcb, 0x01, 0x00
-	.byte 0x38, 0xcd, 0x01, 0x00, 0x0a, 0xcf, 0x01, 0x00
-	.byte 0xdc, 0xd0, 0x01, 0x00, 0xae, 0xd2, 0x01, 0x00
-	.byte 0x80, 0xd4, 0x01, 0x00, 0x52, 0xd6, 0x01, 0x00
-	.byte 0x24, 0xd8, 0x01, 0x00, 0xf6, 0xd9, 0x01, 0x00
-	.byte 0xcb, 0xdb, 0x01, 0x00, 0x9d, 0xdd, 0x01, 0x00
-	.byte 0x6f, 0xdf, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x27, 0x49, 0x01, 0x00
-	.byte 0x59, 0x4b, 0x01, 0x00, 0xd1, 0x4c, 0x01, 0x00
-	.byte 0x2d, 0x4f, 0x01, 0x00, 0x61, 0x7c, 0x01, 0x00
-	.byte 0xf2, 0x73, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x3f, 0x53, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x47, 0x65, 0x01, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x73, 0x67, 0x01, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x18, 0x6a, 0x01, 0x00
-	.byte 0x18, 0x6e, 0x01, 0x00, 0x1b, 0x72, 0x01, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xb4, 0x7e, 0x01, 0x00
-	.byte 0xc4, 0x87, 0x01, 0x00, 0x18, 0x89, 0x01, 0x00
-	.byte 0x5d, 0x8a, 0x01, 0x00, 0xa2, 0x8b, 0x01, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x6c, 0x95, 0x01, 0x00
-	.byte 0x33, 0x98, 0x01, 0x00, 0xf9, 0x9b, 0x01, 0x00
-	.byte 0x96, 0x9f, 0x01, 0x00, 0x99, 0xa3, 0x01, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xa7, 0xa7, 0x01, 0x00
-	.byte 0xd2, 0xab, 0x01, 0x00, 0x42, 0xae, 0x01, 0x00
-	.byte 0xd8, 0xb1, 0x01, 0x00, 0x30, 0xb5, 0x01, 0x00
-	.byte 0xe4, 0xb7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x18, 0x8d, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x67, 0x90, 0x01, 0x00
-	.byte 0x0e, 0x91, 0x01, 0x00, 0xa2, 0x91, 0x01, 0x00
-	.byte 0x36, 0x92, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x32, 0xbb, 0x01, 0x00
-	.byte 0xf3, 0xbe, 0x01, 0x00, 0x48, 0xc2, 0x01, 0x00
-	.byte 0x52, 0xc6, 0x01, 0x00
-; The parallel array indexed by the parameter id (`sll xhl,2 / ld xiy,0x1F22C`), same call site.
+	.long	0					; 0
+	.long	DSP_Eff01_Param_Values		; effect 1 CHORUS
+	.long	DSP_Eff02_Param_Values		; effect 2 MODULATED CHORUS
+	.long	DSP_Eff03_Param_Values		; effect 3 ENHANCER
+	.long	DSP_Eff04_Param_Values		; effect 4 FLANGER
+	.long	DSP_Eff05_Param_Values		; effect 5 PHASER
+	.long	DSP_Eff06_Param_Values		; effect 6 ENSEMBLE
+	.long	0					; 7
+	.long	DSP_Eff08_Param_Values		; effect 8 GATED REVERB
+	.long	DSP_Eff09_Param_Values		; effect 9 SINGLE DELAY
+	.long	DSP_Eff10_Param_Values		; effect 10 MULTI TAP DELAY
+	.long	0					; 11
+	.long	0					; 12
+	.long	0					; 13
+	.long	0					; 14
+	.long	DSP_Eff15_Param_Values		; effect 15 ROCK ROTARY
+	.long	DSP_Eff16_Param_Values		; effect 16 ROOM REVERB 1
+	.long	DSP_Eff17_Param_Values		; effect 17 ROOM REVERB 2
+	.long	DSP_Eff18_Param_Values		; effect 18 PLATE REVERB 1
+	.long	DSP_Eff19_Param_Values		; effect 19 PLATE REVERB 2
+	.long	DSP_Eff20_Param_Values		; effect 20 CONCERT REVERB 1
+	.long	DSP_Eff21_Param_Values		; effect 21 CONCERT REVERB 2
+	.long	DSP_Eff22_Param_Values		; effect 22 DARK REVERB 1
+	.long	DSP_Eff23_Param_Values		; effect 23 DARK REVERB 2
+	.long	DSP_Eff24_Param_Values		; effect 24 BRIGHT REVERB 1
+	.long	DSP_Eff25_Param_Values		; effect 25 BRIGHT REVERB 2
+	.long	DSP_Eff26_Param_Values		; effect 26 WAVE REVERB 1
+	.long	DSP_Eff27_Param_Values		; effect 27 WAVE REVERB 2
+	.long	0					; 28
+	.long	0					; 29
+	.long	0					; 30
+	.long	0					; 31
+	.long	DSP_Eff32_Param_Values		; effect 32 DISTORTION
+	.long	DSP_Eff33_Param_Values		; effect 33 OVERDRIVE
+	.long	DSP_Eff34_Param_Values		; effect 34 FUZZ
+	.long	DSP_Eff35_Param_Values		; effect 35 EXCITER
+	.long	DSP_Eff36_Param_Values		; effect 36 COMPRESSOR
+	.long	DSP_Eff37_Param_Values		; effect 37
+	.long	0					; 38
+	.long	DSP_Eff39_Param_Values		; effect 39 PARAMETRIC EQ
+	.long	0					; 40
+	.long	0					; 41
+	.long	0					; 42
+	.long	0					; 43
+	.long	0					; 44
+	.long	0					; 45
+	.long	0					; 46
+	.long	0					; 47
+	.long	DSP_Eff48_Param_Values		; effect 48 AUTO PAN
+	.long	0					; 49
+	.long	DSP_Eff50_Param_Values		; effect 50 VIBRATO
+	.long	0					; 51
+	.long	DSP_Eff52_Param_Values		; effect 52 AUTO WAH
+	.long	DSP_Eff53_Param_Values		; effect 53 ROTARY SPEAKER
+	.long	DSP_Eff54_Param_Values		; effect 54 RING MODULATOR
+	.long	0					; 55
+	.long	DSP_Eff56_Param_Values		; effect 56 MIX UP
+	.long	DSP2_Eff57_Param_Values		; effect 57 STANDARD  [IC310 MN19413]
+	.long	DSP2_Eff58_Param_Values		; effect 58 PERCUSSIVE  [IC310 MN19413]
+	.long	DSP2_Eff59_Param_Values		; effect 59 SYMPHONIC  [IC310 MN19413]
+	.long	DSP2_Eff60_Param_Values		; effect 60 DEEP SPACE  [IC310 MN19413]
+	.long	0					; 61
+	.long	0					; 62
+	.long	0					; 63
+	.long	DSP_Eff64_Param_Values		; effect 64 S.DELAY+CHORUS
+	.long	DSP_Eff65_Param_Values		; effect 65 S.DELAY+S.DELAY
+	.long	DSP_Eff66_Param_Values		; effect 66 S.DELAY+FLANGER
+	.long	DSP_Eff67_Param_Values		; effect 67 S.DELAY+VIBRATO
+	.long	DSP_Eff68_Param_Values		; effect 68 S.DELAY+PHASER
+	.long	0					; 69
+	.long	DSP_Eff70_Param_Values		; effect 70 AUTO WAH+S.DELAY
+	.long	DSP_Eff71_Param_Values		; effect 71 PEQ+CHORUS
+	.long	DSP_Eff72_Param_Values		; effect 72 PEQ+S.DELAY
+	.long	DSP_Eff73_Param_Values		; effect 73 PEQ+FLANGER
+	.long	DSP_Eff74_Param_Values		; effect 74 PEQ+VIBRATO
+	.long	DSP_Eff75_Param_Values		; effect 75 PEQ+COMPRESSOR
+	.long	0					; 76
+	.long	0					; 77
+	.long	0					; 78
+	.long	DSP2_Eff79_Param_Values		; effect 79 GEQ  [IC310 MN19413]
+	.long	0					; 80
+	.long	0					; 81
+	.long	0					; 82
+	.long	0					; 83
+	.long	0					; 84
+	.long	0					; 85
+	.long	0					; 86
+	.long	0					; 87
+	.long	DSP2_Eff88_Param_Values		; effect 88 ROOM  [IC310 MN19413]
+	.long	DSP2_Eff89_Param_Values		; effect 89 KARAOKE  [IC310 MN19413]
+	.long	DSP2_Eff90_Param_Values		; effect 90 BATH ROOM  [IC310 MN19413]
+	.long	DSP2_Eff91_Param_Values		; effect 91 STAGE  [IC310 MN19413]
+	.long	0					; 92
+	.long	0					; 93
+	.long	0					; 94
+	.long	0					; 95
+	.long	DSP_Eff96_Param_Values		; effect 96 PEQ+COMPR+DIST
+	.long	DSP_Eff97_Param_Values		; effect 97 PEQ+COMPR+OVERDR
+	.long	DSP_Eff98_Param_Values		; effect 98 PEQ+DIST+DELAY
+	.long	DSP_Eff99_Param_Values		; effect 99 PEQ+OVERDR+DELAY
+; The parallel array, same call site (`ld hl,bc / extz xhl / sll xhl,2 / ld xiy,0x1F22C`).
+; CORRECTED: an earlier header said it is "indexed by the parameter id".  It is not: HL is
+; copied from BC, the EFFECT id, which also indexes DSP_Param_Block_Ptrs_A two instructions
+; later -- both arrays are per effect.  These are the parameter DESCRIPTOR record tables,
+; passed to DSP_ParameterWriteEngine in XDE.
 ; Entries: 0x017425, 0x01564B, 0x015969, 0x015D1B, 0x015FD3, 0x0163A2, 0x017AE3, 0x017425,
 ; 0x01779F, 0x01811E, 0x0183CE, 0x017425 -- 0x017425 recurs as the default/fallback block.
+; The recurring 0x017425 is DSP_Eff00_Param_Descriptors,
+; the NO OPERATION stub shared by the 42 stub effects (zone header).  100 entries: the array
+; ends where EFF_Mute_Program_PtrTable, a separately-read table, begins.
 DSP_Param_Block_Ptrs_B:
-	.byte 0x25, 0x74, 0x01, 0x00
-	.byte 0x4b, 0x56, 0x01, 0x00, 0x69, 0x59, 0x01, 0x00
-	.byte 0x1b, 0x5d, 0x01, 0x00, 0xd3, 0x5f, 0x01, 0x00
-	.byte 0xa2, 0x63, 0x01, 0x00, 0xe3, 0x7a, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x9f, 0x77, 0x01, 0x00
-	.byte 0x1e, 0x81, 0x01, 0x00, 0xce, 0x83, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x85, 0x6e, 0x01, 0x00, 0x72, 0xcb, 0x01, 0x00
-	.byte 0x72, 0xcb, 0x01, 0x00, 0x72, 0xcb, 0x01, 0x00
-	.byte 0x72, 0xcb, 0x01, 0x00, 0x72, 0xcb, 0x01, 0x00
-	.byte 0x72, 0xcb, 0x01, 0x00, 0x72, 0xcb, 0x01, 0x00
-	.byte 0x72, 0xcb, 0x01, 0x00, 0x72, 0xcb, 0x01, 0x00
-	.byte 0x72, 0xcb, 0x01, 0x00, 0x72, 0xcb, 0x01, 0x00
-	.byte 0x72, 0xcb, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x4d, 0x49, 0x01, 0x00
-	.byte 0x7f, 0x4b, 0x01, 0x00, 0xf7, 0x4c, 0x01, 0x00
-	.byte 0x6f, 0x4f, 0x01, 0x00, 0x93, 0x7c, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0xab, 0x53, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x88, 0x65, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0xb4, 0x67, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0xb1, 0x6a, 0x01, 0x00
-	.byte 0x85, 0x6e, 0x01, 0x00, 0x49, 0x72, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0xfe, 0x7e, 0x01, 0x00
-	.byte 0x06, 0x88, 0x01, 0x00, 0x06, 0x88, 0x01, 0x00
-	.byte 0x06, 0x88, 0x01, 0x00, 0x06, 0x88, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0xe9, 0x95, 0x01, 0x00
-	.byte 0xb7, 0x98, 0x01, 0x00, 0xac, 0x9c, 0x01, 0x00
-	.byte 0x10, 0xa0, 0x01, 0x00, 0x4c, 0xa4, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x79, 0xa8, 0x01, 0x00
-	.byte 0x34, 0xac, 0x01, 0x00, 0xa8, 0xae, 0x01, 0x00
-	.byte 0x6d, 0xb2, 0x01, 0x00, 0x8c, 0xb5, 0x01, 0x00
-	.byte 0x31, 0xb8, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x4f, 0x8d, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x8e, 0x90, 0x01, 0x00
-	.byte 0x8e, 0x90, 0x01, 0x00, 0x8e, 0x90, 0x01, 0x00
-	.byte 0x8e, 0x90, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x25, 0x74, 0x01, 0x00
-	.byte 0x25, 0x74, 0x01, 0x00, 0x9a, 0xbb, 0x01, 0x00
-	.byte 0x59, 0xbf, 0x01, 0x00, 0xc2, 0xc2, 0x01, 0x00
-	.byte 0xcf, 0xc6, 0x01, 0x00, 0xb4, 0xea, 0x01, 0x00
-	.byte 0xc8, 0xea, 0x01, 0x00, 0xdc, 0xea, 0x01, 0x00
-	.byte 0xe6, 0xea, 0x01, 0x00, 0xf0, 0xea, 0x01, 0x00
-	.byte 0x24, 0xea, 0x01, 0x00, 0x39, 0xea, 0x01, 0x00
-	.byte 0x4e, 0xea, 0x01, 0x00, 0x63, 0xea, 0x01, 0x00
-	.byte 0x78, 0xea, 0x01, 0x00, 0x87, 0xea, 0x01, 0x00
-	.byte 0x96, 0xea, 0x01, 0x00, 0xa5, 0xea, 0x01, 0x00
-	.byte 0xc8, 0xe5, 0x01, 0x00, 0xd3, 0xe5, 0x01, 0x00
-	.byte 0xde, 0xe5, 0x01, 0x00, 0xea, 0xe5, 0x01, 0x00
-	.byte 0xf6, 0xe5, 0x01, 0x00, 0x02, 0xe6, 0x01, 0x00
-	.byte 0x0d, 0xe6, 0x01, 0x00, 0x18, 0xe6, 0x01, 0x00
-	.byte 0x24, 0xe6, 0x01, 0x00, 0x30, 0xe6, 0x01, 0x00
+	.long	DSP_Eff00_Param_Descriptors	; effect 0 NO OPERATION
+	.long	DSP_Eff01_Param_Descriptors	; effect 1 CHORUS
+	.long	DSP_Eff02_Param_Descriptors	; effect 2 MODULATED CHORUS
+	.long	DSP_Eff03_Param_Descriptors	; effect 3 ENHANCER
+	.long	DSP_Eff04_Param_Descriptors	; effect 4 FLANGER
+	.long	DSP_Eff05_Param_Descriptors	; effect 5 PHASER
+	.long	DSP_Eff06_Param_Descriptors	; effect 6 ENSEMBLE
+	.long	DSP_Eff00_Param_Descriptors	; effect 7
+	.long	DSP_Eff08_Param_Descriptors	; effect 8 GATED REVERB
+	.long	DSP_Eff09_Param_Descriptors	; effect 9 SINGLE DELAY
+	.long	DSP_Eff10_Param_Descriptors	; effect 10 MULTI TAP DELAY
+	.long	DSP_Eff00_Param_Descriptors	; effect 11
+	.long	DSP_Eff00_Param_Descriptors	; effect 12
+	.long	DSP_Eff00_Param_Descriptors	; effect 13
+	.long	DSP_Eff00_Param_Descriptors	; effect 14
+	.long	DSP_Eff15_Param_Descriptors	; effect 15 ROCK ROTARY
+	.long	DSP_Eff16_Param_Descriptors	; effect 16 ROOM REVERB 1
+	.long	DSP_Eff16_Param_Descriptors	; effect 17 ROOM REVERB 2
+	.long	DSP_Eff16_Param_Descriptors	; effect 18 PLATE REVERB 1
+	.long	DSP_Eff16_Param_Descriptors	; effect 19 PLATE REVERB 2
+	.long	DSP_Eff16_Param_Descriptors	; effect 20 CONCERT REVERB 1
+	.long	DSP_Eff16_Param_Descriptors	; effect 21 CONCERT REVERB 2
+	.long	DSP_Eff16_Param_Descriptors	; effect 22 DARK REVERB 1
+	.long	DSP_Eff16_Param_Descriptors	; effect 23 DARK REVERB 2
+	.long	DSP_Eff16_Param_Descriptors	; effect 24 BRIGHT REVERB 1
+	.long	DSP_Eff16_Param_Descriptors	; effect 25 BRIGHT REVERB 2
+	.long	DSP_Eff16_Param_Descriptors	; effect 26 WAVE REVERB 1
+	.long	DSP_Eff16_Param_Descriptors	; effect 27 WAVE REVERB 2
+	.long	DSP_Eff00_Param_Descriptors	; effect 28
+	.long	DSP_Eff00_Param_Descriptors	; effect 29
+	.long	DSP_Eff00_Param_Descriptors	; effect 30
+	.long	DSP_Eff00_Param_Descriptors	; effect 31
+	.long	DSP_Eff32_Param_Descriptors	; effect 32 DISTORTION
+	.long	DSP_Eff33_Param_Descriptors	; effect 33 OVERDRIVE
+	.long	DSP_Eff34_Param_Descriptors	; effect 34 FUZZ
+	.long	DSP_Eff35_Param_Descriptors	; effect 35 EXCITER
+	.long	DSP_Eff36_Param_Descriptors	; effect 36 COMPRESSOR
+	.long	DSP_Eff00_Param_Descriptors	; effect 37
+	.long	DSP_Eff00_Param_Descriptors	; effect 38
+	.long	DSP_Eff39_Param_Descriptors	; effect 39 PARAMETRIC EQ
+	.long	DSP_Eff00_Param_Descriptors	; effect 40
+	.long	DSP_Eff00_Param_Descriptors	; effect 41
+	.long	DSP_Eff00_Param_Descriptors	; effect 42
+	.long	DSP_Eff00_Param_Descriptors	; effect 43
+	.long	DSP_Eff00_Param_Descriptors	; effect 44
+	.long	DSP_Eff00_Param_Descriptors	; effect 45
+	.long	DSP_Eff00_Param_Descriptors	; effect 46
+	.long	DSP_Eff00_Param_Descriptors	; effect 47
+	.long	DSP_Eff48_Param_Descriptors	; effect 48 AUTO PAN
+	.long	DSP_Eff00_Param_Descriptors	; effect 49
+	.long	DSP_Eff50_Param_Descriptors	; effect 50 VIBRATO
+	.long	DSP_Eff00_Param_Descriptors	; effect 51
+	.long	DSP_Eff52_Param_Descriptors	; effect 52 AUTO WAH
+	.long	DSP_Eff15_Param_Descriptors	; effect 53 ROTARY SPEAKER
+	.long	DSP_Eff54_Param_Descriptors	; effect 54 RING MODULATOR
+	.long	DSP_Eff00_Param_Descriptors	; effect 55
+	.long	DSP_Eff56_Param_Descriptors	; effect 56 MIX UP
+	.long	DSP2_Eff57_Param_Descriptors	; effect 57 STANDARD  [IC310 MN19413]
+	.long	DSP2_Eff57_Param_Descriptors	; effect 58 PERCUSSIVE  [IC310 MN19413]
+	.long	DSP2_Eff57_Param_Descriptors	; effect 59 SYMPHONIC  [IC310 MN19413]
+	.long	DSP2_Eff57_Param_Descriptors	; effect 60 DEEP SPACE  [IC310 MN19413]
+	.long	DSP_Eff00_Param_Descriptors	; effect 61
+	.long	DSP_Eff00_Param_Descriptors	; effect 62
+	.long	DSP_Eff00_Param_Descriptors	; effect 63
+	.long	DSP_Eff64_Param_Descriptors	; effect 64 S.DELAY+CHORUS
+	.long	DSP_Eff65_Param_Descriptors	; effect 65 S.DELAY+S.DELAY
+	.long	DSP_Eff66_Param_Descriptors	; effect 66 S.DELAY+FLANGER
+	.long	DSP_Eff67_Param_Descriptors	; effect 67 S.DELAY+VIBRATO
+	.long	DSP_Eff68_Param_Descriptors	; effect 68 S.DELAY+PHASER
+	.long	DSP_Eff00_Param_Descriptors	; effect 69
+	.long	DSP_Eff70_Param_Descriptors	; effect 70 AUTO WAH+S.DELAY
+	.long	DSP_Eff71_Param_Descriptors	; effect 71 PEQ+CHORUS
+	.long	DSP_Eff72_Param_Descriptors	; effect 72 PEQ+S.DELAY
+	.long	DSP_Eff73_Param_Descriptors	; effect 73 PEQ+FLANGER
+	.long	DSP_Eff74_Param_Descriptors	; effect 74 PEQ+VIBRATO
+	.long	DSP_Eff75_Param_Descriptors	; effect 75 PEQ+COMPRESSOR
+	.long	DSP_Eff00_Param_Descriptors	; effect 76
+	.long	DSP_Eff00_Param_Descriptors	; effect 77
+	.long	DSP_Eff00_Param_Descriptors	; effect 78
+	.long	DSP2_Eff79_Param_Descriptors	; effect 79 GEQ  [IC310 MN19413]
+	.long	DSP_Eff00_Param_Descriptors	; effect 80
+	.long	DSP_Eff00_Param_Descriptors	; effect 81
+	.long	DSP_Eff00_Param_Descriptors	; effect 82
+	.long	DSP_Eff00_Param_Descriptors	; effect 83
+	.long	DSP_Eff00_Param_Descriptors	; effect 84
+	.long	DSP_Eff00_Param_Descriptors	; effect 85
+	.long	DSP_Eff00_Param_Descriptors	; effect 86
+	.long	DSP_Eff00_Param_Descriptors	; effect 87
+	.long	DSP2_Eff88_Param_Descriptors	; effect 88 ROOM  [IC310 MN19413]
+	.long	DSP2_Eff88_Param_Descriptors	; effect 89 KARAOKE  [IC310 MN19413]
+	.long	DSP2_Eff88_Param_Descriptors	; effect 90 BATH ROOM  [IC310 MN19413]
+	.long	DSP2_Eff88_Param_Descriptors	; effect 91 STAGE  [IC310 MN19413]
+	.long	DSP_Eff00_Param_Descriptors	; effect 92
+	.long	DSP_Eff00_Param_Descriptors	; effect 93
+	.long	DSP_Eff00_Param_Descriptors	; effect 94
+	.long	DSP_Eff00_Param_Descriptors	; effect 95
+	.long	DSP_Eff96_Param_Descriptors	; effect 96 PEQ+COMPR+DIST
+	.long	DSP_Eff97_Param_Descriptors	; effect 97 PEQ+COMPR+OVERDR
+	.long	DSP_Eff98_Param_Descriptors	; effect 98 PEQ+DIST+DELAY
+	.long	DSP_Eff99_Param_Descriptors	; effect 99 PEQ+OVERDR+DELAY
+; ----- per-slot / per-chip program pointer tables (u32) -----
+; EFF_Mute_WithDebug: `sll xwa,2 / ld xbc,EFF_Mute_Program_PtrTable / add xbc,xwa`, slot 0..4.
+; Reader EFF_Mute_WithDebug is at 0x037EB4; 5 x u32 program pointers, one per effect slot (its
+; entry contract WA = slot 0..4), the program then goes to DSP_WriteEFFConfig.
+EFF_Mute_Program_PtrTable:
+	.long	EFF_Mute_Program_Slot0		; 0
+	.long	EFF_Mute_Program_Slot1		; 1
+	.long	EFF_Mute_Program_Slot2		; 2
+	.long	EFF_Mute_Program_Slot3		; 3
+	.long	EFF_Mute_Program_Slot4		; 4
+; DSP_Mute_WithDebug, indexed by chip (four entries, two chips).
+; Reader DSP_Mute_WithDebug is at 0x037EE9 (`sll xwa,2 / ld xbc,table`); 4 x u32 program
+; pointers -- the count is pinned by DSP_Unmute_Program_PtrTable starting right after.
+DSP_Mute_Program_PtrTable:
+	.long	DSP_Mute_Program_Chip0		; 0
+	.long	DSP_Mute_Program_Chip1		; 1
+	.long	DSP_Mute_Program_Chip2		; 2
+	.long	DSP_Mute_Program_Chip3		; 3
+; DSP_Unmute_WithDebug, indexed by chip.
+; Reader DSP_Unmute_WithDebug is at 0x037F1C (`sll xwa,2 / ld xbc,table`); 4 x u32 program
+; pointers -- the count is pinned by EFF_Disconnect_Program_PtrTable starting right after.
+DSP_Unmute_Program_PtrTable:
+	.long	DSP_Unmute_Program_Chip0	; 0
+	.long	DSP_Unmute_Program_Chip1	; 1
+	.long	DSP_Unmute_Program_Chip2	; 2
+	.long	DSP_Unmute_Program_Chip3	; 3
+; EFF_Disconnect: entry = table + 12*mode + 4*slot.  Five entries per mode run, but the code's
+; mode stride is 12, not 20 -- see the NOTE THE STRIDE in EFF_Disconnect: with mode 1, slots 2-4
+; read EFF_Link_Program_PtrTable[0..2].
+EFF_Disconnect_Program_PtrTable:
+	.long	EFF_Disconnect_Program_Slot0	; 0
+	.long	EFF_Disconnect_Program_Slot1	; 1
+	.long	EFF_Disconnect_Program_Slot2	; 2
+	.long	EFF_Disconnect_Program_Slot3	; 3
+	.long	EFF_Disconnect_Program_Slot4	; 4
+; EFF_Link: same 12*mode + 4*slot indexing; with mode 1, slots 2-4 would read past this table.
+; Reader EFF_Link is at 0x037FAE; 5 x u32 program pointers, one per effect slot 0..4.
+EFF_Link_Program_PtrTable:
+	.long	EFF_Link_Program_Slot0		; 0
+	.long	EFF_Link_Program_Slot1		; 1
+	.long	EFF_Link_Program_Slot2		; 2
+	.long	EFF_Link_Program_Slot3		; 3
+	.long	EFF_Link_Program_Slot4		; 4
 ; u16 = 0x004D (77). The pivot the velocity curve is scaled about: the touch computation forms
 ; (VELCURVE_IN[touch] - 77) before applying the per-mode gain. Read with `ldw_da xbc,0x01f418`
 ; in Keybed_Decode_Event (0x03D11F). Byte-identical to boot-ROM ToneGen_VelCurve_Pivot
@@ -11321,11 +12741,23 @@ ToneGen_VelCurve_Divisor:
 ;   between the two copies -- and there the table IS labelled, as ToneGen_VelCurve_ModeParams
 ;   (0xFF802E).
 ToneGen_Voice_Bitmap_Ptr:
-	.byte 0x02, 0xf0, 0x00, 0x00
-	.byte 0x00, 0xd0, 0x00, 0x10, 0xc7, 0x03, 0x20, 0xbd
-	.byte 0x06, 0x30, 0xb4, 0x08, 0x40, 0xab, 0x0b, 0x50
-	.byte 0xa1, 0x0e, 0x60, 0x98, 0x10, 0x70, 0x8f, 0x13
-	.byte 0x80, 0x86, 0x16, 0x90, 0x82, 0x18
+	.long ToneGen_Voice_Active_Bitmap	; = 0x0000F002
+; --- 0x01F420-0x01F43D  touch-curve parameters, 10 records x 3 bytes {gain (Q7), output
+; level at the pivot, black-key trim}, read by Keybed_Decode_Event (0x03D11F) at
+; [this + 3*curve], +1 and +2, curve = Keybed_Touch_Mode (0x004A48); 10 rows by
+; Audio_CmdHandler_A0_BF's `cp (xbc+1),0x9` check (see the note above).  Same name as the
+; byte-identical table in the boot ROM (kn5000_subcpu_boot.s, 0xFF802E).
+ToneGen_VelCurve_ModeParams:
+	.byte 0, 208, 0		; curve 0
+	.byte 16, 199, 3		; curve 1
+	.byte 32, 189, 6		; curve 2
+	.byte 48, 180, 8		; curve 3
+	.byte 64, 171, 11		; curve 4
+	.byte 80, 161, 14		; curve 5
+	.byte 96, 152, 16		; curve 6
+	.byte 112, 143, 19		; curve 7
+	.byte 128, 134, 22		; curve 8
+	.byte 144, 130, 24		; curve 9
 ; 256 bytes (0x01F43E-0x01F53D) mapping the RAW KEYBED TOUCH READING 0..255 to the curve
 ; domain. It is not a MIDI velocity: the index is the high byte of the keybed data word at
 ; (0x110000), and MIDI velocity is what comes OUT the far end, from 0x01F53E.
@@ -11383,77 +12815,64 @@ ToneGen_Velocity_Output_Curve:
 	.byte 0x0e, 0x0f, 0x0f, 0x0f, 0x0f, 0x10, 0x10, 0x11
 	.byte 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19
 	.byte 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21
-	.ascii "\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
-	jrl	nc, 0x0000
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29
+	.byte 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31
+	.byte 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39
+	.byte 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f, 0x40, 0x41
+	.byte 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49
+	.byte 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f, 0x50, 0x51
+	.byte 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59
+	.byte 0x5a, 0x5b, 0x5c, 0x5d, 0x5e, 0x5f, 0x60, 0x61
+	.byte 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69
+	.byte 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f, 0x70, 0x71
+	.byte 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79
+	.byte 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f
+; ===========================================================================
+; 0x01F63E-0x01F735  DOUBLE-PRECISION LITERAL POOL of the floating-point code (31 x 8 bytes)
+; ===========================================================================
+; IEEE-754 doubles, little-endian.  Each slot is loaded by exactly ONE `lda xNN,(slot:24)`
+; in subcpu_fp_math.s -- the compiler's per-use constant pool; the reader is in each
+; label's name and the comment gives the value and the address of the reading operand.  Until
+; 2026-09-25 this was framed as instructions (`normal`, `swi 7`, `mul xbc,xsp`, `jrl nc,0`)
+; and misaligned `.byte` rows; verified and re-typed by
+; scripts/converters/retype_v142_fp_literal_pool.py (31 source readers, 31 ROM references,
+; none elsewhere).
+FPConst_tan_Zero:	.double 0.0	; 0.0, read by FP_tan (operand at 0x03D4E7)
 ; -2147483647.0000002 -- returned by the double->long conversion path on negative overflow
-; (subcpu_fp_math.s line 154, via ToneGen_Compare_Voice with de = 1).
-FPConst_Int32_Min_As_Double:
-	normal
-	nop
-	.byte 0xc0, 0xff, 0xff
-	swi	7
-	.byte 0xdf, 0xc1
+; (subcpu_fp_math.s line 154, via FP_dcmp with de = 1).
+FPConst_Int32_Min_As_Double:	.quad 0xc1dfffffffc00001	; -2147483647.0000002, read by FP_pow (operand at 0x03D53B)
 ; +2147483647.0000002 -- the positive-overflow counterpart (subcpu_fp_math.s line 160, de = 3).
-FPConst_Int32_Max_As_Double:
-	normal
-	nop
-	.byte 0xc0, 0xff, 0xff
-	swi	7
-	mul	xbc, xsp
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.byte 0xf0, 0x3f, 0x00, 0x00
-	nop
-	nop
-	nop
-	nop
-	.byte 0xf0, 0x3f, 0x00, 0x00
-	nop
-	nop
-	nop
-	nop
-	.byte 0xf0, 0x3f, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xe0, 0x3f, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f
+FPConst_Int32_Max_As_Double:	.quad 0x41dfffffffc00001	; 2147483647.0000002, read by FP_pow (operand at 0x03D54D)
+FPConst_pow_AfterRange_One:	.double 1.0	; 1.0, read by FP_pow_AfterRange (operand at 0x03D5A1)
+FPConst_pow_AltPath_One:	.double 1.0	; 1.0, read by FP_pow_AltPath (operand at 0x03D5D1)
+FPConst_pow_IntPower_Seed_One:	.double 1.0	; 1.0, read by FP_pow_IntPower_Seed (operand at 0x03D610)
+FPConst_pow_IntPower_LessPath_Zero:	.double 0.0	; 0.0, read by FP_pow_IntPower_LessPath (operand at 0x03D67B)
+FPConst_pow_IntPower_DifferentPath_One:	.double 1.0	; 1.0, read by FP_pow_IntPower_DifferentPath (operand at 0x03D721)
+FPConst_pow_ExpLog_Zero:	.double 0.0	; 0.0, read by FP_pow_ExpLog (operand at 0x03D75D)
+FPConst_pow_ExpLog_Clamp_Zero:	.double 0.0	; 0.0, read by FP_pow_ExpLog_Clamp (operand at 0x03D814)
+FPConst_SinCos_Kernel_Zero:	.double 0.0	; 0.0, read by FP_SinCos_Kernel (operand at 0x03D9AA)
+FPConst_SinCos_Kernel_InRange_Half:	.double 0.5	; 0.5, read by FP_SinCos_Kernel_InRange (operand at 0x03D9E3)
+FPConst_SinCos_Kernel_InRange_One:	.double 1.0	; 1.0, read by FP_SinCos_Kernel_InRange (operand at 0x03D9F7)
+FPConst_SinCos_Kernel_Phase3_Half:	.double 0.5	; 0.5, read by FP_SinCos_Kernel_Phase3 (operand at 0x03DA4E)
+FPConst_modf_Zero:	.double 0.0	; 0.0, read by FP_modf (operand at 0x03E1AA)
+FPConst_exp_One:	.double 1.0	; 1.0, read by FP_exp (operand at 0x03E650)
+FPConst_exp_NonZero_One:	.double 1.0	; 1.0, read by FP_exp_NonZero (operand at 0x03E676)
 ; 709.778 = ln(DBL_MAX). Compared against before exp()/pow() to decide the ERANGE path.
-FPConst_Exp_Overflow_Limit:
-	.byte 0x4e, 0x62
-	.byte 0x10, 0x58, 0x39, 0x2e, 0x86, 0x40
+FPConst_Exp_Overflow_Limit:	.quad 0x40862e395810624e	; 709.778, read by FP_exp_NonZero (operand at 0x03E685)
 ; -708.396 = ln(DBL_MIN). The underflow counterpart of the above.
-FPConst_Exp_Underflow_Limit:
-	.byte 0xba, 0x49
-	.byte 0x0c, 0x02, 0x2b, 0x23, 0x86, 0xc0, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
-	.zero 8
-	.zero 8
-	.zero 8
-	.zero 8
-	.zero 8
-	.zero 6
+FPConst_Exp_Underflow_Limit:	.quad 0xc086232b020c49ba	; -708.396, read by FP_exp_LessPath (operand at 0x03E6AD)
+FPConst_exp_LessPath_Zero:	.double 0.0	; 0.0, read by FP_exp_LessPath (operand at 0x03E6BF)
+FPConst_log_Zero:	.double 0.0	; 0.0, read by FP_log (operand at 0x03E74D)
+FPConst_log_InRange_One_1:	.double 1.0	; 1.0, read by FP_log_InRange (operand at 0x03E781)
+FPConst_log_InRange_One_2:	.double 1.0	; 1.0, read by FP_log_InRange (operand at 0x03E7A7)
+FPConst_log_InRange_One_3:	.double 1.0	; 1.0, read by FP_log_InRange (operand at 0x03E7B6)
+FPConst_log_IterLoop_Two:	.double 2.0	; 2.0, read by FP_log_IterLoop (operand at 0x03E85D)
+FPConst_trunc_Zero:	.double 0.0	; 0.0, read by FP_trunc (operand at 0x03E899)
+FPConst_trunc_ZeroOrMax_Zero:	.double 0.0	; 0.0, read by FP_trunc_ZeroOrMax (operand at 0x03E8CB)
+FPConst_trunc_NegOffset_Zero:	.double 0.0	; 0.0, read by FP_trunc_NegOffset (operand at 0x03E928)
+FPConst_ldexp_Zero:	.double 0.0	; 0.0, read by FP_ldexp (operand at 0x03EABB)
+FPConst_ldexp_ClampLow_Zero:	.double 0.0	; 0.0, read by FP_ldexp_ClampLow (operand at 0x03EB00)
+FPConst_ldexp_DecLoop_Zero:	.double 0.0	; 0.0, read by FP_ldexp_DecLoop (operand at 0x03EB8B)
 
 
 INTRX1_HANDLER:	; 1F736
@@ -11464,17 +12883,17 @@ INTRX1_HANDLER:	; 1F736
 	push xde
 	push xbc
 	push xwa
-	ld_sd8b C, 0xD4
-	ld_sd8b A, 0xD5
+	ld_sd8b C, SC1BUF
+	ld_sd8b A, SC1CR
 	and a, 0x1C	; 0001 1100
 	jr z, Serial1_RX_NoError
 
 	; serial comms error happened:
-	ldmm_sd8b 0xD5, 0x36, 0x10	; LD (1036h), (SC1CR)
+	ldmm_sd8b SC1CR, 0x36, 0x10	; LD (1036h), (SC1CR)
 	jr Serial1_RX_Exit
 
 Serial1_RX_NoError:	; 01F74Fh
-	bit 2, (4148:16)	; Check if RX enabled
+	bit 2, (SERIAL_1_VAR_1034:16)	; Check if RX enabled
 	jr z, Serial1_RX_Exit
 	ld xwa, 0xE00	; Ring buffer descriptor at 0x0E00
 	calr SAVE_BYTE_TO_RING_BUFFER
@@ -11503,10 +12922,10 @@ INTTX1_HANDLER:	; 01F765h
 	push xde
 	push xbc
 	push xwa
-	bit 0, (4148:16)	; Check sync flag
+	bit 0, (SERIAL_1_VAR_1034:16)	; Check sync flag
 	jr z, Serial1_TX_Normal
-	res 0, (4148:16)
-	ld (0xD4:8), 0xFE:io	; Send sync byte
+	res 0, (SERIAL_1_VAR_1034:16)
+	ld (SC1BUF:8), 0xFE:io	; Send sync byte
 	jr Serial1_TX_CheckEmpty
 
 Serial1_TX_Normal:	; 01F77Bh
@@ -11514,16 +12933,16 @@ Serial1_TX_Normal:	; 01F77Bh
 	calr READ_BYTE_FROM_RING_BUFFER
 	cp hl, 0xFFFF	; Buffer empty?
 	jr z, Serial1_TX_CheckEmpty
-	st_dd8b L, 0xD4	; Send byte
+	st_dd8b L, SC1BUF	; Send byte
 
 Serial1_TX_CheckEmpty:	; 01F78Ch
-	bit 0, (4148:16)
+	bit 0, (SERIAL_1_VAR_1034:16)
 	jr nz, Serial1_TX_Exit
 	ld xwa, 0x1016
 	calr RING_BUFFER_HAS_OVERRUN
 	cp hl, 0xFFFF	; Buffer empty?
 	jr nz, Serial1_TX_Exit
-	ld (0xEB:8), 0xFD:io	; Disable TX interrupt
+	ld (INTES1:8), 0xFD:io	; Disable TX interrupt
 
 Serial1_TX_Exit:	; 01F7A3h
 	pop xwa
@@ -11621,28 +13040,39 @@ RingBuf_Write_Update:	; 01F7F8h
 Serial1_Enable_TX_Interrupt:	; 01F801h
 	push	sr
 	ei 6
-	ld (0xEB:8), 0xDD:io
+	ld (INTES1:8), 0xDD:io
 	pop	sr
 	ret
 
-Serial1_BaudRate_Config_Table:
-	.byte 0x02, 0x06, 0x06, 0x08, 0xeb, 0xfd, 0x03, 0x0e
+; Writes INTES1 (SFR 0xEB, serial-1 interrupt enable/level) = 0xFD under `push sr / ei 6` --
+; instruction for instruction the shape of Serial1_Enable_TX_Interrupt just above, which
+; writes 0xDD; the two values differ only in the high (TX) nibble, 0xF against 0xD.  No caller
+; found: the address 0x01F809 occurs nowhere in the image as a 3-byte LE value and no calr
+; displacement lands on it, so what 0xFD selects is not established.
+; ★ Renamed 2026-09-25 from Serial1_BaudRate_Config_Table and written as instructions: the 8
+; bytes decode cleanly (MAME unidasm and llvm-mc agree) as this routine, not as a table.
+Serial1_Write_INTES1_FD:
+	push	sr
+	ei 6
+	ld (INTES1:8), 0xFD:io
+	pop	sr
+	ret
 
 Serial1_CommandHandler_RX_F4F5:
 	cp a, 0xF5
 	jr z, Serial1_F5_BaudRate_Switch
 	cp a, 0xF4
 	ret nz
-	ld (4152:16), 3
-	set 2, (4148:16)
+	ld (SERIAL_1_VAR_1038:16), 3
+	set 2, (SERIAL_1_VAR_1034:16)
 	ei 6
-	ld (0xD6:8), 0x2B:io
+	ld (SC1MOD:8), 0x2B:io
 	ei 0
 	ret
 
 Serial1_F5_BaudRate_Switch:
-	ld (4152:16), 2
-	set 2, (4148:16)
+	ld (SERIAL_1_VAR_1038:16), 2
+	set 2, (SERIAL_1_VAR_1034:16)
 	ret
 
 Audio_CheckQueuedData_Send:
@@ -11653,7 +13083,7 @@ Audio_CheckQueuedData_Send:
 	cp xde, 0x87
 	ret c
 	ld (4140:16), xbc
-	set 0, (4148:16)
+	set 0, (SERIAL_1_VAR_1034:16)
 	calr Serial1_Enable_TX_Interrupt
 	ret
 
@@ -11695,7 +13125,7 @@ Serial1_DataTransmit_Loop:
 	jr z, Serial1_TX_Done
 
 Serial1_TX_LoopBody:
-	bit 2, (4148:16)
+	bit 2, (SERIAL_1_VAR_1034:16)
 	jr nz, Serial1_TX_ViaRingBuf
 	ld xwa, (xsp + 6)
 	ldb_spi C, 0xE0
@@ -11732,27 +13162,33 @@ Audio_Process_Final:
 	jrl Audio_CheckQueuedData_Send
 
 INIT_RING_BUFFERS:
-	ld (4148:16), 0
-	set 0, (4148:16)
-	ld (4152:16), 0
-	ld xiy, 0xF434
+	ld (SERIAL_1_VAR_1034:16), 0
+	set 0, (SERIAL_1_VAR_1034:16)
+	ld (SERIAL_1_VAR_1038:16), 0
+	ld xiy, Serial1_TxBuf_Struct
 	ld xix, 0xE00
 	ldw bc, 0xB
 	ldirw
-	ld xiy, 0xF44A
+	ld xiy, Serial1_RxBuf_Struct
 	ld xix, 0x1016
 	ldw bc, 0xB
 	ldirw
 	ei 6	; <-------  1f90b
-	ld (0xD6:8), 0x29:io
-	ld (0xD5:8), 0x00:io
-	ld (0xD7:8), 0x0A:io
-	ld (0xEB:8), 0x5D:io
-	ld (0xD4:8), 0xFE:io
+	ld (SC1MOD:8), 0x29:io
+	ld (SC1CR:8), 0x00:io
+	ld (BR1CR:8), 0x0A:io
+	ld (INTES1:8), 0x5D:io
+	ld (SC1BUF:8), 0xFE:io
 	ei 0
 	ret
 
-Serial1_Config_Constants:
+; 5 bytes right before RESET (0x01F924).  They decode (MAME unidasm) as `halt / ret / jr T,RESET
+; / ret` -- the jr skips the last 0x0E and lands exactly on RESET -- but the same bytes also
+; decode cleanly one byte later, nothing refers to 0x01F91F..0x01F923 (3-byte LE address, calr
+; and jr displacements searched), and nothing here is serial configuration.  Purpose not
+; established; kept as bytes.
+; ★ Renamed 2026-09-25 from Serial1_Config_Constants, a name no reader supports.
+PreReset_Unreferenced_Bytes:
 	.byte 0x05, 0x0e, 0x68, 0x01, 0x0e
 
 
