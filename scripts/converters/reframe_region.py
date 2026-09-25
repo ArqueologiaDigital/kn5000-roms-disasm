@@ -12,6 +12,10 @@ QUESTION THIS ANSWERS
     byte after a `ret`) plus llvm-mc agreeing on every instruction's length.
 
 HOW
+  0. SYNC CHECK: unidasm is started 40..47 bytes before `lo`; `lo` must be an
+     instruction start in at least 6 of the 8 decodes (linear decoding
+     resynchronises, so a true boundary is reached from most anchors), unless
+     --force-start is given with independent evidence.
   1. The address map of the image (address_line_map.py's marker technique)
      gives the source lines that emit [lo, hi) in FILE; the range must start
      and end on line boundaries.
@@ -116,6 +120,8 @@ def main():
                          " that another file references; emitted as `.set NAME, . + k` before"
                          " the instruction, with the comment")
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--force-start", action="store_true",
+                    help="accept a start that fails the sync check (give the evidence in the commit)")
     a = ap.parse_args()
     lo, hi = [int(x, 16) for x in a.range.split("-")]
     data = []
@@ -166,6 +172,18 @@ def main():
     if cur < hi:
         pieces.append((cur, hi, "code"))
     addr_label = {v: k for k, v in syms.items() if BASE <= v < 0x1000000}
+    # SYNC CHECK: is `lo` an instruction start on the path unidasm settles into
+    # from earlier, arbitrary starting bytes?  Linear TLCS-900 decoding
+    # resynchronises within a few instructions, so a true boundary is hit from
+    # most anchors and a misframed one from few.
+    hits = 0
+    for back in range(40, 48):
+        starts = {ia for ia, n, t in unidasm(rom, lo - back, lo + 16)}
+        hits += lo in starts
+    print("sync check at 0x%06X: %d of 8 earlier anchors land on it" % (lo, hits))
+    if hits < 6 and not a.force_start:
+        sys.exit("refusing: 0x%06X is not where linear decoding from earlier bytes settles (%d/8);"
+                 " pass --force-start with independent evidence (a call/jump/pointer to it)" % (lo, hits))
     for x, y, kind in pieces:
         if kind == "code":
             ins = unidasm(rom, x, y)

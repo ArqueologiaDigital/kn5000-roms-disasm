@@ -15797,29 +15797,23 @@ VoiceSlot_LoadResult_LoadReg:
 	pop xiz
 	pop xix
 	ret
-
 VoiceSlot_LoadResult_Data:
-	ld	c, (0xcee5:24)
+	ldb_da	c, (0xcee5)
 	ld	b, c
-	calr	65025
+	calr	Voice_ComputeNoteBitPosition
 	ld	xiy, SoundEffect_Dispatch_Table_0x103C
-	calr	65173
+	calr	ComputeNoteBitPositi_StoreDRAM
 	cp	a, 0:i3
-	jr	z, 20
-	.byte 0xc2
-	or	iz, 0x3e00
-	rcf
-	.byte 0xc2
-	or	iz, 0x3c00
-	jrl	nc, -8510
-	.byte 0xce
-	nop
-	push	xix
-	swi	1
-	jr	6
+	jr	z, Voice_UpdateNoteBitmap_Skip
+	ordi8_24	(0xcede), 16
+	anddi8_24	(0xcede), 127
+	anddi8_24	(0xcede), 249
+	jr	Voice_UpdateNoteBitmap_Return
+Voice_UpdateNoteBitmap_Skip:
 	ld	a, 0:opc
 	ld	w, 0:opc
-	jr	0
+	jr	Voice_UpdateNoteBitmap_Return
+Voice_UpdateNoteBitmap_Return:
 	ret
 
 VoiceSlot_LoadResult_Block:
@@ -19334,9 +19328,9 @@ SendEpilogue_Data_Helper:
 	cp	wa, 6:i3
 	jr	gt, SeqVoice_CheckAndRet_Data_Skip12
 	add	wa, wa
-	lda	xix, (SoundEffect_Dispatch_Table_0x1360:24)
+	lda_24	xix, (0xeec168)
 	ld_rrw	wa, xix, wa
-	lda	xix, (SeqVoice_CheckAndRet_Data_0x101:24)
+	lda_24	xix, (0xfebd57)
 	jp_rr	8, xix, wa
 SeqVoice_CheckAndRet_Data_Skip10:
 	ld	hl, 0:i3
@@ -22537,16 +22531,12 @@ Dispatch_Data_Skip3:
 	ld	xwa, xiz
 Dispatch_Data_Skip4:
 	ld	xiz, xwa
-	cp	xiz, 256
+	cp	xiz, 0x100
 	jr	nc, Dispatch_Data_Entry
-	.byte 0xf1
-	jr	ule, -4
-	.byte 0xb0
+	resda	0, (0xfc63)
 	jr	Dispatch_Data_Join
 Dispatch_Data_Entry:
-	.byte 0xf1
-	jr	ule, -4
-	.byte 0xb8
+	setda	0, (0xfc63)
 Dispatch_Data_Join:
 	ld	wa, iz
 	ld	bc, wa
@@ -25309,36 +25299,30 @@ Param_SignExtendReturn_Skip12:
 	inc	6, xsp
 	ret
 	ret
-	lda	xsp, (xsp-22)
+	lda	xsp, (xsp-0x16)
 	pushw	iz
-	ld	(xsp+20), xwa
-	ld	xwa, (xsp+20)
-	calr	64511
-	ld	(xsp+6), hl
-	ld	xwa, (xsp+20)
-	calr	64543
-	.byte 0x9f, 0x06
-	push	xsp
-	nop
-	nop
-	jrl	z, 205
-	.byte 0x9f, 0x06
-	push	xsp
-	jrl	0x7200
-	.byte 0xc5
-	nop
+	ld	(xsp+0x14), xwa
+	ld	xwa, (xsp+0x14)
+	calr	Param_SignExtendReturn_Helper
+	ld	(xsp+0x6), hl
+	ld	xwa, (xsp+0x14)
+	calr	Param_SignExtendRetu_Data
+	cpw	(xsp+0x6), 0
+	jrl	z, Param_SignExtendReturn_Entry
+	cpw	(xsp+0x6), 120
+	jrl	le, Param_SignExtendReturn_Entry
 	or	xhl, xhl
-	jrl	z, 192
+	jrl	z, Param_SignExtendReturn_Entry
 	ld	xwa, xhl
 	sra	xwa, 15
 	sra	xwa, 0
 	and	xwa, 0x3fff
 	add	xwa, xhl
 	and	xwa, 0xffffc000
-	ld	(xsp+2), xhl
-	sub	(xsp+2), xwa
-	ld	xbc, (xsp+2)
-	ld	a, (xbc+16)
+	ld	(xsp+0x2), xhl
+	sub	(xsp+0x2), xwa
+	ld	xbc, (xsp+0x2)
+	ld	a, (xbc+0x10)
 	and	a, 192
 	cp	a, 192
 	jrl	z, Param_SignExtendReturn_Join3
@@ -25454,70 +25438,61 @@ Param_SignExtendReturn_Return:
 	ret
 	dec	2, xsp
 	push	xiz
-	ld	(0xe193:16), xwa
+	stda32	(0xe193), xwa
 	ld	(xwa), 240
-	ld	xwa, (0xe193:16)
-	ld	(xwa+1), 80
-	ld	xwa, (0xe193:16)
-	ld	(xwa+2), 44
-	ld	xwa, (0xe193:16)
-	ld	(xwa+3), 4
-	ld	xwa, (0xe193:16)
-	ld	(xwa+4), 0
-	ld	xwa, (0xe193:16)
-	ld	(xwa+5), 17
-	ld	xwa, (0xe193:16)
+	ldda32	xwa, (0xe193)
+	ld	(xwa+0x1), 80
+	ldda32	xwa, (0xe193)
+	ld	(xwa+0x2), 44
+	ldda32	xwa, (0xe193)
+	ld	(xwa+0x3), 4
+	ldda32	xwa, (0xe193)
+	ld	(xwa+0x4), 0
+	ldda32	xwa, (0xe193)
+	ld	(xwa+0x5), 17
+	ldda32	xwa, (0xe193)
 	calr	Param_SignExtendReturn_Helper
-	ld	(xsp+4), hl
-	ld	wa, (xsp+4)
+	ld	(xsp+0x4), hl
+	ld	wa, (xsp+0x4)
 	exts	xwa
 	add	xwa, xwa
-	ld	xbc, (0xe193:16)
+	ldda32	xbc, (0xe193)
 	add	xbc, xwa
 	add	xbc, 12
 	ld	xiz, xbc
 	inc	1, xiz
 	ld	(xbc), 0
-	ld	xwa, (0xe193:16)
-	ld	bc, (xsp+4)
+	ldda32	xwa, (0xe193)
+	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 13
-	call	Part_ProcessEntry_Data_0x19
-	.byte 0xf5
-	swi	0
-	ld	xsp, 0xe1f700b6
-	.byte 0x93, 0xe1
-	ld	w, 159:opc
-	.byte 0x04
-	ld	a, 217:opc
-	xor	(xbc), a
-	.byte 0xc8
-	retd	7424
-	.byte 0x06
-	jrl	ule, 0x5efd
+	call	0xfd72e7
+	lda_dpi	xsp, 248
+	ld	(xiz), 247
+	ldda32	xwa, (0xe193)
+	ld	bc, (xsp+0x4)
+	add	bc, bc
+	add	bc, 15
+	call	0xfd7306
+	pop	xiz
 	inc	2, xsp
 	ret
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, xiz
-	calr	64049
-	ld	(xsp+6), hl
+	calr	Param_SignExtendReturn_Helper
+	ld	(xsp+0x6), hl
 	ld	xwa, xiz
-	calr	64082
-	ld	bc, (xsp+6)
+	calr	Param_SignExtendRetu_Data
+	ld	bc, (xsp+0x6)
 	exts	xbc
-	.byte 0x9f, 0x06
-	push	xsp
-	nop
-	nop
-	jr	z, 113
-	.byte 0x9f, 0x06
-	push	xsp
-	jrl	0x6200
-	jr	gt, -21
-	.byte 0xe3
-	jr	z, 102
+	cpw	(xsp+0x6), 0
+	jr	z, Param_SignExtendReturn_Entry2
+	cpw	(xsp+0x6), 120
+	jr	le, Param_SignExtendReturn_Entry2
+	or	xhl, xhl
+	jr	z, Param_SignExtendReturn_Entry2
 	ld	xwa, xhl
 	sra	xwa, 15
 	sra	xwa, 0
@@ -25525,7 +25500,7 @@ Param_SignExtendReturn_Return:
 	add	xwa, xhl
 	and	xwa, 0xffffc000
 	sub	xhl, xwa
-	ld	e, (xhl+16)
+	ld	e, (xhl+0x10)
 	and	e, 192
 	cp	e, 192
 	jr	z, Param_SignExtendReturn_Skip21
@@ -25536,11 +25511,11 @@ Param_SignExtendReturn_Return:
 	jr	z, Param_SignExtendReturn_Skip21
 	cp	e, 0:i3
 	jr	nz, Param_SignExtendReturn_Skip21
-	cp	xhl, 470
+	cp	xhl, 0x1d6
 	jr	ugt, Param_SignExtendReturn_Entry2
-	ld	(0xe193:16), xiz
+	stda32	(0xe193), xiz
 	ld	wa, 3:i3
-	ld	bc, (xsp+6)
+	ld	bc, (xsp+0x6)
 	ld	xde, xiz
 	jr	19
 Param_SignExtendReturn_Skip20:
@@ -26702,60 +26677,62 @@ SendPartDataBlock_Return5_Helper:
 	.byte 0xaa, 0x01, 0x37
 	ret
 HdaeRom_DataHandler_Helper2:
-	lda	xsp, (xsp-26)
+	lda	xsp, (xsp-0x1a)
 	push	xiz
-	ld	(xsp+22), xbc
-	ld	(xsp+26), xwa
-	ld	xwa, (xsp+26)
+	ld	(xsp+0x16), xbc
+	ld	(xsp+0x1a), xwa
+	ld	xwa, (xsp+0x1a)
 	calr	65441
-	ld	xde, (xsp+26)
-	lda	xhl, (xde+16)
-	ld	xwa, (xsp+22)
+	ld	xde, (xsp+0x1a)
+	lda	xhl, (xde+0x10)
+	ld	xwa, (xsp+0x16)
 	ld	xiy, xwa
 	ld	xix, xde
 	ldw	bc, 8
 	ldirw
-	lda	xwa, (xwa+16)
-	.byte 0xb0
-	inc	6, l
-	.byte 0x04, 0xb3, 0xbd
-	jr	2
-	.byte 0xb3, 0xb5, 0xb0
-	inc	6, b
-	.byte 0x04, 0xb3, 0xbc
-	jr	2
-	.byte 0xb3, 0xb4
-	ld	xhl, (xsp+26)
-	lda	xwa, (xhl+41)
-	ld	(xsp+14), xwa
-	.byte 0x80
-	push	xix
-	xorcf_dd8 187
-	ldw wa, 2751
-	jr f, -80
-	nop
-	nop
-	ld	xix, (xsp+22)
-	lda	xwa, (xix+17)
-	ld	(xsp+18), xwa
+	lda	xwa, (xwa+0x10)
+	bitm	7, (xwa)
+	jr	z, HdaeRom_DataHandler_Helper2_Skip
+	setm	5, (xhl)
+	jr	HdaeRom_DataHandler_Helper2_Join
+HdaeRom_DataHandler_Helper2_Skip:
+	resm	5, (xhl)
+HdaeRom_DataHandler_Helper2_Join:
+	bitm	2, (xwa)
+	jr	z, HdaeRom_DataHandler_Helper2_Skip2
+	setm	4, (xhl)
+	jr	HdaeRom_DataHandler_Helper2_Join2
+HdaeRom_DataHandler_Helper2_Skip2:
+	resm	4, (xhl)
+HdaeRom_DataHandler_Helper2_Join2:
+	ld	xhl, (xsp+0x1a)
+	lda	xwa, (xhl+0x29)
+	ld	(xsp+0xe), xwa
+	andmi8	(xwa), 240
+	lda	xwa, (xhl+0x2a)
+	ld	(xsp+0xa), xwa
+	ld	(xwa), 0
+	ld	xix, (xsp+0x16)
+	lda	xwa, (xix+0x11)
+	ld	(xsp+0x12), xwa
 	ld	a, (xwa)
 	and	a, 192
 	srl	a, 6
 	inc	7, a
 	ld	c, a
-	ld	xwa, (xsp+14)
+	ld	xwa, (xsp+0xe)
 	or	(xwa), c
-	ld	xiy, (xsp+18)
+	ld	xiy, (xsp+0x12)
 	ld	a, (xiy)
 	and	a, 48
 	srl	a, 4
 	inc	7, a
 	sll	a, 4
 	ld	e, a
-	ld	xwa, (xsp+10)
+	ld	xwa, (xsp+0xa)
 	ld	c, (xwa)
 	or	c, e
-	ld	xde, (xsp+10)
+	ld	xde, (xsp+0xa)
 	ld	(xde), c
 	ld	a, (xiy)
 	and	a, 12
@@ -26763,28 +26740,28 @@ HdaeRom_DataHandler_Helper2:
 	inc	7, a
 	or	c, a
 	ld	(xde), c
-	ld	a, (xix+18)
+	ld	a, (xix+0x12)
 	mul	a, 127
 	extz	wa
 	div	a, 30
 	ld	c, a
-	ld	(xhl+59), c
+	ld	(xhl+0x3b), c
 	ld	xde, xix
-	ld	a, (xde+19)
-	ld	(xhl+43), a
-	lda	xwa, (xde+20)
-	ld	(xsp+18), xwa
+	ld	a, (xde+0x13)
+	ld	(xhl+0x2b), a
+	lda	xwa, (xde+0x14)
+	ld	(xsp+0x12), xwa
 	ld	xbc, xhl
-	lda	xwa, (xbc+44)
-	ld	(xsp+14), xwa
-	lda	xwa, (xbc+60)
-	ld	(xsp+10), xwa
-	ld	xwa, (xsp+18)
+	lda	xwa, (xbc+0x2c)
+	ld	(xsp+0xe), xwa
+	lda	xwa, (xbc+0x3c)
+	ld	(xsp+0xa), xwa
+	ld	xwa, (xsp+0x12)
 	ld	c, (xwa)
 	cp	c, 9
 	jr	nc, SendPartDataBlock_Return5_Skip2
 	inc	5, c
-	ld	xwa, (xsp+10)
+	ld	xwa, (xsp+0xa)
 	ld	(xwa), c
 	ld	c, 5:opc
 	jr	SendPartDataBlock_Return5_Join
@@ -26818,74 +26795,69 @@ SendPartDataBlock_Return5_Join:
 	ld	xwa, (xsp+14)
 	ld	(xwa), c
 SendPartDataBlock_Return5_Join2:
-	ld	xix, (xsp+22)
-	lda	xde, (xix+21)
+	ld	xix, (xsp+0x16)
+	lda	xde, (xix+0x15)
 	ld	c, (xde)
-	ld	xhl, (xsp+26)
-	ld	(xhl+62), c
+	ld	xhl, (xsp+0x1a)
+	ld	(xhl+0x3e), c
 	ld	c, (xde)
-	ld	(xhl+46), c
-	ld	c, (xix+30)
+	ld	(xhl+0x2e), c
+	ld	c, (xix+0x1e)
 	sll	c, 3
-	ld	(xhl+92), c
+	ld	(xhl+0x5c), c
 	ld	xwa, xix
-	lda	xwa, (xwa+31)
-	ld	(xsp+6), xwa
+	lda	xwa, (xwa+0x1f)
+	ld	(xsp+0x6), xwa
 	ld	xde, xhl
 	ld	a, (xwa)
-	ld	(xde+93), a
-	ld	(xsp+4), 0
+	ld	(xde+0x5d), a
+	ld	(xsp+0x4), 0
 	ld	de, 0:i3
+HdaeRom_DataHandler_Helper2_Loop:
 	ld	ix, de
 	add	ix, 94
 	ld	hl, de
 	add	hl, 32
-	ld	xwa, (xsp+22)
-	ld	xbc, (xsp+26)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xec
-	ld	a, 243:opc
-	reti
-	.byte 0xe4, 0xf0
-	ld	xbc, 0xda61048f
-	jr	lt, -113
-	max
-	push	xsp
-	ld	(103:8), 217:io
-	ld	xwa, (xsp+6)
+	ld	xwa, (xsp+0x16)
+	ld	xbc, (xsp+0x1a)
+	ld_rrb	a, xwa, hl
+	st_rrb	a, xbc, ix
+	incm8	1, (xsp+0x4)
+	inc	1, de
+	cp	(xsp+0x4), 8
+	jr	c, HdaeRom_DataHandler_Helper2_Loop
+	ld	xwa, (xsp+0x6)
 	ld	a, (xwa)
 	and	a, 15
 	cp	a, 10
-	jr	z, 5
+	jr	z, HdaeRom_DataHandler_Helper2_Skip3
 	cp	a, 11
-	jr	nz, 67
-	ld	xwa, (xsp+26)
-	lda	xwa, (xwa+96)
-	ld	(xsp+18), xwa
-	ld	xwa, (xsp+22)
-	.byte 0x88
-	.ascii "\"?2c"
-	.byte 0x06
-	ld	xwa, (xsp+18)
+	jr	nz, SendPartDataBlock_Return5_Skip4
+HdaeRom_DataHandler_Helper2_Skip3:
+	ld	xwa, (xsp+0x1a)
+	lda	xwa, (xwa+0x60)
+	ld	(xsp+0x12), xwa
+	ld	xwa, (xsp+0x16)
+	cp	(xwa+0x22), 50
+	jr	ule, HdaeRom_DataHandler_Helper2_Skip4
+	ld	xwa, (xsp+0x12)
 	ld	(xwa), 50
-	ld	xwa, (xsp+6)
-	.byte 0xb0
-	inc	6, l
-	ld	d, 175:opc
-	ex_ff
-	ld	c, 187:opc
-	.byte 0x1c
-	ldw	de, 8578
+HdaeRom_DataHandler_Helper2_Skip4:
+	ld	xwa, (xsp+0x6)
+	bitm	7, (xwa)
+	jr	z, SendPartDataBlock_Return5_Skip4
+	ld	xhl, (xsp+0x16)
+	lda	xde, (xhl+0x1c)
+	ld	a, (xde)
 	bit	6, a
 	jr	z, SendPartDataBlock_Return5_Skip4
-	ld	xbc, (xsp+26)
-	ld	(xbc+94), 1
-	ld	a, (xhl+29)
-	ld	(xbc+95), a
+	ld	xbc, (xsp+0x1a)
+	ld	(xbc+0x5e), 1
+	ld	a, (xhl+0x1d)
+	ld	(xbc+0x5f), a
 	ld	c, (xde)
 	and	c, 63
-	ld	xwa, (xsp+18)
+	ld	xwa, (xsp+0x12)
 	ld	(xwa), c
 SendPartDataBlock_Return5_Skip4:
 	ld	xbc, (xsp+26)
@@ -27718,14 +27690,14 @@ TmFlashWrite_Block3:
 	call	BuildAndSendPacket_Block
 	jr	12
 TmFlashWrite_Block2_Code_Skip:
-	ld	a, (xsp+4)
+	ld	a, (xsp+0x4)
 	extz	wa
 	ldw	bc, 255
-	call	COMM_BuildAndSendPacket
-	call	FDemoText_RefreshFullDisplay
+	call	0xfef455
+	call	0xf851de
 	pop	xiz
-	.byte 0xef
-	jr	le, 0x0e
+	inc	2, xsp
+	ret
 
 TmFlash_CopyToExtMem:
 	lda xwa, (0x300000:24)
@@ -27922,10 +27894,10 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	ret
 	dec	8, xsp
 	pushw	iz
-	ld	(xsp+2), xde
+	ld	(xsp+0x2), xde
 	ld	iz, bc
-	ld	(xsp+6), xwa
-	ld	xwa, (xsp+6)
+	ld	(xsp+0x6), xwa
+	ld	xwa, (xsp+0x6)
 	calr	SendPartDataBlock_InitVal4
 	ld	bc, iz
 	extz	xbc
@@ -27936,35 +27908,29 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	cp	hl, 5:i3
 	jrl	gt, TmFlash_BulkTransferToSubCPU_Skip5
 	add	hl, hl
-	lda	xix, (CharMap_FullPermutation_0x653:24)
-	ld_rrw hl, xix, hl
-	lda xix, (16713883:24)
-	jp_rr 8, xix, hl
+	lda_24	xix, (0xeed76b)
+	ld_rrw	hl, xix, hl
+	lda_24	xix, (0xff089b)
+	jp_rr	8, xix, hl
 	ld	xwa, xbc
-	ld	xbc, 470
+	ld	xbc, 0x1d6
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
-	.byte 0xaf, 0x06
-	sub	(xhl), l
-	.byte 0x06
-	sub	(xhl), xsp
-	push	sr
-	ld	w, 176:opc
-	jr	ule, 48
-	.byte 0xd6, 0x01
+	add	xhl, (xsp+0x6)
+	sub	xhl, (xsp+0x6)
+	ld	xwa, (xsp+0x2)
+	ld	(xwa), xhl
+	ldw	wa, 0x1d6
 	jr	TmFlash_BulkTransferToSubCPU_Join2
 	ld	xwa, xbc
-	ld	xbc, 289
+	ld	xbc, 0x121
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
-	.byte 0xaf, 0x06
-	sub	(xhl), l
-	.byte 0x06
-	sub	(xhl), xsp
-	push	sr
-	ld	w, 176:opc
-	jr	ule, 48
-	ld	a, 1:opc
+	add	xhl, (xsp+0x6)
+	sub	xhl, (xsp+0x6)
+	ld	xwa, (xsp+0x2)
+	ld	(xwa), xhl
+	ldw	wa, 0x121
 	jr	TmFlash_BulkTransferToSubCPU_Join2
 	ld	xwa, xbc
 	sll	xwa, 3
@@ -27972,15 +27938,11 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	sll	xwa, 4
 	add	xwa, 80
 	ld	xhl, xwa
-	.byte 0xaf, 0x06
-	sub	(xhl), l
-	.byte 0x06
-	sub	(xhl), xsp
-	push	sr
-	ld	w, 176:opc
-	jr	ule, 48
-	.byte 0x90
-	nop
+	add	xhl, (xsp+0x6)
+	sub	xhl, (xsp+0x6)
+	ld	xwa, (xsp+0x2)
+	ld	(xwa), xhl
+	ldw	wa, 144
 TmFlash_BulkTransferToSubCPU_Join2:
 	ld	xbc, (xsp+14)
 	ld	(xbc), wa
