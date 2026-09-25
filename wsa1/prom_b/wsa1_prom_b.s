@@ -162356,16 +162356,21 @@ sub_F70C3F:
 	jr	ule, 5	; F70C47  jr ULE,0xf70c4e
 	ld	xiy, 1	; F70C49  ld XIY,0x00000001
 	ret	; F70C4E  ret
-	nop	; F70C4F  nop
-	normal	; F70C50  normal
-	push	sr	; F70C51  push SR
-	pop	sr	; F70C52  pop SR
-	max	; F70C53  max
-	halt	; F70C54  halt
-	ei	7	; F70C55  ei 0x07
-	ld	(15:8), 9:io	; F70C57  ld (0x0f),0x09
-	ldw	(11:8), 3340:io	; F70C5A  ld (0x0b),0x0d0c
-	ret	; F70C5E  ret
+
+; --------------------------------------------------------------------------
+; ByteMap_F70C4F -- 0xF70C4F-0xF70C5E, 16 bytes: 0x00-0x08, 0x0F, 0x09-0x0E
+;   -- the identity on 0..15 except that 0x0F is moved to entry 9 and
+;   0x09-0x0E each move up one.  Converted 2026-09-25 (lane promb): the source
+;   framed the bytes as instructions (`nop`, `normal`, `push SR`, `pop SR`,
+;   `max`, `halt`, `ei 7`, `ld (0x0f),0x09`, `ld (0x0b),0x0d0c`, `ret`) after
+;   the `ret` that ends sub_F70C3F; nothing branches into them.
+; Unknown: the reader.  No 24- or 32-bit spelling of 0xF70C4F-0xF70C6E occurs
+;   in prom_a or prom_b; the identity map ByteMap_F70C5F follows it directly,
+;   the same shape as the flag-selected pairs ByteMap_F6F985/F6F996 that
+;   sub_F6F94E copies -- a pattern, not a reader.
+; --------------------------------------------------------------------------
+ByteMap_F70C4F:
+	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0F, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E	; F70C4F  [0..15]
 
 ; --------------------------------------------------------------------------
 ; ByteMap_F70C5F -- 18 bytes: a BYTE MAP.  0 of them are 0xFF and the other
@@ -162388,32 +162393,55 @@ sub_F70C3F:
 ; --------------------------------------------------------------------------
 ByteMap_F70C5F:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F70C5F  [0..15]
+; ⚠ CORRECTED 2026-09-25 (lane promb): the map is 16 bytes (0x00-0x0F), not
+;   18.  Its last two "entries" (0xC1, 0xD0) are the first two bytes of
+;   sub_F70C6F's first instruction, `ld C,(0x10d0)`, which a `calr` at
+;   0xF7047F reaches.
+
+
+; --------------------------------------------------------------------------
+; sub_F70C6F -- 0xF70C6F-0xF70CB9 (converted 2026-09-25, lane promb; was the
+;   last two bytes of ByteMap_F70C5F and `Data_F70C71`, 73 bytes filed as
+;   "everything about it except its bytes" unknown).
+; Called from: 0xF7047F (`calr`).
+; Does:    C = (0x10D0) AND 0x0F; clears bit C of the words at (0x11B4) and
+;          (0x11B6) (`rcf` then `stcf A,DE`, with A = C, bank-3 registers
+;          RL3/QHL3 holding A and DE across it); then writes 0xFF to
+;          (0x11D8 + C).  Its neighbour sub_F70CBA indexes (0x11B8) with the
+;          same (0x10D0) AND 0x0F.
+; Evidence: MAME unidasm and llvm-mc agree on every instruction, the one call
+;          site lands on the first, and it ends with `ret` right where
+;          sub_F70CBA, a routine two callers reach, begins.
+; Unknown: what the nibble of (0x10D0) and the three tables it indexes are.
+; --------------------------------------------------------------------------
 sub_F70C6F:
-	.byte	0xC1, 0xD0	; F70C6F  [16..17]
-
-
-; --------------------------------------------------------------------------
-; Data_F70C71 -- 73 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |.#....<..>...."....,.<....R.>..<..>...."....,.<
-;           ....R.>.....<D..........\.|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
-; --------------------------------------------------------------------------
-Data_F70C71:
-	.byte	0x10, 0x23, 0xCB, 0xCC, 0x0F, 0xC7, 0x3C, 0x99, 0xD7, 0x3E, 0x9A, 0xD1, 0xB4, 0x11, 0x22, 0xCB	; F70C71  [0..15]
-	.byte	0x89, 0x10, 0xDA, 0x2C, 0xC7, 0x3C, 0x89, 0xF1, 0xB4, 0x11, 0x52, 0xD7, 0x3E, 0x8A, 0xC7, 0x3C	; F70C81  [16..31]
-	.byte	0x99, 0xD7, 0x3E, 0x9A, 0xD1, 0xB6, 0x11, 0x22, 0xCB, 0x89, 0x10, 0xDA, 0x2C, 0xC7, 0x3C, 0x89	; F70C91  [32..47]
-	.byte	0xF1, 0xB6, 0x11, 0x52, 0xD7, 0x3E, 0x8A, 0xCA, 0xD2, 0xD9, 0x8D, 0x3C, 0x44, 0xD8, 0x11, 0x00	; F70CA1  [48..63]
-	.byte	0x00, 0xF3, 0x07, 0xF0, 0xF4, 0x00, 0xFF, 0x5C, 0x0E	; F70CB1  [64..72]
+	ld	c, (4304:16)	; F70C6F  ld C,(0x10d0)
+	and	c, 15	; F70C73  and C,0x0f
+	m_rd_ld_rr2x RBX, 0x3C, r1	; F70C76  ld RL3,A
+	m_rd_ld_rr2x RWX, 0x3E, r2	; F70C79  ld QHL3,DE
+	ld	de, (4532:16)	; F70C7C  ld DE,(0x11b4)
+	ld	a, c	; F70C80  ld A,C
+	rcf	; F70C82  rcf
+	m_rd_stcf_a RW+r2	; F70C83  stcf A,DE
+	m_rd_ld_rrx RBX, 0x3C, r1	; F70C85  ld A,RL3
+	ld	(4532:16), de	; F70C88  ld (0x11b4),DE
+	m_rd_ld_rrx RWX, 0x3E, r2	; F70C8C  ld DE,QHL3
+	m_rd_ld_rr2x RBX, 0x3C, r1	; F70C8F  ld RL3,A
+	m_rd_ld_rr2x RWX, 0x3E, r2	; F70C92  ld QHL3,DE
+	ld	de, (4534:16)	; F70C95  ld DE,(0x11b6)
+	ld	a, c	; F70C99  ld A,C
+	rcf	; F70C9B  rcf
+	m_rd_stcf_a RW+r2	; F70C9C  stcf A,DE
+	m_rd_ld_rrx RBX, 0x3C, r1	; F70C9E  ld A,RL3
+	ld	(4534:16), de	; F70CA1  ld (0x11b6),DE
+	m_rd_ld_rrx RWX, 0x3E, r2	; F70CA5  ld DE,QHL3
+	xor	b, b	; F70CA8  xor B,B
+	ld	iy, bc	; F70CAA  ld IY,BC
+	push	xix	; F70CAC  push XIX
+	ld	xix, 4568	; F70CAD  ld XIX,0x000011d8
+	mx_ld_mi8 MXD, ra_IX, ra_IY, 0xff	; F70CB2  ld (XIX+IY),0xff
+	pop	xix	; F70CB8  pop XIX
+	ret	; F70CB9  ret
 
 
 ; --------------------------------------------------------------------------
