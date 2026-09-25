@@ -21193,10 +21193,10 @@ sub_F8C846:   ; entry: prom_b routine directory
 	m_cp_mi8 MB16, 0x207a, 0xdb                          ; F8C84A  c1 7a 20 3f db
 	jr z, .LF8C869                                       ; F8C84F  66 18
 .LF8C851:
-	ld XIX,0x00f8c8ac                                    ; F8C851  44 ac c8 f8 00
+	ld XIX,PanelLedWireMap_Variant1                      ; F8C851  44 ac c8 f8 00
 	m_cp_mi8 MB8, 0xc4, 0x01                             ; F8C856  c0 c4 3f 01
 	jr z, .LF8C861                                       ; F8C85A  66 05
-	ld XIX,0x00f8c8b7                                    ; F8C85C  44 b7 c8 f8 00
+	ld XIX,PanelLedWireMap_Variant2                      ; F8C85C  44 b7 c8 f8 00
 .LF8C861:
 	mx8_ld_rm MXB, ra_IX, rb_W, r0                       ; F8C861  c3 03 f0 e1 20
 	calr .LF8C86A                                        ; F8C866  1e 01 00
@@ -21229,17 +21229,21 @@ sub_F8C846:   ; entry: prom_b routine directory
 	call 0xf40f08                                        ; F8C8A5  1d 08 0f f4
 	popw wa                                              ; F8C8A9  48
 	jr .LF8C86A                                          ; F8C8AA  68 be
-	m_and_rm MB8, 0xc1, r2                               ; F8C8AC  c0 c1 c2
-	.byte 0xc4, 0xc5, 0xc9                               ; F8C8AF  c4 c5 c9
-	xor D,0x00                                           ; F8C8B2  cc cd 00
-	nop                                                  ; F8C8B5  00
-	nop                                                  ; F8C8B6  00
-	and (0xc9c2:16), b                                   ; F8C8B7  c1 c2 c9 ca
-	and C,0xc3                                           ; F8C8BB  cb cc c3
-	nop                                                  ; F8C8BE  00
-	nop                                                  ; F8C8BF  00
-	nop                                                  ; F8C8C0  00
-	nop                                                  ; F8C8C1  00
+; ---------------------------------------------------------------------
+; PanelLedWireMap_Variant1 / _Variant2 -- 11 bytes each: LED index W -> the
+; panel wire code (0xC0 | segment) a LED packet is addressed to.
+; Read by the code after sub_F8C842 / sub_F8C846 (prom_b directory entries):
+; 0xF8C851 `ld XIX,0x00F8C8AC` (0xF8C85C `ld XIX,0x00F8C8B7` when (0xC4) != 1),
+; 0xF8C861 `ld W,(XIX+W)`, then .LF8C86A stores W and A into the ring at RAM
+; 0x2BA0 -- the packet [wire][mask] (FINDINGS-prom_a-for-the-mame-driver.md 3).
+; COUNT 11 is the extent between the two reader-named bases, and after the
+; second one sub_F8C8C2 begins; the unused tail entries are 0x00.
+; Was framed as code (`m_and_rm`, `xor D,0`, `and (0xc9c2),b`, `nop`s).
+; ---------------------------------------------------------------------
+PanelLedWireMap_Variant1:
+	.byte 0xc0, 0xc1, 0xc2, 0xc4, 0xc5, 0xc9, 0xcc, 0xcd, 0x00, 0x00, 0x00  ; F8C8AC
+PanelLedWireMap_Variant2:
+	.byte 0xc1, 0xc2, 0xc9, 0xca, 0xcb, 0xcc, 0xc3, 0x00, 0x00, 0x00, 0x00  ; F8C8B7
 sub_F8C8C2:   ; entry: prom_b routine directory
 	ret                                                  ; F8C8C2  0e
 sub_F8C8C3:   ; entry: prom_b routine directory
@@ -36328,7 +36332,21 @@ sub_F94E0A:
 	pop XIX                                              ; F94E19  5c
 	pop XIZ                                              ; F94E1A  5e
 	ret                                                  ; F94E1B  0e
-sub_F94E1C:
+; ---------------------------------------------------------------------
+; TestMode_PanelSwitchesToLeds -- the service test mode's switch echo: every
+; switch packet waiting in the panel queue at RAM 0x2B40 lights one LED.
+; Called from: sub_F9566A at 0xF956A6 (when (0x207B) == (0x207A)).
+; Per packet (wire byte, then mask byte, read from the ring whose descriptor
+; is at XIZ = 0x2B40: index +6 advances to +4, wraps past +2 back to +0, and
+; the byte at +8 is incremented per byte taken): W = the wire's group
+; through TestMode_PanelWireGroupMap_Variant1/2 (by the strap (0xC4)), skip if
+; 0x20; WA = TestMode_SwitchLedCodes_*[W][BitMask_LowestSetBitOrdinal(mask)-1];
+; call T_F40670 (-> sub_F8C846, which queues (PanelLedWireMap[W], A) to the
+; panel).  Stops when +6 reaches +4, and stores the index back at +6.
+; Evidence: the instructions below, 0xF94E20-0xF94ED7; the table layouts are
+; checked by notes/proma-2026-09-25/gen_panel_test_tables.py.
+; ---------------------------------------------------------------------
+TestMode_PanelSwitchesToLeds:
 	push XIZ                                             ; F94E1C  3e
 	push XIX                                             ; F94E1D  3c
 	push XHL                                             ; F94E1E  3b
@@ -36345,10 +36363,10 @@ sub_F94E28:
 	srl a, 0x01                                          ; F94E3B  c9 ef 01
 	or L,A                                               ; F94E3E  c9 e7
 	xor H,H                                              ; F94E40  ce d6
-	ld XIY,0x00f94ed8                                    ; F94E42  45 d8 4e f9 00
+	ld XIY,TestMode_PanelWireGroupMap_Variant1           ; F94E42  45 d8 4e f9 00
 	m_cp_mi8 MB8, 0xc4, 0x01                             ; F94E47  c0 c4 3f 01
 	jr z, .LF94E52                                           ; F94E4B  66 05
-	ld XIY,0x00f95008                                    ; F94E4D  45 08 50 f9 00
+	ld XIY,TestMode_PanelWireGroupMap_Variant2           ; F94E4D  45 08 50 f9 00
 .LF94E52:
 	mx_ld_rm MXB, ra_IY, ra_HL, r0                       ; F94E52  c3 07 f4 ec 20
 	inc 1,IX                                             ; F94E57  dc 61
@@ -36372,10 +36390,10 @@ sub_F94E28:
 	push XIZ                                             ; F94E85  3e
 	pushw ix                                             ; F94E86  2c
 	pushw wa                                             ; F94E87  28
-	ld XIY,0x00f94f58                                    ; F94E88  45 58 4f f9 00
+	ld XIY,TestMode_SwitchLedCodes_Variant1              ; F94E88  45 58 4f f9 00
 	m_cp_mi8 MB8, 0xc4, 0x01                             ; F94E8D  c0 c4 3f 01
 	jr z, .LF94E98                                           ; F94E91  66 05
-	ld XIY,0x00f95088                                    ; F94E93  45 88 50 f9 00
+	ld XIY,TestMode_SwitchLedCodes_Variant2              ; F94E93  45 88 50 f9 00
 .LF94E98:
 	xor XHL,XHL                                          ; F94E98  eb d3
 	ld L,W                                               ; F94E9A  c8 8f
@@ -36384,7 +36402,7 @@ sub_F94E28:
 	popw wa                                              ; F94EA1  48
 	xor W,W                                              ; F94EA2  c8 d0
 	pushw bc                                             ; F94EA4  29
-	call sub_F95118                                      ; F94EA5  1d 18 51 f9
+	call BitMask_LowestSetBitOrdinal                                      ; F94EA5  1d 18 51 f9
 	popw bc                                              ; F94EA9  49
 	cp a, 0x00:i3                                          ; F94EAA  c9 d8
 	jr z, .LF94EB0                                           ; F94EAC  66 02
@@ -36412,382 +36430,78 @@ sub_F94E28:
 	pop XIX                                              ; F94ED5  5c
 	pop XIZ                                              ; F94ED6  5e
 	ret                                                  ; F94ED7  0e
-	ld w, 0x20:opc                                          ; F94ED8  20 20
-	ld w, 0x20:opc                                          ; F94EDA  20 20
-	ld w, 0x20:opc                                          ; F94EDC  20 20
-	ld w, 0x20:opc                                          ; F94EDE  20 20
-	ld w, 0x20:opc                                          ; F94EE0  20 20
-	ld w, 0x20:opc                                          ; F94EE2  20 20
-	ld w, 0x20:opc                                          ; F94EE4  20 20
-	ld w, 0x20:opc                                          ; F94EE6  20 20
-	ld w, 0x20:opc                                          ; F94EE8  20 20
-	ld w, 0x20:opc                                          ; F94EEA  20 20
-	ld w, 0x20:opc                                          ; F94EEC  20 20
-	ld w, 0x20:opc                                          ; F94EEE  20 20
-	ld w, 0x20:opc                                          ; F94EF0  20 20
-	ld w, 0x20:opc                                          ; F94EF2  20 20
-	ld w, 0x20:opc                                          ; F94EF4  20 20
-	ld w, 0x20:opc                                          ; F94EF6  20 20
-	ld w, 0x20:opc                                          ; F94EF8  20 20
-	ld w, 0x20:opc                                          ; F94EFA  20 20
-	ld w, 0x20:opc                                          ; F94EFC  20 20
-	ld w, 0x20:opc                                          ; F94EFE  20 20
-	ld w, 0x20:opc                                          ; F94F00  20 20
-	ld w, 0x20:opc                                          ; F94F02  20 20
-	ld w, 0x20:opc                                          ; F94F04  20 20
-	ld w, 0x20:opc                                          ; F94F06  20 20
-	ld w, 0x20:opc                                          ; F94F08  20 20
-	ld w, 0x20:opc                                          ; F94F0A  20 20
-	ld w, 0x20:opc                                          ; F94F0C  20 20
-	ld w, 0x20:opc                                          ; F94F0E  20 20
-	ld w, 0x20:opc                                          ; F94F10  20 20
-	ld w, 0x20:opc                                          ; F94F12  20 20
-	ld w, 0x20:opc                                          ; F94F14  20 20
-	ld w, 0x20:opc                                          ; F94F16  20 20
-	ld w, 0x20:opc                                          ; F94F18  20 20
-	ld w, 0x20:opc                                          ; F94F1A  20 20
-	ld w, 0x20:opc                                          ; F94F1C  20 20
-	ld w, 0x20:opc                                          ; F94F1E  20 20
-	ld w, 0x20:opc                                          ; F94F20  20 20
-	ld w, 0x20:opc                                          ; F94F22  20 20
-	ld w, 0x20:opc                                          ; F94F24  20 20
-	ld w, 0x20:opc                                          ; F94F26  20 20
-	ld w, 0x20:opc                                          ; F94F28  20 20
-	ld w, 0x20:opc                                          ; F94F2A  20 20
-	ld w, 0x20:opc                                          ; F94F2C  20 20
-	ld w, 0x20:opc                                          ; F94F2E  20 20
-	ld w, 0x20:opc                                          ; F94F30  20 20
-	ld w, 0x20:opc                                          ; F94F32  20 20
-	ld w, 0x20:opc                                          ; F94F34  20 20
-	ld w, 0x20:opc                                          ; F94F36  20 20
-	nop                                                  ; F94F38  00
-	normal                                               ; F94F39  01
-	push SR                                              ; F94F3A  02
-	pop SR                                               ; F94F3B  03
-	max                                                  ; F94F3C  04
-	halt                                                 ; F94F3D  05
-	ei 0x07                                              ; F94F3E  06 07
-	ld (0x09:8), 0x0a:io                                      ; F94F40  08 09 0a
-	ld w, 0x20:opc                                          ; F94F43  20 20
-	ld w, 0x20:opc                                          ; F94F45  20 20
-	ld w, 0x20:opc                                          ; F94F47  20 20
-	ld w, 0x20:opc                                          ; F94F49  20 20
-	ld w, 0x20:opc                                          ; F94F4B  20 20
-	ld w, 0x20:opc                                          ; F94F4D  20 20
-	ld w, 0x20:opc                                          ; F94F4F  20 20
-	ld w, 0x20:opc                                          ; F94F51  20 20
-	ld w, 0x20:opc                                          ; F94F53  20 20
-	ld w, 0x20:opc                                          ; F94F55  20 20
-	ld w, 0x01:opc                                          ; F94F57  20 01
-	push SR                                              ; F94F59  02
-	push SR                                              ; F94F5A  02
-	push SR                                              ; F94F5B  02
-	max                                                  ; F94F5C  04
-	push SR                                              ; F94F5D  02
-	ld (0x02:8), 0x10:io                                      ; F94F5E  08 02 10
-	push SR                                              ; F94F61  02
-	ld w, 0x02:opc                                          ; F94F62  20 02
-	ld XWA,0x01028002                                    ; F94F64  40 02 80 02 01
-	normal                                               ; F94F69  01
-	push SR                                              ; F94F6A  02
-	normal                                               ; F94F6B  01
-	max                                                  ; F94F6C  04
-	normal                                               ; F94F6D  01
-	ld (0x01:8), 0x10:io                                      ; F94F6E  08 01 10
-	normal                                               ; F94F71  01
-	ld w, 0x01:opc                                          ; F94F72  20 01
-	ld XWA,0x01018001                                    ; F94F74  40 01 80 01 01
-	nop                                                  ; F94F79  00
-	push SR                                              ; F94F7A  02
-	nop                                                  ; F94F7B  00
-	max                                                  ; F94F7C  04
-	nop                                                  ; F94F7D  00
-	ld (0x00:8), 0x10:io                                      ; F94F7E  08 00 10
-	nop                                                  ; F94F81  00
-	ld w, 0x00:opc                                          ; F94F82  20 00
-	ld XWA,0x02008000                                    ; F94F84  40 00 80 00 02
-	reti                                                 ; F94F89  07
-	push SR                                              ; F94F8A  02
-	reti                                                 ; F94F8B  07
-	push SR                                              ; F94F8C  02
-	reti                                                 ; F94F8D  07
-	push SR                                              ; F94F8E  02
-	reti                                                 ; F94F8F  07
-	push SR                                              ; F94F90  02
-	reti                                                 ; F94F91  07
-	push SR                                              ; F94F92  02
-	reti                                                 ; F94F93  07
-	push SR                                              ; F94F94  02
-	reti                                                 ; F94F95  07
-	push SR                                              ; F94F96  02
-	reti                                                 ; F94F97  07
-	push SR                                              ; F94F98  02
-	reti                                                 ; F94F99  07
-	push SR                                              ; F94F9A  02
-	reti                                                 ; F94F9B  07
-	push SR                                              ; F94F9C  02
-	reti                                                 ; F94F9D  07
-	push SR                                              ; F94F9E  02
-	reti                                                 ; F94F9F  07
-	push SR                                              ; F94FA0  02
-	reti                                                 ; F94FA1  07
-	push SR                                              ; F94FA2  02
-	reti                                                 ; F94FA3  07
-	push SR                                              ; F94FA4  02
-	reti                                                 ; F94FA5  07
-	push SR                                              ; F94FA6  02
-	reti                                                 ; F94FA7  07
-	push SR                                              ; F94FA8  02
-	reti                                                 ; F94FA9  07
-	push SR                                              ; F94FAA  02
-	reti                                                 ; F94FAB  07
-	push SR                                              ; F94FAC  02
-	reti                                                 ; F94FAD  07
-sub_F94FAE:
-	push SR                                              ; F94FAE  02
-	reti                                                 ; F94FAF  07
-	push SR                                              ; F94FB0  02
-	reti                                                 ; F94FB1  07
-	push SR                                              ; F94FB2  02
-	reti                                                 ; F94FB3  07
-	push SR                                              ; F94FB4  02
-	reti                                                 ; F94FB5  07
-	push SR                                              ; F94FB6  02
-	reti                                                 ; F94FB7  07
-	push SR                                              ; F94FB8  02
-	reti                                                 ; F94FB9  07
-	push SR                                              ; F94FBA  02
-	reti                                                 ; F94FBB  07
-	push SR                                              ; F94FBC  02
-	reti                                                 ; F94FBD  07
-	push SR                                              ; F94FBE  02
-	reti                                                 ; F94FBF  07
-	push SR                                              ; F94FC0  02
-	reti                                                 ; F94FC1  07
-	push SR                                              ; F94FC2  02
-	reti                                                 ; F94FC3  07
-	push SR                                              ; F94FC4  02
-	reti                                                 ; F94FC5  07
-	push SR                                              ; F94FC6  02
-	reti                                                 ; F94FC7  07
-	normal                                               ; F94FC8  01
-	max                                                  ; F94FC9  04
-	push SR                                              ; F94FCA  02
-	max                                                  ; F94FCB  04
-	max                                                  ; F94FCC  04
-	max                                                  ; F94FCD  04
-	ld (0x04:8), 0x10:io                                      ; F94FCE  08 04 10
-	max                                                  ; F94FD1  04
-	ld w, 0x04:opc                                          ; F94FD2  20 04
-	ld XWA,0x01048004                                    ; F94FD4  40 04 80 04 01
-	pop SR                                               ; F94FD9  03
-	push SR                                              ; F94FDA  02
-	pop SR                                               ; F94FDB  03
-	max                                                  ; F94FDC  04
-	pop SR                                               ; F94FDD  03
-	ld (0x03:8), 0x10:io                                      ; F94FDE  08 03 10
-	pop SR                                               ; F94FE1  03
-	ld w, 0x03:opc                                          ; F94FE2  20 03
-	.byte 0xc0, 0x03, 0x00                               ; F94FE4  c0 03 00
-	nop                                                  ; F94FE7  00
-	push SR                                              ; F94FE8  02
-	reti                                                 ; F94FE9  07
-	push SR                                              ; F94FEA  02
-	reti                                                 ; F94FEB  07
-	push SR                                              ; F94FEC  02
-	reti                                                 ; F94FED  07
-	push SR                                              ; F94FEE  02
-	reti                                                 ; F94FEF  07
-	push SR                                              ; F94FF0  02
-	reti                                                 ; F94FF1  07
-	push SR                                              ; F94FF2  02
-	reti                                                 ; F94FF3  07
-	push SR                                              ; F94FF4  02
-	reti                                                 ; F94FF5  07
-	push SR                                              ; F94FF6  02
-	reti                                                 ; F94FF7  07
-	push SR                                              ; F94FF8  02
-	reti                                                 ; F94FF9  07
-	push SR                                              ; F94FFA  02
-	reti                                                 ; F94FFB  07
-	push SR                                              ; F94FFC  02
-	reti                                                 ; F94FFD  07
-	push SR                                              ; F94FFE  02
-	reti                                                 ; F94FFF  07
-	push SR                                              ; F95000  02
-	reti                                                 ; F95001  07
-	push SR                                              ; F95002  02
-	reti                                                 ; F95003  07
-	push SR                                              ; F95004  02
-	reti                                                 ; F95005  07
-	push SR                                              ; F95006  02
-	reti                                                 ; F95007  07
-	ld w, 0x20:opc                                          ; F95008  20 20
-	ld w, 0x20:opc                                          ; F9500A  20 20
-	ld w, 0x20:opc                                          ; F9500C  20 20
-	ld w, 0x20:opc                                          ; F9500E  20 20
-	ld w, 0x20:opc                                          ; F95010  20 20
-	ld w, 0x20:opc                                          ; F95012  20 20
-	ld w, 0x20:opc                                          ; F95014  20 20
-	ld w, 0x20:opc                                          ; F95016  20 20
-	ld w, 0x20:opc                                          ; F95018  20 20
-	ld w, 0x20:opc                                          ; F9501A  20 20
-	ld w, 0x20:opc                                          ; F9501C  20 20
-	ld w, 0x20:opc                                          ; F9501E  20 20
-	ld w, 0x20:opc                                          ; F95020  20 20
-	ld w, 0x20:opc                                          ; F95022  20 20
-	ld w, 0x20:opc                                          ; F95024  20 20
-	ld w, 0x20:opc                                          ; F95026  20 20
-	ld w, 0x20:opc                                          ; F95028  20 20
-	ld w, 0x20:opc                                          ; F9502A  20 20
-	ld w, 0x20:opc                                          ; F9502C  20 20
-	ld w, 0x20:opc                                          ; F9502E  20 20
-	ld w, 0x20:opc                                          ; F95030  20 20
-	ld w, 0x20:opc                                          ; F95032  20 20
-	ld w, 0x20:opc                                          ; F95034  20 20
-	ld w, 0x20:opc                                          ; F95036  20 20
-	ld w, 0x20:opc                                          ; F95038  20 20
-	ld w, 0x20:opc                                          ; F9503A  20 20
-	ld w, 0x20:opc                                          ; F9503C  20 20
-	ld w, 0x20:opc                                          ; F9503E  20 20
-	ld w, 0x20:opc                                          ; F95040  20 20
-	ld w, 0x20:opc                                          ; F95042  20 20
-	ld w, 0x20:opc                                          ; F95044  20 20
-	ld w, 0x20:opc                                          ; F95046  20 20
-	ld w, 0x20:opc                                          ; F95048  20 20
-	ld w, 0x20:opc                                          ; F9504A  20 20
-	ld w, 0x20:opc                                          ; F9504C  20 20
-	ld w, 0x20:opc                                          ; F9504E  20 20
-	ld w, 0x20:opc                                          ; F95050  20 20
-	ld w, 0x20:opc                                          ; F95052  20 20
-	ld w, 0x20:opc                                          ; F95054  20 20
-	ld w, 0x20:opc                                          ; F95056  20 20
-	ld w, 0x20:opc                                          ; F95058  20 20
-	ld w, 0x20:opc                                          ; F9505A  20 20
-	ld w, 0x20:opc                                          ; F9505C  20 20
-	ld w, 0x20:opc                                          ; F9505E  20 20
-	ld w, 0x20:opc                                          ; F95060  20 20
-	ld w, 0x20:opc                                          ; F95062  20 20
-	ld w, 0x20:opc                                          ; F95064  20 20
-	ld w, 0x20:opc                                          ; F95066  20 20
-	nop                                                  ; F95068  00
-	normal                                               ; F95069  01
-	push SR                                              ; F9506A  02
-	pop SR                                               ; F9506B  03
-	max                                                  ; F9506C  04
-	halt                                                 ; F9506D  05
-	ld w, 0x06:opc                                          ; F9506E  20 06
-	reti                                                 ; F95070  07
-	ld (0x20:8), 0x20:io                                      ; F95071  08 20 20
-	ld w, 0x20:opc                                          ; F95074  20 20
-	ld w, 0x20:opc                                          ; F95076  20 20
-	ld w, 0x20:opc                                          ; F95078  20 20
-	ld w, 0x20:opc                                          ; F9507A  20 20
-	ld w, 0x20:opc                                          ; F9507C  20 20
-	ld w, 0x20:opc                                          ; F9507E  20 20
-	ld w, 0x20:opc                                          ; F95080  20 20
-	ld w, 0x20:opc                                          ; F95082  20 20
-	ld w, 0x20:opc                                          ; F95084  20 20
-	ld w, 0x20:opc                                          ; F95086  20 20
-	normal                                               ; F95088  01
-	normal                                               ; F95089  01
-	push SR                                              ; F9508A  02
-	normal                                               ; F9508B  01
-	max                                                  ; F9508C  04
-	normal                                               ; F9508D  01
-	ld (0x01:8), 0x01:io                                      ; F9508E  08 01 01
-	nop                                                  ; F95091  00
-	push SR                                              ; F95092  02
-	nop                                                  ; F95093  00
-	max                                                  ; F95094  04
-	nop                                                  ; F95095  00
-	ld (0x00:8), 0x08:io                                      ; F95096  08 00 08
-	ei 0x08                                              ; F95099  06 08
-	ei 0x08                                              ; F9509B  06 08
-	ei 0x08                                              ; F9509D  06 08
-	ei 0x08                                              ; F9509F  06 08
-	ei 0x08                                              ; F950A1  06 08
-	ei 0x08                                              ; F950A3  06 08
-	ei 0x08                                              ; F950A5  06 08
-	ei 0x08                                              ; F950A7  06 08
-	ei 0x08                                              ; F950A9  06 08
-	ei 0x08                                              ; F950AB  06 08
-	ei 0x08                                              ; F950AD  06 08
-	ei 0x04                                              ; F950AF  06 04
-	ei 0x04                                              ; F950B1  06 04
-	ei 0x04                                              ; F950B3  06 04
-	ei 0x00                                              ; F950B5  06 00
-	nop                                                  ; F950B7  00
-	max                                                  ; F950B8  04
-	ei 0x04                                              ; F950B9  06 04
-	ei 0x04                                              ; F950BB  06 04
-	ei 0x04                                              ; F950BD  06 04
-	ei 0x04                                              ; F950BF  06 04
-	ei 0x08                                              ; F950C1  06 08
-	ei 0x08                                              ; F950C3  06 08
-	ei 0x08                                              ; F950C5  06 08
-	ei 0x04                                              ; F950C7  06 04
-	ei 0x04                                              ; F950C9  06 04
-	ei 0x04                                              ; F950CB  06 04
-	ei 0x04                                              ; F950CD  06 04
-	ei 0x04                                              ; F950CF  06 04
-	ei 0x04                                              ; F950D1  06 04
-	ei 0x04                                              ; F950D3  06 04
-	ei 0x04                                              ; F950D5  06 04
-	ei 0x04                                              ; F950D7  06 04
-	ei 0x04                                              ; F950D9  06 04
-	ei 0x04                                              ; F950DB  06 04
-	ei 0x04                                              ; F950DD  06 04
-	ei 0x04                                              ; F950DF  06 04
-	ei 0x04                                              ; F950E1  06 04
-	ei 0x04                                              ; F950E3  06 04
-	ei 0x04                                              ; F950E5  06 04
-	ei 0x01                                              ; F950E7  06 01
-	max                                                  ; F950E9  04
-	push SR                                              ; F950EA  02
-	max                                                  ; F950EB  04
-	normal                                               ; F950EC  01
-	halt                                                 ; F950ED  05
-	push SR                                              ; F950EE  02
-	halt                                                 ; F950EF  05
-	nop                                                  ; F950F0  00
-	nop                                                  ; F950F1  00
-	nop                                                  ; F950F2  00
-	nop                                                  ; F950F3  00
-	nop                                                  ; F950F4  00
-	nop                                                  ; F950F5  00
-	nop                                                  ; F950F6  00
-	nop                                                  ; F950F7  00
-	pop SR                                               ; F950F8  03
-	pop SR                                               ; F950F9  03
-	pop SR                                               ; F950FA  03
-	push SR                                              ; F950FB  02
-	nop                                                  ; F950FC  00
-	nop                                                  ; F950FD  00
-	nop                                                  ; F950FE  00
-	nop                                                  ; F950FF  00
-	nop                                                  ; F95100  00
-sub_F95101:
-	nop                                                  ; F95101  00
-	nop                                                  ; F95102  00
-	nop                                                  ; F95103  00
-	nop                                                  ; F95104  00
-	nop                                                  ; F95105  00
-	nop                                                  ; F95106  00
-	nop                                                  ; F95107  00
-	max                                                  ; F95108  04
-	ei 0x04                                              ; F95109  06 04
-	ei 0x04                                              ; F9510B  06 04
-	ei 0x04                                              ; F9510D  06 04
-sub_F9510F:
-	ei 0x04                                              ; F9510F  06 04
-	ei 0x00                                              ; F95111  06 00
-	nop                                                  ; F95113  00
-	nop                                                  ; F95114  00
-	nop                                                  ; F95115  00
-	nop                                                  ; F95116  00
-	nop                                                  ; F95117  00
-sub_F95118:
+; ---------------------------------------------------------------------
+; THE SERVICE TEST MODE'S SWITCH-TO-LED TABLES, 0xF94ED8-0xF95117 (576 B)
+;
+; Read by TestMode_PanelSwitchesToLeds, which drains the panel queue at RAM 0x2B40 and, for each
+; packet (wire, mask), computes L = (wire & 0x1F) | ((wire & 0xC0) >> 1)
+; (0xF94E35-0xF94E3E), W = map[L] (0xF94E42 / 0xF94E4D by the strap (0xC4)),
+; skips W == 0x20, then reads the word at rows + 16*W + 2*(A-1) with A =
+; BitMask_LowestSetBitOrdinal(mask), 1 + the index of the mask's lowest set bit (0xF94E88-
+; 0xF94EB5), and passes it in WA to T_F40670 -> sub_F8C846 (0xF94EBD), which
+; queues (PanelLedWireMap[W], A) to the panel: the switch pressed lights one
+; LED.  The maps use PanelWireGroupMap_Variant1/2's index function and 0x20
+; convention, restricted to the button wires 0xC0-0xCA; the row counts are
+; 1 + the largest group each map holds (0x0A -> 11, 0x08 -> 9); the four
+; tables tile the span, which ends on BitMask_LowestSetBitOrdinal's first instruction.
+; Was framed as code (`ld W,0x20` x64, `push SR / reti` pairs, `normal`,
+; `max`, `halt` ...) under an orphan label sub_F94FAE that nothing in either
+; image references.  notes/proma-2026-09-25/gen_panel_test_tables.py checks
+; the readers' bytes, the tiling and the map values.
+; ---------------------------------------------------------------------
+TestMode_PanelWireGroupMap_Variant1:
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F94ED8  index 0x00
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F94EE8  index 0x10
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F94EF8  index 0x20
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F94F08  index 0x30
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F94F18  index 0x40
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F94F28  index 0x50
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x20, 0x20, 0x20, 0x20, 0x20  ; F94F38  index 0x60
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F94F48  index 0x70
+
+; TestMode_SwitchLedCodes_Variant1 -- 11 groups x 8 LE16 (hi = LED map index W,
+; lo = LED bit mask), one per bit of the switch mask; read at 0xF94E88.
+TestMode_SwitchLedCodes_Variant1:
+	.short 0x0201, 0x0202, 0x0204, 0x0208, 0x0210, 0x0220, 0x0240, 0x0280  ; F94F58  group 0x00
+	.short 0x0101, 0x0102, 0x0104, 0x0108, 0x0110, 0x0120, 0x0140, 0x0180  ; F94F68  group 0x01
+	.short 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080  ; F94F78  group 0x02
+	.short 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702  ; F94F88  group 0x03
+	.short 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702  ; F94F98  group 0x04
+	.short 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702  ; F94FA8  group 0x05
+	.short 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702  ; F94FB8  group 0x06
+	.short 0x0401, 0x0402, 0x0404, 0x0408, 0x0410, 0x0420, 0x0440, 0x0480  ; F94FC8  group 0x07
+	.short 0x0301, 0x0302, 0x0304, 0x0308, 0x0310, 0x0320, 0x03C0, 0x0000  ; F94FD8  group 0x08
+	.short 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702  ; F94FE8  group 0x09
+	.short 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702, 0x0702  ; F94FF8  group 0x0A
+
+; TestMode_PanelWireGroupMap_Variant2 -- the (0xC4) != 1 map, read at 0xF94E4D;
+; 128 entries, 0x20 = no group.
+TestMode_PanelWireGroupMap_Variant2:
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F95008  index 0x00
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F95018  index 0x10
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F95028  index 0x20
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F95038  index 0x30
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F95048  index 0x40
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F95058  index 0x50
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x20, 0x06, 0x07, 0x08, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F95068  index 0x60
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F95078  index 0x70
+
+; TestMode_SwitchLedCodes_Variant2 -- 9 groups x 8 LE16, read at 0xF94E93.
+; Rows 6-8 end in 0x0000 words: bits those groups do not have.
+TestMode_SwitchLedCodes_Variant2:
+	.short 0x0101, 0x0102, 0x0104, 0x0108, 0x0001, 0x0002, 0x0004, 0x0008  ; F95088  group 0x00
+	.short 0x0608, 0x0608, 0x0608, 0x0608, 0x0608, 0x0608, 0x0608, 0x0608  ; F95098  group 0x01
+	.short 0x0608, 0x0608, 0x0608, 0x0608, 0x0604, 0x0604, 0x0604, 0x0000  ; F950A8  group 0x02
+	.short 0x0604, 0x0604, 0x0604, 0x0604, 0x0604, 0x0608, 0x0608, 0x0608  ; F950B8  group 0x03
+	.short 0x0604, 0x0604, 0x0604, 0x0604, 0x0604, 0x0604, 0x0604, 0x0604  ; F950C8  group 0x04
+	.short 0x0604, 0x0604, 0x0604, 0x0604, 0x0604, 0x0604, 0x0604, 0x0604  ; F950D8  group 0x05
+	.short 0x0401, 0x0402, 0x0501, 0x0502, 0x0000, 0x0000, 0x0000, 0x0000  ; F950E8  group 0x06
+	.short 0x0303, 0x0203, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000  ; F950F8  group 0x07
+	.short 0x0604, 0x0604, 0x0604, 0x0604, 0x0604, 0x0000, 0x0000, 0x0000  ; F95108  group 0x08
+; BitMask_LowestSetBitOrdinal -- A = 1 + the index of the lowest set bit of A
+; (1 for bit 0 .. 8 for bit 7), or 0 when A is 0.  Shifts right until a 1
+; falls into carry, counting in C.  Called from TestMode_PanelSwitchesToLeds.
+BitMask_LowestSetBitOrdinal:
 	cp a, 0x00:i3                                          ; F95118  c9 d8
 	jr z, 0x0b                                           ; F9511A  66 0b
 	xor C,C                                              ; F9511C  cb d3
@@ -37433,7 +37147,7 @@ sub_F9566A:
 	calr sub_F956F9                                            ; F956A1  1e 55 00
 	jr .LF956AA                                              ; F956A4  68 04
 .LF956A6:
-	call sub_F94E1C                                      ; F956A6  1d 1c 4e f9
+	call TestMode_PanelSwitchesToLeds                                      ; F956A6  1d 1c 4e f9
 .LF956AA:
 	m_set 4, MD16, 0x2071                                ; F956AA  f1 71 20 bc
 	pop XIX                                              ; F956AE  5c
