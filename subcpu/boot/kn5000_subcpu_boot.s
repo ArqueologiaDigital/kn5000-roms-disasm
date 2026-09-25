@@ -2836,6 +2836,13 @@ VECTOR_TRAMPOLINES:
 ; DEBUG_OUTPUT_STRING: Output null-terminated string from (XIX)
 ; NIBBLE_TO_HEX_ASCII: Convert nibble (0-15) to ASCII hex character ('0'-'9', 'a'-'f')
 ; SUB_FEC1: Output character (loads IZ with 0xFE00, placeholder NOPs)
+;
+; Evidence of use (2026-09-25): the v1.42 sub-CPU PAYLOAD calls two of these across the ROM
+; boundary -- Debug_Print_String (payload 0x038365) does `call 0xFFFEA1` (DEBUG_OUTPUT_STRING)
+; and Debug_Print_Byte / Debug_Print_Word do `call 0xFFFE86` (HEX_BYTE_TO_ASCII, which prints
+; A as two hex digits).  The payload's EFF/DSP layer traces through them ("EFF %d mute",
+; "DSP %d anti reset", ...).  Since SUB_FEC1 as dumped writes nothing (IZ load + NOPs + RET),
+; those traces are silent with this boot ROM.
 ; ==============================================================================
 
 	.org 0xFFFE80 - 0xFE0000, 0xFF

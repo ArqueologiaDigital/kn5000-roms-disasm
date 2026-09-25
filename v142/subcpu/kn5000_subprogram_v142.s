@@ -276,33 +276,60 @@ EMPTY_HANDLER_WITH_RESET:	; 01FBBD
 	reti
 
 
-PrevBank_RegHelper:
+; Cross-ROM constants: two cells of the sub-CPU BOOT ROM (IC30), not of this payload.  In
+; subcpu/boot/kn5000_subcpu_boot.s they are the init flag and the 4 x u32 channel table that
+; the boot ROM's own TONE_GEN_CHANNEL_INIT (0xFF8437) reads; both are dumped bytes there
+; (flag = 00 00, table = 4 x 00 04 00 00).
+	.equ	BootROM_ChannelInitFlag, 0xFFFEEE
+	.equ	BootROM_ChannelConfigTable, 0xFFFEF0
+
+; RENAMED from PrevBank_RegHelper -- nothing here touches a register bank.  This is the
+; payload's copy of the boot ROM's TONE_GEN_CHANNEL_INIT (0xFF8437), instruction for
+; instruction apart from two details: it tests the flag as a BYTE (`cp (flag),0xFF`, the boot
+; ROM uses a word compare against 0xFFFF), and it passes a POINTER to the table entry
+; (XBC = BootROM_ChannelConfigTable + 4*ch) where the boot ROM loads the entry's value.
+; If the flag byte is 0xFF, for ch = 0..3 (counter in QIZH): DSP_Write_Channel(A = ch,
+; XBC = &table[ch]), which writes 8 bytes from XBC to the 0x130000 register window.  With the
+; dumped flag value 0x00 the loop is skipped.  No caller found: no 24-bit occurrence of
+; 0x01FBC1 in the image and no symbolic branch to it.  (Branches were left numeric by the
+; symboliser's R3 guard because of the `halt` below; resolved here by hand from unidasm.)
+DSP_Init_Channels_FromBootTable:
 	push qiz
-	cp	(16776942:24), 255
-	jr	nz, 36
+	cp	(BootROM_ChannelInitFlag:24), 0xff
+	jr	nz, DSP_Init_Channels_FromBootTable_Done
 	ldib_erp	251, 0
+DSP_Init_Channels_FromBootTable_Loop:
 	stb_erp	a, 251
 	extz	wa
 	stb_erp	c, 251
 	extz	bc
 	sla	bc, 2
 	extz	xbc
-	add	xbc, 16776944
-	call	130270
+	add	xbc, BootROM_ChannelConfigTable
+	call	DSP_Write_Channel
 	incb_erp	251, 1
 	cpib_erp	251, 4
-	jr	c, -33
+	jr	c, DSP_Init_Channels_FromBootTable_Loop
+DSP_Init_Channels_FromBootTable_Done:
 	pop qiz
 	ret
 
 
+; NMI handler (via INT_HANDLER_2C).  The same three instructions as the boot ROM's HALT_LOOP
+; (0xFF8490): clear PE bit 0, then HALT forever -- the `jr t` below re-enters the HALT after
+; any wake-up.  CORRECTED: that `jr t` (0x01FBF8) used to sit under the label
+; Timer_StatusHelper as the first instruction of an unrelated routine; it belongs here, and
+; Timer_StatusHelper now starts at 0x01FBFA.
 MUTE_AND_HALT:	; 01FBF4
 	res_dd8 0, 0x38	; mute (?) (here I'm assuming "MUTE" it is an active low signal)
+MUTE_AND_HALT_Halt:
 	halt
+	jr	t, MUTE_AND_HALT_Halt
 
 
+; HL = zero-extended byte at 0x103A.  No caller found (no 24-bit occurrence of 0x01FBFA and no
+; symbolic branch to it).
 Timer_StatusHelper:
-	jr	t, -3
 	ld	l, (4154:16)
 	extz	hl
 	ret
@@ -453,6 +480,13 @@ DSP_Init_Channels_Loop:
 ; Notes: Calculates channel register address from channel number
 ;        Writes 8 sequential bytes to DSP at 0x00130000 + offset
 ; ----------------------------------------------------------------------------
+; CORRECTION (2026-09-25, from the instructions): the entry registers above are swapped.  The
+; code takes the CHANNEL in A (`sll a,5 / set 4,a` -> register index ch*32 + 0x10) and the
+; 8-byte SOURCE in XBC (`ld e,(xbc+)`); XWA's upper bytes and BC are not read as such.
+; DSP_Init_Channels_FromBootTable calls it that way (A = ch, XBC = &table[ch]).  Note that
+; DSP_Init_Channels above passes the pattern pointer in XWA and the channel in BC -- taken
+; literally, each of its four calls selects the register group from the low byte of the
+; pointer and reads 8 bytes from address BC = 0..3.  Not checked on an emulator.
 DSP_Write_Channel:	; 01FCDEh
 	pushw de
 	sll a, 5	; Channel * 32 (register spacing)
@@ -23033,7 +23067,7 @@ VoiceSlot_DataTable_02AE22:
 	lda	xde, (267112:24)
 	lda_rr	xde, xde, wa
 	lda	xde, (xde+258)
-	.byte 0x92, 0x3c, 0x00, 0xff
+	andmi16	(xde), 0xff00
 	ld	a, c
 	extz	wa
 	or	(xde), wa
@@ -23060,12 +23094,12 @@ Voice_Artic_SetWord2Word1_Nibble0:
 	lda	xde, (267112:24)
 	lda_rr	xde, xde, wa
 	lda	xde, (xde+258)
-	.byte 0x9a, 0x04, 0x3c, 0xf0, 0xff
+	andmi16	(xde+4), 0xfff0
 	ld	a, c
 	and	a, 15
 	extz	wa
 	or	(xde+4), wa
-	.byte 0x9a, 0x02, 0x3c, 0xf0, 0xff
+	andmi16	(xde+2), 0xfff0
 	srl	c, 4
 	ld	a, c
 	extz	wa
@@ -23092,12 +23126,12 @@ Voice_Artic_SetWord2Word1_Nibble1:
 	lda	xde, (267112:24)
 	lda_rr	xde, xde, wa
 	lda	xde, (xde+258)
-	.byte 0x9a, 0x04, 0x3c, 0x0f, 0xff
+	andmi16	(xde+4), 0xff0f
 	ld	a, c
 	sll	a, 4
 	extz	wa
 	or	(xde+4), wa
-	.byte 0x9a, 0x02, 0x3c, 0x0f, 0xff
+	andmi16	(xde+2), 0xff0f
 	and	c, 240
 	ld	a, c
 	extz	wa
@@ -23124,13 +23158,13 @@ Voice_Artic_SetWord0Word2_Nibble2:
 	lda	xde, (267112:24)
 	lda_rr	xde, xde, wa
 	lda	xde, (xde+258)
-	.byte 0x92, 0x3c, 0xff, 0xf0
+	andmi16	(xde), 0xf0ff
 	ld	a, c
 	and	a, 15
 	extz	wa
 	sll	wa, 8
 	or	(xde), wa
-	.byte 0x9a, 0x04, 0x3c, 0xff, 0xf0
+	andmi16	(xde+4), 0xf0ff
 	and	c, 240
 	ld	a, c
 	extz	wa
@@ -23158,7 +23192,7 @@ Voice_Artic_SetWord1Nibble2_And_Word3:
 	lda	xde, (267112:24)
 	lda_rr	xde, xde, wa
 	lda	xde, (xde+258)
-	.byte 0x9a, 0x02, 0x3c, 0xff, 0xf0
+	andmi16	(xde+2), 0xf0ff
 	ld	a, c
 	and	a, 15
 	extz	wa
@@ -27849,7 +27883,8 @@ ToneGen_NoteTable_02D55E:
 	set_dd8	7, 24
 	ld	wa, (xiz+46)
 	ld	(1048578:24), wa
-	jr	t, 0
+	jr __jrt_nop_02D57B
+__jrt_nop_02D57B:
 	nop
 	nop
 	nop
@@ -27872,7 +27907,8 @@ ToneGen_Write_Regs0100_0140:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+8)
 	ld	(1048578:24), wa
-	jr	t, 0
+	jr __jrt_nop_02D5A7
+__jrt_nop_02D5A7:
 	nop
 	nop
 	nop
@@ -27885,13 +27921,14 @@ ToneGen_Write_Regs0100_0140:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+10)
 	ld	(1048578:24), wa
-	jr	t, 0
+	jr __jrt_nop_02D5C9
+__jrt_nop_02D5C9:
 	nop
 	nop
 	nop
 	popw iz
-	.byte 0xef
-	jr	ov, 0x0e
+	inc 4, xsp	; was mis-framed as `.byte 0xef` + `jr ov, 0x0e`: the bytes are ef 64 0e
+	ret
 
 ; Existing curated name kept. Writes 0x0840+ch <- +0x1A and 0x0880+ch <- +0x1C.
 ToneGen_WriteEnvSegments:
@@ -29521,13 +29558,13 @@ ToneGen_ReadPitch_Return:
 ; HL = 1 when the part mode is 0x00, else 0 (scc Z,HL). Unreferenced in v142.
 CheckStatusBits_Zero:
 	extz	xwa
-	ld	xbc, 287
-	call	252106
-	lda	xwa, (267118:24)
+	ld	xbc, 0x11f
+	call	FP_MulAccum64
+	lda	xwa, (0x04136e:24)
 	add	xwa, xhl
 	ld	xwa, (xwa)
 	ld	a, (xwa+16)
-	and	a, 192
+	and	a, 0xc0
 	cp	a, 0:i3
 	scc16	z, hl
 	ret
@@ -29958,7 +29995,7 @@ VoiceParam_FullSetup_ExtData:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267112:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xfe, 0xff
+	.byte	0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xfe, 0xff	; and (XBC+WA),0xfffe  (unidasm; no llvm-mc spelling)
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -29970,17 +30007,17 @@ VoiceParam_FullSetup_ExtData_Skip:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267112:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xfd, 0xff
+	.byte	0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xfd, 0xff	; and (XBC+WA),0xfffd  (unidasm; no llvm-mc spelling)
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267112:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x01, 0x00
+	or_rrw_im	xbc, wa, 1, 0
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267112:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x04, 0x00
+	or_rrw_im	xbc, wa, 4, 0
 	ld	a, (xsp)
 	extz	wa
 	call	Voice_NoteState_Clear
@@ -30025,7 +30062,7 @@ VoiceParam_FullSetup_ExtData_Skip2:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267122:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xff, 0xbf
+	.byte	0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xff, 0xbf	; and (XBC+WA),0xbfff  (unidasm; no llvm-mc spelling)
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -30070,7 +30107,7 @@ VoiceParam_SubSlot_Apply_Catalog50:
 	ld	xhl, (283408:24)
 	add	xhl, xwa
 	ldb_erp	e, 251
-	.byte 0xc7, 0xfb, 0xcc, 0x0f
+	and_erpb	251, 15
 	stb_erp	a, 251
 	extz	wa
 	muls	wa, 37
@@ -30148,7 +30185,7 @@ VoiceParam_SubSlot_Apply_Catalog64:
 	ld	xix, (283408:24)
 	add	xix, xhl
 	ldb_erp	e, 226
-	.byte 0xc7, 0xe2, 0xcc, 0x0f
+	and_erpb	226, 15
 	and	e, 240
 	srl	e, 4
 	ld	w, e
@@ -30716,7 +30753,7 @@ VoiceAlloc_Cmd_MarkPresent:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267112:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x01, 0x00
+	or_rrw_im	xbc, wa, 1, 0
 	ret
 ; Part was not yet allocated: set PART+0x00 bit 0, then range-check PART+0x1A against
 ; [0x40,0x50) before calling DSP_FlushAllSlots_Data.
@@ -30725,7 +30762,7 @@ VoiceAlloc_Cmd_FirstAlloc:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267112:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x01, 0x00
+	or_rrw_im	xbc, wa, 1, 0
 	ld	a, e
 	extz	wa
 	muls	wa, 287
@@ -31423,9 +31460,9 @@ Voice_DSPOut_Apply_A:
 	cp	wa, 7:i3
 	jr	gt, Voice_DSPOut_A_Return
 	add	wa, wa
-	lda	xix, (63923:24)
+	lda	xix, (VOICE_DSPOUT_A_JUMPTABLE:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (193390:24)
+	lda	xix, (Voice_DSPOut_A_Type0To3:24)
 	jp_rr	8, xix, wa
 ; Algorithm types 0..3: Voice_DSP_OutputConfig(part, 0) then (part, 1).
 Voice_DSPOut_A_Type0To3:
@@ -31485,25 +31522,26 @@ Voice_DSPOut_Apply_B:
 	cp	wa, 0:i3
 	jr	mi, Voice_DSPOut_B_Return
 	cp	wa, 7:i3
-	jr	gt, 107
+	jr	gt, Voice_DSPOut_B_Return
 	add	wa, wa
-	.byte 0xf2
-	xor	c, (xiz+13312)
-	reti
-	.byte 0xf0, 0xe0, 0x20
-	lda	xix, (193530:24)
+; CORRECTED FRAMING: the next 5+5 bytes were `.byte 0xf2 / xor c,(xiz+13312) / reti /
+; .byte 0xf0,0xe0,0x20`, a misreading of `lda xix,(table:24)` + `ld wa,(xix+wa)` (unidasm
+; frames them so; they are the same two instructions as in Voice_DSPOut_Apply_A).
+	lda	xix, (VOICE_DSPOUT_B_JUMPTABLE:24)
+	ld_rrw	wa, xix, wa
+	lda	xix, (Voice_DSPOut_B_Type0To3:24)
 	jp_rr	8, xix, wa
 ; Algorithm types 0..3: Voice_DSP_OutputConfig2(part, 0) then (part, 1).
 Voice_DSPOut_B_Type0To3:
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, 0:i3
-	call	163281
+	call	Voice_DSP_OutputConfig2
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, 1:i3
-	call	163281
-	jr	t, 63
+	call	Voice_DSP_OutputConfig2
+	jr	t, Voice_DSPOut_B_Return
 ; Algorithm types 4..5: Voice_DSP_OutputConfig2(part, 0) only.
 Voice_DSPOut_B_Type4To5:
 	ld	a, (xsp)
@@ -31556,21 +31594,20 @@ Voice_DSPOut_Second_A:
 	cp	bc, 7:i3
 	ret	gt
 	add	bc, bc
-	.byte 0xf2
-	xor	hl, (xiz+13312)
-	reti
-	.byte 0xf0, 0xe4, 0x21
-	lda	xix, (193676:24)
+; CORRECTED FRAMING, as in Voice_DSPOut_Apply_B: `lda xix,(table:24)` + `ld bc,(xix+bc)`.
+	lda	xix, (VOICE_DSPOUT_SECOND_A_JUMPTABLE:24)
+	ld_rrw	bc, xix, bc
+	lda	xix, (Voice_DSPOut_Second_A_Slot1:24)
 	jp_rr	8, xix, bc
 ; Types 4..5: tail-jump Voice_DSP_OutputConfig(part, 1).
 Voice_DSPOut_Second_A_Slot1:
 	extz	wa
 	ld	bc, 1:i3
-	jp	163044
+	jp	Voice_DSP_OutputConfig
 ; Type 6: tail-jump Voice_DSP_SimpleCopy(part).
 Voice_DSPOut_Second_A_Simple:
 	extz	wa
-	jp	163518
+	jp	Voice_DSP_SimpleCopy
 ; Type 7: return unless PART+0x0A bit 14 is set, then Voice_DSP_OutputConfig(part, 1).
 Voice_DSPOut_Second_A_Gated:
 	ld	c, a
@@ -35434,7 +35471,7 @@ DSP_SetCoeff_FullPipeline:
 	ld	(xsp+10), c
 	ld	(xsp+12), a
 	ldb_erp	e, 251
-	.byte 0xc7, 0xfb, 0xcc, 0x0f
+	and_erpb	251, 15
 	ld	a, e
 	and	a, 240
 	srl	a, 4
@@ -39995,13 +40032,13 @@ DSP_AlgoType_Dispatch3:
 	cp iy, 0xB
 	ret gt
 	add iy, iy
-	lda xix, (0x00fb96:24)
+	lda xix, (AlgoJumpTable3:24)
 	ldw_sri IY, 0x07, 0xF0, 0xF4
-	lda xix, (0x033e44:24)
+	lda xix, (DSP_AlgoType_D3_Arm_Types0to5_7:24)
 	jp_ind 8, 0x07, 0xF0, 0xF4
 
 ; NOT DATA -- arm block for algorithm types 0..5 and 7.  Splits immediately on E == 0.
-DSP_AlgoType_Dispatch3_TableData:
+DSP_AlgoType_D3_Arm_Types0to5_7:
 	cp	e, 0:i3
 	jr	nz, DSP_AlgoType_D3_Arm_Type05_SubNZ
 	ld	e, c
@@ -40015,14 +40052,14 @@ DSP_AlgoType_Dispatch3_TableData:
 	lda	xix, (73238:24)
 	exts	xde
 	add	xde, xix
-	.byte 0xf3, 0x07, 0xe8, 0xf4, 0xcf
+	.byte	0xf3, 0x07, 0xe8, 0xf4, 0xcf	; bit 7,(XDE+IY)  (unidasm; no llvm-mc spelling)
 	ret	z
 	extz	wa
 	muls	wa, 287
 	lda	xde, (267118:24)
 	ld_rrl	xwa, xde, wa
 	bitm	6, (xwa+93)
-	jr	z, DSP_AlgoType_Dispatch3_Skip
+	jr	z, DSP_AlgoType_D3_E0_DescBit6Clear
 	ld	a, c
 	extz	wa
 	muls	wa, 5
@@ -40034,12 +40071,14 @@ DSP_AlgoType_Dispatch3_TableData:
 	lda	xbc, (73238:24)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0xcb, 0x66, 0x06
+	.byte	0xf3, 0x07, 0xe0, 0xe8, 0xcb	; bit 3,(XWA+DE)  (unidasm; no llvm-mc spelling)
+	jr	z, DSP_AlgoType_D3_E0_Bit3Clear
 	ldw	hl, 192
 	jrl	t, DSP_AlgoType_D3_Return
+DSP_AlgoType_D3_E0_Bit3Clear:
 	ldw	hl, 64
 	jrl	t, DSP_AlgoType_D3_Return
-DSP_AlgoType_Dispatch3_Skip:
+DSP_AlgoType_D3_E0_DescBit6Clear:
 	ldw	hl, 64
 	jrl	t, DSP_AlgoType_D3_Return
 ; The E != 0 half of the types-0..5/7 arm: uses sub-record bit 6 (instead of bit 7) and
@@ -40056,14 +40095,14 @@ DSP_AlgoType_D3_Arm_Type05_SubNZ:
 	lda	xix, (73238:24)
 	exts	xde
 	add	xde, xix
-	.byte 0xf3, 0x07, 0xe8, 0xf4, 0xce
+	.byte	0xf3, 0x07, 0xe8, 0xf4, 0xce	; bit 6,(XDE+IY)  (unidasm; no llvm-mc spelling)
 	ret	z
 	extz	wa
 	muls	wa, 287
 	lda	xde, (267118:24)
 	ld_rrl	xwa, xde, wa
 	bitm	6, (xwa+93)
-	jr	z, 48
+	jr	z, DSP_AlgoType_D3_ENZ_DescBit6Clear
 	ld	a, c
 	extz	wa
 	muls	wa, 5
@@ -40075,11 +40114,19 @@ DSP_AlgoType_D3_Arm_Type05_SubNZ:
 	lda	xbc, (73238:24)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0xca, 0x66, 0x05
+	.byte	0xf3, 0x07, 0xe0, 0xe8, 0xca	; bit 2,(XWA+DE)  (unidasm; no llvm-mc spelling)
+	jr	z, DSP_AlgoType_D3_ENZ_Bit2Clear
 	ldw	hl, 0x00c0
-	.asciz "hR3@"
-	.asciz "hM3@"
-	.byte 0x68, 0x48
+; CORRECTED FRAMING: the next 12 bytes were `.asciz "hR3@"`, `.asciz "hM3@"`, `.byte 0x68,0x48`
+; -- 0x68 is `jr t` and 33 40 00 is `ld hl,0x0040`; unidasm frames them as the three exits
+; below, the same shape as the E == 0 half above (which uses 3-byte `jrl t`).
+	jr	t, DSP_AlgoType_D3_Return
+DSP_AlgoType_D3_ENZ_Bit2Clear:
+	ldw	hl, 0x0040
+	jr	t, DSP_AlgoType_D3_Return
+DSP_AlgoType_D3_ENZ_DescBit6Clear:
+	ldw	hl, 0x0040
+	jr	t, DSP_AlgoType_D3_Return
 ; Arm for algorithm types 0x0A and 0x0B (AlgoJumpTable3 offset 0xE7).  Returns immediately for
 ; E != 0 or descriptor[0x5E] == 0; otherwise 0x00C0 / 0x0040 on sub-record bit 3.
 ; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
@@ -50291,6 +50338,15 @@ EFF_VolumeUpdate_Return:
 	inc 6, xsp
 	retd 0x4
 
+; Cross-ROM call targets in the sub-CPU BOOT ROM (Cross-ref: subcpu/boot/kn5000_subcpu_boot.s,
+; where these addresses carry the labels DEBUG_OUTPUT_STRING and HEX_BYTE_TO_ASCII; both are
+; dumped bytes of IC30).  The boot ROM's character sink behind them, SUB_FEC1 (0xFFFEC1), is
+; `ld iz,0xFE00` + 12 x nop + ret in the dump (IC30 is flagged BAD_DUMP, but these bytes are
+; not 0xFF) -- it outputs nothing, so with that boot ROM every Debug_Print_* call below is a
+; no-op apart from its cost.
+	.equ	BootROM_DEBUG_OUTPUT_STRING, 0xFFFEA1
+	.equ	BootROM_HEX_BYTE_TO_ASCII, 0xFFFE86
+
 ; ----------------------------------------------------------------------------
 ; Debug_Print_String - Print null-terminated string via serial port
 ; Entry: XWA = pointer to string
@@ -50298,7 +50354,7 @@ EFF_VolumeUpdate_Return:
 ; Notes: Calls boot ROM serial output routine at 0xFFFEA1
 ; ----------------------------------------------------------------------------
 Debug_Print_String:	; 038365h
-	call 0xFFFEA1
+	call BootROM_DEBUG_OUTPUT_STRING
 	ld wa, 0:i3
 	ret
 
@@ -50310,7 +50366,7 @@ Debug_Print_String:	; 038365h
 ; ----------------------------------------------------------------------------
 Debug_Print_Byte:	; 03836Ch
 	extz wa
-	call 0xFFFE86
+	call BootROM_HEX_BYTE_TO_ASCII
 	ld wa, 0:i3
 	ret
 
@@ -50326,11 +50382,11 @@ Debug_Print_Word:	; 038375h
 	ld wa, iz
 	srl wa, 8	; Get high byte
 	extz wa
-	call 0xFFFE86
+	call BootROM_HEX_BYTE_TO_ASCII
 	ld wa, 0:i3
 	stb_erp A, 0xF8	; Get low byte
 	extz wa
-	call 0xFFFE86
+	call BootROM_HEX_BYTE_TO_ASCII
 	ld wa, 0:i3
 	popw iz
 	ret
