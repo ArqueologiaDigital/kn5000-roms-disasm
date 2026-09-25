@@ -220,9 +220,9 @@
 ;
 ; Code Section 1 (0x280020-0x28F575):
 ;   0x280020  HDAE5000_Handler_Registration - Handler registration entry (DISASSEMBLED)
-;   0x28030E  HDAE5000_Get_Display_Dimensions_A1 - Memory allocation parameter check
-;   0x28033B  HDAE5000_Get_Display_Width_1 - Utility routine
-;   0x280368  HDAE5000_Get_Display_Width_2 - Utility routine
+;   0x28030E  HDAE5000_Alloc_Memory_1 - bitmap resource descriptor (see below)
+;   0x28033B  HDAE5000_Alloc_Memory_2 - bitmap resource descriptor
+;   0x280368  HDAE5000_Alloc_Memory_3 - bitmap resource descriptor
 ;   0x2803C2  HDAE5000_UiState_Reset - Register frame handler callback
 ;   0x28F543  HDAE5000_Alloc_Memory - Display parameter lookup (DISASSEMBLED)
 ;   0x28F570  HDAE5000_Get_Init_Flag - Return HD presence flag (DISASSEMBLED)
@@ -239,8 +239,7 @@
 ;   0x28F813  HDAE5000_Palette_Setup - Set one VGA palette entry (DISASSEMBLED)
 ;   0x28F8E0  HDAE5000_Load_Palette - Load all 256 palette entries (DISASSEMBLED)
 ;   0x28F90B  HDAE5000_Finalize_Init - Just returns (1-byte stub) (DISASSEMBLED)
-;   0x28F90C  HDAE5000_HD_FormatDrive - Display/callback initialization (LABEL EXPOSED)
-;   0x28F90C  HDAE5000_HD_FormatDrive - Display/callback initialization
+;   0x28F90C  HDAE5000_HD_FormatDrive - format the drive (see its header)
 ;   0x28F97E  HDAE5000_DirName_Address - Calculate 16-byte offset in table
 ;   0x28F98B  HDAE5000_DirName_SetAndStore - Copy data to table at 0x201632
 ;   0x28F9AD  HDAE5000_Dir_IsBlankName - Memory check routine
@@ -263,12 +262,12 @@
 ;   0x2952F8  HDAE5000_PPORT_Execute - Execute PPORT command
 ;   0x2953E2  HDAE5000_PPORT_Cmd_Table - Jump table for PPORT commands
 ;   0x295412  HDAE5000_PPORT_Strings - Command menu strings
-;   0x2958D6  HDAE5000_PPORT_Cmd06_WriteFsbToHd - Handler: Send HD info
-;   0x295914  HDAE5000_PPORT_Cmd07_LoadHdToMemory - Handler: Exit PPORT
-;   0x2959F6  HDAE5000_PPORT_Cmd08_SendDataToPc - Handler: Read FSB from HD
-;   0x295D3C  HDAE5000_PPORT_Cmd09_SendFilesToPc - Handler: Send FSB to PC
-;   0x29605A  HDAE5000_PPORT_Cmd10_RcvDataFromPc - Handler: Receive FSB from PC
-;   0x296294  HDAE5000_PPORT_Cmd11_SaveMemoryToHd - Handler: Write FSB to HD
+;   0x2958D6  HDAE5000_PPORT_Cmd06_WriteFsbToHd - command 06 "Writing FSB to HD"
+;   0x295914  HDAE5000_PPORT_Cmd07_LoadHdToMemory - command 07 "Load HD to Memory"
+;   0x2959F6  HDAE5000_PPORT_Cmd08_SendDataToPc - command 08 "Send data to PC"
+;   0x295D3C  HDAE5000_PPORT_Cmd09_SendFilesToPc - command 09 "Sending files to PC"
+;   0x29605A  HDAE5000_PPORT_Cmd10_RcvDataFromPc - command 10 "Rcv data from PC"
+;   0x296294  HDAE5000_PPORT_Cmd11_SaveMemoryToHd - command 11 "Save memory to HD"
 ;   0x2967B4  HDAE5000_PPORT_LatchPacketArgs - Display utility
 ;   0x2967E4  HDAE5000_PPORT_RequestSongInfo - Display utility 2
 ;   0x29AE9F  HDAE5000_MemCopy - Memory copy utility
@@ -281,21 +280,23 @@
 ;                "Technics Software section    M. Kitajima"
 ;                Version "2.33J", "2.21", "TECHNICS KN5000"
 ;   0x29BFE0  HDAE5000_UI_Config - UI configuration strings
-;   0x2BA1A6  HDAE5000_Font_Data - Font bitmap data (large block)
-;   0x2E1C82  HDAE5000_Config_Strings - Configuration and version strings
-;   0x2E21D8  HDAE5000_Test_Strings - PPORT test and debug strings
-;   0x2E2500  HDAE5000_Dir_Strings - Directory management strings
-;   0x2E2E76  HDAE5000_Char_Tables - Character set tables
-;   0x2E348F  HDAE5000_Path_Strings - File path and config strings
-;   0x2E365D  HDAE5000_UI_Icons - UI icon/pattern data with language IDs
+;   0x2A898E  bitmaps and palettes (the retired HDAE5000_Font_Data label
+;                claimed font data at 0x2BA1A6; there is none -- see
+;                hdae5000_data_tables.s)
+;   0x2E1C82  the C program's .rodata, 0x2E1C82-0x2E3703, one label per object
+;                (strings, switch tables, templates), each naming its readers
+;                (scripts/generators/gen_hdae5000_rodata.py).  The six range
+;                names that stood here (Config/Test/Dir/Path strings, Char
+;                tables, UI icons) did not survive that typing.
 ;   0x2E3704  HDAE5000_Multilingual_Messages - Trilingual UI messages (EN/DE/FR)
-;   0x2E5B80  HDAE5000_Lang_Codes - Language code strings and file types
+;   0x2E5B80  the lyrics module's .rodata, 0x2E5B80-0x2E5DCD (gen_hdae5000_rodata.py
+;                --block2): lyric messages, TLhd/TLtr tags, .TLX/.TTX/.MID
 ;   0x2F8DCE  HDAE5000_Display_Params - File extensions, device names, config
 ;   0x2F94B2  HDAE5000_Init_Data - Data copied to 0x23952A (0xC82 bytes)
 ;
 ; RAM Workspace (0x23xxxx):
-;   0x23A19E  HDAE5000_WORKSPACE_PTR2 - Secondary workspace pointer
-;   0x23A1A2  HDAE5000_WORKSPACE_PTR - Main workspace structure pointer
+;   0x23A19E  HDAE5000_RAM_LyricBoxObj - the open lyric box's object id
+;   0x23A1A2  HDAE5000_RAM_MainWorkspacePtr - the main CPU's object table (0x027ED2)
 ;   0x230EC2  HDAE5000_WORK_TEMP - Temporary work variable
 ;   0x230EC4  HDAE5000_STATE_VAR - State variable
 ;   0x230EC6  HDAE5000_CALC_RESULT - Calculation result storage
@@ -309,12 +310,13 @@
 ;
 ; Hard Disk RAM Variables (0x229Dxx):
 ;   0x229D90  HD_STATUS_FLAG - Current drive status
-;   0x229D92  HD_RESULT_FLAG - Last operation result (0=no HD, non-zero=present)
-;   0x229D99  HD_CONFIG_START - Start of drive configuration flags
-;   0x229DAE  HD_CONFIG_END - End of drive configuration flags
+;   0x229D92  HDAE5000_RAM_HdInitResult - HD_Init's step code (0 = no HD)
+;   0x229D99  HDAE5000_RAM_WriteProtect .. 0x229DAE HDAE5000_RAM_LyricBackColor -
+;             the user settings (write protection/confirm, quick load, load by
+;             number, jump after load, lyric jump and colours), not drive flags
 ;   0x229DC8  HD_CONTROL_FLAG - Control register shadow
 ;   0x229DD9  HD_ENABLE_FLAG - Drive enabled flag
-;   0x23A08E  HD_COMMAND_SHADOW - Shadow of last ATA command sent
+;   0x23A08E  HDAE5000_RAM_DirPageBase - first directory of the list page
 ;
 ; Hard Disk Interface:
 ;   The HD-AE5000 uses an IDE/ATA hard disk accessed via PPI bridge.
@@ -414,7 +416,7 @@ HDAE5000_ENTRY_4:	; 28001Ch
 ;                             (A1 = 0x2E198E bitmap data, not a palette; unlike
 ;                              its three neighbours this one carries the
 ;                              firmware's own registry name)
-;   0x2803C2  Register_Frame - Register frame handler callback
+;   0x2803C2  HDAE5000_UiState_Reset - (was Register_Frame; see its header)
 ;   0x28F543  Alloc_Memory - Bitmap resource descriptor for the boot splash
 ;                             (A1 = 0x2E61CE HDAE5000_Bitmap_BootSplash, A2 = 320,
 ;                              A3 = 240 -- bitmap data, not a palette)
