@@ -1,5 +1,7 @@
 # lane seqeng 2026-09-25: the 8.3 path-component parser (v7 label set; same
 # positions as rename_seqeng_fatpath_v10v9.sed, label for label)
+# comment-only lines keep the old names (they record history): skip them
+/^[[:space:]]*;/b
 /^SeqByteBlock_EffectsSeqData:$/d
 /^SeqByteBlock_EffectsSeqDotExt:$/d
 s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Helper2\b/FatPath_Next83Component/g
@@ -17,3 +19,11 @@ s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Skip17\b/FatPath_Next83Component_Mor
 s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Skip18\b/FatPath_Next83Component_CheckEnd/g
 s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Join7\b/FatPath_Next83Component_CheckDotEntry/g
 s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue3\b/FatPath_Next83Component_Return/g
+# FAT primitives (see their headers in smf_event_processor.s)
+s/\bSeqStep_FileSectorError\b/Fat_ReadEntry/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper\b/Fat_CountContiguousClusters/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Skip\b/Fat_CountContiguousClusters_NonEmpty/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Loop\b/Fat_CountContiguousClusters_Next/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Join\b/Fat_CountContiguousClusters_ReadFat/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Skip2\b/Fat_CountContiguousClusters_Done/g
+s/\bSeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue\b/Fat_CountContiguousClusters_Return/g

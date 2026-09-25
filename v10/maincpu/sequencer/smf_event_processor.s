@@ -4701,7 +4701,16 @@ SeqStep_FileSectorReturn:
 	inc	4, xsp
 	ret
 
-SeqStep_FileSectorError:
+; Fat_ReadEntry(file, n)  -- named 2026-09-25 (lane seqeng; was
+; SeqStep_FileSectorError, which it is not).  Returns HL = FAT entry n of the
+; volume whose record is at file+30.  FAT12 when that record's word +36 (its
+; highest cluster number) is 0xFFF: byte offset n*3/2 and a 12-bit unpack by
+; the parity of n; otherwise FAT16: offset 2n.  Sector = offset >> 9 plus the
+; FAT's first sector (volume +24); the sector is fetched with
+; SeqStep_FileIoCheck (last buffer kept in file +38; data at buffer +0x1A), and
+; an entry straddling two sectors (offset & 0x1FF = 0x1FF) takes its second
+; byte from the next sector.  A failed fetch returns (volume +36) - 8.
+Fat_ReadEntry:
 	lda xsp, (xsp - 10)
 	push xiz
 	ldw (xsp + 12), 0x0
@@ -5002,7 +5011,12 @@ SeqStep_FileSectorPopReturn_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
-SeqByteBlock_PathNormalize_Helper:
+; Fat_CountContiguousClusters(file)  -- named 2026-09-25 (lane seqeng; was
+; SeqByteBlock_PathNormalize_Helper).  From the file's first cluster (word +42) it follows
+; the FAT with Fat_ReadEntry while each next cluster is the current one + 1 and
+; not above (volume +36) - 8; the length of that contiguous run is stored in
+; word +44 and returned in HL (0 for an empty file, first cluster 0).
+Fat_CountContiguousClusters:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, (xsp+12)
@@ -5013,30 +5027,30 @@ SeqByteBlock_PathNormalize_Helper:
 	ld	wa, (xiz+42)
 	ld	(xsp+4), wa
 	cpw	(xsp+4), 0
-	jr	nz, SeqByteBlock_PathNormalize_Helper_Skip
+	jr	nz, Fat_CountContiguousClusters_NonEmpty
 	ldw (xiz+44), 0
 	ld	hl, 0:i3
-	jr	SeqByteBlock_PathNormalize_Helper_Epilogue
-SeqByteBlock_PathNormalize_Helper_Skip:
+	jr	Fat_CountContiguousClusters_Return
+Fat_CountContiguousClusters_NonEmpty:
 	ldw	(xiz+44), 1
-	jr	SeqByteBlock_PathNormalize_Helper_Entry
-SeqStep_FileSectorPopReturn_Loop:
+	jr	Fat_CountContiguousClusters_ReadFat
+Fat_CountContiguousClusters_Next:
 	incw	1, (xsp+4)
 	ld	wa, (xsp+4)
 	cp	wa, hl
-	jr	nz, SeqByteBlock_PathNormalize_Helper_Skip2
+	jr	nz, Fat_CountContiguousClusters_Done
 	incw	1, (xiz+44)
-SeqByteBlock_PathNormalize_Helper_Entry:
+Fat_CountContiguousClusters_ReadFat:
 	pushm	(xsp+4)
 	push	xiz
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	wa, hl
 	cp	wa, (xsp+6)
-	jr	ule, SeqStep_FileSectorPopReturn_Loop
-SeqByteBlock_PathNormalize_Helper_Skip2:
+	jr	ule, Fat_CountContiguousClusters_Next
+Fat_CountContiguousClusters_Done:
 	ld	hl, (xiz+44)
-SeqByteBlock_PathNormalize_Helper_Epilogue:
+Fat_CountContiguousClusters_Return:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -5076,7 +5090,7 @@ SeqStep_FileSectorPopReturn_Loop2:
 	pushw	iz
 	ld	xwa, (xsp+22)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	cp	hl, 0:i3
 	jr	z, SeqStep_FileSectorPopReturn_Skip5
@@ -5091,7 +5105,7 @@ SeqStep_FileSectorPopReturn_Loop3:
 	pushw	iz
 	ld	xwa, (xsp+22)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	cp	hl, 0:i3
 	jr	z, SeqStep_FileSectorPopReturn_Skip5
@@ -5448,7 +5462,7 @@ SeqByteBlock_PathNormalize_Loop3:
 	ld	(xsp+22), bc
 	ld	xwa, (xsp+46)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper
+	calr	Fat_CountContiguousClusters
 	lda	xsp, (xsp+12)
 	ld	xwa, (xsp+38)
 	ld	xbc, 0:i3
@@ -5602,7 +5616,7 @@ SeqByteBlock_PathNormalize_Loop15:
 	ld	(xwa+48), bc
 	ld	xwa, (xsp+46)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper
+	calr	Fat_CountContiguousClusters
 	lda	xsp, (xsp+12)
 	ld	xwa, (xsp+16)
 	resm	3, (xwa+22)
@@ -5640,7 +5654,7 @@ SeqByteBlock_PathNormalize_Join15:
 	pushm	(xsp+14)
 	ld	xwa, (xsp+40)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	(xsp+14), hl
 SeqByteBlock_PathNormalize_Skip44:
@@ -5694,7 +5708,7 @@ SeqByteBlock_PathNormalize_Loop5:
 	pushm	(xsp+14)
 	ld	xwa, (xsp+40)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	(xsp+14), hl
 SeqByteBlock_PathNormalize_Skip50:
@@ -5940,7 +5954,7 @@ SeqByteBlock_PathNormalize_Helper4_Join2:
 	ld	(xsp+20), wa
 	pushm	(xiz+42)
 	push	xiz
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	(xiz+42), hl
 SeqByteBlock_PathNormalize_Join2:
@@ -6019,7 +6033,7 @@ SeqByteBlock_PathNormalize_Loop10:
 	pushw	iz
 	ld	xwa, (xsp+10)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	ld qiz, hl
 	pushw	0
 	pushw	iz
@@ -6676,7 +6690,7 @@ SeqByteBlock_PathNormalize_Helper7_Skip:
 	jrl	nz, SeqByteBlock_PathNormalize_Helper7_Join
 	ld	xwa, (xsp+16)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper
+	calr	Fat_CountContiguousClusters
 	inc	4, xsp
 	jrl	SeqByteBlock_PathNormalize_Helper7_Join
 SeqByteBlock_PathNormalize_Helper7_Skip2:
@@ -6701,7 +6715,7 @@ SeqByteBlock_PathNormalize_Loop12:
 	pushw	hl
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	xwa, (xsp+8)
 	ld	wa, (xwa+36)
@@ -6744,7 +6758,7 @@ SeqByteBlock_PathNormalize_Helper7_Skip6:
 SeqByteBlock_PathNormalize_Skip20:
 	ld	xwa, (xsp+16)
 	push	xwa
-	calr	SeqByteBlock_PathNormalize_Helper
+	calr	Fat_CountContiguousClusters
 	inc	4, xsp
 SeqByteBlock_PathNormalize_Helper7_Join:
 	ld	xwa, 0:i3
@@ -7773,7 +7787,7 @@ SeqStep_CountLoop_Body:
 	pushw iz
 	ld xwa, (xsp + 10)
 	push xwa
-	calr SeqStep_FileSectorError
+	calr Fat_ReadEntry
 	inc 6, xsp
 	cp hl, 0:i3
 	jr nz, SeqStep_CountLoop_CheckEnd
@@ -7881,7 +7895,7 @@ SeqStep_SectorCompareBlock_Skip2:
 	jr	z, SeqStep_SectorCompareBlock_Skip3
 	pushw	hl
 	push	xbc
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ret
 SeqStep_SectorCompareBlock_Skip3:

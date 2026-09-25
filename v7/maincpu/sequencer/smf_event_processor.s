@@ -4689,7 +4689,16 @@ SeqStep_FileSectorReturn:
 	pop	xiz
 	inc	4, xsp
 	ret
-SeqStep_FileSectorError:
+; Fat_ReadEntry(file, n)  -- named 2026-09-25 (lane seqeng; was
+; SeqStep_FileSectorError, which it is not).  Returns HL = FAT entry n of the
+; volume whose record is at file+30.  FAT12 when that record's word +36 (its
+; highest cluster number) is 0xFFF: byte offset n*3/2 and a 12-bit unpack by
+; the parity of n; otherwise FAT16: offset 2n.  Sector = offset >> 9 plus the
+; FAT's first sector (volume +24); the sector is fetched with
+; SeqStep_FileIoCheck (last buffer kept in file +38; data at buffer +0x1A), and
+; an entry straddling two sectors (offset & 0x1FF = 0x1FF) takes its second
+; byte from the next sector.  A failed fetch returns (volume +36) - 8.
+Fat_ReadEntry:
 	lda xsp, (xsp - 10)
 	push xiz
 	ldw (xsp + 12), 0x0
@@ -4990,7 +4999,12 @@ SeqStep_FileSectorPopReturn:
 	pop XIZ
 	inc 2,XSP
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper:
+; Fat_CountContiguousClusters(file)  -- named 2026-09-25 (lane seqeng; was
+; SeqByteBlock_StyleBitmapRef_Code_Helper).  From the file's first cluster (word +42) it follows
+; the FAT with Fat_ReadEntry while each next cluster is the current one + 1 and
+; not above (volume +36) - 8; the length of that contiguous run is stored in
+; word +44 and returned in HL (0 for an empty file, first cluster 0).
+Fat_CountContiguousClusters:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, (xsp+12)
@@ -5001,30 +5015,30 @@ SeqByteBlock_StyleBitmapRef_Code_Helper:
 	ld	wa, (xiz+42)
 	ld	(xsp+4), wa
 	cpw	(xsp+4), 0
-	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip
+	jr	nz, Fat_CountContiguousClusters_NonEmpty
 	ldw	(xiz+44), 0
 	ld	hl, 0:i3
-	jr	SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue
-SeqByteBlock_StyleBitmapRef_Code_Helper_Skip:
+	jr	Fat_CountContiguousClusters_Return
+Fat_CountContiguousClusters_NonEmpty:
 	ldw	(xiz+44), 1
-	jr	SeqByteBlock_StyleBitmapRef_Code_Helper_Join
-SeqByteBlock_StyleBitmapRef_Code_Helper_Loop:
+	jr	Fat_CountContiguousClusters_ReadFat
+Fat_CountContiguousClusters_Next:
 	incm	1, (xsp+4)
 	ld	wa, (xsp+4)
 	cp	wa, hl
-	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip2
+	jr	nz, Fat_CountContiguousClusters_Done
 	incm	1, (xiz+44)
-SeqByteBlock_StyleBitmapRef_Code_Helper_Join:
+Fat_CountContiguousClusters_ReadFat:
 	pushm	(xsp+4)
 	push	xiz
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	wa, hl
 	cp	wa, (xsp+6)
-	jr	ule, SeqByteBlock_StyleBitmapRef_Code_Helper_Loop
-SeqByteBlock_StyleBitmapRef_Code_Helper_Skip2:
+	jr	ule, Fat_CountContiguousClusters_Next
+Fat_CountContiguousClusters_Done:
 	ld	hl, (xiz+44)
-SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue:
+Fat_CountContiguousClusters_Return:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -5064,7 +5078,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop3:
 	pushw	iz
 	ld	xwa, (xsp+22)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	cp	hl, 0:i3
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip6
@@ -5079,7 +5093,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop4:
 	pushw	iz
 	ld	xwa, (xsp+22)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	cp	hl, 0:i3
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip6
@@ -5429,7 +5443,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop10:
 	ld	(xsp+22), bc
 	ld	xwa, (xsp+46)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper
+	calr	Fat_CountContiguousClusters
 	lda	xsp, (xsp+12)
 	ld	xwa, (xsp+38)
 	ld	xbc, 0:i3
@@ -5583,7 +5597,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop14:
 	ld	(xwa+48), bc
 	ld	xwa, (xsp+46)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper
+	calr	Fat_CountContiguousClusters
 	lda	xsp, (xsp+12)
 	ld	xwa, (xsp+16)
 	resm	3, (xwa+22)
@@ -5621,7 +5635,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Join10:
 	pushm	(xsp+14)
 	ld	xwa, (xsp+40)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	(xsp+14), hl
 SeqByteBlock_StyleBitmapRef_Code_Helper_Skip36:
@@ -5675,7 +5689,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop16:
 	pushm	(xsp+14)
 	ld	xwa, (xsp+40)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	(xsp+14), hl
 SeqByteBlock_StyleBitmapRef_Code_Helper_Skip42:
@@ -5921,7 +5935,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Join12:
 	ld	(xsp+20), wa
 	pushm	(xiz+42)
 	push	xiz
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	(xiz+42), hl
 SeqByteBlock_StyleBitmapRef_Code_Helper_Join13:
@@ -6000,7 +6014,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper2_Loop:
 	pushw	iz
 	ld	xwa, (xsp+10)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	ld	qiz, hl
 	pushw	0
 	pushw	iz
@@ -6658,7 +6672,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip:
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper4_Join
 	ld	xwa, (xsp+16)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper
+	calr	Fat_CountContiguousClusters
 	inc	4, xsp
 	jrl	SeqByteBlock_StyleBitmapRef_Code_Helper4_Join
 SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip2:
@@ -6683,7 +6697,7 @@ SeqByteBlock_StyleBitmapRef_Code_Loop:
 	pushw	hl
 	ld	xwa, (xsp+18)
 	push	xwa
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ld	xwa, (xsp+8)
 	ld	wa, (xwa+36)
@@ -6726,7 +6740,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip6:
 SeqByteBlock_StyleBitmapRef_Code_Skip5:
 	ld	xwa, (xsp+16)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper
+	calr	Fat_CountContiguousClusters
 	inc	4, xsp
 SeqByteBlock_StyleBitmapRef_Code_Helper4_Join:
 	ld	xwa, 0:i3
@@ -7756,7 +7770,7 @@ SeqStep_CountLoop_Body:
 	pushw iz
 	ld xwa, (xsp + 10)
 	push xwa
-	calr SeqStep_FileSectorError
+	calr Fat_ReadEntry
 	inc 6, xsp
 	cp hl, 0:i3
 	jr nz, SeqStep_CountLoop_CheckEnd
@@ -7863,7 +7877,7 @@ SeqStep_SectorCompareBlock_Skip2:
 	jr	z, SeqStep_SectorCompareBlock_Skip3
 	pushw	hl
 	push	xbc
-	calr	SeqStep_FileSectorError
+	calr	Fat_ReadEntry
 	inc	6, xsp
 	ret
 SeqStep_SectorCompareBlock_Skip3:
