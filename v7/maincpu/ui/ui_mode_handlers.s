@@ -8881,7 +8881,7 @@ PmExpFilter_EventDispatch:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x30
+	lda_dri	xwa, 0xfd, 0x00, 0x01
 	ld	xbc, xde
 	srl	xbc, 0
 	ld	qbc, 0
@@ -8926,7 +8926,7 @@ PmExpFilterGridCheck_Evt1C00018:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x31
+	lda_dri	xbc, 0xfd, 0x00, 0x01
 	ld	xwa, xde
 	srl	xwa, 0
 	ld	qwa, 0
@@ -8980,12 +8980,12 @@ PmExpFilterGridCheck_Loop:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	.byte	0xe3, 0x07, 0xf0, 0xe4, 0xf0
+	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4
 	jr	nz, PmExpFilterGridCheck_Skip4
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x31
+	lda_dri	xbc, 0xfd, 0x00, 0x01
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -9006,7 +9006,7 @@ PmExpFilterGridCheck_Skip3:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x32
+	lda_dri	xde, 0xfd, 0x00, 0x01
 	ld	xbc, 0x1e0008c
 	jrl	PmExpFilterCheck_DoSend
 PmExpFilterGridCheck_Skip4:
@@ -9026,12 +9026,12 @@ PmExpFilterGridCheck_Loop2:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	.byte	0xe3, 0x07, 0xf0, 0xe4, 0xf0
+	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4
 	jr	nz, PmExpFilterGridCheck_Skip7
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x31
+	lda_dri	xbc, 0xfd, 0x00, 0x01
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -9052,7 +9052,7 @@ PmExpFilterGridCheck_Skip6:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x32
+	lda_dri	xde, 0xfd, 0x00, 0x01
 	ld	xbc, 0x1e0008c
 	jrl	PmExpFilterCheck_DoSend
 PmExpFilterGridCheck_Skip7:
@@ -9061,7 +9061,7 @@ PmExpFilterGridCheck_Skip7:
 	jr	c, PmExpFilterGridCheck_Loop2
 	jrl	SeqLoad_StoreReturnZero
 PmExpFilterCheck_CellDecode:
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x33	; lda xhl, xsp+0x0100
+	lda_dri	xhl, 0xfd, 0x00, 0x01	; lda xhl, xsp+0x0100
 	ld	xwa, xde
 	srl	xwa, 0
 	ld	qwa, 0
@@ -9101,7 +9101,7 @@ PmExpFilterCheck_SendNameA:
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x32	; lda xde, xsp+0x0100
+	lda_dri	xde, 0xfd, 0x00, 0x01	; lda xde, xsp+0x0100
 	ld	xbc, 0x1e0008c
 	jr	PmExpFilterCheck_DoSend
 PmExpFilterCheck_AltDecode:

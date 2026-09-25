@@ -8905,7 +8905,7 @@ PmExpFilter_EventDispatch:
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x30	; lda xwa, xsp+0x0100
+	lda_dri	xwa, 0xfd, 0x00, 0x01	; lda xwa, xsp+0x0100
 	ld	xbc, xde
 	srl	xbc, 0
 	ld	qbc, 0
@@ -8947,7 +8947,7 @@ PmExpFilterGridCheck_Evt1C00018:
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x31	; lda xbc, xsp+0x0100
+	lda_dri	xbc, 0xfd, 0x00, 0x01	; lda xbc, xsp+0x0100
 	ld	xwa, xde
 	srl	xwa, 0
 	ld	qwa, 0
@@ -8997,9 +8997,9 @@ FSWAss_RefreshAllVoices_Loop:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
-	.byte	0xe3, 0x07, 0xf0, 0xe4, 0xf0	; cp xwa, (xix+bc)
+	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4	; cp xwa, (xix+bc)
 	jr	nz, FSWAss_RefreshAllVoices_Skip10
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x31	; lda xbc, xsp+0x0100
+	lda_dri	xbc, 0xfd, 0x00, 0x01	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -9017,7 +9017,7 @@ FSWAss_RefreshAllVoices_Skip9:
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x32	; lda xde, xsp+0x0100
+	lda_dri	xde, 0xfd, 0x00, 0x01	; lda xde, xsp+0x0100
 	ld	xbc, 0x1e0008c
 	jrl	PmExpFilterCheck_DoSend
 FSWAss_RefreshAllVoices_Skip10:
@@ -9033,9 +9033,9 @@ FSWAss_RefreshAllVoices_Loop2:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
-	.byte	0xe3, 0x07, 0xf0, 0xe4, 0xf0	; cp xwa, (xix+bc)
+	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4	; cp xwa, (xix+bc)
 	jr	nz, FSWAss_RefreshAllVoices_Skip13
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x31	; lda xbc, xsp+0x0100
+	lda_dri	xbc, 0xfd, 0x00, 0x01	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -9053,7 +9053,7 @@ FSWAss_RefreshAllVoices_Skip12:
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	.byte	0xf3, 0xfd, 0x00, 0x01, 0x32	; lda xde, xsp+0x0100
+	lda_dri	xde, 0xfd, 0x00, 0x01	; lda xde, xsp+0x0100
 	ld	xbc, 0x1e0008c
 	jrl	PmExpFilterCheck_DoSend
 FSWAss_RefreshAllVoices_Skip13:

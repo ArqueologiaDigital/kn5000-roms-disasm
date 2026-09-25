@@ -280,7 +280,7 @@ ComSetGridCheck_JumpTable_Loop:
 	sla	iy, 2
 	ld	xwa, (xiz)
 	; cp xwa, (xix+iy)
-	.byte	0xe3, 0x07, 0xf0, 0xf4, 0xf0	; cp xwa, (xix+iy)
+	cpl_sri_rm	xwa, 0x07, 0xf0, 0xf4	; cp xwa, (xix+iy)
 	jr	z, ComSetGridCheck_JumpTable_Skip3
 	inc	1, bc
 	ld	(xde), bc
@@ -3285,7 +3285,7 @@ CtlMsgGridCheck_Loop:
 	add	iy, wa
 	ld	xwa, (xiz)
 	; cp xwa, (xhl+iy)
-	.byte	0xe3, 0x07, 0xec, 0xf4, 0xf0	; cp xwa, (xhl+iy)
+	cpl_sri_rm	xwa, 0x07, 0xec, 0xf4	; cp xwa, (xhl+iy)
 	jr	nz, CtlMsgGridCheck_Skip2
 	lda	xde, (xsp+20)
 	ld	xwa, (xsp+4)
@@ -4300,7 +4300,7 @@ MidiPartGridCheck_Skip12:
 	inc	4, iz
 	ld	xwa, (xix)
 	; cp xwa, (xhl+iz)
-	.byte	0xe3, 0x07, 0xec, 0xf8, 0xf0	; cp xwa, (xhl+iz)
+	cpl_sri_rm	xwa, 0x07, 0xec, 0xf8	; cp xwa, (xhl+iz)
 	jr	nz, MidiPartGridCheck_Skip13
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 2
@@ -4322,7 +4322,7 @@ MidiPartGridCheck_Skip13:
 	inc	8, iy
 	ld	xwa, (xix)
 	; cp xwa, (xhl+iy)
-	.byte	0xe3, 0x07, 0xec, 0xf4, 0xf0	; cp xwa, (xhl+iy)
+	cpl_sri_rm	xwa, 0x07, 0xec, 0xf4	; cp xwa, (xhl+iy)
 	jr	nz, MidiPartGridCheck_Skip15
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 3
