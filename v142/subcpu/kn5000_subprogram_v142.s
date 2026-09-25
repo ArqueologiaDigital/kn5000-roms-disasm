@@ -30000,8 +30000,8 @@ VoiceParam_FullSetup_ExtData:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267112:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x02, 0x00, 0x68
-	.byte 0x28
+	or_rrw_im	xbc, wa, 2, 0
+	jr	VoiceParam_FullSetup_ExtData_Join
 VoiceParam_FullSetup_ExtData_Skip:
 	ld	a, (xsp)
 	extz	wa
@@ -30013,6 +30013,7 @@ VoiceParam_FullSetup_ExtData_Skip:
 	muls	wa, 287
 	lda	xbc, (267112:24)
 	or_rrw_im	xbc, wa, 1, 0
+VoiceParam_FullSetup_ExtData_Join:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -30055,14 +30056,15 @@ VoiceParam_FullSetup_ExtData_Skip:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267122:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x00, 0x40, 0x68
-	.byte 0x14
+	or_rrw_im	xbc, wa, 0, 64
+	jr	VoiceParam_FullSetup_ExtData_Join2
 VoiceParam_FullSetup_ExtData_Skip2:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267122:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xff, 0xbf	; and (XBC+WA),0xbfff  (unidasm; no llvm-mc spelling)
+VoiceParam_FullSetup_ExtData_Join2:
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
