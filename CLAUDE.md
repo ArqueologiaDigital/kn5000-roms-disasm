@@ -963,18 +963,20 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 | Operation | Mnemonic | Example Encoding |
 |-----------|----------|-----------------|
 | Push 16-bit immediate | `pushw imm16` (NOT `push imm16`) | `pushw 0x007f` → `0b 7f 00` |
-| Compare register with D2 memory | `cpda16_24 xreg, addr` (sub-opcode 0xF0+r) | `cpda16_24 xwa, 0x230e72` → `d2 72 0e 23 f0` |
-| Compare D2 memory with register | `cpdm16_24 addr, xreg` (sub-opcode 0xF8+r) | `cpdm16_24 0x230e72, xwa` → `d2 72 0e 23 f8` |
-| F2 LDA 24-bit address | `ldada_24 xreg, addr` | `ldada_24 xwa, 0x2e2458` → `f2 58 24 2e 30` |
-| E2 32-bit load from 24-bit addr | `ldda32_24 xreg, addr` | `ldda32_24 xbc, 0x23a1a2` → `e2 a2 a1 23 21` |
-| D2 16-bit load from 24-bit addr | `ldda16_24 xreg, addr` | `ldda16_24 xiz, 0x230e72` → `d2 72 0e 23 26` |
+| Post-increment / pre-decrement operand (UPDATE 17) | `(xde+)`, `(-xwa)`, step `(xwa+:N)`, N = 1, 2 or 4 -- default = the data size; LDA/JP/CALL must write it; bank regs `(xbc3+)` | `ld (xde+), a` → `f5 e8 41`; `lda xbc, (xwa+:1)` → `f5 e0 31`.  `(+r)` / `(r-)` are errors; the `*_spi`/`*_dpi` pseudos are deleted |
+| Register-indirect displacement width (UPDATE 17) | `(xrr+D:8)` forces (Xrr+d8), `(xrr+D:16)` forces (Xrr+d16) | `lda xwa, (xsp+0:8)` → `bf 00 30`; `ld a, (xiz+5:16)` → `c3 f9 05 00 21`.  A plain `(xsp+256)` is +256 (`f3 fd 00 01 30`) -- it used to mean d8+0 |
+| Compare register with D2 memory | `cp wa, (addr:24)` (sub-opcode 0xF0+r; the old `cpda16_24 xwa, ...` named XWA for WA and is deleted, TOOLCHAIN_VERSION UPDATE 17) | `cp wa, (0x230e72:24)` → `d2 72 0e 23 f0` |
+| Compare D2 memory with register | `cp (addr:24), wa` (sub-opcode 0xF8+r; was `cpdm16_24 ..., xwa`, deleted) | `cp (0x230e72:24), wa` → `d2 72 0e 23 f8` |
+| F2 LDA 24-bit address | `lda xreg, (addr:24)` (the old `ldada_24` spelling no longer exists) | `lda xwa, (0x2e2458:24)` → `f2 58 24 2e 30` |
+| E2 32-bit load from 24-bit addr | `ld xreg, (addr:24)` (was `ldda32_24`, no longer exists) | `ld xbc, (0x23a1a2:24)` → `e2 a2 a1 23 21` |
+| D2 16-bit load from 24-bit addr | `ld reg16, (addr:24)` (was `ldda16_24 xiz, ...`, which named XIZ for IZ; no longer exists) | `ld iz, (0x230e72:24)` → `d2 72 0e 23 26` |
 | E3 indexed 32-bit load | `ld_sril3 xreg, b0, b1, b2` | `ld_sril3 xbc, 0xe5, 0x0a, 0x0e` → `e3 e5 0a 0e 21` |
 | C3 indexed 8-bit load | `ld_srib3 reg, b0, b1, b2` | `ld_srib3 a, 0x07, 0xe0, 0xf0` → `c3 07 e0 f0 21` |
 | F3 DRI byte store | `lda_dri3 xreg, b0, b1, b2` | `lda_dri3 xbc, 0x07, 0xe8, 0xec` → `f3 07 e8 ec 41` |
 | F3 DRI bit test | `bit_dri N, b0, b1, b2` | `bit_dri 7, 0x07, 0xe8, 0xf0` → `f3 07 e8 f0 cf` |
 | F3 DRI set/reset bit | `set_dri N, b0, b1, b2` / `res_dri` | raw bytes |
 | D7 word ERP load imm | `ldi_werp bank, N` | raw bytes per D7 prefix |
-| D7 word ERP reg copy | `ldto_werp reg, bank` | raw bytes per D7 prefix |
+| D7 word ERP reg copy | `ldto_werp reg, bank` (reg <- bank reg, 0x88+r) / `ldfr_werp reg, bank` (bank reg <- reg, 0x98+r); byte forms `ldto_berp` / `ldfr_berp`.  The old `stw_erp`/`ldw_erp`/`stb_erp`/`ldb_erp` read BACKWARDS and are deleted (UPDATE 17) | `ldto_werp wa, 0x30` → `d7 30 88` (ld WA,RWA3) |
 | D7 word ERP compare | `cp_werp reg, bank` | raw bytes per D7 prefix |
 | D2 memory inc/dec | `incdi16_24 N, addr` / `decdi16_24 N, addr` | raw bytes per D2 prefix |
 | D2 compare with immediate | `cpdi16_24 addr, imm16` | raw bytes per D2 prefix |
@@ -990,7 +992,7 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 
 **Critical gotchas:**
 - `ldada_24` uses `i32imm` operand type — **cannot resolve labels**. Must use numeric addresses for absolute references.
-- `cpda16_24` vs `cpdm16_24` — opposite compare directions (register-memory vs memory-register). Wrong choice flips the carry flag behavior. Check the sub-opcode: 0xF0+r = cpda (register, mem), 0xF8+r = cpdm (mem, register).
+- `cp wa, (mem)` vs `cp (mem), wa` — opposite compare directions (register-memory vs memory-register). Wrong choice flips the carry flag behavior. Check the sub-opcode: 0xF0+r = register, mem; 0xF8+r = mem, register.  (These were the pseudos `cpda16_24` / `cpdm16_24`, deleted in TOOLCHAIN_VERSION UPDATE 17 because their 32-bit register name was encoded by index: `cpda16_24 xwa` meant WA.)
 - Stack-relative LDA with displacement >= 0x80: always use `.byte` (assembler treats d8 as signed, uses F3 5-byte form for >= 128).
 - DRI/SRI raw bytes (b0, b1, b2): Copy exactly from unidasm output. Even small errors (e.g., 0xE8 vs 0xE0) cause mismatches.
 - Loop label placement: Verify jump targets against unidasm addresses. Off-by-one label positions cause displacement mismatches.
