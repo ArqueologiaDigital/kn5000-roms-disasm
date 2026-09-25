@@ -34,6 +34,11 @@ QUESTION THIS ANSWERS
     `normal` (sub_F5D77F's dead tail at 0xF5D7C2) still refuses, as does any
     marker next to a `.byte` line or a `swi`.
 
+    AND R5 RE-SYNCHRONISED (see _resync_agrees): when the committed LINEAR
+    unidasm sweep has lost sync (after text/tables) and so sees no instruction
+    at a site, unidasm decodes again from the site's routine entry and the
+    shared tool's own agreement test is applied to that decode.
+
 RUN
     python3 notes/promb-2026-09-25/symbolize_prom_b_r3.py --report R.json      # dry
     python3 notes/promb-2026-09-25/symbolize_prom_b_r3.py --apply --verify
@@ -100,6 +105,67 @@ def _lane_absurd(ABSURD, c, prev, hist, img, src=None, rel=None, li=None):
         c == "reti" and not prev.startswith("pop")))
 
 
+_ENTRIES = None
+
+
+def _entries():
+    """[(address, label)] of every non-structural label of prom_b's source, sorted."""
+    global _ENTRIES
+    if _ENTRIES is None:
+        src = os.path.join(ROOT, "wsa1", "prom_b", "wsa1_prom_b.s")
+        L = open(src, "rb").read().decode("latin-1").split("\n")
+        out, pend = [], None
+        for t in L:
+            m = re.match(r'^([A-Za-z_]\w*):', t)
+            if m and not re.search(r'_(Skip|Join|Loop|Sub|Return|Epilogue|Entry|Helper|Resume)'
+                                   r'\d*$', m.group(1)):
+                pend = m.group(1)
+            m = re.search(r'; ([0-9A-F]{6})  ', t)
+            if m and pend and not t.startswith(";"):
+                out.append((int(m.group(1), 16), pend))
+                pend = None
+        _ENTRIES = sorted(out)
+    return _ENTRIES
+
+
+def _resync_agrees(mod, uni, s):
+    """R5, re-synchronised: the committed linear unidasm sweep loses sync after
+    text or tables (MsgLine_PartVolume 0xF6DDB7 follows the string " 6 7 8" and
+    the sweep reads `f5 0e 3f` as `db`).  When the linear sweep has no
+    instruction at the site, decode AGAIN with unidasm starting at the routine
+    entry the site belongs to (the nearest preceding non-structural label) and
+    apply the shared tool's own agreement test to that decode."""
+    if mod._orig_uni_agrees(uni, s):
+        return True
+    import bisect
+    import subprocess
+    import tempfile
+    ents = _entries()
+    k = bisect.bisect_right([a for a, _ in ents], s["addr"]) - 1
+    if k < 0 or s["addr"] - ents[k][0] > 0x800:
+        return False
+    lo = ents[k][0]
+    rom = open(os.path.join(ROOT, "wsa1", "original_ROMs", "wsa1_prom_b.ic13"), "rb").read()
+    blob = rom[lo - 0xF00000:s["addr"] + 16 - 0xF00000]
+    with tempfile.NamedTemporaryFile(suffix=".bin") as f:
+        f.write(blob)
+        f.flush()
+        r = subprocess.run([mod.UNIDASM, f.name, "-arch", "tlcs900", "-basepc", "0x%x" % lo],
+                           capture_output=True, text=True)
+    local = {}
+    for ln in r.stdout.split("\n"):
+        m = mod.UNI_LINE.match(ln)
+        if m:
+            local[int(m.group(1), 16)] = (m.group(3).lower(), m.group(4).strip())
+    ok = mod._orig_uni_agrees(local, s)
+    if ok:
+        _RESYNC.append((s["addr"], ents[k][1]))
+    return ok
+
+
+_RESYNC = []
+
+
 def load():
     src = open(TOOL).read()
     for old, new in ((OLD_INIT, NEW_INIT), (OLD_TEST, NEW_TEST)):
@@ -111,6 +177,8 @@ def load():
     mod.__dict__["_lane_absurd"] = _lane_absurd
     sys.path.insert(0, os.path.dirname(TOOL))
     exec(compile(src, TOOL, "exec"), mod.__dict__)
+    mod._orig_uni_agrees = mod.uni_agrees
+    mod.uni_agrees = lambda uni, s: _resync_agrees(mod, uni, s)
     return mod
 
 
@@ -118,7 +186,10 @@ def main():
     if "--image" not in sys.argv:
         sys.argv[1:1] = ["--image", "prom_b", "--only", "prom_b/wsa1_prom_b.s"]
     mod = load()
-    return mod.main()
+    rc = mod.main()
+    print("R5 re-synchronised from the routine entry: %d sites %s"
+          % (len(_RESYNC), ", ".join("0x%06X(%s)" % x for x in _RESYNC[:40])))
+    return rc
 
 
 if __name__ == "__main__":

@@ -27736,9 +27736,10 @@ DispatchTable_F0F347:
 ; --------------------------------------------------------------------------
 sub_F0F35F:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F35F  cp (0x2798),0x00
-	jr	nz, 5	; F0F364  jr NZ,0xf0f36b
+	jr	nz, sub_F0F35F_Skip	; F0F364  jr NZ,0xf0f36b
 	calr	DspEffect_StepAlgorithm	; F0F366  calr 0xf10476
 	jr	sub_F0F37C_Join2	; F0F369  jr T,0xf0f386
+sub_F0F35F_Skip:
 	pushw	0	; F0F36B  push 0x0000
 	pushw	32	; F0F36E  push 0x0020
 	call	T_F418D0	; F0F371  call 0xf418d0
@@ -27868,7 +27869,7 @@ DispatchTable_F0F3AE:
 ; --------------------------------------------------------------------------
 sub_F0F3C6:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F3C6  cp (0x2798),0x00
-	jr	z, 30	; F0F3CB  jr Z,0xf0f3eb
+	jr	z, sub_F0F3EB	; F0F3CB  jr Z,0xf0f3eb
 	pushw	0	; F0F3CD  push 0x0000
 	pushw	33	; F0F3D0  push 0x0021
 	call	T_F418D0	; F0F3D3  call 0xf418d0
@@ -28116,9 +28117,9 @@ DispatchTable_F0F461:
 ; --------------------------------------------------------------------------
 sub_F0F479:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F479  cp (0x2798),0x00
-	jr	nz, 36	; F0F47E  jr NZ,0xf0f4a4
-	calr	3397	; F0F480  calr 0xf101c8
-	jr	18	; F0F483  jr T,0xf0f497
+	jr	nz, sub_F0F48D_Epilogue	; F0F47E  jr NZ,0xf0f4a4
+	calr	sub_F101C8	; F0F480  calr 0xf101c8
+	jr	sub_F0F48D_Join	; F0F483  jr T,0xf0f497
 
 ; --------------------------------------------------------------------------
 ; sub_F0F485
@@ -28137,7 +28138,7 @@ sub_F0F479:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F0F485:
-	calr	4626	; F0F485  calr 0xf1069a
+	calr	sub_F1069A	; F0F485  calr 0xf1069a
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F488  or (XIX),0x01
 	jr	sub_F0F48D_Epilogue	; F0F48B  jr T,0xf0f4a4
 
@@ -28162,6 +28163,7 @@ sub_F0F48D:
 	pushw	1	; F0F490  push 0x0001
 	calr	sub_F103AB	; F0F493  calr 0xf103ab
 	pop	xiy	; F0F496  pop XIY
+sub_F0F48D_Join:
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F497  or (XIX),0x01
 	ld	(8347:16), 133	; F0F49A  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(8348:16), 5	; F0F49F  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
@@ -28246,7 +28248,7 @@ DispatchTable_F0F4C4:
 ; --------------------------------------------------------------------------
 sub_F0F4DC:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F4DC  cp (0x2798),0x00
-	jr	nz, 24	; F0F4E1  jr NZ,0xf0f4fb
+	jr	nz, sub_F0F4FB	; F0F4E1  jr NZ,0xf0f4fb
 	calr	sub_F101E7	; F0F4E3  calr 0xf101e7
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F4E6  or (XIX),0x01
 	ld	(8347:16), 134	; F0F4E9  ld (0x209b),0x86  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
@@ -123621,7 +123623,7 @@ SC1_TxOpTable:
 ; ---------------------------------------------------------------------
 SC1_TxOp0_TwoByte:
 	mx_ld_rm MXB, ra_IZ, ra_IX, 1	; F5B2A9  ld A,(XIZ+IX)
-	calr	131	; F5B2AE  calr 0xf5b334
+	calr	SC1_Queue_Next	; F5B2AE  calr 0xf5b334
 	mx_st_mr8 MXD, ra_DE, ra_IY, 1	; F5B2B1  ld (XDE+IY),A
 	calr	SC1_TxRing_Next	; F5B2B6  calr 0xf5b328
 	mx_ld_rm MXB, ra_IZ, ra_IX, 0	; F5B2B9  ld W,(XIZ+IX)
@@ -141580,8 +141582,8 @@ IndexMap_F667CC:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6682C:
-	call	16001152	; F6682C  call 0xf42880
-	call	16148816	; F66830  call 0xf66950
+	call	T_F42880	; F6682C  call 0xf42880
+	call	sub_F66950	; F66830  call 0xf66950
 	xor	hl, hl	; F66834  xor HL,HL
 	ld	l, (3581:16)	; F66836  ld L,(0x0dfd)
 	dec	1, l	; F6683A  dec 1,L
@@ -156138,7 +156140,7 @@ Data_F6D4BA:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_TransportState_Plus14:
-	calr	296	; F6D4C6  calr 0xf6d5f1
+	calr	MsgLine_ClearTail	; F6D4C6  calr 0xf6d5f1
 	ld	xiy, Text_StartStopFillIn1fillIn2intro1CountInending1	; F6D4C9  ld XIY,0x00f6d66d
 	ld	xix, 4082	; F6D4CE  ld XIX,0x00000ff2
 	xor	xwa, xwa	; F6D4D3  xor XWA,XWA
@@ -157847,9 +157849,10 @@ OctaveNames_Minus2To8:
 ; --------------------------------------------------------------------------
 MsgLine_PartVolume:
 	m_cp_mi8 MB16, 0x0ef5, 0x0a	; F6DDB7  cp (0x0ef5),0x0a
-	jr	z, 9	; F6DDBC  jr Z,0xf6ddc7
+	jr	z, OctaveNames_Minus2To8_Code_Skip	; F6DDBC  jr Z,0xf6ddc7
 	ld	(3829:16), 10	; F6DDBE  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6DDC3  call 0xf431b0
+OctaveNames_Minus2To8_Code_Skip:
 	calr	MsgLine_ClearTail	; F6DDC7  calr 0xf6d5f1
 	ld	l, (4696:16)	; F6DDCA  ld L,(0x1258)
 	xor	h, h	; F6DDCE  xor H,H
@@ -157952,9 +157955,10 @@ Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15:
 ; --------------------------------------------------------------------------
 MsgLine_PartPanpot:
 	m_cp_mi8 MB16, 0x0ef5, 0x0a	; F6DEF7  cp (0x0ef5),0x0a
-	jr	z, 9	; F6DEFC  jr Z,0xf6df07
+	jr	z, MsgLine_PartPanpot_Skip	; F6DEFC  jr Z,0xf6df07
 	ld	(3829:16), 10	; F6DEFE  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6DF03  call 0xf431b0
+MsgLine_PartPanpot_Skip:
 	calr	MsgLine_ClearTail	; F6DF07  calr 0xf6d5f1
 	ld	l, (4696:16)	; F6DF0A  ld L,(0x1258)
 	xor	h, h	; F6DF0E  xor H,H
@@ -158120,9 +158124,10 @@ Data_F6DFBA:
 ; --------------------------------------------------------------------------
 MsgLine_PartTuning:
 	m_cp_mi8 MB16, 0x0ef5, 0x0a	; F6DFC4  cp (0x0ef5),0x0a
-	jr	z, 9	; F6DFC9  jr Z,0xf6dfd4
+	jr	z, MsgLine_PartTuning_Skip	; F6DFC9  jr Z,0xf6dfd4
 	ld	(3829:16), 10	; F6DFCB  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6DFD0  call 0xf431b0
+MsgLine_PartTuning_Skip:
 	calr	MsgLine_ClearTail	; F6DFD4  calr 0xf6d5f1
 	ld	l, (4696:16)	; F6DFD7  ld L,(0x1258)
 	xor	h, h	; F6DFDB  xor H,H
@@ -158205,9 +158210,10 @@ Data_F6E027:
 ; --------------------------------------------------------------------------
 MsgLine_PartBendSens:
 	m_cp_mi8 MB16, 0x0ef5, 0x0a	; F6E02E  cp (0x0ef5),0x0a
-	jr	z, 9	; F6E033  jr Z,0xf6e03e
+	jr	z, MsgLine_PartBendSens_Skip	; F6E033  jr Z,0xf6e03e
 	ld	(3829:16), 10	; F6E035  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6E03A  call 0xf431b0
+MsgLine_PartBendSens_Skip:
 	calr	MsgLine_ClearTail	; F6E03E  calr 0xf6d5f1
 	ld	l, (4696:16)	; F6E041  ld L,(0x1258)
 	xor	h, h	; F6E045  xor H,H
@@ -158542,7 +158548,7 @@ Data_F6E20B:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartEffect1:
-	calr	62428	; F6E212  calr 0xf6d5f1
+	calr	MsgLine_ClearTail	; F6E212  calr 0xf6d5f1
 	ld	l, (4696:16)	; F6E215  ld L,(0x1258)
 	xor	h, h	; F6E219  xor H,H
 	sla	hl, 2	; F6E21B  sla 0x02,HL
@@ -158619,7 +158625,7 @@ Data_F6E259:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartEffect2:
-	calr	62349	; F6E261  calr 0xf6d5f1
+	calr	MsgLine_ClearTail	; F6E261  calr 0xf6d5f1
 	ld	l, (4696:16)	; F6E264  ld L,(0x1258)
 	xor	h, h	; F6E268  xor H,H
 	sla	hl, 2	; F6E26A  sla 0x02,HL
@@ -158698,7 +158704,7 @@ Data_F6E2AC:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartReverb:
-	calr	62260	; F6E2BA  calr 0xf6d5f1
+	calr	MsgLine_ClearTail	; F6E2BA  calr 0xf6d5f1
 	ld	l, (4696:16)	; F6E2BD  ld L,(0x1258)
 	xor	h, h	; F6E2C1  xor H,H
 	sla	hl, 2	; F6E2C3  sla 0x02,HL
@@ -159710,7 +159716,7 @@ Data_F6E78B:
 ; --------------------------------------------------------------------------
 MsgLine_PartCtrlPedal:
 	m_bit 0, MD16, 0x2092	; F6E797  bit 0,(0x2092)
-	jr	nz, 74	; F6E79B  jr NZ,0xf6e7e7
+	jr	nz, MsgLine_PartCtrlPedal_Return	; F6E79B  jr NZ,0xf6e7e7
 	calr	MsgLine_ClearTail	; F6E79D  calr 0xf6d5f1
 	ld	l, (4697:16)	; F6E7A0  ld L,(0x1259)
 	ld	h, l	; F6E7A4  ld H,L
@@ -159735,6 +159741,7 @@ MsgLine_PartCtrlPedal:
 	ldw	bc, 3	; F6E7DE  ld BC,0x0003
 	ldir85	; F6E7E1  ldir
 	call	T_F431B4	; F6E7E3  call 0xf431b4
+MsgLine_PartCtrlPedal_Return:
 	ret	; F6E7E7  ret
 
 ; --------------------------------------------------------------------------
@@ -159874,7 +159881,7 @@ Data_F6E844:
 ; --------------------------------------------------------------------------
 MsgLine_PartRtCreateX:
 	m_bit 0, MD16, 0x2092	; F6E849  bit 0,(0x2092)
-	jr	nz, 74	; F6E84D  jr NZ,0xf6e899
+	jr	nz, MsgLine_PartRtCreateX_Return	; F6E84D  jr NZ,0xf6e899
 	calr	MsgLine_ClearTail	; F6E84F  calr 0xf6d5f1
 	ld	l, (4697:16)	; F6E852  ld L,(0x1259)
 	ld	h, l	; F6E856  ld H,L
@@ -159899,6 +159906,7 @@ MsgLine_PartRtCreateX:
 	ldw	bc, 3	; F6E890  ld BC,0x0003
 	ldir85	; F6E893  ldir
 	call	T_F431B4	; F6E895  call 0xf431b4
+MsgLine_PartRtCreateX_Return:
 	ret	; F6E899  ret
 
 ; --------------------------------------------------------------------------
@@ -196783,7 +196791,7 @@ BlinkArgPtrs_F7FF13:
 ;           independently: notes/prom_b_screens_round8.py --calibrate.
 ; ---------------------------------------------------------------------
 Paint_AdvanceDelay:
-	call	16002688	; F7FF27  call 0xf42e80
+	call	T_CallbackQueue_ResetAndRestartTask2	; F7FF27  call 0xf42e80
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7FF2B  cp (0x207e),0x00
 	jr	nz, Paint_AdvanceDelay_Join	; F7FF30  jr NZ,0xf7ff65
 	call	T_F42A60	; F7FF32  call 0xf42a60
