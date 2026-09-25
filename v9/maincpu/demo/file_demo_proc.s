@@ -674,13 +674,13 @@ Demo_SelectEntry_ByteTable:
 Demo_SelectEntry_ByteTable_Skip:
 	res	3, (0x28ad:16)
 	cp	(0x8d38:16), 228
-	.byte 0xf2, 0xf1, 0x29, 0xf2, 0xee
+	call_24	nz, (0xf229f1)
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
 	ldw	(0x25b84:24), 1
 	ld	(0x8f4e:16), 4
 	cp	(0x8d38:16), 228
-	.byte 0xf2, 0x4d, 0x2a, 0xf2, 0xee
+	call_24	nz, (0xf22a4d)
 	ld	a, (0x28a4:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
@@ -3223,7 +3223,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	extz	wa
 	call	BitMapOut_UpdateWidget_Done_0x98
 	lda	xwa, (0x1ed350:24)
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+0x4)
 	ld	xbc, 16
 	call	FileIO_ReadBlock
 	ld	wa, (0x1ed35d:24)
@@ -3510,7 +3510,7 @@ FileIO_ByteBlock_DemoProc1_Join5:
 	extz	bc
 	call	TmFlashWrite_Block1
 	lda	xwa, (0x1e0000:24)
-	.byte 0xaf, 0x06, 0x80
+	add	xwa, (xsp+0x6)
 	ld	bc, (xsp+10)
 	extz	xbc
 	call	FileIO_ReadBlock
@@ -3604,7 +3604,7 @@ FileIO_ByteBlock_DemoProc1_Join6:
 	extz	wa
 	call	TmFlashWrite_Block1_Return
 	lda	xwa, (0x1e0000:24)
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+0x4)
 	ld	bc, (xsp+8)
 	extz	xbc
 	call	FileIO_ReadBlock
@@ -6669,7 +6669,7 @@ GetFileEntryByIndex_Skip:
 	call	Math_MultiplyAccumulate
 	lda	xwa, (0x25f02:24)
 	add	xwa, xhl
-	.byte 0xb0, 0x9f
+	ldcfm	7, (xwa)
 	scc8	c, l
 	extz	hl
 GetFileEntryByIndex_Epilogue:

@@ -10,3 +10,5 @@ Both cache address maps under `$PORT_SCRATCH` (default `/tmp/claude-1000/lane-sy
 keyed by a hash of the image's sources, and refuse a map whose mirror does not rebuild the
 dump byte for byte.  After either, run `scripts/converters/symbolize_numeric_branches.py
 --image <img> --only <files> --apply --verify`.
+| `convert_code_runs.py` | which `.byte` runs the data census flags as code-suspect / embedded-in-code are CODE: unidasm tiles the run exactly from its start with no absurd instruction; no clean parse starting inside its first instruction stays disjoint from that framing to the run's end; corroborated by an internal branch landing on an instruction start, a call/jp to a known label, or being a single instruction; each instruction round-trips through llvm-mc.  Runs llvm-mc cannot round-trip at all are left untouched | `python3 scripts/lanes/sys/convert_code_runs.py --image v10 --census C.json --file boot/system_handlers.s [--show] [--apply]` |
+| `rename_sys.sed` | the lane's label renames (code that sat under data-shaped or wrongly-parented names); applied with `LC_ALL=C sed -i -f` to the owned files that use them | -- |

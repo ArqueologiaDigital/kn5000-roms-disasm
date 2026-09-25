@@ -1867,23 +1867,81 @@ AudioMix_WriteChannelGroup_Loop:
 	popw de
 	ret
 
-AudioMix_BytecodeData:
-	.byte 0x39, 0x3a, 0x0b, 0x01, 0x00, 0x1e, 0x24, 0x00
-	.byte 0xaf, 0x0a, 0x21, 0xee, 0x8a, 0x0b, 0x00, 0x00
-	.byte 0x1e, 0x19, 0x00, 0xe8, 0x89, 0xeb, 0x8a, 0x0b
-	.byte 0x02, 0x00, 0x1e, 0x0f, 0x00, 0xec, 0x89, 0xed
-	.byte 0x8a, 0x0b, 0x03, 0x00, 0x1e, 0x05, 0x00, 0xef
-	.byte 0x60, 0x5a, 0x59, 0x0e, 0x3d, 0x28, 0x29, 0x8f
-	.byte 0x0c, 0x21, 0xc9, 0xee, 0x05, 0xc9, 0x31, 0x04
-	.byte 0x45, 0x00, 0x00, 0x15, 0x00, 0xb5, 0x41, 0xbd
-	.byte 0x02, 0x43, 0xc9, 0x61, 0xb5, 0x41, 0xbd, 0x02
-	.byte 0x42, 0xc9, 0x61, 0xb5, 0x41, 0xd7, 0xe6, 0x89
-	.byte 0xbd, 0x02, 0x43, 0xc9, 0x61, 0xb5, 0x41, 0xbd
-	.byte 0x02, 0x42, 0xc9, 0x61, 0xb5, 0x41, 0xbd, 0x02
-	.byte 0x45, 0xc9, 0x61, 0xb5, 0x41, 0xbd, 0x02, 0x44
-	.byte 0xc9, 0x61, 0xb5, 0x41, 0xd7, 0xea, 0x89, 0xbd
-	.byte 0x02, 0x43, 0xc9, 0x61, 0xb5, 0x41, 0xbd, 0x02
-	.byte 0x42, 0x49, 0x48, 0x5d
+; -----------------------------------------------------------------------------
+; AudioMix_WriteAllGroupRegs -- load all four channel groups of the audio/mixer
+; register file at 0x150000 (address latch) / 0x150002 (data), 8 bytes each.
+; Until 2026-09-25 this was `AudioMix_BytecodeData`, 124 B of `.byte`; it is code
+; (scripts/lanes/sys/convert_code_runs.py: unidasm tiles it exactly with no
+; absurd instruction, the four `calr` land on the helper's first instruction,
+; every instruction re-assembles to the ROM bytes).
+; Group g's registers are (g << 5) | 0x10 .. +7 -- the same indices
+; AudioMix_WriteChannelGroup fills with a constant during AudioMix_Init.  Here
+; AudioMix_WriteGroupRegs8 writes XBC's four bytes then XDE's (low byte first)
+; to group <word pushed by the caller>: group 1 <- XBC:XDE as passed, group 0
+; <- (xsp+0x0a):XIZ, group 2 <- XWA:XHL, group 3 <- XIX:XIY.
+; No caller found in v7, v9 or v10: searched `call`/`jp` to the address,
+; `calr` whose target is it, and its 24-bit little-endian value anywhere in
+; the ROM (a pointer table entry); the same 124 bytes are in all three.
+; -----------------------------------------------------------------------------
+AudioMix_WriteAllGroupRegs:
+	push	xbc
+	push	xde
+	pushw	1
+	calr	AudioMix_WriteGroupRegs8
+	ld	xbc, (xsp+0xa)
+	ld	xde, xiz
+	pushw	0
+	calr	AudioMix_WriteGroupRegs8
+	ld	xbc, xwa
+	ld	xde, xhl
+	pushw	2
+	calr	AudioMix_WriteGroupRegs8
+	ld	xbc, xix
+	ld	xde, xiy
+	pushw	3
+	calr	AudioMix_WriteGroupRegs8
+	inc	8, xsp
+	pop	xde
+	pop	xbc
+	ret
+; A = (group << 5) | 0x10; for 8 registers: latch A at (0x150000), write the
+; next byte of XBC then XDE at (0x150002), A += 1.  Group = word argument.
+AudioMix_WriteGroupRegs8:
+	push	xiy
+	pushw	wa
+	pushw	bc
+	ld	a, (xsp+0xc)
+	sll	a, 5
+	set	4, a
+	ld	xiy, 0x150000
+	ld	(xiy), a
+	ld	(xiy+0x2), c
+	inc	1, a
+	ld	(xiy), a
+	ld	(xiy+0x2), b
+	inc	1, a
+	ld	(xiy), a
+	ld	bc, qbc
+	ld	(xiy+0x2), c
+	inc	1, a
+	ld	(xiy), a
+	ld	(xiy+0x2), b
+	inc	1, a
+	ld	(xiy), a
+	ld	(xiy+0x2), e
+	inc	1, a
+	ld	(xiy), a
+	ld	(xiy+0x2), d
+	inc	1, a
+	ld	(xiy), a
+	ld	bc, qde
+	ld	(xiy+0x2), c
+	inc	1, a
+	ld	(xiy), a
+	ld	(xiy+0x2), b
+	popw	bc
+	popw	wa
+	pop	xiy
 	ret
 
 ; =============================================================================
@@ -6009,7 +6067,7 @@ E1DMA_ISR_BytecodeBlock:
 	lda	xwa, (1566:16)
 	bitm	7, (xwa)
 	jr	z, INTTC0_HANDLER_Skip3
-	.byte 0xb0, 0xb7
+	resm	7, (xwa)
 	ei	0
 	lda	xde, (1556:16)
 	ld	xwa, (xde)

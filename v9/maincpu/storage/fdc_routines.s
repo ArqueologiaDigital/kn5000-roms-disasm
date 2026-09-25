@@ -1510,7 +1510,7 @@ FDC_CMD_EXEC_Skip8:
 	lda	xbc, (0x8a4c:16)
 	ld	wa, (0x8a1c:16)
 	extz	xwa
-	.byte 0xa1, 0x80
+	add	xwa, (xbc)
 	ld	(xbc), xwa
 	ldw	(0x8a48:16), 1
 	ld	(0x8a2d:16), 1
@@ -1610,7 +1610,7 @@ FDC_CMD_EXEC_Skip14:
 	lda	xbc, (0x8a4c:16)
 	ld	wa, (0x8a1c:16)
 	extz	xwa
-	.byte 0xa1, 0x80
+	add	xwa, (xbc)
 	ld	(xbc), xwa
 	ldw	(0x8a48:16), 1
 	ld	(0x8a2d:16), 1

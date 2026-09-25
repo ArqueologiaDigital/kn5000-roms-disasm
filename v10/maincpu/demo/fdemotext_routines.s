@@ -2781,7 +2781,7 @@ FDemoText_RenderTextLine_Join:
 	jr	nz, FDemoText_RenderTextLine_Join2
 	exts	xhl
 	divs	hl, 2
-	.byte 0x91, 0x83
+	add	hl, (xbc)
 	ld	wa, (xsp+2)
 	exts	xwa
 	divs	wa, 2

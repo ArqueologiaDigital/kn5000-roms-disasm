@@ -1052,7 +1052,7 @@ FlashWrite_BlockRef_Type6_Skip:
 	push	12
 	jr	ugt, 6
 	jrl	nc, 5888
-	.byte 0x1c, 0x01, 0x89
+	call16	0x8901
 	nop
 	pop	sr
 	reti
@@ -2676,7 +2676,7 @@ Flash_StoreBaseAndInitAccPatch_Sub_Loop:
 	ld	de, 0:i3
 	calr	Util_FrameSetup10
 	lda	xwa, (1952:16)
-	.byte 0x90, 0xf3
+	cp	hl, (xwa)
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip5
 	ld	hl, (xwa+2)
 	stb_erp a, 250
@@ -2984,7 +2984,7 @@ Flash_InitBytecodeBlock_Helper3_Loop2:
 	ld w, 0:opc
 	ld	(xsp+4), a
 	res	7, l
-	.byte 0xbf, 0x04, 0xb7
+	resm	7, (xsp+0x4)
 	ld	c, l
 	extz	bc
 	lda	xde, (xsp+12)
@@ -3102,7 +3102,7 @@ Flash_InitBytecodeBlock_Helper3_Loop5:
 	ld w, 0:opc
 	ld	(xsp+4), a
 	res	7, l
-	.byte 0xbf, 0x04, 0xb7
+	resm	7, (xsp+0x4)
 	ld	c, l
 	extz	bc
 	lda	xde, (xsp+12)

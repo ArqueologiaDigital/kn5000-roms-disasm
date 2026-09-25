@@ -157,8 +157,11 @@
 	.set Bitmap_MIDIConnections_2_0x3BDC, Bitmap_MIDIConnections_2 + 15324
 	.set Bitmap_MIDIConnections_2_0x3BDD, Bitmap_MIDIConnections_2 + 15325
 	.set Bitmap_SplitPoint_Gb_0x2B, Bitmap_SplitPoint_Gb + 43
-	.set CDlikeSwTtl_DispatchData_0x4A, CDlikeSwTtl_DispatchData + 74
-	.set CDlikeSwTtl_DispatchData_0x6, CDlikeSwTtl_DispatchData + 6
+	; CDlikeSwTtl_DispatchData_0x4A / _0x6 are real routines now (demo/
+	; demo_seq_bridge.s); these two aliases remain only for ui/setwall_routines.s,
+	; which should call CDlikeSwTtl_SendStartEvtArg1 / CDlikeSwTtl_SendEvt4.
+	.set CDlikeSwTtl_DispatchData_0x4A, CDlikeSwTtl_SendStartEvtArg1
+	.set CDlikeSwTtl_DispatchData_0x6, CDlikeSwTtl_SendEvt4
 	.set CharEncoding_PrintableHi_0x4, CharEncoding_PrintableHi + 4
 	.set CharEncoding_PrintableHi_0x7, CharEncoding_PrintableHi + 7
 	.set CharEncoding_PrintableHi_0xA, CharEncoding_PrintableHi + 10
