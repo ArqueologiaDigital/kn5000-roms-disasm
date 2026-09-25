@@ -139,6 +139,10 @@ _NAME2ADDR = {}
 for _a, _ns in S7.items():
     for _n in _ns:
         _NAME2ADDR.setdefault(_n, _a)
+# the base tool substitutes names from R.elf_symbols() (all symbol types, e.g.
+# the absolute OFFSCREEN_BUFFER_1): map those back too
+for _a, _n in R.elf_symbols().items():
+    _NAME2ADDR.setdefault(_n, _a)
 _TOK = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\b")
 
 

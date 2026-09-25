@@ -2016,8 +2016,8 @@ SetWall_MiscDataAndCode_Loop:
 	jr	c, SetWall_MiscDataAndCode_Entry
 	ldw	bc, 99
 SetWall_MiscDataAndCode_Entry:
-	.byte 0xf1
-	.ascii "l(CX"
+	stb_d8 (10348), c
+	pop xwa
 	ld	(4349:16), xwa
 	ret
 	.byte 0xe7

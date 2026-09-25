@@ -1074,10 +1074,16 @@ SqSngSelTtlFunc:
 
 ; SqTrAs conditional voice check
 SqTrAs_CondCheck:
-	.ascii ":;<>"
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	SetWall_InlineCodeBlock3_0x1
-	.ascii "^\\[Zh"
-	incf
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	jr SqSngName_ReturnZero
 	push	xde
 	push	xhl
 	push	xix
@@ -1283,7 +1289,11 @@ SqTrAsPsTtlFunc:
 	ld de, (xde)
 	lda xix, (SqTrAsPsTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
-SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
+SqTrAsPsTtl_Dispatch:
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	SetWall_DataBlock1
 	pop	xiz
 	pop	xix
@@ -1301,7 +1311,11 @@ SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
 	ld	xbc, 0x01e0004d
 	ld	xde, 0:i3
 	call	ApPostEvent
-	.ascii "h\":;<>"
+	jr SqTrAsPsTtl_ReturnZero
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	SetWall_DataBlock1_0xF
 	pop	xiz
 	pop	xix
@@ -1402,9 +1416,21 @@ SqMdlyPlyTtlFunc:
 	ld de, (xde)
 	lda xix, (SqMdlyPlyTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
-SqMdlyPlyTtl_Dispatch:	.ascii ":;<>"
+SqMdlyPlyTtl_Dispatch:
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	PlayMode_InitFlagBlock
-	.ascii "^\\[ZhL:;<>"
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	jr SqMdlyPly_ReturnZero
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	PlayMode_ClearModeFlag
 	pop	xiz
 	pop	xix
@@ -1469,9 +1495,21 @@ DkMdlyPlyTtlFunc:
 	ld de, (xde)
 	lda xix, (DkMdlyPlyTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
-DkMdlyPlyTtl_Dispatch:	.ascii ":;<>"
+DkMdlyPlyTtl_Dispatch:
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	PlayMode_InitFlagBlock
-	.ascii "^\\[ZhL:;<>"
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	jr DkMdlyPly_ReturnZero
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	PlayMode_ClearModeFlag
 	pop	xiz
 	pop	xix
@@ -1687,7 +1725,12 @@ DpMdlyDocTtl_Dispatch:
 	pop	xiz
 	pop	xix
 	pop	xhl
-	.ascii "ZhY:;<>"
+	pop xde
+	jr DpMdlyDoc_ReturnZero
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	SongMode_InitFlagBlock_0x23
 	pop	xiz
 	pop	xix
@@ -1775,7 +1818,12 @@ DpMdlyPdTtl_Dispatch:
 	pop	xiz
 	pop	xix
 	pop	xhl
-	.ascii "ZhY:;<>"
+	pop xde
+	jr DpMdlyPd_ReturnZero
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	PartFormat_InitFlagBlock_0x26
 	pop	xiz
 	pop	xix
@@ -1852,14 +1900,34 @@ DpMdlySmfTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpMdlySmfTtlFunc title dispatch
 DpMdlySmfTtl_Dispatch:
-	.byte 0xc1, 0x9b, 0x8c, 0x3f, 0x76, 0x66, 0x13, 0xf2
-	.byte 0x88, 0x10, 0x02, 0x00, 0x00, 0xf2, 0x86, 0x10
-	.byte 0x02, 0x02, 0x00, 0x00, 0x1e, 0x3f, 0xfe, 0x1e
-	.byte 0x5b, 0xfd, 0x3a, 0x3b, 0x3c, 0x3e, 0x1d, 0x34
-	.byte 0x09, 0xf2, 0x5e, 0x5c, 0x5b, 0x5a, 0x68, 0x59
-	.byte 0x3a, 0x3b, 0x3c, 0x3e, 0x1d, 0x5c, 0x09, 0xf2
-	.byte 0x5e, 0x5c, 0x5b, 0x5a, 0x1e, 0x3a, 0xfb, 0x68
-	.byte 0x48
+	cpdi8 (35995), 118
+	jr z, DpMdlySmfTtlFunc_Skip
+	stib_da (135304), 0
+	stiw_da (135302), 0
+	calr DisplayMode_RefreshState
+	calr DisplayMode_DispatchEvents
+DpMdlySmfTtlFunc_Skip:
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call DpMdlySmfLyrTtlFunc_Helper
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	jr DpMdlySmf_ReturnZero
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call PlayModeStop_InitFlagBlock_0x2C
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	calr SqTrAsPsTtl_CaseF
+	jr DpMdlySmf_ReturnZero
 DpMdlySmf_CaseA:
 	cp xde, 0xf
 	jr z, DpMdlySmf_CaseE
@@ -3220,10 +3288,17 @@ SqTrSelTtlFunc:
 	ld de, (xde)
 	lda xix, (SqTrSelTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
-SqTrSelTtl_Dispatch:	.ascii ":;<>"
+SqTrSelTtl_Dispatch:
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	PlayMode_SetupAndDispatch
-	.ascii "^\\[Zh"
-	incf
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	jr SqTrSelTtl_ReturnZero
 	push	xde
 	push	xhl
 	push	xix
