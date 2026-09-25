@@ -15,7 +15,8 @@ QUESTION THIS ANSWERS
 RUN
     python3 scripts/analysis/data_range_census.py --images v10,v9,v7 --json X.json
     python3 scripts/analysis/lane_audio_measure.py --census X.json [--lane audio]
-    python3 scripts/analysis/lane_audio_measure.py --census AFTER.json --before BEFORE.json
+    python3 scripts/analysis/lane_audio_measure.py --census AFTER.json --before BEFORE.json \
+        --before-rev <commit the BEFORE census was taken at>
 
     With --before, prints before -> after per file and totals.  The census JSON
     is the input; this script only aggregates it, so the figures are exactly
@@ -26,6 +27,7 @@ import collections
 import json
 import os
 import re
+import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -36,8 +38,14 @@ NUMBR = re.compile(r'^(jr|jrl|jp|call|calr|djnz)\s+(?:[a-z]+\s*,\s*)?(?:[a-z]+\s
 KEYS = ("CODE", "KNOWN-A", "KNOWN-B", "UNKNOWN", "FILLER", "RESEARCH", "markers", "numbr", "romslice")
 
 
-def text_figures(path):
-    L = open(os.path.join(ROOT, path), encoding="latin-1").read().split("\n")
+def text_figures(path, rev=None):
+    if rev:
+        r = subprocess.run(["git", "show", "%s:%s" % (rev, path)], cwd=ROOT, capture_output=True)
+        if r.returncode != 0:
+            return 0, 0, 0
+        L = r.stdout.decode("latin-1").split("\n")
+    else:
+        L = open(os.path.join(ROOT, path), encoding="latin-1").read().split("\n")
     prev, nabs, nnum, rs = "", 0, 0, 0
     for ln in L:
         c = ln.split(";")[0]
@@ -57,7 +65,7 @@ def text_figures(path):
     return nabs, nnum, rs
 
 
-def figures(census, lane):
+def figures(census, lane, rev=None):
     lanes = json.load(open(lw.ROSTER))["lanes"]
     own = {p: lw.owner(p, lanes) for p in lw.tracked()}
     mine = sorted(p for p, o in own.items() if o == lane)
@@ -72,7 +80,7 @@ def figures(census, lane):
             per[path]["RESEARCH"] += r["size"]
     for p in mine:
         if p.endswith(".s"):
-            a, n, rs = text_figures(p)
+            a, n, rs = text_figures(p, rev)
             per[p]["markers"] += a
             per[p]["numbr"] += n
             per[p]["romslice"] += rs
@@ -84,9 +92,10 @@ def main():
     ap.add_argument("--census", required=True)
     ap.add_argument("--before")
     ap.add_argument("--lane", default="audio")
+    ap.add_argument("--before-rev", help="git revision whose sources give the BEFORE text figures")
     a = ap.parse_args()
     mine, after = figures(a.census, a.lane)
-    before = figures(a.before, a.lane)[1] if a.before else None
+    before = figures(a.before, a.lane, a.before_rev)[1] if a.before else None
     print("%-48s " % "file" + " ".join("%10s" % k for k in KEYS))
     tot_a, tot_b = collections.Counter(), collections.Counter()
     for p in mine:

@@ -416,13 +416,13 @@ NoteOn_CC_UpdateByChannelType:
 	ld	xwa, xbc
 	ld	xbc, (xsp + 2)
 	call	NoteMap_UpdateEntry
-NoteOnProcess_NextChannel:
-; -----------------------------------------------------------------------------
-; accompaniment note-on setup.
-; Note-on channel processing, voice slot allocation, and
 ; -----------------------------------------------------------------------------
 ; Section: Note-On Processing & Voice Allocation
 ; -----------------------------------------------------------------------------
+; Note-on channel processing, voice slot allocation, and
+; accompaniment note-on setup.
+; -----------------------------------------------------------------------------
+NoteOnProcess_NextChannel:
 	incw	1, (xsp + 6)
 	cpw	(xsp + 6), 0x1a
 	jrl	c, NoteOn_ChannelScanCC_Body
@@ -815,13 +815,13 @@ AccNoteOn_ChannelLoop_Check:
 	ld	xwa, xbc
 	ld	xbc, (xsp + 2)
 	call	NoteMap_ProcessNoteEvent
-AccMidi_ReadNextEvent:
-; -----------------------------------------------------------------------------
-; accompaniment playback. Includes CC dispatch.
-; MIDI event input handling for rhythm patterns and
 ; -----------------------------------------------------------------------------
 ; Section: Rhythm & Accompaniment MIDI Processing
 ; -----------------------------------------------------------------------------
+; MIDI event input handling for rhythm patterns and
+; accompaniment playback. Includes CC dispatch.
+; -----------------------------------------------------------------------------
+AccMidi_ReadNextEvent:
 	lda	xwa, (xsp + 6)
 	ld	xde, xwa
 	lda	xwa, (xsp + 12)
@@ -1153,14 +1153,14 @@ RhythmMidi_SeqEvt_Return:
 	popw_erp	0xfa
 	lda_dri	XSP, 0xfd, 0xae, 0x00
 	ret
-DemoMode_Main_Operation_Helper:
-Voice_InitializeAll:
-; -----------------------------------------------------------------------------
-; and voice table group setup.
-; Voice state initialization, per-voice event dispatch,
 ; -----------------------------------------------------------------------------
 ; Section: Voice Initialization & Event Dispatch
 ; -----------------------------------------------------------------------------
+; Voice state initialization, per-voice event dispatch,
+; and voice table group setup.
+; -----------------------------------------------------------------------------
+DemoMode_Main_Operation_Helper:
+Voice_InitializeAll:
 	lda_dri	XSP, 0xfd, 0x10, 0xfe
 	push	xiz
 	lda	xiz, (0xc162:16)
@@ -1338,13 +1338,13 @@ VoiceInit_Epilogue:
 	pop	xiz
 	lda_dri	XSP, 0xfd, 0xf0, 0x01
 	ret
-NoteMap_ProcessAndMerge:
-; -----------------------------------------------------------------------------
-; allocation, and control change encoding.
-; NoteMap storage, retrieval, voice linking, merge
 ; -----------------------------------------------------------------------------
 ; Section: NoteMap Entry Management
 ; -----------------------------------------------------------------------------
+; NoteMap storage, retrieval, voice linking, merge
+; allocation, and control change encoding.
+; -----------------------------------------------------------------------------
+NoteMap_ProcessAndMerge:
 	lda_dri	XSP, 0xfd, 0xb8, 0xfe
 	push	xiz
 	lda	xiz, (0xc162:16)
@@ -1594,8 +1594,8 @@ VoiceEvent_HandlerTable:
 	ld	iz, 0:i3
 	cp	iz, (0xc42e:16)
 	jrl	nc, VoiceEvtHandler_Done
-VoiceEvent_TypeDispatch:
 ; Voice event type dispatch
+VoiceEvent_TypeDispatch:
 	ld	wa, iz
 	sll	wa, 2
 	lda	xbc, (0xc430:16)
@@ -1631,8 +1631,8 @@ VoiceEvent_TypeDispatch:
 	ldw_sri	WA, 0x07, 0xf0, 0xe0
 	lda	xix, (VoiceEvent_Dispatch:24)
 	jp_ind	8, 0x07, 0xf0, 0xe0
-VoiceEvent_Dispatch:
 ; Voice event handler dispatch (14-entry, table 0xee8f06)
+VoiceEvent_Dispatch:
 	ld	a, l
 	extz	wa
 	extz	bc
@@ -2447,13 +2447,13 @@ VoiceClaimExt2_Slot3_LoopCheck3:
 Audio_StoreParamAndReturn:
 	lda_dri	XSP, 0xfd, 0x50, 0x01
 	ret
-MidiEvent_ConfigChannel:
-; -----------------------------------------------------------------------------
-; and note sequence parsing.
-; MIDI channel configuration, voice slot data init,
 ; -----------------------------------------------------------------------------
 ; Section: MIDI Event & Channel Configuration
 ; -----------------------------------------------------------------------------
+; MIDI channel configuration, voice slot data init,
+; and note sequence parsing.
+; -----------------------------------------------------------------------------
+MidiEvent_ConfigChannel:
 	lda_dri	XSP, 0xfd, 0xb0, 0xfe
 	stb_dri	C, 0xfd, 0x4e, 0x01
 	cp	a, 0xff
@@ -3311,13 +3311,13 @@ FinalizeCount_LoadReg:
 FinalizeCount_AdvanceSlot:
 	incw	1, (xsp + 2)
 	jrl	ReadAndParseLoop_LoadParam7
-Voice_BuildProgramNotify:
-; -----------------------------------------------------------------------------
-; and extended control change processing.
-; Voice program change notification, NoteMap finalization,
 ; -----------------------------------------------------------------------------
 ; Section: Voice Program Change & Notification
 ; -----------------------------------------------------------------------------
+; Voice program change notification, NoteMap finalization,
+; and extended control change processing.
+; -----------------------------------------------------------------------------
+Voice_BuildProgramNotify:
 	stb_erp	A, 0xf8
 	and	a, 0x8
 	or	a, 0x90
@@ -3824,18 +3824,18 @@ EncodeControlChange_RestoreReg:
 	popw	iz
 	lda	xsp, (xsp + 12)
 	ret
-NoteMap_AddEntry:
-; ============================================================================
-; to check for existing entries and NoteMap_FindBestMatch for voice stealing.
-; up to 3 times (for layers 0, 1, and optionally 2). Uses NoteMap_FindEntry
-; Allocates voice resources for a new note by calling NoteMap_AllocateVoice
-; Output: None (updates note map in place)
-;         XWA = note map base pointer
-;         XBC = note parameters
-; Input:  E = channel (must be 0x15 to proceed)
 ; ============================================================================
 ; NoteMap_AddEntry - Add a new entry to the note allocation map
 ; ============================================================================
+; Input:  E = channel (must be 0x15 to proceed)
+;         XBC = note parameters
+;         XWA = note map base pointer
+; Output: None (updates note map in place)
+; Allocates voice resources for a new note by calling NoteMap_AllocateVoice
+; up to 3 times (for layers 0, 1, and optionally 2). Uses NoteMap_FindEntry
+; to check for existing entries and NoteMap_FindBestMatch for voice stealing.
+; ============================================================================
+NoteMap_AddEntry:
 	lda	xsp, (xsp - 10)
 	pushw_erp	0xfa
 	ld	(xsp + 2), e
@@ -5818,14 +5818,14 @@ NoteMap_PopIz_StoreAC:
 	pop	xiz
 	lda_dri	XSP, 0xfd, 0xac, 0x00
 	ret
-NoteMap_AssignVoiceParams:
-; ============================================================================
-; Iterates voice slots, validates format, looks up voice, assigns params.
-; Output: None
-; Input:  Voice channel parameters
 ; ============================================================================
 ; NoteMap_AssignVoiceParams - Assign voice parameters for note-on events
 ; ============================================================================
+; Input:  Voice channel parameters
+; Output: None
+; Iterates voice slots, validates format, looks up voice, assigns params.
+; ============================================================================
+NoteMap_AssignVoiceParams:
 	lda_dri	XSP, 0xfd, 0x52, 0xff
 	pushw_erp	0xfa
 	stb_dri	C, 0xfd, 0xaa, 0x00
@@ -5921,17 +5921,17 @@ NoteMap_PopRetFA_StoreAE4:
 	popw_erp	0xfa
 	lda_dri	XSP, 0xfd, 0xae, 0x00
 	ret
-NoteMap_AllocateVoice:
-; ============================================================================
-; Called by NoteMap_AddEntry for each voice layer.
-; requested instrument/channel. Uses a stride of 5 bytes per voice entry.
-; Searches the voice table at 0xee8f22 for an available slot matching the
-; Output: L = allocated voice number (0xff if none available)
-;         BC = voice layer index (0, 1, or 2)
-; Input:  XWA = note map base pointer
 ; ============================================================================
 ; NoteMap_AllocateVoice - Allocate a voice slot for a note
 ; ============================================================================
+; Input:  XWA = note map base pointer
+;         BC = voice layer index (0, 1, or 2)
+; Output: L = allocated voice number (0xff if none available)
+; Searches the voice table at 0xee8f22 for an available slot matching the
+; requested instrument/channel. Uses a stride of 5 bytes per voice entry.
+; Called by NoteMap_AddEntry for each voice layer.
+; ============================================================================
+NoteMap_AllocateVoice:
 	lda_dri	XSP, 0xfd, 0x54, 0xff
 	push	xiz
 	stb_dri	C, 0xfd, 0xaa, 0x00
@@ -6689,19 +6689,19 @@ NoteMap_LookupReturn:
 	pop	xiz
 	inc	4, xsp
 	retd	0x2
-NoteMap_LookupVoice:
-; ============================================================================
-; Uses stride of 0xd (13) bytes per voice entry.
-; instrument, and layer to find the matching voice assignment.
-; Looks up voice tables at 0xee8f2e-0xee8f36, cross-referencing channel,
-; Output: L = voice slot index
-;         XBC = voice parameter block
-;         (xsp+12) = MIDI channel (rejects > 0x20)
-;         XWA = note map pointer
-; Input:  E = voice layer (0-4, rejects > 4)
 ; ============================================================================
 ; NoteMap_LookupVoice - Look up voice assignment for a note event
 ; ============================================================================
+; Input:  E = voice layer (0-4, rejects > 4)
+;         XWA = note map pointer
+;         (xsp+12) = MIDI channel (rejects > 0x20)
+;         XBC = voice parameter block
+; Output: L = voice slot index
+; Looks up voice tables at 0xee8f2e-0xee8f36, cross-referencing channel,
+; instrument, and layer to find the matching voice assignment.
+; Uses stride of 0xd (13) bytes per voice entry.
+; ============================================================================
+NoteMap_LookupVoice:
 	dec	4, xsp
 	push	xiz
 	ld	xix, xbc
@@ -7473,17 +7473,17 @@ SlotLoop_Continue_RestoreReg:
 	popw_erp	0xfa
 	lda	xsp, (xsp + 14)
 	ret
-NoteMap_SetChannelParam:
-; ============================================================================
-; configuration from voice table at 0xee8eb8.
-; program change, pitch bend, and other channel voice messages. Reads channel
-; Dispatches MIDI channel messages: handles control change (0xa0=all notes off),
-; Output: None
-;         XWA = pointer to parameter data (command byte at offset 0)
-; Input:  C = MIDI channel number
 ; ============================================================================
 ; NoteMap_SetChannelParam - Set a MIDI channel parameter in the note map
 ; ============================================================================
+; Input:  C = MIDI channel number
+;         XWA = pointer to parameter data (command byte at offset 0)
+; Output: None
+; Dispatches MIDI channel messages: handles control change (0xa0=all notes off),
+; program change, pitch bend, and other channel voice messages. Reads channel
+; configuration from voice table at 0xee8eb8.
+; ============================================================================
+NoteMap_SetChannelParam:
 	lda	xsp, (xsp - 28)
 	pushw	iz
 	ld	(xsp + 24), c
@@ -8145,18 +8145,18 @@ EmitMidiNoteOnEvents_LoadParam:
 	popw	iz
 	inc	8, xsp
 	ret
-NoteMap_FindEntry:
-; ============================================================================
-; and matches against channel assignment data at 0xee8ed8.
-; stride of 5 bytes per entry. Checks active flags (bit 1 at offset 4)
-; Searches the note map for an entry matching the given criteria. Uses a
-; Output: L = entry index (0xff if not found)
-;         BC = search mode (0 = standard)
-;         XWA = note map base pointer
-; Input:  C = search key / channel
 ; ============================================================================
 ; NoteMap_FindEntry - Find an existing entry in the note map
 ; ============================================================================
+; Input:  C = search key / channel
+;         XWA = note map base pointer
+;         BC = search mode (0 = standard)
+; Output: L = entry index (0xff if not found)
+; Searches the note map for an entry matching the given criteria. Uses a
+; stride of 5 bytes per entry. Checks active flags (bit 1 at offset 4)
+; and matches against channel assignment data at 0xee8ed8.
+; ============================================================================
+NoteMap_FindEntry:
 	lda	xsp, (xsp - 14)
 	pushw_erp	0xfa
 	ld	(xsp + 10), c
@@ -8857,16 +8857,16 @@ SynthVoice_Return:
 	popw	iz
 	inc	6, xsp
 	ret
-NoteMap_MergeEntries:
-; ============================================================================
-; Matching entries are copied using ldirw + ldi85 (5-byte copy).
-; filtering by note range (upper/lower bounds via bit masking).
-; Copies 3-byte header, then iterates source entries (5 bytes each),
-; Output: L = count of merged entries
-; Input:  XWA = destination table, XBC = source table, XDE = filter params
 ; ============================================================================
 ; NoteMap_MergeEntries - Filter and merge note mapping table entries
 ; ============================================================================
+; Input:  XWA = destination table, XBC = source table, XDE = filter params
+; Output: L = count of merged entries
+; Copies 3-byte header, then iterates source entries (5 bytes each),
+; filtering by note range (upper/lower bounds via bit masking).
+; Matching entries are copied using ldirw + ldi85 (5-byte copy).
+; ============================================================================
+NoteMap_MergeEntries:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp + 4), xde
@@ -13179,17 +13179,17 @@ VoiceMap_AllocateSlo_SetByteFF2:
 	ld	l, 0xff:opc
 NoteMap_FindBestMatch_Return:
 	ret
-NoteMap_FindBestMatch:
-; ============================================================================
-; active voice when direct reuse is not available.
-; if reuse is possible. Falls back to searching for the least-important
-; against the last-used voice state (addresses 52906-52960) to determine
-; Implements voice stealing algorithm: compares current note parameters
-; Output: L = voice index to steal (0xff if no suitable candidate)
-; Input:  Implicit (reads from note map state variables at 52770+)
 ; ============================================================================
 ; NoteMap_FindBestMatch - Find the best voice to steal for a new note
 ; ============================================================================
+; Input:  Implicit (reads from note map state variables at 52770+)
+; Output: L = voice index to steal (0xff if no suitable candidate)
+; Implements voice stealing algorithm: compares current note parameters
+; against the last-used voice state (addresses 52906-52960) to determine
+; if reuse is possible. Falls back to searching for the least-important
+; active voice when direct reuse is not available.
+; ============================================================================
+NoteMap_FindBestMatch:
 	ld	l, 0xff:opc
 	ld	(0xe8f6:16), 0
 	cpw	(0xcd86:16), 0
@@ -13301,8 +13301,8 @@ UIParam_ScanAndCollect:
 	jr	UIParam_CallbackDispatch
 UIParam_SetDefaultCount:
 	ldib_erp	0xfb, 1
-UIParam_CallbackDispatch:
 ; UIParam callback dispatch
+UIParam_CallbackDispatch:
 	lda	xwa, (xsp + 2)
 	ld	c, (0xe8f8:16)
 	extz	bc
@@ -16033,12 +16033,12 @@ SndParam_Init:
 	ret
 ; v10 name for this address: UIState_ProcessKeyEvent -- not a label here: v7 keeps that name at 0xFEA45D for shared/positional_labels.s
 ; ============================================================================
-; machine to the appropriate page handler.
-; Dispatches keyboard and control panel button events within the UI state
-; Output: None
-; Input:  Key event data
-; ============================================================================
 ; UIState_ProcessKeyEvent - Process a key press/release event in UI state
+; ============================================================================
+; Input:  Key event data
+; Output: None
+; Dispatches keyboard and control panel button events within the UI state
+; machine to the appropriate page handler.
 ; ============================================================================
 	dec	4, xsp
 	.byte	0xbf
@@ -17152,14 +17152,14 @@ HdaeRom_AltTableEntry9_Join:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
-SndPart_SetParam:
-; ============================================================================
-; Dispatches on ~20 parameter codes to update part tables or send via MIDI.
-; Output: None
-; Input:  WA = part number, DE = new value, BC = parameter code
 ; ============================================================================
 ; SndPart_SetParam - Set a sound part parameter by code
 ; ============================================================================
+; Input:  WA = part number, DE = new value, BC = parameter code
+; Output: None
+; Dispatches on ~20 parameter codes to update part tables or send via MIDI.
+; ============================================================================
+SndPart_SetParam:
 	dec	2, xsp
 	pushw	iz
 	ld	iz, de
@@ -18136,14 +18136,14 @@ SendDataReturn_LoadReg:
 	cp	de, 0x18
 	jr	le, SendDataReturn_LoadReg
 	ret
-MIDI_SendControlChange:
-; ============================================================================
-; Builds [4, 0xb0, chan, ctrl, val] packet, transmits via MIDI_SendCmdPacket.
-; Output: None (sends via SubCPU comm)
-; Input:  A = MIDI channel, C = controller number, E = value
 ; ============================================================================
 ; MIDI_SendControlChange - Send a MIDI Control Change message
 ; ============================================================================
+; Input:  A = MIDI channel, C = controller number, E = value
+; Output: None (sends via SubCPU comm)
+; Builds [4, 0xb0, chan, ctrl, val] packet, transmits via MIDI_SendCmdPacket.
+; ============================================================================
+MIDI_SendControlChange:
 	dec	6, xsp
 	ld	(xsp + 256), 0x4
 	ld	(xsp + 1), 0xb0
@@ -18560,15 +18560,15 @@ MIDI_WriteChannelData_Block:
 	jp_rr	8, xix, wa
 	ld	l, 1:opc
 	ret
-MIDI_SendCmdPacket:
-; ============================================================================
-; Low-level MIDI/audio command packet sender.
-; Iterates channel table at 53392, transmits via sendCOMM (XDE=0xd090).
-; Output: None
-; Input:  XWA = pointer to command buffer (first byte = count)
 ; ============================================================================
 ; MIDI_SendCmdPacket - Send a pre-built MIDI command packet
 ; ============================================================================
+; Input:  XWA = pointer to command buffer (first byte = count)
+; Output: None
+; Iterates channel table at 53392, transmits via sendCOMM (XDE=0xd090).
+; Low-level MIDI/audio command packet sender.
+; ============================================================================
+MIDI_SendCmdPacket:
 	ld	hl, 0:i3
 	jr	SendCmdPacket_CheckCount
 SendCmdPacket_Loop:
@@ -18591,16 +18591,16 @@ SendCmdPacket_CheckCount:
 	jp	sendCOMM
 MIDI_PostSendStub:
 	ret
-CDlikeSwTtl_ShowSongTitle_Helper:
-SeqState_GetFlags:
-; ============================================================================
-; sequencer engine to check playback state, loop mode, and recording status.
-; Simple accessor that reads the 32-bit sequencer state word. Used by the
-; Output: XHL = sequencer state flags (from address 59877)
-; Input:  None
 ; ============================================================================
 ; SeqState_GetFlags - Get the current sequencer state flags
 ; ============================================================================
+; Input:  None
+; Output: XHL = sequencer state flags (from address 59877)
+; Simple accessor that reads the 32-bit sequencer state word. Used by the
+; sequencer engine to check playback state, loop mode, and recording status.
+; ============================================================================
+CDlikeSwTtl_ShowSongTitle_Helper:
+SeqState_GetFlags:
 	ld	hl, (0xe91f:16)
 	ret
 ; MIDI_SendChannelPressure is kept at this address only for boot/system_handlers.s; v10's MIDI_SendChannelPressure is the code at 0xFEB396
@@ -18812,15 +18812,15 @@ SwbtWr_ReinitOutputBank_Wrapper:
 	ld	hl, iz
 	popw	iz
 	ret
-Song_AbortPlayback:
-; ============================================================================
-; closes file I/O, flushes task queues, resets state to zero.
-; Sends MIDI All Notes Off to all 16 channels, releases playback lock,
-; Output: None
-; Input:  None
 ; ============================================================================
 ; Song_AbortPlayback - Abort song playback and clean up resources
 ; ============================================================================
+; Input:  None
+; Output: None
+; Sends MIDI All Notes Off to all 16 channels, releases playback lock,
+; closes file I/O, flushes task queues, resets state to zero.
+; ============================================================================
+Song_AbortPlayback:
 	calr	MIDI_ResetAllChannels
 	ld	wa, 2:i3
 	calr	AccWrap_PlayModeStateMachine
@@ -21001,8 +21001,8 @@ Epilogue_InitVal3:
 	ld	hl, 0:i3
 	popw	iz
 	ret
-MidiSysMsg_Handler:
 ; MIDI system message handler
+MidiSysMsg_Handler:
 	lda	xsp, (xsp - 10)
 	push	xiz
 	ld	c, a
@@ -21020,8 +21020,8 @@ MidiSysMsg_Handler:
 	ldw_sri	WA, 0x07, 0xf0, 0xe0
 	lda	xix, (MidiSysMsg_Dispatch:24)
 	jp_ind	8, 0x07, 0xf0, 0xe0
-MidiSysMsg_Dispatch:
 ; MIDI system message dispatch (15-entry, table 0xeec1e8)
+MidiSysMsg_Dispatch:
 	calr	FileIO_ReadNextRecord
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -22034,14 +22034,14 @@ NotifyChangeComplete_SetWord:
 ToneGen_RestoreStackReturn:
 	lda	xsp, (xsp + 32)
 	ret
-FileIO_ReadNextRecord:
-; ============================================================================
-; Used for sequential file record reading during disk operations.
-; Returns: HL = 0 (success), 0xffff (error)
-; Dispatches on state variable DRAM[59876] (values 1-4).
 ; ============================================================================
 ; FileIO_ReadNextRecord - Read next record from file (state machine)
 ; ============================================================================
+; Dispatches on state variable DRAM[59876] (values 1-4).
+; Returns: HL = 0 (success), 0xffff (error)
+; Used for sequential file record reading during disk operations.
+; ============================================================================
+FileIO_ReadNextRecord:
 	ld	a, (0xe91e:16)
 	cp	a, 4:i3
 	jr	z, ReadNextRecord_DoLookupB
@@ -23328,8 +23328,8 @@ SndParam_LookupByChannel:
 	ldw_sri	WA, 0x07, 0xf0, 0xe0
 	lda	xix, (SndParam_TypeDispatch:24)
 	jp_ind	8, 0x07, 0xf0, 0xe0
-SndParam_TypeDispatch:
 ; Sound parameter type dispatch (6-entry, table 0xeed3c6)
+SndParam_TypeDispatch:
 	extz	hl
 	muls	hl, 0x18
 	jr	SndParam_LoadTableConverge
@@ -23368,8 +23368,8 @@ SndParam_LoadReturnByte:
 LoadReturnByte_Increment:
 	inc	2, xsp
 	retd	0x2
-SndParam_OffsetHandler:
 ; Sound parameter offset dispatch handler
+SndParam_OffsetHandler:
 	dec	4, xsp
 	ld	(xsp), e
 	ld	(xsp + 2), a
@@ -23393,8 +23393,8 @@ SndParam_OffsetHandler:
 	ldw_sri	DE, 0x07, 0xf0, 0xe8
 	lda	xix, (SndParam_OffsetDispatch:24)
 	jp_ind	8, 0x07, 0xf0, 0xe8
-SndParam_OffsetDispatch:
 ; Sound parameter offset dispatch (6-entry, table 0xeed3d2)
+SndParam_OffsetDispatch:
 	ldw	bc, 0x10
 	jr	SndParam_LookupTableConverge
 OffsetDispatch_SetWord:
@@ -25685,8 +25685,8 @@ SendPartDataBlock_Block11:
 	cpl	hl
 	stw_dri	HL, 0xe5, 0xa8, 0x72
 	ret
-HdaeRom_DataHandler:
 ; HDAE ROM data dispatch handler
+HdaeRom_DataHandler:
 	lda_dri	XSP, 0xfd, 0x48, 0xfe
 	push	xiz
 	stb_dri	C, 0xfd, 0xb8, 0x01
@@ -25705,8 +25705,8 @@ HdaeRom_DataHandler:
 	ldw_sri	HL, 0x07, 0xf0, 0xec
 	lda	xix, (HdaeRom_DataDispatch:24)
 	jp_ind	8, 0x07, 0xf0, 0xec
-HdaeRom_DataDispatch:
 ; HDAE5000 extension ROM data dispatch (6-entry, table HdaeRom_DispatchOffsetTable)
+HdaeRom_DataDispatch:
 	ld	(xsp+6), xbc
 	cp	(xsp+442), 255
 	jrl	nz, HdaeRom_DataHandler_Skip
@@ -25877,8 +25877,8 @@ SendPartDataBlock_Data3:
 	inc	2, de
 	.byte	0xc7
 	cp	xde, 0xedf6780
-HdaeRom_AltHandler:
 ; HDAE ROM alt dispatch handler
+HdaeRom_AltHandler:
 	pushw	iz
 	ld	xwa, 0x1e0000
 	calr	-797
@@ -25893,8 +25893,8 @@ HdaeRom_AltHandler:
 	ldw_sri	HL, 0x07, 0xf0, 0xec
 	lda	xix, (HdaeRom_AltDispatch:24)
 	jp_ind	8, 0x07, 0xf0, 0xec
-HdaeRom_AltDispatch:
 ; HDAE5000 extension ROM alt dispatch (6-entry, table HdaeRom_AltDispatchOffsetTable)
+HdaeRom_AltDispatch:
 	ld	xwa, 0x1e0000
 	calr	HdaeRom_DataDispatch_Block3
 	ld	iz, 0:i3
@@ -26572,16 +26572,16 @@ Math_MultiplyAccumulate:
 	mul	xwa, xbc
 	add	xhl, xwa
 	ret
-Scoop_EventLoop_12Entry_Helper:
-Sprintf_Locked:
-; Args: xwa = format string pointer, stack = format arguments
-; Referenced by 197+ locations (every Lsw* function, preset loaders, etc.).
-; format string parser), writes to ring buffer at 0xbd3c via AssswbWr.
-; Acquires audio lock #7, formats command via Sprintf_Core (printf-like
-; Primary interface for all Main CPU -> Sub CPU audio parameter updates.
 ; =============================================================================
 ; Sprintf_Locked -- Send sound parameter command to Sub CPU
 ; =============================================================================
+; Primary interface for all Main CPU -> Sub CPU audio parameter updates.
+; Acquires audio lock #7, formats command via Sprintf_Core (printf-like
+; format string parser), writes to ring buffer at 0xbd3c via AssswbWr.
+; Referenced by 197+ locations (every Lsw* function, preset loaders, etc.).
+; Args: xwa = format string pointer, stack = format arguments
+Scoop_EventLoop_12Entry_Helper:
+Sprintf_Locked:
 	dec	4, xsp
 	pushw	iz
 	ld	wa, 7:i3
@@ -26902,8 +26902,8 @@ String_Compare_Extend:
 	exts	hl
 	ret
 ; v10 name for this address: Strncpy -- not a label here: v7 keeps that name at 0xFF0930 for ui_widgets/naka_widget_descriptors.c
-; Args: (xsp+4)=dest, (xsp+8)=src, (xsp+12)=maxlen
 ; Strncpy -- Copy string with length limit, zero-pad remainder
+; Args: (xsp+4)=dest, (xsp+8)=src, (xsp+12)=maxlen
 	ld	bc, (xsp + 12)
 	ld	xde, (xsp + 8)
 	ld	xix, (xsp + 4)
@@ -26927,10 +26927,10 @@ Strncpy_Compare2:
 	cp	bc, 0:i3
 	jr	nz, Strncpy_Block3
 	ret
+; Mem_Compare -- Compare two memory blocks byte-by-byte
+; Returns: 0 if equal, nonzero if different
 Mem_Compare:
 SoundPreset_FindMatch_Helper:
-; Returns: 0 if equal, nonzero if different
-; Mem_Compare -- Compare two memory blocks byte-by-byte
 	ld	bc, (xsp + 12)
 	ld	hl, 0:i3
 	cp	bc, 0:i3
@@ -27012,17 +27012,17 @@ Mem_Copy_Block:
 	ret	nc
 	ldi85
 	ret
-FileIO_CheckPathAndVolumeLabel_Helper:
-Strcat:
-; ============================================================================
-; Located near Strcpy and Strlen (standard C library functions).
-; Finds null terminator in dest, then copies src bytes until null.
-; Output: XHL = original destination pointer
-;         Stack arg2 = source string pointer
-; Input:  Stack arg1 = destination string pointer
 ; ============================================================================
 ; Strcat - Concatenate strings (C runtime)
 ; ============================================================================
+; Input:  Stack arg1 = destination string pointer
+;         Stack arg2 = source string pointer
+; Output: XHL = original destination pointer
+; Finds null terminator in dest, then copies src bytes until null.
+; Located near Strcpy and Strlen (standard C library functions).
+; ============================================================================
+FileIO_CheckPathAndVolumeLabel_Helper:
+Strcat:
 	ld	xde, (xsp + 4)
 	ld	xhl, xde
 	jr	Strcat_CheckZero
@@ -27054,18 +27054,18 @@ Itoa_Safe:
 Itoa_Safe_LoadReg:
 	ld	(xhl), 0x0
 	jr	NumFormat_DivideAndC_Epilogue
-Itoa:
-; ============================================================================
-; 9 use lowercase letters (a-f). Uses repeated division algorithm.
-; Handles negative numbers when base is 10 (prepends '-'). Digits above
-; Converts an integer to its string representation in the given base.
-; Output: Null-terminated string written to buffer
-;         XIZ+4 = output buffer pointer
-;         BC = numeric base (e.g., 10 for decimal)
-; Input:  (xsp+26) = workspace register set selector
 ; ============================================================================
 ; Itoa - Convert integer to ASCII string (C runtime)
 ; ============================================================================
+; Input:  (xsp+26) = workspace register set selector
+;         BC = numeric base (e.g., 10 for decimal)
+;         XIZ+4 = output buffer pointer
+; Output: Null-terminated string written to buffer
+; Converts an integer to its string representation in the given base.
+; Handles negative numbers when base is 10 (prepends '-'). Digits above
+; 9 use lowercase letters (a-f). Uses repeated division algorithm.
+; ============================================================================
+Itoa:
 	ld	wa, (xsp + 26)
 	ldw_erp	WA, 0xe6
 	lda	xiz, (xsp + 4)
@@ -27207,16 +27207,16 @@ Malloc_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
-Strcmp:
-; ============================================================================
-; that many bytes between the two strings.
-; Computes length of string 1 via Strlen, then calls Mem_Compare to compare
-; Output: HL = comparison result (0 = equal)
-;         (xsp+18) = pointer to string 2 (XWA)
-; Input:  (xsp+8) = pointer to string 1 (XIZ)
 ; ============================================================================
 ; Strcmp - Compare two strings (C runtime)
 ; ============================================================================
+; Input:  (xsp+8) = pointer to string 1 (XIZ)
+;         (xsp+18) = pointer to string 2 (XWA)
+; Output: HL = comparison result (0 = equal)
+; Computes length of string 1 via Strlen, then calls Mem_Compare to compare
+; that many bytes between the two strings.
+; ============================================================================
+Strcmp:
 	push	xiz
 	ld	xiz, (xsp + 8)
 	push	xiz
@@ -27250,16 +27250,16 @@ Strcpy_LoadReg:
 	ld	xhl, xiz
 	pop	xiz
 	ret
-Heap_Alloc:
-; ============================================================================
-; Heap_Grow if space is available.
-; requested size. Checks available space at 0x03d528. Falls through to
-; Simple bump allocator: advances the heap pointer at 0x03d524 by the
-; Output: XHL = pointer to allocated block (0xffffffff if insufficient space)
-; Input:  XWA = size in bytes to allocate (0 = return heap base)
 ; ============================================================================
 ; Heap_Alloc - Allocate memory from the heap (C runtime)
 ; ============================================================================
+; Input:  XWA = size in bytes to allocate (0 = return heap base)
+; Output: XHL = pointer to allocated block (0xffffffff if insufficient space)
+; Simple bump allocator: advances the heap pointer at 0x03d524 by the
+; requested size. Checks available space at 0x03d528. Falls through to
+; Heap_Grow if space is available.
+; ============================================================================
+Heap_Alloc:
 	or	xwa, xwa
 	jr	nz, Heap_Alloc_Block
 	ld	xhl, (0x03d528:24)
@@ -27269,30 +27269,30 @@ Heap_Alloc_Block:
 	jr	nc, Heap_Grow
 	ld	xhl, 0xffffffff
 	ret
-Heap_Grow:
-; ============================================================================
-; counter (at address 251176). Called by Heap_Alloc after size check passes.
-; Advances the heap top pointer (0x03d524) and decreases available space
-; Output: XHL = pointer to newly allocated block (previous heap top)
-; Input:  XWA = size in bytes to allocate
 ; ============================================================================
 ; Heap_Grow - Grow the heap by allocating more memory
 ; ============================================================================
+; Input:  XWA = size in bytes to allocate
+; Output: XHL = pointer to newly allocated block (previous heap top)
+; Advances the heap top pointer (0x03d524) and decreases available space
+; counter (at address 251176). Called by Heap_Alloc after size check passes.
+; ============================================================================
+Heap_Grow:
 	ld	xhl, (0x03d524:24)
 	add	(0x03d524:24), xwa
 	sub	(0x3d528:24), xwa
 	ret
-LyricsTrack_ReadAndParse_Helper2:
-Strlen:
-; ============================================================================
-; Located between Strcpy and Memset (standard C library functions).
-; Uses Sprintf_MemChr to search for 0x00 byte, then computes result - start.
-;         Returns 0xffff if null terminator not found
-; Output: HL = length of string (excluding null terminator)
-; Input:  XWA = pointer to null-terminated string (pushed on stack)
 ; ============================================================================
 ; Strlen - Compute string length (C runtime)
 ; ============================================================================
+; Input:  XWA = pointer to null-terminated string (pushed on stack)
+; Output: HL = length of string (excluding null terminator)
+;         Returns 0xffff if null terminator not found
+; Uses Sprintf_MemChr to search for 0x00 byte, then computes result - start.
+; Located between Strcpy and Memset (standard C library functions).
+; ============================================================================
+LyricsTrack_ReadAndParse_Helper2:
+Strlen:
 	push	xiz
 	pushw	0xffff
 	pushw	0x0
@@ -27330,15 +27330,15 @@ Strlen_LoadParam:
 	lda	xsp, (xsp + 10)
 	dec	1, xhl
 	ret
-Itoa_WithBase:
-; ============================================================================
-; the audio command subsystem's integer-to-string conversion.
-; Wrapper around Sprintf_ItoaBaseN. Pushes parameters and delegates to
-; Output: String written to output buffer
-; Input:  WA = integer value, XBC = base pointer, XDE = format options
 ; ============================================================================
 ; Itoa_WithBase - Convert integer to string with specified base (C runtime)
 ; ============================================================================
+; Input:  WA = integer value, XBC = base pointer, XDE = format options
+; Output: String written to output buffer
+; Wrapper around Sprintf_ItoaBaseN. Pushes parameters and delegates to
+; the audio command subsystem's integer-to-string conversion.
+; ============================================================================
+Itoa_WithBase:
 	pushw	wa
 	push	xbc
 	push	xde

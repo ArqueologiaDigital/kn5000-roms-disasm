@@ -1,11 +1,11 @@
 ; v10 name for this address: AudioInit_ConfigStereoVoice -- not a label here: v7 defines that name outside this span (= 0xFDE5F7)
 ; ============================================================================
-; simple stereo (type < 3) or extended routing with panning configuration.
-; Default handler in voice-source dispatch table. Routes voices by type:
-; Output: Updates audio config flags at address 50588
-; Input:  Voice index (from voice type table at 0xee8e62)
-; ============================================================================
 ; AudioInit_ConfigStereoVoice - Configure stereo voice routing and panning
+; ============================================================================
+; Input:  Voice index (from voice type table at 0xee8e62)
+; Output: Updates audio config flags at address 50588
+; Default handler in voice-source dispatch table. Routes voices by type:
+; simple stereo (type < 3) or extended routing with panning configuration.
 ; ============================================================================
 AudioInit_VoiceNotConfigured_Code_Helper:
 	ld	a, (0x8c9e:16)
@@ -1116,16 +1116,16 @@ Interrupt_FlagSetBytecode_Helper:
 	ld	(0xc4fa:16), iz
 	popw	iz
 	ret
-AudioInit_VoiceRoutingTable:
-; `set n,(XWA)`, which tlcs900_backend cannot yet encode -- they are not data.
-; `.byte` below are `or (nnnn),n`, `and (nnnn),n`, `res n,(XWA)` and
-; buys nothing); this comment is the record. The 119 bytes still spelled
-; left alone (semantic labeling is deferred, and renaming an unreferenced label
-; one from 0xc2c2 to 0xc2d5, and it ends on `ret` at its last byte. The name is
-; `or (0xc2c2),0x7f` / `and (0xc2c3),0x01` pairs whose address operand steps by
-; across the two 0x20-entry arrays at 0xc2e2 and 0xc322, after a run of
-; nothing in the tree references this label. It clears bit 7 and sets bits 5/6
 ; NOTE: THE NAME IS A MISNOMER. These 248 bytes are a ROUTINE, not a table, and
+; nothing in the tree references this label. It clears bit 7 and sets bits 5/6
+; across the two 0x20-entry arrays at 0xc2e2 and 0xc322, after a run of
+; `or (0xc2c2),0x7f` / `and (0xc2c3),0x01` pairs whose address operand steps by
+; one from 0xc2c2 to 0xc2d5, and it ends on `ret` at its last byte. The name is
+; left alone (semantic labeling is deferred, and renaming an unreferenced label
+; buys nothing); this comment is the record. The 119 bytes still spelled
+; `.byte` below are `or (nnnn),n`, `and (nnnn),n`, `res n,(XWA)` and
+; `set n,(XWA)`, which tlcs900_backend cannot yet encode -- they are not data.
+AudioInit_VoiceRoutingTable:
 	ret
 	ret
 	ret

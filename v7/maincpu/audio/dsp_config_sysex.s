@@ -3682,8 +3682,8 @@ DSPCfg_ApplyParamStructFull_RangeCheck:
 	jr	lt, AssSwb_SwapEntriesAndDispatch
 	cp	bc, 0x14
 	jr	gt, AssSwb_SwapEntriesAndDispatch
-DspConfig_EventDispatch:
 ; DSP config event dispatch
+DspConfig_EventDispatch:
 	add	bc, bc
 	lda	xix, (ToneKit_VoiceDispatch_Table_0x348:24)
 	ldw_sri	BC, 0x07, 0xf0, 0xe4
@@ -4775,8 +4775,8 @@ AudioInit_ProcessModeChange:
 	jr	AudioModeChange_Handler
 AudioModeChange_ClearVoiceFlags:
 	ld	(0xc162:16), 0
-AudioModeChange_Handler:
 ; Audio mode change handler
+AudioModeChange_Handler:
 	res	3, (0xc162:16)
 	ld	(0xc218:16), 255
 	ld	(0xc220:16), 255
@@ -4814,8 +4814,8 @@ AudioModeChange_Handler:
 	jr	AudioSubsystem_Callback
 AudioSubsystem_ClearVoiceFlags:
 	ld	(0xc162:16), 0
-AudioSubsystem_Callback:
 ; Audio subsystem callback
+AudioSubsystem_Callback:
 	res	3, (0xc162:16)
 	ld	(0xc218:16), 255
 	ld	(0xc220:16), 255

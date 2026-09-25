@@ -63,9 +63,22 @@ import address_line_map as alm  # noqa: E402
 
 BASE = 0xE00000
 HEAD = 0x480
-SPAN = ["audio/dsp_config_sysex.s", "audio/audioinit_routines.s",
-        "audio/note_voice_mapping.s", "audio/sprintf_core.s"]
-FOREIGN = "boot/screen_group_dispatch.s"
+SPANS = {
+    # v7 0xFDA78D-0xFF2153, the 0x41A-drift zone of the audio lane
+    "dsp": {"files": ["audio/dsp_config_sysex.s", "audio/audioinit_routines.s",
+                      "audio/note_voice_mapping.s", "audio/sprintf_core.s"],
+            "foreign": ["boot/screen_group_dispatch.s"],
+            "end10": lambda e: e[1] == "audio/sprintf_core.s" and e[3].startswith("Sprintf_FillToEnd:"),
+            "end7": lambda e: e[1] == "audio/sprintf_core.s" and ".org 0xfffe80" in e[3],
+            "tail": "ERASED FLASH"},
+    # v7 tonegen_fileio_handlers.s + audio_control_engine.s (labels aligned,
+    # but ~6 KB of .byte and 9 romslice .incbin's)
+    "ace": {"files": ["audio/tonegen_fileio_handlers.s", "audio/audio_control_engine.s"],
+            "foreign": ["midi/midi_encoder_routines.s", "ui/led_panel_write.s"],
+            "end10": None, "end7": None, "tail": None},
+}
+CFG = SPANS["dsp"]
+SPAN = CFG["files"]
 CACHE = os.environ.get("PORT_CACHE", "/tmp/claude-1000/lane-audio/port_cache")
 MC = alm.MC
 NM = alm.NM
@@ -268,53 +281,78 @@ class Port:
 
     # ---- bounds
     def bounds(self, order, img):
-        idx = {}
         first = next(i for i, e in enumerate(order) if e[1] == SPAN[0])
-        fore = [i for i, e in enumerate(order) if e[1] == FOREIGN]
-        inc = next(i for i in range(first, fore[0]) if FOREIGN in order[i][3] and ".include" in order[i][3])
-        after = fore[-1] + 1
-        if img == "v10":
-            last = next(i for i, e in enumerate(order) if e[1] == SPAN[3] and e[3].startswith("Sprintf_FillToEnd:"))
+        incs, i = [], first
+        for f in CFG["foreign"]:
+            inc = next(k for k in range(i, len(order)) if order[k][1] in SPAN
+                       and ".include" in order[k][3] and f in order[k][3])
+            fore = [k for k in range(inc, len(order)) if order[k][1] == f]
+            incs.append((inc, fore[-1] + 1))
+            i = fore[-1] + 1
+        end = CFG["end10"] if img == "v10" else CFG["end7"]
+        if end is not None:
+            last = next(k for k in range(first, len(order)) if end(order[k]))
         else:
-            last = next(i for i, e in enumerate(order) if e[1] == SPAN[3] and ".org 0xfffe80" in e[3])
-        idx = {"first": first, "inc": inc, "after": after, "last": last}
-        return idx
+            last = None
+            for k in range(first, len(order)):
+                e = order[k]
+                if e[1] in SPAN or e[1] in CFG["foreign"]:
+                    continue
+                t = e[3].strip()
+                if not t or t.startswith(";"):
+                    continue
+                m = re.match(r'^\.include\s+"([^"]+)"', t)
+                if m and m.group(1) in SPAN:
+                    continue
+                last = k
+                break
+        return {"first": first, "incs": incs, "last": last}
 
     def run(self, verbose=True):
         b10, b7 = self.bounds(self.o10, "v10"), self.bounds(self.o7, "v7")
         o10, o7 = self.o10, self.o7
         V10A, V10E = o10[b10["first"]][0] - HEAD, o10[b10["last"]][0]
-        S7A, J7, S7B, E7 = o7[b7["first"]][0], o7[b7["inc"]][0], o7[b7["after"]][0], o7[b7["last"]][0]
-        # v7 regions: A before the foreign include, B after it; the foreign
-        # file's own bytes are left out of the alignment entirely.
-        self.R = {"A": (V10A, V10E, S7A, J7), "B": (V10A, V10E, S7B, E7)}
+        # v7 segments between the foreign includes; the foreign files' own
+        # bytes are left out of the alignment entirely.
+        cuts = [o7[b7["first"]][0]]
+        for inc, after in b7["incs"]:
+            cuts += [o7[inc][0], o7[after][0]]
+        cuts.append(o7[b7["last"]][0])
+        segs = [(cuts[k], cuts[k + 1]) for k in range(0, len(cuts), 2)]
+        self.segs7 = segs
+        self.R = {"%d" % k: (V10A, V10E, lo, hi) for k, (lo, hi) in enumerate(segs)}
         self.b10, self.b7 = b10, b7
-        len1 = J7 - S7A
-        seq7 = self.r7[S7A - BASE:J7 - BASE] + self.r7[S7B - BASE:E7 - BASE]
+        seq7 = b"".join(self.r7[lo - BASE:hi - BASE] for lo, hi in segs)
+        starts, acc = [], 0
+        for lo, hi in segs:
+            starts.append(acc)
+            acc += hi - lo
+        junctions = starts[1:]
 
         def addr7(j):
-            return S7A + j if j < len1 else S7B + (j - len1)
-        f = os.path.join(CACHE, "match3_%x_%x_%x_%x_%x_%x.json" % (V10A, V10E, S7A, J7, S7B, E7))
+            k = max(x for x in range(len(starts)) if starts[x] <= j)
+            return segs[k][0] + (j - starts[k])
+        key = "_".join("%x" % x for x in [V10A, V10E] + cuts)
+        f = os.path.join(CACHE, "match4_%s.json" % key)
         if os.path.exists(f):
             bl = [tuple(x) for x in json.load(open(f))]
         else:
             sm = difflib.SequenceMatcher(None, self.r10[V10A - BASE:V10E - BASE], seq7, autojunk=False)
             bl = [(i, j, n) for i, j, n in sm.get_matching_blocks() if n]
             json.dump(bl, open(f, "w"))
-        # split blocks at the junction
         blocks = []
         for i, j, n in bl:
-            if j < len1 < j + n:
-                k = len1 - j
+            cut = [x for x in junctions if j < x < j + n]
+            for x in cut:
+                k = x - j
                 blocks.append((i, j, k))
-                blocks.append((i + k, len1, n - k))
-            else:
-                blocks.append((i, j, n))
+                i, j, n = i + k, x, n - k
+            blocks.append((i, j, n))
         dm = {}
         pi, pj = 0, 0
         for (i, j, n) in blocks + [(V10E - V10A, len(seq7), 0)]:
             di, dj = i - pi, j - pj
-            if di and di == dj and not (pj < len1 < j):
+            if di and di == dj and not any(pj < x < j for x in junctions):
                 for k in range(di):
                     dm[V10A + pi + k] = addr7(pj + k) - (V10A + pi + k)
             for k in range(n):
@@ -411,9 +449,9 @@ def carry_old_v7_comments(P):
             continue
         labels, body, com = split_line(text)
         whole = text.strip().startswith(";")
-        if rel == SPAN[3] and "ERASED FLASH" in text:
+        if CFG["tail"] and rel == SPAN[-1] and CFG["tail"] in text:
             tail = True
-        if rel == SPAN[3] and tail:
+        if CFG["tail"] and rel == SPAN[-1] and tail:
             continue
         if body or labels:
             started.add(rel)
@@ -448,6 +486,7 @@ def build_items(P, demoted=frozenset()):
             for lab in split_line(text)[0]:
                 sv10.setdefault(lab, a)
     items = []
+    P.orphans = collections.defaultdict(list)
     pending_comments = []
     pending_labels = []            # (name, v10 addr)
     seen_code = set()              # v10 files whose first byte line has been seen
@@ -457,13 +496,13 @@ def build_items(P, demoted=frozenset()):
         in_span = rel in SPAN
         header = in_span and rel not in seen_code
         if in_span and not header and not body and not labels and text.strip().startswith(";"):
-            pending_comments.append(text.rstrip())
+            pending_comments.append(("post" if pending_labels else "line", text.rstrip()))
         for lab in labels:
             if in_span:
                 pending_labels.append((lab, a10))
         if not body or body.startswith(".include"):
             if com and not header and in_span and labels:
-                pending_comments.append(com.rstrip())
+                pending_comments.append(("post", com.rstrip()))
             continue
         n = P.z10[i]
         if n == 0:
@@ -484,9 +523,14 @@ def build_items(P, demoted=frozenset()):
                 items.append(Item(la + d, 0, "label", lab, rel))
         pending_labels = []
         if it is not None:
-            for c in pending_comments:
-                it.comments.insert(0, ("line", c))
+            it.comments = list(pending_comments) + it.comments
             items.append(it)
+        elif pending_comments:
+            # a v10 comment whose line did not port still goes where its
+            # address maps, if it maps
+            d = P.dm.get(a10)
+            if d is not None:
+                P.orphans[a10 + d].extend(c for _, c in pending_comments)
         pending_comments = []
     return items, old, keep, elsewhere, sv10
 
@@ -496,6 +540,8 @@ def resolve(P, items, old, keep, elsewhere, sv10, verbose=True):
     newlab = {}      # name -> v7 addr
     dropped = collections.Counter()
     P.notes = collections.defaultdict(list)
+    for a, lst in getattr(P, "orphans", {}).items():
+        P.notes[a].extend(lst)
     carry_old_v7_comments(P)
     for it in items:
         if it.kind != "label":
@@ -658,14 +704,12 @@ def layout(P, items, old, keep, newlab):
         k = _b.bisect_right(starts, v) - 1
         if k >= 0 and code[k].a7 < v < code[k].a7 + code[k].n:
             P.notes[code[k].a7] = P.notes[code[k].a7] + P.notes.pop(v)
-    regions = [("A", P.R["A"][2], P.R["A"][3]), ("B", P.R["B"][2], P.R["B"][3])]
+    regions = [(k, lo, hi) for k, (lo, hi) in enumerate(P.segs7)]
     files = {f: [] for f in SPAN}
     emitted = []
-    order = {"audio/dsp_config_sysex.s": 0, "audio/audioinit_routines.s": 1,
-             "audio/note_voice_mapping.s": 2, "audio/sprintf_core.s": 3}
-    ci = 0
+    order = {f: k for k, f in enumerate(SPAN)}
+    cur = SPAN[0]
     for tag, lo, hi in regions:
-        cur = SPAN[0]
         a = lo
         region_code = [it for it in code if lo <= it.a7 < hi]
         j = 0
@@ -673,14 +717,24 @@ def layout(P, items, old, keep, newlab):
             nxt_code = region_code[j] if j < len(region_code) else None
             if nxt_code is not None and nxt_code.a7 == a:
                 it = nxt_code
+                # carried pre-port notes stay in the file they came from (the
+                # one current BEFORE this item), and a note identical to the
+                # item's own (v10) comment is not repeated
+                own = {c.strip() for k2, c in it.comments}
+                allnotes = [c for c in getattr(P, "notes", {}).get(a, []) if c.strip() not in own]
+                gen = [c for c in allnotes if c.startswith("; v10 name for this address:")
+                       or " is kept at this address only for " in c]
+                notes = [c for c in allnotes if c not in gen]
+                if notes and not any(not c.startswith("; (pre-port v7 note") for c in notes):
+                    notes = []
+                files[cur].extend(notes)
                 if it.src in order and order[it.src] >= order[cur]:
                     cur = it.src
-                files[cur].extend(getattr(P, "notes", {}).get(a, []))
+                files[cur].extend(gen)
+                files[cur].extend(c for kind, c in it.comments if kind == "line")
                 for nm in sorted(labels_at.get(a, ())):
                     files[cur].append("%s:" % nm)
-                for kind, c in it.comments:
-                    if kind == "line":
-                        files[cur].append(c)
+                files[cur].extend(c for kind, c in it.comments if kind == "post")
                 trail = [c for k2, c in it.comments if k2 == "trail"]
                 files[cur].append("\t" + it.text + (("\t" + trail[0]) if trail else ""))
                 emitted.append((a, it.n, it))
@@ -698,12 +752,33 @@ def layout(P, items, old, keep, newlab):
             files[cur].extend(rows)
             emitted.append((a, end - a, None))
             a = end
-        if tag == "A":
-            files[SPAN[0]].append('\t.include "%s"' % FOREIGN)
+        if tag < len(regions) - 1:
+            files[cur].append('\t.include "%s"' % CFG["foreign"][tag])
     return files, emitted
 
 
+PORT_NOTE = [
+    "; Ported from v10 by scripts/converters/port_v10_span_to_v7.py: every",
+    "; instruction below was re-assembled to the v7 bytes; `.byte` rows are v7",
+    "; bytes with no byte-identical v10 counterpart.  Comments carried over",
+    "; from v10 may cite v10 addresses."]
+
+
+def header_of(lines):
+    h = []
+    for ln in lines:
+        if ln.strip().startswith(";") or not ln.strip():
+            h.append(ln)
+        else:
+            break
+    while h and not h[-1].strip():
+        h.pop()
+    return h
+
+
 def write_files(P, files):
+    if CFG is SPANS["ace"]:
+        return write_files_ace(P, files)
     v7 = os.path.join(ROOT, "v7/maincpu")
     old = {f: open(os.path.join(v7, f), encoding="latin-1").read().split("\n") for f in SPAN}
 
@@ -739,6 +814,17 @@ def write_files(P, files):
         open(os.path.join(v7, f), "wb").write(data.encode("latin-1"))
 
 
+def write_files_ace(P, files):
+    v7 = os.path.join(ROOT, "v7/maincpu")
+    for f in SPAN:
+        old = open(os.path.join(v7, f), encoding="latin-1").read().split("\n")
+        lines = header_of(old) + PORT_NOTE + [""] + files[f]
+        data = "\n".join(lines)
+        if not data.endswith("\n"):
+            data += "\n"
+        open(os.path.join(v7, f), "wb").write(data.encode("latin-1"))
+
+
 def build_v7():
     r = subprocess.run(["make", "rebuilt_ROMs/kn5000_v7_program.llvm.rom"], cwd=ROOT,
                        capture_output=True, text=True)
@@ -750,7 +836,11 @@ def build_v7():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--span", default="dsp", choices=sorted(SPANS))
     a = ap.parse_args()
+    global CFG, SPAN
+    CFG = SPANS[a.span]
+    SPAN = CFG["files"]
     P = Port().run()
     for k, v in P.R.items():
         print("region %s v10 0x%06X-0x%06X  v7 0x%06X-0x%06X" % ((k,) + v))
