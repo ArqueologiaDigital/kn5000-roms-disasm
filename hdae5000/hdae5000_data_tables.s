@@ -12021,7 +12021,11 @@ HdaeUiName_000:	.asciz	"HDDMENU"                       ; 0x2A8492  [  0]
 ; ROM 0x2A849A - 0x2E1C81.  (A fifth palette/bitmap pair, the boot splash,
 ; sits further down at 0x2E5DCE - 0x2F8DCD under HDAE5000_Palette_Data.)
 ;
-; Layout rule, taken from the copy code inside HDAE5000_UiState_Reset and
+; Layout rule, taken from the copy code inside HDAE5000_Register_Frame and
+; [the addresses below (0x2804BB..) are in the title-screen procedures
+;  HDAE5000_TtlScreenRProc / _TtlScreenR2Proc / _TtlScreenR3Proc, which sat in
+;  the conversion region once labelled Register_Frame -- now the small
+;  HDAE5000_UiState_Reset]
 ; confirmed byte-wise over the whole region: every bitmap is immediately
 ; preceded by its own palette, with no padding between the two.
 ;   * a palette is 0x400 bytes = 256 RGBX entries.  Byte 3 of every entry is
