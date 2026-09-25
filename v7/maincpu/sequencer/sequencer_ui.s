@@ -1279,7 +1279,7 @@ LyricsFile_InsertNormalChar:
 	ld xbc, 0x01c7000c
 	ld xde, 0:i3
 	call SendEvent
-	call LcdOff_Epilogue
+	call UpdateScreen
 	lda_24 xwa, (0x20e42)
 	ld bc, (xwa+2)
 	sla bc, 6

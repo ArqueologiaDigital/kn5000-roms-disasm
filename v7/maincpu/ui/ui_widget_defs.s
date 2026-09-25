@@ -31,6 +31,15 @@ AcGridBoxProc:
 	add xwa, Data_SoundEditorCharsLayout_0x386
 	ld wa, (xwa)
 	lda xix, (AcGridBox_Init:24)
+; Computed jump: target = AcGridBox_Init + Data_SoundEditorCharsLayout_0x386[i], Data_SoundEditorCharsLayout_0x386 = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> AcGridBoxProc_Evt1C00017
+;   0x1c00018 -> AcGridBoxProc_Evt1C00018
+;   0x1c00019 -> AcGridBoxProc_Evt1C00017
+;   0x1c0001a -> AcGridBoxProc_Evt1C00018
+;   0x1c0001b -> AcGridBox_Default
+;   0x1c0001c -> AcGridBox_CellSelect
+;   0x1c0001d -> AcGridBox_CellSelect
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 AcGridBox_Init:
@@ -70,6 +79,7 @@ AcGridBox_Init:
 	calr SetDialDown
 	ld wa, 1:i3
 	jrl AcGridBox_EnableDials
+AcGridBoxProc_Evt1C00017:
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)
@@ -124,6 +134,7 @@ AcGridBox_ScrollUp_Alt:
 	calr SetDialDown
 	ld wa, 1:i3
 	jrl AcGridBox_EnableDials
+AcGridBoxProc_Evt1C00018:
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)
@@ -239,6 +250,15 @@ GridCheck:
 	add xwa, Data_SoundEditorCharsLayout_0x39A
 	ld wa, (xwa)
 	lda xix, (GridCheck_JumpEnd:24)
+; Computed jump: target = GridCheck_JumpEnd + Data_SoundEditorCharsLayout_0x39A[i], Data_SoundEditorCharsLayout_0x39A = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> GridCheck_JumpEnd
+;   0x1c00018 -> GridCheck_JumpEnd
+;   0x1c00019 -> GridCheck_JumpEnd
+;   0x1c0001a -> GridCheck_JumpEnd
+;   0x1c0001b -> GridCheck_Return
+;   0x1c0001c -> GridCheck_JumpEnd
+;   0x1c0001d -> GridCheck_JumpEnd
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 GridCheck_JumpEnd:
@@ -263,9 +283,9 @@ GridCheck_CellSelect:
 
 	ld (xbc + 4), xde
 
-	pushm (xwa)
+	pushw	(xwa)
 
-	pushm (xbc)
+	pushw	(xbc)
 
 	pushw 0xea
 
@@ -441,9 +461,9 @@ PsEditBox_Paint:
 	ld	xhl, (xsp+8)
 	ld	xbc, (xhl+32)
 	push	xbc
-	.byte 0x9b, 0x24, 0x04
+	pushw	(xhl+36)
 	ld	xbc, (xsp+10)
-	.byte 0x99, 0x16, 0x04
+	pushw	(xbc+22)
 	ld	c, (xbc+38)
 	extz	bc
 	pushw	bc
@@ -490,14 +510,25 @@ PsEditBox_Confirm:
 	lda xhl, (xwa + 0x04)
 	ld DE,(XHL)
 	ld IX,DE
-	sub IX,(XWA)
-	.byte 0xdc, 0x41, 0xe9, 0x12, 0xdd, 0x51, 0xd9, 0xa2
-	.byte 0xb0, 0x52, 0x93, 0x6e, 0xf3, 0xfd, 0x14, 0x02
-	.byte 0x31, 0x1e, 0xd1, 0xa8, 0xbf, 0x0c, 0x32, 0xe3
-	.byte 0xfd, 0x18, 0x02, 0x20, 0xe8, 0xe0, 0x6e, 0x17
-	.byte 0xe3, 0xfd, 0x1c, 0x02, 0x20, 0x41, 0x3a, 0x00
-	.byte 0xe0, 0x01, 0x1d, 0x53, 0x92, 0xfa, 0x8f, 0x0c
-	.byte 0x3f, 0x00, 0x6e, 0x10, 0x78, 0x98, 0xfe
+	sub	ix, (xwa)
+	mul	xbc, xix
+	extz	xbc
+	div	xbc, xiy
+	sub	de, bc
+	ld	(xwa), de
+	decw	6, (xhl)
+	lda	xbc, (xsp+532)
+	calr	GetBoxCenter
+	lda	xde, (xsp+12)
+	ld	xwa, (xsp+536)
+	or	xwa, xwa
+	jr	nz, PsEditBox_Confirm_CopyText
+	ld	xwa, (xsp+540)
+	ld	xbc, 0x1e0003a
+	call	SendEvent
+	cp	(xsp+12), 0
+	jr	nz, PsEditBox_Confirm_Render
+	jrl	PsEditBox_ReturnZero
 PsEditBox_Confirm_CopyText:
 	ld	xwa, (xsp+536)
 	push	xwa
@@ -511,8 +542,8 @@ PsEditBox_Confirm_Render:
 	lda_dri XHL, 0xfd, 0x14, 0x02
 	lda xde, (xsp + 12)
 	push xbc
-	pushm (xiy + 36)
-	pushm (xiy + 22)
+	pushw	(xiy+36)
+	pushw	(xiy+22)
 	ld c, (xiy + 38)
 	extz bc
 	pushw bc
@@ -656,22 +687,47 @@ PsNumEditBoxProc:
 	ld xbc, (xsp + 38)
 	ld xde, (xsp + 34)
 	calr PsEditBoxProc
-	jr PsNumEditBox_Return
+	jr	PsNumEditBox_Return
 
 PsNumEditBox_Confirm:
-	.byte 0xaf, 0x2a, 0x20, 0x1d, 0x59, 0x5e, 0xfa, 0xeb
-	.byte 0x8e, 0x0b, 0xea, 0x00, 0x0b, 0x7a, 0xa2, 0xbf
-	.byte 0x1c, 0x30, 0x38, 0x1d, 0x70, 0x07, 0xff, 0x9e
-	.byte 0x32, 0x04, 0x0b, 0xea, 0x00, 0x0b, 0x7c, 0xa2
-	.byte 0xbf, 0x1c, 0x30, 0x38, 0x1d, 0x95, 0x02, 0xff
-	.byte 0xbf, 0x20, 0x30, 0x38, 0xbf, 0x2e, 0x30, 0x38
-	.byte 0x1d, 0xe4, 0x05, 0xff, 0xbf, 0x1a, 0x37, 0x0b
-	.byte 0xea, 0x00, 0x0b, 0x80, 0xa2, 0xbf, 0x1c, 0x30
-	.byte 0x38, 0x1d, 0xe4, 0x05, 0xff, 0xaf, 0x2a, 0x20
-	.byte 0x38, 0xbf, 0x24, 0x30, 0x38, 0xbf, 0x14, 0x30
-	.byte 0x38, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x14, 0x37
-	.byte 0xbf, 0x04, 0x32, 0xaf, 0x2a, 0x20, 0xaf, 0x26
-	.byte 0x21, 0x1e, 0x38, 0xfb, 0xeb, 0xa8
+	ld	xwa, (xsp+42)
+	call	GetViewInstance
+	ld	xiz, xhl
+	pushw	234
+	pushw	41594
+	lda	xwa, (xsp+28)
+	push	xwa
+	call	Free_Compare2
+	pushw	(xiz+50)
+	pushw	234
+	pushw	41596
+	lda	xwa, (xsp+28)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xwa, (xsp+32)
+	push	xwa
+	lda	xwa, (xsp+46)
+	push	xwa
+	call	FileIO_CheckPathAndVolumeLabel_Helper
+	lda	xsp, (xsp+26)
+	pushw	234
+	pushw	41600
+	lda	xwa, (xsp+28)
+	push	xwa
+	call	FileIO_CheckPathAndVolumeLabel_Helper
+	ld	xwa, (xsp+42)
+	push	xwa
+	lda	xwa, (xsp+36)
+	push	xwa
+	lda	xwa, (xsp+20)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+20)
+	lda	xde, (xsp+4)
+	ld	xwa, (xsp+42)
+	ld	xbc, (xsp+38)
+	calr	PsEditBoxProc
+	ld	xhl, 0:i3
 PsNumEditBox_Return:
 	pop xiz
 	lda xsp, (xsp + 42)
@@ -880,7 +936,9 @@ AcNumEdit_GetText:
 	push	xwa
 	call	Free_Compare2
 	ld	xwa, (xsp+12)
-	.byte 0x98, 0x36, 0x04, 0x0b, 0xea, 0x00, 0x0b, 0xac, 0xa2
+	pushw	(xwa+54)
+	pushw	234
+	pushw	41644
 	lda	xwa, (xsp+22)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -897,7 +955,7 @@ AcNumEdit_GetText:
 	call	FileIO_CheckPathAndVolumeLabel_Helper
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+50)
-	.byte 0x90, 0x04
+	pushw	(xwa)
 	lda	xwa, (xsp+28)
 	push	xwa
 	ld	xwa, (xsp+42)
@@ -1351,16 +1409,29 @@ AcLswEdit_Return:
 	ret
 
 LswEditCheck:
-	.byte 0x3e, 0xe8, 0x8e, 0xe9, 0xcf, 0x83, 0x00, 0xe0
-	.byte 0x01, 0x66, 0x4f, 0xe9, 0xcf, 0x3f, 0x00, 0xe0
-	.byte 0x01, 0x66, 0x3f, 0xe9, 0xcf, 0x3e, 0x00, 0xe0
-	.byte 0x01, 0x66, 0x3b, 0xe9, 0xcf, 0x41, 0x00, 0xe0
-	.byte 0x01, 0x66, 0x2f, 0xe9, 0xcf, 0x40, 0x00, 0xe0
-	.byte 0x01, 0x66, 0x20, 0xe9, 0xcf, 0x42, 0x00, 0xe0
-	.byte 0x01, 0x6e, 0x27, 0x9a, 0x04, 0x04, 0x0b, 0xea
-	.byte 0x00, 0x0b, 0xb2, 0xa2, 0xaa, 0x08, 0x20, 0x38
-	.byte 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0a, 0x37, 0xee
-	.byte 0x8b, 0x68, 0x11
+	push	xiz
+	ld	xiz, xwa
+	cp	xbc, 0x1e00083
+	jr	z, LswEditCheck_NotHandled
+	cp	xbc, 0x1e0003f
+	jr	z, LswEditCheck_StepOne
+	cp	xbc, 0x1e0003e
+	jr	z, LswEditCheck_StepFour
+	cp	xbc, 0x1e00041
+	jr	z, LswEditCheck_StepOne
+	cp	xbc, 0x1e00040
+	jr	z, LswEditCheck_GetAddr
+	cp	xbc, 0x1e00042
+	jr	nz, LswEditCheck_NotHandled
+	pushw	(xde+4)
+	pushw	234
+	pushw	41650
+	ld	xwa, (xde+8)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	ld	xhl, xiz
+	jr	LswEditCheck_Return
 LswEditCheck_GetAddr:
 	ld xhl, 0x1f47
 	jr LswEditCheck_Return
@@ -1931,6 +2002,18 @@ RamEditCheck:
 	add xwa, Data_SoundEditorCharsLayout_0x3E8
 	ld wa, (xwa)
 	lda xix, (RamEditCheck_JumpStart:24)
+; Computed jump: target = RamEditCheck_JumpStart + Data_SoundEditorCharsLayout_0x3E8[i], Data_SoundEditorCharsLayout_0x3E8 = 16-bit offsets (10 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
+;   0x1e0003e -> RamEditCheck_Evt1E0003E
+;   0x1e0003f -> RamEditCheck_Evt1E0003F
+;   0x1e00040 -> RamEditCheck_NotHandled
+;   0x1e00041 -> RamEditCheck_NotHandled
+;   0x1e00042 -> RamEditCheck_NotHandled
+;   0x1e00043 -> RamEditCheck_Evt1E00043
+;   0x1e00044 -> RamEditCheck_Evt1E00044
+;   0x1e00045 -> RamEditCheck_Evt1E00045
+;   0x1e00046 -> RamEditCheck_Evt1E0003E
+;   0x1e00047 -> RamEditCheck_JumpStart
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 RamEditCheck_JumpStart:
@@ -1944,14 +2027,19 @@ RamEditCheck_JumpStart:
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr	ResetLswFilter_Epilogue
+RamEditCheck_Evt1E0003E:
 	ld	xhl, 4:i3
 	jr	ResetLswFilter_Epilogue
+RamEditCheck_Evt1E0003F:
 	ld	xhl, 1:i3
 	jr	ResetLswFilter_Epilogue
+RamEditCheck_Evt1E00043:
 	ld	xhl, 16
 	jr	ResetLswFilter_Epilogue
+RamEditCheck_Evt1E00044:
 	ld	xhl, 4294967267
 	jr	ResetLswFilter_Epilogue
+RamEditCheck_Evt1E00045:
 	lda	xhl, (161482:24)
 	jr	ResetLswFilter_Epilogue
 RamEditCheck_NotHandled:
@@ -2048,7 +2136,7 @@ MainRamAdd:
 
 	ld xde, (xsp + 4)
 
-	.byte 0x1d, 0x56, 0x46, 0xfa	; call MainFuncCall (v7 addr)
+	call	MainFuncCall	; call MainFuncCall (v7 addr)
 
 	pop xiz
 
@@ -2384,7 +2472,7 @@ MainBitGet:
 
 	ld xde, xiz
 
-	.byte 0x1d, 0x56, 0x46, 0xfa	; call MainFuncCall (v7 addr)
+	call	MainFuncCall	; call MainFuncCall (v7 addr)
 
 	pop xiz
 
@@ -2464,9 +2552,9 @@ PsMenuBox_Confirm_Render:
 	ld xix, (xsp + 4)
 	ld xwa, (xix + 28)
 	push xwa
-	pushm (xix + 32)
+	pushw	(xix+32)
 	ld xwa, xix
-	pushm (xwa + 22)
+	pushw	(xwa+22)
 	ld a, (xwa + 34)
 	extz wa
 	pushw wa
@@ -2577,23 +2665,46 @@ AcTitleMenu_Confirm_SetLeft:
 	jr AcTitleMenu_Confirm_SetRight
 
 AcTitleMenu_Confirm_NoIconRight:
-	ld wa, 4:i3
+	ld	wa, 4:i3
 
 AcTitleMenu_Confirm_SetRight:
-	.byte 0xd3, 0xfd, 0x20, 0x01, 0x22, 0xd8, 0xa2, 0xb1
-	.byte 0x52, 0xbf, 0x0c, 0x31, 0xaf, 0x08, 0x20, 0xa8
-	.byte 0x2a, 0x20, 0x1d, 0x33, 0x22, 0xfb, 0xbf, 0x0c
-	.byte 0x30, 0xf3, 0xfd, 0x14, 0x01, 0x31, 0x99, 0x04
-	.byte 0x22, 0x91, 0xa2, 0xaf, 0x08, 0x21, 0xa9, 0x1c
-	.byte 0x21, 0x1d, 0x4d, 0x23, 0xfb, 0xbf, 0x06, 0x53
-	.byte 0xbf, 0x0c, 0x30, 0x38, 0x1d, 0xc3, 0x07, 0xff
-	.byte 0xef, 0x64, 0x9f, 0x06, 0x22, 0xf3, 0xfd, 0x28
-	.byte 0x01, 0x31, 0xaf, 0x08, 0x24, 0xbc, 0x32, 0x30
-	.byte 0xdb, 0xf2, 0x6e, 0x68, 0xa0, 0x20, 0xe8, 0xe0
-	.byte 0x66, 0x1e, 0x91, 0x3f, 0x00, 0x00, 0x66, 0x18
-	.byte 0xbf, 0x0c, 0x30, 0xac, 0x1c, 0x21, 0x1d, 0xc4
-	.byte 0x22, 0xfb, 0xd3, 0xfd, 0x18, 0x01, 0x20, 0xdb
-	.byte 0xa0, 0xd8, 0x6d, 0xf3, 0xfd, 0x2c, 0x01, 0x50
+	ld	de, (xsp+288)
+	sub	de, wa
+	ld	(xbc), de
+	lda	xbc, (xsp+12)
+	ld	xwa, (xsp+8)
+	ld	xwa, (xwa+42)
+	call	ConvertStrings
+	lda	xwa, (xsp+12)
+	lda	xbc, (xsp+276)
+	ld	de, (xbc+4)
+	sub	de, (xbc)
+	ld	xbc, (xsp+8)
+	ld	xbc, (xbc+28)
+	call	WordwrapStrings
+	ld	(xsp+6), hl
+	lda	xwa, (xsp+12)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ld	de, (xsp+6)
+	lda	xbc, (xsp+296)
+	ld	xix, (xsp+8)
+	lda	xwa, (xix+50)
+	cp	de, hl
+	jr	nz, AcTitleMenu_Confirm_MultiLine
+	ld	xwa, (xwa)
+	or	xwa, xwa
+	jr	z, AcTitleMenu_Confirm_SingleLine
+	cpw	(xbc), 0
+	jr	z, AcTitleMenu_Confirm_SingleLine
+	lda	xwa, (xsp+12)
+	ld	xbc, (xix+28)
+	call	CalcTotalWidth
+	ld	wa, (xsp+280)
+	sub	wa, hl
+	dec	5, wa
+	ld	(xsp+300), wa
 AcTitleMenu_Confirm_SingleLine:
 	lda_dri XWA, 0xfd, 0x1c, 0x01
 	ld bc, (xwa + 2)
@@ -2615,20 +2726,37 @@ AcTitleMenu_Confirm_SingleLine:
 	ld xix, (xsp + 8)
 	ld xhl, (xix + 28)
 	push xhl
-	pushm (xix + 32)
+	pushw	(xix+32)
 	pushw 0xf7
-	jrl AcTitleMenu_Confirm_RenderTop
+	jrl	AcTitleMenu_Confirm_RenderTop
 
 AcTitleMenu_Confirm_MultiLine:
-	.byte 0x9f, 0x06, 0x23, 0xdb, 0x69, 0xbf, 0x0c, 0x32
-	.byte 0xf3, 0x07, 0xe8, 0xec, 0x00, 0x00, 0xa0, 0x20
-	.byte 0xe8, 0xe0, 0x66, 0x45, 0x91, 0x3f, 0x00, 0x00
-	.byte 0x66, 0x3f, 0x9f, 0x06, 0x20, 0xe8, 0x13, 0xea
-	.byte 0x80, 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xdb, 0x8e
-	.byte 0xbf, 0x10, 0x30, 0x38, 0x1d, 0xc3, 0x07, 0xff
-	.byte 0xef, 0x60, 0xaf, 0x08, 0x20, 0xa8, 0x1c, 0x21
-	.byte 0xbf, 0x0c, 0x30, 0xde, 0xf3, 0x6b, 0x08, 0x9f
-	.byte 0x06, 0x22, 0xf3, 0x07, 0xe0, 0xe8, 0x30
+	ld	hl, (xsp+6)
+	dec	1, hl
+	lda	xde, (xsp+12)
+	.byte	0xf3, 0x07, 0xe8, 0xec, 0x00, 0x00	; ld (xde+hl), 0x00
+	ld	xwa, (xwa)
+	or	xwa, xwa
+	jr	z, AcTitleMenu_Confirm_RenderBottom
+	cpw	(xbc), 0
+	jr	z, AcTitleMenu_Confirm_RenderBottom
+	ld	wa, (xsp+6)
+	exts	xwa
+	add	xwa, xde
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	ld	iz, hl
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	8, xsp
+	ld	xwa, (xsp+8)
+	ld	xbc, (xwa+28)
+	lda	xwa, (xsp+12)
+	cp	hl, iz
+	jr	ugt, AcTitleMenu_Confirm_MultiAdjust
+	ld	de, (xsp+6)
+	lda_rr	xwa, xwa, de	; lda xwa, xwa+de
 AcTitleMenu_Confirm_MultiAdjust:
 	call CalcTotalWidth
 	ldw_sri0 WA, (xsp + 0x0118)
@@ -2657,7 +2785,7 @@ AcTitleMenu_Confirm_RenderBottom:
 	ld xix, (xsp + 8)
 	ld xhl, (xix + 28)
 	push xhl
-	pushm (xix + 32)
+	pushw	(xix+32)
 	pushw 0xf7
 	call DrawString
 	lda_dri XWA, 0xfd, 0x1c, 0x01
@@ -2684,7 +2812,7 @@ AcTitleMenu_Confirm_RenderBottom:
 	ld xix, (xsp + 8)
 	ld xhl, (xix + 28)
 	push xhl
-	pushm (xix + 32)
+	pushw	(xix+32)
 	pushw 0xf7
 
 AcTitleMenu_Confirm_RenderTop:
@@ -2895,23 +3023,46 @@ VwMenuBox_Confirm_SetLeft:
 	jr VwMenuBox_Confirm_SetRight
 
 VwMenuBox_Confirm_NoIconRight:
-	ld wa, 4:i3
+	ld	wa, 4:i3
 
 VwMenuBox_Confirm_SetRight:
-	.byte 0xd3, 0xfd, 0x1e, 0x01, 0x22, 0xd8, 0xa2, 0xb1
-	.byte 0x52, 0xbf, 0x0a, 0x31, 0xaf, 0x06, 0x20, 0xa8
-	.byte 0x2a, 0x20, 0x1d, 0x33, 0x22, 0xfb, 0xbf, 0x0a
-	.byte 0x30, 0xf3, 0xfd, 0x12, 0x01, 0x31, 0x99, 0x04
-	.byte 0x22, 0x91, 0xa2, 0xaf, 0x06, 0x21, 0xa9, 0x1c
-	.byte 0x21, 0x1d, 0x4d, 0x23, 0xfb, 0xdb, 0x8e, 0xbf
-	.byte 0x0a, 0x30, 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xef
-	.byte 0x64, 0xde, 0x8a, 0xf3, 0xfd, 0x26, 0x01, 0x31
-	.byte 0xaf, 0x06, 0x24, 0xbc, 0x2e, 0x30, 0xdb, 0xf2
-	.byte 0x6e, 0x68, 0xa0, 0x20, 0xe8, 0xe0, 0x66, 0x1e
-	.byte 0x91, 0x3f, 0x00, 0x00, 0x66, 0x18, 0xbf, 0x0a
-	.byte 0x30, 0xac, 0x1c, 0x21, 0x1d, 0xc4, 0x22, 0xfb
-	.byte 0xd3, 0xfd, 0x16, 0x01, 0x20, 0xdb, 0xa0, 0xd8
-	.byte 0x6d, 0xf3, 0xfd, 0x2a, 0x01, 0x50
+	ld	de, (xsp+286)
+	sub	de, wa
+	ld	(xbc), de
+	lda	xbc, (xsp+10)
+	ld	xwa, (xsp+6)
+	ld	xwa, (xwa+42)
+	call	ConvertStrings
+	lda	xwa, (xsp+10)
+	lda	xbc, (xsp+274)
+	ld	de, (xbc+4)
+	sub	de, (xbc)
+	ld	xbc, (xsp+6)
+	ld	xbc, (xbc+28)
+	call	WordwrapStrings
+	ld	iz, hl
+	lda	xwa, (xsp+10)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ld	de, iz
+	lda	xbc, (xsp+294)
+	ld	xix, (xsp+6)
+	lda	xwa, (xix+46)
+	cp	de, hl
+	jr	nz, VwMenuBox_Confirm_MultiLine
+	ld	xwa, (xwa)
+	or	xwa, xwa
+	jr	z, VwMenuBox_Confirm_SingleLine
+	cpw	(xbc), 0
+	jr	z, VwMenuBox_Confirm_SingleLine
+	lda	xwa, (xsp+10)
+	ld	xbc, (xix+28)
+	call	CalcTotalWidth
+	ld	wa, (xsp+278)
+	sub	wa, hl
+	dec	5, wa
+	ld	(xsp+298), wa
 VwMenuBox_Confirm_SingleLine:
 	lda_dri XWA, 0xfd, 0x1a, 0x01
 	ld bc, (xwa + 2)
@@ -2933,20 +3084,34 @@ VwMenuBox_Confirm_SingleLine:
 	ld xix, (xsp + 6)
 	ld xhl, (xix + 28)
 	push xhl
-	pushm (xix + 32)
+	pushw	(xix+32)
 	pushw 0xf7
-	jrl VwMenuBox_Confirm_RenderTop
+	jrl	VwMenuBox_Confirm_RenderTop
 
 VwMenuBox_Confirm_MultiLine:
-	.byte 0xde, 0x8b, 0xdb, 0x69, 0xbf, 0x0a, 0x32, 0xf3
-	.byte 0x07, 0xe8, 0xec, 0x00, 0x00, 0xa0, 0x20, 0xe8
-	.byte 0xe0, 0x66, 0x42, 0x91, 0x3f, 0x00, 0x00, 0x66
-	.byte 0x3c, 0xf3, 0x07, 0xe8, 0xf8, 0x30, 0x38, 0x1d
-	.byte 0xc3, 0x07, 0xff, 0xd7, 0xfa, 0x9b, 0xbf, 0x0e
-	.byte 0x30, 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xef, 0x60
-	.byte 0xaf, 0x06, 0x20, 0xa8, 0x1c, 0x21, 0xbf, 0x0a
-	.byte 0x30, 0xd7, 0xfa, 0xf3, 0x6b, 0x05, 0xf3, 0x07
-	.byte 0xe0, 0xf8, 0x30
+	ld	hl, iz
+	dec	1, hl
+	lda	xde, (xsp+10)
+	.byte	0xf3, 0x07, 0xe8, 0xec, 0x00, 0x00	; ld (xde+hl), 0x00
+	ld	xwa, (xwa)
+	or	xwa, xwa
+	jr	z, VwMenuBox_Confirm_RenderBottom
+	cpw	(xbc), 0
+	jr	z, VwMenuBox_Confirm_RenderBottom
+	lda_rr	xwa, xde, iz	; lda xwa, xde+iz
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	ld	qiz, hl
+	lda	xwa, (xsp+14)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	8, xsp
+	ld	xwa, (xsp+6)
+	ld	xbc, (xwa+28)
+	lda	xwa, (xsp+10)
+	cp	hl, qiz
+	jr	ugt, VwMenuBox_Confirm_MultiAdjust
+	lda_rr	xwa, xwa, iz	; lda xwa, xwa+iz
 VwMenuBox_Confirm_MultiAdjust:
 	call CalcTotalWidth
 	ldw_sri0 WA, (xsp + 0x0116)
@@ -2977,7 +3142,7 @@ VwMenuBox_Confirm_RenderBottom:
 	ld xix, (xsp + 6)
 	ld xhl, (xix + 28)
 	push xhl
-	pushm (xix + 32)
+	pushw	(xix+32)
 	pushw 0xf7
 
 VwMenuBox_Confirm_RenderTop:
@@ -3160,7 +3325,18 @@ PsEditSwBox_Return:
 	lda xsp, (xsp + 20)
 	ret
 
-PsEditSwBox_InlineData:
+; -----------------------------------------------------------------------------
+; PsEditSwBox_CalcEdgeSwitchRect -- code (was named PsEditSwBox_InlineData)
+; WA = edit-switch index, XBC = rect {x0,y0,x1,y1} to fill, DE = value given
+; to BoxLeftCheck / BoxRightCheck (ui/ui_control_panel.s: 1 for 0x80-0x88 /
+; 0xa0-0xa8).  point = GetEditSwPoint(WA).  A switch on the left edge
+; (point.x == 0) gets x0 = 0 if BoxLeftCheck(DE) else 8, x1 = 38; one on the
+; right edge (point.x == 319) gets x0 = 281, x1 = 319 if BoxRightCheck(DE)
+; else 311; both span y = point.y-9 .. point.y+8.  One on the bottom edge
+; (point.y == 239) gets x = point.x-16 .. point.x+15, y = 216 .. 238.
+; No caller was found (see scripts/renaming/uiproc_misc_names.py).
+; -----------------------------------------------------------------------------
+PsEditSwBox_CalcEdgeSwitchRect:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+8), de
@@ -3169,7 +3345,7 @@ PsEditSwBox_InlineData:
 	calr	GetEditSwPoint
 	lda	xwa, (xsp+4)
 	cpw	(xwa), 0
-	jr	nz, PsEditSwBoxProc_Skip2
+	jr	nz, PsEditSwBox_CalcEdgeSwitchRect_Skip2
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
 	sub	wa, 9
@@ -3181,15 +3357,15 @@ PsEditSwBox_InlineData:
 	calr	BoxLeftCheck
 	ldw	wa, 8
 	cp	hl, 0:i3
-	jr	z, PsEditSwBoxProc_Skip
+	jr	z, PsEditSwBox_CalcEdgeSwitchRect_Skip
 	ld	wa, 0:i3
-PsEditSwBoxProc_Skip:
+PsEditSwBox_CalcEdgeSwitchRect_Skip:
 	ld	(xiz), wa
 	ldw	(xiz+4), 38
-PsEditSwBoxProc_Skip2:
+PsEditSwBox_CalcEdgeSwitchRect_Skip2:
 	lda	xwa, (xsp+4)
 	cpw	(xwa), 319
-	jr	nz, PsEditSwBoxProc_Join
+	jr	nz, PsEditSwBox_CalcEdgeSwitchRect_Join
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
 	sub	wa, 9
@@ -3202,15 +3378,15 @@ PsEditSwBoxProc_Skip2:
 	calr	BoxRightCheck
 	lda	xwa, (xiz+4)
 	cp	hl, 0:i3
-	jr	z, PsEditSwBoxProc_Skip3
+	jr	z, PsEditSwBox_CalcEdgeSwitchRect_Skip3
 	ldw	(xwa), 319
-	jr	PsEditSwBoxProc_Join
-PsEditSwBoxProc_Skip3:
+	jr	PsEditSwBox_CalcEdgeSwitchRect_Join
+PsEditSwBox_CalcEdgeSwitchRect_Skip3:
 	ldw	(xwa), 311
-PsEditSwBoxProc_Join:
+PsEditSwBox_CalcEdgeSwitchRect_Join:
 	lda	xbc, (xsp+4)
 	cpw	(xbc+2), 239
-	jr	nz, PsEditSwBoxProc_Epilogue
+	jr	nz, PsEditSwBox_CalcEdgeSwitchRect_Epilogue
 	ldw	(xiz+2), 216
 	ldw	(xiz+6), 238
 	ld	wa, (xbc)
@@ -3219,7 +3395,7 @@ PsEditSwBoxProc_Join:
 	ld	wa, (xbc)
 	add	wa, 15
 	ld	(xiz+4), wa
-PsEditSwBoxProc_Epilogue:
+PsEditSwBox_CalcEdgeSwitchRect_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -3241,8 +3417,7 @@ PsEditSwBoxProc_Skip4:
 	jr	nz, PsEditSwBoxProc_Epilogue2
 	ld	xwa, (xsp+10)
 	ldw	(xwa+2), 216
-	.byte 0xb8
-	.long Naka_SubDispatch_B_Table_0x6E
+	ldw	(xwa+6), 238
 	ld	bc, (xbc)
 	sub	bc, 16
 	ld	(xwa), bc
@@ -3311,9 +3486,9 @@ ButtonState_PaintProc:
 	ld xix, (xsp + 4)
 	ld xhl, (xix + 28)
 	push xhl
-	pushm (xix + 32)
+	pushw	(xix+32)
 	ld xhl, xix
-	pushm (xhl + 22)
+	pushw	(xhl+22)
 	call DrawStringCentered
 	lda_dri XWA, 0xfd, 0x18, 0x01
 	ldw_sri0 BC, (xsp + 0x0112)
@@ -3330,9 +3505,9 @@ ButtonState_PaintProc:
 	ld xix, (xsp + 4)
 	ld xhl, (xix + 28)
 	push xhl
-	pushm (xix + 32)
+	pushw	(xix+32)
 	ld xhl, xix
-	pushm (xhl + 22)
+	pushw	(xhl+22)
 	jrl ButtonState_Paint_DrawAndReturn
 
 ButtonState_Paint_EventConfirm:
@@ -3353,9 +3528,9 @@ ButtonState_Paint_EventConfirm:
 	ld xix, (xsp + 4)
 	ld xhl, (xix + 28)
 	push xhl
-	pushm (xix + 32)
+	pushw	(xix+32)
 	ld xhl, xix
-	pushm (xhl + 22)
+	pushw	(xhl+22)
 	call DrawStringCentered
 	lda_dri XWA, 0xfd, 0x18, 0x01
 	ldw_sri0 BC, (xsp + 0x0112)
@@ -3372,9 +3547,9 @@ ButtonState_Paint_EventConfirm:
 	ld xix, (xsp + 4)
 	ld xhl, (xix + 28)
 	push xhl
-	pushm (xix + 32)
+	pushw	(xix+32)
 	ld xhl, xix
-	pushm (xhl + 22)
+	pushw	(xhl+22)
 	jrl ButtonState_Paint_DrawAndReturn
 
 ButtonState_Paint_Default:
@@ -3397,9 +3572,9 @@ ButtonState_Paint_Default:
 	ld xhl, (xsp + 4)
 	ld xde, (xhl + 28)
 	push xde
-	pushm (xhl + 32)
+	pushw	(xhl+32)
 	ld xde, xhl
-	pushm (xde + 22)
+	pushw	(xde+22)
 	ld xde, Data_SoundEditorCharsLayout_0x410
 	call DrawStringCentered
 	lda_dri XWA, 0xfd, 0x18, 0x01
@@ -3415,9 +3590,9 @@ ButtonState_Paint_Default:
 	ld xhl, (xsp + 4)
 	ld xde, (xhl + 28)
 	push xde
-	pushm (xhl + 32)
+	pushw	(xhl+32)
 	ld xde, xhl
-	pushm (xde + 22)
+	pushw	(xde+22)
 	ld xde, Data_SoundEditorCharsLayout_0x414
 
 ButtonState_Paint_DrawAndReturn:
@@ -3482,9 +3657,9 @@ ButtonState_Paint_DrawAligned:
 	ld xix, (xsp + 4)
 	ld xbc, (xix + 28)
 	push xbc
-	pushm (xix + 32)
+	pushw	(xix+32)
 	ld xbc, xix
-	pushm (xbc + 22)
+	pushw	(xbc+22)
 	ld c, (xbc + 34)
 	extz bc
 	pushw bc
@@ -3996,22 +4171,40 @@ PsPageBox_Confirm:
 	exts xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001e
-	call SendEvent
+	call	SendEvent
 
 PsPageBox_Confirm_DrawValue:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x1c, 0x20, 0x90, 0x26
-	.byte 0xe3, 0xfd, 0x14, 0x01, 0x20, 0x41, 0x55, 0x00
-	.byte 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x53, 0x92, 0xfa
-	.byte 0x2b, 0x2e, 0x0b, 0xea, 0x00, 0x0b, 0x54, 0xa3
-	.byte 0xbf, 0x10, 0x30, 0x38, 0x1d, 0x95, 0x02, 0xff
-	.byte 0xbf, 0x0c, 0x37, 0xf3, 0xfd, 0x0c, 0x01, 0x31
-	.byte 0xe3, 0xfd, 0x14, 0x01, 0x20, 0x1e, 0xbf, 0x81
-	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x30, 0xf3, 0xfd, 0x08
-	.byte 0x01, 0x31, 0x1e, 0x6f, 0x83, 0xf3, 0xfd, 0x0c
-	.byte 0x01, 0x30, 0xf3, 0xfd, 0x08, 0x01, 0x31, 0xbf
-	.byte 0x08, 0x32, 0xeb, 0xa8, 0x3b, 0x0b, 0x00, 0x00
-	.byte 0xaf, 0x0a, 0x23, 0x9b, 0x16, 0x04, 0x1d, 0x9f
-	.byte 0xca, 0xfa, 0x68, 0x42
+	ld	xwa, (xsp+4)
+	ld	xwa, (xwa+28)
+	ld	iz, (xwa)
+	ld	xwa, (xsp+276)
+	ld	xbc, 0x1e00055
+	ld	xde, 0:i3
+	call	SendEvent
+	pushw	hl
+	pushw	iz
+	pushw	234
+	pushw	41812
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	lda	xbc, (xsp+268)
+	ld	xwa, (xsp+276)
+	calr	GetClientBox
+	lda	xwa, (xsp+268)
+	lda	xbc, (xsp+264)
+	calr	GetBoxCenter
+	lda	xwa, (xsp+268)
+	lda	xbc, (xsp+264)
+	lda	xde, (xsp+8)
+	ld	xhl, 0:i3
+	push	xhl
+	pushw	0
+	ld	xhl, (xsp+10)
+	pushw	(xhl+22)
+	call	DrawStringCentered
+	jr	UIVwBox_ZeroReturn
 PsPageBox_HitTest:
 	ld xwa, 0x2600024
 	ld xbc, 0x1e00029
@@ -6056,20 +6249,44 @@ AcPmemName_PartChange:
 
 AcPmemName_CallMainFunc:
 	call MainFuncCall
-	jrl PsParaBox_EventReturn
+	jrl	PsParaBox_EventReturn
 
 AcPmemName_Confirm:
-	.byte 0xaf, 0x2c, 0x20, 0xee, 0x8a, 0x1e, 0xa9, 0xa6
-	.byte 0xbe, 0x02, 0x31, 0x91, 0x20, 0xd8, 0x69, 0xd8
-	.byte 0xef, 0x03, 0xd8, 0x61, 0xc9, 0x88, 0xbe, 0x04
-	.byte 0x32, 0xa2, 0x25, 0xc8, 0x8f, 0xdb, 0x12, 0xbf
-	.byte 0x04, 0x34, 0x85, 0x3f, 0x00, 0x66, 0x3e, 0x96
-	.byte 0x3f, 0x00, 0x00, 0x66, 0x24, 0xc8, 0xee, 0x03
-	.byte 0xc8, 0x68, 0xc8, 0x89, 0xd8, 0x12, 0x91, 0x21
-	.byte 0xd8, 0xa1, 0xa2, 0x20, 0x38, 0xd9, 0x12, 0x29
-	.byte 0x2b, 0x0b, 0xea, 0x00, 0x0b, 0xcc, 0xa3, 0x3c
-	.byte 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x10, 0x37, 0x68
-	.byte 0x23
+	ld	xwa, (xsp+44)
+	ld	xde, xiz
+	calr	PsParaBoxProc
+	lda	xbc, (xiz+2)
+	ld	wa, (xbc)
+	dec	1, wa
+	srl	wa, 3
+	inc	1, wa
+	ld	w, a
+	lda	xde, (xiz+4)
+	ld	xiy, (xde)
+	ld	l, w
+	extz	hl
+	lda	xix, (xsp+4)
+	cp	(xiy), 0
+	jr	z, AcPmemName_Confirm_EmptySlot
+	cpw	(xiz), 0
+	jr	z, AcPmemName_Confirm_ZeroIndex
+	sll	w, 3
+	dec	8, w
+	ld	a, w
+	extz	wa
+	ld	bc, (xbc)
+	sub	bc, wa
+	ld	xwa, (xde)
+	push	xwa
+	extz	bc
+	pushw	bc
+	pushw	hl
+	pushw	234
+	pushw	41932
+	push	xix
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+16)
+	jr	AcPmemName_Confirm_SendEvent
 AcPmemName_Confirm_ZeroIndex:
 	ld	xwa, (xde)
 	push	xwa
@@ -6187,8 +6404,8 @@ AcMixerVol_Paint:
 	sub bc, 0x9
 	ld (xwa + 2), bc
 	incw 3, (xwa)
-	decm 3, (xde)
-	decm 1, (xhl)
+	decw	3, (xde)
+	decw	1, (xhl)
 	ldw bc, 0x8
 	call DrawBox
 	lda xwa, (xsp + 24)
@@ -6263,7 +6480,9 @@ AcMixerVol_Confirm:
 	ld WA,(XDE+0x02)
 	inc 4,WA
 	ld (XBC+0x02),WA
-	.byte 0x9f, 0x04, 0x04, 0x0b, 0xea, 0x00, 0x0b, 0xb0, 0xa6
+	pushw	(xsp+4)
+	pushw	234
+	pushw	42672
 	lda	xwa, (xsp+24)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -6275,7 +6494,7 @@ AcMixerVol_Confirm:
 	push	xhl
 	pushw 0
 	ld	xhl, (xsp+14)
-	.byte 0x9b, 0x16, 0x04
+	pushw	(xhl+22)
 	call	DrawStringCentered
 	lda	xwa, (xsp+32)
 	lda	xde, (xsp+24)
@@ -6289,14 +6508,14 @@ AcMixerVol_Confirm:
 	call	DrawBitmapFast
 	lda	xwa, (xsp+32)
 	ldw	bc, 128
-	.byte 0x9f, 0x04, 0xa1
+	sub	bc, (xsp+4)
 	muls	bc, 36
 	exts	xbc
 	divs	bc, 128
 	add	(xwa+2), bc
 	ld	xbc, 3:i3
 	call	DrawBitmapFast
-	.byte 0x9f, 0x06, 0x3f, 0x01, 0x00
+	cpw	(xsp+6), 1
 	jrl	nz, UIList_ReturnZeroJmp
 	lda	xbc, (xsp+24)
 	ld	xwa, (xsp+44)
@@ -6315,10 +6534,13 @@ AcMixerVol_Confirm:
 	ld	de, (xbc)
 	add	de, 12
 	ld	(xwa+4), de
-	.byte 0x98, 0x06, 0x38, 0x12, 0x00
+	addw	(xwa+6), 0x12
 	ld	xde, 3:i3
 	push	xde
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x01, 0x00
+	pushw	251
+	pushw	0
+	pushw	0
+	pushw	1
 	ld	xde, 15378100
 	call	DrawStringReverse
 	jrl	UIList_ReturnZeroJmp
@@ -6686,8 +6908,8 @@ DbMemo_Paint:
 	lda xwa, (xsp + 94)
 	incw 4, (xwa + 2)
 	incw 4, (xwa)
-	decm 4, (xwa + 4)
-	decm 4, (xwa + 6)
+	decw	4, (xwa+4)
+	decw	4, (xwa+6)
 	ldw bc, 0xc6
 	ld de, 7:i3
 	call DrawDesignBox
@@ -6719,9 +6941,9 @@ DbMemo_DrawContent:
 	incw 5, (xde)
 	incw 5, (xhl)
 	lda xwa, (xhl + 4)
-	decm 5, (xwa)
+	decw	5, (xwa)
 	lda xbc, (xhl + 6)
-	decm 5, (xbc)
+	decw	5, (xbc)
 	ld wa, (xwa)
 	sub wa, (xhl)
 	exts xwa
@@ -6760,7 +6982,7 @@ DbMemo_DrawContent_Loop:
 	lda	xwa, (xsp+78)
 	ld	bc, 7:i3
 	call	DrawBox
-	.byte 0x9f, 0x04, 0x04
+	pushw	(xsp+4)
 	ld	xwa, (xsp+8)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -6784,7 +7006,7 @@ DbMemo_DrawContent_Loop:
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
-	.byte 0x9f, 0x04, 0xf3
+	cp	hl, (xsp+4)
 	jrl	nz, DbMemo_ReturnZero
 	ld	wa, (xsp+4)
 	extz	xwa
@@ -6816,7 +7038,9 @@ FDemoText_ByteData_DisplayRefresh_Helper:
 	pop	xiz
 	inc	4, xsp
 	ret
-DbMemo_TrailingData:
+; DbMemo_LoneRet -- a single `ret` instruction (was named DbMemo_TrailingData);
+; no caller was found (see scripts/renaming/uiproc_misc_names.py).
+DbMemo_LoneRet:
 	ret
 
 DbMemoryDumpProc:
@@ -6867,8 +7091,8 @@ DbMemDump_Paint:
 	lda xwa, (xsp + 104)
 	incw 4, (xwa + 2)
 	incw 4, (xwa)
-	decm 4, (xwa + 4)
-	decm 4, (xwa + 6)
+	decw	4, (xwa+4)
+	decw	4, (xwa+6)
 	ldw bc, 0xc6
 	ld de, 7:i3
 	call DrawDesignBox
@@ -6905,8 +7129,8 @@ DbMemDump_Confirm:
 	lda xwa, (xsp + 104)
 	incw 5, (xwa + 2)
 	incw 5, (xwa)
-	decm 5, (xwa + 4)
-	decm 5, (xwa + 6)
+	decw	5, (xwa+4)
+	decw	5, (xwa+6)
 	ldw (xsp + 4), 0x0
 
 DbMemDump_Confirm_RowLoop:
@@ -6945,22 +7169,55 @@ DbMemDump_Confirm_RowLoop:
 	lda xsp, (xsp + 0x16)
 	lda xwa, (xsp + 0x68)
 	lda xbc, (xsp + 0x64)
-	lda xde, (xsp + 0x14)
-	.byte 0xeb, 0xab, 0x3b, 0x0b, 0x00, 0x00, 0x0b, 0x07
-	.byte 0x00, 0x1d, 0xbd, 0xc6, 0xfa, 0xbf, 0x0a, 0x31
-	.byte 0x89, 0x07, 0x21, 0xd8, 0x12, 0x28, 0x89, 0x06
-	.byte 0x21, 0xd8, 0x12, 0x28, 0x89, 0x05, 0x21, 0xd8
-	.byte 0x12, 0x28, 0x89, 0x04, 0x21, 0xd8, 0x12, 0x28
-	.byte 0x89, 0x03, 0x21, 0xd8, 0x12, 0x28, 0x89, 0x02
-	.byte 0x21, 0xd8, 0x12, 0x28, 0x89, 0x01, 0x21, 0xd8
-	.byte 0x12, 0x28, 0x81, 0x21, 0xd8, 0x12, 0x28, 0x0b
-	.byte 0xea, 0x00, 0x0b, 0xd2, 0xa6, 0xbf, 0x28, 0x30
-	.byte 0x38, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x18, 0x37
-	.byte 0xbf, 0x64, 0x31, 0x91, 0x38, 0x30, 0x00, 0xbf
-	.byte 0x68, 0x30, 0xbf, 0x14, 0x32, 0xeb, 0xab, 0x3b
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00, 0x1d, 0xbd
-	.byte 0xc6, 0xfa, 0xbf, 0x0a, 0x32, 0xea, 0x88, 0xba
-	.byte 0x08, 0x31
+	lda	xde, (xsp+20)
+	ld	xhl, 3:i3
+	push	xhl
+	pushw	0
+	pushw	7
+	call	DrawString
+	lda	xbc, (xsp+10)
+	ld	a, (xbc+7)
+	extz	wa
+	pushw	wa
+	ld	a, (xbc+6)
+	extz	wa
+	pushw	wa
+	ld	a, (xbc+5)
+	extz	wa
+	pushw	wa
+	ld	a, (xbc+4)
+	extz	wa
+	pushw	wa
+	ld	a, (xbc+3)
+	extz	wa
+	pushw	wa
+	ld	a, (xbc+2)
+	extz	wa
+	pushw	wa
+	ld	a, (xbc+1)
+	extz	wa
+	pushw	wa
+	ld	a, (xbc)
+	extz	wa
+	pushw	wa
+	pushw	234
+	pushw	42706
+	lda	xwa, (xsp+40)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+24)
+	lda	xbc, (xsp+100)
+	addw	(xbc), 0x30
+	lda	xwa, (xsp+104)
+	lda	xde, (xsp+20)
+	ld	xhl, 3:i3
+	push	xhl
+	pushw	0
+	pushw	7
+	call	DrawString
+	lda	xde, (xsp+10)
+	ld	xwa, xde
+	lda	xbc, (xde+8)
 DbMemDump_Confirm_SanitizeLoop:
 	cp (xwa), 0x20
 	jr nc, DbMemDump_Confirm_SanitizeNext
@@ -7241,15 +7498,15 @@ UI_ScrollBox_ComputeLayout:
 	lda_dri XDE, 0xfd, 0x12, 0x01
 	ld xhl, (xsp + 6)
 	push xhl
-	pushm (xsp + 14)
+	pushw	(xsp+14)
 	pushw 0xf7
 	call DrawString
 	lda_dri XWA, 0xfd, 0x1a, 0x02
 	lda_dri XDE, 0xfd, 0x16, 0x02
 	ld xbc, (xsp + 6)
 	push xbc
-	pushm (xsp + 14)
-	pushm (xsp + 18)
+	pushw	(xsp+14)
+	pushw	(xsp+18)
 	ld xbc, (xsp + 22)
 	ld c, (xbc + 34)
 	extz bc
@@ -7581,7 +7838,7 @@ PsTrkSw_Confirm_DrawGeometry:
 	lda	xiy, (xsp+158)
 	lda	xix, (xsp+150)
 	ld	bc, 4:i3
-	.byte 0x95, 0x11
+	ldirw
 	lda	xix, (xsp+142)
 	lda	xwa, (xsp+158)
 	ld	bc, (xwa)
@@ -7623,9 +7880,9 @@ PsTrkSw_Confirm_DrawGeometry:
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+4)
 	ld	xbc, (xwa+24)
-	.byte 0x98, 0x16, 0x3f, 0x08, 0x00
+	cpw	(xwa+22), 8
 	jrl	nc, PsTrkSw_Confirm_Track8Plus
-	.byte 0x91, 0x3f, 0x00, 0x00
+	cpw	(xbc), 0
 	jr	z, PsTrkSw_Confirm_DrawOff
 	lda	xwa, (xsp+166)
 	ldw	bc, 203
@@ -7812,8 +8069,44 @@ PsTrkSw_Epilogue:
 	lda_dri XSP, 0xfd, 0xb2, 0x00
 	ret
 
-PsTrkSw_TrailingData:
-	.incbin "includes/romslices/v7_transplant_PsTrkSw_TrailingData.bin"
+; -----------------------------------------------------------------------------
+; PsTrackSwitch_SetBoxFromIndex -- code (was named PsTrkSw_TrailingData)
+; XWA = track-switch widget.  n = word +22 of its view instance
+; (GetViewInstance); the widget's box becomes x = (n & 7)*40 + 4 .. +31,
+; y = 164 (n < 8) or 196 (n >= 8) .. +28, stored with SetBox: two rows of
+; eight switches.  No caller was found (see scripts/renaming/uiproc_misc_names.py).
+; -----------------------------------------------------------------------------
+PsTrackSwitch_SetBoxFromIndex:
+	dec	8, xsp
+	push	xiz
+	ld	xiz, xwa
+	ld	xwa, xiz
+	call	GetViewInstance
+	lda	xde, (xhl+22)
+	lda	xbc, (xsp+4)
+	lda	xwa, (xbc+2)
+	cpw	(xde), 8
+	jr	nc, PsTrackSwitch_SetBoxFromIndex_Skip
+	ldw	(xwa), 164
+	jr	PsTrackSwitch_SetBoxFromIndex_Join
+PsTrackSwitch_SetBoxFromIndex_Skip:
+	ldw	(xwa), 196
+PsTrackSwitch_SetBoxFromIndex_Join:
+	ld	wa, (xde)
+	and	wa, 7
+	mul	wa, 40
+	inc	4, wa
+	ld	(xbc), wa
+	add	wa, 31
+	ld	(xbc+4), wa
+	ld	wa, (xbc+2)
+	add	wa, 28
+	ld	(xbc+6), wa
+	ld	xwa, xiz
+	call	SetBox
+	pop	xiz
+	inc	8, xsp
+	ret
 AcTrackSwitchProc:
 	dec 8, xsp
 	push xiz
@@ -7972,43 +8265,89 @@ AcTrkSw_Reset:
 
 AcTrkSw_Reset_UpdateIndex:
 	ld xwa, (xsp + 40)
-	ld (xsp + 16), xwa
+	ld	(xsp+16), xwa
 
 AcTrkSw_Reset_DrawTrack:
-	.byte 0xaf, 0x10, 0x20, 0x38, 0x1d, 0xc3, 0x07, 0xff
-	.byte 0xaf, 0x18, 0x20, 0x98, 0x24, 0x26, 0xdb, 0x86
-	.byte 0xde, 0x88, 0xd8, 0x61, 0x28, 0x1d, 0xa3, 0x06
-	.byte 0xff, 0xbf, 0x1e, 0x63, 0xaf, 0x1e, 0x21, 0xbf
-	.byte 0x10, 0x61, 0xde, 0x88, 0xd8, 0x61, 0x28, 0x0b
-	.byte 0x00, 0x00, 0x39, 0x1d, 0x1d, 0x08, 0xff, 0xbf
-	.byte 0x0e, 0x37, 0xaf, 0x10, 0x20, 0xaf, 0x18, 0x21
-	.byte 0x1d, 0x33, 0x22, 0xfb, 0xbf, 0x1c, 0x31, 0x99
-	.byte 0x04, 0x20, 0x91, 0xa0, 0xe8, 0x13, 0xd8, 0x0b
-	.byte 0x02, 0x00, 0x91, 0x21, 0xd8, 0x81, 0xbf, 0x24
-	.byte 0x51, 0xaf, 0x14, 0x20, 0xa8, 0x1c, 0x20, 0x1d
-	.byte 0x0a, 0x22, 0xfb, 0xbf, 0x1c, 0x30, 0x98, 0x06
-	.byte 0x21, 0x98, 0x02, 0xa1, 0xdb, 0xa1, 0xd9, 0x8a
-	.byte 0xaf, 0x14, 0x20, 0x98, 0x24, 0x21, 0xea, 0x12
-	.byte 0xd9, 0x52, 0xbf, 0x08, 0x52, 0xbf, 0x12, 0x02
-	.byte 0x00, 0x00, 0xd9, 0xd8, 0x73, 0xb6, 0x00
+	ld	xwa, (xsp+16)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	ld	xwa, (xsp+24)
+	ld	iz, (xwa+36)
+	add	iz, hl
+	ld	wa, iz
+	inc	1, wa
+	pushw	wa
+	call	SLIDE_Decompress_4K_Init_Helper2
+	ld	(xsp+30), xhl
+	ld	xbc, (xsp+30)
+	ld	(xsp+16), xbc
+	ld	wa, iz
+	inc	1, wa
+	pushw	wa
+	pushw	0
+	push	xbc
+	call	0xff081d
+	lda	xsp, (xsp+14)
+	ld	xwa, (xsp+16)
+	ld	xbc, (xsp+24)
+	call	ConvertStrings
+	lda	xbc, (xsp+28)
+	ld	wa, (xbc+4)
+	sub	wa, (xbc)
+	exts	xwa
+	divs	wa, 2
+	ld	bc, (xbc)
+	add	bc, wa
+	ld	(xsp+36), bc
+	ld	xwa, (xsp+20)
+	ld	xwa, (xwa+28)
+	call	GetCharDescent
+	lda	xwa, (xsp+28)
+	ld	bc, (xwa+6)
+	sub	bc, (xwa+2)
+	sub	bc, hl
+	ld	de, bc
+	ld	xwa, (xsp+20)
+	ld	bc, (xwa+36)
+	extz	xde
+	div	xde, xbc
+	ld	(xsp+8), de
+	ldw	(xsp+18), 0
+	cp	bc, 0:i3
+	jrl	ule, AcTrkSw_Select_CheckTrackNum
 AcTrkSw_Select:
-	pushw 0x00ea
-	pushw 0xa828
-	ld XWA,(XSP+0x0e)
-	push XWA
-	call DrawEditSw_CopyVariant_Code_Helper
-	inc 0,XSP
-	ld XWA,(XSP+0x0a)
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x30, 0xbf, 0x0e, 0x60
-	.byte 0xb0, 0x00, 0x00, 0xbf, 0x1c, 0x30, 0x98, 0x04
-	.byte 0x22, 0x90, 0xa2, 0xaf, 0x14, 0x20, 0xa8, 0x1c
-	.byte 0x21, 0xaf, 0x0a, 0x20, 0x1d, 0x4d, 0x23, 0xfb
-	.byte 0xdb, 0x8e, 0xaf, 0x0a, 0x20, 0x38, 0x1d, 0xc3
-	.byte 0x07, 0xff, 0xef, 0x64, 0xde, 0x88, 0xdb, 0xf0
-	.byte 0x66, 0x18, 0xaf, 0x0e, 0x20, 0xb0, 0x00, 0x0d
-	.byte 0xaf, 0x0a, 0x20, 0xf3, 0x07, 0xe0, 0xf8, 0x30
-	.byte 0xbf, 0x0e, 0x60, 0xf4, 0xe0, 0x00, 0x00, 0xbf
-	.byte 0x0e, 0x60
+	pushw	234
+	pushw	43048
+	ld	xwa, (xsp+14)
+	push	xwa
+	call	DrawEditSw_CopyVariant_Code_Helper
+	inc	8, xsp
+	ld	xwa, (xsp+10)
+	lda_rr	xwa, xwa, hl	; lda xwa, xwa+hl
+	ld	(xsp+14), xwa
+	ld	(xwa), 0
+	lda	xwa, (xsp+28)
+	ld	de, (xwa+4)
+	sub	de, (xwa)
+	ld	xwa, (xsp+20)
+	ld	xbc, (xwa+28)
+	ld	xwa, (xsp+10)
+	call	WordwrapStrings
+	ld	iz, hl
+	ld	xwa, (xsp+10)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ld	wa, iz
+	cp	wa, hl
+	jr	z, AcTrkSw_Select_Paint
+	ld	xwa, (xsp+14)
+	ld	(xwa), 13
+	ld	xwa, (xsp+10)
+	lda_rr	xwa, xwa, iz	; lda xwa, xwa+iz
+	ld	(xsp+14), xwa
+	stib_dpd	224, 0
+	ld	(xsp+14), xwa
 AcTrkSw_Select_Paint:
 	ld wa, (xsp + 8)
 	mrdw3 0x9f, 0x12, 0x40
@@ -8024,7 +8363,7 @@ AcTrkSw_Select_Paint:
 	ld xhl, (xsp + 4)
 	ld xwa, (xhl + 28)
 	push xwa
-	pushm (xhl + 32)
+	pushw	(xhl+32)
 	pushw 0xf7
 	ld xwa, xhl
 	ld a, (xwa + 34)
@@ -8147,30 +8486,58 @@ ObjectProc:
 	add xwa, Str_No_0x58E
 	ld wa, (xwa)
 	lda xix, (AcTrkSw_Return:24)
+; Computed jump: target = AcTrkSw_Return + Str_No_0x58E[i], Str_No_0x58E = 16-bit offsets (20 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00010:
+;   0x1e00010 -> AcTrkSw_Return
+;   0x1e00011 -> ObjectProc_Evt1E00011
+;   0x1e00012 -> ObjectProc_Evt1E00012
+;   0x1e00013 -> ObjectProc_Evt1E00013
+;   0x1e00014 -> ObjectProc_Evt1E00014
+;   0x1e00015 -> ExitWindow_Init
+;   0x1e00016 -> ExitWindow_Init
+;   0x1e00017 -> ObjectProc_Evt1E00017
+;   0x1e00018 -> ObjectProc_Evt1E00018
+;   0x1e00019 -> ObjectProc_Evt1E00019
+;   0x1e0001a -> ObjectProc_Evt1E0001A
+;   0x1e0001b -> ObjectProc_Evt1E0001B
+;   0x1e0001c -> ObjectProc_Evt1E0001C
+;   0x1e0001d -> ObjectProc_Evt1E0001D
+;   0x1e0001e -> ObjectProc_Evt1E0001E
+;   0x1e0001f -> ObjectProc_Evt1E0001F
+;   0x1e00020 -> ObjectProc_Evt1E00020
+;   0x1e00021 -> ObjectProc_Evt1E00021
+;   0x1e00022 -> ObjectProc_Evt1E00022
+;   0x1e00023 -> ObjectProc_Evt1E00023
 	jp_ind 8, 0x07, 0xf0, 0xe0
 AcTrkSw_Return:
 	ld	xhl, xiz
 	jrl	ObjectProc_Join5
+ObjectProc_Evt1E00011:
 	ld	xwa, xiz
 	ld	xbc, 31457281
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
+ObjectProc_Evt1E00013:
 	ld	xwa, xiz
 	ld	xbc, 31457282
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
+ObjectProc_Evt1E00021:
 	ld	xwa, xiz
 	ld	xbc, 31457283
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
+ObjectProc_Evt1E00012:
 	ld	xwa, xiz
 	ld	xbc, 31457301
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
+ObjectProc_Evt1E00014:
 	ld	xwa, xiz
 	ld	xbc, 31457284
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
+ObjectProc_Evt1E00019:
 	ld	xwa, (xsp+136)
 	ld	(xwa), 0
 	ld	xwa, xiz
@@ -8193,10 +8560,12 @@ AcTrkSw_Return:
 ObjectProc_Skip:
 	ld	xhl, (xsp+4)
 	jrl	ObjectProc_Join5
+ObjectProc_Evt1E00017:
 	ld	xwa, xiz
 	ld	xbc, 31457286
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
+ObjectProc_Evt1E00018:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
@@ -8204,9 +8573,9 @@ ObjectProc_Skip:
 	lda	xbc, (xsp+8)
 	ld	xhl, xbc
 	ld	xwa, (xsp+136)
-	.byte 0xa0, 0x83
+	add	xhl, (xwa)
 	lda	xde, (xwa+4)
-	.byte 0x83, 0x3f, 0x59
+	cp	(xhl), 89
 	jr	nz, ObjectProc_Skip2
 	pushw 234
 	pushw 43156
@@ -8215,9 +8584,9 @@ ObjectProc_Skip:
 	jr	ObjectProc_Join
 ObjectProc_Skip2:
 	ld	xwa, (xsp+136)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	xwa, (xde)
-	.byte 0x81, 0x3f, 0x5a
+	cp	(xbc), 90
 	jr	nz, ObjectProc_Skip3
 	pushw 234
 	pushw 43162
@@ -8236,6 +8605,7 @@ ObjectProc_Skip3:
 	ld	xbc, 31457287
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
+ObjectProc_Evt1E0001A:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
@@ -8253,6 +8623,7 @@ ObjectProc_Skip3:
 	ld	xbc, 31457288
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join2
+ObjectProc_Evt1E0001B:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
@@ -8261,7 +8632,7 @@ ObjectProc_Skip3:
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
 	lda	xbc, (xsp+8)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
 	ld	w, 0:opc
@@ -8270,6 +8641,7 @@ ObjectProc_Skip3:
 	ld	xbc, 31457289
 	ld	xde, (xsp+136)
 	jr	ObjectProc_Join2
+ObjectProc_Evt1E0001C:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
@@ -8278,7 +8650,7 @@ ObjectProc_Skip3:
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
 	lda	xbc, (xsp+8)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
 	ld	w, 0:opc
@@ -8287,6 +8659,7 @@ ObjectProc_Skip3:
 	ld	xbc, 31457290
 	ld	xde, (xsp+136)
 	jr	ObjectProc_Join2
+ObjectProc_Evt1E0001D:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
@@ -8295,7 +8668,7 @@ ObjectProc_Skip3:
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
 	lda	xbc, (xsp+8)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
 	ld	w, 0:opc
@@ -8306,6 +8679,7 @@ ObjectProc_Skip3:
 ObjectProc_Join2:
 	call	SendEvent
 	jrl	ObjectProc_Join4
+ObjectProc_Evt1E0001E:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
@@ -8314,7 +8688,7 @@ ObjectProc_Join2:
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
 	lda	xbc, (xsp+8)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
 	ld	w, 0:opc
@@ -8324,25 +8698,29 @@ ObjectProc_Join2:
 	ld	xde, (xsp+136)
 	call	SendEvent
 	jr	ObjectProc_Join5
+ObjectProc_Evt1E0001F:
 	ld	xwa, xiz
 	ld	xbc, 31457293
 	ld	xde, (xsp+136)
 	jr	ObjectProc_Join3
+ObjectProc_Evt1E00020:
 	ld	xwa, xiz
 	ld	xbc, 31457294
 	ld	xde, (xsp+136)
 ObjectProc_Join3:
 	calr	ClassProc
 	jr	ObjectProc_Join5
+ObjectProc_Evt1E00022:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
 	call	SendEvent
 	lda	xwa, (xsp+8)
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x80
+	add	xwa, (xsp+136)
 	ld	xhl, 0:i3
 	ld	l, (xwa)
 	jr	ObjectProc_Join5
+ObjectProc_Evt1E00023:
 	ld	xwa, (xsp+136)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
@@ -8685,7 +9063,7 @@ UnRegisterObject:
 	add xde, xwa
 	lda xwa, (Str_No_0x5E0:24)
 	ld (xde), xwa
-	decm 1, (xbc + 8)
+	decw	1, (xbc+8)
 	pop xiz
 	ret
 
@@ -8850,6 +9228,16 @@ ClassProc:
 	add xbc, Str_No_0x5E2
 	ld bc, (xbc)
 	lda xix, (ClassProc_Event_LoadFromWA:24)
+; Computed jump: target = ClassProc_Event_LoadFromWA + Str_No_0x5E2[i], Str_No_0x5E2 = 16-bit offsets (8 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00000:
+;   0x1e00000 -> ClassProc_Event_LoadFromWA
+;   0x1e00001 -> ClassProc_Event_LoadFromHL
+;   0x1e00002 -> ClassProc_Event_LoadFromIZ
+;   0x1e00003 -> ClassProc_Evt1E00003
+;   0x1e00004 -> ClassProc_Evt1E00004
+;   0x1e00005 -> ClassProc_Evt1E00005
+;   0x1e00006 -> ClassProc_Evt1E00006
+;   0x1e00007 -> ClassProc_Evt1E00007
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ;-----------------------------------------------------------------------------
 ; ClassProc_EventHandlers - Dispatch table for UI event types
@@ -8877,9 +9265,11 @@ ClassProc_Event_LoadFromOffset:	; FA45A7 - Event handler: load XHL from (XHL+0Ch
 
 TitleWidget_Paint:
 	jrl ClassProc_ReturnWithStatus
+ClassProc_Evt1E00003:
 	ld hl, (xiz + 8)
 	extz xhl
 	jrl ClassProc_ReturnWithStatus
+ClassProc_Evt1E00004:
 	ld XBC, (xsp + 0x0112)
 	ld xde, xwa
 	cp xwa, 0xffffffff
@@ -8910,11 +9300,12 @@ TitleWidget_Paint_DrawText:
 	add	xde, xde
 	add	xde, xwa
 	sll	xde, 3
-	.byte 0xaf, 0x04, 0x82
+	add	xde, (xsp+4)
 	ld	xde, (xde+4)
 	cp	xde, 4294967295
 	jr	nz, TitleWidget_Paint_CheckState
 	jrl	ClassProc_ReturnZeroJmp
+ClassProc_Evt1E00005:
 	ld	xwa, (xiz+16)
 	push	xwa
 	push	xde
@@ -8935,7 +9326,7 @@ TitleWidget_Select:
 TitleWidget_Confirm:
 	lda	xde, (xsp+146)
 	ld	xwa, xde
-	.byte 0xaf, 0x0a, 0x80
+	add	xwa, (xsp+10)
 	ld	a, (xwa)
 	cp	a, 0:i3
 	jr	nz, TitleWidget_Select
@@ -8955,7 +9346,7 @@ TitleWidget_Confirm:
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 3
-	.byte 0xaf, 0x04, 0x81
+	add	xbc, (xsp+4)
 	ld	xbc, (xbc+4)
 	cp	xbc, 4294967295
 	jrl	z, ClassProc_ReturnZeroJmp
@@ -8964,6 +9355,7 @@ TitleWidget_Confirm:
 	ld	xde, (xsp+274)
 	calr	ClassProc
 	jrl	ClassProc_ReturnZeroJmp
+ClassProc_Evt1E00006:
 	ld	xbc, 31457305
 	call	SendEvent
 	lda	xwa, (xsp+146)
@@ -8972,6 +9364,7 @@ TitleWidget_Confirm:
 	inc	4, xsp
 	extz	xhl
 	jrl	ClassProc_ReturnWithStatus
+ClassProc_Evt1E00007:
 	ld	xbc, (xhl)
 	cp	xbc, 4294967295
 	jr	z, TitleWidget_Confirm_DrawLayout
@@ -8982,7 +9375,7 @@ TitleWidget_Confirm:
 TitleWidget_Confirm_DrawLayout:
 	ld	xwa, (xsp+274)
 	ld	xwa, (xwa+4)
-	.byte 0x80, 0x3f, 0x00
+	cp	(xwa), 0
 	jrl	nz, ClassProc_ReturnZeroJmp
 	ld	wa, (xsp+8)
 	extz	xwa
@@ -8990,7 +9383,7 @@ TitleWidget_Confirm_DrawLayout:
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 3
-	.byte 0xaf, 0x04, 0x81
+	add	xbc, (xsp+4)
 	ld	xwa, (xbc+16)
 	push	xwa
 	lda	xwa, (xsp+150)
@@ -9422,6 +9815,14 @@ ModeProc:
 	add xbc, Str_No_0x5F2
 	ld bc, (xbc)
 	lda xix, (NakaWidget_ReturnConst_0x1600006:24)
+; Computed jump: target = NakaWidget_ReturnConst_0x1600006 + Str_No_0x5F2[i], Str_No_0x5F2 = 16-bit offsets (6 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0002b:
+;   0x1e0002b -> ModeProc_Evt1E0002B
+;   0x1e0002c -> ModeProc_Evt1E0002C
+;   0x1e0002d -> ModeProc_Evt1E0002D
+;   0x1e0002e -> ModeProc_Evt1E0002E
+;   0x1e0002f -> ModeProc_Evt1E0002F
+;   0x1e00030 -> ModeProc_Evt1E00030
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 NakaWidget_ReturnConst_0x1600006:
@@ -9437,6 +9838,7 @@ NakaWidget_Return:
 	add xhl, xhl
 	add xhl, (xsp + 4)
 	jrl GetMode_Epilogue10
+ModeProc_Evt1E0002B:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -9449,6 +9851,7 @@ NakaWidget_Return:
 	ld xde, 0:i3
 	call SendEvent
 	jrl GetMode_Epilogue10
+ModeProc_Evt1E0002C:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -9458,6 +9861,7 @@ NakaWidget_Return:
 	add xbc, (xsp + 4)
 	ld xhl, (xbc)
 	jrl GetMode_Epilogue10
+ModeProc_Evt1E0002D:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -9467,6 +9871,7 @@ NakaWidget_Return:
 	add xbc, (xsp + 4)
 	ld xhl, (xbc + 4)
 	jrl GetMode_Epilogue10
+ModeProc_Evt1E00030:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -9488,8 +9893,10 @@ ObjectEnum_Init:
 	add xbc, (xsp + 4)
 	ld xhl, (xbc + 10)
 	jrl GetMode_Epilogue10
+ModeProc_Evt1E0002E:
 	ld xhl, (0x03ef82:24)
 	jrl GetMode_Epilogue10
+ModeProc_Evt1E0002F:
 	ld xhl, (0x03ef86:24)
 	jrl GetMode_Epilogue10
 
@@ -9827,30 +10234,64 @@ TitleProc:
 	add xde, Str_No_0x6AA
 	ld de, (xde)
 	lda xix, (TitleProc_EventDispatch:24)
+; Computed jump: target = TitleProc_EventDispatch + Str_No_0x6AA[i], Str_No_0x6AA = 16-bit offsets (6 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00030:
+;   0x1e00030 -> TitleProc_Evt1E00030
+;   0x1e00031 -> TitleProc_Evt1E00031
+;   0x1e00032 -> TitleProc_Evt1E00032
+;   0x1e00033 -> TitleProc_Evt1E00033
+;   0x1e00034 -> TitleProc_Evt1E00034
+;   0x1e00035 -> TitleProc_Evt1E00035
 	jp_ind 8, 0x07, 0xf0, 0xe8
 
 ; TitleProc event dispatch
 TitleProc_EventDispatch:
 	ld xhl, 0x1600007
-	jrl TitleFunc_Epilogue34
+	jrl	TitleFunc_Epilogue34
 
 EventDispatch_ScanLoop:
-	.byte 0x9f, 0x16, 0x20, 0xe8, 0x12, 0x41, 0x16, 0x00
-	.byte 0x00, 0x00, 0x1d, 0x7f, 0x02, 0xff, 0xaf, 0x04
-	.byte 0x83, 0x78, 0xd0, 0x08, 0x9f, 0x16, 0x20, 0xe8
-	.byte 0x12, 0x41, 0x16, 0x00, 0x00, 0x00, 0x1d, 0x7f
-	.byte 0x02, 0xff, 0xaf, 0x04, 0x83, 0xa3, 0x20, 0x41
-	.byte 0x2a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x53
-	.byte 0x92, 0xfa, 0x78, 0xaf, 0x08, 0x9f, 0x16, 0x20
-	.byte 0xe8, 0x12, 0x41, 0x16, 0x00, 0x00, 0x00, 0x1d
-	.byte 0x7f, 0x02, 0xff, 0xaf, 0x04, 0x83, 0xa3, 0x23
-	.byte 0x78, 0x99, 0x08, 0x9f, 0x16, 0x20, 0xe8, 0x12
-	.byte 0x41, 0x16, 0x00, 0x00, 0x00, 0x1d, 0x7f, 0x02
-	.byte 0xff, 0xaf, 0x04, 0x83, 0xab, 0x04, 0x23, 0x78
-	.byte 0x82, 0x08, 0x9f, 0x16, 0x20, 0xe8, 0x12, 0x41
-	.byte 0x16, 0x00, 0x00, 0x00, 0x1d, 0x7f, 0x02, 0xff
-	.byte 0xaf, 0x04, 0x83, 0x9b, 0x08, 0x23, 0xeb, 0x13
-	.byte 0x78, 0x69, 0x08
+	ld	wa, (xsp+22)
+	extz	xwa
+	ld	xbc, 22
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+4)
+	jrl	TitleFunc_Epilogue34
+TitleProc_Evt1E00031:
+	ld	wa, (xsp+22)
+	extz	xwa
+	ld	xbc, 22
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+4)
+	ld	xwa, (xhl)
+	ld	xbc, 0x1e0002a
+	ld	xde, 0:i3
+	call	SendEvent
+	jrl	TitleFunc_Epilogue34
+TitleProc_Evt1E00032:
+	ld	wa, (xsp+22)
+	extz	xwa
+	ld	xbc, 22
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+4)
+	ld	xhl, (xhl)
+	jrl	TitleFunc_Epilogue34
+TitleProc_Evt1E00033:
+	ld	wa, (xsp+22)
+	extz	xwa
+	ld	xbc, 22
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+4)
+	ld	xhl, (xhl+4)
+	jrl	TitleFunc_Epilogue34
+TitleProc_Evt1E00030:
+	ld	wa, (xsp+22)
+	extz	xwa
+	ld	xbc, 22
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+4)
+	ld	hl, (xhl+8)
+	exts	xhl
+	jrl	TitleFunc_Epilogue34
 EventDispatch_Select:
 	ld wa, (xsp + 22)
 
@@ -9864,15 +10305,17 @@ EventDispatch_Select:
 
 	ld xhl, (xhl + 10)
 
-	.byte 0x78, 0x52, 0x08	; jrl TitleFunc_Epilogue34 (v7 displacement)
+	jrl	TitleFunc_Epilogue34	; jrl TitleFunc_Epilogue34 (v7 displacement)
 
+TitleProc_Evt1E00034:
 	ld xhl, (0x03ef8a:24)
 
-	.byte 0x78, 0x4a, 0x08	; jrl TitleFunc_Epilogue34 (v7 displacement)
+	jrl	TitleFunc_Epilogue34	; jrl TitleFunc_Epilogue34 (v7 displacement)
 
+TitleProc_Evt1E00035:
 	ld xhl, (0x03ef8e:24)
 
-	.byte 0x78, 0x42, 0x08	; jrl TitleFunc_Epilogue34 (v7 displacement)
+	jrl	TitleFunc_Epilogue34	; jrl TitleFunc_Epilogue34 (v7 displacement)
 
 
 
@@ -9893,15 +10336,22 @@ EventDispatch_SelectDone:
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
-	jr nz, EventDispatch_SelectDone
+	jr	nz, EventDispatch_SelectDone
 
 EventDispatch_ConfirmHandler:
-	.byte 0xe2, 0x8a, 0xef, 0x03, 0x20, 0xf2, 0x8e, 0xef
-	.byte 0x03, 0x60, 0x9f, 0x16, 0x20, 0xe8, 0x12, 0x41
-	.byte 0x16, 0x00, 0x00, 0x00, 0x1d, 0x7f, 0x02, 0xff
-	.byte 0xaf, 0x04, 0x83, 0xab, 0x04, 0x20, 0xe8, 0xcf
-	.byte 0xff, 0xff, 0xff, 0xff, 0x66, 0x0a, 0xaf, 0x1e
-	.byte 0x20, 0xf2, 0x8a, 0xef, 0x03, 0x60, 0x68, 0x0a
+	ld	xwa, (0x03ef8a:24)
+	ld	(0x03ef8e:24), xwa
+	ld	wa, (xsp+22)
+	extz	xwa
+	ld	xbc, 22
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+4)
+	ld	xwa, (xhl+4)
+	cp	xwa, 0xffffffff
+	jr	z, EventDispatch_ConfirmSetup
+	ld	xwa, (xsp+30)
+	ld	(0x03ef8a:24), xwa
+	jr	EventDispatch_ConfirmForward
 EventDispatch_ConfirmSetup:
 	ld xwa, 0x1a00000
 	ld (0x03ef8a:24), xwa
@@ -9993,13 +10443,19 @@ EventDispatch_OKDone:
 	ld XWA,(XSP+0x18)
 	ld XWA,(XWA)
 	ld (XSP+0x04),XWA
-	ld xwa, (0x03ef8a:24)
-	.byte 0xf2, 0x8e, 0xef, 0x03, 0x60, 0x9f, 0x16, 0x20
-	.byte 0xe8, 0x12, 0x41, 0x16, 0x00, 0x00, 0x00, 0x1d
-	.byte 0x7f, 0x02, 0xff, 0xaf, 0x04, 0x83, 0xab, 0x04
-	.byte 0x20, 0xe8, 0xcf, 0xff, 0xff, 0xff, 0xff, 0x66
-	.byte 0x0a, 0xaf, 0x1e, 0x20, 0xf2, 0x8a, 0xef, 0x03
-	.byte 0x60, 0x68, 0x0a
+	ld	xwa, (0x03ef8a:24)
+	ld	(0x03ef8e:24), xwa
+	ld	wa, (xsp+22)
+	extz	xwa
+	ld	xbc, 22
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+4)
+	ld	xwa, (xhl+4)
+	cp	xwa, 0xffffffff
+	jr	z, EventDispatch_Default
+	ld	xwa, (xsp+30)
+	ld	(0x03ef8a:24), xwa
+	jr	EventDispatch_DefaultProc
 EventDispatch_Default:
 	ld xwa, 0x1a00000
 	ld (0x03ef8a:24), xwa
@@ -10101,7 +10557,7 @@ EventDispatch_Return:
 	extz	xwa
 	ld	xbc, 22
 	call	InitializeKubo_Helper
-	.byte 0xaf, 0x04, 0x83
+	add	xhl, (xsp+4)
 	lda	xbc, (xhl+18)
 	ld	wa, (xbc)
 	cp	wa, 65535
@@ -10120,16 +10576,16 @@ EventDispatch_Return:
 	extz	xwa
 	ld	xbc, 22
 	call	InitializeKubo_Helper
-	.byte 0xaf, 0x04, 0x83
+	add	xhl, (xsp+4)
 	ldw	(xhl+18), 65535
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
 	call	InitializeKubo_Helper
 	ld	xwa, xhl
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ldw	(xwa+20), 65535
-	.byte 0xaf, 0x04, 0x83
+	add	xhl, (xsp+4)
 	ld	xwa, 4294967295
 	ld	(xhl+14), xwa
 	ld	xwa, (257930:24)
@@ -10152,7 +10608,7 @@ EventDispatch_Return:
 	extz	xwa
 	ld	xbc, 22
 	call	InitializeKubo_Helper
-	.byte 0xaf, 0x04, 0x83
+	add	xhl, (xsp+4)
 	ldw	(xhl+20), 65535
 	ld	wa, (179250:24)
 	exts	xwa
@@ -10167,7 +10623,8 @@ EventDispatch_Return:
 	extz	xwa
 	ld	xbc, 22
 	call	InitializeKubo_Helper
-	.byte 0xaf, 0x04, 0x83, 0x9b, 0x12, 0x3f, 0xff, 0xff
+	add	xhl, (xsp+4)
+	cpw	(xhl+18), 65535
 	jrl	nz, TitleProc_ReturnZero
 	ldw	wa, 18
 	jrl	TitleProc_ClearAndReturn
@@ -10219,11 +10676,11 @@ EnumList_Close:
 
 	cpw (xhl + 18), 0xffff
 
-	.byte 0x76, 0x84, 0x04	; jrl z, TitleProc_ReturnZero (v7 displacement)
+	jrl	z, TitleProc_ReturnZero	; jrl z, TitleProc_ReturnZero (v7 displacement)
 
 	cpw (xsp + 28), 0x0
 
-	.byte 0x7e, 0x7c, 0x04	; jrl nz, TitleProc_ReturnZero (v7 displacement)
+	jrl	nz, TitleProc_ReturnZero	; jrl nz, TitleProc_ReturnZero (v7 displacement)
 
 	ld xwa, 0x1c00028
 
@@ -10239,7 +10696,7 @@ EnumList_Close:
 
 	ld xde, 0xffffffff
 
-	.byte 0x78, 0xf0, 0x02	; jrl EnumList_OK_ScrollUp (v7 displacement)
+	jrl	EnumList_OK_ScrollUp	; jrl EnumList_OK_ScrollUp (v7 displacement)
 
 
 
@@ -10256,11 +10713,11 @@ EnumList_ShowHide_A:
 
 	cpw (xhl + 18), 0xffff
 
-	.byte 0x76, 0x4c, 0x04	; jrl z, TitleProc_ReturnZero (v7 displacement)
+	jrl	z, TitleProc_ReturnZero	; jrl z, TitleProc_ReturnZero (v7 displacement)
 
 	cpw (xsp + 28), 0x0
 
-	.byte 0x7e, 0x44, 0x04	; jrl nz, TitleProc_ReturnZero (v7 displacement)
+	jrl	nz, TitleProc_ReturnZero	; jrl nz, TitleProc_ReturnZero (v7 displacement)
 
 	ld xwa, 0x1c00028
 
@@ -10276,9 +10733,9 @@ EnumList_ShowHide_A:
 
 	ld xde, 0xffffffff
 
-	.byte 0x1d, 0x07, 0x9e, 0xfa	; call ResetApTimer (v7 addr)
+	call	ResetApTimer	; call ResetApTimer (v7 addr)
 
-	.byte 0x78, 0x29, 0x04	; jrl TitleProc_ReturnZero (v7 displacement)
+	jrl	TitleProc_ReturnZero	; jrl TitleProc_ReturnZero (v7 displacement)
 
 
 
@@ -10350,9 +10807,9 @@ EnumList_PartChange_B:
 
 	ld xde, 0xffffffff
 
-	.byte 0x1d, 0x4a, 0x9e, 0xfa	; call KillApTimer (v7 addr)
+	call	KillApTimer	; call KillApTimer (v7 addr)
 
-	.byte 0x78, 0x8a, 0x03	; jrl TitleProc_ReturnZero (v7 displacement)
+	jrl	TitleProc_ReturnZero	; jrl TitleProc_ReturnZero (v7 displacement)
 
 
 
@@ -10378,19 +10835,34 @@ EnumList_ValueChange_A:
 EnumList_ValueChange_B:
 	ldw wa, 0x10
 	calr TitleProc_SetResourceDirtyFlag
-	jrl TitleProc_ReturnZero
+	jrl	TitleProc_ReturnZero
 
 EnumList_ValueChange_Done:
-	.byte 0x9f, 0x16, 0x20, 0xe8, 0x12, 0x41, 0x16, 0x00
-	.byte 0x00, 0x00, 0x1d, 0x7f, 0x02, 0xff, 0xaf, 0x04
-	.byte 0x83, 0x9b, 0x12, 0x3f, 0xff, 0xff, 0x66, 0x32
-	.byte 0x40, 0x28, 0x00, 0xc0, 0x01, 0x38, 0xe8, 0xa8
-	.byte 0x38, 0xe8, 0xa8, 0xaf, 0x2a, 0x21, 0x42, 0xff
-	.byte 0xff, 0xff, 0xff, 0x1d, 0x07, 0x9e, 0xfa, 0xdb
-	.byte 0xd8, 0x6e, 0x17, 0x40, 0x28, 0x00, 0xc0, 0x01
-	.byte 0x38, 0xe8, 0xa8, 0x38, 0xe8, 0xa8, 0xaf, 0x2a
-	.byte 0x21, 0x42, 0xff, 0xff, 0xff, 0xff, 0x1d, 0x28
-	.byte 0x9d, 0xfa
+	ld	wa, (xsp+22)
+	extz	xwa
+	ld	xbc, 22
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+4)
+	cpw	(xhl+18), 65535
+	jr	z, EnumList_Confirm_Init
+	ld	xwa, 0x1c00028
+	push	xwa
+	ld	xwa, 0:i3
+	push	xwa
+	ld	xwa, 0:i3
+	ld	xbc, (xsp+42)
+	ld	xde, 0xffffffff
+	call	ResetApTimer
+	cp	hl, 0:i3
+	jr	nz, EnumList_Confirm_Init
+	ld	xwa, 0x1c00028
+	push	xwa
+	ld	xwa, 0:i3
+	push	xwa
+	ld	xwa, 0:i3
+	ld	xbc, (xsp+42)
+	ld	xde, 0xffffffff
+	call	SetApTimer
 EnumList_Confirm_Init:
 	ldw wa, 0x10
 	jrl TitleProc_ClearAndReturn
@@ -10425,19 +10897,34 @@ EnumList_Paint:
 EnumList_Paint_DrawEntry:
 	ld wa, 1:i3
 	calr TitleProc_SetResourceDirtyFlag
-	jrl TitleProc_ReturnZero
+	jrl	TitleProc_ReturnZero
 
 EnumList_Paint_Loop:
-	.byte 0x9f, 0x16, 0x20, 0xe8, 0x12, 0x41, 0x16, 0x00
-	.byte 0x00, 0x00, 0x1d, 0x7f, 0x02, 0xff, 0xaf, 0x04
-	.byte 0x83, 0x9b, 0x12, 0x3f, 0xff, 0xff, 0x66, 0x32
-	.byte 0x40, 0x28, 0x00, 0xc0, 0x01, 0x38, 0xe8, 0xa8
-	.byte 0x38, 0xe8, 0xa8, 0xaf, 0x2a, 0x21, 0x42, 0xff
-	.byte 0xff, 0xff, 0xff, 0x1d, 0x07, 0x9e, 0xfa, 0xdb
-	.byte 0xd8, 0x6e, 0x17, 0x40, 0x28, 0x00, 0xc0, 0x01
-	.byte 0x38, 0xe8, 0xa8, 0x38, 0xe8, 0xa8, 0xaf, 0x2a
-	.byte 0x21, 0x42, 0xff, 0xff, 0xff, 0xff, 0x1d, 0x28
-	.byte 0x9d, 0xfa
+	ld	wa, (xsp+22)
+	extz	xwa
+	ld	xbc, 22
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+4)
+	cpw	(xhl+18), 65535
+	jr	z, EnumList_ReturnZero
+	ld	xwa, 0x1c00028
+	push	xwa
+	ld	xwa, 0:i3
+	push	xwa
+	ld	xwa, 0:i3
+	ld	xbc, (xsp+42)
+	ld	xde, 0xffffffff
+	call	ResetApTimer
+	cp	hl, 0:i3
+	jr	nz, EnumList_ReturnZero
+	ld	xwa, 0x1c00028
+	push	xwa
+	ld	xwa, 0:i3
+	push	xwa
+	ld	xwa, 0:i3
+	ld	xbc, (xsp+42)
+	ld	xde, 0xffffffff
+	call	SetApTimer
 EnumList_ReturnZero:
 	ld wa, 1:i3
 	jrl TitleProc_ClearAndReturn
@@ -10897,6 +11384,15 @@ ViewableProc:
 	add xwa, Str_No_0x6D0
 	ld wa, (xwa)
 	lda xix, (Viewable_GetClassProc:24)
+; Computed jump: target = Viewable_GetClassProc + Str_No_0x6D0[i], Str_No_0x6D0 = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c0000b:
+;   0x1c0000b -> ViewableProc_Evt1C0000B
+;   0x1c0000c -> ViewableProc_Evt1C0000C
+;   0x1c0000d -> Viewable_ReturnZero
+;   0x1c0000e -> Viewable_ReturnZero
+;   0x1c0000f -> Viewable_ReturnZero
+;   0x1c00010 -> Viewable_DefaultDispatch
+;   0x1c00011 -> Viewable_ReturnZero
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Viewable_GetClassProc:
@@ -10932,6 +11428,7 @@ Viewable_InitClose_ToChild:
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
 	jr Viewable_Show_DispatchTail
+ViewableProc_Evt1C0000B:
 	ld xwa, xiz
 	calr GetVisible
 	cp hl, 0:i3
@@ -10958,6 +11455,7 @@ Viewable_Show_DispatchChild:
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
 	jr Viewable_Show_DispatchTail
+ViewableProc_Evt1C0000C:
 	ld xwa, xiz
 	calr GetVisible
 	cp hl, 0:i3
@@ -11957,7 +12455,6 @@ BoxStyle0_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-BoxStyle0_Return:
 
 uwordProc:
 	dec 8, xsp
@@ -12058,7 +12555,6 @@ BoxStyle2_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-BoxStyle2_Return:
 
 scharProc:
 	dec 8, xsp
@@ -12159,7 +12655,6 @@ BoxStyle4_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-BoxStyle4_Return:
 
 ulongProc:
 	dec 8, xsp
@@ -12259,7 +12754,6 @@ BoxStyle6_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-BoxStyle6_Return:
 
 pBoolProc:
 	lda	xsp, (xsp-268)
@@ -12380,7 +12874,6 @@ BoxStyle7_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle7_Return:
 
 pSwordProc:
 	lda	xsp, (xsp-268)
@@ -12501,7 +12994,6 @@ BoxStyle8_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle8_Return:
 
 pUwordProc:
 	lda	xsp, (xsp-268)
@@ -12622,7 +13114,6 @@ BoxStyle9_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle9_Return:
 
 pScharProc:
 	lda	xsp, (xsp-268)
@@ -12744,7 +13235,6 @@ BoxStyle10_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle10_Return:
 
 pUcharProc:
 	lda	xsp, (xsp-268)
@@ -12865,7 +13355,6 @@ BoxStyle11_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle11_Return:
 
 pSlongProc:
 	lda	xsp, (xsp-268)
@@ -12985,7 +13474,6 @@ BoxStyle12_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle12_Return:
 
 pUlongProc:
 	lda	xsp, (xsp-268)
@@ -13106,7 +13594,6 @@ BoxStyle13_DoneAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-BoxStyle13_Return:
 
 RECTWProc:
 	lda xsp, (xsp - 128)
@@ -13268,7 +13755,6 @@ EdgeDraw_BottomLeft_FinishAlt:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x0c, 0x01
 	ret
-EdgeDraw_BottomLeft_Return:
 
 RectY1Proc:
 	lda xsp, (xsp - 12)
@@ -13408,7 +13894,7 @@ TabDraw_TopEdge_CalcHeight:
 
 	pushw wa
 
-	.byte 0x1d, 0x06, 0x06, 0xff	; call Itoa_Safe (v7 addr)
+	call	Itoa_Safe	; call Itoa_Safe (v7 addr)
 
 	inc 8, xsp
 
@@ -13443,7 +13929,6 @@ TabDraw_BottomEdge_Prologue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
-TabDraw_BottomEdge_Return:
 
 RectY2Proc:
 	lda xsp, (xsp - 12)
@@ -13520,7 +14005,7 @@ EdgeVariant_A_Execute:
 
 	pushw wa
 
-	.byte 0x1d, 0x06, 0x06, 0xff	; call Itoa_Safe (v7 addr)
+	call	Itoa_Safe	; call Itoa_Safe (v7 addr)
 
 	inc 8, xsp
 
@@ -13614,7 +14099,6 @@ EdgeVariant_C_Setup:
 	popw iz
 	lda_dri XSP, 0xfd, 0x84, 0x00
 	ret
-EdgeVariant_C_Prologue:
 
 PointXProc:
 	lda_dri XSP, 0xfd, 0xf8, 0xfe
@@ -14011,7 +14495,6 @@ FrameVariant_A_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_A_Return:
 
 ColorIDProc:
 	dec 8, xsp
@@ -14112,7 +14595,6 @@ FrameVariant_C_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_C_Return:
 
 AlignmentIDProc:
 	dec 8, xsp
@@ -14163,7 +14645,6 @@ FrameVariant_D_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_D_Return:
 
 EditSwStyleIDProc:
 	dec 8, xsp
@@ -14342,7 +14823,6 @@ FrameVariant_G_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_G_Return:
 
 FrameIDProc:
 	dec 8, xsp
@@ -14393,7 +14873,6 @@ FrameVariant_H_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_H_Return:
 
 UserIDProc:
 	dec 8, xsp
@@ -14444,7 +14923,6 @@ FrameVariant_I_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_I_Return:
 
 PartIDProc:
 	dec 8, xsp
@@ -14495,7 +14973,6 @@ FrameVariant_J_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_J_Return:
 
 TrackIDProc:
 	dec 8, xsp
@@ -14546,7 +15023,6 @@ FrameVariant_K_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_K_Return:
 
 IntTimeIDProc:
 	dec 8, xsp
@@ -14597,7 +15073,6 @@ FrameVariant_L_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-FrameVariant_L_Return:
 
 StringProc:
 	lda_dri XSP, 0xfd, 0xc6, 0xfe
@@ -14840,7 +15315,6 @@ SliderH_ReturnAlt5:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x08, 0x01
 	ret
-SliderH_Return:
 
 IconIDProc:
 	lda_dri XSP, 0xfd, 0xf8, 0xfe
@@ -15083,7 +15557,6 @@ ApFuncIDProc_Return:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x08, 0x01
 	ret
-DrawHelper_B_Setup:
 
 ApFuncIDProc:
 	lda_dri XSP, 0xfd, 0xe8, 0xee
@@ -15529,29 +16002,53 @@ ViewID_EnumFill_OuterNext:
 	add (xsp + 8), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0xff
-	jr ule, ViewID_EnumFill_OuterLoop
+	jr	ule, ViewID_EnumFill_OuterLoop
 
 ViewID_EventSwitch:
-	.byte 0xee, 0xcf, 0x0c, 0x00, 0xe0, 0x01, 0x76, 0xc0
-	.byte 0x01, 0xee, 0xcf, 0x0b, 0x00, 0xe0, 0x01, 0x76
-	.byte 0xff, 0x00, 0xee, 0xcf, 0x09, 0x00, 0xe0, 0x01
-	.byte 0x76, 0xf6, 0x00, 0xee, 0xcf, 0x28, 0x00, 0xe0
-	.byte 0x01, 0x76, 0xc1, 0x00, 0xee, 0xcf, 0x0e, 0x00
-	.byte 0xe0, 0x01, 0x76, 0xb0, 0x00, 0xee, 0xcf, 0x0d
-	.byte 0x00, 0xe0, 0x01, 0x7e, 0x2c, 0x02, 0xe3, 0xfd
-	.byte 0x14, 0x11, 0x20, 0xbf, 0x04, 0x60, 0xa8, 0x08
-	.byte 0x20, 0xaf, 0x10, 0xf0, 0x6e, 0x16, 0x0b, 0xea
-	.byte 0x00, 0x0b, 0xbc, 0xaa, 0xaf, 0x08, 0x20, 0xa8
-	.byte 0x04, 0x20, 0x38, 0x1d, 0x95, 0x02, 0xff, 0xef
-	.byte 0x60, 0x78, 0x68, 0x01
+	cp	xiz, 0x1e0000c
+	jrl	z, ViewID_EnumOpen
+	cp	xiz, 0x1e0000b
+	jrl	z, ViewID_GetCurrent
+	cp	xiz, 0x1e00009
+	jrl	z, ViewID_GetCurrent
+	cp	xiz, 0x1e00028
+	jrl	z, ViewID_GetInfoStr
+	cp	xiz, 0x1e0000e
+	jrl	z, ViewID_EnumCount
+	cp	xiz, 0x1e0000d
+	jrl	nz, ViewID_Default
+	ld	xwa, (xsp+4372)
+	ld	(xsp+4), xwa
+	ld	xwa, (xwa+8)
+	cp	xwa, (xsp+16)
+	jr	nz, ViewID_Select_Lookup
+	pushw	234
+	pushw	43708
+	ld	xwa, (xsp+8)
+	ld	xwa, (xwa+4)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	inc	8, xsp
+	jrl	ViewID_ReturnZero
 ViewID_Select_Lookup:
-	.byte 0xe8, 0xee, 0x02, 0xf3, 0xfd, 0x14, 0x01, 0x31
-	.byte 0xe8, 0x81, 0xa1, 0x20, 0x41, 0x15, 0x00, 0xe0
-	.byte 0x01, 0xea, 0xa8, 0x1d, 0x88, 0x55, 0xfa, 0x83
-	.byte 0x3f, 0x00, 0x66, 0x18, 0x3b, 0x0b, 0xea, 0x00
-	.byte 0x0b, 0xc4, 0xaa, 0xaf, 0x0c, 0x20, 0xa8, 0x04
-	.byte 0x20, 0x38, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0c
-	.byte 0x37, 0x78, 0x34, 0x01
+	sll	xwa, 2
+	lda	xbc, (xsp+276)
+	add	xbc, xwa
+	ld	xwa, (xbc)
+	ld	xbc, 0x1e00015
+	ld	xde, 0:i3
+	call	ViewableProc
+	cp	(xhl), 0
+	jr	z, ViewID_Select_NoName
+	push	xhl
+	pushw	234
+	pushw	43716
+	ld	xwa, (xsp+12)
+	ld	xwa, (xwa+4)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	jrl	ViewID_ReturnZero
 ViewID_Select_NoName:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+8)
@@ -15618,12 +16115,12 @@ ViewID_GetCurrent:
 	extz	xwa
 	sll	xwa, 0
 	ld	xbc, xwa
-	.byte 0xa2, 0x81
+	add	xbc, (xde)
 	ld	xwa, xbc
 	ld	xbc, 31457301
 	ld	xde, 0:i3
 	call	ViewableProc
-	.byte 0x83, 0x3f, 0x00
+	cp	(xhl), 0
 	jr	z, ViewID_GetCurrent_NoName
 	push	xhl
 	pushw 234
@@ -15743,7 +16240,6 @@ ViewID_Return:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x18, 0x11
 	ret
-ViewID_Epilogue:
 
 ScreenIDProc:
 	lda_dri XSP, 0xfd, 0xe8, 0xee
@@ -15845,12 +16341,20 @@ ScreenID_Select_Lookup:
 	lda XBC,(XSP+0x0114)
 	add XBC,XWA
 	ld XWA,(XBC)
-	ld XBC,0x01e00015
-	.byte 0xea, 0xa8, 0x1d, 0x88, 0x55, 0xfa, 0x83, 0x3f
-	.byte 0x00, 0x66, 0x18, 0x3b, 0x0b, 0xea, 0x00, 0x0b
-	.byte 0xf8, 0xaa, 0xaf, 0x0c, 0x20, 0xa8, 0x04, 0x20
-	.byte 0x38, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0c, 0x37
-	.byte 0x78, 0xfe, 0x00
+	ld	xbc, 0x1e00015
+	ld	xde, 0:i3
+	call	ViewableProc
+	cp	(xhl), 0
+	jr	z, ScreenID_Select_NoName
+	push	xhl
+	pushw	234
+	pushw	43768
+	ld	xwa, (xsp+12)
+	ld	xwa, (xwa+4)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	jrl	ScreenID_ReturnZero
 ScreenID_Select_NoName:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+8)
@@ -15964,11 +16468,19 @@ ScreenID_EnumOpen_ScanLoop:
 	lda XBC,(XSP+0x0114)
 	add XBC,XWA
 	ld XWA,(XBC)
-	ld XBC,0x01e00015
-	.byte 0xea, 0xa8, 0x1d, 0x88, 0x55, 0xfa, 0x83, 0x3f
-	.byte 0x00, 0x66, 0x14, 0x3b, 0x0b, 0xea, 0x00, 0x0b
-	.byte 0x1c, 0xab, 0xbf, 0x1c, 0x30, 0x38, 0x1d, 0x95
-	.byte 0x02, 0xff, 0xbf, 0x0c, 0x37, 0x68, 0x50
+	ld	xbc, 0x1e00015
+	ld	xde, 0:i3
+	call	ViewableProc
+	cp	(xhl), 0
+	jr	z, ScreenID_EnumOpen_ScanNoName
+	push	xhl
+	pushw	234
+	pushw	43804
+	lda	xwa, (xsp+28)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	jr	ScreenID_EnumOpen_Compare
 ScreenID_EnumOpen_ScanNoName:
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
@@ -16070,7 +16582,6 @@ ScreenID_Return:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x18, 0x11
 	ret
-ScreenID_Epilogue:
 
 WindowIDProc:
 	lda_dri XSP, 0xfd, 0xe8, 0xee
@@ -16172,12 +16683,20 @@ WindowID_Select_Lookup:
 	lda XBC,(XSP+0x0114)
 	add XBC,XWA
 	ld XWA,(XBC)
-	ld XBC,0x01e00015
-	.byte 0xea, 0xa8, 0x1d, 0x88, 0x55, 0xfa, 0x83, 0x3f
-	.byte 0x00, 0x66, 0x18, 0x3b, 0x0b, 0xea, 0x00, 0x0b
-	.byte 0x3a, 0xab, 0xaf, 0x0c, 0x20, 0xa8, 0x04, 0x20
-	.byte 0x38, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0c, 0x37
-	.byte 0x78, 0xfe, 0x00
+	ld	xbc, 0x1e00015
+	ld	xde, 0:i3
+	call	ViewableProc
+	cp	(xhl), 0
+	jr	z, WindowID_Select_NoName
+	push	xhl
+	pushw	234
+	pushw	43834
+	ld	xwa, (xsp+12)
+	ld	xwa, (xwa+4)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	jrl	WindowID_ReturnZero
 WindowID_Select_NoName:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+8)
@@ -16291,11 +16810,19 @@ WindowID_EnumOpen_ScanLoop:
 	lda XBC,(XSP+0x0114)
 	add XBC,XWA
 	ld XWA,(XBC)
-	ld XBC,0x01e00015
-	.byte 0xea, 0xa8, 0x1d, 0x88, 0x55, 0xfa, 0x83, 0x3f
-	.byte 0x00, 0x66, 0x14, 0x3b, 0x0b, 0xea, 0x00, 0x0b
-	.byte 0x5e, 0xab, 0xbf, 0x1c, 0x30, 0x38, 0x1d, 0x95
-	.byte 0x02, 0xff, 0xbf, 0x0c, 0x37, 0x68, 0x50
+	ld	xbc, 0x1e00015
+	ld	xde, 0:i3
+	call	ViewableProc
+	cp	(xhl), 0
+	jr	z, WindowID_EnumOpen_ScanNoName
+	push	xhl
+	pushw	234
+	pushw	43870
+	lda	xwa, (xsp+28)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	jr	WindowID_EnumOpen_Compare
 WindowID_EnumOpen_ScanNoName:
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
@@ -16397,7 +16924,6 @@ WindowID_Return:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x18, 0x11
 	ret
-WindowID_Epilogue:
 
 ModeIDProc:
 	lda_dri XSP, 0xfd, 0xec, 0xee
@@ -16464,17 +16990,29 @@ ModeID_EventDispatch:
 	ld xbc, xiz
 	ld XDE, (xsp + 0x1110)
 	calr CommonIDProc
-	jrl ModeID_Return
+	jrl	ModeID_Return
 
 ModeID_EnumFill:
-	.byte 0xe3, 0xfd, 0x10, 0x11, 0x26, 0xae, 0x08, 0x20
-	.byte 0xe8, 0xee, 0x02, 0xf3, 0xfd, 0x10, 0x01, 0x31
-	.byte 0xe8, 0x81, 0xa1, 0x20, 0x41, 0x15, 0x00, 0xe0
-	.byte 0x01, 0xea, 0xa8, 0x1d, 0x53, 0x92, 0xfa, 0xae
-	.byte 0x04, 0x21, 0x83, 0x3f, 0x00, 0x6e, 0x15, 0xae
-	.byte 0x08, 0x20, 0x38, 0x0b, 0xea, 0x00, 0x0b, 0x74
-	.byte 0xab, 0x39, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0c
-	.byte 0x37, 0x78, 0x94, 0x00
+	ld	xiz, (xsp+4368)
+	ld	xwa, (xiz+8)
+	sll	xwa, 2
+	lda	xbc, (xsp+272)
+	add	xbc, xwa
+	ld	xwa, (xbc)
+	ld	xbc, 0x1e00015
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	xbc, (xiz+4)
+	cp	(xhl), 0
+	jr	nz, ModeID_EnumFill_HasName
+	ld	xwa, (xiz+8)
+	push	xwa
+	pushw	234
+	pushw	43892
+	push	xbc
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	jrl	ModeID_ReturnZero
 ModeID_EnumFill_HasName:
 	push xhl
 	push xbc
@@ -16555,17 +17093,32 @@ ModeID_EnumOpen:
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x0
-	jr ule, ModeID_EnumOpen_CheckResult
+	jr	ule, ModeID_EnumOpen_CheckResult
 
 ModeID_EnumOpen_SearchLoop:
-	.byte 0xaf, 0x08, 0x20, 0xe8, 0xee, 0x02, 0xf3, 0xfd
-	.byte 0x10, 0x01, 0x31, 0xe8, 0x81, 0xa1, 0x20, 0x41
-	.byte 0x15, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x53
-	.byte 0x92, 0xfa, 0x3b, 0xbf, 0x14, 0x30, 0x38, 0x1d
-	.byte 0x70, 0x07, 0xff, 0xef, 0x60, 0xbf, 0x10, 0x31
-	.byte 0x81, 0x3f, 0x00, 0x6e, 0x12, 0xaf, 0x08, 0x20
-	.byte 0x38, 0x0b, 0xea, 0x00, 0x0b, 0x98, 0xab, 0x39
-	.byte 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0c, 0x37
+	ld	xwa, (xsp+8)
+	sll	xwa, 2
+	lda	xbc, (xsp+272)
+	add	xbc, xwa
+	ld	xwa, (xbc)
+	ld	xbc, 0x1e00015
+	ld	xde, 0:i3
+	call	SendEvent
+	push	xhl
+	lda	xwa, (xsp+20)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	lda	xbc, (xsp+16)
+	cp	(xbc), 0
+	jr	nz, ModeID_EnumOpen_Compare
+	ld	xwa, (xsp+8)
+	push	xwa
+	pushw	234
+	pushw	43928
+	push	xbc
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
 ModeID_EnumOpen_Compare:
 	ld	xwa, (xiz+4)
 	push	xwa
@@ -16676,17 +17229,29 @@ TitleID_EventDispatch:
 	ld xbc, xiz
 	ld XDE, (xsp + 0x1110)
 	calr CommonIDProc
-	jrl TitleID_Return
+	jrl	TitleID_Return
 
 TitleID_EnumFill:
-	.byte 0xe3, 0xfd, 0x10, 0x11, 0x26, 0xae, 0x08, 0x20
-	.byte 0xe8, 0xee, 0x02, 0xf3, 0xfd, 0x10, 0x01, 0x31
-	.byte 0xe8, 0x81, 0xa1, 0x20, 0x41, 0x15, 0x00, 0xe0
-	.byte 0x01, 0xea, 0xa8, 0x1d, 0x53, 0x92, 0xfa, 0xae
-	.byte 0x04, 0x21, 0x83, 0x3f, 0x00, 0x6e, 0x15, 0xae
-	.byte 0x08, 0x20, 0x38, 0x0b, 0xea, 0x00, 0x0b, 0xa0
-	.byte 0xab, 0x39, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0c
-	.byte 0x37, 0x78, 0x94, 0x00
+	ld	xiz, (xsp+4368)
+	ld	xwa, (xiz+8)
+	sll	xwa, 2
+	lda	xbc, (xsp+272)
+	add	xbc, xwa
+	ld	xwa, (xbc)
+	ld	xbc, 0x1e00015
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	xbc, (xiz+4)
+	cp	(xhl), 0
+	jr	nz, TitleID_EnumFill_HasName
+	ld	xwa, (xiz+8)
+	push	xwa
+	pushw	234
+	pushw	43936
+	push	xbc
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	jrl	TitleID_ReturnZero
 TitleID_EnumFill_HasName:
 	push xhl
 	push xbc
@@ -16767,17 +17332,32 @@ TitleID_EnumOpen:
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x0
-	jr ule, TitleID_EnumOpen_CheckResult
+	jr	ule, TitleID_EnumOpen_CheckResult
 
 TitleID_EnumOpen_SearchLoop:
-	.byte 0xaf, 0x08, 0x20, 0xe8, 0xee, 0x02, 0xf3, 0xfd
-	.byte 0x10, 0x01, 0x31, 0xe8, 0x81, 0xa1, 0x20, 0x41
-	.byte 0x15, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x53
-	.byte 0x92, 0xfa, 0x3b, 0xbf, 0x14, 0x30, 0x38, 0x1d
-	.byte 0x70, 0x07, 0xff, 0xef, 0x60, 0xbf, 0x10, 0x31
-	.byte 0x81, 0x3f, 0x00, 0x6e, 0x12, 0xaf, 0x08, 0x20
-	.byte 0x38, 0x0b, 0xea, 0x00, 0x0b, 0xc4, 0xab, 0x39
-	.byte 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0c, 0x37
+	ld	xwa, (xsp+8)
+	sll	xwa, 2
+	lda	xbc, (xsp+272)
+	add	xbc, xwa
+	ld	xwa, (xbc)
+	ld	xbc, 0x1e00015
+	ld	xde, 0:i3
+	call	SendEvent
+	push	xhl
+	lda	xwa, (xsp+20)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	lda	xbc, (xsp+16)
+	cp	(xbc), 0
+	jr	nz, TitleID_EnumOpen_Compare
+	ld	xwa, (xsp+8)
+	push	xwa
+	pushw	234
+	pushw	43972
+	push	xbc
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
 TitleID_EnumOpen_Compare:
 	ld	xwa, (xiz+4)
 	push	xwa
@@ -16891,7 +17471,6 @@ ConstFlagProc_Init:
 ConstFlagProc_ReturnZero:
 	pop xiz
 	ret
-ConstFlagProc_Return:
 
 ConstFlagProc:
 	dec 8, xsp
@@ -16974,24 +17553,21 @@ ConstFlagProc_Default_Done:
 	pop xiz
 	inc 8, xsp
 	ret
-ConstFlagProc_Default_DoneAlt:
 
 ObjectIDProc:
 	jrl slongProc
 
 pFuncProc:
-	jrl DrawHelper_B_Setup
-ConstFlagProc_Epilogue:
+	jrl ApFuncIDProc
 
 pProcProc:
-	jrl DrawHelper_B_Setup
+	jrl ApFuncIDProc
 
 pPropProc:
-	jrl BoxStyle4_Return
+	jrl ulongProc
 ; WidgetType dispatch (pStringProc/EventIDProc)
-WidgetType_DispatchDSP:
 pStringProc:
-	jrl BoxStyle4_Return
+	jrl ulongProc
 
 EventIDProc:
 	jrl slongProc
@@ -17024,9 +17600,18 @@ CommonIDProc:
 	add xde, xde
 	add xde, Str_No_0x8CE
 	ld de, (xde)
-	lda xix, (CommonIDProc_JumpTable:24)
+	lda xix, (CommonIDProc_Evt1E0000D:24)
+; Computed jump: target = CommonIDProc_Evt1E0000D + Str_No_0x8CE[i], Str_No_0x8CE = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00008:
+;   0x1e00008 -> CommonIDProc_ReturnZero
+;   0x1e00009 -> CommonIDProc_Evt1E00009
+;   0x1e0000a -> CommonIDProc_Evt1E0000A
+;   0x1e0000b -> CommonIDProc_Evt1E00009
+;   0x1e0000c -> CommonIDProc_Evt1E0000C
+;   0x1e0000d -> CommonIDProc_Evt1E0000D
+;   0x1e0000e -> CommonIDProc_Evt1E0000E
 	jp_ind 8, 0x07, 0xf0, 0xe8
-CommonIDProc_JumpTable:
+CommonIDProc_Evt1E0000D:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
 	ld	xbc, (xwa+8)
@@ -17036,12 +17621,14 @@ CommonIDProc_JumpTable:
 	ld	xwa, (xbc)
 	push	xwa
 	jr	CommonIDProc_Join
+CommonIDProc_Evt1E0000E:
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	CommonIDProc_Epilogue
 CommonIDProc_CheckAvail:
 	ld	xhl, 1:i3
 	jrl	CommonIDProc_Epilogue
+CommonIDProc_Evt1E0000A:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
 	pushw 234
@@ -17053,6 +17640,7 @@ CommonIDProc_Join:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	CommonIDProc_ReturnZero
+CommonIDProc_Evt1E00009:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
 	pushw 10
@@ -17064,7 +17652,7 @@ CommonIDProc_Join:
 	call	CommonIDProc_Helper
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+12)
-	.byte 0x98, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xwa+4), 0
 	jr	z, CommonIDProc_ReturnZero
 	ld	iz, 0:i3
 	ld	xbc, (xwa+8)
@@ -17073,7 +17661,7 @@ CommonIDProc_Join:
 	ld	xde, 0:i3
 	jr	CommonIDProc_SearchLoop_Check
 CommonIDProc_SearchLoop_Compare:
-	.byte 0xab, 0x04, 0xf0
+	cp	xwa, (xhl+4)
 	jr	nz, CommonIDProc_SearchLoop_Next
 	ld	xwa, (xhl)
 	push	xwa
@@ -17097,6 +17685,7 @@ CommonIDProc_SearchLoop_Check:
 CommonIDProc_ReturnZero:
 	ld xhl, 0:i3
 	jrl CommonIDProc_Epilogue
+CommonIDProc_Evt1E0000C:
 	ld xwa, 0:i3
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 16)
@@ -17104,15 +17693,27 @@ CommonIDProc_ReturnZero:
 	cpw (xbc), 0x0
 	jr z, CommonIDProc_EnumSearch_Atoi
 	ld iz, 0:i3
-	jr CommonIDProc_EnumSearch_Check
+	jr	CommonIDProc_EnumSearch_Check
 
 CommonIDProc_EnumSearch_Compare:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x04, 0x20, 0x38, 0xa1
-	.byte 0x20, 0x38, 0x1d, 0x58, 0x07, 0xff, 0xef, 0x60
-	.byte 0xdb, 0xd8, 0x6e, 0x18, 0xde, 0x89, 0xe9, 0x12
-	.byte 0xe9, 0xee, 0x03, 0xaf, 0x0c, 0x20, 0xa8, 0x08
-	.byte 0x81, 0xaf, 0x04, 0x20, 0xa9, 0x04, 0x21, 0xb8
-	.byte 0x04, 0x61, 0x68, 0x16
+	ld	xwa, (xsp+4)
+	ld	xwa, (xwa+4)
+	push	xwa
+	ld	xwa, (xbc)
+	push	xwa
+	call	0xff0758
+	inc	8, xsp
+	cp	hl, 0:i3
+	jr	nz, CommonIDProc_EnumSearch_Next
+	ld	bc, iz
+	extz	xbc
+	sll	xbc, 3
+	ld	xwa, (xsp+12)
+	add	xbc, (xwa+8)
+	ld	xwa, (xsp+4)
+	ld	xbc, (xbc+4)
+	ld	(xwa+4), xbc
+	jr	CommonIDProc_EnumSearch_EndCheck
 CommonIDProc_EnumSearch_Next:
 	inc 1, iz
 
@@ -18826,7 +19427,7 @@ DisplayCmd_Execute_Type3:
 	stl_dri XWA, 0x07, 0xe8, 0xf0
 	minc4_16 ix, 0x7c
 	ld (xde - 4), ix
-	decm 4, (xde - 2)
+	decw	4, (xde-2)
 	ld hl, ix
 	extz xhl
 	add xhl, xde
@@ -19049,7 +19650,7 @@ InitializeGraphics:
 	ldw (XWA+0x04), 0x013f
 	ldw (XWA+0x06), 0x00ef
 	calr SetChangeRect
-	calr LcdOff_Epilogue
+	calr UpdateScreen
 	calr LcdOn
 	pop XIZ
 	inc 0,XSP
@@ -19107,7 +19708,6 @@ LcdOff_Return:
 
 	call VGA_ScreenBlank
 	ret
-LcdOff_Epilogue:
 
 
 ; =============================================================================

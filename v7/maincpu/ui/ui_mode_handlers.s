@@ -58,44 +58,199 @@ EffectMode_CopyVoiceParams_Done:
 	ret
 
 
+; =============================================================================
+; EffectMode_ByteData_Block1..4 - four routines (CODE, despite the names)
+;
+; The same four routines as in v9/v10, with every RAM variable 0x9c lower in
+; v7 (panel-event bytes 0xbfe1-0xbfe3 here, 0xc07d-0xc07f in v10).
+; Block1: sets the word at 0x8cbc to 0xffff -- the value EffectMode_
+;   CheckTransposeAndLookup caches there -- and jumps to
+;   EffectMode_CheckTransposeChanged, i.e. forces the transpose re-check.
+;   No reference to it was found in v10 (label uses, 32-bit pointers).
+; Block2, Block3, Block4: panel-event callbacks, listed in
+;   UIState_ConfigA_108, _072 and _105 (ui_widgets/widget_dispatch.s).  They
+;   test the payload bytes (Block2: 0xbfe1 == 2, Block4: 0xbfe1 == 3, Block3:
+;   0xbfe1 == 0 or 7) and react by posting event 0x1e0009a / part- or
+;   mode-change events (Block2) or re-reading sound parameters 0x0400/0x0401/
+;   0x028002 via AcApcToggleProc_Helper (v7's label for the routine v10
+;   calls SndParam_LookupReadOnly) and calling EffectMode_CheckModeAndReinit
+;   (Block3, Block4).
+; Names kept: widget_dispatch.s (another lane) refers to Block2-4.  Block2 and
+; Block4 were verbatim romslices until 2026-09-25.
+; =============================================================================
 EffectMode_ByteData_Block1:
 	ldw	(36028:16), 65535
-	jrl	648
+	jrl	EffectMode_CheckTransposeChanged
 EffectMode_ByteData_Block2:
-	.incbin "includes/romslices/v7_transplant_EffectMode_ByteData_Block2.bin"
+	cp	(0xbfe1:16), 2
+	ret	nz
+	ld	a, (0xbfe2:16)
+	and	a, (0xbfe3:16)
+	bit	0, a
+	jrl	z, EffectMode_ByteData_Block2_Skip5
+	cp	(0x8c98:16), 1
+	jr	z, EffectMode_ByteData_Block2_Skip3
+	ld	a, (0x8c9a:16)
+	cp	a, 192
+	jr	z, EffectMode_ByteData_Block2_Skip2
+	cp	a, 193
+	jr	z, EffectMode_ByteData_Block2_Skip
+	cp	a, 194
+	jr	z, EffectMode_ByteData_Block2_Skip
+	cp	a, 195
+	jr	z, EffectMode_ByteData_Block2_Skip
+	cp	a, 197
+	ret	nz
+EffectMode_ByteData_Block2_Skip:
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1e0009a
+	ld	xde, 0:i3
+	call	ApPostEvent
+	ld	wa, 1:i3
+	jr	EffectMode_ByteData_Block2_Join
+EffectMode_ByteData_Block2_Skip2:
+	cp	(0x8cb2:16), 0
+	ret	nz
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1e0009a
+	ld	xde, 0:i3
+	call	ApPostEvent
+	ld	wa, 1:i3
+	jp	UI_PostPartChangeEvent
+EffectMode_ByteData_Block2_Skip3:
+	cp	(0x8cb2:16), 0
+	jr	z, EffectMode_ByteData_Block2_Skip4
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1e0009a
+	ld	xde, 0:i3
+	call	ApPostEvent
+	ld	wa, 1:i3
+EffectMode_ByteData_Block2_Join:
+	call	UI_PostPartChangeEvent
+	jr	EffectMode_ByteData_Block2_Join2
+EffectMode_ByteData_Block2_Skip4:
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1e0009a
+	ld	xde, 0:i3
+	call	ApPostEvent
+	ldw	wa, 18
+	call	UI_PostPartChangeEvent
+	ld	(0x8cb2:16), 0xf
+	ret
+EffectMode_ByteData_Block2_Skip5:
+	cp	(0x8cb2:16), 0
+	ret	z
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1e0009a
+	ld	xde, 0:i3
+	call	ApPostEvent
+	ldw	wa, 193
+	call	UI_PostModeChangeEvent
+EffectMode_ByteData_Block2_Join2:
+	ld	(0x8cb2:16), 0
+	ret
 EffectMode_ByteData_Block3:
-	.byte 0xc1, 0xe1, 0xbf, 0x21, 0xc9, 0xd8, 0x6e, 0x5f
-	.byte 0xc1, 0xe3, 0xbf, 0x3f, 0x00, 0x66, 0x53, 0xf1
-	.byte 0xe2, 0xbf, 0xcf, 0x6e, 0x4d, 0xf1, 0xb6, 0x8c
-	.byte 0xcc, 0x6e, 0x47, 0xc1, 0x9a, 0x8c, 0x3f, 0xc0
-	.byte 0x6e, 0x06, 0x1d, 0xed, 0x90, 0xf9, 0x68, 0x3a
-	.byte 0x40, 0x01, 0x04, 0x00, 0x00, 0x1d, 0x66, 0xcc
-	.byte 0xfc, 0xdb, 0xdb, 0x66, 0x04, 0xdb, 0xda, 0x6e
-	.byte 0x29, 0x40, 0x00, 0x04, 0x00, 0x00, 0x1d, 0x66
-	.byte 0xcc, 0xfc, 0xdb, 0xd8, 0x66, 0x1c, 0x40, 0x02
-	.byte 0x80, 0x02, 0x00, 0x1d, 0x66, 0xcc, 0xfc, 0xf1
-	.byte 0xb8, 0x8c, 0x47, 0xf1, 0x46, 0xb7, 0xbf, 0xf1
-	.byte 0xb6, 0x8c, 0xbb, 0x1e, 0x57, 0x06, 0xf1, 0xb6
-	.byte 0x8c, 0xb3, 0xf1, 0xb6, 0x8c, 0xb4, 0x0e, 0xc9
-	.byte 0xdf, 0x6e, 0x3b, 0xc1, 0xb6, 0x8c, 0x21, 0xc9
-	.byte 0xcc, 0x28, 0x66, 0x32, 0x40, 0x01, 0x04, 0x00
-	.byte 0x00, 0x1d, 0x66, 0xcc, 0xfc, 0xdb, 0xdb, 0x66
-	.byte 0x04, 0xdb, 0xda, 0x6e, 0x21, 0x40, 0x00, 0x04
-	.byte 0x00, 0x00, 0x1d, 0x66, 0xcc, 0xfc, 0xdb, 0xd8
-	.byte 0x66, 0x14, 0x40, 0x02, 0x80, 0x02, 0x00, 0x1d
-	.byte 0x66, 0xcc, 0xfc, 0xf1, 0xb8, 0x8c, 0x47, 0xf1
-	.byte 0x46, 0xb7, 0xbf, 0x1e, 0x0f, 0x06, 0xc1, 0xb6
-	.byte 0x8c, 0x3c, 0xd7, 0x0e
+	ld	a, (0xbfe1:16)
+	cp	a, 0:i3
+	jr	nz, EffectMode_ByteData_Block3_Skip3
+	cp	(0xbfe3:16), 0
+	jr	z, EffectMode_ByteData_Block3_Join
+	bit	7, (0xbfe2:16)
+	jr	nz, EffectMode_ByteData_Block3_Join
+	bit	4, (0x8cb6:16)
+	jr	nz, EffectMode_ByteData_Block3_Join
+	cp	(0x8c9a:16), 0xc0
+	jr	nz, EffectMode_ByteData_Block3_Skip
+	call	UI_PostTimerResetEvent
+	jr	EffectMode_ByteData_Block3_Join
+EffectMode_ByteData_Block3_Skip:
+	ld	xwa, 1025
+	call	AcApcToggleProc_Helper
+	cp	hl, 3:i3
+	jr	z, EffectMode_ByteData_Block3_Skip2
+	cp	hl, 2:i3
+	jr	nz, EffectMode_ByteData_Block3_Join
+EffectMode_ByteData_Block3_Skip2:
+	ld	xwa, 1024
+	call	AcApcToggleProc_Helper
+	cp	hl, 0:i3
+	jr	z, EffectMode_ByteData_Block3_Join
+	ld	xwa, 0x028002
+	call	AcApcToggleProc_Helper
+	ld	(0x8cb8:16), l
+	set	7, (0xb746:16)
+	set	3, (0x8cb6:16)
+	calr	EffectMode_CheckModeAndReinit
+	res	3, (0x8cb6:16)
+EffectMode_ByteData_Block3_Join:
+	res	4, (0x8cb6:16)
+	ret
+EffectMode_ByteData_Block3_Skip3:
+	cp	a, 7:i3
+	jr	nz, EffectMode_ByteData_Block3_Skip5
+	ld	a, (0x8cb6:16)
+	and	a, 0x28
+	jr	z, EffectMode_ByteData_Block3_Skip5
+	ld	xwa, 1025
+	call	AcApcToggleProc_Helper
+	cp	hl, 3:i3
+	jr	z, EffectMode_ByteData_Block3_Skip4
+	cp	hl, 2:i3
+	jr	nz, EffectMode_ByteData_Block3_Skip5
+EffectMode_ByteData_Block3_Skip4:
+	ld	xwa, 1024
+	call	AcApcToggleProc_Helper
+	cp	hl, 0:i3
+	jr	z, EffectMode_ByteData_Block3_Skip5
+	ld	xwa, 0x028002
+	call	AcApcToggleProc_Helper
+	ld	(0x8cb8:16), l
+	set	7, (0xb746:16)
+	calr	EffectMode_CheckModeAndReinit
+EffectMode_ByteData_Block3_Skip5:
+	and	(0x8cb6:16), 0xd7
+	ret
 EffectMode_ByteData_Block4:
-	.incbin "includes/romslices/v7_transplant_EffectMode_ByteData_Block4.bin"
+	cp	(0xbfe1:16), 3
+	jr	nz, EffectMode_ByteData_Block4_Skip2
+	ld	a, (0xbfe2:16)
+	and	a, 7
+	jr	z, EffectMode_ByteData_Block4_Skip2
+	ld	a, (0x8cb6:16)
+	and	a, 0x28
+	jr	z, EffectMode_ByteData_Block4_Skip2
+	ld	xwa, 1025
+	call	AcApcToggleProc_Helper
+	cp	hl, 3:i3
+	jr	z, EffectMode_ByteData_Block4_Skip
+	cp	hl, 2:i3
+	jr	nz, EffectMode_ByteData_Block4_Skip2
+EffectMode_ByteData_Block4_Skip:
+	ld	xwa, 1024
+	call	AcApcToggleProc_Helper
+	cp	hl, 0:i3
+	jr	z, EffectMode_ByteData_Block4_Skip2
+	ld	xwa, 0x028002
+	call	AcApcToggleProc_Helper
+	ld	(0x8cb8:16), l
+	set	7, (0xb746:16)
+	calr	EffectMode_CheckModeAndReinit
+EffectMode_ByteData_Block4_Skip2:
+	and	(0x8cb6:16), 0xd7
+	ret
 EffectMode_ApplyTranspose:
-	.byte 0x1e, 0xe9, 0x00, 0xc1, 0x9a, 0x8c, 0x3f, 0xc0
-	.byte 0x6e, 0x16, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41
-	.byte 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x4b
-	.byte 0x99, 0xfa, 0xd8, 0xa9, 0x1d, 0x56, 0x90, 0xf9
+	calr	EffectMode_ProcessPresetChange
+	cp	(0x8c9a:16), 0xc0
+	jr	nz, EffectMode_ApplyTranspose_StoreTimer
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1e0009a
+	ld	xde, 0:i3
+	call	ApPostEvent
+	ld	wa, 1:i3
+	call	UI_PostPartChangeEvent
 EffectMode_ApplyTranspose_StoreTimer:
 	ld	(36018:16), 0
-	jr	0
+	jr	EffectMode_CheckTransposeAndLookup
 EffectMode_CheckTransposeAndLookup:
 	ld	xwa, 163840
 	call	AcApcToggleProc_Helper
@@ -159,14 +314,14 @@ EffectMode_TimerCountdown_CheckMode:
 	cp	a, 193
 	jr	nz, EffectMode_TimerCountdown_SetBit7
 EffectMode_TimerCountdown_ResBit7:
-	.byte 0xf1, 0x46, 0xb7, 0xb7	; resda 7, 0xb7e2 (v7 patched)
+	res	7, (0xb746:16)	; resda 7, 0xb7e2 (v7 patched)
 
 	ret
 
 
 
 EffectMode_TimerCountdown_SetBit7:
-	.byte 0xf1, 0x46, 0xb7, 0xbf	; setda 7, 0xb7e2 (v7 patched)
+	set	7, (0xb746:16)	; setda 7, 0xb7e2 (v7 patched)
 
 	ret
 
@@ -177,38 +332,57 @@ EffectMode_CheckTransposeChanged:
 	call AcApcToggleProc_Helper
 	bit 0x07,HL
 	jr nz, EffectMode_TransposeInvalid
-	calr SndParam_LoadTransposeValues
-	.byte 0xd1, 0xbc, 0x8c, 0xf3, 0xb0, 0xf6, 0xf1, 0xbc
-	.byte 0x8c, 0x53, 0x78, 0x40, 0xf6
+	calr	SndParam_LoadTransposeValues
+	cp	hl, (0x8cbc:16)
+	ret	z
+	ld	(0x8cbc:16), hl
+	jrl	BitMapOut_ApplyPatch_SkipHeader
 EffectMode_TransposeInvalid:
-	ldw	(36028:16), 65535
-	ldw	(36026:16), 0
+	ldw	(0x8cbc:16), 0xffff
+	ldw	(0x8cba:16), 0
 	ret
 EffectMode_ProcessPresetChange:
 	dec	4, xsp
 	push	xiz
-	ld	bc, (36026:16)
+	ld	bc, (0x8cba:16)
 	ld	wa, bc
 	cp	bc, 0:i3
 	jr	z, EffectMode_ProcessPresetChange_CheckBit7
 	dec	1, wa
 	jr	EffectMode_ProcessPresetChange_Apply
 EffectMode_ProcessPresetChange_CheckBit7:
-	.byte 0xf1, 0x46, 0xb7, 0xcf, 0x6e, 0x56
+	bit	7, (0xb746:16)
+	jr	nz, EffectMode_ProcessPresetChange_Done
 EffectMode_ProcessPresetChange_Apply:
-	.byte 0x1e, 0x7b, 0x00, 0xeb, 0x88, 0xf1, 0xc4, 0x8c
-	.byte 0x60, 0x1e, 0x8a, 0x01, 0xf1, 0x5a, 0xfc, 0x30
-	.byte 0xbf, 0x04, 0x60, 0xe8, 0xca, 0xa0, 0xf9, 0x00
-	.byte 0x00, 0xf2, 0xc4, 0xc2, 0x03, 0x31, 0xe8, 0x8e
-	.byte 0xe9, 0x86, 0xaf, 0x04, 0x20, 0xee, 0x89, 0x1e
-	.byte 0x13, 0x03, 0xaf, 0x04, 0x20, 0xee, 0x89, 0x1e
-	.byte 0x40, 0x03, 0xee, 0x88, 0x1e, 0xdd, 0x03, 0xf1
-	.byte 0xef, 0xf9, 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00
-	.byte 0x00, 0xf2, 0xc4, 0xc2, 0x03, 0x31, 0xe9, 0x80
-	.byte 0x80, 0x3c, 0x80, 0xaf, 0x04, 0x20, 0xee, 0x89
-	.byte 0x1e, 0xc2, 0x03, 0x1e, 0xfc, 0x03
+	calr	EffectMode_ClampAndLookupPreset
+	ld	xwa, xhl
+	ld	(0x8cc4:16), xwa
+	calr	EffectMode_UpdateDisplay
+	lda	xwa, (0xfc5a:16)
+	ld	(xsp+4), xwa
+	sub	xwa, 63904
+	lda	xbc, (0x03c2c4:24)
+	ld	xiz, xwa
+	add	xiz, xbc
+	ld	xwa, (xsp+4)
+	ld	xbc, xiz
+	calr	EffectMode_CopyHoldPedalBits
+	ld	xwa, (xsp+4)
+	ld	xbc, xiz
+	calr	EffectMode_SetRegionAndHold
+	ld	xwa, xiz
+	calr	EffectMode_Nop
+	lda	xwa, (0xf9ef:16)
+	sub	xwa, 63904
+	lda	xbc, (0x03c2c4:24)
+	add	xwa, xbc
+	and	(xwa), 0x80
+	ld	xwa, (xsp+4)
+	ld	xbc, xiz
+	calr	EffectMode_CopyPresetBits
+	calr	EffectMode_ReinitSoundOutput
 EffectMode_ProcessPresetChange_Done:
-	.byte 0xf1, 0x46, 0xb7, 0xb7	; resda 7, 0xb7e2 (v7 patched)
+	res	7, (0xb746:16)	; resda 7, 0xb7e2 (v7 patched)
 
 	pop xiz
 
@@ -591,7 +765,7 @@ EffectMode_CopyHoldPedalBits:
 
 	lda xbc, (xbc + 9)
 
-	resm 0, (xbc)
+	res	0, (xbc)
 
 	or (xwa), l
 
@@ -620,7 +794,7 @@ EffectMode_SetRegion_Apply:
 	ld	(xbc), a
 	or	a, h
 	ld	(xbc), a
-	.byte 0xbe, 0x05, 0xb9
+	set	1, (xiz+5)
 	lda	xbc, (64770:16)
 	ld	h, (xbc)
 	and	h, 3
@@ -638,7 +812,7 @@ EffectMode_SetRegion_Apply:
 	cp	a, 197
 	jr	nz, EffectMode_PopIzRet
 EffectMode_CheckPedalType:
-	.byte 0xf1, 0x1e, 0x04, 0xca
+	bit	2, (0x041e:16)
 	jr	nz, EffectMode_PopIzRet
 	ld	wa, (36026:16)
 	bit	0, wa
@@ -683,7 +857,7 @@ EffectMode_Nop:
 EffectMode_CopyPresetBits:
 	ld xde, xbc
 
-	.byte 0xf1, 0x46, 0xb7, 0xcf	; bitda 7, (0xb7e2) (v7 patched)
+	bit	7, (0xb746:16)	; bitda 7, (0xb7e2) (v7 patched)
 
 	ret z
 
@@ -742,7 +916,7 @@ EffectMode_ReinitSoundOutput:
 	ldw	wa, 128
 	call	16466337
 	calr	-979
-	.byte 0xf1, 0xb6, 0x8c, 0xb4
+	res	4, (0x8cb6:16)
 	cp	(36020:16), 1
 	jr	z, 11
 	ld	xwa, 770
@@ -1015,7 +1189,7 @@ DramTest_IC10IC9_RestoreAndNext:
 	jr nz, DramTest_IC10IC9_WriteLoop
 
 DramTest_IC10IC9_LoopEnd:
-	incm8 1, (xsp + 4)
+	inc	1, (xsp+4)
 	cp (xsp + 4), 0x1
 	jrl nz, DramTest_IC10IC9_NextChip
 	ld l, (xsp + 14)
@@ -1120,14 +1294,14 @@ RomTest_ProgramTableData_SumLoop:
 	ld wa, (xwa)
 	cp wa, hl
 	jr z, RomTest_ProgramROM_Verify
-	setm 0, (xsp + 20)
+	set	0, (xsp+20)
 
 RomTest_ProgramROM_Verify:
 	ld hl, (xde)
 	ld xwa, (xsp + 8)
 	cp (xwa), hl
 	jr z, RomTest_PrepareTableDataTest
-	setm 1, (xsp + 20)
+	set	1, (xsp+20)
 
 RomTest_PrepareTableDataTest:
 	ldw (xbc), 0x0
@@ -1171,14 +1345,14 @@ RomTest_TableData_SumLoop:
 	ld wa, (xwa)
 	cp wa, (xbc)
 	jr z, RomTest_TableData_Verify
-	setm 2, (xsp + 20)
+	set	2, (xsp+20)
 
 RomTest_TableData_Verify:
 	ld xwa, (xsp + 8)
 	ld wa, (xwa)
 	cp wa, (xde)
 	jr z, RomTest_Done
-	setm 3, (xsp + 20)
+	set	3, (xsp+20)
 
 RomTest_Done:
 	ld l, (xsp + 20)
@@ -1253,7 +1427,7 @@ Test_Custom_data_ROM_IC19:
 	call Flash_IdentifyAndValidateChip
 	cp hl, 0xffff
 	jr nz, CustomRomTest_PrepareChecksum
-	setm 1, (xsp + 6)
+	set	1, (xsp+6)
 
 CustomRomTest_PrepareChecksum:
 	lda xhl, (xsp + 2)
@@ -1284,7 +1458,7 @@ CustomRomTest_SumLoop:
 	ld wa, (xde)
 	cp wa, (xhl)
 	jr z, CustomRomTest_Done
-	setm 1, (xsp + 6)
+	set	1, (xsp+6)
 
 CustomRomTest_Done:
 	ld l, (xsp + 6)
@@ -1308,7 +1482,7 @@ Test_LCD_Controller_IC206:
 
 	cp l, 0:i3
 	jr z, LcdTest_WriteOneVerify
-	setm 2, (xsp)
+	set	2, (xsp)
 
 LcdTest_WriteOneVerify:
 	; equivalent to "_VGA_WRITE 3c3h, 1" but with CALL instead of CALR
@@ -1322,7 +1496,7 @@ LcdTest_WriteOneVerify:
 
 	cp l, 1:i3
 	jr z, LcdTest_WriteZeroVerify
-	setm 2, (xsp)
+	set	2, (xsp)
 
 LcdTest_WriteZeroVerify:
 	; equivalent to "_VGA_WRITE 3c3h, 0" but with CALL instead of CALR
@@ -1336,7 +1510,7 @@ LcdTest_WriteZeroVerify:
 
 	cp l, 0:i3
 	jr z, LcdTest_Done
-	setm 2, (xsp)
+	set	2, (xsp)
 
 LcdTest_Done:
 	ld l, (xsp)
@@ -1353,21 +1527,21 @@ Test_Video_RAM_IC207:
 	calr DramTest_Loop
 	cpw (0x1a0000:24), 0x5a5a
 	jr z, VramTest_Pattern2
-	setm 3, (xsp)
+	set	3, (xsp)
 
 VramTest_Pattern2:
 	ldw (0x1a0004:24), 0xa5a5; VRAM self-test pattern 2
 	calr DramTest_Loop
 	cpw (0x1a0004:24), 0xa5a5
 	jr z, VramTest_Pattern3
-	setm 3, (xsp)
+	set	3, (xsp)
 
 VramTest_Pattern3:
 	ldw (0x1a0008:24), 0x5a5a
 	calr DramTest_Loop
 	cpw (0x1a0008:24), 0x5a5a
 	jr z, VramTest_Done
-	setm 3, (xsp)
+	set	3, (xsp)
 
 VramTest_Done:
 	ld l, (xsp)
@@ -1405,21 +1579,36 @@ SelfTest_WaitBitLoop_Check:
 
 SelfTest_WaitDone_CountBits:
 	ldib_erp 0xfa, 0
-	ldib_erp 0xfb, 0
+	ldib_erp	251, 0	; ld qizh, 0
 
 SelfTest_CountBits_Loop:
-	.byte 0xc7, 0xfb, 0x8b, 0xd9, 0x12, 0xf1, 0xc8, 0x8c
-	.byte 0x30, 0xe9, 0x12, 0xe8, 0x81, 0x81, 0x21, 0xd8
-	.byte 0x12, 0x1e, 0x4c, 0x01, 0xc7, 0xfa, 0x89, 0xcf
-	.byte 0x81, 0xc7, 0xfa, 0x99, 0xc7, 0xfb, 0x61, 0xc7
-	.byte 0xfb, 0xcf, 0x08, 0x67, 0xdb, 0xc7, 0xfa, 0xda
-	.byte 0x6e, 0x7b, 0xf1, 0xc8, 0x8c, 0x32, 0x8a, 0x03
-	.byte 0x23, 0xba, 0x04, 0x30, 0xcb, 0x33, 0x00, 0x66
-	.byte 0x04, 0xb0, 0xcc, 0x6e, 0x65
+	stb_erp	c, 251	; ld c, qizh
+	extz	bc
+	lda	xwa, (0x8cc8:16)
+	extz	xbc
+	add	xbc, xwa
+	ld	a, (xbc)
+	extz	wa
+	calr	SelfTest_PopCount
+	stb_erp	a, 250	; ld a, qizl
+	add	a, l
+	ldb_erp	a, 250	; ld qizl, a
+	inc1b_erp	251	; inc 1, qizh
+	cp_erpb	251, 8
+	jr	c, SelfTest_CountBits_Loop
+	cpib_erp	250, 2	; cp qizl, 2
+	jr	nz, SelfTest_SramAndRom
+	lda	xde, (0x8cc8:16)
+	ld	c, (xde+3)
+	lda	xwa, (xde+4)
+	bit	0, c
+	jr	z, SelfTest_CheckBit2
+	bit	4, (xwa)
+	jr	nz, SelfTest_Diagnostic_Skip
 SelfTest_CheckBit2:
 	bit 2, c
 	jr z, SelfTest_CheckBit4
-	bitm 6, (xwa)
+	bit	6, (xwa)
 	jr z, SelfTest_CheckBit4
 	ldw wa, 0xf5
 	jr EffectMode_UIPostModeChangeEvent
@@ -1428,7 +1617,7 @@ SelfTest_CheckBit4:
 	inc 5, xde
 	bit 4, c
 	jr z, SelfTest_CheckBit5
-	bitm 0, (xde)
+	bit	0, (xde)
 	jr z, SelfTest_CheckBit5
 	ldw wa, 0xf6
 	call UI_PostModeChangeEvent
@@ -1438,7 +1627,7 @@ SelfTest_CheckBit4:
 SelfTest_CheckBit5:
 	bit 5, c
 	jr z, SelfTest_CheckBit7
-	bitm 1, (xde)
+	bit	1, (xde)
 	jr z, SelfTest_CheckBit7
 	ldw wa, 0xf7
 	jr EffectMode_UIPostModeChangeEvent
@@ -1446,7 +1635,7 @@ SelfTest_CheckBit5:
 SelfTest_CheckBit7:
 	bit 7, c
 	jr z, SelfTest_CheckBitA1
-	bitm 3, (xde)
+	bit	3, (xde)
 	jr z, SelfTest_CheckBitA1
 	ldw wa, 0xf8
 	jr EffectMode_UIPostModeChangeEvent
@@ -1455,7 +1644,7 @@ SelfTest_CheckBitA1:
 	ld a, (xwa)
 	bit 1, a
 	jr z, SelfTest_CheckBitA3
-	bitm 5, (xde)
+	bit	5, (xde)
 	jr z, SelfTest_CheckBitA3
 	ldw wa, 0xf9
 	jr EffectMode_UIPostModeChangeEvent
@@ -1463,7 +1652,7 @@ SelfTest_CheckBitA1:
 SelfTest_CheckBitA3:
 	bit 3, a
 	jrl z, EffectMode_PopRetFA
-	bitm 7, (xde)
+	bit	7, (xde)
 	jrl z, EffectMode_PopRetFA
 	ldw wa, 0xfc
 
@@ -1588,10 +1777,14 @@ EffectMode_ResetDiagMode:
 	calr	LED_SetAll_WithBlank
 	calr	EffectMode_RestoreSwbWr_NormalMode
 EffectMode_DispatchUpdate:
-	.byte 0xc1, 0x9a, 0x8c, 0x3f, 0xf8, 0xf2, 0xe9, 0x71
-	.byte 0xfb, 0xe6, 0xc1, 0x9a, 0x8c, 0x3f, 0xf7, 0xf2
-	.byte 0x3e, 0x74, 0xfb, 0xe6, 0xc1, 0x9a, 0x8c, 0x3f
-	.byte 0xfb, 0xb0, 0xfe, 0x1e, 0x59, 0x01, 0x0e
+	cp	(0x8c9a:16), 0xf8
+	call_24	z, (EffectMode_HandleTimerEvents)
+	cp	(0x8c9a:16), 0xf7
+	call_24	z, (EffectMode_ModeChangeTransition)
+	cp	(0x8c9a:16), 0xfb
+	ret	nz
+	calr	EffectMode_RunDiagSequence
+	ret
 EffectMode_InitSwbWr_DiagMode:
 	lda xwa, (0xf9b6:16)
 
@@ -1840,28 +2033,60 @@ EffectMode_ByteData_DiagEvents:
 	pop XHL
 	pop XDE
 	ld a, (0x8ce0:16)
-	cpl A
-	.byte 0xc7, 0xfb, 0x99, 0xc9, 0xcc, 0x09, 0xd8, 0x12
-	.byte 0x1e, 0x79, 0xf7, 0xc7, 0xfb, 0x89, 0xc9, 0xcc
-	.byte 0x09, 0x6e, 0x0e, 0x40, 0x0b, 0x00, 0xf5, 0x00
-	.byte 0x41, 0x01, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x68
-	.byte 0x33, 0xc9, 0xcf, 0x09, 0x6e, 0x0e, 0x40, 0x0e
-	.byte 0x00, 0xf5, 0x00, 0x41, 0x01, 0x00, 0xc0, 0x01
-	.byte 0xea, 0xa8, 0x68, 0x20, 0xc7, 0xfb, 0x33, 0x00
-	.byte 0x66, 0x0e, 0x40, 0x11, 0x00, 0xf5, 0x00, 0x41
-	.byte 0x01, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x68, 0x0c
-	.byte 0x40, 0x14, 0x00, 0xf5, 0x00, 0x41, 0x01, 0x00
-	.byte 0xc0, 0x01, 0xea, 0xa8, 0x1d, 0x4b, 0x99, 0xfa
-	.byte 0xd7, 0xfa, 0x05, 0x0e, 0xc1, 0x9b, 0x8c, 0x21
-	.byte 0xc1, 0x9a, 0x8c, 0xf1, 0xb0, 0xf6, 0x40, 0x02
-	.byte 0x40, 0x00, 0x00, 0x31, 0x80, 0x00, 0xda, 0xab
-	.byte 0x1d, 0x5e, 0xcb, 0xfc, 0x1d, 0xa6, 0x06, 0xfe
-	.byte 0x0e
+	cpl	a
+	ldb_erp	a, 251	; ld qizh, a
+	and	a, 9
+	extz	wa
+	calr	Report_test_result_by_blinking_LED
+	stb_erp	a, 251	; ld a, qizh
+	and	a, 9
+	jr	nz, EffectMode_ByteData_DiagEvents_Skip
+	ld	xwa, 0xf5000b
+	ld	xbc, 0x1c00001
+	ld	xde, 0:i3
+	jr	EffectMode_ByteData_DiagEvents_Join
+EffectMode_ByteData_DiagEvents_Skip:
+	cp	a, 9
+	jr	nz, EffectMode_ByteData_DiagEvents_Skip2
+	ld	xwa, 0xf5000e
+	ld	xbc, 0x1c00001
+	ld	xde, 0:i3
+	jr	EffectMode_ByteData_DiagEvents_Join
+EffectMode_ByteData_DiagEvents_Skip2:
+	bit_erpb	251, 0
+	jr	z, EffectMode_ByteData_DiagEvents_Skip3
+	ld	xwa, 0xf50011
+	ld	xbc, 0x1c00001
+	ld	xde, 0:i3
+	jr	EffectMode_ByteData_DiagEvents_Join
+EffectMode_ByteData_DiagEvents_Skip3:
+	ld	xwa, 0xf50014
+	ld	xbc, 0x1c00001
+	ld	xde, 0:i3
+EffectMode_ByteData_DiagEvents_Join:
+	call	ApPostEvent
+	pop	qiz
+	ret
+TEST3FUNC_Helper:
+	ld	a, (0x8c9b:16)
+	cp	a, (0x8c9a:16)
+	ret	z
+	ld	xwa, 16386
+	ldw	bc, 128
+	ld	de, 3:i3
+	call	0xfccb5e
+	call	DemoMode_Main_Operation_Helper
+	ret
 Voice_EmitNoteWithVelocity:
-	.byte 0xc1, 0x9a, 0x8c, 0x3f, 0xf6, 0xb0, 0xfe, 0xf1
-	.byte 0xe8, 0x8c, 0x41, 0xf1, 0xea, 0x8c, 0x43, 0x40
-	.byte 0xff, 0xff, 0xff, 0xff, 0x41, 0x17, 0x00, 0xe2
-	.byte 0x01, 0xea, 0xa8, 0x1d, 0x4b, 0x99, 0xfa, 0x0e
+	cp	(0x8c9a:16), 0xf6
+	ret	nz
+	ld	(0x8ce8:16), a
+	ld	(0x8cea:16), c
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1e20017
+	ld	xde, 0:i3
+	call	ApPostEvent
+	ret
 EffectMode_ModeChangeTransition:
 	ld a, (0x8c9b:16)
 	cp a, (0x8c9a:16)
@@ -2028,6 +2253,14 @@ TEST2FUNC:
 	add xde, WidgetStyleDataTable_0x710
 	ld de, (xde)
 	lda xix, (TEST2FUNC_DispatchReturn:24)
+; Computed jump: target = TEST2FUNC_DispatchReturn + WidgetStyleDataTable_0x710[i], WidgetStyleDataTable_0x710 = 16-bit offsets (6 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
+;   0 -> TEST2FUNC_DispatchReturn
+;   1 -> TableDispatch_Return3
+;   2 -> TableDispatch_Return3
+;   3 -> TableDispatch_Return3
+;   4 -> TableDispatch_Return3
+;   5 -> TableDispatch_Return3
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST2FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST2FUNC_DispatchReturn:
@@ -2049,10 +2282,18 @@ TEST3FUNC:
 	add xde, WidgetStyleDataTable_0x71C
 	ld de, (xde)
 	lda xix, (TEST3FUNC_DispatchReturn:24)
+; Computed jump: target = TEST3FUNC_DispatchReturn + WidgetStyleDataTable_0x71C[i], WidgetStyleDataTable_0x71C = 16-bit offsets (6 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
+;   0 -> TEST3FUNC_DispatchReturn
+;   1 -> TableDispatch_Return4
+;   2 -> TableDispatch_Return4
+;   3 -> TableDispatch_Return4
+;   4 -> TableDispatch_Return4
+;   5 -> TableDispatch_Return4
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST3FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST3FUNC_DispatchReturn:
-	calr	0xfe19
+	calr	TEST3FUNC_Helper
 
 TableDispatch_Return4:
 	ld xhl, 0:i3
@@ -2070,6 +2311,14 @@ TEST4FUNC:
 	add xde, WidgetStyleDataTable_0x728
 	ld de, (xde)
 	lda xix, (TEST4FUNC_DispatchReturn:24)
+; Computed jump: target = TEST4FUNC_DispatchReturn + WidgetStyleDataTable_0x728[i], WidgetStyleDataTable_0x728 = 16-bit offsets (6 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
+;   0 -> TEST4FUNC_DispatchReturn
+;   1 -> TableDispatch_Return5
+;   2 -> TableDispatch_Return5
+;   3 -> TableDispatch_Return5
+;   4 -> TableDispatch_Return5
+;   5 -> TableDispatch_Return5
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST4FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST4FUNC_DispatchReturn:
@@ -2091,6 +2340,14 @@ TEST6FUNC:
 	add xde, WidgetStyleDataTable_0x734
 	ld de, (xde)
 	lda xix, (TEST6FUNC_DispatchReturn:24)
+; Computed jump: target = TEST6FUNC_DispatchReturn + WidgetStyleDataTable_0x734[i], WidgetStyleDataTable_0x734 = 16-bit offsets (6 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
+;   0 -> TEST6FUNC_DispatchReturn
+;   1 -> TableDispatch_Return
+;   2 -> TableDispatch_Return
+;   3 -> TableDispatch_Return
+;   4 -> TableDispatch_Return
+;   5 -> TableDispatch_Return
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST6FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST6FUNC_DispatchReturn:
@@ -2342,7 +2599,169 @@ MstSugAlpGridCheck:
 	ret
 ; === v7-specific block: AcMstStyleAlp_Boundary (497 bytes) ===
 AcMstStyleAlp_Boundary:
-	.incbin "includes/romslices/v7_block_acmststylealp_boundary.bin"
+	lda	xsp, (xsp-74)
+	push	xiz
+	ld	(xsp+66), xde
+	ld	(xsp+70), xbc
+	ld	(xsp+74), xwa
+	ld	xbc, (xsp+70)
+	cp	xbc, 0x1e0008d
+	jrl	z, MasterSetup_ForwardToChild
+	ld	xwa, (xsp+70)
+	cp	xwa, 0x1e0008b
+	jrl	z, MasterSetup_GetNameB_DrawString
+	cp	xwa, 0x1e0008a
+	jrl	z, MasterSetup_GetNameA
+	cp	xwa, 0x1c00007
+	jrl	z, AcMstStyleAlp_Boundary_Skip3
+	cp	xwa, 0x1c00002
+	jrl	z, AcMstStyleAlp_Boundary_Skip2
+	cp	xwa, 0x1c00001
+	jr	z, AcMstStyleAlp_Boundary_Skip
+	sub	xbc, 0x1c00017
+	cp	xbc, 0
+	jrl	lt, MasterSetup_InheritedProc_Fallback
+	cp	xbc, 6
+	jrl	gt, MasterSetup_InheritedProc_Fallback
+	add	xbc, xbc
+	add	xbc, Str_StoreTotalSetting_DE_0x98
+	ld	bc, (xbc)
+	lda	xix, (0xfb78db:24)
+	jp_rr	8, xix, bc	; jp t, xix+bc
+AcMstStyleAlp_Boundary_Skip:
+	ld	xwa, (xsp+74)
+	ld	xbc, (xsp+70)
+	ld	xde, (xsp+66)
+	call	InheritedProc
+	ld	xwa, (xsp+74)
+	call	GetViewInstance
+	ld	(xsp+8), xhl
+	ld	xwa, (xsp+74)
+	ld	xbc, 0x1e0008f
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	xiz, xhl
+	ld	xwa, (xsp+8)
+	ld	bc, (xwa+26)
+	ld	xwa, xiz
+	srl	xwa, 0
+	ld	qwa, 0
+	add	wa, bc
+	ld	de, wa
+	extz	xde
+	ld	xwa, (xsp+74)
+	ld	xbc, 0x1c00018
+	call	SetDialUp
+	ld	xwa, (xsp+8)
+	ld	bc, (xwa+26)
+	ld	xwa, xiz
+	srl	xwa, 0
+	ld	qwa, 0
+	add	wa, bc
+	ld	de, wa
+	extz	xde
+	ld	xwa, (xsp+74)
+	ld	xbc, 0x1c00017
+	call	SetDialDown
+	ld	wa, 1:i3
+	call	SetDialEnable
+	ld	de, iz
+	ld	(xsp+60), de
+	ld	xwa, (xsp+8)
+	ld	xbc, (xwa+78)
+	ld	xwa, (xwa+90)
+	ld	wa, (xwa)
+	muls	wa, 9
+	sub	wa, 9
+	add	wa, (xbc)
+	add	de, wa
+	muls	de, 6
+	lda	xbc, (StyleSong_MasterTable_0x4:24)
+	ld_rrw	de, xbc, de	; ld de, (xbc+de)
+	extz	xde
+	ld	xwa, 0x142000d
+	ld	xbc, 0x1e20018
+	jr	AcMstStyleAlp_Boundary_Join
+AcMstStyleAlp_Boundary_Skip2:
+	ld	xwa, (xsp+74)
+	ld	xbc, (xsp+70)
+	ld	xde, (xsp+66)
+	call	InheritedProc
+	ld	xwa, 0x142000d
+	ld	xbc, 0x1e20019
+	ld	xde, 0:i3
+AcMstStyleAlp_Boundary_Join:
+	call	MainFuncCall
+	jrl	SeqFile_ReturnZeroJmp2
+AcMstStyleAlp_Boundary_Skip3:
+	ld	xwa, (xsp+74)
+	ld	xbc, (xsp+70)
+	ld	xde, (xsp+66)
+	call	InheritedProc
+	ld	xwa, (xsp+74)
+	call	GetViewInstance
+	ld	(xsp+8), xhl
+	ld	xwa, (xsp+8)
+	ld	(xsp+4), xwa
+	lda	xbc, (xwa+78)
+	ld	xwa, (xsp+66)
+	cp	xwa, 128
+	jrl	z, MasterSetup_DialTurn_ScrollUp
+	or	xwa, xwa
+	jrl	nz, SeqFile_ReturnZeroJmp2
+	ld	xbc, (xbc)
+	cpw	(xbc), 0
+	jr	z, AcMstStyleAlp_Boundary_Skip4
+	ld	wa, (xbc)
+	dec	1, wa
+	ld	(xbc), wa
+	muls	wa, 6
+	lda	xbc, (StyleSong_MasterTable:24)
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	push	xwa
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	jr	AcMstStyleAlp_Boundary_Join2
+AcMstStyleAlp_Boundary_Skip4:
+	ld	xwa, (StyleSong_MasterTable_0x176A:24)
+	push	xwa
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	ld	xwa, (xsp+8)
+	ld	xwa, (xwa+78)
+	ldw	(xwa), 999
+AcMstStyleAlp_Boundary_Join2:
+	ld	xde, (xsp+8)
+	ld	xbc, (xde+74)
+	ld	a, (xsp+12)
+	extz	wa
+	ld	(xbc), wa
+	ld	xwa, (xde+78)
+	ld	iz, (xwa)
+	cp	iz, 0:i3
+	jr	z, MasterSetup_StringSearch_Done
+	pushw	1
+	ld	wa, iz
+	extz	xwa
+	ld	xbc, xwa
+	add	xbc, xbc
+	add	xbc, xwa
+	add	xbc, xbc
+	ld	xwa, StyleSong_MasterTable
+	add	xwa, xbc
+	ld	xwa, (xwa)
+	push	xwa
+	lda	xwa, (xsp+18)
+	push	xwa
+	call	SLIDE_Parse_Header_Helper
+	add	xsp, 10
+	cp	hl, 0:i3
+	jr	nz, MasterSetup_StringSearch_Done
+	djnz16	iz, -46
 ; === end v7 block ===
 MasterSetup_StringSearch_Done:
 	cp iz, 0:i3
@@ -2389,7 +2808,7 @@ MasterSetup_DialTurn_ScrollUp:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+82)
 	ld	bc, (xwa)
-	.byte 0x92, 0x81
+	add	bc, (xde)
 	inc	1, bc
 	ld	hl, bc
 	lda	xbc, (xsp+12)
@@ -2508,12 +2927,12 @@ MasterSetup_ScrollUp_Search_Done:
 	jrl	nz, MasterSetup_DialDown_SendPageEvent
 	ld	xbc, (xsp+8)
 	ld	xwa, (xbc+90)
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, MasterSetup_DialDown_DecPage
 	ld	xbc, (xbc+78)
 	lda	xde, (xsp+12)
 	lda	xhl, (15443092:24)
-	.byte 0x91, 0x3f, 0x00, 0x00
+	cpw	(xbc), 0
 	jr	z, MasterSetup_DialDown_Underflow
 	ld	wa, (xbc)
 	dec	1, wa
@@ -2629,7 +3048,7 @@ MasterSetup_DialDown_AdjustView:
 	jrl SeqFile_CallApFunc
 
 MasterSetup_DialDown_DecPage:
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000f
 	ld xde, 0:i3
@@ -2718,7 +3137,7 @@ MasterSetup_FallbackEvent:
 	ld	wa, (xbc)
 	muls	wa, 9
 	dec	1, wa
-	.byte 0x92, 0xf0
+	cp	wa, (xde)
 	jrl	lt, MstStyleAlp_PageForward
 	ld	wa, (xde)
 	exts	xwa
@@ -2729,7 +3148,7 @@ MasterSetup_FallbackEvent:
 	lda	xix, (xix+78)
 	ld	xwa, (xix)
 	ld	bc, (xde)
-	.byte 0x90, 0x81
+	add	bc, (xwa)
 	inc	1, bc
 	ld	hl, bc
 	lda	xbc, (15443092:24)
@@ -2955,11 +3374,13 @@ MasterSetup_GetNameB_DrawString:
 	add	wa, 19
 	ld	(xde+6), wa
 	ld	xwa, (xiz+86)
-	.byte 0x90, 0x04
+	pushw	(xwa)
 	ld	xwa, (xiz+90)
-	.byte 0x90, 0x04
+	pushw	(xwa)
 	ld	xwa, (xiz+74)
-	.byte 0x90, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0x18, 0x0d
+	pushw	(xwa)
+	pushw	237
+	pushw	3352
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -3020,6 +3441,15 @@ MstStyleAlpGridCheck:
 	add xwa, Str_StoreTotalSetting_DE_0xCC
 	ld wa, (xwa)
 	lda xix, (MstStyleAlp_EventDispatch:24)
+; Computed jump: target = MstStyleAlp_EventDispatch + Str_StoreTotalSetting_DE_0xCC[i], Str_StoreTotalSetting_DE_0xCC = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> MstStyleAlp_EventDispatch
+;   0x1c00018 -> MstStyleAlp_EventDispatch
+;   0x1c00019 -> MstStyleAlp_EventDispatch
+;   0x1c0001a -> MstStyleAlp_EventDispatch
+;   0x1c0001b -> EffectMode_SendEvent_Return
+;   0x1c0001c -> EffectMode_SendEvent_Return
+;   0x1c0001d -> EffectMode_SendEvent_Return
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; MstStyleAlpGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d58)
@@ -3116,17 +3546,31 @@ MstStyleAlp_AppendPadChar:
 	push	xwa
 	call	16712885
 	lda	xsp, (xsp+10)
-	incm8	1, (xsp+14)
+	inc	1, (xsp+14)
 MstStyleAlp_PadLoopCond:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x4e, 0x21, 0xa8, 0x5a
-	.byte 0x20, 0x90, 0x20, 0xd8, 0x09, 0x09, 0x00, 0xd8
-	.byte 0xca, 0x09, 0x00, 0x91, 0x80, 0x9f, 0x34, 0x21
-	.byte 0xd8, 0x81, 0xd9, 0x09, 0x06, 0x00, 0xd9, 0x88
-	.byte 0xf2, 0x94, 0xa4, 0xeb, 0x31, 0xe3, 0x07, 0xe4
-	.byte 0xe0, 0x20, 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xef
-	.byte 0x64, 0x31, 0x20, 0x00, 0xdb, 0xa1, 0x8f, 0x0e
-	.byte 0x21, 0xd8, 0x12, 0xd9, 0xf0, 0x67, 0xaa, 0x78
-	.byte 0x8b, 0x00
+	ld	xwa, (xsp+4)
+	ld	xbc, (xwa+78)
+	ld	xwa, (xwa+90)
+	ld	wa, (xwa)
+	muls	wa, 9
+	sub	wa, 9
+	add	wa, (xbc)
+	ld	bc, (xsp+52)
+	add	bc, wa
+	muls	bc, 6
+	ld	wa, bc
+	lda	xbc, (StyleSong_MasterTable:24)
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ldw	bc, 32
+	sub	bc, hl
+	ld	a, (xsp+14)
+	extz	wa
+	cp	wa, bc
+	jr	c, MstStyleAlp_AppendPadChar
+	jrl	MstStyleAlp_FinalSendEvent
 MstStyleAlp_OverflowStr:
 	pushw	237
 	pushw	3380
@@ -3157,16 +3601,30 @@ MstStyleAlp_AppendPadChar2:
 	push	xwa
 	call	16712885
 	lda	xsp, (xsp+10)
-	incm8	1, (xsp+14)
+	inc	1, (xsp+14)
 MstStyleAlp_PadLoopCond2:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x4e, 0x21, 0xa8, 0x5a
-	.byte 0x20, 0x90, 0x20, 0xd8, 0x09, 0x09, 0x00, 0xd8
-	.byte 0xca, 0x09, 0x00, 0x91, 0x80, 0x9f, 0x34, 0x21
-	.byte 0xd8, 0x81, 0xd9, 0x09, 0x06, 0x00, 0xd9, 0x88
-	.byte 0xf2, 0x94, 0xa4, 0xeb, 0x31, 0xe3, 0x07, 0xe4
-	.byte 0xe0, 0x20, 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xef
-	.byte 0x64, 0x31, 0x20, 0x00, 0xdb, 0xa1, 0x8f, 0x0e
-	.byte 0x21, 0xd8, 0x12, 0xd9, 0xf0, 0x67, 0xaa
+	ld	xwa, (xsp+4)
+	ld	xbc, (xwa+78)
+	ld	xwa, (xwa+90)
+	ld	wa, (xwa)
+	muls	wa, 9
+	sub	wa, 9
+	add	wa, (xbc)
+	ld	bc, (xsp+52)
+	add	bc, wa
+	muls	bc, 6
+	ld	wa, bc
+	lda	xbc, (StyleSong_MasterTable:24)
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ldw	bc, 32
+	sub	bc, hl
+	ld	a, (xsp+14)
+	extz	wa
+	cp	wa, bc
+	jr	c, MstStyleAlp_AppendPadChar2
 MstStyleAlp_FinalSendEvent:
 	ld wa, (xsp + 50)
 	cp wa, 1:i3
@@ -3182,7 +3640,6 @@ EffectMode_SendEvent_Return:
 	pop xiz
 	lda xsp, (xsp + 58)
 	ret
-MstStyle1Grid_Boundary:
 
 AcMstStyle1GridBoxProc:
 	lda xsp, (xsp - 16)
@@ -3209,6 +3666,15 @@ AcMstStyle1GridBoxProc:
 	add xbc, Str_StoreTotalSetting_DE_0xDA
 	ld bc, (xbc)
 	lda xix, (MstStyle_EventDispatch:24)
+; Computed jump: target = MstStyle_EventDispatch + Str_StoreTotalSetting_DE_0xDA[i], Str_StoreTotalSetting_DE_0xDA = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> AcMstStyle1GridBoxProc_Evt1C00017
+;   0x1c00018 -> AcMstStyle1GridBoxProc_Evt1C00018
+;   0x1c00019 -> AcMstStyle1GridBoxProc_Evt1C00017
+;   0x1c0001a -> AcMstStyle1GridBoxProc_Evt1C00018
+;   0x1c0001b -> MstStyle_InheritedProc_Fallback
+;   0x1c0001c -> MstStyle_ForwardToChild
+;   0x1c0001d -> MstStyle_ForwardToChild
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; MasterStyle event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d66)
@@ -3240,6 +3706,7 @@ MstStyle_EventDispatch:
 	add wa, iy
 	ld (0x0340c4:24), wa
 	jrl SeqFileAlt_ReturnZeroJmp
+AcMstStyle1GridBoxProc_Evt1C00017:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -3265,7 +3732,7 @@ MstStyle_EventDispatch:
 	ld xwa, (xbc)
 	cpw (xwa), 0x1
 	jrl le, SeqFileAlt_ReturnZeroJmp
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	muls wa, 0xa
@@ -3327,6 +3794,7 @@ MstStyle_FallbackEvent:
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	jrl MstStyle_SetAutoInc_Return
+AcMstStyle1GridBoxProc_Evt1C00018:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -3509,6 +3977,15 @@ MstStyle1GridCheck:
 	add xwa, Str_StoreTotalSetting_DE_0xFE
 	ld wa, (xwa)
 	lda xix, (MstStyle1Grid_EventDispatch:24)
+; Computed jump: target = MstStyle1Grid_EventDispatch + Str_StoreTotalSetting_DE_0xFE[i], Str_StoreTotalSetting_DE_0xFE = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> MstStyle1Grid_EventDispatch
+;   0x1c00018 -> MstStyle1Grid_EventDispatch
+;   0x1c00019 -> MstStyle1Grid_EventDispatch
+;   0x1c0001a -> MstStyle1Grid_EventDispatch
+;   0x1c0001b -> MstStyle1Grid_Epilogue
+;   0x1c0001c -> MstStyle1Grid_EventDispatch
+;   0x1c0001d -> MstStyle1Grid_EventDispatch
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; MstStyle1GridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d8a)
@@ -3541,7 +4018,7 @@ MstStyle1Grid_CellSelect:
 	muls	ix, 10
 	sub	ix, 10
 	ld	wa, (xiz)
-	.byte 0x95, 0xf0
+	cp	wa, (xiy)
 	jrl	nz, MstStyle1Grid_BottomSection
 	ld	xwa, (xsp+4)
 	ld	xiy, (xwa+74)
@@ -3572,15 +4049,27 @@ MstStyle1Grid_PadLeft_Loop:
 	push	xwa
 	call	16712885
 	lda	xsp, (xsp+10)
-	incm8	1, (xsp+10)
+	inc	1, (xsp+10)
 MstStyle1Grid_PadLeft_Check:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x52, 0x20, 0x90, 0x20
-	.byte 0xd8, 0x09, 0x0a, 0x00, 0xd8, 0xca, 0x0a, 0x00
-	.byte 0x9f, 0x20, 0x80, 0xd8, 0xec, 0x03, 0xf2, 0xa4
-	.byte 0xfc, 0xec, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20
-	.byte 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xef, 0x64, 0x31
-	.byte 0x10, 0x00, 0xdb, 0xa1, 0x8f, 0x0a, 0x21, 0xd8
-	.byte 0x12, 0xd9, 0xf0, 0x67, 0xb4, 0x68, 0x76
+	ld	xwa, (xsp+4)
+	ld	xwa, (xwa+82)
+	ld	wa, (xwa)
+	muls	wa, 10
+	sub	wa, 10
+	add	wa, (xsp+32)
+	sla	wa, 3
+	lda	xbc, (StyleGroup_LatinWorld_PairTable_0x2FA:24)
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ldw	bc, 16
+	sub	bc, hl
+	ld	a, (xsp+10)
+	extz	wa
+	cp	wa, bc
+	jr	c, MstStyle1Grid_PadLeft_Loop
+	jr	MstStyle1Grid_CheckPlayAudio
 MstStyle1Grid_OutOfRange:
 	pushw	237
 	pushw	3446
@@ -3589,27 +4078,44 @@ MstStyle1Grid_OutOfRange:
 	inc	8, xsp
 	jr	MstStyle1Grid_CheckPlayAudio
 MstStyle1Grid_BottomSection:
-	.byte 0x92, 0x84, 0xdc, 0xec, 0x03, 0xaf, 0x08, 0x20
-	.byte 0xe3, 0x07, 0xe0, 0xf0, 0x20, 0x38, 0x39, 0x1d
-	.byte 0x70, 0x07, 0xff, 0xef, 0x60, 0xbf, 0x0a, 0x00
-	.byte 0x00, 0x68, 0x17
+	add	ix, (xde)
+	sla	ix, 3
+	ld	xwa, (xsp+8)
+	ld_rrl	xwa, xwa, ix	; ld xwa, (xwa+ix)
+	push	xwa
+	push	xbc
+	call	Free_Compare2
+	inc	8, xsp
+	ld	(xsp+10), 0
+	jr	MstStyle1Grid_PadLeft_CheckB
 MstStyle1Grid_PadLeft_LoopB:
 	pushw	1
 	pushw	237
 	pushw	3464
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16712885
+	call	0xff04b5
 	lda	xsp, (xsp+10)
-	incm8	1, (xsp+10)
+	inc	1, (xsp+10)
 MstStyle1Grid_PadLeft_CheckB:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x52, 0x20, 0x90, 0x20
-	.byte 0xd8, 0x09, 0x0a, 0x00, 0xd8, 0xca, 0x0a, 0x00
-	.byte 0x9f, 0x20, 0x80, 0xd8, 0xec, 0x03, 0xf2, 0xa4
-	.byte 0xfc, 0xec, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20
-	.byte 0x38, 0x1d, 0xc3, 0x07, 0xff, 0xef, 0x64, 0x31
-	.byte 0x10, 0x00, 0xdb, 0xa1, 0x8f, 0x0a, 0x21, 0xd8
-	.byte 0x12, 0xd9, 0xf0, 0x67, 0xb4
+	ld	xwa, (xsp+4)
+	ld	xwa, (xwa+82)
+	ld	wa, (xwa)
+	muls	wa, 10
+	sub	wa, 10
+	add	wa, (xsp+32)
+	sla	wa, 3
+	lda	xbc, (StyleGroup_LatinWorld_PairTable_0x2FA:24)
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ldw	bc, 16
+	sub	bc, hl
+	ld	a, (xsp+10)
+	extz	wa
+	cp	wa, bc
+	jr	c, MstStyle1Grid_PadLeft_LoopB
 MstStyle1Grid_CheckPlayAudio:
 	ld wa, (xsp + 30)
 	cp wa, 1:i3
@@ -3627,7 +4133,6 @@ MstStyle1Grid_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 38)
 	ret
-MstStyle1SubGrid_Boundary:
 
 AcMstStyle1SubGridBoxProc:
 	lda xsp, (xsp - 66)
@@ -3658,6 +4163,15 @@ AcMstStyle1SubGridBoxProc:
 	add xbc, Str_StoreTotalSetting_DE_0x112
 	ld bc, (xbc)
 	lda xix, (MstStyle1_EventDispatch:24)
+; Computed jump: target = MstStyle1_EventDispatch + Str_StoreTotalSetting_DE_0x112[i], Str_StoreTotalSetting_DE_0x112 = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> AcMstStyle1SubGridBoxProc_Evt1C00017
+;   0x1c00018 -> AcMstStyle1SubGridBoxProc_Evt1C00018
+;   0x1c00019 -> AcMstStyle1SubGridBoxProc_Evt1C00017
+;   0x1c0001a -> AcMstStyle1SubGridBoxProc_Evt1C00018
+;   0x1c0001b -> MstStyle1Sub_InheritedFallback
+;   0x1c0001c -> MstStyle1Sub_ForwardToChild
+;   0x1c0001d -> MstStyle1Sub_ForwardToChild
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; MstStyle1 event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d9e)
@@ -3833,6 +4347,7 @@ MstStyle1Sub_SubSel_Adjust:
 	ld xde, 0:i3
 	call PostEvent
 	jrl SeqFile_ReturnZeroJmp
+AcMstStyle1SubGridBoxProc_Evt1C00017:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
@@ -3858,7 +4373,7 @@ MstStyle1Sub_SubSel_Adjust:
 	ld xwa, (xde)
 	cpw (xwa), 0x1
 	jrl le, SeqFile_ReturnZeroJmp
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld xwa, (xde)
 	ld wa, (xwa)
 	muls wa, 0xa
@@ -3931,6 +4446,7 @@ MstStyle1Sub_FallbackEvent:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl MstStyle1Sub_SetDialEnable
+AcMstStyle1SubGridBoxProc_Evt1C00018:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
@@ -4098,13 +4614,25 @@ MstStyle1Sub_GetNameB_DrawString:
 	add WA,0x0013
 	ld (XDE+0x06),WA
 	ld XBC,(XSP+0x10)
-	ld XWA,(XBC+0x4e)
-	.byte 0x90, 0x04, 0xa9, 0x52, 0x20, 0x90, 0x04, 0x0b
-	.byte 0xed, 0x00, 0x0b, 0x98, 0x0d, 0xbf, 0x1c, 0x30
-	.byte 0x38, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x14, 0x37
-	.byte 0xbf, 0x32, 0x30, 0xbf, 0x2e, 0x31, 0xbf, 0x0c
-	.byte 0x32, 0xeb, 0xae, 0x3b, 0x0b, 0xff, 0x00, 0x0b
-	.byte 0xf5, 0x00, 0x1d, 0xbd, 0xc6, 0xfa, 0x68, 0x14
+	ld	xwa, (xbc+78)
+	pushw	(xwa)
+	ld	xwa, (xbc+82)
+	pushw	(xwa)
+	pushw	237
+	pushw	3480
+	lda	xwa, (xsp+28)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+20)
+	lda	xwa, (xsp+50)
+	lda	xbc, (xsp+46)
+	lda	xde, (xsp+12)
+	ld	xhl, 6:i3
+	push	xhl
+	pushw	255
+	pushw	245
+	call	DrawString
+	jr	SeqFile_ReturnZeroJmp
 MstStyle1Sub_ForwardToChild:
 	ld xwa, (xsp + 66)
 	call GetViewInstance
@@ -4145,6 +4673,15 @@ MstStyle1SubGridCheck:
 	add xwa, Str_StoreTotalSetting_DE_0x136
 	ld wa, (xwa)
 	lda xix, (MstStyle1Sub_EventDispatch:24)
+; Computed jump: target = MstStyle1Sub_EventDispatch + Str_StoreTotalSetting_DE_0x136[i], Str_StoreTotalSetting_DE_0x136 = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> MstStyle1Sub_EventDispatch
+;   0x1c00018 -> MstStyle1Sub_EventDispatch
+;   0x1c00019 -> MstStyle1Sub_EventDispatch
+;   0x1c0001a -> MstStyle1Sub_EventDispatch
+;   0x1c0001b -> MstStyle1SubGrid_Epilogue
+;   0x1c0001c -> MstStyle1Sub_EventDispatch
+;   0x1c0001d -> MstStyle1Sub_EventDispatch
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; MstStyle1SubGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0dc2)
@@ -4175,7 +4712,7 @@ MstStyle1SubGrid_CellSelect:
 	muls	hl, 10
 	sub	hl, 10
 	ld	wa, (xiz)
-	.byte 0x95, 0xf0
+	cp	wa, (xiy)
 	jrl	nz, MstStyle1SubGrid_BottomSection
 	ld	xwa, (xsp+4)
 	ld	xiy, (xwa+74)
@@ -4214,18 +4751,31 @@ MstStyle1SubGrid_PadLeft_Loop:
 
 	lda xsp, (xsp + 10)
 
-	inc1b_erp 0xfb
+	inc1b_erp	251	; inc 1, qizh
 
 
 
 MstStyle1SubGrid_PadLeft_Check:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x52, 0x20, 0x90, 0x20
-	.byte 0xd8, 0x09, 0x0a, 0x00, 0xd8, 0xca, 0x0a, 0x00
-	.byte 0x9f, 0x1c, 0x80, 0xe8, 0x13, 0xe8, 0xee, 0x03
-	.byte 0xe2, 0xd2, 0x40, 0x03, 0x80, 0xa0, 0x20, 0x38
-	.byte 0x1d, 0xc3, 0x07, 0xff, 0xef, 0x64, 0x31, 0x10
-	.byte 0x00, 0xdb, 0xa1, 0xc7, 0xfb, 0x89, 0xd8, 0x12
-	.byte 0xd9, 0xf0, 0x67, 0xb5, 0x68, 0x75
+	ld	xwa, (xsp+4)
+	ld	xwa, (xwa+82)
+	ld	wa, (xwa)
+	muls	wa, 10
+	sub	wa, 10
+	add	wa, (xsp+28)
+	exts	xwa
+	sll	xwa, 3
+	add	xwa, (0x0340d2:24)
+	ld	xwa, (xwa)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ldw	bc, 16
+	sub	bc, hl
+	stb_erp	a, 251	; ld a, qizh
+	extz	wa
+	cp	wa, bc
+	jr	c, MstStyle1SubGrid_PadLeft_Loop
+	jr	MstStyle1SubGrid_CheckPlayAudio
 MstStyle1SubGrid_OutOfRange:
 	pushw	237
 	pushw	3502
@@ -4234,10 +4784,17 @@ MstStyle1SubGrid_OutOfRange:
 	inc	8, xsp
 	jr	MstStyle1SubGrid_CheckPlayAudio
 MstStyle1SubGrid_BottomSection:
-	.byte 0x91, 0x83, 0xeb, 0x13, 0xeb, 0xee, 0x03, 0xe2
-	.byte 0xd2, 0x40, 0x03, 0x83, 0xa3, 0x20, 0x38, 0x3a
-	.byte 0x1d, 0x70, 0x07, 0xff, 0xef, 0x60, 0xc7, 0xfb
-	.byte 0xa8, 0x68, 0x17
+	add	hl, (xbc)
+	exts	xhl
+	sll	xhl, 3
+	add	xhl, (0x0340d2:24)
+	ld	xwa, (xhl)
+	push	xwa
+	push	xde
+	call	Free_Compare2
+	inc	8, xsp
+	ldib_erp	251, 0	; ld qizh, 0
+	jr	MstStyle1SubGrid_PadLeft_CheckB
 MstStyle1SubGrid_PadLeft_LoopB:
 	pushw 0x1
 
@@ -4253,18 +4810,30 @@ MstStyle1SubGrid_PadLeft_LoopB:
 
 	lda xsp, (xsp + 10)
 
-	inc1b_erp 0xfb
+	inc1b_erp	251	; inc 1, qizh
 
 
 
 MstStyle1SubGrid_PadLeft_CheckB:
-	.byte 0xaf, 0x04, 0x20, 0xa8, 0x52, 0x20, 0x90, 0x20
-	.byte 0xd8, 0x09, 0x0a, 0x00, 0xd8, 0xca, 0x0a, 0x00
-	.byte 0x9f, 0x1c, 0x80, 0xe8, 0x13, 0xe8, 0xee, 0x03
-	.byte 0xe2, 0xd2, 0x40, 0x03, 0x80, 0xa0, 0x20, 0x38
-	.byte 0x1d, 0xc3, 0x07, 0xff, 0xef, 0x64, 0x31, 0x10
-	.byte 0x00, 0xdb, 0xa1, 0xc7, 0xfb, 0x89, 0xd8, 0x12
-	.byte 0xd9, 0xf0, 0x67, 0xb5
+	ld	xwa, (xsp+4)
+	ld	xwa, (xwa+82)
+	ld	wa, (xwa)
+	muls	wa, 10
+	sub	wa, 10
+	add	wa, (xsp+28)
+	exts	xwa
+	sll	xwa, 3
+	add	xwa, (0x0340d2:24)
+	ld	xwa, (xwa)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ldw	bc, 16
+	sub	bc, hl
+	stb_erp	a, 251	; ld a, qizh
+	extz	wa
+	cp	wa, bc
+	jr	c, MstStyle1SubGrid_PadLeft_LoopB
 MstStyle1SubGrid_CheckPlayAudio:
 	ld wa, (xsp + 26)
 	cp wa, 1:i3
@@ -4282,7 +4851,6 @@ MstStyle1SubGrid_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 30)
 	ret
-MstStyle2Grid_Boundary:
 
 AcMstStyle2GridBoxProc:
 	lda xsp, (xsp - 56)
@@ -4313,6 +4881,15 @@ AcMstStyle2GridBoxProc:
 	add xbc, Str_StoreTotalSetting_DE_0x178
 	ld bc, (xbc)
 	lda xix, (MstStyle1Page_EventDispatch:24)
+; Computed jump: target = MstStyle1Page_EventDispatch + Str_StoreTotalSetting_DE_0x178[i], Str_StoreTotalSetting_DE_0x178 = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> AcMstStyle2GridBoxProc_Evt1C00017
+;   0x1c00018 -> AcMstStyle2GridBoxProc_Evt1C00018
+;   0x1c00019 -> AcMstStyle2GridBoxProc_Evt1C00017
+;   0x1c0001a -> AcMstStyle2GridBoxProc_Evt1C00018
+;   0x1c0001b -> MstStyle2_InheritedFallback
+;   0x1c0001c -> MstStyle2_ForwardToChild
+;   0x1c0001d -> MstStyle2_ForwardToChild
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; MstStyle1 subpage event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0e04)
@@ -4615,7 +5192,7 @@ MstStyle2_HandleDialTurn:
 	stw_erp WA, 0xe2
 	cp wa, 0:i3
 	jr z, MstStyle2_DialDown_PageDec
-	decm 1, (xix)
+	decw	1, (xix)
 	ld wa, (0x0340c4:24)
 	extz xwa
 	add xbc, xwa
@@ -4635,7 +5212,7 @@ MstStyle2_HandleDialTurn:
 MstStyle2_DialDown_PageDec:
 	ld xix, xhl
 	ld xwa, (xhl)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld xwa, (xhl)
 	ld wa, (xwa)
 	sla wa, 1
@@ -4708,7 +5285,7 @@ MstStyle2_PageDec_CountAdj2:
 
 MstStyle2_DialDown_UpdateAndPost:
 	ld xwa, (xde)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld wa, (0x0340c4:24)
 	extz xwa
 	ld xbc, 0x340c8
@@ -4864,6 +5441,7 @@ MstStyle2_DialUp_UpdateAndPost:
 	ld xbc, 0x1c00018
 	ld xde, (xsp + 48)
 	jrl Seq_ApplyFunctionAndReturn
+AcMstStyle2GridBoxProc_Evt1C00017:
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
@@ -4896,7 +5474,7 @@ MstStyle2_DialUp_UpdateAndPost:
 	jrl le, MstStyle2_DialScroll_SetAutoInc
 	lda xhl, (xhl + 86)
 	ld xwa, (xhl)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld wa, (0x0340c4:24)
 	extz xwa
 	add xbc, xwa
@@ -4904,7 +5482,7 @@ MstStyle2_DialUp_UpdateAndPost:
 	ld wa, (xwa)
 	ld (xbc), a
 	ld xwa, (xde)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld xwa, (xde)
 	ld wa, (xwa)
 	sla wa, 1
@@ -5002,7 +5580,7 @@ MstStyle2_DialScrollUp_Middle:
 	ld xhl, (xsp + 4)
 	lda xde, (xhl + 86)
 	ld xwa, (xde)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld wa, (0x0340c4:24)
 	extz xwa
 	add xbc, xwa
@@ -5069,6 +5647,7 @@ MstStyle2_FallbackEvent:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl MstStyle2_SetDialEnable
+AcMstStyle2GridBoxProc_Evt1C00018:
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
@@ -5345,13 +5924,13 @@ MstStyle2_GetNameB_DrawString:
 	ld	xwa, (xiz+78)
 	lda	xde, (xsp+18)
 	ld	wa, (xwa)
-	.byte 0x91, 0xf0
+	cp	wa, (xbc)
 	jr	nz, MstStyle2_NameB_DrawLower
 	ld	xhl, (xiz+74)
 	ld	wa, (xbc)
 	sla	wa, 1
 	dec	1, wa
-	.byte 0x93, 0xf0
+	cp	wa, (xhl)
 	jr	le, MstStyle2_NameB_DrawCurrent
 	pushw 237
 	pushw 3540
@@ -5514,6 +6093,15 @@ MstStyle2GridCheck:
 	add xwa, Str_StoreTotalSetting_DE_0x238
 	ld wa, (xwa)
 	lda xix, (MstGrid2_ScrollJumpTable:24)
+; Computed jump: target = MstGrid2_ScrollJumpTable + Str_StoreTotalSetting_DE_0x238[i], Str_StoreTotalSetting_DE_0x238 = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> MstGrid2_ScrollJumpTable
+;   0x1c00018 -> MstGrid2_ScrollJumpTable
+;   0x1c00019 -> MstGrid2_ScrollJumpTable
+;   0x1c0001a -> MstGrid2_ScrollJumpTable
+;   0x1c0001b -> MstGrid2_Return
+;   0x1c0001c -> MstGrid2_Return
+;   0x1c0001d -> MstGrid2_Return
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MstGrid2_ScrollJumpTable:
@@ -5613,11 +6201,11 @@ MstGrid2_CellSelect:
 	ld	bc, (xbc)
 	inc	5, bc
 	ld	wa, (xhl)
-	.byte 0x94, 0xf0
+	cp	wa, (xix)
 	jrl	ge, MstGrid2_LowerSection
 	cp	de, 4:i3
 	jr	ge, MstGrid2_UpperHalf
-	.byte 0x96, 0xf2
+	cp	de, (xiz)
 	jr	gt, MstGrid2_OutOfRange_LowCol
 	ld	xwa, (xiy)
 	push	xwa
@@ -5635,7 +6223,7 @@ MstGrid2_PadLeft_LoopA:
 	push	xwa
 	call	16712885
 	lda	xsp, (xsp+10)
-	incm8	1, (xsp+18)
+	inc	1, (xsp+18)
 MstGrid2_PadLeft_CheckA:
 	ld	wa, (xsp+56)
 	exts	xwa
@@ -5679,7 +6267,7 @@ MstGrid2_PadLeft_LoopB:
 	push	xwa
 	call	16712885
 	lda	xsp, (xsp+10)
-	incm8	1, (xsp+18)
+	inc	1, (xsp+18)
 MstGrid2_PadLeft_CheckB:
 	ld	wa, (xsp+56)
 	dec	5, wa
@@ -5702,13 +6290,21 @@ MstGrid2_PadLeft_CheckB:
 	jrl	MstGrid2_CheckPlayAudio
 MstGrid2_OutOfRange_HighCol:
 	ld xwa, Str_StoreTotalSetting_DE_0x1AC
-	jrl MstGrid2_CopyFallback
+	jrl	MstGrid2_CopyFallback
 
 MstGrid2_LowerSection:
-	.byte 0xda, 0xdc, 0x69, 0x62, 0x96, 0xf2, 0x6a, 0x56
-	.byte 0xa5, 0x20, 0x38, 0xaf, 0x10, 0x20, 0x38, 0x1d
-	.byte 0x70, 0x07, 0xff, 0xef, 0x60, 0xbf, 0x12, 0x00
-	.byte 0x00, 0x68, 0x17
+	cp	de, 4:i3
+	jr	ge, MstGrid2_BottomRight
+	cp	de, (xiz)
+	jr	gt, MstGrid2_OutOfRange_LowCol2
+	ld	xwa, (xiy)
+	push	xwa
+	ld	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	ld	(xsp+18), 0
+	jr	MstGrid2_PadLeft_CheckC
 MstGrid2_PadLeft_LoopC:
 	pushw	1
 	pushw	237
@@ -5717,7 +6313,7 @@ MstGrid2_PadLeft_LoopC:
 	push	xwa
 	call	16712885
 	lda	xsp, (xsp+10)
-	incm8	1, (xsp+18)
+	inc	1, (xsp+18)
 MstGrid2_PadLeft_CheckC:
 	ld	wa, (xsp+56)
 	exts	xwa
@@ -5739,16 +6335,29 @@ MstGrid2_PadLeft_CheckC:
 	jrl	MstGrid2_CheckPlayAudio
 MstGrid2_OutOfRange_LowCol2:
 	ld xwa, Str_StoreTotalSetting_DE_0x1D0
-	jrl MstGrid2_CopyFallback
+	jrl	MstGrid2_CopyFallback
 
 MstGrid2_BottomRight:
-	.byte 0xaf, 0x08, 0x20, 0xa8, 0x4a, 0x23, 0xaf, 0x04
-	.byte 0x20, 0xa8, 0x52, 0x20, 0x90, 0x20, 0xd8, 0xec
-	.byte 0x01, 0xd8, 0x6a, 0x93, 0xf0, 0x69, 0x65, 0xd9
-	.byte 0xf2, 0x6a, 0x5a, 0xaf, 0x10, 0x20, 0xa0, 0x20
-	.byte 0x38, 0xaf, 0x10, 0x20, 0x38, 0x1d, 0x70, 0x07
-	.byte 0xff, 0xef, 0x60, 0xbf, 0x12, 0x00, 0x00, 0x68
-	.byte 0x17
+	ld	xwa, (xsp+8)
+	ld	xhl, (xwa+74)
+	ld	xwa, (xsp+4)
+	ld	xwa, (xwa+82)
+	ld	wa, (xwa)
+	sla	wa, 1
+	dec	2, wa
+	cp	wa, (xhl)
+	jr	ge, MstGrid2_OutOfRange_BeyondMax
+	cp	de, bc
+	jr	gt, MstGrid2_OutOfRange_HighCol2
+	ld	xwa, (xsp+16)
+	ld	xwa, (xwa)
+	push	xwa
+	ld	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	ld	(xsp+18), 0
+	jr	MstGrid2_PadLeft_CheckD
 MstGrid2_PadLeft_LoopD:
 	pushw	1
 	pushw	237
@@ -5757,7 +6366,7 @@ MstGrid2_PadLeft_LoopD:
 	push	xwa
 	call	16712885
 	lda	xsp, (xsp+10)
-	incm8	1, (xsp+18)
+	inc	1, (xsp+18)
 MstGrid2_PadLeft_CheckD:
 	ld	wa, (xsp+56)
 	dec	5, wa
@@ -5814,7 +6423,6 @@ AcMstSong1GridBoxProc:
 MstSong1GridCheck:
 	ld xhl, 0:i3
 	ret
-MstSong1Grid_Boundary:
 
 AcMstSong2GridBoxProc:
 	jp InheritedProc
@@ -5882,7 +6490,7 @@ MstStylePgCtl_HandleScrollDown:
 	ld xwa, (xbc)
 	cpw (xwa), 0x1
 	jr z, MstStylePgCtl_ScrollDown_Exit
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld xwa, (xde)
 	ld de, (xwa)
 	exts xde
@@ -5906,7 +6514,6 @@ MstStylePgCtl_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
-TchSensGrid_Boundary:
 
 AcTchSensGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -5933,6 +6540,15 @@ AcTchSensGridBoxProc:
 	add xbc, Str_StoreTotalSetting_DE_0x246
 	ld bc, (xbc)
 	lda xix, (MstStyle2_EventDispatch:24)
+; Computed jump: target = MstStyle2_EventDispatch + Str_StoreTotalSetting_DE_0x246[i], Str_StoreTotalSetting_DE_0x246 = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> AcTchSensGridBoxProc_Evt1C00017
+;   0x1c00018 -> AcTchSensGridBoxProc_Evt1C00018
+;   0x1c00019 -> AcTchSensGridBoxProc_Evt1C00017
+;   0x1c0001a -> AcTchSensGridBoxProc_Evt1C00018
+;   0x1c0001b -> TchSens_InheritedFallback
+;   0x1c0001c -> AcTchSensGridBoxProc_Evt1C0001C
+;   0x1c0001d -> AcTchSensGridBoxProc_Evt1C0001C
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; MstStyle2 event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0ed2)
@@ -5973,6 +6589,7 @@ MstStyle2_EventDispatch:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl TchSens_SetDialEnable
+AcTchSensGridBoxProc_Evt1C00017:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6040,6 +6657,7 @@ TchSens_DialDown_Fallback:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl TchSens_SetDialEnable
+AcTchSensGridBoxProc_Evt1C00018:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6130,6 +6748,7 @@ TchSens_GetName_Load:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	TchSens_ReturnZeroJmp
+AcTchSensGridBoxProc_Evt1C0001C:
 	ld	xwa, xiz
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -6176,6 +6795,15 @@ TchSensGridCheck:
 	add xwa, Str_StoreTotalSetting_DE_0x27C
 	ld wa, (xwa)
 	lda xix, (TchSensGrid_EventDispatch:24)
+; Computed jump: target = TchSensGrid_EventDispatch + Str_StoreTotalSetting_DE_0x27C[i], Str_StoreTotalSetting_DE_0x27C = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> TchSensGrid_EventDispatch
+;   0x1c00018 -> TchSensGridCheck_Evt1C00018
+;   0x1c00019 -> TchSensGrid_EventDispatch
+;   0x1c0001a -> TchSensGridCheck_Evt1C00018
+;   0x1c0001b -> TchSensGrid_ReturnZero
+;   0x1c0001c -> TchSensGridCheck_Evt1C0001C
+;   0x1c0001d -> TchSensGridCheck_Evt1C0001C
 	jp_ind 8, 0x07, 0xf0, 0xe0
 TchSensGrid_EventDispatch:
 	call	GetFocusObject
@@ -6190,7 +6818,7 @@ TchSensGrid_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, TchSensGridCheck_Entry
 	cp	de, 1:i3
 	jr	nz, TchSensGridCheck_Entry
@@ -6199,7 +6827,7 @@ TchSensGrid_EventDispatch:
 	ld	de, 2:i3
 	jrl	TchSensGridCheck_Join
 TchSensGridCheck_Entry:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, TchSensGridCheck_Entry2
 	cp	de, 4:i3
 	jr	nz, TchSensGridCheck_Entry2
@@ -6208,7 +6836,7 @@ TchSensGridCheck_Entry:
 	ld	de, 2:i3
 	jrl	TchSensGridCheck_Join
 TchSensGridCheck_Entry2:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, TchSensGridCheck_Entry3
 	cp	de, 5:i3
 	jr	nz, TchSensGridCheck_Entry3
@@ -6217,7 +6845,7 @@ TchSensGridCheck_Entry2:
 	ld	de, 2:i3
 	jrl	TchSensGridCheck_Join
 TchSensGridCheck_Entry3:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, TchSensGrid_ReturnZero
 	cp	de, 6:i3
 	jrl	nz, TchSensGrid_ReturnZero
@@ -6225,6 +6853,7 @@ TchSensGridCheck_Entry3:
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	TchSensGridCheck_Join
+TchSensGridCheck_Evt1C00018:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
@@ -6237,7 +6866,7 @@ TchSensGridCheck_Entry3:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, TchSensGridCheck_Entry4
 	cp	de, 1:i3
 	jr	nz, TchSensGridCheck_Entry4
@@ -6246,7 +6875,7 @@ TchSensGridCheck_Entry3:
 	ld	de, 2:i3
 	jr	TchSensGridCheck_Join
 TchSensGridCheck_Entry4:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, TchSensGridCheck_Entry5
 	cp	de, 4:i3
 	jr	nz, TchSensGridCheck_Entry5
@@ -6255,7 +6884,7 @@ TchSensGridCheck_Entry4:
 	ld	de, 2:i3
 	jr	TchSensGridCheck_Join
 TchSensGridCheck_Entry5:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, TchSensGridCheck_Entry6
 	cp	de, 5:i3
 	jr	nz, TchSensGridCheck_Entry6
@@ -6264,7 +6893,7 @@ TchSensGridCheck_Entry5:
 	ld	de, 2:i3
 	jr	TchSensGridCheck_Join
 TchSensGridCheck_Entry6:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, TchSensGrid_ReturnZero
 	cp	de, 6:i3
 	jrl	nz, TchSensGrid_ReturnZero
@@ -6274,6 +6903,7 @@ TchSensGridCheck_Entry6:
 TchSensGridCheck_Join:
 	call	MainLswAdd
 	jrl	TchSensGrid_ReturnZero
+TchSensGridCheck_Evt1C0001C:
 	lda	xix, (xde+4)
 	ld	xwa, (xde)
 	cp	xwa, 256
@@ -6283,7 +6913,9 @@ TchSensGridCheck_Join:
 	ldw	(xwa+2), 1
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
-	.byte 0x94, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0xe0, 0x0e
+	pushw	(xix)
+	pushw	237
+	pushw	3808
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -6302,7 +6934,7 @@ TchSensGridCheck_Skip:
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
 	ld	xwa, 15535848
-	.byte 0x94, 0x3f, 0x00, 0x00
+	cpw	(xix), 0
 	jr	z, TchSensGridCheck_Skip2
 	ld	xwa, 15535844
 TchSensGridCheck_Skip2:
@@ -6326,7 +6958,9 @@ TchSensGridCheck_Skip3:
 	ldw	(xiy), 1
 	ldw	(xbc), 5
 	ld	(xhl), xiz
-	.byte 0x94, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0xec, 0x0e
+	pushw	(xix)
+	pushw	237
+	pushw	3820
 	push	xiz
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -6342,7 +6976,9 @@ TchSensGridCheck_Skip4:
 	ldw	(xiy), 1
 	ldw	(xbc), 6
 	ld	(xhl), xiz
-	.byte 0x94, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0xf0, 0x0e
+	pushw	(xix)
+	pushw	237
+	pushw	3824
 	push	xiz
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -6403,21 +7039,42 @@ TchSensGrid_Cell_1_4_Render:
 	ld	xbc, 31457420
 	jr	TchSensGrid_SendEvent
 TchSensGrid_CheckCell_1_5:
-	.byte 0x91, 0x3f, 0x01, 0x00, 0x6e, 0x31, 0x90, 0x3f
-	.byte 0x05, 0x00, 0x6e, 0x2b, 0x40, 0x02, 0x01, 0x00
-	.byte 0x00, 0x1d, 0x66, 0xcc, 0xfc, 0x2b, 0x0b, 0xed
-	.byte 0x00, 0x0b, 0x00, 0x0f, 0xbf, 0x0a, 0x30, 0x38
-	.byte 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0a, 0x37, 0x1d
-	.byte 0xc3, 0x40, 0xfa, 0xeb, 0x88, 0xbf, 0x0e, 0x32
-	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x68, 0x35
+	cpw	(xbc), 1
+	jr	nz, TchSensGrid_CheckCell_1_6
+	cpw	(xwa), 5
+	jr	nz, TchSensGrid_CheckCell_1_6
+	ld	xwa, 258
+	call	AcApcToggleProc_Helper
+	pushw	hl
+	pushw	237
+	pushw	3840
+	lda	xwa, (xsp+10)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+14)
+	ld	xbc, 0x1e0008c
+	jr	TchSensGrid_SendEvent
 TchSensGrid_CheckCell_1_6:
-	.byte 0x91, 0x3f, 0x01, 0x00, 0x6e, 0x33, 0x90, 0x3f
-	.byte 0x06, 0x00, 0x6e, 0x2d, 0x40, 0x03, 0x01, 0x00
-	.byte 0x00, 0x1d, 0x66, 0xcc, 0xfc, 0x2b, 0x0b, 0xed
-	.byte 0x00, 0x0b, 0x04, 0x0f, 0xbf, 0x0a, 0x30, 0x38
-	.byte 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0a, 0x37, 0x1d
-	.byte 0xc3, 0x40, 0xfa, 0xeb, 0x88, 0xbf, 0x0e, 0x32
-	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01
+	cpw	(xbc), 1
+	jr	nz, TchSensGrid_ReturnZero
+	cpw	(xwa), 6
+	jr	nz, TchSensGrid_ReturnZero
+	ld	xwa, 259
+	call	AcApcToggleProc_Helper
+	pushw	hl
+	pushw	237
+	pushw	3844
+	lda	xwa, (xsp+10)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+14)
+	ld	xbc, 0x1e0008c
 TchSensGrid_SendEvent:
 	call SendEvent
 
@@ -6426,7 +7083,6 @@ TchSensGrid_ReturnZero:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
-FSWAssGrid_Boundary:
 
 AcFSWAssGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -6453,6 +7109,15 @@ AcFSWAssGridBoxProc:
 	add xbc, Str_StoreTotalSetting_DE_0x28A
 	ld bc, (xbc)
 	lda xix, (TchSens_EventDispatch:24)
+; Computed jump: target = TchSens_EventDispatch + Str_StoreTotalSetting_DE_0x28A[i], Str_StoreTotalSetting_DE_0x28A = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> AcFSWAssGridBoxProc_Evt1C00017
+;   0x1c00018 -> AcFSWAssGridBoxProc_Evt1C00018
+;   0x1c00019 -> AcFSWAssGridBoxProc_Evt1C00017
+;   0x1c0001a -> AcFSWAssGridBoxProc_Evt1C00018
+;   0x1c0001b -> FSWAss_InheritedFallback
+;   0x1c0001c -> AcFSWAssGridBoxProc_Evt1C0001C
+;   0x1c0001d -> AcFSWAssGridBoxProc_Evt1C0001C
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; TouchSensitivity event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0f16)
@@ -6493,6 +7158,7 @@ TchSens_EventDispatch:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl FSWAss_SetDialEnable
+AcFSWAssGridBoxProc_Evt1C00017:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6547,6 +7213,7 @@ FSWAss_DialDown_Fallback:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl FSWAss_SetDialEnable
+AcFSWAssGridBoxProc_Evt1C00018:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6624,6 +7291,7 @@ FSWAss_GetName_Load:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	FSWAss_ReturnZeroJmp
+AcFSWAssGridBoxProc_Evt1C0001C:
 	ld	xwa, xiz
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -6670,6 +7338,15 @@ FSWAssGridCheck:
 	add xwa, CtrlAssignStr_Off_0x4A
 	ld wa, (xwa)
 	lda xix, (FSWAssGrid_EventDispatch:24)
+; Computed jump: target = FSWAssGrid_EventDispatch + CtrlAssignStr_Off_0x4A[i], CtrlAssignStr_Off_0x4A = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> FSWAssGrid_EventDispatch
+;   0x1c00018 -> FSWAssGridCheck_Evt1C00018
+;   0x1c00019 -> FSWAssGrid_EventDispatch
+;   0x1c0001a -> FSWAssGridCheck_Evt1C00018
+;   0x1c0001b -> AudioTable_ReturnZero
+;   0x1c0001c -> FSWAssGridCheck_Evt1C0001C
+;   0x1c0001d -> FSWAssGridCheck_Evt1C0001C
 	jp_ind 8, 0x07, 0xf0, 0xe0
 FSWAssGrid_EventDispatch:
 	call	GetFocusObject
@@ -6684,7 +7361,7 @@ FSWAssGrid_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry
 	cp	de, 2:i3
 	jr	nz, FSWAssGridCheck_Entry
@@ -6709,7 +7386,7 @@ FSWAssGrid_EventDispatch:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry2
 	cp	de, 3:i3
 	jr	nz, FSWAssGridCheck_Entry2
@@ -6734,7 +7411,7 @@ FSWAssGridCheck_Entry:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry2:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry3
 	cp	de, 4:i3
 	jr	nz, FSWAssGridCheck_Entry3
@@ -6759,7 +7436,7 @@ FSWAssGridCheck_Entry2:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry3:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry4
 	cp	de, 5:i3
 	jr	nz, FSWAssGridCheck_Entry4
@@ -6784,7 +7461,7 @@ FSWAssGridCheck_Entry3:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry4:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry5
 	cp	de, 6:i3
 	jr	nz, FSWAssGridCheck_Entry5
@@ -6809,7 +7486,7 @@ FSWAssGridCheck_Entry4:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry5:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry6
 	cp	de, 7:i3
 	jr	nz, FSWAssGridCheck_Entry6
@@ -6834,7 +7511,7 @@ FSWAssGridCheck_Entry5:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry6:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, AudioTable_ReturnZero
 	cp	de, 8
 	jrl	nz, AudioTable_ReturnZero
@@ -6858,6 +7535,7 @@ FSWAssGridCheck_Entry6:
 	ld	xwa, 10368
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
+FSWAssGridCheck_Evt1C00018:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
@@ -6870,7 +7548,7 @@ FSWAssGridCheck_Entry6:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry7
 	cp	de, 2:i3
 	jr	nz, FSWAssGridCheck_Entry7
@@ -6895,7 +7573,7 @@ FSWAssGridCheck_Entry6:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry7:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry8
 	cp	de, 3:i3
 	jr	nz, FSWAssGridCheck_Entry8
@@ -6920,7 +7598,7 @@ FSWAssGridCheck_Entry7:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry8:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry9
 	cp	de, 4:i3
 	jr	nz, FSWAssGridCheck_Entry9
@@ -6945,7 +7623,7 @@ FSWAssGridCheck_Entry8:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry9:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry10
 	cp	de, 5:i3
 	jr	nz, FSWAssGridCheck_Entry10
@@ -6970,7 +7648,7 @@ FSWAssGridCheck_Entry9:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry10:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry11
 	cp	de, 6:i3
 	jr	nz, FSWAssGridCheck_Entry11
@@ -6995,7 +7673,7 @@ FSWAssGridCheck_Entry10:
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry11:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, FSWAssGridCheck_Entry12
 	cp	de, 7:i3
 	jr	nz, FSWAssGridCheck_Entry12
@@ -7020,7 +7698,7 @@ FSWAssGridCheck_Entry11:
 	ld	de, 2:i3
 	jr	FSWAssGridCheck_Join
 FSWAssGridCheck_Entry12:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, AudioTable_ReturnZero
 	cp	de, 8
 	jrl	nz, AudioTable_ReturnZero
@@ -7046,6 +7724,7 @@ FSWAssGridCheck_Entry12:
 FSWAssGridCheck_Join:
 	call	MainLswPut
 	jrl	AudioTable_ReturnZero
+FSWAssGridCheck_Evt1C0001C:
 	lda	xix, (xde+4)
 	lda	xiy, (xsp+4)
 	ld	xwa, (xde)
@@ -7464,6 +8143,14 @@ FswAsIniFunc:
 	add xde, CtrlAssignStr_Off_0x58
 	ld de, (xde)
 	lda xix, (FswAsIni_EventDispatch:24)
+; Computed jump: target = FswAsIni_EventDispatch + CtrlAssignStr_Off_0x58[i], CtrlAssignStr_Off_0x58 = 16-bit offsets (6 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
+;   0 -> SeqLoadFunc_ReturnZero
+;   1 -> FswAsIni_EventDispatch
+;   2 -> SeqLoadFunc_ReturnZero
+;   3 -> SeqLoadFunc_ReturnZero
+;   4 -> SeqLoadFunc_ReturnZero
+;   5 -> SeqLoadFunc_ReturnZero
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; FswAsIniFunc event dispatch (6-entry, event 0x1c00013, table 0xed1234)
 FswAsIni_EventDispatch:
@@ -7613,7 +8300,7 @@ SeqLoad_PostEvent:
 PmemPageCtl_OK_RotateReverse:
 	cp (0x0340e2:24), 0x01
 	jr nz, PmemPageCtl_OK_RotatePost
-	decm 1, (xwa)
+	decw	1, (xwa)
 	ld xwa, 0x45000d
 	ld xbc, 0x1c00002
 	ld xde, 0:i3
@@ -7671,6 +8358,15 @@ AcPmExpFilterGridBoxProc:
 	add xbc, ParamStr02_Vocalist_0x44
 	ld bc, (xbc)
 	lda xix, (PmemPageCtl_EventDispatch:24)
+; Computed jump: target = PmemPageCtl_EventDispatch + ParamStr02_Vocalist_0x44[i], ParamStr02_Vocalist_0x44 = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> AcPmExpFilterGridBoxProc_Evt1C00017
+;   0x1c00018 -> AcPmExpFilterGridBoxProc_Evt1C00018
+;   0x1c00019 -> AcPmExpFilterGridBoxProc_Evt1C00017
+;   0x1c0001a -> AcPmExpFilterGridBoxProc_Evt1C00018
+;   0x1c0001b -> PmExpFilter_DefaultInherited
+;   0x1c0001c -> AcPmExpFilterGridBoxProc_Evt1C0001C
+;   0x1c0001d -> AcPmExpFilterGridBoxProc_Evt1C0001C
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; IvPmemWindowPageCtl event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1420)
@@ -7788,7 +8484,8 @@ PmExpFilter_DrawCellBank1:
 	lda	xbc, (15536704:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x04, 0x14
+	pushw	237
+	pushw	5124
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -7797,8 +8494,8 @@ PmExpFilter_DrawCellBank1:
 	lda	xde, (xsp+280)
 	ld	xbc, 31457420
 	call	SendEvent
-	incm8	1, (xsp+10)
-	.byte 0x8f, 0x0a, 0x3f, 0x09
+	inc	1, (xsp+10)
+	cp	(xsp+10), 9
 	jr	c, PmExpFilter_DrawCellBank1
 	lda	xwa, (xsp+16)
 	ldw	(xwa+2), 6
@@ -7810,7 +8507,7 @@ PmExpFilter_DrawCellBank1:
 	call	DrawDesignBox
 	lda	xde, (xsp+16)
 	ld	wa, (xde+4)
-	.byte 0x92, 0xa0
+	sub	wa, (xde)
 	exts	xwa
 	divs	wa, 2
 	ld	bc, (xde)
@@ -7865,8 +8562,8 @@ PmExpFilter_DrawCellBank2:
 	lda XDE,(XSP+0x0118)
 	ld XBC,0x01e0008c
 	call SendEvent
-	incm8	1, (xsp+10)
-	.byte 0x8f, 0x0a, 0x3f, 0x09
+	inc	1, (xsp+10)
+	cp	(xsp+10), 9
 	jr	c, PmExpFilter_DrawCellBank2
 	lda	xwa, (xsp+16)
 	ldw	(xwa+2), 6
@@ -7878,7 +8575,7 @@ PmExpFilter_DrawCellBank2:
 	call	DrawDesignBox
 	lda	xde, (xsp+16)
 	ld	wa, (xde+4)
-	.byte 0x92, 0xa0
+	sub	wa, (xde)
 	exts	xwa
 	divs	wa, 2
 	ld	bc, (xde)
@@ -7904,10 +8601,12 @@ PmExpFilter_DrawCellBank2:
 	lda	xde, (xsp+24)
 	ld	xhl, 0:i3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xf7, 0x00
+	pushw	0
+	pushw	247
 PmExpFilter_DrawCentered:
 	call DrawStringCentered
 	jrl SeqLoad_ReturnZeroJmp
+AcPmExpFilterGridBoxProc_Evt1C00017:
 	ld xwa, xiz
 	ld XBC, (xsp + 0x0124)
 	ld XDE, (xsp + 0x0120)
@@ -7979,6 +8678,7 @@ PmExpFilter_FallbackForward:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl PmExpFilter_SetDialEnable
+AcPmExpFilterGridBoxProc_Evt1C00018:
 	ld xwa, xiz
 	ld XBC, (xsp + 0x0124)
 	ld XDE, (xsp + 0x0120)
@@ -8080,6 +8780,7 @@ PmExpFilter_GetNameCommon:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	SeqLoad_ReturnZeroJmp
+AcPmExpFilterGridBoxProc_Evt1C0001C:
 	ld	xwa, xiz
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -8157,6 +8858,15 @@ PmExpFilterGridCheck:
 	add xwa, ParamStr02_Vocalist_0xBE
 	ld wa, (xwa)
 	lda xix, (PmExpFilter_EventDispatch:24)
+; Computed jump: target = PmExpFilter_EventDispatch + ParamStr02_Vocalist_0xBE[i], ParamStr02_Vocalist_0xBE = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> PmExpFilter_EventDispatch
+;   0x1c00018 -> PmExpFilterGridCheck_Evt1C00018
+;   0x1c00019 -> PmExpFilter_EventDispatch
+;   0x1c0001a -> PmExpFilterGridCheck_Evt1C00018
+;   0x1c0001b -> SeqLoad_StoreReturnZero
+;   0x1c0001c -> PmExpFilterGridCheck_Evt1C0001C
+;   0x1c0001d -> PmExpFilterGridCheck_Evt1C0001C
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; PmExpFilterGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed149a)
@@ -8168,18 +8878,17 @@ PmExpFilter_EventDispatch:
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
-	.byte 0xf3	; v10 does not spell this byte either
-	swi	5
-	nop
-	.byte 0x01	; v10 does not spell this byte either
-	.byte 0x30	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	lda_dri	xwa, 0xfd, 0x00, 0x01
 	ld	xbc, xde
 	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
-	jrl	nz, 619
+	jrl	nz, SeqLoad_StoreReturnZero
 	ld	c, (213218:24)
 	ld	wa, de
 	sla	wa, 2
@@ -8201,23 +8910,23 @@ PmExpFilterGridCheck_Skip:
 	cp	de, 2:i3
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
-	jrl	gt, 556
+	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (ParamStr02_Vocalist_0x76:24)
 	ld_rrl	xwa, xbc, wa
 	ldw	bc, 65535
 	ld	de, 2:i3
-	jr	119
+	jr	PmExpFilterGridCheck_Join
+PmExpFilterGridCheck_Evt1C00018:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
-	.byte 0xf3	; v10 does not spell this byte either
-	swi	5
-	nop
-	.byte 0x01	; v10 does not spell this byte either
-	.byte 0x31	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	lda_dri	xbc, 0xfd, 0x00, 0x01
 	ld	xwa, xde
 	srl	xwa, 0
 	ld	qwa, 0
@@ -8227,7 +8936,7 @@ PmExpFilterGridCheck_Skip:
 	sla	wa, 2
 	dec	8, wa
 	cpw	(xbc), 1
-	jrl	nz, 488
+	jrl	nz, SeqLoad_StoreReturnZero
 	ld	c, (213218:24)
 	cp	c, 2:i3
 	jr	z, PmExpFilterGridCheck_Skip2
@@ -8253,29 +8962,30 @@ PmExpFilterGridCheck_Skip2:
 	ld	de, 2:i3
 PmExpFilterGridCheck_Join:
 	call	MainLswAdd
-	jrl	413
+	jrl	SeqLoad_StoreReturnZero
+PmExpFilterGridCheck_Evt1C0001C:
 	ld	a, (213218:24)
 	cp	a, 2:i3
-	jr	z, 103
+	jr	z, PmExpFilterGridCheck_Skip5
 	cp	a, 1:i3
-	jrl	nz, 399
+	jrl	nz, SeqLoad_StoreReturnZero
 	ld	l, 0:opc
 	lda	xix, (ParamStr02_Vocalist_0x52:24)
 	ld	xwa, (xde)
+PmExpFilterGridCheck_Loop:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
-	.byte 0xe3	; v10 does not spell this byte either
-	reti
-	.byte 0xf0	; v10 does not spell this byte either
-	.byte 0xe4	; v10 does not spell this byte either
-	.byte 0xf0	; v10 does not spell this byte either
-	jr	nz, 65
-	.byte 0xf3	; v10 does not spell this byte either
-	swi	5
-	nop
-	.byte 0x01	; v10 does not spell this byte either
-	.byte 0x31	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4
+	jr	nz, PmExpFilterGridCheck_Skip4
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	lda_dri	xbc, 0xfd, 0x00, 0x01
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -8284,42 +8994,44 @@ PmExpFilterGridCheck_Join:
 	ld	(xbc+4), xhl
 	ld	xwa, ParamStr02_Vocalist_0x9E
 	cpw	(xde+4), 0
-	jr	z, 5
+	jr	z, PmExpFilterGridCheck_Skip3
 	ld	xwa, ParamStr02_Vocalist_0x9A
+PmExpFilterGridCheck_Skip3:
 	push	xwa
 	push	xhl
 	call	Free_Compare2
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	.byte 0xf3	; v10 does not spell this byte either
-	swi	5
-	nop
-	.byte 0x01	; v10 does not spell this byte either
-	.byte 0x32	; v10 does not spell this byte either
-	ld	xbc, 31457420
-	jrl	307
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	lda_dri	xde, 0xfd, 0x00, 0x01
+	ld	xbc, 0x1e0008c
+	jrl	PmExpFilterCheck_DoSend
+PmExpFilterGridCheck_Skip4:
 	inc	1, l
 	cp	l, 9
-	jr	c, -86
-	jrl	301
+	jr	c, PmExpFilterGridCheck_Loop
+	jrl	SeqLoad_StoreReturnZero
+PmExpFilterGridCheck_Skip5:
 	ld	l, 0:opc
 	lda	xix, (ParamStr02_Vocalist_0x76:24)
 	ld	xwa, (xde)
+PmExpFilterGridCheck_Loop2:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
-	.byte 0xe3	; v10 does not spell this byte either
-	reti
-	.byte 0xf0	; v10 does not spell this byte either
-	.byte 0xe4	; v10 does not spell this byte either
-	.byte 0xf0	; v10 does not spell this byte either
-	jr	nz, 65
-	.byte 0xf3	; v10 does not spell this byte either
-	swi	5
-	nop
-	.byte 0x01	; v10 does not spell this byte either
-	.byte 0x31	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4
+	jr	nz, PmExpFilterGridCheck_Skip7
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	lda_dri	xbc, 0xfd, 0x00, 0x01
 	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
@@ -8328,49 +9040,75 @@ PmExpFilterGridCheck_Join:
 	ld	(xbc+4), xhl
 	ld	xwa, ParamStr02_Vocalist_0xA6
 	cpw	(xde+4), 0
-	jr	z, 5
+	jr	z, PmExpFilterGridCheck_Skip6
 	ld	xwa, ParamStr02_Vocalist_0xA2
+PmExpFilterGridCheck_Skip6:
 	push	xwa
 	push	xhl
 	call	Free_Compare2
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
-	.byte 0xf3	; v10 does not spell this byte either
-	swi	5
-	nop
-	.byte 0x01	; v10 does not spell this byte either
-	.byte 0x32	; v10 does not spell this byte either
-	ld	xbc, 31457420
-	jrl	209
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	lda_dri	xde, 0xfd, 0x00, 0x01
+	ld	xbc, 0x1e0008c
+	jrl	PmExpFilterCheck_DoSend
+PmExpFilterGridCheck_Skip7:
 	inc	1, l
 	cp	l, 9
-	jr	c, -86
-	jrl	203
+	jr	c, PmExpFilterGridCheck_Loop2
+	jrl	SeqLoad_StoreReturnZero
 PmExpFilterCheck_CellDecode:
-	.byte 0xf3, 0xfd, 0x00, 0x01, 0x33, 0xea, 0x88, 0xe8
-	.byte 0xef, 0x00, 0xd7, 0xe2, 0xa8, 0xb3, 0x50, 0xbb
-	.byte 0x02, 0x31, 0xda, 0x88, 0xb1, 0x50, 0xb7, 0x32
-	.byte 0xbb, 0x04, 0x62, 0x91, 0x20, 0xd8, 0x89, 0xd9
-	.byte 0xec, 0x02, 0x93, 0x3f, 0x01, 0x00, 0x7e, 0xa2
-	.byte 0x00, 0xc2, 0xe2, 0x40, 0x03, 0x27, 0xd9, 0x68
-	.byte 0xcf, 0xda, 0x66, 0x4a, 0xcf, 0xd9, 0x7e, 0x92
-	.byte 0x00, 0xd8, 0xda, 0x71, 0x8d, 0x00, 0xd8, 0xcf
-	.byte 0x0a, 0x00, 0x7a, 0x86, 0x00, 0xf2, 0x2e, 0x14
-	.byte 0xed, 0x30, 0xe3, 0x07, 0xe0, 0xe4, 0x20, 0x1d
-	.byte 0x66, 0xcc, 0xfc, 0x40, 0x8a, 0x14, 0xed, 0x00
-	.byte 0xdb, 0xd8, 0x6e, 0x05, 0x40, 0x86, 0x14, 0xed
-	.byte 0x00
+	lda_dri	xhl, 0xfd, 0x00, 0x01	; lda xhl, xsp+0x0100
+	ld	xwa, xde
+	srl	xwa, 0
+	ld	qwa, 0
+	ld	(xhl), wa
+	lda	xbc, (xhl+2)
+	ld	wa, de
+	ld	(xbc), wa
+	lda	xde, (xsp)
+	ld	(xhl+4), xde
+	ld	wa, (xbc)
+	ld	bc, wa
+	sla	bc, 2
+	cpw	(xhl), 1
+	jrl	nz, SeqLoad_StoreReturnZero
+	ld	l, (0x0340e2:24)
+	dec	8, bc
+	cp	l, 2:i3
+	jr	z, PmExpFilterCheck_AltDecode
+	cp	l, 1:i3
+	jrl	nz, SeqLoad_StoreReturnZero
+	cp	wa, 2:i3
+	jrl	lt, SeqLoad_StoreReturnZero
+	cp	wa, 10
+	jrl	gt, SeqLoad_StoreReturnZero
+	lda	xwa, (ParamStr02_Vocalist_0x52:24)
+	ld_rrl	xwa, xwa, bc	; ld xwa, (xwa+bc)
+	call	AcApcToggleProc_Helper
+	ld	xwa, ParamStr02_Vocalist_0xAE
+	cp	hl, 0:i3
+	jr	nz, PmExpFilterCheck_SendNameA
+	ld	xwa, ParamStr02_Vocalist_0xAA
 PmExpFilterCheck_SendNameA:
-	.byte 0x38, 0xbf, 0x04, 0x30, 0x38, 0x1d, 0x70, 0x07
-	.byte 0xff, 0xef, 0x60, 0x1d, 0xc3, 0x40, 0xfa, 0xeb
-	.byte 0x88, 0xf3, 0xfd, 0x00, 0x01, 0x32, 0x41, 0x8c
-	.byte 0x00, 0xe0, 0x01, 0x68, 0x49
+	push	xwa
+	lda	xwa, (xsp+4)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda_dri	xde, 0xfd, 0x00, 0x01	; lda xde, xsp+0x0100
+	ld	xbc, 0x1e0008c
+	jr	PmExpFilterCheck_DoSend
 PmExpFilterCheck_AltDecode:
 	cp	wa, 2:i3
-	jr	lt, 40	; -> 0xFBBC1E
+	jr	lt, PmExpFilterCheck_PushDefault	; -> 0xFBBC1E
 	cp	wa, 10
-	jr	gt, 34	; -> 0xFBBC1E
+	jr	gt, PmExpFilterCheck_PushDefault	; -> 0xFBBC1E
 	lda	xwa, (15537234:24)
 	ld_rrl	xwa, xwa, bc
 	call	AcApcToggleProc_Helper
@@ -8411,7 +9149,6 @@ SeqLoad_StoreReturnZero:
 	ld xhl, 0:i3
 	lda_dri XSP, 0xfd, 0x08, 0x01
 	ret
-PmExpFilterCheck_Boundary:
 
 AcDispTimeSetGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -8440,6 +9177,15 @@ AcDispTimeSetGridBoxProc:
 	add xbc, ParamStr02_Vocalist_0xCC
 	ld bc, (xbc)
 	lda xix, (PmExpFilter2_EventDispatch:24)
+; Computed jump: target = PmExpFilter2_EventDispatch + ParamStr02_Vocalist_0xCC[i], ParamStr02_Vocalist_0xCC = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> AcDispTimeSetGridBoxProc_Evt1C00017
+;   0x1c00018 -> AcDispTimeSetGridBoxProc_Evt1C00018
+;   0x1c00019 -> AcDispTimeSetGridBoxProc_Evt1C00017
+;   0x1c0001a -> AcDispTimeSetGridBoxProc_Evt1C00018
+;   0x1c0001b -> DispTimeSet_DefaultInherited
+;   0x1c0001c -> AcDispTimeSetGridBoxProc_Evt1C0001C
+;   0x1c0001d -> AcDispTimeSetGridBoxProc_Evt1C0001C
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; PmExpFilter event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed14a8)
@@ -8511,6 +9257,7 @@ DispTimeSet_SelectInit:
 	ld	xde, (xsp+12)
 	call	MainFuncCall
 	jrl	SeqSave_ReturnZeroJmp
+AcDispTimeSetGridBoxProc_Evt1C00017:
 	ld	xwa, xiz
 	ld	xbc, (xsp+16)
 	ld	xde, (xsp+12)
@@ -8564,6 +9311,7 @@ DispTimeSet_DialFallback:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl DispTimeSet_SetDialEnabled
+AcDispTimeSetGridBoxProc_Evt1C00018:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -8641,6 +9389,7 @@ DispTimeSet_GetNameCommon:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	SeqSave_ReturnZeroJmp
+AcDispTimeSetGridBoxProc_Evt1C0001C:
 	ld	xwa, xiz
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -8687,6 +9436,15 @@ DispTimeSetGridCheck:
 	add xwa, FadeTimeStr_Off_0x38
 	ld wa, (xwa)
 	lda xix, (DispTimeSet_EventDispatch:24)
+; Computed jump: target = DispTimeSet_EventDispatch + FadeTimeStr_Off_0x38[i], FadeTimeStr_Off_0x38 = 16-bit offsets (7 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
+;   0x1c00017 -> DispTimeSet_EventDispatch
+;   0x1c00018 -> DispTimeSetGridCheck_Evt1C00018
+;   0x1c00019 -> DispTimeSet_EventDispatch
+;   0x1c0001a -> DispTimeSetGridCheck_Evt1C00018
+;   0x1c0001b -> DispTimeSet_ReturnZero
+;   0x1c0001c -> DispTimeSetGridCheck_Evt1C0001C
+;   0x1c0001d -> DispTimeSetGridCheck_Evt1C0001C
 	jp_ind 8, 0x07, 0xf0, 0xe0
 DispTimeSet_EventDispatch:
 	call	GetFocusObject
@@ -8701,7 +9459,7 @@ DispTimeSet_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, DispTimeSetGridCheck_Entry
 	cp	de, 2:i3
 	jr	nz, DispTimeSetGridCheck_Entry
@@ -8717,7 +9475,7 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+10), xbc
 	jrl	DispTimeSetGridCheck_Join
 DispTimeSetGridCheck_Entry:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, DispTimeSetGridCheck_Entry2
 	cp	de, 3:i3
 	jr	nz, DispTimeSetGridCheck_Entry2
@@ -8733,7 +9491,7 @@ DispTimeSetGridCheck_Entry:
 	ld	(xwa+10), xbc
 	jrl	DispTimeSetGridCheck_Join
 DispTimeSetGridCheck_Entry2:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, DispTimeSetGridCheck_Entry3
 	cp	de, 4:i3
 	jr	nz, DispTimeSetGridCheck_Entry3
@@ -8749,7 +9507,7 @@ DispTimeSetGridCheck_Entry2:
 	ld	(xwa+10), xbc
 	jrl	DispTimeSetGridCheck_Join
 DispTimeSetGridCheck_Entry3:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, DispTimeSetGridCheck_Entry4
 	cp	de, 5:i3
 	jr	nz, DispTimeSetGridCheck_Entry4
@@ -8765,7 +9523,7 @@ DispTimeSetGridCheck_Entry3:
 	ld	(xwa+10), xbc
 	jrl	DispTimeSetGridCheck_Join
 DispTimeSetGridCheck_Entry4:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, DispTimeSetGridCheck_Entry5
 	cp	de, 6:i3
 	jr	nz, DispTimeSetGridCheck_Entry5
@@ -8781,7 +9539,7 @@ DispTimeSetGridCheck_Entry4:
 	ld	(xwa+10), xbc
 	jrl	DispTimeSetGridCheck_Join
 DispTimeSetGridCheck_Entry5:
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, DispTimeSet_ReturnZero
 	cp	de, 7:i3
 	jrl	nz, DispTimeSet_ReturnZero
@@ -8796,6 +9554,7 @@ DispTimeSetGridCheck_Entry5:
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
 	jrl	DispTimeSetGridCheck_Join
+DispTimeSetGridCheck_Evt1C00018:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
@@ -8809,7 +9568,7 @@ DispTimeSetGridCheck_Entry5:
 	ld	(xiy), wa
 	ld	iz, de
 	ld	(xiy+2), iz
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, DispTimeSetGridCheck_Entry6
 	cp	iz, 2:i3
 	jr	nz, DispTimeSetGridCheck_Entry6
@@ -8825,7 +9584,7 @@ DispTimeSetGridCheck_Entry5:
 	ld	(xwa+10), xbc
 	jrl	DispTimeSetGridCheck_Join
 DispTimeSetGridCheck_Entry6:
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, DispTimeSetGridCheck_Entry7
 	cp	iz, 3:i3
 	jr	nz, DispTimeSetGridCheck_Entry7
@@ -8841,7 +9600,7 @@ DispTimeSetGridCheck_Entry6:
 	ld	(xwa+10), xbc
 	jrl	DispTimeSetGridCheck_Join
 DispTimeSetGridCheck_Entry7:
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, DispTimeSetGridCheck_Entry8
 	cp	iz, 4:i3
 	jr	nz, DispTimeSetGridCheck_Entry8
@@ -8857,7 +9616,7 @@ DispTimeSetGridCheck_Entry7:
 	ld	(xwa+10), xbc
 	jrl	DispTimeSetGridCheck_Join
 DispTimeSetGridCheck_Entry8:
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, DispTimeSetGridCheck_Skip
 	cp	iz, 5:i3
 	jr	nz, DispTimeSetGridCheck_Skip
@@ -8878,7 +9637,7 @@ DispTimeSetGridCheck_Skip:
 	lda	xhl, (xwa+6)
 	lda	xde, (xwa+10)
 	lda	xix, (xwa+14)
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, DispTimeSetGridCheck_Entry9
 	cp	iz, 6:i3
 	jr	nz, DispTimeSetGridCheck_Entry9
@@ -8893,7 +9652,7 @@ DispTimeSetGridCheck_Skip:
 	ld	(xde), xbc
 	jr	DispTimeSetGridCheck_Join
 DispTimeSetGridCheck_Entry9:
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jrl	nz, DispTimeSet_ReturnZero
 	cp	iz, 7:i3
 	jrl	nz, DispTimeSet_ReturnZero
@@ -8909,9 +9668,10 @@ DispTimeSetGridCheck_Entry9:
 DispTimeSetGridCheck_Join:
 	call	MainRamAdd
 	jrl	DispTimeSet_ReturnZero
+DispTimeSetGridCheck_Evt1C0001C:
 	lda	xwa, (213222:24)
 	lda	xiy, (xde+14)
-	.byte 0xa2, 0xf0
+	cp	xwa, (xde)
 	jr	nz, DispTimeSetGridCheck_Skip2
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
@@ -8936,7 +9696,7 @@ DispTimeSetGridCheck_Join:
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetGridCheck_Skip2:
 	lda	xwa, (213224:24)
-	.byte 0xa2, 0xf0
+	cp	xwa, (xde)
 	jr	nz, DispTimeSetGridCheck_Skip3
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
@@ -8963,7 +9723,7 @@ DispTimeSetGridCheck_Skip3:
 	lda	xbc, (213226:24)
 	lda	xwa, (15537334:24)
 	ld	(xsp+4), xwa
-	.byte 0xa2, 0xf1
+	cp	xbc, (xde)
 	jr	nz, DispTimeSetGridCheck_Skip4
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
@@ -8988,7 +9748,7 @@ DispTimeSetGridCheck_Skip3:
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetGridCheck_Skip4:
 	lda	xwa, (213228:24)
-	.byte 0xa2, 0xf0
+	cp	xwa, (xde)
 	jr	nz, DispTimeSetGridCheck_Skip5
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
@@ -9017,7 +9777,7 @@ DispTimeSetGridCheck_Skip5:
 	lda	xix, (xsp+30)
 	lda	xwa, (xhl+2)
 	lda	xbc, (xhl+4)
-	.byte 0xa2, 0xf6
+	cp	xiz, (xde)
 	jr	nz, DispTimeSetGridCheck_Skip6
 	ldw	(xhl), 1
 	ldw	(xwa), 6
@@ -9040,7 +9800,7 @@ DispTimeSetGridCheck_Skip5:
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetGridCheck_Skip6:
 	lda	xiz, (213232:24)
-	.byte 0xa2, 0xf6
+	cp	xiz, (xde)
 	jrl	nz, DispTimeSet_ReturnZero
 	ldw	(xhl), 1
 	ldw	(xwa), 7
@@ -9241,7 +10001,6 @@ MainTimeFlash_DispatchCmd:
 MainTimeFlash_ReturnZero:
 	ld xhl, 0:i3
 	ret
-MainTimeFlash_Boundary:
 
 NormScreenProc:
 	dec 8, xsp
@@ -9260,7 +10019,7 @@ NormScreenProc:
 NormScreen_InitHandler:
 	ld	xwa, xiz
 	call	GetViewInstance
-	.byte 0xc2, 0xe6, 0x40, 0x03, 0x3f, 0x00
+	cpib_da	(0x0340e6), 0
 	jr	z, NormScreen_ClearBit
 	ld	a, (36076:16)
 	extz	wa
@@ -9279,9 +10038,9 @@ NormScreen_InitHandler:
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	call	PostEvent
-	.byte 0xf1, 0xec, 0x8c, 0xb0
+	res	0, (0x8cec:16)
 NormScreen_ClearBit:
-	.byte 0xf1, 0xec, 0x8c, 0xb0	; resda 0, 0x8d88 (v7 patched)
+	res	0, (0x8cec:16)	; resda 0, 0x8d88 (v7 patched)
 
 	ld xwa, xiz
 
@@ -9416,13 +10175,19 @@ IvWindowPgCtl_OkHandler:
 	exts xde
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001e
-	jr IvWindowPgCtl_SendPageEvent
+	jr	IvWindowPgCtl_SendPageEvent
 
 IvWindowPgCtl_TryNextPage:
-	.byte 0x90, 0x3f, 0x04, 0x00, 0x6e, 0x46, 0x40, 0xc0
-	.byte 0x00, 0x00, 0x00, 0x1d, 0x66, 0xcc, 0xfc, 0xaf
-	.byte 0x04, 0x20, 0xb8, 0x16, 0x31, 0xd8, 0xa9, 0xdb
-	.byte 0xd9, 0x6e, 0x02, 0xd8, 0xaa
+	cpw	(xwa), 4
+	jr	nz, IvWindowPgCtl_DisableAll
+	ld	xwa, 192
+	call	AcApcToggleProc_Helper
+	ld	xwa, (xsp+4)
+	lda	xbc, (xwa+22)
+	ld	wa, 1:i3
+	cp	hl, 1:i3
+	jr	nz, IvWindowPgCtl_SetNextPage
+	ld	wa, 2:i3
 IvWindowPgCtl_SetNextPage:
 	ld xbc, (xbc)
 	ld (xbc), wa
@@ -9498,7 +10263,6 @@ IvWindowPgCtl_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
-IvWindowPgCtl_Boundary:
 
 IvPageOverWrProc:
 	lda xsp, (xsp - 12)
@@ -9771,6 +10535,18 @@ MssNameFunc:
 	add xbc, FadeTimeStr_Off_0x62
 	ld bc, (xbc)
 	lda xix, (MssName_EventDispatch:24)
+; Computed jump: target = MssName_EventDispatch + FadeTimeStr_Off_0x62[i], FadeTimeStr_Off_0x62 = 16-bit offsets (10 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
+;   0x1e0003e -> MssNameFunc_Evt1E0003E
+;   0x1e0003f -> MssNameFunc_Evt1E0003E
+;   0x1e00040 -> MssName_ReturnZero
+;   0x1e00041 -> MssName_ReturnZero
+;   0x1e00042 -> MssName_ReturnZero
+;   0x1e00043 -> MssNameFunc_Evt1E00043
+;   0x1e00044 -> MssNameFunc_Evt1E0003E
+;   0x1e00045 -> MssNameFunc_Evt1E00045
+;   0x1e00046 -> MssNameFunc_Evt1E00046
+;   0x1e00047 -> MssName_EventDispatch
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; MssNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ac)
 MssName_EventDispatch:
@@ -9839,12 +10615,16 @@ MssNameFunc_Join:
 MssNameFunc_Join2:
 	ld	xhl, (xsp+4)
 	jr	MssNameFunc_Epilogue
+MssNameFunc_Evt1E0003E:
 	ld	xhl, 1:i3
 	jr	MssNameFunc_Epilogue
+MssNameFunc_Evt1E00043:
 	ld	xhl, 512
 	jr	MssNameFunc_Epilogue
+MssNameFunc_Evt1E00045:
 	lda	xhl, (36026:16)
 	jr	MssNameFunc_Epilogue
+MssNameFunc_Evt1E00046:
 	ld	xhl, 2:i3
 	jr	MssNameFunc_Epilogue
 MssName_ReturnZero:
@@ -9853,7 +10633,6 @@ MssNameFunc_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
-MssName_Boundary:
 
 AcPmBkNoBoxProc:
 	lda_dri XSP, 0xfd, 0xfc, 0xfe
@@ -9948,7 +10727,6 @@ AcPmBkNoBox_Epilogue:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
-AcPmBkNoBox_Boundary:
 
 AcBkNoBoxProc:
 	lda_dri XSP, 0xfd, 0xfc, 0xfe
@@ -10024,7 +10802,6 @@ AcBkNoBox_Epilogue:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x04, 0x01
 	ret
-AcBkNoBox_Boundary:
 
 MsaModeScreenProc:
 	lda	xsp, (xsp-24)
@@ -10267,7 +11044,6 @@ MsaMode_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret
-MsaMode_Boundary:
 
 PmemModeBoxProc:
 	lda_dri XSP, 0xfd, 0xe8, 0xfe
@@ -10335,7 +11111,7 @@ PmemMode_Paint:
 
 	ld XDE, (xsp + 0x0114)
 
-	.byte 0x1d, 0xfc, 0x3f, 0xfa	; call InheritedProc (v7 addr)
+	call	InheritedProc	; call InheritedProc (v7 addr)
 
 	lda_dri XWA, 0xfd, 0x0c, 0x01
 
@@ -10573,7 +11349,6 @@ PmemMode_Epilogue:
 	pop xiz
 	lda_dri XSP, 0xfd, 0x18, 0x01
 	ret
-PmemMode_Boundary:
 
 AcPmBkEditBoxProc:
 	lda_dri XSP, 0xfd, 0xce, 0xfe
@@ -11049,12 +11824,26 @@ PmBkNameFunc:
 	add xbc, FadeTimeStr_Off_0xA4
 	ld bc, (xbc)
 	lda xix, (PmBkName_EventDispatch:24)
+; Computed jump: target = PmBkName_EventDispatch + FadeTimeStr_Off_0xA4[i], FadeTimeStr_Off_0xA4 = 16-bit offsets (10 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
+;   0x1e0003e -> PmBkNameFunc_Evt1E0003E
+;   0x1e0003f -> PmBkNameFunc_Evt1E0003E
+;   0x1e00040 -> PmBkName_ReturnZero
+;   0x1e00041 -> PmBkName_ReturnZero
+;   0x1e00042 -> PmBkName_ReturnZero
+;   0x1e00043 -> PmBkNameFunc_Evt1E00043
+;   0x1e00044 -> PmBkName_ReturnZero
+;   0x1e00045 -> PmBkName_DataBytes
+;   0x1e00046 -> PmBkNameFunc_Evt1E0003E
+;   0x1e00047 -> PmBkName_EventDispatch
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; PmBkNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ee)
 PmBkName_EventDispatch:
 	ret
+PmBkNameFunc_Evt1E0003E:
 	ld	xhl, 1:i3
 	ret
+PmBkNameFunc_Evt1E00043:
 	ld	xhl, 9
 	ret
 
@@ -11066,17 +11855,30 @@ PmBkName_DataBytes:
 	lda	xhl, (36012:16)
 	ret
 GmOnOffFunc:
-	.byte 0xbf, 0xf4, 0x37, 0x3e, 0xe8, 0x8e, 0xe9, 0xcf
-	.byte 0x83, 0x00, 0xe0, 0x01, 0x66, 0x50, 0xe9, 0xcf
-	.byte 0x3f, 0x00, 0xe0, 0x01, 0x76, 0xc8, 0x00, 0xe9
-	.byte 0xcf, 0x3e, 0x00, 0xe0, 0x01, 0x66, 0x3a, 0xe9
-	.byte 0xcf, 0x41, 0x00, 0xe0, 0x01, 0x66, 0x32, 0xe9
-	.byte 0xcf, 0x40, 0x00, 0xe0, 0x01, 0x66, 0x22, 0xe9
-	.byte 0xcf, 0x42, 0x00, 0xe0, 0x01, 0x7e, 0xa7, 0x00
-	.byte 0x9a, 0x04, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0x02
-	.byte 0x16, 0xaa, 0x08, 0x20, 0x38, 0x1d, 0x95, 0x02
-	.byte 0xff, 0xbf, 0x0a, 0x37, 0xee, 0x8b, 0x78, 0x90
-	.byte 0x00
+	lda	xsp, (xsp-12)
+	push	xiz
+	ld	xiz, xwa
+	cp	xbc, 0x1e00083
+	jr	z, GmOnOff_GetBoundsRect
+	cp	xbc, 0x1e0003f
+	jrl	z, GmOnOff_DefaultReturn
+	cp	xbc, 0x1e0003e
+	jr	z, GmOnOff_Return1
+	cp	xbc, 0x1e00041
+	jr	z, GmOnOff_Return1
+	cp	xbc, 0x1e00040
+	jr	z, GmOnOff_Return0xC0
+	cp	xbc, 0x1e00042
+	jrl	nz, GmOnOff_DefaultReturn
+	pushw	(xde+4)
+	pushw	237
+	pushw	5634
+	ld	xwa, (xde+8)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	ld	xhl, xiz
+	jrl	VariScreen_CleanupRet
 GmOnOff_Return0xC0:
 	ld xhl, 0xc0
 	jrl VariScreen_CleanupRet
@@ -11138,7 +11940,6 @@ VariScreen_CleanupRet:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
-GmOnOff_Boundary:
 
 VariScreenProc:
 	lda_dri XSP, 0xfd, 0xca, 0xfd
@@ -11198,7 +11999,7 @@ VariScreen_HandleShow:
 	call	DkMdlyPly_CheckState_Helper
 	lda	xwa, (xsp+28)
 	ld	(xwa+4), l
-	.byte 0xb8, 0x02, 0x14, 0x9e, 0x8c	; differs from v10 here and llvm-objdump cannot read it
+	ld	(xwa+2), (35998)	; differs from v10 here and llvm-objdump cannot read it
 	call	16703515
 	ld	xhl, (xsp+24)
 	ld	xde, (xhl+56)
@@ -11281,39 +12082,85 @@ VariScreen_HandlePaint:
 	ld (XWA+0x02),DE
 	ld DE,(XHL)
 	add DE,0x0032
-	ld (XWA+0x06),DE
-	.byte 0xea, 0xac, 0x3a, 0x0b, 0xff, 0x00, 0x0b, 0xf7
-	.byte 0x00, 0x42, 0x04, 0x16, 0xed, 0x00, 0x1d, 0xbd
-	.byte 0xc6, 0xfa, 0xc1, 0x9e, 0x8c, 0x21, 0xd8, 0x12
-	.byte 0xd9, 0xa8, 0x1d, 0x26, 0xcd, 0xfc, 0xbf, 0x1f
-	.byte 0x47, 0xc1, 0x9e, 0x8c, 0x21, 0xd8, 0x12, 0x31
-	.byte 0x20, 0x00, 0x1d, 0x26, 0xcd, 0xfc, 0xbf, 0x1c
-	.byte 0x30, 0xb8, 0x04, 0x47, 0xb8, 0x02, 0x14, 0x9e
-	.byte 0x8c, 0x1d, 0x1b, 0xe0, 0xfe, 0x8f, 0x1c, 0x21
-	.byte 0xd8, 0x12, 0xf3, 0xfd, 0x22, 0x01, 0x31, 0x1d
-	.byte 0x39, 0xde, 0xfe, 0xf3, 0xfd, 0x22, 0x02, 0x31
-	.byte 0xb1, 0x02, 0x68, 0x00, 0xb9, 0x02, 0x33, 0xb3
-	.byte 0x02, 0x0c, 0x00, 0xf3, 0xfd, 0x26, 0x02, 0x30
-	.byte 0x91, 0x22, 0xb0, 0x52, 0x91, 0x22, 0xda, 0xc8
-	.byte 0x80, 0x00, 0xb8, 0x04, 0x52, 0x93, 0x22, 0xb8
-	.byte 0x02, 0x52, 0x93, 0x22, 0xda, 0xc8, 0x0f, 0x00
-	.byte 0xb8, 0x06, 0x52, 0xf3, 0xfd, 0x22, 0x01, 0x32
-	.byte 0xeb, 0xa8, 0x3b, 0x0b, 0xfb, 0x00, 0x0b, 0xf7
-	.byte 0x00, 0x1d, 0xbd, 0xc6, 0xfa, 0xf3, 0xfd, 0x22
-	.byte 0x02, 0x31, 0xb1, 0x02, 0x90, 0x00, 0xb9, 0x02
-	.byte 0x33, 0xb3, 0x02, 0x00, 0x00, 0xf3, 0xfd, 0x26
-	.byte 0x02, 0x30, 0x91, 0x22, 0xb0, 0x52, 0x91, 0x22
-	.byte 0xda, 0xc8, 0x38, 0x00, 0xb8, 0x04, 0x52, 0x93
-	.byte 0x22, 0xb8, 0x02, 0x52, 0x93, 0x22, 0xda, 0xc8
-	.byte 0x0f, 0x00, 0xb8, 0x06, 0x52, 0xaf, 0x18, 0x22
-	.byte 0xaa, 0x30, 0x22, 0x92, 0x22, 0xda, 0x09, 0x07
-	.byte 0x00, 0xf2, 0xfe, 0xfd, 0xec, 0x33, 0xea, 0x13
-	.byte 0xeb, 0x82, 0xeb, 0xa8, 0x3b, 0x0b, 0xff, 0x00
-	.byte 0x0b, 0xf7, 0x00, 0x1d, 0xbd, 0xc6, 0xfa, 0xe3
-	.byte 0xfd, 0x36, 0x02, 0x20, 0x41, 0x0f, 0x00, 0xc0
-	.byte 0x01, 0xea, 0xa8, 0x1d, 0x53, 0x92, 0xfa, 0xe3
-	.byte 0xfd, 0x36, 0x02, 0x20, 0x41, 0x0e, 0x00, 0xc0
-	.byte 0x01, 0xea, 0xa8
+	ld	(xwa+6), de
+	ld	xde, 4:i3
+	push	xde
+	pushw	255
+	pushw	247
+	ld	xde, FadeTimeStr_Off_0xBA
+	call	DrawString
+	ld	a, (0x8c9e:16)
+	extz	wa
+	ld	bc, 0:i3
+	call	DkMdlyPly_CheckState_Helper
+	ld	(xsp+31), l
+	ld	a, (0x8c9e:16)
+	extz	wa
+	ldw	bc, 32
+	call	DkMdlyPly_CheckState_Helper
+	lda	xwa, (xsp+28)
+	ld	(xwa+4), l
+	ld	(xwa+2), (35998)
+	call	0xfee01b
+	ld	a, (xsp+28)
+	extz	wa
+	lda	xbc, (xsp+290)
+	call	0xfede39
+	lda	xbc, (xsp+546)
+	ldw	(xbc), 104
+	lda	xhl, (xbc+2)
+	ldw	(xhl), 12
+	lda	xwa, (xsp+550)
+	ld	de, (xbc)
+	ld	(xwa), de
+	ld	de, (xbc)
+	add	de, 128
+	ld	(xwa+4), de
+	ld	de, (xhl)
+	ld	(xwa+2), de
+	ld	de, (xhl)
+	add	de, 15
+	ld	(xwa+6), de
+	lda	xde, (xsp+290)
+	ld	xhl, 0:i3
+	push	xhl
+	pushw	251
+	pushw	247
+	call	DrawString
+	lda	xbc, (xsp+546)
+	ldw	(xbc), 144
+	lda	xhl, (xbc+2)
+	ldw	(xhl), 0
+	lda	xwa, (xsp+550)
+	ld	de, (xbc)
+	ld	(xwa), de
+	ld	de, (xbc)
+	add	de, 56
+	ld	(xwa+4), de
+	ld	de, (xhl)
+	ld	(xwa+2), de
+	ld	de, (xhl)
+	add	de, 15
+	ld	(xwa+6), de
+	ld	xde, (xsp+24)
+	ld	xde, (xde+48)
+	ld	de, (xde)
+	muls	de, 7
+	lda	xhl, (NakaInst_MEMORY_A_ECFDF4_0xA:24)
+	exts	xde
+	add	xde, xhl
+	ld	xhl, 0:i3
+	push	xhl
+	pushw	255
+	pushw	247
+	call	DrawString
+	ld	xwa, (xsp+566)
+	ld	xbc, 0x1c0000f
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	xwa, (xsp+566)
+	ld	xbc, 0x1c0000e
+	ld	xde, 0:i3
 VariScreen_SendAndReturn:
 	call SendEvent
 	jrl FileBrowser_ReturnZero
@@ -11391,25 +12238,54 @@ VariScreen_CalcRowOffset:
 
 VariScreen_SetRightBounds:
 	ldw (xwa), 0xa3
-	ldw (xbc), 0x137
+	ldw	(xbc), 311
 
 VariScreen_DrawDesignArea:
-	.byte 0xd9, 0xa8, 0x32, 0xf5, 0x00, 0x1d, 0x4c, 0xd1
-	.byte 0xfa, 0xbf, 0x1c, 0x30, 0xaf, 0x18, 0x23, 0xab
-	.byte 0x38, 0x21, 0x91, 0x21, 0xb0, 0x43, 0xbb, 0x40
-	.byte 0x32, 0xa2, 0x21, 0x91, 0x21, 0xb8, 0x01, 0x43
-	.byte 0xab, 0x30, 0x21, 0x91, 0x21, 0xb8, 0x02, 0x43
-	.byte 0xa2, 0x21, 0x91, 0x21, 0xd9, 0x12, 0xcb, 0x0a
-	.byte 0x0a, 0xca, 0x8b, 0xb8, 0x03, 0x43, 0x1d, 0x92
-	.byte 0xe0, 0xfe, 0xbf, 0x1c, 0x31, 0x89, 0x03, 0x21
-	.byte 0xd8, 0x12, 0x89, 0x04, 0x23, 0xd9, 0x12, 0xf3
-	.byte 0xfd, 0x22, 0x01, 0x32, 0x1d, 0x7b, 0xde, 0xfe
-	.byte 0xf3, 0xfd, 0x32, 0x01, 0x00, 0x00, 0xbf, 0x08
-	.byte 0x00, 0x09, 0xaf, 0x18, 0x20, 0xa8, 0x34, 0x22
-	.byte 0xa8, 0x2c, 0x23, 0x93, 0x21, 0xd9, 0x09, 0x0a
-	.byte 0x00, 0xd9, 0x88, 0xd8, 0x69, 0x92, 0x24, 0xd8
-	.byte 0xa4, 0x69, 0x0a, 0x92, 0xa0, 0x32, 0x09, 0x00
-	.byte 0xd8, 0xa2, 0xbf, 0x08, 0x45
+	ld	bc, 0:i3
+	ldw	de, 245
+	call	DrawDesignBox
+	lda	xwa, (xsp+28)
+	ld	xhl, (xsp+24)
+	ld	xbc, (xhl+56)
+	ld	bc, (xbc)
+	ld	(xwa), c
+	lda	xde, (xhl+64)
+	ld	xbc, (xde)
+	ld	bc, (xbc)
+	ld	(xwa+1), c
+	ld	xbc, (xhl+48)
+	ld	bc, (xbc)
+	ld	(xwa+2), c
+	ld	xbc, (xde)
+	ld	bc, (xbc)
+	extz	bc
+	div	c, 10
+	ld	c, b
+	ld	(xwa+3), c
+	call	SeMenu_SetDisplayValue_Helper
+	lda	xbc, (xsp+28)
+	ld	a, (xbc+3)
+	extz	wa
+	ld	c, (xbc+4)
+	extz	bc
+	lda	xde, (xsp+290)
+	call	Display_BytecodeBlock_F_Helper2
+	ld	(xsp+306), 0
+	ld	(xsp+8), 9
+	ld	xwa, (xsp+24)
+	ld	xde, (xwa+52)
+	ld	xhl, (xwa+44)
+	ld	bc, (xhl)
+	muls	bc, 10
+	ld	wa, bc
+	dec	1, wa
+	ld	ix, (xde)
+	sub	ix, wa
+	jr	ge, VariScreen_SetHighlightColors
+	sub	wa, (xde)
+	ldw	de, 9
+	sub	de, wa
+	ld	(xsp+8), e
 VariScreen_SetHighlightColors:
 	ld (xsp + 12), 0xff
 	ld (xsp + 14), 0xf5
@@ -11496,7 +12372,7 @@ VariScreen_SetRightNameBounds:
 	ldw (xde), 0xa3
 	ldw (xwa), 0xbe
 VariScreen_DrawNameString:
-	decm	8, (xbc)
+	decw	8, (xbc)
 	ld	xwa, (xsp+24)
 	ld	xwa, (xwa+44)
 	ld	bc, (xwa)
@@ -11543,7 +12419,7 @@ VariScreen_DrawNameString:
 	add	wa, 16
 	ld	(xhl+6), wa
 	lda	xwa, (xhl+4)
-	.byte 0x91, 0x3f, 0x00, 0x00
+	cpw	(xbc), 0
 	jr	nz, VariScreen_SetRightVoiceBounds
 	ldw	(xhl), 16
 	ldw	(xwa), 156
@@ -11643,25 +12519,54 @@ VariScreen_DrawRightPanel:
 
 VariScreen_SetRightPanelRightBounds:
 	ldw (xwa), 0xa3
-	ldw (xbc), 0x137
+	ldw	(xbc), 311
 
 VariScreen_DrawRightDesignBox:
-	.byte 0x31, 0xc1, 0x00, 0xda, 0xaf, 0x1d, 0x4c, 0xd1
-	.byte 0xfa, 0xbf, 0x1c, 0x30, 0xaf, 0x18, 0x23, 0xab
-	.byte 0x38, 0x21, 0x91, 0x21, 0xb0, 0x43, 0xbb, 0x3c
-	.byte 0x32, 0xa2, 0x21, 0x91, 0x21, 0xb8, 0x01, 0x43
-	.byte 0xab, 0x30, 0x21, 0x91, 0x21, 0xb8, 0x02, 0x43
-	.byte 0xa2, 0x21, 0x91, 0x21, 0xd9, 0x12, 0xcb, 0x0a
-	.byte 0x0a, 0xca, 0x8b, 0xb8, 0x03, 0x43, 0x1d, 0x92
-	.byte 0xe0, 0xfe, 0xbf, 0x1c, 0x31, 0x89, 0x03, 0x21
-	.byte 0xd8, 0x12, 0x89, 0x04, 0x23, 0xd9, 0x12, 0xf3
-	.byte 0xfd, 0x22, 0x01, 0x32, 0x1d, 0x7b, 0xde, 0xfe
-	.byte 0xf3, 0xfd, 0x32, 0x01, 0x00, 0x00, 0xbf, 0x08
-	.byte 0x00, 0x09, 0xaf, 0x18, 0x20, 0xa8, 0x34, 0x22
-	.byte 0xa8, 0x2c, 0x23, 0x93, 0x21, 0xd9, 0x09, 0x0a
-	.byte 0x00, 0xd9, 0x88, 0xd8, 0x69, 0x92, 0x24, 0xd8
-	.byte 0xa4, 0x69, 0x0a, 0x92, 0xa0, 0x32, 0x09, 0x00
-	.byte 0xd8, 0xa2, 0xbf, 0x08, 0x45
+	ldw	bc, 193
+	ld	de, 7:i3
+	call	DrawDesignBox
+	lda	xwa, (xsp+28)
+	ld	xhl, (xsp+24)
+	ld	xbc, (xhl+56)
+	ld	bc, (xbc)
+	ld	(xwa), c
+	lda	xde, (xhl+60)
+	ld	xbc, (xde)
+	ld	bc, (xbc)
+	ld	(xwa+1), c
+	ld	xbc, (xhl+48)
+	ld	bc, (xbc)
+	ld	(xwa+2), c
+	ld	xbc, (xde)
+	ld	bc, (xbc)
+	extz	bc
+	div	c, 10
+	ld	c, b
+	ld	(xwa+3), c
+	call	SeMenu_SetDisplayValue_Helper
+	lda	xbc, (xsp+28)
+	ld	a, (xbc+3)
+	extz	wa
+	ld	c, (xbc+4)
+	extz	bc
+	lda	xde, (xsp+290)
+	call	Display_BytecodeBlock_F_Helper2
+	ld	(xsp+306), 0
+	ld	(xsp+8), 9
+	ld	xwa, (xsp+24)
+	ld	xde, (xwa+52)
+	ld	xhl, (xwa+44)
+	ld	bc, (xhl)
+	muls	bc, 10
+	ld	wa, bc
+	dec	1, wa
+	ld	ix, (xde)
+	sub	ix, wa
+	jr	ge, VariScreen_SetRightHighlightColors
+	sub	wa, (xde)
+	ldw	de, 9
+	sub	de, wa
+	ld	(xsp+8), e
 VariScreen_SetRightHighlightColors:
 	ld (xsp + 12), 0xff
 	ld (xsp + 14), 0xf5
@@ -11747,7 +12652,7 @@ VariScreen_SetRightNameRightBounds:
 	ldw (xde), 0xa3
 	ldw (xwa), 0xbe
 VariScreen_DrawRightNameString:
-	decm	8, (xbc)
+	decw	8, (xbc)
 	ld	xde, (xsp+24)
 	ld	xwa, (xde+44)
 	ld	bc, (xwa)
@@ -11793,7 +12698,7 @@ VariScreen_DrawRightNameString:
 	add	wa, 16
 	ld	(xhl+6), wa
 	lda	xwa, (xhl+4)
-	.byte 0x91, 0x3f, 0x00, 0x00
+	cpw	(xbc), 0
 	jr	nz, VariScreen_SetRightVoiceRightBounds
 	ldw	(xhl), 16
 	ldw	(xwa), 156
@@ -11892,18 +12797,36 @@ VariScreen_HandleConfirm:
 	divs WA,0x000a
 	inc 1,WA
 	pushw wa
-	ld XWA,(XBC+0x2c)
-	.byte 0x90, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0x12, 0x16
-	.byte 0xf3, 0xfd, 0x2a, 0x01, 0x30, 0x38, 0x1d, 0x95
-	.byte 0x02, 0xff, 0xbf, 0x0c, 0x37, 0xf3, 0xfd, 0x26
-	.byte 0x02, 0x30, 0xf3, 0xfd, 0x22, 0x02, 0x31, 0xf3
-	.byte 0xfd, 0x22, 0x01, 0x32, 0xeb, 0xa8, 0x3b, 0x0b
-	.byte 0x00, 0x00, 0x0b, 0xf7, 0x00, 0x1d, 0x9f, 0xca
-	.byte 0xfa, 0xbf, 0x08, 0x00, 0x09, 0xaf, 0x10, 0x20
-	.byte 0xa8, 0x34, 0x21, 0xa8, 0x2c, 0x20, 0x90, 0x20
-	.byte 0xd8, 0x09, 0x0a, 0x00, 0xd8, 0x69, 0x91, 0x22
-	.byte 0xd8, 0xa2, 0x69, 0x0a, 0x91, 0xa0, 0x31, 0x09
-	.byte 0x00, 0xd8, 0xa1, 0xbf, 0x08, 0x43
+	ld	xwa, (xbc+44)
+	pushw	(xwa)
+	pushw	237
+	pushw	5650
+	lda	xwa, (xsp+298)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	lda	xwa, (xsp+550)
+	lda	xbc, (xsp+546)
+	lda	xde, (xsp+290)
+	ld	xhl, 0:i3
+	push	xhl
+	pushw	0
+	pushw	247
+	call	DrawStringCentered
+	ld	(xsp+8), 9
+	ld	xwa, (xsp+16)
+	ld	xbc, (xwa+52)
+	ld	xwa, (xwa+44)
+	ld	wa, (xwa)
+	muls	wa, 10
+	dec	1, wa
+	ld	de, (xbc)
+	sub	de, wa
+	jr	ge, VariScreen_ConfirmRowReady
+	sub	wa, (xbc)
+	ldw	bc, 9
+	sub	bc, wa
+	ld	(xsp+8), c
 VariScreen_ConfirmRowReady:
 	ld (xsp + 10), 0x0
 	cp (xsp + 8), 0x0
@@ -12026,7 +12949,7 @@ VariScreen_ConfirmSetNameRightBounds:
 	ldw (xiz), 0xa3
 	ldw (xwa), 0xbe
 VariScreen_ConfirmDrawNameAudio:
-	decm	8, (xiy)
+	decw	8, (xiy)
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+44)
 	ld	bc, (xwa)
@@ -12069,7 +12992,7 @@ VariScreen_ConfirmDrawNameAudio:
 	add	bc, 16
 	ld	(xwa+6), bc
 	lda	xbc, (xwa+4)
-	.byte 0x92, 0x3f, 0x00, 0x00
+	cpw	(xde), 0
 	jr	nz, VariScreen_ConfirmSetVoiceRightBounds
 	ldw	(xwa), 16
 	ldw	(xbc), 156
@@ -12126,7 +13049,7 @@ VariScreen_ConfirmDrawDefVoiceString:
 
 VariScreen_ConfirmDrawStringAndLoop:
 	call DrawStringLeftJustify
-	incm8 1, (xsp + 10)
+	inc	1, (xsp+10)
 	ld a, (xsp + 10)
 	cp a, (xsp + 8)
 	jrl ule, VariScreen_ConfirmLoopBody
@@ -12238,7 +13161,7 @@ VariScreen_EnumSetNameRightBounds:
 	ldw (xde), 0xa3
 	ldw (xwa), 0xbe
 VariScreen_EnumDrawNameAudio:
-	decm	8, (xbc)
+	decw	8, (xbc)
 	ld	xwa, (xsp+24)
 	ld	xwa, (xwa+44)
 	ld	bc, (xwa)
@@ -12282,7 +13205,7 @@ VariScreen_EnumDrawNameAudio:
 	add	bc, 16
 	ld	(xwa+6), bc
 	lda	xbc, (xwa+4)
-	.byte 0x93, 0x3f, 0x00, 0x00
+	cpw	(xhl), 0
 	jr	nz, VariScreen_EnumSetVoiceRightBounds
 	ldw	(xwa), 16
 	ldw	(xbc), 156
@@ -12731,7 +13654,7 @@ VariScreen_OK_PageScrollDown:
 	ld xbc, (xwa + 44)
 	cpw (xbc), 0x1
 	jr le, VariScreen_OK_PageScrollDownWrap
-	decm 1, (xbc)
+	decw	1, (xbc)
 	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000d
 	ld xde, 0:i3
@@ -12794,7 +13717,6 @@ VariScreen_IsHalfRangeAbove:
 	cp a, c
 	scc8 nc, l
 	ret
-IsHalfRangeAbove_End:
 
 RVariScreenProc:
 	lda	xsp, (xsp-552)
@@ -12852,10 +13774,7 @@ RVariScreenProc:
 	ld	xwa, (xiz+48)
 	ldw	(xwa), 72
 	ld	xwa, (xiz+56)
-	.byte 0x90	; llvm-mc cannot spell this byte
-	push	xsp
-	ret
-	nop
+	cpw	(xwa), 14	; llvm-mc cannot spell this byte
 	jr	nz, RVari_Init_TypeNotE	; -> 0xFBEE28
 	ld	xbc, (xiz+44)
 	ld	xwa, (xiz+60)
@@ -12993,33 +13912,70 @@ RVari_Paint:
 	ld	xhl, 0:i3
 	jrl	RVari_Epilogue	; -> 0xFC11F9
 RVari_Select:
-	.byte 0xe3, 0xfd, 0x28, 0x02, 0x20, 0xe3, 0xfd, 0x24
-	.byte 0x02, 0x21, 0xe3, 0xfd, 0x20, 0x02, 0x22, 0x1d
-	.byte 0xfc, 0x3f, 0xfa, 0xe3, 0xfd, 0x28, 0x02, 0x20
-	.byte 0x1d, 0x59, 0x5e, 0xfa, 0xeb, 0x8e, 0xab, 0x38
-	.byte 0x20, 0x90, 0x3f, 0x0f, 0x00, 0x7e, 0x4f, 0x04
-	.byte 0xae, 0x40, 0x20, 0x90, 0x20, 0xe8, 0x13, 0xd8
-	.byte 0x0b, 0x04, 0x00, 0xd7, 0xe2, 0x88, 0xf2, 0xa8
-	.byte 0xfd, 0xec, 0x31, 0xc3, 0x07, 0xe4, 0xe0, 0x21
-	.byte 0xd8, 0x12, 0xf3, 0xfd, 0x14, 0x02, 0x31, 0x1d
-	.byte 0x26, 0xa5, 0xf9, 0xf3, 0xfd, 0x18, 0x02, 0x30
-	.byte 0xf3, 0xfd, 0x16, 0x02, 0x32, 0x92, 0x21, 0xd9
-	.byte 0xca, 0x0f, 0x00, 0xb8, 0x02, 0x51, 0x92, 0x21
-	.byte 0xd9, 0xc8, 0x10, 0x00, 0xb8, 0x06, 0x51, 0xb0
-	.byte 0x02, 0xa3, 0x00, 0xb8, 0x04, 0x02, 0x37, 0x01
-	.byte 0xd9, 0xa8, 0x32, 0xf5, 0x00, 0x1d, 0x4c, 0xd1
-	.byte 0xfa, 0xae, 0x38, 0x20, 0x90, 0x20, 0xd8, 0x12
-	.byte 0xae, 0x40, 0x21, 0x91, 0x21, 0xd9, 0x12, 0x1d
-	.byte 0x73, 0xbc, 0xf5, 0xeb, 0x12, 0x0b, 0x0d, 0x00
-	.byte 0x3b, 0xf3, 0xfd, 0x1a, 0x01, 0x30, 0x38, 0x1d
-	.byte 0xbc, 0x05, 0xff, 0xbf, 0x0a, 0x37, 0xf3, 0xfd
-	.byte 0x21, 0x01, 0x00, 0x00, 0xbf, 0x0a, 0x00, 0xff
-	.byte 0xbf, 0x0c, 0x00, 0xf5, 0xae, 0x3c, 0x20, 0x90
-	.byte 0x20, 0xe8, 0x13, 0xd8, 0x0b, 0x04, 0x00, 0xd7
-	.byte 0xe2, 0x89, 0xae, 0x40, 0x20, 0x90, 0x20, 0xe8
-	.byte 0x13, 0xd8, 0x0b, 0x04, 0x00, 0xd7, 0xe2, 0x88
-	.byte 0xd9, 0xf0, 0x6e, 0x08, 0xbf, 0x0a, 0x00, 0x00
-	.byte 0xbf, 0x0c, 0x00, 0x07
+	ld	xwa, (xsp+552)
+	ld	xbc, (xsp+548)
+	ld	xde, (xsp+544)
+	call	InheritedProc
+	ld	xwa, (xsp+552)
+	call	GetViewInstance
+	ld	xiz, xhl
+	ld	xwa, (xhl+56)
+	cpw	(xwa), 15
+	jrl	nz, RVari_Select_CalcVisibleCount
+	ld	xwa, (xiz+64)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	wa, qwa
+	lda	xbc, (NakaInst_Rock_Pop_0x24:24)
+	ld_rrb	a, xbc, wa	; ld a, (xbc+wa)
+	extz	wa
+	lda	xbc, (xsp+532)
+	call	GetEditSwPoint
+	lda	xwa, (xsp+536)
+	lda	xde, (xsp+534)
+	ld	bc, (xde)
+	sub	bc, 15
+	ld	(xwa+2), bc
+	ld	bc, (xde)
+	add	bc, 16
+	ld	(xwa+6), bc
+	ldw	(xwa), 163
+	ldw	(xwa+4), 311
+	ld	bc, 0:i3
+	ldw	de, 245
+	call	DrawDesignBox
+	ld	xwa, (xiz+56)
+	ld	wa, (xwa)
+	extz	wa
+	ld	xbc, (xiz+64)
+	ld	bc, (xbc)
+	extz	bc
+	call	AccVoice_DispatchWithChannel
+	extz	xhl
+	pushw	13
+	push	xhl
+	lda	xwa, (xsp+282)
+	push	xwa
+	call	0xff05bc
+	lda	xsp, (xsp+10)
+	ld	(xsp+289), 0
+	ld	(xsp+10), 255
+	ld	(xsp+12), 245
+	ld	xwa, (xiz+60)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	bc, qwa
+	ld	xwa, (xiz+64)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	wa, qwa
+	cp	wa, bc
+	jr	nz, RVari_Select_CheckSameBank
+	ld	(xsp+10), 0
+	ld	(xsp+12), 7
 RVari_Select_CheckSameBank:
 	ld	xwa, (xiz+64)
 	ld	wa, (xwa)
@@ -13050,7 +14006,7 @@ RVari_Select_CheckSameBank:
 	ld	(xde+6), wa
 	ldw	(xde), 163
 	ldw	(xde+4), 190
-	decm	8, (xbc)
+	decw	8, (xbc)
 	ld	xwa, (xiz+64)
 	ld	wa, (xwa)
 	exts	xwa
@@ -13171,7 +14127,7 @@ RVari_Select_CheckSameBank:
 	ld	(xde+6), wa
 	ldw	(xde), 163
 	ldw	(xde+4), 190
-	decm	8, (xbc)
+	decw	8, (xbc)
 	ld	xwa, (xiz+60)
 	ld	wa, (xwa)
 	exts	xwa

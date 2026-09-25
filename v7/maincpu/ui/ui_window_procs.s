@@ -307,6 +307,17 @@ WndEvt_DispatchByEventCode:
 	add xwa, Data_SoundEditorCharsLayout_0x24
 	ld wa, (xwa)
 	lda xix, (WndEvt_EventCodeDispatch:24)
+; Computed jump: target = WndEvt_EventCodeDispatch + Data_SoundEditorCharsLayout_0x24[i], Data_SoundEditorCharsLayout_0x24 = 16-bit offsets (9 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
+;   0 -> WndEvt_EventCodeDispatch
+;   1 -> WndEvt_DispatchByEventCode_Case1
+;   2 -> WndEvt_DispatchByEventCode_Case2
+;   3 -> WndEvt_DispatchByEventCode_Case3
+;   4 -> WndEvt_DispatchByEventCode_Case4
+;   5 -> WndEvt_DispatchByEventCode_Case5
+;   6 -> WndEvt_DispatchByEventCode_Case6
+;   7 -> WndEvt_DispatchByEventCode_Case7
+;   8 -> WndEvt_DispatchByEventCode_Case8
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Window event dispatch by event code
@@ -324,12 +335,14 @@ WndEvt_EventCodeDispatch:
 	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x2a	; v10 does not spell this byte either
-	.byte 0x22	; v10 does not spell this byte either
-	.byte 0x78	; v10 does not spell this byte either
-	.byte 0x36	; v10 does not spell this byte either
-	pop	sr
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld	xde, (xsp+42)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	jrl	WndEvt_EventCodeDispatch_Join3
+WndEvt_DispatchByEventCode_Case1:
 	ld	wa, (160984:24)
 	ld	bc, wa
 	inc	1, bc
@@ -346,6 +359,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	WndEvt_EventCodeDispatch_Join3
+WndEvt_DispatchByEventCode_Case2:
 	ld	bc, (160990:24)
 	cp	bc, 0:i3
 	jrl	z, UIDialog_ReturnZeroJmp
@@ -384,6 +398,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	WndEvt_EventCodeDispatch_Join3
+WndEvt_DispatchByEventCode_Case3:
 	lda	xde, (Data_SoundEditorCharsLayout:24)
 	lda	xwa, (xsp+12)
 	ld	(xsp+8), xwa
@@ -410,9 +425,10 @@ WndEvt_EventCodeDispatch_Skip:
 	ld	(xsp+4), xwa
 	extz	xbc
 	sll	xbc, 2
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x81	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xbc, (xsp+4)
 	ld	xwa, (xbc)
 	ld	xbc, (xsp+8)
 	call	ConvertStrings
@@ -445,25 +461,27 @@ WndEvt_EventCodeDispatch_Skip2:
 	ld	wa, (160990:24)
 	extz	xwa
 	sll	xwa, 2
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x80	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	xbc, (xsp+8)
 	call	ConvertStrings
-	ld	wa, (160994:24)
+	ld	wa, (0x0274e2:24)
 	mul	wa, 3
-	add	wa, (160986:24)
+	addda16_24	xwa, (0x0274da)
 	extz	xwa
 	add	xwa, xwa
 	lda	xde, (Data_SoundEditorCharsLayout_0xC:24)
 	ld	xbc, xde
 	add	xbc, xwa
-	ld	wa, (160990:24)
+	ld	wa, (0x0274de:24)
 	ld	hl, wa
 	add	hl, 12
-	.byte 0x91	; v10 does not spell this byte either
-	.byte 0xf3	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	hl, (xbc)
 	jr	ugt, WndEvt_EventCodeDispatch_Skip4
 	ld	c, (xsp+12)
 	cp	c, 90
@@ -472,53 +490,56 @@ WndEvt_EventCodeDispatch_Skip2:
 	jr	nz, WndEvt_EventCodeDispatch_Skip4
 WndEvt_EventCodeDispatch_Skip3:
 	dec	1, wa
-	ld	(160990:24), wa
+	ld	(0x0274de:24), wa
 WndEvt_EventCodeDispatch_Skip4:
-	ld	bc, (160994:24)
+	ld	bc, (0x0274e2:24)
 	mul	bc, 3
-	ld	wa, (160986:24)
+	ld	wa, (0x0274da:24)
 	add	bc, wa
 	extz	xbc
 	add	xbc, xbc
 	add	xde, xbc
-	ld	wa, (160990:24)
+	ld	wa, (0x0274de:24)
 	ld	bc, wa
 	add	bc, 13
-	.byte 0x92	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	bc, (xde)
 	jrl	ugt, UIDialog_ReturnZeroJmp
 	ld	bc, wa
 	add	bc, 13
-	ld	(160990:24), bc
-	ld	wa, (160986:24)
+	ld	(0x0274de:24), bc
+	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
-	.byte 0x42	; v10 does not spell this byte either
-	.byte 0xd2	; v10 does not spell this byte either
-	.byte 0x9e	; v10 does not spell this byte either
-	.byte 0xea	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld	xde, Data_SoundEditorCharsLayout
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
 	extz	xbc
 	sll	xbc, 2
 	ld	xwa, xbc
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x80	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xwa, (xsp+4)
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
 	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
-	lda	xwa, (160944:24)
+	lda	xwa, (0x0274b0:24)
 	cp	c, 83
 	jr	nz, WndEvt_EventCodeDispatch_Skip5
-	.byte 0x8a	; v10 does not spell this byte either
-	.byte 0x01	; v10 does not spell this byte either
-	push	xsp
-	.byte 0x50	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	(xde+1), 80
 	jr	nz, WndEvt_EventCodeDispatch_Skip5
 	ld	bc, (160984:24)
 	extz	xbc
@@ -547,6 +568,7 @@ WndEvt_EventCodeDispatch_Join:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	WndEvt_EventCodeDispatch_Join3
+WndEvt_DispatchByEventCode_Case4:
 	ld	bc, (160986:24)
 	ld	wa, bc
 	extz	xwa
@@ -565,29 +587,31 @@ WndEvt_EventCodeDispatch_Join:
 	ld	wa, (160990:24)
 	ld	de, wa
 	inc	1, de
-	.byte 0x91	; v10 does not spell this byte either
-	.byte 0xf2	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	de, (xbc)
 	jrl	ugt, UIDialog_ReturnZeroJmp
 	inc	1, wa
-	ld	(160990:24), wa
+	ld	(0x0274de:24), wa
 	extz	xwa
 	sll	xwa, 2
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x80	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xwa, (xsp+4)
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
 	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
-	ld	wa, (160984:24)
+	ld	wa, (0x0274d8:24)
 	extz	xwa
 	cp	c, 83
 	jr	nz, WndEvt_EventCodeDispatch_Skip6
-	.byte 0x8a	; v10 does not spell this byte either
-	.byte 0x01	; v10 does not spell this byte either
-	push	xsp
-	.byte 0x50	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	(xde+1), 80
 	jr	nz, WndEvt_EventCodeDispatch_Skip6
 	ld	xbc, 160944
 	add	xbc, xwa
@@ -615,6 +639,7 @@ WndEvt_EventCodeDispatch_Join2:
 WndEvt_EventCodeDispatch_Join3:
 	calr	SetAutoInc
 	jrl	UIDialog_ReturnZeroJmp
+WndEvt_DispatchByEventCode_Case5:
 	ld	iz, (160982:24)
 	dec	1, iz
 	cp	iz, (160984:24)
@@ -656,6 +681,7 @@ WndEvt_EventCodeDispatch_Skip7:
 	ld	xwa, (xsp+50)
 	ld	xbc, 31457408
 	jrl	WndScroll_SendAndReturn
+WndEvt_DispatchByEventCode_Case6:
 	ld	iz, (160984:24)
 	cp	iz, (160982:24)
 	jr	nc, WndEvt_EventCodeDispatch_Skip8
@@ -697,6 +723,7 @@ WndEvt_EventCodeDispatch_Skip8:
 	ld	xwa, (xsp+50)
 	ld	xbc, 31457408
 	jrl	WndScroll_SendAndReturn
+WndEvt_DispatchByEventCode_Case7:
 	ld	qiz, 0
 	ld	iz, 0:i3
 	ld	de, (160982:24)
@@ -704,31 +731,31 @@ WndEvt_EventCodeDispatch_Skip8:
 	jr	ule, WndEvt_EventCodeDispatch_Skip9
 	lda	xhl, (160944:24)
 	ld	a, (xbc)
+WndEvt_EventCodeDispatch_Skip8_Loop:
 	ld	bc, iz
 	extz	xbc
 	ld	xix, xhl
 	add	xix, xbc
-	.byte 0x84	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
-	jr	nz, 9
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	a, (xix)
+	jr	nz, WndEvt_EventCodeDispatch_Skip9
 	inc	1, qiz
 	inc	1, iz
 	cp	iz, de
-	jr	c, -21
+	jr	c, WndEvt_EventCodeDispatch_Skip8_Loop
 WndEvt_EventCodeDispatch_Skip9:
 	ld	wa, qiz
 	cp	wa, de
-	jrl	z, 1103
-	.byte 0xbf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	push	sr
-	nop
-	nop
+	jrl	z, UIDialog_ReturnZeroJmp
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ldw	(xsp+4), 0
 	ld	iz, 0:i3
 	cp	de, 0:i3
-	jr	ule, 37
-	lda	xbc, (160944:24)
-	ld	xwa, (160996:24)
+	jr	ule, WndEvt_EventCodeDispatch_Skip10
+	lda	xbc, (0x0274b0:24)
+	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
 WndEvt_EventCodeDispatch_Loop3:
 	ld	hl, de
@@ -737,8 +764,9 @@ WndEvt_EventCodeDispatch_Loop3:
 	extz	xhl
 	ld	xix, xbc
 	add	xix, xhl
-	.byte 0x84	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	a, (xix)
 	jr	nz, WndEvt_EventCodeDispatch_Skip10
 	incw	1, (xsp+4)
 	inc	1, iz
@@ -749,54 +777,52 @@ WndEvt_EventCodeDispatch_Skip10:
 	ld	(xsp+6), wa
 	ld	wa, (xsp+4)
 	add	(xsp+6), wa
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	jrl	nc, 25050
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	srlw	(xsp+6)
+	inc	1, de
 	pushw	de
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	ld	(xsp+10), xhl
 	ld	wa, qiz
 	extz	xwa
-	ld	xbc, 160944
+	ld	xbc, 0x0274b0
 	add	xbc, xwa
 	push	xbc
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	Free_Compare2
-	ld	wa, (160982:24)
-	.byte 0xd7	; v10 does not spell this byte either
-	swi	2
-	.byte 0xa0	; v10 does not spell this byte either
-	.byte 0x9f	; v10 does not spell this byte either
-	ret
-	or	(xwa), xwa
-	ccf
-	.byte 0xaf	; v10 does not spell this byte either
-	ccf
-	.byte 0x80	; v10 does not spell this byte either
+	ld	wa, (0x0274d6:24)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	sub	wa, qiz
+	sub	wa, (xsp+14)	; v10 does not spell this byte either
+	extz	xwa
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xwa, (xsp+18)
 	ld	(xwa), 0
 	ld	xwa, (xsp+18)
 	push	xwa
 	ld	wa, (xsp+20)
 	extz	xwa
-	ld	xbc, 160944
+	ld	xbc, 0x0274b0
 	add	xbc, xwa
 	push	xbc
 	call	Free_Compare2
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	lda	xsp, (xsp+22)
 	ld	iz, 0:i3
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	push	xsp
-	nop
-	nop
-	jr	ule, 31
-	lda	xde, (160944:24)
-	ld	xhl, (160996:24)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cpw	(xsp+6), 0
+	jr	ule, WndEvt_EventCodeDispatch_Skip10_Skip
+	lda	xde, (0x0274b0:24)
+	ld	xhl, (0x0274e4:24)
 	ld	xbc, 0:i3
+WndEvt_EventCodeDispatch_Skip10_Loop:
 	ld	xwa, xbc
 	ld	xix, xde
 	add	xix, xwa
@@ -804,24 +830,28 @@ WndEvt_EventCodeDispatch_Skip10:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	.byte 0xf6	; v10 does not spell this byte either
-	jr	c, -19
-	.byte 0xd7	; v10 does not spell this byte either
-	swi	2
-	.byte 0x89	; v10 does not spell this byte either
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x81	; v10 does not spell this byte either
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	.byte 0xa1	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	iz, (xsp+6)
+	jr	c, WndEvt_EventCodeDispatch_Skip10_Loop
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+WndEvt_EventCodeDispatch_Skip10_Skip:
+	ld	bc, qiz
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	bc, (xsp+4)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	sub	bc, (xsp+6)
 	ld	wa, (160982:24)
 	ld	iz, wa
 	sub	iz, bc
 	cp	iz, wa
-	jr	nc, 35
+	jr	nc, WndEvt_EventCodeDispatch_Skip10_Skip2
 	lda	xde, (160944:24)
 	ld	xhl, (160996:24)
 	ld	bc, iz
@@ -836,6 +866,7 @@ WndEvt_EventCodeDispatch_Loop4:
 	inc	1, xbc
 	cp	iz, (160982:24)
 	jr	c, WndEvt_EventCodeDispatch_Loop4
+WndEvt_EventCodeDispatch_Skip10_Skip2:
 	ld	xwa, 22
 	ld	xbc, 29360143
 	ld	xde, 160944
@@ -844,14 +875,13 @@ WndEvt_EventCodeDispatch_Loop4:
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 31457408
-	jrl	820
+	jrl	WndScroll_SendAndReturn
+WndEvt_DispatchByEventCode_Case8:
 	ld	iz, 0:i3
-	.byte 0xd2	; v10 does not spell this byte either
-	.byte 0xd6	; v10 does not spell this byte either
-	jrl	ov, 16130
-	nop
-	nop
-	jr	ule, 30
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cpw	(0x0274d6:24), 0
+	jr	ule, WndEvt_EventCodeDispatch_Loop4_Skip
 	lda	xde, (160944:24)
 	ld	xhl, xbc
 	ld	xbc, 0:i3
@@ -865,6 +895,7 @@ WndEvt_EventCodeDispatch_Loop5:
 	inc	1, xbc
 	cp	iz, (160982:24)
 	jr	c, WndEvt_EventCodeDispatch_Loop5
+WndEvt_EventCodeDispatch_Loop4_Skip:
 	ld	xwa, 22
 	ld	xbc, 31457408
 	ld	xde, 0:i3
@@ -1451,7 +1482,7 @@ StringBox_HandlePaint:
 	ld xhl, (xsp + 8)
 	ld xwa, (xhl + 30)
 	push xwa
-	pushm (xhl + 34)
+	pushw	(xhl+34)
 	pushw 0xf7
 	ld xwa, (xsp + 12)
 	ld a, (xwa + 36)
@@ -1498,7 +1529,7 @@ Label_HandlePaint:
 	lda xwa, (xsp + 4)
 	ld xde, (xhl + 26)	; <-- font selection
 	push xde
-	pushm (xhl + 30)	; <-- foreground color
+	pushw	(xhl+30)	; <-- foreground color
 	pushw 0xf7	; <-- background color
 	ld xde, (xhl + 22)	; <-- string pointer
 	call DrawString
@@ -1832,7 +1863,7 @@ Frame_DrawVisible:
 	ld xwa, xiz
 	call GetViewInstance
 	lda xwa, (xhl + 14)
-	pushm (xhl + 26)
+	pushw	(xhl+26)
 	ld bc, (xhl + 22)
 	ld de, (xhl + 24)
 	calr DrawDesignFrame
@@ -1891,9 +1922,9 @@ ClientFrame2_ProcessThickness:
 
 ClientFrame2_InsetLoop:
 	incw 1, (xix)
-	decm 1, (xde)
+	decw	1, (xde)
 	incw 1, (xbc)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	inc 1, xiy
 	cp xiy, xhl
 	jr lt, ClientFrame2_InsetLoop
@@ -1926,9 +1957,9 @@ DesignFrame_DrawLoop:
 	call DrawFrame
 	lda xwa, (xsp + 4)
 	incw 1, (xwa + 2)
-	decm 1, (xwa + 6)
+	decw	1, (xwa+6)
 	incw 1, (xwa)
-	decm 1, (xwa + 4)
+	decw	1, (xwa+4)
 	inc 1, xiz
 	ld wa, (xsp + 12)
 	exts xwa
@@ -2018,9 +2049,9 @@ EditSw_ByteData:
 	calr	GetEditSwPoint
 	lda	xwa, (xsp+18)
 	lda	xbc, (xsp+12)
-	.byte 0x98, 0x02, 0x3f, 0xef, 0x00
+	cpw	(xwa+2), 239
 	jr	z, DrawDesignFrame_Skip2
-	.byte 0x90, 0x3f, 0x00, 0x00
+	cpw	(xwa), 0
 	jr	nz, DrawDesignFrame_Skip
 	ld	xwa, 15376742
 	jr	DrawDesignFrame_Join
@@ -2074,23 +2105,23 @@ DrawDesignFrame_Skip3:
 	exts	xwa
 	divs	wa, 2
 	lda	xix, (xsp+22)
-	.byte 0x91, 0x3f, 0x00, 0x00
+	cpw	(xbc), 0
 	jr	nz, DrawDesignFrame_Entry
 	ldw	(xix), 65534
 	ld	de, (xbc+2)
 	sub	de, wa
 	ld	(xix+2), de
 DrawDesignFrame_Entry:
-	.byte 0x91, 0x3f, 0x3f, 0x01
+	cpw	(xbc), 319
 	jr	nz, DrawDesignFrame_Entry2
 	ldw	de, 318
-	.byte 0x9f, 0x06, 0xa2
+	sub	de, (xsp+6)
 	ld	(xix), de
 	ld	de, (xbc+2)
 	sub	de, wa
 	ld	(xix+2), de
 DrawDesignFrame_Entry2:
-	.byte 0x99, 0x02, 0x3f, 0xef, 0x00
+	cpw	(xbc+2), 239
 	jr	nz, DrawDesignFrame_Skip4
 	ld	wa, (xsp+6)
 	exts	xwa
@@ -2105,7 +2136,7 @@ DrawDesignFrame_Entry2:
 DrawDesignFrame_Skip4:
 	lda	xde, (xix+4)
 	ld	wa, (xsp+6)
-	.byte 0x94, 0x80
+	add	wa, (xix)
 	inc	1, wa
 	ld	(xde), wa
 	lda	xiy, (xix+6)
@@ -2149,17 +2180,30 @@ DrawEditSw_SelectVariantA:
 	jr DrawEditSw_CopyVariant
 
 DrawEditSw_SelectVariantC:
-	ld xwa, Data_SoundEditorCharsLayout_0x2A8
+	ld	xwa, Data_SoundEditorCharsLayout_0x2A8
 
 DrawEditSw_CopyVariant:
-	.byte 0x38, 0x39, 0x1d, 0x70, 0x07, 0xff, 0xef, 0x60
-	.byte 0xbf, 0x02, 0x30, 0xe9, 0xa8, 0x1d, 0xc4, 0x22
-	.byte 0xfb, 0xdb, 0x8e, 0xe8, 0xa8, 0x1d, 0xfd, 0x21
-	.byte 0xfb, 0xbf, 0x08, 0x31, 0xdb, 0x8a, 0xea, 0x13
-	.byte 0xda, 0x0b, 0x02, 0x00, 0xbf, 0x0c, 0x30, 0x91
-	.byte 0x3f, 0x00, 0x00, 0x6e, 0x0c, 0xb0, 0x02, 0xfe
-	.byte 0xff, 0x99, 0x02, 0x24, 0xda, 0xa4, 0xb8, 0x02
-	.byte 0x54
+	push	xwa
+	push	xbc
+	call	Free_Compare2
+	inc	8, xsp
+	lda	xwa, (xsp+2)
+	ld	xbc, 0:i3
+	call	CalcTotalWidth
+	ld	iz, hl
+	ld	xwa, 0:i3
+	call	GetCharHeight
+	lda	xbc, (xsp+8)
+	ld	de, hl
+	exts	xde
+	divs	de, 2
+	lda	xwa, (xsp+12)
+	cpw	(xbc), 0
+	jr	nz, DrawEditSw_PositionLeft
+	ldw	(xwa), 65534
+	ld	ix, (xbc+2)
+	sub	ix, de
+	ld	(xwa+2), ix
 DrawEditSw_PositionLeft:
 	cpw (xbc), 0x13f
 	jr nz, DrawEditSw_PositionRight
@@ -2292,16 +2336,32 @@ TextBox_DrawLineLoop:
 	pushw 0xa17e
 	push XIZ
 	call DrawEditSw_CopyVariant_Code_Helper
-	inc 0,XSP
-	.byte 0xf3, 0x07, 0xf8, 0xec, 0x30, 0xbf, 0x0a, 0x60
-	.byte 0xb0, 0x00, 0x00, 0xbf, 0x1a, 0x30, 0x98, 0x04
-	.byte 0x22, 0x90, 0xa2, 0xaf, 0x12, 0x20, 0xa8, 0x1e
-	.byte 0x21, 0xee, 0x88, 0x1d, 0x4d, 0x23, 0xfb, 0xbf
-	.byte 0x0e, 0x53, 0x3e, 0x1d, 0xc3, 0x07, 0xff, 0xef
-	.byte 0x64, 0x9f, 0x0e, 0x20, 0xdb, 0xf0, 0x66, 0x17
-	.byte 0xaf, 0x0a, 0x20, 0xb0, 0x00, 0x0d, 0x9f, 0x0e
-	.byte 0x20, 0xe8, 0x13, 0xee, 0x80, 0xbf, 0x0a, 0x60
-	.byte 0xf4, 0xe0, 0x00, 0x00, 0xbf, 0x0a, 0x60
+	inc	8, xsp
+	lda_rr	xwa, xiz, hl	; lda xwa, xiz+hl
+	ld	(xsp+10), xwa
+	ld	(xwa), 0
+	lda	xwa, (xsp+26)
+	ld	de, (xwa+4)
+	sub	de, (xwa)
+	ld	xwa, (xsp+18)
+	ld	xbc, (xwa+30)
+	ld	xwa, xiz
+	call	WordwrapStrings
+	ld	(xsp+14), hl
+	push	xiz
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ld	wa, (xsp+14)
+	cp	wa, hl
+	jr	z, TextBox_CheckMoreText
+	ld	xwa, (xsp+10)
+	ld	(xwa), 13
+	ld	wa, (xsp+14)
+	exts	xwa
+	add	xwa, xiz
+	ld	(xsp+10), xwa
+	stib_dpd	224, 0
+	ld	(xsp+10), xwa
 TextBox_CheckMoreText:
 	ld wa, (xsp + 8)
 	mrdw3 0x9f, 0x10, 0x40
@@ -2317,7 +2377,7 @@ TextBox_CheckMoreText:
 	ld xhl, (xsp + 4)
 	ld xwa, (xhl + 30)
 	push xwa
-	pushm (xhl + 34)
+	pushw	(xhl+34)
 	pushw 0xf7
 	ld xwa, xhl
 	ld a, (xwa + 36)
@@ -2392,7 +2452,7 @@ VwBox_HandleGetFocus:
 	jr VwBox_CallDrawDesignFrame
 
 VwBox_UseFocusColor:
-	pushm (xhl + 22)
+	pushw	(xhl+22)
 	ld bc, 1:i3
 	ld de, 2:i3
 
@@ -2494,8 +2554,8 @@ PsParaBox_DrawAligned:
 	lda xde, (xsp + 4)
 	ld xbc, (xiz + 28)
 	push xbc
-	pushm (xiz + 32)
-	pushm (xiz + 22)
+	pushw	(xiz+32)
+	pushw	(xiz+22)
 	ld c, (xiz + 34)
 	extz bc
 	pushw bc
@@ -3064,8 +3124,8 @@ PsRadioBox_Confirm_Draw:
 	jr nz, PsRadioBox_Confirm_DrawUnfocused
 	ld xbc, (xiz)
 	push xbc
-	pushm (xiy)
-	pushm (xde)
+	pushw	(xiy)
+	pushw	(xde)
 	pushw ix
 	pushw 0x1
 	ld xbc, (xsp + 24)
@@ -3075,8 +3135,8 @@ PsRadioBox_Confirm_Draw:
 PsRadioBox_Confirm_DrawUnfocused:
 	ld xbc, (xiz)
 	push xbc
-	pushm (xiy)
-	pushm (xde)
+	pushw	(xiy)
+	pushw	(xde)
 	pushw ix
 	pushw 0x0
 	ld xbc, (xsp + 24)
@@ -3434,9 +3494,9 @@ PsListBox_Confirm_DrawItem:
 	ld (xsp + 18), xbc
 	ld xwa, (xiy)
 	push xwa
-	pushm (xix)
+	pushw	(xix)
 	ld xwa, (xsp + 28)
-	pushm (xwa)
+	pushw	(xwa)
 	pushw hl
 	calr GetDialFocus
 	cpl_sri_rm XHL, 0xfd, 0x34, 0x01
@@ -3451,9 +3511,9 @@ PsListBox_Confirm_ItemUnfocused:
 	lda_dri XWA, 0xfd, 0x1e, 0x01
 	ld xde, (xiy)
 	push xde
-	pushm (xix)
+	pushw	(xix)
 	ld xde, (xsp + 28)
-	pushm (xde)
+	pushw	(xde)
 	pushw hl
 	pushw 0x0
 	ld xde, (xsp + 26)
@@ -3507,7 +3567,7 @@ PsListBox_Select:
 	add hl, bc
 	ld (xix), hl
 	incw 1, (xwa)
-	decm 1, (xwa + 4)
+	decw	1, (xwa+4)
 	ld bc, (xix)
 	add bc, (xsp + 8)
 	inc 1, bc
@@ -3562,9 +3622,9 @@ PsListBox_Select_CheckDone:
 	lda_dri XBC, 0xfd, 0x1a, 0x01
 	ld xwa, (xhl + 28)
 	push xwa
-	pushm (xhl + 32)
+	pushw	(xhl+32)
 	ld xwa, xhl
-	pushm (xwa + 22)
+	pushw	(xwa+22)
 	ld a, (xwa + 34)
 	extz wa
 	pushw wa
@@ -3577,7 +3637,7 @@ PsListBox_Select_CheckDone:
 	jr z, PsListBox_Select_UpdateCurrent
 	lda_dri XWA, 0xfd, 0x1e, 0x01
 	ld xbc, (xsp + 4)
-	pushm (xbc + 22)
+	pushw	(xbc+22)
 	ld bc, 1:i3
 	ld de, 2:i3
 	calr DrawDesignFrame
@@ -3608,7 +3668,7 @@ PsListBox_Select_UpdateCurrent:
 	add hl, bc
 	ld (xix), hl
 	incw 1, (xwa)
-	decm 1, (xwa + 4)
+	decw	1, (xwa+4)
 	ld bc, (xix)
 	add bc, (xsp + 8)
 	inc 1, bc
@@ -3673,9 +3733,9 @@ PsListBox_SelectUpd_CheckDone:
 	jr nz, PsListBox_SelectUpd_DrawUnfocused
 	ld xwa, (xiz)
 	push xwa
-	pushm (xiy)
+	pushw	(xiy)
 	ld xwa, (xsp + 10)
-	pushm (xwa + 22)
+	pushw	(xwa+22)
 	pushw ix
 	pushw 0x1
 	ld xwa, xde
@@ -3686,9 +3746,9 @@ PsListBox_SelectUpd_CheckDone:
 PsListBox_SelectUpd_DrawUnfocused:
 	ld xwa, (xiz)
 	push xwa
-	pushm (xiy)
+	pushw	(xiy)
 	ld xwa, (xsp + 28)
-	pushm (xwa + 22)
+	pushw	(xwa+22)
 	pushw ix
 	pushw 0x0
 	ld xwa, xde
@@ -3948,6 +4008,16 @@ PsGridBoxProc:
 	add xbc, Data_SoundEditorCharsLayout_0x376
 	ld bc, (xbc)
 	lda xix, (PsGridBox_Init:24)
+; Computed jump: target = PsGridBox_Init + Data_SoundEditorCharsLayout_0x376[i], Data_SoundEditorCharsLayout_0x376 = 16-bit offsets (8 words, read
+;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0008a:
+;   0x1e0008a -> 0xf9e3e8
+;   0x1e0008b -> 0xf9e3ef
+;   0x1e0008c -> 0xf9e2ac
+;   0x1e0008d -> 0xf9e3a6
+;   0x1e0008e -> 0xf9e404
+;   0x1e0008f -> 0xf9e4e0
+;   0x1e00090 -> PsGridBox_Default
+;   0x1e00091 -> 0xf9e500
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 	.include "ui/psgridbox_routines.s"
@@ -4147,7 +4217,7 @@ ClampColorToRange_Skip7:
 	ld	wa, (xsp+46)
 	ld	(xde), a
 ClampColorToRange_Skip8:
-	incm8	1, (xsp+20)
+	inc	1, (xsp+20)
 ClampColorToRange_Join3:
 	ld	xwa, (xsp+16)
 	add	(xsp+44), wa
@@ -4186,7 +4256,7 @@ ClampColorToRange_Skip10:
 	ld	wa, (xsp+46)
 	ld	(xde), a
 ClampColorToRange_Skip11:
-	incm8	1, (xsp+20)
+	inc	1, (xsp+20)
 ClampColorToRange_Join4:
 	ld	xwa, (xsp+12)
 	add	(xsp+42), wa
@@ -4244,7 +4314,7 @@ ClampColorToRange_Skip13:
 	ld	wa, (xsp+46)
 	ld	(xhl), a
 ClampColorToRange_Skip14:
-	incm8	1, (xsp+20)
+	inc	1, (xsp+20)
 ClampColorToRange_Join5:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
@@ -4303,7 +4373,7 @@ ClampColorToRange_Skip16:
 	ld	wa, (xsp+46)
 	ld	(xix), a
 ClampColorToRange_Skip17:
-	incm8	1, (xsp+20)
+	inc	1, (xsp+20)
 ClampColorToRange_Join6:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
@@ -4376,16 +4446,10 @@ DrawDesignBox_QueueCallback:
 	lda	xhl, (xwa+4)
 	ld	bc, (xwa+12)
 	ld	de, (xwa+14)
-	.byte 0xd2
-	popw	iz
-	max
-	pop	sr
-	push	xsp
-	nop
-	nop
+	cpw	(0x03044e:24), 0
 	ret	z
 	ld	xwa, xhl
-	calr	1
+	calr	DrawDesignBox_Impl
 	ret
 
 DrawDesignBox_Impl:
@@ -4446,11 +4510,11 @@ Draw_StyledBoxWithFrame:
 	calr DrawBox_Impl
 	jrl DrawFunc_Epilogue74
 	lda xwa, (xsp + 62)
-	decm 1, (xwa + 4)
-	decm 1, (xwa + 6)
+	decw	1, (xwa+4)
+	decw	1, (xwa+6)
 	lda xwa, (xsp + 62)
-	decm 1, (xwa + 4)
-	decm 1, (xwa + 6)
+	decw	1, (xwa+4)
+	decw	1, (xwa+6)
 	lda xwa, (xsp + 62)
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
@@ -4461,9 +4525,9 @@ Draw_StyledBoxWithFrame:
 	jr nz, DrawDesignBox_After2Frame
 	lda xwa, (xsp + 62)
 	incw 1, (xwa + 2)
-	decm 1, (xwa + 6)
+	decw	1, (xwa+6)
 	incw 1, (xwa)
-	decm 1, (xwa + 4)
+	decw	1, (xwa+4)
 	ld bc, 0:i3
 	calr DrawFrame_Impl
 
@@ -4472,9 +4536,9 @@ DrawDesignBox_After2Frame:
 	jr nz, DrawDesignBox_After3Frame
 	lda xwa, (xsp + 62)
 	incw 2, (xwa + 2)
-	decm 2, (xwa + 6)
+	decw	2, (xwa+6)
 	incw 2, (xwa)
-	decm 2, (xwa + 4)
+	decw	2, (xwa+4)
 	ld bc, 0:i3
 	calr DrawFrame_Impl
 
@@ -4614,14 +4678,14 @@ DrawDesignBox_BorderLoop:
 	ld bc, (xde + 2)
 	ld (xwa + 2), bc
 	lda xbc, (xsp + 46)
-	decm 1, (xbc + 2)
+	decw	1, (xbc+2)
 	ld de, (xsp + 4)
 	calr DrawLine_Impl
 	lda xwa, (xsp + 62)
 	incw 1, (xwa + 2)
-	decm 1, (xwa + 6)
+	decw	1, (xwa+6)
 	incw 1, (xwa)
-	decm 1, (xwa + 4)
+	decw	1, (xwa+4)
 	ld xwa, 1:i3
 	add (xsp + 10), xwa
 	ld xwa, (xsp + 10)
@@ -4723,14 +4787,14 @@ ColorAttribute_SetupReturn:
 	ld bc, (xde + 2)
 	ld (xwa + 2), bc
 	lda xbc, (xsp + 46)
-	decm 1, (xbc + 2)
+	decw	1, (xbc+2)
 	ld de, (xsp + 4)
 	calr DrawLine_Impl
 	lda xwa, (xsp + 62)
 	incw 1, (xwa + 2)
-	decm 1, (xwa + 6)
+	decw	1, (xwa+6)
 	incw 1, (xwa)
-	decm 1, (xwa + 4)
+	decw	1, (xwa+4)
 	ld xwa, 1:i3
 	add (xsp + 10), xwa
 	ld xwa, (xsp + 10)
@@ -4816,7 +4880,7 @@ DrawDesignBox_IconCheckRight:
 DrawDesignBox_IconAdjustFrame:
 	lda xwa, (xsp + 62)
 	incw 1, (xwa + 2)
-	decm 1, (xwa + 6)
+	decw	1, (xwa+6)
 	cpw (xsp + 16), 0x0
 	jr nz, DrawDesignBox_IconLeftWidth
 	ld bc, 1:i3
@@ -5186,7 +5250,7 @@ DrawPartGroup_DrawSides:
 	ld bc, (xsp + 10)
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
-	decm 1, (xsp + 66)
+	decw	1, (xsp+66)
 	ld wa, (xsp + 34)
 	inc 1, wa
 	sub (xsp + 58), wa
@@ -5421,7 +5485,7 @@ DrawPartGroup_DrawCAFrames:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	lda xwa, (xsp + 62)
-	decm 2, (xwa + 4)
+	decw	2, (xwa+4)
 	ld bc, (xsp + 34)
 	sub (xsp + 58), bc
 	ld bc, (xsp + 28)
@@ -5497,9 +5561,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	decm 1, (xwa + 2)
+	decw	1, (xwa+2)
 	lda xbc, (xsp + 38)
-	decm 1, (xbc + 2)
+	decw	1, (xbc+2)
 	ld de, (xsp + 6)
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5550,9 +5614,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	lda xbc, (xsp + 38)
-	decm 1, (xbc)
+	decw	1, (xbc)
 	ld de, (xsp + 6)
 	jrl DrawFunc_DrawLineAndReturn
 	ldw wa, 0x28
@@ -5592,7 +5656,7 @@ DrawPartGroup_DrawCAFrames:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	lda xwa, (xsp + 62)
-	decm 2, (xwa + 4)
+	decw	2, (xwa+4)
 	ld bc, (xsp + 34)
 	sub (xsp + 58), bc
 	ld bc, (xsp + 28)
@@ -5660,9 +5724,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	decm 1, (xwa + 2)
+	decw	1, (xwa+2)
 	lda xbc, (xsp + 38)
-	decm 1, (xbc + 2)
+	decw	1, (xbc+2)
 	ldw de, 0xf8
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5692,7 +5756,7 @@ DrawPartGroup_DrawCAFrames:
 	incw 1, (xwa)
 	lda xbc, (xsp + 38)
 	incw 1, (xbc)
-	decm 1, (xbc + 2)
+	decw	1, (xbc+2)
 	ldw de, 0xff
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5714,9 +5778,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	lda xbc, (xsp + 38)
-	decm 1, (xbc)
+	decw	1, (xbc)
 	ldw de, 0xf8
 	jrl DrawFunc_DrawLineAndReturn
 	lda xbc, (xsp + 32)
@@ -5760,7 +5824,7 @@ DrawPartGroup_DrawCAFrames:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	lda xwa, (xsp + 62)
-	decm 2, (xwa + 4)
+	decw	2, (xwa+4)
 	ld bc, (xsp + 32)
 	sub (xsp + 58), bc
 	ld bc, (xsp + 22)
@@ -5830,9 +5894,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	decm 1, (xwa + 2)
+	decw	1, (xwa+2)
 	lda xbc, (xsp + 38)
-	decm 1, (xbc + 2)
+	decw	1, (xbc+2)
 	ldw de, 0xf8
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5882,9 +5946,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	lda xbc, (xsp + 38)
-	decm 1, (xbc)
+	decw	1, (xbc)
 	incw 1, (xwa + 2)
 	ldw de, 0xf8
 	jrl DrawFunc_DrawLineAndReturn
@@ -5957,7 +6021,7 @@ DrawPartGroup_DrawCAFrames:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	lda xwa, (xsp + 62)
-	decm 2, (xwa + 4)
+	decw	2, (xwa+4)
 	ld bc, (xsp + 34)
 	sub (xsp + 58), bc
 	ld bc, (xsp + 28)
@@ -6033,9 +6097,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	decm 1, (xwa + 2)
+	decw	1, (xwa+2)
 	lda xbc, (xsp + 38)
-	decm 1, (xbc + 2)
+	decw	1, (xbc+2)
 	ldw de, 0xf8
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -6086,9 +6150,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	decm 1, (xwa)
+	decw	1, (xwa)
 	lda xbc, (xsp + 38)
-	decm 1, (xbc)
+	decw	1, (xbc)
 	ldw de, 0xf8
 
 DrawFunc_DrawLineAndReturn:
@@ -6126,7 +6190,7 @@ DrawDesignBox_Impl_Loop2:
 	ld	xbc, xiz
 	sub	xbc, xde
 	inc	1, xiz
-	.byte 0xaf, 0x04, 0x81
+	add	xbc, (xsp+4)
 	ld	c, (xbc)
 	ld	(xhl), c
 	inc	1, iy
@@ -6264,23 +6328,43 @@ SplashBMP_DecodePalette:
 	add (xsp + 6), xwa
 	ld xbc, (xsp + 6)
 	cp xbc, (xsp + 30)
-	jr c, SplashBMP_DecodePalette
+	jr	c, SplashBMP_DecodePalette
 
 SplashBMP_ReadInfoHeader:
-	.byte 0xf3, 0xfd, 0x22, 0x04, 0x31, 0xa9, 0x04, 0x20
-	.byte 0xbf, 0x0e, 0x60, 0xa9, 0x08, 0x20, 0xbf, 0x02
-	.byte 0x60, 0x40, 0x08, 0x00, 0x00, 0x00, 0x99, 0x0e
-	.byte 0x50, 0xe8, 0x12, 0xbf, 0x1e, 0x60, 0xe8, 0xec
-	.byte 0x02, 0xe8, 0x89, 0xe8, 0x69, 0xaf, 0x0e, 0x80
-	.byte 0x1d, 0x31, 0x04, 0xff, 0xbf, 0x12, 0x63, 0xeb
-	.byte 0xec, 0x02, 0xbf, 0x12, 0x63, 0xeb, 0x88, 0xaf
-	.byte 0x1e, 0x21, 0x1d, 0x7f, 0x02, 0xff, 0x2b, 0x1d
-	.byte 0xa3, 0x06, 0xff, 0xef, 0x62, 0xbf, 0x1e, 0x63
-	.byte 0xaf, 0x1e, 0x20, 0xbf, 0x1a, 0x60, 0xaf, 0x02
-	.byte 0x20, 0xe8, 0xcf, 0xf0, 0x00, 0x00, 0x00, 0x62
-	.byte 0x46, 0xe8, 0xa8, 0xbf, 0x06, 0x60, 0xaf, 0x02
-	.byte 0x20, 0xe8, 0xca, 0xf0, 0x00, 0x00, 0x00, 0x62
-	.byte 0x2e
+	lda	xbc, (xsp+1058)
+	ld	xwa, (xbc+4)
+	ld	(xsp+14), xwa
+	ld	xwa, (xbc+8)
+	ld	(xsp+2), xwa
+	ld	xwa, 8
+	div	wa, (xbc+14)
+	extz	xwa
+	ld	(xsp+30), xwa
+	sla	xwa, 2
+	ld	xbc, xwa
+	dec	1, xwa
+	add	xwa, (xsp+14)
+	call	0xff0431
+	ld	(xsp+18), xhl
+	sla	xhl, 2
+	ld	(xsp+18), xhl
+	ld	xwa, xhl
+	ld	xbc, (xsp+30)
+	call	InitializeKubo_Helper
+	pushw	hl
+	call	SLIDE_Decompress_4K_Init_Helper2
+	inc	2, xsp
+	ld	(xsp+30), xhl
+	ld	xwa, (xsp+30)
+	ld	(xsp+26), xwa
+	ld	xwa, (xsp+2)
+	cp	xwa, 240
+	jr	le, SplashBMP_PrepareRowBuffer
+	ld	xwa, 0:i3
+	ld	(xsp+6), xwa
+	ld	xwa, (xsp+2)
+	sub	xwa, 240
+	jr	le, SplashBMP_ClampHeight
 SplashBMP_SkipExcessRows:
 	ld xwa, (xsp + 30)
 	ld xbc, (xsp + 18)
@@ -6362,15 +6446,26 @@ SplashBMP_WideImage:
 	ld	xwa, 320
 	call	16712753
 	cp	xhl, 0
-	jr	le, 51
+	jr	le, SplashBMP_CopyRemainder
 SplashBMP_TileNarrow:
-	.byte 0xaf, 0x0e, 0x20, 0x28, 0xaf, 0x1c, 0x20, 0x38
-	.byte 0xaf, 0x10, 0x20, 0xaf, 0x14, 0x21, 0x1d, 0x7f
-	.byte 0x02, 0xff, 0xaf, 0x1c, 0x83, 0x3b, 0x1d, 0xbc
-	.byte 0x05, 0xff, 0xbf, 0x0a, 0x37, 0xe8, 0xa9, 0xaf
-	.byte 0x0a, 0x88, 0xaf, 0x0e, 0x21, 0x40, 0x40, 0x01
-	.byte 0x00, 0x00, 0x1d, 0x31, 0x04, 0xff, 0xaf, 0x0a
-	.byte 0xfb, 0x61, 0xcd
+	ld	xwa, (xsp+14)
+	pushw	wa
+	ld	xwa, (xsp+28)
+	push	xwa
+	ld	xwa, (xsp+16)
+	ld	xbc, (xsp+20)
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+28)
+	push	xhl
+	call	0xff05bc
+	lda	xsp, (xsp+10)
+	ld	xwa, 1:i3
+	add	(xsp+10), xwa
+	ld	xbc, (xsp+14)
+	ld	xwa, 320
+	call	0xff0431
+	cp	(xsp+10), xhl
+	jr	lt, SplashBMP_TileNarrow
 SplashBMP_CopyRemainder:
 	ld xwa, (xsp + 10)
 
@@ -6411,7 +6506,7 @@ SplashBMP_CopyToFramebuffer:
 
 	cp xwa, (xsp + 2)
 
-	.byte 0x71, 0x33, 0xff	; jrl lt, SplashBMP_ReadRowLoop (v7 displacement)
+	jrl	lt, SplashBMP_ReadRowLoop	; jrl lt, SplashBMP_ReadRowLoop (v7 displacement)
 
 
 
@@ -6466,18 +6561,36 @@ Gfx_ProcessSplashData:
 	ld (XSP+0x1c),XWA
 	cpw (XSP+0x16), 0x0018
 	jrl z, SplashData_Epilogue
-	ld XIZ,0x00000008
-	.byte 0x9f, 0x16, 0x56, 0xde, 0x88, 0xe8, 0x12, 0xaf
-	.byte 0x18, 0x21, 0x1d, 0x7f, 0x02, 0xff, 0xbf, 0x12
-	.byte 0x63, 0x9f, 0x16, 0x3f, 0x01, 0x00, 0x66, 0x73
-	.byte 0x9f, 0x16, 0x3f, 0x04, 0x00, 0x7e, 0x41, 0x01
-	.byte 0xbf, 0x08, 0x56, 0xaf, 0x12, 0x20, 0xbf, 0x04
-	.byte 0x60, 0x2b, 0x1d, 0xa3, 0x06, 0xff, 0xbf, 0x10
-	.byte 0x63, 0xaf, 0x10, 0x21, 0xbf, 0x0c, 0x61, 0xaf
-	.byte 0x14, 0x20, 0x28, 0xaf, 0x20, 0x20, 0x38, 0x39
-	.byte 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x0c, 0x37, 0xe9
-	.byte 0xa8, 0xaf, 0x12, 0x20, 0xe8, 0xcf, 0x00, 0x00
-	.byte 0x00, 0x00, 0x62, 0x30
+	ld	xiz, 8
+	div	iz, (xsp+22)
+	ld	wa, iz
+	extz	xwa
+	ld	xbc, (xsp+24)
+	call	InitializeKubo_Helper
+	ld	(xsp+18), xhl
+	cpw	(xsp+22), 1
+	jr	z, SplashData_1bppSetup
+	cpw	(xsp+22), 4
+	jrl	nz, SplashData_Epilogue
+	ld	(xsp+8), iz
+	ld	xwa, (xsp+18)
+	ld	(xsp+4), xwa
+	pushw	hl
+	call	SLIDE_Decompress_4K_Init_Helper2
+	ld	(xsp+16), xhl
+	ld	xbc, (xsp+16)
+	ld	(xsp+12), xbc
+	ld	xwa, (xsp+20)
+	pushw	wa
+	ld	xwa, (xsp+32)
+	push	xwa
+	push	xbc
+	call	0xff05bc
+	lda	xsp, (xsp+12)
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+18)
+	cp	xwa, 0
+	jr	le, SplashData_4bppFree
 SplashData_4bppLoop:
 	ld xde, xbc
 	add xde, (xsp + 28)
@@ -6927,25 +7040,48 @@ CaptureLcd:
 	ld XWA,0x000000f0
 	ld (XBC+0x08),XWA
 	ldw (XBC+0x0c), 0x0001
-	ldw (XBC+0x0e), 0x0008
-	.byte 0xe8, 0xa8, 0xb9, 0x10, 0x60, 0x40, 0x00, 0x2c
-	.byte 0x01, 0x00, 0xb9, 0x14, 0x60, 0xe8, 0xa8, 0xb9
-	.byte 0x18, 0x60, 0xb9, 0x1c, 0x60, 0x40, 0x00, 0x01
-	.byte 0x00, 0x00, 0xb9, 0x20, 0x60, 0xb9, 0x24, 0x60
-	.byte 0xe2, 0x4a, 0x04, 0x03, 0x20, 0x38, 0x0b, 0xea
-	.byte 0x00, 0x0b, 0x50, 0xae, 0xbf, 0x12, 0x30, 0x38
-	.byte 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x14, 0x37, 0xe8
-	.byte 0xa9, 0xe2, 0x4a, 0x04, 0x03, 0x88, 0x1d, 0x13
-	.byte 0x91, 0xf8, 0x1d, 0x70, 0x94, 0xf8, 0xbf, 0x02
-	.byte 0x30, 0x41, 0x5e, 0xae, 0xea, 0x00, 0x1d, 0xba
-	.byte 0x87, 0xf8, 0xdb, 0xd8, 0x7e, 0x12, 0x01, 0xf3
-	.byte 0xfd, 0x3a, 0x04, 0x30, 0x41, 0x0e, 0x00, 0x00
-	.byte 0x00, 0x1d, 0x1b, 0x8a, 0xf8, 0xeb, 0xcf, 0x0e
-	.byte 0x00, 0x00, 0x00, 0x7e, 0xf7, 0x00, 0xf3, 0xfd
-	.byte 0x12, 0x04, 0x30, 0x41, 0x28, 0x00, 0x00, 0x00
-	.byte 0x1d, 0x1b, 0x8a, 0xf8, 0xeb, 0xcf, 0x28, 0x00
-	.byte 0x00, 0x00, 0x7e, 0xe0, 0x00, 0xde, 0xa8, 0xe2
-	.byte 0x94, 0xef, 0x03, 0x20, 0xe8, 0xe0, 0x66, 0x4d
+	ldw	(xbc+14), 8
+	ld	xwa, 0:i3
+	ld	(xbc+16), xwa
+	ld	xwa, 0x012c00
+	ld	(xbc+20), xwa
+	ld	xwa, 0:i3
+	ld	(xbc+24), xwa
+	ld	(xbc+28), xwa
+	ld	xwa, 256
+	ld	(xbc+32), xwa
+	ld	(xbc+36), xwa
+	ld	xwa, (0x03044a:24)
+	push	xwa
+	pushw	234
+	pushw	44624
+	lda	xwa, (xsp+18)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+20)
+	ld	xwa, 1:i3
+	addl_da	(0x03044a), xwa
+	call	GetDiskSizeInfo
+	call	GetEncodedFileSizeData
+	lda	xwa, (xsp+2)
+	ld	xbc, Str_No_0xB48
+	call	FileIO_OpenWithMode
+	cp	hl, 0:i3
+	jrl	nz, CaptureLcd_WriteFailed
+	lda	xwa, (xsp+1082)
+	ld	xbc, 14
+	call	FileIO_WriteByte_Impl
+	cp	xhl, 14
+	jrl	nz, FileIO_ClosePath
+	lda	xwa, (xsp+1042)
+	ld	xbc, 40
+	call	FileIO_WriteByte_Impl
+	cp	xhl, 40
+	jrl	nz, FileIO_ClosePath
+	ld	iz, 0:i3
+	ld	xwa, (0x03ef94:24)
+	or	xwa, xwa
+	jr	z, CaptureLcd_WritePaletteNoOr94
 CaptureLcd_WritePaletteOr94:
 	ld wa, iz
 	call Table_LookupDword
@@ -7623,16 +7759,10 @@ ColorBlit_CallbackBlock:
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
 	ld	(0x03efaa:24), c
-	.byte 0xd2
-	popw	iz
-	max
-	pop	sr
-	push	xsp
-	nop
-	nop
+	cpw	(0x03044e:24), 0
 	ret	z
 	ld	bc, de
-	calr	1
+	calr	ColorBlit_Impl
 	ret
 
 ColorBlit_Impl:
@@ -7806,13 +7936,13 @@ ColorBlit_Mode1_RowLoop:
 	jr gt, ColorBlit_Mode1_NextRow
 
 ColorBlit_Mode1_PixelLoop:
-	bitm 7, (xde)
+	bit	7, (xde)
 	jr z, ColorBlit_Mode1_SetBit5
-	resm 5, (xde)
+	res	5, (xde)
 	jr ColorBlit_Mode1_NextPixel
 
 ColorBlit_Mode1_SetBit5:
-	setm 5, (xde)
+	set	5, (xde)
 
 ColorBlit_Mode1_NextPixel:
 	inc 1, xde
@@ -7852,13 +7982,13 @@ ColorBlit_Mode2_RowLoop:
 	jr gt, ColorBlit_Mode2_NextRow
 
 ColorBlit_Mode2_PixelLoop:
-	bitm 7, (xde)
+	bit	7, (xde)
 	jr z, ColorBlit_Mode2_SetBit6
-	resm 6, (xde)
+	res	6, (xde)
 	jr ColorBlit_Mode2_NextPixel
 
 ColorBlit_Mode2_SetBit6:
-	setm 6, (xde)
+	set	6, (xde)
 
 ColorBlit_Mode2_NextPixel:
 	inc 1, xde
@@ -7925,16 +8055,10 @@ ColorBlit2_CallbackBlock:
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
 	ld	(0x03efaa:24), c
-	.byte 0xd2
-	popw	iz
-	max
-	pop	sr
-	push	xsp
-	nop
-	nop
+	cpw	(0x03044e:24), 0
 	ret	z
 	ld	bc, de
-	calr	1
+	calr	ColorBlit2_Impl
 	ret
 
 ColorBlit2_Impl:
@@ -8107,13 +8231,13 @@ ColorBlit2_Mode1_RowLoop:
 	jr gt, ColorBlit2_Mode1_NextRow
 
 ColorBlit2_Mode1_PixelLoop:
-	bitm 7, (xiy)
+	bit	7, (xiy)
 	jr z, ColorBlit2_Mode1_ResBit5
-	setm 5, (xiy)
+	set	5, (xiy)
 	jr ColorBlit2_Mode1_NextPixel
 
 ColorBlit2_Mode1_ResBit5:
-	resm 5, (xiy)
+	res	5, (xiy)
 
 ColorBlit2_Mode1_NextPixel:
 	inc 1, xiy
@@ -8146,13 +8270,13 @@ ColorBlit2_Mode2_Entry:
 	ld xde, 0:i3
 
 ColorBlit2_Mode2_FullscreenLoop:
-	bitm 7, (xbc)
+	bit	7, (xbc)
 	jr z, ColorBlit2_Mode2_FullscreenRes6
-	setm 6, (xbc)
+	set	6, (xbc)
 	jr ColorBlit2_Mode2_FullscreenNext
 
 ColorBlit2_Mode2_FullscreenRes6:
-	resm 6, (xbc)
+	res	6, (xbc)
 
 ColorBlit2_Mode2_FullscreenNext:
 	inc 1, xbc
@@ -8184,13 +8308,13 @@ ColorBlit2_Mode2_RowLoop:
 	jr gt, ColorBlit2_Mode2_NextRow
 
 ColorBlit2_Mode2_PixelLoop:
-	bitm 7, (xde)
+	bit	7, (xde)
 	jr z, ColorBlit2_Mode2_ResBit6
-	setm 6, (xde)
+	set	6, (xde)
 	jr ColorBlit2_Mode2_NextPixel
 
 ColorBlit2_Mode2_ResBit6:
-	resm 6, (xde)
+	res	6, (xde)
 
 ColorBlit2_Mode2_NextPixel:
 	inc 1, xde
@@ -8213,5 +8337,1770 @@ ColorBlit2_PopReturn:
 	inc 8, xsp
 	ret
 
+
+; =============================================================================
+; DrawMonoBitmap - draw a 1-bpp bitmap into OFFSCREEN_BUFFER_1 in fg/bg colours
+;
+; Input:
+;   XWA = pointer to a rectangle: word[0]=x0, word[2]=y0, word[4]=x1, word[6]=y1
+;   XBC = pointer to the bitmap: one byte per (8-pixel column group, row),
+;         MSB = leftmost pixel; for each group x = 0, 8, 16 .. < x1-x0 the
+;         rows y = 0 .. < y1-y0 are consumed in order (column-major strips)
+;   DE  = foreground colour (used where a bit is 1)
+; The background colour (bit 0) is the word at 0x03efa2 (stored by
+; DirmdEmulator_Dispatch_Code_Helper in display/graphics_text_vga.s).
+; Colour 0xf5 means "copy the pixel from the buffer whose address is at
+; 0x030452" instead of writing a fixed colour (the same convention as DrawLine).
+;
+; Same draw-task idiom as DrawLine / DrawBox (ui/drawing_primitives.s): the
+; draw mode byte at 0x03efa8 is latched into 0x03efaa; if the caller is not the
+; draw task (IS_XSP_INSIDE_4K_REGION_AT_1C032 returns 0) the call is queued as a
+; 20-byte DrawQueue_Alloc record {+0 DrawMonoBitmap_ParamBlock, +4 rect (4
+; words), +12 bitmap pointer, +16 colour, +18 draw mode} and executed later by
+; DisplayCmd_DequeueAndExecute; nothing is drawn while the word at 0x03044e is 0.
+;
+; DrawMonoBitmap_Impl dispatches on the latched draw mode (0x03efaa):
+;   0  pixel = (pixel & 0x60) | (colour & 0x9f)   -- bits 5-6 of the buffer
+;      pixel are preserved, the rest is the colour
+;   1  bit 5 of the pixel := its bit 7 XOR the bitmap bit   (_Impl_Mode1)
+;   2  bit 6 likewise                                       (_Impl_Mode2)
+;   other  nothing is drawn
+; and always finishes with SetChangeRect(rect).
+; Derived from the ROM code below (v7 0xFAF73B); caller:
+; display/graphics_text_vga.s (the character-cell renderer that divides a cell
+; index by 40 and multiplies by 8 to build the rectangle).
+; =============================================================================
+; ColorBlit2_LargeCodeBlock: previous name of this label, kept only because it is still referenced by display/graphics_text_vga.s and shared/positional_labels.s (owned by another lane)
 ColorBlit2_LargeCodeBlock:
-	.incbin "includes/romslices/v7_fix_colorblit2_largecodeblock.bin"
+DrawMonoBitmap:
+	dec	6, xsp
+	push	xiz
+	ld	(xsp+4), de
+	ld	(xsp+6), xbc
+	ld	xiz, xwa
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
+	cp	hl, 0:i3
+	jr	z, DrawMonoBitmap_DeferredPath
+	ld	a, (0x03efa8:24)
+	ld	(0x03efaa:24), a
+	cpw	(0x03044e:24), 0
+	jr	z, DrawMonoBitmap_Return
+	ld	xwa, xiz
+	ld	xbc, (xsp+6)
+	ld	de, (xsp+4)
+	calr	DrawMonoBitmap_Impl
+	jr	DrawMonoBitmap_Return
+DrawMonoBitmap_DeferredPath:
+	ldw	wa, 20
+	calr	DrawQueue_Alloc
+	ld	xwa, xhl
+	lda	xbc, (DrawMonoBitmap_ParamBlock:24)
+	ld	(xwa), xbc
+	ld	xiy, xiz
+	lda	xix, (xwa+4)
+	ld	bc, 4:i3
+	ldirw
+	ld	xbc, (xsp+6)
+	ld	(xwa+12), xbc
+	ld	bc, (xsp+4)
+	ld	(xwa+16), bc
+	ld	c, (0x03efa8:24)
+	ld	(xwa+18), c
+	calr	DisplayCmd_DequeueAndExecute
+DrawMonoBitmap_Return:
+	pop	xiz
+	inc	6, xsp
+	ret
+DrawMonoBitmap_ParamBlock:
+	ld	xbc, xwa
+	lda	xwa, (xbc+4)
+	ld	xhl, (xbc+12)
+	ld	de, (xbc+16)
+	ld	c, (xbc+18)
+	ld	(0x03efaa:24), c
+	cpw	(0x03044e:24), 0
+	ret	z
+	ld	xbc, xhl
+	calr	DrawMonoBitmap_Impl
+	ret
+DrawMonoBitmap_Impl:
+	lda	xsp, (xsp-30)
+	pushw	iz
+	ld	(xsp+22), de
+	ld	(xsp+24), xbc
+	ld	(xsp+28), xwa
+	ld	a, (0x03efaa:24)
+	cp	a, 2:i3
+	jrl	z, DrawMonoBitmap_Impl_Mode2
+	cp	a, 1:i3
+	jrl	z, DrawMonoBitmap_Impl_Mode1
+	cp	a, 0:i3
+	jrl	nz, DrawMonoBitmap_Impl_Done
+	ldw	(xsp+6), 0
+	jrl	DrawMonoBitmap_Impl_Join3
+DrawMonoBitmap_Impl_Loop:
+	ldw	(xsp+8), 0
+	jrl	DrawMonoBitmap_Impl_Join2
+DrawMonoBitmap_Impl_Loop2:
+	lda	xwa, (xsp+18)
+	ld	(xsp+10), xwa
+	ld	xwa, (xsp+28)
+	ld	bc, (xwa)
+	add	bc, (xsp+6)
+	ld	xwa, (xsp+10)
+	stw_dpi	bc, 225	; ld (xwa+), bc
+	ld	(xsp+14), xwa
+	ld	bc, (xde)
+	add	bc, (xsp+8)
+	ld	xwa, (xsp+14)
+	ld	(xwa), bc
+	ld	xwa, (xsp+24)
+	ld	a, (xwa)
+	ld	(xsp+2), a
+	ld	(xsp+4), 0
+DrawMonoBitmap_Impl_Loop3:
+	ld	xhl, (0x030452:24)
+	ld	xwa, (xsp+14)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	lda	xbc, (0x043c00:24)
+	bit	7, (xsp+2)
+	jr	z, DrawMonoBitmap_Impl_Skip3
+	ld	xiy, (xsp+10)
+	ld	iz, (xsp+22)
+	ld	xwa, (xsp+10)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	ld	xix, xbc
+	add	xix, xwa
+	cp	iz, 245
+	jr	z, DrawMonoBitmap_Impl_Skip
+	and	(xix), 0x60
+	ld	wa, iz
+	and	wa, 0x9f
+	add	(xix), a
+	ld	bc, iz
+	and	bc, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	extz	wa
+	cp	wa, bc
+	jr	nz, DrawMonoBitmap_Impl_Skip2
+	jrl	DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip:
+	ld	bc, (xiy)
+	exts	xbc
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	add	xde, xbc
+	add	xhl, xde
+	and	(xix), 0x60
+	ld	a, (xhl)
+	and	a, 0x9f
+	add	(xix), a
+	ld	c, (xhl)
+	and	c, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	cp	a, c
+	jr	z, DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip2:
+	xor	(xix), 0x60
+	jr	DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip3:
+	ld	xiy, (xsp+10)
+	ld	iz, (0x03efa2:24)
+	ld	xwa, (xsp+10)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	ld	xix, xbc
+	add	xix, xwa
+	cp	iz, 245
+	jr	z, DrawMonoBitmap_Impl_Skip4
+	and	(xix), 0x60
+	ld	wa, iz
+	and	wa, 0x9f
+	add	(xix), a
+	ld	bc, iz
+	and	bc, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	extz	wa
+	cp	wa, bc
+	jr	nz, DrawMonoBitmap_Impl_Skip5
+	jr	DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip4:
+	ld	bc, (xiy)
+	exts	xbc
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	add	xde, xbc
+	add	xhl, xde
+	and	(xix), 0x60
+	ld	a, (xhl)
+	and	a, 0x9f
+	add	(xix), a
+	ld	c, (xhl)
+	and	c, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	cp	a, c
+	jr	z, DrawMonoBitmap_Impl_Join
+DrawMonoBitmap_Impl_Skip5:
+	xor	(xix), 0x60
+DrawMonoBitmap_Impl_Join:
+	ld	a, (xsp+2)
+	add	(xsp+2), a
+	ld	xwa, (xsp+10)
+	incw	1, (xwa)
+	inc	1, (xsp+4)
+	cp	(xsp+4), 8
+	jrl	c, DrawMonoBitmap_Impl_Loop3
+	ld	xwa, 1:i3
+	add	(xsp+24), xwa
+	incw	1, (xsp+8)
+DrawMonoBitmap_Impl_Join2:
+	ld	xwa, (xsp+28)
+	lda	xde, (xwa+2)
+	ld	bc, (xde)
+	ld	wa, (xwa+6)
+	sub	wa, bc
+	cp	(xsp+8), wa
+	jrl	c, DrawMonoBitmap_Impl_Loop2
+	incw	8, (xsp+6)
+DrawMonoBitmap_Impl_Join3:
+	ld	xwa, (xsp+28)
+	ld	bc, (xwa+4)
+	sub	bc, (xwa)
+	cp	(xsp+6), bc
+	jrl	c, DrawMonoBitmap_Impl_Loop
+	jrl	DrawMonoBitmap_Impl_Done
+DrawMonoBitmap_Impl_Mode1:
+	ldw	(xsp+6), 0
+	jrl	DrawMonoBitmap_Impl_Join7
+DrawMonoBitmap_Impl_Loop4:
+	ldw	(xsp+8), 0
+	jr	DrawMonoBitmap_Impl_Join6
+DrawMonoBitmap_Impl_Loop5:
+	lda	xde, (xsp+18)
+	ld	xwa, (xsp+28)
+	ld	wa, (xwa)
+	add	wa, (xsp+6)
+	ld	(xde), wa
+	lda	xhl, (xde+2)
+	ld	wa, (xix)
+	add	wa, (xsp+8)
+	ld	(xhl), wa
+	ld	xwa, (xsp+24)
+	ld	a, (xwa)
+	ld	(xsp+2), a
+	ld	(xsp+4), 0
+DrawMonoBitmap_Impl_Loop6:
+	lda	xix, (0x043c00:24)
+	ld	wa, (xhl)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	bit	7, (xsp+2)
+	jr	z, DrawMonoBitmap_Impl_Skip6
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xbc
+	ld	xbc, xix
+	add	xbc, xwa
+	bit	7, (xbc)
+	jr	nz, DrawMonoBitmap_Impl_Skip7
+	jr	DrawMonoBitmap_Impl_Join4
+DrawMonoBitmap_Impl_Skip6:
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xbc
+	ld	xbc, xix
+	add	xbc, xwa
+	bit	7, (xbc)
+	jr	z, DrawMonoBitmap_Impl_Skip7
+DrawMonoBitmap_Impl_Join4:
+	set	5, (xbc)
+	jr	DrawMonoBitmap_Impl_Join5
+DrawMonoBitmap_Impl_Skip7:
+	res	5, (xbc)
+DrawMonoBitmap_Impl_Join5:
+	ld	a, (xsp+2)
+	add	(xsp+2), a
+	incw	1, (xde)
+	inc	1, (xsp+4)
+	cp	(xsp+4), 8
+	jr	c, DrawMonoBitmap_Impl_Loop6
+	ld	xwa, 1:i3
+	add	(xsp+24), xwa
+	incw	1, (xsp+8)
+DrawMonoBitmap_Impl_Join6:
+	ld	xwa, (xsp+28)
+	lda	xix, (xwa+2)
+	ld	bc, (xix)
+	ld	wa, (xwa+6)
+	sub	wa, bc
+	cp	(xsp+8), wa
+	jrl	c, DrawMonoBitmap_Impl_Loop5
+	incw	8, (xsp+6)
+DrawMonoBitmap_Impl_Join7:
+	ld	xwa, (xsp+28)
+	ld	bc, (xwa+4)
+	sub	bc, (xwa)
+	cp	(xsp+6), bc
+	jrl	c, DrawMonoBitmap_Impl_Loop4
+	jrl	DrawMonoBitmap_Impl_Done
+DrawMonoBitmap_Impl_Mode2:
+	ldw	(xsp+6), 0
+	jrl	DrawMonoBitmap_Impl_Join11
+DrawMonoBitmap_Impl_Loop7:
+	ldw	(xsp+8), 0
+	jr	DrawMonoBitmap_Impl_Join10
+DrawMonoBitmap_Impl_Loop8:
+	lda	xde, (xsp+18)
+	ld	xwa, (xsp+28)
+	ld	wa, (xwa)
+	add	wa, (xsp+6)
+	ld	(xde), wa
+	lda	xhl, (xde+2)
+	ld	wa, (xix)
+	add	wa, (xsp+8)
+	ld	(xhl), wa
+	ld	xwa, (xsp+24)
+	ld	a, (xwa)
+	ld	(xsp+2), a
+	ld	(xsp+4), 0
+DrawMonoBitmap_Impl_Loop9:
+	ld	wa, (xhl)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	bit	7, (xsp+2)
+	jr	z, DrawMonoBitmap_Impl_Skip8
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xbc
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bit	7, (xbc)
+	jr	nz, DrawMonoBitmap_Impl_Skip9
+	jr	DrawMonoBitmap_Impl_Join8
+DrawMonoBitmap_Impl_Skip8:
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xbc
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bit	7, (xbc)
+	jr	z, DrawMonoBitmap_Impl_Skip9
+DrawMonoBitmap_Impl_Join8:
+	set	6, (xbc)
+	jr	DrawMonoBitmap_Impl_Join9
+DrawMonoBitmap_Impl_Skip9:
+	res	6, (xbc)
+DrawMonoBitmap_Impl_Join9:
+	ld	a, (xsp+2)
+	add	(xsp+2), a
+	incw	1, (xde)
+	inc	1, (xsp+4)
+	cp	(xsp+4), 8
+	jr	c, DrawMonoBitmap_Impl_Loop9
+	ld	xwa, 1:i3
+	add	(xsp+24), xwa
+	incw	1, (xsp+8)
+DrawMonoBitmap_Impl_Join10:
+	ld	xwa, (xsp+28)
+	lda	xix, (xwa+2)
+	ld	bc, (xix)
+	ld	wa, (xwa+6)
+	sub	wa, bc
+	cp	(xsp+8), wa
+	jrl	c, DrawMonoBitmap_Impl_Loop8
+	incw	8, (xsp+6)
+DrawMonoBitmap_Impl_Join11:
+	ld	xwa, (xsp+28)
+	ld	bc, (xwa+4)
+	sub	bc, (xwa)
+	cp	(xsp+6), bc
+	jrl	c, DrawMonoBitmap_Impl_Loop7
+DrawMonoBitmap_Impl_Done:
+	ld	xwa, (xsp+28)
+	calr	SetChangeRect
+	popw	iz
+	lda	xsp, (xsp+30)
+	ret
+
+; =============================================================================
+; DrawLineWithMode - draw a line between two points, honouring the draw mode
+;
+; Input:
+;   XWA = pointer to point A: word[0]=x, word[2]=y
+;   XBC = pointer to point B: word[0]=x, word[2]=y
+;   DE  = colour (0xf5 = copy the pixel from the buffer at (0x030452))
+;
+; Wrapper / deferred path as in DrawMonoBitmap, with a 16-byte queue record
+; {+0 DrawLineWithMode_ParamBlock, +4 point A, +8 point B, +12 colour,
+; +14 draw mode}.
+;
+; DrawLineWithMode_Impl returns at once unless IsPointOnScreen accepts both
+; points and at least one delta is non-zero.  It walks the longer axis one
+; pixel at a time and the other in 16.16 fixed point: the slope comes from
+; Math_DivideSigned32 on the delta shifted left 16 (`sla 0` = 16), rounded by
+; adding 0x8000.  Pixel writes follow the latched draw mode (0x03efaa): 0 writes
+; the colour into bits 0-4,7 keeping bits 5-6 (as DrawMonoBitmap); 1 sets or
+; clears bit 5 (_Impl_Mode1) and 2 bit 6 (_Impl_Mode2) according to the pixel's
+; bit 7 -- the axis-aligned paths and the general path use OPPOSITE polarity
+; (set-if-bit7 vs clear-if-bit7), as the ROM has it; other modes draw nothing.
+; It ends with SetChangeRect over the rectangle spanned by the two points
+; (_Impl_Done).  DrawLine's wrapper (ui/drawing_primitives.s) does not latch the
+; draw mode byte; this one does.
+; Derived from the ROM code below (v7 0xFAFAC0).  Callers:
+; display/graphics_text_vga.s and, directly into _Impl, the image's root .s
+; (both by numeric `calr` in v7: their files are another lane's).
+; =============================================================================
+DrawLineWithMode:
+	dec	6, xsp
+	push	xiz
+	ld	(xsp+4), de
+	ld	(xsp+6), xbc
+	ld	xiz, xwa
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
+	cp	hl, 0:i3
+	jr	z, DrawLineWithMode_DeferredPath
+	ld	a, (0x03efa8:24)
+	ld	(0x03efaa:24), a
+	cpw	(0x03044e:24), 0
+	jr	z, DrawLineWithMode_Return
+	ld	xwa, xiz
+	ld	xbc, (xsp+6)
+	ld	de, (xsp+4)
+	calr	DrawLineWithMode_Impl
+	jr	DrawLineWithMode_Return
+DrawLineWithMode_DeferredPath:
+	ldw	wa, 16
+	calr	DrawQueue_Alloc
+	ld	xwa, xhl
+	lda	xbc, (DrawLineWithMode_ParamBlock:24)
+	ld	(xwa), xbc
+	ld	xiy, xiz
+	lda	xix, (xwa+4)
+	ldiw
+	ldiw
+	ld	xbc, (xsp+6)
+	ld	xiy, xbc
+	lda	xix, (xwa+8)
+	ldiw
+	ldiw
+	ld	bc, (xsp+4)
+	ld	(xwa+12), bc
+	ld	c, (0x03efa8:24)
+	ld	(xwa+14), c
+	calr	DisplayCmd_DequeueAndExecute
+DrawLineWithMode_Return:
+	pop	xiz
+	inc	6, xsp
+	ret
+DrawLineWithMode_ParamBlock:
+	ld	xbc, xwa
+	lda	xwa, (xbc+4)
+	lda	xhl, (xbc+8)
+	ld	de, (xbc+12)
+	ld	c, (xbc+14)
+	ld	(0x03efaa:24), c
+	cpw	(0x03044e:24), 0
+	ret	z
+	ld	xbc, xhl
+	calr	DrawLineWithMode_Impl
+	ret
+DrawLineWithMode_Impl:
+	lda	xsp, (xsp-72)
+	push	xiz
+	ld	(xsp+66), de
+	ld	(xsp+68), xbc
+	ld	(xsp+72), xwa
+	ld	xwa, (xsp+72)
+	calr	IsPointOnScreen
+	cp	hl, 0:i3
+	jrl	z, DrawLineWithMode_Impl_Epilogue
+	ld	xwa, (xsp+68)
+	calr	IsPointOnScreen
+	cp	hl, 0:i3
+	jrl	z, DrawLineWithMode_Impl_Epilogue
+	ld	xde, 0xffffffff
+	ld	xwa, (xsp+68)
+	ld	bc, (xwa)
+	ld	xwa, (xsp+72)
+	cp	bc, (xwa)
+	jr	le, DrawLineWithMode_Impl_Skip
+	ld	xde, 1:i3
+DrawLineWithMode_Impl_Skip:
+	ld	(xsp+12), xde
+	ld	xde, 0xffffffff
+	ld	xwa, (xsp+68)
+	inc	2, xwa
+	ld	(xsp+22), xwa
+	ld	xwa, (xsp+72)
+	inc	2, xwa
+	ld	(xsp+26), xwa
+	ld	xwa, (xsp+22)
+	ld	bc, (xwa)
+	ld	xwa, (xsp+26)
+	ld	hl, (xwa)
+	cp	bc, hl
+	jr	le, DrawLineWithMode_Impl_Skip2
+	ld	xde, 1:i3
+DrawLineWithMode_Impl_Skip2:
+	ld	(xsp+16), xde
+	ld	xwa, (xsp+12)
+	cp	xwa, 1
+	jr	nz, DrawLineWithMode_Impl_Skip3
+	ld	xwa, (xsp+68)
+	ld	de, (xwa)
+	ld	xwa, (xsp+72)
+	sub	de, (xwa)
+	jr	DrawLineWithMode_Impl_Join
+DrawLineWithMode_Impl_Skip3:
+	ld	xwa, (xsp+72)
+	ld	de, (xwa)
+	ld	xwa, (xsp+68)
+	sub	de, (xwa)
+DrawLineWithMode_Impl_Join:
+	exts	xde
+	ld	(xsp+4), xde
+	ld	xwa, (xsp+16)
+	cp	xwa, 1
+	jr	nz, DrawLineWithMode_Impl_Skip4
+	sub	bc, hl
+	ld	hl, bc
+	jr	DrawLineWithMode_Impl_Join2
+DrawLineWithMode_Impl_Skip4:
+	sub	hl, bc
+DrawLineWithMode_Impl_Join2:
+	exts	xhl
+	ld	(xsp+8), xhl
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jr	nz, DrawLineWithMode_Impl_Skip5
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jrl	z, DrawLineWithMode_Impl_Epilogue
+DrawLineWithMode_Impl_Skip5:
+	ld	xwa, (xsp+72)
+	ld	xiy, xwa
+	lda	xix, (xsp+62)
+	ldiw
+	ldiw
+	ld	a, (0x03efaa:24)
+	ld	(xsp+20), a
+	lda	xwa, (0x043c00:24)
+	ld	(xsp+38), xwa
+	ld	(xsp+30), xwa
+	ld	xwa, (xsp+8)
+	sla	xwa, 0
+	ld	xbc, (xsp+4)
+	call	0xff0431
+	ld	(xsp+34), xhl
+	lda	xwa, (xsp+62)
+	ld	(xsp+42), xwa
+	ld	xwa, (xsp+4)
+	sla	xwa, 0
+	ld	xbc, (xsp+8)
+	call	0xff0431
+	ld	xix, (xsp+42)
+	lda	xwa, (xix+2)
+	ld	(xsp+46), xwa
+	ld	wa, (xwa)
+	exts	xwa
+	sla	xwa, 0
+	ld	(xsp+50), xwa
+	ld	xwa, 32768
+	add	(xsp+50), xwa
+	cp	(xsp+20), 2
+	jrl	z, DrawLineWithMode_Impl_Mode2
+	cp	(xsp+20), 1
+	jrl	z, DrawLineWithMode_Impl_Mode1
+	cp	(xsp+20), 0
+	jrl	nz, DrawLineWithMode_Impl_Done
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jrl	nz, DrawLineWithMode_Impl_Skip9
+	ld	xde, (xsp+42)
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	wa, (xix)
+	exts	xwa
+	add	xwa, xbc
+	ld	xhl, (xsp+30)
+	add	xhl, xwa
+	cpw	(xsp+66), 245
+	jr	z, DrawLineWithMode_Impl_Skip7
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop:
+	and	(xhl), 0x60
+	ld	wa, (xsp+66)
+	and	wa, 0x9f
+	add	(xhl), a
+	ld	de, (xsp+66)
+	and	de, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	extz	wa
+	cp	wa, de
+	jr	z, DrawLineWithMode_Impl_Skip6
+	xor	(xhl), 0x60
+DrawLineWithMode_Impl_Skip6:
+	ld	xwa, (xsp+16)
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
+	add	xhl, xwa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, DrawLineWithMode_Impl_Loop
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip7:
+	ld	wa, (xde)
+	exts	xwa
+	ld	xix, xbc
+	add	xix, xwa
+	add	xix, (0x030452:24)
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop2:
+	and	(xhl), 0x60
+	ld	a, (xix)
+	and	a, 0x9f
+	add	(xhl), a
+	ld	e, (xix)
+	and	e, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	cp	a, e
+	jr	z, DrawLineWithMode_Impl_Skip8
+	xor	(xhl), 0x60
+DrawLineWithMode_Impl_Skip8:
+	ld	xwa, (xsp+16)
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
+	add	xhl, xwa
+	add	xix, xwa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, DrawLineWithMode_Impl_Loop2
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip9:
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jrl	nz, DrawLineWithMode_Impl_Skip13
+	ld	xde, (xsp+42)
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xhl, (xsp+30)
+	add	xhl, xwa
+	cpw	(xsp+66), 245
+	jr	z, DrawLineWithMode_Impl_Skip11
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop3:
+	and	(xhl), 0x60
+	ld	wa, (xsp+66)
+	and	wa, 0x9f
+	add	(xhl), a
+	ld	de, (xsp+66)
+	and	de, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	extz	wa
+	cp	wa, de
+	jr	z, DrawLineWithMode_Impl_Skip10
+	xor	(xhl), 0x60
+DrawLineWithMode_Impl_Skip10:
+	add	xhl, (xsp+12)
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, DrawLineWithMode_Impl_Loop3
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip11:
+	ld	wa, (xde)
+	exts	xwa
+	ld	xix, xbc
+	add	xix, xwa
+	add	xix, (0x030452:24)
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop4:
+	and	(xhl), 0x60
+	ld	a, (xix)
+	and	a, 0x9f
+	add	(xhl), a
+	ld	e, (xix)
+	and	e, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	cp	a, e
+	jr	z, DrawLineWithMode_Impl_Skip12
+	xor	(xhl), 0x60
+DrawLineWithMode_Impl_Skip12:
+	add	xhl, (xsp+12)
+	add	xix, (xsp+12)
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, DrawLineWithMode_Impl_Loop4
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip13:
+	ld	xwa, (xsp+8)
+	cp	xwa, (xsp+4)
+	jrl	le, DrawLineWithMode_Impl_Skip16
+	ld	xwa, (xsp+12)
+	ld	xbc, xhl
+	call	InitializeKubo_Helper
+	ld	(xsp+12), xhl
+	ld	xde, (xsp+42)
+	ld	xwa, xde
+	ld	wa, (xwa)
+	exts	xwa
+	ld	(xsp+4), xwa
+	sla	xwa, 0
+	ld	(xsp+4), xwa
+	ld	xwa, 32768
+	add	(xsp+4), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop5:
+	ld	xiy, xde
+	ld	hl, (xsp+66)
+	lda	xwa, (xde+2)
+	ld	(xsp+50), xwa
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	cpw	(xsp+66), 245
+	jr	z, DrawLineWithMode_Impl_Skip14
+	and	(xix), 0x60
+	ld	wa, hl
+	and	wa, 0x9f
+	add	(xix), a
+	and	hl, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	extz	wa
+	cp	wa, hl
+	jr	nz, DrawLineWithMode_Impl_Skip15
+	jr	DrawLineWithMode_Impl_Join3
+DrawLineWithMode_Impl_Skip14:
+	ld	xiz, (0x030452:24)
+	ld	hl, (xiy)
+	exts	xhl
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xiy, xwa
+	sll	xiy, 2
+	add	xiy, xwa
+	sll	xiy, 6
+	add	xiy, xhl
+	add	xiz, xiy
+	and	(xix), 0x60
+	ld	a, (xiz)
+	and	a, 0x9f
+	add	(xix), a
+	ld	l, (xiz)
+	and	l, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	cp	a, l
+	jr	z, DrawLineWithMode_Impl_Join3
+DrawLineWithMode_Impl_Skip15:
+	xor	(xix), 0x60
+DrawLineWithMode_Impl_Join3:
+	ld	xwa, (xsp+12)
+	add	(xsp+4), xwa
+	ld	xwa, (xsp+4)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xhl, (xsp+16)
+	ld	xwa, (xsp+50)
+	add	(xwa), hl
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jrl	le, DrawLineWithMode_Impl_Loop5
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip16:
+	ld	xwa, (xsp+16)
+	ld	xbc, (xsp+34)
+	call	InitializeKubo_Helper
+	ld	(xsp+16), xhl
+	ld	xde, (xsp+42)
+	ld	xwa, (xsp+46)
+	ld	(xsp+46), xwa
+	ld	xwa, (xsp+50)
+	ld	(xsp+8), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop6:
+	ld	xix, xde
+	ld	hl, (xsp+66)
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xiy, xwa
+	sll	xiy, 2
+	add	xiy, xwa
+	sll	xiy, 6
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xiy
+	ld	xiy, (xsp+38)
+	add	xiy, xwa
+	cpw	(xsp+66), 245
+	jr	z, DrawLineWithMode_Impl_Skip17
+	and	(xiy), 0x60
+	ld	wa, hl
+	and	wa, 0x9f
+	add	(xiy), a
+	and	hl, 0x80
+	ld	a, (xiy)
+	and	a, 0x80
+	extz	wa
+	cp	wa, hl
+	jr	nz, DrawLineWithMode_Impl_Skip18
+	jr	DrawLineWithMode_Impl_Join4
+DrawLineWithMode_Impl_Skip17:
+	ld	xiz, (0x030452:24)
+	ld	hl, (xix)
+	exts	xhl
+	ld	wa, (xix+2)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	add	xix, xhl
+	add	xiz, xix
+	and	(xiy), 0x60
+	ld	a, (xiz)
+	and	a, 0x9f
+	add	(xiy), a
+	ld	l, (xiz)
+	and	l, 0x80
+	ld	a, (xiy)
+	and	a, 0x80
+	cp	a, l
+	jr	z, DrawLineWithMode_Impl_Join4
+DrawLineWithMode_Impl_Skip18:
+	xor	(xiy), 0x60
+DrawLineWithMode_Impl_Join4:
+	ld	xwa, (xsp+16)
+	add	(xsp+8), xwa
+	ld	xhl, (xsp+8)
+	sra	xhl, 0
+	ld	xwa, (xsp+46)
+	ld	(xwa), hl
+	ld	xwa, (xsp+12)
+	add	(xde), wa
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jrl	le, DrawLineWithMode_Impl_Loop6
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Mode1:
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jr	nz, DrawLineWithMode_Impl_Skip20
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, (xsp+30)
+	add	xde, xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop7:
+	bit	7, (xde)
+	jr	z, DrawLineWithMode_Impl_Skip19
+	set	5, (xde)
+	jr	DrawLineWithMode_Impl_Join5
+DrawLineWithMode_Impl_Skip19:
+	res	5, (xde)
+DrawLineWithMode_Impl_Join5:
+	ld	xwa, (xsp+16)
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
+	add	xde, xwa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, DrawLineWithMode_Impl_Loop7
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip20:
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jr	nz, DrawLineWithMode_Impl_Skip22
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, (xsp+30)
+	add	xde, xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop8:
+	bit	7, (xde)
+	jr	z, DrawLineWithMode_Impl_Skip21
+	set	5, (xde)
+	jr	DrawLineWithMode_Impl_Join6
+DrawLineWithMode_Impl_Skip21:
+	res	5, (xde)
+DrawLineWithMode_Impl_Join6:
+	add	xde, (xsp+12)
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, DrawLineWithMode_Impl_Loop8
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip22:
+	ld	xwa, (xsp+8)
+	cp	xwa, (xsp+4)
+	jr	le, DrawLineWithMode_Impl_Skip24
+	ld	xwa, (xsp+12)
+	ld	xbc, xhl
+	call	InitializeKubo_Helper
+	ld	(xsp+12), xhl
+	ld	xde, (xsp+42)
+	ld	xwa, xde
+	ld	wa, (xwa)
+	exts	xwa
+	ld	(xsp+4), xwa
+	sla	xwa, 0
+	ld	(xsp+4), xwa
+	ld	xwa, 32768
+	add	(xsp+4), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop9:
+	lda	xhl, (xde+2)
+	ld	wa, (xhl)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	bit	7, (xix)
+	jr	z, DrawLineWithMode_Impl_Skip23
+	res	5, (xix)
+	jr	DrawLineWithMode_Impl_Join7
+DrawLineWithMode_Impl_Skip23:
+	set	5, (xix)
+DrawLineWithMode_Impl_Join7:
+	ld	xwa, (xsp+12)
+	add	(xsp+4), xwa
+	ld	xwa, (xsp+4)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xwa, (xsp+16)
+	add	(xhl), wa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, DrawLineWithMode_Impl_Loop9
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip24:
+	ld	xwa, (xsp+16)
+	ld	xbc, (xsp+34)
+	call	InitializeKubo_Helper
+	ld	(xsp+16), xhl
+	ld	xhl, (xsp+42)
+	ld	xde, (xsp+46)
+	ld	xwa, (xsp+50)
+	ld	(xsp+8), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop10:
+	ld	wa, (xde)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xhl)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	bit	7, (xix)
+	jr	z, DrawLineWithMode_Impl_Skip25
+	res	5, (xix)
+	jr	DrawLineWithMode_Impl_Join8
+DrawLineWithMode_Impl_Skip25:
+	set	5, (xix)
+DrawLineWithMode_Impl_Join8:
+	ld	xwa, (xsp+16)
+	add	(xsp+8), xwa
+	ld	xwa, (xsp+8)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xwa, (xsp+12)
+	add	(xhl), wa
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, DrawLineWithMode_Impl_Loop10
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Mode2:
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jr	nz, DrawLineWithMode_Impl_Skip27
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, (xsp+30)
+	add	xde, xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop11:
+	bit	7, (xde)
+	jr	z, DrawLineWithMode_Impl_Skip26
+	res	6, (xde)
+	jr	DrawLineWithMode_Impl_Join9
+DrawLineWithMode_Impl_Skip26:
+	set	6, (xde)
+DrawLineWithMode_Impl_Join9:
+	ld	xwa, (xsp+16)
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
+	add	xde, xwa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, DrawLineWithMode_Impl_Loop11
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip27:
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jr	nz, DrawLineWithMode_Impl_Skip29
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, (xsp+30)
+	add	xde, xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop12:
+	bit	7, (xde)
+	jr	z, DrawLineWithMode_Impl_Skip28
+	res	6, (xde)
+	jr	DrawLineWithMode_Impl_Join10
+DrawLineWithMode_Impl_Skip28:
+	set	6, (xde)
+DrawLineWithMode_Impl_Join10:
+	add	xde, (xsp+12)
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, DrawLineWithMode_Impl_Loop12
+	jrl	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip29:
+	ld	xwa, (xsp+8)
+	cp	xwa, (xsp+4)
+	jr	le, DrawLineWithMode_Impl_Skip31
+	ld	xwa, (xsp+12)
+	ld	xbc, xhl
+	call	InitializeKubo_Helper
+	ld	(xsp+12), xhl
+	ld	xde, (xsp+42)
+	ld	xwa, xde
+	ld	wa, (xwa)
+	exts	xwa
+	ld	(xsp+4), xwa
+	sla	xwa, 0
+	ld	(xsp+4), xwa
+	ld	xwa, 32768
+	add	(xsp+4), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop13:
+	lda	xhl, (xde+2)
+	ld	wa, (xhl)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	bit	7, (xix)
+	jr	z, DrawLineWithMode_Impl_Skip30
+	res	6, (xix)
+	jr	DrawLineWithMode_Impl_Join11
+DrawLineWithMode_Impl_Skip30:
+	set	6, (xix)
+DrawLineWithMode_Impl_Join11:
+	ld	xwa, (xsp+12)
+	add	(xsp+4), xwa
+	ld	xwa, (xsp+4)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xwa, (xsp+16)
+	add	(xhl), wa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, DrawLineWithMode_Impl_Loop13
+	jr	DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Skip31:
+	ld	xwa, (xsp+16)
+	ld	xbc, (xsp+34)
+	call	InitializeKubo_Helper
+	ld	(xsp+16), xhl
+	ld	xhl, (xsp+42)
+	ld	xde, (xsp+46)
+	ld	xwa, (xsp+50)
+	ld	(xsp+8), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jr	lt, DrawLineWithMode_Impl_Done
+DrawLineWithMode_Impl_Loop14:
+	ld	wa, (xde)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xhl)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	bit	7, (xix)
+	jr	z, DrawLineWithMode_Impl_Skip32
+	res	6, (xix)
+	jr	DrawLineWithMode_Impl_Join12
+DrawLineWithMode_Impl_Skip32:
+	set	6, (xix)
+DrawLineWithMode_Impl_Join12:
+	ld	xwa, (xsp+16)
+	add	(xsp+8), xwa
+	ld	xwa, (xsp+8)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xwa, (xsp+12)
+	add	(xhl), wa
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, DrawLineWithMode_Impl_Loop14
+DrawLineWithMode_Impl_Done:
+	lda	xwa, (xsp+54)
+	ld	xbc, (xsp+26)
+	ld	bc, (xbc)
+	ld	(xwa+2), bc
+	ld	xbc, (xsp+72)
+	ld	bc, (xbc)
+	ld	(xwa), bc
+	ld	xbc, (xsp+68)
+	ld	bc, (xbc)
+	ld	(xwa+4), bc
+	ld	xbc, (xsp+22)
+	ld	bc, (xbc)
+	ld	(xwa+6), bc
+	calr	SetChangeRect
+DrawLineWithMode_Impl_Epilogue:
+	pop	xiz
+	lda	xsp, (xsp+72)
+	ret
+
+; =============================================================================
+; DrawDottedLineWithMode - DrawLineWithMode with a dotted pattern
+;
+; Same inputs, queue record layout (+0 DrawDottedLineWithMode_ParamBlock) and
+; algorithm as DrawLineWithMode, plus a pattern counter at (xsp+0x18) of the
+; _Impl frame: per pixel step, counter 0 and 1 draw and increment, 2 and 3 skip
+; and increment, and at 4 the counter is reset to 0 WITHOUT drawing or
+; incrementing -- two pixels on, three off.  The draw-mode test is made per
+; pixel inside the loop.
+; The routine continues past the end of this file into the image's root .s
+; (kn5000_v7_program.s).
+; Derived from the ROM code below (v7 0xFB02A9).  Caller:
+; display/graphics_text_vga.s (by numeric `calr` in v7).
+; =============================================================================
+DrawDottedLineWithMode:
+	dec	6, xsp
+	push	xiz
+	ld	(xsp+4), de
+	ld	(xsp+6), xbc
+	ld	xiz, xwa
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
+	cp	hl, 0:i3
+	jr	z, DrawDottedLineWithMode_DeferredPath
+	ld	a, (0x03efa8:24)
+	ld	(0x03efaa:24), a
+	cpw	(0x03044e:24), 0
+	jr	z, DrawDottedLineWithMode_Return
+	ld	xwa, xiz
+	ld	xbc, (xsp+6)
+	ld	de, (xsp+4)
+	calr	DrawDottedLineWithMode_Impl
+	jr	DrawDottedLineWithMode_Return
+DrawDottedLineWithMode_DeferredPath:
+	ldw	wa, 16
+	calr	DrawQueue_Alloc
+	ld	xwa, xhl
+	lda	xbc, (DrawDottedLineWithMode_ParamBlock:24)
+	ld	(xwa), xbc
+	ld	xiy, xiz
+	lda	xix, (xwa+4)
+	ldiw
+	ldiw
+	ld	xbc, (xsp+6)
+	ld	xiy, xbc
+	lda	xix, (xwa+8)
+	ldiw
+	ldiw
+	ld	bc, (xsp+4)
+	ld	(xwa+12), bc
+	ld	c, (0x03efa8:24)
+	ld	(xwa+14), c
+	calr	DisplayCmd_DequeueAndExecute
+DrawDottedLineWithMode_Return:
+	pop	xiz
+	inc	6, xsp
+	ret
+DrawDottedLineWithMode_ParamBlock:
+	ld	xbc, xwa
+	lda	xwa, (xbc+4)
+	lda	xhl, (xbc+8)
+	ld	de, (xbc+12)
+	ld	c, (xbc+14)
+	ld	(0x03efaa:24), c
+	cpw	(0x03044e:24), 0
+	ret	z
+	ld	xbc, xhl
+	calr	DrawDottedLineWithMode_Impl
+	ret
+DrawDottedLineWithMode_Impl:
+	lda	xsp, (xsp-56)
+	push	xiz
+	ld	(xsp+50), de
+	ld	(xsp+52), xbc
+	ld	(xsp+56), xwa
+	ld	(xsp+24), 0
+	ld	xde, 0xffffffff
+	ld	xwa, (xsp+52)
+	ld	bc, (xwa)
+	ld	xwa, (xsp+56)
+	cp	bc, (xwa)
+	jr	le, DrawDottedLineWithMode_Impl_Skip
+	ld	xde, 1:i3
+DrawDottedLineWithMode_Impl_Skip:
+	ld	(xsp+12), xde
+	ld	xde, 0xffffffff
+	ld	xwa, (xsp+52)
+	inc	2, xwa
+	ld	(xsp+26), xwa
+	ld	xwa, (xsp+56)
+	inc	2, xwa
+	ld	(xsp+30), xwa
+	ld	xwa, (xsp+26)
+	ld	bc, (xwa)
+	ld	xwa, (xsp+30)
+	ld	hl, (xwa)
+	cp	bc, hl
+	jr	le, DrawDottedLineWithMode_Impl_Skip2
+	ld	xde, 1:i3
+DrawDottedLineWithMode_Impl_Skip2:
+	ld	(xsp+16), xde
+	ld	xwa, (xsp+12)
+	cp	xwa, 1
+	jr	nz, DrawDottedLineWithMode_Impl_Skip3
+	ld	xwa, (xsp+52)
+	ld	de, (xwa)
+	ld	xwa, (xsp+56)
+	sub	de, (xwa)
+	jr	DrawDottedLineWithMode_Impl_Join
+DrawDottedLineWithMode_Impl_Skip3:
+	ld	xwa, (xsp+56)
+	ld	de, (xwa)
+	ld	xwa, (xsp+52)
+	sub	de, (xwa)
+DrawDottedLineWithMode_Impl_Join:
+	exts	xde
+	ld	(xsp+4), xde
+	ld	xwa, (xsp+16)
+	cp	xwa, 1
+	jr	nz, DrawDottedLineWithMode_Impl_Skip4
+	sub	bc, hl
+	ld	hl, bc
+	jr	DrawDottedLineWithMode_Impl_Join2
+DrawDottedLineWithMode_Impl_Skip4:
+	sub	hl, bc
+DrawDottedLineWithMode_Impl_Join2:
+	exts	xhl
+	ld	(xsp+8), xhl
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jr	nz, DrawDottedLineWithMode_Impl_Skip5
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jrl	z, 1328
+DrawDottedLineWithMode_Impl_Skip5:
+	ld	xwa, (xsp+56)
+	ld	xiy, xwa
+	lda	xix, (xsp+46)
+	ldiw
+	ldiw
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jrl	nz, DrawDottedLineWithMode_Impl_Skip13
+	ld	xwa, 0:i3
+	ld	(xsp+20), xwa
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, Voice_FactoryPresetData_Code_Join4
+DrawDottedLineWithMode_Impl_Loop:
+	cp	(xsp+24), 3
+	jr	ule, DrawDottedLineWithMode_Impl_Skip6
+	ld	(xsp+24), 0
+	jrl	DrawDottedLineWithMode_Impl_Join4
+DrawDottedLineWithMode_Impl_Skip6:
+	cp	(xsp+24), 1
+	jrl	ugt, DrawDottedLineWithMode_Impl_Join3
+	ld	a, (0x03efaa:24)
+	cp	a, 2:i3
+	jrl	z, DrawDottedLineWithMode_Impl_Skip11
+	cp	a, 1:i3
+	jrl	z, DrawDottedLineWithMode_Impl_Skip9
+	cp	a, 0:i3
+	jrl	nz, DrawDottedLineWithMode_Impl_Join3
+	lda	xwa, (xsp+46)
+	ld	xiy, xwa
+	ld	ix, (xsp+50)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xhl, (0x043c00:24)
+	add	xhl, xwa
+	cpw	(xsp+50), 245
+	jr	z, DrawDottedLineWithMode_Impl_Skip7
+	and	(xhl), 0x60
+	ld	wa, ix
+	and	wa, 0x9f
+	add	(xhl), a
+	ld	bc, ix
+	and	bc, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	extz	wa
+	cp	wa, bc
+	jr	nz, DrawDottedLineWithMode_Impl_Skip8
+	jrl	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip7:
+	ld	xix, (0x030452:24)
+	ld	bc, (xiy)
+	exts	xbc
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	add	xde, xbc
+	add	xix, xde
+	and	(xhl), 0x60
+	ld	a, (xix)
+	and	a, 0x9f
+	add	(xhl), a
+	ld	c, (xix)
+	and	c, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	cp	a, c
+	jr	z, DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip8:
+	xor	(xhl), 0x60
+	jr	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip9:
+	lda	xwa, (xsp+46)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bit	7, (xbc)
+	jr	z, DrawDottedLineWithMode_Impl_Skip10
+	res	5, (xbc)
+	jr	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip10:
+	set	5, (xbc)
+	jr	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip11:
+	lda	xwa, (xsp+46)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bit	7, (xbc)
+	jr	z, DrawDottedLineWithMode_Impl_Skip12
+	res	6, (xbc)
+	jr	DrawDottedLineWithMode_Impl_Join3
+DrawDottedLineWithMode_Impl_Skip12:
+	set	6, (xbc)
+DrawDottedLineWithMode_Impl_Join3:
+	inc	1, (xsp+24)
+DrawDottedLineWithMode_Impl_Join4:
+	ld	xwa, (xsp+16)
+	add	(xsp+48), wa
+	ld	xwa, 1:i3
+	add	(xsp+20), xwa
+	ld	xwa, (xsp+20)
+	cp	xwa, (xsp+8)
+	jrl	le, DrawDottedLineWithMode_Impl_Loop
+	jrl	Voice_FactoryPresetData_Code_Join4
+DrawDottedLineWithMode_Impl_Skip13:
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jrl	nz, DrawDottedLineWithMode_Impl_Skip21
+	ld	xwa, 0:i3
+	ld	(xsp+20), xwa
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, Voice_FactoryPresetData_Code_Join4
+DrawDottedLineWithMode_Impl_Loop2:
+	cp	(xsp+24), 3
+	jr	ule, DrawDottedLineWithMode_Impl_Skip14
+	ld	(xsp+24), 0
+	jrl	DrawDottedLineWithMode_Impl_Join6
+DrawDottedLineWithMode_Impl_Skip14:
+	cp	(xsp+24), 1
+	jrl	ugt, DrawDottedLineWithMode_Impl_Join5
+	ld	a, (0x03efaa:24)
+	cp	a, 2:i3
+	jrl	z, DrawDottedLineWithMode_Impl_Skip19
+	cp	a, 1:i3
+	jrl	z, DrawDottedLineWithMode_Impl_Skip17
+	cp	a, 0:i3
+	jrl	nz, DrawDottedLineWithMode_Impl_Join5
+	lda	xwa, (xsp+46)
+	ld	xiy, xwa
+	ld	ix, (xsp+50)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xhl, (0x043c00:24)
+	add	xhl, xwa
+	cpw	(xsp+50), 245
+	jr	z, DrawDottedLineWithMode_Impl_Skip15
+	and	(xhl), 0x60
+	ld	wa, ix
+	and	wa, 0x9f
+	add	(xhl), a
+	ld	bc, ix
+	and	bc, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	extz	wa
+	cp	wa, bc
+	jr	nz, DrawDottedLineWithMode_Impl_Skip16
+	jrl	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip15:
+	ld	xix, (0x030452:24)
+	ld	bc, (xiy)
+	exts	xbc
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	add	xde, xbc
+	add	xix, xde
+	and	(xhl), 0x60
+	ld	a, (xix)
+	and	a, 0x9f
+	add	(xhl), a
+	ld	c, (xix)
+	and	c, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	cp	a, c
+	jr	z, DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip16:
+	xor	(xhl), 0x60
+	jr	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip17:
+	lda	xwa, (xsp+46)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bit	7, (xbc)
+	jr	z, DrawDottedLineWithMode_Impl_Skip18
+	res	5, (xbc)
+	jr	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip18:
+	set	5, (xbc)
+	jr	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip19:
+	lda	xwa, (xsp+46)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bit	7, (xbc)
+	jr	z, DrawDottedLineWithMode_Impl_Skip20
+	res	6, (xbc)
+	jr	DrawDottedLineWithMode_Impl_Join5
+DrawDottedLineWithMode_Impl_Skip20:
+	set	6, (xbc)
+DrawDottedLineWithMode_Impl_Join5:
+	inc	1, (xsp+24)
+DrawDottedLineWithMode_Impl_Join6:
+	ld	xwa, (xsp+12)
+	add	(xsp+46), wa
+	ld	xwa, 1:i3
+	add	(xsp+20), xwa
+	ld	xwa, (xsp+20)
+	cp	xwa, (xsp+4)
+	jrl	le, DrawDottedLineWithMode_Impl_Loop2
+	jrl	Voice_FactoryPresetData_Code_Join4
+DrawDottedLineWithMode_Impl_Skip21:
+	lda	xwa, (xsp+46)
+	ld	(xsp+34), xwa
+	ld	xwa, (xsp+8)
+	cp	xwa, (xsp+4)
+	jrl	le, 322
+	ld	xwa, (xsp+4)
+	sla	xwa, 0
+	ld	xbc, (xsp+8)
+	call	0xff0431
+	ld	xiz, xhl
+	ld	xwa, (xsp+12)
+	ld	xbc, xiz
+	call	InitializeKubo_Helper
+	ld	(xsp+12), xhl
+	ld	xbc, (xsp+34)
+	ld	xwa, xbc
+	ld	wa, (xwa)
+	exts	xwa
+	ld	(xsp+4), xwa
+	sla	xwa, 0
+	ld	(xsp+4), xwa
+	ld	xwa, 32768
+	add	(xsp+4), xwa
+	ld	xwa, 0:i3
+	ld	(xsp+20), xwa
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, Voice_FactoryPresetData_Code_Join4
+	cp	(xsp+24), 3
+	jr	ule, DrawDottedLineWithMode_Impl_Skip22
+	ld	(xsp+24), 0
+	jrl	202
+DrawDottedLineWithMode_Impl_Skip22:
+	cp	(xsp+24), 1
+	jrl	ugt, Voice_FactoryPresetData_Code_Join
+	ld	a, (0x03efaa:24)
+	ldb_erp	a, 240	; ld ixl, a
+	ld	wa, (xbc+2)
+	exts	xwa
+	ld	xhl, xwa
+	sll	xhl, 2
+	add	xhl, xwa
+	sll	xhl, 6
+	lda	xde, (0x043c00:24)
+	cpib_erp	240, 2	; cp ixl, 2
+	jrl	z, DrawDottedLineWithMode_Impl_Skip27
+	cpib_erp	240, 1	; cp ixl, 1
+	jr	z, DrawDottedLineWithMode_Impl_Skip25
+	cpib_erp	240, 0	; cp ixl, 0
+	jrl	nz, Voice_FactoryPresetData_Code_Join
+	ld	xiz, xbc
+	ld	iy, (xsp+50)
+	ld	wa, (xbc)
+	exts	xwa
+	add	xwa, xhl
+	ld	xix, xde
+	add	xix, xwa
+	cpw	(xsp+50), 245
+	jr	z, DrawDottedLineWithMode_Impl_Skip23
+	and	(xix), 0x60
+	ld	wa, iy
+	and	wa, 0x9f
+	add	(xix), a
+	ld	de, iy
+	and	de, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	extz	wa
+	cp	wa, de
+	jr	nz, DrawDottedLineWithMode_Impl_Skip24
+	jr	Voice_FactoryPresetData_Code_Join
+DrawDottedLineWithMode_Impl_Skip23:
+	ld	xiy, (0x030452:24)
+	ld	de, (xiz)
+	exts	xde
+	ld	wa, (xiz+2)
+	exts	xwa
+	ld	xhl, xwa
+	sll	xhl, 2
+	add	xhl, xwa
+	sll	xhl, 6
+	add	xhl, xde
+	add	xiy, xhl
+	and	(xix), 0x60
+	ld	a, (xiy)
+	and	a, 0x9f
+	add	(xix), a
+	ld	e, (xiy)
+	and	e, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	cp	a, e
+	jr	z, Voice_FactoryPresetData_Code_Join
+DrawDottedLineWithMode_Impl_Skip24:
+	xor	(xix), 0x60
+	jr	Voice_FactoryPresetData_Code_Join
+DrawDottedLineWithMode_Impl_Skip25:
+	ld	wa, (xbc)
+	exts	xwa
+	add	xwa, xhl
+	add	xde, xwa
+	bit	7, (xde)
+	jr	z, DrawDottedLineWithMode_Impl_Skip26
+	res	5, (xde)
+	jr	Voice_FactoryPresetData_Code_Join
+DrawDottedLineWithMode_Impl_Skip26:
+	set	5, (xde)
+	jr	Voice_FactoryPresetData_Code_Join
+DrawDottedLineWithMode_Impl_Skip27:
+	ld	wa, (xbc)

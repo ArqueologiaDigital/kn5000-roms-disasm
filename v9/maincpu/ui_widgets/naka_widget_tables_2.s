@@ -2893,15 +2893,24 @@ PmemOutLGridCheck_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutLGridCheck_LocalInit_Strings
 ; PmemOutLGridCheck_LocalInit_Strings -- 52 bytes of NUL-terminated
-; strings after PmemOutLGridCheck_LocalInit; no registration or code
-; reference reaches them (searched: RegObjTabl tables, slice and
-; positional labels). Which code uses them is not established.
+; strings after PmemOutLGridCheck_LocalInit: " %2d-%d " + one 0xFF pad,
+; " ON  ", " OFF ", " OFF ", " %3d ", " %3d ", " OFF ", " %3d ".
+; " ON  " (+0x0A, 0xE8013E) and " OFF " (+0x10, 0xE80144) are the ON/OFF
+; cell text the PmemOutL grid-check code in ui/drawbar_panel_ui.s loads
+; (`ld xwa, PmemOutLGrid_Str_ON` / `ld xwa, PmemOutLGrid_Str_OFF`).
+; CORRECTED at integration 2026-09-25: this header said no code reference
+; reaches the block; the OFF string was reached through the label
+; NakaInst_OFF_E80144 and the ON string through a numeric 0xe8013e.
+; Readers of the remaining five strings are not established.
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; PmemOutLGridCheck_LocalInit_Strings[52].
 ; -----------------------------------------------------------------------------
 PmemOutLGridCheck_LocalInit_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D96, 0x34
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D96, 0x0A
+PmemOutLGrid_Str_ON:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA0, 0x06
+PmemOutLGrid_Str_OFF:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA6, 0x06
+PmemOutLGridCheck_LocalInit_Strings_Tail:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DAC, 0x1E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaInst_ON_E80168
 ; NakaInst_ON_E80168 -- label kept because other files use it; 82 bytes
