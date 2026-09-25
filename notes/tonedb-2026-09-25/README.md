@@ -18,10 +18,13 @@ object's old and new rows spell the ROM bytes before replacing anything, and eac
 idempotent):
 
 * `scripts/tools/style_records_field_rows.py` -- the 1000 Music Stylist records;
-* `scripts/tools/tonedb_aux_typed_rows.py` -- ToneEnv key maps / zone records (typed
-  `ToneEnvZone4/6` rows), the drawbar zone-record blocks, the 26 drum kits (note pairs
-  with the instrument each resolves to) and the 610 PercInst records (per-record
-  headers naming the kit notes that play them).
+* `scripts/tools/tonedb_aux_typed_rows.py` -- the SET descriptors (one `ToneSetDesc`
+  row each), the SET key maps / zone records `ToneSet_NNN_KeyMap/_Zones` (typed
+  `ToneSetZone4/6` rows; named `ToneEnv_RecNNN_A/_B` before
+  `scripts/renaming/rename_tonedb_set_chunks.sed`), the drawbar zone-record blocks and
+  drawbar tone records, the default partial block, the 26 drum kits (note pairs with
+  the instrument each resolves to) and the 610 PercInst records (per-record headers
+  naming the kit notes that play them).
 
 * `scripts/tools/tonedb_records_typed_rows.py` -- the 579 tone records: head split into
   part-mode byte / partial mask / +0x12..+0x14, each partial block annotated with the
