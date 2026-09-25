@@ -77206,6 +77206,12 @@ Dispatch_By_60F080__Tail:
 ;          established anywhere in the tree: +0x0D (the MIDI channel,
 ;          from MidiIn_BuildChannelRouteTable) and +0x1B..+0x1D (written
 ;          by 0xFAA6B1).  The 0x40-byte size is a step, not a proof.
+; ★ 2026-09-25 (lane proma): three AND/OR patch lists add more touched offsets
+;          (not meanings): PatchList_RecordField0C clears the low three bits
+;          of +0x0C and sets +0x0D to the record's own index k (so a part's
+;          default channel byte is its index), and PatchList_RecordBytes2B
+;          AND/OR-patches the twelve bytes +0x2B..+0x36 of every record --
+;          both applied by the T_F40840 module at 0xFB1800.
 ; ---------------------------------------------------------------------
 ParamNumber_RecordPtrs:
 	.long 0x000076a2                                 ; FACDEA  [  0]
@@ -83134,7 +83140,9 @@ PatchList_Globals7F32_Ptr:
 ; then *(addr+1) = b5.  Applied by PatchList_ApplyRecordField0C (`ld H,0x20`
 ; at 0xFB18F9).
 ; Every address is +0x0C of RAM record k (0x76A2 + 0x40*k, +0x40 past k = 7) and
-; b5 = k.
+; b5 = k.  +0x0D is the record's MIDI-channel byte (MidiIn_BuildChannelRouteTable;
+; see ParamNumber_RecordPtrs's header; that routine matches it masked with
+; 0x1F), so applying this list gives part k channel k, for k = 0..31.
 PatchList_RecordField0C:
 	.long 0x000076ae                              ; FB1A84  record  0 +0x0C
 	.byte 0x00, 0x00                                  ; FB1A88  b4, b5
