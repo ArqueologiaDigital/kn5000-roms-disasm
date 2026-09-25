@@ -41,260 +41,900 @@
 ; =============================================================================
 NakaData_WidgetDescriptors:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x0, 0x1E1A
+; [naka_s_headers:short] NakaInst_FxReservedSlot_00
+; Effect 127 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 127 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_00:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1E1A, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_01
+; Effect 126 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 126 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_01:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1E2C, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_02
+; Effect 125 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 125 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_02:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1E3E, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_03
+; Effect 124 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 124 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_03:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1E50, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_04
+; Effect 123 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 123 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_04:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1E62, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_05
+; Effect 122 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 122 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_05:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1E74, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_06
+; Effect 121 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 121 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_06:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1E86, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_07
+; Effect 120 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 120 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_07:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1E98, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_08
+; Effect 119 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 119 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_08:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1EAA, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_09
+; Effect 118 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 118 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_09:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1EBC, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_10
+; Effect 117 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 117 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_10:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1ECE, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_11
+; Effect 116 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 116 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_11:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1EE0, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_12
+; Effect 115 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 115 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_12:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1EF2, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_13
+; Effect 114 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 114 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_13:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F04, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_14
+; Effect 113 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 113 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_14:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F16, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_15
+; Effect 112 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 112 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_15:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F28, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_16
+; Effect 111 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 111 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_16:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F3A, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_17
+; Effect 110 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 110 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_17:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F4C, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_18
+; Effect 109 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 109 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_18:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F5E, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_19
+; Effect 108 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 108 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_19:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F70, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_20
+; Effect 107 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 107 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_20:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F82, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_21
+; Effect 106 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 106 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_21:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F94, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_22
+; Effect 105 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 105 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_22:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1FA6, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_23
+; Effect 104 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 104 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_23:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1FB8, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_24
+; Effect 103 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 103 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_24:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1FCA, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_25
+; Effect 102 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 102 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_25:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1FDC, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_26
+; Effect 101 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 101 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_26:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1FEE, 0x12
+; [naka_s_headers:short] NakaInst_FxReservedSlot_27
+; Effect 100 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 100 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxReservedSlot_27:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2000, 0x12
+; [naka_s_headers:short] NakaInst_PEQ_OVERDR_DELAY
+; Effect 99 name, 18 bytes ("PEQ+OVERDR+DELAY", NUL, 0xff):
+; DspEffectName_PtrTable entry 99 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEQ_OVERDR_DELAY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2012, 0x12
+; [naka_s_headers:short] NakaInst_PEQ_DIST_DELAY
+; Effect 98 name, 18 bytes (" PEQ+DIST+DELAY", NUL, 0xff):
+; DspEffectName_PtrTable entry 98 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEQ_DIST_DELAY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2024, 0x12
+; [naka_s_headers:short] NakaInst_PEQ_COMPR_OVERDR
+; Effect 97 name, 18 bytes ("PEQ+COMPR+OVERDR", NUL, 0xff):
+; DspEffectName_PtrTable entry 97 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEQ_COMPR_OVERDR:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2036, 0x12
+; [naka_s_headers:short] NakaInst_PEQ_COMPR_DIST
+; Effect 96 name, 18 bytes (" PEQ+COMPR+DIST", NUL, 0xff):
+; DspEffectName_PtrTable entry 96 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEQ_COMPR_DIST:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2048, 0x12
+; [naka_s_headers:short] NakaInst_FxComboReserved_0
+; Effect 95 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 95 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxComboReserved_0:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x205A, 0x12
+; [naka_s_headers:short] NakaInst_FxComboReserved_1
+; Effect 94 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 94 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxComboReserved_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x206C, 0x12
+; [naka_s_headers:short] NakaInst_FxComboReserved_2
+; Effect 93 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 93 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxComboReserved_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x207E, 0x12
+; [naka_s_headers:short] NakaInst_FxComboReserved_3
+; Effect 92 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 92 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FxComboReserved_3:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2090, 0x12
+; [naka_s_headers:short] NakaInst_STAGE
+; Effect 91 name, 18 bytes (" STAGE", NUL, 0xff): DspEffectName_PtrTable
+; entry 91 points here, and DspItem0_DisplayEffectName (v10/v9 0xf355f3,
+; v7 0xf355c9) Strcpy's it (the effect-number -> name table is described
+; in the file header).
 NakaInst_STAGE:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x20A2, 0x12
+; [naka_s_headers:short] NakaInst_BATH_ROOM
+; Effect 90 name, 18 bytes ("BATH ROOM", NUL, 0xff):
+; DspEffectName_PtrTable entry 90 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_BATH_ROOM:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x20B4, 0x12
+; [naka_s_headers:short] NakaInst_KARAOKE
+; Effect 89 name, 18 bytes (" KARAOKE", NUL, 0xff):
+; DspEffectName_PtrTable entry 89 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_KARAOKE:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x20C6, 0x12
+; [naka_s_headers:short] NakaInst_ROOM
+; Effect 88 name, 18 bytes (" ROOM", NUL, 0xff): DspEffectName_PtrTable
+; entry 88 points here, and DspItem0_DisplayEffectName (v10/v9 0xf355f3,
+; v7 0xf355c9) Strcpy's it (the effect-number -> name table is described
+; in the file header).
 NakaInst_ROOM:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x20D8, 0x12
+; [naka_s_headers:short] NakaInst_ReverbReserved_0
+; Effect 87 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 87 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ReverbReserved_0:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x20EA, 0x12
+; [naka_s_headers:short] NakaInst_ReverbReserved_1
+; Effect 86 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 86 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ReverbReserved_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x20FC, 0x12
+; [naka_s_headers:short] NakaInst_ReverbReserved_2
+; Effect 85 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 85 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ReverbReserved_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x210E, 0x12
+; [naka_s_headers:short] NakaInst_ReverbReserved_3
+; Effect 84 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 84 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ReverbReserved_3:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2120, 0x12
+; [naka_s_headers:short] NakaInst_ReverbReserved_4
+; Effect 83 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 83 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ReverbReserved_4:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2132, 0x12
+; [naka_s_headers:short] NakaInst_ReverbReserved_5
+; Effect 82 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 82 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ReverbReserved_5:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2144, 0x12
+; [naka_s_headers:short] NakaInst_OVER_D
+; Effect 81 name, 18 bytes (" OVER_D", NUL, 0xff):
+; DspEffectName_PtrTable entry 81 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_OVER_D:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2156, 0x12
+; [naka_s_headers:short] NakaInst_DS_D
+; Effect 80 name, 18 bytes (" DS_D", NUL, 0xff): DspEffectName_PtrTable
+; entry 80 points here, and DspItem0_DisplayEffectName (v10/v9 0xf355f3,
+; v7 0xf355c9) Strcpy's it (the effect-number -> name table is described
+; in the file header).
 NakaInst_DS_D:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2168, 0x12
+; [naka_s_headers:short] NakaInst_GEQ
+; Effect 79 name, 18 bytes (" GEQ", NUL, 0xff): DspEffectName_PtrTable
+; entry 79 points here, and DspItem0_DisplayEffectName (v10/v9 0xf355f3,
+; v7 0xf355c9) Strcpy's it (the effect-number -> name table is described
+; in the file header).
 NakaInst_GEQ:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x217A, 0x12
+; [naka_s_headers:short] NakaInst_EqReserved_0
+; Effect 78 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 78 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_EqReserved_0:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x218C, 0x12
+; [naka_s_headers:short] NakaInst_EqReserved_1
+; Effect 77 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 77 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_EqReserved_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x219E, 0x12
+; [naka_s_headers:short] NakaInst_EqReserved_2
+; Effect 76 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 76 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_EqReserved_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x21B0, 0x12
+; [naka_s_headers:short] NakaInst_PEQ_COMPRESSOR
+; Effect 75 name, 18 bytes (" PEQ+COMPRESSOR", NUL, 0xff):
+; DspEffectName_PtrTable entry 75 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEQ_COMPRESSOR:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x21C2, 0x12
+; [naka_s_headers:short] NakaInst_PEQ_VIBRATO
+; Effect 74 name, 18 bytes (" PEQ+VIBRATO", NUL, 0xff):
+; DspEffectName_PtrTable entry 74 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEQ_VIBRATO:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x21D4, 0x12
+; [naka_s_headers:short] NakaInst_PEQ_FLANGER
+; Effect 73 name, 18 bytes (" PEQ+FLANGER", NUL, 0xff):
+; DspEffectName_PtrTable entry 73 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEQ_FLANGER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x21E6, 0x12
+; [naka_s_headers:short] NakaInst_PEQ_S_DELAY
+; Effect 72 name, 18 bytes (" PEQ+S.DELAY", NUL, 0xff):
+; DspEffectName_PtrTable entry 72 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEQ_S_DELAY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x21F8, 0x12
+; [naka_s_headers:short] NakaInst_PEQ_CHORUS
+; Effect 71 name, 18 bytes (" PEQ+CHORUS", NUL, 0xff):
+; DspEffectName_PtrTable entry 71 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEQ_CHORUS:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x220A, 0x12
+; [naka_s_headers:short] NakaInst_AUTO_WAH_S_DELAY
+; Effect 70 name, 18 bytes ("AUTO WAH+S.DELAY", NUL, 0xff):
+; DspEffectName_PtrTable entry 70 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_AUTO_WAH_S_DELAY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x221C, 0x12
+; [naka_s_headers:short] NakaInst_PEDAL_WAH_DELAY
+; Effect 69 name, 18 bytes ("PEDAL WAH+DELAY", NUL, 0xff):
+; DspEffectName_PtrTable entry 69 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEDAL_WAH_DELAY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x222E, 0x12
+; [naka_s_headers:short] NakaInst_S_DELAY_PHASER
+; Effect 68 name, 18 bytes (" S.DELAY+PHASER", NUL, 0xff):
+; DspEffectName_PtrTable entry 68 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_S_DELAY_PHASER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2240, 0x12
+; [naka_s_headers:short] NakaInst_S_DELAY_VIBRATO
+; Effect 67 name, 18 bytes ("S.DELAY+VIBRATO", NUL, 0xff):
+; DspEffectName_PtrTable entry 67 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_S_DELAY_VIBRATO:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2252, 0x12
+; [naka_s_headers:short] NakaInst_S_DELAY_FLANGER
+; Effect 66 name, 18 bytes ("S.DELAY+FLANGER", NUL, 0xff):
+; DspEffectName_PtrTable entry 66 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_S_DELAY_FLANGER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2264, 0x12
+; [naka_s_headers:short] NakaInst_S_DELAY_S_DELAY
+; Effect 65 name, 18 bytes ("S.DELAY+S.DELAY", NUL, 0xff):
+; DspEffectName_PtrTable entry 65 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_S_DELAY_S_DELAY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2276, 0x12
+; [naka_s_headers:short] NakaInst_S_DELAY_CHORUS
+; Effect 64 name, 18 bytes ("S.DELAY+CHORUS", NUL, 0xff):
+; DspEffectName_PtrTable entry 64 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_S_DELAY_CHORUS:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2288, 0x12
+; [naka_s_headers:short] NakaInst_STRING
+; Effect 63 name, 18 bytes (" STRING", NUL, 0xff):
+; DspEffectName_PtrTable entry 63 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_STRING:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x229A, 0x12
+; [naka_s_headers:short] NakaInst_ChorusReserved_0
+; Effect 62 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 62 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ChorusReserved_0:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x22AC, 0x12
+; [naka_s_headers:short] NakaInst_ChorusReserved_1
+; Effect 61 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 61 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ChorusReserved_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x22BE, 0x12
+; [naka_s_headers:short] NakaInst_DEEP_SPACE
+; Effect 60 name, 18 bytes (" DEEP SPACE", NUL, 0xff):
+; DspEffectName_PtrTable entry 60 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DEEP_SPACE:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x22D0, 0x12
+; [naka_s_headers:short] NakaInst_SYMPHONIC
+; Effect 59 name, 18 bytes (" SYMPHONIC", NUL, 0xff):
+; DspEffectName_PtrTable entry 59 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_SYMPHONIC:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x22E2, 0x12
+; [naka_s_headers:short] NakaInst_PERCUSSIVE
+; Effect 58 name, 18 bytes (" PERCUSSIVE", NUL, 0xff):
+; DspEffectName_PtrTable entry 58 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PERCUSSIVE:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x22F4, 0x12
+; [naka_s_headers:short] NakaInst_STANDARD
+; Effect 57 name, 18 bytes (" STANDARD", NUL, 0xff):
+; DspEffectName_PtrTable entry 57 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_STANDARD:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2306, 0x12
+; [naka_s_headers:short] NakaInst_MIX_UP
+; Effect 56 name, 18 bytes (" MIX UP", NUL, 0xff):
+; DspEffectName_PtrTable entry 56 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_MIX_UP:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2318, 0x12
+; [naka_s_headers:short] NakaInst_HARS_EFFECT
+; Effect 55 name, 18 bytes (" HARS EFFECT", NUL, 0xff):
+; DspEffectName_PtrTable entry 55 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_HARS_EFFECT:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x232A, 0x12
+; [naka_s_headers:short] NakaInst_RING_MODULATOR
+; Effect 54 name, 18 bytes (" RING MODULATOR", NUL, 0xff):
+; DspEffectName_PtrTable entry 54 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_RING_MODULATOR:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x233C, 0x12
+; [naka_s_headers:short] NakaInst_ROTARY_SPEAKER
+; Effect 53 name, 18 bytes (" ROTARY SPEAKER", NUL, 0xff):
+; DspEffectName_PtrTable entry 53 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ROTARY_SPEAKER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x234E, 0x12
+; [naka_s_headers:short] NakaInst_AUTO_WAH
+; Effect 52 name, 18 bytes (" AUTO WAH", NUL, 0xff):
+; DspEffectName_PtrTable entry 52 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_AUTO_WAH:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2360, 0x12
+; [naka_s_headers:short] NakaInst_PEDAL_WAH
+; Effect 51 name, 18 bytes (" PEDAL WAH", NUL, 0xff):
+; DspEffectName_PtrTable entry 51 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PEDAL_WAH:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2372, 0x12
+; [naka_s_headers:short] NakaInst_VIBRATO
+; Effect 50 name, 18 bytes (" VIBRATO", NUL, 0xff):
+; DspEffectName_PtrTable entry 50 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_VIBRATO:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2384, 0x12
+; [naka_s_headers:short] NakaInst_PITCH_SHIFTER
+; Effect 49 name, 18 bytes (" PITCH SHIFTER", NUL, 0xff):
+; DspEffectName_PtrTable entry 49 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PITCH_SHIFTER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2396, 0x12
+; [naka_s_headers:short] NakaInst_AUTO_PAN
+; Effect 48 name, 18 bytes (" AUTO PAN", NUL, 0xff):
+; DspEffectName_PtrTable entry 48 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_AUTO_PAN:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x23A8, 0x12
+; [naka_s_headers:short] NakaInst_ModulationReserved_0
+; Effect 47 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 47 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ModulationReserved_0:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x23BA, 0x12
+; [naka_s_headers:short] NakaInst_ModulationReserved_1
+; Effect 46 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 46 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ModulationReserved_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x23CC, 0x12
+; [naka_s_headers:short] NakaInst_CELM
+; Effect 45 name, 18 bytes (" CELM", NUL, 0xff): DspEffectName_PtrTable
+; entry 45 points here, and DspItem0_DisplayEffectName (v10/v9 0xf355f3,
+; v7 0xf355c9) Strcpy's it (the effect-number -> name table is described
+; in the file header).
 NakaInst_CELM:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x23DE, 0x12
+; [naka_s_headers:short] NakaInst_CEL
+; Effect 44 name, 18 bytes (" CEL", NUL, 0xff): DspEffectName_PtrTable
+; entry 44 points here, and DspItem0_DisplayEffectName (v10/v9 0xf355f3,
+; v7 0xf355c9) Strcpy's it (the effect-number -> name table is described
+; in the file header).
 NakaInst_CEL:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x23F0, 0x12
+; [naka_s_headers:short] NakaInst_CelReserved_0
+; Effect 43 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 43 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_CelReserved_0:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2402, 0x12
+; [naka_s_headers:short] NakaInst_CelReserved_1
+; Effect 42 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 42 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_CelReserved_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2414, 0x12
+; [naka_s_headers:short] NakaInst_CelReserved_2
+; Effect 41 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 41 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_CelReserved_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2426, 0x12
+; [naka_s_headers:short] NakaInst_CelReserved_3
+; Effect 40 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 40 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_CelReserved_3:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2438, 0x12
+; [naka_s_headers:short] NakaInst_PARAMETRIC_EQ
+; Effect 39 name, 18 bytes (" PARAMETRIC EQ", NUL, 0xff):
+; DspEffectName_PtrTable entry 39 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PARAMETRIC_EQ:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x244A, 0x12
+; [naka_s_headers:short] NakaInst_NOISE_FLANGER
+; Effect 38 name, 18 bytes (" NOISE FLANGER", NUL, 0xff):
+; DspEffectName_PtrTable entry 38 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_NOISE_FLANGER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245C, 0x12
+; [naka_s_headers:short] NakaInst_SLOW_ATTACKER
+; Effect 37 name, 18 bytes (" SLOW ATTACKER", NUL, 0xff):
+; DspEffectName_PtrTable entry 37 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_SLOW_ATTACKER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246E, 0x12
+; [naka_s_headers:short] NakaInst_COMPRESSOR
+; Effect 36 name, 18 bytes (" COMPRESSOR", NUL, 0xff):
+; DspEffectName_PtrTable entry 36 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_COMPRESSOR:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2480, 0x12
+; [naka_s_headers:short] NakaInst_EXCITER
+; Effect 35 name, 18 bytes (" EXCITER", NUL, 0xff):
+; DspEffectName_PtrTable entry 35 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_EXCITER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2492, 0x12
+; [naka_s_headers:short] NakaInst_FUZZ
+; Effect 34 name, 18 bytes (" FUZZ", NUL, 0xff): DspEffectName_PtrTable
+; entry 34 points here, and DspItem0_DisplayEffectName (v10/v9 0xf355f3,
+; v7 0xf355c9) Strcpy's it (the effect-number -> name table is described
+; in the file header).
 NakaInst_FUZZ:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24A4, 0x12
+; [naka_s_headers:short] NakaInst_OVERDRIVE
+; Effect 33 name, 18 bytes (" OVERDRIVE", NUL, 0xff):
+; DspEffectName_PtrTable entry 33 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_OVERDRIVE:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24B6, 0x12
+; [naka_s_headers:short] NakaInst_DISTORTION
+; Effect 32 name, 18 bytes (" DISTORTION", NUL, 0xff):
+; DspEffectName_PtrTable entry 32 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DISTORTION:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24C8, 0x12
+; [naka_s_headers:short] NakaInst_DistReserved_0
+; Effect 31 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 31 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DistReserved_0:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24DA, 0x12
+; [naka_s_headers:short] NakaInst_DistReserved_1
+; Effect 30 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 30 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DistReserved_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24EC, 0x12
+; [naka_s_headers:short] NakaInst_DistReserved_2
+; Effect 29 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 29 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DistReserved_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24FE, 0x12
+; [naka_s_headers:short] NakaInst_DistReserved_3
+; Effect 28 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 28 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DistReserved_3:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2510, 0x12
+; [naka_s_headers:short] NakaInst_WAVE_REVERB_2
+; Effect 27 name, 18 bytes (" WAVE REVERB 2", NUL, 0xff):
+; DspEffectName_PtrTable entry 27 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_WAVE_REVERB_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2522, 0x12
+; [naka_s_headers:short] NakaInst_WAVE_REVERB_1
+; Effect 26 name, 18 bytes (" WAVE REVERB 1", NUL, 0xff):
+; DspEffectName_PtrTable entry 26 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_WAVE_REVERB_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2534, 0x12
+; [naka_s_headers:short] NakaInst_BRIGHT_REVERB_2
+; Effect 25 name, 18 bytes ("BRIGHT REVERB 2", NUL, 0xff):
+; DspEffectName_PtrTable entry 25 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_BRIGHT_REVERB_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2546, 0x12
+; [naka_s_headers:short] NakaInst_BRIGHT_REVERB_1
+; Effect 24 name, 18 bytes ("BRIGHT REVERB 1", NUL, 0xff):
+; DspEffectName_PtrTable entry 24 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_BRIGHT_REVERB_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2558, 0x12
+; [naka_s_headers:short] NakaInst_DARK_REVERB_2
+; Effect 23 name, 18 bytes (" DARK REVERB 2", NUL, 0xff):
+; DspEffectName_PtrTable entry 23 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DARK_REVERB_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x256A, 0x12
+; [naka_s_headers:short] NakaInst_DARK_REVERB_1
+; Effect 22 name, 18 bytes (" DARK REVERB 1", NUL, 0xff):
+; DspEffectName_PtrTable entry 22 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DARK_REVERB_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x257C, 0x12
+; [naka_s_headers:short] NakaInst_CONCERT_REVERB_2
+; Effect 21 name, 18 bytes ("CONCERT REVERB 2", NUL, 0xff):
+; DspEffectName_PtrTable entry 21 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_CONCERT_REVERB_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x258E, 0x12
+; [naka_s_headers:short] NakaInst_CONCERT_REVERB_1
+; Effect 20 name, 18 bytes ("CONCERT REVERB 1", NUL, 0xff):
+; DspEffectName_PtrTable entry 20 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_CONCERT_REVERB_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x25A0, 0x12
+; [naka_s_headers:short] NakaInst_PLATE_REVERB_2
+; Effect 19 name, 18 bytes (" PLATE REVERB 2", NUL, 0xff):
+; DspEffectName_PtrTable entry 19 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PLATE_REVERB_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x25B2, 0x12
+; [naka_s_headers:short] NakaInst_PLATE_REVERB_1
+; Effect 18 name, 18 bytes (" PLATE REVERB 1", NUL, 0xff):
+; DspEffectName_PtrTable entry 18 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_PLATE_REVERB_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x25C4, 0x12
+; [naka_s_headers:short] NakaInst_ROOM_REVERB_2
+; Effect 17 name, 18 bytes (" ROOM REVERB 2", NUL, 0xff):
+; DspEffectName_PtrTable entry 17 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ROOM_REVERB_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x25D6, 0x12
+; [naka_s_headers:short] NakaInst_ROOM_REVERB_1
+; Effect 16 name, 18 bytes (" ROOM REVERB 1", NUL, 0xff):
+; DspEffectName_PtrTable entry 16 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ROOM_REVERB_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x25E8, 0x12
+; [naka_s_headers:short] NakaInst_ROCK_ROTARY
+; Effect 15 name, 18 bytes (" ROCK ROTARY", NUL, 0xff):
+; DspEffectName_PtrTable entry 15 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ROCK_ROTARY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x25FA, 0x12
+; [naka_s_headers:short] NakaInst_DelayReserved_0
+; Effect 14 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 14 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DelayReserved_0:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x260C, 0x12
+; [naka_s_headers:short] NakaInst_DelayReserved_1
+; Effect 13 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 13 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DelayReserved_1:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x261E, 0x12
+; [naka_s_headers:short] NakaInst_DelayReserved_2
+; Effect 12 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 12 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_DelayReserved_2:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2630, 0x12
+; [naka_s_headers:short] NakaInst_MODULATION_DELAY
+; Effect 11 name, 18 bytes ("MODULATION DELAY", NUL, 0xff):
+; DspEffectName_PtrTable entry 11 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_MODULATION_DELAY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2642, 0x12
+; [naka_s_headers:short] NakaInst_MULTI_TAP_DELAY
+; Effect 10 name, 18 bytes ("MULTI TAP DELAY", NUL, 0xff):
+; DspEffectName_PtrTable entry 10 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_MULTI_TAP_DELAY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2654, 0x12
+; [naka_s_headers:short] NakaInst_SINGLE_DELAY
+; Effect 9 name, 18 bytes (" SINGLE DELAY", NUL, 0xff):
+; DspEffectName_PtrTable entry 9 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_SINGLE_DELAY:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2666, 0x12
+; [naka_s_headers:short] NakaInst_GATED_REVERB
+; Effect 8 name, 18 bytes (" GATED REVERB", NUL, 0xff):
+; DspEffectName_PtrTable entry 8 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_GATED_REVERB:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2678, 0x12
+; [naka_s_headers:short] NakaInst_ReverbGateReserved
+; Effect 7 name, 18 bytes (" ----------", NUL, 0xff):
+; DspEffectName_PtrTable entry 7 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ReverbGateReserved:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x268A, 0x12
+; [naka_s_headers:short] NakaInst_ENSEMBLE
+; Effect 6 name, 18 bytes (" ENSEMBLE", NUL, 0xff):
+; DspEffectName_PtrTable entry 6 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ENSEMBLE:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x269C, 0x12
+; [naka_s_headers:short] NakaInst_PHASER
+; Effect 5 name, 18 bytes (" PHASER", NUL, 0xff): DspEffectName_PtrTable
+; entry 5 points here, and DspItem0_DisplayEffectName (v10/v9 0xf355f3,
+; v7 0xf355c9) Strcpy's it (the effect-number -> name table is described
+; in the file header).
 NakaInst_PHASER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x26AE, 0x12
+; [naka_s_headers:short] NakaInst_FLANGER
+; Effect 4 name, 18 bytes (" FLANGER", NUL, 0xff):
+; DspEffectName_PtrTable entry 4 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_FLANGER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x26C0, 0x12
+; [naka_s_headers:short] NakaInst_ENHANCER
+; Effect 3 name, 18 bytes (" ENHANCER", NUL, 0xff):
+; DspEffectName_PtrTable entry 3 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_ENHANCER:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x26D2, 0x12
+; [naka_s_headers:short] NakaInst_MODULATED_CHORUS
+; Effect 2 name, 18 bytes ("MODULATED CHORUS", NUL, 0xff):
+; DspEffectName_PtrTable entry 2 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_MODULATED_CHORUS:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x26E4, 0x12
+; [naka_s_headers:short] NakaInst_CHORUS
+; Effect 1 name, 18 bytes (" CHORUS", NUL, 0xff): DspEffectName_PtrTable
+; entry 1 points here, and DspItem0_DisplayEffectName (v10/v9 0xf355f3,
+; v7 0xf355c9) Strcpy's it (the effect-number -> name table is described
+; in the file header).
 NakaInst_CHORUS:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x26F6, 0x12
+; [naka_s_headers:short] NakaInst_NO_OPERATION
+; Effect 0 name, 18 bytes (" NO OPERATION", NUL, 0xff):
+; DspEffectName_PtrTable entry 0 points here, and
+; DspItem0_DisplayEffectName (v10/v9 0xf355f3, v7 0xf355c9) Strcpy's it
+; (the effect-number -> name table is described in the file header).
 NakaInst_NO_OPERATION:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2708, 0x12
 ; -----------------------------------------------------------------------------
@@ -5244,126 +5884,431 @@ MidiMenu_ApFunctionNameTable:
 	.long NakaInst_RevEqSelFunc
 	.long NakaInst_RevEqOnOffFunc
 	.long NakaInst_EmptyFuncName
+; [naka_s_headers:short] NakaInst_EmptyFuncName
+; Name string of MIDI-menu procedure 60 (""): entry 60 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423. This empty name is the table's terminator.
 NakaInst_EmptyFuncName:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24598, 0x2
+; [naka_s_headers:short] NakaInst_RevEqOnOffFunc
+; Name string of MIDI-menu procedure 59 ("RevEqOnOffFunc"): entry 59 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_RevEqOnOffFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2459A, 0x10
+; [naka_s_headers:short] NakaInst_RevEqSelFunc
+; Name string of MIDI-menu procedure 58 ("RevEqSelFunc"): entry 58 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_RevEqSelFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245AA, 0xE
+; [naka_s_headers:short] NakaInst_EqOnOffFunc
+; Name string of MIDI-menu procedure 57 ("EqOnOffFunc"): entry 57 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_EqOnOffFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245B8, 0xC
+; [naka_s_headers:short] NakaInst_EqSelFunc
+; Name string of MIDI-menu procedure 56 ("EqSelFunc"): entry 56 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_EqSelFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245C4, 0xA
+; [naka_s_headers:short] NakaInst_RevSelFunc
+; Name string of MIDI-menu procedure 55 ("RevSelFunc"): entry 55 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_RevSelFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245CE, 0xC
+; [naka_s_headers:short] NakaInst_SplitPointFunc
+; Name string of MIDI-menu procedure 54 ("SplitPointFunc"): entry 54 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_SplitPointFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245DA, 0x10
+; [naka_s_headers:short] NakaInst_StsSplitCheck
+; Name string of MIDI-menu procedure 53 ("StsSplitCheck"): entry 53 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_StsSplitCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245EA, 0xE
+; [naka_s_headers:short] NakaInst_InOutGridCheck
+; Name string of MIDI-menu procedure 52 ("InOutGridCheck"): entry 52 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_InOutGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x245F8, 0x10
+; [naka_s_headers:short] NakaInst_TtMdInOut
+; Name string of MIDI-menu procedure 51 ("TtMdInOut"): entry 51 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdInOut:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24608, 0xA
+; [naka_s_headers:short] NakaInst_FadeSetGridCheck
+; Name string of MIDI-menu procedure 50 ("FadeSetGridCheck"): entry 50
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_FadeSetGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24612, 0x12
+; [naka_s_headers:short] NakaInst_TtFadeInOut
+; Name string of MIDI-menu procedure 49 ("TtFadeInOut"): entry 49 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtFadeInOut:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24624, 0xC
+; [naka_s_headers:short] NakaInst_VocalistPage2OKFunc
+; Name string of MIDI-menu procedure 48 ("VocalistPage2OKFunc"): entry
+; 48 of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_VocalistPage2OKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24630, 0x14
+; [naka_s_headers:short] NakaInst_VocalistPage1OKFunc
+; Name string of MIDI-menu procedure 47 ("VocalistPage1OKFunc"): entry
+; 47 of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_VocalistPage1OKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24644, 0x14
+; [naka_s_headers:short] NakaInst_VocalistGridCheck
+; Name string of MIDI-menu procedure 46 ("VocalistGridCheck"): entry 46
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_VocalistGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24658, 0x12
+; [naka_s_headers:short] NakaInst_TtVocalistWorkstation
+; Name string of MIDI-menu procedure 45 ("TtVocalistWorkstation"): entry
+; 45 of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_TtVocalistWorkstation:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2466A, 0x16
+; [naka_s_headers:short] NakaInst_HarmOnOffFunc
+; Name string of MIDI-menu procedure 44 ("HarmOnOffFunc"): entry 44 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_HarmOnOffFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24680, 0xE
+; [naka_s_headers:short] NakaInst_GMNoFunc
+; Name string of MIDI-menu procedure 43 ("GMNoFunc"): entry 43 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_GMNoFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2468E, 0xA
+; [naka_s_headers:short] NakaInst_GMYesFunc
+; Name string of MIDI-menu procedure 42 ("GMYesFunc"): entry 42 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_GMYesFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24698, 0xA
+; [naka_s_headers:short] NakaInst_StsAreYouSureCheck
+; Name string of MIDI-menu procedure 41 ("StsAreYouSureCheck"): entry 41
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_StsAreYouSureCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246A2, 0x14
+; [naka_s_headers:short] NakaInst_StsGMOffCheck
+; Name string of MIDI-menu procedure 40 ("StsGMOffCheck"): entry 40 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_StsGMOffCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246B6, 0xE
+; [naka_s_headers:short] NakaInst_StsGMOnCheck
+; Name string of MIDI-menu procedure 39 ("StsGMOnCheck"): entry 39 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_StsGMOnCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246C4, 0xE
+; [naka_s_headers:short] NakaInst_StsAttentionCheck
+; Name string of MIDI-menu procedure 38 ("StsAttentionCheck"): entry 38
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_StsAttentionCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246D2, 0x12
+; [naka_s_headers:short] NakaInst_GMOKFunc
+; Name string of MIDI-menu procedure 37 ("GMOKFunc"): entry 37 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_GMOKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246E4, 0xA
+; [naka_s_headers:short] NakaInst_TtMdGm
+; Name string of MIDI-menu procedure 36 ("TtMdGm"): entry 36 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdGm:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246EE, 0x8
+; [naka_s_headers:short] NakaInst_BitmapBmphk
+; Name string of MIDI-menu procedure 35 ("BitmapBmphk"): entry 35 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_BitmapBmphk:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x246F6, 0xC
+; [naka_s_headers:short] NakaInst_MdPresetWithFunc
+; Name string of MIDI-menu procedure 34 ("MdPresetWithFunc"): entry 34
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_MdPresetWithFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24702, 0x12
+; [naka_s_headers:short] NakaInst_MdPresetWithoutFunc
+; Name string of MIDI-menu procedure 33 ("MdPresetWithoutFunc"): entry
+; 33 of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_MdPresetWithoutFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24714, 0x14
+; [naka_s_headers:short] NakaInst_MdPresetOKFunc
+; Name string of MIDI-menu procedure 32 ("MdPresetOKFunc"): entry 32 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_MdPresetOKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24728, 0x10
+; [naka_s_headers:short] NakaInst_TtMdPreset
+; Name string of MIDI-menu procedure 31 ("TtMdPreset"): entry 31 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdPreset:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24738, 0xC
+; [naka_s_headers:short] NakaInst_ExcMspFunc
+; Name string of MIDI-menu procedure 30 ("ExcMspFunc"): entry 30 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_ExcMspFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24744, 0xC
+; [naka_s_headers:short] NakaInst_ExcSeqFunc
+; Name string of MIDI-menu procedure 29 ("ExcSeqFunc"): entry 29 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_ExcSeqFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24750, 0xC
+; [naka_s_headers:short] NakaInst_ExcCompFunc
+; Name string of MIDI-menu procedure 28 ("ExcCompFunc"): entry 28 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_ExcCompFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2475C, 0xC
+; [naka_s_headers:short] NakaInst_ExcSmemFunc
+; Name string of MIDI-menu procedure 27 ("ExcSmemFunc"): entry 27 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_ExcSmemFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24768, 0xC
+; [naka_s_headers:short] NakaInst_ExcPmemFunc
+; Name string of MIDI-menu procedure 26 ("ExcPmemFunc"): entry 26 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_ExcPmemFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24774, 0xC
+; [naka_s_headers:short] NakaInst_ExcDotFunc
+; Name string of MIDI-menu procedure 25 ("ExcDotFunc"): entry 25 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_ExcDotFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24780, 0xC
+; [naka_s_headers:short] NakaInst_ExcSendFunc
+; Name string of MIDI-menu procedure 24 ("ExcSendFunc"): entry 24 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_ExcSendFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2478C, 0xC
+; [naka_s_headers:short] NakaInst_TtMdExc
+; Name string of MIDI-menu procedure 23 ("TtMdExc"): entry 23 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdExc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24798, 0x8
+; [naka_s_headers:short] NakaInst_MidiPartGridCheck
+; Name string of MIDI-menu procedure 22 ("MidiPartGridCheck"): entry 22
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_MidiPartGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247A0, 0x12
+; [naka_s_headers:short] NakaInst_TtMdPart
+; Name string of MIDI-menu procedure 21 ("TtMdPart"): entry 21 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdPart:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247B2, 0xA
+; [naka_s_headers:short] NakaInst_CtlMsgGridCheck
+; Name string of MIDI-menu procedure 20 ("CtlMsgGridCheck"): entry 20 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_CtlMsgGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247BC, 0x10
+; [naka_s_headers:short] NakaInst_TtMdCtlMsg
+; Name string of MIDI-menu procedure 19 ("TtMdCtlMsg"): entry 19 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdCtlMsg:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247CC, 0xC
+; [naka_s_headers:short] NakaInst_PmemOutRGridCheck
+; Name string of MIDI-menu procedure 18 ("PmemOutRGridCheck"): entry 18
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_PmemOutRGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247D8, 0x12
+; [naka_s_headers:short] NakaInst_PmemOutLGridCheck
+; Name string of MIDI-menu procedure 17 ("PmemOutLGridCheck"): entry 17
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_PmemOutLGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247EA, 0x12
+; [naka_s_headers:short] NakaInst_TtMdPmemOut
+; Name string of MIDI-menu procedure 16 ("TtMdPmemOut"): entry 16 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdPmemOut:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x247FC, 0xC
+; [naka_s_headers:short] NakaInst_ComSetGridCheck
+; Name string of MIDI-menu procedure 15 ("ComSetGridCheck"): entry 15 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_ComSetGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24808, 0x10
+; [naka_s_headers:short] NakaInst_TtComSet
+; Name string of MIDI-menu procedure 14 ("TtComSet"): entry 14 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtComSet:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24818, 0xA
+; [naka_s_headers:short] NakaInst_PcgOutSendFunc
+; Name string of MIDI-menu procedure 13 ("PcgOutSendFunc"): entry 13 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_PcgOutSendFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24822, 0x10
+; [naka_s_headers:short] NakaInst_PcgOutGridCheck
+; Name string of MIDI-menu procedure 12 ("PcgOutGridCheck"): entry 12 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_PcgOutGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24832, 0x10
+; [naka_s_headers:short] NakaInst_TtMdPcgOut
+; Name string of MIDI-menu procedure 11 ("TtMdPcgOut"): entry 11 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdPcgOut:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24842, 0xC
+; [naka_s_headers:short] NakaInst_ParaLoadOptOKFunc
+; Name string of MIDI-menu procedure 10 ("ParaLoadOptOKFunc"): entry 10
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_ParaLoadOptOKFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2484E, 0x12
+; [naka_s_headers:short] NakaInst_ParaLoadOptGridCheck
+; Name string of MIDI-menu procedure 9 ("ParaLoadOptGridCheck"): entry 9
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_ParaLoadOptGridCheck:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24860, 0x16
+; [naka_s_headers:short] NakaInst_TtMdParaLoad
+; Name string of MIDI-menu procedure 8 ("TtMdParaLoad"): entry 8 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdParaLoad:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24876, 0xE
+; [naka_s_headers:short] NakaInst_R12OctaveFunc
+; Name string of MIDI-menu procedure 7 ("R12OctaveFunc"): entry 7 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_R12OctaveFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24884, 0xE
+; [naka_s_headers:short] NakaInst_MdCmptCnctFunc
+; Name string of MIDI-menu procedure 6 ("MdCmptCnctFunc"): entry 6 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_MdCmptCnctFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24892, 0x10
+; [naka_s_headers:short] NakaInst_TtComputerConnection
+; Name string of MIDI-menu procedure 5 ("TtComputerConnection"): entry 5
+; of MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9
+; 0xf72bac, v7 0xf727a8) registers with RegObjTabl 0x1600002,
+; ApFunctionProc, 0x3c, 0xe55304, 0x423.
 NakaInst_TtComputerConnection:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248A2, 0x16
+; [naka_s_headers:short] NakaInst_MdSetupLoadFunc
+; Name string of MIDI-menu procedure 4 ("MdSetupLoadFunc"): entry 4 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_MdSetupLoadFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248B8, 0x10
+; [naka_s_headers:short] NakaInst_MdDrumTypeFunc
+; Name string of MIDI-menu procedure 3 ("MdDrumTypeFunc"): entry 3 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_MdDrumTypeFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248C8, 0x10
+; [naka_s_headers:short] NakaInst_MdPcgModeFunc
+; Name string of MIDI-menu procedure 2 ("MdPcgModeFunc"): entry 2 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_MdPcgModeFunc:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248D8, 0xE
+; [naka_s_headers:short] NakaInst_TtMdRealMsg
+; Name string of MIDI-menu procedure 1 ("TtMdRealMsg"): entry 1 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdRealMsg:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248E6, 0xC
+; [naka_s_headers:short] NakaInst_TtMdmenu
+; Name string of MIDI-menu procedure 0 ("TtMdmenu"): entry 0 of
+; MidiMenu_ApFunctionNameTable, which InitializeEast (v10/v9 0xf72bac,
+; v7 0xf727a8) registers with RegObjTabl 0x1600002, ApFunctionProc,
+; 0x3c, 0xe55304, 0x423.
 NakaInst_TtMdmenu:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x248F2, 0x14
 ; -----------------------------------------------------------------------------

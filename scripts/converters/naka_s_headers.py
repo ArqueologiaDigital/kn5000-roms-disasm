@@ -201,6 +201,66 @@ def restructure_seq_rodata(lines, cb):
     return count
 
 
+SHORT = '; [naka_s_headers:short] '
+
+
+def short_headers(lines, blob, items):
+    """items: [(label, [text lines])].  Put a compact header (marker line +
+    text) directly above each label; a re-run replaces its own block."""
+    n = 0
+    for label, text in items:
+        idx = [i for i, l in enumerate(lines) if l == label + ':']
+        if len(idx) != 1:
+            raise SystemExit('short header: label %s found %d times' % (label, len(idx)))
+        i = idx[0]
+        j = i
+        while j > 0 and lines[j - 1].startswith(';') and not lines[j - 1].startswith(SHORT):
+            j -= 1
+        if j > 0 and lines[j - 1] == SHORT + label:
+            del lines[j - 1:i]
+            i = j - 1
+        block = [SHORT + label] + ['; ' + t for t in text]
+        block = [re.sub(r'0x[0-9A-Fa-f]+', lambda m: m.group(0).lower(), b) for b in block]
+        lines[i:i] = block
+        n += 1
+    return n
+
+
+def effect_and_name_headers(data):
+    """The 128 effect-name slices (NakaInst_<EFFECT>, 18 bytes each, blob
+    +0x1E1A..+0x271A) and the 61 MIDI-menu procedure-name slices after
+    MidiMenu_ApFunctionNameTable: one short evidence header each."""
+    base = 0xE30E60
+    sl = R.s_slices(os.path.join(ROOT, R.UI, 'widget_descriptors.s'), 'naka_widget_descriptors')
+    byoff = {v[0]: k for k, v in sl.items()}
+    items = []
+    for n in range(128):
+        off = 0x2708 - 18 * n
+        lab = byoff.get(off)
+        if lab is None:
+            continue
+        name = data[off:off + 16].decode('latin-1')
+        items.append((lab, R.wrap(
+            'Effect %d name, 18 bytes ("%s", NUL, 0xFF): DspEffectName_PtrTable entry %d '
+            'points here, and %s Strcpy\'s it (the effect-number -> name table is described in '
+            'the file header).' % (n, name.rstrip(), n, R.a('DspItem0_DisplayEffectName'))).split('\n')))
+    u32 = lambda o: int.from_bytes(data[o:o + 4], 'little')
+    tab = 0x244A4
+    for k in range(61):
+        t = u32(tab + 4 * k) - base
+        lab = byoff.get(t)
+        if lab is None:
+            continue
+        nm = data[t:data.index(b'\0', t)].decode('latin-1')
+        items.append((lab, R.wrap(
+            'Name string of MIDI-menu procedure %d ("%s"): entry %d of '
+            'MidiMenu_ApFunctionNameTable, which %s registers with RegObjTabl 0x1600002, '
+            'ApFunctionProc, 0x3C, 0xE55304, 0x423.%s'
+            % (k, nm, k, R.a('InitializeEast'),
+               ' This empty name is the table\'s terminator.' if k == 60 else '')).split('\n')))
+    return items
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--apply', action='store_true')
@@ -260,6 +320,18 @@ def main():
                 open(path, 'wb').write('\n'.join(lines).encode('latin-1'))
             print('%-4s %-26s span %s: %d slices%s' % (v, sp['sfile'], span, n,
                                                        '' if args.apply else '  (dry run)'))
+    short_items = effect_and_name_headers(data)
+    for v in ('v10', 'v9', 'v7'):
+        path = os.path.join(ROOT, v, 'maincpu/ui_widgets', 'widget_descriptors.s')
+        raw = open(path, 'rb').read()
+        lines = raw.decode('latin-1').split('\n')
+        n = short_headers(lines, 'naka_widget_descriptors', short_items)
+        out = '\n'.join(lines).encode('latin-1')
+        if args.apply and out != raw:
+            open(path, 'wb').write(out)
+        print('%-4s %-26s %3d short headers  %+d bytes%s' % (v, 'widget_descriptors.s', n,
+                                                          len(out) - len(raw),
+                                                          '' if args.apply else '  (dry run)'))
     for v in ('v10', 'v9', 'v7'):
         for sname, objs in sorted(byfile.items()):
             path = os.path.join(ROOT, v, 'maincpu/ui_widgets', sname)
