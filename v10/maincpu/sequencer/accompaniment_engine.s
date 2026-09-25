@@ -34199,14 +34199,22 @@ AccScreen_DataBlock:
 	ld	xwa, xiy
 	pop	xwa
 	ret
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF6A38B-0xF6A39D (18 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=78% dist=10 near AccScreen_DataBlock+5
-	.byte 0x38, 0xed, 0x88, 0x1d, 0x01, 0x22, 0xfb, 0x58, 0x0e, 0x38, 0xed, 0x88
-	.byte 0x1d, 0x38, 0x25, 0xfb, 0x58, 0x0e
-	push	xiz
-	calr	AccDraw_Secondary_Helper
-	pop	xiz
+	push	xwa
+	ld	xwa, xiy
+	call	DrawFunc_Init_Variant1_0x108
+	pop	xwa
 	ret
 AccDraw_Secondary_Helper:
+	push	xwa
+	ld	xwa, xiy
+	call	ColorBlit_Variant_ByteData
+	pop	xwa
+	ret
+	push	xiz
+	calr	AccDraw_Secondary_Helper2
+	pop	xiz
+	ret
+AccDraw_Secondary_Helper2:
 	.byte 0xc1, 0x37, 0x8d
 	push	xsp
 	ld	(xiz), xiz
@@ -34237,17 +34245,17 @@ AccDraw_Secondary_Helper:
 	ld	xiy, AccScreen_UIDataBlock_0x33
 	ld	xix, AccScreen_UIDataBlock_0x15A
 	calr	AccAudio_DataBlock1
-	calr	AccDraw_Secondary_Helper5
 	calr	AccDraw_Secondary_Helper6
-	calr	AccDraw_Secondary_Helper10
+	calr	AccDraw_Secondary_Helper7
+	calr	AccDraw_Secondary_Helper11
 	ret
-	calr	AccDraw_Secondary_Helper4
+	calr	AccDraw_Secondary_Helper5
 	ld	(0x03efa8:24), 1
 	ld	xiy, AccScreen_UIDataBlock_0x291
-	calr	65411
-	calr	AccDraw_Secondary_Helper10
+	calr	AccDraw_Secondary_Helper
+	calr	AccDraw_Secondary_Helper11
 	ld	(0x03efa8:24), 0
-	calr	1492
+	calr	AccDraw_Secondary_Helper14
 	.byte 0xc1, 0xd6
 	ldw	ix, 0xbb19
 	push	xbc
@@ -34276,24 +34284,24 @@ AccDraw_Secondary_Helper:
 	.byte 0xac, 0xf6
 	nop
 	calr	AccDraw_Secondary
-	calr	AccDraw_Secondary_Helper8
-	calr	AccDraw_Secondary_Helper11
 	calr	AccDraw_Secondary_Helper9
-	calr	1402
+	calr	AccDraw_Secondary_Helper12
+	calr	AccDraw_Secondary_Helper10
+	calr	AccDraw_Secondary_Helper13
 	ret
-	push	xiz
-	calr	AccDraw_Secondary_Helper2
-	pop	xiz
-	ret
-AccDraw_Secondary_Helper2:
-	call	RhythmVariation_InlineCode_0x26
-	ret
-CmpStep_DataBlock_Code_Helper:
 	push	xiz
 	calr	AccDraw_Secondary_Helper3
 	pop	xiz
 	ret
 AccDraw_Secondary_Helper3:
+	call	RhythmVariation_InlineCode_0x26
+	ret
+CmpStep_DataBlock_Code_Helper:
+	push	xiz
+	calr	AccDraw_Secondary_Helper4
+	pop	xiz
+	ret
+AccDraw_Secondary_Helper4:
 	ld	xix, AccScreen_DataBlock_0x103
 	calr	AccDraw_Secondary_Sub
 	ret
@@ -34613,7 +34621,7 @@ AccDraw_Secondary_Return3:
 	ret
 	ret
 	ret
-AccDraw_Secondary_Helper4:
+AccDraw_Secondary_Helper5:
 	ld	(0x03efa8:24), 2
 	.byte 0xc1
 	ccf
@@ -34627,10 +34635,10 @@ AccDraw_Secondary_Helper4:
 	jr	AccDraw_Secondary_Return4
 AccDraw_Secondary_Skip:
 	ld	xiy, AccScreen_UIDataBlock_0x256
-	calr	64663
+	calr	AccDraw_Secondary_Helper
 AccDraw_Secondary_Return4:
 	ret
-AccDraw_Secondary_Helper5:
+AccDraw_Secondary_Helper6:
 	xor	wa, wa
 	ld	xiy, AccScreen_UIDataBlock_0x4F6
 	ld	xix, xiy
@@ -34641,21 +34649,21 @@ AccDraw_Secondary_Helper5:
 	add	xix, xwa
 	calr	AccAudio_DataBlock1
 	ret
-AccDraw_Secondary_Helper6:
+AccDraw_Secondary_Helper7:
 	ld	xiy, AccScreen_UIDataBlock_0x582
 	ld	c, (0x373e:16)
-	calr	AccDraw_Secondary_Helper7
+	calr	AccDraw_Secondary_Helper8
 	ld	xiy, AccScreen_UIDataBlock_0x5DC
 	ld	c, (0x373f:16)
-	calr	AccDraw_Secondary_Helper7
+	calr	AccDraw_Secondary_Helper8
 	ld	xiy, AccScreen_UIDataBlock_0x636
 	ld	c, (0x3740:16)
-	calr	AccDraw_Secondary_Helper7
+	calr	AccDraw_Secondary_Helper8
 	ld	xiy, AccScreen_UIDataBlock_0x690
 	ld	c, (0x3741:16)
-	calr	AccDraw_Secondary_Helper7
+	calr	AccDraw_Secondary_Helper8
 	ret
-AccDraw_Secondary_Helper7:
+AccDraw_Secondary_Helper8:
 	xor	wa, wa
 	ld	xix, xiy
 	add	xix, 10
@@ -34668,7 +34676,7 @@ AccDraw_Secondary_Helper7:
 	calr	AccAudio_DataBlock1
 AccDraw_Secondary_Return5:
 	ret
-AccDraw_Secondary_Helper8:
+AccDraw_Secondary_Helper9:
 	ld	xiy, 0x372e
 	ld	xix, 2601
 	xor	de, de
@@ -34757,7 +34765,7 @@ AccDraw_Secondary_Return6:
 	pop	xix
 	pop	xiy
 	ret
-AccDraw_Secondary_Helper9:
+AccDraw_Secondary_Helper10:
 	xor	wa, wa
 	ld	a, (0x370f:16)
 	cp	a, 0:i3
@@ -34790,7 +34798,7 @@ AccDraw_Secondary_Helper9:
 	call	DrawText_LayoutAndRender_Variant1_0x6CA
 	pop	xwa
 	ret
-AccDraw_Secondary_Helper10:
+AccDraw_Secondary_Helper11:
 	xor	wa, wa
 	ld	a, (0x370f:16)
 	cp	a, 0:i3
@@ -34802,7 +34810,7 @@ AccDraw_Secondary_Skip2:
 	div8rr	a, c
 	ld	(0x39b9:16), a
 	ret
-AccDraw_Secondary_Helper11:
+AccDraw_Secondary_Helper12:
 	ld	(0x03efa8:24), 0
 	.byte 0xc1
 	ccf
@@ -34963,10 +34971,48 @@ AccScreen_UIDataBlock:
 ; The records have a 2-byte head whose second byte is the record length, and
 ; several carry the descriptor shape (tag, LE32 pointer, LE16 cell width) that
 ; the three .incbin records below use.
-	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00, 0x23, 0x00, 0x21, 0x0c, 0x21, 0x10, 0x1d, 0x36, 0x15, 0xfb	; |......#.!.!..6..|
-	.byte 0x0e, 0x23, 0x07, 0x21, 0x0c, 0x1d, 0x5f, 0x15, 0xfb, 0x0e, 0xd8, 0xd0, 0xc1, 0x9b, 0x37, 0x21	; |.#.!.._.......7!|
-	.byte 0xc9, 0xcc, 0x1f, 0x66, 0x09, 0xc9, 0xef, 0x01, 0x67, 0x04, 0xc8, 0x61, 0x68, 0xf7, 0xf1, 0xb8	; |...f....g..ah...|
-	.byte 0x39, 0x40, 0x0e, 0x23, 0x05, 0x34, 0x2d, 0x00, 0x07, 0x12, 0x84, 0x00, 0x53, 0x54, 0x45, 0x50	; |9@.#.4-.....STEP|
+; ** CORRECTED 2026-09-25 (lane accomp): bytes +0x00..+0x32 of this block are
+; NOT data.  They are three routines (51 B) and AccDraw_Secondary CALLS the
+; second and third (calr AccDraw_Secondary_Helper13 / _Helper14), so the
+; "never a branch target" reading above holds for the 23 positional labels
+; only.  The records begin at +0x33 = AccScreen_UIDataBlock_0x33, the first
+; positional label.  Evidence: clean llvm-mc/unidasm decode ending on `ret` at
+; +0x32; the calls land on Display_DeferOrDrawWall / Display_DeferOrUpdateScreen;
+; and v7's copy of this block differs from v10's here in exactly those two call
+; operands (by -0x40D, v7's code-relocation delta for that range) and in one
+; RAM operand -- scripts/converters/lane_accomp_v7_uidatablock.py --diff.
+; The four 16-byte .byte rows these 51 bytes were spelled as carried these
+; ascii renderings:
+; |......#.!.!..6..|
+; |.#.!.._.......7!|
+; |...f....g..ah...|
+; |9@.#.4-.....STEP|
+	ld	(0x03efa8:24), 0
+	ld	c, 0:opc
+	ld	a, 12:opc
+	ld	a, 16:opc
+	call	Display_DeferOrDrawWall
+	ret
+AccDraw_Secondary_Helper13:
+	ld	c, 7:opc
+	ld	a, 12:opc
+	call	Display_DeferOrUpdateScreen
+	ret
+; W = index of the lowest set bit of ((0x379b) & 31), 0 when none is set;
+; stored to (0x39b8).
+AccDraw_Secondary_Helper14:
+	xor	wa, wa
+	ld	a, (0x379b:16)
+	and	a, 31
+	jr	z, 9
+	srl	a, 1
+	jr	c, 4
+	inc	1, w
+	jr	-9
+	ld	(0x39b8:16), w
+	ret
+; +0x33: the records
+	.byte 0x23, 0x05, 0x34, 0x2d, 0x00, 0x07, 0x12, 0x84, 0x00, 0x53, 0x54, 0x45, 0x50	; |#.4-.....STEP|
 	.byte 0x20, 0x52, 0x45, 0x43, 0x4f, 0x52, 0x44, 0x49, 0x4e, 0x47, 0x20, 0x0c, 0x3a, 0x04, 0x50, 0x41	; | RECORDING .:.PA|
 	.byte 0x54, 0x54, 0x45, 0x52, 0x4e, 0x3a, 0x20, 0x09, 0x23, 0x04, 0x50, 0x41, 0x52, 0x54, 0x3a, 0x06	; |TTERN: .#.PART:.|
 	.byte 0x05, 0xc4, 0x05, 0x8d, 0x06, 0x08, 0xe3, 0x08, 0x50, 0x41, 0x52, 0x54, 0x06, 0x05, 0x8c, 0x0b	; |........PART....|
