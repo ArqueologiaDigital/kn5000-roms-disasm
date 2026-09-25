@@ -1234,7 +1234,7 @@ FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	xbc, 31457301
 	ld	xde, 0:i3
 	call	SendEvent
-	.byte 0x83, 0x3f, 0x00
+	cp	(xhl), 0
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Skip2
 	ld	xwa, xiz
 	srl	xwa, 0
@@ -1317,7 +1317,7 @@ FDemoText_ByteData_DisplayRefresh_Loop2:
 FDemoText_ByteData_DisplayRefresh_Skip3:
 	inc	1, xiz
 	ld	xwa, xiz
-	.byte 0xaf, 0x08, 0xf0
+	cp	xwa, (xsp+0x8)
 	jr	c, FDemoText_ByteData_DisplayRefresh_Loop2
 FDemoText_ByteData_DisplayRefresh_Skip4:
 	ld	xwa, 1:i3
@@ -2823,7 +2823,7 @@ FDemoText_RenderTextLine_Join:
 	jr	nz, FDemoText_RenderTextLine_Join2
 	exts	xhl
 	divs	hl, 2
-	.byte 0x91, 0x83
+	add	hl, (xbc)
 	ld	wa, (xsp+2)
 	exts	xwa
 	divs	wa, 2
@@ -2833,7 +2833,7 @@ FDemoText_RenderTextLine_Join:
 FDemoText_RenderTextLine_Skip3:
 	ld	wa, (xbc)
 	add	wa, hl
-	.byte 0x9f, 0x02, 0xa0
+	sub	wa, (xsp+0x2)
 	ld	(xbc), wa
 FDemoText_RenderTextLine_Join2:
 	ld	xbc, (xsp+4)
@@ -2849,7 +2849,7 @@ FDemoText_RenderTextLine_Skip4:
 	call	DrawBitmap
 FDemoText_RenderTextLine_Join3:
 	ld	wa, (xsp+8)
-	.byte 0x9f, 0x02, 0x80
+	add	wa, (xsp+0x2)
 	ld	(154426:24), wa
 	popw	iz
 	lda	xsp, (xsp+14)

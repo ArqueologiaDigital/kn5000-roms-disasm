@@ -3146,7 +3146,7 @@ FileIO_ByteBlock_DemoProc1_Skip2:
 	extz	wa
 	call	16472820
 	lda	xwa, (2020176:24)
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+0x4)
 	ld	xbc, (xsp+8)
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
@@ -3223,7 +3223,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	extz	wa
 	call	FileIO_ByteBlock_DemoProc1_Helper3
 	lda	xwa, (2020176:24)
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+0x4)
 	ld	xbc, 16
 	call	FileIO_ReadBlock
 	ld	wa, (2020189:24)
@@ -3248,7 +3248,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	ld	bc, 0:i3
 	call	FileIO_SeekAndReadBlock
 	lda	xwa, (2020176:24)
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+0x4)
 	ld	xbc, (xsp+8)
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
@@ -3513,7 +3513,7 @@ FileIO_ByteBlock_DemoProc1_Join5:
 	extz	bc
 	call	FileIO_ByteBlock_DemoProc1_Helper5
 	lda	xwa, (1966080:24)
-	.byte 0xaf, 0x06, 0x80
+	add	xwa, (xsp+0x6)
 	ld	bc, (xsp+10)
 	extz	xbc
 	call	FileIO_ReadBlock
@@ -3608,7 +3608,7 @@ FileIO_ByteBlock_DemoProc1_Join6:
 	extz	wa
 	call	FileIO_ByteBlock_DemoProc1_Helper6
 	lda	xwa, (1966080:24)
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+0x4)
 	ld	bc, (xsp+8)
 	extz	xbc
 	call	FileIO_ReadBlock
@@ -6626,7 +6626,7 @@ GetFileEntryByIndex_Skip:
 	call	InitializeKubo_Helper
 	lda	xwa, (155394:24)
 	add	xwa, xhl
-	.byte 0xb0, 0x9f
+	ldcfm	7, (xwa)
 	scc	c, l
 	extz	hl
 GetFileEntryByIndex_Epilogue:
@@ -6714,7 +6714,7 @@ GetFileEntryByIndex_Skip5:
 	call	FileIO_ReadByte
 	sll	hl, 8
 	or	iz, hl
-	.byte 0x9f, 0x1c, 0x46
+	mul	iz, (xsp+0x1c)
 	ld	xwa, xiz
 	add	xwa, 178
 	ld	bc, 0:i3
@@ -6806,7 +6806,7 @@ GetFileEntryByIndex_Skip8:
 GetFileEntryByIndex_Skip9:
 	ld	wa, (xsp+28)
 	sll	wa, 2
-	.byte 0x9f, 0x1a, 0x80
+	add	wa, (xsp+0x1a)
 	mul	wa, 96
 	add	wa, 160
 	extz	xwa

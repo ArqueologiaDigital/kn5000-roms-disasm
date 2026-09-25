@@ -753,7 +753,7 @@ PsFileNameBox_Confirm_MultiItem:
 	sub DE,(XBC)
 	exts XDE
 	ld XWA,(XSP+0x0a)
-	.byte 0x98, 0x26, 0x5a
+	divs	de, (xwa+0x26)
 	ld	(xsp+8), de
 	lda	xiy, (xbc+6)
 	lda	xix, (xbc+2)
@@ -789,7 +789,7 @@ PsFileNameBox_Confirm_MultiItem:
 	inc	2, wa
 	add	(xbc), wa
 	ld	de, (xbc)
-	.byte 0x9f, 0x08, 0x82
+	add	de, (xsp+0x8)
 	ld	xwa, (xsp+14)
 	ld	(xwa), de
 	lda	xde, (xsp+158)
@@ -814,7 +814,7 @@ PsFileNameBox_Confirm_MultiItem:
 	lda	xhl, (xwa+28)
 	lda	xbc, (xsp+158)
 	lda	xde, (xsp+18)
-	.byte 0x94, 0xf5
+	cp	iy, (xix)
 	jr	nz, PsFileNameBox_Confirm_NewItem
 	lda	xwa, (xsp+146)
 	ld	xhl, (xhl)

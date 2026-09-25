@@ -180,9 +180,52 @@ def sval(v, w):
     return v - (1 << (8 * w)) if v >= 1 << (8 * w - 1) else v
 
 
+_PRELUDE = {}
+
+
+def macro_prelude(incdir):
+    """every `.macro` defined anywhere in the tree except shared/macros.s
+    (first definition of a name wins), so that macro invocations such as
+    RegObjTable can be assembled in isolation."""
+    if incdir in _PRELUDE:
+        return _PRELUDE[incdir]
+    seen, out = set(), []
+    for dp, dn, fn in sorted(os.walk(incdir)):
+        for f in sorted(fn):
+            q = os.path.join(dp, f)
+            if not f.endswith(".s") or os.path.relpath(q, incdir) == "shared/macros.s":
+                continue
+            lines = open(q, encoding="latin-1").read().split("\n")
+            i = 0
+            while i < len(lines):
+                m = re.match(r'^\s*\.macro\s+([A-Za-z_.$][\w.$]*)', lines[i].split(";")[0])
+                if m:
+                    j = i
+                    while j < len(lines) and not re.match(r'^\s*\.endm\b', lines[j].split(";")[0]):
+                        j += 1
+                    if m.group(1) not in seen:
+                        seen.add(m.group(1))
+                        out.extend(lines[i:j + 1])
+                    i = j
+                i += 1
+    # symbols the macro bodies use (e.g. RegTitle's `call`), as absolute
+    # values of THIS tree, so an invocation assembles to this tree's bytes
+    syms = _PRELUDE_SYMS.get(incdir, {})
+    used = set(IDENT.findall("\n".join(l.split(";")[0] for l in out)))
+    defs = ["\t.set %s, 0x%x" % (n, syms[n]) for n in sorted(used) if n in syms and n not in seen]
+    d = tempfile.mkdtemp(prefix="porti-prelude-")
+    path = os.path.join(d, "prelude.s")
+    open(path, "w", encoding="latin-1").write("\n".join(defs + out) + "\n")
+    _PRELUDE[incdir] = path
+    return path
+
+
+_PRELUDE_SYMS = {}
+
+
 def assemble_lines(texts, incdir):
     d = tempfile.mkdtemp(prefix="porti-")
-    src = ['\t.include "shared/macros.s"', "\t.text"]
+    src = ['\t.include "shared/macros.s"\n\t.include "%s"' % macro_prelude(incdir), "\t.text"]
     for i, t in enumerate(texts):
         src.append("__t%d:" % i)
         src.append("\t" + t)
@@ -306,6 +349,7 @@ class Porter:
                 for lab in split_line(e[3])[0]:
                     self.dlab_at[e[0]].add(lab)
         self.incdir = os.path.join(ROOT, dst, "maincpu")
+        _PRELUDE_SYMS[self.incdir] = self.sd
         self.keep = None           # --whole: the only dst labels kept
         self.whole = False
         self.dropped = set()

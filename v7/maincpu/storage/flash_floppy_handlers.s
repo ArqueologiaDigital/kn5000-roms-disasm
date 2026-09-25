@@ -935,7 +935,7 @@ Flash_InitExtMemAddrs:
 	ret
 Flash_InitBytecodeBlock:
 	lda	xsp, (xsp-12)
-	.byte 0xd7, 0xfa, 0x04
+	push	qiz
 	ld	(xsp+10), c
 	ld	(xsp+12), a
 	ld	(xsp+2), 0
@@ -1072,7 +1072,7 @@ Flash_InitBytecodeBlock_Skip5:
 	ld	xix, (3186:16)
 	ld	xiy, (3182:16)
 	ldw	bc, 46080
-	.byte 0x95, 0x11
+	ldirw
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (14770428:24)
@@ -1173,9 +1173,9 @@ Flash_InitBytecodeBlock_Join3:
 	ld	l, (3176:16)
 	ld	c, (3178:16)
 	ld	e, (3180:16)
-	.byte 0x87, 0x3f, 0x02
+	cp	(xsp), 2
 	jr	z, Flash_InitBytecodeBlock_Join4
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, Flash_InitBytecodeBlock_Join4
 	ld	a, l
 	extz	wa
@@ -1197,9 +1197,9 @@ Flash_InitBytecodeBlock_Join4:
 	ld	a, (3176:16)
 	ld	c, (3178:16)
 	ld	e, (3180:16)
-	.byte 0x87, 0x3f, 0x02
+	cp	(xsp), 2
 	jr	z, Flash_InitBytecodeBlock_Skip9
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, Flash_InitBytecodeBlock_Skip9
 	extz	wa
 	extz	bc
@@ -3713,7 +3713,7 @@ Flash_InitBytecodeBlock_Helper9:
 	ldw	bc, 0xb400
 	ldirw
 	calr	Flash_InitBytecodeBlock_Helper9_Helper
-	.byte	0x1b, 0x8f, 0xff, 0xfe
+	jp	0xfeff8f
 	dec	2, xsp
 	ld	(xsp), e
 	calr	SlotTable_ExtendedOpsBlock
@@ -3876,7 +3876,7 @@ Flash_WriteBackSlotTable_Skip4:
 	ld	xiy, 14769344
 	lda	xix, (xsp+16)
 	ldw	bc, 512
-	.byte 0x95, 0x11
+	ldirw
 	ld	xbc, (3190:16)
 	ld	xhl, 0:i3
 	ld	l, (xbc+46)
@@ -3963,7 +3963,7 @@ Flash_WriteBackSlotTable_Skip4:
 	ld	(xbc+92), xhl
 	ld	xwa, (xsp+12)
 	ld	xix, (xwa)
-	.byte 0xa9, 0x40, 0x84
+	add	xix, (xbc+0x40)
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa)
 	add	xwa, xix

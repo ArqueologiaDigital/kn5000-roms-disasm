@@ -23,16 +23,19 @@
 
 ; (v7 label ScreenGroup_ReInit stood here; dropped, see the file header)
 	.byte	0x67, 0xfc, 0xc9
-	jr	z, 26
+	jr	z, screen_group_dispatch_Skip2
 	ld	wa, (0xc4f8:16)
 	bit	4, wa
-	jr	nz, 6
+	jr	nz, screen_group_dispatch_Skip
 	set	2, (0xc162:16)
-	jr	5
+	jr	screen_group_dispatch_Entry
 ; (v7 label ScreenGroup_Dispatch stood here; dropped, see the file header)
 ; (v7 label ScreenGroup_DispatchAlt stood here; dropped, see the file header)
+screen_group_dispatch_Skip:
 	ld	(0xc162:16), 0
+screen_group_dispatch_Entry:
 	.byte	0xd1, 0x00, 0xc5, 0x3e, 0x01, 0x00
+screen_group_dispatch_Skip2:
 	ld	a, (0x8c98:16)
 	extz	wa
 ; (v7 label ScreenGroup_SetupWidgetPtr stood here; dropped, see the file header)
@@ -43,12 +46,14 @@
 	ld	xbc, xhl
 	lda	xwa, (0xfde509:24)
 	cp	xwa, xbc
-	.byte	0x66, 0x08
+	jr	z, screen_group_dispatch_Skip3
 	ld	wa, 0:i3
 	call	(xhl)
 	call	0xfde7d8
-	.byte	0x1b, 0x40, 0xf2, 0xfd, 0xf1, 0x69, 0xfc, 0xc8
-	.byte	0xb0, 0xf6
+screen_group_dispatch_Skip3:
+	jp	AudioInit_RefreshToneBank
+	bitda	0, (0xfc69)
+	ret	z
 ; (v7 label ScreenGroup_WidgetLoop stood here; dropped, see the file header)
 	ordi16	(0xc4fa), 128
 	ordi16	(0xc4f8), 4

@@ -1239,7 +1239,7 @@ FDC_CMD_EXEC_Helper2_Helper_Skip:
 	ldw HL, 0xffff
 	ret
 FDC_MODE_CONFIG_Helper:
-	.byte 0x0e
+	ret
 FDC_Set_Status:
 	cp (0x8988:16), 0x00
 	jr nz, FDC_SetStatus_AlreadySet
@@ -1438,7 +1438,7 @@ FDC_CMD_EXEC_Skip3:
 	jr	ule, FDC_CMD_EXEC_Entry3
 	stdi16	(0x89ac), 1
 FDC_CMD_EXEC_Entry3:
-	.byte	0xd1, 0xac, 0x89, 0x19, 0x74, 0x8a
+	ldmm16	0x8a74, 0x89ac
 	stdi16	(0x8980), 0
 	cp	(0x89d0:16), 2
 	jr	nz, FDC_CMD_EXEC_Skip5
@@ -1447,7 +1447,7 @@ FDC_CMD_EXEC_Entry3:
 FDC_CMD_EXEC_Skip5:
 	ldw	(0x8982:16), 512
 FDC_CMD_EXEC_Entry4:
-	.byte	0xd1, 0xae, 0x89, 0x19, 0x76, 0x8a
+	ldmm16	0x8a76, 0x89ae
 	ld	iz, 1:i3
 FDC_CMD_EXEC_Join2:
 	ld	wa, (0x8982:16)
@@ -1539,7 +1539,7 @@ FDC_CMD_EXEC_Skip9:
 	jr	ule, FDC_CMD_EXEC_Entry5
 	stdi16	(0x89ac), 1
 FDC_CMD_EXEC_Entry5:
-	.byte	0xd1, 0xac, 0x89, 0x19, 0x74, 0x8a
+	ldmm16	0x8a74, 0x89ac
 	stdi16	(0x8980), 0
 	cp	(0x89d0:16), 2
 	jr	nz, FDC_CMD_EXEC_Skip11
@@ -1548,7 +1548,7 @@ FDC_CMD_EXEC_Entry5:
 FDC_CMD_EXEC_Skip11:
 	ldw	(0x8982:16), 512
 FDC_CMD_EXEC_Entry6:
-	.byte	0xd1, 0xae, 0x89, 0x19, 0x76, 0x8a
+	ldmm16	0x8a76, 0x89ae
 	ld	iz, 1:i3
 FDC_CMD_EXEC_Join4:
 	ld	wa, (0x8982:16)
@@ -1905,7 +1905,7 @@ FDC_MC_EXIT_Code_Skip3:
 	jr	z, FDC_MC_EXIT_Code_Epilogue
 	ldw	wa, 10
 	calr	SOME_DELAY
-	.byte	0xde, 0x1c, 0xf7
+	djnz16	iz, -9
 FDC_MC_EXIT_Code_Epilogue:
 	popw	iz
 	ret
@@ -1913,7 +1913,7 @@ FDC_MC_EXIT_Code_Epilogue:
 	ldw	wa, 14
 	jrl	FDC_WaitReady_Helper3
 FDC_STATUS_COPY:
-	.byte	0xc1, 0x8a, 0x89, 0x19, 0x88, 0x89
+	ldmm8	0x8988, 0x898a
 FDC_STATUS_COPY_Code:
 	ret	
 	ld	wa, (35240:16)
@@ -2021,7 +2021,7 @@ FDC_CommandEntry_CopyParams:
 	ld	xwa, (xiz + 12)
 	ld	(0x89c0:16), xwa
 	ld	(0x8984:16), 0
-	.byte	0xc1, 0x88, 0x89, 0x19, 0x8a, 0x89
+	ldmm8	0x898a, 0x8988
 	ld	(0x8988:16), 0
 	calr	FDC_COMMAND_DISPATCHER
 	cp	l, 0:i3

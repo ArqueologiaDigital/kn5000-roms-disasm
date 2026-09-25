@@ -808,7 +808,7 @@ FmmSaveTtl_SlotLoop:
 	call	FileIO_SetModeFlag_Reading
 	ld	xiy, 15337066
 	ld	xix, 35184
-	.byte 0x95, 0x10
+	ldiw
 FmmSaveTtl_CommitSave:
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
