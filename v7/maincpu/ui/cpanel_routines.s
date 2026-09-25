@@ -192,14 +192,14 @@ CPanel_InitLEDBuffer:
 	ld (248:8), 34:io
 	ld (248:8), 35:io
 	ld xiy, 36197
-	addda16 xiy, (36193)
+	add iy, (36193:16)
 	ld a, (xiy)
 	incdi16 1, (36193)
 	st_dd8b a, 212
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
 	ld xiy, 36197
-	addda16 xiy, (36193)
+	add iy, (36193:16)
 	ld a, (xiy)
 	incdi16 1, (36193)
 	st_dd8b a, 212
@@ -297,7 +297,7 @@ DELAY_2_TICKS:
 	ld	(36095:16), wa
 DELAY_2_TICKS__loop:
 	ldw_d16 wa, (1033)
-	subda16 xwa, (36095)
+	sub wa, (36095:16)
 	cp wa, 2:i3
 	jr lt, DELAY_2_TICKS__loop
 	ret
@@ -306,7 +306,7 @@ DELAY_6_TICKS:
 	ld	(36095:16), wa
 Delay6T_Loop:
 	ldw_d16 wa, (1033)
-	subda16 xwa, (36095)
+	sub wa, (36095:16)
 	cp wa, 6:i3
 	jr lt, Delay6T_Loop
 	ret
@@ -315,7 +315,7 @@ DELAY_51_TICKS:
 	ld	(36095:16), wa
 Delay51T_Loop:
 	ldw_d16 wa, (1033)
-	subda16 xwa, (36095)
+	sub wa, (36095:16)
 	cp wa, 51
 	jr lt, Delay51T_Loop
 	ret
@@ -456,7 +456,7 @@ CPanel_ButtonPollLoop:
 	jr	nz, CPanel_EncoderCheck
 	ld	w, 12:opc
 CPanel_EncoderCheck:
-	cpdm8 (36302), xwa
+	cp (36302:16), w
 	stb_d8 (36302), w
 	jr nz, CPanel_ButtonPollLoop
 	stb_d8 (36302), w
@@ -535,7 +535,7 @@ CPanel_WaitTXReady_Timeout:
 	jr CPanel_WaitTXReady_Poll
 CPanel_WaitTXReady_BufferCheck:
 	ldw_d16 wa, (36195)
-	cpda16 xwa, (36193)
+	cp wa, (36193:16)
 	jr nz, CPanel_WaitTXReady_Timeout
 WaitTX_ConfigAndReturn:
 	ei 6
@@ -744,7 +744,7 @@ CPanel_SM_SendByte1:
 	ld (227:8), 5:io
 	ld (235:8), 208:io
 	ld xiy, 36197
-	addda16 xiy, (36193)
+	add iy, (36193:16)
 	ld a, (xiy)
 	st_dd8b a, 212
 	incdi16 1, (36193)
@@ -775,7 +775,7 @@ CPanel_SM_SendByteN:
 	ld (227:8), 5:io
 	ld (235:8), 208:io
 	ld xiy, 36197
-	addda16 xiy, (36193)
+	add iy, (36193:16)
 	ld a, (xiy)
 	st_dd8b a, 212
 	incdi16 1, (36193)
@@ -797,7 +797,7 @@ CPanel_SM_TXComplete:
 	stdi8 (36079), 0
 	stdi8 (36078), 0
 	ldw_d16 wa, (36195)
-	subda16 xwa, (36193)
+	sub wa, (36193:16)
 	cp wa, 2:i3
 	jr c, TXComplete_BufferEmpty
 	stdi8 (36078), 4
@@ -856,10 +856,10 @@ CPanel_SM_RXByte1:
 	ld (235:8), 13:io
 	ld_sd8b a, 212
 	ld xiy, 36101
-	addda16 xiy, (36099)
+	add iy, (36099:16)
 	ld (xiy), a
 	ldw_d16 hl, (36099)
-	subda16 xhl, (36097)
+	sub hl, (36097:16)
 	jr nc, RXByte1_ForwardDist
 	neg hl
 	ld iy, hl
@@ -893,7 +893,7 @@ RXByte1_AdvanceState:
 CPanel_SM_RXByteN:
 	ld_sd8b a, 212
 	ld xiy, 36101
-	addda16 xiy, (36099)
+	add iy, (36099:16)
 	ld (xiy), a
 	bitda 0, (36086)
 	jr nz, RXByteN_CheckDone
@@ -976,7 +976,7 @@ CPanel_InterruptPoll_MainLoop:
 	jr ule, PollLoop_DispatchWork
 	ei 0x06
 	ld wa, (0x8d63:16)
-	subda16 xwa, (36193)
+	sub wa, (36193:16)
 	jr nc, 6
 	neg wa
 	ld hl, wa
@@ -1023,7 +1023,7 @@ PollLoop_CheckTXReady:
 	bitda 0, (36080)
 	jr nz, PollLoop_BusyRetry
 	ldw_d16 wa, (36195)
-	subda16 xwa, (36193)
+	sub wa, (36193:16)
 	jr nc, PollLoop_StartTX
 	neg wa
 	ex8 a, w
@@ -1083,7 +1083,7 @@ CPanel_RX_ParseNext:
 	cpw (xiz-2), 4
 	jrl c, CPanel_RX_Done
 	ldw_d16 wa, (36099)
-	subda16 xwa, (36097)
+	sub wa, (36097:16)
 	jr nc, CPanel_RX_PacketSizeCheck
 	neg wa
 	ex8 a, w

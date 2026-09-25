@@ -690,7 +690,7 @@ UIState_DisplayUpdate_BitmapHandler_Loop2:
 	jr	z, UIState_DisplayUpdate_BitmapHandler_Code_Skip
 	ld	a, (xiz+13)
 	pushw	wa
-	andda8	xbc, (0x95d1)
+	and	a, (0x95d1:16)
 	popw	wa
 	jr	nz, UIState_DisplayUpdate_BitmapHandler_Code_Skip
 	and	a, 31
@@ -1665,7 +1665,7 @@ Periodic_TimestampCompare:
 	pushw de
 	ld wa, (1033:16)
 	ld de, wa
-	subda16	xwa, (0xb747)
+	sub	wa, (0xb747:16)
 	cp wa, 0x96
 	jr	c, Periodic_TimestampCompare_Done
 	stda16	(0xb747), de
@@ -9870,7 +9870,7 @@ MidiChan_SetStateMode2:
 	ld	(0xbc9a:16), 2
 	ld	a, (0xbc9a:16)
 MidiChan_CompareAndFlag:
-	cpda8	xbc, (0xbc9c)
+	cp	a, (0xbc9c:16)
 	ret z
 	set	6, (0xbc80:16)
 	ldmm8	0xbc9c, 0xbc9a
@@ -9926,7 +9926,7 @@ MidiSeq_UpdateToneParam:
 	ldb_sri C, 0x07, 0xe4, 0xec
 	ld a, c
 	ld	(0xbc64:16), c
-	cpda8	xhl, (0xbc66)
+	cp	c, (0xbc66:16)
 	ret z
 	set 7, a
 	ld	(0xbc64:16), a
@@ -9940,7 +9940,7 @@ MidiSeq_UpdateToneParam_Lower:
 	ldb_sri C, 0x07, 0xe4, 0xec
 	ld a, c
 	ld	(0xbc70:16), c
-	cpda8	xhl, (0xbc72)
+	cp	c, (0xbc72:16)
 	ret z
 	set 7, a
 	ld	(0xbc70:16), a
@@ -9986,7 +9986,7 @@ MidiSeq_ComputeExpression:
 	inc 1, xhl
 	ld a, l
 	ld	(0xbc6c:16), l
-	cpda8	xsp, (0xbc6e)
+	cp	l, (0xbc6e:16)
 	ret z
 	set 7, a
 	ld	(0xbc6c:16), a
@@ -10007,7 +10007,7 @@ MidiSeq_Expression_Lower:
 	inc 1, xhl
 	ld a, l
 	ld	(0xbc78:16), l
-	cpda8	xsp, (0xbc7a)
+	cp	l, (0xbc7a:16)
 	ret z
 	set 7, a
 	ld	(0xbc78:16), a
@@ -10017,24 +10017,24 @@ MidiSeq_CheckSyncDirty:
 	bit	6, (0xbc7c:16)
 	jr	z, MidiSeq_CheckSyncDirty_Lower
 	ld	a, (0xbc64:16)
-	cpda8	xbc, (0xbc66)
+	cp	a, (0xbc66:16)
 	jr	nz, DSP_Init_ErrorFlagSet
 	ld	a, (0xbc68:16)
-	cpda8	xbc, (0xbc6a)
+	cp	a, (0xbc6a:16)
 	jr	nz, DSP_Init_ErrorFlagSet
 	ld	a, (0xbc6c:16)
-	cpda8	xbc, (0xbc6e)
+	cp	a, (0xbc6e:16)
 	jr	nz, DSP_Init_ErrorFlagSet
 	ret
 MidiSeq_CheckSyncDirty_Lower:
 	ld	a, (0xbc70:16)
-	cpda8	xbc, (0xbc72)
+	cp	a, (0xbc72:16)
 	jr	nz, DSP_Init_ErrorFlagSet
 	ld	a, (0xbc74:16)
-	cpda8	xbc, (0xbc76)
+	cp	a, (0xbc76:16)
 	jr	nz, DSP_Init_ErrorFlagSet
 	ld	a, (0xbc78:16)
-	cpda8	xbc, (0xbc7a)
+	cp	a, (0xbc7a:16)
 	ret z
 DSP_Init_ErrorFlagSet:
 	setm 6, (xbc)

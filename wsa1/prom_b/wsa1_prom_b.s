@@ -162809,7 +162809,7 @@ sub_F6EAA8:
 	adddi16	(4058), 2	; F6EAAD  add (0x0fda),0x0002
 	ld	c, (4051:16)	; F6EAB3  ld C,(0x0fd3)
 	sla	c, 1	; F6EAB7  sla 0x01,C
-	cpdm8	(4058), xhl	; F6EABA  cp (0x0fda),C
+	cp	(4058:16), c	; F6EABA  cp (0x0fda),C
 	jr	c, sub_F6EAA8_Return	; F6EABE  jr C,0xf6eb1a
 	ld	l, (4064:16)	; F6EAC0  ld L,(0x0fe0)
 	cp	l, 2:i3	; F6EAC4  cp L,2
@@ -162843,7 +162843,7 @@ sub_F6EAA8_Skip2:
 	stda32	(4060), xwa	; F6EB0C  ld (0x0fdc),XWA
 	ld	(4064:16), l	; F6EB10  ld (0x0fe0),L
 	xor	b, b	; F6EB14  xor B,B
-	subdm16	(4058), xbc	; F6EB16  sub (0x0fda),BC
+	sub	(4058:16), bc	; F6EB16  sub (0x0fda),BC
 sub_F6EAA8_Return:
 	ret	; F6EB1A  ret
 ; sub_F6EB1B -- UNREACHED: sub_F6EA57's shape, writing 4 where it writes 3.
@@ -162881,7 +162881,7 @@ sub_F6EB6C:
 	incdi16	1, (4058)	; F6EB71  incw 1,(0x0fda)
 	ld	c, (4051:16)	; F6EB75  ld C,(0x0fd3)
 	sla	c, 1	; F6EB79  sla 0x01,C
-	cpdm8	(4058), xhl	; F6EB7C  cp (0x0fda),C
+	cp	(4058:16), c	; F6EB7C  cp (0x0fda),C
 	jr	c, sub_F6EB6C_Return	; F6EB80  jr C,0xf6ebdc
 	ld	l, (4064:16)	; F6EB82  ld L,(0x0fe0)
 	cp	l, 2:i3	; F6EB86  cp L,2
@@ -162915,7 +162915,7 @@ sub_F6EB6C_Skip2:
 	stda32	(4060), xwa	; F6EBCE  ld (0x0fdc),XWA
 	ld	(4064:16), l	; F6EBD2  ld (0x0fe0),L
 	xor	b, b	; F6EBD6  xor B,B
-	subdm16	(4058), xbc	; F6EBD8  sub (0x0fda),BC
+	sub	(4058:16), bc	; F6EBD8  sub (0x0fda),BC
 sub_F6EB6C_Return:
 	ret	; F6EBDC  ret
 ; RamPtrTable_F6EBDD -- 3 LE32 RAM addresses 0x0F5E, 0x0F60, 0x0F62.  Read by
@@ -167744,7 +167744,7 @@ sub_F710E7:
 	ld	qwa, de	; F71130  ld QWA,DE
 	div	xwa, hl	; F71133  div XWA,HL
 	ld	de, qwa	; F71135  ld DE,QWA
-	adddm16	(4230), xwa	; F71138  add (0x1086),WA
+	add	(4230:16), wa	; F71138  add (0x1086),WA
 	popw	wa	; F7113C  pop WA
 
 sub_F710E7_Skip:

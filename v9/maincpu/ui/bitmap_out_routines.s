@@ -121,7 +121,7 @@ BitMapOut_ByteData_RenderB:
 	cp	xhl, 0x01a000f6
 	jrl	z, BitMapOut_ByteData_RenderB_Epilogue
 	ld	a, (0xc080:16)
-	cpda8 xbc, (36154)
+	cp a, (36154:16)
 	jrl nz, BitMapOut_ByteData_RenderB_Epilogue
 	cpdi8 (49277), 0
 	jr	nz, BitMapOut_ByteData_RenderB_Epilogue

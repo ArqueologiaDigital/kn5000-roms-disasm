@@ -891,6 +891,19 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #            their own d16 and never read 256 as the sentinel.  Gate 13/13;
 #            FOIL: hdae5000 `ld (xsp + 0:8), xwa` -> `(xsp + 0)` -> image 2
 #            bytes short.
+#   direct   189 lines, 30 files: the direct-address pseudos whose source
+#            named a register of the WRONG SIZE -- `cpda8 xbc, (8990)` for
+#            cp A,(0x231e), `addda16 xwa` for add WA ... (index-preserving
+#            rule, measured per site) -- are the real instruction:
+#            `cp a, (8990:16)`.  183 by scripts/converters/
+#            convert_direct_address_family.py --all --only-misnamed (new
+#            flag; every candidate spelling assembled, the one matching the
+#            old line's bytes kept), plus 6 macro-body `ldw_da xwa,
+#            (\ParamC)` (d2 .. 20 loads WA) -> `ld wa, (\ParamC:24)` by hand,
+#            proved in expansion by the gate (FOIL `ld xwa` -> v10 3 bytes
+#            differ).  The 4,600 correctly-named direct pseudos are NOT
+#            respelled here (a spelling convergence, not a false text; the
+#            tool converts them with --all, left to wave 3b).
 #
 # Two-decoder SYNTHETIC SWEEP (notes/wave3a-toolchain-probes/two_decoder_sweep.py:
 # 9,984 probes, every addressing prefix x every sub-opcode + the primary map;

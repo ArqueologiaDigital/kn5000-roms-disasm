@@ -3378,7 +3378,7 @@ SeqBuf_WriteBytes_Loop:
 
 SeqBuf_InlineBytecode:
 	ld	hl, (0x1e545:24)
-	cpda16_24	xhl, (0x1e541)
+	cp	hl, (0x1e541:24)
 	ld	hl, 0:i3
 	jr	z, SeqBuf_WriteBytes_Return
 	ldw	hl, 0xffff
@@ -3670,7 +3670,7 @@ AltEvtBuf_WriteBytes_Loop:
 
 AltEvtBuf_InlineBytecode:
 	ld	hl, (0x1f163:24)
-	cpda16_24	xhl, (0x1f15f)
+	cp	hl, (0x1f15f:24)
 	ld	hl, 0:i3
 	jr	z, RhythmBuf_Init_Return
 	ldw	hl, 0xffff
@@ -4061,7 +4061,7 @@ SeqBuf2_WriteBytes_Loop:
 
 SeqBuf2_InlineBytecode:
 	ld	hl, (0x1f88b:24)
-	cpda16_24	xhl, (0x1f887)
+	cp	hl, (0x1f887:24)
 	ld	hl, 0:i3
 	jr	z, SeqBuf2_WriteByte_Return
 	ldw	hl, 0xffff
@@ -4163,7 +4163,7 @@ SeqBuf3_WriteBytes_Loop:
 
 SeqBuf3_InlineBytecode:
 	ld	hl, (0x1fa95:24)
-	cpda16_24	xhl, (0x1fa91)
+	cp	hl, (0x1fa91:24)
 	ld	hl, 0:i3
 	jr	z, SeqBuf3_ReadByte_Return
 	ldw	hl, 0xffff
@@ -4434,7 +4434,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	unlk	xiz
 	ret
 	ld	hl, (0x20133:24)
-	cpda16_24	xhl, (0x2012f)
+	cp	hl, (0x2012f:24)
 	ld	hl, 0:i3
 	jr	z, Seq_TimerEventLoop_Return
 	ldw	hl, 0xffff
@@ -6043,7 +6043,7 @@ INTTC0_HANDLER_Skip3:
 	jr	nz, INTTC0_HANDLER_Skip2
 ; v10 does not spell this byte either
 	.byte	0xd8, 0x2f, 0x40	; ldc WA,unknown
-	cpdm16	(0xe2c6), xwa
+	cp	(0xe2c6:16), wa
 	jr	nz, INTTC0_HANDLER_Skip
 	incw	1, (58052:16)
 	jr	INTTC0_HANDLER_Join

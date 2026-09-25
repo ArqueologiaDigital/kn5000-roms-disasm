@@ -9946,7 +9946,7 @@ MidiVoice_DataBlockHandler_Skip:
 	jr	z, MidiVoice_DataBlockHandler_Skip4
 	bitda	4, (0xfd50)
 	jr	nz, MidiVoice_DataBlockHandler_Skip4
-	orddm8	(0x9048), xbc
+	or	(0x9048:16), a
 	ordi8	(0x9048), 192
 	ld	wa, (xiy)
 	stda16	(0x908b), wa

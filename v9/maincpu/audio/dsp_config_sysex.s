@@ -5810,7 +5810,7 @@ UIStateEvt_ParamEdit_Data_Skip3:
 	call	AudioInit_RefreshToneBank
 UIStateEvt_ParamEdit_Data_Skip4:
 	anddi16	(0xc596), 0xffe8
-	orddm16	(0xc596), xiz
+	or	(0xc596:16), iz
 	ordi16	(0xc594), 4
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
@@ -5896,7 +5896,7 @@ UIStateEvt_ParamEdit_Data_Skip12:
 	ld_rrw	iz, xbc, wa
 UIStateEvt_ParamEdit_Data_Join5:
 	anddi16	(0xc596), 0xffe8
-	orddm16	(0xc596), xiz
+	or	(0xc596:16), iz
 	ordi16	(0xc594), 4
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
@@ -5960,7 +5960,7 @@ UIStateEvt_VolumeMixer_Data:
 	anddi8	(0xc1fe), 252
 	ldb_d8	a, (0xc07e)
 	and	a, 3
-	orddm8	(0xc1fe), xbc
+	or	(0xc1fe:16), a
 	ordi16	(0xc594), 4
 UIStateEvt_VolumeMixer_Data_Skip:
 	ldw_d16	wa, (0xc594)
@@ -5987,7 +5987,7 @@ UIStateEvt_VolumeMixer_Data_Join2:
 	and	a, 2
 	ld	c, a
 	add	a, c
-	orddm8	(0xc1fe), xbc
+	or	(0xc1fe:16), a
 	ordi16	(0xc594), 4
 UIStateEvt_VolumeMixer_Data_Skip3:
 	ldw_d16	wa, (0xc594)

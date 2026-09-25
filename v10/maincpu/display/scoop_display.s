@@ -2975,7 +2975,7 @@ Timer_ModeHandler_0_Loop:
 	call	VoiceSlot_FinalRetZ_0x11
 	ld	(3522:16), a
 	call	VoiceSlot_FinalRetZ_0x11
-	cpda8	xbc, (0x0dc2)
+	cp	a, (0x0dc2:16)
 	jrl	z, Timer_ModeHandler_0_Skip3
 	jr	Timer_ModeHandler_0_Skip
 Timer_ModeHandler_0_Skip3:
@@ -3413,7 +3413,7 @@ ToneParam_ModeGuardEntry_Skip:
 	cp	a, 130
 	jrl	z, ToneParam_ModeGuardEntry_Skip2
 	call	VoiceSlot_FlagCheck
-	cpda8	xbc, (0x0d57)
+	cp	a, (0x0d57:16)
 	jrl	ugt, ToneParam_ModeGuardEntry_Skip2
 	call	DMA_FlagCheckWithCalls
 	jp	ToneParam_ModeGuardEntry_0x6D
@@ -3701,7 +3701,7 @@ ToneParam_Evt09_BytecodeHandler:
 	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip3
 ToneParam_Evt09_BytecodeHandler_Loop2:
 	call	VoiceSlot_FlagCheck
-	cpda8	xbc, (0x0d57)
+	cp	a, (0x0d57:16)
 	jrl	nz, ToneParam_Evt09_BytecodeHandler_Loop3
 	call	ToneParam_HandlerTable_BC_0x4DC
 	ld	(0x7f42:16), 255
@@ -3786,7 +3786,7 @@ ToneParam_Evt09_BytecodeHandler_Skip5:
 	call	ToneParam_HandlerTable_BC_0x1A2
 	ld	a, (3647:16)
 	ld	(3648:16), a
-	cpda8	xbc, (0x0e41)
+	cp	a, (0x0e41:16)
 	jrl	nz, ToneParam_Evt09_BytecodeHandler_Skip6
 	jp	ToneParam_HandlerTable_BC_0x18
 ToneParam_Evt09_BytecodeHandler_Skip6:
@@ -4376,7 +4376,7 @@ DisplayMode_Handler_3_Skip:
 	cp	a, 130
 	jrl	z, DisplayMode_Handler_3_Skip15
 	call	VoiceSlot_FlagCheck
-	cpda8	xbc, (0x0d57)
+	cp	a, (0x0d57:16)
 	jrl	ugt, DisplayMode_Handler_3_Skip15
 	call	DMA_FlagCheckWithCalls
 	jp	DisplayMode_Handler_3_0x3A
@@ -5241,7 +5241,7 @@ VoiceSlot_TableSetup_Skip5:
 	ld	xde, 3262
 	ld_rrb a, xde, hl
 	pop	xde
-	cpda8	xbc, (0x0ded)
+	cp	a, (0x0ded:16)
 	jrl	nz, VoiceSlot_TableSetup_Code_Skip3
 	call	VoiceSlot_FlagCheck
 	cp	a, 130
@@ -5287,7 +5287,7 @@ VoiceSlot_TableSetup_Code_Loop:
 	ld	xde, 3262
 	ld_rrb a, xde, hl
 	pop	xde
-	cpda8	xbc, (0x0ded)
+	cp	a, (0x0ded:16)
 	jrl	nz, VoiceSlot_TableSetup_Code_Skip3
 	call	VoiceSlot_FlagCheck
 	cp	a, 130
@@ -7174,7 +7174,7 @@ PortConfig_Handler_0_Skip2:
 	jrl	z, PortConfig_Handler_0_Skip3
 	cp	a, 130
 	jrl	z, PortConfig_Handler_0_Skip3
-	cpda8	xbc, (0x0d57)
+	cp	a, (0x0d57:16)
 	jrl	nz, PortConfig_Handler_0_Skip3
 	call	SndDispatch_ProcessCommand_0x266
 	jp	PortConfig_Handler_0_0x10A
@@ -8947,7 +8947,7 @@ SystemInit_StepHandler_0_Skip3:
 SystemInit_StepHandler_0_Skip4:
 	djnz16	bc, -39
 	ld	(3415:16), a
-	cpda8	xbc, (0x0dfa)
+	cp	a, (0x0dfa:16)
 	jrl	z, SystemInit_StepHandler_0_Return2
 	call	MemConfig_Handler_5_0x1BF
 SystemInit_StepHandler_0_Return2:
@@ -10127,7 +10127,7 @@ VoiceSlot_FinalRetZ_Entry:
 	andmi8	(xhl), 127
 	ld	(xhl+5), 130
 	inc	1, wa
-	cpda16	xwa, (0x0ce6)
+	cp	wa, (0x0ce6:16)
 	jrl	nz, VoiceSlot_FinalRetZ_Loop4
 	dec	1, wa
 VoiceSlot_FinalRetZ_Join:
@@ -10295,7 +10295,7 @@ VoiceSlot_StatusRet:
 	cp	a, 129
 	jrl	z, VoiceSlot_StatusRet_Skip
 	call	VoiceSlot_FlagCheck
-	cpda8	xbc, (0x0d57)
+	cp	a, (0x0d57:16)
 	jrl	z, VoiceSlot_StatusRet_Skip2
 VoiceSlot_StatusRet_Skip:
 	call	VoiceSlot_IndexDone
@@ -11543,7 +11543,7 @@ ScoopParam_ValueTable_Helper11_Loop:
 	pop xde
 	cp iy, (3583:16)
 	jrl	nz, ScoopParam_ValueTable_Helper11_Skip2
-	cpda8	xbc, (0x0e01)
+	cp	a, (0x0e01:16)
 	jrl	nc, ScoopParam_ValueTable_Helper11_Skip4
 ScoopParam_ValueTable_Helper11_Skip2:
 	call	VoiceSlot_ReadCurrentParams
@@ -12198,7 +12198,7 @@ SubCPU_ToneClearRegion_Skip:
 	cp	a, 130
 	jrl	z, SubCPU_ToneClearRegion_Skip2
 	call	VoiceSlot_FlagCheck
-	cpda8	xbc, (0x0d57)
+	cp	a, (0x0d57:16)
 	jrl	ugt, SubCPU_ToneClearRegion_Skip2
 	call	DMA_FlagCheckWithCalls
 	jp	SubCPU_ToneClearRegion_0x5E
@@ -12435,7 +12435,7 @@ PerfMode_ParamHandler_11_Skip12:
 	xor	wa, wa
 	ld	(3782:16), a
 	ld	(3780:16), wa
-	cpdm16	(0x117c), xwa
+	cp	(0x117c:16), wa
 	jrl	nz, PerfMode_ParamHandler_11_Return2
 	ld	wa, (3662:16)
 	ld	(4476:16), wa
@@ -12554,7 +12554,7 @@ PerfMode_ParamHandler_11_Skip18:
 	cp	a, 130
 	jrl	z, PerfMode_ParamHandler_11_Skip19
 	call	VoiceSlot_FlagCheck
-	cpda8	xbc, (0x0d57)
+	cp	a, (0x0d57:16)
 	jrl	nc, PerfMode_ParamHandler_11_Skip19
 	call	DMA_FlagCheckWithCalls
 	resda	2, (0x0d54)
@@ -12575,7 +12575,7 @@ PerfMode_ParamHandler_11_Skip20:
 	cp	a, 130
 	jrl	z, PerfMode_ParamHandler_11_Skip21
 	call	VoiceSlot_FlagCheck
-	cpda8	xbc, (0x0d57)
+	cp	a, (0x0d57:16)
 	jrl	nc, PerfMode_ParamHandler_11_Skip21
 	call	DMA_FlagCheckWithCalls
 	resda	2, (0x0d54)
@@ -12679,7 +12679,7 @@ PerfMode_ParamHandler_11_Loop2:
 	jrl	z, PerfMode_ParamHandler_11_Loop2
 	cp	l, 95
 	jrl	z, PerfMode_ParamHandler_11_Loop2
-	cpda8	xsp, (0x0f70)
+	cp	l, (0x0f70:16)
 	jrl	nz, PerfMode_ParamHandler_11_Loop3
 	and	a, 240
 	cp	a, 144
@@ -12969,7 +12969,7 @@ PerfMode_ParamHandler_11_Join:
 	cp	a, 144
 	jrl	nz, PerfMode_ParamHandler_11_Skip58
 	ld	a, (3766:16)
-	cpda8	xbc, (0x0f70)
+	cp	a, (0x0f70:16)
 	jrl	nz, PerfMode_ParamHandler_11_Skip58
 	inc	1, (4478:16)
 	ld	a, (3767:16)
@@ -17041,7 +17041,7 @@ Scoop_EventHandler_SpecialMode:
 	ld	xwa, (4349:16)
 	stda32	(0x267a), xwa
 	pop	xwa
-	cpda16	xde, (0x28ba)
+	cp	de, (0x28ba:16)
 	jr	nz, Scoop_EventHandler_SpecialMode_Skip14
 	ldw	iy, 256
 	sub iy, (10428:16)
@@ -19077,7 +19077,7 @@ Scoop_EventLoop_12Entry_Alt_End:
 	ld (xbc), xwa
 	lda_24 xwa, (\ParamB)
 	ld (xbc + 4), xwa
-	ldw_da xwa, (\ParamC)
+	ld wa, (\ParamC:24)	; was `ldw_da xwa, ...`: d2 nn nn nn 20 loads WA, not XWA
 	ld (xbc + 8), wa
 	lda_24 xwa, (\ParamD)
 	ld (xbc + 10), xwa

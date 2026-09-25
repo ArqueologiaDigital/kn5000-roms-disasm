@@ -13724,7 +13724,7 @@ PsMixer_CtlTypeProc6_Skip:
 	ld_rrl	xde, xwa, de
 	lda	xwa, (xsp+20)
 	ld	hl, (xsp+14)
-	cpda16_24	xhl, (0x024790)	; v10 does not spell this byte either
+	cp	hl, (0x024790:24)	; v10 does not spell this byte either
 	jr	nz, PsMixer_CtlTypeProc6_Skip2
 	ld	xhl, 3:i3
 	push	xhl

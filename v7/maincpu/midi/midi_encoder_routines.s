@@ -168,7 +168,7 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	; -> 0xFC65D3
 	jr	Encoder_ProcessBreath_Return
 Encoder_ProcessBreath_SimplePassthrough:
-	cpdm8	(0x8e4c), xbc
+	cp	(0x8e4c:16), a
 	ret	z
 	ld	(0x8e4c:16), a
 	ld	l, a

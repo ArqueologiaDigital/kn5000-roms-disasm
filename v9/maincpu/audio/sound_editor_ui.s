@@ -8260,9 +8260,9 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	ld	de, (xiz+2)
 	add	xiz, 4
 	ld	(1740:16), ix
-	adddm16	(0x6cc), xhl
+	add	(0x6cc:16), hl
 	ld	(1744:16), ix
-	adddm16	(0x6d0), xde
+	add	(0x6d0:16), de
 	stda16	(0x6ce), iy
 	adddi16	(0x6ce), 1
 	ld	(1746:16), iy

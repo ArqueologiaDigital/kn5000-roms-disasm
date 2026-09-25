@@ -35,6 +35,9 @@ EXACT COMMANDS (from the tree root):
     # all seventeen at once
     python3 scripts/converters/convert_direct_address_family.py --all --apply
 
+    # only the sites whose register name was the wrong size (UPDATE 17)
+    python3 scripts/converters/convert_direct_address_family.py --all --only-misnamed --apply
+
 Then, always:  make gate-all
 """
 import argparse, collections, csv, hashlib, os, re, shutil, subprocess, sys, tempfile
@@ -413,6 +416,11 @@ def main():
     ap.add_argument("--report", default=None,
                     help="CSV of every refused site")
     ap.add_argument("--chunk", type=int, default=4000)
+    ap.add_argument("--only-misnamed", action="store_true",
+                    help="write only the sites whose source named a register "
+                         "of the WRONG SIZE (`cpda8 xbc, ...` for cp A) -- the "
+                         "ones whose text was false, TOOLCHAIN_VERSION UPDATE "
+                         "17 -- and leave correct-but-synthetic spellings alone")
     ap.add_argument("--foil", choices=("width", "reg", "op"), default=None,
                     help="deliberately break the rewrite; every site must be "
                          "refused with BYTES-DIFFER (the verifier's control). "
@@ -508,6 +516,8 @@ def main():
                                 "BYTES-DIFFER old=%s new=%s" % (o, first)))
             continue
         j, c = hit
+        if args.only_misnamed and c[2] in ("as-written", "no-register"):
+            continue
         byrule[c[2]] += 1
         ok.append([s["f"], s["n"], s["mn"], s["old"], c[0]])
     shutil.rmtree(work, ignore_errors=True)

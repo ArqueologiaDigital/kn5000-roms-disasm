@@ -9841,7 +9841,7 @@ MidiPartCC_WriteAndDispatch_Skip2:
 	jr	z, MidiVoice_DataBlockHandler_Skip
 	bitda	4, (0xfd50)
 	jr	nz, MidiVoice_DataBlockHandler_Skip
-	orddm8	(0x90e4), xbc
+	or	(0x90e4:16), a
 	ordi8	(0x90e4), 192
 	ld	wa, (xiy)
 	stda16	(0x9127), wa

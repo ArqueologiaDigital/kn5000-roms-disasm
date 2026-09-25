@@ -1434,7 +1434,7 @@ FDC_CMD_EXEC_Loop:
 	jrl	FDC_CMD_EXEC_Epilogue
 FDC_CMD_EXEC_Skip3:
 	ldw_d16	wa, (0x89ac)
-	cpda16	xwa, (0x8a70)
+	cp	wa, (0x8a70:16)
 	jr	ule, FDC_CMD_EXEC_Entry3
 	stdi16	(0x89ac), 1
 FDC_CMD_EXEC_Entry3:
@@ -1460,7 +1460,7 @@ FDC_CMD_EXEC_Join2:
 	lda	xwa, (0x89ac:16)
 	incw	1, (xwa)
 	ld	wa, (xwa)
-	cpda16	xwa, (0x8a70)
+	cp	wa, (0x8a70:16)
 	jr	ugt, FDC_CMD_EXEC_Skip6
 	inc	1, iz
 	jr	FDC_CMD_EXEC_Join2
@@ -1535,7 +1535,7 @@ FDC_CMD_EXEC_Loop2:
 	jrl	FDC_CMD_EXEC_Epilogue2
 FDC_CMD_EXEC_Skip9:
 	ldw_d16	wa, (0x89ac)
-	cpda16	xwa, (0x8a70)
+	cp	wa, (0x8a70:16)
 	jr	ule, FDC_CMD_EXEC_Entry5
 	stdi16	(0x89ac), 1
 FDC_CMD_EXEC_Entry5:
@@ -1561,7 +1561,7 @@ FDC_CMD_EXEC_Join4:
 	lda	xwa, (0x89ac:16)
 	incw	1, (xwa)
 	ld	wa, (xwa)
-	cpda16	xwa, (0x8a70)
+	cp	wa, (0x8a70:16)
 	jr	ugt, FDC_CMD_EXEC_Skip12
 	inc	1, iz
 	jr	FDC_CMD_EXEC_Join4

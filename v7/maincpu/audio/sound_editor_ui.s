@@ -8222,9 +8222,9 @@ UpdSeSel_DetailedUpdate_Helper4_Helper:
 	ld DE,(XIZ+0x02)
 	add XIZ,0x00000004
 	ld (0x06cc:16), ix
-	adddm16	(0x6cc), xhl
+	add	(0x6cc:16), hl
 	stda16	(0x6d0), ix
-	adddm16	(0x6d0), xde
+	add	(0x6d0:16), de
 	stda16	(0x6ce), iy
 	adddi16	(0x6ce), 1
 	stda16	(0x6d2), iy

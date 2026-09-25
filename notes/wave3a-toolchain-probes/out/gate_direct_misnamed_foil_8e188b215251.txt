@@ -1,0 +1,11 @@
+# foil: v10 factory_test/test_init.s macro 'ld wa, (\ParamC:24)' -> 'ld xwa, (\ParamC:24)'
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     3 BYTES DIFFER
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+FAIL: 1 target(s) differ.

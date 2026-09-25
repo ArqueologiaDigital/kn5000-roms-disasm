@@ -27,7 +27,7 @@
 	ld (xsp + 0:8), xwa
 	lda_24 xwa, (\ParamB)
 	ld (xsp + 4), xwa
-	ldw_da xwa, (\ParamC)
+	ld wa, (\ParamC:24)	; was `ldw_da xwa, ...`: d2 nn nn nn 20 loads WA, not XWA
 	ld (xsp + 8), wa
 	lda_24 xwa, (\ParamD)
 	ld (xsp + 10), xwa

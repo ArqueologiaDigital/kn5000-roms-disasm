@@ -2537,7 +2537,7 @@ SLDstBankList_FuncBody_Skip29:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cpda8_24	xbc, (0xea0a14)
+	cp	a, (0xea0a14:24)
 	jr	nc, SLDstBankList_FuncBody_Skip31
 	ldb_da	e, (0xea0a12)
 	ld	a, e

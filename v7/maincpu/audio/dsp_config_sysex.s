@@ -5001,7 +5001,7 @@ AudioDispatch_CheckStereoMode_Code_Skip3:
 	call	AudioInit_RefreshToneBank
 AudioDispatch_CheckStereoMode_Code_Skip4:
 	anddi16	(0xc4fa), 0xffe8
-	orddm16	(0xc4fa), xiz
+	or	(0xc4fa:16), iz
 	ordi16	(0xc4f8), 4
 	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
@@ -5087,7 +5087,7 @@ AudioDispatch_CheckStereoMode_Code_Skip12:
 	ld_rrw	iz, xbc, wa
 AudioDispatch_CheckStereoMode_Code_Join5:
 	anddi16	(0xc4fa), 0xffe8
-	orddm16	(0xc4fa), xiz
+	or	(0xc4fa:16), iz
 	ordi16	(0xc4f8), 4
 	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
@@ -5152,7 +5152,7 @@ UIStateEvt_ParamEdit_Data_Epilogue:
 	anddi8	(0xc162), 252
 	ldb_d8	a, (0xbfe2)
 	and	a, 3
-	orddm8	(0xc162), xbc
+	or	(0xc162:16), a
 	ordi16	(0xc4f8), 4
 UIStateEvt_PartRouting_Code_Skip:
 	ldw_d16	wa, (0xc4f8)
@@ -5179,7 +5179,7 @@ AudioDispatch_CheckStereoMode_Code_Join6:
 	and	a, 2
 	ld	c, a
 	add	a, c
-	orddm8	(0xc162), xbc
+	or	(0xc162:16), a
 	ordi16	(0xc4f8), 4
 AudioDispatch_CheckStereoMode_Code_Skip15:
 	ldw_d16	wa, (0xc4f8)

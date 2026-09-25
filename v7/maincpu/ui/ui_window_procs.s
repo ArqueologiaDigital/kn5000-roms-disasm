@@ -470,7 +470,7 @@ WndEvt_EventCodeDispatch_Skip2:
 	call	ConvertStrings
 	ld	wa, (0x0274e2:24)
 	mul	wa, 3
-	addda16_24	xwa, (0x0274da)
+	add	wa, (0x0274da:24)
 	extz	xwa
 	add	xwa, xwa
 	lda	xde, (Data_SoundEditorCharsLayout_0xC:24)
