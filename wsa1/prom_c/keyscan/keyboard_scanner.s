@@ -342,7 +342,7 @@ NoteTrim_BuildFromCalibration__F9986B:
 	ld	bc, (xiz-7)                         ; F9986B  ld BC,(XIZ+0xf9)
 	exts	bc                                ; F9986E  exts BC
 	exts	xbc                               ; F99870  exts XBC
-	add	xbc, 0xFCC5C9                      ; F99872  add XBC,0x00fcc5c9
+	add	xbc, ToneGen_VelCurve_Trim51                      ; F99872  add XBC,0x00fcc5c9
 	ld	h, (xbc)                            ; F99878  ld H,(XBC)
 	ld	bc, (xiz-2)                         ; F9987A  ld BC,(XIZ+0xfe)
 	exts	xbc                               ; F9987D  exts XBC
@@ -412,7 +412,7 @@ KeyScan_InitKeyStateBitmap__F998A3:
 	ld	bc, (xiz-7)                         ; F998A3  ld BC,(XIZ+0xf9)
 	extz	bc                                ; F998A6  extz BC
 	extz	xbc                               ; F998A8  extz XBC
-	add	xbc, (0xFCC81A:24)             ; F998AA  add XBC,(0xfcc81a)
+	add	xbc, (fp_constant_pool_FCC81A:24)             ; F998AA  add XBC,(0xfcc81a)
 	ld	(xbc), 0                            ; F998AF  ld (XBC),0x00
 	jr KeyScan_InitKeyStateBitmap__F9989E                           ; F998B2  jr T,0xf9989e
 KeyScan_InitKeyStateBitmap__F998B4:
@@ -451,7 +451,7 @@ KeyScan_InitKeyStateBitmap__F998C6:
 	ld	bc, (xiz-3)                         ; F99909  ld BC,(XIZ+0xfd)
 	extz	bc                                ; F9990C  extz BC
 	extz	xbc                               ; F9990E  extz XBC
-	add	xbc, (0xFCC81A:24)             ; F99910  add XBC,(0xfcc81a)
+	add	xbc, (fp_constant_pool_FCC81A:24)             ; F99910  add XBC,(0xfcc81a)
 	or	(xbc), a                            ; F99915  or (XBC),A
 	jr KeyScan_InitKeyStateBitmap__F99937                           ; F99917  jr T,0xf99937
 KeyScan_InitKeyStateBitmap__F99919:
@@ -464,7 +464,7 @@ KeyScan_InitKeyStateBitmap__F99919:
 	ld	bc, (xiz-3)                         ; F99929  ld BC,(XIZ+0xfd)
 	extz	bc                                ; F9992C  extz BC
 	extz	xbc                               ; F9992E  extz XBC
-	add	xbc, (0xFCC81A:24)             ; F99930  add XBC,(0xfcc81a)
+	add	xbc, (fp_constant_pool_FCC81A:24)             ; F99930  add XBC,(0xfcc81a)
 	and	(xbc), a                           ; F99935  and (XBC),A
 KeyScan_InitKeyStateBitmap__F99937:
 	jr KeyScan_InitKeyStateBitmap__F998C1                           ; F99937  jr T,0xf998c1

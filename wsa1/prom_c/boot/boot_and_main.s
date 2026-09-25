@@ -112,9 +112,9 @@
 ; 0xFA3365 is inside P7Units_BootLoadAndStartTask.
 ; ----------------------------------------------------------------------------
 EntryPoint_Records:
-	.long	0x00F98B7D, 0x0000FFF0, 0x00028800	; MAIN
-	.long	0x00FA54DB, 0x0000F980, 0x00028800	; P7Units_ServiceTask__FA54DB
-	.long	0x00F98118, 0x0000F480, 0x00018800	; DSP_ChannelRefresh_Loop
+	.long	MAIN, 0x0000FFF0, 0x00028800	; MAIN
+	.long	P7Units_ServiceTask__FA54DB, 0x0000F980, 0x00028800	; P7Units_ServiceTask__FA54DB
+	.long	DSP_ChannelRefresh_Loop, 0x0000F480, 0x00018800	; DSP_ChannelRefresh_Loop
 
 ; ==============================================================================
 ; 0xF9810E-0xF98111 -- the SEMAPHORE COUNT image
@@ -373,7 +373,7 @@ INTT3_KernelTick:
 ;          leaves it open.
 ; --------------------------------------------------------------------------
 RamImage_Copy:
-	lda	xiy, (0x00FCB4EA:24)
+	lda	xiy, (BootRamImage_Head:24)
 	lda	xix, (0x00E2DF:24)
 	ld	xbc, 0x000010D8
 	extpfx2	0x85, 0x11
@@ -826,7 +826,7 @@ MAIN:
 	call	0xF98000
 	call	NoteTrim_BuildFromCalibration
 	calr	ADC_Init
-	ld	bc, (0x00FFFFEF:24)
+	ld	bc, (CLOCK_CONFIG_MHZ:24)
 	extz	bc
 	pushw	bc
 	calr	Timer1_SetPeriodAndStart

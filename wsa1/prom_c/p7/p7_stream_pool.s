@@ -8071,228 +8071,228 @@ P7Stream_FDBE94:
 ; ------------------------------------------------------------------------------
 PoolDir_Records:
 	; record  0  0xFDBFD9
-	.long	0x00fd2724, 0x00fd2740, 0x00fd27a7, 0x00fd27d5   ; four stream pointers
-	.long	0x00fccf71, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD2724, P7Stream_FD2740, P7Stream_FD27A7, P7Stream_FD27D5   ; four stream pointers
+	.long	DescriptorStrings, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x03
 	; record  1  0xFDBFF2
-	.long	0x00fd4baf, 0x00fd4bcb, 0x00fd4c8f, 0x00fd4cbd   ; four stream pointers
-	.long	0x00fccf71, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD4BAF, P7Stream_FD4BCB, P7Stream_FD4C8F, P7Stream_FD4CBD   ; four stream pointers
+	.long	DescriptorStrings, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x03
 	; record  2  0xFDC00B
-	.long	0x00fd39d1, 0x00fd39ed, 0x00fd3a54, 0x00fd3a82   ; four stream pointers
-	.long	0x00fccf71, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD39D1, P7Stream_FD39ED, P7Stream_FD3A54, P7Stream_FD3A82   ; four stream pointers
+	.long	DescriptorStrings, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x03
 	; record  3  0xFDC024
-	.long	0x00fd343b, 0x00fd345e, 0x00fd3532, 0x00fd357d   ; four stream pointers
-	.long	0x00fccf7d, 0x00fccf85   ; DescriptorStrings pair
+	.long	P7Stream_FD343B, P7Stream_FD345E, P7Stream_FD3532, P7Stream_FD357D   ; four stream pointers
+	.long	DescStr_bbbwbvb, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x06
 	; record  4  0xFDC03D
-	.long	0x00fd71f3, 0x00fd7208, 0x00fd749a, 0x00fd74de   ; four stream pointers
-	.long	0x00fccf8d, 0x00fccf85   ; DescriptorStrings pair
+	.long	P7Stream_FD71F3, P7Stream_FD7208, P7Stream_FD749A, P7Stream_FD74DE   ; four stream pointers
+	.long	DescStr_wwwwwwv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x0c
 	; record  5  0xFDC056
-	.long	0x00fcf176, 0x00fcf18e, 0x00fcf35d, 0x00fcf396   ; four stream pointers
-	.long	0x00fccf95, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FCF176, P7Stream_FCF18E, P7Stream_FCF35D, P7Stream_FCF396   ; four stream pointers
+	.long	DescStr_bbbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record  6  0xFDC06F
-	.long	0x00fcf50f, 0x00fcf529, 0x00fcf646, 0x00fcf690   ; four stream pointers
-	.long	0x00fccf9b, 0x00fccf85   ; DescriptorStrings pair
+	.long	P7Stream_FCF50F, P7Stream_FCF529, P7Stream_FCF646, P7Stream_FCF690   ; four stream pointers
+	.long	DescStr_bbbbbbv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x06
 	; record  7  0xFDC088
-	.long	0x00fd2c3f, 0x00fd2c69, 0x00fd2ddc, 0x00fd2e28   ; four stream pointers
-	.long	0x00fccfa3, 0x00fccf85   ; DescriptorStrings pair
+	.long	P7Stream_FD2C3F, P7Stream_FD2C69, P7Stream_FD2DDC, P7Stream_FD2E28   ; four stream pointers
+	.long	DescStr_bbbbwwv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x08
 	; record  8  0xFDC0A1
-	.long	0x00fd36dd, 0x00fd3707, 0x00fd37f3, 0x00fd3862   ; four stream pointers
-	.long	0x00fccfab, 0x00fccfb4   ; DescriptorStrings pair
+	.long	P7Stream_FD36DD, P7Stream_FD3707, P7Stream_FD37F3, P7Stream_FD3862   ; four stream pointers
+	.long	DescStr_bbbbbbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x07
 	; record  9  0xFDC0BA
-	.long	0x00fd773d, 0x00fd7764, 0x00fd78a0, 0x00fd790f   ; four stream pointers
-	.long	0x00fccfab, 0x00fccfb4   ; DescriptorStrings pair
+	.long	P7Stream_FD773D, P7Stream_FD7764, P7Stream_FD78A0, P7Stream_FD790F   ; four stream pointers
+	.long	DescStr_bbbbbbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x07
 	; record 10  0xFDC0D3
-	.long	0x00fcdbbc, 0x00fcdbda, 0x00fcdc62, 0x00fcdcab   ; four stream pointers
-	.long	0x00fccfbd, 0x00fccfc4   ; DescriptorStrings pair
+	.long	P7Stream_FCDBBC, P7Stream_FCDBDA, P7Stream_FCDC62, P7Stream_FCDCAB   ; four stream pointers
+	.long	DescStr_bbbbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x05
 	; record 11  0xFDC0EC
-	.long	0x00fda62e, 0x00fda64c, 0x00fda711, 0x00fda75a   ; four stream pointers
-	.long	0x00fccfbd, 0x00fccfc4   ; DescriptorStrings pair
+	.long	P7Stream_FDA62E, P7Stream_FDA64C, P7Stream_FDA711, P7Stream_FDA75A   ; four stream pointers
+	.long	DescStr_bbbbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x05
 	; record 12  0xFDC105
-	.long	0x00fda88d, 0x00fda8ad, 0x00fda993, 0x00fdaa12   ; four stream pointers
-	.long	0x00fccfcb, 0x00fccfc4   ; DescriptorStrings pair
+	.long	P7Stream_FDA88D, P7Stream_FDA8AD, P7Stream_FDA993, P7Stream_FDAA12   ; four stream pointers
+	.long	DescStr_bsssbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x05
 	; record 13  0xFDC11E
-	.long	0x00fcddc0, 0x00fcdde0, 0x00fcdec6, 0x00fcdf3a   ; four stream pointers
-	.long	0x00fccfd2, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FCDDC0, P7Stream_FCDDE0, P7Stream_FCDEC6, P7Stream_FCDF3A   ; four stream pointers
+	.long	DescStr_bsssv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 14  0xFDC137
-	.long	0x00fd9c3f, 0x00fd9c68, 0x00fd9e31, 0x00fd9e87   ; four stream pointers
-	.long	0x00fccfd8, 0x00fccfe4   ; DescriptorStrings pair
+	.long	P7Stream_FD9C3F, P7Stream_FD9C68, P7Stream_FD9E31, P7Stream_FD9E87   ; four stream pointers
+	.long	DescStr_bbbbbbbbbvb, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0d
 	; record 15  0xFDC150
-	.long	0x00fd8d82, 0x00fd8da7, 0x00fd8e3f, 0x00fd8e75   ; four stream pointers
-	.long	0x00fccf95, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD8D82, P7Stream_FD8DA7, P7Stream_FD8E3F, P7Stream_FD8E75   ; four stream pointers
+	.long	DescStr_bbbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 16  0xFDC169
-	.long	0x00fd4a10, 0x00fd4a16, 0x00fd4a7f, 0x00fd4a87   ; four stream pointers
-	.long	0x00fccff0, 0x00fccff2   ; DescriptorStrings pair
+	.long	P7Stream_FD4A10, P7Stream_FD4A16, P7Stream_FD4A7F, P7Stream_FD4A87   ; four stream pointers
+	.long	DescStr_v, DescStr_0   ; DescriptorStrings pair
 	.byte	0x00
 	; record 17  0xFDC182
-	.long	0x00fda078, 0x00fda08e, 0x00fda128, 0x00fda164   ; four stream pointers
-	.long	0x00fccf95, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FDA078, P7Stream_FDA08E, P7Stream_FDA128, P7Stream_FDA164   ; four stream pointers
+	.long	DescStr_bbbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 18  0xFDC19B
-	.long	0x00fd3bc4, 0x00fd3be7, 0x00fd3d4c, 0x00fd3d86   ; four stream pointers
-	.long	0x00fccff4, 0x00fccfc4   ; DescriptorStrings pair
+	.long	P7Stream_FD3BC4, P7Stream_FD3BE7, P7Stream_FD3D4C, P7Stream_FD3D86   ; four stream pointers
+	.long	DescStr_bbhbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x05
 	; record 19  0xFDC1B4
-	.long	0x00fd3ef0, 0x00fd3f05, 0x00fd3fa8, 0x00fd3fdd   ; four stream pointers
-	.long	0x00fccffb, 0x00fccfc4   ; DescriptorStrings pair
+	.long	P7Stream_FD3EF0, P7Stream_FD3F05, P7Stream_FD3FA8, P7Stream_FD3FDD   ; four stream pointers
+	.long	DescStr_bwwbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x07
 	; record 20  0xFDC1CD
-	.long	0x00fd302d, 0x00fd304e, 0x00fd3170, 0x00fd31dc   ; four stream pointers
-	.long	0x00fccf95, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD302D, P7Stream_FD304E, P7Stream_FD3170, P7Stream_FD31DC   ; four stream pointers
+	.long	DescStr_bbbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 21  0xFDC1E6
-	.long	0x00fcf886, 0x00fcf89b, 0x00fcf934, 0x00fcf960   ; four stream pointers
-	.long	0x00fcd002, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FCF886, P7Stream_FCF89B, P7Stream_FCF934, P7Stream_FCF960   ; four stream pointers
+	.long	DescStr_bcbbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x05
 	; record 22  0xFDC1FF
-	.long	0x00fd448d, 0x00fd44ad, 0x00fd457e, 0x00fd45d0   ; four stream pointers
-	.long	0x00fccfab, 0x00fccfb4   ; DescriptorStrings pair
+	.long	P7Stream_FD448D, P7Stream_FD44AD, P7Stream_FD457E, P7Stream_FD45D0   ; four stream pointers
+	.long	DescStr_bbbbbbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x07
 	; record 23  0xFDC218
-	.long	0x00fda265, 0x00fda28a, 0x00fda377, 0x00fda3c8   ; four stream pointers
-	.long	0x00fcd008, 0x00fccf85   ; DescriptorStrings pair
+	.long	P7Stream_FDA265, P7Stream_FDA28A, P7Stream_FDA377, P7Stream_FDA3C8   ; four stream pointers
+	.long	DescStr_bwwbbbv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x08
 	; record 24  0xFDC231
-	.long	0x00fd418a, 0x00fd41b0, 0x00fd4299, 0x00fd4314   ; four stream pointers
-	.long	0x00fcd010, 0x00fcd01d   ; DescriptorStrings pair
+	.long	P7Stream_FD418A, P7Stream_FD41B0, P7Stream_FD4299, P7Stream_FD4314   ; four stream pointers
+	.long	DescStr_bwwwwbbbbbbv, DescStr_0123456789ab   ; DescriptorStrings pair
 	.byte	0x0f
 	; record 25  0xFDC24A
-	.long	0x00fd473a, 0x00fd4763, 0x00fd487b, 0x00fd48ce   ; four stream pointers
-	.long	0x00fcd02a, 0x00fccfb4   ; DescriptorStrings pair
+	.long	P7Stream_FD473A, P7Stream_FD4763, P7Stream_FD487B, P7Stream_FD48CE   ; four stream pointers
+	.long	DescStr_bbwwBBbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x09
 	; record 26  0xFDC263
-	.long	0x00fd93b3, 0x00fd93e5, 0x00fd95f1, 0x00fd9626   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD93B3, P7Stream_FD93E5, P7Stream_FD95F1, P7Stream_FD9626   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 27  0xFDC27C
-	.long	0x00fd97f9, 0x00fd982b, 0x00fd9a37, 0x00fd9a6c   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD97F9, P7Stream_FD982B, P7Stream_FD9A37, P7Stream_FD9A6C   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 28  0xFDC295
-	.long	0x00fd7f90, 0x00fd7fc1, 0x00fd81c8, 0x00fd81fd   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD7F90, P7Stream_FD7FC1, P7Stream_FD81C8, P7Stream_FD81FD   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 29  0xFDC2AE
-	.long	0x00fd83cb, 0x00fd83fc, 0x00fd8603, 0x00fd8638   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD83CB, P7Stream_FD83FC, P7Stream_FD8603, P7Stream_FD8638   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 30  0xFDC2C7
-	.long	0x00fcfe79, 0x00fcfeaa, 0x00fd00b2, 0x00fd00e7   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FCFE79, P7Stream_FCFEAA, P7Stream_FD00B2, P7Stream_FD00E7   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 31  0xFDC2E0
-	.long	0x00fd02b5, 0x00fd02e6, 0x00fd04f2, 0x00fd0527   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD02B5, P7Stream_FD02E6, P7Stream_FD04F2, P7Stream_FD0527   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 32  0xFDC2F9
-	.long	0x00fd1e3e, 0x00fd1e70, 0x00fd2078, 0x00fd20ad   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD1E3E, P7Stream_FD1E70, P7Stream_FD2078, P7Stream_FD20AD   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 33  0xFDC312
-	.long	0x00fd227b, 0x00fd22ad, 0x00fd24b5, 0x00fd24ea   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FD227B, P7Stream_FD22AD, P7Stream_FD24B5, P7Stream_FD24EA   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 34  0xFDC32B
-	.long	0x00fce8fc, 0x00fce92e, 0x00fceb36, 0x00fceb6b   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FCE8FC, P7Stream_FCE92E, P7Stream_FCEB36, P7Stream_FCEB6B   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 35  0xFDC344
-	.long	0x00fced39, 0x00fced6b, 0x00fcef73, 0x00fcefa8   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FCED39, P7Stream_FCED6B, P7Stream_FCEF73, P7Stream_FCEFA8   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 36  0xFDC35D
-	.long	0x00fdb3e2, 0x00fdb413, 0x00fdb61b, 0x00fdb650   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FDB3E2, P7Stream_FDB413, P7Stream_FDB61B, P7Stream_FDB650   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 37  0xFDC376
-	.long	0x00fdb81e, 0x00fdb84f, 0x00fdba57, 0x00fdba8c   ; four stream pointers
-	.long	0x00fcd033, 0x00fccf77   ; DescriptorStrings pair
+	.long	P7Stream_FDB81E, P7Stream_FDB84F, P7Stream_FDBA57, P7Stream_FDBA8C   ; four stream pointers
+	.long	DescStr_bbhbv, DescStr_01234   ; DescriptorStrings pair
 	.byte	0x04
 	; record 38  0xFDC38F
-	.long	0x00fd075e, 0x00fd0784, 0x00fd08cd, 0x00fd093f   ; four stream pointers
-	.long	0x00fcd039, 0x00fcd044   ; DescriptorStrings pair
+	.long	P7Stream_FD075E, P7Stream_FD0784, P7Stream_FD08CD, P7Stream_FD093F   ; four stream pointers
+	.long	DescStr_bwwbbbbbbv, DescStr_0123456789   ; DescriptorStrings pair
 	.byte	0x0b
 	; record 39  0xFDC3A8
-	.long	0x00fd0b58, 0x00fd0b7e, 0x00fd0c4b, 0x00fd0cc5   ; four stream pointers
-	.long	0x00fcd04f, 0x00fccfe4   ; DescriptorStrings pair
+	.long	P7Stream_FD0B58, P7Stream_FD0B7E, P7Stream_FD0C4B, P7Stream_FD0CC5   ; four stream pointers
+	.long	DescStr_bwwbbbwwbbv, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0e
 	; record 40  0xFDC3C1
-	.long	0x00fd0e34, 0x00fd0e69, 0x00fd0f98, 0x00fd1040   ; four stream pointers
-	.long	0x00fcd05b, 0x00fcd069   ; DescriptorStrings pair
+	.long	P7Stream_FD0E34, P7Stream_FD0E69, P7Stream_FD0F98, P7Stream_FD1040   ; four stream pointers
+	.long	DescStr_bwwbbbbbbbbbv, DescStr_0123456789abc   ; DescriptorStrings pair
 	.byte	0x0e
 	; record 41  0xFDC3DA
-	.long	0x00fd168c, 0x00fd16b8, 0x00fd17c0, 0x00fd1842   ; four stream pointers
-	.long	0x00fcd077, 0x00fccfe4   ; DescriptorStrings pair
+	.long	P7Stream_FD168C, P7Stream_FD16B8, P7Stream_FD17C0, P7Stream_FD1842   ; four stream pointers
+	.long	DescStr_bwwbbbbbbbv, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0c
 	; record 42  0xFDC3F3
-	.long	0x00fd1227, 0x00fd1259, 0x00fd1399, 0x00fd1441   ; four stream pointers
-	.long	0x00fcd05b, 0x00fcd069   ; DescriptorStrings pair
+	.long	P7Stream_FD1227, P7Stream_FD1259, P7Stream_FD1399, P7Stream_FD1441   ; four stream pointers
+	.long	DescStr_bwwbbbbbbbbbv, DescStr_0123456789abc   ; DescriptorStrings pair
 	.byte	0x0e
 	; record 43  0xFDC40C
-	.long	0x00fce0b8, 0x00fce0df, 0x00fce208, 0x00fce2b5   ; four stream pointers
-	.long	0x00fcd083, 0x00fcd044   ; DescriptorStrings pair
+	.long	P7Stream_FCE0B8, P7Stream_FCE0DF, P7Stream_FCE208, P7Stream_FCE2B5   ; four stream pointers
+	.long	DescStr_bbbbbwwbbv, DescStr_0123456789   ; DescriptorStrings pair
 	.byte	0x0b
 	; record 44  0xFDC425
-	.long	0x00fd4e77, 0x00fd4e96, 0x00fd5066, 0x00fd50b3   ; four stream pointers
-	.long	0x00fcd08e, 0x00fccf85   ; DescriptorStrings pair
+	.long	P7Stream_FD4E77, P7Stream_FD4E96, P7Stream_FD5066, P7Stream_FD50B3   ; four stream pointers
+	.long	DescStr_wwbbbbv, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x08
 	; record 45  0xFDC43E
-	.long	0x00fd5daa, 0x00fd5dcf, 0x00fd5f1b, 0x00fd5f70   ; four stream pointers
-	.long	0x00fcd096, 0x00fccfb4   ; DescriptorStrings pair
+	.long	P7Stream_FD5DAA, P7Stream_FD5DCF, P7Stream_FD5F1B, P7Stream_FD5F70   ; four stream pointers
+	.long	DescStr_wwbwwbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x0b
 	; record 46  0xFDC457
-	.long	0x00fd6502, 0x00fd6533, 0x00fd66e9, 0x00fd676c   ; four stream pointers
-	.long	0x00fcd09f, 0x00fcd044   ; DescriptorStrings pair
+	.long	P7Stream_FD6502, P7Stream_FD6533, P7Stream_FD66E9, P7Stream_FD676C   ; four stream pointers
+	.long	DescStr_wwbbbbbbbv, DescStr_0123456789   ; DescriptorStrings pair
 	.byte	0x0b
 	; record 47  0xFDC470
-	.long	0x00fd6e21, 0x00fd6e46, 0x00fd6fc8, 0x00fd7025   ; four stream pointers
-	.long	0x00fcd0aa, 0x00fccfb4   ; DescriptorStrings pair
+	.long	P7Stream_FD6E21, P7Stream_FD6E46, P7Stream_FD6FC8, P7Stream_FD7025   ; four stream pointers
+	.long	DescStr_wwbbbbbv, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x09
 	; record 48  0xFDC489
-	.long	0x00fd52db, 0x00fd52f9, 0x00fd5451, 0x00fd547e   ; four stream pointers
-	.long	0x00fcd0b3, 0x00fccfc4   ; DescriptorStrings pair
+	.long	P7Stream_FD52DB, P7Stream_FD52F9, P7Stream_FD5451, P7Stream_FD547E   ; four stream pointers
+	.long	DescStr_wwcbbv, DescStr_012345   ; DescriptorStrings pair
 	.byte	0x08
 	; record 49  0xFDC4A2
-	.long	0x00fd55f2, 0x00fd561a, 0x00fd578a, 0x00fd57ca   ; four stream pointers
-	.long	0x00fcd0ba, 0x00fcd0c4   ; DescriptorStrings pair
+	.long	P7Stream_FD55F2, P7Stream_FD561A, P7Stream_FD578A, P7Stream_FD57CA   ; four stream pointers
+	.long	DescStr_wwcbbbbbv, DescStr_012345678   ; DescriptorStrings pair
 	.byte	0x0a
 	; record 50  0xFDC4BB
-	.long	0x00fd59d9, 0x00fd59ff, 0x00fd5b74, 0x00fd5baa   ; four stream pointers
-	.long	0x00fcd0ce, 0x00fccfb4   ; DescriptorStrings pair
+	.long	P7Stream_FD59D9, P7Stream_FD59FF, P7Stream_FD5B74, P7Stream_FD5BAA   ; four stream pointers
+	.long	DescStr_wcbbbbvb, DescStr_01234567   ; DescriptorStrings pair
 	.byte	0x08
 	; record 51  0xFDC4D4
-	.long	0x00fd60df, 0x00fd6110, 0x00fd627c, 0x00fd62e4   ; four stream pointers
-	.long	0x00fcd0d7, 0x00fccfe4   ; DescriptorStrings pair
+	.long	P7Stream_FD60DF, P7Stream_FD6110, P7Stream_FD627C, P7Stream_FD62E4   ; four stream pointers
+	.long	DescStr_wwbbbwwbbvb, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0d
 	; record 52  0xFDC4ED
-	.long	0x00fd6976, 0x00fd69a3, 0x00fd6b69, 0x00fd6bd1   ; four stream pointers
-	.long	0x00fcd0d7, 0x00fccfe4   ; DescriptorStrings pair
+	.long	P7Stream_FD6976, P7Stream_FD69A3, P7Stream_FD6B69, P7Stream_FD6BD1   ; four stream pointers
+	.long	DescStr_wwbbbwwbbvb, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0d
 	; record 53  0xFDC506
-	.long	0x00fd4af7, 0x00fd4afd, 0x00fd4b44, 0x00fd4b4c   ; four stream pointers
-	.long	0x00fccff0, 0x00fccff2   ; DescriptorStrings pair
+	.long	P7Stream_FD4AF7, P7Stream_FD4AFD, P7Stream_FD4B44, P7Stream_FD4B4C   ; four stream pointers
+	.long	DescStr_v, DescStr_0   ; DescriptorStrings pair
 	.byte	0x00
 	; record 54  0xFDC51F
-	.long	0x00fd8806, 0x00fd8827, 0x00fd8a40, 0x00fd8a8a   ; four stream pointers
-	.long	0x00fcd0e3, 0x00fccf85   ; DescriptorStrings pair
+	.long	P7Stream_FD8806, P7Stream_FD8827, P7Stream_FD8A40, P7Stream_FD8A8A   ; four stream pointers
+	.long	DescStr_bBBbBvb, DescStr_0123456   ; DescriptorStrings pair
 	.byte	0x05
 	; record 55  0xFDC538
-	.long	0x00fdab90, 0x00fdabbb, 0x00fdace4, 0x00fdad9c   ; four stream pointers
-	.long	0x00fcd0eb, 0x00fccfe4   ; DescriptorStrings pair
+	.long	P7Stream_FDAB90, P7Stream_FDABBB, P7Stream_FDACE4, P7Stream_FDAD9C   ; four stream pointers
+	.long	DescStr_bbbbbbwwbbv, DescStr_0123456789a   ; DescriptorStrings pair
 	.byte	0x0c
 
 ; ------------------------------------------------------------------------------
@@ -8978,59 +8978,59 @@ PoolDir_FieldRec_FDD169:
 ; PoolDir_Records[k].
 ; ------------------------------------------------------------------------------
 PoolDir_FieldRec_PtrTable:
-	.long	0x00fdc5d1   ; slot  0
-	.long	0x00fdc5ed   ; slot  1
-	.long	0x00fdc609   ; slot  2
-	.long	0x00fdc625   ; slot  3
-	.long	0x00fdc64f   ; slot  4
-	.long	0x00fdc6d4   ; slot  5
-	.long	0x00fdc6f7   ; slot  6
-	.long	0x00fdc728   ; slot  7
-	.long	0x00fdc759   ; slot  8
-	.long	0x00fdc791   ; slot  9
-	.long	0x00fdc7c9   ; slot 10
-	.long	0x00fdc824   ; slot 11
-	.long	0x00fdc855   ; slot 12
-	.long	0x00fdc87f   ; slot 13
-	.long	0x00fdc8a2   ; slot 14
-	.long	0x00fdc912   ; slot 15
-	.long	0x00fdc935   ; slot 16
-	.long	0x00fdc93c   ; slot 17
-	.long	0x00fdc95f   ; slot 18
-	.long	0x00fdc989   ; slot 19
-	.long	0x00fdc9b3   ; slot 20
-	.long	0x00fdc9d6   ; slot 21
-	.long	0x00fdca00   ; slot 22
-	.long	0x00fdca38   ; slot 23
-	.long	0x00fdca69   ; slot 24
-	.long	0x00fdcabd   ; slot 25
-	.long	0x00fdcaf5   ; slot 26
-	.long	0x00fdcb18   ; slot 27
-	.long	0x00fdcb3b   ; slot 28
-	.long	0x00fdcb5e   ; slot 29
-	.long	0x00fdcb81   ; slot 30
-	.long	0x00fdcba4   ; slot 31
-	.long	0x00fdcbc7   ; slot 32
-	.long	0x00fdcbea   ; slot 33
-	.long	0x00fdcc0d   ; slot 34
-	.long	0x00fdcc30   ; slot 35
-	.long	0x00fdcc53   ; slot 36
-	.long	0x00fdcc76   ; slot 37
-	.long	0x00fdcc99   ; slot 38
-	.long	0x00fdccdf   ; slot 39
-	.long	0x00fdcd2c   ; slot 40
-	.long	0x00fdcd87   ; slot 41
-	.long	0x00fdcdd4   ; slot 42
-	.long	0x00fdce7c   ; slot 43
-	.long	0x00fdcec2   ; slot 44
-	.long	0x00fdcf0f   ; slot 45
-	.long	0x00fdcf63   ; slot 46
-	.long	0x00fdcfc5   ; slot 47
-	.long	0x00fdd019   ; slot 48
-	.long	0x00fdd066   ; slot 49
-	.long	0x00fdd0c1   ; slot 50
-	.long	0x00fdd107   ; slot 51
-	.long	0x00fdd169   ; slot 52
-	.long	0x00fdc84e   ; slot 53
-	.long	0x00fdc7f3   ; slot 54
-	.long	0x00fdce2f   ; slot 55
+	.long	PoolDir_FieldRecords   ; slot  0
+	.long	PoolDir_FieldRec_FDC5ED   ; slot  1
+	.long	PoolDir_FieldRec_FDC609   ; slot  2
+	.long	PoolDir_FieldRec_FDC625   ; slot  3
+	.long	PoolDir_FieldRec_FDC64F   ; slot  4
+	.long	PoolDir_FieldRec_FDC6D4   ; slot  5
+	.long	PoolDir_FieldRec_FDC6F7   ; slot  6
+	.long	PoolDir_FieldRec_FDC728   ; slot  7
+	.long	PoolDir_FieldRec_FDC759   ; slot  8
+	.long	PoolDir_FieldRec_FDC791   ; slot  9
+	.long	PoolDir_FieldRec_FDC7C9   ; slot 10
+	.long	PoolDir_FieldRec_FDC824   ; slot 11
+	.long	PoolDir_FieldRec_FDC855   ; slot 12
+	.long	PoolDir_FieldRec_FDC87F   ; slot 13
+	.long	PoolDir_FieldRec_FDC8A2   ; slot 14
+	.long	PoolDir_FieldRec_FDC912   ; slot 15
+	.long	PoolDir_FieldRec_FDC935   ; slot 16
+	.long	PoolDir_FieldRec_FDC93C   ; slot 17
+	.long	PoolDir_FieldRec_FDC95F   ; slot 18
+	.long	PoolDir_FieldRec_FDC989   ; slot 19
+	.long	PoolDir_FieldRec_FDC9B3   ; slot 20
+	.long	PoolDir_FieldRec_FDC9D6   ; slot 21
+	.long	PoolDir_FieldRec_FDCA00   ; slot 22
+	.long	PoolDir_FieldRec_FDCA38   ; slot 23
+	.long	PoolDir_FieldRec_FDCA69   ; slot 24
+	.long	PoolDir_FieldRec_FDCABD   ; slot 25
+	.long	PoolDir_FieldRec_FDCAF5   ; slot 26
+	.long	PoolDir_FieldRec_FDCB18   ; slot 27
+	.long	PoolDir_FieldRec_FDCB3B   ; slot 28
+	.long	PoolDir_FieldRec_FDCB5E   ; slot 29
+	.long	PoolDir_FieldRec_FDCB81   ; slot 30
+	.long	PoolDir_FieldRec_FDCBA4   ; slot 31
+	.long	PoolDir_FieldRec_FDCBC7   ; slot 32
+	.long	PoolDir_FieldRec_FDCBEA   ; slot 33
+	.long	PoolDir_FieldRec_FDCC0D   ; slot 34
+	.long	PoolDir_FieldRec_FDCC30   ; slot 35
+	.long	PoolDir_FieldRec_FDCC53   ; slot 36
+	.long	PoolDir_FieldRec_FDCC76   ; slot 37
+	.long	PoolDir_FieldRec_FDCC99   ; slot 38
+	.long	PoolDir_FieldRec_FDCCDF   ; slot 39
+	.long	PoolDir_FieldRec_FDCD2C   ; slot 40
+	.long	PoolDir_FieldRec_FDCD87   ; slot 41
+	.long	PoolDir_FieldRec_FDCDD4   ; slot 42
+	.long	PoolDir_FieldRec_FDCE7C   ; slot 43
+	.long	PoolDir_FieldRec_FDCEC2   ; slot 44
+	.long	PoolDir_FieldRec_FDCF0F   ; slot 45
+	.long	PoolDir_FieldRec_FDCF63   ; slot 46
+	.long	PoolDir_FieldRec_FDCFC5   ; slot 47
+	.long	PoolDir_FieldRec_FDD019   ; slot 48
+	.long	PoolDir_FieldRec_FDD066   ; slot 49
+	.long	PoolDir_FieldRec_FDD0C1   ; slot 50
+	.long	PoolDir_FieldRec_FDD107   ; slot 51
+	.long	PoolDir_FieldRec_FDD169   ; slot 52
+	.long	PoolDir_FieldRec_FDC84E   ; slot 53
+	.long	PoolDir_FieldRec_FDC7F3   ; slot 54
+	.long	PoolDir_FieldRec_FDCE2F   ; slot 55

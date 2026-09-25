@@ -63,8 +63,8 @@
 ;          inside INTTC3_HANDLER__state1_generic, which jumps through it.
 ; ----------------------------------------------------------------------------
 Link_ClassHandlerTable:
-	.long	0x00f98d9a, 0x00f98de6, 0x00f98fd6, 0x00f9901b
-	.long	0x00f9993d, 0x00f9993d, 0x00f9993d, 0x00f9993d
+	.long	Link_Ch0_AppendToRing, Link_Ch1_WriteParamBlock, Link_Ch2_ForwardBytes, Link_Ch3_SetTouchControl
+	.long	Link_ChannelHandler_Ignore, Link_ChannelHandler_Ignore, Link_ChannelHandler_Ignore, Link_ChannelHandler_Ignore
 
 ; ----------------------------------------------------------------------------
 ; P7Module_RamStateImage -- 0xFCC55F..0xFCC575  (23 bytes)
@@ -149,17 +149,17 @@ P7Module_RamStateImage:
 ; ----------------------------------------------------------------------------
 P7Unit_StreamPtrsByGroupAndUnit:
 	; group 0
-	.long	0x00fcd22d, 0x00fcd22d, 0x00fcd40f
+	.long	P7Stream_FCD22D, P7Stream_FCD22D, P7Stream_FCD40F
 	; group 1
-	.long	0x00fcd97d, 0x00fcd97d, 0x00fcd40f
+	.long	P7Stream_FCD97D, P7Stream_FCD97D, P7Stream_FCD40F
 	; group 2
-	.long	0x00fcd0fe, 0x00fcd0fe, 0x00fcd0f7
+	.long	P7Stream_FCD0FE, P7Stream_FCD0FE, P7Stream_FCD0F7
 	; group 3
-	.long	0x00fcd105, 0x00fcd105, 0x00fcd0f7
+	.long	P7Stream_FCD105, P7Stream_FCD105, P7Stream_FCD0F7
 	; group 4
-	.long	0x00fcd119, 0x00fcd119, 0x00fcd10c
+	.long	P7Stream_FCD119, P7Stream_FCD119, P7Stream_FCD10C
 	; group 5
-	.long	0x00fcd131, 0x00fcd131, 0x00fcd10c
+	.long	P7Stream_FCD131, P7Stream_FCD131, P7Stream_FCD10C
 
 ; ----------------------------------------------------------------------------
 ; unexplained_FCC5BE -- 0xFCC5BE..0xFCC5C8  (11 bytes)
@@ -349,82 +349,159 @@ ToneGen_Velocity_Output_Curve:
 ; ----------------------------------------------------------------------------
 fp_constant_pool_FCC81A:
 	.long	0x0000FFF0               ; 0xFCC81A  32-bit element: address 0x0000FFF0
+F64_56:
 	.long	0x00000000, 0x404C0000   ; 0xFCC81E  f64 56
+F64_16:
 	.long	0x00000000, 0x40300000   ; 0xFCC826  f64 16
+F64_0p005050505051:
 	.long	0xA052BF5B, 0x3F74AFD6   ; 0xFCC82E  f64 0.005050505051
+F64_1100:
 	.long	0x00000000, 0x40913000   ; 0xFCC836  f64 1100
+F64_81:
 	.long	0x00000000, 0x40544000   ; 0xFCC83E  f64 81
+F64_550:
 	.long	0x00000000, 0x40813000   ; 0xFCC846  f64 550
+F64_50:
 	.long	0x00000000, 0x40490000   ; 0xFCC84E  f64 50
+F64_71:
 	.long	0x00000000, 0x4051C000   ; 0xFCC856  f64 71
+F64_110:
 	.long	0x00000000, 0x405B8000   ; 0xFCC85E  f64 110
+F64_55:
 	.long	0x00000000, 0x404B8000   ; 0xFCC866  f64 55
+F64_5:
 	.long	0x00000000, 0x40140000   ; 0xFCC86E  f64 5
+F64_21:
 	.long	0x00000000, 0x40350000   ; 0xFCC876  f64 21
+F64_2376:
 	.long	0x00000000, 0x40A29000   ; 0xFCC87E  f64 2376
+F64_10800:
 	.long	0x00000000, 0x40C51800   ; 0xFCC886  f64 10800
+F64_800:
 	.long	0x00000000, 0x40890000   ; 0xFCC88E  f64 800
+F64_88:
 	.long	0x00000000, 0x40560000   ; 0xFCC896  f64 88
+F64_1200:
 	.long	0x00000000, 0x4092C000   ; 0xFCC89E  f64 1200
+F64_400:
 	.long	0x00000000, 0x40790000   ; 0xFCC8A6  f64 400
+F64_65:
 	.long	0x00000000, 0x40504000   ; 0xFCC8AE  f64 65
+F64_120:
 	.long	0x00000000, 0x405E0000   ; 0xFCC8B6  f64 120
+F64_11:
 	.long	0x00000000, 0x40260000   ; 0xFCC8BE  f64 11
+F64_111:
 	.long	0x00000000, 0x405BC000   ; 0xFCC8C6  f64 111
+F64_4:
 	.long	0x00000000, 0x40100000   ; 0xFCC8CE  f64 4
+F64_76:
 	.long	0x00000000, 0x40530000   ; 0xFCC8D6  f64 76
+F64_26:
 	.long	0x00000000, 0x403A0000   ; 0xFCC8DE  f64 26
+F64_51:
 	.long	0x00000000, 0x40498000   ; 0xFCC8E6  f64 51
+F64_54:
 	.long	0x00000000, 0x404B0000   ; 0xFCC8EE  f64 54
+F64_84:
 	.long	0x00000000, 0x40550000   ; 0xFCC8F6  f64 84
+F32_0p980392158:
 	.long	0x3F7AFAFB               ; 0xFCC8FE  32-bit element: f32 0.980392158
+F64_0p0001424758573:
 	.long	0x4B8EB24E, 0x3F22ACB2   ; 0xFCC902  f64 0.0001424758573
+F64_0p51:
 	.long	0x851EB852, 0x3FE051EB   ; 0xFCC90A  f64 0.51
+F64_neg2:
 	.long	0x00000000, 0xC0000000   ; 0xFCC912  f64 -2
+F64_7p123792865em05:
 	.long	0x4B8EB24E, 0x3F12ACB2   ; 0xFCC91A  f64 7.123792865e-05
+F64_12:
 	.long	0x00000000, 0x40280000   ; 0xFCC922  f64 12
+F64_0p001:
 	.long	0xD2F1A9FC, 0x3F50624D   ; 0xFCC92A  f64 0.001
+F64_9:
 	.long	0x00000000, 0x40220000   ; 0xFCC932  f64 9
+F64_4p2:
 	.long	0xCCCCCCCD, 0x4010CCCC   ; 0xFCC93A  f64 4.2
+F64_0p9:
 	.long	0xCCCCCCCD, 0x3FECCCCC   ; 0xFCC942  f64 0.9
+F64_0p45:
 	.long	0xCCCCCCCD, 0x3FDCCCCC   ; 0xFCC94A  f64 0.45
+F64_neg4p816:
 	.long	0x810624DD, 0xC0134395   ; 0xFCC952  f64 -4.816
+F64_0p1:
 	.long	0x9999999A, 0x3FB99999   ; 0xFCC95A  f64 0.1
+F64_0p02:
 	.long	0x47AE147B, 0x3F947AE1   ; 0xFCC962  f64 0.02
+F64_0p9999:
 	.long	0x48E8A71E, 0x3FEFFF2E   ; 0xFCC96A  f64 0.9999
+F64_neg0p0697:
 	.long	0xF487FCB9, 0xBFB1D7DB   ; 0xFCC972  f64 -0.0697
+F64_0p0004166666667:
 	.long	0xB4E81B4F, 0x3F3B4E81   ; 0xFCC97A  f64 0.0004166666667
+F64_1400:
 	.long	0x00000000, 0x4095E000   ; 0xFCC982  f64 1400
+F64_31:
 	.long	0x00000000, 0x403F0000   ; 0xFCC98A  f64 31
+F64_200:
 	.long	0x00000000, 0x40690000   ; 0xFCC992  f64 200
+F64_100:
 	.long	0x00000000, 0x40590000   ; 0xFCC99A  f64 100
+F64_19:
 	.long	0x00000000, 0x40330000   ; 0xFCC9A2  f64 19
+F64_20:
 	.long	0x00000000, 0x40340000   ; 0xFCC9AA  f64 20
+F64_99:
 	.long	0x00000000, 0x4058C000   ; 0xFCC9B2  f64 99
+F64_89:
 	.long	0x00000000, 0x40564000   ; 0xFCC9BA  f64 89
+F64_0p4270422:
 	.long	0xCEC0C2D3, 0x3FDB54A8   ; 0xFCC9C2  f64 0.4270422
+F64_441:
 	.long	0x00000000, 0x407B9000   ; 0xFCC9CA  f64 441
+F64_1:
 	.long	0x00000000, 0x3FF00000   ; 0xFCC9D2  f64 1
+F64_2:
 	.long	0x00000000, 0x40000000   ; 0xFCC9DA  f64 2
+F64_44100:
 	.long	0x00000000, 0x40E58880   ; 0xFCC9E2  f64 44100
+F64_0p0101010101:
 	.long	0xA052BF5B, 0x3F84AFD6   ; 0xFCC9EA  f64 0.0101010101
+F64_2p267573696em05:
 	.long	0xC751F177, 0x3EF7C6F8   ; 0xFCC9F2  f64 2.267573696e-05
+F64_4p535147392em06:
 	.long	0xD2A7F45F, 0x3ED30593   ; 0xFCC9FA  f64 4.535147392e-06
+F64_2p267573696em06:
 	.long	0xD2A7F45F, 0x3EC30593   ; 0xFCCA02  f64 2.267573696e-06
+F64_0p999999:
 	.long	0xE7210BE9, 0x3FEFFFFD   ; 0xFCCA0A  f64 0.999999
+F64_0p516:
 	.long	0x6E978D50, 0x3FE08312   ; 0xFCCA12  f64 0.516
+F64_0p025:
 	.long	0x9999999A, 0x3F999999   ; 0xFCCA1A  f64 0.025
+F64_neg12:
 	.long	0x00000000, 0xC0280000   ; 0xFCCA22  f64 -12
+F64_0p6:
 	.long	0x33333333, 0x3FE33333   ; 0xFCCA2A  f64 0.6
+F64_0p4:
 	.long	0x9999999A, 0x3FD99999   ; 0xFCCA32  f64 0.4
+F64_0p2:
 	.long	0x9999999A, 0x3FC99999   ; 0xFCCA3A  f64 0.2
+F64_0:
 	.long	0x00000000, 0x00000000   ; 0xFCCA42  f64 0
+F64_0p05:
 	.long	0x9999999A, 0x3FA99999   ; 0xFCCA4A  f64 0.05
+F64_3:
 	.long	0x00000000, 0x40080000   ; 0xFCCA52  f64 3
+F64_0p5:
 	.long	0x00000000, 0x3FE00000   ; 0xFCCA5A  f64 0.5
+F64_10:
 	.long	0x00000000, 0x40240000   ; 0xFCCA62  f64 10
+F64_0p0125:
 	.long	0x9999999A, 0x3F899999   ; 0xFCCA6A  f64 0.0125
+F64_24:
 	.long	0x00000000, 0x40380000   ; 0xFCCA72  f64 24
+F64_2147483648:
 	.long	0x00000000, 0x41E00000   ; 0xFCCA7A  f64 2147483648
 
 ; ----------------------------------------------------------------------------
@@ -653,48 +730,91 @@ DSP_MixerGain_Curve_A:
 ; ----------------------------------------------------------------------------
 DescriptorStrings:
 	.asciz	"bbbvb"	; [ 0] 0xFCCF71
+DescStr_01234:
 	.asciz	"01234"	; [ 1] 0xFCCF77
+DescStr_bbbwbvb:
 	.asciz	"bbbwbvb"	; [ 2] 0xFCCF7D
+DescStr_0123456:
 	.asciz	"0123456"	; [ 3] 0xFCCF85
+DescStr_wwwwwwv:
 	.asciz	"wwwwwwv"	; [ 4] 0xFCCF8D
+DescStr_bbbbv:
 	.asciz	"bbbbv"	; [ 5] 0xFCCF95
+DescStr_bbbbbbv:
 	.asciz	"bbbbbbv"	; [ 6] 0xFCCF9B
+DescStr_bbbbwwv:
 	.asciz	"bbbbwwv"	; [ 7] 0xFCCFA3
+DescStr_bbbbbbbv:
 	.asciz	"bbbbbbbv"	; [ 8] 0xFCCFAB
+DescStr_01234567:
 	.asciz	"01234567"	; [ 9] 0xFCCFB4
+DescStr_bbbbbv:
 	.asciz	"bbbbbv"	; [10] 0xFCCFBD
+DescStr_012345:
 	.asciz	"012345"	; [11] 0xFCCFC4
+DescStr_bsssbv:
 	.asciz	"bsssbv"	; [12] 0xFCCFCB
+DescStr_bsssv:
 	.asciz	"bsssv"	; [13] 0xFCCFD2
+DescStr_bbbbbbbbbvb:
 	.asciz	"bbbbbbbbbvb"	; [14] 0xFCCFD8
+DescStr_0123456789a:
 	.asciz	"0123456789a"	; [15] 0xFCCFE4
+DescStr_v:
 	.asciz	"v"	; [16] 0xFCCFF0
+DescStr_0:
 	.asciz	"0"	; [17] 0xFCCFF2
+DescStr_bbhbbv:
 	.asciz	"bbhbbv"	; [18] 0xFCCFF4
+DescStr_bwwbbv:
 	.asciz	"bwwbbv"	; [19] 0xFCCFFB
+DescStr_bcbbv:
 	.asciz	"bcbbv"	; [20] 0xFCD002
+DescStr_bwwbbbv:
 	.asciz	"bwwbbbv"	; [21] 0xFCD008
+DescStr_bwwwwbbbbbbv:
 	.asciz	"bwwwwbbbbbbv"	; [22] 0xFCD010
+DescStr_0123456789ab:
 	.asciz	"0123456789ab"	; [23] 0xFCD01D
+DescStr_bbwwBBbv:
 	.asciz	"bbwwBBbv"	; [24] 0xFCD02A
+DescStr_bbhbv:
 	.asciz	"bbhbv"	; [25] 0xFCD033
+DescStr_bwwbbbbbbv:
 	.asciz	"bwwbbbbbbv"	; [26] 0xFCD039
+DescStr_0123456789:
 	.asciz	"0123456789"	; [27] 0xFCD044
+DescStr_bwwbbbwwbbv:
 	.asciz	"bwwbbbwwbbv"	; [28] 0xFCD04F
+DescStr_bwwbbbbbbbbbv:
 	.asciz	"bwwbbbbbbbbbv"	; [29] 0xFCD05B
+DescStr_0123456789abc:
 	.asciz	"0123456789abc"	; [30] 0xFCD069
+DescStr_bwwbbbbbbbv:
 	.asciz	"bwwbbbbbbbv"	; [31] 0xFCD077
+DescStr_bbbbbwwbbv:
 	.asciz	"bbbbbwwbbv"	; [32] 0xFCD083
+DescStr_wwbbbbv:
 	.asciz	"wwbbbbv"	; [33] 0xFCD08E
+DescStr_wwbwwbbv:
 	.asciz	"wwbwwbbv"	; [34] 0xFCD096
+DescStr_wwbbbbbbbv:
 	.asciz	"wwbbbbbbbv"	; [35] 0xFCD09F
+DescStr_wwbbbbbv:
 	.asciz	"wwbbbbbv"	; [36] 0xFCD0AA
+DescStr_wwcbbv:
 	.asciz	"wwcbbv"	; [37] 0xFCD0B3
+DescStr_wwcbbbbbv:
 	.asciz	"wwcbbbbbv"	; [38] 0xFCD0BA
+DescStr_012345678:
 	.asciz	"012345678"	; [39] 0xFCD0C4
+DescStr_wcbbbbvb:
 	.asciz	"wcbbbbvb"	; [40] 0xFCD0CE
+DescStr_wwbbbwwbbvb:
 	.asciz	"wwbbbwwbbvb"	; [41] 0xFCD0D7
+DescStr_bBBbBvb:
 	.asciz	"bBBbBvb"	; [42] 0xFCD0E3
+DescStr_bbbbbbwwbbv:
 	.asciz	"bbbbbbwwbbv"	; [43] 0xFCD0EB
 
 

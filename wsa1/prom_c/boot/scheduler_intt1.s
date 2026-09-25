@@ -125,7 +125,7 @@ INTT1_HANDLER__dispatch:
 	cp	bc, 5:i3
 	jr	ugt, INTT1_HANDLER__advance
 	sll	bc, 2
-	add	xbc, 0x00F990C8
+	add	xbc, INTT1_PHASE_TABLE
 	ld	xbc, (xbc)
 	jp	(xbc)
 ; Evidence: the dispatch immediately above is `cp BC,5 / jr UGT / sll BC,2 /
@@ -136,12 +136,12 @@ INTT1_HANDLER__dispatch:
 ;          bytes are `c2 e3 e2 00`, the `incw 1,(0x00E2E3)` that opens
 ;          INTT1_HANDLER__advance -- so the table ends where this says it does.
 INTT1_PHASE_TABLE:
-	.long	0x00F9907E
-	.long	0x00F9908A
-	.long	0x00F99091
-	.long	0x00F99098
-	.long	0x00F990A4
-	.long	0x00F990AB
+	.long	INTT1_HANDLER__phase0
+	.long	INTT1_HANDLER__phase1
+	.long	INTT1_HANDLER__phase2
+	.long	INTT1_HANDLER__phase3
+	.long	INTT1_HANDLER__phase4
+	.long	INTT1_HANDLER__phase5
 INTT1_HANDLER__advance:
 	inc 1, (0x00E2E3:24)
 	cp	(0x00E2E3:24), 0x06

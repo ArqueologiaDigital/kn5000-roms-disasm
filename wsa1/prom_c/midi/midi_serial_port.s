@@ -207,7 +207,7 @@ sub_F9915C__exit:
 ; --------------------------------------------------------------------------
 Serial0_Init:
 	ld	(TRUN:8), 0x80:io
-	ld	c, (0x00FFFFEF:24)
+	ld	c, (CLOCK_CONFIG_MHZ:24)
 	srl	c, 1
 	and	c, 0x0F
 	st_dd8b	c, BR0CR
@@ -974,7 +974,7 @@ MIDI_Watchdogs_And_TransportSwitch__F9950E:
 	cp	xbc, 0xA5                           ; F99523  cp XBC,0x000000a5
 	jr ule, MIDI_Watchdogs_And_TransportSwitch__F99543                      ; F99529  jr ULE,0xf99543
 	ld	(0xF2F8:24), 0                    ; F9952B  ld (0x00f2f8),0x00
-	lda	xwa, (0xFCC5C2:24)                 ; F99531  lda XWA,0xfcc5c2
+	lda	xwa, (unexplained_FCC5BE+4:24)                 ; F99531  lda XWA,0xfcc5c2
 	push	xwa                               ; F99536  push XWA
 	pushw	1                                ; F99537  push 0x0001
 	pushw	6                                ; F9953A  push 0x0006
@@ -989,7 +989,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99543:
 	jr nz, MIDI_Watchdogs_And_TransportSwitch__F99575                       ; F99551  jr NZ,0xf99575
 	cp (0x00F328:24), 0x00                 ; F99553  cp (0x00f328),0x00   [llvm-mc cannot encode this]
 	jr z, MIDI_Watchdogs_And_TransportSwitch__F99573                        ; F99559  jr Z,0xf99573
-	lda	xbc, (0xFCC5C4:24)                 ; F9955B  lda XBC,0xfcc5c4
+	lda	xbc, (unexplained_FCC5BE+6:24)                 ; F9955B  lda XBC,0xfcc5c4
 	push	xbc                               ; F99560  push XBC
 	pushw	1                                ; F99561  push 0x0001
 	pushw	6                                ; F99564  push 0x0006
@@ -1001,7 +1001,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99573:
 MIDI_Watchdogs_And_TransportSwitch__F99575:
 	cp (0x00F328:24), 0x01                 ; F99575  cp (0x00f328),0x01   [llvm-mc cannot encode this]
 	jr z, MIDI_Watchdogs_And_TransportSwitch__F99595                        ; F9957B  jr Z,0xf99595
-	lda	xbc, (0xFCC5C3:24)                 ; F9957D  lda XBC,0xfcc5c3
+	lda	xbc, (unexplained_FCC5BE+5:24)                 ; F9957D  lda XBC,0xfcc5c3
 	push	xbc                               ; F99582  push XBC
 	pushw	1                                ; F99583  push 0x0001
 	pushw	6                                ; F99586  push 0x0006

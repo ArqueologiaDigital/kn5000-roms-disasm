@@ -1250,37 +1250,37 @@ Voice_Search_Order_List_3:
 ; trailing bytes mean.  Records 3..15 are all identical
 ; {Voice_Search_Order_List_3, 02, 05}; only the first three differ.
 ; ------------------------------------------------------------------------------
-	.long	0x00FE11F8
+	.long	Voice_Search_Order_List_1
 	.byte	0x00, 0x03			; 0xFE1220  record  0
-	.long	0x00FE1207
+	.long	Voice_Search_Order_List_2
 	.byte	0x01, 0x03			; 0xFE1226  record  1
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x04			; 0xFE122C  record  2
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE1232  record  3
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE1238  record  4
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE123E  record  5
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE1244  record  6
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE124A  record  7
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE1250  record  8
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE1256  record  9
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE125C  record 10
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE1262  record 11
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE1268  record 12
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE126E  record 13
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE1274  record 14
-	.long	0x00FE1215
+	.long	Voice_Search_Order_List_3
 	.byte	0x02, 0x05			; 0xFE127A  record 15
 ; ------------------------------------------------------------------------------
 ; 0xFE1280-0xFE12B4 -- 53 bytes, SEVEN small tables.  ★ DECODED IN ROUND 6.
@@ -1720,10 +1720,10 @@ SoundRam_BankName_S3:
 ; Cited by: 0xFC38AF [lda <X..>,addr24], 0xFC3A01 [direct-address prefix 0xE2], 0xFC3B2B [direct-address prefix 0xE2]
 ; ----------------------------------------------------------------------------
 SoundRam_BankNamePtrs:
-	.long	0x00FE14CB   ; 0xFE150F
-	.long	0x00FE14DC   ; 0xFE1513
-	.long	0x00FE14ED   ; 0xFE1517
-	.long	0x00FE14FE   ; 0xFE151B
+	.long	SoundRam_BankName_S0   ; 0xFE150F
+	.long	SoundRam_BankName_S1   ; 0xFE1513
+	.long	SoundRam_BankName_S2   ; 0xFE1517
+	.long	SoundRam_BankName_S3   ; 0xFE151B
 
 ; ----------------------------------------------------------------------------
 ; SoundRam_BankBases -- 0xFE151F-0xFE152E  (16 bytes)
@@ -2199,37 +2199,37 @@ Voice_Search_Order_List_3_B:
 ; Copy-B address = copy-A address + 0xC2B.
 ; ----------------------------------------------------------------------------
 Voice_SearchOrder_Records_B:
-	.long	0x00FE1E23
+	.long	Voice_Search_Order_List_1_B
 	.byte	0x00, 0x03   ; 0xFE1E4B  record  0
-	.long	0x00FE1E32
+	.long	Voice_Search_Order_List_2_B
 	.byte	0x01, 0x03   ; 0xFE1E51  record  1
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x04   ; 0xFE1E57  record  2
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E5D  record  3
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E63  record  4
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E69  record  5
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E6F  record  6
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E75  record  7
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E7B  record  8
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E81  record  9
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E87  record 10
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E8D  record 11
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E93  record 12
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E99  record 13
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1E9F  record 14
-	.long	0x00FE1E40
+	.long	Voice_Search_Order_List_3_B
 	.byte	0x02, 0x05   ; 0xFE1EA5  record 15
 
 ; ----------------------------------------------------------------------------
@@ -2499,10 +2499,10 @@ SoundRam_BankName_S3_B:
 ; Copy-B address = copy-A address + 0xC05.
 ; ----------------------------------------------------------------------------
 SoundRam_BankNamePtrs_B:
-	.long	0x00FE20D0   ; 0xFE2114
-	.long	0x00FE20E1   ; 0xFE2118
-	.long	0x00FE20F2   ; 0xFE211C
-	.long	0x00FE2103   ; 0xFE2120
+	.long	SoundRam_BankName_S0_B   ; 0xFE2114
+	.long	SoundRam_BankName_S1_B   ; 0xFE2118
+	.long	SoundRam_BankName_S2_B   ; 0xFE211C
+	.long	SoundRam_BankName_S3_B   ; 0xFE2120
 
 ; ----------------------------------------------------------------------------
 ; SoundRam_BankBases_B -- 0xFE2124-0xFE2133  (16 bytes)

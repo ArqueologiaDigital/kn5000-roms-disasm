@@ -121,12 +121,12 @@ sub_FAD142__FAD173:
 	ld	ix, (xiz-11)                            ; FAD173  ld IX,(XIZ+0xf5)
 	extz	ix                                    ; FAD176  extz IX
 	extz	xix                                   ; FAD178  extz XIX
-	lda	xbc, (0xFE1286:24)                     ; FAD17A  lda XBC,0xfe1286
+	lda	xbc, (BitMasks_EvenBits:24)                     ; FAD17A  lda XBC,0xfe1286
 	add	xbc, xix                               ; FAD17F  add XBC,XIX
 	ld	a, (xbc)                                ; FAD181  ld A,(XBC)
 	extpfx3 0x8E, 0x0A, 0xC1                   ; FAD183  and A,(XIZ+0x0a)
 	jr z, sub_FAD142__FAD1DA                   ; FAD186  jr Z,0xfad1da
-	lda	xbc, (0xFE128A:24)                     ; FAD188  lda XBC,0xfe128a
+	lda	xbc, (BitMasks_OddBits:24)                     ; FAD188  lda XBC,0xfe128a
 	add	xbc, xix                               ; FAD18D  add XBC,XIX
 	ld	a, (xbc)                                ; FAD18F  ld A,(XBC)
 	extpfx3 0x8E, 0x0A, 0xC1                   ; FAD191  and A,(XIZ+0x0a)
@@ -269,11 +269,11 @@ sub_FAD203__FAD22E:
 	extz	bc                                    ; FAD231  extz BC
 	extz	xbc                                   ; FAD233  extz XBC
 	ld	(xiz-6), xbc                            ; FAD235  ld (XIZ+0xfa),XBC
-	add	xbc, 0xFE1286                          ; FAD238  add XBC,0x00fe1286
+	add	xbc, BitMasks_EvenBits                          ; FAD238  add XBC,0x00fe1286
 	ld	a, (xbc)                                ; FAD23E  ld A,(XBC)
 	extpfx3 0x8E, 0x0A, 0xC1                   ; FAD240  and A,(XIZ+0x0a)
 	jr z, sub_FAD203__FAD298                   ; FAD243  jr Z,0xfad298
-	lda	xbc, (0xFE128A:24)                     ; FAD245  lda XBC,0xfe128a
+	lda	xbc, (BitMasks_OddBits:24)                     ; FAD245  lda XBC,0xfe128a
 	extpfx3 0xAE, 0xFA, 0x81                   ; FAD24A  add XBC,(XIZ+0xfa)
 	ld	a, (xbc)                                ; FAD24D  ld A,(XBC)
 	extpfx3 0x8E, 0x0A, 0xC1                   ; FAD24F  and A,(XIZ+0x0a)
@@ -1040,7 +1040,7 @@ MidiCtrl_CC07:
 	ld	c, 2:opc                                   ; FAD70A  ld C,0x02
 	mul8rr	c, l                                ; FAD70C  mul BC,L
 	extz	xbc                                   ; FAD70E  extz XBC
-	add	xbc, 0xFDF3F1                          ; FAD710  add XBC,0x00fdf3f1
+	add	xbc, Voice_CC_VolumeCurve                          ; FAD710  add XBC,0x00fdf3f1
 	ld	de, (xbc)                               ; FAD716  ld DE,(XBC)
 	ld	c, h                                    ; FAD718  ld C,H
 	extz	bc                                    ; FAD71A  extz BC
@@ -1147,7 +1147,7 @@ MidiCtrl_CC11:
 	ld	c, 2:opc                                   ; FAD7A1  ld C,0x02
 	mul8rr	c, l                                ; FAD7A3  mul BC,L
 	extz	xbc                                   ; FAD7A5  extz XBC
-	add	xbc, 0xFDF3F1                          ; FAD7A7  add XBC,0x00fdf3f1
+	add	xbc, Voice_CC_VolumeCurve                          ; FAD7A7  add XBC,0x00fdf3f1
 	ld	de, (xbc)                               ; FAD7AD  ld DE,(XBC)
 	ld	c, h                                    ; FAD7AF  ld C,H
 	extz	bc                                    ; FAD7B1  extz BC
@@ -2211,7 +2211,7 @@ VoiceDefaults_StoreFromPackedByte__FADBA0:
 	srl	c, 4                                   ; FADBAB  srl 0x04,C
 	mul	c, 2                                   ; FADBAE  mul C,0x02
 	extz	xbc                                   ; FADBB1  extz XBC
-	add	xbc, 0xFE128E                          ; FADBB3  add XBC,0x00fe128e
+	add	xbc, Words_FE128E                          ; FADBB3  add XBC,0x00fe128e
 	ld	bc, (xbc)                               ; FADBB9  ld BC,(XBC)
 	ld	(xix+31), bc                            ; FADBBB  ld (XIX+0x1f),BC
 	ld	c, h                                    ; FADBBE  ld C,H
@@ -2480,7 +2480,7 @@ Dev10C_SetReg0201_FromNibblePair__FADC93:
 	sll	bc, 8                                  ; FADCA6  sll 0x08,BC
 	ld	hl, bc                                  ; FADCA9  ld HL,BC
 Dev10C_SetReg0201_FromNibblePair__FADCAB:
-	ld	bc, (0xFE12B7:24)                      ; FADCAB  ld BC,(0xfe12b7)
+	ld	bc, (Dev10C_GlobalRegs_ResetImage+2:24)                      ; FADCAB  ld BC,(0xfe12b7)
 	and	bc, 0xF9F                              ; FADCB0  and BC,0x0f9f
 	or	bc, ix                                  ; FADCB4  or BC,IX
 	or	bc, hl                                  ; FADCB6  or BC,HL
@@ -5850,7 +5850,7 @@ Voice_ApplyParamChange_Dispatch__FAF073:
 	cp	bc, 48                                  ; FAF07B  cp BC,0x0030
 	jrl ugt, Voice_ApplyParamChange_Dispatch__FAF33A                ; FAF07F  jrl UGT,0xfaf33a
 	sll	bc, 2                                  ; FAF082  sll 0x02,BC
-	add	xbc, 0xFAF08F                          ; FAF085  add XBC,0x00faf08f
+	add	xbc, Voice_ApplyParamChange_Dispatch_JumpTable_FAF08F                          ; FAF085  add XBC,0x00faf08f
 	ld	xbc, (xbc)                              ; FAF08B  ld XBC,(XBC)
 	jp	(xbc)                                   ; FAF08D  jp T,XBC
 ; 49 x u32 computed-goto table, 0xFAF08F-0xFAF152, 196 bytes.
@@ -5861,55 +5861,56 @@ Voice_ApplyParamChange_Dispatch__FAF073:
 ; assumed to.  (python3 notes/prom_c_jumptables.py 0xFAD142 0xFB0504;
 ; asserted per table by notes/prom_c_voiceparam_checks.py section 2.)
 ; Entry 0 is the SAME address the out-of-range guard branches to.
-	.long 0x00FAF153	; 0xFAF08F  entry 0 -> 0xFAF153   (also the out-of-range arm)
-	.long 0x00FAF15F	; 0xFAF093  entry 1 -> 0xFAF15F
-	.long 0x00FAF16B	; 0xFAF097  entry 2 -> 0xFAF16B
-	.long 0x00FAF177	; 0xFAF09B  entry 3 -> 0xFAF177
-	.long 0x00FAF17C	; 0xFAF09F  entry 4 -> 0xFAF17C
-	.long 0x00FAF181	; 0xFAF0A3  entry 5 -> 0xFAF181
-	.long 0x00FAF186	; 0xFAF0A7  entry 6 -> 0xFAF186
-	.long 0x00FAF19B	; 0xFAF0AB  entry 7 -> 0xFAF19B
-	.long 0x00FAF1A0	; 0xFAF0AF  entry 8 -> 0xFAF1A0
-	.long 0x00FAF1A5	; 0xFAF0B3  entry 9 -> 0xFAF1A5
-	.long 0x00FAF1AA	; 0xFAF0B7  entry 10 -> 0xFAF1AA
-	.long 0x00FAF1BA	; 0xFAF0BB  entry 11 -> 0xFAF1BA
-	.long 0x00FAF1BF	; 0xFAF0BF  entry 12 -> 0xFAF1BF
-	.long 0x00FAF1C4	; 0xFAF0C3  entry 13 -> 0xFAF1C4
-	.long 0x00FAF1C9	; 0xFAF0C7  entry 14 -> 0xFAF1C9
-	.long 0x00FAF1D9	; 0xFAF0CB  entry 15 -> 0xFAF1D9
-	.long 0x00FAF1DE	; 0xFAF0CF  entry 16 -> 0xFAF1DE
-	.long 0x00FAF1E3	; 0xFAF0D3  entry 17 -> 0xFAF1E3
-	.long 0x00FAF1E8	; 0xFAF0D7  entry 18 -> 0xFAF1E8
-	.long 0x00FAF1F8	; 0xFAF0DB  entry 19 -> 0xFAF1F8
-	.long 0x00FAF1FD	; 0xFAF0DF  entry 20 -> 0xFAF1FD
-	.long 0x00FAF202	; 0xFAF0E3  entry 21 -> 0xFAF202
-	.long 0x00FAF207	; 0xFAF0E7  entry 22 -> 0xFAF207
-	.long 0x00FAF218	; 0xFAF0EB  entry 23 -> 0xFAF218
-	.long 0x00FAF21D	; 0xFAF0EF  entry 24 -> 0xFAF21D
-	.long 0x00FAF222	; 0xFAF0F3  entry 25 -> 0xFAF222
-	.long 0x00FAF227	; 0xFAF0F7  entry 26 -> 0xFAF227
-	.long 0x00FAF238	; 0xFAF0FB  entry 27 -> 0xFAF238
-	.long 0x00FAF246	; 0xFAF0FF  entry 28 -> 0xFAF246
-	.long 0x00FAF254	; 0xFAF103  entry 29 -> 0xFAF254
-	.long 0x00FAF33A	; 0xFAF107  entry 30 -> 0xFAF33A
-	.long 0x00FAF262	; 0xFAF10B  entry 31 -> 0xFAF262
-	.long 0x00FAF270	; 0xFAF10F  entry 32 -> 0xFAF270
-	.long 0x00FAF33A	; 0xFAF113  entry 33 -> 0xFAF33A
-	.long 0x00FAF27E	; 0xFAF117  entry 34 -> 0xFAF27E
-	.long 0x00FAF28C	; 0xFAF11B  entry 35 -> 0xFAF28C
-	.long 0x00FAF29A	; 0xFAF11F  entry 36 -> 0xFAF29A
-	.long 0x00FAF2A8	; 0xFAF123  entry 37 -> 0xFAF2A8
-	.long 0x00FAF2B5	; 0xFAF127  entry 38 -> 0xFAF2B5
-	.long 0x00FAF2C2	; 0xFAF12B  entry 39 -> 0xFAF2C2
-	.long 0x00FAF2CF	; 0xFAF12F  entry 40 -> 0xFAF2CF
-	.long 0x00FAF2DC	; 0xFAF133  entry 41 -> 0xFAF2DC
-	.long 0x00FAF2E9	; 0xFAF137  entry 42 -> 0xFAF2E9
-	.long 0x00FAF2F6	; 0xFAF13B  entry 43 -> 0xFAF2F6
-	.long 0x00FAF303	; 0xFAF13F  entry 44 -> 0xFAF303
-	.long 0x00FAF310	; 0xFAF143  entry 45 -> 0xFAF310
-	.long 0x00FAF31F	; 0xFAF147  entry 46 -> 0xFAF31F
-	.long 0x00FAF328	; 0xFAF14B  entry 47 -> 0xFAF328
-	.long 0x00FAF331	; 0xFAF14F  entry 48 -> 0xFAF331
+Voice_ApplyParamChange_Dispatch_JumpTable_FAF08F:
+	.long Voice_ApplyParamChange_Dispatch__FAF153	; 0xFAF08F  entry 0 -> 0xFAF153   (also the out-of-range arm)
+	.long Voice_ApplyParamChange_Dispatch__FAF15F	; 0xFAF093  entry 1 -> 0xFAF15F
+	.long Voice_ApplyParamChange_Dispatch__FAF16B	; 0xFAF097  entry 2 -> 0xFAF16B
+	.long Voice_ApplyParamChange_Dispatch__FAF177	; 0xFAF09B  entry 3 -> 0xFAF177
+	.long Voice_ApplyParamChange_Dispatch__FAF17C	; 0xFAF09F  entry 4 -> 0xFAF17C
+	.long Voice_ApplyParamChange_Dispatch__FAF181	; 0xFAF0A3  entry 5 -> 0xFAF181
+	.long Voice_ApplyParamChange_Dispatch__FAF186	; 0xFAF0A7  entry 6 -> 0xFAF186
+	.long Voice_ApplyParamChange_Dispatch__FAF19B	; 0xFAF0AB  entry 7 -> 0xFAF19B
+	.long Voice_ApplyParamChange_Dispatch__FAF1A0	; 0xFAF0AF  entry 8 -> 0xFAF1A0
+	.long Voice_ApplyParamChange_Dispatch__FAF1A5	; 0xFAF0B3  entry 9 -> 0xFAF1A5
+	.long Voice_ApplyParamChange_Dispatch__FAF1AA	; 0xFAF0B7  entry 10 -> 0xFAF1AA
+	.long Voice_ApplyParamChange_Dispatch__FAF1BA	; 0xFAF0BB  entry 11 -> 0xFAF1BA
+	.long Voice_ApplyParamChange_Dispatch__FAF1BF	; 0xFAF0BF  entry 12 -> 0xFAF1BF
+	.long Voice_ApplyParamChange_Dispatch__FAF1C4	; 0xFAF0C3  entry 13 -> 0xFAF1C4
+	.long Voice_ApplyParamChange_Dispatch__FAF1C9	; 0xFAF0C7  entry 14 -> 0xFAF1C9
+	.long Voice_ApplyParamChange_Dispatch__FAF1D9	; 0xFAF0CB  entry 15 -> 0xFAF1D9
+	.long Voice_ApplyParamChange_Dispatch__FAF1DE	; 0xFAF0CF  entry 16 -> 0xFAF1DE
+	.long Voice_ApplyParamChange_Dispatch__FAF1E3	; 0xFAF0D3  entry 17 -> 0xFAF1E3
+	.long Voice_ApplyParamChange_Dispatch__FAF1E8	; 0xFAF0D7  entry 18 -> 0xFAF1E8
+	.long Voice_ApplyParamChange_Dispatch__FAF1F8	; 0xFAF0DB  entry 19 -> 0xFAF1F8
+	.long Voice_ApplyParamChange_Dispatch__FAF1FD	; 0xFAF0DF  entry 20 -> 0xFAF1FD
+	.long Voice_ApplyParamChange_Dispatch__FAF202	; 0xFAF0E3  entry 21 -> 0xFAF202
+	.long Voice_ApplyParamChange_Dispatch__FAF207	; 0xFAF0E7  entry 22 -> 0xFAF207
+	.long Voice_ApplyParamChange_Dispatch__FAF218	; 0xFAF0EB  entry 23 -> 0xFAF218
+	.long Voice_ApplyParamChange_Dispatch__FAF21D	; 0xFAF0EF  entry 24 -> 0xFAF21D
+	.long Voice_ApplyParamChange_Dispatch__FAF222	; 0xFAF0F3  entry 25 -> 0xFAF222
+	.long Voice_ApplyParamChange_Dispatch__FAF227	; 0xFAF0F7  entry 26 -> 0xFAF227
+	.long Voice_ApplyParamChange_Dispatch__FAF238	; 0xFAF0FB  entry 27 -> 0xFAF238
+	.long Voice_ApplyParamChange_Dispatch__FAF246	; 0xFAF0FF  entry 28 -> 0xFAF246
+	.long Voice_ApplyParamChange_Dispatch__FAF254	; 0xFAF103  entry 29 -> 0xFAF254
+	.long Voice_ApplyParamChange_Dispatch__FAF33A	; 0xFAF107  entry 30 -> 0xFAF33A
+	.long Voice_ApplyParamChange_Dispatch__FAF262	; 0xFAF10B  entry 31 -> 0xFAF262
+	.long Voice_ApplyParamChange_Dispatch__FAF270	; 0xFAF10F  entry 32 -> 0xFAF270
+	.long Voice_ApplyParamChange_Dispatch__FAF33A	; 0xFAF113  entry 33 -> 0xFAF33A
+	.long Voice_ApplyParamChange_Dispatch__FAF27E	; 0xFAF117  entry 34 -> 0xFAF27E
+	.long Voice_ApplyParamChange_Dispatch__FAF28C	; 0xFAF11B  entry 35 -> 0xFAF28C
+	.long Voice_ApplyParamChange_Dispatch__FAF29A	; 0xFAF11F  entry 36 -> 0xFAF29A
+	.long Voice_ApplyParamChange_Dispatch__FAF2A8	; 0xFAF123  entry 37 -> 0xFAF2A8
+	.long Voice_ApplyParamChange_Dispatch__FAF2B5	; 0xFAF127  entry 38 -> 0xFAF2B5
+	.long Voice_ApplyParamChange_Dispatch__FAF2C2	; 0xFAF12B  entry 39 -> 0xFAF2C2
+	.long Voice_ApplyParamChange_Dispatch__FAF2CF	; 0xFAF12F  entry 40 -> 0xFAF2CF
+	.long Voice_ApplyParamChange_Dispatch__FAF2DC	; 0xFAF133  entry 41 -> 0xFAF2DC
+	.long Voice_ApplyParamChange_Dispatch__FAF2E9	; 0xFAF137  entry 42 -> 0xFAF2E9
+	.long Voice_ApplyParamChange_Dispatch__FAF2F6	; 0xFAF13B  entry 43 -> 0xFAF2F6
+	.long Voice_ApplyParamChange_Dispatch__FAF303	; 0xFAF13F  entry 44 -> 0xFAF303
+	.long Voice_ApplyParamChange_Dispatch__FAF310	; 0xFAF143  entry 45 -> 0xFAF310
+	.long Voice_ApplyParamChange_Dispatch__FAF31F	; 0xFAF147  entry 46 -> 0xFAF31F
+	.long Voice_ApplyParamChange_Dispatch__FAF328	; 0xFAF14B  entry 47 -> 0xFAF328
+	.long Voice_ApplyParamChange_Dispatch__FAF331	; 0xFAF14F  entry 48 -> 0xFAF331
 Voice_ApplyParamChange_Dispatch__FAF153:
 	push	xix                                   ; FAF153  push XIX
 	pushw	de                                   ; FAF154  push DE
@@ -6759,7 +6760,7 @@ MidiCtrl_CC16__FAF729:
 	ld	(xiz-8), a                              ; FAF733  ld (XIZ+0xf8),A
 	ld	wa, (xiz-6)                             ; FAF736  ld WA,(XIZ+0xfa)
 	extz	xwa                                   ; FAF739  extz XWA
-	add	xwa, 0xFE1280                          ; FAF73B  add XWA,0x00fe1280
+	add	xwa, BitMasks_1shl0_to_5                          ; FAF73B  add XWA,0x00fe1280
 	ld	w, (xwa)                                ; FAF741  ld W,(XWA)
 	extpfx3 0x8E, 0xF8, 0xC0                   ; FAF743  and W,(XIZ+0xf8)
 	jrl z, MidiCtrl_CC16__FAF85F                  ; FAF746  jrl Z,0xfaf85f
@@ -6921,7 +6922,7 @@ MidiCtrl_CC17__FAF8A0:
 	ld	(xiz-8), a                              ; FAF8AA  ld (XIZ+0xf8),A
 	ld	wa, (xiz-6)                             ; FAF8AD  ld WA,(XIZ+0xfa)
 	extz	xwa                                   ; FAF8B0  extz XWA
-	add	xwa, 0xFE1280                          ; FAF8B2  add XWA,0x00fe1280
+	add	xwa, BitMasks_1shl0_to_5                          ; FAF8B2  add XWA,0x00fe1280
 	ld	w, (xwa)                                ; FAF8B8  ld W,(XWA)
 	extpfx3 0x8E, 0xF8, 0xC0                   ; FAF8BA  and W,(XIZ+0xf8)
 	jrl z, MidiCtrl_CC17__FAF9D2                  ; FAF8BD  jrl Z,0xfaf9d2
@@ -7077,7 +7078,7 @@ MidiCtrl_CC18__FAFA08:
 	ld	a, h                                    ; FAFA15  ld A,H
 	extz	wa                                    ; FAFA17  extz WA
 	extz	xwa                                   ; FAFA19  extz XWA
-	add	xwa, 0xFE1280                          ; FAFA1B  add XWA,0x00fe1280
+	add	xwa, BitMasks_1shl0_to_5                          ; FAFA1B  add XWA,0x00fe1280
 	ld	w, (xwa)                                ; FAFA21  ld W,(XWA)
 	extpfx3 0x8E, 0xF8, 0xC0                   ; FAFA23  and W,(XIZ+0xf8)
 	jrl z, MidiCtrl_CC18__FAFADA                  ; FAFA26  jrl Z,0xfafada
@@ -7202,7 +7203,7 @@ MidiCtrl_CC19__FAFB0B:
 	ld	a, h                                    ; FAFB18  ld A,H
 	extz	wa                                    ; FAFB1A  extz WA
 	extz	xwa                                   ; FAFB1C  extz XWA
-	add	xwa, 0xFE1280                          ; FAFB1E  add XWA,0x00fe1280
+	add	xwa, BitMasks_1shl0_to_5                          ; FAFB1E  add XWA,0x00fe1280
 	ld	w, (xwa)                                ; FAFB24  ld W,(XWA)
 	extpfx3 0x8E, 0xF8, 0xC0                   ; FAFB26  and W,(XIZ+0xf8)
 	jrl z, MidiCtrl_CC19__FAFBDD                  ; FAFB29  jrl Z,0xfafbdd
@@ -7373,7 +7374,7 @@ sub_FAFBEC__FAFC8C:
 	ld	(xiz-6), wa                             ; FAFC96  ld (XIZ+0xfa),WA
 	ld	iy, hl                                  ; FAFC99  ld IY,HL
 	extz	xiy                                   ; FAFC9B  extz XIY
-	add	xiy, 0xFDE695                          ; FAFC9D  add XIY,0x00fde695
+	add	xiy, BitMask_Table_FDE695                          ; FAFC9D  add XIY,0x00fde695
 	ld	iy, (xiy)                               ; FAFCA3  ld IY,(XIY)
 	and	wa, iy                                 ; FAFCA5  and WA,IY
 	jr z, sub_FAFBEC__FAFCAE                   ; FAFCA7  jr Z,0xfafcae
