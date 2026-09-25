@@ -109,7 +109,7 @@ HDAE5000_FS_Init_Case3:
 	pushw 0x0010
 	ld	wa, iz
 	dec	1, wa
-	call HDAE5000_Calc_Offset_16
+	call HDAE5000_DirName_Address
 	push xhl
 	lda xwa, (0x22aa68:24)
 	push xwa
@@ -170,7 +170,7 @@ HDAE5000_FS_Init_Case5:
 	dec	1, wa
 	ld	bc, (xsp+38)
 	dec	1, bc
-	call HDAE5000_Calculate_Row_Address
+	call HDAE5000_SongRecord_Address
 	push xhl
 	lda xwa, (0x22aa80:24)
 	push xwa
@@ -373,7 +373,7 @@ HDAE5000_FileLBNNameCheck_Ev01E00047:
 	jr nz, .LFS_75c1                       ; [6e 22] jr NZ,0x2875c1
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Calculate_Row_Address
+	call HDAE5000_SongRecord_Address
 	push xhl
 	pushw 0x002e
 	pushw 0x2d70
@@ -1442,7 +1442,7 @@ HDAE5000_FS_Read_FSB:	; 0x287F55 (832 bytes)
 	lda xsp, (xsp + 0x0a)
 	ld wa, (0x23a090:24); WA = page_base
 	add wa, iz                              ; WA = page_base + index (0-based display row)
-	call HDAE5000_Calculate_Tile_Address     ; XHL = VRAM address for this tile row
+	call HDAE5000_FlsRecord_Address     ; XHL = VRAM address for this tile row
 	pushw 0x0010                            ; size = 16 bytes (display tile only)
 	push xhl                                ; dest = VRAM tile address
 	ldw wa, 0x0015
@@ -1747,7 +1747,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	lda	xsp, (xsp+16)
 	pushw 0x0010
 	ld	wa, (0x23A096:24)
-	call HDAE5000_Calculate_Tile_Address
+	call HDAE5000_FlsRecord_Address
 	push xhl
 	pushw 0x0022
 	pushw 0xa058
@@ -1830,7 +1830,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	ld	bc, (0x22B272:24)
 	add	bc, iz
 	ld	wa, (0x23A096:24)
-	call HDAE5000_Resolve_Cell_Address
+	call HDAE5000_FlsItem_SongRecord
 	pushw 0x001a
 	push xhl
 	ldw	wa, 0x0025
@@ -1847,7 +1847,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	lda	xwa, (xsp+2)
 	ld	xde, xwa
 	ld	wa, (0x23A096:24)
-	call HDAE5000_FS_Write_FSB_Helper
+	call HDAE5000_FlsItem_Get
 	cp	hl, 0xffff
 	jr z, .LFWF_847d                       ; [66 36] jr Z,0x28847d
 	cp	(xsp+6), 0x01
@@ -1910,7 +1910,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	ld	xde, xwa
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call HDAE5000_FS_Write_FSB_Helper
+	call HDAE5000_FlsItem_Get
 	ld	iz, hl
 	ld	wa, iz
 	cp	wa, 0xffff
@@ -1975,7 +1975,7 @@ HDAE5000_FS_Write_FSB:	; 0x288295 (5072 bytes)
 	jr z, .LFWF_85ee                       ; [66 2a] jr Z,0x2885ee
 	ld	wa, (xsp+2)
 	ld	bc, (xsp+4)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld	iz, hl
 	ld	a, (xsp+32)
 	extz wa                                 ; extz WA
@@ -2101,7 +2101,7 @@ HDAE5000_SelectFlsScreen:
 	add	bc, wa
 	ld	(0x23a096), bc
 	ld	wa, bc
-	call HDAE5000_Calculate_Tile_Address
+	call HDAE5000_FlsRecord_Address
 	ld	xde, xhl
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
@@ -2216,7 +2216,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xde, xwa
 	ld	wa, iz
 	ld	bc, qiz
-	call HDAE5000_FS_Write_FSB_Helper
+	call HDAE5000_FlsItem_Get
 	cp	hl, 0xffff
 	jrl z, .LFWF_899f                      ; [76 9e 00] jrl Z,0x28899f
 	cp	(xsp+9), 0x01
@@ -2231,7 +2231,7 @@ HDAE5000_FlsLoadScreen:
 .LFWF_8922:
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld	iz, hl
 	ld	de, iz
 	pushw 0x0000
@@ -2239,7 +2239,7 @@ HDAE5000_FlsLoadScreen:
 	push xwa
 	ld	wa, (xsp+10)
 	ld	bc, (xsp+12)
-	calr	HDAE5000_Display_Manager
+	calr	HDAE5000_LoadSongWithUi
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 d1 02] jrl Z,0x288c1a
 	cp	(0x229DAC:24), 2
@@ -2279,7 +2279,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xde, xwa
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call HDAE5000_FS_Write_FSB_Helper
+	call HDAE5000_FlsItem_Get
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 4a 02] jrl Z,0x288c1a
 	cp	(xsp+9), 0x01
@@ -2295,7 +2295,7 @@ HDAE5000_FlsLoadScreen:
 .LFWF_89f8:
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld	iz, hl
 	ld	de, iz
 	pushw 0x0000
@@ -2303,7 +2303,7 @@ HDAE5000_FlsLoadScreen:
 	push xwa
 	ld	wa, (xsp+10)
 	ld	bc, (xsp+12)
-	calr	HDAE5000_Display_Manager
+	calr	HDAE5000_LoadSongWithUi
 	cp	hl, 0xffff
 	jrl z, .LFWF_8c1a                      ; [76 fb 01] jrl Z,0x288c1a
 	cp	(0x229DAC:24), 2
@@ -2340,7 +2340,7 @@ HDAE5000_FlsLoadScreen:
 	ld	bc, 0:i3
 	calr	HDAE5000_FS_Write_FSB
 	ld	wa, (0x23A096:24)
-	call HDAE5000_Validate_Cell_Coords
+	call HDAE5000_Fls_IsBlankName
 	cp	hl, 0xffff
 	jr z, .LFWF_8ab9                       ; [66 20] jr Z,0x288ab9
 	ld	xwa, (0x23a1a2)
@@ -2353,7 +2353,7 @@ HDAE5000_FlsLoadScreen:
 	jrl t, .LFWF_8c1a                      ; [78 61 01] jrl T,0x288c1a
 .LFWF_8ab9:
 	ld	wa, (0x23A096:24)
-	call HDAE5000_Calculate_Tile_Address
+	call HDAE5000_FlsRecord_Address
 	ld	xde, xhl
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
@@ -2584,7 +2584,7 @@ HDAE5000_FlsEditScreen:
 .LFWF_8dd2:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call HDAE5000_FlsEditScreen_Helper
+	call HDAE5000_FlsItem_Insert
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	calr	HDAE5000_FS_Write_FSB
@@ -2595,13 +2595,13 @@ HDAE5000_FlsEditScreen:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, 0:i3
-	call HDAE5000_FlsEditScreen_Helper2
+	call HDAE5000_FlsItem_SetByte80
 	jr t, .LFWF_8e11                       ; [68 10] jr T,0x288e11
 .LFWF_8e01:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, 1:i3
-	call HDAE5000_FlsEditScreen_Helper2
+	call HDAE5000_FlsItem_SetByte80
 .LFWF_8e11:
 	ld	wa, 1:i3
 	ld	bc, 0:i3
@@ -2613,13 +2613,13 @@ HDAE5000_FlsEditScreen:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, 0:i3
-	call HDAE5000_FlsEditScreen_Helper3
+	call HDAE5000_FlsItem_SetByte112
 	jr t, .LFWF_8e42                       ; [68 10] jr T,0x288e42
 .LFWF_8e32:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, 1:i3
-	call HDAE5000_FlsEditScreen_Helper3
+	call HDAE5000_FlsItem_SetByte112
 .LFWF_8e42:
 	ld	wa, 1:i3
 	ld	bc, 0:i3
@@ -2651,7 +2651,7 @@ HDAE5000_FlsEditScreen:
 	call	(xhl)
 	calr	HDAE5000_Wait_Callback_Loop
 	ld	wa, 0:i3
-	call HDAE5000_Display_Callback
+	call HDAE5000_HD_StoreTables
 	cp	hl, 0xffff
 	jr z, .LFWF_8ed4                       ; [66 20] jr Z,0x288ed4
 	ld	xwa, (0x23a1a2)
@@ -2797,7 +2797,7 @@ HDAE5000_FlsDel1SwCatch:
 .LFWF_9095:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call HDAE5000_FlsDel1SwCatch_Helper
+	call HDAE5000_FlsItem_Clear
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	calr	HDAE5000_FS_Write_FSB
@@ -2878,7 +2878,7 @@ HDAE5000_FlsDel2SwCatch:
 .LFWF_9192:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call HDAE5000_FlsDel2SwCatch_Helper
+	call HDAE5000_FlsItem_Remove
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	calr	HDAE5000_FS_Write_FSB
@@ -3035,7 +3035,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	(0x23a094), iz
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
-	call HDAE5000_Cell_In_Bounds
+	call HDAE5000_FlsItem_IsSet
 	cp	hl, 0xffff
 	jrl nz, .LFWF_9448                     ; [7e 81 00] jrl NZ,0x289448
 	ld	xwa, (0x23a1a2)
@@ -3054,11 +3054,11 @@ HDAE5000_FlsFileSelScreen:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (0x23A092:24)
-	call HDAE5000_FlsFileSelScreen_Helper
+	call HDAE5000_FlsItem_SetDir
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (0x23A094:24)
-	call HDAE5000_FlsFileSelScreen_Helper2
+	call HDAE5000_FlsItem_SetSong
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	calr	HDAE5000_FS_Write_FSB
@@ -3117,7 +3117,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	(0x23a094), iz
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld	wa, hl
 	cp	wa, 0xffff
 	jr z, .LFWF_9511                       ; [66 14] jr Z,0x289511
@@ -3206,11 +3206,11 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (0x23A092:24)
-	call HDAE5000_FlsFileSelScreen_Helper
+	call HDAE5000_FlsItem_SetDir
 	ld	wa, (0x23A096:24)
 	ld	bc, (0x23A098:24)
 	ld	de, (0x23A094:24)
-	call HDAE5000_FlsFileSelScreen_Helper2
+	call HDAE5000_FlsItem_SetSong
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	calr	HDAE5000_FS_Write_FSB
@@ -3499,7 +3499,7 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 .LFSD__qiz_loop:
 	ld	bc, qiz
 	ldw_sri0	wa, (xsp + 0x012c)
-	call HDAE5000_Table_Calc_Offset
+	call HDAE5000_Song_IsUsed
 	cp hl, 0xffff
 	jr nz, .LFSD__qiz_found
 	ld	wa, qiz
@@ -3737,7 +3737,7 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	; Check results and call directory handler
 	lda_dri xwa, 0xFD, 0x1E, 0x01	; lda XWA, XSP+0x011E
 	ld	bc, qiz
-	call HDAE5000_FS_Scan_Directory_Helper
+	call HDAE5000_FdSong_CheckFiles
 	cp hl, 0xffff
 	jrl z, .LFSD__no_match
 	; Match — attempt write
@@ -3748,7 +3748,7 @@ HDAE5000_FS_Scan_Directory:	; 0x289889 (2663 bytes)
 	pushw 0x0000
 	pushw 0x0000
 	ldw_sri0	wa, (xsp + 0x0132)
-	call HDAE5000_FS_Scan_Directory_Helper2
+	call HDAE5000_CopyFdSongToHd
 	cp hl, 0xffff
 	jrl nz, .LFSD__loop_next
 	; Write failed — error display
@@ -3894,7 +3894,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	add bc, wa
 	ld (0x23a092:24), bc
 	ld wa, bc
-	call HDAE5000_Get_Display_Dimensions_A1_2F
+	call HDAE5000_Dir_IsBlankName
 	cp hl, 0xffff
 	jr nz, .LFSD__hA_cyl_ok
 	; Invalid — error display
@@ -3933,7 +3933,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	calr HDAE5000_Count_Active_Files
 	ld iz, hl
 	ld wa, (0x23a092:24)
-	call HDAE5000_Count_Invalid_Cells
+	call HDAE5000_Dir_CountEmptySongs
 	cp hl, iz
 	jr c, .LFSD__hA_cyl_fits
 	; Too many — error + recursive scan
@@ -3997,7 +3997,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	add bc, wa
 	ld (0x23a092:24), bc
 	ld wa, bc
-	call HDAE5000_Calc_Offset_16
+	call HDAE5000_DirName_Address
 	ld xde, xhl
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
@@ -4229,7 +4229,7 @@ HDAE5000_WrConfirmEventCatch:
 	ld wa, (0x23a092:24)
 	ld bc, (0x23a094:24)
 	ld de, (0x22aa4c:24)
-	calr HDAE5000_Display_Scroll
+	calr HDAE5000_SaveSongWithUi
 	ld wa, 0:i3
 	ld bc, 0:i3
 	calr HDAE5000_HD_Read_Write
@@ -4430,7 +4430,7 @@ HDAE5000_DelOptSwEventCatch:
 .LFS_EL__case_0a:			; Case 0x0A: copy file
 	ld wa, (0x23a092:24)
 	ld bc, (0x23a094:24)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld wa, hl
 	cp wa, 0xffff
 	jr z, .LFS_EL__0a_skip
@@ -4445,7 +4445,7 @@ HDAE5000_DelOptSwEventCatch:
 .LFS_EL__case_0b:			; Case 0x0B: save file
 	ld wa, (0x23a092:24)
 	ld bc, (0x23a094:24)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld wa, hl
 	cp wa, 0xffff
 	jr z, .LFS_EL__0b_skip
@@ -4475,7 +4475,7 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	; Part 1: Table lookup + data copy utility (68 bytes)
 	ld wa, (0x23a092:24); WA = cylinder
 	ld bc, (0x23a094:24); BC = head
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld wa, hl
 	cp wa, 0xffff
 	jr z, .LDUO__not_found
@@ -4520,7 +4520,7 @@ HDAE5000_DelOptNameCheck_Ev01E00047:
 	ld xiz, xde
 	ld wa, (0x23a092:24)
 	ld bc, (0x23a094:24)
-	call HDAE5000_Calculate_Row_Address
+	call HDAE5000_SongRecord_Address
 	push xhl
 	pushw 0x002e
 	pushw 0x2f68

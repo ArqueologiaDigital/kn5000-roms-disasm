@@ -839,7 +839,7 @@ HDAE5000_HD_Format_Params:	; 0x28370E (702 bytes)
 	; Load sector address for this entry
 	ld wa, (0x23a08e:24); WA = base offset
 	add wa, iz			; WA = base + IZ
-	call HDAE5000_Calc_Offset_16			; XHL = sector address
+	call HDAE5000_DirName_Address			; XHL = sector address
 	; Format sector data
 	pushw 0x0010
 	push xhl
@@ -1002,7 +1002,7 @@ HDAE5000_SEL_DIR_Screen:	; 0x2837F2
 	add bc, wa
 	ld (0x23a092:24), bc; store seek position
 	ld wa, bc
-	call HDAE5000_Calc_Offset_16			; XHL = sector address
+	call HDAE5000_DirName_Address			; XHL = sector address
 	ld xde, xhl
 
 	ld xwa, (0x23a1a2:24)
@@ -1280,7 +1280,7 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	lda	xsp, (xsp+16)
 	pushw 0x0010
 	ld	wa, (0x23A092:24)
-	call HDAE5000_Calc_Offset_16
+	call HDAE5000_DirName_Address
 	push xhl
 	pushw 0x0022
 	pushw 0xa038
@@ -1354,7 +1354,7 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	lda	xsp, (xsp+30)
 	ld	bc, iz
 	ld	wa, (0x23A092:24)
-	call HDAE5000_Calculate_Row_Address
+	call HDAE5000_SongRecord_Address
 	pushw 0x001a
 	push xhl
 	ldw	wa, 0x001e
@@ -1397,7 +1397,7 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 .LHRW_3d45:
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld	wa, hl
 	cp	wa, 0xffff
 	jr z, .LHRW_3d7d                       ; [66 22] jr Z,0x283d7d
@@ -1463,7 +1463,7 @@ HDAE5000_FILE_LOAD_Screen_Ev01EA0008:
 	ld	(0x23a094), iz
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Calculate_Row_Address
+	call HDAE5000_SongRecord_Address
 	ld	xde, xhl
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e0a)
@@ -1540,7 +1540,7 @@ HDAE5000_FILE_LOAD_Screen_Ev01EA0002:
 	ld	(0x23a094), iz
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld	wa, hl
 	cp	wa, 0xffff
 	jr z, .LHRW_3f62                       ; [66 14] jr Z,0x283f62
@@ -1629,7 +1629,7 @@ HDAE5000_AttenDelDirSwCatch:
 	ld	wa, (0x23A092:24)
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call HDAE5000_AttenDelDirSwCatch_Helper
+	call HDAE5000_DeleteDirectory
 	ld	xwa, 0x007f0025
 	calr	HDAE5000_HD_Format_Params
 	ld	wa, 0:i3
@@ -1723,7 +1723,7 @@ HDAE5000_AttenDelFileSwCatch:
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
 	ld	de, (0x22ABE6:24)
-	call HDAE5000_Workspace_Sub_29336B
+	call HDAE5000_DeleteSongParts
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
 	ld	de, 1:i3
@@ -1776,7 +1776,7 @@ HDAE5000_FileLoadSwCatch:
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
 	ld	de, (0x22AA4C:24)
-	calr	HDAE5000_Display_Manager
+	calr	HDAE5000_LoadSongWithUi
 	cp	(0x229DAC:24), 2
 	jr nz, .LHRW_4267                      ; [6e 2c] jr NZ,0x284267
 	ld	wa, (0x22AA4C:24)
@@ -1882,7 +1882,7 @@ HDAE5000_HDDNamingCheck:
 .LHRW_4365:
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld	wa, hl
 	cp	wa, 0xffff
 	jr nz, .LHRW_4390                      ; [6e 15] jr NZ,0x284390
@@ -1928,7 +1928,7 @@ HDAE5000_HDDNamingCheck:
 	jr nz, .LHRW_4441                      ; [6e 33] jr NZ,0x284441
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Table_Calc_Offset
+	call HDAE5000_Song_IsUsed
 	cp	hl, 0xffff
 	jr z, .LHRW_4441                       ; [66 1f] jr Z,0x284441
 	ld	xwa, (0x23a1a2)
@@ -1948,7 +1948,7 @@ HDAE5000_HDDNamingCheck:
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
 	ld	de, (0x22AA4C:24)
-	calr	HDAE5000_Display_Scroll
+	calr	HDAE5000_SaveSongWithUi
 .LHRW_4462:
 	ld	wa, 0:i3
 	ld	bc, 0:i3
@@ -3656,7 +3656,7 @@ HDAE5000_SaveOptSwEventCatch:
 	jr nz, .LHCM_56d9                      ; [6e 33] jr NZ,0x2856d9
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Table_Calc_Offset
+	call HDAE5000_Song_IsUsed
 	cp	hl, 0xffff
 	jr z, .LHCM_56d9                       ; [66 1f] jr Z,0x2856d9
 	ld	xwa, (0x23a1a2)
@@ -3676,7 +3676,7 @@ HDAE5000_SaveOptSwEventCatch:
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
 	ld	de, (0x22AA4C:24)
-	calr	HDAE5000_Display_Scroll
+	calr	HDAE5000_SaveSongWithUi
 .LHCM_56fa:
 	ld	wa, 0:i3
 	ld	bc, 0:i3
@@ -3750,7 +3750,7 @@ HDAE5000_FileOptNameCheck_Ev01E00047:
 	ld	xiz, xde
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Calculate_Row_Address
+	call HDAE5000_SongRecord_Address
 	push xhl
 	pushw 0x002e
 	pushw 0x2958
@@ -5196,7 +5196,7 @@ HDAE5000_SetupP2SwCatch:
 	ld xde, 5:i3
 	call (xhl)
 	ld wa, 0:i3
-	call HDAE5000_SetupP2SwCatch_Helper
+	call HDAE5000_HD_StoreSettings
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
@@ -5547,7 +5547,7 @@ HDAE5000_AttenHDFormatSwCatch_Case6:
 	call (xhl)
 	calr HDAE5000_Wait_Callback_Loop
 	ld wa, 0:i3
-	call HDAE5000_SetupP2SwCatch_Helper
+	call HDAE5000_HD_StoreSettings
 	cp hl, 0xffff
 	jr z, .LCHSC__res3_nomatch
 	; Match found
@@ -5705,7 +5705,7 @@ HDAE5000_HD_Sector_Read_Case5:
 	ld (0x23a094:24), wa
 	ld wa, (0x23a092:24)
 	ld bc, (0x23a094:24)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld iz, hl
 	ld wa, iz
 	cp wa, 0xffff
@@ -5922,7 +5922,7 @@ HDAE5000_LBNLoadSwCatch:
 	; Event 0x01: table lookup and copy
 	ld wa, (0x23a092:24)
 	ld bc, (0x23a094:24)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld wa, hl
 	cp wa, 0xffff
 	jr z, .LHD_SR__b_nomatch
@@ -5983,7 +5983,7 @@ HDAE5000_LBNLoadSwCatch:
 	ld wa, (0x23a092:24)
 	ld bc, (0x23a094:24)
 	ld de, (0x22aa4c:24)
-	calr HDAE5000_Display_Manager
+	calr HDAE5000_LoadSongWithUi
 	pushw 0x0001
 	ld wa, 0:i3
 	ld bc, 0:i3
@@ -6114,7 +6114,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	ld (0x23a094:24), wa; f2 94 a0 23 50
 	ld wa, (0x23a092:24); d2 92 a0 23 20
 	ld bc, (0x23a094:24); d2 94 a0 23 21
-	call HDAE5000_Table_Lookup		; 1d b3 03 29
+	call HDAE5000_Song_PartMask		; 1d b3 03 29
 	ld iz, hl				; db 8e
 	ld wa, iz				; de 88
 	cp wa, 0xffff				; d8 cf ff ff
@@ -6159,7 +6159,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	ld wa, (0x23a092:24); d2 92 a0 23 20
 	ld bc, (0x23a094:24); d2 94 a0 23 21
 	ld de, (0x22aa4c:24); d2 4c aa 22 22
-	calr HDAE5000_Display_Manager		; 1e xx xx
+	calr HDAE5000_LoadSongWithUi		; 1e xx xx
 	pushw 0x0001
 	ld wa, 0:i3				; d8 a8
 	ld bc, 0:i3				; d9 a8

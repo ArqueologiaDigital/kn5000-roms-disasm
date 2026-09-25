@@ -74,17 +74,17 @@
 ;   0x28F90B  HDAE5000_Finalize_Init - Just returns (1-byte stub) (DISASSEMBLED)
 ;   0x28F90C  HDAE5000_HD_FormatDrive - Display/callback initialization (LABEL EXPOSED)
 ;   0x28F90C  HDAE5000_HD_FormatDrive - Display/callback initialization
-;   0x28F97E  HDAE5000_Calc_Offset_16 - Calculate 16-byte offset in table
-;   0x28F98B  HDAE5000_Copy_To_Table - Copy data to table at 0x201632
-;   0x28F9AD  HDAE5000_Get_Display_Dimensions_A1_2F - Memory check routine
-;   0x28F9EB  HDAE5000_Count_Invalid_Cells - Count invalid entries
-;   0x28FA1E  HDAE5000_Calculate_Row_Address - Calculate address with 0x4C multiplier
-;   0x28FA56  HDAE5000_Copy_Display_Cell - Copy table entry
-;   0x28FAA0  HDAE5000_Calculate_Tile_Address - Calculate address with 0x90 multiplier
-;   0x28FABA  HDAE5000_Copy_Display_Cell_90 - Copy 0x90-stride entry
-;   0x28FAE9  HDAE5000_Validate_Cell_Coords - Check table entry validity
-;   0x28FB26  HDAE5000_Resolve_Cell_Address - Get entry address with validation
-;   0x28FBB1  HDAE5000_Cell_In_Bounds - Validate entry at coordinates
+;   0x28F97E  HDAE5000_DirName_Address - Calculate 16-byte offset in table
+;   0x28F98B  HDAE5000_DirName_SetAndStore - Copy data to table at 0x201632
+;   0x28F9AD  HDAE5000_Dir_IsBlankName - Memory check routine
+;   0x28F9EB  HDAE5000_Dir_CountEmptySongs - Count invalid entries
+;   0x28FA1E  HDAE5000_SongRecord_Address - Calculate address with 0x4C multiplier
+;   0x28FA56  HDAE5000_SongName_SetAndStore - Copy table entry
+;   0x28FAA0  HDAE5000_FlsRecord_Address - Calculate address with 0x90 multiplier
+;   0x28FABA  HDAE5000_FlsName_SetAndStore - Copy 0x90-stride entry
+;   0x28FAE9  HDAE5000_Fls_IsBlankName - Check table entry validity
+;   0x28FB26  HDAE5000_FlsItem_SongRecord - Get entry address with validation
+;   0x28FBB1  HDAE5000_FlsItem_IsSet - Validate entry at coordinates
 ;   0x29501C  HDAE5000_PPORT_ServicePending - PPORT state machine entry
 ;   0x295009  HDAE5000_PPORT_Svc27 - PPORT utility function
 ;   0x295046  HDAE5000_PPORT_SwitchToLink - context switch main -> PC link
@@ -658,7 +658,7 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	ldw	(0x22AA4C:24), 511
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
-	call HDAE5000_Table_Lookup
+	call HDAE5000_Song_PartMask
 	ld	wa, hl
 	cp	wa, 0xffff
 	jr z, .LRF_0424                        ; [66 14] jr Z,0x280424
@@ -3937,7 +3937,7 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	; Large 124-byte stack frame for sector buffer and parameter blocks
 	lda xsp, (xsp - 124)		; allocate stack frame
 	ld wa, 0:i3
-	call HDAE5000_PPI_Write_Sector_Helper
+	call HDAE5000_HD_LoadTables
 	cp hl, 0:i3
 	jrl nz, .Lpws_error
 	lda xwa, (xsp + 72)

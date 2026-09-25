@@ -119,7 +119,7 @@ HDAE5000_Menu_Handler:	; 0x28AD48 (248 bytes)
 	ld xbc, xwa			; XBC = buffer
 	ld wa, iz			; WA = menu ID
 	ld de, 0:i3			; DE = 0
-	call HDAE5000_Copy_To_Table
+	call HDAE5000_DirName_SetAndStore
 	cp hl, 0xFFFF			; check if copy failed
 	jr z, .Lmh_alt			; if failed, try alternate path
 	; --- Direct dispatch ---
@@ -202,7 +202,7 @@ HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
 	ld xbc, xwa
 	ld wa, iz
 	ld de, 0:i3
-	call HDAE5000_Copy_Display_Cell_90
+	call HDAE5000_FlsName_SetAndStore
 	cp hl, 0xFFFF
 	jr z, .Lmc_alt
 	; --- Direct dispatch ---
@@ -257,8 +257,14 @@ HDAE5000_Menu_Callback:	; 0x28AE40 (248 bytes)
 	lda xsp, (xsp + 22)
 	ret
 
-HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
+HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	; Manage display state; accesses 0x229DAB
+	; ^ corrected: load a song with its screen messages -- shows object
+	;   0x7F02C1 ("HD_PLEASE" in HDAE5000_UiObjectName_PtrTable), runs
+	;   HDAE5000_LoadSong (WA = directory, BC = song, DE = part mask), and on
+	;   failure shows "ERR_LOAD" (0x29D) and arms "ERR_LOAD_EXIT"/"ERR_LOAD_CATCH"
+	;   (0x29E/0x29F) with event 0x01CA0002.  Callers: FileLoadSwCatch,
+	;   LBNLoadSwCatch, FlsLoadScreen (x2) and the routine at 0x286E50.
 	; --- Prologue ---
 	dec 0, xsp				; ef 68 — allocate 4 bytes
 	pushw iz                                ; push iz (compact 16-bit)
@@ -305,7 +311,7 @@ HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
 	ld wa, (xsp + 0x0c)			; 9f 0c 20
 	ld bc, (xsp + 0x0a)			; 9f 0a 21
 	ld de, (xsp + 0x08)			; 9f 08 22
-	call HDAE5000_Display_Manager_Helper				; 1d e9 05 29
+	call HDAE5000_LoadSong				; 1d e9 05 29
 	ld (xsp + 0x02), hl			; bf 02 53 — save result
 	ld wa, (xsp + 0x02)			; 9f 02 20
 	cp wa, 0xffff				; d8 cf ff ff
@@ -419,8 +425,11 @@ HDAE5000_Display_Manager:	; 0x28AF38 (441 bytes)
 	inc 0, xsp				; ef 60
 	retd 0x0006				; 0f 06 00
 
-HDAE5000_Display_Scroll:	; 0x28B0F1 (271 bytes)
+HDAE5000_SaveSongWithUi:	; 0x28B0F1 (271 bytes)
 	; Handle display scroll: register handler, copy data, dispatch callback
+	; ^ corrected: the save counterpart of HDAE5000_LoadSongWithUi around
+	;   HDAE5000_SaveSong.  Callers: HDDNamingCheck, SaveOptSwEventCatch
+	;   (part mask = the save-option word 0x22AA4C), WrConfirmEventCatch.
 	; Input: WA = index, BC = param, DE = context ptr
 	lda xsp, (xsp - 34)		; allocate 34 bytes on stack (0xDE = -34)
 	pushw iz
@@ -452,7 +461,7 @@ HDAE5000_Display_Scroll:	; 0x28B0F1 (271 bytes)
 	pushw 0x0000			; push 0
 	ld wa, (xsp + 40)		; WA = saved index (XSP+0x28)
 	ld bc, (xsp + 38)		; BC = saved param (XSP+0x26)
-	call HDAE5000_Display_Scroll_Helper			; call scroll handler
+	call HDAE5000_SaveSong			; call scroll handler
 	ld (xsp + 2), hl		; save result at offset 2
 	; --- Check result ---
 	ld wa, (xsp + 2)		; reload result
@@ -4857,7 +4866,7 @@ HDAE5000_File_Rename:	; 0x28E06F (280 bytes)
 	dec 0, xsp			; allocate 8 bytes
 	pushw iz
 	ld (xsp + 4), de		; save file count
-	ld (xsp + 6), c		; save partition
+	ld (xsp + 6), c		; save directory
 	ld (xsp + 8), a		; save operation type
 	cpw (xsp + 4), 0x0000
 	jrl lt, .Lfr_negative		; negative count → special handler
@@ -7700,19 +7709,23 @@ HDAE5000_HD_FormatDrive:	; 28F90Ch (114 bytes)
 	inc 2, xsp			; deallocate 2 bytes
 	ret
 
-HDAE5000_Calc_Offset_16:	; 0x28F97E (13 bytes)
+HDAE5000_DirName_Address:	; 0x28F97E (13 bytes)
 	; Calculate 16-byte offset in table at 0x201632
 	; Input: WA = table index
 	; Output: XHL = pointer to 16-byte entry
+	; (The table is the directory-name block, 16 bytes x 120 --
+	; HDAE5000_HD_GetBlockInfo block 0 -- so WA is a directory index.)
 	extz xwa		; zero-extend index to 32 bits
 	sll xwa, 4		; multiply by 16
 	ld xhl, 0x201632	; table base address
 	add xhl, xwa		; XHL = base + index*16
 	ret
 
-HDAE5000_Copy_To_Table:	; 0x28F98B (34 bytes)
+HDAE5000_DirName_SetAndStore:	; 0x28F98B (34 bytes)
 	; Copy 16 bytes to table entry, then call Display_Callback
 	; Input: WA = table index, XBC = source pointer, DE = param
+	; (= set directory WA's name from XBC, then HDAE5000_HD_StoreTables(DE):
+	; "Display_Callback" is the table writer, DE its keep-spinning flag.)
 	pushw iz
 	ld iz, de			; save DE param
 	pushw 0x0010			; push 16 (byte count)
@@ -7725,13 +7738,16 @@ HDAE5000_Copy_To_Table:	; 0x28F98B (34 bytes)
 	call HDAE5000_StrNCpy	; memcpy(dest, src, 16)
 	lda xsp, (xsp + 0x0A)		; deallocate 10 bytes
 	ld wa, iz			; restore param
-	calr HDAE5000_Display_Callback
+	calr HDAE5000_HD_StoreTables
 	popw iz
 	ret
 
-HDAE5000_Get_Display_Dimensions_A1_2F:	; 0x28F9AD (62 bytes)
-	; Check if tile entry matches reference; return 0 or -1
-	; Input: WA = tile index, Output: HL = 0 (match) or 0xFFFF (mismatch)
+HDAE5000_Dir_IsBlankName:	; 0x28F9AD (62 bytes)
+	; Is directory WA's 16-byte name the blank string at 0x2F8DE0 (16
+	; spaces)?  HL = 0xFFFF if it is (unused directory), 0 otherwise.
+	; (Was "tile entry ... HL = 0 (match) or 0xFFFF (mismatch)": the entry is a
+	; directory name and the result is the other way round -- `jr nz` skips
+	; the 0xFFFF only on a MISmatch.)
 	push xiz		; save XIZ
 	ld iz, wa		; IZ = tile index
 	ld	qiz, 0
@@ -7757,9 +7773,10 @@ HDAE5000_Get_Display_Dimensions_A1_2F:	; 0x28F9AD (62 bytes)
 	pop xiz			; restore XIZ
 	ret
 
-HDAE5000_Count_Invalid_Cells:	; 0x28F9EB (51 bytes)
-	; Count how many of 16 tile entries are invalid (-1)
-	; Input: WA = row param, Output: HL = count of invalid entries
+HDAE5000_Dir_CountEmptySongs:	; 0x28F9EB (51 bytes)
+	; Number of the 16 songs of directory WA that hold no part at all
+	; (HDAE5000_Song_IsUsed = 0xFFFF).  Output: HL = that count.
+	; (Was "16 tile entries"; they are song records.)
 	dec 2, xsp		; allocate 2 bytes
 	push xiz		; save XIZ
 	ld (xsp + 4), wa	; save WA param on stack
@@ -7770,7 +7787,7 @@ HDAE5000_Count_Invalid_Cells:	; 0x28F9EB (51 bytes)
 .Lcic_loop:
 	ld wa, (xsp + 4)	; restore WA param
 	ld	bc, qiz
-	calr HDAE5000_Table_Calc_Offset
+	calr HDAE5000_Song_IsUsed
 	cp hl, 0xFFFF		; check if invalid (-1)
 	jr nz, .Lcic_skip	; skip if valid
 	inc 1, iz		; count invalid
@@ -7784,10 +7801,12 @@ HDAE5000_Count_Invalid_Cells:	; 0x28F9EB (51 bytes)
 	inc 2, xsp		; deallocate 2 bytes
 	ret
 
-HDAE5000_Calculate_Row_Address:	; 0x28FA1E (56 bytes)
+HDAE5000_SongRecord_Address:	; 0x28FA1E (56 bytes)
 	; Calculate table address: base + row*1216 + 1920 + col*76
 	; Input: WA = row, BC = column
 	; Output: XHL = pointer to entry
+	; (row = directory, column = song: XHL = 0x201DB2 + dir*0x4C0 +
+	; song*0x4C, the 76-byte song record.)
 	dec 4, xsp		; allocate 4 bytes
 	pushw iz		; save IZ
 	ld iz, wa		; IZ = row
@@ -7809,14 +7828,17 @@ HDAE5000_Calculate_Row_Address:	; 0x28FA1E (56 bytes)
 	inc 4, xsp		; deallocate 4 bytes
 	ret
 
-HDAE5000_Copy_Display_Cell:	; 0x28FA56 (74 bytes)
-	; Copy table entry using row*1216 + 1920 + col*76 addressing, then callback
-	; Input: WA = row, BC = column, stack+2 = copy size
+HDAE5000_SongName_SetAndStore:	; 0x28FA56 (74 bytes)
+	; Set the 26-byte name of song record (WA = dir, BC = song) from XDE,
+	; then HDAE5000_HD_StoreTables(stacked word).  No reference to it was
+	; found (scripts/analysis/hdae5000_reachability.py).
+	; (Was "copy table entry ... stack+2 = copy size": XDE is the source,
+	; the record the destination, and the stacked word is the store flag.)
 	dec 4, xsp		; allocate 4 bytes
 	pushw iz		; save IZ
 	ld iz, wa		; IZ = row
 	pushw 0x001A		; push 26 (entry size)
-	push xde		; push dest pointer
+	push xde		; push source (the new name)
 	ld wa, bc		; WA = column
 	extz xwa		; zero-extend
 	ld xbc, 0x0000004C	; multiplier = 76
@@ -7830,19 +7852,19 @@ HDAE5000_Copy_Display_Cell:	; 0x28FA56 (74 bytes)
 	add xhl, (xsp + 8)	; XHL += col_offset
 	ld xwa, 0x00201632	; table base address
 	add xwa, xhl		; XWA = base + total_offset
-	push xwa		; push source pointer
+	push xwa		; push destination (the record)
 	call HDAE5000_StrNCpy
 	lda xsp, (xsp + 0x0A)	; deallocate 10 bytes
-	ld wa, (xsp + 0x0A)	; load copy size param from stack
-	calr HDAE5000_Display_Callback
+	ld wa, (xsp + 0x0A)	; the stacked store flag
+	calr HDAE5000_HD_StoreTables
 	popw iz			; restore IZ
 	inc 4, xsp		; deallocate 4 bytes
 	retd 0x0002		; return and pop 2 bytes
 
-HDAE5000_Calculate_Tile_Address:	; 0x28FAA0 (26 bytes)
-	; Calculate tile address: base + index * 0x90 (144)
-	; Input: WA = tile index
-	; Output: XHL = pointer to tile entry
+HDAE5000_FlsRecord_Address:	; 0x28FAA0 (26 bytes)
+	; FLS record address: 0x201632 + 0x24180 + WA*0x90 = 0x2257B2 + fls*144
+	; (HDAE5000_HD_GetBlockInfo block 2).  Input: WA = FLS index.
+	; (Was "tile address"/"tile index".)
 	; Algorithm: index*144 = index*(128+16) = (index<<3 + index)<<4
 	extz xwa		; zero-extend index to 32 bits
 	ld xbc, xwa		; XBC = index
@@ -7854,9 +7876,9 @@ HDAE5000_Calculate_Tile_Address:	; 0x28FAA0 (26 bytes)
 	add xhl, xbc		; XHL = base + offset
 	ret
 
-HDAE5000_Copy_Display_Cell_90:	; 0x28FABA (47 bytes)
-	; Copy entry with 0x90 stride: base + index*144 + 0x24180, then callback
-	; Input: WA = tile index, DE = callback param
+HDAE5000_FlsName_SetAndStore:	; 0x28FABA (47 bytes)
+	; Set FLS record WA's 16-byte name from XBC, then
+	; HDAE5000_HD_StoreTables(DE).  (Was "tile index" / "callback param".)
 	pushw iz		; save IZ
 	ld iz, de		; IZ = callback param
 	pushw 0x0010		; push 16 (copy size)
@@ -7873,14 +7895,13 @@ HDAE5000_Copy_Display_Cell_90:	; 0x28FABA (47 bytes)
 	call HDAE5000_StrNCpy	; copy 16 bytes
 	lda xsp, (xsp + 0x0A)	; deallocate 10 bytes
 	ld wa, iz		; restore callback param
-	calr HDAE5000_Display_Callback
+	calr HDAE5000_HD_StoreTables
 	popw iz			; restore IZ
 	ret
 
-HDAE5000_Validate_Cell_Coords:	; 0x28FAE9 (61 bytes)
-	; Compare tile entry with reference, return 0 if valid or -1 if invalid
-	; Input: WA = tile index
-	; Output: HL = 0 (valid) or 0xFFFF (invalid)
+HDAE5000_Fls_IsBlankName:	; 0x28FAE9 (61 bytes)
+	; Is FLS record WA's name the blank string at 0x2F8DF2 (16 spaces)?
+	; Output: HL = 0xFFFF if blank (unused), 0 otherwise.  (Was "tile entry".)
 	dec 2, xsp		; allocate 2 bytes for result
 	pushw iz		; save IZ
 	ld iz, wa		; IZ = tile index
@@ -7893,7 +7914,7 @@ HDAE5000_Validate_Cell_Coords:	; 0x28FAE9 (61 bytes)
 	pushw 0x002F		; push max length
 	pushw 0x8DF2		; push reference string address
 	ld wa, iz		; restore tile index
-	calr HDAE5000_Calculate_Tile_Address	; XHL = tile address
+	calr HDAE5000_FlsRecord_Address	; XHL = tile address
 	push xhl		; push tile address (32-bit)
 	call HDAE5000_StrNCmp
 	add xsp, 0x0000000A	; clean up 10 bytes
@@ -7906,10 +7927,11 @@ HDAE5000_Validate_Cell_Coords:	; 0x28FAE9 (61 bytes)
 	inc 2, xsp		; deallocate 2 bytes
 	ret
 
-HDAE5000_Resolve_Cell_Address:	; 0x28FB26 (139 bytes)
-	; Get entry address with validation; returns XHL = entry ptr or error ptr
-	; Input: WA = row, BC = column
-	; Output: XHL = pointer to entry (or fallback if invalid)
+HDAE5000_FlsItem_SongRecord:	; 0x28FB26 (139 bytes)
+	; Song record of item BC of FLS record WA: XHL = 0x201DB2 +
+	; (dir+1 byte - 1)*0x4C0 + (song+1 byte - 1)*0x4C, or 0x2F8E04 (26
+	; spaces, a blank name) when the item is empty (HDAE5000_FlsItem_IsSet).
+	; (Was "row"/"column" and "row/col dimension table".)
 	dec 4, xsp		; allocate 4 bytes
 	pushw iz		; save IZ
 	ld iz, bc		; IZ = column
@@ -7917,10 +7939,10 @@ HDAE5000_Resolve_Cell_Address:	; 0x28FB26 (139 bytes)
 	; First: validate the cell
 	ld wa, (xsp + 4)	; WA = row
 	ld bc, iz		; BC = column
-	calr HDAE5000_Cell_In_Bounds
+	calr HDAE5000_FlsItem_IsSet
 	cp hl, 0xFFFF		; invalid?
 	jr z, .Lrca_fail	; if -1, use fallback address
-	; Calculate row offset: look up row dimension table at 0x2257E2
+	; song offset: the item's song+1 byte (FLS record +48+item, 0x2257E2 base)
 	ld bc, iz		; BC = column
 	extz xbc		; zero-extend column
 	ld wa, (xsp + 4)	; WA = row
@@ -7930,14 +7952,14 @@ HDAE5000_Resolve_Cell_Address:	; 0x28FB26 (139 bytes)
 	add xde, xwa		; XDE = row * 9
 	sll xde, 4		; XDE = row * 144
 	add xde, xbc		; XDE = row*144 + col
-	lda xwa, (0x2257e2:24); lda XWA, (0x2257E2) - row dimension table
+	lda xwa, (0x2257e2:24); song+1 bytes of the FLS items
 	add xwa, xde		; XWA = table + row*144 + col
 	ld a, (xwa)		; A = dimension value
 	dec 1, a		; A -= 1
 	extz wa			; zero-extend A to WA
 	muls wa, 0x004C		; WA = (dim-1) * 76
 	ld (xsp + 2), wa	; save row_offset
-	; Calculate column offset: look up col dimension table at 0x2257C2
+	; directory offset: the item's dir+1 byte (FLS record +16+item, 0x2257C2 base)
 	ld bc, iz		; BC = column
 	extz xbc		; zero-extend
 	ld wa, (xsp + 4)	; WA = row
@@ -7947,9 +7969,9 @@ HDAE5000_Resolve_Cell_Address:	; 0x28FB26 (139 bytes)
 	add xde, xwa		; XDE = row * 9
 	sll xde, 4		; XDE = row * 144
 	add xde, xbc		; XDE = row*144 + col
-	lda xwa, (0x2257c2:24); lda XWA, (0x2257C2) - col dimension table
+	lda xwa, (0x2257c2:24); dir+1 bytes of the FLS items
 	add xwa, xde		; XWA = table + index
-	ld a, (xwa)		; A = col dimension
+	ld a, (xwa)		; A = directory + 1
 	dec 1, a		; A -= 1
 	ld w, 0x00:opc		; W = 0 (zero-extend A to WA manually)
 	extz xwa		; zero-extend WA to XWA
@@ -7971,17 +7993,26 @@ HDAE5000_Resolve_Cell_Address:	; 0x28FB26 (139 bytes)
 
 ; ============================================================================
 ; Display Table Management and UI Cell Rendering (0x28FBB1-0x295008)
+; ^ PROVEN WRONG TITLE, kept for the record: this is the song/FLS record
+;   layer and the song load/save/copy/delete code (see
+;   scripts/renaming/rename_hdae5000_songio.sed and each header).
 ; 21,592 bytes, 50 routines
 ;
 ; Table operations use 0x4C (76) byte stride for row addressing
 ; and 0x90 (144) byte stride for tile addressing.
 ; Eight routines at 0x2934C8-0x293BB8 are exactly 222 bytes each,
 ; likely one per UI cell/widget type.
+; ^ They are one per song PART: HDAE5000_DeleteSongPart_Lsw .. _Tlx, and
+;   there are nine (0x2934C8-0x293C95), not eight.
 ; ============================================================================
 
-HDAE5000_Cell_In_Bounds:	; 0x28FBB1 (1497 bytes)
+HDAE5000_FlsItem_IsSet:	; 0x28FBB1 (1497 bytes)
 	; Validate entry at coordinates; calculates table offset
+	; (= HL = 0 if item BC of FLS record WA is set -- both its dir+1 byte
+	; at 0x2257C2 and its song+1 byte at 0x2257E2 are non-zero -- else 0xFFFF)
 ; LCIB: 0x28FBB1 (1497 bytes)
+	; ^ conversion-region size (local-label prefix .LCIB_), not a routine
+	;   size: HDAE5000_FlsItem_IsSet .. HDAE5000_FlsItem_SetByte112.
 
 	ld	hl, 0:i3
 	ld	ix, bc
@@ -8013,7 +8044,10 @@ HDAE5000_Cell_In_Bounds:	; 0x28FBB1 (1497 bytes)
 	ldw	hl, 0xffff
 	ret
 
-HDAE5000_FS_Write_FSB_Helper:
+HDAE5000_FlsItem_Get:
+	; XDE = destination {u16 dir; u16 song; u8 byte80; u8 byte112} of item BC of
+	; FLS record WA (the 1-based dir/song bytes minus 1); nothing when the item
+	; is empty (HDAE5000_FlsItem_IsSet).
 	dec	6, xsp
 	pushw iz                                ; push IZ
 	ld (xsp + 0x02), xde                    ; ld (XSP+0x02),XDE
@@ -8021,7 +8055,7 @@ HDAE5000_FS_Write_FSB_Helper:
 	ld (xsp + 0x06), wa                     ; ld (XSP+0x06),WA
 	ld	wa, (xsp+6)
 	ld	bc, iz
-	calr	HDAE5000_Cell_In_Bounds
+	calr	HDAE5000_FlsItem_IsSet
 	ld	wa, hl
 	cp	wa, 0xffff
 	jrl z, .LCIB_fcae                      ; [76 9f 00] jrl Z,0x28fcae
@@ -8094,7 +8128,8 @@ HDAE5000_FS_Write_FSB_Helper:
 	inc	6, xsp
 	ret
 
-HDAE5000_FlsDel1SwCatch_Helper:
+HDAE5000_FlsItem_Clear:
+	; zero the four bytes of item BC of FLS record WA (+16, +48, +80, +112); HL = 0
 	ld	hl, bc
 	extz xhl                                ; extz XHL
 	ld	de, wa
@@ -8144,7 +8179,9 @@ HDAE5000_FlsDel1SwCatch_Helper:
 	ld	hl, 0:i3
 	ret
 
-HDAE5000_FlsDel2SwCatch_Helper:
+HDAE5000_FlsItem_Remove:
+	; remove item BC of FLS record WA: items BC+1..31 move down one, item 31
+	; is zeroed; HL = 0
 	ld	ix, bc
 	inc	1, ix
 	cp	ix, 0x0020
@@ -8300,7 +8337,9 @@ HDAE5000_FlsDel2SwCatch_Helper:
 	ld	hl, 0:i3
 	ret
 
-HDAE5000_FlsEditScreen_Helper:
+HDAE5000_FlsItem_Insert:
+	; open a gap at item BC of FLS record WA: items BC..30 move up one (item
+	; 31 is lost) and item BC is zeroed; HL = 0
 	push xiz
 	ldw	iy, 0x001f
 	cp	iy, bc
@@ -8464,6 +8503,12 @@ HDAE5000_FlsEditScreen_Helper:
 	pop xiz                                 ; pop XIZ
 	ret
 
+HDAE5000_FlsItem_Set:
+	; item BC of FLS record WA = XDE {u16 dir; u16 song; u8 byte80; u8 byte112}
+	; (stored as dir+1, song+1), then HDAE5000_HD_StoreTables(stacked word);
+	; retd 2.  No reference to 0x29002E was found: the one LE32 hit of a
+	; nearby address (0x290030, at 0x29E158) lies inside a UI object
+	; descriptor record, so this looks unreachable.
 	ld	hl, wa
 	ld	ix, bc
 	extz xix                                ; extz XIX
@@ -8523,10 +8568,11 @@ HDAE5000_FlsEditScreen_Helper:
 	ld	a, (xde+5)
 	ld	(xbc), a
 	ld	wa, (xsp+4)
-	calr	HDAE5000_Display_Callback
+	calr	HDAE5000_HD_StoreTables
 	retd 0x0002		; retd 0x0002
 
-HDAE5000_FlsFileSelScreen_Helper:
+HDAE5000_FlsItem_SetDir:
+	; item BC of FLS record WA: dir+1 byte = E+1; HL = 0
 	extz xbc                                ; extz XBC
 	extz xwa
 	ld	xhl, xwa
@@ -8543,7 +8589,8 @@ HDAE5000_FlsFileSelScreen_Helper:
 	ld	hl, 0:i3
 	ret
 
-HDAE5000_FlsFileSelScreen_Helper2:
+HDAE5000_FlsItem_SetSong:
+	; item BC of FLS record WA: song+1 byte = E+1; HL = 0
 	extz xbc                                ; extz XBC
 	extz xwa
 	ld	xhl, xwa
@@ -8560,7 +8607,8 @@ HDAE5000_FlsFileSelScreen_Helper2:
 	ld	hl, 0:i3
 	ret
 
-HDAE5000_FlsEditScreen_Helper2:
+HDAE5000_FlsItem_SetByte80:
+	; item BC of FLS record WA, if set: byte at +80 = E
 	dec	4, xsp
 	pushw iz                                ; push IZ
 	ld	(xsp+2), e
@@ -8568,7 +8616,7 @@ HDAE5000_FlsEditScreen_Helper2:
 	ld (xsp + 0x04), wa                     ; ld (XSP+0x04),WA
 	ld	wa, (xsp+4)
 	ld	bc, iz
-	calr	HDAE5000_Cell_In_Bounds
+	calr	HDAE5000_FlsItem_IsSet
 	ld	wa, hl
 	cp	wa, 0xffff
 	jr z, .LCIB_0144                       ; [66 23] jr Z,0x290144
@@ -8591,7 +8639,8 @@ HDAE5000_FlsEditScreen_Helper2:
 	inc 4, xsp                              ; inc 4,XSP
 	ret
 
-HDAE5000_FlsEditScreen_Helper3:
+HDAE5000_FlsItem_SetByte112:
+	; item BC of FLS record WA, if set: byte at +112 = E
 	dec	4, xsp
 	pushw iz                                ; push IZ
 	ld	(xsp+2), e
@@ -8599,7 +8648,7 @@ HDAE5000_FlsEditScreen_Helper3:
 	ld (xsp + 0x04), wa                     ; ld (XSP+0x04),WA
 	ld	wa, (xsp+4)
 	ld	bc, iz
-	calr	HDAE5000_Cell_In_Bounds
+	calr	HDAE5000_FlsItem_IsSet
 	ld	wa, hl
 	cp	wa, 0xffff
 	jr z, .LCIB_0186                       ; [66 23] jr Z,0x290186
@@ -8623,10 +8672,12 @@ HDAE5000_FlsEditScreen_Helper3:
 	ret
 
 
-HDAE5000_Table_Calc_Offset:	; 0x29018A (553 bytes)
+HDAE5000_Song_IsUsed:	; 0x29018A (553 bytes)
 	; Check 9 table slots for availability (-1 = free)
 	; WA = row index, BC = column index
 	; Returns HL=0 if any slot occupied, HL=0xFFFF if all free
+	; (WA = directory, BC = song; the nine slots are the part first-cluster
+	; longs at +36.. of the song record, 0xFFFFFFFF = part absent.)
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc		; save column
@@ -8817,8 +8868,10 @@ HDAE5000_Table_Calc_Offset:	; 0x29018A (553 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
+HDAE5000_Song_PartMask:	; 0x2903B3 (928 bytes)
 	; Part 1: Build occupied-slot bitmask (bits 0-8)
+	; (= the mask of the parts song (WA = dir, BC = song) holds, bit k for
+	; part k LSW PMT SQT CMP TM MSP RCM MD TLX; 0xFFFF if it holds none)
 	; WA = row, BC = column. Returns HL = bitmask or 0xFFFF if all free.
 	dec 6, xsp
 	push xiz
@@ -8828,7 +8881,7 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	; First check if ALL slots are free (call Table_Calc_Offset)
 	ld wa, (xsp + 8)
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Calc_Offset
+	calr HDAE5000_Song_IsUsed
 	cp hl, 0xFFFF
 	jrl z, .Ltl_all_free
 	; --- Check slot 0: 0x201656 ---
@@ -9011,8 +9064,14 @@ HDAE5000_Table_Lookup:	; 0x2903B3 (928 bytes)
 	ret
 	; Part 2: Entry setup handler (0x2905E9)
 	; Uses bitmask in WA, dispatches Cell_Render routines per bit
+	; ^ corrected: WA = directory, BC = song, DE = part mask; bit k calls
+	;   HDAE5000_LoadSong_<part k>, stopping at the first that returns
+	;   0xFFFF.  Bracketed by the main-CPU callbacks (0x0E88 table +0xE8, +0xEC,
+	;   +0xF0; with the stacked flag = 1 also 0x0E0A +0x538/+0x53C).  HL = the
+	;   last loader's result.  Callers: HDAE5000_LoadSongWithUi and PC-link
+	;   service 14 ("LoadSongFromHdToMemory").
 	; IZ = entry ID, DE = param, BC = flags
-HDAE5000_Display_Manager_Helper:
+HDAE5000_LoadSong:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), de		; save DE
@@ -9033,14 +9092,14 @@ HDAE5000_Display_Manager_Helper:
 	call (xhl)
 .Ltl2_skip_extra:
 	call HDAE5000_ATA_SoftReset_Status
-	; Test bits 0-8, calling Cell_Render subroutines
+	; Test bits 0-8, calling the part loaders (was "Cell_Render subroutines")
 	ld wa, (xsp + 4)		; reload DE (bitmask param)
 	; --- Bit 0 ---
 	bit 0, wa
 	jr z, .Ltl2_bit1
 	ld wa, iz
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Sub_290753
+	calr HDAE5000_LoadSong_Lsw
 	ld qiz, hl		; ld QIZ, HL (previous-bank store)
 	; --- Bit 1 ---
 .Ltl2_bit1:
@@ -9051,7 +9110,7 @@ HDAE5000_Display_Manager_Helper:
 	jr z, .Ltl2_bit2
 	ld wa, iz
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Sub_2908B1
+	calr HDAE5000_LoadSong_Pmt
 	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 2 ---
 .Ltl2_bit2:
@@ -9062,7 +9121,7 @@ HDAE5000_Display_Manager_Helper:
 	jr z, .Ltl2_bit3
 	ld wa, iz
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Sub_290A00
+	calr HDAE5000_LoadSong_Sqt
 	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 3 ---
 .Ltl2_bit3:
@@ -9073,7 +9132,7 @@ HDAE5000_Display_Manager_Helper:
 	jr z, .Ltl2_bit4
 	ld wa, iz
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Sub_290B86
+	calr HDAE5000_LoadSong_Cmp
 	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 4 ---
 .Ltl2_bit4:
@@ -9084,7 +9143,7 @@ HDAE5000_Display_Manager_Helper:
 	jr z, .Ltl2_bit5
 	ld wa, iz
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Sub_290CB5
+	calr HDAE5000_LoadSong_Tm
 	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 5 ---
 .Ltl2_bit5:
@@ -9095,7 +9154,7 @@ HDAE5000_Display_Manager_Helper:
 	jr z, .Ltl2_bit6
 	ld wa, iz
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Sub_290D91
+	calr HDAE5000_LoadSong_Msp
 	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 6 ---
 .Ltl2_bit6:
@@ -9106,7 +9165,7 @@ HDAE5000_Display_Manager_Helper:
 	jr z, .Ltl2_bit7
 	ld wa, iz
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Sub_290EC0
+	calr HDAE5000_LoadSong_Rcm
 	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 7 ---
 .Ltl2_bit7:
@@ -9117,7 +9176,7 @@ HDAE5000_Display_Manager_Helper:
 	jr z, .Ltl2_bit8
 	ld wa, iz
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Sub_290F45
+	calr HDAE5000_LoadSong_Md
 	ld qiz, hl		; ld QIZ, HL
 	; --- Bit 8 ---
 .Ltl2_bit8:
@@ -9128,7 +9187,7 @@ HDAE5000_Display_Manager_Helper:
 	jr z, .Ltl2_final
 	ld wa, iz
 	ld bc, (xsp + 6)
-	calr HDAE5000_Table_Sub_29103D
+	calr HDAE5000_LoadSong_Tlx
 	ld qiz, hl		; ld QIZ, HL
 	; --- Final workspace cleanup ---
 .Ltl2_final:
@@ -9154,11 +9213,16 @@ HDAE5000_Display_Manager_Helper:
 	inc 4, xsp
 	retd 4
 
-HDAE5000_Table_Sub_290753:	; 0x290753 (350 bytes)
+HDAE5000_LoadSong_Lsw:	; 0x290753 (350 bytes)
+	; Load part 0 (LSW) of song (WA = directory, BC = song): if its slot (song
+	; record +36, 0x201656 + dir*0x4C0 + song*0x4C) is not 0xFFFFFFFF, read the
+	; chain with HDAE5000_HD_ReadFile and hand the data to the main CPU
+	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
+	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 0.
 	lda xsp, (xsp - 28)
 	push xiz
 	ld (xsp + 28), bc	; save file number
-	ld (xsp + 30), wa	; save partition
+	ld (xsp + 30), wa	; save directory
 	ldw (xsp + 10), 0x0000	; init result = 0
 	; First multiply: compute table offset
 	ld wa, (xsp + 28)
@@ -9197,7 +9261,7 @@ HDAE5000_Table_Sub_290753:	; 0x290753 (350 bytes)
 	; Compute arg and call Cell_Get_Params
 	ld xwa, (xsp + 16)
 	add xwa, (xsp + 24)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 4), xhl
 	; Workspace dispatch (d8 displacement 0x0C)
 	ld xwa, (0x23a1a2:24)
@@ -9282,11 +9346,16 @@ HDAE5000_Table_Sub_290753:	; 0x290753 (350 bytes)
 	lda xsp, (xsp + 28)
 	ret
 
-HDAE5000_Table_Sub_2908B1:	; 0x2908B1 (335 bytes)
+HDAE5000_LoadSong_Pmt:	; 0x2908B1 (335 bytes)
+	; Load part 1 (PMT) of song (WA = directory, BC = song): if its slot (song
+	; record +40, 0x20165A + dir*0x4C0 + song*0x4C) is not 0xFFFFFFFF, read the
+	; chain with HDAE5000_HD_ReadFile and hand the data to the main CPU
+	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
+	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 1.
 	lda xsp, (xsp - 38)
 	push xiz
 	ld (xsp + 38), bc	; save file number
-	ld (xsp + 40), wa	; save partition
+	ld (xsp + 40), wa	; save directory
 	ldw (xsp + 12), 0x0000	; init result = 0
 	ldw (xsp + 4), 0x0000	; init flag = 0
 	; First multiply: compute table offset
@@ -9404,11 +9473,16 @@ HDAE5000_Table_Sub_2908B1:	; 0x2908B1 (335 bytes)
 	lda xsp, (xsp + 38)
 	ret
 
-HDAE5000_Table_Sub_290A00:	; 0x290A00 (390 bytes)
+HDAE5000_LoadSong_Sqt:	; 0x290A00 (390 bytes)
+	; Load part 2 (SQT) of song (WA = directory, BC = song): if its slot (song
+	; record +44, 0x20165E + dir*0x4C0 + song*0x4C) is not 0xFFFFFFFF, read the
+	; chain with HDAE5000_HD_ReadFile and hand the data to the main CPU
+	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
+	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 2.
 	lda xsp, (xsp - 28)
 	push xiz
 	ld (xsp + 28), bc	; save file number
-	ld (xsp + 30), wa	; save partition
+	ld (xsp + 30), wa	; save directory
 	ldw (xsp + 10), 0x0000	; init result = 0
 	; First multiply: compute table offset
 	ld wa, (xsp + 28)
@@ -9543,11 +9617,16 @@ HDAE5000_Table_Sub_290A00:	; 0x290A00 (390 bytes)
 	lda xsp, (xsp + 28)
 	ret
 
-HDAE5000_Table_Sub_290B86:	; 0x290B86 (303 bytes)
+HDAE5000_LoadSong_Cmp:	; 0x290B86 (303 bytes)
+	; Load part 3 (CMP) of song (WA = directory, BC = song): if its slot (song
+	; record +48, 0x201662 + dir*0x4C0 + song*0x4C) is not 0xFFFFFFFF, read the
+	; chain with HDAE5000_HD_ReadFile and hand the data to the main CPU
+	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
+	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 3.
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), bc	; save file number
-	ld (xsp + 22), wa	; save partition
+	ld (xsp + 22), wa	; save directory
 	ldw (xsp + 10), 0x0000	; init result = 0
 	; 1st multiply: check entry existence
 	ld wa, (xsp + 20)
@@ -9647,7 +9726,12 @@ HDAE5000_Table_Sub_290B86:	; 0x290B86 (303 bytes)
 	lda xsp, (xsp + 20)
 	ret
 
-HDAE5000_Table_Sub_290CB5:	; 0x290CB5 (220 bytes)
+HDAE5000_LoadSong_Tm:	; 0x290CB5 (220 bytes)
+	; Load part 4 (TM) of song (WA = directory, BC = song): if its slot (song
+	; record +52, 0x201666 + dir*0x4C0 + song*0x4C) is not 0xFFFFFFFF, read the
+	; chain with HDAE5000_HD_ReadFile and hand the data to the main CPU
+	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
+	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 4.
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), bc
@@ -9722,7 +9806,12 @@ HDAE5000_Table_Sub_290CB5:	; 0x290CB5 (220 bytes)
 	lda xsp, (xsp + 20)
 	ret
 
-HDAE5000_Table_Sub_290D91:	; 0x290D91 (303 bytes)
+HDAE5000_LoadSong_Msp:	; 0x290D91 (303 bytes)
+	; Load part 5 (MSP) of song (WA = directory, BC = song): if its slot (song
+	; record +56, 0x20166A + dir*0x4C0 + song*0x4C) is not 0xFFFFFFFF, read the
+	; chain with HDAE5000_HD_ReadFile and hand the data to the main CPU
+	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
+	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 5.
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), bc
@@ -9819,7 +9908,12 @@ HDAE5000_Table_Sub_290D91:	; 0x290D91 (303 bytes)
 	lda xsp, (xsp + 20)
 	ret
 
-HDAE5000_Table_Sub_290EC0:	; 0x290EC0 (133 bytes)
+HDAE5000_LoadSong_Rcm:	; 0x290EC0 (133 bytes)
+	; Load part 6 (RCM) of song (WA = directory, BC = song): if its slot (song
+	; record +60, 0x20166E + dir*0x4C0 + song*0x4C) is not 0xFFFFFFFF, read the
+	; chain with HDAE5000_HD_ReadFile and hand the data to the main CPU
+	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
+	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 6.
 	dec 4, xsp		; allocate 4 bytes on stack
 	push xiz		; save XIZ
 	ld (xsp + 4), bc	; save BC (file number param)
@@ -9848,9 +9942,9 @@ HDAE5000_Table_Sub_290EC0:	; 0x290EC0 (133 bytes)
 	ld (0x238f1e:24), wa; ld (0x238F1E), WA
 	ld wa, (xsp + 4)	; reload file number
 	ld (0x238f20:24), wa; ld (0x238F20), WA
-	lda xwa, (0x293f96:24); XWA = 0x293F96 (function ptr 1)
+	lda xwa, (HDAE5000_RcmStream_Read:24); XWA = 0x293F96 (function ptr 1)
 	ld xde, xwa		; XDE = function ptr 1
-	lda xwa, (0x29414c:24); XWA = 0x29414C (function ptr 2)
+	lda xwa, (HDAE5000_RcmStream_LastResult:24); XWA = 0x29414C (function ptr 2)
 	ld xbc, xwa		; XBC = function ptr 2
 	ld xwa, xde		; XWA = function ptr 1
 	ld xde, (0x23a1a2:24); XDE = (0x23A1A2) workspace ptr
@@ -9863,11 +9957,16 @@ HDAE5000_Table_Sub_290EC0:	; 0x290EC0 (133 bytes)
 	inc 4, xsp		; deallocate 4 bytes
 	ret
 
-HDAE5000_Table_Sub_290F45:	; 0x290F45 (248 bytes)
+HDAE5000_LoadSong_Md:	; 0x290F45 (248 bytes)
+	; Load part 7 (MD) of song (WA = directory, BC = song): if its slot (song
+	; record +64, 0x201672 + dir*0x4C0 + song*0x4C) is not 0xFFFFFFFF, read the
+	; chain with HDAE5000_HD_ReadFile and hand the data to the main CPU
+	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
+	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 7.
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), bc	; save file number
-	ld (xsp + 22), wa	; save partition
+	ld (xsp + 22), wa	; save directory
 	ldw (xsp + 10), 0x0000	; init result = 0
 	; First multiply: compute table offset
 	ld wa, (xsp + 20)
@@ -9950,7 +10049,12 @@ HDAE5000_Table_Sub_290F45:	; 0x290F45 (248 bytes)
 	lda xsp, (xsp + 20)
 	ret
 
-HDAE5000_Table_Sub_29103D:	; 0x29103D (1023 bytes)
+HDAE5000_LoadSong_Tlx:	; 0x29103D (1023 bytes)
+	; Load part 8 (TLX) of song (WA = directory, BC = song): if its slot (song
+	; record +68, 0x201676 + dir*0x4C0 + song*0x4C) is not 0xFFFFFFFF, read the
+	; chain with HDAE5000_HD_ReadFile and hand the data to the main CPU
+	; (workspace 0x0E88 table callbacks).  HL = 0 when there is no such part,
+	; else ReadFile's result.  Called by HDAE5000_LoadSong for mask bit 8.
 ; LTS: 0x29103D (1023 bytes)
 
 	lda	xsp, (xsp-24)
@@ -9978,7 +10082,7 @@ HDAE5000_Table_Sub_29103D:	; 0x29103D (1023 bytes)
 	lda	xwa, (xsp+14)
 	ld	xbc, xwa
 	ldw	wa, 0x000a
-	calr	HDAE5000_Table_Sub_291BDE
+	calr	HDAE5000_TlxPart_Describe
 	lda	xwa, (xsp+14)
 	ld (xsp + 0x06), xwa                    ; ld (XSP+0x06),XWA
 	ld	wa, (xsp+22)
@@ -10006,7 +10110,7 @@ HDAE5000_Table_Sub_29103D:	; 0x29103D (1023 bytes)
 	lda	xwa, (xsp+14)
 	ld	xbc, xwa
 	ldw	wa, 0x000a
-	calr	HDAE5000_Table_Sub_291BDE
+	calr	HDAE5000_TlxPart_Describe
 	lda	xwa, (xsp+14)
 	ld (xsp + 0x02), xwa                    ; ld (XSP+0x02),XWA
 	lda	xwa, (xsp+18)
@@ -10037,7 +10141,15 @@ HDAE5000_Table_Sub_29103D:	; 0x29103D (1023 bytes)
 	lda	xsp, (xsp+24)
 	ret
 
-HDAE5000_Display_Scroll_Helper:
+HDAE5000_SaveSong:
+	; Save a song: WA = directory, BC = song, XDE = its new name; stacked
+	; words: part mask, UI flag, keep-spinning flag.  Mask 0 -> HL = 0 at once;
+	; not enough free clusters (HDAE5000_Song_CheckFreeSpace) -> HL = 0xFFFF.
+	; Otherwise, between the main-CPU callbacks, for k = 0..8: bit k set ->
+	; HDAE5000_SaveSong_<part k> (a failed part is deleted again and ends the
+	; run), bit k clear -> HDAE5000_DeleteSongPart_<part k>: the song ends up
+	; holding exactly the parts of the mask.  Callers: HDAE5000_SaveSongWithUi
+	; and PC-link service 15 ("SaveSongInMemoryToHd").
 	lda	xsp, (xsp-10)
 	push xiz
 	ld (xsp + 0x06), xde                    ; ld (XSP+0x06),XDE
@@ -10050,7 +10162,7 @@ HDAE5000_Display_Scroll_Helper:
 	jrl t, .LTS_1435                       ; [78 d6 02] jrl T,0x291435
 .LTS_115f:
 	ld	wa, (xsp+22)
-	calr	HDAE5000_Cell_Validate
+	calr	HDAE5000_Song_CheckFreeSpace
 	cp	hl, 0xffff
 	jrl z, .LTS_142d                       ; [76 c1 02] jrl Z,0x29142d
 	ld	xwa, (0x23a1a2)
@@ -10071,19 +10183,19 @@ HDAE5000_Display_Scroll_Helper:
 	jr z, .LTS_11c3                        ; [66 20] jr Z,0x2911c3
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Table_Init_Entry
+	calr	HDAE5000_SaveSong_Lsw
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTS_11cc                       ; [6e 14] jr NZ,0x2911cc
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type0
+	calr	HDAE5000_DeleteSongPart_Lsw
 	jr t, .LTS_11cc                        ; [68 09] jr T,0x2911cc
 .LTS_11c3:
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type0
+	calr	HDAE5000_DeleteSongPart_Lsw
 .LTS_11cc:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTS_11fb                        ; [66 28] jr Z,0x2911fb
@@ -10092,19 +10204,19 @@ HDAE5000_Display_Scroll_Helper:
 	jr z, .LTS_11fb                        ; [66 20] jr Z,0x2911fb
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Table_Sub_2915A3
+	calr	HDAE5000_SaveSong_Pmt
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTS_1204                       ; [6e 14] jr NZ,0x291204
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type1
+	calr	HDAE5000_DeleteSongPart_Pmt
 	jr t, .LTS_1204                        ; [68 09] jr T,0x291204
 .LTS_11fb:
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type1
+	calr	HDAE5000_DeleteSongPart_Pmt
 .LTS_1204:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTS_1233                        ; [66 28] jr Z,0x291233
@@ -10113,19 +10225,19 @@ HDAE5000_Display_Scroll_Helper:
 	jr z, .LTS_1233                        ; [66 20] jr Z,0x291233
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Table_Sub_29167C
+	calr	HDAE5000_SaveSong_Sqt
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTS_123c                       ; [6e 14] jr NZ,0x29123c
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type2
+	calr	HDAE5000_DeleteSongPart_Sqt
 	jr t, .LTS_123c                        ; [68 09] jr T,0x29123c
 .LTS_1233:
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type2
+	calr	HDAE5000_DeleteSongPart_Sqt
 .LTS_123c:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTS_126b                        ; [66 28] jr Z,0x29126b
@@ -10134,19 +10246,19 @@ HDAE5000_Display_Scroll_Helper:
 	jr z, .LTS_126b                        ; [66 20] jr Z,0x29126b
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Table_Sub_29175E
+	calr	HDAE5000_SaveSong_Cmp
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTS_1274                       ; [6e 14] jr NZ,0x291274
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type3
+	calr	HDAE5000_DeleteSongPart_Cmp
 	jr t, .LTS_1274                        ; [68 09] jr T,0x291274
 .LTS_126b:
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type3
+	calr	HDAE5000_DeleteSongPart_Cmp
 .LTS_1274:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTS_12a3                        ; [66 28] jr Z,0x2912a3
@@ -10155,19 +10267,19 @@ HDAE5000_Display_Scroll_Helper:
 	jr z, .LTS_12a3                        ; [66 20] jr Z,0x2912a3
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Table_Sub_291831
+	calr	HDAE5000_SaveSong_Tm
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTS_12ac                       ; [6e 14] jr NZ,0x2912ac
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type4
+	calr	HDAE5000_DeleteSongPart_Tm
 	jr t, .LTS_12ac                        ; [68 09] jr T,0x2912ac
 .LTS_12a3:
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type4
+	calr	HDAE5000_DeleteSongPart_Tm
 .LTS_12ac:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTS_12db                        ; [66 28] jr Z,0x2912db
@@ -10176,19 +10288,19 @@ HDAE5000_Display_Scroll_Helper:
 	jr z, .LTS_12db                        ; [66 20] jr Z,0x2912db
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Table_Sub_291909
+	calr	HDAE5000_SaveSong_Msp
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTS_12e4                       ; [6e 14] jr NZ,0x2912e4
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type5
+	calr	HDAE5000_DeleteSongPart_Msp
 	jr t, .LTS_12e4                        ; [68 09] jr T,0x2912e4
 .LTS_12db:
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type5
+	calr	HDAE5000_DeleteSongPart_Msp
 .LTS_12e4:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTS_1313                        ; [66 28] jr Z,0x291313
@@ -10197,19 +10309,19 @@ HDAE5000_Display_Scroll_Helper:
 	jr z, .LTS_1313                        ; [66 20] jr Z,0x291313
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Table_Sub_2919DC
+	calr	HDAE5000_SaveSong_Rcm
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTS_131c                       ; [6e 14] jr NZ,0x29131c
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type6
+	calr	HDAE5000_DeleteSongPart_Rcm
 	jr t, .LTS_131c                        ; [68 09] jr T,0x29131c
 .LTS_1313:
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type6
+	calr	HDAE5000_DeleteSongPart_Rcm
 .LTS_131c:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTS_134b                        ; [66 28] jr Z,0x29134b
@@ -10218,19 +10330,19 @@ HDAE5000_Display_Scroll_Helper:
 	jr z, .LTS_134b                        ; [66 20] jr Z,0x29134b
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Table_Sub_291A62
+	calr	HDAE5000_SaveSong_Md
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTS_1354                       ; [6e 14] jr NZ,0x291354
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type7
+	calr	HDAE5000_DeleteSongPart_Md
 	jr t, .LTS_1354                        ; [68 09] jr T,0x291354
 .LTS_134b:
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type7
+	calr	HDAE5000_DeleteSongPart_Md
 .LTS_1354:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTS_1383                        ; [66 28] jr Z,0x291383
@@ -10239,19 +10351,19 @@ HDAE5000_Display_Scroll_Helper:
 	jr z, .LTS_1383                        ; [66 20] jr Z,0x291383
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Table_Sub_291B33
+	calr	HDAE5000_SaveSong_Tlx
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTS_138c                       ; [6e 14] jr NZ,0x29138c
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type8
+	calr	HDAE5000_DeleteSongPart_Tlx
 	jr t, .LTS_138c                        ; [68 09] jr T,0x29138c
 .LTS_1383:
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	HDAE5000_Cell_Render_Type8
+	calr	HDAE5000_DeleteSongPart_Tlx
 .LTS_138c:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTS_13d5                        ; [66 42] jr Z,0x2913d5
@@ -10282,7 +10394,7 @@ HDAE5000_Display_Scroll_Helper:
 	ld	wa, (xsp+16)
 	ld	bc, (xsp+14)
 	ldw	de, 0x01ff
-	calr	HDAE5000_Workspace_Sub_29336B
+	calr	HDAE5000_DeleteSongParts
 .LTS_13e7:
 	cpw	(xsp+18), 0x0001
 	call	nz, (0x2974B5:24)
@@ -10312,11 +10424,16 @@ HDAE5000_Display_Scroll_Helper:
 	retd 0x0006		; retd 0x0006
 
 
-HDAE5000_Table_Init_Entry:	; 0x29143C (359 bytes)
+HDAE5000_SaveSong_Lsw:	; 0x29143C (359 bytes)
+	; Save part 0 (LSW) of song (WA = directory, BC = song) from the main
+	; CPU's memory (workspace 0x0E88 table callbacks) to a new cluster chain
+	; (HDAE5000_HD_WriteFile, streamed parts continue with
+	; HDAE5000_HD_AppendFile) whose first cluster goes to slot +36; the part
+	; byte +26 is set.  HL = 0 / 0xFFFF.  Called by HDAE5000_SaveSong, bit 0.
 	lda xsp, (xsp - 28)
 	push xiz
 	ld (xsp + 28), bc	; save file number
-	ld (xsp + 30), wa	; save partition
+	ld (xsp + 30), wa	; save directory
 	; Workspace dispatch with WA=0 (buffer at xsp+20)
 	lda xwa, (xsp + 20)
 	ld xbc, xwa
@@ -10336,7 +10453,7 @@ HDAE5000_Table_Init_Entry:	; 0x29143C (359 bytes)
 	; Compute arg and call Cell_Get_Params
 	ld xwa, (xsp + 16)
 	add xwa, (xsp + 24)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 4), xhl
 	; Workspace dispatch (d8 displacement 0x14)
 	ld xwa, (0x23a1a2:24)
@@ -10444,7 +10561,12 @@ HDAE5000_Table_Init_Entry:	; 0x29143C (359 bytes)
 	lda xsp, (xsp + 28)
 	ret
 
-HDAE5000_Table_Sub_2915A3:	; 0x2915A3 (217 bytes)
+HDAE5000_SaveSong_Pmt:	; 0x2915A3 (217 bytes)
+	; Save part 1 (PMT) of song (WA = directory, BC = song) from the main
+	; CPU's memory (workspace 0x0E88 table callbacks) to a new cluster chain
+	; (HDAE5000_HD_WriteFile, streamed parts continue with
+	; HDAE5000_HD_AppendFile) whose first cluster goes to slot +40; the part
+	; byte +27 is set.  HL = 0 / 0xFFFF.  Called by HDAE5000_SaveSong, bit 1.
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), bc
@@ -10457,7 +10579,7 @@ HDAE5000_Table_Sub_2915A3:	; 0x2915A3 (217 bytes)
 	ld wa, 2:i3		; operation code = 2
 	call (xhl)
 	ld xwa, (xsp + 16)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 16), xhl	; save result
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e88)
@@ -10515,11 +10637,16 @@ HDAE5000_Table_Sub_2915A3:	; 0x2915A3 (217 bytes)
 	lda xsp, (xsp + 20)
 	ret
 
-HDAE5000_Table_Sub_29167C:	; 0x29167C (226 bytes)
+HDAE5000_SaveSong_Sqt:	; 0x29167C (226 bytes)
+	; Save part 2 (SQT) of song (WA = directory, BC = song) from the main
+	; CPU's memory (workspace 0x0E88 table callbacks) to a new cluster chain
+	; (HDAE5000_HD_WriteFile, streamed parts continue with
+	; HDAE5000_HD_AppendFile) whose first cluster goes to slot +44; the part
+	; byte +28 is set.  HL = 0 / 0xFFFF.  Called by HDAE5000_SaveSong, bit 2.
 	lda xsp, (xsp - 30)	; larger stack frame
 	push xiz
 	ld (xsp + 30), bc	; save file number
-	ld (xsp + 32), wa	; save partition
+	ld (xsp + 32), wa	; save directory
 	; Workspace dispatch 1: buffer at XSP+22
 	lda xwa, (xsp + 22)
 	ld xbc, xwa
@@ -10594,11 +10721,16 @@ HDAE5000_Table_Sub_29167C:	; 0x29167C (226 bytes)
 	lda xsp, (xsp + 30)	; deallocate 30 bytes
 	ret
 
-HDAE5000_Table_Sub_29175E:	; 0x29175E (211 bytes)
+HDAE5000_SaveSong_Cmp:	; 0x29175E (211 bytes)
+	; Save part 3 (CMP) of song (WA = directory, BC = song) from the main
+	; CPU's memory (workspace 0x0E88 table callbacks) to a new cluster chain
+	; (HDAE5000_HD_WriteFile, streamed parts continue with
+	; HDAE5000_HD_AppendFile) whose first cluster goes to slot +48; the part
+	; byte +29 is set.  HL = 0 / 0xFFFF.  Called by HDAE5000_SaveSong, bit 3.
 	lda xsp, (xsp - 20)	; allocate 20 bytes
 	push xiz
 	ld (xsp + 20), bc	; save file number
-	ld (xsp + 22), wa	; save partition
+	ld (xsp + 22), wa	; save directory
 	lda xwa, (xsp + 12)
 	ld xbc, xwa		; XBC = buffer addr
 	ld xwa, (0x23a1a2:24); workspace ptr
@@ -10663,7 +10795,12 @@ HDAE5000_Table_Sub_29175E:	; 0x29175E (211 bytes)
 	lda xsp, (xsp + 20)
 	ret
 
-HDAE5000_Table_Sub_291831:	; 0x291831 (216 bytes)
+HDAE5000_SaveSong_Tm:	; 0x291831 (216 bytes)
+	; Save part 4 (TM) of song (WA = directory, BC = song) from the main
+	; CPU's memory (workspace 0x0E88 table callbacks) to a new cluster chain
+	; (HDAE5000_HD_WriteFile, streamed parts continue with
+	; HDAE5000_HD_AppendFile) whose first cluster goes to slot +52; the part
+	; byte +30 is set.  HL = 0 / 0xFFFF.  Called by HDAE5000_SaveSong, bit 4.
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), bc
@@ -10733,11 +10870,16 @@ HDAE5000_Table_Sub_291831:	; 0x291831 (216 bytes)
 	lda xsp, (xsp + 20)
 	ret
 
-HDAE5000_Table_Sub_291909:	; 0x291909 (211 bytes)
+HDAE5000_SaveSong_Msp:	; 0x291909 (211 bytes)
+	; Save part 5 (MSP) of song (WA = directory, BC = song) from the main
+	; CPU's memory (workspace 0x0E88 table callbacks) to a new cluster chain
+	; (HDAE5000_HD_WriteFile, streamed parts continue with
+	; HDAE5000_HD_AppendFile) whose first cluster goes to slot +56; the part
+	; byte +31 is set.  HL = 0 / 0xFFFF.  Called by HDAE5000_SaveSong, bit 5.
 	lda xsp, (xsp - 20)	; allocate 20 bytes
 	push xiz
 	ld (xsp + 20), bc	; save file number
-	ld (xsp + 22), wa	; save partition
+	ld (xsp + 22), wa	; save directory
 	lda xwa, (xsp + 12)
 	ld xbc, xwa		; XBC = buffer addr
 	ld xwa, (0x23a1a2:24); workspace ptr
@@ -10802,7 +10944,12 @@ HDAE5000_Table_Sub_291909:	; 0x291909 (211 bytes)
 	lda xsp, (xsp + 20)
 	ret
 
-HDAE5000_Table_Sub_2919DC:	; 0x2919DC (134 bytes)
+HDAE5000_SaveSong_Rcm:	; 0x2919DC (134 bytes)
+	; Save part 6 (RCM) of song (WA = directory, BC = song) from the main
+	; CPU's memory (workspace 0x0E88 table callbacks) to a new cluster chain
+	; (HDAE5000_HD_WriteFile, streamed parts continue with
+	; HDAE5000_HD_AppendFile) whose first cluster goes to slot +60; the part
+	; byte +32 is set.  HL = 0 / 0xFFFF.  Called by HDAE5000_SaveSong, bit 6.
 	push xiz		; save XIZ
 	ld de, bc		; DE = BC (file number param)
 	ld hl, 0:i3		; HL = 0
@@ -10829,11 +10976,11 @@ HDAE5000_Table_Sub_2919DC:	; 0x2919DC (134 bytes)
 	ld wa, hl		; WA = result
 	cp wa, 0xFFFF		; check for failure
 	jr z, .Lts919_exit	; skip if failed
-	lda xwa, (0x294152:24); XWA = 0x294152
+	lda xwa, (HDAE5000_RcmStream_FreeSpace:24); XWA = 0x294152
 	ld xhl, xwa		; XHL = handler 1
-	lda xwa, (0x294069:24); XWA = 0x294069
+	lda xwa, (HDAE5000_RcmStream_Write:24); XWA = 0x294069
 	ld xbc, xwa		; XBC = handler 2
-	lda xwa, (0x29414c:24); XWA = 0x29414C
+	lda xwa, (HDAE5000_RcmStream_LastResult:24); XWA = 0x29414C
 	ld xde, xwa		; XDE = handler 3
 	ld xwa, xhl		; XWA = handler 1
 	ld xhl, (0x23a1a2:24); XHL = (0x23A1A2) workspace ptr
@@ -10845,7 +10992,12 @@ HDAE5000_Table_Sub_2919DC:	; 0x2919DC (134 bytes)
 	pop xiz			; restore XIZ
 	ret
 
-HDAE5000_Table_Sub_291A62:	; 0x291A62 (209 bytes)
+HDAE5000_SaveSong_Md:	; 0x291A62 (209 bytes)
+	; Save part 7 (MD) of song (WA = directory, BC = song) from the main
+	; CPU's memory (workspace 0x0E88 table callbacks) to a new cluster chain
+	; (HDAE5000_HD_WriteFile, streamed parts continue with
+	; HDAE5000_HD_AppendFile) whose first cluster goes to slot +64; the part
+	; byte +33 is set.  HL = 0 / 0xFFFF.  Called by HDAE5000_SaveSong, bit 7.
 	lda xsp, (xsp - 20)	; allocate 20 bytes on stack
 	push xiz		; save XIZ
 	ld (xsp + 20), bc	; save BC param (file number)
@@ -10913,7 +11065,12 @@ HDAE5000_Table_Sub_291A62:	; 0x291A62 (209 bytes)
 	lda xsp, (xsp + 20)	; deallocate 20 bytes
 	ret
 
-HDAE5000_Table_Sub_291B33:	; 0x291B33 (171 bytes)
+HDAE5000_SaveSong_Tlx:	; 0x291B33 (171 bytes)
+	; Save part 8 (TLX) of song (WA = directory, BC = song) from the main
+	; CPU's memory (workspace 0x0E88 table callbacks) to a new cluster chain
+	; (HDAE5000_HD_WriteFile, streamed parts continue with
+	; HDAE5000_HD_AppendFile) whose first cluster goes to slot +68; the part
+	; byte +34 is set.  HL = 0 / 0xFFFF.  Called by HDAE5000_SaveSong, bit 8.
 	lda xsp, (xsp - 20)	; allocate 20 bytes on stack
 	push xiz		; save XIZ
 	ld (xsp + 20), bc	; save BC param (file number)
@@ -10921,9 +11078,9 @@ HDAE5000_Table_Sub_291B33:	; 0x291B33 (171 bytes)
 	lda xwa, (xsp + 12)	; XWA = addr of local buffer
 	ld xbc, xwa		; XBC = buffer address
 	ldw wa, 0x000A		; WA = 10 (string length)
-	calr HDAE5000_Table_Sub_291BDE	; init table entry
+	calr HDAE5000_TlxPart_Describe	; init table entry
 	ld xwa, (xsp + 16)	; XWA = param block
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 16), xhl	; save result XHL
 	lda xwa, (xsp + 12)	; XWA = addr of local buffer
 	ld (xsp + 4), xwa	; store buffer ptr
@@ -10972,10 +11129,14 @@ HDAE5000_Table_Sub_291B33:	; 0x291B33 (171 bytes)
 	lda xsp, (xsp + 20)	; deallocate 20 bytes
 	ret
 
-HDAE5000_Table_Sub_291BDE:	; 0x291BDE (47 bytes)
+HDAE5000_TlxPart_Describe:	; 0x291BDE (47 bytes)
 	; Initialize table entry structure with string address
 	; Input: WA = offset, XBC = structure pointer
 	; Output: HL = offset
+	; (= the TLX part's extent for the part loaders/savers and PC-link
+	; service 13: XBC = {long 0x22B430; long length}, length =
+	; HDAE5000_String_To_Upper(0x22B442 pointer) + 22, also stored to 0x2304F2;
+	; HL = WA.  0x5000 is the TLX size HDAE5000_Song_CheckFreeSpace reserves.)
 	dec 2, xsp
 	push xiz
 	ld xiz, xbc			; XIZ = structure pointer
@@ -10994,9 +11155,18 @@ HDAE5000_Table_Sub_291BDE:	; 0x291BDE (47 bytes)
 	inc 2, xsp
 	ret
 
-HDAE5000_Table_Complex_Init:	; 0x291C0D (2171 bytes)
+HDAE5000_CheckFileSignature:	; 0x291C0D (2171 bytes)
 	; Complex table initialization (large stack frame)
+	; ^ corrected: HL = 0 if the file data at XBC carries part WA's
+	;   signature, else 0xFFFF.  The signature table at 0x2F8E20 has 8-byte
+	;   records {long string; u16 offset; u16 length} indexed by part: "HK"
+	;   at +4 (LSW), "HK" (PMT), 01 08 at +5 (SQT), "HK\0" (CMP),
+	;   "KN5000 SOUND RAM" (TM), "H\0K" (MSP, RCM), "HK" (MD), "TLhd" (TLX);
+	;   compared with HDAE5000_StrNCmp.  Caller: HDAE5000_FdSong_CheckFiles.
 ; LTCI: 0x291C0D (2171 bytes)
+	; ^ conversion-region size (local-label prefix .LTCI_), not a routine
+	;   size: HDAE5000_CheckFileSignature (0x291C0D-0x291C57) and
+	;   HDAE5000_FdSong_CheckFiles (0x291C58-0x292150).
 
 	ld	de, wa
 	extz xde                                ; extz XDE
@@ -11031,7 +11201,13 @@ HDAE5000_Table_Complex_Init:	; 0x291C0D (2171 bytes)
 .LTCI_1c57:
 	ret
 
-HDAE5000_FS_Scan_Directory_Helper:
+HDAE5000_FdSong_CheckFiles:
+	; Check a song on floppy before copying it: XWA = its 8-character name,
+	; BC = part mask.  Fails (HL = 0xFFFF) if a "<name>.SEQ" or the file named
+	; by 0x2F8EA2 opens (main-CPU callback 0x0E88 table +0x94, closed with
+	; +0x9C), or if, for any part k in the mask, the first 512 bytes of
+	; "<name><ext k>" (opened "rb" with +0xA0, read with +0xA8, closed with
+	; +0xAC) fail HDAE5000_CheckFileSignature(k).  HL = 0 otherwise.
 	lda_dri xsp, 0xFD, 0xE6, 0xFE	; lda XSP,XSP+0xfee6
 	push xiz
 	stw_dri bc, 0xFD, 0x1C, 0x01	; ld (XSP+0x011c),BC
@@ -11123,7 +11299,7 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda xwa, (0x230f1c:24)
 	ld	xbc, xwa
 	ld	wa, 0:i3
-	calr	HDAE5000_Table_Complex_Init
+	calr	HDAE5000_CheckFileSignature
 	cp	hl, 0xffff
 	jr nz, .LTCI_1d91                      ; [6e 06] jr NZ,0x291d91
 	ldw	hl, 0xffff
@@ -11157,7 +11333,7 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda xwa, (0x230f1c:24)
 	ld	xbc, xwa
 	ld	wa, 1:i3
-	calr	HDAE5000_Table_Complex_Init
+	calr	HDAE5000_CheckFileSignature
 	cp	hl, 0xffff
 	jr nz, .LTCI_1e08                      ; [6e 06] jr NZ,0x291e08
 	ldw	hl, 0xffff
@@ -11191,7 +11367,7 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda xwa, (0x230f1c:24)
 	ld	xbc, xwa
 	ld	wa, 2:i3
-	calr	HDAE5000_Table_Complex_Init
+	calr	HDAE5000_CheckFileSignature
 	cp	hl, 0xffff
 	jr nz, .LTCI_1e7f                      ; [6e 06] jr NZ,0x291e7f
 	ldw	hl, 0xffff
@@ -11225,7 +11401,7 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda xwa, (0x230f1c:24)
 	ld	xbc, xwa
 	ld	wa, 3:i3
-	calr	HDAE5000_Table_Complex_Init
+	calr	HDAE5000_CheckFileSignature
 	cp	hl, 0xffff
 	jr nz, .LTCI_1ef6                      ; [6e 06] jr NZ,0x291ef6
 	ldw	hl, 0xffff
@@ -11259,7 +11435,7 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda xwa, (0x230f1c:24)
 	ld	xbc, xwa
 	ld	wa, 4:i3
-	calr	HDAE5000_Table_Complex_Init
+	calr	HDAE5000_CheckFileSignature
 	cp	hl, 0xffff
 	jr nz, .LTCI_1f6d                      ; [6e 06] jr NZ,0x291f6d
 	ldw	hl, 0xffff
@@ -11293,7 +11469,7 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda xwa, (0x230f1c:24)
 	ld	xbc, xwa
 	ld	wa, 5:i3
-	calr	HDAE5000_Table_Complex_Init
+	calr	HDAE5000_CheckFileSignature
 	cp	hl, 0xffff
 	jr nz, .LTCI_1fe4                      ; [6e 06] jr NZ,0x291fe4
 	ldw	hl, 0xffff
@@ -11327,7 +11503,7 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda xwa, (0x230f1c:24)
 	ld	xbc, xwa
 	ld	wa, 6:i3
-	calr	HDAE5000_Table_Complex_Init
+	calr	HDAE5000_CheckFileSignature
 	cp	hl, 0xffff
 	jr nz, .LTCI_205b                      ; [6e 06] jr NZ,0x29205b
 	ldw	hl, 0xffff
@@ -11361,7 +11537,7 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda xwa, (0x230f1c:24)
 	ld	xbc, xwa
 	ld	wa, 7:i3
-	calr	HDAE5000_Table_Complex_Init
+	calr	HDAE5000_CheckFileSignature
 	cp	hl, 0xffff
 	jr nz, .LTCI_20d1                      ; [6e 05] jr NZ,0x2920d1
 	ldw	hl, 0xffff
@@ -11395,7 +11571,7 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda xwa, (0x230f1c:24)
 	ld	xbc, xwa
 	ldw	wa, 0x0008
-	calr	HDAE5000_Table_Complex_Init
+	calr	HDAE5000_CheckFileSignature
 	cp	hl, 0xffff
 	jr nz, .LTCI_2148                      ; [6e 05] jr NZ,0x292148
 	ldw	hl, 0xffff
@@ -11407,7 +11583,12 @@ HDAE5000_FS_Scan_Directory_Helper:
 	lda_dri xsp, 0xFD, 0x1A, 0x01	; lda XSP,XSP+0x011a
 	ret
 
-HDAE5000_FS_Scan_Directory_Helper2:
+HDAE5000_CopyFdSongToHd:
+	; Copy a floppy song into song (WA = directory, BC = song): XDE = its name,
+	; stacked: part mask and flags.  Checks the free space
+	; (HDAE5000_Song_CheckFreeSpace), then per bit k HDAE5000_CopyFdSongToHd_<k>
+	; (clear bits delete that part, HDAE5000_DeleteSongParts).  Caller:
+	; HDAE5000_FS_Scan_Directory (the copy-to-HD screen).
 	lda	xsp, (xsp-52)
 	push xiz
 	ld (xsp + 0x30), xde                    ; ld (XSP+0x30),XDE
@@ -11415,7 +11596,7 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld (xsp + 0x36), wa                     ; ld (XSP+0x36),WA
 	ldw (xsp + 0x04), 0
 	ld	wa, (xsp+64)
-	calr	HDAE5000_Cell_Validate
+	calr	HDAE5000_Song_CheckFreeSpace
 	cp	hl, 0xffff
 	jrl z, .LTCI_2479                      ; [76 09 03] jrl Z,0x292479
 	ld	xwa, (0x23a1a2)
@@ -11437,14 +11618,14 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
 	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
-	calr	HDAE5000_Table_Sub_292488
+	calr	HDAE5000_CopyFdSongToHd_Lsw
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTCI_21c8                      ; [6e 09] jr NZ,0x2921c8
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
-	calr	HDAE5000_Cell_Render_Type0
+	calr	HDAE5000_DeleteSongPart_Lsw
 .LTCI_21c8:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTCI_21f8                       ; [66 29] jr Z,0x2921f8
@@ -11454,14 +11635,14 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
 	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
-	calr	HDAE5000_Table_Sub_2925EF
+	calr	HDAE5000_CopyFdSongToHd_Pmt
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTCI_21f8                      ; [6e 09] jr NZ,0x2921f8
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
-	calr	HDAE5000_Cell_Render_Type1
+	calr	HDAE5000_DeleteSongPart_Pmt
 .LTCI_21f8:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTCI_2228                       ; [66 29] jr Z,0x292228
@@ -11471,14 +11652,14 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
 	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
-	calr	HDAE5000_Table_Sub_292798
+	calr	HDAE5000_CopyFdSongToHd_Sqt
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTCI_2228                      ; [6e 09] jr NZ,0x292228
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
-	calr	HDAE5000_Cell_Render_Type2
+	calr	HDAE5000_DeleteSongPart_Sqt
 .LTCI_2228:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTCI_2258                       ; [66 29] jr Z,0x292258
@@ -11488,14 +11669,14 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
 	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
-	calr	HDAE5000_Table_Sub_29293B
+	calr	HDAE5000_CopyFdSongToHd_Cmp
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTCI_2258                      ; [6e 09] jr NZ,0x292258
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
-	calr	HDAE5000_Cell_Render_Type3
+	calr	HDAE5000_DeleteSongPart_Cmp
 .LTCI_2258:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTCI_2288                       ; [66 29] jr Z,0x292288
@@ -11505,14 +11686,14 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
 	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
-	calr	HDAE5000_Table_Sub_292ADE
+	calr	HDAE5000_CopyFdSongToHd_Tm
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTCI_2288                      ; [6e 09] jr NZ,0x292288
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
-	calr	HDAE5000_Cell_Render_Type4
+	calr	HDAE5000_DeleteSongPart_Tm
 .LTCI_2288:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTCI_22b8                       ; [66 29] jr Z,0x2922b8
@@ -11522,14 +11703,14 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
 	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
-	calr	HDAE5000_Table_Sub_292BFE
+	calr	HDAE5000_CopyFdSongToHd_Msp
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTCI_22b8                      ; [6e 09] jr NZ,0x2922b8
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
-	calr	HDAE5000_Cell_Render_Type5
+	calr	HDAE5000_DeleteSongPart_Msp
 .LTCI_22b8:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTCI_22e8                       ; [66 29] jr Z,0x2922e8
@@ -11539,14 +11720,14 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
 	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
-	calr	HDAE5000_Table_Sub_292D16
+	calr	HDAE5000_CopyFdSongToHd_Rcm
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTCI_22e8                      ; [6e 09] jr NZ,0x2922e8
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
-	calr	HDAE5000_Cell_Render_Type6
+	calr	HDAE5000_DeleteSongPart_Rcm
 .LTCI_22e8:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTCI_2318                       ; [66 29] jr Z,0x292318
@@ -11556,14 +11737,14 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
 	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
-	calr	HDAE5000_Table_Sub_292EB9
+	calr	HDAE5000_CopyFdSongToHd_Md
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTCI_2318                      ; [6e 09] jr NZ,0x292318
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
-	calr	HDAE5000_Cell_Render_Type7
+	calr	HDAE5000_DeleteSongPart_Md
 .LTCI_2318:
 	cpw	(xsp+4), 0xffff
 	jr z, .LTCI_2348                       ; [66 29] jr Z,0x292348
@@ -11573,14 +11754,14 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
 	ld xde, (xsp + 0x30)                    ; ld XDE,(XSP+0x30)
-	calr	HDAE5000_Table_Sub_292FD2
+	calr	HDAE5000_CopyFdSongToHd_Tlx
 	ld (xsp + 0x04), hl
 	ld	wa, (xsp+4)
 	cp	wa, 0xffff
 	jr nz, .LTCI_2348                      ; [6e 09] jr NZ,0x292348
 	ld	wa, (xsp+54)
 	ld	bc, (xsp+52)
-	calr	HDAE5000_Cell_Render_Type8
+	calr	HDAE5000_DeleteSongPart_Tlx
 .LTCI_2348:
 	cpw	(xsp+4), 0xffff
 	jrl z, .LTCI_2421                      ; [76 d1 00] jrl Z,0x292421
@@ -11658,7 +11839,7 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	ld	wa, (xsp+58)
 	ld	bc, (xsp+56)
 	ldw	de, 0x01ff
-	calr	HDAE5000_Workspace_Sub_29336B
+	calr	HDAE5000_DeleteSongParts
 .LTCI_2433:
 	cpw	(xsp+60), 0x0001
 	call	nz, (0x2974B5:24)
@@ -11687,11 +11868,16 @@ HDAE5000_FS_Scan_Directory_Helper2:
 	retd 0x0006		; retd 0x0006
 
 
-HDAE5000_Table_Sub_292488:	; 0x292488 (359 bytes)
+HDAE5000_CopyFdSongToHd_Lsw:	; 0x292488 (359 bytes)
+	; Copy the floppy file of part 0 (LSW) into song (WA = directory, BC =
+	; song): read through the main-CPU file callbacks (workspace 0x0E88 table
+	; +0xA0 with the name and mode "rb", +0xA8 in 0x8000-byte chunks into
+	; 0x230F1C, +0xAC) and written with HDAE5000_HD_WriteFile /
+	; HDAE5000_HD_AppendFile to slot +36.  Called by HDAE5000_CopyFdSongToHd.
 	lda xsp, (xsp - 42)
 	push xiz
 	ld (xsp + 42), bc	; save file number
-	ld (xsp + 44), wa	; save partition
+	ld (xsp + 44), wa	; save directory
 	ldw (xsp + 10), 0x0000	; init result = 0
 	; Call 0x29AE9F with args
 	pushw 0x0008
@@ -11725,7 +11911,7 @@ HDAE5000_Table_Sub_292488:	; 0x292488 (359 bytes)
 	; Cell_Get_Params
 	ld xwa, (xsp + 30)
 	add xwa, (xsp + 38)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 4), xhl
 	; Call workspace handler via XIX chain
 	lda xwa, (xsp + 12)
@@ -11817,11 +12003,16 @@ HDAE5000_Table_Sub_292488:	; 0x292488 (359 bytes)
 	lda xsp, (xsp + 42)
 	ret
 
-HDAE5000_Table_Sub_2925EF:	; 0x2925EF (425 bytes)
+HDAE5000_CopyFdSongToHd_Pmt:	; 0x2925EF (425 bytes)
+	; Copy the floppy file of part 1 (PMT) into song (WA = directory, BC =
+	; song): read through the main-CPU file callbacks (workspace 0x0E88 table
+	; +0xA0 with the name and mode "rb", +0xA8 in 0x8000-byte chunks into
+	; 0x230F1C, +0xAC) and written with HDAE5000_HD_WriteFile /
+	; HDAE5000_HD_AppendFile to slot +40.  Called by HDAE5000_CopyFdSongToHd.
 	lda xsp, (xsp - 30)
 	push xiz
 	ld (xsp + 30), bc	; save file number
-	ld (xsp + 32), wa	; save partition
+	ld (xsp + 32), wa	; save directory
 	ldw (xsp + 14), 0x0000	; init result = 0
 	; Call 0x29AE9F with args
 	pushw 0x0008
@@ -11860,7 +12051,7 @@ HDAE5000_Table_Sub_2925EF:	; 0x2925EF (425 bytes)
 	lda xwa, (0x230f1c:24); 0x230F1C
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 4)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 12), xhl
 	; Multiply: compute table offset
 	ld wa, (xsp + 30)
@@ -11908,7 +12099,7 @@ HDAE5000_Table_Sub_2925EF:	; 0x2925EF (425 bytes)
 	lda xwa, (0x230f1c:24); 0x230F1C
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 4)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 12), xhl
 	ld wa, (xsp + 30)
 	extz xwa
@@ -11962,11 +12153,16 @@ HDAE5000_Table_Sub_2925EF:	; 0x2925EF (425 bytes)
 	lda xsp, (xsp + 30)
 	ret
 
-HDAE5000_Table_Sub_292798:	; 0x292798 (419 bytes)
+HDAE5000_CopyFdSongToHd_Sqt:	; 0x292798 (419 bytes)
+	; Copy the floppy file of part 2 (SQT) into song (WA = directory, BC =
+	; song): read through the main-CPU file callbacks (workspace 0x0E88 table
+	; +0xA0 with the name and mode "rb", +0xA8 in 0x8000-byte chunks into
+	; 0x230F1C, +0xAC) and written with HDAE5000_HD_WriteFile /
+	; HDAE5000_HD_AppendFile to slot +44.  Called by HDAE5000_CopyFdSongToHd.
 	lda xsp, (xsp - 32)
 	push xiz
 	ld (xsp + 32), bc	; save file number
-	ld (xsp + 34), wa	; save partition
+	ld (xsp + 34), wa	; save directory
 	ldw (xsp + 4), 0x0000	; init result = 0
 	; Call 0x29AE9F with args
 	pushw 0x0008
@@ -12005,7 +12201,7 @@ HDAE5000_Table_Sub_292798:	; 0x292798 (419 bytes)
 	lda xwa, (0x230f1c:24); 0x230F1C
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 6)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 14), xhl
 	; Multiply: compute table offset
 	ld wa, (xsp + 32)
@@ -12051,7 +12247,7 @@ HDAE5000_Table_Sub_292798:	; 0x292798 (419 bytes)
 	lda xwa, (0x230f1c:24); 0x230F1C
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 6)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 14), xhl
 	ld wa, (xsp + 32)
 	extz xwa
@@ -12105,7 +12301,12 @@ HDAE5000_Table_Sub_292798:	; 0x292798 (419 bytes)
 	lda xsp, (xsp + 32)
 	ret
 
-HDAE5000_Table_Sub_29293B:	; 0x29293B (419 bytes)
+HDAE5000_CopyFdSongToHd_Cmp:	; 0x29293B (419 bytes)
+	; Copy the floppy file of part 3 (CMP) into song (WA = directory, BC =
+	; song): read through the main-CPU file callbacks (workspace 0x0E88 table
+	; +0xA0 with the name and mode "rb", +0xA8 in 0x8000-byte chunks into
+	; 0x230F1C, +0xAC) and written with HDAE5000_HD_WriteFile /
+	; HDAE5000_HD_AppendFile to slot +48.  Called by HDAE5000_CopyFdSongToHd.
 	lda xsp, (xsp - 32)
 	push xiz
 	ld (xsp + 32), bc
@@ -12143,7 +12344,7 @@ HDAE5000_Table_Sub_29293B:	; 0x29293B (419 bytes)
 	lda xwa, (0x230f1c:24)
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 6)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 14), xhl
 	ld wa, (xsp + 32)
 	extz xwa
@@ -12184,7 +12385,7 @@ HDAE5000_Table_Sub_29293B:	; 0x29293B (419 bytes)
 	lda xwa, (0x230f1c:24)
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 6)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 14), xhl
 	ld wa, (xsp + 32)
 	extz xwa
@@ -12236,11 +12437,16 @@ HDAE5000_Table_Sub_29293B:	; 0x29293B (419 bytes)
 	lda xsp, (xsp + 32)
 	ret
 
-HDAE5000_Table_Sub_292ADE:	; 0x292ADE (288 bytes)
+HDAE5000_CopyFdSongToHd_Tm:	; 0x292ADE (288 bytes)
+	; Copy the floppy file of part 4 (TM) into song (WA = directory, BC =
+	; song): read through the main-CPU file callbacks (workspace 0x0E88 table
+	; +0xA0 with the name and mode "rb", +0xA8 in 0x8000-byte chunks into
+	; 0x230F1C, +0xAC) and written with HDAE5000_HD_WriteFile /
+	; HDAE5000_HD_AppendFile to slot +52.  Called by HDAE5000_CopyFdSongToHd.
 	lda xsp, (xsp - 34)
 	push xiz
 	ld (xsp + 34), bc	; save file number
-	ld (xsp + 36), wa	; save partition
+	ld (xsp + 36), wa	; save directory
 	ldw (xsp + 10), 0x0000	; init result = 0
 	; Call 0x29AE9F with args
 	pushw 0x0008
@@ -12286,7 +12492,7 @@ HDAE5000_Table_Sub_292ADE:	; 0x292ADE (288 bytes)
 	lda xwa, (0x230f1c:24)
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 30)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 8), xhl
 	; Multiply: compute table offset
 	ld wa, (xsp + 34)
@@ -12337,7 +12543,12 @@ HDAE5000_Table_Sub_292ADE:	; 0x292ADE (288 bytes)
 	lda xsp, (xsp + 34)
 	ret
 
-HDAE5000_Table_Sub_292BFE:	; 0x292BFE (280 bytes)
+HDAE5000_CopyFdSongToHd_Msp:	; 0x292BFE (280 bytes)
+	; Copy the floppy file of part 5 (MSP) into song (WA = directory, BC =
+	; song): read through the main-CPU file callbacks (workspace 0x0E88 table
+	; +0xA0 with the name and mode "rb", +0xA8 in 0x8000-byte chunks into
+	; 0x230F1C, +0xAC) and written with HDAE5000_HD_WriteFile /
+	; HDAE5000_HD_AppendFile to slot +56.  Called by HDAE5000_CopyFdSongToHd.
 	lda xsp, (xsp - 34)
 	push xiz
 	ld (xsp + 34), bc
@@ -12380,7 +12591,7 @@ HDAE5000_Table_Sub_292BFE:	; 0x292BFE (280 bytes)
 	lda xwa, (0x230f1c:24)
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 30)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 8), xhl
 	ld wa, (xsp + 34)
 	extz xwa
@@ -12427,7 +12638,12 @@ HDAE5000_Table_Sub_292BFE:	; 0x292BFE (280 bytes)
 	lda xsp, (xsp + 34)
 	ret
 
-HDAE5000_Table_Sub_292D16:	; 0x292D16 (419 bytes)
+HDAE5000_CopyFdSongToHd_Rcm:	; 0x292D16 (419 bytes)
+	; Copy the floppy file of part 6 (RCM) into song (WA = directory, BC =
+	; song): read through the main-CPU file callbacks (workspace 0x0E88 table
+	; +0xA0 with the name and mode "rb", +0xA8 in 0x8000-byte chunks into
+	; 0x230F1C, +0xAC) and written with HDAE5000_HD_WriteFile /
+	; HDAE5000_HD_AppendFile to slot +60.  Called by HDAE5000_CopyFdSongToHd.
 	lda xsp, (xsp - 32)
 	push xiz
 	ld (xsp + 32), bc
@@ -12465,7 +12681,7 @@ HDAE5000_Table_Sub_292D16:	; 0x292D16 (419 bytes)
 	lda xwa, (0x230f1c:24)
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 6)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 14), xhl
 	ld wa, (xsp + 32)
 	extz xwa
@@ -12506,7 +12722,7 @@ HDAE5000_Table_Sub_292D16:	; 0x292D16 (419 bytes)
 	lda xwa, (0x230f1c:24)
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 6)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 14), xhl
 	ld wa, (xsp + 32)
 	extz xwa
@@ -12558,7 +12774,12 @@ HDAE5000_Table_Sub_292D16:	; 0x292D16 (419 bytes)
 	lda xsp, (xsp + 32)
 	ret
 
-HDAE5000_Table_Sub_292EB9:	; 0x292EB9 (281 bytes)
+HDAE5000_CopyFdSongToHd_Md:	; 0x292EB9 (281 bytes)
+	; Copy the floppy file of part 7 (MD) into song (WA = directory, BC =
+	; song): read through the main-CPU file callbacks (workspace 0x0E88 table
+	; +0xA0 with the name and mode "rb", +0xA8 in 0x8000-byte chunks into
+	; 0x230F1C, +0xAC) and written with HDAE5000_HD_WriteFile /
+	; HDAE5000_HD_AppendFile to slot +64.  Called by HDAE5000_CopyFdSongToHd.
 	lda xsp, (xsp - 34)
 	push xiz
 	ld (xsp + 34), bc
@@ -12601,7 +12822,7 @@ HDAE5000_Table_Sub_292EB9:	; 0x292EB9 (281 bytes)
 	lda xwa, (0x230f1c:24)
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 30)
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 8), xhl
 	ld wa, (xsp + 34)
 	extz xwa
@@ -12648,7 +12869,12 @@ HDAE5000_Table_Sub_292EB9:	; 0x292EB9 (281 bytes)
 	lda xsp, (xsp + 34)
 	ret
 
-HDAE5000_Table_Sub_292FD2:	; 0x292FD2 (329 bytes)
+HDAE5000_CopyFdSongToHd_Tlx:	; 0x292FD2 (329 bytes)
+	; Copy the floppy file of part 8 (TLX) into song (WA = directory, BC =
+	; song): read through the main-CPU file callbacks (workspace 0x0E88 table
+	; +0xA0 with the name and mode "rb", +0xA8 in 0x8000-byte chunks into
+	; 0x230F1C, +0xAC) and written with HDAE5000_HD_WriteFile /
+	; HDAE5000_HD_AppendFile to slot +68.  Called by HDAE5000_CopyFdSongToHd.
 	lda xsp, (xsp - 34)
 	push xiz
 	ld (xsp + 34), bc
@@ -12696,7 +12922,7 @@ HDAE5000_Table_Sub_292FD2:	; 0x292FD2 (329 bytes)
 	exts xiz		; sign extend to 32-bit
 	ld xwa, xiz
 	add xwa, 0x00000016
-	calr HDAE5000_Cell_Get_Params
+	calr HDAE5000_RoundUpToSector
 	ld (xsp + 30), xhl
 	; Dispatch with XIZ as XBC param
 	lda xwa, (0x230f32:24); 0x230F32
@@ -12758,8 +12984,11 @@ HDAE5000_Table_Sub_292FD2:	; 0x292FD2 (329 bytes)
 	lda xsp, (xsp + 34)
 	ret
 
-HDAE5000_Workspace_Handler:	; 0x29311B (592 bytes)
+HDAE5000_Fls_ForgetSong:	; 0x29311B (592 bytes)
 	; Part 1: Clear matching entries in workspace tables
+	; ^ i.e. remove song (WA = directory, BC = song) from every FLS list:
+	;   the "workspace tables" are the 120 FLS records at 0x2257B2 (HDAE5000_HD_GetBlockInfo
+	;   block 2), 32 items each.
 	; Nested loop: IZ = 0..119, IY = 0..31
 	; For each (IZ,IY), computes table index = IZ*9*16 + IY
 	; If table[index] matches WA+1 AND table[index+0x20] matches BC+1,
@@ -12878,7 +13107,13 @@ HDAE5000_Workspace_Handler:	; 0x29311B (592 bytes)
 	ret
 	; Part 2: Main workspace handler entry (0x29320D)
 	; Called by firmware — saves regs, dispatches through handler chain
-HDAE5000_AttenDelDirSwCatch_Helper:
+HDAE5000_DeleteDirectory:
+	; Delete directory WA: every used song of it loses its nine parts
+	; (HDAE5000_DeleteSongPart_*) and its FLS references
+	; (HDAE5000_Fls_ForgetSong) and gets a blank name (26 spaces); the
+	; directory name is blanked (16 spaces); tables written
+	; (HDAE5000_HD_WriteTables_Status).  BC = 1: also the 0x0E0A +0x538/+0x53C
+	; UI callbacks; DE != 1: spin down.  Caller: AttenDelDirSwCatch.
 	dec 0, xsp			; callee cleanup placeholder
 	push xiz
 	ld (xsp + 6), de		; save DE (param)
@@ -12906,40 +13141,40 @@ HDAE5000_AttenDelDirSwCatch_Helper:
 .Lwh_slot_loop:
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Table_Calc_Offset
+	calr HDAE5000_Song_IsUsed
 	cp hl, 0xFFFF
 	jr z, .Lwh_slot_fill
 	; Process slot — call all 10 render types
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type0
+	calr HDAE5000_DeleteSongPart_Lsw
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type1
+	calr HDAE5000_DeleteSongPart_Pmt
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type2
+	calr HDAE5000_DeleteSongPart_Sqt
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type3
+	calr HDAE5000_DeleteSongPart_Cmp
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type4
+	calr HDAE5000_DeleteSongPart_Tm
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type5
+	calr HDAE5000_DeleteSongPart_Msp
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type6
+	calr HDAE5000_DeleteSongPart_Rcm
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type7
+	calr HDAE5000_DeleteSongPart_Md
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type8
+	calr HDAE5000_DeleteSongPart_Tlx
 	ld wa, (xsp + 10)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Workspace_Handler	; recursive call (clear matching)
+	calr HDAE5000_Fls_ForgetSong	; recursive call (clear matching)
 .Lwh_slot_fill:
 	; Compute fill address and call MemFill
 	pushw 0x001A			; fill count
@@ -12999,12 +13234,17 @@ HDAE5000_AttenDelDirSwCatch_Helper:
 	inc 0, xsp			; stack cleanup
 	ret
 
-HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
+HDAE5000_DeleteSongParts:	; 0x29336B (349 bytes)
+	; Delete the parts in mask DE of song (WA = directory, BC = song)
+	; (HDAE5000_DeleteSongPart_<k> per bit), between the main-CPU callbacks;
+	; a song left with no part also leaves the FLS lists
+	; (HDAE5000_Fls_ForgetSong).  Callers: AttenDelFileSwCatch, SaveSong,
+	; CopyFdSongToHd, PC-link service 27.
 	dec 4, xsp
 	push xiz
 	ld iz, de
 	ld (xsp + 4), bc	; save file number
-	ld (xsp + 6), wa	; save partition
+	ld (xsp + 6), wa	; save directory
 	cp iz, 0:i3
 	jrl z, .Lws36b_exit	; nothing to do
 	; Workspace dispatch at 0xE8
@@ -13028,60 +13268,60 @@ HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
 	jr z, .Lws36b_bit1
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type0
+	calr HDAE5000_DeleteSongPart_Lsw
 .Lws36b_bit1:
 	bit 1, iz
 	jr z, .Lws36b_bit2
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type1
+	calr HDAE5000_DeleteSongPart_Pmt
 .Lws36b_bit2:
 	bit 2, iz
 	jr z, .Lws36b_bit3
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type2
+	calr HDAE5000_DeleteSongPart_Sqt
 .Lws36b_bit3:
 	bit 3, iz
 	jr z, .Lws36b_bit4
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type3
+	calr HDAE5000_DeleteSongPart_Cmp
 .Lws36b_bit4:
 	bit 4, iz
 	jr z, .Lws36b_bit5
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type4
+	calr HDAE5000_DeleteSongPart_Tm
 .Lws36b_bit5:
 	bit 5, iz
 	jr z, .Lws36b_bit6
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type5
+	calr HDAE5000_DeleteSongPart_Msp
 .Lws36b_bit6:
 	bit 6, iz
 	jr z, .Lws36b_bit7
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type6
+	calr HDAE5000_DeleteSongPart_Rcm
 .Lws36b_bit7:
 	bit 7, iz
 	jr z, .Lws36b_bit8
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type7
+	calr HDAE5000_DeleteSongPart_Md
 .Lws36b_bit8:
 	bit 8, iz
 	jr z, .Lws36b_calc
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Cell_Render_Type8
+	calr HDAE5000_DeleteSongPart_Tlx
 .Lws36b_calc:
 	; Calculate table offset
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Table_Calc_Offset
+	calr HDAE5000_Song_IsUsed
 	cp hl, 0xFFFF
 	jr nz, .Lws36b_post
 	; Push args and call 0x29AEC7
@@ -13106,7 +13346,7 @@ HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
 	; Call workspace handler
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
-	calr HDAE5000_Workspace_Handler
+	calr HDAE5000_Fls_ForgetSong
 .Lws36b_post:
 	call HDAE5000_HD_WriteTables_Status
 	; Conditional call NZ to 0x2974B5
@@ -13138,11 +13378,14 @@ HDAE5000_Workspace_Sub_29336B:	; 0x29336B (349 bytes)
 
 ; --- UI Cell Renderers (9 x 222 bytes each) ---
 ; Delete table entry: check existence, call handler, clear entry (-1), clear flag (0)
-HDAE5000_Cell_Render_Type0:	; 0x2934C8 (222 bytes)
+HDAE5000_DeleteSongPart_Lsw:	; 0x2934C8 (222 bytes)
+	; Delete part 0 (LSW) of song (WA = directory, BC = song): if slot +36 is
+	; not 0xFFFFFFFF, free its chain (HDAE5000_HD_FreeChain), set the slot to
+	; 0xFFFFFFFF and the part byte +26 to 0.
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc	; save file number
-	ld (xsp + 6), wa	; save partition
+	ld (xsp + 6), wa	; save directory
 	; --- Check if entry exists ---
 	ld wa, (xsp + 4)
 	extz xwa
@@ -13213,7 +13456,10 @@ HDAE5000_Cell_Render_Type0:	; 0x2934C8 (222 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Cell_Render_Type1:	; 0x2935A6 (222 bytes)
+HDAE5000_DeleteSongPart_Pmt:	; 0x2935A6 (222 bytes)
+	; Delete part 1 (PMT) of song (WA = directory, BC = song): if slot +40 is
+	; not 0xFFFFFFFF, free its chain (HDAE5000_HD_FreeChain), set the slot to
+	; 0xFFFFFFFF and the part byte +27 to 0.
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -13284,7 +13530,10 @@ HDAE5000_Cell_Render_Type1:	; 0x2935A6 (222 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Cell_Render_Type2:	; 0x293684 (222 bytes)
+HDAE5000_DeleteSongPart_Sqt:	; 0x293684 (222 bytes)
+	; Delete part 2 (SQT) of song (WA = directory, BC = song): if slot +44 is
+	; not 0xFFFFFFFF, free its chain (HDAE5000_HD_FreeChain), set the slot to
+	; 0xFFFFFFFF and the part byte +28 to 0.
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -13355,7 +13604,10 @@ HDAE5000_Cell_Render_Type2:	; 0x293684 (222 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Cell_Render_Type3:	; 0x293762 (222 bytes)
+HDAE5000_DeleteSongPart_Cmp:	; 0x293762 (222 bytes)
+	; Delete part 3 (CMP) of song (WA = directory, BC = song): if slot +48 is
+	; not 0xFFFFFFFF, free its chain (HDAE5000_HD_FreeChain), set the slot to
+	; 0xFFFFFFFF and the part byte +29 to 0.
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -13426,7 +13678,10 @@ HDAE5000_Cell_Render_Type3:	; 0x293762 (222 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Cell_Render_Type4:	; 0x293840 (222 bytes)
+HDAE5000_DeleteSongPart_Tm:	; 0x293840 (222 bytes)
+	; Delete part 4 (TM) of song (WA = directory, BC = song): if slot +52 is
+	; not 0xFFFFFFFF, free its chain (HDAE5000_HD_FreeChain), set the slot to
+	; 0xFFFFFFFF and the part byte +30 to 0.
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -13497,7 +13752,10 @@ HDAE5000_Cell_Render_Type4:	; 0x293840 (222 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Cell_Render_Type5:	; 0x29391E (222 bytes)
+HDAE5000_DeleteSongPart_Msp:	; 0x29391E (222 bytes)
+	; Delete part 5 (MSP) of song (WA = directory, BC = song): if slot +56 is
+	; not 0xFFFFFFFF, free its chain (HDAE5000_HD_FreeChain), set the slot to
+	; 0xFFFFFFFF and the part byte +31 to 0.
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -13568,7 +13826,10 @@ HDAE5000_Cell_Render_Type5:	; 0x29391E (222 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Cell_Render_Type6:	; 0x2939FC (222 bytes)
+HDAE5000_DeleteSongPart_Rcm:	; 0x2939FC (222 bytes)
+	; Delete part 6 (RCM) of song (WA = directory, BC = song): if slot +60 is
+	; not 0xFFFFFFFF, free its chain (HDAE5000_HD_FreeChain), set the slot to
+	; 0xFFFFFFFF and the part byte +32 to 0.
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -13639,7 +13900,10 @@ HDAE5000_Cell_Render_Type6:	; 0x2939FC (222 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Cell_Render_Type7:	; 0x293ADA (222 bytes)
+HDAE5000_DeleteSongPart_Md:	; 0x293ADA (222 bytes)
+	; Delete part 7 (MD) of song (WA = directory, BC = song): if slot +64 is
+	; not 0xFFFFFFFF, free its chain (HDAE5000_HD_FreeChain), set the slot to
+	; 0xFFFFFFFF and the part byte +33 to 0.
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -13710,7 +13974,10 @@ HDAE5000_Cell_Render_Type7:	; 0x293ADA (222 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Cell_Render_Type8:	; 0x293BB8 (222 bytes)
+HDAE5000_DeleteSongPart_Tlx:	; 0x293BB8 (222 bytes)
+	; Delete part 8 (TLX) of song (WA = directory, BC = song): if slot +68 is
+	; not 0xFFFFFFFF, free its chain (HDAE5000_HD_FreeChain), set the slot to
+	; 0xFFFFFFFF and the part byte +34 to 0.
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -13781,8 +14048,12 @@ HDAE5000_Cell_Render_Type8:	; 0x293BB8 (222 bytes)
 	inc 4, xsp
 	ret
 
-HDAE5000_Cell_Validate:	; 0x293C96 (347 bytes)
+HDAE5000_Song_CheckFreeSpace:	; 0x293C96 (347 bytes)
 	; Validate cell rendering — tests bits 0-8, accumulates sizes in XIZ
+	; ^ corrected: HL = 0 if the parts of mask WA fit in the free clusters
+	;   (HDAE5000_HD_CountFreeClusters_Status), else 0xFFFF.  Sizes come from
+	;   the main CPU (0x0E88 table +0x80 per area, +0x34, +0x44, +0x64);
+	;   TM counts 0x72AA bytes and TLX 0x5000.
 	lda xsp, (xsp - 12)
 	push xiz
 	ld (xsp + 14), wa		; save bitmask
@@ -13915,10 +14186,12 @@ HDAE5000_Cell_Validate:	; 0x293C96 (347 bytes)
 	lda xsp, (xsp + 12)
 	ret
 
-HDAE5000_Cell_Get_Params:	; 0x293DF1 (61 bytes)
+HDAE5000_RoundUpToSector:	; 0x293DF1 (61 bytes)
 	; Get cell rendering parameters from data source
 	; Input: XWA = source pointer (0 = use default address 0x200)
 	; Output: XHL = parameter block pointer
+	; ^ corrected: XWA is a BYTE COUNT: XHL = XWA rounded up to a multiple of
+	;   512 (HDAE5000_LDiv by 0x200), and 0x200 for 0.  Used for part sizes.
 	dec 0, xsp			; allocate 8 bytes
 	push xiz
 	ld xiz, xwa			; XIZ = source pointer
@@ -13947,9 +14220,15 @@ HDAE5000_Cell_Get_Params:	; 0x293DF1 (61 bytes)
 	inc 0, xsp			; deallocate 8 bytes
 	ret
 
-HDAE5000_Display_Callback:	; 0x293E2E (1093 bytes)
+HDAE5000_HD_StoreTables:	; 0x293E2E (1093 bytes)
 	; Display callback handler via workspace
+	; ^ corrected: write the filesystem tables to disk.  Main-CPU callback
+	;   0x0E88 table +0xE8, ATA soft reset, HDAE5000_HD_WriteTables_Status,
+	;   standby unless WA = 1, callbacks +0xEC/+0xF0; HL = the OR of the
+	;   statuses (0 = ok).  PC-link services 10-12 and 22 call it.
 ; LDC: 0x293E2E (1093 bytes)
+	; ^ conversion-region size (local-label prefix .LDC_), not a routine
+	;   size: HD_StoreTables .. HD_WriteStream.
 
 	dec	2, xsp
 	pushw iz                                ; push IZ
@@ -13981,7 +14260,10 @@ HDAE5000_Display_Callback:	; 0x293E2E (1093 bytes)
 	inc 2, xsp                              ; inc 2,XSP
 	ret
 
-HDAE5000_PPI_Write_Sector_Helper:
+HDAE5000_HD_LoadTables:
+	; read the filesystem tables from disk: the same bracket as
+	; HDAE5000_HD_StoreTables around HDAE5000_HD_ReadTables_Status.  PC-link
+	; services 7-9 and PPI_Write_Sector call it.
 	dec	2, xsp
 	pushw iz                                ; push IZ
 	ld (xsp + 0x02), wa                     ; ld (XSP+0x02),WA
@@ -14012,6 +14294,10 @@ HDAE5000_PPI_Write_Sector_Helper:
 	inc 2, xsp                              ; inc 2,XSP
 	ret
 
+HDAE5000_HD_RestoreSettings:
+	; The HDAE5000_HD_LoadSettings counterpart of HDAE5000_HD_StoreSettings
+	; (same main-CPU bracket).  No reference to it was found
+	; (scripts/analysis/hdae5000_reachability.py): unreachable.
 	dec	2, xsp
 	pushw iz                                ; push IZ
 	ld (xsp + 0x02), wa                     ; ld (XSP+0x02),WA
@@ -14042,7 +14328,10 @@ HDAE5000_PPI_Write_Sector_Helper:
 	inc 2, xsp                              ; inc 2,XSP
 	ret
 
-HDAE5000_SetupP2SwCatch_Helper:
+HDAE5000_HD_StoreSettings:
+	; write the settings sector (HDAE5000_HD_SaveSettings) inside the same
+	; main-CPU bracket as HDAE5000_HD_StoreTables; WA = 1 keeps the drive
+	; spinning.  Callers: SetupP2SwCatch, AttenHDFormatSwCatch (case 6).
 	dec	2, xsp
 	pushw iz                                ; push IZ
 	ld (xsp + 0x02), wa                     ; ld (XSP+0x02),WA
@@ -14073,6 +14362,13 @@ HDAE5000_SetupP2SwCatch_Helper:
 	inc 2, xsp                              ; inc 2,XSP
 	ret
 
+HDAE5000_RcmStream_Read:
+	; Read callback handed to the main CPU by HDAE5000_LoadSong_Rcm (workspace
+	; 0x0E88 table +0xB0, with HDAE5000_RcmStream_LastResult): XWA = buffer,
+	; XBC = byte count.  The first call (state 0x238F1C = 0) starts
+	; HDAE5000_HD_ReadFile on the RCM slot (+60) of song (0x238F1E dir,
+	; 0x238F20 song), later calls continue with HDAE5000_HD_ReadFileNext
+	; (state 1); the result goes to 0x238F22.  Returns XHL = XBC.
 	lda	xsp, (xsp-12)
 	push xiz
 	ld (xsp + 0x0c), xbc                    ; ld (XSP+0x0c),XBC
@@ -14137,6 +14433,12 @@ HDAE5000_SetupP2SwCatch_Helper:
 	lda	xsp, (xsp+12)
 	ret
 
+HDAE5000_RcmStream_Write:
+	; Write callback handed to the main CPU by HDAE5000_SaveSong_Rcm (workspace
+	; 0x0E88 table +0xB4, after HDAE5000_HD_WriteOpen on the RCM slot): XWA =
+	; data, XBC = byte count, through HDAE5000_HD_WriteStream; marks the RCM
+	; part byte (+32) of song (0x238F1E, 0x238F20); state 0x238F1C -> 2,
+	; result -> 0x238F22.  Returns XHL = XBC.
 	dec	6, xsp
 	push xiz
 	ld (xsp + 0x06), xbc                    ; ld (XSP+0x06),XBC
@@ -14209,9 +14511,16 @@ HDAE5000_SetupP2SwCatch_Helper:
 	inc	6, xsp
 	ret
 
+HDAE5000_RcmStream_LastResult:
+	; HL = the result of the last RCM stream read/write (0x238F22); handed to
+	; the main CPU by HDAE5000_LoadSong_Rcm and HDAE5000_SaveSong_Rcm.
 	ld	hl, (0x238F22:24)
 	ret
 
+HDAE5000_RcmStream_FreeSpace:
+	; XHL = the free-space field of HDAE5000_HD_GetDiskUsage (units of
+	; 10,000 bytes) shifted left by 10; handed to the main CPU by
+	; HDAE5000_SaveSong_Rcm.
 	lda	xsp, (xsp-16)
 	lda	xwa, (xsp)
 	call HDAE5000_HD_GetDiskUsage
@@ -14257,7 +14566,7 @@ HDAE5000_HD_GetBlockInfo:
 
 HDAE5000_HD_GetSongInfo:
 	; (WA = directory, BC = file, XDE = destination; PC-link service 13,
-	; SendInfosAboutSong): dest+0 = HDAE5000_Table_Lookup(WA, BC) (0xFFFF
+	; SendInfosAboutSong): dest+0 = HDAE5000_Song_PartMask(WA, BC) (0xFFFF
 	; -> return HL = 0xFFFF), dest+2 = the 16-byte directory name, dest+18 =
 	; the 26-byte file name, dest+44 = bytes 26..35 of the 76-byte file
 	; record.  HL = 0.
@@ -14268,7 +14577,7 @@ HDAE5000_HD_GetSongInfo:
 	ld (xsp + 0x0a), wa                     ; ld (XSP+0x0a),WA
 	ld	wa, (xsp+10)
 	ld	bc, (xsp+8)
-	calr	HDAE5000_Table_Lookup
+	calr	HDAE5000_Song_PartMask
 	ld	wa, hl
 	cp	wa, 0xffff
 	jrl z, .LDC_426f                       ; [76 a5 00] jrl Z,0x29426f
@@ -14826,7 +15135,7 @@ HDAE5000_PPORT_Svc07_ReadDirBlockFromHd:
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
-	call HDAE5000_PPI_Write_Sector_Helper
+	call HDAE5000_HD_LoadTables
 	cp	hl, 0xffff
 	jr nz, .LDS_4746                       ; [6e 02] jr NZ,0x294746
 	ld	iz, 1:i3
@@ -14847,7 +15156,7 @@ HDAE5000_PPORT_Svc08_ReadFileBlockFromHd:
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
-	call HDAE5000_PPI_Write_Sector_Helper
+	call HDAE5000_HD_LoadTables
 	cp	hl, 0xffff
 	jr nz, .LDS_476b                       ; [6e 02] jr NZ,0x29476b
 	ld	iz, 1:i3
@@ -14868,7 +15177,7 @@ HDAE5000_PPORT_Svc09_ReadFlsBlockFromHd:
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
-	call HDAE5000_PPI_Write_Sector_Helper
+	call HDAE5000_HD_LoadTables
 	cp	hl, 0xffff
 	jr nz, .LDS_4790                       ; [6e 02] jr NZ,0x294790
 	ld	iz, 1:i3
@@ -14889,7 +15198,7 @@ HDAE5000_PPORT_Svc10_WriteDirBlockToHd:
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
-	call HDAE5000_Display_Callback
+	call HDAE5000_HD_StoreTables
 	cp	hl, 0xffff
 	jr nz, .LDS_47b5                       ; [6e 02] jr NZ,0x2947b5
 	ld	iz, 1:i3
@@ -14910,7 +15219,7 @@ HDAE5000_PPORT_Svc11_WriteFileSystemBlockToHd:
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
-	call HDAE5000_Display_Callback
+	call HDAE5000_HD_StoreTables
 	cp	hl, 0xffff
 	jr nz, .LDS_47da                       ; [6e 02] jr NZ,0x2947da
 	ld	iz, 1:i3
@@ -14931,7 +15240,7 @@ HDAE5000_PPORT_Svc12_WriteFlsBlockToHd:
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 1:i3
-	call HDAE5000_Display_Callback
+	call HDAE5000_HD_StoreTables
 	cp	hl, 0xffff
 	jr nz, .LDS_47ff                       ; [6e 02] jr NZ,0x2947ff
 	ld	iz, 1:i3
@@ -15088,7 +15397,7 @@ HDAE5000_PPORT_Svc13_SendInfosAboutSong:
 	lda	xwa, (xsp+68)
 	ld	xbc, xwa
 	ldw	wa, 0x000a
-	call HDAE5000_Table_Sub_291BDE
+	call HDAE5000_TlxPart_Describe
 	ld xwa, (xsp + 0x44)                    ; ld XWA,(XSP+0x44)
 	ld	(0x238fed), xwa
 	ld xwa, (xsp + 0x48)                    ; ld XWA,(XSP+0x48)
@@ -15175,7 +15484,7 @@ HDAE5000_PPORT_Svc14_LoadSongFromHdToMemory:
 	pushw 0x0000
 	pushw 0x0001
 	ld	de, (0x238F2E:24)
-	call HDAE5000_Display_Manager_Helper
+	call HDAE5000_LoadSong
 	cp	hl, 0xffff
 	jr nz, .LDS_4b3b                       ; [6e 02] jr NZ,0x294b3b
 	ld	iz, 1:i3
@@ -15199,7 +15508,7 @@ HDAE5000_PPORT_Svc15_SaveSongInMemoryToHd:
 	pushw	(0x238F2E:24)
 	pushw 0x0000
 	pushw 0x0001
-	call HDAE5000_Display_Scroll_Helper
+	call HDAE5000_SaveSong
 	cp	hl, 0xffff
 	jr nz, .LDS_4b6e                       ; [6e 02] jr NZ,0x294b6e
 	ld	iz, 1:i3
@@ -15526,7 +15835,7 @@ HDAE5000_PPORT_Svc22_WriteCloseHD:
 	cp	hl, 0xffff
 	jr z, .LDS_4ee3                        ; [66 0e] jr Z,0x294ee3
 	ld	wa, 1:i3
-	call HDAE5000_Display_Callback
+	call HDAE5000_HD_StoreTables
 	cp	hl, 0xffff
 	jr z, .LDS_4ee3                        ; [66 02] jr Z,0x294ee3
 	ld	iz, 0:i3
@@ -15653,14 +15962,14 @@ HDAE5000_PPORT_Svc25_ReadFileHD:
 
 HDAE5000_PPORT_Svc27:	; 0x295009
 	; PC-link service 27: HDAE5000_PPORT_ServiceTable[27].  Calls
-	; HDAE5000_Workspace_Sub_29336B with DE = RAM (0x238F2E) and two word
+	; HDAE5000_DeleteSongParts with DE = RAM (0x238F2E) and two word
 	; arguments 1, 0; returns HL = 0.  What that callee does for the link is
 	; not established.
 	; PPORT utility - push params and call workspace handler
 	pushw 0x0000			; arg 1
 	pushw 0x0001			; arg 2
 	ld de, (0x238f2e:24); DE = (0x238F2E) - callback ID
-	call HDAE5000_Workspace_Sub_29336B
+	call HDAE5000_DeleteSongParts
 	ld hl, 0:i3			; return 0
 	ret
 	nop
