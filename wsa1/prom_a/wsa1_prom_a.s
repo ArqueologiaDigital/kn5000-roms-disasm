@@ -168397,136 +168397,136 @@ RecordPtrs_RAM76A2:
 ;          by this table.
 ; ---------------------------------------------------------------------
 DrumKitNameBlockPtrs:
-	.long 0x00febace                               ; FEB3BC  [  0] name block 1
-	.long 0x00febace                               ; FEB3C0  [  1] name block 1
-	.long 0x00febace                               ; FEB3C4  [  2] name block 1
-	.long 0x00febace                               ; FEB3C8  [  3] name block 1
-	.long 0x00febace                               ; FEB3CC  [  4] name block 1
-	.long 0x00febace                               ; FEB3D0  [  5] name block 1
-	.long 0x00febace                               ; FEB3D4  [  6] name block 1
-	.long 0x00febace                               ; FEB3D8  [  7] name block 1
-	.long 0x00febace                               ; FEB3DC  [  8] name block 1
-	.long 0x00febace                               ; FEB3E0  [  9] name block 1
-	.long 0x00febace                               ; FEB3E4  [ 10] name block 1
-	.long 0x00febace                               ; FEB3E8  [ 11] name block 1
-	.long 0x00febace                               ; FEB3EC  [ 12] name block 1
-	.long 0x00febace                               ; FEB3F0  [ 13] name block 1
-	.long 0x00febace                               ; FEB3F4  [ 14] name block 1
-	.long 0x00febace                               ; FEB3F8  [ 15] name block 1
-	.long 0x00febace                               ; FEB3FC  [ 16] name block 1
-	.long 0x00febace                               ; FEB400  [ 17] name block 1
-	.long 0x00febace                               ; FEB404  [ 18] name block 1
-	.long 0x00febace                               ; FEB408  [ 19] name block 1
-	.long 0x00febace                               ; FEB40C  [ 20] name block 1
-	.long 0x00febace                               ; FEB410  [ 21] name block 1
-	.long 0x00febace                               ; FEB414  [ 22] name block 1
-	.long 0x00febace                               ; FEB418  [ 23] name block 1
-	.long 0x00febfd8                               ; FEB41C  [ 24] name block 2
-	.long 0x00febace                               ; FEB420  [ 25] name block 1
-	.long 0x00febfd8                               ; FEB424  [ 26] name block 2
-	.long 0x00febace                               ; FEB428  [ 27] name block 1
-	.long 0x00febace                               ; FEB42C  [ 28] name block 1
-	.long 0x00febfd8                               ; FEB430  [ 29] name block 2
-	.long 0x00febace                               ; FEB434  [ 30] name block 1
-	.long 0x00febace                               ; FEB438  [ 31] name block 1
-	.long 0x00febace                               ; FEB43C  [ 32] name block 1
-	.long 0x00febace                               ; FEB440  [ 33] name block 1
-	.long 0x00febace                               ; FEB444  [ 34] name block 1
-	.long 0x00febace                               ; FEB448  [ 35] name block 1
-	.long 0x00febace                               ; FEB44C  [ 36] name block 1
-	.long 0x00febace                               ; FEB450  [ 37] name block 1
-	.long 0x00febace                               ; FEB454  [ 38] name block 1
-	.long 0x00febace                               ; FEB458  [ 39] name block 1
-	.long 0x00fec4e2                               ; FEB45C  [ 40] name block 3
-	.long 0x00febace                               ; FEB460  [ 41] name block 1
-	.long 0x00febace                               ; FEB464  [ 42] name block 1
-	.long 0x00febace                               ; FEB468  [ 43] name block 1
-	.long 0x00febace                               ; FEB46C  [ 44] name block 1
-	.long 0x00febace                               ; FEB470  [ 45] name block 1
-	.long 0x00febace                               ; FEB474  [ 46] name block 1
-	.long 0x00febace                               ; FEB478  [ 47] name block 1
-	.long 0x00fecef6                               ; FEB47C  [ 48] name block 5
-	.long 0x00febace                               ; FEB480  [ 49] name block 1
-	.long 0x00febace                               ; FEB484  [ 50] name block 1
-	.long 0x00febace                               ; FEB488  [ 51] name block 1
-	.long 0x00febace                               ; FEB48C  [ 52] name block 1
-	.long 0x00febace                               ; FEB490  [ 53] name block 1
-	.long 0x00febace                               ; FEB494  [ 54] name block 1
-	.long 0x00febace                               ; FEB498  [ 55] name block 1
-	.long 0x00febace                               ; FEB49C  [ 56] name block 1
-	.long 0x00febace                               ; FEB4A0  [ 57] name block 1
-	.long 0x00febace                               ; FEB4A4  [ 58] name block 1
-	.long 0x00febace                               ; FEB4A8  [ 59] name block 1
-	.long 0x00febace                               ; FEB4AC  [ 60] name block 1
-	.long 0x00febace                               ; FEB4B0  [ 61] name block 1
-	.long 0x00febace                               ; FEB4B4  [ 62] name block 1
-	.long 0x00febace                               ; FEB4B8  [ 63] name block 1
-	.long 0x00febace                               ; FEB4BC  [ 64] name block 1
-	.long 0x00febace                               ; FEB4C0  [ 65] name block 1
-	.long 0x00febace                               ; FEB4C4  [ 66] name block 1
-	.long 0x00febace                               ; FEB4C8  [ 67] name block 1
-	.long 0x00febace                               ; FEB4CC  [ 68] name block 1
-	.long 0x00febace                               ; FEB4D0  [ 69] name block 1
-	.long 0x00febace                               ; FEB4D4  [ 70] name block 1
-	.long 0x00febace                               ; FEB4D8  [ 71] name block 1
-	.long 0x00febace                               ; FEB4DC  [ 72] name block 1
-	.long 0x00febace                               ; FEB4E0  [ 73] name block 1
-	.long 0x00febace                               ; FEB4E4  [ 74] name block 1
-	.long 0x00febace                               ; FEB4E8  [ 75] name block 1
-	.long 0x00febace                               ; FEB4EC  [ 76] name block 1
-	.long 0x00febace                               ; FEB4F0  [ 77] name block 1
-	.long 0x00febace                               ; FEB4F4  [ 78] name block 1
-	.long 0x00febace                               ; FEB4F8  [ 79] name block 1
-	.long 0x00febace                               ; FEB4FC  [ 80] name block 1
-	.long 0x00febace                               ; FEB500  [ 81] name block 1
-	.long 0x00febace                               ; FEB504  [ 82] name block 1
-	.long 0x00febace                               ; FEB508  [ 83] name block 1
-	.long 0x00febace                               ; FEB50C  [ 84] name block 1
-	.long 0x00febace                               ; FEB510  [ 85] name block 1
-	.long 0x00febace                               ; FEB514  [ 86] name block 1
-	.long 0x00febace                               ; FEB518  [ 87] name block 1
-	.long 0x00febace                               ; FEB51C  [ 88] name block 1
-	.long 0x00febace                               ; FEB520  [ 89] name block 1
-	.long 0x00febace                               ; FEB524  [ 90] name block 1
-	.long 0x00febace                               ; FEB528  [ 91] name block 1
-	.long 0x00febace                               ; FEB52C  [ 92] name block 1
-	.long 0x00febace                               ; FEB530  [ 93] name block 1
-	.long 0x00febace                               ; FEB534  [ 94] name block 1
-	.long 0x00febace                               ; FEB538  [ 95] name block 1
-	.long 0x00febace                               ; FEB53C  [ 96] name block 1
-	.long 0x00febace                               ; FEB540  [ 97] name block 1
-	.long 0x00febace                               ; FEB544  [ 98] name block 1
-	.long 0x00febace                               ; FEB548  [ 99] name block 1
-	.long 0x00febace                               ; FEB54C  [100] name block 1
-	.long 0x00febace                               ; FEB550  [101] name block 1
-	.long 0x00febace                               ; FEB554  [102] name block 1
-	.long 0x00febace                               ; FEB558  [103] name block 1
-	.long 0x00febace                               ; FEB55C  [104] name block 1
-	.long 0x00febace                               ; FEB560  [105] name block 1
-	.long 0x00febace                               ; FEB564  [106] name block 1
-	.long 0x00febace                               ; FEB568  [107] name block 1
-	.long 0x00febace                               ; FEB56C  [108] name block 1
-	.long 0x00febace                               ; FEB570  [109] name block 1
-	.long 0x00febace                               ; FEB574  [110] name block 1
-	.long 0x00febace                               ; FEB578  [111] name block 1
-	.long 0x00fec9ec                               ; FEB57C  [112] name block 4
-	.long 0x00febace                               ; FEB580  [113] name block 1
-	.long 0x00febace                               ; FEB584  [114] name block 1
-	.long 0x00febace                               ; FEB588  [115] name block 1
-	.long 0x00febace                               ; FEB58C  [116] name block 1
-	.long 0x00febace                               ; FEB590  [117] name block 1
-	.long 0x00febace                               ; FEB594  [118] name block 1
-	.long 0x00febace                               ; FEB598  [119] name block 1
-	.long 0x00fed400                               ; FEB59C  [120] name block 6
-	.long 0x00febace                               ; FEB5A0  [121] name block 1
-	.long 0x00febace                               ; FEB5A4  [122] name block 1
-	.long 0x00febace                               ; FEB5A8  [123] name block 1
-	.long 0x00febace                               ; FEB5AC  [124] name block 1
-	.long 0x00febace                               ; FEB5B0  [125] name block 1
-	.long 0x00febace                               ; FEB5B4  [126] name block 1
-	.long 0x00febace                               ; FEB5B8  [127] name block 1
-	.long 0x00febace                               ; FEB5BC  [128] name block 1
-	.long 0x00febace                               ; FEB5C0  [129] name block 1
+	.long DrumKitNames_Block1                      ; FEB3BC  [  0] name block 1
+	.long DrumKitNames_Block1                      ; FEB3C0  [  1] name block 1
+	.long DrumKitNames_Block1                      ; FEB3C4  [  2] name block 1
+	.long DrumKitNames_Block1                      ; FEB3C8  [  3] name block 1
+	.long DrumKitNames_Block1                      ; FEB3CC  [  4] name block 1
+	.long DrumKitNames_Block1                      ; FEB3D0  [  5] name block 1
+	.long DrumKitNames_Block1                      ; FEB3D4  [  6] name block 1
+	.long DrumKitNames_Block1                      ; FEB3D8  [  7] name block 1
+	.long DrumKitNames_Block1                      ; FEB3DC  [  8] name block 1
+	.long DrumKitNames_Block1                      ; FEB3E0  [  9] name block 1
+	.long DrumKitNames_Block1                      ; FEB3E4  [ 10] name block 1
+	.long DrumKitNames_Block1                      ; FEB3E8  [ 11] name block 1
+	.long DrumKitNames_Block1                      ; FEB3EC  [ 12] name block 1
+	.long DrumKitNames_Block1                      ; FEB3F0  [ 13] name block 1
+	.long DrumKitNames_Block1                      ; FEB3F4  [ 14] name block 1
+	.long DrumKitNames_Block1                      ; FEB3F8  [ 15] name block 1
+	.long DrumKitNames_Block1                      ; FEB3FC  [ 16] name block 1
+	.long DrumKitNames_Block1                      ; FEB400  [ 17] name block 1
+	.long DrumKitNames_Block1                      ; FEB404  [ 18] name block 1
+	.long DrumKitNames_Block1                      ; FEB408  [ 19] name block 1
+	.long DrumKitNames_Block1                      ; FEB40C  [ 20] name block 1
+	.long DrumKitNames_Block1                      ; FEB410  [ 21] name block 1
+	.long DrumKitNames_Block1                      ; FEB414  [ 22] name block 1
+	.long DrumKitNames_Block1                      ; FEB418  [ 23] name block 1
+	.long DrumKitNames_Block2                      ; FEB41C  [ 24] name block 2
+	.long DrumKitNames_Block1                      ; FEB420  [ 25] name block 1
+	.long DrumKitNames_Block2                      ; FEB424  [ 26] name block 2
+	.long DrumKitNames_Block1                      ; FEB428  [ 27] name block 1
+	.long DrumKitNames_Block1                      ; FEB42C  [ 28] name block 1
+	.long DrumKitNames_Block2                      ; FEB430  [ 29] name block 2
+	.long DrumKitNames_Block1                      ; FEB434  [ 30] name block 1
+	.long DrumKitNames_Block1                      ; FEB438  [ 31] name block 1
+	.long DrumKitNames_Block1                      ; FEB43C  [ 32] name block 1
+	.long DrumKitNames_Block1                      ; FEB440  [ 33] name block 1
+	.long DrumKitNames_Block1                      ; FEB444  [ 34] name block 1
+	.long DrumKitNames_Block1                      ; FEB448  [ 35] name block 1
+	.long DrumKitNames_Block1                      ; FEB44C  [ 36] name block 1
+	.long DrumKitNames_Block1                      ; FEB450  [ 37] name block 1
+	.long DrumKitNames_Block1                      ; FEB454  [ 38] name block 1
+	.long DrumKitNames_Block1                      ; FEB458  [ 39] name block 1
+	.long DrumKitNames_Block3                      ; FEB45C  [ 40] name block 3
+	.long DrumKitNames_Block1                      ; FEB460  [ 41] name block 1
+	.long DrumKitNames_Block1                      ; FEB464  [ 42] name block 1
+	.long DrumKitNames_Block1                      ; FEB468  [ 43] name block 1
+	.long DrumKitNames_Block1                      ; FEB46C  [ 44] name block 1
+	.long DrumKitNames_Block1                      ; FEB470  [ 45] name block 1
+	.long DrumKitNames_Block1                      ; FEB474  [ 46] name block 1
+	.long DrumKitNames_Block1                      ; FEB478  [ 47] name block 1
+	.long DrumKitNames_Block5                      ; FEB47C  [ 48] name block 5
+	.long DrumKitNames_Block1                      ; FEB480  [ 49] name block 1
+	.long DrumKitNames_Block1                      ; FEB484  [ 50] name block 1
+	.long DrumKitNames_Block1                      ; FEB488  [ 51] name block 1
+	.long DrumKitNames_Block1                      ; FEB48C  [ 52] name block 1
+	.long DrumKitNames_Block1                      ; FEB490  [ 53] name block 1
+	.long DrumKitNames_Block1                      ; FEB494  [ 54] name block 1
+	.long DrumKitNames_Block1                      ; FEB498  [ 55] name block 1
+	.long DrumKitNames_Block1                      ; FEB49C  [ 56] name block 1
+	.long DrumKitNames_Block1                      ; FEB4A0  [ 57] name block 1
+	.long DrumKitNames_Block1                      ; FEB4A4  [ 58] name block 1
+	.long DrumKitNames_Block1                      ; FEB4A8  [ 59] name block 1
+	.long DrumKitNames_Block1                      ; FEB4AC  [ 60] name block 1
+	.long DrumKitNames_Block1                      ; FEB4B0  [ 61] name block 1
+	.long DrumKitNames_Block1                      ; FEB4B4  [ 62] name block 1
+	.long DrumKitNames_Block1                      ; FEB4B8  [ 63] name block 1
+	.long DrumKitNames_Block1                      ; FEB4BC  [ 64] name block 1
+	.long DrumKitNames_Block1                      ; FEB4C0  [ 65] name block 1
+	.long DrumKitNames_Block1                      ; FEB4C4  [ 66] name block 1
+	.long DrumKitNames_Block1                      ; FEB4C8  [ 67] name block 1
+	.long DrumKitNames_Block1                      ; FEB4CC  [ 68] name block 1
+	.long DrumKitNames_Block1                      ; FEB4D0  [ 69] name block 1
+	.long DrumKitNames_Block1                      ; FEB4D4  [ 70] name block 1
+	.long DrumKitNames_Block1                      ; FEB4D8  [ 71] name block 1
+	.long DrumKitNames_Block1                      ; FEB4DC  [ 72] name block 1
+	.long DrumKitNames_Block1                      ; FEB4E0  [ 73] name block 1
+	.long DrumKitNames_Block1                      ; FEB4E4  [ 74] name block 1
+	.long DrumKitNames_Block1                      ; FEB4E8  [ 75] name block 1
+	.long DrumKitNames_Block1                      ; FEB4EC  [ 76] name block 1
+	.long DrumKitNames_Block1                      ; FEB4F0  [ 77] name block 1
+	.long DrumKitNames_Block1                      ; FEB4F4  [ 78] name block 1
+	.long DrumKitNames_Block1                      ; FEB4F8  [ 79] name block 1
+	.long DrumKitNames_Block1                      ; FEB4FC  [ 80] name block 1
+	.long DrumKitNames_Block1                      ; FEB500  [ 81] name block 1
+	.long DrumKitNames_Block1                      ; FEB504  [ 82] name block 1
+	.long DrumKitNames_Block1                      ; FEB508  [ 83] name block 1
+	.long DrumKitNames_Block1                      ; FEB50C  [ 84] name block 1
+	.long DrumKitNames_Block1                      ; FEB510  [ 85] name block 1
+	.long DrumKitNames_Block1                      ; FEB514  [ 86] name block 1
+	.long DrumKitNames_Block1                      ; FEB518  [ 87] name block 1
+	.long DrumKitNames_Block1                      ; FEB51C  [ 88] name block 1
+	.long DrumKitNames_Block1                      ; FEB520  [ 89] name block 1
+	.long DrumKitNames_Block1                      ; FEB524  [ 90] name block 1
+	.long DrumKitNames_Block1                      ; FEB528  [ 91] name block 1
+	.long DrumKitNames_Block1                      ; FEB52C  [ 92] name block 1
+	.long DrumKitNames_Block1                      ; FEB530  [ 93] name block 1
+	.long DrumKitNames_Block1                      ; FEB534  [ 94] name block 1
+	.long DrumKitNames_Block1                      ; FEB538  [ 95] name block 1
+	.long DrumKitNames_Block1                      ; FEB53C  [ 96] name block 1
+	.long DrumKitNames_Block1                      ; FEB540  [ 97] name block 1
+	.long DrumKitNames_Block1                      ; FEB544  [ 98] name block 1
+	.long DrumKitNames_Block1                      ; FEB548  [ 99] name block 1
+	.long DrumKitNames_Block1                      ; FEB54C  [100] name block 1
+	.long DrumKitNames_Block1                      ; FEB550  [101] name block 1
+	.long DrumKitNames_Block1                      ; FEB554  [102] name block 1
+	.long DrumKitNames_Block1                      ; FEB558  [103] name block 1
+	.long DrumKitNames_Block1                      ; FEB55C  [104] name block 1
+	.long DrumKitNames_Block1                      ; FEB560  [105] name block 1
+	.long DrumKitNames_Block1                      ; FEB564  [106] name block 1
+	.long DrumKitNames_Block1                      ; FEB568  [107] name block 1
+	.long DrumKitNames_Block1                      ; FEB56C  [108] name block 1
+	.long DrumKitNames_Block1                      ; FEB570  [109] name block 1
+	.long DrumKitNames_Block1                      ; FEB574  [110] name block 1
+	.long DrumKitNames_Block1                      ; FEB578  [111] name block 1
+	.long DrumKitNames_Block4                      ; FEB57C  [112] name block 4
+	.long DrumKitNames_Block1                      ; FEB580  [113] name block 1
+	.long DrumKitNames_Block1                      ; FEB584  [114] name block 1
+	.long DrumKitNames_Block1                      ; FEB588  [115] name block 1
+	.long DrumKitNames_Block1                      ; FEB58C  [116] name block 1
+	.long DrumKitNames_Block1                      ; FEB590  [117] name block 1
+	.long DrumKitNames_Block1                      ; FEB594  [118] name block 1
+	.long DrumKitNames_Block1                      ; FEB598  [119] name block 1
+	.long DrumKitNames_Block6                      ; FEB59C  [120] name block 6
+	.long DrumKitNames_Block1                      ; FEB5A0  [121] name block 1
+	.long DrumKitNames_Block1                      ; FEB5A4  [122] name block 1
+	.long DrumKitNames_Block1                      ; FEB5A8  [123] name block 1
+	.long DrumKitNames_Block1                      ; FEB5AC  [124] name block 1
+	.long DrumKitNames_Block1                      ; FEB5B0  [125] name block 1
+	.long DrumKitNames_Block1                      ; FEB5B4  [126] name block 1
+	.long DrumKitNames_Block1                      ; FEB5B8  [127] name block 1
+	.long DrumKitNames_Block1                      ; FEB5BC  [128] name block 1
+	.long DrumKitNames_Block1                      ; FEB5C0  [129] name block 1
 
 ; ---------------------------------------------------------------------
 ; DrumKitNames -- 13 blocks x 129 names x 10 characters, 16,770 bytes
@@ -168543,8 +168543,8 @@ DrumKitNameBlockPtrs:
 ;   Point 2 is the load-bearing one: it comes from a different table.
 ;
 ; ★★ THE INDEX **IS** THE MIDI NOTE NUMBER -- the offset is ZERO, established
-; 2026-08-25.  (This paragraph used to say "a name's INDEX is a MIDI note number
-; offset. ⚠ WHICH note index 0 is, is NOT established here."  It is now.)
+; 2026-08-25.  (This paragraph used to say that a name's INDEX is a MIDI note
+; number with an OFFSET, and left open which note index 0 is.  That is settled.)
 ; Indices 35-81 are the General MIDI percussion map, in order, with no shift:
 ;
 ;   35 Bass Dr 2  (GM Acoustic Bass Drum)   36 Bass Dr 1  (GM Bass Drum 1)
@@ -168570,6 +168570,16 @@ DrumKitNameBlockPtrs:
 ; is a MIDI note ON THE WIRE rather than a key number the panel already
 ; translated.  It establishes the ENCODING of the index, which is what a
 ; legend-to-index tie needs.
+;
+; ★ THE NAME READER pins the 10-byte width independently of the data.
+; sub_FEB290 (0xFEB290), called 12 times per redraw by sub_FEB280's loop over
+; DE = 0..11 (one row per visible key), sets HL = (0x601F71)+DE with L then
+; replaced by what call 0xF41040 returns for it (the index into the block),
+; (0x2530) = x 0x1A, (0x2532) = y 10*DE+0x2B, calls
+; RecordNameSource_Select (0xFEB2D4) for XIY = the block, then BC = 10 and
+; SWI7 service 0x17, LCD_Svc_17_DrawText8x8Packed (0xF90118), which draws BC
+; characters from XIY + HL*BC.  So name j of a block is the ten bytes at
+; block + 10*j, read by the reader itself, not inferred from the text.
 ;
 ; Block 0 is 129 BLANK names.  It is never named by the pointer table; it is
 ; what 0xFEB32A -- the FALL-THROUGH arm, for a record type that is none of
@@ -168711,6 +168721,10 @@ DrumKitNames:
 	.ascii "          "                             ; FEBABA  [  0][127]
 	.ascii "          "                             ; FEBAC4  [  0][128]
 
+; DrumKitNames_Block1 -- name block 1: 129 ten-character names, 119 non-blank.
+; Read by: DrumKitNameBlockPtrs[123 programs (every one not listed under another block)] -> RecordNameSource_Select's type-0x20
+;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+DrumKitNames_Block1:
 ; ---- name block 1, 0xFEBACE: 10 of 129 names are blank ----
 	.ascii "          "                             ; FEBACE  [  1][  0]
 	.ascii "          "                             ; FEBAD8  [  1][  1]
@@ -168842,6 +168856,10 @@ DrumKitNames:
 	.ascii "WoodBlk H2"                             ; FEBFC4  [  1][127]
 	.ascii "          "                             ; FEBFCE  [  1][128]
 
+; DrumKitNames_Block2 -- name block 2: 129 ten-character names, 119 non-blank.
+; Read by: DrumKitNameBlockPtrs[24, 26, 29] -> RecordNameSource_Select's type-0x20
+;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+DrumKitNames_Block2:
 ; ---- name block 2, 0xFEBFD8: 10 of 129 names are blank ----
 	.ascii "          "                             ; FEBFD8  [  2][  0]
 	.ascii "          "                             ; FEBFE2  [  2][  1]
@@ -168973,6 +168991,10 @@ DrumKitNames:
 	.ascii "WoodBlk H2"                             ; FEC4CE  [  2][127]
 	.ascii "          "                             ; FEC4D8  [  2][128]
 
+; DrumKitNames_Block3 -- name block 3: 129 ten-character names, 119 non-blank.
+; Read by: DrumKitNameBlockPtrs[40] -> RecordNameSource_Select's type-0x20
+;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+DrumKitNames_Block3:
 ; ---- name block 3, 0xFEC4E2: 10 of 129 names are blank ----
 	.ascii "          "                             ; FEC4E2  [  3][  0]
 	.ascii "          "                             ; FEC4EC  [  3][  1]
@@ -169104,6 +169126,10 @@ DrumKitNames:
 	.ascii "WoodBlk H2"                             ; FEC9D8  [  3][127]
 	.ascii "          "                             ; FEC9E2  [  3][128]
 
+; DrumKitNames_Block4 -- name block 4: 129 ten-character names, 88 non-blank.
+; Read by: DrumKitNameBlockPtrs[112] -> RecordNameSource_Select's type-0x20
+;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+DrumKitNames_Block4:
 ; ---- name block 4, 0xFEC9EC: 41 of 129 names are blank ----
 	.ascii "          "                             ; FEC9EC  [  4][  0]
 	.ascii "          "                             ; FEC9F6  [  4][  1]
@@ -169235,6 +169261,10 @@ DrumKitNames:
 	.ascii "          "                             ; FECEE2  [  4][127]
 	.ascii "          "                             ; FECEEC  [  4][128]
 
+; DrumKitNames_Block5 -- name block 5: 129 ten-character names, 62 non-blank.
+; Read by: DrumKitNameBlockPtrs[48] -> RecordNameSource_Select's type-0x20
+;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+DrumKitNames_Block5:
 ; ---- name block 5, 0xFECEF6: 67 of 129 names are blank ----
 	.ascii "          "                             ; FECEF6  [  5][  0]
 	.ascii "          "                             ; FECF00  [  5][  1]
@@ -169366,6 +169396,10 @@ DrumKitNames:
 	.ascii "          "                             ; FED3EC  [  5][127]
 	.ascii "          "                             ; FED3F6  [  5][128]
 
+; DrumKitNames_Block6 -- name block 6: 129 ten-character names, 57 non-blank.
+; Read by: DrumKitNameBlockPtrs[120] -> RecordNameSource_Select's type-0x20
+;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+DrumKitNames_Block6:
 ; ---- name block 6, 0xFED400: 72 of 129 names are blank ----
 	.ascii "          "                             ; FED400  [  6][  0]
 	.ascii "          "                             ; FED40A  [  6][  1]
@@ -169497,6 +169531,15 @@ DrumKitNames:
 	.ascii "Click  3  "                             ; FED8F6  [  6][127]
 	.ascii "          "                             ; FED900  [  6][128]
 
+; DrumKitNames_Block7 -- name block 7: 129 ten-character names, 107 non-blank.
+; No reader is known.  DrumKitNameBlockPtrs names only blocks 1-6, and
+; RecordNameSource_Select's other arms return block 0 or RAM 0x603FF6.
+; Forms searched (2026-09-25, lane proma): the block's 24-bit address
+;   0xFED90A as 3 LE bytes at every offset of prom_a, prom_b and prom_c
+;   (0 hits); 16-bit block offsets 1290*k in instruction operands;
+;   any multiply by 1290 or by 129 in prom_a (none; the only mul-by-10
+;   sites are 0xF8BC47, 0xFDA1F1, 0xFEB04E and the reader's 0xFEB2BD).
+DrumKitNames_Block7:
 ; ---- name block 7, 0xFED90A: 22 of 129 names are blank ----
 	.ascii "          "                             ; FED90A  [  7][  0]
 	.ascii "          "                             ; FED914  [  7][  1]
@@ -169628,6 +169671,15 @@ DrumKitNames:
 	.ascii "Metro 3   "                             ; FEDE00  [  7][127]
 	.ascii "       128"                             ; FEDE0A  [  7][128]
 
+; DrumKitNames_Block8 -- name block 8: 129 ten-character names, 109 non-blank.
+; No reader is known.  DrumKitNameBlockPtrs names only blocks 1-6, and
+; RecordNameSource_Select's other arms return block 0 or RAM 0x603FF6.
+; Forms searched (2026-09-25, lane proma): the block's 24-bit address
+;   0xFEDE14 as 3 LE bytes at every offset of prom_a, prom_b and prom_c
+;   (0 hits); 16-bit block offsets 1290*k in instruction operands;
+;   any multiply by 1290 or by 129 in prom_a (none; the only mul-by-10
+;   sites are 0xF8BC47, 0xFDA1F1, 0xFEB04E and the reader's 0xFEB2BD).
+DrumKitNames_Block8:
 ; ---- name block 8, 0xFEDE14: 20 of 129 names are blank ----
 	.ascii "          "                             ; FEDE14  [  8][  0]
 	.ascii "          "                             ; FEDE1E  [  8][  1]
@@ -169759,6 +169811,15 @@ DrumKitNames:
 	.ascii "Metro 3   "                             ; FEE30A  [  8][127]
 	.ascii "       128"                             ; FEE314  [  8][128]
 
+; DrumKitNames_Block9 -- name block 9: 129 ten-character names, 51 non-blank.
+; No reader is known.  DrumKitNameBlockPtrs names only blocks 1-6, and
+; RecordNameSource_Select's other arms return block 0 or RAM 0x603FF6.
+; Forms searched (2026-09-25, lane proma): the block's 24-bit address
+;   0xFEE31E as 3 LE bytes at every offset of prom_a, prom_b and prom_c
+;   (0 hits); 16-bit block offsets 1290*k in instruction operands;
+;   any multiply by 1290 or by 129 in prom_a (none; the only mul-by-10
+;   sites are 0xF8BC47, 0xFDA1F1, 0xFEB04E and the reader's 0xFEB2BD).
+DrumKitNames_Block9:
 ; ---- name block 9, 0xFEE31E: 78 of 129 names are blank ----
 	.ascii "          "                             ; FEE31E  [  9][  0]
 	.ascii "          "                             ; FEE328  [  9][  1]
@@ -169890,6 +169951,15 @@ DrumKitNames:
 	.ascii "Metro 3   "                             ; FEE814  [  9][127]
 	.ascii "          "                             ; FEE81E  [  9][128]
 
+; DrumKitNames_Block10 -- name block 10: 129 ten-character names, 60 non-blank.
+; No reader is known.  DrumKitNameBlockPtrs names only blocks 1-6, and
+; RecordNameSource_Select's other arms return block 0 or RAM 0x603FF6.
+; Forms searched (2026-09-25, lane proma): the block's 24-bit address
+;   0xFEE828 as 3 LE bytes at every offset of prom_a, prom_b and prom_c
+;   (0 hits); 16-bit block offsets 1290*k in instruction operands;
+;   any multiply by 1290 or by 129 in prom_a (none; the only mul-by-10
+;   sites are 0xF8BC47, 0xFDA1F1, 0xFEB04E and the reader's 0xFEB2BD).
+DrumKitNames_Block10:
 ; ---- name block 10, 0xFEE828: 69 of 129 names are blank ----
 	.ascii "          "                             ; FEE828  [ 10][  0]
 	.ascii "          "                             ; FEE832  [ 10][  1]
@@ -170021,6 +170091,15 @@ DrumKitNames:
 	.ascii "          "                             ; FEED1E  [ 10][127]
 	.ascii "          "                             ; FEED28  [ 10][128]
 
+; DrumKitNames_Block11 -- name block 11: 129 ten-character names, 60 non-blank.
+; No reader is known.  DrumKitNameBlockPtrs names only blocks 1-6, and
+; RecordNameSource_Select's other arms return block 0 or RAM 0x603FF6.
+; Forms searched (2026-09-25, lane proma): the block's 24-bit address
+;   0xFEED32 as 3 LE bytes at every offset of prom_a, prom_b and prom_c
+;   (0 hits); 16-bit block offsets 1290*k in instruction operands;
+;   any multiply by 1290 or by 129 in prom_a (none; the only mul-by-10
+;   sites are 0xF8BC47, 0xFDA1F1, 0xFEB04E and the reader's 0xFEB2BD).
+DrumKitNames_Block11:
 ; ---- name block 11, 0xFEED32: 69 of 129 names are blank ----
 	.ascii "          "                             ; FEED32  [ 11][  0]
 	.ascii "          "                             ; FEED3C  [ 11][  1]
@@ -170152,6 +170231,15 @@ DrumKitNames:
 	.ascii "          "                             ; FEF228  [ 11][127]
 	.ascii "          "                             ; FEF232  [ 11][128]
 
+; DrumKitNames_Block12 -- name block 12: 129 ten-character names, 62 non-blank.
+; No reader is known.  DrumKitNameBlockPtrs names only blocks 1-6, and
+; RecordNameSource_Select's other arms return block 0 or RAM 0x603FF6.
+; Forms searched (2026-09-25, lane proma): the block's 24-bit address
+;   0xFEF23C as 3 LE bytes at every offset of prom_a, prom_b and prom_c
+;   (0 hits); 16-bit block offsets 1290*k in instruction operands;
+;   any multiply by 1290 or by 129 in prom_a (none; the only mul-by-10
+;   sites are 0xF8BC47, 0xFDA1F1, 0xFEB04E and the reader's 0xFEB2BD).
+DrumKitNames_Block12:
 ; ---- name block 12, 0xFEF23C: 67 of 129 names are blank ----
 	.ascii "          "                             ; FEF23C  [ 12][  0]
 	.ascii "          "                             ; FEF246  [ 12][  1]
