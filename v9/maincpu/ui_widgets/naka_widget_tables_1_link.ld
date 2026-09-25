@@ -25,7 +25,6 @@ BitmapDredt0k = 0x00F35DBC;
 BitmapNtedt0d = 0x00F35D8F;
 BitmapNtedt0k = 0x00F35D62;
 CDlikeSwTtlFunc = 0x00F21834;
-CRTC_LINE_COMPARE = 0x00000018;
 CycleOnOffFunc = 0x00F35C99;
 DemoMenuTtlFunc = 0x00F222FD;
 DemoModeFunc = 0x00F222CC;

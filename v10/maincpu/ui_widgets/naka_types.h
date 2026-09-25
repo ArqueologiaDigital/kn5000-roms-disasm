@@ -225,6 +225,118 @@ typedef struct __attribute__((packed)) {
     uint32_t proc_addr;        /* +20: → Proc handler function */
 } naka_dispatch_t;             /* 24 bytes */
 
+/* ── Records that live inside the NAKA blobs but are not widgets ───── */
+
+/**
+ * AccompSeq style-data part descriptor, 16 bytes; accseq_record_t is two of
+ * them.  Field meanings are read off the code, nothing else:
+ *
+ *   AccompSeq_LookupStyleData (sequencer/accompseq_routines.s) takes an index
+ *   below 0x80 (from Voice_DecodeNoteChannel2), multiplies it by 0x20 and adds
+ *   AccompSeq_StyleDataTable.  AccompSeq_LoadParams then reads, for part 1
+ *   (+0x00) and part 2 (+0x10):
+ *     flags    (+0) part 1: 0x7E27 = flags & 0x1D (bit 0 = part 1 active);
+ *                   part 2: bit 0 sets bit 1 of 0x7E27.  AccompSeq_CompareChord
+ *                   tests bit 4 of part 1's flags.
+ *     stream   (+1) event stream; the cursor starts at stream + 6, past the
+ *                   6-byte header 80 FF FF FF FF 87 every stream carries.
+ *     loop     (+5) copied to the second cursor (0x7E34/0x7E36 for part 1,
+ *                   0x7E38/0x7E3A for part 2); 0 or a pointer into the stream.
+ *   AccompSeq_InitMidiEvents writes 3-byte events to the sequencer event
+ *   buffer (AccompSeq_WriteMidiToBuffer -> SeqEvtBuf_WriteByte x3):
+ *     program  (+9)  event (0xC1|0xC2, program & 0x7F, bank | (bit7 ? 0x10 : 0))
+ *     bank     (+10) low nibble used, see program
+ *     ctl04    (+12) event (0xD1|0xD2, 0x04, ctl04)
+ *     ctl07_on (+13) bit 0 -> event (0xD1|0xD2, 0x07, 0x7F or 0x00)
+ *     ctl03_on (+14) bit 0 -> event (0xD1|0xD2, 0x03, 0x7F or 0x00)
+ *   +11 (0x7F in every record) and +15 (0x00 in every record) are read by
+ *   none of these routines.
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t  flags;        /* +0x00 */
+    uint32_t stream;       /* +0x01 -> event stream (header 80 FF FF FF FF 87) */
+    uint32_t loop;         /* +0x05 -> 0, or a position inside the stream */
+    uint8_t  program;      /* +0x09 */
+    uint8_t  bank;         /* +0x0A */
+    uint8_t  field_0b;     /* +0x0B: 0x7F throughout, no reader found */
+    uint8_t  ctl04;        /* +0x0C */
+    uint8_t  ctl07_on;     /* +0x0D: bit 0 */
+    uint8_t  ctl03_on;     /* +0x0E: bit 0 */
+    uint8_t  field_0f;     /* +0x0F: 0x00 throughout, no reader found */
+} accseq_part_t;           /* 16 bytes */
+
+typedef struct __attribute__((packed)) {
+    accseq_part_t part[2];
+} accseq_record_t;         /* 32 bytes */
+
+/**
+ * Class descriptor, 24 bytes: the records a ClassProc (0x1600004) registration
+ * hands to RegisterObjectTable (`RegObjTable 0x1600004, ClassProc, &count,
+ * table, id`).  ClassProc (ui/ui_widget_defs.s) indexes them with index * 24.
+ *
+ * Checked over all 292 descriptors of the 10 ClassProc tables registered in
+ * v10 by scripts/analysis/naka_class_descriptors.py:
+ *   - record_size - props_size is ONE constant per base_class (37 base
+ *     classes, no exception): the size of the base class's record, which
+ *     every derived record starts with.  E.g. base 0x160002B -> 32 (=
+ *     naka_label_t), 0x1600034 -> 42 (= naka_container_t), 0x1600031 -> 26
+ *     (= naka_group_t);
+ *   - `sig` holds one type letter per property, and `props` points at one
+ *     name pointer per letter followed by a pointer to "" (292 of 292);
+ *   - props_size is the sum of the letters' sizes, j c X ` = 4 bytes and
+ *     B C ^ _ A G f = 2 bytes, for 80 of the 81 descriptors that use only
+ *     those letters (AcCmpRecBox "CC" says 2).
+ * base_class is the same u32 that begins every NAKA widget record: its
+ * "XX 00 60 01" header read little-endian is class 0x16000XX.
+ */
+typedef struct __attribute__((packed)) {
+    uint32_t proc;         /* +0x00  class procedure (EffectBoxProc, ...) */
+    uint32_t base_class;   /* +0x04  0x16000xx */
+    uint16_t record_size;  /* +0x08  bytes of an instance record, base included */
+    uint16_t props_size;   /* +0x0A  bytes this class adds */
+    uint32_t name;         /* +0x0C -> class name string */
+    uint32_t sig;          /* +0x10 -> one type letter per property */
+    uint32_t props;        /* +0x14 -> property-name pointers, "" last, then the names */
+} naka_class_t;            /* 24 bytes */
+
+/**
+ * AccompSeq event streams (the byte arrays accseq_part_t.stream points at).
+ * The grammar is the one AccompSeq_ParseEvents / AccompSeq_InitEventDispatch
+ * and AccompSeq_ParseSequenceData (sequencer/accompseq_routines.s) walk; it
+ * consumes every byte of all 103 streams in naka_widget_descriptors.c with
+ * no opcode left over (checked by scripts/converters/naka_c_retype.py, which
+ * refuses to emit a stream it cannot parse exactly).
+ *
+ *   ASEQ_HEADER   80 FF FF FF FF 87 -- skipped: AccompSeq_LoadParams starts
+ *                 the cursor at stream + 6
+ *   0x90  6 bytes tick, then 4 bytes AccompSeq_ReadParams stores at
+ *                 0x7E56..0x7E59 and AccompSeq_ProcessNoteOn6 re-emits
+ *                 (p1 is also tested against 0x78 by AccompSeq_CheckVelocityFlags;
+ *                 p3 == 0 is emitted as 1)
+ *   0x91  8 bytes tick, then 6 bytes (0x7E56..0x7E5B) -> AccompSeq_ProcessNoteOn8
+ *   0xC0  6 bytes tick, program, flags (bit 0 -> program bit 7 / bank bit 4),
+ *                 bank (low nibble), one byte not read by ParseSequenceData
+ *   0xDn  3 bytes (n = 1..5, 7) tick, value: controller n; ParseSequenceData
+ *                 emits (0xD1|0xD2, n, value); n = 5 also stores value at the
+ *                 part's 0x7E72/0x7E73
+ *   0x81  1 byte  end of a 96-tick unit (0x7E46 += 1; ticks are 0..95 within it)
+ *   0x83  1 byte  end of stream (AccompSeq_CleanupSequence / part transition)
+ *   0x84  1 byte  jump back to the loop point (not present in the ROM streams)
+ *   0x87  1 byte  block end: in the RAM variant (index >= 0x80, 256-byte blocks
+ *                 at 0x1E8B00) it links to the next block; every ROM stream
+ *                 ends 83 87
+ *   "tick" is the event's position inside the current 96-tick unit.
+ */
+#define ASEQ_HEADER              0x80, 0xFF, 0xFF, 0xFF, 0xFF, 0x87
+#define ASEQ_EV6(t, a, b, c, d)  0x90, (t), (a), (b), (c), (d)
+#define ASEQ_EV8(t, a, b, c, d, e, f) 0x91, (t), (a), (b), (c), (d), (e), (f)
+#define ASEQ_PROG(t, p, f, b, x) 0xC0, (t), (p), (f), (b), (x)
+#define ASEQ_CTL(n, t, v)        (0xD0 | (n)), (t), (v)
+#define ASEQ_UNIT                0x81
+#define ASEQ_END                 0x83
+#define ASEQ_LOOP                0x84
+#define ASEQ_BLOCK_END           0x87
+
 /* ── String alignment helper ────────────────────────────────── */
 
 /**
