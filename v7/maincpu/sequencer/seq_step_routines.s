@@ -62,7 +62,7 @@ SeqStep_NoteByteBlock_Join:
 	call	SeqData_AdvancePosition
 	cp	(0x287a:16), 0
 	jr	nz, SeqStep_NoteByteBlock_Skip
-	.byte 0xc1, 0xd6, 0x25, 0x19, 0xd8, 0x25
+	ldmm8 0x25d8, 0x25d6
 	call	SeqData_ReadNextByte
 	ld	(9686:16), l
 	ld	a, (9688:16)
@@ -1049,10 +1049,10 @@ SeqStep_MultiTrackCleanup:
 	stb_erp A, 0xfb
 
 	ld (0x2878:16), a
+	ld (0x7ea6:16), 15	; stdi8 (0x7f42), 15 (v7 patched)
+	jrl SeqStep_VoiceReassignFinalExit	; jrl SeqStep_VoiceReassignFinalExit (v7 displacement)
 
-	.byte 0xf1, 0xa6, 0x7e, 0x00, 0x0f	; stdi8 (0x7f42), 15 (v7 patched)
 
-	.byte 0x78, 0x5a, 0x02	; jrl SeqStep_VoiceReassignFinalExit (v7 displacement)
 
 
 
@@ -1255,7 +1255,48 @@ SeqStep_VoiceReassignReturn:
 
 ; === v7-specific block: SeqStep_VoiceReassignExit (120 bytes) ===
 SeqStep_VoiceReassignExit:
-	.incbin "includes/romslices/v7_block_seqstep_voicereassignexit.bin"
+	ld c, (0x270a:16)
+	ld a, c
+	dec 1, a
+	cp a, e
+	jr nz, SeqStep_VoiceReassignError
+	ldib_erp 250, 0
+	jr SeqStep_VoiceReassignCleanup
+SeqStep_VoiceReassignError:
+	ldb_erp c, 250
+SeqStep_VoiceReassignCleanup:
+	stb_erp a, 249
+	extz wa
+	ldw bc, 189
+	call Part_ReadByteDirect
+	ldb_erp l, 251
+	stb_erp a, 250
+	extz wa
+	stb_erp e, 251
+	extz de
+	ldw bc, 189
+	call Part_WriteByte
+	stb_erp a, 249
+	extz wa
+	lda xbc, (xsp+6)
+	call SeqData_CopyBlock2K
+	stb_erp a, 250
+	extz wa
+	lda xbc, (xsp+6)
+	call Part_CopyBlock16
+	stb_erp a, 249
+	extz wa
+	stb_erp c, 250
+	extz bc
+	call Part_CopyToBuffer
+	ld c, (0x270a:16)
+	dec 1, c
+	ld a, (0x00ffe3:24)
+	cp c, a
+	jr nz, SeqStep_VoiceReassignFinalExit
+	ld (0x1d4c:16), a
+	ld (0x1d4e:16), (0x00ffe3:24)
+	call SetWall_LoadToneGenData
 ; === end v7 block ===
 SeqStep_VoiceReassignFinalExit:
 	pop xiz
@@ -2985,8 +3026,54 @@ SeqStep_RebuildReturn:
 	inc 2, xsp
 	ret
 
+; -----------------------------------------------------------------------------
+; SeqStep_ByteBlockEA5F (address-derived name kept: midi_dispatch_handlers.s
+; and the positional alias SeqStep_ByteBlockEA5F_0x4E in
+; shared/positional_labels.s -- other lanes' files -- use it).  Two routines:
+;  +0x00: save RAM 0xFFE3 (byte) / 0xFFEC (word) into 0xF247 / 0xF248, run
+;         SeqData_CopyBlockToBuffer and SeqStep_FindAndCompact for part
+;         (0xFFE3), then VoicePreset_LoadAndInitPan for it, preserving RAM
+;         0xF1CE, 0xF231 and 0xF22F across the call.
+;  +0x4E (SeqStep_ByteBlockEA5F_0x4E): restore 0xFFE3 / 0xFFEC from
+;         0xF247 / 0xF248 (clearing those), set word 0x2668 := 1, clear bit 3
+;         of 0x28A7, and tail-jump to SeqStep_FindAndCompactEntry.
+;  Callers (v7, sequi_find_refs.py): `call` at 0xFD68A5 (+0x00) and at
+;  0xFD7A67 (+0x4E), both in midi/midi_dispatch_handlers.s.
+;  v7: these 120 bytes were the verbatim ROM slice
+;  v7_transplant_SeqStep_ByteBlockEA5F.bin (now unreferenced) until 2026-09-25.
+; -----------------------------------------------------------------------------
 SeqStep_ByteBlockEA5F:
-	.incbin "includes/romslices/v7_transplant_SeqStep_ByteBlockEA5F.bin"
+	dec 2, xsp
+	push xiz
+	ld (0xf247:16), (0x00ffe3:24)
+	ldw (0xf248:16), (0x00ffec:24)
+	ld a, (0x00ffe3:24)
+	extz wa
+	call SeqData_CopyBlockToBuffer
+	calr SeqStep_FindAndCompact
+	ld wa, (0xf1ce:16)
+	ld qiz, wa
+	ld iz, (0xf231:16)
+	ldw (xsp+4), (0xf22f)
+	ld a, (0x00ffe3:24)
+	extz wa
+	call VoicePreset_LoadAndInitPan
+	ld wa, qiz
+	ld (0xf1ce:16), wa
+	ld (0xf231:16), iz
+	ldw (0xf22f), (xsp+4)
+	pop xiz
+	inc 2, xsp
+	ret
+	ld a, (0xf247:16)
+	ld (0x00ffe3:24), a
+	ld (0xf247:16), 0
+	ld wa, (0xf248:16)
+	ld (0x00ffec:24), wa
+	ldw (0xf248:16), 0
+	ldw (0x2668:16), 1
+	res 3, (0x28a7:16)
+	jrl SeqStep_FindAndCompactEntry
 SeqStep_ReinitPartTable:
 	dec 6, xsp
 	push xiz

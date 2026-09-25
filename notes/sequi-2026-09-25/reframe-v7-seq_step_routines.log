@@ -1,0 +1,80 @@
+0xF4E65B-0xF4E6D3: 1 old lines (1 dirty) -> 31 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF4E65B  dec 2, xsp                               || unidasm: dec 2,XSP
+    0xF4E65D  push xiz                                 || unidasm: push XIZ
+    0xF4E65E  ld (0xf247:16), (0x00ffe3:24)            || unidasm: ld (0xf247),(0x00ffe3)
+    0xF4E665  ldw (0xf248:16), (0x00ffec:24)           || unidasm: ldw (0xf248),(0x00ffec)
+    0xF4E66C  ld a, (0x00ffe3:24)                      || unidasm: ld A,(0x00ffe3)
+    0xF4E671  extz wa                                  || unidasm: extz WA
+    0xF4E673  call SeqData_CopyBlockToBuffer           || unidasm: call 0xf413fd
+    0xF4E677  calr 64822                               || unidasm: calr 0xf4e3b0
+    0xF4E67A  ld wa, (0xf1ce:16)                       || unidasm: ld WA,(0xf1ce)
+    0xF4E67E  ld qiz, wa                               || unidasm: ld QIZ,WA
+    0xF4E681  ld iz, (0xf231:16)                       || unidasm: ld IZ,(0xf231)
+    0xF4E685  ldw (xsp+4), (0xf22f)                    || unidasm: ldw (XSP+0x04),(0xf22f)
+    0xF4E68A  ld a, (0x00ffe3:24)                      || unidasm: ld A,(0x00ffe3)
+    0xF4E68F  extz wa                                  || unidasm: extz WA
+    0xF4E691  call VoicePreset_LoadAndInitPan          || unidasm: call 0xf41418
+    0xF4E695  ld wa, qiz                               || unidasm: ld WA,QIZ
+    0xF4E698  ld (0xf1ce:16), wa                       || unidasm: ld (0xf1ce),WA
+    0xF4E69C  ld (0xf231:16), iz                       || unidasm: ld (0xf231),IZ
+    0xF4E6A0  ldw (0xf22f), (xsp+4)                    || unidasm: ldw (0xf22f),(XSP+0x04)
+    0xF4E6A5  pop xiz                                  || unidasm: pop XIZ
+    0xF4E6A6  inc 2, xsp                               || unidasm: inc 2,XSP
+    0xF4E6A8  ret                                      || unidasm: ret
+    0xF4E6A9  ld a, (0xf247:16)                        || unidasm: ld A,(0xf247)
+    0xF4E6AD  ld (0x00ffe3:24), a                      || unidasm: ld (0x00ffe3),A
+    0xF4E6B2  ld (0xf247:16), 0                        || unidasm: ld (0xf247),0x00
+    0xF4E6B7  ld wa, (0xf248:16)                       || unidasm: ld WA,(0xf248)
+    0xF4E6BB  ld (0x00ffec:24), wa                     || unidasm: ld (0x00ffec),WA
+    0xF4E6C0  ldw (0xf248:16), 0                       || unidasm: ld (0xf248),0x0000
+    0xF4E6C6  ldw (0x2668:16), 1                       || unidasm: ld (0x2668),0x0001
+    0xF4E6CC  res 3, (0x28a7:16)                       || unidasm: res 3,(0x28a7)
+    0xF4E6D0  jrl -813                                 || unidasm: jrl T,0xf4e3a6
+VERIFIED: v7 byte-identical after 1 span(s)
+0xF4D66F-0xF4D6F8: 7 old lines (1 dirty) -> 40 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF4D680  ld c, (0x270a:16)                        || unidasm: ld C,(0x270a)
+    0xF4D684  ld a, c                                  || unidasm: ld A,C
+    0xF4D686  dec 1, a                                 || unidasm: dec 1,A
+    0xF4D688  cp a, e                                  || unidasm: cp A,E
+    0xF4D68A  jr nz, 5                                 || unidasm: jr NZ,0xf4d691
+    0xF4D68C  ldib_erp 250, 0                          || unidasm: ld QIZL,0
+    0xF4D68F  jr 3                                     || unidasm: jr T,0xf4d694
+    0xF4D691  ldb_erp c, 250                           || unidasm: ld QIZL,C
+    0xF4D694  stb_erp a, 249                           || unidasm: ld A,IZH
+    0xF4D697  extz wa                                  || unidasm: extz WA
+    0xF4D699  ldw bc, 189                              || unidasm: ld BC,0x00bd
+    0xF4D69C  call Part_ReadByteDirect                 || unidasm: call 0xf4155a
+    0xF4D6A0  ldb_erp l, 251                           || unidasm: ld QIZH,L
+    0xF4D6A3  stb_erp a, 250                           || unidasm: ld A,QIZL
+    0xF4D6A6  extz wa                                  || unidasm: extz WA
+    0xF4D6A8  stb_erp e, 251                           || unidasm: ld E,QIZH
+    0xF4D6AB  extz de                                  || unidasm: extz DE
+    0xF4D6AD  ldw bc, 189                              || unidasm: ld BC,0x00bd
+    0xF4D6B0  call Part_WriteByte                      || unidasm: call 0xf41510
+    0xF4D6B4  stb_erp a, 249                           || unidasm: ld A,IZH
+    0xF4D6B7  extz wa                                  || unidasm: extz WA
+    0xF4D6B9  lda xbc, (xsp+6)                         || unidasm: lda XBC,XSP+0x06
+    0xF4D6BC  call SeqData_CopyBlock2K                 || unidasm: call 0xf419e7
+    0xF4D6C0  stb_erp a, 250                           || unidasm: ld A,QIZL
+    0xF4D6C3  extz wa                                  || unidasm: extz WA
+    0xF4D6C5  lda xbc, (xsp+6)                         || unidasm: lda XBC,XSP+0x06
+    0xF4D6C8  call Part_CopyBlock16                    || unidasm: call 0xf41492
+    0xF4D6CC  stb_erp a, 249                           || unidasm: ld A,IZH
+    0xF4D6CF  extz wa                                  || unidasm: extz WA
+    0xF4D6D1  stb_erp c, 250                           || unidasm: ld C,QIZL
+    0xF4D6D4  extz bc                                  || unidasm: extz BC
+    0xF4D6D6  call Part_CopyToBuffer                   || unidasm: call 0xf414c1
+    0xF4D6DA  ld c, (0x270a:16)                        || unidasm: ld C,(0x270a)
+    0xF4D6DE  dec 1, c                                 || unidasm: dec 1,C
+    0xF4D6E0  ld a, (0x00ffe3:24)                      || unidasm: ld A,(0x00ffe3)
+    0xF4D6E5  cp c, a                                  || unidasm: cp C,A
+    0xF4D6E7  jr nz, 15                                || unidasm: jr NZ,0xf4d6f8
+    0xF4D6E9  ld (0x1d4c:16), a                        || unidasm: ld (0x1d4c),A
+    0xF4D6ED  ld (0x1d4e:16), (0x00ffe3:24)            || unidasm: ld (0x1d4e),(0x00ffe3)
+    0xF4D6F4  call SetWall_LoadToneGenData             || unidasm: call 0xf200ab
+0xF4D481-0xF4D49E: 8 old lines (2 dirty) -> 2 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF4D496  ld (0x7ea6:16), 15                       || unidasm: ld (0x7ea6),0x0f
+    0xF4D49B  jrl 602                                  || unidasm: jrl T,0xf4d6f8
+0xF4CAE3-0xF4CAFF: 7 old lines (1 dirty) -> 1 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF4CAF9  ldmm8 0x25d8, 0x25d6                     || unidasm: ld (0x25d8),(0x25d6)
+VERIFIED: v7 byte-identical after 3 span(s)

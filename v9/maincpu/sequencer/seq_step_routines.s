@@ -62,7 +62,7 @@ SeqStep_NoteByteBlock_Join:
 	call	SeqData_AdvancePosition
 	cp	(0x287a:16), 0
 	jr	nz, SeqStep_NoteByteBlock_Skip
-	.byte 0xc1, 0xd6, 0x25, 0x19, 0xd8, 0x25
+	ldmm8 0x25d8, 0x25d6
 	call	SeqData_ReadNextByte
 	ld	(9686:16), l
 	ld	a, (9688:16)
@@ -3028,10 +3028,25 @@ SeqStep_RebuildReturn:
 	inc 2, xsp
 	ret
 
+; -----------------------------------------------------------------------------
+; SeqStep_ByteBlockEA5F (address-derived name kept: midi_dispatch_handlers.s
+; and the positional alias SeqStep_ByteBlockEA5F_0x4E in
+; shared/positional_labels.s -- other lanes' files -- use it).  Two routines:
+;  +0x00: save RAM 0xFFE3 (byte) / 0xFFEC (word) into 0xF247 / 0xF248, run
+;         SeqData_CopyBlockToBuffer and SeqStep_FindAndCompact for part
+;         (0xFFE3), then VoicePreset_LoadAndInitPan for it, preserving RAM
+;         0xF1CE, 0xF231 and 0xF22F across the call.
+;  +0x4E (SeqStep_ByteBlockEA5F_0x4E): restore 0xFFE3 / 0xFFEC from
+;         0xF247 / 0xF248 (clearing those), set word 0x2668 := 1, clear bit 3
+;         of 0x28A7, and tail-jump to SeqStep_FindAndCompactEntry.
+;  Callers: midi/midi_dispatch_handlers.s calls both by name (v10: the
+;  `call`s at 0xFD7076 and 0xFD8238).
+; -----------------------------------------------------------------------------
 SeqStep_ByteBlockEA5F:
 	dec	2, xsp
 	push	xiz
-	.byte 0xc2, 0xe3, 0xff, 0x00, 0x19, 0x47, 0xf2, 0xd2, 0xec, 0xff, 0x00, 0x19, 0x48, 0xf2
+	ld (0xf247:16), (0x00ffe3:24)
+	ldw (0xf248:16), (0x00ffec:24)
 	ld	a, (65507:24)
 	extz	wa
 	call	SeqData_CopyBlockToBuffer
@@ -3039,14 +3054,14 @@ SeqStep_ByteBlockEA5F:
 	ld	wa, (61902:16)
 	ld	qiz, wa
 	ld	iz, (62001:16)
-	.byte 0xbf, 0x04, 0x16, 0x2f, 0xf2
+	ldw (xsp+4), (0xf22f)
 	ld	a, (65507:24)
 	extz	wa
 	call	VoicePreset_LoadAndInitPan
 	ld	wa, qiz
 	ld	(61902:16), wa
 	ld	(62001:16), iz
-	.byte 0x9f, 0x04, 0x19, 0x2f, 0xf2
+	ldw (0xf22f), (xsp+4)
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -3057,7 +3072,7 @@ SeqStep_ByteBlockEA5F:
 	ld	(65516:24), wa
 	ldw	(62024:16), 0
 	ldw	(9832:16), 1
-	.byte 0xf1, 0xa7, 0x28, 0xb3
+	res 3, (0x28a7:16)
 	jrl	SeqStep_FindAndCompactEntry
 
 SeqStep_ReinitPartTable:
