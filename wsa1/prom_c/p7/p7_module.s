@@ -15145,7 +15145,7 @@ P7Mixer_RequestGain:
 	ld	a, (xiz+10)                             ; FA2DD9  ld A,(XIZ+0x0a)
 	ld	(0xF3B4:24), a                         ; FA2DDC  ld (0x00f3b4),A
 	pushw	2                                    ; FA2DE1  push 0x0002
-	call	0xF98510                              ; FA2DE4  call 0xf98510
+	call	Kernel_SemaSignal_StackArg                              ; FA2DE4  call 0xf98510
 	popw	bc                                    ; FA2DE8  pop BC
 	unlk32 xiz                                 ; FA2DE9  unlk XIZ
 	ret                                        ; FA2DEB  ret
@@ -15529,7 +15529,7 @@ Wait_Ticks_Yield__FA3103:
 	cp	xwa, xbc                                ; FA3115  cp XWA,XBC
 	jr nc, Wait_Ticks_Yield__FA3123                  ; FA3117  jr NC,0xfa3123
 	pushw	2                                    ; FA3119  push 0x0002
-	call	0xF983D9                              ; FA311C  call 0xf983d9
+	call	Kernel_YieldRotate_StackArg                              ; FA311C  call 0xf983d9
 	popw	bc                                    ; FA3120  pop BC
 	jr Wait_Ticks_Yield__FA3103                      ; FA3121  jr T,0xfa3103
 Wait_Ticks_Yield__FA3123:
@@ -15763,7 +15763,7 @@ P7Units_BootLoadAndStartTask:
 	calr P7Mixer_SendGain                 ; FA335E  calr 0xfa2e2d
 	pop	xiy                                    ; FA3361  pop XIY
 	pushw	2                                    ; FA3362  push 0x0002
-	call	0xF9833B                              ; FA3365  call 0xf9833b
+	call	Kernel_StartTask_StackArg                              ; FA3365  call 0xf9833b
 	popw	bc                                    ; FA3369  pop BC
 	ret                                        ; FA336A  ret
 ; --------------------------------------------------------------------------
@@ -19360,11 +19360,11 @@ P7Units_ServiceTask__FA54D5:
 	ret                                        ; FA54DA  ret
 P7Units_ServiceTask__FA54DB:
 	pushw	2                                    ; FA54DB  push 0x0002
-	call	0xF985F8                              ; FA54DE  call 0xf985f8
+	call	Kernel_SemaWait_StackArg                              ; FA54DE  call 0xf985f8
 	popw	bc                                    ; FA54E2  pop BC
 P7Units_ServiceTask__FA54E3:
 	pushw	2                                    ; FA54E3  push 0x0002
-	call	0xF98654                              ; FA54E6  call 0xf98654
+	call	Kernel_SemaTryWait                              ; FA54E6  call 0xf98654
 	popw	bc                                    ; FA54EA  pop BC
 	cp	wa, 0:i3                                  ; FA54EB  cp WA,0
 	jr nz, P7Units_ServiceTask__FA54F1                  ; FA54ED  jr NZ,0xfa54f1
@@ -19391,7 +19391,7 @@ P7Units_ServiceTask__FA5509:
 	calr sub_FA26CB                 ; FA552B  calr 0xfa26cb
 P7Units_ServiceTask__FA552E:
 	jr P7Units_ServiceTask__FA54DB                      ; FA552E  jr T,0xfa54db
-	call	0xF983AF                              ; FA5530  call 0xf983af
+	call	Kernel_ExitTask                              ; FA5530  call 0xf983af
 	ret                                        ; FA5534  ret
 ; --------------------------------------------------------------------------
 ; P7Units_ResolveProgramsAndReload -- 0xFA5535..0xFA5948 (1044 bytes)

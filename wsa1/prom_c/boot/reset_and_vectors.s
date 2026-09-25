@@ -149,7 +149,7 @@ RESET__clear_dram:
 				; counter, the scheduler phase and the touch
 				; controls all live.  See
 				; notes/FINDINGS-prom_c-ram-image.md.
-	jp 0xF9816B		; -> Kernel_InitRam.  ★ CORRECTED 2026-08-25: this
+	jp Kernel_InitRam		; -> Kernel_InitRam.  ★ CORRECTED 2026-08-25: this
 				; is not "the main loop" -- it is the kernel's
 				; RAM initialiser, which falls into Kernel_Start,
 				; which starts MAIN as TASK 1 and enters the
@@ -174,7 +174,7 @@ IRQ_SWI1_REBOOT:			; vector 0x04
 ;          entries in VECTORS below -- every slot listed on the right.
 IRQ_UNUSED:				; vectors 0x08-0x1C, 0x30-0x40,
 					; 0x50-0x5C, 0x68-0x78
-	jp 0xF9816B		; -> Kernel_InitRam, exactly as the end of RESET
+	jp Kernel_InitRam		; -> Kernel_InitRam, exactly as the end of RESET
 				; does: an unexpected interrupt REBUILDS the
 				; kernel's RAM and restarts every task
 ; Evidence: VECTORS slot 0x20 (below) holds 0x00FFF0AC, this label's address, and
