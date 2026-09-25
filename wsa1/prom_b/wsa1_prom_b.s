@@ -110293,6 +110293,12 @@ IndexedTable_GetByte_Join7:
 ; promoted to code.  Same rule as 0xF38C4F in the 0xF353AB block and 0xF09E85 in
 ; the 0xF067A6 block.
 ;
+; ⚠ CORRECTED 2026-09-25 (lane promb): the run IS referenced -- by five
+; PC-relative `calr` in this block, which a 32-bit-spelling census cannot see --
+; and is now five routines, SeqPlayScreen_StageValues .. CycleRecordScreen_
+; StageValues.  See the header at 0xF57453.  So the LAYOUT line below is one
+; tree state old: its "unclaimed run (287 bytes)" is code now.
+;
 ; LAYOUT.  17 segments: 8 code (7095 bytes), 5 pointer tables (976 bytes),
 ; 1 bit table (128 bytes), 1 unclaimed run (287 bytes) and 2 runs of 0x0E `ret`
 ; padding (1721 bytes).  Substantive: 8486 of 10207.
@@ -111748,8 +111754,8 @@ sub_F55C3D:
 ; Touches: (0x12F6) (0x2540) (0x2652) (0x3552) (0x3753)  |  0xF341B6 0xF34256
 ;          0xF3434C 0xF34361 0xF343B6 0xF343BC +9 more
 ; Calls:   T_DLB_Handler_StringTable sub_F55C2F T_DisplayList_Run sub_F55D67
-;          sub_F55D90 Unclaimed_F57453 T_DisplayListB_Run sub_F55C44 T_F415BC
-;          sub_F55C3D 0xF57498
+;          sub_F55D90 SeqPlayScreen_StageValues T_DisplayListB_Run sub_F55C44 T_F415BC
+;          sub_F55C3D RealtimeRecordScreen_StageValues
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF55C44 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -111779,7 +111785,7 @@ sub_F55C44_Return:
 	calr	sub_F55D67	; F55C85  calr 0xf55d67
 	calr	sub_F55D90	; F55C88  calr 0xf55d90
 	ret	; F55C8B  ret
-	calr	Unclaimed_F57453	; F55C8C  calr 0xf57453
+	calr	SeqPlayScreen_StageValues	; F55C8C  calr 0xf57453
 	ld	(9536:16), 2	; F55C8F  ld (0x2540),0x02
 	ld	xiy, DL_CycleMasterS0ngMeasureTimeSig	; F55C94  ld XIY,0x00f34970
 	ld	xix, Data_F349BB	; F55C99  ld XIX,0x00f349bb
@@ -111825,7 +111831,7 @@ sub_F55C44_Return:
 	calr	sub_F55D67	; F55D36  calr 0xf55d67
 	calr	sub_F55D90	; F55D39  calr 0xf55d90
 	ret	; F55D3C  ret
-	calr	5976	; F55D3D  calr 0xf57498
+	calr	RealtimeRecordScreen_StageValues	; F55D3D  calr 0xf57498
 	ld	(9536:16), 2	; F55D40  ld (0x2540),0x02
 	ld	xiy, DL_F34361	; F55D45  ld XIY,0x00f34361
 	ld	xix, Data_F343B6	; F55D4A  ld XIX,0x00f343b6
@@ -111944,8 +111950,8 @@ sub_F55D90_Join:
 ; Touches: (0x12F6) (0x2540) (0x3552) (0x3627) (0x36CE) (0x3755) (0x3756)  |
 ;          0xF3437F 0xF3438E 0xF343A2 0xF343AC 0xF34C9A 0xF34CA2 +18 more
 ; Calls:   T_DisplayList_Run Nop_Ret_F55C2E T_F4181C T_DLB_Handler_Array6
-;          sub_F55C2F 0xF5750C T_DisplayListB_Run T_F41820 sub_F55C3D 0xF574DE
-;          0xF57537 sub_F55C44 +1 more
+;          sub_F55C2F CyclePlayEditScreen_StageValues T_DisplayListB_Run T_F41820 sub_F55C3D CyclePlayScreen_StageValues
+;          CycleRecordScreen_StageValues sub_F55C44 +1 more
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF55E20 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -111998,7 +112004,7 @@ sub_F55E20_Join2:
 	ld	xix, DL_F352F9	; F55E85  ld XIX,0x00f352f9
 	call	T_DisplayList_Run	; F55E8A  call 0xf417f0
 	ret	; F55E8E  ret
-	calr	5754	; F55E8F  calr 0xf5750c
+	calr	CyclePlayEditScreen_StageValues	; F55E8F  calr 0xf5750c
 	ld	(9536:16), 0	; F55E92  ld (0x2540),0x00
 	m_or_mi8 MB8, 0xc6, 0x01	; F55E97  or (0xc6),0x01
 	ld	xiy, DL_F352F9	; F55E9B  ld XIY,0x00f352f9
@@ -112021,7 +112027,7 @@ sub_F55E20_Join2:
 	ld	xix, DL_F34FF2	; F55EE0  ld XIX,0x00f34ff2
 	call	T_DisplayList_Run	; F55EE5  call 0xf417f0
 	ret	; F55EE9  ret
-	calr	5617	; F55EEA  calr 0xf574de
+	calr	CyclePlayScreen_StageValues	; F55EEA  calr 0xf574de
 	ld	(9536:16), 0	; F55EED  ld (0x2540),0x00
 	m_or_mi8 MB8, 0xc6, 0x01	; F55EF2  or (0xc6),0x01
 	ld	xiy, DL_F34FF2	; F55EF6  ld XIY,0x00f34ff2
@@ -112044,7 +112050,7 @@ sub_F55E20_Join2:
 	ld	xix, DL_F351A7	; F55F3B  ld XIX,0x00f351a7
 	call	T_DisplayList_Run	; F55F40  call 0xf417f0
 	ret	; F55F44  ret
-	calr	5615	; F55F45  calr 0xf57537
+	calr	CycleRecordScreen_StageValues	; F55F45  calr 0xf57537
 	ld	(9536:16), 0	; F55F48  ld (0x2540),0x00
 	m_or_mi8 MB8, 0xc6, 0x01	; F55F4D  or (0xc6),0x01
 	ld	xiy, DL_F351A7	; F55F51  ld XIY,0x00f351a7
@@ -116046,41 +116052,219 @@ sub_F57443:
 	call	T_F411B8	; F5744E  call 0xf411b8
 	ret	; F57452  ret
 
-; --------------------------------------------------------------------------
-; Unclaimed_F57453 -- 287 bytes that decode as code and are deliberately NOT
-;                     claimed as code.  Nothing in either image references any
-;                     address inside them, so the layout has no entry point to
-;                     start a walk from, and this tree does not promote a run
-;                     to code on the strength of a decode alone.
-; Decodes as: 0 `link XIZ` prologues (none) and 0 `unlk XIZ` opcode pairs
-;             (none), both re-scanned over 0xF57453-0xF57571 on every emit.
-; Evidence: the reference scan is over BOTH images and over every byte offset,
-;           not only 4-aligned ones: no 32-bit little-endian spelling of any
-;           address in 0xF57453-0xF57571 occurs anywhere in prom_a or prom_b.
-;           What this region needs is a REFERENCE, not a better decoder.
-; Unknown: who calls any of it.  Kept as `.byte` and a FRAMED name.
-; --------------------------------------------------------------------------
-Unclaimed_F57453:
-	.byte	0x3C, 0x3D, 0x28, 0x29, 0xD1, 0x52, 0x35, 0x20, 0xF1, 0x44, 0x26, 0x50, 0xC1, 0xE3, 0x0D, 0x21	; F57453  |<=().R5 .D&P...!|
-	.byte	0xF1, 0x46, 0x26, 0x41, 0xC1, 0x0B, 0x36, 0x21, 0xC9, 0xCC, 0x01, 0xF1, 0x47, 0x26, 0x41, 0xC1	; F57463  |.F&A..6!....G&A.|
-	.byte	0x52, 0x37, 0x21, 0xF1, 0x09, 0x13, 0x41, 0xC1, 0x0A, 0x36, 0x21, 0xC9, 0x61, 0xF1, 0x4B, 0x26	; F57473  |R7!...A..6!.a.K&|
-	.byte	0x41, 0x31, 0x03, 0x00, 0x44, 0x4C, 0x26, 0x00, 0x00, 0x45, 0xCA, 0x34, 0x60, 0x00, 0x95, 0x11	; F57483  |A1..DL&..E.4`...|
-	.byte	0x49, 0x48, 0x5D, 0x5C, 0x0E, 0x28, 0xD1, 0x52, 0x35, 0x20, 0xF1, 0x44, 0x26, 0x50, 0xC1, 0xE3	; F57493  |IH]\.(.R5 .D&P..|
-	.byte	0x0D, 0x21, 0xF1, 0x46, 0x26, 0x41, 0xC1, 0x0B, 0x36, 0x21, 0xC9, 0xCC, 0x02, 0xC9, 0xEF, 0x01	; F574A3  |.!.F&A..6!......|
-	.byte	0xF1, 0x47, 0x26, 0x41, 0xC1, 0xD9, 0x34, 0x21, 0xC9, 0xCC, 0x01, 0xF1, 0x48, 0x26, 0x41, 0xD1	; F574B3  |.G&A..4!....H&A.|
-	.byte	0x08, 0x0C, 0x20, 0xF1, 0x49, 0x26, 0x50, 0xC1, 0x52, 0x37, 0x21, 0xF1, 0x09, 0x13, 0x41, 0xC1	; F574C3  |.. .I&P.R7!...A.|
-	.byte	0x0A, 0x36, 0x21, 0xC9, 0x61, 0xF1, 0x4B, 0x26, 0x41, 0x48, 0x0E, 0x28, 0xC1, 0x27, 0x36, 0x21	; F574D3  |.6!.a.K&AH.(.'6!|
-	.byte	0xF1, 0xF6, 0x12, 0x41, 0xD1, 0x52, 0x35, 0x20, 0xF1, 0x44, 0x26, 0x50, 0xC1, 0x0B, 0x36, 0x21	; F574E3  |...A.R5 .D&P..6!|
-	.byte	0xC9, 0xCC, 0x01, 0xF1, 0x47, 0x26, 0x41, 0xD1, 0x1E, 0x36, 0x20, 0xF1, 0x52, 0x26, 0x50, 0xD1	; F574F3  |....G&A..6 .R&P.|
-	.byte	0x20, 0x36, 0x20, 0xF1, 0x54, 0x26, 0x50, 0x48, 0x0E, 0x28, 0xC1, 0x27, 0x36, 0x21, 0xF1, 0xF6	; F57503  | 6 .T&PH.(.'6!..|
-	.byte	0x12, 0x41, 0xD1, 0x52, 0x35, 0x20, 0xF1, 0x44, 0x26, 0x50, 0xD1, 0x1E, 0x36, 0x20, 0xF1, 0x52	; F57513  |.A.R5 .D&P..6 .R|
-	.byte	0x26, 0x50, 0xD1, 0x20, 0x36, 0x20, 0xF1, 0x54, 0x26, 0x50, 0xC1, 0x26, 0x36, 0x21, 0xF1, 0x08	; F57523  |&P. 6 .T&P.&6!..|
-	.byte	0x13, 0x41, 0x48, 0x0E, 0x28, 0xC1, 0x27, 0x36, 0x21, 0xF1, 0xF6, 0x12, 0x41, 0xD1, 0x52, 0x35	; F57533  |.AH.(.'6!...A.R5|
-	.byte	0x20, 0xF1, 0x44, 0x26, 0x50, 0xC1, 0x0B, 0x36, 0x21, 0xC9, 0xCC, 0x02, 0xC9, 0xEF, 0x01, 0xF1	; F57543  | .D&P..6!.......|
-	.byte	0x47, 0x26, 0x41, 0xC1, 0xD9, 0x34, 0x21, 0xC9, 0xCC, 0x01, 0xF1, 0x48, 0x26, 0x41, 0xD1, 0x22	; F57553  |G&A..4!....H&A."|
-	.byte	0x36, 0x20, 0xF1, 0x56, 0x26, 0x50, 0xD1, 0x24, 0x36, 0x20, 0xF1, 0x58, 0x26, 0x50, 0x48	; F57563  |6 .V&P.$6 .X&PH|
+; ==========================================================================
+; 0xF57453-0xF57572 -- FIVE SCREEN "STAGE VALUES" ROUTINES (converted 2026-09-25, lane promb)
+;
+; ⚠ CORRECTED 2026-09-25.  These 288 bytes used to be one `.byte` block,
+; `Unclaimed_F57453`, whose header read: "Nothing in either image references
+; any address inside them ... no 32-bit little-endian spelling of any address
+; in 0xF57453-0xF57571 occurs anywhere in prom_a or prom_b" and "Unknown: who
+; calls any of it."  The 32-bit census was right and the conclusion was not:
+; FIVE PC-RELATIVE `calr` sites in this very module land on the five routine
+; starts below -- 0xF55C8C (already spelled `calr Unclaimed_F57453`),
+; 0xF55D3D, 0xF55E8F, 0xF55EEA and 0xF55F45.  A `calr` holds a 16-bit
+; displacement, which no 32-bit search can see (notes/lanes/BRIEF-2026-09-01.md,
+; "NO READER HAS NOW BEEN WRONG THREE TIMES, THE SAME WAY" -- this is a fourth).
+;
+; Framing evidence: MAME unidasm's linear sweep and llvm-mc agree on every
+; instruction; each routine is `push ...` / loads and stores / `pop ...` /
+; `ret`, each `ret` is followed immediately by the next routine's `push WA`
+; (0x28), and every call target is an instruction start.  The last `ret`
+; is 0xF57572 -- the byte the old listing counted as the first byte of the
+; 0x0E padding.
+;
+; WHAT THEY DO, and how it is known.  Each caller is the "values" arm of one
+; sequencer screen: it calls its routine here, then runs one interpreter-B
+; display list with `call T_DisplayListB_Run`.  Each routine copies firmware
+; state into RAM cells, and the cells it writes are EXACTLY the `+0x02` source
+; variables of the records of the display list its caller runs next -- no
+; more, no fewer (python3 notes/promb-2026-09-25/stage_values_probe.py):
+;
+;   routine                            caller   list its caller runs      cells
+;   SeqPlayScreen_StageValues          F55C8C   DL_CycleMasterS0ngMeasureTimeSig   6/6
+;   RealtimeRecordScreen_StageValues   F55D3D   DL_F34361 .. 0xF343B6              7/7
+;   CyclePlayScreen_StageValues        F55EEA   DL_F34FF2 .. Data_F35035           5/5
+;   CyclePlayEditScreen_StageValues    F55E8F   DL_F352F9 .. Data_F3533C           5/5
+;   CycleRecordScreen_StageValues      F55F45   DL_F351A7 .. Data_F351F9           6/6
+;
+; The screen names are those of the CAPTION list the same screen's other arm
+; runs (DL_SequencerPlayS0ngCycleMeasure, DL_RealtimeRecordSongMeasure..., 
+; DL_CyclePlayCurrentMeasureCycle, DL_CyclePlayCurrentMeasureEdit,
+; DL_CycleRecordCurrentMeasure), which earlier rounds named from their own text.
+; Which firmware variable each SOURCE cell is (0x3552, 0x0DE3, 0x360A, ...) is
+; read off the caption whose field its display record fills, and is stated per
+; routine as a reading of the screen, not as a name for the RAM cell.
+; ==========================================================================
 
-	.fill	1678, 1, 0x0E	; F57572-F57BFF  `ret` padding (asserted pure 0x0E)
+; --------------------------------------------------------------------------
+; SeqPlayScreen_StageValues
+; Called from: 0xF55C8C (`calr`), the values arm of the screen whose captions
+;          are DL_SequencerPlayS0ngCycleMeasure; that arm then runs
+;          DL_CycleMasterS0ngMeasureTimeSig with DisplayListB_Run.
+; Writes:  (0x2644) <- word (0x3552)      read at the "MEASURE =" field
+;          (0x2646) <- (0x0DE3)           read at the "TIME SIG.=" field
+;          (0x2647) <- (0x360B) AND 1     the "CYCLE:" OFF/ON string index
+;          (0x1309) <- (0x3752)           the "MASTER:" string index
+;          (0x264B) <- (0x360A) + 1       the two-digit number after "S0NG"
+;          (0x264C..0x2651) <- 6 bytes from 0x006034CA, printed as a 6-byte
+;                    string right after that number (`ldir` of 3 words)
+; Preserves: XIX, XIY, WA, BC.
+; Evidence: the six destinations are exactly the six source variables of
+;          DL_CycleMasterS0ngMeasureTimeSig's six records.
+; --------------------------------------------------------------------------
+SeqPlayScreen_StageValues:
+	push	xix	; F57453  push XIX
+	push	xiy	; F57454  push XIY
+	pushw	wa	; F57455  push WA
+	pushw	bc	; F57456  push BC
+	ld	wa, (13650:16)	; F57457  ld WA,(0x3552)
+	ld	(9796:16), wa	; F5745B  ld (0x2644),WA
+	ld	a, (3555:16)	; F5745F  ld A,(0x0de3)
+	ld	(9798:16), a	; F57463  ld (0x2646),A
+	ld	a, (13835:16)	; F57467  ld A,(0x360b)
+	and	a, 1	; F5746B  and A,0x01
+	ld	(9799:16), a	; F5746E  ld (0x2647),A
+	ld	a, (14162:16)	; F57472  ld A,(0x3752)
+	ld	(4873:16), a	; F57476  ld (0x1309),A
+	ld	a, (13834:16)	; F5747A  ld A,(0x360a)
+	inc	1, a	; F5747E  inc 1,A
+	ld	(9803:16), a	; F57480  ld (0x264b),A
+	ldw	bc, 3	; F57484  ld BC,0x0003
+	ld	xix, 9804	; F57487  ld XIX,0x0000264c
+	ld	xiy, 6304970	; F5748C  ld XIY,0x006034ca
+	m_ldir MWI+r5	; F57491  ldirw
+	popw	bc	; F57493  pop BC
+	popw	wa	; F57494  pop WA
+	pop	xiy	; F57495  pop XIY
+	pop	xix	; F57496  pop XIX
+	ret	; F57497  ret
+
+; --------------------------------------------------------------------------
+; RealtimeRecordScreen_StageValues
+; Called from: 0xF55D3D (`calr`), the values arm of the screen whose captions
+;          are DL_RealtimeRecordSongMeasureQuantiTimeSigMasterCycle; that arm
+;          then runs DisplayListB_Run from DL_F34361 to 0xF343B6 (DL_F34361,
+;          DL_MasterSongMeasure, DL_TimeSig).
+; Writes:  (0x2644) <- word (0x3552)      (0x2646) <- (0x0DE3)
+;          (0x2647) <- ((0x360B) AND 2) >> 1
+;          (0x2648) <- (0x34D9) AND 1     (0x2649) <- word (0x0C08)
+;          (0x1309) <- (0x3752)           (0x264B) <- (0x360A) + 1
+; Preserves: WA.
+; Evidence: the seven destinations are exactly the seven source variables of
+;          the seven records from DL_F34361 to 0xF343B6.
+; --------------------------------------------------------------------------
+RealtimeRecordScreen_StageValues:
+	pushw	wa	; F57498  push WA
+	ld	wa, (13650:16)	; F57499  ld WA,(0x3552)
+	ld	(9796:16), wa	; F5749D  ld (0x2644),WA
+	ld	a, (3555:16)	; F574A1  ld A,(0x0de3)
+	ld	(9798:16), a	; F574A5  ld (0x2646),A
+	ld	a, (13835:16)	; F574A9  ld A,(0x360b)
+	and	a, 2	; F574AD  and A,0x02
+	srl	a, 1	; F574B0  srl 0x01,A
+	ld	(9799:16), a	; F574B3  ld (0x2647),A
+	ld	a, (13529:16)	; F574B7  ld A,(0x34d9)
+	and	a, 1	; F574BB  and A,0x01
+	ld	(9800:16), a	; F574BE  ld (0x2648),A
+	ld	wa, (3080:16)	; F574C2  ld WA,(0x0c08)
+	ld	(9801:16), wa	; F574C6  ld (0x2649),WA
+	ld	a, (14162:16)	; F574CA  ld A,(0x3752)
+	ld	(4873:16), a	; F574CE  ld (0x1309),A
+	ld	a, (13834:16)	; F574D2  ld A,(0x360a)
+	inc	1, a	; F574D6  inc 1,A
+	ld	(9803:16), a	; F574D8  ld (0x264b),A
+	popw	wa	; F574DC  pop WA
+	ret	; F574DD  ret
+
+; --------------------------------------------------------------------------
+; CyclePlayScreen_StageValues
+; Called from: 0xF55EEA (`calr`), the values arm of the screen whose captions
+;          are DL_CyclePlayCurrentMeasureCycle; that arm then runs
+;          DisplayListB_Run from DL_F34FF2 to Data_F35035.
+; Writes:  (0x12F6) <- (0x3627)           (0x2644) <- word (0x3552)
+;          (0x2647) <- (0x360B) AND 1
+;          (0x2652) <- word (0x361E)      (0x2654) <- word (0x3620)
+; Preserves: WA.
+; Evidence: the five destinations are exactly the five distinct source
+;          variables of DL_F34FF2's six records (two read 0x12F6).
+; --------------------------------------------------------------------------
+CyclePlayScreen_StageValues:
+	pushw	wa	; F574DE  push WA
+	ld	a, (13863:16)	; F574DF  ld A,(0x3627)
+	ld	(4854:16), a	; F574E3  ld (0x12f6),A
+	ld	wa, (13650:16)	; F574E7  ld WA,(0x3552)
+	ld	(9796:16), wa	; F574EB  ld (0x2644),WA
+	ld	a, (13835:16)	; F574EF  ld A,(0x360b)
+	and	a, 1	; F574F3  and A,0x01
+	ld	(9799:16), a	; F574F6  ld (0x2647),A
+	ld	wa, (13854:16)	; F574FA  ld WA,(0x361e)
+	ld	(9810:16), wa	; F574FE  ld (0x2652),WA
+	ld	wa, (13856:16)	; F57502  ld WA,(0x3620)
+	ld	(9812:16), wa	; F57506  ld (0x2654),WA
+	popw	wa	; F5750A  pop WA
+	ret	; F5750B  ret
+
+; --------------------------------------------------------------------------
+; CyclePlayEditScreen_StageValues
+; Called from: 0xF55E8F (`calr`), the values arm of the screen whose captions
+;          are DL_CyclePlayCurrentMeasureEdit; that arm then runs
+;          DisplayListB_Run from DL_F352F9 to Data_F3533C.
+; Writes:  (0x12F6) <- (0x3627)           (0x2644) <- word (0x3552)
+;          (0x2652) <- word (0x361E)      (0x2654) <- word (0x3620)
+;          (0x1308) <- (0x3626)
+; Preserves: WA.
+; Evidence: the five destinations are exactly the five distinct source
+;          variables of DL_F352F9's six records (two read 0x12F6).
+; --------------------------------------------------------------------------
+CyclePlayEditScreen_StageValues:
+	pushw	wa	; F5750C  push WA
+	ld	a, (13863:16)	; F5750D  ld A,(0x3627)
+	ld	(4854:16), a	; F57511  ld (0x12f6),A
+	ld	wa, (13650:16)	; F57515  ld WA,(0x3552)
+	ld	(9796:16), wa	; F57519  ld (0x2644),WA
+	ld	wa, (13854:16)	; F5751D  ld WA,(0x361e)
+	ld	(9810:16), wa	; F57521  ld (0x2652),WA
+	ld	wa, (13856:16)	; F57525  ld WA,(0x3620)
+	ld	(9812:16), wa	; F57529  ld (0x2654),WA
+	ld	a, (13862:16)	; F5752D  ld A,(0x3626)
+	ld	(4872:16), a	; F57531  ld (0x1308),A
+	popw	wa	; F57535  pop WA
+	ret	; F57536  ret
+
+; --------------------------------------------------------------------------
+; CycleRecordScreen_StageValues
+; Called from: 0xF55F45 (`calr`), the values arm of the screen whose captions
+;          are DL_CycleRecordCurrentMeasure; that arm then runs
+;          DisplayListB_Run from DL_F351A7 to Data_F351F9.
+; Writes:  (0x12F6) <- (0x3627)           (0x2644) <- word (0x3552)
+;          (0x2647) <- ((0x360B) AND 2) >> 1
+;          (0x2648) <- (0x34D9) AND 1
+;          (0x2656) <- word (0x3622)      (0x2658) <- word (0x3624)
+; Preserves: WA.
+; Evidence: the six destinations are exactly the six distinct source
+;          variables of DL_F351A7's seven records (two read 0x12F6).
+; --------------------------------------------------------------------------
+CycleRecordScreen_StageValues:
+	pushw	wa	; F57537  push WA
+	ld	a, (13863:16)	; F57538  ld A,(0x3627)
+	ld	(4854:16), a	; F5753C  ld (0x12f6),A
+	ld	wa, (13650:16)	; F57540  ld WA,(0x3552)
+	ld	(9796:16), wa	; F57544  ld (0x2644),WA
+	ld	a, (13835:16)	; F57548  ld A,(0x360b)
+	and	a, 2	; F5754C  and A,0x02
+	srl	a, 1	; F5754F  srl 0x01,A
+	ld	(9799:16), a	; F57552  ld (0x2647),A
+	ld	a, (13529:16)	; F57556  ld A,(0x34d9)
+	and	a, 1	; F5755A  and A,0x01
+	ld	(9800:16), a	; F5755D  ld (0x2648),A
+	ld	wa, (13858:16)	; F57561  ld WA,(0x3622)
+	ld	(9814:16), wa	; F57565  ld (0x2656),WA
+	ld	wa, (13860:16)	; F57569  ld WA,(0x3624)
+	ld	(9816:16), wa	; F5756D  ld (0x2658),WA
+	popw	wa	; F57571  pop WA
+	ret	; F57572  ret  (the first 0x0E the old listing counted as padding)
+
+	.fill	1677, 1, 0x0E	; F57573-F57BFF  `ret` padding (asserted pure 0x0E)
 
 
 ; --------------------------------------------------------------------------
@@ -116273,12 +116457,12 @@ Ring60195A_PutBlock_Ldir:
 	ld	xhl, 6297946	; F57C79  ld XHL,0x0060195a
 	ldw	wa, 512	; F57C7E  ld WA,0x0200
 	jr	Ring_PutBlockWrapped	; F57C81  jr T,0xf57ccd
-Unclaimed_F57453_Code_Loop:
+Ring601850_PutBlock_LeadB0_StoreNext:
 	inc	1, xiy	; F57C83  inc 1,XIY
 	ld	a, (xiy)	; F57C85  ld A,(XIY)
 	ld	(6291456:24), a	; F57C87  ld (0x600000),A
 	ret	; F57C8C  ret
-Unclaimed_F57453_Code_Loop2:
+Ring601850_PutBlock_LeadB1_StoreNext:
 	inc	1, xiy	; F57C8D  inc 1,XIY
 	ld	a, (xiy)	; F57C8F  ld A,(XIY)
 	ld	(6291457:24), a	; F57C91  ld (0x600001),A
@@ -116310,21 +116494,21 @@ Ring601850_PutBlock_Drop1In3:
 	ld	xiy, (xsp+6)	; F57C9A  ld XIY,(XSP+0x06)
 	ld	a, (xiy)	; F57C9D  ld A,(XIY)
 	cp	a, 176	; F57C9F  cp A,0xb0
-	jr	z, Unclaimed_F57453_Code_Loop	; F57CA2  jr Z,0xf57c83
+	jr	z, Ring601850_PutBlock_LeadB0_StoreNext	; F57CA2  jr Z,0xf57c83
 	cp	a, 177	; F57CA4  cp A,0xb1
-	jr	z, Unclaimed_F57453_Code_Loop2	; F57CA7  jr Z,0xf57c8d
+	jr	z, Ring601850_PutBlock_LeadB1_StoreNext	; F57CA7  jr Z,0xf57c8d
 	push	xhl	; F57CA9  push XHL
 	pushw	de	; F57CAA  push DE
 	ld	xhl, xiy	; F57CAB  ld XHL,XIY
 	xor	de, de	; F57CAD  xor DE,DE
-Unclaimed_F57453_Code_Loop3:
+Ring601850_PutBlock_Drop1In3_Loop:
 	inc	1, xiy	; F57CAF  inc 1,XIY
 	ld_spiw	wa, 245	; F57CB1  ld WA,(XIY+)
 	stw_dpi	wa, 237	; F57CB4  ld (XHL+),WA
 	inc	3, d	; F57CB7  inc 3,D
 	inc	2, e	; F57CB9  inc 2,E
 	cp	d, c	; F57CBB  cp D,C
-	jr	nz, Unclaimed_F57453_Code_Loop3	; F57CBD  jr NZ,0xf57caf
+	jr	nz, Ring601850_PutBlock_Drop1In3_Loop	; F57CBD  jr NZ,0xf57caf
 	ld	c, e	; F57CBF  ld C,E
 	ld	xiy, (xsp+12)	; F57CC1  ld XIY,(XSP+0x0c)
 	ld	xhl, 6297680	; F57CC4  ld XHL,0x00601850
@@ -116354,27 +116538,27 @@ Ring_PutBlockWrapped:
 	push	xix	; F57CCD  push XIX
 	pushw	de	; F57CCE  push DE
 	or	c, c	; F57CCF  or C,C
-	jr	z, Unclaimed_F57453_Code_Epilogue	; F57CD1  jr Z,0xf57d1a
+	jr	z, Ring_PutBlockWrapped_Done	; F57CD1  jr Z,0xf57d1a
 	extz	bc	; F57CD3  extz BC
 	ld	xix, xhl	; F57CD5  ld XIX,XHL
 	cp	(xix-2), bc	; F57CD7  cp (XIX+0xfe),BC
-	jr	c, Unclaimed_F57453_Code_Epilogue	; F57CDA  jr C,0xf57d1a
+	jr	c, Ring_PutBlockWrapped_Done	; F57CDA  jr C,0xf57d1a
 	ld	de, (xix-4)	; F57CDC  ld DE,(XIX+0xfc)
 	sub	(xix-2), bc	; F57CDF  sub (XIX+0xfe),BC
 	sub	wa, de	; F57CE2  sub WA,DE
 	cp	wa, bc	; F57CE4  cp WA,BC
-	jr	c, Unclaimed_F57453_Code_Skip2	; F57CE6  jr C,0xf57d04
-	jr	z, Unclaimed_F57453_Code_Skip	; F57CE8  jr Z,0xf57cf6
+	jr	c, Ring_PutBlockWrapped_TwoCopies	; F57CE6  jr C,0xf57d04
+	jr	z, Ring_PutBlockWrapped_EndsAtTop	; F57CE8  jr Z,0xf57cf6
 	add	(xix-4), bc	; F57CEA  add (XIX+0xfc),BC
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F57CED  lda XIX,XIX+DE
 	m_ldir MBI+r5	; F57CF2  ldir
-	jr	Unclaimed_F57453_Code_Epilogue	; F57CF4  jr T,0xf57d1a
-Unclaimed_F57453_Code_Skip:
+	jr	Ring_PutBlockWrapped_Done	; F57CF4  jr T,0xf57d1a
+Ring_PutBlockWrapped_EndsAtTop:
 	m_ld_mi16 MDD+r4, 0xfc, 0x0000	; F57CF6  ld (XIX+0xfc),0x0000
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F57CFB  lda XIX,XIX+DE
 	m_ldir MBI+r5	; F57D00  ldir
-	jr	Unclaimed_F57453_Code_Epilogue	; F57D02  jr T,0xf57d1a
-Unclaimed_F57453_Code_Skip2:
+	jr	Ring_PutBlockWrapped_Done	; F57D02  jr T,0xf57d1a
+Ring_PutBlockWrapped_TwoCopies:
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F57D04  lda XIX,XIX+DE
 	ld	de, bc	; F57D09  ld DE,BC
 	ld	bc, wa	; F57D0B  ld BC,WA
@@ -116384,7 +116568,7 @@ Unclaimed_F57453_Code_Skip2:
 	ld	xix, xhl	; F57D13  ld XIX,XHL
 	ld	(xix-4), de	; F57D15  ld (XIX+0xfc),DE
 	m_ldir MBI+r5	; F57D18  ldir
-Unclaimed_F57453_Code_Epilogue:
+Ring_PutBlockWrapped_Done:
 	popw	de	; F57D1A  pop DE
 	pop	xix	; F57D1B  pop XIX
 	pop	xhl	; F57D1C  pop XHL
