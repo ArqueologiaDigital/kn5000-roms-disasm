@@ -346,7 +346,44 @@ BitMapOut_ByteData_TransitionSeq_Join:
 	call	ApPostEvent
 	ret
 BitMapOut_ByteData_PresetCopy:
-	.incbin "includes/romslices/v7_transplant_BitMapOut_ByteData_PresetCopy.bin"
+	push qiz
+	cpdi8 (35992), 14
+	jr z, BitMapOut_ByteData_PresetCopy_Skip2
+	bitda 3, (36010)
+	jr nz, BitMapOut_ByteData_PresetCopy_Skip2
+	cpdi8 (49121), 1
+	jr nz, BitMapOut_ByteData_PresetCopy_Skip2
+	calr BitMapOut_GetRenderMode
+	bit 1, l
+	jr nz, BitMapOut_ByteData_PresetCopy_Join
+	ldb_d8 a, (49122)
+	res 7, a
+	ldb_erp a, 251
+	cpib_erp 251, 0
+	jr z, BitMapOut_ByteData_PresetCopy_Join
+	dec1b_erp 251
+	ldb_d8 a, (49123)
+	res 7, a
+	cp a, 0:i3
+	jr z, BitMapOut_ByteData_PresetCopy_Join
+	ld xwa, 769
+	call AcApcToggleProc_Helper
+	stb_erp a, 251
+	extz wa
+	cp hl, 0:i3
+	jr nz, BitMapOut_ByteData_PresetCopy_Skip
+	calr BitMapOut_SnapshotFromROM
+	jr BitMapOut_ByteData_PresetCopy_Join
+BitMapOut_ByteData_PresetCopy_Skip:
+	ld xbc, 63904
+	calr BitMapOut_CopyVoicePreset9
+BitMapOut_ByteData_PresetCopy_Join:
+	ldw wa, 130
+	calr BitMapOut_GetRenderMode_Return
+BitMapOut_ByteData_PresetCopy_Skip2:
+	resda 3, (36010)
+	pop qiz
+	ret
 BitMapOut_CopyVoicePreset9:
 	lda xsp, (xsp - 82)
 	push xiz
