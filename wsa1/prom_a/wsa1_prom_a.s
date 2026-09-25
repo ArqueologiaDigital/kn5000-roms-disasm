@@ -19199,8 +19199,9 @@ BitMask16ByIndex_DeadCopy:
 IndexToBitMask32_DeadCopy:
 	push XIX                                      ; F8A572  3c
 	cp E,0x20                                     ; F8A573  cd cf 20
-	jr ule, 0x02                                  ; F8A576  63 02
+	jr ule, .LF8A57A                                  ; F8A576  63 02
 	xor E,E                                              ; F8A578  cd d5
+.LF8A57A:
 	sla e, 0x02                                          ; F8A57A  cd ec 02
 	ld XIX,BitMask32ByIndex_DeadCopy                           ; F8A57D  44 89 a5 f8 00
 	mx8_ld_rm MXL, ra_IX, rb_E, r2                       ; F8A582  e3 03 f0 e8 22
@@ -19448,10 +19449,10 @@ sub_F8A6F3:
 	jr nz, 0x3c                                          ; F8A7DF  6e 3c
 	cp e, 0x00:i3                                          ; F8A7E1  cd d8
 	jr z, 0x34                                           ; F8A7E3  66 34
-	calr 0xfd20                                          ; F8A7E5  1e 20 fd
+	calr LowestSetBitIndex1Based_Copy                                          ; F8A7E5  1e 20 fd
 	dec 1,E                                              ; F8A7E8  cd 69
 	cp a, 0x01:i3                                          ; F8A7EA  c9 d9
-	jr z, 0x03                                           ; F8A7EC  66 03
+	jr z, .LF8A7F1                                           ; F8A7EC  66 03
 	add E,0x08                                           ; F8A7EE  cd c8 08
 .LF8A7F1:
 	ld d, 0x0f:opc                                          ; F8A7F1  24 0f

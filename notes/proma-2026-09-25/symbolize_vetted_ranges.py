@@ -11,7 +11,9 @@ QUESTION THIS ANSWERS / JOB IT DOES
 
       * the line's address comment and its hex bytes must equal the ROM there;
       * the displacement is recomputed from the ROM bytes (not from the text);
-      * the target must be a statement start in the source (else it is left);
+      * the target must be a statement start in the source (else it is left),
+        and for a range marked "own targets only" (the dead module, whose
+        layout is stale) inside that range;
       * a missing target label is inserted as `.L<ADDR>`.
 
     THE BYTE GATE CHECKS EVERY EDIT: the assembler recomputes the displacement
@@ -20,6 +22,12 @@ QUESTION THIS ANSWERS / JOB IT DOES
 RANGES (vetted by the header named)
     0xF8A81D-0xF8A913   sub_F8A81D, PanelGroupQueue_ExpandToEvents and
                         PanelEvent_ShiftThenRunAction (their headers).
+    0xF8A500-0xF8A7FF   the dead module's code: 0xF8A500-0xF8A60C is byte-identical
+                        to live code but for three table operands
+                        (retitle_panel_tables.py C3), and its handlers are the
+                        older forms of live handlers (same file's headers).
+                        Relative branches are position-independent, so they
+                        are correct in the copy whether or not it runs.
 
 RUN
     python3 notes/proma-2026-09-25/symbolize_vetted_ranges.py            # list
@@ -35,7 +43,7 @@ sys.path.insert(0, HERE)
 import srcmap  # noqa: E402
 
 B = srcmap.BASE
-RANGES = [(0xF8A81D, 0xF8A913)]
+RANGES = [(0xF8A81D, 0xF8A913, False), (0xF8A500, 0xF8A800, True)]   # (lo, hi, own targets only)
 LINE = re.compile(r"^(\t(jr|jrl|calr)\s+(?:([a-z]+)\s*,\s*)?)(-?0x[0-9a-fA-F]+|-?\d+)(\s*;\s*([0-9A-F]{6})\s+((?:[0-9a-f]{2}\s?)+).*)$")
 
 
@@ -60,11 +68,17 @@ def main():
         if not mm:
             continue
         a = int(mm.group(6), 16)
-        if not any(lo <= a < hi for lo, hi in RANGES):
+        if not any(lo <= a < hi for lo, hi, _ in RANGES):
             continue
         bs = bytes(int(x, 16) for x in mm.group(7).split())
         assert rom[a - B:a - B + len(bs)] == bs, hex(a)
         t = target(rom, a, mm.group(2))
+        rng = next(x for x in RANGES if x[0] <= a < x[1])
+        if rng[2] and not rng[0] <= t < rng[1]:
+            # a branch leaving its vetted range is not vouched for -- in the dead
+            # module such targets are the stale layout's (0xF8A7DF -> 0xF8A81D)
+            print("  left  0x%06X -> 0x%06X (outside its vetted range)" % (a, t))
+            continue
         if m.line_of(t) is None:
             print("  left  0x%06X -> 0x%06X (not a statement start)" % (a, t))
             continue
