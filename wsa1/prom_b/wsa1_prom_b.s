@@ -3085,10 +3085,10 @@ sub_F00CA2:
 	extz	xbc	; F00CCD  extz XBC
 	add	xbc, 15729324	; F00CCF  add XBC,0x00f002ac
 	ld	xbc, (xbc)	; F00CD5  ld XBC,(XBC)
-	lda	xiy, (sub_F00CDF:24)	; F00CD7  lda XIY,0xf00cdf
+	lda	xiy, (sub_F00CA2_Resume:24)	; F00CD7  lda XIY,0xf00cdf
 	push	xiy	; F00CDC  push XIY
 	jp	(xbc)	; F00CDD  jp T,XBC
-sub_F00CDF:
+sub_F00CA2_Resume:
 	popw	bc	; F00CDF  pop BC
 sub_F00CA2_Skip:
 	unlk XIZ	; F00CE0  unlk XIZ
@@ -3114,10 +3114,10 @@ sub_F00CE3:
 	extz	xbc	; F00D0E  extz XBC
 	add	xbc, sub_F002F4	; F00D10  add XBC,0x00f002f4
 	ld	xbc, (xbc)	; F00D16  ld XBC,(XBC)
-	lda	xiy, (sub_F00D20:24)	; F00D18  lda XIY,0xf00d20
+	lda	xiy, (sub_F00CE3_Resume:24)	; F00D18  lda XIY,0xf00d20
 	push	xiy	; F00D1D  push XIY
 	jp	(xbc)	; F00D1E  jp T,XBC
-sub_F00D20:
+sub_F00CE3_Resume:
 	popw	bc	; F00D20  pop BC
 sub_F00CE3_Skip:
 	unlk XIZ	; F00D21  unlk XIZ
@@ -3143,10 +3143,10 @@ sub_F00D24:
 	extz	xbc	; F00D4F  extz XBC
 	add	xbc, 15729468	; F00D51  add XBC,0x00f0033c
 	ld	xbc, (xbc)	; F00D57  ld XBC,(XBC)
-	lda	xiy, (sub_F00D61:24)	; F00D59  lda XIY,0xf00d61
+	lda	xiy, (sub_F00D24_Resume:24)	; F00D59  lda XIY,0xf00d61
 	push	xiy	; F00D5E  push XIY
 	jp	(xbc)	; F00D5F  jp T,XBC
-sub_F00D61:
+sub_F00D24_Resume:
 	popw	bc	; F00D61  pop BC
 sub_F00D24_Skip:
 	unlk XIZ	; F00D62  unlk XIZ
@@ -3172,10 +3172,10 @@ sub_F00D65:
 	extz	xbc	; F00D90  extz XBC
 	add	xbc, 15729540	; F00D92  add XBC,0x00f00384
 	ld	xbc, (xbc)	; F00D98  ld XBC,(XBC)
-	lda	xiy, (sub_F00DA2:24)	; F00D9A  lda XIY,0xf00da2
+	lda	xiy, (sub_F00D65_Resume:24)	; F00D9A  lda XIY,0xf00da2
 	push	xiy	; F00D9F  push XIY
 	jp	(xbc)	; F00DA0  jp T,XBC
-sub_F00DA2:
+sub_F00D65_Resume:
 	popw	bc	; F00DA2  pop BC
 sub_F00D65_Skip:
 	unlk XIZ	; F00DA3  unlk XIZ
@@ -16904,10 +16904,10 @@ sub_F0A000:		; <- T_F42004
 	extz	xbc	; F0A02B  extz XBC
 	add	xbc, 16577411	; F0A02D  add XBC,0x00fcf383
 	ld	xbc, (xbc)	; F0A033  ld XBC,(XBC)
-	lda	xiy, (sub_F0A03D:24)	; F0A035  lda XIY,0xf0a03d
+	lda	xiy, (sub_F0A000_Resume:24)	; F0A035  lda XIY,0xf0a03d
 	push	xiy	; F0A03A  push XIY
 	jp	(xbc)	; F0A03B  jp T,XBC
-sub_F0A03D:
+sub_F0A000_Resume:
 	call	PanelScreen_RequestPending	; F0A03D  call 0xfd60b9
 	popw	bc	; F0A041  pop BC
 	cp	a, 0:i3	; F0A042  cp A,0
@@ -16953,10 +16953,10 @@ sub_F0A051:		; <- T_F42014
 	extz	xbc	; F0A083  extz XBC
 	add	xbc, 16577483	; F0A085  add XBC,0x00fcf3cb
 	ld	xbc, (xbc)	; F0A08B  ld XBC,(XBC)
-	lda	xiy, (sub_F0A095:24)	; F0A08D  lda XIY,0xf0a095
+	lda	xiy, (sub_F0A051_Resume:24)	; F0A08D  lda XIY,0xf0a095
 	push	xiy	; F0A092  push XIY
 	jp	(xbc)	; F0A093  jp T,XBC
-sub_F0A095:
+sub_F0A051_Resume:
 	pushw	0	; F0A095  push 0x0000
 	call	sub_FDAC5B	; F0A098  call 0xfdac5b
 	call	PanelScreen_RequestPending	; F0A09C  call 0xfd60b9
@@ -17004,10 +17004,10 @@ sub_F0A0B1:		; <- T_F42024
 	extz	xbc	; F0A0E3  extz XBC
 	add	xbc, 16577555	; F0A0E5  add XBC,0x00fcf413
 	ld	xbc, (xbc)	; F0A0EB  ld XBC,(XBC)
-	lda	xiy, (sub_F0A0F5:24)	; F0A0ED  lda XIY,0xf0a0f5
+	lda	xiy, (sub_F0A0B1_Resume:24)	; F0A0ED  lda XIY,0xf0a0f5
 	push	xiy	; F0A0F2  push XIY
 	jp	(xbc)	; F0A0F3  jp T,XBC
-sub_F0A0F5:
+sub_F0A0B1_Resume:
 	pushw	0	; F0A0F5  push 0x0000
 	call	sub_FDAC5B	; F0A0F8  call 0xfdac5b
 	call	PanelScreen_RequestPending	; F0A0FC  call 0xfd60b9
@@ -17053,10 +17053,10 @@ sub_F0A111:		; <- T_F42034
 	extz	xbc	; F0A13C  extz XBC
 	add	xbc, 16577627	; F0A13E  add XBC,0x00fcf45b
 	ld	xbc, (xbc)	; F0A144  ld XBC,(XBC)
-	lda	xiy, (sub_F0A14E:24)	; F0A146  lda XIY,0xf0a14e
+	lda	xiy, (sub_F0A111_Resume:24)	; F0A146  lda XIY,0xf0a14e
 	push	xiy	; F0A14B  push XIY
 	jp	(xbc)	; F0A14C  jp T,XBC
-sub_F0A14E:
+sub_F0A111_Resume:
 	call	PanelScreen_RequestPending	; F0A14E  call 0xfd60b9
 	popw	bc	; F0A152  pop BC
 	cp	a, 0:i3	; F0A153  cp A,0
@@ -18514,10 +18514,10 @@ sub_F0A90E:		; <- T_F42358
 	extz	xbc	; F0A939  extz XBC
 	add	xbc, 16579652	; F0A93B  add XBC,0x00fcfc44
 	ld	xbc, (xbc)	; F0A941  ld XBC,(XBC)
-	lda	xiy, (sub_F0A94B:24)	; F0A943  lda XIY,0xf0a94b
+	lda	xiy, (sub_F0A90E_Resume:24)	; F0A943  lda XIY,0xf0a94b
 	push	xiy	; F0A948  push XIY
 	jp	(xbc)	; F0A949  jp T,XBC
-sub_F0A94B:
+sub_F0A90E_Resume:
 	call	PanelScreen_RequestPending	; F0A94B  call 0xfd60b9
 	popw	bc	; F0A94F  pop BC
 	cp	a, 0:i3	; F0A950  cp A,0
@@ -18563,10 +18563,10 @@ sub_F0A95F:		; <- T_F42368
 	extz	xbc	; F0A991  extz XBC
 	add	xbc, 16579436	; F0A993  add XBC,0x00fcfb6c
 	ld	xbc, (xbc)	; F0A999  ld XBC,(XBC)
-	lda	xiy, (sub_F0A9A3:24)	; F0A99B  lda XIY,0xf0a9a3
+	lda	xiy, (sub_F0A95F_Resume:24)	; F0A99B  lda XIY,0xf0a9a3
 	push	xiy	; F0A9A0  push XIY
 	jp	(xbc)	; F0A9A1  jp T,XBC
-sub_F0A9A3:
+sub_F0A95F_Resume:
 	pushw	0	; F0A9A3  push 0x0000
 	call	sub_FDAC5B	; F0A9A6  call 0xfdac5b
 	call	PanelScreen_RequestPending	; F0A9AA  call 0xfd60b9
@@ -18612,10 +18612,10 @@ sub_F0A9BF:		; <- T_F42378
 	extz	xbc	; F0A9EA  extz XBC
 	add	xbc, 16579508	; F0A9EC  add XBC,0x00fcfbb4
 	ld	xbc, (xbc)	; F0A9F2  ld XBC,(XBC)
-	lda	xiy, (sub_F0A9FC:24)	; F0A9F4  lda XIY,0xf0a9fc
+	lda	xiy, (sub_F0A9BF_Resume:24)	; F0A9F4  lda XIY,0xf0a9fc
 	push	xiy	; F0A9F9  push XIY
 	jp	(xbc)	; F0A9FA  jp T,XBC
-sub_F0A9FC:
+sub_F0A9BF_Resume:
 	call	PanelScreen_RequestPending	; F0A9FC  call 0xfd60b9
 	popw	bc	; F0AA00  pop BC
 	cp	a, 0:i3	; F0AA01  cp A,0
@@ -18659,10 +18659,10 @@ sub_F0AA10:		; <- T_F433D8
 	extz	xbc	; F0AA3B  extz XBC
 	add	xbc, 16579580	; F0AA3D  add XBC,0x00fcfbfc
 	ld	xbc, (xbc)	; F0AA43  ld XBC,(XBC)
-	lda	xiy, (sub_F0AA4D:24)	; F0AA45  lda XIY,0xf0aa4d
+	lda	xiy, (sub_F0AA10_Resume:24)	; F0AA45  lda XIY,0xf0aa4d
 	push	xiy	; F0AA4A  push XIY
 	jp	(xbc)	; F0AA4B  jp T,XBC
-sub_F0AA4D:
+sub_F0AA10_Resume:
 	call	PanelScreen_RequestPending	; F0AA4D  call 0xfd60b9
 	popw	bc	; F0AA51  pop BC
 	cp	a, 0:i3	; F0AA52  cp A,0
@@ -18706,10 +18706,10 @@ sub_F0AA61:		; <- T_F420B4
 	extz	xbc	; F0AA8C  extz XBC
 	add	xbc, 16579580	; F0AA8E  add XBC,0x00fcfbfc
 	ld	xbc, (xbc)	; F0AA94  ld XBC,(XBC)
-	lda	xiy, (sub_F0AA9E:24)	; F0AA96  lda XIY,0xf0aa9e
+	lda	xiy, (sub_F0AA61_Resume:24)	; F0AA96  lda XIY,0xf0aa9e
 	push	xiy	; F0AA9B  push XIY
 	jp	(xbc)	; F0AA9C  jp T,XBC
-sub_F0AA9E:
+sub_F0AA61_Resume:
 	call	PanelScreen_RequestPending	; F0AA9E  call 0xfd60b9
 	popw	bc	; F0AAA2  pop BC
 	cp	a, 0:i3	; F0AAA3  cp A,0
@@ -18806,10 +18806,10 @@ sub_F0AAF9:		; <- T_F42338
 	extz	xbc	; F0AB24  extz XBC
 	add	xbc, 16579724	; F0AB26  add XBC,0x00fcfc8c
 	ld	xbc, (xbc)	; F0AB2C  ld XBC,(XBC)
-	lda	xiy, (sub_F0AB36:24)	; F0AB2E  lda XIY,0xf0ab36
+	lda	xiy, (sub_F0AAF9_Resume:24)	; F0AB2E  lda XIY,0xf0ab36
 	push	xiy	; F0AB33  push XIY
 	jp	(xbc)	; F0AB34  jp T,XBC
-sub_F0AB36:
+sub_F0AAF9_Resume:
 	call	PanelScreen_RequestPending	; F0AB36  call 0xfd60b9
 	popw	bc	; F0AB3A  pop BC
 	cp	a, 0:i3	; F0AB3B  cp A,0
@@ -21046,10 +21046,10 @@ sub_F0B91C_Skip:
 	extz	bc	; F0B93A  extz BC
 	pushw	bc	; F0B93C  push BC
 	pushw	2	; F0B93D  push 0x0002
-	lda	xiy, (sub_F0B948:24)	; F0B940  lda XIY,0xf0b948
+	lda	xiy, (sub_F0B91C_Resume:24)	; F0B940  lda XIY,0xf0b948
 	push	xiy	; F0B945  push XIY
 	jp	(xix)	; F0B946  jp T,XIX
-sub_F0B948:
+sub_F0B91C_Resume:
 	lda	xbc, (xiz-2)	; F0B948  lda XBC,XIZ+0xfe
 	push	xbc	; F0B94B  push XBC
 	pushw	0	; F0B94C  push 0x0000
@@ -21064,16 +21064,16 @@ sub_F0B948:
 	extz	bc	; F0B964  extz BC
 	pushw	bc	; F0B966  push BC
 	pushw	1	; F0B967  push 0x0001
-	lda	xiy, (sub_F0B972:24)	; F0B96A  lda XIY,0xf0b972
+	lda	xiy, (sub_F0B948_Resume:24)	; F0B96A  lda XIY,0xf0b972
 	push	xiy	; F0B96F  push XIY
 	jp	(xix)	; F0B970  jp T,XIX
-sub_F0B972:
+sub_F0B948_Resume:
 	pushw	0	; F0B972  push 0x0000
 	pushw	0	; F0B975  push 0x0000
-	lda	xiy, (sub_F0B980:24)	; F0B978  lda XIY,0xf0b980
+	lda	xiy, (sub_F0B972_Resume:24)	; F0B978  lda XIY,0xf0b980
 	push	xiy	; F0B97D  push XIY
 	jp	(xix)	; F0B97E  jp T,XIX
-sub_F0B980:
+sub_F0B972_Resume:
 	pushw	159	; F0B980  push 0x009f
 	call	T_Dispatch_Code80_Bracketed	; F0B983  call 0xf41ed0
 	pushw	1	; F0B987  push 0x0001
@@ -22012,19 +22012,19 @@ sub_F0BF04_Join7:
 	extz	bc	; F0C107  extz BC
 	pushw	bc	; F0C109  push BC
 	pushw	3	; F0C10A  push 0x0003
-	lda	xiy, (sub_F0C115:24)	; F0C10D  lda XIY,0xf0c115
+	lda	xiy, (sub_F0C0BB_Resume:24)	; F0C10D  lda XIY,0xf0c115
 	push	xiy	; F0C112  push XIY
 	jp	(xix)	; F0C113  jp T,XIX
-sub_F0C115:
+sub_F0C0BB_Resume:
 	pushw	3	; F0C115  push 0x0003
 	pushw	157	; F0C118  push 0x009d
 	call	T_Dispatch_Code80	; F0C11B  call 0xf41ed4
 	pushw	0	; F0C11F  push 0x0000
 	pushw	4	; F0C122  push 0x0004
-	lda	xiy, (sub_F0C12D:24)	; F0C125  lda XIY,0xf0c12d
+	lda	xiy, (sub_F0C115_Resume:24)	; F0C125  lda XIY,0xf0c12d
 	push	xiy	; F0C12A  push XIY
 	jp	(xix)	; F0C12B  jp T,XIX
-sub_F0C12D:
+sub_F0C115_Resume:
 	inc	8, xsp	; F0C12D  inc 0,XSP
 	inc	4, xsp	; F0C12F  inc 4,XSP
 sub_F0BF04_Join8:
@@ -22048,10 +22048,10 @@ sub_F0BF04_Join8:
 	extz	bc	; F0C162  extz BC
 	pushw	bc	; F0C164  push BC
 	pushw	4	; F0C165  push 0x0004
-	lda	xiy, (sub_F0C170:24)	; F0C168  lda XIY,0xf0c170
+	lda	xiy, (sub_F0C12D_Resume:24)	; F0C168  lda XIY,0xf0c170
 	push	xiy	; F0C16D  push XIY
 	jp	(xix)	; F0C16E  jp T,XIX
-sub_F0C170:
+sub_F0C12D_Resume:
 	pop	xiy	; F0C170  pop XIY
 	jr	sub_F0BF04_Join8	; F0C171  jr T,0xf0c131
 sub_F0BF04_Skip6:
@@ -22075,16 +22075,16 @@ sub_F0BF04_Join9:
 	extz	bc	; F0C19D  extz BC
 	pushw	bc	; F0C19F  push BC
 	pushw	4	; F0C1A0  push 0x0004
-	lda	xiy, (sub_F0C1AB:24)	; F0C1A3  lda XIY,0xf0c1ab
+	lda	xiy, (sub_F0C170_Resume:24)	; F0C1A3  lda XIY,0xf0c1ab
 	push	xiy	; F0C1A8  push XIY
 	jp	(xix)	; F0C1A9  jp T,XIX
-sub_F0C1AB:
+sub_F0C170_Resume:
 	pushw	36	; F0C1AB  push 0x0024
 	pushw	5	; F0C1AE  push 0x0005
-	lda	xiy, (sub_F0C1B9:24)	; F0C1B1  lda XIY,0xf0c1b9
+	lda	xiy, (sub_F0C1AB_Resume:24)	; F0C1B1  lda XIY,0xf0c1b9
 	push	xiy	; F0C1B6  push XIY
 	jp	(xix)	; F0C1B7  jp T,XIX
-sub_F0C1B9:
+sub_F0C1AB_Resume:
 	inc	8, xsp	; F0C1B9  inc 0,XSP
 	m_cp_mi8 MBD+r6, 0xf6, 0x30	; F0C1BB  cp (XIZ+0xf6),0x30
 	jr	nc, sub_F0BF04_Skip8	; F0C1BF  jr NC,0xf0c1df
@@ -22121,10 +22121,10 @@ sub_F0BF04_Join10:
 	extz	bc	; F0C203  extz BC
 	pushw	bc	; F0C205  push BC
 	pushw	3	; F0C206  push 0x0003
-	lda	xiy, (sub_F0C211:24)	; F0C209  lda XIY,0xf0c211
+	lda	xiy, (sub_F0C1B9_Resume:24)	; F0C209  lda XIY,0xf0c211
 	push	xiy	; F0C20E  push XIY
 	jp	(xix)	; F0C20F  jp T,XIX
-sub_F0C211:
+sub_F0C1B9_Resume:
 	ld	c, l	; F0C211  ld C,L
 	extz	bc	; F0C213  extz BC
 	pushw	bc	; F0C215  push BC
@@ -22145,18 +22145,18 @@ sub_F0C211:
 	extz	bc	; F0C237  extz BC
 	pushw	bc	; F0C239  push BC
 	pushw	10	; F0C23A  push 0x000a
-	lda	xiy, (sub_F0C245:24)	; F0C23D  lda XIY,0xf0c245
+	lda	xiy, (sub_F0C211_Resume:24)	; F0C23D  lda XIY,0xf0c245
 	push	xiy	; F0C242  push XIY
 	jp	(xix)	; F0C243  jp T,XIX
-sub_F0C245:
+sub_F0C211_Resume:
 	ld	bc, (xiz-14)	; F0C245  ld BC,(XIZ+0xf2)
 	extz	bc	; F0C248  extz BC
 	pushw	bc	; F0C24A  push BC
 	pushw	11	; F0C24B  push 0x000b
-	lda	xiy, (sub_F0C256:24)	; F0C24E  lda XIY,0xf0c256
+	lda	xiy, (sub_F0C245_Resume:24)	; F0C24E  lda XIY,0xf0c256
 	push	xiy	; F0C253  push XIY
 	jp	(xix)	; F0C254  jp T,XIX
-sub_F0C256:
+sub_F0C245_Resume:
 	pushw	4	; F0C256  push 0x0004
 	pushw	157	; F0C259  push 0x009d
 	call	T_Dispatch_Code80	; F0C25C  call 0xf41ed4
@@ -22221,28 +22221,28 @@ sub_F0C291:
 	extz	bc	; F0C2D4  extz BC
 	pushw	bc	; F0C2D6  push BC
 	pushw	7	; F0C2D7  push 0x0007
-	lda	xiy, (sub_F0C2E2:24)	; F0C2DA  lda XIY,0xf0c2e2
+	lda	xiy, (sub_F0C291_Resume:24)	; F0C2DA  lda XIY,0xf0c2e2
 	push	xiy	; F0C2DF  push XIY
 	jp	(xix)	; F0C2E0  jp T,XIX
-sub_F0C2E2:
+sub_F0C291_Resume:
 	ld	c, h	; F0C2E2  ld C,H
 	extz	bc	; F0C2E4  extz BC
 	ld	de, bc	; F0C2E6  ld DE,BC
 	pushw	bc	; F0C2E8  push BC
 	pushw	8	; F0C2E9  push 0x0008
-	lda	xiy, (sub_F0C2F4:24)	; F0C2EC  lda XIY,0xf0c2f4
+	lda	xiy, (sub_F0C2E2_Resume:24)	; F0C2EC  lda XIY,0xf0c2f4
 	push	xiy	; F0C2F1  push XIY
 	jp	(xix)	; F0C2F2  jp T,XIX
-sub_F0C2F4:
+sub_F0C2E2_Resume:
 	ld	c, l	; F0C2F4  ld C,L
 	extz	bc	; F0C2F6  extz BC
 	ld	(xiz-10), bc	; F0C2F8  ld (XIZ+0xf6),BC
 	pushw	bc	; F0C2FB  push BC
 	pushw	9	; F0C2FC  push 0x0009
-	lda	xiy, (sub_F0C307:24)	; F0C2FF  lda XIY,0xf0c307
+	lda	xiy, (sub_F0C2F4_Resume:24)	; F0C2FF  lda XIY,0xf0c307
 	push	xiy	; F0C304  push XIY
 	jp	(xix)	; F0C305  jp T,XIX
-sub_F0C307:
+sub_F0C2F4_Resume:
 	m_push MWD+r6, 0xf6	; F0C307  pushw (XIZ+0xf6)
 	pushw	de	; F0C30A  push DE
 	ld	bc, (xiz-2)	; F0C30B  ld BC,(XIZ+0xfe)
@@ -22259,18 +22259,18 @@ sub_F0C307:
 	extz	bc	; F0C328  extz BC
 	pushw	bc	; F0C32A  push BC
 	pushw	10	; F0C32B  push 0x000a
-	lda	xiy, (sub_F0C336:24)	; F0C32E  lda XIY,0xf0c336
+	lda	xiy, (sub_F0C307_Resume:24)	; F0C32E  lda XIY,0xf0c336
 	push	xiy	; F0C333  push XIY
 	jp	(xix)	; F0C334  jp T,XIX
-sub_F0C336:
+sub_F0C307_Resume:
 	ld	bc, (xiz-8)	; F0C336  ld BC,(XIZ+0xf8)
 	extz	bc	; F0C339  extz BC
 	pushw	bc	; F0C33B  push BC
 	pushw	11	; F0C33C  push 0x000b
-	lda	xiy, (sub_F0C347:24)	; F0C33F  lda XIY,0xf0c347
+	lda	xiy, (sub_F0C336_Resume:24)	; F0C33F  lda XIY,0xf0c347
 	push	xiy	; F0C344  push XIY
 	jp	(xix)	; F0C345  jp T,XIX
-sub_F0C347:
+sub_F0C336_Resume:
 	pushw	4	; F0C347  push 0x0004
 	pushw	157	; F0C34A  push 0x009d
 	call	T_Dispatch_Code80	; F0C34D  call 0xf41ed4
@@ -22576,10 +22576,10 @@ sub_F0C291_Join8:
 	extz	bc	; F0C57E  extz BC
 	pushw	bc	; F0C580  push BC
 	pushw	2	; F0C581  push 0x0002
-	lda	xiy, (sub_F0C58C:24)	; F0C584  lda XIY,0xf0c58c
+	lda	xiy, (sub_F0C528_Resume:24)	; F0C584  lda XIY,0xf0c58c
 	push	xiy	; F0C589  push XIY
 	jp	(xix)	; F0C58A  jp T,XIX
-sub_F0C58C:
+sub_F0C528_Resume:
 	pushw	2	; F0C58C  push 0x0002
 	pushw	157	; F0C58F  push 0x009d
 	call	T_Dispatch_Code80	; F0C592  call 0xf41ed4
@@ -22589,10 +22589,10 @@ sub_F0C58C:
 	jr	nz, sub_F0C291_Skip18	; F0C59E  jr NZ,0xf0c5d6
 	pushw	0	; F0C5A0  push 0x0000
 	pushw	0	; F0C5A3  push 0x0000
-	lda	xiy, (sub_F0C5AE:24)	; F0C5A6  lda XIY,0xf0c5ae
+	lda	xiy, (sub_F0C58C_Resume:24)	; F0C5A6  lda XIY,0xf0c5ae
 	push	xiy	; F0C5AB  push XIY
 	jp	(xix)	; F0C5AC  jp T,XIX
-sub_F0C5AE:
+sub_F0C58C_Resume:
 	pop	xbc	; F0C5AE  pop XBC
 	m_cp_mi8 MBD+r6, 0xfe, 0x00	; F0C5AF  cp (XIZ+0xfe),0x00
 	jr	nz, sub_F0C291_Skip17	; F0C5B3  jr NZ,0xf0c5ba
@@ -22602,10 +22602,10 @@ sub_F0C291_Skip17:
 	pushw	2	; F0C5BA  push 0x0002
 sub_F0C291_Join9:
 	pushw	1	; F0C5BD  push 0x0001
-	lda	xiy, (sub_F0C5C8:24)	; F0C5C0  lda XIY,0xf0c5c8
+	lda	xiy, (sub_F0C5AE_Resume:24)	; F0C5C0  lda XIY,0xf0c5c8
 	push	xiy	; F0C5C5  push XIY
 	jp	(xix)	; F0C5C6  jp T,XIX
-sub_F0C5C8:
+sub_F0C5AE_Resume:
 	pushw	0	; F0C5C8  push 0x0000
 	pushw	157	; F0C5CB  push 0x009d
 	call	T_Dispatch_Code80	; F0C5CE  call 0xf41ed4
@@ -22628,10 +22628,10 @@ sub_F0C291_Skip19:
 sub_F0C291_Skip20:
 	pushw	0	; F0C5F7  push 0x0000
 	pushw	1	; F0C5FA  push 0x0001
-	lda	xiy, (sub_F0C605:24)	; F0C5FD  lda XIY,0xf0c605
+	lda	xiy, (sub_F0C5C8_Resume:24)	; F0C5FD  lda XIY,0xf0c605
 	push	xiy	; F0C602  push XIY
 	jp	(xix)	; F0C603  jp T,XIX
-sub_F0C605:
+sub_F0C5C8_Resume:
 	pop	xiy	; F0C605  pop XIY
 sub_F0C291_Join10:
 	pushw	1	; F0C606  push 0x0001
@@ -22668,38 +22668,38 @@ sub_F0C616:
 	lda	xbc, (xiz-4)	; F0C630  lda XBC,XIZ+0xfc
 	push	xbc	; F0C633  push XBC
 	pushw	10	; F0C634  push 0x000a
-	lda	xiy, (sub_F0C63F:24)	; F0C637  lda XIY,0xf0c63f
+	lda	xiy, (sub_F0C616_Resume:24)	; F0C637  lda XIY,0xf0c63f
 	push	xiy	; F0C63C  push XIY
 	jp	(xix)	; F0C63D  jp T,XIX
-sub_F0C63F:
+sub_F0C616_Resume:
 	lda	xbc, (xiz-6)	; F0C63F  lda XBC,XIZ+0xfa
 	push	xbc	; F0C642  push XBC
 	pushw	11	; F0C643  push 0x000b
-	lda	xiy, (sub_F0C64E:24)	; F0C646  lda XIY,0xf0c64e
+	lda	xiy, (sub_F0C63F_Resume:24)	; F0C646  lda XIY,0xf0c64e
 	push	xiy	; F0C64B  push XIY
 	jp	(xix)	; F0C64C  jp T,XIX
-sub_F0C64E:
+sub_F0C63F_Resume:
 	lda	xbc, (xiz-8)	; F0C64E  lda XBC,XIZ+0xf8
 	push	xbc	; F0C651  push XBC
 	pushw	0	; F0C652  push 0x0000
-	lda	xiy, (sub_F0C65D:24)	; F0C655  lda XIY,0xf0c65d
+	lda	xiy, (sub_F0C64E_Resume:24)	; F0C655  lda XIY,0xf0c65d
 	push	xiy	; F0C65A  push XIY
 	jp	(xix)	; F0C65B  jp T,XIX
-sub_F0C65D:
+sub_F0C64E_Resume:
 	lda	xbc, (xiz-10)	; F0C65D  lda XBC,XIZ+0xf6
 	push	xbc	; F0C660  push XBC
 	pushw	1	; F0C661  push 0x0001
-	lda	xiy, (sub_F0C66C:24)	; F0C664  lda XIY,0xf0c66c
+	lda	xiy, (sub_F0C65D_Resume:24)	; F0C664  lda XIY,0xf0c66c
 	push	xiy	; F0C669  push XIY
 	jp	(xix)	; F0C66A  jp T,XIX
-sub_F0C66C:
+sub_F0C65D_Resume:
 	lda	xbc, (xiz-12)	; F0C66C  lda XBC,XIZ+0xf4
 	push	xbc	; F0C66F  push XBC
 	pushw	2	; F0C670  push 0x0002
-	lda	xiy, (sub_F0C67B:24)	; F0C673  lda XIY,0xf0c67b
+	lda	xiy, (sub_F0C66C_Resume:24)	; F0C673  lda XIY,0xf0c67b
 	push	xiy	; F0C678  push XIY
 	jp	(xix)	; F0C679  jp T,XIX
-sub_F0C67B:
+sub_F0C66C_Resume:
 	add	xsp, 34	; F0C67B  add XSP,0x00000022
 	m_cp_mi8 MBD+r6, 0xfe, 0x00	; F0C681  cp (XIZ+0xfe),0x00
 	jr	nz, sub_F0C291_Skip21	; F0C685  jr NZ,0xf0c693
@@ -22716,10 +22716,10 @@ sub_F0C291_Skip22:
 	lda	xbc, (xiz-14)	; F0C6A1  lda XBC,XIZ+0xf2
 	push	xbc	; F0C6A4  push XBC
 	pushw	5	; F0C6A5  push 0x0005
-	lda	xiy, (sub_F0C6B0:24)	; F0C6A8  lda XIY,0xf0c6b0
+	lda	xiy, (sub_F0C67B_Resume:24)	; F0C6A8  lda XIY,0xf0c6b0
 	push	xiy	; F0C6AD  push XIY
 	jp	(xix)	; F0C6AE  jp T,XIX
-sub_F0C6B0:
+sub_F0C67B_Resume:
 	inc	6, xsp	; F0C6B0  inc 6,XSP
 sub_F0C291_Join12:
 	ld	h, (xiz-10)	; F0C6B2  ld H,(XIZ+0xf6)
@@ -27126,10 +27126,10 @@ sub_F0F17C:		; <- T_F42F50
 	extz	xwa	; F0F192  extz XWA
 	add	xwa, DispatchTable_F135FD	; F0F194  add XWA,0x00f135fd
 	ld	xbc, (xwa)	; F0F19A  ld XBC,(XWA)
-	lda	xiy, (sub_F0F1A4:24)	; F0F19C  lda XIY,0xf0f1a4
+	lda	xiy, (sub_F0F17C_Resume:24)	; F0F19C  lda XIY,0xf0f1a4
 	push	xiy	; F0F1A1  push XIY
 	jp	(xbc)	; F0F1A2  jp T,XBC
-sub_F0F1A4:
+sub_F0F17C_Resume:
 	pop	xbc	; F0F1A4  pop XBC
 	m_cp_mi8 MB16, 0x2076, 0x17	; F0F1A5  cp (0x2076),0x17
 	jr	nz, sub_F0F17C_Skip	; F0F1AA  jr NZ,0xf0f1b7
@@ -29209,20 +29209,20 @@ sub_F0F788_Skip9:
 	lda	xwa, (Data_F13D48 + 0xD0:24)	; F0F895  lda XWA,0xf13e18
 	push	xwa	; F0F89A  push XWA
 sub_F0F788_Join:
-	lda	xiy, (sub_F0F8A3:24)	; F0F89B  lda XIY,0xf0f8a3
+	lda	xiy, (sub_F0F820_Resume:24)	; F0F89B  lda XIY,0xf0f8a3
 	push	xiy	; F0F8A0  push XIY
 	jp	(xix)	; F0F8A1  jp T,XIX
-sub_F0F8A3:
+sub_F0F820_Resume:
 	inc	8, xsp	; F0F8A3  inc 0,XSP
 sub_F0F788_Join2:
 	lda	xbc, (DL_F1408A:24)	; F0F8A5  lda XBC,0xf1408a
 	push	xbc	; F0F8AA  push XBC
 	lda	xwa, (DL_F13F3C:24)	; F0F8AB  lda XWA,0xf13f3c
 	push	xwa	; F0F8B0  push XWA
-	lda	xiy, (sub_F0F8B9:24)	; F0F8B1  lda XIY,0xf0f8b9
+	lda	xiy, (sub_F0F8A3_Resume:24)	; F0F8B1  lda XIY,0xf0f8b9
 	push	xiy	; F0F8B6  push XIY
 	jp	(xix)	; F0F8B7  jp T,XIX
-sub_F0F8B9:
+sub_F0F8A3_Resume:
 	inc	8, xsp	; F0F8B9  inc 0,XSP
 	m_cp_mi8 MB16, 0x2076, 0x17	; F0F8BB  cp (0x2076),0x17
 	jr	nz, sub_F0F788_Skip10	; F0F8C0  jr NZ,0xf0f8d8
@@ -29240,26 +29240,26 @@ sub_F0F788_Skip10:
 	lda	xwa, (DL_F142A1:24)	; F0F8DE  lda XWA,0xf142a1
 	push	xwa	; F0F8E3  push XWA
 sub_F0F788_Join3:
-	lda	xiy, (sub_F0F8EC:24)	; F0F8E4  lda XIY,0xf0f8ec
+	lda	xiy, (sub_F0F8B9_Resume:24)	; F0F8E4  lda XIY,0xf0f8ec
 	push	xiy	; F0F8E9  push XIY
 	jp	(xix)	; F0F8EA  jp T,XIX
-sub_F0F8EC:
+sub_F0F8B9_Resume:
 	lda	xbc, (Data_F13D48 + 0x15B:24)	; F0F8EC  lda XBC,0xf13ea3
 	push	xbc	; F0F8F1  push XBC
 	lda	xwa, (Data_F13D48 + 0xF9:24)	; F0F8F2  lda XWA,0xf13e41
 	push	xwa	; F0F8F7  push XWA
-	lda	xiy, (sub_F0F900:24)	; F0F8F8  lda XIY,0xf0f900
+	lda	xiy, (sub_F0F8EC_Resume:24)	; F0F8F8  lda XIY,0xf0f900
 	push	xiy	; F0F8FD  push XIY
 	jp	(xix)	; F0F8FE  jp T,XIX
-sub_F0F900:
+sub_F0F8EC_Resume:
 	lda	xbc, (DL_F13F1E:24)	; F0F900  lda XBC,0xf13f1e
 	push	xbc	; F0F905  push XBC
 	lda	xwa, (Data_F13D48 + 0x1B9:24)	; F0F906  lda XWA,0xf13f01
 	push	xwa	; F0F90B  push XWA
-	lda	xiy, (sub_F0F914:24)	; F0F90C  lda XIY,0xf0f914
+	lda	xiy, (sub_F0F900_Resume:24)	; F0F90C  lda XIY,0xf0f914
 	push	xiy	; F0F911  push XIY
 	jp	(xix)	; F0F912  jp T,XIX
-sub_F0F914:
+sub_F0F900_Resume:
 	add	xsp, 24	; F0F914  add XSP,0x00000018
 	pop	xix	; F0F91A  pop XIX
 	ret	; F0F91B  ret
@@ -29790,44 +29790,44 @@ sub_F0FD5F_Skip8:
 	lda	xwa, (Data_F13D48 + 0xD0:24)	; F0FE43  lda XWA,0xf13e18
 	push	xwa	; F0FE48  push XWA
 sub_F0FD5F_Join:
-	lda	xiy, (sub_F0FE51:24)	; F0FE49  lda XIY,0xf0fe51
+	lda	xiy, (sub_F0FDCE_Resume:24)	; F0FE49  lda XIY,0xf0fe51
 	push	xiy	; F0FE4E  push XIY
 	jp	(xix)	; F0FE4F  jp T,XIX
-sub_F0FE51:
+sub_F0FDCE_Resume:
 	inc	8, xsp	; F0FE51  inc 0,XSP
 sub_F0FD5F_Join2:
 	lda	xbc, (Data_F13D48 + 0x165:24)	; F0FE53  lda XBC,0xf13ead
 	push	xbc	; F0FE58  push XBC
 	lda	xwa, (Data_F13D48 + 0xF9:24)	; F0FE59  lda XWA,0xf13e41
 	push	xwa	; F0FE5E  push XWA
-	lda	xiy, (sub_F0FE67:24)	; F0FE5F  lda XIY,0xf0fe67
+	lda	xiy, (sub_F0FE51_Resume:24)	; F0FE5F  lda XIY,0xf0fe67
 	push	xiy	; F0FE64  push XIY
 	jp	(xix)	; F0FE65  jp T,XIX
-sub_F0FE67:
+sub_F0FE51_Resume:
 	lda	xbc, (DL_F1428D:24)	; F0FE67  lda XBC,0xf1428d
 	push	xbc	; F0FE6C  push XBC
 	lda	xwa, (DL_F141D3:24)	; F0FE6D  lda XWA,0xf141d3
 	push	xwa	; F0FE72  push XWA
-	lda	xiy, (sub_F0FE7B:24)	; F0FE73  lda XIY,0xf0fe7b
+	lda	xiy, (sub_F0FE67_Resume:24)	; F0FE73  lda XIY,0xf0fe7b
 	push	xiy	; F0FE78  push XIY
 	jp	(xix)	; F0FE79  jp T,XIX
-sub_F0FE7B:
+sub_F0FE67_Resume:
 	lda	xbc, (Data_F13D48 + 0x18E:24)	; F0FE7B  lda XBC,0xf13ed6
 	push	xbc	; F0FE80  push XBC
 	lda	xwa, (Data_F13D48 + 0x165:24)	; F0FE81  lda XWA,0xf13ead
 	push	xwa	; F0FE86  push XWA
-	lda	xiy, (sub_F0FE8F:24)	; F0FE87  lda XIY,0xf0fe8f
+	lda	xiy, (sub_F0FE7B_Resume:24)	; F0FE87  lda XIY,0xf0fe8f
 	push	xiy	; F0FE8C  push XIY
 	jp	(xix)	; F0FE8D  jp T,XIX
-sub_F0FE8F:
+sub_F0FE7B_Resume:
 	lda	xbc, (DL_F13F1E:24)	; F0FE8F  lda XBC,0xf13f1e
 	push	xbc	; F0FE94  push XBC
 	lda	xwa, (Data_F13D48 + 0x1B9:24)	; F0FE95  lda XWA,0xf13f01
 	push	xwa	; F0FE9A  push XWA
-	lda	xiy, (sub_F0FEA3:24)	; F0FE9B  lda XIY,0xf0fea3
+	lda	xiy, (sub_F0FE8F_Resume:24)	; F0FE9B  lda XIY,0xf0fea3
 	push	xiy	; F0FEA0  push XIY
 	jp	(xix)	; F0FEA1  jp T,XIX
-sub_F0FEA3:
+sub_F0FE8F_Resume:
 	m_ld_m16m MB16, 0x2797, 0x2640	; F0FEA3  ld (0x2640),(0x2797)
 	lda	xbc, (DL_F143AF:24)	; F0FEA9  lda XBC,0xf143af
 	push	xbc	; F0FEAE  push XBC
@@ -30889,10 +30889,10 @@ sub_F1069A:
 	extz	xbc	; F106FE  extz XBC
 	add	xbc, ScreenTable_F131E4	; F10700  add XBC,0x00f131e4
 	ld	xbc, (xbc)	; F10706  ld XBC,(XBC)
-	lda	xiy, (sub_F10710:24)	; F10708  lda XIY,0xf10710
+	lda	xiy, (sub_F1069A_Resume:24)	; F10708  lda XIY,0xf10710
 	push	xiy	; F1070D  push XIY
 	jp	(xbc)	; F1070E  jp T,XBC
-sub_F10710:
+sub_F1069A_Resume:
 	pop	xiy	; F10710  pop XIY
 	jr	sub_F1069A_Join	; F10711  jr T,0xf10716
 sub_F1069A_Skip:
@@ -32057,10 +32057,10 @@ DspEffect_PaintParamEditor_Loop:
 	ld	(xiz-23), xbc	; F110E7  ld (XIZ+0xe9),XBC
 	add	xbc, ScreenTable_F13264	; F110EA  add XBC,0x00f13264
 	ld	xbc, (xbc)	; F110F0  ld XBC,(XBC)
-	lda	xiy, (sub_F110FA:24)	; F110F2  lda XIY,0xf110fa
+	lda	xiy, (DspEffect_PaintParamEditor_Resume:24)	; F110F2  lda XIY,0xf110fa
 	push	xiy	; F110F7  push XIY
 	jp	(xbc)	; F110F8  jp T,XBC
-sub_F110FA:
+DspEffect_PaintParamEditor_Resume:
 	lda	xbc, (ScreenDisplayLists_F132E4:24)	; F110FA  lda XBC,0xf132e4
 	m_add_rm MLD+r6, 0xe9, 1	; F110FF  add XBC,(XIZ+0xe9)
 	ld	xwa, (xbc)	; F11102  ld XWA,(XBC)
@@ -34510,10 +34510,10 @@ sub_F12334:		; <- T_F42F6C
 	extz	xwa	; F12345  extz XWA
 	add	xwa, DispatchTable_F1394F	; F12347  add XWA,0x00f1394f
 	ld	xbc, (xwa)	; F1234D  ld XBC,(XWA)
-	lda	xiy, (sub_F12357:24)	; F1234F  lda XIY,0xf12357
+	lda	xiy, (sub_F12334_Resume:24)	; F1234F  lda XIY,0xf12357
 	push	xiy	; F12354  push XIY
 	jp	(xbc)	; F12355  jp T,XBC
-sub_F12357:
+sub_F12334_Resume:
 	pop	xbc	; F12357  pop XBC
 	unlk XIZ	; F12358  unlk XIZ
 	ret	; F1235A  ret
@@ -72769,10 +72769,10 @@ sub_F38843:		; <- T_F42664
 	sub	bc, 30208	; F3887C  sub BC,0x7600
 	pushw	bc	; F38880  push BC
 	pushw	0	; F38881  push 0x0000
-	lda	xiy, (sub_F3888C:24)	; F38884  lda XIY,0xf3888c
+	lda	xiy, (sub_F38843_Resume:24)	; F38884  lda XIY,0xf3888c
 	push	xiy	; F38889  push XIY
 	jp	(xix)	; F3888A  jp T,XIX
-sub_F3888C:
+sub_F38843_Resume:
 	ldw	bc, 30880	; F3888C  ld BC,0x78a0
 	sub	bc, 30208	; F3888F  sub BC,0x7600
 	ld	hl, bc	; F38893  ld HL,BC
@@ -72780,16 +72780,16 @@ sub_F3888C:
 	sub	wa, 30208	; F38898  sub WA,0x7600
 	pushw	wa	; F3889C  push WA
 	pushw	bc	; F3889D  push BC
-	lda	xiy, (sub_F388A6:24)	; F3889E  lda XIY,0xf388a6
+	lda	xiy, (sub_F3888C_Resume:24)	; F3889E  lda XIY,0xf388a6
 	push	xiy	; F388A3  push XIY
 	jp	(xix)	; F388A4  jp T,XIX
-sub_F388A6:
+sub_F3888C_Resume:
 	pushw	2	; F388A6  push 0x0002
 	pushw	2276	; F388A9  push 0x08e4
-	lda	xiy, (sub_F388B4:24)	; F388AC  lda XIY,0xf388b4
+	lda	xiy, (sub_F388A6_Resume:24)	; F388AC  lda XIY,0xf388b4
 	push	xiy	; F388B1  push XIY
 	jp	(xix)	; F388B2  jp T,XIX
-sub_F388B4:
+sub_F388A6_Resume:
 	ld	d, 0:opc	; F388B4  ld D,0x00
 	inc	8, xsp	; F388B6  inc 0,XSP
 	inc	4, xsp	; F388B8  inc 4,XSP
@@ -72822,10 +72822,10 @@ Divide32_Unsigned_Remainder_Skip3:
 Divide32_Unsigned_Remainder_Join2:
 	pushw	64	; F388F7  push 0x0040
 	pushw	hl	; F388FA  push HL
-	lda	xiy, (sub_F38903:24)	; F388FB  lda XIY,0xf38903
+	lda	xiy, (sub_F388B4_Resume:24)	; F388FB  lda XIY,0xf38903
 	push	xiy	; F38900  push XIY
 	jp	(xix)	; F38901  jp T,XIX
-sub_F38903:
+sub_F388B4_Resume:
 	pop	xiy	; F38903  pop XIY
 Divide32_Unsigned_Remainder_Skip4:
 	inc	1, d	; F38904  inc 1,D
@@ -73045,17 +73045,17 @@ sub_F38A79_Loop:
 	pushw	9	; F38A96  push 0x0009
 	ld	(xiz-3), hl	; F38A99  ld (XIZ+0xfd),HL
 	m_push MWD+r6, 0xfd	; F38A9C  pushw (XIZ+0xfd)
-	lda	xiy, (sub_F38AA7:24)	; F38A9F  lda XIY,0xf38aa7
+	lda	xiy, (sub_F38A79_Resume:24)	; F38A9F  lda XIY,0xf38aa7
 	push	xiy	; F38AA4  push XIY
 	jp	(xix)	; F38AA5  jp T,XIX
-sub_F38AA7:
+sub_F38A79_Resume:
 	pushw	9	; F38AA7  push 0x0009
 	ld	(xiz-5), de	; F38AAA  ld (XIZ+0xfb),DE
 	m_push MWD+r6, 0xfb	; F38AAD  pushw (XIZ+0xfb)
-	lda	xiy, (sub_F38AB8:24)	; F38AB0  lda XIY,0xf38ab8
+	lda	xiy, (sub_F38AA7_Resume:24)	; F38AB0  lda XIY,0xf38ab8
 	push	xiy	; F38AB5  push XIY
 	jp	(xix)	; F38AB6  jp T,XIX
-sub_F38AB8:
+sub_F38AA7_Resume:
 	ld	hl, (xiz-3)	; F38AB8  ld HL,(XIZ+0xfd)
 	add	hl, 64	; F38ABB  add HL,0x0040
 	ld	de, (xiz-5)	; F38ABF  ld DE,(XIZ+0xfb)
@@ -73071,17 +73071,17 @@ sub_F38A79_Loop2:
 	pushw	9	; F38ADB  push 0x0009
 	ld	(xiz-3), hl	; F38ADE  ld (XIZ+0xfd),HL
 	m_push MWD+r6, 0xfd	; F38AE1  pushw (XIZ+0xfd)
-	lda	xiy, (sub_F38AEC:24)	; F38AE4  lda XIY,0xf38aec
+	lda	xiy, (sub_F38AB8_Resume:24)	; F38AE4  lda XIY,0xf38aec
 	push	xiy	; F38AE9  push XIY
 	jp	(xix)	; F38AEA  jp T,XIX
-sub_F38AEC:
+sub_F38AB8_Resume:
 	pushw	9	; F38AEC  push 0x0009
 	ld	(xiz-5), de	; F38AEF  ld (XIZ+0xfb),DE
 	m_push MWD+r6, 0xfb	; F38AF2  pushw (XIZ+0xfb)
-	lda	xiy, (sub_F38AFD:24)	; F38AF5  lda XIY,0xf38afd
+	lda	xiy, (sub_F38AEC_Resume:24)	; F38AF5  lda XIY,0xf38afd
 	push	xiy	; F38AFA  push XIY
 	jp	(xix)	; F38AFB  jp T,XIX
-sub_F38AFD:
+sub_F38AEC_Resume:
 	ld	hl, (xiz-3)	; F38AFD  ld HL,(XIZ+0xfd)
 	add	hl, 64	; F38B00  add HL,0x0040
 	ld	de, (xiz-5)	; F38B04  ld DE,(XIZ+0xfb)
@@ -73092,16 +73092,16 @@ sub_F38AFD:
 	jr	nz, sub_F38A79_Loop2	; F38B14  jr NZ,0xf38adb
 	pushw	11	; F38B16  push 0x000b
 	pushw	32562	; F38B19  push 0x7f32
-	lda	xiy, (sub_F38B24:24)	; F38B1C  lda XIY,0xf38b24
+	lda	xiy, (sub_F38AFD_Resume:24)	; F38B1C  lda XIY,0xf38b24
 	push	xiy	; F38B21  push XIY
 	jp	(xix)	; F38B22  jp T,XIX
-sub_F38B24:
+sub_F38AFD_Resume:
 	pushw	1	; F38B24  push 0x0001
 	pushw	32589	; F38B27  push 0x7f4d
-	lda	xiy, (sub_F38B32:24)	; F38B2A  lda XIY,0xf38b32
+	lda	xiy, (sub_F38B24_Resume:24)	; F38B2A  lda XIY,0xf38b32
 	push	xiy	; F38B2F  push XIY
 	jp	(xix)	; F38B30  jp T,XIX
-sub_F38B32:
+sub_F38B24_Resume:
 	inc	8, xsp	; F38B32  inc 0,XSP
 	pop	xix	; F38B34  pop XIX
 	popw	de	; F38B35  pop DE
@@ -73168,17 +73168,17 @@ sub_F38B8E_Loop:
 	pushw	9	; F38BAB  push 0x0009
 	ld	(xiz-3), hl	; F38BAE  ld (XIZ+0xfd),HL
 	m_push MWD+r6, 0xfd	; F38BB1  pushw (XIZ+0xfd)
-	lda	xiy, (sub_F38BBC:24)	; F38BB4  lda XIY,0xf38bbc
+	lda	xiy, (sub_F38B8E_Resume:24)	; F38BB4  lda XIY,0xf38bbc
 	push	xiy	; F38BB9  push XIY
 	jp	(xix)	; F38BBA  jp T,XIX
-sub_F38BBC:
+sub_F38B8E_Resume:
 	pushw	9	; F38BBC  push 0x0009
 	ld	(xiz-5), de	; F38BBF  ld (XIZ+0xfb),DE
 	m_push MWD+r6, 0xfb	; F38BC2  pushw (XIZ+0xfb)
-	lda	xiy, (sub_F38BCD:24)	; F38BC5  lda XIY,0xf38bcd
+	lda	xiy, (sub_F38BBC_Resume:24)	; F38BC5  lda XIY,0xf38bcd
 	push	xiy	; F38BCA  push XIY
 	jp	(xix)	; F38BCB  jp T,XIX
-sub_F38BCD:
+sub_F38BBC_Resume:
 	ld	hl, (xiz-3)	; F38BCD  ld HL,(XIZ+0xfd)
 	add	hl, 64	; F38BD0  add HL,0x0040
 	ld	de, (xiz-5)	; F38BD4  ld DE,(XIZ+0xfb)
@@ -73194,17 +73194,17 @@ sub_F38B8E_Loop2:
 	pushw	9	; F38BF0  push 0x0009
 	ld	(xiz-3), hl	; F38BF3  ld (XIZ+0xfd),HL
 	m_push MWD+r6, 0xfd	; F38BF6  pushw (XIZ+0xfd)
-	lda	xiy, (sub_F38C01:24)	; F38BF9  lda XIY,0xf38c01
+	lda	xiy, (sub_F38BCD_Resume:24)	; F38BF9  lda XIY,0xf38c01
 	push	xiy	; F38BFE  push XIY
 	jp	(xix)	; F38BFF  jp T,XIX
-sub_F38C01:
+sub_F38BCD_Resume:
 	pushw	9	; F38C01  push 0x0009
 	ld	(xiz-5), de	; F38C04  ld (XIZ+0xfb),DE
 	m_push MWD+r6, 0xfb	; F38C07  pushw (XIZ+0xfb)
-	lda	xiy, (sub_F38C12:24)	; F38C0A  lda XIY,0xf38c12
+	lda	xiy, (sub_F38C01_Resume:24)	; F38C0A  lda XIY,0xf38c12
 	push	xiy	; F38C0F  push XIY
 	jp	(xix)	; F38C10  jp T,XIX
-sub_F38C12:
+sub_F38C01_Resume:
 	ld	hl, (xiz-3)	; F38C12  ld HL,(XIZ+0xfd)
 	add	hl, 64	; F38C15  add HL,0x0040
 	ld	de, (xiz-5)	; F38C19  ld DE,(XIZ+0xfb)
@@ -73215,16 +73215,16 @@ sub_F38C12:
 	jr	nz, sub_F38B8E_Loop2	; F38C29  jr NZ,0xf38bf0
 	pushw	11	; F38C2B  push 0x000b
 	pushw	32562	; F38C2E  push 0x7f32
-	lda	xiy, (sub_F38C39:24)	; F38C31  lda XIY,0xf38c39
+	lda	xiy, (sub_F38C12_Resume:24)	; F38C31  lda XIY,0xf38c39
 	push	xiy	; F38C36  push XIY
 	jp	(xix)	; F38C37  jp T,XIX
-sub_F38C39:
+sub_F38C12_Resume:
 	pushw	1	; F38C39  push 0x0001
 	pushw	32589	; F38C3C  push 0x7f4d
-	lda	xiy, (sub_F38C47:24)	; F38C3F  lda XIY,0xf38c47
+	lda	xiy, (sub_F38C39_Resume:24)	; F38C3F  lda XIY,0xf38c47
 	push	xiy	; F38C44  push XIY
 	jp	(xix)	; F38C45  jp T,XIX
-sub_F38C47:
+sub_F38C39_Resume:
 	inc	8, xsp	; F38C47  inc 0,XSP
 	pop	xix	; F38C49  pop XIX
 	popw	de	; F38C4A  pop DE
@@ -99137,10 +99137,10 @@ sub_F4C4B5:		; <- T_F434E8
 	extz	xwa	; F4C4C6  extz XWA
 	add	xwa, DispatchTable_F4C38D	; F4C4C8  add XWA,0x00f4c38d
 	ld	xbc, (xwa)	; F4C4CE  ld XBC,(XWA)
-	lda	xiy, (sub_F4C4D8:24)	; F4C4D0  lda XIY,0xf4c4d8
+	lda	xiy, (sub_F4C4B5_Resume:24)	; F4C4D0  lda XIY,0xf4c4d8
 	push	xiy	; F4C4D5  push XIY
 	jp	(xbc)	; F4C4D6  jp T,XBC
-sub_F4C4D8:
+sub_F4C4B5_Resume:
 	pop	xbc	; F4C4D8  pop XBC
 	unlk XIZ	; F4C4D9  unlk XIZ
 	ret	; F4C4DB  ret
@@ -99180,10 +99180,10 @@ sub_F4C4DD:
 sub_F4C4DD_Skip:
 	push	0	; F4C505  push 0x00
 	m_push MB16, 0x28b1	; F4C507  push (0x28b1)
-	lda	xiy, (sub_F4C513:24)	; F4C50B  lda XIY,0xf4c513
+	lda	xiy, (sub_F4C4DD_Resume:24)	; F4C50B  lda XIY,0xf4c513
 	push	xiy	; F4C510  push XIY
 	jp	(xix)	; F4C511  jp T,XIX
-sub_F4C513:
+sub_F4C4DD_Resume:
 	ld	l, a	; F4C513  ld L,A
 	pushw	26	; F4C515  push 0x001a
 	push	0	; F4C518  push 0x00
@@ -99196,10 +99196,10 @@ sub_F4C513:
 	pushw	63	; F4C529  push 0x003f
 	push	0	; F4C52C  push 0x00
 	m_push MB16, 0x28b1	; F4C52E  push (0x28b1)
-	lda	xiy, (sub_F4C53A:24)	; F4C532  lda XIY,0xf4c53a
+	lda	xiy, (sub_F4C513_Resume:24)	; F4C532  lda XIY,0xf4c53a
 	push	xiy	; F4C537  push XIY
 	jp	(xix)	; F4C538  jp T,XIX
-sub_F4C53A:
+sub_F4C513_Resume:
 	popw	bc	; F4C53A  pop BC
 	pushw	wa	; F4C53B  push WA
 	pushw	26	; F4C53C  push 0x001a
@@ -99207,10 +99207,10 @@ sub_F4C53A:
 sub_F4C4DD_Skip2:
 	push	0	; F4C541  push 0x00
 	m_push MB16, 0x28b1	; F4C543  push (0x28b1)
-	lda	xiy, (sub_F4C54F:24)	; F4C547  lda XIY,0xf4c54f
+	lda	xiy, (sub_F4C53A_Resume:24)	; F4C547  lda XIY,0xf4c54f
 	push	xiy	; F4C54C  push XIY
 	jp	(xix)	; F4C54D  jp T,XIX
-sub_F4C54F:
+sub_F4C53A_Resume:
 	ld	l, a	; F4C54F  ld L,A
 	pushw	25	; F4C551  push 0x0019
 	push	0	; F4C554  push 0x00
@@ -99223,10 +99223,10 @@ sub_F4C54F:
 	pushw	63	; F4C565  push 0x003f
 	push	0	; F4C568  push 0x00
 	m_push MB16, 0x28b1	; F4C56A  push (0x28b1)
-	lda	xiy, (sub_F4C576:24)	; F4C56E  lda XIY,0xf4c576
+	lda	xiy, (sub_F4C54F_Resume:24)	; F4C56E  lda XIY,0xf4c576
 	push	xiy	; F4C573  push XIY
 	jp	(xix)	; F4C574  jp T,XIX
-sub_F4C576:
+sub_F4C54F_Resume:
 	popw	bc	; F4C576  pop BC
 	pushw	wa	; F4C577  push WA
 	pushw	25	; F4C578  push 0x0019
@@ -105569,10 +105569,10 @@ DrawbarScreen_Dispatch:		; <- T_DrawbarScreen_Dispatch
 	extz	xwa	; F5303B  extz XWA
 	add	xwa, PanelButtonTable_DrawbarScreen	; F5303D  add XWA,0x00f54248
 	ld	xbc, (xwa)	; F53043  ld XBC,(XWA)
-	lda	xiy, (sub_F5304D:24)	; F53045  lda XIY,0xf5304d
+	lda	xiy, (DrawbarScreen_Dispatch_Resume:24)	; F53045  lda XIY,0xf5304d
 	push	xiy	; F5304A  push XIY
 	jp	(xbc)	; F5304B  jp T,XBC
-sub_F5304D:
+DrawbarScreen_Dispatch_Resume:
 	pop	xbc	; F5304D  pop XBC
 	unlk XIZ	; F5304E  unlk XIZ
 	ret	; F53050  ret
@@ -105954,10 +105954,10 @@ sub_F531DC:
 	extz	xbc	; F531E2  extz XBC
 	add	xbc, DispatchTable_F542D1	; F531E4  add XBC,0x00f542d1
 	ld	xbc, (xbc)	; F531EA  ld XBC,(XBC)
-	lda	xiy, (sub_F531F4:24)	; F531EC  lda XIY,0xf531f4
+	lda	xiy, (sub_F531DC_Resume:24)	; F531EC  lda XIY,0xf531f4
 	push	xiy	; F531F1  push XIY
 	jp	(xbc)	; F531F2  jp T,XBC
-sub_F531F4:
+sub_F531DC_Resume:
 	ret	; F531F4  ret
 
 ; --------------------------------------------------------------------------
