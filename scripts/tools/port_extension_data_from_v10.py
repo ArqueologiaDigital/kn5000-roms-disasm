@@ -246,6 +246,10 @@ def main():
                 msh = re.match(r'^(\s*(?:[A-Za-z_]\w*:\s*)?)\.short\s+0x[0-9a-f]{4}(\s*,\s*0x[0-9a-f]{4})*\s*$', code)
                 if mb:
                     new = mb.group(1) + ".byte " + ", ".join("0x%02x" % x for x in T)
+                elif re.match(r'^(\s*(?:[A-Za-z_]\w*:\s*)?)\.long\s+0x[0-9a-f]{8}(\s*,\s*0x[0-9a-f]{8})*\s*$', code) and size % 4 == 0:
+                    pre = re.match(r'^(\s*(?:[A-Za-z_]\w*:\s*)?)', code).group(1)
+                    new = pre + ".long " + ", ".join(
+                        "0x%08x" % int.from_bytes(T[k:k + 4], "little") for k in range(0, size, 4))
                 elif msh and size % 2 == 0:
                     new = msh.group(1) + ".short " + ", ".join(
                         "0x%04x" % int.from_bytes(T[k:k + 2], "little") for k in range(0, size, 2))
