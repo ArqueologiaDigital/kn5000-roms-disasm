@@ -2752,8 +2752,8 @@ InterCPU_Latch_Setup:
 	ldc_cr32 xwa, 0x00
 	ld a, 0x0:opc
 	ldc_cr8 a, 0x42
-	ld (4328:16), 0
-	ld (4330:16), 0
+	ld (DMA_XFER_STATE:16), 0
+	ld (CMD_PROCESSING_STATE:16), 0
 	ret
 
 ; ===========================================================================
@@ -2818,7 +2818,7 @@ DMA_Chunk_Start:
 	bit_dd8 4, 0x34	; MSTAT1 - test if Main CPU is requesting handshake
 	jr z, DMA_Chunk_Wait_MSTAT1_Clear
 	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge Main CPU handshake request
-	ld (4328:16), 1
+	ld (DMA_XFER_STATE:16), 1
 	ld l, c
 	dec 1, l
 	sll a, 5
@@ -2835,11 +2835,11 @@ DMA_Chunk_Transfer:
 	ldc_cr16 bc, 0x48
 	ld (258:16), 22
 	set_dd8 2, 0x80
-	cp (4328:16), 0
+	cp (DMA_XFER_STATE:16), 0
 	ret z
 
 DMA_Chunk_Wait:
-	cp (4328:16), 0
+	cp (DMA_XFER_STATE:16), 0
 	jr nz, DMA_Chunk_Wait
 	ret
 
@@ -2914,7 +2914,7 @@ InterCPU_E2_DMA_Transfer:
 	; 9 instructions, of which 2 needed a spelling search because
 	; llvm-mc --disassemble refuses them (it can still ASSEMBLE them).
 	ld	ix, 0:i3
-	cp	(4328:16), 0
+	cp	(DMA_XFER_STATE:16), 0
 	jr	z, E2_DMA_Ready
 
 ; Spins while the TX-state flag (DMA_XFER_STATE) is non-zero, i.e. a previous micro-DMA burst is still running.
@@ -2923,13 +2923,13 @@ E2_Wait_DMA_Idle:
 	inc	1, ix
 	cp	hl, 60000
 	ret	ugt
-	cp	(4328:16), 0
+	cp	(DMA_XFER_STATE:16), 0
 	jr	nz, E2_Wait_DMA_Idle
 
 ; TX engine idle: assert SSTAT0, mark busy, push the 0xE2 header into the latch.
 E2_DMA_Ready:
 	res_dd8	0, 52
-	ld	(4328:16), 1
+	ld	(DMA_XFER_STATE:16), 1
 	ld	(1179648:24), 226
 	ld	ix, 0:i3
 InterCPU_E2_Gate2:
@@ -2991,7 +2991,7 @@ E2_Wait_MSTAT1_Set:
 InterCPU_E1_DMA_Transfer:
 	pushw iz
 	ld iz, 0:i3
-	cp (4328:16), 0
+	cp (DMA_XFER_STATE:16), 0
 	jr z, E1_DMA_Ready
 
 E1_Wait_DMA_Idle:
@@ -2999,7 +2999,7 @@ E1_Wait_DMA_Idle:
 	inc 1, iz
 	cp hl, 0xEA60
 	jrl ugt, E1_Exit
-	cp (4328:16), 0
+	cp (DMA_XFER_STATE:16), 0
 	jr nz, E1_Wait_DMA_Idle
 
 E1_DMA_Ready:
@@ -3009,7 +3009,7 @@ E1_Check_MSTAT1:
 	bit_dd8 4, 0x34	; MSTAT1 - test if Main CPU is initiating E1 transfer
 	jrl z, E1_Timeout_Retry
 	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge E1 command from Main CPU
-	ld (4328:16), 2
+	ld (DMA_XFER_STATE:16), 2
 	ld (0x120000:24), 0xe1
 	ld iz, 0:i3
 
@@ -3028,11 +3028,11 @@ E1_Start_Transfer:
 	ldc_cr16 wa, 0x48
 	ld (258:16), 22
 	set_dd8 2, 0x80
-	cp (4328:16), 1
+	cp (DMA_XFER_STATE:16), 1
 	jr z, E1_Delay_Loop1
 
 E1_Wait_State1:
-	cp (4328:16), 1
+	cp (DMA_XFER_STATE:16), 1
 	jr nz, E1_Wait_State1
 
 E1_Delay_Loop1:
@@ -3054,11 +3054,11 @@ E1_Phase2_Setup:
 	ldc_cr16 wa, 0x48
 	ld (258:16), 22
 	set_dd8 2, 0x80
-	cp (4328:16), 0
+	cp (DMA_XFER_STATE:16), 0
 	jr z, E1_Delay_Loop2
 
 E1_Wait_Complete:
-	cp (4328:16), 0
+	cp (DMA_XFER_STATE:16), 0
 	jr nz, E1_Wait_Complete
 
 E1_Delay_Loop2:
@@ -3127,10 +3127,10 @@ INT0_HANDLER:	; 20E86
 	bit_dd8 2, 0x34	; MSTAT0 - test if Main CPU is currently sending data
 	jr nz, INT0_Exit
 	ld a, (0x120000:24)
-	ld (4332:16), a
+	ld (BYTE_FROM_MAINCPU_LATCH:16), a
 	cp a, 0xE1
 	jr nz, INT0_Check_E2
-	ld (4330:16), 2	; E1 command - state 2
+	ld (CMD_PROCESSING_STATE:16), 2	; E1 command - state 2
 	lda xwa, (4374:16)	; E1 data buffer
 	ld (4324:16), xwa	; Save DMA target
 	ldc_cr32 xwa, 0x20
@@ -3141,7 +3141,7 @@ INT0_HANDLER:	; 20E86
 INT0_Check_E2:	; 020EB1h
 	cp a, 0xE2
 	jr nz, INT0_Check_E3
-	ld (4330:16), 3	; E2 command - state 3
+	ld (CMD_PROCESSING_STATE:16), 3	; E2 command - state 3
 	lda xwa, (4380:16)	; E2 data buffer
 	ld (4324:16), xwa
 	ldc_cr32 xwa, 0x20
@@ -3152,15 +3152,15 @@ INT0_Check_E2:	; 020EB1h
 INT0_Check_E3:	; 020ECEh
 	cp a, 0xE3
 	jr nz, INT0_Standard_Cmd
-	set 6, (1278:16)	; E3 = payload ready
+	set 6, (PAYLOAD_LOADED_FLAG:16)	; E3 = payload ready
 	jr INT0_Ack
 
 INT0_Standard_Cmd:	; 020ED9h - standard variable-length command
-	ld (4330:16), 1	; State 1
+	ld (CMD_PROCESSING_STATE:16), 1	; State 1
 	lda xwa, (4336:16)	; Standard command buffer
 	ld (4324:16), xwa
 	ldc_cr32 xwa, 0x20
-	ld a, (4332:16)
+	ld a, (BYTE_FROM_MAINCPU_LATCH:16)
 	and a, 0x1F	; Bits 4-0 = length - 1
 	inc 1, a	; Add 1 for actual length
 	extz wa
@@ -3194,15 +3194,15 @@ INT0_Exit:	; 020EFFh
 ;=============================================================================
 MICRODMA_CH2_HANDLER:	; Channel #2 completion		; 20F01
 	res_dd8 2, 0x80
-	cp (4328:16), 1
+	cp (DMA_XFER_STATE:16), 1
 	jr nz, MICRODMA_CH2_State2
-	ld (4328:16), 0
+	ld (DMA_XFER_STATE:16), 0
 	jr MICRODMA_CH2_Done
 
 MICRODMA_CH2_State2:	; 020F12h - two-phase transfer, go to state 1
-	cp (4328:16), 2
+	cp (DMA_XFER_STATE:16), 2
 	jr nz, MICRODMA_CH2_Done
-	ld (4328:16), 1
+	ld (DMA_XFER_STATE:16), 1
 
 MICRODMA_CH2_Done:	; 020F1Eh
 	reti
@@ -3227,7 +3227,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	push xde
 	push xbc
 	push xwa
-	ld a, (4330:16)
+	ld a, (CMD_PROCESSING_STATE:16)
 	cp a, 4:i3
 	jr z, CH0_State4_E1_Done
 	cp a, 3:i3
@@ -3239,7 +3239,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	; State 1: Standard command processing
 	pushw 0x0
 	pushw 0x10F0	; Command buffer address
-	ld c, (4332:16)
+	ld c, (BYTE_FROM_MAINCPU_LATCH:16)
 	ld a, c
 	and a, 0x1F
 	inc 1, a	; Length = (byte & 0x1F) + 1
@@ -3254,7 +3254,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	call (xwa)	; Dispatch to handler
 	inc 6, xsp
-	ld (4330:16), 0
+	ld (CMD_PROCESSING_STATE:16), 0
 	jr CH0_Ack
 
 CH0_State2_E1:	; 020F6Dh - E1 command phase 1 complete, start phase 2
@@ -3264,19 +3264,19 @@ CH0_State2_E1:	; 020F6Dh - E1 command phase 1 complete, start phase 2
 	ld wa, (xwa + 4)	; Get DMA byte count
 	ldc_cr16 wa, 0x40
 	ld (256:16), 10	; Start DMA
-	ld (4330:16), 4	; Move to state 4
+	ld (CMD_PROCESSING_STATE:16), 4	; Move to state 4
 	jr CH0_Timer_Reset
 
 CH0_State3_E2:	; 020F88h - E2 command complete
 	ld (4334:16), 255
-	ld (4330:16), 0
+	ld (CMD_PROCESSING_STATE:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - set to signal ready for next command from Main CPU
 	set 7, (4390:16)	; Set E2 pending flag
 	jr CH0_Timer_Reset
 
 CH0_State4_E1_Done:	; 020F9Bh - E1 two-phase transfer complete
-	ld (4330:16), 0
-	res 7, (1278:16)
+	ld (CMD_PROCESSING_STATE:16), 0
+	res 7, (PAYLOAD_LOADED_FLAG:16)
 
 CH0_Ack:	; 020FA4h
 	set_dd8 1, 0x34	; SSTAT1 - set to signal E1 transfer complete, ready for next
@@ -3346,7 +3346,7 @@ Cmd_DMA_Check_Stuck:	; 021001h
 	; Timeout recovery - abort stuck DMA
 	ldw (InterCPU_DmaStuck_Count:16), 0
 	ld (256:16), 0	; Stop DMA
-	ld (4330:16), 0
+	ld (CMD_PROCESSING_STATE:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - timeout recovery: force ready state after DMA abort
 	inc 1, (InterCPU_DmaAbort_Count:16)	; Increment error counter
 	ret
