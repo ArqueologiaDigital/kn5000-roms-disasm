@@ -18,6 +18,7 @@ QUESTION THIS ANSWERS
 
 RUN
     python3 scripts/analysis/lane_worklists.py --check
+    python3 scripts/analysis/lane_worklists.py --verify-branch LANE main s2/LANE
     python3 scripts/analysis/lane_worklists.py --census C.json --symbr-dir DIR --out OUTDIR
       (DIR holds <image>.json reports written by symbolize_numeric_branches.py --report)
 """
@@ -86,10 +87,35 @@ def main():
     ap.add_argument("--census")
     ap.add_argument("--symbr-dir")
     ap.add_argument("--out")
+    ap.add_argument("--verify-branch", nargs=3, metavar=("LANE", "BASE", "BRANCH"),
+                    help="exit non-zero if BRANCH changed (vs merge-base with BASE) any "
+                         "EXISTING file LANE does not own; new files under notes/ or "
+                         "scripts/ and new files inside owned paths are allowed")
     a = ap.parse_args()
     lanes = json.load(open(ROSTER))["lanes"]
     files = tracked()
     own = {p: owner(p, lanes) for p in files}
+    if a.verify_branch:
+        lane, base, br = a.verify_branch
+        mb = subprocess.run(["git", "merge-base", base, br], cwd=ROOT, capture_output=True,
+                            text=True).stdout.strip()
+        rows = subprocess.run(["git", "diff", "--name-status", mb, br], cwd=ROOT,
+                              capture_output=True, text=True).stdout.strip().split("\n")
+        bad = []
+        for row in filter(None, rows):
+            st, path = row.split("\t", 1)
+            path = path.split("\t")[-1]
+            o = owner(path, lanes)
+            if o == lane:
+                continue
+            if st.startswith("A") and (path.startswith(("notes/", "scripts/")) or o == lane):
+                continue
+            bad.append((st, path, o))
+        for b in bad:
+            print("  NOT OWNED BY %s: %s %s (owner %s)" % (lane, *b))
+        print("VERIFY-BRANCH", lane, "PASS" if not bad else "FAIL (%d)" % len(bad),
+              "(%d paths changed)" % len([r for r in rows if r]))
+        sys.exit(1 if bad else 0)
     if a.check:
         bad = {p: o for p, o in own.items() if o is None or o.startswith("AMBIGUOUS")}
         per = collections.Counter(own.values())
