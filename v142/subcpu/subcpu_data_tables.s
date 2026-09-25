@@ -4242,6 +4242,7 @@ DSP_Bytecode_Global_Config:
 ; UI params, 4 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(215); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[32] (effect 32): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff32_Algo_Bytecode:
 	.byte 0x30, 0xd7, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x00, 0x2e, 0x20, 0x00, 0x00, 0x00
@@ -4272,6 +4273,7 @@ DSP_Eff32_Algo_Bytecode:
 	.byte 0x00, 0x00, 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(30) op4(3) op5(20) op4(3) op1(10) op2(26) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[32] (effect 32): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff32_Coef_Bytecode:
 	.byte 0x00, 0x1e, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4291,6 +4293,7 @@ DSP_Eff32_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[32] (effect 32): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff32_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x07, 0x62, 0x00, 0x62, 0x01, 0x7a
@@ -4300,6 +4303,7 @@ DSP_Eff32_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[32] (effect 32): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff32_Param_Descriptors:
 	.byte 0x00, 0x05, 0x61, 0x00, 0x03	; op61 -> cells 00 03
 	.byte 0x00, 0x05, 0x62, 0x02, 0x05	; op62 -> cells 02 05: dB cells (CURVE_D, 1.00 dB/step)
@@ -4313,6 +4317,7 @@ DSP_Eff32_Param_Descriptors:
 ; UI params, 4 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(320); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[33] (effect 33): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff33_Algo_Bytecode:
 	.byte 0x31, 0x40, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb0, 0x00, 0x00
@@ -4356,6 +4361,7 @@ DSP_Eff33_Algo_Bytecode:
 	.byte 0x13, 0x00, 0x00, 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(75) op4(3) op5(20) op4(3) op1(10) op2(62) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[33] (effect 33): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff33_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4385,6 +4391,7 @@ DSP_Eff33_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[33] (effect 33): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff33_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x07, 0x62, 0x00, 0x62, 0x01, 0x7a
@@ -4394,6 +4401,7 @@ DSP_Eff33_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[33] (effect 33): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff33_Param_Descriptors:
 	.byte 0x00, 0x05, 0x61, 0x00, 0x09	; op61 -> cells 00 09
 	.byte 0x00, 0x05, 0x62, 0x08, 0x11	; op62 -> cells 08 11: dB cells (CURVE_D, 1.00 dB/step)
@@ -4407,6 +4415,7 @@ DSP_Eff33_Param_Descriptors:
 ; UI params, 4 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(215); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[34] (effect 34): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff34_Algo_Bytecode:
 	.byte 0x30, 0xd7, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x00, 0x2e, 0x20, 0x00, 0x00, 0x00
@@ -4437,6 +4446,7 @@ DSP_Eff34_Algo_Bytecode:
 	.byte 0x00, 0x00, 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(30) op4(3) op5(20) op4(3) op1(10) op2(26) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[34] (effect 34): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff34_Coef_Bytecode:
 	.byte 0x00, 0x1e, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4456,6 +4466,7 @@ DSP_Eff34_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[34] (effect 34): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff34_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x07, 0x62, 0x00, 0x62, 0x01, 0x7a
@@ -4465,6 +4476,7 @@ DSP_Eff34_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[34] (effect 34): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff34_Param_Descriptors:
 	.byte 0x00, 0x05, 0x61, 0x00, 0x03	; op61 -> cells 00 03
 	.byte 0x00, 0x05, 0x62, 0x02, 0x05	; op62 -> cells 02 05: dB cells (CURVE_D, 1.00 dB/step)
@@ -4478,6 +4490,7 @@ DSP_Eff34_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DRIVE, ADJUST, HIGH EMPHASIS FC (Hz), EMPHASIS GAIN, VOLUME, REV SEND.
 ; 1 instruction: op3(350); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[35] (effect 35): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff35_Algo_Bytecode:
 	.byte 0x31, 0x5e, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00
@@ -4525,6 +4538,7 @@ DSP_Eff35_Algo_Bytecode:
 	.byte 0x00, 0x04, 0x28, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(75) op4(3) op5(20) op4(3) op1(10) op2(74) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[35] (effect 35): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff35_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4556,6 +4570,7 @@ DSP_Eff35_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 7 records, ids: 61 62 70 66 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[35] (effect 35): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff35_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x07, 0x62, 0x00, 0x62, 0x01, 0x7a
@@ -4570,6 +4585,7 @@ DSP_Eff35_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 61 62 63 70 66 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[35] (effect 35): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff35_Param_Descriptors:
 	.byte 0x00, 0x05, 0x61, 0x00, 0x0b	; op61 -> cells 00 0B
 	.byte 0x00, 0x05, 0x62, 0x02, 0x0d	; op62 -> cells 02 0D: dB cells (CURVE_D, 1.00 dB/step)
@@ -4586,6 +4602,7 @@ DSP_Eff35_Param_Descriptors:
 ; UI params, 17 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, VOLUME, REV SEND.
 ; 1 instruction: op3(530); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[39] (effect 39): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff39_Algo_Bytecode:
 	.byte 0x32, 0x12, 0x01, 0x00, 0x54, 0x00, 0x00, 0x20
 	.byte 0xb1, 0xcd, 0x00, 0x00, 0x20, 0x04, 0x0e, 0x02
@@ -4657,6 +4674,7 @@ DSP_Eff39_Algo_Bytecode:
 	.byte 0xf0
 ; 12 instructions: op0(160) op4(3) op0(90) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[39] (effect 39): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff39_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4717,6 +4735,7 @@ DSP_Eff39_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 17 records, ids: 70 70 70 70 70 70 70 70 70 70 70 70 70 70 70 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[39] (effect 39): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff39_Param_Values:
 	.byte 0x00, 0x06, 0x70, 0x00, 0x00, 0x7a
 	.byte 0x00, 0x06, 0x70, 0x00, 0x10, 0x7a
@@ -4738,6 +4757,7 @@ DSP_Eff39_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 3 records, ids: 70 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[39] (effect 39): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff39_Param_Descriptors:
 	.byte 0x00, 0x0d, 0x70, 0x00, 0x06, 0x0c, 0x12, 0x18	; op70 -> cells 00 06 0C 12 18 64 68 6C 70 74: 5-band biquad: coeff-cursor cells + state-pointer cells (stride +4)
 	.byte 0x64, 0x68, 0x6c, 0x70, 0x74
@@ -4750,6 +4770,7 @@ DSP_Eff39_Param_Descriptors:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(355); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[1] (effect 1): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff01_Algo_Bytecode:
 	.byte 0x31, 0x63, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xe1, 0xcd, 0x00
@@ -4798,6 +4819,7 @@ DSP_Eff01_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(100) op4(3) op5(60) op4(3) op1(10) op2(65) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[1] (effect 1): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff01_Coef_Bytecode:
 	.byte 0x00, 0x64, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x70, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -4836,6 +4858,7 @@ DSP_Eff01_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 66 65 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[1] (effect 1): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff01_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x40
@@ -4847,6 +4870,7 @@ DSP_Eff01_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 66 65 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[1] (effect 1): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff01_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x09, 0x0a	; op66 -> cells 09 0A
 	.byte 0x00, 0x04, 0x65, 0x00	; op65 -> cell 00
@@ -4860,6 +4884,7 @@ DSP_Eff01_Param_Descriptors:
 ; UI params, 7 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, SLOW LFO SPEED (Hz), FAST LFO SPEED (Hz), FAST LFO BALANCE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(430); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[2] (effect 2): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff02_Algo_Bytecode:
 	.byte 0x31, 0xae, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xe1, 0xcd, 0x00
@@ -4917,6 +4942,7 @@ DSP_Eff02_Algo_Bytecode:
 	.byte 0x00, 0x06, 0x02, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(105) op4(3) op5(60) op4(3) op1(10) op2(83) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[2] (effect 2): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff02_Coef_Bytecode:
 	.byte 0x00, 0x69, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -4958,6 +4984,7 @@ DSP_Eff02_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 7 records, ids: 66 65 65 66 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[2] (effect 2): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff02_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x02, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x04, 0x00, 0x00, 0x00, 0x40
@@ -4973,6 +5000,7 @@ DSP_Eff02_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 66 65 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[2] (effect 2): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff02_Param_Descriptors:
 	.byte 0x00, 0x08, 0x66, 0x0b, 0x0c, 0x0d, 0x0f, 0x10	; op66 -> cells 0B 0C 0D 0F 10
 	.byte 0x00, 0x05, 0x65, 0x00, 0x02	; op65 -> cells 00 02
@@ -4986,6 +5014,7 @@ DSP_Eff02_Param_Descriptors:
 ; UI params, 7 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   MANUAL, LOW MIX, HIGH MIX, DELAY L (ms), DELAY R (ms), VOLUME, REV SEND.
 ; 1 instruction: op3(500); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[3] (effect 3): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff03_Algo_Bytecode:
 	.byte 0x31, 0xf4, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00
@@ -5053,6 +5082,7 @@ DSP_Eff03_Algo_Bytecode:
 	.byte 0xf0
 ; 9 instructions: op0(160) op4(3) op0(30) op4(3) op5(50) op4(3) op1(10) op2(86) op4(3); 0xf0
 ; end.
+; Reached via EFF_CoefProgram_PtrTable[3] (effect 3): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff03_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5104,6 +5134,7 @@ DSP_Eff03_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 7 records, ids: 6b 62 62 64 64 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[3] (effect 3): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff03_Param_Values:
 	.byte 0x00, 0x13, 0x6b, 0x00, 0x4c, 0xcc, 0xcc, 0x6f
 	.byte 0x5c, 0x28, 0x6b, 0x01, 0x4c, 0xcc, 0xcc, 0x6f
@@ -5117,6 +5148,7 @@ DSP_Eff03_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 62 64 76 6b 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[3] (effect 3): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff03_Param_Descriptors:
 	.byte 0x00, 0x07, 0x62, 0x08, 0x09, 0x15, 0x16	; op62 -> cells 08 09 15 16: dB cells (CURVE_D, 1.00 dB/step)
 	.byte 0x00, 0x05, 0x64, 0x0b, 0x0c	; op64 -> cells 0B 0C
@@ -5132,6 +5164,7 @@ DSP_Eff03_Param_Descriptors:
 ; UI params, 8 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(330); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[4] (effect 4): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff04_Algo_Bytecode:
 	.byte 0x31, 0x4a, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x40, 0x00, 0x08, 0xbc, 0x00
@@ -5177,6 +5210,7 @@ DSP_Eff04_Algo_Bytecode:
 	.byte 0xe4, 0x07
 	.byte 0xf0
 ; 7 instructions: op0(100) op4(3) op5(40) op4(3) op1(10) op2(62) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[4] (effect 4): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff04_Coef_Bytecode:
 	.byte 0x00, 0x64, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0b, 0x00, 0x32, 0x00, 0x15, 0x0a
@@ -5211,6 +5245,7 @@ DSP_Eff04_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 8 records, ids: 66 65 73 6c 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[4] (effect 4): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff04_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x40
@@ -5231,6 +5266,7 @@ DSP_Eff04_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 65 6c 68 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[4] (effect 4): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff04_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x08, 0x0c	; op66 -> cells 08 0C
 	.byte 0x00, 0x05, 0x65, 0x05, 0x09	; op65 -> cells 05 09
@@ -5247,6 +5283,7 @@ DSP_Eff04_Param_Descriptors:
 ; UI params, 8 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(535); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[5] (effect 5): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff05_Algo_Bytecode:
 	.byte 0x32, 0x17, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x92, 0xa0, 0xe2, 0x00, 0x00
@@ -5318,6 +5355,7 @@ DSP_Eff05_Algo_Bytecode:
 	.byte 0xf0
 ; 9 instructions: op0(160) op4(3) op0(40) op4(3) op5(20) op4(3) op1(10) op2(50) op4(3); 0xf0
 ; end.
+; Reached via EFF_CoefProgram_PtrTable[5] (effect 5): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff05_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x30, 0x00, 0x0a, 0x20, 0x00, 0x00, 0x15, 0x00
@@ -5362,6 +5400,7 @@ DSP_Eff05_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 8 records, ids: 66 65 73 66 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[5] (effect 5): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff05_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x06
 	.byte 0x66, 0x66, 0x66, 0x02, 0x00, 0x00, 0x00, 0x06
@@ -5382,6 +5421,7 @@ DSP_Eff05_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 65 68 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[5] (effect 5): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff05_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x05, 0x06, 0x08, 0x09	; op66 -> cells 05 06 08 09
 	.byte 0x00, 0x05, 0x65, 0x00, 0x0c	; op65 -> cells 00 0C
@@ -5397,6 +5437,7 @@ DSP_Eff05_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(255); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[48] (effect 48): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff48_Algo_Bytecode:
 	.byte 0x30, 0xff, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00
@@ -5432,6 +5473,7 @@ DSP_Eff48_Algo_Bytecode:
 	.byte 0x00, 0x00, 0x04, 0x24, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(55) op4(3) op5(20) op4(3) op1(10) op2(32) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[48] (effect 48): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff48_Coef_Bytecode:
 	.byte 0x00, 0x37, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x20, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5454,6 +5496,7 @@ DSP_Eff48_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[48] (effect 48): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff48_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x20
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x20
@@ -5468,6 +5511,7 @@ DSP_Eff48_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[48] (effect 48): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff48_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x00, 0x07	; op66 -> cells 00 07
 	.byte 0x00, 0x05, 0x65, 0x01, 0x04	; op65 -> cells 01 04
@@ -5482,6 +5526,7 @@ DSP_Eff48_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(270); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[50] (effect 50): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff50_Algo_Bytecode:
 	.byte 0x31, 0x0e, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x08, 0x80, 0x13, 0x00, 0x0b, 0x00
@@ -5519,6 +5564,7 @@ DSP_Eff50_Algo_Bytecode:
 	.byte 0x00, 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(85) op4(3) op5(40) op4(3) op1(10) op2(44) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[50] (effect 50): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff50_Coef_Bytecode:
 	.byte 0x00, 0x55, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0b, 0x00, 0x00, 0xc8, 0x15, 0x0a
@@ -5549,6 +5595,7 @@ DSP_Eff50_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[50] (effect 50): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff50_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x40
@@ -5563,6 +5610,7 @@ DSP_Eff50_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[50] (effect 50): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff50_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x05, 0x09	; op66 -> cells 05 09
 	.byte 0x00, 0x05, 0x65, 0x02, 0x06	; op65 -> cells 02 06
@@ -5577,6 +5625,7 @@ DSP_Eff50_Param_Descriptors:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   RESONANCE, MANUAL, SWEEP RANGE, VOLUME, REV SEND.
 ; 1 instruction: op3(365); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[52] (effect 52): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff52_Algo_Bytecode:
 	.byte 0x31, 0x6d, 0x01, 0x00, 0x54, 0x00, 0x00, 0x20
 	.byte 0xb1, 0xcd, 0x00, 0x00, 0x20, 0x34, 0x0e, 0x02
@@ -5626,6 +5675,7 @@ DSP_Eff52_Algo_Bytecode:
 	.byte 0x04, 0x24, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(125) op4(3) op5(20) op4(3) op1(10) op2(50) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[52] (effect 52): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff52_Coef_Bytecode:
 	.byte 0x00, 0x7d, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5660,6 +5710,7 @@ DSP_Eff52_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 24 24 24 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[52] (effect 52): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff52_Param_Values:
 	.byte 0x00, 0x57, 0x24, 0x00, 0x20, 0x01, 0xeb, 0x85
 	.byte 0x08, 0xf5, 0xc2, 0x01, 0x16, 0x87, 0x06, 0x66
@@ -5683,6 +5734,7 @@ DSP_Eff52_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 6b 6d 24 78 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[52] (effect 52): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff52_Param_Descriptors:
 	.byte 0x00, 0x04, 0x6b, 0x0c	; op6B -> cell 0C
 	.byte 0x00, 0x05, 0x6d, 0x05, 0x06	; op6D -> cells 05 06
@@ -5695,6 +5747,7 @@ DSP_Eff52_Param_Descriptors:
 ; ----- effects 15 ROCK ROTARY / 53 ROTARY SPEAKER (shared microprogram) -----
 ; rock rotary / rotary speaker (shared with algo 53)
 ; 1 instruction: op3(435); 0xf0 end. Shared by effects 15, 53.
+; Reached via EFF_AlgoProgram_PtrTable[..] (2 effects: 15 53): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff15_Algo_Bytecode:
 	.byte 0x31, 0xb3, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02
@@ -5758,6 +5811,7 @@ DSP_Eff15_Algo_Bytecode:
 ;   DRIVE, VOLUME ADJUST, TREBLE DEPTH, FAST (Hz), SLOW (Hz), WIND UP (s), WIND DOWN (s), BASS DEPTH, BASS   FAST (Hz), BASS   SLOW (Hz), WIND UP (s), WIND DOWN (s), VOLUME, SLOW/FAST, REV SEND.
 ; 12 instructions: op0(160) op4(3) op0(35) op4(3) op5(50) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[53] (effect 53): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff53_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5818,6 +5872,7 @@ DSP_Eff53_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 16 records, ids: 61 62 66 6a 6a 69 69 66 6a 6a 69 69 63 66 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[53] (effect 53): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff53_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x05, 0x62, 0x00, 0x7a
@@ -5841,6 +5896,7 @@ DSP_Eff53_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 61 62 69 6a 63 21 74; 0xf0 sentinel. Shared by effects 15, 53.
+; Reached via DSP_Param_Block_Ptrs_B[..] (2 effects: 15 53): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff15_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x10, 0x14	; op66 -> cells 10 14
 	.byte 0x00, 0x05, 0x61, 0x00, 0x01	; op61 -> cells 00 01
@@ -5857,6 +5913,7 @@ DSP_Eff15_Param_Descriptors:
 ;   DRIVE, VOLUME ADJUST, TREBLE DEPTH, FAST (Hz), SLOW (Hz), WIND UP (s), WIND DOWN (s), BASS DEPTH, BASS   FAST (Hz), BASS   SLOW (Hz), WIND UP (s), WIND DOWN (s), VOLUME, SLOW/FAST, REV SEND.
 ; 12 instructions: op0(160) op4(3) op0(35) op4(3) op5(50) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[15] (effect 15): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff15_Coef_Bytecode:
 	.byte 0x00, 0xa0, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -5917,6 +5974,7 @@ DSP_Eff15_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 16 records, ids: 61 62 66 6a 6a 69 69 66 6a 6a 69 69 63 66 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[15] (effect 15): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff15_Param_Values:
 	.byte 0x00, 0x07, 0x61, 0x00, 0x61, 0x01, 0x7a
 	.byte 0x00, 0x05, 0x62, 0x00, 0x7a
@@ -5945,6 +6003,7 @@ DSP_Eff15_Param_Values:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   OSC SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(235); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[54] (effect 54): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff54_Algo_Bytecode:
 	.byte 0x30, 0xeb, 0x01, 0x00, 0x54, 0x00, 0x40, 0x00
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xb1, 0xcd, 0x00
@@ -5978,6 +6037,7 @@ DSP_Eff54_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(55) op4(3) op5(25) op4(3) op1(10) op2(26) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[54] (effect 54): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff54_Coef_Bytecode:
 	.byte 0x00, 0x37, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x20, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6001,6 +6061,7 @@ DSP_Eff54_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[54] (effect 54): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff54_Param_Values:
 	.byte 0x00, 0x09, 0x65, 0x00, 0x01, 0x65, 0x01, 0x01
 	.byte 0x7a
@@ -6012,6 +6073,7 @@ DSP_Eff54_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[54] (effect 54): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff54_Param_Descriptors:
 	.byte 0x00, 0x05, 0x65, 0x00, 0x03	; op65 -> cells 00 03
 	.byte 0x00, 0x05, 0x68, 0x12, 0x13	; op68 -> cells 12 13: ms -> DRAM words x44100/1000 (delay-time cells)
@@ -6031,6 +6093,7 @@ DSP_Eff54_Param_Descriptors:
 ; above resolve to THIS single record trio (pointer identity), and no other stream in the
 ; zone is byte-identical to the NO OPERATION program (duplicate scan clean).
 ; 1 instruction: op3(250); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[..] (42 effects: 0 7 11-14 28-31 37-38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff00_Algo_Bytecode:
 	.byte 0x30, 0xfa, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0x40, 0x00, 0x00
@@ -6066,6 +6129,7 @@ DSP_Eff00_Algo_Bytecode:
 	.byte 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(50) op4(3) op5(40) op4(3) op1(10) op2(38) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[..] (42 effects: 0 7 11-14 28-31 37-38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff00_Coef_Bytecode:
 	.byte 0x00, 0x32, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x40, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -6097,6 +6161,7 @@ DSP_Eff00_Coef_Bytecode:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   THRESHOLD, ATTACK RATE (s), RELEASE RATE (s), VOLUME, REV SEND.
 ; 5 records, ids: 66 6e 6e 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[37] (effect 37): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff37_Param_Values:
 	.byte 0x00, 0x0b, 0x66, 0x00, 0x00, 0x00, 0x00, 0x19
 	.byte 0x99, 0x99, 0x7a
@@ -6109,6 +6174,7 @@ DSP_Eff37_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 66 67 6e 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[..] (42 effects: 0 7 11-14 28-31 37-38 40-47 49 51 55 61-63 69 76-78 80-87 92-95): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff00_Param_Descriptors:
 	.byte 0x00, 0x04, 0x66, 0x04	; op66 -> cell 04
 	.byte 0x00, 0x04, 0x67, 0x26	; op67 -> cell 26
@@ -6122,6 +6188,7 @@ DSP_Eff00_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   GATE TIME (ms), HIGH DAMP GAIN, THRESHOLD, MASK TIME (ms), VOLUME, REV SEND.
 ; 1 instruction: op3(515); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[8] (effect 8): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff08_Algo_Bytecode:
 	.byte 0x32, 0x03, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0xa0, 0xa4, 0x15, 0x02
@@ -6190,6 +6257,7 @@ DSP_Eff08_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(85) op4(3) op5(110) op4(3) op1(10) op2(86) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[8] (effect 8): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff08_Coef_Bytecode:
 	.byte 0x00, 0x55, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6234,6 +6302,7 @@ DSP_Eff08_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 6 records, ids: 6f 76 66 6f 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[8] (effect 8): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff08_Param_Values:
 	.byte 0x00, 0x05, 0x6f, 0x01, 0x7a
 	.byte 0x00, 0x0c, 0x76, 0x00, 0x12, 0x14, 0x7a, 0x76
@@ -6246,6 +6315,7 @@ DSP_Eff08_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 75 76 6f 6d 67 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[8] (effect 8): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff08_Param_Descriptors:
 	.byte 0x00, 0x04, 0x66, 0x16	; op66 -> cell 16
 	.byte 0x00, 0x04, 0x75, 0x03	; op75 -> cell 03
@@ -6262,6 +6332,7 @@ DSP_Eff08_Param_Descriptors:
 ; UI params, 5 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, LFO SPEED (Hz), LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(485); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[6] (effect 6): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff06_Algo_Bytecode:
 	.byte 0x31, 0xe5, 0x01, 0x00, 0x54, 0x08, 0x80, 0x16
 	.byte 0x00, 0x0b, 0x00, 0x50, 0x00, 0x08, 0xbc, 0x00
@@ -6326,6 +6397,7 @@ DSP_Eff06_Algo_Bytecode:
 	.byte 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(105) op4(3) op5(55) op4(3) op1(10) op2(53) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[6] (effect 6): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff06_Coef_Bytecode:
 	.byte 0x00, 0x69, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0xa0, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -6362,6 +6434,7 @@ DSP_Eff06_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 77 65 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[6] (effect 6): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff06_Param_Values:
 	.byte 0x00, 0x33, 0x77, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0xc8, 0x77, 0x01, 0x00, 0x00, 0x00, 0x00
@@ -6377,6 +6450,7 @@ DSP_Eff06_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 5 records, ids: 65 77 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[6] (effect 6): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff06_Param_Descriptors:
 	.byte 0x00, 0x04, 0x65, 0x00	; op65 -> cell 00
 	.byte 0x00, 0x09, 0x77, 0x02, 0x04, 0x06, 0x09, 0x0b	; op77 -> cells 02 04 06 09 0B 0D
@@ -6393,6 +6467,7 @@ DSP_Eff06_Param_Descriptors:
 ; UI params, 6 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   THRESHOLD, RATIO, ATTACK SENS. (s), RELEASE SENS. (s), VOLUME, REV SEND.
 ; 1 instruction: op3(205); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[36] (effect 36): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff36_Algo_Bytecode:
 	.byte 0x30, 0xcd, 0x01, 0x00, 0x54, 0x00, 0x2a, 0x20
 	.byte 0xf0, 0x00, 0x08, 0x80, 0x13, 0x04, 0x07, 0x00
@@ -6422,6 +6497,7 @@ DSP_Eff36_Algo_Bytecode:
 	.byte 0x04, 0x28, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(45) op4(3) op5(20) op4(3) op1(10) op2(62) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[36] (effect 36): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff36_Coef_Bytecode:
 	.byte 0x00, 0x2d, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x70, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6447,6 +6523,7 @@ DSP_Eff36_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 6 records, ids: 72 72 6d 6d 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[36] (effect 36): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff36_Param_Values:
 	.byte 0x00, 0x09, 0x72, 0x00, 0x00, 0x72, 0x01, 0x00
 	.byte 0x7a
@@ -6459,6 +6536,7 @@ DSP_Eff36_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 4 records, ids: 72 6d 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[36] (effect 36): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff36_Param_Descriptors:
 	.byte 0x00, 0x05, 0x72, 0x04, 0x0d	; op72 -> cells 04 0D: THRESHOLD -> cell 04, RATIO -> cell 0D
 	.byte 0x00, 0x07, 0x6d, 0x02, 0x03, 0x0b, 0x0c	; op6D -> cells 02 03 0B 0C: ATTACK/RELEASE SENS. -> detector smoother-coefficient cells
@@ -6471,6 +6549,7 @@ DSP_Eff36_Param_Descriptors:
 ; UI params, 8 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DEPTH, SLOW LFO SPEED (Hz), FAST LFO SPEED L (Hz), FAST LFO SPEED R (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(325); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[56] (effect 56): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff56_Algo_Bytecode:
 	.byte 0x31, 0x45, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0x21, 0xcd, 0x00
@@ -6515,6 +6594,7 @@ DSP_Eff56_Algo_Bytecode:
 	.byte 0x04, 0x00, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(85) op4(3) op5(40) op4(3) op1(10) op2(53) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[56] (effect 56): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff56_Coef_Bytecode:
 	.byte 0x00, 0x55, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x70, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6546,6 +6626,7 @@ DSP_Eff56_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 8 records, ids: 66 65 65 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[56] (effect 56): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff56_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x00, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x66, 0x01, 0x00, 0x00, 0x00, 0x40
@@ -6561,6 +6642,7 @@ DSP_Eff56_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[56] (effect 56): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff56_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x0a, 0x0c	; op66 -> cells 0A 0C
 	.byte 0x00, 0x06, 0x65, 0x00, 0x02, 0x04	; op65 -> cells 00 02 04
@@ -6577,6 +6659,7 @@ DSP_Eff56_Param_Descriptors:
 ; On the DIGITAL REVERB page the same effect reappears with 6 slots (no REV SEND:
 ;   a reverb IS the send bus).
 ; 1 instruction: op3(245); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[9] (effect 9): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff09_Algo_Bytecode:
 	.byte 0x30, 0xf5, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0x21, 0xcd, 0x00
@@ -6611,6 +6694,7 @@ DSP_Eff09_Algo_Bytecode:
 	.byte 0x06, 0x12, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(65) op4(3) op5(40) op4(3) op1(10) op2(62) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[9] (effect 9): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff09_Coef_Bytecode:
 	.byte 0x00, 0x41, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6641,6 +6725,7 @@ DSP_Eff09_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 7 records, ids: 67 67 73 73 76 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[9] (effect 9): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff09_Param_Values:
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x00, 0x02, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x01, 0x00, 0x3f, 0xe0, 0x7a
@@ -6656,6 +6741,7 @@ DSP_Eff09_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 67 76 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[9] (effect 9): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff09_Param_Descriptors:
 	.byte 0x00, 0x05, 0x67, 0x26, 0x28	; op67 -> cells 26 28
 	.byte 0x00, 0x07, 0x76, 0x03, 0x06, 0x0c, 0x0f	; op76 -> cells 03 06 0C 0F
@@ -6672,6 +6758,7 @@ DSP_Eff09_Param_Descriptors:
 ; On the DIGITAL REVERB page the same effect reappears with 11 slots (no REV SEND:
 ;   a reverb IS the send bus).
 ; 1 instruction: op3(345); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[10] (effect 10): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff10_Algo_Bytecode:
 	.byte 0x31, 0x59, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0xf0, 0x00, 0x00
@@ -6719,6 +6806,7 @@ DSP_Eff10_Algo_Bytecode:
 	.byte 0x00
 	.byte 0xf0
 ; 7 instructions: op0(75) op4(3) op5(45) op4(3) op1(10) op2(50) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[10] (effect 10): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff10_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -6750,6 +6838,7 @@ DSP_Eff10_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 67 67 67 67 66 66 66 66 73 76 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[10] (effect 10): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff10_Param_Values:
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x00, 0x02, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x01, 0x00, 0x00, 0x02, 0x7a
@@ -6772,6 +6861,7 @@ DSP_Eff10_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 67 76 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[10] (effect 10): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff10_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x03, 0x04, 0x05, 0x06	; op66 -> cells 03 04 05 06
 	.byte 0x00, 0x07, 0x67, 0x26, 0x28, 0x29, 0x2a	; op67 -> cells 26 28 29 2A
@@ -6791,6 +6881,7 @@ DSP_Eff10_Param_Descriptors:
 ; UI: ACOUSTIC ILLUSION page TYPE selector (fixed 4-slot layout, TYPE STANDARD/PERCUSSIVE/
 ;   SYMPHONIC/DEEP SPACE + ILLUSION LEVEL -- not the 85-name array; kn5000-dsp-paramlist.md section 2).
 ; 2 instructions: cmd(713) yield; 0xf0 end. Shared by effects 57, 58, 59, 60.
+; Reached via EFF_AlgoProgram_PtrTable[..] (4 effects: 57-60): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP2_Eff57_Algo_Bytecode:
 	.byte 0xe2, 0xc9, 0x30, 0x05, 0x38, 0xe7, 0x74, 0x05
 	.byte 0x56, 0x80, 0x02, 0x03, 0x00, 0x80, 0x02, 0x03
@@ -6885,6 +6976,7 @@ DSP2_Eff57_Algo_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 8 instructions: cmd(65) yield cmd(65) yield cmd(65) yield cmd(55) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[57] (effect 57): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff57_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0x00, 0x00, 0x01, 0x05
 	.byte 0xde, 0x40, 0x00, 0x00, 0x28, 0x00, 0x14, 0x88
@@ -6926,6 +7018,7 @@ DSP2_Eff57_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[57] (effect 57): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff57_Param_Values:
 	.byte 0x00, 0x3b, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x05, 0xdd, 0x6c, 0x01, 0x00, 0x05, 0xdd, 0x00
@@ -6938,6 +7031,7 @@ DSP2_Eff57_Param_Values:
 	.byte 0x00, 0x06, 0x63, 0x00, 0x00, 0x7a
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel. Shared by effects 57, 58, 59, 60.
+; Reached via DSP_Param_Block_Ptrs_B[..] (4 effects: 57-60): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP2_Eff57_Param_Descriptors:
 	.byte 0x00, 0x0a, 0x6c, 0x08, 0x16, 0x24, 0x32, 0x49	; op6C -> cells 08 16 24 32 49 57 65: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
 	.byte 0x57, 0x65
@@ -6951,6 +7045,7 @@ DSP2_Eff57_Param_Descriptors:
 ; UI: ACOUSTIC ILLUSION page TYPE selector (fixed 4-slot layout, TYPE STANDARD/PERCUSSIVE/
 ;   SYMPHONIC/DEEP SPACE + ILLUSION LEVEL -- not the 85-name array; kn5000-dsp-paramlist.md section 2).
 ; 8 instructions: cmd(65) yield cmd(65) yield cmd(65) yield cmd(55) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[58] (effect 58): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff58_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0x00, 0x00, 0x01, 0x01
 	.byte 0xf6, 0x40, 0x00, 0x00, 0x28, 0x00, 0x14, 0x88
@@ -6992,6 +7087,7 @@ DSP2_Eff58_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[58] (effect 58): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff58_Param_Values:
 	.byte 0x00, 0x3b, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0xf5, 0x6c, 0x01, 0x00, 0x01, 0xf5, 0x00
@@ -7011,6 +7107,7 @@ DSP2_Eff58_Param_Values:
 ; UI: ACOUSTIC ILLUSION page TYPE selector (fixed 4-slot layout, TYPE STANDARD/PERCUSSIVE/
 ;   SYMPHONIC/DEEP SPACE + ILLUSION LEVEL -- not the 85-name array; kn5000-dsp-paramlist.md section 2).
 ; 8 instructions: cmd(65) yield cmd(65) yield cmd(65) yield cmd(55) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[59] (effect 59): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff59_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0x00, 0x00, 0x01, 0x06
 	.byte 0x42, 0x40, 0x00, 0x00, 0x00, 0xf8, 0x64, 0x9e
@@ -7052,6 +7149,7 @@ DSP2_Eff59_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[59] (effect 59): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff59_Param_Values:
 	.byte 0x00, 0x3b, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x06, 0x41, 0x6c, 0x01, 0x00, 0x06, 0x41, 0x00
@@ -7071,6 +7169,7 @@ DSP2_Eff59_Param_Values:
 ; UI: ACOUSTIC ILLUSION page TYPE selector (fixed 4-slot layout, TYPE STANDARD/PERCUSSIVE/
 ;   SYMPHONIC/DEEP SPACE + ILLUSION LEVEL -- not the 85-name array; kn5000-dsp-paramlist.md section 2).
 ; 8 instructions: cmd(65) yield cmd(65) yield cmd(65) yield cmd(55) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[60] (effect 60): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff60_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0x00, 0x00, 0x01, 0x05
 	.byte 0x7a, 0x40, 0x00, 0x00, 0x28, 0x00, 0x14, 0x88
@@ -7112,6 +7211,7 @@ DSP2_Eff60_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 records, ids: 6c 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[60] (effect 60): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff60_Param_Values:
 	.byte 0x00, 0x3b, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x05, 0x79, 0x6c, 0x01, 0x00, 0x05, 0x79, 0x00
@@ -7127,6 +7227,7 @@ DSP2_Eff60_Param_Values:
 ; ----- effect 79: GEQ  [IC310 MN19413] -----
 ; IC310 program: records ride command 0x30 (second-dsp-and-ready.md B1).
 ; 2 instructions: op3(245) yield; 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[79] (effect 79): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP2_Eff79_Algo_Bytecode:
 	.byte 0x30, 0xf5, 0x30, 0x05, 0xf0, 0x80, 0x02, 0x03
 	.byte 0x00, 0x80, 0x02, 0x03, 0x02, 0xa1, 0x02, 0x03
@@ -7162,6 +7263,7 @@ DSP2_Eff79_Algo_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 2 instructions: cmd(57) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[79] (effect 79): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff79_Coef_Bytecode:
 	.byte 0xe0, 0x39, 0x30, 0x00, 0x80, 0x40, 0x00, 0xc1
 	.byte 0xcc, 0x3e, 0x33, 0x40, 0x00, 0x85, 0xa3, 0x3b
@@ -7174,6 +7276,7 @@ DSP2_Eff79_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 9 records, ids: 76 76 70 70 70 70 76 76 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[79] (effect 79): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff79_Param_Values:
 	.byte 0x00, 0x06, 0x76, 0x00, 0x00, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x10, 0x7a
@@ -7186,6 +7289,7 @@ DSP2_Eff79_Param_Values:
 	.byte 0x00, 0x06, 0x63, 0x00, 0x00, 0x7a
 	.byte 0xf0
 ; 3 records, ids: 70 76 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[79] (effect 79): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP2_Eff79_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x84, 0x89	; op70 -> cells 84 89: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
 	.byte 0x00, 0x05, 0x76, 0x81, 0x8e	; op76 -> cells 81 8E: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
@@ -7199,6 +7303,7 @@ DSP2_Eff79_Param_Descriptors:
 ; bytecode or uPD6383 cell numbers (dsp/analysis/second-dsp-and-ready.md B1). Labels carry the
 ; DSP2_ prefix (codebase convention for the second DSP).
 ; 2 instructions: op3(665) yield; 0xf0 end. Shared by effects 88, 89, 90, 91.
+; Reached via EFF_AlgoProgram_PtrTable[..] (4 effects: 88-91): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP2_Eff88_Algo_Bytecode:
 	.byte 0x32, 0x99, 0x30, 0x0d, 0x30, 0x80, 0x01, 0x45
 	.byte 0x6c, 0x80, 0x01, 0x47, 0x4a, 0x80, 0x02, 0x7f
@@ -7287,6 +7392,7 @@ DSP2_Eff88_Algo_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 4 instructions: cmd(65) yield cmd(39) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[88] (effect 88): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff88_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0xa0, 0x2a, 0x81, 0x00
 	.byte 0x00, 0x00, 0x00, 0x18, 0x51, 0x2b, 0x29, 0x5c
@@ -7306,6 +7412,7 @@ DSP2_Eff88_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 5 records, ids: 75 76 76 63 79; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[88] (effect 88): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff88_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1b, 0xe7, 0x6c, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x01, 0x7a
@@ -7315,6 +7422,7 @@ DSP2_Eff88_Param_Values:
 	.byte 0x79, 0x02, 0x00, 0x7a
 	.byte 0xf0
 ; 4 records, ids: 75 76 63 79; 0xf0 sentinel. Shared by effects 88, 89, 90, 91.
+; Reached via DSP_Param_Block_Ptrs_B[..] (4 effects: 88-91): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP2_Eff88_Param_Descriptors:
 	.byte 0x00, 0x04, 0x75, 0xa3	; op75 -> cell A3: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
 	.byte 0x00, 0x04, 0x76, 0xb8	; op76 -> cell B8: IC310 parameter WORD addresses (B7/B8), NOT uPD6383 cells
@@ -7327,6 +7435,7 @@ DSP2_Eff88_Param_Descriptors:
 ; bytecode or uPD6383 cell numbers (dsp/analysis/second-dsp-and-ready.md B1). Labels carry the
 ; DSP2_ prefix (codebase convention for the second DSP).
 ; 4 instructions: cmd(65) yield cmd(39) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[89] (effect 89): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff89_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0xa0, 0x2a, 0x81, 0x00
 	.byte 0x00, 0x00, 0x00, 0x15, 0x1e, 0x2a, 0x83, 0x66
@@ -7346,6 +7455,7 @@ DSP2_Eff89_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 5 records, ids: 75 76 76 63 79; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[89] (effect 89): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff89_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x10, 0xc4, 0x9b, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x01, 0x7a
@@ -7360,6 +7470,7 @@ DSP2_Eff89_Param_Values:
 ; bytecode or uPD6383 cell numbers (dsp/analysis/second-dsp-and-ready.md B1). Labels carry the
 ; DSP2_ prefix (codebase convention for the second DSP).
 ; 4 instructions: cmd(65) yield cmd(39) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[90] (effect 90): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff90_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0xa0, 0x2a, 0x81, 0x00
 	.byte 0x00, 0x00, 0x00, 0x18, 0x51, 0x2b, 0x29, 0x5c
@@ -7379,6 +7490,7 @@ DSP2_Eff90_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 5 records, ids: 75 76 76 63 79; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[90] (effect 90): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff90_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1d, 0x0e, 0x56, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x01, 0x7a
@@ -7393,6 +7505,7 @@ DSP2_Eff90_Param_Values:
 ; bytecode or uPD6383 cell numbers (dsp/analysis/second-dsp-and-ready.md B1). Labels carry the
 ; DSP2_ prefix (codebase convention for the second DSP).
 ; 4 instructions: cmd(65) yield cmd(39) yield; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[91] (effect 91): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP2_Eff91_Coef_Bytecode:
 	.byte 0xe0, 0x41, 0x30, 0x00, 0xa0, 0x2a, 0x81, 0x00
 	.byte 0x00, 0x00, 0x00, 0x18, 0x51, 0x2b, 0x29, 0x5c
@@ -7412,6 +7525,7 @@ DSP2_Eff91_Coef_Bytecode:
 	.byte 0xd0, 0x02
 	.byte 0xf0
 ; 5 records, ids: 75 76 76 63 79; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[91] (effect 91): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP2_Eff91_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1d, 0x0e, 0x56, 0x7a
 	.byte 0x00, 0x06, 0x76, 0x00, 0x01, 0x7a
@@ -7426,6 +7540,7 @@ DSP2_Eff91_Param_Values:
 ; UI params, 11 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, CHORUS DRY/WET, DEPTH, LFO SPEED (Hz), LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(480); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[64] (effect 64): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff64_Algo_Bytecode:
 	.byte 0x31, 0xe0, 0x01, 0x00, 0x54, 0x00, 0x92, 0xa0
 	.byte 0x32, 0x00, 0x00, 0x82, 0x20, 0x01, 0xc0, 0x00
@@ -7489,6 +7604,7 @@ DSP_Eff64_Algo_Bytecode:
 	.byte 0x16, 0x00, 0x00, 0x06, 0x04, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(120) op4(3) op5(85) op4(3) op1(10) op2(77) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[64] (effect 64): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff64_Coef_Bytecode:
 	.byte 0x00, 0x78, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -7533,6 +7649,7 @@ DSP_Eff64_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 11 records, ids: 66 67 67 73 73 66 66 65 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[64] (effect 64): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff64_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00
@@ -7556,6 +7673,7 @@ DSP_Eff64_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 67 65 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[64] (effect 64): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff64_Param_Descriptors:
 	.byte 0x00, 0x09, 0x66, 0x04, 0x0a, 0x0c, 0x0d, 0x10	; op66 -> cells 04 0A 0C 0D 10 16
 	.byte 0x16
@@ -7572,6 +7690,7 @@ DSP_Eff64_Param_Descriptors:
 ; UI params, 12 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY1 DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, DELAY2 DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(345); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[65] (effect 65): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff65_Algo_Bytecode:
 	.byte 0x31, 0x59, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x20, 0xd1, 0xcd, 0x00
@@ -7619,6 +7738,7 @@ DSP_Eff65_Algo_Bytecode:
 	.byte 0x00
 	.byte 0xf0
 ; 7 instructions: op0(60) op4(3) op5(65) op4(3) op1(10) op2(56) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[65] (effect 65): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff65_Coef_Bytecode:
 	.byte 0x00, 0x3c, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x50, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -7651,6 +7771,7 @@ DSP_Eff65_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 66 67 67 73 73 66 67 67 73 73 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[65] (effect 65): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff65_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x02, 0x40, 0x00, 0x00, 0x00
@@ -7675,6 +7796,7 @@ DSP_Eff65_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 67 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[65] (effect 65): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff65_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x03, 0x07, 0x0b, 0x0f	; op66 -> cells 03 07 0B 0F
 	.byte 0x00, 0x07, 0x67, 0x26, 0x28, 0x2a, 0x2c	; op67 -> cells 26 28 2A 2C
@@ -7690,6 +7812,7 @@ DSP_Eff65_Param_Descriptors:
 ; UI params, 14 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, FLANGER DRY/WET, DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(505); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[66] (effect 66): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff66_Algo_Bytecode:
 	.byte 0x31, 0xf9, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0x31, 0xcd, 0x00
@@ -7757,6 +7880,7 @@ DSP_Eff66_Algo_Bytecode:
 	.byte 0x00
 	.byte 0xf0
 ; 7 instructions: op0(110) op4(3) op5(65) op4(3) op1(10) op2(92) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[66] (effect 66): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff66_Coef_Bytecode:
 	.byte 0x00, 0x6e, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -7800,6 +7924,7 @@ DSP_Eff66_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 14 records, ids: 66 67 67 73 73 66 66 65 73 6c 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[66] (effect 66): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff66_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00
@@ -7832,6 +7957,7 @@ DSP_Eff66_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 9 records, ids: 66 67 65 73 6c 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[66] (effect 66): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff66_Param_Descriptors:
 	.byte 0x00, 0x09, 0x66, 0x07, 0x0d, 0x0f, 0x11, 0x15	; op66 -> cells 07 0D 0F 11 15 1B
 	.byte 0x1b
@@ -7851,6 +7977,7 @@ DSP_Eff66_Param_Descriptors:
 ; UI params, 11 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, DEPTH, LFO SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(435); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[67] (effect 67): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff67_Algo_Bytecode:
 	.byte 0x31, 0xb3, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xd1, 0xcd, 0x00
@@ -7909,6 +8036,7 @@ DSP_Eff67_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(95) op4(3) op5(65) op4(3) op1(10) op2(74) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[67] (effect 67): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff67_Coef_Bytecode:
 	.byte 0x00, 0x5f, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -7948,6 +8076,7 @@ DSP_Eff67_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 11 records, ids: 66 67 67 73 73 66 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[67] (effect 67): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff67_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x04, 0x40, 0x00, 0x00, 0x00
@@ -7971,6 +8100,7 @@ DSP_Eff67_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 67 65 73 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[67] (effect 67): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff67_Param_Descriptors:
 	.byte 0x00, 0x09, 0x66, 0x07, 0x0a, 0x0c, 0x0e, 0x12	; op66 -> cells 07 0A 0C 0E 12 15
 	.byte 0x15
@@ -7988,6 +8118,7 @@ DSP_Eff67_Param_Descriptors:
 ; UI params, 14 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, PHASER DRY/WET, DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(555); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[68] (effect 68): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff68_Algo_Bytecode:
 	.byte 0x32, 0x2b, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xd1, 0xcd, 0x00
@@ -8061,6 +8192,7 @@ DSP_Eff68_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 9 instructions: op0(155) op4(3) op0(5) op4(3) op5(45) op4(3) op1(10) op2(74) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[68] (effect 68): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff68_Coef_Bytecode:
 	.byte 0x00, 0x9b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x11
 	.byte 0x30, 0x00, 0x0a, 0x15, 0x54, 0xc9, 0x95, 0x00
@@ -8107,6 +8239,7 @@ DSP_Eff68_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 14 records, ids: 66 67 67 73 73 66 66 65 73 66 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[68] (effect 68): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff68_Param_Values:
 	.byte 0x00, 0x13, 0x66, 0x00, 0x40, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x66, 0x06, 0x40, 0x00, 0x00, 0x00
@@ -8139,6 +8272,7 @@ DSP_Eff68_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 66 67 65 73 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[68] (effect 68): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff68_Param_Descriptors:
 	.byte 0x00, 0x0b, 0x66, 0x02, 0x07, 0x09, 0x0a, 0x0c	; op66 -> cells 02 07 09 0A 0C 0D 10 15
 	.byte 0x0d, 0x10, 0x15
@@ -8156,6 +8290,7 @@ DSP_Eff68_Param_Descriptors:
 ; UI params, 10 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   RESONANCE, MANUAL, SWEEP RANGE, DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(530); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[70] (effect 70): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff70_Algo_Bytecode:
 	.byte 0x32, 0x12, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0xd1, 0xcd, 0x00
@@ -8226,6 +8361,7 @@ DSP_Eff70_Algo_Bytecode:
 	.byte 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(140) op4(3) op5(45) op4(3) op1(10) op2(74) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[70] (effect 70): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff70_Coef_Bytecode:
 	.byte 0x00, 0x8c, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8268,6 +8404,7 @@ DSP_Eff70_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 10 records, ids: 24 24 24 66 67 67 73 73 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[70] (effect 70): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff70_Param_Values:
 	.byte 0x00, 0x57, 0x24, 0x00, 0x20, 0x01, 0xeb, 0x85
 	.byte 0x08, 0xf5, 0xc2, 0x01, 0x16, 0x87, 0x06, 0x66
@@ -8300,6 +8437,7 @@ DSP_Eff70_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 67 24 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[70] (effect 70): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff70_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x01, 0x05, 0x11, 0x15	; op66 -> cells 01 05 11 15
 	.byte 0x00, 0x05, 0x67, 0x26, 0x29	; op67 -> cells 26 29
@@ -8315,6 +8453,7 @@ DSP_Eff70_Param_Descriptors:
 ; UI params, 9 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, CHORUS DRY/WET, DEPTH, LFO SPEED (Hz), LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(470); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[71] (effect 71): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff71_Algo_Bytecode:
 	.byte 0x31, 0xd6, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0x31, 0xcd, 0x00
@@ -8378,6 +8517,7 @@ DSP_Eff71_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(145) op4(3) op5(60) op4(3) op1(10) op2(95) op4(3) op1(10) op2(11) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[71] (effect 71): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff71_Coef_Bytecode:
 	.byte 0x00, 0x91, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x00
@@ -8430,6 +8570,7 @@ DSP_Eff71_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 9 records, ids: 70 70 70 66 66 65 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[71] (effect 71): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff71_Param_Values:
 	.byte 0x00, 0x0a, 0x70, 0x00, 0x00, 0x7a, 0x70, 0x01
 	.byte 0x00, 0x7a
@@ -8450,6 +8591,7 @@ DSP_Eff71_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 66 70 65 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[71] (effect 71): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff71_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x0e, 0x10, 0x11, 0x1e	; op66 -> cells 0E 10 11 1E
 	.byte 0x00, 0x05, 0x70, 0x02, 0x12	; op70 -> cells 02 12
@@ -8464,6 +8606,7 @@ DSP_Eff71_Param_Descriptors:
 ; UI params, 10 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(275); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[72] (effect 72): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff72_Algo_Bytecode:
 	.byte 0x31, 0x13, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x24, 0xb1, 0xcd, 0x00
@@ -8502,6 +8645,7 @@ DSP_Eff72_Algo_Bytecode:
 	.byte 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(90) op4(3) op5(40) op4(3) op1(10) op2(68) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[72] (effect 72): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff72_Coef_Bytecode:
 	.byte 0x00, 0x5a, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8536,6 +8680,7 @@ DSP_Eff72_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 10 records, ids: 70 70 70 66 67 67 73 73 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[72] (effect 72): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff72_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -8557,6 +8702,7 @@ DSP_Eff72_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 70 67 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[72] (effect 72): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff72_Param_Descriptors:
 	.byte 0x00, 0x05, 0x66, 0x09, 0x13	; op66 -> cells 09 13
 	.byte 0x00, 0x05, 0x70, 0x00, 0x0a	; op70 -> cells 00 0A
@@ -8572,6 +8718,7 @@ DSP_Eff72_Param_Descriptors:
 ; UI params, 12 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, FLANGER DRY/WET, DEPTH, LFO SPEED (Hz), RESONANCE, MANUAL, PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(460); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[73] (effect 73): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff73_Algo_Bytecode:
 	.byte 0x31, 0xcc, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x20, 0x31, 0xcd, 0x00
@@ -8634,6 +8781,7 @@ DSP_Eff73_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(135) op4(3) op5(40) op4(3) op1(10) op2(95) op4(3) op1(10) op2(14) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[73] (effect 73): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff73_Coef_Bytecode:
 	.byte 0x00, 0x87, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8681,6 +8829,7 @@ DSP_Eff73_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 70 70 70 66 66 65 73 6c 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[73] (effect 73): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff73_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -8710,6 +8859,7 @@ DSP_Eff73_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 9 records, ids: 66 65 70 73 6c 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[73] (effect 73): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff73_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x0f, 0x11, 0x13, 0x1f	; op66 -> cells 0F 11 13 1F
 	.byte 0x00, 0x05, 0x65, 0x00, 0x02	; op65 -> cells 00 02
@@ -8727,6 +8877,7 @@ DSP_Eff73_Param_Descriptors:
 ; UI params, 9 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, DEPTH, LFO SPEED (Hz), PHASE, LFO WAVEFORM, VOLUME, REV SEND.
 ; 1 instruction: op3(390); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[74] (effect 74): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff74_Algo_Bytecode:
 	.byte 0x31, 0x86, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x92, 0xa0, 0x32, 0x00, 0x00
@@ -8779,6 +8930,7 @@ DSP_Eff74_Algo_Bytecode:
 	.byte 0x00, 0x04, 0x28, 0x10, 0xe0, 0x00
 	.byte 0xf0
 ; 7 instructions: op0(120) op4(3) op5(40) op4(3) op1(10) op2(86) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[74] (effect 74): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff74_Coef_Bytecode:
 	.byte 0x00, 0x78, 0x01, 0x01, 0x60, 0x00, 0x00, 0x10
 	.byte 0x80, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8818,6 +8970,7 @@ DSP_Eff74_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 9 records, ids: 70 70 70 66 65 68 74 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[74] (effect 74): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff74_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -8838,6 +8991,7 @@ DSP_Eff74_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 7 records, ids: 66 70 65 68 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[74] (effect 74): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff74_Param_Descriptors:
 	.byte 0x00, 0x07, 0x66, 0x0c, 0x0e, 0x10, 0x19	; op66 -> cells 0C 0E 10 19
 	.byte 0x00, 0x05, 0x70, 0x04, 0x11	; op70 -> cells 04 11
@@ -8853,6 +9007,7 @@ DSP_Eff74_Param_Descriptors:
 ; UI params, 9 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, THRESHOLD, RATIO, ATTACK SENS. (s), RELEASE SENS. (s), VOLUME, REV SEND.
 ; 1 instruction: op3(300); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[75] (effect 75): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff75_Algo_Bytecode:
 	.byte 0x31, 0x2c, 0x01, 0x00, 0x54, 0x00, 0x2a, 0x24
 	.byte 0xb0, 0x0b, 0x08, 0x80, 0x13, 0x00, 0x00, 0x00
@@ -8895,6 +9050,7 @@ DSP_Eff75_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(100) op4(3) op5(25) op4(3) op1(10) op2(95) op4(3) op1(10) op2(8) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[75] (effect 75): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff75_Coef_Bytecode:
 	.byte 0x00, 0x64, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -8936,6 +9092,7 @@ DSP_Eff75_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 9 records, ids: 70 70 70 72 72 6d 6d 63 21; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[75] (effect 75): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff75_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -8954,6 +9111,7 @@ DSP_Eff75_Param_Values:
 	.byte 0x66, 0x66, 0x7a
 	.byte 0xf0
 ; 6 records, ids: 70 72 6d 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[75] (effect 75): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff75_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x0f	; op70 -> cells 00 0F
 	.byte 0x00, 0x05, 0x72, 0x0a, 0x19	; op72 -> cells 0A 19
@@ -8968,6 +9126,7 @@ DSP_Eff75_Param_Descriptors:
 ; UI params, 11 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, THRESHOLD, RATIO, ATTACK SENS. (s), RELEASE SENS. (s), DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(455); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[96] (effect 96): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff96_Algo_Bytecode:
 	.byte 0x31, 0xc7, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x2a, 0x24, 0xb0, 0x00, 0x00
@@ -9029,6 +9188,7 @@ DSP_Eff96_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(100) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10) op2(32) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[96] (effect 96): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff96_Coef_Bytecode:
 	.byte 0x00, 0x64, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9072,6 +9232,7 @@ DSP_Eff96_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 70 70 70 72 72 6d 6d 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[96] (effect 96): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff96_Param_Values:
 	.byte 0x00, 0x0a, 0x70, 0x00, 0x00, 0x7a, 0x70, 0x01
 	.byte 0x00, 0x7a
@@ -9093,6 +9254,7 @@ DSP_Eff96_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 70 72 6d 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[96] (effect 96): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff96_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x13	; op70 -> cells 00 13
 	.byte 0x00, 0x05, 0x72, 0x0a, 0x1d	; op72 -> cells 0A 1D
@@ -9109,6 +9271,7 @@ DSP_Eff96_Param_Descriptors:
 ; UI params, 11 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, THRESHOLD, RATIO, ATTACK SENS. (s), RELEASE SENS. (s), DRIVE, ADJUST, VOLUME, REV SEND.
 ; 1 instruction: op3(490); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[97] (effect 97): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff97_Algo_Bytecode:
 	.byte 0x31, 0xea, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x00, 0x24, 0xb0, 0x00, 0x00
@@ -9175,6 +9338,7 @@ DSP_Eff97_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(125) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10) op2(50) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[97] (effect 97): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff97_Coef_Bytecode:
 	.byte 0x00, 0x7d, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9224,6 +9388,7 @@ DSP_Eff97_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 12 records, ids: 70 70 70 72 72 6d 6d 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[97] (effect 97): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff97_Param_Values:
 	.byte 0x00, 0x0a, 0x70, 0x00, 0x00, 0x7a, 0x70, 0x01
 	.byte 0x00, 0x7a
@@ -9245,6 +9410,7 @@ DSP_Eff97_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 8 records, ids: 70 72 6d 61 62 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[97] (effect 97): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff97_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x16	; op70 -> cells 00 16
 	.byte 0x00, 0x05, 0x72, 0x0a, 0x20	; op72 -> cells 0A 20
@@ -9261,6 +9427,7 @@ DSP_Eff97_Param_Descriptors:
 ; UI params, 12 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, DRIVE, ADJUST, DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(465); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[98] (effect 98): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff98_Algo_Bytecode:
 	.byte 0x31, 0xd1, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x2a, 0x24, 0xb0, 0x0b, 0x00
@@ -9323,6 +9490,7 @@ DSP_Eff98_Algo_Bytecode:
 	.byte 0x00
 	.byte 0xf0
 ; 7 instructions: op0(90) op4(3) op5(40) op4(3) op1(10) op2(92) op4(3); 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[98] (effect 98): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff98_Coef_Bytecode:
 	.byte 0x00, 0x5a, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9360,6 +9528,7 @@ DSP_Eff98_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 13 records, ids: 70 70 70 61 62 66 67 67 73 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[98] (effect 98): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff98_Param_Values:
 	.byte 0x00, 0x09, 0x70, 0x00, 0x00, 0x70, 0x01, 0x00
 	.byte 0x7a
@@ -9384,6 +9553,7 @@ DSP_Eff98_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 9 records, ids: 70 66 67 61 62 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[98] (effect 98): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff98_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x0e	; op70 -> cells 00 0E
 	.byte 0x00, 0x07, 0x66, 0x09, 0x0d, 0x17, 0x1b	; op66 -> cells 09 0D 17 1B
@@ -9401,6 +9571,7 @@ DSP_Eff98_Param_Descriptors:
 ; UI params, 12 slots (MEASURED live: kn7000_mame notes/kn5000-dsp-paramlist.md, name indices from RAM 0x29AC):
 ;   BAND EMPHASIS FC (Hz), BAND EMPHASIS  Q, BAND EMPHASIS  G, DRIVE, ADJUST, DELAY DRY/WET, DELAY L (ms), DELAY R (ms), FEEDBACK L, FEEDBACK R, VOLUME, REV SEND.
 ; 1 instruction: op3(525); 0xf0 end.
+; Reached via EFF_AlgoProgram_PtrTable[99] (effect 99): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff99_Algo_Bytecode:
 	.byte 0x32, 0x0d, 0x01, 0x00, 0x54, 0x08, 0x80, 0x13
 	.byte 0x08, 0xbc, 0x00, 0x2a, 0x24, 0xb0, 0x0b, 0x00
@@ -9471,6 +9642,7 @@ DSP_Eff99_Algo_Bytecode:
 	.byte 0xf0
 ; 10 instructions: op0(130) op4(3) op5(40) op4(3) op1(10) op2(95) op4(3) op1(10) op2(38) op4(3);
 ; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[99] (effect 99): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff99_Coef_Bytecode:
 	.byte 0x00, 0x82, 0x01, 0x01, 0x60, 0x00, 0x00, 0x15
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9521,6 +9693,7 @@ DSP_Eff99_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 13 records, ids: 70 70 70 61 62 66 67 67 73 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[99] (effect 99): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff99_Param_Values:
 	.byte 0x00, 0x0a, 0x70, 0x00, 0x00, 0x7a, 0x70, 0x01
 	.byte 0x00, 0x7a
@@ -9545,6 +9718,7 @@ DSP_Eff99_Param_Values:
 	.byte 0x00, 0x06, 0x74, 0x00, 0x01, 0x7a
 	.byte 0xf0
 ; 9 records, ids: 70 66 67 61 62 73 63 21 74; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_B[99] (effect 99): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff99_Param_Descriptors:
 	.byte 0x00, 0x05, 0x70, 0x00, 0x14	; op70 -> cells 00 14
 	.byte 0x00, 0x07, 0x66, 0x0f, 0x13, 0x23, 0x27	; op66 -> cells 0F 13 23 27
@@ -9565,6 +9739,7 @@ DSP_Eff99_Param_Descriptors:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 1 instruction: op3(670); 0xf0 end. Shared by effects 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
 ; 26, 27.
+; Reached via EFF_AlgoProgram_PtrTable[..] (12 effects: 16-27): algorithm program, uploaded by EFF_Change_WithDebug (0x0380EC) via DSP_WriteEFFConfig (0x03C161).
 DSP_Eff16_Algo_Bytecode:
 	.byte 0x32, 0x9e, 0x01, 0x00, 0xc8, 0x08, 0x80, 0x13
 	.byte 0x00, 0x0b, 0x00, 0x00, 0x28, 0x94, 0x15, 0x02
@@ -9653,6 +9828,7 @@ DSP_Eff16_Algo_Bytecode:
 	.byte 0xf0
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[16] (effect 16): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff16_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9714,6 +9890,7 @@ DSP_Eff16_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[16] (effect 16): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff16_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x07, 0x65, 0xfd, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -9726,6 +9903,7 @@ DSP_Eff16_Param_Values:
 	.byte 0xf0
 ; 6 records, ids: 66 67 76 75 63 74; 0xf0 sentinel. Shared by effects 16, 17, 18, 19, 20, 21,
 ; 22, 23, 24, 25, 26, 27.
+; Reached via DSP_Param_Block_Ptrs_B[..] (12 effects: 16-27): descriptor records, passed in XDE by DSP_WriteParam_Generic (0x03C20E) to DSP_ParameterWriteEngine.
 DSP_Eff16_Param_Descriptors:
 	.byte 0x00, 0x0b, 0x66, 0xa9, 0xaa, 0xab, 0xac, 0xaf	; op66 -> cells A9 AA AB AC AF B0 B1 B2
 	.byte 0xb0, 0xb1, 0xb2
@@ -9742,6 +9920,7 @@ DSP_Eff16_Param_Descriptors:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[17] (effect 17): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff17_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9803,6 +9982,7 @@ DSP_Eff17_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[17] (effect 17): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff17_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x12, 0x8f, 0x5c, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -9819,6 +9999,7 @@ DSP_Eff17_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[18] (effect 18): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff18_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9880,6 +10061,7 @@ DSP_Eff18_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[18] (effect 18): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff18_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x2e, 0x76, 0xc8, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -9896,6 +10078,7 @@ DSP_Eff18_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[19] (effect 19): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff19_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -9957,6 +10140,7 @@ DSP_Eff19_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[19] (effect 19): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff19_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x34, 0x7a, 0xe1, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -9973,6 +10157,7 @@ DSP_Eff19_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[20] (effect 20): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff20_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10034,6 +10219,7 @@ DSP_Eff20_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[20] (effect 20): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff20_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x17, 0x97, 0x24, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10050,6 +10236,7 @@ DSP_Eff20_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[21] (effect 21): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff21_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10111,6 +10298,7 @@ DSP_Eff21_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[21] (effect 21): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff21_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1a, 0x4d, 0xd2, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10127,6 +10315,7 @@ DSP_Eff21_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[22] (effect 22): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff22_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10188,6 +10377,7 @@ DSP_Eff22_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[22] (effect 22): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff22_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1f, 0xbe, 0x76, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10204,6 +10394,7 @@ DSP_Eff22_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[23] (effect 23): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff23_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10265,6 +10456,7 @@ DSP_Eff23_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[23] (effect 23): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff23_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1f, 0xbe, 0x76, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10281,6 +10473,7 @@ DSP_Eff23_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[24] (effect 24): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff24_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10342,6 +10535,7 @@ DSP_Eff24_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[24] (effect 24): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff24_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1f, 0xbe, 0x76, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10358,6 +10552,7 @@ DSP_Eff24_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[25] (effect 25): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff25_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10419,6 +10614,7 @@ DSP_Eff25_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[25] (effect 25): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff25_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x1c, 0x8b, 0x43, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10435,6 +10631,7 @@ DSP_Eff25_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[26] (effect 26): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff26_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10496,6 +10693,7 @@ DSP_Eff26_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[26] (effect 26): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff26_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x2a, 0x5e, 0x35, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
@@ -10512,6 +10710,7 @@ DSP_Eff26_Param_Values:
 ;   MEASURED live: kn5000-dsp-paramlist.md): REVERB TIME (s), PRE DELAY (ms), HIGH DAMP GAIN, ER.LEVEL, VOLUME.
 ; 12 instructions: op0(75) op4(3) op5(160) op4(3) op5(20) op4(3) op1(10) op2(95) op4(3) op1(10)
 ; +2 more; 0xf0 end.
+; Reached via EFF_CoefProgram_PtrTable[27] (effect 27): coefficient program, uploaded by EFF_Change_WithDebug (0x0380EC) / EFF_DataChange_WithDebug (0x0381BC) via DSP_WriteEFFConfig.
 DSP_Eff27_Coef_Bytecode:
 	.byte 0x00, 0x4b, 0x01, 0x01, 0x60, 0x00, 0x00, 0x1d
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x15, 0x0a
@@ -10573,6 +10772,7 @@ DSP_Eff27_Coef_Bytecode:
 	.byte 0x40, 0x03, 0x03
 	.byte 0xf0
 ; 5 records, ids: 75 67 76 66 63; 0xf0 sentinel.
+; Reached via DSP_Param_Block_Ptrs_A[27] (effect 27): value records, pushed by DSP_WriteParam_Generic (0x03C20E) for DSP_ParameterWriteEngine (0x03C9E6).
 DSP_Eff27_Param_Values:
 	.byte 0x00, 0x08, 0x75, 0x00, 0x2a, 0x5e, 0x35, 0x7a
 	.byte 0x00, 0x08, 0x67, 0x00, 0x00, 0x80, 0x02, 0x7a
