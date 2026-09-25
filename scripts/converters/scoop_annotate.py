@@ -128,7 +128,8 @@ def apply_one(e, lines, addrs, ext, rb):
             if c and not c.startswith("."):
                 raise SystemExit("0x%06X: line %d is an instruction, not data" % (a, k + 1))
             if com.strip():
-                carry.append((ad, k, "comment", com.strip()))
+                # a comment-only line is kept exactly as written
+                carry.append((ad, k, "comment", lines[k] if not code.strip() else "\t" + com.strip()))
         first_prefix = ""
         m = R.LABEL_RE.match(R.strip_comment(lines[idx])[0].strip())
         if m:
@@ -136,6 +137,7 @@ def apply_one(e, lines, addrs, ext, rb):
         data = rb[a - R.BASE:b - R.BASE]
         out, off = [], 0
         starts = []
+        longs = e["render"].get("kind") == "long"
         while off < size:
             n = rec
             for cpos in sorted(cuts):
@@ -143,19 +145,23 @@ def apply_one(e, lines, addrs, ext, rb):
                     n = cpos - (a + off)
                     break
             n = min(n, size - off)
-            starts.append((a + off, spell(data[off:off + n])))
+            if longs and n == 4:
+                v = int.from_bytes(data[off:off + 4], "little")
+                starts.append((a + off, "\t.long\t" + e["_names"].get(str(v), "0x%08x" % v)))
+            else:
+                starts.append((a + off, spell(data[off:off + n])))
             off += n
         carry.sort(key=lambda x: (x[0], x[1]))
         ci = 0
         for ad, t in starts:
             while ci < len(carry) and carry[ci][0] <= ad:
                 _, _, kind, txt = carry[ci]
-                out.append(txt + ":" if kind == "label" else "\t" + txt)
+                out.append(txt + ":" if kind == "label" else txt)
                 ci += 1
             out.append(t)
         while ci < len(carry):
             _, _, kind, txt = carry[ci]
-            out.append(txt + ":" if kind == "label" else "\t" + txt)
+            out.append(txt + ":" if kind == "label" else txt)
             ci += 1
         if first_prefix:
             out.insert(0, first_prefix + ":")
@@ -185,8 +191,47 @@ def main():
     args = ap.parse_args()
     specs = json.load(open(args.spec))
     files = sorted({s["file"] for s in specs})
-    amap, _ = R.linemap(args.image, files)
+    amap, elf = R.linemap(args.image, files)
     rb = R.rom(args.image)
+    a2n, _ = R.symbols(elf)
+    POS = re.compile(r'_0x[0-9A-Fa-f]+$')
+    newlab = {int(e["addr"], 16): e["label"] for e in specs if e.get("label")}
+    extra = []
+    for e in specs:
+        if e.get("render", {}).get("kind") != "long":
+            continue
+        a = int(e["addr"], 16)
+        tbl = e.get("label") or next((x for x in a2n.get(a, []) if not x.startswith(("Zsr_", "__drc_"))
+                                      and not POS.search(x)), None) or "Tbl_%06X" % a
+        addrs = amap[e["file"]]
+        ext = R.line_extents(addrs)
+        L = open(os.path.join(R.ROOT, e["file"]), encoding="latin-1").read().split("\n")
+        starts = {}
+        for i, x in enumerate(addrs[:len(L)]):
+            if x is not None and ext[i] and x not in starts:
+                c = R.strip_comment(L[i])[0].strip()
+                while R.LABEL_RE.match(c):
+                    c = c[R.LABEL_RE.match(c).end():].strip()
+                starts[x] = bool(c) and not c.startswith(".")
+        names = {}
+        for k in range(0, e["render"]["size"], 4):
+            v = int.from_bytes(rb[a + k - R.BASE:a + k + 4 - R.BASE], "little")
+            if not (0xE00000 <= v <= 0xFFFFFF):
+                continue
+            cand = [x for x in a2n.get(v, []) if not x.startswith(("Zsr_", "__drc_"))]
+            cand.sort(key=lambda x: (bool(POS.search(x)), len(x)))
+            if v in newlab:
+                names[str(v)] = newlab[v]
+            elif cand:
+                names[str(v)] = cand[0]
+            elif starts.get(v):
+                nm = "%s_Target%d" % (tbl, k // 4)
+                newlab[v] = nm
+                names[str(v)] = nm
+                extra.append({"file": e["file"], "addr": "0x%06X" % v, "label": nm,
+                              "comment": ["Entry %d of %s (a code pointer the table holds)." % (k // 4, tbl)]})
+        e["_names"] = names
+    specs += extra
     backup = {f: open(os.path.join(R.ROOT, f), "rb").read() for f in files}
     for f in files:
         lines = open(os.path.join(R.ROOT, f), encoding="latin-1").read().split("\n")

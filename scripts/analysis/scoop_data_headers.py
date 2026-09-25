@@ -127,9 +127,15 @@ def analyse_site(L, i):
                     f["stride"] = int(m2.group(1), 0)
                     f["stride_insn"] = x + " (A = %s)" % m2.group(1)
                     break
-    idx = [x for x in prev if re.match(r'^ld\s+[lcaw]\s*,\s*\(', x.lower())]
+    idx = [x for x in prev if re.match(r'^ld\s+[lcaw]\s*,\s*\(', x.lower())
+           or re.match(r'^ld\s+(hl|wa|bc|de)\s*,\s*(bc|de|wa|hl)$', x.lower())]
     if idx:
         f["index_from"] = idx[-1]
+    for k, x in enumerate(prev):
+        m = re.match(r'^cp\s+(\w+)\s*,\s*(0x[0-9a-f]+|\d+)', x.lower())
+        if m and k + 1 < len(prev) and re.match(r'^jrl?\s+(ugt|nc|uge)\s*,', prev[k + 1].lower()):
+            f["bound"] = "%s (`%s` / `%s` skips larger values)" % (
+                int(m.group(2), 0), x, prev[k + 1].split(",")[0])
     return f
 
 
@@ -252,7 +258,10 @@ def main():
                 if sx.get("uirender"):
                     lines_c.append("handed in XIY to %s" % sx["uirender"])
                 if sx.get("dispatch") and sx.get("ptrload"):
-                    lines_c.append("4-byte handler pointers, entry = index*4, called through `call (x)`")
+                    lines_c.append("%d x 4-byte handler pointers; entry = index * 4, called through `call (x)`"
+                                   % ((pe - ps) // 4))
+                if sx.get("bound"):
+                    lines_c.append("index bounded to 0..%s" % sx["bound"])
                 others = sorted({"%s:%d" % (x["file"].split("/")[-1], x["lineno"]) for x in sites[1:]})
                 if others:
                     lines_c.append("also read at %s" % ", ".join(others[:8]))

@@ -435,6 +435,7 @@ UIRender_LoadTwoDescriptors:
 	call Scoop_EventLoop_12Entry
 	ret
 
+	; Byte data, 129 B.  Read by UIRender_LoadTwoDescriptors (0xEF5DA3): `ld xiy, UIRender_DescriptorTable1`
 UIRender_DescriptorTable1:
 	.byte	0x0e, 0x08, 0x12, 0x06, 0x06, 0x00, 0x13, 0x00, 0x0e, 0x08, 0x52, 0x0c, 0x06, 0x00, 0x13, 0x00
 	.byte	0x0e, 0x08, 0x92, 0x12, 0x06, 0x00, 0x13, 0x00, 0x1b, 0x0a, 0x0b, 0x01, 0x9e, 0x00, 0x35, 0x01
@@ -783,16 +784,22 @@ SoundEvt_LongPacketHandler:
 	xor	h, h
 	sla	hl, 2
 	push	xix
-	ld	xix, SoundEvt_LongPacketHandler_0x35
+	ld	xix, SoundEvt_LongPacketHandler_DispatchTbl
 	ld_rrl xhl, xix, hl
 	pop xix
 	call	(xhl)
 SoundEvt_LongPacketHandler_Return:
 	ret
+	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler (0xEF609D): `ld xix, SoundEvt_LongPacketHandler_DispatchTbl`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3429:16)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+SoundEvt_LongPacketHandler_DispatchTbl:
 	.long	DefaultHandler_Ret
-	.long	0x00ef60e2
-	.long	0x00ef6169
+	.long	SoundEvt_LongPacketHandler_DispatchTbl_Target1
+	.long	SoundEvt_LongPacketHandler_DispatchTbl_Target2
 	.long	DefaultHandler_Ret
+	; Entry 1 of SoundEvt_LongPacketHandler_DispatchTbl (a code pointer the table holds).
+SoundEvt_LongPacketHandler_DispatchTbl_Target1:
 	and	w, 3
 	ld	(3925:16), w
 	ex8	a, w
@@ -834,11 +841,16 @@ SoundEvt_LongPacketHandler_Loop:
 	call	VoiceSlot_TableSetup
 	call	Timer_ModeHandler_0_0x107
 	ret
+	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler (0xEF609D): `ld xhl, ScoopDisp_HandlerData2`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld a, (3420:16)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 ScoopDisp_HandlerData2:
 	.long	VoiceCtrl_SendNoteOffSequence
 	.long	Timer_ParamCompareAlt
 	.long	Timer_ParamLoadAndCompare
 	.long	DefaultHandler_Ret
+	; Entry 2 of SoundEvt_LongPacketHandler_DispatchTbl (a code pointer the table holds).
+SoundEvt_LongPacketHandler_DispatchTbl_Target2:
 	and	w, 3
 	ex8	a, w
 	exts	wa
@@ -849,7 +861,7 @@ ScoopDisp_HandlerData2:
 	ld	a, (3420:16)
 	ld	(3821:16), a
 	push	xhl
-	ld	xhl, ScoopDisp_HandlerData2_0x7F
+	ld	xhl, SoundEvt_LongPacketHandler_DispatchTbl2
 	ld_rrl xiy, xhl, iy
 	pop xhl
 	call	(xiy)
@@ -877,12 +889,14 @@ ScoopDisp_HandlerData2_Code_Skip3:
 	ordi8	(0x0dd3), 1
 	call	VoiceSlot_TableSetup
 	ret
-	.byte	0xe8, 0x61
-	.byte 0xef
-	.byte	0x00
-	.long Timer_ParamCompareAlt
-	.long Timer_ParamLoadAndCompare
-	.long DefaultHandler_Ret
+	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler (0xEF609D): `ld xhl, SoundEvt_LongPacketHandler_DispatchTbl2`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld a, (3420:16)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+SoundEvt_LongPacketHandler_DispatchTbl2:
+	.long	DefaultHandler_Ret
+	.long	Timer_ParamCompareAlt
+	.long	Timer_ParamLoadAndCompare
+	.long	DefaultHandler_Ret
 ; ============================================================================
 ; DefaultHandler_Ret - Null handler stub (immediate return)
 ; ============================================================================
@@ -901,16 +915,22 @@ DefaultHandler_Ret:
 	ld	iy, de
 	ld	(9920:16), bc
 	push	xhl
-	ld	xhl, DefaultHandler_Ret_0x2B
+	ld	xhl, DefaultHandler_Ret_DispatchTbl
 	ld_rrl xiy, xhl, iy
 	pop xhl
 	call	(xiy)
 DefaultHandler_Ret_Return2:
 	ret
-	.long	0x00ef6223
-	.long	0x00ef633f
-	.long	0x00ef633f
-	.long	0x00ef6409
+	; Handler dispatch table, 16 B.  Read by DefaultHandler_Ret (0xEF61E8): `ld xhl, DefaultHandler_Ret_DispatchTbl`
+	; indexed with stride 4 (`sla de, 2`)
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+DefaultHandler_Ret_DispatchTbl:
+	.long	DefaultHandler_Ret_DispatchTbl_Target0
+	.long	DefaultHandler_Ret_DispatchTbl_Target1
+	.long	DefaultHandler_Ret_DispatchTbl_Target1
+	.long	DefaultHandler_Ret_DispatchTbl_Target3
+	; Entry 0 of DefaultHandler_Ret_DispatchTbl (a code pointer the table holds).
+DefaultHandler_Ret_DispatchTbl_Target0:
 	cpdi8	(0x28be), 255
 	jrl	nz, DefaultHandler_Ret_Skip4
 	ld	hl, bc
@@ -1006,6 +1026,8 @@ ToneParam_Evt0F_BytecodeHandler:
 	jp	ToneParam_Evt0F_BytecodeHandler_0x17
 ToneParam_Evt0F_BytecodeHandler_Return:
 	ret
+	; Entry 1 of DefaultHandler_Ret_DispatchTbl (a code pointer the table holds).
+DefaultHandler_Ret_DispatchTbl_Target1:
 	anddi8	(0x0dd3), 254
 	ld	e, (3567:16)
 	xor	d, d
@@ -1082,6 +1104,8 @@ PerfMode_ParamHandler_Table:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
+	; Entry 3 of DefaultHandler_Ret_DispatchTbl (a code pointer the table holds).
+DefaultHandler_Ret_DispatchTbl_Target3:
 	ld	e, (3567:16)
 	xor	d, d
 	sla	de, 2
@@ -1092,26 +1116,29 @@ PerfMode_ParamHandler_Table:
 	pop	xhl
 	call	(xiy)
 	ret
+	; Handler dispatch table, 76 B.  Read by ToneParam_Evt0F_BytecodeHandler (0xEF6327): `ld xhl, PerfMode_JumpTable_Extended`
+	; indexed with stride 4 (`sla de, 2`)
+	; 19 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 PerfMode_JumpTable_Extended:
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long UIState_PerfModeEntry
-	.long PerfMode_BytecodeEntry_A
-	.long PerfMode_BytecodeEntry_A
-	.long UIState_PerfModeEntry
-	.long PerfMode_BytecodeBody_A
-	.long PerfMode_BytecodeEntry_B
-	.long PerfMode_BytecodeEntry_C
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	UIState_PerfModeEntry
+	.long	PerfMode_BytecodeEntry_A
+	.long	PerfMode_BytecodeEntry_A
+	.long	UIState_PerfModeEntry
+	.long	PerfMode_BytecodeBody_A
+	.long	PerfMode_BytecodeEntry_B
+	.long	PerfMode_BytecodeEntry_C
 PerfMode_ParamHandler_0:
 	ld	hl, bc
 	cp	hl, 31
@@ -1124,39 +1151,43 @@ PerfMode_ParamHandler_0:
 	call	(xhl)
 PerfMode_ParamHandler_0_Return:
 	ret
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_0 (0xEF646F): `ld xix, PerfMode_EventTable_0`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 PerfMode_EventTable_0:
-	.long UIDisp_DefaultInputHandler
-	.long PerfMode_Evt01_Handler
-	.long PerfMode_Evt02_Handler
-	.long PerfMode_Evt03_FlagHandler_A
-	.long PerfMode_Evt03_FlagHandler_B
-	.long PerfMode_Evt03_ClampAndUpdate
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long PerfMode_VolumeParam_Process
-	.long ToneParam_Evt09_BytecodeHandler
-	.long SubCPU_ToneParamDisplay
-	.long ToneParam_ModeGuardEntry
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long PerfMode_Evt01_Handler
-	.long PerfMode_Evt02_Handler
-	.long PerfMode_Evt03_FlagHandler_A
-	.long PerfMode_Evt03_FlagHandler_B
-	.long PerfMode_Evt03_ClampAndUpdate
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	PerfMode_EventTable_0_Target1
+	.long	PerfMode_EventTable_0_Target2
+	.long	PerfMode_Evt03_FlagHandler_A
+	.long	PerfMode_Evt03_FlagHandler_B
+	.long	PerfMode_Evt03_ClampAndUpdate
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	PerfMode_VolumeParam_Process
+	.long	ToneParam_Evt09_BytecodeHandler
+	.long	SubCPU_ToneParamDisplay
+	.long	ToneParam_ModeGuardEntry
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	PerfMode_EventTable_0_Target1
+	.long	PerfMode_EventTable_0_Target2
+	.long	PerfMode_Evt03_FlagHandler_A
+	.long	PerfMode_Evt03_FlagHandler_B
+	.long	PerfMode_Evt03_ClampAndUpdate
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_Evt03_FlagHandler_A:
 	ordi8	(0xe3e2), 8
 	ldb_d8	a, (0x3714)
@@ -1251,84 +1282,93 @@ UIDisp_DefaultInputHandler_Skip:
 	ret
 
 
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_1 (0xEF6581): `ld xix, PerfMode_EventTable_1`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 PerfMode_EventTable_1:
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long PerfMode_VolumeParam_Process
-	.long ToneParam_Evt09_BytecodeHandler
-	.long SubCPU_ToneParamDisplay
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	PerfMode_VolumeParam_Process
+	.long	ToneParam_Evt09_BytecodeHandler
+	.long	SubCPU_ToneParamDisplay
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_ParamHandler_2:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, PerfMode_ParamHandler_2_Return
 	sla	hl, 2
 	push	xix
-	ld	xix, PerfMode_ParamHandler_2_0x1B
+	ld	xix, PerfMode_ParamHandler_2_DispatchTbl
 	ld_rrl xhl, xix, hl
 	pop xix
 	call	(xhl)
 PerfMode_ParamHandler_2_Return:
 	ret
-	.byte	0x9c, 0x65, 0xef, 0x00
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_2 (0xEF665D): `ld xix, PerfMode_ParamHandler_2_DispatchTbl`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
+PerfMode_ParamHandler_2_DispatchTbl:
+	.long	UIDisp_DefaultInputHandler
 PerfMode_EventTable_2:
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long PerfMode_VolumeParam_Process
-	.long DefaultHandler_Ret
-	.long PeriphReg_CheckAndDispatch
-	.long ToneEvt_Handler_ModeSingle
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	PerfMode_VolumeParam_Process
+	.long	DefaultHandler_Ret
+	.long	PeriphReg_CheckAndDispatch
+	.long	ToneEvt_Handler_ModeSingle
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_ParamHandler_3:
 	ld	hl, bc
 	cp	hl, 31
@@ -1349,39 +1389,43 @@ PerfMode_ParamHandler_3_Entry:
 PerfMode_ParamHandler_3_Entry_Skip:
 	call	DisplayMode_Handler_3_0x5AF
 	ret
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_3 (0xEF66F8): `ld xix, PerfMode_EventTable_3`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 PerfMode_EventTable_3:
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long PerfMode_ParamHandler_3_Entry
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long PerfMode_VolumeParam_Process
-	.long ToneParam_Evt09_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long PerfMode_ParamHandler_3_Entry
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	PerfMode_ParamHandler_3_Entry
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	PerfMode_VolumeParam_Process
+	.long	ToneParam_Evt09_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	PerfMode_ParamHandler_3_Entry
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_ParamHandler_4:
 	ld	hl, bc
 	cp	hl, 31
@@ -1394,39 +1438,44 @@ PerfMode_ParamHandler_4:
 	call	(xhl)
 PerfMode_ParamHandler_4_Return:
 	ret
-PerfMode_StringData_4:	.asciz "œeï"
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_4 (0xEF67A6): `ld xix, PerfMode_StringData_4`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
+PerfMode_StringData_4:
+	.long	UIDisp_DefaultInputHandler
 PerfMode_EventTable_4:
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long PerfMode_VolumeParam_Process
-	.long ToneParam_Evt09_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	PerfMode_VolumeParam_Process
+	.long	ToneParam_Evt09_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_ParamHandler_5:
 	ld	hl, bc
 	cp	hl, 31
@@ -1439,46 +1488,50 @@ PerfMode_ParamHandler_5:
 	call	(xhl)
 PerfMode_ParamHandler_5_Return:
 	ret
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_5 (0xEF6841): `ld xix, PerfMode_EventTable_5`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 PerfMode_EventTable_5:
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long PerfMode_VolumeParam_Process
-	.long ToneParam_Evt09_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	PerfMode_VolumeParam_Process
+	.long	ToneParam_Evt09_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_ParamHandler_7:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, PerfMode_ParamHandler_7_Return
 	sla	hl, 2
 	push	xix
-	ld	xix, PerfMode_ParamHandler_Data_0x13
+	ld	xix, PerfMode_ParamHandler_7_DispatchTbl
 	ld_rrl xhl, xix, hl
 	pop xix
 	call	(xhl)
@@ -1492,39 +1545,44 @@ PerfMode_ParamHandler_Data:
 PerfMode_ParamHandler_Data_Skip:
 	call	DisplayMode_Handler_3_0x4AC
 	ret
-	.byte	0x9c, 0x65, 0xef, 0x00
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_7 (0xEF68DC): `ld xix, PerfMode_ParamHandler_7_DispatchTbl`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
+PerfMode_ParamHandler_7_DispatchTbl:
+	.long	UIDisp_DefaultInputHandler
 PerfMode_EventTable_6:
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long PerfMode_ParamHandler_Data
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long PerfMode_VolumeParam_Process
-	.long ToneParam_Evt09_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long PerfMode_ParamHandler_Data
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	PerfMode_ParamHandler_Data
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	PerfMode_VolumeParam_Process
+	.long	ToneParam_Evt09_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	PerfMode_ParamHandler_Data
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_ParamHandler_8:
 	ld	hl, bc
 	cp	hl, 31
@@ -1539,39 +1597,43 @@ PerfMode_ParamHandler_8_Return:
 	ret
 
 
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_8 (0xEF698A): `ld xix, PerfMode_EventTable_7`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 PerfMode_EventTable_7:
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long PerfMode_VolumeParam_Process
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	PerfMode_VolumeParam_Process
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_VolumeParam_Process:
 	bit	7, w
 	jrl	nz, PerfMode_VolumeParam_Process_Return
@@ -1630,6 +1692,10 @@ PerfMode_VolumeParam_Process_Return:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; Lcd text, 9 B.  No reader found: no label, positional or absolute .set
+	; name at this address is loaded anywhere in the image (searched by
+	; scripts/analysis/scoop_data_headers.py); purpose not established.
+Str_VolumeEq2:
 	.ascii "VOLUME = "
 PerfMode_ParamHandler_9:
 	ld	hl, bc
@@ -1643,39 +1709,43 @@ PerfMode_ParamHandler_9:
 	call	(xhl)
 PerfMode_ParamHandler_9_Return:
 	ret
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_9 (0xEF6AD7): `ld xix, PerfMode_EventTable_9`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 PerfMode_EventTable_9:
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long PerfMode_Evt04_VolumeHandler
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long PerfMode_Evt04_VolumeHandler
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	PerfMode_Evt04_VolumeHandler
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	PerfMode_Evt04_VolumeHandler
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_Evt04_VolumeHandler:
 	ordi8	(0xe3e2), 8
 	ldb_d8	a, (0x0ef7)
@@ -1709,6 +1779,10 @@ PerfMode_Evt04_VolumeHandler:
 	call	MidiStream_LoadAllPresets
 	call	Audio_ProcessAllMidiStreams
 	ret
+	; Byte data, 20 B.  No reader found: no label, positional or absolute .set
+	; name at this address is loaded anywhere in the image (searched by
+	; scripts/analysis/scoop_data_headers.py); purpose not established.
+Unref_EF6BD3_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05, 0x06, 0x03, 0x0f, 0xff, 0xff, 0xff
 	.byte	0xff, 0x0c, 0x0d, 0x0e
 PerfMode_VoiceAddressTable:
@@ -1766,39 +1840,43 @@ PerfMode_ParamHandler_10:
 	call	(xhl)
 PerfMode_ParamHandler_10_Return:
 	ret
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_10 (0xEF6C50): `ld xix, PerfMode_EventTable_10`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 PerfMode_EventTable_10:
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long VoiceParam_MultiDispatch
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long PerfMode_VolumeParam_Process
-	.long ToneParam_Evt09_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long VoiceParam_MultiDispatch
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	VoiceParam_MultiDispatch
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	PerfMode_VolumeParam_Process
+	.long	ToneParam_Evt09_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	VoiceParam_MultiDispatch
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 VoiceParam_MultiDispatch:
 	; --- Dispatcher: 5-way branch on (0x10f2) value (318 bytes total) ---
 	ld	a, (4337:16)
@@ -1926,39 +2004,43 @@ UIState_PerfModeEntry:
 	call	(xhl)
 UIState_PerfModeEntry_Return:
 	ret
+	; Handler dispatch table, 128 B.  Read by UIState_PerfModeEntry (0xEF6E29): `ld xix, UIState_EventTable`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 UIState_EventTable:
-	.long UIState_DispatchHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long UIState_Evt05_Handler
-	.long UIState_Evt06_Handler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_ShortCallHandler
-	.long DefaultHandler_Ret
-	.long ScoopDisp_DispatchTable_Extended_0x20
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIState_DispatchHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long UIState_Evt05_Handler
-	.long UIState_Evt06_Handler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIState_DispatchHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	UIState_EventTable_Target5
+	.long	UIState_EventTable_Target6
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_ShortCallHandler
+	.long	DefaultHandler_Ret
+	.long	UIState_EventTable_Target11
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIState_DispatchHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	UIState_EventTable_Target5
+	.long	UIState_EventTable_Target6
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 UIState_DispatchHandler:
 	; --- State check/dispatch (61 bytes) ---
 	ld	(3923:16), 1
@@ -2343,18 +2425,28 @@ String_CopyFromIY:
 TitleString_NullRet:
 	ret
 
+	; Lcd text, 5 B.  Read by Display_TitleString_Mode0 (0xEF71C0): `ld xiy, StringData_Tempo`
 StringData_Tempo:	.ascii "TEMPO"
 
+	; Lcd text, 6 B.  Read by Display_TitleString_Mode2 (0xEF71D7): `ld xiy, StringData_Repeat`
 StringData_Repeat:	.ascii "REPEAT"
 
+	; Lcd text, 5 B.  Read by Display_TitleString_Mode3 (0xEF71E2): `ld xiy, StringData_Start`
 StringData_Start:	.ascii "START"
 
+	; Lcd text, 4 B.  Read by Display_TitleString_Mode4 (0xEF71ED): `ld xiy, StringData_Stop`
 StringData_Stop:	.ascii "STOP"
 
+	; Lcd text, 6 B.  Read by TitleString_LoadRhythmLabel (0xEF72A1): `ld xiy, StringData_Rhythm`
+	; indexed with stride 8 (`sla bc, 3`)
+	; copies 6 byte(s) per use (`ld bc, 6` + ldir) into the LCD text buffer
 StringData_Rhythm:	.ascii "RHYTHM"
 
+	; Lcd text, 40 B.  Read by Display_TitleString_Mode5 (0xEF71F8): `ld xiy, StringData_VariNames`
 StringData_VariNames:	.ascii "VARI 1    VARI 2    VARI 3    VARI 4    "
 
+	; Lcd text, 128 B.  Read by TitleString_BuildFromBank (0xEF728B): `ld xiy, StringData_StyleSections`
+	; indexed with stride 8 (`sla bc, 3`)
 StringData_StyleSections:	.ascii "                INTRO1  COUNT   ENDING1 ENDING2 FILL IN1FILL IN2                INTRO2                                          "
 
 Display_FillRegion0:
@@ -2401,39 +2493,44 @@ PerfMode_BytecodeBody_A:
 	call	(xhl)
 PerfMode_BytecodeBody_A_Return:
 	ret
-PerfMode_StringData_A:	.asciz "Änï"
+	; Handler dispatch table, 128 B.  Read by PerfMode_BytecodeBody_A (0xEF73A4): `ld xix, PerfMode_StringData_A`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
+PerfMode_StringData_A:
+	.long	UIState_DispatchHandler
 PerfMode_DispatchTable_A:
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneEvt_Handler_ModeAlt
-	.long ToneEvt_Handler_Mode9
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIState_DispatchHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneEvt_Handler_ModeAlt
+	.long	ToneEvt_Handler_Mode9
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIState_DispatchHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_BytecodeEntry_B:
 	ld	hl, bc
 	cp	hl, 31
@@ -2446,39 +2543,43 @@ PerfMode_BytecodeEntry_B:
 	call	(xhl)
 PerfMode_BytecodeEntry_B_Return:
 	ret
+	; Handler dispatch table, 128 B.  Read by PerfMode_BytecodeEntry_B (0xEF743F): `ld xix, PerfMode_DispatchTable_B`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 PerfMode_DispatchTable_B:
-	.long UIState_DispatchHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long PerfMode_ParamHandler_Data
-	.long DefaultHandler_Ret
-	.long UIState_Evt05_Handler
-	.long UIState_Evt06_Handler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_ShortCallHandler
-	.long DefaultHandler_Ret
-	.long ScoopDisp_DispatchTable_Extended_0x20
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIState_DispatchHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long PerfMode_ParamHandler_Data
-	.long DefaultHandler_Ret
-	.long UIState_Evt05_Handler
-	.long UIState_Evt06_Handler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIState_DispatchHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	PerfMode_ParamHandler_Data
+	.long	DefaultHandler_Ret
+	.long	UIState_EventTable_Target5
+	.long	UIState_EventTable_Target6
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_ShortCallHandler
+	.long	DefaultHandler_Ret
+	.long	UIState_EventTable_Target11
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIState_DispatchHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	PerfMode_ParamHandler_Data
+	.long	DefaultHandler_Ret
+	.long	UIState_EventTable_Target5
+	.long	UIState_EventTable_Target6
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_BytecodeEntry_C:
 	ld	hl, bc
 	cp	hl, 31
@@ -2491,39 +2592,43 @@ PerfMode_BytecodeEntry_C:
 	call	(xhl)
 PerfMode_BytecodeEntry_C_Return:
 	ret
+	; Handler dispatch table, 128 B.  Read by PerfMode_BytecodeEntry_C (0xEF74DA): `ld xix, PerfMode_DispatchTable_C`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 PerfMode_DispatchTable_C:
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long PerfMode_Handler_EvtA
-	.long PerfMode_Handler_EvtB
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	PerfMode_Handler_EvtA
+	.long	PerfMode_Handler_EvtB
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 PerfMode_Handler_EvtA:
 	bit	7, w
 	jrl	nz, PerfMode_Handler_EvtA_Return
@@ -2696,12 +2801,20 @@ PerfMode_Handler_EvtB_Return3:
 	ret
 
 
+	; Handler dispatch table, 32 B.  Read by PerfMode_Handler_EvtB (0xEF7580): `ld xhl, ScoopDisp_DispatchTable_Extended`
+	; indexed with stride 4 (`sla wa, 2`)
+	; 8 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 ScoopDisp_DispatchTable_Extended:
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long VoiceCtrl_CheckAndReset
-	.byte	0x00, 0x03, 0x03, 0x03, 0x00, 0x01, 0x03, 0x03, 0x00, 0x03, 0x02, 0x03, 0x00, 0x00, 0x00, 0x00
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	VoiceCtrl_CheckAndReset
+	.long	0x03030300
+	.long	0x03030100
+	.long	0x03020300
+	.long	0x00000000
+	; Entry 11 of UIState_EventTable (a code pointer the table holds).
+UIState_EventTable_Target11:
 	bit	7, w
 	jrl	nz, ScoopDisp_DispatchTable_Extended_Code_Return
 	ld	xiy, 3567
@@ -2755,11 +2868,14 @@ Timer_ModeDispatch_Return:
 	ret
 
 
+	; Handler dispatch table, 16 B.  Read by Timer_ModeDispatch (0xEF77EA): `ld xix, Timer_ModeSelect_Table`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3429:16)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 Timer_ModeSelect_Table:
-	.long Timer_ModeHandler_0
-	.long Timer_ModeHandler_1
-	.long Timer_ModeHandler_1
-	.long Timer_ModeHandler_3
+	.long	Timer_ModeHandler_0
+	.long	Timer_ModeHandler_1
+	.long	Timer_ModeHandler_1
+	.long	Timer_ModeHandler_3
 Timer_ModeHandler_1:
 	; --- Guard/init function (55 bytes) ---
 	call VoiceState_DataBlock2_0x1D8
@@ -3632,11 +3748,14 @@ ToneParam_Evt09_BytecodeHandler_Skip:
 	add	xsp, 2
 	jp	ToneParam_Evt09_BytecodeHandler_0xBB
 	ret
+	; Handler dispatch table, 16 B.  Read by ToneParam_Evt09_BytecodeHandler (0xEF80AF): `ld xix, ToneParam_HandlerTable_BC`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3429:16)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 ToneParam_HandlerTable_BC:
-	.long DefaultHandler_Ret
-	.long VoiceSlot_TableSetup
-	.long VoiceSlot_TableSetup
-	.long DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	VoiceSlot_TableSetup
+	.long	VoiceSlot_TableSetup
+	.long	DefaultHandler_Ret
 	cpdi8	(0x0d65), 3
 	jrl	z, ToneParam_HandlerTable_BC_Code_Skip
 ToneParam_HandlerTable_BC_Code_Loop:
@@ -4216,11 +4335,15 @@ Display_ModeHandler:
 	ret
 
 
+	; Handler dispatch table, 16 B.  Read by Display_ModeHandler (0xEF87A3): `ld xix, DisplayMode_DispatchTable`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3429:16)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; also read at scoop_display.s:11920
 DisplayMode_DispatchTable:
-	.long DefaultHandler_Ret
-	.long DisplayMode_Handler_1
-	.long DisplayMode_Handler_2
-	.long DisplayMode_Handler_3
+	.long	DefaultHandler_Ret
+	.long	DisplayMode_Handler_1
+	.long	DisplayMode_Handler_2
+	.long	DisplayMode_Handler_3
 DisplayMode_Handler_1:
 	ld	(3567:16), 0
 	call	Display_BytecodeBlock_F
@@ -4529,6 +4652,8 @@ DisplayMode_Handler_3_Skip25:
 DisplayMode_Handler_3_Skip26:
 	ld	(3415:16), l
 	ret
+	; Entry 1 of PerfMode_EventTable_0 (a code pointer the table holds).
+PerfMode_EventTable_0_Target1:
 	bit	7, w
 	jrl	nz, DisplayMode_Handler_3_Skip8
 	call	DisplayMode_Handler_3_0x385
@@ -4752,6 +4877,8 @@ DisplayMode_Handler_3_Skip11:
 	ordi8	(0xe3e2), 8
 DisplayMode_Handler_3_Return9:
 	ret
+	; Entry 2 of PerfMode_EventTable_0 (a code pointer the table holds).
+PerfMode_EventTable_0_Target2:
 	bit	7, w
 	jrl	nz, DisplayMode_Handler_3_Skip32
 	call	DisplayMode_Handler_3_Helper
@@ -4895,11 +5022,14 @@ DisplayMode_Handler_3_Return12:
 	ret
 
 
+	; Handler dispatch table, 16 B.  Read by DisplayMode_Handler_3 (0xEF87FB): `ld xix, DMA_ChannelSelect_Table`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3429:16)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 DMA_ChannelSelect_Table:
-	.long DMA_ChannelHandler_0
-	.long DMA_ChannelHandler_1
-	.long DMA_ChannelHandler_2
-	.long DMA_ChannelHandler_3
+	.long	DMA_ChannelHandler_0
+	.long	DMA_ChannelHandler_1
+	.long	DMA_ChannelHandler_2
+	.long	DMA_ChannelHandler_3
 DMA_ChannelHandler_1:
 	ld	(0x3717:16), 255
 	cpdi8	(0x0def), 0
@@ -5384,9 +5514,13 @@ VoiceSlot_TableSetup_Code_Skip8:
 	call	VoiceState_DataBlock2_0x561
 VoiceSlot_TableSetup_Code_Return2:
 	ret
+	; Entry 6 of UIState_EventTable (a code pointer the table holds).
+UIState_EventTable_Target6:
 	call	MemConfig_Handler_0
 	call	SysInit_SendAllNotesAndReset
 	ret
+	; Entry 5 of UIState_EventTable (a code pointer the table holds).
+UIState_EventTable_Target5:
 	call	MemConfig_Handler_1
 	call	SysInit_SendAllNotesAndReset
 	ret
@@ -5781,7 +5915,7 @@ VoiceCtrl_ParamSetupBytecode_Skip10:
 	ld	l, a
 	xor	h, h
 	push	xix
-	ld	xix, VoiceCtrl_ParamSetupBytecode_0x1F7
+	ld	xix, VoiceCtrl_ParamSetupBytecode_Tbl2
 	ld_rrb	l, xix, hl
 	pop	xix
 	cp	l, 255
@@ -5789,7 +5923,7 @@ VoiceCtrl_ParamSetupBytecode_Skip10:
 	ld	c, l
 	ld	l, a
 	push	xde
-	ld	xde, VoiceCtrl_ParamSetupBytecode_0x20B
+	ld	xde, VoiceCtrl_ParamSetupBytecode_Tbl3
 	ld_rrb	l, xde, hl
 	pop	xde
 	cp	l, 255
@@ -5801,7 +5935,7 @@ VoiceCtrl_ParamSetupBytecode_Skip10:
 VoiceCtrl_ParamSetupBytecode_Loop:
 	ld	a, 0:opc
 	jp	VoiceCtrl_ParamSetupBytecode_0x1E4
-	ld	xhl, VoiceCtrl_ParamSetupBytecode_0x1E5
+	ld	xhl, VoiceCtrl_ParamSetupBytecode_Tbl
 	ld_rr8b	a, xhl, a
 	jp	VoiceCtrl_ParamSetupBytecode_0x1CA
 VoiceCtrl_ParamSetupBytecode_Skip11:
@@ -5823,10 +5957,17 @@ VoiceCtrl_ParamSetupBytecode_Skip11:
 	ld	(xhl), a
 	ld	a, 1:opc
 	ret
+	; Byte data, 18 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97E0): `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl`
+VoiceCtrl_ParamSetupBytecode_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
 	.byte	0x00, 0x00
+	; Byte data, 20 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97E0): `ld xix, VoiceCtrl_ParamSetupBytecode_Tbl2`
+	; index bounded to 0..22 (`cp a, 22` / `jrl ugt` skips larger values)
+VoiceCtrl_ParamSetupBytecode_Tbl2:
 	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte	0xff, 0xff, 0xff, 0xff
+	; Byte data, 20 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97E0): `ld xde, VoiceCtrl_ParamSetupBytecode_Tbl3`
+VoiceCtrl_ParamSetupBytecode_Tbl3:
 	.byte	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte	0xff, 0xff, 0xff, 0xff
 	push	xwa
@@ -5908,7 +6049,7 @@ VoiceCtrl_ParamSetupBytecode_Skip22:
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Skip23
 	add	a, 8
 VoiceCtrl_ParamSetupBytecode_Skip23:
-	ld	xhl, SystemInit_StepHandler_0_0x9
+	ld	xhl, VoiceCtrl_ParamSetupBytecode_Tbl4
 	ld_rr8b	a, xhl, a
 	stb_d8	(0x3728), a
 	push	xwa
@@ -6213,11 +6354,14 @@ VoiceCtrl_ParamSetupBytecode_Epilogue:
 	ret
 
 
+	; Handler dispatch table, 16 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97E0): `ld xde, SerialPort_ModeSelect_Table`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld a, (3429:16)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 SerialPort_ModeSelect_Table:
-	.long SerialPort_ModeHandler_0
-	.long SerialPort_ModeHandler_1
-	.long SerialPort_ModeHandler_1
-	.long SerialPort_ModeHandler_3
+	.long	SerialPort_ModeHandler_0
+	.long	SerialPort_ModeHandler_1
+	.long	SerialPort_ModeHandler_1
+	.long	SerialPort_ModeHandler_3
 SerialPort_ModeHandler_1:
 	ld	(3567:16), 5
 	call	DisplayStr_BytecodeBlock_C
@@ -6380,6 +6524,7 @@ SerialPort_ModeHandler_0_Skip8:
 	ld	(0x342d:16), w
 	ld	(0x342e:16), a
 	ret
+	; Byte data, 28 B.  Read by SerialPort_ModeHandler_0 (0xEF9E03): `ld xix, ScoopParam_ValueTable`
 ScoopParam_ValueTable:
 	.byte	0x00, 0x00, 0x08, 0x00, 0x0c, 0x00, 0x10, 0x00, 0x18, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00
 	.byte	0x60, 0x00, 0xc0, 0x00, 0x80, 0x01, 0x00, 0x03, 0x80, 0x04, 0x00, 0x06
@@ -6515,6 +6660,10 @@ ScoopParam_ValueTable_Join2:
 	jp	ScoopParam_ValueTable_Join
 ScoopParam_ValueTable_Return2:
 	ret
+	; Byte data, 36 B.  No reader found: no label, positional or absolute .set
+	; name at this address is loaded anywhere in the image (searched by
+	; scripts/analysis/scoop_data_headers.py); purpose not established.
+Unref_EFA10F_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
 	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x70, 0x98, 0xff, 0xff, 0x03, 0x03, 0x03, 0x03, 0x03
 	.byte	0x03, 0x03, 0x03, 0x04
@@ -6693,13 +6842,14 @@ Interrupt_CodeDispatch:
 Interrupt_NullRet:
 	ret
 
+	; Handler dispatch table, 20 B.  Read by Interrupt_CodeDispatch (0xEFA349): `ld xwa, Interrupt_VectorSelect_Table`
+	; 5 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 Interrupt_VectorSelect_Table:
-	.long Interrupt_VectorHandler_0
-	.long Interrupt_VectorHandler_1
-	.long Interrupt_VectorHandler_2
-	.long Interrupt_VectorHandler_3
-	.long Interrupt_VectorHandler_4
-
+	.long	Interrupt_VectorHandler_0
+	.long	Interrupt_VectorHandler_1
+	.long	Interrupt_VectorHandler_2
+	.long	Interrupt_VectorHandler_3
+	.long	Interrupt_VectorHandler_4
 Interrupt_VectorHandler_0:
 	cp (0x8d40:16), 0
 	jrl z, Interrupt_Vec0_InitPath
@@ -6885,11 +7035,14 @@ PortConfig_SetupBytecode_Return:
 	pop xix
 	call	(xhl)
 	ret
+	; Handler dispatch table, 16 B.  Read by PortConfig_SetupBytecode (0xEFA4B8): `ld xix, PortConfig_Select_Table`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld hl, wa`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 PortConfig_Select_Table:
-	.long PortConfig_Handler_0
-	.long PortConfig_Handler_1
-	.long PortConfig_Handler_1
-	.long PortConfig_Handler_3
+	.long	PortConfig_Handler_0
+	.long	PortConfig_Handler_1
+	.long	PortConfig_Handler_1
+	.long	PortConfig_Handler_3
 PortConfig_Handler_1:
 	ordi8	(0x0dd3), 1
 	call	VoiceSlot_TableSetup
@@ -7041,6 +7194,7 @@ ScoopParam_ValueTable_Helper2:
 	ld_rr8b	a, xhl, a
 	stb_d8	(0x0d65), a
 	ret
+	; Byte data, 24 B.  Read by PortConfig_Handler_0 (0xEFA565): `ld xhl, PortConfig_DataTable_A`
 PortConfig_DataTable_A:
 	.byte	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x02
 	.byte	0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
@@ -7070,6 +7224,8 @@ PortConfig_DataTable_A_Sub:
 	call	SysInit_BytecodeBlock_0x3DB
 PortConfig_DataTable_A_Sub_Return:
 	ret
+	; Byte data, 20 B.  Read by PortConfig_Handler_0 (0xEFA565): `ld xhl, PortConfig_DataTable_B`
+	; indexed with stride 4 (`sla hl, 2`)
 PortConfig_DataTable_B:
 	.byte	0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05, 0x06, 0x03, 0x0f, 0xff, 0xff, 0xff
 	.byte	0xff, 0x0c, 0x0d, 0x0e
@@ -7085,20 +7241,25 @@ ScoopParam_ValueTable_Helper4:
 	jrl	nz, ScoopParam_ValueTable_Helper4
 	ret
 ScoopParam_ValueTable_Helper5:
-	ld	xhl, PortConfig_DataTable_B_0x44
+	ld	xhl, PortConfig_Handler_0_Tbl
 	ld	a, (3429:16)
 	and	a, 3
 	ld_rr8b a, xhl, a
 	ld (3567:16), a
 	ret
+	; Byte data, 4 B.  Read by PortConfig_Handler_0 (0xEFA565): `ld xhl, PortConfig_Handler_0_Tbl`
+PortConfig_Handler_0_Tbl:
 	.byte	0x00, 0x00, 0x00, 0x0c
 PortConfig_DataTable_B_Return:
 	ret
+	; Pointer table, 16 B.  No reader found: no label, positional or absolute .set
+	; name at this address is loaded anywhere in the image (searched by
+	; scripts/analysis/scoop_data_headers.py); purpose not established.
 ClockConfig_Select_Table:
-	.long ClockConfig_Handler_0
-	.long ClockConfig_Handler_1
-	.long ClockConfig_Handler_1
-	.long ClockConfig_Handler_0
+	.long	ClockConfig_Handler_0
+	.long	ClockConfig_Handler_1
+	.long	ClockConfig_Handler_1
+	.long	ClockConfig_Handler_0
 ClockConfig_Handler_1:
 	ordi8	(0xe3e2), 2
 	ret
@@ -7107,12 +7268,16 @@ ClockConfig_Handler_0:
 	ret
 ScoopParam_ValueTable_Helper6:
 	ret
+	; Byte data, 4 B.  No reader found: no label, positional or absolute .set
+	; name at this address is loaded anywhere in the image (searched by
+	; scripts/analysis/scoop_data_headers.py); purpose not established.
+Unref_EFA7C5_Tbl:
 	.byte	0x04, 0x02, 0x02, 0x04
 ScoopParam_ValueTable_Sub_Helper:
 	cpdi8	(0x0d65), 3
 	jrl	nz, ScoopParam_ValueTable_Helper6_Return
 	ld	bc, 6:i3
-	ld	xiy, ClockConfig_Handler_0_0x9F
+	ld	xiy, ClockConfig_Handler_0_Tbl
 	ld	xix, 3471
 	push	xix
 	ldir85
@@ -7149,7 +7314,7 @@ ScoopParam_ValueTable_Sub_Helper:
 	call	SwbtWr_QueuePostEvent
 ScoopParam_ValueTable_Helper6_Skip:
 	ld	bc, 6:i3
-	ld	xiy, ClockConfig_Handler_0_0xA5
+	ld	xiy, ClockConfig_Handler_0_Tbl2
 	ld	xix, 3471
 	push	xix
 	ldir85
@@ -7162,7 +7327,11 @@ ScoopParam_ValueTable_Helper6_Skip:
 	call	SysInit_BytecodeBlock_0x486
 ScoopParam_ValueTable_Helper6_Return:
 	ret
+	; Byte data, 6 B.  Read by ClockConfig_Handler_0 (0xEFA7BE): `ld xiy, ClockConfig_Handler_0_Tbl`
+ClockConfig_Handler_0_Tbl:
 	.byte	0xc0, 0x00, 0x48, 0x00, 0x00, 0x00
+	; Byte data, 6 B.  Read by ClockConfig_Handler_0 (0xEFA7BE): `ld xiy, ClockConfig_Handler_0_Tbl2`
+ClockConfig_Handler_0_Tbl2:
 	.byte	0xb0, 0x00, 0x48, 0x07, 0x00, 0x30
 ScoopParam_ValueTable_Sub_Helper2:
 	xor	wa, wa
@@ -7396,7 +7565,7 @@ SysEx_BytecodeDispatcher_Skip2:
 	call	MIDI_SendSysExFromW
 	pop	xhl
 	push	xde
-	ld	xde, SysInit_BytecodeBlock_0x6
+	ld	xde, SysEx_BytecodeDispatcher_Tbl2
 	ld_rrb w, xde, hl
 	pop	xde
 	ld	(3425:16), w
@@ -7459,14 +7628,17 @@ SysEx_BytecodeDispatcher_Skip6:
 	call	Display_BytecodeBlock_F_0x3A8
 	call	Display_UpdateRegion3
 	ret
+	; Handler dispatch table, 24 B.  Read by SysEx_BytecodeDispatcher (0xEFAADB): `ld xix, MemoryConfig_Handler_Table`
+	; indexed with stride 4 (`sla hl, 2`)
+	; 6 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 MemoryConfig_Handler_Table:
-	.long MemConfig_Handler_0
-	.long MemConfig_Handler_1
-	.long MemConfig_Handler_2
-	.long MemConfig_Handler_3
-	.long MemConfig_Handler_4
-	.long MemConfig_Handler_5
-	ld	xiy, MemoryConfig_Handler_Table_0xB2
+	.long	MemConfig_Handler_0
+	.long	MemConfig_Handler_1
+	.long	MemoryConfig_Handler_Table_Target2
+	.long	MemConfig_Handler_3
+	.long	MemConfig_Handler_4
+	.long	MemConfig_Handler_5
+	ld	xiy, SysEx_BytecodeDispatcher_Tbl
 	ld	xix, 3471
 	ld	a, 176:opc
 	ld	(xix), a
@@ -7527,6 +7699,8 @@ MemoryConfig_Handler_Table_Code_Skip3:
 	ld	w, (xiy+3)
 	ldto_lerp	xiy, 56
 	ret
+	; Byte data, 97 B.  Read by SysEx_BytecodeDispatcher (0xEFAADB): `ld xiy, SysEx_BytecodeDispatcher_Tbl`
+SysEx_BytecodeDispatcher_Tbl:
 	.byte	0x04, 0x04, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x08, 0x08, 0x00, 0x03, 0x00, 0x08, 0x00, 0x00
 	.byte	0x10, 0x10, 0x00, 0x05, 0x00, 0x10, 0x2f, 0x02, 0x20, 0x20, 0x00, 0x05, 0x00, 0x20, 0x2f, 0x02
 	.byte	0x40, 0x40, 0x00, 0x04, 0x00, 0x40, 0x2f, 0x01, 0x80, 0x80, 0x00, 0x04, 0x00, 0x80, 0x2f, 0x01
@@ -7534,6 +7708,8 @@ MemoryConfig_Handler_Table_Code_Skip3:
 	.byte	0x10, 0x10, 0x00, 0x05, 0x00, 0x10, 0x2f, 0x02, 0x20, 0x20, 0x00, 0x05, 0x00, 0x20, 0x2f, 0x02
 	.byte	0x40, 0x40, 0x00, 0x04, 0x00, 0x40, 0x2f, 0x01, 0x80, 0x80, 0x00, 0x04, 0x00, 0x80, 0x2f, 0x01
 	.byte	0x0e
+	; Entry 2 of MemoryConfig_Handler_Table (a code pointer the table holds).
+MemoryConfig_Handler_Table_Target2:
 	ld	xhl, 0x10f9
 	bitm	2, (xhl)
 	jrl	z, MemoryConfig_Handler_Table_Code_Skip4
@@ -7944,18 +8120,21 @@ MemConfig_Handler_3_Return:
 	pop xix
 	call	(xhl)
 	ret
+	; Handler dispatch table, 44 B.  Read by MemConfig_Handler_3 (0xEFB0D3): `ld xix, SndDispatch_JumpTable_Main`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld hl, wa`
+	; 11 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 SndDispatch_JumpTable_Main:
-	.long DefaultHandler_Ret
-	.long SndDispatch_Handler_1
-	.long SndDispatch_Handler_2
-	.long SndDispatch_TableEntryBegin
-	.long SndDispatch_ShortHandler
-	.long SndDispatch_TableEntryBegin
-	.long SndDispatch_TableEntryBegin
-	.long SndDispatch_Handler_3
-	.long SndDispatch_ShortHandler
-	.long SndDispatch_Handler_3
-	.long SndDispatch_Handler_4
+	.long	DefaultHandler_Ret
+	.long	SndDispatch_Handler_1
+	.long	SndDispatch_Handler_2
+	.long	SndDispatch_TableEntryBegin
+	.long	SndDispatch_ShortHandler
+	.long	SndDispatch_TableEntryBegin
+	.long	SndDispatch_TableEntryBegin
+	.long	SndDispatch_Handler_3
+	.long	SndDispatch_ShortHandler
+	.long	SndDispatch_Handler_3
+	.long	SndDispatch_Handler_4
 SndDispatch_Handler_1:
 	call	SndDispatch_ProcessCommand_0xF9
 	call	SndDispatch_ProcessCommand_0xA5
@@ -7972,13 +8151,16 @@ SndDispatch_Handler_1:
 	call	(xhl)
 SndDispatch_Handler_1_Return:
 	ret
+	; Handler dispatch table, 24 B.  Read by SndDispatch_Handler_1 (0xEFB1D2): `ld xix, SndDispatch_SubTable_1`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld hl, wa`
+	; 6 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 SndDispatch_SubTable_1:
-	.long SndDispatch_InitHandler
-	.long SndDispatch_ProcessCommand
-	.long SndDispatch_ProcessCommand
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	SndDispatch_InitHandler
+	.long	SndDispatch_ProcessCommand
+	.long	SndDispatch_ProcessCommand
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 SndDispatch_Handler_2:
 	call	SndDispatch_ProcessCommand_0xF9
 	call	SndDispatch_ProcessCommand_0xA5
@@ -7995,13 +8177,16 @@ SndDispatch_Handler_2:
 	call	(xhl)
 SndDispatch_Handler_2_Return:
 	ret
+	; Handler dispatch table, 24 B.  Read by SndDispatch_Handler_2 (0xEFB20F): `ld xix, SndDispatch_SubTable_2`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld hl, wa`
+	; 6 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 SndDispatch_SubTable_2:
-	.long SndDispatch_InitHandler
-	.long SndDispatch_ProcessCommand
-	.long SndDispatch_ProcessCommand
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	SndDispatch_InitHandler
+	.long	SndDispatch_ProcessCommand
+	.long	SndDispatch_ProcessCommand
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 SndDispatch_TableEntryBegin:
 	call	SndDispatch_ProcessCommand_0xF9
 	call	SndDispatch_ProcessCommand_0xA5
@@ -8018,13 +8203,17 @@ SndDispatch_TableEntryBegin:
 	call	(xhl)
 SndDispatch_TableEntryBegin_Return:
 	ret
-SndDispatch_BytecodeString:	.asciz "èaï"
+	; Handler dispatch table, 24 B.  Read by SndDispatch_TableEntryBegin (0xEFB24C): `ld xix, SndDispatch_BytecodeString`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld hl, wa`
+	; 6 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+SndDispatch_BytecodeString:
+	.long	DefaultHandler_Ret
 SndDispatch_SubTable_3:
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SndDispatch_ProcessCommand
-	.long SndDispatch_ProcessCommand
-	.long DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SndDispatch_ProcessCommand
+	.long	SndDispatch_ProcessCommand
+	.long	DefaultHandler_Ret
 SndDispatch_ShortHandler:
 	call	SndDispatch_ProcessCommand
 	ret
@@ -8044,13 +8233,16 @@ SndDispatch_Handler_3:
 	call	(xhl)
 SndDispatch_Handler_3_Return:
 	ret
+	; Handler dispatch table, 24 B.  Read by SndDispatch_Handler_3 (0xEFB28E): `ld xix, SndDispatch_SubTable_4`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld hl, wa`
+	; 6 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 SndDispatch_SubTable_4:
-	.long SndDispatch_CallAndInit
-	.long SndDispatch_InitHandler
-	.long SndDispatch_InitHandler
-	.long SndDispatch_ProcessCommand
-	.long SndDispatch_InitHandler
-	.long DefaultHandler_Ret
+	.long	SndDispatch_CallAndInit
+	.long	SndDispatch_InitHandler
+	.long	SndDispatch_InitHandler
+	.long	SndDispatch_ProcessCommand
+	.long	SndDispatch_InitHandler
+	.long	DefaultHandler_Ret
 SndDispatch_Handler_4:
 	call	SndDispatch_ProcessCommand_0xF9
 	call	SndDispatch_ProcessCommand_0xA5
@@ -8061,19 +8253,23 @@ SndDispatch_Handler_4:
 	sla	wa, 2
 	ld	hl, wa
 	push	xix
-	ld	xix, SndDispatch_Handler_4_0x25
+	ld	xix, SndDispatch_Handler_4_DispatchTbl
 	ld_rrl xhl, xix, hl
 	pop xix
 	call	(xhl)
 SndDispatch_Handler_4_Return:
 	ret
-	.byte	0x08, 0xb3, 0xef, 0x00
+	; Handler dispatch table, 24 B.  Read by SndDispatch_Handler_4 (0xEFB2CB): `ld xix, SndDispatch_Handler_4_DispatchTbl`
+	; indexed with stride 4 (`sla wa, 2`), index from `ld hl, wa`
+	; 6 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+SndDispatch_Handler_4_DispatchTbl:
+	.long	SndDispatch_CallAndInit
 SndDispatch_SubTable_5:
-	.long SndDispatch_InitHandler
-	.long SndDispatch_SetFlag30
-	.long SndDispatch_ProcessCommand
-	.long SndDispatch_SetFlag30
-	.long DefaultHandler_Ret
+	.long	SndDispatch_InitHandler
+	.long	SndDispatch_SetFlag30
+	.long	SndDispatch_ProcessCommand
+	.long	SndDispatch_SetFlag30
+	.long	DefaultHandler_Ret
 SndDispatch_CallAndInit:
 	call	VoiceSlot_SubrRetZ
 	call	SndDispatch_InitHandler
@@ -8522,16 +8718,19 @@ SysInit_SendAllNotesAndReset:
 	ret
 
 
+	; Handler dispatch table, 24 B.  Read by SysInit_SendAllNotesAndReset (0xEFB7C9): `ld xde, SystemInit_Handler_Table`
+	; indexed with stride 4 (`sla wa, 2`)
+	; 6 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 SystemInit_Handler_Table:
-	.long SystemInit_StepHandler_0
-	.long SystemInit_StepHandler_0
-	.long SystemInit_StepHandler_2
-	.long SystemInit_StepHandler_3
-	.long SystemInit_StepHandler_4
-	.long SystemInit_StepHandler_5
+	.long	SystemInit_StepHandler_0
+	.long	SystemInit_StepHandler_0
+	.long	SystemInit_StepHandler_2
+	.long	SystemInit_StepHandler_3
+	.long	SystemInit_StepHandler_4
+	.long	SystemInit_StepHandler_5
 	push	xhl
 	ld	a, l
-	ld	xhl, SystemInit_StepHandler_0_0x9
+	ld	xhl, VoiceCtrl_ParamSetupBytecode_Tbl4
 	ld_rr8b	a, xhl, a
 	ld	(0x3728:16), a
 	ld	(3422:16), 16
@@ -8589,6 +8788,9 @@ SystemInit_StepHandler_0:
 	call	MIDI_SendSysExFromW
 	ld	w, 0:opc
 	ret
+	; Byte data, 16 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97E0): `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl4`
+	; also read at scoop_display.s:8534
+VoiceCtrl_ParamSetupBytecode_Tbl4:
 	.byte	0x00, 0x00, 0x05, 0x06, 0x07, 0x0b, 0x03, 0x04, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x00, 0x00
 	cpdi8	(0x0d65), 0
 	jrl	nz, SystemInit_StepHandler_0_Skip2
@@ -8613,7 +8815,7 @@ SystemInit_StepHandler_0_Skip2:
 	sla	hl, 2
 	extz	xhl
 	push	xix
-	ld	xix, SystemInit_StepHandler_0_0xBD
+	ld	xix, SystemInit_StepHandler_0_Tbl
 	ld_rrw de, xix, hl
 	pop xix
 	xor	a, a
@@ -8644,11 +8846,18 @@ SystemInit_StepHandler_0_Skip2:
 	jp	SystemInit_StepHandler_0_0x7A
 SystemInit_StepHandler_0_Return:
 	ret
+	; Byte data, 24 B.  Read by SystemInit_StepHandler_0 (0xEFB875): `ld xix, SystemInit_StepHandler_0_Tbl`
+	; indexed with stride 4 (`sla hl, 2`)
+	; also read at scoop_display.s:8679
+SystemInit_StepHandler_0_Tbl:
 	.byte	0x00, 0x04, 0x60, 0x04, 0x00, 0x03, 0x60, 0x03, 0x00, 0x02, 0x60, 0x02, 0x30, 0x01, 0x90, 0x01
 	.byte	0x00, 0x01, 0x60, 0x01, 0x30, 0x00, 0x30, 0x01
+	; Byte data, 6 B.  Read by SysEx_BytecodeDispatcher (0xEFAADB): `ld xix, SysInit_BytecodeBlock`
 SysInit_BytecodeBlock:
 	.ascii	"P@0 "
 	.byte	0x10, 0x00
+	; Byte data, 6 B.  Read by SysEx_BytecodeDispatcher (0xEFAADB): `ld xde, SysEx_BytecodeDispatcher_Tbl2`
+SysEx_BytecodeDispatcher_Tbl2:
 	.byte	0x01, 0x02, 0x03, 0x05, 0x04, 0x06
 	ld	b, (0xcef1:16)
 	sla	b, 1
@@ -8676,7 +8885,7 @@ SysInit_BytecodeBlock_Code_Skip17:
 	xor	h, h
 	sla	hl, 2
 	push	xde
-	ld	xde, SystemInit_StepHandler_0_0xBD
+	ld	xde, SystemInit_StepHandler_0_Tbl
 	lda_rr xde, xde, hl
 	ld	bc, (xde+2)
 	pop	xde
@@ -10126,7 +10335,7 @@ VoiceSlot_StatusRet_Skip8:
 	and	a, 7
 	sla	a, 1
 	or	a, e
-	ld	xhl, VoiceState_SaveAndRestore_0x1D
+	ld	xhl, VoiceSlot_StatusRet_Tbl2
 	ld_rr8b	a, xhl, a
 	stb_d8	(0x0d61), a
 	call	SNS_Init_Startup
@@ -10786,7 +10995,7 @@ VoiceSlot_StatusRet_Skip38:
 	call	VoiceSlot_FinalRetZ
 	ret
 	ld	a, (3429:16)
-	ld	xhl, VoiceState_SaveAndRestore_0x19
+	ld	xhl, VoiceSlot_StatusRet_Tbl
 	ld_rr8b	a, xhl, a
 	stb_d8	(0x0def), a
 	call	Display_UpdateRegion0
@@ -10795,7 +11004,7 @@ VoiceSlot_StatusRet_Skip38:
 	sla	hl, 2
 	extz	xhl
 	push	xix
-	ld	xix, VoiceState_SaveAndRestore_0x9
+	ld	xix, VoiceSlot_StatusRet_DispatchTbl
 	ld_rrl xhl, xix, hl
 	pop xix
 	call	(xhl)
@@ -10804,11 +11013,20 @@ VoiceState_SaveAndRestore:
 	call	DisplayStr_TempoString_0x74
 	call	DisplayStr_StyleSectionInit
 	ret
-	.byte	0x78, 0xf0, 0xef, 0x00
-	.long DisplayStr_BytecodeBlock_C
-	.long DisplayStr_BytecodeBlock_C
-	.long VoiceState_SaveAndRestore
+	; Handler dispatch table, 16 B.  Read by VoiceSlot_StatusRet (0xEFC7B2): `ld xix, VoiceSlot_StatusRet_DispatchTbl`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3429:16)`
+	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+VoiceSlot_StatusRet_DispatchTbl:
+	.long	DisplayStr_BytecodeBlock_E_0x1
+	.long	DisplayStr_BytecodeBlock_C
+	.long	DisplayStr_BytecodeBlock_C
+	.long	VoiceState_SaveAndRestore
+	; Byte data, 4 B.  Read by VoiceSlot_StatusRet (0xEFC7B2): `ld xhl, VoiceSlot_StatusRet_Tbl`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld a, (3429:16)`
+VoiceSlot_StatusRet_Tbl:
 	.byte	0x00, 0x05, 0x05, 0x0f
+	; Byte data, 12 B.  Read by VoiceSlot_StatusRet (0xEFC7B2): `ld xhl, VoiceSlot_StatusRet_Tbl2`
+VoiceSlot_StatusRet_Tbl2:
 	.byte	0x00, 0x06, 0x04, 0x05, 0x03, 0x07, 0x02, 0x07, 0x01, 0x07, 0x07, 0x07
 
 VoiceSlot_SaveState:
@@ -11399,7 +11617,7 @@ VoiceState_DataBlock2_Code_Skip16:
 	ld	iy, wa
 	sla	iy, 1
 	push	xix
-	ld	xix, VoiceState_DataBlock2_0x541
+	ld	xix, VoiceState_DataBlock2_Tbl
 	ld_rrw bc, xix, iy
 	pop xix
 	and	bc, (0xffec:24)
@@ -11428,6 +11646,9 @@ ScoopParam_ValueTable_Helper12_Skip2:
 	anddi8	(0x287b), 251
 	xor	w, w
 	ret
+	; Byte data, 32 B.  Read by VoiceState_DataBlock2 (0xEFD17A): `ld xix, VoiceState_DataBlock2_Tbl`
+	; indexed with stride 2 (`sla iy, 1`)
+VoiceState_DataBlock2_Tbl:
 	.byte	0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80, 0x00
 	.byte	0x00, 0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80
 	xor	bc, bc
@@ -11746,7 +11967,7 @@ SubCPU_ToneParamDisplay_Skip2:
 	ld	(xix+2), a
 	ld	l, (4380:16)
 	exts	hl
-	ld	xiy, SubCPU_ToneDispatch_0x50
+	ld	xiy, SubCPU_ToneParamDisplay_Tbl
 	ld_rrb a, xiy, hl
 	ld (xix+3), a
 	pop xiy
@@ -11765,7 +11986,7 @@ SubCPU_ToneParamDisplay_Skip2:
 	jrl	z, SubCPU_ToneParamDisplay_Epilogue2
 	xor	wa, wa
 	ld	a, (4380:16)
-	ld	xix, SubCPU_ToneDispatch_0x50
+	ld	xix, SubCPU_ToneParamDisplay_Tbl
 	ld_rrb a, xix, wa
 	ld_rrb a, xhl, wa
 	ld (4381:16), a
@@ -11814,6 +12035,10 @@ SubCPU_ToneParamDisplay_Join:
 	ldir85
 	call	Display_UpdateRegion3
 	ret
+	; Lcd text, 40 B.  No reader found: no label, positional or absolute .set
+	; name at this address is loaded anywhere in the image (searched by
+	; scripts/analysis/scoop_data_headers.py); purpose not established.
+Str_PanKeyShiftTuning:
 	.byte 0x50, 0x41
 	.ascii "N      :KEY SHIFT:TUNING   :BEND SENS:"
 SubCPU_ToneDispatch:
@@ -11831,7 +12056,12 @@ SubCPU_ToneDispatch:
 	.long 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa04
 	.long 0x0000fb3c, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0x0000faee, 0x0000fb08, 0x0000fb22
+	; Byte data, 4 B.  Read by SubCPU_ToneParamDisplay (0xEFD9BC): `ld xiy, SubCPU_ToneParamDisplay_Tbl`
+	; also read at scoop_display.s:11768
+SubCPU_ToneParamDisplay_Tbl:
 	.byte	0x08, 0x09, 0x0a, 0x0b
+	; Entry 1 of SubCPU_ToneParamRet (a code pointer the table holds).
+SubCPU_ToneParamRet_Target1:
 	xor	l, l
 	bit	7, w
 	jrl	nz, SubCPU_ToneDispatch_Code_Skip
@@ -11949,39 +12179,43 @@ PerfMode_ParamHandler_11:
 	call	(xhl)
 PerfMode_ParamHandler_11_Return:
 	ret
+	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_11 (0xEFDCA6): `ld xix, SubCPU_ToneParamRet`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
+	; 32 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
+	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 SubCPU_ToneParamRet:
-	.long UIDisp_DefaultInputHandler
-	.long SubCPU_ToneDispatch_0x54
-	.long DefaultHandler_Ret
-	.long SubCPU_ToneHandler_A
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SubCPU_ToneFormatDone
-	.long SubCPU_ToneClearRegion
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long ToneParam_Evt0F_BytecodeHandler
-	.long DefaultHandler_Ret
-	.long UIDisp_DefaultInputHandler
-	.long SubCPU_ToneDispatch_0x54
-	.long DefaultHandler_Ret
-	.long SubCPU_ToneHandler_A
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long SoundEvt_ShortPacketHandler
-	.long SoundEvt_LongPacketHandler
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
-	.long DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	SubCPU_ToneParamRet_Target1
+	.long	DefaultHandler_Ret
+	.long	SubCPU_ToneHandler_A
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SubCPU_ToneFormatDone
+	.long	SubCPU_ToneClearRegion
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	ToneParam_Evt0F_BytecodeHandler
+	.long	DefaultHandler_Ret
+	.long	UIDisp_DefaultInputHandler
+	.long	SubCPU_ToneParamRet_Target1
+	.long	DefaultHandler_Ret
+	.long	SubCPU_ToneHandler_A
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	SoundEvt_ShortPacketHandler
+	.long	SoundEvt_LongPacketHandler
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
+	.long	DefaultHandler_Ret
 	call	SubCPU_ToneParamRet_0x315
 	call	AccPedal_CheckBitAndUpdate
 	ld	wa, (0x371a:16)
@@ -13258,7 +13492,7 @@ DisplayStr_BytecodeBlock_A_Skip4:
 	xor	h, h
 	sla	hl, 2
 	push	xde
-	ld	xde, DisplayStr_BytecodeBlock_A_0x198
+	ld	xde, DisplayStr_BytecodeBlock_A_Tbl
 	ld_rrl xhl, xde, hl
 	pop	xde
 	ld	wa, (xhl)
@@ -13325,7 +13559,7 @@ DisplayStr_BytecodeBlock_A_Skip5:
 	xor	h, h
 	sla	hl, 2
 	push	xde
-	ld	xde, DisplayStr_BytecodeBlock_A_0x198
+	ld	xde, DisplayStr_BytecodeBlock_A_Tbl
 	ld_rrl xhl, xde, hl
 	pop	xde
 	ld	wa, (xhl)
@@ -13353,6 +13587,10 @@ DisplayStr_BytecodeBlock_A_Skip6:
 	sub (3780:16), bc
 DisplayStr_BytecodeBlock_A_Return2:
 	ret
+	; Byte data, 12 B.  Read by DisplayStr_BytecodeBlock_A (0xEFEB06): `ld xde, DisplayStr_BytecodeBlock_A_Tbl`
+	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3782:16)`
+	; also read at scoop_display.s:13328
+DisplayStr_BytecodeBlock_A_Tbl:
 	.byte	0x4c, 0x0e, 0x00, 0x00, 0x4e, 0x0e, 0x00, 0x00, 0x50, 0x0e, 0x00, 0x00
 	pushdi_w	(0x28bf)
 	pushdi_w	(0x28c1)
@@ -13407,7 +13645,7 @@ DisplayStr_BytecodeBlock_B:
 	ldw	bc, 15
 	stw_dpi	wa, 241
 	djnz16	bc, -6
-	ld	xiy, DisplayStr_BytecodeBlock_B_0x5C
+	ld	xiy, Str_Control
 	ld	xix, 3791
 	ld	bc, 7:i3
 	ldir85
@@ -13419,7 +13657,7 @@ DisplayStr_BytecodeBlock_B:
 	ret
 	call	Display_UpdateRegion0
 	call	Display_BytecodeBlock_F_0x32D
-	ld	xiy, DisplayStr_BytecodeBlock_B_0x5C
+	ld	xiy, Str_Control
 	ld	xix, 3791
 	ld	bc, 7:i3
 	ldir85
@@ -13427,6 +13665,10 @@ DisplayStr_BytecodeBlock_B:
 	call	Display_BytecodeBlock_F_0x17C
 	call	Display_UpdateRegion3
 	ret
+	; Lcd text, 7 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, Str_Control`
+	; copies 7 byte(s) per use (`ld bc, 7` + ldir) into the LCD text buffer
+	; also read at scoop_display.s:13422
+Str_Control:
 	.ascii	"CONTROL"
 	ld	h, (0x3723:16)
 	ld	l, (0x3722:16)
@@ -13441,7 +13683,7 @@ DisplayStr_BytecodeBlock_B:
 	ret
 	call	Display_UpdateRegion0
 	call	Display_BytecodeBlock_F_0x32D
-	ld	xiy, DisplayStr_RhythmLabel_0x1
+	ld	xiy, Str_Rhythm
 	ld	xix, 3791
 	ld	bc, 6:i3
 	ldir85
@@ -13449,8 +13691,13 @@ DisplayStr_BytecodeBlock_B:
 	call	DisplayStr_BytecodeBlock_B_0x63
 	call	Display_UpdateRegion3
 	ret
+	; Lcd text, 1 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, DisplayStr_RhythmLabel`
+	; also read at scoop_display.s:13512
 DisplayStr_RhythmLabel:
 	.byte 0x20
+	; Lcd text, 9 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, Str_Rhythm`
+	; copies 6 byte(s) per use (`ld bc, 6` + ldir) into the LCD text buffer
+Str_Rhythm:
 	.ascii	"RHYTHM   "
 	pushw	bc
 	call	Display_BytecodeBlock_F_0x32D
@@ -13460,7 +13707,7 @@ DisplayStr_RhythmLabel:
 	pop	xiy
 	bitda	0, (0x10f6)
 	jrl	z, DisplayStr_RhythmLabel_Code_Skip
-	ld	xiy, DisplayStr_RhythmLabel_0x42
+	ld	xiy, Str_MSA
 DisplayStr_RhythmLabel_Code_Skip:
 	ld	xix, 3791
 	ld	bc, 5:i3
@@ -13471,6 +13718,9 @@ DisplayStr_RhythmLabel_Code_Skip:
 	call	Display_UpdateRegion5
 	call	Display_UpdateRegion3
 	ret
+	; Lcd text, 10 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, Str_MSA`
+	; copies 5 byte(s) per use (`ld bc, 5` + ldir) into the LCD text buffer
+Str_MSA:
 	.ascii	"M.S.A.    "
 	pushw	bc
 	call	DisplayStr_TempoString_0x74
@@ -13488,12 +13738,15 @@ DisplayStr_RhythmLabel_Code_Skip:
 	push	xix
 	call	ParamDigit_ExtractAndFormat
 	pop	xix
-	ld	xiy, DisplayStr_RhythmLabel_0x86
+	ld	xiy, Str_VarivariOff
 	ld	bc, 4:i3
 	ldir85
 	ld	a, (4483:16)
 	ld	(xix), a
 	ret
+	; Lcd text, 12 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, Str_VarivariOff`
+	; copies 4 byte(s) per use (`ld bc, 4` + ldir) into the LCD text buffer
+Str_VarivariOff:
 	.byte 0x56, 0x41, 0x52
 	.ascii "IVARI OFF"
 	call	DisplayStr_ClearRegion
@@ -13519,12 +13772,12 @@ DisplayStr_BytecodeBlock_C:
 	ret
 	call	Display_BytecodeBlock_F_0x32D
 	ld	xix, 3786
-	ld	xiy, DisplayStr_BytecodeBlock_C_0x5E
+	ld	xiy, Str_TempoEq
 	cp	(0xfc5a:16), 7
 	jrl	nz, DisplayStr_BytecodeBlock_C_Skip
 	cp	(0xfc5b:16), 2
 	jrl	nz, DisplayStr_BytecodeBlock_C_Skip
-	ld	xiy, DisplayStr_BytecodeBlock_C_0x77
+	ld	xiy, DisplayStr_BytecodeBlock_C_Tbl
 DisplayStr_BytecodeBlock_C_Skip:
 	ld	xix, 3791
 	ldw	bc, 25
@@ -13533,9 +13786,14 @@ DisplayStr_BytecodeBlock_C_Skip:
 	call	Display_BytecodeBlock_F_0x2A2
 	call	Display_UpdateRegion3
 	ret
+	; Lcd text, 25 B.  Read by DisplayStr_BytecodeBlock_C (0xEFEE71): `ld xiy, Str_TempoEq`
+Str_TempoEq:
 	.ascii	"  TEMPO  "
 	.byte	0x15
 	.ascii	"=              "
+	; Byte data, 25 B.  Read by DisplayStr_BytecodeBlock_C (0xEFEE71): `ld xiy, DisplayStr_BytecodeBlock_C_Tbl`
+	; copies 25 byte(s) per use (`ld bc, 25` + ldir) into the LCD text buffer
+DisplayStr_BytecodeBlock_C_Tbl:
 	.ascii	"  TEMPO  "
 	.byte	0x93
 	.ascii	"=              "
@@ -13546,7 +13804,7 @@ DisplayStr_BytecodeBlock_C_Skip:
 	jrl	nz, DisplayStr_BytecodeBlock_C_Skip2
 	cpdi8	(0xfc5b), 2
 	jrl	nz, DisplayStr_BytecodeBlock_C_Skip2
-	ld	xiy, DisplayStr_TempoString_0x19
+	ld	xiy, DisplayStr_BytecodeBlock_C_Tbl2
 DisplayStr_BytecodeBlock_C_Skip2:
 	ld	xix, 3791
 	ldw	bc, 25
@@ -13555,16 +13813,20 @@ DisplayStr_BytecodeBlock_C_Skip2:
 	call	Display_BytecodeBlock_F_0x2A2
 	call	Display_UpdateRegion3
 	ret
+	; Lcd text, 25 B.  Read by DisplayStr_BytecodeBlock_C (0xEFEE71): `ld xiy, DisplayStr_TempoString`
 DisplayStr_TempoString:
 	.ascii	"  TEMPO  "
 	.byte	0x15
 	.ascii	"=              "
+	; Byte data, 25 B.  Read by DisplayStr_BytecodeBlock_C (0xEFEE71): `ld xiy, DisplayStr_BytecodeBlock_C_Tbl2`
+	; copies 25 byte(s) per use (`ld bc, 25` + ldir) into the LCD text buffer
+DisplayStr_BytecodeBlock_C_Tbl2:
 	.ascii	"  TEMPO  "
 	.byte	0x93
 	.ascii	"=              "
 	call	Display_UpdateRegion0
 	call	Display_BytecodeBlock_F_0x32D
-	ld	xiy, DisplayStr_TempoString_0x56
+	ld	xiy, DisplayStr_BytecodeBlock_C_Text
 	ld	xix, 3786
 	ldw	bc, 25
 	ldir85
@@ -13572,6 +13834,9 @@ DisplayStr_TempoString:
 	call	Display_UpdateRegion3
 	call	Display_UpdateRegion4
 	ret
+	; Lcd text, 25 B.  Read by DisplayStr_BytecodeBlock_C (0xEFEE71): `ld xiy, DisplayStr_BytecodeBlock_C_Text`
+	; copies 25 byte(s) per use (`ld bc, 25` + ldir) into the LCD text buffer
+DisplayStr_BytecodeBlock_C_Text:
 	.ascii	"                         "
 	call	Display_UpdateRegion0
 	ret
@@ -13670,6 +13935,10 @@ DisplayStr_BytecodeBlock_E:
 	stw_dpi	wa, 241
 	call	Display_UpdateRegion3
 	ret
+	; Byte data, 105 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, DisplayStr_StyleSectionNames`
+	; indexed with stride 8 (`sla xwa, 3`), index from `ld a, (4483:16)`
+	; copies 4 byte(s) per use (`ld bc, 4` + ldir) into the LCD text buffer
+	; also read at scoop_display.s:13638, scoop_display.s:13664
 DisplayStr_StyleSectionNames:
 	.ascii	"        START   STOP    FILL IN1FILL IN2INTRO1  COUNT INENDING1 END     REPEAT  CLEAR   ENDING2 INTRO2  "
 	.byte	0x0e
@@ -13709,9 +13978,9 @@ Display_BytecodeBlock_F:
 	call	Display_UpdateRegion4
 	ret
 	ld	xix, 3796
-	ld	xiy, Display_BytecodeBlock_F_0x104
+	ld	xiy, Display_BytecodeBlock_F_Tbl2
 	ld	a, (4539:16)
-	ld	xhl, Display_BytecodeBlock_F_0xF4
+	ld	xhl, Display_BytecodeBlock_F_Tbl
 	ld_rr8b a, xhl, a
 	exts wa
 	cpdi8	(0x11bb), 23
@@ -13774,7 +14043,11 @@ Display_BytecodeBlock_F_Skip5:
 	ldw	bc, 16
 	ldir85
 	ret
+	; Byte data, 16 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xhl, Display_BytecodeBlock_F_Tbl`
+Display_BytecodeBlock_F_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
+	; Byte data, 80 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Display_BytecodeBlock_F_Tbl2`
+Display_BytecodeBlock_F_Tbl2:
 	.ascii	"RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P15 KBP DUALMSP ----"
 	.byte	0x01, 0x02, 0x03, 0x04
 	call	Display_UpdateRegion0
@@ -13787,7 +14060,7 @@ Display_BytecodeBlock_F_Skip5:
 	call	Display_BytecodeBlock_F_0x27
 	call	Display_UpdateRegion3
 	ret
-	ld	xiy, Display_BytecodeBlock_F_0x20B
+	ld	xiy, Str_PBendModExpEq
 	ld	xix, 3800
 	xor	hl, hl
 	ld	l, (0x3720:16)
@@ -13816,9 +14089,9 @@ Display_BytecodeBlock_F_Skip6:
 	and	a, 127
 	cp	a, 0:i3
 	jrl	z, Display_BytecodeBlock_F_Skip7
-	ld	xiy, Display_BytecodeBlock_F_0x253
+	ld	xiy, Str_On2
 	jp	Display_BytecodeBlock_F_0x1E7
-	ld	xiy, Display_BytecodeBlock_F_0x256
+	ld	xiy, Str_Off2
 Display_BytecodeBlock_F_Skip7:
 	ld	wa, (xiy)
 	ld	(xix), wa
@@ -13835,8 +14108,15 @@ Display_BytecodeBlock_F_Skip8:
 	ld	(xix+2), a
 Display_BytecodeBlock_F_Return2:
 	ret
+	; Lcd text, 72 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Str_PBendModExpEq`
+	; indexed with stride 8 (`sla hl, 3`)
+Str_PBendModExpEq:
 	.ascii	"        P.BEND= MOD.  = EXP.  = P.MEM = AFT.  =                         "
+	; Lcd text, 3 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Str_On2`
+Str_On2:
 	.ascii	" ON"
+	; Lcd text, 3 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Str_Off2`
+Str_Off2:
 	.ascii	"OFF"
 	xor	xwa, xwa
 	ldb_d8	a, (0x3721)
@@ -13885,24 +14165,29 @@ Display_BytecodeBlock_F_Skip9:
 	ld	w, (xiy+2)
 	ld	(xix+2), w
 	ret
-	ld	xiy, Display_BytecodeBlock_F_0x307
+	ld	xiy, Display_BytecodeBlock_F_Tbl3
 	ld	xix, 3791
 	cpdi8	(0xfc5a), 7
 	jrl	nz, Display_BytecodeBlock_F_Skip10
 	cpdi8	(0xfc5b), 2
 	jrl	nz, Display_BytecodeBlock_F_Skip10
-	ld	xiy, Display_BytecodeBlock_F_0x31A
+	ld	xiy, Display_BytecodeBlock_F_Tbl4
 Display_BytecodeBlock_F_Skip10:
 	ldw	bc, 26
 	ldir85
 	call	Display_BytecodeBlock_F_0x2A2
 	call	Display_UpdateRegion3
 	ret
+	; Byte data, 19 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Display_BytecodeBlock_F_Tbl3`
+Display_BytecodeBlock_F_Tbl3:
 	.ascii	" TEMPO   "
 	.byte	0x15
 	.ascii	"="
 	.byte	0x09
 	.ascii	"       "
+	; Byte data, 19 B.  Read by Display_BytecodeBlock_F (0xEFF144): `ld xiy, Display_BytecodeBlock_F_Tbl4`
+	; copies 26 byte(s) per use (`ld bc, 26` + ldir) into the LCD text buffer
+Display_BytecodeBlock_F_Tbl4:
 	.ascii	" TEMPO   "
 	.byte	0x93
 	.ascii	"="
@@ -15759,12 +16044,17 @@ Scoop_CallDisplayHelper:
 	call UIRender_TwoTableGeneral
 	ret
 
+	; Uirender display list, 8 B.  Read by Scoop_CallDisplayHelper (0xF00A94): `ld xiy, Scoop_DisplayData_ButtonLayout`
+	; handed in XIY to UIRender_TwoTableGeneral
 Scoop_DisplayData_ButtonLayout:
 	.byte	0x0e, 0x08, 0x92, 0x12, 0x06, 0x00, 0x13, 0x00
-	ld	xiy, Scoop_DisplayData_ButtonLayout_0x17
+	ld	xiy, Scoop_CallDisplayHelper_DisplayList
 	ld	xix, Scoop_DisplayData_ButtonLayout_0x21
 	call	UIRender_TwoTableGeneral
 	ret
+	; Uirender display list, 10 B.  Read by Scoop_CallDisplayHelper (0xF00A94): `ld xiy, Scoop_CallDisplayHelper_DisplayList`
+	; handed in XIY to UIRender_SingleTable
+Scoop_CallDisplayHelper_DisplayList:
 	.byte	0x1b, 0x0a, 0x08, 0x00, 0x32, 0x00, 0x10, 0x01, 0x42, 0x00
 	ld	xiy, 0xe0b42a
 	ld	xix, SOUND_DATA_DRUM_KITS_0x1A
@@ -15778,6 +16068,8 @@ Scoop_DrawGridLines:
 	call Scoop_DrawGridDividers
 	ret
 
+	; Uirender display list, 90 B.  Read by Scoop_DrawGridLines (0xF00AD3): `ld xiy, Scoop_GridLineData`
+	; handed in XIY to UIRender_TwoTableGeneral
 Scoop_GridLineData:
 	.byte	0x1b, 0x0a, 0x08, 0x00, 0x32, 0x00, 0x10, 0x01, 0x42, 0x00, 0x1b, 0x0a, 0x05, 0x00, 0x4b, 0x00
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF00AEE-0xF00B0A (28 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=78% dist=9 near Scoop_GridLineData+8
@@ -15794,6 +16086,8 @@ Scoop_DrawGridDividers:
 	call UIRender_TwoTableGeneral
 	ret
 
+	; Uirender display list, 30 B.  Read by Scoop_DrawGridDividers (0xF00B40): `ld xiy, Scoop_GridDividerData`
+	; handed in XIY to UIRender_TwoTableGeneral
 Scoop_GridDividerData:
 	.byte	0x1b, 0x0a, 0x08, 0x00, 0x28, 0x00, 0x27, 0x00, 0x32, 0x00, 0x1b, 0x0a, 0x08, 0x00, 0x55, 0x00
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF00B53-0xF00B67 (20 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=80% dist=9 near Scoop_GridDividerData+4
@@ -15805,6 +16099,8 @@ Scoop_DrawFrameLines:
 	call UIRender_TwoTableGeneral
 	ret
 
+	; Uirender display list, 113 B.  Read by Scoop_DrawFrameLines (0xF00B6D): `ld xiy, Scoop_FrameData`
+	; handed in XIY to UIRender_TwoTableGeneral
 Scoop_FrameData:
 	.byte	0x0e, 0x08, 0x12, 0x06, 0x06, 0x00, 0x13, 0x00, 0x0e, 0x08, 0x52, 0x0c, 0x06, 0x00, 0x13, 0x00
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF00B7D-0xF00B9F (34 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=62% dist=15 near Scoop_FrameData+1
