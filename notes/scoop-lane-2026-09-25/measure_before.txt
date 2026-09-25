@@ -1,0 +1,11 @@
+img  file                          CODE   KNOWN-A   KNOWN-B   UNKNOWN    FILLER  RESEARCH markers   numbr romslice
+v10  display/scoop_display.s      48748       542      7053         0         0      6069     593     752        0
+v10  display/scoop_editor_data.s      8928         0       272         0         0       272      56     103        0
+v10  display/graphics_text_vga.s     16498         0       220         0         0       220      61      49        0
+v9   display/scoop_display.s      48958        97      7288         0         0      6344     625     762        0
+v9   display/scoop_editor_data.s      8928         0       272         0         0       272      56     103        0
+v9   display/graphics_text_vga.s     16498         0       220         0         0       220      61      49        0
+v7   display/scoop_display.s      34811       102     21430         0         0     12734     216     275    14768
+v7   display/scoop_editor_data.s      1766         0      7434         0         0      4316       0       0     7434
+v7   display/graphics_text_vga.s     15257         6      1455         0         0      1127      33      61      836
+TOTAL CODE=200392 KNOWN-A=747 KNOWN-B=45644 UNKNOWN=0 FILLER=0 RESEARCH=31574 markers=1701 numbr=2154 romslice=23038
