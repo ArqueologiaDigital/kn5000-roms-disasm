@@ -4184,13 +4184,13 @@ Audio_ResetAfterPayloadError:
 	cp	(0x8c9a:16), 65
 	jr	nz, Audio_ReinitDisplay
 	ld	xwa, 0xc0
-	call	0xfccc66
+	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
 	jr	nz, Audio_ReinitDisplay
 	ld	xwa, 0xc0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xde
 	push	xhl
 	push	xix
@@ -4277,7 +4277,7 @@ Audio_FullReinitWithPreset:
 	ld	xwa, 0xc0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xde
 	push	xhl
 	push	xix
@@ -4289,13 +4289,13 @@ Audio_FullReinitWithPreset:
 	pop	xde
 Audio_CheckAndReinitReverb:
 	ld	xwa, 0x2880
-	call	0xfccc66
+	call	AcApcToggleProc_Helper
 	cp	hl, 0xb7
 	ret	nz
 	ld	xwa, 0x4001
 	ldw	bc, 0x7f
 	ld	de, 2:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	push	xde
 	push	xhl
 	push	xix
@@ -6878,7 +6878,7 @@ UIState_CheckAndRenderBitmap_Loop:
 	ld	wa, iz
 	ldw	bc, 11
 	ldw	de, 127
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	inc	1, iz
 	cp	iz, 15
 	jr	ule, UIState_CheckAndRenderBitmap_Loop
@@ -6887,7 +6887,7 @@ UIState_CheckAndRenderBitmap_Skip:
 	ld	xwa, 0x4001
 	ldw	bc, 127
 	ld	de, 3:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 UIState_CheckAndRenderBitmap_Epilogue:
 	popw	iz
 	ret
@@ -6922,7 +6922,7 @@ UIState_RenderBitmapData_Skip:
 	pushw	3
 	ldw	bc, 434
 	ld	de, 0:i3
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 UIState_RenderBitmapData_Skip2:
 	cp	(0xbfe1:16), 4
 	ret	nz
@@ -6937,7 +6937,7 @@ UIState_RenderBitmapData_Skip2:
 	pushw	3
 	ldw	bc, 11
 	ldw	de, 127
-	call	0xfccb4a
+	call	UIState_CheckAndRenderBitmap_Helper
 	ret
 ToshiCmd_DefaultHandler_Ret:
 	ret
@@ -8045,7 +8045,7 @@ ReverbPreset_SendLoop:
 	ld	xwa, 0x4002
 	ldw	bc, 0x7f
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	popw	iz
 	ret
 ; =============================================================================
@@ -8087,7 +8087,7 @@ EQPreset_SendLoop:
 	ld	xwa, 0x4006
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	popw	iz
 	ret
 ; =============================================================================
@@ -8158,11 +8158,11 @@ CombinedPreset_SendEQLoop:
 	ld	xwa, 0x4002
 	ldw	bc, 0x7f
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	xwa, 0x4006
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	popw	iz
 	inc	4, xsp
 	ret
@@ -8595,6 +8595,7 @@ VoiceMode_ParamHandler_4_Helper:
 	pop	xbc
 	pop	xwa
 	ret
+MidiStream_CmdPedalNotify_Helper:
 	push	xbc
 	push	xde
 	push	xhl
@@ -8612,6 +8613,7 @@ VoiceMode_ParamHandler_4_Helper:
 	pop	xde
 	pop	xbc
 	ret
+MidiStream_CmdPedalNotify_Helper2:
 	push	xwa
 	push	xbc
 	push	xde
@@ -11313,6 +11315,7 @@ MidiStream_StatusJumpTable:
 MidiStream_HandleNoteCC:
 	ret
 	; --- Indexed dispatch: table lookup, conditional call paths (76 bytes) ---
+MidiStream_HandleNoteCC_Body:
 	cp	c, 0x48
 ; (pre-port v7 note about the bytes at 0xFCC135:)
 ; -> 0xFCC17D
@@ -11374,9 +11377,7 @@ MidiStream_HandleChanPressure:
 	jr	z, MidiStream_HandleChanPressure_Skip
 ; (pre-port v7 note about the bytes at 0xFCC1B1:)
 ; llvm-mc cannot spell this byte
-	.byte	0xf1
-	.byte 0x5d
-	and	(xwa), bc
+	bitda	1, (0x905d)
 ; (pre-port v7 note about the bytes at 0xFCC1B5:)
 ; -> 0xFCC1BA
 	jr	z, MidiStream_HandleChanPressure_Skip
@@ -11390,7 +11391,7 @@ MidiStream_HandleChanPressure_Skip:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ld	xix, (0x9056:16)
+	ldda32	xix, (0x9056)
 	ld_rrl	xix, xix, hl
 	ld	l, b
 	ld_rr8b	e, xix, l
@@ -11400,32 +11401,30 @@ MidiStream_HandleChanPressure_Return:
 	ret
 MidiStream_HandleSysMsg:
 	cp	d, 0:i3
-	jr	z, 27
+	jr	z, MidiStream_HandleSysMsg_Return
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ld	xix, (0x9056:16)
-	.byte	0xe3
-	reti
-	.byte	0xf0, 0xec
-	ld	d, 202:opc
-	.byte	0x8f, 0xc3
-	pop	sr
-	.byte	0xf0, 0xec
-	ld	e, 29:opc
-	.byte 0x33, 0x9a, 0xfc
+	ldda32	xix, (0x9056)
+	ld_rrl	xix, xix, hl
+	ld	l, b
+	ld_rr8b	e, xix, l
+	call	MIDI_ClearGuardAndDispatchCC
+MidiStream_HandleSysMsg_Return:
 	ret
+; MIDI RX record type 0x48 handler: entry 72 of the record-type table
+; read by MidiStream_DispatchLoop (the table rows are .long pointers to this
+; address).  With BC = record word +0 and DE = word +2 it dispatches on B
+; through MidiStream_SysExJumpTable (4 entries, bounded by the `cp l, 3` below).
+MidiStream_RecType48_SysExDispatch:
 	extz	hl
 	ld	l, b
 	cp	l, 3:i3
 	jr	ugt, MidiStream_SysExNop
 	sll	hl, 2
 	ld	xix, MidiStream_SysExJumpTable
-	.byte	0xe3
-	reti
-	.byte	0xf0, 0xec
-	ld	d, 180:opc
-	.byte	0xd8
+	ld_rrl	xix, xix, hl
+	jp	(xix)
 MidiStream_SysExJumpTable:
 	.long	MidiStream_HandleRunningStatus
 	.long	MidiStream_SysExNop
@@ -11434,28 +11433,29 @@ MidiStream_SysExJumpTable:
 MidiStream_SysExNop:
 	ret
 MidiStream_SysExData:
-	.byte	0xc1
-	.byte 0x98, 0x8c, 0x3f
-	ret
+	cpdi8	(0x8c98), 14
 	jr	z, 18
 	and	d, 7
-	jr	z, 13
-	ld	e, (0xfc5d:16)
+	jr	z, MidiStream_SysExData_Return
+	ldb_d8	e, (0xfc5d)
 	and	e, 7
 	ld	d, 7:opc
 	call	MIDI_ClearGuardAndDispatchCC
+MidiStream_SysExData_Return:
 	ret
+; MIDI RX record type 0x60 handler: entry 96 of the record-type table
+; read by MidiStream_DispatchLoop (the table rows are .long pointers to this
+; address).  With BC = record word +0 and DE = word +2 it dispatches on B
+; through MidiStream_CtrlJumpTable (2 entries, bounded by the `cp l, 1` below).
+MidiStream_RecType60_CtrlDispatch:
 	extz	hl
 	ld	l, b
 	cp	l, 1:i3
 	jr	ugt, MidiStream_CtrlNop
 	sll	hl, 2
 	ld	xix, MidiStream_CtrlJumpTable
-	.byte	0xe3
-	reti
-	.byte	0xf0, 0xec
-	ld	d, 180:opc
-	.byte	0xd8
+	ld_rrl	xix, xix, hl
+	jp	(xix)
 MidiStream_CtrlJumpTable:
 	.long	MidiStream_CtrlNop
 	.long	MidiStream_CtrlData
@@ -11463,25 +11463,28 @@ MidiStream_CtrlNop:
 	ret
 MidiStream_CtrlData:
 	bit	7, d
-	jr	z, 18
+	jr	z, MidiStream_CtrlData_Return
 	bit	7, e
-	jr	z, 13
-	ld	e, (0xfc6f:16)
+	jr	z, MidiStream_CtrlData_Return
+	ldb_d8	e, (0xfc6f)
 	and	e, 128
 	ld	d, 128:opc
 	call	MIDI_ClearGuardAndDispatchCC
+MidiStream_CtrlData_Return:
 	ret
+; MIDI RX record type 0x98 handler: entry 152 of the record-type table
+; read by MidiStream_DispatchLoop (the table rows are .long pointers to this
+; address).  With BC = record word +0 and DE = word +2 it dispatches on B
+; through MidiStream_CmdJumpTable (12 entries, bounded by the `cp l, 11` below).
+MidiStream_RecType98_CmdDispatch:
 	extz	hl
 	ld	l, b
 	cp	l, 11
 	jr	ugt, MidiStream_CmdNop
 	sll	hl, 2
 	ld	xix, MidiStream_CmdJumpTable
-	.byte	0xe3
-	reti
-	.byte	0xf0, 0xec
-	ld	d, 180:opc
-	.byte	0xd8
+	ld_rrl	xix, xix, hl
+	jp	(xix)
 MidiStream_CmdJumpTable:
 	.long	MidiStream_CmdNop
 	.long	MidiStream_CmdPedalNotify
@@ -11497,31 +11500,31 @@ MidiStream_CmdJumpTable:
 	.long	MidiStream_CmdMaskedNotify
 MidiStream_CmdNop:
 	ret
+; --- Routine 1: D/E bit masking, call FCA1FE (23 bytes) ---
 MidiStream_CmdMaskedNotify:
-	; --- Routine 1: D/E bit masking, call FCA1FE (23 bytes) ---
-	and	d, 0xc0
+	and	d, 192
 	jr	z, MidiStream_CmdMaskedDone
 	and	e, d
 	jr	z, MidiStream_CmdMaskedDone
-	ld	e, (0xfda1:16)
-	and	e, 0xc0
-	ld	d, 0xc0:opc
+	ldb_d8	e, (0xfda1)
+	and	e, 192
+	ld	d, 192:opc
 	call	MIDI_ClearGuardAndDispatchCC
 MidiStream_CmdMaskedDone:
 	ret
+; --- Routine 2: conditional E/D setup, dec E, call FCA1FE (36 bytes) ---
 MidiStream_CmdPedalNotify:
-	; --- Routine 2: conditional E/D setup, dec E, call FCA1FE (36 bytes) ---
-	cp	(0x8c98:16), 14
+	cpdi8	(0x8c98), 14
 	jr	z, MidiStream_CmdPedalDone
-	bit	3, (0xfd50:16)
+	bitda	3, (0xfd50)
 	jr	z, MidiStream_CmdPedalDone
-	and	e, 0x7f
+	and	e, 127
 	jr	z, MidiStream_CmdPedalDone
 	ld	bc, 0:i3
-	ld	e, (0xfd97:16)
-	and	e, 0x7f
+	ldb_d8	e, (0xfd97)
+	and	e, 127
 	dec	1, e
-	ld	d, 0x7f:opc
+	ld	d, 127:opc
 	call	MIDI_ClearGuardAndDispatchCC
 ; (pre-port v7 note about the bytes at 0xFCC2FD:)
 ; Disassembled from the committed romslice (no source of any kind existed):
@@ -11530,32 +11533,32 @@ MidiStream_CmdPedalNotify:
 MidiStream_CmdPedalDone:
 	ret
 ; v10 name for this address: MidiStream_HandlePartSelect -- not a label here: v7 defines that name outside this span (= 0xFCC2FE)
-	cp	a, 0x48
+	cp	a, 72
 	jr	z, MidiStream_PartSelectDone
-	and	w, 0xf
-	or	w, 0x80
+	and	w, 15
+	or	w, 128
 	pushw	wa
 	ld	wa, (xsp)
-	ld	(0x9049:16), w
+	stb_d8	(0x9049), w
 	ld	c, a
-	ld	b, 0x4:opc
+	ld	b, 4:opc
 	ldw	de, 0x800
 	call	MIDI_DispatchCC_Guarded
 	ld	wa, (xsp)
-	ld	(0x9049:16), w
-	ld	c, 0xb1:opc
+	stb_d8	(0x9049), w
+	ld	c, 177:opc
 	ld	b, a
 	ldw	de, 0x4000
 	call	MIDI_DispatchCC_Guarded
 	ld	wa, (xsp)
-	ld	(0x9049:16), w
-	ld	c, 0xb2:opc
+	stb_d8	(0x9049), w
+	ld	c, 178:opc
 	ld	b, a
 	ldw	de, 0x7f00
 	call	MIDI_DispatchCC_Guarded
 	ld	wa, (xsp)
-	ld	(0x9049:16), w
-	ld	c, 0xb4:opc
+	stb_d8	(0x9049), w
+	ld	c, 180:opc
 	ld	b, a
 	ldw	de, 0x7f00
 	call	MIDI_DispatchCC_Guarded
@@ -11563,76 +11566,75 @@ MidiStream_CmdPedalDone:
 MidiStream_PartSelectDone:
 	ret
 ; v10 name for this address: MidiStream_ExtendedDispatch -- not a label here: v7 defines that name outside this span (= 0xFCC351)
+MidiStream_CmdPedalNotify_Helper3:
 	ret
-	.byte	0xc1
-	.byte 0xa8, 0x95, 0x3f, 0x14, 0x6e
-	reti
-	ld	(0x95a8:16), 72
+	cpdi8	(0x95a8), 20
+	jr	nz, MidiStream_CmdPedalNotify_Skip
+	stdi8	(0x95a8), 72
 	ld	c, 72:opc
-	.byte	0xc1
-	.byte 0x98, 0x8c, 0x3f
-	ret
-	jr	z, 7
-	.byte	0xc1
-	.byte 0x98, 0x8c, 0x3f
-	scf
-	jr	nz, 5
+MidiStream_CmdPedalNotify_Skip:
+	cpdi8	(0x8c98), 14
+	jr	z, MidiStream_CmdPedalNotify_Skip2
+	cpdi8	(0x8c98), 17
+	jr	nz, MidiStream_CmdPedalNotify_Skip3
+MidiStream_CmdPedalNotify_Skip2:
 	cp	c, 72
-	jr	z, 49
-	ld	(0x905c:16), 255
+	jr	z, MidiStream_CmdPedalNotify_Return
+MidiStream_CmdPedalNotify_Skip3:
+	stdi8	(0x905c), 255
 	cp	c, 0:i3
-	jr	nz, 45
-	.byte	0xf1, 0x50
-	swi	5
-	inc	6, c
-	ld	l, 193:opc
-	.byte 0x98, 0x8c, 0x3f
-	ret
-	jr	z, 27
-	.byte	0xc1
-	.byte 0x98, 0x8c, 0x3f
-	scf
-	jr	z, 20
+	jr	nz, MidiStream_CmdPedalNotify_Skip4
+	bitda	3, (0xfd50)
+	jr	z, MidiStream_CmdPedalNotify_Skip4
+	cpdi8	(0x8c98), 14
+	jr	z, MidiStream_CmdPedalNotify_Return
+	cpdi8	(0x8c98), 17
+	jr	z, MidiStream_CmdPedalNotify_Return
 	cp	e, 80
-	jr	nc, 15
+	jr	nc, MidiStream_CmdPedalNotify_Return
 	inc	1, e
-	ldw	bc, 408
+	ldw	bc, 0x198
 	ld	d, 127:opc
 	call	MIDI_WriteVoiceParamCC
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
+MidiStream_CmdPedalNotify_Return:
 	ret
-	calr	MidiStream_ExtendedDispatch
+	calr	MidiStream_CmdPedalNotify_Helper3
 	ret
-	ld	l, (0xfd50:16)
+MidiStream_CmdPedalNotify_Skip4:
+	ldb_d8	l, (0xfd50)
 	and	l, 3
 	sla	l, 2
 	ld	xix, MidiStream_ExtendedDispatch_0x73
 	ld_rr8l	xix, xix, l
 	call	(xix)
+MidiStream_ExtDispatch_Mode2Ret:
 	ret
-	calr	-114
+	calr	MidiStream_CmdPedalNotify_Helper3
 	ret
-	.byte 0xd4, 0xc3, 0xfc
-	nop
-	.byte 0x47
-	.byte	0xc4
-	swi	4
-	nop
-	.byte 0xbf, 0xc3, 0xfc
-	nop
-	.byte 0x93
-	.byte	0xc4
-	swi	4
-	nop
-	ld	bc, (0x95a8:16)
-	ld	de, (0x95aa:16)
-	ld	(0x905a:16), c
+; MIDI-mode handler table of the MidiStream_ExtendedDispatch body: 4 x .long
+; code pointer.  Reader: the code just above (v7 0xFCC3A9) --
+;   ldb_d8 l, (0xfd50) / and l, 3 / sla l, 2 / ld xix, <this table> /
+;   ld_rr8l xix, xix, l / call (xix)
+; so the index is bits 0-1 of RAM 0xFD50 and the count, 4, is that mask.
+; Entry 2 is the `ret` in front of the table: that value does nothing.
+; Also named MidiStream_ExtendedDispatch_0x73 (a .set in
+; shared/positional_labels.s).  Open: what the four values of 0xFD50 bits 0-1
+; select (0xFD50-0xFD5D is the block BitMapOut_RestoreVoiceChannels restores).
+	.long	MidiStream_ExtDispatch_Mode0
+	.long	MidiStream_ExtDispatch_Mode1
+	.long	MidiStream_ExtDispatch_Mode2Ret
+	.long	MidiStream_ExtDispatch_Mode3
+MidiStream_ExtDispatch_Mode0:
+	ldw_d16	bc, (0x95a8)
+	ldw_d16	de, (0x95aa)
+	stb_d8	(0x905a), c
 	xor	h, h
 	ld	l, c
 	sll	hl, 2
-	ld	xix, (0x9056:16)
+	ldda32	xix, (0x9056)
 	ld_rrl	xix, xix, hl
-	cp	xix, 4294967295
+	cp	xix, 0xffffffff
 	jr	z, MidiStream_ExtendedDispatch_Return
 	ld	a, 17:opc
 	cp	c, 72
@@ -11651,7 +11653,7 @@ MidiStream_ExtendedDispatch_Skip2:
 	ld	a, e
 	pushw	bc
 	ld	b, c
-	call	RegBitManip_Handler_4_0x1B
+	call	MidiStream_CmdPedalNotify_Helper
 	popw	bc
 MidiStream_ExtendedDispatch_Join:
 	extz	hl
@@ -11672,15 +11674,16 @@ MidiStream_ExtendedDispatch_Skip3:
 	calr	MidiStream_ExtendedDispatch_Helper
 MidiStream_ExtendedDispatch_Return:
 	ret
-	ld	bc, (0x95a8:16)
-	ld	de, (0x95aa:16)
-	ld	(0x905b:16), c
+MidiStream_ExtDispatch_Mode1:
+	ldw_d16	bc, (0x95a8)
+	ldw_d16	de, (0x95aa)
+	stb_d8	(0x905b), c
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ld	xix, (0x9056:16)
+	ldda32	xix, (0x9056)
 	ld_rrl	xix, xix, hl
-	cp	xix, 4294967295
+	cp	xix, 0xffffffff
 	jr	z, MidiStream_ExtendedDispatch_Return2
 	extz	hl
 	ld	l, c
@@ -11700,16 +11703,17 @@ MidiStream_ExtendedDispatch_Skip5:
 	calr	MidiStream_ExtendedDispatch_Helper
 MidiStream_ExtendedDispatch_Return2:
 	ret
-	ld	bc, (0x95a8:16)
+MidiStream_ExtDispatch_Mode3:
+	ldw_d16	bc, (0x95a8)
 	cp	c, 72
 	jr	z, MidiStream_ExtendedDispatch_Return3
-	ld	de, (0x95aa:16)
+	ldw_d16	de, (0x95aa)
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ld	xix, (0x9056:16)
+	ldda32	xix, (0x9056)
 	ld_rrl	xix, xix, hl
-	cp	xix, 4294967295
+	cp	xix, 0xffffffff
 	jr	z, MidiStream_ExtendedDispatch_Return3
 	extz	hl
 	ld	l, c
@@ -11717,14 +11721,14 @@ MidiStream_ExtendedDispatch_Return2:
 	sll	hl, 1
 	ld	xiy, 0x9336
 	ld_rrw	wa, xiy, hl
-	ld	(0x904e:16), wa
-	ld	(0x9050:16), de
-	call	RegBitManip_Handler_4_0x30
-	ld	de, (0x9052:16)
-	ld	c, (0x95a8:16)
+	stda16	(0x904e), wa
+	stda16	(0x9050), de
+	call	MidiStream_CmdPedalNotify_Helper2
+	ldw_d16	de, (0x9052)
+	ldb_d8	c, (0x95a8)
 	ld	b, d
 	ld	d, 255:opc
-	call	MidiStream_ExtendedDispatch_0x197
+	call	MidiStream_ExtendedDispatch_Helper
 MidiStream_ExtendedDispatch_Return3:
 	ret
 MidiStream_ExtendedDispatch_Helper:
@@ -11732,42 +11736,36 @@ MidiStream_ExtendedDispatch_Helper:
 	pushw	hl
 	pushw	bc
 	pushw	de
-	.byte	0xf1
-	.byte 0x5e
-	.byte	0x90, 0xb8
-	calr	105
-	.byte	0xf1
-	.byte 0x5e
-	and	(xwa), bc
+	setda	0, (0x905e)
+	calr	MidiStream_ExtendedDispatch_Helper_Helper
+	bitda	1, (0x905e)
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue
-	ld	(0x905b:16), c
+	stb_d8	(0x905b), c
 	xor	h, h
 	ld	l, c
 	sll	hl, 2
-	ld	xix, (0x9056:16)
-	.byte	0xe3
-	reti
-	.byte	0xf0, 0xec
-	ld	d, 180:opc
-	ld	xiy, 0x803c018c
-	or	(xix+1), b
+	ldda32	xix, (0x9056)
+	ld_rrl	xix, xix, hl
+	ld	(xix), e
+	andmi8	(xix+0x1), 128
+	or	(xix+0x1), b
 	ld	h, b
 	ld	l, e
 	call	PartCtrl_WriteProgramChange
 	call	MIDI_SetupChannelParams
 	ld	a, c
 	ld	w, 1:opc
-	ld	(0x908b:16), wa
+	stda16	(0x908b), wa
 	ld	a, b
 	ld	w, 127:opc
-	ld	(0x908d:16), wa
+	stda16	(0x908d), wa
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	ld	a, c
 	ld	w, 0:opc
-	ld	(0x908b:16), wa
+	stda16	(0x908b), wa
 	ld	a, e
 	ld	w, 255:opc
-	ld	(0x908d:16), wa
+	stda16	(0x908d), wa
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	cp	c, 72
 	jr	z, MidiStream_ExtendedDispatch_Epilogue
@@ -11780,35 +11778,28 @@ MidiStream_ExtendedDispatch_Epilogue:
 	popw	hl
 	pop	xix
 	ret
+MidiStream_ExtendedDispatch_Helper_Helper:
 	push	xix
 	pushw	hl
 	pushw	bc
 	pushw	de
-	.byte	0xc1
-	.byte 0x5e
-	.byte	0x90
-	push	xix
-	swi	5
-	.byte	0xf1
-	.byte 0x5e
-	and	(xwa), wa
-	jr	z, 38
-	.byte	0xc1
-	.byte 0x5e
-	.byte	0x90
-	push	xix
-	swi	6
-	ld	(0x905b:16), c
+	anddi8	(0x905e), 253
+	bitda	0, (0x905e)
+	jr	z, MidiStream_ExtendedDispatch_Helper_Skip2
+	anddi8	(0x905e), 254
+	stb_d8	(0x905b), c
 	ld	l, e
 	ld	h, b
 	ld	xix, RegBitManip_Handler_4_0x43
-	ld	e, (0xfd50:16)
+	ldb_d8	e, (0xfd50)
 	and	e, 3
 	cp	e, 1:i3
-	jr	z, 5
+	jr	z, MidiStream_ExtendedDispatch_Helper_Skip
 	ld	xix, PartCtrl_WriteProgramChange
+MidiStream_ExtendedDispatch_Helper_Skip:
 	call	(xix)
 	ld	e, l
+MidiStream_ExtendedDispatch_Helper_Skip2:
 	cp	c, 15
 	jr	z, MidiStream_ExtendedDispatch_Skip7
 	cp	c, 20
@@ -11826,128 +11817,139 @@ MidiStream_ExtendedDispatch_Epilogue:
 	cp	c, 22
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue2
 MidiStream_ExtendedDispatch_Skip6:
-	call	MidiStream_ExtendedDispatch_0x28F
+	call	MidiStream_ExtendedDispatch_Helper_Helper2
 	jr	c, MidiStream_ExtendedDispatch_Helper_Entry
 	jr	MidiStream_ExtendedDispatch_Helper_Join
 MidiStream_ExtendedDispatch_Skip7:
-	call	MidiStream_ExtendedDispatch_0x28F
+	call	MidiStream_ExtendedDispatch_Helper_Helper2
 	jr	nc, MidiStream_ExtendedDispatch_Helper_Entry
 	cp	c, 15
 	jr	z, MidiStream_ExtendedDispatch_Epilogue2
 MidiStream_ExtendedDispatch_Helper_Join:
 	push_a
-	ld	a, (0x36ff:16)
+	ldb_d8	a, (0x36ff)
 	and	a, 31
 	pop_a
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue2
 MidiStream_ExtendedDispatch_Helper_Entry:
-	.byte	0xf1
-	.byte 0x5e
-	sbc	(xwa), bc
+	setda	1, (0x905e)
 MidiStream_ExtendedDispatch_Epilogue2:
 	popw	de
 	popw	bc
 	popw	hl
 	pop	xix
 	ret
+MidiStream_ExtendedDispatch_Helper_Helper2:
 	cp	e, 15
-	jr	nz, 2
+	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip3
 	scf
 	ret
+MidiStream_ExtendedDispatch_Helper_Skip3:
 	rcf
 	ret
-	.byte	0xc1
-	.byte 0xa8, 0x95, 0x3f, 0x48, 0x6e
-	decf
-	ld	(0x95a8:16), 20
-	cp	(0x8c98:16), 14
-	jrl	z, 151
-	ld	bc, (0x95a8:16)
-	ld	de, (0x95aa:16)
+	cpdi8	(0x95a8), 72
+	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip4
+	stdi8	(0x95a8), 20
+	cpdi8	(0x8c98), 14
+	jrl	z, MidiStream_ExtendedDispatch_Helper_Return
+MidiStream_ExtendedDispatch_Helper_Skip4:
+	ldw_d16	bc, (0x95a8)
+	ldw_d16	de, (0x95aa)
 	ld	xix, 0x9336
 	ld	xiz, 0x9376
 	extz	hl
 	ld	l, c
 	sll	hl, 1
 	cp	e, 255
-	jr	z, 10
+	jr	z, MidiStream_ExtendedDispatch_Helper_Skip5
 	res	7, e
 	st_rrb	e, xix, hl
 	jr	MidiStream_ExtendedDispatch_Join2
+MidiStream_ExtendedDispatch_Helper_Skip5:
 	res	7, d
 	inc	1, xix
 	st_rrb	d, xix, hl
 	dec	1, xix
 MidiStream_ExtendedDispatch_Join2:
 	ld_rrw	wa, xix, hl
-	and	wa, 32639
+	and	wa, 0x7f7f
 	st_rrw	wa, xix, hl
 	srl	hl, 1
-	ld	b, (0xfd50:16)
+	ldb_d8	b, (0xfd50)
 	and	b, 3
 	sll	b, 2
 	ld	xiy, MidiStream_ExtendedDispatch_0x307
 	ld_rr8l	xiy, xiy, b
 	jp	(xiy)
-	.byte 0x68, 0xc6, 0xfc
-	nop
-	.byte 0x6a, 0xc6
-	swi	4
-	nop
-	.byte 0x68, 0xc6, 0xfc, 0x00, 0x8c, 0xc6, 0xfc, 0x00
-	.byte 0x68, 0x25
+; MIDI-mode jump table: 4 x .long code pointer, indexed by bits 0-1 of RAM
+; 0xFD50.  Reader: the code just above (v7 0xFCC642) --
+;   ldb_d8 b, (0xfd50) / and b, 3 / sll b, 2 / ld xiy, <this table> /
+;   ld_rr8l xiy, xiy, b / jp (xiy)
+; Modes 0 and 2 share one target.  Also named MidiStream_ExtendedDispatch_0x307
+; (a .set in shared/positional_labels.s).
+	.long	MidiStream_ExtDispatch_ModeJump02
+	.long	MidiStream_ExtDispatch_ModeJump1
+	.long	MidiStream_ExtDispatch_ModeJump02
+	.long	MidiStream_ExtDispatch_ModeJump3
+MidiStream_ExtDispatch_ModeJump02:
+	jr	37
+MidiStream_ExtDispatch_ModeJump1:
 	bit	0, w
-	jr	z, 21
+	jr	z, MidiStream_ExtendedDispatch_Helper_Skip7
 	srl	a, 4
 	and	a, 15
 	cp	a, 2:i3
-	jr	c, 6
+	jr	c, MidiStream_ExtendedDispatch_Helper_Skip6
 	cp	a, 6:i3
-	jr	nc, 2
+	jr	nc, MidiStream_ExtendedDispatch_Helper_Skip6
 	xor	a, a
+MidiStream_ExtendedDispatch_Helper_Skip6:
 	set	7, a
-	jr	11
+	jr	MidiStream_ExtendedDispatch_Helper_Join2
+MidiStream_ExtendedDispatch_Helper_Skip7:
 	srl	a, 4
 	and	a, 15
-	jr	3
+	jr	MidiStream_ExtendedDispatch_Helper_Join2
+MidiStream_ExtDispatch_ModeJump3:
 	srl	wa, 8
+MidiStream_ExtendedDispatch_Helper_Join2:
 	st_rrb	a, xiz, hl
+MidiStream_ExtendedDispatch_Helper_Return:
 	ret
-	calr	-839
+	calr	MidiStream_CmdPedalNotify_Helper3
 	ret
 ; (pre-port v7 note about the bytes at 0xFCC699:)
 ; === v7-specific block: MidiStream_HandleRunningStatus (919 bytes) ===
 MidiStream_HandleRunningStatus:
-	.byte	0xf1, 0x50
-	swi	5
-	inc	6, c
-	.byte	0x04
+	bitda	3, (0xfd50)
+	jr	z, MidiStream_HandleRunningStatus_Skip
 	cp	c, 0:i3
-	jr	z, 22
-	ld	l, (0xfd50:16)
+	jr	z, MidiStream_HandleRunningStatus_Return
+MidiStream_HandleRunningStatus_Skip:
+	ldb_d8	l, (0xfd50)
 	and	l, 3
 	sll	hl, 2
 	ld	xix, MidiStream_HandleRunningStatus_0x21
-	.byte	0xe3
-	pop	sr
-	.byte	0xf0, 0xec
-	ld	d, 180:opc
-	.byte	0xd8
+	ld_rr8l	xix, xix, l
+	jp	(xix)
+MidiStream_HandleRunningStatus_Return:
 	ret
-	.byte 0xca, 0xc6, 0xfc
-	nop
-	.byte	0xe8, 0xc6
-	swi	4
-	nop
-	.byte 0xb9, 0xc6, 0xfc
-	nop
-	.byte 0x32
-	.byte	0xc1
-	swi	4
-	nop
+; MIDI-mode jump table of MidiStream_HandleRunningStatus: 4 x .long code
+; pointer, indexed by bits 0-1 of RAM 0xFD50.  Reader: MidiStream_HandleRunningStatus
+; (v7 0xFCC699) -- ldb_d8 l, (0xfd50) / and l, 3 / sll hl, 2 /
+; ld xix, <this table> / ld_rr8l xix, xix, l / jp (xix).  Entry 2 is the `ret`
+; just above (no action); entry 3 is the routine that follows the 1-byte `ret`
+; stub MidiStream_HandleNoteCC.  Also named MidiStream_HandleRunningStatus_0x21
+; (a .set in shared/positional_labels.s).
+	.long	MidiStream_RunStatus_Mode0
+	.long	MidiStream_RunStatus_Mode1
+	.long	MidiStream_HandleRunningStatus_Return
+	.long	MidiStream_HandleNoteCC_Body
+MidiStream_RunStatus_Mode0:
 	cp	c, 72
-	jr	nz, 2
+	jr	nz, MidiStream_HandleRunningStatus_Skip2
 	ld	c, 20:opc
+MidiStream_HandleRunningStatus_Skip2:
 	pushw	bc
 	pushw	de
 	ld	e, d
@@ -11960,31 +11962,27 @@ MidiStream_HandleRunningStatus:
 	ld	d, 255:opc
 	call	MIDI_ClearGuardAndDispatchCC
 	ret
+MidiStream_RunStatus_Mode1:
 	cp	c, 72
-	jr	nz, 2
+	jr	nz, MidiStream_HandleRunningStatus_Skip3
 	ld	c, 20:opc
+MidiStream_HandleRunningStatus_Skip3:
 	extz	hl
-	ld	l, (0x90bf:16)
+	ldb_d8	l, (0x90bf)
 	sll	hl, 2
-	ld	xix, (0x9056:16)
-	.byte	0xe3
-	reti
-	.byte	0xf0, 0xec
-	ld	d, 236:opc
-	.byte	0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	z, 38
+	ldda32	xix, (0x9056)
+	ld_rrl	xix, xix, hl
+	cp	xix, 0xffffffff
+	jr	z, MidiStream_HandleRunningStatus_Return2
 	ld	e, (xix)
 	pushw	bc
 	pushw	de
 	xor	d, d
 	bit	7, e
-	jr	z, 2
+	jr	z, MidiStream_HandleRunningStatus_Skip4
 	ld	d, 1:opc
-	ld	e, (xix+1)
+MidiStream_HandleRunningStatus_Skip4:
+	ld	e, (xix+0x1)
 	sll	e, 4
 	ld	b, c
 	ld	c, 129:opc
@@ -11994,249 +11992,419 @@ MidiStream_HandleRunningStatus:
 	res	7, e
 	ld	d, 255:opc
 	call	MIDI_ClearGuardAndDispatchCC
+MidiStream_HandleRunningStatus_Return2:
 	ret
-	.byte 0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	.byte	0xe9, 0xc0
-	swi	4
-	nop
-	swi	7
-	swi	7
-	swi	7
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.fill	8, 1, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0xc2, 0xfc
-	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x42, 0xc2, 0xfc
-	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x7a, 0xc2, 0xfc
-	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xbf, 0xf6, 0x37
-	.byte 0x3e, 0xbf, 0x0a, 0x52, 0xbf, 0x0c, 0x51, 0xbf
-	.byte 0x04, 0x02, 0x00, 0x00, 0xe8, 0x8e, 0xe8, 0xa8
-	.byte 0xbf, 0x06, 0x60, 0xee, 0x8b, 0xeb, 0xcc, 0xff
-	.byte 0x00, 0x00, 0x00, 0xeb, 0x88, 0xe8, 0xee, 0x09
-	.byte 0xeb, 0x80, 0xee, 0x8b, 0xeb, 0xef, 0x08, 0xeb
-	.byte 0xcc, 0xff, 0x00, 0x00, 0x00, 0xe8, 0x83, 0xeb
-	.byte 0x88, 0xe8, 0xee, 0x09, 0xeb, 0x80, 0xee, 0x8b
-	.byte 0xeb, 0xef, 0x00, 0xeb, 0xcc, 0x1f, 0x00, 0x00
-	.byte 0x00, 0xe8, 0x83, 0xeb, 0x88, 0x41, 0xff, 0x07
-	.byte 0x00, 0x00, 0x1d, 0x35, 0x04, 0xff, 0xdb, 0x8c
-	.byte 0x68, 0x2c, 0xd9, 0xa8, 0xea, 0xf6, 0x66, 0x05
-	.byte 0x31, 0xff, 0xff, 0x68, 0x0c, 0xd9, 0xcf, 0xff
-	.byte 0xff, 0x66, 0x06, 0xa8, 0x04, 0x20, 0xbf, 0x06
-	.byte 0x60, 0xdb, 0x61, 0xdb, 0xcf, 0xff, 0x07, 0x6b
-	.byte 0x25, 0xdc, 0x88, 0xd8, 0x63, 0xe8, 0x12, 0xd8
-	.byte 0x0a, 0xff, 0x07, 0xd7, 0xe2, 0x8c, 0xdc, 0x89
-	.byte 0xe9, 0x12, 0xe9, 0xee, 0x03, 0x40, 0x00, 0x41
-	.byte 0x03, 0x00, 0xe9, 0x80, 0xa0, 0x22, 0xea, 0xcf
-	.byte 0xff, 0xff, 0xff, 0x00, 0x6e, 0xbc, 0xaf, 0x06
-	.byte 0x20, 0xe8, 0xe0, 0x66, 0x4b, 0x9f, 0x0a, 0x3f
-	.byte 0x05, 0x00, 0x66, 0x51, 0x88, 0x0d, 0x23, 0xcb
-	.byte 0xcf, 0x09, 0x6f, 0x3c, 0xd9, 0x12, 0xd9, 0xec
-	.byte 0x02, 0xf2, 0xec, 0x10, 0xee, 0x32, 0xf3, 0x07
-	.byte 0xe8, 0xe4, 0x33, 0x9f, 0x0c, 0x21, 0x9f, 0x0a
-	.byte 0x22, 0xa3, 0x23, 0xb3, 0xe8, 0xeb, 0x89, 0x91
-	.byte 0x3f, 0xff, 0xff, 0x66, 0x1b, 0x99, 0x02, 0x20
-	.byte 0xd8, 0xd9, 0x66, 0x0c, 0xd8, 0xd8, 0x6e, 0x15
-	.byte 0x9f, 0x0a, 0x20, 0x1e, 0x93, 0x19, 0x68, 0x0d
-	.byte 0x9f, 0x0a, 0x20, 0x1e, 0x48, 0x1a, 0x68, 0x05
-	.byte 0xbf, 0x04, 0x02, 0xff, 0xff, 0x9f, 0x04, 0x23
-	.byte 0x5e, 0xbf, 0x0a, 0x37, 0x0e, 0x88, 0x10, 0x23
-	.byte 0xcb, 0xde, 0x6f, 0xf1, 0xd9, 0x12, 0xd9, 0xec
-	.byte 0x02, 0xf2, 0x48, 0x11, 0xee, 0x32, 0xf3, 0x07
-	.byte 0xe8, 0xe4, 0x32, 0x9f, 0x0c, 0x21, 0xa2, 0x23
-	.byte 0xb3, 0xe8, 0xbf, 0x04, 0x53, 0x68, 0xd6, 0x2e
-	.byte 0xda, 0x8e, 0x1e, 0x5e, 0x1b, 0xeb, 0x88, 0xde
-	.byte 0x89, 0x9f, 0x06, 0x22, 0x1e, 0xd6, 0xfe, 0x4e
-	.byte 0x0f, 0x02, 0x00, 0xbf, 0xf6, 0x37, 0x3e, 0xbf
-	.byte 0x0a, 0x52, 0xbf, 0x0c, 0x51, 0xbf, 0x04, 0x02
-	.byte 0x00, 0x00, 0xe8, 0x8e, 0xe8, 0xa8, 0xbf, 0x06
-	.byte 0x60, 0xee, 0x8b, 0xeb, 0xcc, 0xff, 0x00, 0x00
-	.byte 0x00, 0xeb, 0x88, 0xe8, 0xee, 0x09, 0xeb, 0x80
-	.byte 0xee, 0x8b, 0xeb, 0xef, 0x08, 0xeb, 0xcc, 0xff
-	.byte 0x00, 0x00, 0x00, 0xe8, 0x83, 0xeb, 0x88, 0xe8
-	.byte 0xee, 0x09, 0xeb, 0x80, 0xee, 0x8b, 0xeb, 0xef
-	.byte 0x00, 0xeb, 0xcc, 0x1f, 0x00, 0x00, 0x00, 0xe8
-	.byte 0x83, 0xeb, 0x88, 0x41, 0xff, 0x07, 0x00, 0x00
-	.byte 0x1d, 0x35, 0x04, 0xff, 0xdb, 0x8c, 0x68, 0x2c
-	.byte 0xd9, 0xa8, 0xea, 0xf6, 0x66, 0x05, 0x31, 0xff
-	.byte 0xff, 0x68, 0x0c, 0xd9, 0xcf, 0xff, 0xff, 0x66
-	.byte 0x06, 0xa8, 0x04, 0x20, 0xbf, 0x06, 0x60, 0xdb
-	.byte 0x61, 0xdb, 0xcf, 0xff, 0x07, 0x6b, 0x25, 0xdc
-	.byte 0x88, 0xd8, 0x63, 0xe8, 0x12, 0xd8, 0x0a, 0xff
-	.byte 0x07, 0xd7, 0xe2, 0x8c, 0xdc, 0x89, 0xe9, 0x12
-	.byte 0xe9, 0xee, 0x03, 0x40, 0x00, 0x41, 0x03, 0x00
-	.byte 0xe9, 0x80, 0xa0, 0x22, 0xea, 0xcf, 0xff, 0xff
-	.byte 0xff, 0x00, 0x6e, 0xbc, 0xaf, 0x06, 0x20, 0xe8
-	.byte 0xe0, 0x66, 0x47, 0x88, 0x0e, 0x21, 0xc9, 0xcf
-	.byte 0x08, 0x6f, 0x3f, 0xd8, 0x12, 0xd8, 0xec, 0x02
-	.byte 0xf2, 0x10, 0x11, 0xee, 0x31, 0xf3, 0x07, 0xe4
-	.byte 0xe0, 0x33, 0xaf, 0x06, 0x20, 0x9f, 0x0c, 0x21
-	.byte 0x9f, 0x0a, 0x22, 0xa3, 0x23, 0xb3, 0xe8, 0xeb
-	.byte 0x89, 0x91, 0x3f, 0xff, 0xff, 0x66, 0x1b, 0x99
-	.byte 0x02, 0x20, 0xd8, 0xd9, 0x66, 0x0c, 0xd8, 0xd8
-	.byte 0x6e, 0x15, 0x9f, 0x0a, 0x20, 0x1e, 0x69, 0x18
-	.byte 0x68, 0x0d
+; MIDI RX RECORD-TYPE HANDLER TABLE: 192 x .long, one per record type 0x00-0xBF;
+; 0xFFFFFFFF = ignore the record.  Reader MidiStream_DispatchLoop (v7 0xFCC09D):
+; the RX buffer at 0xC039 holds 4-byte records read at offset (0x9133); a type
+; byte of 0xFF ends the scan, a type above 0xBF is skipped, otherwise
+;   ld xiy, <this table> / ld_sril3 xiy, (xiy + 4*type) / cp xiy, 0xffffffff
+; and a real handler is called with the record's first word in BC and its
+; second in DE.  Types 0x00-0x1F all go to MidiStream_StatusPrecheck; 0x48,
+; 0x60 and 0x98 go into the MidiStream_HandleSysMsg area (v7 0xFCC200,
+; 0xFCC242, 0xFCC27A); the other 157 are 0xFFFFFFFF.  Count 192 is the
+; reader's `cp a, 0xbf` bound.  Unlike v9/v10 the whole table is in this file
+; and starts right after the `ret` (no pad byte), so the positional name
+; MidiStream_HandleRunningStatus_0x98 (+152, copied from v10 into
+; shared/positional_labels.s) is one byte past it in v7.
+; After the table (v7 0xFCCA30) comes the code of SoundParam_NotifyChange, whose
+; v7 label sits 0x41A higher in kn5000_v7_program.s (the v7 label drift, see
+; scripts/analysis/v7_label_drift.py); the rest of this file is that code.
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	MidiStream_StatusPrecheck
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	MidiStream_RecType48_SysExDispatch
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	MidiStream_RecType60_CtrlDispatch
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	MidiStream_RecType98_CmdDispatch
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+	.long	0xffffffff
+Audio_ResetAfterPayloadError_Helper:
+	lda	xsp, (xsp-0xa)
+	push	xiz
+	ld	(xsp+0xa), de
+	ld	(xsp+0xc), bc
+	ldw	(xsp+0x4), 0
+	ld	xiz, xwa
+	ld	xwa, 0:i3
+	ld	(xsp+0x6), xwa
+	ld	xhl, xiz
+	and	xhl, 255
+	ld	xwa, xhl
+	sll	xwa, 9
+	add	xwa, xhl
+	ld	xhl, xiz
+	srl	xhl, 8
+	and	xhl, 255
+	add	xhl, xwa
+	ld	xwa, xhl
+	sll	xwa, 9
+	add	xwa, xhl
+	ld	xhl, xiz
+	srl	xhl, 0
+	and	xhl, 31
+	add	xhl, xwa
+	ld	xwa, xhl
+	ld	xbc, 0x7ff
+	call	DivMod32
+	ld	ix, hl
+	jr	MidiStream_HandleRunningStatus_Join2
+MidiStream_HandleRunningStatus_Loop:
+	ld	bc, 0:i3
+	cp	xiz, xde
+	jr	z, MidiStream_HandleRunningStatus_Skip5
+	ldw	bc, 0xffff
+	jr	MidiStream_HandleRunningStatus_Join
+MidiStream_HandleRunningStatus_Skip5:
+	cp	bc, 0xffff
+	jr	z, MidiStream_HandleRunningStatus_Join
+	ld	xwa, (xwa+0x4)
+	ld	(xsp+0x6), xwa
+MidiStream_HandleRunningStatus_Join:
+	inc	1, hl
+	cp	hl, 0x7ff
+	jr	ugt, MidiStream_HandleRunningStatus_Skip6
+	ld	wa, ix
+	inc	3, wa
+	extz	xwa
+	div	wa, 0x7ff
+	ld	ix, qwa
+MidiStream_HandleRunningStatus_Join2:
+	ld	bc, ix
+	extz	xbc
+	sll	xbc, 3
+	ld	xwa, 0x34100
+	add	xwa, xbc
+	ld	xde, (xwa)
+	cp	xde, 0xffffff
+	jr	nz, MidiStream_HandleRunningStatus_Loop
+MidiStream_HandleRunningStatus_Skip6:
+	ld	xwa, (xsp+0x6)
+	or	xwa, xwa
+	jr	z, MidiStream_HandleRunningStatus_Skip8
+	cpw	(xsp+0xa), 5
+	jr	z, MidiStream_HandleRunningStatus_Skip9
+	ld	c, (xwa+0xd)
+	cp	c, 9
+	jr	nc, MidiStream_HandleRunningStatus_Skip8
+	extz	bc
+	sla	bc, 2
+	lda_24	xde, (0xee10ec)
+	lda_rr	xhl, xde, bc
+	ld	bc, (xsp+0xc)
+	ld	de, (xsp+0xa)
+	ld	xhl, (xhl)
+	call	(xhl)
+	ld	xbc, xhl
+	cpw	(xbc), 0xffff
+	jr	z, MidiStream_HandleRunningStatus_Skip8
+	ld	wa, (xbc+0x2)
+	cp	wa, 1:i3
+	jr	z, MidiStream_HandleRunningStatus_Skip7
+	cp	wa, 0:i3
+	jr	nz, MidiStream_HandleRunningStatus_Loop2
+	ld	wa, (xsp+0xa)
+	calr	6547
+	jr	MidiStream_HandleRunningStatus_Loop2
+MidiStream_HandleRunningStatus_Skip7:
+	ld	wa, (xsp+0xa)
+	calr	6728
+	jr	MidiStream_HandleRunningStatus_Loop2
+MidiStream_HandleRunningStatus_Skip8:
+	ldw	(xsp+0x4), 0xffff
+MidiStream_HandleRunningStatus_Loop2:
+	ld	hl, (xsp+0x4)
+	pop	xiz
+	lda	xsp, (xsp+0xa)
+	ret
+MidiStream_HandleRunningStatus_Skip9:
+	ld	c, (xwa+0x10)
+	cp	c, 6:i3
+	jr	nc, MidiStream_HandleRunningStatus_Loop2
+	extz	bc
+	sla	bc, 2
+	lda_24	xde, (0xee1148)
+	lda_rr	xde, xde, bc
+	ld	bc, (xsp+0xc)
+	ld	xhl, (xde)
+	call	(xhl)
+	ld	(xsp+0x4), hl
+	jr	MidiStream_HandleRunningStatus_Loop2
+UIState_CheckAndRenderBitmap_Helper:
+	pushw	iz
+	ld	iz, de
+	calr	7006
+	ld	xwa, xhl
+	ld	bc, iz
+	ld	de, (xsp+0x6)
+	calr	Audio_ResetAfterPayloadError_Helper
+	popw	iz
+	retd	2
+	lda	xsp, (xsp-0xa)
+	push	xiz
+	ld	(xsp+0xa), de
+	ld	(xsp+0xc), bc
+	ldw	(xsp+0x4), 0
+	ld	xiz, xwa
+	ld	xwa, 0:i3
+	ld	(xsp+0x6), xwa
+	ld	xhl, xiz
+	and	xhl, 255
+	ld	xwa, xhl
+	sll	xwa, 9
+	add	xwa, xhl
+	ld	xhl, xiz
+	srl	xhl, 8
+	and	xhl, 255
+	add	xhl, xwa
+	ld	xwa, xhl
+	sll	xwa, 9
+	add	xwa, xhl
+	ld	xhl, xiz
+	srl	xhl, 0
+	and	xhl, 31
+	add	xhl, xwa
+	ld	xwa, xhl
+	ld	xbc, 0x7ff
+	call	DivMod32
+	ld	ix, hl
+	jr	MidiStream_HandleRunningStatus_Join4
+MidiStream_HandleRunningStatus_Loop3:
+	ld	bc, 0:i3
+	cp	xiz, xde
+	jr	z, MidiStream_HandleRunningStatus_Skip10
+	ldw	bc, 0xffff
+	jr	MidiStream_HandleRunningStatus_Join3
+MidiStream_HandleRunningStatus_Skip10:
+	cp	bc, 0xffff
+	jr	z, MidiStream_HandleRunningStatus_Join3
+	ld	xwa, (xwa+0x4)
+	ld	(xsp+0x6), xwa
+MidiStream_HandleRunningStatus_Join3:
+	inc	1, hl
+	cp	hl, 0x7ff
+	jr	ugt, MidiStream_HandleRunningStatus_Skip11
+	ld	wa, ix
+	inc	3, wa
+	extz	xwa
+	div	wa, 0x7ff
+	ld	ix, qwa
+MidiStream_HandleRunningStatus_Join4:
+	ld	bc, ix
+	extz	xbc
+	sll	xbc, 3
+	ld	xwa, 0x34100
+	add	xwa, xbc
+	ld	xde, (xwa)
+	cp	xde, 0xffffff
+	jr	nz, MidiStream_HandleRunningStatus_Loop3
+MidiStream_HandleRunningStatus_Skip11:
+	ld	xwa, (xsp+0x6)
+	or	xwa, xwa
+	jr	z, 71
+	ld	a, (xwa+0xe)
+	cp	a, 8
+	jr	nc, 63
+	extz	wa
+	sla	wa, 2
+	lda_24	xbc, (0xee1110)
+	lda_rr	xhl, xbc, wa
+	ld	xwa, (xsp+0x6)
+	ld	bc, (xsp+0xc)
+	ld	de, (xsp+0xa)
+	ld	xhl, (xhl)
+	call	(xhl)
+	ld	xbc, xhl
+	cpw	(xbc), 0xffff
+	jr	z, 27
+	ld	wa, (xbc+0x2)
+	cp	wa, 1:i3
+	jr	z, 12
+	cp	wa, 0:i3
+	jr	nz, 21
+	ld	wa, (xsp+0xa)
+	calr	6249
+	jr	13

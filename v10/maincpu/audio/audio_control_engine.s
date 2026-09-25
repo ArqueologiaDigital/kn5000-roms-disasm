@@ -11364,189 +11364,185 @@ MidiStream_HandleChanPressure:
 	and	de, 0x4848
 	and	e, d
 	bit	3, d
-	jr	z, 9
-	.byte 0xf1
-	swi	1
-	and	(xwa), bc
-	jr	z, 3
+	jr	z, MidiStream_HandleChanPressure_Skip
+	bitda	1, (0x90f9)
+	jr	z, MidiStream_HandleChanPressure_Skip
 	or	e, 8
+MidiStream_HandleChanPressure_Skip:
 	ld	a, e
 	and	e, 72
-	jr	z, 30
+	jr	z, MidiStream_HandleChanPressure_Return
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ld	xix, (0x90f2:16)
-	ld_rrl xix, xix, hl
-	ld l, b
-	ld_rr8b e, xix, l
-	and d, 72
+	ldda32	xix, (0x90f2)
+	ld_rrl	xix, xix, hl
+	ld	l, b
+	ld_rr8b	e, xix, l
+	and	d, 72
 	call	MIDI_ClearGuardAndDispatchCC
+MidiStream_HandleChanPressure_Return:
 	ret
 MidiStream_HandleSysMsg:
 	cp	d, 0:i3
-	jr	z, 27
+	jr	z, MidiStream_HandleSysMsg_Return
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ld	xix, (0x90f2:16)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ld	d, 202:opc
-	.byte 0x8f, 0xc3
-	pop	sr
-	.byte 0xf0, 0xec
-	ld	e, 29:opc
-	swi	6
-	cp	(xbc), xix
+	ldda32	xix, (0x90f2)
+	ld_rrl	xix, xix, hl
+	ld	l, b
+	ld_rr8b	e, xix, l
+	call	MIDI_ClearGuardAndDispatchCC
+MidiStream_HandleSysMsg_Return:
 	ret
+; MIDI RX record type 0x48 handler: entry 72 of the record-type table
+; read by MidiStream_DispatchLoop (the table rows are .long pointers to this
+; address).  With BC = record word +0 and DE = word +2 it dispatches on B
+; through MidiStream_SysExJumpTable (4 entries, bounded by the `cp l, 3` below).
+MidiStream_RecType48_SysExDispatch:
 	extz	hl
 	ld	l, b
 	cp	l, 3:i3
-	jr	ugt, 31
+	jr	ugt, MidiStream_SysExNop
 	sll	hl, 2
 	ld	xix, MidiStream_SysExJumpTable
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ld	d, 180:opc
-	.byte 0xd8
-
-
+	ld_rrl	xix, xix, hl
+	jp	(xix)
 MidiStream_SysExJumpTable:
-	.long MidiStream_HandleRunningStatus
-	.long MidiStream_SysExNop
-	.long MidiStream_SysExNop
-	.long MidiStream_SysExData
+	.long	MidiStream_HandleRunningStatus
+	.long	MidiStream_SysExNop
+	.long	MidiStream_SysExNop
+	.long	MidiStream_SysExData
 MidiStream_SysExNop:
 	ret
 MidiStream_SysExData:
-	.byte 0xc1
-	ldw	ix, 0x3f8d
-	ret
-	jr	z, 18
+	cpdi8	(0x8d34), 14
+	jr	z, MidiStream_SysExData_Return
 	and	d, 7
-	jr	z, 13
-	ld	e, (0xfc5d:16)
+	jr	z, MidiStream_SysExData_Return
+	ldb_d8	e, (0xfc5d)
 	and	e, 7
 	ld	d, 7:opc
 	call	MIDI_ClearGuardAndDispatchCC
+MidiStream_SysExData_Return:
 	ret
+; MIDI RX record type 0x60 handler: entry 96 of the record-type table
+; read by MidiStream_DispatchLoop (the table rows are .long pointers to this
+; address).  With BC = record word +0 and DE = word +2 it dispatches on B
+; through MidiStream_CtrlJumpTable (2 entries, bounded by the `cp l, 1` below).
+MidiStream_RecType60_CtrlDispatch:
 	extz	hl
 	ld	l, b
 	cp	l, 1:i3
-	jr	ugt, 23
+	jr	ugt, MidiStream_CtrlNop
 	sll	hl, 2
 	ld	xix, MidiStream_CtrlJumpTable
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ld	d, 180:opc
-	.byte 0xd8
+	ld_rrl	xix, xix, hl
+	jp	(xix)
 MidiStream_CtrlJumpTable:
-	.long MidiStream_CtrlNop
-	.long MidiStream_CtrlData
+	.long	MidiStream_CtrlNop
+	.long	MidiStream_CtrlData
 MidiStream_CtrlNop:
 	ret
 MidiStream_CtrlData:
 	bit	7, d
-	jr	z, 18
+	jr	z, MidiStream_CtrlData_Return
 	bit	7, e
-	jr	z, 13
-	ld	e, (0xfc6f:16)
+	jr	z, MidiStream_CtrlData_Return
+	ldb_d8	e, (0xfc6f)
 	and	e, 128
 	ld	d, 128:opc
 	call	MIDI_ClearGuardAndDispatchCC
+MidiStream_CtrlData_Return:
 	ret
+; MIDI RX record type 0x98 handler: entry 152 of the record-type table
+; read by MidiStream_DispatchLoop (the table rows are .long pointers to this
+; address).  With BC = record word +0 and DE = word +2 it dispatches on B
+; through MidiStream_CmdJumpTable (12 entries, bounded by the `cp l, 11` below).
+MidiStream_RecType98_CmdDispatch:
 	extz	hl
 	ld	l, b
 	cp	l, 11
-	jr	ugt, 63
+	jr	ugt, MidiStream_CmdNop
 	sll	hl, 2
 	ld	xix, MidiStream_CmdJumpTable
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ld	d, 180:opc
-	.byte 0xd8
+	ld_rrl	xix, xix, hl
+	jp	(xix)
 MidiStream_CmdJumpTable:
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdPedalNotify
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdNop
-	.long MidiStream_CmdMaskedNotify
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdPedalNotify
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdNop
+	.long	MidiStream_CmdMaskedNotify
 MidiStream_CmdNop:
 	ret
+; --- Routine 1: D/E bit masking, call FCA1FE (23 bytes) ---
 MidiStream_CmdMaskedNotify:
-	; --- Routine 1: D/E bit masking, call FCA1FE (23 bytes) ---
-	and d, 0xc0
-	jr z, MidiStream_CmdMaskedDone
-	and e, d
-	jr z, MidiStream_CmdMaskedDone
-	ld	e, (0xfda1:16)
-	and e, 0xc0
-	ld d, 0xc0:opc
-	call MIDI_ClearGuardAndDispatchCC
+	and	d, 192
+	jr	z, MidiStream_CmdMaskedDone
+	and	e, d
+	jr	z, MidiStream_CmdMaskedDone
+	ldb_d8	e, (0xfda1)
+	and	e, 192
+	ld	d, 192:opc
+	call	MIDI_ClearGuardAndDispatchCC
 MidiStream_CmdMaskedDone:
 	ret
+; --- Routine 2: conditional E/D setup, dec E, call FCA1FE (36 bytes) ---
 MidiStream_CmdPedalNotify:
-	; --- Routine 2: conditional E/D setup, dec E, call FCA1FE (36 bytes) ---
-	cp	(0x8d34:16), 14
-	jr z, MidiStream_CmdPedalDone
-	bit	3, (0xfd50:16)
-	jr z, MidiStream_CmdPedalDone
-	and e, 0x7f
-	jr z, MidiStream_CmdPedalDone
+	cpdi8	(0x8d34), 14
+	jr	z, MidiStream_CmdPedalDone
+	bitda	3, (0xfd50)
+	jr	z, MidiStream_CmdPedalDone
+	and	e, 127
+	jr	z, MidiStream_CmdPedalDone
 	ld	bc, 0:i3
-	ld	e, (0xfd97:16)
-	and e, 0x7f
-	dec 1, e
-	ld d, 0x7f:opc
-	call MIDI_ClearGuardAndDispatchCC
+	ldb_d8	e, (0xfd97)
+	and	e, 127
+	dec	1, e
+	ld	d, 127:opc
+	call	MIDI_ClearGuardAndDispatchCC
 MidiStream_CmdPedalDone:
 	ret
-
-
 MidiStream_HandlePartSelect:
-	cp a, 0x48
-	jr z, MidiStream_PartSelectDone
-	and w, 0xf
-	or w, 0x80
-	pushw wa
-	ld wa, (xsp)
-	ld (0x90e5:16), w
-	ld c, a
-	ld b, 0x4:opc
-	ldw de, 0x800
-	call MIDI_DispatchCC_Guarded
-	ld wa, (xsp)
-	ld (0x90e5:16), w
-	ld c, 0xb1:opc
-	ld b, a
-	ldw de, 0x4000
-	call MIDI_DispatchCC_Guarded
-	ld wa, (xsp)
-	ld (0x90e5:16), w
-	ld c, 0xb2:opc
-	ld b, a
-	ldw de, 0x7f00
-	call MIDI_DispatchCC_Guarded
-	ld wa, (xsp)
-	ld (0x90e5:16), w
-	ld c, 0xb4:opc
-	ld b, a
-	ldw de, 0x7f00
-	call MIDI_DispatchCC_Guarded
-	inc 2, xsp
-
+	cp	a, 72
+	jr	z, MidiStream_PartSelectDone
+	and	w, 15
+	or	w, 128
+	pushw	wa
+	ld	wa, (xsp)
+	stb_d8	(0x90e5), w
+	ld	c, a
+	ld	b, 4:opc
+	ldw	de, 0x800
+	call	MIDI_DispatchCC_Guarded
+	ld	wa, (xsp)
+	stb_d8	(0x90e5), w
+	ld	c, 177:opc
+	ld	b, a
+	ldw	de, 0x4000
+	call	MIDI_DispatchCC_Guarded
+	ld	wa, (xsp)
+	stb_d8	(0x90e5), w
+	ld	c, 178:opc
+	ld	b, a
+	ldw	de, 0x7f00
+	call	MIDI_DispatchCC_Guarded
+	ld	wa, (xsp)
+	stb_d8	(0x90e5), w
+	ld	c, 180:opc
+	ld	b, a
+	ldw	de, 0x7f00
+	call	MIDI_DispatchCC_Guarded
+	inc	2, xsp
 MidiStream_PartSelectDone:
 	ret
 

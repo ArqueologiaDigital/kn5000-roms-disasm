@@ -31,8 +31,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--image", required=True)
     ap.add_argument("--file", required=True)
-    ap.add_argument("--table", action="append", required=True,
+    ap.add_argument("--table", action="append", default=[],
                     help="ADDR:COUNT:NAME=ADDR,NAME=ADDR...:HEADERFILE")
+    ap.add_argument("--label", action="append", default=[],
+                    help="ADDR=NAME[:HEADERFILE]: a label (and header) for a code address reached"
+                         " through a table in ANOTHER file")
     ap.add_argument("--apply", action="store_true")
     a = ap.parse_args()
     rom = pt.rom(a.image)
@@ -62,6 +65,9 @@ def main():
             q = taddr + 4 * k
             v = int.from_bytes(rom[q - BASE:q - BASE + 4], "little")
             ln = byaddr.get(q)
+            m = re.match(r'^\s*\.long\s+([A-Za-z_.$][\w.$]*)\s*$', src[ln - 1]) if ln else None
+            if m and syms.get(m.group(1)) == v:
+                continue                     # already symbolic and right
             if ln is None or not re.match(r'^\s*\.long\s+0x%08x\s*$' % v, src[ln - 1], re.I):
                 sys.exit("table row at 0x%06X is not `.long 0x%08x` (line %s: %r)" % (
                     q, v, ln, src[ln - 1] if ln else None))
@@ -85,6 +91,19 @@ def main():
             # bytes pass through unchanged: the header is decoded as latin-1
             # like the source, so UTF-8 in it survives the round trip
             inserts[first] = open(hdr, "rb").read().decode("latin-1").rstrip("\n").split("\n") + inserts[first]
+    for spec in a.label:
+        ad, rest = spec.split("=", 1)
+        nm, _, hdr = rest.partition(":")
+        ad = int(ad, 16)
+        if ad in labels_at:
+            sys.exit("0x%06X already has label %s" % (ad, labels_at[ad]))
+        tl = byaddr.get(ad)
+        if tl is None:
+            sys.exit("0x%06X is not the first byte of a source line" % ad)
+        lines = open(hdr, "rb").read().decode("latin-1").rstrip("\n").split("\n") if hdr else []
+        inserts.setdefault(tl, [])
+        inserts[tl] = inserts[tl] + lines + [nm + ":"]
+        labels_at[ad] = nm
     out = []
     for i, line in enumerate(src, 1):
         out.extend(inserts.get(i, []))
