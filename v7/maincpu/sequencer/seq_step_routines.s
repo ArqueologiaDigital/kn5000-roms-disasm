@@ -42,10 +42,13 @@ SeqStep_NoteReadEvent:
 	add wa, wa
 	lda xix, (Display_FontPalette_Table_0x7E:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda xix, (SeqStep_NoteByteBlock:24)
+	lda xix, (SeqStep_NoteCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
-SeqStep_NoteByteBlock:
+; Case bodies of the `jp_ind` switch in the dispatcher above (event byte 0x80-0x86; word offsets at Display_FontPalette_Table_0x7E): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+SeqStep_NoteCases:
 	ld	a, (0x271c:16)
 	and	a, 255
 	extz	wa
@@ -55,19 +58,19 @@ SeqStep_NoteByteBlock:
 	call	SeqData_ReadNextByte
 	ld	(9686:16), l
 	ldw	wa, 129
-SeqStep_NoteByteBlock_Join:
+SeqStep_NoteCases_Join:
 	call	PartCtrl_WriteByte_Indexed
 	cp	(9686:16), 129
-	jr	z, SeqStep_NoteByteBlock_Skip
+	jr	z, SeqStep_NoteCases_Skip
 	call	SeqData_AdvancePosition
 	cp	(0x287a:16), 0
-	jr	nz, SeqStep_NoteByteBlock_Skip
+	jr	nz, SeqStep_NoteCases_Skip
 	ldmm8 0x25d8, 0x25d6
 	call	SeqData_ReadNextByte
 	ld	(9686:16), l
 	ld	a, (9688:16)
 	extz	wa
-	jr	SeqStep_NoteByteBlock_Join
+	jr	SeqStep_NoteCases_Join
 	ldib_erp	249, 0
 	jr	SeqStep_NoteConsumeInit
 	ldib_erp	249, 1
@@ -92,7 +95,7 @@ SeqStep_NoteConsumeLoop:
 	call SeqData_AdvancePosition
 	cp (0x287a:16), 0
 	jr z, SeqStep_NoteConsumeAdvance
-SeqStep_NoteByteBlock_Skip:
+SeqStep_NoteCases_Skip:
 	mrdw5 0x9f, 0x04, 0x19, 0xaf, 0x28
 	mrdw5 0x9f, 0x06, 0x19, 0x66, 0x26
 	jrl SeqStep_NoteExit

@@ -2296,7 +2296,14 @@ SMF_ConfigSlot_EndOfTrack:
 SMF_ConfigSlot_Return:
 	ret
 
-SMF_ConfigSlot_CodeBlock:
+; SMF_AdvanceInPageChain (formerly SMF_ConfigSlot_CodeBlock) -- RAM 0x113F :=
+; word 0x2887; word 0x1141 := IY + 1; once that passes 255, follow the link
+; word at +3 of the record RAM 0x2881 points to: store it in 0x113F and
+; 0x2887, turn it into an address through SMF_CalcPageAddress (0x100 bytes per
+; page, base in RAM 0x1D5A), and either stop with RAM 0x287A := 2 (bit 7 of
+; the new page's first byte clear) or continue there with 0x1141 := 5, IY := 5.
+; NO CALLER FOUND (scripts/analysis/sequi_find_refs.py on its address).
+SMF_AdvanceInPageChain:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 24 of 26 slots byte-identical
 	push	xhl
 	push	xwa

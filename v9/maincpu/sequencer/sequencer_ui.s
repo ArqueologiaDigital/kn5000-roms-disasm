@@ -2712,21 +2712,26 @@ TrAsGrid_LookupTable:
 	ldw_sri HL, 0x07, 0xe4, 0xe0
 	ret
 
-TrAsGrid_ByteData1:
+; TrAsGrid_StepListValue (formerly TrAsGrid_ByteData1: it is code) -- A :=
+; position of value A in the 20-entry list NakaWidgetPtrTbl_SmfDp_0x23B8; step
+; it up (C == 0, stopping at 19) or down (stopping at 0); return in L the
+; list value at the new position from NakaWidgetPtrTbl_SmfDp_0x23CC.  Called
+; by the TrAsGridCheck cases.
+TrAsGrid_StepListValue:
 	extz	wa
 	lda	xde, (NakaWidgetPtrTbl_SmfDp_0x23B8:24)
 	ld_rrb a, xde, wa
 	cp c, 0:i3
-	jr nz, TrAsGrid_ByteData1_Skip
+	jr nz, TrAsGrid_StepListValue_Skip
 	cp a, 19
-	jr	nc, TrAsGrid_ByteData1_Join
+	jr	nc, TrAsGrid_StepListValue_Join
 	inc	1, a
-	jr	TrAsGrid_ByteData1_Join
-TrAsGrid_ByteData1_Skip:
+	jr	TrAsGrid_StepListValue_Join
+TrAsGrid_StepListValue_Skip:
 	cp	a, 0:i3
-	jr	z, TrAsGrid_ByteData1_Join
+	jr	z, TrAsGrid_StepListValue_Join
 	dec	1, a
-TrAsGrid_ByteData1_Join:
+TrAsGrid_StepListValue_Join:
 	extz	wa
 	ld	xbc, NakaWidgetPtrTbl_SmfDp_0x23CC
 	ld_rrb l, xbc, wa
@@ -2776,10 +2781,13 @@ TrAsGridCheck:
 	add xwa, xwa
 	add xwa, NakaWidgetPtrTbl_SmfDp_0x2420
 	ld wa, (xwa)
-	lda xix, (TrAsGridChk_ByteData:24)
+	lda xix, (TrAsGridCheck_Cases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
-TrAsGridChk_ByteData:
+; Case bodies of the `jp_ind` switch in TrAsGridCheck (events 0x1C00017-0x1C0001D; word offsets at NakaWidgetPtrTbl_SmfDp_0x2420): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+TrAsGridCheck_Cases:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008f
@@ -2803,7 +2811,7 @@ TrAsGridChk_ByteData:
 	ld	a, (0x2873:16)
 	extz	wa
 	ld	bc, 0:i3
-	calr	TrAsGrid_ByteData1
+	calr	TrAsGrid_StepListValue
 	ld	(0x2873:16), l
 	ld (0x021082:24), (0x2873:16)
 	ld xwa, 0x0147001c
@@ -2908,7 +2916,7 @@ TrAsGrid_CheckTrackType_Join2:
 	ld	a, (0x2873:16)
 	extz	wa
 	ld	bc, 1:i3
-	calr	TrAsGrid_ByteData1
+	calr	TrAsGrid_StepListValue
 	ld	(0x2873:16), l
 	ld (0x021082:24), (0x2873:16)
 	ld xwa, 0x0147001c
@@ -6810,9 +6818,12 @@ NoteEdit_GetParamValue:
 	add xde, xde
 	add xde, ExtDevice_ModeDispatch_Table_0x200
 	ld de, (xde)
-	lda xix, (NoteEdit_ParamJumpTable:24)
+	lda xix, (NoteEdit_GetParamValue_Cases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
-NoteEdit_ParamJumpTable:
+; Case bodies of the `jp_ind` switch in NoteEdit_GetParamValue (xde-1 = 0..13; word offsets at ExtDevice_ModeDispatch_Table_0x200): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+NoteEdit_GetParamValue_Cases:
 	ld	hl, (0x2782:16)
 	extz	xhl
 	jrl	NoteEdit_Epilogue
@@ -8373,12 +8384,15 @@ SqplyVal_HandleExtraParams:
 	add xhl, xhl
 	add xhl, ExtDevice_ModeDispatch_Table_0x334
 	ld hl, (xhl)
-	lda xix, (SqplyVal_ExtraParamsData:24)
+	lda xix, (SqplyVal_ParamCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
-SqplyVal_ExtraParamsData:
+; Case bodies of the `jp_ind` switch in the SqplyVal handler above (index 0..7; word offsets at ExtDevice_ModeDispatch_Table_0x334): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+SqplyVal_ParamCases:
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80041
-SqplyVal_ExtraParamsData_Join:
+SqplyVal_ParamCases_Join:
 	call	ApFuncCall
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+26)
@@ -8389,37 +8403,37 @@ SqplyVal_ExtraParamsData_Join:
 	lda	xbc, (xsp+48)
 	lda	xde, (xsp+32)
 	or	xhl, xhl
-	jr	z, SqplyVal_ExtraParamsData_Skip
+	jr	z, SqplyVal_ParamCases_Skip
 	ld	xhl, 0:i3
 	push	xhl
 	pushw	0
 	pushw	255
-	jr	SqplyVal_ExtraParamsData_Join2
+	jr	SqplyVal_ParamCases_Join2
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80042
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80043
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e8004e
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e8004f
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80050
-	jr	SqplyVal_ExtraParamsData_Join
+	jr	SqplyVal_ParamCases_Join
 	ld	xwa, (xbc)
 	ld	xbc, 0x01e80047
-	jr	SqplyVal_ExtraParamsData_Join
-SqplyVal_ExtraParamsData_Skip:
+	jr	SqplyVal_ParamCases_Join
+SqplyVal_ParamCases_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+10)
 	pushm (xhl+22)
 	pushm (xhl+24)
-SqplyVal_ExtraParamsData_Join2:
+SqplyVal_ParamCases_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+68)
 	ld	xbc, 0x01c00017
@@ -8804,14 +8818,17 @@ SqedtVal_ClearDrawBuffer:
 	add xwa, xwa
 	add xwa, ExtDevice_ModeDispatch_Table_0x344
 	ld wa, (xwa)
-	lda xix, (SqedtVal_DrawParamsData:24)
+	lda xix, (SqedtVal_ParamCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
-SqedtVal_DrawParamsData:
+; Case bodies of the `jp_ind` switch in the SqedtVal handler above (index 0..14; word offsets at ExtDevice_ModeDispatch_Table_0x344): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+SqedtVal_ParamCases:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80016
-SqedtVal_DrawParamsData_Join:
+SqedtVal_ParamCases_Join:
 	call	ApFuncCall
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
@@ -8822,75 +8839,75 @@ SqedtVal_DrawParamsData_Join:
 	lda	xbc, (xsp+54)
 	lda	xde, (xsp+30)
 	or	xhl, xhl
-	jrl	z, SqedtVal_DrawParamsData_Skip
+	jrl	z, SqedtVal_ParamCases_Skip
 	ld	xhl, 0:i3
 	push	xhl
 	pushw	0
 	pushw	255
-	jrl	SqedtVal_DrawParamsData_Join2
+	jrl	SqedtVal_ParamCases_Join2
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80017
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80018
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80019
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001a
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001b
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001c
-	jr	SqedtVal_DrawParamsData_Join
+	jr	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001d
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001e
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8001f
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80020
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80021
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80022
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80023
-	jrl	SqedtVal_DrawParamsData_Join
+	jrl	SqedtVal_ParamCases_Join
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e80024
-	jrl	SqedtVal_DrawParamsData_Join
-SqedtVal_DrawParamsData_Skip:
+	jrl	SqedtVal_ParamCases_Join
+SqedtVal_ParamCases_Skip:
 	ld	xhl, 0:i3
 	push	xhl
 	ld	xhl, (xsp+8)
 	pushm (xhl+22)
 	pushm (xhl+24)
-SqedtVal_DrawParamsData_Join2:
+SqedtVal_ParamCases_Join2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+74)
 	ld	xbc, 0x01c00017
@@ -13425,21 +13442,24 @@ SqplyFunc:
 	add xhl, xhl
 	add xhl, ExtDevice_ModeDispatch_Table_0x660
 	ld hl, (xhl)
-	lda xix, (SqplyFunc_ParamFormatData:24)
+	lda xix, (SqplyFunc_FormatCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
-SqplyFunc_ParamFormatData:
+; Case bodies of the `jp_ind` switch in the SqplyFunc handler above (events 0x1E8003E-0x1E80047; word offsets at ExtDevice_ModeDispatch_Table_0x660): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+SqplyFunc_FormatCases:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	wa, de
 	cp	de, 0x8002
-	jr	nz, SqplyFunc_ParamFormatData_Skip
+	jr	nz, SqplyFunc_FormatCases_Skip
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5C4
-	jr	SqplyFunc_ParamFormatData_Join
-SqplyFunc_ParamFormatData_Skip:
+	jr	SqplyFunc_FormatCases_Join
+SqplyFunc_FormatCases_Skip:
 	cp	wa, 0x8001
-	jr	nz, SqplyFunc_ParamFormatData_Skip2
+	jr	nz, SqplyFunc_FormatCases_Skip2
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5C8
-SqplyFunc_ParamFormatData_Join:
+SqplyFunc_FormatCases_Join:
 	push	xwa
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
@@ -13447,7 +13467,7 @@ SqplyFunc_ParamFormatData_Join:
 	call	Strcpy
 	inc	8, xsp
 	jrl	SqplyFunc_RestoreAndReturn
-SqplyFunc_ParamFormatData_Skip2:
+SqplyFunc_FormatCases_Skip2:
 	pushw	wa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5CC
 	jrl	SqplyFunc_PushFormatAddr
@@ -13471,42 +13491,42 @@ SqplyFunc_ParamFormatData_Skip2:
 	ld	xwa, (xsp)
 	lda	xbc, (xwa+18)
 	cp	l, 130
-	jr	nz, SqplyFunc_ParamFormatData_Skip5
+	jr	nz, SqplyFunc_FormatCases_Skip5
 	bit 0, (0x28b1:16)
-	jr z, SqplyFunc_ParamFormatData_Skip4
+	jr z, SqplyFunc_FormatCases_Skip4
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5DA
-	jr	SqplyFunc_ParamFormatData_Join2
-SqplyFunc_ParamFormatData_Skip4:
+	jr	SqplyFunc_FormatCases_Join2
+SqplyFunc_FormatCases_Skip4:
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5E0
-SqplyFunc_ParamFormatData_Join2:
+SqplyFunc_FormatCases_Join2:
 	push	xwa
 	ld xwa, (xbc)
 	push xwa
-	jr SqplyFunc_ParamFormatData_Join4
-SqplyFunc_ParamFormatData_Skip5:
+	jr SqplyFunc_FormatCases_Join4
+SqplyFunc_FormatCases_Skip5:
 	ld xbc, (xbc)
 	bit 1, (0x28b1:16)
-	jr z, SqplyFunc_ParamFormatData_Skip6
+	jr z, SqplyFunc_FormatCases_Skip6
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5E6
-	jr	SqplyFunc_ParamFormatData_Join3
-SqplyFunc_ParamFormatData_Skip6:
+	jr	SqplyFunc_FormatCases_Join3
+SqplyFunc_FormatCases_Skip6:
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5EC
-SqplyFunc_ParamFormatData_Join3:
+SqplyFunc_FormatCases_Join3:
 	push	xwa
 	push	xbc
-	jr	SqplyFunc_ParamFormatData_Join4
+	jr	SqplyFunc_FormatCases_Join4
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5F8
 	cp (0x283a:16), 0
-	jr	z, SqplyFunc_ParamFormatData_Skip3
+	jr	z, SqplyFunc_FormatCases_Skip3
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5F2
-SqplyFunc_ParamFormatData_Skip3:
+SqplyFunc_FormatCases_Skip3:
 	push	xwa
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
-SqplyFunc_ParamFormatData_Join4:
+SqplyFunc_FormatCases_Join4:
 	call	Strcpy
 	inc	8, xsp
 	jrl	SqplyFunc_RestoreAndReturn
@@ -13514,27 +13534,27 @@ SqplyFunc_ParamFormatData_Join4:
 	ld	(xsp), xwa
 	call	GetTitleNow
 	cp	l, 134
-	jr	nz, SqplyFunc_ParamFormatData_Skip7
+	jr	nz, SqplyFunc_FormatCases_Skip7
 	pushm (0x2520:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5FE
-	jr	SqplyFunc_ParamFormatData_Join5
-SqplyFunc_ParamFormatData_Skip7:
+	jr	SqplyFunc_FormatCases_Join5
+SqplyFunc_FormatCases_Skip7:
 	pushm (0x251c:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x604
-SqplyFunc_ParamFormatData_Join5:
+SqplyFunc_FormatCases_Join5:
 	jrl	SqplyFunc_PushFormatAddr
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	call	GetTitleNow
 	cp	l, 134
-	jr	nz, SqplyFunc_ParamFormatData_Skip8
+	jr	nz, SqplyFunc_FormatCases_Skip8
 	pushm (0x2522:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x60A
-	jr	SqplyFunc_ParamFormatData_Join6
-SqplyFunc_ParamFormatData_Skip8:
+	jr	SqplyFunc_FormatCases_Join6
+SqplyFunc_FormatCases_Skip8:
 	pushm (0x251e:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x610
-SqplyFunc_ParamFormatData_Join6:
+SqplyFunc_FormatCases_Join6:
 	jr	SqplyFunc_PushFormatAddr
 
 SqplyFunc_FormatRhythmPattern:
@@ -15555,10 +15575,13 @@ Equalizer_FormatDispatch:
 	sll wa, 1
 	ld xix, NakaInst_2d_0x204
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda xix, (EqFormat_DispatchTable:24)
+	lda xix, (Equalizer_FormatCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
-EqFormat_DispatchTable:
+; Case bodies of the `jp_ind` switch in Equalizer_FormatDispatch (word offsets at NakaInst_2d_0x204): jp (xix + r) with xix = this
+; label, so this label is the offset-0 case.  Formerly named as data; it is
+; code.
+Equalizer_FormatCases:
 	pushw 0x0005
 	ld xwa, NakaData_WidgetDescriptors_0x1530
 	jrl FormatParamStr_CopyEnumName
