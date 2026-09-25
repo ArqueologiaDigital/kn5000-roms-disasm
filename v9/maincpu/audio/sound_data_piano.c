@@ -1,6 +1,21 @@
 /**
  * sound_data_piano.c — Piano category sound data
  *
+ * CORRECTED 2026-09-25 -- read this first.  This is descriptor slot +0x10:
+ * the mode-0 BANK/PROGRAM -> CATEGORY/SLOT map.  Reader
+ * ApplyProgramChangeAs_LoadDRAM2 (v10/v9 0xFEE798): block = header[bank],
+ * record = records[block*256 + program]; it keeps the LOW BYTE of the first
+ * word (category 0..17) and of the second (slot 0..39).  Proven false below:
+ * "sub_bank selects a waveform sub-bank, patch_ref indexes into that
+ * sub-bank" (they are category and slot: all 368 populated cells of
+ * sound_data_guitar.c come back to themselves through this table) and the
+ * "8-byte sub-bank index + 120 bytes padding" (one 128-entry bank -> block
+ * map; bank numbers 8..127 read block 0).
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 8320 bytes: 128-byte header + 2048 x 4-byte patch reference records.
  *
  * Header: 8-byte sub-bank index (0x00-0x07) + 120 bytes zero padding.

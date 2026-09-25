@@ -1,6 +1,16 @@
 /**
  * sound_data_sax_reed.c — Sax & Reed category patch reference grid
  *
+ * CORRECTED 2026-09-25 -- read this first.  This is descriptor slot +0x24:
+ * the mode-1 CATEGORY/SLOT -> PROGRAM/BANK grid, same reader and layout as
+ * sound_data_guitar.c (row = category, low byte = program, high byte =
+ * bank); 136 cells populated, all round-trip through sound_data_flute.c.
+ * "Each row corresponds to a sound sub-bank" and "variant" below are false.
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 1440 bytes: 18 rows x 40 uint16_t entries (80 bytes per row).
  * Each row corresponds to a sound sub-bank. Each uint16_t entry
  * is a patch reference: low byte = patch ID, high byte = variant.

@@ -1,6 +1,19 @@
 /**
  * sound_data_organ_accordion.c — Organ & Accordion Drawbar Registration Data
  *
+ * CORRECTED 2026-09-25 -- read this first.  Descriptor slot +0x30.  The
+ * readers index it by VOICE INDEX (0..127), two bytes per entry:
+ * SndParam_LookupOscEnvelope (v10/v9 0xFEE8F1) when record+5 == 15 or
+ * SndParam_LookupViaEncode(record+5, 0) >= 0xF0, and
+ * SndParam_LookupAndDispatch (0xFEEA24) when its bank argument is 0x78.
+ * So it is 128 x {byte, byte}, every entry (0xF0-0xF3/0xF5/0xF7/0xFC/0xFD, 0).
+ * The "16 registration sets x 8 drawbar levels", the drawbar footages and the
+ * pipe/jazz organ presets below have no reader behind them and are false.
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 256 bytes: 16 registration sets x 8 drawbar levels (uint16_t each).
  * Used by organ/accordion voice configuration to set drawbar footages.
  *

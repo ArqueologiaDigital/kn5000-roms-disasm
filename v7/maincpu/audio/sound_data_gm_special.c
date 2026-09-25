@@ -1,6 +1,16 @@
 /**
  * sound_data_gm_special.c — GM Special category config table
  *
+ * CORRECTED 2026-09-25 -- read this first.  Descriptor slot +0x48: the
+ * MODE-1 per-category LAST SLOT INDEX table for ordinary parts (reader
+ * CharMap_ActivePreamb_Prologue, v10/v9 0xFEE43F; see sound_data_bass.c).
+ * 12 categories are offered and the values sum to 128 sounds; 0xFF = not
+ * offered, not "use all" (false).
+ * Evidence for everything in this block: audio/sound_data.s (reader
+ * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.
+ * The category word in this FILE NAME comes from pairing descriptor slot k
+ * with category name k; no reader indexes these tables by category.
+ *
  * 18 bytes: one uint8_t per sound category (matching SOUND_CATEGORY_NAMES).
  * Varies per category. Value 0xFF indicates "use all" or "not applicable".
  */
