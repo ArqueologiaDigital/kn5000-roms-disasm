@@ -79,15 +79,34 @@
 ;          23 N=5 records outside the staging streams.  The other 37 are
 ;          staging-stream records, see STAGING STREAMS below.
 ;   +0x12  read by Partial_Build_Present_Word (0x032B1E), which tests bits 1:0
-;          (0 in every record; the byte is 0x00 x565, 0x40 x13, 0x10 x1).
-;   +0x13  (0 x573, 4 x6) and +0x14 (0x55 in all 579): no reader found.
-;   +0x15  81-byte COMMON block.  Readers found: the {wave, slot} byte pairs at
-;          rec[0x27+2c] (ToneDB_Find_SubToneRecord 0x032AE0 -- the per-note map
-;          of a drum kit; a melodic record reaches it only for keys >= 0x78 on
-;          a SET whose flags bit 1 is set, see ToneDB_EnvDescTable), the low
-;          nibble of +0x5D (Partial_Build_Present_Word), and +0x5E..+0x61
-;          (Voice_Build_Partial_Descriptor 0x02B717, three ROM tables at
-;          0x012038/0x012057/0x012095).  The rest has no reader found.
+;          (0 in every record; the byte is 0x00 x565, 0x40 x13, 0x10 x1);
+;          Voice_PitchBend_BranchB (0x02A64C) takes its address.
+;   +0x13  bend type (0 x573, 4 x6), read by Voice_Pitch_Compute_Inactive
+;          (0x023698); +0x14 (0x55 in all 579): Voice_PitchBend_BranchA
+;          (0x02A62E) takes its address, no value read found.
+;   +0x15  81-byte COMMON block.  Readers found (record offsets; through the
+;          part's tone pointer at part +0x06 or voice slot +0x13):
+;            +0x27+2c  {wave, slot} byte pairs (ToneDB_Find_SubToneRecord
+;                      0x032AE0 -- a drum kit's per-note map; a melodic record
+;                      reaches it only for keys >= 0x78 on a SET whose flags
+;                      bit 1 is set, see ToneDB_EnvDescTable)
+;            +0x29     low nibble = octave-shift index (Voice_Pitch_Compute
+;                      0x023584 -> Pitch_Get_Patch_Octave_Shift; 8 x494)
+;            +0x2A     high and low nibble each index the byte table 0x011ACF
+;                      (Instrument_LookupProgram_HiNibble 0x02289D / _LoNibble
+;                      0x0228D9)
+;            +0x2B+4k  (k = 0..3) byte +2 bit 7 tested by
+;                      ExtVoice_Build_SlotRegisters (0x024BE3)
+;            +0x5C     level offset centred on 0x40 (Level_Build_Reg0C0 0x0253FE)
+;            +0x5D     algorithm type, low nibble (AlgoType_StateWrite 0x033557,
+;                      Partial_Build_Present_Word)
+;            +0x5E..+0x61  Voice_Build_Partial_Descriptor (0x02B717, ROM tables
+;                      0x012038/0x012057/0x012095); +0x5E/+0x60 also
+;                      DSP_ChanFreq_WritePacket1 (0x033B8B, algorithm types 6/7),
+;                      +0x5F & 0x3F AlgoType_AB_LoadIndex (0x033B70, types 0x0A/0x0B)
+;            +0x64, +0x65  Voice_SecondaryParam_Path2 (0x033DAA) / _Epilogue
+;                      (0x033DD3)
+;          The rest of the common block has no reader found.
 ;   +0x66  N-1 81-byte PARTIAL BLOCKS in rank order.  A bound block becomes the
 ;          voice slot's paramA (slot +0x17, stored by
 ;          Voice_Build_Partial_Descriptor) and is read, in the field groups the

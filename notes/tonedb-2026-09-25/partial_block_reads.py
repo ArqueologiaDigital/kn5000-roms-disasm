@@ -30,7 +30,7 @@ QUESTION THIS ANSWERS
 RUN
     python3 notes/tonedb-2026-09-25/partial_block_reads.py            # offset -> routines
     python3 notes/tonedb-2026-09-25/partial_block_reads.py --by-routine
-    python3 notes/tonedb-2026-09-25/partial_block_reads.py --chains
+    python3 notes/tonedb-2026-09-25/partial_block_reads.py --chains [--slot 19]
         splits every offset's readers by call-graph reachability: T4 = reached
         from Voice_Build_Register_Set / Voice_Release_Type4 (part modes 0x00 and
         0x40, slot +0x17 = a partial block), T2 = reached from Voice_Init_Type1 /
@@ -42,6 +42,10 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+# slot +0x17 (23) = paramA; `--slot 19` follows slot +0x13 instead, which holds
+# the TONE RECORD itself on the melodic path (Voice_Build_Partial_Descriptor)
+# and the PercInst record on the drum path (Voice_Allocate_Type2).
+SLOT_OFF = int(sys.argv[sys.argv.index("--slot") + 1]) if "--slot" in sys.argv else 23
 SRC = ROOT / "v142" / "subcpu" / "kn5000_subprogram_v142.s"
 
 LABEL = re.compile(r'^([A-Za-z_][\w.]*):')
@@ -84,7 +88,7 @@ def main():
         if code.startswith(("ret", "retd")):
             continue
         # paramA load from a slot pointer: ld xR, (xS + 23)
-        mm = re.match(r'^ld (%s), \((%s) \+ 23\)$' % (REG32, REG32), code)
+        mm = re.match(r'^ld (%s), \((%s) \+ %d\)$' % (REG32, REG32, SLOT_OFF), code)
         if mm:
             regs.add(mm.group(1))
             continue
