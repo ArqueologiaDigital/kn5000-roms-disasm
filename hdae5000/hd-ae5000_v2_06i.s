@@ -105,9 +105,9 @@
 ;   0x2967B4  HDAE5000_Render_Display_Region - Display utility
 ;   0x2967E4  HDAE5000_Render_Display_Region2 - Display utility 2
 ;   0x29AE9F  HDAE5000_MemCopy - Memory copy utility
-;   0x29AFF0  HDAE5000_MemCopy_Reverse - Memory copy variant
-;   0x29AFBE  HDAE5000_MemCompare_Block - Memory compare
-;   0x29AF71  HDAE5000_Display_Buffer_Validate - Memory utility
+;   0x29AFF0  HDAE5000_StrNCpy - Memory copy variant
+;   0x29AFBE  HDAE5000_StrNCmp - Memory compare
+;   0x29AF71  HDAE5000_StrLen - Memory utility
 ;   0x29B72D  HDAE5000_Multiply - 32-bit multiply routine
 ;   0x2971A3  HDAE5000_Check_HD_Present - Hard disk presence detection
 ;   0x2999B0  HDAE5000_Version_Info - Version string block:
@@ -1986,7 +1986,7 @@ HDAE5000_DbMemoClProc:
 	push xwa
 	lda	xwa, (xsp+20)
 	push xwa
-	call HDAE5000_MemCopy_Reverse
+	call HDAE5000_StrNCpy
 	lda	xsp, (xsp+10)
 	ld	wa, (xsp+8)
 	extz xwa
@@ -2010,7 +2010,7 @@ HDAE5000_DbMemoClProc:
 	call	(xhl)
 	lda	xwa, (xsp+14)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	inc 4, xsp                              ; inc 4,XSP
 	cp	hl, (xsp+8)
 	jr nz, .LRF_140a                       ; [6e 0b] jr NZ,0x28140a
@@ -2297,7 +2297,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld (xsp + 0x18), wa                     ; ld (XSP+0x18),WA
 	lda	xwa, (xsp+10)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	inc 4, xsp                              ; inc 4,XSP
 	sll	hl, 0x03
 	ld	wa, (xsp+24)
@@ -2348,7 +2348,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld (xsp + 0x18), wa                     ; ld (XSP+0x18),WA
 	lda	xwa, (xsp+10)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	inc 4, xsp                              ; inc 4,XSP
 	sll	hl, 0x03
 	ld	wa, (xsp+24)
@@ -2961,7 +2961,7 @@ HDAE5000_AcHddNamingWindowProc:
 	push xbc
 	ld	xwa, xiz
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	ld	wa, (0x22A026:24)
 	sub	wa, (xsp+12)
 	sub	wa, (xsp+14)
@@ -2975,7 +2975,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	xbc, 0x0022a000
 	add	xbc, xwa
 	push xbc
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	ld	xwa, xiz
 	ld	xbc, (0x23a1a2)
@@ -3078,7 +3078,7 @@ HDAE5000_AcHddNamingWindowProc:
 	push xwa
 	lda xwa, (0x22a000:24)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	inc 0, xsp                              ; inc 0,XSP
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld	xbc, (0x23a1a2)
@@ -3094,7 +3094,7 @@ HDAE5000_AcHddNamingWindowProc:
 	push xwa
 	ld xwa, (xsp + 0x2c)                    ; ld XWA,(XSP+0x2c)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	inc 0, xsp                              ; inc 0,XSP
 	ld	xhl, 0:i3
 	jrl t, .LRF_267c                       ; [78 58 04] jrl T,0x28267c
@@ -3165,7 +3165,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz wa                                 ; extz WA
-	lda xbc, (0x2f9362:24)
+	lda xbc, (HDAE5000_CType_Table:24)
 	bit_dri 0, 0x07, 0xE4, 0xE0	; bit 0,(XBC+WA)
 	jr z, .LRF_2345                        ; [66 24] jr Z,0x282345
 	ldw	(0x22A02A:24), 0
@@ -3185,7 +3185,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz wa                                 ; extz WA
-	lda xbc, (0x2f9362:24)
+	lda xbc, (HDAE5000_CType_Table:24)
 	bit_dri 1, 0x07, 0xE4, 0xE0	; bit 1,(XBC+WA)
 	jr z, .LRF_2387                        ; [66 24] jr Z,0x282387
 	ldw	(0x22A02A:24), 1
@@ -3205,7 +3205,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz wa                                 ; extz WA
-	lda xbc, (0x2f9362:24)
+	lda xbc, (HDAE5000_CType_Table:24)
 	bit_dri 2, 0x07, 0xE4, 0xE0	; bit 2,(XBC+WA)
 	jr z, .LRF_23d2                        ; [66 2d] jr Z,0x2823d2
 	cpw	(0x22A02A:24), 2
@@ -3944,7 +3944,7 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	pushw 0x2264			; source offset
 	lda xwa, (xsp + 36)
 	push xwa			; dest address
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	; MemCopy: copy 10 bytes between buffers
 	pushw 0x000A			; count = 10
 	lda xwa, (xsp + 100)
@@ -3968,14 +3968,14 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	; Compare and copy operations
 	lda xbc, (xsp + 76)
 	lda xwa, (xsp + 20)
-	call HDAE5000_PPI_Write_Sector_Helper4
+	call HDAE5000_ULongToFloat
 	lda xbc, (xsp + 20)
 	lda xde, (0x2e22aa:24); 0x2E22AA
 	lda xwa, (xsp + 20)
-	call HDAE5000_PPI_Write_Sector_Helper5
+	call HDAE5000_FloatDiv
 	lda xbc, (xsp + 20)
 	lda xwa, (xsp + 24)
-	call HDAE5000_Divide_Signed_Sub2
+	call HDAE5000_FloatToDouble
 	; Copy block via PPI
 	lda xiy, (xsp + 24)
 	ld xix, (xiy + 4)
@@ -3986,7 +3986,7 @@ HDAE5000_PPI_Write_Sector:	; 0x282C6E (192 bytes)
 	pushw 0x2270			; offset
 	lda xwa, (xsp + 44)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda xsp, (xsp + 24)		; pop args
 	; Transfer results
 	lda xwa, (xsp + 24)
@@ -4102,16 +4102,16 @@ HDAE5000_PPI_Transfer_Block:	; 0x282E3C (81 bytes)
 	pushw 0x22AE			; source base address
 	lda xwa, (xsp + 8)		; pointer to local buffer
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda xwa, (xsp + 0x0C)		; pointer to compare buffer
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	pushw hl			; save validation result
 	ld xwa, (xsp + 0x16)		; reload input parameter
 	push xwa
 	lda xwa, (xsp + 0x16)		; pointer to local buffer
 	push xwa
-	call HDAE5000_MemCompare_Block
+	call HDAE5000_StrNCmp
 	add xsp, 0x00000018		; clean up stack (24 bytes)
 	cp hl, 0:i3			; check compare result
 	jr nz, .Lptb_found

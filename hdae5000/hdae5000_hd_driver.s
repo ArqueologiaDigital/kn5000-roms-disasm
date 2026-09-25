@@ -35,7 +35,7 @@ HDAE5000_HD_Setup_Drive:	; 0x282E8D (1126 bytes)
 	; Copy drive info to 0x22aa9c buffer
 	ld xwa, xiz					; ee 88
 	push xwa					; 38
-	call HDAE5000_Display_Buffer_Validate					; 1d 71 af 29
+	call HDAE5000_StrLen					; 1d 71 af 29
 	pushw hl                                ; push hl (compact)
 	ld xwa, xiz					; ee 88
 	push xwa					; 38
@@ -410,10 +410,10 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	pushw 0x235c
 	lda xwa, (xsp + 0x12)			; bf 12 30
 	push xwa				; 38
-	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	call HDAE5000_SPrintf		; 1d d8 ab 29
 	lda xwa, (xsp + 0x16)			; bf 16 30
 	push xwa				; 38
-	call HDAE5000_Display_Buffer_Validate				; 1d 71 af 29 — Display_Buffer_Validate
+	call HDAE5000_StrLen				; 1d 71 af 29 — Display_Buffer_Validate
 	lda xsp, (xsp + 0x1a)			; bf 1a 37
 
 	; Block 2: heads (0x229d9a) → display buffer 0x22adba
@@ -433,10 +433,10 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	pushw 0x2360
 	lda xwa, (xsp + 0x12)			; bf 12 30
 	push xwa				; 38
-	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	call HDAE5000_SPrintf		; 1d d8 ab 29
 	lda xwa, (xsp + 0x16)			; bf 16 30
 	push xwa				; 38
-	call HDAE5000_Display_Buffer_Validate				; 1d 71 af 29 — Display_Buffer_Validate
+	call HDAE5000_StrLen				; 1d 71 af 29 — Display_Buffer_Validate
 	lda xsp, (xsp + 0x1a)			; bf 1a 37
 
 	; Block 3: sectors (0x229daa) → display buffer 0x22adec
@@ -453,10 +453,10 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	pushw 0x2364
 	lda xwa, (xsp + 0x10)			; bf 10 30
 	push xwa				; 38
-	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	call HDAE5000_SPrintf		; 1d d8 ab 29
 	lda xwa, (xsp + 0x14)			; bf 14 30
 	push xwa				; 38
-	call HDAE5000_Display_Buffer_Validate				; 1d 71 af 29 — Display_Buffer_Validate
+	call HDAE5000_StrLen				; 1d 71 af 29 — Display_Buffer_Validate
 	lda xsp, (xsp + 0x18)			; bf 18 37
 
 	; Block 4: cylinder count high (0x229da9) → display buffer 0x22ae1e
@@ -473,10 +473,10 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	pushw 0x236a
 	lda xwa, (xsp + 0x10)			; bf 10 30
 	push xwa				; 38
-	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	call HDAE5000_SPrintf		; 1d d8 ab 29
 	lda xwa, (xsp + 0x14)			; bf 14 30
 	push xwa				; 38
-	call HDAE5000_Display_Buffer_Validate				; 1d 71 af 29 — Display_Buffer_Validate
+	call HDAE5000_StrLen				; 1d 71 af 29 — Display_Buffer_Validate
 	lda xsp, (xsp + 0x18)			; bf 18 37
 
 	; Block 5: cylinder count (0x229dab) → display buffer 0x22add1
@@ -493,10 +493,10 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	pushw 0x2372
 	lda xwa, (xsp + 0x10)			; bf 10 30
 	push xwa				; 38
-	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	call HDAE5000_SPrintf		; 1d d8 ab 29
 	lda xwa, (xsp + 0x14)			; bf 14 30
 	push xwa				; 38
-	call HDAE5000_Display_Buffer_Validate				; 1d 71 af 29 — Display_Buffer_Validate
+	call HDAE5000_StrLen				; 1d 71 af 29 — Display_Buffer_Validate
 	lda xsp, (xsp + 0x18)			; bf 18 37
 
 	; Block 6: total size string → display buffer 0x22ae03
@@ -513,16 +513,16 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	call HDAE5000_PPI_Write_Sector_Helper3				; 1d 6c 8b 29
 	ld xwa, (xsp + 0x1c)			; af 1c 20 — load dividend
 	ld xbc, 0x00000064			; 41 64 00 00 00 — divisor = 100
-	call HDAE5000_Divide_Signed		; 1d c5 b8 29
+	call HDAE5000_UDivMod32		; 1d c5 b8 29
 	push xhl				; 3b — push remainder
 	pushw 0x002e
 	pushw 0x237a
 	lda xwa, (xsp + 0x08)			; bf 08 30
 	push xwa				; 38
-	call HDAE5000_PPI_Block_Copy		; 1d d8 ab 29
+	call HDAE5000_SPrintf		; 1d d8 ab 29
 	lda xwa, (xsp + 0x0c)			; bf 0c 30
 	push xwa				; 38
-	call HDAE5000_Display_Buffer_Validate				; 1d 71 af 29 — Display_Buffer_Validate
+	call HDAE5000_StrLen				; 1d 71 af 29 — Display_Buffer_Validate
 
 	; Block 7: capacity text → display buffer 0x22ae35
 	pushw hl                                ; push hl (compact 16-bit)
@@ -822,7 +822,7 @@ HDAE5000_HD_Format_Params:	; 0x28370E (702 bytes)
 	pushw 0x23d2
 	lda xwa, (xsp + 0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	; Format second field
 	pushw 0x0003
 	lda xwa, (xsp + 0x18)
@@ -1257,7 +1257,7 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	pushw 0x2500
 	pushw 0x0022
 	pushw 0xa038
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	ld	wa, (0x23A092:24)
 	inc	1, wa
 	pushw wa                                ; push WA
@@ -1265,18 +1265,18 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	pushw 0x250c
 	lda	xwa, (xsp+24)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+26)
 	lda	xwa, (xsp+2)
 	push xwa
 	pushw 0x0022
 	pushw 0xa038
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	pushw 0x002e
 	pushw 0x2512
 	pushw 0x0022
 	pushw 0xa038
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	lda	xsp, (xsp+16)
 	pushw 0x0010
 	ld	wa, (0x23A092:24)
@@ -1284,12 +1284,12 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	push xhl
 	pushw 0x0022
 	pushw 0xa038
-	call HDAE5000_HD_Read_Write_Helper
+	call HDAE5000_StrNCat
 	pushw 0x002e
 	pushw 0x2514
 	pushw 0x0022
 	pushw 0xa038
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	lda	xsp, (xsp+18)
 	ld	a, (xsp+26)
 	extz wa                                 ; extz WA
@@ -1340,7 +1340,7 @@ HDAE5000_HD_Read_Write:	; 0x283B68 (4737 bytes)
 	pushw 0x2534
 	lda	xwa, (xsp+18)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	pushw 0x0002
 	lda	xwa, (xsp+24)
 	push xwa
@@ -1822,7 +1822,7 @@ HDAE5000_HDDNamingCheck:
 	lda xwa, (0x23a04e:24)
 	push xwa
 	push xde
-	call HDAE5000_MemCopy_Reverse
+	call HDAE5000_StrNCpy
 	lda	xsp, (xsp+10)
 	ld	xhl, xiz
 	jrl t, .LHRW_446b                      ; [78 91 01] jrl T,0x28446b
@@ -1831,7 +1831,7 @@ HDAE5000_HDDNamingCheck:
 	push xde
 	pushw 0x0023
 	pushw 0xa04e
-	call HDAE5000_MemCopy_Reverse
+	call HDAE5000_StrNCpy
 	lda	xsp, (xsp+10)
 	ld	xhl, xiz
 	jrl t, .LHRW_446b                      ; [78 7b 01] jrl T,0x28446b
@@ -1856,7 +1856,7 @@ HDAE5000_HDDNamingCheck:
 	jrl z, .LHRW_4469                      ; [76 41 01] jrl Z,0x284469
 	ld	xwa, xiz
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	pushw hl                                ; push HL
 	ld	xwa, xiz
 	push xwa
@@ -1971,7 +1971,7 @@ HDAE5000_HDD_DIRNAMECheck:
 	lda xwa, (0x23a06e:24)
 	push xwa
 	push xde
-	call HDAE5000_MemCopy_Reverse
+	call HDAE5000_StrNCpy
 	lda	xsp, (xsp+10)
 	ld	xhl, xiz
 	jrl t, .LHRW_4594                      ; [78 e5 00] jrl T,0x284594
@@ -1980,7 +1980,7 @@ HDAE5000_HDD_DIRNAMECheck:
 	push xde
 	pushw 0x0023
 	pushw 0xa06e
-	call HDAE5000_MemCopy_Reverse
+	call HDAE5000_StrNCpy
 	lda	xsp, (xsp+10)
 	ld	(0x23A07E:24), 0
 	ld	xhl, xiz
@@ -2004,7 +2004,7 @@ HDAE5000_HDD_DIRNAMECheck:
 	jrl z, .LHRW_4592                      ; [76 98 00] jrl Z,0x284592
 	ld	xwa, xiz
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	pushw hl                                ; push HL
 	ld	xwa, xiz
 	push xwa
@@ -2108,7 +2108,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2568
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2121,18 +2121,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2582
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2145,18 +2145,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x258a
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2176,7 +2176,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2592
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2189,18 +2189,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x25ac
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2213,18 +2213,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x25b4
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2244,7 +2244,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x25bc
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2257,18 +2257,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x25d6
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2281,18 +2281,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x25de
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2312,7 +2312,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x25e6
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2325,18 +2325,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2600
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2349,18 +2349,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2608
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2380,7 +2380,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2610
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2393,18 +2393,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x262a
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2417,18 +2417,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2632
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2448,7 +2448,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x263a
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2461,18 +2461,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2654
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2485,18 +2485,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x265c
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2516,7 +2516,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2664
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2529,18 +2529,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x267c
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2553,18 +2553,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2684
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2584,7 +2584,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x268c
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2597,18 +2597,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x26a6
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2621,18 +2621,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x26ae
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2652,7 +2652,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x26b6
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2665,18 +2665,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x26d0
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2689,18 +2689,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x26d8
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2720,7 +2720,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x26e0
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2733,18 +2733,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x26f8
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1a)                    ; ld XWA,(XSP+0x1a)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2757,18 +2757,18 @@ HDAE5000_HDD_UTIL_PAGE:
 	pushw 0x2700
 	lda	xwa, (xsp+56)
 	push xwa
-	call HDAE5000_MemCopy_Block
+	call HDAE5000_StrCpy
 	pushw 0x000a
 	lda	xwa, (xsp+30)
 	push xwa
 	ld xwa, (xsp + 0x1e)                    ; ld XWA,(XSP+0x1e)
 	push xwa
-	call .Lccb_sign_handler
+	call HDAE5000_LToA
 	lda	xsp, (xsp+26)
 	push xhl
 	lda	xwa, (xsp+48)
 	push xwa
-	call HDAE5000_StrCopy
+	call HDAE5000_StrCat
 	inc 0, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_Event_Handler
@@ -2790,7 +2790,7 @@ HDAE5000_PPORT_Setup_Helper:
 	ld	xiz, xwa
 	ld	xwa, xiz
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	inc 4, xsp                              ; inc 4,XSP
 	cp	hl, 0x0019
 	jr ule, .LHRW_4d94                     ; [63 03] jr ULE,0x284d94
@@ -2801,7 +2801,7 @@ HDAE5000_PPORT_Setup_Helper:
 	push xwa
 	lda xwa, (0x22abcb:24)
 	push xwa
-	call HDAE5000_MemCopy_Reverse
+	call HDAE5000_StrNCpy
 	lda	xsp, (xsp+10)
 	lda xwa, (0x22abc4:24)
 	ld	xde, xwa
@@ -2829,7 +2829,7 @@ HDAE5000_HD_Error_Check:	; 0x284DE9 (355 bytes)
 	ld xiz, xwa			; save string address
 	ld xwa, xiz
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	inc 4, xsp			; cleanup arg
 	cp hl, 0x0019			; cap length at 25
 	jr ule, .Lhec_len_ok
@@ -2840,7 +2840,7 @@ HDAE5000_HD_Error_Check:	; 0x284DE9 (355 bytes)
 	push xwa			; push source
 	lda xwa, (0x22abcb:24); 0x22ABCB — dest buffer
 	push xwa
-	call HDAE5000_MemCopy_Reverse
+	call HDAE5000_StrNCpy
 	lda xsp, (xsp + 10)		; cleanup 10 bytes of args
 	; Display error string
 	lda xwa, (0x22abc4:24); 0x22ABC4 — display buffer
@@ -3141,7 +3141,7 @@ HDAE5000_SeparateOutputModeCheck:
 	pushw 0x2786
 	ld xwa, (xde + 0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda xsp, (xsp + 0x0c)		; deallocate 12 bytes
 	ld xhl, xiz			; return saved context
 	jr t, .LHD_SC__h1_exit
@@ -3210,7 +3210,7 @@ HDAE5000_SeparateDrumPartCheck:
 	pushw 0x2848
 	ld xwa, (xde + 0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda xsp, (xsp + 0x0c)
 	ld xhl, xiz
 	jr t, .LHD_SC__h2_exit
@@ -3279,7 +3279,7 @@ HDAE5000_SeparateBassPartCheck:
 	pushw 0x290a		; push 0x290A
 	ld xwa, (xde + 0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda xsp, (xsp + 0x0c)
 	ld xhl, xiz
 	jr t, .LHD_SC__h3_exit
@@ -3439,7 +3439,7 @@ HDAE5000_SaveOptNameCheck:
 	pushw 0x293A
 	ld xwa, (xde + 18)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda xsp, (xsp + 12)		; pop args
 	ld xhl, xiz			; return context ptr
 	jr t, .Lhbi_exit
@@ -3742,7 +3742,7 @@ HDAE5000_FileOptNameCheck:
 	pushw 0x2958
 	ld xwa, (xiz + 0x12)                    ; ld XWA,(XIZ+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld xhl, (xsp + 0x04)                    ; ld XHL,(XSP+0x04)
 	jr t, .LHCM_57fe                       ; [68 21] jr T,0x2857fe
@@ -3795,7 +3795,7 @@ HDAE5000_SfxLswBitCheck:
 	pushw 0x2970
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_58b6                       ; [68 55] jr T,0x2858b6
@@ -3863,7 +3863,7 @@ HDAE5000_SfxPmtBitCheck:
 	pushw 0x2988
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_596c                       ; [68 55] jr T,0x28596c
@@ -3931,7 +3931,7 @@ HDAE5000_SfxSqtBitCheck:
 	pushw 0x29a0
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_5a22                       ; [68 55] jr T,0x285a22
@@ -3999,7 +3999,7 @@ HDAE5000_SfxCmpBitCheck:
 	pushw 0x29b8
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_5ad8                       ; [68 55] jr T,0x285ad8
@@ -4067,7 +4067,7 @@ HDAE5000_SfxTmBitCheck:
 	pushw 0x29d0
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_5b8e                       ; [68 55] jr T,0x285b8e
@@ -4135,7 +4135,7 @@ HDAE5000_SfxMspBitCheck:
 	pushw 0x29e8
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_5c44                       ; [68 55] jr T,0x285c44
@@ -4203,7 +4203,7 @@ HDAE5000_SfxRcmBitCheck:
 	pushw 0x2a00
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_5cfa                       ; [68 55] jr T,0x285cfa
@@ -4271,7 +4271,7 @@ HDAE5000_SfxMdBitCheck:
 	pushw 0x2a18
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_5db0                       ; [68 55] jr T,0x285db0
@@ -4341,7 +4341,7 @@ HDAE5000_SfxTlxBitCheck:
 	pushw 0x2a30
 	ld xwa, (xiz + 0x12)                    ; ld XWA,(XIZ+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld xwa, (xiz + 0x0e)                    ; ld XWA,(XIZ+0x0e)
 	ld	(0x23a0a6), xwa
@@ -4423,7 +4423,7 @@ HDAE5000_WriteProtectEditCheck:
 	pushw 0x2a48
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_5f1a                       ; [68 27] jr T,0x285f1a
@@ -4472,7 +4472,7 @@ HDAE5000_LyricJumpEditCheck:
 	pushw 0x2a60
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_5f89                       ; [68 1d] jr T,0x285f89
@@ -4509,7 +4509,7 @@ HDAE5000_LyricJumpEditCheck:
 	pushw 0x2a78
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_5fe4                       ; [68 25] jr T,0x285fe4
@@ -4558,7 +4558,7 @@ HDAE5000_LyricForeColorCheck:
 	pushw 0x2ab8
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_6063                       ; [68 21] jr T,0x286063
@@ -4610,7 +4610,7 @@ HDAE5000_LyricBackColorCheck:
 	pushw 0x2b0c
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_60e2                       ; [68 21] jr T,0x2860e2
@@ -4662,7 +4662,7 @@ HDAE5000_WriteConfirmEditCheck:
 	pushw 0x2b24
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_615d                       ; [68 1d] jr T,0x28615d
@@ -4708,7 +4708,7 @@ HDAE5000_QuickLoadModeEditCheck:
 	pushw 0x2b3c
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_61cc                       ; [68 1d] jr T,0x2861cc
@@ -4754,7 +4754,7 @@ HDAE5000_LoadByNumberModeEditCheck:
 	pushw 0x2b54
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_623b                       ; [68 1d] jr T,0x28623b
@@ -4800,7 +4800,7 @@ HDAE5000_JumpAfterLoadModeEditCheck:
 	pushw 0x2b6c
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr t, .LHCM_62aa                       ; [68 1d] jr T,0x2862aa
@@ -4848,10 +4848,10 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	push xwa
 	ld wa, (xsp + 0x48)
 	pushw wa                                ; push wa (compact)
-	call HDAE5000_HD_Partition_Setup_Helper
+	call HDAE5000_IToA
 	lda xwa, (xsp + 0x2a)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate			; HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen			; HDAE5000_StrLen
 	pushw hl                                ; push hl (compact)
 	lda xwa, (xsp + 0x30)
 	push xwa
@@ -4864,10 +4864,10 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	push xwa
 	ld wa, (xsp + 0x40)
 	pushw wa                                ; push wa
-	call HDAE5000_HD_Partition_Setup_Helper
+	call HDAE5000_IToA
 	lda xwa, (xsp + 0x20)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	pushw hl                                ; push hl
 	lda xwa, (xsp + 0x26)
 	push xwa
@@ -4879,11 +4879,11 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	push xwa
 	ld wa, (xsp + 0x58)
 	pushw wa                                ; push wa
-	call HDAE5000_HD_Partition_Setup_Helper
+	call HDAE5000_IToA
 	lda xsp, (xsp + 0x1e)
 	lda xwa, (xsp + 0x18)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	pushw hl                                ; push hl
 	lda xwa, (xsp + 0x1e)
 	push xwa
@@ -4900,14 +4900,14 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	call HDAE5000_MemFill			; HDAE5000_MemFill
 	lda xbc, (xsp + 0x30)
 	lda xwa, (xsp + 0x14)
-	call HDAE5000_PPI_Write_Sector_Helper4
+	call HDAE5000_ULongToFloat
 	lda xbc, (xsp + 0x14)
 	lda xde, (0x2e2cd0:24)
 	lda xwa, (xsp + 0x14)
-	call HDAE5000_PPI_Write_Sector_Helper5
+	call HDAE5000_FloatDiv
 	lda xbc, (xsp + 0x14)
 	lda xwa, (xsp + 0x18)
-	call HDAE5000_Divide_Signed_Sub2
+	call HDAE5000_FloatToDouble
 	lda xiy, (xsp + 0x18)
 	ld xix, (xiy + 0x04)
 	push xix
@@ -4917,10 +4917,10 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	pushw 0x2cbe		; push 0x2CBE
 	lda xwa, (xsp + 0x2c)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda xwa, (xsp + 0x30)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	lda xsp, (xsp + 0x1c)
 	pushw hl                                ; push hl
 	lda xwa, (xsp + 0x1a)
@@ -4936,14 +4936,14 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	lda xsp, (xsp + 0x12)
 	lda xbc, (xsp + 0x2c)
 	lda xwa, (xsp + 0x0c)
-	call HDAE5000_PPI_Write_Sector_Helper4
+	call HDAE5000_ULongToFloat
 	lda xbc, (xsp + 0x0c)
 	lda xde, (0x2e2cd4:24)
 	lda xwa, (xsp + 0x0c)
-	call HDAE5000_PPI_Write_Sector_Helper5
+	call HDAE5000_FloatDiv
 	lda xbc, (xsp + 0x0c)
 	lda xwa, (xsp + 0x10)
-	call HDAE5000_Divide_Signed_Sub2
+	call HDAE5000_FloatToDouble
 	lda xiy, (xsp + 0x10)
 	ld xix, (xiy + 0x04)
 	push xix
@@ -4953,10 +4953,10 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	pushw 0x2cc4		; push 0x2CC4
 	lda xwa, (xsp + 0x24)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda xwa, (xsp + 0x28)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	pushw hl                                ; push hl
 	lda xwa, (xsp + 0x2e)
 	push xwa
@@ -4971,14 +4971,14 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	call HDAE5000_MemFill
 	lda xbc, (xsp + 0x3c)
 	lda xwa, (xsp + 0x14)
-	call HDAE5000_PPI_Write_Sector_Helper4
+	call HDAE5000_ULongToFloat
 	lda xbc, (xsp + 0x14)
 	lda xde, (0x2e2cd8:24)
 	lda xwa, (xsp + 0x14)
-	call HDAE5000_PPI_Write_Sector_Helper5
+	call HDAE5000_FloatDiv
 	lda xbc, (xsp + 0x14)
 	lda xwa, (xsp + 0x18)
-	call HDAE5000_Divide_Signed_Sub2
+	call HDAE5000_FloatToDouble
 	lda xiy, (xsp + 0x18)
 	ld xix, (xiy + 0x04)
 	push xix
@@ -4988,10 +4988,10 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	pushw 0x2cca		; push 0x2CCA
 	lda xwa, (xsp + 0x2c)
 	push xwa
-	call HDAE5000_PPI_Block_Copy
+	call HDAE5000_SPrintf
 	lda xwa, (xsp + 0x30)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	lda xsp, (xsp + 0x1c)
 	pushw hl                                ; push hl
 	lda xwa, (xsp + 0x1a)
@@ -5009,7 +5009,7 @@ HDAE5000_HD_Partition_Setup:	; 0x2862AC (818 bytes)
 	calr HDAE5000_Display_Clear
 	lda xwa, (xsp + 0x18)
 	push xwa
-	call HDAE5000_Display_Buffer_Validate
+	call HDAE5000_StrLen
 	pushw hl                                ; push hl
 	lda xwa, (xsp + 0x1e)
 	push xwa
@@ -5110,7 +5110,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	lda xbc, (xsp + 0x04)
 	push xbc
 	pushw wa                                ; push wa (compact)
-	call HDAE5000_HD_Partition_Setup_Helper
+	call HDAE5000_IToA
 	inc 0, xsp			; dealloc 4 bytes
 	ld a, (0x22ad9c:24); A = current count
 	extz wa
@@ -5127,7 +5127,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	pushw 0x1e2c
 	lda xwa, (0x22ad9e:24)
 	push xwa
-	call HDAE5000_Code_Remainder			; string compare
+	call HDAE5000_StrPrefixCmp			; string compare
 	inc 0, xsp
 	cp hl, 0:i3
 	jr nz, .LCHSC__try2
@@ -5138,7 +5138,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	pushw 0x1e34
 	lda xwa, (0x22ad9e:24)
 	push xwa
-	call HDAE5000_Code_Remainder			; string compare
+	call HDAE5000_StrPrefixCmp			; string compare
 	inc 0, xsp
 	cp hl, 0:i3
 	jr nz, .LCHSC__no_match
