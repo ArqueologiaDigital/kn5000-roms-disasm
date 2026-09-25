@@ -30,9 +30,11 @@
 ; and both mixer curves end exactly on digital full scale, values a wrong base or
 ; a wrong element size could not produce.
 ;
-; Two objects are deliberately NOT decoded and say why in their own headers: the
-; f32/f64 constant pool at 0xFCC81A (stride not established) and three bytes at
-; 0xFCCB6E.  An honest .incbin beats an invented stride.
+; Two objects were left undecoded when this was written: the f32/f64 constant
+; pool at 0xFCC81A and three bytes at 0xFCCB6E.  (Corrected 2026-09-25, lane
+; promcd: the pool IS decoded now -- see fp_constant_pool_FCC81A, whose element
+; starts come from its 154 cited loads and whose elements are labelled by value;
+; the three bytes at 0xFCCB6E remain as their own header describes.)
 
 ; ----------------------------------------------------------------------------
 ; Link_ClassHandlerTable -- 0xFCC53F..0xFCC55E  (32 bytes)
