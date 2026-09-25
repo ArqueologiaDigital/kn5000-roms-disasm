@@ -193,7 +193,7 @@ Boot_ProbeExternalDevice:
 	push	xiz
 	push	xhl
 	push	xde
-	call	0xfff00e		; BootSerial_ProbeSequence (boot-time
+	call	BootSerial_ProbeSequence + 0x600000		; BootSerial_ProbeSequence (boot-time
 					; absolute; ROM label 0x9ff00e)
 	pop	xde
 	pop	xhl
@@ -587,11 +587,11 @@ BootSerial_ProbeSequence:
 	ld	wa, (0x0f75:16)
 	ld	(0x0f77:16), wa		; (0x0f77) = (0x0f75) snapshot
 	ei	0
-	call	0xfff173		; BootSerial_WaitTxIdle (boot-time
+	call	BootSerial_WaitTxIdle + 0x600000		; BootSerial_WaitTxIdle (boot-time
 					; absolute; ROM label 0x9ff173)
 	ld	a, 0x25:opc			; frame (0x25, 0x01)
 	ld	w, 0x01:opc
-	call	0xfff1c5		; BootSerial_SendFrame (boot-time
+	call	BootSerial_SendFrame + 0x600000		; BootSerial_SendFrame (boot-time
 					; absolute; ROM label 0x9ff1c5)
 	calr	BootSerial_TickWait6
 	calr	BootSerial_TickWait6

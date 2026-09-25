@@ -43,7 +43,7 @@ Boot_CallInitHandlers:
 	; Compare init flag - encoding differs between ROMs
 	; IF INIT_FLAG_COMPARE_WORD (evaluated to true)
 	; table_data: CP (0xFFFEEE), 0xFFFF (7 bytes)
-	cpw	(16776942:24), 65535
+	cpw	(BootInit_EnableFlag + 0x600000:24), 0xffff
 	; ELSE
 	; ENDIF
 
@@ -63,13 +63,16 @@ Boot_CallInitHandlers__handler_loop:
 	extz	bc
 	; SLA 2, BC (multiply by 4 for 32-bit table entries)
 	sla	bc, 2
-	lda	xde, (16776944:24)
+	lda	xde, (BootInit_EntryTable + 0x600000:24)
 	; LDA XDE, 0xFFFEF0 (init handler table)
 	; LD XBC, (XDE+BC) - load handler address from table
 	ld_sril3 xbc, 0x07, 0xE8, 0xE4
 
 	; Call indirect call helper (address differs between ROMs)
-	call 0xFFFA75
+	; (table_data: the target is AudioMix_WriteChannelGroup, WA = i, XBC =
+	; entry i -- see boot_cpserial_states.s; the table and flag are
+	; BootInit_EnableFlag / BootInit_EntryTable in kn5000_table_data.s)
+	call AudioMix_WriteChannelGroup + 0x600000
 
 	; INC 1, QIZH
 	incb_erp 0xfb, 1
