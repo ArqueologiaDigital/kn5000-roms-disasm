@@ -61,6 +61,22 @@ GROUPS = [  # (first, last, text) -- partial-block field groups, see the file he
 ]
 
 
+COMMON_GROUPS = [  # tone-record offsets of the common block's reader-defined groups
+    (0x15, 0x28, "common: no reader found (a kit's {wave, slot} note pairs start at +0x27)"),
+    (0x29, 0x29, "octave-shift index, low nibble (Pitch_Get_Patch_Octave_Shift)"),
+    (0x2A, 0x2A, "two nibble indexes (Instrument_LookupProgram_Hi/LoNibble)"),
+    (0x2B, 0x3A, "4-byte entries 0-3; entry (voice +0x1A & 3) byte +2 bit 7 (ExtVoice_Build_SlotRegisters)"),
+    (0x3B, 0x4A, "4-byte entries 4-7, same shape; no reader found"),
+    (0x4B, 0x5A, "4-byte entries 8-11, same shape; no reader found"),
+    (0x5B, 0x5B, "no reader found"),
+    (0x5C, 0x5C, "level offset, 0x40 = none (Level_Build_Reg0C0)"),
+    (0x5D, 0x5D, "algorithm type, low nibble (AlgoType_StateWrite)"),
+    (0x5E, 0x61, "algorithm parameters (Voice_Build_Partial_Descriptor, AlgoType_*)"),
+    (0x62, 0x63, "no reader found"),
+    (0x64, 0x65, "secondary parameters (Voice_SecondaryParam_Path2/_Epilogue)"),
+]
+
+
 def pad(code, comment, col=COL):
     w = len(code.expandtabs(8))
     return code + "\t" * max(1, (col - w + 7) // 8) + "; " + comment
@@ -202,10 +218,15 @@ def main():
                        % (mode & 0xC0, bits, mode >> 4 & 3)))
         new.append(pad("\t.byte\t0x%02x" % mask, "+0x11 partial mask: partials %s" % ptxt))
         new.append(pad("\t.byte\t" + ", ".join("0x%02x" % b for b in blob(a + 0x12, 3)), "+0x12..+0x14"))
-        # common block: copied verbatim up to the first layer block
+        # common block: keep its "; common block" line, re-cut the rows into
+        # the groups the readers define (see the file header)
         while k < len(body) and not re.match(r'^\s*; layer block \d', body[k]):
-            new.append(body[k])
+            if body[k].strip().startswith(";"):
+                new.append(body[k])
             k += 1
+        for lo, hi, txt in COMMON_GROUPS:
+            new.append(pad("\t.byte\t" + ", ".join("0x%02x" % b for b in blob(a + lo, hi - lo + 1)),
+                           "+0x%02x %s" % (lo, txt)))
         # partial blocks
         rank_to_p = {r: p for p, r in pb.items()}
         blk = 0
