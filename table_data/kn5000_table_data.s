@@ -323,6 +323,17 @@ Compressed_Preset_Data_LZSS:
 	; Referenced by LABEL_EF41E3 in maincpu via SubCPU_Send_Payload.
 	; If decompression fails, firmware falls back to data at 0x830000.
 	;
+	; CORRECTED 2026-09-25: the two lines above do not hold for this block.
+	; LABEL_EF41E3 is now SLIDE_Parse_Header (v10 0xEF41E3), and
+	; SubCPU_Send_Payload (v10 kn5000_v10_program.s) calls it on 0x3E0000
+	; (custom-data flash), falling back to xiz = 0x800000 -- neither is
+	; 0x8E0000.  This block's reader is DemoSongPreset_PointerTable[18]
+	; (0x9C4048): Demo_ParseSlideHeader (0xF87189) passes it to
+	; SLIDE_Parse_Header with destination RAM 0x69800, like demo songs 0-17.
+	; The decompressed image starts "ZZZZ" like theirs (demo song format; see
+	; includes/demo_presets/README.md), and Seq_CopyResourcePtrs (0xF862B5)
+	; pairs demo number 18 with the Feature Demo script (hkst_55.ssf).
+	;
 	; Files:
 	;   includes/demo_presets/demo_preset_18.bin            - decompressed source (38,144 bytes)
 	;   includes/demo_presets/demo_preset_18_compressed.bin - LZSS payload (27,956 bytes)
