@@ -68457,200 +68457,212 @@ MidiIn_BankSelect_ParamTable:
 	.byte 0x18, 0x00, 0x19, 0x00, 0x1a, 0x00, 0x1b, 0x00, 0x1c, 0x00, 0x1d, 0x00   ; FA8CB8
 	.byte 0x1e, 0x00, 0x1f, 0x00   ; FA8CC4
 
-; --- 0xFA8CC8-0xFA8FC7  pointer table (768 bytes) ---
+; ---------------------------------------------------------------------
+; MidiOut_ParamNumberTable -- 192 handler pointers, one per parameter NUMBER
+;
+; Read by: MidiOut_ParamChanged (0xFA70F5, prom_b slot T_MidiOut_ParamChanged):
+;          `cp C,0xBF / jr ugt` then `ld L,C / extz HL / sll 2,HL / ld XIX,
+;          0x00FA8CC8 / ld XIX,(XIX+HL) / call (XIX)` at 0xFA710B-0xFA7121, with
+;          BC = the parameter id (C the number) and DE the value, both also
+;          stored at (0x1958..0x195B) first.
+; COUNT 192 is that bound (0xBF + 1), and 0xFA8CC8 + 192*4 = 0xFA8FC8, the next
+;          object.  111 slots are MidiOut_Param_Ignore (a lone `ret`): most
+;          parameter numbers are not echoed as MIDI.  Entries are `.long <label>`,
+;          so the byte gate checks every target's position.
+; ---------------------------------------------------------------------
 MidiOut_ParamNumberTable:
-	.long 0x00FA712A                            ; FA8CC8  [0]   -> MidiOut_ParamGate_Part0
-	.long 0x00FA7142                            ; FA8CCC  [1]   -> MidiOut_ParamGate_Part1
-	.long 0x00FA715A                            ; FA8CD0  [2]   -> MidiOut_ParamGate_Part2
-	.long 0x00FA7172                            ; FA8CD4  [3]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CD8  [4]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CDC  [5]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CE0  [6]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CE4  [7]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CE8  [8]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CEC  [9]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CF0  [10]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CF4  [11]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CF8  [12]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8CFC  [13]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D00  [14]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D04  [15]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D08  [16]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D0C  [17]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D10  [18]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D14  [19]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D18  [20]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D1C  [21]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D20  [22]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D24  [23]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D28  [24]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D2C  [25]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D30  [26]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D34  [27]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D38  [28]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D3C  [29]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D40  [30]   -> MidiOut_ParamDispatch
-	.long 0x00FA7172                            ; FA8D44  [31]   -> MidiOut_ParamDispatch
-	.long 0x00FA74D0                            ; FA8D48  [32]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D4C  [33]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D50  [34]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D54  [35]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D58  [36]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D5C  [37]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D60  [38]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D64  [39]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D68  [40]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D6C  [41]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D70  [42]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D74  [43]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D78  [44]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D7C  [45]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D80  [46]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D84  [47]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D88  [48]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D8C  [49]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D90  [50]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D94  [51]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D98  [52]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8D9C  [53]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DA0  [54]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DA4  [55]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DA8  [56]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DAC  [57]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DB0  [58]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DB4  [59]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DB8  [60]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DBC  [61]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DC0  [62]   -> MidiOut_CC51_General6
-	.long 0x00FA74D0                            ; FA8DC4  [63]   -> MidiOut_CC51_General6
-	.long 0x00FA7129                            ; FA8DC8  [64]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DCC  [65]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DD0  [66]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DD4  [67]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DD8  [68]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DDC  [69]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DE0  [70]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DE4  [71]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DE8  [72]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DEC  [73]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DF0  [74]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DF4  [75]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DF8  [76]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8DFC  [77]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E00  [78]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E04  [79]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E08  [80]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E0C  [81]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E10  [82]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E14  [83]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E18  [84]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E1C  [85]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E20  [86]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E24  [87]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E28  [88]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E2C  [89]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E30  [90]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E34  [91]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E38  [92]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E3C  [93]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E40  [94]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E44  [95]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E48  [96]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E4C  [97]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E50  [98]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E54  [99]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E58  [100]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E5C  [101]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E60  [102]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E64  [103]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E68  [104]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E6C  [105]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E70  [106]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E74  [107]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E78  [108]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E7C  [109]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E80  [110]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E84  [111]   -> MidiOut_Param_Ignore
-	.long 0x00FA7531                            ; FA8E88  [112]   -> sub_FA7531
-	.long 0x00FA7129                            ; FA8E8C  [113]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E90  [114]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E94  [115]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E98  [116]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8E9C  [117]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EA0  [118]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EA4  [119]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EA8  [120]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EAC  [121]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EB0  [122]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EB4  [123]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EB8  [124]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EBC  [125]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EC0  [126]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EC4  [127]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EC8  [128]   -> MidiOut_Param_Ignore
-	.long 0x00FA7561                            ; FA8ECC  [129]   -> MidiOut_BankSelect_Pair
-	.long 0x00FA7129                            ; FA8ED0  [130]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8ED4  [131]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8ED8  [132]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EDC  [133]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EE0  [134]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EE4  [135]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EE8  [136]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EEC  [137]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EF0  [138]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EF4  [139]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EF8  [140]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8EFC  [141]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F00  [142]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F04  [143]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F08  [144]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F0C  [145]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F10  [146]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F14  [147]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F18  [148]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F1C  [149]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F20  [150]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F24  [151]   -> MidiOut_Param_Ignore
-	.long 0x00FA7584                            ; FA8F28  [152]   -> sub_FA7584
-	.long 0x00FA7129                            ; FA8F2C  [153]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F30  [154]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F34  [155]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F38  [156]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F3C  [157]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F40  [158]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F44  [159]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F48  [160]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F4C  [161]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F50  [162]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F54  [163]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F58  [164]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F5C  [165]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F60  [166]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F64  [167]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F68  [168]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F6C  [169]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F70  [170]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F74  [171]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8F78  [172]   -> MidiOut_Param_Ignore
-	.long 0x00FA7621                            ; FA8F7C  [173]   -> MidiOut_CC79_ResetAllCtrl
-	.long 0x00FA764F                            ; FA8F80  [174]   -> MidiOut_CC78_AllSoundOff
-	.long 0x00FA7129                            ; FA8F84  [175]   -> MidiOut_Param_Ignore
-	.long 0x00FA767D                            ; FA8F88  [176]   -> sub_FA767D
-	.long 0x00FA767E                            ; FA8F8C  [177]   -> MidiOut_PitchBend
-	.long 0x00FA771D                            ; FA8F90  [178]   -> MidiOut_CC01_Modulation
-	.long 0x00FA778B                            ; FA8F94  [179]   -> MidiOut_CC0B_Expression
-	.long 0x00FA77FA                            ; FA8F98  [180]   -> MidiOut_ChannelPressure
-	.long 0x00FA7891                            ; FA8F9C  [181]   -> MidiOut_CC40_Hold
-	.long 0x00FA7129                            ; FA8FA0  [182]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8FA4  [183]   -> MidiOut_Param_Ignore
-	.long 0x00FA795F                            ; FA8FA8  [184]   -> MidiOut_CC10_RTCreatX
-	.long 0x00FA79CD                            ; FA8FAC  [185]   -> MidiOut_CC11_RTCreatY
-	.long 0x00FA7A3B                            ; FA8FB0  [186]   -> MidiOut_CC12_RTCtrlX
-	.long 0x00FA7AA9                            ; FA8FB4  [187]   -> MidiOut_CC13_RTCtrlY
-	.long 0x00FA7B17                            ; FA8FB8  [188]   -> MidiOut_CC02_Modulation2
-	.long 0x00FA7B85                            ; FA8FBC  [189]   -> MidiOut_CC04_CtrlPedal
-	.long 0x00FA7129                            ; FA8FC0  [190]   -> MidiOut_Param_Ignore
-	.long 0x00FA7129                            ; FA8FC4  [191]   -> MidiOut_Param_Ignore
+	.long MidiOut_ParamGate_Part0               ; FA8CC8  [0]
+	.long MidiOut_ParamGate_Part1               ; FA8CCC  [1]
+	.long MidiOut_ParamGate_Part2               ; FA8CD0  [2]
+	.long MidiOut_ParamDispatch                 ; FA8CD4  [3]
+	.long MidiOut_ParamDispatch                 ; FA8CD8  [4]
+	.long MidiOut_ParamDispatch                 ; FA8CDC  [5]
+	.long MidiOut_ParamDispatch                 ; FA8CE0  [6]
+	.long MidiOut_ParamDispatch                 ; FA8CE4  [7]
+	.long MidiOut_ParamDispatch                 ; FA8CE8  [8]
+	.long MidiOut_ParamDispatch                 ; FA8CEC  [9]
+	.long MidiOut_ParamDispatch                 ; FA8CF0  [10]
+	.long MidiOut_ParamDispatch                 ; FA8CF4  [11]
+	.long MidiOut_ParamDispatch                 ; FA8CF8  [12]
+	.long MidiOut_ParamDispatch                 ; FA8CFC  [13]
+	.long MidiOut_ParamDispatch                 ; FA8D00  [14]
+	.long MidiOut_ParamDispatch                 ; FA8D04  [15]
+	.long MidiOut_ParamDispatch                 ; FA8D08  [16]
+	.long MidiOut_ParamDispatch                 ; FA8D0C  [17]
+	.long MidiOut_ParamDispatch                 ; FA8D10  [18]
+	.long MidiOut_ParamDispatch                 ; FA8D14  [19]
+	.long MidiOut_ParamDispatch                 ; FA8D18  [20]
+	.long MidiOut_ParamDispatch                 ; FA8D1C  [21]
+	.long MidiOut_ParamDispatch                 ; FA8D20  [22]
+	.long MidiOut_ParamDispatch                 ; FA8D24  [23]
+	.long MidiOut_ParamDispatch                 ; FA8D28  [24]
+	.long MidiOut_ParamDispatch                 ; FA8D2C  [25]
+	.long MidiOut_ParamDispatch                 ; FA8D30  [26]
+	.long MidiOut_ParamDispatch                 ; FA8D34  [27]
+	.long MidiOut_ParamDispatch                 ; FA8D38  [28]
+	.long MidiOut_ParamDispatch                 ; FA8D3C  [29]
+	.long MidiOut_ParamDispatch                 ; FA8D40  [30]
+	.long MidiOut_ParamDispatch                 ; FA8D44  [31]
+	.long MidiOut_CC51_General6                 ; FA8D48  [32]
+	.long MidiOut_CC51_General6                 ; FA8D4C  [33]
+	.long MidiOut_CC51_General6                 ; FA8D50  [34]
+	.long MidiOut_CC51_General6                 ; FA8D54  [35]
+	.long MidiOut_CC51_General6                 ; FA8D58  [36]
+	.long MidiOut_CC51_General6                 ; FA8D5C  [37]
+	.long MidiOut_CC51_General6                 ; FA8D60  [38]
+	.long MidiOut_CC51_General6                 ; FA8D64  [39]
+	.long MidiOut_CC51_General6                 ; FA8D68  [40]
+	.long MidiOut_CC51_General6                 ; FA8D6C  [41]
+	.long MidiOut_CC51_General6                 ; FA8D70  [42]
+	.long MidiOut_CC51_General6                 ; FA8D74  [43]
+	.long MidiOut_CC51_General6                 ; FA8D78  [44]
+	.long MidiOut_CC51_General6                 ; FA8D7C  [45]
+	.long MidiOut_CC51_General6                 ; FA8D80  [46]
+	.long MidiOut_CC51_General6                 ; FA8D84  [47]
+	.long MidiOut_CC51_General6                 ; FA8D88  [48]
+	.long MidiOut_CC51_General6                 ; FA8D8C  [49]
+	.long MidiOut_CC51_General6                 ; FA8D90  [50]
+	.long MidiOut_CC51_General6                 ; FA8D94  [51]
+	.long MidiOut_CC51_General6                 ; FA8D98  [52]
+	.long MidiOut_CC51_General6                 ; FA8D9C  [53]
+	.long MidiOut_CC51_General6                 ; FA8DA0  [54]
+	.long MidiOut_CC51_General6                 ; FA8DA4  [55]
+	.long MidiOut_CC51_General6                 ; FA8DA8  [56]
+	.long MidiOut_CC51_General6                 ; FA8DAC  [57]
+	.long MidiOut_CC51_General6                 ; FA8DB0  [58]
+	.long MidiOut_CC51_General6                 ; FA8DB4  [59]
+	.long MidiOut_CC51_General6                 ; FA8DB8  [60]
+	.long MidiOut_CC51_General6                 ; FA8DBC  [61]
+	.long MidiOut_CC51_General6                 ; FA8DC0  [62]
+	.long MidiOut_CC51_General6                 ; FA8DC4  [63]
+	.long MidiOut_Param_Ignore                  ; FA8DC8  [64]
+	.long MidiOut_Param_Ignore                  ; FA8DCC  [65]
+	.long MidiOut_Param_Ignore                  ; FA8DD0  [66]
+	.long MidiOut_Param_Ignore                  ; FA8DD4  [67]
+	.long MidiOut_Param_Ignore                  ; FA8DD8  [68]
+	.long MidiOut_Param_Ignore                  ; FA8DDC  [69]
+	.long MidiOut_Param_Ignore                  ; FA8DE0  [70]
+	.long MidiOut_Param_Ignore                  ; FA8DE4  [71]
+	.long MidiOut_Param_Ignore                  ; FA8DE8  [72]
+	.long MidiOut_Param_Ignore                  ; FA8DEC  [73]
+	.long MidiOut_Param_Ignore                  ; FA8DF0  [74]
+	.long MidiOut_Param_Ignore                  ; FA8DF4  [75]
+	.long MidiOut_Param_Ignore                  ; FA8DF8  [76]
+	.long MidiOut_Param_Ignore                  ; FA8DFC  [77]
+	.long MidiOut_Param_Ignore                  ; FA8E00  [78]
+	.long MidiOut_Param_Ignore                  ; FA8E04  [79]
+	.long MidiOut_Param_Ignore                  ; FA8E08  [80]
+	.long MidiOut_Param_Ignore                  ; FA8E0C  [81]
+	.long MidiOut_Param_Ignore                  ; FA8E10  [82]
+	.long MidiOut_Param_Ignore                  ; FA8E14  [83]
+	.long MidiOut_Param_Ignore                  ; FA8E18  [84]
+	.long MidiOut_Param_Ignore                  ; FA8E1C  [85]
+	.long MidiOut_Param_Ignore                  ; FA8E20  [86]
+	.long MidiOut_Param_Ignore                  ; FA8E24  [87]
+	.long MidiOut_Param_Ignore                  ; FA8E28  [88]
+	.long MidiOut_Param_Ignore                  ; FA8E2C  [89]
+	.long MidiOut_Param_Ignore                  ; FA8E30  [90]
+	.long MidiOut_Param_Ignore                  ; FA8E34  [91]
+	.long MidiOut_Param_Ignore                  ; FA8E38  [92]
+	.long MidiOut_Param_Ignore                  ; FA8E3C  [93]
+	.long MidiOut_Param_Ignore                  ; FA8E40  [94]
+	.long MidiOut_Param_Ignore                  ; FA8E44  [95]
+	.long MidiOut_Param_Ignore                  ; FA8E48  [96]
+	.long MidiOut_Param_Ignore                  ; FA8E4C  [97]
+	.long MidiOut_Param_Ignore                  ; FA8E50  [98]
+	.long MidiOut_Param_Ignore                  ; FA8E54  [99]
+	.long MidiOut_Param_Ignore                  ; FA8E58  [100]
+	.long MidiOut_Param_Ignore                  ; FA8E5C  [101]
+	.long MidiOut_Param_Ignore                  ; FA8E60  [102]
+	.long MidiOut_Param_Ignore                  ; FA8E64  [103]
+	.long MidiOut_Param_Ignore                  ; FA8E68  [104]
+	.long MidiOut_Param_Ignore                  ; FA8E6C  [105]
+	.long MidiOut_Param_Ignore                  ; FA8E70  [106]
+	.long MidiOut_Param_Ignore                  ; FA8E74  [107]
+	.long MidiOut_Param_Ignore                  ; FA8E78  [108]
+	.long MidiOut_Param_Ignore                  ; FA8E7C  [109]
+	.long MidiOut_Param_Ignore                  ; FA8E80  [110]
+	.long MidiOut_Param_Ignore                  ; FA8E84  [111]
+	.long sub_FA7531                            ; FA8E88  [112]
+	.long MidiOut_Param_Ignore                  ; FA8E8C  [113]
+	.long MidiOut_Param_Ignore                  ; FA8E90  [114]
+	.long MidiOut_Param_Ignore                  ; FA8E94  [115]
+	.long MidiOut_Param_Ignore                  ; FA8E98  [116]
+	.long MidiOut_Param_Ignore                  ; FA8E9C  [117]
+	.long MidiOut_Param_Ignore                  ; FA8EA0  [118]
+	.long MidiOut_Param_Ignore                  ; FA8EA4  [119]
+	.long MidiOut_Param_Ignore                  ; FA8EA8  [120]
+	.long MidiOut_Param_Ignore                  ; FA8EAC  [121]
+	.long MidiOut_Param_Ignore                  ; FA8EB0  [122]
+	.long MidiOut_Param_Ignore                  ; FA8EB4  [123]
+	.long MidiOut_Param_Ignore                  ; FA8EB8  [124]
+	.long MidiOut_Param_Ignore                  ; FA8EBC  [125]
+	.long MidiOut_Param_Ignore                  ; FA8EC0  [126]
+	.long MidiOut_Param_Ignore                  ; FA8EC4  [127]
+	.long MidiOut_Param_Ignore                  ; FA8EC8  [128]
+	.long MidiOut_BankSelect_Pair               ; FA8ECC  [129]
+	.long MidiOut_Param_Ignore                  ; FA8ED0  [130]
+	.long MidiOut_Param_Ignore                  ; FA8ED4  [131]
+	.long MidiOut_Param_Ignore                  ; FA8ED8  [132]
+	.long MidiOut_Param_Ignore                  ; FA8EDC  [133]
+	.long MidiOut_Param_Ignore                  ; FA8EE0  [134]
+	.long MidiOut_Param_Ignore                  ; FA8EE4  [135]
+	.long MidiOut_Param_Ignore                  ; FA8EE8  [136]
+	.long MidiOut_Param_Ignore                  ; FA8EEC  [137]
+	.long MidiOut_Param_Ignore                  ; FA8EF0  [138]
+	.long MidiOut_Param_Ignore                  ; FA8EF4  [139]
+	.long MidiOut_Param_Ignore                  ; FA8EF8  [140]
+	.long MidiOut_Param_Ignore                  ; FA8EFC  [141]
+	.long MidiOut_Param_Ignore                  ; FA8F00  [142]
+	.long MidiOut_Param_Ignore                  ; FA8F04  [143]
+	.long MidiOut_Param_Ignore                  ; FA8F08  [144]
+	.long MidiOut_Param_Ignore                  ; FA8F0C  [145]
+	.long MidiOut_Param_Ignore                  ; FA8F10  [146]
+	.long MidiOut_Param_Ignore                  ; FA8F14  [147]
+	.long MidiOut_Param_Ignore                  ; FA8F18  [148]
+	.long MidiOut_Param_Ignore                  ; FA8F1C  [149]
+	.long MidiOut_Param_Ignore                  ; FA8F20  [150]
+	.long MidiOut_Param_Ignore                  ; FA8F24  [151]
+	.long sub_FA7584                            ; FA8F28  [152]
+	.long MidiOut_Param_Ignore                  ; FA8F2C  [153]
+	.long MidiOut_Param_Ignore                  ; FA8F30  [154]
+	.long MidiOut_Param_Ignore                  ; FA8F34  [155]
+	.long MidiOut_Param_Ignore                  ; FA8F38  [156]
+	.long MidiOut_Param_Ignore                  ; FA8F3C  [157]
+	.long MidiOut_Param_Ignore                  ; FA8F40  [158]
+	.long MidiOut_Param_Ignore                  ; FA8F44  [159]
+	.long MidiOut_Param_Ignore                  ; FA8F48  [160]
+	.long MidiOut_Param_Ignore                  ; FA8F4C  [161]
+	.long MidiOut_Param_Ignore                  ; FA8F50  [162]
+	.long MidiOut_Param_Ignore                  ; FA8F54  [163]
+	.long MidiOut_Param_Ignore                  ; FA8F58  [164]
+	.long MidiOut_Param_Ignore                  ; FA8F5C  [165]
+	.long MidiOut_Param_Ignore                  ; FA8F60  [166]
+	.long MidiOut_Param_Ignore                  ; FA8F64  [167]
+	.long MidiOut_Param_Ignore                  ; FA8F68  [168]
+	.long MidiOut_Param_Ignore                  ; FA8F6C  [169]
+	.long MidiOut_Param_Ignore                  ; FA8F70  [170]
+	.long MidiOut_Param_Ignore                  ; FA8F74  [171]
+	.long MidiOut_Param_Ignore                  ; FA8F78  [172]
+	.long MidiOut_CC79_ResetAllCtrl             ; FA8F7C  [173]
+	.long MidiOut_CC78_AllSoundOff              ; FA8F80  [174]
+	.long MidiOut_Param_Ignore                  ; FA8F84  [175]
+	.long sub_FA767D                            ; FA8F88  [176]
+	.long MidiOut_PitchBend                     ; FA8F8C  [177]
+	.long MidiOut_CC01_Modulation               ; FA8F90  [178]
+	.long MidiOut_CC0B_Expression               ; FA8F94  [179]
+	.long MidiOut_ChannelPressure               ; FA8F98  [180]
+	.long MidiOut_CC40_Hold                     ; FA8F9C  [181]
+	.long MidiOut_Param_Ignore                  ; FA8FA0  [182]
+	.long MidiOut_Param_Ignore                  ; FA8FA4  [183]
+	.long MidiOut_CC10_RTCreatX                 ; FA8FA8  [184]
+	.long MidiOut_CC11_RTCreatY                 ; FA8FAC  [185]
+	.long MidiOut_CC12_RTCtrlX                  ; FA8FB0  [186]
+	.long MidiOut_CC13_RTCtrlY                  ; FA8FB4  [187]
+	.long MidiOut_CC02_Modulation2              ; FA8FB8  [188]
+	.long MidiOut_CC04_CtrlPedal                ; FA8FBC  [189]
+	.long MidiOut_Param_Ignore                  ; FA8FC0  [190]
+	.long MidiOut_Param_Ignore                  ; FA8FC4  [191]
 
 ; --- 0xFA8FC8-0xFA8FF7  sparse byte map (48 bytes) ---
 MidiOut_IndexToControllerNumber:
