@@ -666,7 +666,7 @@ TaskSched_EventFlagInit:
 	.byte	1, 1
 ; Initial counts of the four SEMAPHORES 0x1092..0x1095 (ids 1..4): TaskSched_Init copies these 4
 ; bytes with `ld xhl, TaskSched_SemaphoreInit / ld de,0x1092 / ld bc,4 / ldir`.  See
-; TaskSem_AddrCalc_Opaque, which reads them back.
+; TaskSem_GetCount, which reads them back.
 TaskSched_SemaphoreInit:
 	.byte	1, 1, 1, 1
 
@@ -1129,7 +1129,7 @@ TaskQueue_Dequeue_Return:
 ; picks another task. Entered with a full context already pushed (push SR + 7 long pushes),
 ; matching the frame TaskSched_ContextRestore pops.
 ; Inputs: none. Clobbers: everything (it either reschedules or restores the pushed context).
-TaskQueue_Operations_Opaque:
+TaskSched_Block_Self:
 	push	sr
 	ei	6
 	push	xhl
@@ -1435,7 +1435,18 @@ TaskEvent_Clear:
 	pop	sr
 	ret
 
-TaskSched_PreemptiveYield_INT:
+; Semaphore release -- V() -- for semaphore A (1..4), task-context version that reschedules.
+; Saves the full context frame TaskSched_ContextRestore pops, masks to level 6, and looks at the
+; semaphore's wait queue, head at 0x107E + 4*A (a circular list: empty when the head points at
+; itself).  Empty: the count byte at 0x1091 + A is incremented (not stored if it would wrap to
+; 0) and the context is restored.  Otherwise the first waiter is unlinked, its state (+0x09) set
+; to 4 = READY, linked at the tail of ready queue 0x1068 + 4*(+0x08), and TaskSched_Dispatch
+; runs.  Same count and queue addresses as TaskSem_GetCount / TaskSched_Wait / TaskSem_TryDec.
+; ★ Renamed 2026-09-25 from TaskSched_PreemptiveYield_INT: nothing here yields
+; unconditionally -- it only dispatches when it has woken a waiter.  The main-CPU v10 ROM holds
+; the same code: a 44-byte run at +39 here is byte-identical to Audio_Lock_Release+39 there
+; (scripts/analysis/v142_maincpu_shared_code_scan.py; ALIGNED = same offset in both routines).
+TaskSem_Release:
 	push	sr
 	ei 6
 	push xhl
@@ -1453,19 +1464,19 @@ TaskSched_PreemptiveYield_INT:
 	extz xiy
 	ld ix, (xiy + 256)
 	cp ix, iy
-	jr nz, TaskSched_PreemptiveYield_INT_Dequeue
+	jr nz, TaskSem_Release_WakeWaiter
 	extz hl
 	add hl, 0x1091
 	extz xhl
 	ld a, (xhl)
 	inc 1, a
-	jr z, TaskSched_PreemptiveYield_INT_Empty
+	jr z, TaskSem_Release_NoWaiter
 	ld (xhl), a
 
-TaskSched_PreemptiveYield_INT_Empty:
+TaskSem_Release_NoWaiter:
 	jrl TaskSched_ContextRestore
 
-TaskSched_PreemptiveYield_INT_Dequeue:
+TaskSem_Release_WakeWaiter:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -1488,6 +1499,15 @@ TaskSched_PreemptiveYield_INT_Dequeue:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 	jrl TaskSched_Dispatch
+
+; The same V() without rescheduling: saves only XWA/XIX/XIY/XHL, masks to level 6 under
+; `push sr`, and on the wake path makes the waiter READY and links it but RETURNS to the caller
+; instead of dispatching (for a caller that must not be switched out here).  No caller found in
+; v1.42: the entry address as a 3-byte LE value occurs nowhere in the image, and no calr
+; displacement lands on it; it had no label until 2026-09-25.  Its wake path also occurs in the
+; main-CPU v10 ROM (runs of 16, 16 and 46 bytes inside AudioLock_Release_WakeWaiter, same
+; scan).
+TaskSem_Release_NoResched:
 	push xwa
 	push xix
 	push xiy
@@ -1502,16 +1522,16 @@ TaskSched_PreemptiveYield_INT_Dequeue:
 	ei 6
 	ld ix, (xiy + 256)
 	cp ix, iy
-	jr nz, TaskQueue_Dequeue_Guard_Dequeue
+	jr nz, TaskSem_Release_NoResched_WakeWaiter
 	extz hl
 	add hl, 0x1091
 	extz xhl
 	ld a, (xhl)
 	inc 1, a
-	jr z, TaskQueue_Dequeue_Guard_Empty
+	jr z, TaskSem_Release_NoResched_NoWaiter
 	ld (xhl), a
 
-TaskQueue_Dequeue_Guard_Empty:
+TaskSem_Release_NoResched_NoWaiter:
 	pop	sr
 	pop xhl
 	pop xiy
@@ -1519,7 +1539,7 @@ TaskQueue_Dequeue_Guard_Empty:
 	pop xwa
 	ret
 
-TaskQueue_Dequeue_Guard_Dequeue:
+TaskSem_Release_NoResched_WakeWaiter:
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -1614,7 +1634,7 @@ TaskSem_TryDec_Return:
 ; 0x107E + 4*A i.e. 0x1082/0x1086/0x108A/0x108E. Siblings: TaskSched_Wait (0x02044F) is the
 ; blocking P(), TaskSem_TryDec (0x0204A9) is the non-blocking one.
 ; Input: A = semaphore id. Output: HL = current count.
-TaskSem_AddrCalc_Opaque:
+TaskSem_GetCount:
 	extz	wa
 	add	wa, 4241
 	extz	xwa
@@ -56646,14 +56666,17 @@ DSP_WriteParam_Return:
 	retd 0x4
 	ret
 
-; Already named.  Two instructions: `lds wa,1` then `jp TaskSched_PreemptiveYield_INT`
+; Already named.  Two instructions: `lds wa,1` then `jp TaskSem_Release`
 ; (0x020370).  It is a TAIL JUMP, so it re-enters the scheduler with priority 1 and only comes
 ; back when this task is next dispatched.  Called after every DSP2_SPI_BusIdle in the bytecode
 ; interpreter, the translator and DSP_MixerCoeff_Compute -- i.e. the DSP write path
 ; deliberately yields between register groups.
+; ★ CORRECTED 2026-09-25 (the jump target was then called TaskSched_PreemptiveYield_INT): WA = 1
+; is not a priority but the SEMAPHORE id -- this releases semaphore 1 (count 0x1092, wait queue
+; 0x1082), waking the task blocked on it if there is one, and only then switches tasks.
 DSP_Bytecode_NotifyStateChange:
 	ld wa, 1:i3
-	jp TaskSched_PreemptiveYield_INT
+	jp TaskSem_Release
 
 ; Already named.  Sets up and runs a canned DSP register-write program.
 ; In:  WA = chip id (0 = DSP1/uPD6383, 1 = DSP2/MN19413), BC = program index,
