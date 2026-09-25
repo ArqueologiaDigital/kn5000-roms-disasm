@@ -45197,8 +45197,8 @@ sub_F99864:
 ;          pointer-shaped, and it is where the decode resumes.
 ; Evidence: the two readers, the callee's own bound, and the shape run; the
 ;          three agree.  notes/prom_a_uiblock_checks.py.
-; ★ CORRECTED 2026-09-25 (lane proma).  This line said "Unknown: what
-;          (0x2740) selects, and what the third block is for."  sub_F8BDF8
+; ★ CORRECTED 2026-09-25 (lane proma).  This line listed what (0x2740)
+;          selects and what the third block is for as open.  sub_F8BDF8
 ;          adds E * 128 to the base before indexing by the button code
 ;          (`xor XDE,XDE / pop E / sla 7,DE / add XIX,XDE`), so (0x2740) picks
 ;          a ROW -- the screen's PAGE -- and each reader's base is its page 0:

@@ -106,8 +106,8 @@ def apply(m):
     old_u = "; Unknown:  what (0x2740) selects, and what the third block is for."
     j = L.index(old_u, i)
     L[j:j + 1] = [u8(x) for x in [
-        "; ★ CORRECTED 2026-09-25 (lane proma).  This line said \"Unknown: what",
-        ";          (0x2740) selects, and what the third block is for.\"  sub_F8BDF8",
+        "; ★ CORRECTED 2026-09-25 (lane proma).  This line listed what (0x2740)",
+        ";          selects and what the third block is for as open.  sub_F8BDF8",
         ";          adds E * 128 to the base before indexing by the button code",
         ";          (`xor XDE,XDE / pop E / sla 7,DE / add XIX,XDE`), so (0x2740) picks",
         ";          a ROW -- the screen's PAGE -- and each reader's base is its page 0:",
