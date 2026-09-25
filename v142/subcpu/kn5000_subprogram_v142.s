@@ -1749,7 +1749,8 @@ TaskMsgQ_Send_DirectDeliver:
 ; TaskMsgQ_Send without rescheduling: saves six registers instead of the full context frame,
 ; then the same queue logic (waiter list 0x1092 + 4*A, message list 0x109A + 4*A, free nodes
 ; at 0x10C6); a waiting receiver is made READY and linked, and the routine RETURNS to its
-; caller.  Main-CPU twin: TaskMsg_Send_NB.  No caller in v1.42.
+; caller.  Main-CPU twin: the code under TaskMsg_Send_NB_Return / _NB_WakeReceiver.  No
+; caller in v1.42.
 TaskMsgQ_Send_NoResched:
 	push xwa
 	push xix
