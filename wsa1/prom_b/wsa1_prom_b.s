@@ -45334,7 +45334,6 @@ DL_Configure_F19C39:
 	.byte 0x01, 0x0a	; F19D43  op 01, 10 bytes -> handler 0xF31A75
 	.byte 0x2d, 0x00, 0xe0, 0x00, 0x4c, 0x00, 0xe0, 0x00	; +2  '-...L...'
 	.byte 0x02, 0x0a	; F19D4D  op 02, 10 bytes -> handler 0xF31A75
-DL_Configure_F19C39_Code_Entry:
 	.byte 0x8a, 0x00, 0x1e, 0x00, 0x8a, 0x00, 0xc2, 0x00	; +2  '........'
 	.byte 0x23, 0x05	; F19D57  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x04, 0x34, 0x00	; +2  '.4.'
@@ -86091,19 +86090,35 @@ T_F42FA4:	jp sub_F0BEBF  ; -> prom_b 0x0BEBF   x6
 T_F42FA8:	jp sub_F0BF04  ; -> prom_b 0x0BF04   x4
 T_F42FAC:	jp sub_FDA252  ; -> prom_a 0x5A252   x2
 	.fill 0x20, 1, 0x0E  ; 0xF42FB0: 32 x ret
-T_F42FD0:	jp 0xF19C18  ; -> prom_b 0x19C18
-T_F42FD4:	jp 0xF19C19  ; -> prom_b 0x19C19
-T_F42FD8:	jp 0xF19C94  ; -> prom_b 0x19C94
-T_F42FDC:	jp DL_Configure_F19C39_Code_Entry  ; -> prom_b 0x19D4F
-T_F42FE0:	jp 0xF19DB4  ; -> prom_b 0x19DB4
-T_F42FE4:	jp 0xF19E01  ; -> prom_b 0x19E01
+; ⚠ T_F42FD0-T_F43000 -- THIRTEEN STALE DIRECTORY SLOTS (header added
+;   2026-09-25, lane promb).  All thirteen are `jp` into 0xF19C18-0xF1A0C7,
+;   which holds DISPLAY LISTS, not code (the module banner at 0xF17559 already
+;   says so: "exactly thirteen in-span addresses are the target of a transfer
+;   ... all thirteen are `jp` slots of one STALE thunk run").  Eleven land
+;   INSIDE a record -- two in the text of "WRITE" (0xF19C18/0xF19C19, one
+;   byte apart), one in "OUT", one in "KEY LAYER" -- and the other two on
+;   record starts of DL_Inter that round 7 already labelled as data
+;   (DL_Inter__F19E4F, DL_Inter__F19EA4).  The targets ascend with the slot
+;   number, as a linker's thunks for one module's routines would.  A byte scan
+;   finds no `call`/`jp` to any of the thirteen slots and no 32-bit copy of
+;   their addresses in prom_a or prom_b.  So each operand is spelled as the
+;   display list it lands in plus an offset -- which is what it IS in this
+;   build -- rather than under a code label; the symboliser's
+;   `DL_Configure_F19C39_Code_Entry`, a label inside a record's operand bytes,
+;   is removed.
+T_F42FD0:	jp DL_CombinationNaming_F19BE5 + 0x33  ; -> prom_b 0x19C18
+T_F42FD4:	jp DL_CombinationNaming_F19BE5 + 0x34  ; -> prom_b 0x19C19
+T_F42FD8:	jp DL_Configure_F19C39 + 0x5B  ; -> prom_b 0x19C94
+T_F42FDC:	jp DL_Configure_F19C39 + 0x116  ; -> prom_b 0x19D4F
+T_F42FE0:	jp DL_Configure_F19D5C + 0x58  ; -> prom_b 0x19DB4
+T_F42FE4:	jp DL_Inter + 0x27  ; -> prom_b 0x19E01
 T_F42FE8:	jp DL_Inter__F19E4F  ; -> prom_b 0x19E4F
 T_F42FEC:	jp DL_Inter__F19EA4  ; -> prom_b 0x19EA4
-T_F42FF0:	jp 0xF19EBF  ; -> prom_b 0x19EBF
-T_F42FF4:	jp 0xF19EDE  ; -> prom_b 0x19EDE
-T_F42FF8:	jp 0xF19FEB  ; -> prom_b 0x19FEB
-T_F42FFC:	jp 0xF1A0AF  ; -> prom_b 0x1A0AF
-T_F43000:	jp 0xF1A0C7  ; -> prom_b 0x1A0C7
+T_F42FF0:	jp DL_Inter + 0xE5  ; -> prom_b 0x19EBF
+T_F42FF4:	jp DL_KeyLayer + 0x8  ; -> prom_b 0x19EDE
+T_F42FF8:	jp DL_VelocityLayer + 0x62  ; -> prom_b 0x19FEB
+T_F42FFC:	jp RecordArray_F1A037 + 0x78  ; -> prom_b 0x1A0AF
+T_F43000:	jp DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8 + 0x8  ; -> prom_b 0x1A0C7
 	.fill 0x1C, 1, 0x0E  ; 0xF43004: 28 x ret
 T_F43020:	jp sub_FE7950  ; -> prom_a 0x67950   x1
 T_F43024:	jp sub_FE7927  ; -> prom_a 0x67927   x1
