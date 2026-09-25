@@ -2,6 +2,15 @@
 ; KN5000 Sub-CPU Payload ROM (192KB)
 ; =============================================================================
 
+; --- Tone-generator (IC303) register window, A23 low (P6.7 = SFR 0x18 bit 7 cleared) ---
+; ToneGen_RegAddrLatch: writing a register number latches it; reading returns the latched
+; register's status word (ToneGen_Read_Register, the only read in the payload).
+; ToneGen_RegDataPort: the data written to the latched register; never read.
+; Evidence: ToneGen_Read_Register's header (139 latch writes, 137 data writes, one read) and
+; subcpu_mem in mame_driver/src/mame/matsushita/kn5000.cpp (IC303 at 0x100000/0x110000).
+	.equ	ToneGen_RegAddrLatch, 0x100000
+	.equ	ToneGen_RegDataPort, 0x100002
+
 ; --- Interrupt Vector Table & Handlers ---
 	.include "subcpu_vectors.s"
 
@@ -3321,8 +3330,8 @@ Cmd_DMA_Check_Stuck:	; 021001h
 ; ===========================================================================
 ToneGen_Read_Register:
 	res_dd8 7, 0x18
-	ld (0x100000:24), wa
-	ld hl, (0x100000:24)
+	ld (ToneGen_RegAddrLatch:24), wa
+	ld hl, (ToneGen_RegAddrLatch:24)
 	ret
 
 ; MIDI_Backlog_Publish(WA = the MIDI ring's current byte count) -- was
@@ -5023,10 +5032,10 @@ Voice_Reset_Engine_PhaseA_Body:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa200
+	ldw (ToneGen_RegDataPort:24), 0xa200
 	jr __jrt_nop_021F26
 __jrt_nop_021F26:
 
@@ -5038,10 +5047,10 @@ Voice_Reset_Engine_PhaseA_Nop:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa280
+	ldw (ToneGen_RegDataPort:24), 0xa280
 	jr __jrt_nop_021F47
 __jrt_nop_021F47:
 
@@ -5065,10 +5074,10 @@ Voice_Reset_Engine_PhaseB_Body:
 	ld a, (xsp + 4)
 	add a, 0xC0
 	extz wa
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x0000
+	ldw (ToneGen_RegDataPort:24), 0x0000
 	jr __jrt_nop_021F80
 __jrt_nop_021F80:
 
@@ -5079,10 +5088,10 @@ Voice_Reset_Engine_PhaseB_Nop:
 	res_dd8 7, 0x18
 	ld a, (xsp + 4)
 	extz wa
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x7e00
+	ldw (ToneGen_RegDataPort:24), 0x7e00
 	jr __jrt_nop_021F9D
 __jrt_nop_021F9D:
 
@@ -15718,10 +15727,10 @@ Voice_Step_ExprRamp_Ascend_Tick:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_026FFD
 __jrt_nop_026FFD:
 
@@ -15735,10 +15744,10 @@ Voice_Step_ExprRamp_Ascend_Tick2:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_027020
 __jrt_nop_027020:
 
@@ -15778,10 +15787,10 @@ Voice_Step_ExprRamp_Descend_Tick:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_027079
 __jrt_nop_027079:
 
@@ -15795,10 +15804,10 @@ Voice_Step_ExprRamp_Descend_Tick2:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_02709C
 __jrt_nop_02709C:
 
@@ -15844,10 +15853,10 @@ Voice_Step_ExprRamp_Release_Tick:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_027108
 __jrt_nop_027108:
 
@@ -15861,10 +15870,10 @@ Voice_Step_ExprRamp_Release_Tick2:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_02712B
 __jrt_nop_02712B:
 
@@ -15903,10 +15912,10 @@ Voice_Step_ExprRamp_ActiveCount:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa200
+	ldw (ToneGen_RegDataPort:24), 0xa200
 	jr __jrt_nop_027181
 __jrt_nop_027181:
 
@@ -15920,10 +15929,10 @@ Voice_Step_ExprRamp_CountTick:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa280
+	ldw (ToneGen_RegDataPort:24), 0xa280
 	jr __jrt_nop_0271A4
 __jrt_nop_0271A4:
 
@@ -17545,11 +17554,11 @@ ToneGen_WriteVoice_Long:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x400
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_027F91
 __jrt_nop_027F91:
 
@@ -17570,12 +17579,12 @@ ToneGen_WriteVoice_Short:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x80
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 4)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_027FB6
 __jrt_nop_027FB6:
 
@@ -17604,10 +17613,10 @@ ToneGen_WriteVoice_Direct:
 	pushw iz
 	ld iz, bc
 	res_dd8 7, 0x18
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ld (0x100002:24), iz
+	ld (ToneGen_RegDataPort:24), iz
 	jr __jrt_nop_027FD1
 __jrt_nop_027FD1:
 
@@ -17633,12 +17642,12 @@ ToneGen_WriteVoice_6Words:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_027FFD
 __jrt_nop_027FFD:
 
@@ -17650,12 +17659,12 @@ ToneGen_WriteVoice_6Words_Word2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02801F
 __jrt_nop_02801F:
 
@@ -17667,12 +17676,12 @@ ToneGen_WriteNote6ch_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_028041
 __jrt_nop_028041:
 
@@ -17684,12 +17693,12 @@ ToneGen_WriteNote6ch_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_028063
 __jrt_nop_028063:
 
@@ -17701,12 +17710,12 @@ ToneGen_WriteNote6ch_NopCont3:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_028085
 __jrt_nop_028085:
 
@@ -17718,12 +17727,12 @@ ToneGen_WriteNote6ch_NopCont4:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_0280A7
 __jrt_nop_0280A7:
 
@@ -17749,12 +17758,12 @@ ToneGen_WriteNote2ch:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_0280D5
 __jrt_nop_0280D5:
 
@@ -17766,12 +17775,12 @@ ToneGen_WriteNote2ch_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_0280F7
 __jrt_nop_0280F7:
 
@@ -17802,11 +17811,11 @@ VoiceCC_DataTable_0280FE:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 2112
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+46)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02811B
 __jrt_nop_02811B:
 	nop
@@ -17827,12 +17836,12 @@ ToneGen_WriteVoice_Pan_Pair:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 256
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+8)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_028147
 __jrt_nop_028147:
 	nop
@@ -17841,12 +17850,12 @@ __jrt_nop_028147:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 320
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+10)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_028169
 __jrt_nop_028169:
 	nop
@@ -17867,12 +17876,12 @@ ToneGen_WriteVoice_Reg21_Reg22:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 2112
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+26)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_028197
 __jrt_nop_028197:
 	nop
@@ -17881,12 +17890,12 @@ __jrt_nop_028197:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 2176
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+28)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_0281B9
 __jrt_nop_0281B9:
 	nop
@@ -17904,11 +17913,11 @@ ToneGen_WriteVoice_EnvLevel:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 384
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+12)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_0281DD
 __jrt_nop_0281DD:
 	nop
@@ -17922,11 +17931,11 @@ ToneGen_WriteVoice_Reg11:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 1088
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+16)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_0281FF
 __jrt_nop_0281FF:
 	nop
@@ -17940,11 +17949,11 @@ ToneGen_WriteVoice_Reg13:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 1216
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+20)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_028221
 __jrt_nop_028221:
 	nop
@@ -17958,11 +17967,11 @@ ToneGen_WriteVoice_Reg18:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 1536
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+64)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_028243
 __jrt_nop_028243:
 	nop
@@ -17976,11 +17985,11 @@ ToneGen_WriteVoice_Reg16:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 1408
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+60)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_028265
 __jrt_nop_028265:
 	nop
@@ -17994,11 +18003,11 @@ ToneGen_WriteVoice_Reg07:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 448
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+56)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_028287
 __jrt_nop_028287:
 	nop
@@ -18012,11 +18021,11 @@ ToneGen_WriteVoice_Reg15:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 1344
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+58)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_0282A9
 __jrt_nop_0282A9:
 	nop
@@ -18035,11 +18044,11 @@ ToneGen_WriteVoice_Reg07_Or_Reg18:
 	jr	nc, ToneGen_WriteVoice_Reg07_Or_Reg18_Skip
 	res_dd8	7, 24
 	add	wa, 448
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+56)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_0282D1
 __jrt_nop_0282D1:
 	nop
@@ -18049,11 +18058,11 @@ __jrt_nop_0282D1:
 ToneGen_WriteVoice_Reg07_Or_Reg18_Skip:
 	res_dd8	7, 24
 	add	wa, 1536
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+66)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_0282F0
 __jrt_nop_0282F0:
 	nop
@@ -18070,11 +18079,11 @@ ToneGen_WriteVoice_Reg15_Or_Reg16:
 	jr	nc, ToneGen_WriteVoice_Reg15_Or_Reg16_Skip
 	res_dd8	7, 24
 	add	wa, 1344
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+58)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_028318
 __jrt_nop_028318:
 	nop
@@ -18084,11 +18093,11 @@ __jrt_nop_028318:
 ToneGen_WriteVoice_Reg15_Or_Reg16_Skip:
 	res_dd8	7, 24
 	add	wa, 1408
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+62)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_028337
 __jrt_nop_028337:
 	nop
@@ -21606,10 +21615,10 @@ Voice_PortamentoSlots_WriteHW_NopCont1:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa200
+	ldw (ToneGen_RegDataPort:24), 0xa200
 	jr __jrt_nop_02A208
 __jrt_nop_02A208:
 
@@ -21623,10 +21632,10 @@ Voice_PortamentoSlots_WriteHW_NopCont2:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa280
+	ldw (ToneGen_RegDataPort:24), 0xa280
 	jr __jrt_nop_02A22A
 __jrt_nop_02A22A:
 
@@ -21644,10 +21653,10 @@ Voice_PortamentoSlots_WriteHW_BranchSkip:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa200
+	ldw (ToneGen_RegDataPort:24), 0xa200
 	jr __jrt_nop_02A24E
 __jrt_nop_02A24E:
 
@@ -21661,10 +21670,10 @@ Voice_PortamentoSlots_WriteHW_NopCont4:
 	ld a, (xwa)
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa280
+	ldw (ToneGen_RegDataPort:24), 0xa280
 	jr __jrt_nop_02A270
 __jrt_nop_02A270:
 
@@ -22199,10 +22208,10 @@ Voice_AllVoices_PortamentoReset_NopCont2:
 	ld a, (xiz)
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa200
+	ldw (ToneGen_RegDataPort:24), 0xa200
 	jr __jrt_nop_02A6AF
 __jrt_nop_02A6AF:
 
@@ -22215,10 +22224,10 @@ Voice_AllVoices_PortamentoReset_NopCont3:
 	ld a, (xiz)
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa280
+	ldw (ToneGen_RegDataPort:24), 0xa280
 	jr __jrt_nop_02A6CF
 __jrt_nop_02A6CF:
 
@@ -24003,10 +24012,10 @@ ToneGen_SilenceChannel:
 	ld a, (xsp)
 	add a, 0xC0
 	extz wa
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x0000
+	ldw (ToneGen_RegDataPort:24), 0x0000
 	jr __jrt_nop_02B4C1
 __jrt_nop_02B4C1:
 
@@ -24018,10 +24027,10 @@ ToneGen_SilenceChannel_NopCont1:
 	res_dd8 7, 0x18
 	ld a, (xsp)
 	extz wa
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x7e00
+	ldw (ToneGen_RegDataPort:24), 0x7e00
 	jr __jrt_nop_02B4DD
 __jrt_nop_02B4DD:
 
@@ -26015,10 +26024,10 @@ Voice_SetPitch:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_02C780
 __jrt_nop_02C780:
 
@@ -26031,10 +26040,10 @@ Voice_SetPitch_NopCont1:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_02C7A1
 __jrt_nop_02C7A1:
 
@@ -26132,10 +26141,10 @@ Voice_NoteOff:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_02C884
 __jrt_nop_02C884:
 
@@ -26148,10 +26157,10 @@ Voice_NoteOff_NopCont1:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_02C8A5
 __jrt_nop_02C8A5:
 
@@ -26271,10 +26280,10 @@ Voice_SetVelocity_Type0_SlotLoop:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_02C9A3
 __jrt_nop_02C9A3:
 
@@ -26286,10 +26295,10 @@ Voice_SetVelocity_Type0_NopCont1:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_02C9C4
 __jrt_nop_02C9C4:
 
@@ -26424,10 +26433,10 @@ Voice_SetVelocity_Type40_SlotLoop:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_02CB07
 __jrt_nop_02CB07:
 
@@ -26439,10 +26448,10 @@ Voice_SetVelocity_Type40_NopCont1:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_02CB28
 __jrt_nop_02CB28:
 
@@ -26538,10 +26547,10 @@ Voice_SetVelocity_Type80_SlotLoop:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_02CC06
 __jrt_nop_02CC06:
 
@@ -26553,10 +26562,10 @@ Voice_SetVelocity_Type80_NopCont1:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_02CC27
 __jrt_nop_02CC27:
 
@@ -27166,11 +27175,11 @@ ToneGen_WriteVoicePitch:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x400
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D0D7
 __jrt_nop_02D0D7:
 
@@ -27197,12 +27206,12 @@ ToneGen_WriteReg0080_StrobeClear:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 128
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+4)
 	res	15, wa
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02D0FC
 __jrt_nop_02D0FC:
 	nop
@@ -27418,12 +27427,12 @@ ToneGen_WriteVoiceParams:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x40
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 2)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D12A
 __jrt_nop_02D12A:
 
@@ -27434,13 +27443,13 @@ ToneGen_WriteVoiceParams_NopCont01:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 4)
 	set 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D14F
 __jrt_nop_02D14F:
 
@@ -27451,12 +27460,12 @@ ToneGen_WriteVoiceParams_NopCont02:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 6)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D171
 __jrt_nop_02D171:
 
@@ -27467,12 +27476,12 @@ ToneGen_WriteVoiceParams_NopCont03:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x100
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 8)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D193
 __jrt_nop_02D193:
 
@@ -27483,12 +27492,12 @@ ToneGen_WriteVoiceParams_NopCont04:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x140
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 10)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D1B5
 __jrt_nop_02D1B5:
 
@@ -27499,12 +27508,12 @@ ToneGen_WriteVoiceParams_NopCont05:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x180
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 12)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D1D7
 __jrt_nop_02D1D7:
 
@@ -27515,12 +27524,12 @@ ToneGen_WriteVoiceParams_NopCont06:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x400
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 14)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D1F9
 __jrt_nop_02D1F9:
 
@@ -27531,12 +27540,12 @@ ToneGen_WriteVoiceParams_NopCont07:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x440
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 16)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D21B
 __jrt_nop_02D21B:
 
@@ -27547,12 +27556,12 @@ ToneGen_WriteVoiceParams_NopCont08:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x480
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 18)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D23D
 __jrt_nop_02D23D:
 
@@ -27563,12 +27572,12 @@ ToneGen_WriteVoiceParams_NopCont09:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x4C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 20)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D25F
 __jrt_nop_02D25F:
 
@@ -27579,12 +27588,12 @@ ToneGen_WriteVoiceParams_NopCont10:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x500
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 22)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D281
 __jrt_nop_02D281:
 
@@ -27595,12 +27604,12 @@ ToneGen_WriteVoiceParams_NopCont11:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 24)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D2A3
 __jrt_nop_02D2A3:
 
@@ -27610,10 +27619,10 @@ ToneGen_WriteVoiceParams_NopCont12:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x8100
+	ldw (ToneGen_RegDataPort:24), 0x8100
 	jr __jrt_nop_02D2BD
 __jrt_nop_02D2BD:
 
@@ -27624,12 +27633,12 @@ ToneGen_WriteVoiceParams_NopCont13:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D2DF
 __jrt_nop_02D2DF:
 
@@ -27640,12 +27649,12 @@ ToneGen_WriteVoiceParams_NopCont14:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D301
 __jrt_nop_02D301:
 
@@ -27656,12 +27665,12 @@ ToneGen_WriteVoiceParams_NopCont15:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x8C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 30)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D323
 __jrt_nop_02D323:
 
@@ -27672,12 +27681,12 @@ ToneGen_WriteVoiceParams_NopCont16:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 32)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D345
 __jrt_nop_02D345:
 
@@ -27688,12 +27697,12 @@ ToneGen_WriteVoiceParams_NopCont17:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 34)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D367
 __jrt_nop_02D367:
 
@@ -27704,12 +27713,12 @@ ToneGen_WriteVoiceParams_NopCont18:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x980
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 36)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D389
 __jrt_nop_02D389:
 
@@ -27720,12 +27729,12 @@ ToneGen_WriteVoiceParams_NopCont19:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 38)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D3AB
 __jrt_nop_02D3AB:
 
@@ -27736,12 +27745,12 @@ ToneGen_WriteVoiceParams_NopCont20:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 40)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D3CD
 __jrt_nop_02D3CD:
 
@@ -27752,12 +27761,12 @@ ToneGen_WriteVoiceParams_NopCont21:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA40
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 42)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D3EF
 __jrt_nop_02D3EF:
 
@@ -27768,13 +27777,13 @@ ToneGen_WriteVoiceParams_NopCont22:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 4)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D414
 __jrt_nop_02D414:
 
@@ -27816,10 +27825,10 @@ ToneGen_WriteSingleReg:
 	pushw iz
 	ld iz, bc
 	res_dd8 7, 0x18
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ld (0x100002:24), iz
+	ld (ToneGen_RegDataPort:24), iz
 	jr __jrt_nop_02D431
 __jrt_nop_02D431:
 
@@ -27842,12 +27851,12 @@ ToneGen_WriteLevelBurst:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D45D
 __jrt_nop_02D45D:
 
@@ -27858,12 +27867,12 @@ ToneGen_WriteLevelBurst_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x940
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 50)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D47F
 __jrt_nop_02D47F:
 
@@ -27874,12 +27883,12 @@ ToneGen_WriteLevelBurst_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xA00
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 54)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D4A1
 __jrt_nop_02D4A1:
 
@@ -27890,12 +27899,12 @@ ToneGen_WriteLevelBurst_NopCont3:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D4C3
 __jrt_nop_02D4C3:
 
@@ -27906,12 +27915,12 @@ ToneGen_WriteLevelBurst_NopCont4:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x900
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 48)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D4E5
 __jrt_nop_02D4E5:
 
@@ -27922,12 +27931,12 @@ ToneGen_WriteLevelBurst_NopCont5:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x9C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 52)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D507
 __jrt_nop_02D507:
 
@@ -27949,12 +27958,12 @@ ToneGen_WriteLevelPair:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D535
 __jrt_nop_02D535:
 
@@ -27965,12 +27974,12 @@ ToneGen_WriteLevelPair_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 44)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D557
 __jrt_nop_02D557:
 
@@ -27990,11 +27999,11 @@ ToneGen_WriteReg0840_Shadow2E:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 2112
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+46)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D57B
 __jrt_nop_02D57B:
 	nop
@@ -28013,12 +28022,12 @@ ToneGen_Write_Regs0100_0140:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 256
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+8)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D5A7
 __jrt_nop_02D5A7:
 	nop
@@ -28027,12 +28036,12 @@ __jrt_nop_02D5A7:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 320
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+10)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D5C9
 __jrt_nop_02D5C9:
 	nop
@@ -28051,12 +28060,12 @@ ToneGen_WriteEnvSegments:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 26)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D5F7
 __jrt_nop_02D5F7:
 
@@ -28067,12 +28076,12 @@ ToneGen_WriteEnvSegments_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 28)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D619
 __jrt_nop_02D619:
 
@@ -28094,12 +28103,12 @@ ToneGen_WriteSegRegs_SameLevel:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D647
 __jrt_nop_02D647:
 
@@ -28110,12 +28119,12 @@ ToneGen_WriteSegRegs_SameLevel_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x880
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 46)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D669
 __jrt_nop_02D669:
 
@@ -28135,10 +28144,10 @@ ToneGen_WriteExprReg:
 	ld iz, bc
 	res_dd8 7, 0x18
 	add wa, 0x180
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ld (0x100002:24), iz
+	ld (ToneGen_RegDataPort:24), iz
 	jr __jrt_nop_02D68A
 __jrt_nop_02D68A:
 
@@ -28162,12 +28171,12 @@ ToneGen_WriteVoiceParams_Ext:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D6B9
 __jrt_nop_02D6B9:
 
@@ -28177,10 +28186,10 @@ ToneGen_WriteVoiceParams_Ext_NopCont1:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x8100
+	ldw (ToneGen_RegDataPort:24), 0x8100
 	jr __jrt_nop_02D6D3
 __jrt_nop_02D6D3:
 
@@ -28191,12 +28200,12 @@ ToneGen_WriteVoiceParams_Ext_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D6F5
 __jrt_nop_02D6F5:
 
@@ -28207,13 +28216,13 @@ ToneGen_WriteVoiceParams_Ext_NopCont3:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x80
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 4)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D71A
 __jrt_nop_02D71A:
 
@@ -28223,12 +28232,12 @@ ToneGen_WriteVoiceParams_Ext_NopCont4:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D738
 __jrt_nop_02D738:
 
@@ -28250,12 +28259,12 @@ ToneGen_WriteVoiceParams_Ext2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D766
 __jrt_nop_02D766:
 
@@ -28265,10 +28274,10 @@ ToneGen_WriteVoiceParams_Ext2_NopCont1:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x8100
+	ldw (ToneGen_RegDataPort:24), 0x8100
 	jr __jrt_nop_02D780
 __jrt_nop_02D780:
 
@@ -28279,12 +28288,12 @@ ToneGen_WriteVoiceParams_Ext2_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D7A2
 __jrt_nop_02D7A2:
 
@@ -28294,12 +28303,12 @@ ToneGen_WriteVoiceParams_Ext2_NopCont3:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 45)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D7C0
 __jrt_nop_02D7C0:
 
@@ -28332,11 +28341,11 @@ ToneGen_WriteGlobalConfig_BranchA:
 
 ToneGen_WriteGlobalConfig_BranchB:
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0200
+	ldw (ToneGen_RegAddrLatch:24), 0x0200
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D7F5
 __jrt_nop_02D7F5:
 
@@ -28345,11 +28354,11 @@ ToneGen_WriteGlobalConfig_NopCont01:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0201
+	ldw (ToneGen_RegAddrLatch:24), 0x0201
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 2)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D810
 __jrt_nop_02D810:
 
@@ -28358,11 +28367,11 @@ ToneGen_WriteGlobalConfig_NopCont02:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0202
+	ldw (ToneGen_RegAddrLatch:24), 0x0202
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 4)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D82B
 __jrt_nop_02D82B:
 
@@ -28371,11 +28380,11 @@ ToneGen_WriteGlobalConfig_NopCont03:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0203
+	ldw (ToneGen_RegAddrLatch:24), 0x0203
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 6)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D846
 __jrt_nop_02D846:
 
@@ -28384,11 +28393,11 @@ ToneGen_WriteGlobalConfig_NopCont04:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0204
+	ldw (ToneGen_RegAddrLatch:24), 0x0204
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 8)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D861
 __jrt_nop_02D861:
 
@@ -28397,11 +28406,11 @@ ToneGen_WriteGlobalConfig_NopCont05:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0205
+	ldw (ToneGen_RegAddrLatch:24), 0x0205
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 10)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D87C
 __jrt_nop_02D87C:
 
@@ -28410,11 +28419,11 @@ ToneGen_WriteGlobalConfig_NopCont06:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0c00
+	ldw (ToneGen_RegAddrLatch:24), 0x0c00
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 12)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D897
 __jrt_nop_02D897:
 
@@ -28423,11 +28432,11 @@ ToneGen_WriteGlobalConfig_NopCont07:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0c01
+	ldw (ToneGen_RegAddrLatch:24), 0x0c01
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 14)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D8B2
 __jrt_nop_02D8B2:
 
@@ -28436,11 +28445,11 @@ ToneGen_WriteGlobalConfig_NopCont08:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0c02
+	ldw (ToneGen_RegAddrLatch:24), 0x0c02
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 16)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D8CD
 __jrt_nop_02D8CD:
 
@@ -28449,11 +28458,11 @@ ToneGen_WriteGlobalConfig_NopCont09:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0c03
+	ldw (ToneGen_RegAddrLatch:24), 0x0c03
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 18)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D8E8
 __jrt_nop_02D8E8:
 
@@ -28462,11 +28471,11 @@ ToneGen_WriteGlobalConfig_NopCont10:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0c04
+	ldw (ToneGen_RegAddrLatch:24), 0x0c04
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 20)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D903
 __jrt_nop_02D903:
 
@@ -28475,11 +28484,11 @@ ToneGen_WriteGlobalConfig_NopCont11:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0c05
+	ldw (ToneGen_RegAddrLatch:24), 0x0c05
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 22)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D91E
 __jrt_nop_02D91E:
 
@@ -28488,11 +28497,11 @@ ToneGen_WriteGlobalConfig_NopCont12:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldw (0x100000:24), 0x0e00
+	ldw (ToneGen_RegAddrLatch:24), 0x0e00
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 24)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02D939
 __jrt_nop_02D939:
 
@@ -28515,12 +28524,12 @@ ToneGen_WriteReg0440_0480:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1088
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+16)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02D965
 __jrt_nop_02D965:
 	nop
@@ -28529,12 +28538,12 @@ __jrt_nop_02D965:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1152
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+18)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02D987
 __jrt_nop_02D987:
 	nop
@@ -28550,11 +28559,11 @@ ToneGen_Write_Reg0180:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 384
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+12)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02D9AB
 __jrt_nop_02D9AB:
 	nop
@@ -28568,11 +28577,11 @@ ToneGen_Write_Reg0440:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 1088
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+16)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02D9CD
 __jrt_nop_02D9CD:
 	nop
@@ -28586,11 +28595,11 @@ ToneGen_Write_Reg0480:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 1152
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+18)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02D9EF
 __jrt_nop_02D9EF:
 	nop
@@ -28604,11 +28613,11 @@ ToneGen_Write_Reg04C0:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 1216
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+20)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DA11
 __jrt_nop_02DA11:
 	nop
@@ -28636,12 +28645,12 @@ ToneGen_WriteExtParams_56:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DA48
 __jrt_nop_02DA48:
 
@@ -28654,12 +28663,12 @@ ToneGen_WriteExtParams_56_BranchSkip:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x600
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 64)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DA6A
 __jrt_nop_02DA6A:
 
@@ -28670,13 +28679,13 @@ ToneGen_WriteExtParams_56_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DA8F
 __jrt_nop_02DA8F:
 
@@ -28694,11 +28703,11 @@ ToneGen_WriteExtParam_600:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x600
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 64)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DAB3
 __jrt_nop_02DAB3:
 
@@ -28723,12 +28732,12 @@ ToneGen_WriteExtParams_56_Alt:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DAEA
 __jrt_nop_02DAEA:
 
@@ -28741,13 +28750,13 @@ ToneGen_WriteExtParams_56_Alt_ClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 60)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DB0F
 __jrt_nop_02DB0F:
 
@@ -28765,10 +28774,10 @@ ToneGen_WriteExtParams_56_Alt_NopCont2:
 ToneGen_WriteExtParam_600_Mute:
 	res_dd8 7, 0x18
 	add wa, 0x580
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x8100
+	ldw (ToneGen_RegDataPort:24), 0x8100
 	jr __jrt_nop_02DB2F
 __jrt_nop_02DB2F:
 
@@ -28792,12 +28801,12 @@ ToneGen_WriteExtParams_56b:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x5C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DB65
 __jrt_nop_02DB65:
 
@@ -28810,12 +28819,12 @@ ToneGen_WriteExtParams_56b_ClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x640
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 66)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DB87
 __jrt_nop_02DB87:
 
@@ -28826,13 +28835,13 @@ ToneGen_WriteExtParams_56b_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x5C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DBAC
 __jrt_nop_02DBAC:
 
@@ -28853,11 +28862,11 @@ ToneGen_WriteReg0640:
 	ld	xiz, xbc
 	res_dd8	7, 24
 	add	wa, 1600
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	wa, (xiz+66)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DBD0
 __jrt_nop_02DBD0:
 	nop
@@ -28879,12 +28888,12 @@ ToneGen_Write_ExtParam_05C0_Strobe:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1472
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DC07
 __jrt_nop_02DC07:
 	nop
@@ -28894,13 +28903,13 @@ ToneGen_Write_ExtParam_05C0_Strobe_Skip:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1472
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
 	res	15, wa
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DC2C
 __jrt_nop_02DC2C:
 	nop
@@ -28913,10 +28922,10 @@ __jrt_nop_02DC2C:
 ToneGen_Mute_Reg05C0:
 	res_dd8	7, 24
 	add	wa, 1472
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
-	ldw	(1048578:24), 33024
+	ldw	(ToneGen_RegDataPort:24), 33024
 	jr	__jrt_nop_02DC4C
 __jrt_nop_02DC4C:
 	nop
@@ -28938,12 +28947,12 @@ ToneGen_WriteExtParams_15:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DC82
 __jrt_nop_02DC82:
 
@@ -28956,12 +28965,12 @@ ToneGen_WriteExtParams_15_ClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x1C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 56)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DCA4
 __jrt_nop_02DCA4:
 
@@ -28972,13 +28981,13 @@ ToneGen_WriteExtParams_15_NopCont2:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DCC9
 __jrt_nop_02DCC9:
 
@@ -28996,11 +29005,11 @@ ToneGen_WriteExtParam_1C0_Single:
 	ld xiz, xbc
 	res_dd8 7, 0x18
 	add wa, 0x1C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 56)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DCED
 __jrt_nop_02DCED:
 
@@ -29024,12 +29033,12 @@ ToneGen_WriteExtParams_15_Alt:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DD24
 __jrt_nop_02DD24:
 
@@ -29042,13 +29051,13 @@ ToneGen_WriteExtParams_15_Alt_ClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DD49
 __jrt_nop_02DD49:
 
@@ -29064,10 +29073,10 @@ ToneGen_WriteExtParams_15_Alt_NopCont2:
 ToneGen_WriteExtParam_540_Mute:
 	res_dd8 7, 0x18
 	add wa, 0x540
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x8100
+	ldw (ToneGen_RegDataPort:24), 0x8100
 	jr __jrt_nop_02DD69
 __jrt_nop_02DD69:
 
@@ -29099,12 +29108,12 @@ ToneGen_WriteExtParams_15_Banked:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1344
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+58)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DDA5
 __jrt_nop_02DDA5:
 	nop
@@ -29114,12 +29123,12 @@ ToneGen_WriteExtParams_15_Banked_Skip:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 448
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+56)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DDC7
 __jrt_nop_02DDC7:
 	nop
@@ -29128,13 +29137,13 @@ __jrt_nop_02DDC7:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1344
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+58)
 	res	15, wa
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DDEC
 __jrt_nop_02DDEC:
 	nop
@@ -29149,12 +29158,12 @@ ToneGen_WriteExtParams_15_Banked_Skip2:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1408
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DE1B
 __jrt_nop_02DE1B:
 	nop
@@ -29164,12 +29173,12 @@ ToneGen_WriteExtParams_15_Banked_Skip3:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1536
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+66)
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DE3D
 __jrt_nop_02DE3D:
 	nop
@@ -29178,13 +29187,13 @@ __jrt_nop_02DE3D:
 	res_dd8	7, 24
 	ld	wa, iz
 	add	wa, 1408
-	ld	(1048576:24), wa
+	ld	(ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8	7, 24
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+62)
 	res	15, wa
-	ld	(1048578:24), wa
+	ld	(ToneGen_RegDataPort:24), wa
 	jr	__jrt_nop_02DE62
 __jrt_nop_02DE62:
 	nop
@@ -29203,11 +29212,11 @@ ToneGen_WriteExtParam_TypeDispatch_Single:
 	jr nc, ToneGen_WriteExtParam_TypeDispatch_Single_HiPath
 	res_dd8 7, 0x18
 	add wa, 0x1C0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 56)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DE8C
 __jrt_nop_02DE8C:
 
@@ -29220,11 +29229,11 @@ ToneGen_WriteExtParam_TypeDispatch_Single_NopCont1:
 ToneGen_WriteExtParam_TypeDispatch_Single_HiPath:
 	res_dd8 7, 0x18
 	add wa, 0x600
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld wa, (xiz + 66)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DEAB
 __jrt_nop_02DEAB:
 
@@ -29253,12 +29262,12 @@ ToneGen_WriteExtParams_TypeDispatch:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DEE8
 __jrt_nop_02DEE8:
 
@@ -29271,13 +29280,13 @@ ToneGen_WriteExtParams_TypeDispatch_LoClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x540
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 58)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DF0D
 __jrt_nop_02DF0D:
 
@@ -29295,12 +29304,12 @@ ToneGen_WriteExtParams_TypeDispatch_HiPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DF3C
 __jrt_nop_02DF3C:
 
@@ -29313,13 +29322,13 @@ ToneGen_WriteExtParams_TypeDispatch_HiClearPath:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x580
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 62)
 	res 15, wa
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02DF61
 __jrt_nop_02DF61:
 
@@ -29339,10 +29348,10 @@ ToneGen_WriteExtParam_Mute_TypeDispatch:
 	jr nc, ToneGen_WriteExtParam_Mute_TypeDispatch_HiPath
 	res_dd8 7, 0x18
 	add wa, 0x540
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x8100
+	ldw (ToneGen_RegDataPort:24), 0x8100
 	jr __jrt_nop_02DF87
 __jrt_nop_02DF87:
 
@@ -29355,10 +29364,10 @@ ToneGen_WriteExtParam_Mute_TypeDispatch_NopCont1:
 ToneGen_WriteExtParam_Mute_TypeDispatch_HiPath:
 	res_dd8 7, 0x18
 	add wa, 0x580
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x8100
+	ldw (ToneGen_RegDataPort:24), 0x8100
 	jr __jrt_nop_02DFA4
 __jrt_nop_02DFA4:
 
@@ -29401,10 +29410,10 @@ ToneGen_Config_Init:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_02DFEA
 __jrt_nop_02DFEA:
 
@@ -29415,10 +29424,10 @@ ToneGen_Config_Init_NopCont1:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_02E008
 __jrt_nop_02E008:
 
@@ -29436,10 +29445,10 @@ ToneGen_ConfigInit_WriteVoiceRegs:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_02E038
 __jrt_nop_02E038:
 
@@ -29450,10 +29459,10 @@ ToneGen_ConfigInit_WriteAddr800:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_02E056
 __jrt_nop_02E056:
 
@@ -29464,10 +29473,10 @@ ToneGen_ConfigInit_WriteAddrC0:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x0000
+	ldw (ToneGen_RegDataPort:24), 0x0000
 	jr __jrt_nop_02E074
 __jrt_nop_02E074:
 
@@ -29477,10 +29486,10 @@ ToneGen_ConfigInit_WriteAddr00:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0x7e00
+	ldw (ToneGen_RegDataPort:24), 0x7e00
 	jr __jrt_nop_02E08E
 __jrt_nop_02E08E:
 
@@ -29525,20 +29534,20 @@ ToneGen_SelfTest_ProbeVoice0:
 	push	xiz
 	ldw	iz, 65535
 	res_dd8	7, 24
-	ldw	(1048576:24), 2112
+	ldw	(ToneGen_RegAddrLatch:24), 2112
 	nop
 	set_dd8	7, 24
-	ldw	(1048578:24), 65280
+	ldw	(ToneGen_RegDataPort:24), 65280
 	jr	__jrt_nop_02E0D1
 __jrt_nop_02E0D1:
 	nop
 	nop
 	nop
 	res_dd8	7, 24
-	ldw	(1048576:24), 2048
+	ldw	(ToneGen_RegAddrLatch:24), 2048
 	nop
 	set_dd8	7, 24
-	ldw	(1048578:24), 65408
+	ldw	(ToneGen_RegDataPort:24), 65408
 	jr	__jrt_nop_02E0EB
 __jrt_nop_02E0EB:
 	nop
@@ -29560,20 +29569,20 @@ ToneGen_SelfTest_ProbeVoice0_Loop:
 	jr	z, ToneGen_SelfTest_ProbeVoice0_Skip
 	ld	iz, 0:i3
 	res_dd8	7, 24
-	ldw	(1048576:24), 2112
+	ldw	(ToneGen_RegAddrLatch:24), 2112
 	nop
 	set_dd8	7, 24
-	ldw	(1048578:24), 65280
+	ldw	(ToneGen_RegDataPort:24), 65280
 	jr	__jrt_nop_02E12C
 __jrt_nop_02E12C:
 	nop
 	nop
 	nop
 	res_dd8	7, 24
-	ldw	(1048576:24), 2048
+	ldw	(ToneGen_RegAddrLatch:24), 2048
 	nop
 	set_dd8	7, 24
-	ldw	(1048578:24), 65408
+	ldw	(ToneGen_RegDataPort:24), 65408
 	jr	__jrt_nop_02E146
 __jrt_nop_02E146:
 	nop
@@ -29586,20 +29595,20 @@ ToneGen_SelfTest_ProbeVoice0_Skip:
 	jr	c, ToneGen_SelfTest_ProbeVoice0_Loop
 ToneGen_SelfTest_ProbeVoice0_Join:
 	res_dd8	7, 24
-	ldw	(1048576:24), 192
+	ldw	(ToneGen_RegAddrLatch:24), 192
 	nop
 	set_dd8	7, 24
-	ldw	(1048578:24), 0
+	ldw	(ToneGen_RegDataPort:24), 0
 	jr	__jrt_nop_02E16C
 __jrt_nop_02E16C:
 	nop
 	nop
 	nop
 	res_dd8	7, 24
-	ldw	(1048576:24), 0
+	ldw	(ToneGen_RegAddrLatch:24), 0
 	nop
 	set_dd8	7, 24
-	ldw	(1048578:24), 32256
+	ldw	(ToneGen_RegDataPort:24), 32256
 	jr	__jrt_nop_02E186
 __jrt_nop_02E186:
 	nop
@@ -29625,12 +29634,12 @@ ToneGen_ReadPitch_AndScale:
 	res_dd8 7, 0x18
 	ld wa, iz
 	add wa, 0xC0
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, (xsp + 6)
 	ld wa, (xwa + 6)
-	ld (0x100002:24), wa
+	ld (ToneGen_RegDataPort:24), wa
 	jr __jrt_nop_02E1B4
 __jrt_nop_02E1B4:
 
@@ -29640,7 +29649,7 @@ ToneGen_ReadPitch_Compute:
 	nop
 	res_dd8 7, 0x18
 	ld wa, iz
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
 	ld xwa, 0x100002
@@ -43257,10 +43266,10 @@ Voice_Poly_NoteOn_RoundRobin:
 	ld a, (15123:16)
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff00
+	ldw (ToneGen_RegDataPort:24), 0xff00
 	jr __jrt_nop_035727
 __jrt_nop_035727:
 
@@ -43274,10 +43283,10 @@ Voice_Poly_NoteOn_SlotSearch:
 	ld a, (15123:16)
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xff80
+	ldw (ToneGen_RegDataPort:24), 0xff80
 	jr __jrt_nop_035749
 __jrt_nop_035749:
 
@@ -43342,10 +43351,10 @@ Voice_Poly_NoteOn_ReleaseCheck:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x840
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa200
+	ldw (ToneGen_RegDataPort:24), 0xa200
 	jr __jrt_nop_0357D8
 __jrt_nop_0357D8:
 
@@ -43358,10 +43367,10 @@ Voice_Poly_NoteOn_ReleaseNext:
 	stb_erp A, 0xFB
 	extz wa
 	add wa, 0x800
-	ld (0x100000:24), wa
+	ld (ToneGen_RegAddrLatch:24), wa
 	nop
 	set_dd8 7, 0x18
-	ldw (0x100002:24), 0xa280
+	ldw (ToneGen_RegDataPort:24), 0xa280
 	jr __jrt_nop_0357F9
 __jrt_nop_0357F9:
 
