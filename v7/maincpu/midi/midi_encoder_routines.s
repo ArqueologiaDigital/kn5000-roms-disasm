@@ -62,7 +62,7 @@ Encoder_ProcessModwheel:
 	srl	a, 1
 	extz	wa
 	lda	xbc, (15573308:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	ld	c, (36424:16)
 	res	7, c
 	cp	c, a
@@ -82,7 +82,7 @@ Encoder_ProcessVolume:
 	ld	(36400:16), a
 	extz	wa
 	lda	xbc, (15573436:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	calr	Encoder_ClampScaleAndNormalize
 	ld	a, l
 	cp	a, (36440:16)
@@ -116,7 +116,7 @@ Encoder_PerformScaling:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (15573692:24)
-	ld_rrw	bc, xbc, wa
+	ld	bc, (xbc+wa)
 	extz	xbc
 	ld	xwa, xhl
 	call	16712319
@@ -133,13 +133,19 @@ Encoder_ClampScaleAndNormalize_End:
 ; Input: A = raw encoder value
 ; Output: HL = processed MIDI CC value, or 0xffff if unchanged
 Encoder_ProcessBreath:
-	.byte 0x33, 0xff, 0xff, 0xc9, 0x06, 0xf1, 0x38, 0x8e
-	.byte 0x41, 0xd8, 0x12, 0xf2, 0xd2, 0xa2, 0xed, 0x31
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xc1, 0xff, 0x36
-	.byte 0x23, 0xcb, 0xcc, 0x0f, 0x6e, 0x07, 0xc1, 0x6f
-	.byte 0x7e, 0x3f, 0x00, 0x66, 0x3e
+	ldw	hl, 0xffff
+	cpl	a
+	ld	(0x8e38:16), a
+	extz	wa
+	lda	xbc, (0xeda2d2:24)
+	ld	a, (xbc+wa)
+	ld	c, (0x36ff:16)
+	and	c, 15
+	jr	nz, Encoder_ProcessBreath_WithModeAdjustment
+	cp	(0x7e6f:16), 0
+	jr	z, Encoder_ProcessBreath_SimplePassthrough
 Encoder_ProcessBreath_WithModeAdjustment:
-	ld	c, (36414:16)
+	ld	c, (0x8e3e:16)
 	cp	c, 0:i3
 	ret	z
 	srl	a, 1
@@ -148,22 +154,23 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	dec	1, c
 	extz	bc
 	add	bc, bc
-	lda	xwa, (15573970:24)
-	ld_rrw	de, xwa, bc
+	lda	xwa, (0xeda3d2:24)
+	ld	de, (xwa+bc)
 	mul	xhl, xde
-	lda	xwa, (15573994:24)
-	ld_rrw	wa, xwa, bc
+	lda	xwa, (0xeda3ea:24)
+	ld	wa, (xwa+bc)
 	sub	hl, wa
-	add	hl, 16512
+	add	hl, 0x4080
 	srl	hl, 8
 	add	hl, hl
 	ld	a, l
-	ld	(36428:16), a
-	jr	Encoder_ProcessBreath_Return	; -> 0xFC65D3
+	ld	(0x8e4c:16), a
+	; -> 0xFC65D3
+	jr	Encoder_ProcessBreath_Return
 Encoder_ProcessBreath_SimplePassthrough:
-	cp	(36428:16), a
+	cpdm8	(0x8e4c), xbc
 	ret	z
-	ld	(36428:16), a
+	ld	(0x8e4c:16), a
 	ld	l, a
 	extz	hl
 Encoder_ProcessBreath_Return:
@@ -179,7 +186,7 @@ Encoder_ProcessFoot:
 	srl	a, 1
 	extz	wa
 	lda	xbc, (15574018:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	ld	c, (36430:16)
 	res	7, c
 	cp	c, a
@@ -200,7 +207,7 @@ Encoder_ProcessExpression:
 	srl	a, 1
 	extz	wa
 	lda	xbc, (15574146:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	ld	(36426:16), a
 	extz	wa
 	ld	hl, wa

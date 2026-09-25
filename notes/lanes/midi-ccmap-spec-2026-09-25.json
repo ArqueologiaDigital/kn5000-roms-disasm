@@ -1,0 +1,377 @@
+[
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFACF",
+  "end": "0xFCFAD9",
+  "kind": "code",
+  "labels": {
+   "0xFCFAD5": {
+    "name": "MidiRx_ChannelMsgDispatch",
+    "comment": [
+     "MidiRx_ChannelMsgDispatch -- entry for channel-voice messages (status 8x..Ex):",
+     "MidiSerial_StatusTable slots 0-6 point here (that table's header gives the",
+     "indexing).  Maps the status byte's channel, (0x9634) & 0x0F, through the",
+     "16-byte RAM table 0x94F4 to a list in 0x9514 (count, then part numbers), and",
+     "for each part stores it in (0x966A) and calls",
+     "MidiCC_LowRange_Table[((0x9634) & 0x70) >> 4]; (0x966B) counts the parts down.",
+     "It follows MidiSerial_HandleDefault_Data's `ret` and had no label: the old",
+     "sweep read that routine's first byte as `.byte 0xc1` and the rest as",
+     "`pushw wa / max / push xiz / normal`."
+    ]
+   }
+  }
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFA04",
+  "end": "0xFCFA25",
+  "kind": "data",
+  "comment": [
+   "MidiSerial_StatusTable -- one 0xFF pad byte, then 8 handler pointers indexed by",
+   "the status byte's high nibble.  Reader MidiSerial_PumpLoop (this file): `ld a,",
+   "(0x9634) / and a, 0x70 / srl a, 2` (= 4 * ((status >> 4) & 7)), `ld xiz,",
+   "MidiSerial_StatusTable_0x1 / ld xiz, (xiz+a) / call (xiz)`, so entry 0 is at +1",
+   "(MidiSerial_StatusTable_0x1 = this label + 1, shared/positional_labels.s) and",
+   "8 entries reach MidiSerial_WaitForData.  Slots 0-6 (8x note off .. Ex pitch",
+   "bend) -> MidiRx_ChannelMsgDispatch; slot 7 (Fx) -> MidiSerial_ParseStatus_Data,",
+   "which dispatches system messages on the low nibble through",
+   "MidiSerial_CmdJumpTable.  Previously spelled as `swi 7 / cpm_spiw ix, 250 /",
+   "nop` x 7."
+  ],
+  "segments": [
+   {
+    "len": 1,
+    "type": "byte",
+    "per_line": 1
+   },
+   {
+    "len": 32,
+    "type": "long",
+    "per_line": 1,
+    "symbols": true,
+    "label": "MidiSerial_StatusHandlers"
+   }
+  ],
+  "header_above_label": true
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0E67",
+  "end": "0xFD16E7",
+  "kind": "data",
+  "comment": [
+   "=====================================================================",
+   "MIDI receive mapping tables (0xFD0E67-0xFD16E6, 2,176 B, 24 sub-tables).",
+   "Previously spelled as ~850 instruction lines (push_f / normal / swi 7 /",
+   "jrl nc, 1793 ...) that nothing executes: scripts/analysis/midi_lane_reach.py",
+   "reaches none of it.  Every sub-table except the two marked Unread has one",
+   "or two readers, each found both as a symbolic `ld xix, <table>` in this",
+   "file and as the table's 24-bit address in the ROM image (searched: the",
+   "3-byte LE address anywhere in the 2 MB dump; the only hits are those",
+   "`ld xix` operands).",
+   "",
+   "How a received message gets here (all in this file):",
+   "  MidiRx_ChannelMsgDispatch (0xFCFAD5) takes the running status byte",
+   "  from (0x9634), maps channel = status & 0x0F through the 16-byte RAM table",
+   "  0x94F4 and the part list 0x9514, stores each target PART number (0..31)",
+   "  in (0x966A) and calls MidiCC_LowRange_Table[(status & 0x70) >> 4]:",
+   "  8x/9x/Ax/Fx -> MidiCC_Handler_SimpleParamStore, Bx -> ..._CC3_TableLookup,",
+   "  Cx -> ..._CC4_VoiceParam, Dx -> ..._CC5_VoiceParam, Ex -> ..._CC6_VoiceParam.",
+   "  The two data bytes are at (0x9635) and (0x9636).",
+   "Every per-part table below is indexed by that part number, range-checked by",
+   "its reader with `cp <part>, 31 / jr ugt` -- which is what pins 32 entries.",
+   "The readers pass the entry to the dispatcher named per table below through",
+   "(0x9644) = BC, (0x9646) = DE (E = the message's data byte), (0x9648) = (0x9637);",
+   "the selector encoding is that dispatcher's business and was not traced here.",
+   "=====================================================================",
+   "",
+   "MidiCC_ChannelMappingData (+0x000, 128 x u8): CONTROLLER NUMBER -> CC FUNCTION",
+   "INDEX (0..47), 0xFF = controller ignored.  Reader MidiCC_Handler_CC3_TableLookup",
+   "(0xFCFB63): `ld xix, MidiCC_ChannelMappingData / ld l, (0x9635) /",
+   "ld a, (xix+l)`, result kept in (0x9657) and used as the index into the",
+   "48-entry MidiCC_ExtendedRange_Table.  Mapped here: CC0->24 CC1->1 CC6->32",
+   "CC7->2 CC10->4 CC11->3 CC32->25 CC38->33 CC64->0 CC80->16 CC82->17",
+   "CC83->18 CC91->7 CC93->5 CC94->6 CC100->35 CC101->34 CC120->41 CC121->40.",
+   "No controller maps to functions 8-15 in this table."
+  ],
+  "segments": [
+   {
+    "len": 128,
+    "type": "byte",
+    "per_line": 16
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 2,
+    "label": "MidiCC_FunctionRxFilter",
+    "comment": [
+     "",
+     "MidiCC_FunctionRxFilter (+0x080, 48 x {u8 bit mask, u8 byte offset}), one per",
+     "CC function index (48 = the size of MidiCC_ExtendedRange_Table).  Reader",
+     "MidiCC_Handler_CC3_TableLookup: `sll a, 1 / ld wa, (<this>+2*func)`; 0xFFFF",
+     "= always dispatched, else `ld c, (0xfd57 + W) / and c, A / jr z` skips the",
+     "function when that bit of the RAM byte array at 0xFD57 is clear (bytes",
+     "0xFD58/0xFD59 are used here; the handlers themselves test 0xFD57 bits",
+     "with `bit n, (0xfd57:16)`).  Entry order = function index 0..47."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_CC64_Sustain",
+    "comment": [
+     "",
+     "Per-part target records, 32 records x 3 bytes (4 per line, record n = part n):",
+     "  +0 u16 selector -> BC -> (0x9644); low byte 0xFF = part not affected, skip",
+     "  +2 u8           -> D  -> (0x9647); E = the controller value (0x9636)",
+     "Sixteen such tables follow (fourteen with a reader, two marked Unread); the",
+     "reader of each is the handler at its CC function's slot of",
+     "MidiCC_ExtendedRange_Table, all of the",
+     "shape `ld a, (0x966a) / cp a, 31 / jr ugt / hl = 3*a / ld xix, <table> /",
+     "ld bc, (xix+hl) / cp c, 255 / jr z / inc 2, xix / ld d, (xix+hl)`.",
+     "",
+     "MidiCC_PartTargets_CC64_Sustain (+0x0E0): function 0 <- CC64; reader",
+     "MidiCC_VoiceParam_0 (0xFCFE0B), whose tail MidiCC_Helper_ConditionalESetup",
+     "(0xFD036B) replaces E with D when the value is >= 0x40 and with 0 below it:",
+     "here D = 0x08."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_Func08",
+    "comment": [
+     "MidiCC_PartTargets_Func08 (+0x140): function 8, reader MidiCC_VoiceParam_1",
+     "(0xFCFE4B) -> MidiStream_DispatchData_0xB2.  No controller maps to function 8",
+     "in MidiCC_ChannelMappingData, so this table is reachable only if (0x9657) is",
+     "set some other way (not searched)."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_Func09",
+    "comment": [
+     "MidiCC_PartTargets_Func09 (+0x1A0): function 9, reader MidiCC_VoiceParam_2",
+     "(0xFCFE8C) -> MidiStream_DispatchData_0xB2.  Unmapped, as function 8."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_CC1_Modulation",
+    "comment": [
+     "MidiCC_PartTargets_CC1_Modulation (+0x200): function 1 <- CC1, reader",
+     "MidiCC_VoiceParam_3 (0xFCFECD) -> MidiStream_DispatchData_0x81."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_CC7_Volume",
+    "comment": [
+     "MidiCC_PartTargets_CC7_Volume (+0x260): function 2 <- CC7, reader",
+     "MidiCC_VoiceParam_4 (0xFCFF0E) -> MidiStream_DispatchData_0x16."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_CC11_Expression",
+    "comment": [
+     "MidiCC_PartTargets_CC11_Expression (+0x2C0): function 3 <- CC11, reader",
+     "MidiCC_VoiceParam_5 (0xFCFF4F) -> MidiStream_DispatchData_0x42."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_CC10_Pan",
+    "comment": [
+     "MidiCC_PartTargets_CC10_Pan (+0x320): function 4 <- CC10, reader",
+     "MidiCC_VoiceParam_6 (0xFCFF90) -> MidiStream_DispatchData_0x191."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_CC93_Chorus",
+    "comment": [
+     "MidiCC_PartTargets_CC93_Chorus (+0x380): function 5 <- CC93, reader",
+     "MidiCC_VoiceParam_7 (0xFCFFD1) -> MidiStream_DispatchData_0x191."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_CC94_Celeste",
+    "comment": [
+     "MidiCC_PartTargets_CC94_Celeste (+0x3E0): function 6 <- CC94 (MIDI 1.0",
+     "\"effect 4 depth\", formerly celeste), reader MidiCC_VoiceParam_8 (0xFD0012);",
+     "D = 0x40 here where the other level tables hold 0x7F."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_CC91_Reverb",
+    "comment": [
+     "MidiCC_PartTargets_CC91_Reverb (+0x440): function 7 <- CC91, reader",
+     "MidiCC_VoiceParam_9 (0xFD0052) -> MidiStream_DispatchData_0x191."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_Unread_A",
+    "comment": [
+     "MidiCC_PartTargets_Unread_A (+0x4A0) and _Unread_B (+0x500): same record",
+     "shape (selector low byte 0xBC / 0xBD), but NO READER FOUND.  Searched: the",
+     "24-bit address (0xFD1307 / 0xFD1367) anywhere in the ROM, and every",
+     "`ld xix, MidiCC_ChannelMappingData*` in the tree.  They sit between the",
+     "function-7 and function-12 tables, i.e. where functions 10 and 11 would",
+     "keep theirs, and MidiCC_ExtendedRange_Table slots 10 and 11 hold",
+     "MidiCC_StubHandler_A/B, which are a bare `ret` -- consistent with two",
+     "functions compiled out, not proof of it."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_Unread_B"
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_Func12",
+    "comment": [
+     "MidiCC_PartTargets_Func12..15 (+0x560, +0x5C0, +0x620, +0x680): functions",
+     "12-15, readers MidiCC_VoiceParam_10 (0xFD009F), _11 (0xFD00E0), _12",
+     "(0xFD0121), _13 (0xFD0162), all -> MidiStream_DispatchData_0xD0.  No",
+     "controller maps to these functions in MidiCC_ChannelMappingData."
+    ]
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_Func13"
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_Func14"
+   },
+   {
+    "len": 96,
+    "type": "byte",
+    "per_line": 12,
+    "label": "MidiCC_PartTargets_Func15"
+   },
+   {
+    "len": 64,
+    "type": "short",
+    "per_line": 8,
+    "label": "MidiCC_PartTargets_CC121_ResetAll",
+    "comment": [
+     "",
+     "Per-part 16-bit selectors, 32 x u16 (8 per line, entry n = part n), read",
+     "as `sll a, 1 / ld bc, (xix+a)`; low byte 0xFF = part not affected.",
+     "",
+     "MidiCC_PartTargets_CC121_ResetAll (+0x6E0): function 40 <- CC121 (reset all",
+     "controllers), reader MidiCC_Handler_ParamDispatch (0xFD02FF), D = 0x7F,",
+     "-> MidiStream_DispatchData_0xEE."
+    ]
+   },
+   {
+    "len": 64,
+    "type": "short",
+    "per_line": 8,
+    "label": "MidiCC_PartTargets_CC120_AllSoundOff",
+    "comment": [
+     "MidiCC_PartTargets_CC120_AllSoundOff (+0x720): function 41 <- CC120, reader",
+     "MidiCC_Handler_TableDispatch (0xFD0335, which loads this address as the",
+     "literal 0x00fd1587), D = 0x7F, -> MidiStream_DispatchData_0x173."
+    ]
+   },
+   {
+    "len": 64,
+    "type": "short",
+    "per_line": 8,
+    "label": "MidiPC_PartTargets",
+    "comment": [
+     "MidiPC_PartTargets (+0x760): PROGRAM CHANGE (status Cx).  Reader",
+     "MidiCC_Handler_CC4_VoiceParam (0xFD039C, MidiCC_LowRange_Table slot 4):",
+     "E = program number (0x9635), D = 0xFF, gated by bit 4 of (0xFD57),",
+     "-> MidiStream_ExtendedDispatch_0x1."
+    ]
+   },
+   {
+    "len": 64,
+    "type": "short",
+    "per_line": 8,
+    "label": "MidiPB_PartTargets",
+    "comment": [
+     "MidiPB_PartTargets (+0x7A0): PITCH BEND (status Ex).  Reader",
+     "MidiCC_Handler_CC6_VoiceParam (0xFD03D8, slot 6): E = LSB (0x9635),",
+     "D = MSB (0x9636), gated by bit 6 of (0xFD57), -> MidiStream_DispatchData_0x67."
+    ]
+   },
+   {
+    "len": 64,
+    "type": "short",
+    "per_line": 8,
+    "label": "MidiCP_PartTargets",
+    "comment": [
+     "MidiCP_PartTargets (+0x7E0): CHANNEL PRESSURE (status Dx).  Reader",
+     "MidiCC_Handler_CC5_VoiceParam (0xFD0416, slot 5): E = pressure (0x9635),",
+     "D = 0x7F, gated by bit 5 of (0xFD57), -> MidiStream_DispatchData_0xD0."
+    ]
+   },
+   {
+    "len": 32,
+    "type": "byte",
+    "per_line": 16,
+    "label": "MidiCC_PartSelector_DataEntry",
+    "comment": [
+     "MidiCC_PartSelector_DataEntry (+0x820, 32 x u8): functions 32 and 33 <- CC6",
+     "and CC38 (data entry MSB/LSB).  Readers MidiCC_Handler_BankModeSelect",
+     "(0xFD01A3) and MidiCC_Handler_ExpressionParam (0xFD0234): `ld c, (xix+hl)`,",
+     "0xFF = part not affected; C becomes the selector's low byte and B is chosen",
+     "by comparing the part's RPN word at 0x9674+2*part with 0x8080/0x8081/0x8082",
+     "(the RPN MSB/LSB stored with bit 7 set by MidiCC_Handler_DirectStoreA/B,",
+     "functions 34/35 <- CC101/CC100)."
+    ]
+   },
+   {
+    "len": 64,
+    "type": "short",
+    "per_line": 8,
+    "label": "MidiCC_PartTargets_BankSelect",
+    "comment": [
+     "MidiCC_PartTargets_BankSelect (+0x840, 32 x u16): functions 24 and 25 <- CC0",
+     "and CC32 (bank select MSB/LSB).  Readers MidiCC_Handler_PairedParamB",
+     "(0xFCFCFA, CC0: D = value, E = 0xFF) and MidiCC_Handler_PairedParamA",
+     "(0xFCFCBC, CC32: E = value, D = 0xFF), both gated by bit 4 of (0xFD57), ->",
+     "MidiStream_ExtendedDispatch_0x298."
+    ]
+   }
+  ],
+  "header_above_label": true
+ }
+]

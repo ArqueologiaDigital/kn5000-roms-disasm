@@ -694,21 +694,37 @@ MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	bit 0, (1074:16)
 	jrl nz, SysEx_InProgressByte
 	bit 6, (1063:16)
-	jr nz, ChanDisp_SysExInProgress
+	jr nz, ChanDisp_SecondDataByte
 	cp a, 0:i3
 	jr z, ChanDisp_NoStatusReturn
 	and a, 0x70
 	srl a, 2
 	xor w, w
-	ld xix, MIDI_CHANNEL_HANDLER_JUMP_TABLE_0x1
+	ld xix, MIDI_CHANNEL_HANDLERS
 	ld_sril3 XIX, 0x07, 0xf0, 0xe0
 	jp (xix)
+; MIDI_CHANNEL_HANDLER_JUMP_TABLE -- one 0xFF pad byte, then 8 handler pointers
+; (MIDI_CHANNEL_HANDLERS = this label + 1), one per status-byte high nibble.
+; Reader MIDI_CHANNEL_MESSAGE_DISPATCHER (just above) for each received DATA
+; byte: running status from (0x423), `and a, 0x70 / srl a, 2` (= 4 * nibble
+; index 0..7), `ld xix, MIDI_CHANNEL_HANDLERS / ld xix, (xix+wa) / jp (xix)`.
+; Slots: 8x 9x Bx Ex (two data bytes) -> ChanDisp_AwaitSecondDataByte (sets
+; bit 6 of (0x427), which routes the NEXT data byte to ChanDisp_SecondDataByte);
+; Cx Dx (one data byte) ->
+; MIDI_QUEUE_EVENT_TO_SEQUENCER; Ax (polyphonic key pressure) ->
+; ChanDisp_NoStatusReturn, a bare `ret`, i.e. ignored; Fx ->
+; MIDI_SYSTEM_EXCLUSIVE_HANDLER.  Previously spelled as `.byte` rows.
 MIDI_CHANNEL_HANDLER_JUMP_TABLE:
-	.byte 0xff, 0xa8, 0xf7, 0xfc, 0x00, 0xa8, 0xf7, 0xfc
-	.byte 0x00, 0x81, 0xf7, 0xfc, 0x00, 0xa8, 0xf7, 0xfc
-	.byte 0x00, 0x82, 0xf7, 0xfc, 0x00, 0x82, 0xf7, 0xfc
-	.byte 0x00, 0xa8, 0xf7, 0xfc, 0x00, 0x00, 0xf8, 0xfc
-	nop
+	.byte 0xff
+MIDI_CHANNEL_HANDLERS:
+	.long ChanDisp_AwaitSecondDataByte
+	.long ChanDisp_AwaitSecondDataByte
+	.long ChanDisp_NoStatusReturn
+	.long ChanDisp_AwaitSecondDataByte
+	.long MIDI_QUEUE_EVENT_TO_SEQUENCER
+	.long MIDI_QUEUE_EVENT_TO_SEQUENCER
+	.long ChanDisp_AwaitSecondDataByte
+	.long MIDI_SYSTEM_EXCLUSIVE_HANDLER
 
 ChanDisp_NoStatusReturn:
 	ret
@@ -731,12 +747,12 @@ QueueToSeq_OverflowFlag:
 	inc 1, (0xb7dd:16)
 	ret
 
-ChanDisp_QueueOverflow:
+ChanDisp_AwaitSecondDataByte:
 	set 6, (1063:16)
 	ld c, e
 	ret
 
-ChanDisp_SysExInProgress:
+ChanDisp_SecondDataByte:
 	bit 1, (1063:16)
 	jr z, ChanDisp_ThreeByteRoute
 	ld d, 0xf2:opc
@@ -904,22 +920,13 @@ READ_COM_SELECT_SWITCH:
 ;       is treated as MIDI selection.
 ;
 MidiSerial_OffsetTable:
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	normal
-	nop
-	push sr
-	pop sr
-	nop
+; 16 x u8, indexed by bits 7..4 of the port byte at 0x68: READ_COM_SELECT_SWITCH
+; does `ld a, (0x68) / srl a, 4 / ld a, (xix+a)` and stores the result in
+; (0xB7E0).  Checked against the table above: index 7 (bit 7 low) -> 0 MIDI,
+; 11 (bit 6 low) -> 1 MAC, 13 (bit 5 low) -> 2 PC1, 14 (bit 4 low) -> 3 PC2,
+; every other pattern -> 0.  Previously spelled as 11 x `nop` / `normal` /
+; `nop` / `push sr` / `pop sr` / `nop`.
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x03, 0x00
 
 SC0Init_ClearContextSlots:
 	ld (1080:16), 0
@@ -945,9 +952,17 @@ SC0Init_EnableRegisters:
 SC0Init_PaddingStub:
 	ret
 
+; MIDI_SC0_DISPATCH_TABLE -- 4 handler pointers: SC0Init_Entry, then
+; SC0Init_PaddingStub (a bare `ret`) three times.  Nothing in this file reads
+; it; its only reference is entry 3 of SystemConfig_PointerTable
+; (ui_widgets/widget_dispatch.s), and the reader of THAT table was not traced
+; by the midi lane, so the indexing is not pinned here beyond the 4 entries
+; that fit before MIDI_SC0_TX_DISPATCH.
 MIDI_SC0_DISPATCH_TABLE:
-	.byte 0x97, 0xf8, 0xfc, 0x00, 0x61, 0xf9, 0xfc, 0x00
-	.byte 0x61, 0xf9, 0xfc, 0x00, 0x61, 0xf9, 0xfc, 0x00
+	.long SC0Init_Entry
+	.long SC0Init_PaddingStub
+	.long SC0Init_PaddingStub
+	.long SC0Init_PaddingStub
 
 MIDI_SC0_TX_DISPATCH:
 	push xwa

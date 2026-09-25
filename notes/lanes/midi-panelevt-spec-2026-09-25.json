@@ -1,0 +1,199 @@
+[
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0609",
+  "end": "0xFD0649",
+  "kind": "data",
+  "header_above_label": true,
+  "comment": [
+   "PanelEvt_DispatchTable -- 16 handler pointers, second-level index = (0x964D).",
+   "Reader PanelEvent_DispatchByIndex (0xFD0A0D): `ld l, (0x964d) / cp l, a /",
+   "jr ugt <ret> / sll hl, 2 / ld xhl, (xiy+hl) / call (xhl)`; the loaders",
+   "PanelEvt_CheckFlag7_Dispatch_A/B/C and friends pass xiy = this table and",
+   "a = 0x0F, which pins 16 entries.  (0x964C)/(0x964D) and (0x964E)/(0x964F) are",
+   "the BC and DE that MIDI_DispatchCC stores before its own 192-entry dispatch."
+  ],
+  "segments": [
+   {
+    "len": 64,
+    "type": "long",
+    "per_line": 1,
+    "symbols": true
+   }
+  ]
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0876",
+  "end": "0xFD0934",
+  "kind": "data",
+  "header_above_label": true,
+  "comment": [
+   "PanelEvt_Dispatch6_TableAndHandlers -- one 0xFF pad byte, then 7 handler",
+   "pointers (PanelEvt_Dispatch6_Handlers = this label + 1): PanelEvt_Dispatch6Entry",
+   "loads `ld xiy, PanelEvt_Dispatch6_Handlers / ld a, 6 / calr",
+   "PanelEvent_DispatchByIndex`, so index (0x964D) 0..6.  The two slots that are",
+   "not MidiCC_NullHandlerBlock / PanelEvt_Handler_0_NoteOnParam follow the table,",
+   "each with the value map it reads.  Previously spelled as `swi 7 / popw bc /",
+   "ei 253 / jrl ule, -772 ...` with the handlers misframed behind it."
+  ],
+  "segments": [
+   {
+    "len": 1,
+    "type": "byte",
+    "per_line": 1
+   },
+   {
+    "len": 28,
+    "type": "long",
+    "per_line": 1,
+    "symbols": true,
+    "label": "PanelEvt_Dispatch6_Handlers"
+   },
+   {
+    "len": 43,
+    "type": "code",
+    "label": "PanelEvt_D6Slot3_SendCC80",
+    "comment": [
+     "PanelEvt_D6Slot3_SendCC80 -- slot 3 of PanelEvt_Dispatch6_Handlers.  If",
+     "(0x964F) & 7 is non-zero and bit 5 of (0xFD59) is set, E = PanelEvt_D6Slot3_ValueMap",
+     "[(0x964E) & 7] and it calls MidiChannel_ConfigureController (0xFD0D13) with",
+     "W = 0x10: CC function 16, which MidiCC_FunctionToCCNumber sends as CC80."
+    ]
+   },
+   {
+    "len": 1,
+    "type": "byte",
+    "per_line": 1
+   },
+   {
+    "len": 8,
+    "type": "byte",
+    "per_line": 8,
+    "label": "PanelEvt_D6Slot3_ValueMap",
+    "comment": [
+     "PanelEvt_D6Slot3_ValueMap (8 x u8): (0x964E) & 7 -> the CC80 value; read by",
+     "PanelEvt_D6Slot3_SendCC80 with `and e, 7 / ld e, (xiy+e)`, which pins 8 entries."
+    ]
+   },
+   {
+    "len": 91,
+    "type": "code",
+    "label": "PanelEvt_D6Slot5_SendCC82",
+    "comment": [
+     "PanelEvt_D6Slot5_SendCC82 -- slot 5 (and 6) of PanelEvt_Dispatch6_Handlers.",
+     "Gated by bit 6 of (0xFD59); from the bits of (0x964E) that changed it may send",
+     "an all-off first (E = 0), then E = <map>[1-based index of the lowest set bit],",
+     "the map being PanelEvt_D6Slot5_BitMapA when (0x964D) == 5 and ..._BitMapB",
+     "otherwise; both through MidiChannel_ConfigureController with W = 0x11: CC",
+     "function 17, sent as CC82."
+    ]
+   },
+   {
+    "len": 9,
+    "type": "byte",
+    "per_line": 9,
+    "label": "PanelEvt_D6Slot5_BitMapA",
+    "comment": [
+     "PanelEvt_D6Slot5_BitMapA / _BitMapB (9 x u8 each): bit position 1..8 -> the",
+     "CC82 value (entry 0 unused: the `inc 1, a / srl e, 1 / jr nc` loop starts",
+     "at 1).  Read by PanelEvt_D6Slot5_SendCC82 via `ld e, (xiy+a)`."
+    ]
+   },
+   {
+    "len": 9,
+    "type": "byte",
+    "per_line": 9,
+    "label": "PanelEvt_D6Slot5_BitMapB"
+   }
+  ]
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD093F",
+  "end": "0xFD0984",
+  "kind": "data",
+  "header_above_label": true,
+  "comment": [
+   "PanelEvt_Dispatch3_TableAndHandlers_A -- 4 handler pointers (no pad):",
+   "PanelEvt_Dispatch3Entry_A loads `ld xiy, <this> / ld a, 3 / calr",
+   "PanelEvent_DispatchByIndex`, so index (0x964D) 0..3.  Slot 1 follows."
+  ],
+  "segments": [
+   {
+    "len": 16,
+    "type": "long",
+    "per_line": 1,
+    "symbols": true
+   },
+   {
+    "len": 53,
+    "type": "code",
+    "label": "PanelEvt_D3ASlot1_SendCC91",
+    "comment": [
+     "PanelEvt_D3ASlot1_SendCC91 -- slot 1 of PanelEvt_Dispatch3_TableAndHandlers_A.",
+     "If bit 7 of (0x964F) is set, takes part 25's entry of the per-part pointer",
+     "table at PanelEvt_Handler_4_DualValueCheck_0x5A7 (0xFFFFFFFF = none), and",
+     "with bit 5 of (0xFD58) set sends E = 0x7F or 0 (bit 7 of (0x964E)) through",
+     "MidiChannel_ConfigureController with W = 7: CC function 7, sent as CC91."
+    ]
+   }
+  ]
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD098F",
+  "end": "0xFD099F",
+  "kind": "data",
+  "header_above_label": true,
+  "comment": [
+   "PanelEvt_Dispatch3_Table_B -- 4 handler pointers, all MidiCC_NullHandlerBlock:",
+   "PanelEvt_Dispatch3Entry_B loads `ld xiy, <this> / ld a, 3 / calr",
+   "PanelEvent_DispatchByIndex`.  Previously spelled `jrl ule, -772 / nop` x 4."
+  ],
+  "segments": [
+   {
+    "len": 16,
+    "type": "long",
+    "per_line": 1,
+    "symbols": true
+   }
+  ]
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD09AB",
+  "end": "0xFD0A0D",
+  "kind": "data",
+  "segments": [
+   {
+    "len": 48,
+    "type": "long",
+    "per_line": 1,
+    "symbols": true,
+    "label": "PanelEvt_Dispatch11_Handlers"
+   },
+   {
+    "len": 46,
+    "type": "code",
+    "label": "PanelEvt_D11Slot11_SendCC83",
+    "comment": [
+     "PanelEvt_D11Slot11_SendCC83 -- slot 11 of PanelEvt_Dispatch11_Handlers.  If",
+     "(0x964F) & 0xC0 is non-zero and bit 2 of (0xFD51) is set, E =",
+     "PanelEvt_D11Slot11_ValueMap[((0x964E) & 0xC0) >> 6] through",
+     "MidiChannel_ConfigureController with W = 0x12: CC function 18, sent as CC83."
+    ]
+   },
+   {
+    "len": 4,
+    "type": "byte",
+    "per_line": 4,
+    "label": "PanelEvt_D11Slot11_ValueMap",
+    "comment": [
+     "PanelEvt_D11Slot11_ValueMap (4 x u8): bits 7-6 of (0x964E) -> the CC83 value;",
+     "`and e, 0xc0 / srl e, 6 / ld e, (xiy+e)` pins 4 entries."
+    ]
+   }
+  ]
+ }
+]

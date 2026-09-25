@@ -1,0 +1,74 @@
+[
+ {
+  "file": "midi/ac_listener_handlers.s",
+  "start": "0xF761D2",
+  "end": "0xF76214",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFA85",
+  "end": "0xFCFA8C",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFAF5",
+  "end": "0xFCFAFC",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFB26",
+  "end": "0xFCFB2D",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD65BE",
+  "end": "0xFD65C7",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD65F1",
+  "end": "0xFD65F3",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6A52",
+  "end": "0xFD6A57",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6A60",
+  "end": "0xFD6A65",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6A74",
+  "end": "0xFD6A79",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6A89",
+  "end": "0xFD6A8E",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6E46",
+  "end": "0xFD6E4F",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6E56",
+  "end": "0xFD6E5A",
+  "kind": "code"
+ }
+]

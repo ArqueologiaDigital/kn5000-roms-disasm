@@ -25,301 +25,468 @@
 ;
 ; =============================================================================
 
-MIDI_INIT_SEQUENCES:
-	.byte 0x16, 0x04, 0x41, 0xf1, 0x34, 0x04, 0x41, 0xf1
-	.byte 0x35, 0x04, 0x41, 0xf1, 0x1e, 0x04, 0x00, 0x01
-	.byte 0xf1, 0xa6, 0x28, 0xb0, 0xd1
-MidiInit_FillLoop:
-	.byte 0xaa, 0x28, 0x3f, 0x00, 0x00, 0x66, 0x05, 0x21
-	.byte 0x85, 0x1e
-MidiInit_Stub1:
-	.byte 0x7f
-MidiInit_Stub2:
-	.byte 0x01
-MidiInit_Stub3:
-	.byte 0xf1
-INTRX0_CLEAR_ERROR_STATE:
-	.byte 0xa7, 0x28, 0xc8, 0x66, 0x0f, 0xd8, 0xd0, 0xf1
-	.byte 0x1b, 0x04, 0x41, 0xf1, 0x1c, 0x04, 0x50, 0xf1
-	.byte 0x21, 0x04, 0x00, 0x01, 0x0e, 0xc1, 0x54, 0x04
-	.byte 0x3f, 0x00, 0x66, 0x45, 0xf1, 0x20
-INTTX0_HANDLER:
-	.byte 0x04, 0xc8, 0x66, 0x3f, 0xf1, 0x20, 0x04, 0x00
-	.byte 0x06, 0xc1, 0x54, 0x04, 0x21, 0xc9, 0x69, 0xc9
-	.byte 0xee, 0x02, 0xc1, 0x17, 0x04, 0x89, 0xf1, 0x1f
-	.byte 0x04, 0xc8, 0x66, 0x09, 0xf1, 0x1f, 0x04, 0x00
-	.byte 0x06, 0xc1, 0x6a, 0x04, 0x89, 0xf1, 0x1e, 0x04
-	.byte 0xc8, 0x66, 0x09, 0xf1, 0x1e, 0x04, 0x00, 0x06
-IntTx0_FlagBit0Branch:
-	.byte 0xc1, 0x15, 0x04, 0x89, 0xf1, 0x21, 0x04, 0xc8
-	.byte 0x66, 0x09, 0xf1, 0x21, 0x04, 0x00, 0x06, 0xc1
-	.byte 0x1b
-IntTx0_FlagBit4Branch:
-	.byte 0x04, 0x89, 0xf1, 0x54
-IntTx0_SendHoldByte:
-	.byte 0x04, 0x00, 0x00, 0x0e, 0xf1, 0x20, 0x04
-IntTx0_FlagBit1Branch:
-	.byte 0x00, 0x06, 0xf1, 0xa7, 0x28, 0xc8, 0x66, 0x2f
-	.byte 0xf1, 0x21, 0x04, 0x00, 0x06, 0xf1, 0xa7, 0x28
-	.byte 0xc9
-IntTx0_FlagBit2Branch:
-	.byte 0x66, 0x24, 0xf1, 0xa6, 0x28, 0xc8, 0x6e, 0x0a
-	.byte 0xf1, 0x15, 0x04, 0x00, 0x00, 0xf1, 0x16, 0x04
-	.byte 0x00
-IntTx0_DequeueAndSend:
-	.byte 0x00, 0xf1, 0x34, 0x04, 0x00, 0x00, 0xf1, 0x35
-	.byte 0x04, 0x00, 0x00, 0xc1, 0xa6, 0x28
-IntTx0_CheckQueueEmpty:
-	push	xix
-	swi	6
-	ld	(1054:16), 6
-	ret
-IntTx0_DequeueAndSend_Code_Skip:
-	ld	(1066:16), 0
-	pushw	wa
-	ld	a, (1056:16)
-	and	a, 5
-	popw	wa
-IntTx0_Epilogue:
-	.byte 0x66, 0x50, 0xf1
-INTRX0_HANDLER:
-	.byte 0x52, 0xfd, 0xca, 0x66, 0x49, 0xcc, 0xcf, 0xfc
-	.byte 0x6e, 0x44, 0xf1, 0x20, 0x04, 0x00, 0x0c, 0xf1
-	.byte 0x1e, 0x04, 0xca, 0x66, 0x1c, 0xf1, 0x21, 0x04
-	.byte 0xca, 0x66, 0x04, 0xf1, 0xde, 0x33, 0xba, 0xf1
-	.byte 0x1e, 0x04, 0x00, 0x0c, 0xd1, 0xaa, 0x28, 0x3f
-	.byte 0x00, 0x00, 0x66, 0x05, 0x21, 0x86, 0x1e, 0x9a
-	.byte 0x00, 0xf1, 0x21, 0x04
-MIDI_RX_BYTE_DISPATCHER:
-	.byte 0xca, 0x66, 0x17, 0xf1, 0x21, 0x04, 0x00, 0x0c
-	.byte 0x28, 0xc1, 0x15, 0x04, 0x21, 0xf1, 0x36, 0x04
-	.byte 0x41, 0xc1, 0x16, 0x04, 0x21, 0xf1, 0x37, 0x04
-	.byte 0x41, 0x48, 0x0e, 0xf1, 0x52, 0xfd, 0xca, 0x66
-	.byte 0x10
-RxDisp_StatusByte:
-	.byte 0xf1, 0xa7, 0x28, 0xca, 0x6e, 0x0a, 0xcc, 0xcf
-	.byte 0xfa, 0x66, 0x06, 0xcc, 0xcf, 0xfb, 0x66, 0x0d
-	.byte 0x0e, 0xf1, 0x29, 0x04, 0xb9, 0xf1, 0xea, 0x00
-	.byte 0x00, 0xdd, 0x78, 0x8e, 0xfe, 0xf1, 0xa7, 0x28
-	.byte 0xc8, 0x66, 0x0c, 0xf1, 0x29, 0x04, 0xba, 0xf1
-	.byte 0xea, 0x00, 0x00, 0xdd
-RxDisp_ClearSysExState:
-	.byte 0x78, 0x30, 0xff, 0x0e, 0xf1, 0x59, 0x04, 0xc8
-	.byte 0x6e, 0x2a, 0x28, 0x44
-RxDisp_SysExError:
-	.byte 0x53, 0xe7, 0x01, 0x00, 0x9c, 0xfe, 0x20, 0xd8
-	.byte 0xc0, 0x66, 0x15, 0x9c
-RxDisp_DataByteDispatch:
-	swi	4
-	ld	c, 243:opc
-RxDisp_SaveContextAndReturn:
-	.byte 0x07, 0xf0, 0xec, 0x00, 0x81, 0xdb, 0x38, 0xff
-	.byte 0x07, 0xd8, 0x69
-MIDI_SYSTEM_MESSAGE_HANDLER:
-	.byte 0xbc, 0xfc, 0x53, 0xbc, 0xfe, 0x50, 0x48, 0xf1
-	.byte 0x75
-SysMsg_Return:
-	.byte 0x04
-SysMsg_NotActiveSense:
-	.byte 0x02, 0x00, 0x00, 0x0e, 0x44, 0x77, 0x04, 0x00
-	.byte 0x00, 0xd1, 0x75, 0x04, 0x23, 0xf3, 0x07, 0xf0
-	.byte 0xec, 0x00, 0x81, 0xdb, 0x61, 0xf1, 0x75, 0x04
-	.byte 0x53, 0x0e, 0xf1, 0x59, 0x04, 0xc8, 0x6e, 0x38
-	.byte 0xd2, 0x51
-SysMsg_CheckStop:
-	.byte 0xe7, 0x01, 0x3f, 0x02, 0x00, 0x67, 0x28, 0x02
-	.byte 0x06
-SysMsg_ClockTransportDispatch:
-	.byte 0x06, 0x44, 0x53, 0xe7, 0x01, 0x00, 0x9c, 0xfc
-	.byte 0x23, 0xf3, 0x07, 0xf0, 0xec, 0x41, 0xdb, 0x38
-	.byte 0xff, 0x07, 0xc1, 0x1b, 0x04, 0x21, 0xf3, 0x07
-ClkTick_TempoThresholdCheck:
-	.byte 0xf0, 0xec, 0x41, 0xdb, 0x38, 0xff, 0x07, 0xbc
-	.byte 0xfc, 0x53, 0x9c, 0xfe, 0x6a, 0x03, 0xf1, 0x75
-	.byte 0x04, 0x02, 0x00
-ClkTick_MidRangeTempoMul:
-	.byte 0x00, 0x0e, 0x44, 0x77, 0x04, 0x00, 0x00, 0xd1
-	.byte 0x75, 0x04
-ClkTick_HighTempoLoad:
-	.byte 0x23, 0xf3, 0x07, 0xf0
-ClkTick_WriteTimingReg:
-	.byte 0xec, 0x41, 0xdb, 0x61, 0xc1, 0x1b, 0x04, 0x21
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x41, 0xdb, 0x61, 0xf1
-	.byte 0x75, 0x04, 0x53, 0x0e
-ClkTick_BeatSubdivCheck:
-	.byte 0xc9, 0x8d, 0xc1, 0x23, 0x04, 0x21, 0xc9, 0x8c
-	.byte 0xf1, 0x32, 0x04, 0xc8, 0x7e, 0x07, 0x01, 0xf1
-	.byte 0x27, 0x04, 0xce, 0x6e, 0x67, 0xc9, 0xd8, 0x66
-	.byte 0x35, 0xc9, 0xcc, 0x70, 0xc9, 0xef, 0x02, 0xc8
-	.byte 0xd0, 0x44, 0x90, 0xef, 0xfc, 0x00, 0xe3, 0x07
-	.byte 0xf0
-ClkTick_PerClockCounters:
-	.byte 0xe0, 0x24, 0xb4, 0xd8, 0xff, 0xd7, 0xef, 0xfc
-	.byte 0x00, 0xd7, 0xef, 0xfc, 0x00, 0xb0, 0xef, 0xfc
-	.byte 0x00, 0xd7, 0xef, 0xfc, 0x00, 0xb1, 0xef, 0xfc
-	.byte 0x00, 0xb1, 0xef, 0xfc, 0x00, 0xd7, 0xef, 0xfc
-	.byte 0x00, 0x2f, 0xf0, 0xfc, 0x00, 0x0e, 0x44
-ClkTick_Src1FineUpdate:
-	.byte 0x7b, 0xf3, 0x01, 0x00, 0x9c, 0xfe, 0x3f, 0x03
-	.byte 0x00, 0x67, 0x11
-ClkTick_Src1CoarseUpdate:
-	ld	a, d
-	pushw	wa
-	call	15673155
-	inc	2, xsp
-	pushw	de
-	call	15673155
-	inc	2, xsp
-	ret
-	.byte 0xf1, 0x27, 0x04, 0xba
-	inc	1, (46913:16)
-	ret
-	.byte 0xf1, 0x27, 0x04, 0xbe
-	ld	c, e
-	ret
-	.byte 0xf1, 0x27, 0x04, 0xc9
-	jr	z, ClkTick_Src1FineUpdate_Code_Skip
-	ld	d, 242:opc
-ClkTick_Src1FineUpdate_Code_Skip:
-	ld	xix, 127867
-	.byte 0x9c, 0xfe, 0x3f, 0x40, 0x00
-	jr	ugt, ClkTick_Src1FineUpdate_Code_Entry
-	pushw	de
-	and	d, 240
-	cp	d, 144
-	popw	de
-	jr	nz, ClkTick_Src1FineUpdate_Code_Entry
-	cp	e, 0:i3
-	jr	nz, ClkTick_Src1FineUpdate_Code_Return
-ClkTick_Src1FineUpdate_Code_Entry:
-	.byte 0x9c, 0xfe, 0x3f, 0x04, 0x00
-	jr	c, ClkTick_Src1FineUpdate_Code_Entry2
-	ld	a, d
-	pushw	wa
-	call	SeqMain_WriteByte
-	inc	2, xsp
-	ld	a, c
-	pushw	wa
-	call	SeqMain_WriteByte
-	inc	2, xsp
-	pushw	de
-	call	SeqMain_WriteByte
-	inc	2, xsp
-	.byte 0xc1, 0x27, 0x04, 0x3c, 0xbd
-ClkTick_Src1FineUpdate_Code_Return:
-	ret
-ClkTick_Src1FineUpdate_Code_Entry2:
-	.byte 0xf1, 0x27, 0x04, 0xba
-	inc	1, (46913:16)
-	ret
-	ld	(1059:16), 0
-	cp	d, 240
-	jr	z, ClkTick_Src1FineUpdate_Code_Skip3
-	cp	d, 242
-	jr	z, ClkTick_Src1FineUpdate_Code_Entry3
-	cp	d, 243
-	jr	z, ClkTick_Src1FineUpdate_Code_Skip2
-	ret
-ClkTick_Src1FineUpdate_Code_Entry3:
-	.byte 0xc1, 0x27, 0x04, 0x3e, 0x42
-	ld	c, e
-	ret
-ClkTick_Src1FineUpdate_Code_Skip2:
-	jrl	-158
-ClkTick_Src1FineUpdate_Code_Skip3:
-	ld	(1074:16), 1
-	cp	e, 80
-	jr	z, ClkTick_Src1FineUpdate_Code_Entry4
-	cp	e, 65
-	jr	z, ClkTick_Src1FineUpdate_Code_Entry4
-	cp	e, 126
-	jr	nz, ClkTick_Src1FineUpdate_Code_Return2
-ClkTick_Src1FineUpdate_Code_Entry4:
-	.byte 0xf1, 0x32, 0x04, 0xb9
-	ld	a, d
-	pushw	wa
-	call	SeqBuf2_WriteByte
-	inc	2, xsp
-	pushw	de
-	call	SeqBuf2_WriteByte
-	inc	2, xsp
-ClkTick_Src1FineUpdate_Code_Return2:
-	ret
-	.byte 0xf1, 0x32, 0x04, 0xc9
-	jr	z, 13
-	.byte 0xf1, 0x32, 0x04, 0xcd
-	jr	nz, 7
-	pushw	de
-	call	15673503
-	inc	2, xsp
-	ret
-SndParam_Widget1_AppendType2_Helper2:
-	ld xwa, (0x0438:16)
-	ld xbc, (0x043c:16)
-	ld xde, (0x0440:16)
-	.byte 0xe1, 0x44, 0x04
-ClkTick_Src3LowerSyncCheck:
-	.byte 0x23, 0xe1, 0x48, 0x04, 0x24, 0xe1, 0x4c, 0x04
-	.byte 0x25, 0xe1, 0x50, 0x04, 0x26, 0x0e, 0xf1, 0x38
-	.byte 0x04, 0x60, 0xf1, 0x3c, 0x04, 0x61, 0xf1, 0x40
-	.byte 0x04, 0x62, 0xf1, 0x44, 0x04, 0x63, 0xf1, 0x48
-	.byte 0x04, 0x64
-ClkTick_Src3OverflowQueue:
-	.byte 0xf1, 0x4c, 0x04, 0x65, 0xf1, 0x50, 0x04, 0x66
-	.byte 0x0e, 0xf1, 0x4b, 0xb7, 0xb0, 0xf1, 0x45, 0xb7
-	.byte 0x00, 0x00, 0x1e, 0x79, 0x00, 0x1e, 0x0b, 0x00
-	.byte 0x1e, 0x4d, 0x00
-Transport_StopHandler:
-	.byte 0x1d, 0x31, 0xb2, 0xfd, 0x1e, 0x90, 0x00, 0x0e
-	.byte 0x1d, 0x3b, 0x08, 0xef, 0xcf, 0xdc, 0x66, 0x1f
-	.byte 0xf1, 0x38, 0xb7, 0x02, 0x12, 0x7a, 0xf1, 0x3a
-	.byte 0xb7, 0x02, 0xb0, 0x28, 0xf1, 0x3c, 0xb7, 0x02
-Transport_StopSrc1QueueEvent:
-	.byte 0x46, 0x10, 0xf1, 0x3e, 0xb7, 0x02, 0xe8, 0x03
-	.byte 0xf1, 0x40, 0xb7, 0x00, 0x08, 0x68, 0x1d, 0xf1
-	.byte 0x38, 0xb7
-Transport_StopSrc3Snapshot:
-	.byte 0x02, 0x8d, 0x5b, 0xf1, 0x3a, 0xb7, 0x02, 0x84
-	.byte 0x1e, 0xf1, 0x3c, 0xb7, 0x02, 0x35, 0x0c, 0xf1
-	.byte 0x3e, 0xb7, 0x02, 0xee, 0x02, 0xf1, 0x40, 0xb7
-	.byte 0x00, 0x06, 0x0e, 0xc1, 0x68
-Transport_Return:
-	nop
-Transport_NoClockSourcePath:
-	.byte 0x21, 0xc9, 0xef, 0x04, 0x44, 0x3b, 0xf1, 0xfc
-	.byte 0x00, 0xc3, 0x03, 0xf0, 0xe0, 0x21, 0xf1, 0x44
-	.byte 0xb7, 0x41, 0x0e, 0x00, 0x00, 0x00, 0x00
-Transport_NoClockReturn:
-	nop
-MIDI_START_PLAYBACK_REQUEST:
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
-	.byte 0x02, 0x03, 0x00, 0xf1, 0x38, 0x04, 0x00, 0x00
-	.byte 0xf1, 0x3c
-StartPlay_Return:
-	.byte 0x04
-StartPlay_Body:
-	nop
-	nop
-	ld	(1088:16), 0
-	ld	(1092:16), 0
-	ld	(1096:16), 0
-MIDI_RESET_PLAYBACK_STATE:
-	.byte 0xf1, 0x4c, 0x04, 0x00, 0x00, 0xf1, 0x50, 0x04
-	.byte 0x00, 0x00, 0x0e, 0x06, 0x06, 0xf1, 0xd2, 0x00
-	.byte 0x00, 0x29, 0xf1, 0xd1, 0x00, 0x00, 0x00, 0xc1
-	.byte 0x40, 0xb7, 0x21, 0xf1, 0xd3, 0x00, 0x41, 0xf1
-	.byte 0xea, 0x00, 0x00, 0x5d, 0xf1, 0xd0, 0x00, 0x00
-	.byte 0xfe, 0x06, 0x00, 0x0e, 0x0e, 0xc6, 0xf0, 0xfc
-	.byte 0x00, 0x90, 0xf1, 0xfc, 0x00, 0x90, 0xf1, 0xfc
-	.byte 0x00, 0x90, 0xf1
+;
+; v7 REGENERATED FROM v10's STRUCTURE (midi lane, 2026-09-25,
+; scripts/tools/midi_lane_v7_from_v10.py): every line below was derived
+; from the v10 line emitting the same bytes at v10 = v7 + 0x7D1, with v7's
+; own bytes decoded and re-encoded.  Addresses quoted in carried-over
+; headers are v10's.  Labels marked `v7 NAME DISPLACED` are the old v7
+; names, kept because another v7 file references them; see that note.
+;
+; The first bytes of this file are the TAIL of an instruction whose head
+; is the last bytes of the previous file: the v7 file boundary sits 0x41A
+; bytes off the v10 one, so it cuts an instruction.
+	.byte 0x16, 0x04, 0x41
+	ld (1076:16), a
+	ld (1077:16), a
+	ld (1054:16), 1
+	res 0, (0x28a6:16)
+	cpw (0x28aa:16), 0
+	jr	z, ResetPlay_Src3Check
+	ld a, 0x85:opc
+	calr	MIDI_QUEUE_EVENT_PAIR
 ResetPlay_Src3Check:
-	.byte 0xfc, 0x00, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d
-	.byte 0x3e, 0xc1, 0x44, 0xb7, 0x3f, 0x00, 0x6e, 0x05
-	.byte 0x1e, 0x0e, 0x00, 0x68, 0x04
+	bit 0, (0x28a7:16)
+	jr	z, ResetPlay_Return
+	xor wa, wa
+	ld (1051:16), a
+	ld (1052:16), wa
+	ld (1057:16), 1
 ResetPlay_Return:
-	.byte 0x1d
+	ret
 MIDI_APPLY_STARTUP_TIMING:
-	ldw de, 64945
+	cp (1108:16), 0
+	jr	z, StartTiming_ClearAndReturn
+	bit 0, (1056:16)
+	jr	z, StartTiming_ClearAndReturn
+	ld (1056:16), 6
+	ld a, (1108:16)
+	dec 1, a
+	sll a, 2
+	add (1047:16), a
+	bit 0, (1055:16)
+	jr	z, StartTiming_Src1Adjust
+	ld (1055:16), 6
+	add (1130:16), a
+StartTiming_Src1Adjust:
+	bit 0, (1054:16)
+	jr	z, StartTiming_Src2Adjust
+	ld (1054:16), 6
+	add (1045:16), a
+StartTiming_Src2Adjust:
+	bit 0, (1057:16)
+	jr	z, StartTiming_ClearAndReturn
+	ld (1057:16), 6
+	add (1051:16), a
+StartTiming_ClearAndReturn:
+	ld (1108:16), 0
+	ret
+Continue_SetRunning:
+	ld (1056:16), 6
+	bit 0, (0x28a7:16)
+	jr	z, Continue_Return
+	ld (1057:16), 6
+	bit 1, (0x28a7:16)
+	jr	z, Continue_Return
+	bit 0, (0x28a6:16)
+	jr	nz, Continue_ClearPositionAndSetSrc1
+	ld (1045:16), 0
+	ld (1046:16), 0
+Continue_ClearPositionAndSetSrc1:
+	ld (1076:16), 0
+	ld (1077:16), 0
+	and (0x28a6:16), 254
+	ld (1054:16), 6
+Continue_Return:
+	ret
+; v7 NAME DISPLACED: `IntTx0_DequeueAndSend_Code_Skip` sits where v10 has `AltClk_DisabledClockPath` (v10 0xFCF5F9).
+; Kept because another v7 file references this address by this name.
+IntTx0_DequeueAndSend_Code_Skip:
+AltClk_DisabledClockPath:
+	ld (1066:16), 0
+	pushw wa
+	ld a, (1056:16)
+	and a, 0x5
+	popw wa
+	jr	z, AltClk_NoSrcFlagPath
+	bit 2, (0xfd52:16)
+	jr	z, AltClk_Return
+	cp d, 0xfc
+	jr	nz, AltClk_Return
+	ld (1056:16), 12
+	bit 2, (1054:16)
+	jr	z, AltClk_StopSrc3Snapshot
+	bit 2, (1057:16)
+	jr	z, AltClk_StopSrc1Queue
+	set	2, (0x33de:16)
+AltClk_StopSrc1Queue:
+	ld (1054:16), 12
+	cpw (0x28aa:16), 0
+	jr	z, AltClk_StopSrc3Snapshot
+	ld a, 0x86:opc
+	calr	MIDI_QUEUE_EVENT_PAIR
+AltClk_StopSrc3Snapshot:
+	bit 2, (1057:16)
+	jr	z, AltClk_Return
+	ld (1057:16), 12
+	pushw wa
+	ld a, (1045:16)
+	ld (1078:16), a
+	ld a, (1046:16)
+	ld (1079:16), a
+	popw wa
+AltClk_Return:
+	ret
+AltClk_NoSrcFlagPath:
+	bit 2, (0xfd52:16)
+	jr	z, AltClk_NoMatchReturn
+	bit 2, (0x28a7:16)
+	jr	nz, AltClk_NoMatchReturn
+	cp d, 0xfa
+	jr	z, AltClk_StartArmTx
+	cp d, 0xfb
+	jr	z, AltClk_ContinueArmTx
+AltClk_NoMatchReturn:
+	ret
+AltClk_StartArmTx:
+	set 1, (1065:16)
+	ld (234:16), 221
+	jrl	SndParam_Widget1_AppendType2_Entry10
+AltClk_ContinueArmTx:
+	bit 0, (0x28a7:16)
+	jr	z, AltClk_Src3DisabledReturn
+	set 2, (1065:16)
+	ld (234:16), 221
+	jrl	Continue_SetRunning
+AltClk_Src3DisabledReturn:
+	ret
+MIDI_QUEUE_TRACK_EVENT:
+	bit 0, (1113:16)
+	jr	nz, QueueTrack_LinearBufWrite
+	pushw wa
+	ld xix, 0x1e753
+	ld wa, (xix - 2)
+	and wa, wa
+	jr	z, QueueTrack_FifoWriteOrClear
+	ld hl, (xix - 4)
+	stib_ind 0x07, 0xf0, 0xec, 0x81
+	minc1_16 hl, 0x7ff
+	dec 1, wa
+	ld (xix - 4), hl
+	ld (xix - 2), wa
+QueueTrack_FifoWriteOrClear:
+	popw wa
+	ldw (1141:16), 0
+	ret
+QueueTrack_LinearBufWrite:
+	ld xix, 0x477
+	ld hl, (1141:16)
+	stib_ind 0x07, 0xf0, 0xec, 0x81
+	inc 1, hl
+	ld (1141:16), hl
+	ret
+MIDI_QUEUE_EVENT_PAIR:
+	bit 0, (1113:16)
+	jr	nz, QueuePair_LinearBufWrite
+	cpw (0x01e751:24), 2
+	jr	c, QueuePair_FifoFullReturn
+	push	sr
+	ei 6
+	ld xix, 0x1e753
+	ld hl, (xix - 4)
+	stb_dri A, 0x07, 0xf0, 0xec
+	minc1_16 hl, 0x7ff
+	ld a, (1051:16)
+	stb_dri A, 0x07, 0xf0, 0xec
+	minc1_16 hl, 0x7ff
+	ld (xix - 4), hl
+	decm 2, (xix - 2)
+	pop	sr
+QueuePair_FifoFullReturn:
+	ldw (1141:16), 0
+	ret
+QueuePair_LinearBufWrite:
+	ld xix, 0x477
+	ld hl, (1141:16)
+	stb_dri A, 0x07, 0xf0, 0xec
+	inc 1, hl
+	ld a, (1051:16)
+	stb_dri A, 0x07, 0xf0, 0xec
+	inc 1, hl
+	ld (1141:16), hl
+	ret
+; v7 NAME DISPLACED: `ClkTick_BeatSubdivCheck` sits where v10 has `MIDI_CHANNEL_MESSAGE_DISPATCHER` (v10 0xFCF733).
+; The v7 code v10 calls `ClkTick_BeatSubdivCheck` is 0x41A earlier, at v7 0xFCEB48.
+; Kept because another v7 file references this address by this name.
+ClkTick_BeatSubdivCheck:
+MIDI_CHANNEL_MESSAGE_DISPATCHER:
+	ld e, a
+	ld a, (1059:16)
+	ld d, a
+	bit 0, (1074:16)
+	jrl	nz, SysEx_InProgressByte
+	bit 6, (1063:16)
+	jr	nz, ChanDisp_SecondDataByte
+	cp a, 0:i3
+	jr	z, ChanDisp_NoStatusReturn
+	and a, 0x70
+	srl a, 2
+	xor w, w
+	ld	xix, MIDI_CHANNEL_HANDLERS
+	ld_sril3 XIX, 0x07, 0xf0, 0xe0
+	jp (xix)
+; MIDI_CHANNEL_HANDLER_JUMP_TABLE -- one 0xFF pad byte, then 8 handler pointers
+; (MIDI_CHANNEL_HANDLERS = this label + 1), one per status-byte high nibble.
+; Reader MIDI_CHANNEL_MESSAGE_DISPATCHER (just above) for each received DATA
+; byte: running status from (0x423), `and a, 0x70 / srl a, 2` (= 4 * nibble
+; index 0..7), `ld xix, MIDI_CHANNEL_HANDLERS / ld xix, (xix+wa) / jp (xix)`.
+; Slots: 8x 9x Bx Ex (two data bytes) -> ChanDisp_AwaitSecondDataByte (sets
+; bit 6 of (0x427), which routes the NEXT data byte to ChanDisp_SecondDataByte);
+; Cx Dx (one data byte) ->
+; MIDI_QUEUE_EVENT_TO_SEQUENCER; Ax (polyphonic key pressure) ->
+; ChanDisp_NoStatusReturn, a bare `ret`, i.e. ignored; Fx ->
+; MIDI_SYSTEM_EXCLUSIVE_HANDLER.  Previously spelled as `.byte` rows.
+	.byte 0xff
+MIDI_CHANNEL_HANDLERS:
+	.long ChanDisp_AwaitSecondDataByte
+	.long ChanDisp_AwaitSecondDataByte
+	.long ChanDisp_NoStatusReturn
+	.long ChanDisp_AwaitSecondDataByte
+	.long MIDI_QUEUE_EVENT_TO_SEQUENCER
+	.long MIDI_QUEUE_EVENT_TO_SEQUENCER
+	.long ChanDisp_AwaitSecondDataByte
+	.long MIDI_SYSTEM_EXCLUSIVE_HANDLER
+ChanDisp_NoStatusReturn:
+	ret
+MIDI_QUEUE_EVENT_TO_SEQUENCER:
+	ld xix, 0x1f37b
+	cpw (xix - 2), 0x3
+	jr	c, QueueToSeq_OverflowFlag
+	ld a, d
+	pushw wa
+	call	SeqMain_WriteByte
+	inc 2, xsp
+	pushw de
+	call	SeqMain_WriteByte
+	inc 2, xsp
+	ret
+QueueToSeq_OverflowFlag:
+	set 2, (1063:16)
+	incdi8	1, (0xb741)
+	ret
+ChanDisp_AwaitSecondDataByte:
+	set 6, (1063:16)
+	ld c, e
+	ret
+ChanDisp_SecondDataByte:
+	bit 1, (1063:16)
+	jr	z, ChanDisp_ThreeByteRoute
+	ld d, 0xf2:opc
+ChanDisp_ThreeByteRoute:
+	ld xix, 0x1f37b
+	cpw (xix - 2), 0x40
+	jr	ugt, ChanDisp_EnqueueThreeBytes
+	pushw de
+	and d, 0xf0
+	cp d, 0x90
+	popw de
+	jr	nz, ChanDisp_EnqueueThreeBytes
+	cp e, 0:i3
+	jr	nz, ChanDisp_NoteOnZeroReturn
+ChanDisp_EnqueueThreeBytes:
+	cpw (xix - 2), 0x4
+	jr	c, ChanDisp_QueueOverflowSet
+	ld a, d
+	pushw wa
+	call	SeqMain_WriteByte
+	inc 2, xsp
+	ld a, c
+	pushw wa
+	call	SeqMain_WriteByte
+	inc 2, xsp
+	pushw de
+	call	SeqMain_WriteByte
+	inc 2, xsp
+	and (1063:16), 189
+ChanDisp_NoteOnZeroReturn:
+	ret
+ChanDisp_QueueOverflowSet:
+	set 2, (1063:16)
+	incdi8	1, (0xb741)
+	ret
+MIDI_SYSTEM_EXCLUSIVE_HANDLER:
+	ld (1059:16), 0
+	cp d, 0xf0
+	jr	z, SysEx_StartByte
+	cp d, 0xf2
+	jr	z, SysEx_SongPositionSetup
+	cp d, 0xf3
+	jr	z, SysEx_SongSelectQueue
+	ret
+SysEx_SongPositionSetup:
+	or (1063:16), 66
+	ld c, e
+	ret
+SysEx_SongSelectQueue:
+	jrl	MIDI_QUEUE_EVENT_TO_SEQUENCER
+SysEx_StartByte:
+	ld (1074:16), 1
+	cp e, 0x50
+	jr	z, SysEx_CaptureManufacturerId
+	cp e, 0x41
+	jr	z, SysEx_CaptureManufacturerId
+	cp e, 0x7e
+	jr	nz, SysEx_Return
+SysEx_CaptureManufacturerId:
+	set 1, (1074:16)
+	ld a, d
+	pushw wa
+	call	SeqBuf2_WriteByte
+	inc 2, xsp
+	pushw de
+	call	SeqBuf2_WriteByte
+	inc 2, xsp
+SysEx_Return:
+	ret
+SysEx_InProgressByte:
+	bit 1, (1074:16)
+	jr	z, SysEx_InProgressReturn
+	bit 5, (1074:16)
+	jr	nz, SysEx_InProgressReturn
+	pushw de
+	call	SeqBuf2_WriteByte
+	inc 2, xsp
+SysEx_InProgressReturn:
+	ret
+; v7 NAME DISPLACED: `SndParam_Widget1_AppendType2_Helper2` sits where v10 has `MIDI_RX_CONTEXT_RESTORE` (v10 0xFCF85D).
+; Kept because another v7 file references this address by this name.
+SndParam_Widget1_AppendType2_Helper2:
+MIDI_RX_CONTEXT_RESTORE:
+	ld xwa, (1080:16)
+	ld xbc, (1084:16)
+	ld xde, (1088:16)
+	ld xhl, (1092:16)
+	ld xix, (1096:16)
+	ld xiy, (1100:16)
+	ld xiz, (1104:16)
+	ret
+MIDI_RX_CONTEXT_SAVE:
+	ld (1080:16), xwa
+	ld (1084:16), xbc
+	ld (1088:16), xde
+	ld (1092:16), xhl
+	ld (1096:16), xix
+	ld (1100:16), xiy
+	ld (1104:16), xiz
+	ret
+SC0Init_Entry:
+	res	0, (0xb74b:16)
+	ld	(0xb745:16), 0
+	calr	SC0Init_ClearContextSlots
+	calr	SC0Init_StandardBaudTable
+	calr	READ_COM_SELECT_SWITCH
+	call	16626225
+	calr	SC0Init_EnableRegisters
+	ret
+SC0Init_StandardBaudTable:
+	call	Get_Region_Code
+	cp l, 4:i3
+	jr	z, SC0Init_AlternateBaudTable
+	ldw	(0xb738:16), 0x7a12
+	ldw	(0xb73a:16), 0x28b0
+	ldw	(0xb73c:16), 0x1046
+	ldw	(0xb73e:16), 0x3e8
+	ld	(0xb740:16), 8
+	jr	SC0Init_BaudTableReturn
+SC0Init_AlternateBaudTable:
+	ldw	(0xb738:16), 0x5b8d
+	ldw	(0xb73a:16), 0x1e84
+	ldw	(0xb73c:16), 0xc35
+	ldw	(0xb73e:16), 0x2ee
+	ld	(0xb740:16), 6
+SC0Init_BaudTableReturn:
+	ret
+READ_COM_SELECT_SWITCH:
+	ld a, (104:16)
+	srl a, 4
+	ld	xix, MidiSerial_OffsetTable
+	ldb_sri A, 0x03, 0xf0, 0xe0
+	ld	(0xb744:16), a
+	ret
+; Input: Active-low "COM_SELECT"
+; bit 7: MIDI
+; bit 6: MAC
+; bit 5: PC1
+; bit 4: PC2
+;
+; Output:
+;   000h = MIDI
+;   001h = MAC
+;   002h = PC1
+;   003h = PC2
+;
+; Note: Bad switch positioning data (more than a single low-bit)
+;       is treated as MIDI selection.
+;
+MidiSerial_OffsetTable:
+; 16 x u8, indexed by bits 7..4 of the port byte at 0x68: READ_COM_SELECT_SWITCH
+; does `ld a, (0x68) / srl a, 4 / ld a, (xix+a)` and stores the result in
+; (0xB7E0).  Checked against the table above: index 7 (bit 7 low) -> 0 MIDI,
+; 11 (bit 6 low) -> 1 MAC, 13 (bit 5 low) -> 2 PC1, 14 (bit 4 low) -> 3 PC2,
+; every other pattern -> 0.  Previously spelled as 11 x `nop` / `normal` /
+; `nop` / `push sr` / `pop sr` / `nop`.
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x03, 0x00
+SC0Init_ClearContextSlots:
+	ld (1080:16), 0
+	ld (1084:16), 0
+	ld (1088:16), 0
+	ld (1092:16), 0
+	ld (1096:16), 0
+; v7 NAME DISPLACED: `MIDI_RESET_PLAYBACK_STATE` sits where v10 has no label (v10 0xFCF935).
+; The v7 code v10 calls `MIDI_RESET_PLAYBACK_STATE` is 0x41A earlier, at v7 0xFCED4A.
+; Kept because another v7 file references this address by this name.
+MIDI_RESET_PLAYBACK_STATE:
+	ld (1100:16), 0
+	ld (1104:16), 0
+	ret
+SC0Init_EnableRegisters:
+	ei 6
+	ld (210:16), 41
+	ld (209:16), 0
+	ld	a, (0xb740:16)
+	ld (211:16), a
+	ld (234:16), 93
+	ld (208:16), 254
+	ei 0
+	ret
+SC0Init_PaddingStub:
+	ret
+; MIDI_SC0_DISPATCH_TABLE -- 4 handler pointers: SC0Init_Entry, then
+; SC0Init_PaddingStub (a bare `ret`) three times.  Nothing in this file reads
+; it; its only reference is entry 3 of SystemConfig_PointerTable
+; (ui_widgets/widget_dispatch.s), and the reader of THAT table was not traced
+; by the midi lane, so the indexing is not pinned here beyond the 4 entries
+; that fit before MIDI_SC0_TX_DISPATCH.
+MIDI_SC0_DISPATCH_TABLE:
+	.long SC0Init_Entry
+	.long SC0Init_PaddingStub
+	.long SC0Init_PaddingStub
+	.long SC0Init_PaddingStub
+MIDI_SC0_TX_DISPATCH:
+	push xwa
+	push xbc
+	push xde
+	push xhl
+	push xix
+	push xiy
+	push xiz
+	cp	(0xb744:16), 0
+	jr	nz, SC0TxDisp_NonMidiPath
+	calr	MIDI_SC0_ENABLE_TX
+	jr	SC0TxDisp_RestoreAndReturn
+SC0TxDisp_NonMidiPath:
+	call	16625970
+SC0TxDisp_RestoreAndReturn:
 	pop xiz
 	pop xiy
 	pop xix
@@ -328,289 +495,428 @@ MIDI_APPLY_STARTUP_TIMING:
 	pop xbc
 	pop xwa
 	ret
-	push SR
-	ei 0x06
-	cp (0x0474:16), 0x55
-	jr z, .Lc_fcf1d1
-	ld (0x00ea:16), 0xdd
-	jr t, .Lc_fcf1da
-.Lc_fcf1d1:
-	call SeqBuf_MidiOut_Init
-	ld (0x0429:16), 0x00
-.Lc_fcf1da:
-	pop SR
-	ret
-	.byte 0x0e, 0xf1, 0x50, 0xfd, 0xcc, 0x6e, 0x4f
-StartTiming_Src1Adjust:
-	call	15673249
-	ldw	(36930:16), 0
-	ld	xix, 127867
-StartTiming_Src2Adjust:
-	.byte 0x9c, 0xf6, 0x20, 0x9c, 0xfa, 0xf0, 0x66, 0x25
-	.byte 0xc1, 0x28, 0x04, 0x3c, 0xfe, 0x1d, 0x54
-StartTiming_ClearAndReturn:
-	.byte 0xf2, 0xfc, 0xc1, 0x98, 0x95, 0x21
-Continue_SetRunning:
-	.byte 0xf1, 0xb8, 0x95, 0x41, 0xc9, 0xcc, 0x70, 0xc9
-	.byte 0xef, 0x02, 0x46, 0x34, 0xf2, 0xfc, 0x00, 0xe3
-	.byte 0x03, 0xf8, 0xe0, 0x26, 0xb6, 0xe8, 0x68, 0xce
-	.byte 0x1d, 0x93, 0xbf, 0xfc, 0x44, 0xa0, 0xbc, 0x00
-	.byte 0x00, 0xd1, 0x42, 0x90, 0x23, 0xf3
-Continue_ClearPositionAndSetSrc1:
-	.byte 0x07, 0xf0, 0xec, 0x00, 0xff, 0x0e, 0xff, 0x04
-	.byte 0xf3, 0xfc, 0x00, 0x04, 0xf3, 0xfc, 0x00, 0x04
-	.byte 0xf3, 0xfc, 0x00, 0x04
-Continue_Return:
-	.byte 0xf3
-AltClk_DisabledClockPath:
-	.byte 0xfc, 0x00, 0x04, 0xf3, 0xfc, 0x00, 0x04, 0xf3
-	.byte 0xfc, 0x00, 0x04, 0xf3, 0xfc, 0x00, 0x7c, 0xf2
-	.byte 0xfc, 0x00, 0x46, 0x7b, 0xf3, 0x01, 0x00, 0x45
-	.byte 0x98, 0x95, 0x00, 0x00, 0xbd, 0x03, 0x00, 0x00
-	.byte 0x1d, 0xae, 0x27, 0xef, 0xf5, 0xf4, 0x47, 0x9e
-	.byte 0xf6, 0x23, 0x9e, 0xfa, 0xf3, 0x66, 0x0a, 0xc3
-AltClk_StopSrc1Queue:
-	.byte 0x07, 0xf8, 0xec, 0x21, 0xc9, 0x33, 0x07, 0x66
-	.byte 0xe7, 0x0e, 0xc1, 0x98, 0x95, 0x27, 0xcf, 0xcc
-	.byte 0x0f, 0xcf
-AltClk_StopSrc3Snapshot:
-	.byte 0xec, 0x02, 0xdb, 0x12, 0x46, 0x96, 0xf2, 0xfc
-	.byte 0x00, 0xe3, 0x07, 0xf8, 0xec, 0x26, 0xb6, 0xe8
-	.byte 0x0e, 0xff, 0xfe, 0xf2, 0xfc, 0x00, 0xfe, 0xf2
-	.byte 0xfc, 0x00, 0xd6, 0xf2, 0xfc
-AltClk_Return:
-	nop
-AltClk_NoSrcFlagPath:
-	.byte 0xec, 0xf2, 0xfc, 0x00, 0xfe, 0xf2, 0xfc, 0x00
-	.byte 0xfe, 0xf2, 0xfc, 0x00, 0xfe, 0xf2, 0xfc, 0x00
-	.byte 0xfe, 0xf2, 0xfc, 0x00, 0xfe, 0xf2
-AltClk_NoMatchReturn:
-	swi	4
-AltClk_StartArmTx:
-	.byte 0x00, 0xfe, 0xf2, 0xfc, 0x00, 0xfe, 0xf2, 0xfc
-	.byte 0x00, 0xfe, 0xf2, 0xfc
-AltClk_ContinueArmTx:
-	.byte 0x00, 0xfe, 0xf2, 0xfc, 0x00, 0xfe, 0xf2, 0xfc
-	.byte 0x00, 0xfe, 0xf2, 0xfc, 0x00, 0xfe, 0xf2, 0xfc
-	.byte 0x00, 0xd1
-AltClk_Src3DisabledReturn:
-	.byte 0x99
-MIDI_QUEUE_TRACK_EVENT:
-	.byte 0x95, 0x20, 0xf1, 0x2d, 0x04, 0x41, 0xf1, 0x52
-	.byte 0xfd, 0xca, 0x66, 0x03, 0xc8, 0x31, 0x07, 0xf1
-	.byte 0x2e, 0x04, 0x40, 0x0e, 0xc1, 0x99, 0x95, 0x21
-	.byte 0xf1, 0x51, 0xfd, 0xcb, 0x66, 0x03, 0xc9, 0x31
-	.byte 0x07, 0xf1, 0x2c, 0x04, 0x41, 0x0e, 0xc1, 0x28
-QueueTrack_FifoWriteOrClear:
-	.byte 0x04, 0x3e, 0x01, 0x0e, 0xc1, 0x98, 0x95, 0x21
-QueueTrack_LinearBufWrite:
-	.byte 0xc9, 0xcc, 0x0f, 0x43, 0x58, 0x94, 0x00, 0x00
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21, 0xc9, 0xcf, 0xff
-	.byte 0x66, 0x50, 0xf1, 0xcc, 0x95, 0x41
-MIDI_QUEUE_EVENT_PAIR:
-	.byte 0x43, 0x78, 0x94, 0x00, 0x00, 0xc3, 0x03, 0xec
-	.byte 0xe0, 0x21, 0xc9, 0xd8, 0x66, 0x3e, 0xf1, 0xcd
-	.byte 0x95, 0x41, 0xf1, 0xcf, 0x95, 0x41, 0xc1, 0xcc
-	.byte 0x95, 0x61, 0xce, 0xd6, 0xc1, 0xcc, 0x95, 0x27
-	.byte 0x44, 0x78, 0x94, 0x00, 0x00, 0xc3, 0x07, 0xf0
-	.byte 0xec, 0x21, 0xf1, 0xce, 0x95, 0x41, 0xce, 0xd6
-	.byte 0xc1, 0x98, 0x95, 0x27, 0xcf, 0xcc, 0x70
-QueuePair_FifoFullReturn:
-	.byte 0xdb, 0xef, 0x02, 0x44, 0x6c, 0xf3, 0xfc
-QueuePair_LinearBufWrite:
-	.byte 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x24, 0xb4, 0xe8
-	.byte 0xc1, 0xcf, 0x95, 0x69, 0x6e, 0xca, 0x0e, 0xff
-	.byte 0x8c, 0xf3, 0xfc, 0x00, 0x8c, 0xf3, 0xfc, 0x00
-	.byte 0x8c, 0xf3, 0xfc, 0x00, 0x92, 0xf3, 0xfc, 0x00
-MIDI_CHANNEL_MESSAGE_DISPATCHER:
-	.byte 0xcb, 0xfb, 0xfc, 0x00, 0x45, 0xfc, 0xfc, 0x00
-	.byte 0x07, 0xfc, 0xfc, 0x00, 0x8c, 0xf3, 0xfc, 0x00
-	.byte 0xc1, 0x28, 0x04, 0x3e, 0x01, 0x0e, 0x44, 0x96
-	.byte 0x06, 0xfd, 0x00, 0xc1, 0x99, 0x95, 0x27, 0xc3
-	.byte 0x03, 0xf0, 0xec, 0x21, 0xf1, 0xbb, 0x95, 0x41
-	.byte 0xc9, 0xcf, 0xff, 0x66, 0x38
-MIDI_CHANNEL_HANDLER_JUMP_TABLE:
-	.incbin "includes/romslices/v7_transplant_MIDI_CHANNEL_HANDLER_JUMP_TABLE.bin"
-ChanDisp_NoStatusReturn:
-	.byte 0x66
-MIDI_QUEUE_EVENT_TO_SEQUENCER:
-	.byte 0x15, 0xd8, 0x12, 0xc1, 0xbb, 0x95, 0x21, 0xd8
-	.byte 0xec, 0x02, 0x44, 0xe2, 0xf3, 0xfc, 0x00, 0xe3
-	.byte 0x07, 0xf0, 0xe0, 0x24, 0xb4, 0xe8, 0x0e, 0x3a
-	.byte 0xf6, 0xfc, 0x00, 0xfc, 0xf6
-QueueToSeq_OverflowFlag:
-	swi	4
-	nop
-	push	xiy
-	ldx
-	swi	4
-	nop
-	jrl	nz, -777
-ChanDisp_QueueOverflow:
-	.byte 0x00, 0xbf, 0xf7, 0xfc, 0x00, 0x00, 0xf8
-ChanDisp_SysExInProgress:
-	swi	4
-	nop
-	ld	xbc, 2164325624
-	swi	0
-ChanDisp_ThreeByteRoute:
-	.byte 0xfc, 0x00, 0x7a, 0xf6, 0xfc, 0x00, 0xbb, 0xf6
-	.byte 0xfc, 0x00, 0xcc, 0xf8, 0xfc, 0x00, 0xcd, 0xf8
-	.byte 0xfc, 0x00, 0xce, 0xf8, 0xfc, 0x00, 0x0f, 0xf9
-	.byte 0xfc, 0x00
-ChanDisp_EnqueueThreeBytes:
-	.byte 0x50, 0xf9, 0xfc, 0x00, 0x91, 0xf9, 0xfc, 0x00
-	.byte 0x67, 0xf5, 0xfc, 0x00, 0xaa, 0xf5, 0xfc, 0x00
-	.byte 0xa3, 0xf4, 0xfc, 0x00, 0xa2, 0xf4, 0xfc, 0x00
-	.byte 0xa2, 0xf4, 0xfc, 0x00, 0xa2, 0xf4, 0xfc, 0x00
-	.byte 0xa2, 0xf4, 0xfc, 0x00, 0xa2
-ChanDisp_NoteOnZeroReturn:
-	.byte 0xf4
-
-ChanDisp_QueueOverflowSet:
-	.byte 0xfc, 0x00, 0x29, 0xf5, 0xfc, 0x00, 0xeb, 0xf4
-	.byte 0xfc
-MIDI_SYSTEM_EXCLUSIVE_HANDLER:
-	.byte 0x00, 0xa2, 0xf4, 0xfc, 0x00, 0xa2, 0xf4, 0xfc
-	.byte 0x00, 0xa2, 0xf4, 0xfc, 0x00, 0xa2, 0xf4, 0xfc
-	.byte 0x00, 0xa2, 0xf4, 0xfc, 0x00
-SysEx_SongPositionSetup:
-	.byte 0xa2, 0xf4, 0xfc, 0x00, 0xd2, 0xf9, 0xfc, 0x00
-SysEx_SongSelectQueue:
-	jr	ule, -6
-	swi	4
-SysEx_StartByte:
-	.byte 0x00, 0xce, 0xfa, 0xfc, 0x00, 0xfd, 0xfa, 0xfc
-	.byte 0x00, 0xa2, 0xf4, 0xfc, 0x00, 0xa2, 0xf4, 0xfc
-	.byte 0x00, 0xa2, 0xf4, 0xfc
-SysEx_CaptureManufacturerId:
-	.byte 0x00, 0xa2, 0xf4, 0xfc, 0x00, 0x2e, 0xfb, 0xfc
-	.byte 0x00, 0x64, 0xfb, 0xfc, 0x00, 0xa2, 0xf4, 0xfc
-	.byte 0x00, 0xa2, 0xf4, 0xfc
-SysEx_Return:
-	nop
-SysEx_InProgressByte:
-	.byte 0xa2, 0xf4, 0xfc, 0x00, 0xa2, 0xf4, 0xfc, 0x00
-	.byte 0xa2, 0xf4, 0xfc, 0x00, 0xa2, 0xf4, 0xfc, 0x00
-	.byte 0x0e, 0xf1, 0x51
-SysEx_InProgressReturn:
-	swi	5
-	inc	6, b
-	push	xiy
-	ld	a, (38350:16)
-	cp	a, 25
-	jr	nz, 52
-	cp	(38331:16), 18
-	jr	nz, 45
-	xor	e, e
-	ld	a, (38298:16)
-	cp	a, 2:i3
-	jr	ugt, 10
-	ld	xix, 16577768
-	ld_rr8b	e, xix, a
-	ldw	bc, 2968
-	ld	d, 192:opc
-	ld	a, (38299:16)
-	ld	(38316:16), a
-	ld	(38312:16), bc
-	ld	(38314:16), de
-	call	16563580
-	ret
-	swi	7
-	nop
-	.byte 0x80, 0x40
-	extz	hl
-	ld	l, (38350:16)
-	cp	l, 31
-	jr	ugt, 50
-	.byte 0xf1, 0x57, 0xfd, 0xcc
-	jr	z, 44
-	sll	hl, 1
-	ld	xix, 16584406
-	ld_rrw	bc, xix, hl
-	cp	c, 255
-	jr	z, 26
-	ld	e, (38298:16)
-	ld	d, 255:opc
-	ld	a, (38299:16)
-	ld	(38316:16), a
-	ld	(38312:16), bc
-	ld	(38314:16), de
-	call	16565737
-	ret
-	extz	hl
-	ld	l, (38350:16)
-	cp	l, 31
-	jr	ugt, SysEx_InProgressByte_Code_Return
-	.byte 0xf1, 0x57, 0xfd, 0xcc
-	jr	z, SysEx_InProgressByte_Code_Return
-	sll	hl, 1
-	ld	xix, 16584406
-	ld_rrw	bc, xix, hl
-	cp	c, 255
-	jr	z, SysEx_InProgressByte_Code_Return
-	ld	d, (38298:16)
-	ld	e, 255:opc
-	ld	a, (38299:16)
-	ld	(38316:16), a
-	ld	(38312:16), bc
-	ld	(38314:16), de
-	call	16565737
-SysEx_InProgressByte_Code_Return:
-	ret
-	ld	a, (38350:16)
-	cp	a, 16
-	jr	nz, SysEx_InProgressByte_Code_Return2
-	cp	(38331:16), 16
-	jr	nz, SysEx_InProgressByte_Code_Return2
-	xor	e, e
-	ld	a, (38298:16)
-	cp	a, 3:i3
-	jr	ugt, 10
-	ld	xix, 16577958
-	ld_rr8b	e, xix, a
-	ldw	bc, 840
-	ld	d, 7:opc
-	ld	a, (38299:16)
-	ld	(38316:16), a
-	ld	(38312:16), bc
-	ld	(38314:16), de
-	call	16563640
-SysEx_InProgressByte_Code_Return2:
-	ret
-	swi	7
-	nop
+MIDI_SC0_ENABLE_TX:
 	push	sr
-	normal
+	ei 6
+	cp (1140:16), 85
+	jr	z, SC0TxEnable_MidiActivePath
+	ld (234:16), 221
+	jr	SC0TxEnable_Return
+SC0TxEnable_MidiActivePath:
+	call	SeqBuf_MidiOut_Init
+	ld (1065:16), 0
+SC0TxEnable_Return:
 	pop	sr
-	ld	a, (38350:16)
+	ret
+; =============================================================================
+; MIDI Dispatch Handlers (11K lines)
+; =============================================================================
+;
+; MIDI Control Change handlers (22 types), serial input parsing,
+; file data validation, sound mode handlers, and arpeggiator queue.
+; The main MIDI message routing and processing layer.
+; =============================================================================
+
+
+
+MidiSerial_RetStub:
+	ret
+MidiSerial_ProcessInput:
+	bit 4, (0xfd50:16)
+	jr	nz, MidiSerial_Return
+	call	SeqMain_SaveWritePos
+	ldw	(0x9042:16), 0
+MidiSerial_PumpLoop:
+	ld xix, 0x1f37b
+	ld wa, (xix - 10)
+	cp wa, (xix - 6)
+	jr	z, MidiSerial_PumpDone
+	and (1064:16), 254
+	call	MidiSerial_WaitForData
+	ld	a, (0x9598:16)
+	ld	(0x95b8:16), a
+	and a, 0x70
+	srl a, 2
+	ld	xiz, MidiSerial_StatusHandlers
+	ld_sril3 XIZ, 0x03, 0xf8, 0xe0
+	call (xiz)
+	jr	MidiSerial_PumpLoop
+MidiSerial_PumpDone:
+	call	MidiStream_LoadAllPresets
+	ld	xix, 0xbca0
+	ld	hl, (0x9042:16)
+	stib_ind 0x07, 0xf0, 0xec, 0xff
+MidiSerial_Return:
+	ret
+; MidiSerial_StatusTable -- one 0xFF pad byte, then 8 handler pointers indexed by
+; the status byte's high nibble.  Reader MidiSerial_PumpLoop (this file): `ld a,
+; (0x9634) / and a, 0x70 / srl a, 2` (= 4 * ((status >> 4) & 7)), `ld xiz,
+; MidiSerial_StatusTable_0x1 / ld xiz, (xiz+a) / call (xiz)`, so entry 0 is at +1
+; (MidiSerial_StatusTable_0x1 = this label + 1, shared/positional_labels.s) and
+; 8 entries reach MidiSerial_WaitForData.  Slots 0-6 (8x note off .. Ex pitch
+; bend) -> MidiRx_ChannelMsgDispatch; slot 7 (Fx) -> MidiRx_SystemMsgDispatch,
+; which dispatches system messages on the low nibble through
+; MidiSerial_CmdJumpTable.  Previously spelled as `swi 7 / cpm_spiw ix, 250 /
+; nop` x 7.
+	.byte 0xff
+MidiSerial_StatusHandlers:
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_SystemMsgDispatch
+MidiSerial_WaitForData:
+	ld xiz, 0x1f37b
+	ld	xiy, 0x9598
+	ld (xiy + 3), 0x0
+MidiSerial_WaitLoop:
+	call	SeqMain_ReadData
+	lda_dpi XSP, 0xf4
+	ld hl, (xiz - 10)
+	cp hl, (xiz - 6)
+	jr	z, MidiSerial_WaitDone
+	ldb_sri A, 0x07, 0xf8, 0xec
+	bit 7, a
+	jr	z, MidiSerial_WaitLoop
+MidiSerial_WaitDone:
+	ret
+MidiRx_SystemMsgDispatch:
+	ld	l, (0x9598:16)
+	and	l, 15
+	sla	l, 2
+	extz	hl
+	ld	xiz, MidiSerial_CmdJumpTable
+	ld	xiz, (xiz+hl)
+	call (xiz)
+	ret
+	swi	7
+; MidiSerial_CmdJumpTable -- 16 handler pointers for SYSTEM messages F0..FF,
+; indexed by the status byte's low nibble.  Reader MidiRx_SystemMsgDispatch
+; (MidiSerial_StatusTable slot 7): `ld l, (0x9634) / and l, 15 / sla l, 2 /
+; ld xiz, MidiSerial_CmdJumpTable / ld xiz, (xiz+hl) / call (xiz)`.  F2 (song
+; position pointer) -> MidiSerial_HandleSongPosition, F3 (song select) ->
+; MidiSerial_HandleSongSelect, every other slot -> MidiSerial_HandleDefault_Data
+; (`or (0x428:16), 1 / ret`).
+MidiSerial_CmdJumpTable:
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleSongPosition
+	.long MidiSerial_HandleSongSelect
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+	.long MidiSerial_HandleDefault_Data
+MidiSerial_HandleSongPosition:
+	ld	wa, (0x9599:16)
+	ld	(1069:16), a
+	bit	2, (0xfd52:16)
+	jr	z, 3
+	set	7, w
+	ld	(1070:16), w
+	ret
+MidiSerial_HandleSongSelect:
+	ld	a, (0x9599:16)
+	bit	3, (0xfd51:16)
+	jr	z, 3
+	set	7, a
+	ld	(1068:16), a
+	ret
+MidiSerial_HandleDefault_Data:
+	or	(0x428:16), 1
+	ret
+; MidiRx_ChannelMsgDispatch -- entry for channel-voice messages (status 8x..Ex):
+; MidiSerial_StatusTable slots 0-6 point here (that table's header gives the
+; indexing).  Maps the status byte's channel, (0x9634) & 0x0F, through the
+; 16-byte RAM table 0x94F4 to a list in 0x9514 (count, then part numbers), and
+; for each part stores it in (0x966A) and calls
+; MidiCC_LowRange_Table[((0x9634) & 0x70) >> 4]; (0x966B) counts the parts down.
+; It follows MidiSerial_HandleDefault_Data's `ret` and had no label: the old
+; sweep read that routine's first byte as `.byte 0xc1` and the rest as
+; `pushw wa / max / push xiz / normal`.
+MidiRx_ChannelMsgDispatch:
+	ld	a, (0x9598:16)
+	and	a, 15
+	ld	xhl, 0x9458
+	ld	a, (xhl+a)
+	cp a, 255
+	jr	z, MidiRx_ChannelMsgDispatch_Return
+	ld	(0x95cc:16), a
+	ld	xhl, 0x9478
+	ld	a, (xhl+a)
+	cp a, 0:i3
+	jr	z, MidiRx_ChannelMsgDispatch_Return
+	ld	(0x95cd:16), a
+	ld	(0x95cf:16), a
+	incdi8	1, (0x95cc)
+	xor	h, h
+	ld	l, (0x95cc:16)
+	ld	xix, 0x9478
+	ld	a, (xix+hl)
+	ld	(0x95ce:16), a
+	xor h, h
+	ld	l, (0x9598:16)
+	and l, 112
+	srl	hl, 2
+	ld	xix, MidiCC_LowRange_Table
+	ld	xix, (xix+hl)
+	call (xix)
+	decdi8	1, (0x95cf)
+	jr nz, -54
+MidiRx_ChannelMsgDispatch_Return:
+	ret
+	swi	7
+; MidiCC_LowRange_Table -- 8 handler pointers, one per status-byte high nibble.
+; Reader MidiRx_ChannelMsgDispatch: `ld l, (0x9634) / and l, 0x70 / srl hl, 2 /
+; ld xix, MidiCC_LowRange_Table / ld xix, (xix+hl) / call (xix)`, slot =
+; (status >> 4) & 7, called once per part in the channel's part list.  Slots:
+; 8x note off, 9x note on, Ax key pressure -> MidiCC_Handler_SimpleParamStore
+; (`or (0x428:16), 1 / ret`); Bx control change -> MidiRx_ControlChange;
+; Cx program change -> MidiRx_ProgramChange; Dx channel pressure ->
+; MidiRx_ChannelPressure; Ex pitch bend -> MidiRx_PitchBend;
+; Fx -> SimpleParamStore (MidiSerial_StatusTable never sends Fx here).
+MidiCC_LowRange_Table:
+	.long MidiCC_Handler_SimpleParamStore
+	.long MidiCC_Handler_SimpleParamStore
+	.long MidiCC_Handler_SimpleParamStore
+	.long MidiRx_ControlChange
+	.long MidiRx_ProgramChange
+	.long MidiRx_ChannelPressure
+	.long MidiRx_PitchBend
+	.long MidiCC_Handler_SimpleParamStore
+MidiCC_Handler_SimpleParamStore:
+	or	(0x428:16), 1
+	ret
+MidiRx_ControlChange:
+	ld	xix, 0xfd0696
+	ld	l, (0x9599:16)
+	ld	a, (xix+l)
+	ld	(0x95bb:16), a
+	cp a, 255
+	jr z, 56
+; v7 NAME DISPLACED: `MIDI_CHANNEL_HANDLER_JUMP_TABLE` sits where v10 has no label (v10 0xFCFB7A).
+; The v7 code v10 calls `MIDI_CHANNEL_HANDLER_JUMP_TABLE` is 0x41A earlier, at v7 0xFCEF8F.
+; Kept because another v7 file references this address by this name.
+MIDI_CHANNEL_HANDLER_JUMP_TABLE:
+	extz	wa
+	sll	a, 1
+	ld	xix, MidiCC_FunctionRxFilter
+	ld	wa, (xix+wa)
+	cp wa, 65535
+	jr	z, MidiRx_ControlChange_Skip
+	ld	xix, 0xfd57
+	ld	c, (xix+w)
+	and c, a
+	jr	z, MidiRx_ControlChange_Return
+MidiRx_ControlChange_Skip:
+	extz	wa
+	ld	a, (0x95bb:16)
+	sla	wa, 2
+	ld	xix, MidiCC_ExtendedRange_Table
+	ld	xix, (xix+wa)
+	call (xix)
+MidiRx_ControlChange_Return:
+	ret
+; MidiCC_ExtendedRange_Table -- 48 handler pointers, one per CC FUNCTION index
+; (the index MidiCC_ChannelMappingData gives a controller number).  Reader
+; MidiRx_ControlChange: `ld a, (0x9657) / sla wa, 2 / ld xix,
+; MidiCC_ExtendedRange_Table / ld xix, (xix+wa) / call (xix)`.  48 entries = the
+; function range of MidiCC_FunctionRxFilter and MidiCC_FunctionToCCNumber (both
+; 48); the per-part target table each slot's handler reads is listed in the
+; header of MidiCC_ChannelMappingData.
+MidiCC_ExtendedRange_Table:
+	.long MidiCC_RxCC64_Sustain
+	.long MidiCC_RxCC1_Modulation
+	.long MidiCC_RxCC7_Volume
+	.long MidiCC_RxCC11_Expression
+	.long MidiCC_RxCC10_Pan
+	.long MidiCC_RxCC93_Chorus
+	.long 0x00fcf841
+	.long MidiCC_RxCC91_Reverb
+	.long MidiCC_RxFunc08
+	.long MidiCC_RxFunc09
+	.long MidiCC_StubHandler_A
+	.long MidiCC_StubHandler_B
+	.long MidiCC_RxFunc12
+	.long MidiCC_RxFunc13
+	.long MidiCC_RxFunc14
+	.long MidiCC_RxFunc15
+	.long MidiCC_Handler_RangeCheck
+	.long MidiCC_Handler_ChannelMapping
+	.long 0x00fcf4a3
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_Handler_PairedParamB
+	.long MidiCC_Handler_PairedParamA
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_Handler_BankModeSelect
+	.long MidiCC_Handler_ExpressionParam
+	.long MidiCC_Handler_DirectStoreA
+	.long MidiCC_Handler_DirectStoreB
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_Handler_ParamDispatch
+	.long MidiCC_Handler_TableDispatch
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+MidiCC_NullHandlerBlock:
+	ret
+	bit	2, (0xfd51:16)
+	jr	z, MidiCC_Handler_BitManipulation_Return
+	ld	a, (0x95ce:16)
+	cp	a, 25
+	jr	nz, MidiCC_Handler_BitManipulation_Return
+	cp	(0x95bb:16), 18
+	jr	nz, MidiCC_Handler_BitManipulation_Return
+	xor	e, e
+	ld	a, (0x959a:16)
+	cp	a, 2:i3
+	jr	ugt, MidiCC_Handler_BitManipulation_Skip
+	ld	xix, MidiCC_CC83_ValueMap
+	ld	e, (xix+a)
+MidiCC_Handler_BitManipulation_Skip:
+	ldw bc, 2968
+	ld d, 192:opc
+	ld	a, (0x959b:16)
+	ld	(0x95ac:16), a
+	stda16	(0x95a8), bc
+	stda16	(0x95aa), de
+	call	VoiceMode_ParamConfigTables_0xB68
+MidiCC_Handler_BitManipulation_Return:
+	ret
+; 0xFF filler after the `ret`; nothing reads it (the table below starts at +1).
+	.byte 0xff
+; MidiCC_CC83_ValueMap (0xFCFCB9, 3 x u8): controller value 0..2 -> E.  Reader
+; MidiCC_Handler_BitManipulation (0xFCFC74), CC function 18 <- CC83
+; (MidiCC_ChannelMappingData): only for part 25, with `bit 2, (0xfd51)` set;
+; `ld a, (0x9636) / cp a, 2 / jr ugt` (E stays 0 above 2) / `ld e, (xix+a)`,
+; then BC = 0x0B98, D = 0xC0 -> VoiceMode_ParamConfigTables_0xB68.
+; Previously spelled `.byte 0x80, 0x40` behind a `nop`.
+MidiCC_CC83_ValueMap:
+	.byte 0x00, 0x80, 0x40
+MidiCC_Handler_PairedParamA:
+	extz	hl
+	ld	l, (0x95ce:16)
+	cp	l, 31
+	jr	ugt, MidiCC_Handler_PairedParamA_Return
+	bit	4, (0xfd57:16)
+	jr	z, MidiCC_Handler_PairedParamA_Return
+	sll	hl, 1
+	ld	xix, MidiCC_PartTargets_BankSelect
+	ld	bc, (xix+hl)
+	cp c, 255
+	jr	z, MidiCC_Handler_PairedParamA_Return
+	ld	e, (0x959a:16)
+	ld	d, 255:opc
+	ld	a, (0x959b:16)
+	ld	(0x95ac:16), a
+	stda16	(0x95a8), bc
+	stda16	(0x95aa), de
+	call	MidiStream_ExtendedDispatch_0x298
+MidiCC_Handler_PairedParamA_Return:
+	ret
+MidiCC_Handler_PairedParamB:
+	extz	hl
+	ld	l, (0x95ce:16)
+	cp	l, 31
+	jr	ugt, MidiCC_Handler_PairedParamB_Return
+	bit	4, (0xfd57:16)
+	jr	z, MidiCC_Handler_PairedParamB_Return
+	sll	hl, 1
+	ld	xix, MidiCC_PartTargets_BankSelect
+	ld	bc, (xix+hl)
+	cp c, 255
+	jr	z, MidiCC_Handler_PairedParamB_Return
+	ld	d, (0x959a:16)
+	ld	e, 255:opc
+	ld	a, (0x959b:16)
+	ld	(0x95ac:16), a
+	stda16	(0x95a8), bc
+	stda16	(0x95aa), de
+	call	MidiStream_ExtendedDispatch_0x298
+MidiCC_Handler_PairedParamB_Return:
+	ret
+MidiCC_Handler_RangeCheck:
+	ld	a, (0x95ce:16)
+	cp	a, 16
+	jr	nz, MidiCC_Handler_RangeCheck_Return
+	cp	(0x95bb:16), 16
+	jr	nz, MidiCC_Handler_RangeCheck_Return
+	xor	e, e
+	ld	a, (0x959a:16)
+	cp	a, 3:i3
+	jr	ugt, MidiCC_Handler_RangeCheck_Skip
+	ld	xix, MidiCC_CC80_ValueMap
+	ld	e, (xix+a)
+MidiCC_Handler_RangeCheck_Skip:
+	ldw bc, 840
+	ld	d, 7:opc
+	ld	a, (0x959b:16)
+	ld	(0x95ac:16), a
+	stda16	(0x95a8), bc
+	stda16	(0x95aa), de
+	call	MidiStream_ApplyPendingParams
+MidiCC_Handler_RangeCheck_Return:
+	ret
+; 0xFF filler after the `ret`; nothing reads it (the table below starts at +1).
+	.byte 0xff
+; MidiCC_CC80_ValueMap (0xFCFD77, 4 x u8): controller value 0..3 -> E.  Reader
+; MidiCC_Handler_RangeCheck (0xFCFD38), CC function 16 <- CC80: only for part 16;
+; `ld a, (0x9636) / cp a, 3 / jr ugt` (E stays 0 above 3) / `ld e, (xix+a)`,
+; then BC = 0x0348, D = 7 -> MidiStream_ApplyPendingParams.  Previously
+; spelled `nop / push sr / normal / pop sr`.
+MidiCC_CC80_ValueMap:
+	.byte 0x00, 0x02, 0x01, 0x03
+MidiCC_Handler_ChannelMapping:
+	ld	a, (0x95ce:16)
 	cp	a, 20
-	jr	nz, 86
-	cp	(38331:16), 17
-	jr	nz, 79
+	jr	nz, MidiCC_Handler_ChannelMapping_Return
+	cp	(0x95bb:16), 17
+	jr	nz, MidiCC_Handler_ChannelMapping_Return
 	ld	b, 5:opc
-	ldw	de, 64512
-	ld	a, (38298:16)
+	ldw	de, 0xfc00
+	ld	a, (0x959a:16)
 	cp	a, 11
-	jr	ugt, 22
+	jr	ugt, MidiCC_Handler_ChannelMapping_Skip
 	extz	wa
 	sll	wa, 2
-	.byte 0x44
-SC0TxDisp_NonMidiPath:
-	ldw	(246:8), 252:io
-SC0TxDisp_RestoreAndReturn:
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x21, 0xd8, 0x62, 0xd3
-MIDI_SC0_ENABLE_TX:
-	.byte 0x07, 0xf0, 0xe0, 0x22, 0x29, 0x2a, 0xf1, 0xed
-	.byte 0x33, 0x42, 0xf1, 0xe0, 0x33, 0x45, 0xf1, 0xe1
-	.byte 0x33
-SC0TxEnable_MidiActivePath:
-	ld	xix, 4120306717
+	ld	xix, MidiCC_CC82_Records
+	ld	bc, (xix+wa)
+	inc 2, wa
+	ld	de, (xix+wa)
+MidiCC_Handler_ChannelMapping_Skip:
+	pushw bc
+	pushw	de
+	ld	(0x33ed:16), b
+	ld	(0x33e0:16), e
+	ld	(0x33e1:16), d
+	call	AccWrap_ReplaySavedExpr
 	popw	de
 	popw	bc
 	cp	e, 0:i3
-SC0TxEnable_Return:
-	.byte 0x6e, 0x13
-
+	jr	nz, MidiCC_Handler_ChannelMapping_Return
 ; End of MIDI Serial routines
-

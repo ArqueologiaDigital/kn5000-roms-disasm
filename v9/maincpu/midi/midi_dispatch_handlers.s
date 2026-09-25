@@ -29,7 +29,7 @@ MidiSerial_PumpLoop:
 	ld (0x9654:16), a
 	and a, 0x70
 	srl a, 2
-	ld xiz, MidiSerial_StatusTable_0x1
+	ld xiz, MidiSerial_StatusHandlers
 	ld_sril3 XIZ, 0x03, 0xf8, 0xe0
 	call (xiz)
 	jr MidiSerial_PumpLoop
@@ -43,26 +43,27 @@ MidiSerial_PumpDone:
 MidiSerial_Return:
 	ret
 
+; MidiSerial_StatusTable -- one 0xFF pad byte, then 8 handler pointers indexed by
+; the status byte's high nibble.  Reader MidiSerial_PumpLoop (this file): `ld a,
+; (0x9634) / and a, 0x70 / srl a, 2` (= 4 * ((status >> 4) & 7)), `ld xiz,
+; MidiSerial_StatusTable_0x1 / ld xiz, (xiz+a) / call (xiz)`, so entry 0 is at +1
+; (MidiSerial_StatusTable_0x1 = this label + 1, shared/positional_labels.s) and
+; 8 entries reach MidiSerial_WaitForData.  Slots 0-6 (8x note off .. Ex pitch
+; bend) -> MidiRx_ChannelMsgDispatch; slot 7 (Fx) -> MidiRx_SystemMsgDispatch,
+; which dispatches system messages on the low nibble through
+; MidiSerial_CmdJumpTable.  Previously spelled as `swi 7 / cpm_spiw ix, 250 /
+; nop` x 7.
 MidiSerial_StatusTable:
-	swi	7
-	cpm_spiw	ix, 250
-	nop
-	cpm_spiw	ix, 250
-	nop
-	cpm_spiw	ix, 250
-	nop
-	cpm_spiw	ix, 250
-	nop
-	cpm_spiw	ix, 250
-	nop
-	cpm_spiw	ix, 250
-	nop
-	cpm_spiw	ix, 250
-	nop
-	popw	iy
-	swi	2
-	swi	4
-	nop
+	.byte 0xff
+MidiSerial_StatusHandlers:
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_ChannelMsgDispatch
+	.long MidiRx_SystemMsgDispatch
 
 MidiSerial_WaitForData:
 	ld xiz, 0x1f37b
@@ -82,23 +83,30 @@ MidiSerial_WaitLoop:
 MidiSerial_WaitDone:
 	ret
 
-MidiSerial_ParseStatus_Data:
+MidiRx_SystemMsgDispatch:
 	ld	l, (0x9634:16)
 	and	l, 15
 	sla	l, 2
 	extz	hl
 	ld	xiz, MidiSerial_CmdJumpTable
-	ld_rrl xiz, xiz, hl
+	ld	xiz, (xiz+hl)
 	call (xiz)
 	ret
 	swi	7
 
 
+; MidiSerial_CmdJumpTable -- 16 handler pointers for SYSTEM messages F0..FF,
+; indexed by the status byte's low nibble.  Reader MidiRx_SystemMsgDispatch
+; (MidiSerial_StatusTable slot 7): `ld l, (0x9634) / and l, 15 / sla l, 2 /
+; ld xiz, MidiSerial_CmdJumpTable / ld xiz, (xiz+hl) / call (xiz)`.  F2 (song
+; position pointer) -> MidiSerial_HandleSongPosition, F3 (song select) ->
+; MidiSerial_HandleSongSelect, every other slot -> MidiSerial_HandleDefault_Data
+; (`or (0x428:16), 1 / ret`).
 MidiSerial_CmdJumpTable:
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
-	.long MidiSerial_HandleSysReset_Data
-	.long MidiSerial_HandleSysCommon_Data
+	.long MidiSerial_HandleSongPosition
+	.long MidiSerial_HandleSongSelect
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
@@ -111,124 +119,140 @@ MidiSerial_CmdJumpTable:
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
-MidiSerial_HandleSysReset_Data:
+MidiSerial_HandleSongPosition:
 	ld	wa, (0x9635:16)
 	ld	(1069:16), a
-	.byte 0xf1, 0x52
-	swi	5
-	inc	6, b
-	pop	sr
+	bit	2, (0xfd52:16)
+	jr	z, 3
 	set	7, w
 	ld	(1070:16), w
 	ret
-MidiSerial_HandleSysCommon_Data:
+MidiSerial_HandleSongSelect:
 	ld	a, (0x9635:16)
-	.byte 0xf1, 0x51
-	swi	5
-	inc	6, c
-	pop	sr
+	bit	3, (0xfd51:16)
+	jr	z, 3
 	set	7, a
 	ld	(1068:16), a
 	ret
 MidiSerial_HandleDefault_Data:
-	.byte 0xc1
-	pushw	wa
-	max
-	push	xiz
-	normal
+	or	(0x428:16), 1
 	ret
+; MidiRx_ChannelMsgDispatch -- entry for channel-voice messages (status 8x..Ex):
+; MidiSerial_StatusTable slots 0-6 point here (that table's header gives the
+; indexing).  Maps the status byte's channel, (0x9634) & 0x0F, through the
+; 16-byte RAM table 0x94F4 to a list in 0x9514 (count, then part numbers), and
+; for each part stores it in (0x966A) and calls
+; MidiCC_LowRange_Table[((0x9634) & 0x70) >> 4]; (0x966B) counts the parts down.
+; It follows MidiSerial_HandleDefault_Data's `ret` and had no label: the old
+; sweep read that routine's first byte as `.byte 0xc1` and the rest as
+; `pushw wa / max / push xiz / normal`.
+MidiRx_ChannelMsgDispatch:
 	ld	a, (0x9634:16)
 	and	a, 15
 	ld	xhl, 0x94f4
-	ld_rr8b a, xhl, a
+	ld	a, (xhl+a)
 	cp a, 255
-	jr	z, 80
+	jr	z, MidiRx_ChannelMsgDispatch_Return
 	ld	(0x9668:16), a
 	ld	xhl, 0x9514
-	ld_rr8b a, xhl, a
+	ld	a, (xhl+a)
 	cp a, 0:i3
-	jr z, 62
+	jr z, MidiRx_ChannelMsgDispatch_Return
 	ld	(0x9669:16), a
 	ld	(0x966b:16), a
 	inc	1, (0x9668:16)
 	xor	h, h
 	ld	l, (0x9668:16)
 	ld	xix, 0x9514
-	ld_rrb a, xix, hl
+	ld	a, (xix+hl)
 	ld (38506:16), a
 	xor h, h
 	ld l, (38452:16)
 	and l, 112
 	srl	hl, 2
 	ld	xix, MidiCC_LowRange_Table
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	call (xix)
 	dec 1, (38507:16)
 	jr nz, -54
+MidiRx_ChannelMsgDispatch_Return:
 	ret
 	swi	7
 
 
+; MidiCC_LowRange_Table -- 8 handler pointers, one per status-byte high nibble.
+; Reader MidiRx_ChannelMsgDispatch: `ld l, (0x9634) / and l, 0x70 / srl hl, 2 /
+; ld xix, MidiCC_LowRange_Table / ld xix, (xix+hl) / call (xix)`, slot =
+; (status >> 4) & 7, called once per part in the channel's part list.  Slots:
+; 8x note off, 9x note on, Ax key pressure -> MidiCC_Handler_SimpleParamStore
+; (`or (0x428:16), 1 / ret`); Bx control change -> MidiRx_ControlChange;
+; Cx program change -> MidiRx_ProgramChange; Dx channel pressure ->
+; MidiRx_ChannelPressure; Ex pitch bend -> MidiRx_PitchBend;
+; Fx -> SimpleParamStore (MidiSerial_StatusTable never sends Fx here).
 MidiCC_LowRange_Table:
 	.long MidiCC_Handler_SimpleParamStore
 	.long MidiCC_Handler_SimpleParamStore
 	.long MidiCC_Handler_SimpleParamStore
-	.long MidiCC_Handler_CC3_TableLookup
-	.long MidiCC_Handler_CC4_VoiceParam
-	.long MidiCC_Handler_CC5_VoiceParam
-	.long MidiCC_Handler_CC6_VoiceParam
+	.long MidiRx_ControlChange
+	.long MidiRx_ProgramChange
+	.long MidiRx_ChannelPressure
+	.long MidiRx_PitchBend
 	.long MidiCC_Handler_SimpleParamStore
 MidiCC_Handler_SimpleParamStore:
-	.byte 0xc1
-	pushw	wa
-	max
-	push	xiz
-	normal
+	or	(0x428:16), 1
 	ret
-MidiCC_Handler_CC3_TableLookup:
+MidiRx_ControlChange:
 	ld	xix, MidiCC_ChannelMappingData
 	ld	l, (0x9635:16)
-	ld_rr8b a, xix, l
+	ld	a, (xix+l)
 	ld (38487:16), a
 	cp a, 255
 	jr z, 56
 	extz	wa
 	sll	a, 1
-	ld	xix, MidiCC_ChannelMappingData_0x80
-	ld_rrw wa, xix, wa
+	ld	xix, MidiCC_FunctionRxFilter
+	ld	wa, (xix+wa)
 	cp wa, 65535
-	jr	z, MidiCC_Handler_CC3_TableLookup_Skip
+	jr	z, MidiRx_ControlChange_Skip
 	ld	xix, 0xfd57
-	ld_rr8b c, xix, w
+	ld	c, (xix+w)
 	and c, a
-	jr	z, 21
-MidiCC_Handler_CC3_TableLookup_Skip:
+	jr	z, MidiRx_ControlChange_Return
+MidiRx_ControlChange_Skip:
 	extz	wa
 	ld	a, (0x9657:16)
 	sla	wa, 2
 	ld	xix, MidiCC_ExtendedRange_Table
-	ld_rrl xix, xix, wa
+	ld	xix, (xix+wa)
 	call (xix)
+MidiRx_ControlChange_Return:
 	ret
 
 
+; MidiCC_ExtendedRange_Table -- 48 handler pointers, one per CC FUNCTION index
+; (the index MidiCC_ChannelMappingData gives a controller number).  Reader
+; MidiRx_ControlChange: `ld a, (0x9657) / sla wa, 2 / ld xix,
+; MidiCC_ExtendedRange_Table / ld xix, (xix+wa) / call (xix)`.  48 entries = the
+; function range of MidiCC_FunctionRxFilter and MidiCC_FunctionToCCNumber (both
+; 48); the per-part target table each slot's handler reads is listed in the
+; header of MidiCC_ChannelMappingData.
 MidiCC_ExtendedRange_Table:
-	.long MidiCC_VoiceParam_0
-	.long MidiCC_VoiceParam_3
-	.long MidiCC_VoiceParam_4
-	.long MidiCC_VoiceParam_5
-	.long MidiCC_VoiceParam_6
-	.long MidiCC_VoiceParam_7
-	.long MidiCC_VoiceParam_8
-	.long MidiCC_VoiceParam_9
-	.long MidiCC_VoiceParam_1
-	.long MidiCC_VoiceParam_2
+	.long MidiCC_RxCC64_Sustain
+	.long MidiCC_RxCC1_Modulation
+	.long MidiCC_RxCC7_Volume
+	.long MidiCC_RxCC11_Expression
+	.long MidiCC_RxCC10_Pan
+	.long MidiCC_RxCC93_Chorus
+	.long MidiCC_RxCC94_Celeste
+	.long MidiCC_RxCC91_Reverb
+	.long MidiCC_RxFunc08
+	.long MidiCC_RxFunc09
 	.long MidiCC_StubHandler_A
 	.long MidiCC_StubHandler_B
-	.long MidiCC_VoiceParam_10
-	.long MidiCC_VoiceParam_11
-	.long MidiCC_VoiceParam_12
-	.long MidiCC_VoiceParam_13
+	.long MidiCC_RxFunc12
+	.long MidiCC_RxFunc13
+	.long MidiCC_RxFunc14
+	.long MidiCC_RxFunc15
 	.long MidiCC_Handler_RangeCheck
 	.long MidiCC_Handler_ChannelMapping
 	.long MidiCC_Handler_BitManipulation
@@ -264,23 +288,20 @@ MidiCC_ExtendedRange_Table:
 MidiCC_NullHandlerBlock:
 	ret
 MidiCC_Handler_BitManipulation:
-	.byte 0xf1, 0x51
-	swi	5
-	inc	6, b
-	push	xiy
+	bit	2, (0xfd51:16)
+	jr	z, MidiCC_Handler_BitManipulation_Return
 	ld	a, (0x966a:16)
 	cp	a, 25
-	jr	nz, 52
-	.byte 0xc1, 0x57, 0x96
-	push	xsp
-	ccf
-	jr	nz, 45
+	jr	nz, MidiCC_Handler_BitManipulation_Return
+	cp	(0x9657:16), 18
+	jr	nz, MidiCC_Handler_BitManipulation_Return
 	xor	e, e
 	ld	a, (0x9636:16)
 	cp	a, 2:i3
-	jr	ugt, 10
-	ld	xix, MidiCC_Handler_BitManipulation_0x45
-	ld_rr8b e, xix, a
+	jr	ugt, MidiCC_Handler_BitManipulation_Skip
+	ld	xix, MidiCC_CC83_ValueMap
+	ld	e, (xix+a)
+MidiCC_Handler_BitManipulation_Skip:
 	ldw bc, 2968
 	ld d, 192:opc
 	ld	a, (0x9637:16)
@@ -288,24 +309,30 @@ MidiCC_Handler_BitManipulation:
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	VoiceMode_ParamConfigTables_0xB68
+MidiCC_Handler_BitManipulation_Return:
 	ret
-	swi	7
-	nop
-	.byte 0x80, 0x40
+; 0xFF filler after the `ret`; nothing reads it (the table below starts at +1).
+	.byte 0xff
+; MidiCC_CC83_ValueMap (0xFCFCB9, 3 x u8): controller value 0..2 -> E.  Reader
+; MidiCC_Handler_BitManipulation (0xFCFC74), CC function 18 <- CC83
+; (MidiCC_ChannelMappingData): only for part 25, with `bit 2, (0xfd51)` set;
+; `ld a, (0x9636) / cp a, 2 / jr ugt` (E stays 0 above 2) / `ld e, (xix+a)`,
+; then BC = 0x0B98, D = 0xC0 -> VoiceMode_ParamConfigTables_0xB68.
+; Previously spelled `.byte 0x80, 0x40` behind a `nop`.
+MidiCC_CC83_ValueMap:
+	.byte 0x00, 0x80, 0x40
 MidiCC_Handler_PairedParamA:
 	extz	hl
 	ld	l, (0x966a:16)
 	cp	l, 31
-	jr	ugt, 50
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, d
-	pushw	ix
+	jr	ugt, MidiCC_Handler_PairedParamA_Return
+	bit	4, (0xfd57:16)
+	jr	z, MidiCC_Handler_PairedParamA_Return
 	sll	hl, 1
-	ld	xix, MidiCC_ChannelMappingData_0x840
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_BankSelect
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, 26
+	jr	z, MidiCC_Handler_PairedParamA_Return
 	ld	e, (0x9636:16)
 	ld	d, 255:opc
 	ld	a, (0x9637:16)
@@ -313,21 +340,20 @@ MidiCC_Handler_PairedParamA:
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_ExtendedDispatch_0x298
+MidiCC_Handler_PairedParamA_Return:
 	ret
 MidiCC_Handler_PairedParamB:
 	extz	hl
 	ld	l, (0x966a:16)
 	cp	l, 31
-	jr	ugt, 50
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, d
-	pushw	ix
+	jr	ugt, MidiCC_Handler_PairedParamB_Return
+	bit	4, (0xfd57:16)
+	jr	z, MidiCC_Handler_PairedParamB_Return
 	sll	hl, 1
-	ld	xix, MidiCC_ChannelMappingData_0x840
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_BankSelect
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, 26
+	jr	z, MidiCC_Handler_PairedParamB_Return
 	ld	d, (0x9636:16)
 	ld	e, 255:opc
 	ld	a, (0x9637:16)
@@ -335,21 +361,21 @@ MidiCC_Handler_PairedParamB:
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_ExtendedDispatch_0x298
+MidiCC_Handler_PairedParamB_Return:
 	ret
 MidiCC_Handler_RangeCheck:
 	ld	a, (0x966a:16)
 	cp	a, 16
 	jr	nz, MidiCC_Handler_RangeCheck_Return
-	.byte 0xc1, 0x57, 0x96
-	push	xsp
-	rcf
+	cp	(0x9657:16), 16
 	jr	nz, MidiCC_Handler_RangeCheck_Return
 	xor	e, e
 	ld	a, (0x9636:16)
 	cp	a, 3:i3
-	jr	ugt, 10
-	ld	xix, MidiCC_Handler_RangeCheck_0x3F
-	ld_rr8b e, xix, a
+	jr	ugt, MidiCC_Handler_RangeCheck_Skip
+	ld	xix, MidiCC_CC80_ValueMap
+	ld	e, (xix+a)
+MidiCC_Handler_RangeCheck_Skip:
 	ldw bc, 840
 	ld	d, 7:opc
 	ld	a, (0x9637:16)
@@ -359,30 +385,33 @@ MidiCC_Handler_RangeCheck:
 	call	MidiStream_ApplyPendingParams
 MidiCC_Handler_RangeCheck_Return:
 	ret
-	swi	7
-	nop
-	push	sr
-	normal
-	pop	sr
+; 0xFF filler after the `ret`; nothing reads it (the table below starts at +1).
+	.byte 0xff
+; MidiCC_CC80_ValueMap (0xFCFD77, 4 x u8): controller value 0..3 -> E.  Reader
+; MidiCC_Handler_RangeCheck (0xFCFD38), CC function 16 <- CC80: only for part 16;
+; `ld a, (0x9636) / cp a, 3 / jr ugt` (E stays 0 above 3) / `ld e, (xix+a)`,
+; then BC = 0x0348, D = 7 -> MidiStream_ApplyPendingParams.  Previously
+; spelled `nop / push sr / normal / pop sr`.
+MidiCC_CC80_ValueMap:
+	.byte 0x00, 0x02, 0x01, 0x03
 MidiCC_Handler_ChannelMapping:
 	ld	a, (0x966a:16)
 	cp	a, 20
-	jr	nz, 86
-	.byte 0xc1, 0x57, 0x96
-	push	xsp
-	scf
-	jr	nz, 79
+	jr	nz, MidiCC_Handler_ChannelMapping_Return
+	cp	(0x9657:16), 17
+	jr	nz, MidiCC_Handler_ChannelMapping_Return
 	ld	b, 5:opc
 	ldw	de, 0xfc00
 	ld	a, (0x9636:16)
 	cp	a, 11
-	jr	ugt, 22
+	jr	ugt, MidiCC_Handler_ChannelMapping_Skip
 	extz	wa
 	sll	wa, 2
-	ld	xix, MidiCC_Handler_ChannelMapping_0x60
-	ld_rrw bc, xix, wa
+	ld	xix, MidiCC_CC82_Records
+	ld	bc, (xix+wa)
 	inc 2, wa
-	ld_rrw de, xix, wa
+	ld	de, (xix+wa)
+MidiCC_Handler_ChannelMapping_Skip:
 	pushw bc
 	pushw	de
 	ld	(0x3489:16), b
@@ -392,419 +421,402 @@ MidiCC_Handler_ChannelMapping:
 	popw	de
 	popw	bc
 	cp	e, 0:i3
-	jr	nz, 19
+	jr	nz, MidiCC_Handler_ChannelMapping_Return
 	inc	1, b
 	ld	(0x3489:16), b
 	ld	(0x347c:16), e
 	ld	(0x347d:16), 4
 	call	AccWrap_ReplaySavedExpr
+MidiCC_Handler_ChannelMapping_Return:
 	ret
-	popw	wa
-	halt
-	nop
-	swi	4
-	popw	wa
-	halt
-	ld	xwa, 0x10054840
-	rcf
-	popw	wa
-	halt
-	max
-	max
-	popw	wa
-	halt
-	nop
-	swi	4
-	popw	wa
-	halt
-	.byte 0x80, 0x80
-	popw	wa
-	halt
-	ld	w, 32:opc
-	popw	wa
-	halt
-	ld	(8:8), 72:io
-	halt
-	nop
-	swi	4
-	popw	wa
-	halt
-	nop
-	swi	4
-	popw	wa
-	halt
-	nop
-	swi	4
-	popw	wa
-	ei	4
-	.byte 0x04
-MidiCC_VoiceParam_0:
+; MidiCC_CC82_Records (0xFCFDDB, 12 records x 4 bytes, one per line = controller
+; value 0..11).  Reader MidiCC_Handler_ChannelMapping (0xFCFD7B), CC function
+; 17 <- CC82: only for part 20; `ld a, (0x9636) / cp a, 11 / jr ugt` (above 11
+; it keeps B = 5, DE = 0xFC00) / `sll wa, 2 / ld bc, (xix+wa) / inc 2, wa /
+; ld de, (xix+wa)`.  Fields as used: +1 B -> (0x3489), +2 E -> (0x347C),
+; +3 D -> (0x347D), then `call AccWrap_ReplaySavedExpr`; when E == 0 it calls
+; again with B+1 and D = 4.  +0 (C, always 0x48 here) is loaded but not used
+; by this reader.  12 entries = the `cp a, 11` bound; the table ends where
+; MidiCC_RxCC64_Sustain begins.
+MidiCC_CC82_Records:
+	.byte 0x48, 0x05, 0x00, 0xfc
+	.byte 0x48, 0x05, 0x40, 0x40
+	.byte 0x48, 0x05, 0x10, 0x10
+	.byte 0x48, 0x05, 0x04, 0x04
+	.byte 0x48, 0x05, 0x00, 0xfc
+	.byte 0x48, 0x05, 0x80, 0x80
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFCFDF3-0xFCFE0A (23 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=68% dist=8 near MidiCC_Handler_ChannelMapping_0x60+24
+	.byte 0x48, 0x05, 0x20, 0x20
+	.byte 0x48, 0x05, 0x08, 0x08
+	.byte 0x48, 0x05, 0x00, 0xfc
+	.byte 0x48, 0x05, 0x00, 0xfc
+	.byte 0x48, 0x05, 0x00, 0xfc
+	.byte 0x48, 0x06, 0x04, 0x04
+MidiCC_RxCC64_Sustain:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, 54
+	jr	ugt, MidiCC_RxCC64_Sustain_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0xE0
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_CC64_Sustain
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_0_Return
+	jr	z, MidiCC_RxCC64_Sustain_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	calr	MidiCC_Helper_ConditionalESetup
-MidiCC_VoiceParam_0_Return:
+MidiCC_RxCC64_Sustain_Return:
 	ret
-MidiCC_VoiceParam_1:
+MidiCC_RxFunc08:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_1_Return
+	jr	ugt, MidiCC_RxFunc08_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x140
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_Func08
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_1_Return
+	jr	z, MidiCC_RxFunc08_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xB2
-MidiCC_VoiceParam_1_Return:
+MidiCC_RxFunc08_Return:
 	ret
-MidiCC_VoiceParam_2:
+MidiCC_RxFunc09:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_2_Return
+	jr	ugt, MidiCC_RxFunc09_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x1A0
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_Func09
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_2_Return
+	jr	z, MidiCC_RxFunc09_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xB2
-MidiCC_VoiceParam_2_Return:
+MidiCC_RxFunc09_Return:
 	ret
-MidiCC_VoiceParam_3:
+MidiCC_RxCC1_Modulation:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_3_Return
+	jr	ugt, MidiCC_RxCC1_Modulation_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x200
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_CC1_Modulation
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_3_Return
+	jr	z, MidiCC_RxCC1_Modulation_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x81
-MidiCC_VoiceParam_3_Return:
+MidiCC_RxCC1_Modulation_Return:
 	ret
-MidiCC_VoiceParam_4:
+MidiCC_RxCC7_Volume:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_4_Return
+	jr	ugt, MidiCC_RxCC7_Volume_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x260
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_CC7_Volume
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_4_Return
+	jr	z, MidiCC_RxCC7_Volume_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x16
-MidiCC_VoiceParam_4_Return:
+MidiCC_RxCC7_Volume_Return:
 	ret
-MidiCC_VoiceParam_5:
+MidiCC_RxCC11_Expression:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_5_Return
+	jr	ugt, MidiCC_RxCC11_Expression_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x2C0
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_CC11_Expression
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_4_Return
+	jr	z, MidiCC_RxCC7_Volume_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x42
-MidiCC_VoiceParam_5_Return:
+MidiCC_RxCC11_Expression_Return:
 	ret
-MidiCC_VoiceParam_6:
+MidiCC_RxCC10_Pan:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_6_Return
+	jr	ugt, MidiCC_RxCC10_Pan_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x320
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_CC10_Pan
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_4_Return
+	jr	z, MidiCC_RxCC7_Volume_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x191
-MidiCC_VoiceParam_6_Return:
+MidiCC_RxCC10_Pan_Return:
 	ret
-MidiCC_VoiceParam_7:
+MidiCC_RxCC93_Chorus:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_7_Return
+	jr	ugt, MidiCC_RxCC93_Chorus_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x380
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_CC93_Chorus
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_7_Return
+	jr	z, MidiCC_RxCC93_Chorus_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x191
-MidiCC_VoiceParam_7_Return:
+MidiCC_RxCC93_Chorus_Return:
 	ret
-MidiCC_VoiceParam_8:
+MidiCC_RxCC94_Celeste:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_8_Return
+	jr	ugt, MidiCC_RxCC94_Celeste_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x3E0
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_CC94_Celeste
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_8_Return
+	jr	z, MidiCC_RxCC94_Celeste_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	calr	MidiCC_Helper_ConditionalESetup
-MidiCC_VoiceParam_8_Return:
+MidiCC_RxCC94_Celeste_Return:
 	ret
-MidiCC_VoiceParam_9:
+MidiCC_RxCC91_Reverb:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_9_Return
+	jr	ugt, MidiCC_RxCC91_Reverb_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x440
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_CC91_Reverb
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_9_Return
+	jr	z, MidiCC_RxCC91_Reverb_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	cp	c, 96
-	jr	z, MidiCC_VoiceParam_9_Skip
+	jr	z, MidiCC_RxCC91_Reverb_Skip
 	call	MidiStream_DispatchData_0x191
-	jr	MidiCC_VoiceParam_9_Return
-MidiCC_VoiceParam_9_Skip:
+	jr	MidiCC_RxCC91_Reverb_Return
+MidiCC_RxCC91_Reverb_Skip:
 	calr	MidiCC_Helper_ConditionalESetup
-MidiCC_VoiceParam_9_Return:
+MidiCC_RxCC91_Reverb_Return:
 	ret
 MidiCC_StubHandler_A:
 	ret
 MidiCC_StubHandler_B:
 	ret
-MidiCC_VoiceParam_10:
+MidiCC_RxFunc12:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_10_Return
+	jr	ugt, MidiCC_RxFunc12_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x560
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_Func12
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_10_Return
+	jr	z, MidiCC_RxFunc12_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
-MidiCC_VoiceParam_10_Return:
+MidiCC_RxFunc12_Return:
 	ret
-MidiCC_VoiceParam_11:
+MidiCC_RxFunc13:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_11_Return
+	jr	ugt, MidiCC_RxFunc13_Return
 	xor	w, w
-MidiCC_VoiceParam_11_MidEntry:
+MidiCC_RxFunc13_MidEntry:
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x5C0
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_Func13
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_11_Return
+	jr	z, MidiCC_RxFunc13_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
-MidiCC_VoiceParam_11_Return:
+MidiCC_RxFunc13_Return:
 	ret
-MidiCC_VoiceParam_12:
+MidiCC_RxFunc14:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_12_Return
+	jr	ugt, MidiCC_RxFunc14_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x620
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_Func14
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_12_Return
+	jr	z, MidiCC_RxFunc14_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
-MidiCC_VoiceParam_12_Return:
+MidiCC_RxFunc14_Return:
 	ret
-MidiCC_VoiceParam_13:
+MidiCC_RxFunc15:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_13_Return
+	jr	ugt, MidiCC_RxFunc15_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
-	ld	xix, MidiCC_ChannelMappingData_0x680
-	ld_rrw bc, xix, hl
+	ld	xix, MidiCC_PartTargets_Func15
+	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_13_Return
+	jr	z, MidiCC_RxFunc15_Return
 	inc	2, xix
-	ld_rrb d, xix, hl
+	ld	d, (xix+hl)
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
-MidiCC_VoiceParam_13_Return:
+MidiCC_RxFunc15_Return:
 	ret
 MidiCC_Handler_BankModeSelect:
 	ld	l, (0x966a:16)
 	cp	l, 31
 	jrl	ugt, MidiCC_Handler_BankModeSelect_Return
 	extz	hl
-	ld	xix, MidiCC_ChannelMappingData_0x820
-	ld_rrb c, xix, hl
+	ld	xix, MidiCC_PartSelector_DataEntry
+	ld	c, (xix+hl)
 	cp c, 255
-	jr	z, 117
+	jr	z, MidiCC_Handler_BankModeSelect_Return
 	sll	hl, 1
 	ld	xix, 0x9674
-	ld_rrw wa, xix, hl
+	ld	wa, (xix+hl)
 	cp wa, 32896
-	jr z, 14
+	jr z, MidiCC_Handler_BankModeSelect_Skip
 	cp	wa, 0x8081
-	jr	z, 29
+	jr	z, MidiCC_Handler_BankModeSelect_Skip2
 	cp	wa, 0x8082
-	jr	z, 42
-	jr	84
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, w
-	popw	iz
+	jr	z, MidiCC_Handler_BankModeSelect_Skip3
+	jr	MidiCC_Handler_BankModeSelect_Return
+MidiCC_Handler_BankModeSelect_Skip:
+	bit	0, (0xfd57:16)
+	jr	z, MidiCC_Handler_BankModeSelect_Return
 	ld	b, 11:opc
 	ld	e, (0x9636:16)
 	cp	e, 12
-	jr	ugt, 67
+	jr	ugt, MidiCC_Handler_BankModeSelect_Return
 	ld	d, 127:opc
-	jr	43
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, a
-	push	xbc
+	jr	MidiCC_Handler_BankModeSelect_Join
+MidiCC_Handler_BankModeSelect_Skip2:
+	bit	1, (0xfd57:16)
+	jr	z, MidiCC_Handler_BankModeSelect_Return
 	ld	b, 10:opc
 	ld	e, (0x9636:16)
 	sll	e, 1
 	ld	d, 255:opc
-	jr	24
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, a
-	ld	h, 34:opc
-	push	193
-	ldw	iz, 9622
+	jr	MidiCC_Handler_BankModeSelect_Join
+MidiCC_Handler_BankModeSelect_Skip3:
+	bit	1, (0xfd57:16)
+	jr	z, MidiCC_Handler_BankModeSelect_Return
+	ld	b, 9:opc
+	ld	e, (0x9636:16)
 	cp	e, 76
-	jr	ugt, 27
+	jr	ugt, MidiCC_Handler_BankModeSelect_Return
 	cp	e, 52
-	jr	c, 22
+	jr	c, MidiCC_Handler_BankModeSelect_Return
 	ld	d, 127:opc
+MidiCC_Handler_BankModeSelect_Join:
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
@@ -815,31 +827,25 @@ MidiCC_Handler_BankModeSelect_Return:
 MidiCC_Handler_ExpressionParam:
 	ld	l, (0x966a:16)
 	cp	l, 31
-	jr	ugt, 97
+	jr	ugt, MidiCC_Handler_ExpressionParam_Return
 	extz	hl
-	ld	xix, MidiCC_ChannelMappingData_0x820
-	ld_rrb c, xix, hl
+	ld	xix, MidiCC_PartSelector_DataEntry
+	ld	c, (xix+hl)
 	cp c, 255
-	jr	z, 80
+	jr	z, MidiCC_Handler_ExpressionParam_Return
 	sll	hl, 1
 	ld	xix, 0x9674
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	push	xsp
-	.byte 0x81
-	decm8	6, (xwa)
-	push	xsp
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, a
-	push	xbc
+	; cp (xix+hl),0x8081 -- the backend cannot spell this form
+	.byte 0xd3, 0x07, 0xf0, 0xec, 0x3f, 0x81, 0x80	; cp (xix+hl),0x8081 -- the backend cannot spell this form
+	jr	nz, MidiCC_Handler_ExpressionParam_Return
+	bit	1, (0xfd57:16)
+	jr	z, MidiCC_Handler_ExpressionParam_Return
 	ld	b, 10:opc
 	ld	xix, (0x90f2:16)
 	extz	hl
 	ld	l, (0x966a:16)
 	sll	hl, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	ld a, (xix+10)
 	res 0, a
 	ld	e, (0x9636:16)
@@ -851,6 +857,7 @@ MidiCC_Handler_ExpressionParam:
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x98
+MidiCC_Handler_ExpressionParam_Return:
 	ret
 MidiCC_Handler_DirectStoreA:
 	ld	a, (0x9636:16)
@@ -859,16 +866,15 @@ MidiCC_Handler_DirectStoreA:
 	ld	l, (0x966a:16)
 	sll	hl, 1
 	ld	xix, 0x9675
-	st_rrb a, xix, hl
+	ld	(xix+hl), a
 	dec 1, xix
-	ld_rrb w, xix, hl
+	ld	w, (xix+hl)
 	cp wa, 65535
-	jr	nz, 7
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xec
-	push	sr
-	jrl	nc, 3711
+	jr	nz, MidiCC_Handler_DirectStoreA_Return
+	; ld (xix+hl),0x7f7f -- the backend cannot spell this form
+	.byte 0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f	; ld (xix+hl),0x7f7f -- the backend cannot spell this form
+MidiCC_Handler_DirectStoreA_Return:
+	ret
 MidiCC_Handler_DirectStoreB:
 	ld	a, (0x9636:16)
 	set	7, a
@@ -876,26 +882,25 @@ MidiCC_Handler_DirectStoreB:
 	ld	l, (0x966a:16)
 	sll	hl, 1
 	ld	xix, 0x9674
-	st_rrb a, xix, hl
+	ld	(xix+hl), a
 	inc 1, xix
-	ld_rrb w, xix, hl
+	ld	w, (xix+hl)
 	cp wa, 65535
-	jr	nz, 9
+	jr	nz, MidiCC_Handler_DirectStoreB_Return
 	dec	1, xix
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xec
-	push	sr
-	jrl	nc, 3711
+	; ld (xix+hl),0x7f7f -- the backend cannot spell this form
+	.byte 0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f	; ld (xix+hl),0x7f7f -- the backend cannot spell this form
+MidiCC_Handler_DirectStoreB_Return:
+	ret
 MidiCC_Handler_ParamDispatch:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, 44
+	jr	ugt, MidiCC_Handler_ParamDispatch_Return
 	sll	a, 1
-	ld	xix, MidiCC_ChannelMappingData_0x6E0
-	ld_rr8w bc, xix, a
+	ld	xix, MidiCC_PartTargets_CC121_ResetAll
+	ld	bc, (xix+a)
 	cp c, 255
-	jr	z, 26
+	jr	z, MidiCC_Handler_ParamDispatch_Return
 	ld	e, (0x9636:16)
 	ld	d, 127:opc
 	ld	a, (0x9637:16)
@@ -903,6 +908,7 @@ MidiCC_Handler_ParamDispatch:
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xEE
+MidiCC_Handler_ParamDispatch_Return:
 	ret
 MidiCC_Handler_TableDispatch:
 	; --- Subroutine 1: table-indexed dispatch via XIX+A (54 bytes) ---
@@ -910,8 +916,8 @@ MidiCC_Handler_TableDispatch:
 	cp a, 0x1f
 	jr ugt, MidiCC_Handler_TableDispatch_Ret
 	sll	a, 1
-	ld xix, 0x00fd1587
-	ld_rr8w	bc, xix, a
+	ld xix, MidiCC_PartTargets_CC120_AllSoundOff
+	ld	bc, (xix+a)
 	cp c, 0xff
 	jr z, MidiCC_Handler_TableDispatch_Ret
 	ld	e, (0x9636:16)
@@ -946,19 +952,17 @@ MidiCC_Helper_EntryWithEqA:
 	ret
 
 
-MidiCC_Handler_CC4_VoiceParam:
+MidiRx_ProgramChange:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, 50
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, d
-	pushw	ix
+	jr	ugt, MidiRx_ProgramChange_Return
+	bit	4, (0xfd57:16)
+	jr	z, MidiRx_ProgramChange_Return
 	sll	a, 1
-	ld	xix, MidiCC_ChannelMappingData_0x760
-	ld_rr8w bc, xix, a
+	ld	xix, MidiPC_PartTargets
+	ld	bc, (xix+a)
 	cp c, 255
-	jr	z, 26
+	jr	z, MidiRx_ProgramChange_Return
 	ld	e, (0x9635:16)
 	ld	d, 255:opc
 	ld	a, (0x9637:16)
@@ -966,20 +970,19 @@ MidiCC_Handler_CC4_VoiceParam:
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_ExtendedDispatch_0x1
+MidiRx_ProgramChange_Return:
 	ret
-MidiCC_Handler_CC6_VoiceParam:
+MidiRx_PitchBend:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, 52
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, h
-	pushw	iz
+	jr	ugt, MidiRx_PitchBend_Return
+	bit	6, (0xfd57:16)
+	jr	z, MidiRx_PitchBend_Return
 	sll	a, 1
-	ld	xix, MidiCC_ChannelMappingData_0x7A0
-	ld_rr8w bc, xix, a
+	ld	xix, MidiPB_PartTargets
+	ld	bc, (xix+a)
 	cp c, 255
-	jr	z, 28
+	jr	z, MidiRx_PitchBend_Return
 	ld	e, (0x9635:16)
 	ld	d, (0x9636:16)
 	ld	a, (0x9637:16)
@@ -987,20 +990,19 @@ MidiCC_Handler_CC6_VoiceParam:
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x67
+MidiRx_PitchBend_Return:
 	ret
-MidiCC_Handler_CC5_VoiceParam:
+MidiRx_ChannelPressure:
 	ld	a, (0x966a:16)
 	cp	a, 31
-	jr	ugt, 50
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, e
-	pushw	ix
+	jr	ugt, MidiRx_ChannelPressure_Return
+	bit	5, (0xfd57:16)
+	jr	z, MidiRx_ChannelPressure_Return
 	sll	a, 1
-	ld	xix, MidiCC_ChannelMappingData_0x7E0
-	ld_rr8w bc, xix, a
+	ld	xix, MidiCP_PartTargets
+	ld	bc, (xix+a)
 	cp c, 255
-	jr	z, 26
+	jr	z, MidiRx_ChannelPressure_Return
 	ld	e, (0x9635:16)
 	ld	d, 127:opc
 	ld	a, (0x9637:16)
@@ -1008,6 +1010,7 @@ MidiCC_Handler_CC5_VoiceParam:
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
+MidiRx_ChannelPressure_Return:
 	ret
 ; ============================================================================
 ; UIState_ProcessDisplayUpdate - Process a display update event in UI state
@@ -1018,114 +1021,96 @@ MidiCC_Handler_CC5_VoiceParam:
 ; screen elements that need to be redrawn.
 ; ============================================================================
 UIState_ProcessDisplayUpdate:
-	.byte 0xc1
-	jrl	pl, 0x3fc0
-	decf
-	jr	nz, 13
+	cp	(0xc07d:16), 13
+	jr	nz, UIState_ProcessDisplayUpdate_Return
 	ld	a, (0xc07f:16)
 	and	a, 255
-	jr	z, 4
-	.byte 0xf1
-	jr	nov, -106
-	.byte 0xb8
+	jr	z, UIState_ProcessDisplayUpdate_Return
+	set	0, (0x966c:16)
+UIState_ProcessDisplayUpdate_Return:
 	ret
 UIState_DisplayUpdate_BitmapHandler:
-	.byte 0xf1
-	jr	nov, -106
-	inc	6, w
-	push_f
-	.byte 0xf1
-	jr	nov, -106
-	ret	lt
-	jr	pl, -106
-	nop
-	.byte 0x80
-	calr	13
+	bit	0, (0x966c:16)
+	jr	z, UIState_DisplayUpdate_BitmapHandler_Return
+	res	0, (0x966c:16)
+	ld	(0x966d:16), 128
+	calr	UIState_DisplayUpdate_BitmapHandler_Helper
 	ld	(0x966d:16), 64
-	calr	5
+	calr	UIState_DisplayUpdate_BitmapHandler_Helper
 	call	VoiceChannels_InitPanFromPreset
+UIState_DisplayUpdate_BitmapHandler_Return:
 	ret
+UIState_DisplayUpdate_BitmapHandler_Helper:
 	ld	xix, 0x94f4
-	.byte 0xc1
-	jr	pl, -106
-	push	xsp
-	incm8	6, (xwa)
-	halt
+	cp	(0x966d:16), 128
+	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip
 	ld	xix, 0x9594
+UIState_DisplayUpdate_BitmapHandler_Skip:
 	ldw	wa, 0xffff
 	ldw	bc, 16
 	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ld	xix, 0x9514
-	.byte 0xc1
-	jr	pl, -106
-	push	xsp
-	incm8	6, (xwa)
-	halt
+	cp	(0x966d:16), 128
+	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip2
 	ld	xix, 0x95b4
+UIState_DisplayUpdate_BitmapHandler_Skip2:
 	xor	wa, wa
 	ldw	bc, 64
 	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ld	xix, 0x94f4
 	ld	xiy, 0x9514
-	.byte 0xc1
-	jr	pl, -106
-	push	xsp
-	incm8	6, (xwa)
-	ldw	(68:8), 0x9594:io
-	nop
-	nop
+	cp	(0x966d:16), 128
+	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip3
+	ld	xix, 0x9594
 	ld	xiy, 0x95b4
+UIState_DisplayUpdate_BitmapHandler_Skip3:
 	ld	(0x9664:16), xiy
 	ld	(0x966e:16), 0
 	ld	w, 0:opc
+UIState_DisplayUpdate_BitmapHandler_Loop:
 	ld	xhl, 1:i3
 	ld	(0x966f:16), 0
 	ld	(0x9670:16), 0
+UIState_DisplayUpdate_BitmapHandler_Loop2:
 	ld	xiz, (0x90f2:16)
 	xor	d, d
 	ld	e, (0x9670:16)
 	sll	de, 2
-	ld_rrl xiz, xiz, de
+	ld	xiz, (xiz+de)
 	cp xiz, 4294967295
 	jr	z, UIState_DisplayUpdate_BitmapHandler_Code_Skip
 	ld	a, (xiz+13)
 	pushw	wa
 	and	a, (0x966d:16)
 	popw	wa
-	jr	nz, 22
+	jr	nz, UIState_DisplayUpdate_BitmapHandler_Code_Skip
 	and	a, 31
 	cp	a, w
-	jr	nz, 15
+	jr	nz, UIState_DisplayUpdate_BitmapHandler_Code_Skip
 	ld	d, (0x9670:16)
-	st_rrb d, xiy, hl
+	ld	(xiy+hl), d
 	inc 1, xhl
 	inc 1, (38511:16)
 UIState_DisplayUpdate_BitmapHandler_Code_Skip:
 	inc	1, (0x9670:16)
-	.byte 0xc1
-	jrl	f, 0x3f96
-	ld	w, 110:opc
-	.byte 0xba, 0xc1
-	jr	nc, -106
-	push	xsp
-	nop
-	jr	z, 16
+	cp	(0x9670:16), 32
+	jr	nz, UIState_DisplayUpdate_BitmapHandler_Loop2
+	cp	(0x966f:16), 0
+	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip4
 	ld	e, (0x966f:16)
 	ld	(xiy), e
 	ld	xde, xiy
 	sub	xde, (0x9664:16)
 	ld	(xix), e
 	add	xiy, xhl
+UIState_DisplayUpdate_BitmapHandler_Skip4:
 	inc	1, xix
 	inc	1, w
 	inc	1, (0x966e:16)
-	.byte 0xc1
-	jr	nz, -106
-	push	xsp
-	ld	w, 110:opc
-	.byte 0x88
+	cp	(0x966e:16), 32
+	jr	nz, UIState_DisplayUpdate_BitmapHandler_Loop
 	ret
 MIDI_DispatchCC:
 	bit 0, (0xb7e7:16)
@@ -1139,7 +1124,7 @@ MIDI_DispatchCC:
 	ld l, c
 	extz hl
 	sll hl, 2
-	ld xix, PanelEvt_Handler_4_DualValueCheck_0x77
+	ld xix, MidiDispatchCC_HandlerTable
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	call (xix)
 
@@ -1223,6 +1208,12 @@ PanelEvt_CheckChanZero_Ret:
 	ret
 
 
+; PanelEvt_DispatchTable -- 16 handler pointers, second-level index = (0x964D).
+; Reader PanelEvent_DispatchByIndex (0xFD0A0D): `ld l, (0x964d) / cp l, a /
+; jr ugt <ret> / sll hl, 2 / ld xhl, (xiy+hl) / call (xhl)`; the loaders
+; PanelEvt_CheckFlag7_Dispatch_A/B/C and friends pass xiy = this table and
+; a = 0x0F, which pins 16 entries.  (0x964C)/(0x964D) and (0x964E)/(0x964F) are
+; the BC and DE that MIDI_DispatchCC stores before its own 192-entry dispatch.
 PanelEvt_DispatchTable:
 	.long PanelEvt_Handler_0_NoteOnParam
 	.long MidiCC_NullHandlerBlock
@@ -1243,323 +1234,300 @@ PanelEvt_DispatchTable:
 PanelEvt_Handler_0_NoteOnParam:
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 70
+	jr	ugt, PanelEvt_Handler_0_NoteOnParam_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x3A7
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	cp xix, 4294967295
-	jr	z, 47
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, d
-	pushw	bc
+	jr	z, PanelEvt_Handler_0_NoteOnParam_Return
+	bit	4, (0xfd57:16)
+	jr	z, PanelEvt_Handler_0_NoteOnParam_Return
 	ld	a, (0x90e5:16)
-	.byte 0xf1, 0xe5, 0x90
-	dec	6, l
-	reti
+	bit	7, (0x90e5:16)
+	jr	nz, PanelEvt_Handler_0_NoteOnParam_Skip
 	ld	a, (xix)
 	bit	6, a
-	jr	nz, 24
+	jr	nz, PanelEvt_Handler_0_NoteOnParam_Return
+PanelEvt_Handler_0_NoteOnParam_Skip:
 	ldw	de, 512
 	ld	(0x963f:16), de
 	and	a, 15
 	or	a, 192
 	ld	w, (0x964e:16)
 	ld	(0x963c:16), wa
-	calr	1878
+	calr	FileData_ValidateAndDispatch
+PanelEvt_Handler_0_NoteOnParam_Return:
 	ret
 PanelEvt_Handler_3_ValueCheck:
 	ld	a, (0x964f:16)
 	and	a, 127
-	jr	z, 47
+	jr	z, PanelEvt_Handler_3_ValueCheck_Return
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, PanelEvt_Handler_3_ValueCheck_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x427
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xwa
-	swi	5
-	inc	6, b
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	jr	z, PanelEvt_Handler_3_ValueCheck_Return
+	bit	2, (0xfd58:16)
+	jr	z, PanelEvt_Handler_3_ValueCheck_Return
+	ld	e, (0x964e:16)
 	ld	w, 2:opc
-	calr	1602
+	calr	MidiChannel_ConfigureController
+PanelEvt_Handler_3_ValueCheck_Return:
 	ret
 PanelEvt_Handler_5_ValueCheck:
 	ld	a, (0x964f:16)
 	and	a, 127
-	jr	z, 47
+	jr	z, PanelEvt_Handler_5_ValueCheck_Return
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, PanelEvt_Handler_5_ValueCheck_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x4A7
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xwa
-	swi	5
-	inc	6, e
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	jr	z, PanelEvt_Handler_5_ValueCheck_Return
+	bit	5, (0xfd58:16)
+	jr	z, PanelEvt_Handler_5_ValueCheck_Return
+	ld	e, (0x964e:16)
 	ld	w, 5:opc
-	calr	1545
+	calr	MidiChannel_ConfigureController
+PanelEvt_Handler_5_ValueCheck_Return:
 	ret
 PanelEvt_Handler_6_NullStub:
 	ret
 PanelEvt_Handler_7_ValueCheck:
 	ld	a, (0x964f:16)
 	and	a, 127
-	jr	z, 47
+	jr	z, PanelEvt_Handler_7_ValueCheck_Return
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, PanelEvt_Handler_7_ValueCheck_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x5A7
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xwa
-	swi	5
-	inc	6, e
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	jr	z, PanelEvt_Handler_7_ValueCheck_Return
+	bit	5, (0xfd58:16)
+	jr	z, PanelEvt_Handler_7_ValueCheck_Return
+	ld	e, (0x964e:16)
 	ld	w, 7:opc
-	calr	1487
+	calr	MidiChannel_ConfigureController
+PanelEvt_Handler_7_ValueCheck_Return:
 	ret
 PanelEvt_Handler_8_ValueCheck:
 	ld	a, (0x964f:16)
 	and	a, 127
-	jr	z, 47
+	jr	z, PanelEvt_Handler_8_ValueCheck_Return
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, PanelEvt_Handler_8_ValueCheck_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x628
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xwa
-	swi	5
-	inc	6, d
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	jr	z, PanelEvt_Handler_8_ValueCheck_Return
+	bit	4, (0xfd58:16)
+	jr	z, PanelEvt_Handler_8_ValueCheck_Return
+	ld	e, (0x964e:16)
 	ld	w, 4:opc
-	calr	1430
+	calr	MidiChannel_ConfigureController
+PanelEvt_Handler_8_ValueCheck_Return:
 	ret
 PanelEvt_Handler_9_SingleByteParam:
 	ld	a, (0x964f:16)
 	and	a, 127
-	jr	z, 49
+	jr	z, PanelEvt_Handler_9_SingleByteParam_Return
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 40
+	jr	ugt, PanelEvt_Handler_9_SingleByteParam_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x6A8
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	cp xix, 4294967295
-	jr	z, 17
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, a
-	pushw	0xaad9
+	jr	z, PanelEvt_Handler_9_SingleByteParam_Return
+	bit	1, (0xfd57:16)
+	jr	z, PanelEvt_Handler_9_SingleByteParam_Return
+	ld	bc, 2:i3
 	ld	d, (0x964e:16)
 	xor	e, e
-	calr	1437
+	calr	FileData_ProcessWithLookup
+PanelEvt_Handler_9_SingleByteParam_Return:
 	ret
 PanelEvt_Handler_10_TwoByteParam:
 	ld	a, (0x964f:16)
 	and	a, 255
-	jr	z, 55
+	jr	z, PanelEvt_Handler_10_TwoByteParam_Return
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 46
+	jr	ugt, PanelEvt_Handler_10_TwoByteParam_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x728
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	cp xix, 4294967295
-	jr	z, 23
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, a
-	scf
+	jr	z, PanelEvt_Handler_10_TwoByteParam_Return
+	bit	1, (0xfd57:16)
+	jr	z, PanelEvt_Handler_10_TwoByteParam_Return
 	ld	bc, 1:i3
 	ld	d, (0x964e:16)
 	xor	e, e
 	srl	de, 1
 	srl	e, 1
-	calr	1372
+	calr	FileData_ProcessWithLookup
+PanelEvt_Handler_10_TwoByteParam_Return:
 	ret
 PanelEvt_Handler_11_SingleByteParam:
 	ld	a, (0x964f:16)
 	and	a, 127
-	jr	z, 49
+	jr	z, PanelEvt_Handler_11_SingleByteParam_Return
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 40
+	jr	ugt, PanelEvt_Handler_11_SingleByteParam_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x7A8
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	cp xix, 4294967295
-	jr	z, 17
-	.byte 0xf1, 0x57
-	swi	5
-	inc	6, w
-	pushw	0xa8d9
+	jr	z, PanelEvt_Handler_11_SingleByteParam_Return
+	bit	0, (0xfd57:16)
+	jr	z, PanelEvt_Handler_11_SingleByteParam_Return
+	ld	bc, 0:i3
 	ld	d, (0x964e:16)
 	xor	e, e
-	calr	1313
+	calr	FileData_ProcessWithLookup
+PanelEvt_Handler_11_SingleByteParam_Return:
 	ret
 PanelEvt_Handler_15_ConditionalSet:
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 44
+	jr	ugt, PanelEvt_Handler_15_ConditionalSet_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x3A7
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
+	ld	xix, (xix+hl)
 	cp xix, 4294967295
 	jr	z, PanelEvt_Handler_15_ConditionalSet_Return
 	extz	de
 	ld	e, (0x964e:16)
 	bit	7, e
-	jr	z, 6
+	jr	z, PanelEvt_Handler_15_ConditionalSet_Skip
 	set	0, d
 	res	7, e
+PanelEvt_Handler_15_ConditionalSet_Skip:
 	call	MidiCC_ChannelDispatch_DualSend
 PanelEvt_Handler_15_ConditionalSet_Return:
 	ret
 
 PanelEvt_Dispatch6Entry:
-	ld xiy, PanelEvt_Dispatch6_TableAndHandlers_0x1
+	ld xiy, PanelEvt_Dispatch6_Handlers
 	ld a, 0x6:opc
 	calr PanelEvent_DispatchByIndex
 	ret
 
+; PanelEvt_Dispatch6_TableAndHandlers -- one 0xFF pad byte, then 7 handler
+; pointers (PanelEvt_Dispatch6_Handlers = this label + 1): PanelEvt_Dispatch6Entry
+; loads `ld xiy, PanelEvt_Dispatch6_Handlers / ld a, 6 / calr
+; PanelEvent_DispatchByIndex`, so index (0x964D) 0..6.  The two slots that are
+; not MidiCC_NullHandlerBlock / PanelEvt_Handler_0_NoteOnParam follow the table,
+; each with the value map it reads.  Previously spelled as `swi 7 / popw bc /
+; ei 253 / jrl ule, -772 ...` with the handlers misframed behind it.
 PanelEvt_Dispatch6_TableAndHandlers:
-	swi	7
-	popw	bc
-	ei	253
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	.byte 0x93
-	ld	(253:8), 0:io
-	jrl	ule, -772
-	nop
-	.byte 0xc7
-	ld	(253:8), 0:io
-	.byte 0xc7
-	ld	(253:8), 0:io
+	.byte 0xff
+PanelEvt_Dispatch6_Handlers:
+	.long PanelEvt_Handler_0_NoteOnParam
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long PanelEvt_D6Slot3_SendCC80
+	.long MidiCC_NullHandlerBlock
+	.long PanelEvt_D6Slot5_SendCC82
+	.long PanelEvt_D6Slot5_SendCC82
+; PanelEvt_D6Slot3_SendCC80 -- slot 3 of PanelEvt_Dispatch6_Handlers.  If
+; (0x964F) & 7 is non-zero and bit 5 of (0xFD59) is set, E = PanelEvt_D6Slot3_ValueMap
+; [(0x964E) & 7] and it calls MidiChannel_ConfigureController (0xFD0D13) with
+; W = 0x10: CC function 16, which MidiCC_FunctionToCCNumber sends as CC80.
+PanelEvt_D6Slot3_SendCC80:
 	ld	a, (0x964f:16)
 	and	a, 7
-	.ascii "f!Dc"
-	swi	3
-	nop
-	nop
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, e
-	ex_ff
+	jr	z, PanelEvt_D6Slot3_SendCC80_Return
+	ld	xix, 0xfb63
+	bit	5, (0xfd59:16)
+	jr	z, PanelEvt_D6Slot3_SendCC80_Return
 	ld	e, (0x964e:16)
 	and	e, 7
-	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0x49
-	ld_rr8b e, xiy, e
-	ld w, 16:opc
-	calr	1110
+	ld	xiy, PanelEvt_D6Slot3_ValueMap
+	ld	e, (xiy+e)
+	ld	w, 16:opc
+	calr	MidiChannel_ConfigureController
+PanelEvt_D6Slot3_SendCC80_Return:
 	ret
-	swi	7
-	nop
-	push	sr
-	normal
-	pop	sr
-	nop
-	nop
-	nop
-	nop
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, h
-	.byte 0x54
+	.byte 0xff
+; PanelEvt_D6Slot3_ValueMap (8 x u8): (0x964E) & 7 -> the CC80 value; read by
+; PanelEvt_D6Slot3_SendCC80 with `and e, 7 / ld e, (xiy+e)`, which pins 8 entries.
+PanelEvt_D6Slot3_ValueMap:
+	.byte 0x00, 0x02, 0x01, 0x03, 0x00, 0x00, 0x00, 0x00
+; PanelEvt_D6Slot5_SendCC82 -- slot 5 (and 6) of PanelEvt_Dispatch6_Handlers.
+; Gated by bit 6 of (0xFD59); from the bits of (0x964E) that changed it may send
+; an all-off first (E = 0), then E = <map>[1-based index of the lowest set bit],
+; the map being PanelEvt_D6Slot5_BitMapA when (0x964D) == 5 and ..._BitMapB
+; otherwise; both through MidiChannel_ConfigureController with W = 0x11: CC
+; function 17, sent as CC82.
+PanelEvt_D6Slot5_SendCC82:
+	bit	6, (0xfd59:16)
+	jr	z, PanelEvt_D6Slot5_SendCC82_Return
 	ld	h, e
 	cpl	h
 	and	h, d
 	and	e, d
 	ld	l, 252:opc
-	.byte 0xc1
-	popw	iy
-	.byte 0x96
-	push	xsp
-	halt
-	jr	z, 2
+	cp	(0x964d:16), 5
+	jr	z, PanelEvt_D6Slot5_SendCC82_Skip
 	ld	l, 4:opc
+PanelEvt_D6Slot5_SendCC82_Skip:
 	and	h, l
-	jr	z, 16
+	jr	z, PanelEvt_D6Slot5_SendCC82_Skip2
 	ld	xix, 0xfbcb
 	ld	w, 17:opc
 	xor	e, e
 	pushw	hl
 	pushw	de
-	calr	1057
+	calr	MidiChannel_ConfigureController
 	popw	de
 	popw	hl
+PanelEvt_D6Slot5_SendCC82_Skip2:
 	and	e, l
-	jr	z, 41
+	jr	z, PanelEvt_D6Slot5_SendCC82_Return
 	ld	xix, 0xfbcb
 	ld	w, 17:opc
-	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0xAC
-	.byte 0xc1
-	popw	iy
-	.byte 0x96
-	push	xsp
-	halt
-	jr	z, 5
-	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0xB5
+	ld	xiy, PanelEvt_D6Slot5_BitMapA
+	cp	(0x964d:16), 5
+	jr	z, PanelEvt_D6Slot5_SendCC82_Skip3
+	ld	xiy, PanelEvt_D6Slot5_BitMapB
+PanelEvt_D6Slot5_SendCC82_Skip3:
 	xor	a, a
+PanelEvt_D6Slot5_SendCC82_Loop:
 	inc	1, a
 	srl	e, 1
-	jr	nc, -7
-	ld_rr8b e, xiy, a
-	calr 1010
+	jr	nc, PanelEvt_D6Slot5_SendCC82_Loop
+	ld	e, (xiy+a)
+	calr	MidiChannel_ConfigureController
+PanelEvt_D6Slot5_SendCC82_Return:
 	ret
-	nop
-	nop
-	nop
-	pop	sr
-	reti
-	push	sr
-	ei	1
-	halt
-	nop
-	nop
-	nop
-	pushw	0
-	nop
-	nop
-	nop
+; PanelEvt_D6Slot5_BitMapA / _BitMapB (9 x u8 each): bit position 1..8 -> the
+; CC82 value (entry 0 unused: the `inc 1, a / srl e, 1 / jr nc` loop starts
+; at 1).  Read by PanelEvt_D6Slot5_SendCC82 via `ld e, (xiy+a)`.
+PanelEvt_D6Slot5_BitMapA:
+	.byte 0x00, 0x00, 0x00, 0x03, 0x07, 0x02, 0x06, 0x01, 0x05
+PanelEvt_D6Slot5_BitMapB:
+	.byte 0x00, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00
 
 PanelEvt_Dispatch3Entry_A:
 	ld xiy, PanelEvt_Dispatch3_TableAndHandlers_A
@@ -1567,41 +1535,39 @@ PanelEvt_Dispatch3Entry_A:
 	calr PanelEvent_DispatchByIndex
 	ret
 
+; PanelEvt_Dispatch3_TableAndHandlers_A -- 4 handler pointers (no pad):
+; PanelEvt_Dispatch3Entry_A loads `ld xiy, <this> / ld a, 3 / calr
+; PanelEvent_DispatchByIndex`, so index (0x964D) 0..3.  Slot 1 follows.
 PanelEvt_Dispatch3_TableAndHandlers_A:
-	jrl	ule, -772
-	nop
-	popw	sp
-	push	253
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	.byte 0xf1
-	popw	sp
-	.byte 0x96
-	inc	6, l
-	pushw	iz
+	.long MidiCC_NullHandlerBlock
+	.long PanelEvt_D3ASlot1_SendCC91
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+; PanelEvt_D3ASlot1_SendCC91 -- slot 1 of PanelEvt_Dispatch3_TableAndHandlers_A.
+; If bit 7 of (0x964F) is set, takes part 25's entry of the per-part pointer
+; table at PanelEvt_Handler_4_DualValueCheck_0x5A7 (0xFFFFFFFF = none), and
+; with bit 5 of (0xFD58) set sends E = 0x7F or 0 (bit 7 of (0x964E)) through
+; MidiChannel_ConfigureController with W = 7: CC function 7, sent as CC91.
+PanelEvt_D3ASlot1_SendCC91:
+	bit	7, (0x964f:16)
+	jr	z, PanelEvt_Dispatch3Entry_A_Return
 	ld	l, 25:opc
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x5A7
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
-	cp xix, 4294967295
-	jr	z, 21
-	.byte 0xf1
-	pop	xwa
-	swi	5
-	inc	6, e
-	retd	37
-	.byte 0xf1
-	popw	iz
-	.byte 0x96
-	inc	6, l
-	push	sr
+	ld	xix, (xix+hl)
+	cp	xix, 0xffffffff
+	jr	z, PanelEvt_Dispatch3Entry_A_Return
+	bit	5, (0xfd58:16)
+	jr	z, PanelEvt_Dispatch3Entry_A_Return
+	ld	e, 0:opc
+	bit	7, (0x964e:16)
+	jr	z, PanelEvt_Dispatch3Entry_A_Skip
 	ld	e, 127:opc
+PanelEvt_Dispatch3Entry_A_Skip:
 	ld	w, 7:opc
-	calr	912
+	calr	MidiChannel_ConfigureController
+PanelEvt_Dispatch3Entry_A_Return:
 	ret
 
 PanelEvt_Dispatch3Entry_B:
@@ -1610,70 +1576,68 @@ PanelEvt_Dispatch3Entry_B:
 	calr PanelEvent_DispatchByIndex
 	ret
 
+; PanelEvt_Dispatch3_Table_B -- 4 handler pointers, all MidiCC_NullHandlerBlock:
+; PanelEvt_Dispatch3Entry_B loads `ld xiy, <this> / ld a, 3 / calr
+; PanelEvent_DispatchByIndex`.  Previously spelled `jrl ule, -772 / nop` x 4.
 PanelEvt_Dispatch3_Table_B:
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
 
 PanelEvt_Dispatch11Entry:
-	ld xiy, PanelEvt_Dispatch11_TableAndHandlers_0x1
+	ld xiy, PanelEvt_Dispatch11_Handlers
 	ld a, 0xb:opc
 	calr PanelEvent_DispatchByIndex
 	ret
 
 PanelEvt_Dispatch11_TableAndHandlers:
-	swi	7
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	muls	hl, 253
+	; PanelEvt_Dispatch11_TableAndHandlers -- one 0xFF pad byte, then 12 handler
+	; pointers. The pad is not a guess: PanelEvt_Dispatch11_TableAndHandlers_0x1
+	; is defined as this label + 1 in shared/positional_labels.s and is what
+	; PanelEvt_Dispatch11Entry loads (`ld xiy, ..._0x1 / ldb a, 0xb / calr
+	; PanelEvent_DispatchByIndex`), so entry 0 is at +1, not at +0.
+	; 12 entries reach 0xFD09DB, which is also the value of the last entry --
+	; the table is followed immediately by the code it points at.
+	; one pad byte; entry 0 of the table is at +1
+	.byte 0xff
+PanelEvt_Dispatch11_Handlers:
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long PanelEvt_D11Slot11_SendCC83
+; PanelEvt_D11Slot11_SendCC83 -- slot 11 of PanelEvt_Dispatch11_Handlers.  If
+; (0x964F) & 0xC0 is non-zero and bit 2 of (0xFD51) is set, E =
+; PanelEvt_D11Slot11_ValueMap[((0x964E) & 0xC0) >> 6] through
+; MidiChannel_ConfigureController with W = 0x12: CC function 18, sent as CC83.
+PanelEvt_D11Slot11_SendCC83:
 	ld	a, (0x964f:16)
 	and	a, 192
-	jr	z, 36
+	jr	z, PanelEvt_D11Slot11_SendCC83_Return
 	ld	xix, 0xfc19
-	.byte 0xf1, 0x51
-	swi	5
-	inc	6, b
-	pop_f
+	bit	2, (0xfd51:16)
+	jr	z, PanelEvt_D11Slot11_SendCC83_Return
 	ld	e, (0x964e:16)
 	and	e, 192
 	srl	e, 6
-	ld	xiy, PanelEvt_Dispatch11_TableAndHandlers_0x5F
-	.byte 0xc3
-	pop	sr
-	.byte 0xf4, 0xe8
-	ld	e, 32:opc
-	ccf
-	calr	779
+	ld	xiy, PanelEvt_D11Slot11_ValueMap
+	ld	e, (xiy+e)
+	ld	w, 18:opc
+	calr	MidiChannel_ConfigureController
+PanelEvt_D11Slot11_SendCC83_Return:
 	ret
-	nop
-	push	sr
-	.byte 0x01
-	nop
+; PanelEvt_D11Slot11_ValueMap (4 x u8): bits 7-6 of (0x964E) -> the CC83 value;
+; `and e, 0xc0 / srl e, 6 / ld e, (xiy+e)` pins 4 entries.
+PanelEvt_D11Slot11_ValueMap:
+	.byte 0x00, 0x02, 0x01, 0x00
 
 PanelEvent_DispatchByIndex:
 	ld l, (0x964d:16)
@@ -1872,120 +1836,121 @@ MidiCC_ChannelDispatch_Ctrl0:
 BitMask_Ctrl0_ConfigExit:
 	ret
 
-MidiCC_ChannelDispatch_MultiHandler:
+; MidiCC_ChannelDispatch_Func09 / _Func08 / _Func12 / _Func13 / _Func14 / _Func15
+; (0xFD0BF1 + 0x30*k): six more routines of the exact shape of
+; MidiCC_ChannelDispatch_Ctrl1/_Ctrl3/_Ctrl0 just above (same 7-byte prologue
+; `ld l, (0x964d) / cp l, 31`, each loading the next 0x80-stride record of the
+; per-part pointer tables, 0xFD228F..0xFD250F, then `ld w, N / calr
+; MidiChannel_ConfigureController`), for CC functions 9, 8, 12, 13, 14, 15.
+; NO REFERENCE FOUND: searched their 32-bit and 24-bit addresses anywhere in the
+; 2 MB dump and every `calr` byte pattern within +-32 KB -- none; the four
+; siblings are in MidiDispatchCC_HandlerTable, these are not.  Those six
+; functions are also exactly the ones with no controller number in
+; MidiCC_FunctionToCCNumber (0xFF), where MidiChannel_ConfigureController gives
+; up -- consistent with handlers left in for unassigned functions.  Decoded as
+; code on that shape evidence (clean decode from each start, calr to a known
+; routine, the same bytes misframed one byte later as `pop xbc / swi 5`).
+MidiCC_ChannelDispatch_Func09:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xBA8
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, a
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	ld	xix, (xix+hl)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return
+	bit	1, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return
+	ld	e, (0x964e:16)
 	ld	w, 9:opc
-	calr	243
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return:
 	ret
+MidiCC_ChannelDispatch_Func08:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return2
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xC28
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, b
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	ld	xix, (xix+hl)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return2
+	bit	2, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return2
+	ld	e, (0x964e:16)
 	ld	w, 8:opc
-	calr	195
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return2:
 	ret
+MidiCC_ChannelDispatch_Func12:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return3
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xCA8
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, c
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	ld	xix, (xix+hl)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return3
+	bit	3, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return3
+	ld	e, (0x964e:16)
 	ld	w, 12:opc
-	calr	147
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return3:
 	ret
+MidiCC_ChannelDispatch_Func13:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return4
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xD28
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, c
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	ld	xix, (xix+hl)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return4
+	bit	3, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return4
+	ld	e, (0x964e:16)
 	ld	w, 13:opc
-	calr	99
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return4:
 	ret
+MidiCC_ChannelDispatch_Func14:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return5
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xDA8
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, d
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	ld	xix, (xix+hl)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return5
+	bit	4, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return5
+	ld	e, (0x964e:16)
 	ld	w, 14:opc
-	calr	51
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return5:
 	ret
+MidiCC_ChannelDispatch_Func15:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return6
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xE28
 	extz	hl
 	sll	l, 2
-	ld_rrl xix, xix, hl
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, d
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	ld	xix, (xix+hl)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return6
+	bit	4, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return6
+	ld	e, (0x964e:16)
 	ld	w, 15:opc
-	calr	3
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return6:
 	ret
 	ret
 	ret
@@ -2007,7 +1972,7 @@ MidiChanCfg_SetupParams:
 	or a, 0xb0
 	cp w, 0x2f
 	jr ugt, MidiChannel_ConfigureExit
-	ld xiz, PanelEvt_Handler_4_DualValueCheck_0x377
+	ld xiz, MidiCC_FunctionToCCNumber
 	ldb_sri W, 0x03, 0xf8, 0xe1
 	cp w, 0xff
 	jr z, MidiChannel_ConfigureExit
@@ -2021,12 +1986,12 @@ MidiChannel_ConfigureExit:
 
 FileData_ProcessWithLookup:
 	ld	a, (0x90e5:16)
-	.byte 0xf1, 0xe5, 0x90
-	dec	6, l
-	reti
+	bit	7, (0x90e5:16)
+	jr	nz, FileData_ProcessWithLookup_Skip
 	ld	a, (xix)
 	bit	6, a
-	jr	nz, 60
+	jr	nz, FileData_ProcessWithLookup_Return
+FileData_ProcessWithLookup_Skip:
 	ld	xiy, 0x963c
 	pushw	bc
 	ldw	bc, 768
@@ -2050,6 +2015,7 @@ FileData_ProcessWithLookup:
 	ld	w, e
 	ld	(xiy+1), wa
 	calr	FileData_ValidateAndDispatch
+FileData_ProcessWithLookup_Return:
 	ret
 
 MidiCC_ChannelDispatch_DualSend:
@@ -2127,14 +2093,14 @@ FileData_DispatchHandler:
 	ret
 
 Periodic_TimestampHelper_Data:
-	ld	(1060:16), a
+	ld	(0x424:16), a
 	extz	wa
 	pushw	wa
-	ei	0x06
+	ei	6
 	call	SeqBuf_MidiOut_WriteByte
-	ei	0x00
-	.byte 0xef
-	jr	le, 0x0e
+	di
+	inc	2, xsp
+	ret
 
 Periodic_TimestampCheck:
 	calr Periodic_TimestampCompare
@@ -2156,3349 +2122,888 @@ Periodic_TimestampCompare_Done:
 	popw wa
 	ret
 
+; =====================================================================
+; MIDI receive mapping tables (0xFD0E67-0xFD16E6, 2,176 B, 24 sub-tables).
+; Previously spelled as ~850 instruction lines (push_f / normal / swi 7 /
+; jrl nc, 1793 ...) that nothing executes: scripts/analysis/midi_lane_reach.py
+; reaches none of it.  Every sub-table except the two marked Unread has one
+; or two readers, each found both as a symbolic `ld xix, <table>` in this
+; file and as the table's 24-bit address in the ROM image (searched: the
+; 3-byte LE address anywhere in the 2 MB dump; the only hits are those
+; `ld xix` operands).
+;
+; How a received message gets here (all in this file):
+;   MidiRx_ChannelMsgDispatch (0xFCFAD5) takes the running status byte
+;   from (0x9634), maps channel = status & 0x0F through the 16-byte RAM table
+;   0x94F4 and the part list 0x9514, stores each target PART number (0..31)
+;   in (0x966A) and calls MidiCC_LowRange_Table[(status & 0x70) >> 4]:
+;   8x/9x/Ax/Fx -> MidiCC_Handler_SimpleParamStore, Bx -> ..._CC3_TableLookup,
+;   Cx -> ..._CC4_VoiceParam, Dx -> ..._CC5_VoiceParam, Ex -> ..._CC6_VoiceParam.
+;   The two data bytes are at (0x9635) and (0x9636).
+; Every per-part table below is indexed by that part number, range-checked by
+; its reader with `cp <part>, 31 / jr ugt` -- which is what pins 32 entries.
+; The readers pass the entry to the dispatcher named per table below through
+; (0x9644) = BC, (0x9646) = DE (E = the message's data byte), (0x9648) = (0x9637);
+; the selector encoding is that dispatcher's business and was not traced here.
+; =====================================================================
+;
+; MidiCC_ChannelMappingData (+0x000, 128 x u8): CONTROLLER NUMBER -> CC FUNCTION
+; INDEX (0..47), 0xFF = controller ignored.  Reader MidiRx_ControlChange
+; (0xFCFB63): `ld xix, MidiCC_ChannelMappingData / ld l, (0x9635) /
+; ld a, (xix+l)`, result kept in (0x9657) and used as the index into the
+; 48-entry MidiCC_ExtendedRange_Table.  Mapped here: CC0->24 CC1->1 CC6->32
+; CC7->2 CC10->4 CC11->3 CC32->25 CC38->33 CC64->0 CC80->16 CC82->17
+; CC83->18 CC91->7 CC93->5 CC94->6 CC100->35 CC101->34 CC120->41 CC121->40.
+; No controller maps to functions 8-15 in this table.
 MidiCC_ChannelMappingData:
-	push_f
-	normal
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	w, 2:opc
-	swi	7
-	swi	7
-	max
-	pop	sr
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	pop_f
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	a, 255:opc
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	rcf
-	swi	7
-	scf
-	ccf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	reti
-	swi	7
-	halt
-	.byte 0x06
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ld	c, 34:opc
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	pushw	bc
-	pushw	wa
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	normal
-	normal
-	push	sr
-	normal
-	max
-	normal
-	ld	(1:8), 16:io
-	normal
-	ld	w, 1:opc
-	ld	w, 1:opc
-	ld	w, 1:opc
-	max
-	push	sr
-	push	sr
-	push	sr
-	ld	xwa, 0x8028001
-	push	sr
-	ld	(2:8), 16:io
-	push	sr
-	rcf
-	push	sr
-	ld	w, 2:opc
-	ld	xwa, 0xffffff02
-	swi	7
-	.fill 8, 1, 0xff
-	.byte 0x80, 0x01, 0x80, 0x01
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	normal
-	push	sr
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	nop
-	max
-	ld	(1:8), 4:io
-	ld	(2:8), 4:io
-	ld	(3:8), 4:io
-	ld	(4:8), 4:io
-	ld	(5:8), 4:io
-	ld	(6:8), 4:io
-	ld	(7:8), 4:io
-	ld	(8:8), 4:io
-	ld	(9:8), 4:io
-	ld	(10:8), 4:io
-	ld	(11:8), 4:io
-	ld	(12:8), 4:io
-	ld	(13:8), 4:io
-	ld	(14:8), 4:io
-	ld	(255:8), 255:io
-	swi	7
-	rcf
-	max
-	ld	(17:8), 4:io
-	ld	(18:8), 4:io
-	ld	(19:8), 4:io
-	ld	(255:8), 255:io
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x17, 0x04, 0x08
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	ld	(xsp), 127
-	.byte 0xb7, 0x01
-	jrl	nc, 695
-	jrl	nc, 951
-	jrl	nc, 1207
-	jrl	nc, 1463
-	jrl	nc, 1719
-	jrl	nc, 1975
-	jrl	nc, 2231
-	jrl	nc, 2487
-	jrl	nc, 2743
-	jrl	nc, 2999
-	jrl	nc, 3255
-	jrl	nc, 3511
-	jrl	nc, 3767
-	jrl	nc, -1
-	swi	7
-	.byte 0xb7
-	rcf
-	jrl	nc, 4535
-	jrl	nc, 4791
-	jrl	nc, 5047
-	jrl	nc, -1
-	swi	7
-	.byte 0xb7
-	pop_a
-	jrl	nc, -1
-	swi	7
-	.byte 0xb7, 0x17
-	jrl	nc, 6327
-	jrl	nc, -1
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	ld	(xiz), 127
-	.byte 0xb6, 0x01
-	jrl	nc, 694
-	jrl	nc, 950
-	jrl	nc, 1206
-	jrl	nc, 1462
-	jrl	nc, 1718
-	jrl	nc, 1974
-	jrl	nc, 2230
-	jrl	nc, 2486
-	jrl	nc, 2742
-	jrl	nc, 2998
-	jrl	nc, 3254
-	jrl	nc, 3510
-	jrl	nc, 3766
-	jrl	nc, -1
-	swi	7
-	.byte 0xb6
-	rcf
-	jrl	nc, 4534
-	jrl	nc, 4790
-	jrl	nc, 5046
-	jrl	nc, -1
-	swi	7
-	.byte 0xb6
-	pop_a
-	jrl	nc, -1
-	swi	7
-	.byte 0xb6, 0x17
-	jrl	nc, 6326
-	jrl	nc, -1
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	ld	(xde), 127
-	.byte 0xb2, 0x01
-	jrl	nc, 690
-	jrl	nc, 946
-	jrl	nc, 1202
-	jrl	nc, 1458
-	jrl	nc, 1714
-	jrl	nc, 1970
-	jrl	nc, 2226
-	jrl	nc, 2482
-	jrl	nc, 2738
-	jrl	nc, 2994
-	jrl	nc, 3250
-	jrl	nc, 3506
-	jrl	nc, 3762
-	jrl	nc, -1
-	swi	7
-	.byte 0xb2
-	rcf
-	jrl	nc, 4530
-	jrl	nc, 4786
-	jrl	nc, 5042
-	jrl	nc, -1
-	swi	7
-	.byte 0xb2
-	pop_a
-	jrl	nc, -1
-	swi	7
-	.byte 0xb2, 0x17, 0x7f
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	nop
-	pop	sr
-	jrl	nc, 769
-	jrl	nc, 770
-	jrl	nc, 771
-	jrl	nc, 772
-	jrl	nc, 773
-	jrl	nc, 774
-	jrl	nc, 775
-	jrl	nc, 776
-	jrl	nc, 777
-	jrl	nc, 778
-	jrl	nc, 779
-	jrl	nc, 780
-	jrl	nc, 781
-	jrl	nc, 782
-	jrl	nc, 783
-	jrl	nc, 784
-	jrl	nc, 785
-	jrl	nc, 786
-	jrl	nc, 787
-	jrl	nc, 788
-	jrl	nc, 789
-	jrl	nc, -1
-	swi	7
-	ldf 3
-	jrl nc, -1
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	ld	(xhl), 127
-	.byte 0xb3, 0x01
-	jrl	nc, 691
-	jrl	nc, 947
-	jrl	nc, 1203
-	jrl	nc, 1459
-	jrl	nc, 1715
-	jrl	nc, 1971
-	jrl	nc, 2227
-	jrl	nc, 2483
-	jrl	nc, 2739
-	jrl	nc, 2995
-	jrl	nc, 3251
-	jrl	nc, 3507
-	jrl	nc, 3763
-	jrl	nc, 4019
-	jrl	nc, 4275
-	jrl	nc, 4531
-	jrl	nc, 4787
-	jrl	nc, 5043
-	jrl	nc, -1
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xb3, 0x17
-	jrl	nc, -1
-	swi	7
-	.byte 0xb0, 0x01
-	jrl	nc, -1
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	nop
-	ld	(127:8), 1:io
-	ld	(127:8), 2:io
-	ld	(127:8), 3:io
-	ld	(127:8), 4:io
-	ld	(127:8), 5:io
-	ld	(127:8), 6:io
-	ld	(127:8), 7:io
-	ld	(127:8), 8:io
-	ld	(127:8), 9:io
-	ld	(127:8), 10:io
-	ld	(127:8), 11:io
-	ld	(127:8), 12:io
-	ld	(127:8), 13:io
-	ld	(127:8), 14:io
-	ld	(127:8), 255:io
-	swi	7
-	swi	7
-	rcf
-	ld	(127:8), 17:io
-	ld	(127:8), 18:io
-	ld	(127:8), 19:io
-	ld	(127:8), 255:io
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	ldf 8
-	jrl nc, -1
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	nop
-	halt
-	jrl	nc, 1281
-	jrl	nc, 1282
-	jrl	nc, 1283
-	jrl	nc, 1284
-	jrl	nc, 1285
-	jrl	nc, 1286
-	jrl	nc, 1287
-	jrl	nc, 1288
-	jrl	nc, 1289
-	jrl	nc, 1290
-	jrl	nc, 1291
-	jrl	nc, 1292
-	jrl	nc, 1293
-	jrl	nc, 1294
-	jrl	nc, 1295
-	jrl nc, -1
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	nop
-	max
-	ld	xwa, 0x2400401
-	max
-	ld	xwa, 0x4400403
-	max
-	ld	xwa, 0x6400405
-	max
-	ld	xwa, 0x8400407
-	max
-	ld	xwa, 0xa400409
-	max
-	ld	xwa, 0xc40040b
-	max
-	ld	xwa, 0xe40040d
-	max
-	ld	xwa, 0x10ffffff
-	max
-	ld	xwa, 0x12400411
-	max
-	ld	xwa, 0xff400413
-	swi	7
-	swi	7
-	pop_a
-	max
-	ld	xwa, 0x17ffffff
-	max
-	ld xwa, 4294967295
-	swi 7
-	swi 7
-	swi 7
-	swi 7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	nop
-	reti
-	jrl	nc, 1793
-	jrl	nc, 1794
-	jrl	nc, 1795
-	jrl	nc, 1796
-	jrl	nc, 1797
-	jrl	nc, 1798
-	jrl	nc, 1799
-	jrl	nc, 1800
-	jrl	nc, 1801
-	jrl	nc, 1802
-	jrl	nc, 1803
-	jrl	nc, 1804
-	jrl	nc, 1805
-	jrl	nc, 1806
-	jrl	nc, 1807
-	jrl	nc, 1808
-	jrl	nc, 1809
-	jrl	nc, 1810
-	jrl	nc, 1811
-	jrl	nc, 1812
-	jrl	nc, 1813
-	jrl	nc, -1
-	swi	7
-	ldf 7
-	jrl	nc, -1
-	swi	7
-	jr	f, 1
-	cp	(xwa), l
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xbc
-	nop
-	jrl	nc, 444
-	jrl	nc, 700
-	jrl	nc, 956
-	jrl	nc, 1212
-	jrl	nc, 1468
-	jrl	nc, 1724
-	jrl	nc, 1980
-	jrl	nc, 2236
-	jrl	nc, 2492
-	jrl	nc, 2748
-	jrl	nc, 3004
-	jrl	nc, 3260
-	jrl	nc, 3516
-	jrl	nc, 3772
-	jrl	nc, 4028
-	jrl	nc, 4284
-	jrl	nc, 4540
-	jrl	nc, 4796
-	jrl	nc, 5052
-	jrl	nc, 5308
-	jrl	nc, 5564
-	jrl	nc, -1
-	swi	7
-	.byte 0xbc, 0x17
-	jrl	nc, 6332
-	jrl	nc, -1
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xbd
-	nop
-	jrl	nc, 445
-	jrl	nc, 701
-	jrl	nc, 957
-	jrl	nc, 1213
-	jrl	nc, 1469
-	jrl	nc, 1725
-	jrl	nc, 1981
-	jrl	nc, 2237
-	jrl	nc, 2493
-	jrl	nc, 2749
-	jrl	nc, 3005
-	jrl	nc, 3261
-	jrl	nc, 3517
-	jrl	nc, 3773
-	jrl	nc, 4029
-	jrl	nc, 4285
-	jrl	nc, 4541
-	jrl	nc, 4797
-	jrl	nc, 5053
-	jrl	nc, 5309
-	jrl	nc, 5565
-	jrl	nc, -1
-	swi	7
-	.byte 0xbd, 0x17
-	jrl	nc, 6333
-	jrl	nc, -1
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xb8
-	nop
-	jrl	nc, 440
-	jrl	nc, 696
-	jrl	nc, 952
-	jrl	nc, 1208
-	jrl	nc, 1464
-	jrl	nc, 1720
-	jrl	nc, 1976
-	jrl	nc, 2232
-	jrl	nc, 2488
-	jrl	nc, 2744
-	jrl	nc, 3000
-	jrl	nc, 3256
-	jrl	nc, 3512
-	jrl	nc, 3768
-	jrl	nc, 4024
-	jrl	nc, 4280
-	jrl	nc, 4536
-	jrl	nc, 4792
-	jrl	nc, 5048
-	jrl	nc, 5304
-	jrl	nc, 5560
-	jrl	nc, -1
-	swi	7
-	.byte 0xb8, 0x17
-	jrl	nc, 6328
-	jrl	nc, -1
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xb9
-	nop
-	jrl	nc, 441
-	jrl	nc, 697
-	jrl	nc, 953
-	jrl	nc, 1209
-	jrl	nc, 1465
-	jrl	nc, 1721
-	jrl	nc, 1977
-	jrl	nc, 2233
-	jrl	nc, 2489
-	jrl	nc, 2745
-	jrl	nc, 3001
-	jrl	nc, 3257
-	jrl	nc, 3513
-	jrl	nc, 3769
-	jrl	nc, 4025
-	jrl	nc, 4281
-	jrl	nc, 4537
-	jrl	nc, 4793
-	jrl	nc, 5049
-	jrl	nc, 5305
-	jrl	nc, 5561
-	jrl	nc, -1
-	swi	7
-	.byte 0xb9, 0x17
-	jrl	nc, 6329
-	jrl	nc, -1
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xba
-	nop
-	jrl	nc, 442
-	jrl	nc, 698
-	jrl	nc, 954
-	jrl	nc, 1210
-	jrl	nc, 1466
-	jrl	nc, 1722
-	jrl	nc, 1978
-	jrl	nc, 2234
-	jrl	nc, 2490
-	jrl	nc, 2746
-	jrl	nc, 3002
-	jrl	nc, 3258
-	jrl	nc, 3514
-	jrl	nc, 3770
-	jrl	nc, 4026
-	jrl	nc, 4282
-	jrl	nc, 4538
-	jrl	nc, 4794
-	jrl	nc, 5050
-	jrl	nc, 5306
-	jrl	nc, 5562
-	jrl	nc, -1
-	swi	7
-	.byte 0xba, 0x17
-	jrl	nc, 6330
-	jrl	nc, -1
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xbb
-	nop
-	jrl	nc, 443
-	jrl	nc, 699
-	jrl	nc, 955
-	jrl	nc, 1211
-	jrl	nc, 1467
-	jrl	nc, 1723
-	jrl	nc, 1979
-	jrl	nc, 2235
-	jrl	nc, 2491
-	jrl	nc, 2747
-	jrl	nc, 3003
-	jrl	nc, 3259
-	jrl	nc, 3515
-	jrl	nc, 3771
-	jrl	nc, 4027
-	jrl	nc, 4283
-	jrl	nc, 4539
-	jrl	nc, 4795
-	jrl	nc, 5051
-	jrl	nc, 5307
-	jrl	nc, 5563
-	jrl	nc, -1
-	swi	7
-	.byte 0xbb, 0x17
-	jrl	nc, 6331
-	jrl	nc, -1
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xad
-	nop
-	sub	(xiy+1), xiy
-	push	sr
-	sub	(xiy+3), xiy
-	.byte 0x04
-	sub	(xiy+5), xiy
-	.byte 0x06
-	sub	(xiy+7), xiy
-	ld	(173:8), 9:io
-	sub	(xiy+10), xiy
-	pushw	3245
-	sub	(xiy+13), xiy
-	ret
-	sub	(xiy+15), xiy
-	rcf
-	sub	(xiy+17), xiy
-	ccf
-	sub	(xiy+19), xiy
-	push_a
-	cp	(xiy+21), xsp
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xae
-	nop
-	sub	(xiz+1), xiz
-	push	sr
-	sub	(xiz+3), xiz
-	.byte 0x04
-	sub	(xiz+5), xiz
-	.byte 0x06
-	sub	(xiz+7), xiz
-	ld	(174:8), 9:io
-	sub	(xiz+10), xiz
-	pushw	3246
-	sub	(xiz+13), xiz
-	ret
-	sub	(xiz+15), xiz
-	rcf
-	sub	(xiz+17), xiz
-	ccf
-	sub	(xiz+19), xiz
-	push_a
-	cp	(xiz+21), xsp
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	nop
-	nop
-	normal
-	nop
-	push	sr
-	nop
-	pop	sr
-	nop
-	max
-	nop
-	halt
-	nop
-	ei	0
-	reti
-	nop
-	ld	(0:8), 9:io
-	nop
-	ldw	(0:8), 11:io
-	incf
-	nop
-	decf
-	nop
-	ret
-	nop
-	retd	4096
-	nop
-	scf
-	nop
-	ccf
-	nop
-	zcf
-	nop
-	push_a
-	nop
-	pop_a
-	nop
-	swi	7
-	swi	7
-	ldf 0
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	ld	(xbc), 177
-	normal
-	ldw (xbc), 945
-	.byte 0xb1, 0x04, 0xb1
-	halt
-	.byte 0xb1, 0x06, 0xb1
-	reti
-	.byte 0xb1
-	ld	(177:8), 9:io
-	.byte 0xb1
-	ldw	(177:8), 0xb10b:io
-	incf
-	.byte 0xb1
-	decf
-	.byte 0xb1
-	ret
-	swi	7
-	swi	7
-	.byte 0xb1
-	rcf
-	.byte 0xb1
-	scf
-	.byte 0xb1
-	ccf
-	.byte 0xb1
-	zcf
-	swi	7
-	swi	7
-	.byte 0xb1
-	pop_a
-	swi	7
-	swi	7
-	.byte 0xb1, 0x17
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	ld	(xix), 180
-	normal
-	ldw (xix), 948
-	.byte 0xb4, 0x04, 0xb4
-	halt
-	.byte 0xb4, 0x06, 0xb4
-	reti
-	.byte 0xb4
-	ld	(180:8), 9:io
-	.byte 0xb4
-	ldw	(180:8), 0xb40b:io
-	incf
-	.byte 0xb4
-	decf
-	.byte 0xb4
-	ret
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	nop
-	normal
-	push	sr
-	pop	sr
-	max
-	halt
-	ei	7
-	ld	(9:8), 10:io
-	pushw	3340
-	ret
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	nop
-	nop
-	normal
-	nop
-	push	sr
-	nop
-	pop	sr
-	nop
-	max
-	nop
-	halt
-	nop
-	ei	0
-	reti
-	nop
-	ld	(0:8), 9:io
-	nop
-	ldw	(0:8), 11:io
-	incf
-	nop
-	decf
-	nop
-	ret
-	nop
-	retd	4096
-	nop
-	scf
-	nop
-	ccf
-	nop
-	zcf
-	nop
-	push_a
-	nop
-	pop_a
-	nop
-	swi	7
-	nop
-	ldf 0
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
+	.byte 0x18, 0x01, 0xff, 0xff, 0xff, 0xff, 0x20, 0x02, 0xff, 0xff, 0x04, 0x03, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0x19, 0xff, 0xff, 0xff, 0xff, 0xff, 0x21, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0x10, 0xff, 0x11, 0x12, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x07, 0xff, 0x05, 0x06, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0x23, 0x22, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x29, 0x28, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+;
+; MidiCC_FunctionRxFilter (+0x080, 48 x {u8 bit mask, u8 byte offset}), one per
+; CC function index (48 = the size of MidiCC_ExtendedRange_Table).  Reader
+; MidiRx_ControlChange: `sll a, 1 / ld wa, (<this>+2*func)`; 0xFFFF
+; = always dispatched, else `ld c, (0xfd57 + W) / and c, A / jr z` skips the
+; function when that bit of the RAM byte array at 0xFD57 is clear (bytes
+; 0xFD58/0xFD59 are used here; the handlers themselves test 0xFD57 bits
+; with `bit n, (0xfd57:16)`).  Entry order = function index 0..47.
+MidiCC_FunctionRxFilter:
+	.byte 0x01, 0x01
+	.byte 0x02, 0x01
+	.byte 0x04, 0x01
+	.byte 0x08, 0x01
+	.byte 0x10, 0x01
+	.byte 0x20, 0x01
+	.byte 0x20, 0x01
+	.byte 0x20, 0x01
+	.byte 0x04, 0x02
+	.byte 0x02, 0x02
+	.byte 0x40, 0x01
+	.byte 0x80, 0x02
+	.byte 0x08, 0x02
+	.byte 0x08, 0x02
+	.byte 0x10, 0x02
+	.byte 0x10, 0x02
+	.byte 0x20, 0x02
+	.byte 0x40, 0x02
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0x80, 0x01
+	.byte 0x80, 0x01
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0x01, 0x02
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+	.byte 0xff, 0xff
+;
+; Per-part target records, 32 records x 3 bytes (4 per line, record n = part n):
+;   +0 u16 selector -> BC -> (0x9644); low byte 0xFF = part not affected, skip
+;   +2 u8           -> D  -> (0x9647); E = the controller value (0x9636)
+; Sixteen such tables follow (fourteen with a reader, two marked Unread); the
+; reader of each is the handler at its CC function's slot of
+; MidiCC_ExtendedRange_Table, all of the
+; shape `ld a, (0x966a) / cp a, 31 / jr ugt / hl = 3*a / ld xix, <table> /
+; ld bc, (xix+hl) / cp c, 255 / jr z / inc 2, xix / ld d, (xix+hl)`.
+;
+; MidiCC_PartTargets_CC64_Sustain (+0x0E0): function 0 <- CC64; reader
+; MidiCC_RxCC64_Sustain (0xFCFE0B), whose tail MidiCC_Helper_ConditionalESetup
+; (0xFD036B) replaces E with D when the value is >= 0x40 and with 0 below it:
+; here D = 0x08.
+MidiCC_PartTargets_CC64_Sustain:
+	.byte 0x00, 0x04, 0x08, 0x01, 0x04, 0x08, 0x02, 0x04, 0x08, 0x03, 0x04, 0x08
+	.byte 0x04, 0x04, 0x08, 0x05, 0x04, 0x08, 0x06, 0x04, 0x08, 0x07, 0x04, 0x08
+	.byte 0x08, 0x04, 0x08, 0x09, 0x04, 0x08, 0x0a, 0x04, 0x08, 0x0b, 0x04, 0x08
+	.byte 0x0c, 0x04, 0x08, 0x0d, 0x04, 0x08, 0x0e, 0x04, 0x08, 0xff, 0xff, 0xff
+	.byte 0x10, 0x04, 0x08, 0x11, 0x04, 0x08, 0x12, 0x04, 0x08, 0x13, 0x04, 0x08
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD0F79-0xFD0F8C (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=69% dist=6 near MidiCC_ChannelMappingData_0xE0+50
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x17, 0x04, 0x08
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Func08 (+0x140): function 8, reader MidiCC_RxFunc08
+; (0xFCFE4B) -> MidiStream_DispatchData_0xB2.  No controller maps to function 8
+; in MidiCC_ChannelMappingData, so this table is reachable only if (0x9657) is
+; set some other way (not searched).
+MidiCC_PartTargets_Func08:
+	.byte 0xb7, 0x00, 0x7f, 0xb7, 0x01, 0x7f, 0xb7, 0x02, 0x7f, 0xb7, 0x03, 0x7f
+	.byte 0xb7, 0x04, 0x7f, 0xb7, 0x05, 0x7f, 0xb7, 0x06, 0x7f, 0xb7, 0x07, 0x7f
+	.byte 0xb7, 0x08, 0x7f, 0xb7, 0x09, 0x7f, 0xb7, 0x0a, 0x7f, 0xb7, 0x0b, 0x7f
+	.byte 0xb7, 0x0c, 0x7f, 0xb7, 0x0d, 0x7f, 0xb7, 0x0e, 0x7f, 0xff, 0xff, 0xff
+	.byte 0xb7, 0x10, 0x7f, 0xb7, 0x11, 0x7f, 0xb7, 0x12, 0x7f, 0xb7, 0x13, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xb7, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xb7, 0x17, 0x7f
+	.byte 0xb7, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Func09 (+0x1A0): function 9, reader MidiCC_RxFunc09
+; (0xFCFE8C) -> MidiStream_DispatchData_0xB2.  Unmapped, as function 8.
+MidiCC_PartTargets_Func09:
+	.byte 0xb6, 0x00, 0x7f, 0xb6, 0x01, 0x7f, 0xb6, 0x02, 0x7f, 0xb6, 0x03, 0x7f
+	.byte 0xb6, 0x04, 0x7f, 0xb6, 0x05, 0x7f, 0xb6, 0x06, 0x7f, 0xb6, 0x07, 0x7f
+	.byte 0xb6, 0x08, 0x7f, 0xb6, 0x09, 0x7f, 0xb6, 0x0a, 0x7f, 0xb6, 0x0b, 0x7f
+	.byte 0xb6, 0x0c, 0x7f, 0xb6, 0x0d, 0x7f, 0xb6, 0x0e, 0x7f, 0xff, 0xff, 0xff
+	.byte 0xb6, 0x10, 0x7f, 0xb6, 0x11, 0x7f, 0xb6, 0x12, 0x7f, 0xb6, 0x13, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xb6, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xb6, 0x17, 0x7f
+	.byte 0xb6, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_CC1_Modulation (+0x200): function 1 <- CC1, reader
+; MidiCC_RxCC1_Modulation (0xFCFECD) -> MidiStream_DispatchData_0x81.
+MidiCC_PartTargets_CC1_Modulation:
+	.byte 0xb2, 0x00, 0x7f, 0xb2, 0x01, 0x7f, 0xb2, 0x02, 0x7f, 0xb2, 0x03, 0x7f
+	.byte 0xb2, 0x04, 0x7f, 0xb2, 0x05, 0x7f, 0xb2, 0x06, 0x7f, 0xb2, 0x07, 0x7f
+	.byte 0xb2, 0x08, 0x7f, 0xb2, 0x09, 0x7f, 0xb2, 0x0a, 0x7f, 0xb2, 0x0b, 0x7f
+	.byte 0xb2, 0x0c, 0x7f, 0xb2, 0x0d, 0x7f, 0xb2, 0x0e, 0x7f, 0xff, 0xff, 0xff
+	.byte 0xb2, 0x10, 0x7f, 0xb2, 0x11, 0x7f, 0xb2, 0x12, 0x7f, 0xb2, 0x13, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xb2, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xb2, 0x17, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_CC7_Volume (+0x260): function 2 <- CC7, reader
+; MidiCC_RxCC7_Volume (0xFCFF0E) -> MidiStream_DispatchData_0x16.
+MidiCC_PartTargets_CC7_Volume:
+	.byte 0x00, 0x03, 0x7f, 0x01, 0x03, 0x7f, 0x02, 0x03, 0x7f, 0x03, 0x03, 0x7f
+	.byte 0x04, 0x03, 0x7f, 0x05, 0x03, 0x7f, 0x06, 0x03, 0x7f, 0x07, 0x03, 0x7f
+	.byte 0x08, 0x03, 0x7f, 0x09, 0x03, 0x7f, 0x0a, 0x03, 0x7f, 0x0b, 0x03, 0x7f
+	.byte 0x0c, 0x03, 0x7f, 0x0d, 0x03, 0x7f, 0x0e, 0x03, 0x7f, 0x0f, 0x03, 0x7f
+	.byte 0x10, 0x03, 0x7f, 0x11, 0x03, 0x7f, 0x12, 0x03, 0x7f, 0x13, 0x03, 0x7f
+	.byte 0x14, 0x03, 0x7f, 0x15, 0x03, 0x7f, 0xff, 0xff, 0xff, 0x17, 0x03, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_CC11_Expression (+0x2C0): function 3 <- CC11, reader
+; MidiCC_RxCC11_Expression (0xFCFF4F) -> MidiStream_DispatchData_0x42.
+MidiCC_PartTargets_CC11_Expression:
+	.byte 0xb3, 0x00, 0x7f, 0xb3, 0x01, 0x7f, 0xb3, 0x02, 0x7f, 0xb3, 0x03, 0x7f
+	.byte 0xb3, 0x04, 0x7f, 0xb3, 0x05, 0x7f, 0xb3, 0x06, 0x7f, 0xb3, 0x07, 0x7f
+	.byte 0xb3, 0x08, 0x7f, 0xb3, 0x09, 0x7f, 0xb3, 0x0a, 0x7f, 0xb3, 0x0b, 0x7f
+	.byte 0xb3, 0x0c, 0x7f, 0xb3, 0x0d, 0x7f, 0xb3, 0x0e, 0x7f, 0xb3, 0x0f, 0x7f
+	.byte 0xb3, 0x10, 0x7f, 0xb3, 0x11, 0x7f, 0xb3, 0x12, 0x7f, 0xb3, 0x13, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xb3, 0x17, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xb0, 0x01, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_CC10_Pan (+0x320): function 4 <- CC10, reader
+; MidiCC_RxCC10_Pan (0xFCFF90) -> MidiStream_DispatchData_0x191.
+MidiCC_PartTargets_CC10_Pan:
+	.byte 0x00, 0x08, 0x7f, 0x01, 0x08, 0x7f, 0x02, 0x08, 0x7f, 0x03, 0x08, 0x7f
+	.byte 0x04, 0x08, 0x7f, 0x05, 0x08, 0x7f, 0x06, 0x08, 0x7f, 0x07, 0x08, 0x7f
+	.byte 0x08, 0x08, 0x7f, 0x09, 0x08, 0x7f, 0x0a, 0x08, 0x7f, 0x0b, 0x08, 0x7f
+	.byte 0x0c, 0x08, 0x7f, 0x0d, 0x08, 0x7f, 0x0e, 0x08, 0x7f, 0xff, 0xff, 0xff
+	.byte 0x10, 0x08, 0x7f, 0x11, 0x08, 0x7f, 0x12, 0x08, 0x7f, 0x13, 0x08, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x17, 0x08, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_CC93_Chorus (+0x380): function 5 <- CC93, reader
+; MidiCC_RxCC93_Chorus (0xFCFFD1) -> MidiStream_DispatchData_0x191.
+MidiCC_PartTargets_CC93_Chorus:
+	.byte 0x00, 0x05, 0x7f, 0x01, 0x05, 0x7f, 0x02, 0x05, 0x7f, 0x03, 0x05, 0x7f
+	.byte 0x04, 0x05, 0x7f, 0x05, 0x05, 0x7f, 0x06, 0x05, 0x7f, 0x07, 0x05, 0x7f
+	.byte 0x08, 0x05, 0x7f, 0x09, 0x05, 0x7f, 0x0a, 0x05, 0x7f, 0x0b, 0x05, 0x7f
+	.byte 0x0c, 0x05, 0x7f, 0x0d, 0x05, 0x7f, 0x0e, 0x05, 0x7f, 0x0f, 0x05, 0x7f
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_CC94_Celeste (+0x3E0): function 6 <- CC94 (MIDI 1.0
+; "effect 4 depth", formerly celeste), reader MidiCC_RxCC94_Celeste (0xFD0012);
+; D = 0x40 here where the other level tables hold 0x7F.
+MidiCC_PartTargets_CC94_Celeste:
+	.byte 0x00, 0x04, 0x40, 0x01, 0x04, 0x40, 0x02, 0x04, 0x40, 0x03, 0x04, 0x40
+	.byte 0x04, 0x04, 0x40, 0x05, 0x04, 0x40, 0x06, 0x04, 0x40, 0x07, 0x04, 0x40
+	.byte 0x08, 0x04, 0x40, 0x09, 0x04, 0x40, 0x0a, 0x04, 0x40, 0x0b, 0x04, 0x40
+	.byte 0x0c, 0x04, 0x40, 0x0d, 0x04, 0x40, 0x0e, 0x04, 0x40, 0xff, 0xff, 0xff
+	.byte 0x10, 0x04, 0x40, 0x11, 0x04, 0x40, 0x12, 0x04, 0x40, 0x13, 0x04, 0x40
+	.byte 0xff, 0xff, 0xff, 0x15, 0x04, 0x40, 0xff, 0xff, 0xff, 0x17, 0x04, 0x40
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_CC91_Reverb (+0x440): function 7 <- CC91, reader
+; MidiCC_RxCC91_Reverb (0xFD0052) -> MidiStream_DispatchData_0x191.
+MidiCC_PartTargets_CC91_Reverb:
+	.byte 0x00, 0x07, 0x7f, 0x01, 0x07, 0x7f, 0x02, 0x07, 0x7f, 0x03, 0x07, 0x7f
+	.byte 0x04, 0x07, 0x7f, 0x05, 0x07, 0x7f, 0x06, 0x07, 0x7f, 0x07, 0x07, 0x7f
+	.byte 0x08, 0x07, 0x7f, 0x09, 0x07, 0x7f, 0x0a, 0x07, 0x7f, 0x0b, 0x07, 0x7f
+	.byte 0x0c, 0x07, 0x7f, 0x0d, 0x07, 0x7f, 0x0e, 0x07, 0x7f, 0x0f, 0x07, 0x7f
+	.byte 0x10, 0x07, 0x7f, 0x11, 0x07, 0x7f, 0x12, 0x07, 0x7f, 0x13, 0x07, 0x7f
+	.byte 0x14, 0x07, 0x7f, 0x15, 0x07, 0x7f, 0xff, 0xff, 0xff, 0x17, 0x07, 0x7f
+	.byte 0xff, 0xff, 0xff, 0x60, 0x01, 0x80, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Unread_A (+0x4A0) and _Unread_B (+0x500): same record
+; shape (selector low byte 0xBC / 0xBD), but NO READER FOUND.  Searched: the
+; 24-bit address (0xFD1307 / 0xFD1367) anywhere in the ROM, and every
+; `ld xix, MidiCC_ChannelMappingData*` in the tree.  They sit between the
+; function-7 and function-12 tables, i.e. where functions 10 and 11 would
+; keep theirs, and MidiCC_ExtendedRange_Table slots 10 and 11 hold
+; MidiCC_StubHandler_A/B, which are a bare `ret` -- consistent with two
+; functions compiled out, not proof of it.
+MidiCC_PartTargets_Unread_A:
+	.byte 0xbc, 0x00, 0x7f, 0xbc, 0x01, 0x7f, 0xbc, 0x02, 0x7f, 0xbc, 0x03, 0x7f
+	.byte 0xbc, 0x04, 0x7f, 0xbc, 0x05, 0x7f, 0xbc, 0x06, 0x7f, 0xbc, 0x07, 0x7f
+	.byte 0xbc, 0x08, 0x7f, 0xbc, 0x09, 0x7f, 0xbc, 0x0a, 0x7f, 0xbc, 0x0b, 0x7f
+	.byte 0xbc, 0x0c, 0x7f, 0xbc, 0x0d, 0x7f, 0xbc, 0x0e, 0x7f, 0xbc, 0x0f, 0x7f
+	.byte 0xbc, 0x10, 0x7f, 0xbc, 0x11, 0x7f, 0xbc, 0x12, 0x7f, 0xbc, 0x13, 0x7f
+	.byte 0xbc, 0x14, 0x7f, 0xbc, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xbc, 0x17, 0x7f
+	.byte 0xbc, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Unread_B (+0x500): same record layout; no reader found --
+; see the searches listed above MidiCC_PartTargets_Unread_A.
+MidiCC_PartTargets_Unread_B:
+	.byte 0xbd, 0x00, 0x7f, 0xbd, 0x01, 0x7f, 0xbd, 0x02, 0x7f, 0xbd, 0x03, 0x7f
+	.byte 0xbd, 0x04, 0x7f, 0xbd, 0x05, 0x7f, 0xbd, 0x06, 0x7f, 0xbd, 0x07, 0x7f
+	.byte 0xbd, 0x08, 0x7f, 0xbd, 0x09, 0x7f, 0xbd, 0x0a, 0x7f, 0xbd, 0x0b, 0x7f
+	.byte 0xbd, 0x0c, 0x7f, 0xbd, 0x0d, 0x7f, 0xbd, 0x0e, 0x7f, 0xbd, 0x0f, 0x7f
+	.byte 0xbd, 0x10, 0x7f, 0xbd, 0x11, 0x7f, 0xbd, 0x12, 0x7f, 0xbd, 0x13, 0x7f
+	.byte 0xbd, 0x14, 0x7f, 0xbd, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xbd, 0x17, 0x7f
+	.byte 0xbd, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Func12..15 (+0x560, +0x5C0, +0x620, +0x680): functions
+; 12-15, readers MidiCC_RxFunc12 (0xFD009F), _11 (0xFD00E0), _12
+; (0xFD0121), _13 (0xFD0162), all -> MidiStream_DispatchData_0xD0.  No
+; controller maps to these functions in MidiCC_ChannelMappingData.
+MidiCC_PartTargets_Func12:
+	.byte 0xb8, 0x00, 0x7f, 0xb8, 0x01, 0x7f, 0xb8, 0x02, 0x7f, 0xb8, 0x03, 0x7f
+	.byte 0xb8, 0x04, 0x7f, 0xb8, 0x05, 0x7f, 0xb8, 0x06, 0x7f, 0xb8, 0x07, 0x7f
+	.byte 0xb8, 0x08, 0x7f, 0xb8, 0x09, 0x7f, 0xb8, 0x0a, 0x7f, 0xb8, 0x0b, 0x7f
+	.byte 0xb8, 0x0c, 0x7f, 0xb8, 0x0d, 0x7f, 0xb8, 0x0e, 0x7f, 0xb8, 0x0f, 0x7f
+	.byte 0xb8, 0x10, 0x7f, 0xb8, 0x11, 0x7f, 0xb8, 0x12, 0x7f, 0xb8, 0x13, 0x7f
+	.byte 0xb8, 0x14, 0x7f, 0xb8, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xb8, 0x17, 0x7f
+	.byte 0xb8, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Func13 (+0x5C0): same 32 x 3-byte record layout as the tables
+; above; function 13, reader MidiCC_RxFunc13 (0xFD00E0) -> MidiStream_DispatchData_0xD0.
+MidiCC_PartTargets_Func13:
+	.byte 0xb9, 0x00, 0x7f, 0xb9, 0x01, 0x7f, 0xb9, 0x02, 0x7f, 0xb9, 0x03, 0x7f
+	.byte 0xb9, 0x04, 0x7f, 0xb9, 0x05, 0x7f, 0xb9, 0x06, 0x7f, 0xb9, 0x07, 0x7f
+	.byte 0xb9, 0x08, 0x7f, 0xb9, 0x09, 0x7f, 0xb9, 0x0a, 0x7f, 0xb9, 0x0b, 0x7f
+	.byte 0xb9, 0x0c, 0x7f, 0xb9, 0x0d, 0x7f, 0xb9, 0x0e, 0x7f, 0xb9, 0x0f, 0x7f
+	.byte 0xb9, 0x10, 0x7f, 0xb9, 0x11, 0x7f, 0xb9, 0x12, 0x7f, 0xb9, 0x13, 0x7f
+	.byte 0xb9, 0x14, 0x7f, 0xb9, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xb9, 0x17, 0x7f
+	.byte 0xb9, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Func14 (+0x620): same 32 x 3-byte record layout as the tables
+; above; function 14, reader MidiCC_RxFunc14 (0xFD0121) -> MidiStream_DispatchData_0xD0.
+MidiCC_PartTargets_Func14:
+	.byte 0xba, 0x00, 0x7f, 0xba, 0x01, 0x7f, 0xba, 0x02, 0x7f, 0xba, 0x03, 0x7f
+	.byte 0xba, 0x04, 0x7f, 0xba, 0x05, 0x7f, 0xba, 0x06, 0x7f, 0xba, 0x07, 0x7f
+	.byte 0xba, 0x08, 0x7f, 0xba, 0x09, 0x7f, 0xba, 0x0a, 0x7f, 0xba, 0x0b, 0x7f
+	.byte 0xba, 0x0c, 0x7f, 0xba, 0x0d, 0x7f, 0xba, 0x0e, 0x7f, 0xba, 0x0f, 0x7f
+	.byte 0xba, 0x10, 0x7f, 0xba, 0x11, 0x7f, 0xba, 0x12, 0x7f, 0xba, 0x13, 0x7f
+	.byte 0xba, 0x14, 0x7f, 0xba, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xba, 0x17, 0x7f
+	.byte 0xba, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Func15 (+0x680): same 32 x 3-byte record layout as the tables
+; above; function 15, reader MidiCC_RxFunc15 (0xFD0162) -> MidiStream_DispatchData_0xD0.
+MidiCC_PartTargets_Func15:
+	.byte 0xbb, 0x00, 0x7f, 0xbb, 0x01, 0x7f, 0xbb, 0x02, 0x7f, 0xbb, 0x03, 0x7f
+	.byte 0xbb, 0x04, 0x7f, 0xbb, 0x05, 0x7f, 0xbb, 0x06, 0x7f, 0xbb, 0x07, 0x7f
+	.byte 0xbb, 0x08, 0x7f, 0xbb, 0x09, 0x7f, 0xbb, 0x0a, 0x7f, 0xbb, 0x0b, 0x7f
+	.byte 0xbb, 0x0c, 0x7f, 0xbb, 0x0d, 0x7f, 0xbb, 0x0e, 0x7f, 0xbb, 0x0f, 0x7f
+	.byte 0xbb, 0x10, 0x7f, 0xbb, 0x11, 0x7f, 0xbb, 0x12, 0x7f, 0xbb, 0x13, 0x7f
+	.byte 0xbb, 0x14, 0x7f, 0xbb, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xbb, 0x17, 0x7f
+	.byte 0xbb, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+;
+; Per-part 16-bit selectors, 32 x u16 (8 per line, entry n = part n), read
+; as `sll a, 1 / ld bc, (xix+a)`; low byte 0xFF = part not affected.
+;
+; MidiCC_PartTargets_CC121_ResetAll (+0x6E0): function 40 <- CC121 (reset all
+; controllers), reader MidiCC_Handler_ParamDispatch (0xFD02FF), D = 0x7F,
+; -> MidiStream_DispatchData_0xEE.
+MidiCC_PartTargets_CC121_ResetAll:
+	.short 0x00ad, 0x01ad, 0x02ad, 0x03ad, 0x04ad, 0x05ad, 0x06ad, 0x07ad
+	.short 0x08ad, 0x09ad, 0x0aad, 0x0bad, 0x0cad, 0x0dad, 0x0ead, 0x0fad
+	.short 0x10ad, 0x11ad, 0x12ad, 0x13ad, 0x14ad, 0x15ad, 0xffff, 0xffff
+	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
+; MidiCC_PartTargets_CC120_AllSoundOff (+0x720): function 41 <- CC120, reader
+; MidiCC_Handler_TableDispatch (0xFD0335, which loads this address as the
+; literal 0x00fd1587), D = 0x7F, -> MidiStream_DispatchData_0x173.
+MidiCC_PartTargets_CC120_AllSoundOff:
+	.short 0x00ae, 0x01ae, 0x02ae, 0x03ae, 0x04ae, 0x05ae, 0x06ae, 0x07ae
+	.short 0x08ae, 0x09ae, 0x0aae, 0x0bae, 0x0cae, 0x0dae, 0x0eae, 0x0fae
+	.short 0x10ae, 0x11ae, 0x12ae, 0x13ae, 0x14ae, 0x15ae, 0xffff, 0xffff
+	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
+; MidiPC_PartTargets (+0x760): PROGRAM CHANGE (status Cx).  Reader
+; MidiRx_ProgramChange (0xFD039C, MidiCC_LowRange_Table slot 4):
+; E = program number (0x9635), D = 0xFF, gated by bit 4 of (0xFD57),
+; -> MidiStream_ExtendedDispatch_0x1.
+MidiPC_PartTargets:
+	.short 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007
+	.short 0x0008, 0x0009, 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f
+	.short 0x0010, 0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0xffff, 0x0017
+	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
+; MidiPB_PartTargets (+0x7A0): PITCH BEND (status Ex).  Reader
+; MidiRx_PitchBend (0xFD03D8, slot 6): E = LSB (0x9635),
+; D = MSB (0x9636), gated by bit 6 of (0xFD57), -> MidiStream_DispatchData_0x67.
+MidiPB_PartTargets:
+	.short 0x00b1, 0x01b1, 0x02b1, 0x03b1, 0x04b1, 0x05b1, 0x06b1, 0x07b1
+	.short 0x08b1, 0x09b1, 0x0ab1, 0x0bb1, 0x0cb1, 0x0db1, 0x0eb1, 0xffff
+	.short 0x10b1, 0x11b1, 0x12b1, 0x13b1, 0xffff, 0x15b1, 0xffff, 0x17b1
+	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
+; MidiCP_PartTargets (+0x7E0): CHANNEL PRESSURE (status Dx).  Reader
+; MidiRx_ChannelPressure (0xFD0416, slot 5): E = pressure (0x9635),
+; D = 0x7F, gated by bit 5 of (0xFD57), -> MidiStream_DispatchData_0xD0.
+MidiCP_PartTargets:
+	.short 0x00b4, 0x01b4, 0x02b4, 0x03b4, 0x04b4, 0x05b4, 0x06b4, 0x07b4
+	.short 0x08b4, 0x09b4, 0x0ab4, 0x0bb4, 0x0cb4, 0x0db4, 0x0eb4, 0xffff
+	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
+	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
+; MidiCC_PartSelector_DataEntry (+0x820, 32 x u8): functions 32 and 33 <- CC6
+; and CC38 (data entry MSB/LSB).  Readers MidiCC_Handler_BankModeSelect
+; (0xFD01A3) and MidiCC_Handler_ExpressionParam (0xFD0234): `ld c, (xix+hl)`,
+; 0xFF = part not affected; C becomes the selector's low byte and B is chosen
+; by comparing the part's RPN word at 0x9674+2*part with 0x8080/0x8081/0x8082
+; (the RPN MSB/LSB stored with bit 7 set by MidiCC_Handler_DirectStoreA/B,
+; functions 34/35 <- CC101/CC100).
+MidiCC_PartSelector_DataEntry:
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0xff
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_BankSelect (+0x840, 32 x u16): functions 24 and 25 <- CC0
+; and CC32 (bank select MSB/LSB).  Readers MidiCC_Handler_PairedParamB
+; (0xFCFCFA, CC0: D = value, E = 0xFF) and MidiCC_Handler_PairedParamA
+; (0xFCFCBC, CC32: E = value, D = 0xFF), both gated by bit 4 of (0xFD57), ->
+; MidiStream_ExtendedDispatch_0x298.
+MidiCC_PartTargets_BankSelect:
+	.short 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007
+	.short 0x0008, 0x0009, 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f
+	.short 0x0010, 0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0x00ff, 0x0017
+	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
 PanelEvt_Handler_4_DualValueCheck:
-	.byte 0xf1
-	popw	sp
-	and	(xiz), hl
-	jr	z, 53
+	bit	3, (0x964f:16)
+	jr	z, PanelEvt_Handler_4_DualValueCheck_Skip2
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 44
+	jr	ugt, PanelEvt_Handler_4_DualValueCheck_Skip2
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x527
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ld	d, 236:opc
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	z, 21
-	.byte 0xf1
-	pop	xwa
-	swi	5
-	inc	6, w
-	retd	37
-	.byte 0xf1
-	popw	iz
-	and	(xiz), hl
-	jr	z, 2
+	ld	xix, (xix+hl)
+	cp	xix, 0xffffffff
+	jr	z, PanelEvt_Handler_4_DualValueCheck_Skip2
+	bit	0, (0xfd58:16)
+	jr	z, PanelEvt_Handler_4_DualValueCheck_Skip2
+	ld	e, 0:opc
+	bit	3, (0x964e:16)
+	jr	z, PanelEvt_Handler_4_DualValueCheck_Skip
 	ld	e, 127:opc
+PanelEvt_Handler_4_DualValueCheck_Skip:
 	ld	w, 0:opc
-	calr	62961
-	.byte 0xf1
-	popw	sp
-	and	(xiz), iz
-	jr	z, 53
+	calr	MidiChannel_ConfigureController
+PanelEvt_Handler_4_DualValueCheck_Skip2:
+	bit	6, (0x964f:16)
+	jr	z, PanelEvt_Handler_4_DualValueCheck_Return
 	ld	l, (0x964c:16)
 	cp	l, 31
-	jr	ugt, 44
+	jr	ugt, PanelEvt_Handler_4_DualValueCheck_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x527
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ld	d, 236:opc
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	z, 21
-	.byte 0xf1
-	pop	xwa
-	swi	5
-	inc	6, e
-	retd	37
-	.byte 0xf1
-	popw	iz
-	and	(xiz), iz
-	jr	z, 2
+	ld	xix, (xix+hl)
+	cp	xix, 0xffffffff
+	jr	z, PanelEvt_Handler_4_DualValueCheck_Return
+	bit	5, (0xfd58:16)
+	jr	z, PanelEvt_Handler_4_DualValueCheck_Return
+	ld	e, 0:opc
+	bit	6, (0x964e:16)
+	jr	z, PanelEvt_Handler_4_DualValueCheck_Skip3
 	ld	e, 127:opc
+PanelEvt_Handler_4_DualValueCheck_Skip3:
 	ld	w, 6:opc
-	calr	62902
+	calr	MidiChannel_ConfigureController
+PanelEvt_Handler_4_DualValueCheck_Return:
 	ret
-	.byte 0x90
-	halt
-	swi	5
-	nop
-	.byte 0xa7
-	halt
-	swi	5
-	nop
-	.byte 0xbe
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	ld	(0xfd05:16), 224
-	halt
-	swi	5
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	jr	ugt, 8
-	swi	5
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	ldw	ix, 0xfd09
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	.byte 0x84
-	push	253
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	ld	b, 10:opc
-	swi	5
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+9), iy
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	ld	xiz, 0x7400fd0a
-	ldw	(253:8), 0x8f00:io
-	halt
-	swi	5
-	nop
-	cp	(xix+10), iy
-	nop
-	.byte 0xb9
-	ldw	(253:8), 4352:io
-	pushw	253
-	ld	xbc, 0x7100fd0b
-	pushw	253
-	.byte 0xc1
-	pushw	253
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	cp	(xsp+5), e
-	nop
-	ld	xwa, 0xa0b0701
-	pop	xiy
-	pop	xiz
-	pop	xhl
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x50, 0x52, 0x53
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	nop
-	ld	w, 255:opc
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x06
-	ld	h, 101:opc
-	jr	ov, -1
-	swi	7
-	swi	7
-	swi	7
-	jrl	ge, -136
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.byte 0xcb
-	swi	3
-	nop
-	nop
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.byte 0xcb
-	swi	3
-	nop
-	nop
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.byte 0xcb
-	swi	3
-	nop
-	nop
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	pop_f
-	swi	4
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	pop_f
-	swi	4
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
+	; PanelEvt_Handler_4_DualValueCheck_0x77 (0xFD175E) -- MIDI CC handler table.
+	; INDEXING RULE, from the only site that loads it (MidiCC_Dispatch, this file):
+	;     cp c, 0xbf / jr ugt, <ret>      ; index = C, valid 0..0xBF
+	;     ld l, c / extz hl / sll hl, 2   ; scaled by 4
+	;     ld xix, ..._0x77 / ld_sril3 XIX, 0x07, 0xf0, 0xec   ; xix += hl
+	;     call (xix)                      ; entry is a CODE address
+	; => 192 entries of 4 bytes, index 0 at 0xFD175E, stride 4. Every entry
+	; resolves to a label in this file, which is what settles CODE-pointer over
+	; data-pointer. It was previously spelled as 1-byte .byte runs interleaved
+	; with resync garbage; the byte gate could not see the difference.
 
+	; Supersedes 3 v10_data_as_code_census.py notes inside this span (the first
+	; reads: 0xFD17AB-0xFD191E (371 B), unreached CODE-territory, was disassembled
+	; as 188 plausible-but-dead instruction lines). The census was RIGHT that this
+	; is data and WRONG about where it starts: it carved from 0xFD17AB, one byte
+	; past the entry boundary, so every record shown was a rotation of the real
+	; one. The array starts at 0xFD175E, immediately after the `ret` at 0xFD175D.
+MidiDispatchCC_HandlerTable:
+	.long PanelEvt_CheckFlag7_Dispatch_A
+	.long PanelEvt_CheckFlag7_Dispatch_B
+	.long PanelEvt_CheckFlag7_Dispatch_C
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckChanZero_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch6Entry
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch3Entry_A
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch3Entry_B
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_ChannelDispatch_TableA
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch11Entry
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_ChannelDispatch_Ctrl40
+	.long MidiCC_ChannelDispatch_Ctrl41
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_ChannelDispatch_SpecialCh1
+	.long MidiCC_ChannelDispatch_CtrlFlags
+	.long MidiCC_ChannelDispatch_Ctrl1
+	.long MidiCC_ChannelDispatch_Ctrl3
+	.long MidiCC_ChannelDispatch_CtrlFlags2
+	.long MidiCC_ChannelDispatch_Ctrl0
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	; PanelEvt_Handler_4_DualValueCheck_0x377 (0xFD1A5E) -- 48-entry byte table.
+	; INDEXING RULE, from MidiChanCfg_SetupParams (this file):
+	;     cp w, 0x2f / jr ugt, <exit>     ; index = W, valid 0..0x2F
+	;     ld xiz, ..._0x377 / ldb_sri W, 0x03, 0xf8, 0xe1   ; W = (xiz + W)
+	;     cp w, 0xff / jr z, <exit>       ; 0xFF means 'no entry'
+	; => 48 bytes, stride 1, 0xFF = absent. A genuine byte table: it is printed
+	; 8 per line only to show the six 8-entry groups, not because 8 is a record.
+; MidiCC_FunctionToCCNumber: the TRANSMIT direction of MidiCC_ChannelMappingData.
+; Entry f is the controller number sent for CC function f; it is exactly the
+; inverse of that receive map (function 0 -> 0x40 = CC64, 1 -> CC1, 2 -> CC7,
+; ... 40 -> CC121, 41 -> CC120), and MidiChannel_ConfigureController builds
+; the message as status 0xB0 | channel, this byte, value E.
+MidiCC_FunctionToCCNumber:
+	.byte 0x40, 0x01, 0x07, 0x0b, 0x0a, 0x5d, 0x5e, 0x5b
+
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x50, 0x52, 0x53, 0xff, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x00, 0x20, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x06, 0x26, 0x65, 0x64, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x79, 0x78, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	; 0xFD1A8E..0xFD268F -- 24 records of 32 x u32, stride 0x80.
+	; INDEXING RULE, from the 26 sites in this file that load a record base
+	; (PanelEvt_Handler_4_DualValueCheck_0x3A7 .. _0xE28 in shared/positional_labels.s):
+	;     ldb_d8 l, (0x964c) / cp l, 31 / jr ugt, <skip>   ; index = L, valid 0..31
+	;     ld xix, <record base> / extz hl / sll l, 2
+	;     ld_rrl xix, xix, hl             ; xix = record[index]
+	;     cp xix, 0xffffffff / jr z, <skip>   ; 0xFFFFFFFF means 'no entry'
+	; => 32 entries of 4 bytes per record; present entries are work-RAM addresses
+	; 0x0000F9C3 + 26*k (26-byte parameter blocks); absent entries are 0xFFFFFFFF.
+	; Record bases run 0xFD1A8E + 0x80*k for k=0..4, then 0xFD1D0F + 0x80*k for
+	; k=0..18 -- there is a ONE-BYTE 0xFF pad at 0xFD1D0E, which is why the
+	; second block is offset by one and why this span is emitted in three
+	; segments. The positional labels are the evidence for that offset, not a
+	; guess: _0x5A7 = base+1447 and _0x628 = base+1576, a gap of 129.
+
+	; Previously this span was carved by v10_data_as_code_census.py at a start
+	; offset one byte past the true array start, so each record appeared as
+	; '.byte <tail>' plus fake instructions ('swi 1 / nop / nop') for its head.
+	; Those census notes are removed here because the offset they record is the
+	; wrong one; the census's finding -- that this is data, not code -- stands.
+
+	; Supersedes 44 v10_data_as_code_census.py notes inside this span, all carved
+	; one byte late for the same reason (e.g. 0xFD1A93-0xFD1AB2 (31 B) is the tail
+	; of the record that really starts at 0xFD1A8E).
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0x0000fc19, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	; one-byte 0xFF pad; the record grid restarts at 0xFD1D0F
+	.byte 0xff
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0x0000fc19, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 FileData_ValidateFormat:
 	pushw wa
 	dec 2, xsp
@@ -5648,44 +3153,35 @@ FileData_RawDataBlock_Skip:
 	call	FileIO_ReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	ge, 15
+	jr	ge, FileData_RawDataBlock_Skip2
 	ld	xwa, (xsp+10)
 	push	xwa
 	call	Free
 	inc	4, xsp
 	ld	hl, iz
-	jrl	371
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	jrl	FileData_RawDataBlock_Epilogue
+FileData_RawDataBlock_Skip2:
+	ldw	(xsp+4), 0
+FileData_RawDataBlock_Loop2:
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, xwa
 	sll	xbc, 5
 	add	xbc, 32
 	ld	xiz, xbc
-	.byte 0xaf
-	ldw	(134:8), 6721:io
-	nop
-	nop
-	nop
+	add	xiz, (xsp+10)
+	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	add	xhl, 52
-	.byte 0xaf, 0x06
-	or	(xhl), h
-	add	(xwa-21), a
-	calr	1351
+	add	xhl, (xsp+6)
+	ld	xwa, xiz
+	ld	xbc, xhl
+	calr	DataBuf_CopyVoiceBlock24
 	incw	1, (xsp+4)
-	.byte 0x9f, 0x04
-	push	xsp
-	push_f
-	nop
-	jr	c, -56
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	cpw	(xsp+4), 24
+	jr	c, FileData_RawDataBlock_Loop2
+	ldw	(xsp+4), 0
+FileData_RawDataBlock_Loop3:
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, xwa
@@ -5693,68 +3189,48 @@ FileData_RawDataBlock_Skip:
 	add	xbc, xwa
 	sll	xbc, 2
 	ld	xwa, xbc
-	add	xwa, 800
-	.byte 0xaf
-	ldw	(128:8), 0xc8e9:io
-	.byte 0xa4
-	push	sr
-	nop
-	nop
-	.byte 0xaf, 0x06, 0x81
-	calr	1869
+	add	xwa, 0x320
+	add	xwa, (xsp+10)
+	add	xbc, 0x2a4
+	add	xbc, (xsp+6)
+	calr	DataBuf_CopyEffectBlock12
 	incw	1, (xsp+4)
-	.byte 0x9f, 0x04
-	push	xsp
-	pop	sr
-	nop
-	jr	c, -47
+	cpw	(xsp+4), 3
+	jr	c, FileData_RawDataBlock_Loop3
 	ld	xwa, (xsp+10)
 	lda xwa, (xwa+836)
 	ld xbc, (xsp+6)
 	lda xbc, (xbc+728)
-	calr 2065
+	calr DataBuf_CopyFilterBlock12
 	ld xwa, (xsp+10)
 	lda	xwa, (xwa+852)
 	ld	xbc, (xsp+6)
 	lda	xbc, (xbc+740)
-	calr	2409
+	calr	DataBuf_CopyReverbBlock6
 	ld	xwa, (xsp+10)
-	.byte 0xf3, 0xe1
-	pop	xix
-	pop	sr
-	ldw	wa, 1711
-	ld	a, 243:opc
-	.byte 0xe5, 0xec
-	push	sr
-	ldw	bc, 0xe91e
-	push	191
-	.byte 0x04
-	push	sr
-	nop
-	nop
+	lda	xwa, (xwa+860)
+	ld	xbc, (xsp+6)
+	lda	xbc, (xbc+748)
+	calr	DataBuf_CopySimpleBlock4
+	ldw	(xsp+4), 0
+FileData_RawDataBlock_Loop4:
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, xwa
 	sll	xbc, 5
 	add	xbc, 874
 	ld	xiz, xbc
-	.byte 0xaf
-	ldw	(134:8), 6721:io
-	nop
-	nop
-	nop
+	add	xiz, (xsp+10)
+	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	add	xhl, 754
-	.byte 0xaf, 0x06
-	or	(xhl), h
-	add	(xwa-21), a
-	calr	2499
+	add	xhl, (xsp+6)
+	ld	xwa, xiz
+	ld	xbc, xhl
+	calr	DataBuf_LoadAndDispatchFormat2
 	incw	1, (xsp+4)
-	.byte 0x9f, 0x04
-	push	xsp
-	push	sr
-	nop
-	jr	c, -56
+	cpw	(xsp+4), 2
+	jr	c, FileData_RawDataBlock_Loop4
 	ld	xwa, (xsp+10)
 	lda xwa, (xwa+938)
 	ld xbc, (xsp+6)
@@ -5805,59 +3281,58 @@ FileData_AllocLoadAndParse_Helper:
 	push	xiz
 	ld	wa, (0xb7ea:16)
 	cp	wa, 1:i3
-	jr	z, 119
+	jr	z, FileData_AllocLoadAndParse_Helper_Skip2
 	cp	wa, 2:i3
-	jr	nz, 122
-	.byte 0xbf
-	incf
-	push	sr
-	ldw	(0:8), 0x901d:io
-	.byte 0xb4
-	swi	5
+	jr	nz, FileData_AllocLoadAndParse_Helper_Skip3
+	ldw	(xsp+12), 10
+FileData_AllocLoadAndParse_Helper_Join:
+	call	PrePmLoad
 	ld	wa, (xsp+12)
-	calr	10765
+	calr	DataBuf_CopyBulkBitfields_Large_Helper3
 	ldw (xsp+8), 0
 	ld	wa, (xsp+12)
 	srl	wa, 3
 	cp	wa, 0:i3
-	jr	ule, 20
+	jr	ule, FileData_AllocLoadAndParse_Helper_Skip
+FileData_AllocLoadAndParse_Helper_Loop:
 	ld	wa, (xsp+8)
-	calr	10986
+	calr	SndParam_TableDispatch_Memset
 	incw	1, (xsp+8)
 	ld	wa, (xsp+12)
 	srl	wa, 3
 	cp	(xsp+8), wa
-	jr	c, -20
+	jr	c, FileData_AllocLoadAndParse_Helper_Loop
+FileData_AllocLoadAndParse_Helper_Skip:
 	pushw	768
 	call	Malloc
 	inc	2, xsp
 	ld	(xsp+14), xhl
 	ld	xwa, (xsp+14)
 	or	xwa, xwa
-	jr	z, 53
+	jr	z, FileData_AllocLoadAndParse_Helper_Skip3
 	ldw (xsp+10), 0
-	.byte 0x9f
-	incf
-	push	xsp
-	nop
-	nop
-	jrl	ule, 427
+	cpw	(xsp+12), 0
+	jrl	ule, FileData_AllocLoadAndParse_Helper_Skip5
+FileData_AllocLoadAndParse_Helper_Loop2:
 	ld	xwa, (xsp+14)
 	ld	xbc, 768
 	call	FileIO_ReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	ge, 28
+	jr	ge, FileData_AllocLoadAndParse_Helper_Skip4
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	Free
 	inc	4, xsp
 	ld	hl, iz
 	jrl	FileData_RawDataBlock_Epilogue2
+FileData_AllocLoadAndParse_Helper_Skip2:
 	ldw (xsp+12), 24
-	jr	-117
+	jr	FileData_AllocLoadAndParse_Helper_Join
+FileData_AllocLoadAndParse_Helper_Skip3:
 	ldw	hl, 0xff38
 	jrl	FileData_RawDataBlock_Epilogue2
+FileData_AllocLoadAndParse_Helper_Skip4:
 	ld	wa, (xsp+10)
 	extz	xwa
 	ld	xbc, xwa
@@ -5868,7 +3343,7 @@ FileData_AllocLoadAndParse_Helper:
 	add	xwa, xbc
 	ld	(xsp+4), xwa
 	ldw (xsp+8), 0
-FileData_RawDataBlock_Loop:
+FileData_AllocLoadAndParse_Helper_Loop3:
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -5876,22 +3351,19 @@ FileData_RawDataBlock_Loop:
 	add	xbc, xwa
 	sll	xbc, 3
 	ld	xiz, xbc
-	.byte 0xaf
-	ret
-	.byte 0x86
+	add	xiz, (xsp+14)
 	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	add	xhl, 20
-	.byte 0xaf, 0x04
-	or	(xhl), h
-	add	(xwa-21), a
+	add	xhl, (xsp+4)
+	ld	xwa, xiz
+	ld	xbc, xhl
 	calr	DataBuf_CopyVoiceBlock24
 	incw	1, (xsp+8)
-	.byte 0x9f
-	ld	(63:8), 24:io
-	nop
-	jr	c, FileData_RawDataBlock_Loop
-	ldw (xsp+8), 0
+	cpw	(xsp+8), 24
+	jr	c, FileData_AllocLoadAndParse_Helper_Loop3
+	ldw	(xsp+8), 0
+FileData_AllocLoadAndParse_Helper_Loop4:
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -5899,29 +3371,19 @@ FileData_RawDataBlock_Loop:
 	add	xbc, xwa
 	sll	xbc, 2
 	ld	xwa, xbc
-	add	xwa, 576
-	.byte 0xaf
-	ret
-	or	(xwa), a
-	add	d, w
-	push	sr
-	nop
-	nop
-	.byte 0xaf, 0x04, 0x81
-	calr	1326
+	add	xwa, 0x240
+	add	xwa, (xsp+14)
+	add	xbc, 0x284
+	add	xbc, (xsp+4)
+	calr	DataBuf_CopyEffectBlock12
 	incw	1, (xsp+8)
-	.byte 0x9f
-	ld	(63:8), 3:io
-	nop
-	jr	c, -47
+	cpw	(xsp+8), 3
+	jr	c, FileData_AllocLoadAndParse_Helper_Loop4
 	ld	xwa, (xsp+14)
-	.byte 0xf3, 0xe1
-	jr	ov, 2
-	ldw	wa, 1199
-	ld	a, 243:opc
-	.byte 0xe5
-	lda	xbc, (xwa+2)
-	calr	1522
+	lda	xwa, (xwa+612)
+	ld	xbc, (xsp+4)
+	lda	xbc, (xbc+696)
+	calr	DataBuf_CopyFilterBlock12
 	ld	xwa, (xsp+14)
 	lda	xwa, (xwa+624)
 	ld	xbc, (xsp+4)
@@ -5933,78 +3395,60 @@ FileData_RawDataBlock_Loop:
 	lda	xbc, (xbc+716)
 	calr	DataBuf_CopySimpleBlock4
 	ldw (xsp+8), 0
-FileData_RawDataBlock_Loop2:
+FileData_RawDataBlock_Loop:
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
 	sll	xbc, 5
 	add	xbc, 645
 	ld	xiz, xbc
-	.byte 0xaf
-	ret
-	.byte 0x86
+	add	xiz, (xsp+14)
 	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	add	xhl, 722
-	.byte 0xaf, 0x04
-	or	(xhl), h
-	add	(xwa-21), a
+	add	xhl, (xsp+4)
+	ld	xwa, xiz
+	ld	xbc, xhl
 	calr	DataBuf_LoadAndDispatchFormat2
 	incw	1, (xsp+8)
-	.byte 0x9f
-	ld	(63:8), 2:io
-	nop
-	jr	c, FileData_RawDataBlock_Loop2
+	cpw	(xsp+8), 2
+	jr	c, FileData_RawDataBlock_Loop
 	ld	xwa, (xsp+14)
 	lda	xwa, (xwa+709)
 	ld	xbc, (xsp+4)
 	lda	xbc, (xbc+864)
 	calr	DataBuf_CopyEQBlock7
 	ld	xwa, (xsp+14)
-	.byte 0xf3, 0xe1, 0xcc
-	push	sr
-	ldw	wa, 1199
-	ld	a, 243:opc
-	.byte 0xe5
-	jr	gt, 3
-	ldw	bc, 0x611e
-	ldw	(175:8), 8206:io
+	lda	xwa, (xwa+716)
+	ld	xbc, (xsp+4)
+	lda	xbc, (xbc+874)
+	calr	DataBuf_CopyChorusBlock16
+	ld	xwa, (xsp+14)
 	lda	xwa, (xwa+732)
 	ld	xbc, (xsp+4)
 	lda	xbc, (xbc+890)
 	calr	DataBuf_CopyCompressorBlock16
 	ld	xwa, (xsp+14)
-	.byte 0xf3, 0xe1, 0xec
-	push	sr
-	ldw	wa, 1199
-	ld	a, 243:opc
-	.byte 0xe5, 0x8a
-	pop	sr
-	ldw	bc, 0x5a1e
-	pushw	3759
-	ld	w, 243:opc
-	.byte 0xe1, 0xf2
-	push	sr
-	ldw	wa, 1199
-	ld	a, 243:opc
-	.byte 0xe5, 0xae
-	pop	sr
-	ldw	bc, 0x541e
-	pushw	3759
-	ld	w, 175:opc
-	.byte 0x04
-	ld	a, 30:opc
-	.byte 0xd0
-	decf
+	lda	xwa, (xwa+748)
+	ld	xbc, (xsp+4)
+	lda	xbc, (xbc+906)
+	calr	DataBuf_CopyDelayBit2
+	ld	xwa, (xsp+14)
+	lda	xwa, (xwa+754)
+	ld	xbc, (xsp+4)
+	lda	xbc, (xbc+942)
+	calr	DataBuf_CopyMixerBlock12
+	ld	xwa, (xsp+14)
+	ld	xbc, (xsp+4)
+	calr	DataBuf_CopyBulkBitfields_Stub
 	ld	xwa, 0xf980
 	ld	xbc, (xsp+4)
-	calr	3907
+	calr	DataBuf_CopyBulkBitfields_960
 	incw	1, (xsp+10)
 	ld	wa, (xsp+10)
-	.byte 0x9f
-	incf
-	st_dd8w iy, 119
-	swi 6
+	cp	wa, (xsp+12)
+	jrl	c, FileData_AllocLoadAndParse_Helper_Loop2
+FileData_AllocLoadAndParse_Helper_Skip5:
 	ld	wa, 0:i3
 	call	PostPmLoad
 	ld	xwa, (xsp+14)
@@ -8238,7 +5682,7 @@ DataBuf_CopyBulkBitfields_Large_Loop3:
 	ld	de, wa
 	add	de, 414
 	ld	xwa, (xsp+10)
-	lda_rr	xiz, xwa, de
+	lda	xiz, (xwa+de)
 	ld	xwa, xbc
 	ld	xbc, 26
 	call	Math_MultiplyAccumulate
@@ -8779,20 +6223,17 @@ VoiceParam_CopyBitfields_LargeBlock:
 	lda	xde, (xbc+15)
 	ld	l, (xwa)
 	and	l, 15
-	.byte 0x82
-	push	xix
-	.byte 0xf0
+	andmi8	(xde), 240
 	or	(xde), l
-	.byte 0xb0, 0x9d, 0xb2, 0xa5, 0xb0, 0x9e, 0xb2, 0xa6
-	.byte 0xb0, 0x9e, 0xb2
-	add	(xsp), xwa
-	normal
-	ld	a, 201:opc
-	neg	d
-	.byte 0x89
-	ret
-	push	xix
-	swi	0
+	ldcfm	5, (xwa)
+	stcfm	5, (xde)
+	ldcfm	6, (xwa)
+	stcfm	6, (xde)
+	ldcfm	6, (xwa)
+	stcfm	7, (xde)
+	ld	a, (xwa+1)
+	and	a, 7
+	andmi8	(xbc+14), 248
 	or	(xbc+14), a
 	ret
 	ld	xde, xwa
@@ -8801,277 +6242,221 @@ VoiceParam_CopyBitfields_LargeBlock:
 	ld	a, (xhl)
 	and	a, 3
 	and	a, 3
-	.byte 0x84
-	push	xix
-	swi	4
+	andmi8	(xix), 252
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
-	scc8	c, a
+	ldcfm	3, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 3
-	.byte 0x84
-	push	xix
-	ldx
+	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d
-	scc8	c, a
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 5
-	.byte 0x84
-	push	xix
-	.byte 0xdf
+	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9e, 0xb4, 0xa6, 0xba
-	pop	sr
-	.byte 0x9b, 0xb9
-	pop	sr
-	.byte 0xa3
+	ldcfm	6, (xhl)
+	stcfm	6, (xix)
+	ldcfm	3, (xde+3)
+	stcfm	3, (xbc+3)
 	lda	xix, (xbc+4)
 	lda	xhl, (xde+4)
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
 	ld	a, (xhl)
 	and	a, 24
-	.byte 0x84
-	push	xix
-	.byte 0xe7
+	andmi8	(xix), 231
 	or	(xix), a
 	lda	xix, (xbc+5)
 	lda	xhl, (xde+5)
-	.byte 0xb3, 0x98
-	scc8	c, a
+	ldcfm	0, (xhl)
+	scc	c, a
 	and	a, 1
-	.byte 0x84
-	push	xix
-	swi	6
+	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9e
-	scc8	c, a
+	ldcfm	6, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 6
-	.byte 0x84
-	push	xix
-	.byte 0xbf
+	andmi8	(xix), 191
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xix, (xbc+7)
 	lda	xhl, (xde+7)
 	ld	a, (xhl)
 	and	a, 15
 	and	a, 15
-	.byte 0x84
-	push	xix
-	.byte 0xf0
+	andmi8	(xix), 240
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d, 0xb4, 0xa5
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	stcfm	5, (xix)
 	lda	xix, (xbc+8)
 	lda	xhl, (xde+8)
-	.byte 0xb3, 0x98
-	scc8	c, a
+	ldcfm	0, (xhl)
+	scc	c, a
 	and	a, 1
-	.byte 0x84
-	push	xix
-	swi	6
+	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x99
-	scc8	c, a
+	ldcfm	1, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 1
-	.byte 0x84
-	push	xix
-	swi	5
+	andmi8	(xix), 253
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
-	scc8	c, a
+	ldcfm	3, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 3
-	.byte 0x84
-	push	xix
-	ldx
+	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d
-	scc8	c, a
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 5
-	.byte 0x84
-	push	xix
-	.byte 0xdf
+	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9e
-	scc8	c, a
+	ldcfm	6, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 6
-	.byte 0x84
-	push	xix
-	.byte 0xbf
+	andmi8	(xix), 191
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xix, (xbc+9)
 	lda	xhl, (xde+9)
-	.byte 0xb3, 0x98
-	scc8	c, a
+	ldcfm	0, (xhl)
+	scc	c, a
 	and	a, 1
-	.byte 0x84
-	push	xix
-	swi	6
+	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x99
-	scc8	c, a
+	ldcfm	1, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 1
-	.byte 0x84
-	push	xix
-	swi	5
+	andmi8	(xix), 253
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
-	scc8	c, a
+	ldcfm	3, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 3
-	.byte 0x84
-	push	xix
-	ldx
+	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d
-	scc8	c, a
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 5
-	.byte 0x84
-	push	xix
-	.byte 0xdf
+	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9e
-	scc8	c, a
+	ldcfm	6, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 6
-	.byte 0x84
-	push	xix
-	.byte 0xbf
+	andmi8	(xix), 191
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xix, (xbc+10)
 	lda	xhl, (xde+10)
-	.byte 0xb3, 0x98
-	scc8	c, a
+	ldcfm	0, (xhl)
+	scc	c, a
 	and	a, 1
-	.byte 0x84
-	push	xix
-	swi	6
+	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x99
-	scc8	c, a
+	ldcfm	1, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 1
-	.byte 0x84
-	push	xix
-	swi	5
+	andmi8	(xix), 253
 	or	(xix), a
-	.byte 0xb3, 0x9a
-	scc8	c, a
+	ldcfm	2, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 2
-	.byte 0x84
-	push	xix
-	swi	3
+	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
-	scc8	c, a
+	ldcfm	3, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 3
-	.byte 0x84
-	push	xix
-	ldx
+	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
-	scc8	c, a
+	ldcfm	4, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 4
-	.byte 0x84
-	push	xix
-	add	xix, xsp
-	sbc	xhl, xbc
-	.byte 0x9d
-	scc8	c, a
+	andmi8	(xix), 239
+	or	(xix), a
+	ldcfm	5, (xhl)
+	scc	c, a
 	and	a, 1
 	sla	a, 5
-	.byte 0x84
-	push	xix
-	.byte 0xdf
+	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xbc, (xbc+11)
 	lda	xwa, (xde+11)
-	.byte 0xb0, 0x98, 0xb1, 0xa0, 0xb0, 0x9d, 0xb1, 0xa5
-	.byte 0xb0, 0x9e, 0xb1, 0xa6
+	ldcfm	0, (xwa)
+	stcfm	0, (xbc)
+	ldcfm	5, (xwa)
+	stcfm	5, (xbc)
+	ldcfm	6, (xwa)
+	stcfm	6, (xbc)
 	ret
 
 DSPCfg_ConfigureVoiceSlotA:
@@ -9237,22 +6622,21 @@ DSPCfg_VoiceSlotB_ExtractData:
 	lda	xhl, (xde+373)
 	ld	a, (xhl)
 	and	a, 7
-	jr	z, 19
+	jr	z, DSPCfg_VoiceSlotB_ExtractData_Skip2
 	ld	a, (xhl)
 	sll	a, 4
 	and	a, 48
 	andmi8	(xbc+737), 207
 	or	(xbc+737), a
+DSPCfg_VoiceSlotB_ExtractData_Skip2:
 	lda	xwa, (xde+1006)
 	ld	xhl, xwa
 	lda	xix, (xbc+64)
 	lda	xiy, (xwa+16)
+DSPCfg_VoiceSlotB_ExtractData_Loop:
 	ld	a, (xhl-36)
 	res	7, a
-	.byte 0x8c
-	swi	6
-	push	xix
-	.byte 0x80
+	andmi8	(xix-2), 128
 	or	(xix-2), a
 	ld	a, (xhl-18)
 	res	7, a
@@ -9260,32 +6644,29 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix+1), a
 	ld	a, (xhl+18)
 	res	7, a
-	.byte 0x8c
-	swi	7
-	push	xix
-	.byte 0x80
+	andmi8	(xix-1), 128
 	or	(xix-1), a
 	ldb_spi	a, 236
 	ld	(xix), a
 	lda	xix, (xix+26)
 	cp	xhl, xiy
-	jr	c, -51
+	jr	c, DSPCfg_VoiceSlotB_ExtractData_Loop
 	ld	a, (xde+389)
 	extz	wa
 	lda	xhl, (NakaInst_SoundConfig_LookupTable_0x58:24)
-	ld_rrb	a, xhl, wa
+	ld	a, (xhl+wa)
 	ld	(xbc+948), a
 	ld	a, (xde+390)
 	extz	wa
-	ld_rrb	a, xhl, wa
+	ld	a, (xhl+wa)
 	ld	(xbc+949), a
 	ld	a, (xde+394)
 	extz	wa
-	ld_rrb	a, xhl, wa
+	ld	a, (xhl+wa)
 	ld	(xbc+970), a
 	ld	a, (xde+395)
 	extz	wa
-	ld_rrb	a, xhl, wa
+	ld	a, (xhl+wa)
 	ld	(xbc+969), a
 	ret
 DataBuf_CopyBulkBitfields_Large_Helper:
@@ -9555,31 +6936,25 @@ DataBuf_CopyBulkBitfields_Large_Helper2:
 	ld	xwa, xde
 	lda	xbc, (xbc+32)
 	lda	xde, (xde+416)
+DataBuf_CopyBulkBitfields_Large_Helper2_Loop:
 	ld	l, (xwa-2)
 	and	l, 127
-	.byte 0x89
-	swi	6
-	push	xix
-	add (xwa), a
-	swi 6
-	ld xwa, xsp
-	normal
-	ld l, 207:opc
-	scc nc, d
+	andmi8	(xbc-2), 128
+	or	(xbc-2), l
+	ld	l, (xwa+1)
+	and	l, 127
 	andmi8	(xbc+1), 128
 	or	(xbc+1), l
 	ld	l, (xwa-1)
 	and	l, 127
-	.byte 0x89
-	swi	7
-	push	xix
-	add (xwa), a
-	swi 7
-	add xwa, xsp
-	ld l, 177:opc
-	ld xsp, 3090225849
-	jp16 59952
-	bit_dd8 3, 103
+	andmi8	(xbc-1), 128
+	or	(xbc-1), l
+	ld	l, (xwa)
+	ld	(xbc), l
+	lda	xbc, (xbc+26)
+	lda	xwa, (xwa+26)
+	cp	xwa, xde
+	jr	c, DataBuf_CopyBulkBitfields_Large_Helper2_Loop
 	ret
 
 DataBuf_TransferSlotBitfields:
@@ -9724,11 +7099,8 @@ DataBuf_CopyBulkBitfields_Large_Helper3:
 	lda	xwa, (Naka_ToshiParam_Table_0x8C:24)
 	ld	(xsp+2), xwa
 	ld	iz, 0:i3
-	.byte 0x9f, 0x06
-	push	xsp
-	nop
-	nop
-	jr	ule, 43
+	cpw	(xsp+6), 0
+	jr	ule, DataBuf_CopyBulkBitfields_Large_Helper3_Epilogue
 DataBuf_Data_FormatDispatch_Loop:
 	ld	wa, iz
 	extz	xwa
@@ -9745,8 +7117,9 @@ DataBuf_Data_FormatDispatch_Loop:
 	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	inc	1, iz
-	.byte 0x9f, 0x06, 0xf6
+	cp	iz, (xsp+6)
 	jr	c, DataBuf_Data_FormatDispatch_Loop
+DataBuf_CopyBulkBitfields_Large_Helper3_Epilogue:
 	popw	iz
 	inc	6, xsp
 	ret
@@ -10801,41 +8174,34 @@ MidiStream_RetStub3:
 	ret
 
 MidiStream_PrevBankCheck:
-	.byte 0xd7
-	swi	2
-	.byte 0x04, 0xf1
-	push_f
-	ld	(xiy-49), xiz
-	push	xwa
+	push	qiz
+	bit	7, (0xbd18:16)
+	jr	z, MidiStream_PrevBankCheck_Skip2
 	ldib_erp 251, 0
-	calr	60
+MidiStream_PrevBankCheck_Loop:
+	calr	SeqAlt_ProcessAndFinalize
 	ld	xwa, (0xbcac:16)
-	.byte 0x80
-	push	xsp
-	normal
-	jr	z, 47
-	.byte 0x80
-	push	xsp
-	.byte 0x06
-	jr	nz, 6
+	cp	(xwa), 1
+	jr	z, MidiStream_PrevBankCheck_Epilogue
+	cp	(xwa), 6
+	jr	nz, MidiStream_PrevBankCheck_Skip
 	ld	(xwa+4), 32
-	jr	36
+	jr	MidiStream_PrevBankCheck_Epilogue
+MidiStream_PrevBankCheck_Skip:
 	ld	xwa, (0xbc60:16)
-	calr	3797
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	inc	7, hl
-	.byte 0xda, 0xc7
-	swi	3
-	inc	7, hl
-	rcf
+	calr	SeqOut_FlushWithChunking
+	inc1b_erp	251
+	cpib_erp	251, 3
+	jr	c, MidiStream_PrevBankCheck_Loop
+	cpib_erp	251, 3
+	jr	c, MidiStream_PrevBankCheck_Epilogue
 	ld	xwa, (0xbcac:16)
 	ld	(xwa+4), 24
-	jr	6
-	calr	24
-	calr	5117
+	jr	MidiStream_PrevBankCheck_Epilogue
+MidiStream_PrevBankCheck_Skip2:
+	calr	SeqBuf_WaitForEmpty
+	calr	MidiStream_PrevBankCheck_Helper
+MidiStream_PrevBankCheck_Epilogue:
 	pop qiz
 	ret
 
@@ -12298,15 +9664,11 @@ ArpQueue_EnqueueDone:
 
 ArpQueue_ProcessAndSort_Data:
 	ld	xwa, (0xbcac:16)
-	.byte 0x88, 0x04
-	push	xsp
-	nop
+	cp	(xwa+4), 0
 	ret	nz
 ArpQueue_ProcessAndSort_Data_Loop:
 	ld	xwa, (0xbcac:16)
-	.byte 0x88, 0x04
-	push	xsp
-	nop
+	cp	(xwa+4), 0
 	ret	nz
 	call	MidiSeq_PartConfigure_Data
 	calr	ArpQueue_ProcessAndSort_Data_Helper
@@ -12324,8 +9686,7 @@ ArpQueue_ProcessAndSort_Data_Loop:
 	ret
 ArpQueue_ProcessAndSort_Data_Helper:
 	ld	xwa, (0xbcb8:16)
-	.byte 0x88
-	retd	319
+	cp	(xwa+15), 1
 	ret	nz
 	ld	xwa, MidiPkt_EventType_Table_0x56C
 	ld	bc, 3:i3
@@ -12336,6 +9697,7 @@ ArpQueue_ProcessAndSort_Data_Helper2:
 	ld	xwa, (0xbcd4:16)
 	or	xwa, xwa
 	jr	z, ArpQueue_ProcessAndSort_Data_Epilogue
+ArpQueue_ProcessAndSort_Data_Helper2_Loop:
 	lda	xwa, (xsp)
 	lda	xde, (xwa+1)
 	lda	xhl, (0xbccc:16)
@@ -12347,10 +9709,9 @@ ArpQueue_ProcessAndSort_Data_Helper2:
 	ld	(xwa), c
 	srl	c, 4
 	ld	(xwa), c
-	.byte 0x82
-	push	xix
-	retd	0xaad9
-	calr	65359
+	andmi8	(xde), 15
+	ld	bc, 2:i3
+	calr	ArpQueue_Enqueue
 	ld	xwa, 1:i3
 	sub	(0xbcc4:16), xwa
 	lda	xbc, (0xbcd4:16)
@@ -12358,13 +9719,10 @@ ArpQueue_ProcessAndSort_Data_Helper2:
 	dec	1, xwa
 	ld	(xbc), xwa
 	or	xwa, xwa
-	jr	z, 10
+	jr	z, ArpQueue_ProcessAndSort_Data_Epilogue
 	ld	xwa, (0xbc5c:16)
-	.byte 0x90
-	push	xsp
-	swi	4
-	nop
-	jr	c, -65
+	cpw	(xwa), 252
+	jr	c, ArpQueue_ProcessAndSort_Data_Helper2_Loop
 ArpQueue_ProcessAndSort_Data_Epilogue:
 	inc	2, xsp
 	ret
@@ -12373,8 +9731,9 @@ ArpQueue_ProcessAndSort_Data_Helper3:
 	ld	(xsp), 1
 	ld	xwa, (0xbcd4:16)
 	or	xwa, xwa
-	jr	nz, 3
+	jr	nz, ArpQueue_ProcessAndSort_Data_Helper3_Skip
 	ld	(xsp), 0
+ArpQueue_ProcessAndSort_Data_Helper3_Skip:
 	lda	xwa, (xsp)
 	ld	bc, 1:i3
 	calr	ArpQueue_Enqueue
@@ -12507,8 +9866,9 @@ SeqVoice_ReadEntryFields_Data:
 	ld	a, (xde+2)
 	lda_dpi	xbc, 228
 	ld	a, (xde+3)
-	.byte 0xf5, 0xe4
-	ld	xbc, 0x0eff00b1
+	lda_dpi	xbc, 228
+	ld	(xbc), 255
+	ret
 
 SeqVoice_StoreEntry:
 	dec 4, xsp
@@ -12627,35 +9987,32 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	xiz, xwa
 	lda	xwa, (0xf980:16)
 	ld	(xiz), xwa
-	calr	763
+	calr	SeqVoice_DispatchProcess_Data_Helper2
 	ld	(xsp+4), xhl
-	calr	779
+	calr	SeqVoice_DispatchProcess_Data_Helper3
 	lda	xwa, (0xffbe:16)
 	sub	xwa, 0xf980
 	add	xwa, 0x12cb2
 	add	xwa, xhl
-	.byte 0xaf, 0x04
-	or	(xwa), w
-	.byte 0xc8
-	nop
-	pop	xwa
-	nop
-	nop
+	add	xwa, (xsp+4)
+	add	xwa, 0x5800
 	add	(xiz+8), xwa
 	ld	wa, 1:i3
-	calr	61196
+	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, 8
+	jr	z, SeqVoice_DispatchProcess_Data_Skip3
 	ld	xwa, 0x72aa
 	add	(xiz+8), xwa
+SeqVoice_DispatchProcess_Data_Skip3:
 	ld	wa, 3:i3
-	calr	61177
+	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, 6
-	calr	671
+	jr	z, SeqVoice_DispatchProcess_Data_Skip4
+	calr	SeqVoice_DispatchProcess_Data_Helper
 	add	(xiz+8), xhl
+SeqVoice_DispatchProcess_Data_Skip4:
 	ld	xwa, (xiz+8)
-	.byte 0xa6, 0x80
+	add	xwa, (xiz)
 	ld	(xiz+4), xwa
 	pop	xiz
 	inc	4, xsp
@@ -12722,15 +10079,14 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	(xiz+4), xwa
 	ld	xwa, 0x16800
 	ld	(xiz+8), xwa
-	.byte 0xf1
-	push_f
-	ld	(xiy-50), xiz
-	decf
-	calr	455
+	bit	6, (0xbd18:16)
+	jr	z, SeqVoice_DispatchProcess_Data_Epilogue2
+	calr	SeqVoice_DispatchProcess_Data_Helper
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
 	ld	(xiz+8), xhl
+SeqVoice_DispatchProcess_Data_Epilogue2:
 	pop	xiz
 	ret
 	lda	xde, (0x94800:24)
@@ -12757,11 +10113,9 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	(xiz+4), xwa
 	ld	xwa, 0x15440
 	ld	(xiz+8), xwa
-	.byte 0xf1
-	push_f
-	ld	(xiy-50), xiz
-	ld	h, 30:opc
-	jr	ge, 1
+	bit	6, (0xbd18:16)
+	jr	z, SeqVoice_DispatchProcess_Data_Epilogue3
+	calr	SeqVoice_DispatchProcess_Data_Helper
 	lda	xde, (0x94860:24)
 	lda	xbc, (0x95bc0:24)
 	sub	xbc, xde
@@ -12774,6 +10128,7 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	(xiz+4), xbc
 	sub	xhl, xde
 	ld	(xiz+8), xhl
+SeqVoice_DispatchProcess_Data_Epilogue3:
 	pop	xiz
 	ret
 	push	xiz
@@ -12784,44 +10139,30 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	(xiz+4), xwa
 	ld	xwa, 0x53000
 	ld	(xiz+8), xwa
-	.byte 0xf1
-	push_f
-	ld	(xiy-50), xiz
-	ldf 30
-	push xwa
-	normal
-	.byte 0xf3, 0xed
-	nop
-	pop	xwa
-	ldw	wa, 0x80a6
+	bit	6, (0xbd18:16)
+	jr	z, SeqVoice_DispatchProcess_Data_Epilogue4
+	calr	SeqVoice_DispatchProcess_Data_Helper2
+	lda	xwa, (xhl+22528)
+	add	xwa, (xiz)
 	ld	(xiz+4), xwa
 	ld	xwa, 0x5800
 	add	xwa, xhl
 	ld	(xiz+8), xwa
+SeqVoice_DispatchProcess_Data_Epilogue4:
 	pop	xiz
 	ret
 	lda	xbc, (0xf180:16)
 	ld	(xwa), xbc
-	.byte 0xf3, 0xe5
-	nop
-	ld	(49:8), 184:io
-	.byte 0x04
-	jr	lt, 65
-	nop
-	ld	(0:8), 0:io
+	lda	xbc, (xbc+2048)
+	ld	(xwa+4), xbc
+	ld	xbc, 0x800
 	ld	(xwa+8), xbc
 	ret
 	lda	xbc, (0xab000:24)
 	ld	(xwa), xbc
-	.byte 0xf3, 0xe5
-	nop
-	.byte 0x50
-	ldw	bc, 1208
-	jr	lt, 65
-	nop
-	.byte 0x50
-	nop
-	nop
+	lda	xbc, (xbc+20480)
+	ld	(xwa+4), xbc
+	ld	xbc, 0x5000
 	ld	(xwa+8), xbc
 	ret
 	push	xiz
@@ -12832,15 +10173,14 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	(xiz+4), xwa
 	ld	xwa, 0x4d800
 	ld	(xiz+8), xwa
-	.byte 0xf1
-	push_f
-	ld	(xiy-50), xiz
-	decf
-	calr	207
+	bit	6, (0xbd18:16)
+	jr	z, SeqVoice_DispatchProcess_Data_Epilogue5
+	calr	SeqVoice_DispatchProcess_Data_Helper2
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
 	ld	(xiz+8), xhl
+SeqVoice_DispatchProcess_Data_Epilogue5:
 	pop	xiz
 	ret
 	ret
@@ -12850,25 +10190,18 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	xiz, xwa
 	lda	xwa, (0x1e8800:24)
 	ld	(xiz), xwa
-	.byte 0xf3, 0xe1
-	nop
-	push	xix
-	ldw	wa, 1214
-	jr	f, 64
-	nop
-	push	xix
-	nop
-	nop
+	lda	xwa, (xwa+15360)
+	ld	(xiz+4), xwa
+	ld	xwa, 0x3c00
 	ld	(xiz+8), xwa
-	.byte 0xf1
-	push_f
-	ld	(xiy-50), xiz
-	decf
-	calr	179
+	bit	6, (0xbd18:16)
+	jr	z, SeqVoice_DispatchProcess_Data_Epilogue6
+	calr	SeqVoice_DispatchProcess_Data_Helper3
 	ld	xwa, (xiz)
 	add	xwa, xhl
 	ld	(xiz+4), xwa
 	ld	(xiz+8), xhl
+SeqVoice_DispatchProcess_Data_Epilogue6:
 	pop	xiz
 	ret
 	lda	xde, (0x1e8800:24)
@@ -12897,12 +10230,9 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	(xiz+4), xwa
 	ld	xwa, 0x3900
 	ld	(xiz+8), xwa
-	.byte 0xf1
-	push_f
-	ld	(xiy-50), xiz
-	ld	h, 30:opc
-	.byte 0x52
-	nop
+	bit	6, (0xbd18:16)
+	jr	z, SeqVoice_DispatchProcess_Data_Epilogue7
+	calr	SeqVoice_DispatchProcess_Data_Helper3
 	lda	xde, (0x1e8820:24)
 	lda	xbc, (0x1e8b00:24)
 	sub	xbc, xde
@@ -12915,8 +10245,10 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	ld	(xiz+4), xbc
 	sub	xhl, xde
 	ld	(xiz+8), xhl
+SeqVoice_DispatchProcess_Data_Epilogue7:
 	pop	xiz
 	ret
+SeqVoice_DispatchProcess_Data_Helper:
 	push	xde
 	push	xhl
 	push	xix
@@ -12930,6 +10262,7 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	extz	xhl
 	sll	xhl, 4
 	ret
+SeqVoice_DispatchProcess_Data_Helper2:
 	push	xde
 	push	xhl
 	push	xix
@@ -12943,6 +10276,7 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	extz	xhl
 	sll	xhl, 4
 	ret
+SeqVoice_DispatchProcess_Data_Helper3:
 	push	xde
 	push	xhl
 	push	xix
@@ -12990,7 +10324,11 @@ MidiChan_ApplyTimeout:
 	calr MIDI_ReadChannelParam
 	ret
 
-MidiChan_TimerDispatch_Data:	.ascii ":;<>"
+MidiChan_TimerDispatch_Data:
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call	ToneGen_DSPCfg_Initialize
 	call	SndParam_SyncDisplayBitmap
 	pop	xiz
@@ -12998,6 +10336,7 @@ MidiChan_TimerDispatch_Data:	.ascii ":;<>"
 	pop	xhl
 	pop	xde
 	ret
+MidiStream_PrevBankCheck_Helper:
 	ld	de, (1033:16)
 MidiChan_TimerDispatch_Data_Code_Loop:
 	ld	wa, de
@@ -13115,17 +10454,14 @@ AssSwb_ProcessLoop_Data:
 	dec	6, xsp
 	push	xiz
 	ld	xiz, xwa
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	ld	a, (xiz)
 	extz	wa
-	calr	65291
+	calr	Part_LookupByIndex
 	ld	(xsp+6), xhl
 	ld	xbc, (xsp+6)
 	cp	xbc, 0xffffffff
-	jrl	z, 150
+	jrl	z, AssSwb_ProcessLoop_Data_Skip
 	lda	xix, (xiz+2)
 	lda	xhl, (xiz+4)
 	ld	wa, (xhl)
@@ -13136,45 +10472,33 @@ AssSwb_ProcessLoop_Data:
 	extz	iy
 	ld	wa, (xhl)
 	cpl	a
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xf4
-	add	b, a
-	ld	a, 199:opc
-	.byte 0xf4, 0x99
+	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xc9	; and (xbc+iy),a -- the backend cannot spell this form
+	ld	a, (xde)
+	ldb_erp	a, 244
 	extz	iy
 	ld	wa, (xix)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xf4
-	add	xde, xbc
-	ld	a, 216:opc
-	ccf
+	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xe9	; or (xbc+iy),a -- the backend cannot spell this form
+	ld	a, (xde)
+	extz	wa
 	ld	iy, wa
 	inc	1, iy
 	ld	wa, (xhl)
 	srl	wa, 8
 	cpl	a
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xf4
-	add	b, a
-	ld	a, 216:opc
-	ccf
+	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xc9	; and (xbc+iy),a -- the backend cannot spell this form
+	ld	a, (xde)
+	extz	wa
 	ld	iy, wa
 	inc	1, iy
 	ld	wa, (xix)
 	srl	wa, 8
 	ld	xix, (xsp+6)
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xf4
-	add	xiz, xbc
-	ld	a, 216:opc
-	ccf
+	.byte 0xc3, 0x07, 0xf0, 0xf4, 0xe9	; or (xix+iy),a -- the backend cannot spell this form
+	ld	a, (xiz)
+	extz	wa
 	ld	c, (xde)
 	extz	bc
-	ld_rrb e, xix, bc
+	ld	e, (xix+bc)
 	extz de
 	ld	hl, (xhl)
 	extz	hl
@@ -13189,22 +10513,21 @@ AssSwb_ProcessLoop_Data:
 	extz	hl
 	inc	1, hl
 	ld	xde, (xsp+6)
-	ld_rrb e, xde, hl
+	ld	e, (xde+hl)
 	extz	de
 	ld	hl, (xiz+4)
 	srl	hl, 8
 	extz	hl
 	pushw	hl
 	call	AssswbWr
-	jr	5
-	.byte 0xbf, 0x04
-	push	sr
-	swi	7
-	swi	7
+	jr	AssSwb_ProcessLoop_Data_Join
+AssSwb_ProcessLoop_Data_Skip:
+	ldw	(xsp+4), 0xffff
+AssSwb_ProcessLoop_Data_Join:
 	ld	hl, (xsp+4)
 	pop	xiz
-	.byte 0xef
-	jr	z, 0x0e
+	inc	6, xsp
+	ret
 
 Part_LookupTableEntry:
 	ld xde, (0x90f2:16)
@@ -13494,11 +10817,8 @@ MidiSeq_PartLookup_Data_Skip:
 MidiSeq_PartLookup_Data_Skip2:
 	calr	MidiSeq_PartLookup_Data_Helper3
 MidiSeq_PartLookup_Data_Entry:
-	.byte 0xf1
-	push_f
-	.byte 0xbd
-	sbc	w, a
-	.byte 0xf6
+	bit	1, (0xbd18:16)
+	ret	z
 	call	SeqStep_PlaybackNop
 	ret
 MidiSeq_PartLookup_Data_Helper:
@@ -13513,11 +10833,8 @@ MidiSeq_PartLookup_Data_Helper3:
 	call	SeqData_ReadFieldByIndex
 	extz	hl
 	lda	xbc, (WidgetParam_Entry_018_0x9A:24)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	pop_f
-	ld	xde, MidiPkt_EventType_Table_0x33
+	ld	(0x7f42), (xbc+hl)
+	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
 
 MidiSeq_ApplyPendingParams:
@@ -13557,15 +10874,11 @@ MidiSeq_PartConfigure_Data:
 	ret
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
-	.byte 0xf1
-	push_f
-	ld	(xiy-69), w
-	ld	(xix-68), 0
+	set	3, (0xbd18:16)
+	ld	xwa, 0xbcbc
 	call	SeqVoice_DispatchProcess_Data_0xDC
 	calr	MidiPkt_ArpConfigChain_Data
-	.byte 0xf1
-	push_f
-	.byte 0xbd, 0xb3
+	res	3, (0xbd18:16)
 	ret
 	ld	xwa, 0xbcbc
 	call	SeqVoice_DispatchProcess_Data_0x1E3
@@ -14010,7 +11323,7 @@ MidiTable_DispatchHelper:
 	extz wa
 	sla	wa, 2
 	lda xbc, (SeqChan_CommandDispatch_Table:24)
-	ld_rrl	xhl, xbc, wa
+	ld	xhl, (xbc+wa)
 	call	(xhl)
 	calr MidiTable_FlushArpNotes
 	call MidiSeq_UpdateAllParams
@@ -14043,10 +11356,7 @@ MidiTable_CallFlush:
 
 
 MidiPkt_InitSingleField_Data:
-	.byte 0xc1
-	ld	w, 189:opc
-	push	xsp
-	nop
+	cp	(0xbd20:16), 0
 	ret	nz
 	ld	(0xbd20:16), 1
 	ld	xwa, MidiPkt_EventType_Table_0x578
@@ -14290,7 +11600,7 @@ MidiPkt_ArpExtHandler_N_Data:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (SeqChan_CommandDispatch_Table_0x9C:24)
-	ld_rrl xhl, xbc, hl
+	ld	xhl, (xbc+hl)
 	call (xhl)
 	ret
 SeqChan_ProcessStepCmd:
@@ -14467,10 +11777,8 @@ SeqChan_StepCmd_Field11_Data:
 	ld	wa, 4:i3
 	call	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	.byte 0xf2
-	cp	(xiy+108), e
-	or	xbc, xiz
-	ld	xwa, (xix-68)
+	call_24	nz, (0xfd6c8d)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
@@ -14488,10 +11796,8 @@ SeqChan_StepCmd_Field12_Data:
 	ld	wa, 4:i3
 	call	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	.byte 0xf2
-	cp	(xiy+108), e
-	or	xbc, xiz
-	ld	xwa, (xix-68)
+	call_24	nz, (0xfd6c8d)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
@@ -14510,10 +11816,8 @@ SeqChan_StepCmd_Field13Write:
 	ld	wa, 4:i3
 	call AccWrap_ReturnZero
 	cp hl, 0xffff
-	.byte 0xf2
-	cp	(xiy+108), e
-	or xbc, xiz
-	ld xwa, (xix-68)
+	call_24	nz, (0xfd6c8d)
+	ldda32	xwa, (0xbcac)
 	; --- Section 2: reload XWA, setup BC, call, check L ---
 	ldw bc, 0x000f
 	call SeqData_ReadFieldByIndex
@@ -14539,12 +11843,9 @@ SeqChan_DispatchByType_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SeqChan_CommandDispatch_Table_0xF4:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	c, 179:opc
-	cp	xbc, xwa
-	.byte 0x1c, 0xbd, 0xb7
+	ld	xhl, (xbc+wa)
+	call	(xhl)
+	res	7, (0xbd1c:16)
 	ret
 SeqChan_DefaultHandler:
 	ld	xwa, (0xbcac:16)
@@ -14556,28 +11857,28 @@ SeqChan_WriteField_Data_A:
 	ld	bc, 3:i3
 	ld	de, 0:i3
 	call	MIDI_ReadChannelParam
-	.byte 0xf1, 0x1a, 0xbd, 0xbf
+	set	7, (0xbd1a:16)
 	ret
 SeqChan_WriteField_Data_B:
 	ld	xwa, (0xbcac:16)
 	ld	bc, 3:i3
 	ld	de, 0:i3
 	call	MIDI_ReadChannelParam
-	.byte 0xf1, 0x1a, 0xbd, 0xbe
+	set	6, (0xbd1a:16)
 	ret
 SeqChan_WriteField_Data_C:
 	ld	xwa, (0xbcac:16)
 	ld	bc, 3:i3
 	ld	de, 0:i3
 	call	MIDI_ReadChannelParam
-	.byte 0xf1, 0x1a, 0xbd, 0xbd
+	set	5, (0xbd1a:16)
 	ret
 SeqChan_WriteField_Data_D:
 	ld	xwa, (0xbcac:16)
 	ld	bc, 3:i3
 	ld	de, 0:i3
 	call	MIDI_ReadChannelParam
-	.byte 0xf1, 0x1a, 0xbd, 0xbc
+	set	4, (0xbd1a:16)
 	ret
 SeqChan_RetStub_C:
 	ret
@@ -14586,7 +11887,7 @@ SeqChan_WriteField_Data_E:
 	ld	bc, 3:i3
 	ld	de, 0:i3
 	call	MIDI_ReadChannelParam
-	.byte 0xf1, 0x1a, 0xbd, 0xba
+	set	2, (0xbd1a:16)
 	ret
 ; MIDI SysEx processing block with dispatch
 MidiSysEx_ProcessBlock:
@@ -14765,7 +12066,7 @@ MidiSysEx_ProcessBlock_Helper11:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SeqChan_CommandDispatch_Table_0x152:24)
-	ld_rrl	xhl, xbc, wa
+	ld	xhl, (xbc+wa)
 	call	(xhl)
 	ret
 	ret
@@ -15062,10 +12363,8 @@ SoundMode_RetStub_H:
 	ret
 
 SoundMode_SysExConfig_Data:
-	.byte 0xf1, 0x50
-	swi	5
-	sbc	w, d
-	swi	6
+	bit	4, (0xfd50:16)
+	ret	nz
 	and	wa, 511
 	lda	xbc, (0xfc5a:16)
 	ld	l, a
@@ -15090,9 +12389,7 @@ SoundMode_SysExConfig_Data:
 	pop	xix
 	pop	xhl
 	pop	xde
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xbc
+	set	4, (0x90f9:16)
 	push	xde
 	push	xhl
 	push	xix
@@ -15102,9 +12399,7 @@ SoundMode_SysExConfig_Data:
 	pop	xix
 	pop	xhl
 	pop	xde
-	.byte 0xf1
-	swi	1
-	.byte 0x90, 0xb4
+	res	4, (0x90f9:16)
 	ret
 
 SoundMode_DispatchRender:
@@ -15889,20 +13184,15 @@ MidiBuf_FillLoop:
 	ret
 
 MidiCtrl_ModeSwitch_Data:
-	.byte 0xf1
-	sbc	xsp, xiz
-	sbc	w, w
-	swi	6
-	.byte 0xc1
-	jrl	pl, 0x3fc0
-	pop	sr
+	bit	0, (0xb7ee:16)
 	ret	nz
-	.byte 0xf1
-	jrl	nc, -13632
+	cp	(0xc07d:16), 3
+	ret	nz
+	bit	2, (0xc07f:16)
 	ret	z
 	ld	a, (0xc07e:16)
 	extz	wa
-	calr	1
+	calr	MidiCtrl_Bit2ToChannel
 	ret
 
 MidiCtrl_Bit2ToChannel:
@@ -16247,10 +13537,8 @@ SeqData_FormatOutput_CaseC:
 	lda	xwa, (xwa+14)
 	jp	Param_SignExtendRetu_Data_0x3CB
 SeqData_FormatOutput_Default:
-	.byte 0xf1, 0x50
-	swi	5
-	sbc	w, d
-	swi	6
+	bit	4, (0xfd50:16)
+	ret	nz
 	ld	xwa, (0xbc54:16)
 	lda	xwa, (xwa+14)
 	call	Param_SignExtendRetu_Data_0x59C
@@ -16264,25 +13552,16 @@ SeqData_FormatOutput_Default:
 	call	ArpQueue_SwapBuffers
 	ret
 SeqData_FormatOutput_Data:
-	.byte 0xf1, 0x50
-	swi	5
-	sbc	w, d
-	swi	6
-	calr	31
-	.byte 0xd1
-	adc	wa, iz
-	push	xsp
-	nop
-	nop
+	bit	4, (0xfd50:16)
+	ret	nz
+	calr	SeqData_FormatOutput_Data_Helper
+	cpdi16	(0x90de), 0
 	ret	z
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	.byte 0xd1
-	adc	wa, iz
-	pop_f
-	.byte 0xe0, 0x90
+	ldmm16	0x90e0, 0x90de
 	call	MidiStream_JumpStubData
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -16290,6 +13569,7 @@ SeqData_FormatOutput_Data:
 	pop	xhl
 	pop	xde
 	ret
+SeqData_FormatOutput_Data_Helper:
 	ld	xwa, (0xbcac:16)
 	ld	bc, 1:i3
 	call	SeqData_ReadFieldByIndex
@@ -16301,221 +13581,216 @@ SeqData_FormatOutput_Data:
 	ret	gt
 	add	hl, hl
 	lda	xix, (SeqData_SubDispatch_Table_0xA0:24)
-	ld_rrw hl, xix, hl
+	ld	hl, (xix+hl)
 	lda xix, (16617342:24)
 	jp_rr 8, xix, hl
-	jr	18
-	jr	110
-	jrl	200
-	jrl	291
-	jrl	289
-	jrl	379
-	calr	469
+	jr	SeqData_FormatOutput_Data_Helper_Join
+	jr	SeqData_FormatOutput_Data_Helper_Join2
+	jrl	SeqData_FormatOutput_Data_Helper_Join3
+	jrl	SeqData_FormatOutput_Data_Helper_Return
+	jrl	SeqData_FormatOutput_Data_Helper_Join4
+	jrl	SeqData_FormatOutput_Data_Helper_Join5
+	calr	SeqData_FormatOutput_Data_Helper_Helper
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 11
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cp_erpb	251, 11
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xE:24)
-	ld_rrl xwa, xwa, bc
-	calr 6074
+	lda	xwa, (0xee4e2a:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xE:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4e2a:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join2:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue2
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x66:24)
-	ld_rrl xwa, xwa, bc
-	calr 5981
+	lda	xwa, (0xee4e82:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue2
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x66:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4e82:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue2:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join3:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 12
-	jr	nc, 68
-	stb_erp c, 251
+	ldb_erp	l, 251
+	cp_erpb	251, 12
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue3
+	stb_erp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x6E:24)
-	ld_rrl xwa, xwa, bc
-	calr 5887
+	lda	xwa, (0xee4e8a:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue3
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x6E:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4e8a:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue3:
-	pop qiz
+	pop	qiz
 	ret
+SeqData_FormatOutput_Data_Helper_Return:
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join4:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue4
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xCE:24)
-	ld_rrl xwa, xwa, bc
-	calr 5793
+	lda	xwa, (0xee4eea:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue4
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xCE:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4eea:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue4:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Join5:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue5
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xD6:24)
-	ld_rrl xwa, xwa, bc
-	calr 5700
-	cp hl, 65535
+	lda	xwa, (0xee4ef2:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
+	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue5
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xD6:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4ef2:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue5:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+SeqData_FormatOutput_Data_Helper_Helper:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 14
-	jr	nc, 68
-	stb_erp c, 251
+	ldb_erp	l, 251
+	cp_erpb	251, 14
+	jr	nc, SeqData_FormatOutput_Data_Code_Epilogue6
+	stb_erp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xDE:24)
-	ld_rrl xwa, xwa, bc
-	calr 5606
+	lda	xwa, (0xee4efa:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, SeqData_FormatOutput_Data_Code_Epilogue6
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xDE:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4efa:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x14E:24)
+	lda	xde, (0xee4f6a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 SeqData_FormatOutput_Data_Code_Epilogue6:
-	pop qiz
+	pop	qiz
 	ret
 
 SeqAlt_NibbleSearch_Ret:
@@ -16705,12 +13980,12 @@ SeqAlt_DescriptorBlock_Data:
 	dec	6, xsp
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	cp	(xiz+9), l
-	jr	ugt, 59
-	.byte 0x8e
-	ldw	(247:8), 0x366b:io
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue4
+	cp	l, (xiz+10)
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue4
 	extz	hl
 	lda	xbc, (xsp+4)
 	ld	a, (xiz+6)
@@ -16720,61 +13995,62 @@ SeqAlt_DescriptorBlock_Data:
 	lda	xde, (xiz+11)
 	ld	a, (xde)
 	and	a, 15
-	jr	z, 2
-	.byte 0xdb
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip4
+	.byte 0xdb, 0xfe	; sll a,hl -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip4:
 	ld	(xbc+2), hl
 	ld	l, (xiz+8)
 	extz	hl
 	ld	a, (xde)
 	and	a, 15
-	jr	z, 2
-	.byte 0xdb
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip5
+	.byte 0xdb, 0xfe	; sll a,hl -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip5:
 	ld	(xbc+4), hl
 	ld	xwa, xbc
 	call	AssSwb_ProcessLoop_Data
+SeqAlt_NibbleSearch_Epilogue4:
 	pop	xiz
 	inc	6, xsp
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	cp	(xiz+9), l
-	jr	ugt, 47
-	.byte 0x8e
-	ldw	(247:8), 0x2a6b:io
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue5
+	cp	l, (xiz+10)
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue5
 	ld	a, (xiz+14)
 	cp	a, 1:i3
-	jr	nc, 35
+	jr	nc, SeqAlt_NibbleSearch_Epilogue5
 	extz	wa
 	muls	wa, 6
-	lda	xbc, (ToneKit_FrequencyTable_0x408:24)
-	ld_rrl xbc, xbc, wa
-	ld a, (xiz+8)
-	cpl a
+	lda	xbc, (0xee4e18:24)
+	ld	xbc, (xbc+wa)
+	ld	a, (xiz+8)
+	cpl	a
 	and	(xbc), a
 	ld	a, (xiz+11)
 	and	a, 15
-	jr	z, 2
-	.byte 0xcf
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip6
+	.byte 0xcf, 0xfe	; sll a,l -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip6:
 	or	(xbc), l
+SeqAlt_NibbleSearch_Epilogue5:
 	pop	xiz
 	ret
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	lda	xbc, (xsp+4)
 	ld	(xbc+2), l
 	cp	(xiz+9), l
-	jrl	ugt, 169
-	.byte 0x8e
-	ldw	(247:8), 0xa37b:io
-	nop
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue
+	cp	l, (xiz+10)
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue
 	ld	a, (xiz+14)
 	cp	a, 255
 	jr	z, SeqAlt_NibbleSearch_Skip
@@ -16782,7 +14058,7 @@ SeqAlt_DescriptorBlock_Data:
 	jrl	nc, SeqAlt_NibbleSearch_Epilogue
 	extz	wa
 	muls	wa, 6
-	lda	xbc, (ToneKit_FrequencyTable_0x406:24)
+	lda	xbc, (0xee4e16:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	de, (xwa)
@@ -16794,7 +14070,7 @@ SeqAlt_DescriptorBlock_Data:
 	jr	z, SeqAlt_NibbleSearch_Epilogue
 	ld	a, (xiz+6)
 	ld	(xsp+4), a
-	ld	xwa, (0xbcac:16)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -16806,18 +14082,18 @@ SeqAlt_DescriptorBlock_Data:
 	ld	e, (xhl)
 	ld	a, (xiz+11)
 	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip7
+	.byte 0xcd, 0xfe	; sll a,e -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip7:
 	ld	(xhl), e
 	ld	a, (xiz+8)
 	ld	(xbc+3), a
 	ld	xwa, xbc
-	jr	55
+	jr	SeqAlt_NibbleSearch_Join3
 SeqAlt_NibbleSearch_Skip:
 	ld	a, (xiz+6)
 	ld	(xbc), a
-	ld	xwa, (0xbcac:16)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -16829,13 +14105,14 @@ SeqAlt_NibbleSearch_Skip:
 	ld	e, (xhl)
 	ld	a, (xiz+11)
 	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip8
+	.byte 0xcd, 0xfe	; sll a,e -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip8:
 	ld	(xhl), e
 	ld	a, (xiz+8)
 	ld	(xbc+3), a
 	ld	xwa, xbc
+SeqAlt_NibbleSearch_Join3:
 	call	AssSwb_ApplyBitDescriptor
 SeqAlt_NibbleSearch_Epilogue:
 	pop	xiz
@@ -16844,22 +14121,22 @@ SeqAlt_NibbleSearch_Epilogue:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	(xsp+10), xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	ld	(xsp+4), l
 	ld	xde, (xsp+10)
 	ld	a, (xde+9)
-	.byte 0x8f, 0x04
-	ld	(0x857b:16), 143
-	max
-	ld	c, 138:opc
-	ldw	(243:8), 0x7d6b:io
-	ld	xwa, (0xbc54:16)
+	cp	a, (xsp+4)
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue2
+	ld	c, (xsp+4)
+	cp	c, (xde+10)
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue2
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
-	ldb_erp l, 248
+	ldb_erp	l, 248
 	extz	iz
 	sll	iz, 8
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	extz	hl
 	or	iz, hl
@@ -16867,24 +14144,24 @@ SeqAlt_NibbleSearch_Epilogue:
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue2
 	srl	iz, 4
 	and	iz, 63
-	ld	xwa, (0xbcac:16)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
 	ld	xwa, (xsp+10)
 	ld	a, (xwa+6)
 	or	a, l
-	ldb_erp a, 251
+	ldb_erp	a, 251
 	lda	xwa, (xsp+6)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 	ld	(xwa+1), 1
-	stb_erp c, 248
+	stb_erp	c, 248
 	ld	(xwa+2), c
 	ld	(xwa+3), 127
 	call	AssSwb_ApplyBitDescriptor
 	lda	xwa, (xsp+6)
-	stb_erp c, 251
+	stb_erp	c, 251
 	ld	(xwa), c
 	ld	xde, (xsp+10)
 	ld	c, (xde+7)
@@ -16901,31 +14178,24 @@ SeqAlt_NibbleSearch_Epilogue2:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	ld	(xsp+8), l
 	ld	a, (xiz+9)
-	.byte 0x8f
-	ld	(241:8), 123:io
-	.byte 0xb8
-	nop
+	cp	a, (xsp+8)
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue6
 	ld	a, (xsp+8)
-	.byte 0x8e
-	ldw	(241:8), 0xaf7b:io
-	nop
+	cp	a, (xiz+10)
+	jrl	ugt, SeqAlt_NibbleSearch_Epilogue6
 	ld	a, (xiz+14)
 	cp	a, 1:i3
-	jrl	nc, 167
+	jrl	nc, SeqAlt_NibbleSearch_Epilogue6
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x4:24)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ld	w, 191:opc
-	.byte 0x04
-	jr	f, -31
-	ld	xwa, (xix-68)
+	lda	xbc, (0xee4e20:24)
+	ld	xwa, (xbc+wa)
+	ld	(xsp+4), xwa
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -16938,8 +14208,7 @@ SeqAlt_NibbleSearch_Epilogue2:
 	lda	xde, (xwa+1)
 	lda	xhl, (xwa+2)
 	lda	xix, (xwa+3)
-	.byte 0x8f
-	ld	(63:8), 129:io
+	cp	(xsp+8), 129
 	jr	z, SeqAlt_NibbleSearch_Skip2
 	ld	c, (xsp+10)
 	ld	(xwa), c
@@ -16981,6 +14250,7 @@ SeqAlt_NibbleSearch_Skip2:
 	ld	(xwa+3), c
 SeqAlt_NibbleSearch_Join:
 	call	AssSwb_ApplyBitDescriptor
+SeqAlt_NibbleSearch_Epilogue6:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
@@ -16988,12 +14258,12 @@ SeqAlt_NibbleSearch_Join:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
 	cp	(xiz+9), l
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue3
-	.byte 0x8e
-	ldw	(247:8), 0x696b:io
+	cp	l, (xiz+10)
+	jr	ugt, SeqAlt_NibbleSearch_Epilogue3
 	ld	a, (xiz+14)
 	cp	a, 255
 	jr	z, SeqAlt_NibbleSearch_Epilogue3
@@ -17001,10 +14271,10 @@ SeqAlt_NibbleSearch_Join:
 	jr	nc, SeqAlt_NibbleSearch_Epilogue3
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xA:24)
-	ld_rrl xwa, xbc, wa
-	lda xbc, (xsp+6)
-	cp l, 0:i3
+	lda	xbc, (0xee4e26:24)
+	ld	xwa, (xbc+wa)
+	lda	xbc, (xsp+6)
+	cp	l, 0:i3
 	jr	nz, SeqAlt_NibbleSearch_Skip3
 	ld	a, (xwa)
 	ld	(xbc), a
@@ -17015,7 +14285,7 @@ SeqAlt_NibbleSearch_Skip3:
 SeqAlt_NibbleSearch_Join2:
 	ld	a, (xiz+6)
 	ld	(xsp+4), a
-	ld	xwa, (0xbcac:16)
+	ldda32	xwa, (0xbcac)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -17027,9 +14297,9 @@ SeqAlt_NibbleSearch_Join2:
 	ld	e, (xhl)
 	ld	a, (xiz+11)
 	and	a, 15
-	jr	z, 2
-	.byte 0xcd
-	swi	6
+	jr	z, SeqAlt_NibbleSearch_Skip9
+	.byte 0xcd, 0xfe	; sll a,e -- the backend cannot spell this form
+SeqAlt_NibbleSearch_Skip9:
 	ld	(xhl), e
 	ld	a, (xiz+8)
 	ld	(xbc+3), a
@@ -17040,7 +14310,7 @@ SeqAlt_NibbleSearch_Epilogue3:
 	inc	4, xsp
 	ret
 	ret
-	ld	xwa, (0xbc54:16)
+	ldda32	xwa, (0xbc54)
 	lda	xwa, (xwa+14)
 	call	Param_SignExtendRetu_Data_0x4C3
 	cp	hl, 0:i3
@@ -17048,7 +14318,7 @@ SeqAlt_NibbleSearch_Epilogue3:
 	ld	xwa, MidiPkt_EventType_Table_0x560
 	ld	bc, 5:i3
 	call	ArpQueue_Enqueue
-	ld	xwa, (0xbc5c:16)
+	ldda32	xwa, (0xbc5c)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
 	ret
@@ -17436,10 +14706,8 @@ VoiceParam_LoopExit:
 VoiceParam_MultiMode_StubRet:
 	ret
 VoiceParam_AssSwb_MultiBlock_Data:
-	.byte 0xf1, 0x50
-	swi	5
-	sbc	w, d
-	swi	6
+	bit	4, (0xfd50:16)
+	ret	nz
 	ld	xwa, (0xbcac:16)
 	ld	bc, 1:i3
 	call	SeqData_ReadFieldByIndex
@@ -17451,221 +14719,216 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ret	gt
 	add	hl, hl
 	lda	xix, (SeqData_SubDispatch_Table_0xAE:24)
-	ld_rrw hl, xix, hl
+	ld	hl, (xix+hl)
 	lda xix, (16620094:24)
 	jp_rr 8, xix, hl
-	jr	18
-	jr	110
-	jrl	200
-	jrl	291
-	jrl	289
-	jrl	379
-	calr	469
+	jr	VoiceParam_AssSwb_MultiBlock_Data_Join
+	jr	VoiceParam_AssSwb_MultiBlock_Data_Join2
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join3
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Return
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join4
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join5
+	calr	VoiceParam_AssSwb_MultiBlock_Data_Helper
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 11
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cp_erpb	251, 11
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x3A:24)
-	ld_rrl xwa, xwa, bc
-	calr 3322
+	lda	xwa, (0xee4e56:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x3A:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4e56:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join2:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x6A:24)
-	ld_rrl xwa, xwa, bc
-	calr 3229
-	cp hl, 65535
+	lda	xwa, (0xee4e86:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
+	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x6A:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4e86:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join3:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 12
-	jr	nc, 68
-	stb_erp c, 251
+	ldb_erp	l, 251
+	cp_erpb	251, 12
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue3
+	stb_erp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x9E:24)
-	ld_rrl xwa, xwa, bc
-	calr 3135
+	lda	xwa, (0xee4eba:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue3
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x9E:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4eba:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue3:
-	pop qiz
+	pop	qiz
 	ret
+VoiceParam_AssSwb_MultiBlock_Data_Return:
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join4:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xD2:24)
-	ld_rrl xwa, xwa, bc
-	calr 3041
-	cp hl, 65535
+	lda	xwa, (0xee4eee:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
+	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xD2:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4eee:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Join5:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cpib_erp 251, 1
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cpib_erp	251, 1
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0xDA:24)
-	ld_rrl xwa, xwa, bc
-	calr 2948
-	cp hl, 65535
+	lda	xwa, (0xee4ef6:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
+	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0xDA:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4ef6:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5:
-	pop qiz
+	pop	qiz
 	ret
-	.byte 0xd7
-	swi	2
-	.byte 0x04
-	ld	xwa, (0xbcac:16)
+VoiceParam_AssSwb_MultiBlock_Data_Helper:
+	push	qiz
+	ldda32	xwa, (0xbcac)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
-	ldb_erp l, 251
-	cp_erpb 251, 8
-	jr nc, 68
-	stb_erp c, 251
-	extz bc
+	ldb_erp	l, 251
+	cp_erpb	251, 8
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue6
+	stb_erp	c, 251
+	extz	bc
 	sla	bc, 2
-	lda	xwa, (WidgetParam_SelfRef_Table_0x116:24)
-	ld_rrl xwa, xwa, bc
-	calr 2854
+	lda	xwa, (0xee4f32:24)
+	ld	xwa, (xwa+bc)
+	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue6
-	stb_erp a, 251
+	stb_erp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (WidgetParam_SelfRef_Table_0x116:24)
-	ld_rrl xbc, xbc, wa
-	ld xwa, xbc
+	lda	xbc, (0xee4f32:24)
+	ld	xbc, (xbc+wa)
+	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (WidgetParam_SelfRef_Table_0x17E:24)
+	lda	xde, (0xee4f9a:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue6:
-	pop qiz
+	pop	qiz
 	ret
 
 VoiceParam_MultiBlock_Ret:
@@ -17675,26 +14938,26 @@ VoiceParam_MultiBlock_Epilogue_Data:
 	lda	xsp, (xsp-12)
 	ld	c, (xwa+14)
 	cp	c, 1:i3
-	jr	nc, 53
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Epilogue
 	extz	bc
 	muls	bc, 6
-	lda	xde, (ToneKit_FrequencyTable_0x408:24)
-	.byte 0xe3
-	reti
-	or	xix, xwa
-	ld	c, 191:opc
-	ld	(50:8), 136:io
-	.byte 0x06
-	ld	c, 178:opc
-	ld	xhl, 0xba230788
-	.byte 0x01
-	ld	xhl, 0x2ba2383
-	ld	xhl, 0xba230888
-	pop	sr
-	ld	xhl, 0x62b131b7
+	lda	xde, (0xee4e18:24)
+	ld	xhl, (xde+bc)
+	lda	xde, (xsp+8)
+	ld	c, (xwa+6)
+	ld	(xde), c
+	ld	c, (xwa+7)
+	ld	(xde+1), c
+	ld	c, (xhl)
+	ld	(xde+2), c
+	ld	c, (xwa+8)
+	ld	(xde+3), c
+	lda	xbc, (xsp)
+	ld	(xbc), xde
 	ld	(xbc+4), xwa
 	ld	xwa, xbc
-	calr	1460
+	calr	MidiPkt_EnqueueControl_3354
+VoiceParam_AssSwb_MultiBlock_Data_Epilogue:
 	lda	xsp, (xsp+12)
 	ret
 

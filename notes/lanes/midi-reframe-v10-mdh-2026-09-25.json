@@ -1,0 +1,620 @@
+[
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFB5D",
+  "end": "0xFCFB62",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFC74",
+  "end": "0xFCFC7A",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFC83",
+  "end": "0xFCFC88",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFCC7",
+  "end": "0xFCFCCD",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFD05",
+  "end": "0xFCFD0B",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFD41",
+  "end": "0xFCFD46",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFCFD84",
+  "end": "0xFCFD89",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD01DF",
+  "end": "0xFD01E5",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD01F4",
+  "end": "0xFD01FA",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0207",
+  "end": "0xFD0213",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0256",
+  "end": "0xFD0265",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD02C6",
+  "end": "0xFD02CE",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD02F7",
+  "end": "0xFD02FF",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD03A5",
+  "end": "0xFD03AB",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD03E1",
+  "end": "0xFD03E7",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD041F",
+  "end": "0xFD0425",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0452",
+  "end": "0xFD0457",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0462",
+  "end": "0xFD0466",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0467",
+  "end": "0xFD0476",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD048B",
+  "end": "0xFD0492",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD04A8",
+  "end": "0xFD04AF",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD04C9",
+  "end": "0xFD04D5",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0530",
+  "end": "0xFD053C",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0556",
+  "end": "0xFD055D",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0669",
+  "end": "0xFD066F",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0673",
+  "end": "0xFD0679",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD06C2",
+  "end": "0xFD06CC",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD06FB",
+  "end": "0xFD0705",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0735",
+  "end": "0xFD073F",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD076E",
+  "end": "0xFD0778",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD07A7",
+  "end": "0xFD07AF",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD07E2",
+  "end": "0xFD07E8",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0823",
+  "end": "0xFD082B",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD0D59",
+  "end": "0xFD0D5F",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD16E7",
+  "end": "0xFD16EB",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD1700",
+  "end": "0xFD170B",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD170D",
+  "end": "0xFD1719",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD1722",
+  "end": "0xFD1726",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD173B",
+  "end": "0xFD1746",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD1748",
+  "end": "0xFD1754",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD27C0",
+  "end": "0xFD27C5",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD27D7",
+  "end": "0xFD27DF",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD27E9",
+  "end": "0xFD27F0",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD27F6",
+  "end": "0xFD27FB",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD27FD",
+  "end": "0xFD2824",
+  "kind": "code",
+  "drop_comments": [
+   "0xFD27FF-0xFD2818 (25 B), unreached CODE-territory"
+  ]
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD282A",
+  "end": "0xFD282F",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD285A",
+  "end": "0xFD286F",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2881",
+  "end": "0xFD2889",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2893",
+  "end": "0xFD289A",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD28A0",
+  "end": "0xFD28A5",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2948",
+  "end": "0xFD2951",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2992",
+  "end": "0xFD2997",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD29F6",
+  "end": "0xFD29F9",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2A08",
+  "end": "0xFD2A0F",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2A15",
+  "end": "0xFD2A1A",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2A1C",
+  "end": "0xFD2A43",
+  "kind": "code",
+  "drop_comments": [
+   "0xFD2A1D-0xFD2A37 (26 B), unreached CODE-territory"
+  ]
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2A49",
+  "end": "0xFD2A4E",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2A53",
+  "end": "0xFD2A60",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2AA0",
+  "end": "0xFD2AA3",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2AB2",
+  "end": "0xFD2AB9",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2ABF",
+  "end": "0xFD2AC4",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2ADC",
+  "end": "0xFD2AEF",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2B02",
+  "end": "0xFD2B2E",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD2B3F",
+  "end": "0xFD2B45",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD49C5",
+  "end": "0xFD49C8",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD49CA",
+  "end": "0xFD49E0",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD4DF6",
+  "end": "0xFD4DFA",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD4E10",
+  "end": "0xFD4E14",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD51FE",
+  "end": "0xFD520B",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD5218",
+  "end": "0xFD522D",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD5374",
+  "end": "0xFD5379",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD53A1",
+  "end": "0xFD53A4",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6E8B",
+  "end": "0xFD6E91",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6EE9",
+  "end": "0xFD6EF2",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6F31",
+  "end": "0xFD6F41",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6F56",
+  "end": "0xFD6F63",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6F6E",
+  "end": "0xFD6F7B",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6F9A",
+  "end": "0xFD6FA0",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6FBC",
+  "end": "0xFD6FC9",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD6FCC",
+  "end": "0xFD6FD2",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD702D",
+  "end": "0xFD7036",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD70E3",
+  "end": "0xFD70E7",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD7587",
+  "end": "0xFD758D",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD75B0",
+  "end": "0xFD75BA",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD7B67",
+  "end": "0xFD7B6C",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD801C",
+  "end": "0xFD8025",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8055",
+  "end": "0xFD805E",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD808E",
+  "end": "0xFD8097",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD80C8",
+  "end": "0xFD80D3",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD80ED",
+  "end": "0xFD80F1",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD80FE",
+  "end": "0xFD8102",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD810F",
+  "end": "0xFD8113",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8120",
+  "end": "0xFD8124",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8132",
+  "end": "0xFD8136",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8522",
+  "end": "0xFD8528",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8565",
+  "end": "0xFD8569",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8575",
+  "end": "0xFD8579",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8EFD",
+  "end": "0xFD8F03",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8F2A",
+  "end": "0xFD8F30",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8F33",
+  "end": "0xFD8F39",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD8F3F",
+  "end": "0xFD8F45",
+  "kind": "code"
+ },
+ {
+  "file": "midi/midi_dispatch_handlers.s",
+  "start": "0xFD9A0C",
+  "end": "0xFD9A12",
+  "kind": "code"
+ }
+]

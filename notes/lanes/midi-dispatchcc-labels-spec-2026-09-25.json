@@ -1,0 +1,11 @@
+[
+ {"file": "midi/midi_dispatch_handlers.s", "start": "0xFD175E", "end": "0xFD1762", "kind": "data",
+  "segments": [{"len": 4, "type": "long", "per_line": 1, "symbols": true, "label": "MidiDispatchCC_HandlerTable"}]},
+ {"file": "midi/midi_dispatch_handlers.s", "start": "0xFD1A5E", "end": "0xFD1A66", "kind": "data",
+  "segments": [{"len": 8, "type": "byte", "per_line": 8, "label": "MidiCC_FunctionToCCNumber", "comment": [
+   "MidiCC_FunctionToCCNumber: the TRANSMIT direction of MidiCC_ChannelMappingData.",
+   "Entry f is the controller number sent for CC function f; it is exactly the",
+   "inverse of that receive map (function 0 -> 0x40 = CC64, 1 -> CC1, 2 -> CC7,",
+   "... 40 -> CC121, 41 -> CC120), and MidiChannel_ConfigureController builds",
+   "the message as status 0xB0 | channel, this byte, value E."]}]}
+]

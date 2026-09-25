@@ -1,0 +1,9 @@
+[
+ {"file": "midi/midi_dispatch_handlers.s", "start": "0xFD0BF1", "end": "0xFD0D11", "kind": "code",
+  "labels": {
+   "0xFD0C21": "MidiCC_ChannelDispatch_Func08",
+   "0xFD0C51": "MidiCC_ChannelDispatch_Func12",
+   "0xFD0C81": "MidiCC_ChannelDispatch_Func13",
+   "0xFD0CB1": "MidiCC_ChannelDispatch_Func14",
+   "0xFD0CE1": "MidiCC_ChannelDispatch_Func15"}}
+]

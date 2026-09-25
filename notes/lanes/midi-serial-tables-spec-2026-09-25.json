@@ -1,0 +1,58 @@
+[
+ {
+  "file": "midi/midi_serial_routines.s",
+  "start": "0xFCF760",
+  "end": "0xFCF781",
+  "kind": "data",
+  "header_above_label": true,
+  "comment": [
+   "MIDI_CHANNEL_HANDLER_JUMP_TABLE -- one 0xFF pad byte, then 8 handler pointers",
+   "(MIDI_CHANNEL_HANDLERS = this label + 1), one per status-byte high nibble.",
+   "Reader MIDI_CHANNEL_MESSAGE_DISPATCHER (just above) for each received DATA",
+   "byte: running status from (0x423), `and a, 0x70 / srl a, 2` (= 4 * nibble",
+   "index 0..7), `ld xix, MIDI_CHANNEL_HANDLERS / ld xix, (xix+wa) / jp (xix)`.",
+   "Slots: 8x 9x Bx Ex (two data bytes) -> ChanDisp_AwaitSecondDataByte (sets",
+   "bit 6 of (0x427), which routes the NEXT data byte to ChanDisp_SecondDataByte);",
+   "MIDI_QUEUE_EVENT_TO_SEQUENCER; Ax (polyphonic key pressure) ->",
+   "ChanDisp_NoStatusReturn, a bare `ret`, i.e. ignored; Fx ->",
+   "MIDI_SYSTEM_EXCLUSIVE_HANDLER.  Previously spelled as `.byte` rows."
+  ],
+  "segments": [
+   {
+    "len": 1,
+    "type": "byte",
+    "per_line": 1
+   },
+   {
+    "len": 32,
+    "type": "long",
+    "per_line": 1,
+    "symbols": true,
+    "label": "MIDI_CHANNEL_HANDLERS"
+   }
+  ]
+ },
+ {
+  "file": "midi/midi_serial_routines.s",
+  "start": "0xFCF962",
+  "end": "0xFCF972",
+  "kind": "data",
+  "header_above_label": true,
+  "comment": [
+   "MIDI_SC0_DISPATCH_TABLE -- 4 handler pointers: SC0Init_Entry, then",
+   "SC0Init_PaddingStub (a bare `ret`) three times.  Nothing in this file reads",
+   "it; its only reference is entry 3 of SystemConfig_PointerTable",
+   "(ui_widgets/widget_dispatch.s), and the reader of THAT table was not traced",
+   "by the midi lane, so the indexing is not pinned here beyond the 4 entries",
+   "that fit before MIDI_SC0_TX_DISPATCH."
+  ],
+  "segments": [
+   {
+    "len": 16,
+    "type": "long",
+    "per_line": 1,
+    "symbols": true
+   }
+  ]
+ }
+]

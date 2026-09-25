@@ -295,7 +295,396 @@ PcgOutGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PcgOutGridCheckJumpTable:
-	.incbin "includes/romslices/v7_transplant_PcgOutGridCheckJumpTable.bin"
+	call	GetFocusObject
+	ld	xwa, xhl
+	ld	xbc, 0x1e0008f
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	xiz, xhl
+	lda	xwa, (xsp+4)
+	ld	xbc, xiz
+	srl	xbc, 0
+	ld	qbc, 0
+	ld	(xwa), bc
+	ld	bc, iz
+	ld	(xwa+2), bc
+	cpw	(xwa), 1
+	jrl	nz, PcgOutGridCheckComplete
+	ld	xde, (xsp+44)
+	cp	bc, 3:i3
+	jrl	z, PcgOutGridCheckJumpTable_Skip5
+	cp	bc, 2:i3
+	jr	z, PcgOutGridCheckJumpTable_Entry
+	cp	bc, 1:i3
+	jr	z, PcgOutGridCheckJumpTable_Skip2
+	cp	bc, 0:i3
+	jrl	nz, PcgOutGridCheckComplete
+	ld	xiy, UserMemory_FormatStrings
+	lda	xix, (xsp+22)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+22)
+	lda	xbc, (0x2476a:24)
+	ld	(xwa), xbc
+	ld	xbc, 15
+	ld	(xwa+6), xbc
+	cp	xde, 0x1c00019
+	jr	nz, PcgOutGridCheckJumpTable_Skip
+	ld	xbc, 4:i3
+	ld	(xwa+14), xbc
+PcgOutGridCheckJumpTable_Skip:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip2:
+	ld	xiy, UserMemory_FormatStrings
+	lda	xix, (xsp+22)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+22)
+	lda	xbc, (0x2476c:24)
+	ld	(xwa), xbc
+	ld	xbc, 127
+	ld	(xwa+6), xbc
+	cp	xde, 0x1c00019
+	jr	nz, PcgOutGridCheckJumpTable_Skip3
+	ld	xbc, 4:i3
+	ld	(xwa+14), xbc
+PcgOutGridCheckJumpTable_Skip3:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Entry:
+	cp	(0x24770:24), 255
+	jrl	z, PcgOutGridCheckComplete
+	ld	xiy, UserMemory_FormatStrings
+	lda	xix, (xsp+22)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+22)
+	lda	xbc, (0x2476e:24)
+	ld	(xwa), xbc
+	ld	xbc, 127
+	ld	(xwa+6), xbc
+	cp	xde, 0x1c00019
+	jr	nz, PcgOutGridCheckJumpTable_Skip4
+	ld	xbc, 4:i3
+	ld	(xwa+14), xbc
+PcgOutGridCheckJumpTable_Skip4:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip5:
+	ld	xiy, UserMemory_FormatStrings
+	lda	xix, (xsp+22)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+22)
+	lda	xbc, (0x24770:24)
+	ld	(xwa), xbc
+	ld	xbc, 127
+	ld	(xwa+6), xbc
+	ld	xbc, 0xffffffff
+	ld	(xwa+10), xbc
+	cp	xde, 0x1c00019
+	jr	nz, PcgOutGridCheckJumpTable_Skip6
+	ld	xbc, 4:i3
+	ld	(xwa+14), xbc
+PcgOutGridCheckJumpTable_Skip6:
+	jrl	PcgOutGridCheckJumpTable_Join4
+	call	GetFocusObject
+	ld	xwa, xhl
+	ld	xbc, 0x1e0008f
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	xiz, xhl
+	lda	xwa, (xsp+4)
+	ld	xbc, xiz
+	srl	xbc, 0
+	ld	qbc, 0
+	ld	(xwa), bc
+	ld	bc, iz
+	ld	(xwa+2), bc
+	cpw	(xwa), 1
+	jrl	nz, PcgOutGridCheckComplete
+	ld	xde, (xsp+44)
+	cp	bc, 3:i3
+	jrl	z, PcgOutGridCheckJumpTable_Skip11
+	cp	bc, 2:i3
+	jrl	z, PcgOutGridCheckJumpTable_Entry2
+	cp	bc, 1:i3
+	jr	z, PcgOutGridCheckJumpTable_Skip8
+	cp	bc, 0:i3
+	jrl	nz, PcgOutGridCheckComplete
+	ld	xiy, UserMemory_FormatStrings
+	lda	xix, (xsp+22)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+22)
+	lda	xbc, (0x2476a:24)
+	ld	(xwa), xbc
+	ld	xbc, 15
+	ld	(xwa+6), xbc
+	lda	xhl, (xwa+14)
+	cp	xde, 0x1c0001a
+	jr	nz, PcgOutGridCheckJumpTable_Skip7
+	ld	xbc, 0xfffffffc
+	ld	(xhl), xbc
+	jr	PcgOutGridCheckJumpTable_Join
+PcgOutGridCheckJumpTable_Skip7:
+	ld	xbc, 0xffffffff
+	ld	(xhl), xbc
+PcgOutGridCheckJumpTable_Join:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip8:
+	ld	xiy, UserMemory_FormatStrings
+	lda	xix, (xsp+22)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+22)
+	lda	xbc, (0x2476c:24)
+	ld	(xwa), xbc
+	ld	xbc, 127
+	ld	(xwa+6), xbc
+	lda	xhl, (xwa+14)
+	cp	xde, 0x1c0001a
+	jr	nz, PcgOutGridCheckJumpTable_Skip9
+	ld	xbc, 0xfffffffc
+	ld	(xhl), xbc
+	jr	PcgOutGridCheckJumpTable_Join2
+PcgOutGridCheckJumpTable_Skip9:
+	ld	xbc, 0xffffffff
+	ld	(xhl), xbc
+PcgOutGridCheckJumpTable_Join2:
+	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Entry2:
+	cp	(0x24770:24), 255
+	jrl	z, PcgOutGridCheckComplete
+	ld	xiy, UserMemory_FormatStrings
+	lda	xix, (xsp+22)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+22)
+	lda	xbc, (0x2476e:24)
+	ld	(xwa), xbc
+	ld	xbc, 127
+	ld	(xwa+6), xbc
+	lda	xhl, (xwa+14)
+	cp	xde, 0x1c0001a
+	jr	nz, PcgOutGridCheckJumpTable_Skip10
+	ld	xbc, 0xfffffffc
+	ld	(xhl), xbc
+	jr	PcgOutGridCheckJumpTable_Join3
+PcgOutGridCheckJumpTable_Skip10:
+	ld	xbc, 0xffffffff
+	ld	(xhl), xbc
+PcgOutGridCheckJumpTable_Join3:
+	jr	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip11:
+	ld	xiy, UserMemory_FormatStrings
+	lda	xix, (xsp+22)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+22)
+	lda	xbc, (0x24770:24)
+	ld	(xwa), xbc
+	ld	xbc, 127
+	ld	(xwa+6), xbc
+	ld	xbc, 0xffffffff
+	ld	(xwa+10), xbc
+	lda	xhl, (xwa+14)
+	cp	xde, 0x1c0001a
+	jr	nz, PcgOutGridCheckJumpTable_Skip12
+	ld	xbc, 0xfffffffc
+	ld	(xhl), xbc
+	jr	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheckJumpTable_Skip12:
+	ld	xbc, 0xffffffff
+	ld	(xhl), xbc
+PcgOutGridCheckJumpTable_Join4:
+	call	MainRamAdd
+	jrl	PcgOutGridCheckComplete
+	ldw	(xhl), 1
+	ld	xhl, xiy
+	ld	(xde), xiy
+	lda	xde, (0x2476a:24)
+	lda	xwa, (xiz+14)
+	cp	xde, (xiz)
+	jr	nz, PcgOutGridCheckJumpTable_Entry_Code_Skip
+	ldw	(xbc), 0
+	ld	xwa, (xwa)
+	inc	1, xwa
+	push	xwa
+	pushw	231
+	pushw	0xff4e
+	push	xhl
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	jrl	PcgOutCheck_SetFinalProp
+PcgOutGridCheckJumpTable_Entry_Code_Skip:
+	lda	xde, (0x2476c:24)
+	cp	xde, (xiz)
+	jr	nz, PcgOutGridCheckJumpTable_Entry_Code_Skip2
+	ldw	(xbc), 1
+	ld	xwa, (xwa)
+	inc	1, xwa
+	push	xwa
+	pushw	231
+	pushw	0xff54
+	push	xhl
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	jrl	PcgOutCheck_SetFinalProp
+PcgOutGridCheckJumpTable_Entry_Code_Skip2:
+	lda	xde, (0x2476e:24)
+	cp	xde, (xiz)
+	jrl	nz, PcgOutGridCheckJumpTable_Entry_Code_Skip4
+	ldw	(xbc), 2
+	cp	(0x24770:24), 255
+	jr	nz, PcgOutGridCheckJumpTable_Entry_Code_Skip3
+	pushw	231
+	pushw	0xff5a
+	push	xhl
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+6), 4
+	pushw	231
+	pushw	0xff60
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	jrl	PcgOutCheck_SetFinalProp
+PcgOutGridCheckJumpTable_Entry_Code_Skip3:
+	ld	xwa, (xwa)
+	push	xwa
+	pushw	231
+	pushw	0xff68
+	push	xhl
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+6), 4
+	ld	c, (0x24770:24)
+	exts	bc
+	ld	xwa, (xiz+14)
+	sll	wa, 7
+	add	wa, bc
+	pushw	wa
+	pushw	231
+	pushw	0xff6e
+	lda	xwa, (xsp+18)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	jrl	PcgOutCheck_SetFinalProp
+PcgOutGridCheckJumpTable_Entry_Code_Skip4:
+	lda	xde, (0x24770:24)
+	cp	xde, (xiz)
+	jrl	nz, PcgOutGridCheckComplete
+	ldw	(xbc), 2
+	ld	xwa, (xwa)
+	cp	xwa, 0xffffffff
+	jr	nz, PcgOutGridCheckJumpTable_Entry_Code_Skip5
+	pushw	231
+	pushw	0xff76
+	push	xhl
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+6), 3
+	pushw	231
+	pushw	0xff7c
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+6), 4
+	pushw	231
+	pushw	0xff82
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	jrl	PcgOutCheck_SetFinalProp
+PcgOutGridCheckJumpTable_Entry_Code_Skip5:
+	ld	a, (0x2476e:24)
+	exts	wa
+	pushw	wa
+	pushw	231
+	pushw	0xff8a
+	push	xhl
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+6), 3
+	ld	xwa, (xiz+14)
+	push	xwa
+	pushw	231
+	pushw	0xff90
+	lda	xwa, (xsp+20)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+6), 4
+	ld	xbc, (xiz+14)
+	ld	a, (0x2476e:24)
+	exts	wa
+	sll	wa, 7
+	add	wa, bc
+	pushw	wa
+	pushw	231
+	pushw	0xff96
+	lda	xwa, (xsp+18)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	jrl	PcgOutCheck_SetFinalProp
 PcgOutCheckGridDataStructure:
 	ld XWA,XIZ
 	srl XWA, 0x00
@@ -347,16 +736,30 @@ PcgOutCheck_SendPreset1:
 	ld	xbc, 31457420
 	jrl	PcgOutCheck_SetFinalProp
 PcgOutCheck_SendPreset2:
-	.byte 0xc2, 0x70, 0x47, 0x02, 0x3f, 0xff, 0x6e, 0x45
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0xaa, 0xff, 0x39, 0x1d
-	.byte 0x70, 0x07, 0xff, 0xef, 0x60, 0x1d, 0xc3, 0x40
-	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x04, 0x32, 0x41, 0x8c
-	.byte 0x00, 0xe0, 0x01, 0x1d, 0x53, 0x92, 0xfa, 0xbf
-	.byte 0x06, 0x02, 0x04, 0x00, 0x0b, 0xe7, 0x00, 0x0b
-	.byte 0xb0, 0xff, 0xbf, 0x10, 0x30, 0x38, 0x1d, 0x70
-	.byte 0x07, 0xff, 0xef, 0x60, 0x1d, 0xc3, 0x40, 0xfa
-	.byte 0xeb, 0x88, 0xbf, 0x04, 0x32, 0x41, 0x8c, 0x00
-	.byte 0xe0, 0x01, 0x78, 0x6b, 0x01
+	cp	(0x24770:24), 255
+	jr	nz, PcgOutCheck_SendPreset2Named
+	pushw	231
+	pushw	0xffaa
+	push	xbc
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+6), 4
+	pushw	231
+	pushw	0xffb0
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	jrl	PcgOutCheck_SetFinalProp
 PcgOutCheck_SendPreset2Named:
 	ld	a, (149358:24)
 	exts	wa
@@ -391,21 +794,43 @@ PcgOutCheck_SendPreset2Named:
 	ld	xbc, 31457420
 	jrl	PcgOutCheck_SetFinalProp	; -> 0xF7797B
 PcgOutCheck_SendPreset3:
-	.byte 0xb0, 0x02, 0x02, 0x00, 0xc2, 0x70, 0x47, 0x02
-	.byte 0x3f, 0xff, 0x6e, 0x6c, 0x0b, 0xe7, 0x00, 0x0b
-	.byte 0xc6, 0xff, 0x39, 0x1d, 0x70, 0x07, 0xff, 0xef
-	.byte 0x60, 0x1d, 0xc3, 0x40, 0xfa, 0xeb, 0x88, 0xbf
-	.byte 0x04, 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x1d
-	.byte 0x53, 0x92, 0xfa, 0xbf, 0x06, 0x02, 0x03, 0x00
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0xcc, 0xff, 0xbf, 0x10
-	.byte 0x30, 0x38, 0x1d, 0x70, 0x07, 0xff, 0xef, 0x60
-	.byte 0x1d, 0xc3, 0x40, 0xfa, 0xeb, 0x88, 0xbf, 0x04
-	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x53
-	.byte 0x92, 0xfa, 0xbf, 0x06, 0x02, 0x04, 0x00, 0x0b
-	.byte 0xe7, 0x00, 0x0b, 0xd2, 0xff, 0xbf, 0x10, 0x30
-	.byte 0x38, 0x1d, 0x70, 0x07, 0xff, 0xef, 0x60, 0x1d
-	.byte 0xc3, 0x40, 0xfa, 0xeb, 0x88, 0xbf, 0x04, 0x32
-	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x90, 0x00
+	ldw	(xwa), 2
+	cp	(0x24770:24), 255
+	jr	nz, PcgOutCheck_SendPreset3Named
+	pushw	231
+	pushw	0xffc6
+	push	xbc
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+6), 3
+	pushw	231
+	pushw	0xffcc
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+6), 4
+	pushw	231
+	pushw	0xffd2
+	lda	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+4)
+	ld	xbc, 0x1e0008c
+	jrl	PcgOutCheck_SetFinalProp
 PcgOutCheck_SendPreset3Named:
 	ld	a, (149358:24)
 	exts	wa
