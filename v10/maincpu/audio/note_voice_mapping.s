@@ -17153,7 +17153,6 @@ SndParam_Init:
 	call MIDI_PostSendStub
 	inc 6, xsp
 	ret
-
 ; ============================================================================
 ; UIState_ProcessKeyEvent - Process a key press/release event in UI state
 ; ============================================================================
@@ -17164,219 +17163,201 @@ SndParam_Init:
 ; ============================================================================
 UIState_ProcessKeyEvent:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl nc, -28736
-	normal
-	ld a, 216:opc
-	ccf
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	extz	wa
 	cp	wa, 0:i3
-	jrl	mi, 483
+	jrl	mi, SndParam_ProcessEntry_Epilogue
 	cp	wa, 12
-	jrl	gt, 476
+	jrl	gt, SndParam_ProcessEntry_Epilogue
 	add	wa, wa
-	lda	xix, (SoundEffect_Dispatch_Table_0x123C:24)
+	lda_24	xix, (0xeec044)
 	ld_rrw	wa, xix, wa
-	lda	xix, (UIState_ProcessKeyEvent_0x3D:24)
+	lda_24	xix, (0xfea84f)
 	jp_rr	8, xix, wa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	jrl	z, SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+256)
+	ld	a, (xsp+0x100)
 	extz	wa
 	calr	MIDI_WriteChannelData_Block
 	cp	l, 0:i3
 	jrl	nz, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+3)
-	.byte 0xc9
-SndParam_ProcessEntry:
-	ldw	wa, 0xc907
-	scc16	z, wa
-	add	(xsp+1), l
-	nop
-	ld	a, 216:opc
-	ccf
+	ld	a, (xsp+0x3)
+	.set	SndParam_ProcessEntry, . + 1	; mid-instruction: only a .long in ui_widgets/widget_dispatch.s (bytes 7f a8 fe 00 inside a byte table) names this address
+	res	7, a
+	cp	a, 0:i3
+	jrl	z, SndParam_ProcessEntry_Epilogue
+	ld	a, (xsp+0x100)
+	extz	wa
 	calr	MIDI_WriteChannelData_Block
 	cp	l, 0:i3
 	jrl	nz, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	jrl	z, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ldw	bc, 127
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 7
 	jr	z, SndParam_ProcessEntry_Entry
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 7
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 SndParam_ProcessEntry_Entry:
-	.byte 0xbf
-	pop	sr
-	inc	6, c
-	zcf
+	bitm	3, (xsp+0x3)
+	jr	z, UIState_ProcessKeyEvent_Skip
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 8
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-	.byte 0xbf
-	pop	sr
-	scc8	z, h
-	.byte 0x1f, 0x01, 0x8f
-	nop
-	ld	a, 216:opc
-	ccf
+UIState_ProcessKeyEvent_Skip:
+	bitm	6, (xsp+0x3)
+	jrl	z, SndParam_ProcessEntry_Epilogue
+	ld	a, (xsp+0x100)
+	extz	wa
 	calr	MIDI_WriteChannelData_Block
 	cp	l, 0:i3
 	jrl	nz, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 64
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
 	jrl	z, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
 	jrl	z, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
 	jrl	z, SndParam_ProcessEntry_Epilogue
-	ld a, (xsp+256)
-	extz wa
+	ld	a, (xsp+0x100)
+	extz	wa
 	calr	MIDI_WriteChannelData_Block
 	cp	l, 0:i3
 	jrl	nz, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
 	jrl	z, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	SndParam_ProcessEntry_Epilogue
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
 	jr	z, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	SndParam_ProcessEntry_Epilogue
-	.byte 0xbf
-	pop	sr
-	inc	6, c
-	zcf
+	bitm	3, (xsp+0x3)
+	jr	z, UIState_ProcessKeyEvent_Skip2
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 8
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-	.byte 0xbf
-	pop	sr
-	inc	6, e
-	zcf
+UIState_ProcessKeyEvent_Skip2:
+	bitm	5, (xsp+0x3)
+	jr	z, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 32
 	ld	c, a
 	extz	bc
@@ -17387,234 +17368,177 @@ SndParam_ProcessEntry_Epilogue:
 	ret
 HdaeRom_Entry:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	dec	6, bc
-	popw	wa
-	.byte 0xbf
-	pop	sr
-	inc	6, l
-	zcf
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 1:i3
+	jr	nz, HdaeRom_Entry_Epilogue
+	bitm	7, (xsp+0x3)
+	jr	z, HdaeRom_Entry_Skip
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 128
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-	.byte 0xbf
-	pop	sr
-	inc	6, h
-	zcf
+HdaeRom_Entry_Skip:
+	bitm	6, (xsp+0x3)
+	jr	z, HdaeRom_Entry_Skip2
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 64
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-	.byte 0xbf
-	pop	sr
-	inc	6, e
-	zcf
+HdaeRom_Entry_Skip2:
+	bitm	5, (xsp+0x3)
+	jr	z, HdaeRom_Entry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 32
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
+HdaeRom_Entry_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_ProcessBlock:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	.byte 0xcf
-	push_f
-	jr	ugt, 35
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 24
+	jr	ugt, HdaeRom_ProcessBlock_Epilogue
 	cp	a, 0:i3
-	jr	c, 31
-	ld	a, (xsp+3)
+	jr	c, HdaeRom_ProcessBlock_Epilogue
+	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, 23
-	ld	(xsp+1), 0
+	jr	z, HdaeRom_ProcessBlock_Epilogue
+	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
+HdaeRom_ProcessBlock_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_ReadParam:
 	ret
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	.byte 0xcf
-	push_f
-	jr	ugt, 35
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 24
+	jr	ugt, HdaeRom_ReadParam_Epilogue
 	cp	a, 0:i3
-	jr	c, 31
-	ld	a, (xsp+3)
+	jr	c, HdaeRom_ReadParam_Epilogue
+	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, 23
-	ld	(xsp+1), 0
+	jr	z, HdaeRom_ReadParam_Epilogue
+	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
+HdaeRom_ReadParam_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_WriteParam:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	.byte 0xcf
-	push_f
-	jr	ugt, 35
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 24
+	jr	ugt, HdaeRom_WriteParam_Epilogue
 	cp	a, 0:i3
-	jr	c, 31
-	ld	a, (xsp+3)
+	jr	c, HdaeRom_WriteParam_Epilogue
+	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, 23
-	ld	(xsp+1), 0
+	jr	z, HdaeRom_WriteParam_Epilogue
+	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
+HdaeRom_WriteParam_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_CheckResult:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	.byte 0xcf
-	push_f
-	jr	ugt, 35
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 24
+	jr	ugt, HdaeRom_CheckResult_Epilogue
 	cp	a, 0:i3
-	jr	c, 31
-	ld	a, (xsp+3)
+	jr	c, HdaeRom_CheckResult_Epilogue
+	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, 23
-	ld	(xsp+1), 0
+	jr	z, HdaeRom_CheckResult_Epilogue
+	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
+HdaeRom_CheckResult_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_FinishBlock:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	.byte 0xcf
-	push_f
-	jr	ugt, 35
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 24
+	jr	ugt, HdaeRom_FinishBlock_Epilogue
 	cp	a, 0:i3
-	jr	c, 31
-	ld	a, (xsp+3)
+	jr	c, HdaeRom_FinishBlock_Epilogue
+	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, 23
-	ld	(xsp+1), 0
+	jr	z, HdaeRom_FinishBlock_Epilogue
+	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
+HdaeRom_FinishBlock_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_TableEntry0:
@@ -17625,67 +17549,57 @@ HdaeRom_TableEntry1:
 	ret
 HdaeRom_TableEntry2:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 216:opc
-	ccf
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	extz	wa
 	cp	wa, 0:i3
-	jrl	mi, 133
+	jrl	mi, HdaeRom_TableEntry2_Epilogue
 	cp	wa, 7:i3
-	jrl	gt, 128
+	jrl	gt, HdaeRom_TableEntry2_Epilogue
 	add	wa, wa
-	lda	xix, (SoundEffect_Dispatch_Table_0x1256:24)
-	ld_rrw wa, xix, wa
-	lda xix, (16690196:24)
-	jp_rr 8, xix, wa
-	ld	a, (xsp+3)
+	lda_24	xix, (0xeec05e)
+	ld_rrw	wa, xix, wa
+	lda_24	xix, (0xfeac14)
+	jp_rr	8, xix, wa
+	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, HdaeRom_TableEntry2_Epilogue
-	lda	xbc, (xsp+2)
+	lda	xbc, (xsp+0x2)
 	ld	a, 0:opc
-	.byte 0xbf
-	push	sr
-	dec	6, l
-	.byte 0x06
-	ld	a, (xsp+2)
+	bitm	7, (xsp+0x2)
+	jr	nz, HdaeRom_TableEntry2_Skip
+	ld	a, (xsp+0x2)
 	res	7, a
+HdaeRom_TableEntry2_Skip:
 	ld	(xbc), a
-	ld	a, (xsp+2)
+	ld	a, (xsp+0x2)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 23
 	ld	bc, 7:i3
 	calr	MIDI_SendControlChange
-	ld	a, (xsp+2)
+	ld	a, (xsp+0x2)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 24
 	ld	bc, 7:i3
 	calr	MIDI_SendControlChange
 	jr	HdaeRom_TableEntry2_Epilogue
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
 	jr	z, HdaeRom_TableEntry2_Epilogue
-	ld	a, (xsp+2)
+	ld	a, (xsp+0x2)
 	res	7, a
 	extz	wa
 	ld	de, wa
 	ldw	wa, 23
 	ldw	bc, 91
 	calr	MIDI_SendControlChange
-	ld	a, (xsp+2)
+	ld	a, (xsp+0x2)
 	res	7, a
 	extz	wa
 	ld	de, wa
@@ -17700,57 +17614,50 @@ HdaeRom_AltEntry:
 	ret
 UIStateEvt_ProcessHandler:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	inc	6, hl
-	ld	xiz, 0x5a66dac9
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 3:i3
+	jr	z, UIStateEvt_ProcessHandler_Skip2
+	cp	a, 2:i3
+	jr	z, UIStateEvt_ProcessHandler_Epilogue
 	cp	a, 1:i3
-	jr	z, 33
+	jr	z, UIStateEvt_ProcessHandler_Skip
 	cp	a, 0:i3
-	jr	nz, 82
-	ld	a, (xsp+3)
-	and	a, 255
-	jr	z, 74
-	lda	xwa, (xsp)
-	ld	xde, xwa
-	ld	a, (xsp+3)
-	and	a, 255
-	ld	c, a
-	extz	bc
-	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
-	jr	UIStateEvt_ProcessHandler_Epilogue
-	ld	a, (xsp+3)
+	jr	nz, UIStateEvt_ProcessHandler_Epilogue
+	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, UIStateEvt_ProcessHandler_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	UIStateEvt_ProcessHandler_Epilogue
-	.byte 0xbf
-	pop	sr
-	inc	6, w
-	zcf
+UIStateEvt_ProcessHandler_Skip:
+	ld	a, (xsp+0x3)
+	and	a, 255
+	jr	z, UIStateEvt_ProcessHandler_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
+	and	a, 255
+	ld	c, a
+	extz	bc
+	ld	xwa, xde
+	calr	UIState_ProcessKeyEvent_Helper
+	jr	UIStateEvt_ProcessHandler_Epilogue
+UIStateEvt_ProcessHandler_Skip2:
+	bitm	0, (xsp+0x3)
+	jr	z, UIStateEvt_ProcessHandler_Epilogue
+	lda	xwa, (xsp)
+	ld	xde, xwa
+	ld	a, (xsp+0x3)
 	and	a, 1
 	ld	c, a
 	extz	bc
@@ -17761,49 +17668,40 @@ UIStateEvt_ProcessHandler_Epilogue:
 	ret
 HdaeRom_AltProcessBlock:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	.byte 0xcf
-	decf
-	jr	ugt, 63
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 13
+	jr	ugt, HdaeRom_AltProcessBlock_Epilogue
 	cp	a, 2:i3
-	jr	nc, 51
+	jr	nc, HdaeRom_AltProcessBlock_Skip3
 	cp	a, 0:i3
-	jr	z, 6
+	jr	z, HdaeRom_AltProcessBlock_Skip
 	cp	a, 1:i3
-	jr	z, 12
-	jr	49
+	jr	z, HdaeRom_AltProcessBlock_Skip2
+	jr	HdaeRom_AltProcessBlock_Epilogue
+HdaeRom_AltProcessBlock_Skip:
 	lda	xwa, (xsp)
 	ldw	bc, 255
-	calr	846
-	jr	39
-	ld	a, (xsp+3)
+	calr	UIState_ProcessKeyEvent_Helper
+	jr	HdaeRom_AltProcessBlock_Epilogue
+HdaeRom_AltProcessBlock_Skip2:
+	ld	a, (xsp+0x3)
 	and	a, 15
 	jr	z, HdaeRom_AltProcessBlock_Entry
 	lda	xwa, (xsp)
 	ldw	bc, 15
 	calr	UIState_ProcessKeyEvent_Helper
 HdaeRom_AltProcessBlock_Entry:
-	.byte 0xbf
-	pop	sr
-	inc	6, l
-	ccf
+	bitm	7, (xsp+0x3)
+	jr	z, HdaeRom_AltProcessBlock_Epilogue
 	lda	xwa, (xsp)
 	ldw	bc, 128
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltProcessBlock_Epilogue
+HdaeRom_AltProcessBlock_Skip3:
 	lda	xwa, (xsp)
 	ldw	bc, 255
 	calr	UIState_ProcessKeyEvent_Helper
@@ -17813,46 +17711,39 @@ HdaeRom_AltProcessBlock_Epilogue:
 	ret
 HdaeRom_AltReadParam:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	inc	6, ix
-	ld	xiy, 0x4166dbc9
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 4:i3
+	jr	z, HdaeRom_AltReadParam_Epilogue
+	cp	a, 3:i3
+	jr	z, HdaeRom_AltReadParam_Epilogue
 	cp	a, 2:i3
-	jr	z, 34
+	jr	z, HdaeRom_AltReadParam_Skip
 	cp	a, 1:i3
-	jr	z, 57
+	jr	z, HdaeRom_AltReadParam_Epilogue
 	cp	a, 0:i3
-	jr	nz, 53
-	.byte 0xbf
-	pop	sr
-	inc	6, b
-	ldw	wa, 0x30b7
+	jr	nz, HdaeRom_AltReadParam_Epilogue
+	bitm	2, (xsp+0x3)
+	jr	z, HdaeRom_AltReadParam_Epilogue
+	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 4
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltReadParam_Epilogue
-	ld	a, (xsp+3)
+HdaeRom_AltReadParam_Skip:
+	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, HdaeRom_AltReadParam_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 255
 	ld	c, a
 	extz	bc
@@ -17863,54 +17754,45 @@ HdaeRom_AltReadParam_Epilogue:
 	ret
 HdaeRom_AltCheckResult:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl nc, -28736
-	normal
-	ld a, 201:opc
-	inc 6, ix
-	pushw wa
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 4:i3
+	jr	z, HdaeRom_AltCheckResult_Skip3
 	cp	a, 3:i3
-	jr	z, 77
+	jr	z, HdaeRom_AltCheckResult_Epilogue
 	cp	a, 2:i3
-	jr	z, 6
+	jr	z, HdaeRom_AltCheckResult_Skip2
 	cp	a, 1:i3
-	.ascii "fEhC"
-	.byte 0xbf
-	pop	sr
-	inc	6, l
-	push	xiz
+	jr	z, HdaeRom_AltCheckResult_Epilogue
+	jr	HdaeRom_AltCheckResult_Epilogue
+HdaeRom_AltCheckResult_Skip2:
+	bitm	7, (xsp+0x3)
+	jr	z, HdaeRom_AltCheckResult_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 128
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltCheckResult_Epilogue
-	ld	a, (xsp+3)
+HdaeRom_AltCheckResult_Skip3:
+	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, HdaeRom_AltCheckResult_Epilogue
-	lda	xbc, (xsp+2)
+	lda	xbc, (xsp+0x2)
 	ld	a, 0:opc
-	.byte 0xbf
-	push	sr
-	dec	6, l
-	.byte 0x06
-	ld	a, (xsp+2)
+	bitm	7, (xsp+0x2)
+	jr	nz, HdaeRom_AltCheckResult_Skip4
+	ld	a, (xsp+0x2)
 	res	7, a
+HdaeRom_AltCheckResult_Skip4:
 	ld	(xbc), a
-	ld	a, (xsp+2)
+	ld	a, (xsp+0x2)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 25
@@ -17920,36 +17802,27 @@ HdaeRom_AltCheckResult_Epilogue:
 	inc	4, xsp
 	ret
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	exts	l
-	jr	ugt, 69
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 19
+	jr	ugt, HdaeRom_AltCheckResult_Epilogue2
 	cp	a, 4:i3
-	jr	c, 65
-	ld	a, (xsp+1)
+	jr	c, HdaeRom_AltCheckResult_Epilogue2
+	ld	a, (xsp+0x1)
 	dec	4, a
 	extz	wa
-	lda	xbc, (0xf1a0:16)
+	lda_d16	xbc, (0xf1a0)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
 	extz	wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x1AA:24)
-	ld_rrb e, xbc, wa
-	ld a, e
-	cp a, 1:i3
+	lda_24	xbc, (0xee8ea2)
+	ld_rrb	e, xbc, wa
+	ld	a, e
+	cp	a, 1:i3
 	jr	z, HdaeRom_AltCheckResult_Skip
 	cp	a, 2:i3
 	jr	z, HdaeRom_AltCheckResult_Skip
@@ -17957,11 +17830,10 @@ HdaeRom_AltCheckResult_Epilogue:
 	jr	nz, HdaeRom_AltCheckResult_Epilogue2
 HdaeRom_AltCheckResult_Skip:
 	extz	de
-	ld	a, (xsp+3)
-	.byte 0x8f
-	push	sr
-	xor	(0x8bc9:16), a
-	ccf
+	ld	a, (xsp+0x3)
+	and	a, (xsp+0x2)
+	ld	c, a
+	extz	bc
 	ld	wa, de
 	ld	de, bc
 	ldw	bc, 145
@@ -17971,68 +17843,54 @@ HdaeRom_AltCheckResult_Epilogue2:
 	ret
 HdaeRom_AltTableEntry0:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -18496
-	ldw	wa, 0x8ae8
-	ld	a, (xsp+3)
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	lda	xwa, (xsp)
+	ld	xde, xwa
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	444
+	calr	UIState_ProcessKeyEvent_Helper
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry1:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	inc	6, hl
-	pushw	ix
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 3:i3
+	jr	z, HdaeRom_AltTableEntry1_Skip2
 	cp	a, 1:i3
-	jr	z, 22
+	jr	z, HdaeRom_AltTableEntry1_Skip
 	cp	a, 0:i3
-	jr	nz, 52
+	jr	nz, HdaeRom_AltTableEntry1_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltTableEntry1_Epilogue
+HdaeRom_AltTableEntry1_Skip:
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltTableEntry1_Epilogue
+HdaeRom_AltTableEntry1_Skip2:
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
@@ -18042,75 +17900,13 @@ HdaeRom_AltTableEntry1_Epilogue:
 	ret
 HdaeRom_AltTableEntry2:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -18496
-	ldw	wa, 0x8ae8
-	ld	a, (xsp+3)
-	res	7, a
-	ld	c, a
-	extz	bc
-	ld	xwa, xde
-	calr	308
-	inc	4, xsp
-	ret
-HdaeRom_AltTableEntry3:
-	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -18496
-	ldw	wa, 0x8ae8
-	ld	a, (xsp+3)
-	res	7, a
-	ld	c, a
-	extz	bc
-	ld	xwa, xde
-	calr	264
-	inc	4, xsp
-	ret
-HdaeRom_AltTableEntry4:
-	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	push	xsp
-	rcf
-	jr	c, 6
-	.byte 0x8f, 0x01
-	push	xsp
-	push_a
-	jr	ule, 19
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
@@ -18118,50 +17914,74 @@ HdaeRom_AltTableEntry4:
 	calr	UIState_ProcessKeyEvent_Helper
 	inc	4, xsp
 	ret
-HdaeRom_AltTableEntry5:
+HdaeRom_AltTableEntry3:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -18496
-	ldw	wa, 0x8ae8
-	ld	a, (xsp+3)
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	lda	xwa, (xsp)
+	ld	xde, xwa
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	164
+	calr	UIState_ProcessKeyEvent_Helper
+	inc	4, xsp
+	ret
+HdaeRom_AltTableEntry4:
+	dec	4, xsp
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	cp	(xsp+0x1), 16
+	jr	c, HdaeRom_AltTableEntry4_Skip
+	cp	(xsp+0x1), 20
+	jr	ule, HdaeRom_AltTableEntry4_Epilogue
+HdaeRom_AltTableEntry4_Skip:
+	lda	xwa, (xsp)
+	ld	xde, xwa
+	ld	a, (xsp+0x3)
+	res	7, a
+	ld	c, a
+	extz	bc
+	ld	xwa, xde
+	calr	UIState_ProcessKeyEvent_Helper
+HdaeRom_AltTableEntry4_Epilogue:
+	inc	4, xsp
+	ret
+HdaeRom_AltTableEntry5:
+	dec	4, xsp
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	lda	xwa, (xsp)
+	ld	xde, xwa
+	ld	a, (xsp+0x3)
+	res	7, a
+	ld	c, a
+	extz	bc
+	ld	xwa, xde
+	calr	UIState_ProcessKeyEvent_Helper
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry6:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -18496
-	ldw	wa, 0x8ae8
-	ld	a, (xsp+3)
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	lda	xwa, (xsp)
+	ld	xde, xwa
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	120
+	calr	UIState_ProcessKeyEvent_Helper
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry7:
@@ -18170,56 +17990,45 @@ HdaeRom_AltTableEntry8:
 	ret
 HdaeRom_AltTableEntry9:
 	dec	4, xsp
-	.byte 0xbf
-	nop
-	push_a
-	.byte 0x80, 0xc0, 0xbf, 0x01
-	push_a
-	jrl	pl, -16448
-	push	sr
-	push_a
-	jrl	nz, -16448
-	pop	sr
-	push_a
-	jrl	nc, -28736
-	normal
-	ld	a, 201:opc
-	inc	6, bc
-	calr	55497
-	jr	nz, 79
-	.byte 0xbf
-	pop	sr
-	inc	6, l
-	popw	de
+	ld	(xsp+0x100), (0xc080)
+	ld	(xsp+0x1), (0xc07d)
+	ld	(xsp+0x2), (0xc07e)
+	ld	(xsp+0x3), (0xc07f)
+	ld	a, (xsp+0x1)
+	cp	a, 1:i3
+	jr	z, HdaeRom_AltTableEntry9_Skip2
+	cp	a, 0:i3
+	jr	nz, HdaeRom_AltTableEntry9_Epilogue
+	bitm	7, (xsp+0x3)
+	jr	z, HdaeRom_AltTableEntry9_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 128
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltTableEntry9_Epilogue
-	ld	a, (xsp+3)
+HdaeRom_AltTableEntry9_Skip2:
+	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
 	jr	z, HdaeRom_AltTableEntry9_Entry
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	res	7, a
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 HdaeRom_AltTableEntry9_Entry:
-	.byte 0xbf
-	pop	sr
-	inc	6, l
-	zcf
+	bitm	7, (xsp+0x3)
+	jr	z, HdaeRom_AltTableEntry9_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
-	ld	a, (xsp+3)
+	ld	a, (xsp+0x3)
 	and	a, 128
 	ld	c, a
 	extz	bc

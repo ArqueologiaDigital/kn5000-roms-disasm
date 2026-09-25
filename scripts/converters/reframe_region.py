@@ -111,6 +111,10 @@ def main():
     ap.add_argument("--range", required=True)
     ap.add_argument("--data", action="append", default=[])
     ap.add_argument("--drop-mid-label", action="append", default=[])
+    ap.add_argument("--mid-label-as-set", action="append", default=[],
+                    help="NAME[=COMMENT]: a label the new framing puts inside an instruction but"
+                         " that another file references; emitted as `.set NAME, . + k` before"
+                         " the instruction, with the comment")
     ap.add_argument("--apply", action="store_true")
     a = ap.parse_args()
     lo, hi = [int(x, 16) for x in a.range.split("-")]
@@ -205,12 +209,18 @@ def main():
         if m and int(m.group(3), 16) in addr_label and int(m.group(3), 16) >= BASE:
             r[2] = "%s\t%s, %s" % (m.group(1), m.group(2), addr_label[int(m.group(3), 16)])
     starts = {r[0] for r in new}
+    as_set = dict((x.split("=", 1) + [""])[:2] for x in a.mid_label_as_set)
+    sets = []           # (instruction addr, name, offset, comment)
     for adr, l in labels:
         if adr not in starts and adr != hi:
             if l in a.drop_mid_label:
                 continue
+            if l in as_set:
+                ia = max(r[0] for r in new if r[0] < adr)
+                sets.append((ia, l, adr - ia, as_set[l]))
+                continue
             sys.exit("label %s at 0x%06X falls inside an instruction of the new framing" % (l, adr))
-    labels = [(adr, l) for adr, l in labels if l not in a.drop_mid_label]
+    labels = [(adr, l) for adr, l in labels if l not in a.drop_mid_label and l not in as_set]
     out = []
     ci = 0
     li = 0
@@ -222,6 +232,9 @@ def main():
         for adr, l in labels:
             if adr == r[0]:
                 out.append("%s:" % l)
+        for ia, l, k, com in sets:
+            if ia == r[0]:
+                out.append("\t.set\t%s, . + %d" % (l, k) + (("\t; " + com) if com else ""))
         out.append("\t" + r[2])
     while ci < len(comments):
         out.append(comments[ci][1])
